@@ -30,8 +30,11 @@ FIGDIR  ?= ..
 MP4S    := $(addprefix $(FIGDIR)/,$(addsuffix .mp4,$(BASES)))
 
 # Shared Playwright/Chromium install. Anywhere you have playwright + js-yaml works;
-# at UCSC this is the ~/pwrec tree.
-PW_ENV  ?= PLAYWRIGHT_BROWSERS_PATH=$(HOME)/pwrec/browsers NODE_PATH=$(HOME)/pwrec/node_modules
+# at UCSC this is /hive/groups/browser/uiTest/pw, one pinned copy for every
+# browser-driving test in the tree (see its README.md for the pin). Override
+# PW_ENV to point at a private install.
+PW_DIR  ?= /hive/groups/browser/uiTest/pw
+PW_ENV  ?= PLAYWRIGHT_BROWSERS_PATH=$(PW_DIR)/browsers NODE_PATH=$(PW_DIR)/node_modules
 
 # FAST=1 -> figures only: no dwells, no cursor animation, no screen recording, no mp4.
 # Same stills, about a third of the wall clock. Use it while iterating on figure content;

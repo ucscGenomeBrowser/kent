@@ -15,7 +15,8 @@
 # changes, someone is told rather than left to notice.
 
 DOCENT ?= ../docent.js
-PW_ENV ?= PLAYWRIGHT_BROWSERS_PATH=$(HOME)/pwrec/browsers NODE_PATH=$(HOME)/pwrec/node_modules
+PW_DIR ?= /hive/groups/browser/uiTest/pw
+PW_ENV ?= PLAYWRIGHT_BROWSERS_PATH=$(PW_DIR)/browsers NODE_PATH=$(PW_DIR)/node_modules
 T      ?=
 TESTS  := $(if $(T),$(addsuffix .docent.yaml,$(T)),$(wildcard *.docent.yaml))
 

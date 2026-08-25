@@ -26,13 +26,15 @@ intent; the renderer deals with the UI.
 ## Run
 
 ```
-PLAYWRIGHT_BROWSERS_PATH=~/pwrec/browsers NODE_PATH=~/pwrec/node_modules \
+PW=/hive/groups/browser/uiTest/pw
+PLAYWRIGHT_BROWSERS_PATH=$PW/browsers NODE_PATH=$PW/node_modules \
   node docent.js AP1.docent.yaml
 ```
 
-Needs `playwright`, `js-yaml`, and `ffmpeg`. At UCSC these live in a shared install at
-`~braney/pwrec` (`pwrec/browsers` for Chromium, `pwrec/node_modules` for the modules) —
-point the two variables above anywhere you have them.
+Needs `playwright`, `js-yaml`, and `ffmpeg`. At UCSC these live in one pinned shared
+install at `/hive/groups/browser/uiTest/pw` (`browsers` for Chromium, `node_modules`
+for the modules), which every browser-driving test in the tree uses; its `README.md`
+records the pinned versions. Point the two variables above anywhere you have them.
 
 Outputs, relative to the script's own directory:
 

@@ -5,9 +5,11 @@
  *
  * Render a hand-authored Docent script into a silent mp4 PLUS a named still PNG at
  * every `shot:` marker (the figures). One source script -> both outputs, so a figure
- * is literally a frame of the tour. Reuses the shared Playwright/Chromium in ~/pwrec.
+ * is literally a frame of the tour. Reuses the shared Playwright/Chromium install in
+ * /hive/groups/browser/uiTest/pw.
  *
- *   PLAYWRIGHT_BROWSERS_PATH=~/pwrec/browsers NODE_PATH=~/pwrec/node_modules \
+ *   PW=/hive/groups/browser/uiTest/pw
+ *   PLAYWRIGHT_BROWSERS_PATH=$PW/browsers NODE_PATH=$PW/node_modules \
  *     node docent.js AP1.docent.yaml
  *
  * The high-level verbs bake in the quickLift/Convert mechanics (dbSNP composite

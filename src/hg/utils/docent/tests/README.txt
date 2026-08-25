@@ -10,7 +10,7 @@ Run by hand, not by the kent tree's `make test`:
     make derive-accept      # rewrite those baselines, then read `git diff expected/`
 
 Most tests drive a real browser against a real server, so they need the network and
-the shared Playwright install (~/pwrec; see ../README.md). That is why none of this is
+the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md). That is why none of this is
 part of the tree-wide test target: a broken network would fail the build.
 
 A test is an ordinary Docent script that asserts with `expect:`. It passes by exiting
