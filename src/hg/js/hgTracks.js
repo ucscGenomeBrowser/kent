@@ -2061,8 +2061,10 @@ var vis = {
                     rec.visibility = 0;
                 // else Would be nice to hide subtracks as well but that may be overkill
                 $(document.getElementById('tr_' + track)).remove();
+                // also remove this from the Visible Tracks group
+                removeTrackFromVisibleGroup(track);
                 cart.updateSessionPanel();
-                imageV2.drawHighlights();
+                imageV2.afterImgChange(true);
                 $(this).attr('class', 'hiddenText');
             } else
                 $(this).attr('class', 'normalText');
@@ -3292,6 +3294,14 @@ jQuery.fn.panImages = function(){
 
 };
 
+function removeTrackFromVisibleGroup(track) {
+/* When a track has been hidden by the user, remove its select and label from
+ * the visible tracks group */
+    let rec = document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]");
+    if (rec)
+        rec.parentElement.remove();
+}
+
   ///////////////////////////////////////
  //// rightClick (aka context menu) ////
 ///////////////////////////////////////
@@ -3375,6 +3385,7 @@ var rightClick = {
             // update the track list below the image
             vis.update(loneParent, 'hide');
             rightClick.hideLegends();
+            removeTrackFromVisibleGroup(loneParent);
             delete hgTracks.trackDb[loneParent]; // for the next right-click
         }
 
@@ -3384,6 +3395,7 @@ var rightClick = {
             var id = delIds[i];
             cartHideAnyTrack(id, cartVars, cartVals);
             $(document.getElementById('tr_' + id)).remove();
+            removeTrackFromVisibleGroup(id);
             delete hgTracks.trackDb[id]; // for the next right-click
         }
         imageV2.afterImgChange(true);

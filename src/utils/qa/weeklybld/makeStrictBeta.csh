@@ -9,8 +9,14 @@ pwd
 # the makefile now does zoo automatically now when you call it
 echo "trackDb Make strict. [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/makeDb/trackDb
-#make -O -j 5 beta >& make.strict.log  # gotta fix the metaDb makefiles in trackDb first
-make beta >& make.strict.log
+# The databases are independent of each other, so run them in parallel.  -O keeps
+# each database's output together in the log.  Set TRACKDB_MAKE_JOBS to change the
+# job count; going much above 8 needs ssh connection sharing first, or hgwbeta's
+# sshd starts refusing connections (MaxStartups).
+set trackDbJobs = 8
+if ( $?TRACKDB_MAKE_JOBS ) set trackDbJobs = $TRACKDB_MAKE_JOBS
+echo "trackDb make with -j $trackDbJobs"
+make -O -j $trackDbJobs beta >& make.strict.log
 /bin/egrep -i "html missing" make.strict.log > warning.txt
 /bin/egrep -iv "html missing" make.strict.log > make.strict.log2
 mv make.strict.log2 make.strict.log

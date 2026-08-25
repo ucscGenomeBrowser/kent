@@ -8,9 +8,15 @@ kentSrc = ../../..
 # Make for ENCODE reporting (includes release alpha and release beta)
 #	make encodeReport
 
-# DO NOT RUN MULTIPLE INSTANCES OF THIS SCRIPT 
-# Because it creates temporary files in the current directory 
-# before loading them into the database.
+# DO NOT RUN TWO OF THESE MAKES AT THE SAME TIME
+# Two makes using the same table names will fight over the same tables.
+#
+# Running ONE make with -j is fine, and is much faster, since the databases are
+# independent of each other.  Every per-database recipe writes only to files and
+# tables named after that database, and hgTrackDb and hgFindSpec put their
+# temporary files in $$TMPDIR under process-unique names.  Pass -O as well so
+# that the output of each database stays together in the log:
+#	make -O -j 8 beta
 
 # Browser supports multiple trackDb's so that individual developers
 # can change things rapidly without stepping on other people's toes. 
@@ -273,9 +279,9 @@ beta_all: ${DBS:%=%_beta}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
 	rm  -f $*.gbdbList.txt
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb $*
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
-	# now make files for hgwdev-beta (we share the tables with hgwbeta)
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} $*
+	# the -alsoTo also makes the files for hgwdev-beta (we share the tables with
+	# hgwbeta), without building the same index a second time
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} -alsoTo=${ALPHA_MACHINE}:${HIVE_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now build the relatedTracks table for each db
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./buildRelatedTracks relatedTrack $*
 	-ssh  ${BETA_MACHINE} rm -rf /dev/shm/trackDbCache/$*.trackDb

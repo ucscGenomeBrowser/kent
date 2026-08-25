@@ -706,6 +706,10 @@ def cmd_list(args):
     if args.search:
         params["subject"] = f"~{args.search}"
 
+    if args.target_version:
+        params["fixed_version_id"] = resolve_version(
+            args.target_version, args.project, args.base_url, args.api_key)
+
     query = urllib.parse.urlencode(params)
     data = api_get(args.base_url, f"/issues.json?{query}", args.api_key)
 
@@ -1316,6 +1320,8 @@ def build_parser():
                         help="Assignee name or 'me'")
     p_list.add_argument("--tracker",
                         help="Tracker name or ID")
+    p_list.add_argument("--target-version", dest="target_version",
+                        help="Target version name or ID (e.g. 503)")
     p_list.add_argument("--search",
                         help="Search in subject")
     p_list.add_argument("--limit", type=int, default=25,

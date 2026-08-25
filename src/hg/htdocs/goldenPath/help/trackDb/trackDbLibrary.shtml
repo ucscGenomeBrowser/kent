@@ -2162,7 +2162,7 @@ There are no extra options that can appear on the type hic line.
     <P>
     Each entry is a <code>fieldName="Human Label"</code> pair.  The field name must be an
     extra bigBed field (defined in the track's <code>.as</code> file) that contains a
-    pre-computed <code>R,G,B</code> color string — the same format as the standard
+    pre-computed <code>R,G,B</code> color string, the same format as the standard
     <A onclick="jumpTo(this)" href="#itemRgb">itemRgb</A> field.  The label in double
     quotes is shown in the dropdown; if omitted, a label is derived automatically by
     stripping a leading <code>colorBy</code> prefix and replacing underscores with spaces.

@@ -218,4 +218,4 @@ visibility hide
         filterByRange._zscore on
         parent constraintV4_1_1
         priority 1.5
-        mouseOver Z: $_zscore<br> $synonymous<br> $missense<br> Gene flags: $geneFlags<br> Constraint flags: $constraintFlags
+        mouseOver $_mouseOver<br> $synonymous<br> $missense<br> Constraint flags: $constraintFlags

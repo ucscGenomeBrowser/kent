@@ -198,13 +198,18 @@ def emit_rows(records, assembly, hg38_lookup):
         conseq = v.get('major_consequence') or 'unknown'
         ac = int(v.get('allele_count') or 0)
         an = int(v.get('allele_num') or 0)
-        hom = int(v.get('hom_count') or 0)
-        # Carrier individuals = heterozygous + homozygous carriers. In this
-        # FLOSSIES export allele_count is already het + hom (not the usual
-        # het + 2*hom), so we sum the per-population het and hom counts directly
-        # rather than allele_count - hom_count, which would drop homozygotes.
+        # Carrier individuals = heterozygous + homozygous carriers, summed from
+        # the per-population het/hom counts. In this FLOSSIES export allele_count
+        # is already het + hom (not the usual het + 2*hom); the check below makes
+        # a future re-fetch that renames these keys or switches to standard
+        # allele-count semantics fail loudly instead of silently zeroing carriers.
         carriers = (sum(int(x or 0) for x in (v.get('pop_hets') or {}).values())
                     + sum(int(x or 0) for x in (v.get('pop_homs') or {}).values()))
+        if carriers != ac:
+            raise ValueError(
+                "FLOSSIES het+hom ({}) != allele_count ({}) for {}; "
+                "pop_hets/pop_homs schema may have changed".format(
+                    carriers, ac, v.get('HGVSc') or v.get('variant_id')))
         applies, pts, _ = bs2_tier(conseq, carriers)
         color = COLORS[applies]
         hgvsc = v.get('HGVSc') or ''

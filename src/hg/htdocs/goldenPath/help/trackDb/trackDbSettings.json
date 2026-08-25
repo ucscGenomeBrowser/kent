@@ -1,0 +1,3601 @@
+{
+ "version": "v3",
+ "categories": [
+  "Common Settings",
+  "Common Settings - less frequent",
+  "bam - Compressed Alignment Track Settings",
+  "bigBarChart",
+  "bigBed - Item or Region Track Settings",
+  "Item or Region Track Settings - less frequent",
+  "bigChain - Pairwise Alignments",
+  "bigGenePred - Gene Annotations",
+  "bigInteract",
+  "bigMaf - Multiple Alignments",
+  "bigNarrowPeak - Peaks",
+  "bigPsl - Pairwise Alignments",
+  "bigWig - Signal Graphing Track Settings",
+  "bigLolly - Lollipop charts",
+  "hic - Hi-C contact matrices",
+  "halSnake - Multiple Alignments",
+  "vcfTabix - Variant Call Format Track Settings",
+  "vcfPhasedTrio - Variant Call Format Track Settings",
+  "superTrack - Folder Track Settings",
+  "Composite Track Settings",
+  "Composite - Subgroups Settings",
+  "Composite - Views Settings",
+  "Faceted Composite Settings",
+  "Aggregate or Overlay Track Settings",
+  "general hub file settings",
+  "genomes file settings"
+ ],
+ "settings": [
+  {
+   "key": "track",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "required",
+   "fmt": "track",
+   "ex": "track myFirstTrack",
+   "desc": "This is the name of the dataset and must be unique within the Genome Browser or dataHub."
+  },
+  {
+   "key": "type",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "required",
+   "fmt": "type",
+   "ex": "type bed 6 +",
+   "desc": "Declares the format of the data and is used to determine display methods and options."
+  },
+  {
+   "key": "shortLabel",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "required",
+   "fmt": "shortLabel",
+   "ex": "shortLabel Human mRNAs",
+   "desc": "Specifies the track's \"short label\", which is used in a number of places in the Browser to identify the track."
+  },
+  {
+   "key": "longLabel",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "required",
+   "fmt": "longLabel",
+   "ex": "longLabel Human mRNAs from GenBank",
+   "desc": "Specifies the track's \"long label\", which is also used in numerous places in the Browser to identify a track."
+  },
+  {
+   "key": "bigDataUrl",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart",
+    "bigBed",
+    "bigChain",
+    "bigInteract",
+    "bigLolly",
+    "bigMaf",
+    "bigPsl",
+    "bigWig",
+    "bam",
+    "hic",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "required",
+   "fmt": "bigDataUrl <url/relativePath>",
+   "ex": "bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb",
+   "desc": "The location of a remote data file containing the bulk of the data for the track."
+  },
+  {
+   "key": "html",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "html",
+   "ex": "html docs/myFirstTrack.html",
+   "desc": "Use the html path/to/explain.html to specify the file that contains the complete description of a track in HTML format."
+  },
+  {
+   "key": "visibility",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "required",
+   "fmt": "visibility",
+   "ex": "visibility dense",
+   "desc": "Visibility (i.e."
+  },
+  {
+   "key": "meta",
+   "category": "Common Settings",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "meta",
+   "ex": "",
+   "desc": "Meta specifies the metadata tag for this track."
+  },
+  {
+   "key": "color",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "color <red,green,blue>",
+   "ex": "color 255,0,0",
+   "desc": "Many track types allow the color of the data displayed in the image to be specified with this setting."
+  },
+  {
+   "key": "priority",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "priority <float>",
+   "ex": "priority 50",
+   "desc": "The priority is used to define the order of a track within its track group or data hub, as well as its default order within the Browser image."
+  },
+  {
+   "key": "altColor",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "altColor <red,green,blue>",
+   "ex": "altColor 0,0,255",
+   "desc": "Many track types allow setting a color range that varies from color to altColor ."
+  },
+  {
+   "key": "boxedCfg",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "boxedCfg <on/off>",
+   "ex": "boxedCfg on",
+   "desc": "Configuration controls can be placed inside a box on the configuration page."
+  },
+  {
+   "key": "chromosomes",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "chromosomes <chr1,chr2,...>",
+   "ex": "chromosomes chr1,chr7,chr18,chr19,chr22,chrX,chrM",
+   "desc": "Some datasets do not contain data for all chromosomes of a genome."
+  },
+  {
+   "key": "darkerLabels",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "darkerLabels on",
+   "ex": "",
+   "desc": "If this setting is \"on\", the color of the left labels on the track display will have a somewhat darker color than the track display itself."
+  },
+  {
+   "key": "dataVersion",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "dataVersion <str>",
+   "ex": "dataVersion May 2011 <em>beta</em>",
+   "desc": "Many tracks undergo multiple revisions over time."
+  },
+  {
+   "key": "directUrl_for_hubs",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "directUrl <url>",
+   "ex": "directUrl http://mygenes.org/cgi-bin/geneView/%s",
+   "desc": "By default, items shown in the Browser image can be linked to a details page giving information about that item."
+  },
+  {
+   "key": "downloadUrl",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "downloadUrl <label> <URL>",
+   "ex": "downloadUrl GFF https://mywebsite.com/ucscTrack.gff.gz",
+   "desc": "While description HTML pages can contain download instructions, having external file download links directly specified in trackDb makes it possible show thes..."
+  },
+  {
+   "key": "iframeUrl",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "iframeUrl <url>",
+   "ex": "iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$\n    iframeOptions height='600' width='1024'",
+   "desc": "This setting allows integrating an external html page into the default details page, as an iframe."
+  },
+  {
+   "key": "iframeOptions",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "iframeOptions <string>",
+   "ex": "iframeOptions width='800' height='800' scrolling='yes'",
+   "desc": "When iframeUrl is used, this statement specifies a string that is inserted literally into the HTML <iframe> tag."
+  },
+  {
+   "key": "mouseOver",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigPsl",
+    "bigChain",
+    "bigMaf",
+    "bigMethyl",
+    "bigNarrowPeak",
+    "bigGenePred"
+   ],
+   "level": "full",
+   "fmt": "mouseOver <pattern>",
+   "ex": "mouseOver variant $name/$chrom:${chromStart} value $score",
+   "desc": "For bigBed files with more than 8 fields (not counting any extra bigBed fields), this adds mouse over text from a pattern based on the values of fields in th..."
+  },
+  {
+   "key": "mouseOverField",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigPsl",
+    "bigChain",
+    "bigMaf",
+    "bigMethyl",
+    "bigNarrowPeak",
+    "bigGenePred"
+   ],
+   "level": "full",
+   "fmt": "mouseOverField <fieldName1>",
+   "ex": "mouseOverField comment",
+   "desc": "For bigBed files with more than 8 fields (not counting any extra bigBed fields), this adds mouse over text that are different from the \"name\" field of a bigB..."
+  },
+  {
+   "key": "multiRegionsBedUrl",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": null,
+   "fmt": "multiRegionsBedUrl <url/relativePath>",
+   "ex": "multiRegionsBedUrl covidMuts.regions.bed",
+   "desc": "This setting causes a link to appear on the track configuration and items details pages to launch a multi-region custom regions view , where the regions are..."
+  },
+  {
+   "key": "otherDb",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "otherDb <otherDb>",
+   "ex": "otherDb mm10",
+   "desc": "Track types that show pairwise alignments often need to declare the other species/assembly included in the alignment."
+  },
+  {
+   "key": "otherTwoBitUrl",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "chain",
+    "bigChain",
+    "psl",
+    "bigPsl"
+   ],
+   "level": "new",
+   "fmt": "otherTwoBitUrl <url/relativePath>",
+   "ex": "otherTwoBitUrl https://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.2bit",
+   "desc": "For pairwise alignment tracks this can specify where to find the query sequence This setting can be used in psl, bigPsl, chain, and bigChain tracks."
+  },
+  {
+   "key": "pennantIcon",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "pennantIcon <iconFile>/<text color> [html [tip]] \n[; <iconFile>/<text color> [html [tip]]]",
+   "ex": "pennantIcon 18.jpg ../goldenPath/help/liftOver.html \"lifted from hg18\"",
+   "desc": "Certain tracks can be visually flagged in the Browser menu by use of an icon or text label and a link to a description of the flags meaning."
+  },
+  {
+   "key": "tableBrowser",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": null,
+   "fmt": "tableBrowser <off/on/noGenome/tbNoGenome> [table1 ...]",
+   "ex": "tableBrowser off decipherRaw knownToDecipher",
+   "desc": "The Table Browser (and REST API ) typically allow querying and downloading of some or all of the raw data for a track."
+  },
+  {
+   "key": "url_for_hubs",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "url <url>",
+   "ex": "url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=$n&term=$$&extra=$<field2>\n    urlLabel NCBI Details:",
+   "desc": "Many tracks allow an external link when an individual track data item is examined."
+  },
+  {
+   "key": "urls",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "urls <fieldName1>=\"<url1>\" <fieldName2>=\"<url2>\" ...",
+   "ex": "urls pmid=\"https://www.ncbi.nlm.nih.gov/pubmed/$$\" spId=\"http://www.uniprot.org/uniprot/$$\"",
+   "desc": "This is similar to the url tag, but allows urls on fields that are not the \"name\" field."
+  },
+  {
+   "key": "skipEmptyFields",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigPsl",
+    "bigGenePred",
+    "bigMethyl",
+    "bigNarrowPeak",
+    "bigMaf",
+    "bigChain"
+   ],
+   "level": "full",
+   "fmt": "skipEmptyFields on",
+   "ex": "",
+   "desc": "If this setting is \"on\", the item details page will not show fields that have empty values."
+  },
+  {
+   "key": "skipFields",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigPsl",
+    "bigGenePred",
+    "bigMethyl",
+    "bigNarrowPeak",
+    "bigMaf",
+    "bigChain"
+   ],
+   "level": "full",
+   "fmt": "skipFields <fieldName1>,<fieldName2> ...",
+   "ex": "skipFields mouseOver,labelField,hiddenField",
+   "desc": "This setting can be used to suppress extra fields on the item details page."
+  },
+  {
+   "key": "sepFields",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigPsl",
+    "bigGenePred",
+    "bigMethyl",
+    "bigNarrowPeak",
+    "bigMaf",
+    "bigChain"
+   ],
+   "level": "full",
+   "fmt": "sepFields fieldName1,fieldName2 ...",
+   "ex": "sepFields pmid,spId",
+   "desc": "This setting changes the item details page and splits the table used for showing extra fields before any of the specified fields."
+  },
+  {
+   "key": "bam",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": null,
+   "fmt": "type bam",
+   "ex": "",
+   "desc": "Declares configuration settings for a track of type bam."
+  },
+  {
+   "key": "refUrl",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "refUrl <url>/%s",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "bigDataIndex",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "bigDataIndex <url/relativePath>",
+   "ex": "bigDataIndex http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bam.bai",
+   "desc": "The location of a remote data file containing the index."
+  },
+  {
+   "key": "bamColorMode",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "bamColorMode <strand/gray/tag/off>",
+   "ex": "",
+   "desc": "There are numerous ways to color bam tracks to highlight certain aspects of the data."
+  },
+  {
+   "key": "bamGrayMode",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "bamGrayMode <aliQual/baseQual/unpaired>",
+   "ex": "",
+   "desc": "When bamColorMode is set to \"gray\", you can highlight one of the following: Refer to the SAM format details for a discussion of these values."
+  },
+  {
+   "key": "bamColorTag",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "bamColorTag <XX>",
+   "ex": "",
+   "desc": "You can also use RGB data associated with individual tags within the bam file itself."
+  },
+  {
+   "key": "noColorTag",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "noColorTag .",
+   "ex": "bamColorMode strand\n    noColorTag",
+   "desc": "The bam coloring options are all user-configurable within the browser."
+  },
+  {
+   "key": "bamSkipPrintQualScore",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "bamSkipPrintQualScore .",
+   "ex": "bamSkipPrintQualScore .",
+   "desc": "Any bam tag can be displayed on the details page by clicking on it in the Browser image."
+  },
+  {
+   "key": "indelDoubleInsert",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "indelDoubleInsert <off/on>",
+   "ex": "baseColorUseSequence genbank\n    indelDoubleInsert on\n    indelQueryInsert on\n    indelPolyA on",
+   "desc": "Insertion and deletion differences between tag sequences and the reference genome can be highlighted with the use of these settings."
+  },
+  {
+   "key": "minAliQual",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "minAliQual <#>",
+   "ex": "minAliQual 20",
+   "desc": "When the Browser image is zoomed in to the level where individual tags are visible, the tags in a bam file can be filtered to show only those with a minimum..."
+  },
+  {
+   "key": "pairEndsByName",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "pairEndsByName .",
+   "ex": "",
+   "desc": "Some high-throughput sequencing technologies result in \"paired end\" tags, which are two individual bam records joined by their name."
+  },
+  {
+   "key": "pairSearchRange",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "pairSearchRange <#>",
+   "ex": "pairedEndsByName .\n    pairSearchRange 5000",
+   "desc": "Searching to join pairs of tags by name will be limited to a maximum distance (default: 20,000 bases)."
+  },
+  {
+   "key": "showNames",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "showNames <on/off>",
+   "ex": "showNames off",
+   "desc": "When the Browser image is zoomed in to the level where individual tags are viewable, the query name for each tag is shown by default."
+  },
+  {
+   "key": "doWiggle",
+   "category": "bam - Compressed Alignment Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bam"
+   ],
+   "level": "full",
+   "fmt": "doWiggle on",
+   "ex": "doWiggle on",
+   "desc": "The doWiggle setting enables the BAM data to be displayed as a bar graph where the height is proportional to the number of reads mapped to each genomic posit..."
+  },
+  {
+   "key": "bigBarChart",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": null,
+   "fmt": "type bigBarChart",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "barChartBars",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartBars <label1 label2...>",
+   "ex": "",
+   "desc": "This setting is a list of labels for the categorical variables (bars)."
+  },
+  {
+   "key": "barChartColors",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartColors <color1 color2...>",
+   "ex": "",
+   "desc": "This setting is a list of colors, one for each category (bar)."
+  },
+  {
+   "key": "barChartLabel",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartLabel <label>",
+   "ex": "",
+   "desc": "This setting provides a label for the category selection list."
+  },
+  {
+   "key": "barChartMaxSize",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartMaxSize <small/medium/large>",
+   "ex": "",
+   "desc": "BarChart track display selects one of three sizes (small, medium, or large) to display barCharts, based on size of the genomic region in the current window."
+  },
+  {
+   "key": "barChartSizeWindows",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartSizeWindows <largeMax> <smallMin>",
+   "ex": "barChartSizeWindows 500 8000",
+   "desc": "This setting provides a way to choose the basepair thresholds which determine the barChart sizes (small, medium, or large charts)."
+  },
+  {
+   "key": "barChartStretchToItem",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "barChartStretchToItem on",
+   "ex": "",
+   "desc": "This setting extends the barCharts to cover the entire horizontal space available in the graph."
+  },
+  {
+   "key": "barChartFacets",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "barChartFacets <column1,column2,...columnN>",
+   "ex": "",
+   "desc": "This setting turns on the faceted selection on the track details and configure page which is useful for selecting which bars out of a large number to display."
+  },
+  {
+   "key": "barChartStatsUrl",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "barChartStatsUrl <url>",
+   "ex": "",
+   "desc": "This setting associates a table in tab-separated-values with the barchart, with one line per bar."
+  },
+  {
+   "key": "singleCellColumnNames",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "singleCellColumnNames off",
+   "ex": "",
+   "desc": "This setting changes cell count to count in the track details page for the column named count in the facets file specified by barChartStatsUrl ."
+  },
+  {
+   "key": "barChartMerge",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "barChartMerge on",
+   "ex": "",
+   "desc": "This setting enables the merge button inside of the faceted selections."
+  },
+  {
+   "key": "barChartMetric",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartMetric <metric>",
+   "ex": "",
+   "desc": "This setting provides a label for details page information about the barChart values presented."
+  },
+  {
+   "key": "barChartUnit",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartUnit <unit>",
+   "ex": "",
+   "desc": "The unit label is attached to values in the display, charts and plots of the track."
+  },
+  {
+   "key": "barChartCategoryUrl",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartCategoryUrl <url>",
+   "ex": "",
+   "desc": "Specifies a tab-separated file that provides labels and optionally colors for the categories (bars)."
+  },
+  {
+   "key": "barChartSampleUrl",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "barChartSampleUrl <url>",
+   "ex": "",
+   "desc": "Specifies a tab-separated file that provides categories for samples in the barChartMatrixUrl file."
+  },
+  {
+   "key": "barChartBarMinPadding",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "barChartBarMinPadding <num>",
+   "ex": "",
+   "desc": "Sets the minimum pixel width between bars to <num> pixels."
+  },
+  {
+   "key": "barChartBarMinWidth",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart"
+   ],
+   "level": "new",
+   "fmt": "barChartBarMinWidth <num>",
+   "ex": "",
+   "desc": "Sets the minimum pixel width of the bars in the chart to <num> pixels."
+  },
+  {
+   "key": "maxLimit",
+   "category": "bigBarChart",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bedGraph",
+    "bigBarChart"
+   ],
+   "level": "full",
+   "fmt": "maxLimit <#>",
+   "ex": "maxLimit 5000",
+   "desc": "The upper limit of the data range in a track is specified with this setting."
+  },
+  {
+   "key": "bigBed",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": null,
+   "fmt": "type bigBed <3-12> [+/.]",
+   "ex": "type bigBed 9 +",
+   "desc": "Type bigBed declares the number of standard \"bed\" fields in the data."
+  },
+  {
+   "key": "itemRgb",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed",
+    "bedDetail",
+    "bedGraph",
+    "bedLogR"
+   ],
+   "level": "base",
+   "fmt": "itemRgb on",
+   "ex": "itemRgb on",
+   "desc": "In bed formats supporting at least 9 standard bed fields, this setting can be used to activate item coloring using the value in the ninth field, itemRgb ."
+  },
+  {
+   "key": "colorFields",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigGenePred"
+   ],
+   "level": "new",
+   "fmt": "colorFields default=\"<label>\" <fieldName1>=\"<label1>\" <fieldName2>=\"<label2>\" ...",
+   "ex": "colorFields default=\"Kozak strength\" colorByEvidence=\"Evidence type\" colorByHlaClass=\"HLA class\"",
+   "desc": "Enables a Color by: dropdown in the track controls that lets the user switch among multiple pre-computed color schemes without leaving the track display."
+  },
+  {
+   "key": "colorByStrand",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "base",
+   "fmt": "colorByStrand <red,green,blue> <red,green,blue>",
+   "ex": "colorByStrand 255,0,0 0,0,255",
+   "desc": "To color items differently by the strand they align to, use the colorByStrand setting."
+  },
+  {
+   "key": "denseCoverage",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "denseCoverage <maxVal>",
+   "ex": "denseCoverage 100",
+   "desc": "bigBed specific Type bigBed tracks in dense mode do a density plot based on maximum coverage seen at each pixel."
+  },
+  {
+   "key": "labelOnFeature",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "labelOnFeature <on/off>",
+   "ex": "labelOnFeature on",
+   "desc": "Usually, labels (the BED name field) are drawn next to the features."
+  },
+  {
+   "key": "extraDetailsTable",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "deprecated",
+   "fmt": "extraDetailsTable <url/relativePath>",
+   "ex": "",
+   "desc": "This setting was renamed June 2022."
+  },
+  {
+   "key": "extraTableFields",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "deprecated",
+   "fmt": "extraTableFields <fieldName1|table title,fieldName2|table title,...>",
+   "ex": "extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example",
+   "desc": "This setting was renamed June 2022."
+  },
+  {
+   "key": "detailsStaticTable",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "detailsStaticTable <url/relativePath>",
+   "ex": "",
+   "desc": "Provides a template to a tab separated text file where $<fieldName> strings will be substituted for data in the bigBed and displayed as an HTML table."
+  },
+  {
+   "key": "detailsDynamicTable",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "detailsDynamicTable <fieldName1|table title,fieldName2|table title,...>",
+   "ex": "detailsDynamicTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example",
+   "desc": "Tells the system that the data in <fieldName1,...> contains an encoded table that should be turned into a standard HTML table on the details page for that item."
+  },
+  {
+   "key": "detailsScript",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "detailsScript.<plotType>.<fieldName> <jsonConfig>",
+   "ex": "detailsScript.histogram.afrHist {\"title\":\"AFR Allele Frequencies\",\"xLabel\":\"Allele size (repeat copies)\"}\ndetailsScript.histogram.eurHist {\"title\":\"EUR Allele Frequencies\",\"xLabel\":\"Allele size (repeat copies)\"}",
+   "desc": "Adds a custom JavaScript visualization to the item details page for a bigBed track."
+  },
+  {
+   "key": "exonArrows",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "genePred",
+    "bed",
+    "broadPeak"
+   ],
+   "level": "full",
+   "fmt": "exonArrows <on/off>",
+   "ex": "exonArrows off",
+   "desc": "On tracks that show exons or blocks within features, exon arrows allow the user to jump to the next exon or block outside the image."
+  },
+  {
+   "key": "exonNumbers",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "genePred",
+    "bed",
+    "psl",
+    "bigBed",
+    "bigGenePred"
+   ],
+   "level": "full",
+   "fmt": "exonNumbers <on/off>",
+   "ex": "exonNumbers off",
+   "desc": "A mouseover that shows the exon and intron numbers can be explicitly shown or hidden using this setting."
+  },
+  {
+   "key": "scoreFilter",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "scoreFilter <low>[:<high>]",
+   "ex": "scoreFilter 300\n    scoreFilterLimits 200:1000",
+   "desc": "Type bigBed tracks can be filtered on the standard bed field score ."
+  },
+  {
+   "key": "maxItems",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed",
+    "broadPeak",
+    "psl"
+   ],
+   "level": "full",
+   "fmt": "maxItems <integer>",
+   "ex": "maxItems 25",
+   "desc": "Maximum number of items to display individually in full or pack or squish mode."
+  },
+  {
+   "key": "maxWindowCoverage",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "genePred",
+    "bam",
+    "rmsk",
+    "narrowPeak",
+    "broadPeak",
+    "bigWig",
+    "bedLogR"
+   ],
+   "level": "full",
+   "fmt": "maxWindowCoverage <integer>",
+   "ex": "maxWindowCoverage 10000000",
+   "desc": "When too many individual bed items might be shown in the Browser image (such as might occur when a large region of a chromosome is viewed), maxWindowCoverage..."
+  },
+  {
+   "key": "maxWindowToDraw",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "genePred",
+    "bam",
+    "rmsk",
+    "narrowPeak",
+    "broadPeak",
+    "bigWig",
+    "bedLogR"
+   ],
+   "level": "full",
+   "fmt": "maxWindowToDraw <integer>",
+   "ex": "maxWindowToDraw 10000000",
+   "desc": "When too many individual bed items might be shown in the Browser image (such as might occur when a large region of a chromosome is viewed), maxWindowToDraw w..."
+  },
+  {
+   "key": "minGrayLevel",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "broadPeak",
+    "narrowPeak",
+    "bedLogR",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "minGrayLevel  <1-9>",
+   "ex": "minGrayLevel   4",
+   "desc": "When a bed track contains the standard field score , and when that score is used to present items in gray or color scale (see spectrum ), this setting specif..."
+  },
+  {
+   "key": "noScoreFilter",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bedGraph",
+    "bedLogR",
+    "gvf"
+   ],
+   "level": "full",
+   "fmt": "noScoreFilter  on",
+   "ex": "type bigBed 6 +\n    noScoreFilter on",
+   "desc": "By default, bed tracks with 5 or more standard bed fields that contain either a ' ."
+  },
+  {
+   "key": "spectrum",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "spectrum on",
+   "ex": "spectrum on\n    scoreMin 700\n    scoreMax 900",
+   "desc": "Replaces useScore ."
+  },
+  {
+   "key": "style",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "style <heatmap>",
+   "ex": "style heatmap",
+   "desc": "BigBed tracks can be created with a variety of extra fields."
+  },
+  {
+   "key": "thickDrawItem",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "thickDrawItem <off/on>",
+   "ex": "thickDrawItem on",
+   "desc": "In bed tracks that have 8 or more standard bed fields, portions of items in tracks such as gene models can be drawn thicker to differentiate exon regions fro..."
+  },
+  {
+   "key": "decorator",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed",
+    "genePred",
+    "bigGenePred",
+    "psl",
+    "bigPsl"
+   ],
+   "level": "new",
+   "fmt": "decorator.default.*",
+   "ex": "",
+   "desc": "Decorators allow annotation to be placed on top of BED 12+, bigBed, PSL, and bigGenePred tracks by highlighting regions and adding glyphs on top of them."
+  },
+  {
+   "key": "searchIndex",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "searchIndex <str>",
+   "ex": "searchIndex name",
+   "desc": "Specifies the list of field names on which a index has been made."
+  },
+  {
+   "key": "searchTrix",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "searchTrix <url/relativePath>",
+   "ex": "searchTrix url or relative path",
+   "desc": "Specifies the URL to a TRIX file that maps free text to a set of indices that are assumed to have indicies in the associated bigBed file."
+  },
+  {
+   "key": "labelFields",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart",
+    "bigBed",
+    "bigGenePred",
+    "bigNarrowPeak",
+    "bigPsl"
+   ],
+   "level": "full",
+   "fmt": "labelFields < fieldName[,fieldName] >",
+   "ex": "",
+   "desc": "A list of fields from the bigBed based file that can be used as a label."
+  },
+  {
+   "key": "defaultLabelFields",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBarChart",
+    "bigBed",
+    "bigGenePred",
+    "bigNarrowPeak",
+    "bigPsl"
+   ],
+   "level": "full",
+   "fmt": "defaultLabelFields < fieldName[,fieldName] >",
+   "ex": "",
+   "desc": "A list of fields from the bigBed based file that should be used as a label by default."
+  },
+  {
+   "key": "labelSeparator",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed",
+    "bigGenePred",
+    "bigNarrowPeak",
+    "bigPsl"
+   ],
+   "level": "full",
+   "fmt": "labelSeparator < text >",
+   "ex": "",
+   "desc": "One or more characters to use as the field separator between multiple labels."
+  },
+  {
+   "key": "filter",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "filter.<fieldName> <default integer>",
+   "ex": "filter.score 0",
+   "desc": "There are a number of different filters available for bigBed data."
+  },
+  {
+   "key": "filterText",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "filterText.<fieldName> <default search string>",
+   "ex": "filterText.geneName *BRCA*",
+   "desc": "There are a number of different filters available for bigBed data."
+  },
+  {
+   "key": "filterValues",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "filterValues.<fieldName> <value1,value2,value3...>",
+   "ex": "filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...",
+   "desc": "There are a number of different filters available for bigBed data."
+  },
+  {
+   "key": "filterLabel",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "filterLabel.<fieldName> <label>",
+   "ex": "filterValues.strand +,-\n    filterLabel.strand Strand (Orientation)",
+   "desc": "When a user clicks on a track item in the Browser image, the item detail page is shown."
+  },
+  {
+   "key": "filterPriority",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "filterPriority.<fieldName> <number>",
+   "ex": "filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...\n    filterValues.annot pLoF,missense,synonymous,other\n    filterValues.FILTER PASS,InbreedingCoeff,RF,AC0\n    filterPriority.variation_type 1\n    filterPriority.annot 2\n    filterPriority.FILTER 3",
+   "desc": "Sets the display order of filters on the track configuration page."
+  },
+  {
+   "key": "highlight",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "highlight.<fieldName> <default integer>",
+   "ex": "highlight.blockCount 4",
+   "desc": "Similar to filters, There are a number of different highlights available for bigBed data."
+  },
+  {
+   "key": "highlightText",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "highlightText.<fieldName> <default search string>",
+   "ex": "highlightText.name NM*",
+   "desc": "Similar to filters, There are a number of different highlights available for bigBed data."
+  },
+  {
+   "key": "highlightValues",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "highlightValues.<fieldName> <value1,value2,value3...>",
+   "ex": "highlightValues.OddEven Odd",
+   "desc": "Similar to filters, There are a number of different highlights available for bigBed data."
+  },
+  {
+   "key": "highlightColor",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "highlightColor <hexcolor>",
+   "ex": "highlightColor #ff0000",
+   "desc": "Sets the default color for all of the various highlights defined in this stanza"
+  },
+  {
+   "key": "highlightPriority",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "highlightPriority.<fieldName> <number>",
+   "ex": "highlightValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...\n    highlightValues.annot pLoF,missense,synonymous,other\n    highlightValues.FILTER PASS,InbreedingCoeff,RF,AC0\n    highlightPriority.variation_type 1\n    highlightPriority.annot 2\n    highlightPriority.FILTER 3",
+   "desc": "Sets the display order of highlights on the track configuration page."
+  },
+  {
+   "key": "bedNameLabel",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "bedNameLabel <label>",
+   "ex": "bedNameLabel Gene Id",
+   "desc": "When a user clicks on a bed track item in the Browser image, the item detail page is shown."
+  },
+  {
+   "key": "exonArrowsDense",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed"
+   ],
+   "level": "full",
+   "fmt": "exonArrowsDense <off/on>",
+   "ex": "",
+   "desc": "On tracks that show exons or blocks within items, exon arrows allow the user to jump to the next exon/block outside the image."
+  },
+  {
+   "key": "itemImagePath",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed"
+   ],
+   "level": "full",
+   "fmt": "itemImagePath <path> <suffix>",
+   "ex": "itemImagePath images/myTrackImages png\n    itemBigImagePath http://bigImages.com/myTrackImages jpg",
+   "desc": "Items can be associated with images and the images can be made visible with these two settings."
+  },
+  {
+   "key": "mergeSpannedItems",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "mergeSpannedItems <on/off>",
+   "ex": "mergeSpannedItems on",
+   "desc": "Allows merging all track items that extend beyond both sides of the current viewing window into one bed item in the display."
+  },
+  {
+   "key": "linkIdInName",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed"
+   ],
+   "level": "full",
+   "fmt": "linkIdInName on",
+   "ex": "linkIdInName on",
+   "desc": "This setting changes the meaning of the bed name field to \"identifier description\"."
+  },
+  {
+   "key": "nextExonText",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "nextExonText <str>",
+   "ex": "nextExonText \"Next Match\"\n    prevExonText \"Previous Match\"",
+   "desc": "For tracks that offer multiple block items such as gene models, the next/previous exon arrows are usually displayed by default in the Browser."
+  },
+  {
+   "key": "scoreLabel",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed",
+    "bigPsl",
+    "bigGenePred",
+    "bigNarrowPeak"
+   ],
+   "level": "full",
+   "fmt": "scoreLabel <label>",
+   "ex": "scoreLabel Log of binding Score * 1000",
+   "desc": "When a user clicks on a track item in the Browser image, the item detail page is shown."
+  },
+  {
+   "key": "showTopScorers",
+   "category": "Item or Region Track Settings - less frequent",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bed5FloatScoreWithFdr",
+    "bed5FloatScore"
+   ],
+   "level": "full",
+   "fmt": "showTopScorers #",
+   "ex": "showTopScorers 20",
+   "desc": "Use this setting to show a list of some number of top-scoring items in a region of the genome, when looking at an individual item in the item details page."
+  },
+  {
+   "key": "bigChain",
+   "category": "bigChain - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigChain"
+   ],
+   "level": null,
+   "fmt": "type bigChain targetDb",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "linkDataUrl",
+   "category": "bigChain - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigChain"
+   ],
+   "level": "full",
+   "fmt": "linkDataUrl <url/relativePath>",
+   "ex": "",
+   "desc": "The location of a remote data file containing the chain link data."
+  },
+  {
+   "key": "baseColorUseSequence",
+   "category": "bigChain - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "baseColorUseSequence  <extFile {seqTable} /\n                  hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss / 2bit >",
+   "ex": "",
+   "desc": "Specifies where item sequence can be found (if any) so that item sequence, or differences from genomic sequence, can be drawn when viewing a sufficiently sma..."
+  },
+  {
+   "key": "baseColorDefault",
+   "category": "bigChain - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "baseColorDefault\n                    <diffBases/diffCodons/itemBases/itemCodons/genomicCodons>",
+   "ex": "",
+   "desc": "Specifies the default drawing mode."
+  },
+  {
+   "key": "bigGenePred",
+   "category": "bigGenePred - Gene Annotations",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigGenePred"
+   ],
+   "level": null,
+   "fmt": "type bigGenePred",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "bigInteract",
+   "category": "bigInteract",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigInteract"
+   ],
+   "level": null,
+   "fmt": "type bigInteract",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "interactDirectional",
+   "category": "bigInteract",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigInteract"
+   ],
+   "level": "full",
+   "fmt": "interactDirectional <true|offsetSource|offsetTarget|clusterSource|clusterTarget>",
+   "ex": "",
+   "desc": "This setting is used when the interaction has an orientation (direction of effect)."
+  },
+  {
+   "key": "interactUp",
+   "category": "bigInteract",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigInteract"
+   ],
+   "level": "full",
+   "fmt": "interactUp <true|false>",
+   "ex": "",
+   "desc": "This setting flips the curved full visibility display so that the peak of the curves is 'up' (hills instead of valleys)."
+  },
+  {
+   "key": "detailsBoxesEnabled",
+   "category": "bigInteract",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigInteract"
+   ],
+   "level": "new",
+   "fmt": "detailsBoxesEnabled <true|false>",
+   "ex": "",
+   "desc": "This setting controls the default behavior for suppressing the \"box\" links to hgc details pages that appear on the lines connecting interacting regions."
+  },
+  {
+   "key": "interactMultiRegion",
+   "category": "bigInteract",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigInteract"
+   ],
+   "level": "full",
+   "fmt": "interactMultiRegion <true|padding>",
+   "ex": "",
+   "desc": "This setting causes a link to appear on the details page that appears when an interaction is clicked on."
+  },
+  {
+   "key": "endsVisible",
+   "category": "bigInteract",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigInteract"
+   ],
+   "level": "full",
+   "fmt": "endsVisible two",
+   "ex": "",
+   "desc": "This setting makes the default behavior for the track show only interactions with both ends in the window."
+  },
+  {
+   "key": "bigMaf",
+   "category": "bigMaf - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigMaf"
+   ],
+   "level": null,
+   "fmt": "type bigMaf",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "speciesOrder",
+   "category": "bigMaf - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wigMaf",
+    "bed"
+   ],
+   "level": "full",
+   "fmt": "speciesOrder <species1> [species2 ...]",
+   "ex": "",
+   "desc": "Use speciesOrder to declare the order of the stacked alignments."
+  },
+  {
+   "key": "speciesLabels",
+   "category": "bigMaf - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wigMaf",
+    "bed"
+   ],
+   "level": "new",
+   "fmt": "speciesLabels <species1=newLabel1> [species2=newLabel2 ...]",
+   "ex": "speciesLabels mm10=mouse_mm10 mm39=mouse_mm39",
+   "desc": "Use speciesLabels to specify new labels that map to sequence names."
+  },
+  {
+   "key": "frames",
+   "category": "bigMaf - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wigMaf",
+    "bigMaf"
+   ],
+   "level": "full",
+   "fmt": "frames <table/url>",
+   "ex": "frames myCodonFrames",
+   "desc": "A wigMaf or bigMaf track can display gene codon translation."
+  },
+  {
+   "key": "summary",
+   "category": "bigMaf - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wigMaf",
+    "bigMaf"
+   ],
+   "level": "full",
+   "fmt": "summary <tableName/url>",
+   "ex": "summary hg17Maf8waySummary",
+   "desc": "This setting contains a table name containing a MAF summary table, or a url that points to a bigBed containing that information."
+  },
+  {
+   "key": "bigNarrowPeak",
+   "category": "bigNarrowPeak - Peaks",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigNarrowPeak"
+   ],
+   "level": null,
+   "fmt": "type bigNarrowPeak",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "Filter",
+   "category": "bigNarrowPeak - Peaks",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "narrowPeak",
+    "broadPeak"
+   ],
+   "level": "full",
+   "fmt": "<column>Filter <low>[:<high>]",
+   "ex": "scoreFilter 100",
+   "desc": "A number of numerical filters are available for bed tracks."
+  },
+  {
+   "key": "bigPsl",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigPsl"
+   ],
+   "level": null,
+   "fmt": "type bigPsl",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "baseColorUseCds",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "genePred",
+    "psl",
+    "bigPsl"
+   ],
+   "level": "full",
+   "fmt": "baseColorUseCds <given>",
+   "ex": "baseColorUseCds given",
+   "desc": "Specifies where coding sequence (CDS) coordinates can be found (if any) so that codons can be drawn when viewing a sufficiently small region."
+  },
+  {
+   "key": "showDiffBasesAllScales",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": "all",
+   "level": "full",
+   "fmt": "showDiffBasesAllScales on",
+   "ex": "",
+   "desc": "Show base differences for all zoom levels."
+  },
+  {
+   "key": "pslSequence",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "psl"
+   ],
+   "level": "new",
+   "fmt": "pslSequence <no/all/different>",
+   "ex": "pslSequence different",
+   "desc": "This setting specifies some display configuration options for psl tracks that also have sequence loaded."
+  },
+  {
+   "key": "showCdsAllScales",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "psl"
+   ],
+   "level": "new",
+   "fmt": "showCdsAllScales on",
+   "ex": "",
+   "desc": "Show CDS for PSL tracks at all zoom levels."
+  },
+  {
+   "key": "showCdsMaxZoom",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "psl"
+   ],
+   "level": "new",
+   "fmt": "showCdsMaxZoom <basesPerPixel>",
+   "ex": "baseColorDefault genomicCodons\n    baseColorUseCds given\n    showDiffBasesMaxZoom 10000.0\n    showCdsMaxZoom 10000.0\n    baseColorUseCds table hgFixed.transMapGeneUcscGenes\n    baseColorUseSequence lfExtra\n    baseColorDefault diffCodons\n    baseColorTickColor lighterShade\n    showDiffBasesAllScales .\n    showCdsAllScales .",
+   "desc": "Use this setting (a float) to specify the maximum zoom-out allowed for displaying the CDS for psl tracks."
+  },
+  {
+   "key": "showDiffBasesMaxZoom",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": "all",
+   "level": "new",
+   "fmt": "showDiffBasesMaxZoom <basesPerPixel>",
+   "ex": "",
+   "desc": "Show annotations highlighting base or codon differences only if current zoom level does not exceed basesPerPixel (a float)."
+  },
+  {
+   "key": "bigWig",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigWig"
+   ],
+   "level": null,
+   "fmt": "type bigWig <#> <#>",
+   "ex": "",
+   "desc": "The remote data files of type bigWig must declare the expected signal range for the data."
+  },
+  {
+   "key": "autoScale",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph",
+    "hic"
+   ],
+   "level": "base",
+   "fmt": "autoScale <off/on/group>",
+   "ex": "autoScale on",
+   "desc": "This setting is available for both the graph types of tracks (wig, bigWig, bedGraph) and the Hi-C heatmap tracks (hic)."
+  },
+  {
+   "key": "maxHeightPixels",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph",
+    "bigInteract"
+   ],
+   "level": "base",
+   "fmt": "maxHeightPixels <max:default:min>",
+   "ex": "maxHeightPixels 100:16:8",
+   "desc": "The amount of vertical viewing space for your signal track should be declared, though it is configurable by the user."
+  },
+  {
+   "key": "viewLimits",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph"
+   ],
+   "level": "base",
+   "fmt": "viewLimits <lower:upper>",
+   "ex": "viewLimits 5:20\n    viewLimitsMax0:100",
+   "desc": "The data of most interest in a graph track may be contained within a narrow range."
+  },
+  {
+   "key": "alwaysZero",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bedGraph",
+    "bigWig"
+   ],
+   "level": "full",
+   "fmt": "alwaysZero  <off/on>",
+   "ex": "",
+   "desc": "When autoScale is set to \"on\" or \"group\" in the signal track, additionally setting alwaysZero to \"on\" will ensure that the y=0 value will be in view at all t..."
+  },
+  {
+   "key": "graphTypeDefault",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph"
+   ],
+   "level": "full",
+   "fmt": "graphTypeDefault points",
+   "ex": "graphTypeDefault points",
+   "desc": "The signal can be graphed as either \" points \" displayed at the signal value, or the default space-filling \" bar \"."
+  },
+  {
+   "key": "maxWindowToQuery",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigWig",
+    "bedLogR"
+   ],
+   "level": "full",
+   "fmt": "maxWindowToQuery <integer>",
+   "ex": "",
+   "desc": "For bigWigs only When signal data is clicked in the Browser image, the details of the signal in the current viewing window are displayed."
+  },
+  {
+   "key": "negateValues",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph"
+   ],
+   "level": "full",
+   "fmt": "negateValues <on>",
+   "ex": "",
+   "desc": "Negate the values in the wiggle, meaning that positive values become negative and vice-versa."
+  },
+  {
+   "key": "setColorWith",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigWig"
+   ],
+   "level": "full",
+   "fmt": "setColorWith <url/relativePath>",
+   "ex": "setColorWith url or relative path",
+   "desc": "Specifies the URL to a bed 9 bigBed file."
+  },
+  {
+   "key": "smoothingWindow",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph"
+   ],
+   "level": "full",
+   "fmt": "smoothingWindow <off/1-16>",
+   "ex": "smoothingWindow 4",
+   "desc": "Often signal information is chunky, because a single value is given for a number of bases."
+  },
+  {
+   "key": "transformFunc",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph",
+    "bed"
+   ],
+   "level": "full",
+   "fmt": "transformFunc <NONE/LOG>",
+   "ex": "transformFunc LOG",
+   "desc": "The track's signal can be presented in log scale with this user-configurable setting."
+  },
+  {
+   "key": "logo",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigWig"
+   ],
+   "level": "new",
+   "fmt": "logo on",
+   "ex": "logo on",
+   "desc": "Enables dynseq display , which graphs the signal as reference base nucleotide letters with their heights equal to the signal value within the bigWig track."
+  },
+  {
+   "key": "logoMaf",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigWig",
+    "bigMaf"
+   ],
+   "level": "new",
+   "fmt": "logoMaf <url/relativePath>",
+   "ex": "logoMaf https://hgdownload.gi.ucsc.edu/goldenPath/hg38/multiz470way/multiz470way.bigMaf",
+   "desc": "The argument to logoMaf is the path to a MAF alignment (either a table or bigMaf)."
+  },
+  {
+   "key": "windowingFunction",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph"
+   ],
+   "level": "full",
+   "fmt": "windowingFunction  <mean/mean+whiskers/maximum/minimum>",
+   "ex": "windowingFunction mean",
+   "desc": "Depending upon how large of a genomic region is displayed in the Browser image, it may be necessary to summarize the actual signal."
+  },
+  {
+   "key": "yLineMark",
+   "category": "bigWig - Signal Graphing Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "wig",
+    "bigWig",
+    "bedGraph"
+   ],
+   "level": "full",
+   "fmt": "yLineMark <#>",
+   "ex": "yLineOnOff on\n    yLineMark 2.5\n    gridDefault on",
+   "desc": "It can be useful to draw a line across the track's signal graph at some fixed y coordinate."
+  },
+  {
+   "key": "bigLolly",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": null,
+   "fmt": "type bigLolly",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "noStems",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": "full",
+   "fmt": "noStems <on/off>",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "lollySizeField",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": "full",
+   "fmt": "lollySizeField <integer>",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "lollyMaxSize",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": "full",
+   "fmt": "lollyMaxSize <integer>",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "lollyField",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": "full",
+   "fmt": "lollyField <integer>",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "yAxisLabel",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": "full",
+   "fmt": "yAxisLabel.<integer> <integer> <on/off> <R,G,B> <string>",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "yAxisNumLabels",
+   "category": "bigLolly - Lollipop charts",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigLolly"
+   ],
+   "level": "full",
+   "fmt": "yAxisNumLabels.<on/off> <integer>",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "hic",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": null,
+   "fmt": "type hic",
+   "ex": "",
+   "desc": ""
+  },
+  {
+   "key": "drawMode",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "full",
+   "fmt": "drawMode <triangle|square|arc>",
+   "ex": "",
+   "desc": "This setting controls the default display mode for the hic track."
+  },
+  {
+   "key": "normalization",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "full",
+   "fmt": "normalization <NONE|VC|VC_SQRT|KR>",
+   "ex": "",
+   "desc": "This setting controls which method is the default for normalizing the raw scores from the .hic file."
+  },
+  {
+   "key": "resolution",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "full",
+   "fmt": "resolution <Auto|integer>",
+   "ex": "",
+   "desc": "This setting controls the default size of the bins that the Hi-C contact results are grouped into."
+  },
+  {
+   "key": "saturationScore",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "full",
+   "fmt": "saturationScore <float>",
+   "ex": "",
+   "desc": "The saturationScore setting is part of how the color shades of the heatmap are displayed."
+  },
+  {
+   "key": "hicDistanceMin",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "new",
+   "fmt": "hicDistanceMin <integer>",
+   "ex": "",
+   "desc": "Hi-C tracks have a setting that controls the minimum interaction distance in nucleotides for the heatmap."
+  },
+  {
+   "key": "hicDistanceMax",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "new",
+   "fmt": "hicDistanceMax <integer>",
+   "ex": "",
+   "desc": "Hi-C tracks have a setting that controls the maximum interaction distance in nucleotides for the heatmap."
+  },
+  {
+   "key": "hicArcLimit",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "new",
+   "fmt": "hicArcLimit <integer>",
+   "ex": "",
+   "desc": "The \"arc\" display mode for Hi-C tracks can become difficult to read if too many arcs are being drawn, particularly if many of them have scores close to the s..."
+  },
+  {
+   "key": "hicArcLimitEnabled",
+   "category": "hic - Hi-C contact matrices",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "hic"
+   ],
+   "level": "new",
+   "fmt": "hicArcLimitEnabled <true|false>",
+   "ex": "",
+   "desc": "The \"arc\" display mode for Hi-C tracks can become difficult to read if too many arcs are being drawn, so there is an option to limit the display to the N hig..."
+  },
+  {
+   "key": "halSnake",
+   "category": "halSnake - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "halSnake"
+   ],
+   "level": null,
+   "fmt": "type halSnake",
+   "ex": "",
+   "desc": "If the bigDataUrl setting is included, the data at the location specified by that URL will be displayed."
+  },
+  {
+   "key": "showSnpWidth",
+   "category": "halSnake - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "halSnake"
+   ],
+   "level": "full",
+   "fmt": "showSnpWidth < integer >",
+   "ex": "",
+   "desc": "The maximum width (in bases) of a window where the halSnake will show SNPs between the reference and the other species."
+  },
+  {
+   "key": "otherSpecies",
+   "category": "halSnake - Multiple Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "halSnake"
+   ],
+   "level": "full",
+   "fmt": "otherSpecies <otherSpecies>",
+   "ex": "otherSpecies tweeter",
+   "desc": "The name of the other assembly in the pairwise alignment for this track."
+  },
+  {
+   "key": "vcfTabix",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfTabix"
+   ],
+   "level": null,
+   "fmt": "type vcfTabix",
+   "ex": "",
+   "desc": "If the bigDataUrl setting is included, the data at the location specified by that URL will be displayed."
+  },
+  {
+   "key": "hapClusterEnabled",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "hapClusterEnabled <true|false>",
+   "ex": "",
+   "desc": "If the VCF file includes genotype columns for at least two individuals, then a haplotype sorting display is enabled by default."
+  },
+  {
+   "key": "hapClusterMethod",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "hapClusterMethod <centerWeighted|fileOrder|treeFile url >",
+   "ex": "",
+   "desc": "Assuming hapClusterEnabled is true , this specifies how genotypes are ordered for display: centerWeighted : For diploid organisms, this separates the two hap..."
+  },
+  {
+   "key": "hapClusterColorBy",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "hapClusterColorBy <altOnly|function|refAlt|base>",
+   "ex": "",
+   "desc": "Assuming hapClusterEnabled is true , this specifies one of three ways that reference and alternate alleles are colored: altOnly : reference allele is white (..."
+  },
+  {
+   "key": "geneTrack",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "geneTrack < track >",
+   "ex": "",
+   "desc": "This is for use with hapClusterColorBy function ; it specifies the gene track to use when determining the functional effect of each variant."
+  },
+  {
+   "key": "hapClusterTreeAngle",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "hapClusterTreeAngle <triangle|rectangle>",
+   "ex": "",
+   "desc": "Assuming hapClusterEnabled is true , this controls the shape of leaf clusters on the right of the tree (i.e."
+  },
+  {
+   "key": "hapClusterHeight",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "hapClusterHeight < N >",
+   "ex": "",
+   "desc": "Assuming hapClusterEnabled is true , this specifies the height in pixels of the haplotype sorting display."
+  },
+  {
+   "key": "applyMinQual",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "applyMinQual <true|false>",
+   "ex": "",
+   "desc": "If true , then variants whose QUAL column contains a value less than the minQual setting will not be displayed."
+  },
+  {
+   "key": "minQual",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "minQual < Q >",
+   "ex": "",
+   "desc": "Assuming applyMinQual is true , this is the minimum QUAL value required for a variant to be displayed."
+  },
+  {
+   "key": "minFreq",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf"
+   ],
+   "level": "full",
+   "fmt": "minFreq < F >",
+   "ex": "",
+   "desc": "The minimum minor allele frequency required for a variant to be displayed."
+  },
+  {
+   "key": "vcfDoFilter",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "vcfDoFilter <on/off>",
+   "ex": "",
+   "desc": "Turn on/off the FILTER options available by default for VCF tracks"
+  },
+  {
+   "key": "vcfDoQual",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "vcfDoQual <on/off>",
+   "ex": "",
+   "desc": "Turns on/off the QUAL filter options available by default for VCF tracks"
+  },
+  {
+   "key": "vcfDoMaf",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "vcfDoMaf <on/off>",
+   "ex": "",
+   "desc": "Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks"
+  },
+  {
+   "key": "sampleMetadataFile",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "sampleMetadataFile <url>",
+   "ex": "#sample\tPopulation\tSuperpopulation\tRegion\nHG00096\tGBR\tEUR\tEurope\nHG00099\tGBR\tEUR\tEurope\nNA18939\tJPT\tEAS\tEast Asia",
+   "desc": "Specifies a tab-separated file that provides metadata columns for VCF samples."
+  },
+  {
+   "key": "vcfPhasedTrio",
+   "category": "vcfPhasedTrio - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfPhasedTrio"
+   ],
+   "level": null,
+   "fmt": "type vcfPhasedTrio",
+   "ex": "",
+   "desc": "There are no extra options that can appear on the type vcfPhasedTrio line."
+  },
+  {
+   "key": "vcfChildSample",
+   "category": "vcfPhasedTrio - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "vcfChildSample <sampleName|altName>",
+   "ex": "",
+   "desc": "The VCF Genotype column ID of the \"child\" sample, followed optionally by a \"|\" character and an alias for the display."
+  },
+  {
+   "key": "vcfParentSamples",
+   "category": "vcfPhasedTrio - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "vcfParentSamples <sampleName|altName,sampleName|altName>",
+   "ex": "",
+   "desc": "A comma separated (no spaces) list of the VCF Genotype column IDs of the \"parents\", followed optionally by a \"|\" character and an alias for the display."
+  },
+  {
+   "key": "vcfUseAltSampleNames",
+   "category": "vcfPhasedTrio - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfPhasedTrio"
+   ],
+   "level": "full",
+   "fmt": "vcfUseAltSampleNames <on/off>",
+   "ex": "",
+   "desc": "Make the display use the aliases as the default labels for each haplotype lane instead of the ID from the VCF."
+  },
+  {
+   "key": "superTrack",
+   "category": "superTrack - Folder Track Settings",
+   "roles": [
+    "super"
+   ],
+   "types": [
+    "superTrack"
+   ],
+   "level": "base",
+   "fmt": "superTrack on show",
+   "ex": "",
+   "desc": "To declare a supertrack, simply add this setting to a track definition that will hold a few standard settings."
+  },
+  {
+   "key": "parent_supertrack",
+   "category": "superTrack - Folder Track Settings",
+   "roles": [
+    "super"
+   ],
+   "types": [
+    "superTrack"
+   ],
+   "level": "base",
+   "fmt": "parent <superTrack>",
+   "ex": "",
+   "desc": "Membership in a supertrack, composite, or aggregate track is declared by the child, not the supertrack itself with a line such as parent superTrack1 ."
+  },
+  {
+   "key": "parent",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "base",
+   "fmt": "parent <composite> [off/on]",
+   "ex": "",
+   "desc": "Membership in a composite is declared by the subtrack child, not the composite itself, through this setting."
+  },
+  {
+   "key": "compositeTrack",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "base",
+   "fmt": "compositeTrack on",
+   "ex": "",
+   "desc": "To declare a composite, simply add this setting to a track definition, along with a few standard settings."
+  },
+  {
+   "key": "allButtonPair",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "allButtonPair on",
+   "ex": "",
+   "desc": "When a simple composite track presents a short list of subtracks, it can be convenient for the user to have an easy way to select or deselect all of them."
+  },
+  {
+   "key": "centerLabelsDense",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "centerLabelsDense <off/on>",
+   "ex": "",
+   "desc": "By default, only the composite track's single center label is shown when the subtracks are displayed together in the Browser dense mode."
+  },
+  {
+   "key": "dragAndDrop",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "dragAndDrop subTracks",
+   "ex": "",
+   "desc": "When you have many subtracks in a composite track, it may be useful on the Track Setting page, also known as the hgTrackUi configuration page, to rearrange t..."
+  },
+  {
+   "key": "hideEmptySubtracks",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "hideEmptySubtracks <on/off>",
+   "ex": "",
+   "desc": "When you have many subtracks in a composite track, it may be useful to limit the display to only those with data in the current viewing window."
+  },
+  {
+   "key": "hideEmptySubtracksMultiBedUrl",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "hideEmptySubtracksMultiBedUrl file.bb",
+   "ex": "",
+   "desc": "For large composites, especially those where each subtrack may be sparse, substantial performance improvements can be gained by creating an index file of the..."
+  },
+  {
+   "key": "hideEmptySubtracksSourcesUrl",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "hideEmptySubtracksSourcesUrl file.tab",
+   "ex": "",
+   "desc": "This setting is used in conjunction with the hideEmptySubtracksMultiBedUrl setting, described above."
+  },
+  {
+   "key": "hideEmptySubtracksLabel",
+   "category": "Composite Track Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "compositeTrack"
+   ],
+   "level": "full",
+   "fmt": "hideEmptySubtracksLabel <label>",
+   "ex": "",
+   "desc": "This setting is used in conjunction with the hideEmptySubtracks setting to customize the label preceding the selection checkbox on the track configuration page."
+  },
+  {
+   "key": "subGroupN",
+   "category": "Composite - Subgroups Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "subGroups"
+   ],
+   "level": "base",
+   "fmt": "subGroup1 <gTag1> <gTitle1> <mTag1a=mTitle1a>\n                        [mTag1b=mTitle1b...]",
+   "ex": "",
+   "desc": "Up to 9 subgroups may be declared, one per line."
+  },
+  {
+   "key": "subGroups",
+   "category": "Composite - Subgroups Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "subGroups"
+   ],
+   "level": "base",
+   "fmt": "subGroups <gTag1=mTag1?> [gTag2= mTag2?]",
+   "ex": "",
+   "desc": "The subtracks themselves declare their membership in a group with the subGroups setting."
+  },
+  {
+   "key": "dimensions",
+   "category": "Composite - Subgroups Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "subGroups"
+   ],
+   "level": "base",
+   "fmt": "dimensions <dimX=gTag#> [dimY=gTag#] [dimA=gTag# ...]",
+   "ex": "",
+   "desc": "In order to define the type of UI desired for selecting subtracks based upon groups, additional settings are needed at the composite level."
+  },
+  {
+   "key": "filterComposite",
+   "category": "Composite - Subgroups Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "subGroups"
+   ],
+   "level": "full",
+   "fmt": "filterComposite <dim[A/B/C][=one]> [dimB dimC ...]",
+   "ex": "",
+   "desc": "For the \"abc\" dimensions, rows of checkboxes will be shown by default."
+  },
+  {
+   "key": "dimensionAchecked",
+   "category": "Composite - Subgroups Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "subGroups"
+   ],
+   "level": "full",
+   "fmt": "dimension<?>checked <mTag1a>\n                                [mTag1b ...]",
+   "ex": "",
+   "desc": "One more complication in the selection process is determining which subgroup options are selected by default."
+  },
+  {
+   "key": "sortOrder",
+   "category": "Composite - Subgroups Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "subGroups"
+   ],
+   "level": "full",
+   "fmt": "sortOrder <gTag#=+/-> [gTag#=- ...]",
+   "ex": "",
+   "desc": "When declaring subgroups, it is often useful to sort the subtrack list by those subgroups."
+  },
+  {
+   "key": "view",
+   "category": "Composite - Views Settings",
+   "roles": [
+    "view"
+   ],
+   "types": [
+    "view"
+   ],
+   "level": "base",
+   "fmt": "subGroup1 view <Views> <vTag1a=vTitle1a> [vTag1b=vTitle1b...]",
+   "ex": "",
+   "desc": "A view is always declared both as a subgroup and in a track stanza itself."
+  },
+  {
+   "key": "parent_view",
+   "category": "Composite - Views Settings",
+   "roles": [
+    "view"
+   ],
+   "types": [
+    "view"
+   ],
+   "level": "base",
+   "fmt": "subGroups view=<vTag1>...",
+   "ex": "",
+   "desc": "A subtrack declares its membership in a view both as subgroup membership and with a parent setting that refers to the view track name."
+  },
+  {
+   "key": "viewUi",
+   "category": "Composite - Views Settings",
+   "roles": [
+    "view"
+   ],
+   "types": [
+    "view"
+   ],
+   "level": "full",
+   "fmt": "viewUi on",
+   "ex": "",
+   "desc": "If subtracks within a view are configurable, then the view will have the configuration controls for it in a box beneath the view's visibility drop down."
+  },
+  {
+   "key": "configurable",
+   "category": "Composite - Views Settings",
+   "roles": [
+    "view"
+   ],
+   "types": [
+    "view",
+    "composite"
+   ],
+   "level": "full",
+   "fmt": "configurable <off/on>",
+   "ex": "",
+   "desc": "Tracks are configurable by default if their track type supports this, and views and composites are configurable if their children's track type supports this."
+  },
+  {
+   "key": "faceted",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": null,
+   "fmt": "compositeTrack faceted",
+   "ex": "",
+   "desc": "This version of the compositeTrack setting indicates that the UI for this composite track should be handled with facets."
+  },
+  {
+   "key": "metaDataUrl",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": "new",
+   "fmt": "metaDataUrl <url>",
+   "ex": "accession       group        cell_type\nDRX118406       CellLine     iPSC\nDRX118407       CellLine     iPSC\nDRX118408       CellLine     iMeLC",
+   "desc": "The URL here points to the tsv file that provides facet information."
+  },
+  {
+   "key": "primaryKey",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": "new",
+   "fmt": "primaryKey <field>",
+   "ex": "",
+   "desc": "This setting is required and works in tandem with the file specified in the metaDataUrl setting."
+  },
+  {
+   "key": "maxCheckboxes",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": "new",
+   "fmt": "maxCheckboxes <integer>",
+   "ex": "",
+   "desc": "Frequently a facet may have a long list of possible values - too many to display at once in the track selection interface."
+  },
+  {
+   "key": "dataTypes",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": "new",
+   "fmt": "dataTypes <name1(|\"table title\") name2(|\"table title\") ...>",
+   "ex": "dataTypes sig|\"Raw signal\" peak|Peaks",
+   "desc": "This optional setting identifies a list of datatypes available for each sample in the metadata file (one sample per row)."
+  },
+  {
+   "key": "defaultSortField",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": "new",
+   "fmt": "defaultSortField <name>",
+   "ex": "defaultSortField tissue",
+   "desc": "This optional setting chooses which field in the metadata table will be used to sort the table of subtracks when the page is first loaded."
+  },
+  {
+   "key": "subtrackUrls",
+   "category": "Faceted Composite Settings",
+   "roles": [
+    "composite"
+   ],
+   "types": [
+    "faceted",
+    "composite"
+   ],
+   "level": "new",
+   "fmt": "subtrackUrls <field1>=<url1> <field2>=<url2> ...",
+   "ex": "subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ project=https://www.ncbi.nlm.nih.gov/bioproject/$$",
+   "desc": "For some faceted composites, each subtrack is associated with a particular cell line or other accession that is described in more detail at another resource..."
+  },
+  {
+   "key": "container",
+   "category": "Aggregate or Overlay Track Settings",
+   "roles": [
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "container",
+    "multiWig"
+   ],
+   "level": "full",
+   "fmt": "container multiWig",
+   "ex": "",
+   "desc": "Signal overlay tracks are declared much like simple composites."
+  },
+  {
+   "key": "parent_container",
+   "category": "Aggregate or Overlay Track Settings",
+   "roles": [
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "container",
+    "multiWig"
+   ],
+   "level": "base",
+   "fmt": "parent <containerTrack>",
+   "ex": "",
+   "desc": "Membership in a container track is declared at the subtrack level."
+  },
+  {
+   "key": "aggregate",
+   "category": "Aggregate or Overlay Track Settings",
+   "roles": [
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "container",
+    "multiWig"
+   ],
+   "level": "full",
+   "fmt": "aggregate <transparentOverlay/stacked/solidOverlay/none>",
+   "ex": "",
+   "desc": "It is important to declare an aggregation method; otherwise, this set of tracks displays as a composite would, with additional restrictions."
+  },
+  {
+   "key": "showSubtrackColorOnUi",
+   "category": "Aggregate or Overlay Track Settings",
+   "roles": [
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": [
+    "container",
+    "multiWig"
+   ],
+   "level": "full",
+   "fmt": "showSubtrackColorOnUi on",
+   "ex": "",
+   "desc": "Subtracks in an overlay have individual colors."
+  },
+  {
+   "key": "hub",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "hub <str>",
+   "ex": "hub myRnaSeqData",
+   "desc": "A short, unique identifier for the hub used internally by the Genome Browser software to identify your hub."
+  },
+  {
+   "key": "shortLabel",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "shortLabel <str>",
+   "ex": "shortLabel ENCODE3 RNA-seq Data",
+   "desc": "A short description of the hub."
+  },
+  {
+   "key": "longLabel",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "longLabel <str>",
+   "ex": "longLabel Comment describing this hub contents",
+   "desc": "A longer, more descriptive label for the hub."
+  },
+  {
+   "key": "genomesFile",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "genomesFile <url/relativePath>",
+   "ex": "genomesFile genomes.txt",
+   "desc": "References the next definition file in this hub that will describe the assemblies and tracks available at this hub."
+  },
+  {
+   "key": "email",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "email <email address>",
+   "ex": "email contactEmail@institution.edu",
+   "desc": "Provides users with a contact point for questions related to the hub."
+  },
+  {
+   "key": "descriptionUrl",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "descriptionUrl <url/relativePath>",
+   "ex": "descriptionUrl castorBeanHubDescription.html",
+   "desc": "Specify a relative path or URL link to a webpage (e.g."
+  },
+  {
+   "key": "useOneFile",
+   "category": "general hub file settings",
+   "roles": [
+    "hub"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "useOneFile <on>",
+   "ex": "useOneFile on",
+   "desc": "If the hub only has tracks on a single genome, useOneFile allows all hub and track configuration settings to be in a single file."
+  },
+  {
+   "key": "genome",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "genome <str>",
+   "ex": "genome ricCom1",
+   "desc": "For hubs on native assemblies, use the UCSC database name (e.g."
+  },
+  {
+   "key": "trackDb",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "trackDb <url/relativePath>",
+   "ex": "trackDb ricCom1/trackDb.txt",
+   "desc": "Relative path or URL to the file that defines the tracks for the assembly specified by the genome setting."
+  },
+  {
+   "key": "groups",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "groups <url/relativePath>",
+   "ex": "groups ricCom1/groups.txt",
+   "desc": "Relative path or URL that points to a file defining track groups, which are collections of related tracks displayed together under the main Genome Browser im..."
+  },
+  {
+   "key": "description",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "description <str>",
+   "ex": "description July 2011 Castor bean",
+   "desc": "Description of the assembly version that is displayed on the Gateway page and title pages for this assembly."
+  },
+  {
+   "key": "twoBitPath",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "twoBitPath <url/relativePath>",
+   "ex": "twoBitPath ricCom1/ricCom1.2bit",
+   "desc": "Relative path or URL to the .2bit sequence file for the assembly."
+  },
+  {
+   "key": "chromAlias",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "chromAlias <url/relativePath>",
+   "ex": "chromAlias thisGenome.chromAlias.txt",
+   "desc": "Enables the Genome Browser to automatically convert chromosome names in submitted custom track data from alternate naming schemes to the names used in the as..."
+  },
+  {
+   "key": "chromAliasBb",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "chromAliasBb <url/relativePath>",
+   "ex": "chromAliasBb thisGenome.chromAlias.bb",
+   "desc": "Like chromAlias , except the file is in the compressed, binary bigBed format."
+  },
+  {
+   "key": "chromSizes",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "chromSizes <url/relativePath>",
+   "ex": "chromSizes thisGenome.chromSizes.txt",
+   "desc": "Defines a file to be used when displaying the sequences contained in an assembly."
+  },
+  {
+   "key": "chromAuthority",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "chromAuthority <str>",
+   "ex": "chromAuthority ucsc",
+   "desc": "Indicates which chromosome naming scheme from the chromAlias file to be used as the default in the Genome Browser display."
+  },
+  {
+   "key": "codonTable",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "new",
+   "fmt": "codonTable default=<id> <sequenceName>=<id> ...",
+   "ex": "codonTable default=1 NC_017929.1=13",
+   "desc": "By default the Genome Browser translates codons to amino acids with the standard genetic code, except for sequences named chrM or chrMT , which use the verte..."
+  },
+  {
+   "key": "organism",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "organism <str>",
+   "ex": "organism Orangutan",
+   "desc": "Common name of the organism, displayed alongside the description on title pages."
+  },
+  {
+   "key": "defaultPos",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "defaultPos <chr:start-end>",
+   "ex": "defaultPos chr7:155799529-155812871",
+   "desc": "Defines the initial view in the Genome Browser, usually highlighting a popular gene or region of interest."
+  },
+  {
+   "key": "orderKey",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "orderKey <int>",
+   "ex": "orderKey 4800",
+   "desc": "Controls the ordering of assemblies in the pull-down menu."
+  },
+  {
+   "key": "scientificName",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "scientificName <str>",
+   "ex": "scientificName Ricinus communis",
+   "desc": "Scientific name of organism, displayed alongside the description on title pages."
+  },
+  {
+   "key": "htmlPath",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "htmlPath <url/relativePath>",
+   "ex": "htmlPath ricCom1/description.html",
+   "desc": "Points to an HTML file with assembly information."
+  },
+  {
+   "key": "transBlat",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "transBlat <url> <port>",
+   "ex": "transBlat yourServer.yourInstitution.edu 17778",
+   "desc": "Indicates the server and port to be used for the \"translated DNA/RNA\" options in the BLAT interface."
+  },
+  {
+   "key": "blat",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "blat <url> <port>",
+   "ex": "blat yourServer.yourInstitution.edu 17777",
+   "desc": "Indicates the server and port to be used for the BLAT tool."
+  },
+  {
+   "key": "isPcr",
+   "category": "genomes file settings",
+   "roles": [
+    "genome"
+   ],
+   "types": "all",
+   "level": "base",
+   "fmt": "isPcr <url> <port>",
+   "ex": "isPcr yourServer.yourInstitution.edu 17779",
+   "desc": "Indicates the server and port to be used for the In-Silico PCR tool."
+  }
+ ]
+}
