@@ -1,4 +1,4 @@
-include mouseDevTimecourse.ra
+include mouseDevTimecourse.ra alpha,beta
 
 # Local declaration so that local gold.html is picked up.
 track gold override

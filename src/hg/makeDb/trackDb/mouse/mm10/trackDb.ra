@@ -10,7 +10,7 @@ include trackDb.vertebrateChainNet.ra
 include trackDb.previousVersionsChainNet.ra alpha
 include tabulaMurisSenis.ra
 include tabulamuris.ra
-include mouseDevTimecourse.ra
+include mouseDevTimecourse.ra alpha,beta
 include developmentTimecourseSignalMm10.ra
 include liftOverMm39.ra
 
