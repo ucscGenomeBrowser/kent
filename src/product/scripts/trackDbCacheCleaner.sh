@@ -144,12 +144,26 @@ export expireDirCount=`cat "${expireList}" | wc -l`
 export expireFileCount=`awk '{n += $1} END {printf "%d", n}' "${expireList}"`
 export expireByteCount=`awk '{n += $2} END {printf "%d", n}' "${expireList}"`
 
+# a cache directory can be owned by any user who ran a command line
+# utility, so a removal can fail on permissions.  Count those and carry on,
+# rather than abandoning the rest of the cleaning.
+export failedDirCount=0
+export warnLimit=10
+
 if [ "${dryRun}" -eq 1 ]; then
   awk '{printf "would remove %s (%d files, %d bytes)\n", $3, $1, $2}' "${expireList}"
 else
   while read fileCount byteCount dirName
   do
-    rm -fr "${dirName}"
+    if ! rm -fr "${dirName}" 2>/dev/null; then
+      failedDirCount=`echo "${failedDirCount}" | awk '{print $1 + 1}'`
+      if [ "${failedDirCount}" -le "${warnLimit}" ]; then
+        echo "# warning: could not remove ${dirName}" 1>&2
+      fi
+      if [ "${failedDirCount}" -eq "${warnLimit}" ]; then
+        echo "# warning: further removal failures not listed" 1>&2
+      fi
+    fi
   done < "${expireList}"
 fi
 
@@ -181,4 +195,11 @@ LC_NUMERIC=en_US printf "# expired %'d directories, %'d files, %'d bytes\n" \
   "${expireDirCount}" "${expireFileCount}" "${expireByteCount}" 1>&2
 LC_NUMERIC=en_US printf "# expired %'d empty directories\n" "${emptyDirCount}" 1>&2
 LC_NUMERIC=en_US printf "# %'d directories remain in %s\n" "${remainDirCount}" "${cacheDir}" 1>&2
+
+if [ "${failedDirCount}" -gt 0 ]; then
+  LC_NUMERIC=en_US printf "# ERROR: %'d directories could not be removed\n" "${failedDirCount}" 1>&2
+  printf "# %s trackDbCacheCleaner.sh FAILED\n" "`date +%FT%T`" 1>&2
+  exit 1
+fi
+
 printf "# %s trackDbCacheCleaner.sh SUCCESS\n" "`date +%FT%T`" 1>&2
