@@ -822,38 +822,165 @@ for (p = r->parent; p != NULL; p = p->parent)
 return count;
 }
 
-static struct tdbRecord *closestTdbAboveLevel(struct tdbRecord *tdbList,
+struct tdbPosRef
+/* One record's start position within one file.  Used to build a tdbFileIndex. */
+    {
+    char *fileName;		/* Name of file, not allocated here. */
+    int startLineIx;		/* Line the record starts on. */
+    int listIx;			/* Index of record in master list, to break ties. */
+    int depth;			/* Count of ancestors. */
+    struct tdbRecord *record;	/* Record at this position. */
+    };
+
+struct tdbFileIndex
+/* All record positions within one file, sorted by line, with a precomputed answer to
+ * "which record above this line is closest, at or below a given depth?"  Replaces a
+ * scan of the whole record list per query, which was quadratic on big assemblies. */
+    {
+    int posCount;		/* Number of record positions in the file. */
+    struct tdbPosRef *posArray;	/* Positions sorted by startLineIx, then master list order. */
+    int levelCount;		/* One more than the depth of the deepest record in the file. */
+    int *closestAbove;		/* (posCount+1) x levelCount.  Element [i*levelCount + d] is the
+				 * index in posArray of the closest record above position i
+				 * with depth <= d, or -1 if there is none.  Row posCount
+				 * covers a line after every position in the file. */
+    };
+
+static int tdbPosRefCmp(const void *va, const void *vb)
+/* Compare two tdbPosRef by file, then start line, then master list order. */
+{
+const struct tdbPosRef *a = va, *b = vb;
+int diff = strcmp(a->fileName, b->fileName);
+if (diff == 0)
+    {
+    diff = a->startLineIx - b->startLineIx;
+    if (diff == 0)
+	diff = a->listIx - b->listIx;
+    }
+return diff;
+}
+
+static struct tdbFileIndex *tdbFileIndexNew(struct tdbPosRef *posArray, int posCount,
+                                            struct lm *lm)
+/* Build index over the positions of one file.  The positions are already sorted. */
+{
+struct tdbFileIndex *index;
+lmAllocVar(lm, index);
+index->posCount = posCount;
+index->posArray = posArray;
+
+/* Find the deepest record in this file. */
+int maxDepth = 0, i;
+for (i = 0; i < posCount; ++i)
+    if (posArray[i].depth > maxDepth)
+        maxDepth = posArray[i].depth;
+int levelCount = index->levelCount = maxDepth + 1;
+lmAllocArray(lm, index->closestAbove, (posCount + 1) * levelCount);
+
+/* Sweep forward keeping the closest position seen so far at or below each depth.  All
+ * positions sharing a start line see the same state, since none of them is above the
+ * others.  Within such a group the earliest in master list order wins, which is why the
+ * group is walked backwards. */
+int *bestUpTo;
+lmAllocArray(lm, bestUpTo, levelCount);
+int d;
+for (d = 0; d < levelCount; ++d)
+    bestUpTo[d] = -1;
+i = 0;
+while (i < posCount)
+    {
+    int groupEnd = i;
+    while (groupEnd < posCount && posArray[groupEnd].startLineIx == posArray[i].startLineIx)
+        groupEnd += 1;
+    int j;
+    for (j = i; j < groupEnd; ++j)
+        {
+        int *row = index->closestAbove + j*levelCount;
+        CopyArray(bestUpTo, row, levelCount);
+        }
+    for (j = groupEnd - 1; j >= i; --j)
+        for (d = posArray[j].depth; d < levelCount; ++d)
+	    bestUpTo[d] = j;
+    i = groupEnd;
+    }
+int *lastRow = index->closestAbove + posCount*levelCount;
+CopyArray(bestUpTo, lastRow, levelCount);
+return index;
+}
+
+static struct hash *tdbFileIndexesNew(struct tdbRecord *recordList, struct lm *lm)
+/* Return hash of tdbFileIndex keyed by file name, covering every record position. */
+{
+/* Gather every position of every record into one array. */
+struct tdbRecord *record;
+int posCount = 0;
+for (record = recordList; record != NULL; record = record->next)
+    posCount += slCount(record->posList);
+struct tdbPosRef *posArray;
+lmAllocArray(lm, posArray, posCount);
+int posIx = 0, listIx = 0;
+for (record = recordList; record != NULL; record = record->next, ++listIx)
+    {
+    int depth = countAncestors(record);
+    struct tdbFilePos *pos;
+    for (pos = record->posList; pos != NULL; pos = pos->next)
+        {
+        struct tdbPosRef *ref = &posArray[posIx++];
+        ref->fileName = pos->fileName;
+        ref->startLineIx = pos->startLineIx;
+        ref->listIx = listIx;
+        ref->depth = depth;
+        ref->record = record;
+        }
+    }
+qsort(posArray, posCount, sizeof(posArray[0]), tdbPosRefCmp);
+
+/* Each run of equal file names becomes one index. */
+struct hash *hash = hashNew(0);
+int i = 0;
+while (i < posCount)
+    {
+    int runEnd = i;
+    while (runEnd < posCount && sameString(posArray[runEnd].fileName, posArray[i].fileName))
+        runEnd += 1;
+    hashAdd(hash, posArray[i].fileName, tdbFileIndexNew(posArray + i, runEnd - i, lm));
+    i = runEnd;
+    }
+return hash;
+}
+
+static struct tdbRecord *closestTdbAboveLevel(struct hash *fileIndexes,
                                               struct tdbFilePos *childPos, int parentDepth)
 /* Find parent at given depth that comes closest to (but before) childPos. */
 {
-struct tdbRecord *parent, *closestParent = NULL;
-int closestDistance = BIGNUM;
-for (parent = tdbList; parent != NULL; parent = parent->next)
+struct tdbFileIndex *index = hashFindVal(fileIndexes, childPos->fileName);
+if (index == NULL)
+    return NULL;
+
+/* Binary search for the first position at or after childPos.  Everything before it is
+ * on an earlier line, and nothing at or after it counts as being above the child. */
+int lo = 0, hi = index->posCount;
+while (lo < hi)
     {
-    if (countAncestors(parent) <= parentDepth)
-	{
-	struct tdbFilePos *pos;
-	for (pos = parent->posList; pos != NULL; pos = pos->next)
-	    {
-	    if (sameString(pos->fileName, childPos->fileName))
-		{
-		int distance = childPos->startLineIx - pos->startLineIx;
-		if (distance > 0)
-		    {
-		    if (distance < closestDistance)
-			{
-			closestDistance = distance;
-			closestParent = parent;
-			}
-		    }
-		}
-	    }
-	}
+    int mid = (lo + hi) / 2;
+    if (index->posArray[mid].startLineIx < childPos->startLineIx)
+        lo = mid + 1;
+    else
+        hi = mid;
     }
-return closestParent;
+
+int level = parentDepth;
+if (level >= index->levelCount)
+    level = index->levelCount - 1;
+if (level < 0)
+    return NULL;
+int closestIx = index->closestAbove[lo*index->levelCount + level];
+if (closestIx < 0)
+    return NULL;
+return index->posArray[closestIx].record;
 }
 
-static void checkChildUnderNearestParent(struct tdbRecord *recordList, struct tdbRecord *child)
+static void checkChildUnderNearestParent(struct hash *fileIndexes, struct tdbRecord *child)
 /* Make sure that parent record occurs before child, and that indeed it is the
  * closest parent before the child. */
 {
@@ -875,7 +1002,7 @@ for (childFp = child->posList; childFp != NULL; childFp = childFp->next)
 			 childFp->fileName, child->key, childFp->startLineIx,
 			 parent->key, parentFp->startLineIx);
 	    struct tdbRecord *closestParent =
-	                                    closestTdbAboveLevel(recordList, childFp, parentDepth);
+	                                    closestTdbAboveLevel(fileIndexes, childFp, parentDepth);
 	    assert(closestParent != NULL);
 	    if (closestParent != parent)
 	        errAbort("%s comes between parent (%s) and child (%s) in %s\n"
@@ -919,12 +1046,15 @@ for (record = recordList; record != NULL; record = record->next)
 	}
     }
 
-/* Additional child/parent checks. */
+/* Additional child/parent checks.  The index is built once and shared by every child,
+ * rather than rescanning the record list for each one. */
+struct hash *fileIndexes = tdbFileIndexesNew(recordList, lm);
 for (record = recordList; record != NULL; record = record->next)
     {
     if (record->parent != NULL)
-        checkChildUnderNearestParent(recordList, record);
+        checkChildUnderNearestParent(fileIndexes, record);
     }
+hashFree(&fileIndexes);
 }
 
 static void checkLabelLength(struct tdbRecord *record, char *name, int maxLength)
