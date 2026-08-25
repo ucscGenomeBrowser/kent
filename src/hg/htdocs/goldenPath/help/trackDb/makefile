@@ -35,6 +35,12 @@ install:
 
 
 
+# trackDbSettings.yaml and .json are generated from trackDbLibrary.shtml and
+# trackDbHub.v3.html, and checked in, so doInstall only copies the json. Needs PyYAML
+# and BeautifulSoup.
+settings:
+	python3 trackDbSettingsGen.py --import --json
+
 doInstall:
 	echo ${CURRENT_HUB_SPEC}
 	cp ${CPFLAGS} trackDbLibrary.shtml ${DEST}
@@ -43,4 +49,5 @@ doInstall:
 	cp ${CPFLAGS} trackDbDoc.html ${DEST}
 	cp ${CPFLAGS} trackDbHub.html ${DEST}
 	cp ${CPFLAGS} changes.html ${DEST}
+	cp ${CPFLAGS} trackDbSettings.json ${DEST}
 	cp ${CPFLAGS} ${HUB_SPEC_FILES} ${DEST}
