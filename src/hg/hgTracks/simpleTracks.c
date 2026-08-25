@@ -15175,7 +15175,7 @@ if (sameWord(type, "bed"))
     {
     char *trackName = trackHubSkipHubName(track->track);
 
-    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    complexBedMethods(track, tdb, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
@@ -15197,7 +15197,7 @@ else if (sameWord(type, "bedLogR"))
     {
     wordCount++;
     words[1] = "9";
-    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    complexBedMethods(track, tdb, wordCount, words);
     //track->bedSize = 10;
     }
     */
@@ -15205,7 +15205,7 @@ else if (sameWord(type, "bedTabix"))
     {
     knetUdcInstall();
     tdb->canPack = TRUE;
-    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    complexBedMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "longTabix"))
     {
@@ -15213,7 +15213,7 @@ else if (sameWord(type, "longTabix"))
     words[0] = type;
     words[1] = "5";
     knetUdcInstall();
-    complexBedMethods(track, tdb, FALSE, 2, words);
+    complexBedMethods(track, tdb, 2, words);
     longRangeMethods(track, tdb);
     }
 else if (sameWord(type, "mathWig"))

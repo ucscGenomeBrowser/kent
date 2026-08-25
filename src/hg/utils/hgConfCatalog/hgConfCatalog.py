@@ -256,7 +256,7 @@ RELEASE_GATES = {
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1165", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
-        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9390", default="FALSE",
+        h("modernAlignPage", "flag", "hg/hgc/hgc.c:9377", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Use the modern single-page base-by-base alignment view (the one "
                "hgBlat's new results page uses) for ordinary alignment clicks too "
@@ -365,11 +365,6 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
-        h("bigBedOnePath", "flag", "hg/hgTracks/bigBedTrack.c:1122",
-          default="TRUE", role="gate", verified=True,
-          note="Single code path for bigBed fetching, replacing the older "
-               "split.  Public since v492.  Four call sites, and deleting it "
-               "removes a whole alternative path rather than just a branch."),
         h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c:41",
           default="TRUE", role="gate", verified=True,
           note="Let hubs declare their own track groups.  Public since v492."),
@@ -629,7 +624,7 @@ MIRROR_KNOBS = {
                "machine whose gene tables are not laid out the way the RR's "
                "are, so a knob; it gates no feature and there is nothing to "
                "flip."),
-        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27582", default="keep",
+        h("blatOldTracks", "internal", "hg/hgc/hgc.c:27569", default="keep",
           verified=True,
           note="What happens to the custom tracks left behind by a user's "
                "earlier BLAT searches when a new search makes another one.  "

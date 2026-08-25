@@ -721,8 +721,7 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 fieldCount = track->bedSize;
-boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
-if (bigBedOnePath  && (fieldCount == 0))
+if (fieldCount == 0)
     track->bedSize = fieldCount = bbi->definedFieldCount;
 
 struct bigBedInterval *bb, *bbList; 
@@ -1096,70 +1095,22 @@ struct linkedFeatures *lf = (struct linkedFeatures *)item;
 return lf->label;
 }
 
-#ifdef NOTNOW
-static int getFieldCount(struct track *track)
-// return the definedFieldCount of the passed track with is assumed to be a bigBed
-{
-struct bbiFile *bbi = NULL;
-struct errCatch *errCatch = errCatchNew();
-if (errCatchStart(errCatch))
-    {
-    bbi = fetchBbiForTrack(track);
-    }
-errCatchEnd(errCatch);
-
-if (bbi)
-    return bbi->definedFieldCount;
-
-return 3; // if we can't get the bbi, use the minimum
-}
-#endif
-
 void commonBigBedMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[])
 /* Set up common bigBed methods used by several track types that depend on the bigBed format. */
 {
-boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
+track->isBigBed = TRUE;
+linkedFeaturesMethods(track);
+track->extraUiData = newBedUiData(track->track);
+track->loadItems = loadGappedBed;
 
-if (bigBedOnePath)
+if (wordCount > 1)
+    track->bedSize = atoi(words[1]);
+
+if (trackDbSetting(tdb, "colorByStrand"))
     {
-    track->isBigBed = TRUE;
-    linkedFeaturesMethods(track);
-    track->extraUiData = newBedUiData(track->track);
-    track->loadItems = loadGappedBed;
-
-    if (wordCount > 1)
-        track->bedSize = atoi(words[1]);
-
-    if (trackDbSetting(tdb, "colorByStrand"))
-        {
-        Color lfItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg);
-        track->itemColor = lfItemColorByStrand;
-        }
-    }
-else 
-    {
-    char *newWords[wordCount];
-
-    int ii;
-    for(ii=0; ii < wordCount; ii++)
-        newWords[ii] = words[ii];
-
-    #ifdef NOTNOW
-    // let's help the user out and get the definedFieldCount if they didn't specify it on the type line
-    if (!tdbIsSuper(track->tdb) && (track->tdb->subtracks == NULL) && (wordCount == 1) && sameString(words[0], "bigBed"))
-        {
-        int fieldCount = getFieldCount(track);
-        if (fieldCount > 3) 
-            {
-            char buffer[1024];
-            safef(buffer, sizeof buffer, "%d", fieldCount);
-            newWords[1] = cloneString(buffer);
-            wordCount = 2;
-            }
-        }
-    #endif
-    complexBedMethods(track, tdb, TRUE, wordCount, newWords);
+    Color lfItemColorByStrand(struct track *tg, void *item, struct hvGfx *hvg);
+    track->itemColor = lfItemColorByStrand;
     }
 track->loadSummary = loadBigBedSummary;
 }
