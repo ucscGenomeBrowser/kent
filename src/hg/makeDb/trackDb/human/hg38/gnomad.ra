@@ -132,7 +132,7 @@ html gnomad
     html gnomadV4.1
     priority 1
     visibility squish
-    release alpha
+    release alpha,beta
 
         track gnomadExomesVariantsV4_1
         parent gnomadVariantsV4.1 on
@@ -164,7 +164,7 @@ html gnomad
         urlLabel View this variant at gnomAD
         detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
         detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1.1/exomes/gnomad.v4.1.1.exomes.details.tab.gz
-        release alpha
+        release alpha,beta
 
         track gnomadGenomesVariantsV4_1
         parent gnomadVariantsV4.1 on
@@ -196,7 +196,7 @@ html gnomad
         urlLabel View this variant at gnomAD
         detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
         detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1.1/genomes/gnomad.v4.1.1.genomes.details.tab.gz
-        release alpha
+        release alpha,beta
 
     track gnomadVariantsV4.1
     parent gnomadVariants
@@ -211,7 +211,7 @@ html gnomad
     html gnomadV4.1
     priority 1
     visibility squish
-    release beta,public
+    release public
 
         track gnomadExomesVariantsV4_1
         parent gnomadVariantsV4.1 on
@@ -243,7 +243,7 @@ html gnomad
         urlLabel View this variant at gnomAD
         detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
         detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1/exomes/gnomad.v4.1.exomes.details.tab.gz
-        release beta,public
+        release public
 
         track gnomadGenomesVariantsV4_1
         parent gnomadVariantsV4.1 on
@@ -275,7 +275,7 @@ html gnomad
         urlLabel View this variant at gnomAD
         detailsDynamicTable _jsonVep|Variant Effect Predictor,_jsonPopTable|Population Frequencies,_jsonHapTable|Haplotype Frequencies
         detailsTabUrls _dataOffset=/gbdb/hg38/gnomAD/v4.1/genomes/gnomad.v4.1.genomes.details.tab.gz
-        release beta,public
+        release public
 
 track gnomadConstraint
 parent gnomadVariants on
@@ -295,8 +295,8 @@ dataVersion Release 3.1.2 (October 22, 2021)
 html gnomadConstraint
 
 # The missense and pLI contraint tracks
-include gnomad.constraint.public.ra beta,public
-include gnomad.constraint.alpha.ra alpha
+include gnomad.constraint.public.ra public
+include gnomad.constraint.alpha.ra alpha,beta
 include gnomadCoverage.ra
 
 track gnomadStructuralVariants
