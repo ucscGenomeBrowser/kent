@@ -1633,6 +1633,27 @@ for(; tdb; tdb = tdb->next)
 cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
 }
 
+static boolean resolveGenarkDb(struct cart *cart)
+/* If db names a Genark assembly, turn it into the genome and hubUrl variables that
+ * connect that Genark hub, and return TRUE.   Otherwise leave the cart alone and
+ * return FALSE. */
+{
+char *db = cartOptionalString(cart,"db");
+
+if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
+    return FALSE;
+
+char *url = genarkUrl(db);
+
+if (url == NULL)
+    return FALSE;
+
+cartSetString(cart, "genome", db);
+cartAddString(cart, "hubUrl", url);
+cartRemove(cart, "db");
+return TRUE;
+}
+
 static void fixUpDb(struct cart *cart)
 // we want to load Genark hubs or error out if db is not available
 {
@@ -1640,23 +1661,13 @@ char *db = cartOptionalString(cart,"db");
 
 if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
-else
-    {
-    char *url = genarkUrl(db);
 
-    if (url != NULL)
-        {
-        cartSetString(cart, "genome", db);
-        cartAddString(cart, "hubUrl", url);
-        cartRemove(cart, "db");
-        }
-    else if (!hDbIsActive(db))
-	errAbort("Can not find database '%s'.<br>"
-                "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s</a> in "
-                "the list of NCBI/INSDC assemblies, then click 'request' when you have found the right assembly "
-                "and enter your email address. We will then make a genome browser and get back to you within a few days.",
-                db, db, db);
-    }
+if (!resolveGenarkDb(cart) && !hDbIsActive(db))
+    errAbort("Can not find database '%s'.<br>"
+            "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s</a> in "
+            "the list of NCBI/INSDC assemblies, then click 'request' when you have found the right assembly "
+            "and enter your email address. We will then make a genome browser and get back to you within a few days.",
+            db, db, db);
 }
 
 boolean isValidToken(char *token)
@@ -1945,7 +1956,14 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
 if (didSessionLoad)
+    {
     cartCopyLocalHubs(cart);
+
+    // Loading a session empties the cart and then puts the CGI variables back, which
+    // undoes the work fixUpDb did above.  A Genark accession in db= has to be turned
+    // back into a genome and a hubUrl before we connect the hubs.  refs #38184
+    resolveGenarkDb(cart);
+    }
 
 char *newDatabase = hubConnectLoadHubs(cart);
 
