@@ -58,11 +58,16 @@ function sessRandomShareName() {
     return 'share_' + s;
 }
 
-function sessCommifyPos(pos) {
-    // Add thousands separators to each number in a position string ("chr7:155799529-155812871" ->
-    // "chr7:155,799,529-155,812,871") using utils.js commify.
-    if (typeof commify !== 'function') { return String(pos); }
-    return String(pos).replace(/\d+/g, function(n) { return commify(n); });
+function sessMbpPos(pos) {
+    // Shorten a position to megabases to save horizontal space:
+    // "chr7:155799529-155812871" -> "chr7:155.80-155.81 Mbp".  Falls back to the raw string
+    // if it doesn't parse.
+    var m = /^(.+):([0-9,]+)-([0-9,]+)$/.exec(String(pos));
+    if (!m) { return String(pos); }
+    var s = parseInt(m[2].replace(/,/g, ''), 10);
+    var e = parseInt(m[3].replace(/,/g, ''), 10);
+    if (isNaN(s) || isNaN(e)) { return String(pos); }
+    return m[1] + ':' + (s / 1e6).toFixed(2) + '-' + (e / 1e6).toFixed(2) + ' Mbp';
 }
 
 function sessMsg(text, cls) {
@@ -727,17 +732,25 @@ function sessBuildTable() {
               render: function(d, type, row) {
                   if (type !== 'display') { return row.db || ''; }
                   var html = sessEnc(row.db || 'n/a');
-                  if (row.position) {
-                      html += ' <span class="sessPos">' + sessEnc(sessCommifyPos(row.position)) +
-                          '</span>';
+                  // Region: band, locus (gene) and the position shortened to Mbp, so it all fits.
+                  var region = [];
+                  if (row.band) { region.push(sessEnc(row.band)); }
+                  if (row.locus) { region.push(sessEnc(row.locus)); }
+                  if (row.position) { region.push(sessEnc(sessMbpPos(row.position))); }
+                  if (region.length) {
+                      html += ' <span class="sessPos">' + region.join('&nbsp;&nbsp; ') + '</span>';
                   }
                   return html; } },
             { title: 'Created', data: 'createdEpoch',
               render: function(d, type, row) {
-                  return (type === 'display') ? sessEnc(row.created) : row.createdEpoch; } },
+                  return (type === 'display') ?
+                      '<span title="' + sessEnc(row.createdFull || row.created) + '">' +
+                      sessEnc(row.created) + '</span>' : row.createdEpoch; } },
             { title: 'Last used', data: 'lastUseEpoch',
               render: function(d, type, row) {
-                  return (type === 'display') ? sessEnc(row.lastUse) : row.lastUseEpoch; } },
+                  return (type === 'display') ?
+                      '<span title="' + sessEnc(row.lastUse) + '">' +
+                      sessEnc(row.lastUseDate || row.lastUse) + '</span>' : row.lastUseEpoch; } },
             { title: 'Views', data: 'useCount',
               render: function(d, type) { return (type === 'display') ? sessNum(d) : d; } },
             { title: 'Actions', className: 'sessActionsCol', data: null, orderable: false,

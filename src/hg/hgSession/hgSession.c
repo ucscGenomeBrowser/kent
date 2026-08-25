@@ -2184,6 +2184,9 @@ if (loggedIn)
                 "WHERE userName = '%s' ORDER BY sessionName;", namedSessionTable, encUserName);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
+        /* Cache one connection per assembly db so the per-session band/locus lookups don't
+         * re-open a connection for every row when many sessions share an assembly. */
+        struct hash *dbConnCache = hashNew(0);
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *encSessionName = row[0];
@@ -2194,10 +2197,14 @@ if (loggedIn)
             ZeroVar(&firstUseTm);
             strptime(firstUse, "%Y-%m-%d %T", &firstUseTm);
             long epoch = (long)mktime(&firstUseTm);
+            /* created = date only for display; createdFull = date+minute for the hover. */
             char *dateOnly = cloneString(firstUse);
             char *spacePt = strchr(dateOnly, ' ');
             if (spacePt != NULL)
                 *spacePt = '\0';
+            char *createdFull = cloneString(firstUse);
+            if (strlen(createdFull) == 19)
+                createdFull[16] = '\0';
             char *db2 = sessionValFromContents(row[4], "db");
             char *pos2 = sessionValFromContents(row[4], "position");
             char *description = gotSettings ? getSetting(row[5], "description") : NULL;
@@ -2208,9 +2215,66 @@ if (loggedIn)
             ZeroVar(&lastUseTm);
             strptime(lastUse, "%Y-%m-%d %T", &lastUseTm);
             long lastUseEpoch = (long)mktime(&lastUseTm);
-            /* Trim the seconds off the display: "2026-08-21 10:29:25" -> "2026-08-21 10:29". */
+            char *lastUseDate = cloneString(lastUse);   /* date only for display */
+            char *sp2 = strchr(lastUseDate, ' ');
+            if (sp2 != NULL)
+                *sp2 = '\0';
+            /* Trim the seconds off the full value shown on hover: "...10:29:25" -> "...10:29". */
             if (strlen(lastUse) == 19)
                 lastUse[16] = '\0';
+
+            /* Band (from cytoBand) and locus (from locusName) for the saved position, looked up in
+             * the session's own assembly.  Skips hub assemblies and missing tables.  For a very
+             * large region there are too many genes to name, so say so instead. */
+            char *band = NULL, *locus = NULL;
+            if (isNotEmpty(db2) && isNotEmpty(pos2) && !trackHubDatabase(db2))
+                {
+                char *posClone = cloneString(pos2);
+                stripChar(posClone, ',');
+                char *colon = strrchr(posClone, ':');
+                char *chrom = NULL;
+                int start = 0, end = 0;
+                boolean parsed = FALSE;
+                if (colon != NULL)
+                    {
+                    *colon = '\0';
+                    chrom = posClone;
+                    char *dash = strchr(colon + 1, '-');
+                    if (dash != NULL)
+                        {
+                        *dash = '\0';
+                        start = atoi(colon + 1) - 1;   /* display is 1-based; tables are 0-based */
+                        if (start < 0)
+                            start = 0;
+                        end = atoi(dash + 1);
+                        parsed = (end > start);
+                        }
+                    }
+                if (parsed)
+                    {
+                    struct sqlConnection *dbConn = hashFindVal(dbConnCache, db2);
+                    if (dbConn == NULL && sqlDatabaseExists(db2))
+                        {
+                        dbConn = hAllocConn(db2);
+                        hashAdd(dbConnCache, db2, dbConn);
+                        }
+                    if (dbConn != NULL)
+                        {
+                        if (sqlTableExists(dbConn, "cytoBand"))
+                            {
+                            char bandBuf[HDB_MAX_BAND_STRING];
+                            if (hChromBandConn(dbConn, chrom, start, bandBuf) && bandBuf[0])
+                                band = cloneString(bandBuf);
+                            }
+                        if ((end - start) > 10000000)
+                            locus = cloneString("Too large for the genes");
+                        else
+                            locus = hLocusName(dbConn, chrom, start, end);
+                        }
+                    }
+                freez(&posClone);
+                }
+
             struct dyString *dyUrl = dyStringNew(0);
             addSessionLink(dyUrl, encUserName, encSessionName, FALSE, TRUE);
 
@@ -2219,25 +2283,45 @@ if (loggedIn)
             jsonWriteString(jw, "encName", encSessionName);
             jsonWriteNumber(jw, "shared", shared);
             jsonWriteString(jw, "created", dateOnly);
+            jsonWriteString(jw, "createdFull", createdFull);
             jsonWriteNumber(jw, "createdEpoch", epoch);
             jsonWriteString(jw, "lastUse", lastUse);
+            jsonWriteString(jw, "lastUseDate", lastUseDate);
             jsonWriteNumber(jw, "lastUseEpoch", lastUseEpoch);
             jsonWriteNumber(jw, "useCount", atoll(row[3]));
             if (isNotEmpty(db2))
                 jsonWriteString(jw, "db", trackHubSkipHubName(db2));
             if (isNotEmpty(pos2))
                 jsonWriteString(jw, "position", pos2);
+            if (isNotEmpty(band))
+                jsonWriteString(jw, "band", band);
+            if (isNotEmpty(locus))
+                jsonWriteString(jw, "locus", locus);
             if (isNotEmpty(description))
                 jsonWriteString(jw, "description", description);
             jsonWriteString(jw, "shareUrl", dyUrl->string);
             jsonWriteObjectEnd(jw);
 
             dyStringFree(&dyUrl);
+            freez(&band);
+            freez(&locus);
             freez(&firstUse);
             freez(&dateOnly);
+            freez(&createdFull);
+            freez(&lastUse);
+            freez(&lastUseDate);
             freez(&sessionName);
             }
         sqlFreeResult(&sr);
+        /* Release the cached per-assembly connections. */
+        struct hashEl *hel, *helList = hashElListHash(dbConnCache);
+        for (hel = helList; hel != NULL; hel = hel->next)
+            {
+            struct sqlConnection *dbConn = hel->val;
+            hFreeConn(&dbConn);
+            }
+        hashElFreeList(&helList);
+        hashFree(&dbConnCache);
         }
     hDisconnectCentral(&conn);
     }

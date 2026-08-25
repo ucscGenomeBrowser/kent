@@ -760,7 +760,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         if (row != NULL)
             {
             char *raw = row[4];
-            char *full = subTextString(subList, raw);
+            char *full = hLocusNameExpand(raw);   // shared with hgSession, see hdb.c
             jsonWriteString(jw, "locusText", full);
             freeMem(full);
             char *type = NULL, *genes = raw;
