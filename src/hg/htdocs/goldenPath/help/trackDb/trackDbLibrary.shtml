@@ -2469,7 +2469,7 @@ that identifies the reference sequence.
     used instead of spaces to separate fields of the BED file.  Please note that
     this option will only work if tab characters are used as the field separator
     throughout your BED file.  More information on creating bigBed files is
-    available <a href="../bigBed.html">here</a>.
+    available on our <a href="../bigBed.html">bigBed Track Format</a> page.
     </p>
 
 </DIV>
@@ -4794,8 +4794,8 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     then a haplotype sorting display is enabled by default.  This option can be
     used to disable it if desired, for example if the genotypes have not been
     phased and a significant portion of the genotypes are heterozygous.
-    More information about the haplotype sorting display can be found
-    <A HREF="../hgVcfTrackHelp.html">here</A>.
+    More information about the haplotype sorting display can be found on our
+    <A HREF="../hgVcfTrackHelp.html">Configuring VCF tracks</A> page.
     </P>
 </DIV>
 
@@ -6872,7 +6872,8 @@ and is particularly useful for tracks with large numbers of categories.
 may consist of too many tracks to easily coerce into that structure, and may also benefit from mixing
 datasets with different underlying types (e.g. signals and peaks) together under the same heading.
 For those situations, a "faceted composite" track may be appropriate.  A discussion of this composite
-type with some worked examples is available <a href="/docs/hubs/facetedComposite.html">here</a>.</p>
+type with some worked examples is available on our
+<a href="/docs/hubs/facetedComposite.html">Faceted Composite Tracks</a> page.</p>
 <p>A faceted composite track is a composite with no views or subgroups to organize the subtracks.  Instead,
 the subtracks are organized by a list of facets drawn from an accompanying tsv (tab-separated values) file.
 These facets can be combined with an optional <code>dataTypes</code> setting to control which subtracks are
