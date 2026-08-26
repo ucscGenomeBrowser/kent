@@ -757,22 +757,8 @@ function blatFormBuild() {
             // mouseoverContainer mouseenter handler in utils.js), and renders its text as HTML, so
             // a link in the tip is genuinely clickable.  htmlEncode keeps the title attribute
             // well-formed; the browser decodes it back to markup before it is injected.
-            check('allGenomes', cfg.allGenomes, 'Search many genomes',
-                'Runs the same query against every default assembly and attached hub that has a ' +
-                'dedicated BLAT server. Dynamic BLAT servers are skipped and listed as such in the ' +
-                "output. See our <a target='_blank' href='../FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> " +
-                'for more information.') +
-            check('allResults', cfg.allResults, 'No min. score',
-                'Turns off minimum-match filtering so every alignment is returned. A human DNA search ' +
-                'normally requires 20 matching bases, based on the genome size, to filter out ' +
-                'lower-quality results; useful for short queries and the tiny genomes of ' +
-                'microorganisms.') +
-            check('autoRearr', cfg.autoRearr, 'Show rearrangements',
-                'Shows duplications of the query sequence using multiple lines with connecting lines ' +
-                'between fragments, and displays inversions better (the "snakes" display). Can also ' +
-                'be switched on or off from the BLAT track configuration page.') +
             // Only offered where hg.conf blatOldTracks=delete, i.e. where there is something to opt
-            // out of.  Unlike the three above (which keep the classic form's plain-checkbox
+            // out of.  Unlike the three below (which keep the classic form's plain-checkbox
             // behaviour), this one is submitted through an explicit hidden field: a checkbox sends
             // nothing when unticked, so cartUsualBoolean would never see it go back to false and
             // "Keep results" could not be switched off again once used.
@@ -787,6 +773,20 @@ function blatFormBuild() {
                     'this box to keep earlier results instead, so every search adds its own track ' +
                     'and results accumulate. Your choice is remembered for next time.')}">` +
                 `${BLAT_INFO_SVG}</span></span>` : '') +
+            check('autoRearr', cfg.autoRearr, 'Show rearrangements',
+                'Shows duplications of the query sequence using multiple lines with connecting lines ' +
+                'between fragments, and displays inversions better (the "snakes" display). Can also ' +
+                'be switched on or off from the BLAT track configuration page.') +
+            check('allResults', cfg.allResults, 'No min. score',
+                'Turns off minimum-match filtering so every alignment is returned. A human DNA search ' +
+                'normally requires 20 matching bases, based on the genome size, to filter out ' +
+                'lower-quality results; useful for short queries and the tiny genomes of ' +
+                'microorganisms.') +
+            check('allGenomes', cfg.allGenomes, 'Search many genomes',
+                'Runs the same query against every default assembly and attached hub that has a ' +
+                'dedicated BLAT server. Dynamic BLAT servers are skipped and listed as such in the ' +
+                "output. See our <a target='_blank' href='../FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> " +
+                'for more information.') +
         '</div>' +
 
         '<div class="gbSection">Query sequence</div>' +
