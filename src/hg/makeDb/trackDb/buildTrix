@@ -61,9 +61,13 @@ buildDbTrix() {
         /cluster/bin/x86_64/trixContextIndex $base.txt $base
         chmod 664 $base.txt $base.ix $base.ixx $base.offsets $base.offsets.ixx
         # the .txt, .offsets and .offsets.ixx files are for snippets on search pages:
+        # Name the files explicitly rather than rsyncing $tmpDir/ itself.  With a
+        # directory as the source, rsync also applies -a to the destination
+        # directory, and setting its times fails unless we own it.
         local dest
         for dest in "${dests[@]}"; do
-            rsync -a $tmpDir/ "${dest%%:*}:${dest#*:}/"
+            rsync -a $base.txt $base.ix $base.ixx $base.offsets $base.offsets.ixx \
+                "${dest%%:*}:${dest#*:}/"
         done
     fi
     rm -rf $tmpDir
