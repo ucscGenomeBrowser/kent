@@ -1049,8 +1049,9 @@ void doSaveSessionJson(char *userName)
 /* AJAX endpoint behind the "Share a link" menu button.  Save the current cart as a named session
  * and print JSON {"name": <session name>, "url": <shareable link>}.  When the user is not logged
  * in (or hgsShareAnon is set), save under the reserved anonymous user "l" with a random token
- * name.  When logged in with no name given, generate a short random name.  Saved shared by link so
- * the link works for anyone.  Reuses saveCartAsSession() and addSessionLink(). */
+ * name.  When logged in, the caller supplies the name (a typed name, or a random internal
+ * "_XXXXXXXX" name generated client-side).  Saved shared by link so the link works for anyone.
+ * Reuses saveCartAsSession() and addSessionLink(). */
 {
 struct sqlConnection *conn = hConnectCentral();
 if (!sqlTableExists(conn, namedSessionTable))
@@ -1075,20 +1076,22 @@ char *encSessionName = NULL;
 if (anon)
     {
     encUserName = "l";                    /* reserved anonymous user -> short link /s/l/<token> */
-    sessionName = makeRandomKey(96);      /* 16 URL-safe alphanumeric chars; no encoding needed */
-    encSessionName = sessionName;
+    /* The caller may supply a client-generated token so the Share dialog can show the exact link
+     * before the user commits; fall back to a server-generated token when none is given (e.g. the
+     * hgc BLAT "Share a link" button). */
+    if (isEmpty(sessionName))
+        sessionName = makeRandomKey(96);  /* 16 URL-safe alphanumeric chars */
+    encSessionName = cgiEncodeFull(sessionName);
     }
 else
     {
+    /* Logged-in callers always supply a name: the caller either typed one or generated a random
+     * internal "_XXXXXXXX" name client-side (sessRandomShareName in hgSession.js, shared by the
+     * top-right "Share a link" menu in topLinks.js), so we no longer auto-name here. */
     if (isEmpty(sessionName))
         {
-        /* One-click share: auto-name the session.  "_" is kept verbatim by cgiEncodeFull (unlike
-         * "-"), so the short link /s/<user>/<name> stays clean. */
-        char randName[32];
-        char *rk = makeRandomKey(48);     /* 8 URL-safe alphanumeric chars */
-        safef(randName, sizeof randName, "share_%s", rk);
-        freeMem(rk);
-        sessionName = cloneString(randName);
+        saveSessionJsonError(conn, "Please provide a name for this session.");
+        return;
         }
     encUserName = cgiEncodeFull(userName);
     encSessionName = cgiEncodeFull(sessionName);

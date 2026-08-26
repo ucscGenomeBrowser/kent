@@ -224,6 +224,12 @@ var topLinks = (function() {
         });
         btnRow.appendChild(copyBtn);
 
+        // One-click "Create link & copy": copy right after the session is created.  execCommand copy
+        // still runs while the modal is focused; if a browser blocks it the URL box and Copy button
+        // above are the manual fallback.
+        if (opts.autoCopy)
+            copyBtn.click();
+
         if (canRename) {
             var nameBtn = el("button", {textContent: "Specify name"}, {marginLeft: "8px"});
             nameBtn.addEventListener("click", function() { showRename(body, url, opts); });
@@ -319,18 +325,54 @@ var topLinks = (function() {
             return;
         }
 
-        // Session mode (hgTracks): create a link right away so the user can just copy it.
+        // Session mode (hgTracks): don't create the session yet.  Opening the dialog and closing it
+        // should not litter the user's session list with unused links, so we only create the session
+        // when the user clicks the button (which then also copies the link in one step).
         var loggedIn = link.getAttribute("data-loggedin") === "1";
         var body = document.createElement("div");
-        var status = el("p", {textContent: "Creating link…"}, {marginTop: "0"});
-        body.appendChild(status);
         showModal("Share a link", body, 720);
-        var params = {hgsid: getHgsidSafe(), hgS_doSaveSessionJson: 1};
-        if (!loggedIn)
-            params.hgS_shareAnon = 1;   // anonymous token link; no rename
-        postJson(params, status, function(data) {
-            showResult(body, data.url, {name: data.name, session: true, loggedIn: loggedIn});
+        showCreatePrompt(body, loggedIn);
+    }
+
+    // A random internal session name: a leading "_" (marking it machine-generated, kept verbatim by
+    // the short-link encoder) plus 8 URL-safe alphanumeric chars.  Mirrors sessRandomShareName() in
+    // hgSession.js; generated here so the server no longer needs to auto-name shared sessions.
+    function shareRandomName() {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var s = "";
+        for (var i = 0; i < 8; i++)
+            s += chars.charAt(Math.floor(Math.random() * chars.length));
+        return "_" + s;
+    }
+
+    // The initial session-mode view: explain the link, then a single button that creates the shared
+    // session and copies its link in one step.  Logged in, we generate the name client-side and pass
+    // it; logged out, we ask the server for an anonymous token link.
+    function showCreatePrompt(body, loggedIn) {
+        body.innerHTML = "";
+        body.appendChild(el("p", {textContent: "Create a stable link to your current view to share " +
+            "with collaborators or put into figure legends or manuscripts. Links never time out."},
+            {marginTop: "0"}));
+        var status = el("div", {}, {margin: "6px 0"});
+        var createBtn = el("button", {title: "Create the shareable link and copy it to your clipboard"});
+        createBtn.innerHTML = clipboardSvg + "Create link &amp; copy";
+        createBtn.addEventListener("click", function() {
+            createBtn.disabled = true;
+            var params = {hgsid: getHgsidSafe(), hgS_doSaveSessionJson: 1};
+            if (loggedIn)
+                params.hgS_newSessionName = shareRandomName();
+            else
+                params.hgS_shareAnon = 1;   // anonymous token link; no rename
+            postJson(params, status, function(data) {
+                showResult(body, data.url, {name: data.name, session: true, loggedIn: loggedIn,
+                                            autoCopy: true});
+            });
         });
+        var row = el("div", {});
+        row.appendChild(createBtn);
+        body.appendChild(row);
+        body.appendChild(status);
+        appendManageNote(body, loggedIn);
     }
 
     // ---- Wire up the menu items --------------------------------------------------------------
