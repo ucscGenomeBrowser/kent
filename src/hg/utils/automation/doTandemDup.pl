@@ -188,8 +188,9 @@ sub doPairedEnds {
   my $bossScript = newBash HgRemoteScript("$runDir/runPairedEnds.bash",
 		$paraHub, $runDir, $whatItDoes);
 
-  # trying 48G ram to see if jobs will not fail
-  my $paraRun = "para make -ram=48g jobList
+  # improvements to kmerPairs.pl reduced memory requirement dramatically
+  #  2026-08-26
+  my $paraRun = "para make -ram=3g jobList
 para check
 para time > run.time
 cat run.time\n";
