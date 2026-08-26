@@ -13,7 +13,7 @@
 // Styling: shared house-style components in gbModern.css (.gbPill, .gbCard, .gbModal*, .gbTable,
 // .gbBanner, .gbSection), session-specific layout in hgSession.css.
 
-/* global $, hgSessionData, convertTitleTagsToMouseovers, htmlEncode, commify */
+/* global $, hgSessionData, convertTitleTagsToMouseovers, htmlEncode, commify, gbShowTimingDialog */
 
 // Cart action variables (must match the hgs* defines in hgSession.h; hgSessionPrefix is "hgS_").
 var SESS_ACT = {
@@ -606,6 +606,9 @@ function sessTableHtml(C) {
 
 function sessionBuild() {
     sessData = hgSessionData;
+    // When the page was loaded with &measureTiming=1 the C side attaches sessData.timing; time the
+    // client-side render too so the dialog shows the full server+client picture.
+    var tBuildStart = (sessData.timing && window.performance) ? performance.now() : 0;
     var C = sessData.config;
     var app = $('#sessionApp');
 
@@ -662,6 +665,27 @@ function sessionBuild() {
     if (C.loggedIn) { sessBuildTable(); }
 
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
+
+    // Timing report (only when loaded with &measureTiming=1): a pill that opens the shared dialog.
+    if (sessData.timing) {
+        var clientRows = [{ label: 'build page (JS)',
+                            ms: Math.round(performance.now() - tBuildStart) }];
+        var pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'gbPill';
+        pill.id = 'sessTimingBtn';
+        pill.innerHTML = '&#9201; Timing';
+        pill.title = 'Show where this page spent its time (server and browser)';
+        pill.addEventListener('click', function() {
+            gbShowTimingDialog(sessData.timing, clientRows);
+        });
+        var bar = document.querySelector('#sessionApp .sessToolbar') ||
+                  document.getElementById('sessionApp');
+        bar.appendChild(pill);
+        // measureTiming=1 on the URL is an explicit request to see the numbers, so open the dialog
+        // right away; the pill stays for reopening it after Close.
+        gbShowTimingDialog(sessData.timing, clientRows);
+    }
 }
 
 // ---- bulk select / delete ------------------------------------------------

@@ -46,9 +46,12 @@
 #include "bigBed.h"
 #include "bigPsl.h"
 #include "blatShare.h"
+#include "perfTimer.h"
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
+struct perfTimer *hgBlatTiming = NULL;	/* Non-NULL when &measureTiming is set; times the request
+					 * and is emitted as hgBlatData.timing for the JS dialog. */
 boolean orgChange = FALSE;
 boolean dbChange = FALSE;
 boolean allGenomes = FALSE;
@@ -791,11 +794,16 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     freeMem(newTabUrl);
     }
 jsonWriteListEnd(jw);    // hits
+/* When &measureTiming is set, hand the per-phase timings to hgBlat.js (it shows them in a
+ * dialog).  This step covers building the results JSON, including the per-hit locusName lookups. */
+perfTimerStep(hgBlatTiming, "assemble results JSON + locus lookups");
+perfTimerJson(hgBlatTiming, jw, "timing");
 jsonWriteObjectEnd(jw);  // root
 
 printf("<div id='blatResults' class='gbApp'></div>\n");
 jsInlineF("var hgBlatData = %s;\n", jw->dy->string);
 jsonWriteFree(&jw);
+perfTimerFree(&hgBlatTiming);
 }
 
 static void printBlatBannerStyle()
@@ -2083,6 +2091,8 @@ return(ret);
 void blatSeq(char *userSeq, char *organism, char *database, int dbCount)
 /* Blat sequence user pasted in. */
 {
+if (isNotEmpty(cartOptionalString(cart, "measureTiming")))
+    hgBlatTiming = perfTimerNew();   /* times the request; emitted as hgBlatData.timing */
 FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
@@ -2303,6 +2313,8 @@ else
     minSuggested = max(minMatchShown,minLucky);
     }
 
+perfTimerStep(hgBlatTiming, "prepare query");
+
 int seqNumber = 0;
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -2411,6 +2423,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     ++seqNumber;
     }
 carefulClose(&f);
+perfTimerStep(hgBlatTiming, "run BLAT");
 
 if (!allGenomes)
     {

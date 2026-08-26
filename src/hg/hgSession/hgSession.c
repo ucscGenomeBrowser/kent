@@ -42,8 +42,11 @@
 #include "sessionData.h"
 #include "jsonParse.h"
 #include "jsonWrite.h"
+#include "perfTimer.h"
 
 char *database = NULL;
+struct perfTimer *hgSessionTiming = NULL;	/* Non-NULL when &measureTiming is set; times the page
+						 * and is emitted as hgSessionData.timing for the JS. */
 
 void usage()
 /* Explain usage and exit. */
@@ -2164,6 +2167,7 @@ safef(returnAddress, sizeof(returnAddress), "%s?%s", hgSessionName(), cartSidUrl
 jsonWriteStringf(jw, "resetUrl", "../cgi-bin/cartReset?%s&destination=%s",
                  cartSidUrlString(cart), cgiEncodeFull(returnAddress));
 jsonWriteObjectEnd(jw);   // config
+perfTimerStep(hgSessionTiming, "page header + config");
 
 jsonWriteListStart(jw, "sessions");
 if (loggedIn)
@@ -2183,6 +2187,7 @@ if (loggedIn)
                 "SELECT sessionName, shared, firstUse, useCount, contents, lastUse FROM %s "
                 "WHERE userName = '%s' ORDER BY sessionName;", namedSessionTable, encUserName);
         struct sqlResult *sr = sqlGetResult(conn, query);
+        perfTimerStep(hgSessionTiming, "load sessions from MySQL");
         char **row;
         /* Cache one connection per assembly db so the per-session band/locus lookups don't
          * re-open a connection for every row when many sessions share an assembly. */
@@ -2313,6 +2318,7 @@ if (loggedIn)
             freez(&sessionName);
             }
         sqlFreeResult(&sr);
+        perfTimerStep(hgSessionTiming, "annotate positions (band + locus) + build JSON");
         /* Release the cached per-assembly connections. */
         struct hashEl *hel, *helList = hashElListHash(dbConnCache);
         for (hel = helList; hel != NULL; hel = hel->next)
@@ -2333,6 +2339,8 @@ void doMainPageNew(char *userName, char *message)
  * band), the experimental banner, an empty #sessionApp container, and the hgSessionData JSON that
  * hgSession.js reads to build the UI. */
 {
+if (isNotEmpty(cartOptionalString(cart, "measureTiming")))
+    hgSessionTiming = perfTimerNew();   /* times the page; emitted as hgSessionData.timing */
 cspWriteResponseHeader();
 puts("Content-Type:text/html\n");
 cartWebStart(cart, NULL, "My Sessions");
@@ -2351,9 +2359,13 @@ printf("<div id='sessionApp' class='gbApp'></div>\n");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 sessionDataToJson(userName, jw);
+/* When &measureTiming is set, hand the per-phase timings to hgSession.js (it shows them in a
+ * dialog).  Emitted at the top level as hgSessionData.timing. */
+perfTimerJson(hgSessionTiming, jw, "timing");
 jsonWriteObjectEnd(jw);
 jsInlineF("var hgSessionData = %s;\n", jw->dy->string);
 jsonWriteFree(&jw);
+perfTimerFree(&hgSessionTiming);
 
 cartWebEnd();
 }

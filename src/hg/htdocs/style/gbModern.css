@@ -119,3 +119,16 @@ table.hgInside { background:#fff; }
 .gbTable td.num, .gbTable th.num { text-align:right; font-variant-numeric:tabular-nums; }
 .gbTable a { color:var(--accent); text-decoration:none; }
 .gbTable a:hover { color:var(--accentHover); text-decoration:underline; }
+
+/* Timing dialog (gbShowTimingDialog in utils.js): a wider modal holding a gbTable whose last column
+ * is a proportional bar.  Shown when a page is loaded with &measureTiming=1. */
+.gbModal.gbTimingModal { max-width:560px; }
+.gbTimingTable td.gbTimeBarCell { width:45%; }
+/* The bar track fills the cell; the fill width is set inline as a percentage of the total time. */
+.gbTimeBar { position:relative; height:14px; background:var(--stripe); }
+.gbTimeBar > span { position:absolute; top:0; left:0; height:100%; background:var(--section); }
+.gbTimingTable tr.gbTimeTotal td { font-weight:700; border-top:2px solid var(--headrowLine); }
+.gbTimingTable tr.gbTimeTotal .gbTimeBar > span { background:var(--navy); }
+/* A subhead row separating the "server" and "client" groups. */
+.gbTimingTable tr.gbTimeGroup td { background:var(--headrow); color:var(--navy); font-weight:700;
+    font-size:12px; }

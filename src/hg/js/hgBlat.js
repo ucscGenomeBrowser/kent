@@ -9,7 +9,7 @@
 // Header tooltips reuse the Genome Browser's own mechanism (title + convertTitleTagsToMouseovers).
 
 /* jshint esnext: true */
-/* global $, hgBlatData, convertTitleTagsToMouseovers, htmlEncode */
+/* global $, hgBlatData, convertTitleTagsToMouseovers, htmlEncode, commify, gbShowTimingDialog */
 
 var blatSelectedRank = null;   // rank of the row shown in the detail panel
 
@@ -419,6 +419,9 @@ function blatShowQuerySeq() {
 function blatBuild() {
     var cfg = hgBlatData.config;
     var hits = hgBlatData.hits;
+    // When loaded with &measureTiming=1 the C side attaches hgBlatData.timing; time the client
+    // render too so the dialog shows the full server+client picture.
+    var tBuildStart = (hgBlatData.timing && window.performance) ? performance.now() : 0;
 
     // Pin a stable, shareable URL into the address bar (no server redirect) so refresh, bookmark and
     // "Share a link" all use the trash-backed reopen link instead of the transient POST/search URL.
@@ -535,6 +538,29 @@ function blatBuild() {
         `If you are missing matches that you think should be there, ` +
         `<a target="_blank" href="../FAQ/FAQblat.html#blat1b">read our BLAT FAQ</a> or ` +
         `<a href="mailto:genome@soe.ucsc.edu">contact us</a>.</div>`;
+
+    // Timing report (only when loaded with &measureTiming=1): a pill in the summary strip that opens
+    // the shared dialog with the server phases plus the client render time.
+    if (hgBlatData.timing) {
+        var clientRows = [{ label: 'build page (JS)',
+                            ms: Math.round(performance.now() - tBuildStart) }];
+        var pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'gbPill';
+        pill.id = 'blatTimingBtn';
+        pill.innerHTML = '&#9201; Timing';
+        pill.title = 'Show where this page spent its time (server and browser)';
+        pill.addEventListener('click', function() {
+            gbShowTimingDialog(hgBlatData.timing, clientRows);
+        });
+        var strip = document.querySelector('#blatResults .gbStripActions') ||
+                    document.querySelector('#blatResults .gbStrip');
+        if (strip) { strip.appendChild(pill); }
+        // measureTiming=1 on the URL is an explicit request to see the numbers, so open the dialog
+        // right away; the pill stays for reopening it after Close.
+        gbShowTimingDialog(hgBlatData.timing, clientRows);
+    }
+
     blatApplyTooltips();
 }
 

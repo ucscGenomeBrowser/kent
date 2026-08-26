@@ -4333,6 +4333,84 @@ function titleTagToMouseover(mapEl) {
         addMouseover(mapEl, mapEl.title);
 }
 
+function gbShowTimingDialog(serverRows, clientRows) {
+    /* Pop up a small modal that breaks down where a page spent its time.  Shared by the
+     * client-rendered CGI pages (hgBlat, hgSession, ...) that emit a "timing" array when loaded
+     * with &measureTiming=1.  serverRows and clientRows are each an array of {label, ms} (either may
+     * be null/empty); the server list normally ends with a {label:"total"} row from the C side.
+     * Renders one gbTable with a proportional bar per row, styled by the .gbTiming* rules in
+     * gbModern.css.  Reuses the .gbModalBg/.gbModal machinery; closes on Close, Esc, backdrop. */
+    serverRows = serverRows || [];
+    clientRows = clientRows || [];
+    // Scale the bars to the largest single interval (ignoring the grand-total rows, which would
+    // otherwise dwarf every step).  Fall back to 1 to avoid divide-by-zero on an all-zero page.
+    var maxMs = 1;
+    function scan(rows) {
+        rows.forEach(function(r) {
+            if (r.label !== "total" && r.ms > maxMs)
+                maxMs = r.ms;
+        });
+    }
+    scan(serverRows);
+    scan(clientRows);
+
+    function rowHtml(r, extraClass) {
+        var pct = Math.min(100, Math.round((r.ms / maxMs) * 100));
+        var isTotal = (r.label === "total");
+        var label = isTotal ? "Total" : r.label;
+        return '<tr class="' + (extraClass || "") + (isTotal ? " gbTimeTotal" : "") + '">' +
+            '<td>' + htmlEncode(label) + '</td>' +
+            '<td class="num" title="' + htmlEncode(r.ms + " milliseconds") + '">' +
+                htmlEncode(commify(r.ms)) + '</td>' +
+            '<td class="gbTimeBarCell"><div class="gbTimeBar"><span style="width:' + pct + '%"></span>' +
+                '</div></td></tr>';
+    }
+    function groupHtml(title, rows) {
+        if (!rows || !rows.length)
+            return "";
+        var h = '<tr class="gbTimeGroup"><td colspan="3">' + htmlEncode(title) + '</td></tr>';
+        rows.forEach(function(r) { h += rowHtml(r); });
+        return h;
+    }
+
+    var body = '<table class="gbTable gbTimingTable"><thead><tr>' +
+        '<th title="What was measured">Phase</th>' +
+        '<th class="num" title="Wall-clock milliseconds spent">ms</th>' +
+        '<th title="Time relative to the slowest phase">&nbsp;</th>' +
+        '</tr></thead><tbody>' +
+        groupHtml("Server (C code)", serverRows) +
+        groupHtml("Browser (JavaScript)", clientRows) +
+        '</tbody></table>';
+
+    // Build a self-contained modal so this helper does not depend on any page-local markup.
+    $('#gbTimingBg').remove();
+    var html = '<div id="gbTimingBg" class="gbModalBg gbApp" style="display:flex">' +
+        '<div class="gbModal gbTimingModal" role="dialog" aria-modal="true" aria-labelledby="gbTimingTitle">' +
+        '<div class="gbModalTitle" id="gbTimingTitle">Timing</div>' +
+        '<div class="gbModalText" style="max-width:none">Wall-clock time spent handling this ' +
+            'request.  Add or remove <code>&amp;measureTiming=1</code> from the page URL to toggle ' +
+            'this report.</div>' +
+        body +
+        '<div class="gbModalBtns"><button type="button" class="gbPill" id="gbTimingClose">Close' +
+            '</button></div></div></div>';
+    $('body').append(html);
+    convertTitleTagsToMouseovers();
+
+    function close() {
+        $('#gbTimingBg').remove();
+        $(document).off('keydown.gbTiming');
+    }
+    $('#gbTimingClose').on('click', close);
+    $('#gbTimingBg').on('click', function(ev) {
+        if (ev.target === this)   // backdrop click only, not clicks inside the card
+            close();
+    });
+    $(document).on('keydown.gbTiming', function(ev) {
+        if (ev.key === "Escape")
+            close();
+    });
+}
+
 function htmlEncode(s) {
     /* HTML-escape a value (&, <, >, ", ') so it is safe to insert as text or into an attribute
      * value in a string of HTML.  Shared helper: prefer this over rolling a per-file escaper.
