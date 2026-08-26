@@ -5567,6 +5567,19 @@ function deleteCustomTrack (trackName) {
     // since we store custom tracks as a text file, not mysql tables
     xhttp.open("GET", url, false);
     xhttp.send();
+    removeCustomTrackCells(trackName);
+}
+
+function removeCustomTrackCells (trackName) {
+    /* Remove this custom track from the track list under the image. A visible track is
+     * listed twice, once in its own group and once in the Visible Tracks group, so drop
+     * every cell that carries its delete icon, not just the one that was clicked. */
+    var selector = 'div.trackDeleteIcon[data-track="' + trackName + '"]';
+    document.querySelectorAll(selector).forEach(function(d) {
+        var td = d.closest("td");
+        if (td)
+            td.remove();
+    });
 }
 
 function deleteAllBlatTracks () {
@@ -5592,7 +5605,6 @@ function onTrackDelIconClick (ev) {
     // assumes the track is in hgTracks.trackDb, so only call it when it is.
     if (hgTracks.trackDb && hgTracks.trackDb[trackName])
         rightClick.hideTracks([trackName]);
-    divEl.closest("td").remove();
 }
 
 function onQuickLiftDelIconClick (ev) {
