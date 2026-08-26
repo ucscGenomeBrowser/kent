@@ -290,6 +290,14 @@ boolean hChromBandConn(struct sqlConnection *conn,
 /* Fill in text string that says what band pos is on.
  * Return FALSE if not on any band, or table missing. */
 
+char *hLocusNameExpand(char *raw);
+/* Expand locusName-table abbreviations ("ex:"/"in:"/"ig:" and "|") into a human-readable
+ * string. Returns a cloneString'd value (caller frees), or NULL for empty input. */
+
+char *hLocusName(struct sqlConnection *conn, char *chrom, int start, int end);
+/* If conn's database has a "locusName" table, return the human-readable gene/locus label
+ * overlapping the range ("intron STON2", "intergenic FOO-BAR"), else NULL. Caller frees. */
+
 boolean hScaffoldPos(char *db, char *chrom, int start, int end,
                      char **retScaffold, int *retStart, int *retEnd);
 /* Return the scaffold, and start end coordinates on a scaffold, for

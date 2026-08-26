@@ -13,7 +13,7 @@
 // Styling: shared house-style components in gbModern.css (.gbPill, .gbCard, .gbModal*, .gbTable,
 // .gbBanner, .gbSection), session-specific layout in hgSession.css.
 
-/* global $, hgSessionData, convertTitleTagsToMouseovers, htmlEncode, commify */
+/* global $, hgSessionData, convertTitleTagsToMouseovers, htmlEncode, commify, gbShowTimingDialog */
 
 // Cart action variables (must match the hgs* defines in hgSession.h; hgSessionPrefix is "hgS_").
 var SESS_ACT = {
@@ -58,11 +58,16 @@ function sessRandomShareName() {
     return 'share_' + s;
 }
 
-function sessCommifyPos(pos) {
-    // Add thousands separators to each number in a position string ("chr7:155799529-155812871" ->
-    // "chr7:155,799,529-155,812,871") using utils.js commify.
-    if (typeof commify !== 'function') { return String(pos); }
-    return String(pos).replace(/\d+/g, function(n) { return commify(n); });
+function sessMbpPos(pos) {
+    // Shorten a position to megabases to save horizontal space:
+    // "chr7:155799529-155812871" -> "chr7:155.80-155.81 Mbp".  Falls back to the raw string
+    // if it doesn't parse.
+    var m = /^(.+):([0-9,]+)-([0-9,]+)$/.exec(String(pos));
+    if (!m) { return String(pos); }
+    var s = parseInt(m[2].replace(/,/g, ''), 10);
+    var e = parseInt(m[3].replace(/,/g, ''), 10);
+    if (isNaN(s) || isNaN(e)) { return String(pos); }
+    return m[1] + ':' + (s / 1e6).toFixed(2) + '-' + (e / 1e6).toFixed(2) + ' Mbp';
 }
 
 function sessMsg(text, cls) {
@@ -175,12 +180,15 @@ var SESS_TRASH_SVG = '<svg class="sessIcon" xmlns="http://www.w3.org/2000/svg" v
     ' 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8' +
     'c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7' +
     ' 47.9-45L416 128z"/></svg>';
-// Font Awesome "floppy-disk" (save) solid path.
-var SESS_SAVE_SVG = '<svg class="sessIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"' +
-    ' aria-hidden="true"><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64' +
-    ' 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7' +
-    ' 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32' +
-    '-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>';
+// Font Awesome "floppy-disk" (save) regular/outline path - reads more clearly as a save icon.
+var SESS_SAVE_SVG = '<svg class="sessIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"' +
+    ' aria-hidden="true"><path fill="currentColor" d="M160 144C151.2 144 144 151.2 144 160L144 480C144' +
+    ' 488.8 151.2 496 160 496L480 496C488.8 496 496 488.8 496 480L496 237.3C496 233.1 494.3 229 491.3' +
+    ' 226L416 150.6L416 240C416 257.7 401.7 272 384 272L224 272C206.3 272 192 257.7 192 240L192 144L160' +
+    ' 144zM240 144L240 224L368 224L368 144L240 144zM96 160C96 124.7 124.7 96 160 96L402.7 96C419.7 96' +
+    ' 436 102.7 448 114.7L525.3 192C537.3 204 544 220.3 544 237.3L544 480C544 515.3 515.3 544 480' +
+    ' 544L160 544C124.7 544 96 515.3 96 480L96 160zM256 384C256 348.7 284.7 320 320 320C355.3 320 384' +
+    ' 348.7 384 384C384 419.3 355.3 448 320 448C284.7 448 256 419.3 256 384z"/></svg>';
 // Font Awesome "lock" solid path - marks a private (not-shared) session, since sharing is the default.
 var SESS_LOCK_SVG = '<svg class="sessLock" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"' +
     ' aria-hidden="true"><path fill="currentColor" d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80' +
@@ -601,6 +609,9 @@ function sessTableHtml(C) {
 
 function sessionBuild() {
     sessData = hgSessionData;
+    // When the page was loaded with &measureTiming=1 the C side attaches sessData.timing; time the
+    // client-side render too so the dialog shows the full server+client picture.
+    var tBuildStart = (sessData.timing && window.performance) ? performance.now() : 0;
     var C = sessData.config;
     var app = $('#sessionApp');
 
@@ -657,6 +668,27 @@ function sessionBuild() {
     if (C.loggedIn) { sessBuildTable(); }
 
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
+
+    // Timing report (only when loaded with &measureTiming=1): a pill that opens the shared dialog.
+    if (sessData.timing) {
+        var clientRows = [{ label: 'build page (JS)',
+                            ms: Math.round(performance.now() - tBuildStart) }];
+        var pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'gbPill';
+        pill.id = 'sessTimingBtn';
+        pill.innerHTML = '&#9201; Timing';
+        pill.title = 'Show where this page spent its time (server and browser)';
+        pill.addEventListener('click', function() {
+            gbShowTimingDialog(sessData.timing, clientRows);
+        });
+        var bar = document.querySelector('#sessionApp .sessToolbar') ||
+                  document.getElementById('sessionApp');
+        bar.appendChild(pill);
+        // measureTiming=1 on the URL is an explicit request to see the numbers, so open the dialog
+        // right away; the pill stays for reopening it after Close.
+        gbShowTimingDialog(sessData.timing, clientRows);
+    }
 }
 
 // ---- bulk select / delete ------------------------------------------------
@@ -727,16 +759,25 @@ function sessBuildTable() {
               render: function(d, type, row) {
                   if (type !== 'display') { return row.db || ''; }
                   var html = sessEnc(row.db || 'n/a');
-                  if (row.position) {
-                      html += ' <span class="sessPos">' + sessEnc(sessCommifyPos(row.position)) +
-                          '</span>';
+                  // Region: band, locus (gene) and the position shortened to Mbp, so it all fits.
+                  var region = [];
+                  if (row.band) { region.push(sessEnc(row.band)); }
+                  if (row.locus) { region.push(sessEnc(row.locus)); }
+                  if (row.position) { region.push(sessEnc(sessMbpPos(row.position))); }
+                  if (region.length) {
+                      html += ' <span class="sessPos">' + region.join('&nbsp;&nbsp; ') + '</span>';
                   }
                   return html; } },
             { title: 'Created', data: 'createdEpoch',
               render: function(d, type, row) {
-                  if (type !== 'display') { return row.createdEpoch; }
-                  return '<span title="Last used: ' + sessEnc(row.lastUse) + '">' +
-                      sessEnc(row.created) + '</span>'; } },
+                  return (type === 'display') ?
+                      '<span title="' + sessEnc(row.createdFull || row.created) + '">' +
+                      sessEnc(row.created) + '</span>' : row.createdEpoch; } },
+            { title: 'Last used', data: 'lastUseEpoch',
+              render: function(d, type, row) {
+                  return (type === 'display') ?
+                      '<span title="' + sessEnc(row.lastUse) + '">' +
+                      sessEnc(row.lastUseDate || row.lastUse) + '</span>' : row.lastUseEpoch; } },
             { title: 'Views', data: 'useCount',
               render: function(d, type) { return (type === 'display') ? sessNum(d) : d; } },
             { title: 'Actions', className: 'sessActionsCol', data: null, orderable: false,
@@ -776,6 +817,7 @@ function sessBuildTable() {
         'Session': 'Click a name to load that session in the Genome Browser',
         'Assembly': 'The genome assembly this session was saved on',
         'Created': 'When the session was first saved',
+        'Last used': 'When the session was last saved or loaded',
         'Views': 'How many times this session has been loaded',
         'Actions': 'Overwrite with your current view, share, edit, or delete'
     };

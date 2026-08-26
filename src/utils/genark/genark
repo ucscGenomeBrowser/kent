@@ -39,9 +39,21 @@ Subcommands:
                       accessions) and report problems, separating contrib-specific
                       issues from the assemblies' own pre-existing hub warnings.
                       --noTracks does a faster structure-only check.
+
+  syncFtp             Update the local NCBI assembly mirror
+                      /hive/data/outside/ncbi/genomes/{GCA,GCF}/ against NCBI.
+                      Fetches the current assembly_summary_{genbank,refseq}.txt,
+                      diffs them against the last-synced copy to find new and
+                      changed assemblies, mirrors those with lftp (reusing the
+                      curated exclude list), and appends one row per affected
+                      assembly to /hive/data/outside/ncbi/genomes/changes.tsv.
+                      -n computes the full change set and writes changes.tsv
+                      without downloading any assembly data.
 """
 
 import argparse
+import concurrent.futures
+import datetime
 import glob
 import os
 import random
@@ -49,11 +61,57 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
 
 ASMHUBS = "/hive/data/genomes/asmHubs"
 CONTRIB = os.path.join(ASMHUBS, "contrib")
 
 ACC_RE = re.compile(r"^GC[AF]_[0-9]{9}\.[0-9]+$")
+
+# --- syncFtp: local NCBI genomes mirror --------------------------------------
+
+GENOMES = "/hive/data/outside/ncbi/genomes"
+FTP_HOST = "https://ftp.ncbi.nlm.nih.gov"
+# assembly dirs live under genomes/all/<GCA|GCF>/... on the server; the local
+# mirror drops the "all" component, so genomes/all/GCA/000/001/405/GCA_...  maps
+# to <dest>/GCA/000/001/405/GCA_...
+ALL_MARKER = "/genomes/all/"
+
+# per-accession-type authority file: the current "latest" assemblies
+SUMMARY_PATH = {
+    "GCA": "/genomes/genbank/assembly_summary_genbank.txt",
+    "GCF": "/genomes/refseq/assembly_summary_refseq.txt",
+}
+SUMMARY_NAME = {
+    "GCA": "assembly_summary_genbank.txt",
+    "GCF": "assembly_summary_refseq.txt",
+}
+
+# lftp mirror exclude patterns (regex, passed as -x), copied verbatim from
+# /hive/data/outside/ncbi/genomes/fetchLftp.sh -- the files NCBI ships that the
+# GenArk mirror does not keep.
+LFTP_EXCLUDES = [
+    "suppressed",
+    "Annotation_comparison",
+    "RefSeq_transcripts_alignments",
+    "RNASeq_coverage_graphs",
+    r".*_ani_contam_ranges\.tsv",
+    r".*_ani_report\.txt",
+    r".*_fcs_report\.txt",
+    r".*_gene_ontology\.gaf\.gz",
+    r".*_genomic\.gtf\.gz",
+    r".*_protein\.gpff\.gz",
+    r".*_translated_cds\.faa\.gz",
+    r".*_wgsmaster\.gbff\.gz",
+    r"annotation_hashes\.txt",
+    r"md5checksums\.txt",
+    r"uncompressed_checksums\.txt",
+]
+
+# generous per-assembly backstop; lftp's own net:timeout handles stalls
+PER_ASM_TIMEOUT = 4 * 3600
+CHANGES_HEADER = "#date\taccession\tgcx\tstatus\tlocalDir\tnFiles\tfiles\n"
 
 
 def accPath(acc):
@@ -295,6 +353,263 @@ def checkContrib(args):
         sys.exit(1)
 
 
+def destDirFor(ftpPath, destBase):
+    """Map an assembly_summary ftp_path (column 20) to (localDir, srcSub), or
+    None. ftp_path e.g.
+      https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.28_GRCh38.p13
+    -> ("<destBase>/GCA/000/001/405/GCA_000001405.28_GRCh38.p13",
+        "GCA/000/001/405/GCA_000001405.28_GRCh38.p13").  srcSub is the path under
+    genomes/all/ used to build the remote lftp source."""
+    i = ftpPath.find(ALL_MARKER)
+    if i < 0:
+        return None
+    sub = ftpPath[i + len(ALL_MARKER):].rstrip("/")
+    if not sub:
+        return None
+    return os.path.join(destBase, sub), sub
+
+
+def fetchSummary(url, dest):
+    """Download url to dest with wget. Raises on failure."""
+    subprocess.run(["wget", "-q", "--tries=3", "--timeout=1200", "-O", dest, url],
+                   check=True)
+
+
+def summaryIndex(path):
+    """Stream a summary file into a compact {accession: hash(row)} dict. Only the
+    per-row hash is kept, so the 1.7 GB GenBank summary does not sit in RAM as
+    text."""
+    idx = {}
+    with open(path) as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            acc = line.split("\t", 1)[0]
+            if acc:
+                idx[acc] = hash(line)
+    return idx
+
+
+def diffSummary(baselinePath, nowPath, gcx, destBase, fillMissing):
+    """Compare the last-synced baseline against the freshly fetched summary and
+    return (candidates, removed).  Both streamed; only a compact baseline index
+    is held in memory.
+      candidates: dicts {acc, gcx, status(new|updated), ftpPath, destDir, sub}
+      removed:    dicts {acc, gcx, ftpPath, destDir}  (dropped from "latest")
+    With fillMissing, unchanged rows whose local dir is absent are also
+    re-fetched (status new) to self-heal gaps from past partial runs."""
+    prev = summaryIndex(baselinePath)
+    candidates = []
+    with open(nowPath) as fh:
+        for line in fh:
+            if line.startswith("#"):
+                continue
+            f = line.rstrip("\n").split("\t")
+            if len(f) < 20:
+                continue
+            acc, ftpPath = f[0], f[19]
+            if not acc or not ftpPath.startswith("http"):
+                continue
+            dd = destDirFor(ftpPath, destBase)
+            if dd is None:
+                continue
+            destDir, sub = dd
+            if acc not in prev:
+                status = "new"
+            elif prev.pop(acc) == hash(line):
+                if fillMissing and not os.path.isdir(destDir):
+                    status = "new"
+                else:
+                    continue
+            else:
+                status = "updated"
+            candidates.append({"acc": acc, "gcx": gcx, "status": status,
+                               "ftpPath": ftpPath, "destDir": destDir, "sub": sub})
+
+    removed = []
+    if prev:                            # accessions left in prev dropped to historical
+        leftover = set(prev)
+        with open(baselinePath) as fh:
+            for line in fh:
+                if line.startswith("#") or not leftover:
+                    continue
+                f = line.rstrip("\n").split("\t")
+                if len(f) < 20 or f[0] not in leftover:
+                    continue
+                dd = destDirFor(f[19], destBase)
+                removed.append({"acc": f[0], "gcx": gcx, "ftpPath": f[19],
+                                "destDir": dd[0] if dd else ""})
+                leftover.discard(f[0])
+    return candidates, removed
+
+
+def parseLftpLog(logPath, host, sub, destDir):
+    """Read an lftp mirror --log/--script file and return (added, removed): the
+    file paths (relative to the assembly dir) that were, or would be,
+    transferred (get) and deleted (rm)."""
+    remotePrefix = "%s%s%s/" % (host, ALL_MARKER, sub)
+    added, removed = [], []
+    if not os.path.exists(logPath):
+        return added, removed
+    with open(logPath) as fh:
+        for line in fh:
+            parts = line.split()
+            if not parts:
+                continue
+            if parts[0] == "get":
+                url = parts[-1]
+                rel = url[len(remotePrefix):] if url.startswith(remotePrefix) \
+                    else os.path.basename(url)
+                added.append(rel)
+            elif parts[0] == "rm":
+                local = parts[-1]
+                removed.append(os.path.relpath(local, destDir))
+    return added, removed
+
+
+def lftpMirrorOne(cand, host, noDownload):
+    """Mirror one assembly with lftp (reusing the curated exclude list). Returns
+    the candidate dict augmented with added[], removed[], rc, err. With
+    noDownload, lftp runs in --script mode: it lists the remote dir and records
+    what it would transfer, but downloads nothing."""
+    destDir, sub = cand["destDir"], cand["sub"]
+    fd, logPath = tempfile.mkstemp(prefix="genarkSyncFtp.", suffix=".lftp")
+    os.close(fd)
+    logOpt = "--script=%s" % logPath if noDownload else "--log=%s" % logPath
+    excl = " ".join("-x '%s'" % p for p in LFTP_EXCLUDES)
+    script = ("open %s; set net:timeout 1200; "
+              "mirror --only-newer --no-perms --delete --parallel=4 %s %s "
+              "/genomes/all/%s/ %s/; quit"
+              % (host, logOpt, excl, sub, destDir))
+    if not noDownload:
+        os.makedirs(destDir, exist_ok=True)
+
+    rc, err = 1, ""
+    for attempt in range(3):
+        try:
+            res = subprocess.run(["lftp", "-e", script], capture_output=True,
+                                 text=True, timeout=PER_ASM_TIMEOUT)
+            rc, err = res.returncode, res.stderr
+            if rc == 0:
+                break
+        except subprocess.TimeoutExpired:
+            rc, err = 1, "timeout"
+        time.sleep(5 * (attempt + 1))
+
+    added, removed = parseLftpLog(logPath, host, sub, destDir)
+    os.remove(logPath)
+    cand = dict(cand)
+    cand.update(added=added, removed=removed, rc=rc, err=err)
+    return cand
+
+
+def writeChange(fh, stamp, rec):
+    """Append one assembly's change row to changes.tsv (fh)."""
+    files = list(rec.get("added", []))
+    files += ["rm:%s" % r for r in rec.get("removed", [])]
+    fh.write("%s\t%s\t%s\t%s\t%s\t%d\t%s\n"
+             % (stamp, rec["acc"], rec["gcx"], rec["status"],
+                rec.get("destDir", ""), len(files), ",".join(files)))
+    fh.flush()
+
+
+def syncFtp(args):
+    """Update the local /hive/data/outside/ncbi/genomes/{GCA,GCF}/ mirror:
+    fetch the current assembly summaries, diff against the last-synced copy to
+    find new and changed assemblies, mirror those with lftp, and log one row per
+    affected assembly to changes.tsv."""
+    host = args.src
+    destBase = args.dest
+    syncDir = os.path.join(destBase, "syncFtp")
+    changesTsv = os.path.join(destBase, "changes.tsv")
+    if args.gca_only:
+        gcxList = ["GCA"]
+    elif args.gcf_only:
+        gcxList = ["GCF"]
+    else:
+        gcxList = ["GCA", "GCF"]
+
+    if args.dry_run:
+        # global --dry-run: coarse preview only, touch nothing
+        for gcx in gcxList:
+            print("# would fetch %s%s and sync %s deltas into %s/%s/"
+                  % (host, SUMMARY_PATH[gcx], gcx, destBase, gcx))
+        return
+
+    os.makedirs(syncDir, exist_ok=True)
+    totNew = totUpd = totRem = totFail = 0
+    stamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    changesFh = None
+
+    for gcx in gcxList:
+        cur = os.path.join(syncDir, SUMMARY_NAME[gcx])
+        staged = cur + ".new"
+        print("# %s: fetching %s%s" % (gcx, host, SUMMARY_PATH[gcx]))
+        fetchSummary(host + SUMMARY_PATH[gcx], staged)
+
+        if not os.path.exists(cur):
+            os.rename(staged, cur)      # bootstrap: baseline only, no downloads
+            n = sum(1 for l in open(cur) if not l.startswith("#"))
+            print("# %s: bootstrap baseline saved (%d assemblies); no downloads. "
+                  "Re-run to sync deltas." % (gcx, n))
+            continue
+
+        candidates, removed = diffSummary(cur, staged, gcx, destBase,
+                                          args.fill_missing)
+        if args.limit is not None:
+            candidates = candidates[:args.limit]
+        nNew = sum(1 for c in candidates if c["status"] == "new")
+        print("# %s: %d new, %d updated, %d removed to process%s"
+              % (gcx, nNew, len(candidates) - nNew, len(removed),
+                 " (-n, no downloads)" if args.no_download else ""))
+
+        if changesFh is None:
+            newFile = not os.path.exists(changesTsv) \
+                or os.path.getsize(changesTsv) == 0
+            changesFh = open(changesTsv, "a")
+            if newFile:
+                changesFh.write(CHANGES_HEADER)
+
+        for rec in removed:
+            rec = dict(rec, status="removed")
+            writeChange(changesFh, stamp, rec)
+            totRem += 1
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as ex:
+            futs = [ex.submit(lftpMirrorOne, c, host, args.no_download)
+                    for c in candidates]
+            for fut in concurrent.futures.as_completed(futs):
+                rec = fut.result()
+                if rec["rc"] != 0:
+                    totFail += 1
+                    sys.stderr.write("fail %s: lftp rc=%d %s\n"
+                                     % (rec["acc"], rec["rc"],
+                                        rec["err"].strip()[:200]))
+                    continue
+                writeChange(changesFh, stamp, rec)
+                if rec["status"] == "new":
+                    totNew += 1
+                else:
+                    totUpd += 1
+
+        # advance the baseline only on a real, successful run; -n leaves the
+        # baseline untouched so a later real run re-detects the same deltas.
+        if args.no_download:
+            os.remove(staged)
+        else:
+            if os.path.exists(cur):
+                os.replace(cur, cur + ".prev")
+            os.rename(staged, cur)
+
+    if changesFh is not None:
+        changesFh.close()
+    print("syncFtp: %d new, %d updated, %d removed, %d failed%s"
+          % (totNew, totUpd, totRem, totFail,
+             "  (dry, -n)" if args.no_download else ""))
+    if totFail:
+        sys.exit(1)
+
+
 def main():
     ap = argparse.ArgumentParser(
         prog="genark", description="Manage UCSC GenArk assembly hubs.")
@@ -323,7 +638,32 @@ def main():
                    help="per-assembly hubCheck timeout in seconds (default 300)")
     c.set_defaults(func=checkContrib)
 
+    s = sub.add_parser("syncFtp",
+                       help="update the local NCBI genomes mirror from the FTP site")
+    g = s.add_mutually_exclusive_group()
+    g.add_argument("--gca-only", action="store_true",
+                   help="only sync GenBank (GCA) assemblies")
+    g.add_argument("--gcf-only", action="store_true",
+                   help="only sync RefSeq (GCF) assemblies")
+    s.add_argument("-n", "--no-download", action="store_true",
+                   help="compute the change set and write changes.tsv, but "
+                        "download no assembly data (differs from --dry-run, "
+                        "which touches nothing)")
+    s.add_argument("--jobs", type=int, default=6,
+                   help="assemblies to mirror in parallel (default 6, max 20)")
+    s.add_argument("--limit", type=int,
+                   help="process at most this many candidate assemblies")
+    s.add_argument("--fill-missing", action="store_true",
+                   help="also re-fetch summary assemblies whose local dir is absent")
+    s.add_argument("--src", default=FTP_HOST,
+                   help="source FTP/HTTP host (default %s)" % FTP_HOST)
+    s.add_argument("--dest", default=GENOMES,
+                   help="local mirror root (default %s)" % GENOMES)
+    s.set_defaults(func=syncFtp)
+
     args = ap.parse_args()
+    if getattr(args, "jobs", 1) > 20:
+        args.jobs = 20
     args.func(args)
 
 

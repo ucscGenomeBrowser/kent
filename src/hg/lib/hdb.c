@@ -1441,6 +1441,46 @@ else
     }
 }
 
+char *hLocusNameExpand(char *raw)
+/* Expand the abbreviations in a locusName-table label into a human-readable string:
+ * "ex:" -> "exon ", "in:" -> "intron ", "ig:" -> "intergenic ", and the "|" that
+ * separates gene symbols -> "-".  Returns a cloneString'd value (caller frees), or
+ * NULL for empty input. */
+{
+if (isEmpty(raw))
+    return NULL;
+struct dyString *dy = dyStringNew(64);
+char *genes = raw;
+if (startsWith("ex:", raw))
+    { dyStringAppend(dy, "exon "); genes = raw + 3; }
+else if (startsWith("in:", raw))
+    { dyStringAppend(dy, "intron "); genes = raw + 3; }
+else if (startsWith("ig:", raw))
+    { dyStringAppend(dy, "intergenic "); genes = raw + 3; }
+char *dupe = cloneString(genes);
+subChar(dupe, '|', '-');
+dyStringAppend(dy, dupe);
+freeMem(dupe);
+return dyStringCannibalize(&dy);
+}
+
+char *hLocusName(struct sqlConnection *conn, char *chrom, int start, int end)
+/* If conn's database has a "locusName" table, look up the gene/locus label that overlaps
+ * the given range and return it expanded into a human-readable string ("intron STON2",
+ * "intergenic FOO-BAR"), or NULL if the table is absent or nothing overlaps.  Caller frees.
+ * Reused by hgBlat (result labels) and hgSession (saved-session region column). */
+{
+if (!sqlTableExists(conn, "locusName"))
+    return NULL;
+struct sqlResult *sr = hRangeQuery(conn, "locusName", chrom, start, end, NULL, 0);
+char **row = sqlNextRow(sr);
+char *label = NULL;
+if (row != NULL)
+    label = hLocusNameExpand(row[4]);
+sqlFreeResult(&sr);
+return label;
+}
+
 boolean hScaffoldPos(char *db, char *chrom, int start, int end,
                      char **retScaffold, int *retStart, int *retEnd)
 /* Return the scaffold, and start end coordinates on a scaffold, for
