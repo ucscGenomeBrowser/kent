@@ -138,6 +138,14 @@ BA.2.86:
       # https://github.com/cov-lineages/pango-designation/commit/02d2cb6aa1155e4d0473fcb1ff345f472725be27
       - site: 23599
         representative: England/CLIMB-CM7YJM45/2025
+      # Fede requested exclusion of XFJ.3 at 21617 and 21618, so XFJ.3.1 correctly shows S:I19V
+      - site: 21617
+        representative: USA/UT-UPHL-251003428161/2025
+      - site: 21618
+        representative: USA/UT-UPHL-251003428161/2025
+      # Cornelius identified real G23599T reversions in descendant sublineages of XFG (TJ.1.1 and TK.1)
+      - site: 23599
+        representative: USA/CA-CDPH-500147572/2025
 
 JN.1:
     # Inherits from BA.2.86
