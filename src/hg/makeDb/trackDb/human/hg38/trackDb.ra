@@ -692,7 +692,7 @@ include encode.cCREs.override.ra
 include hic.ra
 
 include gnomad.ra
-include gnomadMpc.ra alpha,beta
+include gnomadMpc.ra
 
 
 include platinumGenomes.ra
