@@ -6334,15 +6334,6 @@ autoScale group
 
     track singleCellSignalsPeaks_neuro_degen_atac__peaks
     parent singleCellSignalsPeaks off
-    priority 2100012
-    type bigNarrowPeak
-    bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/peaks.bb
-    color 153,153,153
-    shortLabel All cell types Peaks
-    longLabel All cell types, peaks (peaks) (Risk Loci in Alzheimer)
-
-    track singleCellSignalsPeaks_neuro_degen_atac__peaks_2
-    parent singleCellSignalsPeaks off
     priority 2100013
     type bigBed 5 +
     bigDataUrl /gbdb/hg38/bbi/singleCellSignalsPeaks/neuro-degen-atac/peaks.v2.bb
@@ -6352,7 +6343,7 @@ autoScale group
     filterValues.ctcf TRUE,FALSE
     color 153,153,153
     shortLabel All cell types Peaks
-    longLabel All cell types, peaks (peaks.v2) (Risk Loci in Alzheimer)
+    longLabel All cell types, peaks (Risk Loci in Alzheimer)
 
     track singleCellSignalsPeaks_olg_eae_ms__human_multiomics_control__subsample_1_pd003_atac_hs_ctr_roche_astro_rnd_peaks
     parent singleCellSignalsPeaks off
