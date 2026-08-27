@@ -246,6 +246,10 @@ void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
 void hTvDropDownClassWithJavascript(char *varName, char *id, enum trackVisibility vis, boolean canPack,
                                     char *class, struct slPair *events);
 
+/* Parse an onlyVisibility value the way hTvGetVizArr() does: case-insensitively, with an
+ * unrecognized value falling back to dense rather than to hide. */
+enum trackVisibility tvFromVisOnlySetting(char *visOnly);
+
 /* return a NULL-terminated array of char* with possible track visibilities */
 char** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly);
 

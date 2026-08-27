@@ -223,6 +223,10 @@ for ( ; parent != NULL && !tdbIsComposite(parent); parent = parent->parent)
 return parent;
 }
 
+boolean tdbIsFacetedComposite(struct trackDb *tdb);
+// Is this a composite whose children are picked from a metadata table rather than a
+// subgroup matrix?  Unlike other composites, a faceted composite's own visibility is a
+// maximum for its children rather than a value they inherit.
 
 // --- MultiTracks are container tracks with one level of subtracks
  //                combined into a unified hgTracks image track

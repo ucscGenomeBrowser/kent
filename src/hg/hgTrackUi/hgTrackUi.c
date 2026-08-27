@@ -3112,7 +3112,30 @@ const char *metaDataId = tdb->track;
 const int metaDataIdLen = strlen(metaDataId);
 
 printf(pageStyle);       // css
-printf(placeholderDiv);  // placholder
+
+// --- Composite-level filters ---
+// Faceted composites skip hCompositeUi(), so we're doing our own filters setup.
+// The section is named "bedFilters" rather than "filters" because the JS builds
+// its own "#filters" div for the metadata facets.
+if (bedHasFilters(tdb))
+    {
+    puts("<div class='bedFiltersWrap'>");
+    puts("<style>#bedFilters-1 > td > br:first-of-type, "
+         "#bedFilters-1 > td > p:empty { display:none; }</style>");
+    puts("<table>");  // required by jsBeginCollapsibleSection*, which emits a <TR>
+    jsBeginCollapsibleSectionFontSize(cart, tdb->track, "bedFilters", "Data filters",
+                                      FALSE, "medium");
+    printf("<p class='smallText' style='margin-top:0'>These filters apply to every "
+           "subtrack in this container. ");
+    printInfoIcon("A filter set on an individual subtrack's own configuration page "
+                  "overrides the value here, for that subtrack only.");
+    puts("</p>");
+    scoreCfgUi(database, cart, tdb, tdb->track, NULL, 1000, /*boxed=*/FALSE);
+    jsEndCollapsibleSection();
+    puts("</table></div>");
+    }
+
+printf(placeholderDiv);
 
 // start by figuring out what's on by default and hasn't been overridden
 struct hash *defaultOn = hashNew(0);
@@ -3420,7 +3443,7 @@ boolean isGencode3 = trackDbSettingOn(tdb, "isGencode3");
 // 4) special cases falling through the cracks but based upon type
 if (tdbIsSuperTrack(tdb))
     superTrackUi(tdb, tdbList);
-else if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+else if (tdbIsFacetedComposite(tdb))
     facetedCompositeUi(tdb);
 else if (sameString(track, "stsMap"))
     stsMapUi(tdb);
@@ -3621,7 +3644,7 @@ if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrack
     // It'd be nice to handle faceted composites as a separate container type, but practically so much
     // of the display features we want are identical to composites - it's easier to special case the UI.
     if (tdbIsComposite(tdb) && !isLogo) // for the moment generalizing this to include other containers...
-        if (!sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")) // but not faceted containers ...
+        if (!tdbIsFacetedComposite(tdb)) // but not faceted containers ...
             hCompositeUi(db, cart, tdb, NULL, NULL, MAIN_FORM);
 
     // Additional special case navigation links may be added
@@ -3685,7 +3708,7 @@ printf("<b>Configure track container: "
             database, chromosome, cgiEncode(tdbParent->track), tdbParent->longLabel);
 printf("<p>");
 
-if (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted"))
+if (tdbIsFacetedComposite(tdb))
     return;
 
 if (tdbParent->html)
@@ -3913,7 +3936,7 @@ else
                 htmlEncode(tdb->longLabel), tdbIsSuper(tdb) ? " tracks" : "");
 
     // Add a description link if there is one.  Only for faceted composites for now.
-    if (isNotEmpty(tdb->html) && (tdbIsComposite(tdb) && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted")))
+    if (isNotEmpty(tdb->html) && tdbIsFacetedComposite(tdb))
         {
         char *downArrow = "&dArr;";
         enum browserType browser = cgiBrowser();
@@ -3984,8 +4007,16 @@ else if (sameString(tdb->type, "hic"))
 if (!tdbIsDownloadsOnly(tdb))
     {
     /* Display visibility menu */
-    if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
+    boolean isFaceted = tdbIsFacetedComposite(tdb);
+    if (tdbIsComposite(tdb) && (multViewCount(tdb) > 0 || isFaceted))
+        {
         printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+        if (isFaceted)
+            printInfoIcon("This is the most detailed display mode any track in this "
+                          "container may use. Tracks that ask for a less detailed mode of "
+                          "their own will keep it, and changing this maximum does not "
+                          "discard those settings.");
+        }
     else if (tdbIsSuper(tdb))
         {
         printf("<B>Show or hide this container and all tracks:&nbsp;</B>");
@@ -4026,6 +4057,19 @@ if (!tdbIsDownloadsOnly(tdb))
         else
             hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,canPack,"normalText visDD",
                                             trackDbSetting(tdb, "onlyVisibility"),NULL);
+
+        // A faceted composite caps its children, so say so rather than quietly clamping.
+        // NOTE: no shortLabel in the mouseover - printInfoIcon doesn't escape its text.
+        if (tdbIsContainerChild(tdb) && tdbIsFacetedComposite(tdb->parent))
+            {
+            enum trackVisibility maxVis = tdbVisLimitedByAncestors(cart, tdb->parent,
+                                                                   FALSE, TRUE);
+            char note[512];
+            safef(note, sizeof(note), "The parent container is currently set to a maximum "
+                  "display mode of '%s', so this track will display at no more than that.",
+                  hStringFromTv(maxVis));
+            printInfoIcon(note);
+            }
         }
 
     if (!ajax)

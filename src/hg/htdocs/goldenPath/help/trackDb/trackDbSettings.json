@@ -389,6 +389,21 @@
    "desc": "This setting causes a link to appear on the track configuration and items details pages to launch a multi-region custom regions view , where the regions are..."
   },
   {
+   "key": "onlyVisibility",
+   "category": "Common Settings - less frequent",
+   "roles": [
+    "super",
+    "composite",
+    "view",
+    "leaf"
+   ],
+   "types": "all",
+   "level": "new",
+   "fmt": "onlyVisibility <dense|squish|pack|full>",
+   "ex": "track coverage\n   onlyVisibility dense",
+   "desc": "Restricts a track to a single display mode."
+  },
+  {
    "key": "otherDb",
    "category": "Common Settings - less frequent",
    "roles": [

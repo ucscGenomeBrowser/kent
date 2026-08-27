@@ -485,6 +485,15 @@ if (tdb->settingsHash == NULL)
 return hashFindVal(tdb->settingsHash, name);
 }
 
+boolean tdbIsFacetedComposite(struct trackDb *tdb)
+/* Is this a composite whose children are picked from a metadata table rather than a
+ * subgroup matrix?  Unlike other composites, a faceted composite's own visibility is a
+ * maximum for its children rather than a value they inherit. */
+{
+return tdb != NULL && tdbIsComposite(tdb)
+    && sameOk(trackDbLocalSetting(tdb, "compositeTrack"), "faceted");
+}
+
 struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expression)
 // Return local settings that match expression else NULL.  In alpha order.
 {
