@@ -1089,7 +1089,7 @@ hPrintf("<div id='tabs' style='display:none; %s'>\n<ul>\n<li><a href='#simpleTab
 hPrintf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
 hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
         "style='max-width:1000px; width:100%%;'>\n",
-        TRACK_SEARCH_SIMPLE,simpleEntry == NULL ? "" : simpleEntry);
+        TRACK_SEARCH_SIMPLE,simpleEntry == NULL ? "" : htmlEncode(simpleEntry)); // escape (XSS)
 jsOnEventById("keyup", "simpleSearch", "findTracks.searchButtonsEnable(true);");
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
@@ -1115,7 +1115,7 @@ hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' "
         "style='min-width:326px; font-size:.9em;'>",
-        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
+        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : htmlEncode(nameSearch)); // escape (XSS)
 jsOnEventById("keyup", "nameSearch", "findTracks.searchButtonsEnable(true);");
 hPrintf("</td></tr>\n");
 
@@ -1126,7 +1126,7 @@ hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' "
         "style='max-width:536px; width:536px; font-size:.9em;'>",
-        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
+        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : htmlEncode(descSearch)); // escape (XSS)
 jsOnEventById("keyup", "descSearch", "findTracks.searchButtonsEnable(true);");
 hPrintf("</td></tr>\n");
 

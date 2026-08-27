@@ -832,7 +832,7 @@ static void displayVariantPath(struct variantPathNode *variantPath, char *sample
 /* Display mutations on the path to this sample. */
 {
 printf("<p>Mutations along the path from the root of the phylogenetic tree to %s:\n",
-       sampleId);
+       htmlEncode(sampleId)); // uploaded sample name, escape (XSS)
 if (variantPath)
     {
     boolean makeCollapsible = (variantPathCountMuts(variantPath) > 20);
@@ -1323,12 +1323,12 @@ while ((clumpSize = countIdentical(refsToGo)) > 0)
         printf("<b>%d identical samples:</b>\n<ul>\n", clumpSize);
         struct slName *sln;
         for (sln = sortedSamples;  sln != NULL;  sln = sln->next)
-            printf("<li><b>%s</b>\n", sln->name);
+            printf("<li><b>%s</b>\n", htmlEncode(sln->name)); // uploaded sample name, escape (XSS)
         puts("</ul>");
         }
     else
         {
-        printf("<b>%s</b>\n", info->sampleId);
+        printf("<b>%s</b>\n", htmlEncode(info->sampleId)); // uploaded sample name, escape (XSS)
         ref = ref->next;
         }
     refsToGo = ref;
@@ -2241,7 +2241,7 @@ struct slName *si;
 for (si = sampleIds;  si != NULL;  si = si->next)
     {
     puts("<tr>");
-    printf("<th>%s</td>", replaceChars(si->name, "|", " | "));
+    printf("<th>%s</td>", htmlEncode(replaceChars(si->name, "|", " | "))); // escape (XSS)
     struct placementInfo *pi = hashFindVal(results->samplePlacements, si->name);
     if (pi)
         {
@@ -3580,7 +3580,7 @@ if (lfLooksLikeFasta(lf))
         puts("<p>");
         struct slPair *fail;
         for (fail = failedSeqs;  fail != NULL;  fail = fail->next)
-            printf("%s<br>\n", fail->name);
+            printf("%s<br>\n", htmlEncode(fail->name)); // message quotes seq name, escape (XSS)
         puts("</p>");
         }
     if (failedPsls)
@@ -3588,7 +3588,7 @@ if (lfLooksLikeFasta(lf))
         puts("<p>");
         struct slPair *fail;
         for (fail = failedPsls;  fail != NULL;  fail = fail->next)
-            printf("%s<br>\n", fail->name);
+            printf("%s<br>\n", htmlEncode(fail->name)); // message quotes seq name, escape (XSS)
         puts("</p>");
         }
     if (seqInfoList == NULL)
@@ -3838,25 +3838,25 @@ if (results && results->singleSubtreeInfo)
         {
         int subtreeUserSampleCount = slCount(ti->subtreeUserSampleIds);
         printf("<li><a href='%s' download>Subtree with %s", ti->subtreeTn->forHtml,
-               ti->subtreeUserSampleIds->name);
+               htmlEncode(ti->subtreeUserSampleIds->name)); // uploaded sample name, escape (XSS)
         if (subtreeUserSampleCount > 10)
             printf(" and %d other samples", subtreeUserSampleCount - 1);
         else
             {
             struct slName *sln;
             for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-                printf(", %s", sln->name);
+                printf(", %s", htmlEncode(sln->name)); // uploaded sample name, escape (XSS)
             }
         puts(" (Newick file)</a>");
         printf("<li><a href='%s' download>Auspice JSON for subtree with %s",
-               jsonTns[ix]->forHtml, ti->subtreeUserSampleIds->name);
+               jsonTns[ix]->forHtml, htmlEncode(ti->subtreeUserSampleIds->name)); // escape (XSS)
         if (subtreeUserSampleCount > 10)
             printf(" and %d other samples", subtreeUserSampleCount - 1);
         else
             {
             struct slName *sln;
             for (sln = ti->subtreeUserSampleIds->next;  sln != NULL;  sln = sln->next)
-                printf(", %s", sln->name);
+                printf(", %s", htmlEncode(sln->name)); // uploaded sample name, escape (XSS)
             }
         puts(" (JSON file)</a>");
         }
@@ -4216,7 +4216,7 @@ if (isNotEmpty(nextcladeIndex))
         printf("<br>No reference was found for the following sequences:\n<ul>\n");
         struct slName *noMatch;
         for (noMatch = noMatches;  noMatch != NULL;  noMatch = noMatch->next)
-            printf("<li>%s\n", noMatch->name);
+            printf("<li>%s\n", htmlEncode(noMatch->name)); // uploaded sample name, escape (XSS)
         puts("</ul>");
         }
     int refCount = slCount(refFiles);
