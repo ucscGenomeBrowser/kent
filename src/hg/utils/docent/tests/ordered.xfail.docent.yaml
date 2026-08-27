@@ -1,0 +1,19 @@
+# EXPECTED TO FAIL. The other half of ordered.docent.yaml.
+#
+# The same view, with mane and gtexGeneV8 named in the order they are NOT drawn in. If
+# this run ever exits 0, `ordered: true` has stopped comparing positions and is doing
+# nothing but repeating the set test beside it -- which is the state the flag was added
+# to get out of, and it would pass silently.
+#
+# The failure it should print:
+#   rows out of order: gtexGeneV8 should be drawn above mane
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack, gtexGeneV8: pack}
+  - expect: {rows: [ruler, gtexGeneV8, mane], ordered: true}

@@ -578,6 +578,10 @@ if (errCatchStart(errCatch))
                 minMatch, minBlocks, 0, minSizeQ,
                 minChainT, 0,
                 fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+        /* flush and close the output files before we read the failure file back below */
+        carefulClose(&mapped);
+        carefulClose(&unmapped);
+
         if (ct == -1)
             /* programming error */
             errAbort("ERROR: Unsupported data format.\n");
@@ -626,8 +630,6 @@ if (errCatchStart(errCatch))
         puts("</PRE></BLOCKQUOTE>\n");
         }
         webParamsUsed(minMatch, multiple, minSizeQ, minChainT, minBlocks, fudgeThick);
-
-        carefulClose(&unmapped);
         }
     }
 errCatchEnd(errCatch);

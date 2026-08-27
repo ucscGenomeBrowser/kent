@@ -45,6 +45,10 @@ What is covered
                 renders as a perfectly good page; the derive baseline pins it at 3.
   customtrack   addCustomTrack: with inline BED, tabs and newlines surviving the trip.
   scale         a 3x run draws the same rows as a 1x one.
+  ordered       `ordered: true` on rows:, and the fact that a row which was not drawn is
+                reported by rows: alone rather than failing the order check as well.
+  ordered.xfail the same two rows named the wrong way round. Expected to fail -- a flag
+                that cannot fail is not a check, it is a second copy of the set test.
   expectfail    an assertion that is plainly false. Expected to fail -- if it ever passes,
     .xfail      `expect:` has stopped throwing and every other test here means nothing.
   make parity   FAST vs slow, and a rerun, on composite. FAST drops the dwells and the

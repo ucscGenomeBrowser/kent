@@ -1,0 +1,26 @@
+# `ordered: true` on rows:, which is the difference between "these rows were drawn" and
+# "these rows were drawn in this order".
+#
+# rows: is a set test and exact: true only adds "and nothing else", so before this flag
+# no assertion in the language could fail because the rows came out in the wrong order.
+# That is exactly the shape of #38032, where a quickLift target returned its tracks in
+# the order they were lifted rather than the order they have on the source, and every
+# check in a tour of it passed on the broken build.
+#
+# hg38 sorts mane (genes) above gtexGeneV8 (expression), so the pass case is the plain
+# trackDb order. ordered.xfail.docent.yaml is the same view with the two rows named the
+# other way round, which has to fail -- a flag that cannot fail is not a check.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack, gtexGeneV8: pack}
+  # Both spellings hold here: the rows are these three, and they are in this order.
+  - expect: {rows: [ruler, mane, gtexGeneV8], exact: true, ordered: true}
+  # A row that was never drawn is reported once, by rows:, and skipped by the order
+  # check rather than failing a second time for being out of place.
+  - expect: {rows: [ruler, gtexGeneV8], ordered: true}

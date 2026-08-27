@@ -2024,7 +2024,7 @@ return trackDbSetting(tdb, "quickLiftUrl") != NULL ||
        trackDbSetting(tdb, "quickLifted") != NULL;
 }
 
-static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct dyString *visDy, struct trackDb **badList, struct hash *existingTracks)
+static void walkTree(FILE *f, char *db, struct cart *cart,  struct trackDb *tdb, struct trackDb **badList, struct hash *existingTracks)
 /* walk tree looking for visible tracks to output to hub.  Skip tracks that already
  * came from a quickLift hub, and skip tracks whose name is already present in
  * the existing hub file. */
@@ -2138,7 +2138,7 @@ else
    return 1;
 }
 
-char *trackHubBuild(char *db, struct cart *cart, struct dyString *visDy, struct trackDb **badList)
+char *trackHubBuild(char *db, struct cart *cart, struct trackDb **badList)
 /* Build a track hub using trackDb and the cart.  If a hub file already exists
  * for db (i.e. earlier quickLift work in the same session), append new track
  * stanzas to it instead of overwriting, and skip tracks that are already in
@@ -2171,7 +2171,7 @@ chmod(filename, 0666);
 if (!hubExists)
     outHubHeader(f, trackHubSkipHubName(db));
 
-walkTree(f, db, cart, tdbList, visDy, badList, existingTracks);
+walkTree(f, db, cart, tdbList, badList, existingTracks);
 fclose(f);
 
 return cloneString(filename);
