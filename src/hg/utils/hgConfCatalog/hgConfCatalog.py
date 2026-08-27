@@ -235,7 +235,7 @@ RELEASE_GATES = {
                "wizard.  Added v447 and briefly defaulted TRUE around v454 "
                "before going back to FALSE, so the history shows a flip that "
                "was reverted.  Four call sites."),
-        h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:187",
+        h("hgSession.shortLink", "flag", "hg/hgSession/hgSession.c:190",
           default="FALSE", role="gate", verified=True,
           note="Short session links.  Added v374 and never flipped, which is "
                "the longest-running dark feature here."),
@@ -243,7 +243,7 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
-        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3377",
+        h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:3390",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
                "page can be reopened and shared.  The read at hgBlat.c:2972 "
@@ -253,7 +253,7 @@ RELEASE_GATES = {
                "Filed as a knob until that was read, on the strength of the "
                "default being an identifier the harvester could not resolve; "
                "a flag whose own source says to flip it later is a gate."),
-        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1165", default="FALSE",
+        h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c:1173", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
         h("modernAlignPage", "flag", "hg/hgc/hgc.c:9390", default="FALSE",
@@ -262,7 +262,7 @@ RELEASE_GATES = {
                "hgBlat's new results page uses) for ordinary alignment clicks too "
                "- mRNA/EST, PSL and similar hgc details - instead of the classic "
                "two-frame <frameset>.  Off during QA; flip to TRUE once released."),
-        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:845", default="FALSE",
+        h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c:853", default="FALSE",
           role="gate", verified=True,
           note="The banner on the classic BLAT results page that offers a "
                "one-click switch to the new sortable table display.  Guards "
@@ -381,7 +381,7 @@ RELEASE_GATES = {
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:859", default="TRUE",
+        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c:867", default="TRUE",
           role="gate", verified=True,
           note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c:34", default="TRUE",
@@ -403,7 +403,7 @@ RELEASE_GATES = {
                "since v427.  Described here as \"run hubCheck when a hub is "
                "attached\" until the call site was read: it gates the tab, "
                "not attachment, so a hub is validated on attach either way."),
-        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3121", default="FALSE",
+        h("blatNewForm", "flag", "hg/hgBlat/hgBlat.c:3134", default="FALSE",
           role="gate", verified=True, ticket="37893",
           note="Replaces hgBlat's classic C-generated search form with the "
                "JavaScript-built one in hg/js/hgBlat.js, which shares its "
@@ -413,7 +413,7 @@ RELEASE_GATES = {
                "banner offers a per-user opt-out that sets blatNewForm=0 in "
                "the cart.  It comes out once the new form replaces the old "
                "one, which is what makes it a gate rather than a knob."),
-        h("blatNewFormBanner", "flag", "hg/hgBlat/hgBlat.c:826",
+        h("blatNewFormBanner", "flag", "hg/hgBlat/hgBlat.c:834",
           default="follows blatNewForm", role="gate", verified=True,
           ticket="37893",
           note="Whether the classic BLAT search form carries a banner offering "
@@ -470,14 +470,14 @@ MIRROR_KNOBS = {
             "choose between behaviours rather than turning one off, and those "
             "carry no gate/knob role because only booleans have one.",
     "vars": [
-        h("isGbib", "flag", "hg/lib/hdb.c:3714", default="FALSE", role="knob",
+        h("isGbib", "flag", "hg/lib/hdb.c:3754", default="FALSE", role="knob",
           public=True, verified=True,
           note="This is the Genome Browser in a Box.  Changes paths and "
                "disables features that make no sense on a VM."),
-        h("isGbic", "flag", "hg/lib/hdb.c:3720", default="FALSE", role="knob",
+        h("isGbic", "flag", "hg/lib/hdb.c:3760", default="FALSE", role="knob",
           public=True, verified=True,
           note="This is a Genome Browser in the Cloud install."),
-        h("allowNib", "flag", "hg/lib/hdb.c:2772", default="TRUE", role="knob",
+        h("allowNib", "flag", "hg/lib/hdb.c:2812", default="TRUE", role="knob",
           public=True, verified=True,
           note="Permit nib sequence files.  In hDbDbNibPath: on, the sequence "
                "directory comes from dbDb.nibPath; off, it is /gbdb/<db> "
@@ -507,7 +507,7 @@ MIRROR_KNOBS = {
                "measurably faster to draw, so both positions have a "
                "constituency.  Its companions freeTypeDir and freeTypeFont "
                "are plain values and stay."),
-        h("trustTrackDb", "flag", "hg/lib/hdb.c:4132", default="FALSE",
+        h("trustTrackDb", "flag", "hg/lib/hdb.c:4172", default="FALSE",
           role="knob", verified=True,
           note="Skip the per-track check that a trackDb row's table or file "
                "actually exists, in addTrackIfDataAccessible.  Whether a "
@@ -555,7 +555,7 @@ MIRROR_KNOBS = {
           role="knob", verified=True,
           note="Never treat the database as local, so no local file "
                "shortcuts.  Deployment topology, not a feature."),
-        h("traceGbdb", "flag", "hg/lib/hdb.c:1596", default="FALSE",
+        h("traceGbdb", "flag", "hg/lib/hdb.c:1636", default="FALSE",
           role="knob", verified=True,
           note="Log every /gbdb file the CGI opens.  A diagnostic."),
         h("drawDot", "flag", "hg/hgc/hgc.c:3464", default="FALSE", role="knob",
@@ -570,7 +570,7 @@ MIRROR_KNOBS = {
           role="knob", public=True, verified=True,
           note="Take identity from HTTP basic auth rather than the login "
                "system."),
-        h("login.relativeLink", "flag", "hg/lib/hdb.c:3652", default="FALSE",
+        h("login.relativeLink", "flag", "hg/lib/hdb.c:3692", default="FALSE",
           role="knob", public=True, verified=True,
           note="Relative rather than absolute login links."),
         h("login.acceptAnyId", "flag", "hg/lib/wikiLink.c:248",
@@ -622,7 +622,7 @@ MIRROR_KNOBS = {
                "hgTracks.c read, so on a machine that did not set the flag the "
                "button was in the top bar while the checkbox was hidden.  "
                "config.c now defaults TRUE as well."),
-        h("ignoreDefaultKnown", "flag", "hg/lib/hdb.c:6146", default="FALSE",
+        h("ignoreDefaultKnown", "flag", "hg/lib/hdb.c:6186", default="FALSE",
           role="knob", verified=True,
           note="In hdbDefaultKnownDb, ignore the defaultKnown table and treat "
                "the requested db as its own known-genes db.  A property of a "
@@ -810,11 +810,11 @@ PATHS = {
     "what": "Where things live on disk.  These are the settings a mirror is "
             "most likely to have to change.",
     "vars": [
-        h("gbdbLoc1", "path", "hg/lib/hdb.c:1553", public=True, verified=True,
+        h("gbdbLoc1", "path", "hg/lib/hdb.c:1593", public=True, verified=True,
           note="Primary /gbdb location.  Any C code opening a /gbdb path is "
                "supposed to run it through hReplaceGbdb() so this takes "
                "effect."),
-        h("gbdbLoc2", "path", "hg/lib/hdb.c:1584", public=True, verified=True,
+        h("gbdbLoc2", "path", "hg/lib/hdb.c:1624", public=True, verified=True,
           note="Fallback /gbdb location, tried when a file is missing from "
                "gbdbLoc1.  This is how a mirror keeps part of /gbdb local and "
                "the rest remote."),
@@ -847,10 +847,10 @@ PATHS = {
           "hg/cgilib/sessionThumbnail.c:30", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.convertPath", "path",
-          "hg/hgSession/hgSession.c:1173", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1176", public=True, verified=True,
           family="sessionThumbnail"),
         h("sessionThumbnail.suppress", "flag",
-          "hg/hgSession/hgSession.c:1169", public=True, verified=True,
+          "hg/hgSession/hgSession.c:1172", public=True, verified=True,
           family="sessionThumbnail"),
         h("freeTypeDir", "path", "hg/hgTracks/config.c:186",
           default='"../htdocs/urw-fonts"', verified=True),
@@ -949,11 +949,11 @@ LIMITS = {
           default='"10000"', verified=True, ticket="37788"),
         h("liftDailyLimit", "limit", "hg/hubApi/apiUtils.c:934", verified=True,
           note="Per-day liftOver cap for the hub API."),
-        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2209",
+        h("hgBlat.maxSequenceCount", "limit", "hg/hgBlat/hgBlat.c:2219",
           default="NULL", public=True, verified=True),
-        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:3190",
+        h("parallelFetch.threads", "limit", "hg/hgBlat/hgBlat.c:3203",
           default='"20"', public=True, verified=True),
-        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:3221",
+        h("parallelFetch.timeout", "limit", "hg/hgBlat/hgBlat.c:3234",
           default='"90"', public=True, verified=True),
         h("logCgiVarMaxLen", "limit", "hg/lib/hgConfig.c:386", default='"0"',
           public=True, verified=True,
@@ -1117,7 +1117,7 @@ BRANDING = {
           verified=True, note="Which curated hubs this machine shows."),
         h("genarkHubPrefix", "internal", "hg/hgGateway/hgGateway.c:1128",
           verified=True),
-        h("test.preview", "flag", "hg/lib/hdb.c:3728", verified=True,
+        h("test.preview", "flag", "hg/lib/hdb.c:3768", verified=True,
           note="Marks a preview machine, which changes some banners and "
                "links.  Part of the release plumbing, but a permanent part."),
         h("restoreMapFind", "internal", "hg/hgTracks/imageV2.c:496",
