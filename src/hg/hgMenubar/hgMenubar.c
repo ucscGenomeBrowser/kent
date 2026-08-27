@@ -20,29 +20,49 @@
 
 char* errMessage;
 
-char *loginLinkHtml()
+static char *pageReturnUrl(char *pagePath)
+/* Return the CGI-encoded URL of the static page this menu bar is included into, to hand to
+ * hgLogin as its returnto so login and logout come back to that page (refs #38192).  NULL if
+ * we cannot build one hgLogin would accept, and then the links keep their old hgSession
+ * target.  pagePath is the path part, from REDIRECT_URL or DOCUMENT_URI. */
+{
+if (isEmpty(pagePath))
+    return NULL;
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "http%s://%s%s", cgiAppendSForHttps(), cgiServerNamePort(), pagePath);
+char *encoded = wikiLinkEncodePageReturnUrl(dy->string);
+dyStringFree(&dy);
+return encoded;
+}
+
+char *loginLinkHtml(char *pagePath)
 /* Return HTML <li> for the top-right Login menu item, or "" if no login system is configured.
- * Static-page variant: the logged-out link uses href="../cgi-bin/hgSession" so the caller's
- * OLD_HREF substitution rewrites it to a page-relative path; logged-in account-dialog URLs come
- * from wikiLink and are absolute.  topLinks.js turns the logged-in item into a dialog. */
+ * Static-page variant: all of the URLs come from wikiLink and are absolute, so the caller's
+ * OLD_HREF substitution leaves them alone.  topLinks.js turns the logged-in item into a
+ * dialog. */
 {
 if (!(loginSystemEnabled() || wikiLinkEnabled()))
     return cloneString("");
 struct dyString *dy = dyStringNew(512);
 char *userName = wikiLinkUserName();
+// There is no hgsid on a static page, so the return URL carries none either
+char *retEnc = pageReturnUrl(pagePath);
 if (userName == NULL)
     {
     // Link straight to the login page (absolute URL from wikiLink), not through hgSession.
-    char *loginUrl = wikiLinkUserLoginUrl("");
+    char *loginUrl = retEnc ? wikiLinkUserLoginUrlReturning("", retEnc)
+                            : wikiLinkUserLoginUrl("");
     dyStringPrintf(dy, "<a class='topRightLink' href=\"%s\" id='loginLink' "
         "title='Log in to save and share sessions'>Login</a>", loginUrl);
     }
 else
     {
-    // No hgsid available on static pages; the logout return URL simply omits it.
-    char *logoutUrl = wikiLinkUserLogoutUrl("");
-    char *changePwUrl = wikiLinkChangePasswordUrl("");
-    char *changeEmailUrl = wikiLinkChangeEmailUrl("");
+    char *logoutUrl = retEnc ? wikiLinkUserLogoutUrlReturning("", retEnc)
+                             : wikiLinkUserLogoutUrl("");
+    char *changePwUrl = retEnc ? wikiLinkChangePasswordUrlReturning("", retEnc)
+                               : wikiLinkChangePasswordUrl("");
+    char *changeEmailUrl = retEnc ? wikiLinkChangeEmailUrlReturning("", retEnc)
+                                  : wikiLinkChangeEmailUrl("");
     dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
         "title='Account info and sign out' "
         "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\" "
@@ -50,6 +70,7 @@ else
         userName, logoutUrl, changePwUrl ? changePwUrl : "",
         changeEmailUrl ? changeEmailUrl : "", userName);
     }
+freez(&retEnc);
 return dyStringCannibalize(&dy);
 }
 
@@ -108,7 +129,7 @@ while (lineFileNext(menuFile, &oldLine, &lineSize))
     // Fill the top-right link placeholders.  Login shows the user or a link to hgSession;
     // the Share-a-link button is browser-only, so it is dropped on static pages.
     if (stringIn("<!-- LOGIN_LINK -->", line))
-        line = replaceChars(line, "<!-- LOGIN_LINK -->", loginLinkHtml());
+        line = replaceChars(line, "<!-- LOGIN_LINK -->", loginLinkHtml(pagePath));
     if (stringIn("<!-- SHARE_LINK -->", line))
         line = replaceChars(line, "<!-- SHARE_LINK -->", "");
     char *newLine = replaceChars(line, OLD_HREF, newHref);

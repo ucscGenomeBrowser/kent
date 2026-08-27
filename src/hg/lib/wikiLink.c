@@ -431,18 +431,155 @@ return wikiLinkEncodeReturnUrl(hgsid, "hgSession", "");
 }
 
 
+/* Longest return URL we will build.  hgLogin copies the decoded returnto into a 2 kB buffer
+ * and aborts if it does not fit, and cgi-encoding can nearly triple the length on the way
+ * there, so a page with a very long query string gives up the query string, not the trip
+ * back. */
+#define RETURN_URL_MAX 1000
+
+static boolean returnUrlSchemeIsSafe(char *returnUrl)
+/* Return TRUE unless returnUrl carries a scheme other than http or https.  The scheme is the
+ * text before the first colon, and only when that colon comes before any slash, question mark
+ * or hash; a colon after one of those belongs to the path or the query, so the URL is relative.
+ * This is what keeps a javascript: or data: URL out of the href hgLogin writes. */
+{
+char *colon = strchr(returnUrl, ':');
+if (colon == NULL)
+    return TRUE;
+char *pathStart = strpbrk(returnUrl, "/?#");
+if (pathStart != NULL && pathStart < colon)
+    return TRUE;
+int schemeLen = colon - returnUrl;
+return (schemeLen == 4 && startsWithNoCase("http", returnUrl))
+    || (schemeLen == 5 && startsWithNoCase("https", returnUrl));
+}
+
+static boolean returnUrlIsWellFormed(char *returnUrl)
+/* Return TRUE if returnUrl looks like a URL hgLogin can write into its page.  Every CGI
+ * parameter becomes a cart variable, so returnto holds whatever the visitor's URL said, and it
+ * is printed into an href attribute and into a javascript location assignment.  A quote, an
+ * angle bracket, a backslash or a control character would end the attribute or the string
+ * literal and reflect script onto the page.  A real URL percent-encodes all of those, so
+ * refusing them turns away nothing legitimate. */
+{
+char *c;
+for (c = returnUrl; *c != 0; c++)
+    {
+    unsigned char uc = (unsigned char)*c;
+    if (uc < ' ' || uc == 127 || strchr("\"'<>\\`", *c) != NULL)
+        return FALSE;
+    }
+return returnUrlSchemeIsSafe(returnUrl);
+}
+
+static boolean returnUrlHostIsApproved(char *returnUrl)
+/* Return TRUE if returnUrl starts with the login host or one of the hosts listed in
+ * login.approvedReturn.  The setting is optional; where it is absent no host is checked. */
+{
+char *approved = cfgOptionDefault(CFG_APPROVED_HOSTS, NULL);
+if (approved == NULL)
+    return TRUE;
+struct slName *approvedHosts = slNameListFromComma(approved);
+slAddHead(&approvedHosts, slNameNew(hLoginHostCgiBinUrl()));
+struct slName *host;
+for (host = approvedHosts; host != NULL; host = host->next)
+    if (startsWith(host->name, returnUrl))
+        return TRUE;
+return FALSE;
+}
+
+boolean loginReturnUrlIsAcceptable(char *returnUrl)
+/* Return TRUE if hgLogin will accept returnUrl as its returnto: an http or https URL with no
+ * character that could break out of the page hgLogin prints it into, on an approved host.
+ * hgLogin checks this on the way in; callers that build a returnto check it on the way out,
+ * so that a URL hgLogin would refuse becomes a plain login link instead of an error page. */
+{
+return returnUrl != NULL && returnUrlIsWellFormed(returnUrl)
+    && returnUrlHostIsApproved(returnUrl);
+}
+
+char *wikiLinkEncodePageReturnUrl(char *url)
+/* Return url CGI-encoded for use as a returnto, or NULL if hgLogin would refuse it.
+ * Free when done. */
+{
+if (!loginReturnUrlIsAcceptable(url) || strlen(url) > RETURN_URL_MAX)
+    return NULL;
+return cgiEncode(url);
+}
+
+static char *currentPageUrl(char *cgiName, char *hgsid, char *queryString)
+/* Return the absolute URL of the CGI we are running now, with the given query string, or with
+ * just hgsid when queryString is NULL.  Free when done. */
+{
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "%s%s", hLocalHostCgiBinUrl(), cgiName);
+if (isNotEmpty(queryString))
+    {
+    dyStringPrintf(dy, "?%s", queryString);
+    // The cart is what carries the rest of the page state, so make sure we come back to it
+    boolean hasHgsid = (startsWith("hgsid=", queryString) ||
+                        stringIn("&hgsid=", queryString) != NULL);
+    if (isNotEmpty(hgsid) && !hasHgsid)
+        dyStringPrintf(dy, "&hgsid=%s", hgsid);
+    }
+else if (isNotEmpty(hgsid))
+    dyStringPrintf(dy, "?hgsid=%s", hgsid);
+return dyStringCannibalize(&dy);
+}
+
+char *wikiLinkEncodeCurrentPageReturnUrl(char *hgsid)
+/* Return a CGI-encoded URL for the page we are on right now, to hand to hgLogin as its
+ * returnto, so login and logout come back here instead of dropping the visitor on hgSession.
+ * Returns NULL when there is no page worth returning to, and the caller should then fall back
+ * to its own default.  Free when done. */
+{
+char *scriptName = cgiScriptName();
+if (isEmpty(scriptName))
+    return NULL;
+char *lastSlash = strrchr(scriptName, '/');
+char *cgiName = (lastSlash == NULL) ? scriptName : lastSlash + 1;
+if (isEmpty(cgiName))
+    return NULL;
+// hgLogin is where the link points, so returning to it would only loop.  hgRenderTracks just
+// draws an image for another website, it is not a page anyone is sitting on.
+if (sameString(cgiName, "hgLogin") || sameString(cgiName, "hgRenderTracks"))
+    return NULL;
+
+/* The query string is what makes a page like hgTrackUi or hgc work at all, since their track
+ * and item parameters are not all kept in the cart.  Coming back to a URL the visitor clicked
+ * themselves does no more than their reload button would, as long as it was a GET; a POST
+ * cannot be replayed from a URL anyway.  hgTracks is the exception: everything it needs is in
+ * the cart, and its query string can hold a one-shot zoom or drag that we do not want to
+ * repeat. */
+char *queryString = getenv("QUERY_STRING");
+char *method = cgiRequestMethod();
+if (sameString(cgiName, "hgTracks") || (method != NULL && differentWord(method, "GET")))
+    queryString = NULL;
+
+char *url = currentPageUrl(cgiName, hgsid, queryString);
+char *encoded = wikiLinkEncodePageReturnUrl(url);
+if (encoded == NULL && queryString != NULL)
+    {
+    // A stray quote or an over-long query string costs the query string, not the page
+    freez(&url);
+    url = currentPageUrl(cgiName, hgsid, NULL);
+    encoded = wikiLinkEncodePageReturnUrl(url);
+    }
+freez(&url);
+return encoded;
+}
+
+
 //#*** TODO: replace all of the non-mediawiki "returnto"s here and in hgLogin.c with a #define
 
 
 char *wikiLinkUserLoginUrlReturning(char *hgsid, char *returnUrl)
 /* Return the URL for the wiki user login page. */
 {
-char buf[2048];
+struct dyString *dy = dyStringNew(256);
 if (loginSystemEnabled())
     {
-    safef(buf, sizeof(buf),
-        "%s?hgLogin.do.displayLoginPage=1&returnto=%s",
-        loginUrl(), returnUrl);
+    dyStringPrintf(dy, "%s?hgLogin.do.displayLoginPage=1&returnto=%s", loginUrl(), returnUrl);
     } 
 else 
     {
@@ -450,11 +587,10 @@ else
         errAbort("wikiLinkUserLoginUrl called when wiki is not enabled (specified "
             "in hg.conf).");
     // The following line of code is not used at UCSC anymore since 2014
-    safef(buf, sizeof(buf),
-        "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
+    dyStringPrintf(dy, "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
         wikiLinkHost(), returnUrl);
     }   
-return(cloneString(buf));
+return dyStringCannibalize(&dy);
 }
 
 char *wikiLinkUserLoginUrl(char *hgsid)
@@ -469,23 +605,20 @@ return result;
 char *wikiLinkUserLogoutUrlReturning(char *hgsid, char *returnUrl)
 /* Return the URL for the wiki user logout page. */
 {
-char buf[2048];
+struct dyString *dy = dyStringNew(256);
 if (loginSystemEnabled())
     {
-    safef(buf, sizeof(buf),
-        "%s?hgLogin.do.displayLogout=1&returnto=%s",
-        loginUrl(), returnUrl);
+    dyStringPrintf(dy, "%s?hgLogin.do.displayLogout=1&returnto=%s", loginUrl(), returnUrl);
     } 
 else
     {
     if (! wikiLinkEnabled())
         errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
             "in hg.conf).");
-    safef(buf, sizeof(buf),
-        "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+    dyStringPrintf(dy, "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
          wikiLinkHost(), returnUrl);
     }
-return(cloneString(buf));
+return dyStringCannibalize(&dy);
 }
 
 char *wikiLinkUserLogoutUrl(char *hgsid)
@@ -500,54 +633,54 @@ return result;
 char *wikiLinkUserSignupUrl(char *hgsid)
 /* Return the URL for the user signup  page. */
 {
-char buf[2048];
+struct dyString *dy = dyStringNew(256);
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
 
 if (loginSystemEnabled())
     {
-    safef(buf, sizeof(buf),
-        "%s?hgLogin.do.signupPage=1&returnto=%s",
-        loginUrl(), retEnc);
+    dyStringPrintf(dy, "%s?hgLogin.do.signupPage=1&returnto=%s", loginUrl(), retEnc);
     }
 else
     {
     if (! wikiLinkEnabled())
         errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
             "in hg.conf).");
-    safef(buf, sizeof(buf),
-        "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+    dyStringPrintf(dy, "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
          wikiLinkHost(), retEnc);
     }
 freez(&retEnc);
-return(cloneString(buf));
+return dyStringCannibalize(&dy);
+}
+
+char *wikiLinkChangePasswordUrlReturning(char *hgsid, char *returnUrl)
+/* Return the URL for the user change password page. */
+{
+struct dyString *dy = dyStringNew(256);
+if (loginSystemEnabled())
+    {
+    dyStringPrintf(dy, "%s?hgLogin.do.changePasswordPage=1&returnto=%s", loginUrl(), returnUrl);
+    }
+else
+    {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
+            "in hg.conf).");
+    dyStringPrintf(dy, "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
+         wikiLinkHost(), returnUrl);
+    }
+return dyStringCannibalize(&dy);
 }
 
 char *wikiLinkChangePasswordUrl(char *hgsid)
-/* Return the URL for the user change password page. */
+/* Return the URL for the user change password page, returning to hgSession. */
 {
-char buf[2048];
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
-
-if (loginSystemEnabled())
-    {
-    safef(buf, sizeof(buf),
-        "%s?hgLogin.do.changePasswordPage=1&returnto=%s",
-        loginUrl(), retEnc);
-    }
-else
-    {
-    if (! wikiLinkEnabled())
-        errAbort("wikiLinkUserLogoutUrl called when wiki is not enable (specified "
-            "in hg.conf).");
-    safef(buf, sizeof(buf),
-        "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
-         wikiLinkHost(), retEnc);
-    }
+char *result = wikiLinkChangePasswordUrlReturning(hgsid, retEnc);
 freez(&retEnc);
-return(cloneString(buf));
+return result;
 }
 
-char *wikiLinkChangeEmailUrl(char *hgsid)
+char *wikiLinkChangeEmailUrlReturning(char *hgsid, char *returnUrl)
 /* Return the URL for the user change email page, or NULL if unavailable.  Supported only by
  * the hgLogin login system, and only when the login.emailLink feature is enabled in hg.conf
  * (the same switch that controls the passwordless email-link sign-in). */
@@ -556,13 +689,19 @@ if (!loginSystemEnabled())
     return NULL;
 if (!cfgOptionBooleanDefault(CFG_LOGIN_EMAIL_LINK, FALSE))
     return NULL;
-char buf[2048];
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "%s?hgLogin.do.changeEmailPage=1&returnto=%s", loginUrl(), returnUrl);
+return dyStringCannibalize(&dy);
+}
+
+char *wikiLinkChangeEmailUrl(char *hgsid)
+/* Return the URL for the user change email page, returning to hgSession, or NULL if
+ * unavailable. */
+{
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
-safef(buf, sizeof(buf),
-    "%s?hgLogin.do.changeEmailPage=1&returnto=%s",
-    loginUrl(), retEnc);
+char *result = wikiLinkChangeEmailUrlReturning(hgsid, retEnc);
 freez(&retEnc);
-return(cloneString(buf));
+return result;
 }
 
 void wikiFixLogoutLinkWithJs()

@@ -22,6 +22,8 @@
 #define CFG_LOGIN_RELATIVE "login.relativeLink"
 /* Enables passwordless email-link sign-in and the "change email" option (default off). */
 #define CFG_LOGIN_EMAIL_LINK "login.emailLink"
+/* Comma-separated list of hosts that hgLogin will return a visitor to after login or logout. */
+#define CFG_APPROVED_HOSTS "login.approvedReturn"
 
 /* hg.conf central db parameters */
 #define CFG_CENTRAL_DOMAIN "central.domain"
@@ -77,6 +79,22 @@ char *wikiLinkUserLoginUrlReturning(char *hgsid, char *returnUrl);
 char *wikiLinkEncodeReturnUrl(char *hgsid, char *cgiName, char* urlSuffix);
 /* Return a CGI-encoded URL with hgsid to a CGI.  Free when done. */
 
+boolean loginReturnUrlIsAcceptable(char *returnUrl);
+/* Return TRUE if hgLogin will accept returnUrl as its returnto: an http or https URL with no
+ * character that could break out of the page hgLogin prints it into, on an approved host.
+ * hgLogin checks this on the way in; callers that build a returnto check it on the way out,
+ * so that a URL hgLogin would refuse becomes a plain login link instead of an error page. */
+
+char *wikiLinkEncodePageReturnUrl(char *url);
+/* Return url CGI-encoded for use as a returnto, or NULL if hgLogin would refuse it.
+ * Free when done. */
+
+char *wikiLinkEncodeCurrentPageReturnUrl(char *hgsid);
+/* Return a CGI-encoded URL for the page we are on right now, to hand to hgLogin as its
+ * returnto, so login and logout come back here instead of dropping the visitor on hgSession.
+ * Returns NULL when there is no page worth returning to, and the caller should then fall back
+ * to its own default.  Free when done. */
+
 char *wikiLinkUserLogoutUrl(char *hgsid);
 /* Return the URL for the wiki user logout page. */
 
@@ -87,10 +105,17 @@ char *wikiLinkUserSignupUrl(char *hgsid);
 /* Return the URL for the user signup  page. */
 
 char *wikiLinkChangePasswordUrl(char *hgsid);
+/* Return the URL for the user change password page, returning to hgSession. */
+
+char *wikiLinkChangePasswordUrlReturning(char *hgsid, char *returnUrl);
 /* Return the URL for the user change password page. */
 
 char *wikiLinkChangeEmailUrl(char *hgsid);
-/* Return the URL for the user change email page. */
+/* Return the URL for the user change email page, returning to hgSession, or NULL if
+ * unavailable. */
+
+char *wikiLinkChangeEmailUrlReturning(char *hgsid, char *returnUrl);
+/* Return the URL for the user change email page, or NULL if unavailable. */
 
 char *wikiServerAndCgiDir();
 /* return the current full absolute URL up to the CGI name, like

@@ -337,84 +337,30 @@ for (sl = newCookies;  sl != NULL;  sl = sl->next)
 return result; 
 }
 
-static boolean isValidReturnUrl(char *returnUrl)
-/* Verify that returnUrl startswith an hg.conf approved set of hosts. */
-{
-struct slName *approvedHosts = slNameListFromComma(cfgOptionDefault(CFG_APPROVED_HOSTS, NULL));
-slAddHead(&approvedHosts, slNameNew(hLoginHostCgiBinUrl()));
-if (approvedHosts)
-    {
-    struct slName *approvedStart;
-    for (approvedStart = approvedHosts; approvedStart != NULL; approvedStart = approvedStart->next)
-        {
-        if (startsWith(approvedStart->name, returnUrl))
-            return TRUE;
-        }
-    }
-return FALSE;
-}
-
-static boolean returnUrlSchemeIsSafe(char *returnUrl)
-/* Return TRUE unless returnUrl carries a scheme other than http or https.  The scheme is the
- * text before the first colon, and only when that colon comes before any slash, question mark
- * or hash; a colon after one of those belongs to the path or the query, so the URL is relative.
- * This is what keeps a javascript: or data: URL out of the href we write. */
-{
-char *colon = strchr(returnUrl, ':');
-if (colon == NULL)
-    return TRUE;
-char *pathStart = strpbrk(returnUrl, "/?#");
-if (pathStart != NULL && pathStart < colon)
-    return TRUE;
-int schemeLen = colon - returnUrl;
-return (schemeLen == 4 && startsWithNoCase("http", returnUrl))
-    || (schemeLen == 5 && startsWithNoCase("https", returnUrl));
-}
-
-static boolean returnUrlIsWellFormed(char *returnUrl)
-/* Return TRUE if returnUrl looks like a URL we can write into the page.  Every CGI parameter
- * becomes a cart variable, so returnto holds whatever the visitor's URL said, and it is printed
- * into an href attribute and into a javascript location assignment.  A quote, an angle bracket,
- * a backslash or a control character would end the attribute or the string literal and reflect
- * script onto the page.  A real URL percent-encodes all of those, so refusing them turns away
- * nothing legitimate. */
-{
-char *c;
-for (c = returnUrl; *c != 0; c++)
-    {
-    unsigned char uc = (unsigned char)*c;
-    if (uc < ' ' || uc == 127 || strchr("\"'<>\\`", *c) != NULL)
-        return FALSE;
-    }
-return returnUrlSchemeIsSafe(returnUrl);
-}
-
 char *getReturnToURL()
 /* get URL from cart var returnto; if empty, make URL to hgSession on login host.  */
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
-char returnTo[2048];
 
 if (isEmpty(returnURL))
-    safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", hLoginHostCgiBinUrl());
-else
     {
-    /* Check the shape of the URL on every install.  login.approvedReturn is optional, and
-     * where it is set it only matches the front of the URL, so the rest of the URL is
-     * unchecked either way. */
-    boolean ok = returnUrlIsWellFormed(returnURL);
-    if (ok && cfgOptionDefault(CFG_APPROVED_HOSTS, NULL))
-        ok = isValidReturnUrl(returnURL);
-    if (!ok)
-        {
-        hDumpStackDisallow();
-        errAbort("Error: Invalid returnto URL. Please send email to genome-www@soe.ucsc.edu "
-                "with the returnto argument from the URL (or just the full URL) so we can "
-                "fix this.");
-        }
-    safecpy(returnTo, sizeof(returnTo), returnURL);
+    char returnTo[2048];
+    safef(returnTo, sizeof(returnTo), "%shgSession?hgS_doMainPage=1", hLoginHostCgiBinUrl());
+    return cloneString(returnTo);
     }
-return cloneString(returnTo);
+
+/* Check the shape of the URL on every install.  login.approvedReturn is optional, and
+ * where it is set it only matches the front of the URL, so the rest of the URL is
+ * unchecked either way.  The check lives in wikiLink.c so that the CGIs building a
+ * returnto can apply the same rules before they write the link. */
+if (!loginReturnUrlIsAcceptable(returnURL))
+    {
+    hDumpStackDisallow();
+    errAbort("Error: Invalid returnto URL. Please send email to genome-www@soe.ucsc.edu "
+            "with the returnto argument from the URL (or just the full URL) so we can "
+            "fix this.");
+    }
+return cloneString(returnURL);
 }
 
 static char *getReturnToUrlForAttr()

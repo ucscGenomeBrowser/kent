@@ -1668,29 +1668,39 @@ if(scriptName)
     }
 
 // Fill in the top-right Login link (placeholder <!-- LOGIN_LINK --> in globalNavBar.inc, inside
-// the #topRightLinks container).  Logged out: a "Login" link to hgSession.  Logged in: the
+// the #topRightLinks container).  Logged out: a "Login" link straight to hgLogin.  Logged in: the
 // username, which opens an account dialog (handled in topLinks.js using the data-* attributes
-// below).  No login system: removed.
+// below).  No login system: removed.  Login, logout and the account links all send the visitor
+// back to the page they are on now.
     {
     char *loginLi = "";
     if (loginSystemEnabled() || wikiLinkEnabled())
         {
         char *userName = wikiLinkUserName();
         struct dyString *dy = dyStringNew(512);
+        // Come back to the page the visitor was reading when they clicked, refs #38192.  The
+        // return URL is NULL on the few pages there is no point returning to, and then these
+        // links fall back to their old hgSession target.
+        char *hgsid = cart ? cartSessionId(cart) : "";
+        char *retEnc = wikiLinkEncodeCurrentPageReturnUrl(hgsid);
         if (userName == NULL)
             {
             // Link straight to the login page (same target hgSession's own Login link uses),
             // rather than bouncing the user through hgSession first.
-            char *loginUrl = wikiLinkUserLoginUrl(cart ? cartSessionId(cart) : "");
+            char *loginUrl = retEnc ? wikiLinkUserLoginUrlReturning(hgsid, retEnc)
+                                    : wikiLinkUserLoginUrl(hgsid);
             dyStringPrintf(dy, "<a class='topRightLink' href='%s' id='loginLink' "
                 "title='Log in to save and share sessions'>Login</a>", loginUrl);
+            freez(&loginUrl);
             }
         else
             {
-            char *hgsid = cart ? cartSessionId(cart) : NULL;
-            char *logoutUrl = wikiLinkUserLogoutUrl(hgsid);
-            char *changePwUrl = wikiLinkChangePasswordUrl(hgsid);
-            char *changeEmailUrl = wikiLinkChangeEmailUrl(hgsid);
+            char *logoutUrl = retEnc ? wikiLinkUserLogoutUrlReturning(hgsid, retEnc)
+                                     : wikiLinkUserLogoutUrl(hgsid);
+            char *changePwUrl = retEnc ? wikiLinkChangePasswordUrlReturning(hgsid, retEnc)
+                                       : wikiLinkChangePasswordUrl(hgsid);
+            char *changeEmailUrl = retEnc ? wikiLinkChangeEmailUrlReturning(hgsid, retEnc)
+                                          : wikiLinkChangeEmailUrl(hgsid);
             dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
                 "title='Account info and sign out' "
                 "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\" "
@@ -1698,6 +1708,7 @@ if(scriptName)
                 userName, logoutUrl, changePwUrl ? changePwUrl : "",
                 changeEmailUrl ? changeEmailUrl : "", userName);
             }
+        freez(&retEnc);
         loginLi = dyStringCannibalize(&dy);
         }
     menuStr = replaceChars(menuStr, "<!-- LOGIN_LINK -->", loginLi);
@@ -1717,9 +1728,13 @@ if(scriptName)
         char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
         char *shareMode = isHgTrackUi ? "url" : "session";
         struct dyString *dy = dyStringNew(256);
+        // data-shortlink lets topLinks.js build the exact share URL to preview in the dialog, before
+        // the session is actually created, matching addSessionLink()'s server-side choice.
         dyStringPrintf(dy, "<a class='topRightLink' href='#' id='shareLink' "
             "title='Get a link to this view to share with others' "
-            "data-sharemode='%s' data-loggedin='%d'", shareMode, (userName != NULL));
+            "data-sharemode='%s' data-loggedin='%d' data-shortlink='%d'",
+            shareMode, (userName != NULL),
+            cfgOptionBooleanDefault("hgSession.shortLink", FALSE));
         if (userName != NULL)
             dyStringPrintf(dy, " data-username=\"%s\"", userName);
         dyStringAppend(dy, ">Share a link</a>");
