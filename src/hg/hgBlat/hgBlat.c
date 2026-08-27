@@ -636,6 +636,8 @@ jsonWriteString(jw, "db", trackHubSkipHubName(database));
 jsonWriteString(jw, "organism", trackHubSkipHubName(organism));
 jsonWriteString(jw, "queryName", pslList->qName);
 jsonWriteNumber(jw, "querySize", pslList->qSize);
+/* Query lengths of a protein search are amino acids, so hgBlat.js labels them "aa", not "bp". */
+jsonWriteBoolean(jw, "isProt", pslIsProtein(pslList));
 jsonWriteNumber(jw, "hitCount", slCount(pslList));
 jsonWriteBoolean(jw, "multiQuery", pslListMultiQuery(pslList));
 jsonWriteBoolean(jw, "hasLocus", locusConn != NULL);
@@ -1444,7 +1446,7 @@ return buf;
 }
 
 static char *topHitLocusLabel(char *database, struct psl *psl)
-/* Return a short, human-recognizable label for the top BLAT hit: the first gene symbol from the
+/* Return a short, human-recognizable label for the top BLAT hit: a gene symbol from the
  * assembly's locusName table when the hit lands in a gene, otherwise a chrom:start position.
  * The locusName lookup mirrors the results page (see printBlatResultsApp).  Returns a cloneString'd
  * value the caller must free. */
@@ -1456,29 +1458,52 @@ if (locusConn != NULL)
     {
     struct sqlResult *sr = hRangeQuery(locusConn, "locusName", psl->tName, psl->tStart, psl->tEnd,
         NULL, 0);
-    char **row = sqlNextRow(sr);
-    if (row != NULL)
+    // A hit usually overlaps several locusName rows, and they come back in bin order, which has
+    // nothing to do with how much of the hit each one covers.  Pick the best row instead: an exon
+    // row always beats an intron row, however little of the exon the hit touches, because touching
+    // any coding sequence is the more informative thing to say about the query.  Within one kind,
+    // the row the hit overlaps most wins.
+    char **row;
+    char *bestGenes = NULL;
+    boolean bestIsExon = FALSE;
+    int bestOverlap = 0;
+    while ((row = sqlNextRow(sr)) != NULL)
         {
         char *raw = row[4];
         char *genes = NULL;
+        boolean isExon = FALSE;
         // Only ex:/in: (exon/intron) hits name a gene; ig: (intergenic) just lists the neighbors,
         // so for those fall through to coordinates, which are more useful.
         if (startsWith("ex:", raw))
+            {
             genes = raw + 3;
+            isExon = TRUE;
+            }
         else if (startsWith("in:", raw))
             genes = raw + 3;
-        if (genes != NULL)
+        else
+            continue;
+        int overlap = positiveRangeIntersection(psl->tStart, psl->tEnd,
+            sqlSigned(row[2]), sqlSigned(row[3]));
+        if (bestGenes == NULL || (isExon && !bestIsExon) ||
+            (isExon == bestIsExon && overlap > bestOverlap))
             {
-            char *dupe = cloneString(genes);
-            char *words[128];
-            int n = chopByChar(dupe, '|', words, ArraySize(words));
-            if (n > 0 && words[0][0] != '\0')
-                label = cloneString(words[0]);
-            freeMem(dupe);
+            freeMem(bestGenes);
+            bestGenes = cloneString(genes);
+            bestIsExon = isExon;
+            bestOverlap = overlap;
             }
         }
     sqlFreeResult(&sr);
     hFreeConn(&locusConn);
+    if (bestGenes != NULL)
+        {
+        char *words[128];
+        int n = chopByChar(bestGenes, '|', words, ArraySize(words));
+        if (n > 0 && words[0][0] != '\0')
+            label = cloneString(words[0]);
+        freeMem(bestGenes);
+        }
     }
 if (label == NULL)
     {
@@ -1523,21 +1548,25 @@ else
     // Results" group, so the prefix would just be noise.  The long label keeps "BLAT" for context
     // wherever it shows without the group heading (e.g. the custom-track manager, mouseovers).
     char *date = blatDateStamp();
+    // A protein query is measured in amino acids, not bases, so do not call its length "bp".
+    char *unit = pslIsProtein(psl) ? "aa" : "bp";
     if (count == 1)
         {
         if (differentString(names->name, "YourSeq"))
             {
             // Query carried a FASTA header, so name the track after the sequence.
             safef(shortName, sizeof shortName, "%s", names->name);
-            safef(description, sizeof description, "BLAT %s, %dbp, %s", names->name, psl->qSize, date);
+            safef(description, sizeof description, "BLAT %s, %d%s, %s", names->name, psl->qSize,
+                unit, date);
             }
         else
             {
             // Headerless query: "YourSeq" tells the user nothing, so name it by query size and the
             // top hit's gene (or position), which is what they actually recognize later.
             char *locus = topHitLocusLabel(database, psl);
-            safef(shortName, sizeof shortName, "%dbp %s", psl->qSize, locus);
-            safef(description, sizeof description, "BLAT %dbp %s, %s", psl->qSize, locus, date);
+            safef(shortName, sizeof shortName, "%d%s %s", psl->qSize, unit, locus);
+            safef(description, sizeof description, "BLAT %d%s %s, %s", psl->qSize, unit, locus,
+                date);
             freeMem(locus);
             }
         }

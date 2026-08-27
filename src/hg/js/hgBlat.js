@@ -78,10 +78,16 @@ function blatIdentityCell(hit) {
     return `<span class="blatIdPct" style="color:${c}">${hit.identity.toFixed(1)}%</span>`;
 }
 
+function blatUnit() {
+    // A protein query is measured in amino acids, everything else in bases.
+    return hgBlatData.config.isProt ? 'aa' : 'bp';
+}
+
 function blatCoverageCell(hit) {
     var left = (hit.qStart - 1) / hit.qSize * 100;
     var width = (hit.qEnd - hit.qStart + 1) / hit.qSize * 100;
-    var tip = `Query matches the genome at ${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}bp out of ${blatFmt(hit.qSize)}bp`;
+    var u = blatUnit();
+    var tip = `Query matches the genome at ${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}${u} out of ${blatFmt(hit.qSize)}${u}`;
     return `<span class="blatCov" title="${tip}"><i style="left:${left.toFixed(1)}%;` +
         `width:${width.toFixed(1)}%"></i></span>`;
 }
@@ -101,7 +107,7 @@ function blatSummaryStrip(cfg, queryCount) {
         stats = stat('Queries', blatFmt(queryCount)) + div + assembly;
     } else {
         stats = stat('Query', htmlEncode(cfg.queryName)) + div +
-            stat('Length', blatFmt(cfg.querySize) + ' bp') + div + assembly;
+            stat('Length', blatFmt(cfg.querySize) + ' ' + blatUnit()) + div + assembly;
     }
     var actions = '';
     // "View all in browser" is the primary action, so it comes first.
