@@ -13,13 +13,15 @@ across datasets, so a flat directory would clobber them, and keeping the subpath
 lets the /gbdb/<asm>/bbi/singleCellSignalsPeaks symlink resolve every bigDataUrl.
 
 It also copies the composite's facet metadata to
-  <bed>/singleCellSignalsPeaks_metadata.tsv   (the track's metaDataUrl target).
+  <bed>/singleCellSignalsPeaks_metadata.tsv   (the track's metaDataUrl target),
+and writes the cell-class facet colors to
+  <bed>/singleCellSignalsPeaks_colors.json    (the track's colorSettingsUrl target).
 
 Usage:
   copySingleCellSignalsPeaksFiles.py [--assembly hg38|mm10] [--stanzas STANZAS]
                                      [--manifest MANIFEST] [--dry-run]
 """
-import re, os, shutil, argparse
+import re, os, json, shutil, argparse
 from urllib.parse import urlparse
 
 # Where the hub build writes manifest.tsv -- its OUTPUT dir, not its code. The build
@@ -48,6 +50,23 @@ def copy_atomic(src, dst):
             os.remove(tmp)
         raise
 
+def write_text_atomic(text, dst):
+    """Write text to dst without ever leaving a half-written dst in place.
+
+    Same reason as copy_atomic: the bed dir is served live, and the faceted UI fetches
+    this file on every hgTrackUi page load, so a partial write hands out unparseable JSON
+    for as long as the write takes.
+    """
+    tmp = "%s.tmp%d" % (dst, os.getpid())
+    try:
+        with open(tmp, "w") as fh:
+            fh.write(text)
+        os.replace(tmp, dst)
+    except BaseException:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        raise
+
 def up_to_date(src, dst):
     """True if dst already holds this copy of src, so it can be skipped.
 
@@ -59,6 +78,42 @@ def up_to_date(src, dst):
         return False
     return (os.path.getsize(dst) == os.path.getsize(src)
             and os.path.getmtime(dst) >= os.path.getmtime(src))
+
+def palette_file(build):
+    """Path to the cell class -> color palette TSV (class<TAB>R,G,B, one per line).
+
+    Same resolution order as makeSingleCellSignalsPeaksRa.py: prefer the copy of record
+    archived alongside these scripts (written by build_celltype_crosswalks.py), fall back
+    to the hub build dir. The two scripts must agree on the palette, or the swatches in
+    the faceted selector would not match the colors the subtracks are drawn in.
+    """
+    pal = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       "celltype-crosswalks", "celltype-palette.tsv")
+    if not os.path.isfile(pal):
+        pal = os.path.join(build, "celltype-crosswalks", "celltype-palette.tsv")
+    return pal
+
+def colors_json(pal):
+    """Render the palette as the faceted UI's colorSettingsUrl JSON.
+
+    facetedComposite.js wants {facetName: {facetValue: cssColor}} and draws a swatch
+    beside each checkbox of any facet named in it. The facet name must be the metadata
+    column ("Cell_class") and each key must be the column value verbatim -- the lookup
+    is an exact string match, so a case or spacing difference silently drops the swatch.
+    The whole palette is emitted, not just the classes this assembly uses: extra keys are
+    ignored by the JS, and it keeps hg38 and mm10 sharing one class->color mapping.
+    """
+    colors = {}
+    for line in open(pal):
+        f = line.rstrip("\n").split("\t")
+        if len(f) < 2 or not f[0].strip():
+            continue
+        rgb = [int(x) for x in f[1].split(",")]
+        colors[f[0]] = "#%02X%02X%02X" % tuple(rgb)
+    if not colors:
+        raise SystemExit("ERROR: no class/color rows read from %s, so the facet color "
+                         "swatches cannot be written." % pal)
+    return json.dumps({"Cell_class": colors}, indent=4, sort_keys=True) + "\n"
 
 def load_relpath_to_abs(manifest, asm):
     m = {}
@@ -157,6 +212,21 @@ def main():
     if not args.dry_run:
         os.makedirs(beddir, exist_ok=True)
         copy_atomic(meta_src, meta_dst)
+
+    # Facet color swatches: the track's colorSettingsUrl target. Derived from the same
+    # class->color palette the subtrack "color" lines come from, so a class has one color
+    # in the selector and in the track display. A missing palette is fatal for the same
+    # reason a missing metadata file is: the .ra names this file, and quietly leaving the
+    # previous build's copy in place would show swatches that no longer match the tracks.
+    pal = palette_file(build)
+    if not os.path.isfile(pal):
+        raise SystemExit("ERROR: no cell class palette at %s, so the facet color swatches "
+                         "cannot be written. The track's colorSettingsUrl would keep "
+                         "pointing at the previous build's colors." % pal)
+    colors_dst = os.path.join(beddir, "%s_colors.json" % TRACK)
+    if not args.dry_run:
+        write_text_atomic(colors_json(pal), colors_dst)
+
     print("assembly=%s composite=%s: subtracks=%d copied=%d missing=%d  ~%.1f GB%s"
           % (asm, hub_composite, total, copied, missing, nbytes / 1e9,
              "  (dry-run)" if args.dry_run else "  -> " + beddir))

@@ -6,6 +6,7 @@ type bigBed 3
 shortLabel Single-cell ATAC-seq
 longLabel Single-cell ATAC-seq Peaks and Signals for UCSC Cell Browser datasets
 metaDataUrl /gbdb/mm10/bbi/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
+colorSettingsUrl /gbdb/mm10/bbi/singleCellSignalsPeaks/singleCellSignalsPeaks_colors.json
 primaryKey Track
 subtrackUrls Dataset=https://cells.ucsc.edu/?ds=$$
 defaultSortField Cell_class

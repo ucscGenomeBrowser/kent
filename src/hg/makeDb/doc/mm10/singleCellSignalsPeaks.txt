@@ -46,6 +46,16 @@
 # preserved on purpose: some coverage/peak basenames (e.g. MOL.bw, OPC.bw) repeat
 # across datasets, so a flat directory would clobber them.  89.6 GB, 647 files.
 #
+# The same script also writes <bed>/singleCellSignalsPeaks_colors.json, the track's
+# colorSettingsUrl target: {"Cell_class": {<class>: "#RRGGBB"}}, rendered straight from
+# celltype-palette.tsv. The faceted UI draws a color swatch beside each checkbox of any
+# facet named in that file, so the Cell class checkboxes carry the same colors the
+# subtracks are drawn in. Keys must match the metadata column value verbatim -- the
+# lookup in facetedComposite.js is an exact string match, and an unmatched key just
+# leaves that swatch blank. The whole palette is written for both assemblies, so classes
+# an assembly does not use (mm10 uses all 23; hg38 has no Ependymal or Choroid plexus)
+# are simply unused keys.
+#
 #   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
 #   python3 $scriptDir/copySingleCellSignalsPeaksFiles.py --assembly mm10 --dry-run
 #   python3 $scriptDir/copySingleCellSignalsPeaksFiles.py --assembly mm10
@@ -87,7 +97,8 @@
 #   (celltype-crosswalks/celltype-class.tsv, built by build_celltype_crosswalks.py).
 #   The class drives BOTH the track color (one colorblind-conscious palette,
 #   celltype-palette.tsv, shared by hg38 and mm10 so a class is the same color on
-#   both assemblies) and the subtrack priority. Cell class is the primary cell facet.
+#   both assemblies) and the subtrack priority. Cell class is the primary cell facet,
+#   and the same palette is published as the facet swatch colors (section 2).
 #
 #   "Other glia" (88,160,88) was added because "Other" was doing four unrelated
 #   jobs. Of 40 tracks corpus-wide sitting in it: 14 real glia with nowhere else to

@@ -77,6 +77,11 @@ def main():
         "shortLabel Single-cell ATAC-seq",
         "longLabel Single-cell ATAC-seq Peaks and Signals for UCSC Cell Browser datasets",
         "metaDataUrl %s/%s_metadata.tsv" % (gbdb, TRACK),
+        # Cell class -> color for the facet swatches in the selector, so a class reads the
+        # same in the checkbox list as in the drawn tracks (both come from
+        # celltype-crosswalks/celltype-palette.tsv). Written by
+        # copySingleCellSignalsPeaksFiles.py alongside the facet metadata.
+        "colorSettingsUrl %s/%s_colors.json" % (gbdb, TRACK),
         "primaryKey Track",
         "subtrackUrls Dataset=https://cells.ucsc.edu/?ds=$$",
         "defaultSortField Cell_class",

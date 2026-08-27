@@ -76,13 +76,20 @@
 # https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks
 
 ##############################################################################
-# 4. Facet metadata
+# 4. Facet metadata and facet colors
 ##############################################################################
 # The faceted composite's metaDataUrl points at a copy of the hub's hg38
 # main-faceted metadata (primaryKey = Track):
 #
 #   cp $CBHUB_OUT/meta/hg38.metadata.tsv \
 #      /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
+#
+# Its colorSettingsUrl points at singleCellSignalsPeaks_colors.json in the same dir,
+# which gives the faceted UI a color swatch for each Cell class checkbox, matching the
+# color the subtracks of that class are drawn in. Both files are written by
+# copySingleCellSignalsPeaksFiles.py (section 2); the JSON is rendered from the shared
+# celltype-palette.tsv, so it is identical on hg38 and mm10. See
+# doc/mm10/singleCellSignalsPeaks.txt section 2 for the format and its gotchas.
 
 ##############################################################################
 # 5. Labels, colors, and facets
