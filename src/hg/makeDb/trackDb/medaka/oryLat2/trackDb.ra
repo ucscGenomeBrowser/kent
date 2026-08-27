@@ -33,4 +33,4 @@ group regulation
 priority 3
 html dnaMethylation.html
 
-include methbase2.ra
+include methbase2.ra alpha
