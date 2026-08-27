@@ -13,6 +13,7 @@
 #include "obscure.h"
 #include "memalloc.h"
 #include "dlist.h"
+#include "errAbort.h"
 
 
 static size_t memAlloced = 0;
@@ -204,8 +205,18 @@ if (size == 0 || size > NEEDMEM_LIMIT)
     errAbort("needMem: trying to allocate %llu bytes (limit: %llu)",
          (unsigned long long)size, (unsigned long long)NEEDMEM_LIMIT);
 if ((pt = mhStack->alloc(size)) == NULL)
+    {
+    if (isErrAbortInProgress())
+        {
+        /* Calling errAbort here would re-enter the warn handler and loop.
+         * dumpStack makes no heap allocations (fork+pstack) and has its own
+         * re-entrancy guard; exit immediately after. */
+        dumpStack("needMem: out of memory during error handling");
+        exit(1);
+        }
     errAbort("needMem: Out of memory - request size %llu bytes, errno: %d\n",
              (unsigned long long)size, errno);
+    }
 memset(pt, 0, size);
 memAlloced += size;
 return pt;
