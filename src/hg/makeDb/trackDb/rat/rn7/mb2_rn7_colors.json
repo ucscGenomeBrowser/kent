@@ -1,0 +1,24 @@
+{
+    "label": {
+        "Sperm": "#d82626",
+        "Brain Hippocampal": "#d85b26",
+        "Hypothalamus": "#d89126",
+        "Rat": "#d8c626",
+        "Embryo": "#b5d826",
+        "Primary Macrophages": "#7fd826",
+        "Left Ventricle": "#49d826",
+        "Liver": "#26d838",
+        "Epiblast": "#26d86d",
+        "EPC": "#26d8a3",
+        "Placenta": "#26d8d8",
+        "Serum": "#26a3d8",
+        "Oocyte": "#266dd8",
+        "Medial Prefrontal Cortex": "#2638d8",
+        "Hippocampus": "#4926d8",
+        "Carotid Body": "#7f26d8",
+        "Esophageal": "#b526d8",
+        "Caudal Sperm": "#d826c6",
+        "Brain-preoptic area": "#d82691",
+        "Brain Prefrontal Cortex": "#d8265b"
+    }
+}

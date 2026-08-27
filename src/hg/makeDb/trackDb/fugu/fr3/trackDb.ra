@@ -152,3 +152,13 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSTRUT000000[0-9]*(\.[0-9]+)?
 
 include ../../refSeqComposite.ra
+
+track dnaMethylation
+superTrack on
+shortLabel DNA Methylation
+longLabel DNA Methylation
+group regulation
+priority 3
+html dnaMethylation.html
+
+include methbase2.ra

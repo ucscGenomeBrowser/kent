@@ -1,0 +1,16 @@
+{
+    "label": {
+        "Blood": "#F0C000",
+        "Untreated Bone Primary Osteosarcoma": "#FF8838",
+        "Sperm": "#B05020",
+        "Skin Fibroblast": "#F01111",
+        "Placenta": "#C000C0",
+        "Normal Bone-Rib": "#6000B0",
+        "Liver": "#5020E0",
+        "Kidney": "#0050FF",
+        "Skeletal Muscle": "#0072D6",
+        "Primary Dermal Fibroblasts": "#0099C0",
+        "Normal Bone-Vertebrae": "#00C000",
+        "Cerebrum": "#80D000"
+    }
+}

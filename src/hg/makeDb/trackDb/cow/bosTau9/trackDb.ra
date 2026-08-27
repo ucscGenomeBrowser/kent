@@ -21,3 +21,13 @@ searchPriority 8
 
 include ../../refSeqComposite.ra
 include ../../crispr10K.ra
+
+track dnaMethylation
+superTrack on
+shortLabel DNA Methylation
+longLabel DNA Methylation
+group regulation
+priority 3
+html dnaMethylation.html
+
+include methbase2.ra

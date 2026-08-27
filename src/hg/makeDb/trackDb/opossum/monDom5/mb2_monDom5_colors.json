@@ -1,0 +1,10 @@
+{
+    "label": {
+        "Embryo": "#F0C000",
+        "Blast": "#FF8838",
+        "7.5 trophectoderm": "#B05020",
+        "Sperm": "#F01111",
+        "Extraembryonic Membrane": "#C000C0",
+        "Brain": "#6000B0"
+    }
+}

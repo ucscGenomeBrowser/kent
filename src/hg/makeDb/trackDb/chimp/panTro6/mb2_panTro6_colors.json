@@ -1,0 +1,16 @@
+{
+    "label": {
+        "Brain": "#F0C000",
+        "Liver": "#FF8838",
+        "Heart": "#B05020",
+        "Lung": "#F01111",
+        "Kidney": "#C000C0",
+        "Prefrontal Cortex": "#6000B0",
+        "LCL": "#5020E0",
+        "Sperm": "#0050FF",
+        "CD34+": "#0072D6",
+        "SRS413524": "#0099C0",
+        "Neutriphils": "#00C000",
+        "Bone": "#80D000"
+    }
+}

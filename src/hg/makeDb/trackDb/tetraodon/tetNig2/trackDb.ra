@@ -17,3 +17,13 @@ track gaze override
 type genePred gazePep
 visibility pack
 baseColorDefault genomicCodons
+
+track dnaMethylation
+superTrack on
+shortLabel DNA Methylation
+longLabel DNA Methylation
+group regulation
+priority 3
+html dnaMethylation.html
+
+include methbase2.ra

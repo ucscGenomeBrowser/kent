@@ -1,0 +1,24 @@
+{
+    "label": {
+        "Blood": "#d82626",
+        "Brain": "#d85b26",
+        "B-Lymphocyte": "#d89126",
+        "Plasma": "#d8c626",
+        "ESC": "#b5d826",
+        "Placenta": "#7fd826",
+        "Sperm": "#49d826",
+        "PBMC": "#26d838",
+        "Liver": "#26d86d",
+        "Cord Blood": "#26d8a3",
+        "Colon": "#26d8d8",
+        "Cell Line": "#26a3d8",
+        "Fallopian Tube": "#266dd8",
+        "Esophagus": "#2638d8",
+        "iPSC": "#4926d8",
+        "Lung": "#7f26d8",
+        "Ovarian Cancer Tumors": "#b526d8",
+        "Nasopharyngeal Swab": "#d826c6",
+        "Bone Marrow": "#d82691",
+        "Primary": "#d8265b"
+    }
+}

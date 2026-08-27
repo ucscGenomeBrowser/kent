@@ -1,0 +1,24 @@
+{
+    "label": {
+        "Longissimus Dorsi": "#d82626",
+        "Skeletal Muscle": "#d85b26",
+        "PBMC": "#d89126",
+        "Embryo": "#d8c626",
+        "Placenta": "#b5d826",
+        "Liver": "#7fd826",
+        "Ovary": "#49d826",
+        "Brain": "#26d838",
+        "Skeletal Muscle Tissue": "#26d86d",
+        "Longissimus Dorsi Muscle": "#26d8a3",
+        "Longissi Dorsi": "#26d8d8",
+        "Sperm": "#26a3d8",
+        "new born fetal fibroblast-derived iPSC line": "#266dd8",
+        "naive B cell": "#2638d8",
+        "memory B cell": "#4926d8",
+        "gamma-delta T cell": "#7f26d8",
+        "Neutrophils": "#b526d8",
+        "Myeloid Leukocyte": "#d826c6",
+        "CD4-positive alpha-beta T cell": "#d82691",
+        "Blood": "#d8265b"
+    }
+}
