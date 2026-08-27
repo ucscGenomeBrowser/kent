@@ -2,6 +2,7 @@ track gnomadPLI
 parent gnomadVariants 
 shortLabel gnomAD Constraint Metrics
 longLabel Genome Aggregation Database (gnomAD) Predicted Constraint Metrics (LOEUF, pLI, and Z-scores)
+pennantIcon Updated red ../goldenPath/newsarch.html#082626 "Updated Aug. 26, 2026"
 compositeTrack On
 group varRep
 type bigBed 12
@@ -188,6 +189,7 @@ visibility hide
         track pliByTranscriptV4_1_1
         shortLabel Transcript LoF v4.1.1
         longLabel gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI) v4.1.1
+        pennantIcon New red ../goldenPath/newsarch.html#082626 "Released Aug. 26, 2026"
         subGroups view=v4_1_1
         type bigBed 12 +
         itemRgb on
@@ -206,6 +208,7 @@ visibility hide
         track missenseByTranscriptV4_1_1
         shortLabel Transcript Missense v4.1.1
         longLabel gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores) v4.1.1
+        pennantIcon New red ../goldenPath/newsarch.html#082626 "Released Aug. 26, 2026"
         subGroups view=v4_1_1
         type bigBed 12 +
         searchIndex name,geneName

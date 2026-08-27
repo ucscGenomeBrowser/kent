@@ -3,6 +3,7 @@ parent gnomadVariants
 compositeTrack on
 shortLabel gnomAD MPC
 longLabel gnomAD Missense Deleteriousness Prediction by Constraint (MPC) v4.1.1
+pennantIcon New red ../goldenPath/newsarch.html#082626 "Released Aug. 26, 2026"
 type bigWig
 visibility hide
 group varRep
@@ -63,6 +64,7 @@ track gnomadMpcOverlaps
 parent gnomadVariants
 shortLabel gnomAD MPC overlaps
 longLabel gnomAD MPC v4.1.1 - variants scored against multiple transcripts
+pennantIcon New red ../goldenPath/newsarch.html#082626 "Released Aug. 26, 2026"
 type bigBed 9 +
 itemRgb on
 visibility hide
