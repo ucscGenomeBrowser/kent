@@ -1,0 +1,5 @@
+accession	label	cell_type	tissue	_source_name	_study	__sample	__bsrate	__meth	__depth	__mapping	__uniq	__sites	__hmr_size	__hmr_count	__pmd_size	__pmd_count
+SRX1294707	Sperm	sperm	NA	sea_urchin sperm	SRP064299	SRS1093761	0.989	0.253	51.197	0.502	0.817	0.898	4199.49	87967	35696.2	8445
+SRX1294708	Oocyte	oocyte	NA	sea_urchin oocyte	SRP064299	SRS1093760	0.986	0.197	31.200	0.482	0.188	0.885	5201.94	70743	36804.34	8243
+SRX1294709	Cleavage	cleavage	NA	sea_urchin cleavage	SRP064299	SRS1093759	0.989	0.240	48.835	0.442	0.836	0.919	4398.83	86021	37467.31	8310
+SRX1294710	Blastula	blastula	NA	sea_urchin blastula	SRP064299	SRS1093758	0.990	0.250	39.984	0.571	0.915	0.907	4507.9	83222	36853.88	8447

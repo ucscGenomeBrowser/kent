@@ -189,8 +189,10 @@
     by each user. The exact configuration of the display for each mode depends upon the track''s type,
     and some modes may not be supported for certain track types. Please note visibility settings in composite
     subtracks are directly inherited from the parent. Therefore, any visibility lines added at the subtrack
-    level of a composite will be ignored. Be sure to experiment with this setting to verify that it works
-    as expected for your track type and track structure. Valid settings:'
+    level of a composite will be ignored. The one exception is a faceted composite , where the parent''s
+    visibility is a maximum rather than a value the subtracks inherit, and subtrack visibility lines are
+    honored up to that maximum. Be sure to experiment with this setting to verify that it works as expected
+    for your track type and track structure. Valid settings:'
   format: visibility
   examples:
   - visibility dense
@@ -532,6 +534,35 @@
   format: multiRegionsBedUrl <url/relativePath>
   examples:
   - multiRegionsBedUrl covidMuts.regions.bed
+- name: onlyVisibility
+  types:
+  - all
+  roles:
+  - super
+  - composite
+  - view
+  - leaf
+  category: Common Settings - less frequent
+  context: trackDb
+  level: new
+  required: false
+  summary: Restricts a track to a single display mode.
+  description: Restricts a track to a single display mode. The visibility dropdowns and the right-click
+    menu offer only hide and the named mode, so the track either displays that way or is hidden; an unrecognized
+    mode is treated as dense . Use this for a track that is only meaningful in one mode - to pick a starting
+    mode that the user can then change, use visibility instead. This setting is also read from the subtracks
+    of a faceted composite , whose own visibility is a maximum for its subtracks rather than a value they
+    inherit. Display modes rank from least to most detailed as hide , dense , squish , pack , full . Both
+    visibility and onlyVisibility are read only from the subtrack's own stanza and are not inherited from
+    the parent; an onlyVisibility line on the faceted composite itself restricts the container's own maximum
+    instead. Changing the maximum does not discard the display modes set on individual subtracks, so restoring
+    a more detailed maximum brings them back as they were.
+  format: onlyVisibility <dense|squish|pack|full>
+  examples:
+  - "track coverage\n   onlyVisibility dense"
+  - "track methylation\n   compositeTrack faceted\n   visibility pack\n\n       track methylation_SRX172462_levels\n\
+    \       parent methylation off\n       visibility full\n\n       track methylation_SRX172462_reads\n\
+    \       parent methylation off\n       onlyVisibility dense"
 - name: otherDb
   types:
   - all
@@ -3408,7 +3439,7 @@
   description: If the VCF file includes genotype columns for at least two individuals, then a haplotype
     sorting display is enabled by default. This option can be used to disable it if desired, for example
     if the genotypes have not been phased and a significant portion of the genotypes are heterozygous.
-    More information about the haplotype sorting display can be found here .
+    More information about the haplotype sorting display can be found on our Configuring VCF tracks page.
   format: hapClusterEnabled <true|false>
   examples: []
 - name: hapClusterMethod
@@ -4077,7 +4108,9 @@
   summary: This version of the compositeTrack setting indicates that the UI for this composite track should
     be handled with facets.
   description: This version of the compositeTrack setting indicates that the UI for this composite track
-    should be handled with facets.
+    should be handled with facets. A faceted composite also treats its own visibility as a maximum for
+    its subtracks rather than a value they inherit, so one container can hold tracks that each want a
+    different display mode. See onlyVisibility for how a subtrack picks its own mode within that maximum.
   format: compositeTrack faceted
   examples: []
 - name: metaDataUrl

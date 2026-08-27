@@ -1,0 +1,24 @@
+{
+    "label": {
+        "ESC": "#d82626",
+        "Liver": "#d85b26",
+        "Bone Marrow": "#d89126",
+        "Hippocampus": "#d8c626",
+        "Spleen": "#b5d826",
+        "Sperm": "#7fd826",
+        "Brain": "#49d826",
+        "Lung": "#26d838",
+        "Cortex": "#26d86d",
+        "Embryo": "#26d8a3",
+        "Blood": "#26d8d8",
+        "Skin": "#26a3d8",
+        "Kidney": "#266dd8",
+        "Cerebral Cortex": "#2638d8",
+        "Testis": "#4926d8",
+        "Heart": "#7f26d8",
+        "iPSC": "#b526d8",
+        "Oocyte": "#d826c6",
+        "Hepatocyte": "#d82691",
+        "Placenta": "#d8265b"
+    }
+}

@@ -944,6 +944,25 @@ static char *pack[] =
     NULL
     };
 
+enum trackVisibility tvFromVisOnlySetting(char *visOnly)
+/* Parse an onlyVisibility value.  Deliberately mirrors hTvGetVizArr() below: matching is
+ * case-insensitive, and an unrecognized value falls back to dense.  Do NOT use
+ * hTvFromString[NoAbort]() here - it is case sensitive and quietly answers tvHide for
+ * anything it doesn't know, which would make the track vanish while the vis dropdown
+ * built from the same setting still looked correct. */
+{
+if (sameWord(visOnly,"dense"))
+    return tvDense;
+else if (sameWord(visOnly,"squish"))
+    return tvSquish;
+else if (sameWord(visOnly,"pack"))
+    return tvPack;
+else if (sameWord(visOnly,"full"))
+    return tvFull;
+else
+    return tvDense;
+}
+
 char ** hTvGetVizArr(enum trackVisibility vis, boolean canPack, char* visOnly) 
 /* return a NULL-terminated array of char* with possible track visibilities */
 {
@@ -976,14 +995,19 @@ void hTvDropDownClassVisOnlyAndExtraWithLabel(char *varName, enum trackVisibilit
 // and potentially limited to visOnly
 {
 char** vizArr = hTvGetVizArr(vis, canPack, visOnly);
-char* checked = vizArr[vis];
 int vizArrLen = arrNullLen(vizArr);
+char* checked;
 
 // Same as hTvDropDownClassWithJavascript():
 // Normal track with no special limits needs mapping to get back checked value
 static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
-if (visOnly==NULL && canPack)
+if (visOnly != NULL)
+    // Just hide and the one allowed vis, so a tv enum would index off the end of the array
+    checked = (vis == tvHide ? vizArr[0] : vizArr[1]);
+else if (canPack)
     checked = vizArr[packIx[vis]];
+else
+    checked = vizArr[vis];
 
 cgiMakeDropListClassWithIdStyleJavascriptAndLabel(varName, NULL, vizArr, vizArrLen, checked, class, TV_DROPDOWN_STYLE, events, label);
 }
@@ -10011,14 +10035,48 @@ enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb 
 boolean subtrackOverride = FALSE;
 enum trackVisibility vis = tdbLocalVisibility(cart,tdb,&subtrackOverride);
 
+// Children of a faceted composite are heterogeneous enough that one inherited vis won't
+// do, so they keep a display mode of their own and the parent's vis is only a ceiling.
+boolean facetedChild = (tdbIsContainerChild(tdb) && tdbIsFacetedComposite(tdb->parent));
+char *onlyVis = (facetedChild ? trackDbLocalSetting(tdb, "onlyVisibility") : NULL);
+
 if (tdbIsContainerChild(tdb))
     {
+    if (facetedChild)
+        {
+        // A child of a faceted composite holds a display mode of its own rather than
+        // inheriting the parent's.  NOTE: tdb->visibility can't tell "asked for something"
+        // from "inherited a default", since trackDbFieldsFromSettings() fills it through
+        // the inheriting trackDbSetting() - hence trackDbLocalSetting here.
+        boolean hasOwnVis = (subtrackOverride
+                             || trackDbLocalSetting(tdb, "visibility") != NULL);
+        if (onlyVis != NULL)
+            {
+            // onlyVisibility pins the child to a single mode, but asking to hide still hides
+            if (!(hasOwnVis && vis == tvHide))
+                vis = tvFromVisOnlySetting(onlyVis);
+            }
+        else if (!hasOwnVis)
+            vis = tvFull;    // No mode of its own, so take whatever the parent allows
+        }
     // subtracks without explicit (cart) vis but are selected, should get inherited vis
-    if (!subtrackOverride)
+    else if (!subtrackOverride)
         vis = tvFull;
     // subtracks with checkbox that says no, are stopped cold
     if (checkBoxToo && !fourStateVisible(subtrackFourStateChecked(tdb,cart)))
         vis = tvHide; // Checkbox says no
+    }
+if (facetedChild)
+    {
+    // Note this skips the subtrackOverride shortcut below on purpose: escaping the
+    // parent's limit is exactly the behavior a faceted composite doesn't want.
+    if (vis == tvHide)
+        return tvHide;
+    enum trackVisibility maxVis = tdbVisLimitedByAncestors(cart,tdb->parent,checkBoxToo,
+                                                           foldersToo);
+    if (onlyVis != NULL)  // A pinned child either fits under the maximum or doesn't draw
+        return (tvCompare(vis,maxVis) >= 0 ? vis : tvHide);
+    return tvMin(vis,maxVis);
     }
 if (subtrackOverride)
     return vis;

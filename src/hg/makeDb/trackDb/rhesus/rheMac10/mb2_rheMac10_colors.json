@@ -1,0 +1,24 @@
+{
+    "label": {
+        "cffDNA": "#d82626",
+        "Brain": "#d85b26",
+        "Hypothalamus": "#d89126",
+        "Hippocampus": "#d8c626",
+        "Cortex": "#b5d826",
+        "Sperm": "#7fd826",
+        "Liver": "#49d826",
+        "Heart": "#26d838",
+        "Airway Epithelium": "#26d86d",
+        "PBMC": "#26d8a3",
+        "Kidney": "#26d8d8",
+        "Placenta": "#26a3d8",
+        "Thymus": "#266dd8",
+        "Lung": "#2638d8",
+        "Blood": "#4926d8",
+        "LCL": "#7f26d8",
+        "Blast": "#b526d8",
+        "White Blood": "#d826c6",
+        "Trophoblasts": "#d82691",
+        "Spermatogonia": "#d8265b"
+    }
+}

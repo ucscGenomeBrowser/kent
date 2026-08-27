@@ -1,0 +1,4 @@
+accession	label	cell_type	tissue	_source_name	_study	__sample	__bsrate	__meth	__depth	__mapping	__uniq	__sites	__hmr_size	__hmr_count	__pmd_size	__pmd_count
+SRX18115389	Liver	NA	liver	NA	SRP405758	SRS15617724	0.986	0.679	16.887	0.764	0.727	0.979	1229.46	46692	201807.59	2992
+SRX18115390	Skeletal Muscle	NA	skeleton muscle	NA	SRP405758	SRS15617725	0.989	0.676	12.080	0.822	0.826	0.975	1141.44	55139	17567.85	1831
+SRX18115403	Skeletal Muscle	NA	skeleton muscle	NA	SRP405758	SRS15617725	0.990	0.696	5.172	0.889	0.754	0.959	1379.18	52023	40455.4	806

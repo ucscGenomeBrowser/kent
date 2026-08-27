@@ -1,0 +1,127 @@
+track Methbase
+compositeTrack faceted
+parent dnaMethylation
+metaDataUrl /gbdb/equCab3/methBase2/mb2_equCab3_metadata.tsv
+colorSettingsUrl /gbdb/equCab3/methBase2/mb2_equCab3_colors.json
+primaryKey accession
+dataTypes hmr levels reads
+maxCheckboxes 20
+shortLabel Methbase
+longLabel Methbase
+type bigBed
+visibility hide
+subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ study=https://www.ncbi.nlm.nih.gov/sra/$$ sample=https://www.ncbi.nlm.nih.gov/sra/$$
+
+track Methbase_SRX18115405_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP405758/SRS15617736/SRX18115405/SRX18115405.hmr.bb
+type bigBed
+shortLabel Liver
+longLabel Liver SRX18115405
+color 56,113,193
+parent Methbase off
+priority 0.00001
+onlyVisibility dense
+
+track Methbase_SRX18115405_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP405758/SRS15617736/SRX18115405/SRX18115405.sym_counts.bw
+type bigWig
+shortLabel Liver
+longLabel Liver SRX18115405
+color 176,80,32
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00002
+onlyVisibility full
+
+track Methbase_SRX18115405_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP405758/SRS15617736/SRX18115405/SRX18115405.sym_coverage.bw
+type bigWig
+shortLabel Liver
+longLabel Liver SRX18115405
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00003
+onlyVisibility full
+
+track Methbase_SRX18115406_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP405758/SRS15617737/SRX18115406/SRX18115406.hmr.bb
+type bigBed
+shortLabel Skeletal Muscle
+longLabel Skeletal Muscle SRX18115406
+color 56,113,193
+parent Methbase off
+priority 0.00004
+onlyVisibility dense
+
+track Methbase_SRX18115406_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP405758/SRS15617737/SRX18115406/SRX18115406.sym_counts.bw
+type bigWig
+shortLabel Skeletal Muscle
+longLabel Skeletal Muscle SRX18115406
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00005
+onlyVisibility full
+
+track Methbase_SRX18115406_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP405758/SRS15617737/SRX18115406/SRX18115406.sym_coverage.bw
+type bigWig
+shortLabel Skeletal Muscle
+longLabel Skeletal Muscle SRX18115406
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00006
+onlyVisibility full
+
+track Methbase_SRX760454_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP049936/SRS745064/SRX760454/SRX760454.hmr.bb
+type bigBed
+shortLabel Placenta
+longLabel Placenta SRX760454
+color 56,113,193
+parent Methbase off
+priority 0.00007
+onlyVisibility dense
+
+track Methbase_SRX760454_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP049936/SRS745064/SRX760454/SRX760454.sym_counts.bw
+type bigWig
+shortLabel Placenta
+longLabel Placenta SRX760454
+color 255,136,56
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00008
+onlyVisibility full
+
+track Methbase_SRX760454_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP049936/SRS745064/SRX760454/SRX760454.sym_coverage.bw
+type bigWig
+shortLabel Placenta
+longLabel Placenta SRX760454
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00009
+onlyVisibility full

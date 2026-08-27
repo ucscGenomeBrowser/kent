@@ -1,0 +1,16 @@
+{
+    "label": {
+        "Placenta": "#F0C000",
+        "ERS3224074": "#FF8838",
+        "Trophoblast": "#B05020",
+        "In Vitro Cultured Embryos": "#F01111",
+        "Sperm": "#C000C0",
+        "Embryos": "#6000B0",
+        "Small Intestine": "#5020E0",
+        "Liver": "#0050FF",
+        "Kidney": "#0072D6",
+        "Heart": "#0099C0",
+        "Cortex": "#00C000",
+        "Cerebellum": "#80D000"
+    }
+}

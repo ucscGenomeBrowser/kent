@@ -1,0 +1,24 @@
+{
+    "label": {
+        "Whole Embryo": "#d82626",
+        "Sperm": "#d85b26",
+        "5dpf zebrafish embryos": "#d89126",
+        "Whole Larvae": "#d8c626",
+        "Brain": "#b5d826",
+        "Whole Embryos": "#7fd826",
+        "Liver": "#49d826",
+        "Liver & Other": "#26d838",
+        "Whole Organism": "#26d86d",
+        "Somatic": "#26d8a3",
+        "Primordial Germ": "#26d8d8",
+        "Testicular": "#26a3d8",
+        "Embryo": "#266dd8",
+        "Testis": "#2638d8",
+        "Hemogenic Endothelium": "#4926d8",
+        "Hematopoietic Stem Cell": "#7f26d8",
+        "Endothelial": "#b526d8",
+        "Blastema": "#d826c6",
+        "sp7-cells": "#d82691",
+        "sp7+": "#d8265b"
+    }
+}

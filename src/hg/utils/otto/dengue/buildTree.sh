@@ -11,11 +11,10 @@ today=$(date +%F)
 dengueDir=/hive/data/outside/otto/dengue
 dengueNcbiDir=$dengueDir/ncbi/ncbi.latest
 
-usherDir=~angie/github/usher
-usherSampled=$usherDir/build/usher-sampled
-usher=$usherDir/build/usher
-matUtils=$usherDir/build/matUtils
-matOptimize=$usherDir/build/matOptimize
+usherDir=~angie/github/usher/build
+usherSampled=$usherDir/usher-sampled
+matUtils=$usherDir/matUtils
+matOptimize=$usherDir/matOptimize
 
 # Subtype 1
 asmAcc1=GCF_000862125.1
@@ -196,10 +195,10 @@ for subtype in 1 2 3 4; do
     # Update links in /gbdb
     nc=$(basename $gbff .gbff)
     dir=/gbdb/wuhCor1/hgPhyloPlaceData/dengue/$nc
-    mkdir -p $dir
-    ln -sf $(pwd)/denv$subtype.$today.pb $dir/denv$subtype.latest.pb
-    ln -sf $(pwd)/denv$subtype.$today.metadata.tsv.gz $dir/denv$subtype.latest.metadata.tsv.gz
-    ln -sf $(pwd)/hgPhyloPlace.description.$subtype.txt $dir/denv$subtype.latest.version.txt
+    ssh hgwdev mkdir -p $dir
+    ssh hgwdev ln -sf $(pwd)/denv$subtype.$today.pb $dir/denv$subtype.latest.pb
+    ssh hgwdev ln -sf $(pwd)/denv$subtype.$today.metadata.tsv.gz $dir/denv$subtype.latest.metadata.tsv.gz
+    ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.$subtype.txt $dir/denv$subtype.latest.version.txt
 
 
     # Extract Newick and VCF for anyone who wants to download those instead of protobuf
@@ -225,11 +224,10 @@ for subtype in 1 2 3 4; do
     # Update hgdownload-test link for archive
     asmDir=$(echo $asmAcc \
         | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
-    mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
-    ln -sf $archive /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/$y/$m
+    ssh hgwdev ln -sf $archiveRoot/*.latest.* /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/
     # rsync to hgdownload hubs dir
-    for h in hgdownload1 hgdownload3; do
-        if rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/* \
+    for h in hgdownload1 hgdownload2 hgdownload3; do
+        if ssh hgwdev rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_DENV-$subtype/* \
                  qateam@$h:/mirrordata/hubs/$asmDir/UShER_DENV-$subtype/; then
             true
         else
@@ -242,3 +240,5 @@ done
 
 rm -f mutation-paths.txt *.pre*.pb final-tree.nh
 nice gzip -f *.log *.tsv move_log* *.stderr samples.*
+
+echo All done.

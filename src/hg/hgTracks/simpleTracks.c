@@ -11953,6 +11953,12 @@ boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
+// A faceted composite's children keep a display mode of their own, so having one says
+// nothing about whether the facet table selected them - leave that to the checkbox.
+// NOTE: subtrack->tdb can be the composite's tdb, hence getSubtrackTdb() rather than
+// subtrack->tdb->parent.
+if (overrideComposite && tdbIsFacetedComposite(getSubtrackTdb(subtrack)->parent))
+    overrideComposite = FALSE;
 char option[4096];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
@@ -15593,7 +15599,8 @@ static bool isSubtrackVisibleTdb(struct cart *cart, struct trackDb *tdb)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  *  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
-boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track))
+                            && !tdbIsFacetedComposite(tdb->parent);
 bool enabledInTdb = TRUE; // assume that this track is enabled in tdb
 char option[1024];
 safef(option, sizeof(option), "%s_sel", tdb->track);

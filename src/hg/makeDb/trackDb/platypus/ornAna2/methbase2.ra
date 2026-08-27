@@ -1,0 +1,51 @@
+track Methbase
+compositeTrack faceted
+parent dnaMethylation
+metaDataUrl /gbdb/ornAna2/methBase2/mb2_ornAna2_metadata.tsv
+colorSettingsUrl /gbdb/ornAna2/methBase2/mb2_ornAna2_colors.json
+primaryKey accession
+dataTypes hmr levels reads
+maxCheckboxes 20
+shortLabel Methbase
+longLabel Methbase
+type bigBed
+visibility hide
+subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ study=https://www.ncbi.nlm.nih.gov/sra/$$ sample=https://www.ncbi.nlm.nih.gov/sra/$$
+
+track Methbase_SRX7285991_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP235124/SRS5779513/SRX7285991/SRX7285991.hmr.bb
+type bigBed
+shortLabel Cortex
+longLabel Cortex SRX7285991
+color 56,113,193
+parent Methbase off
+priority 0.00001
+onlyVisibility dense
+
+track Methbase_SRX7285991_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP235124/SRS5779513/SRX7285991/SRX7285991.sym_counts.bw
+type bigWig
+shortLabel Cortex
+longLabel Cortex SRX7285991
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00002
+onlyVisibility full
+
+track Methbase_SRX7285991_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP235124/SRS5779513/SRX7285991/SRX7285991.sym_coverage.bw
+type bigWig
+shortLabel Cortex
+longLabel Cortex SRX7285991
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00003
+onlyVisibility full

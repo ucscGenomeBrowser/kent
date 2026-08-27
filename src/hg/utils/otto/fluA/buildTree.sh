@@ -16,11 +16,10 @@ fi
 fluADir=/hive/data/outside/otto/fluA
 fluANcbiDir=$fluADir/ncbi/ncbi.latest
 
-usherDir=~angie/github/usher
-usherSampled=$usherDir/build/usher-sampled
-usher=$usherDir/build/usher
-matUtils=$usherDir/build/matUtils
-matOptimize=$usherDir/build/matOptimize
+usherDir=~angie/github/usher/build
+usherSampled=$usherDir/usher-sampled
+matUtils=$usherDir/matUtils
+matOptimize=$usherDir/matOptimize
 
 minSize=800
 threads=16
@@ -251,10 +250,12 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
         fi
 
         # Depending on the segment RefSeq, maybe run nextclade
-        # Note: nextclade has a dataset flu_h3n2_na but it does not assign clades.
         case $segRef in
         "NC_007366.1")
             nextcladeName=flu_h3n2_ha
+            ;;
+        "NC_007368.1")
+            nextcladeName=flu_h3n2_na
             ;;
         "NC_026433.1")
             nextcladeName=flu_h1n1pdm_ha
@@ -276,7 +277,8 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                  # Also run on collab's sequences and SRA assemblies
                  time cat <(faSomeRecords <(xzcat $fluADir/ncbi/ncbi.$today/genbank.fa.xz) \
                                 accs.$asmAcc.$segRef.tsv stdout) \
-                          $fluADir/h5nx.epiNoMatchRenamed.fa \                          $fluADir/andersen_lab.srrNotGb.renamed.fa
+                          $fluADir/h5nx.epiNoMatchRenamed.fa \
+                          $fluADir/andersen_lab.srrNotGb.renamed.fa
              else
                  time faSomeRecords <(xzcat $fluADir/ncbi/ncbi.$today/genbank.fa.xz) \
                          accs.$asmAcc.$segRef.tsv stdout
@@ -410,13 +412,22 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
         title="Influenza A $strain segment $segment ($segName) $today tree with $sampleCountComma genomes from INSDC$gisaid"
         columns="genbank_accession,country,location,date,host,serotype,segment,genoflu_genotype,genoflu_segtype,authors,bioproject_accession$nextcladeTaxCo"
         config_json=""
+        overlay_template=$fluAScriptDir/taxonium_overlay.html
         if [[ $segRef == "NC_007362.1" ]]; then
             columns="$columns,mouse_escape,ferret_escape,cell_entry,stability,sa26_increase"
             config_json="--config_json $fluAScriptDir/h5n1_ha.config.json"
+            overlay_template=$fluAScriptDir/taxonium_overlay_h5n1_ha.html
         elif [[ $segment == 1 ]]; then
             columns="$columns,mutdiffsel,mutdiffsel_mutations,aa_substitution_count"
             config_json="--config_json $fluAScriptDir/pb2.config.json"
+            overlay_template=$fluAScriptDir/taxonium_overlay_pb2.html
         fi
+        sed -re 's@__ASMDIR__@'$asmDir'@g' $overlay_template \
+        | sed -re 's@__STRAIN__@'"$strain"'@g' \
+        | sed -re 's/__SEGNUM__/'$segment'/g' \
+        | sed -re 's/__SEGNAME__/'$segName'/g' \
+        | sed -re 's/__SEGREF__/'$segRef'/g' \
+              > overlay.html
         if \
             usher_to_taxonium --input fluA.$asmAcc.$segRef.$today.pb \
                 --metadata fluA.$asmAcc.$segRef.$today.metadata.tsv.gz \
@@ -424,6 +435,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                 --genbank $fluADir/$asmAcc/$segRef.gbff \
                 --name_internal_nodes \
                 $config_json \
+                --overlay_html overlay.html \
                 --title "$title" \
                 --output fluA.$asmAcc.$segRef.$today.taxonium.jsonl.gz \
                 >& utt.log; then
@@ -468,13 +480,22 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
             title="Influenza A $strain segment $segment ($segName) $today tree with $sampleCountComma genomes from INSDC"
             columns="genbank_accession,country,location,date,host,serotype,segment,genoflu_genotype,genoflu_segtype,authors,bioproject_accession$nextcladeTaxCo"
             config_json=""
+            overlay_template=$fluAScriptDir/taxonium_overlay.html
             if [[ $segRef == "NC_007362.1" ]]; then
                 columns="$columns,mouse_escape,ferret_escape,cell_entry,stability,sa26_increase"
                 config_json="--config_json $fluAScriptDir/h5n1_ha.config.json"
+                overlay_template=$fluAScriptDir/taxonium_overlay_h5n1_ha.html
             elif [[ $segRef == "NC_007357.1" ]]; then
                 columns="$columns,mutdiffsel,mutdiffsel_mutations,aa_substitution_count"
                 config_json="--config_json $fluAScriptDir/pb2.config.json"
+                overlay_template=$fluAScriptDir/taxonium_overlay_pb2.html
             fi
+            sed -re 's@__ASMDIR__@'$asmDir'@g' $overlay_template \
+            | sed -re 's@__STRAIN__@'"$strain"'@g' \
+            | sed -re 's/__SEGNUM__/'$segment'/g' \
+            | sed -re 's/__SEGNAME__/'$segName'/g' \
+            | sed -re 's/__SEGREF__/'$segRef'/g' \
+                  > overlay.html
             if \
                 usher_to_taxonium --input fluA.$asmAcc.$segRef.$today.pb \
                     --metadata fluA.$asmAcc.$segRef.$today.metadata.tsv.gz \
@@ -482,6 +503,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
                     --genbank $fluADir/$asmAcc/$segRef.gbff \
                     --name_internal_nodes \
                     $config_json \
+                    --overlay_html overlay.html \
                     --title "$title" \
                     --output fluA.$asmAcc.$segRef.$today.taxonium.jsonl.gz \
                     >& utt.log; then
@@ -496,27 +518,27 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
 
             # Put .plusGisaid versions in non-hgdownload location
             dir=/gbdb/wuhCor1/hgPhyloPlaceData/influenzaA/$segRef
-            mkdir -p $dir
-            ln -sf $(pwd)/fluA.$asmAcc.$segRef.plusGisaid.$today.pb \
+            ssh hgwdev mkdir -p $dir
+            ssh hgwdev ln -sf $(pwd)/fluA.$asmAcc.$segRef.plusGisaid.$today.pb \
                      $dir/fluA.$asmAcc.$segRef.plusGisaid.latest.pb
-            ln -sf $(pwd)/fluA.$asmAcc.$segRef.plusGisaid.$today.metadata.tsv.gz \
+            ssh hgwdev ln -sf $(pwd)/fluA.$asmAcc.$segRef.plusGisaid.$today.metadata.tsv.gz \
                      $dir/fluA.$asmAcc.$segRef.plusGisaid.latest.metadata.tsv.gz
-            ln -sf $(pwd)/hgPhyloPlace.description.$asmAcc.$segRef.plusGisaid.txt \
+            ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.$asmAcc.$segRef.plusGisaid.txt \
                      $dir/fluA.$asmAcc.$segRef.plusGisaid.latest.version.txt
-            ln -sf $(pwd)/samples.$asmAcc.$segRef.plusGisaid.$today.gz \
+            ssh hgwdev ln -sf $(pwd)/samples.$asmAcc.$segRef.plusGisaid.$today.gz \
                      $dir/fluA.$asmAcc.$segRef.plusGisaid.latest.samples.gz
         fi
 
         # Link regular versions to non-hgdownload location too
         dir=/gbdb/wuhCor1/hgPhyloPlaceData/influenzaA/$segRef
-        mkdir -p $dir
-        ln -sf $(pwd)/fluA.$asmAcc.$segRef.$today.pb \
+        ssh hgwdev mkdir -p $dir
+        ssh hgwdev ln -sf $(pwd)/fluA.$asmAcc.$segRef.$today.pb \
                  $dir/fluA.$asmAcc.$segRef.latest.pb
-        ln -sf $(pwd)/fluA.$asmAcc.$segRef.$today.metadata.tsv.gz \
+        ssh hgwdev ln -sf $(pwd)/fluA.$asmAcc.$segRef.$today.metadata.tsv.gz \
                  $dir/fluA.$asmAcc.$segRef.latest.metadata.tsv.gz
-        ln -sf $(pwd)/hgPhyloPlace.description.$asmAcc.$segRef.txt \
+        ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.$asmAcc.$segRef.txt \
                  $dir/fluA.$asmAcc.$segRef.latest.version.txt
-        ln -sf $(pwd)/samples.$asmAcc.$segRef.$today.gz \
+        ssh hgwdev ln -sf $(pwd)/samples.$asmAcc.$segRef.$today.gz \
                  $dir/fluA.$asmAcc.$segRef.latest.samples.gz
 
         # Extract Newick and VCF for anyone who wants to download those instead of protobuf
@@ -544,12 +566,10 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
         done
 
         # Update hgdownload-test link for archive (adding assembly/segRef hierarchy)
-        mkdir -p $downloadsRoot/$asmDir/UShER_$segRef/$y/$m/$d
-        ln -sf $archive/*.$segRef.* $downloadsRoot/$asmDir/UShER_$segRef/$y/$m/$d/
-        ln -sf $archiveRoot/*.$segRef.latest.* $downloadsRoot/$asmDir/UShER_$segRef/
+        ssh hgwdev ln -sf $archiveRoot/*.$segRef.latest.* $downloadsRoot/$asmDir/UShER_$segRef/
         # rsync to hgdownload hubs dir
-        for h in hgdownload1 hgdownload3; do
-            if rsync -a -L --delete $downloadsRoot/$asmDir/UShER_$segRef \
+        for h in hgdownload1 hgdownload2 hgdownload3; do
+            if ssh hgwdev rsync -a -L --delete $downloadsRoot/$asmDir/UShER_$segRef \
                      qateam@$h:/mirrordata/hubs/$asmDir/; then
                 true
             else
@@ -561,7 +581,7 @@ for asmAcc in GCF_000864105.1 GCF_000865085.1 GCF_001343785.1 GCF_000865725.1 GC
     done
 done
 
-$fluAScriptDir/runGenoFlu.sh >& genoflu.log
+$fluAScriptDir/runGenoFlu.sh $today >& genoflu.log
 
 echo "Built the trees, cleaning up."
 rm -f mutation-paths.txt *.pre*.pb final-tree.nh tmp.log

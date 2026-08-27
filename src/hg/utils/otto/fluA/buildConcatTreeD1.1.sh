@@ -153,7 +153,9 @@ cat samples.h5n1_D1.1_2024.* | grep -v \|SRR | cut -d\| -f 2 \
 | tawk '{ if ($2 != "") { print $2; } else { print $1; } }' \
 | sort -u \
 | grep -Ff - $fluANcbiDir/metadata.tsv \
+| grep -vE ' clone ?[0-9]+' \
 | cut -f 1,17 \
+| grep -Fwf <(zcat renaming.tsv.gz | cut -f 1) \
     > cladeAccToSeg
 # Extract the sequences into per-segment fasta files... renamed from accession to tree name.
 # joinSegments.py below will ignore the uniquifying INSDC accession part of names.  Remove the
@@ -272,6 +274,7 @@ usher_to_taxonium --input h5n1_D1.1_2024.pb.gz \
     --name_internal_nodes \
     --title "2024 H5N1 D1.1 outbreak in USA, concatenated segments from INSDC and SRA ($today)" \
     --config_json $fluAScriptDir/concat.config.json \
+    --overlay_html $fluAScriptDir/taxonium_overlay_d1_1.html \
     --chronumental \
     --chronumental_steps 500 \
     --chronumental_add_inferred_date chronumental_date \
@@ -280,10 +283,10 @@ usher_to_taxonium --input h5n1_D1.1_2024.pb.gz \
 
 # Link to /gbdb/ location
 dir=/gbdb/wuhCor1/hgPhyloPlaceData/influenzaA/h5n1_D1.1_2024
-mkdir -p $dir
-ln -sf $(pwd)/h5n1_D1.1_2024.pb.gz $dir/h5n1_D1.1_2024.latest.pb.gz
-ln -sf $(pwd)/h5n1_D1.1_2024.metadata.tsv.gz $dir/h5n1_D1.1_2024.latest.metadata.tsv.gz
-ln -sf $(pwd)/hgPhyloPlace.description.h5n1_D1.1_2024.txt \
+ssh hgwdev mkdir -p $dir
+ssh hgwdev ln -sf $(pwd)/h5n1_D1.1_2024.pb.gz $dir/h5n1_D1.1_2024.latest.pb.gz
+ssh hgwdev ln -sf $(pwd)/h5n1_D1.1_2024.metadata.tsv.gz $dir/h5n1_D1.1_2024.latest.metadata.tsv.gz
+ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.h5n1_D1.1_2024.txt \
     $dir/h5n1_D1.1_2024.latest.version.txt
 
 # Extract Newick and VCF for anyone who wants to download those instead of protobuf
@@ -305,11 +308,11 @@ ln -sf $(pwd)/hgPhyloPlace.description.h5n1_D1.1_2024.txt \
     $archiveRoot/h5n1_D1.1_2024.latest.version.txt
 
 # Update hgdownload-test link for archive (adding assembly/segRef hierarchy)
-mkdir -p $downloadsRoot/$asmDir/UShER_h5n1_D1.1_2024
-ln -sf $archiveRoot/h5n1_D1.1_2024.latest.* $downloadsRoot/$asmDir/UShER_h5n1_D1.1_2024/
+ssh hgwdev mkdir -p $downloadsRoot/$asmDir/UShER_h5n1_D1.1_2024
+ssh hgwdev ln -sf $archiveRoot/h5n1_D1.1_2024.latest.* $downloadsRoot/$asmDir/UShER_h5n1_D1.1_2024/
 # rsync to hgdownload hubs dir
-for h in hgdownload1 hgdownload3; do
-    if rsync -a -L --delete $downloadsRoot/$asmDir/UShER_h5n1_D1.1_2024 \
+for h in hgdownload1 hgdownload2 hgdownload3; do
+    if ssh hgwdev rsync -a -L --delete $downloadsRoot/$asmDir/UShER_h5n1_D1.1_2024 \
              qateam@$h:/mirrordata/hubs/$asmDir/ ; then
         true
     else

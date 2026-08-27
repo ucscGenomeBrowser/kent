@@ -1,0 +1,5 @@
+accession	label	cell_type	tissue	_source_name	_study	__sample	__bsrate	__meth	__depth	__mapping	__uniq	__sites	__hmr_size	__hmr_count	__pmd_size	__pmd_count
+SRX11003182	Primary Dermal Fibroblasts	NA	Primary dermal fibroblasts	Primary dermal fibroblasts	SRP321573	SRS9077388	0.980	0.652	14.246	0.733	0.662	0.987	2404.56	52541	301138.75	2083
+SRX12487221	Muscle	NA	muscle	NA	SRP340041	SRS10450472	0.992	0.648	20.606	0.703	0.603	0.989	1689.98	46121	24583.24	2312
+SRX12487222	Muscle	NA	muscle	NA	SRP340041	SRS10450473	0.991	0.644	20.997	0.702	0.616	0.989	1686.1	47559	27175.45	2225
+SRX2919303	Hair Follicles	NA	Hair follicles	NA	SRP107834	SRS2216818	0.982	0.648	118.624	0.693	0.731	0.996	1743.59	81594	0.0	0

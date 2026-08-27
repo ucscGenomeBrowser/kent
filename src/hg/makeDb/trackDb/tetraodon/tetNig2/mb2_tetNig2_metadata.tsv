@@ -1,0 +1,4 @@
+accession	label	cell_type	tissue	_source_name	_study	__sample	__bsrate	__meth	__depth	__mapping	__uniq	__sites	__hmr_size	__hmr_count	__pmd_size	__pmd_count
+SRX020159	Whole Adults	NA	NA	Whole adults	SRP002417	SRS072452	0.996	0.623	1.596	0.418	0.959	0.720	1894.51	11081	25584.77	22
+SRX020160	Whole Adults	NA	NA	Whole adults	SRP002417	SRS072452	0.996	0.616	3.769	0.521	0.941	0.923	1409.49	14377	9361.74	197
+SRX020161	Whole Adults	NA	NA	Whole adults	SRP002417	SRS072452	0.995	0.648	3.859	0.577	0.883	0.922	1307.38	15266	9516.67	187

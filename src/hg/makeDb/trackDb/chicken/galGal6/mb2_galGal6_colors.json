@@ -1,0 +1,24 @@
+{
+    "label": {
+        "Heart": "#d82626",
+        "Ovary": "#d85b26",
+        "Spleen": "#d89126",
+        "Jejunum": "#d8c626",
+        "Lung": "#b5d826",
+        "Breast": "#7fd826",
+        "Gonad": "#49d826",
+        "Adipose Tissue": "#26d838",
+        "Leg Muscle": "#26d86d",
+        "Liver": "#26d8a3",
+        "Ileum": "#26d8d8",
+        "Blood": "#26a3d8",
+        "Mandibular Condyle": "#266dd8",
+        "Embryo Muscle": "#2638d8",
+        "Embryo Liver": "#4926d8",
+        "Retina": "#7f26d8",
+        "Hypothalamus": "#b526d8",
+        "Eggshell Gland": "#d826c6",
+        "Embryo": "#d82691",
+        "ERS14577706": "#d8265b"
+    }
+}

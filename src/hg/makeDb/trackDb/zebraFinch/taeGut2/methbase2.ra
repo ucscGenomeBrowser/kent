@@ -1,0 +1,773 @@
+track Methbase
+compositeTrack faceted
+parent dnaMethylation
+metaDataUrl /gbdb/taeGut2/methBase2/mb2_taeGut2_metadata.tsv
+colorSettingsUrl /gbdb/taeGut2/methBase2/mb2_taeGut2_colors.json
+primaryKey accession
+dataTypes hmr levels reads
+maxCheckboxes 20
+shortLabel Methbase
+longLabel Methbase
+type bigBed
+visibility hide
+subtrackUrls accession=https://www.ncbi.nlm.nih.gov/sra/$$ study=https://www.ncbi.nlm.nih.gov/sra/$$ sample=https://www.ncbi.nlm.nih.gov/sra/$$
+
+track Methbase_SRX24532694_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278724/SRX24532694/SRX24532694.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532694
+color 56,113,193
+parent Methbase off
+priority 0.00001
+onlyVisibility dense
+
+track Methbase_SRX24532694_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278724/SRX24532694/SRX24532694.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532694
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00002
+onlyVisibility full
+
+track Methbase_SRX24532694_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278724/SRX24532694/SRX24532694.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532694
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00003
+onlyVisibility full
+
+track Methbase_SRX24532695_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278729/SRX24532695/SRX24532695.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532695
+color 56,113,193
+parent Methbase off
+priority 0.00004
+onlyVisibility dense
+
+track Methbase_SRX24532695_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278729/SRX24532695/SRX24532695.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532695
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00005
+onlyVisibility full
+
+track Methbase_SRX24532695_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278729/SRX24532695/SRX24532695.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532695
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00006
+onlyVisibility full
+
+track Methbase_SRX24532696_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278725/SRX24532696/SRX24532696.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532696
+color 56,113,193
+parent Methbase off
+priority 0.00007
+onlyVisibility dense
+
+track Methbase_SRX24532696_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278725/SRX24532696/SRX24532696.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532696
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00008
+onlyVisibility full
+
+track Methbase_SRX24532696_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278725/SRX24532696/SRX24532696.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532696
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00009
+onlyVisibility full
+
+track Methbase_SRX24532697_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278733/SRX24532697/SRX24532697.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532697
+color 56,113,193
+parent Methbase off
+priority 0.00010
+onlyVisibility dense
+
+track Methbase_SRX24532697_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278733/SRX24532697/SRX24532697.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532697
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00011
+onlyVisibility full
+
+track Methbase_SRX24532697_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278733/SRX24532697/SRX24532697.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532697
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00012
+onlyVisibility full
+
+track Methbase_SRX24532698_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278726/SRX24532698/SRX24532698.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532698
+color 56,113,193
+parent Methbase off
+priority 0.00013
+onlyVisibility dense
+
+track Methbase_SRX24532698_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278726/SRX24532698/SRX24532698.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532698
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00014
+onlyVisibility full
+
+track Methbase_SRX24532698_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278726/SRX24532698/SRX24532698.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532698
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00015
+onlyVisibility full
+
+track Methbase_SRX24532699_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278727/SRX24532699/SRX24532699.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532699
+color 56,113,193
+parent Methbase off
+priority 0.00016
+onlyVisibility dense
+
+track Methbase_SRX24532699_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278727/SRX24532699/SRX24532699.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532699
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00017
+onlyVisibility full
+
+track Methbase_SRX24532699_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278727/SRX24532699/SRX24532699.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532699
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00018
+onlyVisibility full
+
+track Methbase_SRX24532700_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278728/SRX24532700/SRX24532700.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532700
+color 56,113,193
+parent Methbase off
+priority 0.00019
+onlyVisibility dense
+
+track Methbase_SRX24532700_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278728/SRX24532700/SRX24532700.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532700
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00020
+onlyVisibility full
+
+track Methbase_SRX24532700_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278728/SRX24532700/SRX24532700.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532700
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00021
+onlyVisibility full
+
+track Methbase_SRX24532701_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278730/SRX24532701/SRX24532701.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532701
+color 56,113,193
+parent Methbase off
+priority 0.00022
+onlyVisibility dense
+
+track Methbase_SRX24532701_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278730/SRX24532701/SRX24532701.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532701
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00023
+onlyVisibility full
+
+track Methbase_SRX24532701_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278730/SRX24532701/SRX24532701.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532701
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00024
+onlyVisibility full
+
+track Methbase_SRX24532702_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278731/SRX24532702/SRX24532702.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532702
+color 56,113,193
+parent Methbase off
+priority 0.00025
+onlyVisibility dense
+
+track Methbase_SRX24532702_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278731/SRX24532702/SRX24532702.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532702
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00026
+onlyVisibility full
+
+track Methbase_SRX24532702_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278731/SRX24532702/SRX24532702.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532702
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00027
+onlyVisibility full
+
+track Methbase_SRX24532703_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278732/SRX24532703/SRX24532703.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532703
+color 56,113,193
+parent Methbase off
+priority 0.00028
+onlyVisibility dense
+
+track Methbase_SRX24532703_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278732/SRX24532703/SRX24532703.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532703
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00029
+onlyVisibility full
+
+track Methbase_SRX24532703_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278732/SRX24532703/SRX24532703.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532703
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00030
+onlyVisibility full
+
+track Methbase_SRX24532704_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278735/SRX24532704/SRX24532704.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532704
+color 56,113,193
+parent Methbase off
+priority 0.00031
+onlyVisibility dense
+
+track Methbase_SRX24532704_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278735/SRX24532704/SRX24532704.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532704
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00032
+onlyVisibility full
+
+track Methbase_SRX24532704_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278735/SRX24532704/SRX24532704.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532704
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00033
+onlyVisibility full
+
+track Methbase_SRX24532705_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278734/SRX24532705/SRX24532705.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532705
+color 56,113,193
+parent Methbase off
+priority 0.00034
+onlyVisibility dense
+
+track Methbase_SRX24532705_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278734/SRX24532705/SRX24532705.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532705
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00035
+onlyVisibility full
+
+track Methbase_SRX24532705_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278734/SRX24532705/SRX24532705.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532705
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00036
+onlyVisibility full
+
+track Methbase_SRX24532706_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278736/SRX24532706/SRX24532706.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532706
+color 56,113,193
+parent Methbase off
+priority 0.00037
+onlyVisibility dense
+
+track Methbase_SRX24532706_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278736/SRX24532706/SRX24532706.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532706
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00038
+onlyVisibility full
+
+track Methbase_SRX24532706_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278736/SRX24532706/SRX24532706.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532706
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00039
+onlyVisibility full
+
+track Methbase_SRX24532717_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278747/SRX24532717/SRX24532717.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532717
+color 56,113,193
+parent Methbase off
+priority 0.00040
+onlyVisibility dense
+
+track Methbase_SRX24532717_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278747/SRX24532717/SRX24532717.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532717
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00041
+onlyVisibility full
+
+track Methbase_SRX24532717_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278747/SRX24532717/SRX24532717.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532717
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00042
+onlyVisibility full
+
+track Methbase_SRX24532728_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278758/SRX24532728/SRX24532728.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532728
+color 56,113,193
+parent Methbase off
+priority 0.00043
+onlyVisibility dense
+
+track Methbase_SRX24532728_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278758/SRX24532728/SRX24532728.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532728
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00044
+onlyVisibility full
+
+track Methbase_SRX24532728_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278758/SRX24532728/SRX24532728.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532728
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00045
+onlyVisibility full
+
+track Methbase_SRX24532731_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278761/SRX24532731/SRX24532731.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532731
+color 56,113,193
+parent Methbase off
+priority 0.00046
+onlyVisibility dense
+
+track Methbase_SRX24532731_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278761/SRX24532731/SRX24532731.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532731
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00047
+onlyVisibility full
+
+track Methbase_SRX24532731_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278761/SRX24532731/SRX24532731.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532731
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00048
+onlyVisibility full
+
+track Methbase_SRX24532732_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278762/SRX24532732/SRX24532732.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532732
+color 56,113,193
+parent Methbase off
+priority 0.00049
+onlyVisibility dense
+
+track Methbase_SRX24532732_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278762/SRX24532732/SRX24532732.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532732
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00050
+onlyVisibility full
+
+track Methbase_SRX24532732_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278762/SRX24532732/SRX24532732.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532732
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00051
+onlyVisibility full
+
+track Methbase_SRX24532733_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278763/SRX24532733/SRX24532733.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532733
+color 56,113,193
+parent Methbase off
+priority 0.00052
+onlyVisibility dense
+
+track Methbase_SRX24532733_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278763/SRX24532733/SRX24532733.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532733
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00053
+onlyVisibility full
+
+track Methbase_SRX24532733_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278763/SRX24532733/SRX24532733.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532733
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00054
+onlyVisibility full
+
+track Methbase_SRX24532734_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278764/SRX24532734/SRX24532734.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532734
+color 56,113,193
+parent Methbase off
+priority 0.00055
+onlyVisibility dense
+
+track Methbase_SRX24532734_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278764/SRX24532734/SRX24532734.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532734
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00056
+onlyVisibility full
+
+track Methbase_SRX24532734_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278764/SRX24532734/SRX24532734.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532734
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00057
+onlyVisibility full
+
+track Methbase_SRX24532735_hmr
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278765/SRX24532735/SRX24532735.hmr.bb
+type bigBed
+shortLabel Blood
+longLabel Blood SRX24532735
+color 56,113,193
+parent Methbase off
+priority 0.00058
+onlyVisibility dense
+
+track Methbase_SRX24532735_levels
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278765/SRX24532735/SRX24532735.sym_counts.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532735
+color 240,192,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:1
+yLineOnOff on
+priority 0.00059
+onlyVisibility full
+
+track Methbase_SRX24532735_reads
+bigDataUrl http://hgdownload.soe.ucsc.edu/hubs/methbase/v2/smithlab.usc.edu/methbase/data/SRP507248/SRS21278765/SRX24532735/SRX24532735.sym_coverage.bw
+type bigWig
+shortLabel Blood
+longLabel Blood SRX24532735
+color 0,0,0
+parent Methbase off
+windowingFunction mean
+maxHeightPixels 24:24:24
+viewLimits 0:10
+yLineOnOff on
+priority 0.00060
+onlyVisibility full

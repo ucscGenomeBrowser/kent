@@ -1,0 +1,24 @@
+{
+    "label": {
+        "Sperm": "#d82626",
+        "Blood": "#d85b26",
+        "Muscle": "#d89126",
+        "Liver": "#d8c626",
+        "Loin Muscle": "#b5d826",
+        "Longissimus Dorsi": "#7fd826",
+        "Alveolar Macrophages": "#49d826",
+        "Lung": "#26d838",
+        "Longissimus Dorsi Muscle": "#26d86d",
+        "Jejunum": "#26d8a3",
+        "Pituitary": "#26d8d8",
+        "Mammary": "#26a3d8",
+        "Subcutaneous Fat": "#266dd8",
+        "Rumen": "#2638d8",
+        "Placenta": "#4926d8",
+        "Oocytes": "#7f26d8",
+        "Hypothalamus": "#b526d8",
+        "Testicle": "#d826c6",
+        "Morula": "#d82691",
+        "Milk Somatic": "#d8265b"
+    }
+}

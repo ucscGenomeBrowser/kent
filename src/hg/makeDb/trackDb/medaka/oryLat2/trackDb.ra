@@ -25,3 +25,12 @@ termRegex scaffold[0-9]+|ultracontig[0-9]+_scaffold[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
+track dnaMethylation
+superTrack on
+shortLabel DNA Methylation
+longLabel DNA Methylation
+group regulation
+priority 3
+html dnaMethylation.html
+
+include methbase2.ra alpha

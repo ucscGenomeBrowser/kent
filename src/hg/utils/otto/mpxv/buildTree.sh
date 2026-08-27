@@ -43,10 +43,10 @@ downloadDir_II=UShER_hMPXV
 
 mpxvNcbiDir=$mpxvDir/ncbi/ncbi.latest
 
-usherDir=~angie/github/usher
-usherSampled=$usherDir/build/usher-sampled
-usher=$usherDir/build/usher
-matUtils=$usherDir/build/matUtils
+usherDir=~angie/github/usher/build
+usherSampled=$usherDir/usher-sampled
+matUtils=$usherDir/matUtils
+matOptimize=$usherDir/matOptimize
 
 if [[ ! -d $mpxvDir/ncbi/ncbi.$today || ! -s $mpxvDir/ncbi/ncbi.$today/genbank.fa.xz ]]; then
     mkdir -p $mpxvDir/ncbi/ncbi.$today
@@ -120,11 +120,11 @@ for clade in I II; do
         > usher.addNew.log 2>usher-sampled.stderr
 
     # Optimize:
-    time ~angie/github/usher_branch/build/matOptimize \
-        -T 16 -r 20 -M 2 -S move_log.usher_branch \
+    time $matOptimize \
+        -T 16 -r 20 -M 2 -S move_log \
         -i mpxv.clade$clade.$today.masked.preOpt.pb.gz \
         -o mpxv.clade$clade.$today.masked.opt.pb.gz \
-        >& matOptimize.usher_branch.log
+        >& matOptimize.log
     # It crashes when I add
     #    -v all.masked.vcf.gz \
     # -- bug Cheng later.
@@ -191,10 +191,10 @@ for clade in I II; do
     # Update links to latest protobuf and metadata in /gbdb directories
     nc=$(basename $gbff .gbff)
     dir=/gbdb/wuhCor1/hgPhyloPlaceData/mpxv/$nc
-    mkdir -p $dir
-    ln -sf $(pwd)/mpxv.clade$clade.$today.masked.pb.gz $dir/mpxv.clade$clade.latest.pb.gz
-    ln -sf $(pwd)/mpxv.clade$clade.$today.metadata.tsv.gz $dir/mpxv.clade$clade.latest.metadata.tsv.gz
-    ln -sf $(pwd)/hgPhyloPlace.description.$clade.txt $dir/mpxv.clade$clade.latest.version.txt
+    ssh hgwdev mkdir -p $dir
+    ssh hgwdev ln -sf $(pwd)/mpxv.clade$clade.$today.masked.pb.gz $dir/mpxv.clade$clade.latest.pb.gz
+    ssh hgwdev ln -sf $(pwd)/mpxv.clade$clade.$today.metadata.tsv.gz $dir/mpxv.clade$clade.latest.metadata.tsv.gz
+    ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.$clade.txt $dir/mpxv.clade$clade.latest.version.txt
 
     # Extract Newick and VCF for anyone who wants to download those instead of protobuf
     $matUtils extract -i mpxv.clade$clade.$today.masked.pb.gz \
@@ -227,11 +227,10 @@ for clade in I II; do
     done
 
     # Update hgdownload-test link for archive
-    mkdir -p /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/$downloadDir/$y/$m
-    ln -sf $archive /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/$downloadDir/$y/$m
+    ssh hgwdev ln -sf $archiveRoot/*.latest.* /data/apache/htdocs-hgdownload/hubs/$asmDir/$downloadDir/
     # rsync to hgdownload hubs dir
-    for h in hgdownload1 hgdownload3; do
-        if rsync -a -L --delete /usr/local/apache/htdocs-hgdownload/hubs/$asmDir/$downloadDir/* \
+    for h in hgdownload1 hgdownload2 hgdownload3; do
+        if ssh hgwdev rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/$downloadDir/* \
                  qateam@$h:/mirrordata/hubs/$asmDir/$downloadDir/; then
             true
         else
