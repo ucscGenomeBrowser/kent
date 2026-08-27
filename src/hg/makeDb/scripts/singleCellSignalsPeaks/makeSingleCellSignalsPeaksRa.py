@@ -81,6 +81,14 @@ def main():
         "subtrackUrls Dataset=https://cells.ucsc.edu/?ds=$$",
         "defaultSortField Cell_class",
         "maxCheckboxes 200",
+        # One scale across every selected subtrack, so two tracks drawn at the same locus
+        # can be compared directly; with per-track autoScale, tracks whose values differ
+        # by orders of magnitude both drew full height. It must sit on the composite, not
+        # the children: hgTracks groups by tdb->parent (wigTrack.c setMinMax), and a
+        # per-subtrack setting would override this one. Limits are taken from the data in
+        # the current window, not genome-wide, so an outlying region elsewhere in the
+        # genome cannot flatten the view.
+        "autoScale group",
     ])
 
     # class ordering for subtrack priority: palette line order (neurons, glia,
