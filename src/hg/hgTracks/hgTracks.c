@@ -10497,6 +10497,12 @@ if (cfgOptionBooleanDefault("canDoHgcInPopUp", TRUE) && cartUsualBoolean(cart, "
 if (cfgOptionBooleanDefault("greyBarIcons", TRUE))
     jsInline("var greyBarIcons = true;\n");
 
+// measure how long the track image takes to reach the reader, on one page load
+// in pngTimingSampleRate.  Zero, or the setting left out, turns it off.
+int pngTimingSampleRate = atoi(cfgOptionDefault("pngTimingSampleRate", "0"));
+if (pngTimingSampleRate > 0)
+    jsInlineF("var pngTimingSampleRate = %d;\n", pngTimingSampleRate);
+
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
 if (measureTiming)

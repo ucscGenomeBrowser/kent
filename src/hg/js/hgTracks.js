@@ -7915,7 +7915,56 @@ $(document).ready(function()
         convertTitleTagsToMouseovers();
     }
 
+    if (typeof pngTimingSampleRate !== 'undefined' && pngTimingSampleRate > 0) {
+        reportPngTiming(pngTimingSampleRate);
+    }
+
 });
+
+function reportPngTiming(sampleRate) {
+    /* Report how long the track image took to reach this reader, on one page
+     * load in sampleRate.  The browser keeps a timing record for every image it
+     * loads, holding the bytes it took off the wire and the time it waited.  We
+     * cannot get that from our own logs: apache stops timing once the kernel has
+     * the bytes.  Bytes divided by time gives the reader's throughput, which is
+     * what decides whether a lower png compression level helps them or hurts
+     * them.  The two numbers ride on the query string of a 43 byte image, so the
+     * apache log line is the whole record and no process has to start. */
+    if (Math.random() * sampleRate >= 1)
+        return;
+    if (!window.performance || !window.performance.getEntriesByType)
+        return;
+
+    var sendTiming = function () {
+        var entries = window.performance.getEntriesByType("resource");
+        for (var i = 0; i < entries.length; i++) {
+            var entry = entries[i];
+            // the track image is ../trash/hgt/hgt_<host>_<user>_<hex>.png.  The
+            // guidelines and the side label images are named differently.
+            if (entry.name.indexOf("/hgt/hgt_") < 0)
+                continue;
+            if (entry.name.indexOf(".png") < 0)
+                continue;
+            var bytes = entry.transferSize;
+            var download = entry.responseEnd - entry.responseStart;
+            // an image answered from the browser cache has no transfer to time
+            if (!bytes || !download)
+                return;
+            // duration covers the whole fetch, download only the bytes arriving
+            new Image().src = "../images/DOT.gif?hgtPng=1" +
+                "&ts=" + Math.round(bytes) +
+                "&d=" + Math.round(entry.duration) +
+                "&x=" + Math.round(download);
+            return;
+        }
+    };
+
+    // the timing record only exists once the image has finished loading
+    if (document.readyState === "complete")
+        sendTiming();
+    else
+        window.addEventListener("load", sendTiming);
+}
 
 function hgtWarnTiming(maxSeconds) {
     /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */
