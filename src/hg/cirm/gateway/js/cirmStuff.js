@@ -10,9 +10,7 @@
 var cirmSiteFunctions = (function() {
 
     var isSecureSite = function() {
-        if ((document.domain == "cirmdcm.soe.ucsc.edu") ||
-            (document.domain.search(/^cirm-01/) >= 0) ||
-            (document.domain.search(/^hgwdev/) >= 0) ||
+        if ((document.domain.search(/^hgwdev/) >= 0) ||
 	    (document.domain.search(/sspsygene.gi.ucsc.edu/) >= 0)) {
             return true;
             }

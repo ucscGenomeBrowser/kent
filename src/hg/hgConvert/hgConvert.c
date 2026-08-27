@@ -662,7 +662,6 @@ char *chrom;
 int start, end;
 int origSize;
 struct chain *chainList, *chain;
-struct dyString *visDy = NULL;
 
 if (!hgParseChromRange(database, fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
@@ -684,8 +683,7 @@ if (doQuickLift)
     if (quickChain == 0)
         errAbort("can't find quickChain from %s to %s", fromDb->name, toDb->name);
 
-    visDy = newDyString(1024);
-    char *newHub = trackHubBuild(fromDb->name, cart, visDy, &badList);
+    char *newHub = trackHubBuild(fromDb->name, cart, &badList);
     char *error = NULL;
     quickHub = hubFindOrAddUrlInStatusTable(cart, newHub, &error);
     if (error != NULL)
@@ -723,7 +721,6 @@ else
            If these conditions are met then print position link to
            browser for toDb, otherwise just print position without link. */
         boolean startedAnchor = FALSE;
-        visDy = newDyString(20);
         if ((hDbIsActive(toDb->name) && chromSeqExists) || startsWith("hub:",toDb->nibPath) || sameString(toDb->nibPath, "genark"))
             {
             if (quickChain)

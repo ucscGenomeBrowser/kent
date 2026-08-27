@@ -74,6 +74,13 @@ its source dataset in the Cell Browser.
 </p>
 
 <p>
+All signal subtracks that are turned on share one vertical scale, set from the data in
+the window being viewed, so tracks drawn at the same position can be compared directly.
+Because each dataset was normalized by its own pipeline, comparisons are most meaningful
+between subtracks of the same dataset.
+</p>
+
+<p>
 Subtracks are colored by broad cell-type class, so the same class is shown in the same color across datasets (and matches the coloring of the corresponding human track). The classes are:
 </p>
 <table class="stdTbl">
@@ -95,6 +102,8 @@ Subtracks are colored by broad cell-type class, so the same class is shown in th
       <td>Oligodendrocyte precursor: oligodendrocyte precursor cells (OPCs) and committed precursors</td></tr>
   <tr><th style="background-color:rgb(0,0,0);width:2em">&nbsp;</th>
       <td>Microglia: microglia and perivascular macrophages</td></tr>
+  <tr><th style="background-color:rgb(88,160,88);width:2em">&nbsp;</th>
+      <td>Other glia: glia that fit none of the glial classes above, such as olfactory ensheathing cells and clusters labeled only as glia</td></tr>
   <tr><th style="background-color:rgb(68,170,153);width:2em">&nbsp;</th>
       <td>Ependymal: ependymal cells lining the ventricles</td></tr>
   <tr><th style="background-color:rgb(136,34,85);width:2em">&nbsp;</th>
@@ -118,7 +127,7 @@ Subtracks are colored by broad cell-type class, so the same class is shown in th
   <tr><th style="background-color:rgb(153,79,0);width:2em">&nbsp;</th>
       <td>Stromal: fibroblasts, mesenchymal, and other stromal cells</td></tr>
   <tr><th style="background-color:rgb(153,153,153);width:2em">&nbsp;</th>
-      <td>Other: mixed types, and types that fit none of the classes above, such as peripheral glia (Schwann, enteric and olfactory ensheathing cells) and melanocytes</td></tr>
+      <td>Other: mixed types, and types that fit none of the classes above, such as peripheral glia (Schwann and enteric) and melanocytes</td></tr>
   <tr><th style="background-color:rgb(187,187,187);width:2em">&nbsp;</th>
       <td>Unknown: cell type not resolved from the source data</td></tr>
 </table>

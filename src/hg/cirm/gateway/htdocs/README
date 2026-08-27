@@ -8,9 +8,6 @@ location where we edit the .html files (kent/src/hg/cirm/gateway/htdocs),
 or by using a url like 
  https://cirm-01-galt.cirm/cirmIndex.html
 
-You can also login to cirmdcm from hgwdev with your password for testing:
- https://galt%40soe.ucsc.edu:mypassword@cirmdcm.soe.ucsce.edu/cirmIndex.html
-
 It is helpful to run htmlCheck with both the validate and strictTagNestCheck commands since they cover different things.
 This will find errors in the html syntax.
 
@@ -27,7 +24,7 @@ htmlCheck getLinks 'https://cirm-01-galt.cirm/projects.html' | egrep -v '(http|^
 
 
 Specific domain that is unwanted:
-Also, you should not use a domain in the URL like cirmdcm.soe.ucsc.edu because we do not need it and also it will fail when pushed to the public server.
+Also, you should not spell out a host name in the URL because we do not need it and also it will fail when pushed to the public server.
 
 Obviously, if the link is something that is going completely off-site, then a protocol and domain are needed.
 
