@@ -1,0 +1,23 @@
+# One Docent script beside the JavaScript tests, so that `make uiTest` here shows
+# both engines running and landing in one results.json.
+#
+# Note what this is, next to t01-render.js: four assertions in one line that a
+# non-programmer can read AND write. That is the rule for choosing an engine --
+# "go somewhere, turn tracks on and off, assert what is drawn" is a .docent.yaml,
+# and anything needing a login, the database, an HTTP status or the page's own
+# JavaScript is a t*.js.
+#
+# A docent script carries its own `target:` line. uiTest does not override it, so
+# `make uiTest TARGET=hgwdev-$USER` moves the JavaScript tests and leaves this
+# one on genome-test.
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - expect: {rows: [ruler, knownGene], height: "<3000"}
+  - hide: all
+  - expect: {rows: [ruler], exact: true}
