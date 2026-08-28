@@ -852,7 +852,7 @@ if (sameString(emailToken, token))
 else
     {
     freez(&errMsg);
-    errMsg = cloneString("Token does not match.");
+    errMsg = cloneString("This activation link is not valid or has already been used.");
     }
 cartSetString(cart, "hgLogin_userName", username);
 
