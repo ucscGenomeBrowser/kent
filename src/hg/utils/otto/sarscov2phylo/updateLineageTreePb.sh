@@ -121,7 +121,9 @@ grep 'Could not' annotate.pangoOnly.out | cat
 grep skip annotate.pangoOnly.out | cat
 set -o pipefail
 
-# Make a bunch of smaller trees and see how they do.
+# Make candidate subtrees.  Remove BA.5.1_no29666 because it's always a problematic mini-BA.5.1;
+# then reassign all extra labels (for potential recombinants and sublineages) to valid Pango
+# labels so we don't get a regex failure when running pangolin.
 mkdir -p /hive/users/angie/lineageTreeUpdate.$today
 cd /hive/users/angie/lineageTreeUpdate.$today
 for i in 0 1 2 3 4 5 6 7 8 9; do
@@ -129,10 +131,35 @@ for i in 0 1 2 3 4 5 6 7 8 9; do
     $matUtils extract -i $ottoDir/$buildDate/gisaidAndPublic.$buildDate.masked.reroot.pangoOnly.pb.gz \
         -r 50 -o test.50.$i.pb
     $matUtils mask -i test.50.$i.pb -S -o test.50.$i.simp.pb
+    $matUtils extract -i test.50.$i.simp.pb -p -c BA.5.1_no29666 -o test.50.$i.simp.tmp.pb
+    $matUtils extract -i test.50.$i.simp.tmp.pb -C clade-paths.$i.tmp
+    tail -n+2 clade-paths.$i.tmp \
+    | cut -f 1,2 \
+    | sed -re 's/miscBA[A-Za-z0-9]+/BA.2/;
+               s/miscDeltaBA1[A-Za-z0-9]+/BA.1/;
+               s/miscBA.5.2CJ.1/CJ.1/;
+               s/miscBA.5BA.2.75/BA.5/;
+               s/proposed422/BA.1/;
+               s/proposed437/BA.1/;
+               s/proposed439/BA.1.1/;
+               s/proposed441/BA.1/;
+               s/proposed446/BA.1.1/;
+               s/proposed455/BA.1/;
+               s/proposed467/BA.2/;
+               s/proposed482/BA.2/;
+               s/proposed882/BA.2/;
+               s/proposed885/BA.2/;
+               s/proposed911/BA.5/;
+               s/proposed1006/BA.2/;
+               s/proposed1137/BA.5/;
+               s/([A-Z\.0-9]+)_[A-Za-z0-9_]+/\1/;' \
+        > cladeNodes.reassign
+    $matUtils annotate -i test.50.$i.simp.tmp.pb -l -C cladeNodes.reassign -o test.50.$i.simp.pb
+    rm test.50.$i.simp.tmp.pb clade-paths.$i.tmp cladeNodes.reassign
 done
 
 # Run pangolin on each subtree
-# 7.5-14.5m each job, ~3.5hrs total:
+# About 1 minute per job
 conda activate pangolin
 for i in 0 1 2 3 4 5 6 7 8 9; do
     echo test.50.$i.simp
