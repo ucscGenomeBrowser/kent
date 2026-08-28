@@ -239,6 +239,16 @@ CONTAINER = {
               tdb="hideEmptySubtracks"),
             v("sortOrder", "string", "hg/lib/hui.c:sortOrderGet",
               note="Subtrack table sort, e.g. 'cellType=+ view=-'."),
+            v("facetSortOrder", "string", "hg/hgTrackUi/hgTrackUi.c:3314",
+              note="Same thing for a faceted composite's table, and the same "
+                   "'field=+ field2=-' syntax, which facetedComposite.js:921 "
+                   "says it copied from sortOrder above.  Written only by "
+                   "JavaScript (facetedComposite.js:931), sent even when empty "
+                   "so the server clears a stale value, and read back in "
+                   "hgTrackUi to override trackDb's defaultSortField.  The "
+                   "read treats it as untrusted, because the JSON it lands in "
+                   "goes inside a <script> block: anything outside "
+                   "alphanumerics and _ . - + = space drops the whole value."),
             v("filterComp.<groupTag>", "list", "hg/lib/hui.c:3119", multi=True,
               note="One per ABC dimension of a filterComposite.  'All' means "
                    "every option selected."),
