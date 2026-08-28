@@ -47,7 +47,8 @@
           "meta_pheno_RIFAMPICIN", "meta_pheno_STREPTOMYCIN",
           "meta_pheno_BEDAQUILINE", "meta_pheno_CLOFAZIMINE",
           "meta_pheno_DELAMANID", "meta_pheno_LEVOFLOXACIN",
-          "meta_pheno_LINEZOLID", "meta_pheno_RIFABUTIN"
+          "meta_pheno_LINEZOLID", "meta_pheno_RIFABUTIN",
+          "genotype", "None"
       ]
   },
   "defaultColorByField": "meta_tbprof_sublin",
