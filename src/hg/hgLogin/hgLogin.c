@@ -883,7 +883,7 @@ hPrintf(
     htmlEncode(cartUsualString(cart, "hgLogin_userName", "")));  // value="" attribute; escape (XSS)
 hPrintf("<div class=\"inputGroup\">"
     "\n"
-    "<label for=\"currentPw\">Current or Emailed Password</label>"
+    "<label for=\"currentPw\">Current or emailed password</label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=\"password\" name=\"hgLogin_password\" value=\"\" size=\"30\" id=\"currentPw\">");
 printPwdEyeIcon("curPwEyeIcon", "curPwEyeSlash");
@@ -892,7 +892,7 @@ hPrintf(
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
-    "<label for=\"newPw1\">New Password</label>"
+    "<label for=\"newPw1\">New password</label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=\"password\" name=\"hgLogin_newPassword1\" value=\"\" size=\"30\" id=\"newPw1\">");
 printPwdEyeIcon("newPw1EyeIcon", "newPw1EyeSlash");
@@ -901,7 +901,7 @@ hPrintf(
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
-    "<label for=\"newPw2\">Re-enter New Password</label>"
+    "<label for=\"newPw2\">Re-enter new password</label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=\"password\" name=\"hgLogin_newPassword2\" value=\"\" size=\"30\" id=\"newPw2\">");
 printPwdEyeIcon("newPw2EyeIcon", "newPw2EyeSlash");
@@ -910,7 +910,7 @@ hPrintf(
     "</div>"
     "\n"
     "<div class=\"formControls\">"
-    "    <input type=\"submit\" name=\"hgLogin.do.changePassword\" value=\"Change Password\" class=\"largeButton\"> &nbsp; "
+    "    <input type=\"submit\" name=\"hgLogin.do.changePassword\" value=\"Change password\" class=\"largeButton\"> &nbsp; "
     "    <a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "\n"
     "</div>"
@@ -955,14 +955,14 @@ if (!currentPassword || sameString(currentPassword,""))
 if (!newPassword1 || sameString(newPassword1,"") || (strlen(newPassword1)<5))
     {
     freez(&errMsg);
-    errMsg = cloneString("New Password must be at least 5 characters long.");
+    errMsg = cloneString("New password must be at least 5 characters long.");
     changePasswordPage(conn);
     return;
     }
 if (!newPassword2 || sameString(newPassword2,"") )
     {
     freez(&errMsg);
-    errMsg = cloneString("Re-enter New Password field cannot be blank.");
+    errMsg = cloneString("Re-enter new password field cannot be blank.");
     changePasswordPage(conn);
     return;
     }
@@ -1133,7 +1133,7 @@ hPrintf("<div class=\"inputGroup\">"
     "<input type=\"text\" name=\"hgLogin_newEmail2\" value=\"\" size=\"30\" id=\"newEmail2\">"
     "</div>");
 hPrintf("<div class=\"formControls\">"
-    "<input type=\"submit\" name=\"hgLogin.do.changeEmail\" value=\"Change Email\" class=\"largeButton\">"
+    "<input type=\"submit\" name=\"hgLogin.do.changeEmail\" value=\"Change email\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div></form></div><!-- END - changeEmailBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
@@ -1285,7 +1285,7 @@ hPrintf("<div class=\"inputGroup\">"
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
-    "<label for=\"reenterEmail\">Re-enter Email address</label>"
+    "<label for=\"reenterEmail\">Re-enter email address</label>"
     "<input type=text name=\"hgLogin_email2\" value=\"%s\" size=\"30\" id=\"emailCheck\">"
     "</div>\n",
     htmlEncode(cartUsualString(cart, "hgLogin_userName", "")),   // all three go into value="" attributes; escape (XSS)
@@ -1294,7 +1294,7 @@ hPrintf("<div class=\"inputGroup\">"
 
 if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
     hPrintf("<div class=\"inputGroup\">"
-        "<label for=\"recovEmail\">Optional Secondary Recovery Email</label>"
+        "<label for=\"recovEmail\">Optional secondary recovery email</label>"
         "<input type=text name=\"hgLogin_recovEmail\" size=\"30\" id=\"recovEmail\">"
         "</div>"
         "\n");
@@ -1310,7 +1310,7 @@ hPrintf(
     "</div>"
     "\n"
     "<div class=\"inputGroup\">"
-    "<label for=\"passwordCheck\">Re-enter Password</label>"
+    "<label for=\"passwordCheck\">Re-enter password</label>"
     "<span style=\"display:inline-flex; align-items:center;\">"
     "<input type=password name=\"hgLogin_password2\" value=\"%s\" size=\"30\" id=\"passwordCheck\">",
     htmlEncode(cartUsualString(cart, "hgLogin_password2", "")));  // value="" attribute; escape (XSS)
@@ -1321,7 +1321,7 @@ hPrintf(
     "</div>"
     "\n"
     "<div class=\"formControls\">"
-    "    <input type=\"submit\" name=\"hgLogin.do.signup\" value=\"Sign Up using Email\" class=\"largeButton\"> &nbsp; "
+    "    <input type=\"submit\" name=\"hgLogin.do.signup\" value=\"Sign up using email\" class=\"largeButton\"> &nbsp; "
     "    <a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div>"
     "</form>"
@@ -1954,7 +1954,7 @@ hPrintf("<div class=\"inputGroup\">"
     "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
     "</div>", encEmail);
 hPrintf("<div class=\"formControls\">"
-    "<input type=\"submit\" name=\"hgLogin.do.completeAccount\" value=\"Create Account\" class=\"largeButton\">"
+    "<input type=\"submit\" name=\"hgLogin.do.completeAccount\" value=\"Create account\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div></form></div><!-- END - completeAccountBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
@@ -2120,7 +2120,7 @@ for (m = list;  m != NULL;  m = m->next)
     }
 hPrintf("</div>");
 hPrintf("<div class=\"formControls\">"
-    "<input type=\"submit\" name=\"hgLogin.do.chooseAccount\" value=\"Sign In\" class=\"largeButton\">"
+    "<input type=\"submit\" name=\"hgLogin.do.chooseAccount\" value=\"Sign in\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div></form></div><!-- END - chooseAccountBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);

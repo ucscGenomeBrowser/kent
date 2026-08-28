@@ -17,7 +17,7 @@ get merged into this repository automatically with the next release (see
 kent/build/kent-core/).
 
 You can find short descriptions for most command line tools here:
-http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/FOOTER.txt
+http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/FOOTER.txt
 
 Here are a few selected tools that are useful when building track and assembly hubs:
 

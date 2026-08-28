@@ -38,7 +38,18 @@
 #   allen-brain-science/seaad_MTG/bw/ADNC0Astro.bw ).
 # The served subpath is preserved on purpose: 18 peak-file basenames repeat
 # across datasets (cortex-atac), so a flat directory would clobber them.
-#   936 files total (bigWig + bigBed/bigNarrowPeak), ~206 GB.
+#   934 files total (bigWig + bigBed/bigNarrowPeak), ~274 GB as the copy script
+#   counts it (256 GiB; du reports 511 G because of GPFS block allocation).
+#
+# copySingleCellSignalsPeaksFiles.py skips files already up to date (same size and
+# a destination no older than its source), so a re-run after new data lands moves
+# only the new files -- adding the 9 stage-split brainvar bigWigs took ~1.2 GB and
+# 10 seconds even though the summary line still counts all 934 subtracks.
+#
+# 11 data files in the bed dir are no longer referenced by the .ra (134 MB): the 10
+# cortex-atac interact.old/ bigBeds reclassified to the interact composite and one
+# dropped QC cluster. Harmless, and both are explained above; delete them if the
+# dir is ever tidied.
 #
 # The file list comes straight from the composite's bigDataUrl lines mapped back
 # to manifest abs_paths; copy each abs_path to bed/<relpath> (mkdir -p parents).
@@ -50,7 +61,12 @@
 # cellBrowserHg38 subtracks, renames the composite to singleCellSignalsPeaks,
 # repoints every bigDataUrl at the local /gbdb copy, and writes the .ra with
 # group=regulation (ATAC signal/peaks sit with the ENCODE regulatory tracks).
-# Subtrack colors and labels (incl. the SEA-AD subclass colors) carry through.
+# Subtrack colors and labels carry through from the hub stanzas.
+#
+# Colors are the shared broad-cell-class palette, NOT each dataset's own scheme --
+# SEA-AD used to come through in its own subclass colors, and no longer does, so a
+# cell class is one color across every dataset and both assemblies. See
+# doc/mm10/singleCellSignalsPeaks.txt sections 4 and 4b.
 #
 #   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
 #   python3 $scriptDir/makeSingleCellSignalsPeaksRa.py \
@@ -60,13 +76,20 @@
 # https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/singleCellSignalsPeaks
 
 ##############################################################################
-# 4. Facet metadata
+# 4. Facet metadata and facet colors
 ##############################################################################
 # The faceted composite's metaDataUrl points at a copy of the hub's hg38
 # main-faceted metadata (primaryKey = Track):
 #
 #   cp $CBHUB_OUT/meta/hg38.metadata.tsv \
 #      /hive/data/genomes/hg38/bed/singleCellSignalsPeaks/singleCellSignalsPeaks_metadata.tsv
+#
+# Its colorSettingsUrl points at singleCellSignalsPeaks_colors.json in the same dir,
+# which gives the faceted UI a color swatch for each Cell class checkbox, matching the
+# color the subtracks of that class are drawn in. Both files are written by
+# copySingleCellSignalsPeaksFiles.py (section 2); the JSON is rendered from the shared
+# celltype-palette.tsv, so it is identical on hg38 and mm10. See
+# doc/mm10/singleCellSignalsPeaks.txt section 2 for the format and its gotchas.
 
 ##############################################################################
 # 5. Labels, colors, and facets
@@ -96,10 +119,22 @@
 ##############################################################################
 # Counts
 ##############################################################################
-# 936 files resolved across 9 datasets: human-enhancer-atlas (444),
-# sea-ad-brain-atac (184), cortex-atac (91), retina (69), neuro-degen-atac (67),
+# 934 subtracks across 9 datasets: human-enhancer-atlas (444),
+# sea-ad-brain-atac (184), cortex-atac (81), retina (69), neuro-degen-atac (66),
 # multiomic-human-heart (40), cardiogenesis-atac (19), olg-eae-ms (18),
-# brainvar (4). 10 mislabeled interaction bigBeds (cortex-atac interact.old/) are
-# reclassified to the interact composite and 1 QC cluster is dropped, leaving 925
-# subtracks in the track. Facet metadata rows match the subtracks 1:1.
-# All 925 longLabels are unique; shortLabels are <=22 chars with no underscores.
+# brainvar (13). Mislabeled interaction bigBeds (cortex-atac interact.old/) are
+# reclassified to the interact composite and QC clusters are dropped before the
+# .ra is written. Facet metadata rows match the subtracks 1:1.
+# All 934 longLabels are unique; shortLabels are <=22 chars with no underscores.
+# Every subtrack has a broad cell class and a palette color (0 unclassified).
+# One track legitimately shows class "Unknown": neuro-degen-atac's cluster whose
+# source label is literally "Unannotated". That is a real palette class, not a
+# classification failure.
+#
+# brainvar went 4 -> 13 subtracks when the group sent stage-split pseudobulk
+# coverage: 5 prenatal and 4 postnatal added alongside the 4 original
+# combined-stage tracks. Progenitors are prenatal only, so 9 new files, not 10.
+# Their methods text says "a tile size of 1 kb" but the data is 100 bp (every
+# interval is 100 bp wide on 100 bp boundaries, matching the TileSize-100
+# filenames); 100 bp is what the description page states. Worth confirming with
+# them which they intended.

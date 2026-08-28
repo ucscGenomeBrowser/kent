@@ -11,11 +11,11 @@ today=$(date +%F)
 rsvDir=/hive/data/outside/otto/rsv
 rsvNcbiDir=$rsvDir/ncbi/ncbi.latest
 
-usherDir=~angie/github/usher
-usherSampled=$usherDir/build/usher-sampled
-usher=$usherDir/build/usher
-matUtils=$usherDir/build/matUtils
-matOptimize=$usherDir/build/matOptimize
+usherDir=~angie/github/usher/build
+usherSampled=$usherDir/usher-sampled
+usher=$usherDir/usher
+matUtils=$usherDir/matUtils
+matOptimize=$usherDir/matOptimize
 
 # RSV-A reference: Nextstrain uses KJ627695.1 but RefSeq is NC_038235.1 (M74568)
 asmAccA=GCF_002815475.1
@@ -213,10 +213,10 @@ for aOrB in A B; do
     # Update links to latest protobuf and metadata in /gbdb directories
     nc=$(basename $gbff .gbff)
     dir=/gbdb/wuhCor1/hgPhyloPlaceData/rsv/$nc
-    mkdir -p $dir
-    ln -sf $(pwd)/rsv$aOrB.$today.pb $dir/rsv$aOrB.latest.pb
-    ln -sf $(pwd)/rsv$aOrB.$today.metadata.tsv.gz $dir/rsv$aOrB.latest.metadata.tsv.gz
-    ln -sf $(pwd)/hgPhyloPlace.description.$aOrB.txt $dir/rsv$aOrB.latest.version.txt
+    ssh hgwdev mkdir -p $dir
+    ssh hgwdev ln -sf $(pwd)/rsv$aOrB.$today.pb $dir/rsv$aOrB.latest.pb
+    ssh hgwdev ln -sf $(pwd)/rsv$aOrB.$today.metadata.tsv.gz $dir/rsv$aOrB.latest.metadata.tsv.gz
+    ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.$aOrB.txt $dir/rsv$aOrB.latest.version.txt
 
     # Extract Newick and VCF for anyone who wants to download those instead of protobuf
     $matUtils extract -i rsv$aOrB.$today.pb \
@@ -241,11 +241,10 @@ for aOrB in A B; do
     # Update hgdownload-test link for archive
     asmDir=$(echo $asmAcc \
         | sed -re 's@^(GC[AF])_([0-9]{3})([0-9]{3})([0-9]{3})\.([0-9]+)@\1/\2/\3/\4/\1_\2\3\4.\5@')
-    mkdir -p /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
-    ln -sf $archive /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/$y/$m
+    ssh hgwdev ln -sf $archiveRoot/rsv$aOrB.latest.* /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/
     # rsync to hgdownload{1,2} hubs dir
-    for h in hgdownload1 hgdownload3; do
-        if rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/* \
+    for h in hgdownload1 hgdownload2 hgdownload3; do
+        if ssh hgwdev rsync -a -L --delete /data/apache/htdocs-hgdownload/hubs/$asmDir/UShER_RSV-$aOrB/* \
                  qateam@$h:/mirrordata/hubs/$asmDir/UShER_RSV-$aOrB/; then
             true
         else

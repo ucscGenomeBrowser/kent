@@ -1,0 +1,15 @@
+{
+    "label": {
+        "Gonad": "#F0C000",
+        "Testis": "#FF8838",
+        "Ovary": "#B05020",
+        "Haploid male fry NO.2": "#F01111",
+        "Haploid male fry NO.1": "#C000C0",
+        "Haploid female fry NO.2": "#6000B0",
+        "Haploid female fry NO.1": "#5020E0",
+        "Diploid male fry NO.2": "#0050FF",
+        "Diploid male fry NO.1": "#0072D6",
+        "Diploid female fry NO.2": "#0099C0",
+        "Diploid female fry NO.1": "#00C000"
+    }
+}

@@ -46,6 +46,16 @@
 # preserved on purpose: some coverage/peak basenames (e.g. MOL.bw, OPC.bw) repeat
 # across datasets, so a flat directory would clobber them.  89.6 GB, 647 files.
 #
+# The same script also writes <bed>/singleCellSignalsPeaks_colors.json, the track's
+# colorSettingsUrl target: {"Cell_class": {<class>: "#RRGGBB"}}, rendered straight from
+# celltype-palette.tsv. The faceted UI draws a color swatch beside each checkbox of any
+# facet named in that file, so the Cell class checkboxes carry the same colors the
+# subtracks are drawn in. Keys must match the metadata column value verbatim -- the
+# lookup in facetedComposite.js is an exact string match, and an unmatched key just
+# leaves that swatch blank. The whole palette is written for both assemblies, so classes
+# an assembly does not use (mm10 uses all 23; hg38 has no Ependymal or Choroid plexus)
+# are simply unused keys.
+#
 #   scriptDir=$HOME/kent/src/hg/makeDb/scripts/singleCellSignalsPeaks
 #   python3 $scriptDir/copySingleCellSignalsPeaksFiles.py --assembly mm10 --dry-run
 #   python3 $scriptDir/copySingleCellSignalsPeaksFiles.py --assembly mm10
@@ -83,11 +93,26 @@
 #   values on commas). The full cell type is a searchable table column (_Cell_type),
 #   not a facet -- there are too many values.
 #
-# Cell class: each cell type is assigned one of ~22 broad classes
+# Cell class: each cell type is assigned one of 23 broad classes
 #   (celltype-crosswalks/celltype-class.tsv, built by build_celltype_crosswalks.py).
 #   The class drives BOTH the track color (one colorblind-conscious palette,
 #   celltype-palette.tsv, shared by hg38 and mm10 so a class is the same color on
-#   both assemblies) and the subtrack priority. Cell class is the primary cell facet.
+#   both assemblies) and the subtrack priority. Cell class is the primary cell facet,
+#   and the same palette is published as the facet swatch colors (section 2).
+#
+#   "Other glia" (88,160,88) was added because "Other" was doing four unrelated
+#   jobs. Of 40 tracks corpus-wide sitting in it: 14 real glia with nowhere else to
+#   go, 14 peripheral glia deliberately placed there (Schwann / enteric -- left
+#   alone), 5 that are not cell types at all (All cell types / All cells /
+#   Neuronal and glial -- aggregate peak calls, a separate defect NOT addressed),
+#   and 6 genuinely other. The new class takes the glial aggregate labels (Glia,
+#   Glial), olfactory ensheathing cells, and the five fly glia subtypes; Schwann and
+#   enteric glia stay under "Other". Named for symmetry with the existing
+#   "Other neuron". The color came from a grid search maximizing minimum dE against
+#   the 22 existing entries under normal, deuteranope and protanope simulation,
+#   restricted to the widest free hue band; nearest neighbours are Epithelial
+#   (dE 17) and Astrocyte (dE 20), both above the palette's own closest pair
+#   (Other vs Unknown, 12.7). Before this, Glia and Non-Neuronal were both grey.
 #
 # Tissue / Life stage / Condition: filled per collection from hub_config.json
 #   (tissue_from_path, collection_lifestage, collection_condition) plus dataset-
@@ -188,6 +213,76 @@
 # native tracks always color a cell class the same.
 
 ##############################################################################
+# 4b. Two collections whose source hub stanzas are ignored
+##############################################################################
+# hub_config.json "collection_ignore_hub_stanzas" lists collections built as if they
+# had no curated hub at all: the cell type comes from the manifest original_track_name
+# (the source FILENAME) and the stanza is generated rather than copied. Normally the
+# wrangler-written hub stanza is the better source and is preferred everywhere --
+# corpus-wide its shortLabel classifies 1245 tracks that the filename cannot -- so this
+# is per-collection and must stay that way.
+#
+# Currently sea-ad-brain-atac and allen-basal-ganglia-atac. Both name their subtracks in
+# a DIFFERENT scheme than every piece of curation written for them, and both failed in
+# two independent ways:
+#
+#   Labels. SEA-AD files are ADNC0L2-3IT.bw -> original_track_name "ADNC0 L2-3IT", but
+#   its hub stanzas are named "L2/3IT_ADNC:0" -- the ADNC token moves from the front to
+#   the back and the layer name loses its hyphen. So label_sub (^ADNC(\d+)),
+#   celltype_leading_strip_regex (which strips a LEADING ADNC token) and the keys of
+#   sea-ad-celltype-crosswalk.tsv (L2-3IT, L5-6NP, Lamp5-Lhx6, Sst-Chodl) ALL miss, and
+#   72 hg38 cortical-layer tracks plus 89 mm10 allen-basal-ganglia tracks lost their
+#   broad cell class and their shared-palette color. Note the trailing " ADNC:0" is NOT
+#   what breaks it: lookup_class shortens by whitespace prefix, so "Lamp5 ADNC:0" ->
+#   "Lamp5" still resolves. The failures are the 9 spellings that differ between the two
+#   schemes (lookup_class("L2/3IT") is None; lookup_class("L2/3 IT") is Excitatory neuron).
+#
+#   Scaling. Both hubs declare a bare "type bigWig" with no data range, so 184 hg38 and
+#   89 mm10 tracks silently lost the default viewLimits bigWigInfo would have supplied.
+#
+# Add a collection here only when its hub stanzas are genuinely a different naming scheme
+# from its curation. The fix for a merely MISSING crosswalk row is to add the row.
+
+##############################################################################
+# 4c. Vertical scaling: autoScale group on the composite
+##############################################################################
+# The composite parent carries "autoScale group", and NO subtrack sets autoScale of its
+# own. Every selected subtrack then shares one vertical scale, so two tracks drawn at the
+# same locus can be compared directly; with per-track autoScale, tracks whose values
+# differ by orders of magnitude both drew full height and looked equally strong.
+#
+# It has to sit on the parent. hgTracks groups by tdb->parent (wigTrack.c setMinMax
+# accumulates each drawn track's limits into the shared parent tdb, and wigDrawPredraw
+# reads them back), and hubCheck errAborts on an individual bigWig that declares
+# "autoScale group" -- it "belongs in the parent composite stanza instead". 637 subtracks
+# had inherited exactly that verbatim from their source hubs, so build_stanzas now drops
+# autoScale via DROP_KEYS. A per-subtrack autoScale would also override the inherited
+# parent setting.
+#
+# Limits come from preDrawAutoScale scanning the preDraw array, i.e. the data in the
+# CURRENT WINDOW, not genome-wide -- so an outlying region elsewhere cannot flatten the
+# view. That is why grouping beats fixed per-dataset viewLimits, which was considered and
+# rejected: the spread of per-track maxima WITHIN one dataset reaches 20,117x (retina,
+# 0.80 to 16,092) and the maxima are outlier-dominated (a cortex-dev coverage track peaks
+# at 908,985), so a per-dataset ceiling would draw many real tracks flat.
+#
+# Grouping PER DATASET is not expressible here. autoScale group groups by tdb->parent and
+# a subtrack inside a view has the view as its parent, but a faceted composite cannot have
+# views: facetedCompositeUi walks tdb->subtracks exactly one level and builds <track>_sel
+# cart vars from the immediate children (hgTrackUi.c), so with a view level the leaf
+# bigWigs are never enumerated. None of the faceted composites in the tree use views.
+# Accepted cost: selecting across datasets with different normalizations (BrainVar
+# gene-activity maxing near 6 next to SEA-AD coverage near 72) draws the smaller tracks
+# small. The description page says comparisons are most meaningful within a dataset.
+#
+# Separately, a bigWig whose type line carries no data range gets one from bigWigInfo, so
+# the browser always has default viewLimits. Source hubs often set autoScale on the
+# COMPOSITE PARENT and this build flattens subtracks into one composite without copying
+# the parent, so the intent was lost in transit -- 232 subtracks corpus-wide had no range,
+# no autoScale and no viewLimits, and BrainVar (max ~6) drew as a flat line against
+# hgTracks' built-in 0:127.
+
+##############################################################################
 # 5. Redundant allen-brain-science copies removed
 ##############################################################################
 # The Allen basal-ganglia dataset serves each unchanged per-cluster bigWig from all
@@ -214,3 +309,5 @@
 # QC-cluster tracks (doublet / low-quality / batch) are dropped when the .ra is
 # generated, leaving 587 subtracks in the track (581 signal + 6 peak). Facet
 # metadata rows match the subtracks 1:1, and all 587 longLabels are unique.
+# Every subtrack has a broad cell class and a palette color (0 unclassified);
+# the 89 allen-basal-ganglia-atac tracks were the ones fixed by section 4b.

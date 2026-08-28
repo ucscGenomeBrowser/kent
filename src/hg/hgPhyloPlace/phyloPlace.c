@@ -2314,6 +2314,8 @@ static void inlineRecombinantData(struct recombinantInfo *recombinants, struct h
                                   int genomeSize, struct geneInfo *geneInfoList)
 /* Write out inline javascript with data used to draw recombinant graph in popup when button is clicked. */
 {
+if (! recombinants->recombMutations)
+    return;
 struct dyString *dy = dyStringNew(4096 * slCount(recombinants));
 dyStringPrintf(dy, "var recombinantData = { genomeSize: %d,\n  genes: [\n    ", genomeSize);
 int gIx;

@@ -142,7 +142,9 @@ cat samples.h5n1_outbreak_2024.* | grep -v \|SRR | cut -d\| -f 2 \
 | cut -f 15 | sort -u \
 | grep -vE 'A/Texas/37/2024|24-003692-001|24-005915-001|23-038138-001|24-006483-001' \
 | grep -Ff - $fluANcbiDir/metadata.tsv \
+| grep -vE ' clone ?[0-9]+' \
 | cut -f 1,17 \
+| grep -Fwf <(zcat renaming.tsv.gz | cut -f 1) \
     > cladeAccToSeg
 # Extract the sequences into per-segment fasta files... renamed from accession to tree name.
 # joinSegments.py below will ignore the uniquifying INSDC accession part of names.  Remove the
@@ -192,10 +194,10 @@ chmod 664 h5n1_outbreak_2024.pb*
 # Sometimes that filtering needs to be done twice!  I guess getting rid of some long branches
 # can create others.  I hope we don't need more than two rounds...
 $matUtils extract -i h5n1_outbreak_2024.pb.opt.gz \
-    --max-branch-length 65 \
+    --max-branch-length 50 \
     -O -o tmp.pb.gz
 $matUtils extract -i tmp.pb.gz \
-    --max-branch-length 65 \
+    --max-branch-length 50 \
     -O -o h5n1_outbreak_2024.pb.gz
 
 # Make a tree version description for hgPhyloPlace
@@ -259,6 +261,7 @@ usher_to_taxonium --input h5n1_outbreak_2024.pb.gz \
     --name_internal_nodes \
     --title "2024 H5N1 B3.13 outbreak in USA, concatenated segments from INSDC and SRA ($today)" \
     --config_json $fluAScriptDir/concat.config.json \
+    --overlay_html $fluAScriptDir/taxonium_overlay_b3_13.html \
     --chronumental \
     --chronumental_steps 500 \
     --chronumental_add_inferred_date chronumental_date \
@@ -267,10 +270,10 @@ usher_to_taxonium --input h5n1_outbreak_2024.pb.gz \
 
 # Link to /gbdb/ location
 dir=/gbdb/wuhCor1/hgPhyloPlaceData/influenzaA/h5n1_outbreak_2024
-mkdir -p $dir
-ln -sf $(pwd)/h5n1_outbreak_2024.pb.gz $dir/h5n1_outbreak_2024.latest.pb.gz
-ln -sf $(pwd)/h5n1_outbreak_2024.metadata.tsv.gz $dir/h5n1_outbreak_2024.latest.metadata.tsv.gz
-ln -sf $(pwd)/hgPhyloPlace.description.h5n1_outbreak_2024.txt \
+ssh hgwdev mkdir -p $dir
+ssh hgwdev ln -sf $(pwd)/h5n1_outbreak_2024.pb.gz $dir/h5n1_outbreak_2024.latest.pb.gz
+ssh hgwdev ln -sf $(pwd)/h5n1_outbreak_2024.metadata.tsv.gz $dir/h5n1_outbreak_2024.latest.metadata.tsv.gz
+ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.description.h5n1_outbreak_2024.txt \
     $dir/h5n1_outbreak_2024.latest.version.txt
 
 # Extract Newick and VCF for anyone who wants to download those instead of protobuf
@@ -301,12 +304,10 @@ for e in jsonl.gz metadata.tsv.gz nwk.gz pb.gz vcf.gz version.txt msa.fa.gz ; do
 done
 
 # Update hgdownload-test link for archive (adding assembly/segRef hierarchy)
-mkdir -p $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/$y/$m/$d
-ln -sf $archive/h5n1_outbreak_2024.* $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/$y/$m/$d/
-ln -sf $archiveRoot/h5n1_outbreak_2024.latest.* $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/
+ssh hgwdev ln -sf $archiveRoot/h5n1_outbreak_2024.latest.* $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024/
 # rsync to hgdownload hubs dir
-for h in hgdownload1 hgdownload3; do
-    if rsync -a -L --delete $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024 \
+for h in hgdownload1 hgdownload2 hgdownload3; do
+    if ssh hgwdev rsync -a -L --delete $downloadsRoot/$asmDir/UShER_h5n1_outbreak_2024 \
              qateam@$h:/mirrordata/hubs/$asmDir/ ; then
         true
     else

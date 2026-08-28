@@ -3834,7 +3834,10 @@ boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbContaine
 /* When subtrack vis is set via findTracks, and composite has no cart settings,
    then "shape" composite to match found */
 {
-if (!tdbIsContainer(tdbContainer))
+// Reshaping raises the container to the max of its children and drops child vis that
+// matches.  For a faceted composite the container vis is a ceiling set by the curator,
+// so raising it would silently widen it and the child vis is not ours to drop.
+if (!tdbIsContainer(tdbContainer) || tdbIsFacetedComposite(tdbContainer))
     return FALSE;  // Don't do any shaping
 
 // First look for subtrack level vis
@@ -4036,7 +4039,9 @@ while ((oneName = slPopHead(&changedSettings)) != NULL)
     if (cartRemoveOldFromTdbTree(newCart,oldVars,tdb,suffix,oneName->val,TRUE) > 0)
         clensed++;
     }
-if  (containerVisChanged && !hasViews)
+// Not for faceted composites: there the container vis is only a maximum, so changing it
+// must leave the children's own display modes alone.
+if  (containerVisChanged && !hasViews && !tdbIsFacetedComposite(tdb))
     { // vis is a special additive case!
     char *vis = hStringFromTv(tdbVisLimitedByAncestry(newCart, tdb, FALSE));
     if (cartRemoveOldFromTdbTree(newCart,oldVars,tdb,NULL,vis,TRUE) > 0)

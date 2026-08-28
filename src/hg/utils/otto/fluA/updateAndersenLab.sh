@@ -4,17 +4,21 @@ set -beEu -o pipefail
 export PATH=~/bin/x86_64:~/bin/scripts:$PATH
 fluADir=/hive/data/outside/otto/fluA
 
+if [[ ! -v TMPDIR ]]; then
+    export TMPDIR=/scratch/tmp
+fi
+
 # Update Andersen Lab avian-influenza repo (assemblies of USDA H5N1 sequences) and map by name
 # to GenBank seqs
 cd ~/github/avian-influenza
 git pull
 ./scripts/map_genbank.sh ~/github/avian-influenza/metadata/SraRunTable_automated.csv \
     ~/github/avian-influenza/fasta \
-    > /data/tmp/angie/genbank_mapping.tsv
+    > $TMPDIR/genbank_mapping.tsv
 
-wc -l /data/tmp/angie/genbank_mapping.tsv
+wc -l $TMPDIR/genbank_mapping.tsv
 
-cd /data/tmp/angie
+cd $TMPDIR
 
 # Extract sequences that are in SRA but not (yet) in GenBank.
 find ~/github/avian-influenza/fasta -name \*.fa \

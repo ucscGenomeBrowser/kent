@@ -410,19 +410,23 @@ for (group = groupList; group != NULL; group = group->next)
                 // Whether super child or not, if its a composite, then handle the children
                 if (tdbIsComposite(tdb))
                     {
+                    // A faceted composite's children own their display modes and the
+                    // parent's vis is only a ceiling, so setting the parent is enough -
+                    // don't stomp the per-child preferences on the way through.
+                    boolean keepChildVis = tdbIsFacetedComposite(tdb);
                     struct track *subtrack;
                     for (subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
                         {
-                        if (changeVis == tvHide)               // Since subtrack level vis is an
-                            {
-                            cartRemove(cart, subtrack->track); // override, simply remove to hide
-                            if (excludeHash != NULL) // if we're loading an RTS, but probably we should always do this
-                                {
-                                char selName[4096];
-                                safef(selName, sizeof(selName), "%s_sel", subtrack->track);
-                                cartRemove(cart, selName);
-                                }
+                        if (changeVis == tvHide && excludeHash != NULL)
+                            {   // loading an RTS should start from a clean selection,
+                            char selName[4096];             // but probably we should
+                            safef(selName, sizeof(selName), "%s_sel", subtrack->track);
+                            cartRemove(cart, selName);      // always do this
                             }
+                        if (keepChildVis)
+                            continue;
+                        if (changeVis == tvHide)               // Since subtrack level vis is an
+                            cartRemove(cart, subtrack->track); // override, simply remove to hide
                         else
                             cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
                         subtrack->visibility = changeVis;
@@ -7779,6 +7783,8 @@ for (track = trackList; track != NULL; track = track->next)
             hideKids = TRUE;
         cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
 
+        boolean facetedParent = tdbIsFacetedComposite(track->tdb);
+
         // now see if we have any specified visibilities
         struct track *subtrack;
         for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -7795,11 +7801,23 @@ for (track = trackList; track != NULL; track = track->next)
             if (s != NULL)
                 {
                 subtrack->visibility = hTvFromString(s);
-                cartSetString(cart, subtrack->track, s);
-                if (sameString("hide", s))
+                if (facetedParent && sameString("hide", s))
+                    {
+                    // A faceted composite's child holds a standing display mode rather
+                    // than inheriting one, and a standing mode of "hide" would survive
+                    // being re-selected in the facet table and look like a bug.  So take
+                    // the child out of the selection instead of storing that.
+                    cartRemove(cart, subtrack->track);
                     cartSetString(cart, buffer, "0");
+                    }
                 else
-                    cartSetString(cart, buffer, "1");
+                    {
+                    cartSetString(cart, subtrack->track, s);
+                    // Conversely, a faceted child's stored display mode is not a request
+                    // to turn it on - the facet table owns the _sel checkbox.
+                    if (!facetedParent)
+                        cartSetString(cart, buffer, "1");
+                    }
                 if (undecoratedVis)
                     cartRemove(cart, trackHubSkipHubName(subtrack->track)); // remove the undecorated version
                 }

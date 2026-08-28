@@ -40,6 +40,8 @@ if [[ "$latest" > "$handled" ]]; then
     echo "New RefSeq historical release available for hg38: $latest (we have: ${handled:-none})"
     echo "Source: $baseUrl"
     echo "Build steps: RS_YYYY_MM section in kent/src/hg/makeDb/doc/hg38/ncbiRefSeq.txt"
+    echo "Do not forget /gbdb/hg38/ncbiRefSeq/ncbiRefSeqHistoricalVersion.txt, the"
+    echo "track's own version string -- last step of that makedoc section."
     echo "To silence: set $latest in /hive/data/outside/otto/refSeqHistorical/lastHandledRelease.txt. refs #35766"
 fi
 exit 0

@@ -56,7 +56,7 @@ GABAergic	Inhibitory neuron
 GABAergic neuron	Inhibitory neuron
 Gastric goblet	Epithelial
 Gastric neuroendocrine	Epithelial	gut neuroendocrine epithelial cell
-Glial	Other	unspecified glia (ambiguous astro/oligo/other)
+Glial	Other glia	unspecified glia (dataset groups all glia together)
 Glutamatergic neuron	Excitatory neuron	glutamatergic
 Glycinergic	Inhibitory neuron	glycinergic (retinal amacrine)
 Goblet	Epithelial

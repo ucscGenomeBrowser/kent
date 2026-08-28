@@ -482,7 +482,7 @@ hgLoadSqlTab hg38 ncbiRefSeqLinkHistorical ~/kent/src/hg/lib/ncbiRefSeqLink.sql 
 #############################################################################
 # NCBI published a newer historical release, GCF_000001405.40-RS_2024_08
 # (2024-10-22), superseding the RS_2023_03 build above. One-off refresh of the
-# same six tables (names unchanged, no trackDb change). Full script kept at
+# same six tables (names unchanged). Full script kept at
 # /hive/data/outside/refSeqHistorical/RS_2024_08/build.RS_2024_08.sh
 mkdir /hive/data/outside/refSeqHistorical/RS_2024_08
 cd /hive/data/outside/refSeqHistorical/RS_2024_08
@@ -549,3 +549,20 @@ cat pragmaLabels.txt | tr -s '[:blank:]' | cut -d':' -f1 | sort -u | cut -d' ' -
 cut -f1 refSeqHistorical.gp | LC_ALL=C sort -u > name.list
 LC_ALL=C join -t$'\t' name.list refLink.tab > ncbiRefSeqLinkOld.tab
 hgLoadSqlTab hg38 ncbiRefSeqLinkHistorical ~/kent/src/hg/lib/ncbiRefSeqLink.sql ncbiRefSeqLinkOld.tab
+
+# version string for the track (DONE - Matt - 2026-08-27)
+#############################################################################
+# This subtrack has its own dataVersion, separate from the composite's
+# /gbdb/hg38/ncbiRefSeq/ncbiRefSeqVersion.txt, which tracks the current RefSeq
+# annotation release and is years ahead of the historical data. Without this
+# file the Historical track advertises the current release in its long label,
+# on its track settings page and on its details pages.
+# Redo this step on every historical refresh, with the release NCBI published.
+cd /hive/data/outside/refSeqHistorical/RS_2024_08
+echo "NCBI RefSeq ${REL} (2024-10-22)" > ncbiRefSeqHistoricalVersion.txt
+ln -sf `pwd`/ncbiRefSeqHistoricalVersion.txt \
+    /gbdb/hg38/ncbiRefSeq/ncbiRefSeqHistoricalVersion.txt
+
+# trackDb: dataVersion on the ncbiRefSeqHistorical stanza in
+# kent/src/hg/makeDb/trackDb/human/trackDb.ra
+#   dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqHistoricalVersion.txt

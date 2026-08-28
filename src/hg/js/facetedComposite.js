@@ -217,6 +217,11 @@ $(function() {
         selector.appendChild(Object.assign(document.createElement("label"), {
             innerHTML: "<b>Subtrack types enabled:</b>",
         }));
+
+        selector.appendChild(createInfoIcon(
+            "Multiple types of data can be displayed for each of the samples listed below. " +
+            "Check the boxes for the types you wish to view."));
+
         Object.keys(embeddedData.dataTypes).forEach(name => {
             const label = document.createElement("label");
             const dataType = embeddedData.dataTypes[name];
@@ -450,8 +455,8 @@ $(function() {
         function updateSelectedText() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
-            allTab.textContent = `All (${totalCount})`;
-            selectedTab.textContent = `Active (${selCount})`;
+            allTab.textContent = `All Tracks (${totalCount})`;
+            selectedTab.textContent = `Active Tracks (${selCount})`;
             const showSelected = toggleCheckbox.checked;
             allTab.classList.toggle("active", !showSelected);
             selectedTab.classList.toggle("active", showSelected);

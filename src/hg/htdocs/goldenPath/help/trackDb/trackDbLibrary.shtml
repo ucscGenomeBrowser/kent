@@ -278,8 +278,11 @@
     display for each mode depends upon the track's type, and some modes may not be supported
     for certain track types. Please note visibility settings in composite subtracks are
     directly inherited from the parent. Therefore, any visibility lines added at the subtrack
-    level of a composite will be ignored. Be sure to experiment with this setting to
-    verify that it works as expected for your track type and track structure.</P>
+    level of a composite will be ignored. The one exception is a
+    <A HREF="#faceted_composite">faceted composite</A>, where
+    the parent's visibility is a maximum rather than a value the subtracks inherit, and
+    subtrack visibility lines are honored up to that maximum. Be sure to experiment with this
+    setting to verify that it works as expected for your track type and track structure.</P>
     <P>Valid settings:</P>
     <UL>
     <LI><code>hide</code>: DEFAULT. The track is not displayed in the Browser image unless
@@ -298,6 +301,55 @@
     <P><B>Example:</B>
     </P>
     <pre>   visibility dense</pre>
+</DIV>
+
+<DIV class="onlyVisibility"><span class="types all"></span>
+<div class="format"><code>onlyVisibility &lt;dense|squish|pack|full&gt;</code></div>
+    <P class="isRequired">Required: No</P>
+    <P>Restricts a track to a single display mode.  The visibility dropdowns and the
+    right-click menu offer only <code>hide</code> and the named mode, so the track either
+    displays that way or is hidden; an unrecognized mode is treated as <code>dense</code>.
+    Use this for a track that is only meaningful in one mode - to pick a starting mode that
+    the user can then change, use <A HREF="#visibility">visibility</A> instead.</P>
+    <P>This setting is also read from the subtracks of a
+    <A HREF="#faceted_composite">faceted composite</A>, whose own <code>visibility</code> is a
+    <em>maximum</em> for its subtracks rather than a value they inherit.  Display modes rank
+    from least to most detailed as <code>hide</code>, <code>dense</code>, <code>squish</code>,
+    <code>pack</code>, <code>full</code>.</P>
+    <UL>
+    <LI>A subtrack with neither setting of its own displays at whatever the parent allows,
+    just as in a conventional composite.</LI>
+    <LI>A subtrack with its own <code>visibility</code> displays in that mode, or at the
+    parent's maximum if its own setting is the more detailed of the two.</LI>
+    <LI>A subtrack with <code>onlyVisibility</code> is pinned to that single mode.  It
+    displays if that mode is within the parent's maximum, and is not displayed at all
+    otherwise.</LI>
+    </UL>
+    <P>Both <code>visibility</code> and <code>onlyVisibility</code> are read only from the
+    subtrack's own stanza and are not inherited from the parent; an
+    <code>onlyVisibility</code> line on the faceted composite itself restricts the
+    container's own maximum instead.  Changing the maximum does not discard the display
+    modes set on individual subtracks, so restoring a more detailed maximum brings them back
+    as they were.</P>
+    <P><B>Example:</B> a track that only makes sense as a single ribbon:
+    </P>
+    <pre>   track coverage
+   onlyVisibility dense</pre>
+    <P><B>Example:</B> in a faceted composite with the maximum set to <code>pack</code>, the
+    levels subtrack below displays in <code>pack</code> mode rather than <code>full</code>,
+    and the reads subtrack displays in <code>dense</code> mode:
+    </P>
+    <pre>   track methylation
+   compositeTrack faceted
+   visibility pack
+
+       track methylation_SRX172462_levels
+       parent methylation off
+       visibility full
+
+       track methylation_SRX172462_reads
+       parent methylation off
+       onlyVisibility dense</pre>
 </DIV>
 
 <DIV class="html"><span class="types all"></span>
@@ -6906,6 +6958,12 @@ and a row has sampleId=K562, then the subtrack for that row is <code>chipSeq_K56
 <p>
 This version of the <code>compositeTrack</code> setting indicates that the UI for this composite track
 should be handled with facets.
+</p>
+<p>
+A faceted composite also treats its own <A HREF="#visibility">visibility</A> as a maximum for its
+subtracks rather than a value they inherit, so one container can hold tracks that each want a
+different display mode.  See <A HREF="#onlyVisibility">onlyVisibility</A> for how a subtrack picks
+its own mode within that maximum.
 </p>
 </div>
 

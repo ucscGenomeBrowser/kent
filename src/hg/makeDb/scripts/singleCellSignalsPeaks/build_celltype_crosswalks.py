@@ -43,6 +43,14 @@ PALETTE = {
     "Oligodendrocyte":              "204,121,167",   # reddish purple
     "Oligodendrocyte precursor":    "240,228,66",    # yellow
     "Microglia":                    "0,0,0",         # black
+    # Coarse/unspecified glia, the glial counterpart to "Other neuron": datasets that
+    # group all glia together (brainvar "Glia"), CNS glia with no specific class of their
+    # own (olfactory ensheathing cells), and the fly glia. These were all landing in
+    # "Other" grey alongside non-glial leftovers. Hue picked from the widest gap in the
+    # palette; nearest neighbours are Epithelial (dE 17) and Astrocyte (dE 20), both
+    # above the palette's own closest pair, and it stays separated under simulated
+    # deuteranopia and protanopia.
+    "Other glia":                   "88,160,88",     # medium green
     "Ependymal":                    "68,170,153",    # Tol teal
     "Choroid plexus":               "136,34,85",     # Tol wine
     "Endothelial":                  "136,204,238",   # Tol cyan

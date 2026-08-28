@@ -1182,6 +1182,7 @@ const T_START = Date.now();
   //
   //   expect: {rows: [ruler, mane]}         these rows were drawn
   //   expect: {rows: [ruler, mane], exact: true}   ... and nothing else
+  //   expect: {rows: [ruler, mane], ordered: true} ... in that order, top to bottom
   //   expect: {noRows: [clinvarCnv]}        this row was not
   //   expect: {height: 2000}                the still is no taller than this ("<1200" etc.)
   //   expect: {tip: "mismatch A->C"}        the tooltip now up says this
@@ -1218,6 +1219,22 @@ const T_START = Date.now();
     if (o.exact && want.length) {
       const extra = seen.rows.filter(r => !want.some(w => r === w || r.endsWith('_' + w)));
       if (extra.length) bad.push(`unexpected rows: ${extra.join(', ')}`);
+    }
+    // `ordered: true` makes rows: a check on the ORDER they were drawn in as well as on
+    // which ones were. seen.rows is in document order and hgTracks draws top to bottom,
+    // so the named rows have to appear at increasing positions. A row that was not drawn
+    // at all is already reported above, and is skipped here rather than producing a
+    // second failure saying the same thing. Without this a set test cannot fail for a
+    // wrong order, which is the whole of a bug like a quickLift target coming back in
+    // request order rather than source order (#38032).
+    if (o.ordered) {
+      const seq = want.map(w => ({ w, at: seen.rows.findIndex(r => r === w || r.endsWith('_' + w)) }))
+                      .filter(e => e.at >= 0);
+      for (let i = 1; i < seq.length; i++)
+        if (seq[i].at < seq[i - 1].at) {
+          bad.push(`rows out of order: ${seq[i - 1].w} should be drawn above ${seq[i].w}`);
+          break;
+        }
     }
     const banned = list(o.noRows).filter(w => drawn(w));
     if (banned.length) bad.push(`rows that should not be drawn: ${banned.join(', ')}`);

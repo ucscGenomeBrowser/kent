@@ -44,3 +44,13 @@ longLabel Variants from The Macaque Genotype And Phenotype Resource (mGAP)
 visibility dense
 bigDataUrl /gbdb/rheMac10/mgap/mGAP.Rhesus_macaque.vcf.gz
 group varRep
+
+track dnaMethylation
+superTrack on
+shortLabel DNA Methylation
+longLabel DNA Methylation
+group regulation
+priority 3
+html dnaMethylation.html
+
+include methbase2.ra alpha

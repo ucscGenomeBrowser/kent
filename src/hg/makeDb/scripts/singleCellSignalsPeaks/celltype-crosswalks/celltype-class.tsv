@@ -58,7 +58,7 @@ CBDevelopingneuron1	Other neuron	86,180,233
 Cerebral nuclei GABAergic neuron	Inhibitory neuron	213,94,0
 CGE-derived interneuron	Inhibitory neuron	213,94,0
 Chandelier	Inhibitory neuron	213,94,0
-Chiasmglia	Other	153,153,153
+Chiasmglia	Other glia	88,160,88
 Chief	Epithelial	17,119,51
 Cholangiocytes	Epithelial	17,119,51
 Choroid plexus	Choroid plexus	136,34,85
@@ -78,7 +78,7 @@ Colonic goblet	Epithelial	17,119,51
 Committed oligodendrocyte precursor	Oligodendrocyte precursor	240,228,66
 Cone photoreceptor	Other neuron	86,180,233
 Connecting tubule cell	Epithelial	17,119,51
-Cortexglia	Other	153,153,153
+Cortexglia	Other glia	88,160,88
 Cortical corticothalamic excitatory neuron (L6 CT)	Excitatory neuron	0,114,178
 Cortical epithelial-like	Epithelial	17,119,51
 Cortical excitatory neuron	Excitatory neuron	0,114,178
@@ -117,7 +117,7 @@ Endocardium	Endothelial	136,204,238
 Endothelial	Endothelial	136,204,238
 Endothelial and mural	Endothelial	136,204,238
 Endothelial cell	Endothelial	136,204,238
-Ensheathingglia	Other	153,153,153
+Ensheathingglia	Other glia	88,160,88
 Enteric glia	Other	153,153,153
 Enteric neuron	Other neuron	86,180,233
 Enterochromaffin	Epithelial	17,119,51
@@ -143,7 +143,8 @@ GABAergic neuron	Inhibitory neuron	213,94,0
 Ganglion	Other neuron	86,180,233
 Gastric goblet	Epithelial	17,119,51
 Gastric neuroendocrine	Epithelial	17,119,51
-Glial	Other	153,153,153
+Glia	Other glia	88,160,88
+Glial	Other glia	88,160,88
 Glutamatergic neuron	Excitatory neuron	0,114,178
 Glycinergic	Inhibitory neuron	213,94,0
 Goblet	Epithelial	17,119,51
@@ -288,7 +289,7 @@ Olfactory bulb excitatory neuron	Excitatory neuron	0,114,178
 Olfactory bulb GABAergic neuron	Inhibitory neuron	213,94,0
 Olfactory bulb granule GABAergic neuron	Inhibitory neuron	213,94,0
 Olfactory bulb neuroblast	Neural progenitor	51,34,136
-Olfactory ensheathing cell	Other	153,153,153
+Olfactory ensheathing cell	Other glia	88,160,88
 Olfactory/cortical-subplate Tfap2d neuron	Other neuron	86,180,233
 Oli-neu	Oligodendrocyte	204,121,167
 Oligo	Oligodendrocyte	204,121,167
@@ -312,7 +313,7 @@ Parvalbumin GABAergic interneuron	Inhibitory neuron	213,94,0
 Pax6	Inhibitory neuron	213,94,0
 PB4	Unknown	187,187,187
 Pericyte	Mural	221,204,119
-Perineurialglia	Other	153,153,153
+Perineurialglia	Other glia	88,160,88
 Peripheral nerve stromal	Stromal	153,79,0
 Perivascular macrophage	Immune	238,102,119
 Photoreceptor	Other neuron	86,180,233
@@ -331,6 +332,7 @@ Pre smooth muscle	Mural	221,204,119
 Pre-B cell	Immune	238,102,119
 Primary retinal progenitor	Neural progenitor	51,34,136
 Proerythroblast	Erythroid	170,68,153
+Progenitor	Neural progenitor	51,34,136
 Proliferating mesenchymal cell	Stromal	153,79,0
 Prox1/Lhx6 GABAergic interneuron	Inhibitory neuron	213,94,0
 Proximal tubule	Epithelial	17,119,51
@@ -379,7 +381,7 @@ Stellate	Stromal	153,79,0
 Striatal GABAergic interneuron	Inhibitory neuron	213,94,0
 Stromal cell	Stromal	153,79,0
 Subiculum/entorhinal neuron	Excitatory neuron	0,114,178
-Subperineurialglia	Other	153,153,153
+Subperineurialglia	Other glia	88,160,88
 Sympathoblasts	Other neuron	86,180,233
 Syncytiotrophoblast and villous cytotrophoblasts	Epithelial	17,119,51
 Syncytiotrophoblast;Cytotrophoblast;Trophoblast giant	Epithelial	17,119,51

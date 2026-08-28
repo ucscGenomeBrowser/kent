@@ -1,0 +1,78 @@
+<h2 class="font-bold">About Taxonium</h2>
+<p>
+  Taxonium is a web application for exploring phylogenetic trees. Find out more at the
+  Github repository (https://github.com/theosanderson/taxonium)
+  or
+  read the documentation (https://docs.taxonium.org).
+</p>
+
+<h2 class="font-bold">About the tree</h2>
+<p>
+  This tree was constructed by the
+  <a href="https://pathogengenomics.ucsc.edu/" target=_blank>Pathogen Genomics Group</a>
+  at the University of California Santa Cruz (UCSC) Genomics Institute.
+  Our automated pipeline downloads Influenza A sequences from
+  <a href="https://www.ncbi.nlm.nih.gov/genbank/" target=_blank>GenBank</a>
+  (i.e. the INSDC databases) and SRA assemblies from
+  <a href="https://github.com/andersen-lab/avian-influenza/" target=_blank>https://github.com/andersen-lab/avian-influenza/</a>,
+  aligns them to the <a href="https://www.ncbi.nlm.nih.gov/refseq/" target=_blank>RefSeq</a> reference sequence
+  for __STRAIN__ segment __SEGNUM__ (__SEGNAME__),
+  __SEGREF__(https://www.ncbi.nlm.nih.gov/nuccore/__SEGREF__),
+  using <a href="https://docs.nextstrain.org/projects/nextclade/en/stable/user/nextclade-cli/index.html" target=_blank>nextclade</a>,
+  and runs <a href="https://usher-wiki.readthedocs.io/en/latest/" target=_blank>UShER</a>
+  to infer the tree structure and
+  <a href="https://usher-wiki.readthedocs.io/en/latest/matOptimize.html" target=_blank>matOptimize</a>
+  to improve it under maximum parsimony.
+</p>
+
+<h2 class="font-bold">About the metadata</h2>
+<p>
+  In addition to metadata from GenBank and https://github.com/andersen-lab/avian-influenza
+  (date, country, host, etc.), five phenotype scores were calculated from
+  Deep Mutational Scanning (DMS) experiments performed by the Bloom lab at the
+  Fred Hutchinson Cancer Center
+  (https://dms-vep.org/Flu_H5_American-Wigeon_South-Carolina_2021-H5N1_DMS/):
+  <ul>
+    <li>Mouse sera escape relative to AmWigeon/SC/2021</li>
+    <li>Ferret sera escape relative to AmWigeon/SC/2021</li>
+    <li>Cell entry</li>
+    <li>Stability</li>
+    <li>Increase in a2,6 sialic acid usage</li>
+  </ul>
+  The scores displayed for each sequence were calculated by summing the per-mutation scores
+  for all mutations found in that sequence.
+</p>
+
+<h2 class="font-bold">Downloads</h2>
+<p>
+  The tree and metadata files can be downloaded from
+  https://hgdownload.gi.ucsc.edu/hubs/__ASMDIR__/UShER___SEGREF__ .
+</p>
+
+<h2 class="font-bold">Citations</h2>
+<p>
+  If you use Taxonium in your research, please cite:
+  <br>
+  Theo Sanderson (2022)
+  <span class="font-semibold">Taxonium, a web-based tool for exploring large phylogenetic trees</span>
+  <i>eLife</i> 11:e82392.
+  <br>
+  <a href="https://doi.org/10.7554/eLife.82392" target=_blank>https://doi.org/10.7554/eLife.82392</a>
+</p>
+<p>
+  If you use the tree in your research, please cite:
+  <br>
+  Jakob McBroome et al. (2021)
+  <span class="font-semibold">A Daily-Updated Database and Tools for Comprehensive SARS-CoV-2 Mutation-Annotated Trees</span>
+  <i>Mol Biol Evol</i> 38(12):5819-5824.
+  <br>
+  <a href="https://doi.org/10.1093/molbev/msab264" target=_blank>https://doi.org/10.1093/molbev/msab264</a>
+</p>
+<p>
+  If you use the Deep Mutational Scanning phenotype scores in your research, please cite:
+  <br>
+  Bernadeta Dadonaite et al. (2024)
+  <span class="font-semibold">Deep mutational scanning of H5 hemagglutinin to inform influenza virus surveillance</span>
+  <br>
+  <a href="https://doi.org/10.1371/journal.pbio.3002916" target=_blank>https://doi.org/10.1371/journal.pbio.3002916</a>
+</p>

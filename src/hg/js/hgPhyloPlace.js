@@ -454,7 +454,7 @@ var recombinantGraph = (function () {
         const maxLabelWidth = estimateTextWidth(genomeSizeString);
         const maxBins = Math.floor(width / (maxLabelWidth * 1.5));
         const tickTextY = y + 3 * cfg.topPad;
-        for (let binSize of [100, 200, 500, 1000, 200, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000]) {
+        for (let binSize of [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000]) {
             let binCount = Math.ceil(genomeSize / binSize);
             if (binCount < maxBins) {
                 for (let gx = 0;  gx < genomeSize;  gx += binSize) {
