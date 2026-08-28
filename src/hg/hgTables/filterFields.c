@@ -476,7 +476,7 @@ struct dbTable *dtList, *dt;
 char dbTableBuf[256];
 
 cartSetString(cart, hgtaFieldSelectTable, getDbTable(db, table));
-if (strchr(table, '.'))
+if (tableHasDbPrefix(table))
     htmlOpen("Select Fields from %s", table);
 else
     htmlOpen("Select Fields from %s.%s", db, table);
@@ -1286,7 +1286,7 @@ struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
 char dbTableBuf[256];
 
-if (strchr(table, '.'))
+if (tableHasDbPrefix(table))
     htmlOpen("Filter on Fields from %s", table);
 else
     htmlOpen("Filter on Fields from %s.%s", db, table);
