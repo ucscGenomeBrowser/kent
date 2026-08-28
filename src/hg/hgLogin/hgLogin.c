@@ -1939,9 +1939,23 @@ char *encEmail = htmlEncode(email);
 hPrintf("<div id=\"completeAccountBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf("<h3>Choose a username</h3>");
-hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
-    "You can change the suggested name below.</p>",
-    oauthProviderLabel(provider), brwName);
+if (sameWord(provider, "orcid"))
+    hPrintf("<p>A new genome browser account is created for any ORCID sign-in not seen before, "
+        "because ORCID only shares an ORCID iD, not an email address. So you cannot sign into an "
+        "existing account using ORCID. Use another sign-in option instead if you don't want to "
+        "create a new account.</p>"
+        "<p>Pick a username for your %s account. You can change the suggested name below.</p>",
+        brwName);
+else if (sameWord(provider, "cilogon"))
+    hPrintf("<p>A new genome browser account is created for any CILogon sign-in not seen before. "
+        "So you cannot sign into an existing account using CILogon this way. Use another sign-in "
+        "option instead if you don't want to create a new account.</p>"
+        "<p>Pick a username for your %s account. You can change the suggested name below.</p>",
+        brwName);
+else
+    hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
+        "You can change the suggested name below.</p>",
+        oauthProviderLabel(provider), brwName);
 printUsernameNote();
 hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"completeAccountForm\">", hgLoginUrl);

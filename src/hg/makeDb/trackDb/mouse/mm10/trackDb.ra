@@ -11,7 +11,7 @@ include trackDb.previousVersionsChainNet.ra alpha
 include tabulaMurisSenis.ra
 include tabulamuris.ra
 include mouseDevTimecourse.ra alpha,beta
-include developmentTimecourseSignalMm10.ra
+include developmentTimecourseSignalMm10.ra alpha,beta
 include liftOverMm39.ra
 
 # Local declaration so that local gold.html is picked up.
