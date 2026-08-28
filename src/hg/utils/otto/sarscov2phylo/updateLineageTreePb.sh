@@ -80,7 +80,7 @@ $matUtils extract -i gisaidAndPublic.$buildDate.masked.pruneRevs.pb.gz \
     -O -o gisaidAndPublic.$buildDate.masked.reroot.pb.gz
 
 # Reroot pango.clade-mutations.tsv
-sed -re 's/\t([A-Z][0-9]+[A-Z])/\tT8782C > C28144T > \1/;' $scriptDir/pango.clade-mutations.tsv \
+sed -re 's/\t($|[A-Z][0-9]+[A-Z])/\tT8782C > C28144T > \1/;' $scriptDir/pango.clade-mutations.tsv \
     > pango.clade-mutations.reroot.tsv
 
 # Mask additional bases at the beginning and end of the genome that pangolin masks after
