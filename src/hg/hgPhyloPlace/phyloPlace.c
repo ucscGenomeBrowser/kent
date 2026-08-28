@@ -817,7 +817,7 @@ for (vpn = variantPath;  vpn != NULL;  vpn = vpn->next)
     if (vpn != variantPath)
         printf(" > ");
     if (!isInternalNodeName(vpn->nodeName, 0))
-        printf("%s: ", vpn->nodeName);
+        printf("%s: ", htmlEncode(vpn->nodeName));
     struct singleNucChange *snc;
     for (snc = vpn->sncList;  snc != NULL;  snc = snc->next)
         {
