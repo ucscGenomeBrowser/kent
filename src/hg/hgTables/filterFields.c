@@ -1095,7 +1095,7 @@ if (!(isWig||isBedGr||(isBb && !isKnownGene)||isBam||isVcf||isLongTabix||isHic))
     hPrintf(" &nbsp;&nbsp; name like 'ENST%%' <br>");
     hPrintf(" &nbsp;&nbsp; name like \"ENST*\" <br>");
     hPrintf(" &nbsp;&nbsp; name = 'ENST00000693149.1_1' <br>");
-    hPrintf(" &nbsp;&nbsp; (name = 'ENST00000693149.1_1' and score < 100) or (name = 'ENST00000691165.1_1' and score < 1000) <br>");
+    hPrintf(" &nbsp;&nbsp; (name = 'ENST00000693149.1_1' and score &lt; 100) or (name = 'ENST00000691165.1_1' and score &lt; 1000) <br>");
     
     hPrintf("</TD></TR></TABLE>\n");
     }
