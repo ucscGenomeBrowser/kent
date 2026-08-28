@@ -83,5 +83,8 @@ if [[ "$annotatedNotDesignated" != "" ]]; then
 else
     echo "No extra lineages, good."
 fi
+echo ""
+# Check for split lineages / sequences to prune:
+grep 'prune ' split_lineages.txt | cat
 set -o pipefail
 set -x
