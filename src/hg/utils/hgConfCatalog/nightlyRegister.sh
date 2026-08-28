@@ -126,12 +126,18 @@ export KENT_SRC=$CHECKOUT/src
 work=$(mktemp -d)
 trap 'cleanup; rm -rf "$work"' EXIT
 
-# The two mechanical passes.  Both are deterministic and neither invents a
-# judgement, so a cron may run them unattended: --auto-register copies facts off
-# the call, and --fix-citations only ever moves a file:line onto the read it
-# already names.
+# The one mechanical pass.  It is deterministic and invents no judgement, so a
+# cron may run it unattended: --auto-register only copies facts off the call.
+#
+# There used to be a second pass here, --fix-citations, which chased the line
+# numbers the catalog stored beside each read.  It is gone, and so is the field
+# it repaired.  Line numbers are derived data, and storing them by hand meant a
+# single insertion near the top of hgTracks.c moved fifteen citations at once:
+# of the sixteen commits this job pushed between 2026-08-07 and 2026-08-28,
+# thirteen changed nothing else.  A row now cites the file, and the line is
+# recomputed for display.  So this job commits only when a setting is genuinely
+# new, which was three of those sixteen nights.
 "$CATALOG" --auto-register  > "$work/register" 2>&1
-"$CATALOG" --fix-citations  > "$work/citations" 2>&1
 
 # What is left after the machine has done all it honestly can.  Non-zero
 # whenever a row is waiting to be classified, so the exit code is information.
@@ -164,10 +170,14 @@ fi
 
 # Name the settings in the subject line so the commit reads like a person wrote
 # it, and keep it under a sensible width when there are many.
-names=$(git diff -U0 -- "$RELPATH" | sed -n 's/^+ *h("\([^"]*\)".*/\1/p' | paste -sd, - )
+# Take the names from --auto-register's own report rather than from the diff.
+# Reading them off "+" lines used to credit the job with registering settings it
+# had only re-cited, because --fix-citations rewrote whole h("name", ...) lines
+# and every one of them matched.  The report says what was actually written.
+names=$(sed -n 's/^    \([A-Za-z0-9_.{}]*\) .*/\1/p' "$work/register" | paste -sd, - )
 count=$(echo "$names" | tr ',' '\n' | grep -c . || true)
 if [[ -z $names ]]; then
-    subject="hgConfCatalog: refresh the file:line citations, refs #37925"
+    subject="hgConfCatalog: update the catalog, refs #37925"
 elif [[ ${#names} -le 60 ]]; then
     subject="hgConfCatalog: register $names, refs #37925"
 else
@@ -178,19 +188,13 @@ fi
     echo "$subject"
     echo
     echo "Written by nightlyRegister.sh, which records the settings the tree"
-    echo "reads that the catalog was missing, and repairs file:line citations"
-    echo "whose line numbers have drifted.  Only facts copied off the call site"
-    echo "are filled in.  No classification is guessed: a new boolean gets no"
+    echo "reads that the catalog was missing.  Only facts copied off the call"
+    echo "site are filled in.  No classification is guessed: a new boolean gets no"
     echo "role=, because calling a release gate a knob would hide it from the"
     echo "sunset report for good, and every row lands in the 'Awaiting review'"
     echo "section until somebody reads the call site."
     echo
     sed 's/^/  /' "$work/register"
-    # Only mention citations when some actually moved; "no citation to fix" is
-    # not news worth carrying in a commit message forever.
-    if [[ -s $work/citations ]] && ! grep -q '^no citation to fix$' "$work/citations"; then
-        sed 's/^/  /' "$work/citations"
-    fi
 } > "$work/msg"
 
 git add -- "$RELPATH"
@@ -215,9 +219,6 @@ beat "committed ${count:-0} row(s) at $(git rev-parse --short HEAD), $waiting aw
 echo "hg.conf catalog: $subject"
 echo
 sed 's/^/  /' "$work/register"
-if [[ -s $work/citations ]] && ! grep -q '^no citation to fix$' "$work/citations"; then
-    sed 's/^/  /' "$work/citations"
-fi
 echo
 echo "Left for a person to decide:"
 sed 's/^/  /' "$work/reconcile"
