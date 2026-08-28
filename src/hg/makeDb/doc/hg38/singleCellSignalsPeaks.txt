@@ -29,6 +29,43 @@
 # Cell Browser datasets already serve; nothing is regenerated here, only copied.
 
 ##############################################################################
+# 1b. Excluding an individual track
+##############################################################################
+# Most files that should not ship are caught by a rule describing their whole
+# class (work-in-progress dirs, submitter source dirs, cbBuild desc placeholders,
+# orphan intermediates). For a file that is technically fine but still should not
+# be a track, the hub build has a hand-curated denylist in hub_config.json:
+#
+#   "exclude_track_paths": [ [<regex>, <note>], ... ]
+#
+# The regex is re.search-matched against the file's path relative to
+# /hive/data/inside/cells/datasets. A match sets excluded=1 in manifest.tsv with
+# reason "manually_excluded", so the file never reaches the hub, the .ra, or the
+# facet metadata. build_manifest.py warns when a pattern matches nothing -- a
+# typo'd regex fails open, and the track would keep shipping while the config says
+# it does not -- and inventory-report.md lists each excluded path with its note.
+#
+# Anchor patterns with ^...$ . The BrainVar aggregates below share their basenames
+# with the submitter-files/ copies and with the prenatal/postnatal files; they
+# differ only by directory, so an unanchored pattern would take all three.
+#
+# Currently excluded (5 files, all hg38):
+#   brainvar/gene-activity/hub/bw/{ExN,Glia,InN,NN}-TileSize-100-...-ArchR.bw
+#       The 4 combined-stage BrainVar aggregates, superseded by the prenatal and
+#       postnatal pair of the same cell type (see the brainvar note under Counts).
+#   neuro-degen-atac/peaks.bb
+#       Superseded by peaks.v2.bb, which is what that dataset's own hub.txt serves
+#       as "track peaks" -- its peaks.bb bigDataUrl line is commented out there.
+#       peaks.bb survives only as an unreferenced file on disk, so the walk picks
+#       it up as an orphan; both files collide on the same track id and shipped as
+#       two indistinguishable "All cell types, peaks" tracks. Dropping it also
+#       clears the collision, so the survivor is named ..._peaks rather than
+#       ..._peaks_2 and its label loses the "(peaks)" disambiguator.
+#
+# After editing the denylist, re-run build_manifest.py and build_stanzas.py, then
+# sections 2 and 3 to refresh the bed dir, the facet metadata, and the .ra.
+
+##############################################################################
 # 2. Copy the data files into place  (bed dir, served via a /gbdb symlink)
 ##############################################################################
 # Every subtrack of the cellBrowserHg38 composite is copied into
@@ -38,18 +75,19 @@
 #   allen-brain-science/seaad_MTG/bw/ADNC0Astro.bw ).
 # The served subpath is preserved on purpose: 18 peak-file basenames repeat
 # across datasets (cortex-atac), so a flat directory would clobber them.
-#   934 files total (bigWig + bigBed/bigNarrowPeak), ~274 GB as the copy script
+#   929 files total (bigWig + bigBed/bigNarrowPeak), ~274 GB as the copy script
 #   counts it (256 GiB; du reports 511 G because of GPFS block allocation).
 #
 # copySingleCellSignalsPeaksFiles.py skips files already up to date (same size and
 # a destination no older than its source), so a re-run after new data lands moves
 # only the new files -- adding the 9 stage-split brainvar bigWigs took ~1.2 GB and
-# 10 seconds even though the summary line still counts all 934 subtracks.
+# 10 seconds even though the summary line still counts all 929 subtracks.
 #
-# 11 data files in the bed dir are no longer referenced by the .ra (134 MB): the 10
-# cortex-atac interact.old/ bigBeds reclassified to the interact composite and one
-# dropped QC cluster. Harmless, and both are explained above; delete them if the
-# dir is ever tidied.
+# 16 data files in the bed dir are no longer referenced by the .ra (1.1 GB): the
+# 10 cortex-atac interact.old/ bigBeds reclassified to the interact composite, one
+# dropped QC cluster, and the 5 files denied by exclude_track_paths (section 1b).
+# Harmless -- the .ra alone decides what is served; delete them if the dir is ever
+# tidied.
 #
 # The file list comes straight from the composite's bigDataUrl lines mapped back
 # to manifest abs_paths; copy each abs_path to bed/<relpath> (mkdir -p parents).
@@ -119,13 +157,13 @@
 ##############################################################################
 # Counts
 ##############################################################################
-# 934 subtracks across 9 datasets: human-enhancer-atlas (444),
-# sea-ad-brain-atac (184), cortex-atac (81), retina (69), neuro-degen-atac (66),
+# 929 subtracks across 9 datasets: human-enhancer-atlas (444),
+# sea-ad-brain-atac (184), cortex-atac (81), retina (69), neuro-degen-atac (65),
 # multiomic-human-heart (40), cardiogenesis-atac (19), olg-eae-ms (18),
-# brainvar (13). Mislabeled interaction bigBeds (cortex-atac interact.old/) are
+# brainvar (9). Mislabeled interaction bigBeds (cortex-atac interact.old/) are
 # reclassified to the interact composite and QC clusters are dropped before the
 # .ra is written. Facet metadata rows match the subtracks 1:1.
-# All 934 longLabels are unique; shortLabels are <=22 chars with no underscores.
+# All 929 longLabels are unique; shortLabels are <=22 chars with no underscores.
 # Every subtrack has a broad cell class and a palette color (0 unclassified).
 # One track legitimately shows class "Unknown": neuro-degen-atac's cluster whose
 # source label is literally "Unannotated". That is a real palette class, not a
@@ -134,6 +172,8 @@
 # brainvar went 4 -> 13 subtracks when the group sent stage-split pseudobulk
 # coverage: 5 prenatal and 4 postnatal added alongside the 4 original
 # combined-stage tracks. Progenitors are prenatal only, so 9 new files, not 10.
+# The 4 combined-stage tracks were then dropped (section 1b), leaving the 9
+# stage-split ones, so every BrainVar track is now prenatal or postnatal.
 # Their methods text says "a tile size of 1 kb" but the data is 100 bp (every
 # interval is 100 bp wide on 100 bp boundaries, matching the TileSize-100
 # filenames); 100 bp is what the description page states. Worth confirming with
