@@ -1047,6 +1047,10 @@ boolean compositeChildHideEmptySubtracks(struct cart *cart, struct trackDb *chil
  * Return TRUE if we should hide empties
  */
 
+void compositeHideEmptySubtracksUi(struct cart *cart, struct trackDb *tdb);
+/* Print the checkbox controlling the hideEmptySubtracks setting, for composites that
+ * have it.  Prints nothing for the ones that don't. */
+
 char *wgEncodeVocabLink(char *term,char *value,char *title, char *label,char *suffix);
 // returns allocated string of HTML link to ENCODE controlled vocabulary term
 

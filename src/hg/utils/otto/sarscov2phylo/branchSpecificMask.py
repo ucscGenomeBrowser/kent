@@ -65,6 +65,8 @@ def run(cmd):
         die(e)
 
 def getBacktrack(spec, rep):
+    #*** Note: if a representative is used multiple times, the first representativeBacktrack that we come across for it
+    #*** will be applied to all.
     """If spec for branch whose representative is rep has representativeBacktrack, return that
     value, otherwise return 0."""
     for branch in spec:
@@ -73,6 +75,12 @@ def getBacktrack(spec, rep):
             backtrack = branchSpec.get('representativeBacktrack')
             if backtrack is not None:
                 return backtrack
+        exclusions = spec[branch].get('exclusions', [])
+        for ex in exclusions:
+            if ex['representative'] == rep:
+                backtrack = ex.get('representativeBacktrack')
+                if backtrack is not None:
+                    return backtrack
     return 0
 
 def getRepresentativeNodes(pbIn, spec):

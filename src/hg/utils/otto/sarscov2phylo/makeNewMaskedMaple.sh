@@ -124,7 +124,7 @@ fi
 
 function gbAccCogRenaming {
     # pipeline: one INSDC accession per line of stdin, acc to full name if COG-UK on stdout
-    grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
+    csvtk -t -U -H grep --pattern-file - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
     | grep COG-UK/ \
     | tawk '{ if ($4 != "") { print $1, $4 "/" $6 "/" $3 "|" $1 "|" $3; } else { if ($3 != "") { print $1, $6  "/" $3 "|" $1 "|" $3; } else { print $1, $6 "|" $1 "|?"; } } }' \
     | sed -re 's@COG-UK/@@g; s/United Kingdom://; s/(\/[0-9]{4})(-[0-9]+)*/\1/; s/ //g;'
@@ -132,7 +132,7 @@ function gbAccCogRenaming {
 
 function gbAccNonCogRenaming {
     # pipeline: one INSDC accession per line of stdin, acc to full name if non-COG-UK on stdout
-    grep -Fwf - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
+    csvtk -t -U -H grep --pattern-file - $ncbiDir/ncbi_dataset.plusBioSample.tsv \
     | grep -v COG-UK/ \
     | cleanGenbank \
     | tawk '{ if ($3 == "") { $3 = "?"; }
@@ -167,11 +167,11 @@ zcat $cogUkDir/cog_metadata.csv.gz \
     >> accToNewName
 # GISAID:
 zcat $gisaidDir/metadata_batch_$today.tsv.gz \
-| grep -Fwf prevGisaid \
+| csvtk -t -U grep --pattern-file prevGisaid --fields gisaid_epi_isl \
 | tawk '$3 != "" {print $3 "\t" $1 "|" $3 "|" $5;}' \
     >> accToNewName
 # CNCB:
-grep -Fwf prevCncb $cncbDir/cncb.metadata.tsv \
+csvtk -t -U grep --pattern-file prevCncb --fields "Accession ID" $cncbDir/cncb.metadata.tsv \
 | cleanCncb \
 | sed -re 's/ /_/g;' \
 | tawk '{print $2 "\t" $1 "|" $2 "|" $10;}' \
@@ -233,27 +233,25 @@ sort -u ../tooManyEpps.ids ../badBranchSeed.ids dropoutContam.ids refBackfill.id
 # Get IDs of new GenBank sequences
 set +o pipefail
 cut -f 1 $ncbiDir/ncbi_dataset.plusBioSample.tsv \
-| grep -vFwf <(cat prevGbAcc exclude.ids) \
-| cat \
+| csvtk -t -U grep --invert --pattern-file <(cat prevGbAcc exclude.ids) \
     > gbNew
 
 # Get IDs of new COG-UK sequences
 zcat $cogUkDir/cog_metadata.csv.gz | cut -d, -f 1 \
 | grep -vFwf <(cat prevCogUk exclude.ids) \
-| cat \
+| tail -n+2 \
     > cogUkNew
 
 # Get IDs of new GISAID sequences
 zcat $gisaidDir/metadata_batch_$today.tsv.gz \
 | cut -f 3 \
-| grep -vFwf <(cat prevGisaid exclude.ids) \
-| cat \
+| csvtk -t -U grep --invert --pattern-file <(cat prevGisaid exclude.ids) \
     > gisaidNew
 
 # Get IDs of new CNCB sequences
 cut -f 2 $cncbDir/cncb.metadata.tsv \
-| grep -vFwf <(cat prevCncb exclude.ids) \
-| cat \
+| grep -v ^EPI_ISL_ \
+| csvtk -t -U grep --invert --pattern-file <(cat prevCncb exclude.ids) \
     > cncbNew
 
 # Now make a renaming that converts accessions back to full name|acc|year names.
@@ -274,14 +272,14 @@ if [ -s gbNew ]; then
 fi
 if [ -s gisaidNew ]; then
     zcat $gisaidDir/metadata_batch_$today.tsv.gz \
-    | grep -Fwf gisaidNew \
+    | csvtk -t -U grep --pattern-file gisaidNew --fields gisaid_epi_isl \
     | tawk '$3 != "" {print $3 "\t" $1 "|" $3 "|" $5;}' \
         >> $renaming
 fi
 if [ -s cncbNew ]; then
     cleanCncb < $cncbDir/cncb.metadata.tsv \
     | sed -re 's/ /_/g;' \
-    | grep -Fwf cncbNew \
+    | csvtk -t -U grep --pattern-file cncbNew --fields Accession_ID \
     | tawk '{print $2 "\t" $1 "|" $2 "|" $10;}' \
         >> $renaming
 fi
@@ -296,8 +294,8 @@ tawk '$7 == "mask" {print $1, $2-1, $2;}' $problematicSitesVcf > mask.bed
 # which usually means garbage.
 cp /dev/null new.masked.mpl.gz
 if [ -s gbNew ]; then
-    cat <(zcat $ncbiDir/nextclade.full.tsv.gz | head -1) \
-        <(zcat $ncbiDir/nextclade.full.tsv.gz | grep -Fwf gbNew) \
+    zcat $ncbiDir/nextclade.full.tsv.gz \
+    | csvtk -t grep --pattern-file gbNew --fields seqName \
     | nextcladeToMaple -refLen=29903 -renameOrPrune=$renaming -maskBed=mask.bed -maxSubst=200 \
         -minReal=$minReal stdin stdout \
     | grep -v '^-' \
@@ -305,8 +303,8 @@ if [ -s gbNew ]; then
         >> new.masked.mpl.gz
 fi
 if [ -s cogUkNew ]; then
-    cat <(zcat $cogUkDir/nextclade.full.tsv.gz | head -1) \
-        <(zcat $cogUkDir/nextclade.full.tsv.gz | grep -Fwf cogUkNew) \
+    zcat $cogUkDir/nextclade.full.tsv.gz \
+    | csvtk -t grep --pattern-file cogUkNew --fields seqName \
     | nextcladeToMaple -refLen=29903 -renameOrPrune=$renaming -maskBed=mask.bed -maxSubst=200 \
         -minReal=$minReal stdin stdout \
     | grep -v '^-' \
@@ -316,10 +314,9 @@ fi
 if [ -s gisaidNew ]; then
     # The GISAID nextclade.full.tsv.gz has full names not IDs; strip down to IDs so lack of
     # renaming doesn't lead to pruning.
-    cat <(zcat $gisaidDir/chunks/nextclade.full.tsv.gz | head -1) \
-        <(zcat $gisaidDir/chunks/nextclade.full.tsv.gz \
-          | sed -re 's/[^\t]+\|(EPI_ISL_[0-9]+)\|[^\t]+/\1/' \
-          | grep -Fwf gisaidNew) \
+    zcat $gisaidDir/chunks/nextclade.full.tsv.gz \
+    | sed -re 's/[^\t]+\|(EPI_ISL_[0-9]+)\|[^\t]+/\1/' \
+    | csvtk -t grep --pattern-file gisaidNew --fields seqName \
     | nextcladeToMaple -refLen=29903 -renameOrPrune=$renaming -maskBed=mask.bed -maxSubst=200 \
         -minReal=$minReal stdin stdout \
     | grep -v '^-' \
@@ -327,8 +324,8 @@ if [ -s gisaidNew ]; then
         >> new.masked.mpl.gz
 fi
 if [ -s cncbNew ]; then
-    cat <(zcat $cncbDir/nextclade.full.tsv.gz | head -1) \
-        <(zcat $cncbDir/nextclade.full.tsv.gz | grep -Fwf cncbNew) \
+    zcat $cncbDir/nextclade.full.tsv.gz \
+    | csvtk -t grep --pattern-file cncbNew --fields seqName \
     | nextcladeToMaple -refLen=29903 -renameOrPrune=$renaming -maskBed=mask.bed -maxSubst=200 \
         -minReal=$minReal stdin stdout \
     | grep -v '^-' \

@@ -3113,6 +3113,8 @@ const int metaDataIdLen = strlen(metaDataId);
 
 printf(pageStyle);       // css
 
+compositeHideEmptySubtracksUi(cart, tdb);
+
 // --- Composite-level filters ---
 // Faceted composites skip hCompositeUi(), so we're doing our own filters setup.
 // The section is named "bedFilters" rather than "filters" because the JS builds
