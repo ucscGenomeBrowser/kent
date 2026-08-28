@@ -11,3 +11,4 @@ maxWindowCoverage 200000
 filterText.name .*
 filterType.name regexp
 filterLabel.name Gene symbol
+pennantIcon New red ../goldenPath/newsarch.html#082826 "Released Aug. 28, 2026"

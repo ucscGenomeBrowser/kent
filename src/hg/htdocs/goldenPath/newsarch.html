@@ -64,6 +64,126 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="082826"></a>
+<h2>Aug. 28, 2026 &nbsp;&nbsp; Deleteriousness Predictions: popEVE and EVE for hg38</h2>
+<p>
+We are pleased to announce the release of two new proteome-wide missense variant effect
+prediction tracks for hg38:
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=popEve&position=default" target="_blank">popEVE</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=eve&position=default" target="_blank">EVE</a>.
+Both are deep generative models that predict variant pathogenicity by learning patterns of
+natural sequence variation across species, without relying on clinical labels.
+</p>
+
+<h3>EVE</h3>
+<p>
+<a href="https://evemodel.org" target="_blank">EVE</a> (Evolutionary model of Variant Effect) is a
+deep generative model that predicts the pathogenicity of missense variants by learning patterns of
+natural sequence variation across thousands of species, without relying on clinical labels.
+Pre-computed scores are provided for all possible missense substitutions across 2,949
+disease-associated human proteins.
+</p>
+
+<p>
+Scores range from 0 to 1, with higher values indicating a greater predicted likelihood that a
+variant is disease-relevant. As with any pathogenicity prediction score, EVE is intended as
+supporting evidence rather than a stand-alone classifier.
+</p>
+
+<p>
+Each track entry spans one protein at its genomic locus. The heatmap columns correspond to
+individual amino acid positions, placed at the codon's genomic coordinate, and the rows correspond
+to the 20 standard amino acids, ordered by amino acid class. Each cell shows the EVE score for
+substituting the wildtype amino acid at that position with the row amino acid. Empty cells
+indicate the wildtype amino acid at a given position, or positions for which no score is
+available.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="/cgi-bin/hgTracks?db=hg38&position=chr7%3A81752177-81752229&eve=pack" target="_blank">
+<img alt="Genome Browser screenshot of the EVE track at the HGF locus on hg38"
+src="/images/newsArchImages/eve.png" width='55%'></a>
+<p class="gbsCaption"><em>EVE missense variant effect scores for the HGF locus (chr7,
+GRCh38/hg38). Each row is an amino acid substitution; each column is a protein position. Hovering
+over a cell shows the substitution and EVE score.</em></p>
+</div>
+
+<p>
+Items in this track are colored according to score:
+</p>
+<ul>
+  <li><b>Red</b> &ndash; Likely pathogenic (score &asymp; 1)</li>
+  <li><b>White</b> &ndash; Uncertain (score &asymp; 0.5)</li>
+  <li><b>Blue</b> &ndash; Likely benign (score &asymp; 0)</li>
+</ul>
+
+<p>
+<b>Note:</b> Zoom in to base level to see the full amino-acid heatmap with per-substitution scores
+on mouseover. At wider zoom levels, the track switches to displaying a density graph.
+</p>
+
+<h3>popEVE</h3>
+<p>
+<a href="https://pop.evemodel.org" target="_blank">popEVE</a> builds on EVE by combining its
+evolutionary signal with predictions from the ESM-1v protein language model and human population
+variation from the UK Biobank. A key difference is that EVE scores are calibrated separately
+within each protein, whereas popEVE scores are calibrated across the entire proteome. That means a
+popEVE score in one gene can be compared directly to a popEVE score in a completely different
+gene. This is useful when prioritizing which of several candidate variants across different genes
+is most likely to be damaging. The track provides popEVE scores for missense substitutions across
+roughly 18,000 human proteins.
+</p>
+
+<p>
+popEVE scores are continuous, with lower, more negative values indicating greater predicted
+deleteriousness. The authors define approximately &minus;5.056 as a severe, high-confidence
+deleterious threshold and &minus;4.617 as a moderate threshold. Because the scores are calibrated
+across the proteome, they can be compared directly between genes.
+</p>
+
+<p>
+Each track item represents a protein at its genomic locus and is displayed as a heatmap. Columns
+correspond to amino acid positions, while rows represent possible amino acid substitutions. Each
+cell shows the popEVE score for that substitution.
+</p>
+
+<p>
+Items are colored according to score:
+</p>
+<ul>
+  <li><b>Dark red</b> &ndash; Most deleterious (&le; &minus;6.04)</li>
+  <li><b>Red-orange</b> &ndash; Severe (&asymp; &minus;5.056)</li>
+  <li><b>Light orange</b> &ndash; Moderate (&asymp; &minus;4.617)</li>
+  <li><b>White / very light</b> &ndash; Near the proteome-wide median (&asymp; &minus;3.5)</li>
+  <li><b>Blue</b> &ndash; Most tolerated (&ge; &minus;2.41)</li>
+</ul>
+
+<p>
+Colors are interpolated between these values on a single proteome-wide gradient. As with other
+computational variant-effect predictors, popEVE is intended to provide supporting evidence for
+variant interpretation rather than serve as a stand-alone clinical classifier.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="/cgi-bin/hgTracks?db=hg38&position=chr3%3A38756746-38756842&popEve=pack" target="_blank">
+<img alt="Genome Browser screenshot of the popEVE track at the SCN10A locus on hg38"
+src="/images/newsArchImages/popEve.png" width='55%'></a>
+<p class="gbsCaption"><em>popEVE missense deleteriousness scores for all possible amino acid
+substitutions in the SCN10A gene at chr3, GRCh38/hg38, where colors indicate predicted severity
+from severe (red) to tolerated (blue).</em></p>
+</div>
+
+<p>
+We would like to thank Mafalda Dias, Jonathan Frazer, Debora S. Marks, Rose Orenbuch, and
+colleagues at Harvard Medical School, the Centre for Genomic Regulation, and collaborating
+institutions for developing popEVE and making the scores publicly available at
+<a href="https://pop.evemodel.org" target="_blank">pop.evemodel.org</a>, and Jonathan Frazer,
+Pascal Notin, Mafalda Dias, and Debora S. Marks at Harvard Medical School, along with Yarin Gal at
+the University of Oxford, for making the EVE scores publicly available at
+<a href="https://evemodel.org" target="_blank">evemodel.org</a>. Lou Nassar and Max Haeussler
+developed these tracks, with QA by Jairo Navarro, Barali Kitiyakara, and Eliza Alde.
+</p>
+
 <a name="082626"></a>
 <h2>Aug. 26, 2026 &nbsp;&nbsp; gnomAD v4.1.1 and MPC tracks for hg38</h2>
 <p>
