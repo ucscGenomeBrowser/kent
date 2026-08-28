@@ -5607,6 +5607,7 @@ track ncbiRefSeqHistorical
 parent refSeqComposite off
 priority 9
 type genePred
+dataVersion /gbdb/$D/ncbiRefSeq/ncbiRefSeqHistoricalVersion.txt
 shortLabel RefSeq Historical
 longLabel NCBI RefSeq Historical Transcript Versions
 color 12,12,120
