@@ -92,7 +92,7 @@ MIN_TREE_NAMES = 300
 
 def c(name, kind, src, value="1", persists=False, public=False, note=None,
       verified=False, alias=None, deprecated=False, members=None,
-      nocart=False, leaks=False, droppedBy=None):
+      nocart=False, leaks=False, droppedBy=None, partialDrop=None):
     """One catalog entry.
 
     name       the CGI parameter name as typed on the URL
@@ -112,6 +112,12 @@ def c(name, kind, src, value="1", persists=False, public=False, note=None,
     droppedBy  file:line of an indirect cartRemove, where the name is passed
                into a helper rather than removed literally, so the audit
                cannot see it
+    partialDrop the reverse of droppedBy: there is a literal cartRemove, but it
+               is on a code path that does not set the variable, so the name
+               still reaches the cart by the path that does.  Say which remove
+               and which path.  The audit keys on the name alone and cannot
+               tell one path from another, so without this a true leaks=True
+               reads as stale and the nightly never goes quiet
     """
     d = {"name": name, "kind": kind, "src": src, "value": value,
          "persists": persists, "public": public, "verified": verified}
@@ -121,6 +127,8 @@ def c(name, kind, src, value="1", persists=False, public=False, note=None,
         d["leaks"] = True
     if droppedBy:
         d["droppedBy"] = droppedBy
+    if partialDrop:
+        d["partialDrop"] = partialDrop
     if note:
         d["note"] = note
     if alias:
@@ -251,6 +259,41 @@ SESSIONS = {
           public=True, verified=True, leaks=True,
           note="URL of a saved session settings file. Stays in the session "
                "after the load."),
+        # hgSession's three Save-form inputs.  They are form fields, not
+        # commands anybody would type on a URL, and the first two sat in
+        # urlNamesNotCataloged.txt on that reading until the sessions were
+        # counted: they are in almost every saved session there is.  A form
+        # field that persists is the same defect as a leaking command, so they
+        # are described here rather than accepted as out of scope.
+        c("hgS_newSessionName", "action", "hg/hgSession/hgSession.c:1065",
+          value="<name>", verified=True, leaks=True,
+          partialDrop="cartRemove at hgSession.c:1070 and 1113 covers "
+                      "doSaveSessionJson and doRenameSessionJson.  The Save "
+                      "form itself does not remove it, and hgSession.c:1063 "
+                      "says so in a comment: the sticky cart value would "
+                      "otherwise shadow the requested name.  In 6400 of 6607 "
+                      "saved sessions.",
+          note="Name to save the current session under."),
+        c("hgS_newSessionShare", "action", "hg/hgSession/hgSession.c:1071",
+          value="1", verified=True, leaks=True,
+          partialDrop="cartRemove at hgSession.c:1071, 2414 and 2444 covers "
+                      "the JSON endpoints only, not the Save form.  In 6398 "
+                      "of 6607 saved sessions.",
+          note="Whether the saved session may be shared with others."),
+        c("hgS_newSessionDescription", "action",
+          "hg/hgSession/hgSession.c:2546", value="<text>", verified=True,
+          leaks=True,
+          partialDrop="cartRemove at hgSession.c:2547 covers "
+                      "doDescribeSessionJson, the AJAX endpoint added with the "
+                      "opt-in Sessions page at 9f8d33c8b2b.  doSessionChange "
+                      "reads the same variable out of the cart at "
+                      "hgSession.c:1833 and never removes it, and it is in "
+                      "neither hgSession's excludeVars[] nor doSaveSessionJson's "
+                      "cleanup beside its two siblings.  In 165 of 6607 saved "
+                      "sessions, 41 of them carrying text the user typed.",
+          note="Free-text description for a saved session.  Read from the "
+               "request by the JSON endpoint and from the cart by the form "
+               "path, which is why it appears both here and in the cart."),
         c("hgS_*", "action", "hg/hgSession/hgSession.h:19", value="<varies>",
           note="hgSession's own command family. All transient.",
           members=["hgS_doNewSession", "hgS_doSaveLocal", "hgS_doLoadLocal",
@@ -1478,6 +1521,15 @@ def persistence_audit(cat, found, out=sys.stdout, verbose=False):
     parameter that reads like a one-shot command but is quietly being written
     into the user's session, which is the class of bug #37923 is chasing.
 
+    The model is coarser than the tree in one direction: it asks whether a
+    cartRemove of the name exists anywhere, not whether it is on the path that
+    sets the name.  hgSession's three Save-form inputs are the case that showed
+    this up.  Each is removed in one of the JSON endpoints and none of them is
+    removed by the form path that actually posts them, so all three sit in
+    saved sessions while the audit reads them as dropped.  A row says so with
+    partialDrop=, which is the only way to record a leak the audit would
+    otherwise call stale on every run.
+
     Returns the number of disagreements found, either direction, and prints
     them.  The count of leaks already recorded in the catalog is not one: those
     are known and are the finding of #37923, not news.
@@ -1496,7 +1548,7 @@ def persistence_audit(cat, found, out=sys.stdout, verbose=False):
             continue
         if name not in dropped and not e.get("leaks"):
             unclaimed.append(e)
-        elif name in dropped and e.get("leaks"):
+        elif name in dropped and e.get("leaks") and not e.get("partialDrop"):
             overclaimed.append(e)
 
     if unclaimed:
