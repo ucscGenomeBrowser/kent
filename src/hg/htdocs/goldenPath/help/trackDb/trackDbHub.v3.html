@@ -269,7 +269,7 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="track"><A name="track"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-required">track</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="type"><A name="type"></A><IMG class='toggle detail'>
+    <TR VALIGN=TOP><TD class="type_for_hubs"><A name="type"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-required">type</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="shortLabel"><A name="shortLabel"></A><IMG class='toggle detail'>
@@ -304,6 +304,15 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="priority"><A name="priority"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-base">priority &lt;float&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="canPack"><A name="canPack"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-deprecated">canPack &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="configureByPopup"><A name="configureByPopup"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">configureByPopup &lt;on/off&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="origAssembly"><A name="origAssembly"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">origAssembly &lt;db&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="altColor"><A name="altColor"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">altColor &lt;red,green,blue&gt;</code></div>
@@ -547,6 +556,11 @@ are described below along with settings specific to their types.</P>
         barChartFacets on</code>
     </div>
 </td></tr>
+<tr valign=top><td class="barChartMatrixUrl"><a name="barChartMatrixUrl"></a>
+        <img alt="" class='toggle detail'>
+    <div class="format"><code class="level-full">barChartMatrixUrl &lt;url&gt;</code>
+    </div>
+</td></tr>
 <tr valign=top><td class="barChartStatsUrl"><a name="barChartStatsUrl"></a>
         <img alt="" class='toggle detail'>
     <div class="format"><code class="level-new">
@@ -751,6 +765,10 @@ are described below along with settings specific to their types.</P>
             <span class="filterValuesDefault"><code class="level-full">filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code></span><BR>
             <span class="filterType"><code class="level-full">filterType.&lt;fieldName&gt; &lt;single/singleList/multiple/multipleListOr/multipleListAnd/multipleListOnlyOr/multipleListOnlyAnd&gt;</code></span></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="filterBy"><A name="filterBy"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-full">filterBy &lt;field1:title=[+]opt1a...&gt; [field2:title=[+]opt2a...]</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="filterLabel"><A name="filterLabel"></A>
             <A name="filterLabel.fieldName"></A><IMG class='toggle detail'>
         <div class="format">
@@ -859,6 +877,12 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="otherTwoBitUrl"><A name="otherTwoBitUrl"</A><IMG class='toggle detail'>
         <div class="format"><code class="level-new">otherTwoBitUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="chainColor"><A name="chainColor"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">chainColor &lt;scheme&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="chainNormScoreAvailable"><A name="chainNormScoreAvailable"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">chainNormScoreAvailable &lt;yes/no&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorUseSequence"><A name="baseColorUseSequence"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; / 
                                 hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss / 2bit &gt;</code></div>
@@ -892,6 +916,9 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="intronGap"><A name="intronGap"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">intronGap &lt;#bases&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">
@@ -979,6 +1006,24 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="speciesLabels"><A name="speciesLabels"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-new">speciesLabels &lt;species1=newLabel1&gt; [species2=newLabel2 &hellip;]</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="pairwiseHeight"><A name="pairwiseHeight"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">pairwiseHeight &lt;#&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesGroups"><A name="speciesGroups"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">speciesGroups &lt;sgroup1&gt; [sgroup2 &hellip;]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesDefaultOff"><A name="speciesDefaultOff"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">speciesDefaultOff &lt;species1&gt; [species2 ...]</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="speciesCodonDefault"><A name="speciesCodonDefault"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">speciesCodonDefault &lt;species&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="itemFirstCharCase"><A name="itemFirstCharCase"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">itemFirstCharCase noChange</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="irows"><A name="irows"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">irows off</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="frames"><A name="frames"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">frames &lt;url/relativePath&gt;</code></div>
     </TD></TR>
@@ -1038,6 +1083,9 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="baseColorDefault"><A name="baseColorDefault"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">baseColorDefault &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="baseColorTickColor"><A name="baseColorTickColor"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">baseColorTickColor &lt;lighterShade/contrastingColor&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="showDiffBasesAllScales"><A name="showDiffBasesAllScales"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">showDiffBasesAllScales on</code></div>
     </TD></TR>
@@ -1049,9 +1097,6 @@ are described below along with settings specific to their types.</P>
             <span class="indelDoubleInsert"><code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
             <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
             <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="pslSequence"><A name="pslSequence"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">pslSequence &lt;no/all/different&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="showCdsAllScales"><A name="showCdsAllScales"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-new">showCdsAllScales on</code></div>
@@ -1093,6 +1138,9 @@ are described below along with settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-base">autoScale &lt;off/on/group&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="mouseOverFunction"><A name="mouseOverFunction"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">mouseOverFunction &lt;noAverage&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxHeightPixels">
         <A name="maxHeightPixels"></A><IMG class='toggle detail'>
@@ -1176,8 +1224,8 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <tr valign=top><td class="noStems"><a name="noStems"<a/><img alt="" class='toggle detail'>
-        <div class="format"><code class="level-full">noStems &lt;on/off&gt;</code>
+    <tr valign=top><td class="lollyNoStems"><a name="lollyNoStems"></a><img alt="" class='toggle detail'>
+        <div class="format"><code class="level-full">lollyNoStems &lt;on/off&gt;</code>
         </div>
     </td></tr>
     <tr valign=top><td class="lollySizeField"><a name="lollySizeField"<a/><img alt="" class='toggle detail'>
@@ -1792,8 +1840,9 @@ to be placed in a single file without the need for separate
     <TR VALIGN=TOP>
         <TD class="useScore"><A name="useScore"></A>
             <code class="level-deprecated">useScore</code></TD>
-        <TD>bed, factorSource, bed5FloatScore, broadPeak</TD>
-        <TD>Replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>.</TD>
+        <TD>bed, bigBed, bigGenePred, psl, bigPsl</TD>
+        <TD>Replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>, which
+            sets the same flag and takes the same type list.</TD>
     </TR>
 </TABLE>
 </div>

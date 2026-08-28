@@ -1049,8 +1049,8 @@ are described below along with the settings specific to their types.</P>
     <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code>
     </div>
 </td></tr>
-<tr valign=top><td class="noStems"><img alt="" class='toggle detail'>
-    <div class="format"><code class="level-required">noStems &lt;on/off&gt;</code>
+<tr valign=top><td class="lollyNoStems"><img alt="" class='toggle detail'>
+    <div class="format"><code class="level-required">lollyNoStems &lt;on/off&gt;</code>
     </div>
 </td></tr>
 <tr valign=top><td class="lollySizeField"><img alt="" class='toggle detail'>
@@ -1302,9 +1302,6 @@ are described below along with the settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="pred"><A name="pred"></A><IMG class='toggle detail'>
         <div class="format"><code>pred &lt;assembly.table&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="pslSequence"><A name="pslSequence"></A><IMG class='toggle detail'>
-        <div class="format"><code>pslSequence &lt;no/all/different&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="transMapGene">
             <A name="transMapGene"></A>
@@ -2205,10 +2202,10 @@ bigWig</P>
         <TD>ENCODE only; DEPRCATED (replaced with mdb )</TD>
     </TR>
     <TR VALIGN=TOP>
-        <TD class="canPack"><A name="canPack"></A><code>canPack &lt;off/on&gt;</code></div></TD>
+        <TD class="canPack"><A name="canPack"></A><code>canPack &lt;off/on&gt;</code></TD>
         <TD>all</TD>
-        <TD><I>NOT FOR HUBS.  Deprecated.</I>
-            <P>Almost tracks can be displayed in the five
+        <TD><I>Deprecated. The track type usually decides this.</I>
+            <P>Almost all tracks can be displayed in the five
             standard visibilities.  However on some track types such as
             wiggles, <code>squish</code> and <code>pack</code> offer no real advantage
             over <code>dense</code> and <code>full</code>. By default, these tracks will
@@ -2217,7 +2214,8 @@ bigWig</P>
             of composites will always offer all five choices.</P>
             <P><B>Example:</B></P>
             <pre>   canPack on</pre>
-    </TD></TR>
+        </TD>
+        </TR>
     <TR VALIGN=TOP>
         <TD class="cdsDrawDefault"><A name="cdsDrawDefault"></A>
             <code>cdsDrawDefault</code></TD><TD>genePred</TD>
@@ -2421,9 +2419,10 @@ bigWig</P>
     </TR>
     <TR VALIGN=TOP>
         <TD class="metadata"><A name="metadata"></A><code>metadata</code></TD>
-        <TD>all <I>ENCODE only</I></TD>
-        <TD>OBSOLETE: replaced by metaDb. <I>Currently only way for datHubs to have
-            metadata dropdowns.  Used by WashU hubs.</I>
+        <TD>all</TD>
+        <TD>OBSOLETE: replaced by <A onclick="return jumpTo(this);" HREF="#">meta</A>,
+            which names one metadata file for the whole hub. Still read, and still
+            used by some hubs.
         </TD>
     </TR>
     <TR VALIGN=TOP>
@@ -2472,13 +2471,13 @@ bigWig</P>
     </TR>
     <TR VALIGN=TOP>
         <TD class="noInherit"><A name="noInherit"></A><code>noInherit</code></TD><TD>all</TD>
-        <TD>This one should be
-            OBSOLETE but there continue to be edge cases where this setting
-            has some affect.  Currently only 2 places this is read this:</P>
+        <TD><P>This one should be OBSOLETE, but there are still edge cases where it
+            has an effect. It is read in a few places:</P>
             <OL>
-            <LI>in hdb to makesuperChildren inherit settings from their supertrack.  This is 
-            done by putting the super settings into the child's settings hash.</LI>
-            <LI>tdbQuery where it appears to have no affect.</LI>
+            <LI>in hdb, to stop a subtrack inheriting its parent's settings. Without
+            it the parent settings are copied into the child's settings hash.</LI>
+            <LI>in hgCollection, which removes it.</LI>
+            <LI>in tdbQuery and raSqlQuery, where it appears to have no effect.</LI>
             </OL>
         </TD>
     </TR>
@@ -2657,16 +2656,17 @@ bigWig</P>
     </TR>
     <TR VALIGN=TOP>
         <TD class="speciesUseFile"><A name="speciesUseFile"></A>
-            <code>speciesUseFile &lt;fileName&gt;</code></TD>
-        <TD>wigMaf</TD>
+            <code>speciesUseFile &lt;cartVariableName&gt;</code></TD>
+        <TD>wigMaf, bigMaf</TD>
         <TD>
             <P><I>Deprecated</I></P>
             <P>Much more rarely used, this setting can
             replace <code>speciesOrder</code> and <code>speciesGroups</code>.
-            Set the <code>speciesUseFile</code> to a path relative to the apache cgi-bin.
-            The file should contain a single species name as the first word of each line.</P>
+            The value is not a file name. It is the name of a cart variable, and the
+            Browser reads the species list from the file that variable points to.
+            The file holds one species name as the first word of each line.</P>
             <P><B>Example:</B></P>
-            <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
+            <pre>    speciesUseFile myTrack.speciesList</pre>
         </TD>
     </TR>
     <TR VALIGN=TOP>
@@ -2713,9 +2713,9 @@ bigWig</P>
     </TR>
     <TR VALIGN=TOP>
         <TD class="useScore"><A name="useScore"></A>
-            <code>useScore</code></TD><TD>bed, factorSource, bed5FloatScore, broadPeak</TD>
-        <TD>Deprecate: replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
-            as a slighly less obscurely named setting.
+            <code>useScore</code></TD><TD>bed, bigBed, bigGenePred, psl, bigPsl</TD>
+        <TD>Deprecated: replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>
+            as a slightly less obscurely named setting. Either name sets the same flag.
         </TD>
     </TR>
     <TR VALIGN=TOP>
