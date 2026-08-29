@@ -1,0 +1,49 @@
+##############################################################################
+# GCF_000165445.2 - gray mouse lemur (2017) - Microcebus murinus - taxId: 30608
+##############################################################################
+track chainNetGCF_000165445.2
+compositeTrack on
+shortLabel gray mouse lemur (2017) Chain/Net
+longLabel gray mouse lemur (2017) (Feb. 2017 GCF_000165445.2_Mmur_3.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium
+matrixHeader A, C, G, T
+otherDb GCF_000165445.2
+html chainNet
+
+    track chainNetGCF_000165445.2Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetGCF_000165445.2
+    spectrum on
+
+        track chainGCF_000165445.2
+        parent chainNetGCF_000165445.2Viewchain
+        subGroups view=chain
+        shortLabel gray mouse lemur (2017) Chain
+        longLabel gray mouse lemur (2017) (Feb. 2017 GCF_000165445.2_Mmur_3.0) Chained Alignments
+        type bigChain GCF_000165445.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainGCF_000165445.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainGCF_000165445.2Link.bb
+
+        track chainLiftOverGCF_000165445.2
+        parent chainNetGCF_000165445.2Viewchain
+        subGroups view=chain
+        shortLabel gray mouse lemur (2017) liftOverChain
+        longLabel gray mouse lemur (2017) (Feb. 2017 GCF_000165445.2_Mmur_3.0) Lift Over Chained Alignments
+        type bigChain GCF_000165445.2
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCF_000165445.2.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverGCF_000165445.2Link.bb
+
