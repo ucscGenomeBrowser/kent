@@ -254,10 +254,11 @@
 # It has to sit on the parent. hgTracks groups by tdb->parent (wigTrack.c setMinMax
 # accumulates each drawn track's limits into the shared parent tdb, and wigDrawPredraw
 # reads them back), and hubCheck errAborts on an individual bigWig that declares
-# "autoScale group" -- it "belongs in the parent composite stanza instead". 637 subtracks
-# had inherited exactly that verbatim from their source hubs, so build_stanzas now drops
-# autoScale via DROP_KEYS. A per-subtrack autoScale would also override the inherited
-# parent setting.
+# "autoScale group" -- it "belongs in the parent composite stanza instead". 475 subtracks
+# corpus-wide (402 hg38, 73 mm10) had inherited exactly that verbatim from their source
+# hubs, and a further 677 (184 hg38, 493 mm10) carried "autoScale on", so build_stanzas
+# now drops autoScale via DROP_KEYS for all 1152. A per-subtrack autoScale would also
+# override the inherited parent setting.
 #
 # Limits come from preDrawAutoScale scanning the preDraw array, i.e. the data in the
 # CURRENT WINDOW, not genome-wide -- so an outlying region elsewhere cannot flatten the

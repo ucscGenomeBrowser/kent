@@ -1,5 +1,5 @@
 {
- "current": 501,
+ "current": 502,
  "first": {
   "../cgi-bin/RNAplot": {
    "commit": "a127c65d3af",
@@ -571,12 +571,52 @@
    "version": 371,
    "via": "literal"
   },
+  "blatNewForm": {
+   "commit": "cee097b75fe",
+   "subject": "hgBlat: new client-rendered BLAT search form and sortable results page, refs #37893",
+   "tickets": [
+    37893
+   ],
+   "ts": 1786461522,
+   "version": 502,
+   "via": "call"
+  },
+  "blatNewFormBanner": {
+   "commit": "cee097b75fe",
+   "subject": "hgBlat: new client-rendered BLAT search form and sortable results page, refs #37893",
+   "tickets": [
+    37893
+   ],
+   "ts": 1786461522,
+   "version": 502,
+   "via": "call"
+  },
   "blatNewPageBanner": {
    "commit": "c683ecb63d7",
    "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
    "tickets": [],
    "ts": 1785029100,
    "version": 501,
+   "via": "call"
+  },
+  "blatOldTracks": {
+   "commit": "81d7cff6cb6",
+   "subject": "hgBlat new results page: table redesign, rename modal, share link, and an XSS fix",
+   "tickets": [
+    37893
+   ],
+   "ts": 1786029878,
+   "version": 501,
+   "via": "literal"
+  },
+  "blatResultsGroup": {
+   "commit": "f48fc325d72",
+   "subject": "BLAT results: own track group, Delete-all button, clearer names, refs #38086",
+   "tickets": [
+    38086
+   ],
+   "ts": 1786977282,
+   "version": 502,
    "via": "call"
   },
   "blatServers": {
@@ -1041,6 +1081,14 @@
    ],
    "ts": 1450125196,
    "version": 326,
+   "via": "call"
+  },
+  "cspResponseHeader": {
+   "commit": "e6ddf60465d",
+   "subject": "hg/lib: add an option to send the content policy as an http response header",
+   "tickets": [],
+   "ts": 1787436539,
+   "version": 502,
    "via": "call"
   },
   "curatedHubPrefix": {
@@ -2038,6 +2086,16 @@
    "version": 299,
    "via": "call"
   },
+  "hubSpaceLockTimeout": {
+   "commit": "c3788110e8d",
+   "subject": "Fix hubSpace hook error handling and nested hub path handling, refs #37964",
+   "tickets": [
+    37964
+   ],
+   "ts": 1785868015,
+   "version": 501,
+   "via": "call"
+  },
   "hubSpaceTusdEndpoint": {
    "commit": "a6e5c99f562",
    "subject": "Make hubspace tusd endpoint defined by hg.conf variable hubSpaceTusdEndpoint",
@@ -2114,6 +2172,16 @@
    "tickets": [],
    "ts": 1213046137,
    "version": 183,
+   "via": "call"
+  },
+  "keep": {
+   "commit": "81d7cff6cb6",
+   "subject": "hgBlat new results page: table redesign, rename modal, share link, and an XSS fix",
+   "tickets": [
+    37893
+   ],
+   "ts": 1786029878,
+   "version": 501,
    "via": "call"
   },
   "liftDailyLimit": {
@@ -2401,6 +2469,16 @@
    "tickets": [],
    "ts": 1694560564,
    "version": 453,
+   "via": "call"
+  },
+  "modernAlignPage": {
+   "commit": "0043d5ee22d",
+   "subject": "hgc: route non-BLAT alignment clicks to the modern single-page view, refs #37893",
+   "tickets": [
+    37893
+   ],
+   "ts": 1786377300,
+   "version": 501,
    "via": "call"
   },
   "mouseOverEnabled": {
@@ -2737,6 +2815,16 @@
    "version": 487,
    "via": "literal"
   },
+  "quickLiftClipToChains": {
+   "commit": "7f65d3da8f2",
+   "subject": "quickLift: clip an oversized item to the chains we loaded instead of dropping it, refs #38042",
+   "tickets": [
+    38042
+   ],
+   "ts": 1786129679,
+   "version": 501,
+   "via": "call"
+  },
   "relatedTrack": {
    "commit": "d156aaa50bb",
    "subject": "hgc and hgTrackUi can query a 'relatedTrack' table to print a list of related tracks to the one being looked at along wi",
@@ -2940,6 +3028,28 @@
    "tickets": [],
    "ts": 1392064220,
    "version": 295,
+   "via": "call"
+  },
+  "sessionNewPage": {
+   "commit": "9f8d33c8b2b",
+   "subject": "hgSession: new opt-in JavaScript \"My Sessions\" page; share gbModern.css with hgBlat. refs #38157",
+   "tickets": [
+    37996,
+    38157
+   ],
+   "ts": 1787303142,
+   "version": 502,
+   "via": "call"
+  },
+  "sessionNewPageBanner": {
+   "commit": "9f8d33c8b2b",
+   "subject": "hgSession: new opt-in JavaScript \"My Sessions\" page; share gbModern.css with hgBlat. refs #38157",
+   "tickets": [
+    37996,
+    38157
+   ],
+   "ts": 1787303142,
+   "version": 502,
    "via": "call"
   },
   "sessionThumbnail.convertPath": {
@@ -3708,6 +3818,16 @@
    ],
    "ts": 1768508493,
    "version": 492,
+   "via": "call"
+  },
+  "quickLiftClipToChains": {
+   "commit": "7f65d3da8f2",
+   "subject": "quickLift: clip an oversized item to the chains we loaded instead of dropping it, refs #38042",
+   "tickets": [
+    38042
+   ],
+   "ts": 1786129679,
+   "version": 501,
    "via": "call"
   },
   "showDownloadUi": {
@@ -5578,6 +5698,10 @@
   [
    1784567050,
    501
+  ],
+  [
+   1786381213,
+   502
   ]
  ]
 }
