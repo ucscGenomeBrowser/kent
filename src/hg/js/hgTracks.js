@@ -7921,6 +7921,10 @@ $(document).ready(function()
 
 });
 
+// hold the beacon image in a variable that outlives reportPngTiming.  An
+// Image with no reference to it can be collected before the request goes out.
+var pngTimingBeacon;
+
 function reportPngTiming(sampleRate) {
     /* Report how long the track image took to reach this reader, on one page
      * load in sampleRate.  The browser keeps a timing record for every image it
@@ -7947,11 +7951,18 @@ function reportPngTiming(sampleRate) {
                 continue;
             var bytes = entry.transferSize;
             var download = entry.responseEnd - entry.responseStart;
-            // an image answered from the browser cache has no transfer to time
-            if (!bytes || !download)
+            // no bytes means the browser never took the image off the wire, or
+            // it does not report the size.  Either way there is nothing to time.
+            if (!bytes)
                 return;
+            // a download of zero is a real delivery that finished inside one
+            // clock tick, not a missing measurement.  Firefox rounds resource
+            // timing to a millisecond, so a small image on a fast link lands
+            // there.  Report it and let the reader of the log fall back to d.
+            // Dropping it would leave only the slow connections in the sample.
             // duration covers the whole fetch, download only the bytes arriving
-            new Image().src = "../images/DOT.gif?hgtPng=1" +
+            pngTimingBeacon = new Image();
+            pngTimingBeacon.src = "../images/DOT.gif?hgtPng=1" +
                 "&ts=" + Math.round(bytes) +
                 "&d=" + Math.round(entry.duration) +
                 "&x=" + Math.round(download);
