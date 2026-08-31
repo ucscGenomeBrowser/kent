@@ -14,6 +14,7 @@
 #include "linefile.h"
 #include "sqlList.h"
 #include "jksql.h"
+#include "htmlSanitize.h"
 #include "customTrack.h"
 #include "myVariants.h"
 #include "ctgPos.h"
@@ -877,7 +878,7 @@ html = customDocParse(html);  /* this will chew up the input string */
 if(html != NULL)
     {
     char *tmp = html;
-    html = jsStripJavascript(html);
+    html = htmlSanitize(html);
     freeMem(tmp);
     }
 else

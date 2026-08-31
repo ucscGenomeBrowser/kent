@@ -27,6 +27,7 @@
 #include "filePath.h"
 #include "htmlPage.h"
 #include "trackDb.h"
+#include "htmlSanitize.h"
 #include "trackHub.h"
 #include "errCatch.h"
 #include "hgBam.h"
@@ -1313,13 +1314,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb)
-/* Fetch tdb->track's html description and store in tdb->html. */
+static char *trackHubDescriptionText(char *trackDbFile, struct trackDb *tdb)
+/* Fetch the text of tdb->track's html description page, or NULL if it has none. */
 {
 /* html setting should always be set because we set it at load time */
 char *htmlName = trackDbSetting(tdb, "html");
 if (htmlName == NULL)
-    return;
+    return NULL;
 
 char *simpleName = hubConnectSkipHubPrefix(htmlName);
 char *url = trackHubRelativeUrl(trackDbFile, simpleName);
@@ -1330,8 +1331,31 @@ if (!endsWith(url, ".html"))
     safef(buffer, sizeof buffer, "%s.html", url);
     fixedUrl = buffer;
     }
-tdb->html = udcFileReadAllIfExists(fixedUrl, NULL, 0, NULL);
+char *html = udcFileReadAllIfExists(fixedUrl, NULL, 0, NULL);
 freez(&url);
+return html;
+}
+
+void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb)
+/* Fetch tdb->track's html description and store in tdb->html. */
+{
+char *html = trackHubDescriptionText(trackDbFile, tdb);
+if (html == NULL)
+    return;                     /* no page of its own, so leave any it inherited alone */
+tdb->html = htmlSanitize(html);
+freeMem(html);
+}
+
+struct slName *trackHubDescriptionRemovals(char *trackDbFile, struct trackDb *tdb)
+/* Return a list of messages naming the parts of tdb's description page that we do not
+ * print, or NULL if we print all of it. */
+{
+char *html = trackHubDescriptionText(trackDbFile, tdb);
+struct slName *removed = NULL;
+char *clean = htmlSanitizeReport(html, &removed);
+freeMem(html);
+freeMem(clean);
+return removed;
 }
 
 void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb)

@@ -22,6 +22,7 @@
 #include "cytoBand.h"
 #include "cart.h"
 #include "errCatch.h"
+#include "htmlSanitize.h"
 #include "hgFind.h"
 #include "hgFindSpec.h"
 #include "hgHgvs.h"
@@ -4377,9 +4378,12 @@ if (htmlPath != NULL)
 		startsWith("ftp://"  , htmlPath))
 	{
 	struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
-	htmlString =  lineFileReadAll(lf);
-	htmlStrLength = strlen(htmlString);
+	char *fetched = lineFileReadAll(lf);
 	lineFileClose(&lf);
+	/* This one came in over the network from a hub, so print only what we allow. */
+	htmlString = htmlSanitize(fetched);
+	freeMem(fetched);
+	htmlStrLength = (htmlString == NULL ? 0 : strlen(htmlString));
 	}
     }
 
