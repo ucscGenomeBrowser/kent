@@ -1966,8 +1966,10 @@
   examples: []
 - name: searchIndex
   types:
-  - bed
   - bigBed
+  - bigPsl
+  - bigGenePred
+  - bigBarChart
   roles:
   - leaf
   category: bigBed - Item or Region Track Settings
@@ -1988,8 +1990,8 @@
   - searchIndex name
 - name: searchTrix
   types:
-  - bed
   - bigBed
+  - bigGenePred
   roles:
   - leaf
   category: bigBed - Item or Region Track Settings
@@ -3128,6 +3130,25 @@
   summary: Show base differences for all zoom levels.
   description: Show base differences for all zoom levels.
   format: showDiffBasesAllScales on
+  examples: []
+- name: pslSequence
+  types:
+  - psl
+  - bigPsl
+  roles:
+  - leaf
+  category: bigPsl - Pairwise Alignments
+  context: trackDb
+  level: deprecated
+  required: false
+  summary: Obsolete.
+  description: Obsolete. The Browser does not read this setting. It selected how bases were labelled on
+    psl tracks that also have sequence loaded. The baseColor family replaced it in 2006, and nothing has
+    read either this spelling or the older pslSequenceBases since. all is now baseColorDefault itemBases
+    . different is now baseColorDefault diffBases . no left the choice to the user, which is what happens
+    when baseColorDefault is not set. Both replacements need baseColorUseSequence to be set. Remove pslSequence
+    from a trackDb file; it has no effect.
+  format: pslSequence <no/all/different>
   examples: []
 - name: showCdsAllScales
   types:

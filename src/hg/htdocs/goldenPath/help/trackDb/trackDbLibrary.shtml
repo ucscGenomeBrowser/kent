@@ -2407,7 +2407,7 @@ There are no extra options that can appear on the type hic line.
     scores greater than or equal to 900 above will display in black.</P>
 </DIV>
 
-<DIV class="searchIndex"><span class="types bed bigBed"></span>
+<DIV class="searchIndex"><span class="types bigBed bigPsl bigGenePred bigBarChart"></span>
 <div class="format"><code>searchIndex &lt;str&gt;</code></div>
     <P> Specifies the list of field names on which a index has been made.
     When a user enters a string in the position search box of the browser,
@@ -2425,7 +2425,7 @@ There are no extra options that can appear on the type hic line.
     <pre>   searchIndex name</pre>
 </DIV>
 
-<DIV class="searchTrix"><span class="types bed bigBed"></span>
+<DIV class="searchTrix"><span class="types bigBed bigGenePred"></span>
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
@@ -3446,6 +3446,23 @@ that identifies the reference sequence.
     display these all.joiner-linked tables by default.</P>
     <P><B>Example:</B></P>
     <pre>   defaultLinkedTables kgXref</pre>
+</DIV>
+
+<DIV class="pslSequence"><span class="types psl bigPsl"></span>
+<div class="format"><code>pslSequence &lt;no/all/different&gt;</code></div>
+    <P><I>Obsolete. The Browser does not read this setting.</I>
+    It selected how bases were labelled on psl tracks that also have sequence
+    loaded. The <code>baseColor</code> family replaced it in 2006, and nothing
+    has read either this spelling or the older
+    <code>pslSequenceBases</code> since.
+    <UL>
+    <LI><code>all</code> is now <code>baseColorDefault itemBases</code>.</LI>
+    <LI><code>different</code> is now <code>baseColorDefault diffBases</code>.</LI>
+    <LI><code>no</code> left the choice to the user, which is what happens when
+    <code>baseColorDefault</code> is not set.</LI>
+    </UL>
+    Both replacements need <code>baseColorUseSequence</code> to be set. Remove
+    <code>pslSequence</code> from a trackDb file; it has no effect.</P>
 </DIV>
 
 <DIV class="idXref"><span class="types genePred bigGenePred"></span>

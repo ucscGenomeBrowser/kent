@@ -1476,8 +1476,10 @@
     "leaf"
    ],
    "types": [
-    "bed",
-    "bigBed"
+    "bigBed",
+    "bigPsl",
+    "bigGenePred",
+    "bigBarChart"
    ],
    "level": "full",
    "fmt": "searchIndex <str>",
@@ -1491,8 +1493,8 @@
     "leaf"
    ],
    "types": [
-    "bed",
-    "bigBed"
+    "bigBed",
+    "bigGenePred"
    ],
    "level": "full",
    "fmt": "searchTrix <url/relativePath>",
@@ -2344,6 +2346,21 @@
    "fmt": "showDiffBasesAllScales on",
    "ex": "",
    "desc": "Show base differences for all zoom levels."
+  },
+  {
+   "key": "pslSequence",
+   "category": "bigPsl - Pairwise Alignments",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "psl",
+    "bigPsl"
+   ],
+   "level": "deprecated",
+   "fmt": "pslSequence <no/all/different>",
+   "ex": "",
+   "desc": "Obsolete."
   },
   {
    "key": "showCdsAllScales",

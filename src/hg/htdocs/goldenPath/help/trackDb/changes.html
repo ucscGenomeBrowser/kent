@@ -46,6 +46,30 @@
 </tr>
 
 <tr>
+    <td>2026-08-31</td>
+    <td>bigPsl, bigGenePred, bigBarChart, bigLolly</td>
+    <td><a href="trackDbHub.html#searchIndex">searchIndex</a>,
+        <a href="trackDbHub.html#searchTrix">searchTrix</a>,
+        <a href="trackDbHub.html#mouseOver">mouseOver</a>,
+        <a href="trackDbHub.html#mouseOverField">mouseOverField</a>,
+        <a href="trackDbHub.html#indelDoubleInsert">indelDoubleInsert</a>,
+        <a href="trackDbHub.html#indelQueryInsert">indelQueryInsert</a>,
+        <a href="trackDbHub.html#indelPolyA">indelPolyA</a></td>
+    <td>Documentation fix, continuing the "For Types" corrections below. Each of these
+    settings works on types its entry did not name. <code>searchIndex</code> gains
+    <code>bigPsl</code>, <code>bigGenePred</code> and <code>bigBarChart</code>, and
+    <code>searchTrix</code> gains <code>bigGenePred</code>; both are read on the
+    bigBed-backed search path, whatever the flavor. <code>mouseOver</code> and
+    <code>mouseOverField</code> gain <code>bigLolly</code>. The three
+    <code>indel*</code> settings named only <code>bam</code> in the library, though this
+    page has listed them under <code>bigPsl</code> for years; they are read for every
+    track that draws linked features, so <code>psl</code> and <code>bigPsl</code> are
+    named now. <code>searchIndex</code> and <code>searchTrix</code> also drop
+    <code>bed</code>, which never worked: a track in one of our own database tables
+    configures search through the <code>hgFindSpec</code> table instead. No browser
+    behavior changed.</td>
+</tr>
+<tr>
     <td>2026-08-28</td>
     <td>bigLolly</td>
     <td><a href="trackDbHub.html#lollyNoStems">lollyNoStems</a></td>
@@ -137,12 +161,17 @@
 <tr>
     <td>2026-08-28</td>
     <td>bigPsl</td>
-    <td>pslSequence</td>
-    <td>Removed. This setting has never done anything. The variable it described was
-    replaced by the <a href="trackDbHub.html#baseColorUseSequence">baseColorUseSequence</a>
-    family long before the setting was listed here. Use
-    <code>baseColorUseSequence</code> and
-    <a href="trackDbHub.html#baseColorDefault">baseColorDefault</a> instead.</td>
+    <td><a href="trackDbHub.html#pslSequence">pslSequence</a></td>
+    <td>Marked deprecated. This setting has never done anything. The variable it
+    described was replaced by the
+    <a href="trackDbHub.html#baseColorUseSequence">baseColorUseSequence</a> family long
+    before the setting was listed here. Use <code>baseColorUseSequence</code> and
+    <a href="trackDbHub.html#baseColorDefault">baseColorDefault</a> instead:
+    <code>pslSequence all</code> is now <code>baseColorDefault itemBases</code>, and
+    <code>pslSequence different</code> is now <code>baseColorDefault diffBases</code>.
+    The entry is kept rather than deleted so that <code>hubCheck</code> tells you the
+    setting is deprecated, instead of reporting it as an unrecognized setting and
+    guessing at a typo.</td>
 </tr>
 <tr>
     <td>2026-07-31</td>
