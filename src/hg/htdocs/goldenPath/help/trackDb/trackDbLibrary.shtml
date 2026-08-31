@@ -4718,7 +4718,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     specifies which chimp genome assembly was used, e.g. <code>panTro2</code>.</P>
 </DIV>
 
-<DIV class="chimpMacaqueOrthoTable"><span class="types snp"></span>
+<DIV class="chimpMacaqueOrthoTable"><span class="types bed"></span>
 <div class="format"><code>chimpMacaqueOrthoTable &lt;table&gt;</code></div>
     <P>If chains/nets from chimp and rhesus macaque were use to identify
     the chimp or macaque reference assembly allele at the location
@@ -4726,7 +4726,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     that contains the mapped alleles.</P>
 </DIV>
 
-<DIV class="chimpOrangMacOrthoTable"><span class="types snp"></span>
+<DIV class="chimpOrangMacOrthoTable"><span class="types bed"></span>
 <div class="format"><code>chimpOrangMacOrthoTable &lt;table&gt;</code></div>
     <P>If chains/nets from chimp, orangutan and rhesus macaque were use to identify
     the chimp/orangutan/macaque reference assembly allele at the location
@@ -4734,21 +4734,21 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     that contains the mapped alleles.</P>
 </DIV>
 
-<DIV class="codingAnnoLabel_table"><span class="types snp"></span>
+<DIV class="codingAnnoLabel_table"><span class="types bed"></span>
 <div class="format"><code>codingAnnoLabel_&lt;table&gt; &lt;text&gt;</code></div>
     <P><I>Deprecated; will probably be removed.</I>
     This specifies a text label for display of &lt;table&gt;'s
     predictions of a SNP's effect on a protein-coding gene.</P>
 </DIV>
 
-<DIV class="codingAnnotations"><span class="types snp"></span>
+<DIV class="codingAnnotations"><span class="types bed"></span>
 <div class="format"><code>codingAnnotations &lt;table&gt;[,table]</code></div>
     <P><I>Deprecated; will probably be removed.</I>
     This specifies one or more tables containing predictions of SNP
     effects on protein-coding genes.</P>
 </DIV>
 
-<DIV class="defaultGeneTracks"><span class="types snp"></span>
+<DIV class="defaultGeneTracks"><span class="types bed bigDbSnp"></span>
 <div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
     <P>The details page of a SNP can display the predicted functional
     affect on a gene from any genePred track.
@@ -4760,7 +4760,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     <pre>   defaultGeneTracks knownGenes</pre>
 </DIV>
 
-<DIV class="defaultMaxWeight"><span class="types snp"></span>
+<DIV class="defaultMaxWeight"><span class="types bed"></span>
 <div class="format"><code>defaultMaxWeight &lt;1|2|3&gt;</code></div>
     <P>dbSNP assigns a weight of 1, 2 or 3 to each variant, depending
     on how many distinct mappings a variant's flanking sequences have
@@ -4774,7 +4774,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     setting has no effect on those tables.</P>
 </DIV>
 
-<DIV class="hapmapPhase"><span class="types snp"></span>
+<DIV class="hapmapPhase"><span class="types bed"></span>
 <div class="format"><code>hapmapPhase &lt;II|III&gt;</code></div>
     <P>The SNP details page looks for the SNP's ID in HapMap track tables
     that have different names and contents depending on whether they
@@ -4782,21 +4782,21 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     (This setting is also used by HapMap SNPs tracks.)</P>
 </DIV>
 
-<DIV class="macaqueDb"><span class="types snp"></span>
+<DIV class="macaqueDb"><span class="types bed"></span>
 <div class="format"><code>macaqueDb &lt;db&gt;</code></div>
     <P>If macaque chains/nets were used to identify the macaque reference
     assembly allele at the location homologous to the human SNP, this
     specifies which macaque genome assembly was used, e.g. <code>rheMac2</code>.</P>
 </DIV>
 
-<DIV class="orangDb"><span class="types snp"></span>
+<DIV class="orangDb"><span class="types bed"></span>
 <div class="format"><code>orangDb &lt;db&gt;</code></div>
     <P>If orangutan chains/nets were used to identify the orangutan reference
     assembly allele at the location homologous to the human SNP, this
     specifies which orangutan genome assembly was used, e.g. <code>ponAbe2</code>.</P>
 </DIV>
 
-<DIV class="snpExceptions"><span class="types snp"></span>
+<DIV class="snpExceptions"><span class="types bed"></span>
 <div class="format"><code>snpExceptions &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that contains annotations of unusual
     properties of variants.  This setting applies only to versions prior to dbSNP 
@@ -4804,19 +4804,19 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     main snp<em>NNN</em> table and an auxiliary table is no longer needed.</P>
 </DIV>
 
-<DIV class="snpExceptionDesc"><span class="types snp"></span>
+<DIV class="snpExceptionDesc"><span class="types bed"></span>
 <div class="format"><code>snpExceptionDesc &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that maps exception keywords
     to one-sentence descriptions.</P>
 </DIV>
 
-<DIV class="snpSeq"><span class="types snp"></span>
+<DIV class="snpSeq"><span class="types bed"></span>
 <div class="format"><code>snpSeq &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that maps variant IDs to
     file offsets at which flanking sequences are stored.</P>
 </DIV>
 
-<DIV class="snpSeqFile"><span class="types snp"></span>
+<DIV class="snpSeqFile"><span class="types bed"></span>
 <div class="format"><code>snpSeqFile &lt;path&gt;</code></div>
     <P>This specifies an auxiliary file that contains the flanking
     sequences of each variant's representative submitted SNP.</P>
