@@ -802,6 +802,14 @@ cartRemovePrefix(cart, hgsDoDownloadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
+/* Two of the Save form's own inputs.  If they stay in the cart they are stored inside every
+ * session saved afterwards, so one session's description travels in sessions that never had
+ * one.  hgsNewSessionShare is left alone on purpose: it has the same problem, but it is also
+ * the only memory of the user's "Allow this session to be loaded by others" choice, and
+ * showSavingOptions() defaults that box to checked.  Removing it here would quietly re-check
+ * the box for someone who keeps their sessions private. */
+cartRemove(cart, hgsNewSessionName);
+cartRemove(cart, hgsNewSessionDescription);
 }
 
 static void outIfNotPresent(struct cart *cart, struct dyString *dy, char *track, int tdbVis)
@@ -980,7 +988,8 @@ char *doNewSession(char *userName)
 if (userName == NULL)
     return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
-char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
+/* Clone: saveCartAsSession() removes this cart variable, which frees the cart's own copy. */
+char *sessionName = trimSpaces(cloneString(cartString(cart, hgsNewSessionName)));
 if (isEmpty(sessionName))
     return "Error: Unable to save a session without a name.  Please add one and try again.";
 
@@ -1060,8 +1069,9 @@ if (!sqlTableExists(conn, namedSessionTable))
     }
 
 boolean anon = isEmpty(userName) || cgiBoolean(hgsShareAnon);
-// Read the requested name from the request, not the cart (hgSession's Save form leaves a sticky
-// value in the cart under this same variable that would otherwise shadow ours).
+// Read the requested name from the request, not the cart.  cleanHgSessionFromCart() now takes
+// this variable back out, but carts written before that still hold a sticky value from
+// hgSession's Save form, and it would otherwise shadow ours.
 char *sessionName = trimSpaces(cloneString(cgiUsualString(hgsNewSessionName, "")));
 
 /* Keep our control variables out of the saved session contents and the user's own cart. */
@@ -1898,7 +1908,8 @@ char *doReSaveSession(char *userName, char *actionVar)
 if (userName == NULL)
     return "Unable to re-save session -- please log in and try again.";
 struct sqlConnection *conn = hConnectCentral();
-char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
+/* Clone: cartLoadUserSession() and saveCartAsSession() both free the cart's own copy. */
+char *sessionName = trimSpaces(cloneString(cartString(cart, hgsNewSessionName)));
 if (isEmpty(sessionName))
     return "Error: Unable to save a session without a name.  Please add one and try again.";
 
