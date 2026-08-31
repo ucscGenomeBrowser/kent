@@ -1044,7 +1044,7 @@ struct bed *b = item;
 return itemColorByStrand(tg, (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0)), hvg);
 }
 
-void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
+void complexBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[])
 /* Fill in methods for more complex bed tracks. */
 {
@@ -1057,10 +1057,7 @@ if (wordCount > 1)
     fieldCount = atoi(words[1]);
 
 track->bedSize = fieldCount;
-track->isBigBed = isBigBed;
-
-//if (track->isBigBed)
-    //track->nextItemButtonable = FALSE;
+track->isBigBed = FALSE;
 
 if (fieldCount < 8)
     {
