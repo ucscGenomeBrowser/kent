@@ -1970,11 +1970,18 @@ char *newDatabase = hubConnectLoadHubs(cart);
 if (newDatabase != NULL)
     {
     char *cartDb = cartOptionalString(cart, "db");
+    char *oldDb = (oldVars != NULL) ? hashFindVal(oldVars, "db") : NULL;
 
     if ((cartDb == NULL) || differentString(cartDb, newDatabase))
         {
+        // resolveGenarkDb takes db out of the cart, so a Genark db= that names the assembly
+        // the cart was already on looks like a database change here.  It is not one, and the
+        // magic below would replace the position we just loaded from a session with the
+        // assembly default and drop the multi-region variables.  refs #38184
+        boolean sameDb = !IS_CART_VAR_EMPTY(oldDb) && sameString(oldDb, newDatabase);
+
         // this is some magic to use the defaultPosition and reset cart variables
-        if (oldVars)
+        if (oldVars && !sameDb)
             {
             struct hashEl *hel;
             if ((hel = hashLookup(oldVars,"db")) != NULL)
