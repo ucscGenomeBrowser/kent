@@ -389,7 +389,8 @@
     "bigMaf",
     "bigMethyl",
     "bigNarrowPeak",
-    "bigGenePred"
+    "bigGenePred",
+    "bigLolly"
    ],
    "level": "full",
    "fmt": "mouseOver <pattern>",
@@ -412,7 +413,8 @@
     "bigMaf",
     "bigMethyl",
     "bigNarrowPeak",
-    "bigGenePred"
+    "bigGenePred",
+    "bigLolly"
    ],
    "level": "full",
    "fmt": "mouseOverField <fieldName1>",
@@ -737,7 +739,9 @@
     "leaf"
    ],
    "types": [
-    "bam"
+    "bam",
+    "psl",
+    "bigPsl"
    ],
    "level": "full",
    "fmt": "indelDoubleInsert <off/on>",
@@ -835,6 +839,7 @@
     "leaf"
    ],
    "types": [
+    "barChart",
     "bigBarChart"
    ],
    "level": "full",
@@ -863,6 +868,7 @@
     "leaf"
    ],
    "types": [
+    "barChart",
     "bigBarChart"
    ],
    "level": "full",
@@ -989,6 +995,7 @@
     "leaf"
    ],
    "types": [
+    "barChart",
     "bigBarChart"
    ],
    "level": "full",
@@ -1003,6 +1010,7 @@
     "leaf"
    ],
    "types": [
+    "barChart",
     "bigBarChart"
    ],
    "level": "full",
@@ -2598,6 +2606,7 @@
     "leaf"
    ],
    "types": [
+    "wig",
     "bigWig",
     "bigMaf"
    ],

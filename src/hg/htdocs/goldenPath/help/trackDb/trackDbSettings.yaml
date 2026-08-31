@@ -525,6 +525,7 @@
   - bigMethyl
   - bigNarrowPeak
   - bigGenePred
+  - bigLolly
   roles:
   - super
   - composite
@@ -554,6 +555,7 @@
   - bigMethyl
   - bigNarrowPeak
   - bigGenePred
+  - bigLolly
   roles:
   - super
   - composite
@@ -978,6 +980,8 @@
 - name: indelDoubleInsert
   types:
   - bam
+  - psl
+  - bigPsl
   roles:
   - leaf
   category: bam - Compressed Alignment Track Settings
@@ -1092,6 +1096,7 @@
   examples: []
 - name: barChartBars
   types:
+  - barChart
   - bigBarChart
   roles:
   - leaf
@@ -1122,6 +1127,7 @@
   examples: []
 - name: barChartLabel
   types:
+  - barChart
   - bigBarChart
   roles:
   - leaf
@@ -1271,6 +1277,7 @@
   examples: []
 - name: barChartMetric
   types:
+  - barChart
   - bigBarChart
   roles:
   - leaf
@@ -1285,6 +1292,7 @@
   examples: []
 - name: barChartUnit
   types:
+  - barChart
   - bigBarChart
   roles:
   - leaf
@@ -3437,6 +3445,7 @@
   - logo on
 - name: logoMaf
   types:
+  - wig
   - bigWig
   - bigMaf
   roles:

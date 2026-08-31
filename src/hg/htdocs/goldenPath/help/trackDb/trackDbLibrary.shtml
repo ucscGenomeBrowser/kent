@@ -1066,7 +1066,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred"></span>
+<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred bigLolly"></span>
     <div class="format">
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
@@ -1088,7 +1088,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred"></span>
+<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred bigLolly"></span>
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
@@ -3112,7 +3112,7 @@ that identifies the reference sequence.
     <pre>   logo on</pre>
 </DIV>
 
-<DIV class="logoMaf"><span class="types bigWig bigMaf"></span>
+<DIV class="logoMaf"><span class="types wig bigWig bigMaf"></span>
 <div class="format"><code>logoMaf &lt;url/relativePath&gt;</code></div>
     <P>The argument to logoMaf is the path to a MAF alignment (either a table or bigMaf). 
     If set and zoomed into base level, the wiggle will be drawn as a sequence logo calculated 
@@ -3644,7 +3644,7 @@ that identifies the reference sequence.
     <pre>   bamSkipPrintQualScore .</pre>
 </DIV>
 
-<DIV class="indelDoubleInsert"><span class="types bam"></span>
+<DIV class="indelDoubleInsert"><span class="types bam psl bigPsl"></span>
 <div class="format">
     <code>indelDoubleInsert &lt;off/on&gt;</code><BR>
     <code>indelQueryInsert &lt;off/on&gt;</code><BR>
@@ -5506,7 +5506,7 @@ There are no extra options that can appear on the type vcfPhasedTrio line.
     This table has a simple 2 column format: char(255) factor, char(255) motif.</P>
 </DIV>
 
-<DIV class="motifPwmTable"><span class="types factorSource bed6FloatScore"></span>
+<DIV class="motifPwmTable"><span class="types factorSource bed6FloatScore bigBed"></span>
 <div class="format"><code>motifPwmTable &lt;table&gt;</code></div>
     <P>When viewing the details of a factorSource track item containing
     a binding motif in the <code>motifTable</code>, the 
@@ -5844,20 +5844,20 @@ For the complete bigBarChart format definitions please see the
     <A HREF="../barChart.html">bigBarChart help page</A>.</P>
 </DIV>
 
-<DIV class="barChartBars"><span class="types bigBarChart"></span>
+<DIV class="barChartBars"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
     <P>This setting is a list of labels for the categorical variables (bars).
     It is required for this track type.
     </P>
 </DIV>
 
-<DIV class="barChartUnit"><span class="types bigBarChart"></span>
+<DIV class="barChartUnit"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartUnit &lt;unit&gt;</code></div>
     <P>The unit label is attached to values in the display, charts and plots of the track.
     </P>
 </DIV>
 
-<DIV class="barChartLabel"><span class="types bigBarChart"></span>
+<DIV class="barChartLabel"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartLabel &lt;label&gt;</code></div>
     <P>This setting provides a label for the category selection list.</p>
     </P>
@@ -5901,7 +5901,7 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
-<DIV class="barChartMetric"><span class="types bigBarChart"></span>
+<DIV class="barChartMetric"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.
         These are typically summary values, derived from many samples (often the median value).</p>
