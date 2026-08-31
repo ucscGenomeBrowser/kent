@@ -1340,6 +1340,8 @@ void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb)
 /* Fetch tdb->track's html description and store in tdb->html. */
 {
 char *html = trackHubDescriptionText(trackDbFile, tdb);
+if (html == NULL)
+    return;                     /* no page of its own, so leave any it inherited alone */
 tdb->html = htmlSanitize(html);
 freeMem(html);
 }
