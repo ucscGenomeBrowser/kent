@@ -465,7 +465,7 @@ enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs
 // WARNING: The specifics of the HTTP_USER_AGENT vary widely.
 //          This has only been tested on a few cases.
 static enum browserType clientBrowser = btUnknown;
-static enum browserType clientOsType  = (enum browserType)osUnknown;
+static enum osType clientOsType  = osUnknown;
 static char *clientBrowserExtra       = NULL;
 static char *clientOsExtra            = NULL;
 
@@ -488,19 +488,19 @@ if (clientBrowser == btUnknown)
             ptr += strlen("MSIE ");
             clientBrowserExtra = cloneFirstWordByDelimiter(ptr,';');
             }
-        else if ((ptr = stringIn("Firefox",userAgent)) != NULL)
+        else if ((ptr = stringIn("Firefox/",userAgent)) != NULL)
             {
             clientBrowser = btFF;
-            ptr += strlen("(Firefox/");
+            ptr += strlen("Firefox/");
             clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
             }
-        else if ((ptr = stringIn("Chrome",userAgent)) != NULL)  // Must be before Safari
+        else if ((ptr = stringIn("Chrome/",userAgent)) != NULL)  // Must be before Safari
             {
             clientBrowser = btChrome;
             ptr += strlen("Chrome/");
             clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
             }
-        else if ((ptr = stringIn("Safari",userAgent)) != NULL)
+        else if ((ptr = stringIn("Safari/",userAgent)) != NULL)
             {
             clientBrowser = btSafari;
             ptr += strlen("Safari/");
@@ -512,27 +512,27 @@ if (clientBrowser == btUnknown)
             }
 
         // Determine the OS
-        if ((ptr = stringIn("Windows",userAgent)) != NULL)
+        if ((ptr = stringIn("Windows ",userAgent)) != NULL)
             {
-            clientOsType = (enum browserType)osWindows;
+            clientOsType = osWindows;
             ptr += strlen("Windows ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
-        else if ((ptr = stringIn("Linux",userAgent)) != NULL)
+        else if ((ptr = stringIn("Linux ",userAgent)) != NULL)
             {
-            clientOsType = (enum browserType)osLinux;
+            clientOsType = osLinux;
             ptr += strlen("Linux ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else if ((ptr = stringIn("Mac ",userAgent)) != NULL)
             {
-            clientOsType = (enum browserType)osMac;
+            clientOsType = osMac;
             ptr += strlen("Mac ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else
             {
-            clientOsType = (enum browserType)osOther;
+            clientOsType = osOther;
             }
         }
     }
@@ -544,7 +544,7 @@ if (browserQualifier != NULL)
         *browserQualifier = NULL;
     }
 if (clientOs != NULL)
-    *clientOs = (enum osType)clientOsType;
+    *clientOs = clientOsType;
 if (clientOsQualifier != NULL)
     {
     if (clientOsExtra != NULL)
