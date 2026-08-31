@@ -50,6 +50,19 @@ static char *cases[] = {
     "<a href=\"#\">to the top</a><div id=\"\">no name at all</div>",
 /* a table keeps its shape */
 "<table border=\"1\"><tr><td colspan=\"2\" bgcolor=\"#eee\">cell</td></tr></table>",
+/* an entity in a style value cannot spell a property value we would not print */
+"<p style=\"list-style:u&#114l(http://example.com/x.png);color:re&#100\">a</p>",
+/* an ampersand the author meant still reads as one */
+"<p style=\"font-family:'AT&T Sans'\">a</p>",
+/* the same attribute twice is written once, the way a browser reads it */
+"<img src=\"first.png\" src=\"second.png\" alt=\"a\" alt=\"b\">"
+    "<a href=\"javascript:alert(1)\" href=\"https://example.com\">x</a>",
+/* a quote that is never closed takes the rest of the page, and we say so */
+"<p>real</p><p title=\"oops>never printed</p>",
+/* a less than sign that starts no tag is text, and cannot eat a tag of ours */
+"<div>a &lt; b</ <b>bold</b></div>",
+/* a name we already renamed is not renamed again, on either side of the link */
+"<h2 id=\"descPage-methods\">M</h2><a href=\"#descPage-methods\">jump</a>",
 };
 
 int main(int argc, char *argv[])
@@ -67,6 +80,19 @@ for (i = 0;  i < ArraySize(cases);  ++i)
     printf("\n");
     freeMem(clean);
     slFreeList(&removed);
+    }
+/* Running the filter over its own output has to leave it alone.  hgCustom hands the text
+ * we returned back to us when a custom track is edited and saved again, so anything that
+ * changes on a second pass changes a little more on every save.  Any case that is not
+ * settled prints here, and the expected output is the record of which ones those are. */
+for (i = 0;  i < ArraySize(cases);  ++i)
+    {
+    char *once = htmlSanitize(cases[i]);
+    char *twice = htmlSanitize(once);
+    if (differentString(once, twice))
+        printf("not settled:\n once : %s\n twice: %s\n\n", once, twice);
+    freeMem(once);
+    freeMem(twice);
     }
 if (htmlSanitize(NULL) != NULL)
     errAbort("htmlSanitize(NULL) should be NULL");

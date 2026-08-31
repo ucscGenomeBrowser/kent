@@ -118,6 +118,11 @@ static char *videoHosts =
 /* Nesting past this depth is not a document, it is a way to make us emit a huge page. */
 #define maxNestDepth 256
 
+/* The longest attribute name we look at, and the most attributes we remember writing on one
+ * tag.  Every name on the allowlist is well inside both. */
+#define maxAttrName 128
+#define maxTagAttrs 32
+
 static struct hash *keepHash = NULL, *killHash = NULL, *voidHash = NULL, *rawTextHash = NULL;
 static struct hash *silentKillHash = NULL;
 static struct hash *attrHash = NULL, *stylePropHash = NULL, *schemeHash = NULL, *videoHostHash = NULL;
@@ -348,7 +353,7 @@ return s;
 static void appendEscaped(struct dyString *dy, char *s)
 /* Append s as an attribute value, hiding the characters that could end the attribute or
  * start a tag.  Ampersands are left alone so that entities the author wrote stay as
- * they are. */
+ * they are, and so that running this over its own output changes nothing. */
 {
 for (;  *s != 0;  ++s)
     {
@@ -552,7 +557,13 @@ while (decl != NULL && *decl != 0)
         tolowers(prop);
         if (isNotEmpty(prop) && isNotEmpty(value))
             {
-            char *lower = cloneString(value);
+            /* Look at the text a browser will see, not the text the author wrote.  A
+             * browser turns a character reference into the character it names before the
+             * CSS parser runs, so u&#114l( would otherwise walk past the check below.
+             * Only the numeric form needs decoding here.  A named reference has to end in
+             * a semicolon, apart from a legacy handful that all name Latin-1 punctuation,
+             * and a semicolon has already ended the declaration before we get here. */
+            char *lower = decodeNumericRefs(value);
             tolowers(lower);
             if (hashLookup(stylePropHash, prop) == NULL)
                 ;                       /* not a property we print, and nothing to explain */
@@ -575,6 +586,32 @@ if (out->stringSize == 0)
 return dyStringCannibalize(&out);
 }
 
+static char *skipIdPrefix(char *name)
+/* Return name past a prefix we put there ourselves.  Adding a second one would work, but
+ * the filter runs over its own output whenever a custom track is edited and saved again,
+ * and a prefix that stacks grows the name a little more on every save. */
+{
+if (startsWith(htmlSanitizeIdPrefix, name))
+    return name + strlen(htmlSanitizeIdPrefix);
+return name;
+}
+
+static boolean alreadyWritten(char written[][maxAttrName+1], int *pCount, char *attr)
+/* Has attr already gone onto this tag?  If not, remember it and return FALSE.  A browser
+ * keeps the first of a repeated attribute and drops the rest, so we write the first and drop
+ * the rest too, rather than hand out a tag with two of something and lean on that rule. */
+{
+int i;
+for (i = 0;  i < *pCount;  ++i)
+    {
+    if (sameString(written[i], attr))
+        return TRUE;
+    }
+if (*pCount < maxTagAttrs)
+    safecpy(written[(*pCount)++], maxAttrName+1, attr);
+return FALSE;
+}
+
 static void writeAttributes(struct sanitizer *san, char *element, char *attrText, char *tagEnd)
 /* Write the attributes of element that we allow, from the text between attrText and tagEnd. */
 {
@@ -582,14 +619,16 @@ boolean isAnchor = sameString(element, "a");
 boolean isFrame = sameString(element, "iframe");
 boolean hasTarget = FALSE;
 char *relValue = NULL;
+char written[maxTagAttrs][maxAttrName+1];
+int writtenCount = 0;
 char *s = attrText;
 char *name, *val;
 int nameLen, valLen;
 while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
     {
-    if (nameLen == 0 || nameLen > 128)
+    if (nameLen == 0 || nameLen > maxAttrName)
         continue;
-    char attr[129];
+    char attr[maxAttrName+1];
     memcpy(attr, name, nameLen);
     attr[nameLen] = 0;
     tolowers(attr);
@@ -605,6 +644,8 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
             continue;
             }
         }
+    if (alreadyWritten(written, &writtenCount, attr))
+        continue;
     char *value = cloneStringZ(val == NULL ? "" : val, valLen);
     if (sameString(attr, "style"))
         {
@@ -633,7 +674,7 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
                 {
                 /* The name it points at is being renamed, so rename this to match. */
                 dyStringAppend(san->out, "#" htmlSanitizeIdPrefix);
-                appendEscaped(san->out, fragment);
+                appendEscaped(san->out, skipIdPrefix(fragment));
                 }
             else
                 appendEscaped(san->out, value);
@@ -648,15 +689,12 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
         if (isNotEmpty(value))
             {
             dyStringPrintf(san->out, " %s=\"%s", attr, htmlSanitizeIdPrefix);
-            appendEscaped(san->out, value);
+            appendEscaped(san->out, skipIdPrefix(value));
             dyStringAppendC(san->out, '"');
             }
         }
     else if (isAnchor && sameString(attr, "rel"))
-        {
-        freez(&relValue);
-        relValue = cloneString(value);
-        }
+        relValue = cloneString(value);          /* a repeat of it never reaches here */
     else
         {
         if (isAnchor && sameString(attr, "target"))
@@ -670,11 +708,15 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
 if (isAnchor && (hasTarget || relValue != NULL))
     {
     /* A link that opens a new window hands that window a handle back to ours unless we
-     * say otherwise. */
+     * say otherwise.  A noopener or noreferrer the text already carries is dropped first,
+     * so that running this over its own output does not stack a second pair on. */
     dyStringAppend(san->out, " rel=\"");
-    if (relValue != NULL)
+    char *word, *rest = relValue;
+    while (rest != NULL && (word = nextWord(&rest)) != NULL)
         {
-        appendEscaped(san->out, relValue);
+        if (sameWord(word, "noopener") || sameWord(word, "noreferrer"))
+            continue;
+        appendEscaped(san->out, word);
         dyStringAppendC(san->out, ' ');
         }
     dyStringAppend(san->out, "noopener noreferrer\"");
@@ -758,13 +800,20 @@ while (*s != 0)
     char *nameStart = s + (closing ? 2 : 1);
     if (!isalpha((unsigned char)*nameStart))
         {
-        dyStringAppendC(san->out, '<');
+        /* Not the start of a tag, so it is text.  Spelled out, because a browser reads
+         * something like "</ " as a comment and swallows markup of ours up to the next '>'. */
+        dyStringAppend(san->out, "&lt;");
         s += 1;
         continue;
         }
     char *tagEnd = findTagEnd(nameStart);
     if (tagEnd == NULL)
-        break;                          /* tag with no end, drop what is left */
+        {
+        /* Most often an attribute value whose quote is never closed.  Everything after it
+         * reads as part of that value, so there is nothing left we can trust. */
+        noteRemoved(san, "stopped at a tag that never ends, and printed nothing after it");
+        break;
+        }
     char name[64];
     char *attrText = tagName(nameStart, name, sizeof name);
     s = tagEnd + 1;
@@ -816,7 +865,10 @@ while (*s != 0)
     if (hashLookup(keepHash, name) == NULL)
         continue;                       /* tag goes, text inside it stays */
     if (!isVoid && san->depth >= maxNestDepth)
+        {
+        noteRemoved(san, "dropped tags nested more than %d deep", maxNestDepth);
         continue;
+        }
     dyStringPrintf(san->out, "<%s", name);
     writeAttributes(san, name, attrText, tagEnd);
     dyStringAppendC(san->out, '>');

@@ -73,3 +73,24 @@ out: <h2 id="descPage-methods">M</h2><a name="descPage-top">t</a><a href="#descP
 in : <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 out: <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 
+in : <p style="list-style:u&#114l(http://example.com/x.png);color:re&#100">a</p>
+out: <p style="color:re&#100;">a</p>
+     (removed the value of the style property list-style)
+
+in : <p style="font-family:'AT&T Sans'">a</p>
+out: <p style="font-family:'AT&T Sans';">a</p>
+
+in : <img src="first.png" src="second.png" alt="a" alt="b"><a href="javascript:alert(1)" href="https://example.com">x</a>
+out: <img src="first.png" alt="a"><a>x</a>
+     (removed a link that used the javascript: scheme)
+
+in : <p>real</p><p title="oops>never printed</p>
+out: <p>real</p>
+     (stopped at a tag that never ends, and printed nothing after it)
+
+in : <div>a &lt; b</ <b>bold</b></div>
+out: <div>a &lt; b&lt;/ <b>bold</b></div>
+
+in : <h2 id="descPage-methods">M</h2><a href="#descPage-methods">jump</a>
+out: <h2 id="descPage-methods">M</h2><a href="#descPage-methods">jump</a>
+
