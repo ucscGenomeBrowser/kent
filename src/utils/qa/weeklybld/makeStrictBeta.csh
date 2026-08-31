@@ -14,7 +14,9 @@ cd $BUILDDIR/$dir/kent/src/hg/makeDb/trackDb
 # job count; going much above 8 needs ssh connection sharing first, or hgwbeta's
 # sshd starts refusing connections (MaxStartups).
 set trackDbJobs = 8
-if ( $?TRACKDB_MAKE_JOBS ) set trackDbJobs = $TRACKDB_MAKE_JOBS
+if ( $?TRACKDB_MAKE_JOBS ) then
+    set trackDbJobs = $TRACKDB_MAKE_JOBS
+endif
 echo "trackDb make with -j $trackDbJobs"
 make -O -j $trackDbJobs beta >& make.strict.log
 /bin/egrep -i "html missing" make.strict.log > warning.txt
