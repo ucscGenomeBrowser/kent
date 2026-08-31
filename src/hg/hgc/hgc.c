@@ -5137,23 +5137,10 @@ else if (wordCount > 0)
 	}
     else if (sameString(type, "bigBed"))
         {
-        boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
-
-        if (bigBedOnePath)
-            {
-            int num = 0;
-            if (wordCount > 1)
-                num = atoi(words[1]);
-            genericBigBedClick(conn, tdb, item, start, end, num);
-            }
-        else
-            {
-            int num = 0;
-            if (wordCount > 1)
-                num = atoi(words[1]);
-            if (num < 3) num = 3;
-            genericBigBedClick(conn, tdb, item, start, end, num);
-            }
+        int num = 0;
+        if (wordCount > 1)
+            num = atoi(words[1]);
+        genericBigBedClick(conn, tdb, item, start, end, num);
 	}
     else if (sameString(type, "sample"))
 	{

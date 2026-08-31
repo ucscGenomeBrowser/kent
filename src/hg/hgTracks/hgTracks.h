@@ -1514,7 +1514,7 @@ void bedMethods(struct track *tg);
 void bed9Methods(struct track *tg);
 /* Fill in methods for bed9 tracks. */
 
-void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBed,
+void complexBedMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Fill in methods for more complex bed tracks. */
 
