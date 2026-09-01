@@ -42,7 +42,9 @@ checkMetaDb() {
     /cluster/bin/x86_64/hgsqlTableDate $db $metaDb $metaDir/metaDb || rm $metaDir/metaDb 
 
     # makefile will call makeMetaDb if file list is newer than table
-    (cd $metaDir && make DB=$db TABLE=$metaDb)
+    # clear MAKEFLAGS: this is not a recursive make, so a parallel parent make
+    # has already closed the jobserver pipe and the sub-make would warn about it
+    (cd $metaDir && MAKEFLAGS= make DB=$db TABLE=$metaDb)
     rm -f $metaDir/metaDb
 }
 
