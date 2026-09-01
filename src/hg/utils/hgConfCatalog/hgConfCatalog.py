@@ -1453,6 +1453,14 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("pngTimingSampleRate", "unreviewed", "hg/hgTracks/hgTracks.c",
+          default="0", ticket="38109",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionDefault in "
+               "hg/hgTracks/hgTracks.c.  Came in at 7007b23dcc1, hgTracks: "
+               "measure how long the track image takes to reach the reader, "
+               "refs #38109.  Needs a kind, a description, and a section to "
+               "live in."),
     ],
 }
 
