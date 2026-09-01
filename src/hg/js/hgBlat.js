@@ -120,9 +120,10 @@ function blatSummaryStrip(cfg, queryCount) {
         actions += '<button type="button" class="gbPill" id="blatSeqBtn" ' +
             'title="Show the sequence you searched with, in FASTA format">Show Query Sequence</button>';
     }
-    // "Share a link" just reveals the page's stable URL (cfg.shareUrl, a trash-backed reopen link).
-    // cfg.canShare covers old session-based links (?u=&s=), where the current URL is already shareable.
-    if (cfg.shareUrl || cfg.canShare) {
+    // "Share a link" creates a durable, minimal snapshot session (db + results bigPsl only) and shows
+    // its ?u=&s= reopen link (see blatShareLink).  Only offered when a durable bigPsl backs the
+    // results (cfg.canShare = autoBigPsl); without it there is nothing for the shared link to reopen.
+    if (cfg.canShare) {
         // A small share-nodes icon precedes the label so users learn to associate it with sharing.
         var shareIcon = '<svg class="blatShareIcon" viewBox="0 0 24 24" width="13" height="13" ' +
             'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ' +
@@ -131,7 +132,7 @@ function blatSummaryStrip(cfg, queryCount) {
             '<line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line>' +
             '<line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line></svg>';
         actions += '<button type="button" class="gbPill" id="blatShareBtn" ' +
-            'title="Show a link that reopens these results (works for a limited time)">' +
+            'title="Create a durable link that reopens these BLAT results">' +
             shareIcon + 'Share a link</button>';
     }
     // "Rename BLAT Track" opens a modal to rename the results custom track. This is a JS-native
@@ -271,20 +272,26 @@ function blatApplyTooltips() {
 
 // ---- share a link --------------------------------------------------------
 
-function blatShareLink() {
-    // No session, no AJAX: the results page already has a stable, shareable URL (hgBlat.c emits it as
-    // cfg.shareUrl and blatBuild() pins it into the address bar with history.replaceState), so this
-    // just shows/copies window.location.  The link reopens straight from the trash .pslx/.fa, so it
-    // works until those trash files are cleaned - hence the retention note.
-    var box = document.getElementById('gbShareBox');
-    if (!box) { return; }
-    if (box.style.display === 'flex') { box.style.display = 'none'; return; }   // toggle off
-    var url = window.location.href;
+// The snapshot link we created for this page view, cached so re-opening the box doesn't make another.
+var blatShareCachedUrl = null;
+
+// Render the share box.  url set -> show the link + Copy; url null -> "Creating link…"; msg (url null)
+// -> show an error.
+function blatShowShareBox(box, url, msg) {
     box.style.display = 'flex';
+    if (msg) {
+        box.innerHTML = '<span class="gbShareMsg gbShareFull" style="color:#a00">' +
+            htmlEncode(msg) + '</span>';
+        return;
+    }
+    if (!url) {
+        box.innerHTML = '<span class="gbShareMsg gbShareFull">Creating link…</span>';
+        return;
+    }
     box.innerHTML =
-        '<span class="gbShareMsg gbShareFull">Shareable link — anyone with it can reopen ' +
-        'these results. The results are stored temporarily, so the link works for at least 48 hours ' +
-        'after they were last viewed.</span>' +
+        '<span class="gbShareMsg gbShareFull">Shareable link — anyone with it can reopen these ' +
+        'BLAT results. It stores only the results (not your other tracks or settings) and stays ' +
+        'active as long as it is used.</span>' +
         '<input id="gbShareInput" class="gbShareInput" type="text" readonly>' +
         '<button type="button" class="gbPill" id="blatShareCopy" title="Copy the link to the clipboard">Copy</button>';
     var inp = document.getElementById('gbShareInput');
@@ -297,6 +304,42 @@ function blatShareLink() {
         else { document.execCommand('copy'); }
         this.textContent = 'Copied';
     });
+}
+
+function blatShareLink() {
+    // Create (or reveal) a durable share link.  It is backed by a lightweight "snapshot" session that
+    // stores only db + the results bigPsl - not the whole cart - under a server-generated unique name
+    // (see lib/snapshotSession.c).  hgBlat's ?u=&s= reopen (doShareReopen) rebuilds the results table
+    // from that bigPsl.  The token generation, uniqueness and reaping are shared with hgc and the
+    // top-right "Share a link".
+    var box = document.getElementById('gbShareBox');
+    if (!box) { return; }
+    if (box.style.display === 'flex') { box.style.display = 'none'; return; }   // toggle off
+
+    // Already viewing a shared session link: the current URL is itself the shareable link.
+    if (/[?&]s=/.test(window.location.search)) { blatShowShareBox(box, window.location.href); return; }
+    // Already created one this page view: reuse it rather than creating another session.
+    if (blatShareCachedUrl) { blatShowShareBox(box, blatShareCachedUrl); return; }
+
+    var cfg = hgBlatData.config;
+    blatShowShareBox(box, null);   // "Creating link…"
+    var body = 'hgsid=' + encodeURIComponent(cfg.hgsid || '') +
+        '&hgS_doSaveSessionJson=1&hgS_shareAnon=1&hgS_snapshotType=blat';
+    fetch('../cgi-bin/hgSession', {method: 'POST', credentials: 'same-origin',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: body})
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (!data || !data.name) {
+                blatShowShareBox(box, null, (data && data.error) || 'Could not create the link.');
+                return;
+            }
+            blatShareCachedUrl = window.location.origin + '/cgi-bin/hgBlat?u=l&s=' +
+                encodeURIComponent(data.name);
+            blatShowShareBox(box, blatShareCachedUrl);
+        })
+        .catch(function() {
+            blatShowShareBox(box, null, 'Could not reach the server. Please try again.');
+        });
 }
 
 // ---- Rename BLAT track (modal) -------------------------------------------

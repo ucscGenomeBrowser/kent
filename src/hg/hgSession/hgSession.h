@@ -25,6 +25,16 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 // set, or when no user is logged in) saves under the reserved anonymous user "l".
 #define hgsDoSaveSessionJson hgSessionPrefix "doSaveSessionJson"
 #define hgsShareAnon hgSessionPrefix "shareAnon"
+// AJAX endpoint that reserves (server-generates) a unique anonymous snapshot name and returns it as
+// JSON without saving, so the Share dialog can preview the exact link before the user commits.
+#define hgsDoAnonName hgSessionPrefix "doAnonName"
+// When set, doSaveSessionJson returns {"exists": true} instead of overwriting a session the logged-in
+// user already has under the requested name, so the Share dialog can warn before clobbering it.
+#define hgsFailIfExists hgSessionPrefix "failIfExists"
+// When set to a registered snapshotType (e.g. "blat"), doSaveSessionJson saves a lightweight
+// "snapshot" session holding only that feature's declared cart vars (see lib/snapshotSession.c)
+// instead of the whole cart.  The stored name is forced to the "__" snapshot prefix.
+#define hgsSnapshotType hgSessionPrefix "snapshotType"
 // Rename an existing session (hgsOldSessionName -> hgsNewSessionName) for the "Specify name" step.
 #define hgsDoRenameSessionJson hgSessionPrefix "doRenameSessionJson"
 
