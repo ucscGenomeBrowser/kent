@@ -41,6 +41,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import registryData as rd                                          # noqa: E402
+import trackDbData as td                                           # noqa: E402
 
 
 NUM_WORD = {0: "no", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
@@ -68,6 +69,11 @@ def asset(name):
     """Read one of the stylesheet or script files that sits next to this one."""
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), name)) as f:
         return f.read().rstrip("\n")
+
+
+def style(name):
+    """The shared tokens plus one page's own rules, as a single stylesheet."""
+    return asset("tokens.css") + "\n\n" + asset(name)
 
 
 # ============================================================ the Venn page ==
@@ -270,7 +276,7 @@ def collisionNote(coll):
                ". ".join(lines)))
 
 
-def vennPage(regs, counts, shared, coll, baseline, audit, indexName, today):
+def vennPage(regs, counts, shared, coll, baseline, audit, indexName, corrName, today):
     """The whole Venn page."""
     byKey = {r["key"]: r for r in regs}
     total = sum(counts.values())
@@ -398,13 +404,14 @@ def vennPage(regs, counts, shared, coll, baseline, audit, indexName, today):
   Registries: %(footRegs)s<br>
   Counts taken %(today)s from each catalog's --json output. A track variable is matched on the
   cart variable it names, not on the suffix the catalog stores.<br>
-  Name by name, with descriptions: <a href="%(indexName)s">Registry Name Index</a>.<br>
-  Both pages are drawn by hg/utils/registryPages/registryPages.py.
+  Name by name, with descriptions: <a href="%(indexName)s">Registry Name Index</a> &middot;
+  which of these a trackDb setting can preset: <a href="%(corrName)s">trackDb Override Map</a><br>
+  Drawn by hg/utils/registryPages/registryPages.py.
 </footer>
 
 </div>
 """ % {
-        "css": asset("venn.css"),
+        "css": style("venn.css"),
         "today": today,
         "tree": esc(shortPath(rd.kentSrc())),
         "svg": "\n".join("  " + line for line in vennSvg(regs, counts).splitlines()),
@@ -429,6 +436,7 @@ def vennPage(regs, counts, shared, coll, baseline, audit, indexName, today):
         "trackBaseline": baseline["track"],
         "auditPara": auditPara,
         "indexName": esc(indexName),
+        "corrName": esc(corrName),
         "footRegs": " &middot; ".join("%s #%s" % (r["tool"], r["ticket"]) for r in regs),
     }
 
@@ -539,7 +547,7 @@ def alphabeticalView(regs):
     return markup, data, len(buckets.get("#", [])), scoped
 
 
-def indexPage(regs, shared, vennName, today):
+def indexPage(regs, shared, vennName, corrName, today):
     """The whole name index, both views."""
     import json
     tips = []
@@ -617,8 +625,9 @@ def indexPage(regs, shared, vennName, today):
   Built %(today)s from each catalog's --json output against %(tree)s. Every description and
   source citation is the catalog's own text, unedited. Where a row carries no prose, the tooltip
   shows what the catalog does record: kind, default, and the file the tree reads it in.<br>
-  How the four registries overlap: <a href="%(vennName)s">Four Config Registries</a>.<br>
-  Both pages are drawn by hg/utils/registryPages/registryPages.py.
+  How the four registries overlap: <a href="%(vennName)s">Four Config Registries</a> &middot;
+  which of these a trackDb setting can preset: <a href="%(corrName)s">trackDb Override Map</a><br>
+  Drawn by hg/utils/registryPages/registryPages.py.
 </footer>
 
 </div>
@@ -631,7 +640,7 @@ def indexPage(regs, shared, vennName, today):
 %(js)s
 </script>
 """ % {
-        "css": asset("index.css"),
+        "css": style("index.css"),
         "js": asset("index.js"),
         "today": today,
         "tree": esc(shortPath(rd.kentSrc())),
@@ -648,7 +657,237 @@ def indexPage(regs, shared, vennName, today):
         "tips": json.dumps(tips, separators=(",", ":")),
         "azdata": json.dumps(azData, separators=(",", ":")),
         "vennName": esc(vennName),
+        "corrName": esc(corrName),
         "footRegs": " &middot; ".join("%s #%s" % (r["tool"], r["ticket"]) for r in regs),
+    }
+
+
+# ======================================================= the correlation page ==
+
+def workList(pairs, how, weak=False):
+    """The candidate edits, one block per type the docs do not list."""
+    groups = td.byMissingType(pairs, how)
+    if not groups:
+        return '<p class="sub">Nothing. The two files agree on every comparable pair.</p>'
+    out = ['<div class="work%s">' % (" weak" if weak else "")]
+    for tdbType, ps in groups.items():
+        bySetting = {}
+        for p in ps:
+            bySetting.setdefault(p["setting"], p)
+        out.append('  <div class="wrow">')
+        out.append('    <div class="wtype"><code>%s</code>'
+                   '<span class="wcount">%d %s</span></div>'
+                   % (esc(tdbType), len(bySetting),
+                      "setting" if len(bySetting) == 1 else "settings"))
+        out.append('    <div class="wsettings">')
+        for name in sorted(bySetting, key=str.lower):
+            p = bySetting[name]
+            out.append('      <div class="wsetting"><code>%s</code>'
+                       '<span class="wnow">now: %s%s</span></div>'
+                       % (esc(name), esc(", ".join(p["docTypes"])),
+                          "" if p["how"] == "same name"
+                          else "  &middot; joined through %s" % esc(p["var"])))
+        out.append('    </div>')
+        out.append('  </div>')
+    out.append('</div>')
+    return "\n".join(out)
+
+
+def pairTable(pairs):
+    """Every setting that has a runtime override, with both type lists."""
+    rows = []
+    for p in pairs:
+        if not p["comparable"]:
+            verdict = '<span class="pill none">not comparable</span>'
+        elif p["missing"]:
+            verdict = '<span class="pill gap">docs may be short</span>'
+        elif p["extra"]:
+            verdict = '<span class="pill none">cart has no UI for some</span>'
+        else:
+            verdict = '<span class="pill same">agree</span>'
+        cartTypes = " ".join(
+            ('<span class="add">%s</span>' % esc(t)) if t in p["missing"] else esc(t)
+            for t in p["cartTypes"]) or "&mdash;"
+        rows.append(
+            '        <tr><td class="mono">%s</td><td class="mono">%s</td>'
+            '<td class="how">%s</td><td class="types">%s</td><td class="types">%s</td>'
+            '<td>%s</td></tr>'
+            % (esc(p["setting"]), esc(p["var"]), esc(p["how"]),
+               esc(" ".join(p["docTypes"])) or "&mdash;", cartTypes, verdict))
+    return ('    <table>\n'
+            '      <caption>%d settings with a runtime override</caption>\n'
+            '      <thead>\n'
+            '        <tr><th scope="col">trackDb setting</th><th scope="col">cart variable</th>'
+            '<th scope="col">joined by</th><th scope="col">docs say</th>'
+            '<th scope="col">cart serves</th><th scope="col">verdict</th></tr>\n'
+            '      </thead>\n      <tbody>\n%s\n      </tbody>\n    </table>'
+            % (len(pairs), "\n".join(rows)))
+
+
+def chipList(names):
+    return '<div class="chips">%s</div>' % "".join(
+        '<span class="nm">%s</span>' % html.escape(n) for n in names)
+
+
+def correlatePage(data, vennName, indexName, today):
+    """The whole trackDb override map."""
+    pairs = data["pairs"]
+    strong = [p for p in pairs if p["how"] == "same name"]
+    weak = [p for p in pairs if p["how"] == "tdbDefault"]
+    comparable = [p for p in pairs if p["comparable"]]
+    agree = [p for p in comparable if not p["missing"] and not p["extra"]]
+    gaps = td.byMissingType(pairs, "same name")
+    nGapSettings = len({p["setting"] for ps in gaps.values() for p in ps})
+
+    return """<title>trackDb Override Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700\
+&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+%(css)s
+</style>
+
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">UCSC Genome Browser &middot; trackDb and the cart</p>
+  <h1>Which trackDb settings a user can change</h1>
+  <p class="lede">A trackDb setting names a default. For some settings the browser also offers the
+  reader a control, and the reader's choice lands in a cart variable. <strong>%(nPairs)d</strong>
+  of the <strong>%(nSettings)d</strong> documented settings work that way.</p>
+  <p class="lede">Both files also say which track types a setting applies to, and they were
+  written from different evidence: the documentation by hand, the cart catalog by reading the
+  config code. They disagree about <strong>%(nGapSettings)d</strong> settings.</p>
+  <div class="sources">
+    <div class="sourcecard tdb">
+      <h3>trackDbSettings.json %(version)s</h3>
+      <p class="big">%(nSettings)d</p>
+      <p>Settings, generated from trackDbLibrary.shtml by <code class="t">make settings</code>.
+      The <code class="t">types</code> list on each one is what the hub wizard publishes and what
+      #37908 has been correcting.</p>
+    </div>
+    <div class="sourcecard cart">
+      <h3>cartTrackVarCatalog #37838</h3>
+      <p class="big">%(nCart)d</p>
+      <p>Track cart variables, each filed under the config function that reads it, with the
+      trackDb types that function serves. Built by reading hui.c and the per-type Ui functions,
+      not by reading the documentation.</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>Types the config code serves and the documentation does not list</h2>
+  <p class="sub">Each block is one type and the settings whose <code>types</code> list omits it.
+  A block is usually one edit repeated across a family, which is how it is worth fixing. These are
+  candidates, not verdicts: every row still has to be read against the code. The pairs below are
+  joined by name, so the setting and the cart variable are one knob under two spellings.</p>
+%(work)s
+</section>
+
+<section>
+  <h2>Weaker candidates, joined through a default</h2>
+  <p class="sub">Here the setting and the cart variable are spelled differently, and the join is
+  the cart catalog's own note that the variable takes its default from that setting. A variable
+  can be offered for a type whose default comes from somewhere else, so a type on this list is a
+  question rather than a candidate.</p>
+%(weakWork)s
+</section>
+
+<section>
+  <h2>Every setting with a runtime override</h2>
+  <p class="sub">All %(nPairs)d pairs. A type in the cart column that the docs do not list is
+  marked. <strong>Not comparable</strong> means one side has nothing to say: a variable filed by
+  track name or in a wildcard family carries no type list, and a setting that applies to every
+  track cannot disagree about which types it covers.</p>
+  <div class="tablewrap">
+%(table)s
+  </div>
+</section>
+
+<section>
+  <h2>The two sides that did not join</h2>
+  <p class="sub">Most of both files has no counterpart in the other, and that is the expected
+  shape. A setting with no cart variable is one the browser reads and never offers to change. A
+  cart variable with no setting is a control with no trackDb default behind it.</p>
+  <div class="notes">
+    <div class="notecard">
+      <h3>%(nNoOverride)d settings a reader cannot change</h3>
+      <p>They configure the track once, from trackDb, and the browser offers no control.</p>
+    </div>
+    <div class="notecard">
+      <h3>%(nNoSetting)d cart variables with no documented setting</h3>
+      <p>Controls whose value has no trackDb default, plus every variable the cart catalog files
+      by track name or in a wildcard family.</p>
+    </div>
+  </div>
+  <p></p>
+  <details>
+    <summary>The %(nNoOverride)d settings with no runtime override</summary>
+%(noOverride)s
+  </details>
+  <p></p>
+  <details>
+    <summary>The %(nNoSetting)d cart variables with no trackDb setting</summary>
+%(noSetting)s
+  </details>
+</section>
+
+<section>
+  <h2>How much to trust this</h2>
+  <div class="notes">
+    <div class="notecard">
+      <h3>The cart catalog only knows types with a control</h3>
+      <p>It files a variable under the config function that draws it, so it can only speak about
+      types that have one. A type in the documentation and not in the cart column is usually the
+      documentation being right about a type with no UI.</p>
+    </div>
+    <div class="notecard">
+      <h3>A variable can sit in two groups</h3>
+      <p>One variable read by two config functions collects the types of both.
+      <code>aggregate</code> is filed under multiWig and under wig from the same source line, so
+      the wig types on its row are the catalog being generous rather than the documentation being
+      short.</p>
+    </div>
+    <div class="notecard">
+      <h3>Both files can be wrong together</h3>
+      <p>%(nAgree)d comparable pairs agree exactly. That is two independent readings landing in
+      the same place, which is worth something, but neither was checked against a track that
+      actually renders.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Sources: trackDbSettings.json %(version)s, generated from trackDbLibrary.shtml &middot;
+  cartTrackVarCatalog #37838<br>
+  Built %(today)s against %(tree)s. Refs #37908 #37838.<br>
+  The four registries and how they overlap: <a href="%(vennName)s">Four Config Registries</a>
+  &middot; every name with its description: <a href="%(indexName)s">Registry Name Index</a><br>
+  Drawn by hg/utils/registryPages/registryPages.py.
+</footer>
+
+</div>
+""" % {
+        "css": style("correlate.css"),
+        "today": today,
+        "tree": esc(shortPath(rd.kentSrc())),
+        "version": esc(data["version"]),
+        "nSettings": len(data["settings"]),
+        "nCart": len(data["cart"]),
+        "nPairs": len(pairs),
+        "nAgree": len(agree),
+        "nGapSettings": nGapSettings,
+        "work": workList(pairs, "same name"),
+        "weakWork": workList(pairs, "tdbDefault", weak=True),
+        "table": pairTable(pairs),
+        "nNoOverride": len(data["noOverride"]),
+        "nNoSetting": len(data["noSetting"]),
+        "noOverride": chipList(data["noOverride"]),
+        "noSetting": chipList(data["noSetting"]),
+        "vennName": esc(vennName),
+        "indexName": esc(indexName),
     }
 
 
@@ -661,6 +900,7 @@ def main():
     parser.add_argument("--outDir", help="write both pages into this directory")
     parser.add_argument("--venn", help="write the Venn page here")
     parser.add_argument("--index", help="write the name index here")
+    parser.add_argument("--correlate", help="write the trackDb override map here")
     parser.add_argument("--check", action="store_true",
                         help="write nothing, just audit the shared names; for a cron")
     parser.add_argument("--audit", action="store_true",
@@ -671,15 +911,17 @@ def main():
                              "(default its file name, which is right when both sit in one "
                              "directory; give a full URL when they do not)")
     parser.add_argument("--indexLink", help="href each page uses to point at the name index")
+    parser.add_argument("--correlateLink",
+                        help="href the other pages use to point at the trackDb override map")
     args = parser.parse_args()
 
-    if not (args.outDir or args.venn or args.index or args.check):
-        parser.error("nothing to do: give --outDir, --venn, --index or --check")
+    if not (args.outDir or args.venn or args.index or args.correlate or args.check):
+        parser.error("nothing to do: give --outDir, --venn, --index, --correlate or --check")
 
     regs = rd.loadRegistries()
     ok = rd.checkShared(regs)
 
-    if args.check and not (args.outDir or args.venn or args.index):
+    if args.check and not (args.outDir or args.venn or args.index or args.correlate):
         sys.exit(0 if ok else 1)
 
     counts = rd.regionCounts(regs)
@@ -691,23 +933,32 @@ def main():
 
     vennPath = args.venn
     indexPath = args.index
+    corrPath = args.correlate
     if args.outDir:
         vennPath = vennPath or os.path.join(args.outDir, "registryVenn.html")
         indexPath = indexPath or os.path.join(args.outDir, "registryIndex.html")
+        corrPath = corrPath or os.path.join(args.outDir, "trackDbOverrides.html")
 
     vennName = args.vennLink or (os.path.basename(vennPath) if vennPath
                                  else "registryVenn.html")
     indexName = args.indexLink or (os.path.basename(indexPath) if indexPath
                                    else "registryIndex.html")
+    corrName = args.correlateLink or (os.path.basename(corrPath) if corrPath
+                                      else "trackDbOverrides.html")
 
     if vennPath:
         with open(vennPath, "w") as f:
-            f.write(vennPage(regs, counts, shared, coll, baseline, audit, indexName, today))
+            f.write(vennPage(regs, counts, shared, coll, baseline, audit, indexName, corrName,
+                             today))
         print("wrote %s" % vennPath)
     if indexPath:
         with open(indexPath, "w") as f:
-            f.write(indexPage(regs, shared, vennName, today))
+            f.write(indexPage(regs, shared, vennName, corrName, today))
         print("wrote %s" % indexPath)
+    if corrPath:
+        with open(corrPath, "w") as f:
+            f.write(correlatePage(td.load(), vennName, indexName, today))
+        print("wrote %s" % corrPath)
 
     sys.exit(0 if ok else 1)
 

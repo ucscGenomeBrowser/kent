@@ -1,34 +1,4 @@
-:root{
-  color-scheme: light;
-  --bg:#f4f6f8; --panel:#ffffff; --ink:#131a20; --ink2:#4a5a66; --ink3:#7c8b95;
-  --rule:#dbe2e8; --rule2:#eaeff3;
-  --s-track:#e87ba4; --s-url:#2a78d6; --s-file:#008300; --s-conf:#eda100;
-  --fill:0.11;
-  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --body:"IBM Plex Serif",Georgia,"Times New Roman",serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme: dark;
-    --bg:#171a1d; --panel:#1e2226; --ink:#e9edf1; --ink2:#a8b4bd; --ink3:#7b8891;
-    --rule:#2d353b; --rule2:#262d33;
-    --s-track:#d55181; --s-url:#3987e5; --s-file:#008300; --s-conf:#c98500;
-    --fill:0.17;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme: dark;
-  --bg:#171a1d; --panel:#1e2226; --ink:#e9edf1; --ink2:#a8b4bd; --ink3:#7b8891;
-  --rule:#2d353b; --rule2:#262d33;
-  --s-track:#d55181; --s-url:#3987e5; --s-file:#008300; --s-conf:#c98500;
-  --fill:0.17;
-}
-
-*{box-sizing:border-box}
-a{color:inherit; text-underline-offset:3px; text-decoration-thickness:1px; text-decoration-color:var(--s-url)}
-a:hover{text-decoration-color:currentColor}
-a:focus-visible{outline:2px solid var(--s-url); outline-offset:2px; border-radius:2px}
+/* venn.css - the four-set diagram page.  Tokens come from tokens.css. */
 body{
   background:var(--bg); color:var(--ink);
   font-family:var(--body); font-size:16.5px; line-height:1.62;

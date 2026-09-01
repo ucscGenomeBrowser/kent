@@ -1,30 +1,4 @@
-:root{
-  color-scheme: light;
-  --bg:#f4f6f8; --panel:#ffffff; --ink:#131a20; --ink2:#4a5a66; --ink3:#7c8b95;
-  --rule:#dbe2e8; --rule2:#eaeff3; --chipbg:#eef2f5; --chiphov:#e0e7ec;
-  --track:#e87ba4; --url:#2a78d6; --file:#008300; --conf:#eda100;
-  --tipbg:#1b2429; --tipink:#eef3f6; --tipink2:#a9bcc6; --tipline:#33434c;
-  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --body:"IBM Plex Serif",Georgia,"Times New Roman",serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme: dark;
-    --bg:#171a1d; --panel:#1e2226; --ink:#e9edf1; --ink2:#a8b4bd; --ink3:#7b8891;
-    --rule:#2d353b; --rule2:#262d33; --chipbg:#242b31; --chiphov:#303941;
-    --track:#d55181; --url:#3987e5; --file:#008300; --conf:#c98500;
-    --tipbg:#0d1114; --tipink:#eef3f6; --tipink2:#9fb0ba; --tipline:#2a353c;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme: dark;
-  --bg:#171a1d; --panel:#1e2226; --ink:#e9edf1; --ink2:#a8b4bd; --ink3:#7b8891;
-  --rule:#2d353b; --rule2:#262d33; --chipbg:#242b31; --chiphov:#303941;
-  --track:#d55181; --url:#3987e5; --file:#008300; --conf:#c98500;
-  --tipbg:#0d1114; --tipink:#eef3f6; --tipink2:#9fb0ba; --tipline:#2a353c;
-}
-*{box-sizing:border-box}
+/* index.css - the name index page.  Tokens come from tokens.css. */
 body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.6;
      -webkit-font-smoothing:antialiased}
 .wrap{max-width:1120px; margin:0 auto; padding:44px 24px 120px}

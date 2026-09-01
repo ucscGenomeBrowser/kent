@@ -1,0 +1,52 @@
+/* tokens.css - the palette and type both registry pages share.
+   Light is defined on bare :root; the dark values are repeated under the media
+   query and under the [data-theme] stamp, so the viewer's own choice wins in
+   both directions and a viewer on the default "system" setting still gets a
+   complete palette.
+
+   The four registry colors are slots 1, 4, 6 and 5 of the browser data-viz
+   categorical palette, chosen because all four have to be told apart at once
+   in the Venn: they clear the all-pairs colorblind and normal-vision gates in
+   both light and dark.  Every name also carries a text label, which is what
+   the contrast warning on the light yellow and pink asks for. */
+:root{
+  color-scheme: light;
+  --bg:#f4f6f8; --panel:#ffffff; --ink:#131a20; --ink2:#4a5a66; --ink3:#7c8b95;
+  --rule:#dbe2e8; --rule2:#eaeff3; --chipbg:#eef2f5; --chiphov:#e0e7ec;
+  --track:#e87ba4; --url:#2a78d6; --file:#008300; --conf:#eda100;
+  --s-track:#e87ba4; --s-url:#2a78d6; --s-file:#008300; --s-conf:#eda100;
+  --tdb:#4a3aa7;
+  --fill:0.11;
+  --tipbg:#1b2429; --tipink:#eef3f6; --tipink2:#a9bcc6; --tipline:#33434c;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Serif",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#171a1d; --panel:#1e2226; --ink:#e9edf1; --ink2:#a8b4bd; --ink3:#7b8891;
+    --rule:#2d353b; --rule2:#262d33; --chipbg:#242b31; --chiphov:#303941;
+    --track:#d55181; --url:#3987e5; --file:#008300; --conf:#c98500;
+    --s-track:#d55181; --s-url:#3987e5; --s-file:#008300; --s-conf:#c98500;
+    --tdb:#9085e9;
+    --fill:0.17;
+    --tipbg:#0d1114; --tipink:#eef3f6; --tipink2:#9fb0ba; --tipline:#2a353c;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#171a1d; --panel:#1e2226; --ink:#e9edf1; --ink2:#a8b4bd; --ink3:#7b8891;
+  --rule:#2d353b; --rule2:#262d33; --chipbg:#242b31; --chiphov:#303941;
+  --track:#d55181; --url:#3987e5; --file:#008300; --conf:#c98500;
+  --s-track:#d55181; --s-url:#3987e5; --s-file:#008300; --s-conf:#c98500;
+  --tdb:#9085e9;
+  --fill:0.17;
+  --tipbg:#0d1114; --tipink:#eef3f6; --tipink2:#9fb0ba; --tipline:#2a353c;
+}
+
+*{box-sizing:border-box}
+a{color:inherit; text-underline-offset:3px; text-decoration-thickness:1px;
+  text-decoration-color:var(--url)}
+a:hover{text-decoration-color:currentColor}
+a:focus-visible{outline:2px solid var(--url); outline-offset:2px; border-radius:2px}
