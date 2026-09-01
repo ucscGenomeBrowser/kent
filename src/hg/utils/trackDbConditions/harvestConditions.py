@@ -96,12 +96,15 @@ SCOPES = {
 # both read track settings, and neither is the picture.
 NOT_RENDER = ("hg/hgTracks/config.c", "hg/hgTracks/searchTracks.c")
 
-# Scanned for both scopes.  hui.c and the *Ui.c files are not only the config
-# page: they also hold the accessors the drawing code calls, so hicUiGetArcLimit
-# has to be visible to the render graph as well as the config one.  Which scope
-# a read belongs to is then decided by who calls it, not by which file it is in.
-SHARED = ["hg/lib/hui.c", "hg/lib/*Ui.c", "hg/lib/wiggleCart.c",
-          "hg/lib/trackDbCustom.c", "hg/lib/hdb.c"]
+# Scanned for both scopes.  Naming the libraries one at a time was wrong twice
+# over: hui.c and the *Ui.c files are not only the config page, they hold the
+# accessors the drawing code calls, and a hand-kept list silently missed
+# netCart.c, chainCart.c, pgSnp.c and a dozen more that read track settings on
+# the drawing path.  A read site that is not scanned is worse than one that is
+# unclassified: the every-path analysis would claim a condition holds at every
+# read while never having seen one of them.  So scan the libraries whole and let
+# reachability decide which side of the browser each read belongs to.
+SHARED = ["hg/lib/*.c", "hg/cgilib/*.c"]
 
 # A read reached with none of these is unguarded.  Anything matching is noise
 # rather than a condition on the setting: it says the code got far enough to
@@ -207,6 +210,9 @@ def lineIndex(src):
 
 
 LEAVES = re.compile(r"^\s*\{?\s*(return\b|errAbort\s*\(|continue\b|break\b)")
+
+# How far into a function an early return still reads as a precondition.
+PRECONDITION_LINES = 25
 
 
 def loadDefines(paths):
@@ -354,11 +360,18 @@ def scanFile(path, kentSrc, defines):
                     q = skipSpace(s, p + 4)
                     guards.append((q, stmtEnd(s, q), "else", "NOT (%s)" % cond, line[p]))
                 elif word == "if" and LEAVES.match(src[close:end]):
-                    # the guarded statement leaves, so the rest of the function
-                    # is only reached when the condition is false
+                    # The guarded statement leaves, so the rest of the function
+                    # is only reached when the condition is false.  Only near the
+                    # top of the function, though: that is a precondition, and
+                    # people read it as one.  The same shape four hundred lines
+                    # down is just sequencing, and attributing it to every later
+                    # read is sound but says nothing about the setting.  It was
+                    # how the jsonp output check in doTrackForm came to look like
+                    # a condition on filterBy.
                     for fs, fe, _ in funcs:
                         if fs <= i < fe:
-                            guards.append((end, fe, "guard", "NOT (%s)" % cond, line[i]))
+                            if line[i] - line[fs] <= PRECONDITION_LINES:
+                                guards.append((end, fe, "guard", "NOT (%s)" % cond, line[i]))
                             break
                 i = close
                 continue
@@ -481,17 +494,16 @@ def scanFile(path, kentSrc, defines):
             "calls": calls, "addrTaken": sorted(addrTaken)}
 
 
-def splitConjuncts(text):
-    """A && B is two conditions.  Splitting it is sound; splitting || is not."""
-    parts, depth, cur = [], 0, ""
-    i = 0
+def splitOn(text, op):
+    """Split on a top-level operator, ignoring anything inside brackets."""
+    parts, depth, cur, i = [], 0, "", 0
     while i < len(text):
         c = text[i]
         if c in "([":
             depth += 1
         elif c in ")]":
             depth -= 1
-        if depth == 0 and text[i:i+2] == "&&":
+        if depth == 0 and text[i:i+2] == op:
             parts.append(cur)
             cur = ""
             i += 2
@@ -499,7 +511,40 @@ def splitConjuncts(text):
         cur += c
         i += 1
     parts.append(cur)
-    parts = [p.strip() for p in parts if p.strip()]
+    return [p.strip() for p in parts if p.strip()]
+
+
+def unwrap(text):
+    """Drop one layer of parentheses when they wrap the whole expression."""
+    text = text.strip()
+    while text.startswith("(") and text.endswith(")"):
+        depth = 0
+        for i, ch in enumerate(text):
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth -= 1
+                if depth == 0 and i != len(text) - 1:
+                    return text                  # the parens are not a wrapper
+        text = text[1:-1].strip()
+    return text
+
+
+def splitConjuncts(text):
+    """Break a condition into the separate things it requires.
+
+    A && B is two conditions, and splitting it is sound.  Splitting A || B is
+    not.  But a negated disjunction is a conjunction, so NOT (A || B) splits
+    into NOT A and NOT B, which is where the useful ones hide: the squishyPack
+    guard reads NOT (visibility != tvPack || checkIfWiggling(...)), and as one
+    string it is neither a visibility condition nor a coverage one.
+    """
+    inner = re.match(r"^NOT\s*\((.*)\)$", text.strip(), re.S)
+    if inner:
+        disjuncts = splitOn(inner.group(1), "||")
+        if len(disjuncts) > 1:
+            return ["NOT (%s)" % unwrap(part) for part in disjuncts]
+    parts = splitOn(text, "&&")
     return parts if len(parts) > 1 else [text]
 
 

@@ -35,10 +35,13 @@ lives in conditionBaseline.txt beside this file; --update-baseline accepts.
 
 import argparse
 import collections
+import getpass
+import glob
 import json
 import os
 import re
 import sys
+import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import harvestConditions as hc                                     # noqa: E402
@@ -100,7 +103,7 @@ def accessorMap(reads):
             if len(rs) == 1 and not rs[0]["conds"]}
 
 
-def classify(cond, accessors=None):
+def classify(cond, accessors=None, settingNames=None):
     """Which kind of condition this is, and the settings it names if any."""
     text = cond["text"]
     named = list(cond.get("derivedFrom") or [])
@@ -115,6 +118,18 @@ def classify(cond, accessors=None):
     for kind, _, pattern in KINDS:
         if re.search(pattern, text):
             return kind, []
+    # Last, and weakest: a bare variable named after a setting is usually
+    # holding it, which is how drawMode arrives from hicUiFetchDrawMode.  It runs
+    # after the patterns above on purpose.  track->visibility is the runtime
+    # field, not the visibility setting, and reading it the other way round put
+    # the squishyPack guard in the wrong bucket.  Field accesses are skipped for
+    # the same reason, and short names because type, name and color are settings
+    # and also ordinary words.
+    bare = re.findall(r"(?<![\w>.])([A-Za-z_][A-Za-z0-9_]*)", text)
+    hits = sorted({ident for ident in bare
+                   if settingNames and ident in settingNames and len(ident) >= 5})
+    if hits:
+        return OTHER_SETTING, hits
     return UNCLASSIFIED, []
 
 
@@ -127,20 +142,59 @@ def condId(cond):
     return re.sub(r"\s+", "", cond["text"])
 
 
-def build(kentSrc=None, cache=None):
+def defaultCache(kentSrc):
+    """Where to keep the harvest between runs.
+
+    Scanning the tree takes about forty seconds, which is fine once and tiresome
+    four times in a row while reading the output.  The cache is keyed on the
+    newest source file, so editing any scanned file rebuilds it, and it lives in
+    the temp directory rather than the tree so it cannot dirty a checkout.
+    """
+    tag = re.sub(r"\W+", "_", os.path.abspath(kentSrc)).strip("_")[-60:]
+    return os.path.join(tempfile.gettempdir(),
+                        "trackDbConditions-%s-%s.json" % (getpass.getuser(), tag))
+
+
+def sourceStamp(kentSrc):
+    """The newest modification time across everything the harvest reads."""
+    newest = 0.0
+    patterns = set(hc.SHARED)
+    for pats in hc.SCOPES.values():
+        patterns.update(pats)
+    for pattern in patterns:
+        for path in glob.glob(os.path.join(kentSrc, pattern)):
+            try:
+                newest = max(newest, os.path.getmtime(path))
+            except OSError:
+                pass
+    return round(newest, 3)
+
+
+def build(kentSrc=None, cache=None, refresh=False):
     """Harvest, classify, and fold the read sites together per setting and scope."""
     kentSrc = kentSrc or hc.os.environ.get("KENT_SRC") or os.path.abspath(
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
-    if cache and os.path.exists(cache):
-        with open(cache) as f:
-            reads = json.load(f)
-    else:
+    cache = cache or defaultCache(kentSrc)
+    stamp = sourceStamp(kentSrc)
+    reads = None
+    if not refresh and os.path.exists(cache):
+        try:
+            with open(cache) as f:
+                held = json.load(f)
+            if held.get("stamp") == stamp:
+                reads = held["reads"]
+        except (ValueError, KeyError, OSError):
+            reads = None
+    if reads is None:
         reads = hc.harvest(kentSrc)
-        if cache:
+        try:
             with open(cache, "w") as f:
-                json.dump(reads, f)
+                json.dump({"stamp": stamp, "reads": reads}, f)
+        except OSError:
+            pass
 
     accessors = accessorMap(reads)
+    settingNames = {r["name"] for r in reads if r["tdb"]}
     settings = {}
     for read in reads:
         if not read["tdb"]:
@@ -150,14 +204,14 @@ def build(kentSrc=None, cache=None):
                                           "sites": [], "unknown": False})
         conds = []
         for cond in hc.realConds(read):
-            kind, named = classify(cond, accessors)
+            kind, named = classify(cond, accessors, settingNames)
             conds.append({"text": cond["text"], "kind": kind, "names": named,
                           "file": cond["file"], "line": cond["line"]})
         used = []
         for cond in read.get("useConds", []):
             if hc.isNoise(cond):
                 continue
-            kind, named = classify(cond, accessors)
+            kind, named = classify(cond, accessors, settingNames)
             used.append({"text": cond["text"], "kind": kind, "names": named,
                          "file": cond["file"], "line": cond["line"]})
         entry["sites"].append({"file": read["file"], "line": read["line"],
@@ -243,6 +297,60 @@ def showSetting(entry, docs, verbose=False):
             print("      %s:%d  %s()" % (site["file"], site["line"], site["func"]))
 
 
+# Cases read out of the C by hand.  Every one of them broke at least once while
+# this was being built, usually silently, so they are checked rather than
+# trusted.  Each is (scope, setting, where, kind, text that must appear); a
+# leading "!" on the text means it must NOT appear anywhere in that setting.
+SELF_TEST = [
+    ("render", "bamColorTag",       "whenUsed", "otherSetting", "bamColorMode"),
+    ("render", "pairSearchRange",   "whenUsed", "otherSetting", "pairEndsByName"),
+    ("render", "frames",            "always",   "visibility",   "tvFull"),
+    ("render", "frames",            "always",   "zoom",         "zoomedToBaseLevel"),
+    ("render", "squishyPackPoint",  "always",   "visibility",   "tvPack"),
+    ("render", "hicArcLimit",       "always",   "otherSetting", "drawMode"),
+    ("render", "hapClusterHeight",  "always",   "coverage",     "setupForWiggle"),
+    ("render", "hideEmptySubtracks", "always",  "container",    "tdbIsComposite"),
+    ("config", "minGrayLevel",      "always",   "otherSetting", "scoreMin"),
+    # the output-format check at the tail of doTrackForm is not a condition on
+    # a track setting, however sound the control flow makes it
+    ("render", "filterBy",          "any",      None,           "!jsonp"),
+]
+
+
+def selfTest(entries):
+    """Check the harvest against cases confirmed by reading the code."""
+    byKey = {(e["scope"], e["name"]): e for e in entries}
+    bad = 0
+    for scope, name, where, kind, want in SELF_TEST:
+        entry = byKey.get((scope, name))
+        if entry is None:
+            print("FAIL %s %s: not read at all in that scope" % (scope, name))
+            bad += 1
+            continue
+        if where == "any":
+            conds = entry["always"] + entry["whenUsed"] + entry["sometimes"]
+        else:
+            conds = entry["always" if where == "always" else "whenUsed"]
+        if want.startswith("!"):
+            hits = [c for c in conds if want[1:] in c["text"] or want[1:] in c["names"]]
+            if hits:
+                print("FAIL %s %s: should not mention %s, but %s does"
+                      % (scope, name, want[1:], hits[0]["text"][:60]))
+                bad += 1
+            continue
+        hits = [c for c in conds
+                if (kind is None or c["kind"] == kind)
+                and (want in c["text"] or want in c["names"])]
+        if not hits:
+            print("FAIL %s %s [%s]: no %s condition mentioning %s"
+                  % (scope, name, where, kind, want))
+            for c in conds:
+                print("       had: %-12s %s" % (c["kind"], c["text"][:70]))
+            bad += 1
+    print("self test: %d of %d cases pass" % (len(SELF_TEST) - bad, len(SELF_TEST)))
+    return bad == 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__.split("\n\n")[0],
@@ -260,20 +368,26 @@ def main():
                         help="only settings whose condition is not just the track type")
     parser.add_argument("--json", help="write everything here")
     parser.add_argument("--check", action="store_true", help="cron mode, see the module docstring")
+    parser.add_argument("--self-test", action="store_true",
+                        help="check the harvest against cases confirmed by hand")
     parser.add_argument("--update-baseline", action="store_true",
                         help="accept the current set of conditioned settings")
-    parser.add_argument("--cache", help="reuse a harvest written here")
+    parser.add_argument("--cache", help="keep the harvest here instead of the default temp file")
+    parser.add_argument("--refresh", action="store_true", help="rescan even if the cache is current")
     args = parser.parse_args()
 
     kentSrc = os.environ.get("KENT_SRC") or os.path.abspath(
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
-    entries = build(kentSrc, args.cache)
+    entries = build(kentSrc, args.cache, args.refresh)
     docs = documented(kentSrc)
 
     if args.json:
         with open(args.json, "w") as f:
             json.dump({"settings": entries, "kinds": KIND_TEXT}, f, indent=1)
         print("wrote %s" % args.json)
+
+    if args.self_test:
+        sys.exit(0 if selfTest(entries) else 1)
 
     if args.update_baseline:
         names = sorted(conditionedNames(entries, docs))
@@ -286,6 +400,10 @@ def main():
         return
 
     if args.check:
+        if not selfTest(entries):
+            print("the scanner itself is not reporting what it used to; "
+                  "fix that before reading anything below")
+            sys.exit(1)
         now = conditionedNames(entries, docs)
         was = baselineNames()
         problems = 0

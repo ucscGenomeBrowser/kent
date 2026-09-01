@@ -1,17 +1,15 @@
 # Documented settings whose reads all sit behind a condition.
 # Accepted state for trackDbConditions.py --check.  One scope:name per line.
 render:bamColorTag
-render:barChartBars
-render:barChartCategoryUrl
 render:barChartColors
 render:barChartMerge
 render:baseColorTickColor
 render:baseColorUseCds
 render:bigDataIndex
-render:bigDataUrl
 render:centerLabelsDense
 render:chainNormScoreAvailable
 render:colorFields
+render:compositeTrack
 render:configurable
 render:configureByPopup
 render:dataVersion
@@ -20,6 +18,7 @@ render:drawMode
 render:exonNumbers
 render:filterBy
 render:frames
+render:genome
 render:hapClusterHeight
 render:hapClusterTreeAngle
 render:hicArcLimit
@@ -28,6 +27,7 @@ render:hideEmptySubtracksMultiBedUrl
 render:hideEmptySubtracksSourcesUrl
 render:highlightColor
 render:irows
+render:itemRgb
 render:labelOnFeature
 render:linkDataUrl
 render:logoMaf
@@ -38,7 +38,6 @@ render:metadata
 render:minGrayLevel
 render:minQual
 render:negateValues
-render:nextExonText
 render:noInherit
 render:normalization
 render:otherTwoBitUrl
@@ -46,14 +45,13 @@ render:pairSearchRange
 render:pennantIcon
 render:resolution
 render:saturationScore
+render:searchIndex
 render:showCdsMaxZoom
-render:showSnpWidth
 render:smoothingWindow
+render:sortOrder
 render:speciesCodonDefault
-render:speciesDefaultOff
-render:speciesGroups
-render:speciesOrder
 render:subGroups
+render:superTrack
 render:thickDrawItem
 render:viewLimits
 render:windowingFunction
