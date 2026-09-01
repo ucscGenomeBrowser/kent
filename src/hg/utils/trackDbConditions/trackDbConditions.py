@@ -220,6 +220,16 @@ def build(kentSrc=None, cache=None, refresh=False):
         if read["callerUnknown"]:
             entry["unknown"] = True
 
+    # "read the trackDb value when the cart has none" is how every setting with a
+    # default resolves.  It is not a condition on the setting, and left in it
+    # accounted for a third of the worklist.
+    for entry in settings.values():
+        for site in entry["sites"]:
+            for field in ("conds", "used"):
+                site[field] = [c for c in site[field]
+                               if not (c["kind"] == OTHER_SETTING
+                                       and c["names"] == [entry["name"]])]
+
     for entry in settings.values():
         perSite = [{condId(c): c for c in s["conds"]} for s in entry["sites"]]
         always, sometimes = {}, {}

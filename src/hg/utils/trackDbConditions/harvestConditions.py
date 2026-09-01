@@ -117,6 +117,11 @@ NOISE = re.compile(
     r"|^NOT \(isEmpty\("
     r"|^NOT \(!\w+\)$"
     r"|^\w+ = \w+; \w+ != NULL"          # for (x = y; x != NULL; ...)
+    # the words of the trackDb type line.  A track always has a type, so a guard
+    # on the count being positive is a sanity check, not a condition: it was
+    # showing up as a "data" condition on chainNormScoreAvailable, lollyMaxSize
+    # and lollyNoStems, and it means nothing on any of them.
+    r"|^NOT \(word(Count|Ct) <= 0\)$|^word(Count|Ct) > 0$"
 )
 
 
@@ -319,11 +324,23 @@ def scanFile(path, kentSrc, defines):
     fromSetting = {}
     fileValue = collections.defaultdict(set)   # name -> settings it ever holds
     assignAt = collections.defaultdict(list)   # name -> offsets of its assignments
-    for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\s*\(", s):
-        reader = m.group(2)
-        if reader not in READERS:
+    for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(?=[A-Za-z_])", s):
+        # The read is often wrapped: cloneString(trackDbSetting(...)) and
+        # atoi(cartOrTdbString(...)) are both common, and stopping at the first
+        # call name loses them.  hideEmptySubtracksSourcesUrl needing
+        # hideEmptySubtracksMultiBedUrl was missed for exactly this reason.
+        pos, reader, open_ = m.end(), None, None
+        for _ in range(4):
+            call = re.match(r"([A-Za-z_][A-Za-z0-9_]*)\s*\(", s[pos:])
+            if not call:
+                break
+            here = pos + call.end() - 1
+            if call.group(1) in READERS:
+                reader, open_ = call.group(1), here
+                break
+            pos = here + 1
+        if reader is None:
             continue
-        open_ = s.index("(", m.end(2))
         close = matchParen(s, open_)
         args = splitArgs(src[open_ + 1:close - 1])
         idx = READERS[reader]
@@ -331,7 +348,13 @@ def scanFile(path, kentSrc, defines):
             continue
         name = settingNameOf(args[idx], defines)
         if name and not name.startswith("{"):
-            fromSetting[(enclosing(m.start(1)), m.group(1))] = name
+            # Keep every assignment with its offset.  wigFetchMinMaxYWithCart
+            # assigns defaultViewLimits from defaultViewLimits and then, if that
+            # came back NULL, from viewLimits.  Remembering only the last one
+            # made the test in between look like viewLimits testing itself, and
+            # hid a real relationship between two settings.
+            fromSetting.setdefault((enclosing(m.start(1)), m.group(1)), []).append(
+                (m.start(1), name))
             fileValue[m.group(1)].add(name)
             assignAt[m.group(1)].append(m.start(1))
 
@@ -384,9 +407,24 @@ def scanFile(path, kentSrc, defines):
                 func = enclosing(g[0])
                 for part in splitConjuncts(g[3]):
                     idents = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", part)
-                    derived = sorted({fromSetting[(func, ident)] for ident in idents
-                                      if (func, ident) in fromSetting}
-                                     | {carries[ident] for ident in idents if ident in carries})
+                    derived = set()
+                    for ident in idents:
+                        # A macro in the test is the setting it expands to.
+                        # cartVarExistsAnyLevel(cart, tdb, FALSE, MAF_CHAIN_VAR)
+                        # is a test of mafChain, and reading it as an unknown
+                        # word hid that irows is only consulted when mafChain is
+                        # absent from the cart.
+                        if re.fullmatch(r"[A-Z][A-Z0-9_]*", ident) and ident in defines:
+                            derived.add(defines[ident])
+                            continue
+                        writes = fromSetting.get((func, ident))
+                        if writes:
+                            # the assignment in force where the test is written
+                            before = [w for w in writes if w[0] < g[0]]
+                            derived.add((before[-1] if before else writes[0])[1])
+                        elif ident in carries:
+                            derived.add(carries[ident])
+                    derived = sorted(derived)
                     out.append({"kind": g[2], "text": part, "line": g[4], "file": rel,
                                 "derivedFrom": derived})
         return out
