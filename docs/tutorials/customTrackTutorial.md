@@ -1,7 +1,7 @@
 % UCSC Genome Browser Custom Track Tutorial
 
 The UCSC Genome Browser allows users to load their own annotations by adding
-[Custom Tracks](../cgi-bin/hgCustom). Custom tracks work well for quickly displaying data and are
+[Custom Tracks](/cgi-bin/hgCustom). Custom tracks work well for quickly displaying data and are
 automatically discarded 48 hours after the last time they were accessed.
  
 This tutorial introduces the Custom Track interface and demonstrates how to:
