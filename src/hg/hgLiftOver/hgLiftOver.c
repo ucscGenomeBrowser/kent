@@ -98,7 +98,6 @@ jsIncludeAutoCompleteLibs();
 char *searchBarId = "fromGenomeSearch";
 printf("<input name='%s' value='%s' type='hidden'></input>\n", HGLFT_FROMDB_VAR, chain->fromDb);
 printf("<input name='%s' value='%s' type='hidden'></input>\n", HGLFT_FROMORG_VAR, fromOrg);
-printf("<input name='formMethod' value='GET' type='hidden'></input>\n");
 printf("<TD class='searchCell'>\n");
 printGenomeSearchBar(searchBarId, "Search any species, genome or assembly name", NULL, TRUE, "Change original genome:", NULL);
 jsInlineF(
