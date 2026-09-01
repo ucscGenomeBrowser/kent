@@ -149,21 +149,22 @@ Navarro for testing, feedback, and documentation.
 </p>
 
 <a name="082826"></a>
-<h2>Aug. 28, 2026 &nbsp;&nbsp; Deleteriousness Predictions: popEVE and EVE for hg38</h2>
+<h2>Aug. 28, 2026 &nbsp;&nbsp; Deleteriousness Predictions: EVE and popEVE for hg38</h2>
 <p>
 We are pleased to announce the release of two new proteome-wide missense variant effect
 prediction tracks for hg38:
-<a href="/cgi-bin/hgTrackUi?db=hg38&g=popEve&position=default" target="_blank">popEVE</a> and
-<a href="/cgi-bin/hgTrackUi?db=hg38&g=eve&position=default" target="_blank">EVE</a>.
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=eve&position=default" target="_blank">EVE</a> and
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=popEve&position=default" target="_blank">popEVE</a>.
 Both are deep generative models that predict variant pathogenicity by learning patterns of
 natural sequence variation across species, without relying on clinical labels.
 </p>
 
 <h3>EVE</h3>
 <p>
-<a href="https://evemodel.org" target="_blank">EVE</a> (Evolutionary model of Variant Effect) is a
-deep generative model that predicts the pathogenicity of missense variants by learning patterns of
-natural sequence variation across thousands of species, without relying on clinical labels.
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=eve&position=default" target="_blank">EVE</a>
+(<b>E</b>volutionary model of <b>V</b>ariant <b>E</b>ffect) is a deep generative model that
+predicts the pathogenicity of missense variants by learning patterns of natural sequence variation
+across thousands of species, without relying on clinical labels.
 Pre-computed scores are provided for all possible missense substitutions across 2,949
 disease-associated human proteins.
 </p>
@@ -184,7 +185,8 @@ available.
 </p>
 
 <div class="text-center" style="margin-top: 1.5em;">
-<a href="/cgi-bin/hgTracks?db=hg38&position=chr7%3A81752177-81752229&eve=pack" target="_blank">
+<a href="/cgi-bin/hgTracks?db=hg38&position=chr7%3A81752177-81752229&hideTracks=1&predictionScoresSuper=show&eve=pack&popEve=hide&mutScore=hide&primateAi=hide"
+   target="_blank">
 <img alt="Genome Browser screenshot of the EVE track at the HGF locus on hg38"
 src="/images/newsArchImages/eve.png" width='55%'></a>
 <p class="gbsCaption"><em>EVE missense variant effect scores for the HGF locus (chr7,
@@ -196,9 +198,15 @@ over a cell shows the substitution and EVE score.</em></p>
 Items in this track are colored according to score:
 </p>
 <ul>
-  <li><b>Red</b> &ndash; Likely pathogenic (score &asymp; 1)</li>
-  <li><b>White</b> &ndash; Uncertain (score &asymp; 0.5)</li>
-  <li><b>Blue</b> &ndash; Likely benign (score &asymp; 0)</li>
+  <li><span style="display:inline-block; background-color:#d6604d; width:18px;
+      height:12px; vertical-align:middle;"></span>
+      <b>Red</b> &ndash; Likely pathogenic (score &asymp; 1)</li>
+  <li><span style="display:inline-block; background-color:#f7f7f7; width:18px;
+      height:12px; vertical-align:middle; border:1px solid #ccc;"></span>
+      <b>White</b> &ndash; Uncertain (score &asymp; 0.5)</li>
+  <li><span style="display:inline-block; background-color:#2166ac; width:18px;
+      height:12px; vertical-align:middle;"></span>
+      <b>Blue</b> &ndash; Likely benign (score &asymp; 0)</li>
 </ul>
 
 <p>
@@ -208,14 +216,14 @@ on mouseover. At wider zoom levels, the track switches to displaying a density g
 
 <h3>popEVE</h3>
 <p>
-<a href="https://pop.evemodel.org" target="_blank">popEVE</a> builds on EVE by combining its
-evolutionary signal with predictions from the ESM-1v protein language model and human population
-variation from the UK Biobank. A key difference is that EVE scores are calibrated separately
-within each protein, whereas popEVE scores are calibrated across the entire proteome. That means a
-popEVE score in one gene can be compared directly to a popEVE score in a completely different
-gene. This is useful when prioritizing which of several candidate variants across different genes
-is most likely to be damaging. The track provides popEVE scores for missense substitutions across
-roughly 18,000 human proteins.
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=popEve&position=default" target="_blank">popEVE</a> builds
+on EVE by combining its evolutionary signal with predictions from the ESM-1v protein language
+model and human population variation from the UK Biobank. A key difference is that EVE scores are
+calibrated separately within each protein, whereas popEVE scores are calibrated across the entire
+proteome. That means a popEVE score in one gene can be compared directly to a popEVE score in a
+completely different gene. This is useful when prioritizing which of several candidate variants
+across different genes is most likely to be damaging. The track provides popEVE scores for
+missense substitutions across roughly 18,000 human proteins.
 </p>
 
 <p>
@@ -235,11 +243,22 @@ cell shows the popEVE score for that substitution.
 Items are colored according to score:
 </p>
 <ul>
-  <li><b>Dark red</b> &ndash; Most deleterious (&le; &minus;6.04)</li>
-  <li><b>Red-orange</b> &ndash; Severe (&asymp; &minus;5.056)</li>
-  <li><b>Light orange</b> &ndash; Moderate (&asymp; &minus;4.617)</li>
-  <li><b>White / very light</b> &ndash; Near the proteome-wide median (&asymp; &minus;3.5)</li>
-  <li><b>Blue</b> &ndash; Most tolerated (&ge; &minus;2.41)</li>
+  <li><span style="display:inline-block; background-color:#b2182b; width:18px;
+      height:12px; vertical-align:middle;"></span>
+      <b>Dark red</b> &ndash; Most deleterious (&le; &minus;6.04)</li>
+  <li><span style="display:inline-block; background-color:#d6604d; width:18px;
+      height:12px; vertical-align:middle;"></span>
+      <b>Red-orange</b> &ndash; Severe (&asymp; &minus;5.056)</li>
+  <li><span style="display:inline-block; background-color:#f4a582; width:18px;
+      height:12px; vertical-align:middle;"></span>
+      <b>Light orange</b> &ndash; Moderate (&asymp; &minus;4.617)</li>
+  <li><span style="display:inline-block; background-color:#f7f7f7; width:18px;
+      height:12px; vertical-align:middle; border:1px solid #ccc;"></span>
+      <b>White / very light</b> &ndash; Near the proteome-wide median
+      (&asymp; &minus;3.5)</li>
+  <li><span style="display:inline-block; background-color:#2166ac; width:18px;
+      height:12px; vertical-align:middle;"></span>
+      <b>Blue</b> &ndash; Most tolerated (&ge; &minus;2.41)</li>
 </ul>
 
 <p>
@@ -249,7 +268,7 @@ variant interpretation rather than serve as a stand-alone clinical classifier.
 </p>
 
 <div class="text-center" style="margin-top: 1.5em;">
-<a href="/cgi-bin/hgTracks?db=hg38&position=chr3%3A38756746-38756842&popEve=pack" target="_blank">
+<a href="https://genome.ucsc.edu/s/bkitiyakara/popEVE" target="_blank">
 <img alt="Genome Browser screenshot of the popEVE track at the SCN10A locus on hg38"
 src="/images/newsArchImages/popEve.png" width='55%'></a>
 <p class="gbsCaption"><em>popEVE missense deleteriousness scores for all possible amino acid
@@ -258,14 +277,14 @@ from severe (red) to tolerated (blue).</em></p>
 </div>
 
 <p>
-We would like to thank Mafalda Dias, Jonathan Frazer, Debora S. Marks, Rose Orenbuch, and
-colleagues at Harvard Medical School, the Centre for Genomic Regulation, and collaborating
-institutions for developing popEVE and making the scores publicly available at
-<a href="https://pop.evemodel.org" target="_blank">pop.evemodel.org</a>, and Jonathan Frazer,
-Pascal Notin, Mafalda Dias, and Debora S. Marks at Harvard Medical School, along with Yarin Gal at
-the University of Oxford, for making the EVE scores publicly available at
-<a href="https://evemodel.org" target="_blank">evemodel.org</a>. Lou Nassar and Max Haeussler
-developed these tracks, with QA by Jairo Navarro, Barali Kitiyakara, and Eliza Alde.
+We would like to thank Jonathan Frazer, Pascal Notin, Mafalda Dias, and Debora S. Marks at
+Harvard Medical School, along with Yarin Gal at the University of Oxford, for making the EVE
+scores publicly available at <a href="https://evemodel.org" target="_blank">evemodel.org</a>, and
+Mafalda Dias, Jonathan Frazer, Debora S. Marks, Rose Orenbuch, and colleagues at Harvard Medical
+School, the Centre for Genomic Regulation, and collaborating institutions for developing popEVE
+and making the scores publicly available at
+<a href="https://pop.evemodel.org" target="_blank">pop.evemodel.org</a>. Lou Nassar and Max
+Haeussler developed these tracks, with QA by Jairo Navarro, Barali Kitiyakara, and Eliza Alde.
 </p>
 
 <a name="082626"></a>
