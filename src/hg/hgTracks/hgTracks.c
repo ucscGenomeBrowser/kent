@@ -7571,14 +7571,12 @@ if (cartOptionalString(cart, "hgt.trackNameFilter") == NULL)
 /* gcOnFly track: if a trackDb entry exists (native or hub, possibly
  * with a hub_#_ prefix on the table name), patch in on-the-fly
  * computation methods so data comes from genome sequence, not a file.
- * hg.conf switches:
+ * hg.conf switch:
  *   gcOnTheFly=on      - master switch, track is removed if off (default on)
- *   gcOnTheFlyCoExist=on - allow gcOnFly alongside gc5Base/gc5BaseBw
- *                          (default off: remove gcOnFly if either exists)
+ * Also removed if gc5Base or gc5BaseBw is present in trackDb.
  * This must run after loadTrackHubs so assembly hub tracks are present. */
 {
 boolean gcOnTheFlyEnabled = cfgOptionBooleanDefault("gcOnTheFly", TRUE);
-boolean gcCoExist = cfgOptionBooleanDefault("gcOnTheFlyCoExist", FALSE);
 struct track *t, *prev = NULL, *next;
 for (t = trackList; t != NULL; t = next)
     {
@@ -7588,9 +7586,8 @@ for (t = trackList; t != NULL; t = next)
 	boolean remove = FALSE;
 	if (!gcOnTheFlyEnabled)
 	    remove = TRUE;
-	else if (!gcCoExist &&
-	    (rFindTrackWithTable("gc5Base", trackList) != NULL ||
-	     rFindTrackWithTable("gc5BaseBw", trackList) != NULL))
+	else if (rFindTrackWithTable("gc5Base", trackList) != NULL ||
+	    rFindTrackWithTable("gc5BaseBw", trackList) != NULL)
 	    remove = TRUE;
 	if (remove)
 	    {
