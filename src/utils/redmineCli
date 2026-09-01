@@ -25,9 +25,14 @@ Usage:
     redmineCli related 34446 --add 12345 6789  # add relations to a ticket
     redmineCli watch 37339 lou braney         # add watchers to a ticket
     redmineCli users                          # list user names and IDs
+    redmineCli sql --tables                   # list Redmine database tables
+    redmineCli sql --describe issues          # show one table's columns
+    redmineCli sql "select id, subject from issues where project_id=1 limit 5"
+    redmineCli sql --file report.sql --tsv    # run a saved query, tab-separated
 """
 
 import argparse
+import decimal
 import json
 import mimetypes
 import os
@@ -37,7 +42,7 @@ import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime
+from datetime import date, datetime
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -52,6 +57,41 @@ PRIORITY_UNPRIORITIZED = 12
 PRIORITY_URGENT = 6
 STATUS_NEW = 1
 PROJECT_GB = "genomebrowser"
+
+# --- Read-only SQL against the Redmine database ----------------------------
+# Credentials come from ~/.hg.conf: redmine.db.user and redmine.db.password if
+# present, otherwise db.user and db.password. redmine.db.host, redmine.db.name
+# and redmine.db.port are optional and default to the constants below.
+
+DEFAULT_DB_HOST = "redmine.gi.ucsc.edu"
+DEFAULT_DB_NAME = "redmine"
+DEFAULT_DB_PORT = 3306
+
+# Rows printed before output is cut off. --limit 0 turns the cap off.
+SQL_DEFAULT_LIMIT = 500
+
+# Seconds before the server kills a query. These run against the live
+# production database, so a bad join must not sit there holding resources.
+SQL_MAX_STATEMENT_TIME = 30
+
+# Statement verbs cmd_sql will send. This is a guard rail against a typo, not
+# a security boundary. The password on disk would let any other client run the
+# same statement, so read-only is enforced by granting the account SELECT and
+# nothing else.
+SQL_ALLOWED_VERBS = ("select", "show", "describe", "desc", "explain", "with")
+
+# The hgcat grant covers the whole redmine schema, so these are readable. The
+# checks below keep a careless query from putting credentials on a terminal or
+# into a log. They are not a security boundary: the same account can read the
+# same rows from any other MySQL client. --allow-sensitive turns them off.
+#
+# Tables that hold nothing but credentials. Matched against the query text.
+SQL_SECRET_TABLES = ("tokens",)
+
+# Columns never worth printing, wherever they are selected from. Checked
+# against the result columns, so "select * from users" is caught too.
+SQL_SECRET_COLUMNS = ("hashed_password", "salt", "twofa_scheme",
+                      "twofa_totp_key", "twofa_totp_last_used_at")
 
 # Redmine display name of the build-meister account. QA assigns a Build Patch
 # ticket to this user to hand it over for patching; patch-queue gates on it.
@@ -214,15 +254,26 @@ FIELD_VALIDATORS = {
 }
 
 
-def read_api_key(conf_path="~/.hg.conf"):
-    """Read redmine.apiKey from ~/.hg.conf."""
+def read_conf(conf_path="~/.hg.conf"):
+    """Parse a key=value config file into a dict, skipping comments and blanks."""
     conf_path = os.path.expanduser(conf_path)
+    values = {}
     with open(conf_path) as f:
         for line in f:
             line = line.strip()
-            if line.startswith("redmine.apiKey="):
-                return line.split("=", 1)[1]
-    sys.exit("Error: redmine.apiKey not found in " + conf_path)
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            values[key.strip()] = value.strip()
+    return values
+
+
+def read_api_key(conf_path="~/.hg.conf"):
+    """Read redmine.apiKey from ~/.hg.conf."""
+    api_key = read_conf(conf_path).get("redmine.apiKey")
+    if not api_key:
+        sys.exit("Error: redmine.apiKey not found in " + os.path.expanduser(conf_path))
+    return api_key
 
 
 def api_get(base_url, path, api_key):
@@ -1286,6 +1337,201 @@ def cmd_note(args):
 
 
 # ---------------------------------------------------------------------------
+# sql
+# ---------------------------------------------------------------------------
+
+def import_pymysql():
+    """Import pymysql, preferring the copy bundled in the kent tree."""
+    try:
+        import pymysql
+        return pymysql
+    except ImportError:
+        pass
+    pyLib = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                         "..", "hg", "pyLib")
+    sys.path.insert(0, os.path.normpath(pyLib))
+    try:
+        import pymysql
+        return pymysql
+    except ImportError:
+        sys.exit("Error: cannot import pymysql. Expected the copy bundled in "
+                 "the kent tree at src/hg/pyLib.")
+
+
+def sql_connect(args):
+    """Open a connection to the Redmine database using ~/.hg.conf credentials."""
+    pymysql = import_pymysql()
+    conf = read_conf(args.conf)
+    # Prefer a dedicated redmine.db.* account. Fall back to the db.* account,
+    # which is the same shared read-only login on both servers, so the password
+    # does not have to be stored twice.
+    user = conf.get("redmine.db.user") or conf.get("db.user")
+    password = conf.get("redmine.db.password") or conf.get("db.password")
+    if not user or not password:
+        sys.exit(
+            "Error: no database credentials in " + os.path.expanduser(args.conf)
+            + "\nAdd redmine.db.user and redmine.db.password (the file must be "
+            "mode 600).\nredmine.db.host, redmine.db.name and redmine.db.port "
+            "are optional.")
+    database = args.database or conf.get("redmine.db.name", DEFAULT_DB_NAME)
+    try:
+        # Multi-statement support stays off, so a query cannot smuggle in a
+        # second statement after a semicolon.
+        return pymysql.connect(
+            host=conf.get("redmine.db.host", DEFAULT_DB_HOST),
+            port=int(conf.get("redmine.db.port", DEFAULT_DB_PORT)),
+            user=user, password=password, database=database,
+            charset="utf8mb4", connect_timeout=10)
+    except Exception as e:
+        sys.exit(f"Error: cannot connect to the Redmine database: {e}")
+
+
+def sql_first_verb(sql):
+    """Return the first SQL keyword, skipping leading comments and blank lines."""
+    for line in sql.splitlines():
+        line = line.strip()
+        if not line or line.startswith("--") or line.startswith("#"):
+            continue
+        word = line.lstrip("(").split(None, 1)
+        return word[0].lower() if word else ""
+    return ""
+
+
+def sql_cell(value, max_width=0):
+    """Render one result value as a single line of display text."""
+    if value is None:
+        text = "NULL"
+    elif isinstance(value, datetime):
+        text = value.isoformat(sep=" ")
+    elif isinstance(value, date):
+        text = value.isoformat()
+    elif isinstance(value, bytes):
+        text = value.decode("utf-8", errors="replace")
+    else:
+        text = str(value)
+    text = " ".join(text.split())
+    if max_width and len(text) > max_width:
+        text = text[:max_width - 3] + "..."
+    return text
+
+
+def sql_json_default(value):
+    """Render values json.dumps cannot handle on its own."""
+    if isinstance(value, (date, datetime)):
+        return value.isoformat()
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    if isinstance(value, decimal.Decimal):
+        return float(value)
+    return str(value)
+
+
+def sql_print_table(columns, rows, max_width):
+    """Print rows as a column-aligned text table."""
+    widths = [len(c) for c in columns]
+    cells = []
+    for row in rows:
+        out = [sql_cell(v, max_width) for v in row]
+        for i, text in enumerate(out):
+            widths[i] = max(widths[i], len(text))
+        cells.append(out)
+    print("  ".join(c.ljust(w) for c, w in zip(columns, widths)).rstrip())
+    print("  ".join("-" * w for w in widths))
+    for out in cells:
+        print("  ".join(t.ljust(w) for t, w in zip(out, widths)).rstrip())
+
+
+def sql_check_secret_tables(sql):
+    """Refuse a query naming a table that holds only credentials."""
+    for table in SQL_SECRET_TABLES:
+        if re.search(r"\b%s\b" % re.escape(table), sql, re.IGNORECASE):
+            sys.exit(f"Error: refusing to query the '{table}' table, which holds "
+                     "Redmine API keys and session tokens.\n"
+                     "Pass --allow-sensitive if you really mean to read it.")
+
+
+def sql_check_secret_columns(columns):
+    """Refuse to print credential columns. Called before any row is fetched."""
+    hits = [c for c in columns if c.lower() in SQL_SECRET_COLUMNS]
+    if hits:
+        sys.exit("Error: refusing to print the column(s) " + ", ".join(hits)
+                 + ", which hold password hashes or two-factor seeds.\n"
+                 "Name the columns you want instead of using *, or pass "
+                 "--allow-sensitive.")
+
+
+def cmd_sql(args):
+    """Run a read-only SQL query against the Redmine database."""
+    if args.tables:
+        sql = "show tables"
+    elif args.describe:
+        sql = "describe `%s`" % args.describe.replace("`", "")
+    else:
+        sql = read_text_input(args.query, args.file)
+        if sql is None and not sys.stdin.isatty():
+            sql = sys.stdin.read()
+        if not sql or not sql.strip():
+            sys.exit("Error: no query given. Pass SQL as an argument, with "
+                     "--file, or on stdin.")
+    sql = sql.strip().rstrip(";").strip()
+    if args.limit < 0:
+        args.limit = 0
+
+    verb = sql_first_verb(sql)
+    if verb not in SQL_ALLOWED_VERBS:
+        sys.exit(f"Error: refusing to run a '{verb}' statement. redmineCli sql "
+                 "runs read-only queries only: "
+                 + ", ".join(v.upper() for v in SQL_ALLOWED_VERBS) + ".")
+    if not args.allow_sensitive:
+        sql_check_secret_tables(sql)
+    if args.explain and verb in ("select", "with"):
+        sql = "explain " + sql
+
+    conn = sql_connect(args)
+    try:
+        with conn.cursor() as cur:
+            # Kill a runaway query rather than let it hold production resources.
+            cur.execute("set session max_statement_time=%f" % float(args.timeout))
+            cur.execute(sql)
+            if cur.description is None:
+                sys.exit("Error: that statement returned no result set.")
+            columns = [d[0] for d in cur.description]
+            if not args.allow_sensitive:
+                sql_check_secret_columns(columns)
+            # Fetch one extra row so we can tell "exactly at the cap" from
+            # "there was more".
+            rows = cur.fetchmany(args.limit + 1) if args.limit else cur.fetchall()
+    except SystemExit:
+        raise
+    except Exception as e:
+        sys.exit(f"Error: query failed: {e}")
+    finally:
+        conn.close()
+
+    truncated = bool(args.limit) and len(rows) > args.limit
+    if truncated:
+        rows = rows[:args.limit]
+
+    if args.json:
+        print(json.dumps([dict(zip(columns, r)) for r in rows],
+                         indent=2, default=sql_json_default))
+    elif args.tsv:
+        print("\t".join(columns))
+        for row in rows:
+            print("\t".join(sql_cell(v) for v in row))
+    elif rows:
+        sql_print_table(columns, rows, args.max_width)
+
+    # Flush before the stderr footer, or a piped stdout arrives after it.
+    sys.stdout.flush()
+    count = len(rows)
+    note = f"\n{count} row{'' if count == 1 else 's'}"
+    if truncated:
+        note += f" (cut off at --limit {args.limit}; use --limit 0 for all)"
+    sys.stderr.write(note + "\n")
+
+
+# ---------------------------------------------------------------------------
 # Argument parsing
 # ---------------------------------------------------------------------------
 
@@ -1503,6 +1749,35 @@ def build_parser():
     p_note.add_argument("ticket_id", help="Ticket ID number")
     p_note.add_argument("note_number", type=int, help="Note number (as shown in Redmine URL #note-N)")
 
+    # sql
+    p_sql = sub.add_parser("sql",
+                           help="Run a read-only SQL query against the Redmine database")
+    p_sql.add_argument("query", nargs="?",
+                       help="SQL to run; omit to read it from --file or stdin")
+    p_sql.add_argument("--file", help="Read the query from a file ('-' for stdin)")
+    p_sql.add_argument("--tables", action="store_true",
+                       help="List the tables in the database")
+    p_sql.add_argument("--describe", metavar="TABLE",
+                       help="Show one table's columns")
+    p_sql.add_argument("--allow-sensitive", dest="allow_sensitive",
+                       action="store_true",
+                       help="Allow reading credential tables and columns "
+                            "(tokens, password hashes, two-factor seeds)")
+    p_sql.add_argument("--explain", action="store_true",
+                       help="Prefix the query with EXPLAIN instead of running it")
+    p_sql.add_argument("--database", help="Schema name (default: redmine.db.name "
+                       "from the conf file, else %s)" % DEFAULT_DB_NAME)
+    p_sql.add_argument("--tsv", action="store_true", help="Tab-separated output")
+    p_sql.add_argument("--json", action="store_true", help="JSON output")
+    p_sql.add_argument("--limit", type=int, default=SQL_DEFAULT_LIMIT,
+                       help="Most rows to print, 0 for all (default: %(default)s)")
+    p_sql.add_argument("--max-width", dest="max_width", type=int, default=80,
+                       help="Cut off wide cells in table output, 0 for no limit "
+                            "(default: %(default)s)")
+    p_sql.add_argument("--timeout", type=float, default=SQL_MAX_STATEMENT_TIME,
+                       help="Seconds before the server kills the query "
+                            "(default: %(default)s)")
+
     return parser
 
 
@@ -1531,6 +1806,7 @@ def main():
         "related": cmd_related,
         "watch": cmd_watch,
         "note": cmd_note,
+        "sql": cmd_sql,
     }
     commands[args.command](args)
 
