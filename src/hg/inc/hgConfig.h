@@ -51,6 +51,11 @@ void cfgSetMaxMem();
 /* Check hg.conf for maxMem.  If not set, don't limit memory.  Otherwise
  * limit memory usage to that number. */
 
+void cfgSetMallocTopPad();
+/* Check hg.conf for mallocTopPad.  If set to a positive number of bytes, ask
+ * the C library to grow the heap in steps that size instead of its 128 kB
+ * default. */
+
 void cfgSetLogCgiVars();
 /* optionally activate dumping of all CGI variables to stderr log */
 

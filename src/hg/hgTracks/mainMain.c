@@ -35,6 +35,10 @@ long enteredMainTime = 0;
 
 int main(int argc, char *argv[])
 {
+// First, before anything has a chance to allocate: read hg.conf and set how
+// big a step the C library takes when it grows the heap.  refs #38225
+cfgSetMallocTopPad();
+
 enteredMainTime = clock1000();
 measureTime(NULL);
 
