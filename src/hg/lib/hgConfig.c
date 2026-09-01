@@ -14,6 +14,9 @@
 #include "customTrack.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+#if defined(__GLIBC__)
+#include <malloc.h>
+#endif
 
 /* the file to read the global configuration info from */
 #define GLOBAL_CONFIG_PATH "."
@@ -378,6 +381,26 @@ if ((maxMemStr = cfgOption("maxMem")) != NULL)
     unsigned long maxMem = atol(maxMemStr);
     setMemLimit(maxMem);
     }
+}
+
+void cfgSetMallocTopPad()
+/* Check hg.conf for mallocTopPad.  If set to a positive number of bytes, ask
+ * the C library to grow the heap in steps that size instead of its 128 kB
+ * default.  hgTracks loads tracks in parallel threads, and every thread grows
+ * its own pool, so the small default step costs a heavy render more than a
+ * hundred thousand system calls that do nothing for the reader.  Bigger steps
+ * buy that time back and cost resident memory on the same renders.  See
+ * #38225. */
+{
+#if defined(__GLIBC__)
+char *topPadStr = cfgOption("mallocTopPad");
+if (topPadStr != NULL)
+    {
+    long topPad = atol(topPadStr);
+    if (topPad > 0)
+        mallopt(M_TOP_PAD, topPad);
+    }
+#endif
 }
 
 void cfgSetLogCgiVars()
