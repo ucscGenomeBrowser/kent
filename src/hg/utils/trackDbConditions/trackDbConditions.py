@@ -153,9 +153,16 @@ def build(kentSrc=None, cache=None):
             kind, named = classify(cond, accessors)
             conds.append({"text": cond["text"], "kind": kind, "names": named,
                           "file": cond["file"], "line": cond["line"]})
+        used = []
+        for cond in read.get("useConds", []):
+            if hc.isNoise(cond):
+                continue
+            kind, named = classify(cond, accessors)
+            used.append({"text": cond["text"], "kind": kind, "names": named,
+                         "file": cond["file"], "line": cond["line"]})
         entry["sites"].append({"file": read["file"], "line": read["line"],
                                "func": read["func"], "reader": read["reader"],
-                               "conds": conds})
+                               "conds": conds, "used": used})
         if read["callerUnknown"]:
             entry["unknown"] = True
 
@@ -173,6 +180,15 @@ def build(kentSrc=None, cache=None):
                                                                 c["text"]))
         entry["sometimes"] = sorted(sometimes.values(), key=lambda c: (KIND_ORDER.index(c["kind"]),
                                                                       c["text"]))
+        perUse = [{condId(c): c for c in s["used"]} for s in entry["sites"] if s["used"]]
+        whenUsed = {}
+        if perUse:
+            common = set(perUse[0])
+            for one in perUse[1:]:
+                common &= set(one)
+            whenUsed = {cid: c for one in perUse for cid, c in one.items() if cid in common}
+        entry["whenUsed"] = sorted(whenUsed.values(),
+                                   key=lambda c: (KIND_ORDER.index(c["kind"]), c["text"]))
     return list(settings.values())
 
 
@@ -197,7 +213,7 @@ def baselineNames():
 def conditionedNames(entries, docs, scope="render"):
     """Documented settings that carry an always-condition, as scope:name."""
     return {"%s:%s" % (e["scope"], e["name"]) for e in entries
-            if e["scope"] == scope and e["always"] and e["name"] in docs}
+            if e["scope"] == scope and (e["always"] or e["whenUsed"]) and e["name"] in docs}
 
 
 def showSetting(entry, docs, verbose=False):
@@ -210,7 +226,7 @@ def showSetting(entry, docs, verbose=False):
         print("    documented for: %s" % (types or "?"))
     else:
         print("    not in trackDbLibrary.shtml")
-    groups = [("always", entry["always"])]
+    groups = [("always", entry["always"]), ("when used", entry["whenUsed"])]
     if verbose:
         groups.append(("sometimes", entry["sometimes"]))
     elif entry["sometimes"]:
@@ -293,13 +309,13 @@ def main():
             print("no read of %s found in %s" % (args.setting, ", ".join(scopes)))
         return
 
-    conditioned = [e for e in picked if e["always"] or e["sometimes"]]
+    conditioned = [e for e in picked if e["always"] or e["sometimes"] or e["whenUsed"]]
     if args.kind:
         conditioned = [e for e in conditioned
                        if any(c["kind"] == args.kind for c in e["always"] + e["sometimes"])]
     if args.surprising:
         conditioned = [e for e in conditioned
-                       if any(c["kind"] in SURPRISING for c in e["always"])]
+                       if any(c["kind"] in SURPRISING for c in e["always"] + e["whenUsed"])]
 
     if args.list or args.kind or args.surprising:
         for entry in sorted(conditioned, key=lambda e: (e["scope"], e["name"].lower())):
@@ -308,15 +324,18 @@ def main():
 
     inDocs = [e for e in conditioned if e["name"] in docs]
     always = [e for e in conditioned if e["always"]]
+    used = [e for e in conditioned if e["whenUsed"]]
     print("settings read           %d  (%s)" % (len(picked), ", ".join(scopes)))
     print("with any condition      %d" % len(conditioned))
     print("with an always-condition %d" % len(always))
     print("of those, documented    %d" % len([e for e in always if e["name"] in docs]))
+    print("read plainly, used only under a condition  %d  (documented %d)"
+          % (len(used), len([e for e in used if e["name"] in docs])))
     print("documented and conditional at all: %d" % len(inDocs))
     print()
     tally = collections.Counter()
     for entry in conditioned:
-        for cond in entry["always"]:
+        for cond in entry["always"] + entry["whenUsed"]:
             tally[cond["kind"]] += 1
     print("always-conditions by kind:")
     for kind in KIND_ORDER:

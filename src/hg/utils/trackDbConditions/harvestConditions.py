@@ -311,6 +311,8 @@ def scanFile(path, kentSrc, defines):
     # A later test of scoreMinStr is a test of the setting, not housekeeping, so
     # remember which local holds which setting.
     fromSetting = {}
+    fileValue = collections.defaultdict(set)   # name -> settings it ever holds
+    assignAt = collections.defaultdict(list)   # name -> offsets of its assignments
     for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\s*\(", s):
         reader = m.group(2)
         if reader not in READERS:
@@ -324,9 +326,17 @@ def scanFile(path, kentSrc, defines):
         name = settingNameOf(args[idx], defines)
         if name and not name.startswith("{"):
             fromSetting[(enclosing(m.start(1)), m.group(1))] = name
+            fileValue[m.group(1)].add(name)
+            assignAt[m.group(1)].append(m.start(1))
+
+    # A name is only taken to carry a setting when it carries exactly one, and
+    # is long enough not to be a word like type, name or vis that means
+    # something else three functions away.
+    carries = {var: sorted(names)[0] for var, names in fileValue.items()
+               if len(names) == 1 and len(var) >= 5}
 
     # guards
-    guards = []
+    guards, condSpans = [], []
     i = 0
     while i < n:
         m = re.match(r"\b(if|while|for|switch)\b", s[i:])
@@ -338,6 +348,7 @@ def scanFile(path, kentSrc, defines):
                 cond = re.sub(r"\s+", " ", src[j+1:close-1]).strip()
                 end = stmtEnd(s, close)
                 guards.append((close, end, word, cond, line[i]))
+                condSpans.append((j, close))
                 p = skipSpace(s, end)
                 if s[p:p+4] == "else" and not (p+4 < n and (s[p+4].isalnum() or s[p+4] == "_")):
                     q = skipSpace(s, p + 4)
@@ -359,9 +370,10 @@ def scanFile(path, kentSrc, defines):
             if g[0] <= off < g[1]:
                 func = enclosing(g[0])
                 for part in splitConjuncts(g[3]):
-                    derived = sorted({fromSetting[(func, ident)]
-                                      for ident in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", part)
-                                      if (func, ident) in fromSetting})
+                    idents = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", part)
+                    derived = sorted({fromSetting[(func, ident)] for ident in idents
+                                      if (func, ident) in fromSetting}
+                                     | {carries[ident] for ident in idents if ident in carries})
                     out.append({"kind": g[2], "text": part, "line": g[4], "file": rel,
                                 "derivedFrom": derived})
         return out
@@ -413,6 +425,58 @@ def scanFile(path, kentSrc, defines):
                 addrTaken.add(word)
         i += len(word)
 
+    # Where the value goes.  A setting is often read plainly and only used
+    # under a test, which is the bamColorTag shape: the value is read at the top
+    # of the loader and used far below, behind a test of bamColorMode.  So for
+    # each name that carries a setting, find where the value is used and what
+    # guards those uses.
+    inCond = lambda off: any(a <= off < b for a, b in condSpans)
+
+    def isTransfer(off):
+        """The value being handed on, not consumed.
+
+        The test is how deep in parentheses the mention sits, counted from the
+        start of its statement.  Inside a call it is an argument, so something
+        is doing work with it: bamGetTagString(bam, btd->userTag, ...) is a use.
+        At depth zero it is one side of an assignment or an element of an
+        initializer list, which only moves the value somewhere else:
+        struct bamTrackData btd = {tg, pairHash, colorMode, userTag, ...}
+        carries the setting into a field without using it.  Counting that as a
+        use puts an unguarded site in the set and empties every intersection.
+        """
+        start = max(s.rfind(";", 0, off), s.rfind("{", 0, off), s.rfind("}", 0, off))
+        depth = 0
+        for ch in s[start + 1:off]:
+            if ch in "([":
+                depth += 1
+            elif ch in ")]":
+                depth -= 1
+        return depth <= 0
+
+    useConds = {}
+    for var, setting in carries.items():
+        sites = []
+        for m in re.finditer(r"\b%s\b" % re.escape(var), s):
+            off = m.start()
+            if off in assignAt[var] or inCond(off) or enclosing(off) is None:
+                continue
+            if isTransfer(off):
+                continue
+            sites.append(condsAt(off))
+        if not sites:
+            continue
+        common = {useKey(c): c for c in sites[0]}
+        for one in sites[1:]:
+            keys = {useKey(c) for c in one}
+            common = {k: v for k, v in common.items() if k in keys}
+            if not common:
+                break
+        # a test of the setting's own value says only that it is set
+        useConds[setting] = [c for c in common.values()
+                             if c.get("derivedFrom") != [setting]]
+    for read in reads:
+        read["useConds"] = useConds.get(read["name"], []) if read["tdb"] else []
+
     return {"file": rel, "funcs": [f[2] for f in funcs], "reads": reads,
             "calls": calls, "addrTaken": sorted(addrTaken)}
 
@@ -442,6 +506,19 @@ def splitConjuncts(text):
 def condKey(cond):
     """Two conditions are the same when they say the same thing, spacing aside."""
     return (re.sub(r"\s+", "", cond["text"]), cond["kind"])
+
+
+def useKey(cond):
+    """Looser key, for matching a test of a value against a test of the field holding it.
+
+    The same test is written sameString(colorMode, ...) in the loader and
+    sameString(btd->colorMode, ...) in the drawer, because the value was carried
+    into a struct on the way.  Dropping the field prefix makes those one
+    condition.  Only the use-site pass uses this; the every-path analysis keeps
+    the strict key, since there a wrong match would turn a guess into a claim.
+    """
+    text = re.sub(r"\b\w+\s*->\s*", "", cond["text"])
+    return (re.sub(r"\s+", "", text), cond["kind"])
 
 
 UI_NAME = re.compile(r"(CfgUi|Ui|UiSection|Option|Options|Menu|Dropdown|Section|Cfg)$")
