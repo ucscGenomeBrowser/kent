@@ -48,7 +48,7 @@ char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update",
      "hgLogin_password", "hgLogin_password2", "hgLogin_newPassword1",
      "hgLogin_newPassword2", "hgLogin_newEmail1", "hgLogin_newEmail2",
      "hgLogin_curPassword", "code", "state", "provider", "user", "token",
-     "newEmail", "exp", "sig", NULL };
+     "newEmail", "recovEmail", "exp", "sig", NULL };
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
@@ -62,6 +62,9 @@ char *hgLoginUrl = NULL; /* full absolute URL to hgLogin as seen from browser,
     hg.conf login.relativeLink is on. */
 boolean pwdEyeIconEnabled = TRUE; /* show/hide eye icon on password fields;
     set from hg.conf login.pwdEyeIcon in doMiddle() */
+boolean recovEmailVerifyOk = FALSE; /* TRUE when gbMembers has the recovEmailVerified column, so
+    a confirmed recovery address can be told apart from one that was merely typed into the signup
+    form.  Set in doMiddle() after the auto-upgrade; FALSE on a mirror where the ALTER failed. */
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   1.0    /* standard penalty is 1.0 for most CGIs */
@@ -518,16 +521,38 @@ safef(msg, sizeof(msg),
 sendMailOut(email, subject, msg);
 }
 
+static char *sqlAddressMatch(char *email)
+/* Return a SQL fragment matching the gbMembers rows that belong to whoever controls email: the
+ * accounts carrying it as their primary address, plus the accounts carrying it as a *confirmed*
+ * recovery address.  An unconfirmed recovEmail is only a string that a signup form typed in --
+ * nobody ever proved they can read mail there -- so matching it would let someone who registered
+ * with a victim's address as their recovery address capture that victim's login (see
+ * confirmRecovEmail).  Callers must pass a non-empty email, or rows with a blank recovEmail
+ * match.  Result is allocd and carries the sqlSafef prefix; embed it with %-s. */
+{
+struct dyString *dy = sqlDyStringCreate("(email='%s'", email);
+if (recovEmailVerifyOk)
+    sqlDyStringPrintf(dy, " OR (recovEmail='%s' AND recovEmailVerified='Y')", email);
+else
+    /* A mirror whose gbMembers predates the column: we cannot tell confirmed from unconfirmed,
+     * so keep the old behavior rather than locking those users out of their own accounts. */
+    sqlDyStringPrintf(dy, " OR recovEmail='%s'", email);
+sqlDyStringPrintf(dy, ")");
+return dyStringCannibalize(&dy);
+}
+
 void sendUsername(struct sqlConnection *conn, char *email)
 /* email user username(s)  */
 {
 struct sqlResult *sr;
 char **row;
-char query[256];
+char query[1024];
 
 /* find all the user names associated with this email address */
 char userList[512]="";
-sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE email='%s' or recovEmail='%s'", email, email);
+char *addrMatch = sqlAddressMatch(email);
+sqlSafef(query,sizeof(query),"SELECT * FROM gbMembers WHERE %-s", addrMatch);
+freeMem(addrMatch);
 sr = sqlGetResult(conn, query);
 int numUser = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -670,7 +695,15 @@ if (!email || sameString(email,""))
     return;
     }
 
-sqlSafef(query,sizeof(query),"SELECT recovEmail FROM gbMembers WHERE userName='%s'", username);
+/* Only a confirmed recovery address gets a copy: an unconfirmed one never proved it belongs to
+ * this account, and a new password must not be mailed to a stranger whose address someone typed
+ * into the signup form. */
+if (recovEmailVerifyOk)
+    sqlSafef(query,sizeof(query),
+        "SELECT recovEmail FROM gbMembers WHERE userName='%s' AND recovEmailVerified='Y'",
+        username);
+else
+    sqlSafef(query,sizeof(query),"SELECT recovEmail FROM gbMembers WHERE userName='%s'", username);
 char *recovEmail = sqlQuickString(conn, query);
 
 sendNewPwdMail(username, email, recovEmail, password);
@@ -1081,6 +1114,59 @@ safef(message, sizeof(message),
 sendActMailOut(oldEmail, subject, message);
 }
 
+static char *recovEmailSig(char *user, char *recovEmail, char *verified, char *expStr)
+/* HMAC-MD5 over a pending recovery-address confirmation, keyed by the secret login.cookieSalt.
+ * It goes in the link mailed to the address, so that opening the link -- and only opening it --
+ * marks the address confirmed, proving the mailbox really does reach the person who claimed it.
+ * verified is the account's recovEmailVerified value when the link was minted; because
+ * confirmRecovEmail recomputes the signature from the value currently on the account, a link
+ * stops validating once it has been used, so each link works exactly once.  Result is allocd. */
+{
+char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
+if (isEmpty(salt))
+    errAbort("Confirming a recovery email address requires %s in hg.conf, set to a secret random "
+        "string.  Without a secret we cannot sign the confirmation link.", CFG_LOGIN_COOKIE_SALT);
+char buf[1024];
+safef(buf, sizeof(buf), "recovEmail|%s|%s|%s|%s",
+    emptyForNull(user), emptyForNull(recovEmail), emptyForNull(verified), emptyForNull(expStr));
+return hmacMd5(salt, buf);
+}
+
+static void sendRecovEmailConfirmMail(char *recovEmail, char *user)
+/* Email a one-time link to recovEmail that, when opened, marks it confirmed for account user.
+ * Until that happens the address counts for nothing: it cannot sign anyone in and it gets no
+ * copy of a password reset.  The link lasts a week, like the account activation mail, because a
+ * recovery mailbox is often not the one its owner reads every day. */
+{
+char expStr[32];
+safef(expStr, sizeof(expStr), "%ld", clock1() + 7*24*3600);   // link good for a week
+char *sig = recovEmailSig(user, recovEmail, "N", expStr);
+char url[1024];
+safef(url, sizeof(url),
+    "%s?hgLogin.do.confirmRecovEmail=1&user=%s&recovEmail=%s&exp=%s&sig=%s",
+    hgLoginUrl, cgiEncode(user), cgiEncode(recovEmail), expStr, sig);
+char subject[256];
+safef(subject, sizeof(subject), "Confirm your %s recovery email address", brwName);
+char *remoteAddr = getenv("REMOTE_ADDR");
+char message[4096];
+safef(message, sizeof(message),
+    "Someone (probably you, from IP address %s) gave this address as the recovery email address "
+    "for the %s account \"%s\".\nTo confirm that this mailbox is yours, open this link in your "
+    "browser:\n\n%s\n\nThe link works once and expires in seven days.  Until it is opened, this "
+    "address cannot be used to sign in to that account and will not receive a password reset.\n\n"
+    "If this is *not* you, do not open the link: someone typed your address by mistake, and "
+    "ignoring this message is all it takes to keep them from using it.\n\n%s\n%s",
+    emptyForNull(remoteAddr), brwName, user, url, signature, returnAddr);
+/* Not sendActMailOut(): that exits the CGI when the address will not take mail, which would
+ * end the signup response after the account has already been created and its activation mail
+ * sent.  A recovery address is optional and easy to mistype, so a bad one must not derail
+ * signing up -- the address simply stays unconfirmed, which is the safe state. */
+if (mailViaPipeBounce(recovEmail, subject, message, returnAddr) == -1)
+    fprintf(stderr, "hgLogin: could not mail recovery-address confirmation to %s for account "
+        "%s\n", recovEmail, user);
+freeMem(sig);
+}
+
 void changeEmailPage(struct sqlConnection *conn)
 /* Draw the change-email page for the currently logged-in user.  The account is taken from
  * the validated login cookie (wikiLinkUserName), never from a form field, so a user can only
@@ -1258,6 +1344,63 @@ freeMem(encEmail);
 returnToURL(1500);
 }
 
+void confirmRecovEmail(struct sqlConnection *conn)
+/* Mark a recovery address confirmed.  Reached by opening the signed link mailed to that address
+ * (see sendRecovEmailConfirmMail); the signature and its expiry are the authorization, so this
+ * needs no login cookie -- the link may be opened from that mailbox in any browser. */
+{
+if (!recovEmailVerifyOk || isEmpty(cfgOption(CFG_LOGIN_COOKIE_SALT)))
+    {
+    /* No column to record the answer in, or no secret to check the signature against, so the
+     * link cannot have come from us.  Checked before recovEmailSig(), which aborts without a
+     * secret: a link is only ever minted where one is configured, so reaching here means a
+     * hand-made URL and it deserves the ordinary refusal, not an error page. */
+    freez(&errMsg);
+    errMsg = cloneString("This confirmation link is not valid.");
+    displayLoginPage(conn);
+    return;
+    }
+char *user = cgiUsualString("user", "");
+char *recovEmail = cgiUsualString("recovEmail", "");
+char *expStr = cgiUsualString("exp", "");
+char *sig = cgiUsualString("sig", "");
+/* Recompute the signature over the flag currently on the account.  Once confirmed the flag is
+ * 'Y', so re-opening the same link no longer matches: the link works exactly once. */
+char query[1024];
+sqlSafef(query, sizeof(query),
+    "SELECT recovEmailVerified FROM gbMembers WHERE userName='%s' AND recovEmail='%s'",
+    user, recovEmail);
+char *verified = sqlQuickString(conn, query);
+char *expected = recovEmailSig(user, recovEmail, emptyForNull(verified), expStr);
+boolean sigOk = isNotEmpty(sig) && sameString(sig, expected);
+freeMem(expected);
+if (!sigOk || isEmpty(user) || spc_email_isvalid(recovEmail) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("This confirmation link is not valid or has already been used.");
+    displayLoginPage(conn);
+    return;
+    }
+if (clock1() > atol(expStr))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("This confirmation link has expired.");
+    displayLoginPage(conn);
+    return;
+    }
+sqlSafef(query, sizeof(query),
+    "UPDATE gbMembers SET recovEmailVerified='Y', lastUse=NOW() "
+    "WHERE userName='%s' AND recovEmail='%s'", user, recovEmail);
+sqlUpdate(conn, query);
+char *encEmail = htmlEncode(recovEmail);
+hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
+hPrintf("<h3>Your recovery email address has been confirmed.</h3>");
+hPrintf("<p><b>%s</b> can now be used to sign in to your account and to recover your "
+    "password.</p></div>", encEmail);
+freeMem(encEmail);
+returnToURL(1500);
+}
+
 void signupPage(struct sqlConnection *conn)
 /* draw the signup page */
 {
@@ -1296,6 +1439,9 @@ if (sqlFieldIndex(conn, "gbMembers", "recovEmail") != -1)
     hPrintf("<div class=\"inputGroup\">"
         "<label for=\"recovEmail\">Optional secondary recovery email</label>"
         "<input type=text name=\"hgLogin_recovEmail\" size=\"30\" id=\"recovEmail\">"
+        "<p style=\"font-size:0.9em\">We will email this address a link to confirm it. Until "
+        "you open that link, the address cannot be used to sign in or to recover your "
+        "password.</p>"
         "</div>"
         "\n");
 
@@ -1462,9 +1608,19 @@ struct dyString *query2 = sqlDyStringCreate(
     "userName='%s',realName='%s',password='%s',email='%s',"
     "lastUse=NOW(),accountActivated='%s'",
     user,user,encPwd,email,accActStatus);
+/* A recovery address is confirmed by mail before it counts for anything (see
+ * sendRecovEmailConfirmMail).  Two kinds of install cannot confirm anything: one that sends no
+ * mail at all, and one with no login.cookieSalt to sign the link with (plain login does not
+ * need the salt, so an install can run happily without one).  There, leave the address as
+ * usable as it is today rather than storing one that could never be confirmed. */
+boolean confirmRecov = !isEmpty(recovEmail) && recovEmailVerifyOk
+                        && !sameWord(returnAddr, "NOEMAIL")
+                        && isNotEmpty(cfgOption(CFG_LOGIN_COOKIE_SALT));
 // set the recov email only if we got one (and we only got one if the table has this field)
 if (!isEmpty(recovEmail))
     sqlDyStringPrintf(query2, ",recovEmail='%s'", recovEmail);
+if (confirmRecov)
+    sqlDyStringPrintf(query2, ",recovEmailVerified='N'");
 
 sqlUpdate(conn, dyStringContents(query2));
 dyStringFree(&query2);
@@ -1476,6 +1632,8 @@ if (sameWord(returnAddr, "NOEMAIL"))
     }
 
 setupNewAccount(conn, email, user);
+if (confirmRecov)
+    sendRecovEmailConfirmMail(recovEmail, user);
 /* send out activate code mail, and display the mail confirmation box */
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_email2");
@@ -1488,7 +1646,7 @@ redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 void accountHelp(struct sqlConnection *conn)
 /* email user username(s) or new password */
 {
-char query[256];
+char query[1024];   // room for an address-matching clause holding a long address twice
 char *email = cartUsualString(cart, "hgLogin_email", "");
 char *username = cartUsualString(cart, "hgLogin_userName", "");
 char *helpWith = cartUsualString(cart, "hgLogin_helpWith", "");
@@ -1519,8 +1677,10 @@ if (sameString(helpWith,"username"))
         }
     else 
         {
+        char *addrMatch = sqlAddressMatch(email);
         sqlSafef(query,sizeof(query),
-            "SELECT password FROM gbMembers WHERE email='%s' or recovEmail='%s'", email, email);
+            "SELECT password FROM gbMembers WHERE %-s", addrMatch);
+        freeMem(addrMatch);
         char *password = sqlQuickString(conn, query);
         cartSetString(cart, "hgLogin_sendMailTo", email);
         cartSetString(cart, "hgLogin_sendMailContain", "username(s)");
@@ -2091,21 +2251,21 @@ if (isEmpty(email) || (!emailMode && !pendingIdentityValid()))
     return;
     }
 char *encEmail = htmlEncode(email);   // the address is displayed; never trust it raw (XSS)
-char query[512];
+char query[1024];
+char *addrMatch = sqlAddressMatch(email);   // email is non-empty here (checked above)
 if (emailMode)
     // Only the accounts that hold the just-validated login token, matching what emailLogin saw.
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s' "
+        "SELECT * FROM gbMembers WHERE %-s AND loginToken='%s' "
         "AND loginToken<>'' AND loginTokenExpires > NOW() AND accountActivated='Y' ORDER BY idx",
-        email, email, cartUsualString(cart, "emailLogin_tokenMd5", ""));
+        addrMatch, cartUsualString(cart, "emailLogin_tokenMd5", ""));
 else
     // Only activated accounts, matching what chooseAccount() and resolveIdentity() accept;
     // otherwise the page offers a row the action refuses, and shows the username of an
-    // unactivated row anyone could have created with this address.  Match both primary and
-    // recovery address, as resolveIdentity() does; email is non-empty here (checked above).
+    // unactivated row anyone could have created with this address.
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND accountActivated='Y' "
-        "ORDER BY idx", email, email);
+        "SELECT * FROM gbMembers WHERE %-s AND accountActivated='Y' ORDER BY idx", addrMatch);
+freeMem(addrMatch);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
 
 hPrintf("<div id=\"chooseAccountBox\" class=\"centeredContainer formBox\">"
@@ -2150,7 +2310,7 @@ void chooseAccount(struct sqlConnection *conn)
 {
 int chosenIdx = cartUsualInt(cart, "hgLogin_chosenIdx", 0);
 char *provider = cartUsualString(cart, "oauth_pending_provider", "");
-char query[512];
+char query[1024];   // room for an address-matching clause holding a long address twice
 
 if (isEmpty(provider))
     {
@@ -2169,11 +2329,12 @@ if (isEmpty(provider))
         displayLoginPage(conn);
         return;
         }
+    char *addrMatch = sqlAddressMatch(email);
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE idx=%d AND (email='%s' OR recovEmail='%s') "
+        "SELECT * FROM gbMembers WHERE idx=%d AND %-s "
         "AND loginToken='%s' AND loginToken<>'' AND loginTokenExpires > NOW() "
         "AND accountActivated='Y'",
-        chosenIdx, email, email, tokenMd5);
+        chosenIdx, addrMatch, tokenMd5);
     struct gbMembers *m = gbMembersLoadByQuery(conn, query);
     if (m == NULL)
         {
@@ -2185,8 +2346,9 @@ if (isEmpty(provider))
     /* Consume the token on every account that shared it (single use), then sign in.
      * loginAndReturn records the sign-in on the chosen account in gbMembers.lastUse. */
     sqlSafef(query, sizeof(query),
-        "UPDATE gbMembers SET loginToken='' WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s'",
-        email, email, tokenMd5);
+        "UPDATE gbMembers SET loginToken='' WHERE %-s AND loginToken='%s'",
+        addrMatch, tokenMd5);
+    freeMem(addrMatch);
     sqlUpdate(conn, query);
     cartRemove(cart, "emailLogin_email");
     cartRemove(cart, "emailLogin_tokenMd5");
@@ -2209,12 +2371,12 @@ if (isEmpty(subject) || isEmpty(email) || !pendingIdentityValid())
     }
 /* Only an activated account counts: an unactivated row can hold any address someone typed
  * without ever proving they own it (see resolveIdentity), so it must not receive a social link.
- * Match both primary and recovery address, as chooseAccountPage() offers; email is non-empty
- * here (checked above). */
+ * Match what chooseAccountPage() offers; email is non-empty here (checked above). */
+char *oauthAddrMatch = sqlAddressMatch(email);
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM gbMembers WHERE idx=%d AND (email='%s' OR recovEmail='%s') "
-    "AND accountActivated='Y'",
-    chosenIdx, email, email);
+    "SELECT * FROM gbMembers WHERE idx=%d AND %-s AND accountActivated='Y'",
+    chosenIdx, oauthAddrMatch);
+freeMem(oauthAddrMatch);
 struct gbMembers *m = gbMembersLoadByQuery(conn, query);
 if (m == NULL)
     {
@@ -2251,19 +2413,20 @@ struct gbMembers *matches = NULL;
 int n = 0;
 if (id->emailVerified && isNotEmpty(id->email))
     {
-    char query[512];
-    /* Match the provider email against both the primary and the recovery address, the same as
-     * password and email-link login do (see sendUsername/emailLogin).  The isNotEmpty() guard
-     * above keeps id->email out of the query, so a blank recovEm=='' row can never match.
+    char query[1024];
+    /* Match the provider email against the primary address and any confirmed recovery address,
+     * the same as password and email-link login do (see sqlAddressMatch).  The isNotEmpty()
+     * guard above keeps an empty id->email out of the query, so a blank recovEmail='' row can
+     * never match.
      * Match only activated accounts.  gbMembers has no unique key on email, and the plain
      * signup form will create an unactivated row for any address a person types -- the
      * activation mail goes to the address's real owner, who ignores it.  Without this filter
      * someone could pre-register a victim's address, and the victim's first social login would
      * then auto-link to (and sign in as) the attacker's account. */
+    char *addrMatch = sqlAddressMatch(id->email);
     sqlSafef(query, sizeof(query),
-        "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND accountActivated='Y' "
-        "ORDER BY idx",
-        id->email, id->email);
+        "SELECT * FROM gbMembers WHERE %-s AND accountActivated='Y' ORDER BY idx", addrMatch);
+    freeMem(addrMatch);
     matches = gbMembersLoadByQuery(conn, query);
     n = slCount(matches);
     }
@@ -2462,10 +2625,11 @@ if (isEmpty(email) || spc_email_isvalid(email) == 0)
     emailLinkPage(conn);
     return;
     }
-char query[512];
+char query[1024];
+char *addrMatch = sqlAddressMatch(email);
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND accountActivated='Y'",
-    email, email);
+    "SELECT * FROM gbMembers WHERE %-s AND accountActivated='Y'", addrMatch);
+freeMem(addrMatch);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query), *m;
 if (list != NULL)
     {
@@ -2505,11 +2669,13 @@ if (!emailLinkEnabled())
 char *email = cgiUsualString("email", "");
 char *token = cgiUsualString("token", "");
 char *tokenMD5 = generateTokenMD5(token);
-char query[512];
+char query[1024];
+char *addrMatch = sqlAddressMatch(email);
 sqlSafef(query, sizeof(query),
-    "SELECT * FROM gbMembers WHERE (email='%s' OR recovEmail='%s') AND loginToken='%s' "
+    "SELECT * FROM gbMembers WHERE %-s AND loginToken='%s' "
     "AND loginToken<>'' AND loginTokenExpires > NOW() AND accountActivated='Y' ORDER BY idx",
-    email, email, tokenMD5);
+    addrMatch, tokenMD5);
+freeMem(addrMatch);
 struct gbMembers *list = gbMembersLoadByQuery(conn, query);
 int n = slCount(list);
 if (n == 0)
@@ -2571,6 +2737,14 @@ if (sqlFieldIndex(conn, "gbMembers", "recovEmail") == -1) {
     autoUpgradeTableAddColumn(conn, "gbMembers", "recovEmail", "varchar(255)", FALSE, "''");
 }
 
+/* Tells a confirmed recovery address from one that was only typed into the signup form.
+ * Existing rows default to 'Y': every recovery address that predates this column keeps working
+ * exactly as before, so no one has to re-confirm an address they set up long ago.  Only
+ * addresses entered from now on have to be confirmed (see sendRecovEmailConfirmMail). */
+if (sqlFieldIndex(conn, "gbMembers", "recovEmailVerified") == -1)
+    autoUpgradeTableAddColumn(conn, "gbMembers", "recovEmailVerified", "varchar(1)", FALSE, "'Y'");
+recovEmailVerifyOk = (sqlFieldIndex(conn, "gbMembers", "recovEmailVerified") != -1);
+
 // columns for the passwordless email-link login feature
 if (sqlFieldIndex(conn, "gbMembers", "loginToken") == -1)
     autoUpgradeTableAddColumn(conn, "gbMembers", "loginToken", "varchar(255)", FALSE, "NULL");
@@ -2618,6 +2792,8 @@ else if (cartVarExists(cart, "hgLogin.do.changeEmail"))
     changeEmail(conn);
 else if (cartVarExists(cart, "hgLogin.do.confirmChangeEmail"))
     confirmChangeEmail(conn);
+else if (cartVarExists(cart, "hgLogin.do.confirmRecovEmail"))
+    confirmRecovEmail(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
     displayAccHelpPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
