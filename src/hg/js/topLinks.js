@@ -99,6 +99,7 @@ var topLinks = (function() {
         var logoutUrl = link.getAttribute("data-logouturl");
         var changePwUrl = link.getAttribute("data-changepwurl");
         var changeEmailUrl = link.getAttribute("data-changeemailurl");
+        var changeRecovEmailUrl = link.getAttribute("data-changerecovemailurl");
         var body = document.createElement("div");
         var p = el("p");
         p.appendChild(document.createTextNode("Signed in as "));
@@ -128,6 +129,8 @@ var topLinks = (function() {
             addLink(ul, changePwUrl, "Change password");
         if (changeEmailUrl)
             addLink(ul, changeEmailUrl, "Change email");
+        if (changeRecovEmailUrl)
+            addLink(ul, changeRecovEmailUrl, "Recovery email");
         addLink(ul, logoutUrl, "Sign out");
         body.appendChild(ul);
         showModal("Account", body);

@@ -107,6 +107,9 @@ if (loginSystemEnabled()) /* Using the new hgLogin CGI for login */
     char *changeEmailUrl = wikiLinkChangeEmailUrl(cartSessionId(cart));
     if (changeEmailUrl != NULL)
         printf("<li><A HREF=\"%s\">Change email</A></li>", changeEmailUrl);
+    char *changeRecovEmailUrl = wikiLinkChangeRecovEmailUrl(cartSessionId(cart));
+    if (changeRecovEmailUrl != NULL)
+        printf("<li><A HREF=\"%s\">Recovery email</A></li>", changeRecovEmailUrl);
     printf("</ul>");
 
     printf("<p><A id='logoutLink' HREF=\"%s\">Sign out</A></p>",

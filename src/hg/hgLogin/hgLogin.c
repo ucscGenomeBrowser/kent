@@ -48,7 +48,8 @@ char *excludeVars[] = { "submit", "Submit", "debug", "fixMembers", "update",
      "hgLogin_password", "hgLogin_password2", "hgLogin_newPassword1",
      "hgLogin_newPassword2", "hgLogin_newEmail1", "hgLogin_newEmail2",
      "hgLogin_curPassword", "code", "state", "provider", "user", "token",
-     "newEmail", "recovEmail", "exp", "sig", NULL };
+     "newEmail", "recovEmail", "exp", "sig",
+     "hgLogin_newRecovEmail1", "hgLogin_newRecovEmail2", NULL };
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct hash *oldCart;	/* Old cart hash. */
@@ -73,6 +74,8 @@ boolean recovEmailVerifyOk = FALSE; /* TRUE when gbMembers has the recovEmailVer
 static void printSocialButtons(boolean dividerAbove, boolean dividerBelow, char *action);
 static void printEmailLinkButton();
 static boolean emailLinkEnabled();
+static boolean recovEmailChangeEnabled();
+void changeRecovEmailPage(struct sqlConnection *conn);
 static void printUsernameNote();
 void emailLinkPage(struct sqlConnection *conn);
 void displayLoginPage(struct sqlConnection *conn);
@@ -1114,33 +1117,40 @@ safef(message, sizeof(message),
 sendActMailOut(oldEmail, subject, message);
 }
 
-static char *recovEmailSig(char *user, char *recovEmail, char *verified, char *expStr)
-/* HMAC-MD5 over a pending recovery-address confirmation, keyed by the secret login.cookieSalt.
- * It goes in the link mailed to the address, so that opening the link -- and only opening it --
- * marks the address confirmed, proving the mailbox really does reach the person who claimed it.
- * verified is the account's recovEmailVerified value when the link was minted; because
- * confirmRecovEmail recomputes the signature from the value currently on the account, a link
- * stops validating once it has been used, so each link works exactly once.  Result is allocd. */
+static char *recovEmailSig(char *user, char *newRecov, char *curRecov, char *curVerified,
+                           char *expStr)
+/* HMAC-MD5 over a pending recovery address, keyed by the secret login.cookieSalt.  It goes in
+ * the link mailed to that address, so that opening the link -- and only opening it -- puts the
+ * address on the account and marks it confirmed, proving the mailbox really does reach the
+ * person who claimed it.  One signature serves both cases: the address given at signup (where
+ * newRecov is already stored, unconfirmed) and a later change (where it is not stored at all
+ * until the link is opened, so a typo cannot cost the user a working recovery address).
+ * curRecov and curVerified are the account's stored address and flag when the link was minted;
+ * because confirmRecovEmail recomputes the signature from what is on the account now, a link
+ * stops validating once it has been used, so each link works exactly once and a stale link
+ * cannot quietly undo a newer change.  Result is allocd. */
 {
 char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
 if (isEmpty(salt))
     errAbort("Confirming a recovery email address requires %s in hg.conf, set to a secret random "
         "string.  Without a secret we cannot sign the confirmation link.", CFG_LOGIN_COOKIE_SALT);
 char buf[1024];
-safef(buf, sizeof(buf), "recovEmail|%s|%s|%s|%s",
-    emptyForNull(user), emptyForNull(recovEmail), emptyForNull(verified), emptyForNull(expStr));
+safef(buf, sizeof(buf), "recovEmail|%s|%s|%s|%s|%s",
+    emptyForNull(user), emptyForNull(newRecov), emptyForNull(curRecov),
+    emptyForNull(curVerified), emptyForNull(expStr));
 return hmacMd5(salt, buf);
 }
 
-static void sendRecovEmailConfirmMail(char *recovEmail, char *user)
-/* Email a one-time link to recovEmail that, when opened, marks it confirmed for account user.
- * Until that happens the address counts for nothing: it cannot sign anyone in and it gets no
- * copy of a password reset.  The link lasts a week, like the account activation mail, because a
- * recovery mailbox is often not the one its owner reads every day. */
+static void sendRecovEmailConfirmMail(char *recovEmail, char *user, char *curRecov,
+                                      char *curVerified)
+/* Email a one-time link to recovEmail that, when opened, puts it on account user as a confirmed
+ * recovery address.  Until that happens the address counts for nothing: it cannot sign anyone in
+ * and it gets no copy of a password reset.  The link lasts a week, like the account activation
+ * mail, because a recovery mailbox is often not the one its owner reads every day. */
 {
 char expStr[32];
 safef(expStr, sizeof(expStr), "%ld", clock1() + 7*24*3600);   // link good for a week
-char *sig = recovEmailSig(user, recovEmail, "N", expStr);
+char *sig = recovEmailSig(user, recovEmail, curRecov, curVerified, expStr);
 char url[1024];
 safef(url, sizeof(url),
     "%s?hgLogin.do.confirmRecovEmail=1&user=%s&recovEmail=%s&exp=%s&sig=%s",
@@ -1165,6 +1175,23 @@ if (mailViaPipeBounce(recovEmail, subject, message, returnAddr) == -1)
     fprintf(stderr, "hgLogin: could not mail recovery-address confirmation to %s for account "
         "%s\n", recovEmail, user);
 freeMem(sig);
+}
+
+static void sendRecovEmailChangeAlertMail(char *email, char *user, char *newRecov)
+/* Tell the account's main address that its recovery address just changed, so its owner finds
+ * out if the change was not theirs.  A confirmed recovery address can sign in to the account,
+ * so moving it deserves the same notice as changing the main address itself. */
+{
+char subject[256];
+safef(subject, sizeof(subject), "Your %s recovery email address was changed", brwName);
+char *remoteAddr = getenv("REMOTE_ADDR");
+char message[4096];
+safef(message, sizeof(message),
+    "The recovery email address on the %s account \"%s\" was just changed to %s (request from "
+    "IP address %s).\n\nIf you made this change, nothing more is needed.  If you did NOT, please "
+    "reply to this message right away so we can help you secure the account.\n\n%s\n%s",
+    brwName, user, newRecov, emptyForNull(remoteAddr), signature, returnAddr);
+sendActMailOut(email, subject, message);
 }
 
 void changeEmailPage(struct sqlConnection *conn)
@@ -1364,14 +1391,18 @@ char *user = cgiUsualString("user", "");
 char *recovEmail = cgiUsualString("recovEmail", "");
 char *expStr = cgiUsualString("exp", "");
 char *sig = cgiUsualString("sig", "");
-/* Recompute the signature over the flag currently on the account.  Once confirmed the flag is
- * 'Y', so re-opening the same link no longer matches: the link works exactly once. */
+/* Recompute the signature over the address and flag currently on the account.  Applying the
+ * link changes both, so re-opening it no longer matches: the link works exactly once. */
 char query[1024];
 sqlSafef(query, sizeof(query),
-    "SELECT recovEmailVerified FROM gbMembers WHERE userName='%s' AND recovEmail='%s'",
-    user, recovEmail);
-char *verified = sqlQuickString(conn, query);
-char *expected = recovEmailSig(user, recovEmail, emptyForNull(verified), expStr);
+    "SELECT recovEmail, recovEmailVerified FROM gbMembers WHERE userName='%s'", user);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+char *curRecov = (row != NULL) ? cloneString(emptyForNull(row[0])) : NULL;
+char *curVerified = (row != NULL) ? cloneString(emptyForNull(row[1])) : NULL;
+sqlFreeResult(&sr);
+char *expected = recovEmailSig(user, recovEmail, emptyForNull(curRecov),
+                               emptyForNull(curVerified), expStr);
 boolean sigOk = isNotEmpty(sig) && sameString(sig, expected);
 freeMem(expected);
 if (!sigOk || isEmpty(user) || spc_email_isvalid(recovEmail) == 0)
@@ -1388,10 +1419,20 @@ if (clock1() > atol(expStr))
     displayLoginPage(conn);
     return;
     }
+/* Set the address as well as the flag: for a signup this rewrites the same value, and for a
+ * change this is the point at which the new address takes effect. */
 sqlSafef(query, sizeof(query),
-    "UPDATE gbMembers SET recovEmailVerified='Y', lastUse=NOW() "
-    "WHERE userName='%s' AND recovEmail='%s'", user, recovEmail);
+    "UPDATE gbMembers SET recovEmail='%s', recovEmailVerified='Y', lastUse=NOW() "
+    "WHERE userName='%s'", recovEmail, user);
 sqlUpdate(conn, query);
+/* A change, not a signup confirmation: tell the main address, so a hijack gets noticed. */
+if (isNotEmpty(curRecov) && differentWord(curRecov, recovEmail))
+    {
+    sqlSafef(query, sizeof(query), "SELECT email FROM gbMembers WHERE userName='%s'", user);
+    char *email = sqlQuickString(conn, query);
+    if (isNotEmpty(email))
+        sendRecovEmailChangeAlertMail(email, user, recovEmail);
+    }
 char *encEmail = htmlEncode(recovEmail);
 hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
 hPrintf("<h3>Your recovery email address has been confirmed.</h3>");
@@ -1399,6 +1440,164 @@ hPrintf("<p><b>%s</b> can now be used to sign in to your account and to recover 
     "password.</p></div>", encEmail);
 freeMem(encEmail);
 returnToURL(1500);
+}
+
+void changeRecovEmailPage(struct sqlConnection *conn)
+/* Draw the set/change-recovery-address page for the currently logged-in user.  As on the
+ * change-email page the account comes from the validated login cookie, never from a form
+ * field, and an account that has a password must supply it: a confirmed recovery address can
+ * sign in to the account, so a borrowed login cookie alone must not be able to point it
+ * somewhere new. */
+{
+if (!recovEmailChangeEnabled())
+    {
+    displayLoginPage(conn);
+    return;
+    }
+char *user = wikiLinkUserName();
+if (isEmpty(user))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please log in first to change your recovery email address.");
+    displayLoginPage(conn);
+    return;
+    }
+char query[512];
+sqlSafef(query, sizeof(query),
+    "SELECT recovEmail, recovEmailVerified FROM gbMembers WHERE userName='%s'", user);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+char *curRecov = (row != NULL) ? cloneString(emptyForNull(row[0])) : cloneString("");
+boolean curConfirmed = (row != NULL) && sameWord(emptyForNull(row[1]), "Y");
+sqlFreeResult(&sr);
+sqlSafef(query, sizeof(query), "SELECT password FROM gbMembers WHERE userName='%s'", user);
+boolean hasPassword = isNotEmpty(sqlQuickString(conn, query));
+char *encUser = htmlEncode(user);
+char *encCurRecov = htmlEncode(isNotEmpty(curRecov) ? curRecov : "(none)");
+
+hPrintf("<div id=\"changeRecovEmailBox\" class=\"centeredContainer formBox\">"
+    "<h2>%s</h2>", brwName);
+hPrintf("<h3>Recovery Email</h3>");
+hPrintf("<p><span style='color:red;'>%s</span></p>", errMsg ? errMsg : "");
+hPrintf("<form method=\"post\" action=\"%s\" name=\"changeRecovEmailForm\">", hgLoginUrl);
+hPrintf("<p>Signed in as <b>%s</b>.<br>Current recovery email address: <b>%s</b>%s</p>",
+    encUser, encCurRecov,
+    (isNotEmpty(curRecov) && !curConfirmed) ? " (waiting to be confirmed)" : "");
+hPrintf("<p style=\"font-size:0.9em\">A second address you can use to get back into your "
+    "account: it can sign you in, including with the Google and ORCID buttons, and it receives "
+    "a copy of a password reset. We email it a link to confirm it, and it does nothing until "
+    "you open that link. Your current address keeps working until then.</p>");
+freeMem(encUser);
+freeMem(encCurRecov);
+if (hasPassword)
+    hPrintf("<div class=\"inputGroup\">"
+        "<label for=\"curPassword\">Current password</label>"
+        "<input type=\"password\" name=\"hgLogin_curPassword\" value=\"\" size=\"30\" "
+        "id=\"curPassword\">"
+        "</div>");
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"newRecovEmail1\">New recovery email address</label>"
+    "<input type=\"text\" name=\"hgLogin_newRecovEmail1\" value=\"\" size=\"30\" "
+    "id=\"newRecovEmail1\">"
+    "</div>");
+hPrintf("<div class=\"inputGroup\">"
+    "<label for=\"newRecovEmail2\">Re-enter new recovery email address</label>"
+    "<input type=\"text\" name=\"hgLogin_newRecovEmail2\" value=\"\" size=\"30\" "
+    "id=\"newRecovEmail2\">"
+    "</div>");
+hPrintf("<div class=\"formControls\">"
+    "<input type=\"submit\" name=\"hgLogin.do.changeRecovEmail\" value=\"Change recovery email\" "
+    "class=\"largeButton\">"
+    " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
+    "</div></form></div><!-- END - changeRecovEmailBox -->", getReturnToUrlForAttr());
+cartSaveSession(cart);
+}
+
+void changeRecovEmail(struct sqlConnection *conn)
+/* Process the set/change-recovery-address form for the currently logged-in user. */
+{
+if (!recovEmailChangeEnabled())
+    {
+    displayLoginPage(conn);
+    return;
+    }
+char *user = wikiLinkUserName();
+if (isEmpty(user))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please log in first to change your recovery email address.");
+    displayLoginPage(conn);
+    return;
+    }
+char *recov1 = cartUsualString(cart, "hgLogin_newRecovEmail1", "");
+char *recov2 = cartUsualString(cart, "hgLogin_newRecovEmail2", "");
+if (isEmpty(recov1) || spc_email_isvalid(recov1) == 0)
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please enter a valid email address.");
+    changeRecovEmailPage(conn);
+    return;
+    }
+if (differentString(recov1, recov2))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Email addresses do not match.");
+    changeRecovEmailPage(conn);
+    return;
+    }
+char query[512];
+/* Re-authenticate where we can: if the account has a password, require the current one. */
+sqlSafef(query, sizeof(query), "SELECT password FROM gbMembers WHERE userName='%s'", user);
+char *curPwd = sqlQuickString(conn, query);
+if (isNotEmpty(curPwd))
+    {
+    char *given = cartUsualString(cart, "hgLogin_curPassword", "");
+    if (isEmpty(given) || !checkPwd(given, curPwd))
+        {
+        freez(&errMsg);
+        errMsg = cloneString("Please enter your current password.");
+        changeRecovEmailPage(conn);
+        return;
+        }
+    }
+sqlSafef(query, sizeof(query),
+    "SELECT recovEmail, recovEmailVerified, email FROM gbMembers WHERE userName='%s'", user);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+char *curRecov = (row != NULL) ? cloneString(emptyForNull(row[0])) : cloneString("");
+char *curVerified = (row != NULL) ? cloneString(emptyForNull(row[1])) : cloneString("");
+char *curEmail = (row != NULL) ? cloneString(emptyForNull(row[2])) : cloneString("");
+sqlFreeResult(&sr);
+/* An address the account already uses needs no second proof. */
+if (sameWord(recov1, curEmail))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("That is already the main address on this account.");
+    changeRecovEmailPage(conn);
+    return;
+    }
+if (sameWord(recov1, curRecov) && sameWord(curVerified, "Y"))
+    {
+    freez(&errMsg);
+    errMsg = cloneString("That is already your confirmed recovery email address.");
+    changeRecovEmailPage(conn);
+    return;
+    }
+/* Do not store the address yet: mail a one-time confirmation link and put it on the account
+ * only when that link is opened (see confirmRecovEmail).  Until then the address the user has
+ * now keeps working, so a typo here costs them nothing. */
+sendRecovEmailConfirmMail(recov1, user, curRecov, curVerified);
+cartRemove(cart, "hgLogin_newRecovEmail1");
+cartRemove(cart, "hgLogin_newRecovEmail2");
+cartRemove(cart, "hgLogin_curPassword");
+char *encRecov = htmlEncode(recov1);
+hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
+hPrintf("<h3>Almost done. Please check your email</h3>");
+hPrintf("<p>We sent a confirmation link to <b>%s</b>. Open the link in that message to finish "
+    "setting your recovery email address. The link works once and expires in seven days. Until "
+    "then nothing about your account changes.</p></div>", encRecov);
+freeMem(encRecov);
+returnToURL(3000);
 }
 
 void signupPage(struct sqlConnection *conn)
@@ -1633,7 +1832,7 @@ if (sameWord(returnAddr, "NOEMAIL"))
 
 setupNewAccount(conn, email, user);
 if (confirmRecov)
-    sendRecovEmailConfirmMail(recovEmail, user);
+    sendRecovEmailConfirmMail(recovEmail, user, recovEmail, "N");
 /* send out activate code mail, and display the mail confirmation box */
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_email2");
@@ -1869,6 +2068,19 @@ static boolean emailLinkEnabled()
  * outbound email, so it is off unless the admin explicitly enables it with login.emailLink=on. */
 {
 return cfgOptionBooleanDefault(CFG_LOGIN_EMAIL_LINK, FALSE);
+}
+
+static boolean recovEmailChangeEnabled()
+/* Return TRUE if users may set or change their own recovery email address.  Needs working
+ * outbound mail to confirm the new address, a login.cookieSalt to sign the confirmation link,
+ * and the recovEmailVerified column to record the answer in, so all three are required on top
+ * of the admin turning it on with login.recovEmailChange=on in hg.conf. */
+{
+if (!cfgOptionBooleanDefault(CFG_LOGIN_RECOV_EMAIL_CHANGE, FALSE))
+    return FALSE;
+if (!recovEmailVerifyOk || isEmpty(cfgOption(CFG_LOGIN_COOKIE_SALT)))
+    return FALSE;
+return !sameWord(returnAddr, "NOEMAIL");
 }
 
 static void printEmailLinkButton()
@@ -2794,6 +3006,10 @@ else if (cartVarExists(cart, "hgLogin.do.confirmChangeEmail"))
     confirmChangeEmail(conn);
 else if (cartVarExists(cart, "hgLogin.do.confirmRecovEmail"))
     confirmRecovEmail(conn);
+else if (cartVarExists(cart, "hgLogin.do.changeRecovEmailPage"))
+    changeRecovEmailPage(conn);
+else if (cartVarExists(cart, "hgLogin.do.changeRecovEmail"))
+    changeRecovEmail(conn);
 else if (cartVarExists(cart, "hgLogin.do.displayAccHelpPage"))
     displayAccHelpPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.accountHelp"))
