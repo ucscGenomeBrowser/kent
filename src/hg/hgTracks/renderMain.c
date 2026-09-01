@@ -18,6 +18,7 @@
 #include "hgTracks.h"
 #include "imageV2.h"
 #include "botDelay.h"
+#include "hgConfig.h"
 
 static void usage()
 /* Print out usage and exit - just temporary. */
@@ -114,6 +115,10 @@ boolean issueBotWarning;
 
 int main(int argc, char *argv[])
 {
+// First, before anything has a chance to allocate: read hg.conf and set how
+// big a step the C library takes when it grows the heap.  refs #38225
+cfgSetMallocTopPad();
+
 cgiSpoof(&argc, argv);
 if(argc == 1)
     {

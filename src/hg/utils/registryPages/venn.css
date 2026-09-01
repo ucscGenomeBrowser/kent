@@ -1,0 +1,95 @@
+/* venn.css - the four-set diagram page.  Tokens come from tokens.css. */
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--body); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px; margin:0 auto; padding:44px 24px 96px; display:flex; flex-direction:column; gap:44px}
+
+/* ---------- header ---------- */
+.eyebrow{
+  font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink3); margin:0 0 14px;
+}
+h1{
+  font-family:var(--display); font-weight:700; font-size:clamp(34px,5.4vw,54px);
+  line-height:1.04; letter-spacing:-0.02em; margin:0 0 18px; text-wrap:balance;
+}
+.lede{max-width:63ch; margin:0; color:var(--ink2); font-size:18px}
+.lede strong{color:var(--ink); font-weight:600}
+.meta{
+  margin-top:22px; padding-top:16px; border-top:1px solid var(--rule);
+  font-family:var(--mono); font-size:12px; color:var(--ink3);
+  display:flex; flex-wrap:wrap; gap:8px 26px;
+}
+
+/* ---------- figure ---------- */
+figure{margin:0; background:var(--panel); border:1px solid var(--rule); border-radius:3px; padding:26px 22px 20px}
+.svg-scroll{overflow-x:auto}
+svg.venn{display:block; width:100%; min-width:640px; height:auto}
+figcaption{
+  margin-top:18px; padding-top:14px; border-top:1px solid var(--rule2);
+  color:var(--ink2); font-size:14.5px; max-width:70ch;
+}
+
+.r-count{font-family:var(--display); font-weight:700; fill:var(--ink)}
+.r-name{font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.1em; fill:var(--ink2)}
+.r-zero{font-family:var(--display); font-weight:500; font-size:13px; fill:var(--ink3)}
+.r-small{font-family:var(--display); font-weight:700; font-size:19px; fill:var(--ink)}
+.tick{font-family:var(--mono); font-size:10.5px; fill:var(--ink3); letter-spacing:.06em}
+
+/* ---------- sections ---------- */
+h2{
+  font-family:var(--display); font-weight:600; font-size:22px; letter-spacing:-0.01em;
+  margin:0 0 6px;
+}
+.sub{margin:0 0 22px; color:var(--ink2); font-size:15.5px; max-width:68ch}
+section{display:flex; flex-direction:column}
+
+/* shared-name list */
+.slivers{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--rule)}
+.sliver{
+  display:grid; grid-template-columns:200px 1fr; gap:6px 28px;
+  padding:20px 0; border-bottom:1px solid var(--rule);
+}
+.sliver-head{display:flex; flex-direction:column; gap:8px}
+.pairchips{display:flex; align-items:center; gap:7px}
+.chip{width:11px; height:11px; border-radius:2px; flex:none}
+.chip.track{background:var(--s-track)} .chip.url{background:var(--s-url)}
+.chip.file{background:var(--s-file)} .chip.conf{background:var(--s-conf)}
+.pairname{font-family:var(--mono); font-size:11.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink2)}
+.pairnum{font-family:var(--display); font-weight:700; font-size:30px; line-height:1}
+.pairnum span{font-family:var(--mono); font-weight:400; font-size:12px; color:var(--ink3); letter-spacing:.06em; margin-left:7px}
+ul.names{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px}
+ul.names li{display:flex; flex-wrap:wrap; gap:4px 12px; align-items:baseline}
+code{font-family:var(--mono); font-size:13.5px; background:var(--rule2); padding:1.5px 6px; border-radius:2px; white-space:nowrap}
+.note{color:var(--ink2); font-size:14.5px; flex:1 1 260px; min-width:0}
+
+/* table */
+.tablewrap{overflow-x:auto; border:1px solid var(--rule); border-radius:3px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:14px}
+caption{text-align:left; padding:14px 16px; color:var(--ink3); font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; border-bottom:1px solid var(--rule)}
+th,td{padding:9px 16px; text-align:left; border-bottom:1px solid var(--rule2)}
+th{font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink3)}
+td.num{text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:none}
+tr.z td{color:var(--ink3)}
+.dots{display:inline-flex; gap:4px; vertical-align:middle}
+.dot{width:9px; height:9px; border-radius:50%}
+.dot.off{background:transparent; box-shadow:inset 0 0 0 1px var(--rule)}
+.dot.track{background:var(--s-track)} .dot.url{background:var(--s-url)}
+.dot.file{background:var(--s-file)} .dot.conf{background:var(--s-conf)}
+
+/* notes */
+.notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:26px}
+.notecard{border-top:2px solid var(--rule); padding-top:14px}
+.notecard h3{font-family:var(--display); font-weight:600; font-size:15px; margin:0 0 8px; letter-spacing:-0.005em}
+.notecard p{margin:0 0 10px; font-size:14.5px; color:var(--ink2)}
+.notecard p:last-child{margin-bottom:0}
+
+footer{border-top:1px solid var(--rule); padding-top:18px; font-family:var(--mono); font-size:11.5px; color:var(--ink3); line-height:1.8}
+
+@media (max-width:640px){
+  .sliver{grid-template-columns:1fr}
+  .wrap{gap:38px; padding:32px 18px 72px}
+}

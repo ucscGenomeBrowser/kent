@@ -941,6 +941,24 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+static char *skipEmptyPairs(char *s)
+/* Return the start of the next variable name in a var=val&var=val... string,
+ * skipping the separators of any empty pairs, as in the "&&" of "a=1&&b=2".
+ * Returns a pointer to the terminating zero when nothing is left.
+ *
+ * Without this the parsers below, which split on the first separator after a
+ * value, read the leftover one as part of the next name: "a=1&&b=2" stores "b"
+ * under "&b".  Nothing looks that name up, so the variable is silently lost.
+ * The same empty pair at the end of the string has no '=' after it and instead
+ * aborts the CGI.  cgiEncode escapes everything but alphanumerics, '.' and '_',
+ * so no encoded name can begin with a separator and none is ever eaten here.
+ * refs #38185 */
+{
+if (s == NULL)
+    return NULL;
+return s + strspn(s, "&;");
+}
+
 boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
 /* Parse out next var/val in a var=val&var=val... cgi formatted string 
  * This will insert zeroes and other things into string. 
@@ -950,7 +968,7 @@ boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
  *     while (cgiParseNext(&pt, &var, &val))
  *          printf("%s\t%s\n", var, val); */
 {
-char *var = *pInput;
+char *var = skipEmptyPairs(*pInput);
 if (var == NULL || var[0] == 0)
     return FALSE;
 char *val = strchr(var, '=');
@@ -1003,7 +1021,7 @@ if (logCgiVarMaxLen > 0)
     logMsg = dyStringNew(1024);	
 
 namePt = input;
-while (namePt != NULL && namePt[0] != 0)
+while ((namePt = skipEmptyPairs(namePt)) != NULL && namePt[0] != 0)
     {
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)

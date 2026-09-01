@@ -10,3 +10,4 @@ vgp577way
 HPRCv2
 lowelab
 hprc2annot
+RCPediaVGP_v1
