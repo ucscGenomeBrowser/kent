@@ -1,0 +1,416 @@
+#!/usr/bin/env node
+// uiTest -- run the browser UI tests for one CGI.
+//
+//     uiTest [options] <dir or file> ...
+//
+// Two engines, one runner. The CLI dispatches by extension:
+//
+//     t*.js               a JavaScript test  -> lib/run.js
+//     *.docent.yaml       a Docent script    -> docent.js, as a subprocess
+//
+// and merges both into one results.json. Docent is not modified by any of this;
+// the integration is its exit code.
+//
+// The rule for which to write:
+//
+//     "Go somewhere, turn tracks on and off, assert what is drawn"
+//         -> write a .docent.yaml
+//     Needs a login, files, the database, JS internals, an HTTP status, a timing
+//     number, or a comparison between two page loads
+//         -> write a t*.js
+//
+// See README.md for setup and WRITING-TESTS.md for how to write one.
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { execFileSync, spawnSync } = require('child_process');
+
+const env = require('./lib/env');
+const pw = require('./lib/pw');
+const runner = require('./lib/run');
+const site = require('./lib/site');
+const browser = require('./lib/browser');
+const pages = require('./lib/pages');
+
+const EXIT = env.EXIT;
+
+// Longest a single docent script may run before it is killed.
+const DOCENT_TIMEOUT = 10 * 60 * 1000;
+
+const USAGE = `usage: uiTest [options] <dir or file> ...
+       uiTest --selfcheck [--login]
+       uiTest lint [dir]
+
+Runs the browser UI tests in a directory: t*.js through the JavaScript runner,
+*.docent.yaml through docent.js. Needs a network, a browser and a target server,
+which is why these are not part of the tree-wide "make test".
+
+options:
+  --target NAME     server to test. Compiled in: rr, genome-test, hgwdev,
+                    hgwbeta, hgwdev-<user>, or a full http(s) URL. Add more with
+                    target.<name> lines in your conf file.
+                    (default: default.target in your conf, else genome-test)
+  --account NAME    which account.<name> block in your conf to log in with
+  --conf FILE       conf file (default ~/.hg.uiTest.conf, or UITEST_CONF)
+  --artifacts DIR   where this run's output goes
+  --only NAME       only test files whose name contains NAME
+  --grep TEXT       only checks whose name contains TEXT
+  --headed          show the browser instead of running it headless
+  --slowmo MS       pause between actions, to watch what is happening
+  --strict          exit 4 if every check was skipped
+  --selfcheck       check node, playwright, the conf file and the target, then stop
+  --login           with --selfcheck, also do one real hgLogin round trip
+  -h, --help        this
+
+exit codes:
+  0  everything that ran passed (skips allowed)
+  1  a check failed -- a bug in the thing under test
+  2  usage or configuration error
+  3  infrastructure: no browser, server unreachable, login broken
+  4  everything was skipped and --strict was given
+`;
+
+function parseArgs(argv) {
+    const o = { targets: [] };
+    for (let i = 0; i < argv.length; i++) {
+        const a = argv[i];
+        const next = () => {
+            i++;
+            if (i >= argv.length) {
+                throw env.configError(`${a} needs a value`);
+            }
+            if (argv[i][0] === '-') {
+                throw env.configError(`${a} needs a value, got ${argv[i]}`);
+            }
+            return argv[i];
+        };
+        switch (a) {
+        case '--target': o.target = next(); break;
+        case '--account': o.account = next(); break;
+        case '--conf': o.conf = next(); break;
+        case '--artifacts': o.artifacts = next(); break;
+        case '--only': o.only = next(); break;
+        case '--grep': o.grep = next(); break;
+        case '--headed': o.headed = true; break;
+        case '--slowmo': {
+            const v = next();
+            o.slowMo = Number(v);
+            if (!Number.isFinite(o.slowMo) || o.slowMo < 0) {
+                throw env.configError(`--slowmo needs a non-negative number, got ${v}`);
+            }
+            break;
+        }
+        case '--strict': o.strict = true; break;
+        case '--selfcheck': o.selfcheck = true; break;
+        case '--login': o.login = true; break;
+        case 'lint': o.lint = true; break;
+        case '-h': case '--help': o.help = true; break;
+        default:
+            if (a[0] === '-') {
+                throw env.configError(`unknown option ${a}\n\n${USAGE}`);
+            }
+            o.targets.push(a);
+        }
+    }
+    return o;
+}
+
+function stamp() {
+    const d = new Date();
+    const p = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-` +
+        `${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
+}
+
+function gitCommit() {
+    try {
+        return execFileSync('git', ['-C', pages.kentSrc, 'rev-parse', '--short', 'HEAD'],
+            { encoding: 'utf8' }).trim();
+    } catch (e) {
+        return null;
+    }
+}
+
+function collect(targets, only) {
+    // Everything runnable under the named directories and files, in a stable
+    // order so two runs list their checks the same way.
+    const out = [];
+    for (const t of targets) {
+        let st;
+        try {
+            st = fs.statSync(t);
+        } catch (e) {
+            throw env.configError(`no such file or directory: ${t}`);
+        }
+        if (st.isDirectory()) {
+            fs.readdirSync(t).sort().forEach(f => {
+                if (/^t\d\d-.*\.js$/.test(f) || /\.docent\.ya?ml$/.test(f)) {
+                    out.push(path.join(t, f));
+                }
+            });
+        } else {
+            out.push(t);
+        }
+    }
+    return only ? out.filter(f => path.basename(f).includes(only)) : out;
+}
+
+function labelFor(targets) {
+    // A run in hgTracks/tests is a run of hgTracks, not of "tests".
+    const first = path.resolve(targets[0]);
+    const dir = fs.statSync(first).isDirectory() ? first : path.dirname(first);
+    return path.basename(dir) === 'tests' ? path.basename(path.dirname(dir)) : path.basename(dir);
+}
+
+function runDocent(run, file, e) {
+    // Docent as a subprocess. Stills and sessions are redirected into this run's
+    // directory and DOCENT_FAST drops the mp4, so a test run leaves nothing
+    // behind in the source tree.
+    const base = path.basename(file).replace(/\.docent\.ya?ml$/, '');
+    const expectFail = /\.xfail$/.test(base);
+    const docent = path.join(pages.kentSrc, 'hg', 'utils', 'docent', 'docent.js');
+    if (!fs.existsSync(docent)) {
+        run.skipped(base, `docent is not in this tree: expected ${docent}`);
+        return;
+    }
+    const t0 = Date.now();
+    const res = spawnSync('node', [docent, path.basename(file)], {
+        cwd: path.dirname(path.resolve(file)),
+        encoding: 'utf8',
+        timeout: DOCENT_TIMEOUT,
+        env: {
+            ...process.env,
+            ...pw.subprocessEnv(e),
+            DOCENT_FAST: '1',
+            DOCENT_STILLS: path.join(run.dir, 'stills'),
+            DOCENT_SESSIONS: path.join(run.dir, 'sessions'),
+        },
+    });
+    const out = (res.stdout || '') + (res.stderr || '');
+    const logFile = path.join(run.dir, `${base}.docent.log`);
+    fs.writeFileSync(logFile, out);
+    const timedOut = !!(res.error && res.error.code === 'ETIMEDOUT');
+    const failed = timedOut || res.status !== 0;
+    let status;
+    if (expectFail) {
+        status = failed ? 'xfail' : 'xpass';
+    } else {
+        status = failed ? 'fail' : 'pass';
+    }
+    const lastReal = out.trim().split('\n').filter(l => l.trim()).slice(-3).join(' | ');
+    const timeoutDetail = `docent script was killed after ${DOCENT_TIMEOUT / 60000} minutes`;
+    const entry = {
+        name: base,
+        status: status,
+        ms: Date.now() - t0,
+        detail: status === 'xpass' ? 'this was supposed to fail, and it passed'
+            : (failed ? (timedOut ? timeoutDetail : lastReal) : ''),
+        url: '',
+        shot: null,
+        log: logFile,
+    };
+    const label = { pass: 'PASS', fail: 'FAIL', xfail: 'XFAIL', xpass: 'XPASS' }[status];
+    run.log(`${label}  ${base}  (docent)${entry.detail ? '\n        ' + entry.detail : ''}`);
+    if (failed || status === 'xpass') {
+        run.log(`        log: ${logFile}`);
+    }
+    run.record(entry);
+}
+
+async function reachable(base) {
+    // A plain HTTP request, so an unreachable server is reported as such rather
+    // than as a Playwright stack trace 30 seconds later.
+    const c = new AbortController();
+    const timer = setTimeout(() => c.abort(), 10000);
+    try {
+        const res = await fetch(`${base}/hgGateway`, { signal: c.signal });
+        return res.status < 500 ? null : `HTTP ${res.status}`;
+    } catch (err) {
+        return err.name === 'AbortError' ? 'timed out after 10s' : err.message;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+async function selfcheck(o, e) {
+    let bad = 0;
+    const say = (ok, what, detail) => {
+        console.log(`${ok ? 'ok  ' : 'BAD '} ${what}${detail ? ': ' + detail : ''}`);
+        if (!ok) {
+            bad++;
+        }
+    };
+
+    const major = Number(process.versions.node.split('.')[0]);
+    say(major >= 18, `node ${process.versions.node}`,
+        major >= 18 ? '' : 'uiTest needs node 18 or newer');
+
+    let r = null;
+    try {
+        r = pw.resolve(e);
+        say(true, `playwright ${r.version || '(version unknown)'}`,
+            `${r.source}, ${r.prefix || 'node\'s own module path'}`);
+        if (r.pin) {
+            say(!r.warning, `pin ${r.pin}`, r.warning || '');
+        }
+        say(!!r.browsersPath, 'browsers',
+            r.browsersPath || 'no browsers/ beside the install; playwright will use its own cache');
+    } catch (err) {
+        say(false, 'playwright', err.message);
+    }
+
+    say(true, `conf ${e.confFile}`,
+        e.confPresent ? `read ${e.confFiles.length} file(s)` : 'not present, using compiled defaults');
+    say(true, `target ${e.target}`, e.base);
+    const why = await reachable(e.base);
+    say(!why, 'target reachable', why || '');
+    say(true, 'account', e.account ? e.account.user : `none (${e.accountReason})`);
+    say(true, 'hgsql', e.canHgsql ? 'available' : `not available (${e.hgsqlReason})`);
+    say(true, 'artifacts', e.artifacts);
+
+    if (o.login) {
+        if (!e.account) {
+            say(false, 'login', `no account to log in with: ${e.accountReason}`);
+        } else {
+            const b = await browser.launch(e);
+            try {
+                const ctx = await browser.context(b, e, {
+                    initScripts: site.INIT_SCRIPTS, trace: false,
+                });
+                const p = await ctx.newPage();
+                await site.ensureLoggedIn(ctx, p, e);
+                say(true, 'login', `${e.account.user} at ${e.base}`);
+            } catch (err) {
+                say(false, 'login', err.message);
+                await b.close().catch(() => {});
+                return EXIT.INFRA;
+            }
+            await b.close().catch(() => {});
+        }
+    }
+
+    if (bad) {
+        console.log(`\n${bad} problem(s). Fix these before trusting a test result.`);
+        return why ? EXIT.INFRA : EXIT.CONFIG;
+    }
+    console.log('\nsetup looks good');
+    return EXIT.OK;
+}
+
+function lint(dir) {
+    // page.waitForTimeout is a guess about how long something takes on a machine
+    // you are not sitting at. It is banned outright in lib/ and pages/, and in a
+    // test it has to say what it is waiting for.
+    const root = path.resolve(dir || '.');
+    const bad = [];
+    const walk = (d) => {
+        for (const f of fs.readdirSync(d, { withFileTypes: true })) {
+            const p = path.join(d, f.name);
+            if (f.isDirectory()) {
+                if (f.name !== 'node_modules' && f.name[0] !== '.') {
+                    walk(p);
+                }
+            } else if (f.name.endsWith('.js')) {
+                const lines = fs.readFileSync(p, 'utf8').split('\n');
+                const inLib = /(^|\/)(lib|pages)\//.test(path.relative(root, p)) ||
+                    path.basename(path.dirname(p)) === 'lib' ||
+                    path.basename(path.dirname(p)) === 'pages';
+                lines.forEach((l, i) => {
+                    if (!l.includes('waitForTimeout') || l.trim().startsWith('//')) {
+                        return;
+                    }
+                    if (inLib) {
+                        bad.push(`${p}:${i + 1}: waitForTimeout is not allowed in lib/ or pages/`);
+                    } else if (!/\/\/\s*flake:/.test(l) && !/\/\/\s*flake:/.test(lines[i - 1] || '')) {
+                        bad.push(`${p}:${i + 1}: waitForTimeout needs a "// flake:" comment ` +
+                            `naming what it waits for`);
+                    }
+                });
+            }
+        }
+    };
+    walk(root);
+    bad.forEach(b => console.error(b));
+    if (bad.length) {
+        console.error(`\n${bad.length} problem(s). Replace these with a helper from lib/wait.js.`);
+        return EXIT.FAIL;
+    }
+    console.log(`waitForTimeout policy: clean under ${root}`);
+    return EXIT.OK;
+}
+
+async function main() {
+    const o = parseArgs(process.argv.slice(2));
+    if (o.help) {
+        console.log(USAGE);
+        return EXIT.OK;
+    }
+    if (o.lint) {
+        return lint(o.targets[0]);
+    }
+
+    const e = env.load(o);
+    if (o.selfcheck) {
+        return selfcheck(o, e);
+    }
+    if (!o.targets.length) {
+        console.error(USAGE);
+        return EXIT.CONFIG;
+    }
+
+    const files = collect(o.targets, o.only);
+    if (!files.length) {
+        console.error(`nothing to run in ${o.targets.join(', ')}` +
+            (o.only ? ` matching --only ${o.only}` : ''));
+        return EXIT.CONFIG;
+    }
+
+    const label = labelFor(o.targets);
+    const started = new Date().toISOString();
+    const dir = path.join(e.artifacts, e.target, `${stamp()}-${label}`);
+    const run = runner.createRun(e, dir);
+    run.grep = o.grep || null;
+    run.strict = !!o.strict;
+
+    const r = pw.resolve(e);
+    run.log(`uiTest ${label} -> ${e.target} (${e.base})`);
+    run.log(`playwright ${r.version || '?'} from ${r.prefix || 'node\'s own module path'}`);
+    if (r.warning) {
+        run.log(`WARNING ${r.warning}`);
+    }
+    const yaml = files.filter(f => /\.docent\.ya?ml$/.test(f));
+    if (yaml.length && e.target !== env.DEFAULT_TARGET) {
+        run.log(`NOTE ${yaml.length} docent script(s) here carry their own "target:" line. ` +
+            `--target ${e.target} does not reach them.`);
+    }
+
+    try {
+        for (const f of files) {
+            if (/\.docent\.ya?ml$/.test(f)) {
+                runDocent(run, f, e);
+            } else {
+                await run.runFile(f);
+            }
+        }
+    } finally {
+        run.summary();
+        run.write({
+            label: label,
+            started: started,
+            gitCommit: gitCommit(),
+            node: process.versions.node,
+            playwright: { version: r.version, pin: r.pin, prefix: r.prefix },
+            files: files,
+        });
+    }
+    return run.exitCode();
+}
+
+main().then(code => {
+    process.exitCode = code;
+}).catch(err => {
+    console.error(`uiTest: ${err.message}`);
+    process.exitCode = err.exitCode || EXIT.INFRA;
+});
