@@ -64,6 +64,90 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="090126"></a>
+<h2>Sep. 1, 2026 &nbsp;&nbsp; New faceted interface for large composite tracks</h2>
+<p>
+We are pleased to announce
+<a href="/docs/hubs/facetedComposite.html" target="_blank">faceted composites</a>, a new
+interface for composite tracks that hold very large numbers of subtracks. The standard
+composite works well for somewhere between 20 and 50 subtracks, but it becomes unwieldy
+once the count runs into the hundreds to thousands. A faceted composite is an alternative
+display for those cases: facets along the left side filter the collection while a
+paginated table on the right lists the subtracks that match, letting users narrow
+thousands of entries down to the handful relevant to their work. The individual-experiment
+tracks in the ENCODE4 Regulation collection, <a href="#072226">announced in July 2026</a>,
+already use this interface. Faceted composites are configured entirely through trackDb
+settings, so any hub developer can build one.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeReg4Epigenetics" target="_blank">
+<img alt="Faceted composite interface showing facets, search boxes, and a paginated subtrack table"
+src="/images/newsArchImages/facetedComposite.png" width='75%'></a>
+<p class="gbsCaption"><em>The faceted composite interface on the ENCODE4
+DNase/ATAC/Histone/CTCF (Indiv.) track. Facets on the left filter the 6,353 subtracks,
+and the table lists those that match.</em></p>
+</div>
+
+<p>
+A faceted composite otherwise behaves like an ordinary composite, with two differences:
+</p>
+<ul>
+  <li>it does not use views or subgroups</li>
+  <li>it draws its facets from a web-accessible tab-separated metadata file named in the
+  <code>metaDataUrl</code> setting</li>
+</ul>
+
+<p>
+Adding <code>compositeTrack faceted</code> to a composite stanza turns on the interface. A
+<code>primaryKey</code> setting names the column of that file which identifies each
+subtrack, and subtracks are named <code>&lt;parent&gt;_&lt;primaryKey value&gt;</code> to
+tie each one to its metadata row. Because there are no views, the subtracks of a single
+faceted composite can mix data types, such as signal and peak files, in one container.
+</p>
+
+<p>
+Underscore prefixes on the field names in the metadata file control where each field
+shows up:
+</p>
+
+<table class="stdTbl">
+  <tr><th>Field name in the metadata file</th><th>Facet on the page</th>
+      <th>Search box in the table</th></tr>
+  <tr><td><code>tissue</code></td><td>yes</td><td>yes</td></tr>
+  <tr><td><code>_date</code></td><td>no</td><td>yes</td></tr>
+  <tr><td><code>__count</code></td><td>no</td><td>no</td></tr>
+</table>
+
+<p>
+Two optional settings extend the interface:
+</p>
+<ul>
+  <li><code>dataTypes</code> &ndash; groups several files per sample, so a single row of
+  the subtrack table can turn on a signal track and a peak track together</li>
+  <li><code>subtrackUrls</code> &ndash; turns metadata values into links, which is useful
+  for accession numbers or protocol identifiers</li>
+</ul>
+
+<p>
+Our new <a href="/docs/hubs/facetedComposite.html" target="_blank">Faceted Composite
+Tracks</a> documentation page walks through building one, with an
+<a href="/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hubUrl=https://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubFacetedComposite/hub.txt"
+target="_blank">example hub</a> that can be loaded directly into the browser. The complete
+reference for each setting lives in our
+<a href="/goldenPath/help/trackDb/trackDbHub.html#faceted_composite" target="_blank">trackDb
+documentation</a>, and our <a href="/docs/hubs/hubBasics.html" target="_blank">Hub
+Basics</a> page is a good starting point if you are new to building hubs.
+</p>
+
+<p>
+We would like to thank Andrew Smith at the University of Southern California, who
+contributed the original implementation of this interface, and Jonathan Casper, who
+developed it into the version released at the UCSC Genome Browser. We also thank
+Lou Nassar, Gerardo Perez, Clay Fischer, Brian Raney, Max Haeussler, and Jairo
+Navarro for testing, feedback, and documentation.
+</p>
+
 <a name="082826"></a>
 <h2>Aug. 28, 2026 &nbsp;&nbsp; Deleteriousness Predictions: popEVE and EVE for hg38</h2>
 <p>
