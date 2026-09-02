@@ -12,11 +12,19 @@ kentSrc = ../../..
 # Two makes using the same table names will fight over the same tables.
 #
 # Running ONE make with -j is fine, and is much faster, since the databases are
-# independent of each other.  Every per-database recipe writes only to files and
-# tables named after that database, and hgTrackDb and hgFindSpec put their
-# temporary files in $$TMPDIR under process-unique names.  Pass -O as well so
-# that the output of each database stays together in the log:
+# independent of each other.  Every per-database recipe writes only to tables
+# named after that database, and hgTrackDb and hgFindSpec put their temporary
+# files in $$TMPDIR under process-unique names.  Pass -O as well so that the
+# output of each database stays together in the log:
 #	make -O -j 8 beta
+#
+# Naming a scratch file after its database is not by itself enough to make a
+# recipe parallel-safe: loadTracks runs tdbQuery -check with -root set to this
+# directory, and tdbQuery stats every entry it finds here.  A file that one
+# recipe creates and deletes is therefore visible to every other recipe, and
+# unlinking it between another job's readdir and stat aborts that job with
+# "stat failed in listDirX".  Write per-database scratch files to $$TMPDIR (see
+# GBDB_LIST below), not to this directory.
 
 # Browser supports multiple trackDb's so that individual developers
 # can change things rapidly without stepping on other people's toes. 
@@ -218,6 +226,13 @@ ALPHA_MACHINE = hgwdev.gi.ucsc.edu
 BETA_MACHINE = qateam@hgwbeta.soe.ucsc.edu
 PUBLIC_MACHINE = qateam@hgw0.soe.ucsc.edu
 
+# Where the per-database /gbdb file list goes.  This must live outside the
+# directory tdbQuery -check scans; see the note at the top of this file.  It is
+# named for the database and the user so that concurrent makes by two users do
+# not share it.  Recursively expanded on purpose: $* is only set inside the
+# pattern recipes that use it.  ${TMPDIR:-/tmp} is left for the shell.
+GBDB_LIST = $${TMPDIR:-/tmp}/${USER}.$*.gbdbList.txt
+
 # For the new demo-$USER machines, the "USER" passed in to makefile contains a hyphen which
 # needs to be replaced with an underscore for mysql table names.
 USERTABLE = $(shell echo ${USER} | sed -e 's/-/_/g')
@@ -275,9 +290,9 @@ beta_all: ${DBS:%=%_beta}
 
 %_beta:
 	# now do loads on hgwbeta
-	-ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=beta trackDb hgFindSpec $*
-	rm  -f $*.gbdbList.txt
+	-ssh  ${BETA_MACHINE} find /gbdb/$*  -type f -size +1c  > ${GBDB_LIST}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=${GBDB_LIST} -release=beta trackDb hgFindSpec $*
+	rm  -f ${GBDB_LIST}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb $*
 	# the -alsoTo also makes the files for hgwdev-beta (we share the tables with
 	# hgwbeta), without building the same index a second time
@@ -299,14 +314,14 @@ public: onbeta clean
 public_all: ${DBS:%=%_public}
 
 %_publicTest:
-	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
-	rm -f $*.gbdbList.txt
+	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > ${GBDB_LIST}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=${GBDB_LIST} -release=public trackDb_publicTest hgFindSpecTest_publicTest $*
+	rm -f ${GBDB_LIST}
 
 %_public:
-	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > $*.gbdbList.txt
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=$*.gbdbList.txt -release=public trackDb_public hgFindSpec_public $*
-	rm -f $*.gbdbList.txt
+	-ssh  ${PUBLIC_MACHINE} find /gbdb/$*  -type f -size +1c  > ${GBDB_LIST}
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks -addVersion ${EXTRA} -strict -gbdbList=${GBDB_LIST} -release=public trackDb_public hgFindSpec_public $*
+	rm -f ${GBDB_LIST}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb public metaDb_public $*
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb_public ${BUILD_TRIX} trackDb_public metaDb_public cv/public/cv.ra ${BETA_MACHINE} ${DATA_TRIX} $*
 	# now build the relatedTracks table for each db
