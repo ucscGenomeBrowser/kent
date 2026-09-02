@@ -21,9 +21,13 @@ Four pieces, in the order they run.
 
 2. render.sh       render each URL against a parked hgTracks and keep the png.
 
-   Set PORT to the ticket sandbox.  It uses hgRenderTracks, which returns the
-   image itself rather than a page, and it sends an explicit pix= so the first
-   hit is a render and not addPixAndReloadPage().
+       render.sh corpusUrls.tsv corpus 48088 6
+
+   The port is the ticket sandbox's and the last argument is how many renders
+   to run at once.  It uses hgRenderTracks, which returns the image itself
+   rather than a page, and it sends an explicit pix= so the first hit is a
+   render and not addPixAndReloadPage().  Rendering in parallel changes nothing
+   that is measured later, since the encode is timed offline.
 
 3. pngLevelBench   encode each corpus image at every level, 0 to 9.
 
@@ -33,6 +37,17 @@ Four pieces, in the order they run.
    The encode matches lib/pngwrite.c exactly: RGBA, 8 bits, no interlace, row
    filter pinned to UP.  Only the level varies, and nothing is written to disk,
    so the time is the encode alone.
+
+   The row filter can be swept too, since the two settings interact and the
+   filter that compresses best is not the same one at every level or on every
+   image:
+
+       pngLevelBench -tab -reps=2 -minLevel=1 -maxLevel=6 \
+           -filters=none,sub,up,avg,paeth,all corpus/*.png > sweep.tsv
+
+   `all` is libpng's own per row choice, which is what the browser did before
+   #38107 pinned UP.  Everything is compared against `-baseFilter` at `-base`,
+   which defaults to the pair the browser ships, up at 6.
 
 4. levelReport.py  aggregate into per-level B, S and break-even speed.
 

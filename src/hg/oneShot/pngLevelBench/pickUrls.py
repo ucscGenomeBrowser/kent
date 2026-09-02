@@ -5,12 +5,24 @@ Keeps the URLs a reader actually loaded, drops the ones this machine cannot
 render the same way, and samples them in proportion to how often they were
 loaded, so the corpus is weighted the way real traffic is.
 """
-import gzip, random, sys, urllib.parse, collections
+import argparse, gzip, random, sys, urllib.parse, collections
 
-SRC   = sys.argv[1]
-DBS   = sys.argv[2]
-OUT   = sys.argv[3]
-N     = int(sys.argv[4]) if len(sys.argv) > 4 else 300
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("gets", help="url and status per line, gzipped, from the log")
+parser.add_argument("dbs", help="the assemblies this machine has, one per line")
+parser.add_argument("out", help="where to write the chosen urls")
+parser.add_argument("n", nargs="?", type=int, default=300, help="how many to pick")
+parser.add_argument("--seed", type=int, default=38109,
+                    help="the random seed, so a run repeats (default the ticket)")
+parser.add_argument("--exclude", metavar="FILE",
+                    help="an earlier output of this script, whose urls to skip, "
+                         "so a second corpus does not repeat the first")
+args = parser.parse_args()
+
+SRC, DBS, OUT, N = args.gets, args.dbs, args.out, args.n
+already = set()
+if args.exclude:
+    already = set(line.split("\t", 1)[1].strip() for line in open(args.exclude))
 
 # params that would make this render something other than what the reader saw,
 # or would reach off the machine
@@ -61,7 +73,9 @@ for why, n in stat.most_common():
 sys.stderr.write("%d distinct URLs\n" % len(counts))
 
 # sample in proportion to how often each URL was loaded, without repeats
-random.seed(38109)
+random.seed(args.seed)
+for u in already:
+    counts.pop(u, None)
 urls = list(counts)
 weights = [counts[u] for u in urls]
 chosen = []
