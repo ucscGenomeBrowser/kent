@@ -150,12 +150,12 @@ To make a purchase, or access download links as a personal or non-profit academi
             <strong>Product does not include:</strong><br>
             <ul>
 <li>The UCSC Genome Browser source code.</li>
-<li>The over.chain data files.</li>
+<li>The over.chain data files, which are licensed separately. See <a href="#chainFiles">UCSC chain files</a> below.</li>
 </ul>
           </div>
-          
+
         </div>
-      
+
         <div class="product-version">
           <h4>LiftOver command-line program (Mac OSX 64-bit)</h4>
           <div class="product-size">
@@ -175,10 +175,84 @@ To make a purchase, or access download links as a personal or non-profit academi
             <strong>Product does not include:</strong><br>
             <ul>
 <li>The UCSC Genome Browser source code.</li>
-<li>The over.chain data files.</li>
+<li>The over.chain data files, which are licensed separately. See <a href="#chainFiles">UCSC chain files</a> below.</li>
 </ul>
           </div>
-          
+
+        </div>
+		</td>
+	</tr>
+</table>
+
+
+
+<a id="chainFiles"></a>
+<table class="table">
+	<tr>
+		<td>
+			<h2>UCSC chain files</h2>
+<div class="product-details">Chain files, also known as over.chain files,
+describe how the coordinates of one genome assembly line up against those of
+another. They serve as input to the LiftOver program and the <a
+href="https://genome.ucsc.edu/cgi-bin/hgLiftOver" target="_blank">LiftOver web
+tool</a>. UCSC produces these files with its own alignment pipeline, and they
+are the only files the LiftOver program accepts.
+
+Chain files are downloaded from the liftOver directory of each assembly on the
+<a href="https://hgdownload.gi.ucsc.edu/downloads.html"
+target="_blank">downloads server</a>, for example <a
+href="https://hgdownload.gi.ucsc.edu/goldenPath/hg38/liftOver/"
+target="_blank">hgdownload.gi.ucsc.edu/goldenPath/hg38/liftOver/</a>.
+Commercial use requires a license.</div>
+
+
+
+          <div class="product-eula">
+
+            <a href="https://genome.ucsc.edu/store/UCSC_GB_EULA.pdf" target="_blank">Terms and conditions</a>
+
+          </div>
+
+
+
+      <div class="product-price">
+
+
+
+            <strong>Cost per year per user:</strong> $1,200<br>
+
+
+        <strong><span style="color:red">Cost for non-profit academic research use:</span></strong> Free<br>
+      </div>
+
+        <div class="product-version">
+
+          <div class="product-requirements">
+            <strong>Licensing notes:</strong><br>
+            <ul>
+<li>A commercial license for chain files is granted on a per user basis, so it must be purchased for every person in your organization who uses the files.</li>
+<li>A license is not transferable to another person without written permission from the University. See section 2.3 of the terms and conditions.</li>
+<li>If a per user license does not fit how your organization works, for instance if the files are used in an automated pipeline rather than by named people, please write to <strong>genome-browser-store-group@ucsc.edu</strong> to discuss other arrangements.</li>
+</ul>
+          </div>
+
+
+          <div class="product-includes">
+            <strong>Product includes:</strong><br>
+            <ul>
+<li>A license to use the UCSC-generated over.chain files for commercial purposes. The files are downloaded from the UCSC downloads server.</li>
+</ul>
+          </div>
+
+
+          <div class="product-not_includes">
+            <strong>Product does not include:</strong><br>
+            <ul>
+<li>The LiftOver program, which is licensed separately.</li>
+<li>The UCSC Genome Browser source code.</li>
+</ul>
+          </div>
+
         </div>
 		</td>
 	</tr>
@@ -265,6 +339,81 @@ You can use the GBiC program to install a Genome Browser mirror on any Linux bas
 </ul>
           </div>
           
+        </div>
+		</td>
+	</tr>
+</table>
+
+
+<table class="table">
+	<tr>
+		<td>
+			<h2>Genome Browser Docker image</h2>
+<div class="product-details">The Genome Browser Docker image is a complete UCSC Genome Browser mirror in a container, with the Genome Browser software, an Apache web server, and a MariaDB database server all included. Everything runs inside the container, so the image does not touch the Apache or MySQL setup already on your machine. This makes it useful on a laptop, or on a server that already runs other web software.
+
+You can build the image on any system that runs Docker, including Windows, macOS, and Linux. Once the container starts, you open the mirror in a web browser at a port on your own machine. The container downloads track data from UCSC as you use it, and you can attach a Docker volume to keep your data and settings when the container restarts. A more detailed description of the image and how to use it is available from the <a href="https://genome.ucsc.edu/goldenPath/help/docker.html" target="_blank">Docker Help Page</a>. If you have questions about the image please send an email to the publicly archived Genome Browser Mirror mailing list: <a href="mailto:genome-mirror@soe.ucsc.edu" target="_blank">genome-mirror@soe.ucsc.edu</a>.</div>
+
+
+
+          <div class="product-eula">
+
+            <a href="https://genome.ucsc.edu/store/UCSC_GB_EULA.pdf" target="_blank">Terms and conditions</a>
+
+          </div>
+
+
+
+      <div class="product-price">
+
+          <strong>One time setup fee:</strong> $2,400<br>
+
+
+
+            <strong>Cost per year:</strong> $1,200<br>
+
+
+        <strong><span style="color:red">Cost for non-profit academic research use:</span></strong> Free<br>
+      </div>
+
+        <div class="product-version">
+
+          <div class="product-requirements">
+            <strong>System Requirements:</strong><br>
+            The image will run anywhere Docker itself runs, however there are a few additional considerations:
+<ul>
+<li>Docker Desktop, or the Docker engine, must be installed first. See the <a href="https://docs.docker.com/get-started/" target="_blank">Docker documentation</a> for your operating system.</li>
+<li>Your network firewall must allow connections on TCP port 873, used by rsync. Without this, the container cannot download the Genome Browser software or track data.</li>
+<li>You need a free port on the host machine to map to port 80 inside the container. Our examples use port 8080.</li>
+<li>The image is built on Ubuntu 24 LTS and installs <a href="http://httpd.apache.org" target="_blank">Apache</a> and <a href="https://mariadb.org/" target="_blank">MariaDB</a> inside the container. Please follow the links to determine if you have the correct license for each of these open source programs.</li>
+<li>The built image is around 3GB. The minimum amount of disk space needed to load all data from UCSC on-the-fly is about 5GB, although temporary files will accumulate quickly after normal usage and take up more space. In order to fully mirror the hg19 assembly database locally, approximately 10TB of disk space is needed, however most other organism databases are significantly smaller -- in the 5-10GB range -- plus around 40GB for associated GenBank data. This GenBank data will only be downloaded once.</li>
+<li>Around 4GB of memory is required to display all of chromosome 1 on hg19. Most other assemblies will require significantly less memory.</li>
+</ul>
+
+          </div>
+
+
+          <div class="product-includes">
+            <strong>Product includes:</strong><br>
+            <ul>
+<li>The UCSC Genome Browser Dockerfile. The image it builds:</li>
+<ul>
+<li>downloads the Genome Browser CGIs</li>
+<li>installs Apache and MariaDB inside the container</li>
+<li>configures the container to download supporting data files from UCSC</li>
+<li>starts both servers when the container runs</li>
+</ul>
+</ul>
+          </div>
+
+
+          <div class="product-not_includes">
+            <strong>Product does not include:</strong><br>
+            <ul>
+<li>The UCSC Genome Browser source code.</li>
+<li>Docker itself, which must be installed separately.</li>
+</ul>
+          </div>
+
         </div>
 		</td>
 	</tr>
