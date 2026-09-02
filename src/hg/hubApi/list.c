@@ -640,7 +640,7 @@ else
 hFreeConn(&conn);
 
 
-if (hti && (hti->isSplit || debug))
+if (hti && hti->isSplit)
     jsonWriteBoolean(jw, "splitTable", hti->isSplit);
 
 outputSchema(thisTrack, jw, columnNames, columnTypes, jsonTypes, hti,
