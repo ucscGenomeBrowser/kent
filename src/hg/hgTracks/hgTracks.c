@@ -9747,7 +9747,10 @@ if (!hideControls)
         {
         // freezeName is e.g. "Feb. 2009 (GRCh37/hg19)"
         char *afterParen = skipBeyondDelimit(freezeName, '(');
-        afterParen--; // move back one char
+        if (afterParen != NULL)
+            afterParen--; // move back one char, onto the '(' itself
+        else
+            afterParen = freezeName; // no '(' in the description, so print it whole
         hPrintf("%s %s on %s %s", organization, browserName, htmlEncode(organism),
                 htmlEncode(afterParen));
         }

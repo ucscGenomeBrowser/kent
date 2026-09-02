@@ -296,7 +296,8 @@ for (i=0; i<fieldCount; i++)
     else
         {
         // the field name and value come from the hub's bigBed when this is a hub track
-        printFieldLabelWithId(hubEncode(tdb, name), hubEncode(tdb, name));
+        char *encName = hubEncode(tdb, name);
+        printFieldLabelWithId(encName, encName);
         printf("<td>%s</td></tr>\n", hubEncode(tdb, val));
         }
     printCount++;
