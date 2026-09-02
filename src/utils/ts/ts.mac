@@ -53,9 +53,19 @@ case "$sub" in
         printf '%s' "$tkt" | grep -qE '^[0-9]+$' || { echo "ts: ticket must be numeric" >&2; exit 1; }
         port="$(ssh "$HGWDEV" "$REMOTE port $tkt")" || exit 1
         [ -n "$port" ] || { echo "ts: no port for ticket $tkt" >&2; exit 1; }
+        # Ask hgwdev for the https port rather than computing it here, so the
+        # offset lives in one place.  An hgwdev ts from before https says
+        # nothing, and the tunnel then carries http alone, as it always did.
+        sport="$(ssh "$HGWDEV" "$REMOTE port $tkt ssl" 2>/dev/null)" || sport=""
         echo "Tunnel: localhost:$port -> $HGWDEV  (ticket $tkt)"
         echo "Open:   http://localhost:$port/cgi-bin/hgTracks"
+        if [ -n "$sport" ]; then
+            echo "        https://localhost:$sport/cgi-bin/hgTracks   (self-signed, warns once)"
+        fi
         echo "Ctrl-C closes the tunnel."
+        if [ -n "$sport" ]; then
+            exec ssh -N -L "$port:localhost:$port" -L "$sport:localhost:$sport" "$HGWDEV"
+        fi
         exec ssh -N -L "$port:localhost:$port" "$HGWDEV"
         ;;
     list|create|sync|conf|start|stop|remove)

@@ -29,6 +29,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "quickLift.h"
+#include "customTrack.h"
 
 boolean hubsCanAddGroups()
 /* can track hubs have their own groups? */
@@ -52,14 +53,18 @@ return startsWith(hubTrackPrefix, trackName);
 }
 
 char *hubEncode(struct trackDb *tdb, char *text)
-/* Return text escaped for HTML if it belongs to a track hub, otherwise return it unchanged.
- * A hub's trackDb, autoSql schema and data file are all written by a stranger, so anything
- * from them has to be escaped before it goes in the page.  Our own tracks are a
+/* Return text escaped for HTML if it belongs to a track hub or to a custom track, otherwise
+ * return it unchanged.  A hub's trackDb, autoSql schema and data file are all written by a
+ * stranger, so anything from them has to be escaped before it goes in the page.  A custom
+ * track's data comes from outside too, and one person can drop a custom track into another
+ * person's session with a link that carries hgt.customText, so it gets the same treatment;
+ * customFactory.c strips JavaScript from the track and label lines but leaves the data
+ * fields alone, and the data fields are what this is called on.  Our own tracks are a
  * different case: they put real HTML in fields on purpose - ClinVar's review-status stars,
  * the CRISPR track's links in an extra column, the <BR> in the Denisova schema comments -
  * and escaping those would print the markup instead of rendering it. */
 {
-if (text != NULL && tdb != NULL && isHubTrack(tdb->track))
+if (text != NULL && tdb != NULL && (isHubTrack(tdb->track) || isCustomTrack(tdb->track)))
     return htmlEncode(text);
 return text;
 }

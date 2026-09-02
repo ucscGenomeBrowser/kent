@@ -1,0 +1,8 @@
+track RCPediaVGP_v1
+shortLabel RCPedia VGP
+longLabel Retrocopies Encyclopedia - VGP v1 assemblies September 2026
+type bigGenePred
+bigDataUrl contrib/RCPediaVGP_v1/retrocopies.bb
+html contrib/RCPediaVGP_v1/retrocopies.html
+group genes
+visibility dense
