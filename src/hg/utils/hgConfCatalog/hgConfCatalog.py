@@ -1453,6 +1453,12 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("mallocTopPad", "unreviewed", "hg/lib/hgConfig.c", ticket="38225",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOption in hg/lib/hgConfig.c.  Came in "
+               "at d2a2afcd6c5, hgTracks: let hg.conf set how big a step "
+               "malloc takes, refs #38225.  Needs a kind, a description, and "
+               "a section to live in."),
         h("pngTimingSampleRate", "unreviewed", "hg/hgTracks/hgTracks.c",
           default="0", ticket="38109",
           note="Written down by --auto-register, not yet reviewed by a "

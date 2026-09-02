@@ -152,9 +152,10 @@ var topLinks = (function() {
         "192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 " +
         "512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z'/></svg>";
 
-    // POST to the hgSession JSON endpoint.  On {name,url} success call onResult(data); on {error}
-    // or transport failure show the message in statusEl.
-    function postJson(params, statusEl, onResult) {
+    // POST to the hgSession JSON endpoint.  On a {url} or {exists} response call onResult(data); on
+    // {error} or transport failure show the message in statusEl and call onFail (if given) so the
+    // caller can re-enable its controls.
+    function postJson(params, statusEl, onResult, onFail) {
         statusEl.style.color = "#000";
         statusEl.textContent = "Working…";
         $.ajax({
@@ -163,16 +164,18 @@ var topLinks = (function() {
             data: params,
             dataType: "json",
             success: function(data) {
-                if (data && data.url)
+                if (data && (data.url || data.exists))
                     onResult(data);
                 else {
                     statusEl.style.color = "#a00";
                     statusEl.textContent = (data && data.error) ? data.error : "Could not create link.";
+                    if (onFail) onFail();
                 }
             },
             error: function() {
                 statusEl.style.color = "#a00";
                 statusEl.textContent = "Could not reach the server. Please try again.";
+                if (onFail) onFail();
             }
         });
     }
@@ -224,6 +227,12 @@ var topLinks = (function() {
         });
         btnRow.appendChild(copyBtn);
 
+        // One-click "Create link & copy": copy right after the session is created.  execCommand copy
+        // still runs while the modal is focused; if a browser blocks it the URL box and Copy button
+        // above are the manual fallback.
+        if (opts.autoCopy)
+            copyBtn.click();
+
         if (canRename) {
             var nameBtn = el("button", {textContent: "Specify name"}, {marginLeft: "8px"});
             nameBtn.addEventListener("click", function() { showRename(body, url, opts); });
@@ -242,7 +251,7 @@ var topLinks = (function() {
     function showRename(body, currentUrl, opts) {
         body.innerHTML = "";
         body.appendChild(el("p", {textContent: "Name this link:"}, {marginTop: "0"}));
-        var nameInput = el("input", {type: "text", value: "", placeholder: "e.g. my favorite view"},
+        var nameInput = el("input", {type: "text", value: "", placeholder: "fig3b"},
                            {width: "100%", padding: "4px", margin: "6px 0", boxSizing: "border-box"});
         body.appendChild(nameInput);
         var status = el("div", {}, {margin: "6px 0"});
@@ -319,18 +328,175 @@ var topLinks = (function() {
             return;
         }
 
-        // Session mode (hgTracks): create a link right away so the user can just copy it.
-        var loggedIn = link.getAttribute("data-loggedin") === "1";
+        // Session mode (hgTracks): don't create the session yet.  Opening the dialog and closing it
+        // should not litter the user's session list with unused links, so we only create the session
+        // when the user clicks the button (which then also copies the link in one step).  We still
+        // show the final link right away as a preview, so the user knows what it will look like.
+        var opts = {
+            loggedIn: link.getAttribute("data-loggedin") === "1",
+            shortLink: link.getAttribute("data-shortlink") === "1",
+            userName: link.getAttribute("data-username") || ""
+        };
         var body = document.createElement("div");
-        var status = el("p", {textContent: "Creating link…"}, {marginTop: "0"});
-        body.appendChild(status);
         showModal("Share a link", body, 720);
-        var params = {hgsid: getHgsidSafe(), hgS_doSaveSessionJson: 1};
-        if (!loggedIn)
-            params.hgS_shareAnon = 1;   // anonymous token link; no rename
-        postJson(params, status, function(data) {
-            showResult(body, data.url, {name: data.name, session: true, loggedIn: loggedIn});
+        if (opts.loggedIn) {
+            // Logged in: the share is saved under the user's account; we generate its default name
+            // client-side so the preview updates live as the user edits it.
+            showCreatePrompt(body, opts, "");
+        } else {
+            // Anonymous: every anonymous link's name is generated server-side (unique, crypto-strong),
+            // so reserve one first, then preview the exact link it will become.
+            var prep = el("p", {textContent: "Preparing link…"}, {marginTop: "0"});
+            body.appendChild(prep);
+            reserveAnonName(function(name) {
+                showCreatePrompt(body, opts, "", name);
+            }, function(msg) {
+                prep.style.color = "#a00";
+                prep.textContent = msg || "Could not reach the server. Please try again.";
+            });
+        }
+    }
+
+    // Ask the server to reserve (generate, guarantee-unique, not yet save) an anonymous snapshot
+    // name; call onName(name) with it, or onFail(msg) on error.
+    function reserveAnonName(onName, onFail) {
+        $.ajax({
+            type: "POST", url: "../cgi-bin/hgSession", dataType: "json",
+            data: {hgsid: getHgsidSafe(), hgS_doAnonName: 1},
+            success: function(data) {
+                if (data && data.name) onName(data.name);
+                else onFail(data && data.error);
+            },
+            error: function() { onFail(); }
         });
+    }
+
+    // A string of n URL-safe alphanumeric characters.  Used only for the logged-in default name;
+    // anonymous names come from the server (reserveAnonName).
+    function randChars(n) {
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var s = "";
+        for (var i = 0; i < n; i++)
+            s += chars.charAt(Math.floor(Math.random() * chars.length));
+        return s;
+    }
+
+    // The default session name for a logged-in share: a leading "_" (marking it machine-generated,
+    // kept verbatim by the short-link encoder) plus 8 chars, mirroring sessRandomShareName() in
+    // hgSession.js.  Anonymous names are server-generated, not built here.
+    function shareName() {
+        return "_" + randChars(8);
+    }
+
+    // Build the exact share URL for a given session name, matching addSessionLink() in hgSession.c:
+    // a short "/s/<user>/<name>" link when hgSession.shortLink is on, otherwise the long hgTracks
+    // hgS_doOtherUser form.  Logged out, the owner is the reserved anonymous user "l".
+    function shareUrlFor(opts, name) {
+        var user = opts.loggedIn ? opts.userName : "l";
+        var origin = window.location.protocol + "//" + window.location.host;
+        if (opts.shortLink)
+            return origin + "/s/" + encodeURIComponent(user) + "/" + encodeURIComponent(name);
+        return origin + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=" +
+            encodeURIComponent(user) + "&hgS_otherUserSessionName=" + encodeURIComponent(name);
+    }
+
+    // The initial session-mode view: preview the final link (not yet active), then a single button
+    // that creates the shared session and copies the link in one step.  We generate the session name
+    // here and pass it to the server so the previewed link is exactly the one that gets created.
+    // Logged in, the user may type a custom name before creating; the preview updates as they type.
+    // initialName (optional) pre-fills the name field, e.g. when returning from the overwrite prompt.
+    // presetAutoName (optional) is the name to use when none is typed - for anonymous shares this is
+    // the unique name reserved from the server; logged in we generate a client-side "_XXXX" name.
+    function showCreatePrompt(body, opts, initialName, presetAutoName) {
+        body.innerHTML = "";
+        var autoName = presetAutoName || shareName();
+        body.appendChild(el("p", {textContent: "This link points to your current view and never " +
+            "times out. It becomes active — and is copied to your clipboard — when you click the " +
+            "button below."}, {marginTop: "0"}));
+
+        // Optional custom name (logged in only): leave it blank to use the generated name above.
+        // A short, space-free name keeps the link tidy (it becomes part of the URL).
+        var nameInput = null;
+        if (opts.loggedIn) {
+            body.appendChild(el("label", {textContent: "Name this link (optional):"},
+                {display: "block", margin: "10px 0 4px", fontWeight: "bold"}));
+            nameInput = el("input", {type: "text", placeholder: "fig3b", value: initialName || ""},
+                {width: "100%", padding: "4px", boxSizing: "border-box"});
+            body.appendChild(nameInput);
+        }
+
+        // Preview of the link, styled muted to signal it is not active yet; updated live below.
+        var urlBox = el("div", {}, {background: "#f0f0f0", padding: "6px 8px", borderRadius: "4px",
+            wordBreak: "break-all", fontFamily: "monospace", color: "#666", margin: "8px 0"});
+        body.appendChild(urlBox);
+
+        function typedName() { return nameInput ? nameInput.value.trim() : ""; }
+        function chosenName() { return typedName() || autoName; }
+        function refreshPreview() { urlBox.textContent = shareUrlFor(opts, chosenName()); }
+        refreshPreview();
+        if (nameInput)
+            nameInput.addEventListener("input", refreshPreview);
+
+        var status = el("div", {}, {margin: "6px 0"});
+        var createBtn = el("button", {title: "Create the shareable link and copy it to your clipboard"},
+                           {marginTop: "8px"});
+        createBtn.innerHTML = clipboardSvg + "Create link &amp; copy";
+
+        var busy = false;
+        // Create the session (and copy its link).  allowOverwrite skips the "name already exists"
+        // guard, used after the user confirms they want to replace their existing link.
+        function submitCreate(allowOverwrite) {
+            if (busy) return;
+            busy = true;
+            createBtn.disabled = true;
+            var name = chosenName();
+            var params = {hgsid: getHgsidSafe(), hgS_doSaveSessionJson: 1, hgS_newSessionName: name};
+            if (!opts.loggedIn)
+                params.hgS_shareAnon = 1;              // anonymous token link; no naming
+            else if (typedName() && !allowOverwrite)
+                params.hgS_failIfExists = 1;           // warn before clobbering a same-named session
+            postJson(params, status, function(data) {
+                busy = false;
+                if (data.exists) {
+                    showOverwriteConfirm(name);
+                    return;
+                }
+                showResult(body, data.url, {name: data.name, session: true, loggedIn: opts.loggedIn,
+                                            autoCopy: true});
+            }, function() { busy = false; createBtn.disabled = false; });
+        }
+        createBtn.addEventListener("click", function() { submitCreate(false); });
+
+        // The typed name is already taken: ask before replacing it.  Cancel returns to this prompt
+        // with the name kept; Replace re-submits allowing the overwrite.
+        function showOverwriteConfirm(name) {
+            body.innerHTML = "";
+            body.appendChild(el("p", {textContent: 'You already have a link named "' + name + '". ' +
+                "Replace it so this name points to your current view?"}, {marginTop: "0"}));
+            var cstatus = el("div", {}, {margin: "6px 0"});
+            var replaceBtn = el("button", {textContent: "Replace and copy"});
+            replaceBtn.addEventListener("click", function() {
+                replaceBtn.disabled = true;
+                var params = {hgsid: getHgsidSafe(), hgS_doSaveSessionJson: 1, hgS_newSessionName: name};
+                postJson(params, cstatus, function(data) {
+                    showResult(body, data.url, {name: data.name, session: true,
+                                                loggedIn: opts.loggedIn, autoCopy: true});
+                }, function() { replaceBtn.disabled = false; });
+            });
+            var cancelBtn = el("button", {textContent: "Cancel"}, {marginLeft: "8px"});
+            cancelBtn.addEventListener("click", function() { showCreatePrompt(body, opts, name); });
+            var crow = el("div", {});
+            crow.appendChild(replaceBtn);
+            crow.appendChild(cancelBtn);
+            body.appendChild(crow);
+            body.appendChild(cstatus);
+        }
+
+        var row = el("div", {});
+        row.appendChild(createBtn);
+        body.appendChild(row);
+        body.appendChild(status);
+        appendManageNote(body, opts.loggedIn);
     }
 
     // ---- Wire up the menu items --------------------------------------------------------------

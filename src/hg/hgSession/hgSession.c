@@ -40,6 +40,7 @@
 #include "trackHub.h"
 #include "errCatch.h"
 #include "sessionData.h"
+#include "snapshotSession.h"
 #include "jsonParse.h"
 #include "jsonWrite.h"
 #include "perfTimer.h"
@@ -1054,12 +1055,32 @@ dyStringFree(&dyUrl);
 hDisconnectCentral(&conn);
 }
 
+void doAnonNameJson()
+/* AJAX endpoint that reserves a fresh, guaranteed-unique anonymous snapshot name and returns it as
+ * JSON {"name": ...} WITHOUT saving anything.  The top-right "Share a link" dialog calls this on open
+ * so it can show the exact link as a preview before the user commits, while keeping name generation
+ * server-side (unique, crypto-strong) for every anonymous link. */
+{
+struct sqlConnection *conn = hConnectCentral();
+cartRemove(cart, hgsDoAnonName);
+if (!sqlTableExists(conn, namedSessionTable))
+    {
+    saveSessionJsonError(conn, "Required session table does not exist in the central database.");
+    return;
+    }
+char *name = snapshotNewName(conn, "l");
+puts("Content-Type:application/json\n");
+printf("{\"name\": \"%s\"}\n", jsonStringEscape(name));
+hDisconnectCentral(&conn);
+}
+
 void doSaveSessionJson(char *userName)
 /* AJAX endpoint behind the "Share a link" menu button.  Save the current cart as a named session
  * and print JSON {"name": <session name>, "url": <shareable link>}.  When the user is not logged
  * in (or hgsShareAnon is set), save under the reserved anonymous user "l" with a random token
- * name.  When logged in with no name given, generate a short random name.  Saved shared by link so
- * the link works for anyone.  Reuses saveCartAsSession() and addSessionLink(). */
+ * name.  When logged in, the caller supplies the name (a typed name, or a random internal
+ * "_XXXXXXXX" name generated client-side).  Saved shared by link so the link works for anyone.
+ * Reuses saveCartAsSession() and addSessionLink(). */
 {
 struct sqlConnection *conn = hConnectCentral();
 if (!sqlTableExists(conn, namedSessionTable))
@@ -1069,6 +1090,10 @@ if (!sqlTableExists(conn, namedSessionTable))
     }
 
 boolean anon = isEmpty(userName) || cgiBoolean(hgsShareAnon);
+boolean failIfExists = cgiBoolean(hgsFailIfExists);
+// A registered snapshot type (e.g. "blat") means: save a lightweight snapshot holding only that
+// feature's declared cart vars, not the whole cart (see lib/snapshotSession.c).
+char *snapshotType = cgiOptionalString(hgsSnapshotType);
 // Read the requested name from the request, not the cart.  cleanHgSessionFromCart() now takes
 // this variable back out, but carts written before that still hold a sticky value from
 // hgSession's Save form, and it would otherwise shadow ours.
@@ -1077,31 +1102,81 @@ char *sessionName = trimSpaces(cloneString(cgiUsualString(hgsNewSessionName, "")
 /* Keep our control variables out of the saved session contents and the user's own cart. */
 cartRemove(cart, hgsDoSaveSessionJson);
 cartRemove(cart, hgsShareAnon);
+cartRemove(cart, hgsFailIfExists);
+cartRemove(cart, hgsSnapshotType);
 cartRemove(cart, hgsNewSessionName);
 cartRemove(cart, hgsNewSessionShare);
+
+/* Snapshot path: a lightweight session holding only the feature's declared cart vars, under a
+ * server-generated, guaranteed-unique "__"-prefixed name (share tokens must never collide and
+ * silently overwrite one another).  Handled before the normal full-session logic because its
+ * naming rules differ.  Works for both anonymous ("l") and logged-in owners. */
+if (isNotEmpty(snapshotType))
+    {
+    if (snapshotTypeFind(snapshotType) == NULL)
+        {
+        saveSessionJsonError(conn, "Unknown snapshot type.");
+        return;
+        }
+    char *snapUser = anon ? "l" : cgiEncodeFull(userName);
+    char *snapName;
+    if (isEmpty(sessionName))
+        snapName = snapshotNewName(conn, snapUser);            /* server-generated, unique */
+    else if (startsWith(snapshotNamePrefix, sessionName))
+        snapName = cgiEncodeFull(sessionName);
+    else
+        snapName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
+    saveSnapshotSession(conn, snapshotType, snapUser, snapName, cart);
+    char *snapDecoded = cgiDecodeClone(snapName);
+    saveSessionJsonResult(conn, snapUser, snapName, snapDecoded);
+    return;
+    }
 
 char *encUserName = NULL;
 char *encSessionName = NULL;
 if (anon)
     {
     encUserName = "l";                    /* reserved anonymous user -> short link /s/l/<token> */
-    sessionName = makeRandomKey(96);      /* 16 URL-safe alphanumeric chars; no encoding needed */
-    encSessionName = sessionName;
+    /* Every anonymous share uses the shared snapshot naming: a server-generated, guaranteed-unique
+     * "__"-token, so tokens never collide/overwrite and the reaper can garbage-collect abandoned
+     * ones.  The top-right Share dialog passes a name it just reserved (for its live preview); we
+     * force the "__" prefix either way so the link stays reap-eligible. */
+    if (isEmpty(sessionName))
+        encSessionName = snapshotNewName(conn, encUserName);
+    else if (startsWith(snapshotNamePrefix, sessionName))
+        encSessionName = cgiEncodeFull(sessionName);
+    else
+        encSessionName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
+    sessionName = cgiDecodeClone(encSessionName);   // keep decoded name in sync for the JSON result
     }
 else
     {
+    /* Logged-in callers always supply a name: the caller either typed one or generated a random
+     * internal "_XXXXXXXX" name client-side (sessRandomShareName in hgSession.js, shared by the
+     * top-right "Share a link" menu in topLinks.js), so we no longer auto-name here. */
     if (isEmpty(sessionName))
         {
-        /* One-click share: auto-name the session.  "_" is kept verbatim by cgiEncodeFull (unlike
-         * "-"), so the short link /s/<user>/<name> stays clean. */
-        char randName[32];
-        char *rk = makeRandomKey(48);     /* 8 URL-safe alphanumeric chars */
-        safef(randName, sizeof randName, "share_%s", rk);
-        freeMem(rk);
-        sessionName = cloneString(randName);
+        saveSessionJsonError(conn, "Please provide a name for this session.");
+        return;
         }
     encUserName = cgiEncodeFull(userName);
     encSessionName = cgiEncodeFull(sessionName);
+    /* The Share dialog sets failIfExists when the user typed a custom name, so it can warn before
+     * clobbering an existing session of theirs.  Report the clash instead of overwriting. */
+    if (failIfExists)
+        {
+        char query[1024];
+        sqlSafef(query, sizeof query,
+                 "select count(*) from %s where userName = '%s' and sessionName = '%s'",
+                 namedSessionTable, encUserName, encSessionName);
+        if (sqlQuickNum(conn, query) > 0)
+            {
+            puts("Content-Type:application/json\n");
+            printf("{\"exists\": true}\n");
+            hDisconnectCentral(&conn);
+            return;
+            }
+        }
     }
 
 saveCartAsSession(conn, encUserName, encSessionName, 1);  /* shared by link */
@@ -2658,6 +2733,10 @@ else if (cartVarExists(cart, hgsDoNewSession))
     {
     char *message = doNewSession(userName);
     doMainPage(userName, message);
+    }
+else if (cartVarExists(cart, hgsDoAnonName))
+    {
+    doAnonNameJson();
     }
 else if (cartVarExists(cart, hgsDoSaveSessionJson))
     {

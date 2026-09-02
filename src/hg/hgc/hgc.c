@@ -9324,7 +9324,9 @@ if (canShare)
     "  btn.textContent = 'Creating link\\u2026';\n"
     "  fetch('../cgi-bin/hgSession', {method:'POST', credentials:'same-origin',"
     " headers:{'Content-Type':'application/x-www-form-urlencoded'},"
-    " body:'hgsid=%s&hgS_doSaveSessionJson=1&hgS_shareAnon=1'})\n"
+    // hgS_snapshotType=blat -> a lightweight snapshot storing only blatLastBigBed (+db), not the
+    // whole cart, under a server-generated unique "__" name (see lib/snapshotSession.c).
+    " body:'hgsid=%s&hgS_doSaveSessionJson=1&hgS_shareAnon=1&hgS_snapshotType=blat'})\n"
     "  .then(function(r){ return r.json(); }).then(function(data){\n"
     "    btn.textContent = label; btn.dataset.busy = '';\n"
     "    if (!data || !data.name) return;\n"
