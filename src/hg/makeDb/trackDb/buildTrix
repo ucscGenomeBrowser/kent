@@ -67,7 +67,7 @@ buildDbTrix() {
         local dest
         for dest in "${dests[@]}"; do
             rsync -a $base.txt $base.ix $base.ixx $base.offsets $base.offsets.ixx \
-                "${dest%%:*}:${dest#*:}/"
+                "$dest/"
         done
     fi
     rm -rf $tmpDir

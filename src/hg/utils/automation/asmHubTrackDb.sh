@@ -130,7 +130,7 @@ longLabel GC Percent in 5-Base Windows
 group map
 visibility dense
 type bigWig 0 100
-bigDataUrl bbi/%s/gcOnFly.bw
+bigDataUrl bbi/%s.gcOnFly.bw
 gcOnFlyMaxDensity 50000
 syntheticTrack on
 calcWinSize 5
