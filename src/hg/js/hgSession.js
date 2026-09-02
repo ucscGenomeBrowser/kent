@@ -47,15 +47,16 @@ function sessNum(n) {
 }
 
 function sessRandomShareName() {
-    // Mirror the server's auto/anonymous share-name convention ("share_" + 8 URL-safe alphanumeric
-    // chars).  hgSession.c's doSaveSessionJson generates the same style server-side for the top-right
-    // "Share a link"; we generate it here so the confirm dialog can show the name before saving.
+    // Auto-name convention for machine-generated session names: a leading "_" (which marks the name
+    // as internally generated, and is kept verbatim by the short-link encoder) followed by 8 URL-safe
+    // alphanumeric chars.  This is the single source of the convention: the top-right "Share a link"
+    // menu (topLinks.js) and hgSession.c both defer to a name generated here.
     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var s = '';
     for (var i = 0; i < 8; i++) {
         s += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    return 'share_' + s;
+    return '_' + s;
 }
 
 function sessMbpPos(pos) {
@@ -432,7 +433,7 @@ function sessActParams(action, row) {
 function sessDoSave() {
     var name = document.getElementById('sessSaveName').value.trim();
     if (!name) {
-        // Empty name: offer to save under a server-style random "share_XXXXXXXX" name, after
+        // Empty name: offer to save under a random internal "_XXXXXXXX" name, after
         // confirming the user really meant to leave it blank.
         var rand = sessRandomShareName();
         sessConfirm({
