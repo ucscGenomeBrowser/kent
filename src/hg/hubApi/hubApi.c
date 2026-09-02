@@ -33,7 +33,8 @@ boolean reachedMaxItems = FALSE;	/* during getData, signal to return */
 long long itemsReturned = 0;	/* for getData functions, number of items returned */
 /* for debugging purpose, current bot delay value */
 int botDelay = 0;
-boolean debug = FALSE;	/* can be set in URL debug=1, to turn off: debug=0 */
+/* debug options removed/disabled 2026-09-02 */
+/* boolean debug = FALSE; can be set in URL debug=1, to turn off: debug=0 */
 #define delayFraction	0.03
 
 /* default is to list all trackDb entries, composite containers too.
@@ -275,8 +276,6 @@ char *trackName = trackHubSkipHubName(tdb->track);
 char *parentName = tdb->parent ? trackHubSkipHubName(tdb->parent->track) : NULL;
 
 struct dyString *extraDyFlags = dyStringNew(128);
-if (debug)
-    dyStringAppend(extraDyFlags, ";debug=1");
 if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
@@ -326,8 +325,6 @@ static void hubSampleUrl(struct trackHub *hub, char *db, struct trackDb *tdb,
     long chromCount, long itemCount, char *genome, char *errorString)
 {
 struct dyString *extraDyFlags = dyStringNew(128);
-if (debug)
-    dyStringAppend(extraDyFlags, ";debug=1");
 if (jsonOutputArrays)
     dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
 char *extraFlags = dyStringCannibalize(&extraDyFlags);
@@ -524,11 +521,6 @@ static void hubSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb,
 /* tdb has subtracks, show only subTracks, no details, this is RECURSIVE */
 {
 hPrintf("    <li><ul>\n");
-if (debug)
-    {
-    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", trackHubSkipHubName(tdb->track), db);
-    hPrintf("    <li>chrom: '%s' size: %u</li>\n", chromName, chromSize);
-    }
 if (tdb->subtracks)
     {
     struct trackDb *tdbEl = NULL;
@@ -577,13 +569,9 @@ static void showSubTracks(struct trackHub *hub, char *db, struct trackDb *tdb, s
 /* tdb has subtracks, show only subTracks, no details */
 {
 hPrintf("    <li><ul>\n");
-if (debug)
-    hPrintf("    <li>subtracks for '%s' db: '%s'</li>\n", tdb->track, db);
 if (tdb->subtracks)
     {
     struct dyString *extraDyFlags = dyStringNew(128);
-    if (debug)
-	dyStringAppend(extraDyFlags, ";debug=1");
     if (jsonOutputArrays)
 	dyStringAppend(extraDyFlags, ";jsonOutputArrays=1");
     char *extraFlags = dyStringCannibalize(&extraDyFlags);
@@ -638,9 +626,6 @@ while ((hel = hashNext(&hc)) != NULL)
 if (tdb->subtracks)
     {
     struct trackDb *tdbEl = NULL;
-    if (debug)
-	hPrintf("   <li>has %d subtrack(s)</li>\n", slCount(tdb->subtracks));
-
     for (tdbEl = tdb->subtracks; tdbEl; tdbEl = tdbEl->next)
 	{
         hPrintf("<li>subtrack: %s of parent: %s : type: '%s' (TBD: sample data)</li>\n", trackHubSkipHubName(tdbEl->track), trackHubSkipHubName(tdbEl->parent->track), tdbEl->type);
@@ -1141,15 +1126,6 @@ else
     }
 }
 
-static void showCartDump()
-/* for information purposes only during development, will become obsolete */
-{
-hPrintf("<h4>cart dump</h4>");
-hPrintf("<pre>\n");
-cartDump(cart);
-hPrintf("</pre>\n");
-}
-
 static void sendJsonHogMessage(char *hogHost)
 {
 apiErrAbort(err429, err429Msg, "Your host, %s, has been sending too many requests lately and is "
@@ -1317,10 +1293,6 @@ hPrintf("<tr><th colspan=3>(example JSON list output: <a href='/list/publicHubs'
 
 hPrintf("</table>\n");
 hPrintf("</td></tr></table>\n");
-
-/* how does debug carry forward ? */
-// if (debug)
-//    cgiMakeHiddenVar("debug", "1");
 }
 
 static void apiRequest(char *pathInfo)
@@ -1479,58 +1451,12 @@ hPrintf("<div class='container-fluid gbPage'>\n");
 /* these style mentions need to go into custom css file */
 hPrintf("<div style='border:10px solid white'>\n");
 
-if (debug)
-    {
-    hPrintf("<ul>\n");
-    hPrintf("<li>hgBotDelay: %d</li>\n", botDelay);
-    char *envVar = getenv("BROWSER_HOST");
-    hPrintf("<li>BROWSER_HOST:%s</li>\n", envVar);
-    envVar = getenv("CONTEXT_DOCUMENT_ROOT");
-    hPrintf("<li>CONTEXT_DOCUMENT_ROOT:%s</li>\n", envVar);
-    envVar = getenv("CONTEXT_PREFIX");
-    hPrintf("<li>CONTEXT_PREFIX:%s</li>\n", envVar);
-    envVar = getenv("DOCUMENT_ROOT");
-    hPrintf("<li>DOCUMENT_ROOT:%s</li>\n", envVar);
-    envVar = getenv("HTTP_HOST");
-    hPrintf("<li>HTTP_HOST:%s</li>\n", envVar);
-    envVar = getenv("REQUEST_URI");
-    hPrintf("<li>REQUEST_URI:%s</li>\n", envVar);
-    envVar = getenv("SCRIPT_FILENAME");
-    hPrintf("<li>SCRIPT_FILENAME:%s</li>\n", envVar);
-    envVar = getenv("SCRIPT_NAME");
-    hPrintf("<li>SCRIPT_NAME:%s</li>\n", envVar);
-    envVar = getenv("SCRIPT_URI");
-    hPrintf("<li>SCRIPT_URI:%s</li>\n", envVar);
-    envVar = getenv("SCRIPT_URL");
-    hPrintf("<li>SCRIPT_URL:%s</li>\n", envVar);
-    envVar = getenv("SERVER_NAME");
-    hPrintf("<li>SERVER_NAME:%s</li>\n", envVar);
-    envVar = getenv("PATH_INFO");
-    if (isNotEmpty(envVar))
-       hPrintf("<li>PATH_INFO:'%s'</li>\n", envVar);
-    else
-       hPrintf("<li>PATH_INFO:&lt;empty&gt;</li>\n");
-    hPrintf("</ul>\n");
-    }
-
 char *otherHubUrl = cartUsualString(cart, "urlHub", "");
 char *hubDropDown = cartUsualString(cart, "publicHubs", defaultHub);
 char *urlDropDown = urlFromShortLabel(hubDropDown);
 char *ucscDb = cartUsualString(cart, "ucscGenome", defaultDb);
 char *selectRadio = cartUsualString(cart, RADIO_GROUP, RADIO_PUBHUB);
 char *urlInput = urlDropDown;	/* assume public hub */
-if (debug)
-    {
-    hPrintf("<ul>\n");
-    hPrintf("<li>otherHubUrl: '%s'</li>\n", otherHubUrl);
-    hPrintf("<li>hubDropDown: '%s'</li>\n", hubDropDown);
-    hPrintf("<li>urlDropDown: '%s'</li>\n", urlDropDown);
-    hPrintf("<li>ucscDb: '%s'</li>\n", ucscDb);
-    hPrintf("<li>urlInput: '%s'</li>\n", urlInput);
-    hPrintf("<li>trackLeavesOnly: '%s'</li>\n", trackLeavesOnly ? "TRUE" : "FALSE");
-    hPrintf("<li>jsonOutputArrays: '%s'</li>\n", jsonOutputArrays ? "TRUE" : "FALSE");
-    hPrintf("</ul>\n");
-    }
 if (isEmpty(otherHubUrl))
     otherHubUrl = urlInput;
 
@@ -1546,9 +1472,6 @@ if (measureTiming)
     }
 
 hPrintf("<h3>Documentation: <a href='../../goldenPath/help/api.html'>API definitions/help</a>, and <a href='../../goldenPath/help/trackDb/trackDbHub.html' target=_blank>Track definition document</a> for definitions of track settings.</h3>\n");
-
-if (debug)
-    showCartDump();
 
 hPrintf("<h2>Explore hub or database assemblies and tracks (v%s)</h2>\n", SRC_VERSION);
 
@@ -1572,11 +1495,6 @@ else
     hubInfo("default db", hub->defaultDb);
     hubInfo("description url", hub->descriptionUrl);
     hubInfo("email", hub->email);
-    if (debug)
-	{
-	hubInfo("version", hub->version);	/* UCSC internal info */
-	hubInfo("level", hub->level);		/* UCSC internal info */
-	}
     hPrintf("</ul>\n");
 
     genomeList(hub);
@@ -1636,10 +1554,6 @@ if (isNotEmpty(jsonArray))
     else
 	apiErrAbort(err400, err400Msg, "unrecognized 'jsonOutputArrays=%s' argument, can only be =1 or =0", jsonArray);
     }
-
-int maybeDebug = cgiOptionalInt("debug", 0);
-if (1 == maybeDebug)
-    debug = TRUE;
 
 char *measTime = cgiOptionalString("measureTiming");
 if (isNotEmpty(measTime) && sameWord("1", measTime))

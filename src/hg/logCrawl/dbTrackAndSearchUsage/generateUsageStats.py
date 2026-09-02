@@ -601,28 +601,51 @@ help='output a file containing info on default track usage for top 15 most used 
     ##### Output information on default track usage if indicated #####
     if args.outputDefaults == True and all([args.dbCounts, args.trackCounts]):
 
-        # Sort dbs by most popular
+        # Sort dbs by most popular. Hub-backed dbs (e.g. hub_3671779_hs1) are skipped: hub ids
+        # are handed out per hgcentral, so the ids in the logs never match the ids hgTracks
+        # returns here and every track lookup below would miss.
         dbCountsSorted = sorted(dbCounts.items(), key=operator.itemgetter(1))
         dbCountsSorted.reverse()
+        dbsToCheck = [db for db, useCount in dbCountsSorted if not db.startswith("hub_")]
 
         defaultCountsFile = open(os.path.join(outDir, "defaultCounts.tsv"), "w")
-        for x in range(0, 15): # Will only output the default track stats for the 15 most popular assemblies
-            db = dbCountsSorted[x][0]
+        for db in dbsToCheck[0:15]: # Only the default track stats for the 15 most popular assemblies
             dbOpt = "db=" + db
             # HGDB_CONF must be set here so that we use default tracks from beta, not dev
             # Dev can contain staged tracks that don't exist on RR, leading to errors later in script
-            cmd = ["cd /usr/local/apache/cgi-bin && HGDB_CONF=$HOME/.hg.conf.beta ./hgTracks hgt.trackImgOnly=1" + dbOpt]
+            # The space before dbOpt matters - without it cgiSpoof reads the whole thing as one
+            # variable and db is silently ignored, leaving every assembly with hg38's defaults.
+            cmd = ["cd /usr/local/apache/cgi-bin && HGDB_CONF=$HOME/.hg.conf.beta ./hgTracks hgt.trackImgOnly=1 " + dbOpt]
             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             cmdout, cmderr = p.communicate()
-            errText = cmderr.decode("ASCII") # Convert binary output into ACSII for processing
-            # Process stderr output as that's what contains the trackLog lines
-            splitErrText = errText.split("\n")
-            trackLog = splitErrText[0] # First element is trackLog line, second is CGI_TIME; only want trackLog
-            splitLine = trackLog.split(" ")
-
-            # Build list of tracks
-            tracks = splitLine[4]
-            tracks = tracks.split(",")
+            # Hub shortLabels are user supplied, so an errAbort here can carry non-ASCII
+            errText = cmderr.decode("utf-8", errors="replace")
+            # hgTracks writes the visible track list to stderr as "trackLog N db hgsid t:vis,t:vis",
+            # split into ~800 byte blocks so Apache does not chop the lines. Every numbered block
+            # is part of the list; the trailing "trackLog position" line and the CGI_TIME and
+            # RESOURCE lines are not, and must not be parsed as tracks.
+            tracks = []
+            mismatch = None
+            for errLine in errText.split("\n"):
+                splitLine = errLine.split(" ")
+                if len(splitLine) > 4 and splitLine[0] == "trackLog" and splitLine[1].isdigit():
+                    if splitLine[2] != db:
+                        mismatch = splitLine[2]
+                        tracks = []
+                        break
+                    tracks.extend(splitLine[4].split(","))
+            if not tracks:
+                # assemblyStatsCron.py reads these back out and puts them in its report. Writing
+                # to stderr would be pointless: the caller merges and discards it, and the cron
+                # sends its own stderr to /dev/null.
+                if mismatch:
+                    warning = "asked hgTracks for " + db + " but it reported " + mismatch
+                else:
+                    warning = "no usable trackLog output from hgTracks for " + db
+                defaultCountsFile.write("#WARNING\t" + warning +
+                                        ", its default tracks are missing from this report\n")
+                print("Warning: " + warning, file=sys.stderr)
+                continue
 
             dbUse = dbCounts[db]
             # output list to file that contains column headings

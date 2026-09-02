@@ -8413,6 +8413,9 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
+static struct hash *refSeqStatusHashLoad(struct track *tg);
+/* Build a name->refSeqStatus hash for tg's items (defined below). */
+
 void loadNcbiRefSeq(struct track *tg)
 /* Load up RefSeq known genes. */
 {
@@ -8421,6 +8424,8 @@ loadGenePredWithName2(tg);
 if (vis != tvDense)
     lookupRefNames(tg);
 vis = limitVisibility(tg);
+if (vis != tvHide)
+    tg->customPt = refSeqStatusHashLoad(tg);  // so refGeneColor does no draw-time SQL
 }
 
 void loadRefGene(struct track *tg)
@@ -8433,6 +8438,8 @@ if (vis != tvDense)
     lookupRefNames(tg);
     }
 vis = limitVisibility(tg);
+if (vis != tvHide)
+    tg->customPt = refSeqStatusHashLoad(tg);  // so refGeneColor does no draw-time SQL
 }
 
 /* A spectrum from blue to red signifying the percentage of methylation */
@@ -8561,38 +8568,78 @@ tg->ixAltColor = col;
 return(col);
 }
 
-Color refGeneColorByStatus(struct track *tg, char *name, struct hvGfx *hvg)
+static struct hash *refSeqStatusHashLoad(struct track *tg)
+/* Build (at load time) a name->refSeqStatus hash for this track's items, so that
+ * refGeneColorByStatus can shade items at draw time without asking the database
+ * once per item.  One batched query instead of one query per drawn gene.
+ * Returns NULL when no status table applies, in which case
+ * refGeneColorByStatus colors everything normally, exactly as an empty query
+ * result did before.  Call it after limitVisibility() and only for a track that
+ * will actually draw: a track limitVisibility hides needs no colors, and it is
+ * the tracks with the most items -- the ones it hides -- whose query is
+ * largest. */
+{
+if (tg->items == NULL)
+    return NULL;
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+char *db = (liftDb == NULL) ? database : liftDb;
+boolean isNcbi = startsWith("ncbiRefSeq", trackHubSkipHubName(tg->table));
+char *table = isNcbi ? "ncbiRefSeqLink" : refSeqStatusTable;
+char *keyCol = isNcbi ? "id" : "mrnaAcc";
+/* refSeqStatusTable is qualified with its database (usually hgFixed.refSeqStatus),
+ * so the existence test has to go through a connection like the old draw-time code
+ * did.  hTableExists() looks a name up in db's own list of tables and would answer
+ * FALSE for any name carrying a database prefix, which would quietly drop the
+ * shading for every non-NCBI RefSeq track. */
+struct sqlConnection *conn = hAllocConn(db);
+if (!sqlTableExists(conn, table))
+    {
+    hFreeConn(&conn);
+    return NULL;
+    }
+struct hash *hash = hashNew(0);
+struct dyString *query = sqlDyStringCreate("select %s, status from %s where %s in (",
+                                           keyCol, table, keyCol);
+struct linkedFeatures *lf;
+boolean first = TRUE;
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    if (!first)
+        sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "'%s'", lf->name);
+    first = FALSE;
+    }
+sqlDyStringPrintf(query, ")");
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(hash, row[0], cloneString(row[1]));
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+dyStringFree(&query);
+return hash;
+}
+
+static Color refGeneColorByStatus(struct track *tg, char *name, struct hvGfx *hvg)
 /* Get refseq gene color from refSeqStatus.
  * Reviewed, Validated -> normal, Provisional -> lighter,
  * Predicted, Inferred(other) -> lightest
- * If no refSeqStatus, color it normally.
- */
+ * If no refSeqStatus, color it normally.  Reads the status from the hash that
+ * refSeqStatusHashLoad built at load time and left on tg->customPt, so this
+ * does no database work while the image is being drawn. */
 {
 int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter, lightest;
-char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
-char *db = (liftDb == NULL) ? database : liftDb;
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr;
-char **row;
-char query[256];
-
-if (startsWith("ncbiRefSeq", trackHubSkipHubName(tg->table)))
+struct hash *statusHash = tg->customPt;
+char *status = (statusHash != NULL) ? hashFindVal(statusHash, name) : NULL;
+if (status != NULL)
     {
-    sqlSafef(query, sizeof query, "select status from ncbiRefSeqLink where id = '%s'", name);
-    }
-else
-    sqlSafef(query, sizeof query, "select status from %s where mrnaAcc = '%s'",
-        refSeqStatusTable, name);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
+    if (startsWith("Reviewed", status) || startsWith("Validated", status))
         {
         /* Use the usual color */
         }
-    else if (startsWith("Provisional", row[0]))
+    else if (startsWith("Provisional", status))
         {
         lighter.r = (6*normal->r + 4*255) / 10;
         lighter.g = (6*normal->g + 4*255) / 10;
@@ -8609,8 +8656,6 @@ if ((row = sqlNextRow(sr)) != NULL)
         col = hvGfxFindRgb(hvg, &lightest);
         }
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 return col;
 }
 
@@ -8626,16 +8671,11 @@ if (lf->itemAttr != NULL)
 /* If refSeqStatus is available, use it to determine the color.
  * Reviewed, Validated -> normal, Provisional -> lighter,
  * Predicted, Inferred(other) -> lightest
- * If no refSeqStatus, color it normally.
- */
-char *liftDb = cloneString(trackDbSetting(tg->tdb, "quickLiftDb"));
-char *db = (liftDb == NULL) ? database : liftDb;
-struct sqlConnection *conn = hAllocConn(db);
-Color color = tg->ixColor;
-if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(db,  "ncbiRefSeqLink"))
-    color = refGeneColorByStatus(tg, lf->name, hvg);
-hFreeConn(&conn);
-return color;
+ * If no refSeqStatus, color it normally.  The status comes from the hash
+ * refSeqStatusHashLoad built at load time, so this asks the database nothing.
+ * When no status table applied the hash is NULL and every item gets the
+ * normal color. */
+return refGeneColorByStatus(tg, lf->name, hvg);
 }
 
 void ncbiRefSeqMethods(struct track *tg)
