@@ -47,6 +47,9 @@ the machine's loopback:
 There is no password on a parked instance.  It shows only what any hgwdev user
 can already build and query.
 
+Every instance also answers over https, on its port plus 1000.  "ts list" prints
+both numbers, and "ts tunnel" forwards both.  See Notes for why.
+
 Notes
 -----
 
@@ -83,6 +86,25 @@ reports a clean run.  ts writes an empty central.domain into the frozen hg.conf.
 That leaves the domain attribute off the cookie and makes it host-only, which
 works whether you reach the instance as localhost or as 127.0.0.1.  "ts conf"
 adds it to an instance frozen before ts had it.
+
+Each instance listens twice: plain http on its registered port, and https on
+that port plus 1000.  Both serve the same frozen code.  The point of the pair is
+that some CGI behaviour depends on the scheme, and on a plain-http park you
+cannot see it at all.  Apache sets HTTPS=on only for the https listener, and
+cgiServerHttpsIsOn() reads exactly that, so a CGI deciding whether to mark a
+cookie Secure takes one branch on each port.  Hitting both is then a two-line
+check rather than something you have to reason about.
+
+The certificate is self-signed, made once, and shared by every instance on the
+account.  It lives in ticketSandboxes/ssl.  A browser warns the first time; curl
+needs -k.  That is fine here: a park has no password and is reached through an
+ssh tunnel that is already encrypted, so the certificate exists to turn HTTPS=on
+for the CGIs, not to prove who is serving.
+
+Only the http port is in the registry.  The https port is derived, so nothing
+about the old layout changed and "ts conf" adds https to an instance frozen
+before it existed.  http ports are kept below 49080 so the two ranges cannot
+overlap.
 
 Each instance draws its ticket number faintly across the page background, so you
 always know which frozen browser you are viewing.  ts writes that stylesheet
