@@ -438,9 +438,15 @@ else
     bbList = bigBedIntervalQuery(bbi, chrom, ivStart, ivEnd, 0, lm);
 
 /* Get bedSize if it's not already defined. */
-boolean bigBedOnePath = cfgOptionBooleanDefault("bigBedOnePath", TRUE);
-if (bigBedOnePath && (bedSize == 0))
+if (bedSize == 0)
     bedSize = bbi->definedFieldCount;
+
+/* A bigBed always has at least chrom, chromStart and chromEnd.  A smaller count
+ * can only come from a bad type line, and the bedSize - 3 below would then run
+ * off the front of restFields[]. */
+if (bedSize < 3)
+    errAbort("Track %s declares 'type bigBed %d', but a bigBed has at least 3 fields.",
+             tdb->track, bedSize);
 
 char *scoreFilter = cartOrTdbString(cart, tdb, "scoreFilter", NULL);
 int minScore = 0;

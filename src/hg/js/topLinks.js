@@ -118,7 +118,7 @@ var topLinks = (function() {
         var navUl = el("ul", {}, {listStyle: "none", margin: "0 0 10px 0", padding: "0"});
         addLink(navUl, "../cgi-bin/hgSession?hgS_doMainPage=1&hgsid=" + hgsid, "My Sessions");
         addLink(navUl, "../cgi-bin/hgCustom?hgsid=" + hgsid, "My Custom Tracks");
-        addLink(navUl, "../cgi-bin/hgHubConnect?hgsid=" + hgsid + "#hubUpload", "My Track Hubs");
+        addLink(navUl, "../cgi-bin/hgHubConnect?hgsid=" + hgsid + "#unlistedHubs", "My Track Hubs");
         body.appendChild(navUl);
 
         // Account actions.

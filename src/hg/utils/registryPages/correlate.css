@@ -1,0 +1,91 @@
+/* correlate.css - the trackDb override map.  Tokens come from tokens.css. */
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px;
+     line-height:1.6; -webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px; margin:0 auto; padding:44px 24px 110px;
+      display:flex; flex-direction:column; gap:46px}
+
+.eyebrow{font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink3); margin:0 0 14px}
+h1{font-family:var(--display); font-weight:700; font-size:clamp(32px,5vw,50px); line-height:1.05;
+  letter-spacing:-0.02em; margin:0 0 16px; text-wrap:balance}
+.lede{max-width:65ch; margin:0; color:var(--ink2); font-size:17.5px}
+.lede + .lede{margin-top:11px}
+.lede strong{color:var(--ink); font-weight:600}
+
+/* the two things being compared */
+.sources{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px;
+  margin-top:26px}
+.sourcecard{border-top:3px solid var(--rule); padding-top:14px}
+.sourcecard.tdb{border-top-color:var(--tdb)}
+.sourcecard.cart{border-top-color:var(--track)}
+.sourcecard h3{font-family:var(--mono); font-weight:500; font-size:11.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink3); margin:0 0 8px}
+.sourcecard p{margin:0; font-size:14.5px; color:var(--ink2)}
+.sourcecard .big{font-family:var(--display); font-weight:700; font-size:30px; line-height:1.1;
+  color:var(--ink); margin-bottom:4px}
+
+h2{font-family:var(--display); font-weight:600; font-size:24px; letter-spacing:-0.015em;
+  margin:0 0 8px}
+.sub{margin:0 0 24px; color:var(--ink2); font-size:15.5px; max-width:72ch}
+section{display:flex; flex-direction:column}
+
+/* the worklist, one block per missing type */
+.work{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--rule)}
+.wrow{display:grid; grid-template-columns:190px 1fr; gap:10px 26px;
+  padding:20px 0; border-bottom:1px solid var(--rule)}
+.wtype{display:flex; flex-direction:column; gap:7px}
+.wtype code{font-size:14px; align-self:flex-start}
+.wcount{font-family:var(--mono); font-size:11.5px; color:var(--ink3); letter-spacing:.06em}
+.wsettings{display:flex; flex-direction:column; gap:10px; min-width:0}
+.wsetting{display:flex; flex-wrap:wrap; gap:5px 12px; align-items:baseline}
+.wnow{font-family:var(--mono); font-size:11.5px; color:var(--ink3); word-break:break-word}
+.weak{opacity:.92}
+
+code{font-family:var(--mono); font-size:13px; background:var(--chipbg); padding:1.5px 6px;
+  border-radius:3px; white-space:nowrap}
+code.t{background:transparent; padding:0; color:var(--ink2)}
+
+/* the full pair table */
+.tablewrap{overflow-x:auto; border:1px solid var(--rule); border-radius:3px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:13.5px}
+caption{text-align:left; padding:14px 16px; color:var(--ink3); font-family:var(--mono);
+  font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
+  border-bottom:1px solid var(--rule)}
+th,td{padding:9px 14px; text-align:left; border-bottom:1px solid var(--rule2); vertical-align:top}
+th{font-family:var(--mono); font-weight:500; font-size:11px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink3); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td.mono{font-family:var(--mono); font-size:12.5px}
+td.types{font-family:var(--mono); font-size:11.5px; color:var(--ink2); min-width:170px}
+td.types .add{color:var(--ink); font-weight:500}
+.pill{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+  text-transform:uppercase; padding:2px 7px; border-radius:999px; white-space:nowrap;
+  border:1px solid var(--rule); color:var(--ink2)}
+.pill.gap{border-color:var(--tdb); color:var(--tdb)}
+.pill.same{border-color:var(--file); color:var(--file)}
+.pill.none{color:var(--ink3)}
+.how{font-family:var(--mono); font-size:11px; color:var(--ink3); white-space:nowrap}
+
+/* the unpaired sides */
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.nm{font-family:var(--mono); font-size:12.5px; line-height:1.5; padding:3px 8px; border-radius:3px;
+  background:var(--chipbg); color:var(--ink)}
+details{border-top:1px solid var(--rule); padding-top:14px}
+summary{cursor:pointer; font-family:var(--display); font-weight:600; font-size:15px;
+  margin-bottom:12px}
+summary:focus-visible{outline:2px solid var(--url); outline-offset:2px}
+details p{margin:0 0 14px; color:var(--ink2); font-size:14.5px; max-width:72ch}
+
+.notes{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:26px}
+.notecard{border-top:2px solid var(--rule); padding-top:14px}
+.notecard h3{font-family:var(--display); font-weight:600; font-size:15px; margin:0 0 8px}
+.notecard p{margin:0 0 10px; font-size:14.5px; color:var(--ink2)}
+.notecard p:last-child{margin-bottom:0}
+
+footer{border-top:1px solid var(--rule); padding-top:18px; font-family:var(--mono);
+  font-size:11.5px; color:var(--ink3); line-height:1.85}
+
+@media (max-width:640px){
+  .wrow{grid-template-columns:1fr}
+  .wrap{gap:38px; padding:32px 18px 80px}
+}

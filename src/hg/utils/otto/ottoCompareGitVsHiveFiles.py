@@ -23,8 +23,9 @@ import os
 from datetime import datetime
 
 # How alike two files must be (fraction of shared lines) before a hive file that
-# shares a basename with a git file is treated as a copy of it.  Real pairs that
-# have drifted score well above 0.9, unrelated same-name scripts below 0.2.
+# shares an ambiguous basename with a git file is treated as a copy of it.  Real
+# pairs that have drifted score well above 0.9, unrelated same-name scripts below
+# 0.2.  Only names that turn up more than once are scored, see searchHiveFiles.
 minSimilarity = 0.5
 
 def bash(cmd):
@@ -42,8 +43,9 @@ def readLines(filePath):
 def looksLikeSameFile(gitPath, hivePath):
     """A shared basename does not make two files the same file: hive has
     grcIncidentDb/GRCh37/runUpdate.sh, a per-assembly script unrelated to the
-    genArk/asmAlias/runUpdate.sh in git.  Compare the contents so only files
-    that really are copies of each other get reported as out of sync."""
+    genArk/asmAlias/runUpdate.sh in git.  When a basename is ambiguous, compare
+    the contents so only files that really are copies of each other get reported
+    as out of sync."""
     gitLines = readLines(gitPath)
     hiveLines = readLines(hivePath)
     matcher = difflib.SequenceMatcher(None, gitLines, hiveLines)
@@ -67,27 +69,38 @@ def parseGitFilesAndMd5sums(fileListWithMd5sum, gitPathDic, gitPathHiveMatches):
 
 def searchHiveFiles(gitPathDic,gitPathHiveMatches):
     """Find git otto files in the hive otto dir and get md5sums"""
-    md5sByFileName = {}    # basename -> set of md5sums of every git file with that name
+    gitCountByFileName = {}  # basename -> how many git files carry that name
+    md5sByFileName = {}      # basename -> set of md5sums of every git file with that name
     for gitPath, md5sum in gitPathDic.items():
-        md5sByFileName.setdefault(os.path.basename(gitPath), set()).add(md5sum)
+        fileName = os.path.basename(gitPath)
+        gitCountByFileName[fileName] = gitCountByFileName.get(fileName, 0) + 1
+        md5sByFileName.setdefault(fileName, set()).add(md5sum)
 
-    hiveSearchCache = {}   # basename -> [hive paths], the same name is looked up once
+    hiveSearchCache = {}   # basename -> [(hive md5sum, hive path)], each name searched once
     for gitPath in gitPathDic.keys():
         fileName = os.path.basename(gitPath)
         if fileName not in hiveSearchCache:
-            hiveSearchCache[fileName] = bash(f"find /hive/data/outside/otto/ -maxdepth 3 -name '{fileName}' 2>/dev/null")
-        for fileHit in hiveSearchCache[fileName]:
-            fileHit = fileHit.strip()
-            if os.path.isfile(fileHit):
-                if os.access(fileHit, os.R_OK):
+            hiveHits = []
+            hiveSearch = f"find /hive/data/outside/otto/ -maxdepth 3 -name '{fileName}' 2>/dev/null"
+            for fileHit in bash(hiveSearch):
+                fileHit = fileHit.strip()
+                if os.path.isfile(fileHit) and os.access(fileHit, os.R_OK):
                     fileHitMd5Sum = bash('md5sum '+fileHit)
-                    md5 = fileHitMd5Sum[0].split("  ")[0]
-                    if md5 != gitPathDic[gitPath] and md5 in md5sByFileName[fileName]:
-                        # in sync with a different git file of the same name
-                        continue
-                    if md5 != gitPathDic[gitPath] and not looksLikeSameFile(gitPath, fileHit):
-                        continue
-                    gitPathHiveMatches[gitPath].append((md5, fileHit))
+                    hiveHits.append((fileHitMd5Sum[0].split("  ")[0], fileHit))
+            hiveSearchCache[fileName] = hiveHits
+        # One git file and one hive file of this name can only be each other, so a
+        # differing md5sum is always worth reporting, however far the two have
+        # drifted apart.  Only a name that turns up more than once needs the
+        # content check to tell real copies from unrelated files sharing the name.
+        nameIsAmbiguous = gitCountByFileName[fileName] > 1 or len(hiveSearchCache[fileName]) > 1
+        for md5, fileHit in hiveSearchCache[fileName]:
+            if md5 != gitPathDic[gitPath] and nameIsAmbiguous:
+                if md5 in md5sByFileName[fileName]:
+                    # in sync with a different git file of the same name
+                    continue
+                if not looksLikeSameFile(gitPath, fileHit):
+                    continue
+            gitPathHiveMatches[gitPath].append((md5, fileHit))
     return(gitPathHiveMatches)
 
 def compareGitMd5sumsToHiveMd5sums(gitPathDic, gitPathHiveMatches):

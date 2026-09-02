@@ -465,7 +465,7 @@ enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs
 // WARNING: The specifics of the HTTP_USER_AGENT vary widely.
 //          This has only been tested on a few cases.
 static enum browserType clientBrowser = btUnknown;
-static enum browserType clientOsType  = (enum browserType)osUnknown;
+static enum osType clientOsType  = osUnknown;
 static char *clientBrowserExtra       = NULL;
 static char *clientOsExtra            = NULL;
 
@@ -488,19 +488,19 @@ if (clientBrowser == btUnknown)
             ptr += strlen("MSIE ");
             clientBrowserExtra = cloneFirstWordByDelimiter(ptr,';');
             }
-        else if ((ptr = stringIn("Firefox",userAgent)) != NULL)
+        else if ((ptr = stringIn("Firefox/",userAgent)) != NULL)
             {
             clientBrowser = btFF;
-            ptr += strlen("(Firefox/");
+            ptr += strlen("Firefox/");
             clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
             }
-        else if ((ptr = stringIn("Chrome",userAgent)) != NULL)  // Must be before Safari
+        else if ((ptr = stringIn("Chrome/",userAgent)) != NULL)  // Must be before Safari
             {
             clientBrowser = btChrome;
             ptr += strlen("Chrome/");
             clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
             }
-        else if ((ptr = stringIn("Safari",userAgent)) != NULL)
+        else if ((ptr = stringIn("Safari/",userAgent)) != NULL)
             {
             clientBrowser = btSafari;
             ptr += strlen("Safari/");
@@ -512,27 +512,27 @@ if (clientBrowser == btUnknown)
             }
 
         // Determine the OS
-        if ((ptr = stringIn("Windows",userAgent)) != NULL)
+        if ((ptr = stringIn("Windows ",userAgent)) != NULL)
             {
-            clientOsType = (enum browserType)osWindows;
+            clientOsType = osWindows;
             ptr += strlen("Windows ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
-        else if ((ptr = stringIn("Linux",userAgent)) != NULL)
+        else if ((ptr = stringIn("Linux ",userAgent)) != NULL)
             {
-            clientOsType = (enum browserType)osLinux;
+            clientOsType = osLinux;
             ptr += strlen("Linux ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else if ((ptr = stringIn("Mac ",userAgent)) != NULL)
             {
-            clientOsType = (enum browserType)osMac;
+            clientOsType = osMac;
             ptr += strlen("Mac ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else
             {
-            clientOsType = (enum browserType)osOther;
+            clientOsType = osOther;
             }
         }
     }
@@ -544,7 +544,7 @@ if (browserQualifier != NULL)
         *browserQualifier = NULL;
     }
 if (clientOs != NULL)
-    *clientOs = (enum osType)clientOsType;
+    *clientOs = clientOsType;
 if (clientOsQualifier != NULL)
     {
     if (clientOsExtra != NULL)
@@ -941,6 +941,24 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+static char *skipEmptyPairs(char *s)
+/* Return the start of the next variable name in a var=val&var=val... string,
+ * skipping the separators of any empty pairs, as in the "&&" of "a=1&&b=2".
+ * Returns a pointer to the terminating zero when nothing is left.
+ *
+ * Without this the parsers below, which split on the first separator after a
+ * value, read the leftover one as part of the next name: "a=1&&b=2" stores "b"
+ * under "&b".  Nothing looks that name up, so the variable is silently lost.
+ * The same empty pair at the end of the string has no '=' after it and instead
+ * aborts the CGI.  cgiEncode escapes everything but alphanumerics, '.' and '_',
+ * so no encoded name can begin with a separator and none is ever eaten here.
+ * refs #38185 */
+{
+if (s == NULL)
+    return NULL;
+return s + strspn(s, "&;");
+}
+
 boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
 /* Parse out next var/val in a var=val&var=val... cgi formatted string 
  * This will insert zeroes and other things into string. 
@@ -950,7 +968,7 @@ boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
  *     while (cgiParseNext(&pt, &var, &val))
  *          printf("%s\t%s\n", var, val); */
 {
-char *var = *pInput;
+char *var = skipEmptyPairs(*pInput);
 if (var == NULL || var[0] == 0)
     return FALSE;
 char *val = strchr(var, '=');
@@ -1003,7 +1021,7 @@ if (logCgiVarMaxLen > 0)
     logMsg = dyStringNew(1024);	
 
 namePt = input;
-while (namePt != NULL && namePt[0] != 0)
+while ((namePt = skipEmptyPairs(namePt)) != NULL && namePt[0] != 0)
     {
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)

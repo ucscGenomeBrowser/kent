@@ -7,7 +7,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 pipelineTester = ${BIN_DIR}/pipelineTester
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
+test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
     dnaCodonTest
@@ -28,6 +28,13 @@ dnaCodonTest: dnaCodonTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/dnaCodonTest${EXE}
 	${BIN_DIR}/dnaCodonTest > output/dnaCodonTest
 	diff expected/dnaCodonTest output/dnaCodonTest
+
+htmlSanitizeTest: htmlSanitizeTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/htmlSanitizeTest htmlSanitizeTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/htmlSanitizeTest${EXE}
+	${BIN_DIR}/htmlSanitizeTest > output/htmlSanitizeTest
+	diff expected/htmlSanitizeTest output/htmlSanitizeTest
 
 errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

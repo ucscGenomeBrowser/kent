@@ -1532,6 +1532,7 @@ OUTPUT REQUIREMENTS:
 - Output the COMPLETE review in the plain text email format shown above
 - Start with "DAILY CODE REVIEW" - no preamble
 - Include ALL sections, but omit CROSS-COMMIT OBSERVATIONS and RISK ASSESSMENT if they would only contain boilerplate (e.g., "only one commit", "all low risk with no concerns")
+- OVERALL STATUS is NOT omittable: end every review with the OVERALL STATUS line, even for a single commit whose Verdict says the same thing. A review without it is treated as possible FEEDBACK and emailed.
 
 BEGIN YOUR REVIEW NOW. Use your tools to investigate thoroughly.
 """
@@ -1677,14 +1678,11 @@ def is_envelope_line(line):
     undecorated = undecorate_line(line)
     return any(pattern.match(undecorated) for pattern in BARE_ENVELOPE_RES)
 
-def verdict_words(text):
-    """Every decision a 'Verdict:' line in text states, as a set of APPROVED/FEEDBACK.
-
-    Collects rather than returning the first, because a block can contain more than one
-    such line - a quoted diff hunk, or the template quoted back - and reading whichever
-    came first let a quoted "+Verdict: APPROVED" override the real "Verdict: FEEDBACK"
-    below it.  Placeholder lines that name both words state nothing and are skipped."""
-    words = set()
+def verdict_lines(text):
+    """The decision of every readable 'Verdict:' line in text, in order, one entry per
+    line.  A list rather than a set because digest_wants_email() checks the count
+    against the number of commits reviewed, not just which decisions appear."""
+    decisions = []
     for raw in text.splitlines():
         match = re.match(VERDICT_LINE_RE, normalize_marker_line(raw), re.IGNORECASE)
         if not match:
@@ -1694,8 +1692,17 @@ def verdict_words(text):
         # the author a "needs attention" digest over a review that approved their commit.
         word = verdict_value(match.group(1))
         if word:
-            words.add(word)
-    return words
+            decisions.append(word)
+    return decisions
+
+def verdict_words(text):
+    """Every decision a 'Verdict:' line in text states, as a set of APPROVED/FEEDBACK.
+
+    Collects rather than returning the first, because a block can contain more than one
+    such line - a quoted diff hunk, or the template quoted back - and reading whichever
+    came first let a quoted "+Verdict: APPROVED" override the real "Verdict: FEEDBACK"
+    below it.  Placeholder lines that name both words state nothing and are skipped."""
+    return set(verdict_lines(text))
 
 def read_verdict(text):
     """The verdict a block states, or None when it states nothing or contradicts itself.
@@ -1767,16 +1774,31 @@ def textile_review_verdict(review):
                 return word
     return None
 
-def digest_wants_email(review):
+def digest_wants_email(review, num_commits=None):
     """True if this digest should be emailed to its author.
 
     Sends unless the digest definitively says APPROVED, and keeps the old bare substring
     test as a backstop so this can only ever send more than production did, never less.
     An unreadable status sends: between mailing a review nobody needed and silently
-    binning a real one, the first is the recoverable mistake."""
+    binning a real one, the first is the recoverable mistake.
+
+    One narrowing of that rule: the model drops the OVERALL STATUS block roughly one
+    digest in six, nearly always alongside the sections the prompt invites it to omit,
+    and in the first three weeks every one of those was an approved review mailed as
+    "possible FEEDBACK".  So when the status is missing, the per-commit Verdict lines
+    decide instead - but only on a full accounting: exactly one readable verdict per
+    commit reviewed and every one APPROVED.  A missing or unreadable verdict, an extra
+    one (e.g. quoted from the template), or any FEEDBACK still sends."""
     if 'OVERALL STATUS: FEEDBACK' in review:
         return True
-    return digest_overall_status(review) != 'APPROVED'
+    status = digest_overall_status(review)
+    if status is not None:
+        return status != 'APPROVED'
+    if num_commits:
+        verdicts = verdict_lines(review)
+        if len(verdicts) == num_commits and set(verdicts) == {'APPROVED'}:
+            return False
+    return True
 
 def sanitize_commit_block(block, label=''):
     """Strip envelope lines and separator rules out of one commit block.
@@ -2397,7 +2419,8 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
         # backstop in digest_wants_email fires on a digest whose own status line reads
         # APPROVED - and a dry run that printed the status was telling the operator "no
         # email" on a night the live run mails.
-        return 'FEEDBACK' if digest_wants_email(data['review']) else 'APPROVED'
+        return ('FEEDBACK' if digest_wants_email(data['review'], data.get('num_commits'))
+                else 'APPROVED')
 
     # Phase 3: Send emails (only for reviews with FEEDBACK; never for failures)
     print(f"\nPhase 3: Sending emails (FEEDBACK only)...")
@@ -2411,12 +2434,17 @@ def run_daily_mode(hours, cc_address, dry_run, log_dir, alert_email=DEFAULT_ALER
             if data['error']:
                 print(f"  {data['name']}: FAILED - skipping author email (will alert maintainer)")
                 continue
-            if not digest_wants_email(data['review']):
-                print(f"  {data['name']}: APPROVED - skipping email")
+            if not digest_wants_email(data['review'], data.get('num_commits')):
+                if digest_overall_status(data['review']) is None:
+                    print(f"  {data['name']}: APPROVED (no readable OVERALL STATUS, but "
+                          f"every per-commit verdict is APPROVED) - skipping email")
+                else:
+                    print(f"  {data['name']}: APPROVED - skipping email")
                 continue
             if digest_overall_status(data['review']) is None:
-                print(f"  {data['name']}: WARNING - could not read OVERALL STATUS, "
-                      f"emailing anyway rather than dropping a possible FEEDBACK")
+                print(f"  {data['name']}: WARNING - could not read OVERALL STATUS or "
+                      f"account for every per-commit verdict, emailing anyway rather "
+                      f"than dropping a possible FEEDBACK")
             print(f"  Emailing {data['name']} <{author_email}> (FEEDBACK)...")
             try:
                 send_review_email(gmail_service, author_email, data['name'],

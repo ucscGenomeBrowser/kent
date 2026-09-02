@@ -108,7 +108,7 @@ tail -n+2 $cncbDir/cncb.metadata.tsv \
     >> gisaidAndPublic.$today.metadata.tsv
 wc -l gisaidAndPublic.$today.metadata.tsv
 zcat $gisaidDir/metadata_batch_$today.tsv.gz \
-| grep -Fwf <(grep EPI_ISL samples.$today | cut -d\| -f 2) \
+| csvtk -t -U grep --pattern-file <(grep EPI_ISL samples.$today | cut -d\| -f 2) --fields gisaid_epi_isl \
 | tawk '{print $1 "|" $3 "|" $5, "", $5, $7, $15, $13, $14, $18, $19;}' \
     >> gisaidAndPublic.$today.metadata.tsv
 wc -l gisaidAndPublic.$today.metadata.tsv

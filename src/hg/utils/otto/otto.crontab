@@ -172,7 +172,7 @@ MAILTO=cells@ucsc.edu
 # cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
 # (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
 * * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
-@reboot umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
+@reboot umask 002; sleep 180; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
 
 # DE worker: Cell Browser differential expression (RM #24912). Keeps deWorker.py
 # alive (reads the /hive job queue); restarts if down / on reboot.
@@ -195,5 +195,5 @@ MAILTO=jbirgmei@ucsc.edu
 # PubTator3 dbSNP track update
 28 08 * * * /bin/zsh -c 'cd /hive/data/outside/otto/pubtatorDbSnp && ./doUpdate.sh'
 
-MAILTO=cells@ucsc.edu
-@reboot umask 0000; /cluster/home/max/htdocs-cells-submit/tusd/tusd_linux_amd64/tusd -upload-dir /hive/data/inside/cells/upload/ -port 8443 -max-size 100000000000
+#MAILTO=cells@ucsc.edu
+#@reboot umask 0000; sleep 240; /cluster/home/max/htdocs-cells-submit/tusd/tusd_linux_amd64/tusd -upload-dir /hive/data/inside/cells/upload/ -port 8443 -max-size 100000000000

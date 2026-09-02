@@ -1,0 +1,96 @@
+in : <html><head><title>T</title><meta charset="utf-8"></head><body class="x"><h2>Head</h2><p>Text</p></body></html>
+out: <h2>Head</h2><p>Text</p>
+
+in : <p>before</p><script>alert(1)</script><style>body{visibility:hidden}</style><p>after</p>
+out: <p>before</p><p>after</p>
+     (removed the script element and everything inside it)
+     (removed the style element and everything inside it)
+
+in : <p>before</p><script>if (a < b) alert(1)
+out: <p>before</p>
+     (removed the script element and everything inside it)
+
+in : <div id="top" class="warn" title="t" onclick="alert(1)">text</div>
+out: <div id="descPage-top" title="t">text</div>
+     (removed the attribute onclick)
+
+in : <a href="&#106;avascript:alert(1)">one</a> <a href="java&Tab;script:alert(1)">two</a>
+out: <a>one</a> <a>two</a>
+     (removed a link that used the javascript: scheme)
+     (removed a link that does not read as a plain web address)
+
+in : <a href="&#0000000106;avascript:alert(1)">three</a> <a href="&#106avascript:alert(1)">four</a>
+out: <a>three</a> <a>four</a>
+     (removed a link that used the javascript: scheme)
+
+in : <a href="jav&#9;ascript:alert(1)">five</a> <a href="java&colon;script:alert(1)">six</a>
+out: <a>five</a> <a>six</a>
+     (removed a link that does not read as a plain web address)
+
+in : <a href="&#109;ailto:help&#64;riken.jp?subject=x">write to us</a>
+out: <a href="&#109;ailto:help&#64;riken.jp?subject=x">write to us</a>
+
+in : <a href="https://genome.ucsc.edu">u</a> <a href="#anchor" target="_blank">a</a>
+out: <a href="https://genome.ucsc.edu">u</a> <a href="#descPage-anchor" target="_blank" rel="noopener noreferrer">a</a>
+
+in : <img src="pic.png" alt="a" onerror="alert(1)" width="20">
+out: <img src="pic.png" alt="a" width="20">
+     (removed the attribute onerror)
+
+in : <iframe width="560" src="https://www.youtube.com/embed/abc"></iframe><iframe src="https://example.com/x">fallback</iframe>
+out: <iframe width="560" src="https://www.youtube.com/embed/abc" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"></iframe>
+     (removed an iframe, we only allow one that plays a video from a site we know)
+
+in : <p style="color:red;behavior:url(#default#VML);text-align:center;position:fixed">p</p>
+out: <p style="color:red;text-align:center;">p</p>
+
+in : <o:p>word</o:p><vertebrates>more</vertebrates>
+out: wordmore
+
+in : <div><b>bold<p>para
+out: <div><b>bold<p>para</p></b></div>
+
+in : <div style="color:red"/>the rest of the page is not inside that div
+out: <div style="color:red;">the rest of the page is not inside that div</div>
+
+in : <svg><svg><svg><svg>text
+out: text
+     (removed the svg element and everything inside it)
+
+in : <a href=https://example.com/x\">link text</a> and more text
+out: <a href="https://example.com/x\&quot;">link text</a> and more text
+
+in : <form action="/x"><input name="password"><button>Log in</button></form><p>after</p>
+out: <p>after</p>
+     (removed the form element and everything inside it)
+
+in : <!DOCTYPE html><!-- <p>hidden</p> --><p>shown</p>
+out: <p>shown</p>
+
+in : <h2 id="methods">M</h2><a name="top">t</a><a href="#methods">same page</a> <a href="other.html#methods">other page</a><a href="#">to the top</a><div id="">no name at all</div>
+out: <h2 id="descPage-methods">M</h2><a name="descPage-top">t</a><a href="#descPage-methods">same page</a> <a href="other.html#methods">other page</a><a href="#">to the top</a><div>no name at all</div>
+
+in : <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
+out: <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
+
+in : <p style="list-style:u&#114l(http://example.com/x.png);color:re&#100">a</p>
+out: <p style="color:re&#100;">a</p>
+     (removed the value of the style property list-style)
+
+in : <p style="font-family:'AT&T Sans'">a</p>
+out: <p style="font-family:'AT&T Sans';">a</p>
+
+in : <img src="first.png" src="second.png" alt="a" alt="b"><a href="javascript:alert(1)" href="https://example.com">x</a>
+out: <img src="first.png" alt="a"><a>x</a>
+     (removed a link that used the javascript: scheme)
+
+in : <p>real</p><p title="oops>never printed</p>
+out: <p>real</p>
+     (stopped at a tag that never ends, and printed nothing after it)
+
+in : <div>a &lt; b</ <b>bold</b></div>
+out: <div>a &lt; b&lt;/ <b>bold</b></div>
+
+in : <h2 id="descPage-methods">M</h2><a href="#descPage-methods">jump</a>
+out: <h2 id="descPage-methods">M</h2><a href="#descPage-methods">jump</a>
+

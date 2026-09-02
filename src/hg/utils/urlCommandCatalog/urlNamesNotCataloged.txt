@@ -163,8 +163,6 @@ hgS_gallery_                       # hg/hgSession/hgSession.c
 hgS_loadLocalFileName              # hg/hgSession/hgSession.c
 hgS_load_                          # hg/hgSession/hgSession.c
 hgS_makeDownload_                  # hg/hgSession/hgSession.c
-hgS_newSessionName                 # hg/hgSession/hgSession.c
-hgS_newSessionShare                # hg/hgSession/hgSession.c
 hgS_oldSessionName                 # hg/hgSession/hgSession.c
 hgS_otherUserSessionLabel          # hg/hgTracks/hgTracks.c
 hgS_saveLocalBackupFileName        # hg/hgSession/backup.c

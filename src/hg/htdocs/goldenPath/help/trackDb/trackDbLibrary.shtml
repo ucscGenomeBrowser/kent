@@ -9,7 +9,11 @@
       /usr/local/apache/htdocs-{sandbox}/goldenPath/help/trackDb/
       A "make" should get them there.
 
-  ALWAYS VIEW trackDbTestBlurbs.html AFTER MODIFYING THIS FILE !!!!!!!
+  ALWAYS CHECK THIS FILE AFTER MODIFYING IT !!!!!!!
+      Run "make settings", which rebuilds trackDbSettings.yaml and .json from this
+      file and reports any blurb it could not read.  Then view trackDbDoc.html and
+      trackDbHub.html and open the settings you touched.
+      (The old trackDbTestBlurbs.html test page was dropped in Nov 2025.)
 
   How to add/maintain this documentation:
   There are 2 essential parts to trackDb*.html DOCS: I) this LIBRARY and II) the HTML PAGES.
@@ -51,7 +55,9 @@
   - Document introductions and section introductions may also be shared by multiple documents
     and therefore may be included here as "intro blurb" DIVs as: <DIV class="bed_intro">.
     - intro DIVs do not contain a class="format" DIV.
-  - Use trackDbTestBurbs.html to test blurbs you add or modify.  It runs javascript tests.
+  - Run "make settings" to check a blurb you add or modify.  trackDbSettingsGen.py
+    parses this file and names any blurb whose types span, format div or description
+    it could not read.
   HINT: It is the class={setting} that ties things togther.  If there is a need for multiple
   descriptions of the same setting, then create multiple blurb DIVs with different classes as:
     <DIV class="parent"> and <DIV class="parent_view">.
@@ -205,27 +211,30 @@
     <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>Declares the format of the data and is used to
     determine display methods and options.</P>
-    <P>Valid settings:</P>
+    <P>Valid settings for a hub:</P>
     <P>
     <A onclick="return jumpTo(this);" HREF="#">bam/cram</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBarChart</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigGenePred</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigInteract</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigLolly</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigNarrowPeak</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">halSnake</A>,
     <A onclick="return jumpTo(this);" HREF="#">hic</A>,
     <A onclick="return jumpTo(this);" HREF="#">vcfTabix</A>,
+    <A onclick="return jumpTo(this);" HREF="#">vcfPhasedTrio</A>.
+    </P>
     <P>Detailed descriptions of each type can be found
     below.  In many cases the type setting includes additional
     parameters to further specify the data format.  Some track types
     have additional setting requirements, to be discussed
     below.</P>
-    <P><B>Example:</B>
-    </P>
+    <P><B>Example:</B></P>
     <pre>   type bigBed 6 +</pre>
 </DIV>
 
@@ -267,6 +276,22 @@
     tab-separated file specified by metaTab, or tagStorm file specified by metaDb in the 
     hub's genomes.txt file. Examples on how to include metadata in your hubs can be found
     on the following <a href="/goldenPath/help/metadata.html">metadata guide</a>.
+</DIV>
+
+<DIV class="metadata"><span class="types all"></span>
+<div class="format"><code>metadata &lt;name=value&gt; [&lt;name=value&gt; ...]</code></div>
+    <P><I>Deprecated. Use <A onclick="return jumpTo(this);" HREF="#">meta</A> instead.</I></P>
+    <P>Attaches metadata to a track as a list of <code>name=value</code> pairs on one line.
+    Wrap a value that contains spaces in double quotes. A word starting with <code>#</code>
+    ends the line, so anything after it is a comment. The pairs are shown on the track
+    description page and on the item details page.</P>
+    <P>The <code>meta</code> setting replaces this one. It keeps the metadata in a single
+    file for the whole hub, named by <code>metaDb</code> or <code>metaTab</code> in
+    <code>genomes.txt</code>, instead of repeating it in every stanza. See the
+    <a href="/goldenPath/help/metadata.html">metadata guide</a>. The Browser still reads
+    <code>metadata</code>, but <code>meta</code> wins when a stanza has both.</P>
+    <P><B>Example:</B></P>
+    <pre>   metadata cellType=K562 antibody=CTCF lab="Broad Institute"</pre>
 </DIV>
 
 <DIV class="visibility"><span class="types all"></span>
@@ -418,9 +443,16 @@
     Use the given field as the height of the lollipop.
 </DIV>
 
-<DIV class="noStems"><span class="types bigLolly"></span>
-<div class="format"><code>noStems &lt;on/off&gt;</code></div>
-    Don't draw the stems of the lollipops.
+<DIV class="lollyNoStems"><span class="types bigLolly"></span>
+<div class="format"><code>lollyNoStems &lt;on/off&gt;</code></div>
+    <P>Draw the lollipop heads without the stems that normally connect them to
+    the baseline.</P>
+    <P>This setting was documented as <code>noStems</code> until August 2026.
+    That spelling never worked, because the Browser has always read
+    <code>lollyNoStems</code>. A track using <code>noStems</code> draws its
+    stems as usual.</P>
+    <P><B>Example:</B></P>
+    <pre>   lollyNoStems on</pre>
 </DIV>
 
 <DIV class="lollySizeField"><span class="types bigLolly"></span>
@@ -497,7 +529,8 @@
 
 <DIV class="canPack"><span class="types all"></span>
 <div class="format"><code>canPack &lt;off/on&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Deprecated.</I></P>
+    <P><I>Deprecated. The track type usually implies whether pack and
+    squish are offered, so this setting is rarely needed.</I></P>
     <P>Most tracks can be displayed in all five
     visibilities modes.  However on some track types such as
     wiggles, the <code>squish</code> and <code>pack</code> modes offer no real advantage
@@ -552,7 +585,6 @@
 
 <DIV class="configureByPopup"><span class="types all"></span>
 <div class="format"><code>configureByPopup &lt;on/off&gt;</code></div>
-    <P><I>NOT FOR HUBS.</I></P>
     <P>Most track displays that can be configured by a user can also be
     configured from directly within the
     Browser image through a right-click option that pops up
@@ -752,7 +784,6 @@
 
 <DIV class="origAssembly"><span class="types all"></span>
 <div class="format"><code>origAssembly &lt;db&gt;</code></div>
-    <P><I>NOT FOR HUBS.</I></P>
     <P>The original assembly version for which the dataset was
     generated.  Datasets generated by mapping to one genome
     assembly may prove useful enough to map to a more recent assembly.
@@ -1035,7 +1066,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred"></span>
+<DIV class="mouseOverField"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred bigLolly"></span>
     <div class="format">
         <code>mouseOverField &lt;fieldName1&gt;</code><BR>
     </div>
@@ -1057,7 +1088,7 @@
     </pre>
 </DIV>
 
-<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred"></span>
+<DIV class="mouseOver"><span class="types bigBed bigPsl bigChain bigMaf bigMethyl bigNarrowPeak bigGenePred bigLolly"></span>
     <div class="format">
         <code>mouseOver &lt;pattern&gt;</code><BR>
     </div>
@@ -1316,14 +1347,6 @@ There are no extra options that can appear on the type hic line.
     <P><em>An example can be found below.</em></P>
 </DIV>
 
-<DIV class="bigDataUrl2"><span class="types bigBed bigWig bam vcfTabix"></span>
-<div class="format">
-    <code>bigDataUrl2 &lt;url/relativePath&gt;</code></div>
-    <P>This setting is for remote data file type
-    tracks (e.g. bigWig) and is fully described in the "<A HREF="#bigDataUrl">Common
-    trackDb settings</A>" portion of this document.</P>
-</DIV>
-
 <DIV class="colorByStrand"><span class="types bed bigBed"></span>
 <div class="format"><code>colorByStrand &lt;red,green,blue&gt; &lt;red,green,blue&gt;</code></div>
     <P>To color items
@@ -1451,7 +1474,7 @@ There are no extra options that can appear on the type hic line.
     <pre>   labelOnFeature on</pre>
 </DIV>
 
-<DIV class="exonArrows"><span class="types genePred bed broadPeak"></span>
+<DIV class="exonArrows"><span class="types bed bigBed genePred bigGenePred psl bigPsl chain bigChain narrowPeak bigNarrowPeak broadPeak"></span>
 <div class="format"><code>exonArrows &lt;on/off&gt;</code></div>
     <P>On tracks that show
     exons or blocks within features, exon arrows allow the user to jump to
@@ -1463,7 +1486,7 @@ There are no extra options that can appear on the type hic line.
     <pre>   exonArrows off</pre>
 </DIV>
 
-<DIV class="exonNumbers"><span class="types genePred bed psl bigBed bigGenePred"></span>
+<DIV class="exonNumbers"><span class="types genePred bigGenePred bed bigBed psl bigPsl"></span>
 <div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
     <P>A mouseover that shows the exon and intron numbers 
     can be explicitly shown or hidden using this setting.
@@ -1473,7 +1496,7 @@ There are no extra options that can appear on the type hic line.
     <P>The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron", respectively.</P>
 </DIV>
 
-<DIV class="Filter"><span class="types bed narrowPeak broadPeak"></span>
+<DIV class="Filter"><span class="types bed bigBed narrowPeak bigNarrowPeak broadPeak"></span>
 <div class="format">
     <code>&lt;column&gt;Filter &lt;low&gt;[:&lt;high&gt;]</code><BR>
     <code>scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
@@ -1561,11 +1584,9 @@ There are no extra options that can appear on the type hic line.
     excluded.  The filter cannot be set to less than 200 or more than 1000..</P>
 </DIV>
 
-<DIV class="filterBy"><span class="types bed bigBed genePred psl factorSource"></span>
+<DIV class="filterBy"><span class="types bed bigBed genePred bigGenePred psl bigPsl bigLolly factorSource"></span>
 <div class="format"><code>filterBy  &lt;field1:title=[+]opt1a...&gt;
                             [field2:title=[+]opt2a...]</code></div>
-    <!-- DONNA -- redo -->
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
     <P>Another method of
     filtering items relies upon discrete values.  One or more fields
     such as <code>name</code> or <code>score</code> may contain a limited number
@@ -2260,7 +2281,7 @@ There are no extra options that can appear on the type hic line.
     <pre>   maxItems 25</pre>
 </DIV>
 
-<DIV class="maxWindowCoverage"><span class="types bed genePred bam rmsk narrowPeak broadPeak bigWig bedLogR"></span>
+<DIV class="maxWindowCoverage"><span class="types bed bigBed genePred bigGenePred psl bigPsl chain bigChain narrowPeak bigNarrowPeak broadPeak bam rmsk bedLogR vcf vcfTabix"></span>
 <div class="format"><code>maxWindowCoverage &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
@@ -2272,7 +2293,7 @@ There are no extra options that can appear on the type hic line.
     being displayed as a density coverage graph.</p>
 </DIV>
 
-<DIV class="maxWindowToDraw"><span class="types bed genePred bam rmsk narrowPeak broadPeak bigWig bedLogR"></span>
+<DIV class="maxWindowToDraw"><span class="types all"></span>
 <div class="format"><code>maxWindowToDraw &lt;integer&gt;</code></div>
     <p>When too many individual bed items might be shown in the Browser image
     (such as might occur when a large region of a chromosome is viewed),
@@ -2297,7 +2318,7 @@ There are no extra options that can appear on the type hic line.
     <code>zoom in to <= 10,000,000 bases to view items</code>.</p>
 </DIV>
 
-<DIV class="minGrayLevel"><span class="types bed broadPeak narrowPeak bedLogR bigBed"></span>
+<DIV class="minGrayLevel"><span class="types bed bigBed broadPeak narrowPeak bigNarrowPeak bedLogR bigInteract"></span>
 <div class="format"><code>minGrayLevel  &lt;1-9&gt;</code></div>
     <P>When a bed track contains the standard
     field <code>score</code>, and when that score is used
@@ -2312,7 +2333,7 @@ There are no extra options that can appear on the type hic line.
     less than medium gray, while the highest scores appear black.</P>
 </DIV>
 
-<DIV class="noScoreFilter"><span class="types bed bedGraph bedLogR gvf"></span>
+<DIV class="noScoreFilter"><span class="types bed bigBed bedGraph bedLogR gvf"></span>
 <div class="format"><code>noScoreFilter  on</code></div>
     <P>By default, bed
     tracks with 5 or more standard bed fields that contain either a '<code>.</code>' or
@@ -2329,7 +2350,22 @@ There are no extra options that can appear on the type hic line.
     noScoreFilter on    </pre>
 </DIV>
 
-<DIV class="spectrum"><span class="types all"></span>
+<DIV class="useScore"><span class="types bed bigBed bigGenePred psl bigPsl"></span>
+<div class="format"><code>useScore 1</code></div>
+    <P><I>Deprecated. Use <A onclick="return jumpTo(this);" HREF="#">spectrum</A> instead.</I></P>
+    <P>Shades each item by its <code>score</code> field, so low scores draw in light gray and
+    high scores draw near black. <code>spectrum on</code> does the same thing and is the
+    spelling to use in a new track. The Browser treats the two names as one setting, and
+    <code>scoreMin</code>, <code>scoreMax</code> and
+    <A onclick="return jumpTo(this);" HREF="#">minGrayLevel</A> tune both the same way.</P>
+    <P>In a trackDb file or a hub, any value turns the shading on, including
+    <code>useScore 0</code>, because the Browser only checks whether the setting is present.
+    In a custom track the value is read, and <code>0</code> turns the shading off.</P>
+    <P><B>Example:</B></P>
+    <pre>   useScore 1</pre>
+</DIV>
+
+<DIV class="spectrum"><span class="types bed bigBed bigGenePred psl bigPsl"></span>
 <div class="format">
     <code>spectrum on</code><BR>
     <code>scoreMax &lt;integer&gt;</code><BR>
@@ -2371,7 +2407,7 @@ There are no extra options that can appear on the type hic line.
     scores greater than or equal to 900 above will display in black.</P>
 </DIV>
 
-<DIV class="searchIndex"><span class="types bed bigBed"></span>
+<DIV class="searchIndex"><span class="types bigBed bigPsl bigGenePred bigBarChart"></span>
 <div class="format"><code>searchIndex &lt;str&gt;</code></div>
     <P> Specifies the list of field names on which a index has been made.
     When a user enters a string in the position search box of the browser,
@@ -2389,7 +2425,7 @@ There are no extra options that can appear on the type hic line.
     <pre>   searchIndex name</pre>
 </DIV>
 
-<DIV class="searchTrix"><span class="types bed bigBed"></span>
+<DIV class="searchTrix"><span class="types bigBed bigGenePred"></span>
 <div class="format"><code>searchTrix &lt;url/relativePath&gt;</code></div>
     <P> Specifies the URL to a TRIX file that maps free text to
     a set of indices that are assumed to have indicies in the associated
@@ -2526,7 +2562,7 @@ that identifies the reference sequence.
 
 </DIV>
 
-<DIV class="baseColorUseSequence"><span class="types all"></span>
+<DIV class="baseColorUseSequence"><span class="types bed bigBed genePred psl bigPsl chain bigChain bam"></span>
 <div class="format"><code>baseColorUseSequence  &lt;extFile {seqTable} /
                   hgPcrResult / lfExtra / nameIsSequence / seq1Seq2 / ss / 2bit &gt;</code></div>
     <!-- DONNA -- redo -->
@@ -2562,7 +2598,7 @@ that identifies the reference sequence.
     </UL>
 </DIV>
 
-<DIV class="baseColorUseCds"><span class="types bed genePred psl bigPsl"></span>
+<DIV class="baseColorUseCds"><span class="types bed bigBed genePred bigGenePred psl bigPsl"></span>
 <div class="format"><code>baseColorUseCds &lt;given&gt;</code></div>
     <P>Specifies where coding sequence (CDS)
     coordinates can be found (if any) so that codons can be drawn
@@ -2571,7 +2607,7 @@ that identifies the reference sequence.
     <pre>   baseColorUseCds given</pre>
 </DIV>
 
-<DIV class="baseColorDefault"><span class="types all"></span>
+<DIV class="baseColorDefault"><span class="types bed bigBed genePred bigGenePred psl bigPsl chain bigChain bam"></span>
 <div class="format"><code>baseColorDefault
                     &lt;diffBases/diffCodons/itemBases/itemCodons/genomicCodons&gt;</code></div>
     <P>Specifies the default drawing mode.
@@ -2583,22 +2619,37 @@ that identifies the reference sequence.
     setting.</P>
 </DIV>
 
-<DIV class="baseColorTickColor"><span class="types bed bigBed"></span>
+<DIV class="baseColorTickColor"><span class="types bed bigBed psl bigPsl"></span>
 <div class="format"><code>baseColorTickColor &lt;lighterShade/contrastingColor&gt;</code></div>
-    <P><I>NOT FOR HUBS.  Not yet supported by bigBeds</I></P>
-    <P>Choose a <code>contrastingColor</code> (this is often
-    white) or <code>lighterShade</code> of color. This should be the
-    same color as would be chosen for the base text if the user were
-    zoomed in to base level.</P>
+    <P>Sets the color of the tick marks that mark where item bases differ from the
+    genome. Those marks appear when the track draws with
+    <code>baseColorDefault diffBases</code> and the view is zoomed out past base
+    level. Their default color is red.</P>
+    <UL>
+    <LI><code>contrastingColor</code>: a color that stands out against the item
+    color, often white.</LI>
+    <LI><code>lighterShade</code>: a lighter version of the item color.</LI>
+    </UL>
+    <P>Both values are worked out from the item's own color, so this setting does
+    nothing unless the track gives each item a color. In a hub the way to do that is
+    <A onclick="return jumpTo(this);" HREF="#">colorByStrand</A>. Without it the
+    setting is read and ignored, and the tick marks stay red.
+    <code>itemRgb</code> does not count here: it colors an item as it is drawn, but
+    it does not give the track the per-item color this setting reads.</P>
+    <P><B>Example:</B></P>
+    <pre>
+    colorByStrand 0,0,200 200,0,0
+    baseColorDefault diffBases
+    baseColorTickColor contrastingColor</pre>
 </DIV>
 
-<DIV class="showDiffBasesAllScales"><span class="types all"></span>
+<DIV class="showDiffBasesAllScales"><span class="types bed bigBed genePred psl bigPsl chain bigChain bam"></span>
 <div class="format"><code>showDiffBasesAllScales on</code></div>
     <P>Show base differences for all zoom levels.</P>
     <!-- DONNA -- how do you show the differences?  -->
 </DIV>
 
-<DIV class="showDiffBasesMaxZoom"><span class="types all"></span>
+<DIV class="showDiffBasesMaxZoom"><span class="types bed bigBed genePred psl bigPsl chain bigChain bam"></span>
 <div class="format"><code>showDiffBasesMaxZoom &lt;basesPerPixel&gt;</code></div>
     <P>Show annotations highlighting base or codon differences
     only if current zoom level does not exceed 
@@ -2606,12 +2657,12 @@ that identifies the reference sequence.
     should also be set to make this useful.</P>
 </DIV>
 
-<DIV class="showCdsAllScales"><span class="types psl"></span>
+<DIV class="showCdsAllScales"><span class="types psl bigPsl"></span>
 <div class="format"><code>showCdsAllScales on</code></div>
     <P>Show CDS for PSL tracks at all zoom levels.</P>
 </DIV>
 
-<DIV class="showCdsMaxZoom"><span class="types psl"></span>
+<DIV class="showCdsMaxZoom"><span class="types psl bigPsl"></span>
 <div class="format"><code>showCdsMaxZoom &lt;basesPerPixel&gt;</code></div>
     <P>Use this setting (a float) to specify the maximum zoom-out allowed for displaying the CDS 
     for psl tracks. 
@@ -2636,7 +2687,7 @@ that identifies the reference sequence.
     DONNA -- finish -->
 </DIV>
 
-<DIV class="exonArrowsDense"><span class="types bed"></span>
+<DIV class="exonArrowsDense"><span class="types bed bigBed genePred bigGenePred psl bigPsl chain bigChain narrowPeak bigNarrowPeak broadPeak bam"></span>
 <div class="format"><code>exonArrowsDense &lt;off/on&gt;</code></div>
     <P>On tracks that show
     exons or blocks within items, exon arrows allow the user to jump to
@@ -2654,7 +2705,7 @@ that identifies the reference sequence.
     <pre>   itemDetailsHtmlTable pseudoGeneDetails</pre>
 </DIV>
 
-<DIV class="itemImagePath"><span class="types bed"></span>
+<DIV class="itemImagePath"><span class="types bed bigBed"></span>
 <div class="format"><code>itemImagePath &lt;path&gt; &lt;suffix&gt;</code><BR>
     <code>itemBigImagePath &lt;path&gt; &lt;suffix&gt;</code></div>
     <!-- <P><I>Not found in any of the Genome Browser trackDb.ra files.  Custom or dataHub 
@@ -2689,7 +2740,7 @@ that identifies the reference sequence.
     <pre>   mafTrack multiz46way</pre>
 </DIV>
 
-<DIV class="nextExonText"><span class="types all"></span>
+<DIV class="nextExonText"><span class="types bed bigBed genePred bigGenePred psl bigPsl chain bigChain narrowPeak bigNarrowPeak broadPeak"></span>
 <div class="format">
     <code>nextExonText &lt;str&gt;</code><BR>
     <code>prevExonText &lt;str&gt;</code></div>
@@ -2972,7 +3023,7 @@ that identifies the reference sequence.
     can scale it up to 100 pixels.</P>
 </DIV>
 
-<DIV class="maxWindowToQuery"><span class="types bed bigWig bedLogR"></span>
+<DIV class="maxWindowToQuery"><span class="types bigWig"></span>
 <div class="format"><code>maxWindowToQuery &lt;integer&gt;</code></div>
     <P><I>For bigWigs only</I></P>
     <P>When signal data is clicked in the Browser image, the details of the signal
@@ -3061,7 +3112,7 @@ that identifies the reference sequence.
     <pre>   logo on</pre>
 </DIV>
 
-<DIV class="logoMaf"><span class="types bigWig bigMaf"></span>
+<DIV class="logoMaf"><span class="types wig bigWig bigMaf"></span>
 <div class="format"><code>logoMaf &lt;url/relativePath&gt;</code></div>
     <P>The argument to logoMaf is the path to a MAF alignment (either a table or bigMaf). 
     If set and zoomed into base level, the wiggle will be drawn as a sequence logo calculated 
@@ -3376,7 +3427,7 @@ that identifies the reference sequence.
     this track is for RNA genes.</P>
 </DIV>
 
-<DIV class="intronGap"><span class="types genePred psl"></span>
+<DIV class="intronGap"><span class="types genePred bigGenePred psl bigPsl"></span>
 <div class="format"><code>intronGap &lt;#bases&gt;</code></div>
     <P>In drawing gene models, it can be useful to see
     "exon arrows" when the transcript extends beyond the current
@@ -3389,7 +3440,7 @@ that identifies the reference sequence.
     exons is 12 bases or less.</P>
 </DIV>
 
-<DIV class="defaultLinkedTables"><span class="types genePred"></span>
+<DIV class="defaultLinkedTables"><span class="types genePred bigGenePred"></span>
 <div class="format"><code>defaultLinkedTables &lt;table1&gt;[,table2...]</code></div>
     <P>In hgTables, when selecting output fields,
     display these all.joiner-linked tables by default.</P>
@@ -3397,7 +3448,24 @@ that identifies the reference sequence.
     <pre>   defaultLinkedTables kgXref</pre>
 </DIV>
 
-<DIV class="idXref"><span class="types genePred"></span>
+<DIV class="pslSequence"><span class="types psl bigPsl"></span>
+<div class="format"><code>pslSequence &lt;no/all/different&gt;</code></div>
+    <P><I>Obsolete. The Browser does not read this setting.</I>
+    It selected how bases were labelled on psl tracks that also have sequence
+    loaded. The <code>baseColor</code> family replaced it in 2006, and nothing
+    has read either this spelling or the older
+    <code>pslSequenceBases</code> since.
+    <UL>
+    <LI><code>all</code> is now <code>baseColorDefault itemBases</code>.</LI>
+    <LI><code>different</code> is now <code>baseColorDefault diffBases</code>.</LI>
+    <LI><code>no</code> left the choice to the user, which is what happens when
+    <code>baseColorDefault</code> is not set.</LI>
+    </UL>
+    Both replacements need <code>baseColorUseSequence</code> to be set. Remove
+    <code>pslSequence</code> from a trackDb file; it has no effect.</P>
+</DIV>
+
+<DIV class="idXref"><span class="types genePred bigGenePred"></span>
 <div class="format"><code>idXref &lt;idColumn&gt; &lt;altIdColumn&gt;</code></div>
     <P>By using this setting you can link alternative
     names to the gene models found in a genePred.   This is used by
@@ -3593,7 +3661,7 @@ that identifies the reference sequence.
     <pre>   bamSkipPrintQualScore .</pre>
 </DIV>
 
-<DIV class="indelDoubleInsert"><span class="types bam"></span>
+<DIV class="indelDoubleInsert"><span class="types bam psl bigPsl"></span>
 <div class="format">
     <code>indelDoubleInsert &lt;off/on&gt;</code><BR>
     <code>indelQueryInsert &lt;off/on&gt;</code><BR>
@@ -3760,20 +3828,6 @@ that identifies the reference sequence.
     <pre>  pred hg18.blastKGPep04</pre>
 </DIV>
 
-<DIV class="pslSequence"><span class="types psl"></span>
-<div class="format"><code>pslSequence &lt;no/all/different&gt;</code></div>
-    <P>This setting specifies some display configuration options for
-    psl tracks that also have sequence loaded.  
-    <UL>
-    <LI><code>all</code>: Display nucleotide labels on all bases.</LI>
-    <LI><code>different</code>: Label only base differences. </LI>
-    <LI><code>no</code>:  Allow the user to select which of the other two options is preferred.</LI>
-    </UL>
-    </P>
-    <P><B>Example:</B></P>
-    <pre>    pslSequence different</pre>
-</DIV>
-
 <DIV class="transMapGene"><span class="types psl"></span>
 <div class="format">
     <code>transMapGene &lt;assembly.table&gt;</code><BR>
@@ -3934,7 +3988,7 @@ that identifies the reference sequence.
     <P><em>Example can be found below.</em></P>
 </DIV>
 
-<DIV class="chainColor"><span class="types chain"></span>
+<DIV class="chainColor"><span class="types chain bigChain"></span>
 <div class="format"><code>chainColor &lt;scheme&gt;</code></div>
     <P>By default chains are colored by the alignment
     chromosome of the query species.  This can be overridden with this
@@ -3977,7 +4031,7 @@ that identifies the reference sequence.
     <pre>   chainMinScore 5000</pre>
 </DIV>
 
-<DIV class="chainNormScoreAvailable"><span class="types chain netAlign bed"></span>
+<DIV class="chainNormScoreAvailable"><span class="types chain bigChain netAlign bed"></span>
 <div class="format"><code>chainNormScoreAvailable &lt;yes/no&gt;</code></div>
     <P>A given chain or netAlign track may or may not
     have a populated normScore column.  If the column exists, then
@@ -4111,7 +4165,7 @@ that identifies the reference sequence.
     <pre>   frames myCodonFrames.bb</pre>
 </DIV>
 
-<DIV class="irows"><span class="types wigMaf"></span>
+<DIV class="irows"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>irows off</code></div>
     <P>By default, gaps in the non-reference species are filled with the placeholder
     character:
@@ -4136,7 +4190,7 @@ that identifies the reference sequence.
     <pre>   irows off</pre>
 </DIV>
 
-<DIV class="itemFirstCharCase"><span class="types wigMaf"></span>
+<DIV class="itemFirstCharCase"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>itemFirstCharCase noChange</code></div>
     <P>This controls if 
     species names in the multiple alignment should be capitalized in
@@ -4147,7 +4201,7 @@ that identifies the reference sequence.
     <pre>   itemFirstCharCase noChange</pre>
 </DIV>
 
-<DIV class="pairwiseHeight"><span class="types wigMaf"></span>
+<DIV class="pairwiseHeight"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>pairwiseHeight &lt;#&gt;</code></div>
     <P>A wigMaf display in
     the Browser image is a stacked set of pairwise alignments to the
@@ -4157,7 +4211,7 @@ that identifies the reference sequence.
     <pre>   pairwiseHeight 10</pre>
 </DIV>
 
-<DIV class="speciesCodonDefault"><span class="types wigMaf"></span>
+<DIV class="speciesCodonDefault"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>speciesCodonDefault &lt;species&gt;</code></div>
     <P>This setting, which
     is used with "frames", declares the default species
@@ -4168,7 +4222,7 @@ that identifies the reference sequence.
     frames myCodonFrames    </pre>
 </DIV>
 
-<DIV class="speciesDefaultOff"><span class="types wigMaf"></span>
+<DIV class="speciesDefaultOff"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>speciesDefaultOff &lt;species1&gt; [species2 ...]</code></div>
     <P>To control which of
     the stacked pairwise alignments are displayed or hidden by default, use
@@ -4181,7 +4235,7 @@ that identifies the reference sequence.
     <pre>   speciesDefaultOff galGal2 fr1 danRer1</pre>
 </DIV>
 
-<DIV class="speciesOrder"><span class="types wigMaf bed"></span>
+<DIV class="speciesOrder"><span class="types wigMaf bigMaf"></span>
 <div class="format"><I>Related settings:</I><BR>
     <code>speciesOrder &lt;species1&gt; [species2 &hellip;]</code></div>
     <P>Use <code>speciesOrder</code> to declare the order of the
@@ -4189,14 +4243,14 @@ that identifies the reference sequence.
     it may make sense to use the <code>speciesGroups</code> setting instead.</P>
 </DIV>
 
-<DIV class="speciesLabels"><span class="types wigMaf bed"></span>
+<DIV class="speciesLabels"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>speciesLabels &lt;species1=newLabel1&gt; [species2=newLabel2 &hellip;]</code></div>
     <P>Use <code>speciesLabels</code> to specify new labels that map to sequence names.</P>
     <P><B>Example:</B></P>
     <pre>   speciesLabels mm10=mouse_mm10 mm39=mouse_mm39</pre>
 </DIV>
 
-<DIV class="speciesGroups"><span class="types wigMaf"></span>
+<DIV class="speciesGroups"><span class="types wigMaf bigMaf"></span>
 <div class="format">
     <code>speciesGroups &lt;sgroup1&gt; [sgroup2  &hellip;]</code><BR>
     <code>sGroup_&lt;sgroupN&gt; &lt;species1&gt; [species2 &hellip;]</code></div>
@@ -4216,15 +4270,18 @@ that identifies the reference sequence.
     <P>Choose one of these two alternatives to display species.</P>
 </DIV>
 
-<DIV class="speciesUseFile"><span class="types wigMaf"></span>
-<div class="format"><code>speciesUseFile &lt;fileName&gt;</code></div>
+<DIV class="speciesUseFile"><span class="types wigMaf bigMaf"></span>
+<div class="format"><code>speciesUseFile &lt;cartVariableName&gt;</code></div>
     <P><I>Deprecated</I></P>
     <P>Much more rarely used, this setting can
     replace <code>speciesOrder</code> and <code>speciesGroups</code>.
-    Set the <code>speciesUseFile</code> to a path relative to the apache cgi-bin.
-    The file should contain a single species name as the first word of each line.</P>
+    The value is not a file name. It is the name of a cart variable, and the
+    Browser reads the species list from the file that variable points to. That
+    file has to be one the Browser itself wrote for this user, so a track cannot
+    supply it directly; it arrives through the track's own configuration page.
+    The file holds one species name as the first word of each line.</P>
     <P><B>Example:</B></P>
-    <pre>    speciesUseFile speciesLists/conserved8Way.txt</pre>
+    <pre>    speciesUseFile myTrack.speciesList</pre>
 </DIV>
 
 <DIV class="summary"><span class="types wigMaf bigMaf"></span>
@@ -4240,7 +4297,7 @@ that identifies the reference sequence.
     <pre>   summary hg17Maf8waySummary</pre>
 </DIV>
 
-<DIV class="treeImage"><span class="types wigMaf"></span>
+<DIV class="treeImage"><span class="types wigMaf bigMaf"></span>
 <div class="format"><code>treeImage &lt;imageFile&gt;</code></div>
     <P>The phylogenetic tree
     can used to show the relations of the species in the multiple
@@ -4678,7 +4735,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     specifies which chimp genome assembly was used, e.g. <code>panTro2</code>.</P>
 </DIV>
 
-<DIV class="chimpMacaqueOrthoTable"><span class="types snp"></span>
+<DIV class="chimpMacaqueOrthoTable"><span class="types bed"></span>
 <div class="format"><code>chimpMacaqueOrthoTable &lt;table&gt;</code></div>
     <P>If chains/nets from chimp and rhesus macaque were use to identify
     the chimp or macaque reference assembly allele at the location
@@ -4686,7 +4743,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     that contains the mapped alleles.</P>
 </DIV>
 
-<DIV class="chimpOrangMacOrthoTable"><span class="types snp"></span>
+<DIV class="chimpOrangMacOrthoTable"><span class="types bed"></span>
 <div class="format"><code>chimpOrangMacOrthoTable &lt;table&gt;</code></div>
     <P>If chains/nets from chimp, orangutan and rhesus macaque were use to identify
     the chimp/orangutan/macaque reference assembly allele at the location
@@ -4694,21 +4751,21 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     that contains the mapped alleles.</P>
 </DIV>
 
-<DIV class="codingAnnoLabel_table"><span class="types snp"></span>
+<DIV class="codingAnnoLabel_table"><span class="types bed"></span>
 <div class="format"><code>codingAnnoLabel_&lt;table&gt; &lt;text&gt;</code></div>
     <P><I>Deprecated; will probably be removed.</I>
     This specifies a text label for display of &lt;table&gt;'s
     predictions of a SNP's effect on a protein-coding gene.</P>
 </DIV>
 
-<DIV class="codingAnnotations"><span class="types snp"></span>
+<DIV class="codingAnnotations"><span class="types bed"></span>
 <div class="format"><code>codingAnnotations &lt;table&gt;[,table]</code></div>
     <P><I>Deprecated; will probably be removed.</I>
     This specifies one or more tables containing predictions of SNP
     effects on protein-coding genes.</P>
 </DIV>
 
-<DIV class="defaultGeneTracks"><span class="types snp"></span>
+<DIV class="defaultGeneTracks"><span class="types bed bigDbSnp"></span>
 <div class="format"><code>defaultGeneTracks &lt;genesTrack&gt;[,genesTrack]</code></div>
     <P>The details page of a SNP can display the predicted functional
     affect on a gene from any genePred track.
@@ -4720,7 +4777,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     <pre>   defaultGeneTracks knownGenes</pre>
 </DIV>
 
-<DIV class="defaultMaxWeight"><span class="types snp"></span>
+<DIV class="defaultMaxWeight"><span class="types bed"></span>
 <div class="format"><code>defaultMaxWeight &lt;1|2|3&gt;</code></div>
     <P>dbSNP assigns a weight of 1, 2 or 3 to each variant, depending
     on how many distinct mappings a variant's flanking sequences have
@@ -4734,7 +4791,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     setting has no effect on those tables.</P>
 </DIV>
 
-<DIV class="hapmapPhase"><span class="types snp"></span>
+<DIV class="hapmapPhase"><span class="types bed"></span>
 <div class="format"><code>hapmapPhase &lt;II|III&gt;</code></div>
     <P>The SNP details page looks for the SNP's ID in HapMap track tables
     that have different names and contents depending on whether they
@@ -4742,21 +4799,21 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     (This setting is also used by HapMap SNPs tracks.)</P>
 </DIV>
 
-<DIV class="macaqueDb"><span class="types snp"></span>
+<DIV class="macaqueDb"><span class="types bed"></span>
 <div class="format"><code>macaqueDb &lt;db&gt;</code></div>
     <P>If macaque chains/nets were used to identify the macaque reference
     assembly allele at the location homologous to the human SNP, this
     specifies which macaque genome assembly was used, e.g. <code>rheMac2</code>.</P>
 </DIV>
 
-<DIV class="orangDb"><span class="types snp"></span>
+<DIV class="orangDb"><span class="types bed"></span>
 <div class="format"><code>orangDb &lt;db&gt;</code></div>
     <P>If orangutan chains/nets were used to identify the orangutan reference
     assembly allele at the location homologous to the human SNP, this
     specifies which orangutan genome assembly was used, e.g. <code>ponAbe2</code>.</P>
 </DIV>
 
-<DIV class="snpExceptions"><span class="types snp"></span>
+<DIV class="snpExceptions"><span class="types bed"></span>
 <div class="format"><code>snpExceptions &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that contains annotations of unusual
     properties of variants.  This setting applies only to versions prior to dbSNP 
@@ -4764,19 +4821,19 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     main snp<em>NNN</em> table and an auxiliary table is no longer needed.</P>
 </DIV>
 
-<DIV class="snpExceptionDesc"><span class="types snp"></span>
+<DIV class="snpExceptionDesc"><span class="types bed"></span>
 <div class="format"><code>snpExceptionDesc &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that maps exception keywords
     to one-sentence descriptions.</P>
 </DIV>
 
-<DIV class="snpSeq"><span class="types snp"></span>
+<DIV class="snpSeq"><span class="types bed"></span>
 <div class="format"><code>snpSeq &lt;table&gt;</code></div>
     <P>This specifies an auxiliary table that maps variant IDs to
     file offsets at which flanking sequences are stored.</P>
 </DIV>
 
-<DIV class="snpSeqFile"><span class="types snp"></span>
+<DIV class="snpSeqFile"><span class="types bed"></span>
 <div class="format"><code>snpSeqFile &lt;path&gt;</code></div>
     <P>This specifies an auxiliary file that contains the flanking
     sequences of each variant's representative submitted SNP.</P>
@@ -4840,7 +4897,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     <P><em>Example can be found below.</em></P>
 </DIV>
 
-<DIV class="hapClusterEnabled"><span class="types vcf"></span>
+<DIV class="hapClusterEnabled"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterEnabled &lt;true|false&gt;</code></div>
     <P>If the VCF file includes genotype columns for at least two individuals,
     then a haplotype sorting display is enabled by default.  This option can be
@@ -4851,7 +4908,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     </P>
 </DIV>
 
-<div class="hapClusterMethod"><span class="types vcf"></span>
+<div class="hapClusterMethod"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterMethod &lt;centerWeighted|fileOrder|treeFile <em>url</em>&gt;</code></div>
     <p>Assuming <code>hapClusterEnabled</code> is <code>true</code>, this specifies how
     genotypes are ordered for display:
@@ -4871,7 +4928,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     </p>
 </div>
 
-<DIV class="hapClusterColorBy"><span class="types vcf"></span>
+<DIV class="hapClusterColorBy"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
     this specifies one of three ways that reference and alternate alleles are colored:
@@ -4889,13 +4946,13 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     </P>
 </DIV>
 
-<div class="geneTrack"><span class="types vcf vcfPhasedTrio"></span>
+<div class="geneTrack"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>geneTrack &lt;<em>track</em>&gt;</code></div>
     <p>This is for use with <code>hapClusterColorBy function</code>; it specifies the gene track
     to use when determining the functional effect of each variant.</p>
 </div>
 
-<DIV class="hapClusterTreeAngle"><span class="types vcf"></span>
+<DIV class="hapClusterTreeAngle"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterTreeAngle &lt;triangle|rectangle&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
     this controls the shape of leaf clusters on the right of the tree
@@ -4929,21 +4986,21 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     </P>
 </DIV>
 
-<DIV class="hapClusterHeight"><span class="types vcf"></span>
+<DIV class="hapClusterHeight"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterHeight &lt;<EM>N</EM>&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
     this specifies the height in pixels of the haplotype sorting display.
     </P>
 </DIV>
 
-<DIV class="applyMinQual"><span class="types vcf"></span>
+<DIV class="applyMinQual"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>applyMinQual &lt;true|false&gt;</code></div>
     <P>If <code>true</code>, then variants whose QUAL column contains a value less
     than the <code>minQual</code> setting will not be displayed.
     </P>
 </DIV>
 
-<DIV class="minQual"><span class="types vcf"></span>
+<DIV class="minQual"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>minQual &lt;<EM>Q</EM>&gt;</code></div>
     <P>
     <P>Assuming <code>applyMinQual</code> is <code>true</code>,
@@ -4951,7 +5008,7 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     </P>
 </DIV>
 
-<DIV class="minFreq"><span class="types vcf"></span>
+<DIV class="minFreq"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>minFreq &lt;<EM>F</EM>&gt;</code></div>
     <P>
     The minimum minor allele frequency required for a variant to be displayed.
@@ -5466,7 +5523,7 @@ There are no extra options that can appear on the type vcfPhasedTrio line.
     This table has a simple 2 column format: char(255) factor, char(255) motif.</P>
 </DIV>
 
-<DIV class="motifPwmTable"><span class="types factorSource bed6FloatScore"></span>
+<DIV class="motifPwmTable"><span class="types factorSource bed6FloatScore bigBed"></span>
 <div class="format"><code>motifPwmTable &lt;table&gt;</code></div>
     <P>When viewing the details of a factorSource track item containing
     a binding motif in the <code>motifTable</code>, the 
@@ -5804,20 +5861,20 @@ For the complete bigBarChart format definitions please see the
     <A HREF="../barChart.html">bigBarChart help page</A>.</P>
 </DIV>
 
-<DIV class="barChartBars"><span class="types bigBarChart"></span>
+<DIV class="barChartBars"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
     <P>This setting is a list of labels for the categorical variables (bars).
     It is required for this track type.
     </P>
 </DIV>
 
-<DIV class="barChartUnit"><span class="types bigBarChart"></span>
+<DIV class="barChartUnit"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartUnit &lt;unit&gt;</code></div>
     <P>The unit label is attached to values in the display, charts and plots of the track.
     </P>
 </DIV>
 
-<DIV class="barChartLabel"><span class="types bigBarChart"></span>
+<DIV class="barChartLabel"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartLabel &lt;label&gt;</code></div>
     <P>This setting provides a label for the category selection list.</p>
     </P>
@@ -5861,7 +5918,7 @@ For the complete bigBarChart format definitions please see the
     </P>
 </DIV>
 
-<DIV class="barChartMetric"><span class="types bigBarChart"></span>
+<DIV class="barChartMetric"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartMetric &lt;metric&gt;</code></div>
     <P>This setting provides a label for details page information about the barChart values presented.
         These are typically summary values, derived from many samples (often the median value).</p>
@@ -6367,6 +6424,19 @@ and is particularly useful for tracks with large numbers of categories.
     <P>Because subgroup settings are often lengthy, it is recommended that the 
     '<code>\</code>' line continuation character be used to break up the setting over
     multiple lines for easier reading. 
+</DIV>
+
+<DIV class="noInherit"><span class="types all"></span>
+<div class="format"><code>noInherit on</code></div>
+    <P><I>Deprecated.</I></P>
+    <P>Placed on a subtrack, this stops the subtrack from taking settings from its composite
+    parent. Without it a subtrack inherits the parent's <code>type</code> and
+    <code>group</code>, plus every parent setting the subtrack does not define itself.</P>
+    <P>The Browser only checks whether the setting is present, so any value turns it on,
+    including <code>noInherit off</code>. Defining a setting on the subtrack already
+    overrides the inherited value, so this setting is rarely needed.</P>
+    <P><B>Example:</B></P>
+    <pre>   noInherit on</pre>
 </DIV>
 
 <DIV class="subGroups"><span class="types subGroups"></span>

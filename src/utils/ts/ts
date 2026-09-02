@@ -11,7 +11,9 @@
 # of cgi-bin-$USER + htdocs-$USER plus a rewritten hg.conf.  Data is left
 # shared on purpose (freeze the code, share the data).  The one exception is the
 # udc cache: each ticket gets its own subtree under the shared trash, so one
-# instance cannot serve another a cache entry it wrote (see setUdcDir).
+# instance cannot serve another a cache entry it wrote (see setUdcDir).  The
+# rewritten hg.conf also drops the cookie domain, or a parked instance could not
+# hold a cart at all (see setCookieDomain).
 #
 # The parked instances and the port registry live under $TS_ROOT, by default
 # $HOME/ticketSandboxes.  On hgwdev, point that at a large local pool (a freeze
@@ -130,6 +132,7 @@ freeze() {
     printf '\n# ts: per-ticket background marker (refs #37867)\nbrowser.style=/style/tsMarker.css\n' \
         >> "$dir/cgi-bin/hg.conf"
     setUdcDir "$tkt" "$dir"
+    setCookieDomain "$tkt" "$dir"
     echo "Freeze complete ($(du -sh "$dir/cgi-bin" "$dir/$HTDOCS_NAME" 2>/dev/null | awk '{print $1}' | paste -sd'+'))."
 }
 
@@ -173,6 +176,27 @@ setUdcDir() {
     grep -q '^# ts: per-ticket udc cache' "$dir/cgi-bin/hg.conf" && return 0
     printf '\n# ts: per-ticket udc cache (refs #37867)\nudc.cacheDir=%s\n' \
         "$(udcDir "$tkt")" >> "$dir/cgi-bin/hg.conf"
+}
+
+# --- let the cart survive on a loopback host ---------------------------------
+# The shared config sets central.domain=.ucsc.edu, and cartWriteCookie (cart.c)
+# puts that on the cart cookie.  A parked instance answers on localhost, so the
+# browser drops a cookie scoped to .ucsc.edu, and every request gets a fresh
+# cart.  Track visibility falls back to its trackDb default, quietly: the page
+# still renders, so a scripted run measures the defaults and looks like a clean
+# pass.  Clicking through a park by hand hides it, because hgTracks puts the
+# hgsid in its own page links; a run that navigates by URL has nothing to carry.
+# An empty value leaves the domain attribute off the cookie altogether, which is
+# what a host-only cookie needs, and it works whether the instance is reached as
+# localhost or as 127.0.0.1.  The login cookies follow it too, through
+# getCookieDomainString() in wikiLink.c.  Appended to hg.conf, so it overrides
+# the value in the included base config (the last assignment of a name wins).
+setCookieDomain() {
+    local tkt="$1" dir="$2"
+    # freeze() writes hg.conf fresh, but conf() calls this on an existing one
+    grep -q '^# ts: host-only cart cookie' "$dir/cgi-bin/hg.conf" && return 0
+    printf '\n# ts: host-only cart cookie (refs #37867)\ncentral.domain=\n' \
+        >> "$dir/cgi-bin/hg.conf"
 }
 
 # --- render the per-ticket httpd.conf ----------------------------------------
@@ -305,7 +329,8 @@ cmd_conf() {
     local running=""; [[ -n "$(pidOf "$tkt")" ]] && running=1
     [[ -n "$running" ]] && stopHttpd "$tkt"
     writeConf "$tkt" "$port"
-    setUdcDir "$tkt" "$(tsDir "$tkt")"   # retrofit a sandbox frozen before this existed
+    setUdcDir "$tkt" "$(tsDir "$tkt")"        # retrofit a sandbox frozen before these existed
+    setCookieDomain "$tkt" "$(tsDir "$tkt")"
     if [[ -n "$running" ]]; then
         startHttpd "$tkt"
     else

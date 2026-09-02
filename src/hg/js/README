@@ -82,3 +82,11 @@ Javascript and JSX files for the new framework live in three subdirectories:
     checks for properties that must be passed down in order to work with ImModel,
     ImmutableUpdate adds efficient change detection using ImmutableJS.
   - each CGI has a subdir for its JSX code
+
+
+TESTING JAVASCRIPT:
+
+The test/ directory that used to be here held a 2015 JsTestDriver setup that
+nothing referenced and nobody ran. Browser tests now live in src/hg/utils/uiTest/,
+with each CGI's own tests in src/hg/<cgi>/tests/. See src/hg/hgTracks/tests/ for
+a worked example.

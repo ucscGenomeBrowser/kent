@@ -40,6 +40,7 @@ DOC_NAME_TO_KEYWORD = {
     "hubGenome": "genome",
     "trackDbFile": "trackDb",
     "groupsFile": "groups",
+    "type_for_hubs": "type",
 }
 
 # The docs use HTML entities that decode to non-ASCII punctuation. Fold them: "format" is

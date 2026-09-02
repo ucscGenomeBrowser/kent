@@ -71,6 +71,19 @@ still data: "ts sync" does not clear it.  "ts remove" does delete it.
 "ts conf" adds this setting to an instance frozen before ts had it, so you do
 not have to re-freeze to get a private cache.
 
+The cart cookie is written with no domain on it.  The shared config sets
+central.domain=.ucsc.edu, and a parked instance answers on localhost, so a
+browser drops a cookie scoped to .ucsc.edu.  Every request then gets a fresh
+cart, and each track comes up at its trackDb default rather than the setting you
+chose.  Nothing errors, which is what makes this worth saying out loud: the page
+still renders.  Clicking through a park by hand hides the problem, because
+hgTracks puts the hgsid into the links on its own pages.  A script that
+navigates by URL has nothing to carry, so it quietly measures the defaults and
+reports a clean run.  ts writes an empty central.domain into the frozen hg.conf.
+That leaves the domain attribute off the cookie and makes it host-only, which
+works whether you reach the instance as localhost or as 127.0.0.1.  "ts conf"
+adds it to an instance frozen before ts had it.
+
 Each instance draws its ticket number faintly across the page background, so you
 always know which frozen browser you are viewing.  ts writes that stylesheet
 into the frozen htdocs and sets browser.style in the frozen hg.conf.

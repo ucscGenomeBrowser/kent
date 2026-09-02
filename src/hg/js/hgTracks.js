@@ -7915,7 +7915,67 @@ $(document).ready(function()
         convertTitleTagsToMouseovers();
     }
 
+    if (typeof pngTimingSampleRate !== 'undefined' && pngTimingSampleRate > 0) {
+        reportPngTiming(pngTimingSampleRate);
+    }
+
 });
+
+// hold the beacon image in a variable that outlives reportPngTiming.  An
+// Image with no reference to it can be collected before the request goes out.
+var pngTimingBeacon;
+
+function reportPngTiming(sampleRate) {
+    /* Report how long the track image took to reach this reader, on one page
+     * load in sampleRate.  The browser keeps a timing record for every image it
+     * loads, holding the bytes it took off the wire and the time it waited.  We
+     * cannot get that from our own logs: apache stops timing once the kernel has
+     * the bytes.  Bytes divided by time gives the reader's throughput, which is
+     * what decides whether a lower png compression level helps them or hurts
+     * them.  The two numbers ride on the query string of a 43 byte image, so the
+     * apache log line is the whole record and no process has to start. */
+    if (Math.random() * sampleRate >= 1)
+        return;
+    if (!window.performance || !window.performance.getEntriesByType)
+        return;
+
+    var sendTiming = function () {
+        var entries = window.performance.getEntriesByType("resource");
+        for (var i = 0; i < entries.length; i++) {
+            var entry = entries[i];
+            // the track image is ../trash/hgt/hgt_<host>_<user>_<hex>.png.  The
+            // guidelines and the side label images are named differently.
+            if (entry.name.indexOf("/hgt/hgt_") < 0)
+                continue;
+            if (entry.name.indexOf(".png") < 0)
+                continue;
+            var bytes = entry.transferSize;
+            var download = entry.responseEnd - entry.responseStart;
+            // no bytes means the browser never took the image off the wire, or
+            // it does not report the size.  Either way there is nothing to time.
+            if (!bytes)
+                return;
+            // a download of zero is a real delivery that finished inside one
+            // clock tick, not a missing measurement.  Firefox rounds resource
+            // timing to a millisecond, so a small image on a fast link lands
+            // there.  Report it and let the reader of the log fall back to d.
+            // Dropping it would leave only the slow connections in the sample.
+            // duration covers the whole fetch, download only the bytes arriving
+            pngTimingBeacon = new Image();
+            pngTimingBeacon.src = "../images/DOT.gif?hgtPng=1" +
+                "&ts=" + Math.round(bytes) +
+                "&d=" + Math.round(entry.duration) +
+                "&x=" + Math.round(download);
+            return;
+        }
+    };
+
+    // the timing record only exists once the image has finished loading
+    if (document.readyState === "complete")
+        sendTiming();
+    else
+        window.addEventListener("load", sendTiming);
+}
 
 function hgtWarnTiming(maxSeconds) {
     /* show a dialog box if the page load time was slower than x seconds. Has buttons to hide or never show this again. */

@@ -156,13 +156,15 @@ $(function() {
         container.id = "myTag";
         container.innerHTML = `
         <div id="dataTypeSelector"></div>
-        <div id="sortNote" class="smallText"></div>
         <div id="container">
             <div id="filters"></div>
-            <table id="theMetaDataTable">
-                <thead></thead>
-                <tfoot></tfoot>
-            </table>
+            <div id="tableColumn">
+                <div id="sortNote" class="smallText"></div>
+                <table id="theMetaDataTable">
+                    <thead></thead>
+                    <tfoot></tfoot>
+                </table>
+            </div>
         </div>
         `;
         // Instead of appending to body, append into the placeholder div

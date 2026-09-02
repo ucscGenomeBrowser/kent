@@ -7,6 +7,7 @@
 #include "grp.h"
 #include "hdb.h"
 #include "hgFind.h"
+#include "htmlSanitize.h"
 #include "htmshell.h"
 #include "hubConnect.h"
 #include "hui.h"
@@ -671,8 +672,11 @@ if (htmlPath != NULL)
 	     startsWith("ftp://"  , htmlPath))
 	{
 	struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
-	htmlString = lineFileReadAll(lf);
+	char *fetched = lineFileReadAll(lf);
 	lineFileClose(&lf);
+	/* This one came in over the network from a hub, so print only what we allow. */
+	htmlString = htmlSanitize(fetched);
+	freeMem(fetched);
 	}
     }
 return htmlString;

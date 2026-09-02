@@ -5826,6 +5826,30 @@ return compositeHideEmptySubtracks(cart, tdb, retMultiBedFile, retSubtrackIdFile
 
 }
 
+void compositeHideEmptySubtracksUi(struct cart *cart, struct trackDb *tdb)
+/* Print the checkbox controlling the hideEmptySubtracks setting, for composites that
+ * have it.  Prints nothing for the ones that don't. */
+{
+boolean hideSubtracksDefault;
+// TODO: Gray out or otherwise suppress when in multi-region mode
+if (!compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
+    return;
+char *hideLabel = "Hide empty subtracks";
+hideLabel = trackDbSettingOrDefault(tdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
+printf("<p><b>%s:</b> &nbsp;", hideLabel);
+char buf[128];
+safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
+boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
+cgiMakeCheckBox(buf, doHideEmpties);
+
+// info icon with explanatory text on mouseover
+char *info =
+    "Subtracks with no data in the browser window are hidden. Changing the browser window"
+    " by zooming or scrolling may result in display of a different selection of tracks.";
+printInfoIcon(info);
+printf("</p>");
+}
+
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
 // Display list of subtracks and descriptions with checkboxes to control visibility and
 // possibly other nice things including links to schema and metadata and a release date.
@@ -9841,25 +9865,7 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     }
 cgiDown(0.3);
 
-boolean hideSubtracksDefault;
-// TODO: Gray out or otherwise suppress when in multi-region mode 
-if (compositeHideEmptySubtracksSetting(tdb, &hideSubtracksDefault, NULL, NULL))
-    {
-    char *hideLabel = "Hide empty subtracks";
-    hideLabel = trackDbSettingOrDefault(tdb, SUBTRACK_HIDE_EMPTY_LABEL, hideLabel);
-    printf("<p><b>%s:</b> &nbsp;", hideLabel);
-    char buf[128];
-    safef(buf, sizeof buf, "%s.%s", tdb->track, SUBTRACK_HIDE_EMPTY);
-    boolean doHideEmpties = compositeHideEmptySubtracks(cart, tdb, NULL, NULL);
-    cgiMakeCheckBox(buf, doHideEmpties);
-
-    // info icon with explanatory text on mouseover
-    char *info = 
-        "Subtracks with no data in the browser window are hidden. Changing the browser window"
-        " by zooming or scrolling may result in display of a different selection of tracks.";
-    printInfoIcon(info);
-    printf("</p>");
-    }
+compositeHideEmptySubtracksUi(cart, tdb);
 
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {

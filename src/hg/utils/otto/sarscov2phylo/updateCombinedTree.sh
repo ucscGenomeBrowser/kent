@@ -1,4 +1,6 @@
 #!/bin/bash
+source ~/.bashrc
+conda activate bte
 set -beEu -x -o pipefail
 
 #	Do not modify this script, modify the source tree copy:
@@ -196,9 +198,6 @@ ssh hgwdev ln -sf $(pwd)/hgPhyloPlace.plusGisaid.omicron.description.txt \
     /gbdb/wuhCor1/hgPhyloPlaceData/public.plusGisaid.latest.omicron.version.txt
 
 # Extract recent-only tree (samples from the past year plus samples within radius 5 of those) for faster searches
-set +x
-conda activate bte
-set -x
 python $scriptDir/find_recent_samples.py -i gisaidAndPublic.$today.metadata.tsv.gz -n 365 -o recent_samples.txt
 python $scriptDir/prune_to_radius.py -i gisaidAndPublic.$today.masked.pb.gz -l recent_samples.txt -r 5 \
        -o samples.$today.recent
@@ -248,6 +247,13 @@ usher_to_taxonium --input gisaidAndPublic.$today.masked.pb.gz \
     >& utt.log &
 
 $scriptDir/extractPublicTree.sh $today $prevDate
+
+# Scan for split lineages
+time python ~/kent/src/hg/utils/otto/sarscov2phylo/find_split_lineages.py \
+     -i gisaidAndPublic.$today.masked.pb.gz \
+     -e G22599C,G22927T,T22928C,A23598G \
+     -p pruneForSplitLineages \
+     > split_lineages.txt
 
 set +o pipefail
 grep skipping annotate* | cat
