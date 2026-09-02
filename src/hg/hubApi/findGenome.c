@@ -38,9 +38,28 @@ hgsql -e 'desc assemblyList;' hgcentraltest
 | taxId          | int(10) unsigned    | YES  |     | NULL    |       |
 | clade          | varchar(255)        | YES  |     | NULL    |       |
 | description    | varchar(1023)       | YES  |     | NULL    |       |
-| browserExists  | tinyint(3) unsigned | YES  |     | NULL    |       |
+| browserExists  | tinyint(3) unsigned | YES  | MUL | NULL    |       |
 | hubUrl         | varchar(511)        | YES  |     | NULL    |       |
+| year           | int(10) unsigned    | YES  |     | NULL    |       |
+| refSeqCategory | varchar(31)         | YES  | MUL | NULL    |       |
+| versionStatus  | varchar(15)         | YES  | MUL | NULL    |       |
+| assemblyLevel  | varchar(15)         | YES  | MUL | NULL    |       |
+| haplotypes     | varchar(511)        | YES  |     | NULL    |       |
 +----------------+---------------------+------+-----+---------+-------+
+
+hgsql -e 'show index from assemblyList;' hgcentraltest
+   FULLTEXT gIdx (name, commonName, scientificName, clade, description,
+                  refSeqCategory, versionStatus, assemblyLevel, haplotypes)
+   -- MATCH() column lists below must name exactly these 9 columns, in
+   -- any order, or MySQL silently runs an unindexed full-table scan
+   -- instead of using this index (see the boolean-mode caveat in the
+   -- MySQL manual, "Boolean Full-Text Searches")
+   PRIMARY KEY (name)
+   INDEX idxBrowserExists (browserExists)
+   INDEX idxRefSeqCategory (refSeqCategory)
+   INDEX idxVersionStatus (versionStatus)
+   INDEX idxAssemblyLevel (assemblyLevel)
+   INDEX idxFilters (browserExists, refSeqCategory, versionStatus, assemblyLevel)
 */
 
 static long long sqlJsonOut(struct jsonWrite *jw, struct sqlResult *sr)
@@ -224,7 +243,7 @@ for (int i = 1; i < wordCount; ++i)
 /* initial SELECT allows any browser exist status, existing or not */
 struct dyString *query = dyStringNew(64);
 sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s ", asmListTable);
-sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
+sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
 addConditions(query);	/* add optional SELECT options */
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
@@ -240,7 +259,7 @@ if (matchCount > 0)
 	dyStringFree(&query);
 	query = dyStringNew(64);
 	sqlDyStringPrintf(query, "SELECT * FROM %s ", asmListTable);
-        sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
+        sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes) AGAINST ('%s' IN BOOLEAN MODE)", queryDy->string);
 	addConditions(query);	/* add optional SELECT options */
 	sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
 	struct sqlResult *sr = sqlGetResult(conn, query->string);
@@ -261,7 +280,7 @@ long long itemCount = 0;
 *totalMatchCount = 0;
 
 struct dyString *query = sqlDyStringCreate("SELECT COUNT(*) FROM %s ", asmListTable);
-sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s' IN BOOLEAN MODE)", searchWord);
+sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes) AGAINST ('%s' IN BOOLEAN MODE)", searchWord);
 addConditions(query);	/* add optional SELECT options */
 
 long long matchCount = sqlQuickLongLong(conn, query->string);
@@ -270,7 +289,7 @@ if (matchCount < 1)	/* no match, add the * wild card match to make a prefix matc
     {
     dyStringClear(query);
     sqlDyStringPrintf(query, "SELECT COUNT(*) FROM %s ", asmListTable);
-    sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s*' IN BOOLEAN MODE)", searchWord);
+    sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes) AGAINST ('%s*' IN BOOLEAN MODE)", searchWord);
     addConditions(query);	/* add optional SELECT options */
     matchCount = sqlQuickLongLong(conn, query->string);
     if (matchCount > 0)
@@ -288,7 +307,7 @@ else
     {
     dyStringClear(query);
     sqlDyStringPrintf(query, "SELECT * FROM %s ", asmListTable);
-    sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel) AGAINST ('%s%s' IN BOOLEAN MODE)", searchWord, *prefixSearch ? "*" : "");
+    sqlDyStringPrintf(query, "WHERE MATCH(name, commonName, scientificName, clade, description, refSeqCategory, versionStatus, assemblyLevel, haplotypes) AGAINST ('%s%s' IN BOOLEAN MODE)", searchWord, *prefixSearch ? "*" : "");
     addConditions(query);	/* add optional SELECT options */
     sqlDyStringPrintf(query, " ORDER BY priority LIMIT %d;", maxItemsOutput);
     struct sqlResult *sr = sqlGetResult(conn, query->string);
@@ -299,6 +318,42 @@ else
 
 return itemCount;
 }	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, boolean *prefixSearch) */
+
+static long long exactNameSearch(struct sqlConnection *conn, char *word, struct jsonWrite *jw, long long *totalMatchCount)
+/* fast path for a single-word search: the great majority of single-word
+ *  searches are an exact UCSC database name or NCBI/GenArk assembly
+ *  accession (e.g. hg38, GCF_052040795.1) that is already present
+ *  verbatim in the 'name' column, which is the table's PRIMARY KEY.
+ *  Try that direct, indexed equality lookup first since it is an O(log n)
+ *  B-TREE seek versus the much more expensive FULLTEXT boolean search in
+ *  oneWordSearch().  Simply returns 0, with *totalMatchCount left at 0,
+ *  when there is no exact match; the caller then falls back to
+ *  oneWordSearch() for the usual FULLTEXT keyword search.
+ */
+{
+long long itemCount = 0;
+*totalMatchCount = 0;
+
+struct dyString *query = sqlDyStringCreate("SELECT COUNT(*) FROM %s ", asmListTable);
+sqlDyStringPrintf(query, "WHERE name='%s'", word);
+addConditions(query);	/* add optional SELECT options */
+
+long long matchCount = sqlQuickLongLong(conn, query->string);
+dyStringFree(&query);
+if (matchCount < 1)	// no exact match, let caller fall back to FULLTEXT search
+    return itemCount;
+*totalMatchCount = matchCount;
+
+query = sqlDyStringCreate("SELECT * FROM %s ", asmListTable);
+sqlDyStringPrintf(query, "WHERE name='%s'", word);
+addConditions(query);	/* add optional SELECT options */
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+itemCount = sqlJsonOut(jw, sr);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+
+return itemCount;
+}	/*	static long long exactNameSearch(struct sqlConnection *conn, char *word, struct jsonWrite *jw, long long *totalMatchCount) */
 
 #ifdef NOT
 // disabled 2025-10-22
@@ -477,20 +532,28 @@ AllocArray(words, wordCount);
 (void) chopByWhite(searchString, words, wordCount);
 if (1 == wordCount)
     {
-    boolean doQuote = TRUE;
-    /* already quoted, let it go as-is */
-    if (startsWith("\"", words[0]) && endsWith(words[0],"\""))
-	doQuote = FALSE;
-    /* already wildcard, let it go as-is */
-    if (endsWith(words[0],"*"))
-	doQuote = FALSE;
-    if (doQuote && hasWordBreaks(words[0]))
+    /* fast path: try an exact PRIMARY KEY match on 'name' first, since
+     * the great majority of single-word searches are an exact UCSC db
+     * name or assembly accession; itemCount stays 0 when there is no
+     * exact match, and the usual FULLTEXT search below runs as before */
+    itemCount = exactNameSearch(conn, words[0], jw, &totalMatchCount);
+    if (itemCount < 1)
 	{
-	char *quotedWords = quoteWords(words[0]);
-	endResultSearchString = quotedWords;
-	itemCount = oneWordSearch(conn, quotedWords, jw, &totalMatchCount, &prefixSearch);
-	} else {
-	itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
+	boolean doQuote = TRUE;
+	/* already quoted, let it go as-is */
+	if (startsWith("\"", words[0]) && endsWith(words[0],"\""))
+	    doQuote = FALSE;
+	/* already wildcard, let it go as-is */
+	if (endsWith(words[0],"*"))
+	    doQuote = FALSE;
+	if (doQuote && hasWordBreaks(words[0]))
+	    {
+	    char *quotedWords = quoteWords(words[0]);
+	    endResultSearchString = quotedWords;
+	    itemCount = oneWordSearch(conn, quotedWords, jw, &totalMatchCount, &prefixSearch);
+	    } else {
+	    itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
+	    }
 	}
     }
 else	/* multiple word search */
