@@ -43,18 +43,28 @@
 # exit on any error at any time
 set -beEu -o pipefail
 
-export dryRun=0
-if [ "${1-}" = "-n" ]; then
-  dryRun=1
-  shift
-fi
-
-if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+usage() {
   echo "usage: trackDbCacheCleaner.sh [-n] <cacheDir> [expireDays]" 1>&2
   echo "  expire trackDb cache directories unread for expireDays days" 1>&2
+  echo "  -n          list what would be removed, remove nothing" 1>&2
   echo "  cacheDir is the cacheTrackDbDir setting from hg.conf" 1>&2
   echo "  expireDays defaults to 30" 1>&2
   exit 255
+}
+
+export dryRun=0
+while getopts ":n" opt
+do
+  case "${opt}" in
+    n)  dryRun=1 ;;
+    \?) echo "ERROR: unknown option '-${OPTARG}'" 1>&2
+        usage ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+  usage
 fi
 
 export cacheDir="${1}"
@@ -70,10 +80,15 @@ case "${cacheDir}" in
       exit 255 ;;
 esac
 
-# /data and /dev/shm are the parents of a cache directory, never the cache
-export pathDepth=`echo "${cacheDir}" | awk -F/ '{n=0;for(i=1;i<=NF;i++)if(length($i))n++;print n}'`
-if [ "${pathDepth}" -lt 2 ]; then
-  echo "ERROR: refusing to clean the top level directory '${cacheDir}'" 1>&2
+# drop any trailing slash, so that the root check below cannot be dodged by
+# writing it as '/' or '//'
+cacheDir=`echo "${cacheDir}" | sed -e 's#/*$##'`
+
+# the root directory is never a trackDb cache.  Every other absolute path can
+# be, including one a mirror made at the top level, so the check on name.txt
+# below is what decides the rest.
+if [ -z "${cacheDir}" ]; then
+  echo "ERROR: refusing to clean the root directory" 1>&2
   exit 255
 fi
 

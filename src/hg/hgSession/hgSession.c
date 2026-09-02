@@ -1705,6 +1705,10 @@ else
 					hgsLoadLocalFileName "__binary");
     char *fileName = cartOptionalString(cart,
 					hgsLoadLocalFileName "__filename");
+    /* The name arrives with the upload and is printed in four of the messages below,
+     * so encode it once here rather than at each one. */
+    if (isNotEmpty(fileName))
+	fileName = htmlEncode(fileName);
     if (isNotEmpty(filePlainContents))
 	{
 	char *settings = trimSpaces(filePlainContents);
