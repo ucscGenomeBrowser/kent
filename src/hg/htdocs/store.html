@@ -351,7 +351,7 @@ You can use the GBiC program to install a Genome Browser mirror on any Linux bas
 			<h2>Genome Browser Docker image</h2>
 <div class="product-details">The Genome Browser Docker image is a complete UCSC Genome Browser mirror in a container, with the Genome Browser software, an Apache web server, and a MariaDB database server all included. Everything runs inside the container, so the image does not touch the Apache or MySQL setup already on your machine. This makes it useful on a laptop, or on a server that already runs other web software.
 
-You can build the image on any system that runs Docker, including Windows, macOS, and Linux. Once the container starts, you open the mirror in a web browser at a port on your own machine. The container downloads track data from UCSC as you use it, and you can attach a Docker volume to keep your data and settings when the container restarts. A more detailed description of the image and how to use it is available from the <a href="https://genome.ucsc.edu/goldenPath/help/docker.html" target="_blank">Docker Help Page</a>. If you have questions about the image please send an email to the publicly archived Genome Browser Mirror mailing list: <a href="mailto:genome-mirror@soe.ucsc.edu" target="_blank">genome-mirror@soe.ucsc.edu</a>.</div>
+UCSC publishes a prebuilt image on Docker Hub as <a href="https://hub.docker.com/r/genomebrowser/server" target="_blank">genomebrowser/server</a>. It is rebuilt for every Genome Browser release, and one tag covers both Intel and Apple Silicon machines, so most people can pull the image rather than build it themselves. You can also build the image yourself on any system that runs Docker, including Windows, macOS, and Linux. Once the container starts, you open the mirror in a web browser at a port on your own machine. The container downloads track data from UCSC as you use it, and you can attach a Docker volume to keep your data and settings when the container restarts. A more detailed description of the image and how to use it is available from the <a href="https://genome.ucsc.edu/goldenPath/help/docker.html" target="_blank">Docker Help Page</a>. If you have questions about the image please send an email to the publicly archived Genome Browser Mirror mailing list: <a href="mailto:genome-mirror@soe.ucsc.edu" target="_blank">genome-mirror@soe.ucsc.edu</a>.</div>
 
 
 
@@ -385,7 +385,7 @@ You can build the image on any system that runs Docker, including Windows, macOS
 <li>Your network firewall must allow connections on TCP port 873, used by rsync. Without this, the container cannot download the Genome Browser software or track data.</li>
 <li>You need a free port on the host machine to map to port 80 inside the container. Our examples use port 8080.</li>
 <li>The image is built on Ubuntu 24 LTS and installs <a href="http://httpd.apache.org" target="_blank">Apache</a> and <a href="https://mariadb.org/" target="_blank">MariaDB</a> inside the container. Please follow the links to determine if you have the correct license for each of these open source programs.</li>
-<li>The built image is around 3GB. The minimum amount of disk space needed to load all data from UCSC on-the-fly is about 5GB, although temporary files will accumulate quickly after normal usage and take up more space. In order to fully mirror the hg19 assembly database locally, approximately 10TB of disk space is needed, however most other organism databases are significantly smaller -- in the 5-10GB range -- plus around 40GB for associated GenBank data. This GenBank data will only be downloaded once.</li>
+<li>Plan on about 8GB of disk space for the image itself, separate from track data. Building the current Dockerfile produces around 5.6GB on disk, and the prebuilt image is a 2.6GB download that unpacks to around 7.4GB. The minimum amount of disk space needed to load all data from UCSC on-the-fly is about 5GB, although temporary files will accumulate quickly after normal usage and take up more space. In order to fully mirror the hg19 assembly database locally, approximately 10TB of disk space is needed, however most other organism databases are significantly smaller -- in the 5-10GB range -- plus around 40GB for associated GenBank data. This GenBank data will only be downloaded once.</li>
 <li>Around 4GB of memory is required to display all of chromosome 1 on hg19. Most other assemblies will require significantly less memory.</li>
 </ul>
 
@@ -402,6 +402,8 @@ You can build the image on any system that runs Docker, including Windows, macOS
 <li>configures the container to download supporting data files from UCSC</li>
 <li>starts both servers when the container runs</li>
 </ul>
+<li>The prebuilt genomebrowser/server image on Docker Hub, which is the same image built for you and
+tagged with each Genome Browser release.</li>
 </ul>
           </div>
 
