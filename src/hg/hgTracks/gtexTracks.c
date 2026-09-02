@@ -506,8 +506,10 @@ while (geneBed != NULL)
         char *fromDetail = strstrNoCase(desc, "(from");
         if (fromDetail)
             *fromDetail = 0;
-        // the "..." plus its terminating null needs MAX_DESC+4 bytes of buffer
-        if (strlen(desc) > MAX_DESC + 4)
+        // The "..." plus its terminating null is written at desc+MAX_DESC, so the buffer
+        // needs MAX_DESC+4 bytes.  sqlQuickString sized it at strlen+1 before the "(from"
+        // strip above shortened the string, so a length of MAX_DESC+3 here is enough.
+        if (strlen(desc) >= MAX_DESC + 3)
             strcpy(desc+MAX_DESC, "...");
         // also strip 'homo sapiens' prefix
         #define SPECIES_PREFIX  "Homo sapiens "
