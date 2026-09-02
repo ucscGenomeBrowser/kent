@@ -20,6 +20,7 @@
 #include "customTrack.h"
 #include "hgGenome.h"
 #include "trashDir.h"
+#include "htmshell.h"
 
 
 static char *markerNames[] = {
@@ -98,8 +99,9 @@ hPrintf("draw connecting lines between markers separated by up to ");
 cartMakeIntVar(cart, hggMaxGapToFill, 25000000, 8);
 hPrintf(" bases.<BR>");
 hPrintf("<BR>\n");
+/* oldFileName arrives with the upload and lands inside a quoted attribute. */
 hPrintf("file name: <INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", hggUploadFile,
-	oldFileName);
+	attributeEncode(oldFileName));
 hPrintf("<BR>\n");
 hPrintf("&nbsp;or<BR>\n");
 hPrintf("Paste URLs or data:<br>");
