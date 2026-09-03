@@ -39,14 +39,6 @@ else if (reachedMaxItems)
     }
 puts("\n");
 
-if (debug)
-    {
-    char sizeString[64];
-    unsigned long long vmPeak = currentVmPeak();
-    sprintLongWithCommas(sizeString, vmPeak);
-    jsonWriteString(jw, "vmPeak", sizeString);
-    }
-
 if (measureTiming)
     {
     long nowTime = clock1000();
@@ -95,8 +87,6 @@ jsonWriteObjectStart(jw, NULL);
 // not needed jsonWriteString(jw, "source", "UCSantaCruz");
 jsonWriteDateFromUnix(jw, "downloadTime", (long long) timeNow);
 jsonWriteNumber(jw, "downloadTimeStamp", (long long) timeNow);
-if (debug)
-    jsonWriteNumber(jw, "botDelay", (long long) botDelay);
 return jw;
 }
 
@@ -473,7 +463,7 @@ for ( ; var; var = var->next)
     {
     if (sameWord("cgiSpoof", var->name))
 	continue;
-    if (sameWord("debug", var->name))
+    if (sameWord("debug", var->name)) // debug silent tolerated, does nothing
 	continue;
     if (sameWord("cmd", var->name))
 	continue;

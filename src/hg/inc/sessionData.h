@@ -12,6 +12,10 @@ char *sessionDataSaveTrashFile(char *trashPath, char *sessionDir);
  * If trashPath is already a soft-link, return the path that it links to.
  * Return NULL if trashPath does not exist (can happen with expired custom track files). */
 
+char *sessionDirFromNames(char *sessionDataDir, char *encUserName, char *encSessionName);
+/* Alloc and return the per-session data directory under sessionDataDir (hashed by user and session
+ * name), or NULL if sessionDataDir is empty.  errAborts if sessionDataDir is not an absolute path. */
+
 void sessionDataSaveSession(struct cart *cart, char *encUserName, char *encSessionName,
                             char *dbSuffix);
 /* If hg.conf specifies safe places to store files and/or tables that belong to user sessions,

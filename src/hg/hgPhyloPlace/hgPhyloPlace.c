@@ -69,7 +69,7 @@ else if (isNotEmpty(fileBinaryCoords))
     fprintf(stderr, "%s=%s fileBinaryCoords=%s\n", cartVar, fileName, fileBinaryCoords);
     /* The cart holds the address and size of the uploaded bytes, but any
      * request can set that variable, so only use a block cheapcgi handed out. */
-    unsigned long size;
+    unsigned long size = 0;
     char *mem = cgiMemBlobFind(fileBinaryCoords, &size);
     if (mem != NULL)
 	lf = lineFileDecompressMem(TRUE, mem, size);

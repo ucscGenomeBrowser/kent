@@ -438,11 +438,15 @@ return wikiLinkEncodeReturnUrl(hgsid, "hgSession", "");
 #define RETURN_URL_MAX 1000
 
 static boolean returnUrlSchemeIsSafe(char *returnUrl)
-/* Return TRUE unless returnUrl carries a scheme other than http or https.  The scheme is the
+/* Return TRUE only for an http URL, an https URL, or a path-relative URL.  The scheme is the
  * text before the first colon, and only when that colon comes before any slash, question mark
  * or hash; a colon after one of those belongs to the path or the query, so the URL is relative.
- * This is what keeps a javascript: or data: URL out of the href hgLogin writes. */
+ * This is what keeps a javascript: or data: URL out of the href hgLogin writes.  A
+ * scheme-relative "//host/path" is refused as well: it names another host but carries no
+ * colon, so it is not relative in the sense this function allows. */
 {
+if (startsWith("//", returnUrl))
+    return FALSE;
 char *colon = strchr(returnUrl, ':');
 if (colon == NULL)
     return TRUE;

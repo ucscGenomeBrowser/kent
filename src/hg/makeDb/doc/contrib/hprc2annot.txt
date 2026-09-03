@@ -1,0 +1,228 @@
+# 2026-07-16 Claude (max): HPRC Release 2 GenArk contributed track hub (refs #35415)
+# 2026-08-28 Claude (max): QA fixes -- liftoff transcript names, segdups strand,
+#                          pcLAI rebuild, stats retention, docs/trackDb into git
+
+# Builds a GenArk "contributed track" hub (contribTracks.html model) that adds
+# seven annotation tracks to the ~462 HPRC Release 2 assemblies already present as
+# GenArk assembly hubs:
+#   catGenes  liftoffGenes  censat  censatCentromeres  segdups  pclai  methylation
+#
+# Hub location (served under hgdownload /hubs/ once a contrib symlink is added):
+#   /hive/data/genomes/asmHubs/contrib/hprc2annot
+# Build work area (indexes, logs, per-job temp):
+#   /hive/data/genomes/asmHubs/contrib/hprc2annot.build
+# Scripts (this directory):
+#   ~/kent/src/hg/makeDb/scripts/hprc2annot
+# Track description pages and the trackDb stanza template (the master copies;
+# the hub's docs/ directory is refreshed from here):
+#   ~/kent/src/hg/makeDb/trackDb/contrib/hprc2annot
+
+##############################################################################
+# 1. Source data
+##############################################################################
+# HPRC publishes one annotation file per assembly per track in the public S3
+# bucket s3://human-pangenomics, indexed by CSVs in the GitHub repo
+# human-pangenomics/hprc_intermediate_assembly under data_tables/annotation/.
+# Each annotation index has columns: sample_id, haplotype, assembly_name, location.
+# The assembly-level index data_tables/assemblies_release2_v1.0.index.csv maps
+# each assembly to its GenBank accession (column genbank_accession).
+#
+# Download the index CSVs into the build area (uses the gh CLI):
+mkdir -p /hive/data/genomes/asmHubs/contrib/hprc2annot.build/idx
+cd /hive/data/genomes/asmHubs/contrib/hprc2annot.build/idx
+R=human-pangenomics/hprc_intermediate_assembly
+gh api repos/$R/contents/data_tables/assemblies_release2_v1.0.index.csv --jq .download_url | xargs curl -sL -o asm_index.csv
+gh api repos/$R/contents/data_tables/annotation/cat/cat_genes_hprc_r2_v1.3.index.csv --jq .download_url | xargs curl -sL -o idx_cat.csv
+gh api repos/$R/contents/data_tables/annotation/liftoff/liftoff_genes_hprc_r2_v1.0.index.csv --jq .download_url | xargs curl -sL -o idx_liftoff.csv
+gh api repos/$R/contents/data_tables/annotation/censat/censat_hprc_r2_v1.0.index.csv --jq .download_url | xargs curl -sL -o idx_censat.csv
+gh api repos/$R/contents/data_tables/annotation/censat/censat_centromeres_hprc_r2_v1.0.index.csv --jq .download_url | xargs curl -sL -o idx_censatCen.csv
+gh api repos/$R/contents/data_tables/annotation/methylation/ont_methylation_hprc_r2_v1.0.index.csv --jq .download_url | xargs curl -sL -o idx_methyl.csv
+gh api repos/$R/contents/data_tables/annotation/pclai/pclai_v1.1_asm_coord_local_hprc_r2.index.csv --jq .download_url | xargs curl -sL -o idx_pclai.csv
+gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.index.csv --jq .download_url | xargs curl -sL -o idx_segdups.csv
+
+##############################################################################
+# 2. Key facts that shaped the build
+##############################################################################
+# - All 461 r2 assemblies already exist as GenArk assembly hubs under
+#   /hive/data/genomes/asmHubs/GCA/nnn/nnn/nnn/GCA_*. The contrib hub only adds
+#   trackDb + data; genomes.txt just lists "genome GCA_x" + "trackDb GCA_x/...".
+# - Chromosome naming is handled by the GenArk chromAlias: each assembly's
+#   GCA_*.chromAlias.bb carries an "hprcV2" column with the PanSN names
+#   (SAMPLE#HAP#genbankName) that the HPRC files use, for both chromosomes and
+#   contigs. So no chromosome renaming is needed: PanSN files are built against a
+#   PanSN chrom.sizes (genbank sizes with each name prefixed by SAMPLE#HAP#) and
+#   the browser resolves them. The methylation bigWigs use the same PanSN names
+#   and resolve the same way (downloaded whole; no conversion).
+# - CAT GFF3 uses bare GenBank names (no PanSN prefix) -> built against the plain
+#   GCA_*.chrom.sizes.txt.
+# - HPRC mixes _pat/_mat (trio) and _hap1/_hap2 (non-trio) naming across tables,
+#   so assembly_name is not a reliable join key. Everything joins on
+#   (sample_id, haplotype) instead, which is unique and covers 100% of entries.
+# - The index CSVs arrive with CRLF line endings; a trailing \r on the S3 URL
+#   makes curl reject it. The orchestrator strips CR before use.
+# - Liftoff GFF3 leaves CDS phase empty ('.'); without phase gff3ToGenePred drops
+#   every coding transcript. hprc2annotFillCdsPhase.py recomputes phase first.
+# - The pclai submissions bucket is flaky (connection resets); downloads use
+#   curl --retry 8 --retry-all-errors.
+# - assemblies_release2 has the two haplotype accessions SWAPPED for three
+#   samples (HG01978, HG02257, HG03516): the GenArk chromAlias hprcV2 column
+#   declares the opposite haplotype for those accessions. The orchestrator
+#   hard-corrects the mapping so each file builds against the assembly whose
+#   sequences actually match (otherwise those bigBeds come out empty).
+# - Excluded samples: HG002 (hg002v1.1 uses a bespoke chr-name scheme not present
+#   in its GenArk aliases; only pcLAI exists for it) and CHM13 (= hs1, no
+#   annotation data here).
+# - HG00735 hap2 (GCA_018472765.3): the segdups source was computed on a different
+#   contig version (JAHBCG02*) than the GenArk .3 assembly, so ~40k contig-level
+#   segdup calls do not map; the chromosome-level calls (~21.6k) map fine. This is
+#   an upstream assembly-version mismatch, documented rather than forced. This is
+#   the only case where the UNMATCHED_SEQ warning fires (see section 3).
+# - gff3ToGenePred needs -rnaNameAttr=ID on the liftoff GFF3. Without it the
+#   genePred name comes from the gene, so every transcript of a gene gets the same
+#   name, the transcript accession is lost, and the transcript_biotype lookup that
+#   fills the "type" column never matches. On the CAT GFF3 the flag is a no-op
+#   (verified byte-identical output), so both gene tracks use the same code path.
+# - SEDEF reports strand1 in column 6 and strand2 in column 14. strand1 is "+" on
+#   every row by construction; the informative one is strand2, the orientation of
+#   the paralogous copy. The track uses column 14, so inverted duplications render
+#   as minus-strand items.
+# - The segdups paralog partner is a plain text field, so the browser does not
+#   translate its PanSN sequence name the way it translates the chrom column. The
+#   build maps it through the GenArk chromAlias (ucsc column, falling back to
+#   genbank) so the partner reads chr2:... like the rest of the page.
+# - hprc2annotFixBed.sh is NOT idempotent by nature: run twice on pclai it
+#   re-parses an already-parsed name and blanks the values. It now refuses to
+#   touch a file that is already in the converted layout. GCA_041900255.1 was
+#   damaged this way before the guard existed and was rebuilt from source.
+#
+# Final hub: 462 assemblies (HG002 excluded); 2770 bigBed files. Per-track feature
+# counts for the collection are in log/summary.tsv, regenerated at the end of every
+# build run (see section 3). Feature counts are near-lossless: cat/liftoff lose
+# <0.02% (gff3ToGenePred invalid-strand / past-chrom-end); censat,
+# censatCentromeres, pcLAI lossless; segdups lossless except the one HG00735 hap2
+# case above.
+
+##############################################################################
+# 3. Build
+##############################################################################
+# Per-item builder: hprc2annotBuildOne.sh TRACK SAMPLE HAP ACC
+#   downloads the source from S3, converts (see per-track notes in the script),
+#   writes the .bb into the hub assembly dir, appends a stats line to
+#   log/stats.tsv. Columns:
+#     track acc sample hap inputCount outputCount pastEnd unmatchedRows
+#     unmatchedNames note
+#   Rows are dropped for exactly two reasons and BOTH are counted, so a naming
+#   problem cannot pass as a clean build: the row runs past the end of its
+#   sequence (pastEnd), or its sequence name is not in the assembly at all
+#   (unmatchedRows / unmatchedNames, which also prints an UNMATCHED_SEQ warning
+#   with example names to log/build.err). An empty conversion result is treated
+#   as a failure rather than written out as a valid but empty bigBed.
+# Orchestrator (generates the job list, runs GNU parallel, then trackDb):
+~/kent/src/hg/makeDb/scripts/hprc2annot/hprc2annotBuild.sh 20   # -j 20, resumable
+# It skips (assembly,track) outputs that already exist, so it can be re-run to
+# fill in any downloads that failed. Failures are collected in log/build.err.
+#
+# To rebuild after changing how a track is converted, name the tracks and force
+# past the resume check:
+#   HPRC2_FORCE=1 hprc2annotBuild.sh 20 liftoff segdups
+# stats.tsv is appended to, never truncated, so the counts for tracks a run did
+# not touch survive. Each run writes a "# run <date>" marker, and the end of the
+# run regenerates log/summary.tsv, a per-track roll-up over the whole collection
+# taken from the last record for each (track,assembly). That file is the retained
+# evidence for the feature-count claims in section 2.
+
+##############################################################################
+# 4. trackDb / genomes.txt
+##############################################################################
+# The stanzas are NOT in the script. They live in the kent tree next to the seven
+# description pages, so both are reviewable:
+#   ~/kent/src/hg/makeDb/trackDb/contrib/hprc2annot/hprc2annot.trackDb.txt
+#   ~/kent/src/hg/makeDb/trackDb/contrib/hprc2annot/<track>.html
+# hprc2annotMakeTrackDb.py reads that template, walks the hub, writes genomes.txt
+# (one block per assembly that has >=1 built data file) and a per-assembly
+# trackDb.txt containing only the stanzas whose data file exists (the 6 .bb plus
+# methylation.bw), and refreshes the hub's docs/ from the kent copies. Real copies,
+# not symlinks: the hub files are served by apache and pushed to hgdownload and
+# must not depend on a developer's home directory.
+#   hprc2annotMakeTrackDb.py --check   # report what is out of date, write nothing
+# Each track is an independent top-level track (no container) assigned to a track
+# group:
+#   catGenes,liftoffGenes -> genes;  censat,segdups -> varRep;
+#   censatCentromeres -> map;  pclai -> compGeno;  methylation -> regulation.
+# html pages are shared in docs/ and referenced as ../docs/<track>.
+#
+# Gene names: with -rnaNameAttr=ID the genePred name is the transcript accession,
+# and genePredToBigGenePred puts the gene id in name2 (col13), so the symbol and
+# biotype remap keys on name2 (col13) and the transcript_biotype lookup keys on
+# name (col4). Both gene tracks therefore show the gene symbol as the label (or
+# the Ensembl gene id for novel/lncRNA genes with no symbol), with the transcript
+# accession and both biotypes on the details page, and both are searchable.
+#
+# segdups and pclai: the feature name is left blank and the useful values are
+# shown on mouseover instead (the source names were very long). segdups mouseOver
+# = paralog partner / percent identity / aligned length / satellite bases; pclai
+# mouseOver = window / PCA coords (PC1,PC2) / segment PCA / confidence.
+# hprc2annotBuildOne.sh produces these directly on a fresh build.
+#
+# hprc2annotFixBed.sh rewrites an already-built segdups or pclai bigBed in place
+# (blank the name, split the values into fields) WITHOUT re-downloading. It exists
+# for the one-off migration of files built before that layout and is not part of a
+# normal build; a fresh build never needs it. It refuses to run on a file that is
+# already converted, because a second pass on pclai would blank the values it
+# parsed on the first. Usage:
+#   find <hub> -name segdups.bb | sed 's/^/segdups /' >  fixbed.jobs
+#   find <hub> -name pclai.bb   | sed 's/^/pclai /'   >> fixbed.jobs
+#   parallel --colsep ' ' hprc2annotFixBed.sh {1} {2} :::: fixbed.jobs
+#   hprc2annotMakeTrackDb.py            # regenerate trackDb after
+
+##############################################################################
+# 5. Documentation
+##############################################################################
+# Master copies of the seven track description pages:
+#   ~/kent/src/hg/makeDb/trackDb/contrib/hprc2annot/<track>.html
+# hprc2annotMakeTrackDb.py copies them into the hub's docs/ directory, where all
+# 462 assemblies reference them. Edit the kent copy, never the hub copy.
+# References were added with /cluster/bin/scripts/getTrackReferences:
+#   catGenes   CAT       PMID 29884752
+#   liftoff    Liftoff   PMID 33320174
+#   censat/cen cenSat    PMID 35357911
+#   segdups    SEDEF     PMID 30423092
+# pcLAI has no PMID; the preprint reference was taken from the Crossref record for
+# doi 10.64898/2026.03.23.713813 rather than written by hand:
+#   curl -sH 'Accept: application/json' https://api.crossref.org/works/<doi>
+# methylation: HPRC has not supplied a method citation.
+
+##############################################################################
+# 6. Testing / serving
+##############################################################################
+# For QA the hub is exposed via ~/public_html and loaded on the browser:
+#   https://genome.ucsc.edu/cgi-bin/hgTracks?genome=GCA_041900255.1&hubUrl=https://hgwdev.gi.ucsc.edu/~max/hprc2annot/hub.txt
+# hubCheck https://hgwdev.gi.ucsc.edu/~max/hprc2annot/hub.txt
+# Production serving under hgdownload needs a hubs/contrib -> asmHubs/contrib
+# symlink (owned by the GenArk maintainer).
+
+##############################################################################
+# 7. Wiring into the GenArk assembly hubs (src/utils/genark/genark)
+##############################################################################
+# The general GenArk management tool genark installs the collection with one
+# command:
+#   genark addContrib hprc2annot        (genark addContrib --remove hprc2annot to undo)
+# For each accession it:
+#   - creates <assemblyHub>/contrib/hprc2annot/ with symlinks to the data files
+#     (.bb + methylation.bw -> the contrib hub) and the shared doc pages;
+#   - writes a per-assembly hprc2annot.trackDb.txt whose bigDataUrl/html paths are
+#     hub-root relative (contrib/hprc2annot/...);
+#   - wires that trackDb block into the assembly's useOneFile hub.txt, between
+#     "# BEGIN/END genark contrib: hprc2annot" markers (idempotent).
+# A full GenArk hub rebuild regenerates hub.txt, so re-run addContrib after a
+# rebuild, or add hprc2annot handling to the build's asmHubTrackDb.sh for a
+# durable inclusion.
+# Ran on 462 assemblies (HG002 excluded).
+#
+# QA the installed collection with:
+#   genark checkContrib hprc2annot            # hubCheck a random sample of 5
+#   genark checkContrib hprc2annot --all      # every assembly
+#   genark checkContrib hprc2annot GCA_x ...  # specific accessions
+# It runs hubCheck on each assembly hub and separates contrib-specific problems
+# from the assemblies' own pre-existing hub warnings (the HPRCv2 chain track names
+# contain periods, which hubCheck warns about -- not an hprc2annot issue).

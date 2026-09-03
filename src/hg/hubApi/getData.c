@@ -131,12 +131,6 @@ char *splitSqlTable = cloneString(sqlTable);
  * here for the chrom name means to use the first chrom name in chromInfo
  */
 struct hTableInfo *hti = hFindTableInfoWithConn(conn, NULL, sqlTable);
-if (debug && hti)
-    {
-    jsonWriteBoolean(jw, "isPos", hti->isPos);
-    jsonWriteBoolean(jw, "isSplit", hti->isSplit);
-    jsonWriteBoolean(jw, "hasBin", hti->hasBin);
-    }
 /* check if table name needs to be modified */
 if (hti && hti->isSplit)
     {
@@ -146,8 +140,6 @@ if (hti && hti->isSplit)
 	safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, hti->rootName);
 	freeMem(splitSqlTable);
 	splitSqlTable = cloneString(fullTableName);
-	if (debug)
-	    jsonWriteString(jw, "splitSqlTable", splitSqlTable);
 	}
     else
 	{
@@ -156,8 +148,6 @@ if (hti && hti->isSplit)
 	safef(fullTableName, sizeof(fullTableName), "%s_%s", defaultChrom, hti->rootName);
 	freeMem(splitSqlTable);
 	splitSqlTable = cloneString(fullTableName);
-	if (debug)
-	    jsonWriteString(jw, "splitSqlTable", splitSqlTable);
 	}
     }
 
@@ -205,7 +195,7 @@ else if (0 == (start + end))	/* have chrom, no start,end == full chr */
     jsonWriteNumber(jw, "end", (long long)ci->size);
     if (tdb && isWiggleDataTable(tdb->type))
 	{
-	if (jsonOutputArrays || debug)
+	if (jsonOutputArrays)
 	    wigColumnTypes(columnTypesJw, track);
 	jsonWriteListStart(jw, track);
         itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, 0, ci->size, 0);
@@ -228,7 +218,7 @@ else	/* fully specified chrom:start-end */
     jsonWriteString(jw, "chrom", chrom);
     if (tdb && isWiggleDataTable(tdb->type))
 	{
-	if (jsonOutputArrays || debug)
+	if (jsonOutputArrays)
 	    wigColumnTypes(columnTypesJw, track);
 	jsonWriteListStart(jw, track);
         itemsReturned += wigTableDataOutput(jw, db, splitSqlTable, chrom, start, end, 0);
@@ -249,9 +239,6 @@ else	/* fully specified chrom:start-end */
 	}
     }
 
-if (debug)
-    jsonWriteString(jw, "select", query->string);
-
 /* continuing, could be wiggle output with no chrom specified */
 char **columnNames = NULL;
 char **columnTypes = NULL;
@@ -262,7 +249,7 @@ if (! as)
 struct asColumn *columnEl = as->columnList;
 int asColumnCount = slCount(columnEl);
 int columnCount = tableColumns(conn, splitSqlTable, &columnNames, &columnTypes, &jsonTypes);
-if (jsonOutputArrays || debug)
+if (jsonOutputArrays)
     {
     outputSchema(tdb, columnTypesJw, columnNames, columnTypes, jsonTypes, hti,
 	columnCount, asColumnCount, columnEl, track);
@@ -473,7 +460,7 @@ jsonWriteString(jw, "hubUrl", hubUrl);
 jsonWriteString(jw, "genome", genome);
 
 struct jsonWrite *columnTypesJw = NULL;
-if (jsonOutputArrays || debug)
+if (jsonOutputArrays)
     {
     columnTypesJw = jsonWriteNew();
     jsonWriteObjectStart(columnTypesJw, "columnTypes");
@@ -535,7 +522,7 @@ for (i = 0; i < numTracks; i++)
         if (! as)
         apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome: '%s' for endpoint '/getData/track' given hubUrl='%s'", bigDataUrl, track, genome, hubUrl);
         struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-        if (jsonOutputArrays || debug)
+        if (jsonOutputArrays)
             bigColumnTypes(columnTypesJw, fiList, as, track);
 
         jsonWriteListStart(jw, track);
@@ -559,7 +546,7 @@ for (i = 0; i < numTracks; i++)
         }
     else if (startsWith("bigWig", thisTrack->type))
         {
-        if (jsonOutputArrays || debug)
+        if (jsonOutputArrays)
         wigColumnTypes(columnTypesJw, track);
         jsonWriteListStart(jw, track);
         bigWigData(jw, bbi, chrom, uStart, uEnd);
@@ -567,7 +554,7 @@ for (i = 0; i < numTracks; i++)
         }
     bbiFileClose(&bbi);
     }
-if (jsonOutputArrays || debug)
+if (jsonOutputArrays)
     {
     jsonWriteObjectEnd(columnTypesJw);
     jsonWriteAppend(jw, NULL, columnTypesJw);
@@ -628,7 +615,7 @@ if (numTracks > MAX_NUM_TRACKS)
 int i = 0;
 struct hash *trackHash = hashNew(0); // let hub tracks work
 struct jsonWrite *columnTypesJw = NULL;
-if (jsonOutputArrays || debug)
+if (jsonOutputArrays)
     {
     columnTypesJw = jsonWriteNew();
     jsonWriteObjectStart(columnTypesJw, "columnTypes");
@@ -726,8 +713,6 @@ for (i = 0; i < numTracks; i++)
         jsonWriteString(jw, "trackType", thisTrack->type);
 
     jsonWriteString(jw, "track", track);
-    if (debug)
-        jsonWriteBoolean(jw, "jsonOutputArrays", jsonOutputArrays);
 
     char query[4096];
     struct bbiFile *bbi = NULL;
@@ -780,7 +765,7 @@ for (i = 0; i < numTracks; i++)
         if (! as)
             apiErrAbort(err500, err500Msg, "can not find schema definition for bigDataUrl '%s', track=%s genome='%s' for endpoint '/getData/track'", bigDataUrl, track, db);
         struct sqlFieldType *fiList = sqlFieldTypesFromAs(as);
-        if (jsonOutputArrays || debug)
+        if (jsonOutputArrays)
             bigColumnTypes(columnTypesJw, fiList, as, track);
 
         jsonWriteListStart(jw, track);
@@ -804,7 +789,7 @@ for (i = 0; i < numTracks; i++)
         }
     else if (thisTrack && startsWith("bigWig", thisTrack->type))
         {
-        if (jsonOutputArrays || debug)
+        if (jsonOutputArrays)
             wigColumnTypes(columnTypesJw, track);
 
         jsonWriteListStart(jw, track);
@@ -815,7 +800,7 @@ for (i = 0; i < numTracks; i++)
     else
         tableDataOutput(db, thisTrack, conn, jw, track, chrom, uStart, uEnd, columnTypesJw);
     }
-if (jsonOutputArrays || debug)
+if (jsonOutputArrays)
     {
     jsonWriteObjectEnd(columnTypesJw);
     jsonWriteAppend(jw, NULL, columnTypesJw);

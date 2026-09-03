@@ -1,0 +1,112 @@
+# trackDb stanzas for the hprc2annot GenArk contributed track collection.
+# HPRC Release 2 annotations on the ~462 HPRC assembly hubs, refs #35415.
+#
+# hprc2annotMakeTrackDb.py reads this file, keeps only the stanzas whose
+# bigDataUrl file is present in a given assembly's hub directory, and writes
+# the per-assembly trackDb.txt. Stanzas are separated by blank lines; comment
+# lines are ignored. Paths here are relative to the assembly's hub directory;
+# genark addContrib rewrites them to contrib/hprc2annot/... when it wires the
+# collection into each assembly's hub.txt.
+#
+# dataVersion values come from the HPRC index CSV file names (see the makeDoc,
+# src/hg/makeDb/doc/contrib/hprc2annot.txt); update them when HPRC reissues a
+# track.
+
+track hprcCatGenes
+shortLabel CAT Genes
+longLabel CAT (Comparative Annotation Toolkit) gene annotations
+type bigGenePred
+bigDataUrl catGenes.bb
+group genes
+priority 10
+visibility pack
+labelFields name,name2
+defaultLabelFields name2
+searchIndex name,name2
+baseColorDefault genomicCodons
+dataVersion HPRC Release 2, CAT genes v1.3
+html ../docs/catGenes
+
+track hprcLiftoffGenes
+shortLabel Liftoff Genes
+longLabel Liftoff RefSeq gene annotations
+type bigGenePred
+bigDataUrl liftoffGenes.bb
+group genes
+priority 11
+visibility dense
+labelFields name,name2
+defaultLabelFields name2
+searchIndex name,name2
+baseColorDefault genomicCodons
+dataVersion HPRC Release 2, Liftoff genes v1.0
+html ../docs/liftoffGenes
+
+track hprcCensat
+shortLabel cenSat
+longLabel Centromere satellite annotation (cenSat)
+type bigBed 9 +
+bigDataUrl censat.bb
+group varRep
+priority 20
+visibility pack
+itemRgb on
+searchIndex name
+dataVersion HPRC Release 2, cenSat v1.0
+html ../docs/censat
+
+track hprcActiveCentromeres
+shortLabel Active Centromere
+longLabel Active centromere regions
+type bigBed 3
+bigDataUrl censatCentromeres.bb
+group map
+priority 21
+visibility dense
+color 220,20,60
+dataVersion HPRC Release 2, cenSat centromeres v1.0
+html ../docs/censatCentromeres
+
+track hprcSegdups
+shortLabel Seg Dups
+longLabel Segmental duplications (SEDEF)
+type bigBed 9 +
+bigDataUrl segdups.bb
+group varRep
+priority 22
+visibility dense
+itemRgb on
+filterValues.original True,False
+filterType.original multipleListOr
+filterLabel.original SEDEF original call
+mouseOver Duplicate of ${partner}<br>Identity: ${pctMatch}%<br>Aligned length: ${alnLen} bp<br>Satellite bases: ${satBases}
+dataVersion HPRC Release 2, SEDEF segdups v1.1
+html ../docs/segdups
+
+track hprcPclai
+shortLabel pcLAI Ancestry
+longLabel Pangenome local ancestry inference (pcLAI)
+type bigBed 9 +
+bigDataUrl pclai.bb
+group compGeno
+priority 30
+visibility pack
+itemRgb on
+mouseOver Window ${window}<br>PCA coordinates (PC1,PC2): ${pca}<br>Segment PCA: ${pcaSegment}<br>Confidence: ${score}
+dataVersion HPRC Release 2, pcLAI v1.1
+html ../docs/pclai
+
+track hprcMethylation
+shortLabel Methylation
+longLabel ONT 5mC CpG methylation
+type bigWig 0 100
+bigDataUrl methylation.bw
+group regulation
+priority 40
+visibility full
+autoScale off
+viewLimits 0:100
+maxHeightPixels 100:40:8
+color 0,0,200
+dataVersion HPRC Release 2, ONT methylation v1.0
+html ../docs/methylation

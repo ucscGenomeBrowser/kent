@@ -33,5 +33,5 @@ while (my $line = <FH>) {
   }
 }
 close (FH);
-printf "<hiram\@soe.ucsc.edu> Hiram Clawson";
+printf "<braney\@soe.ucsc.edu> Brian Raney";
 
