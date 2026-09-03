@@ -97,6 +97,14 @@ if (errCatchStart(errCatch))
                 struct chain *retChain, *retChainToFree;
                 char *chrom = chain->qName;
                 chainSubsetOnT(chain, winStart, winEnd, &retChain, &retChainToFree);
+
+                // chainLoadIdRangeHub returns every chain whose span overlaps the window,
+                // but only loads the links that fall inside it.  A chain can therefore
+                // reach across the window with no aligned block in it, in which case
+                // chainSubsetOnT has nothing to subset and hands back NULL.
+                if (retChain == NULL)
+                    continue;
+
                 struct cBlock *cb;
                 for(cb = retChain->blockList; cb; cb = cb->next)
                     {
