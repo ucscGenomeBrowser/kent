@@ -4,7 +4,7 @@ shortLabel ENCODE Expression
 longLabel ENCODE developmental time course bulk RNA-seq gene expression
 group regulation
 priority 0.6
-pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
+pennantIcon New red ../goldenPath/newsarch.html#090426 "Released Sep. 4, 2026"
 html mouseDevTimecourse
 
     track developmentTimecourseM4mm10TPM

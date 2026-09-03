@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import subprocess, os, gzip, argparse, sys, json, operator, datetime
+import subprocess, os, gzip, argparse, sys, json, operator, datetime, re
 from collections import Counter, defaultdict
 
 #####
@@ -606,7 +606,10 @@ help='output a file containing info on default track usage for top 15 most used 
         # returns here and every track lookup below would miss.
         dbCountsSorted = sorted(dbCounts.items(), key=operator.itemgetter(1))
         dbCountsSorted.reverse()
-        dbsToCheck = [db for db, useCount in dbCountsSorted if not db.startswith("hub_")]
+        #The name is interpolated into a shell command below, so anything that does not look
+        #like an assembly name is dropped rather than passed to sh
+        dbsToCheck = [db for db, useCount in dbCountsSorted
+                      if not db.startswith("hub_") and re.match(r'^[A-Za-z0-9_.-]+$', db)]
 
         defaultCountsFile = open(os.path.join(outDir, "defaultCounts.tsv"), "w")
         for db in dbsToCheck[0:15]: # Only the default track stats for the 15 most popular assemblies
