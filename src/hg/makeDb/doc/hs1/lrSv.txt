@@ -91,3 +91,10 @@ bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSvHprc2Ro.as
 # palette (CPX purple, colorsDb DEL 200,0,0); apr hs1 and cpc1 hs1 only needed
 # the CPX color remapped, so their served bigBeds were recolored in place the
 # same way as the hg38 files (see doc/hg38/lrSv.txt). There is no hs1 lrSvAll.
+
+##########
+# 2026-08/09 - see doc/hg38/lrSv.txt for the dated blocks covering the deletion
+# anchor fix (2026-08, refs #38099), the lrSv1kLin insertion span fix and the
+# filter-cap bumps (2026-09-01, refs #38099). Those rebuilds also replaced the
+# hs1 bigBeds for 1kgOnt, apr, cpc1, colorsDb and lin1218; all of them are
+# built from the hg38 work dirs by the commands in that file.

@@ -80,9 +80,21 @@ def main():
             # part of a deletion, so the deleted region starts one base to the
             # right. Drop the anchor from the left of DEL intervals so svLen ==
             # |SVLEN| and coordinates match anchor-excluded callsets (e.g.
-            # HGSVC3). INS keeps the anchor-based position.
+            # HGSVC3).
+            # An insertion has no deleted span: its item is the single anchor
+            # base at the attach point, so span == 1. This VCF sets END = POS+1
+            # on insertions, which would draw them 2 bp wide, so clamp chromEnd
+            # back to the anchor. That matches the other VCF-derived subtracks
+            # (CoLoRSdb, AoU, GA4K, CARD, gustafson, 1kgOnt, and deCODE for its
+            # single-base-REF records).
             if svType == "DEL":
                 chromStart += 1
+            elif svType in ("INS", "MEI"):
+                chromEnd = chromStart + 1
+            # Only DEL and INS occur in either source VCF. A future INV/DUP/CPX
+            # would fall through to chromEnd = END with chromStart = pos-1, i.e.
+            # the same off-by-one just fixed for DEL, so revisit the anchor
+            # question per type before trusting such a record.
             if chromEnd <= chromStart:
                 chromEnd = chromStart + 1
 
@@ -98,7 +110,6 @@ def main():
             afEur = toFloat(info.get("AF_EUR", "0"))
             afSas = toFloat(info.get("AF_SAS", "0"))
             ns = toInt(info.get("NS", "0"))
-            numConsolidated = toInt(info.get("NumConsolidated", "0"))
 
             color = SV_COLORS.get(svType, "100,100,100")
             featLen = insLen if svType in ("INS", "MEI") else svLen
@@ -126,7 +137,6 @@ def main():
                 f"{afEur:.6f}",
                 f"{afSas:.6f}",
                 str(ns),
-                str(numConsolidated),
             ]
             fOut.write("\t".join(row) + "\n")
             nWritten += 1
