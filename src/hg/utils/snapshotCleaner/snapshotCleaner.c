@@ -1,10 +1,10 @@
-/* snapshotReaper - garbage-collect abandoned anonymous shareable-view snapshots.
+/* snapshotCleaner - clean up abandoned anonymous shareable-view snapshots.
  *
  * Shareable "view snapshot" sessions (see hg/lib/snapshotSession.c) are lightweight named sessions
  * created to back durable share links (e.g. a BLAT alignment).  Anonymous ones live under the
- * reserved user "l" with a "__"-prefixed name.  This reaper deletes those whose lastUse is older
+ * reserved user "l" with a "__"-prefixed name.  This cleaner deletes those whose lastUse is older
  * than the TTL, along with their durable sessionData files, giving share links a "durable while
- * used, reaped when abandoned" lifetime.  It never touches real (non-"__") or non-anonymous
+ * used, removed when abandoned" lifetime.  It never touches real (non-"__") or non-anonymous
  * sessions.  Intended to run from the same cron as the trash cleaner.
  *
  * Copyright (C) 2026 The Regents of the University of California
@@ -21,13 +21,13 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "snapshotReaper - delete abandoned anonymous view-snapshot sessions and their durable files.\n"
+  "snapshotCleaner - delete abandoned anonymous view-snapshot sessions and their durable files.\n"
   "usage:\n"
-  "   snapshotReaper [options]\n"
+  "   snapshotCleaner [options]\n"
   "options:\n"
-  "   -ttlDays=N   Reap anonymous snapshots not opened within N days.\n"
+  "   -ttlDays=N   Clean anonymous snapshots not opened within N days.\n"
   "                Default: the hg.conf setting snapshot.ttlDays, else %d (~4 years).\n"
-  "   -dryRun      Report how many would be reaped without deleting anything.\n",
+  "   -dryRun      Report how many would be cleaned without deleting anything.\n",
   snapshotDefaultTtlDays);
 }
 
@@ -48,13 +48,13 @@ if (isNotEmpty(cfgTtl))
     ttlDays = atoi(cfgTtl);
 ttlDays = optionInt("ttlDays", ttlDays);        // command line wins over hg.conf
 if (ttlDays < 1)
-    errAbort("snapshotReaper: ttlDays must be at least 1 (got %d)", ttlDays);
+    errAbort("snapshotCleaner: ttlDays must be at least 1 (got %d)", ttlDays);
 boolean dryRun = optionExists("dryRun");
 
 struct sqlConnection *conn = hConnectCentral();
-int n = snapshotReapAnon(conn, ttlDays, dryRun);
+int n = snapshotCleanAnon(conn, ttlDays, dryRun);
 hDisconnectCentral(&conn);
 verbose(1, "%s %d abandoned anonymous snapshot(s) older than %d days.\n",
-        dryRun ? "Would reap" : "Reaped", n, ttlDays);
+        dryRun ? "Would clean" : "Cleaned", n, ttlDays);
 return 0;
 }

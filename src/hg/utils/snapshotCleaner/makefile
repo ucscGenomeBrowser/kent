@@ -1,3 +1,3 @@
 kentSrc = ../../..
-A = snapshotReaper
+A = snapshotCleaner
 include $(kentSrc)/inc/userApp.mk

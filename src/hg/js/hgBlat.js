@@ -315,7 +315,7 @@ function blatShareLink() {
     // Create (or reveal) a durable share link.  It is backed by a lightweight "snapshot" session that
     // stores only db + the results bigPsl - not the whole cart - under a server-generated unique name
     // (see lib/snapshotSession.c).  hgBlat's ?u=&s= reopen (doShareReopen) rebuilds the results table
-    // from that bigPsl.  The token generation, uniqueness and reaping are shared with hgc and the
+    // from that bigPsl.  The token generation, uniqueness and cleanup are shared with hgc and the
     // top-right "Share a link".
     var box = document.getElementById('gbShareBox');
     if (!box) { return; }
