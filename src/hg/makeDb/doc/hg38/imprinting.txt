@@ -51,3 +51,203 @@ done
 # chr11:1,999,937  0.4886   <- H19 ICR, as expected
 # chr15:24,955,342 0.5362   <- SNRPN/MAGEL2 region, as expected
 # chr20:57,428,788 0.0006   <- control, essentially zero
+
+##############################################################################
+# Geneimprint - catalog of imprinted and candidate imprinted genes
+# (refs #37599)
+##############################################################################
+
+# Geneimprint (https://geneimprint.com, curated by Randy L. Jirtle) publishes a
+# table of imprinted and candidate imprinted genes per species. The human table
+# gives a cytogenetic band but no coordinates, so the gene symbols have to be
+# resolved against a gene annotation. We use the HGNC track, which carries the
+# approved symbol, the previous approved symbols, the alias symbols and the
+# cytogenetic band of every locus.
+
+mkdir -p /hive/data/genomes/hg38/bed/imprinting/geneimprint
+cd /hive/data/genomes/hg38/bed/imprinting/geneimprint
+
+curl -sSL -A "Mozilla/5.0" \
+  "https://geneimprint.com/site/genes-by-species.Homo+sapiens" \
+  -o geneimprint.human.html
+
+# the two annotations the symbols are resolved against
+bigBedToBed /gbdb/hg38/hgnc/hgnc.bb hgnc.bed
+hgsql hg38 -N -e "select chrom,txStart,txEnd,strand,name2 from refGene" > refGene.tsv
+
+# parse the table, resolve the symbols, write bed9+9 plus a report
+~/kent/src/hg/makeDb/scripts/imprinting/geneimprintToBed.py \
+    geneimprint.human.html hgnc.bed refGene.tsv \
+    geneimprint.bed geneimprint.report.txt
+
+# 281 rows in the catalog, 274 features written:
+#   4 rows dropped, their identifiers are retired and match nothing in HGNC or
+#     refGene (ZNF127AS, PWCR1, LOC100131170, FLJ20464). PWCR1 is the old name
+#     of the SNORD116 cluster, which is in the track under that name.
+#   3 genes are listed twice in the catalog under a current and a retired
+#     symbol (FBRSL1/KIAA1545, ISM1/C20orf82, MRAP2/C6orf117); each pair is
+#     merged into one feature carrying both names.
+# Mapping checks in the report: all 274 loci fall on the chromosome arm the
+# catalog states, and 273 of 274 agree with the catalog's antisense marker on
+# the strand (ZDBF2 is the exception).
+
+bedToBigBed -type=bed9+9 -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/imprinting/geneimprint.as \
+    -extraIndex=name \
+    geneimprint.bed /hive/data/genomes/hg38/chrom.sizes geneimprint.bb
+
+# spot check the canonical loci
+bigBedToBed geneimprint.bb stdout \
+  | grep -wE "H19|IGF2|KCNQ1OT1|SNRPN|UBE3A|MEG3|GNAS|PLAGL1" | cut -f1-4,10,11
+# H19 maternal, IGF2 paternal, KCNQ1OT1 paternal, SNRPN paternal,
+# UBE3A maternal, MEG3 maternal, GNAS isoform dependent, PLAGL1 paternal
+
+##############################################################################
+# Akbari iDMRs - imprinted differentially methylated regions
+# (refs #37599)
+##############################################################################
+
+# Akbari et al. 2023 (Cell Genomics, PMID 36777186) assembled 192 imprinted
+# DMRs on the autosomes from five earlier genome-wide studies, for their PatMat
+# parent-of-origin method. The list is table S3 of the paper and is also
+# shipped with PatMat as Imprinted_DMR_List_V1.GRCh38.tsv.
+#
+# tableS3.tsv was downloaded by hand from the paper's supplementary material.
+
+cd /hive/data/genomes/hg38/bed/imprinting/akbari2023
+
+# confirm the supplementary table and the tool's own copy hold the same regions
+curl -sSL \
+  "https://raw.githubusercontent.com/vahidAK/PatMat/main/patmat/Imprinted_DMR_List_V1.GRCh38.tsv" \
+  -o patmat.Imprinted_DMR_List_V1.GRCh38.tsv
+awk -F'\t' 'NR>1{print $1"\t"$2"\t"$3}' tableS3.tsv | sort > /tmp/s3.coords
+awk -F'\t' 'NR>1{print $1"\t"$2"\t"$3}' patmat.Imprinted_DMR_List_V1.GRCh38.tsv \
+    | sort > /tmp/pm.coords
+comm -12 /tmp/s3.coords /tmp/pm.coords | wc -l
+# 192, i.e. all of them, the two copies are identical
+
+# IMPORTANT: the published Start column is 1-based inclusive, not BED. PatMat's
+# own reader does "dmr_start = int(line[1]) - 1" before handing the interval to
+# tabix (patmat/core/methylation.py, process_dmr_line), which settles it. The
+# converter below applies that shift.
+
+~/kent/src/hg/makeDb/scripts/imprinting/akbariIdmrToBed.py \
+    tableS3.tsv /hive/data/genomes/hg38/chrom.sizes \
+    akbariIdmr.bed akbariIdmr.report.txt
+
+# 192 rows in, 192 features out, nothing skipped. 144 maternally methylated and
+# 48 paternally methylated; 93 regions reported by two or more studies and 99 by
+# a single study, which matches the counts stated in the paper. Region length
+# 64 bp to 44,308 bp, median 867 bp, 414,958 bp in total. One region (H19) has
+# NA in the six WGBS validation columns, so those are stored as empty strings
+# and hidden on the details page with skipEmptyFields.
+
+bedToBigBed -type=bed9+11 -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/imprinting/akbariIdmr.as \
+    -extraIndex=name,gene \
+    akbariIdmr.bed /hive/data/genomes/hg38/chrom.sizes akbariIdmr.bb
+
+# spot check the canonical imprinting control regions and their methylated allele
+bigBedToBed akbariIdmr.bb stdout | awk -F'\t' '$1=="chr11"' | cut -f1-4,10
+# H19 paternal, IGF2_DMR2 paternal, IGF2_DMR0 paternal, KvDMR1 maternal
+
+# cross-check against the MethBase2 ASM subtrack: the two chr11 ASM peaks sit
+# on the H19 region and on KvDMR1, and the chr15 peak sits inside the
+# SNRPN region
+
+##############################################################################
+# OMIM Imprinted - genes flagged as imprinted in the OMIM gene map
+# (refs #37599)
+##############################################################################
+
+# The OMIM staff curate imprinting from the primary literature, but that call is
+# published only through GeneScout, which appends "(I)" to the coordinates in its
+# Location column. It is NOT part of the OMIM gene map and NOT in any of the
+# licensed OMIM download files: today's genemap.txt, genemap2.txt and
+# morbidmap.txt contain zero occurrences of "(I)".
+#
+#   grep -c "(I)" /hive/data/outside/otto/omim/2026-09-03/genemap{,2}.txt
+#   0
+#   0
+#
+# So the flag has to come from a GeneScout export, which is also the only input
+# the converter needs.
+#
+# MANUAL STEP - Max did this by hand in a web browser, and it cannot be
+# automated. genescout.omim.org sits behind a Cloudflare JavaScript challenge
+# that returns HTTP 403 to curl and wget for every path on the host, so the file
+# cannot be fetched from hgwdev. To repeat it:
+#
+#   1. open https://genescout.omim.org/ in a browser
+#   2. set assembly GRCh38 (hg38), operation "intersect"
+#   3. paste one whole-chromosome interval per line into Primary coordinates,
+#      chr1:1-248956422 through chrY:1-59373566, using the hg38 chrom.sizes
+#      lengths
+#   4. run the search, then Download the results table as tab-delimited
+#   5. copy the file to the data directory below
+#
+# The export used here was generated 2026-09-03 and saved as
+# GeneScout-Results.tsv. It has a 76-line preamble; the results header is on
+# line 77 and the converter locates it by looking for the header row rather than
+# by a fixed offset.
+
+cd /hive/data/genomes/hg38/bed/imprinting/omimImprint
+# GeneScout-Results.tsv placed here by hand, see above
+
+~/kent/src/hg/makeDb/scripts/imprinting/omimImprintToBed.py \
+    GeneScout-Results.tsv /hive/data/genomes/hg38/chrom.sizes \
+    omimImprint.bed omimImprint.report.txt
+
+# 44,566 gene rows in the export, 567 of them carry the (I) marker, 459 features
+# written:
+#   225 have an OMIM gene entry of their own
+#   234 are in the gene map without one, mostly antisense transcripts, lncRNAs
+#       and microRNAs inside imprinted clusters (KCNQ1-AS1, INS-IGF2, ...)
+#   108 dropped: these are OMIM phenotype entries, not genes. They are mapped
+#       disease regions and coarse linkage intervals running up to 90 Mb (SRS2
+#       chr7, 89.6 Mb; DEL18q, 61.9 Mb; DEL9p, 43.0 Mb) and would blanket the
+#       display. All 108 are listed in omimImprint.report.txt. Phenotype
+#       positions are already in the omimLocation track.
+#
+# The script needs nothing but the export: a phenotype entry repeats the same
+# MIM number in the Gene MIM# and Phenotype MIM# columns, while a gene entry
+# carries two different numbers. That rule was checked against OMIM's own
+# mimTitles.txt prefixes ("Number Sign"/"Percent" = phenotype) and agrees on all
+# 567 flagged entries, 0 disagreements, so no OMIM download file is needed.
+#
+# The coordinates were also checked once against the licensed genemap2.txt: all
+# 225 flagged loci that have an OMIM gene entry agreed exactly, 0 disagreements
+# on chromosome, start or end. That was a one-off validation, the build does not
+# depend on it.
+#
+# GeneScout coordinates are 1-based inclusive, so the start is decremented by
+# one. Established two ways: the export echoes whole chromosomes as
+# "chr1:1-248,956,422" (a 0-based system would start at 0), and comparing
+# genemap2.txt against the 0-based hgnc.bb over 17,617 genes gives a modal
+# start difference of exactly +1 and end difference of exactly 0.
+#
+# genemap2.txt is then used as an independent coordinate check: all 225 loci
+# with an OMIM gene entry agree with the licensed gene map exactly, 0
+# disagreements on chromosome, start or end.
+
+bedToBigBed -type=bed9+6 -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/imprinting/omimImprint.as \
+    -extraIndex=name \
+    omimImprint.bed /hive/data/genomes/hg38/chrom.sizes omimImprint.bb
+
+# Check that the (I) marker really means imprinted, rather than being one of
+# GeneScout's display markers like the (S) that flags a gene spanning the edge
+# of a search interval. Compare the flagged loci with the two other subtracks,
+# against a size-matched random sample of unflagged genes as the baseline.
+
+cd /hive/data/genomes/hg38/bed/imprinting
+bedtools intersect -a omimImprint/omimImprint.bed -b akbari2023/akbariIdmr.bed -u | wc -l
+bedtools intersect -a omimImprint/omimImprint.bed -b geneimprint/geneimprint.bed -u | wc -l
+# 148 of the flagged loci overlap an Akbari iDMR and 303 overlap a Geneimprint
+# gene. For 529 randomly chosen genes that do NOT carry the marker the same two
+# counts are 0 and 5. The marker is also per gene, not per band: 11p15.5 has 13
+# of its 129 genes flagged.
+#
+# No redistribution restriction applies: this track is built purely from the
+# GeneScout export and contains no OMIM download data, so unlike omimGene2 it
+# needs no "tableBrowser noGenome".

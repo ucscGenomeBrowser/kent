@@ -1,14 +1,7 @@
 <h2>Description</h2>
 
 <p>
-Most genes are expressed from both the maternal and the paternal copy of a
-chromosome. A small number of genes break this rule: they are
-<em>imprinted</em>, meaning that only the copy inherited from one parent is
-active while the other copy is silenced. The mark that keeps the two copies
-apart is DNA methylation. At an imprinted locus, one allele carries methylated
-CpG sites and the other does not, a pattern called allele-specific methylation
-(ASM). Regions with this pattern are candidates for imprinting control regions,
-the switches that set the expression of whole gene clusters.
+This track summarizes allele-specific methylation (ASM) across thousands of human methylomes. At an imprinted locus one allele carries methylated CpG sites and the other does not, so a region that shows this pattern in many independent samples is a candidate imprinting control region.
 </p>
 
 <p>
@@ -31,6 +24,10 @@ The score is a summary across samples, not a measurement in any single sample.
 A value of 0.5 does not mean that half of the DNA molecules are methylated; it
 means that about half of the surveyed methylomes had an AMR call covering that
 CpG.
+</p>
+
+<p>
+See the <a href="hgTrackUi?g=imprinting">Imprinting</a> track collection page for background on genomic imprinting and for the color scheme shared by all of its subtracks.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -83,9 +80,8 @@ The data file was downloaded from
 the "common" section of the MethBase2 track hub at
 <a href="http://smithlab.usc.edu/trackdata/methylation/hub.txt" target="_blank">http://smithlab.usc.edu/trackdata/methylation/hub.txt</a>.
 The file is a bigWig and was used as it is, without reformatting or
-recalculation; it covers 29,401,795 CpG positions on the 25 main chromosomes
-(chr1 to chr22, chrX, chrY, chrM) and no positions were dropped. The steps we
-ran are documented in the
+recalculation. It carries a value at each of 29,401,795 CpG positions, on
+chr1 to chr22, chrX, chrY and chrM. The steps we ran are documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt" target="_blank">imprinting makeDoc</a>.
 </p>
 
