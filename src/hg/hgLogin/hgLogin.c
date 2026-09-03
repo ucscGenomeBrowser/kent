@@ -869,7 +869,7 @@ hPrintf("<div id=\"changePwBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>%s</h2>", brwName);
 hPrintf(
-    "<h3>Change Password</h3>"
+    "<h3>Change password</h3>"
     "\n"
     "<p> <span style='color:red;'>%s</span> </p>"
     "\n"
@@ -1112,7 +1112,7 @@ char *encCurEmail = htmlEncode(isNotEmpty(curEmail) ? curEmail : "(none)");
 
 hPrintf("<div id=\"changeEmailBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
-hPrintf("<h3>Change Email</h3>");
+hPrintf("<h3>Change email</h3>");
 hPrintf("<p><span style='color:red;'>%s</span></p>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"changeEmailForm\">", hgLoginUrl);
 hPrintf("<p>Signed in as <b>%s</b>.<br>Current email address: <b>%s</b></p>",
@@ -1269,7 +1269,7 @@ hPrintf(
 hPrintf("<p>Already have an account? "
     "<a href=\"%s?hgLogin.do.displayLoginPage=1\">Go to the login page</a>.</p>", hgLoginUrl);
 printSocialButtons(FALSE, TRUE, "Sign up");
-hPrintf("<h3>Sign Up Using Email</h3>"
+hPrintf("<h3>Sign up using email</h3>"
     "<form method=\"post\" action=\"%s\" name=\"mainForm\">"
     "<span style='color:red;'>%s</span>"
     "\n", hgLoginUrl, errMsg ? errMsg : "");

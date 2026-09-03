@@ -291,34 +291,44 @@ Haeussler developed these tracks, with QA by Jairo Navarro, Barali Kitiyakara, a
 We are excited to announce the updated
 <b>Genome Aggregation Database (gnomAD) v4.1.1 tracks</b> for human assembly
 hg38/GRCh38, and
-new <b>gnomAD Missense Deleteriousness Prediction by Constraint (MPC)</b> tracks, found in the <a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariants">gnomAD superTrack</a>. The tracks are:</p>
+new <b>gnomAD Missense Deleteriousness Prediction by Constraint (MPC)</b> tracks, both found in
+the <a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariants">gnomAD superTrack</a>. The
+tracks are:</p>
 <ul>
-  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariantsV4.1" target="_blank">gnomAD v4.1.1</a></b>
+  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadVariantsV4.1"
+  target="_blank">gnomAD v4.1.1</a></b>
   (composite track): Shows exome and genome variants. This release revises the LOFTEE END_TRUNC
   GERP distance threshold from -58.0 to 0.0, reclassifying about 79,920 predicted loss-of-function
   variants from high-confidence to low-confidence.</li>
-  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadPLI" target="_blank">gnomAD Constraint Metrics</a></b>
+  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadPLI"
+  target="_blank">gnomAD Constraint Metrics</a></b>
   (composite track): The v4.1.1 constraint metrics were recomputed
-  using a Bayesian framework instead of the previous frequentist approach, expanded the coverage model
+  using a Bayesian framework instead of the previous frequentist approach, expanded the
+  coverage model
   from a depth cutoff to allele number, and now include chrX and chrY. gnomAD's recommended LOEUF
   threshold changed from &lt;0.35 to &lt;0.45 accordingly. The two v4.1.1 subtracks:
    <ul>
-    <li><b>Transcript LoF v4.1.1</b>: gnomAD Predicted Loss of Function Constraint Metrics By Transcript (LOEUF and pLI)</li>
-    <li><b>Transcript Missense v4.1.1</b>: gnomAD Predicted Missense Constraint Metrics By Transcript (Z-scores)</li>
+    <li><b>Transcript LoF v4.1.1</b>: gnomAD Predicted Loss of Function
+    Constraint Metrics By Transcript (LOEUF and pLI)</li>
+    <li><b>Transcript Missense v4.1.1</b>: gnomAD Predicted Missense
+    Constraint Metrics By Transcript (Z-scores)</li>
    </ul>
   </li>
-  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadMpc" target="_blank">gnomAD MPC</a></b> (composite
+  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadMpc"
+  target="_blank">gnomAD MPC</a></b> (composite
   track): Shows a machine-learning score that predicts which missense variants are likely to be
   deleterious, computed from the gnomAD v4.1.1 release of 730,947 exomes. The score is shown as four
   allele-specific tracks (A, C, G, T).</li>
-  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadMpcOverlaps" target="_blank">gnomAD MPC overlaps</a></b>:
+  <li><b><a href="/cgi-bin/hgTrackUi?db=hg38&g=gnomadMpcOverlaps"
+  target="_blank">gnomAD MPC overlaps</a></b>:
   Covering the small subset of variants (about 250,000, or 0.4% of the ~70 million scored variants)
   that are scored against more than one transcript.</li>
 </ul>
 
 <div class="text-center" style="margin-top: 1.5em;">
 <a href="https://genome.ucsc.edu/s/gperez2/gnomADv4.1.1" target="_blank">
-<img alt="Genome Browser screenshot of the gnomAD v4.1.1 and MPC tracks" src="/images/newsArchImages/gnomadV4.1.1_MPC.png"
+<img alt="Genome Browser screenshot of the gnomAD v4.1.1 and MPC tracks"
+src="/images/newsArchImages/gnomadV4.1.1_MPC.png"
 width='75%'></a>
 <p class="gbsCaption"><em>gnomAD v4.1.1 exome and genome variants, the LoF and missense
 constraint tracks, and the four gnomAD MPC allele tracks plus MPC overlaps, at the KCNH1 locus
@@ -326,7 +336,8 @@ on hg38.</em></p>
 </div>
 
 <p>
-For more information about the v4.1.1 update, see the <a href="https://gnomad.broadinstitute.org/news/2026-03-gnomad-v4-1-1/" target="_blank">gnomAD
+For more information about the v4.1.1 update, see the
+<a href="https://gnomad.broadinstitute.org/news/2026-03-gnomad-v4-1-1/" target="_blank">gnomAD
 blog post</a>.</p>
 
 <p>
