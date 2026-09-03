@@ -5,7 +5,7 @@ longLabel ENCODE developmental time course bulk RNA-seq gene expression
 group regulation
 origAssembly mm10
 #pennantIcon 10.jpg ../goldenPath/help/liftOver.html "lifted from mm10"
-pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
+pennantIcon New red ../goldenPath/newsarch.html#090426 "Released Sep. 4, 2026"
 priority 0.6
 html mouseDevTimecourse
 
