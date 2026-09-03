@@ -108,6 +108,9 @@ if (loginSystemEnabled()) /* Using the new hgLogin CGI for login */
     char *changeEmailUrl = wikiLinkChangeEmailUrl(cartSessionId(cart));
     if (changeEmailUrl != NULL)
         printf("<li><A HREF=\"%s\">Change email</A></li>", changeEmailUrl);
+    char *changeRecovEmailUrl = wikiLinkChangeRecovEmailUrl(cartSessionId(cart));
+    if (changeRecovEmailUrl != NULL)
+        printf("<li><A HREF=\"%s\">Recovery email</A></li>", changeRecovEmailUrl);
     printf("</ul>");
 
     printf("<p><A id='logoutLink' HREF=\"%s\">Sign out</A></p>",
@@ -1705,6 +1708,10 @@ else
 					hgsLoadLocalFileName "__binary");
     char *fileName = cartOptionalString(cart,
 					hgsLoadLocalFileName "__filename");
+    /* The name arrives with the upload and is printed in four of the messages below,
+     * so encode it once here rather than at each one. */
+    if (isNotEmpty(fileName))
+	fileName = htmlEncode(fileName);
     if (isNotEmpty(filePlainContents))
 	{
 	char *settings = trimSpaces(filePlainContents);

@@ -1059,9 +1059,13 @@ for (group = groupList; group != NULL; group = group->next)
     }
 hashFree(&superHash);
 
-// on an assembly hub the organism and the freeze name both come from the hub
+// On an assembly hub the organism and the freeze name both come from the hub, but they are
+// not escaped here: webStartWrapperDetailedNoArgs puts the title through htmlTextOut, which
+// escapes & < > and the double quote for us.  Escaping it a second time printed the entity
+// instead of the character, so every assembly with a '/' in its description read
+// "(GRCh38&#x2F;hg38)" in the blue bar.
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly",
-      htmlEncode(organism), htmlEncode(hFreezeFromDb(database)));
+      organism, hFreezeFromDb(database));
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");

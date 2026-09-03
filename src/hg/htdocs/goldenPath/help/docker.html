@@ -12,6 +12,8 @@
 <h6><a href="#docker">What is Docker?</a></h6>
 <h6><a href="#installingDocker">How to Install Docker Desktop?</a></h6>
 <h6><a href="#dockerUCSCgb">Using Docker Desktop for UCSC Genome Browser</a></h6>
+<h6><a href="#dockerHub">Using the Prebuilt UCSC Genome Browser Image</a></h6>
+<h6><a href="#buildImage">Building the Image Yourself</a></h6>
 <h6><a href="#dockerVolume">Create a Docker Volume for Data Persistence</a></h6>
 <h6><a href="#updateGB">Updating the Latest UCSC Genome Browser Version</a></h6>
 <h6><a href="#hg.conf">Customize a UCSC Genome Browser Docker Container</a></h6>
@@ -86,6 +88,40 @@ target=_blank>Overview of the get started guide</a>
    <li><b>Linux</b>: start the Docker service by running the following command on the terminal: 
    <pre><code>sudo systemctl start docker</pre></code>
 </ul>
+<a id="dockerHub"></a>
+<h2>Using the Prebuilt UCSC Genome Browser Image</h2>
+<p>
+UCSC publishes a ready-made Genome Browser image on Docker Hub as
+<a href="https://hub.docker.com/r/genomebrowser/server" target=_blank>genomebrowser/server</a>. The
+image is rebuilt for every Genome Browser release and tagged with the version number, for example
+<code>v502</code>. The <code>latest</code> tag always points at the most recent release, and a
+single tag covers both Intel and Apple Silicon machines. Most people should pull this image rather
+than build the Dockerfile themselves, since pulling takes a few minutes where a build takes
+considerably longer.</p>
+<p>
+The following commands download the image and start a container, mapping port 8080 on the host
+machine to port 80 in the container:</p>
+<pre><code>docker pull genomebrowser/server
+docker run -d --name ucsc_genomebrowser_container -p 8080:80 genomebrowser/server</code></pre>
+<p>The Genome Browser is then available at http://localhost:8080</p>
+
+<p>To pull a specific release rather than the most recent one, add the version tag:</p>
+<pre><code>docker pull genomebrowser/server:v502</code></pre>
+
+<p>
+Plan on about 8GB of disk space for the image itself. The download is around 2.6GB and unpacks to
+around 7.4GB. Track data is downloaded from UCSC as you use the browser and needs space beyond
+that. See the <a href="#dockerVolume">Create a Docker Volume for Data Persistence</a> section below
+for keeping that data between container restarts.</p>
+
+<p>
+Build the image from the Dockerfile instead if you need to change how it is built, for instance to
+add other software or to change the Genome Browser configuration at build time. The next sections
+describe how to do that.</p>
+
+<a id="buildImage"></a>
+<h2>Building the Image Yourself</h2>
+
 <h3>Obtaining a UCSC Genome Browser Dockerfile</h3>
 <p>The UCSC Genome Browser dockerfile can be obtained from the
 <a href="https://github.com/ucscGenomeBrowser/" target=_blank>UCSC Genome Browser Github</a>

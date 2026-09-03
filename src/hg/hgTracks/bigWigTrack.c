@@ -82,31 +82,41 @@ if (errCatchStart(errCatch))
             struct chain  *chain, *chainList = chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chromName, winStart, winEnd, -1);
 
             // go through each block of each chain and grab a summary from the query coordinates
-            // FIXME (refs #37621): quickLift bigWig summary issues.
-            //   1. summaryOffset/summarySizeBlock are scaled by retChain->tSize, not
-            //      (winEnd - winStart). When a chain only partially covers the visible
-            //      window, its blocks get stretched to fill the full preDraw buffer
-            //      instead of landing at the correct window pixels. With multiple chains
-            //      in chainList, each stretches independently and overwrites the others.
-            //   2. summarySizeBlock is computed from target span but bigWigSummaryArrayExtended
-            //      is called with query coordinates; the bigWig zoom level it selects is
-            //      based on (qEnd-qStart)/summarySizeBlock, which can pick the wrong zoom
-            //      when target and query block lengths differ significantly (indels).
             for(chain = chainList; chain; chain = chain->next)
                 {
                 struct chain *retChain, *retChainToFree;
                 char *chrom = chain->qName;
                 chainSubsetOnT(chain, winStart, winEnd, &retChain, &retChainToFree);
+
+                // chainLoadIdRangeHub returns every chain whose span overlaps the window,
+                // but only loads the links that fall inside it.  A chain can therefore
+                // reach across the window with no aligned block in it, in which case
+                // chainSubsetOnT has nothing to subset and hands back NULL.
+                if (retChain == NULL)
+                    continue;
+
                 struct cBlock *cb;
                 for(cb = retChain->blockList; cb; cb = cb->next)
                     {
-                    // figure out where in the summary array the target coordinates put us
-                    int tSize = retChain->tEnd - retChain->tStart;
-                    int summaryOffset = (((double)cb->tStart - retChain->tStart) / tSize ) * summarySize;
+                    // Figure out where in the summary array the target coordinates put us.
+                    // preDraw covers the WINDOW, so the block is placed relative to the
+                    // window and not to the chain.  Scaling by the chain's own span stretched
+                    // every partially covering chain across the whole buffer, and with more
+                    // than one chain in the window they overwrote each other (refs #37621).
+                    int tSize = winEnd - winStart;
+                    int summaryOffset = (((double)cb->tStart - winStart) / tSize ) * summarySize;
                     int summarySizeBlock = (((double)cb->tEnd - cb->tStart) / tSize ) * summarySize;
 
+                    // chainSubsetOnT clips the blocks to the window, so a block cannot reach
+                    // past the end of the buffer.  summary[] is exactly summarySize long with
+                    // no slack, so keep the clamp rather than trust that.
+                    if (summaryOffset < 0)
+                        summaryOffset = 0;
+                    if (summaryOffset + summarySizeBlock > summarySize)
+                        summarySizeBlock = summarySize - summaryOffset;
+
                     // grab the data using query coordinates
-                    if (summarySizeBlock != 0)
+                    if (summarySizeBlock > 0)
                         {
                         int start = cb->qStart;
                         int end = cb->qEnd;

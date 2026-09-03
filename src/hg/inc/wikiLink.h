@@ -24,6 +24,7 @@
 #define CFG_LOGIN_EMAIL_LINK "login.emailLink"
 /* Comma-separated list of hosts that hgLogin will return a visitor to after login or logout. */
 #define CFG_APPROVED_HOSTS "login.approvedReturn"
+#define CFG_LOGIN_RECOV_EMAIL_CHANGE "login.recovEmailChange"
 
 /* hg.conf central db parameters */
 #define CFG_CENTRAL_DOMAIN "central.domain"
@@ -116,6 +117,12 @@ char *wikiLinkChangeEmailUrl(char *hgsid);
 
 char *wikiLinkChangeEmailUrlReturning(char *hgsid, char *returnUrl);
 /* Return the URL for the user change email page, or NULL if unavailable. */
+
+char *wikiLinkChangeRecovEmailUrl(char *hgsid);
+/* Return the URL for the user recovery email page, or NULL if unavailable. */
+
+char *wikiLinkChangeRecovEmailUrlReturning(char *hgsid, char *returnUrl);
+/* Return the URL for the user recovery email page, coming back to returnUrl. */
 
 char *wikiServerAndCgiDir();
 /* return the current full absolute URL up to the CGI name, like

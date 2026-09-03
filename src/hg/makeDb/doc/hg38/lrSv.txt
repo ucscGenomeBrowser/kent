@@ -13,6 +13,16 @@
 # one. Insertions/inversions/complex keep the anchor position (pos-1): an
 # insertion has no deleted span and its anchor is the attach point.
 #
+# The same convention pins chromEnd for an insertion: the item is the SINGLE
+# anchor base, so chromEnd = pos and the span is exactly 1, whatever the source
+# VCF puts in INFO/END. Some callers (Truvari, in the Lin 1218 VCFs) write
+# END = POS+1 on insertions; taking chromEnd from END there draws every
+# insertion 2 bp wide and sets svLen = 2, which also stops it merging in
+# lrSvAll. Treat END as authoritative only for types that consume reference
+# bases. This is the convention converters should follow; note it is not yet
+# true of every existing subtrack (chirmade101 draws insertions as a reference
+# interval of length insLen, and cpc1/apr are mixed).
+#
 # 2026-08 Claude max: fixed a pos-1 off-by-one in the DEL branch of 11
 # converters (lrSv1kLin1218, lrSv1kgOnt, lrSvGustafson, lrSvGa4kSv, lrSvDecode,
 # lrSvAou1kCsv, lrSvColorsDbSv, lrSvCard, lrSvApr, lrSvCpc1, and the generic
@@ -604,8 +614,9 @@ ln -sf /hive/data/genomes/hg38/bed/lrSv/1k-lin/lin1218.hs1.bb /gbdb/hs1/lrSv/lin
 # column order they appear in the output). To add or swap a dataset, edit that
 # file and re-run the merge; nothing in the script is hardcoded per dataset.
 # The HPRC row points to the v2.1 graph SVs (hprc2v21.bb). The HPRC Jasmine
-# callset is deliberately left out of the merge. Datasets that are not yet
-# published (e.g. lrSv1kLin) are also kept out until a paper is available.
+# callset and the Kim PD brain callset (KimPD) are deliberately left out of the
+# merge. lrSv1kLin was held out while unpublished but is now in the merge as
+# Lin1218 (see the 2026-08-13 block below).
 #
 # The merge script reads each source bigBed once in parallel (phase 1, writes
 # per-chromosome TSVs), then merges per chromosome (phase 2). It writes the
@@ -841,3 +852,62 @@ python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py
 # Lin1218 callset already merges several 1KG datasets (HPRC, HGSVC3, IB-ONT,
 # UW-ONT), so those samples appear both in their own columns and in Lin1218AC;
 # the merge keeps per-database AC columns, so no single count is inflated.
+
+##########
+# 2026-09-01 Claude lrnassar
+#
+# QA of the lrSv1kLin release (refs #38099): fixed a second off-by-one, this
+# time on the right edge of insertions, and dropped a dead column.
+#
+# 1. Insertion span. lrSv1kLin1218VcfToBed.py took chromEnd from INFO/END, and
+#    these VCFs set END = POS+1 on insertions (verified on all 391,410 hg38 and
+#    376,117 hs1 INS records, no exceptions). With chromStart = pos-1 that gave
+#    every insertion a 2 bp span and svLen = 2, against the 1 bp anchor-base
+#    convention at the top of this file and against the track's own description
+#    page. The converter now clamps chromEnd to the anchor for INS/MEI.
+#    Deletions were already correct and are unchanged (span == |SVLEN| and
+#    len(REF) == |SVLEN|+1 on every record).
+# 2. numConsolidated dropped from lrSv1kLin1218.as and the converter. The
+#    NumConsolidated INFO key is declared in the source VCF header but never
+#    appears on a data line, so the column was 0 on all 1.2M rows and put a
+#    meaningless "Consolidated Samples 0" line on every detail page.
+#    Field count 22 -> 21.
+
+cd /hive/data/genomes/hg38/bed/lrSv/1k-lin
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/GRCh38_INSDEL_1218.vcf.gz lin1218.hg38.bed
+bedSort lin1218.hg38.bed lin1218.hg38.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hg38.sorted.bed /hive/data/genomes/hg38/chrom.sizes lin1218.hg38.bb
+
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218VcfToBed.py \
+    input/CHM13_INSDEL_1218.vcf.gz lin1218.hs1.bed
+bedSort lin1218.hs1.bed lin1218.hs1.sorted.bed
+bedToBigBed -type=bed9+ -as=$HOME/kent/src/hg/makeDb/scripts/lrSv/lrSv1kLin1218.as \
+    -tab lin1218.hs1.sorted.bed /hive/data/genomes/hs1/chrom.sizes lin1218.hs1.bb
+
+# Item counts unchanged (587,779 hg38 / 614,522 hs1) - narrowing a span cannot
+# merge distinct positions. Variant names unchanged too, since the name carries
+# insLen for insertions, not the span.
+#
+# 3. Re-ran the merge so lrSvAll picks up the narrowed insertions. Built into a
+#    scratch dir first, because the script writes straight to the live symlink
+#    target, then swapped the whole work dir in:
+python3 ~/kent/src/hg/makeDb/scripts/lrSv/lrSvMergeAll.py \
+    --work-dir /hive/data/genomes/hg38/bed/lrSv/all.new
+# lrSvAll 2,963,093 -> 2,855,267 variants. 107,980 Lin insertions now merge with
+# an insertion already in the track (was 154), so the old file carried ~108k
+# duplicate insertion rows. Lin deletions were already merging at 93,905 and are
+# unchanged. Residual 2 bp insertions drop from 395,658 to 4,402, all from
+# callsets whose source REF really does span more than one base (apr, cpc1,
+# deCODE).
+#
+# 4. trackDb: seven filter.svLen / filter.insLen maxima in lrSv.ra were one or
+#    more short of the data, so a few real features were hidden by default -
+#    mostly fallout from the 2026-08 deletion narrowing, and three of them only
+#    visible on hs1. colorsDbSv 101381 -> 111110, gustafsonSv 98289 -> 98290,
+#    lrSv1kLin 99565 -> 99691, han945Sv 99743 -> 99744, ga4kSv 809711 -> 809712,
+#    aprSv 99885 -> 99892, cpc1Sv insLen 376583 -> 414249. lrSv.ra is shared
+#    across assemblies, so each cap covers the larger assembly. lrSvAll's own
+#    caps (svLen 0:30000000, insLen 0:600000) are left alone on purpose: the
+#    rows they hide are breakend artifacts up to 92 Mb.

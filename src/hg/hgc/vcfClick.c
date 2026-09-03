@@ -115,8 +115,8 @@ if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(subs
     // Make a copy of the part of def->description that matches the regex,
     // then chop by '|' and print out header column tags:
     int matchSize = substrArr[0].rm_eo - substrArr[0].rm_so;
-    char copy[matchSize+1];
-    safencpy(copy, sizeof(copy), def->description + substrArr[0].rm_so, matchSize);
+    // The description comes from the VCF header, so it can be any length; keep it off the stack.
+    char *copy = cloneStringZ(def->description + substrArr[0].rm_so, matchSize);
     // Turn '_' into ' ' so description words can wrap inside headers, saving some space
     subChar(copy, '_', ' ');
     char *words[PATH_LEN];
@@ -125,6 +125,7 @@ if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(subs
     for (i = 0;  i < descColCount; i++)
         printf("<TH class='withThinBorder'>%s</TH>", hubEncode(tdb, words[i]));
     puts("</TR>");
+    freeMem(copy);
     return descColCount;
     }
 else
@@ -143,17 +144,21 @@ for (j = 0;  j < el->count;  j++)
     char *val = el->values[j].datString;
     if (!isEmpty(val))
         {
-        int len = strlen(val);
-        char copy[len+1];
-        safencpy(copy, sizeof(copy), val, len);
+        // The value comes from the VCF, so it can be any length; keep it off the stack.
+        char *copy = cloneString(val);
         char *words[PATH_LEN];
-        chopByChar(copy, '|', words, ArraySize(words));
+        int wordCount = chopByChar(copy, '|', words, ArraySize(words));
         int k;
         // printTabularHeaderRow strips off (but still prints!) a trailing '|'
         // because of the regex, so enforce that here too so the rows after
-        // the header don't get all out of whack
+        // the header don't get all out of whack.  A value can carry fewer
+        // fields than the header describes, and chopByChar fills only the
+        // slots it used, so print an empty cell rather than reading past
+        // wordCount into uninitialized stack.
         for (k = 0;  k < headerCount;  k++)
-            printf("<TD class='withThinBorder'>%s</TD>", hubEncode(tdb, words[k]));
+            printf("<TD class='withThinBorder'>%s</TD>",
+                   k < wordCount ? hubEncode(tdb, words[k]) : "");
+        freeMem(copy);
         }
     puts("</TR>");
     }

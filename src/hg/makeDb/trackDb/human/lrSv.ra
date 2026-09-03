@@ -41,7 +41,7 @@ noScoreFilter on
     filterValues.svType DEL,INS,INV,DUP
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:101381
+    filter.svLen 0:111110
     filterByRange.svLen on
     filterLabel.svLen SV Length (bp)
     filter.insLen 0:18724
@@ -103,7 +103,7 @@ noScoreFilter on
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:98289
+    filter.svLen 0:98290
     filterByRange.svLen on
     filterLabel.svLen SV Length
     filter.insLen 0:25094
@@ -189,7 +189,7 @@ noScoreFilter on
     filterValues.svType DEL,INS
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:99565
+    filter.svLen 0:99691
     filterByRange.svLen on
     filterLabel.svLen SV Length (bp)
     filter.insLen 0:99968
@@ -273,7 +273,7 @@ noScoreFilter on
     filterValues.svType DEL,INS,DUP,INV,TRA
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:99743
+    filter.svLen 0:99744
     filterByRange.svLen on
     filterLabel.svLen SV Length
     filter.insLen 0:27242
@@ -332,7 +332,7 @@ noScoreFilter on
     filterValues.svType DEL,INS,DUP,INV
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:809711
+    filter.svLen 0:809712
     filterByRange.svLen on
     filterLabel.svLen SV Length
     filter.insLen 0:14923
@@ -569,7 +569,7 @@ noScoreFilter on
     filterValues.svType INS,DEL,CPX,MIXED
     filterType.svType multipleListOr
     filterLabel.svType SV Type
-    filter.svLen 0:99885
+    filter.svLen 0:99892
     filterByRange.svLen on
     filterLabel.svLen SV Length
     filter.insLen 0:584016
@@ -599,7 +599,7 @@ noScoreFilter on
     filter.svLen 0:8998096
     filterByRange.svLen on
     filterLabel.svLen SV Length
-    filter.insLen 0:376583
+    filter.insLen 0:414249
     filterByRange.insLen on
     filterLabel.insLen Insertion Length
     filter.AC 0:116

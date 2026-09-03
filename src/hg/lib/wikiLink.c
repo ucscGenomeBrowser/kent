@@ -438,11 +438,15 @@ return wikiLinkEncodeReturnUrl(hgsid, "hgSession", "");
 #define RETURN_URL_MAX 1000
 
 static boolean returnUrlSchemeIsSafe(char *returnUrl)
-/* Return TRUE unless returnUrl carries a scheme other than http or https.  The scheme is the
+/* Return TRUE only for an http URL, an https URL, or a path-relative URL.  The scheme is the
  * text before the first colon, and only when that colon comes before any slash, question mark
  * or hash; a colon after one of those belongs to the path or the query, so the URL is relative.
- * This is what keeps a javascript: or data: URL out of the href hgLogin writes. */
+ * This is what keeps a javascript: or data: URL out of the href hgLogin writes.  A
+ * scheme-relative "//host/path" is refused as well: it names another host but carries no
+ * colon, so it is not relative in the sense this function allows. */
 {
+if (startsWith("//", returnUrl))
+    return FALSE;
 char *colon = strchr(returnUrl, ':');
 if (colon == NULL)
     return TRUE;
@@ -700,6 +704,32 @@ char *wikiLinkChangeEmailUrl(char *hgsid)
 {
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
 char *result = wikiLinkChangeEmailUrlReturning(hgsid, retEnc);
+freez(&retEnc);
+return result;
+}
+
+char *wikiLinkChangeRecovEmailUrlReturning(char *hgsid, char *returnUrl)
+/* Return the URL for the page where a user sets or changes their recovery email address, or
+ * NULL if unavailable.  Supported only by the hgLogin login system, and only when the admin
+ * has turned it on with login.recovEmailChange in hg.conf.  hgLogin checks the rest of what
+ * the feature needs (a cookie salt to sign the confirmation link, working outbound mail, and
+ * the recovEmailVerified column) and sends the user back to the login page if any is missing. */
+{
+if (!loginSystemEnabled())
+    return NULL;
+if (!cfgOptionBooleanDefault(CFG_LOGIN_RECOV_EMAIL_CHANGE, FALSE))
+    return NULL;
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "%s?hgLogin.do.changeRecovEmailPage=1&returnto=%s", loginUrl(), returnUrl);
+return dyStringCannibalize(&dy);
+}
+
+char *wikiLinkChangeRecovEmailUrl(char *hgsid)
+/* Return the URL for the recovery email page, returning to hgSession, or NULL if
+ * unavailable. */
+{
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
+char *result = wikiLinkChangeRecovEmailUrlReturning(hgsid, retEnc);
 freez(&retEnc);
 return result;
 }

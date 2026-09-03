@@ -63,12 +63,15 @@ else
                                : wikiLinkChangePasswordUrl("");
     char *changeEmailUrl = retEnc ? wikiLinkChangeEmailUrlReturning("", retEnc)
                                   : wikiLinkChangeEmailUrl("");
+    char *changeRecovEmailUrl = retEnc ? wikiLinkChangeRecovEmailUrlReturning("", retEnc)
+                                       : wikiLinkChangeRecovEmailUrl("");
     dyStringPrintf(dy, "<a class='topRightLink' href='#' id='loginLink' "
         "title='Account info and sign out' "
         "data-username=\"%s\" data-logouturl=\"%s\" data-changepwurl=\"%s\" "
-        "data-changeemailurl=\"%s\">%s</a>",
+        "data-changeemailurl=\"%s\" data-changerecovemailurl=\"%s\">%s</a>",
         userName, logoutUrl, changePwUrl ? changePwUrl : "",
-        changeEmailUrl ? changeEmailUrl : "", userName);
+        changeEmailUrl ? changeEmailUrl : "",
+        changeRecovEmailUrl ? changeRecovEmailUrl : "", userName);
     }
 freez(&retEnc);
 return dyStringCannibalize(&dy);

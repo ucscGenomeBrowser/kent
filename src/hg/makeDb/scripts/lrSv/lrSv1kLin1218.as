@@ -22,5 +22,4 @@ table lrSv1kLin1218
     float afEur;               "AF European|Allele frequency in European samples"
     float afSas;               "AF South Asian|Allele frequency in South Asian samples"
     int NS;                    "Sample Count|Number of samples with genotype data"
-    int numConsolidated;       "Consolidated Samples|Number of samples consolidated into this call by Truvari"
     )
