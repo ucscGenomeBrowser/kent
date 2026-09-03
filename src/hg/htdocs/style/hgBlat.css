@@ -28,9 +28,14 @@
 #blatTable tbody tr:nth-child(even) { background:var(--stripe); }
 #blatTable tbody tr:hover { background:var(--hover); }
 #blatTable tbody tr.blatSel { background:var(--sel); box-shadow:inset 3px 0 0 var(--navy); }
-#blatTable td.num, #blatTable th.num { text-align:right; font-variant-numeric:tabular-nums; }
+/* Every column reads left-justified (Lou, #38086 note-37): a table that mixes right-aligned
+ * numbers, a centred strand and left-aligned text has no single edge for the eye to follow.  The
+ * numeric columns keep tabular figures so their digits still line up under each other. */
+#blatTable thead th, #blatTable tbody td { text-align:left; }
+#blatTable td.rankCol, #blatTable td.scoreCol, #blatTable td.identCol,
+#blatTable td.spanCol { font-variant-numeric:tabular-nums; }
 #blatTable td.rankCol { color:var(--faint); }
-#blatTable td.strandCol { text-align:center; color:var(--muted); }
+#blatTable td.strandCol { color:var(--muted); }
 #blatTable td.actionsCol a { color:var(--accent); font-weight:700; }
 #blatTable td.actionsCol .blatActSep { color:var(--line); margin:0 10px; }
 /* "New tab" shown as the usual box-with-arrow icon (via a CSS background so it isn't repeated in
@@ -43,10 +48,16 @@
 #blatTable a:hover { color:var(--accentHover); text-decoration:underline; }
 .blatRowHint { padding:11px 18px 2px; font-size:13px; color:var(--muted); }
 .blatLocus { max-width:280px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.chrNote { color:var(--faint); text-decoration:none; margin-left:4px; }
-.chrNote:hover { color:var(--accent); }
-.blatScoreWrap { display:flex; align-items:center; gap:9px; justify-content:flex-end; }
-.blatScoreVal { font-size:13px; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
+/* The alt/fix explanation icon is the one thing on the row a user really should notice, so it is
+ * red rather than the faint grey it started as (Lou, #38086 note-37).  The selector carries
+ * #blatTable so it outranks the table's generic "#blatTable a" link colour, which would otherwise
+ * repaint the icon navy through currentColor. */
+#blatTable a.chrNote { color:#b1301f; text-decoration:none; margin-left:5px; }
+#blatTable a.chrNote:hover { color:var(--accentHover); }
+/* Score is a number followed by a bar.  The number gets a fixed width so that left-justifying the
+ * column does not leave the bars in a ragged column of their own. */
+.blatScoreWrap { display:flex; align-items:center; gap:9px; }
+.blatScoreVal { font-size:13px; font-weight:700; min-width:42px; font-variant-numeric:tabular-nums; }
 .blatScoreBar { flex:0 0 54px; height:8px; background:var(--headrow); border:1px solid var(--headrowLine); overflow:hidden; }
 .blatScoreBar > i { display:block; height:100%; background:var(--accent); }
 .blatIdPct { font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
