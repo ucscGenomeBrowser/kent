@@ -2785,11 +2785,13 @@ jsonWriteBoolean(jw, "allGenomes", allGenomes);
 jsonWriteBoolean(jw, "showKeepResults",
                  sameString(cfgOptionDefault("blatOldTracks", "keep"), "delete"));
 jsonWriteBoolean(jw, "keepResults", cartUsualBoolean(cart, "blatKeepResults", FALSE));
-/* The example is fetched on demand rather than inlined: it is a realistic ~14 kb sequence, which
- * would otherwise be embedded in every page load of the form just to serve the few users who click
- * "Load example". */
+/* The example is fetched on demand rather than inlined: it is a real 2.5 kb sequence, which would
+ * otherwise be embedded in every page load of the form just to serve the few users who click
+ * "Load example".  The sequence is a window over two PTP4A3 exons that is also carried by an alt
+ * haplotype and a fix patch of chr8, so the results table shows the alt/fix rows and their
+ * explanatory icons rather than a single boring hit. */
 jsonWriteString(jw, "exampleUrl", "../goldenPath/help/blatExample.fa");
-jsonWriteString(jw, "exampleLabel", "Load example - human SOD1 locus");
+jsonWriteString(jw, "exampleLabel", "Load example - human PTP4A3 gene");
 /* Same "similar tools" links the classic page offered, so the sidebar isn't a set of dead links.
  * These carry $DB$ rather than a baked-in db: picking a genome no longer reloads the page, so
  * blatFormSetDb() re-expands them against the newly chosen assembly.

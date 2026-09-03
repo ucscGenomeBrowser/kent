@@ -32,9 +32,14 @@ function blatPositionCell(hit) {
     // For alt/fix/random/chrUn sequences show an info icon linking to the FAQ ("What is chr_alt &
     // chr_fix?"), with the short explanation as its tooltip.  (Sits after the position link, not
     // nested inside it.)
+    // Drawn as the browser's own info-icon SVG rather than the &#9432; glyph it used to be: the
+    // glyph is missing from some system fonts (it renders as a tofu box), and an SVG can take the
+    // red that makes it stand out in the row (Lou, #38086 note-37).  currentColor lets .chrNote in
+    // hgBlat.css own both the resting and the hover colour.
     var note = hit.chromNote ?
         ` <a class="chrNote" target="_blank" href="../FAQ/FAQblat.html#blat1c" ` +
-        `title="${htmlEncode(hit.chromNote)} Click to learn more in the BLAT FAQ.">&#9432;</a>` : '';
+        `title="${htmlEncode(hit.chromNote)} Click to learn more in the BLAT FAQ.">` +
+        `${blatInfoSvg('currentColor')}</a>` : '';
     // The position links to the Genome Browser at this match; the new-tab icon right after it opens
     // the same in a new tab (whitespace between them, no divider).
     // URLs are htmlEncode'd before going into href="": they can carry the user's query name, so an
@@ -500,16 +505,16 @@ function blatBuild() {
     var queryCount = new Set(hits.map(h => h.qName)).size;
 
     var th = [];
-    th.push('<th class="num">#</th>');
+    th.push('<th>#</th>');
     if (cfg.multiQuery) { th.push('<th>Query</th>'); }
     th.push('<th>Open in Genome Browser</th>');
     th.push('<th>Show</th>');
     th.push('<th>Query coverage</th>');
     if (cfg.hasLocus) { th.push('<th>Locus</th>'); }
-    th.push('<th class="num">Score</th>');
-    th.push('<th class="num">Identity</th>');
+    th.push('<th>Score</th>');
+    th.push('<th>Identity</th>');
     th.push('<th>Strand</th>');
-    th.push('<th class="num">Span</th>');
+    th.push('<th>Span</th>');
 
     // detail dock sits above the table: with long hit lists a bottom dock scrolls out of view
     document.getElementById('blatResults').innerHTML =
@@ -535,7 +540,7 @@ function blatBuild() {
     blatWireRename();
 
     var columns = [];
-    columns.push({ data: 'rank', className: 'num rankCol' });
+    columns.push({ data: 'rank', className: 'rankCol' });
     if (cfg.multiQuery) { columns.push({ data: 'qName', className: 'queryCol' }); }
     columns.push({ data: null, orderable: false, className: 'blatPos',
         render: (d, type, row) => (type === 'display' ? blatPositionCell(row) : row.chrom + ':' + row.tStart) });
@@ -550,12 +555,12 @@ function blatBuild() {
     }
     // Score carries a bar scaled to the highest score in this result set (raw score kept for sorting).
     var maxScore = hits.reduce((m, h) => Math.max(m, h.score || 0), 0);
-    columns.push({ data: 'score', className: 'num scoreCol',
+    columns.push({ data: 'score', className: 'scoreCol',
         render: (d, type, row) => (type === 'display' ? blatScoreCell(row, maxScore) : d) });
-    columns.push({ data: 'identity', className: 'num identCol',
+    columns.push({ data: 'identity', className: 'identCol',
         render: (d, type, row) => (type === 'display' ? blatIdentityCell(row) : d) });
     columns.push({ data: 'strand', className: 'strandCol' });
-    columns.push({ data: 'span', className: 'num',
+    columns.push({ data: 'span', className: 'spanCol',
         render: (d, type, row) => (type === 'display' ? blatFmt(d) : d) });
 
     var dt = $('#blatTable').DataTable({
@@ -622,13 +627,18 @@ function blatBuild() {
 // Styling comes from hgBlat.css (loaded by webIncludeResourceFile in hgBlat.c), shared with the results page.
 
 // The Genome Browser's standard info icon, copied from printInfoIconSvg() in hg/lib/hui.c so the
-// form's icons are pixel-identical to the C-rendered ones elsewhere in the browser.
-var BLAT_INFO_SVG =
-    "<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' " +
-    "xmlns='http://www.w3.org/2000/svg'>" +
-    "<circle cx='12' cy='12' r='10' stroke='#1C274C' stroke-width='1.5'/>" +
-    "<path d='M12 17V11' stroke='#1C274C' stroke-width='1.5' stroke-linecap='round'/>" +
-    "<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='#1C274C'/></svg>";
+// page's icons are pixel-identical to the C-rendered ones elsewhere in the browser.  The stroke
+// colour is a parameter because the results table wants a red one (see blatPositionCell); pass
+// 'currentColor' to let CSS drive it.
+function blatInfoSvg(stroke) {
+    return "<svg style='height:1.1em; vertical-align:top' viewBox='0 0 24 24' fill='none' " +
+        "xmlns='http://www.w3.org/2000/svg'>" +
+        "<circle cx='12' cy='12' r='10' stroke='" + stroke + "' stroke-width='1.5'/>" +
+        "<path d='M12 17V11' stroke='" + stroke + "' stroke-width='1.5' stroke-linecap='round'/>" +
+        "<circle cx='1' cy='1' r='1' transform='matrix(1 0 0 -1 11 9)' fill='" + stroke +
+        "'/></svg>";
+}
+var BLAT_INFO_SVG = blatInfoSvg('#1C274C');
 
 // The assembly-search syntax help.  setupGenomeSelector hides the info icon that
 // printGenomeSearchBar (hg/lib/web.c) normally puts next to the box, so the new form loses that
@@ -702,6 +712,79 @@ function blatFormLimitsModal() {
         'command line</a> on your own server.</div>' +
         '<div class="gbModalBtns"><button type="button" class="gbPill" id="blatLimitsClose">Close</button></div>' +
         '</div></div>';
+}
+
+function blatFormBusyMarkup() {
+    // Spinner overlay shown between Submit and the arrival of the results page.  Built with the
+    // form (hidden) rather than on demand, so nothing has to be parsed or fetched at the moment the
+    // browser is already busy navigating away.
+    return '<div id="blatBusyBg" class="gbBusyBg" role="status" aria-live="polite">' +
+        '<div class="gbBusyCard"><div class="gbSpinner"></div>' +
+        '<div><div class="gbBusyTitle" id="blatBusyTitle">Running BLAT&hellip;</div>' +
+        '<div class="gbBusyText" id="blatBusyText"></div></div></div></div>';
+}
+
+function blatFormBusyWire(cfg) {
+    // The search is a plain form POST that navigates the page, so between the click on Submit and
+    // the arrival of the results nothing on screen changes at all - and a BLAT run is anywhere from
+    // under a second to well over half a minute, the long end being an assembly served by a dynamic
+    // BLAT server, which has to load its index from disk before it can answer.  Cover the form with
+    // a spinner for that interval.  Nothing here hides it again: the only thing that ends the wait
+    // is the results page replacing this one.  The exception is a Back navigation, where the browser
+    // may restore this page from its cache with the overlay still up - see the pageshow handler.
+    var form = document.mainForm;
+    if (!form) { return; }
+    var showTimer = null;
+    var slowTimer = null;
+
+    // Which button was used.  SubmitEvent.submitter is missing in older Safari, so also remember
+    // the last submit button the user activated and fall back to that.
+    var lastBtn = null;
+    $('#blatFormBox input[type=submit]').on('click', function() { lastBtn = this; });
+
+    $(form).on('submit', function(ev) {
+        var btn = (ev.originalEvent && ev.originalEvent.submitter) || lastBtn;
+        // Clear just empties the textarea and comes straight back; no spinner for that.
+        if (btn && btn.name === 'Clear') { return; }
+        // Nothing to align - hgBlat returns its "please paste a sequence" page immediately, so a
+        // spinner would only flash.
+        var ta = document.getElementById('blatUserSeq');
+        var file = document.getElementById('blatSeqFile');
+        if (!(ta && ta.value.trim()) && !(file && file.files && file.files.length)) { return; }
+
+        var allGenomes = $('#blat_allGenomes').prop('checked');
+        // The genome can be changed without reloading the page, so take the label from the search
+        // bar (which setupGenomeSearchBar keeps current) rather than from the page-load config.
+        var genomeInput = document.getElementById('genomeSearch');
+        var genome = (genomeInput && genomeInput.value) || cfg.dbLabel || 'the selected assembly';
+        document.getElementById('blatBusyTitle').innerHTML =
+            allGenomes ? 'Searching all genomes&hellip;' : 'Running BLAT&hellip;';
+        document.getElementById('blatBusyText').textContent = allGenomes ?
+            'Aligning your sequence against every assembly that has its own BLAT server.' :
+            'Aligning your sequence against ' + genome + '.';
+        // Held back a moment: a hg38 DNA search of this size comes back in well under a second, and
+        // a scrim that appears and vanishes again inside that time reads as a glitch rather than as
+        // progress.  Timers keep running on a page whose navigation is in flight, so the overlay
+        // still appears for every search slow enough to be worth reporting.
+        showTimer = setTimeout(function() { $('#blatBusyBg').addClass('on'); }, 350);
+
+        // A search that is still going after this long is almost always one where the assembly's
+        // BLAT index is being loaded on demand.  Say so, rather than leaving the user guessing
+        // whether anything is still happening.
+        slowTimer = setTimeout(function() {
+            document.getElementById('blatBusyText').textContent =
+                'Still working. Assemblies whose BLAT index is loaded on demand are slow to ' +
+                'answer the first search.';
+        }, 8000);
+    });
+
+    // Back button: browsers that restore this page from the back/forward cache restore it exactly as
+    // it was left, spinner and all.  Take it down and cancel the pending "still working" message.
+    $(window).on('pageshow', function() {
+        $('#blatBusyBg').removeClass('on');
+        if (showTimer) { clearTimeout(showTimer); showTimer = null; }
+        if (slowTimer) { clearTimeout(slowTimer); slowTimer = null; }
+    });
 }
 
 function blatFormSetDb(db) {
@@ -874,7 +957,8 @@ function blatFormBuild() {
         '</div>' +
 
         '</div>' + blatFormSidebar(cfg) + '</div>' +
-        blatFormLimitsModal();
+        blatFormLimitsModal() +
+        blatFormBusyMarkup();
 
     // Move the C-generated genome search bar (real autocomplete over every assembly, already wired
     // by setupGenomeSearchBar) into its slot, rather than reimplementing it with a hardcoded list.
@@ -903,7 +987,7 @@ function blatFormBuild() {
     });
     $('#blatTabPaste').on('click', function() { blatFormTab(false); });
     $('#blatTabUpload').on('click', function() { blatFormTab(true); });
-    // The example sequence is a real ~14 kb query, fetched on demand so it is not carried in every
+    // The example sequence is a real 2.5 kb query, fetched on demand so it is not carried in every
     // page load.  The link doubles as its own status indicator while the request is in flight.
     $('#blatExample').on('click', function(ev) {
         ev.preventDefault();
@@ -960,6 +1044,8 @@ function blatFormBuild() {
             $(fileInput).trigger('change');
         }
     });
+
+    blatFormBusyWire(cfg);
 
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
 }
