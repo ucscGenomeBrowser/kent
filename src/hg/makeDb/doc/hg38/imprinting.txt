@@ -1,0 +1,53 @@
+# Imprinting track collection on hg38, refs #37599
+# 2026-09-03 Claude-max
+
+# The "Imprinting" superTrack collects annotations of imprinted loci and of the
+# allele-specific methylation that marks them.
+
+##############################################################################
+# MethBase2 ASM - allele-specific methylation fraction across methylomes
+# (refs #37599, data source is the MethBase2 hub, refs #36320)
+##############################################################################
+
+# The MethBase2 track hub (Andrew D. Smith, USC) publishes an assembly-wide
+# summary bigWig under its "common" section. For each CpG site it holds the
+# fraction of MethBase2 hg38 methylomes in which that site fell inside an
+# allelically methylated region called by "dnmtools amrfinder".
+#
+#   hub:  http://smithlab.usc.edu/trackdata/methylation/hub.txt
+#   file: http://smithlab.usc.edu/methbase/data/common/hg38/hg38.asm.bw
+#
+# We take the file as-is. No conversion, filtering or recalculation is done.
+
+mkdir -p /hive/data/genomes/hg38/bed/imprinting/methBaseAsm
+cd /hive/data/genomes/hg38/bed/imprinting/methBaseAsm
+curl -sS -O http://smithlab.usc.edu/methbase/data/common/hg38/hg38.asm.bw
+
+# The upstream file was last modified 2025-07-14 and is 163,160,098 bytes.
+# Sanity checks: hg38 chrom names and sizes, value range, coverage.
+
+bigWigInfo hg38.asm.bw
+# chromCount: 25
+# basesCovered: 29,401,795
+# mean: 0.000728
+# min: 0.000000
+# max: 0.862512
+# std: 0.009708
+
+# 25 chroms = chr1-chr22, chrX, chrY, chrM, all with hg38 sizes. All values are
+# fractions in [0,1]. basesCovered equals the number of annotated CpG positions,
+# each a single-base interval. Nothing is outside a chrom boundary, nothing was
+# skipped.
+
+# Spot check three loci: the H19/IGF2 imprinting control region, the
+# SNRPN/PWS-AS region, and a non-imprinted control region on chr20.
+
+for r in "chr11 1990000 2010000" "chr15 24954000 25200000" "chr20 57414000 57430000"; do
+    set -- $r
+    echo "== $1:$2-$3"
+    bigWigToBedGraph -chrom=$1 -start=$2 -end=$3 hg38.asm.bw stdout \
+        | sort -k4,4gr | head -3
+done
+# chr11:1,999,937  0.4886   <- H19 ICR, as expected
+# chr15:24,955,342 0.5362   <- SNRPN/MAGEL2 region, as expected
+# chr20:57,428,788 0.0006   <- control, essentially zero

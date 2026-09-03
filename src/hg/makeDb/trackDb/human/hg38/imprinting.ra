@@ -1,0 +1,25 @@
+track imprinting
+shortLabel Imprinting
+longLabel Genomic imprinting: allele-specific methylation and imprinted regions
+group regulation
+superTrack on
+priority 3.5
+
+    track methBaseAsm
+    parent imprinting on
+    shortLabel MethBase2 ASM
+    longLabel Imprinting: fraction of MethBase2 methylomes with allele-specific methylation at each CpG
+    type bigWig 0 1
+    bigDataUrl /gbdb/hg38/imprinting/methBaseAsm/hg38.asm.bw
+    visibility full
+    priority 1
+    color 255,64,64
+    autoScale off
+    viewLimits 0:0.5
+    viewLimitsMax 0:1
+    maxHeightPixels 100:40:8
+    alwaysZero on
+    yLineOnOff on
+    yLineMark 0
+    windowingFunction mean
+    dataVersion MethBase2 hg38 ASM, 2025-07-14
