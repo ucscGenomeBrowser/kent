@@ -19,8 +19,8 @@ struct sangerGene
     char strand[2];	/* + or - for strand */
     unsigned txStart;	/* Transcription start position */
     unsigned txEnd;	/* Transcription end position */
-    unsigned cdsStart;	/* Coding region start */
-    unsigned cdsEnd;	/* Coding region end */
+    unsigned cdsStart;	/* Coding region start; cdsStart == cdsEnd for non-coding transcripts */
+    unsigned cdsEnd;	/* Coding region end; cdsStart == cdsEnd for non-coding transcripts */
     unsigned exonCount;	/* Number of exons */
     unsigned *exonStarts;	/* Exon start positions */
     unsigned *exonEnds;	/* Exon end positions */

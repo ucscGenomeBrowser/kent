@@ -74,6 +74,10 @@ UTRs are non-coding and their exonFrame value is -1.</p>
 <p>The fields cdsStartStat and cdsEndStat have the following values: 'none' = none,
 'unk' = unknown, 'incmpl' = incomplete, and 'cmpl' = complete. The
 values, however, are not used for our display and cannot be used to identify coding or non-coding genes.
+To determine whether a transcript is non-coding, check whether <code>thickStart</code> equals
+<code>thickEnd</code> (coding transcripts have <code>thickStart != thickEnd</code>); this is the
+bigGenePred equivalent of the genePred convention where <code>cdsStart == cdsEnd</code> marks a
+non-coding transcript.
 For most purposes, to get more information about a transcript, other tables will need to be used. For
 instance, in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the Gencode Version number.
 See this <a href="../../FAQ/FAQgenes.html#coding" target="_blank">coding/non-coding genes FAQ</a>

@@ -1002,8 +1002,8 @@ transcript has a row in this table.</p>
     char[1] strand;             "+ or - for strand"
     uint    txStart;            "Transcription start position"
     uint    txEnd;              "Transcription end position"
-    uint    cdsStart;           "Coding region start"
-    uint    cdsEnd;             "Coding region end"
+    uint    cdsStart;           "Coding region start; cdsStart == cdsEnd for non-coding transcripts"
+    uint    cdsEnd;             "Coding region end; cdsStart == cdsEnd for non-coding transcripts"
     uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
@@ -1024,8 +1024,8 @@ genePredExt format.</p>
     char[1] strand;     	"+ or - for strand"
     uint txStart;       	"Transcription start position"
     uint txEnd;         	"Transcription end position"
-    uint cdsStart;      	"Coding region start"
-    uint cdsEnd;        	"Coding region end"
+    uint cdsStart;      	"Coding region start; cdsStart == cdsEnd for non-coding transcripts"
+    uint cdsEnd;        	"Coding region end; cdsStart == cdsEnd for non-coding transcripts"
     uint exonCount;     	"Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
@@ -1038,7 +1038,9 @@ genePredExt format.</p>
 </code></pre>
 <p>The fields cdsStartStat and cdsEndStat can have the following values: 'none' = none,
 'unk' = unknown, 'incmpl' = incomplete, and 'cmpl' = complete. However, the values are not used for
-our display and cannot be used to identify which genes are coding or non-coding. For most purposes,
+our display and cannot be used to identify which genes are coding or non-coding. To determine
+whether a transcript is non-coding, check whether <code>cdsStart</code> equals <code>cdsEnd</code>
+(coding transcripts have <code>cdsStart != cdsEnd</code>). For most purposes,
 to get more information about a transcript, other tables will need to be used.
 For instance, in the case of hg38, the tables named wgEncodeGencodeAttrsVxx, where xx is the
 Gencode Version number. See this <a href="../../FAQ/FAQgenes.html#coding"
@@ -1071,8 +1073,8 @@ alternative-splicing situations, each transcript has a row in this table.</p>
     char[1] strand;             "+ or - for strand"
     uint    txStart;            "Transcription start position"
     uint    txEnd;              "Transcription end position"
-    uint    cdsStart;           "Coding region start"
-    uint    cdsEnd;             "Coding region end"
+    uint    cdsStart;           "Coding region start; cdsStart == cdsEnd for non-coding transcripts"
+    uint    cdsEnd;             "Coding region end; cdsStart == cdsEnd for non-coding transcripts"
     uint    exonCount;          "Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
