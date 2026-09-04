@@ -6,6 +6,7 @@ visibility hide
 group phenDis
 pennantIcon Updated red ../goldenPath/newsarch.html#082826 "New popEVE and EVE tracks added Aug. 28, 2026"
 
+include alphaGenome.ra alpha
 include bayesDel.ra
 include mutscore.ra
 include mcap.ra
