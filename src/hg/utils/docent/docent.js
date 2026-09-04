@@ -1407,7 +1407,12 @@ const T_START = Date.now();
     return matches[0].v;
   }
   async function convert(o) {
-    o = o || {};
+    // A bare string is the target assembly, the way every other verb takes its one
+    // obvious argument. Without this `convert: hs1` left o as the String, so o.to was
+    // undefined and o.search picked up String.prototype.search -- the run then reported
+    // `convert: "function search() { [native code] }" matched nothing`, which tells the
+    // reader nothing about what is wrong with their script.
+    o = (typeof o === 'string') ? { to: o } : (o || {});
     // `shot:` here can name up to three moments of the Convert page, none of which any
     // other verb can reach (after Submit the tour is already on the results page):
     //   shot: convert_filled                 -- just before Submit (the common one)
