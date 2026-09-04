@@ -113,7 +113,7 @@ while (lineFileNext(lf, &line, NULL))
         /* subsequent lines in ra stanza */
         /* indent properly, squeeze out extra whitespace within settings */
         spaceOut(of, indent);
-        ct = chopByWhite(line, words, sizeof(words));
+        ct = chopByWhite(line, words, ArraySize(words));
         for (i = 0; i < ct; i++)
             {
             fputs(words[i], of);

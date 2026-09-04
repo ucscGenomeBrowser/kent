@@ -563,7 +563,7 @@ char *makeTissueName(char *description)
 /* Create a single word camel-case name from a tissue description */
 {
 char *words[10];
-int count = chopByWhite(cloneString(description), words, sizeof(words));
+int count = chopByWhite(cloneString(description), words, ArraySize(words));
 struct dyString *ds = dyStringNew(0);
 int i;
 for (i=0; i<count; i++)

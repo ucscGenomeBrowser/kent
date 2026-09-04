@@ -86,7 +86,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     // copied from genePredItemClassColor - is there no function for this?
     // convert comma sep rgb string to array
     char *rgbVals[5];
-    chopString(colStr, ",", rgbVals, sizeof(rgbVals));
+    chopString(colStr, ",", rgbVals, ArraySize(rgbVals));
     struct rgbColor *rgb;
     AllocVar(rgb);
     rgb->r = (sqlUnsigned(rgbVals[0]));

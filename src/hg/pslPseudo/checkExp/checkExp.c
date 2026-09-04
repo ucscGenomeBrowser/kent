@@ -512,7 +512,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     struct misMatch *mf = NULL;
     ps = pseudoGeneLinkLoad(row);
     tmpName[0] = cloneString(ps->name);
-    chopByChar(tmpName[0], '.', tmpName, sizeof(tmpName));
+    chopByChar(tmpName[0], '.', tmpName, ArraySize(tmpName));
     verbose(2,"name %s %s:%d-%d\n",
             ps->name, ps->chrom, ps->chromStart,ps->chromEnd);
     /* get expressed retro from hash */

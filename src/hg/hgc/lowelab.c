@@ -884,7 +884,7 @@ printf("<a name=\"homology\"></a><b>Gene Homology</b><br></td></tr>\n");
 printf("<tr><td>\n");
 
 /* ncbi blast hits */
-hits = chopString(gi,":",giwords,sizeof(giwords));
+hits = chopString(gi,":",giwords,ArraySize(giwords));
 if (hits > 0)
 {
 	printf("<B>NCBI Blast Hits:</B> "

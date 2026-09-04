@@ -272,11 +272,11 @@ if (isNotEmpty(cloneTerms))
             cloneTerms[i] = ' ';
         }
     char *splitTerms[1024];
-    int termCount = chopByWhite(cloneTerms, splitTerms, sizeof(splitTerms));
+    int termCount = chopByWhite(cloneTerms, splitTerms, ArraySize(splitTerms));
     for (i=0; i<termCount; i++)
         {
         char *hyphenatedTerms[1024];
-        int hyphenTerms = chopString(splitTerms[i], "-", hyphenatedTerms, sizeof(hyphenatedTerms));
+        int hyphenTerms = chopString(splitTerms[i], "-", hyphenatedTerms, ArraySize(hyphenatedTerms));
         int j;
         for (j=0; j<hyphenTerms-1; j++)
             {

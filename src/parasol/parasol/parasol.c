@@ -177,7 +177,7 @@ for (;;)
     if (pm.size == 0)
         break;
 
-    count = chopByChar(pm.data, '\n', row, sizeof(row));
+    count = chopByChar(pm.data, '\n', row, ArraySize(row));
 
     if (count > 1) --count;  /* for multiline, count is inflated by one */
 
