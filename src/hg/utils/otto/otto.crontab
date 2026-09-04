@@ -169,6 +169,12 @@ MAILTO=cells@ucsc.edu
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
  
+# Hidden-dataset reminders (RM #38246). Once a month, queue one draft email per
+# hidden dataset whose submitter has not been asked in a year, and mail the
+# report to cells@. Nothing reaches an author until a person reviews the queue
+# and runs "cbPingHidden send". Silent when nothing is due.
+0 8 1 * * umask 002; ~mspeir/cellBrowser/ucsc/cbPingHidden scan -q --mail-report cells@ucsc.edu
+
 # cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
 # (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
 * * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1
