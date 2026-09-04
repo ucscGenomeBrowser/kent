@@ -842,9 +842,11 @@ function blatFormBuild() {
 
     var banner = '';
     if (cfg.classicUrl) {
-        banner = '<div class="gbBanner">We are testing a new BLAT search page. You can go back to ' +
-            `<a href="${htmlEncode(cfg.classicUrl)}">the original page</a> anytime. If you have feedback ` +
-            'on this new page, do not hesitate to let us know via ' +
+        // #newBLAT is the agreed anchor for the announcement on the news archive page (RM #37996).
+        banner = '<div class="gbBanner">Welcome to our ' +
+            '<a href="../goldenPath/newsarch.html#newBLAT">new BLAT page</a>. You can go back to ' +
+            `the <a href="${htmlEncode(cfg.classicUrl)}">original page</a> anytime. ` +
+            'Please send any feedback to ' +
             '<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.</div>';
     }
 
