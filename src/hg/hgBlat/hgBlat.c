@@ -837,11 +837,24 @@ if (!cfgOptionBooleanDefault("blatNewFormBanner",
 			     cfgOptionBooleanDefault("blatNewForm", FALSE)))
     return;
 printBlatBannerStyle();
-printf("<div class=\"blatBanner\">"
-       "We are testing a <a href=\"hgBlat?blatNewForm=1&%s=%s\">new BLAT search page</a>. "
-       "If you have feedback on this new page, do not hesitate to let us know via "
-       "<a href=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</a>.</div>\n",
-       cartSessionVarName(), cartSessionId(cart));
+/* Once a switch-over date is announced (hg.conf blatNewFormSwitchDate, e.g. "October 21"), the
+ * banner names it, so a slipped date is an hg.conf change rather than a CGI build patch.  With no
+ * date set, the original "we are testing" invitation is shown. */
+char *switchDate = cfgOption("blatNewFormSwitchDate");
+if (isNotEmpty(switchDate))
+    printf("<div class=\"blatBanner\">"
+           "We will be updating this BLAT page on <b>%s</b>. "
+           "You can <a href=\"hgBlat?blatNewForm=1&%s=%s\">try the new page now</a> and provide "
+           "feedback to <a href=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</a>. "
+           "See our <a href=\"../goldenPath/newsarch.html\">news announcement</a> for more "
+           "information.</div>\n",
+           switchDate, cartSessionVarName(), cartSessionId(cart));
+else
+    printf("<div class=\"blatBanner\">"
+           "We are testing a <a href=\"hgBlat?blatNewForm=1&%s=%s\">new BLAT search page</a>. "
+           "If you have feedback on this new page, do not hesitate to let us know via "
+           "<a href=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</a>.</div>\n",
+           cartSessionVarName(), cartSessionId(cart));
 }
 
 static void printNewDisplayBanner(char *uiState)
@@ -2599,10 +2612,10 @@ puts("Rather than pasting a sequence, you can choose to upload a text file conta
 puts("<label>Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\"></label>");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit file\"><P>\n");
 printf("%s", 
-"<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
+"<P>Only DNA sequences of 75,000 or fewer bases and protein or translated \n"
 "sequence of 10,000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
-"submissions is 50,000 bases or 25,000 letters.<br> A valid example "
+"submissions is 187,500 bases or 25,000 letters.<br> A valid example "
 "is <tt>GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</tt> (human SOD1).\n</P>\n");
 
 printf("%s", 
