@@ -434,10 +434,10 @@ for(psl = quickLiftPsls(chainHash, pslList); psl != NULL; psl = nextPsl)
     nextPsl = psl->next;
     psl->next = NULL;    // lfFromPslx hangs on to the psl, so don't leave it in a list
 
-    // sizeMul is 1 whatever the caller passed:  the lift returns an untranslated
-    // alignment, and it puts a protein alignment into nucleotide space on the way, so the
-    // block sizes are already in bases.
-    slAddHead(&lfList, lfFromPslx(psl, 1, isXeno, nameGetsPos, tg));
+    // The caller's sizeMul does not survive the lift, so ask this alignment what space its
+    // blocks are in.  A protein alignment comes back in protein units when the lift left
+    // its codons whole, and in bases when it did not.
+    slAddHead(&lfList, lfFromPslx(psl, pslIsProtein(psl) ? 3 : 1, isXeno, nameGetsPos, tg));
     }
 finishPslLfList(tg, lfList);
 }

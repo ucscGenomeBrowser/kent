@@ -631,15 +631,25 @@ static boolean quickLiftPslBackToProtein(struct psl *lifted)
 {
 int i;
 
-if ((lifted->qStart % 3) || (lifted->qEnd % 3) || (lifted->qSize % 3))
+if ((lifted->qStart % 3) || (lifted->qEnd % 3) || (lifted->qSize % 3) ||
+    (lifted->qBaseInsert % 3))
     return FALSE;
 for (i = 0; i < lifted->blockCount; i++)
     if ((lifted->blockSizes[i] % 3) || (lifted->qStarts[i] % 3))
         return FALSE;
 
+// A protein psl always has its query on the forward strand, "++" or "+-".  pslTransMap can
+// hand back strand[0] == '-' (it reverse complements the input when the two alignments
+// disagree about the shared sequence's strand), and "-+" would tell pslShow to reverse
+// complement the protein as though it were DNA.  Turn it over so the minus lands on the
+// target side, where the protein display expects it.
+if (lifted->strand[0] == '-')
+    pslRc(lifted);
+
 lifted->qStart /= 3;
 lifted->qEnd /= 3;
 lifted->qSize /= 3;
+lifted->qBaseInsert /= 3;
 for (i = 0; i < lifted->blockCount; i++)
     {
     lifted->blockSizes[i] /= 3;

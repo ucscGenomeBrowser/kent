@@ -4164,17 +4164,32 @@ else
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
+// The normalized score lives in the chain table, so for a quickLifted track it has to be
+// read from the assembly the chain came from.  Against the assembly on screen the table
+// name either does not resolve, or resolves to a same-named table there and returns
+// somebody else's chain, which is worse.
+char *normDb = database;
+struct sqlConnection *normConn = conn;
+char *normTable = tdb->table;
+boolean lifted = quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb);
+if (lifted)
+    {
+    normDb = trackDbSetting(tdb, "quickLiftDb");
+    normTable = trackHubSkipHubName(tdb->table);
+    normConn = hAllocConn(normDb);
+    }
+
 if (normScoreAvailable)
     {
     char tableName[HDB_MAX_TABLE_STRING];
-    if (!hFindSplitTable(database, chain->tName, tdb->table, tableName, sizeof tableName, NULL))
-	errAbort("genericChainClick track %s not found", tdb->table);
+    if (!hFindSplitTable(normDb, chain->tName, normTable, tableName, sizeof tableName, NULL))
+	errAbort("genericChainClick track %s not found", normTable);
     char query[256];
     struct sqlResult *sr;
     char **row;
     sqlSafef(query, ArraySize(query),
 	 "select normScore from %s where id = '%s'", tableName, item);
-    sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(normConn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
         double normScore = atof(row[0]);
@@ -4184,6 +4199,8 @@ if (normScoreAvailable)
     sqlFreeResult(&sr);
     printf("<BR>\n");
     }
+if (lifted)
+    hFreeConn(&normConn);
 
 if (quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb))
     // A lifted chain is only worked out over the window being viewed, so the whole chain's
@@ -8736,7 +8753,7 @@ tdb = ali.tdb;
 if (tdb == NULL)
     errAbort("BUG: bigPsl alignment table '%s' not found; this maybe causes by `.' in track names", aliTable);
              
-if (!trackHubDatabase(ali.db))
+if (!trackHubDatabase(ali.db) && !isGenArk(ali.db))
     conn = hAllocConnTrack(ali.db, tdb);
 
 char title[1024];

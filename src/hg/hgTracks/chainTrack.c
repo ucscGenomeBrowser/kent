@@ -385,7 +385,8 @@ lf->orientation = (lifted->qStrand == '-') ? -1 : 1;
 int len = strlen(chain->qName) + 32;
 lf->name = needMem(len);
 if (!doSnake)
-    safef(lf->name, len, "%s %c %dk", chain->qName, lifted->qStrand, qs/1000);
+    // qs was worked out from the source chain, so print its strand, not the lifted one
+    safef(lf->name, len, "%s %c %dk", chain->qName, chain->qStrand, qs/1000);
 else
     safef(lf->name, len, "%s", chain->qName);
 safef(buf, sizeof(buf), "%d", chain->id);

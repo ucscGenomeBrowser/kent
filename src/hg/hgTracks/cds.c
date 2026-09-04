@@ -18,6 +18,7 @@
 #include "fa.h"
 #include "genePred.h"
 #include "cds.h"
+#include "trackHub.h"
 #include "genbank.h"
 #include "twoBit.h"
 #include "cacheTwoBit.h"
@@ -1180,7 +1181,10 @@ char *name = getItemDataName(tg, mrnaName);
 // The sequence the alignment is to belongs with the alignment, so on a quickLifted track
 // it comes from the assembly the alignment came from, not the one on screen.
 char *seqDb = cdsDb(tg);
-if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
+// A quickLifted track arrives with a hub_NNN_ prefix, and these tests are about what kind
+// of table it is, so they want the name without it.
+char *bareTable = trackHubSkipHubName(tableName);
+if (sameString(bareTable,"refGene") || sameString(bareTable,"refSeqAli"))
     mrnaSeq = hGenBankGetMrna(seqDb, name, "refMrna");
 else
     {
