@@ -27628,6 +27628,18 @@ if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
     ctList = keptList;
     }
 
+/* Custom track ids are deterministic from the track name, so a fresh BLAT track can be assigned
+ * the same ct_ id as an earlier same-named track the user (or blatOldTracks=hide) hid and later
+ * deleted.  The old visibility cart variable outlives the deleted track and would silently start
+ * the new track hidden (seen with "I'm feeling lucky": the user lands on hgTracks and the result
+ * is invisible, RM #38086).  A brand-new track should always show with its declared visibility,
+ * so drop any stale cart variable for its id.  Runs after every block above that can set "hide"
+ * (blatOldTracks=hide included), so ordering cannot hide the new track again. */
+struct customTrack *newCt;
+for (newCt = newCts; newCt != NULL; newCt = newCt->next)
+    if (newCt->tdb != NULL)
+        cartRemove(cart, newCt->tdb->track);
+
 theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);
