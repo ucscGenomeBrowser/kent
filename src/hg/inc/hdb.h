@@ -554,6 +554,10 @@ boolean trackDataAccessible(char *database, struct trackDb *tdb);
  * or a database table with the same name.
  * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
 
+struct trackDb *trackDbPolishAfterLinkupKeepAll(struct trackDb *tdbList);
+/* The part of trackDbPolishAfterLinkup that every caller wants, without dropping
+ * tracks whose data cannot be reached. */
+
 struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db);
 /* Do various massaging that can only be done after parent/child
  * relationships are established. */

@@ -4386,16 +4386,24 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
-/* Do various massaging that can only be done after parent/child
- * relationships are established. */
+struct trackDb *trackDbPolishAfterLinkupKeepAll(struct trackDb *tdbList)
+/* The part of trackDbPolishAfterLinkup that every caller wants, without dropping
+ * tracks whose data cannot be reached.  hubCheck needs this: a track pruned because
+ * its bigDataUrl does not resolve is exactly the track hubCheck has to report on. */
 {
-tdbList = pruneEmpties(tdbList, db, hIsPrivateHost() || hIsPreviewHost(), 0);
 addChildRefsToParents(tdbList);
 trackDbContainerMarkup(NULL, tdbList);
 rInheritFields(tdbList);
 slSort(&tdbList, trackDbCmp);
 return tdbList;
+}
+
+struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
+/* Do various massaging that can only be done after parent/child
+ * relationships are established. */
+{
+tdbList = pruneEmpties(tdbList, db, hIsPrivateHost() || hIsPreviewHost(), 0);
+return trackDbPolishAfterLinkupKeepAll(tdbList);
 }
 
 struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)

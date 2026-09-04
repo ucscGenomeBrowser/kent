@@ -1,0 +1,2 @@
+Found 1 problem:
+Couldn't open input/relPath/data/noSuchFile.bb
