@@ -220,6 +220,62 @@ slSort(&list, cBlockCmpTarget);
 chain->blockList = list;
 }
 
+struct chain *chainLoadRange(char *database, char *track, char *chrom, int start, int end)
+/* Load every chain in a range from the database, each carrying the blocks that overlap the
+ * range.  As with chainLoadIdRange the chain header still describes the whole chain, not
+ * just the part in range. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct hash *chainHash = newHash(0);
+struct chain *chainList = NULL, *chain;
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+char id[32];
+
+/* Load the chain headers in range, and index them so the links can find them. */
+sr = hRangeQuery(conn, track, chrom, start, end, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    chain = chainHeadLoad(row + rowOffset);
+    slAddHead(&chainList, chain);
+    safef(id, sizeof id, "%d", chain->id);
+    hashAdd(chainHash, id, chain);
+    }
+sqlFreeResult(&sr);
+
+/* One pass over the links in range, handing each to the chain it belongs to. */
+if (chainList != NULL)
+    {
+    char linkTable[HDB_MAX_TABLE_STRING];
+    safef(linkTable, sizeof linkTable, "%sLink", track);
+    sr = hRangeQuery(conn, linkTable, chrom, start, end, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct chainLink link;
+        chainLinkStaticLoad(row + rowOffset, &link);
+        if ((chain = hashFindVal(chainHash, row[rowOffset + 4])) != NULL)
+            {
+            struct cBlock *cBlock;
+            AllocVar(cBlock);
+            cBlock->tStart = link.tStart;
+            cBlock->tEnd = link.tEnd;
+            cBlock->qStart = link.qStart;
+            cBlock->qEnd = link.qStart + (link.tEnd - link.tStart);
+            slAddHead(&chain->blockList, cBlock);
+            }
+        }
+    sqlFreeResult(&sr);
+    for (chain = chainList; chain != NULL; chain = chain->next)
+        slSort(&chain->blockList, cBlockCmpTarget);
+    }
+
+hashFree(&chainHash);
+sqlDisconnect(&conn);
+slReverse(&chainList);
+return chainList;
+}
+
 struct chain *chainLoadIdRangeHub(char *db, char *fileName, char *linkFileName,   char *chrom, int start, int end, int id)
 /* Load parts of chain of given ID from bigChain file.  Note the chain header
  * including score, tStart, tEnd, will still reflect the whole chain,
