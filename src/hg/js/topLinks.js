@@ -82,7 +82,12 @@ var topLinks = (function() {
         overlay.addEventListener("click", function(ev) {
             if (ev.target === overlay)
                 closeModal();
-            ev.stopPropagation();
+            // Clicks on a link are the exception: the page may have a handler that needs to see
+            // them (hgHubConnect.js watches for its own links and switches tab instead of
+            // reloading).  A link click ends the dialog anyway, so nothing is lost by letting an
+            // underlying popup notice it too.
+            if (!ev.target.closest("a"))
+                ev.stopPropagation();
         });
         document.addEventListener("keydown", onKey, true);   // capture: run before other handlers
         closeCurrent = function() {
@@ -110,7 +115,14 @@ var topLinks = (function() {
         // helper: add an <li><a> to a list
         function addLink(ul, href, text) {
             var li = el("li", {}, {margin: "6px 0"});
-            li.appendChild(el("a", {href: href, textContent: text}));
+            var a = el("a", {href: href, textContent: text});
+            // Most of these links leave the page, which takes the dialog with it.  "My Track Hubs"
+            // does not when we are already on hgHubConnect: there hgHubConnect.js cancels the click
+            // and just switches a tab, so the dialog would stay up.  Close it ourselves, deferred
+            // to the next tick so the click is fully dispatched first -- detaching the link while
+            // it is still being handled would rob hgHubConnect.js of the tab switch.
+            a.addEventListener("click", function() { setTimeout(closeModal, 0); });
+            li.appendChild(a);
             ul.appendChild(li);
         }
 
