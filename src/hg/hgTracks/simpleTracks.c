@@ -5265,58 +5265,225 @@ el->sumSquares = sumSquares * normFactor;
 return validCount;
 }
 
-static unsigned *countOverlaps(struct track *track)
-/* Count up overlap of linked features. */
+/* Item coverage for the "draw as a coverage graph" display mode.
+ *
+ * Coverage is a step function: it only changes where a feature starts or ends.
+ * So it is held as a list of runs rather than as one count per base of the
+ * window.  The per-base array this replaced was
+ *     needHugeZeroedMem((1 + winEnd - winStart) * sizeof(unsigned))
+ * which is 100 MB on a 25 Mb window, per track, incremented once per base of
+ * every feature and then read back in full to produce about 1,200 pixels.
+ * Sampling walks the runs instead, so both the memory and the two passes over
+ * it scale with the number of features and not with the width of the window.
+ * refs #38094
+ */
+
+struct covEvent
+/* A change in coverage at one base offset from winStart. */
+    {
+    unsigned pos;
+    int delta;          /* +1 where a feature starts, -1 where it ends */
+    };
+
+struct covRuns
+/* Coverage over the window as a step function.  Run i covers
+ * [pos[i], pos[i+1]) at depth cov[i]; the last run reaches size.  pos[0] is
+ * always 0, and the depth after the final event is always 0, so a lookup at
+ * size reads 0 the way the old counts[size] element did. */
+    {
+    unsigned *pos;
+    unsigned *cov;
+    int runCount;
+    unsigned size;
+    int cursor;         /* run holding the last position looked up */
+    };
+
+static int covEventCmp(const void *va, const void *vb)
+/* Sort coverage events by position. */
+{
+unsigned a = ((const struct covEvent *)va)->pos;
+unsigned b = ((const struct covEvent *)vb)->pos;
+if (a < b)
+    return -1;
+if (a > b)
+    return 1;
+return 0;
+}
+
+static void covAddInterval(struct covEvent *events, int *pCount,
+                           unsigned start, unsigned end, unsigned size)
+/* Clip one feature to the window and record its two coverage events.  The
+ * clipping is deliberately the same arithmetic the per-base loop used. */
+{
+if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
+    return;
+
+int x1 = max((int)start - (int)winStart, 0);
+int x2 = min((int)end - (int)winStart, size);
+if (x1 >= x2)
+    return;
+
+int n = *pCount;
+events[n].pos = x1;
+events[n].delta = 1;
+events[n+1].pos = x2;
+events[n+1].delta = -1;
+*pCount = n + 2;
+}
+
+static struct covRuns *countOverlaps(struct track *track)
+/* Build the coverage step function for the linked features in the window. */
 {
 struct slList *items = track->items;
 struct slList *item;
 unsigned size = winEnd - winStart;
-unsigned *counts = needHugeZeroedMem((1+ size) * sizeof(unsigned));
 extern int linkedFeaturesItemStart(struct track *tg, void *item);
 boolean isLinkedFeature = ( track->itemStart == linkedFeaturesItemStart);
 
+/* Count the intervals first so the event array can be sized exactly. */
+int intervalCount = 0;
 for (item = items; item; item = item->next)
     {
     if (isLinkedFeature)
         {
         struct linkedFeatures *lf = (struct linkedFeatures *)item;
         struct simpleFeature *sf;
-
         for (sf = lf->components; sf != NULL; sf = sf->next)
-            {
-            unsigned start = sf->start;
-            unsigned end = sf->end;
-            if (start == end)
-                end++;
-            if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
-                continue;
-
-            int x1 = max((int)start - (int)winStart, 0);
-            int x2 = min((int)end - (int)winStart, size);
-
-            for(; x1 < x2; x1++)
-                counts[x1]++;
-            }
+            intervalCount++;
         }
     else
-        {
-        unsigned start = track->itemStart(track, item);
-        unsigned end = track->itemEnd(track, item);
-        if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
-            continue;
-
-        int x1 = max((int)start - (int)winStart, 0);
-        int x2 = min((int)end - (int)winStart, size);
-
-        for(; x1 < x2; x1++)
-            counts[x1]++;
-        }
+        intervalCount++;
     }
 
-return counts;
+struct covEvent *events = NULL;
+int eventCount = 0;
+if (intervalCount > 0)
+    {
+    events = needLargeMem(2 * (size_t)intervalCount * sizeof(*events));
+    for (item = items; item; item = item->next)
+        {
+        if (isLinkedFeature)
+            {
+            struct linkedFeatures *lf = (struct linkedFeatures *)item;
+            struct simpleFeature *sf;
+
+            for (sf = lf->components; sf != NULL; sf = sf->next)
+                {
+                unsigned start = sf->start;
+                unsigned end = sf->end;
+                if (start == end)
+                    end++;
+                covAddInterval(events, &eventCount, start, end, size);
+                }
+            }
+        else
+            {
+            unsigned start = track->itemStart(track, item);
+            unsigned end = track->itemEnd(track, item);
+            covAddInterval(events, &eventCount, start, end, size);
+            }
+        }
+    qsort(events, eventCount, sizeof(events[0]), covEventCmp);
+    }
+
+struct covRuns *runs;
+AllocVar(runs);
+runs->size = size;
+runs->cursor = 0;
+/* One run can start at each distinct event position, plus the run from 0. */
+AllocArray(runs->pos, eventCount + 1);
+AllocArray(runs->cov, eventCount + 1);
+runs->pos[0] = 0;
+runs->cov[0] = 0;
+int n = 1;
+int depth = 0;
+int i = 0;
+while (i < eventCount)
+    {
+    unsigned p = events[i].pos;
+    while (i < eventCount && events[i].pos == p)
+        {
+        depth += events[i].delta;
+        i++;
+        }
+    if (runs->pos[n-1] == p)            /* events at offset 0 */
+        runs->cov[n-1] = depth;
+    else if (runs->cov[n-1] != (unsigned)depth)
+        {
+        runs->pos[n] = p;
+        runs->cov[n] = depth;
+        n++;
+        }
+    }
+runs->runCount = n;
+freeMem(events);
+return runs;
 }
 
-static void countsToPixelsUp(unsigned *counts, struct preDrawContainer *pre)
+static void covRunsFree(struct covRuns **pRuns)
+/* Free a coverage step function. */
+{
+struct covRuns *runs = *pRuns;
+if (runs == NULL)
+    return;
+freeMem(runs->pos);
+freeMem(runs->cov);
+freez(pRuns);
+}
+
+static unsigned covAt(struct covRuns *runs, unsigned pos)
+/* Coverage at one base offset.  Lookups run forward through the window, so the
+ * cursor makes this amortized constant time; a backward lookup still works. */
+{
+if (pos < runs->pos[runs->cursor])
+    runs->cursor = 0;
+while (runs->cursor + 1 < runs->runCount && pos >= runs->pos[runs->cursor + 1])
+    runs->cursor++;
+return runs->cov[runs->cursor];
+}
+
+static void covSumRange(struct covRuns *runs, unsigned a, unsigned b,
+                        double *pCount, double *pSum, double *pSumSquares,
+                        double *pMin, double *pMax)
+/* Fold the whole bases of [a, b) into the running per-pixel statistics, a run
+ * at a time.  Every quantity here is an integer held in a double, so adding a
+ * run as cov*n reaches the same value the per-base loop reached by adding cov
+ * n times.  The square is formed with unsigned arithmetic first, because that
+ * is what the per-base loop did. */
+{
+if (a >= b)
+    return;
+covAt(runs, a);                         /* park the cursor on the first run */
+int ix = runs->cursor;
+double count = *pCount, sum = *pSum, sumSquares = *pSumSquares;
+double lowest = *pMin, highest = *pMax;
+while (ix < runs->runCount && runs->pos[ix] < b)
+    {
+    unsigned runEnd = (ix + 1 < runs->runCount) ? runs->pos[ix+1] : runs->size;
+    unsigned lo = (runs->pos[ix] > a) ? runs->pos[ix] : a;
+    unsigned hi = (runEnd < b) ? runEnd : b;
+    if (hi > lo)
+        {
+        unsigned cov = runs->cov[ix];
+        double n = hi - lo;
+        count += n;
+        sum += (double)cov * n;
+        sumSquares += (double)(cov * cov) * n;
+        if (highest < cov)
+            highest = cov;
+        if (lowest > cov)
+            lowest = cov;
+        }
+    if (runEnd >= b)
+        break;
+    ix++;
+    }
+runs->cursor = (ix < runs->runCount) ? ix : runs->runCount - 1;
+*pCount = count; *pSum = sum; *pSumSquares = sumSquares;
+*pMin = lowest; *pMax = highest;
+}
+
+static void countsToPixelsUp(struct covRuns *runs, struct preDrawContainer *pre)
 /* Up sample counts into pixels. */
 {
 int preDrawZero = pre->preDrawZero;
@@ -5328,15 +5495,16 @@ for (pixel=0; pixel<insideWidth; ++pixel)
     {
     struct preDrawElement *pe = &pre->preDraw[pixel + preDrawZero];
     unsigned index = pixel * countsPerPixel;
+    unsigned count = covAt(runs, index);
     pe->count = 1;
-    pe->min = counts[index];
-    pe->max = counts[index];
-    pe->sumData = counts[index] ;
-    pe->sumSquares = counts[index] * counts[index];
+    pe->min = count;
+    pe->max = count;
+    pe->sumData = count ;
+    pe->sumSquares = count * count;
     }
 }
 
-static void countsToPixelsDown(unsigned *counts, struct preDrawContainer *pre)
+static void countsToPixelsDown(struct covRuns *runs, struct preDrawContainer *pre)
 /* Down sample counts into pixels. */
 {
 int preDrawZero = pre->preDrawZero;
@@ -5354,7 +5522,7 @@ for (pixel=0; pixel<insideWidth; ++pixel)
     double realCount, realSum, realSumSquares, max, min;
 
     realCount = realSum = realSumSquares = 0.0;
-    max = min = counts[startUns];
+    max = min = covAt(runs, startUns);
 
     assert(startUns != endUns);
     unsigned ceilUns = ceil(startReal);
@@ -5364,32 +5532,25 @@ for (pixel=0; pixel<insideWidth; ++pixel)
 	/* need a fraction of the first count */
 	double frac = (double)ceilUns - startReal;
 	realCount = frac;
-	realSum = frac * counts[startUns];
+	realSum = frac * covAt(runs, startUns);
 	realSumSquares = realSum * realSum;
 	startUns++;
 	}
 
     // add in all the counts that are totally in this pixel
-    for(; startUns < endUns; startUns++)
-	{
-	realCount += 1.0;
-	realSum += counts[startUns];
-	realSumSquares += counts[startUns] * counts[startUns];
-	if (max < counts[startUns])
-	    max = counts[startUns];
-	if (min > counts[startUns])
-	    min = counts[startUns];
-	}
+    covSumRange(runs, startUns, endUns,
+		&realCount, &realSum, &realSumSquares, &min, &max);
 
     // add any fraction of the count that's only partially in this pixel
     double lastFrac = endReal - endUns;
-    double lastSum = lastFrac * counts[endUns];
+    double lastSum = lastFrac * covAt(runs, endUns);
     if ((lastFrac > 0.0) && (endUns < size))
 	{
-	if (max < counts[endUns])
-	    max = counts[endUns];
-	if (min > counts[endUns])
-	    min = counts[endUns];
+	unsigned lastCount = covAt(runs, endUns);
+	if (max < lastCount)
+	    max = lastCount;
+	if (min > lastCount)
+	    min = lastCount;
 	realCount += lastFrac;
 	realSum += lastSum;
 	realSumSquares += lastSum * lastSum;
@@ -5399,16 +5560,16 @@ for (pixel=0; pixel<insideWidth; ++pixel)
     }
 }
 
-static void countsToPixels(unsigned *counts, struct preDrawContainer *pre)
+static void countsToPixels(struct covRuns *runs, struct preDrawContainer *pre)
 /* Sample counts into pixels. */
 {
 unsigned size = winEnd - winStart;
 double countsPerPixel = size / (double) insideWidth;
 
 if (countsPerPixel <= 1.0)
-    countsToPixelsUp(counts, pre);
+    countsToPixelsUp(runs, pre);
 else
-    countsToPixelsDown(counts, pre);
+    countsToPixelsDown(runs, pre);
 }
 
 static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
@@ -5458,9 +5619,9 @@ if (tg->summary)
     summaryToPixels(tg->summary, pre);
 else
     {
-    unsigned *counts = countOverlaps(tg);
-    countsToPixels(counts, pre);
-    freez(&counts);
+    struct covRuns *runs = countOverlaps(tg);
+    countsToPixels(runs, pre);
+    covRunsFree(&runs);
     }
 
 tg->colorShades = shadesOfGray;

@@ -1,6 +1,7 @@
 # UCSC Genome Browser Website Dockerfile using Ubuntu 24 Noble
 FROM phusion/baseimage:noble-1.0.2
 LABEL org.opencontainers.image.authors="mhaeussl@ucsc.edu"
+LABEL org.opencontainers.image.description="This is the UCSC Genome Browser docker image. See our documentation for more details: https://genome.ucsc.edu/goldenPath/help/docker.html"
 # The following is required as this is a "fat" docker image with an initd, running daemons like sshd and crond
 # See phusion documentation
 CMD ["/sbin/my_init"]
