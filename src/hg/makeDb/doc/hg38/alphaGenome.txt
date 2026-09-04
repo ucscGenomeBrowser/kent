@@ -1,0 +1,57 @@
+# AlphaGenome Variant Impact (AVI) score track, refs #38261
+# Fri Sep  4 14:20:00 PDT 2026 (Claude max)
+
+# Google DeepMind provided alphagenome_variant_impact_score_snvs.tsv.gz (83 GB, tabix
+# indexed) directly, along with terms.txt, their terms of service. The same data is on
+# https://deepmind.google.com/science/alphagenome/atlas
+# The file is a tab-separated table of chrom, pos, ref, alt, raw_score, PHRED covering
+# every possible single-base substitution in GRCh38. It holds no indels, despite what
+# the AlphaGenome Atlas offers, and no row where alt == ref.
+
+mkdir -p /hive/data/genomes/hg38/bed/alphaGenome
+cd /hive/data/genomes/hg38/bed/alphaGenome
+
+# We cannot redistribute this data, so the trackDb stanzas carry "tableBrowser off"
+# and the description page points users at Google for the download.
+
+# Split into one wig per alternate allele. The program copies the PHRED column through
+# as text, so no precision is lost, and it prints a full accounting of lines read,
+# lines skipped and values written. Took 28 minutes and 10.7 MB of memory.
+# Source: ~/kent/src/hg/oneShot/alphaGenomeToWig/alphaGenomeToWig.c
+alphaGenomeToWig alphagenome_variant_impact_score_snvs.tsv.gz
+
+# What it reported. Nothing was skipped: every input line became a score, and the
+# real scores written (values minus zero fills) equal the input line count exactly.
+#   read 8812917339 data lines, used 8812917339
+#     A: 2931187386 values in 399706 sections (860697142 zero fills)
+#     C: 2937603476 values in   3556 sections (599003079 zero fills)
+#     G: 2937603388 values in   3562 sections (601477231 zero fills)
+#     T: 2931143258 values in 402430 sections (863442717 zero fills)
+#   wrote 11737537508 values in 809254 sections, 2924620169 of them zero fills
+# 11737537508 - 2924620169 = 8812917339, matching the 8,812,917,339 data lines in
+# the input (wc -l minus the header). A and T have far more sections than C and G
+# because unscored stretches longer than maxGap fall more often between A/T scores.
+
+# On the number of fixedStep sections: because no row has alt == ref, each per-allele
+# file is missing roughly every fourth position. alphaGenomeToWig fills gaps of up to
+# -maxGap=10 bases with zero so one fixedStep block can span a long contiguous run.
+# Without this the file fragments into blocks of about 3.5 values each and the
+# resulting bigWig is roughly twice as large. Measured on 30 M lines of chr21:
+#   fixedStep wig  ->  34.5 MB bigWig
+#   bedGraph       ->  74.0 MB bigWig
+
+for n in A C G T; do
+    wigToBigWig alphaGenome$n.wig ../../chrom.sizes $(echo $n | tr A-Z a-z).bw &
+done
+wait
+
+# Check the value range, this is what viewLimits/viewLimitsMax in trackDb are based on
+for n in a c g t; do bigWigInfo $n.bw | egrep "^(min|max|mean):"; done
+
+# Sanity check that the 1-based input maps to the right 0-based bigWig position.
+# chr21:5010001 G>A has PHRED 6.58432 in the source file:
+bigWigToBedGraph -chrom=chr21 -start=5010000 -end=5010004 a.bw stdout
+# chr21 5010000 5010001 6.58432   <- the G>A score
+# chr21 5010001 5010002 0         <- ref is A here, so no A>A row, zero filled
+
+# The wig files are only intermediates and can be deleted once the bigWigs check out.
