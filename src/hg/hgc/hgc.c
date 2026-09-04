@@ -144,6 +144,7 @@
 #include "chain.h"
 #include "chainDb.h"
 #include "chainNetDbLoad.h"
+#include "bigChain.h"
 #include "chainToPsl.h"
 #include "chainToAxt.h"
 #include "netAlign.h"
@@ -3793,11 +3794,67 @@ if (html != NULL && html[0] != 0)
 hPrintf("<BR>\n");
 }
 
+static struct chain *quickLiftChainInRange(struct trackDb *tdb, int id)
+/* Load one chain out of the assembly the track came from and map it onto the reference.
+ * Every chain in the window is loaded and then matched on id, rather than asking for the
+ * one id:  the chain's sequence name in the other assembly is not known here, and the
+ * by-id loaders abort when the id is not in the range they were given. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->table), &table, &liftDb);
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+
+char *chainFile = NULL, *linkFile = NULL;
+if (startsWith("big", tdb->type))
+    {
+    chainFile = trackDbSetting(tdb, "bigDataUrl");
+    linkFile = trackDbSetting(tdb, "linkDataUrl");
+    if (linkFile == NULL)
+        linkFile = bigChainGetLinkFile(chainFile);
+    }
+
+struct hash *chainHash = newHash(8);
+struct hash *mapPsls = NULL;
+struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, seqName,
+    winStart, winEnd, chainHash);
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    struct chain *chain, *chainList;
+    if (chainFile != NULL)
+        chainList = chainLoadIdRangeHub(NULL, chainFile, linkFile, range->chrom,
+            range->start, range->end, -1);
+    else
+        chainList = chainLoadRange(liftDb, table, range->chrom, range->start, range->end);
+
+    for (chain = chainList; chain != NULL; chain = chain->next)
+        {
+        if (chain->id != id)
+            continue;
+
+        struct chain *lifted = quickLiftChain(chainHash, &mapPsls, chain);
+        if (lifted != NULL)
+            return lifted;
+        }
+    }
+return NULL;
+}
+
 struct chain *chainLoadItemInRange(struct trackDb *tdb, char *item)
 /* Load up parts of chain that intersect seqName:winStart-winEnd */
 {
 struct chain *chain = NULL;
 int id = sqlUnsigned(item);
+
+if ((trackDbSetting(tdb, "quickLiftDb") != NULL) && !quickLiftIsOwnChainTrack(tdb))
+    {
+    chain = quickLiftChainInRange(tdb, id);
+    if (chain == NULL)
+        errAbort("Couldn't lift chain %d into %s:%d-%d", id, seqName, winStart, winEnd);
+    return chain;
+    }
+
 if (startsWith("big", tdb->type))
     {
     char *fileName = trackDbSetting(tdb, "bigDataUrl");
@@ -4128,7 +4185,15 @@ if (normScoreAvailable)
     printf("<BR>\n");
     }
 
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
+if ((trackDbSetting(tdb, "quickLiftDb") != NULL) && !quickLiftIsOwnChainTrack(tdb))
+    // A lifted chain is only worked out over the window being viewed, so the whole chain's
+    // extent is not knowable here and the usual sentence would be wrong.
+    printf("<BR>This chain comes from %s and is mapped onto %s as the browser draws it, so "
+           "the fields above describe the part of it around the window rather than the "
+           "whole chain.<BR>\n",
+           trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
+else
+    printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
