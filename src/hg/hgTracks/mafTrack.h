@@ -10,6 +10,10 @@
 #include "maf.h"
 #endif
 
+#ifndef QUICKLIFT_H
+#include "quickLift.h"
+#endif
+
 struct mafPriv
 {
 void *list;
@@ -25,7 +29,7 @@ static inline boolean inSummaryMode(struct cart *cart, struct trackDb *tdb, int 
 // belonging to the assembly the track came from, so it cannot be queried with reference
 // coordinates, and for a hub track the setting comes back rewritten as a path under the
 // hub besides.  Read the real blocks and lift them instead.
-if (trackDbSetting(tdb, "quickLiftDb") != NULL)
+if (quickLiftIsLifted(tdb))
     return FALSE;
 
 char *snpTable = trackDbSetting(tdb, "snpTable");

@@ -309,6 +309,12 @@ static struct chain *quickLiftLoadChains(char *quickLiftFile, char *chrom, int s
 /* Load the chains from quickLiftFile that overlap a padded window around the
  * destination range. */
 {
+// A track can name the assembly it came from without naming a chain file, since nothing
+// stops a hub from setting one of the pair and not the other.  With no chains there is
+// nothing to lift, and every caller copes with an empty answer.
+if (quickLiftFile == NULL)
+    return NULL;
+
 // need to add some padding to these coordinates
 int padStart = start - QUICKLIFT_RANGE_PAD;
 if (padStart < 0)
@@ -465,6 +471,13 @@ for(chain = chainList; chain; chain = chain->next)
                          qStart, qEnd, extraWhere, &rowOffset);
     else
         sr = sqlGetResult(conn, query);
+
+    // numFields is what the loader will read, so it is also the least the row can have.
+    // The native loaders check this; without it a table of the wrong type walks off the
+    // end of the row.
+    if ((numFields > 0) && (sqlCountColumns(sr) < numFields + rowOffset))
+        errAbort("table %s in %s has %d columns, need at least %d",
+                 table, sqlGetDatabase(conn), sqlCountColumns(sr), numFields + rowOffset);
 
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -742,8 +755,10 @@ for (maf = mafList; maf != NULL; maf = nextMaf)
         }
 
     // the chains are keyed on the sequence name in the other assembly
-    char srcBuf[1024];
-    safecpy(srcBuf, sizeof srcBuf, ref->src);
+    // mafSplitSrcGetChrom writes into what it is given, so it needs a copy, and the copy
+    // has to be allocated:  a maf component name comes from a hub and safecpy into a
+    // fixed buffer would abort on a long one rather than truncate.
+    char *srcBuf = cloneString(ref->src);
     char *srcChrom = mafSplitSrcGetChrom(srcBuf, sourceDb);
     int refStart = ref->start;
     int refEnd = refStart + ref->size;
@@ -751,6 +766,7 @@ for (maf = mafList; maf != NULL; maf = nextMaf)
     struct chain *chain = liftOverChainForRange(chainHash, srcChrom, refStart, refEnd);
     if (chain == NULL)
         {
+        freeMem(srcBuf);
         mafAliFree(&maf);
         continue;
         }
@@ -785,10 +801,21 @@ for (maf = mafList; maf != NULL; maf = nextMaf)
         subRef->start = destStart;
         slAddHead(&outList, sub);
         }
+    freeMem(srcBuf);
     mafAliFree(&maf);
     }
 slReverse(&outList);
 return outList;
+}
+
+boolean quickLiftIsLifted(struct trackDb *tdb)
+// TRUE when this track's data comes from another assembly and there is enough to lift it.
+// Both halves have to be there:  the chain file that does the lifting and the assembly the
+// data came from.  A hub can set either one on its own, and half the pair is no use.
+{
+return (tdb != NULL) &&
+       (trackDbSetting(tdb, "quickLiftUrl") != NULL) &&
+       (trackDbSetting(tdb, "quickLiftDb") != NULL);
 }
 
 boolean quickLiftIsOwnChainTrack(struct trackDb *tdb)

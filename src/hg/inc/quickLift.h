@@ -110,6 +110,11 @@ struct mafAli *quickLiftMafs(struct hash *chainHash, struct mafAli *mafList,
 // row and the lift does not keep the reference contiguous.  refSrc is the name the browser
 // expects on the reference row, "<db>.<chrom>", with no hub prefix.
 
+boolean quickLiftIsLifted(struct trackDb *tdb);
+// TRUE when this track's data comes from another assembly and there is enough to lift it.
+// Both halves have to be there:  the chain file that does the lifting and the assembly the
+// data came from.  A hub can set either one on its own, and half the pair is no use.
+
 boolean quickLiftIsOwnChainTrack(struct trackDb *tdb);
 // TRUE when this is the chain track quickLift builds to show the lift itself.  That stanza
 // carries quickLiftUrl and quickLiftDb like any lifted track, but its data is already in

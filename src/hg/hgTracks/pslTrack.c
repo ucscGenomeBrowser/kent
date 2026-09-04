@@ -424,7 +424,7 @@ struct hash *chainHash = newHash(8);
 struct sqlConnection *conn = hAllocConn(liftDb);
 struct psl *pslList = (struct psl *)quickLiftSql(conn, quickLiftFile, table,
     chrom, start, end, NULL, pslChromFilterWhere(tg, extraWhere, sizeof(extraWhere)),
-    pslRowLoader, 0, chainHash);
+    pslRowLoader, 21, chainHash);
 hFreeConn(&conn);
 
 struct linkedFeatures *lfList = NULL;
@@ -446,7 +446,7 @@ static void lfFromPslsInRange(struct track *tg, int start, int end,
 	char *chrom, boolean isXeno, boolean nameGetsPos, int sizeMul)
 /* Return linked features from range of table. */
 {
-if (trackDbSetting(tg->tdb, "quickLiftDb") != NULL)
+if (quickLiftIsLifted(tg->tdb))
     {
     quickLiftLfFromPsls(tg, chrom, start, end, isXeno, nameGetsPos);
     return;

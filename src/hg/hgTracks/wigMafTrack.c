@@ -340,7 +340,7 @@ int begin = winStart - 2;
 if (begin < 0)
     begin = 0;
 
-if (trackDbSetting(track->tdb, "quickLiftDb") != NULL)
+if (quickLiftIsLifted(track->tdb))
     mp->list = quickLiftLoadMafs(track, begin, winEnd + 2);
 else if (track->isBigBed)
     {
@@ -560,7 +560,7 @@ if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
     struct mafPriv *mp = getMafPriv(track);
     struct sqlConnection *conn, *conn2;
 
-    if (trackDbSetting(track->tdb, "quickLiftDb") != NULL)
+    if (quickLiftIsLifted(track->tdb))
         mp->list = quickLiftLoadMafs(track, winStart, winEnd);
     else if (track->isBigBed)
         {

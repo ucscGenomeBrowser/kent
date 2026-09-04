@@ -496,7 +496,7 @@ void bigChainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
-if ((trackDbSetting(tg->tdb, "quickLiftDb") != NULL) && !quickLiftIsOwnChainTrack(tg->tdb))
+if (quickLiftIsLifted(tg->tdb) && !quickLiftIsOwnChainTrack(tg->tdb))
     {
     quickLiftChainLoadItems(tg);
     return;
@@ -583,7 +583,7 @@ void chainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
-if ((trackDbSetting(tg->tdb, "quickLiftDb") != NULL) && !quickLiftIsOwnChainTrack(tg->tdb))
+if (quickLiftIsLifted(tg->tdb) && !quickLiftIsOwnChainTrack(tg->tdb))
     {
     quickLiftChainLoadItems(tg);
     return;

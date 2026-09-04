@@ -3847,7 +3847,7 @@ struct chain *chainLoadItemInRange(struct trackDb *tdb, char *item)
 struct chain *chain = NULL;
 int id = sqlUnsigned(item);
 
-if ((trackDbSetting(tdb, "quickLiftDb") != NULL) && !quickLiftIsOwnChainTrack(tdb))
+if (quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb))
     {
     chain = quickLiftChainInRange(tdb, id);
     if (chain == NULL)
@@ -4185,7 +4185,7 @@ if (normScoreAvailable)
     printf("<BR>\n");
     }
 
-if ((trackDbSetting(tdb, "quickLiftDb") != NULL) && !quickLiftIsOwnChainTrack(tdb))
+if (quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb))
     // A lifted chain is only worked out over the window being viewed, so the whole chain's
     // extent is not knowable here and the usual sentence would be wrong.
     printf("<BR>This chain comes from %s and is mapped onto %s as the browser draws it, so "
@@ -7076,7 +7076,7 @@ static char *aliTrackParam()
  * the one from the assembly the alignments came from, and that name usually also belongs
  * to a real table on the assembly being viewed. */
 {
-static char buf[256];
+static char buf[1024];
 
 safef(buf, sizeof buf, "&aliTrack=%s", cgiUsualString("table", cgiUsualString("g", "")));
 return buf;
@@ -8825,6 +8825,8 @@ aliTable = cartString(cart, "aliTable");
 struct quickLiftAli ali;
 quickLiftAliInfo(aliTable, &ali);
 tdb = ali.tdb;
+if (tdb == NULL)
+    errAbort("BUG: bigPsl alignment table '%s' not found; this maybe causes by `.' in track names", aliTable);
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
 htmlFramesetStart(title);
