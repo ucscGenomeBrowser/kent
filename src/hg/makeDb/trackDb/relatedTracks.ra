@@ -224,6 +224,7 @@ hg38 >ucscRetroAli8 ucscRetroAli9 The newer version of this track
 hg38 >wgRnaOld wgRna The newer version of this track
 hg38 >covidHgiGwas covidHgiGwasR4Pval A later release of the same COVID-19 Host Genetics Initiative meta-analysis
 hg38 >colorsDbLegacy longReadVariants Current long-read structural variant callsets, including the up-to-date CoLoRSdb release
+hg38 >crispr crispr10K The same target sites computed over a wider window, exons plus 10 kb rather than 200 bp
 hg38 >transMapV4 transMapV6 The current version of the TransMap alignments
 hg38 >transMapV5 transMapV6 The current version of the TransMap alignments
 hg38 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
@@ -238,6 +239,7 @@ hg19 dbSnpArchive dbSnp155Composite The dbSNP release currently used by the Brow
 hg19 >gtexGene gtexGeneV8 The newer GTEx release, 54 tissues from 948 donors
 hg19 >wgRnaOld wgRna The newer version of this track
 hg19 >covidHgiGwas covidHgiGwasR4Pval A later release of the same COVID-19 Host Genetics Initiative meta-analysis
+hg19 >crispr crispr10K The same target sites computed over a wider window, exons plus 10 kb rather than 200 bp
 hg19 >transMapV4 transMapV6 The current version of the TransMap alignments
 hg19 >transMapV5 transMapV6 The current version of the TransMap alignments
 hg19 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
@@ -248,6 +250,7 @@ hg19 >ensGene knownGene The current GENCODE gene set, which shares its annotatio
 mm39 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 mm39 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
 
+mm10 >crispr crispr10K The same target sites computed over a wider window, exons plus 10 kb rather than 200 bp
 mm10 >transMapV4 transMapV6 The current version of the TransMap alignments
 mm10 >transMapV5 transMapV6 The current version of the TransMap alignments
 mm10 >ensGene knownGene The current GENCODE gene set, which shares its annotation with Ensembl
@@ -401,6 +404,12 @@ hg38 knownGene mane One representative transcript per gene, agreed between RefSe
 hg38 mane knownGene The full GENCODE gene set that MANE Select transcripts are drawn from
 hg38 refSeqComposite mane The MANE Select subset of RefSeq transcripts, matched to GENCODE
 hg38 mane refSeqComposite The full NCBI RefSeq transcript set that MANE Select is drawn from
+hg38 knownGene hgnc Official gene symbols and names from the HGNC, with previous symbols and aliases
+hg38 hgnc knownGene The default gene set, whose gene names come from this nomenclature
+hg38 refSeqComposite hgnc Official gene symbols and names from the HGNC, with previous symbols and aliases
+hg38 hgnc refSeqComposite Transcript annotations from NCBI, which use these gene symbols
+hg38 mane hgnc Official gene symbols and names from the HGNC, with previous symbols and aliases
+hg38 hgnc mane One agreed representative transcript per gene, matched between RefSeq and GENCODE
 hg38 >ccdsGene mane One representative transcript per gene, matched between RefSeq and GENCODE
 hg38 refSeqComposite xenoRefGene RefSeq transcripts from other species, aligned to the human genome
 hg38 xenoRefGene refSeqComposite Human RefSeq transcripts, rather than transcripts from other species
@@ -420,6 +429,10 @@ hg19 uniprot spMut Amino acid substitutions annotated in UniProt, mapped to the 
 hg19 spMut uniprot Protein domains, sites and other UniProt annotations mapped to the genome
 hg19 ucscGenePfam uniprot Protein domains and functional sites from UniProt
 hg19 uniprot ucscGenePfam Pfam domains mapped onto GENCODE transcripts
+hg19 knownGene hgnc Official gene symbols and names from the HGNC, with previous symbols and aliases
+hg19 hgnc knownGene The default gene set, whose gene names come from this nomenclature
+hg19 refSeqComposite hgnc Official gene symbols and names from the HGNC, with previous symbols and aliases
+hg19 hgnc refSeqComposite Transcript annotations from NCBI, which use these gene symbols
 hg19 refSeqComposite xenoRefGene RefSeq transcripts from other species, aligned to the human genome
 hg19 xenoRefGene refSeqComposite Human RefSeq transcripts, rather than transcripts from other species
 hg19 ~knownAlt sibAltEvents Another set of alternative splicing and promoter events called from transcript alignments
@@ -499,6 +512,63 @@ danRer11 >transMapV5 transMapV6 The current version of the TransMap alignments
 danRer11 ensGene refSeqComposite Gene models from NCBI RefSeq, curated independently of Ensembl
 danRer11 refSeqComposite ensGene Gene models from Ensembl, curated independently of RefSeq
 danRer11 ~simpleRepeat microsat Another annotation of short tandem repeats in the reference sequence
+
+# Repeat annotation cross-links:
+hg38 rmsk nestedRepeats Fragments of the same repeats joined by RepeatMasker ID, showing which pieces belong together
+hg38 nestedRepeats rmsk The individual repeat annotations these fragments were joined from
+hg38 rmsk joinedRmsk A detailed view of the same annotations, showing the alignment structure of each repeat
+hg38 joinedRmsk rmsk The standard view of these annotations, one item per repeat
+hg38 rmsk simpleRepeat Tandem repeats found by TRF, rather than the interspersed repeat families
+hg38 simpleRepeat rmsk Interspersed repeats and low-complexity DNA, annotated by family
+hg38 rmsk windowmaskerSdust An alternative masking of repetitive and low-complexity sequence, computed without a repeat library
+hg38 windowmaskerSdust rmsk Repeats annotated by family from a curated library, rather than found de novo
+
+hg19 rmsk nestedRepeats Fragments of the same repeats joined by RepeatMasker ID, showing which pieces belong together
+hg19 nestedRepeats rmsk The individual repeat annotations these fragments were joined from
+hg19 rmsk simpleRepeat Tandem repeats found by TRF, rather than the interspersed repeat families
+hg19 simpleRepeat rmsk Interspersed repeats and low-complexity DNA, annotated by family
+hg19 rmsk windowmaskerSdust An alternative masking of repetitive and low-complexity sequence, computed without a repeat library
+hg19 windowmaskerSdust rmsk Repeats annotated by family from a curated library, rather than found de novo
+
+mm39 rmsk nestedRepeats Fragments of the same repeats joined by RepeatMasker ID, showing which pieces belong together
+mm39 nestedRepeats rmsk The individual repeat annotations these fragments were joined from
+mm39 rmsk simpleRepeat Tandem repeats found by TRF, rather than the interspersed repeat families
+mm39 simpleRepeat rmsk Interspersed repeats and low-complexity DNA, annotated by family
+mm39 rmsk windowmaskerSdust An alternative masking of repetitive and low-complexity sequence, computed without a repeat library
+mm39 windowmaskerSdust rmsk Repeats annotated by family from a curated library, rather than found de novo
+
+mm10 rmsk nestedRepeats Fragments of the same repeats joined by RepeatMasker ID, showing which pieces belong together
+mm10 nestedRepeats rmsk The individual repeat annotations these fragments were joined from
+mm10 rmsk joinedRmsk A detailed view of the same annotations, showing the alignment structure of each repeat
+mm10 joinedRmsk rmsk The standard view of these annotations, one item per repeat
+mm10 rmsk simpleRepeat Tandem repeats found by TRF, rather than the interspersed repeat families
+mm10 simpleRepeat rmsk Interspersed repeats and low-complexity DNA, annotated by family
+mm10 rmsk windowmaskerSdust An alternative masking of repetitive and low-complexity sequence, computed without a repeat library
+mm10 windowmaskerSdust rmsk Repeats annotated by family from a curated library, rather than found de novo
+
+danRer11 rmsk nestedRepeats Fragments of the same repeats joined by RepeatMasker ID, showing which pieces belong together
+danRer11 nestedRepeats rmsk The individual repeat annotations these fragments were joined from
+danRer11 rmsk simpleRepeat Tandem repeats found by TRF, rather than the interspersed repeat families
+danRer11 simpleRepeat rmsk Interspersed repeats and low-complexity DNA, annotated by family
+danRer11 rmsk windowmaskerSdust An alternative masking of repetitive and low-complexity sequence, computed without a repeat library
+danRer11 windowmaskerSdust rmsk Repeats annotated by family from a curated library, rather than found de novo
+
+# Literature and association cross-links:
+hg38 gwasCatalog varsInPubs Individual variants mentioned in the literature, text-mined from full-text papers
+hg38 varsInPubs gwasCatalog Trait and disease associations from published genome-wide association studies
+hg38 gwasCatalog snpedia Wiki summaries of what has been published about individual SNPs
+hg38 snpedia gwasCatalog The underlying published associations, with effect sizes and p-values
+hg38 gwasCatalog gtexEqtlHighConf Variants that change gene expression, often used to find the gene behind an association signal
+hg38 gtexEqtlHighConf gwasCatalog Trait and disease association signals these expression effects are usually compared against
+hg38 snpedia varsInPubs Individual variants mentioned in the literature, text-mined from full-text papers
+hg38 varsInPubs snpedia Wiki summaries of what has been published about individual SNPs
+
+hg19 gwasCatalog varsInPubs Individual variants mentioned in the literature, text-mined from full-text papers
+hg19 varsInPubs gwasCatalog Trait and disease associations from published genome-wide association studies
+hg19 gwasCatalog snpedia Wiki summaries of what has been published about individual SNPs
+hg19 snpedia gwasCatalog The underlying published associations, with effect sizes and p-values
+hg19 snpedia varsInPubs Individual variants mentioned in the literature, text-mined from full-text papers
+hg19 varsInPubs snpedia Wiki summaries of what has been published about individual SNPs
 
 # Variant impact predictor cross-links:
 hg38 mutScore primateAi A pathogenicity predictor that also works from 3D protein structure
