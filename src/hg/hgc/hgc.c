@@ -7686,7 +7686,7 @@ else if (stringIn("_", item))
     // the item name contains the forward and reverse primers
     int maxSplits = 2;
     char *splitQName[maxSplits];
-    int numSplits = chopString(cloneString(item), "_", splitQName, sizeof(splitQName));
+    int numSplits = chopString(cloneString(item), "_", splitQName, ArraySize(splitQName));
     if (numSplits == maxSplits)
         {
         fPrimer = splitQName[0];

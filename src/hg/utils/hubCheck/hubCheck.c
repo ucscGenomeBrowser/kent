@@ -830,7 +830,7 @@ if (errCatchStart(errCatch))
     {
     char *type = trackDbRequiredSetting(tdb, "type");
     char *splitType[4];
-    int numWords = chopByWhite(cloneString(type), splitType, sizeof(splitType));
+    int numWords = chopByWhite(cloneString(type), splitType, ArraySize(splitType));
     char *trackType = splitType[0];
     boolean isParentTrack = (tdbIsComposite(tdb) || tdbIsCompositeView(tdb) || tdbIsContainer(tdb));
     if (!isParentTrack && !isValidTrackType(trackType))

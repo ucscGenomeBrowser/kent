@@ -122,7 +122,7 @@ if (!lineIsData(line))
     return bfl;
     }
 verbose(3, "%s\n", line);
-wordCount = chopByWhite(line, words, sizeof(words));
+wordCount = chopByWhite(line, words, ArraySize(words));
 if (bedSize == 0)
     {
     verbose(2, "BED size is %d\n", wordCount);

@@ -493,15 +493,16 @@ function blatBuild() {
     var headActions =
         `${back}<a class="gbPill" title="Start a new BLAT search" href="${htmlEncode(cfg.newSearchUrl)}">New BLAT search</a>`;
 
-    // Top banner: note this is the new page, link back to the classic page (fresh searches only,
-    // where the trash files still exist), and invite feedback.  The old page also clears the
-    // blatNewPage preference so later searches use the classic page until the user opts back in.
+    // Top banner: identical wording to the search form's banner.  The original-page link shows
+    // only for fresh searches (where the trash files still exist); it clears the blatNewPage
+    // preference so later searches use the classic page until the user opts back in.
     var origPage = cfg.canOldPage ?
-        ` You can go back to <a title="Show these results on the classic BLAT results page" ` +
-        `href="hgBlat?blatNewPage=0&blatReopen=1&hgsid=${encodeURIComponent(cfg.hgsid)}">the original page</a> anytime.` : '';
+        ` You can go back to the <a title="Show these results on the classic BLAT results page" ` +
+        `href="hgBlat?blatNewPage=0&blatReopen=1&hgsid=${encodeURIComponent(cfg.hgsid)}">original page</a> anytime.` : '';
     var bannerHtml =
-        `<div class="gbBanner">We are testing a new BLAT output page.${origPage} ` +
-        `If you have feedback on this new page, do not hesitate to let us know via ` +
+        `<div class="gbBanner">Welcome to our ` +
+        `<a href="../goldenPath/newsarch.html#newBLAT">new BLAT page</a>.${origPage} ` +
+        `Please send any feedback to ` +
         `<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.</div>`;
 
     var queryCount = new Set(hits.map(h => h.qName)).size;
@@ -842,9 +843,11 @@ function blatFormBuild() {
 
     var banner = '';
     if (cfg.classicUrl) {
-        banner = '<div class="gbBanner">We are testing a new BLAT search page. You can go back to ' +
-            `<a href="${htmlEncode(cfg.classicUrl)}">the original page</a> anytime. If you have feedback ` +
-            'on this new page, do not hesitate to let us know via ' +
+        // #newBLAT is the agreed anchor for the announcement on the news archive page (RM #37996).
+        banner = '<div class="gbBanner">Welcome to our ' +
+            '<a href="../goldenPath/newsarch.html#newBLAT">new BLAT page</a>. You can go back to ' +
+            `the <a href="${htmlEncode(cfg.classicUrl)}">original page</a> anytime. ` +
+            'Please send any feedback to ' +
             '<a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.</div>';
     }
 

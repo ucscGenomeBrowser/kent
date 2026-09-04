@@ -101,7 +101,7 @@ int skip = 0;
 int start = 0;
 if (!pName || ((name = *pName) == NULL))
     return 0;
-numWords = chopByChar(name, ':', words, sizeof(words));
+numWords = chopByChar(name, ':', words, ArraySize(words));
 if (numWords == 3)
     skip = 1;
 chrom = words[0 + skip];
