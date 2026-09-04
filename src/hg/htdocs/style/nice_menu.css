@@ -85,18 +85,22 @@ a.skipNav:focus {
 #trToggle {
 	display:none;
 }
-/* Narrow / phone screens: the fixed-width (min 1000px) bar scrolls horizontally, so the
-   right-edge-pinned links would collide with "About Us".  Instead pin a menu icon to the visible
-   viewport corner and reveal the links as a dropdown when tapped. */
+/* Narrow / phone screens: the fixed-width (min 1000px) bar scrolls horizontally, so links pinned
+   to the right edge of the bar end up off-screen.  Instead collapse them into a menu icon that
+   sticks to the right edge of the visible part of the bar, and show the links as a dropdown when
+   it is tapped.  "sticky" rather than "fixed": fixed pins to the top of the window, which is
+   inside the bar only on hgTracks - on pages with a logo banner above the bar (hgGateway, the home
+   page) it lands in the white area above it. */
 @media (max-width: 1100px) {
 	#topRightLinks {
-		position:fixed;
-		top:0;
-		right:0;
+		position:sticky;
+		float:right;
+		top:auto;
+		right:14px;
 		height:32px;
 		line-height:32px;
 		padding:0 8px;
-		background:#00457c;
+		background:inherit; /* the bar's blue, which is not the same on all pages */
 		z-index:1000;
 	}
 	#trToggle {
@@ -109,17 +113,22 @@ a.skipNav:focus {
 		cursor:pointer;
 		padding:0;
 	}
-	#topRightLinks a.topRightLink {
+	/* The links hang below the icon.  They are taken out of the flow so that opening the menu
+	   does not make the bar taller and push the rest of the page down. */
+	#trLinks {
 		display:none;
+		position:absolute;
+		top:32px;
+		right:0;
+		background:inherit;
 	}
-	#topRightLinks.trOpen {
-		height:auto;
+	#topRightLinks.trOpen #trLinks {
+		display:block;
 	}
-	#topRightLinks.trOpen a.topRightLink {
+	#topRightLinks a.topRightLink {
 		display:block;
 		margin:0;
 		padding:8px 12px;
-		background:#00457c;
 		text-align:right;
 	}
 }

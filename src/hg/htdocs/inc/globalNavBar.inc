@@ -3,8 +3,9 @@
 
 <!-- Top-right links (Share a link, Login).  These comment placeholders are replaced at runtime by
      menuBar() in lib/web.c (CGI pages) and by hgMenubar.c (static pages).  They sit in their own
-     absolutely-positioned container at the top-right of the bar, not inside the menu list. -->
-<div id="topRightLinks"><button type="button" id="trToggle" aria-label="Menu" aria-expanded="false">&#9776;</button><!-- SHARE_LINK --><!-- LOGIN_LINK --></div>
+     own container at the top-right of the bar, not inside the menu list.  On narrow screens the
+     #trLinks span becomes a dropdown under the menu icon (see nice_menu.css). -->
+<div id="topRightLinks"><button type="button" id="trToggle" aria-label="Menu" aria-expanded="false">&#9776;</button><span id="trLinks"><!-- SHARE_LINK --><!-- LOGIN_LINK --></span></div>
 
 		<div id="main-menu"><div id="block-nice_menus-1" class="clear-block block block-nice_menus">
 

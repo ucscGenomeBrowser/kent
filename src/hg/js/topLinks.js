@@ -544,6 +544,10 @@ var topLinks = (function() {
         var toggle = document.getElementById("trToggle");
         var container = document.getElementById("topRightLinks");
         if (toggle && container) {
+            // Nothing to show, e.g. a mirror with no login system: leave the icon out entirely
+            // rather than offer a menu that opens empty.
+            if (container.getElementsByClassName("topRightLink").length === 0)
+                toggle.style.display = "none";
             toggle.addEventListener("click", function(ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
