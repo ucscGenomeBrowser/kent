@@ -24,4 +24,6 @@
 
 DOCENT = ../../docent.js
 
+PREFLIGHT = ../preflight.js
+
 include ../docentTest.mk

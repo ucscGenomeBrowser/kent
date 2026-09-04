@@ -17,4 +17,6 @@
 DOCENT = ../docent.js
 PARITY ?= composite
 
+PREFLIGHT = ./preflight.js
+
 include docentTest.mk

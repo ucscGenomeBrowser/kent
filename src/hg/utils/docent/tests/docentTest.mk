@@ -2,14 +2,18 @@
 # tests/regress/makefile, so both directories run the same code rather than a copy of it.
 #
 # An including makefile sets, before the include:
-#   DOCENT   path to docent.js from THIS directory   (required)
-#   PARITY   which script `make parity` runs         (default: the first one found)
+#   DOCENT     path to docent.js from THIS directory     (required)
+#   PREFLIGHT  path to preflight.js from THIS directory  (required)
+#   PARITY     which script `make parity` runs           (default: the first one found)
 #
 # Everything else -- which scripts are tests, which have derive baselines -- comes from
 # what is on disk here, so a new *.docent.yaml is picked up with no edit.
 
 ifndef DOCENT
 $(error include docentTest.mk only after setting DOCENT, e.g. DOCENT = ../docent.js)
+endif
+ifndef PREFLIGHT
+$(error include docentTest.mk only after setting PREFLIGHT, e.g. PREFLIGHT = ./preflight.js)
 endif
 
 PW_DIR ?= /hive/groups/browser/uiTest/pw
@@ -21,7 +25,14 @@ PASSING := $(filter-out %.xfail,$(patsubst %.docent.yaml,%,$(wildcard *.docent.y
 PARITY ?= $(firstword $(PASSING))
 TESTS  := $(if $(T),$(addsuffix .docent.yaml,$(T)),$(wildcard *.docent.yaml))
 
-.PHONY: test parity clean
+.PHONY: test parity clean preflight
+
+# The fixtures the scripts here name but do not contain: saved sessions, hub URLs, the
+# server itself. No browser, so this is seconds, and it is what separates "the fixtures
+# went away" from "a bug came back" -- which are the same red without it. Run it before
+# the suite, and on its own as often as you like.
+preflight:
+	@$(PW_ENV) node $(PREFLIGHT) .
 
 test:
 	@if [ -z "$(strip $(TESTS))" ]; then \
