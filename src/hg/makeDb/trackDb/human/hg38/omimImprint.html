@@ -1,0 +1,148 @@
+<h2>Description</h2>
+
+<p>
+This track shows the genes that OMIM, the catalog of human genes and genetic
+disorders curated at Johns Hopkins, marks as imprinted. The OMIM staff assign
+that mark by reading the primary literature. It is published only through
+<a href="https://genescout.omim.org/" target="_blank">GeneScout</a>, OMIM's tool
+for listing the genes and phenotypes inside a set of genomic intervals, which
+appends <tt>(I)</tt> to the coordinates of a flagged gene in its Location
+column. The mark is not part of the OMIM gene map and does not appear in any of
+the OMIM download files. Because the set is curated by hand it is smaller and
+more conservative than the computational predictions in the other tracks of
+this collection, and it is tied directly to the OMIM entries for each gene.
+</p>
+
+<p>
+The track holds 459 loci. Of these, 225 have an OMIM gene entry of their own
+and 234 appear in the gene map without one; the second group is mostly
+antisense transcripts, long non-coding RNAs and microRNAs sitting inside
+imprinted clusters, such as KCNQ1-AS1 and INS-IGF2.
+</p>
+
+<p>
+See the <a href="hgTrackUi?g=imprinting">Imprinting</a> track collection page for background on genomic imprinting and for the color scheme shared by all of its subtracks.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each item is one OMIM gene entry, drawn over the gene span that OMIM gives.
+OMIM does not report a strand, so the items are drawn without one. Clicking an
+item opens a page with the MIM number, the full gene name, the other symbols
+OMIM lists for the locus, and every OMIM phenotype associated with the gene.
+The gene symbol links to the OMIM entry.
+</p>
+
+<p>
+OMIM records that a gene is imprinted but not which parental copy is active, so
+every item here is drawn in the neutral gray that this collection uses for
+annotations without a parent of origin. Vermillion and blue keep their meaning
+on the other subtracks: the maternal and the paternal copy.
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#555555;width:2em">&nbsp;</th>
+      <td>Gray &mdash; imprinted according to OMIM, parental copy not stated</td></tr>
+</table>
+
+<p>
+Methylation itself is annotated elsewhere. The Kaplan lab human methylation
+atlas is a separate track,
+<a href="hgTrackUi?g=humanMethylationAtlasSummary">Human Methylation Atlas
+Summary</a>, under DNA Methylation.
+</p>
+
+<p>
+A filter separates the genes that have an OMIM gene entry of their own from the
+loci that appear in the gene map without one, which are mostly antisense
+transcripts and other non-coding genes at imprinted clusters. It does not
+filter anything out by default.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+OMIM curators read the primary literature and record, for each gene, the
+phenotypes it causes, the mode of inheritance and a set of annotations, one of
+which is that the gene is imprinted. That annotation surfaces only in GeneScout
+output, where it is appended as <tt>(I)</tt> to the coordinates in the Location
+column; it is in neither the OMIM gene map nor the OMIM download files.
+GeneScout is described in Applegate et al. (2022).
+</p>
+
+<p>
+The gene list was exported from
+<a href="https://genescout.omim.org/" target="_blank">GeneScout</a> as a
+tab-delimited file, using a search that covers every chromosome on assembly
+GRCh38, and the flagged entries were converted to browser coordinates. GeneScout
+also lists OMIM phenotype entries alongside genes; those are mapped disease
+regions rather than gene positions, some of them tens of megabases long, so they
+are not shown here. The Genome Browser already has them in the
+<a href="hgTrackUi?g=omimLocation">OMIM Cyto Loci</a> track. The processing
+steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt" target="_blank">imprinting makeDoc</a>
+and the script is in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/imprinting" target="_blank">makeDb/scripts/imprinting</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through
+our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>omimImprint</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/omimImprint/" target="_blank">our download server</a>.
+The file for this track is called <tt>omimImprint.bb</tt>. Individual regions or
+the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded
+as a precompiled binary for your system. Instructions for downloading source
+code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/omimImprint/omimImprint.bb -chrom=chr15 -start=23000000 -end=26000000 stdout</tt>
+</p>
+
+<p>
+The original gene list can be exported from
+<a href="https://genescout.omim.org/" target="_blank">GeneScout</a>. Use of OMIM
+resources requires agreement to the
+<a href="https://omim.org/help/agreement" target="_blank">OMIM terms of use</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to the OMIM curators at the McKusick-Nathans Institute of Genetic
+Medicine, Johns Hopkins University School of Medicine, for maintaining the
+catalog, and in particular to Joanna Amberger for explaining how to export the
+gene list from GeneScout.
+</p>
+
+<h2>References</h2>
+
+<p>
+Applegate CD, Schiettecatte F, Hamosh A, Amberger JS.
+<a href="https://doi.org/10.1002/cpz1.530" target="_blank">
+Exploring Genes and Phenotypes Within Chromosomal Regions Using OMIM&#x27;s GeneScout</a>.
+<em>Curr Protoc</em>. 2022 Sep;2(9):e530.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36130039" target="_blank">36130039</a>
+</p>
+
+<p>
+Amberger JS, Bocchini CA, Schiettecatte F, Scott AF, Hamosh A.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25428349" target="_blank">
+OMIM.org: Online Mendelian Inheritance in Man (OMIM®), an online catalog of human genes and genetic
+disorders</a>.
+<em>Nucleic Acids Res</em>. 2015 Jan;43(Database issue):D789-98.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25428349" target="_blank">25428349</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383985/" target="_blank">PMC4383985</a>
+</p>
+

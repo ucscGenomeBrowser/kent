@@ -1,0 +1,148 @@
+<h2>Description</h2>
+
+<p>
+This track shows the human part of the Geneimprint catalog, with each gene
+placed on the genome. The catalog itself gives only a cytogenetic band, so the
+coordinates here come from resolving the gene symbols against the
+<a href="hgTrackUi?g=hgnc">HGNC</a> gene annotation. Note that the track
+contains all of the catalog, including 18 genes that Geneimprint records as
+<em>not</em> imprinted and 10 whose status is unknown. Use the filters on the
+track configuration page to narrow the display to the evidence levels you want.
+</p>
+
+<p>
+See the <a href="hgTrackUi?g=imprinting">Imprinting</a> track collection page for background on genomic imprinting and for the color scheme shared by all of its subtracks.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each item is one gene from the catalog, drawn over the span of the resolved
+locus. The item is labeled with the name Geneimprint uses, which for older
+entries can differ from today's approved symbol; the configuration page can
+switch the label to the approved symbol instead. Clicking an item opens a page
+with the imprint status, the expressed allele, the band the catalog gives, and
+links to the Geneimprint and HGNC entries.
+</p>
+
+<p>
+The color shows which parental copy is expressed:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>Paternal &mdash; the copy inherited from the father is expressed,
+          so the maternal copy is silenced</td></tr>
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>Maternal &mdash; the copy inherited from the mother is expressed,
+          so the paternal copy is silenced</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th>
+      <td>Biallelic &mdash; both copies are expressed, the gene was tested and
+          is not imprinted</td></tr>
+  <tr><th style="background-color:#E69F00;width:2em">&nbsp;</th>
+      <td>Isoform dependent &mdash; some transcripts of the gene are imprinted
+          and others are not</td></tr>
+  <tr><th style="background-color:#CC79A7;width:2em">&nbsp;</th>
+      <td>Random &mdash; one copy is silenced, but which one is not decided by
+          the parent of origin</td></tr>
+  <tr><th style="background-color:#555555;width:2em">&nbsp;</th>
+      <td>Unknown &mdash; the expressed copy has not been determined</td></tr>
+</table>
+
+<p>
+Vermillion, blue and gray mean the same thing on every subtrack of this
+collection; the three colors above them are used only by this catalog.
+</p>
+
+<p>
+Two filters are available, one on imprint status and one on expressed allele.
+Neither filters anything out by default.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Geneimprint is curated by hand from the imprinting literature and is maintained
+by Randy L. Jirtle. A large share of the entries marked as predicted rather
+than confirmed comes from the genome-wide machine learning screen of Luedi et
+al. (2007), which scored every human gene on the sequence features that
+distinguish known imprinted genes, mainly the arrangement of repeats and
+transcription factor binding sites around the locus. The catalog records for
+each gene the expressed parental allele and an evidence level: imprinted, not
+imprinted, predicted, conflicting data, provisional data, tissue dependent or
+unknown. The site does not publish a definition of these levels.
+</p>
+
+<p>
+The catalog table was downloaded from
+<a href="https://geneimprint.com/site/genes-by-species.Homo+sapiens" target="_blank">https://geneimprint.com/site/genes-by-species.Homo+sapiens</a>
+and parsed out of the HTML page. Geneimprint gives a cytogenetic band but no
+coordinates, so each gene symbol was resolved against the HGNC track, trying in
+turn the approved symbol, the previous approved symbols and the alias symbols,
+first for the catalog name and then for each of the aliases the catalog lists.
+Only the main chromosomes were considered, so an alternate haplotype can never
+win a match. Where a symbol matched more than one locus, the one whose
+cytogenetic band agreed with the catalog was taken. Two cluster names,
+SNORD115@ and SNORD116, do not exist as single loci and were spanned from the
+first to the last numbered member of their family. One symbol that HGNC has
+retired, PRR25, was resolved through RefSeq instead. The processing steps are
+documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt" target="_blank">imprinting makeDoc</a>
+and the script is in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/imprinting" target="_blank">makeDb/scripts/imprinting</a>.
+</p>
+
+<p>
+The catalog lists 281 entries and 274 of them are shown. Four could not be
+placed because their gene identifiers have been retired and no longer match any
+locus; one of those, PWCR1, is an older name for the SNORD116 cluster, which is
+in the track under that name. Three more genes appear twice in the catalog under
+an old and a current symbol, and each pair is drawn once, carrying both names.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through
+our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>geneimprint</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/geneimprint/" target="_blank">our download server</a>.
+The file for this track is called <tt>geneimprint.bb</tt>. Individual regions or
+the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded
+as a precompiled binary for your system. Instructions for downloading source
+code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/geneimprint/geneimprint.bb -chrom=chr15 -start=23000000 -end=26000000 stdout</tt>
+</p>
+
+<p>
+The original catalog can be browsed at
+<a href="https://geneimprint.com/site/genes-by-species.Homo+sapiens" target="_blank">https://geneimprint.com/site/genes-by-species.Homo+sapiens</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Randy L. Jirtle for curating and publishing the Geneimprint catalog.
+</p>
+
+<h2>References</h2>
+
+<p>
+Luedi PP, Dietrich FS, Weidman JR, Bosko JM, Jirtle RL, Hartemink AJ.
+<a href="https://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=18055845" target="_blank">
+Computational and experimental identification of novel human imprinted genes</a>.
+<em>Genome Res</em>. 2007 Dec;17(12):1723-30.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/18055845" target="_blank">18055845</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2099581/" target="_blank">PMC2099581</a>
+</p>
+

@@ -108,6 +108,9 @@ if (loginSystemEnabled()) /* Using the new hgLogin CGI for login */
     char *changeEmailUrl = wikiLinkChangeEmailUrl(cartSessionId(cart));
     if (changeEmailUrl != NULL)
         printf("<li><A HREF=\"%s\">Change email</A></li>", changeEmailUrl);
+    char *changeRecovEmailUrl = wikiLinkChangeRecovEmailUrl(cartSessionId(cart));
+    if (changeRecovEmailUrl != NULL)
+        printf("<li><A HREF=\"%s\">Recovery email</A></li>", changeRecovEmailUrl);
     printf("</ul>");
 
     printf("<p><A id='logoutLink' HREF=\"%s\">Sign out</A></p>",
@@ -1138,9 +1141,9 @@ if (anon)
     {
     encUserName = "l";                    /* reserved anonymous user -> short link /s/l/<token> */
     /* Every anonymous share uses the shared snapshot naming: a server-generated, guaranteed-unique
-     * "__"-token, so tokens never collide/overwrite and the reaper can garbage-collect abandoned
+     * "__"-token, so tokens never collide/overwrite and the snapshot cleaner can remove abandoned
      * ones.  The top-right Share dialog passes a name it just reserved (for its live preview); we
-     * force the "__" prefix either way so the link stays reap-eligible. */
+     * force the "__" prefix either way so the link stays eligible for cleaning. */
     if (isEmpty(sessionName))
         encSessionName = snapshotNewName(conn, encUserName);
     else if (startsWith(snapshotNamePrefix, sessionName))

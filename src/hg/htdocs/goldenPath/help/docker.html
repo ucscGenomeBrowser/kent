@@ -13,6 +13,7 @@
 <h6><a href="#installingDocker">How to Install Docker Desktop?</a></h6>
 <h6><a href="#dockerUCSCgb">Using Docker Desktop for UCSC Genome Browser</a></h6>
 <h6><a href="#dockerHub">Using the Prebuilt UCSC Genome Browser Image</a></h6>
+<h6><a href="#buildImage">Building the Image Yourself</a></h6>
 <h6><a href="#dockerVolume">Create a Docker Volume for Data Persistence</a></h6>
 <h6><a href="#updateGB">Updating the Latest UCSC Genome Browser Version</a></h6>
 <h6><a href="#hg.conf">Customize a UCSC Genome Browser Docker Container</a></h6>
@@ -88,7 +89,7 @@ target=_blank>Overview of the get started guide</a>
    <pre><code>sudo systemctl start docker</pre></code>
 </ul>
 <a id="dockerHub"></a>
-<h3>Using the Prebuilt UCSC Genome Browser Image</h3>
+<h2>Using the Prebuilt UCSC Genome Browser Image</h2>
 <p>
 UCSC publishes a ready-made Genome Browser image on Docker Hub as
 <a href="https://hub.docker.com/r/genomebrowser/server" target=_blank>genomebrowser/server</a>. The
@@ -117,6 +118,9 @@ for keeping that data between container restarts.</p>
 Build the image from the Dockerfile instead if you need to change how it is built, for instance to
 add other software or to change the Genome Browser configuration at build time. The next sections
 describe how to do that.</p>
+
+<a id="buildImage"></a>
+<h2>Building the Image Yourself</h2>
 
 <h3>Obtaining a UCSC Genome Browser Dockerfile</h3>
 <p>The UCSC Genome Browser dockerfile can be obtained from the

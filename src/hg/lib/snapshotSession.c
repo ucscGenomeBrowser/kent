@@ -213,7 +213,7 @@ dyStringFree(&dy);
 return useCount;
 }
 
-/* ---- Reaping abandoned anonymous snapshots -------------------------------------------------- */
+/* ---- Cleaning up abandoned anonymous snapshots ---------------------------------------------- */
 
 static void removeDirTree(char *dir)
 /* Best-effort recursive removal of a directory and its contents (files are hard-links into durable
@@ -233,7 +233,7 @@ slFreeList(&fiList);
 rmdir(dir);
 }
 
-int snapshotReapAnon(struct sqlConnection *conn, int ttlDays, boolean dryRun)
+int snapshotCleanAnon(struct sqlConnection *conn, int ttlDays, boolean dryRun)
 /* See snapshotSession.h. */
 {
 char *sessionDataDir = cfgOption("sessionDataDir");
@@ -244,16 +244,16 @@ sqlSafef(query, sizeof query,
     "SELECT sessionName FROM %s WHERE userName='%s' AND sessionName LIKE '\\_\\_%%' "
     "AND lastUse < DATE_SUB(now(), INTERVAL %d DAY)",
     namedSessionTable, snapshotAnonUser, ttlDays);
-struct slName *toReap = NULL;
+struct slName *toClean = NULL;
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    slNameAddHead(&toReap, row[0]);
+    slNameAddHead(&toClean, row[0]);
 sqlFreeResult(&sr);
 
 int n = 0;
 struct slName *s;
-for (s = toReap;  s != NULL;  s = s->next)
+for (s = toClean;  s != NULL;  s = s->next)
     {
     if (!dryRun)
         {
@@ -274,6 +274,6 @@ for (s = toReap;  s != NULL;  s = s->next)
         }
     n++;
     }
-slFreeList(&toReap);
+slFreeList(&toClean);
 return n;
 }

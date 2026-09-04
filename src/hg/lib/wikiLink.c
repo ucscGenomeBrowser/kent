@@ -708,6 +708,32 @@ freez(&retEnc);
 return result;
 }
 
+char *wikiLinkChangeRecovEmailUrlReturning(char *hgsid, char *returnUrl)
+/* Return the URL for the page where a user sets or changes their recovery email address, or
+ * NULL if unavailable.  Supported only by the hgLogin login system, and only when the admin
+ * has turned it on with login.recovEmailChange in hg.conf.  hgLogin checks the rest of what
+ * the feature needs (a cookie salt to sign the confirmation link, working outbound mail, and
+ * the recovEmailVerified column) and sends the user back to the login page if any is missing. */
+{
+if (!loginSystemEnabled())
+    return NULL;
+if (!cfgOptionBooleanDefault(CFG_LOGIN_RECOV_EMAIL_CHANGE, FALSE))
+    return NULL;
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "%s?hgLogin.do.changeRecovEmailPage=1&returnto=%s", loginUrl(), returnUrl);
+return dyStringCannibalize(&dy);
+}
+
+char *wikiLinkChangeRecovEmailUrl(char *hgsid)
+/* Return the URL for the recovery email page, returning to hgSession, or NULL if
+ * unavailable. */
+{
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
+char *result = wikiLinkChangeRecovEmailUrlReturning(hgsid, retEnc);
+freez(&retEnc);
+return result;
+}
+
 void wikiFixLogoutLinkWithJs()
 /* HTTP Basic Auth requires a strange hack to logout. This code prints a script 
  * that fixes an html link with id=logoutLink */

@@ -1,0 +1,22 @@
+table geneimprint
+"Geneimprint catalog of imprinted and candidate imprinted genes, symbols resolved to hg38 coordinates"
+    (
+    string chrom;              "Chromosome (or contig, scaffold, etc.)"
+    uint   chromStart;         "Start position in chromosome"
+    uint   chromEnd;           "End position in chromosome"
+    string name;               "Gene name in the Geneimprint catalog"
+    uint   score;              "Score (unused, always 0)"
+    char[1] strand;            "+ or - for strand"
+    uint   thickStart;         "Start of thick display"
+    uint   thickEnd;           "End of thick display"
+    uint   reserved;           "Color, set from the expressed allele"
+    string status;             "Imprint Status|Evidence level assigned by Geneimprint"
+    string expressedAllele;    "Expressed Allele|Parental copy that is expressed"
+    lstring aliases;           "Aliases|Other names for this gene, as listed by Geneimprint"
+    string catalogBand;        "Catalog Band|Cytogenetic band as given by Geneimprint"
+    string hgncSymbol;         "Resolved Symbol|Approved symbol of the locus the coordinates come from"
+    string hgncId;             "HGNC ID|Identifier of the resolved locus, empty if resolved through RefSeq"
+    lstring geneName;          "Gene Description|Full name of the resolved locus"
+    string locusType;          "Locus Type|Kind of locus, e.g. protein coding or small nucleolar RNA"
+    string resolvedBy;         "Resolved By|Which name matched: current symbol, previous symbol, alias, small RNA cluster or RefSeq"
+    )

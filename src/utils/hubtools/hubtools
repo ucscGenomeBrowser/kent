@@ -209,7 +209,12 @@ https://genome.ucsc.edu/goldenpath/help/trackDb/trackDbHub.html
         help="import a UCSC session URL or a track backup archive, converts custom tracks",
         description="Create a hub in the current dir (or -o outDir) from any URL with an hgsid, a\n"
             "session URL, or a local xxx.tar.gz track backup archive (see: My Data > My Session).\n"
-            "Processes all genomes with custom tracks and downloads bigDataUrl files into outDir.")
+            "Processes all genomes with custom tracks and downloads bigDataUrl files into outDir.\n"
+            "\n"
+            "Writes a single outDir/hub.txt, with one 'genome' stanza per assembly, so the whole\n"
+            "session is reachable through one hubUrl. Data files of an assembly go into\n"
+            "outDir/<db>/. The hub is labelled after the session; add a line 'email=you@host' to\n"
+            "~/.hubtools.conf to set the contact email of generated hubs.")
     pImpSession.add_argument("urlOrFile", help="an hgTracks URL with an hgsid, a session URL, or a local .tar.gz archive")
     pImpSession.add_argument("--download", dest="doDownload", action="store_true",
         help="Download all bigDataUrl files to outDir")
@@ -504,19 +509,29 @@ def parseMeta(inDirs):
         logging.debug("Got meta from %s: %s" % (inDir, str(meta)))
     return meta
 
-def writeHubGenome(ofh, db, inMeta):
-    " create a hub.txt and genomes.txt file, hub.txt is just a template "
+def writeHubStanza(ofh, inMeta):
+    " write the leading 'hub' stanza of a single-file hub "
     meta = inMeta.get(".hub", {})
-    ofh.write("hub autoHub\n")
+    ofh.write("hub %s\n" % meta.get("hub", "autoHub"))
     ofh.write("shortLabel %s\n" % meta.get("shortLabel", "Auto-generated hub"))
     ofh.write("longLabel %s\n" % meta.get("longLabel", "Auto-generated hub"))
     #ofh.write("genomesFile genomes.txt\n")
     if "descriptionUrl" in meta:
         ofh.write("descriptionUrl %s\n" % meta["descriptionUrl"])
-    ofh.write("email %s\n" % meta.get("email", "yourEmail@example.com"))
+    ofh.write("email %s\n" % meta.get("email", cfgOption("email", "yourEmail@example.com")))
     ofh.write("useOneFile on\n\n")
+    return ofh
 
+def writeGenomeStanza(ofh, db):
+    """ write a 'genome' stanza. A useOneFile hub can contain one of these per assembly,
+    so a hub that covers several assemblies still needs only a single hubUrl. """
     ofh.write("genome %s\n\n" % db)
+    return ofh
+
+def writeHubGenome(ofh, db, inMeta):
+    " create a single-file hub.txt for exactly one assembly "
+    writeHubStanza(ofh, inMeta)
+    writeGenomeStanza(ofh, db)
     return ofh
 
 def readSubdirs(inDir, subDirs):
@@ -880,7 +895,7 @@ def sslContext():
         ctx.verify_mode = ssl.CERT_NONE
     return ctx
 
-def httpReq(url, asBytes=False, asJson=False, params=None):
+def httpReq(url, asBytes=False, asJson=False, params=None, returnFinalUrl=False):
     " HTTP GET a URL with the stdlib and return its content (bytes, parsed JSON or text) "
     if params:
         sep = "&" if urllib.parse.urlparse(url).query else "?"
@@ -895,15 +910,21 @@ def httpReq(url, asBytes=False, asJson=False, params=None):
     try:
         with urllib.request.urlopen(url, context=sslContext()) as resp:
             content = resp.read()
+            finalUrl = resp.geturl()
     except urllib.error.URLError as e:
         errAbort("Error fetching the URL %s: %s" % (url, e))
 
     if asBytes:
-        return content
+        ret = content
     elif asJson:
-        return json.loads(content.decode("utf-8"))
+        ret = json.loads(content.decode("utf-8"))
     else:
-        return content.decode("utf-8")
+        ret = content.decode("utf-8")
+
+    if returnFinalUrl:
+        # short session links redirect, and the redirect target carries the session name
+        return ret, finalUrl
+    return ret
 
 def importJbrowse(baseUrl, db, outDir):
     " import an IGV trackList.json hierarchy "
@@ -1624,6 +1645,23 @@ def downloadUrlsParallel(url_filename_list, max_threads=12):
             except Exception as e:
                 logging.error(f"Error in thread: {e}")
 
+# trackDb settings whose value is an "on"/"off" keyword that the CGIs and hubCheck
+# only accept in lowercase. Custom track lines in the wild often carry "autoScale=OFF".
+onOffSettings = set([
+    "alwaysZero", "autoScale", "boxedCfg", "centerLabelsDense", "denseCoverage",
+    "itemRgb", "negateValues", "nextItemButton", "noInherit", "showSubtrackColorOnUi",
+    "smoothingWindow", "spectrum", "yLineOnOff",
+])
+
+def normalizeOnOff(tdb):
+    """ lower-case the value of on/off settings, e.g. a custom track's "autoScale=OFF"
+    becomes "autoScale off". hubCheck rejects the uppercase spelling. """
+    for key, val in list(tdb.items()):
+        if key in onOffSettings and val.lower() in ("on", "off") and val != val.lower():
+            logging.debug("Lower-casing '%s %s'" % (key, val))
+            tdb[key] = val.lower()
+    return tdb
+
 def makeLegalTrackName(s):
     " remove characters that are not allowed for track names "
     s = s.replace(" ", "_")
@@ -1699,26 +1737,34 @@ def convertTextToBin(db, textFname, tdb, outDir):
     tdb["bigDataUrl"] = basename(outFname)
     return tdb
 
-def convCtDb(hubInDir, db, inDir, outDir, doDownload):
-    " convert one db part of a track archive to an output directory "
-    meta = parseMeta([hubInDir])
+def relBigDataUrl(urlPrefix, fname):
+    " a bigDataUrl relative to the directory that holds hub.txt "
+    if not urlPrefix:
+        return fname
+    return urlPrefix + "/" + fname
 
+def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
+    """ convert one db part of a track archive: append a 'genome' stanza and one stanza
+    per custom track to the already-open hub.txt handle ofh, and put converted or
+    downloaded data files into outDir. bigDataUrls of local files are prefixed with
+    urlPrefix, so hub.txt can live in the directory above the data files.
+    Track names are numbered from startIdx: a single-file hub has one track namespace
+    for all of its 'genome' stanzas, so the numbering has to continue across assemblies.
+    Returns (list of (url, localFname) still to download, number of tracks written).
+    """
     findGlob = join(inDir, "*.ct")
     inFnames = glob.glob(findGlob)
     if len(inFnames)==0:
         logging.info("No *.ct files found in %s" % findGlob)
-        return []
+        return [], 0
 
     tdbData = readTrackLines(inFnames)
 
-    makedirs(outDir)
-    hubTxtFname = join(outDir, "hub.txt")
-    ofh = open(hubTxtFname, "wt")
-    writeHubGenome(ofh, db, meta)
+    writeGenomeStanza(ofh, db)
 
     getUrlsFnames = []
     doneFnames = set()
-    tdbIdx = 0
+    tdbIdx = startIdx
     for fname, tdb in tdbData.items():
         tdb["shortLabel"] = tdb["name"]
 
@@ -1733,11 +1779,15 @@ def convCtDb(hubInDir, db, inDir, outDir, doDownload):
         tdb["longLabel"] = tdb["description"]
         del tdb["description"]
 
+        normalizeOnOff(tdb)
+
         if "bigDataUrl" not in tdb:
+            makedirs(outDir)
             textFname = join(outDir, tdb["track"]+".txt")
             stripFirstLine(fname, textFname)
 
             tdb = convertTextToBin(db, textFname, tdb, outDir)
+            tdb["bigDataUrl"] = relBigDataUrl(urlPrefix, tdb["bigDataUrl"])
 
             os.remove(textFname)
         else:
@@ -1755,20 +1805,18 @@ def convCtDb(hubInDir, db, inDir, outDir, doDownload):
                 assert(uniqueFname not in doneFnames) # eight hex digits should be enough for everyone
                 doneFnames.add(uniqueFname)
 
+                makedirs(outDir)
                 outFname = join(outDir, uniqueFname)
                 getUrlsFnames.append((url, outFname))
-                tdb["bigDataUrl"] = uniqueFname
+                tdb["bigDataUrl"] = relBigDataUrl(urlPrefix, uniqueFname)
             else:
                 logging.debug("Not downloading %s, option to download was not set" % url)
 
         writeStanza(ofh, 0, tdb)
 
-    logging.info("Wrote %s" % hubTxtFname)
-    ofh.close()
+    return getUrlsFnames, tdbIdx - startIdx
 
-    return getUrlsFnames
-
-def convArchDir(hubInfoDir, inDir, outDir, doDownload):
+def convArchDir(hubInfoDir, inDir, outDir, doDownload, hubMeta=None):
     " convert a directory created from the .tar.gz file downloaded via our track archive feature "
     logging.info("Converting track archive in %s to a new track hub in %s" % (inDir, outDir))
     dbContent = os.listdir(inDir)
@@ -1781,30 +1829,82 @@ def convArchDir(hubInfoDir, inDir, outDir, doDownload):
     if len(dbDirs)==0:
         errAbort("No directories found under %s. Is this really a UCSC track backup archive .tar.gz file?" % inDir)
 
+    meta = parseMeta([hubInfoDir])
+    if hubMeta:
+        # labels guessed from the source session, overridden by anything the user put
+        # into tracks.json / tracks.tsv / tracks.ra / tracks.yaml
+        hubStanza = dict(hubMeta)
+        hubStanza.update(meta.get(".hub", {}))
+        meta[".hub"] = hubStanza
+
+    makedirs(outDir)
+    hubTxtFname = join(outDir, "hub.txt")
+
+    # A single hub.txt for the whole session: 'useOneFile on' allows more than one
+    # 'genome' stanza, so even a multi-assembly session needs only one hubUrl. The data
+    # files still go into a subdirectory per assembly, so that two assemblies cannot
+    # overwrite each other's converted bigBeds.
+    ofh = open(hubTxtFname, "wt")
+    writeHubStanza(ofh, meta)
+
     allBigDataUrls = []
+    trackCount = 0
+    dbs = []
     for db, inSubDir in dbDirs:
         logging.debug("Processing %s, db=%s" % (inSubDir, db))
-        outSubDir = join(outDir, db)
-        dbUrls = convCtDb(hubInfoDir, db, inSubDir, outSubDir, doDownload)
+        dbUrls, dbTracks = convCtDb(db, inSubDir, join(outDir, db), db, ofh, doDownload,
+                startIdx=trackCount)
+        if dbTracks==0:
+            continue
         allBigDataUrls.extend(dbUrls)
+        trackCount += dbTracks
+        dbs.append(db)
+
+    ofh.close()
+
+    if trackCount==0:
+        os.remove(hubTxtFname)
+        errAbort("Found no custom tracks under %s, so there is nothing to convert. "
+                "Does the session really have custom tracks?" % inDir)
+
+    logging.info("Wrote %s" % hubTxtFname)
 
     downloadUrlsParallel( allBigDataUrls )
 
+    return hubTxtFname, trackCount, dbs
+
+def sessionNameFromUrl(url):
+    """ a short session link redirects to an hgTracks URL that names the session and its
+    owner, e.g. ...&hgS_otherUserName=jsmith&hgS_otherUserSessionName=myTracks.
+    Return (ownerName, sessionName), either of which can be None. """
+    query_params = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+    owner = query_params.get("hgS_otherUserName", [None])[0]
+    sessName = query_params.get("hgS_otherUserSessionName", [None])[0]
+    return owner, sessName
+
+def stripApiKey(url):
+    " remove the apiKey parameter from a URL, so it is safe to write into a hub file "
+    parsed = urllib.parse.urlparse(url)
+    params = [(k, v) for k, v in urllib.parse.parse_qsl(parsed.query) if k != "apiKey"]
+    return urllib.parse.urlunparse(parsed._replace(query=urllib.parse.urlencode(params)))
+
 def hgsidFromUrl(url):
-    " return the part after hgsid= from a URL "
+    " return the part after hgsid= from a URL, plus the session owner and name, if present "
     parsed_url = urllib.parse.urlparse(url)
     server_name = f"{parsed_url.scheme}://{parsed_url.netloc}"
     query_params = urllib.parse.parse_qs(parsed_url.query)
     hgsid = query_params.get('hgsid')[0]
-    return server_name, hgsid  # Extracting the first value from the list
+    # Extracting the first value from the list
+    return server_name, hgsid, sessionNameFromUrl(url)
 
 def hgsidFromPage(url, apiKey):
-    " return hgsid given a URL. Uses HTTP fetch and extracts hgsid from html page. "
+    """ return (server, hgsid, (owner, sessionName)) given a URL. Uses HTTP fetch and
+    extracts hgsid from the html page. """
     # Parse the URL
     # short session URLs first go through one redirect
     # apiKey is appended so the request skips the UCSC captcha page
     logging.info("Getting hgsid from page %s" % url)
-    pageText = httpReq(url, params={"apiKey": apiKey})
+    pageText, finalUrl = httpReq(url, params={"apiKey": apiKey}, returnFinalUrl=True)
 
     hgsid = None
     for l in pageText.splitlines():
@@ -1822,7 +1922,7 @@ def hgsidFromPage(url, apiKey):
     #query_params = urllib.parse.parse_qs(parsed_url.query)
     #hgsid = query_params.get('hgsid')
     # Return the hgsid value if it exists
-    return server_name, hgsid  # Extracting the first value from the list
+    return server_name, hgsid, sessionNameFromUrl(finalUrl)
 
 def downloadTrackArchive(serverUrl, hgsid, ofh, apiKey):
     " download the track archive for a given hgsid and save it under tgzFname "
@@ -1874,6 +1974,69 @@ def makeTempFile(suffix=None, dir=None, mode="w", prefix=None):
         fh = tempfile.NamedTemporaryFile(prefix=prefix, suffix=suffix, dir=dir, mode=mode) # removes file on destruction of fh variable
     return fh
 
+def htmlEscape(s):
+    " minimal escaping, enough for a URL or a session name in the description page "
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+def sessionHubMeta(owner, sessName):
+    """ hub.txt defaults for a hub converted from a session: name the hub after the
+    session, so the user does not end up publishing "Auto-generated hub". A plain
+    hgsid link does not carry a session name, in that case only the description page
+    records where the hub came from. """
+    meta = { "descriptionUrl" : "hubDescription.html" }
+    if sessName:
+        meta["hub"] = makeLegalTrackName(sessName)
+        meta["shortLabel"] = sessName
+        if owner:
+            meta["longLabel"] = "Custom tracks of UCSC session '%s' of user '%s'" % (sessName, owner)
+        else:
+            meta["longLabel"] = "Custom tracks of UCSC session '%s'" % sessName
+    return meta
+
+def writeHubDescription(outDir, srcDesc, dbs):
+    """ write the hub description page, so the hub has a provenance note and hubCheck
+    stops warning about the missing overview page. """
+    fname = join(outDir, "hubDescription.html")
+    if isfile(fname):
+        logging.info("Not overwriting the existing %s" % fname)
+        return fname
+
+    ofh = open(fname, "wt")
+    ofh.write("<h2>Description</h2>\n")
+    ofh.write("<p>This track hub was created with <tt>hubtools import session</tt> on %s from %s.\n" %
+            (time.strftime("%Y-%m-%d"), htmlEscape(srcDesc)))
+    ofh.write("Every track in it was a custom track of that session.</p>\n")
+    if dbs:
+        ofh.write("<p>Assemblies: %s</p>\n" % htmlEscape(", ".join(dbs)))
+    ofh.write("<h2>Contact</h2>\n")
+    ofh.write("<p>Please replace this page and the hub's shortLabel, longLabel and email "
+            "with your own description and contact details before you share the hub.</p>\n")
+    ofh.close()
+    logging.info("Wrote %s" % fname)
+    return fname
+
+def printHubHint(hubTxtFname, outDir, trackCount, dbs):
+    " tell the user what was created and how to load it. Written to stderr, like the log. "
+    hubDir = outDir if outDir else "."
+    db = dbs[0] if dbs else "hg38"
+    lines = [
+        "",
+        "Created a hub with %d track(s) on %d assembl%s (%s):" % (trackCount, len(dbs),
+            "y" if len(dbs)==1 else "ies", ", ".join(dbs)),
+        "    %s" % hubTxtFname,
+        "",
+        "To load it, copy the contents of '%s' to a web server and open:" % hubDir,
+        "    https://genome.ucsc.edu/cgi-bin/hgTracks?db=%s&hubUrl=<yourServerUrl>/hub.txt" % db,
+        "or upload it to UCSC's free hub storage with:",
+        "    hubtools up -i %s <hubName>" % hubDir,
+        "",
+        "Set shortLabel, longLabel and email in hub.txt and edit hubDescription.html",
+        "before you share the hub. To validate it:",
+        "    cd %s; hubCheck hub.txt" % hubDir,
+        "",
+    ]
+    sys.stderr.write("\n".join(lines)+"\n")
+
 def convCtUrlOrFile(url, inDir, outDir, doDownload):
     """ given an hgTracks URL with an hgsid or a session link or .tar.gz local track archive tarball, get all
     custom track lines and create a hub file for it. Try to convert BED custom tracks to bigBed.
@@ -1888,9 +2051,13 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
         # valid apiKey, so an apiKey is required to import from a live server.
         apiKey = getApiKey("To import a session or hgTracks link from a UCSC server")
         if "hgsid=" in url:
-            serverUrl, hgsid = hgsidFromUrl(url)
+            serverUrl, hgsid, (owner, sessName) = hgsidFromUrl(url)
         else:
-            serverUrl, hgsid = hgsidFromPage(url, apiKey)
+            serverUrl, hgsid, (owner, sessName) = hgsidFromPage(url, apiKey)
+
+        linkKind = "the hgTracks link" if "hgsid=" in url else "the session link"
+        srcDesc = linkKind + " " + stripApiKey(url)
+        hubMeta = sessionHubMeta(owner, sessName)
 
         tgzFh = makeTempFile(dir=downDir, suffix=".tar.gz", mode="wb")
         downloadTrackArchive(serverUrl, hgsid, tgzFh, apiKey)
@@ -1898,6 +2065,12 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
     else:
         tgzFh = None
         tgzFname = url
+        archName = basename(url)
+        srcDesc = "the session archive " + archName
+        for suffix in (".tar.gz", ".tgz"):
+            if archName.endswith(suffix):
+                archName = archName[:-len(suffix)]
+        hubMeta = sessionHubMeta(None, archName)
 
     logging.info("Extracting %s to %s" % (tgzFname, downDir))
     with tarfile.open(tgzFname, 'r:gz') as tar:
@@ -1906,7 +2079,8 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
         except TypeError:
             tar.extractall(path=downDir)
 
-    convArchDir(inDir, downDir, outDir, doDownload)
+    hubTxtFname, trackCount, dbs = convArchDir(inDir, downDir, outDir, doDownload, hubMeta)
+    writeHubDescription(outDir, srcDesc, dbs)
 
     if not debugMode:
         if tgzFh:
@@ -1914,16 +2088,24 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
         logging.info("Removing %s" % downDir)
         shutil.rmtree(downDir)
 
+    printHubHint(hubTxtFname, outDir, trackCount, dbs)
+
 def stanzaKey(stanza):
-    " return key of stanza, so track name or .hub or .genome "
+    """ return key of stanza, so track name, .hub or ".genome <db>". The assembly is part
+    of the genome key because a single-file hub can hold one genome stanza per assembly
+    and they would otherwise overwrite each other in the stanza dict. """
     if "track" in stanza:
         return stanza["track"][2]
-    else:
-        for tdbType in ["hub", "genome"]:
-            if tdbType in stanza:
-                return "."+tdbType
+    if "hub" in stanza:
+        return ".hub"
+    if "genome" in stanza:
+        return ".genome " + stanza["genome"][2]
 
     errAbort("Got hub.txt file with a stanza that has neither a 'track', nor a 'hub', nor a 'genome' key: %s" % repr(stanza))
+
+def isMetaStanzaKey(name):
+    " True if a stanzaKey() belongs to a hub or genome stanza, not to a track "
+    return name==".hub" or name==".genome" or name.startswith(".genome ")
 
 def stanzaAddVal(tdb, tag, val):
     " add or update a key/val in a stanza, inheriting indent from existing entries "
@@ -2187,7 +2369,7 @@ def nest(hubFname, parentName, trackPat):
     matchTdbs = OrderedDict()
     oldTdbs = OrderedDict()
     for name, tdb in tdbs.items():
-        if name not in [".hub", ".genome"] and stanzaMatchesRe(tdb, ["track", "shortLabel"], pat) and not name==parentName: # never match the parent
+        if not isMetaStanzaKey(name) and stanzaMatchesRe(tdb, ["track", "shortLabel"], pat) and not name==parentName: # never match the parent
             matchTdbs[name] = tdb
         else:
             oldTdbs[name] = tdb
@@ -2218,7 +2400,7 @@ def unnest(hubFname, trackPat):
     newTdbs = OrderedDict()
     modCount = 0
     for name, tdb in tdbs.items():
-        if name not in [".hub", ".genome"] and stanzaMatchesRe(tdb, ["track", "shortLabel"], pat):
+        if not isMetaStanzaKey(name) and stanzaMatchesRe(tdb, ["track", "shortLabel"], pat):
             tdb = stanzaEdit(tdb, indent=0, delTags=["parent"] )
             modCount += 1
         newTdbs[name] = tdb

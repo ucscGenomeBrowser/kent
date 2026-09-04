@@ -1,0 +1,84 @@
+<h2>Description</h2>
+
+<p>
+Genomic imprinting is the small set of exceptions to the rule that both copies
+of a gene are expressed. At an imprinted locus only the maternal or only the
+paternal copy is active, and which one it is was decided in the germline of the
+parent that passed it on. The instruction is carried by DNA methylation: one
+allele has methylated CpG sites and the other does not, so the two copies look
+different to the transcription machinery even though their sequence is the same.
+The regions that hold this asymmetry are called imprinting control regions, and
+a single one can govern the expression of a whole cluster of neighboring genes.
+Losing or gaining methylation at these regions is the cause of several
+developmental syndromes.
+</p>
+
+<p>
+This collection brings together annotations that mark imprinted loci and the
+allele-specific methylation that defines them.
+</p>
+
+<h2>Subtracks</h2>
+
+<ul>
+<li>
+<a href="hgTrackUi?g=methBaseAsm">MethBase2 ASM</a> &mdash; for every CpG site,
+the fraction of MethBase2 human methylomes in which the site was part of an
+allelically methylated region. Peaks mark candidate imprinting control regions.
+</li>
+<li>
+<a href="hgTrackUi?g=geneimprint">Geneimprint</a> &mdash; the human part of the
+Geneimprint catalog of imprinted and candidate imprinted genes, colored by which
+parental copy is expressed.
+</li>
+<li>
+<a href="hgTrackUi?g=akbariIdmr">Akbari iDMRs</a> &mdash; 192 imprinted
+differentially methylated regions compiled from five genome-wide studies,
+colored by which parental copy is methylated.
+</li>
+<li>
+<a href="hgTrackUi?g=omimImprint">OMIM Imprinted</a> &mdash; the genes that
+the OMIM staff have curated as imprinted, published through OMIM's GeneScout
+tool.
+</li>
+</ul>
+
+<p>
+DNA methylation itself is annotated elsewhere in the browser rather than here.
+The Kaplan lab human methylation atlas, which gives methylation and
+unmethylated regions for a large panel of purified cell types, is a separate
+track:
+<a href="hgTrackUi?g=humanMethylationAtlasSummary">Human Methylation Atlas
+Summary</a>, under DNA Methylation.
+</p>
+
+<h2>Color Conventions</h2>
+
+<p>
+The subtracks share one color scheme, so a color means the same thing
+throughout the collection:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>The maternal copy is the one the annotation marks</td></tr>
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>The paternal copy is the one the annotation marks</td></tr>
+  <tr><th style="background-color:#555555;width:2em">&nbsp;</th>
+      <td>The annotation carries no parent of origin</td></tr>
+</table>
+
+<p>
+What is being marked differs by subtrack, because the sources annotate
+different things: Geneimprint names the copy that is <em>expressed</em>, while
+the iDMR track names the copy that is <em>methylated</em>. So H19 is vermillion
+in one and blue in the other, and both are correct. Each subtrack page states
+which copy its colors refer to, and adds any categories that only it uses.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+Each subtrack has its own description page with the details on how the data was
+made and how to download and intersect the annotations. Use the links above.
+</p>

@@ -97,7 +97,7 @@ DIRS = ${buildRefresh} \
 	refSeqGet \
 	safePush \
 	scaffoldFaToAgp \
-	snapshotReaper \
+	snapshotCleaner \
 	toDev64 \
 	vcfRenameAndPrune \
 	vcfToHgvs \

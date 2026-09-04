@@ -4055,17 +4055,23 @@ var dragReorder = {
         var btns = $("p.btn");
         if (btns.length > 0) {
             dragReorder.zipButtons($('#imgTbl'));
+            $(btns).off("mouseenter", dragReorder.buttonMouseOver );
+            $(btns).off("mouseleave", dragReorder.buttonMouseOut  );
             $(btns).on("mouseenter", dragReorder.buttonMouseOver );
             $(btns).on("mouseleave", dragReorder.buttonMouseOut  );
             $(btns).show();
         }
         var handle = $("td.dragHandle");
         if (handle.length > 0) {
+            $(handle).off("mouseenter", dragReorder.dragHandleMouseOver );
+            $(handle).off("mouseleave", dragReorder.dragHandleMouseOut  );
             $(handle).on("mouseenter", dragReorder.dragHandleMouseOver );
             $(handle).on("mouseleave", dragReorder.dragHandleMouseOut  );
         }
 
         // setup mouse callbacks for the area tags
+        $("#imgTbl").find("tr").off("mouseover", dragReorder.trMouseOver );
+        $("#imgTbl").find("tr").off("mouseleave", dragReorder.trMouseLeave );
         $("#imgTbl").find("tr").on("mouseover", dragReorder.trMouseOver );
         $("#imgTbl").find("tr").on("mouseleave", dragReorder.trMouseLeave );
         $("#imgTbl").find("tr").each( function (i, row) {

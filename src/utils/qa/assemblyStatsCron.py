@@ -4,6 +4,7 @@
 import datetime
 from collections import OrderedDict
 import getpass
+import re
 import subprocess
 import os
 import urllib.parse
@@ -226,7 +227,7 @@ def resolveHub(hubId):
         return None
     if len(candidates) > 1:
         # Same id, different hubs. The track name we saw in the logs usually matches the right
-        # hub's shortLabel, so trust that before falling back to whoever refreshed most recently.
+        # hub's shortLabel, so trust that first.
         observedTrack = stripHubPrefix(bestTrackForHub[hubId][2]).lower() if hubId in bestTrackForHub else ""
         #Needs enough label to be evidence - a two letter shortLabel matches almost anything
         matching = [c for c in candidates if len(c[1][1]) >= 8 and
@@ -313,7 +314,10 @@ bash("sort "+outputDir+'/dbCounts.tsv -rnk2 > '+outputDir+'/dbCountsTopSorted.ts
 topDbs = bash('head -n 10 '+outputDir+'/dbCountsTopSorted.tsv | cut -f1 -d "\t"').rstrip().split("\n")
 #Hub backed databases are skipped - hub ids differ between hgcentrals, so the track names
 #hgTracks hands back here would never match the ones seen in the logs.
-topDbs = [db for db in topDbs if not db.startswith("hub_")][0:4]
+#Assembly names are interpolated into a shell command below, so anything that does not look
+#like one is dropped rather than passed to sh
+topDbs = [db for db in topDbs
+          if not db.startswith("hub_") and re.match(r'^[A-Za-z0-9_.-]+$', db)][0:4]
 
 defaultTracks = set()
 for db in topDbs:
@@ -329,14 +333,23 @@ for db in topDbs:
     #blocks so Apache does not chop the lines. Take every numbered block; the trailing
     #"trackLog position" line and the CGI_TIME/RESOURCE lines are not track lists.
     tracksForDb = []
+    mismatch = None
     for defaultsLine in defaults:
         splitLine = defaultsLine.split(" ")
         if len(splitLine) > 4 and splitLine[0] == "trackLog" and splitLine[1].isdigit():
+            #Check hgTracks answered about the assembly we asked for. Silently accepting
+            #another assembly's list is exactly how the defaults went wrong for two years.
+            if splitLine[2] != db:
+                mismatch = splitLine[2]
+                tracksForDb = []
+                break
             tracksForDb.extend(splitLine[4].split(","))
 
     if not tracksForDb:
-        reportWarnings.append("WARNING: hgTracks returned no default track list for "+db+
-                              ", its tracks are not filtered out of the non-default list below.")
+        reason = "it reported "+mismatch+" instead" if mismatch else "it returned no track list"
+        reportWarnings.append("WARNING: asked hgTracks for the default tracks of "+db+" and "+
+                              reason+", so its tracks are not filtered out of the non-default "
+                              "list below.")
         continue
 
     for track in tracksForDb:
