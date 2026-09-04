@@ -11,6 +11,8 @@
 #define quickLiftChainTableConfVariable      "quickLiftChainName"
 #define defaultQuickLiftChainTableName       "quickLiftChain"
 
+struct psl;
+
 struct quickLiftRegions
 // store highlight information
 {
@@ -71,6 +73,22 @@ char *quickLiftGetChainPath(struct cart *, char *fromDb, char *toDb);
 
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
 // Map a list of bedd in query coordinates to our current reference
+
+struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end);
+// Load the quickLift chains covering chrom:start-end on the reference and return them in a
+// hash keyed on the other assembly's sequence names, which is the shape the lift functions
+// want.  Use this when the items were fetched some other way, so quickLiftSql was not the
+// thing that collected the chains.
+
+struct psl *quickLiftPsl(struct hash *chainHash, struct hash **pMapPsls, struct psl *psl);
+// Map the target side of an alignment from the other assembly onto our current reference.
+// The query side (the mRNA, EST or protein the alignment is to) is left alone.  Returns
+// NULL if the alignment doesn't map.  pMapPsls points at a hash of mapping alignments the
+// caller keeps across a run of items; point it at a NULL hash to start.
+
+struct psl *quickLiftPsls(struct hash *chainHash, struct psl *pslList);
+// Map a list of alignments in the other assembly's coordinates onto our current reference.
+// Alignments that don't map are dropped.
 
 struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chainHash);
 // Map a list of encodePeaks in query coordinates to our current reference.  These can't go

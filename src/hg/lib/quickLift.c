@@ -25,6 +25,9 @@
 #include "chromAlias.h"
 #include "customTrack.h"
 #include "encode/encodePeak.h"
+#include "psl.h"
+#include "chainToPsl.h"
+#include "pslTransMap.h"
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -341,6 +344,27 @@ if (chain->qStrand == '-')
 *retQEnd = qEnd;
 }
 
+struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end)
+// Load the quickLift chains covering chrom:start-end on the reference and return them in a
+// hash keyed on the other assembly's sequence names, which is the shape the lift functions
+// want.  Use this when the items were fetched some other way, so quickLiftSql was not the
+// thing that collected the chains.
+{
+struct hash *chainHash = newHash(8);
+struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
+
+for(chain = chainList; chain; chain = chain->next)
+    {
+    if (chain->blockList == NULL)
+        continue;
+
+    chainSwap(chain);
+    liftOverAddChainHash(chainHash, chain);
+    }
+
+return chainHash;
+}
+
 struct slList *quickLiftSql(struct sqlConnection *conn, char *quickLiftFile, char *table, char *chrom, int start, int end,  char *query, char *extraWhere, ItemLoader2 loader, int numFields,struct hash *chainHash)
 // retrieve items for which we have a loader from a SQL database for which we have a set quickLift chains.
 // Save the chains we used to map the item back to the current reference.
@@ -446,6 +470,150 @@ for(bed = bedList; bed; bed = nextBed)
         }
     }
 return liftedBedList;
+}
+
+static long pslAlignedBases(struct psl *psl)
+/* Total size of the alignment's blocks, in whatever units the blocks are in. */
+{
+long total = 0;
+int i;
+
+for (i = 0; i < psl->blockCount; i++)
+    total += psl->blockSizes[i];
+return total;
+}
+
+static void quickLiftPslCounts(struct psl *psl, struct psl *lifted)
+/* Put the original match, mismatch, repeat and N counts back on a lifted alignment,
+ * scaled by how much of it survived the lift.  pslTransMap recounts them off the blocks,
+ * which reads every lifted alignment as a perfect match:  the details page then claims
+ * 100% identity and the browser draws every item at full shade. */
+{
+// A protein alignment comes back from the lift in nucleotide space, so its block sizes,
+// and therefore its counts, are in different units than the ones we started with.
+double protMul = (pslIsProtein(psl) && !pslIsProtein(lifted)) ? 3.0 : 1.0;
+long origBases = pslAlignedBases(psl);
+long newBases = pslAlignedBases(lifted);
+
+if ((origBases <= 0) || (newBases <= 0))
+    return;
+
+double survived = newBases / (origBases * protMul);
+if (survived > 1.0)
+    survived = 1.0;
+
+lifted->match = round(psl->match * protMul * survived);
+lifted->misMatch = round(psl->misMatch * protMul * survived);
+lifted->repMatch = round(psl->repMatch * protMul * survived);
+lifted->nCount = round(psl->nCount * protMul * survived);
+}
+
+static struct psl *mapPslForChain(struct hash **pMapPsls, struct chain *chain)
+/* The mapping alignment for one chain, made once and kept.  The chains in a quickLift
+ * chainHash have the other assembly on the target side, which is what remapBlockedBed
+ * wants.  pslTransMap wants it the other way round: query on the other assembly, target
+ * on the reference.
+ * Building this per item costs nothing at gene zoom, where a chain covers a handful of
+ * blocks, and a great deal zoomed out, where the chain covering the window carries
+ * thousands of blocks and an alignment track can have hundreds of thousands of items. */
+{
+char key[32];
+
+if (*pMapPsls == NULL)
+    *pMapPsls = newHash(8);
+safef(key, sizeof key, "%p", chain);
+
+struct psl *mapPsl = hashFindVal(*pMapPsls, key);
+if (mapPsl == NULL)
+    {
+    mapPsl = chainToPsl(chain);
+    pslSwap(mapPsl, FALSE);
+    hashAdd(*pMapPsls, key, mapPsl);
+    }
+return mapPsl;
+}
+
+static boolean quickLiftPslBackToProtein(struct psl *lifted)
+/* pslTransMap puts a protein alignment into nucleotide space to do the mapping and leaves
+ * it there, so the query start, end and size come back three times too large and the base
+ * alignment view refuses the alignment ("size of rna X is 604, has changed since alignment
+ * was performed when it was 1812").  Put the query side back into protein units.  Returns
+ * FALSE, leaving the alignment alone, when the lift split a codon so the query side no
+ * longer divides evenly. */
+{
+int i;
+
+if ((lifted->qStart % 3) || (lifted->qEnd % 3) || (lifted->qSize % 3))
+    return FALSE;
+for (i = 0; i < lifted->blockCount; i++)
+    if ((lifted->blockSizes[i] % 3) || (lifted->qStarts[i] % 3))
+        return FALSE;
+
+lifted->qStart /= 3;
+lifted->qEnd /= 3;
+lifted->qSize /= 3;
+for (i = 0; i < lifted->blockCount; i++)
+    {
+    lifted->blockSizes[i] /= 3;
+    lifted->qStarts[i] /= 3;
+    }
+// A protein psl carries the target strand explicitly, and pslTransMap normalized the
+// target onto the forward strand on the way out.
+lifted->strand[1] = '+';
+lifted->strand[2] = 0;
+return TRUE;
+}
+
+struct psl *quickLiftPsl(struct hash *chainHash, struct hash **pMapPsls, struct psl *psl)
+// Map the target side of an alignment from the other assembly onto our current reference.
+// The query side (the mRNA, EST or protein the alignment is to) is left alone.  Returns
+// NULL if the alignment doesn't map.  pMapPsls points at a hash of mapping alignments the
+// caller keeps across a run of items; point it at a NULL hash to start.
+{
+struct chain *chain = liftOverChainForRange(chainHash, psl->tName, psl->tStart, psl->tEnd);
+if (chain == NULL)
+    return NULL;
+
+struct psl *mapPsl = mapPslForChain(pMapPsls, chain);
+
+// pslTransMap aborts when the two alignments disagree about the size of the sequence they
+// share.  That means the chain and the track were built against different versions of the
+// other assembly, so drop the item rather than taking the CGI down with it.
+if (psl->tSize != mapPsl->qSize)
+    return NULL;
+
+struct psl *lifted = pslTransMap(pslTransMapNoOpts, psl, pslTypeUnspecified,
+                                 mapPsl, pslTypeUnspecified);
+if (lifted != NULL)
+    {
+    // before counting, so quickLiftPslCounts sees both sides in the same units
+    if (pslIsProtein(psl))
+        quickLiftPslBackToProtein(lifted);
+    quickLiftPslCounts(psl, lifted);
+    }
+return lifted;
+}
+
+struct psl *quickLiftPsls(struct hash *chainHash, struct psl *pslList)
+// Map a list of alignments in the other assembly's coordinates onto our current reference.
+// Alignments that don't map are dropped.
+{
+struct psl *liftedList = NULL;
+struct psl *psl, *nextPsl;
+struct hash *mapPsls = NULL;
+
+for(psl = pslList; psl; psl = nextPsl)
+    {
+    nextPsl = psl->next;
+    psl->next = NULL;
+
+    struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, psl);
+    if (lifted != NULL)
+        slAddHead(&liftedList, lifted);
+    pslFree(&psl);
+    }
+slReverse(&liftedList);
+return liftedList;
 }
 
 struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chainHash)
