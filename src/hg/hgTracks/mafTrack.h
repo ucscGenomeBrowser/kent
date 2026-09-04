@@ -21,6 +21,13 @@ struct mafPriv *getMafPriv(struct track *track);
 /* zoom level where summary file is used */
 static inline boolean inSummaryMode(struct cart *cart, struct trackDb *tdb, int winSize)
 {
+// A quickLifted maf track has no summary to read.  The summary names a table or file
+// belonging to the assembly the track came from, so it cannot be queried with reference
+// coordinates, and for a hub track the setting comes back rewritten as a path under the
+// hub besides.  Read the real blocks and lift them instead.
+if (trackDbSetting(tdb, "quickLiftDb") != NULL)
+    return FALSE;
+
 char *snpTable = trackDbSetting(tdb, "snpTable");
 unsigned summaryWindowSize = cartOrTdbInt(cart, tdb, "summaryWindowSize", 1000000);
 
