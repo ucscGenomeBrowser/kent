@@ -34,6 +34,11 @@ cd "$DIR"
 
 # only replace the live page if it actually changed
 if ! cmp -s "$DIR/$PAGE" "$HTDOCS/$PAGE"; then
-    cp -p "$DIR/$PAGE" "$HTDOCS/$PAGE"
+    cp "$DIR/$PAGE" "$HTDOCS/$PAGE"
+    # The execute bit is what makes apache run the SSI includes on a .html file
+    # (XBitHack). Without it the page is served verbatim and the reader gets the
+    # bare content with no menu bar and no stylesheets, which is the state
+    # allTips.html is in. Do not drop this chmod.
+    chmod 775 "$HTDOCS/$PAGE"
     echo "trackLists: updated $HTDOCS/$PAGE"
 fi

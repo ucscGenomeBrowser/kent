@@ -51,6 +51,12 @@ Pushing that to the RR needs a /root/<name>AutoPush script added to
 /etc/crontab by cluster-admin; ask them for it, and use the existing lines as
 the template (tipsAutoPush, thumbNailAutoPush, asmAliasAutoPush).
 
+The page must be mode 775 in htdocs. Apache runs the SSI includes on a .html
+file only when its execute bit is set (XBitHack); without it the page is served
+verbatim and the reader sees the bare content with no menu bar and no
+stylesheets. allTips.html is in exactly that state on the RR today, so this is
+an easy mistake to repeat. trackLists.sh chmods the page after copying it.
+
 The generated page is deliberately not in the kent tree. That matches the other
 generated pages: allTips.html and thumbNailLinks.html live only in htdocs and
 are not tracked in git. Only the generator is committed. (assemblyRequest.html
