@@ -1496,16 +1496,16 @@ return TRUE;
 void hubCheckBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb)
 /* Check remote file exists and is of correct type. Wrap this in error catcher */
 {
-char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
-if (relativeUrl != NULL)
+/* trackHubTracksForGenome() has already run expandBigDataUrl() on this tdb, so
+ * bigDataUrl and bigDataIndex are no longer relative to genome->trackDbFile and must
+ * be used as they are.  Resolving them a second time here prepended the hub directory
+ * twice whenever a local hub was reached by a relative path, so that
+ * "hubCheck out/hub.txt" looked for out/out/hg19/x.bb and reported it missing. */
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (bigDataUrl != NULL)
     {
     char *type = trackDbRequiredSetting(tdb, "type");
-    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
-
-    char *bigDataIndex = NULL;
-    char *relIdxUrl = trackDbSetting(tdb, "bigDataIndex");
-    if (relIdxUrl != NULL)
-        bigDataIndex = trackHubRelativeUrl(genome->trackDbFile, relIdxUrl);
+    char *bigDataIndex = trackDbSetting(tdb, "bigDataIndex");
 
     verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
     if (startsWithWord("bigWig", type))
@@ -1581,7 +1581,6 @@ if (relativeUrl != NULL)
         }
     else
         errAbort("unrecognized type %s in genome %s track %s", type, genome->name, tdb->track);
-    freez(&bigDataUrl);
     }
 }
 

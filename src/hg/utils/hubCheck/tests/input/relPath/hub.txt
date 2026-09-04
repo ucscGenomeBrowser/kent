@@ -1,0 +1,20 @@
+hub relPath
+shortLabel relPath
+longLabel bigDataUrl resolution when hub.txt is reached by a relative path
+email braney@soe.ucsc.edu
+descriptionUrl hubDescription.html
+useOneFile on
+
+genome mm10
+
+# 'type bigBed 9' deliberately disagrees with the 6 fields in the file. hubCheck can
+# only report that mismatch if it actually found and opened the file, so the mismatch
+# is what proves data/test6field.bb was resolved correctly. Declaring the true field
+# count would make hubCheck silent, and it is equally silent when it cannot find the
+# file at all, because such a track is pruned before the file check runs.
+track relPathTrack
+type bigBed 9
+bigDataUrl data/test6field.bb
+shortLabel relPathTrack
+longLabel bigDataUrl in a subdirectory below hub.txt
+visibility dense

@@ -1,0 +1,2 @@
+Found 1 problem:
+bigBed file 'input/relPath/data/test6field.bb' has 6 fields, but track "relPathTrack" declares 'type bigBed 9'. Either regenerate the bigBed with the correct number of fields, or change the type line to match the file's field count.
