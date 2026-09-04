@@ -1,0 +1,37 @@
+# #36331 -- quickLift from hg38 to hs1 died on the GENCODE Versions container.
+#
+# What the ticket recorded: hgConvert with QuickLift selected returned
+#
+#     Couldn't set connection database to hub_25071_hs1
+#     mySQL error 1049: Unknown database 'hub_25071_hs1'
+#
+# The ticket reproduced it by loading a saved session on hgwdev. That session is no longer
+# in hgcentraltest, so this builds the state instead. The only thing the session
+# contributed that matters is which track was showing, and three steps here do that. A
+# test that builds its own state cannot be broken by someone tidying their session list.
+#
+# The container is called GENCODE Archive (knownGeneArchive) now. "GENCODE Versions" in
+# the ticket is the old label for the same track.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {knownGeneArchive: show, knownGeneV49: pack}
+
+  # Assert the source view first. If the track is not drawn here, the convert below would
+  # have nothing to lift and the real assertion would pass for the wrong reason.
+  - expect: {rows: [knownGeneV49], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true}
+  # The conversion result page is not hgTracks; its coordinate link is what reaches the
+  # lifted view.
+  - open: lift
+
+  # Both halves are needed. The failure was an early-error page, which draws no image at
+  # all, so `noText` on its own would have passed on exactly the page the bug produced.
+  # The row id carries a per-run hub_<n>_ prefix, which `rows:` matches by suffix.
+  - expect: {rows: [knownGeneV49], noText: "Unknown database"}

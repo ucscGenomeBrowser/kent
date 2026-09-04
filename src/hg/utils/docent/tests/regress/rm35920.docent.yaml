@@ -1,0 +1,39 @@
+# #35920 -- a hub declaring the wrong bigBed type crashed hgTracks or drew garbage item
+# names, and gave no warning until an item of the track came into view. What the reader
+# then saw was a "jsEmbedded" dialog titled with the server's hostname, which says nothing
+# about the real problem.
+#
+# The hub has one track for each half of the problem: ultras says `type bigBed 12 +` over
+# a file with 4 fields, ultraZoos says `type bigBed 4 +` over a file with 3.
+#
+# The hub is our own copy of the reporter's, at
+# ~/public_html/docentFixtures/Auto-generated_hub/, with bigDataUrl pointing at the local
+# files so nothing outside this repository can change what the test loads. hubCheck
+# reports the two type mismatches and a missing description page, which is correct: those
+# are what the hub is for. It is the crash and the garbage labels that must be gone, not
+# the malformed hub.
+#
+# The position is where ultras.bb has its first item (uc.1 at chr1:10,537,639-10,537,846),
+# because the ticket is explicit that nothing goes wrong until an item is in view.
+target: genome-test
+db: hg38
+position: chr1:10537000-10538500
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/Auto-generated_hub/hub.txt", db: hg38}
+  - go: chr1:10537000-10538500
+  - track: {ultras: pack, ultraZoos: pack}
+
+  # Only `ultras` is required to draw. ultraZoos declares `type bigBed 4 +` over a
+  # three-field file and produces no row at all, which is a defensible outcome for a file
+  # that cannot be read as declared -- the ticket asks for no crash and no garbage labels,
+  # not for a malformed track to render. Requiring its row would be asserting a behavior
+  # nobody promised. The row for `ultras` is what catches the crash, since the failure
+  # produced a dialog and no image; jsEmbedded is the string from that dialog.
+  - expect: {rows: [ultras], noText: "jsEmbedded"}
+
+  # And the item label has to be the name from the file rather than a garbage string, which
+  # is the other half of the ticket. uc.1 is ultras.bb's first item.
+  - mouseover: {track: ultras, item: "uc.1"}
+  - expect: {tip: "uc.1"}
