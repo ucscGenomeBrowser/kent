@@ -19,7 +19,8 @@ umask 002
 
 DIR=${RTDIR:-/hive/data/outside/otto/trackLists}
 HTDOCS=${HTDOCS:-/usr/local/apache/htdocs}   # override for testing
-PAGE=trackLists.html
+PAGE=mirrorTracks.html
+DEST=goldenPath/help                         # sits with the other mirror docs
 
 cd "$DIR"
 
@@ -33,12 +34,12 @@ cd "$DIR"
 ./mkPage.py -i "$DIR/collected.json" -o "$DIR/internal.html" --internal
 
 # only replace the live page if it actually changed
-if ! cmp -s "$DIR/$PAGE" "$HTDOCS/$PAGE"; then
-    cp "$DIR/$PAGE" "$HTDOCS/$PAGE"
+if ! cmp -s "$DIR/$PAGE" "$HTDOCS/$DEST/$PAGE"; then
+    cp "$DIR/$PAGE" "$HTDOCS/$DEST/$PAGE"
     # The execute bit is what makes apache run the SSI includes on a .html file
     # (XBitHack). Without it the page is served verbatim and the reader gets the
     # bare content with no menu bar and no stylesheets, which is the state
     # allTips.html is in. Do not drop this chmod.
-    chmod 775 "$HTDOCS/$PAGE"
-    echo "trackLists: updated $HTDOCS/$PAGE"
+    chmod 775 "$HTDOCS/$DEST/$PAGE"
+    echo "trackLists: updated $HTDOCS/$DEST/$PAGE"
 fi

@@ -46,10 +46,15 @@ or so.
 
 Publishing
 ----------
-The script writes /usr/local/apache/htdocs/trackLists.html on hgwdev.
-Pushing that to the RR needs a /root/<name>AutoPush script added to
-/etc/crontab by cluster-admin; ask them for it, and use the existing lines as
-the template (tipsAutoPush, thumbNailAutoPush, asmAliasAutoPush).
+The script writes goldenPath/help/mirrorTracks.html under htdocs on hgwdev,
+next to mirror.html, which is the page that links to it. Pushing that to the RR
+needs a /root/<name>AutoPush script added to /etc/crontab by cluster-admin; ask
+them for it, and use the existing lines as the template (tipsAutoPush,
+thumbNailAutoPush, asmAliasAutoPush).
+
+The otto job is still called trackLists while the page it writes is called
+mirrorTracks.html. The page was renamed after review; the job was not, since it
+is referred to by path in otto.crontab.
 
 The page must be mode 775 in htdocs. Apache runs the SSI includes on a .html
 file only when its execute bit is set (XBitHack); without it the page is served
@@ -62,9 +67,7 @@ generated pages: allTips.html and thumbNailLinks.html live only in htdocs and
 are not tracked in git. Only the generator is committed. (assemblyRequest.html
 looks like a precedent but is not one; it is now just a redirect stub.)
 
-Where the page should finally live is not settled. The ticket says only that it
-is "autoPushed out on a cycle and linked to the mirror site", naming no path, so
-the top-level htdocs location here is a choice, not a requirement, and it can be
-moved. The natural reading of "the mirror site" is a link from
-goldenPath/help/mirror.html, but that is an inference from Lou's wording rather
-than something the ticket states.
+"The mirror site" in the ticket meant goldenPath/help/mirror.html, confirmed by
+Lou on 2026-09-04, and the page is linked from there. It also keeps its link from
+the licensing page, src/hg/htdocs/license/index.html, which is where a reader who
+wants the exact list of what we cannot hand on is most likely to start.

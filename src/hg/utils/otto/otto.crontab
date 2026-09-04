@@ -157,6 +157,13 @@ MAILTO=otto-group@ucsc.edu
 #Add a new daily tip to the home page
 5 5 * * 1-5 /cluster/software/bin/python /cluster/bin/scripts/generateTipOfDay.py -s ~/kent/src/hg/htdocs/allTipsRaw.html
 
+# Mirror-facing track lists (RM #37781): tracks we cannot redistribute, tracks
+# that update themselves, tracks contributed from outside UCSC. Writes
+# goldenPath/help/mirrorTracks.html into htdocs; reaching the RR needs a /root
+# autoPush entry from cluster-admin. Weekly is plenty, none of the three lists
+# moves daily. Silent unless a restricted file is found reachable on hgdownload.
+32 6 * * 4 /hive/data/outside/otto/trackLists/trackLists.sh
+
 #OMIM Upload
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh

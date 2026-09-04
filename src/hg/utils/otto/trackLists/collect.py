@@ -76,6 +76,24 @@ def trackdb(dbs):
             tdb[db] = rows
     return tdb
 
+def container_of(tt, track):
+    """Return the outermost composite or supertrack a track hangs off, "" if none.
+
+    The page splits the restricted list into cohort variant-frequency projects and
+    everything else. Nothing on an individual track says which it is; the only place
+    that is written down is the container it belongs to, so record it here and let
+    the page decide. Walks with a seen set because a parent loop in trackDb should
+    produce an empty answer, not hang the nightly run."""
+    cur, seen = track, set()
+    while cur not in seen:
+        seen.add(cur)
+        p = (tt.get(cur) or {}).get("parent") or (tt.get(cur) or {}).get("subTrack") or ""
+        p = p.split()[0] if p else ""     # value is "varFreqs on", we want the name
+        if not p or p not in tt:
+            break
+        cur = p
+    return "" if cur == track else cur
+
 LICENSE_RE = re.compile(r"distribut|licen|restrict|permission|agreement", re.I)
 
 def restricted_from_trackdb(tdb):
@@ -192,7 +210,10 @@ OVERRIDE = {
 }
 INFRA = ["readOnlyKentMirror","lastLog","ottoCompareGitVsHiveFiles","liftRequest",
          "GenArk","buildPublicSessionThumbnails","generateTipOfDay","cellBrowser",
-         "cbAnnotServer","tabulate_facets","tsv_to_json","updateNewsSec","tusd"]
+         "cbAnnotServer","tabulate_facets","tsv_to_json","updateNewsSec","tusd",
+         # this job itself: it writes a page, it does not touch track data, and a
+         # page that listed its own generator would be its own first entry
+         "trackLists"]
 
 def cron_english(s):
     if s.startswith("@"):
@@ -332,6 +353,12 @@ def main():
                                 shortLabel=restricted[(db, t)]["shortLabel"]))
         elif code[:1] != "4":
             unchecked.append(dict(db=db, track=t, path=p, code=code or "none"))
+
+    # which composite or supertrack each one belongs to; the page groups on this
+    for (db, t), v in restricted.items():
+        c = container_of(tdb[db], t)
+        v["container"] = c
+        v["containerLabel"] = (tdb[db].get(c) or {}).get("shortLabel", "") if c else ""
 
     contrib = [] if a.no_contrib else contrib_crawl(a.cache, a.refresh_contrib)
 

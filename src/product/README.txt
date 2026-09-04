@@ -105,6 +105,15 @@ and personal use. To purchase a
 license, see our [license Instructions](https://genome.ucsc.edu/license/index.html)
 or visit the [Genome Browser store](https://genome-store.ucsc.edu/). 
 
+Not every track on our site can be part of a mirror. Some data reaches us under terms
+that let us show it but not pass it on, so it is absent from our download server and
+will be missing from your copy. Other tracks are rebuilt here on a schedule and will
+drift away from your copy between updates, and some annotation was contributed by
+outside groups rather than built at UCSC. All three sets are named on the
+[track lists for mirror sites](https://genome.ucsc.edu/goldenPath/help/mirrorTracks.html)
+page, which is
+regenerated from our servers rather than kept by hand.
+
 # Installing a Genome Browser locally with the GBiC installer
 
 If you do not want to use our prepared virtual machine Genome-Browser-in-a-Box, we provide a
