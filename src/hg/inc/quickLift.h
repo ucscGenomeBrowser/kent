@@ -12,6 +12,7 @@
 #define defaultQuickLiftChainTableName       "quickLiftChain"
 
 struct psl;
+struct chain;
 
 struct quickLiftRegions
 // store highlight information
@@ -74,6 +75,21 @@ char *quickLiftGetChainPath(struct cart *, char *fromDb, char *toDb);
 struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean blocked);
 // Map a list of bedd in query coordinates to our current reference
 
+struct quickLiftRange
+// A range in the other assembly that some part of the reference window maps back to.
+{
+struct quickLiftRange *next;
+char *chrom;            /* sequence name in the other assembly */
+int start;
+int end;
+};
+
+struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
+    struct hash *chainHash);
+// The ranges in the other assembly that map into chrom:start-end on the reference.  The
+// chains that do the mapping are added to chainHash, which is the form the lift functions
+// read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
+
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end);
 // Load the quickLift chains covering chrom:start-end on the reference and return them in a
 // hash keyed on the other assembly's sequence names, which is the shape the lift functions
@@ -85,6 +101,18 @@ struct psl *quickLiftPsl(struct hash *chainHash, struct hash **pMapPsls, struct 
 // The query side (the mRNA, EST or protein the alignment is to) is left alone.  Returns
 // NULL if the alignment doesn't map.  pMapPsls points at a hash of mapping alignments the
 // caller keeps across a run of items; point it at a NULL hash to start.
+
+boolean quickLiftIsOwnChainTrack(struct trackDb *tdb);
+// TRUE when this is the chain track quickLift builds to show the lift itself.  That stanza
+// carries quickLiftUrl and quickLiftDb like any lifted track, but its data is already in
+// reference coordinates and must not be lifted a second time.
+
+struct chain *quickLiftChain(struct hash *chainHash, struct hash **pMapPsls,
+    struct chain *chain);
+// Map a chain's target side from the other assembly onto our current reference.  A chain is
+// an alignment between that assembly and some other species, so this composes the two and
+// leaves a chain between the reference and that species.  The query side is left alone.
+// Returns NULL if the chain doesn't map.  The chain handed in is not modified.
 
 struct psl *quickLiftPsls(struct hash *chainHash, struct psl *pslList);
 // Map a list of alignments in the other assembly's coordinates onto our current reference.

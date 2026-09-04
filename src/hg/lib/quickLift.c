@@ -302,17 +302,20 @@ if (geneId)
 return ret;
 }
 
+#define QUICKLIFT_RANGE_PAD 100000
+
 static struct chain *quickLiftLoadChains(char *quickLiftFile, char *chrom, int start, int end)
 /* Load the chains from quickLiftFile that overlap a padded window around the
  * destination range. */
 {
 // need to add some padding to these coordinates
-int padStart = start - 100000;
+int padStart = start - QUICKLIFT_RANGE_PAD;
 if (padStart < 0)
     padStart = 0;
 
 char *linkFileName = bigChainGetLinkFile(quickLiftFile);
-return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart, end+100000, -1);
+return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart,
+    end + QUICKLIFT_RANGE_PAD, -1);
 }
 
 static void quickLiftChainQueryRange(struct chain *chain, int *retQStart, int *retQEnd)
@@ -344,6 +347,86 @@ if (chain->qStrand == '-')
 *retQEnd = qEnd;
 }
 
+static boolean quickLiftChainRangeIn(struct chain *chain, int tStart, int tEnd,
+    int *retQStart, int *retQEnd)
+/* The query side range matching tStart..tEnd on the target, rather than the whole extent
+ * of the chain's blocks.  One block can be enormous:  hg19 and hg38 run identical for
+ * 12.8Mb on chr7, so the whole-block answer would ask the other assembly for millions of
+ * bases either side of the window.  Within a block the two sides are colinear, so the
+ * part that matters can be worked out exactly.  Returns FALSE if no block overlaps. */
+{
+struct cBlock *cb;
+int qStart = 0, qEnd = 0;
+boolean any = FALSE;
+
+for (cb = chain->blockList; cb != NULL; cb = cb->next)
+    {
+    int s = max(cb->tStart, tStart);
+    int e = min(cb->tEnd, tEnd);
+    if (s >= e)
+        continue;
+
+    int qLo = cb->qStart + (s - cb->tStart);
+    int qHi = cb->qStart + (e - cb->tStart);
+    if (!any || (qLo < qStart))
+        qStart = qLo;
+    if (!any || (qHi > qEnd))
+        qEnd = qHi;
+    any = TRUE;
+    }
+if (!any)
+    return FALSE;
+
+// correct for strand
+if (chain->qStrand == '-')
+    {
+    int saveStart = qStart;
+    qStart = chain->qSize - qEnd;
+    qEnd = chain->qSize - saveStart;
+    }
+*retQStart = qStart;
+*retQEnd = qEnd;
+return TRUE;
+}
+
+struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
+    struct hash *chainHash)
+// The ranges in the other assembly that map into chrom:start-end on the reference.  The
+// chains that do the mapping are added to chainHash, which is the form the lift functions
+// read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
+{
+struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
+struct quickLiftRange *rangeList = NULL;
+
+for(chain = chainList; chain; chain = chain->next)
+    {
+    if (chain->blockList == NULL)
+        continue;
+
+    // pad the window the same way quickLiftLoadChains does, so an item that reaches into
+    // the window from just outside it is still found
+    int qStart, qEnd;
+    int padStart = start - QUICKLIFT_RANGE_PAD;
+    if (padStart < 0)
+        padStart = 0;
+    if (quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+        {
+        struct quickLiftRange *range;
+        AllocVar(range);
+        range->chrom = cloneString(chain->qName);
+        range->start = qStart;
+        range->end = qEnd;
+        slAddHead(&rangeList, range);
+        }
+
+    // the query range was read off the chain as it came, so swap only afterwards
+    chainSwap(chain);
+    liftOverAddChainHash(chainHash, chain);
+    }
+slReverse(&rangeList);
+return rangeList;
+}
+
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end)
 // Load the quickLift chains covering chrom:start-end on the reference and return them in a
 // hash keyed on the other assembly's sequence names, which is the shape the lift functions
@@ -351,17 +434,8 @@ struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int
 // thing that collected the chains.
 {
 struct hash *chainHash = newHash(8);
-struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
 
-for(chain = chainList; chain; chain = chain->next)
-    {
-    if (chain->blockList == NULL)
-        continue;
-
-    chainSwap(chain);
-    liftOverAddChainHash(chainHash, chain);
-    }
-
+quickLiftSourceRanges(quickLiftFile, chrom, start, end, chainHash);
 return chainHash;
 }
 
@@ -592,6 +666,118 @@ if (lifted != NULL)
     quickLiftPslCounts(psl, lifted);
     }
 return lifted;
+}
+
+static struct chain *chainFromPsl(struct psl *psl)
+/* The inverse of chainToPsl.  Score and id are the caller's to fill in, since an alignment
+ * does not carry them. */
+{
+struct chain *chain;
+struct cBlock *blockList = NULL, *b;
+int i;
+
+AllocVar(chain);
+chain->tName = cloneString(psl->tName);
+chain->tSize = psl->tSize;
+chain->tStart = psl->tStart;
+chain->tEnd = psl->tEnd;
+chain->qName = cloneString(psl->qName);
+chain->qSize = psl->qSize;
+chain->qStrand = psl->strand[0];
+
+// chainToPsl turns the chain's query bounds the right way up for a psl, so turn them back
+if (chain->qStrand == '-')
+    {
+    chain->qStart = psl->qSize - psl->qEnd;
+    chain->qEnd = psl->qSize - psl->qStart;
+    }
+else
+    {
+    chain->qStart = psl->qStart;
+    chain->qEnd = psl->qEnd;
+    }
+
+for (i = psl->blockCount - 1; i >= 0; i--)
+    {
+    AllocVar(b);
+    b->tStart = psl->tStarts[i];
+    b->tEnd = b->tStart + psl->blockSizes[i];
+    b->qStart = psl->qStarts[i];
+    b->qEnd = b->qStart + psl->blockSizes[i];
+    slAddHead(&blockList, b);
+    }
+chain->blockList = blockList;
+return chain;
+}
+
+boolean quickLiftIsOwnChainTrack(struct trackDb *tdb)
+// TRUE when this is the chain track quickLift builds to show the lift itself.  That stanza
+// carries quickLiftUrl and quickLiftDb like any lifted track, but its data is already in
+// reference coordinates and must not be lifted a second time.  The giveaway is that its
+// bigDataUrl IS the quickLift chain file.
+{
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+
+if (quickLiftFile == NULL)
+    return FALSE;
+if (startsWithNoCase("bigQuickLiftChain", tdb->type))
+    return TRUE;
+
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+return (bigDataUrl != NULL) && sameString(bigDataUrl, quickLiftFile);
+}
+
+struct chain *quickLiftChain(struct hash *chainHash, struct hash **pMapPsls, struct chain *chain)
+// Map a chain's target side from the other assembly onto our current reference.  A chain is
+// an alignment between that assembly and some other species, so this composes the two and
+// leaves a chain between the reference and that species.  The query side is left alone.
+// Returns NULL if the chain doesn't map.  The chain handed in is not modified.
+{
+// chainToPsl copies the header, and every chain loader leaves the header describing the
+// whole chain while loading only the blocks that overlap the range asked for.  Correct it
+// for the conversion, then put it back:  callers still want the whole-chain header, which
+// is what the native details page reports.
+int saveTStart = chain->tStart, saveTEnd = chain->tEnd;
+int saveQStart = chain->qStart, saveQEnd = chain->qEnd;
+struct cBlock *b = chain->blockList;
+
+if (b == NULL)
+    return NULL;
+
+int tStart = b->tStart, tEnd = b->tEnd, qStart = b->qStart, qEnd = b->qEnd;
+for (; b != NULL; b = b->next)
+    {
+    if (b->tStart < tStart)
+        tStart = b->tStart;
+    if (b->tEnd > tEnd)
+        tEnd = b->tEnd;
+    if (b->qStart < qStart)
+        qStart = b->qStart;
+    if (b->qEnd > qEnd)
+        qEnd = b->qEnd;
+    }
+chain->tStart = tStart;
+chain->tEnd = tEnd;
+chain->qStart = qStart;
+chain->qEnd = qEnd;
+
+struct psl *psl = chainToPsl(chain);
+
+chain->tStart = saveTStart;
+chain->tEnd = saveTEnd;
+chain->qStart = saveQStart;
+chain->qEnd = saveQEnd;
+
+struct psl *lifted = quickLiftPsl(chainHash, pMapPsls, psl);
+pslFree(&psl);
+if (lifted == NULL)
+    return NULL;
+
+struct chain *out = chainFromPsl(lifted);
+out->score = chain->score;
+out->id = chain->id;
+pslFree(&lifted);
+return out;
 }
 
 struct psl *quickLiftPsls(struct hash *chainHash, struct psl *pslList)
