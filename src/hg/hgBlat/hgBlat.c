@@ -842,13 +842,18 @@ printBlatBannerStyle();
  * date set, the original "we are testing" invitation is shown. */
 char *switchDate = cfgOption("blatNewFormSwitchDate");
 if (isNotEmpty(switchDate))
+    {
+    /* Where "news announcement" points; defaults to the news archive until the announcement is
+     * drafted, then hg.conf can aim it at the item's anchor without a CGI rebuild. */
+    char *newsUrl = cfgOptionDefault("blatNewFormNewsUrl", "../goldenPath/newsarch.html");
     printf("<div class=\"blatBanner\">"
            "We will be updating this BLAT page on <b>%s</b>. "
            "You can <a href=\"hgBlat?blatNewForm=1&%s=%s\">try the new page now</a> and provide "
            "feedback to <a href=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</a>. "
-           "See our <a href=\"../goldenPath/newsarch.html\">news announcement</a> for more "
+           "See our <a href=\"%s\">news announcement</a> for more "
            "information.</div>\n",
-           switchDate, cartSessionVarName(), cartSessionId(cart));
+           switchDate, cartSessionVarName(), cartSessionId(cart), newsUrl);
+    }
 else
     printf("<div class=\"blatBanner\">"
            "We are testing a <a href=\"hgBlat?blatNewForm=1&%s=%s\">new BLAT search page</a>. "
