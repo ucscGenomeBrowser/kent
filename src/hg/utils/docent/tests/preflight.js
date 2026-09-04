@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* preflight.js [DIR]
+/* preflight.js [DIR] [SCRIPT...]
  *
  * Checks the things a directory of Docent tests depends on but does not contain: the
  * saved sessions the scripts load, the hubs they attach, the custom-track URLs they
@@ -17,6 +17,11 @@
  *
  * Exit 0 if every fixture resolved, 1 otherwise, so a nightly run can tell "the fixtures
  * are gone" from "a bug came back". Without this they are the same red.
+ *
+ * With no script names it checks every *.docent.yaml in DIR, which is what you want
+ * interactively. Name scripts to check only those: the nightly run passes the COMMITTED
+ * list, because a directory also holds work in progress and a dead fixture belonging to
+ * a script that is not running should not be reported as a problem.
  */
 'use strict';
 const fs = require('fs');
@@ -75,7 +80,10 @@ function urlCheck(url, wantText) {
 
 const fileCheck = file => async () => fs.existsSync(file) ? null : 'no such file';
 
-const scripts = fs.readdirSync(DIR).filter(f => f.endsWith('.docent.yaml')).sort();
+const named = process.argv.slice(3)
+  .map(a => a.endsWith('.docent.yaml') ? a : `${a}.docent.yaml`);
+const scripts = (named.length ? named
+                             : fs.readdirSync(DIR).filter(f => f.endsWith('.docent.yaml'))).sort();
 const seenServer = new Map();
 
 for (const f of scripts) {
