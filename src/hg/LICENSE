@@ -1,4 +1,4 @@
-LicenceRef-proprietary=https://genome.ucsc.edu/license
+LicenseRef-proprietary=https://genome.ucsc.edu/license
 
 Source code under this directory is under the MIT license (see kent/LICENSE), 
 WITH THE EXCEPTION of the following subdirectories:
