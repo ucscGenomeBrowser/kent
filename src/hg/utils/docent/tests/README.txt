@@ -14,8 +14,14 @@ the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md)
 part of the tree-wide test target: a broken network would fail the build.
 
 A test is an ordinary Docent script that asserts with `expect:`. It passes by exiting
-0. `expect:` is the only verb that fails a run, so a test with no `expect:` step in it
-tests nothing.
+0. `expect:` is the only verb that CHECKS anything, so a test with no `expect:` step in
+it tests nothing: `track:` accepts a name no assembly has and still exits 0.
+
+Other verbs do fail a run, so do not read the line above as "nothing else can stop it".
+A verb throws when it cannot do what it was told -- `mouseover:` cannot find the item,
+`loadSession:` cannot find the file, `drag:`, `convert:` and `go:` likewise -- and
+docent.js turns any step's throw into `step N (verb) failed` and exit 1. None of them
+looks at whether the page came out right, which is the part only `expect:` does.
 
 A script named *.xfail.docent.yaml is expected to FAIL, and the run fails if it passes.
 That is how a trap gets pinned rather than merely written down.
@@ -24,6 +30,13 @@ That is how a trap gets pinned rather than merely written down.
 trackDb and prints the cart variables without opening a browser, in about a second. It
 is where Docent's own decisions live, and the baselines in expected/ are what catch a
 change to visVars() or tdbHideTargets() that a rendered page would hide.
+
+The trackDb listing is cached in $TMPDIR for a day (docent.js, TDB_TTL), and a cold
+fetch prints one provenance line that a warm run does not. That line would make the
+first `make derive` of the day differ from a baseline captured warm, for a reason that
+has nothing to do with trackDb changing, so the makefile strips it from both the run and
+the baseline. Everything else trackDb says about itself is kept, including the two lines
+that report a hub genome or an unreachable hubApi.
 
 What is covered
 ---------------

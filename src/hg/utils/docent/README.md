@@ -250,7 +250,7 @@ Every other verb renders happily whatever it is handed. A superTrack that came u
 makes an image 7,581 px tall, a subtrack that never hid stays in the figure, a pinned
 tooltip grabs the neighbouring item, an Apache 414 arrives as a perfectly valid page saying
 *Request-URI Too Long*. All of those have shipped at least once, all were caught by eye, and
-all of them are mechanically checkable. `expect:` is the only verb that stops a run:
+all of them are mechanically checkable. `expect:` is the only verb that looks at any of it:
 
 ```yaml
   - track: {varsInPubs: hideKids, pubtator: pack}
@@ -270,6 +270,13 @@ step 5 (expect) failed: rows not drawn: clinvarMain; image is 69px, wanted <50
 
 Notes:
 
+- **Other verbs can still fail a run, they just do not check anything.** A verb throws
+  when it cannot do what it was told: `mouseover:` cannot find the item, `loadSession:`
+  cannot find the file, `drag:` gets endpoints it cannot read, `convert:` cannot find the
+  assembly in the dropdown. Any step's throw becomes `step N (verb) failed` and exit 1.
+  What none of them does is judge the result, and `track:` does not even judge its own
+  input -- a name no assembly has is sent as `name=mode` and the run exits 0. That is why
+  a script with no `expect:` in it is a tour and not a test.
 - **Row names are matched by suffix**, the way `mouseover:` resolves a track, so `mane`
   is satisfied by a lifted view's `hub_192070_mane` and a script does not have to know the
   per-run hub number.
