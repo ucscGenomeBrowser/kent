@@ -1,0 +1,18 @@
+hub relPathMissing
+shortLabel relPathMissing
+longLabel a bigDataUrl that does not exist must be reported, not dropped
+email braney@soe.ucsc.edu
+descriptionUrl hubDescription.html
+useOneFile on
+
+genome mm10
+
+# A track whose data file is genuinely absent. hubCheck used to hand this list to
+# trackDbPolishAfterLinkup(), whose prune step dropped any track it could not open, so
+# the one thing hubCheck most needs to report was the one thing it stayed quiet about.
+track relPathMissingTrack
+type bigBed 6
+bigDataUrl data/noSuchFile.bb
+shortLabel relPathMissingTrack
+longLabel bigDataUrl pointing at a file that is not there
+visibility dense

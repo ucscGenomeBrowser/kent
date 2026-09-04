@@ -1249,7 +1249,10 @@ if (errCatchStart(errCatch))
     boolean foundFirstGenome = FALSE;
     tdbList = trackHubTracksForGenome(hub, genome, NULL, &foundFirstGenome);
     tdbList = trackDbLinkUpGenerations(tdbList);
-    tdbList = trackDbPolishAfterLinkup(tdbList, genome->name);
+    /* Deliberately not trackDbPolishAfterLinkup(): its prune step silently drops any
+     * track whose data file cannot be opened, which is the single most important thing
+     * for hubCheck to complain about. */
+    tdbList = trackDbPolishAfterLinkupKeepAll(tdbList);
     checkTrackNamesForDots(tdbList);
     trackHubPolishTrackNames(hub, tdbList);
     }
