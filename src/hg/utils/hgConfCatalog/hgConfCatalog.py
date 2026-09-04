@@ -1479,10 +1479,10 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("snapshot.ttlDays", "unreviewed", "hg/utils/snapshotReaper/snapshotReaper.c",
+        h("snapshot.ttlDays", "unreviewed", "hg/utils/snapshotCleaner/snapshotCleaner.c",
           note="Written down by --auto-register, not yet reviewed by a "
                "person.  Read with cfgOption in "
-               "hg/utils/snapshotReaper/snapshotReaper.c.  Came in at "
+               "hg/utils/snapshotCleaner/snapshotCleaner.c.  Came in at "
                "32cd2100d9d, Reusable \"view snapshot\" sessions for durable, "
                "minimal Share-a-link links.  Needs a kind, a description, and "
                "a section to live in."),
