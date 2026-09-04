@@ -25,12 +25,13 @@ def cell(w, text, indent="    "):
     w("%s</td>" % indent)
 
 def rows_by_track(restricted):
-    by = collections.defaultdict(lambda: dict(dbs=set(), label="", why=set()))
+    """Group the restricted rows by track. The per-row "why" is deliberately not
+    carried through: which tests fired is explained once in prose below the table."""
+    by = collections.defaultdict(lambda: dict(dbs=set(), label=""))
     for r in restricted:
         e = by[r["track"]]
         e["dbs"].add(r["db"])
         e["label"] = e["label"] or r.get("shortLabel", "")
-        e["why"].update(r.get("why", []))
     return by
 
 def main():
@@ -85,7 +86,7 @@ def main():
     w('These tracks reach us under terms that let us display the data but not pass it on.')
     w('You can see them on our site, and in most cases you can obtain the same data yourself')
     w('directly from the group that produced it, but we cannot include them in a mirror or on')
-    w('our download server. The reasons vary: some are commercial licences, others are')
+    w('our download server. The reasons vary: some are commercial licenses, others are')
     w('consent agreements attached to human cohorts. Check the description page of an')
     w('individual track for who to approach about access.')
     w('</p>')
@@ -115,7 +116,18 @@ def main():
     w('too large to return, not for any licensing reason, and those are not listed above.')
     w('</p>')
     exposed = d.get("exposed", [])
-    if exposed and a.internal:
+    if exposed and not a.internal:
+        # Never name reachable restricted files on a page anyone can read: the path
+        # of a file we should be blocking is a pointer straight at it. Say only that
+        # the check runs; the internal copy and the cron mail carry the detail. Do
+        # not fold this branch into the all-clear one below, which would have the
+        # public page claim the list is clean when the check says otherwise.
+        w('<p>')
+        w('Every track named above is cross-checked against the download server each time')
+        w('this page is rebuilt. Any file that turns out to be reachable there is reported')
+        w('to us privately rather than named on this page.')
+        w('</p>')
+    elif exposed:
         w('<h3>Reachable on hgdownload</h3>')
         w('<p>')
         w('%d file(s) marked as restricted are currently served by the download server and'
@@ -138,7 +150,8 @@ def main():
     else:
         w('<p>')
         w('Every track named above is checked against the download server each time this page')
-        w('is rebuilt, so that a track listed as restricted is genuinely blocked there.')
+        w('is rebuilt, and every file marked as restricted is correctly blocked there. Checked')
+        w('on %s.' % esc(today))
         w('</p>')
     w('')
 
@@ -147,7 +160,7 @@ def main():
     w('<h2>Tracks that update themselves</h2>')
     w('<p>')
     w('These tracks are rebuilt on a schedule without anyone at UCSC touching them. If you')
-    w('mirror them, your copy will drift from ours until you synchronise again. Times are US')
+    w('mirror them, your copy will drift from ours until you synchronize again. Times are US')
     w('Pacific.')
     w('</p>')
     w('<table>')
@@ -197,8 +210,8 @@ def main():
     w('<p>')
     w('Some assemblies in our')
     w('<a href="https://hgdownload.soe.ucsc.edu/hubs/" target="_blank">GenArk</a> collection')
-    w('carry annotation built by outside groups rather than by UCSC. The data sit alongside')
-    w('our own tracks, but the group named below produced them, and questions about the')
+    w('carry annotation built by outside groups rather than by UCSC. The data sits alongside')
+    w('our own tracks, but the group named below produced it, and questions about the')
     w('underlying annotation are best sent to that group.')
     w('</p>')
     w('<table>')

@@ -10,7 +10,7 @@ No single trackDb setting marks every restricted track, so list 1 is the union o
 several tests, and each row records which ones fired:
 
   tableBrowser off                    the usual marker
-  noGenomeReason citing licence terms how OMIM is marked; a query for "off" misses it
+  noGenomeReason citing license terms how OMIM is marked; a query for "off" misses it
   absent from hgdownload              ground truth for MySQL tables
   reachable on hgdownload             ground truth the other way, and the only test
                                       that catches a restricted file we are still serving
@@ -45,7 +45,8 @@ def note(msg):
 
 def databases():
     out = []
-    for d in sh("hgsql -h %s -N -e 'show databases' 2>/dev/null" % BETA).split():
+    for d in sh("hgsql -h %s -N -e %s 2>/dev/null"
+                % (q(BETA), q("show databases"))).split():
         if d in SKIP_DBS or d.startswith("hgcentral"):
             continue
         out.append(d)
@@ -64,7 +65,8 @@ def trackdb(dbs):
     def one(db):
         rows = {}
         for line in sh("hgsql -h %s -N -e %s %s 2>/dev/null"
-                       % (BETA, q("select tableName, settings from trackDb"), db)).splitlines():
+                       % (q(BETA), q("select tableName, settings from trackDb"),
+                          q(db))).splitlines():
             p = line.split("\t")
             if len(p) >= 2:
                 rows[p[0]] = parse_settings(p[1])
@@ -99,15 +101,15 @@ def dl_listing(db, cache):
     f = os.path.join(cache, "dl_%s.txt" % db)
     if os.path.exists(f) and time.time() - os.path.getmtime(f) < DL_MAX_AGE:
         return db, set(open(f).read().split())
-    html = sh("curl -s --max-time 90 '%s/goldenPath/%s/database/'" % (DL, db))
+    html = sh("curl -s --max-time 90 %s" % q("%s/goldenPath/%s/database/" % (DL, db)))
     tabs = sorted(set(re.findall(r"([A-Za-z0-9_]+)\.txt\.gz", html)))
     with open(f, "w") as fh:
         fh.write("\n".join(tabs))
     return db, set(tabs)
 
 def http_code(path):
-    return sh("curl -s -o /dev/null --max-time 30 -w '%%{http_code}' -r 0-99 '%s%s' < /dev/null"
-              % (DL, path)).strip()
+    return sh("curl -s -o /dev/null --max-time 30 -w '%%{http_code}' -r 0-99 %s < /dev/null"
+              % q(DL + path)).strip()
 
 # --- GenArk contributed ----------------------------------------------------
 
@@ -125,7 +127,7 @@ def contrib_crawl(cache, refresh=False):
         note("contrib: crawling %s, this takes >10 minutes ..." % GENARK)
         tmp = f + ".tmp"
         rc = subprocess.run("find -L %s -mindepth 7 -maxdepth 7 -type d -path '*/contrib/*' "
-                            "> %s 2>/dev/null" % (GENARK, tmp), shell=True)
+                            "> %s 2>/dev/null" % (q(GENARK), q(tmp)), shell=True)
         if rc.returncode == 0 and os.path.getsize(tmp) > 0:
             os.replace(tmp, f)
             note("contrib: crawl done, %d rows" % sum(1 for _ in open(f)))
@@ -283,7 +285,8 @@ def main():
     note("hgdownload listings: %.0fs" % (time.time() - t1))
 
     def tables(db):
-        return set(sh("hgsql -h %s -N -e 'show tables' %s 2>/dev/null" % (BETA, db)).split())
+        return set(sh("hgsql -h %s -N -e %s %s 2>/dev/null"
+                      % (q(BETA), q("show tables"), q(db))).split())
     with ThreadPoolExecutor(max_workers=8) as ex:
         have = dict(zip(dbs, ex.map(tables, dbs)))
     partial = []
@@ -316,12 +319,19 @@ def main():
               if v["bigDataUrl"] and not v["bigDataUrl"].startswith("http")]
     with ThreadPoolExecutor(max_workers=8) as ex:
         codes = list(ex.map(lambda c: http_code(c[2]), checks))
-    exposed = []
+    exposed, unchecked = [], []
     for (db, t, p), code in zip(checks, codes):
         restricted[(db, t)]["hgdownload"] = code
-        if code != "404":
+        # Only a real HTTP response says anything about the file. A curl that timed
+        # out or could not connect comes back empty or as 000, and calling that
+        # "reachable" both mails a false alarm and drops the all-clear line from the
+        # public page on nothing more than a network blip. 4xx means blocked, 2xx and
+        # 3xx mean served, and anything else means the test did not run.
+        if code[:1] in ("2", "3"):
             exposed.append(dict(db=db, track=t, path=p, code=code,
                                 shortLabel=restricted[(db, t)]["shortLabel"]))
+        elif code[:1] != "4":
+            unchecked.append(dict(db=db, track=t, path=p, code=code or "none"))
 
     contrib = [] if a.no_contrib else contrib_crawl(a.cache, a.refresh_contrib)
 
@@ -331,6 +341,7 @@ def main():
         otto=parse_otto(a.otto_crontab, tdb),
         contrib=contrib,
         partialDownloads=partial,
+        uncheckedDownloads=unchecked,
         counts=dict(databases=len(dbs)),
         generated=time.strftime("%Y-%m-%d"),
     )
@@ -351,6 +362,13 @@ def main():
         note("*** %d file(s) marked restricted are reachable on hgdownload:" % len(exposed))
         for e in exposed:
             note("      %s  %s  %s" % (e["db"], e["track"], e["path"]))
+    if unchecked:
+        note("")
+        note("note: %d file(s) could not be checked against hgdownload (no HTTP"
+             % len(unchecked))
+        note("      response); they are neither reported as reachable nor as blocked:")
+        for u in unchecked:
+            note("      %-6s %-16s %s (%s)" % (u["db"], u["track"], u["path"], u["code"]))
     return 0
 
 if __name__ == "__main__":

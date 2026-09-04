@@ -11,7 +11,7 @@
 # (same pattern as the daily tips and the session thumbnails, which are likewise
 # generated into htdocs and are not tracked in git).
 #
-# Output behaviour: quiet on success, except that a restricted file found to be
+# Output behavior: quiet on success, except that a restricted file found to be
 # reachable on hgdownload always prints, so cron mails it.
 
 set -o errexit -o pipefail
