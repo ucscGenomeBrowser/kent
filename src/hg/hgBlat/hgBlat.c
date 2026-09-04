@@ -2785,6 +2785,13 @@ jsonWriteBoolean(jw, "allGenomes", allGenomes);
 jsonWriteBoolean(jw, "showKeepResults",
                  sameString(cfgOptionDefault("blatOldTracks", "keep"), "delete"));
 jsonWriteBoolean(jw, "keepResults", cartUsualBoolean(cart, "blatKeepResults", FALSE));
+/* "Keep only last search" checkbox (RM #38086): the inverse framing - results accumulate by
+ * default (the current public behavior) and checking the box opts into removing earlier BLAT
+ * result tracks on each new search.  Gated by its own hg.conf setting, independent of
+ * blatOldTracks above; hgc.c (buildBigPsl) is what acts on blatOnlyLatest. */
+jsonWriteBoolean(jw, "showOnlyLatest",
+    sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on"));
+jsonWriteBoolean(jw, "onlyLatest", cartUsualBoolean(cart, "blatOnlyLatest", FALSE));
 /* The example is fetched on demand rather than inlined: it is a real 2.5 kb sequence, which would
  * otherwise be embedded in every page load of the form just to serve the few users who click
  * "Load example".  The sequence is a window over two PTP4A3 exons that is also carried by an alt

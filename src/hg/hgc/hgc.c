@@ -27605,6 +27605,29 @@ if (differentString(oldTracks, "keep"))
     ctList = keptList;
     }
 
+/* "Keep only last search" (RM #38086): per-user opt-in to remove earlier BLAT result tracks,
+ * the checkbox inverse of blatOldTracks=delete above (left untouched).  With the box unchecked
+ * (the default) results accumulate exactly as before, so removal only ever happens because the
+ * user asked for it.  Gated on the same hg.conf setting that shows the checkbox, so a stale
+ * cart variable cannot delete tracks on a site where the feature is off. */
+if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
+    && cartUsualBoolean(cart, "blatOnlyLatest", FALSE))
+    {
+    struct customTrack *ct, *next, *keptList = NULL;
+    for (ct = ctList; ct != NULL; ct = next)
+        {
+        next = ct->next;
+        if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+            {
+            cartRemove(cart, ct->tdb->track);   /* no orphaned visibility for a reused ct_ id */
+            continue;   /* drop it; customTracksSaveCart below writes out only the kept list */
+            }
+        slAddHead(&keptList, ct);
+        }
+    slReverse(&keptList);
+    ctList = keptList;
+    }
+
 theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 
 customTracksSaveCart(database, cart, theCtList);

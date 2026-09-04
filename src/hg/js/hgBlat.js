@@ -660,6 +660,7 @@ var BLAT_GENOME_SEARCH_HELP =
 // wrapped in try/catch because localStorage throws in private-mode / disabled-storage browsers, in
 // which case we simply fall back to the cart-supplied default and skip persistence.
 var BLAT_KEEP_RESULTS_KEY = 'blatKeepResults';
+var BLAT_ONLY_LATEST_KEY = 'blatOnlyLatest';
 
 function blatGetKeepResultsPref() {
     // Returns true/false for a stored preference, or null if the user has never set one here.
@@ -671,6 +672,18 @@ function blatGetKeepResultsPref() {
 
 function blatSetKeepResultsPref(on) {
     try { localStorage.setItem(BLAT_KEEP_RESULTS_KEY, on ? '1' : '0'); } catch (e) { /* ignore */ }
+}
+
+function blatGetOnlyLatestPref() {
+    // Returns true/false for a stored preference, or null if the user has never set one here.
+    try {
+        var v = localStorage.getItem(BLAT_ONLY_LATEST_KEY);
+        return v === null ? null : (v === '1');
+    } catch (e) { return null; }
+}
+
+function blatSetOnlyLatestPref(on) {
+    try { localStorage.setItem(BLAT_ONLY_LATEST_KEY, on ? '1' : '0'); } catch (e) { /* ignore */ }
 }
 
 function blatOpts(list, cur) {
@@ -865,6 +878,11 @@ function blatFormBuild() {
         var storedKeep = blatGetKeepResultsPref();
         if (storedKeep !== null) { keepResultsInit = storedKeep; }
     }
+    var onlyLatestInit = cfg.onlyLatest;
+    if (cfg.showOnlyLatest) {
+        var storedLatest = blatGetOnlyLatestPref();
+        if (storedLatest !== null) { onlyLatestInit = storedLatest; }
+    }
 
     document.getElementById('blatFormBox').innerHTML =
         banner +
@@ -919,6 +937,19 @@ function blatFormBuild() {
                 'dedicated BLAT server. Dynamic BLAT servers are skipped and listed as such in the ' +
                 "output. See our <a target='_blank' href='../FAQ/FAQblat.html#blat9'>BLAT All FAQ</a> " +
                 'for more information.') +
+            // "Keep only last search" (RM #38086): submitted through a hidden field for the same
+            // reason as "Keep results" above: an unchecked box sends nothing, so the cart could
+            // never see it switched back off.
+            (cfg.showOnlyLatest ?
+                '<span class="blatCheck">' +
+                `<input type="hidden" name="blatOnlyLatest" id="blatOnlyLatestVal" value="${onlyLatestInit ? 1 : 0}">` +
+                `<label><input type="checkbox" id="blat_onlyLatest"${onlyLatestInit ? ' checked' : ''}>` +
+                'Keep only last search</label>' +
+                `<span class="blatInfo" title="${htmlEncode(
+                    'Each new BLAT search removes your earlier BLAT result tracks, so only the ' +
+                    'newest search shows in the Genome Browser. Leave unchecked to keep all ' +
+                    'results. Your choice is remembered for next time.')}">` +
+                `${BLAT_INFO_SVG}</span></span>` : '') +
         '</div>' +
 
         '<div class="gbSection">Query sequence</div>' +
@@ -984,6 +1015,10 @@ function blatFormBuild() {
     $('#blat_keepResults').on('change', function() {
         document.getElementById('blatKeepResultsVal').value = this.checked ? '1' : '0';
         blatSetKeepResultsPref(this.checked);
+    });
+    $('#blat_onlyLatest').on('change', function() {
+        document.getElementById('blatOnlyLatestVal').value = this.checked ? '1' : '0';
+        blatSetOnlyLatestPref(this.checked);
     });
     $('#blatTabPaste').on('click', function() { blatFormTab(false); });
     $('#blatTabUpload').on('click', function() { blatFormTab(true); });
