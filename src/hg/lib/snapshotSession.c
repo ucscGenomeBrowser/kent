@@ -29,7 +29,7 @@ static char *blatVars[] = { "blatLastBigBed", NULL };
 
 static struct snapshotType snapshotTypes[] =
     {
-    { "blat", blatVars },
+    { "blat", blatVars, "blatLastBigBed" },
     };
 
 struct snapshotType *snapshotTypeFind(char *name)
@@ -42,6 +42,14 @@ for (i = 0;  i < ArraySize(snapshotTypes);  i++)
     if (sameString(name, snapshotTypes[i].name))
         return &snapshotTypes[i];
 return NULL;
+}
+
+boolean snapshotHasRequired(struct snapshotType *type, struct cart *cart)
+/* Return FALSE when type declares a requiredVar that is missing/empty in cart. */
+{
+if (type == NULL || isEmpty(type->requiredVar))
+    return TRUE;
+return isNotEmpty(cartOptionalString(cart, type->requiredVar));
 }
 
 boolean snapshotIsSnapshotName(char *sessionName)

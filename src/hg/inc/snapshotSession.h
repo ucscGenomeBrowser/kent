@@ -41,10 +41,16 @@ struct snapshotType
     {
     char *name;         /* type key sent by the client, e.g. "blat" */
     char **vars;        /* NULL-terminated cart variable names to persist (besides "db") */
+    char *requiredVar;  /* if non-NULL, the snapshot is a dead link without this cart var, so the
+                         * save is rejected when it is absent (e.g. results not built yet) */
     };
 
 struct snapshotType *snapshotTypeFind(char *name);
 /* Return the registered snapshot type, or NULL if name is not a known type. */
+
+boolean snapshotHasRequired(struct snapshotType *type, struct cart *cart);
+/* Return FALSE when type declares a requiredVar that is missing/empty in cart (saving it would make
+ * a link that reopens to nothing), otherwise TRUE. */
 
 boolean snapshotIsSnapshotName(char *sessionName);
 /* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix). */

@@ -1116,9 +1116,17 @@ cartRemove(cart, hgsNewSessionShare);
  * naming rules differ.  Works for both anonymous ("l") and logged-in owners. */
 if (isNotEmpty(snapshotType))
     {
-    if (snapshotTypeFind(snapshotType) == NULL)
+    struct snapshotType *st = snapshotTypeFind(snapshotType);
+    if (st == NULL)
         {
         saveSessionJsonError(conn, "Unknown snapshot type.");
+        return;
+        }
+    /* Refuse to mint a link that would reopen to nothing (e.g. BLAT results not built yet); tell the
+     * caller to retry rather than handing out a dead link. */
+    if (!snapshotHasRequired(st, cart))
+        {
+        saveSessionJsonError(conn, "These results are not ready yet. Please try again in a moment.");
         return;
         }
     char *snapUser = anon ? "l" : cgiEncodeFull(userName);
