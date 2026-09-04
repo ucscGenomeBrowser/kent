@@ -282,6 +282,12 @@ hg38 genCC clinGenComp Expert-panel gene-disease validity and dosage sensitivity
 hg38 clinGenComp genCC Gene-disease assertions from several curation groups, harmonized into one set
 hg38 geneReviews omimContainer Gene and phenotype records from OMIM, the standard reference for Mendelian disease genes
 hg38 omimContainer geneReviews Expert-authored clinical summaries for genetic conditions, with diagnosis and management guidance
+hg38 genCC omimContainer Gene and phenotype records from OMIM, the reference these curation efforts cite
+hg38 omimContainer genCC Gene-disease assertions from several curation groups, harmonized into one set
+hg38 orphadata omimContainer Gene and phenotype records from OMIM, cross-referenced throughout Orphanet
+hg38 omimContainer orphadata Rare disease gene annotations from Orphanet
+hg38 g2p omimContainer Gene and phenotype records from OMIM, the reference these curation efforts cite
+hg38 omimContainer g2p Gene-disease pairs curated by the Gene2Phenotype project
 
 hg19 genCC g2p Gene-disease pairs curated by the Gene2Phenotype project, one of the sources GenCC aggregates
 hg19 g2p genCC Gene-disease assertions from several curation groups, harmonized into one set
@@ -293,6 +299,12 @@ hg19 genCC clinGenComp Expert-panel gene-disease validity and dosage sensitivity
 hg19 clinGenComp genCC Gene-disease assertions from several curation groups, harmonized into one set
 hg19 geneReviews omimContainer Gene and phenotype records from OMIM, the standard reference for Mendelian disease genes
 hg19 omimContainer geneReviews Expert-authored clinical summaries for genetic conditions, with diagnosis and management guidance
+hg19 genCC omimContainer Gene and phenotype records from OMIM, the reference these curation efforts cite
+hg19 omimContainer genCC Gene-disease assertions from several curation groups, harmonized into one set
+hg19 orphadata omimContainer Gene and phenotype records from OMIM, cross-referenced throughout Orphanet
+hg19 omimContainer orphadata Rare disease gene annotations from Orphanet
+hg19 g2p omimContainer Gene and phenotype records from OMIM, the reference these curation efforts cite
+hg19 omimContainer g2p Gene-disease pairs curated by the Gene2Phenotype project
 
 # Cancer somatic variant cross-links:
 hg38 cancerMutations gdcCancer The same TCGA somatic mutations, summarized across all 33 Pan-Cancer projects
