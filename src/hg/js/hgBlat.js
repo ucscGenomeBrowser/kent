@@ -294,9 +294,11 @@ function blatShowShareBox(box, url, msg) {
         return;
     }
     box.innerHTML =
-        '<span class="gbShareMsg gbShareFull">Shareable link — anyone with it can reopen these ' +
-        'BLAT results. It stores only the results (not your other tracks or settings) and stays ' +
-        'active as long as it is used.</span>' +
+        '<span class="gbShareMsg gbShareFull">Anyone with this <b>shareable link</b> can open ' +
+        'these BLAT results. It stores only the results, not your other tracks or settings. The ' +
+        'link remains valid for years; to keep your results permanently, save them into a ' +
+        `<a href="hgSession?db=${encodeURIComponent(hgBlatData.config.db || '')}` +
+        `&hgsid=${encodeURIComponent(hgBlatData.config.hgsid || '')}">Session</a>.</span>` +
         '<input id="gbShareInput" class="gbShareInput" type="text" readonly>' +
         '<button type="button" class="gbPill" id="blatShareCopy" title="Copy the link to the clipboard">Copy</button>';
     var inp = document.getElementById('gbShareInput');
@@ -362,7 +364,7 @@ function blatRenameModalHtml(cfg) {
         '<div class="gbModal" role="dialog" aria-modal="true" aria-labelledby="gbModalTitle">' +
         '<div class="gbModalTitle" id="gbModalTitle">Rename BLAT Track</div>' +
         '<div class="gbModalText">Every BLAT result is stored in its own track in the Genome ' +
-        'Browser. You can rename the track here. Results will disappear after 2–3 days, unless ' +
+        'Browser, which you can rename here. Results will disappear after 2 days unless ' +
         `they are saved into a <a href="${sessionUrl}">Session link</a>.</div>` +
         '<label class="gbModalLabel" for="blatRenameName">Track name</label>' +
         '<input id="blatRenameName" class="gbModalInput" type="text" maxlength="80">' +
@@ -489,7 +491,7 @@ function blatBuild() {
     // The page actions live in the gold main-header bar (framework #sectTtl), next to the title -
     // so there is no separate toolbar (.blatHead is gone).  Injected into #sectTtl below.
     var headActions =
-        `${back}<a class="gbPill primary" title="Start a new BLAT search" href="${htmlEncode(cfg.newSearchUrl)}">New BLAT search</a>`;
+        `${back}<a class="gbPill" title="Start a new BLAT search" href="${htmlEncode(cfg.newSearchUrl)}">New BLAT search</a>`;
 
     // Top banner: note this is the new page, link back to the classic page (fresh searches only,
     // where the trash files still exist), and invite feedback.  The old page also clears the
@@ -699,8 +701,11 @@ function blatFormCount() {
     var out = document.getElementById('blatCountText');
     if (!ta || !out) { return; }
     var n = ta.value.replace(/[^A-Za-z*]/g, '').length;
-    out.textContent = blatFmt(n) + ' of 25,000 characters';
-    $('#blatLimitLink').toggleClass('over', n > 25000);
+    // 75,000 is the DNA per-sequence limit (hgBlat.c maxSingleSize); protein and translated
+    // queries top out at 10,000, but the server rejects those with a warning that links to the
+    // full limits in the docs, so the counter shows only the common case.
+    out.textContent = blatFmt(n) + ' of 75,000 characters';
+    out.classList.toggle('over', n > 75000);
 }
 
 function blatFormTab(showUpload) {
@@ -708,23 +713,6 @@ function blatFormTab(showUpload) {
     $('#blatTabUpload').toggleClass('on', showUpload);
     $('#blatPanePaste').toggle(!showUpload);
     $('#blatPaneUpload').toggle(showUpload);
-}
-
-function blatFormLimitsModal() {
-    var row = (k, v) => `<div class="blatLimitRow"><span>${k}</span><strong>${v}</strong></div>`;
-    return '<div id="blatLimitsBg" class="gbModalBg" style="display:none">' +
-        '<div class="gbModal" role="dialog" aria-modal="true" aria-labelledby="blatLimitsTitle">' +
-        '<div class="gbModalTitle" id="blatLimitsTitle">Input limits</div>' +
-        row('DNA per sequence', '25,000 bases') +
-        row('Protein / translated', '10,000 letters') +
-        row('Sequences per run', '25') +
-        row('Total per submission', '50,000 bases') +
-        '<div class="gbModalText gbModalNote">Queries above these limits are rejected ' +
-        'before alignment. For larger jobs, run BLAT from the ' +
-        '<a target="_blank" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">' +
-        'command line</a> on your own server.</div>' +
-        '<div class="gbModalBtns"><button type="button" class="gbPill" id="blatLimitsClose">Close</button></div>' +
-        '</div></div>';
 }
 
 function blatFormBusyMarkup() {
@@ -820,15 +808,16 @@ function blatFormSidebar(cfg) {
         return `<a data-urltpl="${htmlEncode(tpl)}" href="${htmlEncode(href)}">${label}</a>`;
     };
     if (cfg.pcrUrlTpl) {
-        tools += `<div>${tplLink(cfg.pcrUrlTpl, 'In-Silico PCR')} — better than BLAT for ` +
+        tools += `<div>${tplLink(cfg.pcrUrlTpl, 'In-Silico PCR')} - better than BLAT for ` +
             'locating PCR primers.</div>';
     }
     if (cfg.oligoMatchUrlTpl) {
-        tools += `<div>${tplLink(cfg.oligoMatchUrlTpl, 'Short Sequence Match')} — for ` +
+        tools += `<div>${tplLink(cfg.oligoMatchUrlTpl, 'Short Sequence Match')} - for ` +
             'sequences under 20 bp, within the region shown in the Genome Browser.</div>';
     }
     tools += '<div><a target="_blank" href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">' +
-        'findMotifs</a> — command-line search across a whole genome.</div>';
+        'findMotif</a> - like Short Sequence Match, but searches a whole genome, ' +
+        'from the command line.</div>';
     return '<div>' +
         (tools ? `<div class="gbCard"><h3>Similar tools</h3>${tools}</div>` : '') +
         '<div class="gbCard"><h3>Help</h3>' +
@@ -888,7 +877,7 @@ function blatFormBuild() {
         banner +
         '<div class="blatFormGrid"><div>' +
 
-        '<div class="gbSection">Search &ndash; type keywords to find the target assembly</div>' +
+        '<div class="gbSection">Target assembly</div>' +
         '<div class="blatRow">' +
             '<div class="blatField blatGenomeSlot"><span>Genome or assembly ' +
                 `<span class="blatInfo" title="${BLAT_GENOME_SEARCH_HELP}">${BLAT_INFO_SVG}</span>` +
@@ -961,17 +950,17 @@ function blatFormBuild() {
         '<div id="blatPanePaste">' +
             '<div class="blatPaneHint"><span>Separate multiple sequences with a &gt;name line. ' +
             'Up to 25 sequences.</span>' +
-            `<a href="#" id="blatExample">${htmlEncode(cfg.exampleLabel)}</a></div>` +
+            `<button type="button" id="blatExample" class="blatChip" ` +
+            `title="${htmlEncode(cfg.exampleTitle)}">${htmlEncode(cfg.exampleLabel)}</button></div>` +
             '<textarea class="blatSeq" name="userSeq" id="blatUserSeq" spellcheck="false" ' +
             'aria-label="Paste in a query sequence"></textarea>' +
-            '<div class="blatCount"><span id="blatCountText"></span>' +
-            '<a href="#" id="blatLimitLink">Show input limits</a></div>' +
+            '<div class="blatCount"><span id="blatCountText"></span></div>' +
         '</div>' +
 
         '<div id="blatPaneUpload" style="display:none">' +
             '<div class="blatDrop" id="blatDrop">' +
                 '<div class="blatDropTitle">Drop a sequence file here</div>' +
-                '<div class="blatDropSub">Plain text or FASTA, up to 50,000 bases total</div>' +
+                '<div class="blatDropSub">Plain text or FASTA, up to 25 sequences</div>' +
                 '<input type="file" name="seqFile" id="blatSeqFile">' +
                 '<div class="blatFileName" id="blatFileName"></div>' +
             '</div>' +
@@ -982,13 +971,12 @@ function blatFormBuild() {
             `title="${htmlEncode('Align the sequence and show all matches')}">` +
             '<input type="submit" class="gbPill" name="Lucky" value="I&#39;m feeling lucky" ' +
             `title="${htmlEncode('Skip the list of matches and open the best-scoring one straight ' +
-                'away in the Genome Browser. Ignored when "Search many genomes" is ticked.')}">` +
+                'away in the Genome Browser. Ignored when "Search many genomes" is checked.')}">` +
             '<input type="submit" class="gbPill" name="Clear" value="Clear" ' +
             `title="${htmlEncode('Empty the query sequence box')}">` +
         '</div>' +
 
         '</div>' + blatFormSidebar(cfg) + '</div>' +
-        blatFormLimitsModal() +
         blatFormBusyMarkup();
 
     // Move the C-generated genome search bar (real autocomplete over every assembly, already wired
@@ -1023,11 +1011,12 @@ function blatFormBuild() {
     $('#blatTabPaste').on('click', function() { blatFormTab(false); });
     $('#blatTabUpload').on('click', function() { blatFormTab(true); });
     // The example sequence is a real 2.5 kb query, fetched on demand so it is not carried in every
-    // page load.  The link doubles as its own status indicator while the request is in flight.
-    $('#blatExample').on('click', function(ev) {
-        ev.preventDefault();
+    // page load.  The button doubles as its own status indicator while the request is in flight,
+    // and is disabled for that interval so a double-click cannot start a second fetch.
+    $('#blatExample').on('click', function() {
         var link = this;
         var label = cfg.exampleLabel;
+        link.disabled = true;
         link.textContent = 'Loading example…';
         fetch(cfg.exampleUrl)
             .then(function(resp) {
@@ -1042,23 +1031,15 @@ function blatFormBuild() {
                 ta.setSelectionRange(0, 0);
                 ta.scrollTop = 0;
                 link.textContent = label;
+                link.disabled = false;
                 blatFormTab(false);   // in case the user was on the upload tab
             })
             .catch(function(err) {
                 link.textContent = 'Could not load example';
                 // Leave the message up briefly, then let the user try again.
-                setTimeout(function() { link.textContent = label; }, 4000);
+                setTimeout(function() { link.textContent = label; link.disabled = false; }, 4000);
                 console.error('hgBlat: example fetch failed:', err);
             });
-    });
-    $('#blatLimitLink').on('click', function(ev) {
-        ev.preventDefault();
-        $('#blatLimitsBg').css('display', 'flex');
-    });
-    $('#blatLimitsClose').on('click', function() { $('#blatLimitsBg').hide(); });
-    $('#blatLimitsBg').on('click', function(ev) { if (ev.target === this) { $(this).hide(); } });
-    $(document).on('keydown.blatLimits', function(ev) {
-        if (ev.key === 'Escape') { $('#blatLimitsBg').hide(); }
     });
 
     var fileInput = document.getElementById('blatSeqFile');

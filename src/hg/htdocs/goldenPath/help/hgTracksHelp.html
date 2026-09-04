@@ -910,16 +910,18 @@ ATGCTGCGAACAGAGAGCTGCCGCCCCAGGTCGCCCGCCGGACAGGTGGC
 CGCGGCGTCCCCGCTCCTGCTGCTGCTGCTGCTGCTCGCCTGGTGCGCGG
 </code></pre>
 
+<a name="blatLimits"></a>
 <h3>BLAT limitations</h3>
 <p>
-DNA input sequences are limited to a maximum length of 25,000 bases. Protein or translated input
-sequences must not exceed 10,000 letters. As many as 25 multiple sequences may be submitted at the
-same time. The maximum combined length of DNA input for multiple sequence submissions is 50,000
-bases (with a 25,000 base limit per individual sequence). For protein or translated input, the
-maximum combined input length is 25,000 letters (with a 5000 letter limit per individual
-sequence).</p>
+DNA input sequences are limited to a maximum length of 75,000 bases per sequence. Protein or
+translated input sequences must not exceed 10,000 letters per sequence. As many as 25 sequences
+may be submitted at the same time. The maximum combined length of a multiple-sequence submission
+is 187,500 bases for DNA input and 25,000 letters for protein or translated input.</p>
 <p>
-NOTE: Program-driven BLAT use is limited to a maximum of one hit every 15 seconds and no more than
+For jobs above these limits, you can run BLAT on your own machine with the command-line tool; see
+<a href="../../FAQ/FAQblat.html#blat15">Running BLAT locally</a> in the BLAT FAQ.</p>
+<p>
+<strong>NOTE:</strong> Program-driven BLAT use is limited to a maximum of one hit every 15 seconds and no more than
 5000 hits per day.</p>
 
 <h3>BLAT query search results</h3>

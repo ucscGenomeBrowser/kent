@@ -224,8 +224,14 @@ var topLinks = (function() {
         opts = opts || {};
         var canRename = opts.session && opts.loggedIn;
         body.innerHTML = "";
+        // Saved sessions never expire (site policy); a url-mode link (the BLAT alignment page's
+        // snapshot) is durable while used but cleaned after years of no use, so it makes the
+        // softer promise and points at sessions for permanence.
+        var durability = opts.session ? "Links never time out:" :
+            "The link remains valid for years; to keep your results permanently, save them " +
+            "into a Session:";
         body.appendChild(el("p", {textContent: "You can share this link with collaborators, put " +
-            "it into figure legends or manuscripts. Links never time out:"}, {marginTop: "0"}));
+            "it into figure legends or manuscripts. " + durability}, {marginTop: "0"}));
         // Read-only text region (not an <input>) so it's clear the URL isn't meant to be edited.
         var urlBox = el("div", {id: "tlShareUrl", textContent: url},
                         {background: "#f0f0f0", padding: "6px 8px", borderRadius: "4px",

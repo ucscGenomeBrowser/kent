@@ -5248,8 +5248,8 @@ function genomeSelectorInjectStyle() {
     .gsWrap { position:relative; max-width:620px; }
     .gsField { display:flex; align-items:stretch; border:1px solid #9aa6b2; background:#fff; }
     .gsField.gsFocus { border-color:#14487f; box-shadow:0 0 0 2px rgba(20,72,127,0.18); }
-    .gsField input[type=text] { flex:1; min-width:0; border:0; outline:none; padding:11px 12px;
-        font-size:16px; font-family:inherit; color:#23303f; background:transparent; }
+    .gsField input[type=text] { flex:1; min-width:0; border:0; outline:none; padding:9px 12px;
+        font-size:15px; font-family:inherit; color:#23303f; background:transparent; }
     .gsCaret { border:0; border-left:1px solid #dbe1e7; background:#f4f7f9; width:42px;
         display:flex; align-items:center; justify-content:center; cursor:pointer; color:#14487f; }
     .gsCaret:hover { background:#e7edf2; }
@@ -5270,6 +5270,9 @@ function genomeSelectorInjectStyle() {
     .gsRow .gsSpecies { font-size:13px; color:#6b7885; font-style:italic; }
     .gsRow .gsAcc { margin-left:auto; font-size:12.5px; color:#8b96a2; font-variant-numeric:tabular-nums; }
     .gsEmpty { padding:10px 12px; font-size:14px; color:#6b7885; }
+    /* Shown only in the browse (common genomes) view: the user who opens the menu and does not
+     * find their species in the short list is exactly the one who needs to learn they can type. */
+    .gsHint { padding:6px 12px; font-size:12.5px; color:#6b7885; border-bottom:1px solid #e6eaee; }
     .gsPicks { margin-top:10px; display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
     .gsPicksLabel { font-size:13px; color:#6b7885; }
     /* Smaller than the design's 14px and than the house minimum: these are short, high-contrast db
@@ -5416,6 +5419,8 @@ function setupGenomeSelector(config) {
 
         function openCommon() {
             render('Common genomes', commonList(), 'No common genomes configured.');
+            menu.innerHTML = '<div class="gsHint">Start typing to search every available genome</div>' +
+                menu.innerHTML;
             menu.classList.add('gsOpen');
         }
 
@@ -5495,7 +5500,7 @@ function setupGenomeSelector(config) {
             }
             if (top) { list = [top].concat(list); }
             if (!list.length) { picks.innerHTML = ''; return; }
-            picks.innerHTML = '<span class="gsPicksLabel">Quick picks:</span>';
+            picks.innerHTML = '<span class="gsPicksLabel">Shortcuts:</span>';
             list.forEach(function(d) {
                 var b = document.createElement('button');
                 b.type = 'button';

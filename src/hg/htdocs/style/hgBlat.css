@@ -103,8 +103,11 @@
  * so bottom-aligning the row would push Query type down by the height of that line. */
 #blatFormBox .blatRow { display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
 #blatFormBox .blatField { display:flex; flex-direction:column; gap:5px; }
-#blatFormBox .blatField > span { font-size:13px; font-weight:700; color:var(--muted); }
-#blatFormBox .blatField select { padding:6px 8px; font-size:14px; border:1px solid var(--btnLine);
+#blatFormBox .blatField > span { font-size:13px; font-weight:700; color:var(--muted); line-height:19px; }
+/* Same font size as the genome combobox input (.gsField, utils.js) and 1px less vertical padding
+ * (a select draws its own inner chrome), so the two boxes on the row come out the same rendered
+ * height and their tops line up. */
+#blatFormBox .blatField select { padding:8px; font-size:15px; border:1px solid var(--btnLine);
     border-radius:0; background:#fff; color:var(--ink); font-family:inherit; }
 #blatFormBox .blatGenomeSlot { flex:1 1 650px; min-width:260px; max-width:650px; }
 #blatFormBox .blatChecks { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-bottom:16px;
@@ -117,8 +120,16 @@
 #blatFormBox .blatTab { padding:8px 16px; font-size:14px; font-weight:700; cursor:pointer; background:none;
     border:none; border-bottom:3px solid transparent; color:var(--accent); font-family:inherit; }
 #blatFormBox .blatTab.on { border-bottom-color:var(--title); color:var(--ink); }
-#blatFormBox .blatPaneHint { display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+#blatFormBox .blatPaneHint { display:flex; justify-content:space-between; align-items:center; gap:16px;
     flex-wrap:wrap; font-size:13px; color:var(--muted); margin-bottom:6px; }
+/* "Load example" is an action, not a navigation, so it is a small chip-style button rather than a
+ * hyperlink (Lou, #38086).  Sized and colored like the genome search bar's quick-pick pills
+ * (.gsPick in utils.js) so the two read as the same species of control. */
+#blatFormBox .blatChip { font-family:inherit; font-size:12.5px; font-weight:600; padding:3px 10px;
+    border:1px solid var(--btnLine); background:#fff; color:var(--accent); cursor:pointer;
+    border-radius:999px; white-space:nowrap; }
+#blatFormBox .blatChip:hover { border-color:var(--accent); }
+#blatFormBox .blatChip:disabled { color:var(--muted); border-color:var(--btnLine); cursor:default; }
 #blatFormBox textarea.blatSeq { width:100%; height:200px; resize:vertical; padding:9px 11px; box-sizing:border-box;
     font-family:'Roboto Mono','Courier New',monospace; font-size:13px; line-height:1.6;
     border:1px solid var(--btnLine); border-radius:0; color:var(--ink); background:#fff; }
@@ -141,8 +152,6 @@
 #blatFormBox .gbCard div + div { margin-top:9px; }
 #blatFormBox .gbCard a { color:var(--accent); }
 #blatFormBox .gbCard a:hover { color:var(--accentHover); }
-#blatFormBox .blatLimitRow { display:flex; justify-content:space-between; gap:12px; padding-bottom:7px;
-    border-bottom:1px solid var(--lineSoft); font-size:13px; }
 /* The genome search bar is emitted by hgBlat.c (printGenomeSearchBar) and relocated into the
  * layout by JS, so it keeps its real autocomplete over every assembly. */
 /* The genome picker is setupGenomeSelector (utils.js), which builds its own combobox; only

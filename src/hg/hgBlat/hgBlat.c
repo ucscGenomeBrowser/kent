@@ -2366,7 +2366,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	}
     if (oneSize > maxSingleSize)
 	{
-	warn("Sequence %s is %d letters long (max is %d), skipping",
+	warn("Sequence %s is %d letters long (max is %d), skipping. "
+	    "See the <a target='_blank' href='../goldenPath/help/hgTracksHelp.html#blatLimits'>"
+	    "BLAT input limits</a> for all limits and how to run larger jobs from the command line.",
 	    seq->name, oneSize, maxSingleSize);
 	continue;
 	}
@@ -2390,7 +2392,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     totalSize += oneSize;
     if (totalSize > maxTotalSize)
         {
-	warn("Sequence %s would take us over the %d letter limit, stopping here.",
+	warn("Sequence %s would take us over the %d letter limit, stopping here. "
+	    "See the <a target='_blank' href='../goldenPath/help/hgTracksHelp.html#blatLimits'>"
+	    "BLAT input limits</a> for all limits and how to run larger jobs from the command line.",
 	     seq->name, maxTotalSize);
 	break;
 	}
@@ -2798,7 +2802,9 @@ jsonWriteBoolean(jw, "onlyLatest", cartUsualBoolean(cart, "blatOnlyLatest", FALS
  * haplotype and a fix patch of chr8, so the results table shows the alt/fix rows and their
  * explanatory icons rather than a single boring hit. */
 jsonWriteString(jw, "exampleUrl", "../goldenPath/help/blatExample.fa");
-jsonWriteString(jw, "exampleLabel", "Load example - human PTP4A3 gene");
+jsonWriteString(jw, "exampleLabel", "Load example");
+jsonWriteString(jw, "exampleTitle", "Fill the box with an example query: "
+    "2.5 kb of the human PTP4A3 gene.");
 /* Same "similar tools" links the classic page offered, so the sidebar isn't a set of dead links.
  * These carry $DB$ rather than a baked-in db: picking a genome no longer reloads the page, so
  * blatFormSetDb() re-expands them against the newly chosen assembly.

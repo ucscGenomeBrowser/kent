@@ -9129,11 +9129,13 @@ printf("<style>"
        " align-items:center; justify-content:space-between; padding:8px 16px}"  /* gold title band */
        ".blatTitleBar .blatTtl{font-size:18px; font-weight:700}"
        ".blatTitleBar .blatBtns{display:flex; gap:8px; align-items:center}"
-       ".blatBtn{padding:4px 12px; font-size:13px; border:1px solid #999; border-radius:3px;"
-       " background:#e6e6e6; text-decoration:none; white-space:nowrap; cursor:pointer}"
+       /* same recipe as .gbPill in gbModern.css (not loaded on this page), so these read as the
+        * same buttons as on the BLAT results page */
+       ".blatBtn{padding:5px 12px; font-size:13px; font-weight:700; border:1px solid #999;"
+       " border-radius:0; background:#fff; text-decoration:none; white-space:nowrap; cursor:pointer}"
        /* nice_menu.css sets a:link blue (specificity 0,1,1); a.blatBtn:link (0,2,1) beats it */
-       "a.blatBtn:link, a.blatBtn:visited, a.blatBtn:hover{color:#000; text-decoration:none}"
-       ".blatBtn:hover{background:#d8d8d8}"
+       "a.blatBtn:link, a.blatBtn:visited, a.blatBtn:hover{color:#003a72; text-decoration:none}"
+       ".blatBtn:hover{background:#eef2f7}"
        "#blatAlnBody{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color:#374a5e;"
        " display:grid; grid-template-columns:220px 1fr;"      /* full-height sidebar + content column */
        " background:#fff}"                                    /* edge to edge: no margin, no border */
@@ -9158,7 +9160,7 @@ printf("<style>"
        "#blatAlnContent pre{margin:0; padding:2px 0 12px; line-height:1.4; background:none; border:0;"
        " border-radius:0; color:#374a5e; white-space:pre; word-break:normal; word-wrap:normal}"
        /* key-value summary strip, mirroring hgBlat's .blatStrip (label over value, thin dividers) */
-       ".blatAlnStrip{display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:2px 0 14px}"
+       ".blatAlnStrip{display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:12px 0 14px}"
        ".blatAlnStat{display:flex; flex-direction:column; gap:1px}"
        ".blatAlnStat .k{font-size:12px; color:#5b6572; font-weight:700}"
        ".blatAlnStat .v{font-size:14px; color:#1e2833; font-weight:700}"
@@ -27561,6 +27563,7 @@ safef(buffer, sizeof buffer, customTextTemplate, groupTag, bigBedTn.forCgi, host
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);
+
 
 /* Optionally clear PREVIOUS BLAT result tracks (those tagged blatResult=on) so the user is not
  * confused about which results are current.  hg.conf "blatOldTracks":
