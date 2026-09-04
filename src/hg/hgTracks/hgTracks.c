@@ -8142,8 +8142,19 @@ for (track = trackList; track != NULL; track = track->next)
 
 	    if (isTrackForParallelLoad(subtrack))
 		{
-		if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
+		enum trackVisibility subVis = tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE);
+		if (subVis != tvHide)
 		    {
+		    /* Settle this subtrack's visibility here, on the main thread, before
+		     * the worker thread that loads it can read it.  A composite child's
+		     * visibility is otherwise written lazily by limitedVisFromComposite(),
+		     * called from compositeLoad() on the main thread while the worker is
+		     * already running, so the loader could read it either before or after
+		     * the write and the track came out at one of two heights.  This is the
+		     * same value and the same test limitedVisFromComposite() would use, so
+		     * the write only moves earlier.  refs #38254 */
+		    if (tdbIsCompositeChild(subtrack->tdb) && !subtrack->limitedVisSet)
+			subtrack->visibility = subVis;
 		    struct paraFetchData *pfd;
 		    AllocVar(pfd);
 		    pfd->track = subtrack;  // need pointer to be stable
