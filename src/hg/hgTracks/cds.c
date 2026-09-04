@@ -790,16 +790,32 @@ else
 }
 
 
-static void getGenbankCds(char *acc, struct genbankCds* cds)
+static char *cdsDb(struct track *tg)
+/* The assembly whose CDS and sequence tables go with this track's items.  A quickLifted
+ * track's items came from another assembly, and that is where their CDS is described.
+ * The destination is not merely the wrong answer:  when it is a hub-backed assembly its
+ * name is not a database at all, and asking for a connection to it fails. */
+{
+char *liftDb = (tg->tdb != NULL) ? trackDbSetting(tg->tdb, "quickLiftDb") : NULL;
+
+return (liftDb != NULL) ? liftDb : database;
+}
+
+static void getGenbankCds(char *db, char *acc, struct genbankCds* cds)
 /* Get cds start and stop from genbank tables, if available. Otherwise it
  * does nothing */
 {
-static boolean first = TRUE, haveGbCdnaInfo = FALSE;
-struct sqlConnection *conn = hAllocConn(database);
-if (first)
+// Remember whether the table is there per assembly, not once for the process:  one page
+// can hold both native and quickLifted alignment tracks, which read different assemblies.
+static struct hash *haveGbCdnaInfoHash = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+if (haveGbCdnaInfoHash == NULL)
+    haveGbCdnaInfoHash = hashNew(0);
+int haveGbCdnaInfo = hashIntValDefault(haveGbCdnaInfoHash, db, -1);
+if (haveGbCdnaInfo < 0)
     {
     haveGbCdnaInfo = sqlTableExists(conn, gbCdnaInfoTable);
-    first = FALSE;
+    hashAddInt(haveGbCdnaInfoHash, db, haveGbCdnaInfo);
     }
 if (haveGbCdnaInfo)
     {
@@ -812,14 +828,14 @@ if (haveGbCdnaInfo)
 hFreeConn(&conn);
 }
 
-static void getCdsFromTbl(char *acc, char *baseColorSetting, struct genbankCds* cds)
+static void getCdsFromTbl(char *db, char *acc, char *baseColorSetting, struct genbankCds* cds)
 /* Get CDS from a specified table, doing nothing if not found */
 {
 char *p = skipToSpaces(baseColorSetting);
 char *cdsSpecTbl = skipLeadingSpaces(p);
 if (*cdsSpecTbl == '\0')
     errAbort("%s table requires a table name as an argument", BASE_COLOR_USE_CDS);
-struct sqlConnection *conn = hAllocConnDbTbl(cdsSpecTbl, &cdsSpecTbl, database);
+struct sqlConnection *conn = hAllocConnDbTbl(cdsSpecTbl, &cdsSpecTbl, db);
 // allow multiple, but only use the first, since transMapGene table might have
 // multiple entries for same gene from different source dbs.
 struct cdsSpec *cdsSpec
@@ -855,9 +871,9 @@ else
     char *setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_CDS);
     char *dataName = getItemDataName(tg, psl->qName);
     if ((setting != NULL) && startsWith("table", setting))
-        getCdsFromTbl(dataName, setting, cds);
+        getCdsFromTbl(cdsDb(tg), dataName, setting, cds);
     else
-        getGenbankCds(dataName, cds);
+        getGenbankCds(cdsDb(tg), dataName, cds);
     }
 }
 
@@ -1120,7 +1136,7 @@ return seq;
 }
 #endif /* GBROWSE */
 
-static struct dnaSeq *maybeGetExtFileSeq(char *seqSource, char *name)
+static struct dnaSeq *maybeGetExtFileSeq(char *db, char *seqSource, char *name)
 /* look up sequence name in seq and extFile tables specified in seqSource */
 {
 /* seqSource is: extFile seqTbl extFileTbl */
@@ -1134,7 +1150,7 @@ int nwords = chopByWhite(buf->string, words, ArraySize(words));
 if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE,
              seqSource);
-return hDnaSeqGet(database, name, words[1], words[2]);
+return hDnaSeqGet(db, name, words[1], words[2]);
 }
 
 
@@ -1161,8 +1177,11 @@ static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
 boolean doUpper = TRUE;
 struct dnaSeq *mrnaSeq = NULL;
 char *name = getItemDataName(tg, mrnaName);
+// The sequence the alignment is to belongs with the alignment, so on a quickLifted track
+// it comes from the assembly the alignment came from, not the one on screen.
+char *seqDb = cdsDb(tg);
 if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
-    mrnaSeq = hGenBankGetMrna(database, name, "refMrna");
+    mrnaSeq = hGenBankGetMrna(seqDb, name, "refMrna");
 else
     {
     char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
@@ -1175,9 +1194,9 @@ else
 	    mrnaSeq = maybeGetPcrResultSeq(lf);
 #endif /* GBROWSE */
 	else if (startsWith("extFile", seqSource))
-	    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+	    mrnaSeq = maybeGetExtFileSeq(seqDb, seqSource, name);
 	else if (endsWith("ExtFile", seqSource))
-	    mrnaSeq = maybeGetExtFileSeq(seqSource, name);
+	    mrnaSeq = maybeGetExtFileSeq(seqDb, seqSource, name);
 	else if (sameString("nameIsSequence", seqSource))
 	    {
 	    mrnaSeq = newDnaSeq(cloneString(name), strlen(name), name);
@@ -1216,18 +1235,18 @@ else
 	    {
 	    char *table = seqSource;
 	    nextWord(&table);
-	    mrnaSeq = hGenBankGetMrna(database, name, table);
+	    mrnaSeq = hGenBankGetMrna(seqDb, name, table);
 	    }
 	else if (startsWithWord("db", seqSource))
 	    {
 	    char *sourceDb = seqSource;
 	    nextWord(&sourceDb);
 	    if (isEmpty(sourceDb))
-		sourceDb = database;
+		sourceDb = seqDb;
 	    mrnaSeq = hChromSeq(sourceDb, name, 0, 0);
 	    }
 	else
-	    mrnaSeq = hGenBankGetMrna(database, name, NULL);
+	    mrnaSeq = hGenBankGetMrna(seqDb, name, NULL);
 	}
     }
 if (mrnaSeq != NULL && doUpper)

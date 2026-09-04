@@ -13,6 +13,8 @@
 #include "hgTracks.h"
 #include "psl.h"
 #include "genbank.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 #ifndef GBROWSE
 #include "../gsid/gsidTable/gsidTable.h"
@@ -101,7 +103,11 @@ andLogic = sameString(type, "and");
 
 /* Make a pass though each filter, and start setting up search for
  * those that have some text. */
-conn = hAllocConn(database);
+// For a quickLifted track the accessions, and the gbCdnaInfo ids the filter tables point
+// at, belong to the assembly the alignments came from, not the one on screen.
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+char *filterDb = (liftDb != NULL) ? liftDb : database;
+conn = hAllocConn(filterDb);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
     if (fil->pattern[0] != 0)   // Filled above
@@ -238,7 +244,14 @@ static boolean shouldFilterGenbankPatentSequences(struct track *tg)
 {
 char name[256];
 safef(name, sizeof(name), "%s.%s", tg->tdb->track, SHOW_PATENT_SEQUENCES_SUFFIX);
-return (sameString(tg->tdb->track, "mrna")|| sameString(tg->tdb->track, "intronEst"))
+// Strip the hub prefix on a quickLifted track so hub_NNN_mrna is recognized.  The
+// accession test itself needs no database, so it is right on a lifted track too.  Leave
+// other hubs alone: a hub track that merely happens to be named mrna was not being
+// filtered before and should not start now.
+char *bareTrack = tg->tdb->track;
+if (trackDbSetting(tg->tdb, "quickLifted") != NULL)
+    bareTrack = trackHubSkipHubName(bareTrack);
+return (sameString(bareTrack, "mrna")|| sameString(bareTrack, "intronEst"))
         && !cartUsualBoolean(cart, name, FALSE);
 }
 
@@ -332,6 +345,35 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 return lfFromPslx(psl, 1, isXeno, FALSE, NULL);
 }
 
+static char *pslChromFilterWhere(struct track *tg, char *extraWhere, int extraWhereSize)
+/* Return the SQL clause for this track's chromFilter setting, written into extraWhere,
+ * or NULL when the setting asks for every chromosome. */
+{
+char optionChr[128]; /* Option -  chromosome filter */
+
+safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->track);
+char *optionChrStr = cartUsualString(cart, optionChr, "All");
+if (!startsWith("chr",optionChrStr))
+    return NULL;
+
+sqlSafef(extraWhere, extraWhereSize, "qName = \"%s\"",optionChrStr);
+return extraWhere;
+}
+
+static void finishPslLfList(struct track *tg, struct linkedFeatures *lfList)
+/* Put the linked features built from an alignment table in order, apply the filters, and
+ * hang them on the track. */
+{
+slReverse(&lfList);
+if (tg->visibility != tvDense)
+    slSort(&lfList, linkedFeaturesCmpStart);
+if (tg->extraUiData)
+    filterMrna(tg, &lfList);
+if (shouldFilterGenbankPatentSequences(tg))
+    filterGenbankPatentSequences(tg, &lfList);
+tg->items = lfList;
+}
+
 static void connectedLfFromPslsInRange(struct sqlConnection *conn,
     struct track *tg, int start, int end, char *chromName,
     boolean isXeno, boolean nameGetsPos, int sizeMul)
@@ -341,23 +383,11 @@ static void connectedLfFromPslsInRange(struct sqlConnection *conn,
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
-char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
-char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128];
 
-safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->track);
-optionChrStr = cartUsualString(cart, optionChr, "All");
-if (startsWith("chr",optionChrStr))
-    {
-    sqlSafef(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
-    sr = hRangeQuery(conn, tg->table, chromName, start, end, extraWhere, &rowOffset);
-    }
-else
-    {
-    safef(extraWhere, sizeof(extraWhere), " ");
-    sr = hRangeQuery(conn, tg->table, chromName, start, end, NULL, &rowOffset);
-    }
+sr = hRangeQuery(conn, tg->table, chromName, start, end,
+                 pslChromFilterWhere(tg, extraWhere, sizeof(extraWhere)), &rowOffset);
 
 if (sqlCountColumns(sr) < 21+rowOffset)
     errAbort("trackDb has incorrect table type for track \"%s\"",
@@ -369,23 +399,61 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&lfList, lf);
     // Don't free psl - may be used by baseColor code (and freeing is slow)
     }
-slReverse(&lfList);
-if (tg->visibility != tvDense)
-    slSort(&lfList, linkedFeaturesCmpStart);
-if (tg->extraUiData)
-    filterMrna(tg, &lfList);
-if (shouldFilterGenbankPatentSequences(tg))
-    filterGenbankPatentSequences(tg, &lfList);
-tg->items = lfList;
 sqlFreeResult(&sr);
+finishPslLfList(tg, lfList);
+}
+
+static struct slList *pslRowLoader(char **row, int numFields)
+/* Load one alignment out of a SQL row, in the shape quickLiftSql wants. */
+{
+return (struct slList *)pslLoad(row);
+}
+
+static void quickLiftLfFromPsls(struct track *tg, char *chrom, int start, int end,
+	boolean isXeno, boolean nameGetsPos)
+/* Read alignments out of the assembly the track was lifted from, map them onto the
+ * reference, and turn them into linked features. */
+{
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(tg->tdb, tg->table, &table, &liftDb);
+char *quickLiftFile = trackDbSetting(tg->tdb, "quickLiftUrl");
+char extraWhere[128];
+
+struct hash *chainHash = newHash(8);
+struct sqlConnection *conn = hAllocConn(liftDb);
+struct psl *pslList = (struct psl *)quickLiftSql(conn, quickLiftFile, table,
+    chrom, start, end, NULL, pslChromFilterWhere(tg, extraWhere, sizeof(extraWhere)),
+    pslRowLoader, 0, chainHash);
+hFreeConn(&conn);
+
+struct linkedFeatures *lfList = NULL;
+struct psl *psl, *nextPsl;
+for(psl = quickLiftPsls(chainHash, pslList); psl != NULL; psl = nextPsl)
+    {
+    nextPsl = psl->next;
+    psl->next = NULL;    // lfFromPslx hangs on to the psl, so don't leave it in a list
+
+    // sizeMul is 1 whatever the caller passed:  the lift returns an untranslated
+    // alignment, and it puts a protein alignment into nucleotide space on the way, so the
+    // block sizes are already in bases.
+    slAddHead(&lfList, lfFromPslx(psl, 1, isXeno, nameGetsPos, tg));
+    }
+finishPslLfList(tg, lfList);
 }
 
 static void lfFromPslsInRange(struct track *tg, int start, int end,
-	char *chromName, boolean isXeno, boolean nameGetsPos, int sizeMul)
+	char *chrom, boolean isXeno, boolean nameGetsPos, int sizeMul)
 /* Return linked features from range of table. */
 {
+if (trackDbSetting(tg->tdb, "quickLiftDb") != NULL)
+    {
+    quickLiftLfFromPsls(tg, chrom, start, end, isXeno, nameGetsPos);
+    return;
+    }
+
 struct sqlConnection *conn = hAllocConn(database);
-connectedLfFromPslsInRange(conn, tg, start, end, chromName,
+connectedLfFromPslsInRange(conn, tg, start, end, chrom,
 	isXeno, nameGetsPos, sizeMul);
 hFreeConn(&conn);
 }
