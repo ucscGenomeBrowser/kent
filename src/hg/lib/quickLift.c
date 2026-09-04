@@ -28,6 +28,7 @@
 #include "psl.h"
 #include "chainToPsl.h"
 #include "pslTransMap.h"
+#include "maf.h"
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -708,6 +709,86 @@ for (i = psl->blockCount - 1; i >= 0; i--)
     }
 chain->blockList = blockList;
 return chain;
+}
+
+struct mafAli *quickLiftMafs(struct hash *chainHash, struct mafAli *mafList,
+    char *sourceDb, char *refSrc, int refSrcSize)
+// Map MAF blocks from the other assembly onto our current reference.
+//
+// A MAF block has to be one contiguous run on its first row, and the lift does not keep
+// the reference contiguous:  where the reference assembly has lost bases the columns for
+// them go away, and where it has gained bases the alignment says nothing about them.  So a
+// block is cut at every chain block boundary.  Inside one chain block the two assemblies
+// run in step, which is what lets the columns be carried over untouched:  only the first
+// row's coordinates change, and mafSubset does the rest of the arithmetic.
+//
+// refSrc is the name the browser expects on the reference row, "<db>.<chrom>", with no hub
+// prefix.  Blocks whose reference does not map are dropped.
+{
+struct mafAli *outList = NULL;
+struct mafAli *maf, *nextMaf;
+
+for (maf = mafList; maf != NULL; maf = nextMaf)
+    {
+    nextMaf = maf->next;
+    maf->next = NULL;
+
+    // The first row of a MAF is its reference, and a reference row is always forward.
+    struct mafComp *ref = maf->components;
+    if ((ref == NULL) || (ref->strand != '+') || (ref->size <= 0))
+        {
+        mafAliFree(&maf);
+        continue;
+        }
+
+    // the chains are keyed on the sequence name in the other assembly
+    char srcBuf[1024];
+    safecpy(srcBuf, sizeof srcBuf, ref->src);
+    char *srcChrom = mafSplitSrcGetChrom(srcBuf, sourceDb);
+    int refStart = ref->start;
+    int refEnd = refStart + ref->size;
+
+    struct chain *chain = liftOverChainForRange(chainHash, srcChrom, refStart, refEnd);
+    if (chain == NULL)
+        {
+        mafAliFree(&maf);
+        continue;
+        }
+
+    struct cBlock *cb;
+    for (cb = chain->blockList; cb != NULL; cb = cb->next)
+        {
+        int runStart = max(cb->tStart, refStart);
+        int runEnd = min(cb->tEnd, refEnd);
+        if (runStart >= runEnd)
+            continue;
+
+        struct mafAli *sub = mafSubset(maf, ref->src, runStart, runEnd);
+        if (sub == NULL)
+            continue;
+
+        int destStart = cb->qStart + (runStart - cb->tStart);
+        if (chain->qStrand == '-')
+            {
+            // The lift turns the block over, so turn every row over with it.  A chain
+            // keeps its query side reverse complemented, so the forward start of the run
+            // comes from the far end of it.
+            mafFlipStrand(sub);
+            destStart = chain->qSize - (cb->qStart + (runEnd - cb->tStart));
+            }
+
+        struct mafComp *subRef = sub->components;
+        freeMem(subRef->src);
+        subRef->src = cloneString(refSrc);
+        subRef->srcSize = refSrcSize;
+        subRef->strand = '+';
+        subRef->start = destStart;
+        slAddHead(&outList, sub);
+        }
+    mafAliFree(&maf);
+    }
+slReverse(&outList);
+return outList;
 }
 
 boolean quickLiftIsOwnChainTrack(struct trackDb *tdb)

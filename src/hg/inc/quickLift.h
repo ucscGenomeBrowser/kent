@@ -13,6 +13,7 @@
 
 struct psl;
 struct chain;
+struct mafAli;
 
 struct quickLiftRegions
 // store highlight information
@@ -101,6 +102,13 @@ struct psl *quickLiftPsl(struct hash *chainHash, struct hash **pMapPsls, struct 
 // The query side (the mRNA, EST or protein the alignment is to) is left alone.  Returns
 // NULL if the alignment doesn't map.  pMapPsls points at a hash of mapping alignments the
 // caller keeps across a run of items; point it at a NULL hash to start.
+
+struct mafAli *quickLiftMafs(struct hash *chainHash, struct mafAli *mafList,
+    char *sourceDb, char *refSrc, int refSrcSize);
+// Map MAF blocks from the other assembly onto our current reference.  A block is cut at
+// every chain block boundary, since a MAF block has to be one contiguous run on its first
+// row and the lift does not keep the reference contiguous.  refSrc is the name the browser
+// expects on the reference row, "<db>.<chrom>", with no hub prefix.
 
 boolean quickLiftIsOwnChainTrack(struct trackDb *tdb);
 // TRUE when this is the chain track quickLift builds to show the lift itself.  That stanza
