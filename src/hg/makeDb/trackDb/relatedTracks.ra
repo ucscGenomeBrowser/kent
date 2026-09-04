@@ -24,6 +24,9 @@ hg38 gnomadVariants caddSuper View CADD scores for this variant and region
 hg38 constraintSuper gnomadPLI Predicted constraint metrics from gnomAD
 hg38 gnomadPLI constraintSuper Container track of various constraint scores
 
+hg38 >imprinting humanMethylationAtlasSummary Methylation of purified cell types, from the Kaplan lab
+hg38 >humanMethylationAtlasSummary imprinting Imprinted genes and allele-specific methylation
+
 hg38 gnomadStr strVar Population-level short tandem repeat and VNTR variation from multiple projects
 hg38 strVar gnomadStr Short tandem repeat genotypes at disease-associated loci, from gnomAD v3.1.3
 

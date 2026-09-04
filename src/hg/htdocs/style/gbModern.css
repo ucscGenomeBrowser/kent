@@ -105,6 +105,25 @@ table.hgInside { background:#fff; }
     border-radius:0; padding:6px 8px; font-size:14px; font-family:inherit; background:#fff; }
 .gbModalBtns { display:flex; gap:8px; justify-content:flex-end; margin-top:18px; }
 
+/* Busy overlay - a scrim over a spinner card, shown while a request that navigates the page away is
+ * in flight.  A plain form POST gives no feedback of its own, and a BLAT run against a dynamic
+ * server can sit there for many seconds, so without this the page looks dead after Submit.  Same
+ * placement rules as the modal: keep the markup inside the .gbApp wrapper.  Add class "on" to show
+ * it; there is no way to dismiss it, since the only thing that ends the wait is the new page. */
+.gbBusyBg { position:fixed; top:0; right:0; bottom:0; left:0; z-index:1100;
+    background:rgba(255,255,255,.75); display:none; align-items:center; justify-content:center; }
+.gbBusyBg.on { display:flex; }
+.gbBusyCard { background:#fff; border:1px solid var(--line); box-shadow:0 4px 18px rgba(0,0,0,.28);
+    padding:22px 26px; display:flex; align-items:center; gap:16px; max-width:92vw; }
+.gbBusyTitle { font-size:15px; font-weight:700; color:var(--ink); }
+.gbBusyText { font-size:13px; color:var(--muted); margin-top:4px; max-width:380px; line-height:1.4; }
+/* Drawn in CSS rather than loaded as images/loading.gif: the page is already navigating away when
+ * this appears, so a request for an image is exactly what we cannot count on finishing. */
+.gbSpinner { flex:none; width:28px; height:28px; border:3px solid var(--lineSoft);
+    border-top-color:var(--navy); border-radius:50%; animation:gbSpin .8s linear infinite; }
+@keyframes gbSpin { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .gbSpinner { animation-duration:2.4s; } }
+
 /* Generic dense results table - steel-tint header, zebra rows, navy selection bar.  Apply class
  * "gbTable" to the <table>; the tool may add its own column classes. */
 .gbTable { font-size:13px; width:100%; border-collapse:collapse; }

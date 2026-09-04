@@ -1,0 +1,228 @@
+<h2>Description</h2>
+
+<p>
+An imprinted differentially methylated region, or iDMR, is a stretch of the genome where the CpG sites of one parental copy are methylated and the same sites on the other copy are not. Because the methylated copy is always the one from the same parent, an iDMR is a fixed landmark that says which of a person's two chromosomes came from the mother and which from the father, without sequencing the parents.
+</p>
+
+<p>
+This track shows 192 such regions on the autosomes, assembled by Akbari et al.
+(2023) from five earlier genome-wide surveys of imprinted methylation and used
+by their PatMat method to assign whole chromosomes to a parent of origin. Just
+under half of the regions were reported independently by two or more of the
+five studies. The rest come from a single study and were kept only after they
+showed the expected half-methylated signal in public methylomes from blood and
+from many tissues. The X chromosome was left out, since it is not generally
+thought to carry iDMRs.
+</p>
+
+<p>
+The regions cover the classic imprinting control regions, including the H19
+region and both IGF2 DMRs on chromosome 11, KvDMR1 at the KCNQ1 cluster, the
+SNRPN region on chromosome 15, the IG-DMR and MEG3 regions on chromosome 14 and
+both GNAS regions on chromosome 20, together with a long tail of less
+well-established loci.
+</p>
+
+<p>
+See the <a href="hgTrackUi?g=imprinting">Imprinting</a> track collection page for background on genomic imprinting and for the color scheme shared by all of its subtracks.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each item is one region. Items are labeled with the first gene at or near the
+region; the configuration page can switch the label to the full list of genes,
+which is also shown when the mouse hovers over an item. The regions have no
+meaningful strand.
+</p>
+
+<p>
+The color shows which parental copy carries the methylation. Vermillion and
+blue mean the maternal and the paternal copy on every subtrack of this
+collection, but what is marked differs: this track marks the <em>methylated</em>
+copy, while <a href="hgTrackUi?g=geneimprint">Geneimprint</a> marks the
+<em>expressed</em> copy. At the H19 region this track is blue because the
+paternal copy is the methylated one, and Geneimprint shows H19 in vermillion
+because the maternal copy is the expressed one. Both are right. Note also that
+methylation at an imprinting control region does not always silence the nearby
+gene: the methylated paternal H19 region is what allows IGF2 to be expressed
+from the paternal chromosome.
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>Maternal &mdash; the copy inherited from the mother is methylated,
+          so it is the silenced copy (144 regions)</td></tr>
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>Paternal &mdash; the copy inherited from the father is methylated,
+          so it is the silenced copy (48 regions)</td></tr>
+</table>
+
+<p>
+Three filters are available: methylated allele, evidence level (reported by
+several studies or by one study plus confirmation in public methylomes), and
+which of the five source studies reported the region. None of them filters
+anything out by default.
+</p>
+
+<p>
+Clicking a region opens a page with the methylated allele, the source studies,
+and the counts behind the confirmation step: how many blood methylomes and how
+many tissue methylomes could be tested at that region, and in how many of them
+the region was partially methylated. One region, the H19 region on chromosome
+11, has no counts in the published table, so those rows are left out on its
+page.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Akbari et al. combined nanopore sequencing, which reads DNA methylation
+directly off the same molecule as the sequence, with the long-range phase
+information in Strand-seq data, to build chromosome-length haplotypes and then
+assign each haplotype to a parent. Nanopore reads at 24 to 38-fold coverage
+were base called with guppy and mapped to GRCh38 with minimap2, variants were
+called with Clair3, and Strand-seq libraries at 2.8 to 9.5-fold combined
+coverage were used to phase those variants across whole chromosomes. The parent
+of origin then follows from the methylation state of the haplotypes at the
+iDMRs. Tested on five trios with diverse genetic backgrounds, the method
+assigned the parent of origin correctly for every autosome, with a mismatch
+error rate of 0.31% for single-nucleotide variants and 1.89% for insertions and
+deletions.
+</p>
+
+<p>
+The region list itself was built as follows. Candidate iDMRs were gathered from
+five earlier genome-wide studies (Court et al. 2014, Joshi et al. 2016,
+Hernandez Mora et al. 2018, Zink et al. 2018 and Akbari et al. 2022). Regions
+overlapping between two or more studies were merged into the largest interval
+covered, and regions within 1 kb of each other with the same parent of origin
+were also merged. This gave 93 regions seen in at least two studies and 306
+seen in only one. The single-study regions were then filtered: first against
+twelve nanopore-sequenced cell lines with trio information, dropping regions
+whose parent of origin conflicted with the original report, and then against
+whole-genome bisulfite data from 119 blood samples from 87 individuals in
+Blueprint and 60 samples covering 29 tissue types from ENCODE and Roadmap. The
+reasoning behind the second filter is that if only one allele of a region is
+methylated, the two alleles together should read as about half methylated. A
+region counted as partially methylated in a sample if it had at least five CpG
+sites with at least five reads and more than 60% of those sites had a
+methylation fraction between 0.35 and 0.65. Regions had to pass in at least two
+samples and in at least 5% of the samples where they could be tested. That left
+99 of the single-study regions, for 192 in total. As a control, randomly chosen
+intervals passed the same criteria only 2.4% of the time.
+</p>
+
+<p>
+The region list was taken from table S3 of the paper, which is also distributed
+with the authors' PatMat software as
+<tt>Imprinted_DMR_List_V1.GRCh38.tsv</tt> at
+<a href="https://github.com/vahidAK/PatMat" target="_blank">https://github.com/vahidAK/PatMat</a>.
+It was converted to browser coordinates without any other change, and all 192
+regions are shown. The processing steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt" target="_blank">imprinting makeDoc</a>
+and the script is in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/imprinting" target="_blank">makeDb/scripts/imprinting</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through
+our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>akbariIdmr</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a
+bigBed file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/akbari2023/" target="_blank">our download server</a>.
+The file for this track is called <tt>akbariIdmr.bb</tt>. Individual regions or
+the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded
+as a precompiled binary for your system. Instructions for downloading source
+code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/akbari2023/akbariIdmr.bb -chrom=chr11 -start=1900000 -end=2800000 stdout</tt>
+</p>
+
+<p>
+The original region list can be downloaded from the
+<a href="https://github.com/vahidAK/PatMat" target="_blank">PatMat repository</a>
+or from the supplementary material of the paper.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Vahid Akbari and colleagues at Canada's Michael Smith Genome Sciences
+Centre and the University of British Columbia for compiling and publishing the
+region list.
+</p>
+
+<h2>References</h2>
+
+<p>
+Akbari V, Hanlon VCT, O&#x27;Neill K, Lefebvre L, Schrader KA, Lansdorp PM, Jones SJM.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/36777186" target="_blank">
+Parent-of-origin detection and chromosome-scale haplotyping using long-read DNA methylation
+sequencing and Strand-seq</a>.
+<em>Cell Genom</em>. 2023 Jan 11;3(1):100233.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36777186" target="_blank">36777186</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9903809/" target="_blank">PMC9903809</a>
+</p>
+
+<p>
+Akbari V, Garant JM, O&#x27;Neill K, Pandoh P, Moore R, Marra MA, Hirst M, Jones SJM.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35787786" target="_blank">
+Genome-wide detection of imprinted differentially methylated regions using nanopore sequencing</a>.
+<em>Elife</em>. 2022 Jul 5;11.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35787786" target="_blank">35787786</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9255983/" target="_blank">PMC9255983</a>
+</p>
+
+<p>
+Zink F, Magnusdottir DN, Magnusson OT, Walker NJ, Morris TJ, Sigurdsson A, Halldorsson GH,
+Gudjonsson SA, Melsted P, Ingimundardottir H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30349119" target="_blank">
+Insights into imprinting from parent-of-origin phased methylomes and transcriptomes</a>.
+<em>Nat Genet</em>. 2018 Nov;50(11):1542-1552.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30349119" target="_blank">30349119</a>
+</p>
+
+<p>
+Hernandez Mora JR, Tayama C, Sánchez-Delgado M, Monteagudo-Sánchez A, Hata K, Ogata T, Medrano J,
+Poo-Llanillo ME, Simón C, Moran S <em>et al</em>.
+<a href="https://www.tandfonline.com/doi/10.2217/epi-2017-0172?url_ver=Z39.88-2003&amp;rfr_id=ori:ri
+d:crossref.org&amp;rfr_dat=cr_pub%20%200pubmed" target="_blank">
+Characterization of parent-of-origin methylation using the Illumina Infinium MethylationEPIC array
+platform</a>.
+<em>Epigenomics</em>. 2018 Jul;10(7):941-954.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29962238" target="_blank">29962238</a>
+</p>
+
+<p>
+Joshi RS, Garg P, Zaitlen N, Lappalainen T, Watson CT, Azam N, Ho D, Li X, Antonarakis SE, Brunner
+HG <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27569549" target="_blank">
+DNA Methylation Profiling of Uniparental Disomy Subjects Provides a Map of Parental Epigenetic Bias
+in the Human Genome</a>.
+<em>Am J Hum Genet</em>. 2016 Sep 1;99(3):555-566.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27569549" target="_blank">27569549</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5011056/" target="_blank">PMC5011056</a>
+</p>
+
+<p>
+Court F, Tayama C, Romanelli V, Martin-Trujillo A, Iglesias-Platas I, Okamura K, Sugahara N, Simón
+C, Moore H, Harness JV <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/24402520" target="_blank">
+Genome-wide parent-of-origin DNA methylation analysis reveals the intricacies of human imprinting
+and suggests a germline methylation-independent mechanism of establishment</a>.
+<em>Genome Res</em>. 2014 Apr;24(4):554-69.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24402520" target="_blank">24402520</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3975056/" target="_blank">PMC3975056</a>
+</p>
+

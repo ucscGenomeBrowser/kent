@@ -616,6 +616,26 @@ MIRROR_KNOBS = {
                "never turn it on, so there is no release at which the flag "
                "could be deleted.  If the RR's default ever flips TRUE the "
                "flag still has to stay for everyone else."),
+        h("login.recovEmailChange", "flag", "hg/hgLogin/hgLogin.c",
+          default="FALSE", role="knob", public=True, verified=True,
+          ticket="38197",
+          note="Offer the page where a signed-in user sets or changes the "
+               "recovery email address on their account.  A knob for the same "
+               "reason login.emailLink is one: the new address is confirmed by "
+               "mail before it takes effect, so a mirror that cannot send mail "
+               "leaves this off permanently and there is no release at which "
+               "the flag could be deleted.  It also needs login.cookieSalt to "
+               "sign the confirmation link and the gbMembers.recovEmailVerified "
+               "column, and hgLogin hides the page where any of the three is "
+               "missing.",
+          debatable="A gate if the intent is really to ship the page dark and "
+                    "then flip it: it was added defaulting FALSE so the page "
+                    "could sit on master through QA, which is what a gate is "
+                    "for.  Filed as a knob because the mail requirement it "
+                    "shares with login.emailLink outlives that: even after the "
+                    "RR turns it on, a mirror without outbound mail needs the "
+                    "switch, so there is no release at which it could be "
+                    "deleted."),
         h("analytics.trackClicks", "flag", "hg/lib/googleAnalytics.c",
           default="TRUE", role="knob", verified=True,
           note="Report link clicks to analytics.  A mirror with its own "

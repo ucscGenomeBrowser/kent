@@ -1,0 +1,146 @@
+<h2>Description</h2>
+
+<p>
+This track summarizes allele-specific methylation (ASM) across thousands of human methylomes. At an imprinted locus one allele carries methylated CpG sites and the other does not, so a region that shows this pattern in many independent samples is a candidate imprinting control region.
+</p>
+
+<p>
+Whole-genome bisulfite sequencing reads are long enough to cover several CpG
+sites at once, so the methylation states of neighboring sites on the same DNA
+molecule can be read together. When the reads at a locus fall into two clearly
+separated groups, one mostly methylated and one mostly unmethylated, that locus
+shows allele-specific methylation. This track shows, for every CpG site in the
+genome, the fraction of MethBase2 human methylomes in which the site was called
+part of an allelically methylated region (AMR). Values range from 0 to 1. High
+values mean that many independent samples show two differently methylated
+alleles at that site, which is the expected signature of a constitutive
+imprinted region. Lower but non-zero values point at loci where allele-specific
+methylation is restricted to certain tissues or is driven by sequence variation
+rather than by imprinting.
+</p>
+
+<p>
+The score is a summary across samples, not a measurement in any single sample.
+A value of 0.5 does not mean that half of the DNA molecules are methylated; it
+means that about half of the surveyed methylomes had an AMR call covering that
+CpG.
+</p>
+
+<p>
+See the <a href="hgTrackUi?g=imprinting">Imprinting</a> track collection page for background on genomic imprinting and for the color scheme shared by all of its subtracks.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The track is a signal graph with one value per CpG site. The default vertical
+range is 0 to 0.5, since even the strongest known imprinted regions rarely
+exceed that fraction across a set of samples this diverse. The range, the
+graph height, the smoothing window and the aggregation function can all be
+changed on the track configuration page. Positions between CpG sites carry no
+data and are drawn as gaps.
+</p>
+
+<p>
+The per-sample methylation levels, hypomethylated regions and read coverage
+that this summary is derived from are published by the Smith lab as a track
+hub, which can be loaded from
+<a href="http://smithlab.usc.edu/trackdata/methylation/hub.txt" target="_blank">http://smithlab.usc.edu/trackdata/methylation/hub.txt</a>
+or found in the list of public hubs.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+MethBase2 collects publicly available whole-genome bisulfite sequencing runs
+from the <a href="https://www.ncbi.nlm.nih.gov/sra" target="_blank">NCBI Sequence
+Read Archive</a> and reprocesses all of them through one uniform pipeline built
+on <a href="https://dnmtools.readthedocs.io/" target="_blank">DNMTools</a>.
+Reads are mapped with abismal, duplicates are removed, the bisulfite conversion
+rate is estimated, and per-site methylation levels are computed and symmetrized
+across the two strands of each CpG. A methylome enters the browsable collection
+only if its bisulfite conversion rate is at least 0.9 and at least 70% of CpG
+sites are covered, which in practice implies well above 1x average coverage.
+Allelically methylated regions are then called per methylome with the
+<a href="https://dnmtools.readthedocs.io/en/latest/amrfinder/" target="_blank">amrfinder</a>
+command. It slides a window of 10 CpG sites along the genome and fits two
+models to the reads in each window, one in which both alleles share a single
+methylation state and one in which the two alleles have separate states. The
+window is called an AMR when the two-allele model fits significantly better,
+using a likelihood ratio test with a false discovery rate correction; windows
+need at least 4x mean coverage per CpG to be tested, and neighboring AMRs closer
+than 1 kb are merged. The statistical model is described in Fang et al. (2012).
+The score shown here is the number of methylomes whose AMR set covers a given
+CpG, divided by the number of methylomes tested.
+</p>
+
+<p>
+The data file was downloaded from
+<a href="http://smithlab.usc.edu/methbase/data/common/hg38/hg38.asm.bw" target="_blank">http://smithlab.usc.edu/methbase/data/common/hg38/hg38.asm.bw</a>,
+the "common" section of the MethBase2 track hub at
+<a href="http://smithlab.usc.edu/trackdata/methylation/hub.txt" target="_blank">http://smithlab.usc.edu/trackdata/methylation/hub.txt</a>.
+The file is a bigWig and was used as it is, without reformatting or
+recalculation. It carries a value at each of 29,401,795 CpG positions, on
+chr1 to chr22, chrX, chrY and chrM. The steps we ran are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt" target="_blank">imprinting makeDoc</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through
+our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>methBaseAsm</i>.
+</p>
+
+<p>
+For automated download and analysis, the annotation is stored in a bigWig file
+that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/methBaseAsm/" target="_blank">our download server</a>.
+The file for this track is called <tt>hg38.asm.bw</tt>. Individual regions or the
+whole annotation can be obtained using our tools <tt>bigWigToBedGraph</tt> or
+<tt>bigWigSummary</tt>, which can be compiled from the source code or downloaded
+as precompiled binaries for your system. Instructions for downloading source
+code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain values within a given range, e.g.
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/methBaseAsm/hg38.asm.bw -chrom=chr15 -start=24950000 -end=25200000 stdout</tt>
+</p>
+
+<p>
+The original data can be downloaded from the MethBase2 track hub at
+<a href="http://smithlab.usc.edu/trackdata/methylation/hub.txt" target="_blank">http://smithlab.usc.edu/trackdata/methylation/hub.txt</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Andrew D. Smith and the Smith lab at the University of Southern
+California for building MethBase2 and for making the allele-specific
+methylation summary available. The collection is maintained at
+<a href="https://github.com/smithlabcode/methbase" target="_blank">https://github.com/smithlabcode/methbase</a>.
+</p>
+
+<h2>References</h2>
+
+<p>
+Fang F, Hodges E, Molaro A, Dean M, Hannon GJ, Smith AD.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22523239" target="_blank">
+Genomic landscape of human allele-specific DNA methylation</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2012 May 8;109(19):7332-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22523239" target="_blank">22523239</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3358917/" target="_blank">PMC3358917</a>
+</p>
+
+<p>
+Song Q, Decato B, Hong EE, Zhou M, Fang F, Qu J, Garvin T, Kessler M, Zhou J, Smith AD.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/24324667" target="_blank">
+A reference methylome database and analysis pipeline to facilitate integrative and comparative
+epigenomics</a>.
+<em>PLoS One</em>. 2013;8(12):e81148.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24324667" target="_blank">24324667</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3855694/" target="_blank">PMC3855694</a>
+</p>
+

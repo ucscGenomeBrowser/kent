@@ -1,0 +1,90 @@
+track imprinting
+shortLabel Imprinting
+longLabel Genomic imprinting: allele-specific methylation and imprinted regions
+group regulation
+superTrack on
+priority 3.5
+
+    track methBaseAsm
+    parent imprinting on
+    shortLabel MethBase2 ASM
+    longLabel Imprinting: fraction of MethBase2 methylomes with allele-specific methylation at each CpG
+    type bigWig 0 1
+    bigDataUrl /gbdb/hg38/imprinting/methBaseAsm/hg38.asm.bw
+    visibility full
+    priority 1
+    color 85,85,85
+    autoScale off
+    viewLimits 0:0.5
+    viewLimitsMax 0:1
+    maxHeightPixels 100:40:8
+    alwaysZero on
+    yLineOnOff on
+    yLineMark 0
+    windowingFunction mean
+
+    track geneimprint
+    parent imprinting on
+    shortLabel Geneimprint
+    longLabel Imprinting: Geneimprint catalog of imprinted and candidate imprinted genes
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/imprinting/geneimprint/geneimprint.bb
+    visibility pack
+    priority 2
+    itemRgb on
+    searchIndex name
+    labelFields name,hgncSymbol
+    defaultLabelFields name
+    url https://geneimprint.com/site/genes/Homo_sapiens_$$
+    urlLabel Geneimprint entry for this gene:
+    urls hgncId="https://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/$$"
+    mouseOver <b>${name}</b><br><b>Imprint status</b>: ${status}<br><b>Expressed allele</b>: ${expressedAllele}<br><b>Band in catalog</b>: ${catalogBand}<br><b>Resolved to</b>: ${hgncSymbol} (${resolvedBy})
+    filterValues.status Imprinted,Predicted,Not Imprinted,Conflicting Data,Provisional Data,Tissue Dependent,Unknown
+    filterType.status multipleListOr
+    filterLabel.status Filter by imprint status
+    filterValues.expressedAllele Paternal,Maternal,Biallelic,Isoform Dependent,Random,Unknown
+    filterType.expressedAllele multipleListOr
+    filterLabel.expressedAllele Filter by expressed allele
+
+    track akbariIdmr
+    parent imprinting on
+    shortLabel Akbari iDMRs
+    longLabel Imprinting: imprinted differentially methylated regions compiled from five genome-wide studies
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/imprinting/akbari2023/akbariIdmr.bb
+    visibility pack
+    priority 3
+    itemRgb on
+    searchIndex name,gene
+    labelFields gene,name
+    defaultLabelFields gene
+    skipEmptyFields on
+    mouseOver <b>${name}</b><br><b>Methylated allele</b>: ${methylatedAllele}<br><b>Evidence</b>: ${evidence}<br><b>Reported by</b>: ${studies}
+    filterValues.methylatedAllele Maternal,Paternal
+    filterType.methylatedAllele multipleListOr
+    filterLabel.methylatedAllele Filter by methylated allele
+    filterValues.evidence Multiple studies,Single study
+    filterType.evidence multipleListOr
+    filterLabel.evidence Filter by evidence
+    filterValues.studies Akbari,Court,Hernandez,Joshi,Zink
+    filterType.studies multipleListOr
+    filterLabel.studies Filter by source study
+
+    track omimImprint
+    parent imprinting on
+    shortLabel OMIM Imprinted
+    longLabel Imprinting: genes curated as imprinted by OMIM, from GeneScout
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/imprinting/omimImprint/omimImprint.bb
+    visibility pack
+    priority 4
+    itemRgb on
+    searchIndex name
+    url https://omim.org/entry/$$
+    urlLabel OMIM entry:
+    urls mimNumber="https://omim.org/entry/$$"
+    skipEmptyFields on
+    mouseOver <b>${name}</b><br>${geneName}<br><b>OMIM</b>: ${entryType}<br><b>Band</b>: ${cytoLocation}
+    filterValues.entryType OMIM gene,No OMIM entry
+    filterType.entryType multipleListOr
+    filterLabel.entryType Filter by whether OMIM has a gene entry

@@ -7,10 +7,10 @@
  * and, crucially, avoids leaking the sharer's unrelated tracks/position to whoever opens the link.
  *
  * Snapshots are always shared-by-link.  Their session names are prefixed "__" so the My Sessions
- * list can hide them by default and a reaper can garbage-collect abandoned anonymous ones.  Each
+ * list can hide them by default and the snapshot cleaner can remove abandoned anonymous ones.  Each
  * feature that wants durable shareable links registers a snapshotType naming its variables; the
- * feature reconstructs its view from those variables and calls snapshotTouchLastUse() on every open
- * so popular links stay alive under the reaper's "durable while used" policy.
+ * feature reconstructs its view from those variables, and the existing session-load path bumps
+ * lastUse on every open so popular links stay alive under the "durable while used" policy.
  *
  * Copyright (C) 2026 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
@@ -22,7 +22,7 @@
 #include "jksql.h"
 
 /* All snapshot session names start with this marker: hidden from the session list by default and
- * eligible for TTL reaping.  A single leading '_' is reserved for real, user-visible auto-named
+ * eligible for TTL cleaning.  A single leading '_' is reserved for real, user-visible auto-named
  * quick shares; the double '__' means "machine-made, not a normal loadable session". */
 #define snapshotNamePrefix "__"
 
@@ -30,7 +30,7 @@
  * and the /s/l/<name> short link. */
 #define snapshotAnonUser "l"
 
-/* Default reaper TTL: an anonymous snapshot not opened within this many days is garbage-collected.
+/* Default cleaner TTL: an anonymous snapshot not opened within this many days is deleted.
  * 4 years ~ the length of a typical PhD, so a link in a thesis keeps working for its author's degree.
  * Override with the hg.conf setting "snapshot.ttlDays". */
 #define snapshotDefaultTtlDays (4 * 365)
@@ -65,9 +65,9 @@ int saveSnapshotSession(struct sqlConnection *conn, char *snapshotTypeName,
 /* Note: no explicit "touch lastUse" is needed - cartLoadUserSession() already bumps lastUse (via
  * sessionTouchLastUse) on every session open, so a link stays alive as long as it is used. */
 
-int snapshotReapAnon(struct sqlConnection *conn, int ttlDays, boolean dryRun);
+int snapshotCleanAnon(struct sqlConnection *conn, int ttlDays, boolean dryRun);
 /* Delete anonymous ("l") snapshot rows whose lastUse is older than ttlDays, and remove their durable
  * sessionData directories.  Never touches non-anonymous or non-snapshot rows.  Returns the count
- * reaped (or that would be reaped, when dryRun). */
+ * cleaned (or that would be cleaned, when dryRun). */
 
 #endif /* SNAPSHOTSESSION_H */
