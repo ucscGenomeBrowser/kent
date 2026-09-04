@@ -1703,7 +1703,8 @@ void printCaptcha()
     if (!cfSiteKey)
         return;
 
-    fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
+    if (cfgOptionBooleanDefault("captchaDebug", FALSE))
+        fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
     cspWriteResponseHeader();
     puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
     puts("<html><head>");

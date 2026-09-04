@@ -1038,6 +1038,12 @@ ABUSE = {
                "that enables the captcha path must set it."),
         h("cloudFlareSecretKey", "credential", "hg/lib/cart.c",
           verified=True, required=True),
+        h("captchaDebug", "flag", "hg/lib/cart.c", default="FALSE",
+          role="knob", verified=True,
+          note="Log the session id to stderr each time printCaptcha() shows "
+               "the captcha, as \"CAPTCHA_PRINT <hgsid>\".  A permanent "
+               "debugging aid for tracing why a given session is being "
+               "captcha-gated, not a feature being shipped dark."),
         h("noCaptchaAgent.", "internal", "hg/lib/botDelay.c",
           verified=True,
           note="A prefix family rather than one setting: every "
