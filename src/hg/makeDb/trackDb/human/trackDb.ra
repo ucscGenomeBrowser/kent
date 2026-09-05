@@ -5622,6 +5622,16 @@ semiShortCircuit 1
 termRegex [N][MR]_[0-9]{6}[0-9]*\.[0-9]+
 searchPriority 20
 
+searchName ncbiRefSeqHistoricalProtAcc
+searchTable ncbiRefSeqHistorical
+searchType genePred
+searchMethod exact
+semiShortCircuit 1
+xrefTable ncbiRefSeqLinkHistorical
+xrefQuery select id,protAcc from %s where protAcc = '%s' and protAcc not in (select protAcc from ncbiRefSeqLink)
+termRegex [NY]P_[0-9]{6}[0-9]*\.[0-9]+
+searchPriority 20.1
+
 
 include alphaMissense.ra
 
