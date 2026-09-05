@@ -18,8 +18,10 @@ char *chrom = cartString(cart, "c");
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 
-// Print iframe (using tdb settings iframeUrl and iframeOptions)
+// Print iframe (using tdb settings iframeUrl and iframeOptions). The iframe is the
+// content of this page, not a detail of an item, so print it right here.
 printIframe(tdb, "");
+printPendingIframe();
 
 // jsIncludeFile throws an error due to CSP when invoked via pop-up, but is necessary when
 // "Enable pop-up when clicking items" is disabled in Genome Browser.
