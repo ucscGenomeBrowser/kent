@@ -87,6 +87,11 @@ MAILTO=otto-group@ucsc.edu
 #RefSeq Historical update notifier (RM #35766) - silent unless NCBI has a new release
 40 8 * * 3 /hive/data/outside/otto/refSeqHistorical/checkRefSeqHistoricalUpdate.sh
 
+#STRchive - hg38 disease-associated tandem repeats, dashnowlab/STRchive#333.
+#Weekly check for a new GitHub release, silent unless STRchive published one.
+#STRchive releases one to two times a month.
+45 7 * * 1 umask 002; /hive/data/outside/otto/strchive/strchiveOtto.py
+
 # InSiGHT VCEP ClinVar curated variants weekly update
 08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
 

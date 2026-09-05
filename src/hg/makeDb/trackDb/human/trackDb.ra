@@ -5644,6 +5644,13 @@ include g2p.ra
 include varFreqs.ra
 include phasedVars.ra
 
+# Tandem Repeat Variation superTrack.  Shared by all human assemblies: the
+# bigDataUrls use $D and -strict drops the members whose file is not there, so
+# each assembly gets only the tracks that were actually built for it.  Alpha only
+# until the STRchive auto-push is installed, #38268 -- beta and public still get
+# the hg38-only human/hg38/strVar.ra.  Drop the "alpha" here to release it.
+include strVarNew.ra alpha
+
 track dnaMethylation
 superTrack on
 shortLabel DNA Methylation

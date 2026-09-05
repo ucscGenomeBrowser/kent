@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Automatic push of STRchive GBDB files from hgwdev to hgwbeta, RR,
+# genome-euro and genome-asia
+# Requested by Max Haeussler, September 2026
+
+# NOT INSTALLED YET.  This is the draft to hand to the sysadmins: it belongs in
+# /hive/groups/adminGit (branch hgwdev) as strchiveAutoPush, deployed to
+# /root/strchiveAutoPush, with a line in hgwdev's /etc/crontab a little after the
+# otto cron (otto.crontab runs strchiveOtto.py at 07:45 on Mondays):
+#
+#   # weekly STRchive auto push (requested by Max Haeussler, Sept 2026)
+#   15 8 * * 1 root /root/strchiveAutoPush
+#
+# Until this is in place the otto job keeps hgwdev current and the RR stays on
+# whatever was last pushed by hand.
+#
+# rsync -avL follows symlinks, which matters here: /gbdb/hg38/strVar/strchive.bb
+# is a symlink into /hive/data/outside/otto/strchive/releases/<tag>/ and the RR
+# needs the file it points at, not the link.
+#
+# hs1 is served to the browser as a curated hub, but its /gbdb layout is the same
+# as a native assembly, so it pushes exactly like hg19 and hg38.
+
+VICTIM="max@soe.ucsc.edu"
+TODAY=`date "+%m%d%Y"`
+OUTFILE="/hive/data/outside/otto/autoPushLogs/strchiveAutoPushLog/strchiveAutoPush.log.$TODAY"
+PUSHTO="hgwbeta hgw0 hgw1 hgw2 genome-euro genome-asia"
+
+for i in $PUSHTO
+do
+  for db in hg19 hg38 hs1
+  do
+    echo "Pushing $db STRchive files to $i" >> $OUTFILE
+    if rsync -avL --rsh=ssh \
+	/gbdb/$db/strVar/strchive.bb \
+	/gbdb/$db/strVar/strchive.version.txt \
+        $i:/gbdb/$db/strVar/ >> $OUTFILE
+    then
+      echo "  Completed at `date`" >> $OUTFILE
+      echo " " >> $OUTFILE
+    else
+      echo "  ERROR - strchiveAutoPush failed for $db to $i with code $?"
+      echo "  ERROR - strchiveAutoPush failed for $db to $i with code $?" >> $OUTFILE
+      exit $?
+    fi
+  done
+done
+
+# If we get here, everything completed without problems. Send mail to the
+# official victim and we're done.
+
+cat $OUTFILE | mailx -s "strchiveAutoPush completed" $VICTIM

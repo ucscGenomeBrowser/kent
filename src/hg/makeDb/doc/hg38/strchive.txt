@@ -30,3 +30,35 @@ ln -sf /hive/data/genomes/hg38/bed/str/strchive/strchive.bb /gbdb/hg38/webstr/st
 # Load trackDb
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=hg38
+
+#############################################################################
+# STRchive is now an otto track, on hg19/hg38/hs1
+# 2026-09-04 (max)
+
+# Everything above is history. STRchive now builds a Genome Browser bigBed for
+# every release and publishes it on their GitHub releases page, so there is no
+# conversion left to do on our side - see dashnowlab/STRchive#333. An otto job
+# checks weekly for a new release and repoints the /gbdb symlinks at it:
+
+#   kent/src/hg/utils/otto/strchive/       script, makefile, README
+#   /hive/data/outside/otto/strchive/      where it runs, and where the data lives
+#   otto.crontab                           45 7 * * 1
+
+# Do not rebuild by hand. To force an update or roll back:
+#   /hive/data/outside/otto/strchive/strchiveOtto.py --force
+#   /hive/data/outside/otto/strchive/strchiveOtto.py --release v2.26.1
+
+# Their release ships hg19, hg38 and T2T-chm13 (= hs1) files and we take all
+# three, so the track is on three assemblies now. The trackDb stanza moved from
+# human/hg38/strVar.ra to human/strVar.ra and uses $D in the bigDataUrls, so
+# hgTrackDb -strict gives each assembly only the strVar members whose file is
+# actually there. strVar.html and strchive.html moved up to human/ with it.
+
+# /gbdb/<db>/strVar/strchive.bb -> the otto releases dir, one symlink per db
+# /gbdb/<db>/strVar/strchive.version.txt is what the dataVersion setting shows
+
+# The new trackDb is alpha-only until the auto-push exists: without a cron
+# copying /gbdb/*/strVar/ out to the RR, a released trackDb would promise data
+# the RR does not have. human/strVarNew.ra is tagged alpha, human/hg38/strVar.ra
+# is tagged beta,public and still describes the old hg38-only track. Release
+# steps are in the header of strVarNew.ra. refs #38268
