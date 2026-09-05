@@ -10818,8 +10818,14 @@ if (version != NULL && startsWith("/", version))
     // For quickLifted tracks the file lives on the source assembly, so
     // substitute $D using quickLiftDb rather than the destination database.
     char *liftDb = trackDbSetting(tdb, "quickLiftDb");
-    char *resolveDb = liftDb ? liftDb : database;
-    if (liftDb != NULL ||
+    char *resolveDb = trackHubSkipHubName(liftDb ? liftDb : database);
+    // A hub is user-supplied, so a hub track may not name just any local file.
+    // Paths under /gbdb are the exception: that tree is public data, mirrored on
+    // hgdownload, so reading one discloses nothing.  Curated-hub assemblies need
+    // this - hs1 and friends are served to the browser as a hub, which makes their
+    // otto tracks hub tracks, and without it hgTrackUi prints the raw path where
+    // the version should be.
+    if (liftDb != NULL || startsWith("/gbdb/", version) ||
         (!trackHubDatabase(database) && !isHubTrack(tdb->table)))
         {
         char *path = replaceInUrl(version, "", NULL, resolveDb, "", 0, 0, tdb->track, FALSE, NULL);
