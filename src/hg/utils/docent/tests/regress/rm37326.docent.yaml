@@ -1,0 +1,34 @@
+# #37326 -- the CRISPR tracks showed no mouseOver text at all.
+#
+# The fix is on genome-test and the assertion is that a tooltip really comes up over a
+# CRISPR guide and carries the guide's scores, rather than coming up empty.
+#
+# The tooltip text is the bigBed's own _mouseOver field (trackDb: mouseOverField
+# _mouseOver), which reads "MIT Spec. Score: 62, Doench 2016: 92%, Moreno-Mateos: 79%" --
+# not the scoreLabel ("MIT Guide Specificity Score") that trackDb shows on the details
+# page. 46 of the 117 guides in this window carry "Sequence is not unique in genome"
+# instead, so a guide with real scores has to be picked deliberately.
+#
+# Hover by TITLE, not by position. An earlier version used
+# `mouseover: {track: crispr10KTargets, at: chr17:43044494}`, which raised no tooltip:
+# `at:` sets x from the coordinate but forces y to the MIDDLE of the row, and in pack mode
+# this track is 324px of stacked guides, so the cursor landed between them. `title:`
+# matches the item's own map box, lands on its row wherever that row is, and makes docent
+# wait for THAT item's tooltip rather than settling for a neighbour's.
+#
+# The guide named here is chr17:43044497-43044520 and its mouseOver string is unique in
+# this window, so a match cannot be the wrong item. If the CRISPR data is rebuilt and its
+# scores change, this fails with the tooltip it did find, which is a readable break.
+target: genome-test
+db: hg38
+position: chr17:43044295-43045295
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43045295
+  - hide: all
+  - track: {crispr10KTargets: pack}
+  - expect: {rows: [crispr10KTargets], noText: "Warning/Error"}
+
+  - mouseover: {track: crispr10KTargets, title: "MIT Spec. Score: 62, Doench 2016: 92%"}
+  - expect: {tip: "MIT Spec. Score: 62, Doench 2016: 92%, Moreno-Mateos: 79%"}

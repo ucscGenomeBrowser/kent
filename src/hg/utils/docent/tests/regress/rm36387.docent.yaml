@@ -1,0 +1,47 @@
+# #36387 -- an HGVS term pasted into the position box crashed the browser at once.
+#
+# The term the Stanford reader sent, and the whole of the bug, is that it carries a
+# ZERO-WIDTH SPACE (U+200B) between "):" and "n.46G>A". Pasting from a clinical report is
+# how it got there. hgTracks' search handler passed the raw term to encodeURIComponent, so
+# the zero-width character reached hgSuggest, which put it in a LIKE and died:
+#
+#     mySQL error 1267: Illegal mix of collations (latin1_swedish_ci,IMPLICIT) and
+#     (utf8mb4_general_ci,COERCIBLE) for operation 'like'
+#
+# From hgTracks that came back as an Error 500. Fixed in the JS by stripping zero-width
+# characters before the term is encoded (#36412 is the build patch that carried it).
+#
+# So the term below MUST keep its \u200b escape. Without it there is no bug and the test
+# passes on any build ever shipped.
+#
+# What the fixed behavior actually is, measured on genome-test 2026-09-05: the position box
+# submits to hgSearch, which reports no results for the term. That is right and is what
+# Christopher Lee described on the ticket -- an HGVS term is not something hgSearch
+# resolves, and the bug was never that it should. An earlier version of this test waited
+# for #imgTbl and timed out, because it assumed a fix meant landing on the variant.
+#
+# The assertion that carries the weight is noUrl. The stripped character is invisible in
+# the rendered page, so the only evidence that the fix is in place is that %E2%80%8B did
+# not survive into the search URL. text: is the companion half: on the buggy build hgTracks
+# returned 500 and the search page never rendered at all.
+target: genome-test
+db: hg38
+position: chr12:120291800-120291900
+reset: true
+fast: true
+steps:
+  - go: chr12:120291800-120291900
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [mane], noText: "Warning/Error"}
+
+  # goShow: rather than go:, because the position box is where the term was typed and
+  # where the crash happened. The zero-width space is written as an escape so it survives
+  # a copy and is visible to the next reader.
+  - goShow: "RNU4-2 (NR_003137.3):\u200bn.46G>A"
+
+  - expect:
+      url: "/hgSearch"
+      noUrl: "%E2%80%8B"
+      text: "Search across the Genome Browser site"
+      noText: "Internal Server Error"

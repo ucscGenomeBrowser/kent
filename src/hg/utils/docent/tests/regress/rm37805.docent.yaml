@@ -1,0 +1,42 @@
+# #37805 -- the gnomAD v3.1.1 tooltip carried a stray closing brace.
+#
+# hg38/gnomad.ra had an extra "}" immediately after ${chromEnd} in the mouseOver pattern
+# for gnomadGenomesVariantsV3_1_1, so the tooltip read
+#
+#     Position: chr17:43091449-43091450} (T/G)
+#
+# instead of ...-43091450 (T/G). Spotted during QA of #37615.
+#
+# Two things about reaching a drawn row, both of which cost a run:
+#
+#   * gnomadVariants is a superTrack, so it does not pass its setting down. Its other
+#     members come up at their own trackDb visibility and draw coverage rows next to this
+#     one. hideKids on the container leaves only the track named after it.
+#   * this track has filterValuesDefault.annot pLoF,missense,synonymous, so at a position
+#     with only UTR and downstream variants it draws NOTHING and has no row at all. The
+#     first version of this test used chr17:43044295-43045295, where all 258 v3.1.1
+#     variants are annotated "other", and failed for that reason and not for the bug.
+#     chr17:43091000-43092000 is inside BRCA1 exon 11 and holds 80 missense, 13 pLoF and
+#     29 synonymous variants, so the row is drawn.
+#
+# The hover names an item by its TITLE, which for this track is the mouseOver text itself.
+# That pins one variant rather than whatever sits at the middle of a packed row, and it
+# makes docent wait for THAT item's tooltip instead of settling for a neighbour's.
+#
+# Both halves of the assertion are needed. tip: is what only holds when the pattern
+# rendered correctly -- the buggy build produced "43091450} (T/G)" and would fail it.
+# noText: catches a brace anywhere else the pattern might leak one; the window is narrow
+# and only this track is showing, so nothing else on the page produces one.
+target: genome-test
+db: hg38
+position: chr17:43091000-43092000
+reset: true
+fast: true
+steps:
+  - go: chr17:43091000-43092000
+  - hide: all
+  - track: {gnomadVariants: hideKids, gnomadGenomesVariantsV3_1_1: pack}
+  - expect: {rows: [gnomadGenomesVariantsV3_1_1], noText: "Warning/Error"}
+
+  - mouseover: {track: gnomadGenomesVariantsV3_1_1, title: "rs80357218"}
+  - expect: {tip: "chr17:43091449-43091450 (T/G)", noText: "}"}
