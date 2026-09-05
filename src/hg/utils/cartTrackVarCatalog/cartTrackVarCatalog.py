@@ -1538,6 +1538,20 @@ def check_values(out=sys.stdout):
                 bad += 1
         if e["type"] == "enum" and vals and not e.get("valuesSrc"):
             noSrc.append(name)
+    # The filename rule in the harvester decides that a name is not a cart
+    # variable, so it must never be able to say that about one the catalog
+    # describes.  Nothing warns if it starts to: --reconcile checks
+    # cataloged() first, so such a name would simply stop being reported and
+    # keep its row.  Checked here instead, where a new extension in
+    # FILE_SUFFIXES or a new catalog row shows up as an error.
+    h = harvestModule()
+    if h is not None:
+        for e in all_vars():
+            if e["name"] and h.fileNameLike(e["name"]):
+                print("%s: the harvester's filename rule would read this "
+                      "cataloged name as a filename; the two disagree about "
+                      "what it is" % e["name"], file=sys.stderr)
+                bad += 1
     print("values ok" if not bad else "values: %d problem(s)" % bad, file=out)
     # Not an error.  It is the backlog: an enum whose values nobody has
     # checked against the C array that actually gates them.
@@ -1674,8 +1688,14 @@ def write_baseline(names, sites=None, path=BASELINE_FILE):
 # does not describe as a track-scoped cart variable.  Refs #37838.
 #
 # Most are not cart variables at all: the scan cannot tell one from a table
-# name, a filename suffix or an SQL fragment, so .bai, _gold and .tbi come out
-# of it too.  Some are cart variables that simply have not been cataloged yet.
+# name or an SQL fragment, so _gold comes out of it too.  Some are cart
+# variables that simply have not been cataloged yet.
+#
+# Filenames are NOT in here.  A "%s.tmp" built from a filename has the same
+# shape as a "%s.heightPer" built from a track name, and 15 names of that kind
+# used to sit below with a new one arriving every few weeks.  The harvester now
+# reads them from the trailing extension instead: harvestCartVars.py
+# --filenames lists what that rule claims and explains it.
 #
 # cartTrackVarCatalog.py --reconcile complains about any harvested name in
 # neither the catalog nor this file, so this is what keeps a nightly run quiet
@@ -1701,15 +1721,29 @@ def write_baseline(names, sites=None, path=BASELINE_FILE):
                 f.write("%s\n" % n)
 
 
-def harvested():
-    """(name -> file:line) for every literal name the tree yields, or None.
+def harvestModule():
+    """The harvester next door, or None if it cannot be imported.
 
-    Keyed the same way the catalog is, so the two are directly comparable.
+    Imported by name inside a function rather than at module scope on purpose.
+    registryPages loads this file by path, and in that process the sibling
+    directory is not on sys.path, so a top-level import would break a consumer
+    that only wants the catalog and never asks for a harvest.
     """
     try:
         import harvestCartVars as h
     except ImportError:
         print("harvestCartVars.py not importable from here", file=sys.stderr)
+        return None
+    return h
+
+
+def harvested():
+    """(name -> file:line) for every literal name the tree yields, or None.
+
+    Keyed the same way the catalog is, so the two are directly comparable.
+    """
+    h = harvestModule()
+    if h is None:
         return None
     out = {}
     for name, src in h.resolved(h.harvest(quiet=True)).items():
@@ -1745,8 +1779,19 @@ def reconcile(cat, out=sys.stdout, verbose=False):
 
     cataloged, literals, patterns = cataloged_test()
     baseline = read_baseline()
+    h = harvestModule()          # harvested() above already proved it imports
 
-    new = sorted(n for n in tree if not cataloged(n) and n not in baseline)
+    # A filename is not a cart variable, and the scan cannot tell the two
+    # apart: "%s.tmp" built from a filename has the shape of "%s.heightPer"
+    # built from a track name.  h.fileNameLike() answers that from the
+    # trailing extension, so those names no longer need a baseline line each.
+    # The test comes after cataloged(), so a name the catalog describes is
+    # never hidden by it, and h.fileNameLike is checked against the catalog's
+    # own literals by --check.
+    files = sorted(n for n in tree
+                   if not cataloged(n) and h.fileNameLike(n))
+    new = sorted(n for n in tree if not cataloged(n) and n not in baseline
+                 and not h.fileNameLike(n))
     only_cat = sorted(n for n in literals if n not in tree)
 
     if verbose:
@@ -1765,6 +1810,12 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         print("\nharvested, in the baseline rather than the catalog (%d)"
               % len(known), file=out)
         for n in known:
+            print("    %-30s %s" % (n, tree[n]), file=out)
+        print("\nharvested, read as a filename rather than a cart variable "
+              "(%d)" % len(files), file=out)
+        print("    (harvestCartVars.py --filenames explains the rule)",
+              file=out)
+        for n in files:
             print("    %-30s %s" % (n, tree[n]), file=out)
 
     if new:
@@ -2086,8 +2137,12 @@ def main():
         if tree is None:
             return 1
         cataloged, _, _ = cataloged_test()
+        h = harvestModule()      # harvested() above already proved it imports
         was = read_baseline()
-        now = set(n for n in tree if not cataloged(n))
+        # The same two exclusions --reconcile makes, or accepting the backlog
+        # would write back every filename the harvester reads as a name.
+        now = set(n for n in tree
+                  if not cataloged(n) and not h.fileNameLike(n))
         write_baseline(now, tree)
         print("wrote %s: %d names, %d added, %d dropped"
               % (BASELINE_FILE, len(now), len(now - was), len(was - now)))

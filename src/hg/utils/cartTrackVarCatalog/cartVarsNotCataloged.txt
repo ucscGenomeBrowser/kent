@@ -3,8 +3,14 @@
 # does not describe as a track-scoped cart variable.  Refs #37838.
 #
 # Most are not cart variables at all: the scan cannot tell one from a table
-# name, a filename suffix or an SQL fragment, so .bai, _gold and .tbi come out
-# of it too.  Some are cart variables that simply have not been cataloged yet.
+# name or an SQL fragment, so _gold comes out of it too.  Some are cart
+# variables that simply have not been cataloged yet.
+#
+# Filenames are NOT in here.  A "%s.tmp" built from a filename has the same
+# shape as a "%s.heightPer" built from a track name, and 15 names of that kind
+# used to sit below with a new one arriving every few weeks.  The harvester now
+# reads them from the trailing extension instead: harvestCartVars.py
+# --filenames lists what that rule claims and explains it.
 #
 # cartTrackVarCatalog.py --reconcile complains about any harvested name in
 # neither the catalog nor this file, so this is what keeps a nightly run quiet
@@ -26,18 +32,15 @@ HighlightType                      # hg/hgTracks/bigBedTrack.c
 \n                                 # hg/hgc/hgc.c
 add                                # hg/lib/hui.c
 alt                                # hg/hgc/myVariantsClick.c
-bai                                # hg/cgilib/fileUi.c
 bin                                # hg/cgilib/annoStreamDb.c
 bip                                # hg/hgTracks/gvfTrack.c
 blockCount                         # hg/hgTracks/myVariantsTrack.c
 blockSizes                         # hg/hgTracks/myVariantsTrack.c
 cancel                             # hg/hgTracks/myVariantsTrack.c
-cgm                                # hg/lib/chromGraph.c
 chainSelf                          # hg/hgc/hgc.c
 chromEnd                           # hg/hgc/myVariantsClick.c
 chromStart                         # hg/hgc/myVariantsClick.c
 chromStarts                        # hg/hgTracks/myVariantsTrack.c
-circle.txt                         # hg/hgc/hgdpClick.c
 clr                                # hg/lib/hui.c
 cnvType                            # hg/hgc/myVariantsClick.c
 coloring                           # hg/hgTrackUi/hgTrackUi.c
@@ -49,32 +52,23 @@ description                        # hg/hgc/myVariantsClick.c
 dispFndTrk                         # hg/hgTracks/searchTracks.c
 dnovo                              # hg/hgTracks/gvfTrack.c
 drag                               # hg/lib/vcfUi.c
-eps                                # hg/hgc/hgdpClick.c
-err                                # hg/hgTables/genomeSpace.c
 excludeDbs                         # hg/lib/jksql.c
 fileSortOrder                      # hg/cgilib/fileUi.c
 first                              # hg/lib/tablesTables.c
 germ                               # hg/hgTracks/gvfTrack.c
 gold                               # hg/lib/hdb.c
-html                               # hg/lib/trackHub.c
 id                                 # hg/hgTracks/myVariantsTrack.c
-ids                                # hg/hgc/virusClick.c
 itemRgb                            # hg/hgc/myVariantsClick.c
 kgAlias                            # hg/lib/findKGAlias.c
 kgProtAlias                        # hg/lib/findKGProtAlias.c
 knownGene                          # hg/lib/hgFind.c
 last                               # hg/lib/tablesTables.c
-link.bb                            # hg/hgTracks/chainTrack.c
-log                                # hg/hgc/virusClick.c
 mat                                # hg/hgTracks/gvfTrack.c
 minAc                              # hg/lib/vcfUi.c
 mouseover                          # hg/hgc/myVariantsClick.c
 name                               # hg/hgc/myVariantsClick.c
 next                               # hg/lib/tablesTables.c
-pdf                                # hg/hgc/hgdpClick.c
 pfamDesc                           # hg/hgc/hgc.c
-pie.txt                            # hg/hgc/hgdpClick.c
-png                                # hg/hgc/hgdpClick.c
 prev                               # hg/lib/tablesTables.c
 project                            # hg/hgc/myVariantsClick.c
 projectSelect                      # hg/hgc/myVariantsClick.c
@@ -82,11 +76,8 @@ prot                               # hg/hgc/hgc.c
 ref                                # hg/hgc/myVariantsClick.c
 sel_id                             # hg/hgTracks/searchTracks.c
 som                                # hg/hgTracks/gvfTrack.c
-ss.ps                              # hg/hgc/rnaFoldClick.c
 thickEnd                           # hg/hgc/myVariantsClick.c
 thickStart                         # hg/hgc/myVariantsClick.c
-tmp                                # hg/lib/trackHub.c
 unip                               # hg/hgTracks/gvfTrack.c
 unk                                # hg/hgTracks/gvfTrack.c
-wig                                # hg/lib/wigDataStream.c
 wikiTrack                          # hg/hgTables/hgTables.c

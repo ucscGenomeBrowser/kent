@@ -33,12 +33,23 @@ run time, which is exactly where the hierarchy nests one level deeper:
 filter.<field>, decorator.<name>.<var>, <track>.<species>.
 
 Output needs curation.  The scan cannot tell a cart variable from a table
-name, a filename suffix or an SQL fragment, so expect to throw away things
-like .bai, _gold and .tbi by hand.
+name or an SQL fragment, so expect to throw away things like _gold by hand.
+
+One class of that is recognised here rather than by hand: a filename.  Code
+that builds "%s.tmp" from a filename looks exactly like code that builds
+"%s.heightPer" from a track name, so every such site used to arrive as a name
+somebody had to write down as not-a-cart-variable, 15 of them at the last
+count and a new one every few weeks.  fileNameLike() below answers the
+question instead, by asking whether the trailing component is a file
+extension.  The records still carry the name, because a harvest that hides
+what it saw cannot be checked; it is the catalog's --reconcile that stops
+asking a person about them, and --filenames lists exactly what the rule
+claims.
 
 Usage:
     harvestCartVars.py --by-func            # grouped by function, for reading
     harvestCartVars.py --by-var             # grouped by variable, with sites
+    harvestCartVars.py --filenames          # what the filename rule claims
     harvestCartVars.py --json recs.json     # raw records
     harvestCartVars.py --dirs hg/hgc,hg/hgTables --by-func
 """
@@ -62,6 +73,35 @@ DEFAULT_DIRS = "hg/lib,hg/hgTracks,hg/hgTrackUi,hg/cgilib,hg/hgc,hg/hgTables"
 
 # Extra trees mined for #define values only, not scanned for call sites.
 MACRO_DIRS = ["inc", "lib", "hg/inc"]
+
+# File extensions that mark a harvested name as a filename rather than a cart
+# variable.  Deliberately only the ones the tree builds today, plus tbi beside
+# bai: every entry here is a name nobody has to classify again, so a guess adds
+# a way to lose a real cart variable silently and buys nothing.  Adding one is
+# a decision, and --filenames is how to check what it costs.
+FILE_SUFFIXES = frozenset([
+    "bai", "bb", "cgm", "eps", "err", "html", "ids", "log", "pdf", "png",
+    "ps", "tbi", "tmp", "txt", "wig",
+])
+
+
+def fileNameLike(var):
+    """Is this harvested name the tail of a filename rather than a cart name?
+
+    The test is on the trailing dot-separated component, after the leading
+    separator the harvester may or may not have captured, so ".tmp",
+    "_ss.ps" and ".link.bb" all answer yes through the same rule.
+
+    Two cleverer tests were tried and rejected.  The destination buffer's
+    declaration does not decide it: psName and tmpName are char[PATH_LEN] but
+    the .bai and .link.bb sites format into a plain buf and buffer.  Nor does
+    the argument being formatted: it is a filename at some sites, a url at
+    others and a table name at a third set, with no shared spelling.  The
+    extension is the only part that is actually about the name, which is what
+    this rule asks about, and it is the only part a reader can check.
+    """
+    name = var.lstrip("._")
+    return name.rsplit(".", 1)[-1].lower() in FILE_SUFFIXES
 
 
 # ---------------------------------------------------------------------------
@@ -388,6 +428,9 @@ def main():
                     help="group by file and function")
     ap.add_argument("--by-var", action="store_true",
                     help="group by variable, listing where each is used")
+    ap.add_argument("--filenames", action="store_true",
+                    help="list the harvested names the filename rule claims, "
+                         "with the call site, so the rule can be audited")
     ap.add_argument("--keep-unresolved", action="store_true",
                     help="include {ident} and EXPR: entries in the groupings")
     args = ap.parse_args()
@@ -404,6 +447,17 @@ def main():
         with open(args.json, "w") as f:
             json.dump(records, f, indent=1)
         print("wrote %s" % args.json, file=sys.stderr)
+
+    if args.filenames:
+        hits = {}
+        for r in sorted(records, key=lambda r: (r["file"], r["line"])):
+            if wanted(r["var"]) and fileNameLike(r["var"]):
+                hits.setdefault(r["var"].lstrip("._"),
+                                "%s:%d" % (r["file"], r["line"]))
+        print("%d harvested names read as filenames, not cart variables"
+              % len(hits))
+        for n in sorted(hits):
+            print("    %-16s %s" % (n, hits[n]))
 
     if args.by_func:
         byfunc = collections.defaultdict(set)
@@ -423,8 +477,8 @@ def main():
             print("%-34s %d  %s"
                   % (k, len(byvar[k]), " ".join(sorted(byvar[k])[:4])))
 
-    if not (args.json or args.by_func or args.by_var):
-        print("nothing to do; pass --by-func, --by-var or --json",
+    if not (args.json or args.by_func or args.by_var or args.filenames):
+        print("nothing to do; pass --by-func, --by-var, --filenames or --json",
               file=sys.stderr)
         return 1
     return 0
