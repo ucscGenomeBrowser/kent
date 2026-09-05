@@ -237,6 +237,14 @@ CONTAINER = {
             v("hideEmptySubtracks", "bool",
               "hg/lib/hui.c:compositeHideEmptySubtracks",
               tdb="hideEmptySubtracks"),
+            v("defaults", "int", "hg/hgTrackUi/hgTrackUi.c:3866",
+              note="Set to 1 by the track UI's reset button.  hgTrackUi "
+                   "reads it with cartUsualInt and then clears this "
+                   "container's cart variables and its children's, so it is "
+                   "a one-shot command that happens to travel as a cart "
+                   "variable.  Read for a superTrack as well as a composite; "
+                   "the surrounding test is tdbIsContainer || "
+                   "tdbIsSuperTrack."),
             v("sortOrder", "string", "hg/lib/hui.c:sortOrderGet",
               note="Subtrack table sort, e.g. 'cellType=+ view=-'."),
             v("facetSortOrder", "string", "hg/hgTrackUi/hgTrackUi.c:3314",
@@ -328,6 +336,14 @@ FAMILIES = {
             v("filterPriority.<field>", "float", "hg/inc/bigBedFilter.h:29"),
             v("<field>FilterLimits", "string", "hg/lib/trackDb.c:298"),
             v("<field>FilterPriority", "float", "hg/lib/trackDb.c:302"),
+            v("<field>FilterLabel", "string", "hg/lib/hui.c:4027",
+              note="getLabelSetting tries three spellings through "
+                   "cartOrTdbString, in order: filterLabel.<field> above, "
+                   "then <field>.FilterLabel, then this one.  All three are "
+                   "legal cart names, not only trackDb settings.  The "
+                   "harvester reports the middle spelling, and because the "
+                   "separator is stripped for comparison this row is what "
+                   "accounts for it, the same way <field>FilterType does."),
         ],
     },
     "textFilter": {
@@ -349,6 +365,10 @@ FAMILIES = {
               note="trackDb-side value list."),
             v("filterValuesDefault.<field>", "string",
               "hg/inc/bigBedFilter.h:26"),
+            v("<field>FilterValuesDefault", "string", "hg/lib/hui.c:4009",
+              note="The CAP spelling of the row above.  "
+                   "getFilterValueDefaultsSetting reads all three forms "
+                   "through cartOrTdbString; see <field>FilterLabel."),
             v("doAdvanced", "bool", "hg/lib/hui.c:filterBySetCfgUiGuts",
               note="Advanced filter box expanded."),
         ],
@@ -361,6 +381,10 @@ FAMILIES = {
             v("highlight.<field>", "float", "hg/inc/bigBedFilter.h:64"),
             v("highlightText.<field>", "string", "hg/inc/bigBedFilter.h:65"),
             v("highlightType.<field>", "enum", "hg/inc/bigBedFilter.h:68"),
+            v("<field>HighlightType", "enum", "hg/hgTracks/bigBedTrack.c:162",
+              note="The CAP spelling of the row above.  getHighlightType "
+                   "reads all three forms through cartOrTdbString; see "
+                   "<field>FilterLabel."),
             v("highlightLimits.<field>", "string", "hg/lib/trackDb.c:...",
               note="See isComplexSetting() for the full twin list."),
         ],
@@ -724,6 +748,12 @@ TYPES = {
             v("applyMinQual", "bool", "hg/inc/vcfUi.h:40"),
             v("minQual", "float", "hg/inc/vcfUi.h:44"),
             v("minFreq", "float", "hg/inc/vcfUi.h:52"),
+            v("minAc", "int", "hg/inc/vcfUi.h:56", default=0,
+              note="Minimum allele count, read off the INFO column's AC, so "
+                   "a reader can hide singletons with 2 instead of working "
+                   "out a frequency cutoff.  vcfCfgMinAc writes the form "
+                   "field as <track>.minAc and reads the value back with "
+                   "cartOrTdbInt on the bare name (vcfUi.c:452)."),
             v("excludeFilterValues", "list", "hg/inc/vcfUi.h:49", multi=True),
             v("showHardyWeinberg", "bool", "hg/inc/vcfUi.h:38"),
             v("vcfSampleOrder", "string", "hg/inc/vcfUi.h:57",
@@ -1299,6 +1329,104 @@ OTHER_CGIS = {
               note="Lowe lab tracks."),
         ],
     },
+    "hgc My Variants edit": {
+        "what": "One edit to one My Variants annotation, in flight.  The "
+                "details page (hg/hgc/myVariantsClick.c:doMyVariantsDetails) "
+                "prints a form whose fields are named <track>_<field>; the "
+                "form posts, so the values land in the cart the way any "
+                "request variable does; and on the next render hgTracks "
+                "(hg/hgTracks/myVariantsTrack.c:myVariantsEditOrDelete) reads "
+                "them out of the cart, writes the row to SQL and removes "
+                "them.  So these are cart variables by mechanism and one-shot "
+                "commands by intent, which is why nothing here has a default "
+                "and why _id is the trigger: its presence is what says an "
+                "edit was submitted.\n"
+                "The track name is always myVariants_<encoded>, so these "
+                "suffixes are only ever seen under that prefix, but the "
+                "harvester reports a suffix without its prefix and the "
+                "catalog compares them that way, so ordinary words like id "
+                "and name are registered here bare.  The whole feature is "
+                "behind the doMyVariants hg.conf gate, which defaults FALSE, "
+                "and none of these names is in any saved session.\n"
+                "Registering them costs something, and it was measured rather "
+                "than guessed.  These are BED field names, so they collide "
+                "with hgTables' per-field variables, whose last component is "
+                "also a column name: hgta_fs.check.<db>.<table>.name now "
+                "matches the _name row here.  In the 6,620 saved sessions "
+                "that moves 24 names out of sessionCartAudit's honest "
+                "\"matched only by a catch-all\" bucket.  The underlying "
+                "reason is a gap in that audit rather than in this file: "
+                "peel() only tries suffixes that start after a separator, so "
+                "a left-anchored row like hgta_fs.check.<db>.<table>.<field> "
+                "can never match the name it describes, which is also why "
+                "4,299 hgta_ names sit in that bucket already.  Fix that and "
+                "the longer, correct match wins and these 24 go back.",
+        "vars": [
+            v("_id", "hidden", "hg/hgTracks/myVariantsTrack.c:736", sep="_",
+              note="Row id of the annotation being edited, written as a "
+                   "hidden field at myVariantsClick.c:238.  hgTracks removes "
+                   "it first so an edit is applied once, and every other "
+                   "variable here is ignored without it."),
+            v("_name", "string", "hg/hgc/myVariantsClick.c:243", sep="_",
+              note="The annotation's label, as drawn in the browser."),
+            v("_description", "string", "hg/hgc/myVariantsClick.c:250",
+              sep="_", note="Longer notes, shown on the details page."),
+            v("_chromStart", "int", "hg/hgc/myVariantsClick.c:265", sep="_",
+              note="Range-checked against the chromosome size in the form "
+                   "and validated again server-side."),
+            v("_chromEnd", "int", "hg/hgc/myVariantsClick.c:270", sep="_"),
+            v("_thickStart", "int", "hg/hgc/myVariantsClick.c:279", sep="_",
+              note="CDS start.  Offered only for a transcript annotation."),
+            v("_thickEnd", "int", "hg/hgc/myVariantsClick.c:284", sep="_",
+              note="CDS end.  Transcript only."),
+            v("_blockCount", "int", "hg/hgTracks/myVariantsTrack.c:647",
+              sep="_",
+              note="Exon count.  This and the two below are hidden fields "
+                   "kept in sync by the block widget, and updateBlocksFields "
+                   "validates the three together with loadAndValidateBed "
+                   "before touching SQL: a missing one is a no-op, and a "
+                   "failed validation removes all three so a bad edit cannot "
+                   "corrupt the next one."),
+            v("_blockSizes", "string", "hg/hgTracks/myVariantsTrack.c:648",
+              sep="_", note="Comma-separated exon sizes."),
+            v("_chromStarts", "string", "hg/hgTracks/myVariantsTrack.c:649",
+              sep="_", note="Comma-separated exon starts, BED12 relative."),
+            v("_itemRgb", "color", "hg/hgc/myVariantsClick.c:343", sep="_",
+              note="#RRGGBB from a text input.  updateTextField special-cases "
+                   "any name ending in itemRgb and stores the integer "
+                   "htmlColorForCode returns, so an unparseable colour is "
+                   "dropped rather than written."),
+            v("_mouseover", "string", "hg/hgc/myVariantsClick.c:441", sep="_",
+              note="Hover text for the item."),
+            v("_cnvType", "enum", "hg/hgc/myVariantsClick.c:364", sep="_",
+              values=["deletion", "duplication", "insertion", "inversion",
+                      "translocation", "complex", "breakend"],
+              valuesSrc="hg/lib/myVariants.c:18 myVariantsCnvTypes",
+              note="CNV annotations only.  The vocabulary follows gnomAD, "
+                   "says the form's own help icon."),
+            v("_ref", "string", "hg/hgc/myVariantsClick.c:386", sep="_",
+              note="Reference allele.  Offered for a plain variant, not for "
+                   "a transcript or a CNV."),
+            v("_alt", "string", "hg/hgc/myVariantsClick.c:391", sep="_",
+              note="Alternate allele for a variant.  A CNV reuses the same "
+                   "field for the inserted or duplicated sequence "
+                   "(myVariantsClick.c:378), which is worth knowing before "
+                   "either meaning is written into a schema."),
+            v("_project", "string", "hg/hgc/myVariantsClick.c:406", sep="_",
+              note="Free-text project name, for grouping annotations.  A "
+                   "shared track shows the project and does not offer the "
+                   "field, so this arrives only from the owner."),
+            v("_delete", "hidden", "hg/hgTracks/myVariantsTrack.c:753",
+              sep="_",
+              note="The Delete button's name, so only its presence matters; "
+                   "read with cartVarExists and removed before the row is "
+                   "deleted.  Not offered on a shared track."),
+            v("_cancel", "hidden", "hg/hgTracks/myVariantsTrack.c:745",
+              sep="_",
+              note="The Cancel button.  Read before delete and before any "
+                   "field update, and returns without applying anything."),
+        ],
+    },
     "hgc extended DNA": {
         "what": "The Extended DNA page (hg/hgc/hgc.c:doGetDnaExtended1) keeps "
                 "one case/color set per track.  A real per-track group that "
@@ -1687,9 +1815,9 @@ def write_baseline(names, sites=None, path=BASELINE_FILE):
 # cart*ClosestToHome() or safef("%s.%s") call site but that cartTrackVarCatalog.py
 # does not describe as a track-scoped cart variable.  Refs #37838.
 #
-# Most are not cart variables at all: the scan cannot tell one from a table
-# name or an SQL fragment, so _gold comes out of it too.  Some are cart
-# variables that simply have not been cataloged yet.
+# None of them is a cart variable: the scan cannot tell one from a table name
+# or an SQL fragment, so _gold comes out of it too.  See the walk below for
+# the five classes they fall into.
 #
 # Filenames are NOT in here.  A "%s.tmp" built from a filename has the same
 # shape as a "%s.heightPer" built from a track name, and 15 names of that kind
@@ -1705,9 +1833,20 @@ def write_baseline(names, sites=None, path=BASELINE_FILE):
 # went away.
 #
 # The first version of this file was accepted wholesale, as a snapshot of the
-# gap on the day reconcile learned to fail.  So a name being in here is not
-# evidence that anybody has looked at it; only the ones added since, which
-# arrive a few at a time in a reviewable diff, carry that weight.
+# gap on the day reconcile learned to fail, so for a year a name being in here
+# was not evidence that anybody had looked at it.  That is no longer true: on
+# 2026-09-05 every remaining name was read at its call site, and what was left
+# falls into five classes.  Item labels that only look like variables
+# (gvfItemName appends _unk, _dnovo and six more to an item's name for
+# display).  HTML element ids, built the same way a cart name is and never
+# sent to the server, which is most of them.  Table and db.table names.  One
+# submit-button name that is read with cgiOptionalString and never from the
+# cart (snp125Defaults_coloring).  And one printf artifact, "\\n".
+#
+# So a name in here now means somebody decided it is not a cart variable.  A
+# name that arrives later does not: read its call site before believing this
+# file about it.  Twenty-three names left in that walk and are described in
+# cartTrackVarCatalog.py, eighteen of them the My Variants edit form's.
 #
 # Names are stored with the leading separator stripped, which is how reconcile
 # compares them.
