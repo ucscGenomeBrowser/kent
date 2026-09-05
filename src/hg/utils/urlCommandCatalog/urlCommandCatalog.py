@@ -871,6 +871,25 @@ OTHER_CGIS = {
               note="Configure a track straight from a data file URL."),
             c("sourceDb", "action", "hg/hgTrackUi/hgTrackUi.c:4643",
               value="<db>", verified=True, note="Assembly the track came from."),
+            c("snp125Defaults_coloring", "action",
+              "hg/hgTrackUi/hgTrackUi.c:563", value="Set+defaults",
+              verified=True, leaks=True,
+              note="The \"Set defaults\" button under the SNP colouring "
+                   "section.  snp125ResetColorVarsIfNecessary reads it with "
+                   "cgiOptionalString, not from the cart, and says in a "
+                   "comment that this is deliberate: only a click in this "
+                   "request should clear the colour variables.  But nothing "
+                   "then keeps the click out of the session.  It is not in "
+                   "hgTrackUi's excludeVars, and would be unreachable there "
+                   "even if it were listed, because that array has a stray "
+                   "NULL in the middle (hgTrackUi.c:4718) which ends it "
+                   "early.  Found in one saved session and four live carts, "
+                   "which is harmless in itself: the reset only fires when "
+                   "the value arrives on the request, so a stored copy does "
+                   "nothing.  Cataloged because a one-shot command that "
+                   "persists is the same defect whatever its blast radius.  "
+                   "The name looks track-scoped and is not: the prefix is "
+                   "the fixed string snp125Defaults."),
         ],
     },
     "hgCustom": {
