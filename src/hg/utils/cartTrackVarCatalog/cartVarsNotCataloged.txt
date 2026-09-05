@@ -82,8 +82,10 @@ prot                               # hg/hgc/hgc.c
 ref                                # hg/hgc/myVariantsClick.c
 sel_id                             # hg/hgTracks/searchTracks.c
 som                                # hg/hgTracks/gvfTrack.c
+ss.ps                              # hg/hgc/rnaFoldClick.c
 thickEnd                           # hg/hgc/myVariantsClick.c
 thickStart                         # hg/hgc/myVariantsClick.c
+tmp                                # hg/lib/trackHub.c
 unip                               # hg/hgTracks/gvfTrack.c
 unk                                # hg/hgTracks/gvfTrack.c
 wig                                # hg/lib/wigDataStream.c
