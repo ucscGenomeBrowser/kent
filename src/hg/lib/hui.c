@@ -7040,7 +7040,7 @@ if (trackDbFilters)
     puts("<BR>");
     struct trackDbFilter *filter = NULL;
     struct sqlConnection *conn = NULL;
-    if (!isHubTrack(db))
+    if (!isHubTrack(db) && !isGenArk(db))
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
@@ -7184,7 +7184,7 @@ if (trackDbFilters)
     puts("<BR>");
     struct trackDbFilter *filter = NULL;
     struct sqlConnection *conn = NULL;
-    if (!isHubTrack(db))
+    if (!isHubTrack(db) && !isGenArk(db))
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
@@ -10618,7 +10618,9 @@ struct asObject *asForDb(struct trackDb *tdb, char* database)
 /* return asObject given the database. NULL if not found */
 {
 struct sqlConnection *conn = NULL ;
-if (!trackHubDatabase(database))
+// database can be a quickLift track's source assembly, which for a GenArk arrives
+// here as a bare accession with no MySQL database behind it.
+if (!trackHubDatabase(database) && !isGenArk(database))
     conn = hAllocConnTrack(database, tdb);
 struct asObject *as = asForTdb(conn, tdb);
 hFreeConn(&conn);
