@@ -1,0 +1,50 @@
+# #36340 -- a search-result click after a quickLift could not find the source coordinate.
+#
+# Gerardo's steps: load his session, QuickLift to human HG02257.pat 2021, search "brca2" on
+# the lifted view, and click the BRCA2 hit under "MANE Select Plus Clinical". The result was
+#
+#     Sorry, couldn't locate chr13:32315508-32400268 in HG02257.alt.pat.f1_v2 May 2021
+#     human (HG02257.pat 2021)
+#
+# -- the hit carried the SOURCE assembly's coordinate and the target could not resolve it.
+# Same error from the "NCBI Gene Orthologs" hit.
+#
+# The target is named by ACCESSION, not by label, and that is not cosmetic here. GenArk
+# carries two releases whose labels differ only in punctuation, and for this sample they
+# swap haplotype between them: GCA_018466835.1 is HG02257 PAT (2021) while
+# GCA_018466835.2 is HG02257 MAT (2024). A label fragment like "HG02257.pat" would be one
+# hub update away from matching the wrong assembly.
+#
+# The session is Gerardo's own, kept because what it holds -- a custom track plus a hub on
+# hg38 -- is what made the search return several kinds of hit.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: Gerardo, name: quickLift_CT_hub}
+  - expect: {noText: "Could not find session"}
+
+  - convert: {to: GCA_018466835.1, quicklift: true}
+  - open: lift
+  - expect: {noText: "Sorry, couldn't locate"}
+
+  - goShow: "brca2"
+  - expect: {url: "/hgSearch", noText: "Sorry, couldn't locate"}
+
+  # The first BRCA2 hit on the results page. Which of the several hits it is does not
+  # matter much -- they all resolve to the same gene span -- but where it LANDS matters a
+  # great deal, and that is what the next step reads.
+  - click: 'a:has-text("BRCA2")'
+
+  # This is the assertion the script exists for, and noText: is the weaker half of it.
+  # The bug sent the click at the SOURCE coordinate, chr13:32,315,508-32,400,268, which the
+  # target cannot resolve. Fixed, the click lands on the target's own contig:
+  # JAGYVI010000002.1:12,922,586-13,007,328, measured 2026-09-05, and 84,742 bases wide
+  # against BRCA2's 84,760 on hg38. Naming the source coordinate in noUrl: is what makes
+  # this fail on the buggy build rather than merely pass on the fixed one.
+  - expect:
+      url: "position=JAGYVI010000002.1%3A12922586"
+      noUrl: "chr13%3A32315508"
+      noText: "Sorry, couldn't locate"
+      rows: [mane, knownGene]

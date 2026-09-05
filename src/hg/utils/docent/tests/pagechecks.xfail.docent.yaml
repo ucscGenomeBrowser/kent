@@ -1,0 +1,30 @@
+# EXPECTED TO FAIL. The other half of pagechecks.docent.yaml.
+#
+# The same view with all four new checks aimed the wrong way at once. If this run ever
+# exits 0, at least one of url:, noUrl:, has: and noHas: has stopped comparing anything --
+# and since the regression suite next door leans on them for bugs that rows:, height: and
+# text: cannot see, they would pass silently over exactly those bugs.
+#
+# One script rather than four because each check was also verified on its own by hand when
+# it was written, and four near-identical scripts is four things to keep in step. The
+# failure names every check that failed, so a single run says which of the four broke.
+#
+# The failure it should print, all four in one message:
+#   url is "https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?...", wanted it to contain
+#     "/hgSearch"; url contains "/hgTracks": ...; nothing matches
+#     "#td_data_ruler map[name=map_center_mane]"; 1 element(s) match
+#     "#td_data_mane map[name=map_center_mane]", wanted none
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+  - expect:
+      url: "/hgSearch"
+      noUrl: "/hgTracks"
+      has: "#td_data_ruler map[name=map_center_mane]"
+      noHas: "#td_data_mane map[name=map_center_mane]"

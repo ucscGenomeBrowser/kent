@@ -1,0 +1,46 @@
+# #37562 -- a stale lastPosition warning on the search-results page after a quickLift.
+#
+# After a QuickLift hop the cart's lastPosition still held the SOURCE assembly's coordinate,
+# which cannot be resolved on the destination hub assembly, so hgFind put a banner on the
+# search-results page:
+#
+#     Unable to resolve lastPosition '...'
+#
+# (hg/lib/hgFind.c:2270.) A side observation from #36340 -- it never affected the results or
+# the click-through, only the banner.
+#
+# So the recipe has to reach the SEARCH-RESULTS page on the lifted assembly, not the track
+# view: a term that resolves to one place goes straight to the image and never prints this.
+# "brca" is ambiguous on hs1, so goShow submits it and lands on the results list.
+#
+# One track is turned on and lifted so the assertions before the search can tell a drawn
+# view from an error page. mane is deliberately not used: it draws nothing at the window
+# two other quickLift tickets use, and a row check on it would fail for that reason.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {knownGeneArchive: show, knownGeneV49: pack}
+  - expect: {rows: [knownGeneV49], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [knownGeneV49], noText: "Unable to resolve lastPosition"}
+
+  # A search from the lifted view. This is where the banner appeared.
+  - goShow: "brca"
+
+  # The url: and text: halves are not optional. This page has no track image, so `rows:`
+  # reports none and a bare noText: would pass just as happily on a blank page or an early
+  # error -- which is the failure mode this whole suite has to guard against. Both checks
+  # confirm we really are on hgSearch, and on the LIFTED assembly (db=hub_<n>_hs1) rather
+  # than back on hg38, since the banner only ever appeared on the destination.
+  - expect:
+      url: "/hgSearch"
+      text: "Search across the Genome Browser site"
+      noText: "Unable to resolve lastPosition"
+  - expect: {url: "db=hub_"}

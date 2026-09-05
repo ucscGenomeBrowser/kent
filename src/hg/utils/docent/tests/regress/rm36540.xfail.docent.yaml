@@ -1,0 +1,32 @@
+# #36540 -- EXPECTED TO FAIL. The ticket is Closed; the symptom is not.
+#
+# Measured 2026-09-04 with the reporter's own hub URL, not just our copy:
+#
+#     genome.ucsc.edu       v502   chromInfo error present
+#     hgwbeta.soe.ucsc.edu  v503   chromInfo error present
+#     genome-test           v503   chromInfo error present
+#
+# The ticket's last note says "This is now on the RR", and the discussion on it is about
+# making the error message better rather than about making genome= resolve. Whatever
+# landed, a user who writes genome= instead of db= for a hub-backed assembly still gets
+#
+#     Can't start query: select * from chromInfo where chrom = 'chr9'
+#     mySQL error 1146: Table 'hs1.chromInfo' doesn't exist (db=hs1)
+#
+# So this cannot assert fixed behavior, because there is none to assert. It is kept as an
+# xfail instead, which is how this suite pins a trap: the run fails if it ever PASSES, so
+# the day someone fixes it, they are told there is a test waiting rather than left to
+# discover it. If #36540 is reopened and fixed, drop the .xfail from the name.
+#
+target: genome-test
+reset: true
+fast: true
+db: hs1
+steps:
+  - goto: "/cgi-bin/hgTracks?genome=hs1&hubUrl=https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/NOTCH2NLHub/hub.txt&position=chr9%3A1-1000000&pix=1100"
+
+  # "chromInfo" alone is the assertion, not the whole quoted string: the message names the
+  # assembly, and the point is that no query against a chromInfo table should reach the
+  # user whichever assembly it names. Paired with a row check because the early-error page
+  # this bug produced draws no image, so noText on its own would have passed on it.
+  - expect: {rows: [ruler], noText: "chromInfo"}

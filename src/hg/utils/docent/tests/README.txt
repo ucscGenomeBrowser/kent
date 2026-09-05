@@ -14,8 +14,14 @@ the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md)
 part of the tree-wide test target: a broken network would fail the build.
 
 A test is an ordinary Docent script that asserts with `expect:`. It passes by exiting
-0. `expect:` is the only verb that fails a run, so a test with no `expect:` step in it
-tests nothing.
+0. `expect:` is the only verb that CHECKS anything, so a test with no `expect:` step in
+it tests nothing: `track:` accepts a name no assembly has and still exits 0.
+
+Other verbs do fail a run, so do not read the line above as "nothing else can stop it".
+A verb throws when it cannot do what it was told -- `mouseover:` cannot find the item,
+`loadSession:` cannot find the file, `drag:`, `convert:` and `go:` likewise -- and
+docent.js turns any step's throw into `step N (verb) failed` and exit 1. None of them
+looks at whether the page came out right, which is the part only `expect:` does.
 
 A script named *.xfail.docent.yaml is expected to FAIL, and the run fails if it passes.
 That is how a trap gets pinned rather than merely written down.
@@ -24,6 +30,13 @@ That is how a trap gets pinned rather than merely written down.
 trackDb and prints the cart variables without opening a browser, in about a second. It
 is where Docent's own decisions live, and the baselines in expected/ are what catch a
 change to visVars() or tdbHideTargets() that a rendered page would hide.
+
+The trackDb listing is cached in $TMPDIR for a day (docent.js, TDB_TTL), and a cold
+fetch prints one provenance line that a warm run does not. That line would make the
+first `make derive` of the day differ from a baseline captured warm, for a reason that
+has nothing to do with trackDb changing, so the makefile strips it from both the run and
+the baseline. Everything else trackDb says about itself is kept, including the two lines
+that report a hub genome or an unreachable hubApi.
 
 What is covered
 ---------------
@@ -49,6 +62,15 @@ What is covered
                 reported by rows: alone rather than failing the order check as well.
   ordered.xfail the same two rows named the wrong way round. Expected to fail -- a flag
                 that cannot fail is not a check, it is a second copy of the set test.
+  pagechecks    the `expect:` checks that read the PAGE rather than the track image --
+                `url:`/`noUrl:` on the address, `has:`/`noHas:` on a CSS selector -- plus
+                the positional form of `click:` (`{track:, frac:}`), which follows the
+                item box nearest a point. All four exist for bugs that rows:, height: and
+                text: cannot see: a search term's zero-width space stripped out of a URL
+                (#36387), a center label attached to the wrong row (#37785), and an item
+                that cannot be named at all because its track is `type bigBed 3` (#36335).
+  pagechecks    the same four aimed the wrong way at once. Expected to fail. The message
+    .xfail      names every check that failed, so one run says which of the four broke.
   expectfail    an assertion that is plainly false. Expected to fail -- if it ever passes,
     .xfail      `expect:` has stopped throwing and every other test here means nothing.
   make parity   FAST vs slow, and a rerun, on composite. FAST drops the dwells and the

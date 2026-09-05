@@ -1,0 +1,33 @@
+# #35333 -- a bigBed whose field count disagrees with the trackDb type line caused a
+# SEGFAULT, which reached the reader as "hgTracks object missing" and, in the ticket's
+# words, was bewildering to a collaborator.
+#
+# The track declares `type bigBed 12 +` over a bed9+ file. hubCheck catches the mismatch,
+# which is good, but a malformed hub should not crash the browser.
+#
+# Our own copy of the reporter's hub, at ~/public_html/docentFixtures/hgtracks_obj_bug/,
+# with bigDataUrl pointing at the local file. Note the clone's `groups` and `html` lines
+# still point at the reporter's public_html, which hubClone left absolute; those are
+# cosmetic for this test but are a dependency worth removing if it ever fails oddly.
+#
+# The position is the first contig in 1q21_contigs.bb (chr1:142,654,935-142,673,231). The
+# ticket's own steps say to go to chr1 after hiding everything, and the crash needs an
+# item in view.
+target: genome-test
+db: hs1
+position: chr1:142654000-142674000
+reset: true
+fast: true
+steps:
+  # No hide: all and no track: step here, on purpose. The hub declares `visibility pack`
+  # for this track, so attaching it is enough. A first version hid everything and then
+  # named the track, and the track did not come back: for an ATTACHED hub the cart
+  # variable is the hub-prefixed name (hub_194767_H9_shasta_1q21), and track: sends the
+  # plain name, which turns on nothing. rows: matches by suffix on the way out, so the
+  # assertion below does not need the prefix -- but the cart write would have.
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/hgtracks_obj_bug/hub.txt", db: hs1}
+  - go: chr1:142654000-142674000
+
+  # The row check is the real assertion: the SEGFAULT produced no image at all, so a
+  # noText check on its own would have passed on the page the bug produced.
+  - expect: {rows: [H9_shasta_1q21], noText: "hgTracks object missing"}

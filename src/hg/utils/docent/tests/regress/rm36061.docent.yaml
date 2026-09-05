@@ -1,0 +1,46 @@
+# #36061 -- the DECIPHER SNVs details page came up missing its details after a quickLift.
+#
+# Gerardo's steps from the ticket: hg38, hide all, DECIPHER to show, QuickLift to hs1, and
+# click the 517898 item in the DECIPHER SNV track. The lifted details page came back
+# without the fields the native one shows.
+#
+# The ticket's position, chr7:156,982,676-156,996,015, is the window every quickLift ticket
+# quotes, and item 517898 is not in it: it is at chr7:155,803,191-155,803,192, and
+# decipherSnvs draws nothing at all in the ticket's window. Following the ticket literally
+# gave "item 517898 not found ... 8 map box(es) in that row, addressable as: mergedItem,
+# ... 314209" -- those belong to decipherSnvs' sibling. So the window here is the one that
+# actually holds the item the ticket names.
+#
+# Two names are in play and only one of them is a row. decipherSnvs and decipher are
+# DIFFERENT tracks (SNVs and CNVs) under decipherContainer, which is a superTrack -- so it
+# does not pass its setting down, and its other members come up at their own trackDb
+# visibility however much the hide: all hid. The row to assert is decipherSnvs; `decipher`
+# turning up instead of it is the sign that the SNVs track drew nothing.
+target: genome-test
+db: hg38
+position: chr7:155800000-155806000
+reset: true
+fast: true
+steps:
+  - go: chr7:155800000-155806000
+  - hide: all
+  - track: {decipherContainer: show, decipherSnvs: pack}
+  - expect: {rows: [decipherSnvs], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [decipherSnvs], noText: "Warning/Error"}
+
+  - click: {track: decipherSnvs, item: "517898"}
+
+  # The details themselves, not just the item's name -- "missing details" was the whole
+  # report, and the name alone is on the page even when every field below it is gone.
+  # These five are what the native hgc page prints for patient 517898, read off it rather
+  # than guessed.
+  - expect:
+      text: "Ref Allele: A"
+      noText: "Warning/Error"
+  - expect: {text: "Alt Allele: G"}
+  - expect: {text: "Transcript: ENST00000297261"}
+  - expect: {text: "Genotype: Heterozygous"}
+  - expect: {text: "Inheritance: Paternally inherited"}

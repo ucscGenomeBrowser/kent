@@ -1,0 +1,30 @@
+# #37388 -- clicking an item in a QuickLifted hub track sent hgc looking for a MySQL
+# database named after the source assembly:
+#
+#     Couldn't set connection database to GCA_018466835.2
+#
+# The session is kept for this one. It is braney/crash1 on genome-test, and it pins a
+# state that is genuinely awkward to build: hg38 at chrM:577-16569 with a quickLift hub
+# active, its chain from GCA_018466835.2, and an xenoRefGene track from that hub. Building
+# that in steps would mean attaching a hub and running a convert whose target is a
+# GenArk assembly, which is more moving parts than the bug needs.
+#
+# click: {track:, item:} follows the item's own map-box link, which is how hgc is reached.
+# A raw click on the image is swallowed by hgTracks' drag-select handler.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: braney, name: crash1}
+
+  # The guard. A session that has been renamed or deleted is not an error: hgTracks
+  # answers 200 with an early-error page carrying no track image, and every noText check
+  # on that page passes. Without this line a deleted session turns this test green.
+  - expect: {noText: "Could not find session"}
+
+  - click: {track: xenoRefGene, item: "NM_126741.2"}
+
+  # hgc has no track image, so there is no row to assert on here: the whole check is that
+  # the page is the details page and not the early-error page the bug produced.
+  - expect: {noText: "Couldn't set connection database"}

@@ -1,0 +1,32 @@
+# #37520 -- QuickLift tracks were removed after hopping to another genome and back.
+#
+# The ticket's steps: reset, hg38, convert to hs1 with QuickLift, then pick hg38 from the
+# Genomes menu and hs1 again. The lifted tracks were gone from hs1.
+#
+# The two hops are done with goto: rather than by driving the blue-bar menu, because the
+# bug is about what the cart keeps across a database switch, not about the menu widget.
+# A menu click and a db= URL reach the same cart change.
+# Asserts on quickLiftChain rather than a data track, for two reasons. At the ticket's
+# position mane has no features, so its row is legitimately absent. And the chain is
+# itself one of the quickLift tracks this ticket says went missing, so if the lift is
+# dropped across the genome hop the chain goes with it -- which is exactly the check.
+target: genome-test
+db: hg38
+position: chr7:156982676-156996015
+reset: true
+fast: true
+steps:
+  - go: chr7:156982676-156996015
+  - hide: all
+  - track: {mane: pack}
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
+
+  # Away to hg38 and back to hs1. The lifted track has to survive the round trip.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100"
+  - goto: "/cgi-bin/hgTracks?db=hs1&pix=1100"
+
+  # The row id of a lifted track carries a per-run hub_<n>_ prefix, which rows: matches by
+  # suffix, so this holds without knowing the hub number.
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}

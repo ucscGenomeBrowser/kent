@@ -1,0 +1,37 @@
+# #37906 -- Neandertal Cntgs and Neandertal Seq drew nothing when the window was narrow.
+#
+# Reported on hg18 at chr19:56,940,838-56,946,943 (the FPR1 gene): no data under either
+# track, and two clicks of Zoom out 3x brought some of it back. So the assertion is that
+# data really is drawn at the narrow window the reporter used.
+#
+# The ticket links a session, and this deliberately does not use it. The link is
+# /s/gperez2/mlq_37881 on the RR, and RR sessions live in hgcentral, so it cannot be
+# loaded from genome-test at all. There is a Gerardo/mlq_37881 on genome-test, but it is a
+# different session. Reaching for it because the name matched would have made this test
+# pass or fail for reasons unconnected to the bug.
+#
+# Two things about the names, both of which cost a run to find out:
+#
+#   * "Neandertal Cntgs" (ntSeqContigs) and "Neandertal Seq" (ntSeqReads) are COMPOSITES,
+#     not tracks. A container never gets an img_data_ row of its own, so asserting on
+#     those two names can only ever fail. The rows carry the children's names.
+#   * ntSeqContigs has one child, bamAll. ntSeqReads has six bamSL* children, and at this
+#     window only some of them have reads: on 2026-09-04 bamSLMez1, bamSLVi33dot16,
+#     bamSLVi33dot25 and bamSLVi33dot26 drew, while bamSLDenisova did not. Naming all six
+#     would make the test fail whenever a sample legitimately has nothing here, so it
+#     names one child per composite instead: bamAll for the Cntgs side, bamSLMez1 for the
+#     Seq side. Those two are what "no data under either track" was about.
+target: genome-test
+db: hg18
+position: chr19:56940838-56946943
+reset: true
+fast: true
+steps:
+  - go: chr19:56940838-56946943
+  - hide: all
+  - track: {ntSeqContigs: pack, ntSeqReads: pack}
+
+  # A track that is on but has nothing in view still gets a row, so this is a check that
+  # the data was found rather than that the track was enabled. That is the distinction the
+  # bug turned on: the tracks were on the whole time and drew nothing.
+  - expect: {rows: [bamAll, bamSLMez1], noText: "Warning/Error"}

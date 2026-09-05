@@ -1,0 +1,41 @@
+# #36029 -- with several phyloP tracks on and MAF hidden, turning a MAF to full did not
+# display it. The controls showed it as full; the row was not drawn. A cart reset cleared
+# it, and it came back later.
+#
+# The ticket's session is on the RR (/s/Markd/maf-display-bug-36029) and so cannot be
+# loaded from genome-test, and the state it holds is three phyloP tracks, which is a step
+# to build.
+#
+# Track names on hg38: the conservation containers are cons100way (UCSC 100 Vertebrates),
+# cons241way (Zoonomia 241 Placent) and cons470way (Hiller Lab 470 Mammals). Each has a
+# phyloP view and an alignment view. The 241-way MAF the reporter could not display is
+# cactus241wayBM, under cons241wayViewalign.
+#
+# Asking for a phyloP view turns the whole composite on, alignment view included: a first
+# version of this test asserted the MAF was absent after naming only the phyloP views and
+# found multiz100way, cactus241wayBM and multiz470way all drawn. So the alignment views
+# have to be hidden by name to reach the state the report started from. That is the same
+# shape as the views test in the suite next door, where a hideKids has to be aimed at the
+# view that holds the subtrack rather than at the composite.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+
+  # Three phyloP tracks on, all three alignment views off: the state the report began in.
+  - track:
+      cons100wayViewphyloP: full
+      cons241wayViewphyloP: full
+      cons470wayViewphyloP: full
+      cons100wayViewalign: hide
+      cons241wayViewalign: hide
+      cons470wayViewalign: hide
+  - expect: {noRows: [cactus241wayBM, multiz100way, multiz470way], noText: "Warning/Error"}
+
+  # Now ask for the 241-way MAF. This is the step that did nothing.
+  - track: {cactus241wayBM: full}
+  - expect: {rows: [cactus241wayBM], noText: "Warning/Error"}

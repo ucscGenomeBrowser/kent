@@ -1,0 +1,27 @@
+# #36798 -- the two OMIM tracks disappeared from a session after a configure submit.
+#
+# A user reported it against a saved session, and the ticket's steps are: load the
+# session, open Configure, set text size to 10, submit, and the two OMIM tracks are gone.
+# Any configuration change triggered it, not just the font.
+#
+# The ticket's session is /s/Lou/omimIssue.3 on the RR, which is in hgcentral and cannot
+# be loaded from genome-test. Built here instead: the session's only relevant contribution
+# is that the two OMIM tracks were showing.
+#
+# A configure submit is a cart write, and textSize is the cart variable it writes, so a
+# goto: carrying it reaches the same state as the form. Doing it through the Configure
+# page would test the form rather than the bug.
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+  - hide: all
+  - track: {omimContainer: show, omimGene2: pack, omimAvSnp: pack}
+  - expect: {rows: [omimGene2, omimAvSnp], noText: "Warning/Error"}
+
+  # The configure change that made them vanish.
+  - goto: "/cgi-bin/hgTracks?db=hg38&textSize=10&pix=1100"
+  - expect: {rows: [omimGene2, omimAvSnp], noText: "Warning/Error"}

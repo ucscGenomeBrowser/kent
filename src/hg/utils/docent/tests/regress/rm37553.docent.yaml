@@ -1,0 +1,47 @@
+# #37553 -- custom tracks loaded from a URL did not display on hgwdev.
+#
+# The ticket's example is the QA team's own set of example custom tracks, given to
+# hgCustom as a URL on hg19:
+#
+#     https://genecats.gi.ucsc.edu/qa/customTracks/testing/examples.WITHOUT.FTPS.txt
+#
+# That URL is kept rather than replaced with a local copy, because it is a team-owned QA
+# fixture rather than one person's directory, and because it is the exact input the ticket
+# used. preflight checks it, so if it moves the run says so instead of failing on an
+# assertion.
+#
+# A custom track's row id is assigned by hgTracks and carries a random number
+# (ct_GFF_6451, ct_BlatPSL_4952), so `rows:` cannot name one: rows match by suffix and the
+# number changes every run. The check is on the labels instead, which is also how the
+# customtrack test next door does it.
+#
+# Two wrong guesses about the label text, both fixed by reading the page rather than the
+# file. "GFF example" is not a label: the file says `track name=GFF example description=`
+# with the name unquoted, so hgCustom takes the name as "GFF" and drops "example". And the
+# DESCRIPTION is not on the page either -- hgTracks puts a track's longLabel in the
+# control's title attribute, which innerText does not see. What is visible is the
+# shortLabel, i.e. the name.
+#
+# Three names from three different loaders -- a hosted vcfTabix, an inline PSL, and a
+# remote bigChain -- so a partial load fails instead of passing on whichever one survived.
+# All three are several words long and belong to nothing native on hg19. The height floor
+# is the other half of it: these labels sit in the track controls under the image and
+# would be there even if nothing had drawn. Measured 2026-09-05: 46 rows, 6475px. The
+# floor is left low on purpose -- one of the remote bigDataUrls going away should not fail
+# this test, since the three label checks are what carries it.
+target: genome-test
+db: hg19
+position: chr21:33031597-33041570
+reset: true
+fast: true
+steps:
+  - go: chr21:33031597-33041570
+  - hide: all
+  - addCustomTrack: {url: "https://genecats.gi.ucsc.edu/qa/customTracks/testing/examples.WITHOUT.FTPS.txt"}
+
+  - expect:
+      text: "VCF Example One"
+      noText: "Warning/Error"
+      height: ">1000"
+  - expect: {text: "Blat PSL"}
+  - expect: {text: "bigChain Example One"}

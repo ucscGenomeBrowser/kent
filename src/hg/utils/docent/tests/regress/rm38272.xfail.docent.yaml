@@ -1,0 +1,59 @@
+# #38272 -- hgTrackUi tries a MySQL connect to a quickLifted GenArk source assembly.
+#
+# THIS IS AN XFAIL, and it is NOT a copy of rm37388. That script covers hgc, where the fix
+# landed and works. This one drives the OTHER page reached from the same lifted track, its
+# track-settings page, which still does what #37388 described:
+#
+#     Warning/Error(s):
+#     Couldn't set connection database to GCA_018466835.2
+#     mySQL error 1049: Unknown database 'GCA_018466835.2'
+#
+# Measured 2026-09-05 on genome-test, v503, from session braney/crash1: follow the lifted
+# RefSeq mRNAs track's own settings link and the page comes back 451 characters long, with
+# that warning box, the track name, a display-mode row, "Remove from QuickLift" -- and
+# nothing else. Same error string as #37388, different CGI.
+#
+# #37388 is Closed and out on the RR, so nobody is watching this. Its fix was per-CGI:
+# 921a40c472e guarded the one call in hgc (hgc.c:4984, `!trackHubDatabase(liftDb) &&
+# !isGenArk(liftDb)` before hAllocConnTrack) and the branch in getTrackHtml. hgTrackUi has
+# a path of its own that was never guarded -- specificUi() (hgTrackUi.c:3432) reassigns
+#
+#     char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
+#     if (liftDb != NULL)
+#         db = liftDb;
+#
+# and hands that db to cfgByCfgType(), labelCfgUi() and extraUiLinks(), which connect to it.
+# Where the page stops fits: specificUi() is called at :4202, after the "Remove from
+# QuickLift" link at :4118, and that is the last thing the 451 characters contain.
+#
+# This is NOT the reason rm37389.xfail's description is missing. That is hgc, a separate
+# CGI on a separate path, and its page renders in full with no warning at all.
+#
+# Filed as #38272 on 2026-09-05, Medium, In Progress. It reproduces from scratch with no
+# session at all -- open GenArk GCA_018466835.2 at CM089257.1:80,200,000-80,360,000, leave
+# the default tracks alone, QuickLift to hg38, click the gear on RefSeq mRNAs -- and it is
+# live on genome.ucsc.edu, hgwbeta and genome-test alike. The script that checks any of the
+# three is at /hive/groups/browser/redmineNotes/38252/claude/repro_37388_hgTrackUi.js.
+#
+# This script uses the braney/crash1 session instead, because that is the cheap way to the
+# same state and rm37388 already depends on it, so preflight covers it either way.
+#
+# The script asserts the fixed behavior -- no MySQL warning, and the settings page really
+# rendered -- so it passes as soon as this is fixed, and `make test` then reports the xfail
+# as a failure, which is the signal to rename it and drop the .xfail.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: braney, name: crash1}
+  - expect: {noText: "Could not find session", rows: [xenoRefGene]}
+
+  # The track's own settings link, which is the gesture a user makes to configure a lifted
+  # track. hgTrackUi has no track image, so there is no row to assert on: the checks are on
+  # the page text.
+  - click: 'a[href*="hgTrackUi"][href*="xenoRefGene"]'
+
+  - expect:
+      text: "RefSeq mRNAs Track Settings"
+      noText: "Couldn't set connection database"

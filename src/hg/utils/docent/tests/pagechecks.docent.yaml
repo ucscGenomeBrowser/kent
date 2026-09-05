@@ -1,0 +1,56 @@
+# The three `expect:` checks that look at the page rather than at the track image, plus
+# the positional form of `click:`. All four were added for the regression suite next door
+# (tests/regress), and tests/README.txt's rule is that a verb we touch and find untested
+# belongs here.
+#
+#   url: / noHas:   a substring check on the CURRENT ADDRESS. Some things are visible
+#                   nowhere else -- which CGI a click reached, and what a form put in a
+#                   query string. #36387's fix strips zero-width characters out of a
+#                   search term before the position box submits it, and the character is
+#                   invisible in the rendered page, so the URL is the only evidence.
+#   has: / noHas:   a CSS selector matches / matches nothing. For a bug whose whole
+#                   signature is WHERE something sits: #37785 drew the same rows, the same
+#                   height and the same pixels either way, and only the row its center
+#                   label's image map hung off changed.
+#   click: {track:, frac:}   the item box nearest a point, and its hgc link. The only way
+#                   in for a track whose items cannot be named -- a `type bigBed 3` gets
+#                   an EMPTY i= in its hgc href and the same title on every box.
+#
+# pagechecks.xfail.docent.yaml is the other half: the same view with each of the four
+# aimed the wrong way, because a check that cannot fail is not a check.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+
+  # url: and noUrl: on a plain tracks view. `go:` navigates hgTracks directly, so the
+  # address carries the CGI and the position and no hgSearch.
+  - expect:
+      url: "/hgTracks"
+      noUrl: "/hgSearch"
+      rows: [ruler, mane]
+
+  # has: and noHas:. hgTracks puts each center label in a MAP named map_center_<track>,
+  # inside the data cell of the row it belongs to -- which is the structure #37785 broke.
+  # The ruler has no center label of its own, so that pair is the negative case.
+  - expect:
+      has:
+        - "#td_data_mane map[name=map_center_mane]"
+        - "#imgTbl tr#tr_mane"
+      noHas:
+        - "#td_data_ruler map[name=map_center_mane]"
+        - "map[name=map_center_noSuchTrack]"
+
+  # The positional click. frac: 0.5 is the middle of the row; mane HAS named items here,
+  # so this is not the case that needs it, but it is the case where the result can be
+  # checked -- the details page has to be the one for a MANE transcript.
+  - click: {track: mane, frac: 0.5}
+  - expect:
+      url: "/hgc"
+      text: "Position:"
+      noText: "Warning/Error"

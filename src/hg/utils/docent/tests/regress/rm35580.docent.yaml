@@ -1,0 +1,46 @@
+# #35580 -- "Show <alt> placed on its chromosome" errored instead of drawing the view.
+#
+# The reporter was at chr16_KI270853v1_alt:744117-744278, clicked the GRC Patches item,
+# and on the hgc page clicked "Show chr16_KI270853v1_alt placed on its chromosome". That
+# link puts hgTracks in singleAltHaplo mode, and it came back with
+#
+#     unexpected current window 55471440, expected first window 55471712
+#
+# The first attempt at a fix had to be reverted on the v487 branch (#36311, a build patch)
+# because it broke the UCSC Unusual Regions track in multi-region mode. The fix that
+# actually shipped is in v488, so this asserts the behavior of that one, not the reverted
+# one.
+#
+# The session is kept. Gerardo/RM_35326_bug is on genome-test, and what it contributes is
+# hard to build in steps: a position on an alt contig, with the GRC Patches track showing
+# and the four recount3 tracks on -- the ticket's own title asks whether recount3 is
+# involved, so the assertion below names two of them and would catch the view coming back
+# without them.
+#
+# The item on altSeqLiftOverPsl is called "chr16", which reads oddly next to the alt-contig
+# position but is what hgTracks puts in the map box: the item names the chromosome the alt
+# belongs to.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: Gerardo, name: RM_35326_bug}
+
+  # A missing session is not an error -- hgTracks answers 200 with an early-error page and
+  # every noText check on it passes -- so both halves are needed here.
+  - expect: {noText: "Could not find session", rows: [altSeqLiftOverPsl]}
+
+  - click: {track: altSeqLiftOverPsl, item: chr16}
+  - expect: {text: "Show chr16_KI270853v1_alt placed on its chromosome"}
+
+  - click: 'a:has-text("placed on its chromosome")'
+
+  # The row list is what makes this tight. The bug produced an error page with no track
+  # image at all, so noText: on its own would have passed on it; and asking for the
+  # recount3 rows checks the tracks that #36311's revert was about are still drawn in
+  # singleAltHaplo mode.
+  - expect:
+      rows: [altSeqLiftOverPsl, recount3_gtex, recount3_tcga]
+      noText: "unexpected current window"
+      url: "virtModeType=singleAltHaplo"

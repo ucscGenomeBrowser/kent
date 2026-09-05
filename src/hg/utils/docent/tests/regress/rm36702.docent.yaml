@@ -1,0 +1,32 @@
+# #36702 -- QuickLift from hg19 to hs1 and to the human GenArk assemblies failed with
+#
+#     Couldn't set connection database to hub_3671779_hs1
+#     mySQL error 1049: Unknown database 'hub_3671779_hs1'
+#
+# The hub id in the message is per-run, so the assertion names the stem of the message and
+# not the whole string.
+#
+# Self-contained: the ticket's steps are a cart reset and a convert, with no session and
+# no particular track needed. One track is turned on anyway, so the lifted view has
+# something to draw and the row check below can mean something.
+# Asserts on `ncbiRefSeqCurated`, a leaf track (hg19 has no mane track). Naming a container here does not work: refSeqComposite
+# is a compositeTrack, and a container never gets an img_data_ row of its own -- the rows
+# carry its children's names (ncbiRefSeqCurated and the rest). Check a name against
+# trackDb before asserting on it.
+target: genome-test
+db: hg19
+position: chr7:155604967-155612966
+reset: true
+fast: true
+steps:
+  - go: chr7:155604967-155612966
+  - hide: all
+  - track: {ncbiRefSeqCurated: pack}
+  - expect: {rows: [ncbiRefSeqCurated], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+
+  # Both halves matter. The failure was an early-error page that draws no image, so
+  # noText: on its own would have passed on exactly the page the bug produced.
+  - expect: {rows: [ncbiRefSeqCurated], noText: "Unknown database"}

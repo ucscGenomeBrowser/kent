@@ -1,0 +1,31 @@
+# #36514 -- after a QuickLift from hg38 to hs1, typing a chromosome name into the
+# position box returned an error instead of navigating.
+#
+# The ticket's steps are: reset, hg38, convert to hs1 with QuickLift, go to
+# chr7:156982676-156996015, then enter "chr7" as a search query.
+#
+# goShow: is used rather than go: on purpose. go: navigates straight to a position;
+# goShow: puts the term in the position box and lets the page submit it, which is the
+# path the user took and the one the bug was on.
+# Asserts on quickLiftChain, the chain track the lift itself adds. A data track is no
+# good here: at the ticket's position (chr7:156,982,676-156,996,015) mane has no
+# features, so its row is legitimately absent and the assertion would fail for a reason
+# unconnected to the bug. The chain is always drawn in a lifted view, so it is the right
+# way to say "we are on a drawn lifted page and not on an error page".
+target: genome-test
+db: hg38
+position: chr7:156982676-156996015
+reset: true
+fast: true
+steps:
+  - go: chr7:156982676-156996015
+  - hide: all
+  - track: {mane: pack}
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
+
+  - goShow: chr7
+  # A search that fails renders a perfectly good page carrying the message, so the row
+  # check is what proves we are on a drawn view and not on an error page.
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
