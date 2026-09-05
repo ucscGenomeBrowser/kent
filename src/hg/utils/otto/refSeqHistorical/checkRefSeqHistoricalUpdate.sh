@@ -42,6 +42,8 @@ if [[ "$latest" > "$handled" ]]; then
     echo "Build steps: RS_YYYY_MM section in kent/src/hg/makeDb/doc/hg38/ncbiRefSeq.txt"
     echo "Do not forget /gbdb/hg38/ncbiRefSeq/ncbiRefSeqHistoricalVersion.txt, the"
     echo "track's own version string -- last step of that makedoc section."
+    echo "Also rebuild ncbiRefSeqPepTableHistorical (the gbProcess -pepFa step)"
+    echo "or HGVS protein terms on newly deprecated accessions will not resolve."
     echo "To silence: set $latest in /hive/data/outside/otto/refSeqHistorical/lastHandledRelease.txt. refs #35766"
 fi
 exit 0

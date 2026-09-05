@@ -550,6 +550,35 @@ cut -f1 refSeqHistorical.gp | LC_ALL=C sort -u > name.list
 LC_ALL=C join -t$'\t' name.list refLink.tab > ncbiRefSeqLinkOld.tab
 hgLoadSqlTab hg38 ncbiRefSeqLinkHistorical ~/kent/src/hg/lib/ncbiRefSeqLink.sql ncbiRefSeqLinkOld.tab
 
+# protein sequences for deprecated NP_ accessions (DONE - Lou - 2026-09-04)
+#############################################################################
+# ncbiRefSeqLinkHistorical names the protein for every deprecated transcript but
+# we stored no sequences, so HGVS p. terms and bare NP_ searches on a deprecated
+# protein version did not resolve.  NCBI publishes no protein FASTA for the
+# historical set; the translations are in the rna.gbff downloaded above and
+# gbProcess -pepFa writes them out.  Redo this step on every historical refresh.
+# refs #38248
+cd /hive/data/outside/refSeqHistorical/RS_2024_08
+
+# second gbProcess pass, so the link-table commands above stay exactly as run.
+/hive/data/outside/genbank/bin/x86_64/gbProcess -pepFa=refSeqHistoricalPep.fa \
+    /dev/null /dev/null ${REL}_knownrefseq_rna.gbff.gz 2>gbProcessPep.err
+
+# sort -u is safe here: no accession in this file carries two different
+# sequences.  protAcc is field 6 of ncbiRefSeqLink.sql
+# (id, status, name, product, mrnaAcc, protAcc, locusLinkId, omimId, ...).
+# Restrict to the accessions the link table references; nothing can look up the
+# rest.  LC_ALL=C on both sides of the join, as above.
+faToTab -type=protein -keepAccSuffix refSeqHistoricalPep.fa stdout \
+    | LC_ALL=C sort -u > refSeqHistoricalPep.tab
+cut -f6 ncbiRefSeqLinkOld.tab | grep -v '^$' | LC_ALL=C sort -u > histProtAcc.list
+LC_ALL=C join -t$'\t' histProtAcc.list refSeqHistoricalPep.tab \
+    > ncbiRefSeqPepTableHistorical.tab
+
+# for RS_2024_08: 162041 fasta records, 87191 unique, 66119 after the join
+hgLoadSqlTab hg38 ncbiRefSeqPepTableHistorical ~/kent/src/hg/lib/pepPred.sql \
+    ncbiRefSeqPepTableHistorical.tab
+
 # version string for the track (DONE - Matt - 2026-08-27)
 #############################################################################
 # This subtrack has its own dataVersion, separate from the composite's
