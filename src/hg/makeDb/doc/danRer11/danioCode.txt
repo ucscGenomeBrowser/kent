@@ -1,0 +1,140 @@
+# 2026-09-04 Claude max - DANIO-CODE as native danRer11 tracks (refs #38265, #38239)
+
+# The DANIO-CODE consortium publishes its zebrafish developmental genomics data
+# as a public track hub.  This turns the hub's danRer11 trackDb into a native
+# trackDb file and copies the data files here.
+#
+# NOTE: we are hosting the consortium's data, not just pointing at it.  #38239
+# lists the consortium's agreement to that as an open question; confirm it before
+# this leaves alpha.
+
+mkdir -p /hive/data/genomes/danRer11/bed/danioCode
+cd /hive/data/genomes/danRer11/bed/danioCode
+
+# Get the hub.  The server redirects http to https, so use https from here on to
+# avoid a redirect on every range request the browser makes.
+curl -sL -O http://trackhub2.genereg.net/DANIO-CODE/DANIO-CODE.hub.txt
+curl -sL -O http://trackhub2.genereg.net/DANIO-CODE/DANIO-CODE.genomes.txt
+curl -sL -o trackDb.txt http://trackhub2.genereg.net/DANIO-CODE/danRer11/trackDb.txt
+
+grep -cE "^[[:space:]]*track " trackDb.txt
+# 901
+
+# How much data is behind the hub, and which of it is actually reachable.  Pull the
+# Content-Length with a HEAD request for every bigDataUrl.  Takes a few minutes.
+awk '{gsub(/^ +/,"")} /^bigDataUrl /{u=$2;
+       if (u ~ /^https?:/) print u;
+       else print "https://trackhub2.genereg.net/DANIO-CODE/danRer11/" u}' trackDb.txt \
+  | sort -u > urls.txt
+wc -l < urls.txt
+# 883
+
+cat urls.txt | parallel -j 20 --pipe -N 45 \
+  'while read -r u; do
+       sz=$(curl -sIL --max-time 30 "$u" | awk "BEGIN{IGNORECASE=1} /^content-length:/{n=\$2} END{gsub(/\r/,\"\",n); print n+0}")
+       printf "%s\t%s\n" "$sz" "$u"
+   done' > sizes.tsv
+
+awk -F'\t' '{s+=$1} END{printf "%.1f GB in %d files\n", s/1e9, NR}' sizes.tsv
+# 69.3 GB in 883 files
+# broken down: 702 bigWig 65.3 GB, 1 bw 2.6 GB, 45 bb 1.3 GB, 135 bigBed 0.1 GB
+
+# Four files return 404 on the consortium's server.  All four are cell-type tracks
+# whose file name contains a "|" character.  Keep the list, the converter drops the
+# subtracks that point at them.
+awk -F'\t' '$1==0{print $2}' sizes.tsv > missingUrls.txt
+cat missingUrls.txt
+# https://trackhub2.genereg.net/DANIO-CODE/danRer11/tailbud|spinal_cord.colors.bb
+# https://trackhub2.genereg.net/DANIO-CODE/danRer11/Muscle|tailbud.colors.bb
+# https://trackhub2.genereg.net/DANIO-CODE/danRer11/Pharyngeal_mesoderm|tailbud.colors.bb
+# https://trackhub2.genereg.net/DANIO-CODE/danRer11/Epidermis|periderm.colors.bb
+
+# Check that the hub's files really are on danRer11 and not lifted from danRer10.
+bigBedInfo -chroms https://trackhub2.genereg.net/DANIO-CODE/danRer11/consens.canonical.danRer11.bigBed \
+  | grep -A2 chromCount
+#   chr1 0 59578282
+grep -P "^chr1\t" /hive/data/genomes/danRer11/chrom.sizes
+# chr1  59578282
+# matches, no lift needed
+
+# The list to download is everything that answered, so 883 minus the 4 above.
+grep -vxFf missingUrls.txt urls.txt > dlUrls.txt
+wc -l < dlUrls.txt
+# 879
+
+# Mirror the data files.  879 files, 69.3 GB, took about an hour at -j 10.  The
+# script skips files that are already there with the right size and prints the
+# URLs it could not get, so it can be re-run until it reports nothing.
+~/kent/src/hg/makeDb/scripts/danioCode/danioCodeDownload.sh \
+    dlUrls.txt /hive/data/genomes/danRer11/bed/danioCode/data 10
+
+ls data | wc -l
+# 879
+du -sh --apparent-size data
+# 69G
+
+# Check every file against the Content-Length the server reported.
+python3 -c '
+import os
+want = dict((os.path.basename(u), int(sz)) for sz, u in
+            (l.rstrip("\n").split("\t") for l in open("sizes.tsv")))
+bad = [f for f in os.listdir("data")
+       if os.path.getsize("data/" + f) != want.get(f)]
+print(len(bad), "size mismatches")'
+# 0 size mismatches
+
+# We never parse or rewrite these files, so nothing can shift a coordinate.  Spot
+# check that by re-fetching a few and comparing checksums.
+for f in copes_dr11.bb transgenic_danRer11.bb consens.canonical.danRer11.bigBed; do
+    curl -s -o /tmp/remote.tmp "https://trackhub2.genereg.net/DANIO-CODE/danRer11/$f"
+    md5sum /tmp/remote.tmp data/$f
+done
+# identical for all three
+
+# Symlink data/ into /gbdb/danRer11/danioCode/ before the next step, since that is
+# where the trackDb will point.
+
+# Convert the hub trackDb into a native trackDb.  What the script has to change is
+# documented in its header; in short: one superTrack wraps the eleven hub
+# containers, track names and subGroup tags are made legal for hgTrackDb, relative
+# bigDataUrls are resolved, settings that tdbQuery rejects for the stanza's type are
+# dropped, and the subtracks in missingUrls.txt are left out.
+# --local-prefix points every bigDataUrl at our own copy under /gbdb; leave it off
+# to keep reading the files from the consortium's server.
+~/kent/src/hg/makeDb/scripts/danioCode/danioCodeHubToRa.py \
+    trackDb.txt \
+    https://trackhub2.genereg.net/DANIO-CODE/danRer11/ \
+    danioCode.ra \
+    --drop-list missingUrls.txt \
+    --local-prefix /gbdb/danRer11/danioCode
+# wrote danioCode.ra: 897 stanzas emitted, 4 dropped
+# 135 subGroup tags renamed
+# dropped tag 'dimensionXchecked' from 1 stanzas of type 'bigBed 9'
+# dropped tag 'itemRgb' from 24 stanzas of type 'bigWig'
+
+# 901 hub stanzas in, 897 native stanzas out.  The four that are missing are the
+# subtracks whose files 404, listed above.  The container superTrack "danioCode" is
+# added on top, so the trackDb file holds 898 stanzas.
+
+cp danioCode.ra ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer11/danioCode.ra
+
+# and in zebrafish/danRer11/trackDb.ra:
+#   include danioCode.ra alpha
+
+# Two deliberate differences from the hub, both worth revisiting before release:
+#  - all eleven containers are set to "visibility hide", so nothing is on by
+#    default.  The hub turns some RNA-seq samples on.  Which subset should be
+#    visible is an open question on #38239.
+#  - the three hub superTracks (COPEs/DOPEs, enhancer validation, comparative
+#    genomics) became composites, because a superTrack cannot sit inside another
+#    superTrack.  A composite needs its own 'type' -- hgTracks takes the
+#    container's draw handler from it and a hub superTrack carries none -- so the
+#    script borrows the first child's type.  Without it hgTracks says
+#    "No draw handler for dcCopes_and_dopes".
+#
+# The description page of dcComparativeGenomics has no reference: those tracks are
+# the Burgess lab's, not DANIO-CODE's, and the citation for them is still unknown.
+
+# Check that the browser reads the files and draws them.  Worth turning on all
+# eleven containers at once, which is what caught the missing 'type' above:
+#   https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgRenderTracks?db=danRer11&position=chr1:20,000,000-20,100,000&hideTracks=1&danioCode=show&dcConsensus_promoters=pack&dcComp=full&dcRNAseqComposite=full&DCD002238SQ_pos=full
