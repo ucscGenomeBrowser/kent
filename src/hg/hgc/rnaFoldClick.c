@@ -19,6 +19,7 @@
 #include "memalloc.h"
 #include "hgConfig.h"
 #include "pipeline.h"
+#include "md5.h"
 
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
@@ -372,6 +373,12 @@ for (i = 0; i < mcCount; i++)
 slReverse(&maf->components);
 }
 
+/* RNAplot truncates the sequence id it is given to 42 characters, and the id has to
+ * carry the output path, so both of these are kept deliberately short: 9 for
+ * "../trash/", 8 for the directory and its slash, and 20 for the hash is 37. */
+#define RNA_FOLD_TRASH_DIR "rnaFold"
+#define RNA_FOLD_HASH_LEN  20
+
 void htmlPrintSecStr(FILE *f, char *table, struct rnaSecStr *item, int start)
 /* Print out the details for an rnaStruct* table. */
 {
@@ -386,25 +393,39 @@ toRna(seq->dna);
 seq->dna[strlen(item->secStr)] = 0;
 
 char *rnaPlotPath = cfgOptionDefault("rnaPlotPath", "../cgi-bin/RNAplot");
-mkdirTrashDirectory(table);
+mkdirTrashDirectory(RNA_FOLD_TRASH_DIR);
 
-char psName[512];
-safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, item->name);
+/* RNAplot takes the name of its output file from the sequence id on the fasta header
+ * written below: it keeps the first 42 characters of that id and appends "_ss.ps".
+ * So the id has to be a relative path that survives the truncation intact and is
+ * still unique per item.  There is no room to spell the item out - names in
+ * wuhCor1.rnaStructRangan reach 42 characters on their own - so hash the table and
+ * item name into a fixed-width base.  The id below is always 37 characters.
+ * refs #37424 */
+char idText[PATH_LEN];
+safef(idText, sizeof idText, "%s/%s", table, item->name);
+char *idHash = md5HexForString(idText);
+idHash[RNA_FOLD_HASH_LEN] = '\0';
+
+char psRoot[PATH_LEN];
+safef(psRoot, sizeof psRoot, "../trash/%s/%s", RNA_FOLD_TRASH_DIR, idHash);
+freeMem(idHash);
+
 char *plotCmd[] = {rnaPlotPath, NULL};
 struct pipeline *plStruct = pipelineOpen1(plotCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 FILE *of = pipelineFile(plStruct);
 if (of != NULL)
     {
-    fprintf(of, ">%s\n", psName);        /* This tells where to put file. */
+    fprintf(of, ">%s\n", psRoot);        /* This tells where to put file. */
     fprintf(of, "%s\n%s\n", seq->dna, item->secStr);
     }
 pipelineClose(&plStruct);
 
-char pngName[256];
-char *rootName = cloneString(psName);
- 
-chopSuffix(rootName);
-safef(pngName, sizeof(pngName), "%s.png", rootName);
+/* RNAplot appended "_ss.ps" to the id, so that, not psRoot, is the file gs reads. */
+char psName[PATH_LEN];
+safef(psName, sizeof psName, "%s_ss.ps", psRoot);
+char pngName[PATH_LEN];
+safef(pngName, sizeof pngName, "%s.png", psRoot);
 
 char outputBuf[1024];
 safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", pngName);
@@ -416,11 +437,8 @@ printf("<a target=blank href='http://pseudoviewer.inha.ac.kr/WSPV_quickSender.as
 htmlHorizontalLine();
 if (sysRet != 0)
     {
-    /* Always fires today: RNAplot truncates the sequence id we hand it to 42
-     * characters and appends "_ss.ps", and psName's directory prefix is already 41
-     * characters, so RNAplot writes rnaStructRangan_<one letter>_ss.ps and gs is
-     * pointed at a file that was never created.  Drop just the diagram; the rest of
-     * the page is still worth showing.  refs #37424 */
+    /* RNAplot wrote no PostScript file, or gs could not read it.  Drop just the
+     * diagram; the rest of the page is still worth showing.  refs #37424 */
     printf("RNAFold diagram could not be made.<BR>");
     warn("Could not make the RNA fold diagram: system call returned %d for:\n  %s",
         sysRet, pipelineDesc(pl));
