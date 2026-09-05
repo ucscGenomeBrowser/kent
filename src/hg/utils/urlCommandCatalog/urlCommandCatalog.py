@@ -294,12 +294,42 @@ SESSIONS = {
           note="Free-text description for a saved session.  Read from the "
                "request by the JSON endpoint and from the cart by the form "
                "path, which is why it appears both here and in the cart."),
+        # The "Share a link" dialog's three request parameters.  All three are
+        # read with cgi* and cartRemove'd in the handler, so none of them
+        # persists.  hgS_shareAnon sat in urlNamesNotCataloged.txt on the
+        # reading that it was internal state, which its cgiBoolean read
+        # contradicts; it is described here beside the two that arrived with it.
+        c("hgS_shareAnon", "action", "hg/hgSession/hgSession.c:1095",
+          verified=True,
+          note="Save under the reserved anonymous user \"l\" with a "
+               "server-generated token name instead of under the logged-in "
+               "user, which is what makes a short /s/l/<token> link.  Implied "
+               "when nobody is logged in, so it is only needed to ask for an "
+               "anonymous link while logged in.  Removed at "
+               "hgSession.c:1107."),
+        c("hgS_failIfExists", "action", "hg/hgSession/hgSession.c:1096",
+          verified=True,
+          note="Answer {\"exists\": true} instead of overwriting a session "
+               "the logged-in user already has under the requested name, so "
+               "the Share dialog can warn before clobbering one.  Removed at "
+               "hgSession.c:1108."),
+        c("hgS_snapshotType", "action", "hg/hgSession/hgSession.c:1099",
+          value="<type>", verified=True,
+          note="Save a lightweight snapshot session holding only one "
+               "feature's declared cart variables (hg/lib/snapshotSession.c) "
+               "rather than the whole cart, e.g. blat.  The stored name is "
+               "forced to the \"__\" snapshot prefix so a token cannot "
+               "collide with a real session name, a type no snapshotTypeFind "
+               "knows is refused, and so is a save whose required cart "
+               "variables are not there yet, rather than minting a link that "
+               "would reopen to nothing.  Removed at hgSession.c:1109."),
         c("hgS_*", "action", "hg/hgSession/hgSession.h:19", value="<varies>",
           note="hgSession's own command family. All transient.",
           members=["hgS_doNewSession", "hgS_doSaveLocal", "hgS_doLoadLocal",
                    "hgS_doMainPage", "hgS_doSessionDetail",
                    "hgS_doSessionChange", "hgS_doReSaveSession",
                    "hgS_doSaveSessionJson", "hgS_doRenameSessionJson",
+                   "hgS_doAnonName",
                    "hgS_load_*", "hgS_delete_*", "hgS_edit_*", "hgS_share_*",
                    "hgS_gallery_*", "hgS_showDownload_*",
                    "hgS_makeDownload_*", "hgS_doDownload_*", "hgS_cancel"]),
@@ -1077,6 +1107,20 @@ OTHER_CGIS = {
               note="The signature over user, newEmail and exp that "
                    "authorizes the change.  Checked before anything else in "
                    "the link is trusted."),
+            c("recovEmail", "action", "hg/hgLogin/hgLogin.c:1391",
+              value="<email>", verified=True,
+              note="The recovery address a confirmation link is claiming, on "
+                   "the hgLogin.do.confirmRecovEmail path.  The same shape as "
+                   "newEmail above, and authorized by the same sig and exp "
+                   "pair, so the link works from the new mailbox with no "
+                   "login cookie.  The signed material also covers the "
+                   "address currently on the account and whether it was "
+                   "confirmed, so changing the recovery address retires every "
+                   "link outstanding against the old one.  The address is "
+                   "written to gbMembers only after the signature checks out "
+                   "and spc_email_isvalid accepts it.  hgLogin's excludeVars "
+                   "(hgLogin.c:47) lists it, so it does not stay in the "
+                   "session."),
         ],
     },
     "smaller CGIs": {

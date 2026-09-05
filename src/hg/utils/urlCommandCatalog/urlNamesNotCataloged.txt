@@ -150,6 +150,8 @@ hgLogin_newEmail1                  # hg/hgLogin/hgLogin.c
 hgLogin_newEmail2                  # hg/hgLogin/hgLogin.c
 hgLogin_newPassword1               # hg/hgLogin/hgLogin.c
 hgLogin_newPassword2               # hg/hgLogin/hgLogin.c
+hgLogin_newRecovEmail1             # hg/hgLogin/hgLogin.c
+hgLogin_newRecovEmail2             # hg/hgLogin/hgLogin.c
 hgLogin_password                   # hg/hgLogin/hgLogin.c
 hgLogin_password2                  # hg/hgLogin/hgLogin.c
 hgLogin_sendMailContain            # hg/hgLogin/hgLogin.c
@@ -166,7 +168,6 @@ hgS_makeDownload_                  # hg/hgSession/hgSession.c
 hgS_oldSessionName                 # hg/hgSession/hgSession.c
 hgS_otherUserSessionLabel          # hg/hgTracks/hgTracks.c
 hgS_saveLocalBackupFileName        # hg/hgSession/backup.c
-hgS_shareAnon                      # hg/hgSession/hgSession.c
 hgS_share_                         # hg/hgSession/hgSession.c
 hgS_showDownload_                  # hg/hgSession/hgSession.c
 hgSeq.casing                       # hg/cgilib/hgSeq.c
@@ -432,7 +433,7 @@ report                             # hg/encode/docId/docIdView/docIdView.c
 retries                            # hg/gigAssembler/codJobs/jabba/jabba.c
 reward                             # hg/pslFilterBadCdna/pslFilterBadCdna.c
 ring_action                        # hg/hgGeneRing/hgGeneRing.c
-s                                  # hg/hgBlat/hgBlat.c
+s                                  # hg/hgc/hgc.c
 sarsCoV2File                       # hg/hgPhyloPlace/hgPhyloPlace.c
 selectRadio                        # hg/hubApi/hubApi.c
 seqIdent                           # hg/affyGnf/pslAffySelect.c
@@ -501,7 +502,7 @@ transfer                           # hg/qaPushQ/qaPushQ.c
 translate                          # hg/gigAssembler/ooGreedy/getgene/getgene.c
 trumpSize                          # hg/altSplice/spliceWalk/spliceWalk.c
 txn_id                             # hg/gsid/gsidMember/gsidMember.c
-u                                  # hg/hgBlat/hgBlat.c
+u                                  # hg/hgc/hgc.c
 ucscGenome                         # hg/hubApi/hubApi.c
 unzoom                             # hg/wikiPlot/wikiPlot.c
 update                             # hg/hgLogin/hgLogin.c
