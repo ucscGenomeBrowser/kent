@@ -175,8 +175,10 @@ if (chp != NULL)
 
 sqlSafef(query, sizeof(query), "select organism from dbDb where name = '%s'", database);
 if(sqlQuickQuery(connCentral, query, buf, sizeof(buf)) == NULL)
-    // this can happen in mirrors (see #8490).
-    errAbort("organism '%s' not found in dbDb", database);
+    // This can happen in mirrors (see #8490), and also for an assembly that has
+    // been retired from dbDb but is still named by a maf component (see #37424).
+    // Fall back on the database name, which is all we know about it.
+    res = cloneString(database);
 else
     res = cloneString(buf);
 hDisconnectCentral(&connCentral);
@@ -409,13 +411,25 @@ safef(outputBuf, sizeof outputBuf, "-sOutputFile=%s", pngName);
 char *pipeCmd[] = {"gs", "-sDEVICE=png16m", outputBuf, "-dBATCH","-dNOPAUSE","-q", psName, NULL};
 struct pipeline *pl = pipelineOpen1(pipeCmd, pipelineWrite | pipelineNoAbort, "/dev/null", NULL, 0);
 int sysRet = pipelineWait(pl);
-if (sysRet != 0)
-    errAbort("System call returned %d for:\n  %s", sysRet, pipelineDesc(pl));
 
 printf("<a target=blank href='http://pseudoviewer.inha.ac.kr/WSPV_quickSender.asp?seq=%s&str=%s&start=%d'>Display on PseudoViewer</a><BR>", seq->dna, item->secStr, start);
 htmlHorizontalLine();
-printf("RNAFold diagram:<BR>");
-printf("<IMG SRC='%s' border = '2'>", pngName);
+if (sysRet != 0)
+    {
+    /* Always fires today: RNAplot truncates the sequence id we hand it to 42
+     * characters and appends "_ss.ps", and psName's directory prefix is already 41
+     * characters, so RNAplot writes rnaStructRangan_<one letter>_ss.ps and gs is
+     * pointed at a file that was never created.  Drop just the diagram; the rest of
+     * the page is still worth showing.  refs #37424 */
+    printf("RNAFold diagram could not be made.<BR>");
+    warn("Could not make the RNA fold diagram: system call returned %d for:\n  %s",
+        sysRet, pipelineDesc(pl));
+    }
+else
+    {
+    printf("RNAFold diagram:<BR>");
+    printf("<IMG SRC='%s' border = '2'>", pngName);
+    }
 }
 
 void htmlPrintSecStrEvofoldDrawing(FILE *f, struct rnaSecStr *item)

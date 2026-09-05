@@ -135,19 +135,24 @@ boolean chromSeqFileExists(char *db, char *chrom)
 /* sequence file for this chromosome and check if the file exists. */
 {
 char seqFile[512];
-struct sqlConnection *conn = sqlConnect(db);
 char query[256];
 char *res = NULL;
 boolean exists = FALSE;
 
-/* if the database exists (which it must since we opened the connection above), check for the chromInfo table */
-if (sqlDatabaseExists(db) && sqlTableExists(conn, "chromInfo"))
+/* db is often the otherDb of a chain or net track, which can name an assembly that
+ * has no local database at all: a GenArk hub assembly, or one that has been retired.
+ * sqlConnect aborts in that case, so ask for a connection that is allowed to fail. */
+struct sqlConnection *conn = sqlMayConnect(db);
+if (conn == NULL)
+    return FALSE;
+
+if (sqlTableExists(conn, "chromInfo"))
     {
     /* the database and chromInfo table exist, look to see if it has our chrom. */
     sqlSafef(query, sizeof(query), "select fileName from chromInfo where chrom = '%s'", chrom);
-    res = sqlQuickQuery(conn, query, seqFile, 512);
-    sqlDisconnect(&conn);
+    res = sqlQuickQuery(conn, query, seqFile, sizeof seqFile);
     }
+sqlDisconnect(&conn);
 
 /* if there is not table or no information in the table or if the table */
 /* exists but the file can not be opened return false, otherwise sequence */

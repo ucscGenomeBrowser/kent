@@ -232,6 +232,16 @@ struct pgSiftPred *el;
 struct sqlResult *sr;
 char **row;
 char query[512];
+/* The prediction table is loaded separately from the pgSnp track that names it, so a
+ * machine can have the track and not the table (the hg18 pgSnp tables are missing on
+ * hgwbeta and on the RR).  Say so instead of aborting the details page.  refs #37424 */
+if (!hTableExists(db, tableName))
+    {
+    warn("SIFT predictions are not available: table %s, named by the pgSiftPredTab "
+        "setting, is missing from %s.", tableName, db);
+    return;
+    }
+
 struct sqlConnection *conn = hAllocConn(db);
 
 sqlSafef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart = %d and chromEnd = %d",

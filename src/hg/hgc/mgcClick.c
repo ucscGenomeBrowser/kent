@@ -303,10 +303,10 @@ static struct cloneInfo *mgcCloneInfoLoad(struct sqlConnection *conn, char *acc,
 {
 struct cloneInfo *ci = cloneInfoLoad(conn, acc, start, "mgcFullMrna", "mgcGenes");
 ci->isMgc = TRUE;
-if (ci->mgcId == 0)
-    errAbort("no MGC:nnnn entry in mrnaClone table for MGC clone %s", acc);
-if (ci->imageId == 0)
-    errAbort("no IMAGE:nnnn entry in mrnaClone table for MGC clone %s", acc);
+/* mgcId and imageId are not used by the rest of the page, and a clone in mgcFullMrna
+ * can legitimately carry only one of the two ids in hgFixed.mrnaClone (BC111925 is
+ * named IMAGE:40080739 and has no MGC: component), so a missing id is not worth
+ * losing the details page over.  refs #37424 */
 return ci;
 }
 

@@ -65,6 +65,7 @@ void chromInfoOutput(struct chromInfo *el, FILE *f, char sep, char lastSep);
 boolean chromSeqFileExists(char *db, char *chrom);
 /* Check whether chromInfo exists for a database, find the path of the */
 /* sequence file for this chromosome and check if the file exists. */
+/* Returns FALSE, rather than aborting, when db is not a local database. */
 
 struct chromInfo *createChromInfoList(char *name, char *database);
 /* Load up chromosome information for chrom 'name'.
