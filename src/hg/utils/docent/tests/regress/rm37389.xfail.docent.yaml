@@ -1,0 +1,60 @@
+# #37389 -- the track description was missing from a quickLifted hgc page when the source
+# assembly is a GenArk hub.
+#
+# THIS IS AN XFAIL, and it is a REGRESSION ON MASTER, not a fix that never worked. That
+# distinction was got wrong twice before it was measured properly, so here is what was
+# measured, on 2026-09-05, from scratch and with no session at all:
+#
+#     genome.ucsc.edu   (v502)   lifted page HAS the description
+#     hgwbeta           (v503)   lifted page HAS the description
+#     genome-test       (master) lifted page does NOT
+#
+# So #37389's fix (5aed2d465f1, v498) works, and something that landed on master after
+# v503_branch was cut broke it again. It has not reached users.
+#
+# It is specific to the GenArk branch of getTrackHtml. A plain db-to-db quickLift keeps its
+# description on genome-test: hg19 refGene lifted to hg38 still prints one.
+#
+# What has been ruled out, each by measurement rather than by reading:
+#
+#   * hui.c is byte identical between v503_base and origin/master, so getTrackHtml itself
+#     did not change. Something it calls did.
+#   * htmlSanitize(), which #38126 added to trackHubAddOneDescription in this window, is
+#     not eating it. Run over this hub's own xenoRefGene.html it returns 3674 bytes from
+#     3354 with the text intact.
+#   * the fixture is fine: GCA_018466835.2 is in the genark table, the hub declares
+#     `html html/GCA_018466835.2_HG02257_mat_hprc_f2.xenoRefGene`, and that file is served
+#     200 from hgdownload.
+#   * getTrackHtml IS reached. printTrackHtml() (hgc.c:3745) takes liftDb straight from the
+#     quickLiftDb setting, which is certainly present here since it is the string in
+#     #38272's error.
+#
+# BISECTED, and fixed. The breaking commit is 1258d7f65e7 ("trackHub: keep a description a
+# track inherited from its parent", refs #38126): it made trackHubAddOneDescription return
+# early rather than assign a failed fetch, so tdb->html keeps a non-NULL value and hgc's
+# `if (liftDb && (tdb->html == NULL))` at hgc.c:3722 never fires. Filed as #38275 and fixed
+# on master in 4be6477ebcb by asking isEmpty() instead. This script should start passing
+# once that build reaches genome-test, and `make test` will report the xfail as a failure --
+# which is the signal to delete the .xfail and this comment.
+#
+# The script asserts the FIXED behavior, the same as every other script here, and is marked
+# .xfail so the suite stays green. If it starts passing, `make test` reports that as a
+# failure, which is the signal to delete the .xfail and this comment.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: braney, name: crash1}
+  - expect: {noText: "Could not find session"}
+
+  - click: {track: xenoRefGene, item: "NM_126741.2"}
+
+  # The page itself is fine -- that is #37388, which is fixed and has its own script. What
+  # is missing is only the description block.
+  - expect: {noText: "Couldn't set connection database", text: "Item: NM_126741.2"}
+
+  # The assertion this script exists for. "RefSeq mRNAs mapped to this assembly" is the
+  # longLabel and is on the page already, so the check is on the section heading that
+  # printTrackHtml writes and on a phrase from the hub's own description file.
+  - expect: {text: "Description"}
