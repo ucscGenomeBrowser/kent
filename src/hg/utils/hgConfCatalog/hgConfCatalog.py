@@ -688,6 +688,21 @@ MIRROR_KNOBS = {
                "delete, the BLAT search form shows a Keep results checkbox so "
                "a user can opt out for one search (cart variable "
                "blatKeepResults, read back in hg/hgc/hgc.c)."),
+        h("blatOnlyLatestCheckbox", "internal", "hg/hgBlat/hgBlat.c",
+          default="off", verified=True, ticket="36292",
+          note="Whether the BLAT search form offers a \"Keep only last "
+               "search\" checkbox, the opt-in inverse of blatOldTracks above: "
+               "results accumulate by default and a user asks for the earlier "
+               "ones to be removed.  Two call sites that have to agree, "
+               "hgBlat.c:2815 which shows the box and hgc.c:27616 which acts "
+               "on the cart variable blatOnlyLatest it sets, so a stale cart "
+               "value cannot delete tracks on a machine where the feature is "
+               "off.  A knob in spirit for the same reason as blatOldTracks, "
+               "and a string rather than a flag, so it carries no gate/knob "
+               "role.  Being a string has one consequence worth knowing: it "
+               "is compared with sameString against \"on\", so only that "
+               "exact value turns it on and true, 1 and yes do not, unlike "
+               "every flag read through cfgOptionBooleanDefault."),
     ],
 }
 
@@ -1006,6 +1021,36 @@ LIMITS = {
           public=True, verified=True,
           note="Truncate logged CGI variables at this length.  Zero disables "
                "the logging that cfgSetLogCgiVars() would otherwise do."),
+        h("mallocTopPad", "limit", "hg/lib/hgConfig.c", verified=True,
+          ticket="38225",
+          note="Bytes of heap the C library takes from the kernel at a time, "
+               "passed to mallopt(M_TOP_PAD) by cfgSetMallocTopPad() at CGI "
+               "startup.  Glibc's own step is 128 kB, and hgTracks draws its "
+               "tracks in parallel threads that each grow their own pool, so "
+               "a heavy render spends over a hundred thousand system calls on "
+               "growing the heap.  A bigger step buys that time back and "
+               "costs resident memory on the same renders.  Left out, or set "
+               "to anything that is not a positive number, and glibc's "
+               "behaviour is untouched; the whole read sits inside "
+               "#if defined(__GLIBC__), so it does nothing on a machine with "
+               "another C library.  A limit rather than a flag, so it carries "
+               "no gate/knob role, but it is a knob in spirit: the right "
+               "value depends on how much memory the machine can spend, and "
+               "that question does not end at a release.  The measurements "
+               "are on #38225 and the value for the RR is not settled."),
+        h("snapshot.ttlDays", "limit",
+          "hg/utils/snapshotCleaner/snapshotCleaner.c", verified=True,
+          note="Days an anonymous Share-a-link snapshot session is kept "
+               "before snapshotCleaner deletes it.  An anonymous snapshot is "
+               "saved under the reserved user \"l\" with a server-generated "
+               "name, so no account owns it and nothing else would ever "
+               "remove it.  The compiled-in default is "
+               "snapshotDefaultTtlDays, 4 * 365 in hg/inc/snapshotSession.h, "
+               "and the -ttlDays command line option wins over hg.conf.  The "
+               "utility aborts on a value below 1, so a mistyped setting "
+               "deletes nothing.  Read by that utility rather than by a CGI, "
+               "and nothing in the tree schedules it: a machine that keeps "
+               "anonymous snapshots has to run the cleaner itself."),
     ],
 }
 
@@ -1096,6 +1141,20 @@ LOGGING = {
           verified=True, family="proxy"),
         h("logProxy", "debug", "hg/lib/cart.c", verified=True,
           family="proxy"),
+        h("pngTimingSampleRate", "debug", "hg/hgTracks/hgTracks.c",
+          default="0", verified=True, ticket="38109",
+          note="One page load in this many measures how long the track image "
+               "took to reach the reader.  hgTracks writes the rate into the "
+               "page as a JavaScript variable and reportPngTiming() in "
+               "hg/js/hgTracks.js does the rest: it reads the browser's own "
+               "timing record for the image, then puts the bytes and the "
+               "download time on the query string of a 43 byte image, so one "
+               "apache log line is the whole measurement and no process has "
+               "to start.  This is the part of the wait no server-side timing "
+               "can see, because apache stops timing once the kernel has the "
+               "bytes.  Zero, or the setting left out, and nothing is written "
+               "into the page, so the beacon is off.  It samples rather than "
+               "reporting every load because each report is another request."),
     ],
 }
 
@@ -1175,6 +1234,27 @@ BRANDING = {
                "links.  Part of the release plumbing, but a permanent part."),
         h("restoreMapFind", "internal", "hg/hgTracks/imageV2.c",
           verified=True),
+        h("blatNewFormSwitchDate", "branding", "hg/hgBlat/hgBlat.c",
+          verified=True, ticket="37996",
+          note="The day the classic BLAT form's banner names as the day the "
+               "new form takes over, written the way it is shown, e.g. "
+               "\"October 21\".  Set it and the banner says when the change "
+               "happens and links a news announcement; leave it out and the "
+               "banner keeps its original wording, which only invites the "
+               "reader to try the new page.  It is a setting so that a "
+               "slipped date is an hg.conf edit rather than a CGI build "
+               "patch.  A string, so no gate/knob role, but it is as "
+               "temporary as blatNewFormBanner: it has nothing left to say "
+               "once the new form is the only form, and goes away with it."),
+        h("blatNewFormNewsUrl", "url", "hg/hgBlat/hgBlat.c",
+          default="../goldenPath/newsarch.html", verified=True,
+          ticket="37996",
+          note="Where the \"news announcement\" link in that banner points.  "
+               "The default is the news archive, so the link goes somewhere "
+               "sensible while the announcement is still being written, and "
+               "hg.conf can aim it at the item's own anchor later without a "
+               "rebuild.  Read only on the path blatNewFormSwitchDate opens, "
+               "so on a machine that sets no date it does nothing."),
     ],
 }
 
@@ -1479,50 +1559,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("blatNewFormNewsUrl", "unreviewed", "hg/hgBlat/hgBlat.c",
-          default="../goldenPath/newsarch.html", ticket="37996",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionDefault in hg/hgBlat/hgBlat.c. "
-               "Came in at a9c71c94309, BLAT dated banner: make the news "
-               "announcement URL an hg.conf setting.  refs #37996.  Needs a "
-               "kind, a description, and a section to live in."),
-        h("blatNewFormSwitchDate", "unreviewed", "hg/hgBlat/hgBlat.c",
-          ticket="37996",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOption in hg/hgBlat/hgBlat.c.  Came in "
-               "at 7a69a5535f1, BLAT classic form: announce the new-page "
-               "switch date via hg.conf, fix stale input limits.  refs "
-               "#37996.  Needs a kind, a description, and a section to live "
-               "in."),
-        h("blatOnlyLatestCheckbox", "unreviewed", "hg/hgBlat/hgBlat.c",
-          default="off", ticket="36292",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionDefault in hg/hgBlat/hgBlat.c.  2 "
-               "call sites.  Came in at 994528edb7d, Adding an opt-in \"Keep "
-               "only last search\" checkbox to the new BLAT search form.  refs "
-               "#36292.  Needs a kind, a description, and a section to live "
-               "in."),
-        h("snapshot.ttlDays", "unreviewed", "hg/utils/snapshotCleaner/snapshotCleaner.c",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOption in "
-               "hg/utils/snapshotCleaner/snapshotCleaner.c.  Came in at "
-               "32cd2100d9d, Reusable \"view snapshot\" sessions for durable, "
-               "minimal Share-a-link links.  Needs a kind, a description, and "
-               "a section to live in."),
-        h("mallocTopPad", "unreviewed", "hg/lib/hgConfig.c", ticket="38225",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOption in hg/lib/hgConfig.c.  Came in "
-               "at d2a2afcd6c5, hgTracks: let hg.conf set how big a step "
-               "malloc takes, refs #38225.  Needs a kind, a description, and "
-               "a section to live in."),
-        h("pngTimingSampleRate", "unreviewed", "hg/hgTracks/hgTracks.c",
-          default="0", ticket="38109",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionDefault in "
-               "hg/hgTracks/hgTracks.c.  Came in at 7007b23dcc1, hgTracks: "
-               "measure how long the track image takes to reach the reader, "
-               "refs #38109.  Needs a kind, a description, and a section to "
-               "live in."),
     ],
 }
 
