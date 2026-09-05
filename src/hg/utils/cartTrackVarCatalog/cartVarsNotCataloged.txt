@@ -52,7 +52,6 @@ description                        # hg/hgc/myVariantsClick.c
 dispFndTrk                         # hg/hgTracks/searchTracks.c
 dnovo                              # hg/hgTracks/gvfTrack.c
 drag                               # hg/lib/vcfUi.c
-excludeDbs                         # hg/lib/jksql.c
 fileSortOrder                      # hg/cgilib/fileUi.c
 first                              # hg/lib/tablesTables.c
 germ                               # hg/hgTracks/gvfTrack.c

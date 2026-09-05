@@ -1737,16 +1737,24 @@ def harvestModule():
     return h
 
 
+# The records behind the last harvested() call.  Kept so --reconcile can ask
+# the harvester about a record's classification without scanning the tree a
+# second time, which costs about ten seconds.
+_RECORDS = None
+
+
 def harvested():
     """(name -> file:line) for every literal name the tree yields, or None.
 
     Keyed the same way the catalog is, so the two are directly comparable.
     """
+    global _RECORDS
     h = harvestModule()
     if h is None:
         return None
+    _RECORDS = h.harvest(quiet=True)
     out = {}
-    for name, src in h.resolved(h.harvest(quiet=True)).items():
+    for name, src in h.resolved(_RECORDS).items():
         k = key(name)
         if k:
             out.setdefault(k, src)
@@ -1790,9 +1798,22 @@ def reconcile(cat, out=sys.stdout, verbose=False):
     # own literals by --check.
     files = sorted(n for n in tree
                    if not cataloged(n) and h.fileNameLike(n))
+
+    # Same story one registry over: jksql.c builds "<profile>.excludeDbs" with
+    # safef and reads it with cfgOption, so it is an hg.conf setting and lives
+    # in hgConfCatalog's profile-suffix family.  harvestCartVars.py --hgconf
+    # lists these.
+    conf = h.hgConfNames(_RECORDS or [])
+    confSeen = sorted(n for n in tree if n in conf)
+
     new = sorted(n for n in tree if not cataloged(n) and n not in baseline
-                 and not h.fileNameLike(n))
+                 and not h.fileNameLike(n) and n not in conf)
     only_cat = sorted(n for n in literals if n not in tree)
+
+    # A name this catalog describes that the tree reads with a cfg* accessor
+    # is not a difference of opinion, it is one of the two registries being
+    # wrong about what the name is.  Rare enough to print rather than count.
+    claimed = sorted(n for n in tree if n in conf and cataloged(n))
 
     if verbose:
         print("catalog literal names   %d" % len(literals), file=out)
@@ -1817,6 +1838,22 @@ def reconcile(cat, out=sys.stdout, verbose=False):
               file=out)
         for n in files:
             print("    %-30s %s" % (n, tree[n]), file=out)
+        print("\nharvested, an hg.conf setting rather than a cart variable "
+              "(%d)" % len(confSeen), file=out)
+        print("    (harvestCartVars.py --hgconf explains the rule; these "
+              "belong to\n     hgConfCatalog, which cannot see them either)",
+              file=out)
+        for n in confSeen:
+            print("    %-30s %s" % (n, tree[n]), file=out)
+
+    if claimed:
+        print("\nin this catalog, but the tree reads it with a cfg* accessor "
+              "(%d):" % len(claimed), file=out)
+        print("    (an hg.conf setting cannot also be a track-scoped cart "
+              "variable; one of\n     the two registries has it wrong)",
+              file=out)
+        for n in claimed:
+            print("    %-30s %s" % (n, tree[n]), file=out)
 
     if new:
         print("\nbuilt by the tree, in neither the catalog nor the baseline "
@@ -1826,7 +1863,7 @@ def reconcile(cat, out=sys.stdout, verbose=False):
               "--update-baseline)", file=out)
         for n in new:
             print("    %-30s %s" % (n, tree[n]), file=out)
-    return len(new)
+    return len(new) + len(claimed)
 
 
 # ---------------------------------------------------------------------------
@@ -2142,7 +2179,8 @@ def main():
         # The same two exclusions --reconcile makes, or accepting the backlog
         # would write back every filename the harvester reads as a name.
         now = set(n for n in tree
-                  if not cataloged(n) and not h.fileNameLike(n))
+                  if not cataloged(n) and not h.fileNameLike(n)
+                  and n not in h.hgConfNames(_RECORDS or []))
         write_baseline(now, tree)
         print("wrote %s: %d names, %d added, %d dropped"
               % (BASELINE_FILE, len(now), len(now - was), len(was - now)))

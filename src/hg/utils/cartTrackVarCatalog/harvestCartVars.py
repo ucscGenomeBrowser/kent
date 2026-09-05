@@ -85,6 +85,40 @@ FILE_SUFFIXES = frozenset([
 ])
 
 
+# How far after the safef to look for the accessor that consumes the buffer.
+# Small on purpose: the read is normally the next line, and a buffer reused
+# later in the function for something else must not excuse an unrelated name.
+HGCONF_WINDOW = 6
+
+
+def hgConfRead(txt, pos, dest, lineno):
+    """Is the buffer this call just filled read back as an hg.conf name?
+
+    jksql.c:1325 builds "<profile>.excludeDbs" with safef from a failover
+    profile name and reads it with cfgOption on the very next line.  That is
+    an hg.conf setting, not a cart variable: it belongs to hgConfCatalog's
+    database-profile suffix family, and hgConfCatalog cannot find it either,
+    because the name never appears as a literal.
+
+    Nothing about the shape distinguishes the two.  What distinguishes them is
+    which accessor consumes the buffer, so that is what this looks for: a
+    cfg* call taking the same identifier within the next few lines.  dest has
+    to be a plain identifier; anything else and we do not know what was
+    filled in.
+    """
+    if not re.fullmatch(r'[A-Za-z_]\w*', dest.strip()):
+        return False
+    rx = re.compile(r'\bcfg[A-Za-z0-9]*\s*\(\s*%s\s*[,)]'
+                    % re.escape(dest.strip()))
+    end = pos
+    for _ in range(HGCONF_WINDOW):
+        nl = txt.find("\n", end)
+        if nl < 0:
+            break
+        end = nl + 1
+    return rx.search(txt[pos:end]) is not None
+
+
 def fileNameLike(var):
     """Is this harvested name the tail of a filename rather than a cart name?
 
@@ -344,21 +378,27 @@ def scan_file(fp, rel, macro, conflict=None):
         if not mm:
             continue
         sep, tail = mm.group(1), mm.group(2)
+        # An hg.conf name and a cart name are built the same way; only the
+        # accessor that reads the buffer back tells them apart.
+        conf = (len(args) > 0
+                and hgConfRead(txt, match_close(txt, i) + 1, args[0], ln))
+        def rec(var, how):
+            r = dict(var=var, file=rel, line=ln, func=encl[ln], how=how)
+            if conf:
+                r["notCart"] = "hgConf"
+            return r
         if "%" not in tail and tail:
-            recs.append(dict(var=sep+tail, file=rel, line=ln,
-                             func=encl[ln], how="fmtlit"))
+            recs.append(rec(sep+tail, "fmtlit"))
         elif tail == "%s" and len(rest) >= 2:
             # "%s.%s", track, SUFFIX -> the suffix is the SECOND vararg
             v = resolve(rest[1], localconst, macro, conflict)
             if v and not v.startswith("EXPR:"):
-                recs.append(dict(var=sep+v, file=rel, line=ln,
-                                 func=encl[ln], how="fmt"))
+                recs.append(rec(sep+v, "fmt"))
         elif tail == "%s.%s" and len(rest) >= 3:
             v1 = resolve(rest[1], localconst, macro, conflict)
             v2 = resolve(rest[2], localconst, macro, conflict)
             if not v1.startswith("EXPR:") and not v2.startswith("EXPR:"):
-                recs.append(dict(var=sep+v1+"."+v2, file=rel, line=ln,
-                                 func=encl[ln], how="fmt3"))
+                recs.append(rec(sep+v1+"."+v2, "fmt3"))
     return recs
 
 
@@ -396,6 +436,17 @@ def harvest(dirs=None, quiet=False):
     return records
 
 
+def hgConfNames(records):
+    """The harvested names that are hg.conf settings, not cart variables.
+
+    Keyed with the leading separator stripped, the way the catalog compares
+    them.  See hgConfRead() for what makes the call.
+    """
+    return set(r["var"].lstrip("._") for r in records
+               if r.get("notCart") == "hgConf" and not r["var"].startswith("EXPR:")
+               and "{" not in r["var"])
+
+
 def resolved(records):
     """name -> first file:line, for the names the scan resolved to a literal.
 
@@ -431,6 +482,9 @@ def main():
     ap.add_argument("--filenames", action="store_true",
                     help="list the harvested names the filename rule claims, "
                          "with the call site, so the rule can be audited")
+    ap.add_argument("--hgconf", action="store_true",
+                    help="list the harvested names that are hg.conf settings "
+                         "rather than cart variables, with the call site")
     ap.add_argument("--keep-unresolved", action="store_true",
                     help="include {ident} and EXPR: entries in the groupings")
     args = ap.parse_args()
@@ -459,6 +513,17 @@ def main():
         for n in sorted(hits):
             print("    %-16s %s" % (n, hits[n]))
 
+    if args.hgconf:
+        hits = {}
+        for r in sorted(records, key=lambda r: (r["file"], r["line"])):
+            if wanted(r["var"]) and r.get("notCart") == "hgConf":
+                hits.setdefault(r["var"].lstrip("._"),
+                                "%s:%d" % (r["file"], r["line"]))
+        print("%d harvested names read back with a cfg* accessor, so they are "
+              "hg.conf\nsettings and not cart variables" % len(hits))
+        for n in sorted(hits):
+            print("    %-16s %s" % (n, hits[n]))
+
     if args.by_func:
         byfunc = collections.defaultdict(set)
         for r in records:
@@ -477,9 +542,10 @@ def main():
             print("%-34s %d  %s"
                   % (k, len(byvar[k]), " ".join(sorted(byvar[k])[:4])))
 
-    if not (args.json or args.by_func or args.by_var or args.filenames):
-        print("nothing to do; pass --by-func, --by-var, --filenames or --json",
-              file=sys.stderr)
+    if not (args.json or args.by_func or args.by_var or args.filenames
+            or args.hgconf):
+        print("nothing to do; pass --by-func, --by-var, --filenames, "
+              "--hgconf or --json", file=sys.stderr)
         return 1
     return 0
 
