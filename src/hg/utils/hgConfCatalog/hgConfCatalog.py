@@ -1479,6 +1479,29 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("blatNewFormNewsUrl", "unreviewed", "hg/hgBlat/hgBlat.c",
+          default="../goldenPath/newsarch.html", ticket="37996",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionDefault in hg/hgBlat/hgBlat.c. "
+               "Came in at a9c71c94309, BLAT dated banner: make the news "
+               "announcement URL an hg.conf setting.  refs #37996.  Needs a "
+               "kind, a description, and a section to live in."),
+        h("blatNewFormSwitchDate", "unreviewed", "hg/hgBlat/hgBlat.c",
+          ticket="37996",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOption in hg/hgBlat/hgBlat.c.  Came in "
+               "at 7a69a5535f1, BLAT classic form: announce the new-page "
+               "switch date via hg.conf, fix stale input limits.  refs "
+               "#37996.  Needs a kind, a description, and a section to live "
+               "in."),
+        h("blatOnlyLatestCheckbox", "unreviewed", "hg/hgBlat/hgBlat.c",
+          default="off", ticket="36292",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionDefault in hg/hgBlat/hgBlat.c.  2 "
+               "call sites.  Came in at 994528edb7d, Adding an opt-in \"Keep "
+               "only last search\" checkbox to the new BLAT search form.  refs "
+               "#36292.  Needs a kind, a description, and a section to live "
+               "in."),
         h("snapshot.ttlDays", "unreviewed", "hg/utils/snapshotCleaner/snapshotCleaner.c",
           note="Written down by --auto-register, not yet reviewed by a "
                "person.  Read with cfgOption in "
