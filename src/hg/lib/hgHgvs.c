@@ -2097,7 +2097,10 @@ else if (startsWith("NP_", acc) || startsWith("XP_", acc))
         // user may have passed previous versioned transcript, check the *Old tables:
         if (!txAcc && hDbHasNcbiRefSeqHistorical(db))
             {
-            sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLinkHistorical where protAcc = '%s'",
+            // several deprecated transcript versions can share one protein version;
+            // take the newest.  Sort by length first: '.9' beats '.10' as a string.
+            sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLinkHistorical "
+                     "where protAcc = '%s' order by length(mrnaAcc) desc, mrnaAcc desc",
                      acc);
             txAcc = sqlQuickString(conn, query);
             }
