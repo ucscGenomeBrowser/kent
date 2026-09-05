@@ -760,34 +760,105 @@ const T_START = Date.now();
       // whose items depend on the pixel width -- a print render (SCALE) draws a wider image,
       // so features hgTracks merged into one box at screen width come apart into several
       // with names of their own -- and the fix is to pick from the names that do exist.
-      const near = await page.evaluate(({ band }) => {
+      // Pick the row's areas by MAP NAME, not by geometry. hgTracks names each map after
+      // the track it belongs to (map_data_<key>, map_center_<key>), so this is exact --
+      // whereas the y-band test this used to do dropped every item box on a quickLift
+      // target and left the message saying the row held three things when it held
+      // twenty-eight. The band is still the tie-break when a map cannot be attributed.
+      const near = await page.evaluate(({ key }) => {
         const out = [];
-        for (const a of document.querySelectorAll('map[name^="map_"] area')) {
-          const c = (a.getAttribute('coords') || '').split(',').map(Number);
-          if (c.length < 4) continue;
-          const m = a.closest('map'), nm = m && m.getAttribute('name');
-          const im = nm && document.querySelector(`img[usemap="#${nm}"]`);
-          if (!im) continue;
-          const r = im.getBoundingClientRect();
-          const s = im.naturalWidth ? r.width / im.naturalWidth : 1;
-          const cy = r.top + s * (c[1] + c[3]) / 2;
-          if (cy < band.top - 1 || cy > band.bot + 1) continue;
+        const mine = m => {
+          const nm = m.getAttribute('name') || '';
+          return nm === `map_${key}` || nm.endsWith(`_${key}`);
+        };
+        const all = [...document.querySelectorAll('map[name^="map_"]')];
+        // Fall back to every map when none can be attributed to this key, so the message
+        // is never empty just because hgTracks named the map something unexpected.
+        const named = all.filter(mine);
+        const maps = named.length ? named : all;
+        for (const m of maps) for (const a of m.querySelectorAll('area')) {
           const i = (a.getAttribute('href') || '').match(/[?&]i=([^&]+)/);
+          // A bigBed with no name field (type bigBed 3, e.g. every GIAB Problematic
+          // Regions subtrack) gets map boxes with no &i= at all, so an `i=`-only list comes
+          // back empty and the error then says nothing about what the row does hold. Fall
+          // back to what the box can be addressed BY instead: its title, which is what
+          // `title:` matches.
           if (i) out.push(decodeURIComponent(i[1]));
+          else {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = a.getAttribute('title') || a.getAttribute('data-tooltip') || '';
+            const tip = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+            if (tip) out.push(`title: ${JSON.stringify(tip)}`);
+          }
         }
-        return out;
-      }, { band }).catch(() => []);
+        const boxes = maps.reduce((k, m) => k + m.querySelectorAll('area').length, 0);
+        return { names: [...new Set(out)], boxes };
+      }, { key }).catch(() => ({ names: [], boxes: 0 }));
       const win = await page.evaluate(() => {
         try { return `${hgTracks.chromName}:${hgTracks.winStart}-${hgTracks.winEnd}`; }
         catch (_) { return '?'; }
       }).catch(() => '?');
-      const show = process.env.DOCENT_ROWS ? near : near.slice(0, 12);
+      const names = near.names;
+      const show = process.env.DOCENT_ROWS ? names : names.slice(0, 12);
+      // The BOX count matters as much as the names. A type-bigBed-3 row has plenty of
+      // items and no way to name any of them -- 26 boxes collapsing to two distinct
+      // titles -- and the next thing to try there is a positional `click: {frac: ...}`,
+      // not a different name. Saying only "in that row: two titles" hides that.
       throw new Error(`item "${want}" not found in track "${t}" (searched map-box areas + `
-        + `mouseOver spans). Window ${win}.${near.length ? ` In that row: ${show.join(', ')}`
-          + `${show.length < near.length ? `, ... (${near.length} total; DOCENT_ROWS=1 for all)` : ''}`
-          : ''}`);
+        + `mouseOver spans). Window ${win}. ${near.boxes} map box(es) in that row`
+        + `${names.length ? `, addressable as: ${show.join(', ')}`
+          + `${show.length < names.length ? `, ... (${names.length} distinct; DOCENT_ROWS=1 for all)` : ''}`
+          : ' and none of them carries a name or a title'}`);
     }
     return { x: img.x + imgPx * (span.x1 + span.x2) / 2, y: row.y + row.height / 2, href: null };
+  }
+  // A POSITIONAL point plus the hgc link of the map box nearest it. `click:` needs this
+  // because some tracks have no item that can be named at all: every subtrack of GIAB
+  // Problematic Regions is `type bigBed 3`, so its hgc hrefs carry an EMPTY `i=` and every
+  // box's title is "Start of Exon (1/1)" -- neither `item:` nor `title:` can pick one, and
+  // a raw mouse click on the data area is swallowed by hgTracks' drag-select handler. So
+  // place the point the way posXY does and follow the box under (or nearest) it.
+  //
+  // Nearest rather than strictly containing, because y is the row's middle and a packed
+  // row stacks its items above and below that line.
+  async function areaXY(t, o) {
+    const { key } = await trackBox(t);
+    const { x, y } = await posXY(t, o);
+    const hit = await page.evaluate(({ x, y, key }) => {
+      const maps = [...document.querySelectorAll('map[name^="map_"]')].filter(m => {
+        const nm = m.getAttribute('name') || '';
+        return nm === `map_data_${key}` || nm === `map_${key}`;
+      });
+      let best = null;
+      for (const m of maps) {
+        const nm = m.getAttribute('name');
+        const im = document.querySelector(`img[usemap="#${nm}"]`);
+        if (!im) continue;
+        const r = im.getBoundingClientRect();
+        const sc = im.naturalWidth ? r.width / im.naturalWidth : 1;
+        for (const a of m.querySelectorAll('area')) {
+          const href = a.getAttribute('href') || '';
+          if (!/hgc\?|hgc$/.test(href)) continue;               // item links only
+          const c = (a.getAttribute('coords') || '').split(',').map(Number);
+          if (c.length < 4) continue;
+          const x1 = r.left + sc * Math.min(c[0], c[2]), x2 = r.left + sc * Math.max(c[0], c[2]);
+          const y1 = r.top + sc * Math.min(c[1], c[3]), y2 = r.top + sc * Math.max(c[1], c[3]);
+          const dx = Math.max(x1 - x, 0, x - x2), dy = Math.max(y1 - y, 0, y - y2);
+          const d = Math.hypot(dx, dy);
+          if (!best || d < best.d)
+            best = { href, cx: (x1 + x2) / 2, cy: (y1 + y2) / 2, d };
+        }
+      }
+      const count = maps.reduce((k, m) => k + m.querySelectorAll('area').length, 0);
+      return best && { ...best, n: count };
+    }, { x, y, key });
+    if (!hit) throw new Error(`click: no item link near that point in track "${t}" `
+      + `(no map box under map_data_${key} carries an hgc href)`);
+    if (process.env.DOCENT_ROWS)
+      console.log(`  point in ${t}: (${Math.round(x)},${Math.round(y)}) -> box at `
+                + `(${Math.round(hit.cx)},${Math.round(hit.cy)}), ${Math.round(hit.d)}px away, `
+                + `${hit.n} box(es) in the row`);
+    return { x: hit.cx, y: hit.cy, href: hit.href };
   }
   // POSITIONAL point: at:/frac:/x: -> x, y forced to the track row's middle. The grey
   // side-label strip (insideX) is baked into the image's left, so a fraction/coord maps
@@ -1187,11 +1258,29 @@ const T_START = Date.now();
   //   expect: {height: 2000}                the still is no taller than this ("<1200" etc.)
   //   expect: {tip: "mismatch A->C"}        the tooltip now up says this
   //   expect: {text: "...", noText: "..."}  the page does / does not contain this
+  //   expect: {url: "hgSearch", noUrl: "%E2%80%8B"}  the address bar does / does not
+  //   expect: {has: "#td_data_mane map[name=map_center_mane]"}  this selector matches
+  //   expect: {noHas: "#td_data_knownGene map[name=map_center_mane]"}  ... does not
+  //
+  // `url:`/`noUrl:` are a substring check on the CURRENT address, which is the only place
+  // some things are visible at all: which CGI a click actually reached, and what the page
+  // put in a query string. #36387's fix strips zero-width characters out of a search term
+  // before the position box submits it, and the term is invisible in the rendered page --
+  // the only evidence either way is whether `%E2%80%8B` survives into the URL.
+  //
+  // `has:`/`noHas:` are for a bug whose whole signature is WHERE something sits in the
+  // page. #37785 attached a squishyPack track's center label to the wrong row: same rows
+  // drawn, same total height, same pixels -- only the row the label hangs off changed, so
+  // rows:, height: and text: are all blind to it. Both take a CSS selector, or a list of
+  // them, and each may name several elements. Reach for these last: an assertion on
+  // hgTracks' own ids and classes is the most likely thing here to break for a reason
+  // that is not a bug.
   //
   // `warn: true` downgrades a failure to a warning, for a check worth logging but not worth
   // stopping a build over.
   async function expectState(arg) {
     const o = (arg && typeof arg === 'object') ? arg : { text: arg };
+    const url = page.url();
     const seen = await page.evaluate(() => {
       const im = document.getElementById('imgTbl');
       const tip = document.getElementById('mouseoverContainer');
@@ -1256,6 +1345,20 @@ const T_START = Date.now();
       bad.push(`page does not contain "${o.text}"`);
     if (o.noText != null && seen.text.includes(String(o.noText)))
       bad.push(`page contains "${o.noText}"`);
+    if (o.url != null && !url.includes(String(o.url)))
+      bad.push(`url is "${url}", wanted it to contain "${o.url}"`);
+    if (o.noUrl != null && url.includes(String(o.noUrl)))
+      bad.push(`url contains "${o.noUrl}": ${url}`);
+    for (const sel of list(o.has)) {
+      const n = await page.locator(sel).count().catch(() => -1);
+      if (n === 0) bad.push(`nothing matches "${sel}"`);
+      else if (n < 0) bad.push(`has: cannot read the selector "${sel}"`);
+    }
+    for (const sel of list(o.noHas)) {
+      const n = await page.locator(sel).count().catch(() => -1);
+      if (n > 0) bad.push(`${n} element(s) match "${sel}", wanted none`);
+      else if (n < 0) bad.push(`noHas: cannot read the selector "${sel}"`);
+    }
     if (!bad.length) {
       console.log(`EXPECT ok -- ${seen.rows.length} row(s), ${height}px`);
       return;
@@ -1633,6 +1736,16 @@ const T_START = Date.now();
         const isPos = /^[\w.|-]+:[\d,]+(-[\d,]+)?$/.test(term);
         if (!await page.locator('#positionInput:visible').count())
           throw new Error('goShow: no position box on this page (need hgTracks or hgGateway) -- ' + page.url());
+        // Scroll to the top first. The position box and the Search button live in the page
+        // header, and the site's top bar is FIXED -- so on a tall page that is already
+        // scrolled down (a lifted view 2,000px high, say) Playwright's own minimal
+        // scroll-into-view leaves the button underneath that bar and the click is
+        // intercepted: "<a id=loginLink ...> from <form id=TrackHeaderForm> subtree
+        // intercepts pointer events", retried for 30s and then a timeout. Typing into the
+        // box still worked, so the failure came at the Search click and looked like a
+        // broken button rather than a covered one.
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await sleep(120);
         await glideTo('#positionInput'); await page.click('#positionInput'); await dwell(160);
         await page.fill('#positionInput', '');                            // clear the old position
         await dwell(200);
@@ -1667,6 +1780,23 @@ const T_START = Date.now();
         // returns instantly and a following shot races the reload ("Cannot find context
         // with specified id").
         if (!done) {
+          // Take the Login/Share links out of the way of the Search button. They sit in an
+          // absolutely-positioned container at the top right of the header bar (see the
+          // comment lib/web.c writes into the page), and on a wide page -- a session with a
+          // large pix, a quickLift target 2,000px tall -- that container lands ON TOP of
+          // #goButton. Playwright then retries the click for the full 30s and fails with
+          // "<a id=loginLink ...> subtree intercepts pointer events", which reads like a
+          // broken Search button rather than a covered one. Turning off pointer events on
+          // those links is enough, costs nothing, and is safe because goShow never wants
+          // them: they are replaced on the next page load anyway. Pressing Enter in the box
+          // is NOT a working substitute -- by the time a 30s click timeout has been caught,
+          // the navigation wait armed before it has already expired.
+          await page.evaluate(() => {
+            for (const el of document.querySelectorAll('#loginLink, .topRightLink')) {
+              el.style.pointerEvents = 'none';
+              if (el.parentElement) el.parentElement.style.pointerEvents = 'none';
+            }
+          }).catch(() => {});
           const navDone = page.waitForNavigation({ waitUntil: 'load', timeout: 30000 }).catch(() => {});
           await clickGlide((await page.locator('#goButton').count()) ? '#goButton' : '.jwGoButtonContainer');
           await navDone;
@@ -1840,9 +1970,15 @@ const T_START = Date.now();
       case 'goto': await nav(arg); break;
       case 'click':
         if (arg && typeof arg === 'object' && arg.track) {
-          // Click a NAMED track item -> follow its map-box link (e.g. the hgc detail page).
-          const it = await itemXY(arg.track, arg.item ?? arg.title ?? arg.value,
-                                  arg.title != null && arg.item == null && arg.value == null);
+          // Click a track item -> follow its map-box link (e.g. the hgc detail page).
+          // Named (item:/title:/value:) picks the item by identity; positional
+          // (at:/frac:/x:) takes the box nearest that point, for a track whose items
+          // cannot be named at all.
+          const named = arg.item ?? arg.title ?? arg.value;
+          const it = (named != null)
+            ? await itemXY(arg.track, named,
+                           arg.title != null && arg.item == null && arg.value == null)
+            : await areaXY(arg.track, arg);
           await glide(it.x, it.y); await sleep(200);
           // A raw click on the data area is swallowed by hgTracks' drag-select handler, so
           // follow the item's own map-box link (the hgc detail page) directly.

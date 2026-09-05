@@ -62,6 +62,15 @@ What is covered
                 reported by rows: alone rather than failing the order check as well.
   ordered.xfail the same two rows named the wrong way round. Expected to fail -- a flag
                 that cannot fail is not a check, it is a second copy of the set test.
+  pagechecks    the `expect:` checks that read the PAGE rather than the track image --
+                `url:`/`noUrl:` on the address, `has:`/`noHas:` on a CSS selector -- plus
+                the positional form of `click:` (`{track:, frac:}`), which follows the
+                item box nearest a point. All four exist for bugs that rows:, height: and
+                text: cannot see: a search term's zero-width space stripped out of a URL
+                (#36387), a center label attached to the wrong row (#37785), and an item
+                that cannot be named at all because its track is `type bigBed 3` (#36335).
+  pagechecks    the same four aimed the wrong way at once. Expected to fail. The message
+    .xfail      names every check that failed, so one run says which of the four broke.
   expectfail    an assertion that is plainly false. Expected to fail -- if it ever passes,
     .xfail      `expect:` has stopped throwing and every other test here means nothing.
   make parity   FAST vs slow, and a rerun, on composite. FAST drops the dwells and the
