@@ -200,14 +200,25 @@ PROFILE_SUFFIXES = {
         "runtime value.  So these suffixes are legal under any profile prefix, "
         "and none of the resulting names appears as a literal anywhere in the "
         "tree.  This is why product/ex.hg.conf documents "
-        "archivecentral.password while a search of the source finds nothing.",
+        "archivecentral.password while a search of the source finds nothing.  "
+        "Any profile also has a failover profile, named with the \"slow-\" "
+        "prefix in front of the main profile's name (sqlProfileGetFailover at "
+        "jksql.c:409), which is where slow-db comes from.  excludeDbs is the "
+        "one suffix that belongs only to a failover profile, and the one that "
+        "is not read through cfgOption2: jksql.c:1325 builds the whole name "
+        "with safef and reads it with cfgOption, which is why no harvest of "
+        "the tree finds it even though ex.hg.conf:36 documents "
+        "slow-db.excludeDbs and goldenPath/help/gbib.html explains it twice.  "
+        "Its value is a comma-separated list of databases that exist only on "
+        "the local server, so the failover connection is never opened for "
+        "them.",
     "src": "hg/lib/jksql.c",
     "suffixes": ["host", "port", "socket", "user", "password", "db",
                  "verifyServerCert", "ca", "caPath", "cert", "key", "cipher",
-                 "crl", "crlPath"],
-    "knownProfiles": ["db", "central", "cart", "customTracks", "archivecentral",
-                      "backupcentral", "myStuff", "myGenome", "rrcentral", "pq",
-                      "rtdb", "cdw"],
+                 "crl", "crlPath", "excludeDbs"],
+    "knownProfiles": ["db", "slow-db", "central", "cart", "customTracks",
+                      "archivecentral", "backupcentral", "myStuff", "myGenome",
+                      "rrcentral", "pq", "rtdb", "cdw"],
 }
 
 
