@@ -1,0 +1,55 @@
+# #36335 -- clicking an item in a quickLifted GIAB Problematic Regions track errored.
+#
+# hg/hgc/bigBedClick.c:502 said
+#
+#     errAbort("can't port %s", fields[3]);
+#
+# and for a bigBed3 -- which every GIAB subtrack is -- fields[] is only three long, so
+# fields[3] read one past the end and the dialog carried whatever was on the stack there.
+# It also fired far too often: with bedSize 3 there is no name filter, so every interval
+# quickLiftGetIntervals returned went through the remap and a single unmappable item
+# aborted the whole page. Fixed in c13d7b1af23 by skipping a NULL remap, then 01badfbaa97
+# for the stacked <BR>s that fix exposed.
+#
+# Brian's own repro from the ticket, which is one subtrack in pack rather than the whole
+# composite: hg38, hide all, alldifficultregions to pack, QuickLift to hs1, go to
+# chr7:156,982,676-156,996,015, click an item.
+#
+# The two halves of the assertion are the error string the ticket quoted and the details
+# the fixed page prints. noText: on its own would pass on the buggy page, because that page
+# renders perfectly well -- it just carries a garbled warning. text: on the position is
+# what says the item was really found and remapped, and 233 bases at
+# chr7:156,983,823-156,984,055 is the value recorded in the ticket when the fix was
+# verified.
+target: genome-test
+db: hg38
+position: chr7:156982676-156996015
+reset: true
+fast: true
+steps:
+  - go: chr7:156982676-156996015
+  - hide: all
+  - track: {alldifficultregions: pack}
+
+  # Assert the source view first: with nothing drawn here the convert would have nothing to
+  # lift and the real assertion below could pass for the wrong reason.
+  - expect: {rows: [alldifficultregions], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [alldifficultregions], noText: "can't port"}
+
+  # Positional, not named. These items cannot be named at all: type bigBed 3 has no name
+  # field, so hgTracks writes an EMPTY i= into the hgc href and gives every box the same
+  # title, "Start of Exon (1/1)". frac: 0.5 takes the box nearest the middle of the row,
+  # which is enough -- the bug aborted the whole page whenever ANY item in range failed to
+  # remap, so which one is clicked does not matter.
+  - click: {track: alldifficultregions, frac: 0.5}
+
+  # "Genomic Size" is the field the ticket names as proof the page renders: the fix was
+  # verified by seeing Position and Genomic Size come up directly under the title. The
+  # buggy build never got that far -- errAbort stopped the page and printed the garbled
+  # "can't port" instead -- so this and the noText: are two halves of one check.
+  - expect:
+      text: "Genomic Size"
+      noText: "can't port"

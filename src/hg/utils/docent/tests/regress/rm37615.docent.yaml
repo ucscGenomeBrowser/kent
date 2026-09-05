@@ -1,0 +1,45 @@
+# #37615 -- a quickLifted bigBed tooltip reported pre-lift coordinates.
+#
+# Under quickLift the bedRow used for mouseOver substitution is loaded from the SOURCE
+# assembly's interval, so $chrom/${chromStart}/${chromEnd} printed the hg38 position while
+# the position bar showed the lifted one. Two commits: 05c41aa8b79 first appended a note
+# saying the coordinates came from the source assembly, then 98572a57d65 replaced that with
+# the real fix -- overwrite those three fields with the lifted bed's target coordinates
+# before substituting, so the tooltip matches where the item is drawn.
+#
+# So the behavior to assert is the SECOND one. The plan for this suite still said to look
+# for the disclaimer note; that note is gone from the tree and a test for it would fail.
+#
+# The track is gnomAD v3.1.1, the same one rm37805 uses natively, because its mouseOver
+# pattern is exactly the coordinate substitution this bug was about:
+#
+#     <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)
+#
+# and the same window and variant are reachable, which makes the two scripts easy to read
+# together. gnomadVariants is a superTrack, so hideKids keeps its siblings off.
+target: genome-test
+db: hg38
+position: chr17:43091000-43092000
+reset: true
+fast: true
+steps:
+  - go: chr17:43091000-43092000
+  - hide: all
+  - track: {gnomadVariants: hideKids, gnomadGenomesVariantsV3_1_1: pack}
+  - expect: {rows: [gnomadGenomesVariantsV3_1_1], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [gnomadGenomesVariantsV3_1_1], noText: "Warning/Error"}
+
+  - mouseover: {track: gnomadGenomesVariantsV3_1_1, title: "rs80357218"}
+
+  # Both halves, and both numbers were measured on the lifted view rather than worked out.
+  # rs80357218 is at chr17:43,091,449-43,091,450 on hg38 and lifts to chr17:43,950,032 on
+  # hs1, so the fixed tooltip reads the second and the buggy one read the first. Naming the
+  # source coordinate in noText: is what makes this test about the bug: a tip: check alone
+  # would also pass if the tooltip stopped substituting coordinates at all.
+  - expect:
+      tip: "chr17:43950032-43950033 (T/G)"
+      noText: "43091449"
+

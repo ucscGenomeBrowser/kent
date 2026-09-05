@@ -1,0 +1,47 @@
+# #37785 -- a squishyPack track stole a neighbouring track's center label.
+#
+# GENCODE (knownGene) in squishyPack is drawn as two slices, a full-height part and a
+# squished part, which smashSquish() stitches back together on the assumption that the
+# squished clone is drawn immediately after its source. flatTracksCmp() broke an
+# image-order tie involving that clone purely by visibility, even against an unrelated
+# track sharing the same order, so MANE could sort between knownGene and its own clone.
+# smashSquish() then merged the squished slice onto MANE's row and dragged MANE's center
+# label with it: the label above knownGene's items read "MANE". Fixed in
+# hg/hgTracks/imageV2.c, 7bed537d83b.
+#
+# The recipe is Lou's own URL from the ticket, which is all state and no session: both
+# tracks in pack and both given the SAME image order, which is what makes the tie.
+#
+# What makes this test different from every other one here: rows:, height: and text: are
+# all blind to the bug. The same three rows are drawn either way, the total image height
+# is the same, and the labels are drawn into a PNG rather than into the page text. The only
+# thing that changes is which row's <td> the center label's image map hangs off, so this
+# is the one script that uses has:/noHas: to say where an element sits.
+#
+# hgTracks puts each center label in a MAP named map_center_<track>, inside the data cell
+# of the row it belongs to. Fixed: map_center_mane is in td_data_mane. Buggy: it moved into
+# td_data_knownGene along with the squished slice. Both halves are asserted, because the
+# right map being present says nothing about a stray copy elsewhere.
+target: genome-test
+db: hg38
+position: chr11:528907-538911
+reset: true
+fast: true
+steps:
+  - go: chr11:528907-538911
+  - hide: all
+  # squishyPack, and the colliding image order, are cart variables with no verb of their
+  # own, so this is the goto: escape hatch. It is also the exact URL the ticket used.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr11:528907-538911&hideTracks=1&knownGene=pack&mane=pack&knownGene_imgOrd=4&mane_imgOrd=4&pix=1100"
+
+  - expect:
+      rows: [ruler, mane, knownGene]
+      exact: true
+      ordered: true
+      noText: "Warning/Error"
+      has:
+        - "#td_data_mane map[name=map_center_mane]"
+        - "#td_data_knownGene map[name=map_center_knownGene]"
+      noHas:
+        - "#td_data_knownGene map[name=map_center_mane]"
+        - "#td_data_mane map[name=map_center_knownGene]"

@@ -1,0 +1,60 @@
+# #37491 -- hgConvert's QuickLift warning named composite subtracks the user never showed.
+#
+# validateTdbChildren() in hg/lib/trackHub.c walked EVERY subtrack of a composite and put
+# any non-liftable type into the user-facing list under
+#
+#     Some of your tracks failed to lift because the type is not supported by QuickLift.
+#
+# even subtracks that were switched off. Fixed in c4e77d5b638; the code now reads
+# `validateOneTdb(db, tdb, visible ? badList : NULL)`, so a subtrack that is not visible is
+# still lifted alongside its visible siblings but is no longer complained about.
+#
+# Platinum Genomes is the composite to use: all three of its subtracks are type vcfTabix,
+# which QuickLift does not support, so with exactly one of them showing the warning has
+# exactly one row. Before the fix all three were listed however few were on.
+#
+# THE TRAP, and it cost a run. `track: {platinumGenomes: hideKids, platinumNA12878: pack}`
+# does not express "the user deselected the other two". hideKids writes a `<track>=hide`
+# cart variable for each sibling, and isSubtrackVisible() (hg/lib/trackHub.c:1847) begins
+#
+#     boolean overrideComposite = (NULL != cartOptionalString(cart, tdb->track));
+#     ...
+#     if (overrideComposite) enabled = TRUE;
+#
+# so the mere presence of that variable makes the sibling count as visible and it lands in
+# the warning again -- a first version of this test failed on `noText: "NA12877"` and
+# looked exactly like the bug being back. What a deselected subtrack really looks like is
+# `<track>_sel=0` and NO visibility variable at all, which is what the checkbox on
+# hgTrackUi writes. There is no verb for that, so the state is set with the goto: escape
+# hatch.
+#
+# mane is turned on as well so the lift has something it CAN carry.
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+  - hide: all
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125364&pix=1100&mane=pack&platinumGenomes=pack&platinumNA12878_sel=1&platinumNA12877_sel=0&platinumHybrid_sel=0"
+
+  # One of the three drawn and the other two not. This is the state the warning is read
+  # against, so it is asserted rather than assumed.
+  - expect:
+      rows: [mane, platinumNA12878]
+      noRows: [platinumNA12877, platinumHybrid]
+      noText: "Warning/Error"
+
+  - convert: {to: hs1, quicklift: true}
+
+  # The Convert RESULT page, before the click through to the lifted view. No other verb
+  # reaches this page, and it is the only place the warning appears.
+  #
+  # Both halves matter. text: says the warning really was printed, so the noText: below is
+  # not passing on a page that has no warning at all -- which is what a lift with nothing
+  # unsupported in it would produce.
+  - expect:
+      text: "Some of your tracks failed to lift"
+      noText: "NA12877"
+  - expect: {text: "NA12878"}
