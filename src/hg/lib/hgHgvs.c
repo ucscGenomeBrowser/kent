@@ -918,6 +918,15 @@ else
                  "where name = '%s'", acc);
         struct sqlConnection *conn = hAllocConn(db);
         seq = sqlQuickString(conn, query);
+        // deprecated protein versions live in the RefSeq Historical pep table
+        if (isEmpty(seq) && hDbHasNcbiRefSeqHistorical(db) &&
+            hTableExists(db, "ncbiRefSeqPepTableHistorical"))
+            {
+            freez(&seq);
+            sqlSafef(query, sizeof(query), "select seq from ncbiRefSeqPepTableHistorical "
+                     "where name = '%s'", acc);
+            seq = sqlQuickString(conn, query);
+            }
         hFreeConn(&conn);
         }
     else
