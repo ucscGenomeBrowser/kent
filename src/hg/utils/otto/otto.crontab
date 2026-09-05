@@ -157,6 +157,13 @@ MAILTO=otto-group@ucsc.edu
 #Add a new daily tip to the home page
 5 5 * * 1-5 /cluster/software/bin/python /cluster/bin/scripts/generateTipOfDay.py -s ~/kent/src/hg/htdocs/allTipsRaw.html
 
+# Mirror-facing track lists (RM #37781): tracks we cannot redistribute, tracks
+# that update themselves, tracks contributed from outside UCSC. Writes
+# goldenPath/help/mirrorTracks.html into htdocs; reaching the RR needs a /root
+# autoPush entry from cluster-admin. Weekly is plenty, none of the three lists
+# moves daily. Silent unless a restricted file is found reachable on hgdownload.
+32 6 * * 4 /hive/data/outside/otto/trackLists/trackLists.sh
+
 #OMIM Upload
 HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 15 05 * * *  /hive/data/outside/otto/omim/omimUploadWrapper.sh
@@ -169,6 +176,12 @@ MAILTO=cells@ucsc.edu
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
  
+# Hidden-dataset reminders (RM #38246). Once a month, queue one draft email per
+# hidden dataset whose submitter has not been asked in a year, and mail the
+# report to cells@. Nothing reaches an author until a person reviews the queue
+# and runs "cbPingHidden send". Silent when nothing is due.
+0 8 1 * * umask 002; ~mspeir/cellBrowser/ucsc/cbPingHidden scan -q --mail-report cells@ucsc.edu
+
 # cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
 # (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.
 * * * * * umask 002; CBANNOT_ENV_FILE=/hive/data/inside/cells/cbAnnotServer/cbAnnot.env ~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh >> /hive/data/inside/cells/cbAnnotServer/logs/watchdog.log 2>&1

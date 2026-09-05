@@ -1,0 +1,77 @@
+<h2>Description</h2>
+<p>
+This track shows the AlphaGenome Variant Impact (AVI) score, a prediction from Google DeepMind
+of how likely a given substitution is to be disease causing. Scores are provided for every
+possible single-base substitution at every position in the genome, about 8.8 billion in total.
+Unlike predictors that only cover protein-coding changes, the AVI score is defined genome wide,
+so it also scores variants in introns and in intergenic regulatory regions.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Because there are three possible substitutions at each position, the scores are split across
+four separate graphs, one for each alternate allele. The graph labelled "Mutation: A" shows the
+score for changing the reference base to an A, and so on. At any given position only three of
+the four graphs carry a real prediction; the fourth is the one matching the reference base,
+where no substitution exists, and it is shown as zero.
+</p>
+<p>
+The source data gives two numbers per variant, a raw model score and a PHRED-scaled version of
+it. This track displays the PHRED-scaled score, which is easier to compare across variants: it
+is a rank in which 10 corresponds to the top 10 percent of the most impactful substitutions in
+the genome, 20 to the top 1 percent, and 30 to the top 0.1 percent. Higher values therefore
+indicate a variant predicted to be more damaging. Most positions score low, with a genome-wide
+median near 1.6, so the default view is scaled to 0 to 30 rather than to the observed maximum
+of about 89.
+</p>
+<p>
+Individual scores are only shown when the view is zoomed in far enough. At wider zoom levels the
+graph shows the range of scores in each screen pixel rather than a single value.
+</p>
+
+<h2>Methods</h2>
+<p>
+The AVI score comes from a machine learning model that combines several kinds of evidence about
+a variant: AlphaGenome regulatory predictions, AlphaMissense pathogenicity scores for changes
+that fall in coding sequence, measures of evolutionary sequence conservation, and further
+functional annotations. Google DeepMind precomputed the score for all single-base substitutions
+in GRCh38 and released it as a tab-separated, tabix-indexed table of chromosome, position,
+reference allele, alternate allele, raw score and PHRED score. Note that the score has not yet
+been described in a peer-reviewed publication.
+</p>
+<p>
+The scores can be downloaded from the
+<a href="https://deepmind.google.com/science/alphagenome/atlas" target="_blank">AlphaGenome
+Atlas</a>. At UCSC the table was split into one wig file per alternate allele and each was
+converted to bigWig. The PHRED column was copied through as text, so the values shown are
+exactly those in the source file. The commands are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/alphaGenome.txt"
+target="_blank">makeDoc</a>, and the conversion program is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/oneShot/alphaGenomeToWig"
+target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Google DeepMind's terms do not allow UCSC to redistribute this dataset, so it is not available
+from the Table Browser, the Data Integrator, the Genome Browser API or our download server. The
+full set of precomputed scores can be obtained directly from the
+<a href="https://deepmind.google.com/science/alphagenome/atlas" target="_blank">AlphaGenome
+Atlas</a>, which provides the same tab-separated, tabix-indexed file that this track was built
+from. Scores for individual variants can also be read off the track in the browser by zooming in
+until single bases are visible.
+</p>
+<p>
+Use of the AlphaGenome Services and their output is subject to the
+<a href="https://deepmind.google.com/science/alphagenome/atlas" target="_blank">AlphaGenome
+Services Additional Terms of Service</a>. In summary, the Services are available only to
+individuals and to non-commercial organizations such as universities, non-profit research
+institutes, educational bodies and government bodies, or for journalism, and their output may not
+be used for clinical purposes or relied on for medical advice.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to Dhavanthi Hariharan, Francesca Pietra, Tom Ward and Elisa Wong at Google DeepMind for
+providing this dataset and for their help with the track description.
+</p>

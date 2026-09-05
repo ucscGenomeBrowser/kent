@@ -5,6 +5,23 @@ The "Prediction Scores" container track contains subtracks showing the results o
 scores. Usually these are prediction algorithms that use protein features, conservation, nucleotide composition and similar
 signals to determine if a genome variant is pathogenic or not.</p>
 
+<h3>AlphaGenome - hg38</h3>
+<p>
+<b>Interpretation:</b> Scores are PHRED-scaled, so 10 marks the top 10 percent of the most
+impactful substitutions in the genome, 20 the top 1 percent and 30 the top 0.1 percent. Higher
+values are more likely to be damaging. The authors do not define a pathogenicity cutoff.
+</p>
+<p>
+<a href="hgTrackUi?g=alphaGenome">AlphaGenome</a>
+shows the AlphaGenome Variant Impact (AVI) score from Google DeepMind, a machine-learning
+prediction that combines AlphaGenome regulatory predictions, AlphaMissense scores, sequence
+conservation and other functional annotations. Unlike most of the other scores in this
+container, it is not restricted to coding sequence: the track contains four bigWig subtracks
+(one per alternate allele) covering all 8.8 billion possible single-base substitutions in the
+genome, including introns and intergenic regulatory regions. The score has not yet been
+described in a peer-reviewed publication, and the data cannot be redistributed by UCSC.
+</p>
+
 <h3>BayesDel - Only hg19</h3>
 <p><a href="hgTrackUi?g=bayesDel">BayesDel</a> is a deleteriousness meta-score for coding and 
 non-coding variants, single nucleotide
@@ -153,6 +170,14 @@ proteins as a heatmap, colored on a global gradient from
 </p>
 
 <h2>Display Conventions and Configuration</h2>
+
+<h3>AlphaGenome</h3>
+<p>Four bigWig subtracks, one per alternate nucleotide, covering every position in the
+genome. The subtrack matching the reference base at a given position has no substitution
+to score and is shown as zero. The default view is scaled to 0 to 30, while the observed
+maximum is about 89, so the range can be raised in the track configuration. This data
+cannot be redistributed, so it is not available from the Table Browser or our download
+server; see the per-track description page for where to obtain it.</p>
 
 <h3>BayesDel</h3>
 <p>There are eight subtracks for the BayesDel track: four include pre-computed MaxAF-integrated BayesDel

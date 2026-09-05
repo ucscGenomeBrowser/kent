@@ -1,0 +1,72 @@
+track alphaGenome
+shortLabel AlphaGenome
+longLabel AlphaGenome Variant Impact (AVI) Score for all single-base substitutions (zoom in for scores)
+type bigWig
+compositeTrack on
+parent predictionScoresSuper
+visibility dense
+color 0,114,178
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+tableBrowser off
+dataVersion AlphaGenome Variant Impact score, Google DeepMind snapshot of August 27, 2026
+
+    track alphaGenomeA
+    shortLabel Mutation: A
+    longLabel AlphaGenome AVI Score: Mutation is A
+    type bigWig
+    parent alphaGenome on
+    visibility dense
+    bigDataUrl /gbdb/$D/alphaGenome/a.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:30
+    viewLimitsMax 0:100
+    maxWindowToDraw 10000000
+    maxWindowToQuery 500000
+    mouseOverFunction noAverage
+    tableBrowser off
+
+    track alphaGenomeC
+    shortLabel Mutation: C
+    longLabel AlphaGenome AVI Score: Mutation is C
+    type bigWig
+    parent alphaGenome on
+    visibility dense
+    bigDataUrl /gbdb/$D/alphaGenome/c.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:30
+    viewLimitsMax 0:100
+    maxWindowToDraw 10000000
+    maxWindowToQuery 500000
+    mouseOverFunction noAverage
+    tableBrowser off
+
+    track alphaGenomeG
+    shortLabel Mutation: G
+    longLabel AlphaGenome AVI Score: Mutation is G
+    type bigWig
+    parent alphaGenome on
+    visibility dense
+    bigDataUrl /gbdb/$D/alphaGenome/g.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:30
+    viewLimitsMax 0:100
+    maxWindowToDraw 10000000
+    maxWindowToQuery 500000
+    mouseOverFunction noAverage
+    tableBrowser off
+
+    track alphaGenomeT
+    shortLabel Mutation: T
+    longLabel AlphaGenome AVI Score: Mutation is T
+    type bigWig
+    parent alphaGenome on
+    visibility dense
+    bigDataUrl /gbdb/$D/alphaGenome/t.bw
+    maxHeightPixels 128:20:8
+    viewLimits 0:30
+    viewLimitsMax 0:100
+    maxWindowToDraw 10000000
+    maxWindowToQuery 500000
+    mouseOverFunction noAverage
+    tableBrowser off
