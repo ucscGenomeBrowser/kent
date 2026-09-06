@@ -1,0 +1,48 @@
+# #38185 -- an empty CGI pair (&&) in the middle of a query string ate the next variable.
+#
+# cgiParseInputAbort() took the text after a value, did `strchr(dataPt, '&')` and
+# terminated there, leaving the pointer on the SECOND ampersand. The next pass through the
+# loop therefore read the following variable's name as `&position`, stored it under a name
+# nobody looks up, and lost it with no warning at all. The same empty pair at the END of
+# the query string took the other branch and aborted instead:
+#
+#     Very Early Error
+#     Mangled CGI input string &
+#
+# So one empty pair was silent in one position and fatal in the other. Both parsers in
+# lib/cheapcgi.c now skip an empty pair. QA Ready, target 504.
+#
+# This is not hypothetical. It is what broke the reporter's link in #38145: his URL had &&
+# immediately before hgS_doLoadUrl, his saved session never loaded, and he reported it as
+# missing tracks, which sent us looking in the wrong place for days.
+#
+# Both checks were WATCHED TO FAIL, which almost nothing else in this suite can say. The
+# fix is on master for v504, so hgwbeta was still running the broken parser on 2026-09-06
+# and both URLs were driven there:
+#
+#   middle    hgwbeta lands on chr7:155,799,529-155,812,871, hg38's default position --
+#             the position the URL asked for was simply gone
+#   trailing  hgwbeta returns "Mangled CGI input string &"
+#
+# That is why the first assertion is the POSITION ITSELF rather than the absence of an
+# error: losing the variable produced no error to look for. The string comes from the
+# #positionDisplay span, which is real page text, not the title, so expect: text can see it.
+#
+# The two steps deliberately ask for DIFFERENT positions. After the first step the cart
+# holds chr1:1-1,000, so a second step asking for the same place would be satisfied by the
+# cart whether or not the URL was parsed.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # Empty pair in the MIDDLE: position= used to be swallowed.
+  - goto: "/cgi-bin/hgTracks?db=hg38&&position=chr1:1-1000&pix=1100"
+  - expect: {rows: [ruler], text: "chr1:1-1,000"}
+
+  # The same empty pair at the END, which used to abort before any of it was read.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr3:1-1000&pix=1100&&"
+  - expect:
+      rows: [ruler]
+      text: "chr3:1-1,000"
+      noText: "Mangled CGI input string"

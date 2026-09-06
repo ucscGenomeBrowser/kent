@@ -1,0 +1,61 @@
+# #38126 -- the description HTML a hub hands us is printed inside a page of ours, and was
+# printed as it arrived.
+#
+# A hub's track description page is fetched from wherever the hub says and printed into
+# hgTrackUi and hgc. Whatever the hub wrote ran in our origin, with our cookies. 646595ff1c1
+# (branch hubSanitize) put htmlSanitize in front of it: the HTML is reduced to an allowlist
+# of elements, attributes and style properties. An element that is not on the keep list
+# loses its tag but keeps its text, so a pasted document still reads as the article it was
+# meant to be, while script, style, form and their kin go away with everything inside them.
+# Every id, and every name on an anchor, is renamed with the fixed prefix "descPage-"
+# (inc/htmlSanitize.h), so a name the outside HTML chose cannot collide with one our own
+# JavaScript looks up. Ships in v504.
+#
+# THE FIXTURE IS DELIBERATELY MALFORMED. ~braney/docentFixtures/descFilterHub is ours, and
+# its descProbe.html carries a script, a form and a div with a chosen id for no reason but
+# to be filtered. hubCheck reports two of them, which is the other half of #38126 -- a hub
+# author should hear about it from us rather than from a page that comes out wrong:
+#
+#     warning: on the 'descFilterProbe' description page the Browser removed the form
+#              element and everything inside it
+#     warning: ... removed the script element and everything inside it
+#
+# Do not "fix" the fixture.
+#
+# EVERY STRUCTURAL CHECK BELOW WAS WATCHED TO FAIL. The fix is on master for v504, so on
+# 2026-09-06 hgwbeta still printed the description raw, and the same page was read on both:
+#
+#                                     genome-test   hgwbeta
+#     id="descPage-hubDescProbe"      present       absent
+#     id="hubDescProbe"               absent        present
+#     id="hubDescProbeScript"         absent        present
+#     name="hubDescProbeInput"        absent        present
+#
+# The two text checks are the companion half and do NOT flip: they hold on both servers,
+# and they are here so the run cannot pass on a page where the description simply failed to
+# load. A filter that removed everything would satisfy every noHas: on its own.
+#
+# has:/noHas: rather than text:, because a <script> element's contents are not in
+# innerText on either build. A noText: on the script body would have passed everywhere and
+# asserted nothing. This is the case those two checks exist for.
+target: genome-test
+db: hg38
+position: chr1:10537500-10538000
+reset: true
+fast: true
+steps:
+  # uc.1, the first item in the fixture's bigBed, so the row below is evidence the hub
+  # really loaded rather than evidence that a link exists.
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/descFilterHub/hub.txt", db: hg38, position: chr1:10537500-10538000}
+  - expect: {rows: [descFilterProbe], noText: "Warning/Error"}
+
+  # The track's own settings page, which is where printTrackHtml puts the description.
+  - click: 'a[href*="hgTrackUi"][href*="descFilterProbe"]'
+
+  - expect:
+      text: "This sentence must survive the filter unchanged."
+      has: "#descPage-hubDescProbe"
+
+  - expect:
+      text: "Text inside an element that only loses its tag."
+      noHas: ["#hubDescProbe", "#hubDescProbeScript", 'input[name="hubDescProbeInput"]']

@@ -1,0 +1,57 @@
+# #38108 -- a caller-supplied memory address crashed three CGIs from a plain GET.
+#
+# When a file is uploaded, cheapcgi stored the ADDRESS and the size of the uploaded bytes
+# as text, in a companion variable named after the file field with `__binary` added. The
+# code that later read the upload turned that text straight back into a pointer. Nothing
+# recorded where the value came from, and every CGI parameter is copied into the cart, so
+# the address could be chosen by whoever sent the request. No login and no upload needed:
+#
+#     hgTracks?db=hg38&hgt.customFile__filename=x.gz&hgt.customFile__binary=1 100
+#
+# is an address of 1 and a size of 100, and it returned a 500 with a stack trace in the
+# error log:
+#
+#     getFileNameFromHdrSig (m=0x1 <error: Cannot access memory at address 0x1>)
+#     customLineFile ... customFactoryParse ...
+#
+# Fixed on master in 7181c0af889, which moved the bookkeeping into cheapcgi: it now keeps a
+# registry of the blocks it actually created and looks them up by name, so a value naming a
+# block cheapcgi never made is refused.
+#
+# Three CGIs, three paths to the same routine: hgTracks and hgCustom through the custom
+# track upload, hgPhyloPlace through its sequence upload. All three are driven here, since
+# the fix is in one place but each caller reaches it differently.
+#
+# hgSession is NOT here even though it shares the fix. Measured on genome-test 2026-09-06:
+# without a login it answers the crafted GET with the sign-in page, so the upload path is
+# never reached and a script that drove it would assert nothing about this bug.
+#
+# There is no server left to watch this fail on, and that is worth saying rather than
+# leaving a reader to assume it was checked. 7181c0af889 is in v503_branch, so hgwbeta has
+# it and answers all three URLs with an ordinary page. The RR was still on v502 on
+# 2026-09-06 and so is still vulnerable -- it is deliberately NOT driven here, because the
+# reproducer's whole effect is to kill the CGI process serving it.
+#
+# The assertion on each page is a POSITIVE one. A crash arrives as Apache's own 500 page,
+# which is a perfectly valid page carrying none of these strings, so a bare noText would
+# pass on it -- the same trap as the "Very Early Error" page. hgTracks gets a row check for
+# the same reason; the other two have no track image, so they name text the CGI itself
+# writes.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # The custom-track upload path, reached from the browser itself.
+  - goto: "/cgi-bin/hgTracks?db=hg38&hgt.customFile__filename=x.gz&hgt.customFile__binary=1%20100&pix=1100"
+  - expect: {rows: [ruler], noText: "Internal Server Error"}
+
+  # The same variables, reached from the custom-track page instead.
+  - goto: "/cgi-bin/hgCustom?db=hg38&hgt.customFile__filename=x.gz&hgt.customFile__binary=1%20100"
+  - expect: {text: "Add Custom Tracks", noText: "Internal Server Error"}
+
+  # hgPhyloPlace's sequence upload, which has an upload field of its own.
+  - goto: "/cgi-bin/hgPhyloPlace?db=wuhCor1&sarsCoV2File__filename=x&sarsCoV2File__binary=1%20100"
+  - expect:
+      text: "Place your sequences in a global phylogenetic tree"
+      noText: "Internal Server Error"
