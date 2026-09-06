@@ -94,7 +94,8 @@
 #   not a facet -- there are too many values.
 #
 # Cell class: each cell type is assigned one of 23 broad classes
-#   (celltype-crosswalks/celltype-class.tsv, built by build_celltype_crosswalks.py).
+#   (celltype-crosswalks/celltype-class.tsv, hand-curated -- NOT written by
+#   build_celltype_crosswalks.py; see the Cell classes note below).
 #   The class drives BOTH the track color (one colorblind-conscious palette,
 #   celltype-palette.tsv, shared by hg38 and mm10 so a class is the same color on
 #   both assemblies) and the subtrack priority. Cell class is the primary cell facet,
@@ -192,6 +193,18 @@
 #   (the union of the mm10 crosswalk classes with paper-decodes/hg38_ct_class.tsv), NOT
 #   generated -- build_celltype_crosswalks.py does not write it, so a class change has to
 #   be made there too.
+#
+# The bare "Progenitor" row in celltype-class.tsv is live, not leftover -- do not
+#   retire it. build_stanzas' class_key() collapses plurals, so BrainVar's cell type
+#   "Progenitors" (hg38, prenatal only) looks up under the singular key and gets its
+#   Neural progenitor class and indigo color from that one row. Nothing in the row says
+#   so, and no track's label matches it literally, so it reads as dead.
+#   It is also genuinely ambiguous: a bare "Progenitor" is not evidence of a neural
+#   lineage, and the corpus now spans kidney, heart and blood. Remapping the row is the
+#   wrong fix (it would grey out BrainVar's progenitor track). When a non-neural dataset
+#   arrives with such a label, add the specific cell type instead -- a specific entry
+#   beats its own prefix in lookup_class(), which is how "Nephron progenitors" comes out
+#   Stromal while the bare row stays neural.
 #
 # One copy of the crosswalks: build_stanzas reads celltype-crosswalks/ out of the kent
 #   tree (XWALK_ROOT, overridable), not the copy in the hub-build dir. There used to be
