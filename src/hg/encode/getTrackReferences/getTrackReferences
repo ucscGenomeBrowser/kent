@@ -1,6 +1,20 @@
 #!/usr/bin/env python
-import sys, os, urllib.request, argparse, re, html, textwrap, requests
+import sys, os, urllib.request, urllib.error, argparse, re, html, textwrap, time, requests
 from xml.etree import ElementTree as ET
+
+def eutilsFetch(url):
+    """ Fetch an E-utilities URL and return the parsed XML.  NCBI allows three requests a
+    second and answers 429 above that, and we make two requests per citation, so back off
+    and retry a few times instead of failing a long list of ids halfway through. """
+    sys.stderr.write("Accessing %s\n" % url)
+    for tryCount in range(5):
+        try:
+            return ET.XML(urllib.request.urlopen(url).read())
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or tryCount == 4:
+                # never print this on stdout, it would end up in the middle of the references
+                sys.exit("error: cannot fetch %s: %s" % (url, e))
+            time.sleep(2 ** tryCount)
 
 def parsePubmed(doc, id):
     infoDict = dict()
@@ -50,16 +64,42 @@ def parseInit(id):
         db = "PMC"
         id = re.sub("PMC", "", id)
         url = urlbase + "db=%s" % db + "&id=%s&version=2.0" % id
-    sys.stderr.write("Accessing %s\n" % url)
-    fetch = urllib.request.urlopen(url)
-
-    doc = ET.XML(fetch.read())
+    doc = eutilsFetch(url)
     if db == "Pubmed":
         infoDict = parsePubmed(doc, id)
     elif db == "PMC":
         infoDict = parsePmc(doc, id)
 
     return infoDict
+
+def resolveDoi(url):
+    """ NCBI hands out doi.org links for many publishers.  Follow the redirect, so that the
+    citation points straight at the article page, the way it did when we still scraped the
+    links out of the PubMed page.  Keep the doi.org link if the publisher does not answer. """
+    if not re.match(r"https?://(dx\.)?doi\.org/", url):
+        return url
+    try:
+        return requests.head(url, allow_redirects=True, timeout=60).url
+    except requests.RequestException:
+        return url
+
+def fetchFullTextUrl(id):
+    """ Return the publisher's URL for a PubMed ID, or None if NCBI lists no full text
+    provider for it.  Uses the E-utilities elink/prlinks API.  We used to scrape the "full
+    text links" box out of the PubMed web page, but NCBI now answers non-browser clients
+    with a Javascript cookie challenge, so that page no longer contains any links. """
+    url = ("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/elink.fcgi?"
+           "dbfrom=pubmed&cmd=prlinks&retmode=xml&id=%s" % id)
+    doc = eutilsFetch(url)
+
+    # elink returns one ObjUrl per LinkOut provider, publisher first, in the same order as
+    # the "full text links" box on the PubMed page, from which we take the first one
+    for objUrl in doc.iter("ObjUrl"):
+        link = objUrl.find("Url")
+        if link is not None and link.text:
+            return resolveDoi(link.text.strip())
+
+    return None
 
 def htmlEscape(str):
     return html.escape(str)
@@ -123,43 +163,17 @@ def makeHtml(infoDict, plain, verbose, doi):
             idStr = ("DOI: <a href=\"https://doi.org/%s\" target=\"_blank\">%s</a>; " % (infoDict['doi'], infoDict['doi'] ) ) + idStr
 
     # now that the pubmed link has been constructed, we can overwrite the url in infoDict with the original article URL
-
-    # make sure the portlet that generates outlinks for PubMed didn't fail.  If it did, try again until
-    # it works or we give up.
-    # Note: no longer sure this is necessary - seems like NCBI is doing something different now, but at
-    # any rate urllib2 no longer seems to fetch the links list in at least some cases.  Requests works.
+    origComment = ""
     origUrl = infoDict['url']
-    for try_count in range(10):
-        origComment = ""
-        infoDict['url'] = origUrl
-        fetch = requests.get(infoDict['url'])
-        try:
-            m = re.search(r'<div class="full-text-links-list">\s*<a\s+(class="[^"]*"\s+)?href="(\S+)"', fetch.text)
-            if m:
-                if m.group(2):
-                    # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
-                    infoDict['url'] = m.group(2).replace("&amp;", "&")
-                break
-            else:
-                #n = re.search('<div class="icons"></div>', doc) # another possible detection of failed portlet
-                p = re.search('Default output of portlet NCBIPageSection', doc)
-                if p is None:
-                    break
-        except:
-            try:
-                m = re.search(r'<div class="full-text-links-list">\s*<a\s+(class="[^"]*"\s+)?href="(.+)"', fetch.text)
-                if m:
-                    if m.group(2):
-                        # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
-                        infoDict['url'] = m.group(2).replace("&amp;", "&").replace(" ", "%20").replace("///","//")
-                    break
-            except:
-                # this try failed, fall through to the next one
-                pass
+    fullTextUrl = fetchFullTextUrl(infoDict['pubmed'])
+    if fullTextUrl:
+        infoDict['url'] = fullTextUrl
     else:
-        # never print this on stdout: it would end up in the middle of the references
-        sys.exit("error: failed to fetch the full-text link from NCBI after 10 tries.  Try again "
-                 "later, or use the PubMed link %s as the reference URL." % origUrl)
+        # not an error: plenty of older papers have no full text provider at NCBI at all.
+        # Keep the PubMed link, but say so on stderr, never on stdout, where the message
+        # would end up in the middle of the references.
+        sys.stderr.write("warning: NCBI lists no full text link for PMID %s, "
+                         "linking to PubMed instead\n" % infoDict['pubmed'])
 
     htmlLines = list()
     htmlLines.append("<p>")
