@@ -10801,6 +10801,24 @@ struct dyString *fUrl = subMulti(eUrl->string, fieldCount, fieldNames, fieldVals
     return fUrl->string;
 }
 
+static boolean isPublicDataPath(char *path)
+/* Return TRUE if path names a file in the /gbdb tree.  Only a plain path counts, a ".."
+ * component makes the name mean something outside that tree, so it is not accepted. */
+{
+if (!startsWith("/gbdb/", path))
+    return FALSE;
+char *s = path + strlen("/gbdb/");
+while (s != NULL && s[0] != '\0')
+    {
+    if (s[0] == '.' && s[1] == '.' && (s[2] == '/' || s[2] == '\0'))
+        return FALSE;
+    s = strchr(s, '/');
+    if (s != NULL)
+        s += 1;
+    }
+return TRUE;
+}
+
 char *checkDataVersion(char *database, struct trackDb *tdb)
 /* see if trackDb has a dataVersion setting and check that file for version */
 {
@@ -10819,16 +10837,17 @@ if (version != NULL && startsWith("/", version))
     // substitute $D using quickLiftDb rather than the destination database.
     char *liftDb = trackDbSetting(tdb, "quickLiftDb");
     char *resolveDb = trackHubSkipHubName(liftDb ? liftDb : database);
-    // A hub is user-supplied, so a hub track may not name just any local file.
-    // Paths under /gbdb are the exception: that tree is public data, mirrored on
-    // hgdownload, so reading one discloses nothing.  Curated-hub assemblies need
-    // this - hs1 and friends are served to the browser as a hub, which makes their
-    // otto tracks hub tracks, and without it hgTrackUi prints the raw path where
-    // the version should be.
-    if (liftDb != NULL || startsWith("/gbdb/", version) ||
+    char *path = replaceInUrl(version, "", NULL, resolveDb, "", 0, 0, tdb->track, FALSE, NULL);
+    // A hub is user-supplied, so a hub track may not name just any local file.  Paths under
+    // /gbdb are the exception: that tree is public data, mirrored on hgdownload, so reading
+    // one discloses nothing.  Curated-hub assemblies need this - hs1 and friends are served
+    // to the browser as a hub, which makes their otto tracks hub tracks, and without it
+    // hgTrackUi prints the raw path where the version should be.  quickLifted tracks land
+    // here too, their dataVersion file is under /gbdb on the source assembly.  $D is
+    // substituted before the test, since on a quickLifted track it comes from the hub.
+    if (isPublicDataPath(path) ||
         (!trackHubDatabase(database) && !isHubTrack(tdb->table)))
         {
-        char *path = replaceInUrl(version, "", NULL, resolveDb, "", 0, 0, tdb->track, FALSE, NULL);
         struct lineFile* lf = lineFileMayOpen(path, TRUE);
         if (lf)
             version = lineFileReadAll(lf);
