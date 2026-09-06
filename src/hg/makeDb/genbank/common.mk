@@ -57,7 +57,7 @@ MKDIR = mkdir -p
 STRINGIFY = stringify
 
 %.o: %.c
-	${CC} ${CFLAGS} -c -o $@ $<
+	${CC} ${CFLAGS} ${DEPGEN} -c -o $@ $<
 
 $(GB_BINARCH)/%: ${O} makefile ${LIBGENBANK}
 	@${MKDIR} -p ${GB_BINARCH}

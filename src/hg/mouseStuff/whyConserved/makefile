@@ -13,7 +13,7 @@ whyConserved: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/whyConserved $O $(MYLIBS) $L
 	${STRIP} ${DESTDIR}${BINDIR}/whyConserved${EXE}
 
-trackOverlap: trackOverlap.o
+trackOverlap: trackOverlap.o $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/trackOverlap trackOverlap.o $(MYLIBS) $L
 	${STRIP} ${DESTDIR}${BINDIR}/trackOverlap${EXE}
 

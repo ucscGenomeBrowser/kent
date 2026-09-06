@@ -10,7 +10,7 @@ A = makeTrackIndex
 
 O = $A.o
 
-$A: ${O}
+$A: ${O} ${MYLIBS}
 	@${MKDIR} "${DESTDIR}${BINDIR}"
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}

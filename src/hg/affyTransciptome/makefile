@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(L)
 O = affyPairsToSample normalizeSampleFile avgTranscriptomeExps maxTranscriptomeExps scaleSampleFiles averageZoomLevels \
 	groupSamples
 
-%: %.c 
+%: %.c $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o ${DESTDIR}${BINDIR}/$@ $(addsuffix .c,$@) $(MYLIBS) ${L}
 
 all : $(O)

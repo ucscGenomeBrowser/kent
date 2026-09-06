@@ -18,5 +18,5 @@ compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
-testVisiSearch:  visiSearch.o testVisiSearch.o
+testVisiSearch:  visiSearch.o testVisiSearch.o ${MYLIBS}
 	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}

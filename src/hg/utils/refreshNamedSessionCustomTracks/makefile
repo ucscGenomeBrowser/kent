@@ -3,7 +3,7 @@ A = refreshNamedSessionCustomTracks
 include ${kentSrc}/inc/userApp.mk
 
 %.o: %.c
-	${CC} -DCGI_BIN=\"${CGI_BIN}\" ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} -DCGI_BIN=\"${CGI_BIN}\" ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
 ifeq (${SYS},Darwin)
 # refreshNamedSessionCustomTracks uses sigtimedwait, which is not available on OS/X, despite being POSIX

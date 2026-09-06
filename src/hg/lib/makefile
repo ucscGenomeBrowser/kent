@@ -51,7 +51,7 @@ else
 endif
 
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) libDir
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
@@ -84,3 +84,9 @@ tags:
 
 test:
 	cd tests && ${MAKE} test
+
+# The objects in the subdirectories need their generated header dependencies
+# too, and common.mk only looks in the current directory.  This sits at the foot
+# of the file so the rules it brings in cannot become the default goal.
+# refs #36621
+-include $(wildcard cgapSage/*.d encode/*.d encode3/*.d)

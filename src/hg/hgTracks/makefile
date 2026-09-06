@@ -41,14 +41,14 @@ else
 endif
 
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
 mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
 compile: compileMain ${RENDERA}
 
-compileMain: $O
+compileMain: $O ${MYLIBS}
 	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
 	cp extTools.ra ${CGI_BIN_DEST}
 

@@ -11,7 +11,7 @@ A = wikiPlot
 O = wikiPlot.o
 
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
 compile: $O
 	${CC} -o $A $O ${MYLIBS} ${L}
