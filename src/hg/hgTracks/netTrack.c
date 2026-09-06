@@ -247,9 +247,13 @@ struct chainNet *net;
 if (tg->isBigBed)
     {
     char *fileName = hReplaceGbdb(trackDbSetting(tg->tdb, "bigDataUrl"));
+    char *quickLiftFile = trackDbSetting(tg->tdb, "quickLiftUrl");
     if (fileName == NULL)
         errAbort("No bigDataUrl in track %s", tg->track);
-    net = chainNetLoadRangeHub(fileName, chromName, seqStart, seqEnd);
+    if (quickLiftFile != NULL)
+        net = chainNetLoadRangeQuickLift(quickLiftFile, fileName, chromName, seqStart, seqEnd);
+    else
+        net = chainNetLoadRangeHub(fileName, chromName, seqStart, seqEnd);
     }
 else
     net = chainNetLoadRange(database, tg->table, chromName,

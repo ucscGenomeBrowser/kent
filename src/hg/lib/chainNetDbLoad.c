@@ -17,6 +17,8 @@
 #include "netAlign.h"
 #include "bigNet.h"
 #include "bigBed.h"
+#include "bed.h"
+#include "quickLift.h"
 #include "chainNetDbLoad.h"
 #include "chromAlias.h"
 
@@ -217,6 +219,35 @@ fill->qTrf = bn->qTrf;
 return fill;
 }
 
+static struct cnlHelper *cnlHelperNew(char *tName)
+/* A place to collect net rows by level, before helpToNet rebuilds the tree from
+ * them.  tName is not allocated here; helpToNet clones it. */
+{
+struct cnlHelper *help;
+AllocVar(help);
+help->tName = tName;
+help->nameHash = hashNew(8);
+help->maxDepth = 40;
+AllocArray(help->levels, help->maxDepth);
+return help;
+}
+
+static void cnlHelperAddBigNet(struct cnlHelper *help, char *fileName, struct bigNet *bn,
+                               int tStart, int tEnd)
+/* Add one bigNet row to the helper at the target range given.  That is the row's own
+ * range for a plain bigNet, and where the row landed for a quickLifted one. */
+{
+struct cnFill *fill;
+
+if (bn->level < 1 || bn->level >= help->maxDepth)
+    errAbort("%s has level %d, net levels run from 1 to %d",
+            fileName, bn->level, help->maxDepth-1);
+fill = cnFillFromBigNet(bn, help->nameHash);
+fill->tStart = tStart;
+fill->tSize = tEnd - tStart;
+slAddHead(&help->levels[bn->level], fill);
+}
+
 struct chainNet *chainNetLoadRangeHub(char *fileName, char *chrom, int start, int end)
 /* Load the parts of a bigNet file that intersect range into a chainNet.
  * Note the net->size field is not filled in. */
@@ -236,12 +267,7 @@ if (bbList == NULL)
     return NULL;
     }
 
-AllocVar(help);
-help->tName = chrom;	/* helpToNet clones this. */
-help->nameHash = hashNew(8);
-help->maxDepth = 40;
-AllocArray(help->levels, help->maxDepth);
-
+help = cnlHelperNew(chrom);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct bigNet bn;
@@ -249,15 +275,69 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (fieldCount != BIGNET_NUM_COLS)
         errAbort("%s has %d fields, bigNet needs %d", fileName, fieldCount, BIGNET_NUM_COLS);
     bigNetStaticLoad(bedRow, &bn);
-    if (bn.level < 1 || bn.level >= help->maxDepth)
-        errAbort("%s has level %d, net levels run from 1 to %d",
-                fileName, bn.level, help->maxDepth-1);
-    slAddHead(&help->levels[bn.level], cnFillFromBigNet(&bn, help->nameHash));
+    cnlHelperAddBigNet(help, fileName, &bn, bn.chromStart, bn.chromEnd);
     }
 
 net = helpToNet(&help);
 bbiFileClose(&bbi);
 lmCleanup(&lm);
+return net;
+}
+
+struct bigNet *bigNetFromInterval(struct bbiFile *bbi, struct bigBedInterval *bb,
+                                  char *fileName, struct bigNet *bn)
+/* Fill in bn from one interval of a bigNet file.  The chrom name is the one the file
+ * carries, which for a quickLifted net is in the source assembly. */
+{
+char *bedRow[BIGNET_NUM_COLS];
+char startBuf[16], endBuf[16];
+char chromName[256];
+int fieldCount;
+
+/* -1 rather than a remembered chromId: bbiCachedChromLookup leaves the buffer alone
+ * when the id matches, so a cache that outlives the buffer returns stale bytes. */
+bbiCachedChromLookup(bbi, bb->chromId, -1, chromName, sizeof(chromName));
+fieldCount = bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+if (fieldCount != BIGNET_NUM_COLS)
+    errAbort("%s has %d fields, bigNet needs %d", fileName, fieldCount, BIGNET_NUM_COLS);
+bigNetStaticLoad(bedRow, bn);
+return bn;
+}
+
+struct chainNet *chainNetLoadRangeQuickLift(char *quickLiftFile, char *fileName,
+                                            char *chrom, int start, int end)
+/* Load the part of a bigNet file that quickLifts into chrom:start-end, and build a
+ * chainNet in the destination assembly's coordinates.  Only the target side of the net
+ * moves; the query side describes a third assembly and is carried across untouched.
+ * Note the net->size field is not filled in. */
+{
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+struct hash *chainHash = NULL;
+struct bigBedInterval *bb, *bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom,
+                                                           start, end, &chainHash);
+struct cnlHelper *help = NULL;
+struct chainNet *net;
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    /* Lift through the same code every other quickLift track uses, so a net row lands
+     * where a bed of the same span would.  Only the target range comes from the lifted
+     * bed; the rest of the row is read from the interval it came from. */
+    struct bed *bed = quickLiftIntervalsToBedClip(bbi, chainHash, bb);
+    struct bigNet bn;
+
+    if ((bed == NULL) || !sameString(bed->chrom, chrom))
+        continue;
+    bigNetFromInterval(bbi, bb, fileName, &bn);
+    if (help == NULL)
+        help = cnlHelperNew(chrom);
+    cnlHelperAddBigNet(help, fileName, &bn, bed->chromStart, bed->chromEnd);
+    }
+
+bbiFileClose(&bbi);
+if (help == NULL)
+    return NULL;
+net = helpToNet(&help);
 return net;
 }
 

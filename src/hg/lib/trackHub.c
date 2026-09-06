@@ -1952,6 +1952,7 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        startsWithNoCase("narrowPeak", tdb->type) || \
        startsWithNoCase("broadPeak", tdb->type) || \
        startsWithNoCase("bigLolly", tdb->type) || \
+       startsWithNoCase("bigNet", tdb->type) || \
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {
@@ -1962,6 +1963,7 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
 
 // make sure we have a bigDataUrl
 if (startsWithNoCase("bigBed", tdb->type) || \
+       startsWithNoCase("bigNet", tdb->type) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
