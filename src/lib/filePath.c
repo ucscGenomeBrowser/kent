@@ -233,7 +233,7 @@ while (TRUE)
     if (end == NULL)
         break;
     else
-        p = end++;
+        p = end + 1;
     }
 return TRUE;
 }

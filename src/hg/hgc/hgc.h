@@ -540,8 +540,14 @@ void printAddWbr(char *text, int distance);
  */
 
 void printIframe(struct trackDb *tdb, char *itemName);
-/* print an iframe with the URL specified in trackDb (iframeUrl), can have
- * the standard codes in it (like $$ for itemName, etc) */
+/* Prepare an iframe with the URL specified in trackDb (iframeUrl), can have
+ * the standard codes in it (like $$ for itemName, etc). The iframe is written
+ * out later, by printPendingIframe(). */
+
+void printPendingIframe();
+/* Write out the iframe queued up by printIframe(), if there is one. The
+ * position-printing routines call this, so the iframe ends up under the
+ * "View DNA" line with the other details. */
 
 char *getIdInUrl(struct trackDb *tdb, char *itemName);
 /* If we have an idInUrlSql tag, look up itemName in that, else just

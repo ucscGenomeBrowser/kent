@@ -764,6 +764,7 @@ if (featDna && end > start)
 	   database, start, (item != NULL ? cgiEncode(item) : ""),
 	   cgiEncode(chrom), start, end, strand, tbl, trackHubSkipHubName(database), trackHubSkipHubName(hGenome(database)));
     }
+printPendingIframe();
 }
 
 void printPosOnScaffold(char *chrom, int start, int end, char *strand)
@@ -785,6 +786,7 @@ void printPosOnScaffold(char *chrom, int start, int end, char *strand)
 	printf("<B>Strand:</B> %s<BR>\n", strand);
     else
 	strand = "?";
+    printPendingIframe();
 }
 
 void printPos(char *chrom, int start, int end, char *strand, boolean featDna,
@@ -934,9 +936,14 @@ else
 return url;
 }
 
+static struct dyString *pendingIframe = NULL;  // see printIframe() below
+
 void printIframe(struct trackDb *tdb, char *itemName)
-/* print an iframe with the URL specified in trackDb (iframeUrl), can have 
+/* Prepare an iframe with the URL specified in trackDb (iframeUrl), can have 
  * the standard codes in it (like $$ for itemName, etc)
+ * The iframe is not written out here: it is held back and printed by
+ * printPendingIframe(), just after the position / "View DNA" block, so it shows
+ * up with the rest of the item details instead of above them. refs #37595
  */
 {
 char *url = getUrlSetting(tdb, "iframeUrl");
@@ -966,7 +973,8 @@ char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%
 // browsers ignore 'unsafe-inline', so an un-nonced inline script never runs.
 // The script stays here, ahead of the iframe, so resizeIframe is defined
 // before the iframed page loads and calls it.
-printf(" \
+dyStringFree(&pendingIframe);
+pendingIframe = dyStringCreate("<br> \
 <script nonce='%s'> \
 function resizeIframe(height) \
 { \
@@ -976,6 +984,17 @@ function resizeIframe(height) \
  \
 <iframe id='hgcIframe' src='%s' %s></iframe> \
 <p>", getNonce(), eUrl, iframeOptions);
+}
+
+void printPendingIframe()
+/* Write out the iframe queued up by printIframe(), if there is one. Called from
+ * the position-printing routines so that the iframe lands under the "View DNA"
+ * line, with the other details, and not at the top of the page. */
+{
+if (pendingIframe == NULL)
+    return;
+fputs(pendingIframe->string, stdout);
+dyStringFree(&pendingIframe);
 }
 
 void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabel, 
@@ -3732,6 +3751,8 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
+// safety net: a few detail pages never print a position, so flush the iframe here
+printPendingIframe();
 if (!isCustomTrack(tdb->track) && !isMyVariantsType(tdb->type))
     {
     printRelatedTracks(database, trackHash, tdb, cart);
@@ -5100,10 +5121,13 @@ if (differentString(type, "bigInteract") && differentString(type, "interact"))
     {
     // skip generic URL code as these may have multiple items returned for a click
     itemForUrl = getIdInUrl(tdb, item);
-    if (itemForUrl != NULL && trackDbSetting(tdb, "url") && differentString(type, "bigBed")
+    // the big* types print their own url and iframe, over in bigBedClick.c
+    if (itemForUrl != NULL && differentString(type, "bigBed")
             && differentString(type, "bigPsl") && differentString(type, "bigGenePred"))
         {
-        printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+        if (trackDbSetting(tdb, "url"))
+            printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+        // a track can have an iframeUrl without a url, so this is not under the test above
         printIframe(tdb, itemForUrl);
         }
     }

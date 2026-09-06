@@ -1,0 +1,125 @@
+# Tandem Repeat Variation, shared by all human assemblies.
+#
+# ALPHA ONLY, ON PURPOSE.  This is the version that follows STRchive's GitHub
+# releases and puts the track on hg19 and hs1.  It is held back from beta and
+# public until the sysadmins install the strchiveAutoPush cron (see
+# kent/src/hg/utils/otto/strchive/strchiveAutoPush and #38268) -- without that
+# push, the RR would advertise data it does not have.  hg38/strVar.ra is the
+# released version and is tagged beta,public so the two never overlap.
+#
+# TO RELEASE, once the auto-push is running:
+#   - drop the "alpha" from "include strVarNew.ra alpha" in human/trackDb.ra
+#   - delete human/hg38/strVar.ra, strVar.html and strchive.html, and the
+#     "include strVar.ra beta,public" line in human/hg38/trackDb.ra
+#   - rename strVarNew.ra/.html and strchiveNew.html back to strVar/strchive
+#     and drop the "html strVarNew" / "html strchiveNew" lines below
+#
+# The bigDataUrls use $D rather than a hardcoded assembly, and hgTrackDb -strict
+# drops any track whose bigDataUrl file is not there.  So a member appears only on
+# the assemblies it was actually built for: today STRchive is on hg19, hg38 and hs1
+# and the rest are hg38-only.  To add a member on another assembly, put the file in
+# /gbdb/<db>/strVar/ and rebuild trackDb -- nothing here needs to change.
+
+track strVar
+html strVarNew
+shortLabel Tandem Repeat Variation
+longLabel Tandem Repeat Variation
+group varRep
+superTrack on
+visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#041026 "Released Apr. 10, 2026"
+
+    track webstr
+    shortLabel WebSTR
+    longLabel WebSTR Short Tandem Repeat Loci (EnsembleTR Panel, 1000 Genomes)
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/$D/strVar/webstr.bb
+    visibility dense
+    superTrack strVar dense
+    # hg38 is not $D here on purpose: this is WebSTR's own url and we only built
+    # this track for hg38, so it is the only assembly where the track shows up
+    urls repeatId="https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38"
+    url https://webstr.ucsd.edu/locus?repeat_id=$<repeatId>&genome=hg38
+    urlLabel Link to repeat record in WebSTR
+    searchIndex name
+    mouseOver <b>Repeat motif:</b> $motif ($period bp) <br> <b>Copies in ref:</b> $numCopies <br> <b>Heterozygosity:</b> $het
+    scoreFilter 0
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
+    detailsScript.histogram.afrHist {"title":"AFR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.amrHist {"title":"AMR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.easHist {"title":"EAS Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.sasHist {"title":"SAS Allele Frequencies","xLabel":"Allele size (repeat copies)"}
+
+    track strchive
+    html strchiveNew
+    shortLabel STRchive
+    longLabel STRchive Disease-Associated Short Tandem Repeat Loci
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/$D/strVar/strchive.bb
+    visibility pack
+    superTrack strVar pack
+    url https://strchive.org/loci/$$
+    urlLabel STRchive locus page
+    searchIndex name
+    mouseOver <b>Gene:</b> $gene <br> <b>Motif:</b> $referenceMotif <br> <b>Minimum pathogenic repeat:</b> $pathogenicMin <br> <b>Mode of inheritance:</b> $inheritance <br> <b>Evidence:</b> $evidence <br> <b>Associated disease(s):</b> $disease
+    filterValues.evidence Definitive,Strong,Moderate,Limited,Provisional,Disputed,Refuted
+    filterType.evidence multiple
+    filterLabel.evidence Evidence for the locus-disease association
+    # written by the strchive otto job, kent/src/hg/utils/otto/strchive
+    dataVersion  /gbdb/$D/strVar/strchive.version.txt
+
+    track trexplorer
+    shortLabel TRExplorer
+    longLabel TRExplorer V2 Tandem Repeat Catalog
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/$D/strVar/trexplorer.bb
+    visibility dense
+    superTrack strVar dense
+    urls locusId="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
+    urlLabel TRExplorer locus page
+    searchIndex name
+    mouseOver <b>Motif:</b> $referenceMotif ($motifSize bp) <br> <b>Copies in ref:</b> $numRepeats <br> <b>Purity:</b> $repeatPurity <br> <b>Heterozygosity:</b> $het <br> <b>Gene:</b> $geneName ($geneRegion)
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
+    detailsScript.histogram.tenKAlleleHist {"title":"TenK10K Allele Distribution","xLabel":"Allele size (repeat copies)"}
+    detailsScript.histogram.hprcAlleleHist {"title":"HPRC256 Allele Distribution","xLabel":"Allele size (repeat copies)"}
+
+    track tommoStr
+    shortLabel ToMMo 61k STR
+    longLabel ToMMo 61KJPN Short Tandem Repeat Allele Counts (Expansion Hunter)
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/$D/strVar/tommoStr.bb
+    visibility dense
+    superTrack strVar dense
+    searchIndex name
+    mouseOver <b>Motif:</b> $motif ($period bp) <br> <b>Ref copies:</b> $numCopies <br> <b>Mean:</b> $mean, <b>Median:</b> $median <br> <b>Heterozygosity:</b> $het
+    scoreFilter 0
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
+    detailsScript.histogram.alleleHist {"title":"Allele Count Distribution (61K Japanese)","xLabel":"Allele size (repeat copies)"}
+
+    track viennaVntr
+    shortLabel 1KG Vienna ONT VNTR
+    longLabel 1000 Genomes Vienna ONT VNTR Allele Statistics (VAMOS, 1,019 samples, long-read)
+    type bigBed 9 +
+    itemRgb on
+    bigDataUrl /gbdb/$D/strVar/viennaVntr.bb
+    visibility dense
+    superTrack strVar dense
+    searchIndex name
+    skipEmptyFields on
+    mouseOver <b>Avg motif:</b> $ruLenAvg bp <br> <b>Median repeat units:</b> $medianRus (range: $minRus-$maxRus) <br> <b>Unique alleles:</b> $numUniqueVntrs <br> <b>Heterozygosity:</b> $het
+    scoreFilter 0
+    filterByRange.het on
+    filter.het 0:1
+    filterLimits.het 0:1
+    dataVersion v1.1

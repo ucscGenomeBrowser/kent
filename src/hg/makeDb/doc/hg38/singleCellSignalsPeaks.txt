@@ -174,7 +174,17 @@
 # combined-stage tracks. Progenitors are prenatal only, so 9 new files, not 10.
 # The 4 combined-stage tracks were then dropped (section 1b), leaving the 9
 # stage-split ones, so every BrainVar track is now prenatal or postnatal.
+# The description page's dataset list lagged that drop by one commit: it still
+# said 13 BrainVar signal subtracks and "all nuclei together and ... prenatal and
+# postnatal separately", and 2 neuro-degen-atac peak subtracks. Corrected to 9 and
+# 1, with the combined-stage wording removed. BrainVar was also the only hg38
+# dataset with no citation; it now cites Werling et al. 2020, which described the
+# cohort, with the caveat that the single-nucleus data shown here were not part of
+# that paper (the Cell Browser desc.conf makes the same distinction). hg38 is now
+# 10 references, mm10 still 7.
+#
 # Their methods text says "a tile size of 1 kb" but the data is 100 bp (every
 # interval is 100 bp wide on 100 bp boundaries, matching the TileSize-100
-# filenames); 100 bp is what the description page states. Worth confirming with
-# them which they intended.
+# filenames). The submitters confirmed 100 bp on 2026-09-05, so the 1 kb in their
+# methods text is an error and the description page's 100 bp is right. No change
+# needed to the page or the data.

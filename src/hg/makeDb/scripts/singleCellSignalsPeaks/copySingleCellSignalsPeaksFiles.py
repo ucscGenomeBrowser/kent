@@ -104,12 +104,18 @@ def colors_json(pal):
     ignored by the JS, and it keeps hg38 and mm10 sharing one class->color mapping.
     """
     colors = {}
-    for line in open(pal):
-        f = line.rstrip("\n").split("\t")
-        if len(f) < 2 or not f[0].strip():
-            continue
-        rgb = [int(x) for x in f[1].split(",")]
-        colors[f[0]] = "#%02X%02X%02X" % tuple(rgb)
+    with open(pal) as fh:
+        for lineNo, line in enumerate(fh, 1):
+            f = line.rstrip("\n").split("\t")
+            if len(f) < 2 or not f[0].strip():
+                continue
+            try:
+                rgb = [int(x) for x in f[1].split(",")]
+                colors[f[0]] = "#%02X%02X%02X" % tuple(rgb)
+            except (ValueError, TypeError):
+                raise SystemExit("ERROR: %s line %d has %r where an R,G,B triple of "
+                                 "integers was expected, so the facet color swatch for "
+                                 "%r cannot be written." % (pal, lineNo, f[1], f[0]))
     if not colors:
         raise SystemExit("ERROR: no class/color rows read from %s, so the facet color "
                          "swatches cannot be written." % pal)
