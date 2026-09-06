@@ -304,6 +304,22 @@ bigNetStaticLoad(bedRow, bn);
 return bn;
 }
 
+static boolean cnlSeenBefore(struct hash *seen, struct bigNet *bn, int tStart, int tEnd)
+/* Has this row already been added?  quickLiftGetIntervals can return one source row
+ * twice, through two chains whose padded query ranges overlap, and helpToNet cannot
+ * tell two identical parents apart: the second inherits no children and then draws as
+ * one solid box over the first one's gaps.  A level, a target range and a chain id
+ * together name a row in a net, so they are enough to recognize the repeat. */
+{
+char key[128];
+
+safef(key, sizeof key, "%u:%d:%d:%u", bn->level, tStart, tEnd, bn->chainId);
+if (hashLookup(seen, key) != NULL)
+    return TRUE;
+hashAdd(seen, key, NULL);
+return FALSE;
+}
+
 struct chainNet *chainNetLoadRangeQuickLift(char *quickLiftFile, char *fileName,
                                             char *chrom, int start, int end)
 /* Load the part of a bigNet file that quickLifts into chrom:start-end, and build a
@@ -316,6 +332,7 @@ struct hash *chainHash = NULL;
 struct bigBedInterval *bb, *bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom,
                                                            start, end, &chainHash);
 struct cnlHelper *help = NULL;
+struct hash *seen = hashNew(0);
 struct chainNet *net;
 
 for (bb = bbList; bb != NULL; bb = bb->next)
@@ -326,14 +343,22 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct bed *bed = quickLiftIntervalsToBedClip(bbi, chainHash, bb);
     struct bigNet bn;
 
-    if ((bed == NULL) || !sameString(bed->chrom, chrom))
+    if (bed == NULL)
         continue;
-    bigNetFromInterval(bbi, bb, fileName, &bn);
-    if (help == NULL)
-        help = cnlHelperNew(chrom);
-    cnlHelperAddBigNet(help, fileName, &bn, bed->chromStart, bed->chromEnd);
+    if (sameString(bed->chrom, chrom))
+        {
+        bigNetFromInterval(bbi, bb, fileName, &bn);
+        if (!cnlSeenBefore(seen, &bn, bed->chromStart, bed->chromEnd))
+            {
+            if (help == NULL)
+                help = cnlHelperNew(chrom);
+            cnlHelperAddBigNet(help, fileName, &bn, bed->chromStart, bed->chromEnd);
+            }
+        }
+    bedFree(&bed);
     }
 
+hashFree(&seen);
 bbiFileClose(&bbi);
 if (help == NULL)
     return NULL;

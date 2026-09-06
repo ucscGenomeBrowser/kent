@@ -4229,9 +4229,11 @@ printf("<BR>\n");
 }
 
 static struct netAlign *bigNetLoadOne(struct trackDb *tdb, char *chrom, int start,
-                                      unsigned level)
+                                      unsigned level, boolean *retClipped)
 /* Load the record from a bigNet file at the given level that covers start.
- * Returns NULL if there isn't one. */
+ * Returns NULL if there isn't one.  Sets *retClipped when a quickLifted row would
+ * only lift with its ends pulled in, so the extent reported is the visible part
+ * rather than the whole item. */
 {
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
@@ -4255,21 +4257,38 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct bigNet bn;
     unsigned tStart = bb->start, tEnd = bb->end;
+    boolean thisClipped = FALSE;
 
     if (quickLiftFile != NULL)
         {
-        /* The unclipped lift, so the details page reports the item's whole extent. */
+        /* The unclipped lift first, so the page can report the item's whole extent.
+         * An item too big for the chains loaded here lifts only with its ends pulled
+         * in, and that is how the image drew it, so fall back to the clipped lift
+         * rather than reporting an item the reader can plainly see as missing. */
         struct bed *bed = quickLiftIntervalsToBed(bbi, chainHash, bb);
-        if ((bed == NULL) || !sameString(bed->chrom, chrom))
+        if (bed == NULL)
+            {
+            bed = quickLiftIntervalsToBedClip(bbi, chainHash, bb);
+            thisClipped = TRUE;
+            }
+        if (bed == NULL)
             continue;
+        if (!sameString(bed->chrom, chrom))
+            {
+            bedFree(&bed);
+            continue;
+            }
         tStart = bed->chromStart;
         tEnd = bed->chromEnd;
+        bedFree(&bed);
         }
     if ((tStart > start) || (tEnd <= start))
         continue;
     bigNetFromInterval(bbi, bb, fileName, &bn);
     if (bn.level != level)
         continue;
+    if (retClipped != NULL)
+        *retClipped = thisClipped;
     AllocVar(na);
     na->level = bn.level;
     na->tName = cloneString(chrom);
@@ -4344,6 +4363,9 @@ boolean isBig = startsWith("big", tdb->type);
  * chain to follow -- only the net itself lifted. */
 boolean isLifted = isBig && (trackDbSetting(tdb, "quickLiftUrl") != NULL);
 struct trackDb *chainTdb = NULL;
+/* Set when a lifted row would only lift with its ends pulled in to the chains we
+ * loaded, so the numbers below describe the visible part and not the whole item. */
+boolean clipped = FALSE;
 
 if (isBig && !isLifted)
     {
@@ -4358,7 +4380,7 @@ if (otherOrg == NULL)
     }
 if (isBig)
     {
-    net = bigNetLoadOne(tdb, seqName, start, sqlUnsigned(item));
+    net = bigNetLoadOne(tdb, seqName, start, sqlUnsigned(item), &clipped);
     if (net == NULL)
         errAbort("Couldn't find %s:%d at level %s in %s", seqName, start, item, tdb->track);
     }
@@ -4432,9 +4454,10 @@ if ((net->chainId != 0) && (!isBig || (chainTdb != NULL)))
     }
 else if ((net->chainId != 0) && isLifted)
     {
-    printf("<BR>This net was lifted to %s from %s.  Its chains are in %s, so the "
-           "alignment cannot be shown here.<BR>\n",
-           database, trackDbSetting(tdb, "quickLiftDb"), trackDbSetting(tdb, "quickLiftDb"));
+    char *sourceDb = trackDbSetting(tdb, "quickLiftDb");
+    printf("<BR>This net was lifted from %s, so its chains are not on this assembly "
+           "and the alignment cannot be shown here.<BR>\n",
+           isEmpty(sourceDb) ? "another assembly" : sourceDb);
     htmlHorizontalLine();
     }
 printf("<B>Type:</B> %s<BR>\n", net->type);
@@ -4480,7 +4503,11 @@ if (net->tEnd >= net->tStart)
     printLabeledNumber(org, "size", net->tEnd - net->tStart);
 if (net->qEnd >= net->qStart)
     printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
+if (clipped)
+    printf("<BR>Fields above refer to the part of this chain or gap that could be "
+           "placed on this assembly, not to the whole of it.<BR>\n");
+else
+    printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 netAlignFree(&net);
 }
 
