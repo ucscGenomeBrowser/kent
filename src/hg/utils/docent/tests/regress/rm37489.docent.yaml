@@ -1,0 +1,50 @@
+# #37489 -- a quickLifted track showed the TEMPLATE of its dataVersion setting instead of
+# the version.
+#
+# ClinVar's trackDb carries `dataVersion /gbdb/$D/bbi/clinvar/version.txt`, and the browser
+# reads that file and prints what is in it. On a lifted track $D was never substituted, so
+# the settings page showed the reader:
+#
+#     Version: /gbdb/$D/bbi/clinvar/version.txt
+#
+# a path with an unexpanded variable in it, where a release date belongs.
+#
+# This is the first script here that asserts a VALUE rather than the shape of a page.
+# Everything else says a row was drawn, or that a page does not carry an error. None of
+# them would notice a track that draws perfectly and tells the reader something false, and
+# that is most of what a data bug looks like.
+#
+# The positive check is the PREFIX only. "ClinVar Release:" is written by the pipeline and
+# does not move; the date after it changes every month, and asserting it would make this
+# script fail on the next ClinVar update, which is not a browser regression. noText: "$D"
+# is the symptom itself, and it cannot stand alone: a page that failed to render carries no
+# "$D" either.
+#
+# The lift is done here rather than loaded from Gerardo's RM_37489 session. That session
+# still exists on genome-test but its quickLift is gone -- it comes back as plain hg38 with
+# clinvarMain, clinvarCnv and clinvarSubLolly and no hub_ prefix on any of them. A lifted
+# session dies with the trash it points at, so a script that needs a lift has to make one.
+target: genome-test
+db: hg38
+position: chr13:32396673-32400065
+reset: true
+fast: true
+steps:
+  - go: chr13:32396673-32400065
+  - hide: all
+  - track: {clinvarMain: pack}
+  - expect: {rows: [clinvarMain]}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [clinvarMain], noText: "Warning/Error"}
+
+  # The lifted COMPOSITE's settings page, which is where dataVersion is printed. Measured
+  # on genome-test: a lifted view carries no hgTrackUi link for the subtrack at all. Every
+  # settings link under ClinVar points at the container, g=hub_<n>_clinvar, and there are
+  # four of them on the page, so the first one is named explicitly rather than left to a
+  # selector that matches several.
+  - click: 'a[href*="hgTrackUi"][href*="_clinvar"] >> nth=0'
+  - expect:
+      text: "ClinVar Release:"
+      noText: "$D"
