@@ -196,7 +196,8 @@ OTTO = {
             "updates a hub rather than a trackDb track: insightClinVar and "
             "pms2clParalogVars, on hg19 and hg38"),
  "malacards":("MalaCards","table",
-              "loads the hg38 malacards table, which no track points at"),
+              "loads the hg38 malacards table; no track shows it, but the gene "
+              "details page uses it for the MalaCards disease links"),
  "refSeqHistorical":("RefSeq Historical","notifier",
                      "checks whether NCBI has a new release; changes no data"),
  "vcepVersions":("VCEP spec versions","notifier",
