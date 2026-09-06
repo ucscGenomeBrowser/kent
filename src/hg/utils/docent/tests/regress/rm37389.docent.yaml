@@ -1,45 +1,32 @@
 # #37389 -- the track description was missing from a quickLifted hgc page when the source
 # assembly is a GenArk hub.
 #
-# THIS IS AN XFAIL, and it is a REGRESSION ON MASTER, not a fix that never worked. That
-# distinction was got wrong twice before it was measured properly, so here is what was
-# measured, on 2026-09-05, from scratch and with no session at all:
+# It was broken twice and by different causes, which is why the comment is long.
 #
-#     genome.ucsc.edu   (v502)   lifted page HAS the description
-#     hgwbeta           (v503)   lifted page HAS the description
-#     genome-test       (master) lifted page does NOT
+# The v498 fix (5aed2d465f1) filled in a TODO branch in getTrackHtml() (hg/lib/hui.c) that
+# had done nothing whenever quickLiftDb named a hub assembly. That fix works.
 #
-# So #37389's fix (5aed2d465f1, v498) works, and something that landed on master after
-# v503_branch was cut broke it again. It has not reached users.
+# Then 1258d7f65e7 ("trackHub: keep a description a track inherited from its parent", refs
+# #38126) broke it again on master, and only on master: measured 2026-09-05, v502 and v503
+# both drew the description and the tip did not. It made trackHubAddOneDescription return
+# early rather than assign a failed fetch, so tdb->html keeps a non-NULL value; hgc's
+# getHtmlFromSelfOrParent asked `tdb->html == NULL` before falling back to the source hub,
+# that test stopped holding, and getTrackHtml was never called. Filed as #38275 and fixed
+# in 4be6477ebcb by asking isEmpty() instead.
 #
-# It is specific to the GenArk branch of getTrackHtml. A plain db-to-db quickLift keeps its
-# description on genome-test: hg19 refGene lifted to hg38 still prints one.
+# So this script has now watched the behaviour break and come back, which is more than the
+# rest of the suite can say. It was an .xfail between the two.
 #
-# What has been ruled out, each by measurement rather than by reading:
+# The session is braney/crash1, the same one rm37388 uses, because it pins a state that is
+# awkward to build in steps: hg38 with a quickLift hub active whose source is the GenArk
+# GCA_018466835.2, and an xenoRefGene track from that hub. rm38272 uses it too, so preflight
+# covers it for all three.
 #
-#   * hui.c is byte identical between v503_base and origin/master, so getTrackHtml itself
-#     did not change. Something it calls did.
-#   * htmlSanitize(), which #38126 added to trackHubAddOneDescription in this window, is
-#     not eating it. Run over this hub's own xenoRefGene.html it returns 3674 bytes from
-#     3354 with the text intact.
-#   * the fixture is fine: GCA_018466835.2 is in the genark table, the hub declares
-#     `html html/GCA_018466835.2_HG02257_mat_hprc_f2.xenoRefGene`, and that file is served
-#     200 from hgdownload.
-#   * getTrackHtml IS reached. printTrackHtml() (hgc.c:3745) takes liftDb straight from the
-#     quickLiftDb setting, which is certainly present here since it is the string in
-#     #38272's error.
-#
-# BISECTED, and fixed. The breaking commit is 1258d7f65e7 ("trackHub: keep a description a
-# track inherited from its parent", refs #38126): it made trackHubAddOneDescription return
-# early rather than assign a failed fetch, so tdb->html keeps a non-NULL value and hgc's
-# `if (liftDb && (tdb->html == NULL))` at hgc.c:3722 never fires. Filed as #38275 and fixed
-# on master in 4be6477ebcb by asking isEmpty() instead. This script should start passing
-# once that build reaches genome-test, and `make test` will report the xfail as a failure --
-# which is the signal to delete the .xfail and this comment.
-#
-# The script asserts the FIXED behavior, the same as every other script here, and is marked
-# .xfail so the suite stays green. If it starts passing, `make test` reports that as a
-# failure, which is the signal to delete the .xfail and this comment.
+# A separate from-scratch reproduction, which needs no session at all and can be pointed at
+# any server, is kept at
+# /hive/groups/browser/redmineNotes/38252/claude/repro_37388_hgTrackUi.js -- it was written
+# for #38272 but walks the same ground. There is also a Docent tour of this bug at
+# ~/docentTours/bugs/rm37389.docent.yaml, recorded while it was broken.
 target: genome-test
 db: hg38
 reset: true
@@ -55,6 +42,9 @@ steps:
   - expect: {noText: "Couldn't set connection database", text: "Item: NM_126741.2"}
 
   # The assertion this script exists for. "RefSeq mRNAs mapped to this assembly" is the
-  # longLabel and is on the page already, so the check is on the section heading that
-  # printTrackHtml writes and on a phrase from the hub's own description file.
+  # longLabel and is on the page whether or not the description rendered, so neither half of
+  # this is that: "Description" is the heading printTrackHtml writes above the block, and the
+  # second is a phrase out of the hub's own description file, which is the only thing that
+  # can only be there if the file was really fetched from the GenArk hub.
   - expect: {text: "Description"}
+  - expect: {text: "translated blat alignments"}
