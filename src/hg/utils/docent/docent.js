@@ -1974,16 +1974,38 @@ const T_START = Date.now();
           // Named (item:/title:/value:) picks the item by identity; positional
           // (at:/frac:/x:) takes the box nearest that point, for a track whose items
           // cannot be named at all.
+          //
+          // `raw: true` presses the mouse where a user would press it and lets the page do
+          // whatever it does, instead of following the link. That is a different gesture,
+          // not a slower way to reach the same page: an item click on most tracks is
+          // answered by an ajax DIALOG, and the dialog is where a whole class of bug lives
+          // (hgTracks hanging on the SECOND click of the same item, #36805). Following the
+          // href never opens a dialog, so it can never see one. With raw: and no item name
+          // it is a bare point on the row -- the ruler carries no hgc map boxes at all, and
+          // a click on it is the gesture in #27113.
           const named = arg.item ?? arg.title ?? arg.value;
           const it = (named != null)
             ? await itemXY(arg.track, named,
                            arg.title != null && arg.item == null && arg.value == null)
-            : await areaXY(arg.track, arg);
+            : (arg.raw ? await posXY(arg.track, arg) : await areaXY(arg.track, arg));
           await glide(it.x, it.y); await sleep(200);
           // A raw click on the data area is swallowed by hgTracks' drag-select handler, so
-          // follow the item's own map-box link (the hgc detail page) directly.
-          if (it.href) await nav(it.href);
-          else { await page.mouse.click(it.x, it.y); await page.waitForLoadState('load').catch(() => {}); await captureState(); }
+          // by default follow the item's own map-box link (the hgc detail page) directly.
+          if (it.href && !arg.raw) await nav(it.href);
+          else {
+            const was = page.url();
+            await page.mouse.click(it.x, it.y);
+            // Answered in one of three ways depending on what was clicked: a navigation, an
+            // ajax dialog, or a new image swapped in place. Wait for whichever arrives
+            // rather than picking one, and never on a fixed sleep, which would flake on a
+            // slow hgc and waste the time on a fast one.
+            await Promise.race([
+              page.waitForSelector('.ui-dialog:visible', { timeout: 20000 }),
+              page.waitForFunction(u => location.href !== u, was, { timeout: 20000 }),
+            ]).catch(() => {});
+            await page.waitForSelector('#imgTbl', { timeout: 20000 }).catch(() => {});
+            await captureState();
+          }
           if (arg.shot) { await shot(arg.shot); return; }
         } else {
           // Plain selector click. Strip target=_blank first so an external link (e.g. a

@@ -1,0 +1,56 @@
+# #27113 -- a single click on the base-position ruler drifted the view one base LEFT
+# instead of recentring symmetrically on the base that was clicked.
+#
+# Three things were fixed in 94f9b53d3db and one was taken back out again (b551f6c3ac8
+# reverted the "0 bases" -> "1 base" scale-bar wording after QA flagged it). What survives
+# is the click behaviour: a single click zooms in 3x, centred symmetrically on the base
+# under the cursor, and a click on the ruler's grey side-label strip no longer hijacks the
+# config pop-up to do a zoom. This script covers the first. The side-label strip is left
+# alone on purpose: posXY puts a fraction inside the DATA area by design, so reaching that
+# strip means addressing a raw pixel outside it and asserting on a second pop-up, which is
+# a different test.
+#
+# ONE BASE is the whole error, so the window has to be small enough for one base to be
+# visible. At the 13kb windows the rest of this suite uses, a pixel is fourteen bases and
+# the bug is not expressible at all. This starts at 100 bases, where a base is about eleven
+# pixels wide.
+#
+# THE ASSERTION IS ARITHMETIC, not three observed strings. The window starts centred on
+# base 155,806,200, every click zooms 3x about the clicked base, and the clicked base is
+# the centre one, so that base stays the centre of every window that follows:
+#
+#     start      155,806,151-155,806,250    100 bases   centre 155,806,200
+#     click 1    155,806,184-155,806,216     33 bases   centre 155,806,200
+#     click 2    155,806,195-155,806,205     11 bases   centre 155,806,200
+#     click 3    155,806,199-155,806,201      3 bases   centre 155,806,200
+#
+# A one-base drift at any click moves every window after it, and the last one is three
+# bases wide, so there is nowhere for it to hide. Each click is asserted separately so a
+# failure names the click that drifted rather than only the end of the chain.
+#
+# This is one of the two scripts here that does anything more than once (rm36805 is the
+# other). A drift of one base per click is not something anyone would file after a single
+# gesture; it is the accumulation that people saw, and a straight-line script cannot see it.
+#
+# raw: true, with no item name, is a bare point on a row. The ruler carries no hgc map boxes
+# at all, so docent's ordinary item click has nothing to follow and this is the only way to
+# express the gesture.
+#
+# Fixed and on the RR on 2026-07-28, so there is no build left to watch this fail on.
+target: genome-test
+db: hg38
+position: chr7:155806151-155806250
+reset: true
+fast: true
+steps:
+  - go: chr7:155806151-155806250
+  - expect: {rows: [ruler], text: "chr7:155,806,151-155,806,250"}
+
+  - click: {track: ruler, frac: 0.5, raw: true}
+  - expect: {text: "chr7:155,806,184-155,806,216"}
+
+  - click: {track: ruler, frac: 0.5, raw: true}
+  - expect: {text: "chr7:155,806,195-155,806,205"}
+
+  - click: {track: ruler, frac: 0.5, raw: true}
+  - expect: {rows: [ruler], text: "chr7:155,806,199-155,806,201"}
