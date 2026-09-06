@@ -52,6 +52,7 @@ UTILS_APPLIST = \
 	mafToBigMaf \
 	mafToBigMafSummary \
 	makeTableList \
+	netToBigNet \
 	oligoMatch \
 	overlapSelect \
 	positionalTblCheck \
@@ -114,6 +115,7 @@ TEST_DIRS = \
 	hgvsToVcf \
 	hubCheck \
 	mafToBigMafSummary \
+	netToBigNet \
 	overlapSelect \
 	pslToBigPsl \
 	refSeqGet \

@@ -743,7 +743,7 @@ else if (sameWord("bigDbSnp", type))
     cType = cfgBigDbSnp;
 else if(startsWith("longTabix", type))
     cType = cfgLong;
-else if (startsWith("netAlign", type)
+else if (startsWith("netAlign", type) || startsWith("bigNet", type)
      || startsWith("net", tdb->track)) // SPECIAL CASE from hgTrackUi which might not be needed
     cType = cfgNetAlign;
 else if(sameWord("bed5FloatScore",       type)

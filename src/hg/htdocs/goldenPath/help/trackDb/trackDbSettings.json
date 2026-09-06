@@ -8,6 +8,7 @@
   "bigBed - Item or Region Track Settings",
   "Item or Region Track Settings - less frequent",
   "bigChain - Pairwise Alignments",
+  "bigNet - Alignment Nets",
   "bigGenePred - Gene Annotations",
   "bigInteract",
   "bigMaf - Multiple Alignments",
@@ -106,6 +107,7 @@
     "bigInteract",
     "bigLolly",
     "bigMaf",
+    "bigNet",
     "bigPsl",
     "bigWig",
     "bam",
@@ -1964,6 +1966,20 @@
    "fmt": "baseColorDefault\n                    <diffBases/diffCodons/itemBases/itemCodons/genomicCodons>",
    "ex": "",
    "desc": "Specifies the default drawing mode."
+  },
+  {
+   "key": "bigNet",
+   "category": "bigNet - Alignment Nets",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigNet"
+   ],
+   "level": "new",
+   "fmt": "type bigNet targetDb chainTrack",
+   "ex": "",
+   "desc": ""
   },
   {
    "key": "bigGenePred",

@@ -37,8 +37,8 @@
   summary: Declares the format of the data and is used to determine display methods and options.
   description: 'Declares the format of the data and is used to determine display methods and options.
     Valid settings for a hub: bam/cram , bigBarChart , bigBed , bigChain , bigGenePred , bigInteract ,
-    bigLolly , bigMaf , bigNarrowPeak , bigPsl , bigWig , halSnake , hic , vcfTabix , vcfPhasedTrio .
-    Detailed descriptions of each type can be found below. In many cases the type setting includes additional
+    bigLolly , bigMaf , bigNarrowPeak , bigNet , bigPsl , bigWig , halSnake , hic , vcfTabix , vcfPhasedTrio
+    . Detailed descriptions of each type can be found below. In many cases the type setting includes additional
     parameters to further specify the data format. Some track types have additional setting requirements,
     to be discussed below.'
   format: type
@@ -95,6 +95,7 @@
   - bigInteract
   - bigLolly
   - bigMaf
+  - bigNet
   - bigPsl
   - bigWig
   - bam
@@ -115,12 +116,12 @@
     setting is required for all data tracks in a track hub. The setting is either the full URL (including
     http: or another protocol) or it is relative to the directory in which the trackDb file containing
     this setting is located. The file must be in one of the supported remote data file formats: bam/cram,
-    bigBarChart, bigBed, bigChain, bigLolly, bigInteract, bigMaf, bigPsl, bigGenePred, bigMethyl, bigNarrowPeak,
-    bigWig, vcfTabix, or hic. Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate index
-    file that must have the same name as the data file plus a standard suffix (".bai" and ".tbi" respectively),
-    unless bigDataIndex is used. All occurrences of the string $D in the URL will be substituted with
-    the genome assembly database name. This allows a trackDb entry to be used with for multiple assemblies.
-    $D substitution is not implemented for track hubs.'
+    bigBarChart, bigBed, bigChain, bigLolly, bigInteract, bigMaf, bigNet, bigPsl, bigGenePred, bigMethyl,
+    bigNarrowPeak, bigWig, vcfTabix, or hic. Note that bam/cram and vcfTabix/vcfPhasedTrio types require
+    a separate index file that must have the same name as the data file plus a standard suffix (".bai"
+    and ".tbi" respectively), unless bigDataIndex is used. All occurrences of the string $D in the URL
+    will be substituted with the genome assembly database name. This allows a trackDb entry to be used
+    with for multiple assemblies. $D substitution is not implemented for track hubs.'
   format: bigDataUrl <url/relativePath>
   examples:
   - bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb
@@ -2685,6 +2686,19 @@
     The genomicCodons , itemCodons and diffCodons are applicable only if the track has CDS info, as specified
     by the baseColorUseCds setting.
   format: "baseColorDefault\n                    <diffBases/diffCodons/itemBases/itemCodons/genomicCodons>"
+  examples: []
+- name: bigNet
+  types:
+  - bigNet
+  roles:
+  - leaf
+  category: bigNet - Alignment Nets
+  context: trackDb
+  level: new
+  required: false
+  summary: ''
+  description: ''
+  format: type bigNet targetDb chainTrack
   examples: []
 - name: bigGenePred
   types:

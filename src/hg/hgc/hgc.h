@@ -99,6 +99,9 @@ void hgcAnchor(char *group, char *item, char *other);
 struct trackDb *tdbForTableArg();
 /* get trackDb for track passed in table arg */
 
+struct trackDb *getTdbForTrackName(char *trackName);
+/* Given a track name (which may have ct_ or hub_ prepended), return its tdb. */
+
 void writeFramesetType();
 /* Write document type that shows a frame set, rather than regular HTML. */
 

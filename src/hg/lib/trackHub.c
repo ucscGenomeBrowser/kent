@@ -1060,6 +1060,7 @@ else
                   startsWithWord("bigGenePred", type) ||
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
+                  startsWithWord("bigNet", type) ||
                   startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBaseView", type) ||
                   startsWithWord("bigRmsk", type) ||
@@ -1516,7 +1517,8 @@ if (bigDataUrl != NULL)
         }
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
              startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
-             startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
+             startsWithWord("bigChain", type)|| startsWithWord("bigNet", type) ||
+             startsWithWord("bigMaf", type) ||
              startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
              startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type) ||
              startsWithWord("bigMethyl", type))

@@ -1,0 +1,15 @@
+net chr22 50818468
+ fill 11474667 4868 chr9 + 88449095 5007 id 23550 score 75185 ali 2697 qDup 3069 type top tN 0 qN 0 tR 854 qR 2910 tTrf 1600 qTrf 553
+  gap 11474911 17 chr9 + 88449345 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
+  gap 11475306 12 chr9 + 88449713 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
+  gap 11475444 27 chr9 + 88449826 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
+  gap 11475503 1646 chr9 + 88449858 782 tN 0 qN 0 tR 854 qR 502 tTrf 0 qTrf 0
+   fill 11475503 1646 chr11 + 58769938 784 id 56275 score 2236 ali 115 qDup 80 type nonSyn tN 0 qN 0 tR 854 qR 40 tTrf 0 qTrf 0
+    gap 11475573 1531 chr11 + 58770018 659 tN 0 qN 0 tR 854 qR 40 tTrf 0 qTrf 0
+  gap 11477657 12 chr9 + 88451155 0 tN 0 qN 0 tR 0 qR 0 tTrf 0 qTrf 0
+  gap 11478751 166 chr9 + 88452236 1097 tN 0 qN 0 tR 0 qR 862 tTrf 166 qTrf 0
+   fill 11478751 166 chr11 - 58780620 166 id 45179 score 4743 ali 166 qDup 166 type nonSyn tN 0 qN 0 tR 0 qR 114 tTrf 166 qTrf 0
+  gap 11479115 123 chr9 + 88453526 384 tN 0 qN 0 tR 0 qR 337 tTrf 123 qTrf 0
+   fill 11479115 123 chr11 + 58751189 116 id 46828 score 2574 ali 115 qDup 116 type nonSyn tN 0 qN 0 tR 0 qR 0 tTrf 123 qTrf 0
+  gap 11479296 99 chr9 + 88453968 0 tN 0 qN 0 tR 0 qR 0 tTrf 41 qTrf 0
+   fill 11479296 99 chr11 + 58751359 113 id 46828 score 2126 ali 95 qDup 113 type nonSyn tN 0 qN 0 tR 0 qR 0 tTrf 41 qTrf 0

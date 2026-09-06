@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!--#set var="TITLE" value="Genome Browser bigNet Track Format" -->
+<!--#set var="ROOT" value="../.." -->
+
+<!-- Relative paths to support mirror sites with non-standard GB docs install -->
+<!--#include virtual="$ROOT/inc/gbPageStart.html" -->
+
+<h1>bigNet Track Format</h1>
+<p>
+A net describes which parts of one genome line up with which parts of another. It is built from
+<a href="chain.html">chains</a>, and it sorts them into levels. The top level holds the best chain
+over each part of the target genome. Inside the gaps of that chain sit the next best chains, and so
+on. The net is how the Genome Browser shows orthology between two assemblies, because it says which
+alignment is the real counterpart of a region rather than just one of many possible ones.</p>
+<p>
+The bigNet format holds the same data as a <a href="net.html">net</a> file, but compressed and
+indexed as a <a href="/goldenPath/help/bigBed.html">bigBed</a>. Net files are converted to bigNet
+files with the program <code>bedToBigBed</code>, run with the <code>-as</code> option to pull in a
+special <a href="http://www.linuxjournal.com/article/5949" target="_blank">autoSql</a>
+(<em>.as</em>) file that defines the fields of the bigNet.</p>
+<p>
+The bigNet files are in an indexed binary format. The main advantage of this format is that only
+those portions of the file needed to display a particular region are transferred to the Genome
+Browser server. The bigNet file stays on your own web-accessible server (http, https or ftp), not on
+the UCSC server, and only the portion needed for the currently displayed chromosomal position is
+locally cached as a &quot;sparse file&quot;. If you do not have access to a web-accessible server
+and need hosting space for your bigNet files, please see the
+<a href="hgTrackHubHelp.html#Hosting">Hosting</a> section of the Track Hub Help documentation.</p>
+<p>
+A bigNet track is used in a <a href="hgTrackHubHelp.html">track hub</a>. It is not available as a
+custom track.</p>
+
+<a name="bigNet"></a>
+<h2>bigNet format definition</h2>
+<p>
+The following autoSql definition is used to specify bigNet files. Save it as <em>bigNet.as</em>. It
+is pulled in when the <code>bedToBigBed</code> utility is run with the <code>-as=bigNet.as</code>
+option. The same file is in the UCSC source tree at <em>src/hg/lib/bigNet.as</em>.</p>
+<pre><code>    table bigNet
+    "bigNet - a net of pairwise alignments in bigBed format"
+        (
+        string chrom;       "Reference sequence chromosome or scaffold"
+        uint   chromStart;  "Start position in chromosome"
+        uint   chromEnd;    "End position in chromosome"
+        string name;        "Name of the query sequence"
+        uint   score;       "Score (0-1000)"
+        char[1] strand;     "+ or - for strand of the query sequence"
+        uint   level;       "Depth in the net.  Odd levels are fills, even levels are gaps"
+        uint   qStart;      "Start of alignment on query sequence"
+        uint   qEnd;        "End of alignment on query sequence"
+        uint   chainId;     "Id of the chain that fills this gap.  0 for a gap"
+        uint   ali;         "Bases in gap-free alignments"
+        double chainScore;  "Score from the chain"
+        string type;        "Syntenic type: gap, top, syn, nonSyn or inv"
+        int    qOver;       "Overlap with parent gap on query side.  -1 for undefined"
+        int    qFar;        "Distance from parent gap on query side.  -1 for undefined"
+        int    qDup;        "Bases with two or more copies in query.  -1 for undefined"
+        int    tN;          "Unsequenced bases on target.  -1 for undefined"
+        int    qN;          "Unsequenced bases on query.  -1 for undefined"
+        int    tR;          "RepeatMasker bases on target.  -1 for undefined"
+        int    qR;          "RepeatMasker bases on query.  -1 for undefined"
+        int    tNewR;       "Lineage specific repeat bases on target.  -1 for undefined"
+        int    qNewR;       "Lineage specific repeat bases on query.  -1 for undefined"
+        int    tOldR;       "Bases of ancient repeats on target.  -1 for undefined"
+        int    qOldR;       "Bases of ancient repeats on query.  -1 for undefined"
+        int    tTrf;        "Bases of tandem repeats on target.  -1 for undefined"
+        int    qTrf;        "Bases of tandem repeats on query.  -1 for undefined"
+        )</code></pre>
+<p>
+One row is one fill or one gap of the net. The <code>level</code> field records how deep it sits.
+Odd levels are fills and even levels are gaps, so a top level chain has <code>level 1</code>, the
+gaps inside it have <code>level 2</code>, and the chains that fill those gaps have
+<code>level 3</code>. The Genome Browser rebuilds the nesting from these levels and the target
+coordinates, so a row must be contained by the row one level above it.</p>
+<p>
+The last thirteen fields are filled in by the <code>netClass</code> and <code>netSyntenic</code>
+programs. If you have not run them, those fields hold -1 and the Genome Browser leaves them out of
+the details page.</p>
+<p>
+Note that the <code>bedToBigBed</code> utility uses a substantial amount of memory: approximately
+25% more RAM than the uncompressed BED input file.</p>
+
+<h2>Creating a bigNet track</h2>
+<p>
+A bigNet track shows only the net. To see the alignment behind a piece of the net, the browser needs
+the chains as well, so a bigNet track is paired with a
+<a href="bigChain.html">bigChain</a> track built from the same alignment. Build the bigChain track
+first, then follow these steps.</p>
+<p>
+<strong>Step 1.</strong>
+Download the <code>bedToBigBed</code> and <code>netToBigNet</code> programs from the UCSC
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities directory</a>.</p>
+<p>
+<strong>Step 2.</strong>
+Use the <code>fetchChromSizes</code> script from the
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">same directory</a> to create a
+<em>chrom.sizes</em> file for the target assembly (e.g., hg38). Alternatively, download the
+<em>chrom.sizes</em> file for any assembly hosted at UCSC from our
+<a href="http://hgdownload.gi.ucsc.edu/downloads.html">downloads</a> page (click on &quot;Full data
+set&quot; for any assembly).</p>
+<p>
+<strong>Step 3.</strong>
+Use the <code>netToBigNet</code> utility to turn the net file into the input for
+<code>bedToBigBed</code>:</p>
+<pre><code>netToBigNet hg38.mm39.net bigNet.pre</code></pre>
+<p>
+<code>netToBigNet</code> sorts its output, so it is ready for the next step. It stops with an error
+if the net is missing the fields that <code>netClass</code> and <code>netSyntenic</code> add. Pass
+<code>-warn</code> to convert such a net anyway.</p>
+<p>
+<strong>Step 4.</strong>
+Create the bigNet file using the <code>bedToBigBed</code> utility:</p>
+<pre><code>bedToBigBed -type=bed6+20 -as=bigNet.as -tab bigNet.pre hg38.chrom.sizes bigNet.bb</code></pre>
+<p>
+<strong>Step 5.</strong>
+Move the newly created bigNet file (<em>bigNet.bb</em>) to a web-accessible http, https or ftp
+location.</p>
+<p>
+<strong>Step 6.</strong>
+Add the track to the <em>trackDb.txt</em> file of a
+<a href="hgTrackHubHelp.html">track hub</a>. The type line names the query assembly and the chain
+track that holds the alignments:</p>
+<pre><code>track myChains
+shortLabel Mouse Chain
+longLabel Mouse (mm39) chained alignments
+type bigChain mm39
+bigDataUrl bigChain.bb
+linkDataUrl bigChain.link.bb
+otherDb mm39
+visibility pack
+
+track myNet
+shortLabel Mouse Net
+longLabel Mouse (mm39) alignment net
+type bigNet mm39 myChains
+bigDataUrl bigNet.bb
+otherDb mm39
+visibility full</code></pre>
+<p>
+The second word of the type line is the query assembly. The third word is the name of the chain
+track in the same hub. The browser follows it when you click an item in the net, so that the details
+page can show the alignment and link to the other assembly.</p>
+<p>
+The <code>bedToBigBed</code> program can be run with several additional options. For a full list of
+the available options, type <code>bedToBigBed</code> (with no arguments) on the command line to
+display the usage message.</p>
+
+<h2>Sharing your data with others</h2>
+<p>
+If you would like to share your bigNet data track with a colleague, learn how to create a URL by
+looking at Example 6 on <a href="customTrack.html#EXAMPLE6">this page</a>.</p>
+
+<h2>Extracting data from the bigNet format</h2>
+<p>
+Because the bigNet format is an extension of <a href="bigBed.html">bigBed</a>, the
+<code>bigBedToBed</code> program can be used to extract data from a bigNet file. This program can be
+downloaded from the <a href="http://hgdownload.gi.ucsc.edu/admin/exe/">binary utilities
+directory</a>. It can be run to extract all of the data or a portion of it:</p>
+<pre><code>bigBedToBed http://myorg.edu/mylab/bigNet.bb -chrom=chr21 -start=0 -end=1000000 out.txt</code></pre>
+<p>
+You can also use the <code>bigBedSummary</code> and <code>bigBedInfo</code> programs from that
+directory to see a summary of the file or its header and field list.</p>
+
+<h2>Troubleshooting</h2>
+<p>
+If you encounter an error when you run the <code>bedToBigBed</code> program, check your input file
+for data coordinates that extend past the end of the chromosome. If these are present, run the
+<code>bedClip</code> program (<a href="http://hgdownload.gi.ucsc.edu/admin/exe/">available
+here</a>) to remove the problematic row:</p>
+<pre><code>bedClip bigNet.pre chrom.sizes bigNet.clipped.pre</code></pre>
+<p>
+If the track draws but every item sits on one row, check that the <code>level</code> field is
+filled in and that each row is contained by the row one level above it. The browser draws a row at
+the depth its level names, and a level that has no parent is drawn at the top.</p>
+
+<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->

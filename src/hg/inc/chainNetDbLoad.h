@@ -34,6 +34,10 @@ struct chainNet *chainNetLoadRange(char *database, char *track,
 	char *chrom, int start, int end, char *extraWhere);
 /* Load parts of a net track that intersect range. */
 
+struct chainNet *chainNetLoadRangeHub(char *fileName, char *chrom, int start, int end);
+/* Load the parts of a bigNet file that intersect range into a chainNet.
+ * Note the net->size field is not filled in. */
+
 struct chainNet *chainNetLoadChrom(char *database, char *track,
 	char *chrom, char *extraWhere);
 /* Load net on whole chromosome. */

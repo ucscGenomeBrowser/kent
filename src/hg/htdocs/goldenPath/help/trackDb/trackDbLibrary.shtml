@@ -172,6 +172,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigNet</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>,
     <A onclick="return jumpTo(this);" HREF="#">chain</A>,
@@ -222,6 +223,7 @@
     <A onclick="return jumpTo(this);" HREF="#">bigLolly</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigNarrowPeak</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigNet</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">halSnake</A>,
@@ -475,7 +477,7 @@
     Turn the y axis number labels on or off
 </DIV>
 
-<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigLolly bigMaf bigPsl bigWig bam hic vcfTabix vcfPhasedTrio"></span>
+<DIV class="bigDataUrl"><span class="types bigBarChart bigBed bigChain bigInteract bigLolly bigMaf bigNet bigPsl bigWig bam hic vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
@@ -485,7 +487,8 @@
     or it is relative to the directory in which the trackDb file containing this setting
     is located.  The file must be in one of
     the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly,
-    bigInteract, bigMaf, bigPsl, bigGenePred, bigMethyl, bigNarrowPeak, bigWig, vcfTabix, or hic.
+    bigInteract, bigMaf, bigNet, bigPsl, bigGenePred, bigMethyl, bigNarrowPeak, bigWig, vcfTabix,
+    or hic.
     Note that bam/cram and vcfTabix/vcfPhasedTrio types require a separate
     index file that must have the same name as the data file plus a
     standard suffix (".bai" and ".tbi" respectively), unless
@@ -1283,6 +1286,13 @@ There are no extra options that can appear on the type bigPsl line.
 <div class="format">
     <code>type bigChain targetDb</code></div>
 You must specify the target database in the type bigChain line.
+</DIV>
+
+<DIV class="bigNet"><span class="types bigNet"></span>
+<div class="format">
+    <code>type bigNet targetDb chainTrack</code></div>
+You must give the target database and the name of the chain track that holds the alignments
+in the type bigNet line.  The chain track is in the same hub.
 </DIV>
 
 <DIV class="bigNarrowPeak"><span class="types bigNarrowPeak"></span>

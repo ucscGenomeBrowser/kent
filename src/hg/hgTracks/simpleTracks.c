@@ -15580,6 +15580,11 @@ else if (sameWord(type, "netAlign"))
     {
     netMethods(track);
     }
+else if (sameWord(type, "bigNet"))
+    {
+    track->isBigBed = TRUE;
+    netMethods(track);
+    }
 else if (sameWord(type, "maf"))
     {
     mafMethods(track);

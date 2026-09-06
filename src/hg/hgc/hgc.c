@@ -147,6 +147,7 @@
 #include "chainToPsl.h"
 #include "chainToAxt.h"
 #include "netAlign.h"
+#include "bigNet.h"
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
 #include "stsMapMouseNew.h"
@@ -4227,6 +4228,74 @@ if (q != 0)
 printf("<BR>\n");
 }
 
+static struct netAlign *bigNetLoadOne(struct trackDb *tdb, char *chrom, int start,
+                                      unsigned level)
+/* Load the record from a bigNet file at the given level that covers start.
+ * Returns NULL if there isn't one. */
+{
+char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
+if (fileName == NULL)
+    errAbort("No bigDataUrl in track %s", tdb->track);
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, start+1, 0, lm);
+char *bedRow[BIGNET_NUM_COLS];
+char startBuf[16], endBuf[16];
+struct netAlign *na = NULL;
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    struct bigNet bn;
+    int fieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if (fieldCount != BIGNET_NUM_COLS)
+        errAbort("%s has %d fields, bigNet needs %d", fileName, fieldCount, BIGNET_NUM_COLS);
+    bigNetStaticLoad(bedRow, &bn);
+    if (bn.level != level)
+        continue;
+    AllocVar(na);
+    na->level = bn.level;
+    na->tName = cloneString(bn.chrom);
+    na->tStart = bn.chromStart;
+    na->tEnd = bn.chromEnd;
+    safecpy(na->strand, sizeof na->strand, bn.strand);
+    na->qName = cloneString(bn.name);
+    na->qStart = bn.qStart;
+    na->qEnd = bn.qEnd;
+    na->chainId = bn.chainId;
+    na->ali = bn.ali;
+    na->score = bn.chainScore;
+    na->qOver = bn.qOver;
+    na->qFar = bn.qFar;
+    na->qDup = bn.qDup;
+    na->type = cloneString(bn.type);
+    na->tN = bn.tN;
+    na->qN = bn.qN;
+    na->tR = bn.tR;
+    na->qR = bn.qR;
+    na->tNewR = bn.tNewR;
+    na->qNewR = bn.qNewR;
+    na->tOldR = bn.tOldR;
+    na->qOldR = bn.qOldR;
+    na->tTrf = bn.tTrf;
+    na->qTrf = bn.qTrf;
+    break;
+    }
+bbiFileClose(&bbi);
+lmCleanup(&lm);
+return na;
+}
+
+static char *netChainTrackName(struct trackDb *tdb, char *chainTrack)
+/* The type line of a net track names its chain track without any hub prefix.
+ * If the net track came from a hub, so did the chain track it names. */
+{
+if (!isHubTrack(tdb->track))
+    return chainTrack;
+char buf[256];
+safef(buf, sizeof buf, "hub_%d_%s", hubIdFromTrackName(tdb->track), chainTrack);
+return cloneString(buf);
+}
+
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, char *otherDb, char *chainTrack)
 /* Generic click handler for net tracks. */
@@ -4243,24 +4312,37 @@ char *otherOrgBrowser = otherOrg;
 int tSize, qSize;
 int netWinSize;
 struct chain *chain;
+boolean isBig = startsWith("big", tdb->type);
+
+if (isBig)
+    chainTrack = netChainTrackName(tdb, chainTrack);
 
 if (otherOrg == NULL)
     {
     /* use first word in short track label */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
-if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
-    errAbort("genericNetClick track %s not found", tdb->table);
-sqlSafef(query, sizeof(query),
-	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
-	 "and level = %s",
-	 table, seqName, start, start, item);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s:%d in %s", seqName, start, table);
+if (isBig)
+    {
+    net = bigNetLoadOne(tdb, seqName, start, sqlUnsigned(item));
+    if (net == NULL)
+        errAbort("Couldn't find %s:%d at level %s in %s", seqName, start, item, tdb->track);
+    }
+else
+    {
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+        errAbort("genericNetClick track %s not found", tdb->table);
+    sqlSafef(query, sizeof(query),
+             "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
+             "and level = %s",
+             table, seqName, start, start, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+        errAbort("Couldn't find %s:%d in %s", seqName, start, table);
 
-net = netAlignLoad(row+hasBin);
-sqlFreeResult(&sr);
+    net = netAlignLoad(row+hasBin);
+    sqlFreeResult(&sr);
+    }
 tSize = net->tEnd - net->tStart;
 qSize = net->qEnd - net->qStart;
 
@@ -4297,7 +4379,14 @@ if (net->chainId != 0)
 	    printf("To see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
 	    }
         }
-    chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
+    if (isBig)
+        {
+        char idBuf[32];
+        safef(idBuf, sizeof idBuf, "%u", net->chainId);
+        chain = chainLoadItemInRange(getTdbForTrackName(chainTrack), idBuf);
+        }
+    else
+        chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
          /* print link to browser for otherDb only if otherDb is active */
@@ -5104,6 +5193,7 @@ type = words[0];
 if (container == NULL && wordCount > 0)
     {
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
+        || sameString(type, "bigNet")
         || sameString(type, "bigQuickLiftChain")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
@@ -5190,10 +5280,10 @@ else if (wordCount > 0)
 	    subType = words[1];
 	genericPslClick(conn, tdb, item, start, subType);
 	}
-    else if (sameString(type, "netAlign"))
+    else if (sameString(type, "netAlign") || sameString(type, "bigNet"))
         {
 	if (wordCount < 3)
-	    errAbort("Missing field in netAlign track type field");
+	    errAbort("Missing field in %s track type field", type);
 	genericNetClick(conn, tdb, item, start, words[1], words[2]);
 	}
     else if (sameString(type, "bigQuickLiftChain")) 

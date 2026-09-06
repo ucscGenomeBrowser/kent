@@ -15,6 +15,8 @@
 #include "chainLink.h"
 #include "chainNet.h"
 #include "netAlign.h"
+#include "bigNet.h"
+#include "bigBed.h"
 #include "chainNetDbLoad.h"
 #include "chromAlias.h"
 
@@ -76,7 +78,7 @@ int depth, maxDepth = 0;
 /* Note that level 0 is always empty. */
 
 /* Sort everybody by target start. */
-for (depth=1; ; ++depth)
+for (depth=1; depth < help->maxDepth; ++depth)
     {
     if (levels[depth] == NULL && depth != 0)
         break;
@@ -179,6 +181,83 @@ sqlFreeResult(&sr);
 if (net != NULL)
     net->size = hChromSize(database, chrom);
 sqlDisconnect(&conn);
+return net;
+}
+
+static struct cnFill *cnFillFromBigNet(struct bigNet *bn, struct hash *nameHash)
+/* Convert a bigNet row to cnFill.  Name hash is a place to store
+ * the strings. */
+{
+struct cnFill *fill;
+AllocVar(fill);
+fill->tStart = bn->chromStart;
+fill->tSize = bn->chromEnd - bn->chromStart;
+fill->qName = hashStoreName(nameHash, bn->name);
+fill->qStrand = bn->strand[0];
+fill->qStart = bn->qStart;
+fill->qSize = bn->qEnd - bn->qStart;
+fill->chainId = bn->chainId;
+fill->score = bn->chainScore;
+fill->ali = bn->ali;
+fill->qOver = bn->qOver;
+fill->qFar = bn->qFar;
+fill->qDup = bn->qDup;
+if (!sameString(bn->type, "gap"))
+    fill->type = hashStoreName(nameHash, bn->type);
+fill->tN = bn->tN;
+fill->qN = bn->qN;
+fill->tR = bn->tR;
+fill->qR = bn->qR;
+fill->tNewR = bn->tNewR;
+fill->qNewR = bn->qNewR;
+fill->tOldR = bn->tOldR;
+fill->qOldR = bn->qOldR;
+fill->tTrf = bn->tTrf;
+fill->qTrf = bn->qTrf;
+return fill;
+}
+
+struct chainNet *chainNetLoadRangeHub(char *fileName, char *chrom, int start, int end)
+/* Load the parts of a bigNet file that intersect range into a chainNet.
+ * Note the net->size field is not filled in. */
+{
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+char *bedRow[BIGNET_NUM_COLS];
+char startBuf[16], endBuf[16];
+struct cnlHelper *help = NULL;
+struct chainNet *net;
+
+if (bbList == NULL)
+    {
+    bbiFileClose(&bbi);
+    lmCleanup(&lm);
+    return NULL;
+    }
+
+AllocVar(help);
+help->tName = chrom;	/* helpToNet clones this. */
+help->nameHash = hashNew(8);
+help->maxDepth = 40;
+AllocArray(help->levels, help->maxDepth);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    struct bigNet bn;
+    int fieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if (fieldCount != BIGNET_NUM_COLS)
+        errAbort("%s has %d fields, bigNet needs %d", fileName, fieldCount, BIGNET_NUM_COLS);
+    bigNetStaticLoad(bedRow, &bn);
+    if (bn.level < 1 || bn.level >= help->maxDepth)
+        errAbort("%s has level %d, net levels run from 1 to %d",
+                fileName, bn.level, help->maxDepth-1);
+    slAddHead(&help->levels[bn.level], cnFillFromBigNet(&bn, help->nameHash));
+    }
+
+net = helpToNet(&help);
+bbiFileClose(&bbi);
+lmCleanup(&lm);
 return net;
 }
 
