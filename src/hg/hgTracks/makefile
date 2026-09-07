@@ -55,13 +55,6 @@ compileMain: $O ${MYLIBS}
 ${RENDERA}: ${RENDERO}
 	${MAKE} -f makefile.hgRenderTracks ${MAKECMDGOALS}
 
-wigTrack.o:	wigCommon.h
-bedGraph.o:	wigCommon.h
-
-switchGear.o:	switchGear.h
-cds.o:		cds.h
-hgTracks.o:	cds.h
-pslTrack.o:	cds.h
 
 clean::
 	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif

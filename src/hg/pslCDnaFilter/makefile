@@ -1,7 +1,8 @@
 kentSrc = ../..
 A = pslCDnaFilter
-extraHeaders = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h globalNearBestFilter.h localNearBestFilter.h polyASize.h hapRegions.h \
-	usage.h algo.h
+# usage.h and algo.h are made by stringify below, so they have to be named
+# here; the compiler cannot report a header it has not been able to read yet.
+extraHeaders = usage.h algo.h
 extraObjects = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o globalNearBestFilter.o localNearBestFilter.o polyASize.o hapRegions.o
 
 include ${kentSrc}/inc/userApp.mk

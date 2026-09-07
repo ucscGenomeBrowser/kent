@@ -31,7 +31,3 @@ clean::
 	rm -f ${blastToPsl_objs} ${blastXmlToPsl_objs}
 	rm -f blastXmlToPsl${EXE} blastToPsl${EXE}
 
-ncbiBlast.o: ncbiBlast.c ncbiBlast.h
-pslBuild.o: pslBuild.c pslBuild.h
-blastXmlToPsl.o: blastXmlToPsl.c ncbiBlast.h pslBuild.h
-blastToPsl.o: blastToPsl.c pslBuild.h
