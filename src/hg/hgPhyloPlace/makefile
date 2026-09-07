@@ -22,7 +22,7 @@ compileCgi: $O
 	${CC} ${CFLAGS} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
-${UTILA}: ${UTILO}
+${UTILA}: ${UTILO} ${MYLIBS}
 	${CC} ${CFLAGS} -o ${UTILA} ${UTILO} ${MYLIBS} ${L}
 
 clean::

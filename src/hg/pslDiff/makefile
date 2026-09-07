@@ -17,8 +17,6 @@ $A: $O ${MYLIBS}
 compile:: ${O}
 	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
-pslDiff.o: pslDiff.c pslSets.h
-
 test: compile
 	cd tests && ${MAKE} test
 	rm -f ${A}${EXE}

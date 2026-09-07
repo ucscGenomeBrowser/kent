@@ -5,9 +5,9 @@ L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-%Test: %Test.c 
+%Test: %Test.c ${MYLIBS}
 	${CC} ${COPT}  -I../inc -I../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
-%: %.c 
+%: %.c ${MYLIBS}
 	${CC} ${COPT}  -I../inc -I../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 	mv $@ ${DESTDIR}${BINDIR}/
 

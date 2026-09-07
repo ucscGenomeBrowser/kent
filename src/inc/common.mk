@@ -534,7 +534,37 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 
 CC_PROG_OPTS = ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC}
 %.o: %.c
-	${CC} ${CC_PROG_OPTS} -o $@ -c $<
+	${CC} ${CC_PROG_OPTS} ${DEPGEN} -o $@ -c $<
+
+# Generated header dependencies.  Every makefile in the tree includes this file,
+# so the two lines below give the whole tree the rebuild rule that hand-written
+# "foo.o: bar.h" lines only ever covered a few objects of.  refs #36621
+#
+# -MMD writes foo.d next to foo.o, listing every header that compile actually
+# read, and the -include below feeds those back to make.  -MP adds an empty
+# target for each of those headers, so deleting or renaming a header does not
+# leave make asking for a file no rule can build.  System headers are left out
+# (-MMD rather than -MD) because they do not change between builds here.
+#
+# Objects are built next to their source, so the current directory is the whole
+# of it here.  The two makefiles that put objects in a subdirectory, lib and
+# hg/lib, pick those up themselves at the foot of their own file.  ${wildcard}
+# is evaluated when the makefile is read, which is the right time: a .d written
+# during this run belongs to an object this run just compiled from scratch, so
+# there is nothing stale to catch.
+#
+# Turn it off for one build with "make DEPGEN=".
+#
+# The save and restore around the include is not decoration.  A .d file holds
+# rules, and make takes its default goal from the first rule it sees, included
+# files and all.  Without this, "make" in lib/ built adjacency.o and stopped,
+# because that was the first line of the first .d file.  Setting .DEFAULT_GOAL
+# back to what it was (usually nothing, since common.mk is read before the
+# makefile's own rules) hands the choice back to the makefile.
+DEPGEN = -MMD -MP
+kentSavedGoal := $(.DEFAULT_GOAL)
+-include $(wildcard *.d)
+.DEFAULT_GOAL := $(kentSavedGoal)
 
 # autodetect UCSC installation of node.js:
 ifeq (${NODEBIN},)

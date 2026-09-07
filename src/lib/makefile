@@ -70,3 +70,9 @@ clean:
 
 tags:
 	etags ../inc/*.h ../lib/*.h ../lib/*.c  ../hg/inc/*.h ../hg/lib/*.h ../hg/lib/*.c ../hg/hgTracks/*.c ../hg/hgc/*.c ../hg/hgTrackUi/*.c
+
+# The objects in the subdirectories need their generated header dependencies
+# too, and common.mk only looks in the current directory.  This sits at the foot
+# of the file so the rules it brings in cannot become the default goal.
+# refs #36621
+-include $(wildcard font/*.d)

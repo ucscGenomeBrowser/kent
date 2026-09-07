@@ -1,4 +1,8 @@
 *.o
+# generated header dependencies, written beside each .o by -MMD.  refs #36621
+*.d
+# ...but that pattern also matches a directory, and this one is checked in
+!src/browserbox/etc/sudoers.d/
 *.a
 *~
 foo

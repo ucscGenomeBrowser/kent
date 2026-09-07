@@ -20,7 +20,6 @@ install: ${PROGS:%=%_}
 
 else
 A = ${PROG}
-extraHeaders = ntContig.h
 extraObjects = ntContig.o
 include ${kentSrc}/inc/userApp.mk
 

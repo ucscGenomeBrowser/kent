@@ -12,7 +12,7 @@ OHuge = $(addsuffix Huge.o, $(basename $O))
 THuge = ../lib/$(MACHTYPE)/jkOwnLibHuge.a
 
 %Huge.o: %.c
-	${CC} -DGFSERVER_HUGE ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} -DGFSERVER_HUGE ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
 all: $(T) $(THuge)
 

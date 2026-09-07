@@ -5,7 +5,6 @@ sharedObjects = hooklib.o
 include ${kentSrc}/inc/userAppMulti.mk
 else
 extraObjects = hooklib.o
-extraHeaders = hooklib.h
 CGI_LOADER_SUBDIR = hooks
 
 A = ${PROG}

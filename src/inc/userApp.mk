@@ -14,8 +14,11 @@
 # for more than one object file for the resulting 'A' program, use
 #       extraObjects = second.o third.o fourth.o etc.o
 #
-# and for extra header files for depenencies
-#       extraHeaders = second.h third.h fourth.h etc.h
+# for headers this directory generates, such as a stringify usage message or an
+# autoSql output.  Ordinary headers do not belong here: the compiler records
+# those itself, see DEPGEN in common.mk.  A generated header has to be named,
+# because on the first build there is nothing to have recorded yet.
+#       extraHeaders = usage.h
 #
 # to use object files built elsewhere:
 #       externObjects = ../path/other.o

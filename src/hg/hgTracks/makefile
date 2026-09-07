@@ -41,27 +41,20 @@ else
 endif
 
 %.o: %.c
-	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
+	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} ${DEPGEN} -o $@ -c $<
 
 mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
 compile: compileMain ${RENDERA}
 
-compileMain: $O
+compileMain: $O ${MYLIBS}
 	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
 	cp extTools.ra ${CGI_BIN_DEST}
 
 ${RENDERA}: ${RENDERO}
 	${MAKE} -f makefile.hgRenderTracks ${MAKECMDGOALS}
 
-wigTrack.o:	wigCommon.h
-bedGraph.o:	wigCommon.h
-
-switchGear.o:	switchGear.h
-cds.o:		cds.h
-hgTracks.o:	cds.h
-pslTrack.o:	cds.h
 
 clean::
 	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif
