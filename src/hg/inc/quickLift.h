@@ -139,6 +139,11 @@ struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chai
 boolean quickLiftEnabled(struct cart *cart);
 /* Return TRUE if feature is available */
 
+boolean quickLiftAlignmentsEnabled(struct cart *cart);
+/* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
+ * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says
+ * browser.quickLiftAlignments=on, and a cart variable of the same name overrides that. */
+
 struct quickLiftRegions *quickLiftGetRegions(char *ourDb, char *liftDb, char *quickLiftFile, char *chrom, int seqStart, int seqEnd);
 /* Figure out the highlight regions and cache them. */
 

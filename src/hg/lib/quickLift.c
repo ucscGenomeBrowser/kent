@@ -951,6 +951,23 @@ char *cfgEnabled = cartOrCfgOption(cart, "browser.quickLift");
 return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
 }
 
+boolean quickLiftAlignmentsEnabled(struct cart *cart)
+/* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
+ * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says
+ * browser.quickLiftAlignments=on, and a cart variable of the same name overrides that so
+ * one machine can show both answers.  The hg.conf half is read with a literal
+ * cfgOptionBooleanDefault rather than cartOrCfgOption because harvestHgConf.py only sees
+ * the cfgOption* accessors, which is why browser.quickLift itself is missing from the
+ * hg.conf catalog. */
+{
+char *cartEnabled = cartOptionalString(cart, "browser.quickLiftAlignments");
+
+if (cartEnabled != NULL)
+    return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
+           sameString(cartEnabled, "yes");
+return cfgOptionBooleanDefault("browser.quickLiftAlignments", FALSE);
+}
+
 static int hrCmp(const void *va, const void *vb)
 /* Compare to sort based on chromStart. */
 {
