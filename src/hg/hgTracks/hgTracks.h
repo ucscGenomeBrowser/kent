@@ -1878,10 +1878,18 @@ void labelTrackAsHideEmpty(struct track *tg);
 /* add text to track long label to indicate empty subtracks are hidden */
 
 void labelTrackAsDensity(struct track *tg);
-/* Add text to track long label to indicate density mode */
+/* Add text to track long label to indicate the user asked for density mode */
 
 void labelTrackAsDensityWindowSize(struct track *tg);
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
+
+void labelTrackAsDensityTooManyItems(struct track *tg);
+/* Add text to track long label to indicate we switched to density mode because there were
+ * too many items to draw one by one */
+
+void labelTrackAsDensityIfActive(struct track *tg);
+/* If a track is showing item density instead of individual items, say so in the long label,
+ * distinguishing the density the user asked for from the density we had to impose. */
 
 void setupHotkeys(boolean gotExtTools);
 /* setup keyboard shortcuts and a help dialog for it */
