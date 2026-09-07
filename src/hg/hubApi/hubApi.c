@@ -153,8 +153,11 @@ el = newSlName("bigMaf");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigChain");
 slAddHead(&supportedTypes, el);
-el = newSlName("bigNet");
-slAddHead(&supportedTypes, el);
+if (trackHubBigNetEnabled())
+    {
+    el = newSlName("bigNet");
+    slAddHead(&supportedTypes, el);
+    }
 slNameSort(&supportedTypes);
 }	/*	static void initSupportedTypes()	*/
 
