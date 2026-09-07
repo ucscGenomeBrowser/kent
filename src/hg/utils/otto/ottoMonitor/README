@@ -1,0 +1,99 @@
+ottoMonitor - a daily check that every otto job is still running.  Refs #38101.
+
+WHY
+
+Otto jobs are silent when their source has published nothing.  That is the
+design, and it is also why a job that stops running is invisible: no output, no
+mail, and the track quietly freezes.  #38280 is the case that prompted this.  A
+daily job whose source URL had disappeared ran about 1,100 times over three
+years without a word, and the wuhCor1 UniProt track has not moved since June
+2023.
+
+WHAT IT ASKS
+
+One question per job: did it run when it was supposed to.  It answers that from
+a run stamp, meaning something the job leaves behind whether or not the data
+changed.  Fifteen jobs write a log or a named file on every run.  Nine leave only
+their working directory's mtime, because they write a temp file and delete it.
+Eight leave nothing at all, and those are reported as blind rather than as
+passing, so the gap stays visible instead of reading as good news.
+
+A late job is not automatically somebody's bug.  So a late job with a source URL
+gets that URL fetched.  If the source is down the job is left alone, and only a
+second run in a row that fails the same way becomes a ticket.  If the source
+answers, the failure was something else and it files the same day.
+
+THE SURVEYS BEHIND IT
+
+  ottoSourceUrls.tsv         where each job's data comes from, the URL to probe,
+                             and the curl shape that URL actually answers.  Every
+                             one was fetched, not read out of a script.
+  ottoFailureSignatures.tsv  what a run, a change and a failure look like on disk
+                             for each of the 47 jobs.  ottoMonitorStamps.tsv is
+                             the machine-readable part of it; this is the reasoning.
+
+Read the signature survey before changing a stamp glob.  It says what each job
+writes and when, which is the difference between a stamp that tracks every run
+and one that only moves when the data changes.
+
+THE THREE INPUTS
+
+  ottoOwners.tsv         who owns each job, whether to watch it, its source URL,
+                         and its schedule.  Canonical copy is in genecats at
+                         otto/ottoOwners.tsv.  The team edits it there.
+  ottoMonitorStamps.tsv  where each job's run stamp lives.  Kept beside this
+                         script, because it is about the monitor and not about
+                         ownership.
+  state.json             written under /hive/data/outside/otto/ottoMonitor/.
+                         Holds the last run seen, the last verdict, the number of
+                         runs in a row that failed the same way, and the ticket
+                         number when one is open.  Without it a second strike
+                         cannot be told from a first.
+
+RUNNING IT
+
+  ./ottoMonitor.py                     silent unless something is late
+  ./ottoMonitor.py -v                  also lists the on-time jobs and the blind ones
+  ./ottoMonitor.py --job clinvar       one job
+  ./ottoMonitor.py --file              actually file tickets.  OFF by default
+
+Filing is off by default on purpose.  Run it without --file for a while and read
+what it would have filed.
+
+THE TWO COPIES
+
+Same rule as the rest of otto.  Edit the copy in the kent tree at
+src/hg/utils/otto/ottoMonitor, commit, then copy it out to
+/hive/data/outside/otto/ottoMonitor, which is what cron runs.  Never edit the
+hive copy directly.
+
+TRAPS WORTH KNOWING BEFORE YOU CHANGE A STAMP
+
+A file's mtime is not always the run time.  hgsqlTableDate calls utime() to set
+a file's mtime to the database TABLE's date, on purpose, so a later -nt test asks
+about the data rather than the run.  omimUpload's upload/*.date files look like
+an ideal run stamp and are not; the directory mtime is used instead.
+
+The nine directory-mtime jobs work today but nobody designed that signal.
+Copying a file into one of those directories by hand resets the clock and the
+monitor will read it as a run.
+
+cron's day rule is an OR, not an AND: when both day-of-month and day-of-week are
+restricted the job runs when EITHER matches.  A job like "14 13 * * mon" would
+look like it never runs if this were read the other way.
+
+A job with more than one crontab line has its schedules joined with ";" in the
+cron column of ottoOwners.tsv, and the monitor takes whichever fired last.
+ottoLastLog is the only one so far, because cron cannot say "the last day of the
+month" in one line.
+
+THE EIGHT BLIND JOBS
+
+gwas, mane, ncbiRefSeq, ottoGitVsHive, refSeqHistorical, strchive,
+uniprotWuhCor1, vcepVersions.
+
+Two of them are a one-line fix rather than a monitor problem.  gwas already
+creates a dated directory, just after its change check instead of before.  mane
+gates its whole body on whether an output file already exists.  Moving either
+would put that job in reach.  That is a suggestion for the owners, not something
+this ticket does.
