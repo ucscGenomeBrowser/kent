@@ -1,0 +1,60 @@
+# Run stamps for the otto failure monitor.  Refs #38101.
+#
+# One row per job in otto.crontab.  The job name and the schedule come from
+# ottoOwners.tsv; this file says only where to look to find out whether the job
+# ran, which ottoOwners.tsv has no business carrying.
+#
+# stampGlob   a shell glob.  The monitor takes the NEWEST mtime among the
+#             matches and calls that the last run.  "-" means the job leaves
+#             nothing behind on a run that finds no new data, so whether it ran
+#             cannot be answered from disk at all.  Those jobs are reported as
+#             blind rather than as passing.
+# graceHours  how long after the scheduled time the stamp is still allowed to be
+#             missing.  It covers both a slow job and a late start.  Default 6.
+#             uniprot gets five days because the run itself takes three or four.
+# note        why this glob and not another.  Read it before changing one.
+#
+# Derived from the survey in
+# /hive/groups/browser/redmineNotes/38101/claude/ottoFailureSignatures.tsv
+#
+#job	stampGlob	graceHours	note
+clinvar	/hive/data/outside/otto/clinvar/log/clinvar.log	18	appended by tee -a on every run
+geneReviews	/hive/data/outside/otto/geneReviews/lastRun.log	12	written every run by the wrapper
+decipher	/hive/data/outside/otto/decipher	6	dir mtime: the curl writes and removes the variants bed
+gwas	-	6	blind: the dated dir is created only after the change check
+dbVar	/hive/data/outside/otto/dbVar/2???-??-??	12	the dated dir is made before any check
+orphanet	/hive/data/outside/otto/orphanet/2???-??-??	12	the dated dir is made in the wrapper before any check
+insight	/hive/data/outside/otto/insight/log/insight.*.log	8	one log per run, kept even when the build dir is deleted
+omim	/hive/data/outside/otto/omim/2???-??-??	8	the dated dir is made before the md5 compare
+lovd	/hive/data/outside/otto/lovd/2???-??-??	8	the dated dir is made at the top of download.sh
+mitoMap	/hive/data/outside/otto/mitoMap	8	dir mtime: the .latest.tsv files are written then removed
+refSeqHistorical	-	6	blind: a notifier, it writes only when NCBI has something new
+strchive	-	6	blind: writes only on a new GitHub release
+vcepVersions	-	6	blind: a pure notifier, it writes nothing at all
+uniprot	/hive/data/outside/otto/uniprot/lastRun.log	120	the run itself takes three to four days
+uniprotWuhCor1	-	6	blind, and the source is dead. See #38280
+clinGen	/hive/data/outside/otto/clinGen/clinGenGeneValidity/ls.check	6	rewritten every run
+clinGenCspec	/hive/data/outside/otto/clinGen/clinGenCspec	8	dir mtime: svis.json is written then removed on no change
+varChat	/hive/data/outside/otto/varChat	8	dir mtime: the .latest.bb files are written then removed
+vista	/hive/data/outside/otto/vista	8	dir mtime: the .latest files are written then removed
+civic	/hive/data/outside/otto/civic/gene_features/temp*	12	dir mtime: the temp bed files are rewritten every run
+grcIncidentDb	/hive/data/outside/otto/grcIncidentDb/*	6	every per-assembly dir is touched each run
+ncbiRefSeq	-	6	blind: prev<Db>.sum moves only when NCBI publishes
+mane	-	6	blind: the whole body is gated on whether the output already exists
+malacards	/hive/data/outside/otto/malacards/geneSymbolToKgId.txt	8	written from hgsql every run
+pubtatorDbSnp	/hive/data/outside/otto/pubtatorDbSnp/out/2???/??/??/script_output.log	8	a dated run dir with a full zsh -x trace, made before any work
+panelApp	/hive/data/outside/otto/panelApp/missing_genes.txt	8	rewritten every run; the run takes about three hours
+g2p	/hive/data/outside/otto/g2p/doG2p.lock	8	the lock is taken every run
+genCC	/hive/data/outside/otto/genCC	8	dir mtime: newSubmission.tsv is written then removed
+trackLists	/hive/data/outside/otto/trackLists/collected.json	6	rewritten every run before the page is built
+readOnlyKentMirror	/cluster/home/otto/git.fetch.output	6	overwritten every run
+ottoLastLog	/cluster/home/otto/lastLog/log/2???/lastLog.*.gz	12	one dated pair per run, month end only
+ottoGitVsHive	-	6	blind: ottoCrontab.tmp is removed at the end of the run.  Only otto's home dir mtime is left, and that moves for unrelated reasons
+liftRequest	/hive/data/outside/otto/liftRequest/ottoRequest.lock	2	rewritten with the pid every seven minutes
+genArkHgcentral	/hive/data/inside/GenArk/genark.tsv	12	rebuilt every run
+genArkDevList	/hive/data/inside/GenArk/pushRR/logs/2???/??/gbdbGenArk.*.gz	8	the run takes two to three hours
+genArkPushRR	/hive/data/inside/GenArk/pushRR/*.todayList.gz	14	the push to five hosts runs long
+chainTables	/hive/data/inside/GenArk/checkChainTables/liftOverChain.fromDb.toDb.txt	6	rewritten every run
+sessionThumbnails	/usr/local/apache/htdocs/thumbNailLinks.html	8	rewritten every run
+tipOfDay	/usr/local/apache/htdocs/tipOfDay.html	6	rewritten every weekday run
+omimUpload	/hive/data/outside/otto/omim/upload	6	dir mtime.  NOT the .date files: hgsqlTableDate sets those by hand to the table's date, not the run time
