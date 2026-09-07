@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "sqlNum.h"
+#include "hubConnect.h"
 #include "hVarSubst.h"
 
 static boolean isVarEnd(boolean inBraces, char c)
@@ -42,6 +43,30 @@ if (nameIdx == varNameSize)
 varName[nameIdx] = '\0';
 if (inBraces)
     p++;
+return p;
+}
+
+static char *parseVarNameMaybe(char *varStart, char *varName, int varNameSize)
+/* Like parseVarName, but return NULL instead of aborting when what follows the `$' is not
+ * a well formed variable reference.  Used in hubHtml mode, where a stray dollar sign in a
+ * description page has to survive untouched. */
+{
+char *p = varStart+1;
+boolean inBraces = (*p == '{');
+if (inBraces)
+    p++;
+int nameIdx = 0;
+while ((nameIdx < varNameSize-1) && (*p != '\0') && !isVarEnd(inBraces, *p))
+    varName[nameIdx++] = *p++;
+if ((nameIdx == 0) || (nameIdx == varNameSize-1))
+    return NULL;
+varName[nameIdx] = '\0';
+if (inBraces)
+    {
+    if (*p != '}')
+        return NULL;
+    p++;
+    }
 return p;
 }
 
@@ -227,6 +252,42 @@ else if (sameString(varBase, "hgsid") && cart != NULL)
     dyStringAppend(dest, cartSessionId(cart));
 }
 
+static char *parentTrackName(struct trackDb *tdb)
+/* Name of the container holding tdb, in the form hgTrackUi's g= parameter needs: with the
+ * hub_<id>_ prefix when this is a hub track, since that is what trackHubAddNamePrefix put
+ * into tdb->track.  Views are skipped, a view has no description page of its own.  Returns
+ * the track's own name when it is not in a container. */
+{
+struct trackDb *parent = tdb->parent;
+char *viewName = NULL;
+while ((parent != NULL) && tdbIsView(parent, &viewName))
+    parent = parent->parent;
+return (parent != NULL) ? parent->track : tdb->track;
+}
+
+/* The variables a hub's description page may use.  Deliberately a short explicit list and
+ * not every trackDb setting the way native trackDb allows: a hub page written before this
+ * substitution existed can easily contain something like "$track" inside a shell example,
+ * and silently rewriting that would be worse than not substituting at all. */
+static char *hubHtmlVars[] = {"db", "hgsid", "track", "parentTrack",
+                              "organism", "Organism", "ORGANISM", "date", "downloadsServer"};
+
+static boolean isHubHtmlVar(struct cart *cart, struct trackDb *tdb, char *varName)
+/* Is varName one of the variables a hub description page may use, and can this call
+ * resolve it?  Asked only in hubHtml mode, to tell a variable reference from a dollar sign
+ * that happens to be followed by a word. */
+{
+if (tdb == NULL)
+    return FALSE;
+if (sameString(varName, "hgsid") && (cart == NULL))
+    return FALSE;
+int i;
+for (i = 0;  i < ArraySize(hubHtmlVars);  i++)
+    if (sameString(varName, hubHtmlVars[i]))
+        return TRUE;
+return FALSE;
+}
+
 static void substTrackDbVar(char *desc, struct trackDb *tdb, char *database,
                             char *varName, struct dyString *dest)
 /* substitute a variable value obtained from trackDb */
@@ -239,6 +300,8 @@ else if (sameString(varName, "downloadsServer"))
     dyStringAppend(dest, hDownloadsServer());
 else if (sameString(varName, "track"))
     dyStringAppend(dest, tdb->track);
+else if (sameString(varName, "parentTrack"))
+    dyStringAppend(dest, parentTrackName(tdb));
 else
     dyStringAppend(dest, lookupTrackDbSubVar(desc, tdb, varName, varName));
 }
@@ -260,12 +323,14 @@ else
 }
 
 static char *hVarSubstExt(char *desc, struct cart *cart, struct trackDb *tdb, char *database,
-                          char *src)
+                          char *src, boolean hubHtml)
 /* Parse a string and substitute variable references.  Return NULL if
  * no variable references were found.  Error on missing variables (except
  * $matrix).  desc is a brief description to print on an error to help with
  * debugging. tdb maybe NULL to only do substitutions based on database
- * and organism.  cart may be NULL. See trackDb/README for more information.*/
+ * and organism.  cart may be NULL. See trackDb/README for more information.
+ * In hubHtml mode nothing is an error and only the variables in hubHtmlVars are
+ * recognized: every other `$' is copied through unchanged. */
 {
 struct dyString *dest = NULL;
 char *start = src;  // start of current static string in src
@@ -282,6 +347,21 @@ while ((next = strchr(next, '$')) != NULL)
         // $$ is a literal $
         dyStringAppendC(dest, '$');
         start = next = next + 2;
+        }
+    else if (hubHtml)
+        {
+        // variable reference, or just a dollar sign in the text
+        char *after = parseVarNameMaybe(next, varName, sizeof(varName));
+        if ((after != NULL) && isHubHtmlVar(cart, tdb, varName))
+            {
+            substVar(desc, cart, tdb, database, varName, dest);
+            start = next = after;
+            }
+        else
+            {
+            dyStringAppendC(dest, '$');
+            start = next = next + 1;
+            }
         }
     else
         {
@@ -306,7 +386,7 @@ char *hVarSubst(char *desc, struct trackDb *tdb, char *database, char *src)
  * debugging. tdb maybe NULL to only do substitutions based on database
  * and organism. See trackDb/README for more information.*/
 {
-return hVarSubstExt(desc, NULL, tdb, database, src);
+return hVarSubstExt(desc, NULL, tdb, database, src, FALSE);
 }
 
 void hVarSubstInVar(char *desc, struct trackDb *tdb, char *database, char **varPtr)
@@ -314,7 +394,7 @@ void hVarSubstInVar(char *desc, struct trackDb *tdb, char *database, char **varP
  * occur, freeing the old memory if necessary.  See hVarSubst for details.
  */
 {
-char *dest = hVarSubstExt(desc, NULL, tdb, database, *varPtr);
+char *dest = hVarSubstExt(desc, NULL, tdb, database, *varPtr, FALSE);
 if (dest != NULL)
     {
     freez(varPtr);
@@ -334,10 +414,29 @@ void hVarSubstWithCart(char *desc, struct cart *cart, struct trackDb *tdb, char 
                        char **varPtr)
 /* Like hVarSubstInVar, but if cart is non-NULL, $hgsid will be substituted. */
 {
-char *dest = hVarSubstExt(desc, cart, tdb, database, *varPtr);
+char *dest = hVarSubstExt(desc, cart, tdb, database, *varPtr, FALSE);
 if (dest != NULL)
     {
     freez(varPtr);
     *varPtr = dest;
+    }
+}
+
+void hVarSubstTrackDbHtml(struct cart *cart, struct trackDb *tdb, char *database)
+/* Substitute variables in the description page of a hub track.  Native trackDb needs no
+ * such call: hgTrackDb already substituted the html when it loaded trackDb.  A hub's html
+ * comes straight off the hub's web server and has never been through substitution, so it
+ * is done here, at render time, where $db, $hgsid and $parentTrack resolve to the hub_<id>_
+ * names the CGIs actually use.  Only the variables in hubHtmlVars are recognized and
+ * nothing is an error, so a dollar sign in a description page that was not written with
+ * this in mind stays a dollar sign. */
+{
+if ((tdb == NULL) || isEmpty(tdb->html) || !isHubTrack(tdb->track))
+    return;
+char *dest = hVarSubstExt(tdb->track, cart, tdb, database, tdb->html, TRUE);
+if (dest != NULL)
+    {
+    freez(&tdb->html);
+    tdb->html = dest;
     }
 }

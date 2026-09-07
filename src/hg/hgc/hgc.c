@@ -30,6 +30,7 @@
 #include "hdb.h"
 #include "spDb.h"
 #include "hui.h"
+#include "hVarSubst.h"
 #include "hgRelate.h"
 #include "htmlPage.h"
 #include "psl.h"
@@ -3776,7 +3777,12 @@ for (;tdb != NULL; tdb = tdb->parent)
     if (liftDb && isEmpty(tdb->html))
         tdb->html = getTrackHtml(liftDb, tdb->table);
     if (tdb->html != NULL && tdb->html[0] != 0)
+        {
+        // a hub's description page never went through hgTrackDb, substitute its variables
+        // here.  tdb is the track the html belongs to, so $parentTrack means its container.
+        hVarSubstTrackDbHtml(cart, tdb, database);
         return tdb->html;
+        }
     }
 return NULL;
 }

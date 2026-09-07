@@ -68,6 +68,17 @@ may have the following variables, which will be substituted:
                chainNet html page.
      $downloadsServer - the value of the hg.conf downloads.server variable, or
                          hgdownload.soe.ucsc.edu if not set.
+     $track - the track's own name, as hgTrackUi's g= parameter needs it. For a
+               hub track that includes the hub_<id>_ prefix.
+     $parentTrack - the name of the container the track sits in, a superTrack or
+               a composite, in the same form as $track. Views are skipped, since
+               a view has no description page of its own. For a track that is
+               not in a container this is the same as $track. Useful for linking
+               a subtrack's description page back to its container, e.g.
+               <a href="hgTrackUi?db=$db&amp;g=$parentTrack">.
+     $hgsid - the current session id. Substituted only where there is a cart,
+               that is by the CGIs; hgTrackDb leaves it empty, so it is of use
+               in hub description pages rather than in native trackDb.
 In addition, if there is an $otherDb field set in the .ra file, these
 variables are available:
      $o_ORGANISM - all upper case other organism, like 'MOUSE'

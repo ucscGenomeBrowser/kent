@@ -936,6 +936,10 @@ if (!isEmpty(facetedWhere->string))
     sqlDyStringPrintf(tagQuery,  "%-s", facetedWhere->string); // trust because it was created safely
 struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
 
+// no file matched the filters: "id IN ()" is not valid SQL, so return early
+if (fileIds == NULL)
+    return NULL;
+
 // retrieve the cdwFiles objects for these
 struct dyString *fileQuery = sqlDyStringCreate("SELECT * FROM cdwFile WHERE id IN (");
 sqlDyStringPrintValuesList(fileQuery, fileIds);
