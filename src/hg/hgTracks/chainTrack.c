@@ -21,6 +21,11 @@
 #include "chromAlias.h"
 #include "hgConfig.h"
 #include "snake.h"
+#include "chainNetDbLoad.h"
+#include "bigChain.h"
+#include "quickLift.h"
+#include "chainToPsl.h"
+#include "psl.h"
 
 struct cartOptions
     {
@@ -357,11 +362,147 @@ linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
     font, color, vis);
 }
 
+
+static struct linkedFeatures *lfFromLiftedChain(struct chain *chain, struct chain *lifted,
+    int qs, boolean doSnake)
+/* Build the drawing item for one chain that has been mapped onto the reference.  The
+ * blocks come from the lifted alignment, so unlike the native loaders this one does not
+ * leave the components for loadLinks to fetch. */
+{
+struct linkedFeatures *lf;
+char buf[16];
+
+AllocVar(lf);
+lf->start = lf->tallStart = lifted->tStart;
+lf->end = lf->tallEnd = lifted->tEnd;
+lf->qSize = lifted->qSize;
+lf->grayIx = maxShade;
+lf->score = chain->score;
+lf->filterColor = -1;
+
+lf->orientation = (lifted->qStrand == '-') ? -1 : 1;
+
+int len = strlen(chain->qName) + 32;
+lf->name = needMem(len);
+if (!doSnake)
+    // qs was worked out from the source chain, so print its strand, not the lifted one
+    safef(lf->name, len, "%s %c %dk", chain->qName, chain->qStrand, qs/1000);
+else
+    safef(lf->name, len, "%s", chain->qName);
+safef(buf, sizeof(buf), "%d", chain->id);
+lf->extra = cloneString(buf);
+
+struct simpleFeature *sfList = NULL, *sf;
+struct cBlock *b;
+for (b = lifted->blockList; b != NULL; b = b->next)
+    {
+    AllocVar(sf);
+    sf->start = b->tStart;
+    sf->end = b->tEnd;
+    sf->grayIx = lf->grayIx;
+    // A minus strand chain keeps its query coordinates reverse complemented, and the
+    // drawing code wants them forward, which is the same turn loadLinks makes at the end.
+    if (lf->orientation == -1)
+        {
+        sf->qStart = lifted->qSize - b->qEnd;
+        sf->qEnd = lifted->qSize - b->qStart;
+        }
+    else
+        {
+        sf->qStart = b->qStart;
+        sf->qEnd = b->qEnd;
+        }
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+return lf;
+}
+
+static void quickLiftChainLoadItems(struct track *tg)
+/* Load chains out of the assembly this track came from and map them onto the reference.
+ * A chain is an alignment between that assembly and some other species, so lifting one
+ * composes two alignments and leaves the user with chains between the assembly on screen
+ * and that species. */
+{
+boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
+struct cartOptions *chainCart = (struct cartOptions *) tg->extraUiData;
+char *optionChrStr = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "chromFilter");
+if (isNotEmpty(optionChrStr) && sameWord("All", skipLeadingSpaces(optionChrStr)))
+    optionChrStr = NULL;
+
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(tg->tdb, tg->table, &table, &liftDb);
+char *quickLiftFile = trackDbSetting(tg->tdb, "quickLiftUrl");
+
+char *chainFile = NULL, *linkFile = NULL;
+if (tg->isBigBed)
+    {
+    chainFile = trackDbSetting(tg->tdb, "bigDataUrl");
+    // linkDataUrl when the track names its link file, which not every track does by the
+    // name bigChainGetLinkFile would guess.  This is the choice loadLinks makes.
+    linkFile = trackDbSetting(tg->tdb, "linkDataUrl");
+    if (linkFile == NULL)
+        linkFile = bigChainGetLinkFile(chainFile);
+    }
+
+struct hash *chainHash = newHash(8);
+struct hash *mapPsls = NULL;
+struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, chromName,
+    winStart, winEnd, chainHash);
+struct linkedFeatures *list = NULL;
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    struct chain *chain, *chainList;
+    if (tg->isBigBed)
+        chainList = chainLoadIdRangeHub(NULL, chainFile, linkFile, range->chrom,
+            range->start, range->end, -1);
+    else
+        chainList = chainLoadRange(liftDb, table, range->chrom, range->start, range->end);
+
+    for (chain = chainList; chain != NULL; chain = chain->next)
+        {
+        if (chain->blockList == NULL)
+            continue;
+        if ((optionChrStr != NULL) && !startsWith(optionChrStr, chain->qName))
+            continue;
+        if ((chainCart->scoreFilter > 0) && (chain->score < chainCart->scoreFilter))
+            continue;
+
+        int qs = (chain->qStrand == '-') ? chain->qSize - chain->qEnd : chain->qStart;
+        struct chain *lifted = quickLiftChain(chainHash, &mapPsls, chain);
+        if (lifted == NULL)
+            continue;
+
+        slAddHead(&list, lfFromLiftedChain(chain, lifted, qs, doSnake));
+        }
+    }
+
+// put the list back into the order the chains were loaded in, which is what decides
+// between items the sort below sees as equal
+slReverse(&list);
+if (tg->visibility != tvDense)
+    slSort(&list, linkedFeaturesCmpStart);
+else if (chainCart->chainColor == chainColorScoreColors)
+    slSort(&list, chainCmpScore);
+tg->items = list;
+
+maybeLoadSnake(tg);
+}
+
 void bigChainLoadItems(struct track *tg)
 /* Load up all of the chains from correct table into tg->items
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
+if (quickLiftIsLifted(tg->tdb) && !quickLiftIsOwnChainTrack(tg->tdb))
+    {
+    quickLiftChainLoadItems(tg);
+    return;
+    }
+
 boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
 struct linkedFeatures *list = NULL, *lf;
 int qs;
@@ -443,6 +584,12 @@ void chainLoadItems(struct track *tg)
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
 {
+if (quickLiftIsLifted(tg->tdb) && !quickLiftIsOwnChainTrack(tg->tdb))
+    {
+    quickLiftChainLoadItems(tg);
+    return;
+    }
+
 boolean doSnake = cartOrTdbBoolean(cart, tg->tdb, "doSnake" , FALSE);
 char *table = tg->table;
 struct chain chain;

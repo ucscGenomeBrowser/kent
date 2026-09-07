@@ -379,6 +379,25 @@ RELEASE_GATES = {
                     "because the CGI emits the header today, and because "
                     "calling a gate a knob hides it from the sunset report "
                     "for good."),
+        h("browser.quickLiftAlignments", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38249",
+          note="Let quickLift lift alignment tracks: psl, bigPsl, chain, "
+               "bigChain, maf, bigMaf and wigMaf.  Read once, in "
+               "quickLiftAlignmentsEnabled(), and asked once, by "
+               "validateOneTdb in trackHub.c, which is the only door:  the "
+               "quickLiftUrl and quickLiftDb pair that every lift path keys "
+               "off is written by the quickLift hub writer and by nothing "
+               "else, so with the flag off an alignment track never enters a "
+               "quickLift hub and the lifting, drawing and details code behind "
+               "it is unreachable.  A hub built while it was on keeps working, "
+               "since its stanzas are already in the hub file in trash.  On in "
+               "confs/hgwdev.hg.conf.  Named browser.quickLiftAlignments to "
+               "sit beside browser.quickLift, the gate on the rest of the "
+               "feature, but read with a literal cfgOptionBooleanDefault "
+               "rather than cartOrCfgOption:  the harvester only sees the "
+               "cfgOption* accessors, which is why browser.quickLift is not in "
+               "this catalog.  A cart variable of the same name still "
+               "overrides it, so both answers can be had on one machine."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
         h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",

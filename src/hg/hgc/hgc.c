@@ -144,6 +144,7 @@
 #include "chain.h"
 #include "chainDb.h"
 #include "chainNetDbLoad.h"
+#include "bigChain.h"
 #include "chainToPsl.h"
 #include "chainToAxt.h"
 #include "netAlign.h"
@@ -3488,10 +3489,20 @@ boolean showEvery = sameString(item, "PrintAllSequences");
 boolean showAll = trackDbSettingOn(tdb, "showAll");
 unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
 struct bigBedInterval *bb, *bbList = NULL;
+struct hash *chainHash = NULL;
+struct hash *mapPsls = NULL;     // mapping alignments quickLift reuses across items
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
 
+// A quickLifted track can only show what the chains around this window reach, so it takes
+// the windowed query even when the track asks for every alignment of the item.  The file
+// holds the other assembly's alignments, so the window has to be turned into that
+// assembly's coordinates before the query.  quickLiftGetIntervals also hands back the
+// chains needed to bring the alignments the other way.
 // If showAll is on, show all alignments with this qName, not just the
 // selected one.
-if (showEvery)
+if (quickLiftFile != NULL)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, seqName, ivStart, ivEnd, &chainHash);
+else if (showEvery)
     {
     struct bbiChromInfo *chrom, *chromList = bbiChromList(bbi);
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -3561,6 +3572,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	{
         char *cdsStr, *seq;
         struct psl *psl= getPslAndSeq(tdb, chromName, bb, seqTypeField, &seq, &cdsStr);
+        if (chainHash != NULL)
+            {
+            struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, psl);
+            pslFree(&psl);
+            if (lifted == NULL)
+                continue;       // nothing in the chains places this alignment
+            psl = lifted;
+            }
         slAddHead(&pslList, psl);
 
         // we're assuming that if there are multiple psl's with the same id that
@@ -3620,7 +3639,10 @@ else
 char *aliTable = cloneString(tdb->table);
 if (isHubTrack(aliTable))
     trackHubFixName(aliTable);
-if (showEvery || pslIsProtein(pslList))
+// pslIsProtein reads through its argument, and the list is empty whenever nothing in the
+// window matched the item, or, on a quickLifted track, nothing in the window could be
+// lifted.
+if (showEvery || ((pslList != NULL) && pslIsProtein(pslList)))
     printAlignmentsSimple(pslList, start, "htcBigPslAli", aliTable, item);
 else
     printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow",
@@ -3648,10 +3670,22 @@ void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb,
 {
 struct psl* pslList = getAlignments(conn, tdb->table, item);
 
+// For a quickLifted track the alignments came out of the other assembly, and so did the
+// sequence the check below looks for, so both have to name that assembly.  Move the
+// alignments onto the reference before anything prints a position.  Only the ones the
+// chains around this window can place survive, which leaves out alignments of the same
+// accession elsewhere in the genome.
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *srcDb = (liftDb != NULL) ? liftDb : database;
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+if ((quickLiftFile != NULL) && (pslList != NULL))
+    pslList = quickLiftPsls(quickLiftChainHash(quickLiftFile, seqName, winStart, winEnd),
+                            pslList);
+
 /* check if there is an alignment available for this sequence.  This checks
  * both genbank sequences and other sequences in the seq table.  If so,
  * set it up so they can click through to the alignment. */
-if (hGenBankHaveSeq(database, item, NULL))
+if (hGenBankHaveSeq(srcDb, item, NULL))
     {
     printf("<H3>%s/Genomic Alignments</H3>", item);
     if (sameString("protein", subType))
@@ -3782,11 +3816,67 @@ if (html != NULL && html[0] != 0)
 hPrintf("<BR>\n");
 }
 
+static struct chain *quickLiftChainInRange(struct trackDb *tdb, int id)
+/* Load one chain out of the assembly the track came from and map it onto the reference.
+ * Every chain in the window is loaded and then matched on id, rather than asking for the
+ * one id:  the chain's sequence name in the other assembly is not known here, and the
+ * by-id loaders abort when the id is not in the range they were given. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->table), &table, &liftDb);
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+
+char *chainFile = NULL, *linkFile = NULL;
+if (startsWith("big", tdb->type))
+    {
+    chainFile = trackDbSetting(tdb, "bigDataUrl");
+    linkFile = trackDbSetting(tdb, "linkDataUrl");
+    if (linkFile == NULL)
+        linkFile = bigChainGetLinkFile(chainFile);
+    }
+
+struct hash *chainHash = newHash(8);
+struct hash *mapPsls = NULL;
+struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, seqName,
+    winStart, winEnd, chainHash);
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    struct chain *chain, *chainList;
+    if (chainFile != NULL)
+        chainList = chainLoadIdRangeHub(NULL, chainFile, linkFile, range->chrom,
+            range->start, range->end, -1);
+    else
+        chainList = chainLoadRange(liftDb, table, range->chrom, range->start, range->end);
+
+    for (chain = chainList; chain != NULL; chain = chain->next)
+        {
+        if (chain->id != id)
+            continue;
+
+        struct chain *lifted = quickLiftChain(chainHash, &mapPsls, chain);
+        if (lifted != NULL)
+            return lifted;
+        }
+    }
+return NULL;
+}
+
 struct chain *chainLoadItemInRange(struct trackDb *tdb, char *item)
 /* Load up parts of chain that intersect seqName:winStart-winEnd */
 {
 struct chain *chain = NULL;
 int id = sqlUnsigned(item);
+
+if (quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb))
+    {
+    chain = quickLiftChainInRange(tdb, id);
+    if (chain == NULL)
+        errAbort("Couldn't lift chain %d into %s:%d-%d", id, seqName, winStart, winEnd);
+    return chain;
+    }
+
 if (startsWith("big", tdb->type))
     {
     char *fileName = trackDbSetting(tdb, "bigDataUrl");
@@ -4096,17 +4186,32 @@ else
 
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
 
+// The normalized score lives in the chain table, so for a quickLifted track it has to be
+// read from the assembly the chain came from.  Against the assembly on screen the table
+// name either does not resolve, or resolves to a same-named table there and returns
+// somebody else's chain, which is worse.
+char *normDb = database;
+struct sqlConnection *normConn = conn;
+char *normTable = tdb->table;
+boolean lifted = quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb);
+if (lifted)
+    {
+    normDb = trackDbSetting(tdb, "quickLiftDb");
+    normTable = trackHubSkipHubName(tdb->table);
+    normConn = hAllocConn(normDb);
+    }
+
 if (normScoreAvailable)
     {
     char tableName[HDB_MAX_TABLE_STRING];
-    if (!hFindSplitTable(database, chain->tName, tdb->table, tableName, sizeof tableName, NULL))
-	errAbort("genericChainClick track %s not found", tdb->table);
+    if (!hFindSplitTable(normDb, chain->tName, normTable, tableName, sizeof tableName, NULL))
+	errAbort("genericChainClick track %s not found", normTable);
     char query[256];
     struct sqlResult *sr;
     char **row;
     sqlSafef(query, ArraySize(query),
 	 "select normScore from %s where id = '%s'", tableName, item);
-    sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(normConn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
         double normScore = atof(row[0]);
@@ -4116,8 +4221,18 @@ if (normScoreAvailable)
     sqlFreeResult(&sr);
     printf("<BR>\n");
     }
+if (lifted)
+    hFreeConn(&normConn);
 
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
+if (quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb))
+    // A lifted chain is only worked out over the window being viewed, so the whole chain's
+    // extent is not knowable here and the usual sentence would be wrong.
+    printf("<BR>This chain comes from %s and is mapped onto %s as the browser draws it, so "
+           "the fields above describe the part of it around the window rather than the "
+           "whole chain.<BR>\n",
+           trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
+else
+    printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
@@ -7154,6 +7269,18 @@ hFreeConn(&conn);
 hFreeConn(&conn2);
 }
 
+static char *aliTrackParam()
+/* "&aliTrack=<track>" for the track hgc was called on, so an alignment handler can find
+ * its trackDb.  The aliTable name alone will not do:  a quickLifted track's table name is
+ * the one from the assembly the alignments came from, and that name usually also belongs
+ * to a real table on the assembly being viewed. */
+{
+static char buf[1024];
+
+safef(buf, sizeof buf, "&aliTrack=%s", cgiUsualString("table", cgiUsualString("g", "")));
+return buf;
+}
+
 static boolean isPslToPrintByClick(struct psl *psl, int startFirst, boolean isClicked)
 /* Determine if a psl should be printed based on if it was or was not the one that was clicked
  * on.
@@ -7193,7 +7320,8 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
             char *qName = itemIn;
 	    if (showEvery)
 		qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
-	    safef(otherString, sizeof(otherString), "%d&aliTable=%s", psl->tStart, tableName);
+	    safef(otherString, sizeof(otherString), "%d&aliTable=%s%s", psl->tStart, tableName,
+                  aliTrackParam());
             printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
                    hgTracksPathAndSettings(), database, psl->tName, psl->tStart+1, psl->tEnd);
 	    if (psl->qSize <= MAX_DISPLAY_QUERY_SEQ_SIZE) // Only anchor if small enough 
@@ -7241,8 +7369,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	    qName = replaceChars(itemIn, "PrintAllSequences", psl->qName);
 
         char otherString[512];
-	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
-	      psl->tStart, tableName);
+	safef(otherString, sizeof(otherString), "%d&aliTable=%s%s",
+	      psl->tStart, tableName, aliTrackParam());
 	hgcAnchorSomewhere(hgcCommandInWindow, qName, otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
@@ -8675,9 +8803,85 @@ puts("</HTML>\n");
 exit(0);	/* Avoid cartHtmlEnd. */
 }
 
-static void getCdsStartAndStop(struct sqlConnection *conn, char *acc, char *trackTable,
-			       uint *retCdsStart, uint *retCdsEnd)
-/* Get cds start and stop, if available */
+struct quickLiftAli
+/* Where the alignments behind an "aliTable" cart value actually live.  For a quickLifted
+ * track that is another assembly, under the track's unprefixed table name.  For anything
+ * else it is the current database and the table as given. */
+    {
+    struct trackDb *tdb;
+    char *db;              /* assembly holding the alignments and their sequence */
+    char *table;           /* the alignment table within that assembly */
+    char *quickLiftFile;   /* the chain file, NULL when the track is not quickLifted */
+    };
+
+static void quickLiftAliInfo(char *aliTable, struct quickLiftAli *ali)
+/* Fill in where the alignments behind aliTable live. */
+{
+ZeroVar(ali);
+ali->db = database;
+ali->table = aliTable;
+
+char *bareTable = trackHubSkipHubName(aliTable);
+// aliTrack is the track hgc was called on, which is the only unambiguous handle on the
+// trackDb; aliTable can be a table name that both assemblies have.
+char *aliTrack = cartUsualString(cart, "aliTrack", NULL);
+if (isNotEmpty(aliTrack))
+    ali->tdb = hashFindVal(trackHash, aliTrack);
+if ((ali->tdb == NULL) && isCustomTrack(bareTable))
+    {
+    struct customTrack *ct = lookupCt(bareTable);
+    if (ct != NULL)
+        ali->tdb = ct->tdb;
+    }
+if (ali->tdb == NULL)
+    ali->tdb = hashFindVal(trackHash, aliTable);
+if (ali->tdb == NULL)
+    return;
+
+char *liftDb = trackDbSetting(ali->tdb, "quickLiftDb");
+if (liftDb == NULL)
+    return;
+
+ali->quickLiftFile = trackDbSetting(ali->tdb, "quickLiftUrl");
+ali->db = liftDb;
+quickLiftResolveTable(ali->tdb, bareTable, &ali->table, &ali->db);
+}
+
+static struct psl *quickLiftFindPsl(struct quickLiftAli *ali, struct sqlConnection *conn,
+                                    char *acc, char *chrom, int tStart)
+/* The alignment of acc that the lift places at chrom:tStart on the reference.  Only that
+ * destination position is known here and the lift does not run backwards, so read every
+ * alignment of acc out of the other assembly, lift them, and keep the one that lands
+ * where we were sent.  Returns NULL if none does. */
+{
+char splitTable[HDB_MAX_TABLE_STRING];
+boolean hasBin;
+if (!hFindSplitTable(ali->db, chrom, ali->table, splitTable, sizeof splitTable, &hasBin))
+    errAbort("Failed to find aliTable=%s in %s", ali->table, ali->db);
+
+char query[1024];
+sqlSafef(query, sizeof query, "select * from %s where qName like '%s%%'", splitTable, acc);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct psl *pslList = NULL;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    slAddHead(&pslList, pslLoad(row+hasBin));
+sqlFreeResult(&sr);
+
+pslList = quickLiftPsls(quickLiftChainHash(ali->quickLiftFile, chrom, winStart, winEnd),
+                        pslList);
+
+struct psl *psl;
+for (psl = pslList; psl != NULL; psl = psl->next)
+    if (sameString(psl->tName, chrom) && (psl->tStart == tStart))
+        return psl;
+return NULL;
+}
+
+static void getCdsStartAndStop(char *db, struct sqlConnection *conn, char *acc,
+                               char *trackTable, uint *retCdsStart, uint *retCdsEnd)
+/* Get cds start and stop, if available.  db is the assembly the alignment came from,
+ * which is not the one on screen when the track is quickLifted. */
 {
 struct trackDb *tdb = hashFindVal(trackHash, trackTable);
 // Note: this variable was previously named cdsTable but unfortunately the
@@ -8685,7 +8889,7 @@ struct trackDb *tdb = hashFindVal(trackHash, trackTable);
 char *tdbCdsTable = tdb ? trackDbSetting(tdb, "cdsTable") : NULL;
 if (isEmpty(tdbCdsTable) && startsWith("ncbiRefSeq", trackTable))
     tdbCdsTable = "ncbiRefSeqCds";
-if (isNotEmpty(tdbCdsTable) && hTableExists(database, tdbCdsTable))
+if (isNotEmpty(tdbCdsTable) && hTableExists(db, tdbCdsTable))
     {
     char query[256];
     sqlSafef(query, sizeof(query), "select cds from %s where id = '%s'", tdbCdsTable, acc);
@@ -8723,18 +8927,16 @@ struct sqlConnection *conn = NULL;
 struct trackDb *tdb = NULL;
 
 aliTable = cartString(cart, "aliTable");
-if (isCustomTrack(aliTable))
-    {
-    struct customTrack *ct = lookupCt(aliTable);
-    tdb = ct->tdb;
-    }
-else
-    tdb = hashFindVal(trackHash, aliTable);
+// A quickLifted track's alignments live in the file of the assembly they came from, and
+// the position we were sent is on the reference.
+struct quickLiftAli ali;
+quickLiftAliInfo(aliTable, &ali);
+tdb = ali.tdb;
 if (tdb == NULL)
     errAbort("BUG: bigPsl alignment table '%s' not found; this maybe causes by `.' in track names", aliTable);
              
-if (!trackHubDatabase(database))
-    conn = hAllocConnTrack(database, tdb);
+if (!trackHubDatabase(ali.db) && !isGenArk(ali.db))
+    conn = hAllocConnTrack(ali.db, tdb);
 
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
@@ -8745,28 +8947,54 @@ start = cartInt(cart, "l");
 int end = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 
-char *seq, *cdsString = NULL;
+char *seq = NULL, *cdsString = NULL;
 struct lm *lm = lmInit(0);
 char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-char *bedRow[32];
-char startBuf[16], endBuf[16];
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+struct hash *chainHash = NULL, *mapPsls = NULL;
+struct bigBedInterval *bb, *bbList;
+if (ali.quickLiftFile != NULL)
+    bbList = quickLiftGetIntervals(ali.quickLiftFile, bbi, chrom, start, end, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+
+// Pick the alignment the browser drew at chrom:start-end.  Under quickLift the intervals
+// are in the other assembly's coordinates, so each one has to be lifted before its
+// position can be compared with the one we were sent.
+psl = NULL;
+char otherChrom[bbi->chromBpt->keySize+1];
+int lastChromId = -1;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct bed *bed = bedLoadN(bedRow, 12);
-    if (sameString(bed->name, acc) && (bb->start == start) && (bb->end == end))
-	{
-	bb->next = NULL;
-	break;
-	}
+    char *bbChrom = seqName;
+    if (ali.quickLiftFile != NULL)
+        {
+        bbiCachedChromLookup(bbi, bb->chromId, lastChromId, otherChrom, sizeof otherChrom);
+        lastChromId = bb->chromId;
+        bbChrom = otherChrom;
+        }
+    char *bbSeq = NULL, *bbCds = NULL;
+    struct psl *bbPsl = getPslAndSeq(tdb, bbChrom, bb, seqTypeField, &bbSeq, &bbCds);
+    if (ali.quickLiftFile != NULL)
+        {
+        struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, bbPsl);
+        pslFree(&bbPsl);
+        bbPsl = lifted;
+        }
+    if ((bbPsl != NULL) && sameString(bbPsl->qName, acc)
+     && (bbPsl->tStart == start) && (bbPsl->tEnd == end))
+        {
+        psl = bbPsl;
+        seq = bbSeq;
+        cdsString = bbCds;
+        break;
+        }
+    pslFree(&bbPsl);
     }
-if (bb == NULL)
+if (psl == NULL)
     errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
              acc, chrom, start, end, tdb->table, fileName);
-unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-psl = getPslAndSeq(tdb, seqName, bb, seqTypeField, &seq, &cdsString);
 if (cdsString)
     genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
@@ -8793,13 +9021,11 @@ unsigned int cdsStart = 0, cdsEnd = 0;
 struct trackDb *tdb = NULL;
 
 aliTable = cartString(cart, "aliTable");
-if (isCustomTrack(aliTable))
-    {
-    struct customTrack *ct = lookupCt(aliTable);
-    tdb = ct->tdb;
-    }
-else
-    tdb = hashFindVal(trackHash, aliTable);
+struct quickLiftAli ali;
+quickLiftAliInfo(aliTable, &ali);
+tdb = ali.tdb;
+if (tdb == NULL)
+    errAbort("BUG: bigPsl alignment table '%s' not found; this maybe causes by `.' in track names", aliTable);
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", acc, aliTable);
 htmlFramesetStart(title);
@@ -8809,25 +9035,52 @@ start = cartInt(cart, "l");
 int end = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 
-char *seq, *cdsString = NULL;
+char *seq = NULL, *cdsString = NULL;
 struct lm *lm = lmInit(0);
 char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
 struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
-struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-char *bedRow[32];
-char startBuf[16], endBuf[16];
+unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
+struct hash *chainHash = NULL, *mapPsls = NULL;
+struct bigBedInterval *bb, *bbList;
+if (ali.quickLiftFile != NULL)
+    // the file holds the other assembly's alignments, so the window has to be turned
+    // into that assembly's coordinates before the query
+    bbList = quickLiftGetIntervals(ali.quickLiftFile, bbi, chrom, start, end, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+
+wholePsl = NULL;
+char otherChrom[bbi->chromBpt->keySize+1];
+int lastChromId = -1;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct bed *bed = bedLoadN(bedRow, 12);
-    if (sameString(bed->name, acc))
-	{
-	bb->next = NULL;
-	break;
-	}
+    char *bbChrom = seqName;
+    if (ali.quickLiftFile != NULL)
+        {
+        bbiCachedChromLookup(bbi, bb->chromId, lastChromId, otherChrom, sizeof otherChrom);
+        lastChromId = bb->chromId;
+        bbChrom = otherChrom;
+        }
+    char *bbSeq = NULL, *bbCds = NULL;
+    struct psl *bbPsl = getPslAndSeq(tdb, bbChrom, bb, seqTypeField, &bbSeq, &bbCds);
+    if (ali.quickLiftFile != NULL)
+        {
+        struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, bbPsl);
+        pslFree(&bbPsl);
+        bbPsl = lifted;
+        }
+    if ((bbPsl != NULL) && sameString(bbPsl->qName, acc))
+        {
+        wholePsl = bbPsl;
+        seq = bbSeq;
+        cdsString = bbCds;
+        break;
+        }
+    pslFree(&bbPsl);
     }
-unsigned seqTypeField =  bbExtraFieldIndex(bbi, "seqType");
-wholePsl = getPslAndSeq(tdb, seqName, bb, seqTypeField, &seq, &cdsString);
+if (wholePsl == NULL)
+    errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
+             acc, chrom, start, end, tdb->table, fileName);
 
 if (seq == NULL)
     {
@@ -8846,8 +9099,10 @@ showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
                             NULL, cdsStart, cdsEnd);
 }
 
-static struct dnaSeq *getBaseColorSequence(char *itemName, char *table)
-/* Grab sequence using the sequence and extFile table names out of BASE_COLOR_USE_SEQUENCE. */
+static struct dnaSeq *getBaseColorSequence(char *db, char *itemName, char *table)
+/* Grab sequence using the sequence and extFile table names out of BASE_COLOR_USE_SEQUENCE.
+ * db is the assembly the sequence lives in, which is not the one on screen when the track
+ * is quickLifted. */
 {
 struct trackDb *tdb = hashMustFindVal(trackHash, table);
 char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
@@ -8858,11 +9113,11 @@ char *specCopy = cloneString(spec);
 char *words[3];
 int nwords = chopByWhite(specCopy, words, ArraySize(words));
 if (sameString(words[0], "extFile") && (nwords == ArraySize(words)))
-    return hDnaSeqGet(database, itemName, words[1], words[2]);
+    return hDnaSeqGet(db, itemName, words[1], words[2]);
 else if (sameString(words[0], "db"))
     {
-    char *db = (nwords == 2) ? words[1] : database;
-    return hChromSeq(db, itemName, 0, 0);
+    char *seqDb = (nwords == 2) ? words[1] : db;
+    return hChromSeq(seqDb, itemName, 0, 0);
     }
 else
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
@@ -8889,7 +9144,7 @@ safef(accChopped, sizeof(accChopped), "%s",acc);
 chopSuffix(accChopped);
 
 aliTable = cartString(cart, "aliTable");
-char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
+char *accForTitle = startsWith("ncbiRefSeq", trackHubSkipHubName(aliTable)) ? acc : accChopped;
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
 alnModernStart(title);
@@ -8897,51 +9152,62 @@ alnModernStart(title);
 /* Get some environment vars. */
 start = cartInt(cart, "o");
 
-conn = hAllocConn(database);
-getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
+// A quickLifted track's alignments, and the sequence they are to, live in the assembly
+// they came from, not the one on screen.  The position we were sent is on the reference.
+struct quickLiftAli ali;
+quickLiftAliInfo(aliTable, &ali);
+conn = hAllocConn(ali.db);
+getCdsStartAndStop(ali.db, conn, acc, aliTable, &cdsStart, &cdsEnd);
 
-/* Look up alignments in database */
-if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
-    errAbort("Failed to find aliTable=%s", aliTable);
-sqlSafef(query, sizeof query, "select * from %s where qName like '%s%%' and tName=\"%s\" and tStart=%d",
-	table, acc, seqName, start);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find alignment for %s at %d", acc, start);
-psl = pslLoad(row+hasBin);
-sqlFreeResult(&sr);
-
-/* get bz rna snapshot for blastz alignments */
-if (sameString("mrnaBlastz", aliTable) || sameString("pseudoMrna", aliTable))
+if (ali.quickLiftFile != NULL)
     {
-    struct sqlConnection *conn = hAllocConn(database);
-    unsigned retId = 0;
-    safef(accTmp, sizeof accTmp, "bz-%s", acc);
-    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, conn) == -1)
-        rnaSeq = hRnaSeq(database, acc);
-    hFreeConn(&conn);
-    }
-else if (sameString("HInvGeneMrna", aliTable))
-    {
-    /* get RNA accession for the gene id in the alignment */
-    sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
-    rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
-    }
-else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable) ||
-         startsWith("fixSeqLiftOverPsl", aliTable))
-    {
-    rnaSeq = getBaseColorSequence(acc, aliTable);
+    psl = quickLiftFindPsl(&ali, conn, acc, seqName, start);
+    if (psl == NULL)
+        errAbort("Couldn't find a lifted alignment for %s at %s:%d", acc, seqName, start);
     }
 else
     {
-    char *cdnaTable = NULL;
-    struct trackDb *tdb = hashFindVal(trackHash, aliTable);
-    if (tdb != NULL)
-	cdnaTable = trackDbSetting(tdb, "cdnaTable");
-    if (isNotEmpty(cdnaTable) && hTableExists(database, cdnaTable))
-	rnaSeq = hGenBankGetMrna(database, acc, cdnaTable);
+    /* Look up alignments in database */
+    if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
+        errAbort("Failed to find aliTable=%s", aliTable);
+    sqlSafef(query, sizeof query, "select * from %s where qName like '%s%%' and tName=\"%s\" and tStart=%d",
+	    table, acc, seqName, start);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+        errAbort("Couldn't find alignment for %s at %d", acc, start);
+    psl = pslLoad(row+hasBin);
+    sqlFreeResult(&sr);
+    }
+
+/* get bz rna snapshot for blastz alignments */
+char *bareAliTable = trackHubSkipHubName(aliTable);
+if (sameString("mrnaBlastz", bareAliTable) || sameString("pseudoMrna", bareAliTable))
+    {
+    struct sqlConnection *conn = hAllocConn(ali.db);
+    unsigned retId = 0;
+    safef(accTmp, sizeof accTmp, "bz-%s", acc);
+    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, conn) == -1)
+        rnaSeq = hRnaSeq(ali.db, acc);
+    hFreeConn(&conn);
+    }
+else if (sameString("HInvGeneMrna", bareAliTable))
+    {
+    /* get RNA accession for the gene id in the alignment */
+    sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
+    rnaSeq = hRnaSeq(ali.db, sqlQuickString(conn, query));
+    }
+else if (sameString("ncbiRefSeqPsl", bareAliTable) || startsWith("altSeqLiftOverPsl", bareAliTable) ||
+         startsWith("fixSeqLiftOverPsl", bareAliTable))
+    {
+    rnaSeq = getBaseColorSequence(ali.db, acc, aliTable);
+    }
+else
+    {
+    char *cdnaTable = (ali.tdb != NULL) ? trackDbSetting(ali.tdb, "cdnaTable") : NULL;
+    if (isNotEmpty(cdnaTable) && hTableExists(ali.db, cdnaTable))
+	rnaSeq = hGenBankGetMrna(ali.db, acc, cdnaTable);
     else
-	rnaSeq = hRnaSeq(database, acc);
+	rnaSeq = hRnaSeq(ali.db, acc);
     }
 
 if (NULL == rnaSeq)
@@ -8950,7 +9216,7 @@ if (NULL == rnaSeq)
     }
 else
     {
-    if (startsWith("xeno", aliTable))
+    if (startsWith("xeno", bareAliTable))
         showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
     else
         showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
@@ -8974,12 +9240,16 @@ chopSuffix(accChopped);
 aliTable = cartString(cart, "aliTable");
 start = cartInt(cart, "o");
 
-char *accForTitle = startsWith("ncbiRefSeq", aliTable) ? acc : accChopped;
+// a quickLifted track carries a hub_NNN_ prefix; the name tests below are all about the
+// kind of alignment, so they want the name without it
+char *bareAliTable = trackHubSkipHubName(aliTable);
+
+char *accForTitle = startsWith("ncbiRefSeq", bareAliTable) ? acc : accChopped;
 char title[1024];
 safef(title, sizeof title, "%s vs Genomic [%s]", accForTitle, aliTable);
 htmlFramesetStart(title);
 
-if (startsWith("user", aliTable))
+if (startsWith("user", bareAliTable))
     {
     char *pslName, *faName, *qName;
     struct lineFile *lf;
@@ -9037,48 +9307,57 @@ if (startsWith("user", aliTable))
     }
 else
     {
-    /* Look up alignments in database */
-    struct sqlConnection *conn = hAllocConn(database);
-    getCdsStartAndStop(conn, acc, aliTable, &cdsStart, &cdsEnd);
+    /* Look up alignments in database.  A quickLifted track's alignments, and the
+     * sequence they are to, live in the assembly they came from. */
+    struct quickLiftAli ali;
+    quickLiftAliInfo(aliTable, &ali);
+    struct sqlConnection *conn = hAllocConn(ali.db);
+    getCdsStartAndStop(ali.db, conn, acc, aliTable, &cdsStart, &cdsEnd);
 
-    char table[64];
-    boolean hasBin;
-    if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
-	errAbort("aliTable %s not found", aliTable);
     char query[256];
-    sqlSafef(query, sizeof(query),
-         "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d", 
-         table, acc, seqName, start);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    if ((row = sqlNextRow(sr)) == NULL)
-	errAbort("Couldn't find alignment for %s at %d", acc, start);
-    wholePsl = pslLoad(row+hasBin);
-    sqlFreeResult(&sr);
+    if (ali.quickLiftFile != NULL)
+        {
+        wholePsl = quickLiftFindPsl(&ali, conn, acc, seqName, start);
+        if (wholePsl == NULL)
+            errAbort("Couldn't find a lifted alignment for %s at %s:%d", acc, seqName, start);
+        }
+    else
+        {
+        char table[64];
+        boolean hasBin;
+        if (!hFindSplitTable(database, seqName, aliTable, table, sizeof table, &hasBin))
+            errAbort("aliTable %s not found", aliTable);
+        sqlSafef(query, sizeof(query),
+             "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d", 
+             table, acc, seqName, start);
+        struct sqlResult *sr = sqlGetResult(conn, query);
+        char **row;
+        if ((row = sqlNextRow(sr)) == NULL)
+            errAbort("Couldn't find alignment for %s at %d", acc, start);
+        wholePsl = pslLoad(row+hasBin);
+        sqlFreeResult(&sr);
+        }
 
-    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) ||
-        sameString("pseudoMrna", aliTable) || startsWith("altSeqLiftOverPsl", aliTable) ||
-        startsWith("fixSeqLiftOverPsl", aliTable) || startsWith("ncbiRefSeqPsl", aliTable))
+    if (startsWith("ucscRetroAli", bareAliTable) || startsWith("retroMrnaAli", bareAliTable) ||
+        sameString("pseudoMrna", bareAliTable) || startsWith("altSeqLiftOverPsl", bareAliTable) ||
+        startsWith("fixSeqLiftOverPsl", bareAliTable) || startsWith("ncbiRefSeqPsl", bareAliTable))
 	{
-        rnaSeq = getBaseColorSequence(acc, aliTable);
+        rnaSeq = getBaseColorSequence(ali.db, acc, aliTable);
 	}
-    else if (sameString("HInvGeneMrna", aliTable))
+    else if (sameString("HInvGeneMrna", bareAliTable))
 	{
 	/* get RNA accession for the gene id in the alignment */
 	sqlSafef(query, sizeof(query), "select mrnaAcc from HInv where geneId='%s'",
 	      acc);
-	rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
+	rnaSeq = hRnaSeq(ali.db, sqlQuickString(conn, query));
 	}
     else
 	{
-	char *cdnaTable = NULL;
-	struct trackDb *tdb = hashFindVal(trackHash, aliTable);
-	if (tdb != NULL)
-	    cdnaTable = trackDbSetting(tdb, "cdnaTable");
-	if (isNotEmpty(cdnaTable) && hTableExists(database, cdnaTable))
-	    rnaSeq = hGenBankGetMrna(database, acc, cdnaTable);
+	char *cdnaTable = (ali.tdb != NULL) ? trackDbSetting(ali.tdb, "cdnaTable") : NULL;
+	if (isNotEmpty(cdnaTable) && hTableExists(ali.db, cdnaTable))
+	    rnaSeq = hGenBankGetMrna(ali.db, acc, cdnaTable);
 	else
-	    rnaSeq = hRnaSeq(database, acc);
+	    rnaSeq = hRnaSeq(ali.db, acc);
 	}
     hFreeConn(&conn);
     }
@@ -9088,7 +9367,7 @@ if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
 else
     partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
 
-if (startsWith("xeno", aliTable))
+if (startsWith("xeno", bareAliTable))
     errAbort("htcCdnaAliInWindow does not support translated alignments.");
 else
     showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
@@ -10651,7 +10930,7 @@ return prot;
 void ncbiRefSeqSequence(char *itemName)
 {
 char *table = cartString(cart, "o");
-struct dnaSeq *rnaSeq = getBaseColorSequence(itemName, table );
+struct dnaSeq *rnaSeq = getBaseColorSequence(database, itemName, table );
 cartHtmlStart("RefSeq mRNA Sequence");
 
 printf("<PRE><TT>");
@@ -27990,11 +28269,22 @@ if ((!isCustomTrack(track) && !isMyVariantsTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
-    if (sameString("htcBigPslAli", track) || sameString("htcBigPslAliInWindow", track) )
+    // The alignment click-throughs arrive with the track in aliTrack (aliTable can be a
+    // bare table name that means nothing on this assembly), and a hub track's trackDb --
+    // including a quickLifted one -- only reaches trackHash if its hub is attached here.
+    if (sameString("htcBigPslAli", track) || sameString("htcBigPslAliInWindow", track)
+     || sameString("htcCdnaAli", track) || sameString("htcCdnaAliInWindow", track)
+     || sameString("htcProteinAli", track))
 	{
-	char *aliTable = cartString(cart, "aliTable");
-	if (isHubTrack(aliTable))	
-	    tdb = hubConnectAddHubForTrackAndFindTdb( database, aliTable, NULL, trackHash);
+	char *aliTrack = cartUsualString(cart, "aliTrack", NULL);
+	char *aliTable = cartUsualString(cart, "aliTable", NULL);
+	char *hubTrack = NULL;
+	if (isNotEmpty(aliTrack) && isHubTrack(aliTrack))
+	    hubTrack = aliTrack;
+	else if (isNotEmpty(aliTable) && isHubTrack(aliTable))
+	    hubTrack = aliTable;
+	if (hubTrack != NULL)
+	    tdb = hubConnectAddHubForTrackAndFindTdb( database, hubTrack, NULL, trackHash);
 	}
     else if (isHubTrack(track))
 	{
@@ -29351,8 +29641,8 @@ doMiddle();
 
 // "u"/"s" are the shared BLAT link's session selectors (loadBlatShareSessionIfAny); exclude them so
 // they are not left in the reader's cart and written into any session they later save.
-char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "addp", "pred", "quickLiftCcds",
-                       "u", "s", NULL};
+char *excludeVars[] = {"Submit", "submit", "g", "i", "aliTable", "aliTrack", "addp", "pred",
+                       "quickLiftCcds", "u", "s", NULL};
 
 int main(int argc, char *argv[])
 {

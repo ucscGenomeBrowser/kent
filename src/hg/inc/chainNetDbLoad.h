@@ -62,6 +62,11 @@ struct chainNet *chainNetLoadChrom(char *database, char *track,
 	char *chrom, char *extraWhere);
 /* Load net on whole chromosome. */
 
+struct chain *chainLoadRange(char *database, char *track, char *chrom, int start, int end);
+/* Load every chain in a range from the database, each carrying the blocks that overlap the
+ * range.  As with chainLoadIdRange the chain header still describes the whole chain, not
+ * just the part in range. */
+
 struct chain *chainLoadIdRangeHub(char *database, char *fileName, char *track, char *chrom, 
 	int start, int end, int id);
 /* Load parts of chain of given ID from bigChain file.  Note the chain header

@@ -1943,7 +1943,25 @@ dumpTdbAndChildren(cart, dy, tdb);
 return dy;
 }
 
-static boolean validateOneTdb(char *db, struct trackDb *tdb, struct trackDb **badList)
+static boolean isAlignmentType(char *type)
+/* The alignment types quickLift can lift.  These are newer than the rest of quickLift and
+ * are gated in hg.conf, so quickLiftAlignmentsEnabled decides whether one may enter the
+ * hub.  This is the only door:  quickLiftUrl and quickLiftDb, the pair every lift path
+ * keys off, are written by the quickLift hub writer and by nothing else. */
+{
+// trackDb types are matched without regard to case since that's how the rest of the
+// browser reads them (some trackDb stanzas say "bigbed" rather than "bigBed").
+return startsWithNoCase("bigPsl", type) ||
+       startsWithNoCase("bigChain", type) ||
+       startsWithNoCase("bigMaf", type) ||
+       startsWithNoCase("wigMaf", type) ||
+       sameWord("chain", type) ||
+       startsWithNoCase("chain ", type) ||
+       sameWord("psl", type) ||
+       startsWithNoCase("psl ", type);
+}
+
+static boolean validateOneTdb(struct cart *cart, char *db, struct trackDb *tdb, struct trackDb **badList)
 /* Make sure the tdb is a track type we grok.  badList may be NULL to validate
  * silently (no user-facing complaint about non-liftable types). */
 {
@@ -1960,6 +1978,7 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        startsWithNoCase("broadPeak", tdb->type) || \
        startsWithNoCase("bigLolly", tdb->type) || \
        (startsWithNoCase("bigNet", tdb->type) && trackHubBigNetEnabled()) || \
+       (isAlignmentType(tdb->type) && quickLiftAlignmentsEnabled(cart)) || \
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {
@@ -1971,6 +1990,9 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
 // make sure we have a bigDataUrl
 if (startsWithNoCase("bigBed", tdb->type) || \
        startsWithNoCase("bigNet", tdb->type) || \
+       startsWithNoCase("bigPsl", tdb->type) || \
+       startsWithNoCase("bigChain", tdb->type) || \
+       startsWithNoCase("bigMaf", tdb->type) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
@@ -2018,7 +2040,7 @@ else
         boolean visible = isParentVisible(cart, tdb) && isSubtrackVisible(cart, tdb);
         // Lift all siblings of a visible subtrack, but only complain about
         // non-liftable ones the user actually asked for (visible ones).
-        if (validateOneTdb(db, tdb, visible ? badList : NULL))
+        if (validateOneTdb(cart, db, tdb, visible ? badList : NULL))
             {
             slAddHead(&validTdbs, tdb);
             if (visible)
@@ -2045,7 +2067,7 @@ if (tdb->subtracks)
     return TRUE;
     }
 
-return validateOneTdb(db, tdb, badList);
+return validateOneTdb(cart, db, tdb, badList);
 }
 
 static void outTrack(struct dyString *out, struct cart *cart, struct trackDb *tdb, double priority)

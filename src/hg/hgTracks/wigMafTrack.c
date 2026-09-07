@@ -18,6 +18,7 @@
 #include "mafTrack.h"
 #include "customTrack.h"
 #include "mafSummary.h"
+#include "quickLift.h"
 #include "mafFrames.h"
 #include "phyloTree.h"
 #include "soTerm.h"
@@ -282,6 +283,49 @@ return fileName;
 }
 
 
+static struct mafAli *quickLiftLoadMafs(struct track *track, int start, int end)
+/* Load MAF blocks out of the assembly the track came from and map them onto the reference. */
+{
+char *liftDb = trackDbSetting(track->tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(track->tdb, track->table, &table, &liftDb);
+char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
+
+struct hash *chainHash = newHash(8);
+struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, chromName,
+    start, end, chainHash);
+struct mafAli *srcList = NULL;
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    struct mafAli *someMafs = NULL;
+    if (track->isBigBed)
+        {
+        struct bbiFile *bbi = fetchBbiForTrack(track);
+        someMafs = bigMafLoadInRegion(bbi, range->chrom, range->start, range->end);
+        bbiFileClose(&bbi);
+        track->bbiFile = NULL;
+        }
+    else
+        {
+        struct sqlConnection *conn = hAllocConn(liftDb);
+        struct sqlConnection *conn2 = hAllocConn(liftDb);
+        someMafs = wigMafLoadInRegion(conn, conn2, table, range->chrom,
+            range->start, range->end, getTrackMafFile(track));
+        hFreeConn(&conn);
+        hFreeConn(&conn2);
+        }
+    srcList = slCat(srcList, someMafs);
+    }
+
+// The browser looks for its reference row by the assembly name without a hub prefix,
+// which is how the maf drawing code builds the name it searches for.
+char refSrc[512];
+safef(refSrc, sizeof refSrc, "%s.%s", hubConnectSkipHubPrefix(database), chromName);
+return quickLiftMafs(chainHash, srcList, liftDb, refSrc,
+                     hChromSize(database, chromName));
+}
+
 static void loadMafsToTrack(struct track *track)
 /* load mafs in region to track custom pointer */
 {
@@ -296,7 +340,9 @@ int begin = winStart - 2;
 if (begin < 0)
     begin = 0;
 
-if (track->isBigBed)
+if (quickLiftIsLifted(track->tdb))
+    mp->list = quickLiftLoadMafs(track, begin, winEnd + 2);
+else if (track->isBigBed)
     {
     struct bbiFile *bbi = fetchBbiForTrack(track);
     mp->list = bigMafLoadInRegion(bbi, chromName, begin, winEnd+2);
@@ -514,7 +560,9 @@ if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
     struct mafPriv *mp = getMafPriv(track);
     struct sqlConnection *conn, *conn2;
 
-    if (track->isBigBed)
+    if (quickLiftIsLifted(track->tdb))
+        mp->list = quickLiftLoadMafs(track, winStart, winEnd);
+    else if (track->isBigBed)
         {
         struct bbiFile *bbi = fetchBbiForTrack(track);
         mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, winStart, winEnd);

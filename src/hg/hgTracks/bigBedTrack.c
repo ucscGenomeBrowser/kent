@@ -24,6 +24,7 @@
 #include "trackHub.h"
 #include "net.h"
 #include "bigPsl.h"
+#include "bPlusTree.h"    // for the chrom-name key size of the bigBed we are reading
 #include "bigBedFilter.h"
 #include "bigBedLabel.h"
 #include "variation.h"
@@ -798,6 +799,10 @@ struct linkedFeatures *spannedLf = NULL;
 unsigned filtered = 0;
 unsigned notLifted = 0;
 struct bed *bed = NULL, *bedCopy = NULL;
+struct hash *mapPsls = NULL;     // mapping alignments quickLift reuses across items
+int lastChromId = -1;
+char otherChrom[bbi->chromBpt->keySize+1];
+char startBuf[16], endBuf[16];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     struct linkedFeatures *lf = NULL;
@@ -809,15 +814,24 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (sameString(track->tdb->type, "bigPsl"))
         {
         // fill out bedRow to support mouseOver pattern replacements
-        char startBuf[16], endBuf[16];
         bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
         char *seq, *cds;
-        struct psl *psl = pslFromBigPsl(chromName, bb, seqTypeField,  &seq, &cds);
-        int sizeMul =  pslIsProtein(psl) ? 3 : 1;
+        // Under quickLift the interval came out of the other assembly's file, so the
+        // alignment has to carry that assembly's sequence name:  chromName is the name on
+        // the reference, and the chains are looked up by the name on the other side.
+        char *pslChrom = chromName;
+        if (quickLiftFile)
+            {
+            bbiCachedChromLookup(bbi, bb->chromId, lastChromId, otherChrom, sizeof otherChrom);
+            lastChromId = bb->chromId;
+            pslChrom = otherChrom;
+            }
+        struct psl *psl = pslFromBigPsl(pslChrom, bb, seqTypeField,  &seq, &cds);
+        boolean isProt = pslIsProtein(psl);
         boolean isXeno = 0;  // just affects grayIx
         boolean nameGetsPos = FALSE; // we want the name to stay the name
 
-        if (sizeMul == 3)
+        if (isProt)
             {
             // these tags are not currently supported by the drawing engine for protein psl
             hashRemove(track->tdb->settingsHash, "showDiffBasesAllScales");
@@ -825,15 +839,41 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             hashRemove(track->tdb->settingsHash, "baseColorDefault");
             }
 
-        lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
-        lf->original = psl;
-        if ((seq != NULL) && (lf->orientation == -1))
-            reverseComplement(seq, strlen(seq));
-        lf->extra = seq;
-        lf->cds = cds;
-        lf->useItemRgb = useItemRgb;
-        if ( lf->useItemRgb )
-            lf->filterColor = itemRgbColumn(bedRow[8]);
+        if (quickLiftFile)
+            {
+            // Move the alignment's target side onto the reference.  Ask the lifted
+            // alignment about its own block sizes rather than reusing isProt:  the lift
+            // puts a protein alignment into nucleotide space on the way through.
+            struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, psl);
+            pslFree(&psl);
+            psl = lifted;
+            }
+
+        if (psl == NULL)
+            liftFailed = TRUE;
+        else
+            {
+            if (quickLiftFile)
+                {
+                // bedRow still holds the pre-lift position, and a $chrom or $chromStart in
+                // a mouseOver has to report where the item is drawn.
+                safef(startBuf, sizeof startBuf, "%d", psl->tStart);
+                safef(endBuf, sizeof endBuf, "%d", psl->tEnd);
+                bedRow[0] = psl->tName;
+                bedRow[1] = startBuf;
+                bedRow[2] = endBuf;
+                }
+            int sizeMul = pslIsProtein(psl) ? 3 : 1;
+            lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
+            lf->original = psl;
+            if ((seq != NULL) && (lf->orientation == -1))
+                reverseComplement(seq, strlen(seq));
+            lf->extra = seq;
+            lf->cds = cds;
+            lf->useItemRgb = useItemRgb;
+            if ( lf->useItemRgb )
+                lf->filterColor = itemRgbColumn(bedRow[8]);
+            }
         }
     else if (sameString(tdb->type, "bigDbSnp"))
         {

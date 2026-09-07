@@ -19,6 +19,7 @@
 #include "trackHub.h"
 #include "chromAlias.h"
 #include "genark.h"
+#include "quickLift.h"
 
 extern boolean issueBotWarning;
 
@@ -548,6 +549,50 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%d&db=%s"
 winStart, winEnd, winStart, database, tdb->track, label);
 }
 
+static struct mafAli *quickLiftClickMafs(struct trackDb *tdb, char *fileName)
+/* Load MAF blocks out of the assembly the track came from and map them onto the reference.
+ * The window is on the reference, and the blocks are not, so neither the coordinates nor
+ * the connections the caller has can be used as they stand. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(tdb, trackHubSkipHubName(tdb->table), &table, &liftDb);
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+boolean isBig = sameString(tdb->type, "bigMaf");
+
+struct hash *chainHash = newHash(8);
+struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, seqName,
+    winStart, winEnd, chainHash);
+struct mafAli *srcList = NULL;
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    struct mafAli *someMafs = NULL;
+    if (isBig)
+        {
+        char *bigFile = trackDbSetting(tdb, "bigDataUrl");
+        struct bbiFile *bbi = bigBedFileOpenAlias(bigFile, chromAliasFindAliases);
+        someMafs = bigMafLoadInRegion(bbi, range->chrom, range->start, range->end);
+        bbiFileClose(&bbi);
+        }
+    else
+        {
+        struct sqlConnection *srcConn = hAllocConn(liftDb);
+        struct sqlConnection *srcConn2 = hAllocConn(liftDb);
+        someMafs = mafLoadInRegion2(srcConn, srcConn2, table, range->chrom,
+            range->start, range->end, fileName);
+        hFreeConn(&srcConn);
+        hFreeConn(&srcConn2);
+        }
+    srcList = slCat(srcList, someMafs);
+    }
+
+// the reference row has to be named the way the code below goes looking for it
+char refSrc[512];
+safef(refSrc, sizeof refSrc, "%s.%s", hubConnectSkipHubPrefix(database), seqName);
+return quickLiftMafs(chainHash, srcList, liftDb, refSrc, hChromSize(database, seqName));
+}
+
 static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)
 /* Display details for MAF or AXT tracks. */
 {
@@ -595,7 +640,9 @@ else
             }
         }
 
-    if (sameString(tdb->type, "bigMaf"))
+    if (quickLiftIsLifted(tdb))
+        mafList = quickLiftClickMafs(tdb, fileName);
+    else if (sameString(tdb->type, "bigMaf"))
         {
         char *fileName = trackDbSetting(tdb, "bigDataUrl");
         struct bbiFile *bbi =  bigBedFileOpenAlias(fileName, chromAliasFindAliases);
