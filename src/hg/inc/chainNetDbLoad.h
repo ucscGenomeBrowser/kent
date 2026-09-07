@@ -24,6 +24,10 @@
 #include "bigNet.h"
 #endif
 
+#ifndef BIGBED_H
+#include "bigBed.h"
+#endif
+
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash);
 /* Convert netAlign to cnFill. Name hash is a place to store
