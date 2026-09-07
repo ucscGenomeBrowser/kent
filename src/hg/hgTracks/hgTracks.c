@@ -5394,6 +5394,14 @@ for(pfRef = preFlatTracks; pfRef; pfRef = pfRef->next)
     }
 pixHeight = tmpPixHeight;
 
+// All the ways into density mode have now been decided, so note it in the long labels
+// of the tracks that will actually be drawn.
+for(pfRef = preFlatTracks; pfRef; pfRef = pfRef->next)
+    {
+    if (!isLimitedVisHiddenForAllWindows(pfRef->track))
+        labelTrackAsDensityIfActive(pfRef->track);
+    }
+
 // Construct flatTracks
 for(; preFlatTracks; preFlatTracks = preFlatTracks->next)
     flatTracksAdd(&flatTracks,preFlatTracks->track,cart, orderedWiggles);
@@ -12443,15 +12451,10 @@ if (cdsQueryCache != NULL)
 }
 
 void labelTrackAsFilteredNumber(struct track *tg, unsigned numOut)
-/* add text to track long label to indicate filter is active. Also add doWiggle/windowsize label. */
+/* add text to track long label to indicate filter is active */
 {
 if (numOut > 0)
     tg->longLabel = labelAsFilteredNumber(tg->longLabel, numOut);
-
-if (cartOrTdbBoolean(cart, tg->tdb, "doWiggle", FALSE))
-    labelTrackAsDensity(tg);
-else if (winTooBigDoWiggle(cart, tg))
-    labelTrackAsDensityWindowSize(tg);
 }
 
 void labelTrackAsFiltered(struct track *tg)
@@ -12489,15 +12492,36 @@ else
 }
 
 void labelTrackAsDensity(struct track *tg)
-/* Add text to track long label to indicate density mode */
+/* Add text to track long label to indicate the user asked for density mode */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "item density shown");
+tg->longLabel = labelAddNote(tg->longLabel,
+    "density mode active, configure the track to switch it off");
 }
 
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "item density shown - zoom in for individual items or use squish or dense mode");
+tg->longLabel = labelAddNote(tg->longLabel, "too many features, density shown - zoom in for individual items or use squish or dense mode");
+}
+
+void labelTrackAsDensityTooManyItems(struct track *tg)
+/* Add text to track long label to indicate we switched to density mode because there were
+ * too many items to draw one by one */
+{
+tg->longLabel = labelAddNote(tg->longLabel,
+    "too many features, density shown, zoom in to see details");
+}
+
+void labelTrackAsDensityIfActive(struct track *tg)
+/* If a track is showing item density instead of individual items, say so in the long label,
+ * distinguishing the density the user asked for from the density we had to impose. */
+{
+if (cartOrTdbBoolean(cart, tg->tdb, "doWiggle", FALSE))
+    labelTrackAsDensity(tg);
+else if (winTooBigDoWiggle(cart, tg))
+    labelTrackAsDensityWindowSize(tg);
+else if (tg->limitWiggle)
+    labelTrackAsDensityTooManyItems(tg);
 }
 
 

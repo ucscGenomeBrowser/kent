@@ -2830,7 +2830,15 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         {
         printf("<TR style='border-bottom: none'><TD style='margin-bottom:10px' NOWRAP colspan=2>\n");
 
-        printf("<b>Apply visibility: </b>\n");
+        // Hide/show everything with a single click, the two most common cases
+        printf("<button type='button' id='superVizHideAllButton'>Hide all tracks</button>\n");
+	jsOnEventById("click", "superVizHideAllButton", "superUiSetAllTracks('hide')");
+
+        printf("<button type='button' style='margin-left: 10px' id='superVizShowAllButton'>"
+               "Show all tracks</button>\n");
+	jsOnEventById("click", "superVizShowAllButton", "superUiSetAllTracks('pack')");
+
+        printf("<span style='margin-left: 20px'><b>Apply visibility: </b></span>\n");
         printf("<select id='superSubViz' class='normalText'>\n");
         printf("<option value='hide'>Hide</option>");
         printf("<option value='dense'>Dense</option>");
@@ -2839,17 +2847,14 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         printf("<option value='full'>Full</option>\n");
         printf("</select>\n");
 
-        printInfoIcon("The 'Apply to all visible tracks' button sets the visibility selected in this dropdown on all tracks below that are not hidden.<br>"
+        printInfoIcon("The 'Show all tracks' button sets all tracks below to pack, except for those "
+                      "that do not support it, e.g. signal tracks, which are set to full.<br>"
 		      "The 'Apply to all tracks' button sets the visibility selected in this dropdown on all tracks below, including hidden ones.");
 
-        // First button: set all selectors that are not on 'hide' to the current value of the top select 
-        printf("<button type='button' id='superVizApplyButton'>Apply to all visible tracks</button>\n");
-	jsOnEventById("click", "superVizApplyButton", "superUiSetAllTracks(true)");
-
-        // Second button: set all selectors to the current value of the top select
-        printf("<button type='button' style='margin-left: 10px' id='superVizApplyAllButton'>Apply to all tracks</button>&nbsp;\n");
+        // set all selectors to the current value of the top select
+        printf("<button type='button' id='superVizApplyAllButton'>Apply to all tracks</button>&nbsp;\n");
 	jsOnEventById("click", "superVizApplyAllButton", "superUiSetAllTracks()");
-        
+
         printf("</TD></TR>\n");
         }
     printf("<TR><TD NOWRAP>");
@@ -3979,7 +3984,7 @@ if (!ajax)
     // that they're inside a container now and can go back up the hierarchy
     if (tdbGetComposite(tdb)) {
         // shortLabel comes from trackDb, which a track hub controls, escape
-        printf("<p>This track is a subtrack of the composite container track \"%s\".<br>",
+        printf("<p>This track is part of the track container \"%s\".<br>",
                htmlEncode(tdb->parent->shortLabel));
         printf("<a href='hgTrackUi?db=%s&c=%s&g=%s'>Click here</a> to display the \"%s\" container configuration page.", database, chromosome, tdb->parent->track, htmlEncode(tdb->parent->shortLabel));
     }
