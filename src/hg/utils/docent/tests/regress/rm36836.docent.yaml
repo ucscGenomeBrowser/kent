@@ -1,0 +1,40 @@
+# #36836 -- a GenArk assembly and an assembly hub both crashed when opened by URL, and on
+# hgwdev only.
+#
+# Reported with four URLs: two on hgwdev that crashed and the same two on hgwbeta and hgw0
+# that were fine. That shape is the whole point of the ticket. The code that broke it was
+# only ever on hgwdev, so a release-branch build could not show it and the RR was never
+# affected. genome-test IS hgwdev's build, which is why this test belongs here and would
+# have been worthless anywhere else.
+#
+# It was not fixed so much as withdrawn: Galt reverted the two commits from #36835
+# (0542bdef848 and 289c4a361a8) at Brian's request, over a speed concern that had not been
+# measured. So the behavior asserted here is the behavior from before #36835, and what the
+# script guards against is a second attempt at that work landing the same way.
+#
+# No `db:` at the top on purpose -- neither step uses one. Each URL names its own assembly,
+# which is exactly the gesture the ticket reported, so both are driven with goto: rather
+# than with the hub: verb.
+#
+# The daph hub is a public UCSC example hub on GitHub, not a colleague's public_html, so it
+# is about as durable as an outside fixture gets. preflight reads the hubUrl out of the
+# goto below, so if GitHub ever moves it the nightly says a fixture is missing rather than
+# reporting a browser regression.
+#
+# Both assertions name a real data row, not just the ruler. A crash left no track image at
+# all, so the ruler alone would already fail on it -- but a page that draws the ruler and
+# nothing else is also what an assembly whose tracks did not resolve looks like, and that
+# is the half of this bug that was about hub loading rather than about the CGI staying up.
+# gc5Base is in every GenArk hub, and myTrack is the daph hub's only track. Row names are
+# matched by suffix, so the per-run hub_<n>_ prefix on both does not have to be known.
+target: genome-test
+reset: true
+fast: true
+steps:
+  # The GenArk assembly, by accession, with no hub URL of its own.
+  - goto: "/cgi-bin/hgTracks?db=GCF_000003625.3&pix=1100"
+  - expect: {rows: [ruler, gc5Base], noText: "Warning/Error"}
+
+  # The assembly hub, by genome= plus hubUrl=, at the position the ticket gave.
+  - goto: "/cgi-bin/hgTracks?genome=daph&hubUrl=https://raw.githubusercontent.com/ucsc-browser/assemblyHubEx/master/Daphnia/hubExamples/hubAssembly/daph/hub.txt&position=scaffold_1%3A35591-35626&pix=1100"
+  - expect: {rows: [ruler, myTrack], noText: "Warning/Error"}

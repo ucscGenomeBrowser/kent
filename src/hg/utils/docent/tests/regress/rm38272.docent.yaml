@@ -1,0 +1,54 @@
+# #38272 -- hgTrackUi tried a MySQL connect to a quickLifted GenArk source assembly.
+#
+# This is NOT a copy of rm37388. That script covers hgc. This one drives the OTHER page
+# reached from the same lifted track, its track-settings page, which had a path of its own
+# that #37388's per-CGI fix never guarded:
+#
+#     Warning/Error(s):
+#     Couldn't set connection database to GCA_018466835.2
+#     mySQL error 1049: Unknown database 'GCA_018466835.2'
+#
+# specificUi() (hgTrackUi.c:3432) reassigns db to the track's quickLiftDb setting and hands
+# that db to cfgByCfgType(), labelCfgUi() and extraUiLinks(). For a GenArk source the db is
+# a bare accession with no MySQL database behind it. trackHubDatabase() does not catch that,
+# because the source hub is not loaded in this request. hgc got the matching isGenArk()
+# guard in #37388 (921a40c472e); hgTrackUi got it on master in cdb348c5512, where asForDb()
+# and two trackDbFilter blocks in hui.c now test isGenArk() as well. That ships in v504.
+#
+# Both halves were measured on 2026-09-06, not inferred. Broken, the page came back 451
+# characters: the warning box, the nav chrome, the track name, a display-mode row, "Remove
+# from QuickLift", and nothing else. That is where specificUi() is called, at hgTrackUi.c
+# :4202, just after the "Remove from QuickLift" link at :4118. Fixed, the same page is 2800
+# characters. hgwbeta still gave the 451-character page that morning, so the two were seen
+# side by side.
+#
+# The assertions are on text that exists only past the point where the broken page stopped.
+# "RefSeq mRNAs Track Settings" is deliberately NOT one of them: the 451-character page
+# carries that heading too, so it never told the two apart. "Color track by codons" comes
+# from cfgByCfgType() and "Data schema/format description and download" from extraUiLinks(),
+# which are two of the three routines that were handed the bad db.
+#
+# It reproduces from scratch with no session at all -- open GenArk GCA_018466835.2 at
+# CM089257.1:80,200,000-80,360,000, leave the default tracks alone, QuickLift to hg38, click
+# the gear on RefSeq mRNAs. The script that checks any server that way is at
+# /hive/groups/browser/redmineNotes/38252/claude/repro_37388_hgTrackUi.js.
+#
+# This script uses the braney/crash1 session instead, because that is the cheap way to the
+# same state and rm37388 already depends on it, so preflight covers it either way.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: braney, name: crash1}
+  - expect: {noText: "Could not find session", rows: [xenoRefGene]}
+
+  # The track's own settings link, which is the gesture a user makes to configure a lifted
+  # track. hgTrackUi has no track image, so there is no row to assert on: the checks are on
+  # the page text.
+  - click: 'a[href*="hgTrackUi"][href*="xenoRefGene"]'
+
+  - expect:
+      text: "Color track by codons"
+      noText: "Couldn't set connection database"
+  - expect: {text: "Data schema/format description and download"}

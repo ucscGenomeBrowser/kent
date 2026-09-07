@@ -1,0 +1,50 @@
+# #35865 -- the Microarray Expression Data section of hgGene was empty on hg19 and hg38.
+#
+# A user wrote in (#35845) because hg18 showed expression data for a gene and hg38 showed
+# the section heading with nothing under it. The section was there; what was missing was
+# everything in it.
+#
+# So the assertion cannot be the heading. A page with the heading and no data is exactly
+# what was reported, and "Microarray Expression Data" is on it either way. The two data set
+# names under the heading are the check: GNF Expression Atlas 2 and the Gladstone set are
+# what the section is supposed to list, and neither can appear unless hgGene found data to
+# put there.
+#
+# This is also the first script here that opens hgGene at all. The suite reaches hgTracks,
+# hgTrackUi, hgc, hgSearch, hgCustom, hgConvert and hgPhyloPlace; hgGene had no coverage.
+#
+# The gene is reached by its coordinates and a click, not by pasting the hgGene URL from
+# the ticket. That URL names a transcript (ENST00000269305.9), and a transcript accession is
+# data: the next knownGene update can retire it and the script would then fail for a reason
+# that is not a bug. Clicking by POSITION rather than by item name keeps the same accession
+# out of the click. TP53's window on hg38 is a genome coordinate, which does not move.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+position: chr17:7668421-7687490
+steps:
+  - go: chr17:7668421-7687490
+  - hide: all
+  - track: {knownGene: pack}
+  - expect: {rows: [knownGene], noText: "Warning/Error"}
+
+  # By TITLE, which for knownGene is the gene symbol. Not by item:, which would be the
+  # transcript accession this script is trying to avoid, and not by position: a positional
+  # click looks for a box carrying an hgc href, and knownGene's boxes link to hgGene, so
+  # areaXY finds nothing at all there.
+  - click: {track: knownGene, title: "TP53"}
+  - expect: {url: "hgGene", text: "TP53"}
+
+  - expect: {text: "Microarray Expression Data"}
+
+  # The section is COLLAPSED when hgGene draws it: its table is written with
+  # style='display:none' and opened by the + button beside the heading. Its contents are in
+  # the DOM the whole time, but expect: text reads innerText, which leaves out anything
+  # hidden -- so without this click the two checks below fail on a perfectly good page, and
+  # a has: written to dodge that would pass on the empty page the ticket is about. Clicking
+  # the + is also what the user in #35845 did.
+  - click: '#microarrayBtn'
+
+  - expect: {text: "GNF Expression Atlas 2"}
+  - expect: {text: "Gladstone Microarray Data"}

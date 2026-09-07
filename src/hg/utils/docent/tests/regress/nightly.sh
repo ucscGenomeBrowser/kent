@@ -11,12 +11,26 @@
 # recipe is not right yet -- and those must not mail a failure every night.  A newly
 # committed test is picked up with no edit here.
 #
-# It runs out of whatever checkout this script itself lives in, so a second copy in a
-# second checkout needs no argument.  While the tests live only on branch
-# docentTests37892 that means Brian's worktree.  Once the branch is on master this
-# should move to a checkout of its own, the way catalogNightly has one under
-# /hive/users/braney, so that an ordinary day's editing cannot change what the cron
-# measures.
+# It runs out of whatever checkout this script itself lives in, so a copy in a second
+# checkout needs no argument.  The cron runs it out of a clone of its own,
+#
+#     /hive/users/braney/docentNightly/kent
+#
+# the way catalogNightly has one under /hive/users/braney, so that an ordinary day's
+# editing in ~/kent cannot change what the cron measures.  Nothing here is built, so
+# the clone needs no submodules and no make.
+#
+# --update brings that clone to origin/master and then re-runs this script from the
+# result.  Two reasons for the re-exec rather than a separate driver script beside the
+# crontab: the whole job stays in the tree where it can be reviewed and committed, and
+# a change to this file takes effect the same night as a change to a test, instead of
+# a night later.
+#
+# --update will only ever touch a checkout that is a pristine mirror of origin/master.
+# A working tree with uncommitted edits, or one holding a commit that has not been
+# pushed, is left alone and reported, because a `reset --hard` there would throw away
+# work.  That is what makes it safe for the flag to exist in a script that also sits in
+# a working tree.
 
 set -u
 export PATH=/usr/bin:/bin:/usr/local/bin:$PATH
@@ -31,6 +45,44 @@ STAMP=$(date +%Y-%m-%d_%H%M)
 mkdir -p "$LOGDIR"
 OUT="$LOGDIR/$STAMP.txt"
 
+# A job that could not start has to arrive looking like the others, or a night when
+# nothing ran reads as a quiet night.  Same subject shape, same log file, exit 0.
+bail() {
+{
+    echo "Docent regression run, $(date)"
+    echo "checkout: $HERE"
+    echo
+    echo "$@"
+    echo
+    echo "Nothing was tested.  This is a problem with this job, not with the browser."
+} > "$OUT" 2>&1
+mail -s "docent regression: BROKEN (0 ok) $(date +%F)" "$TO" < "$OUT"
+exit 0
+}
+
+if [ "${1:-}" = --update ] && [ -z "${DOCENT_NIGHTLY_UPDATED:-}" ]; then
+    shift
+    dirty=$(git -C "$HERE" status --porcelain --untracked-files=no 2>&1)
+    if [ -n "$dirty" ]; then
+        bail "--update will not reset $HERE: it has uncommitted changes.
+
+$dirty"
+    fi
+    git -C "$HERE" fetch -q origin master 2>&1 || \
+        bail "--update could not fetch origin master into $HERE."
+    ahead=$(git -C "$HERE" rev-list --oneline FETCH_HEAD..HEAD 2>&1)
+    if [ -n "$ahead" ]; then
+        bail "--update will not reset $HERE: it holds commits that are not on origin/master.
+
+$ahead"
+    fi
+    git -C "$HERE" reset -q --hard FETCH_HEAD 2>&1 || \
+        bail "--update could not move $HERE to FETCH_HEAD."
+    # Re-open this file by name, which is now the copy that just arrived.
+    export DOCENT_NIGHTLY_UPDATED=1
+    exec "$0" "$@"
+fi
+
 # The committed scripts, as bare test names.  `make test T=` takes a list.
 TESTS=$(cd "$HERE" && git ls-files '*.docent.yaml' 2>/dev/null \
         | sed 's#.*/##; s#\.docent\.yaml$##' | tr '\n' ' ')
@@ -40,6 +92,9 @@ TESTS=$(cd "$HERE" && git ls-files '*.docent.yaml' 2>/dev/null \
   echo "checkout: $HERE"
   echo "branch:   $(git -C "$HERE" rev-parse --abbrev-ref HEAD 2>/dev/null)"
   echo "commit:   $(git -C "$HERE" rev-parse --short HEAD 2>/dev/null)"
+  if [ -n "${DOCENT_NIGHTLY_UPDATED:-}" ]; then
+    echo "updated:  this checkout was reset to origin/master before the run"
+  fi
   echo
 
   if [ -z "${TESTS// /}" ]; then

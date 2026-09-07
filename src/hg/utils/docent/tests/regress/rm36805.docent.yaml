@@ -1,0 +1,48 @@
+# #36805 -- clicking a TOGA item a SECOND time hung the display.
+#
+# Reported by Hiram on mm10: turn on only "TOGA vs hg38", click an item to get the details
+# pop-up, dismiss it, click any item again, and the display hangs. Gerardo's recipe on the
+# ticket is exact and is what this follows: load the session, click
+# ENST00000518529.SFTA3.1, click the x on the pop-up, click the same item again.
+#
+# This is the first script here that does anything TWICE. Everything else in the suite is a
+# straight line from a fresh cart: reset, a few steps, assert. A bug that only exists on the
+# repeat is invisible to that shape, and there are at least two of them in the pool (#36805
+# and #37014). One click of this item passes on the broken build as happily as on the fixed
+# one, so the second click is not a flourish, it IS the test.
+#
+# raw: true on the click is the other half. Docent's ordinary item click follows the item's
+# own map-box href straight to hgc, which is the right thing when the assertion is about the
+# details PAGE. Here the bug is in the DIALOG: hgTracks answers a real click with an ajax
+# pop-up (popUpHgcOrHgGene.hgc in hg/js/hgTracks.js), and following the href never opens one,
+# so it could never see this. raw: presses the mouse where a user presses it and lets the
+# page do what it does.
+#
+# :visible matters on both checks. jQuery UI HIDES #hgcDialog on close, it does not remove
+# it, so a bare has: "#hgcDialog" would match the closed dialog and the second assertion
+# would pass without the pop-up ever coming back.
+#
+# No build left to watch this fail on: fixed for v492 in December 2025, so hgwbeta and the
+# RR have had it for months.
+target: genome-test
+db: mm10
+reset: true
+fast: true
+steps:
+  - loadSession: {user: Gerardo, name: RM_36805_TOGA_hangs}
+
+  # A session that has gone away is not an error -- hgTracks serves a 200 with no image and
+  # every noText on it passes -- so the row check is what says the session really loaded.
+  - expect: {noText: "Could not find session", rows: [HLTOGAannotvHg38v1]}
+
+  - click: {track: HLTOGAannotvHg38v1, item: "ENST00000518529.SFTA3.1", raw: true}
+  - expect: {has: "#hgcDialog:visible"}
+
+  # The x button, which is the gesture the ticket names. Scoped to the visible dialog: the
+  # page carries more than one jQuery UI dialog in its DOM.
+  - click: '.ui-dialog:visible .ui-dialog-titlebar-close'
+  - expect: {noHas: "#hgcDialog:visible"}
+
+  # The whole point. Same item, same gesture, second time.
+  - click: {track: HLTOGAannotvHg38v1, item: "ENST00000518529.SFTA3.1", raw: true}
+  - expect: {has: "#hgcDialog:visible"}

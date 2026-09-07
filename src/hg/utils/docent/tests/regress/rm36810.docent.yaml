@@ -1,0 +1,44 @@
+# #36810 -- trackDb's `urls` statement stopped turning data fields into links.
+#
+# ClinVar's trackDb carries
+#
+#     urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId=".../gene/$$" ...
+#
+# and hgc is supposed to substitute the item's own field value for $$ and print a link.
+# Something between v487 and v491 broke that, so the accessions were printed as plain text
+# and the reader had nowhere to go. Reported by Lou off #36808, fixed for v492.
+#
+# The assertion is the HREF, which is a value the browser BUILT from the data, not text it
+# copied. That is what separates this from the rest of the suite: almost everything else
+# here says a row was drawn or a page carries no error, and would be just as happy with an
+# accession printed as dead text.
+#
+# It asks for RCV specifically, not merely for a link to NCBI. Every ClinVar hgc page has
+# NCBI links in its description and boilerplate, so `a[href*="ncbi.nlm.nih.gov"]` would
+# pass on the broken page too. /clinvar/RCV can only be there if an rcvAcc field went
+# through the substitution.
+#
+# Nothing here names a variant. ClinVar is rebuilt every month and an accession that is on
+# the page today may not be next time, so the item is taken by POSITION -- the box nearest
+# the middle of a window in BRCA2 that is thick with variants -- and the assertion is on
+# the SHAPE of the accession rather than on any particular one.
+#
+# has: rather than text:, because a href is not page text. This is the same reason rm38126
+# uses it, from the other direction: there the thing asserted was absent from innerText, here
+# it never appears in innerText at all.
+target: genome-test
+db: hg38
+position: chr13:32396673-32400065
+reset: true
+fast: true
+steps:
+  - go: chr13:32396673-32400065
+  - hide: all
+  - track: {clinvarMain: pack}
+  - expect: {rows: [clinvarMain], noText: "Warning/Error"}
+
+  - click: {track: clinvarMain, frac: 0.5}
+  - expect: {url: "hgc", noText: "Warning/Error"}
+
+  - expect: {has: 'a[href*="ncbi.nlm.nih.gov/clinvar/RCV"]'}
+  - expect: {has: 'a[href*="ncbi.nlm.nih.gov/gene/"]'}
