@@ -1658,15 +1658,15 @@ function makeHighlightPicker(cartVar, parentEl, trackName, label, cartColor = hl
     $(inpSpec).spectrum("set", $(inpText).val());
 }
 
-function superUiSetAllTracks(onlyVisible) {
-    /* called when user clicks the 'Apply to all' buttons: sets all viz dropdowns to the #superSubViz value */
-    let newVal = $('#superSubViz').val();
+function superUiSetAllTracks(newVal) {
+    /* called when user clicks one of the buttons above the track list: sets all viz dropdowns
+     * to newVal, e.g. 'hide' or 'pack'. Without an argument, the #superSubViz value is used. */
+    if (newVal === undefined)
+        newVal = $('#superSubViz').val();
     var selects = document.querySelectorAll('#superTrackTable select');
     for (var i = 0; i < selects.length; i++) {
         var sel = selects[i];
         if (sel.id==="superSubViz")
-            continue;
-        if (onlyVisible && sel.value === 'hide')
             continue;
         sel.value = newVal;
         // if the dropdown cannot be set to a value (e.g. bigWig has no pack), set it to full or dense
