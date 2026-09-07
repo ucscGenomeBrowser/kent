@@ -153,6 +153,11 @@ el = newSlName("bigMaf");
 slAddHead(&supportedTypes, el);
 el = newSlName("bigChain");
 slAddHead(&supportedTypes, el);
+if (trackHubBigNetEnabled())
+    {
+    el = newSlName("bigNet");
+    slAddHead(&supportedTypes, el);
+    }
 slNameSort(&supportedTypes);
 }	/*	static void initSupportedTypes()	*/
 
@@ -219,6 +224,8 @@ if (startsWith("chain ", tdb->type))
     stripType = cloneString("chain");
 else if (startsWith("netAlign ", tdb->type))
     stripType = cloneString("netAlign");
+else if (startsWith("bigNet ", tdb->type))
+    stripType = cloneString("bigNet");
 else if (startsWith("genePred ", tdb->type))
     stripType = cloneString("genePred");
 else if (startsWith("bigWig ", tdb->type))
@@ -430,6 +437,7 @@ if (errCatchStart(errCatch))
             || startsWithWord("bigDbSnp", type)
             || startsWithWord("bigMaf", type)
             || startsWithWord("bigChain", type)
+            || startsWithWord("bigNet", type)
             || startsWithWord("bigRmsk", type)
             || startsWithWord("bigBarChart", type)
             || startsWithWord("bigInteract", type))

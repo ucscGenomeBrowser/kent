@@ -69,9 +69,9 @@ cell bed bedGraph
 centerLabelsDense *
 centerLabelsPack *
 chainColor chain bigChain
-chainLinearGap netAlign chain bed psl bigPsl bigChain bigMaf
-chainMinScore netAlign chain bed psl bigPsl bigChain bigMaf
-chainNormScoreAvailable netAlign bed chain bigChain
+chainLinearGap netAlign chain bed psl bigPsl bigChain bigMaf bigNet
+chainMinScore netAlign chain bed psl bigPsl bigChain bigMaf bigNet
+chainNormScoreAvailable netAlign bed chain bigChain bigNet
 chimpDb bed
 chimpMacaqueOrthoTable bed
 chimpOrangMacOrthoTable bed
@@ -303,8 +303,8 @@ mafFile customTracks
 mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain psl bigPsl bigChain bigMaf
-matrixHeader netAlign bed chain psl bigPsl bigChain bigMaf
+matrix netAlign bed chain psl bigPsl bigChain bigMaf bigNet
+matrixHeader netAlign bed chain psl bigPsl bigChain bigMaf bigNet
 maxCheckboxes *
 maxChromName customTracks
 maxHeightPixels *
@@ -359,7 +359,7 @@ origTrackLine customTracks
 otherDb *
 otherTwoBitUrl *
 otherDbTable bed
-otherOrg netAlign chain bigChain
+otherOrg netAlign chain bigChain bigNet
 otherSpecies halSnake
 pairEndsByName bam
 pairedEndUrlFormat bed

@@ -20,6 +20,10 @@
 #include "chainNet.h"
 #endif
 
+#ifndef BIGNET_H
+#include "bigNet.h"
+#endif
+
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash);
 /* Convert netAlign to cnFill. Name hash is a place to store
@@ -33,6 +37,22 @@ struct chainNet *chainNetLoadResult(struct sqlResult *sr, int rowOffset);
 struct chainNet *chainNetLoadRange(char *database, char *track,
 	char *chrom, int start, int end, char *extraWhere);
 /* Load parts of a net track that intersect range. */
+
+struct chainNet *chainNetLoadRangeHub(char *fileName, char *chrom, int start, int end);
+/* Load the parts of a bigNet file that intersect range into a chainNet.
+ * Note the net->size field is not filled in. */
+
+struct chainNet *chainNetLoadRangeQuickLift(char *quickLiftFile, char *fileName,
+                                            char *chrom, int start, int end);
+/* Load the part of a bigNet file that quickLifts into chrom:start-end, and build a
+ * chainNet in the destination assembly's coordinates.  Only the target side of the net
+ * moves; the query side describes a third assembly and is carried across untouched.
+ * Note the net->size field is not filled in. */
+
+struct bigNet *bigNetFromInterval(struct bbiFile *bbi, struct bigBedInterval *bb,
+                                  char *fileName, struct bigNet *bn);
+/* Fill in bn from one interval of a bigNet file.  The chrom name is the one the file
+ * carries, which for a quickLifted net is in the source assembly. */
 
 struct chainNet *chainNetLoadChrom(char *database, char *track,
 	char *chrom, char *extraWhere);

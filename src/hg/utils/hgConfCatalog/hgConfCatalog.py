@@ -234,6 +234,14 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
+        h("bigNet", "flag", "hg/lib/trackHub.c", default="FALSE",
+          role="gate", verified=True, ticket="20824",
+          note="The bigNet track type, a net of pairwise alignments in a "
+               "bigBed, and quickLift support for it.  Read once in "
+               "trackHubBigNetEnabled(); with it off a hub that declares "
+               "\"type bigNet\" fails to load with an unsupported-type error, "
+               "quickLift refuses the type, and neither hubCheck nor the hubApi "
+               "lists it among the supported types."),
         h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "

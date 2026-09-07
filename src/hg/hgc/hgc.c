@@ -147,6 +147,7 @@
 #include "chainToPsl.h"
 #include "chainToAxt.h"
 #include "netAlign.h"
+#include "bigNet.h"
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
 #include "stsMapMouseNew.h"
@@ -4227,6 +4228,119 @@ if (q != 0)
 printf("<BR>\n");
 }
 
+static struct netAlign *bigNetLoadOne(struct trackDb *tdb, char *chrom, int start,
+                                      unsigned level, boolean *retClipped)
+/* Load the record from a bigNet file at the given level that covers start.
+ * Returns NULL if there isn't one.  Sets *retClipped when a quickLifted row would
+ * only lift with its ends pulled in, so the extent reported is the visible part
+ * rather than the whole item. */
+{
+char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+if (fileName == NULL)
+    errAbort("No bigDataUrl in track %s", tdb->track);
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName, chromAliasFindAliases);
+struct hash *chainHash = NULL;
+struct bigBedInterval *bb, *bbList;
+struct netAlign *na = NULL;
+
+/* A quickLifted net is read over the whole window, because that is the lift the image
+ * was drawn from, and each row is then tested against the clicked base once it has
+ * landed. */
+if (quickLiftFile != NULL)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, winStart, winEnd, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, start+1, 0, lm);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    struct bigNet bn;
+    unsigned tStart = bb->start, tEnd = bb->end;
+    boolean thisClipped = FALSE;
+
+    if (quickLiftFile != NULL)
+        {
+        /* The unclipped lift first, so the page can report the item's whole extent.
+         * An item too big for the chains loaded here lifts only with its ends pulled
+         * in, and that is how the image drew it, so fall back to the clipped lift
+         * rather than reporting an item the reader can plainly see as missing. */
+        struct bed *bed = quickLiftIntervalsToBed(bbi, chainHash, bb);
+        if (bed == NULL)
+            {
+            bed = quickLiftIntervalsToBedClip(bbi, chainHash, bb);
+            thisClipped = TRUE;
+            }
+        if (bed == NULL)
+            continue;
+        if (!sameString(bed->chrom, chrom))
+            {
+            bedFree(&bed);
+            continue;
+            }
+        tStart = bed->chromStart;
+        tEnd = bed->chromEnd;
+        bedFree(&bed);
+        }
+    if ((tStart > start) || (tEnd <= start))
+        continue;
+    bigNetFromInterval(bbi, bb, fileName, &bn);
+    if (bn.level != level)
+        continue;
+    if (retClipped != NULL)
+        *retClipped = thisClipped;
+    AllocVar(na);
+    na->level = bn.level;
+    na->tName = cloneString(chrom);
+    na->tStart = tStart;
+    na->tEnd = tEnd;
+    safecpy(na->strand, sizeof na->strand, bn.strand);
+    na->qName = cloneString(bn.name);
+    na->qStart = bn.qStart;
+    na->qEnd = bn.qEnd;
+    na->chainId = bn.chainId;
+    na->ali = bn.ali;
+    na->score = bn.chainScore;
+    na->qOver = bn.qOver;
+    na->qFar = bn.qFar;
+    na->qDup = bn.qDup;
+    na->type = cloneString(bn.type);
+    na->tN = bn.tN;
+    na->qN = bn.qN;
+    na->tR = bn.tR;
+    na->qR = bn.qR;
+    na->tNewR = bn.tNewR;
+    na->qNewR = bn.qNewR;
+    na->tOldR = bn.tOldR;
+    na->qOldR = bn.qOldR;
+    na->tTrf = bn.tTrf;
+    na->qTrf = bn.qTrf;
+    break;
+    }
+bbiFileClose(&bbi);
+lmCleanup(&lm);
+return na;
+}
+
+static char *netChainTrackName(struct trackDb *tdb, char *chainTrack)
+/* The type line of a net track names its chain track without any hub prefix.
+ * If the net track came from a hub, so did the chain track it names. */
+{
+if (!isHubTrack(tdb->track))
+    return chainTrack;
+char buf[256];
+safef(buf, sizeof buf, "hub_%d_%s", hubIdFromTrackName(tdb->track), chainTrack);
+return cloneString(buf);
+}
+
+static struct trackDb *netChainTdb(char *chainTrack)
+/* The tdb of the chain track a net track's type line names, or NULL if this assembly
+ * has no such track.  A quickLifted net is the case with none: the net comes across on
+ * its own and its chain track stays behind on the source assembly. */
+{
+return (trackHash == NULL) ? NULL : hashFindVal(trackHash, chainTrack);
+}
+
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, char *otherDb, char *chainTrack)
 /* Generic click handler for net tracks. */
@@ -4243,28 +4357,52 @@ char *otherOrgBrowser = otherOrg;
 int tSize, qSize;
 int netWinSize;
 struct chain *chain;
+boolean isBig = startsWith("big", tdb->type);
+/* A quickLifted net has moved to this assembly on its own.  The chain track its type
+ * line names is still on the source assembly, so there is no alignment to show and no
+ * chain to follow -- only the net itself lifted. */
+boolean isLifted = isBig && (trackDbSetting(tdb, "quickLiftUrl") != NULL);
+struct trackDb *chainTdb = NULL;
+/* Set when a lifted row would only lift with its ends pulled in to the chains we
+ * loaded, so the numbers below describe the visible part and not the whole item. */
+boolean clipped = FALSE;
+
+if (isBig && !isLifted)
+    {
+    chainTrack = netChainTrackName(tdb, chainTrack);
+    chainTdb = netChainTdb(chainTrack);
+    }
 
 if (otherOrg == NULL)
     {
     /* use first word in short track label */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
-if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
-    errAbort("genericNetClick track %s not found", tdb->table);
-sqlSafef(query, sizeof(query),
-	 "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
-	 "and level = %s",
-	 table, seqName, start, start, item);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s:%d in %s", seqName, start, table);
+if (isBig)
+    {
+    net = bigNetLoadOne(tdb, seqName, start, sqlUnsigned(item), &clipped);
+    if (net == NULL)
+        errAbort("Couldn't find %s:%d at level %s in %s", seqName, start, item, tdb->track);
+    }
+else
+    {
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+        errAbort("genericNetClick track %s not found", tdb->table);
+    sqlSafef(query, sizeof(query),
+             "select * from %s where tName = '%s' and tStart <= %d and tEnd > %d "
+             "and level = %s",
+             table, seqName, start, start, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+        errAbort("Couldn't find %s:%d in %s", seqName, start, table);
 
-net = netAlignLoad(row+hasBin);
-sqlFreeResult(&sr);
+    net = netAlignLoad(row+hasBin);
+    sqlFreeResult(&sr);
+    }
 tSize = net->tEnd - net->tStart;
 qSize = net->qEnd - net->qStart;
 
-if (net->chainId != 0)
+if ((net->chainId != 0) && (!isBig || (chainTdb != NULL)))
     {
     netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
     printf("<BR>\n");
@@ -4297,7 +4435,14 @@ if (net->chainId != 0)
 	    printf("To see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
 	    }
         }
-    chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
+    if (isBig)
+        {
+        char idBuf[32];
+        safef(idBuf, sizeof idBuf, "%u", net->chainId);
+        chain = chainLoadItemInRange(chainTdb, idBuf);
+        }
+    else
+        chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
          /* print link to browser for otherDb only if otherDb is active */
@@ -4305,6 +4450,14 @@ if (net->chainId != 0)
 	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser, NULL);
 	chainFree(&chain);
 	}
+    htmlHorizontalLine();
+    }
+else if ((net->chainId != 0) && isLifted)
+    {
+    char *sourceDb = trackDbSetting(tdb, "quickLiftDb");
+    printf("<BR>This net was lifted from %s, so its chains are not on this assembly "
+           "and the alignment cannot be shown here.<BR>\n",
+           isEmpty(sourceDb) ? "another assembly" : sourceDb);
     htmlHorizontalLine();
     }
 printf("<B>Type:</B> %s<BR>\n", net->type);
@@ -4350,7 +4503,11 @@ if (net->tEnd >= net->tStart)
     printLabeledNumber(org, "size", net->tEnd - net->tStart);
 if (net->qEnd >= net->qStart)
     printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
-printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
+if (clipped)
+    printf("<BR>Fields above refer to the part of this chain or gap that could be "
+           "placed on this assembly, not to the whole of it.<BR>\n");
+else
+    printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 netAlignFree(&net);
 }
 
@@ -5104,6 +5261,7 @@ type = words[0];
 if (container == NULL && wordCount > 0)
     {
     if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
+        || sameString(type, "bigNet")
         || sameString(type, "bigQuickLiftChain")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
@@ -5190,10 +5348,10 @@ else if (wordCount > 0)
 	    subType = words[1];
 	genericPslClick(conn, tdb, item, start, subType);
 	}
-    else if (sameString(type, "netAlign"))
+    else if (sameString(type, "netAlign") || sameString(type, "bigNet"))
         {
 	if (wordCount < 3)
-	    errAbort("Missing field in netAlign track type field");
+	    errAbort("Missing field in %s track type field", type);
 	genericNetClick(conn, tdb, item, start, words[1], words[2]);
 	}
     else if (sameString(type, "bigQuickLiftChain")) 

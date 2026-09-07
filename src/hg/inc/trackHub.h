@@ -258,5 +258,9 @@ boolean trackHubIsValidSeqName(char *name);
 /* Return TRUE if name is a valid sequence name: non-empty, starts with a
  * letter or digit, and contains only [A-Za-z0-9._-]. */
 
+boolean trackHubBigNetEnabled();
+/* Return TRUE if the bigNet track type is turned on.  Off unless hg.conf says
+ * bigNet=on.  Everything that accepts or advertises the type asks this. */
+
 #endif /* TRACKHUB_H */
 

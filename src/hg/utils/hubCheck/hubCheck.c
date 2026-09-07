@@ -793,9 +793,18 @@ else if (tdb->subtracks != NULL)
 }
 
 static char *VALID_TRACK_TYPES[] = {
-    "bam", "bigBarChart", "bigBed", "bigChain", "bigGenePred", "bigInteract",
+    "bam", "bigBarChart", "bigBed", "bigChain", "bigGenePred", "bigInteract", "bigNet",
     "bigLolly", "bigMaf", "bigMethyl", "bigNarrowPeak", "bigPsl", "bigRmsk",
     "bigWig", "halSnake", "hic", "longTabix", "vcfPhasedTrio", "vcfTabix", NULL};
+
+static bool typeIsTurnedOff(char *trackType)
+/* Some types in VALID_TRACK_TYPES are gated in hg.conf.  Report the ones this
+ * machine has turned off, so hubCheck agrees with what the browser will load. */
+{
+if (sameString(trackType, "bigNet"))
+    return !trackHubBigNetEnabled();
+return FALSE;
+}
 
 static bool isValidTrackType(char *trackType)
 /* check that a track type is valid */
@@ -804,7 +813,7 @@ static bool isValidTrackType(char *trackType)
 // There is also code in trackHub.c that checks track names.
 // both places must be changed or common code created.
 for (int i = 0; VALID_TRACK_TYPES[i] != NULL; i++)
-    if (sameString(trackType, VALID_TRACK_TYPES[i]))
+    if (sameString(trackType, VALID_TRACK_TYPES[i]) && !typeIsTurnedOff(trackType))
         return TRUE;
 return FALSE;
 }
@@ -815,7 +824,9 @@ static char *getValidTrackTypesMsg()
 struct dyString *msg = dyStringNew(256);
 for (int i = 0; VALID_TRACK_TYPES[i] != NULL; i++)
     {
-    if (i > 0)
+    if (typeIsTurnedOff(VALID_TRACK_TYPES[i]))
+        continue;
+    if (msg->stringSize > 0)
         dyStringAppend(msg, ", ");
     dyStringAppend(msg, VALID_TRACK_TYPES[i]);
     }

@@ -378,6 +378,7 @@ if (startsWithWord("bigBarChart", type) ||
     startsWithWord("bigDbSnp", type) ||
     startsWithWord("bigMaf", type) ||
     startsWithWord("bigChain", type) ||
+    startsWithWord("bigNet", type) ||
     startsWithWord("bigPsl", type)
    )
     return TRUE;

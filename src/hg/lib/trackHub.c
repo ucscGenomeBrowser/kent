@@ -999,6 +999,13 @@ if (!trackDbSetting(tdb, BAR_CHART_CATEGORY_URL) && !trackDbSetting(tdb, BAR_CHA
     errAbort("BarChart track '%s' is missing either %s or %s setting. Please add one of those settings to the appropriate stanza", tdb->track, BAR_CHART_CATEGORY_LABELS, BAR_CHART_CATEGORY_URL);
 }
 
+boolean trackHubBigNetEnabled()
+/* Return TRUE if the bigNet track type is turned on.  Off unless hg.conf says
+ * bigNet=on.  Everything that accepts or advertises the type asks this. */
+{
+return cfgOptionBooleanDefault("bigNet", FALSE);
+}
+
 static void validateOneTrack( struct trackHub *hub, 
     struct trackHubGenome *genome, struct trackDb *tdb)
 /* Validate a track's trackDb entry. */
@@ -1060,6 +1067,7 @@ else
                   startsWithWord("bigGenePred", type) ||
                   startsWithWord("bigNarrowPeak", type) ||
                   startsWithWord("bigChain", type) ||
+                  (startsWithWord("bigNet", type) && trackHubBigNetEnabled()) ||
                   startsWithWord("bigLolly", type) ||
                   startsWithWord("bigBaseView", type) ||
                   startsWithWord("bigRmsk", type) ||
@@ -1516,7 +1524,8 @@ if (bigDataUrl != NULL)
         }
     else if (startsWithWord("bigNarrowPeak", type) || startsWithWord("bigBed", type) ||
              startsWithWord("bigGenePred", type)  || startsWithWord("bigPsl", type)||
-             startsWithWord("bigChain", type)|| startsWithWord("bigMaf", type) ||
+             startsWithWord("bigChain", type)|| startsWithWord("bigNet", type) ||
+             startsWithWord("bigMaf", type) ||
              startsWithWord("bigBarChart", type) || startsWithWord("bigInteract", type) ||
              startsWithWord("bigLolly", type) || startsWithWord("bigRmsk",type) ||
              startsWithWord("bigMethyl", type))
@@ -1950,6 +1959,7 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        startsWithNoCase("narrowPeak", tdb->type) || \
        startsWithNoCase("broadPeak", tdb->type) || \
        startsWithNoCase("bigLolly", tdb->type) || \
+       (startsWithNoCase("bigNet", tdb->type) && trackHubBigNetEnabled()) || \
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {
@@ -1960,6 +1970,7 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
 
 // make sure we have a bigDataUrl
 if (startsWithNoCase("bigBed", tdb->type) || \
+       startsWithNoCase("bigNet", tdb->type) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
