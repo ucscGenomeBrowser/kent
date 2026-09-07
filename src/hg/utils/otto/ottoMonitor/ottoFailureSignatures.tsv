@@ -1,0 +1,78 @@
+# Kept in the kent tree at src/hg/utils/otto/ottoMonitor, beside the monitor
+# that reads it.  A dated copy of the survey it came from is in
+# /hive/groups/browser/redmineNotes/38101/claude/.
+#
+# What a run, a change, and a failure look like on disk, per otto job.
+# For the #38101 failure monitor.  Surveyed 2026-09-07, read-only, from the LIVE
+# copies under /hive/data/outside/otto.  Nothing was edited or run.
+#
+# This covers all 29 jobs that have an external source.  The 18 internal jobs
+# are NOT surveyed yet; see the note beside this file.
+#
+# runStamp: what proves the job RAN, whether or not the data changed.  Without
+# one, "no new data" and "did not run" are the same picture on disk.
+#   log         a log file written on every run
+#   dateDir     a dated directory created before any change check
+#   perRunFile  a named file rewritten every run
+#   dirMtime    NOTHING is written that survives, but a temp file is created and
+#               removed, so the job directory's own mtime tracks the last run.
+#               Works today, but it is a side effect, not a design, and any
+#               manual touch in the directory destroys it.
+#   none        no evidence at all that the job ran
+#
+# changeArtifact: what appears only when the source actually changed.
+# failureSignal: what a failure produces.  Cron mails only on output.
+#
+# job  cadence  runStamp  runStampPath  changeArtifact  failureSignal
+clinvar	monthly 8th 00:08	log	log/clinvar.log, appended by tee -a on every run	bigBed/, prevRun/, dated outputs	set -o errexit -o pipefail; all output goes to the log and to mail
+geneReviews	weekly Tue 08:00	log	lastRun.log	dated dir, ../lastUpdate	ERR trap prints "ERROR: GeneReviews build failed (exit N)"; exit 255 if the work dir is missing
+decipher	daily 04:11	dirMtime	the curl writes and later removes the variants bed	dated dir, release/	ERR trap reportErr
+gwas	weekly Wed 04:41	none	-	dated dir YYMMDD	exit 1 if the column list does not match expectedColumns.txt; exit 255 if the work dir is missing
+dbVar	monthly 2nd 08:13	dateDir	<today>/giab, made before any check	release/<db>/version.txt	ERR trap cleanUpOnError; prints "lastUpdate was NOT bumped" and exits 1
+orphanet	monthly 10th 07:10	dateDir	<today>, made in the wrapper before any check	release/<db>/version.txt	ERR trap; a count change over 10 percent prints and exits 1
+insight	weekly Tue 03:08	log	log/insight.<date>.log	dated build dir, but it is DELETED on a no-change run	set -o errexit -o pipefail; a count change over 10 percent fails
+omim	daily 04:17	dateDir	<today>/wget.log, made before the md5 compare	release.diff, prev.md5sum.txt	prints "Potential error in OMIM release fetch" and cats wget.log
+lovd	weekly Mon 13:14	dateDir	<today>, made at the top of download.sh	release/<db>	exit 255 if the work dir is missing; a bed under 10000 lines is rejected
+mitoMap	weekly Wed 08:55	dirMtime	.latest.tsv files written then removed on no-change	version.txt, dated bb files	downloadFile() exits 1 on a failed or empty fetch; a count change over 20 exits 1
+refSeqHistorical	weekly Wed 08:40	none	-	lastHandledRelease.txt	five retries, then prints "could not reach <url>" and exits 1
+strchive	weekly Mon 07:45	none	-	lastRelease.txt, releases/<tag>/	prints and exits 1 on anything unexpected
+vcepVersions	monthly 15th 06:40	none	-	nothing at all, it is a pure notifier	raises RuntimeError naming the URL and what it could not parse
+uniprot	monthly 26th 07:00	log	lastRun.log, doUniprot.log	the 110+ db outputs	runs 3 to 4 days; a failure mid-run leaves a partial tree
+uniprotWuhCor1	daily 04:00	none	-	archive/covid-19.<date>.xml	NONE. curl -s, exit code ignored. See #38280, source dead since 2023
+clinGen	daily 09:00	perRunFile	clinGenGeneValidity/ls.check and release.list, rewritten every run	release.diff	
+clinGenCspec	weekly Wed 11:11	dirMtime	svis.json written then removed on no-change	svis.json.old, the two bb files	four retries, then a message naming the CSpec status page, exit 1
+varChat	weekly Thu 22:22	dirMtime	.latest.bb files written then removed on no-change	varChat.hg*.bb, version.txt	set -e -o pipefail; a count difference guard
+vista	monthly 1st 09:00	dirMtime	.latest.bed and .latest.bb written then removed on no-change	vista.*.bb	WEAK: no set -e, and bedToBigBed stderr goes to /dev/null
+civic	monthly 2nd 12:12	dirMtime	gene_features/temp* rewritten every run	the civic bb files	set -o pipefail -o errexit
+grcIncidentDb	daily 06:33	perRunFile	the per-assembly directories are touched every run	the incident bb files	
+ncbiRefSeq	weekly Wed 08:23	none	-	prev<Db>.sum	set -beEu -o pipefail; work happens under /hive/data/genomes/<db>/bed
+mane	weekly Mon 05:11	none	-	mane.<version>/	WEAK: the whole body is gated on "if the output bb does not exist"
+malacards	monthly 20th 04:04	perRunFile	geneSymbolToKgId.txt, written from hgsql every run	oldVersions/	
+pubtatorDbSnp	daily 08:28	log	out/<YYYY>/<MM>/<DD>/script_output.log, a full zsh -x trace	rsids.hg*.bed	ERR trap mails the owner. Also mails on NO change, which breaks the silent contract
+panelApp	weekly Tue 10:10	perRunFile	missing_genes.txt, currentJson/	current/<db>	
+g2p	monthly 5th 06:22	perRunFile	doG2p.lock, prevAllG2P.csv	dated dir	
+genCC	weekly Tue 16:08	dirMtime	newSubmission.tsv written then removed	dated dir	the md5 compare happens before anything is written
+trackLists	weekly Thu 06:32	perRunFile	collected.json, mirrorTracks.html, internal.html, all rewritten every run	-	set -o errexit -o pipefail
+#
+# ---- the 18 internal jobs, surveyed 2026-09-07 ----
+# Same columns.  None of these can be source-unreachable, so the only question
+# the monitor asks of them is "did it run".
+#
+readOnlyKentMirror	daily 00:41	perRunFile	~otto/git.fetch.output, overwritten every run	the kent tree reset to origin/master	mails gbauto@ucsc.edu DIRECTLY, not otto-group, then exits 255
+ottoLastLog	month end 23:38	perRunFile	~otto/lastLog/log/<YYYY>/lastLog.<ts>.txt.gz and history.<ts>.txt.gz	same	set -beEu -o pipefail
+ottoGitVsHive	weekdays 01:00	dirMtime	~otto/ottoCrontab.tmp is written then removed at the end of the run	the divergence report on stdout	prints each mismatch, which cron mails to otto-group
+liftRequest	every 7 minutes	perRunFile	ottoRequest.lock, rewritten with the pid every run	a row in the ottoRequest table	prints "hgsql update error" or "sendmail failed" to stderr
+genArkHgcentral	weekly Tue 10:37	perRunFile	genark.tsv, newGenark.tsv, beforeSort.asmList	rows in hgcentraltest.genark	builds a mail file and sends it; each section says SUCCESSFUL or FAILED
+genArkDevList	daily 18:58	perRunFile	pushRR/logs/<YYYY>/<MM>/gbdbGenArk.<host>.<date>.gz	same	set -o errexit; the run takes two to three hours
+genArkPushRR	daily 01:03	perRunFile	pushRR/<host>.todayList.gz and the dated logs beside them	same	a lock file guards against overrunning itself and mails when it trips
+chainTables	daily 03:11	perRunFile	liftOverChain.fromDb.toDb.txt and quickLiftChain.fromDb.toDb.txt	none, it is a checker not a builder	prints both comm diffs to stderr and exits 255
+sessionThumbnails	weekly Thu 01:11	perRunFile	htdocs/thumbNailLinks.html and the fetched images	same	
+tipOfDay	weekdays 05:05	perRunFile	htdocs/tipOfDay.html, and a line appended to tipsDone.txt	same	
+omimUpload	daily 05:15	dirMtime	the upload/ directory mtime	omimTableDump.tgz under htdocs/omimUpload	prints "Process failed" and exits 1. TRAP: upload/*.date mtimes are set by hgsqlTableDate via utime() to the TABLE date, not the run time
+cellsNewsSec	weekdays 00:00	perRunFile	the news json it rewrites	same	not monitored, cells team
+cellsFacets	weekdays 00:00	perRunFile	htdocs-cells-submit/facets/	same	not monitored, cells team
+cellsFacetsJson	weekdays 00:00	perRunFile	htdocs-cells-submit/facets/*.json	same	not monitored, cells team
+cbPingHidden	monthly 1st 08:00	none	-	a draft per dataset in the queue directory	not monitored, cells team; silent when nothing is due
+cbAnnotServer	every minute	none	-	watchdog.log grows only when it restarts something	not monitored; the real health check is whether gunicorn answers on 127.0.0.1:5051
+cellsTusd	@reboot	none	-	-	not monitored; the crontab line is commented out
+cbDeWorker	-	none	-	-	moved 2026-08-22 to otto's crontab on hgcompute-08, not visible from hgwdev

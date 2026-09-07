@@ -1,0 +1,70 @@
+# Kept in the kent tree at src/hg/utils/otto/ottoMonitor, beside the monitor
+# that reads it.  A dated copy of the survey it came from is in
+# /hive/groups/browser/redmineNotes/38101/claude/.
+#
+# Otto job source URLs, for the #38101 failure monitor's liveness check.
+# Surveyed 2026-09-07 from the LIVE copies under /hive/data/outside/otto and
+# /hive/data/inside/GenArk, cross-checked against src/hg/utils/otto/otto.crontab.
+# Read-only survey.  Nothing here was edited.
+#
+# class:
+#   external        the entry script itself names the source URL
+#   externalIndirect the URL is in an aux config file, an extensionless script,
+#                   or a build script in the kent tree.  A monitor that greps
+#                   the entry script will not find it.
+#   localMirror     the source is a local path another job refreshes.  A curl
+#                   liveness check does not apply.
+#   internal        no external source at all.  Can never be source-unreachable,
+#                   so any failure is a real failure with no waiting period.
+#
+# probeUrl: the cheapest URL that answers "is the source up now".  "-" where
+# there is none.  Never the bulk data file where a version stamp exists.
+#
+# job  class  probeUrl  urlLivesIn  notes  probeCheck
+panelApp	external	https://panelapp.genomicsengland.co.uk/api/v1/panels/?format=json	panelApp/doPanelApp.py	two sources; also https://panelapp-aus.org/api/v1/panels/?format=json	HEAD 200
+decipher	externalIndirect	file:/hive/data/outside/otto/decipher/curl.config	decipher/curl.config	curl -K supplies an X-Auth-Token header AND the URL; the bare https://www.deciphergenomics.org/files/license-file/3 returns 404 without it, so this is a credential like omim; file is mode 660 group protein	200 with curl -K curl.config; 404 without the X-Auth-Token header
+gwas	external	https://www.ebi.ac.uk/gwas/api/search/downloads/associations/v1.0?split=false	gwas/checkGwas.sh	bulk download is the only endpoint; probe with --range 0-0	HEAD 200
+geneReviews	external	ftp://ftp.ncbi.nih.gov/pub/GeneReviews/	geneReviews/checkGeneReviews.sh	wget --timestamping over an ftp glob; probe the directory listing	ftp listing 226
+dbVar	external	https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/gvf/	dbVar/checkDbVar.sh	nstd175; also reads https://ftp.ncbi.nlm.nih.gov/pub/dbVar/sandbox/dbvarhub/hub.txt	HEAD 200
+orphanet	external	http://www.orphadata.org/data/xml/en_product4.xml	orphanet/checkOrphanet.sh	four en_product*.xml files; http, not https	HEAD 200
+clinvar	externalIndirect	https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/	clinvar/clinVarToBed	doUpdate.sh has no URL; clinVarToBed is python with no extension	HEAD 200
+mane	external	https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/	mane/doMane.py	release dir is version-numbered; the parent listing is the probe	HEAD 200
+genCC	external	https://thegencc.org/download/action/submissions-export-tsv?format=new	genCC/doGenCC.py	single endpoint, no version stamp	HEAD 200
+g2p	external	https://www.ebi.ac.uk/gene2phenotype/api/panel/all/download	g2p/g2pWrapper.sh		301, needs -L; GET -L -r 0-0 200
+omim	externalIndirect	file:/hive/data/outside/otto/omim/omimUrls.txt	omim/omimUrls.txt	the path segment is an OMIM download KEY, a credential; the monitor must read the file, never hardcode; mode 660 group protein; also https://omim.org/static/omim/data/mim2gene.txt	301 then 200 with -L -r 0-0, using the URL read from omimUrls.txt
+lovd	external	https://varcache.lovd.nl/bed/hg38?add_id_ncbi=1&add_annotation=1	lovd/download.sh	per-db URL built in a loop	HEAD 501, GET -r 0-0 200 -- HEAD is not supported
+mitoMap	external	https://fr.mitomap.org/update-date.txt	mitoMap/checkMitoMapUpdate.sh	best probe in the whole set: the job already fetches a tiny date stamp first	HEAD 200
+refSeqHistorical	external	https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/historical/GRCh38/	refSeqHistorical/checkRefSeqHistoricalUpdate.sh		HEAD 200
+strchive	external	https://api.github.com/repos/dashnowlab/STRchive/releases/latest	strchive/strchiveOtto.py	NOT in ottoOwners.tsv; added to the crontab after 2026-08-14	HEAD 200
+insight	externalIndirect	https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi	kent src/hg/makeDb/scripts/insight/buildInsightClinVar.py	entry script and checkInsightClinVar.sh hold no URL; the build script is in the kent tree, not in the otto dir	HEAD 405, GET -r 0-0 200 -- eutils rejects HEAD
+vcepVersions	external	https://cspec.genome.network/cspec/ui/svi/affiliation/50087	vcepVersions/checkVcepVersions.py	also reads our own https://hgdownload.soe.ucsc.edu/hubs/*/	200 with an affiliation id; the bare path is 400
+uniprot	external	ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/	uniprot/doUpdate.sh	has an expasy mirror; a failure needs both hosts checked before it is called unreachable	ftp listing 226
+uniprotWuhCor1	external	ftp://ftp.uniprot.org/pub/databases/uniprot/pre_release/covid-19.xml	uniprot/covidCheck.sh	DEAD SOURCE. The pre_release directory is gone: the file returns FTP 550 and the directory denies listing. The ebi mirror http://ftp.ebi.ac.uk/pub/databases/uniprot/pre_release/covid-19.xml returns 404. The job runs daily at 04:00, curl -s swallows the failure, the -nt test is false, so it exits silently. Last output 2023-06-21, and /gbdb/wuhCor1/uniprot has not changed since. covidCheck.sh exists only in /hive and is not in the kent tree, so ottoCompareGitVsHiveFiles.py cannot see it either	FTP 550, SOURCE IS DEAD
+clinGen	external	ftp://ftp.clinicalgenome.org/	clinGen/clinGenWrapper.sh	four files; also NCBI dbVar nstd45	ftp listing 226
+clinGenCspec	external	https://cspec.genome.network/cspec/api/svis	clinGen/clinGenCspec/makeClinGenCspec.sh	THREE independent sources: cspec, http://purl.obolibrary.org/obo/mondo.json, https://search.clinicalgenome.org/kb/gene-validity/download; already retries and already names a status page per source	HEAD 400, GET -r 0-0 200 -- HEAD is not supported
+varChat	external	https://ucsc-engenome-varchat.s3.eu-west-1.amazonaws.com/latest/version.txt	varChat/varChatOtto.sh	version.txt is a cheap probe	HEAD 200
+vista	external	https://gitlab.com/egsb-mfgl/vista-data/-/raw/main/locus_ucsc_hg38.bed	vista/vistaOtto.sh	also reads hgdownload chrom.sizes	HEAD 200
+civic	externalIndirect	https://civicdb.org/	civic/civicToBed.py	DOWNLOAD_BASE_URL constant; doCivicUpdate.sh only runs uv	host root 206; /downloads is 403 to curl and the file path is date-templated
+grcIncidentDb	external	ftp://ftp.ncbi.nih.gov/pub/grc/human/	grcIncidentDb/runUpdate.sh		ftp listing 226, trailing slash required
+ncbiRefSeq	localMirror	-	ncbiRefSeq/runHg38.sh	source is /hive/data/outside/ncbi/genomes/GCF/000/001/405/...gff.gz, a local NCBI mirror another job refreshes; a stale mirror looks like "nothing to do", not a failure	-
+malacards	external	https://genecardscustomers.blob.core.windows.net/ucsc/UCSC_DiseaseCentric_dump_MC_current.csv	malacards/update.sh	Azure blob; bulk csv is the only endpoint	HEAD 200
+pubtatorDbSnp	external	https://ftp.ncbi.nlm.nih.gov/pub/lu/PubTator3/mutation2pubtator3.gz	pubtatorDbSnp/doUpdate.sh		HEAD 200
+trackLists	external	https://hgdownload.soe.ucsc.edu/hubs/	trackLists/trackLists.sh	the "source" is our own hgdownload; NOT in ottoOwners.tsv; added after 2026-08-14	HEAD 200
+readOnlyKentMirror	internal	-	/cluster/home/otto/bin/readOnlyKentMirror		-
+ottoLastLog	internal	-	~otto/lastLog/lastLog.sh		-
+ottoGitVsHive	internal	-	kent src/hg/utils/otto/ottoCompareGitVsHiveFiles.py	compares the tree copy against the hive copy	-
+liftRequest	internal	-	liftRequest/devAndRR.sh	reads local tables, mails on request	-
+genArkHgcentral	internal	-	/hive/data/inside/GenArk/updateHgcentral.sh		-
+genArkDevList	internal	-	/hive/data/inside/GenArk/pushRR/devList.sh	2-3 hour listing job	-
+genArkPushRR	internal	-	/hive/data/inside/GenArk/pushRR/pushRR.sh	pushes to hgwbeta hgw0 hgw1 hgw2 euroNode; a push target being down is not a source problem	-
+chainTables	internal	-	/hive/data/inside/GenArk/checkChainTables/toFromCounts.sh	mysql only	-
+sessionThumbnails	internal	-	/cluster/bin/scripts/buildPublicSessionThumbnailsIndexPage.py		-
+tipOfDay	internal	-	/cluster/bin/scripts/generateTipOfDay.py	reads kent src/hg/htdocs/allTipsRaw.html	-
+omimUpload	internal	-	omim/omimUploadWrapper.sh	loads the omim job's own output to beta; depends on the omim job, not on a URL	-
+cellsNewsSec	internal	-	~bwick/cellBrowser/ucsc/updateNewsSec	cells team job, runs from a personal home dir	-
+cellsFacets	internal	-	~bwick/cellBrowser/ucsc/tabulate_facets.pl		-
+cellsFacetsJson	internal	-	htdocs-cells-submit/facets/tsv_to_json.py		-
+cbPingHidden	internal	-	~mspeir/cellBrowser/ucsc/cbPingHidden	NOT in ottoOwners.tsv; added after 2026-08-14	-
+cbAnnotServer	internal	-	~mspeir/cellBrowser/src/cbAnnotServer/deploy/watchdog.sh	a watchdog, runs every minute; needs different treatment from a data job	-
+cellsTusd	internal	-	crontab, commented out	the MAILTO and the job are both commented	-
+cbDeWorker	internal	-	MOVED	moved 2026-08-22 to otto's crontab on hgcompute-08; ottoOwners.tsv still lists it as running here	-

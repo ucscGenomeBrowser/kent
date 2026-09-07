@@ -23,6 +23,19 @@ gets that URL fetched.  If the source is down the job is left alone, and only a
 second run in a row that fails the same way becomes a ticket.  If the source
 answers, the failure was something else and it files the same day.
 
+THE SURVEYS BEHIND IT
+
+  ottoSourceUrls.tsv         where each job's data comes from, the URL to probe,
+                             and the curl shape that URL actually answers.  Every
+                             one was fetched, not read out of a script.
+  ottoFailureSignatures.tsv  what a run, a change and a failure look like on disk
+                             for each of the 47 jobs.  ottoMonitorStamps.tsv is
+                             the machine-readable part of it; this is the reasoning.
+
+Read the signature survey before changing a stamp glob.  It says what each job
+writes and when, which is the difference between a stamp that tracks every run
+and one that only moves when the data changes.
+
 THE THREE INPUTS
 
   ottoOwners.tsv         who owns each job, whether to watch it, its source URL,

@@ -14,8 +14,8 @@
 #             uniprot gets five days because the run itself takes three or four.
 # note        why this glob and not another.  Read it before changing one.
 #
-# Derived from the survey in
-# /hive/groups/browser/redmineNotes/38101/claude/ottoFailureSignatures.tsv
+# Derived from ottoFailureSignatures.tsv, beside this file.  Read that before
+# changing a glob here: it says what each job writes, when, and why.
 #
 #job	stampGlob	graceHours	note
 clinvar	/hive/data/outside/otto/clinvar/log/clinvar.log	18	appended by tee -a on every run
