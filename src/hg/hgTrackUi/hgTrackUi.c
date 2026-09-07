@@ -14,6 +14,7 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "hVarSubst.h"
 #include "fileUi.h"
 #include "ldUi.h"
 #include "snpUi.h"
@@ -4681,6 +4682,9 @@ if (isDup)
     tdb = dupTdbFrom(tdb, dup);
     }
 
+// A hub's description page never went through hgTrackDb, so its variables are substituted
+// here instead.  This is what lets a hub page link to its container with $parentTrack.
+hVarSubstTrackDbHtml(cart, tdb, database);
 
 if(cartOptionalString(cart, "ajax"))
     {
