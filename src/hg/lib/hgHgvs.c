@@ -403,11 +403,38 @@ if (pHgvs && *pHgvs)
 //                                                  6...         1-based end position
 //                                                       7.....  change description
 
-// As above but omitting the protein change
-#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntExp "\\)?"
+// As above but omitting the protein change, and allowing a range of codon numbers.
+// Someone reading about a mutation usually has the codon number but not the amino acid,
+// so "KAT6A p.495" and "KAT6A p.495_533" have to work as well as "KAT6A p.Lys495".
+#define posIntRangeExp posIntExp "(_" posIntExp ")?"
+#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntRangeExp "\\)?"
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
-//                           2.....                             1-based position
+//                           2.....                             1-based start position
+//                                 3.......                     optional range sep and end position
+//                                    4.....                    1-based end position
+
+// The same bare codon number or range, but after a transcript accession rather than a gene
+// symbol.  Here the "p" is required: without it "NM_006766.5 1483" would silently become a
+// codon number, and a bare number after an accession is far more likely to be something else.
+#define pDot "[ :]+p\\.?\\(?"
+#define pseudoHgvsNMPDotPosExp "^" versionedRefSeqNMExp pDot posIntRangeExp "\\)?"
+//      0..........................                             whole matching string
+//      1...............                                        acc & optional dot version
+//             2........                                        optional dot version
+//                       3.....                                 optional gene sym in ()s
+//                        4...                                  optional gene symbol
+//                                 5.....                       1-based start position
+//                                       6.......               optional range sep and end position
+//                                          7.....              1-based end position
+
+#define pseudoHgvsENSPDotPosExp "^" ensTranscriptExp pDot posIntRangeExp "\\)?"
+//      0..........................                             whole matching string
+//      1.....................................  ENS transcript ID including optional lift suffix
+//         2...                                 optional non-human species code e.g. MUS for mouse
+//                 3.....                       1-based start position
+//                       4.......               optional range sep and end position
+//                          5.....              1-based end position
 
 
 // Gene symbol, maybe punctuation, and a clear "c." position (and possibly change)
@@ -939,13 +966,36 @@ else
 return seq;
 }
 
-static char refBaseForNp(char *db, char *npAcc, int pos)
-// Get the amino acid base in NP_'s sequence at 1-based offset pos.
+static struct hgvsVariant *hgvsFromBareProtPos(char *db, char *protAcc, char *geneSymbol,
+                                               int startPos, int endPos)
+/* Turn a bare codon number, or range of codon numbers, into a parsed HGVS p. term.
+ * HGVS wants the reference amino acid with the number, so look it up.  endPos may be 0
+ * for a single position.  Returns NULL if the protein is unknown or the numbers are off
+ * the end of it. */
 {
-char *seq = getProteinSeq(db, npAcc);
-char base = seq ? seq[pos-1] : '\0';
+struct hgvsVariant *hgvs = NULL;
+char *seq = getProteinSeq(db, protAcc);
+if (seq == NULL)
+    return NULL;
+int protLen = strlen(seq);
+if (endPos == 0)
+    endPos = startPos;
+if (startPos >= 1 && startPos <= protLen && endPos >= startPos && endPos <= protLen)
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringAppend(dy, protAcc);
+    if (isNotEmpty(geneSymbol))
+        dyStringPrintf(dy, "(%s)", geneSymbol);
+    if (endPos > startPos)
+        dyStringPrintf(dy, ":p.%c%d_%c%d", seq[startPos-1], startPos, seq[endPos-1], endPos);
+    else
+        // a single position with no change is spelled as a synonymous substitution
+        dyStringPrintf(dy, ":p.%c%d=", seq[startPos-1], startPos);
+    hgvs = hgvsParseTerm(dy->string);
+    dyStringFree(&dy);
+    }
 freeMem(seq);
-return base;
+return hgvs;
 }
 
 static struct hgvsVariant* hgvsPseudoToRealHgvs(regmatch_t  substrs[], char* term, char* db, int geneSymbolIx, char *prefix)
@@ -1001,6 +1051,22 @@ if ((isSubst = regexMatchSubstr(term, pseudoHgvsENSPDotSubstExp,
         freeMem(enspAcc);
         }
     }
+else if (regexMatchSubstr(term, pseudoHgvsENSPDotPosExp, substrs, ArraySize(substrs)))
+    {
+    // User gave an ENST_ accession and a bare codon number or range of codon numbers.
+    int ensAccIx = 1, startPosIx = 3, endPosIx = 5;
+    char *ensAcc = regexSubstringClone(term, substrs[ensAccIx]);
+    char *enspAcc = enspForEnst(db, ensAcc);
+    if (isNotEmpty(enspAcc))
+        {
+        int startPos = regexSubstringInt(term, substrs[startPosIx]);
+        int endPos = regexSubstrMatched(substrs[endPosIx]) ?
+            regexSubstringInt(term, substrs[endPosIx]) : 0;
+        hgvs = hgvsFromBareProtPos(db, enspAcc, NULL, startPos, endPos);
+        }
+    freeMem(enspAcc);
+    freeMem(ensAcc);
+    }
 else if ((isSubst = regexMatchSubstr(term, pseudoHgvsNMPDotSubstExp,
                                      substrs, ArraySize(substrs))) ||
          regexMatchSubstr(term, pseudoHgvsNMPDotRangeExp, substrs, ArraySize(substrs)))
@@ -1031,6 +1097,25 @@ else if ((isSubst = regexMatchSubstr(term, pseudoHgvsNMPDotSubstExp,
         dyStringFree(&npTerm);
         freeMem(npAcc);
         }
+    }
+else if (regexMatchSubstr(term, pseudoHgvsNMPDotPosExp, substrs, ArraySize(substrs)))
+    {
+    // User gave an NM_ accession and a bare codon number or range of codon numbers.
+    int nmAccIx = 1, nmGeneSymbolIx = 4, startPosIx = 5, endPosIx = 7;
+    char *nmAcc = regexSubstringClone(term, substrs[nmAccIx]);
+    char *npAcc = npForNm(db, nmAcc);
+    if (isNotEmpty(npAcc))
+        {
+        char *geneSymbol = regexSubstrMatched(substrs[nmGeneSymbolIx]) ?
+            regexSubstringClone(term, substrs[nmGeneSymbolIx]) : NULL;
+        int startPos = regexSubstringInt(term, substrs[startPosIx]);
+        int endPos = regexSubstrMatched(substrs[endPosIx]) ?
+            regexSubstringInt(term, substrs[endPosIx]) : 0;
+        hgvs = hgvsFromBareProtPos(db, npAcc, geneSymbol, startPos, endPos);
+        freeMem(geneSymbol);
+        }
+    freeMem(npAcc);
+    freeMem(nmAcc);
     }
 else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
                                      substrs, ArraySize(substrs))) ||
@@ -1070,17 +1155,15 @@ else if (regexMatchSubstr(term, pseudoHgvsGeneSymbolProtPosExp, substrs, ArraySi
         for (npItem = npAccList; npItem != NULL; npItem = npItem->next)
             {
             char *npAcc = npItem->name;
-            // Only position was provided, no change.  Look up ref base and make a synonymous subst
-            // so it's parseable HGVS.
-            int posIx = 2;
-            int pos = regexSubstringInt(term, substrs[posIx]);
-            char refBase = refBaseForNp(db, npAcc, pos);
-            struct dyString *npTerm = dyStringCreate("%s(%s):p.%c%d=",
-                                                     npAcc, geneSymbol, refBase, pos);
-            struct hgvsVariant *newTerm = hgvsParseTerm(npTerm->string);
+            // Only the codon number(s) were provided, no amino acid and no change.
+            int startPosIx = 2, endPosIx = 4;
+            int startPos = regexSubstringInt(term, substrs[startPosIx]);
+            int endPos = regexSubstrMatched(substrs[endPosIx]) ?
+                regexSubstringInt(term, substrs[endPosIx]) : 0;
+            struct hgvsVariant *newTerm = hgvsFromBareProtPos(db, npAcc, geneSymbol,
+                                                              startPos, endPos);
             if (newTerm)
                 slAddHead(&hgvs, newTerm);
-            dyStringFree(&npTerm);
             }
         }
     }
