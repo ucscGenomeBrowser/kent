@@ -234,6 +234,20 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
+        h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
+          role="gate", verified=True, ticket="38273",
+          note="Copy a track collection's generated hub file when the program that writes "
+               "it (only hgCollection) asks for a copy, instead of on every session load.  "
+               "With it off, loading any session that carries a collection copies the hub to "
+               "a new trash file and registers that copy in hgcentral.hubStatus, which is "
+               "where 81% of the RR's 3.1M hubStatus rows came from.  Read in "
+               "cartCollectionHubCopyOnWrite() and branched on at four places in three "
+               "files: cart.c makes the copy when cartRequestLocalHubCopy() was called, and "
+               "skips a hub the cart already owns in copyLocalHubs(); "
+               "cartCopyLocalHubsOnSessionLoad() does nothing (that one is the old behavior, "
+               "and it plus its five callers in cart.c and hgSession.c go away with the "
+               "gate); sessionData.c's saveTrackFile splits a hub that came from another "
+               "session.  Off during QA; flip to TRUE once released."),
         h("bigNet", "flag", "hg/lib/trackHub.c", default="FALSE",
           role="gate", verified=True, ticket="20824",
           note="The bigNet track type, a net of pairwise alignments in a "

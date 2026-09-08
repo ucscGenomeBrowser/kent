@@ -26,7 +26,7 @@ while (s != NULL && s[0] != '\0')
 return FALSE;
 }
 
-static boolean pathIsUnderDir(char *dir, char *path)
+boolean pathIsUnderDir(char *dir, char *path)
 /* Return TRUE if path names something underneath dir.  A '/' is required at the directory
  * boundary, so a sibling directory whose name merely starts the same way (trashBackup next
  * to trash) does not match.  ".." below the boundary is refused. */

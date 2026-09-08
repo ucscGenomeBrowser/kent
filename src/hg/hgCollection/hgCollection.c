@@ -1074,6 +1074,12 @@ if (!isCommandLine)
     htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 oldVars = hashNew(10);
 
+// Every command below rewrites the whole hub file named by customComposite-<db>, and that file
+// may belong to a saved session, so ask the cart for a private copy in trash.  This has to be
+// said before the cart is opened, because the copy gives the hub a new id and the hubs are
+// loaded during cart open.  refs #38273
+cartRequestLocalHubCopy();
+
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 
 if (! isCommandLine)

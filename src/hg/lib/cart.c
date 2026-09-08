@@ -564,18 +564,63 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
+boolean cartCollectionHubCopyOnWrite()
+/* Return TRUE if a track collection hub file is copied when the program that writes it asks for
+ * a copy, rather than on every session load.  hg.conf gate for #38273; drop it once the new
+ * behavior has been through a release.
+ *
+ * Retiring the gate is not a uniform "delete the if, keep the body": in
+ * cartCopyLocalHubsOnSessionLoad() the body is the OLD behavior and the whole function and its
+ * callers go away, while the two tests below and the one in sessionData.c lose only the gate
+ * term. */
+{
+return cfgOptionBooleanDefault("collectionHubCopyOnWrite", FALSE);
+}
+
+static boolean gLocalHubCopyRequested = FALSE;
+
+void cartRequestLocalHubCopy()
+/* Declare that this program rewrites the track collection hub file that the cart names, so that
+ * cartNew() replaces it with a private copy in trash before the hubs are loaded.
+ *
+ * Call this before opening the cart.  It has to be a property of the program rather than of the
+ * request, because the copy gives the hub a new id and the hubs are loaded during cart open,
+ * before any CGI's doMiddle() can decide whether this particular request will write.  hgCollection
+ * is the only caller; it is the only program that writes one of these files.  refs #38273 */
+{
+gLocalHubCopyRequested = TRUE;
+}
+
+static boolean hubFileIsOurScratchCopy(char *hubFileName)
+/* Return TRUE if hubFileName is a plain file in the trash directory, which means it is a working
+ * copy this cart already owns and hgCollection may rewrite in place.
+ *
+ * A trash path that is a symbolic link is NOT one: saveTrackFile() replaces the trash file with a
+ * link to the session's durable copy when a session is saved (see sessionData.c), and writing
+ * through that link would rewrite the file the saved session names.  Do not use realpath() here;
+ * these links are deliberate. */
+{
+if (!isTrashPath(hubFileName))
+    return FALSE;
+struct stat st;
+if (lstat(hubFileName, &st) != 0)
+    return FALSE;
+return !S_ISLNK(st.st_mode);
+}
+
 static void copyLocalHubs(struct cart *cart, struct hashEl *el)
-/* Copy a set of custom composites to a new hub file. Update the 
+/* Copy a custom composite hub to a new hub file in trash. Update the
  * relevant cart variables. */
 {
 struct tempName hubTn;
 char *hubFileVar = el->name;
 char *oldHubFileName = el->val;
-if (startsWith(customCompositeCartName, el->name))
-    trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
-else if (startsWith(quickLiftCartName, el->name))
-    trashDirDateFile(&hubTn, "quickLift", "hub", ".txt");
-char *newHubFileName = cloneString(hubTn.forCgi);
+
+// The cart is not ours: every cart variable can be set from the URL.  Screen the path the same
+// way getHubName() does before opening it, and leave a rejected value in the cart so the user
+// can still fix it.
+if (!isServerUserFilePath(oldHubFileName))
+    return;
 
 // let's make sure the hub hasn't been cleaned up
 int fd = open(oldHubFileName, O_RDONLY);
@@ -584,8 +629,15 @@ if (fd < 0)
     cartRemove(cart, hubFileVar);
     return;
     }
-
 close(fd);
+
+// Under copy-on-write a hub we already own is left alone.  Copying it again would give the hub a
+// new id on every edit, and the track names the browser is holding carry that id.  refs #38273
+if (cartCollectionHubCopyOnWrite() && hubFileIsOurScratchCopy(oldHubFileName))
+    return;
+
+trashDirDateFile(&hubTn, "hgComposite", "hub", ".txt");
+char *newHubFileName = cloneString(hubTn.forCgi);
 copyFile(oldHubFileName, newHubFileName);
 cartReplaceHubVars(cart, hubFileVar, oldHubFileName, newHubFileName);
 }
@@ -655,17 +707,30 @@ cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 cartSetString(cart, hubFileVar, newHubUrl);
 }
 
-void cartCopyLocalHubs(struct cart *cart)
-/* Find any custom composite hubs and copy them so they can be modified. */
+static void cartCopyLocalHubs(struct cart *cart)
+/* Find any custom composite hubs and copy them so they can be modified.  Under the
+ * collectionHubCopyOnWrite gate a hub this cart already owns is left alone; see
+ * copyLocalHubs(). */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 
 for (el = elList; el != NULL; el = el->next)
     {
-    // we probably shouldn't be doing this until the user actually makes a change in the collection
-    if (startsWith(customCompositeCartName, el->name))
+    // the "-" matters: it is what fileNameCartVarPrefixes screens on, and a name that only
+    // starts with "customComposite" has had no path check applied to its value
+    if (startsWith(customCompositeCartName "-", el->name))
         copyLocalHubs(cart, el);
     }
+}
+
+void cartCopyLocalHubsOnSessionLoad(struct cart *cart)
+/* Copy any custom composite hubs after loading a session.  This is the pre-#38273 behavior and
+ * costs an hgcentral.hubStatus row per load; under the collectionHubCopyOnWrite gate it does
+ * nothing, because the program that writes the hub asks for its own copy instead.  When the gate
+ * goes away, this function and every call to it go with it. */
+{
+if (!cartCollectionHubCopyOnWrite())
+    cartCopyLocalHubs(cart);
 }
 
 static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
@@ -1958,13 +2023,22 @@ if (cartVarExists(cart, hgHubDoDisconnect))
 
 if (didSessionLoad)
     {
-    cartCopyLocalHubs(cart);
+    cartCopyLocalHubsOnSessionLoad(cart);
 
     // Loading a session empties the cart and then puts the CGI variables back, which
     // undoes the work fixUpDb did above.  A Genark accession in db= has to be turned
     // back into a genome and a hubUrl before we connect the hubs.  refs #38184
     resolveGenarkDb(cart);
     }
+
+// A program that rewrites the track collection hub file has asked for its own copy of it (see
+// cartRequestLocalHubCopy).  If the file belongs to a saved session then every load of that
+// session names it and other users may load it too, so it must not be written in place.  Under
+// copy-on-write this is the only place the copy is made, and it has to happen here, before the
+// hubs are loaded below, because the copy gets a new hub id and the track names come from it.
+// refs #38273
+if (cartCollectionHubCopyOnWrite() && gLocalHubCopyRequested)
+    cartCopyLocalHubs(cart);
 
 char *newDatabase = hubConnectLoadHubs(cart);
 

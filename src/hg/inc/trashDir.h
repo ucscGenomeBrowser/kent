@@ -23,6 +23,11 @@ void copyFileToTrash(char **pFileName, char *dirName, char *base, char *suffix);
  * given dirName of trash/ with the given base and suffix, copy *pFileName's
  * contents to it, and set *pFileName to the new filename. */
 
+boolean pathIsUnderDir(char *dir, char *path);
+/* Return TRUE if path names something underneath dir.  A '/' is required at the directory
+ * boundary, so a sibling directory whose name merely starts the same way (trashBackup next
+ * to trash) does not match.  ".." below the boundary is refused. */
+
 boolean isTrashPath(char *path);
 /* Return TRUE if path names a file inside the trash directory. */
 

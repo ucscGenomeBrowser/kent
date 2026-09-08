@@ -356,12 +356,32 @@ if (sessionDataDbPrefix)
     }
 }
 
+INLINE boolean cartVarIsLocalHub(char *cartVar)
+/* Return TRUE if cartVar starts with "customComposite-" or "hubQuickLift-". */
+{
+return startsWith(quickLiftCartName "-", cartVar) || startsWith(customCompositeCartName "-", cartVar);
+}
+
 static char *newCtTrashFile()
 /* Alloc and return the name of a new trash file to hold custom track metadata. */
 {
 struct tempName tn;
 trashDirFile(&tn, "ct", CT_PREFIX, ".ctfile");
 return cloneString(tn.forCgi);
+}
+
+static char *localHubSessionDataPath(char *varName, char *sessionDir)
+/* Alloc and return a fresh path under sessionDir for a track collection or quickLift hub file.
+ * Used when the hub being saved belongs to some other session, so its own name cannot be
+ * reused.  Mint a new trash name and map it into sessionDir the way a trash file's own name
+ * would be mapped, so the result has the same shape as every other saved hub path. */
+{
+struct tempName tn;
+if (startsWith(quickLiftCartName "-", varName))
+    trashDirDateFile(&tn, "quickLift", "hub", ".txt");
+else
+    trashDirDateFile(&tn, "hgComposite", "hub", ".txt");
+return sessionDataPathFromTrash(tn.forCgi, sessionDir);
 }
 
 static char *saveTrackFile(struct cart *cart, char *varName, char *oldFile,
@@ -373,10 +393,20 @@ static char *saveTrackFile(struct cart *cart, char *varName, char *oldFile,
 char *newFile = NULL;
 if (fileExists(oldFile))
     {
-    if (isTrashPath(oldFile))
+    // A local hub file outside trash belongs to another session: this one was loaded and is now
+    // being saved under a new name, or is another user's session being re-saved.  Copy it so that
+    // each session owns its own hub file.  Under copy-on-write nothing copies these on load, so
+    // this is the only place the split happens.  refs #38273
+    boolean fromOtherSession = (cartCollectionHubCopyOnWrite() &&
+                                !isTrashPath(oldFile) && isNotEmpty(sessionDir) &&
+                                cartVarIsLocalHub(varName) &&
+                                !pathIsUnderDir(sessionDir, oldFile));
+    if (isTrashPath(oldFile) || fromOtherSession)
         {
         struct lineFile *lf = lineFileOpen(oldFile, TRUE);
-        if (isNotEmpty(sessionDir))
+        if (fromOtherSession)
+            newFile = localHubSessionDataPath(varName, sessionDir);
+        else if (isNotEmpty(sessionDir))
             newFile = sessionDataPathFromTrash(oldFile, sessionDir);
         else
             newFile = newCtTrashFile();
@@ -401,7 +431,7 @@ if (fileExists(oldFile))
             }
         carefulClose(&newF);
         fprintf(stderr, "Wrote new file %s\n", newFile);
-        if (isNotEmpty(sessionDir))
+        if (isNotEmpty(sessionDir) && !fromOtherSession)
             {
             if (unlink(oldFile) != 0)
                 errnoAbort("saveTrackFile: unlink(oldFile='%s') failed", oldFile);
@@ -440,12 +470,6 @@ if (isNotEmpty(sessionDataDir))
     freeMem(sessionHash);
     }
 return dir;
-}
-
-INLINE boolean cartVarIsLocalHub(char *cartVar)
-/* Return TRUE if cartVar starts with "customComposite-" or "hubQuickLift-". */
-{
-return startsWith(quickLiftCartName "-", cartVar) || startsWith(customCompositeCartName "-", cartVar);
 }
 
 static char *dayOfMonthString()
