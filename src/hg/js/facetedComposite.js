@@ -307,6 +307,10 @@ $(function() {
                              Object.keys(embeddedData.dataTypes).length > 0;
         const itemLabel = hasDataTypes ? "samples" : "tracks";
         const singularLabel = itemLabel.slice(0, -1);
+        // Capitalized, for the two filter tabs.  With data types a row is a
+        // sample rather than a track, since each row stands for as many tracks
+        // as there are active data types.
+        const itemLabelCap = itemLabel.charAt(0).toUpperCase() + itemLabel.slice(1);
 
         const columns = [checkboxColumn, ...ordinaryColumns];
 
@@ -366,7 +370,11 @@ $(function() {
                 bottomEnd: 'paging'
             },
             order: initialOrder,
-            pageLength: 25,       // show 25 rows per page by default
+            // Paginating a table that would nearly fit anyway just hides rows
+            // behind a menu, so show everything up to the first menu step that
+            // exceeds 25.  -1 is what DataTables reads as "all", the same value
+            // behind the "All" entry in the menu below.
+            pageLength: metadata.length < 50 ? -1 : 25,
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             language: {
                 lengthMenu: `Show _MENU_ ${itemLabel}`,
@@ -457,8 +465,8 @@ $(function() {
         function updateSelectedText() {
             const selCount = table.rows({selected: true}).count();
             const totalCount = table.rows().count();
-            allTab.textContent = `All Tracks (${totalCount})`;
-            selectedTab.textContent = `Active Tracks (${selCount})`;
+            allTab.textContent = `All ${itemLabelCap} (${totalCount})`;
+            selectedTab.textContent = `Active ${itemLabelCap} (${selCount})`;
             const showSelected = toggleCheckbox.checked;
             allTab.classList.toggle("active", !showSelected);
             selectedTab.classList.toggle("active", showSelected);
