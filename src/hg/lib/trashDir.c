@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
+#include <limits.h>
 #include "common.h"
 #include "hash.h"
 #include "hgConfig.h"
@@ -43,10 +44,27 @@ if (strncmp(path, dir, dirLen) != 0 || path[dirLen] != '/' || path[dirLen+1] == 
 return !hasDotDotComponent(path + dirLen + 1);
 }
 
+static boolean pathIsUnderDirOrItsTarget(char *dir, char *path)
+/* pathIsUnderDir(), but also accept a path under the directory that dir resolves to.  A
+ * configured directory is often reached through a symlink, and sessionData.c stores the
+ * resolved spelling of a path whose file is already a symlink, so both spellings turn up in
+ * saved sessions.  Only dir is resolved.  Resolving path would defeat the check, because a
+ * trash file is often a symlink into session storage on purpose. */
+{
+if (pathIsUnderDir(dir, path))
+    return TRUE;
+if (isEmpty(dir))
+    return FALSE;
+char resolved[PATH_MAX];
+if (realpath(dir, resolved) == NULL)
+    return FALSE;
+return pathIsUnderDir(resolved, path);
+}
+
 boolean isTrashPath(char *path)
 /* Return TRUE if path names a file inside the trash directory. */
 {
-return pathIsUnderDir(trashDir(), path);
+return pathIsUnderDirOrItsTarget(trashDir(), path);
 }
 
 boolean isTrashOrSessionDataPath(char *path)
@@ -54,8 +72,8 @@ boolean isTrashOrSessionDataPath(char *path)
  * directories that trash files are moved to when a session is saved. */
 {
 return isTrashPath(path) ||
-       pathIsUnderDir(cfgOption("sessionDataDir"), path) ||
-       pathIsUnderDir(cfgOption("sessionDataDirOld"), path);
+       pathIsUnderDirOrItsTarget(cfgOption("sessionDataDir"), path) ||
+       pathIsUnderDirOrItsTarget(cfgOption("sessionDataDirOld"), path);
 }
 
 boolean isServerUserFilePath(char *path)
@@ -64,7 +82,7 @@ boolean isServerUserFilePath(char *path)
  * directory such as myVariantsDataDir. */
 {
 return isTrashOrSessionDataPath(path) ||
-       pathIsUnderDir(cfgOption("myVariantsDataDir"), path);
+       pathIsUnderDirOrItsTarget(cfgOption("myVariantsDataDir"), path);
 }
 
 boolean isRemoteUrl(char *path)
