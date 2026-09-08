@@ -71,6 +71,15 @@ What is covered
                 that cannot be named at all because its track is `type bigBed 3` (#36335).
   pagechecks    the same four aimed the wrong way at once. Expected to fail. The message
     .xfail      names every check that failed, so one run says which of the four broke.
+  colorchecks   `color:`, the one check that reads the track IMAGE: is:/not: on the color
+                a row is mostly drawn in, `part: label` for the center label instead of
+                the items, `at:` for one item rather than the whole row, and the list
+                form. It exists for #36212, where a track that sets both `itemRgb on` and
+                `color` draws its items in the wrong one -- same rows, same height, same
+                names, same tooltips, so nothing but the pixels can tell.
+  colorchecks   the same six aimed wrong, all in ONE expect: step so the message has to
+    .xfail      name all six. Expected to fail. The comment lists them in order; read the
+                log rather than trusting the exit code.
   expectfail    an assertion that is plainly false. Expected to fail -- if it ever passes,
     .xfail      `expect:` has stopped throwing and every other test here means nothing.
   make parity   FAST vs slow, and a rerun, on composite. FAST drops the dwells and the
@@ -110,3 +119,12 @@ Still to write
 
 A test that needs a stable server-side fixture (a hub, a custom track) should carry it
 in the script rather than assume something on disk.
+
+colorchecks is the one exception, and the reason is worth knowing before someone else
+hits it. `color:` has to address a ROW by name, and a custom track cannot be addressed
+by name at all: hgTracks assigns its row id (`ct_<name>_<number>`), which is why
+customtrack asserts on label text instead of on `rows:`. So an inline custom track --
+the self-contained way to get a known color onto the page -- is the one fixture this
+check cannot use. It reads ~/public_html/docentFixtures/itemRgbHub/ instead, which
+tests/regress/rm36212.xfail needs anyway, and which `make preflight` checks is still
+there.

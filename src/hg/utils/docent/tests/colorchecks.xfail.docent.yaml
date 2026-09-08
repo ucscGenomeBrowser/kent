@@ -1,0 +1,30 @@
+# EXPECTED TO FAIL. The other half of colorchecks.docent.yaml, with every form of the
+# check aimed the wrong way, because a check that cannot fail is not a check.
+#
+# All six are in ONE `expect:` step on purpose. A step evaluates every check it holds
+# before it throws, so the failure message has to name all six; a script of six steps
+# would only ever prove the first one works. Read the log rather than trusting the exit
+# code, and expect these, in this order:
+#
+#   colorOnly is drawn 0,255,0, wanted 0,0,255
+#   colorOnly is drawn 0,255,0, which is the color it should not be
+#   itemRgbOn's center label is drawn 0,0,0, wanted 0,255,0
+#   color: cannot read the color "chartreuse"      <- color NAMES are refused: trackDb's
+#                                                     `color 0,255,0` is not CSS green
+#   color: needs a track
+#   color: no #img_center_ruler on the page        <- the ruler has no center label
+target: genome-test
+db: hg38
+position: chr1:1000000-1010000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/itemRgbHub/hub.txt", db: hg38}
+  - go: chr1:1000000-1010000
+  - expect:
+      color:
+        - {track: colorOnly, is: "0,0,255", not: "0,255,0"}
+        - {track: itemRgbOn, part: label, is: "0,255,0"}
+        - {track: colorOnly, is: "chartreuse"}
+        - {is: "0,0,0"}
+        - {track: ruler, part: label, is: "0,0,0"}

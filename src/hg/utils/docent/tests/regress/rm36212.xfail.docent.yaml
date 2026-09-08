@@ -1,0 +1,81 @@
+# #36212 -- EXPECTED TO FAIL.  The bug is live everywhere; this asserts the behavior the
+# ticket asks for, so it fails until the fix lands and then tells us it is time to promote.
+#
+# A stanza used to be able to combine `itemRgb on` with `color`: the items were drawn from
+# the file's own RGB column and the labels from `color`.  Since 2025 `color` overrides
+# `itemRgb` and the items come out in the color setting.  Gerardo reproduced it on
+# 2026-05-01 with a four-track hub and reported that his CRM3 (color only) and CRM4
+# (itemRgb on + color) render identically, which is the whole bug in one line.
+#
+# The cause is the order of the tests in bedItemRgb(), hg/cgilib/bedCart.c:
+#
+#     if ((trackDbSettingClosestToHome(tdb, "color") != NULL) || trackDbSettingOff(...))
+#         return FALSE;                    <-- "color" is present, so it wins here
+#     if (trackDbSettingOn(tdb, OPT_ITEM_RGB))
+#         return TRUE;                     <-- never reached when "color" is set
+#
+# so the explicit `itemRgb on` can never be seen.  88d620e6c82 folded the `color` test
+# into the first early return; c54077c4044 added the second test back, but below it.
+#
+# Measured on 2026-09-08, all three servers, with the fixture hub below:
+#
+#     genome.ucsc.edu       v502   items green
+#     hgwbeta.soe.ucsc.edu  v503   items green
+#     genome-test           v503   items green
+#
+# And it has been watched to flip, which almost nothing else in this directory has.  The
+# three-line reorder of bedItemRgb() above was built into parked #36212 (port 48099, tree
+# ~/kentItemRgb branch itemRgb36212) and this same script, pointed at that port, passes:
+# itemRgbAndColor's items come back 0,0,255 at 98% of the row while its center label stays
+# 0,255,0.  So the assertion below is known to be about the bug and not about something
+# near it.
+#
+# The fixture is ~/public_html/docentFixtures/itemRgbHub/, four tracks over four identical
+# copies of one bed9 file.  Every item in the file carries a pure blue itemRgb column
+# (0,0,255) and the tracks that set `color` set a pure green (0,255,0), so which setting
+# won is readable straight off the pixels.  It declares `visibility pack` itself, so there
+# is no `hide: all` here -- a hub track's cart name carries a per-run hub_<n>_ prefix that
+# `track:` cannot write.
+#
+# This is the first script in this suite to assert a COLOR, because it is the first bug
+# here that leaves the page identical: same rows, same height, same item names, same
+# tooltips, same image height.  `expect: {color: ...}` reads the pixels hgTracks drew in
+# the row.
+target: genome-test
+db: hg38
+position: chr1:1000000-1010000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/itemRgbHub/hub.txt", db: hg38}
+  - go: chr1:1000000-1010000
+
+  # All four rows have to be drawn before any color means anything.  A row that failed to
+  # load draws a pale yellow message instead of items, and the color checks below would
+  # then be reporting on that message.
+  - expect:
+      rows: [itemRgbNeither, itemRgbOn, colorOnly, itemRgbAndColor]
+      noText: "Unable to open"
+
+  # The three cases that already behave.  They are here to pin the rest of the matrix, so
+  # that a fix which simply turns itemRgb on everywhere -- and takes `color` away from the
+  # tracks that only set `color` -- fails this script instead of passing it.
+  #
+  # itemRgbNeither is blue because of the hg.conf default: bedItemRgb() ends in
+  # cfgOptionBooleanDefault("alwaysItemRgb", TRUE), so a stanza that says nothing gets the
+  # file's RGB column.  A server with `alwaysItemRgb=off` in hg.conf would draw that row
+  # black and fail this check for a reason that is not a bug.  No server we run has it off.
+  - expect: {color: {track: itemRgbNeither, is: "0,0,255"}}
+  - expect: {color: {track: itemRgbOn, is: "0,0,255"}}
+  - expect: {color: {track: colorOnly, is: "0,255,0"}}
+
+  # The other half of the ticket, and the reason the two settings are worth combining at
+  # all: `color` still has a job to do.  It colors the label while the items keep the
+  # file's own RGB.  This one passes today and must keep passing after the fix.
+  - expect: {color: {track: itemRgbAndColor, part: label, is: "0,255,0"}}
+
+  # And the bug, last on purpose: this script stops here, so anything below it would
+  # never run.  `itemRgb on` plus `color 0,255,0`: the items come from the file, so blue,
+  # and `not:` names the green they are actually drawn in today so the failure says which
+  # of the two settings won rather than only that the color was unexpected.
+  - expect: {color: {track: itemRgbAndColor, is: "0,0,255", not: "0,255,0"}}

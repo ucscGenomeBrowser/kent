@@ -880,6 +880,99 @@ const T_START = Date.now();
     }
     return { x, y: row.y + row.height / 2 };
   }
+  // The colors hgTracks actually DREW in a track's row, most pixels first.
+  //
+  // Every other check in `expect:` reads the DOM, and a bug about color leaves the DOM
+  // untouched: the same rows, the same height, the same item names, the same tooltips.
+  // #36212 is the case -- a track that sets both `itemRgb on` and `color` draws its items
+  // in the color setting instead of in the file's own RGB column -- and the pixels are the
+  // only evidence either way.
+  //
+  // hgTracks renders the whole view into ONE png and shows each row as a CSS-offset slice
+  // of it: `#img_data_<key>` for the items, `#img_center_<key>` for the center label, both
+  // inside `#tr_<key>`. So a row's own pixels are that slice -- the image drawn into a
+  // canvas at its offset and clipped to the cell it sits in. The png is served from the
+  // same host as the page, so the canvas is readable rather than tainted.
+  //
+  // The SIDE labels are a different png (`#img_side_`) and are deliberately left out:
+  // "what color is this row" must not be answered by the label text. The side-label strip
+  // is also baked into the left of the data png, which the slice offset hides -- x0 below
+  // is where the data actually starts inside the slice, and everything left of it is
+  // skipped for the same reason.
+  //
+  // White is background and is not counted. Everything else is, black included, since a
+  // track with no color of its own draws black items.
+  async function rowColors(o) {
+    const { key } = await trackBox(o.track);
+    const part = String(o.part || 'items');
+    const id = ((part === 'label' || part === 'center') ? 'img_center_' : 'img_data_') + key;
+    // at: is a genomic coordinate, so it needs the window; frac: and x: do not.
+    let frac = (o.frac != null) ? Number(o.frac) : null;
+    if (frac == null && o.at != null)
+      frac = await page.evaluate(at => {
+        try { const s = hgTracks.winStart, e = hgTracks.winEnd;
+          const c = +String(at).replace(/.*:/, '').replace(/,/g, '');
+          return Math.max(0, Math.min(1, (c - s) / (e - s))); } catch (_) { return 0.5; }
+      }, o.at);
+    await page.waitForFunction(i => {
+      const im = document.getElementById(i);
+      return !!(im && im.complete && im.naturalWidth > 0);
+    }, id, { timeout: 8000 }).catch(() => {});
+    return await page.evaluate(({ id, frac, xpx, wide }) => {
+      const im = document.getElementById(id);
+      if (!im) return { err: `no #${id} on the page` };
+      if (!im.complete || !im.naturalWidth) return { err: `#${id} has not loaded` };
+      // The clipping box is the img's own DIV, not the cell: hgTracks puts the center
+      // label and the data in two `div.sliceDiv` of their own inside one `td_data_<key>`,
+      // each with the explicit height of its slice. Measuring the cell instead runs the
+      // canvas off the end of this row's slice and into the next track's -- which reads
+      // that track's color as if it were part of this one.
+      const cell = im.parentElement.classList.contains('sliceDiv')
+        ? im.parentElement : (im.closest('td') || im.parentElement);
+      const cs = getComputedStyle(im);
+      const dx = parseFloat(cs.left) || 0, dy = parseFloat(cs.top) || 0;
+      const w = Math.max(1, Math.round(cell.clientWidth));
+      const h = Math.max(1, Math.round(cell.clientHeight));
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      const g = cv.getContext('2d', { willReadFrequently: true });
+      g.drawImage(im, dx, dy);
+      let insideX = 0;
+      try { insideX = hgTracks.insideX || 0; } catch (_) {}
+      const x0 = Math.max(0, Math.min(w - 1, Math.round(insideX + dx)));
+      let xa = x0, xb = w;
+      if (xpx != null || frac != null) {
+        const c = (xpx != null) ? x0 + xpx : x0 + frac * (w - x0);
+        xa = Math.max(x0, Math.round(c - wide / 2));
+        xb = Math.min(w, xa + wide);
+      }
+      const d = g.getImageData(xa, 0, Math.max(1, xb - xa), h).data;
+      const n = new Map();
+      let total = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], gg = d[i + 1], b = d[i + 2], a = d[i + 3];
+        if (a < 8) continue;                                  // nothing drawn here
+        if (r >= 250 && gg >= 250 && b >= 250) continue;       // background
+        const k = r + ',' + gg + ',' + b;
+        n.set(k, (n.get(k) || 0) + 1);
+        total++;
+      }
+      const top = [...n.entries()].sort((p, q) => q[1] - p[1]).slice(0, 6)
+        .map(([k, v]) => ({ c: k.split(',').map(Number), n: v }));
+      return { top, total, box: [xa, xb, w, h] };
+    }, { id, frac, xpx: (o.x != null) ? Number(o.x) : null, wide: Number(o.wide || 5) });
+  }
+  // "r,g,b" or "#rrggbb" -> [r,g,b]. No color NAMES on purpose: trackDb's `color 0,255,0`
+  // is not CSS `green` (#008000), and a script that says one and means the other would be
+  // wrong in a way nobody would look for.
+  function parseRgb(v) {
+    const s = String(v).trim();
+    let m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(s);
+    if (m) return [1, 2, 3].map(i => parseInt(m[i], 16));
+    m = /^(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})$/.exec(s);
+    if (m) { const v3 = [1, 2, 3].map(i => Number(m[i])); return v3.every(x => x <= 255) ? v3 : null; }
+    return null;
+  }
   // Hover an item to raise its mouseover tooltip (real mousemove -> the browser's own
   // tooltip). Two ways to place the cursor:
   //   IDENTITY  `item:` / `title:` / `value:` -> name the item (lands on the right ROW).
@@ -1261,6 +1354,8 @@ const T_START = Date.now();
   //   expect: {url: "hgSearch", noUrl: "%E2%80%8B"}  the address bar does / does not
   //   expect: {has: "#td_data_mane map[name=map_center_mane]"}  this selector matches
   //   expect: {noHas: "#td_data_knownGene map[name=map_center_mane]"}  ... does not
+  //   expect: {color: {track: crm4, is: "0,0,255"}}   the items in that row are drawn blue
+  //   expect: {color: {track: crm4, part: label, is: "0,255,0"}}  ... its center label green
   //
   // `url:`/`noUrl:` are a substring check on the CURRENT address, which is the only place
   // some things are visible at all: which CGI a click actually reached, and what the page
@@ -1275,6 +1370,11 @@ const T_START = Date.now();
   // them, and each may name several elements. Reach for these last: an assertion on
   // hgTracks' own ids and classes is the most likely thing here to break for a reason
   // that is not a bug.
+  //
+  // `color:` is the one check that reads the IMAGE rather than the page, because a bug about
+  // color changes nothing else: same rows, same height, same items, same tooltips. It names
+  // the color the row is mostly drawn in (`is:`) or the one it must not be (`not:`), and
+  // `part: label` asks about the center label instead of the items. See rowColors().
   //
   // `warn: true` downgrades a failure to a warning, for a check worth logging but not worth
   // stopping a build over.
@@ -1358,6 +1458,45 @@ const T_START = Date.now();
       const n = await page.locator(sel).count().catch(() => -1);
       if (n > 0) bad.push(`${n} element(s) match "${sel}", wanted none`);
       else if (n < 0) bad.push(`noHas: cannot read the selector "${sel}"`);
+    }
+    // color: the pixels hgTracks drew in a row, which no other check here can see. A list
+    // is allowed, and every entry is checked, so one step can state the whole of a color
+    // matrix and a failure names every row that came out wrong rather than only the first.
+    for (const one of (o.color == null ? [] : (Array.isArray(o.color) ? o.color : [o.color]))) {
+      const c = (typeof one === 'object') ? one : { is: one };
+      const where = `${c.track}${(c.part === 'label' || c.part === 'center') ? "'s center label" : ''}`;
+      if (!c.track) bad.push('color: needs a track');
+      else if (c.is == null && c.not == null) bad.push('color: needs is: or not:');
+      else {
+        const got = await rowColors(c).catch(e => ({ err: e.message }));
+        const show = g => g.top.slice(0, 3)
+          .map(t => `${t.c.join(',')} (${Math.round(100 * t.n / g.total)}%)`).join(', ');
+        if (got.err) bad.push(`color: ${got.err}`);
+        // An empty row is the failure mode to name explicitly. A track that drew nothing
+        // has no color at all, and a check that quietly passed on it -- or failed saying
+        // the color was wrong -- would send the reader after the wrong thing.
+        else if (!got.top.length)
+          bad.push(`color: nothing is drawn in ${where}`);
+        else {
+          const tol = (c.tolerance != null) ? Number(c.tolerance) : 8;
+          const near = (a, b) => a.every((v, i) => Math.abs(v - b[i]) <= tol);
+          const dom = got.top[0].c;
+          for (const [k, want] of [['is', c.is], ['not', c.not]]) {
+            if (want == null) continue;
+            const rgb = parseRgb(want);
+            if (!rgb) { bad.push(`color: cannot read the color "${want}"`); continue; }
+            if (k === 'is' && !near(dom, rgb))
+              bad.push(`${where} is drawn ${dom.join(',')}, wanted ${rgb.join(',')}`
+                     + ` -- the row holds ${show(got)}`);
+            if (k === 'not' && near(dom, rgb))
+              bad.push(`${where} is drawn ${dom.join(',')}, which is the color it should not be`
+                     + ` -- the row holds ${show(got)}`);
+          }
+          if (process.env.DOCENT_ROWS)
+            console.log(`  color ${where}: ${show(got)}`
+                      + ` [x ${got.box[0]}-${got.box[1]} of ${got.box[2]}, ${got.box[3]}px tall]`);
+        }
+      }
     }
     if (!bad.length) {
       console.log(`EXPECT ok -- ${seen.rows.length} row(s), ${height}px`);
