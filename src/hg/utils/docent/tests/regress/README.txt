@@ -34,3 +34,22 @@ page passes. So a session-based test also asserts something that is only true wh
 session really loaded.
 
 Six recipes need a test hub on a colleague's public_html. Same problem, same remedy.
+
+Fixtures we own live in ~/public_html/docentFixtures/, and `make preflight` checks that
+every hub a script here names still answers. Copy a reporter's hub in there rather than
+loading theirs, so nothing outside this repository can change what a test measures.
+
+rm36212 is the one to read before writing another
+--------------------------------------------------
+
+It is the only script here that has been watched to fail on a build with the bug AND to
+pass on a build with the fix, which is the evidence every other script in this directory
+would like to have and does not. The recipe: build the fix into a ticket sandbox, point a
+copy of the script at that port with `target: http://127.0.0.1:PORT/cgi-bin`, and record
+in the comment which checks flipped. It costs one build and it settles what a tight
+assertion can only argue.
+
+It is also the first script to assert a COLOR, using `expect: {color: ...}`, because it
+is the first bug here that leaves the page identical -- same rows, same height, same item
+names, same tooltips. When rows:, height:, text: and has: are all blind to a bug, the
+pixels are what is left. See tests/colorchecks.docent.yaml for the check itself.
