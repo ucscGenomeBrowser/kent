@@ -1,0 +1,89 @@
+<h2>Description</h2>
+
+<p>
+Most of the DNA in a cell is wrapped around nucleosomes or bound by other proteins, and only
+the stretches that are left open can be reached by the transcription factors that switch genes
+on. Fiber-seq reads out that protein occupancy directly. Permeabilized cells are treated with
+a non-specific N6-adenine methyltransferase, which methylates adenines wherever the DNA is
+exposed and leaves protected adenines untouched, so each DNA molecule carries a stencil of the
+proteins that were sitting on it. The molecules are then sequenced on a PacBio instrument,
+which reports the base sequence, the added adenine methylation and the native CpG methylation
+from the same read. Because the reads are long enough to carry heterozygous variants, they can
+be assigned to one of the two parental chromosomes, giving a separate picture of chromatin for
+each haplotype rather than an average of the two.
+</p>
+
+<p>
+This collection holds the Fiber-seq data from the Stergachis and Vollger labs for 41 samples,
+covering common cell lines and lymphoblastoid lines from individuals sequenced by the Human
+Pangenome Reference Consortium and the Genome in a Bottle project. It contains three tracks:
+</p>
+
+<ul>
+  <li><a href="hgTrackUi?g=fiberSeqAcc">Fiber-seq Acc</a> shows percent-accessible chromatin
+      for seven widely used cell lines as a single overlay, so accessibility can be compared
+      across cell types at a glance.</li>
+  <li><a href="hgTrackUi?g=fiberSeqCompendium">Fiber-seq Compendium</a> gives, for every one of
+      the 41 samples, the percent-accessible signal, the called FIRE regulatory element peaks
+      and a per-haplotype accessibility overlay. Samples are selected from a searchable table.</li>
+  <li><a href="hgTrackUi?g=fiberSeqMeth">Methylation</a> gives per-sample CpG methylation from
+      the same reads, both combined over the two chromosomes and split by haplotype, together
+      with the difference between haplotypes at several significance thresholds.</li>
+</ul>
+
+<p>
+Related data can be found in the <a href="hgTrackUi?g=dnaMethylation">DNA Methylation</a>
+collection, which holds methylation measured by other assays.
+</p>
+
+<h2>Display Conventions</h2>
+
+<p>
+Each of the three tracks has its own display conventions and its own color scheme; see the
+individual track description pages linked above. Signal tracks are scaled 0 to 100 percent
+throughout, so a bar height means the same thing in every track and every sample.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The data were generated and processed by the Stergachis and Vollger labs. Details of the assay,
+the machine learning model that calls regulatory elements from single molecules, and the
+methylation calling are given on the individual track description pages.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The individual track description pages linked above explain how to download the underlying
+bigWig and bigBed files and how to query them from scripts.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Mitchell Vollger, Andrew Stergachis and Shane Neph at the University of Washington
+and the University of Utah for generating this data, for packaging it for the browser and for
+their help in arranging the tracks.
+</p>
+
+<h2>References</h2>
+
+<p>
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+WE, Bohaczuk SC <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40501892" target="_blank">
+A haplotype-resolved view of human gene regulation</a>.
+<em>bioRxiv</em>. 2025 Jun 2;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40501892" target="_blank">40501892</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12157683/" target="_blank">PMC12157683</a>
+</p>
+
+<p>
+Stergachis AB, Debo BM, Haugen E, Churchman LS, Stamatoyannopoulos JA.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32587015" target="_blank">
+Single-molecule regulatory architectures captured by chromatin fiber sequencing</a>.
+<em>Science</em>. 2020 Jun 26;368(6498):1449-1454.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32587015" target="_blank">32587015</a>
+</p>
+

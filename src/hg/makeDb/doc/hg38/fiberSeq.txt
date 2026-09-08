@@ -1,0 +1,258 @@
+# 2026-09-07 Claude max: Fiber-seq accessibility, FIRE peaks and CpG methylation, refs #36210
+
+# The Stergachis and Vollger labs (UW / Utah) built their own hg38 track hub for
+# Fiber-seq and asked for it as a native track:
+#   https://fiberseq.github.io/UCSC-Fiber-seq-hub/hub.txt
+# Shane Neph then sent 41 per-sample CpG methylation hubs to include alongside it
+# (attachment cpg-hprc.txt on the "Fiber-seq in the genome browser" thread,
+# 2026-09-07).  The CpG sample list is the same 41 samples as the accessibility
+# compendium, so both became faceted composites under one container.
+
+# The data lives on the UW Kopah S3 (Ceph) server under a per-sample hash
+# directory.  We mirror it rather than pointing bigDataUrl at UW, since that
+# server has had availability problems (see MLQ #37961) and a native track
+# should not depend on it.
+
+# ---------------------------------------------------------------------------
+# Sample list
+# ---------------------------------------------------------------------------
+
+# The accession, sample name, cell type and per-sample S3 hash directory are
+# checked in as
+#   ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqSamples.tsv
+# The accessions and hashes were extracted from the lab's hub trackDb, and the
+# sample names and cell types from the metadata TSV that hub points at:
+
+cd /hive/data/genomes/hg38/bed/fiberSeq
+wget -O hubTrackDb.txt https://fiberseq.github.io/UCSC-Fiber-seq-hub/hg38/trackDb.txt
+wget -O hubMeta.tsv https://fiberseq.github.io/UCSC-Fiber-seq-hub/hg38/fireCompendium_metadata.tsv
+
+# accession -> hash, from the bigDataUrls in the hub
+grep -o "hashed.PacBio-Fiber-seq/[A-Z0-9]*/[0-9a-f]*" hubTrackDb.txt \
+  | sed 's|hashed.PacBio-Fiber-seq/||' | tr '/' '\t' | sort -u > acc_hash.tsv
+wc -l acc_hash.tsv
+# 41 acc_hash.tsv
+
+# accession -> sample, cellType, one row per sample
+tail -n +2 hubMeta.tsv | awk -F'\t' '!seen[$4]++ {print $4"\t"$1"\t"$2}' | sort > acc_sample_type.tsv
+
+join -t$'\t' acc_sample_type.tsv <(sort acc_hash.tsv) > manifest.tsv
+wc -l manifest.tsv
+# 41 manifest.tsv
+
+# Cross-check that the CpG hubs Shane sent cover exactly these 41 accessions and
+# agree on the sample names.  cpg-hprc.txt is his attachment, sample<TAB>hubUrl.
+sed 's|.*ucsc-hprc-cpg/\([A-Z0-9]*\)/.*|\1|' cpg-hprc.txt | grep . | sort -u > cpg_acc.txt
+comm -3 <(cut -f1 manifest.tsv) cpg_acc.txt
+# no output: identical accession sets
+
+join -t$'\t' -1 1 -2 1 <(cut -f1,2 manifest.tsv) \
+  <(awk -F'\t' 'NF==2{sub(/.*ucsc-hprc-cpg\//,"",$2); split($2,a,"/"); print a[1]"\t"$1}' cpg-hprc.txt | sort) \
+  | awk -F'\t' '$2!=$3'
+# no output: all 41 sample labels agree
+
+# manifest.tsv was then committed as fiberSeqSamples.tsv with a header line.
+
+# ---------------------------------------------------------------------------
+# Mirror the data
+# ---------------------------------------------------------------------------
+
+# 11 files per sample, 451 files, 397 GB:
+#   all.percent.accessible.bw, hap1/hap2.percent.accessible.bw, fire-peaks.bb
+#   cpg.combined.bw, cpg.hap1.bw, cpg.hap2.bw
+#   cpg.diffs_all.bw, cpg.diffs_p0.01.bw, cpg.diffs_p0.001.bw, cpg.diffs_p0.0001.bw
+# The script resumes, verifies each file against the size the server reports and
+# skips files that are already complete, so it can be re-run safely.
+
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqDownload.sh \
+    /hive/data/genomes/hg38/bed/fiberSeq 12 > download.log 2>&1
+
+grep -c '^got' download.log
+grep -c FAIL download.log
+
+# Check every file parses and holds data:
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqCheck.sh /hive/data/genomes/hg38/bed/fiberSeq
+
+# This reports two placeholder files at the source:
+#   PM00001/hap1.percent.accessible.bw  (512 bytes, basesCovered 1)
+#   PM00001/hap2.percent.accessible.bw  (512 bytes, basesCovered 1)
+# They are valid bigWigs that cover a single base with a value of zero, so
+# GM12878's haplotype accessibility overlay draws nothing.  Note that they are
+# NOT basesCovered 0, which is why the check tests for less than 1000; the
+# smallest legitimate haplotype file here covers 4.1 million bases (PM00008,
+# the near-haploid Hap1 line, which has little phaseable heterozygosity).
+# Every other sample has real haplotype files, and PM00001's CpG haplotype
+# files are fine.  Reported to the lab; noted on fiberSeqCompendium.html.
+# Nothing else was dropped: all 451 files downloaded, and all 449 non-empty
+# ones parse as bigWig or bigBed.
+
+# ---------------------------------------------------------------------------
+# Rebuild the FIRE peak bigBeds
+# ---------------------------------------------------------------------------
+
+# The peak files carry narrowPeak data and even embed the narrowPeak autoSql,
+# but their bigBed header records a field count of 3:
+bigBedInfo -as PM00001/fire-peaks.bb | head -25
+#   fieldCount: 3
+#   definedFieldCount: 3
+#   extraFieldCount: 0
+#   as: table fire_peaks ... 10 columns ...
+bigBedToBed PM00001/fire-peaks.bb -chrom=chr1 -start=1000000 -end=1100000 stdout | head -1
+#   chr1 1000104 1000268 peak-247 224 . 22.421965 -1 31.751720958940915 94
+# i.e. the data really has all 10 columns.  All 41 files are like this.
+#
+# With fieldCount 3, bbFieldIndex() cannot find signalValue or qValue, so no
+# filter, no mouseOver and no details-page column can work.  Worse for this
+# type: bigNarrowPeakLoadItems() calls bigBedMakeNumberFilter() for score,
+# signalValue, pValue and qValue on every draw, and that calls getFieldNum()
+# before it checks whether a filter was even requested, so hgTracks would
+# errAbort with "error building filter with field signalValue.  Field not
+# found." on any view of these files.  The rebuild is therefore required, not
+# cosmetic.  It changes the header only, no data.
+
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqFixPeaks.sh \
+    /hive/data/genomes/hg38/bed/fiberSeq 8
+
+# Peaks were called against the GRCh38 analysis set, which carries the
+# Epstein-Barr virus decoy.  chrEBV is not in UCSC hg38 (not in chrom.sizes and
+# not in chromInfo), so bedToBigBed refuses those rows and the script drops
+# them, counting each one.  chrEBV is the only contig in the peak files that
+# hg38 does not have; the bigWigs also contain chrEBV but need no rebuild,
+# since hgTracks simply never queries a chrom it does not know.
+#
+# Reconciliation, from peakCounts.tsv (accession, source peaks, peaks in the
+# track, peaks dropped on chrEBV):
+#   source peaks     9,487,043
+#   peaks in track   9,486,622
+#   dropped chrEBV         421   in 20 of the 41 samples, 2 to 166 each
+# Every sample balances exactly: source - chrEBV == in track.  The largest
+# single loss is GM12878 with 166 peaks, which is 0.04 percent of its 429,883.
+# This is mentioned in the methods section of fiberSeqCompendium.html.
+
+# The rebuild also rounds signalValue and qValue to 3 decimals.  They arrive
+# with full double precision (qValues like 22.807437495448326), which reads
+# badly in a mouseover and on the details page and costs a third of the file
+# size: 467 MB over the 41 files before rounding, 313 MB after.  pValue is the
+# sentinel -1 throughout and is untouched.
+#
+# The rebuilt files are named fire-peaks.ucsc.bb and are what trackDb points
+# at; the originals are kept next to them for comparison.
+
+# Reconciliation is re-derived by the script on every run, into peakFixReport.txt:
+sed -E 's/^([A-Z0-9]+) ([0-9]+) peaks \(source ([0-9]+), dropped ([0-9]+) on chrEBV\)$/\1\t\2\t\3\t\4/' \
+    peakFixReport.txt | awk -F'\t' '{kept+=$2; src+=$3; ebv+=$4; if($3-$4!=$2) mism++}
+    END{printf "kept %d source %d chrEBV %d mismatched %d\n", kept, src, ebv, mism+0}'
+# kept 9486622 source 9487043 chrEBV 421 mismatched 0
+
+# Chromosome naming is otherwise already UCSC style, no chromAlias needed:
+bigWigInfo -chroms PM00001/all.percent.accessible.bw | head -12
+# chromCount 25, chr1 ... chrY (primary chromosomes only)
+bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
+# chromCount 195, primary plus alts and patches
+
+# ---------------------------------------------------------------------------
+# trackDb, metadata and colors
+# ---------------------------------------------------------------------------
+
+# One script writes the whole track stanza plus the two faceted-composite
+# metadata and color files, so the 585 stanzas stay consistent:
+
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqTrackDb.py
+
+# It writes
+#   ~/kent/src/hg/makeDb/trackDb/human/hg38/fiberSeq.ra
+#   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqCompendium_metadata.tsv
+#   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqCompendium_colors.json
+#   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqMeth_metadata.tsv
+#   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqMeth_colors.json
+
+# Structure:
+#   fiberSeq            container, group regulation
+#     fiberSeqAcc         multiWig overlay of 7 common cell lines, shown by default
+#     fiberSeqCompendium  faceted composite, dataTypes acc/peaks/hap, 41 samples
+#     fiberSeqMeth        faceted composite, dataTypes comb/hap/diffs, 41 samples
+#
+# The two composites use the same faceted-composite machinery as Methbase
+# (methbase2.ra): metaDataUrl for the sample table, colorSettingsUrl for the
+# facet swatches, primaryKey for the row id, and dataTypes for the per-sample
+# data kinds.  Two things about that machinery drove the naming:
+#
+# 1. Subtracks must be named <composite>_<accession>_<dataType>, with the
+#    accession as the ONLY middle component.  facetedCompositeUi() in
+#    hg/hgTrackUi/hgTrackUi.c cuts the data element at the first underscore
+#    after the composite name, and cartDump.c rebuilds subtrack names as
+#    <composite>_<element>_<type>.  The lab's hub used
+#    fireCompendium_GM12878_PM00001_all, which would resolve to element
+#    "GM12878" and then look for a track named fireCompendium_GM12878_all that
+#    does not exist.  Sample name and cell type live in the metadata TSV.
+#
+# 2. dataTypes brings onlyVisibility with it, which is what lets the bigWig
+#    subtracks default to full while the peak subtracks default to dense.  A
+#    plain composite shares one visibility across all its subtracks, which is
+#    the problem the lab ran into when they asked for peaks in dense and signal
+#    in full.
+#
+# 3. The peaks are declared bigNarrowPeak, so the point-source offset in the
+#    tenth column is drawn as a tick inside the peak (lfFromEncodePeak() sets
+#    tallStart/tallEnd from it).  Getting there needed two small additions to
+#    the tree, since bigNarrowPeak had been left behind by the bigBed-like
+#    types:
+#      hg/hgTracks/encode.c   bigNarrowPeakLoadItems() now honours mouseOver
+#                             and mouseOverField, using the existing
+#                             mouseOverSetupForBbi() / mouseOverGetBbiText()
+#                             helpers in hg/hgTracks/mouseOver.c
+#      hg/makeDb/trackDb/tagTypes.tab
+#                             bigNarrowPeak added to mouseOver, scoreFilter,
+#                             scoreFilterLimits, scoreMin, scoreMax,
+#                             signalFilter and signalFilterLimits, and
+#                             pValueFilter/qValueFilter (plus their Limits)
+#                             registered for the first time.  encodePeakCfgUi()
+#                             in hg/lib/hui.c and bigNarrowPeakLoadItems() both
+#                             already handled the q/pValue filters; they had
+#                             just never been declared here, so tdbQuery
+#                             -strict rejected them.
+#
+# 4. The peak filters are the ENCODE peak settings, signalFilter, qValueFilter
+#    and scoreFilter with their *Limits, which encodePeakCfgUi() draws with its
+#    own labels ("Minimum Signal value", "Minimum Q-Value (-log10)").  The
+#    bigBed-generic filter.<field> settings are NOT read by this type.  All
+#    three defaults are the full range, so nothing is hidden until the user
+#    narrows one.  Verified in the rendered UI:
+#      hgTrackUi?db=hg38&g=fiberSeqCompendium_PM00004_peaks
+#    draws min/max boxes for all three with the right limit hints.
+#
+# 5. mouseOver text only appears in pack or full.  Dense makes no per-item map
+#    boxes at all, so no bigBed-like track has a per-item hover there.  Since
+#    Andrew asked for peaks in dense by default, the mouseover is there for
+#    whoever switches a peak track to pack.  Checked by temporarily dropping
+#    onlyVisibility and reading the image map: in pack the AREA tags carry
+#      data-tooltip='<b>K562 FIRE peak</b><br>FIRE score: 17.76015
+#                    <br>-log10 FDR: 22.807437495448326<br>Score: 177'
+#    and in dense there are no per-peak AREA tags.  Note the tooltip is HTML
+#    entity encoded in the page, so grep for it with the entities in mind.
+
+# ---------------------------------------------------------------------------
+# Rendering checks
+# ---------------------------------------------------------------------------
+
+# ACTB promoter, the accessibility overlay, all seven cell lines in color:
+#   hgRenderTracks?db=hg38&position=chr7:5,527,000-5,533,000&hideTracks=1
+#     &fiberSeq=show&fiberSeqAcc=full
+# Note that a child of a container needs the container shown as well; without
+# fiberSeq=show only the ruler comes back.
+#
+# The compendium at the same locus, showing that onlyVisibility works: the
+# three default samples come up with peaks in dense and signal in full, in one
+# composite.
+#   ...&fiberSeqCompendium=full
+#
+# GNAS, an imprinted locus, for the methylation composite.  GM12878's
+# haplotype overlay switches from orange (haplotype 2 methylated) to blue
+# (haplotype 1 methylated) across the locus, and the difference track follows:
+#   hgRenderTracks?db=hg38&position=chr20:58,838,000-58,860,000&hideTracks=1
+#     &fiberSeq=show&fiberSeqMeth=full
+#     &fiberSeqMeth_PM00001_hap_sel=1&fiberSeqMeth_PM00001_diffs_sel=1
+#
+# The faceted table's embedded JSON on the composite UI page confirms the
+# naming works: dataElements comes back as bare accessions ("PM00001",
+# "PM00004", "PM00005") and dataTypes as acc/peaks active, hap inactive.

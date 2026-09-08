@@ -1,0 +1,42 @@
+#accession	sample	cellType	hash
+PM00001	GM12878	Lymphoblastoid B-lymphocyte EBV-transformed	56c8efa47d30e7ffa5b12ebe6dd1e7c4
+PM00002	HG002	Lymphoblastoid B-lymphocyte EBV-transformed	66537188deac5f1b93fbaeb25bc42e01
+PM00004	K562	Erythroleukemia myeloid	bab7c68a9ebb7a2b3c7201c7a7f4c2bf
+PM00005	HepG2	Hepatocyte liver	2917f9bdc4cdf28720fa5bf81eafb876
+PM00006	Panc1	Pancreatic ductal epithelial	d73722295e681ecf85cd2e65aa0e7c70
+PM00007	THP-1	Monocyte myeloid	d9bace2630b732dea835e6faa6a357da
+PM00008	Hap1	Myeloid near-haploid	09ce0ae0ea79bd7a84b97ddc9a32fb38
+PM00009	Jurkat	T-lymphocyte	41ffee46fb1292f6566d022e01d256c1
+PM00010	H1	Embryonic stem cell	c8a8d41383128a1e3d26c4e5ff6754aa
+PM00011	H9	Embryonic stem cell	919ef478b700e2788cfb45d787ef0e96
+PM00012	Hek293T	Human embryonic kidney	eb6e7dc0f85e205f584c65645f6da4b3
+PS00971	HG01123	Lymphoblastoid B-lymphocyte EBV-transformed	32075e85354ac89edd4e9472caa93d3c
+PS00972	HG01258	Lymphoblastoid B-lymphocyte EBV-transformed	6131088532f16569cdfadb303c9251ff
+PS00973	HG01358	Lymphoblastoid B-lymphocyte EBV-transformed	868b57a6e0470f9b749761dc80c1d4b4
+PS00974	HG01361	Lymphoblastoid B-lymphocyte EBV-transformed	89b91e72dd977f456b2a00eb548d8c76
+PS00975	HG01891	Lymphoblastoid B-lymphocyte EBV-transformed	5497a65db4b1dc18f78e0fde852ca084
+PS00976	HG02071	Lymphoblastoid B-lymphocyte EBV-transformed	29ea847693b3d38d0d2849603df73cb2
+PS00977	HG02074	Lymphoblastoid B-lymphocyte EBV-transformed	dca57606102ce19dc9a99d788a2a3171
+PS00978	HG02132	Lymphoblastoid B-lymphocyte EBV-transformed	8ccfe29ff5a0093e8cfad2a727054d97
+PS00979	HG02135	Lymphoblastoid B-lymphocyte EBV-transformed	fa42dfae0df70d9bce4389a1b4681238
+PS00980	HG02257	Lymphoblastoid B-lymphocyte EBV-transformed	a340d9c3be89ac455752fb407495d6e3
+PS00981	HG02486	Lymphoblastoid B-lymphocyte EBV-transformed	e148a02e55a49027536fa02cf1ad054b
+PS00982	HG02559	Lymphoblastoid B-lymphocyte EBV-transformed	885268787c41c09ed7c1cabe8c1e6fc1
+PS00983	HG02572	Lymphoblastoid B-lymphocyte EBV-transformed	e5e3af18c23d821a70086aec8262fdc8
+PS00984	HG02717	Lymphoblastoid B-lymphocyte EBV-transformed	49dd2cf0726a10a4d8eb2c8221b6f8ac
+PS00985	HG02886	Lymphoblastoid B-lymphocyte EBV-transformed	a352ed22ad490f183e1a89fc600c55dc
+PS00986	HG03516	Lymphoblastoid B-lymphocyte EBV-transformed	e9150edc165f21c8b60f524e32232b34
+PS00987	HG03804	Lymphoblastoid B-lymphocyte EBV-transformed	9bcdcdbfedc59d7fef2cae0f1acbe3ea
+PS00988	HG03942	Lymphoblastoid B-lymphocyte EBV-transformed	67b785f2ac06480aff5811f5f668d6b4
+PS00989	HG04160	Lymphoblastoid B-lymphocyte EBV-transformed	c29fefa1065e2cc26d914d6c79891535
+PS00990	HG04187	Lymphoblastoid B-lymphocyte EBV-transformed	98c0504758e3c8cf4383f22658aac113
+PS01302	A549	Lung epithelial adenocarcinoma	7b39ec1b123ae87b077dafc7d9090a1c
+PS01305	MCF-7	Breast epithelial adenocarcinoma	3f29e4e4b63b744ce4aeb72bbeecd70f
+PS01314	HCT116	Colon epithelial colorectal carcinoma	91cbfbadf9e012ed9a83a8987f7d12dd
+PS01319	Caco-2	Colon epithelial colorectal adenocarcinoma	c26fd5d56fd09f84ff28c7c4b9f99559
+PS01388	WTC-11	Induced pluripotent stem cell iPSC	85dce624f9c36c4f2ff11bc22af93dd1
+PS01517	GM28572	Lymphoblastoid B-lymphocyte EBV-transformed	0b5ee552d04d5730df674bd9ab288ce9
+PS01518	GM28570	Lymphoblastoid B-lymphocyte EBV-transformed	f185df42c50391eebc7e3b69d5fd945f
+PS01519	GM25456	Lymphoblastoid B-lymphocyte EBV-transformed	5612ea912092183984914c6d25998b1f
+PS01520	GM25455	Lymphoblastoid B-lymphocyte EBV-transformed	27d0455403f6b4221c7267604c468aff
+PS01524	GM27730	Lymphoblastoid B-lymphocyte EBV-transformed	8f7783e80526113d9dda6bb3ed387bee

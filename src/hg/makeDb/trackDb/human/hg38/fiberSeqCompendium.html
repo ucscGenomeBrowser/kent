@@ -1,0 +1,185 @@
+<h2>Description</h2>
+
+<p>
+This track holds the full Fiber-seq accessibility data for 41 samples: 14 cell lines and 27
+lymphoblastoid lines derived from individuals sequenced by the Human Pangenome Reference
+Consortium and the Genome in a Bottle project. For each sample three kinds of data are
+available:
+</p>
+
+<ul>
+  <li>Percent accessible: the fraction of Fiber-seq molecules on which a position was called
+      accessible, combining both chromosomes.</li>
+  <li>FIRE peaks: the accessible regulatory elements called from that signal, with a score and
+      a false discovery rate.</li>
+  <li>Haplotype accessibility: the same percent-accessible signal computed separately for the
+      two parental chromosomes and drawn as an overlay, which makes elements that are open on
+      one chromosome but not the other visible directly.</li>
+</ul>
+
+<p>
+Because 41 samples times three data types is too many tracks for a checkbox list, samples are
+chosen from a searchable table on this page. Pick the data types you want along the top, then
+select samples in the table; the browser turns on that combination for every sample you picked.
+The table can be filtered by sample class and cell type, or searched by sample name and
+accession.
+</p>
+
+<h2>Display Conventions</h2>
+
+<p>
+Accessibility and haplotype signals are drawn 0 to 100 percent with a fixed scale, so heights
+are comparable between samples. The default windowing function is maximum, so a narrow element
+survives zooming out. FIRE peaks are shown in dense mode by default, one row per sample.
+</p>
+
+<p>
+In the haplotype overlay:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th><td>Haplotype 1</td></tr>
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th><td>Haplotype 2</td></tr>
+</table>
+
+<p>
+The two are overlaid transparently, so a position that is equally accessible on both chromosomes
+appears as the two colors superimposed, and a haplotype-selective element appears as one color
+standing alone. Which parental chromosome is haplotype 1 is arbitrary and is not consistent
+between samples.
+</p>
+
+<p>
+The color swatches next to the sample class filters in the table are:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th><td>Lymphoblastoid cell line</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th><td>Stem cell</td></tr>
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th><td>Cancer or immortalized cell line</td></tr>
+</table>
+
+<p>
+Peaks carry two filterable values, the FIRE score in the signalValue field and the false
+discovery rate as a -log10 value in the qValue field, and both can be filtered from a peak
+track's own configuration page, along with the score. No filter is applied by default. A short
+tick inside each peak marks the point source, the single base the pipeline picked as the summit.
+Switching a peak track to pack or full also gives each peak a mouseover with its FIRE score and
+FDR; dense mode has no per-peak hover, which is a property of dense display rather than of this
+track. The pValue field of the source files is set to -1 throughout and carries no information.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Permeabilized cells were treated with the Hia5 N6-adenine methyltransferase, which methylates
+adenines in DNA not protected by a bound protein, and high molecular weight DNA was prepared
+into PacBio SMRTbell libraries and sequenced. Adenine methylation was called with fibertools-rs
+v0.4, and reads were aligned and haplotype-phased; for GM12878 an average 20 kb read spans at
+least one heterozygous variant and 87.9 percent of reads could be phased against GRCh38. The
+FIRE pipeline v0.0.4, a Snakemake workflow, then applied a semi-supervised XGBoost classifier
+to label methyltransferase-sensitive patches on each read as FIRE elements. The classifier was
+trained with Mokapot over 15 iterations on 21 GM12878 experiments spanning 5.8 to 13.3 percent
+adenine methylation, with DNase I and CTCF ChIP-seq peaks as mixed-positive labels. The
+aggregate FIRE score at a position is
+-50/R times the sum over covering elements of log10(1 - min(EP, 0.99)), where R is the read
+depth and EP the estimated precision of each element, which puts the score between 0 and 100;
+positions covered by fewer than four FIRE elements are not scored. The false discovery rate was
+estimated by shuffling whole reads within a chromosome and comparing the resulting score
+distribution to the observed one. Peaks are FIRE score local maxima below a 5 percent FDR with
+at least 10 percent of covering reads actuated; adjacent maxima sharing half their elements or
+overlapping reciprocally by 90 percent were merged, and peak boundaries were set to the median
+start and end of the underlying elements. See Vollger et al. for details.
+</p>
+
+<p>
+The bigWig and bigBed files were downloaded from
+<a href="https://s3.kopah.uw.edu/userprod/web/public/hashed.PacBio-Fiber-seq/" target="_blank">the
+Stergachis lab data server</a>, four files per sample
+(<tt>all.percent.accessible.bw</tt>, <tt>hap1.percent.accessible.bw</tt>,
+<tt>hap2.percent.accessible.bw</tt> and <tt>fire-peaks.bb</tt>). The signal files were copied
+without modification. The peak files were rebuilt, because their bigBed header recorded three
+data columns while the data has the full ten of a narrowPeak file, which left the browser unable
+to see the signalValue and qValue columns for filtering or display. The rebuild corrects the
+header and rounds the FIRE score and the FDR to three decimals, which is well beyond the
+precision either measure carries. It does drop peaks called on chrEBV, the Epstein-Barr virus decoy of the GRCh38
+analysis set, since that sequence is not part of hg38: 421 of 9,487,043 peaks, in 20 of the 41
+samples, between 2 and 166 peaks each, leaving 9,486,622 in the track. The download, rebuild and
+integrity steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/fiberSeq.txt"
+target="_blank">makeDoc</a>, and the scripts that fetch the data and generate the track
+configuration are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/fiberSeq"
+target="_blank">kent source tree</a>.
+</p>
+
+<p>
+Two files are empty at the source: the haplotype accessibility bigWigs for GM12878 (accession
+PM00001), so its haplotype overlay shows no data. Its combined signal, its peaks and its CpG
+methylation are all present, and every other sample has real haplotype files.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>fiberSeqCompendium</i>.
+</p>
+
+<p>
+For automated download and analysis, the data are stored in bigWig and bigBed files that can be
+downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/fiberSeq/" target="_blank">our
+download server</a>, one directory per sample accession. The peak files are called
+<tt>fire-peaks.ucsc.bb</tt> and the signal files <tt>all.percent.accessible.bw</tt>,
+<tt>hap1.percent.accessible.bw</tt> and <tt>hap2.percent.accessible.bw</tt>. Individual regions
+or the whole genome annotation can be obtained using our tools <tt>bigBedToBed</tt> and
+<tt>bigWigToBedGraph</tt>, which can be compiled from the source code or downloaded as
+precompiled binaries for your system. Instructions for downloading source code and binaries can
+be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tools can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/fiberSeq/PM00001/fire-peaks.ucsc.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The mapping from sample accession to sample name and cell type is in
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/fiberSeq/fiberSeqCompendium_metadata.tsv"
+target="_blank">fiberSeqCompendium_metadata.tsv</a>. The original data can be downloaded from the
+<a href="https://s3.kopah.uw.edu/userprod/web/public/hashed.PacBio-Fiber-seq/" target="_blank">Stergachis
+lab data server</a>, and the lab maintains its own track hub and documentation at
+<a href="https://fiberseq.github.io/" target="_blank">fiberseq.github.io</a>. The FIRE pipeline
+is at <a href="https://github.com/fiberseq/FIRE" target="_blank">github.com/fiberseq/FIRE</a> and
+the methylation caller at
+<a href="https://github.com/fiberseq/fibertools-rs" target="_blank">github.com/fiberseq/fibertools-rs</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Mitchell Vollger, Andrew Stergachis and Shane Neph for generating this data, for
+assembling it into a track hub and for their help in arranging these tracks for the browser.
+</p>
+
+<h2>References</h2>
+
+<p>
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+WE, Bohaczuk SC <em>et al</em>.
+<a href="https://doi.org/10.1101/2024.06.14.599122" target="_blank">
+A haplotype-resolved view of human gene regulation</a>.
+<em>bioRxiv</em>. 2025 Jun 2;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40501892" target="_blank">40501892</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12157683/" target="_blank">PMC12157683</a>
+</p>
+
+<p>
+Stergachis AB, Debo BM, Haugen E, Churchman LS, Stamatoyannopoulos JA.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32587015" target="_blank">
+Single-molecule regulatory architectures captured by chromatin fiber sequencing</a>.
+<em>Science</em>. 2020 Jun 26;368(6498):1449-1454.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32587015" target="_blank">32587015</a>
+</p>
+
