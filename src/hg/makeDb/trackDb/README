@@ -51,46 +51,53 @@ Variable substitution:
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:
-     $ORGANISM - all upper case organism, like 'MOUSE'
-     $Organism - initial capped organism, like 'Mouse'
-     $organism - all lower case organism, like 'mouse'
-     $db - database (like mm3, hg15, etc.)
-     $date - freeze date of underlying assembly
-     $blurb - If there is a blurb field in the .ra file this echos it.
-     $matrix - content of the matrix and optional matrixHeader trackDb setting
+     ${ORGANISM} - all upper case organism, like 'MOUSE'
+     ${Organism} - initial capped organism, like 'Mouse'
+     ${organism} - all lower case organism, like 'mouse'
+     ${db} - database (like mm3, hg15, etc.)
+     ${date} - freeze date of underlying assembly
+     ${blurb} - If there is a blurb field in the .ra file this echos it.
+     ${matrix} - content of the matrix and optional matrixHeader trackDb setting
                which will be converted to an HTML table. If there is no matrix
                setting, an empty string is substituted.
-     $chainMinScore -  value that gets substituted into this statement on the
+     ${chainMinScore} -  value that gets substituted into this statement on the
                chain or chainNet html page: 'Chains scoring below a minimum
-               score of "$chainMinScore" were discarded'.
-     $chainLinearGap - value for the -linearGap matrix used with axtChain
+               score of "${chainMinScore}" were discarded'.
+     ${chainLinearGap} - value for the -linearGap matrix used with axtChain
                (e.g. loose, medium). Gets substituted into the chain or
                chainNet html page.
-     $downloadsServer - the value of the hg.conf downloads.server variable, or
+     ${downloadsServer} - the value of the hg.conf downloads.server variable, or
                          hgdownload.soe.ucsc.edu if not set.
-     $track - the track's own name, as hgTrackUi's g= parameter needs it. For a
-               hub track that includes the hub_<id>_ prefix.
-     $parentTrack - the name of the container the track sits in, a superTrack or
-               a composite, in the same form as $track. Views are skipped, since
-               a view has no description page of its own. For a track that is
-               not in a container this is the same as $track. Useful for linking
-               a subtrack's description page back to its container, e.g.
-               <a href="hgTrackUi?db=$db&amp;g=$parentTrack">.
-     $hgsid - the current session id. Substituted only where there is a cart,
-               that is by the CGIs; hgTrackDb leaves it empty, so it is of use
-               in hub description pages rather than in native trackDb.
-In addition, if there is an $otherDb field set in the .ra file, these
+     ${track} - the track's own name, as hgTrackUi's g= parameter needs it. For
+               a hub track that includes the hub_<id>_ prefix.
+     ${parentTrack} - the name of the container the track sits in, a superTrack
+               or a composite, in the same form as ${track}. Views are skipped,
+               since a view has no description page of its own. For a track that
+               is not in a container this is the same as ${track}. Useful for
+               linking a subtrack's description page back to its container, e.g.
+               <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">.
+     ${hgsid} - the current session id. Only a CGI has a cart to take this
+               from. Native trackDb html is substituted once by hgTrackDb when
+               it loads trackDb, and that happens without a cart, so ${hgsid}
+               is empty there. It is meant for hub description pages, which are
+               substituted at render time by hgc and hgTrackUi instead.
+In addition, if there is an otherDb field set in the .ra file, these
 variables are available:
-     $o_ORGANISM - all upper case other organism, like 'MOUSE'
-     $o_Organism - initial capped other organism, like 'Mouse'
-     $o_organism - all lower case other organism, like 'mouse'
-     $o_db - other database (like mm3, hg15, etc.)
-     $o_date - freeze date of underlying other assembly
+     ${o_ORGANISM} - all upper case other organism, like 'MOUSE'
+     ${o_Organism} - initial capped other organism, like 'Mouse'
+     ${o_organism} - all lower case other organism, like 'mouse'
+     ${o_db} - other database (like mm3, hg15, etc.)
+     ${o_date} - freeze date of underlying other assembly
 
 Any other ra fields may be referenced as a variable.
-The reference can be in the form $name or ${name}.  Without
-the braces, name is terminated by a character other than
-[0-9A-Za-Z_].  A literal $ is represented as $$.
+
+Always write the braces.  The bare form $name also works, terminated by a
+character other than [0-9A-Za-Z_], and older pages use it, but do not write it
+in anything new and do not document it.  Inside braces any character is allowed
+up to the closing brace, so ${name} leaves room for structured variable names
+later, something $name cannot express.  It also settles what happens when a
+reference is followed by a letter: ${db}Something is unambiguous, $dbSomething
+is read as one long name.  A literal $ is represented as $$.
 
 Here are some details on how to load various track types into the database
 tables:
