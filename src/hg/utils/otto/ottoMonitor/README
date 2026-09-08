@@ -79,9 +79,26 @@ a file's mtime to the database TABLE's date, on purpose, so a later -nt test ask
 about the data rather than the run.  omimUpload's upload/*.date files look like
 an ideal run stamp and are not; the directory mtime is used instead.
 
+A run stamp says the job started, not that it worked.  Most of these globs are
+written early in a run on purpose, so a job that dies half way still shows that
+it tried.  The cost is that a job which fails the same way every time looks on
+time forever.  uniprot is the live example: its monthly run dies after about 37
+minutes on a missing lxml, it has produced no output since January 2025, and the
+browser serves UniProt release 2024_06 while the downloaded source is at 2026_02.
+The monitor still reads it as on time, because lastRun.log is fresh every month.
+Catching that needs a second kind of check, on the age of the job's OUTPUT
+rather than on its schedule, and the monitor does not have one.
+
 The eight directory-mtime jobs work today but nobody designed that signal.
 Copying a file into one of those directories by hand resets the clock and the
 monitor will read it as a run.
+
+The grace window is measured from the last scheduled time whose window has
+already closed, not from the latest scheduled time.  Written the other way, a
+daily job scheduled fewer than graceHours before the monitor's own run time can
+never be called late, because every check lands inside a fresh window.  Six of
+the forty were in that hole: clinGen, genArkPushRR, grcIncidentDb, liftRequest,
+omim and pubtatorDbSnp.
 
 cron's day rule is an OR, not an AND: when both day-of-month and day-of-week are
 restricted the job runs when EITHER matches.  A job like "14 13 * * mon" would

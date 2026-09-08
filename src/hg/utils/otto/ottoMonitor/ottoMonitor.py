@@ -49,6 +49,11 @@ redmineCli = os.path.expanduser("~/kent/src/utils/redmineCli")
 # of the job's own graceHours.  Covers clock skew and a cron that starts slow.
 extraGraceMinutes = 15
 
+# A job with no individual owner carries this in the owner column of
+# ottoOwners.tsv, and belongs to whoever the ottoOnDuty header names.  Lou set
+# that rule for civic on #38101, 2026-09-08.
+onDutyOwner = "ottoOnDuty"
+
 dowNames = {"sun": 0, "mon": 1, "tue": 2, "wed": 3, "thu": 4, "fri": 5, "sat": 6}
 
 
@@ -263,11 +268,16 @@ def saveState(path, state):
     os.rename(tmp, path)
 
 
-def checkJob(job, owners, stamps, now):
+def checkJob(job, owners, stamps, now, onDuty=None):
     """Everything known about one job's last run.  Returns a dict."""
     ownerRow = owners[job]
     stampRow = stamps.get(job)
-    result = {"job": job, "owner": ownerRow[1], "sourceUrl": ownerRow[5],
+    owner = ownerRow[1]
+    ownerIsOnDuty = owner == onDutyOwner
+    if ownerIsOnDuty:
+        owner = onDuty or "?"
+    result = {"job": job, "owner": owner, "ownerIsOnDuty": ownerIsOnDuty,
+              "sourceUrl": ownerRow[5],
               "cron": ownerRow[6], "verdict": "ok", "detail": ""}
 
     if stampRow is None:
@@ -275,13 +285,21 @@ def checkJob(job, owners, stamps, now):
         result["detail"] = "in the crontab with no row in ottoMonitorStamps.tsv"
         return(result)
 
-    stampGlob, graceHours = stampRow[1], stampRow[2]
+    stampGlob, graceHours = stampRow[1], float(stampRow[2])
     if stampGlob == "-":
         result["verdict"] = "blind"
         result["detail"] = stampRow[3] if len(stampRow) > 3 else "no run stamp"
         return(result)
 
-    due = prevScheduledRun(result["cron"], now)
+    # Check against the most recent scheduled time whose grace window has
+    # already CLOSED, not against the latest one.  Measuring the grace forward
+    # from the latest scheduled time leaves a job permanently unflaggable
+    # whenever its scheduled hour is less than graceHours before this script's
+    # own run time, because every check then lands inside a fresh grace window.
+    # Six of the forty were in that hole at the 12:15 cron: clinGen,
+    # genArkPushRR, grcIncidentDb, liftRequest, omim and pubtatorDbSnp.
+    due = prevScheduledRun(result["cron"],
+                           now - timedelta(hours=graceHours, minutes=extraGraceMinutes))
     if due is None:
         result["verdict"] = "unparsed"
         result["detail"] = "could not parse cron spec %r" % result["cron"]
@@ -290,11 +308,7 @@ def checkJob(job, owners, stamps, now):
     lastRun = newestMtime(stampGlob)
     result["due"] = due.strftime("%Y-%m-%d %H:%M")
     result["lastRun"] = lastRun.strftime("%Y-%m-%d %H:%M") if lastRun else "never"
-    deadline = due + timedelta(hours=float(graceHours), minutes=extraGraceMinutes)
     if lastRun is not None and lastRun >= due:
-        return(result)
-    if now < deadline:
-        result["detail"] = "due %s, still inside its grace window" % result["due"]
         return(result)
 
     result["verdict"] = "late"
@@ -320,8 +334,12 @@ def fileTicket(result, onDuty, dryRun):
     owner as a watcher and named in the body."""
     owner = result["owner"]
     subject = "otto job %s has not run since %s" % (result["job"], result["lastRun"])
-    ownerLine = ("The recorded owner of this job is %s." % owner if owner != "?"
-                 else "This job has no recorded owner in ottoOwners.tsv.")
+    if result.get("ownerIsOnDuty"):
+        ownerLine = "This job has no individual owner, so it belongs to whoever is running otto."
+    elif owner != "?":
+        ownerLine = "The recorded owner of this job is %s." % owner
+    else:
+        ownerLine = "This job has no recorded owner in ottoOwners.tsv."
     body = "\n".join([
         "The otto failure monitor found this job late. Refs #38101.",
         "",
@@ -341,7 +359,9 @@ def fileTicket(result, onDuty, dryRun):
         return(None)
     done = subprocess.run(cmd, capture_output=True, text=True)
     print(done.stdout.strip())
-    for name in [n for n in (owner, onDuty) if n and n != "?"]:
+    # dict.fromkeys keeps the order and drops the duplicate when the job's owner
+    # is the person on duty
+    for name in dict.fromkeys(n for n in (owner, onDuty) if n and n != "?"):
         ticketId = "".join(c for c in done.stdout.split("#")[-1][:6] if c.isdigit())
         if ticketId:
             subprocess.run([redmineCli, "watch", ticketId, name],
@@ -377,7 +397,7 @@ def main():
 
     late, blind, other, fine = [], [], [], []
     for job in sorted(watched):
-        result = checkJob(job, owners, stamps, now)
+        result = checkJob(job, owners, stamps, now, onDuty)
         if result["verdict"] == "late":
             result = classifyLate(result)
         entry = state.setdefault(job, {})

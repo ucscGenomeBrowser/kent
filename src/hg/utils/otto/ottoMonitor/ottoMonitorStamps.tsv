@@ -11,8 +11,17 @@
 #             blind rather than as passing.
 # graceHours  how long after the scheduled time the stamp is still allowed to be
 #             missing.  It covers both a slow job and a late start.  Default 6.
-#             uniprot gets five days because the run itself takes three or four.
+#             The monitor checks the most recent scheduled time whose grace
+#             window has already closed, so a generous value here delays a
+#             report by that much; it does not hide one.
+#             uniprot gets five days because it fires once a month and a missed
+#             slot is often restarted by hand days later.
 # note        why this glob and not another.  Read it before changing one.
+#
+# A run stamp says the job STARTED, not that it finished or that it worked.  Most
+# of these globs are written early in the run, on purpose, so that a job which
+# dies half way still shows that it tried.  uniprot is the case that makes the
+# limit concrete: see its note below.
 #
 # Derived from ottoFailureSignatures.tsv, beside this file.  Read that before
 # changing a glob here: it says what each job writes, when, and why.
@@ -31,7 +40,7 @@ mitoMap	/hive/data/outside/otto/mitoMap	8	dir mtime: the .latest.tsv files are w
 refSeqHistorical	-	6	blind: a notifier, it writes only when NCBI has something new
 strchive	-	6	blind: writes only on a new GitHub release
 vcepVersions	-	6	blind: a pure notifier, it writes nothing at all
-uniprot	/hive/data/outside/otto/uniprot/lastRun.log	120	the run itself takes three to four days
+uniprot	/hive/data/outside/otto/uniprot/lastRun.log	120	doUpdate.sh creates lastRun.log with a > redirect, so the stamp lands when the run starts.  A real run takes three to four days, and longer when the UniProt release is a big one (Max, #38101).  This stamp cannot tell that apart from a crash: on 2026-08-26 the run died after 37 minutes on a missing lxml and still left a fresh stamp
 uniprotWuhCor1	-	6	blind, and the source is dead. See #38280
 clinGen	/hive/data/outside/otto/clinGen/clinGenGeneValidity/ls.check	6	rewritten every run
 clinGenCspec	/hive/data/outside/otto/clinGen/clinGenCspec	8	dir mtime: svis.json is written then removed on no change
