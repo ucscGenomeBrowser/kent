@@ -39,3 +39,14 @@ NM_006766.5 p.495_533
 ENST00000265713.8 p.495
 ENST00000265713.8 p.495_533
 KAT6A c.1483_1599
+KAT6A 495
+KAT6A 495_533
+# A hyphen is a range separator in protein coordinates only, refs #38285
+KAT6A 495-533
+KAT6A p.495-533
+NM_006766.5 p.495-533
+ENST00000265713.8 p.495-533
+# ...but in c. and n. terms a hyphen is still an intron offset, not a range:
+# this one must stay a single base 1599 nt before c.1483, not codons 1483..1599
+KAT6A c.1483-1599
+KAT6A n.100-200

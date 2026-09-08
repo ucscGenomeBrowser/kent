@@ -406,7 +406,12 @@ if (pHgvs && *pHgvs)
 // As above but omitting the protein change, and allowing a range of codon numbers.
 // Someone reading about a mutation usually has the codon number but not the amino acid,
 // so "KAT6A p.495" and "KAT6A p.495_533" have to work as well as "KAT6A p.Lys495".
-#define posIntRangeExp posIntExp "(_" posIntExp ")?"
+// A hyphen is allowed as the range separator alongside the HGVS underscore, but ONLY here in
+// protein coordinates, where HGVS has no other use for it: proteins have neither introns nor
+// negative positions.  In c. and n. terms a hyphen is an intron offset -- c.1483-1599 is a
+// single base 1599 nt before c.1483 -- so those keep the underscore as their only range
+// separator, and posIntRangeExp must not be used to build a c. or n. pattern.
+#define posIntRangeExp posIntExp "([-_]" posIntExp ")?"
 #define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntRangeExp "\\)?"
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
