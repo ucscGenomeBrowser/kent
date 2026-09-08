@@ -41,6 +41,9 @@ Valid position queries can include:</p>
   Exon positions: <code>SYMBOL exon N</code> or <code>SYMBOL:e.N[+/-offset]</code>
   (e.g. <code>TP53 exon 5</code>, <code>BRCA2:e.10</code>, <code>NM_000546:e.5+2</code>)</li>
   <li>
+  Codon or nucleotide positions and ranges, with or without the amino acid letters
+  (e.g. <code>BRAF 600</code>, <code>KAT6A 495-533</code>, <code>KAT6A c.1483_1599</code>)</li>
+  <li>
   HGVS and accession searches on outdated RefSeq accession versions is available on hg38</li>
 </ul> 
 <p> 
@@ -84,6 +87,23 @@ all RefSeq, then historical RefSeq. To jump to a codon instead, just enter it
 after the gene, e.g. <code>BRAF 600</code>, use the HGVS notation (see below), or
 right-click any transcript in the browser and select &ldquo;Zoom to
 codon&rdquo;.</p>
+
+<p>
+A codon or nucleotide number can also be given as a range, which is often what you want when a
+paper describes a variant or a domain that covers more than one codon. Write the two numbers with
+an underscore between them, as HGVS does: <code>KAT6A p.495_533</code> or
+<code>KAT6A c.1483_1599</code>. The amino acid letters are optional, so
+<code>KAT6A p.Lys495_Ser533</code> works as well, and an Ensembl or RefSeq transcript can stand in
+for the gene symbol, e.g. <code>ENST00000265713.8 p.495_533</code>.</p>
+
+<p>
+For codons you can use a hyphen instead of the underscore, so <code>BRCA1 100-200</code> and
+<code>KAT6A p.495-533</code> both work. <b>This shortcut is for codons only.</b> After
+<code>c.</code> or <code>n.</code> a hyphen keeps its HGVS meaning, which is an intron offset
+rather than a range: <code>KAT6A c.1483-1599</code> is the single base 1599&nbsp;bases before
+<code>c.1483</code>, deep in the preceding intron, and the Browser takes you there. So
+<code>KAT6A 100-200</code> is a stretch of 101 codons, while <code>KAT6A c.100-200</code> is one
+base. If you mean a range of nucleotides, always use the underscore.</p>
 
 <h2>Sample queries</h2> 
 <p> 
@@ -183,9 +203,20 @@ different types of queries that can be performed.
     NM_001372044:c.1528_1530del</td>
     <td>Displays the region that matches the <a href="http://varnomen.hgvs.org/" target="_blank">HGVS</a> 
         expression, usually in the format <tt>&lt;transcript or protein&gt;:&lt;position&gt; &lt;amino acid or nucleotide change&gt;</tt><br>If a gene symbol is used, HGVS search will try all RefSeq transcripts to find the nucleotide or amino acid at the position indicated in the expression. If there are multiple matches, a disambiguation page will be shown. If the RefSeq sequence differs from the genome sequence, then currently the search will use the genome, not the transcript, for codon counting and amino acid / nucleotide  comparison. Please contact us if this is inconvenient.</td></tr> 
+  <tr id="codonRange">
+    <td nowrap>KAT6A p.495<br> KAT6A 495<br> KAT6A p.495_533<br> KAT6A 495-533<br>
+    KAT6A p.Lys495_Ser533<br> ENST00000265713.8 p.495_533<br> NM_006766.5 p.495<br>
+    KAT6A c.1483<br> KAT6A c.1483_1599<br> ENST00000265713.8 c.1483_1599</td>
+    <td>A codon or nucleotide position, or a range of them, with no sequence change. The amino acid
+    letters are optional, a bare number after a gene symbol is read as a codon, and the gene symbol
+    can be replaced by a RefSeq or Ensembl transcript. Ranges of codons take either an underscore
+    or a hyphen; ranges of nucleotides take only the underscore, because after <code>c.</code> or
+    <code>n.</code> a hyphen is an HGVS intron offset, so <code>c.1483-1599</code> means the single
+    base 1599&nbsp;bases before <code>c.1483</code>. A gene symbol with more than one transcript
+    brings up a disambiguation page.</td></tr>
   <tr>
     <td>NM_198056.2:c.1A&gt;C</td>
-    <td>An example of an HGVS search on a previous NM version that is now outdated. 
+    <td>An example of an HGVS search on a previous NM version that is now outdated.
         Support for previous NM accessions is only available on hg38.</td></tr>
   <tr>
     <td>1-55051215-G-GA</td>
