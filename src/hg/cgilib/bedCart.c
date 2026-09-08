@@ -25,11 +25,19 @@ boolean bedItemRgb(struct trackDb *tdb)
 if (tdb == NULL)
    return TRUE;
 
-if ((trackDbSettingClosestToHome(tdb, "color") != NULL) || trackDbSettingOff(tdb, OPT_ITEM_RGB))
+/* An explicit setting in the stanza wins, either way.  The "color" test below is only
+ * about whether to turn itemRgb on by DEFAULT, so it must not be reached first: a stanza
+ * that says both "itemRgb on" and "color" wants its items from the file's own RGB column
+ * and its labels from color, which is what it got before 88d620e6c82 folded the two
+ * tests into one early return. */
+if (trackDbSettingOff(tdb, OPT_ITEM_RGB))
     return FALSE;
 
 if (trackDbSettingOn(tdb, OPT_ITEM_RGB))
     return TRUE;
+
+if (trackDbSettingClosestToHome(tdb, "color") != NULL)
+    return FALSE;
 
 if ((cfgOptionBooleanDefault("alwaysItemRgb", TRUE) == FALSE))
     return FALSE;
