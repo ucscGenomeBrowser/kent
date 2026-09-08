@@ -2987,6 +2987,67 @@ else
     return splicedBaseCount(lf, g, lf->end);
 }
 
+static int cdsMrnaPos(struct linkedFeatures *lf, int g)
+/* 1-based HGVS c. position of genomic base g, which must lie in the CDS.
+ * c.1 is the first base of the CDS, distances measured in spliced space. */
+{
+if (lf->orientation >= 0)
+    return splicedBaseCount(lf, lf->tallStart, g) + 1;
+else
+    return splicedBaseCount(lf, g + 1, lf->tallEnd) + 1;
+}
+
+static void exonCdsNote(struct linkedFeatures *lf, int s, int e, char *buf, int bufSize)
+/* Describe the exon [s,e) of a coding transcript in HGVS c. coordinates: the UTR
+ * piece(s) as c.-N / c.*N and the coding piece as a c. range together with the
+ * codon (p.) numbers it covers.  This is what the popup shows when we are zoomed
+ * out too far to label the individual codons. */
+{
+buf[0] = '\0';
+boolean posStrand = (lf->orientation >= 0);
+int cdsStart = lf->tallStart, cdsEnd = lf->tallEnd;
+/* the exon split into its three possible pieces, in genomic coordinates */
+int upS = s, upE = min(e, cdsStart);            // left of the CDS
+int cdS = max(s, cdsStart), cdE = min(e, cdsEnd);
+int dnS = max(s, cdsEnd), dnE = e;              // right of the CDS
+/* in transcription order the left piece is the 5' UTR on + strand, the 3' on - */
+int utr5S = posStrand ? upS : dnS, utr5E = posStrand ? upE : dnE;
+int utr3S = posStrand ? dnS : upS, utr3E = posStrand ? dnE : upE;
+char loBuf[16], hiBuf[16];
+int len = 0;
+if (utr5E > utr5S)
+    {
+    utrHgvsCoord(lf, posStrand ? utr5S : utr5E - 1, loBuf, sizeof(loBuf));
+    utrHgvsCoord(lf, posStrand ? utr5E - 1 : utr5S, hiBuf, sizeof(hiBuf));
+    if (sameString(loBuf, hiBuf))
+        safef(buf, bufSize, "<b>5' UTR: </b> c.%s<br>", loBuf);
+    else
+        safef(buf, bufSize, "<b>5' UTR: </b> c.%s_%s<br>", loBuf, hiBuf);
+    len = strlen(buf);
+    }
+if (cdE > cdS)
+    {
+    int c5 = cdsMrnaPos(lf, posStrand ? cdS : cdE - 1);
+    int c3 = cdsMrnaPos(lf, posStrand ? cdE - 1 : cdS);
+    int p5 = (c5 + 2) / 3, p3 = (c3 + 2) / 3;
+    if (p5 == p3)
+        safef(buf + len, bufSize - len, "<b>Codons: </b> c.%d-%d (p.%d)<br>", c5, c3, p5);
+    else
+        safef(buf + len, bufSize - len, "<b>Codons: </b> c.%d-%d (p.%d-%d)<br>",
+                c5, c3, p5, p3);
+    len = strlen(buf);
+    }
+if (utr3E > utr3S)
+    {
+    utrHgvsCoord(lf, posStrand ? utr3S : utr3E - 1, loBuf, sizeof(loBuf));
+    utrHgvsCoord(lf, posStrand ? utr3E - 1 : utr3S, hiBuf, sizeof(hiBuf));
+    if (sameString(loBuf, hiBuf))
+        safef(buf + len, bufSize - len, "<b>3' UTR: </b> c.%s<br>", loBuf);
+    else
+        safef(buf + len, bufSize - len, "<b>3' UTR: </b> c.%s_%s<br>", loBuf, hiBuf);
+    }
+}
+
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
     int y, int heightPer, int sItem, int eItem,
     boolean lButton, boolean rButton, int buttonW)
@@ -3001,8 +3062,10 @@ int exonIx = 1;
 struct slRef *exonList = NULL, *ref;
 // TODO this exonText (and intronText) setting is just a made-up placeholder.
 // could add a real setting name. Maybe someday extend to exon names (LRG?) instead of just exon numbers
+boolean isTranscript = TRUE;   // chain blocks and LRG regions have no cDNA coordinates
 if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     {
+    isTranscript = FALSE;
     exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Block");
     intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Gap"  ); // what really goes here for chain type?
     }
@@ -3228,28 +3291,35 @@ for (ref = exonList; TRUE; )
                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                     // if you change the text below, also change hgTracks:mouseOverToExon
                     char *posNote = "";
-                    char posBuf[64];
+                    char posBuf[256];
                     char *exonOrIntron = "Intron";
                     char *lengthLabel = "Length:";
                     if (isExon)
                         {
                         exonOrIntron = "Exon";
                         lengthLabel = "Exon Length:";
-                        if (lf->tallStart >= lf->tallEnd && zoomedToCdsColorLevel)
+                        if (isTranscript)
                             {
-                            // non-coding transcript (no CDS): label the exon with its
-                            // spliced HGVS n. nucleotide range instead of the codon note.
-                            boolean posStrand = (lf->orientation >= 0);
-                            int n5 = txMrnaPos(lf, posStrand ? s : e - 1);
-                            int n3 = txMrnaPos(lf, posStrand ? e - 1 : s);
-                            if (n5 == n3)
-                                safef(posBuf, sizeof(posBuf), "<b>Position: </b> n.%d<br>", n5);
+                            if (lf->tallStart >= lf->tallEnd)
+                                {
+                                // non-coding transcript (no CDS): label the exon with its
+                                // spliced HGVS n. nucleotide range instead of a codon note.
+                                boolean posStrand = (lf->orientation >= 0);
+                                int n5 = txMrnaPos(lf, posStrand ? s : e - 1);
+                                int n3 = txMrnaPos(lf, posStrand ? e - 1 : s);
+                                if (n5 == n3)
+                                    safef(posBuf, sizeof(posBuf), "<b>Position: </b> n.%d<br>", n5);
+                                else
+                                    safef(posBuf, sizeof(posBuf), "<b>Position: </b> n.%d_%d<br>",
+                                            n5, n3);
+                                }
                             else
-                                safef(posBuf, sizeof(posBuf), "<b>Position: </b> n.%d_%d<br>", n5, n3);
+                                // coding transcript, too far out to draw the codons: give the
+                                // exon's cDNA range and the codons it covers, so a c. or p.
+                                // position can be found without zooming into every exon
+                                exonCdsNote(lf, s, e, posBuf, sizeof(posBuf));
                             posNote = posBuf;
                             }
-                        else
-                            posNote = "<b>Codons:</b> Zoom in to show cDNA position<br>";
                         }
 
 
