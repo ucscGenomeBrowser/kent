@@ -25,6 +25,27 @@ Because the color is continuous rather than a set of population labels, it is
 read by comparing regions with each other rather than against a fixed legend.
 </p>
 <p>
+The color follows the ancestry segment rather than the individual window, so
+neighboring windows inside one segment differ by only one or two color steps.
+Those small differences are not meaningful: the feature to read is the block, not
+the window. Two consequences are worth knowing before concluding that a display
+looks wrong. First, a haplotype with a single ancestry throughout gives one
+uniform color across every chromosome, which is the correct result for that
+sample rather than a rendering problem. Second, where a haplotype does carry
+several ancestries the blocks are tens of megabases long, so a view of only a few
+megabases usually falls inside one block and also looks uniform. Zooming out to a
+whole chromosome is what makes the block structure visible.
+</p>
+<p>
+Assembly <tt>GCA_018466835.2</tt> (sample HG02257) is a useful example of a
+haplotype with several ancestry segments. Its <tt>chr17</tt> crosses four blocks,
+with transitions near 10.0 Mb, 50.7 Mb and 73.3 Mb, and <tt>chr5</tt> crosses
+four more across its 184 Mb; <tt>chr20</tt> and <tt>chr22</tt> each cross three.
+In that same assembly <tt>chr2</tt>, <tt>chr13</tt> and <tt>chr18</tt> carry a
+single ancestry from end to end and are uniform in color, so picking one of those
+chromosomes gives no sense of what the track shows.
+</p>
+<p>
 The track is best viewed in pack mode. In dense mode the windows are collapsed
 onto one row, which hides the per-window values.
 </p>
