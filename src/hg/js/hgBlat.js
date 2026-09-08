@@ -702,11 +702,18 @@ function blatFormCount() {
     var out = document.getElementById('blatCountText');
     if (!ta || !out) { return; }
     var n = ta.value.replace(/[^A-Za-z*]/g, '').length;
-    // 75,000 is the DNA per-sequence limit (hgBlat.c maxSingleSize); protein and translated
-    // queries top out at 10,000, but the server rejects those with a warning that links to the
-    // full limits in the docs, so the counter shows only the common case.
-    out.textContent = blatFmt(n) + ' of 75,000 characters';
-    out.classList.toggle('over', n > 75000);
+    // The per-sequence limit for the selected query type, passed through from the C constants in
+    // hgBlat.c so the two cannot drift apart (the page claimed a stale 25,000 for years).
+    // "BLAT's guess" counts against the DNA limit - the common case; a protein query that only
+    // the server recognizes as such is still rejected there with a warning linking the full
+    // limits in the docs.
+    var cfg = hgBlatFormData;
+    var typeSel = document.querySelector('#blatFormBox select[name=type]');
+    var type = typeSel ? typeSel.value : '';
+    var isTx = (type === 'protein' || type === 'translated RNA' || type === 'translated DNA');
+    var max = isTx ? cfg.maxSingleTx : cfg.maxSingleDna;
+    out.textContent = blatFmt(n) + ' of ' + blatFmt(max) + ' characters';
+    out.classList.toggle('over', n > max);
 }
 
 function blatFormTab(showUpload) {
@@ -1000,6 +1007,8 @@ function blatFormBuild() {
     blatFormCount();
 
     $('#blatUserSeq').on('input', blatFormCount);
+    // The limit shown depends on the query type, so recount when it changes.
+    $('#blatFormBox select[name=type]').on('change', blatFormCount);
     // Mirror the "Keep results" checkbox into its hidden field so an unticked box submits an
     // explicit 0 rather than nothing at all, and remember the choice in localStorage so it comes
     // back pre-set on the user's next visit (see keepResultsInit above).
