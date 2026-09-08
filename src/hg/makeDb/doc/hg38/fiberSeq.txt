@@ -163,16 +163,23 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #   ~/kent/src/hg/makeDb/trackDb/human/hg38/fiberSeq.ra
 #   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqCompendium_metadata.tsv
 #   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqCompendium_colors.json
-#   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqMeth_metadata.tsv
-#   /hive/data/genomes/hg38/bed/fiberSeq/fiberSeqMeth_colors.json
 
 # Structure:
 #   fiberSeq            container, group regulation
 #     fiberSeqAcc         multiWig overlay of 7 common cell lines, shown by default
-#     fiberSeqCompendium  faceted composite, dataTypes acc/peaks/hap, 41 samples
-#     fiberSeqMeth        faceted composite, dataTypes comb/hap/diffs, 41 samples
+#     fiberSeqCompendium  faceted composite, 41 samples, six data types:
+#                         acc, peaks, hap, cpg, cpgHap, cpgDiff
 #
-# The two composites use the same faceted-composite machinery as Methbase
+# Accessibility and methylation started as two composites, fiberSeqCompendium and
+# fiberSeqMeth, and were merged into one.  They cover the identical 41 samples,
+# and cartDump.c assigns priority with the data element as the OUTER loop and the
+# data type as the inner one, so a single composite keeps a sample's six subtracks
+# contiguous in the image.  As two composites the display was an accessibility
+# block followed by a methylation block, so comparing the two assays for one
+# sample meant reading across every other sample - which is the whole point,
+# since both come off the same molecules in the same experiment.
+#
+# The composite uses the same faceted-composite machinery as Methbase
 # (methbase2.ra): metaDataUrl for the sample table, colorSettingsUrl for the
 # facet swatches, primaryKey for the row id, and dataTypes for the per-sample
 # data kinds.  Two things about that machinery drove the naming:
@@ -221,7 +228,27 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #      hgTrackUi?db=hg38&g=fiberSeqCompendium_PM00004_peaks
 #    draws min/max boxes for all three with the right limit hints.
 #
-# 5. mouseOver text only appears in pack or full.  Dense makes no per-item map
+# 5. Facet columns: only "sampleClass" is faceted.  facetedComposite.js offers
+#    a facet value only when it occurs more than once (a checkbox matching a
+#    single row is just a slow search box), so:
+#      accession  41 distinct, all count 1, and excluded anyway as primaryKey
+#      _sample    41 distinct, all count 1 - can never be a facet
+#      _cellType  14 distinct but only 2 with count > 1 (Lymphoblastoid 27,
+#                 Embryonic stem cell 2), so as a facet it drew two checkboxes
+#                 and left 12 samples unreachable.  Underscored, so it is a
+#                 searchable and sortable column instead.
+#      sampleClass 3 values, all count > 1.  Derived from the lab's free-text
+#                 cell type, and worth replacing when they give us real HPRC
+#                 metadata (donor sex, population) that would facet properly.
+#
+# 6. Subtracks need an explicit priority.  Without one they fall back to a label
+#    sort, which showed a sample's data types as Peaks, CpG, Acc on a first
+#    visit.  The script now numbers them sample-outer, declared-data-type-inner
+#    (i*10 + j + 1), which matches the row of data type checkboxes across the
+#    top of the table.  cartDump.c clears "<mdid>_*.priority" and writes its own
+#    on every submit, so this only sets the starting order.
+#
+# 7. mouseOver text only appears in pack or full.  Dense makes no per-item map
 #    boxes at all, so no bigBed-like track has a per-item hover there.  Since
 #    Andrew asked for peaks in dense by default, the mouseover is there for
 #    whoever switches a peak track to pack.  Checked by temporarily dropping
@@ -250,8 +277,13 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 # haplotype overlay switches from orange (haplotype 2 methylated) to blue
 # (haplotype 1 methylated) across the locus, and the difference track follows:
 #   hgRenderTracks?db=hg38&position=chr20:58,838,000-58,860,000&hideTracks=1
-#     &fiberSeq=show&fiberSeqMeth=full
-#     &fiberSeqMeth_PM00001_hap_sel=1&fiberSeqMeth_PM00001_diffs_sel=1
+#     &fiberSeq=show&fiberSeqCompendium=full
+#     &fiberSeqCompendium_PM00001_cpgHap_sel=1
+#     &fiberSeqCompendium_PM00001_cpgDiff_sel=1
+#
+# The merged composite at the same locus, with the three default data types on,
+# renders each sample's tracks together and in the declared order:
+#   GM12878 Acc / GM12878 Peaks / GM12878 CpG / K562 Acc / K562 Peaks / ...
 #
 # The faceted table's embedded JSON on the composite UI page confirms the
 # naming works: dataElements comes back as bare accessions ("PM00001",

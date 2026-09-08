@@ -1,34 +1,37 @@
 <h2>Description</h2>
 
 <p>
-Most of the DNA in a cell is wrapped around nucleosomes or bound by other proteins, and only
-the stretches that are left open can be reached by the transcription factors that switch genes
-on. Fiber-seq reads out that protein occupancy directly. Permeabilized cells are treated with
-a non-specific N6-adenine methyltransferase, which methylates adenines wherever the DNA is
-exposed and leaves protected adenines untouched, so each DNA molecule carries a stencil of the
-proteins that were sitting on it. The molecules are then sequenced on a PacBio instrument,
-which reports the base sequence, the added adenine methylation and the native CpG methylation
-from the same read. Because the reads are long enough to carry heterozygous variants, they can
-be assigned to one of the two parental chromosomes, giving a separate picture of chromatin for
-each haplotype rather than an average of the two.
+Fiber-seq maps which parts of each DNA molecule are bound by proteins and which are open.
+Permeabilized cells are treated with a non-specific adenine methyltransferase that methylates
+only exposed adenines, so nucleosomes and other bound proteins leave an unmethylated footprint
+on each molecule. The DNA is then sequenced on a PacBio instrument, which reads the base
+sequence, the added adenine methylation and the native CpG methylation from the same molecule.
+Because the reads are long enough to span heterozygous variants, they can be phased to a
+parental haplotype, giving a chromatin picture for each allele separately rather than an average
+of the two.
+</p>
+
+<p>
+The accessibility this measures is the same property that DNase-seq and ATAC-seq measure, and
+the tracks here can be read much as those are. The difference is that Fiber-seq reports it one
+molecule at a time, so a value is a fraction of molecules rather than a pile of cut sites, and
+it can be split by haplotype.
 </p>
 
 <p>
 This collection holds the Fiber-seq data from the Stergachis and Vollger labs for 41 samples,
 covering common cell lines and lymphoblastoid lines from individuals sequenced by the Human
-Pangenome Reference Consortium and the Genome in a Bottle project. It contains three tracks:
+Pangenome Reference Consortium and the Genome in a Bottle project. It contains two tracks:
 </p>
 
 <ul>
   <li><a href="hgTrackUi?g=fiberSeqAcc">Fiber-seq Acc</a> shows percent-accessible chromatin
       for seven widely used cell lines as a single overlay, so accessibility can be compared
       across cell types at a glance.</li>
-  <li><a href="hgTrackUi?g=fiberSeqCompendium">Fiber-seq Compendium</a> gives, for every one of
-      the 41 samples, the percent-accessible signal, the called FIRE regulatory element peaks
-      and a per-haplotype accessibility overlay. Samples are selected from a searchable table.</li>
-  <li><a href="hgTrackUi?g=fiberSeqMeth">Methylation</a> gives per-sample CpG methylation from
-      the same reads, both combined over the two chromosomes and split by haplotype, together
-      with the difference between haplotypes at several significance thresholds.</li>
+  <li><a href="hgTrackUi?g=fiberSeqCompendium">Fiber-seq Compendium</a> holds everything, for
+      every one of the 41 samples: the percent-accessible signal, the called FIRE regulatory
+      element peaks, CpG methylation, and per-haplotype versions of the accessibility and the
+      methylation. Samples are selected from a searchable table.</li>
 </ul>
 
 <p>
@@ -39,9 +42,9 @@ collection, which holds methylation measured by other assays.
 <h2>Display Conventions</h2>
 
 <p>
-Each of the three tracks has its own display conventions and its own color scheme; see the
-individual track description pages linked above. Signal tracks are scaled 0 to 100 percent
-throughout, so a bar height means the same thing in every track and every sample.
+Both tracks have their own display conventions and color schemes; see the individual track
+description pages linked above. Signal tracks are scaled 0 to 100 percent throughout, so a bar
+height means the same thing in every track and every sample.
 </p>
 
 <h2>Methods</h2>
