@@ -11,8 +11,9 @@ cgi-bin-$USER and htdocs-$USER, plus a rewritten hg.conf.  The MySQL databases,
 running as you, serves the copy on a loopback high port.  It needs no root, no
 DNS, and no vhost.
 
-The one thing ts does not share is the udc cache.  Each ticket gets its own
-directory under the shared trash, trash/udcCache/ts/NNNNN.  See Notes.
+What ts does not share is the two caches.  Each ticket gets its own udc cache
+under the shared trash, trash/udcCache/ts/NNNNN, and its own trackDb cache
+inside the sandbox.  See Notes.
 
 Two files:
 
@@ -73,6 +74,21 @@ still data: "ts sync" does not clear it.  "ts remove" does delete it.
 
 "ts conf" adds this setting to an instance frozen before ts had it, so you do
 not have to re-freeze to get a private cache.
+
+The trackDb cache is private per ticket too, at NNNNN/trackDbCache inside the
+sandbox.  It holds a shared-memory image of the parsed trackDb, and its layout
+is tied to TRACKDB_VERSION in the binaries that wrote it, so a park built from a
+branch that touches the cache has no business sharing a directory with the live
+sandbox or with other developers.  There is a sharper reason as well: the writer
+leaves a name.txt beside each image and opens it for write, so whoever wrote it
+first owns the file and the next writer's CGI dies on a permission error - after
+the image itself has already landed, which makes the failure look intermittent.
+
+This one is derived from the code rather than data, so it is treated the
+opposite way from the udc cache: "ts sync" clears it, because the binaries it
+belongs to have just been replaced, and "ts remove" takes it with the sandbox.
+"ts conf" retrofits it onto an instance frozen before ts had it.  Budget for it:
+an image is on the order of 200 MB per assembly, on top of the freeze itself.
 
 The cart cookie is written with no domain on it.  The shared config sets
 central.domain=.ucsc.edu, and a parked instance answers on localhost, so a
