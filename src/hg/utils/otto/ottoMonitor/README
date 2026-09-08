@@ -13,10 +13,11 @@ WHAT IT ASKS
 
 One question per job: did it run when it was supposed to.  It answers that from
 a run stamp, meaning something the job leaves behind whether or not the data
-changed.  Fifteen jobs write a log or a named file on every run.  Nine leave only
-their working directory's mtime, because they write a temp file and delete it.
-Eight leave nothing at all, and those are reported as blind rather than as
-passing, so the gap stays visible instead of reading as good news.
+changed.  Of the 40 jobs in ottoMonitorStamps.tsv, twenty-four write a log, a
+dated directory, or a named file on every run.  Eight leave only their working
+directory's mtime, because they write a temp file and delete it.  Eight leave
+nothing at all, and those are reported as blind rather than as passing, so the
+gap stays visible instead of reading as good news.
 
 A late job is not automatically somebody's bug.  So a late job with a source URL
 gets that URL fetched.  If the source is down the job is left alone, and only a
@@ -31,6 +32,10 @@ THE SURVEYS BEHIND IT
   ottoFailureSignatures.tsv  what a run, a change and a failure look like on disk
                              for each of the 47 jobs.  ottoMonitorStamps.tsv is
                              the machine-readable part of it; this is the reasoning.
+
+Both surveys cover all 47 jobs in otto.crontab.  The monitor watches 40 of them.
+The other seven are the Cell Browser jobs, which ottoOwners.tsv marks monitor=no
+because the cells team owns them and a GB Bug would be the wrong tracker.
 
 Read the signature survey before changing a stamp glob.  It says what each job
 writes and when, which is the difference between a stamp that tracks every run
@@ -74,7 +79,7 @@ a file's mtime to the database TABLE's date, on purpose, so a later -nt test ask
 about the data rather than the run.  omimUpload's upload/*.date files look like
 an ideal run stamp and are not; the directory mtime is used instead.
 
-The nine directory-mtime jobs work today but nobody designed that signal.
+The eight directory-mtime jobs work today but nobody designed that signal.
 Copying a file into one of those directories by hand resets the clock and the
 monitor will read it as a run.
 

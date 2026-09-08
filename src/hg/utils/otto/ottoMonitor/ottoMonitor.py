@@ -205,8 +205,10 @@ def sourceIsUp(sourceUrl):
         return(None, "no url found in " + path)
 
     if sourceUrl.startswith("ftp:"):
+        # An ftp listing has no HTTP code; curl reports 226 for a completed
+        # transfer.  Anything else, 0 included, means the source did not answer.
         code = curl([sourceUrl])
-        return(code == 226 or code == 0 and False, "ftp -> %d" % code)
+        return(code == 226, "ftp -> %d" % code)
 
     code = curl(["-I", sourceUrl])
     if code == 200:

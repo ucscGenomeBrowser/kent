@@ -6,8 +6,8 @@
 # For the #38101 failure monitor.  Surveyed 2026-09-07, read-only, from the LIVE
 # copies under /hive/data/outside/otto.  Nothing was edited or run.
 #
-# This covers all 29 jobs that have an external source.  The 18 internal jobs
-# are NOT surveyed yet; see the note beside this file.
+# This covers all 47 jobs in otto.crontab: the 29 with an external source first,
+# then the 18 internal ones in their own section further down.
 #
 # runStamp: what proves the job RAN, whether or not the data changed.  Without
 # one, "no new data" and "did not run" are the same picture on disk.
