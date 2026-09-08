@@ -558,6 +558,14 @@ char *getIdInUrl(struct trackDb *tdb, char *itemName);
 // Parsed in both bigBedClick.c (to build JSON + load JS) and hgc.c (to skip fields from table).
 #define DETAILS_SCRIPT_PREFIX "detailsScript.*"
 
+// Reserved key inside a detailsScript <jsonConfig>: a JSON list of other bigBed field names
+// whose values are exported alongside the setting's own field, as a "fieldValues" object.
+// Lets one setting drive a plot that needs several fields.
+#define DETAILS_SCRIPT_EXPORT_FIELDS "exportFields"
+
+// Most fields a single exportFields list may name, so a hub cannot bloat the details page.
+#define DETAILS_SCRIPT_MAX_EXPORT 32
+
 void printFieldLabel(char *entry);
 /* print the field label, the first column in the table, as a <td>. Allow a
  * longer description after a |-char, as some fields are not easy to

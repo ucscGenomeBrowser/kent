@@ -94,6 +94,7 @@ visibility pack
 itemRgb on
 mouseOver Window ${window}<br>PCA coordinates (PC1,PC2): ${pca}<br>Segment PCA: ${pcaSegment}<br>Confidence: ${score}
 dataVersion HPRC Release 2, pcLAI v1.1
+detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":["pca","pcaSegment"],"title":"Position in ancestry space","xLabel":"PC1","yLabel":"PC2"}
 html ../docs/pclai
 
 track hprcMethylation

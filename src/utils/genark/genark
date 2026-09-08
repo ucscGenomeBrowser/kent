@@ -166,41 +166,85 @@ def rewriteTrackDb(srcPath, name):
     already-prefixed paths are left untouched."""
     out = []
     prefix = "contrib/%s/" % name
+
+    def rebase(val):
+        """Make one local path hub-root relative; leave a URL or a done path alone."""
+        if re.match(r"[a-z]+://", val) or val.startswith(prefix):
+            return val
+        return prefix + os.path.basename(val)
+
     for line in open(srcPath):
         stripped = line.lstrip()
         indent = line[:len(line) - len(stripped)]
         m = re.match(r"(bigDataUrl|linkDataUrl)\s+(\S+)\s*$", stripped)
         if m:
-            key, val = m.group(1), m.group(2)
-            if not re.match(r"[a-z]+://", val) and not val.startswith(prefix):
-                val = prefix + os.path.basename(val)
-            out.append("%s%s %s\n" % (indent, key, val))
+            out.append("%s%s %s\n" % (indent, m.group(1), rebase(m.group(2))))
             continue
         m = re.match(r"html\s+(\S+)\s*$", stripped)
         if m:
-            val = m.group(1)
-            if not val.startswith(prefix):
-                val = prefix + os.path.basename(val)
-            out.append("%shtml %s\n" % (indent, val))
+            out.append("%shtml %s\n" % (indent, rebase(m.group(1))))
+            continue
+        # detailsScript carries its file in a "...Url" key inside a JSON value, and
+        # the collection writes it relative to the accession dir. In this layout the
+        # data sits one level deeper (contrib/<name>/), so rebase it the same way.
+        if stripped.startswith("detailsScript."):
+            line = re.sub(r'("[A-Za-z0-9_]*[Uu]rl"\s*:\s*")([^"]+)(")',
+                          lambda m: m.group(1) + rebase(m.group(2)) + m.group(3), line)
+            out.append(line)
             continue
         out.append(line)
     return "".join(out)
 
 
-def wireHubTxt(hubTxt, name, block, remove, dryRun):
+def dropTopLevelTracks(text, trackNames):
+    """Return the hub text with the top-level stanzas of trackNames removed.
+
+    The assembly build can bake a snapshot of a contrib collection straight into
+    its hub file, without our markers. Left in place those stanzas would collide
+    with the block we add, giving the hub two "track <name>" entries.
+
+    Stanzas in a useOneFile hub are separated by a blank line, so a dropped one
+    runs from its "track" line to the next blank line or the next stanza. Only a
+    "track" line at column zero starts a stanza, so the indented subtracks of a
+    composite that is not ours are never considered.
+    """
+    if not trackNames:
+        return text
+    out = []
+    dropping = False
+    for line in text.splitlines(keepends=True):
+        m = re.match(r"track\s+(\S+)\s*$", line)
+        if m:
+            # a new stanza starts here, whoever it belongs to
+            dropping = m.group(1) in trackNames
+            if dropping:
+                continue
+        elif dropping:
+            if line.strip() == "":
+                dropping = False    # blank line closes the stanza; drop it too
+            continue
+        out.append(line)
+    return "".join(out)
+
+
+def wireHubTxt(hubTxt, name, block, remove, dryRun, trackNames=None):
     """Insert/replace (or remove) the marked contrib block in the assembly's
-    useOneFile hub.txt. Edits the real file the hub.txt symlink points at."""
+    useOneFile hub file. Edits the real file the path points at."""
     begin = "# BEGIN genark contrib: %s" % name
     end = "# END genark contrib: %s" % name
     blockRe = re.compile(
         r"\n*" + re.escape(begin) + r".*?" + re.escape(end) + r"\n?", re.DOTALL)
     realHub = os.path.realpath(hubTxt)
     text = open(realHub).read()
-    newText = blockRe.sub("\n", text).rstrip("\n") + "\n"
+    newText = blockRe.sub("\n", text)
+    if not remove:
+        # clear any unmarked copy the assembly build wrote, so ours is the only one
+        newText = dropTopLevelTracks(newText, trackNames)
+    newText = newText.rstrip("\n") + "\n"
     if not remove:
         newText += "\n%s\n%s\n%s\n" % (begin, block.rstrip("\n"), end)
     if dryRun:
-        print("  %s %s" % ("unwire hub.txt:" if remove else "wire hub.txt:", realHub))
+        print("  %s %s" % ("unwire" if remove else "wire", realHub))
     else:
         with open(realHub, "w") as fh:
             fh.write(newText)
@@ -221,11 +265,18 @@ def addContrib(args):
     docs = []
     if os.path.isdir(docsDir):
         docs = sorted(f for f in os.listdir(docsDir) if f.endswith(".html"))
+    # Files at the collection root that all assemblies share, such as a scatterplot
+    # background panel named by a detailsScript dataUrl. Linked flat next to the
+    # docs, so contrib/<name>/<file> resolves for every assembly.
+    shared = sorted(f for f in os.listdir(root)
+                    if f.endswith((".json", ".tsv"))
+                    and os.path.isfile(os.path.join(root, f)))
 
     accs = sorted(d for d in os.listdir(root) if ACC_RE.match(d)
                   and os.path.isdir(os.path.join(root, d)))
     if not accs:
         sys.exit("error: no accession directories (GCA_*/GCF_*) under %s" % root)
+    trackNames = contribTrackNames(root, accs)
 
     done = 0
     skipped = 0
@@ -238,11 +289,14 @@ def addContrib(args):
             skipped += 1
             continue
         dest = os.path.join(asmDir, "contrib", name)
-        # the served single-file hub in the build dir (asmHubs/<acc>/hub.txt and
-        # /gbdb/genark/<acc>/hub.txt are symlinks to this); asmId is the build
-        # directory basename, which carries the assembly-name suffix.
+        # the alpha-tier single-file hub in the build dir (asmHubs/<acc>/alpha.hub.txt
+        # and /gbdb/genark/<acc>/alpha.hub.txt are symlinks to this); asmId is the
+        # build directory basename, which carries the assembly-name suffix.
         asmId = os.path.basename(asmDir)
-        hubTxt = os.path.join(asmDir, "%s.singleFile.hub.txt" % asmId)
+        # Only the alpha tier for now: <asmId>.singleFile.hub.txt is what
+        # /gbdb/genark/<acc>/hub.txt points at and is served as the assembly's
+        # default hub, so a contrib collection under test stays out of it.
+        hubTxt = os.path.join(asmDir, "alpha.hub.txt")
 
         if args.remove:
             if os.path.exists(hubTxt):
@@ -266,6 +320,9 @@ def addContrib(args):
         # symlink shared doc pages (flat, so contrib/<name>/<doc> resolves)
         for d in docs:
             symlink(os.path.join(docsDir, d), os.path.join(dest, d), args.dry_run)
+        # and the collection's shared root-level data files
+        for f in shared:
+            symlink(os.path.join(root, f), os.path.join(dest, f), args.dry_run)
 
         # per-assembly trackDb with hub-root-relative paths, and wire it into hub.txt
         srcTdb = os.path.join(accDir, "trackDb.txt")
@@ -278,7 +335,8 @@ def addContrib(args):
                 with open(destTdb, "w") as fh:
                     fh.write(tdb)
             if os.path.exists(hubTxt):
-                wireHubTxt(hubTxt, name, tdb, remove=False, dryRun=args.dry_run)
+                wireHubTxt(hubTxt, name, tdb, remove=False, dryRun=args.dry_run,
+                           trackNames=trackNames)
             else:
                 sys.stderr.write("warn %s: no hub.txt to wire at %s\n" % (acc, hubTxt))
         done += 1
