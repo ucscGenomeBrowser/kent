@@ -13,12 +13,28 @@ to=${1:-$USER@soe.ucsc.edu}
 poll=${2:-300}          # seconds between checks
 heartbeat=${3:-43200}   # seconds between "still going" notes when the stage does not change
 
+# Optional Slack incoming webhook, for getting these on a phone. It is a credential, so it
+# is read from ~/.hg.conf (mode 600) and never passed on the command line, where ps would
+# show it to everyone on the machine. Add a line like:
+#     slack.webhook=https://hooks.slack.com/services/...
+# Without it, notifications go by mail only.
+webhook=`grep '^slack.webhook=' $HOME/.hg.conf 2>/dev/null | head -1 | cut -d= -f2-`
+
 dir=/hive/data/outside/otto/uniprot
 log=$dir/lastRun.log
 lock=/hive/data/outside/uniProt/current/doUniprot.lock
 
+slackSend() {
+    [ -z "$webhook" ] && return 0
+    # -s so a webhook failure does not spray the URL into the log
+    printf '{"text": %s}' "\"uniprot otto: $1\"" \
+        | curl -s -m 20 -X POST -H 'Content-type: application/json' --data @- "$webhook" > /dev/null 2>&1 \
+        || echo "`date '+%F %T'` slack webhook post failed" >&2
+}
+
 send() {
     subject=$1
+    slackSend "$subject"
     { echo "run directory: $dir"
       echo "started:       $started"
       echo "now:           `date '+%Y-%m-%d %H:%M:%S'`"
