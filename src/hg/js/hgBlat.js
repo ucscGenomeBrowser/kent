@@ -723,7 +723,7 @@ function blatFormCount() {
     if (!ta || !out) { return; }
     var n = ta.value.replace(/[^A-Za-z*]/g, '').length;
     // The per-sequence limit for the selected query type, passed through from the C constants in
-    // hgBlat.c so the two cannot drift apart (the page claimed a stale 25,000 for years).
+    // hgBlat.c so the two cannot drift apart.
     // "BLAT's guess" counts against the DNA limit - the common case; a protein query that only
     // the server recognizes as such is still rejected there with a warning linking the full
     // limits in the docs.

@@ -63,14 +63,14 @@ static long enteredMainTime = 0;
 boolean autoBigPsl = FALSE;  // DEFAULT VALUE change to TRUE in future
 
 /* for earlyBotCheck() function at the beginning of main() */
-#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+#define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs; this one is 0.5 */
 
 /* Per-sequence query size limits, enforced below and shown by the new form's character counter
  * (emitted into hgBlatFormData so the C and JS numbers cannot drift apart).  The total limit for
  * a multi-sequence submission is 2.5x the per-sequence limit. */
 #define maxSingleSizeDna 75000
 #define maxSingleSizeTx  10000    /* protein and translated queries */
-                                /* this one is 0.5 */
+
 static boolean issueBotWarning = FALSE;
 
 struct gfResult
