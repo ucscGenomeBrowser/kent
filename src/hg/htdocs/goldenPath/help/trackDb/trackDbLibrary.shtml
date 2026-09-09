@@ -5106,6 +5106,15 @@ detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":
     </P>
 </DIV>
 
+<DIV class="minAc"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>minAc &lt;<EM>N</EM>&gt;</code></div>
+    <P>
+    The minimum alternate allele count required for a variant to be displayed, taken from the
+    AC field of the INFO column. Variants whose INFO has no usable AC are always displayed.
+    By default this is 0 (i.e. display all variants).
+    </P>
+</DIV>
+
 <DIV class="vcfDoFilter"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>
@@ -5124,6 +5133,12 @@ detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":
 <div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
+    </p>
+</DIV>
+<DIV class="vcfDoMinAc"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>vcfDoMinAc &lt;on/off&gt;</code></div>
+    <p>
+    Turns on/off the minimum allele count filter option available by default for VCF tracks
     </p>
 </DIV>
 

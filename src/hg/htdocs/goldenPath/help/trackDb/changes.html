@@ -46,6 +46,17 @@
 
 <tr>
     <td>2026-09-09</td>
+    <td>vcf, vcfTabix, vcfPhasedTrio</td>
+    <td><a href="trackDbHub.html#minAc">minAc</a></td>
+    <td>Documenting two more existing settings. <code>minAc</code> hides a variant whose
+    alternate allele count, read from the AC field of the INFO column, falls below the given
+    number; variants with no usable AC are always shown.
+    <a href="trackDbHub.html#vcfDoMinAc">vcfDoMinAc</a> turns the matching filter control on
+    the configuration page on or off. Neither was listed in tagTypes.tab, so until now
+    <code>tdbQuery -check</code> rejected both.</td>
+</tr>
+<tr>
+    <td>2026-09-09</td>
     <td>vcfPhasedTrio</td>
     <td><a href="trackDbHub.html#vcfPhasedColorBy">vcfPhasedColorBy</a></td>
     <td>Documenting an existing setting that had never been written down. It picks how
