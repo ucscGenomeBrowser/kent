@@ -728,11 +728,34 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         struct dyString *ds = dyStringNew(1024);
         dyStringPrintf(ds, "var bedDetails = %s;\n", jw->dy->string);
 
-        // Dynamically import and call each plot type's module
+        // Dynamically import and call each plot type's module. The URL carries
+        // ?v=<mtime>, as every other js file does, so that a browser cannot serve a
+        // cached module against newer bedDetails JSON and a mirror cannot pair an old
+        // module with new CGIs. webTimeStampedLinkToResource() errAborts on a missing
+        // file and plotType comes from a hub, so a plotType with no module installed
+        // falls back to the plain path: that leaves a silent failed import as before,
+        // rather than taking the whole details page down over one bad hub setting.
         for (hel = helList; hel != NULL; hel = hel->next)
+            {
+            char modFile[PATH_LEN];
+            safef(modFile, sizeof modFile, "hgc.%s.js", hel->name);
+            char fallBack[PATH_LEN];
+            safef(fallBack, sizeof fallBack, "../js/%s", modFile);
+            char *modUrl = fallBack;
+            char *docRoot = hDocumentRoot();
+            if (docRoot != NULL)
+                {
+                char onDisk[PATH_LEN];
+                safef(onDisk, sizeof onDisk, "%s/js/%s", docRoot, modFile);
+                if (fileExists(onDisk))
+                    modUrl = webTimeStampedLinkToResource(modFile, FALSE);
+                }
             dyStringPrintf(ds, "$(document).ready(function() {\n"
-                "  import('../js/hgc.%s.js').then(function(mod) { mod.%s(bedDetails); });\n"
-                "});\n", hel->name, hel->name);
+                "  import('%s').then(function(mod) { mod.%s(bedDetails); });\n"
+                "});\n", modUrl, hel->name);
+            if (modUrl != fallBack)
+                freeMem(modUrl);
+            }
 
         jsInline(dyStringCannibalize(&ds));
         jsonWriteFree(&jw);
