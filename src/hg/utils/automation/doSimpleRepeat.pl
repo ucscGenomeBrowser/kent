@@ -17,6 +17,7 @@ use HgStepManager;
 
 # Hardcoded (for now):
 my $chunkSize = 50000000;	# will be readjusted if seqCount > 100000
+my $trfChunkSize = 500000;	# new argument to trfBig Sept 2026
 my $singleRunSize = 200000000;
 my $clusterBin = qw(/cluster/bin/$MACHTYPE);
 
@@ -207,7 +208,7 @@ foreach spec (`cat \$inLst`)
   # seq:start-end for liftUp's sake:
   twoBitToFa \$spec stdout \\
   | sed -e "s/^>.*/>\$base/" \\
-  | $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
+  | $clusterBin/trfBig -chunkMaxSize=$trfChunkSize $trf409Option -trf=$clusterBin/$trfCmd \\
       stdin /dev/null -bedAt=\$base.bed -tempDir=\$tmpDir
 end
 
@@ -336,7 +337,7 @@ else
   endif
 endif
 twoBitToFa $unmaskedSeq stdout \\
-| $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
+| $clusterBin/trfBig -chunkMaxSize=$trfChunkSize $trf409Option -trf=$clusterBin/$trfCmd \\
       stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=\$TMPDIR
 _EOF_
   );
