@@ -4,7 +4,8 @@
 This is a general, subcommand-based tool. Subcommands will be added over time.
 
 Subcommands:
-  addContrib <name>   Install a contributed track collection into the GenArk
+  addContrib <name> [tier]
+                      Install a contributed track collection into the GenArk
                       assembly hubs. <name> is a subdirectory of
                       /hive/data/genomes/asmHubs/contrib/ that is laid out as
                       one directory per assembly accession (GCA_*/GCF_*) plus a
@@ -778,15 +779,16 @@ def main():
     p = sub.add_parser("addContrib",
                        help="install a contrib track collection into the assembly hubs")
     p.add_argument("name", help="contrib subdirectory name under %s" % CONTRIB)
-    p.add_argument("--remove", action="store_true",
-                   help="uninstall: remove the symlinks, the hub.txt block, and the "
-                        "collection's entry in both release lists")
-    p.add_argument("--tier", choices=["alpha", "beta", "public"], default="alpha",
+    p.add_argument("tier", nargs="?", choices=["alpha", "beta", "public"],
+                   default="alpha",
                    help="how far to release the collection. alpha (default) installs it "
                         "and wires alpha.hub.txt, which is hgwdev only. beta adds it to "
                         "betaGenArk.txt, public adds it to publicGenArk.txt as well; "
                         "those two lists are what mkGenomes.pl reads when it builds the "
                         "beta and public hub.txt tiers.")
+    p.add_argument("--remove", action="store_true",
+                   help="uninstall: remove the symlinks, the hub.txt block, and the "
+                        "collection's entry in both release lists")
     p.set_defaults(func=addContrib)
 
     c = sub.add_parser("checkContrib",
