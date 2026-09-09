@@ -700,13 +700,39 @@ const T_START = Date.now();
     return { key, img, row, imgPx: imgPx || 1 };
   }
   // Resolve a NAMED item to a point {x,y} + its map-box HREF (the item's hgc link). We
-  // pick the map <area> whose href(&i=<name>)/title carries the name AND whose box sits in
-  // this track's own ROW band (so stacked items on other rows don't win); fall back to the
-  // JSON mouseOver spans (wig/dense tracks, no per-item href).
+  // pick the map <area> whose href(&i=<name>)/title carries the name AND that belongs to
+  // THIS track's own map; fall back to the JSON mouseOver spans (wig/dense tracks, no
+  // per-item href).
+  //
+  // Belonging is decided by MAP NAME, not by geometry, the same way areaXY and the error
+  // message below decide it. hgTracks names each map after the track it draws
+  // (map_data_<key>, map_center_<key>), so the test is exact. A y-band test is not: a
+  // packed row stacks items above and below its middle, and on a quickLift target the band
+  // drops boxes that really are in the row. The band is kept only to choose between
+  // several boxes OF THIS TRACK that carry the same name.
+  //
+  // A box belonging to another track is never picked, however well it matches. That
+  // fallback used to be here -- `inBand[0] || cands[0]` -- and it answered with a
+  // neighbouring track's item, silently, whenever this track had none of its own. A hub
+  // track that declares more bigBed fields than its file has draws no items at all
+  // (#38310), and a probe for one reported the item of a native track that happens to use
+  // the same item names, so three tracks that draw nothing were recorded as drawing.
+  // rm35920 read hg38's native `ultras` for years the same way. An answer that is wrong
+  // but reads as a pass is worse than a failure, so this now returns nothing and lets the
+  // error below say where the name really was.
   async function itemXY(t, want, titleOnly) {
     const { key, img, row, imgPx } = await trackBox(t);
     const band = { top: row.y, bot: row.y + row.height };
-    const area = await page.evaluate(({ want, titleOnly, band, imgBox }) => {
+    const area = await page.evaluate(({ want, titleOnly, band, imgBox, key }) => {
+      // Does this map hold the pixels of the track we were asked about?
+      const isMine = m => {
+        const nm = (m && m.getAttribute('name')) || '';
+        return nm === `map_${key}` || nm.endsWith(`_${key}`);
+      };
+      // When NOTHING on the page can be attributed to this key, hgTracks named the map
+      // something we do not recognise. Only then does geometry get to decide, which is
+      // what this did for every track before.
+      const anyMine = [...document.querySelectorAll('map[name^="map_"]')].some(isMine);
       const areas = [...document.querySelectorAll('map[name^="map_"] area')];
       const cands = [];
       for (const a of areas) {
@@ -732,19 +758,28 @@ const T_START = Date.now();
         const tmp = document.createElement('div');
         tmp.innerHTML = title;
         const tip = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
-        cands.push({ cx, cy, href, tip, inBand: cy >= band.top - 1 && cy <= band.bot + 1 });
+        cands.push({ cx, cy, href, tip, map: nm || '', mine: isMine(m),
+                     inBand: cy >= band.top - 1 && cy <= band.bot + 1 });
       }
-      const inBand = cands.filter(h => h.inBand);
-      const pick = (inBand[0] || cands[0]) || null;
-      return pick && { ...pick, n: cands.length, nBand: inBand.length,
-                       all: cands.map(c => Math.round(c.cx)) };
-    }, { want: String(want), titleOnly: !!titleOnly, band, imgBox: img });
-    if (area) {
+      // This track's boxes only, unless the page names no map after this track at all.
+      const pool = anyMine ? cands.filter(h => h.mine) : cands.filter(h => h.inBand);
+      const pick = pool.find(h => h.inBand) || pool[0] || null;
+      // The tracks a matching box was found in that are NOT this one, so a failure can say
+      // where the name actually is instead of leaving the reader to guess.
+      const elsewhere = [...new Set(cands.filter(h => !h.mine)
+                                         .map(h => h.map.replace(/^map_(data_|center_)?/, ''))
+                                         .filter(Boolean))];
+      return { pick, n: cands.length, nPool: pool.length, anyMine, elsewhere,
+               all: pool.map(c => Math.round(c.cx)) };
+    }, { want: String(want), titleOnly: !!titleOnly, band, imgBox: img, key });
+    if (area && area.pick) {
+      const p = area.pick;
       if (process.env.DOCENT_ROWS)
-        console.log(`  item "${want}" in ${t}: ${area.n} map box(es) match (${area.nBand} in row), `
-                  + `centers x=[${area.all}] -> hovering (${Math.round(area.cx)},${Math.round(area.cy)})`
-                  + (area.tip ? `, expecting tip "${area.tip.slice(0, 40)}"` : ''));
-      return { x: area.cx, y: area.cy, href: area.href, tip: area.tip };
+        console.log(`  item "${want}" in ${t}: ${area.n} map box(es) match, ${area.nPool} of them `
+                  + `${area.anyMine ? "this track's" : 'in the row (no map names this track)'}, `
+                  + `centers x=[${area.all}] -> hovering (${Math.round(p.cx)},${Math.round(p.cy)})`
+                  + (p.tip ? `, expecting tip "${p.tip.slice(0, 40)}"` : ''));
+      return { x: p.cx, y: p.cy, href: p.href, tip: p.tip };
     }
     const span = await page.evaluate(({ keys, want }) => {
       const md = window.mapData; if (!md || !md.spans) return null;
@@ -800,6 +835,16 @@ const T_START = Date.now();
       }).catch(() => '?');
       const names = near.names;
       const show = process.env.DOCENT_ROWS ? names : names.slice(0, 12);
+      // Where the name DID turn up. Without this the reader sees only "not found here" and
+      // has no way to tell an item that is missing from one that is sitting in the track
+      // next door -- which is the case that used to be answered silently and wrongly, so
+      // it is the one worth naming. See the comment on itemXY.
+      const other = (area && area.elsewhere && area.elsewhere.length) ? area.elsewhere : [];
+      const alsoIn = other.length
+        ? `. That name IS on this page, in ${other.slice(0, 6).join(', ')}`
+          + `${other.length > 6 ? `, ... (${other.length} tracks)` : ''}`
+          + ` -- another track's box is never used for this one`
+        : '';
       // The BOX count matters as much as the names. A type-bigBed-3 row has plenty of
       // items and no way to name any of them -- 26 boxes collapsing to two distinct
       // titles -- and the next thing to try there is a positional `click: {frac: ...}`,
@@ -808,7 +853,7 @@ const T_START = Date.now();
         + `mouseOver spans). Window ${win}. ${near.boxes} map box(es) in that row`
         + `${names.length ? `, addressable as: ${show.join(', ')}`
           + `${show.length < names.length ? `, ... (${names.length} distinct; DOCENT_ROWS=1 for all)` : ''}`
-          : ' and none of them carries a name or a title'}`);
+          : ' and none of them carries a name or a title'}${alsoIn}`);
     }
     return { x: img.x + imgPx * (span.x1 + span.x2) / 2, y: row.y + row.height / 2, href: null };
   }
