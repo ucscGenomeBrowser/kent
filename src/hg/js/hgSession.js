@@ -498,7 +498,7 @@ function sessDoSave() {
     sessDoSaveWithName(name);
 }
 
-function sessDoSaveWithName(name, allowOverwrite) {
+function sessDoSaveWithName(name) {
     var priv = document.getElementById('sessSavePrivate').checked;
     var descEl = document.getElementById('sessSaveDesc');
     var desc = descEl ? descEl.value.trim() : '';
@@ -508,7 +508,7 @@ function sessDoSaveWithName(name, allowOverwrite) {
     // Saving under a name you are already using replaces that session's contents, so ask first.
     // With failIfExists set the CGI answers {exists: true} instead of saving, which is how the
     // top-right "Share a link" menu handles the same collision.
-    if (!allowOverwrite) { p[SESS_P.failIfExists] = '1'; }
+    p[SESS_P.failIfExists] = '1';
 
     // doSaveSessionJson always saves shared-by-link (the default); chain the optional description
     // and, if the user asked for "only I can load it", make it private, then reload to show the row.
@@ -542,15 +542,27 @@ function sessDoSaveWithName(name, allowOverwrite) {
             partlySaved('the description could not be saved. ' + m);
         });
     }
+    function replace() {
+        // Replace goes through the overwrite endpoint rather than saving again.  A save always
+        // writes the session as shared by link, which would take a session out of the public
+        // gallery, or make a private one loadable by anyone holding the link.  Overwrite keeps
+        // whatever sharing level the session already had, and the chained steps below still apply
+        // the description and the "only I can load it" box if the user set them.
+        var op = {};
+        op[SESS_ACT.overwrite] = '1';
+        op[SESS_P.oldName] = name;
+        sessAjax(op, afterSave);
+    }
     sessAjax(p, function(resp) {
         if (resp && resp.exists) {
             sessConfirm({
                 title: 'Replace this session?',
                 bodyHtml: 'You already have a session named <b>' + sessEnc(name) + '</b>. Replacing ' +
                     'it points that name at the view you are looking at now, and what the session ' +
-                    'held before is gone.',
+                    'held before is gone.' +
+                    (priv ? '' : ' Who can load it stays as it is.'),
                 okLabel: 'Replace it',
-                onOk: function() { sessModalClose(); sessDoSaveWithName(name, true); }
+                onOk: function() { sessModalClose(); replace(); }
             });
             return;
         }
