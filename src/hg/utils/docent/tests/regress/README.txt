@@ -61,3 +61,27 @@ It is also the first script to assert a COLOR, using `expect: {color: ...}`, bec
 is the first bug here that leaves the page identical -- same rows, same height, same item
 names, same tooltips. When rows:, height:, text: and has: are all blind to a bug, the
 pixels are what is left. See tests/colorchecks.docent.yaml for the check itself.
+
+rm38310 is the second color check, and the second script watched both ways
+---------------------------------------------------------------------------
+
+Same recipe as rm36212, and worth reading for the reason it needs pixels, which is
+different. Its bug does not draw the wrong color; it replaces the row with the bigWarn
+bar, 240,240,180 (undefinedYellowColor, hg/hgTracks/simpleTracks.c), and paints an error
+message INSIDE the png. So the row is still drawn, still the same name, and every text
+check on the page passes -- the message is in the image, where noText: cannot reach it.
+That is also why the ticket was filed saying there was no warning at all.
+
+Two things fall out of it that apply to any script here:
+
+  * `rows:` cannot express "this track drew its items". The broken build draws the row.
+    `color:` with `is:` on the item color and `not: "240,240,180"` can, and a failure
+    prints what each row really came out.
+  * A drawn item that cannot be clicked through is half a bug. rm38310 clicks its item
+    and asserts the item's POSITION on the hgc page, because the aborted hgc page carries
+    the track's longLabel twice in its own header and a text: check on that alone passes
+    on it.
+
+Measured both ways on 2026-09-09: the whole directory was run against the #38310 ticket
+sandbox twice, once with the patched hgTracks and hgc and once with unpatched controls
+built from the same tree. Thirty-seven scripts, identical verdicts, except this one.

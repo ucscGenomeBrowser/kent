@@ -1,0 +1,103 @@
+# #38310 -- EXPECTED TO FAIL until the fix ships. A hub track whose `type bigBed N`
+# declares more fields than the file holds drew its row with no items in it.
+#
+# The fix is written and verified but is NOT on master yet, so there is no server in the
+# world that passes this today. It is an xfail rather than a test for that reason alone:
+# `make test` fails if an xfail PASSES, so the day the fix reaches genome-test the suite
+# says there is a test waiting. When it flips, drop the .xfail from the name.
+#
+# WHAT WENT WRONG, and why the ticket's own words are not quite right. #38310 says the row
+# came up empty "with no warning". The row is empty, but there IS a message: hgTracks
+# catches the abort into networkErrMsg (hg/hgTracks/hgTracks.c) and swaps in
+# bigDrawWarning, which paints the row as a pale yellow bar with the text in it. The text
+# read `invalid signed integer: ""` -- the fourth field of a four-field row array, which
+# was never filled in. So the message was there and said nothing useful, and it is drawn
+# INSIDE the png, which is why it is invisible to every text check in this suite and why
+# the original measurement (counting item map boxes in the HTML) reported silence.
+#
+# THAT IS WHY THE ASSERTION IS A COLOR CHECK. `color:` is the only check that reads the
+# image, and this is the second bug in this directory that needs it. Each row is asked for
+# the color it is actually drawn in:
+#
+#   fixed    white background (not counted) plus a black item box and a black pack label
+#            -> dominant 0,0,0
+#   broken    a full-width bigWarn bar, 240,240,180 (undefinedYellowColor,
+#            hg/hgTracks/simpleTracks.c) -> dominant 240,240,180
+#
+# so `is: "0,0,0"` states the item is there and `not: "240,240,180"` states the warning bar
+# is not, and a failure prints the color each row really came out.
+#
+# Watched both ways on 2026-09-09, the way rm36212 was. Against genome-test it fails at
+# step 4 naming all five over-declared rows, each 240,240,180 at 95% of the row; against
+# the #38310 ticket sandbox on port 48099 every one of the eight is 0,0,0 at 100% and the
+# run exits 0. Then the whole of this directory was run against that one sandbox twice,
+# once with the patched hgTracks and hgc and once with unpatched controls built from the
+# same tree: thirty-seven scripts, identical verdicts, except this one. Notes in
+# /hive/groups/browser/redmineNotes/38310/claude/.
+#
+# `rows:` alone would pass on the broken build, because the broken build draws all eight
+# rows. `mouseover:` would too, and worse: before docent's e2b5b26b925 itemXY handed a
+# track with no box of its own a neighbour's, so a tooltip check reported uc.1 for rows
+# that drew nothing. Do not put one in here.
+#
+# The fixture is ours, at ~/public_html/docentFixtures/bigBedFieldCount/. One bigBed with
+# four fields, eight tracks over it, one declared type each -- the whole point is that the
+# only thing that differs between the rows is the number on the type line. hubCheck
+# rejects five of the eight, correctly (hg/lib/trackHub.c hubCheckBigDataUrl refuses
+# numFields > bbi->fieldCount); it is the empty row that is the bug, not the hub.
+#
+# Track names carry the rm38310 prefix because a fixture must never name a track anything
+# the assembly might also call it -- see README.txt, and rm35920, which tested nothing for
+# its whole life over exactly that.
+#
+# The hub declares `visibility pack` itself, so there is no `track:` step and no
+# `hide: all`: a hub track's cart name carries a per-run hub_<n>_ prefix that `track:`
+# cannot write.
+target: genome-test
+db: hg38
+position: chr1:10537000-10538500
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/bigBedFieldCount/hub.txt", db: hg38}
+  - go: chr1:10537000-10538500
+
+  # The hub attached and all eight rows reached the page. This is setup, not the
+  # assertion: the broken build draws all eight of these too.
+  - expect:
+      rows: [rm38310bb4, rm38310bb4plus, rm38310bb5, rm38310bb6,
+             rm38310bb9, rm38310bb12, rm38310bb12plus, rm38310bbAuto]
+
+  # The assertion. Every row draws the item, and no row is a warning bar. The three that
+  # already worked (4, 4 +, and the no-number form #19984 fixed) are listed as well, so a
+  # future change that breaks them is caught by the same step.
+  - expect:
+      color:
+        - {track: rm38310bb4,       is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bb4plus,   is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bb5,       is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bb6,       is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bb9,       is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bb12,      is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bb12plus,  is: "0,0,0", not: "240,240,180"}
+        - {track: rm38310bbAuto,    is: "0,0,0", not: "240,240,180"}
+
+  # The other half of the same bug, on the details page. hgc took the declared count too
+  # and aborted with the string below, so an item that did draw could not be clicked
+  # through -- which is live on the RR today for hg38 setDups and two hg19 exomeProbesets
+  # subtracks, all `bigBed 4` over a three-field file.
+  #
+  # `bb9` and not `bb12`, because "type bigBed 12" is a prefix of "type bigBed 12 +" and
+  # the check below would then pass on the wrong track's page. Nothing else in this hub is
+  # labelled "type bigBed 9".
+  #
+  # The coordinate is the assertion. The aborted page carries the track's longLabel twice
+  # in its own header, so `text:` on that alone passes on it; what the abort never gets to
+  # print is the item's position.
+  - click: {track: rm38310bb9, item: "uc.1"}
+  - expect:
+      url: "hgc"
+      text: "type bigBed 9"
+      noText: "Disagreement between trackDb field count"
+  - expect:
+      text: "chr1:10537640-10537846"
