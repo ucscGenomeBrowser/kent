@@ -9,7 +9,7 @@
 # collection into each assembly's hub.txt.
 #
 # dataVersion values come from the HPRC index CSV file names (see the makeDoc,
-# src/hg/makeDb/doc/contrib/hprc2annot.txt); update them when HPRC reissues a
+# src/hg/makeDb/doc/contrib/hprc2annot/hprc2annot.txt); update them when HPRC reissues a
 # track.
 
 track hprcCatGenes
@@ -92,9 +92,9 @@ group compGeno
 priority 30
 visibility pack
 itemRgb on
-mouseOver Window ${window}<br>PCA coordinates (PC1,PC2): ${pca}<br>Segment PCA: ${pcaSegment}<br>Confidence: ${score}
+mouseOver Window ${window}<br>Window PC1,PC2: ${pca}<br>Ancestry centroid: ${centroid}<br>Confidence: ${score}
 dataVersion HPRC Release 2, pcLAI v1.1
-detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":["pca","pcaSegment"],"title":"Position in ancestry space","xLabel":"PC1","yLabel":"PC2"}
+detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":["pca","centroid"],"title":"Position in ancestry space","xLabel":"PC1","yLabel":"PC2"}
 html ../docs/pclai
 
 track hprcMethylation

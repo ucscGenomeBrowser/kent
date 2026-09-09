@@ -174,8 +174,10 @@ pclai)
   dl "$url" "$TMP/in.bed" || exit 5
   inCount=$(grep -vc '^#' "$TMP/in.bed")
   # -> bed9+3, name left blank (values shown on mouseover). Force thick = full item
-  # (source has occasional thickStart=chromStart-1). Parse the source name
-  # "SAMPLE/hN/<window>_(PC1,PC2)" into window + pca; col10 -> pcaSegment.
+  # (source has occasional thickStart=chromStart-1, against its own documented
+  # format). Parse the source name "SAMPLE/hN/<window>_(PC1,PC2)" into window +
+  # pca; col10 is the source's "centroid" column, the discretized ancestry of the
+  # window written as the PCA centroid of its ancestry cluster.
   grep -v '^#' "$TMP/in.bed" \
     | awk -F'\t' 'BEGIN{OFS="\t"}
         { seg=$4; sub(/^[^/]*\/[^/]*\//,"",seg); k=split(seg,b,"_"); pca=b[k];

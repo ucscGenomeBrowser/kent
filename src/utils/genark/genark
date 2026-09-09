@@ -192,6 +192,13 @@ def rewriteTrackDb(srcPath, name):
             return val
         return prefix + os.path.basename(val)
 
+    def rebaseBeside(val):
+        """Make one local path relative to the .bb it is resolved against, i.e. the
+        bare file name. Leaves a URL or an absolute path alone. Idempotent."""
+        if re.match(r"[a-z]+://", val) or val.startswith("/"):
+            return val
+        return os.path.basename(val)
+
     for line in open(srcPath):
         stripped = line.lstrip()
         indent = line[:len(line) - len(stripped)]
@@ -203,12 +210,17 @@ def rewriteTrackDb(srcPath, name):
         if m:
             out.append("%shtml %s\n" % (indent, rebase(m.group(1))))
             continue
-        # detailsScript carries its file in a "...Url" key inside a JSON value, and
-        # the collection writes it relative to the accession dir. In this layout the
-        # data sits one level deeper (contrib/<name>/), so rebase it the same way.
+        # detailsScript carries its file in a "...Url" key inside a JSON value.
+        # This one must NOT be rebased like bigDataUrl: hgc (bigBedClick.c) resolves
+        # a relative detailsScript Url against the track's own bigDataUrl when it
+        # builds the details page, so prefixing it here as well makes the browser
+        # ask for contrib/<name>/contrib/<name>/<file> and the fetch silently fails.
+        # The collection writes it relative to the accession dir, where the file
+        # sits beside the .bb; in this layout both move into contrib/<name>/
+        # together, so relative-to-the-.bb is just the basename.
         if stripped.startswith("detailsScript."):
             line = re.sub(r'("[A-Za-z0-9_]*[Uu]rl"\s*:\s*")([^"]+)(")',
-                          lambda m: m.group(1) + rebase(m.group(2)) + m.group(3), line)
+                          lambda m: m.group(1) + rebaseBeside(m.group(2)) + m.group(3), line)
             out.append(line)
             continue
         out.append(line)
