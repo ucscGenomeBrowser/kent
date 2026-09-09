@@ -1,0 +1,176 @@
+# ASM Atlas composite in the Imprinting track collection on hg38, refs #37599
+# 2026-09-04 Claude-max
+
+# Rosenski et al. 2025, "Atlas of imprinted and allele-specific DNA methylation
+# in the human body", Nat Commun 16:2141, PMID 40069157. The authors published
+# four region sets as hg19 custom tracks in a saved session, and the paper's
+# supplementary data carries the per-region annotation. There is no hg38 release
+# from the authors, so everything below is lifted.
+
+mkdir -p /hive/data/genomes/hg38/bed/imprinting/kaplanImprint
+cd /hive/data/genomes/hg38/bed/imprinting/kaplanImprint
+
+##############################################################################
+# 1. Turn the authors' session into a track hub
+##############################################################################
+
+# The session holds 99 custom tracks, most of them from other papers. hubtools
+# converts it into a hub in one step, which is the easiest way to get at the
+# bigDataUrls without clicking through the session.
+#
+#   https://genome-euro.ucsc.edu/s/Tomkap/hg19_Imp
+
+hubtools import session 'https://genome-euro.ucsc.edu/s/Tomkap/hg19_Imp' -o hub
+
+# Note: this used to die with "KeyError: 'description'" because description= is
+# optional on a custom track line and three of the 99 tracks in this session do
+# not have one. Fixed in src/utils/hubtools/hubtools.
+
+grep -A6 -E '^track (ICRs_new|imprinted|Bimodal|BimodalASM|Parental_ASM)_' hub/hub.txt
+
+##############################################################################
+# 2. Fetch the four region sets and unpack them to BED
+##############################################################################
+
+# Of the 99 tracks in the session these four are the results of this paper. The
+# fifth candidate, "imprinted", is the literature gene list the authors used as
+# input, and the browser already has the Geneimprint and OMIM gene lists for that,
+# so it was left out.
+
+mkdir -p hg19
+cd hg19
+for f in ICRs-new.bigbed bimodal.bigbed bimodal+ASM.bigbed parental_ASM.bigbed; do
+    curl -sS -O "https://files.cs.huji.ac.il/tommy/UXM_hg19/bed_tracks/$f"
+done
+
+bigBedToBed ICRs-new.bigbed     icr.hg19.bed
+bigBedToBed bimodal.bigbed      bimodal.hg19.bed
+bigBedToBed bimodal+ASM.bigbed  bimodalAsm.hg19.bed
+bigBedToBed parental_ASM.bigbed parentalAsm.hg19.bed
+wc -l *.hg19.bed
+# 72, 385564, 34425 and 460 regions
+
+cd ..
+
+# Heads up on bimodal.bigbed: its name field is the comma-separated list of the
+# cell types in which the region is bimodal, and it is cut off at the 255
+# character limit of a BED string field in 125 of the 385,564 regions, which are
+# exactly the regions shared by the most cell types. Supplementary Data 1 cannot
+# repair this: it is a different, larger region set (1,176,179 rows) whose
+# per-sample calls do not reproduce the published cell type labels. The cut-off
+# rows are therefore kept and flagged in a note field.
+
+##############################################################################
+# 3. Supplementary data
+##############################################################################
+
+# PMC refuses these downloads, Springer serves them.
+
+mkdir -p suppl
+cd suppl
+curl -sSL -A "Mozilla/5.0" -o MOESM4.xlsx \
+  'https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-025-57433-1/MediaObjects/41467_2025_57433_MOESM4_ESM.xlsx'
+cd ..
+
+# Dump the sheets we need to TSV. Data S2 has the revised and pre-revision ICR
+# boundaries, S3 the ASM SNPs, S4 the parental ASM SNPs with their known-ICR
+# annotation, S10 the imprinted genes near each parental region, and the sheet
+# named "Sheet24" the methylation of each parental region in oocyte, sperm,
+# inner cell mass and blastocyst.
+
+~/kent/src/hg/makeDb/scripts/imprinting/kaplanImprintXlsxToTsv.py suppl/MOESM4.xlsx suppl/tsv
+
+##############################################################################
+# 4. Join the annotation onto the regions
+##############################################################################
+
+# Region sets are used unchanged, so each output file has exactly as many
+# features as its input. Everything else on the details page comes from the
+# supplement, joined by coordinate.
+
+~/kent/src/hg/makeDb/scripts/imprinting/kaplanImprintToBed.py hg19 suppl/tsv bed
+
+# literature annotation for 50 ICR names
+# kaplanIcr: 72 regions, 0 without original boundaries in Data S2
+# kaplanBimodal: 385564 regions, 125 with a cut-off cell type list, shading scaled to 22 cell types
+# kaplanAsm: 34425 regions, 0 without SNP annotation in Data S3
+# kaplanParentalAsm: 460 regions, 50 without gamete methylation
+#     Novel region                             366
+#     Novel region near an imprinted gene      49
+#     Known imprinting control region          45
+#
+# The 45 known control regions match the paper. Data S3 has one extra row with
+# no coordinates, which is why the paper says 34,426 SNP-linked regions and the
+# published file has 34,425.
+
+##############################################################################
+# 5. Lift to hg38 and build the bigBeds
+##############################################################################
+
+~/kent/src/hg/makeDb/scripts/imprinting/kaplanImprintLift.sh bed hg38
+
+# kaplanIcr            hg19       72 -> hg38       72  (0 did not lift)
+# kaplanBimodal        hg19   385564 -> hg38   385235  (329 did not lift)
+# kaplanAsm            hg19    34425 -> hg38    34356  (69 did not lift)
+# kaplanParentalAsm    hg19      460 -> hg38      458  (2 did not lift)
+
+# Every unlifted region is accounted for by liftOver itself, no region was
+# dropped by us:
+
+for f in hg38/*.unmapped; do echo "== $f"; grep '^#' $f | sort | uniq -c; done
+# kaplanAsm            44 split, 21 partially deleted, 4 deleted
+# kaplanBimodal       228 split, 93 partially deleted, 8 deleted
+# kaplanParentalAsm     1 split, 1 deleted
+# kaplanIcr             none
+
+# A separate problem is regions that lift but come out much longer, because hg38
+# inserted sequence inside them. kaplanLiftNote.py flags any region whose length
+# changed by more than 10% instead of dropping it: 1 control region, 32 bimodal
+# regions and 8 SNP-linked regions. The control region is TCEB3C, the only one
+# on chr18, 19,948 bp on hg19 and 73,540 bp after lifting. It is worth keeping
+# at the right locus with a warning rather than losing the locus from hg38.
+
+grep -c . hg38/*.hg38.bed
+bigBedInfo hg38/kaplanParentalAsm.bb | egrep 'itemCount|fieldCount'
+
+##############################################################################
+# 6. Sanity checks
+##############################################################################
+
+# The gamete methylation should agree with the literature annotation: an oocyte
+# germline DMR should be methylated in the egg and not in sperm.
+
+awk -F'\t' '$11=="Oocyte gDMR" && $21!="" && $22!=""' hg38/kaplanParentalAsm.hg38.bed \
+    | awk -F'\t' '{n++; if ($21>$22) ok++} END {print ok"/"n" oocyte gDMRs more methylated in oocyte than in sperm"}'
+awk -F'\t' '$11=="Sperm gDMR" && $21!="" && $22!=""' hg38/kaplanParentalAsm.hg38.bed \
+    | awk -F'\t' '{n++; if ($22>$21) ok++} END {print ok"/"n" sperm gDMRs more methylated in sperm than in oocyte"}'
+
+# Spot check three loci that must be there: H19/IGF2 on chr11, the PWS/AS region
+# on chr15, and DIRAS3 on chr1.
+
+for r in "chr11 1990000 2010000" "chr15 24800000 25200000" "chr1 68000000 68100000"; do
+    set -- $r
+    echo "== $1:$2-$3"
+    bigBedToBed hg38/kaplanParentalAsm.bb -chrom=$1 -start=$2 -end=$3 stdout | cut -f1-4,10-12
+done
+
+##############################################################################
+# 7. Publish
+##############################################################################
+
+# trackDb: composite kaplanImprint added to human/hg38/imprinting.ra, under the
+# existing Imprinting collection. The subtracks share one description page,
+# kaplanImprint.html.
+#
+# The kaplanAsm subtrack, the bimodal regions whose methylation follows a
+# heterozygous SNP, is built by the scripts above but its trackDb stanza is
+# commented out: those regions are driven by the DNA sequence rather than by
+# imprinting, so they do not belong in this collection. The bigBed and the
+# /gbdb symlink are in place, so uncommenting the stanza is all it takes to
+# bring the track back.
+#
+# The description pages of the subtracks open with a link back to the container,
+# written as hgTrackUi?db=$db&hgsid=${hgsid}&g=$parentTrack so that the same
+# markup works in a hub. Both $parentTrack and a working $hgsid need an hgTrackDb
+# built after Sep 2026; an older /cluster/bin/x86_64/hgTrackDb stops the trackDb
+# load with 'setting "parentTrack" not found', and resolves $hgsid to nothing.

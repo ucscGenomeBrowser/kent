@@ -1,5 +1,5 @@
 table omimImprint
-"Genes curated as imprinted by OMIM, from a GeneScout export"
+"Genes curated as imprinted or candidate imprinted by OMIM, from a GeneScout export"
     (
     string chrom;         "Chromosome (or contig, scaffold, etc.)"
     uint   chromStart;    "Start position in chromosome"

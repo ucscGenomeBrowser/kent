@@ -22,26 +22,43 @@ allele-specific methylation that defines them.
 
 <ul>
 <li>
+<a href="hgTrackUi?g=omimImprint">OMIM Genes</a> &mdash; the genes that the
+OMIM staff curate as imprinted or candidate imprinted, published through OMIM's
+GeneScout tool. The two are not distinguished in what OMIM publishes.
+</li>
+<li>
+<a href="hgTrackUi?g=geneimprint">Geneimprint Genes</a> &mdash; the genes that
+Geneimprint curates as imprinted or candidate imprinted, colored by which
+parental copy is expressed.
+</li>
+<li>
 <a href="hgTrackUi?g=methBaseAsm">MethBase2 ASM</a> &mdash; for every CpG site,
 the fraction of MethBase2 human methylomes in which the site was part of an
 allelically methylated region. Peaks mark candidate imprinting control regions.
 </li>
 <li>
-<a href="hgTrackUi?g=geneimprint">Geneimprint</a> &mdash; the human part of the
-Geneimprint catalog of imprinted and candidate imprinted genes, colored by which
-parental copy is expressed.
-</li>
-<li>
 <a href="hgTrackUi?g=akbariIdmr">Akbari iDMRs</a> &mdash; 192 imprinted
-differentially methylated regions compiled from five genome-wide studies,
-colored by which parental copy is methylated.
+differentially methylated regions that Akbari et al. compiled from five
+genome-wide studies, colored by which parental copy is methylated.
 </li>
 <li>
-<a href="hgTrackUi?g=omimImprint">OMIM Imprinted</a> &mdash; the genes that
-the OMIM staff have curated as imprinted, published through OMIM's GeneScout
-tool.
+<a href="hgTrackUi?g=kaplanImprint">ASM Atlas</a> &mdash; three annotation
+sets from a survey of allele-specific methylation in about 40 purified cell
+types: regions whose methylation follows the parent of origin, known control
+regions with their boundaries redrawn, and the much larger pool of regions
+carrying two methylation states that these were drawn from.
 </li>
 </ul>
+
+<p>
+The first four sets above are gene or region catalogs assembled from the
+literature, so they overlap by design: a gene called imprinted by OMIM is
+usually also in Geneimprint, and its control region is usually among the Akbari
+iDMRs.
+The ASM Atlas is different in kind, since its regions were called from
+sequencing data rather than collected from papers, and most of them have never
+been linked to imprinting.
+</p>
 
 <p>
 DNA methylation itself is annotated elsewhere in the browser rather than here.

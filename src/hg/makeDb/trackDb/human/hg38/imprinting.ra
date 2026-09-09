@@ -8,11 +8,11 @@ priority 3.5
     track methBaseAsm
     parent imprinting on
     shortLabel MethBase2 ASM
-    longLabel Imprinting: fraction of MethBase2 methylomes with allele-specific methylation at each CpG
+    longLabel Imprinting - MethBase2: fraction of methylomes with allele-specific methylation at each CpG
     type bigWig 0 1
     bigDataUrl /gbdb/hg38/imprinting/methBaseAsm/hg38.asm.bw
     visibility full
-    priority 1
+    priority 3
     color 85,85,85
     autoScale off
     viewLimits 0:0.5
@@ -25,8 +25,8 @@ priority 3.5
 
     track geneimprint
     parent imprinting on
-    shortLabel Geneimprint
-    longLabel Imprinting: Geneimprint catalog of imprinted and candidate imprinted genes
+    shortLabel Geneimprint Genes
+    longLabel Imprinting - Geneimprint: genes curated as imprinted or candidate imprinted
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/geneimprint/geneimprint.bb
     visibility pack
@@ -49,11 +49,11 @@ priority 3.5
     track akbariIdmr
     parent imprinting on
     shortLabel Akbari iDMRs
-    longLabel Imprinting: imprinted differentially methylated regions compiled from five genome-wide studies
+    longLabel Imprinting - Akbari et al.: imprinted DMRs compiled from five genome-wide studies
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/akbari2023/akbariIdmr.bb
     visibility pack
-    priority 3
+    priority 4
     itemRgb on
     searchIndex name,gene
     labelFields gene,name
@@ -72,12 +72,12 @@ priority 3.5
 
     track omimImprint
     parent imprinting on
-    shortLabel OMIM Imprinted
-    longLabel Imprinting: genes curated as imprinted by OMIM, from GeneScout
+    shortLabel OMIM Genes
+    longLabel Imprinting - OMIM: genes curated as imprinted or candidate imprinted, from GeneScout
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/omimImprint/omimImprint.bb
     visibility pack
-    priority 4
+    priority 1
     itemRgb on
     searchIndex name
     url https://omim.org/entry/$$
@@ -88,3 +88,102 @@ priority 3.5
     filterValues.entryType OMIM gene,No OMIM entry
     filterType.entryType multipleListOr
     filterLabel.entryType Filter by whether OMIM has a gene entry
+
+    track kaplanImprint
+    parent imprinting on
+    compositeTrack on
+    shortLabel ASM Atlas
+    longLabel Imprinting - ASM Atlas: allele-specific methylation in 39 cell types (Rosenski 2025)
+    type bigBed 9 +
+    visibility hide
+    priority 5
+    itemRgb on
+    skipEmptyFields on
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
+
+        track kaplanParentalAsm
+        parent kaplanImprint on
+        shortLabel Parental ASM
+        longLabel Imprinting - ASM Atlas: regions where the methylation state follows the parent of origin
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg38/imprinting/kaplanImprint/kaplanParentalAsm.bb
+        visibility pack
+        priority 1
+        searchIndex name
+        labelFields name,icrName
+        defaultLabelFields name
+        urls snps="https://www.ncbi.nlm.nih.gov/snp/$$"
+        mouseOver <b>${name}</b><br><b>Region</b>: ${regionType}<br><b>Type</b>: ${icrType}<br><b>Imprinted genes nearby</b>: ${imprintedGenes}<br><b>Cell types</b>: ${cellTypeCount}<br><b>Methylation in oocyte / sperm</b>: ${methOocyte} / ${methSperm}
+        filterValues.regionType Known imprinting control region,Novel region near an imprinted gene,Novel region
+        filterType.regionType multipleListOr
+        filterLabel.regionType Filter by how the region relates to known imprinting
+        filterValues.icrType Oocyte gDMR,Sperm gDMR,Secondary DMR,Oocyte gDMR- secondary DMR,Sperm gDMR-secondary DMR,unclear
+        filterType.icrType multipleListOr
+        filterLabel.icrType Filter by the gamete the methylation comes from
+        filterByRange.cellTypeCount on
+        filter.cellTypeCount 1:73
+        filterLimits.cellTypeCount 1:73
+        filterLabel.cellTypeCount Number of cell types supporting the region
+        filterByRange.snpCount on
+        filter.snpCount 1:39
+        filterLimits.snpCount 1:39
+        filterLabel.snpCount Number of SNPs used to phase the region
+
+        track kaplanIcr
+        parent kaplanImprint on
+        shortLabel ICRs Revised
+        longLabel Imprinting - ASM Atlas: control regions with boundaries revised from fragment-level methylation
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg38/imprinting/kaplanImprint/kaplanIcr.bb
+        visibility pack
+        priority 2
+        searchIndex name
+        labelFields name
+        defaultLabelFields name
+        mouseOver <b>${name}</b><br><b>Type</b>: ${icrType}<br><b>Associated genes</b>: ${genes}<br><b>Recovered as parent-of-origin ASM</b>: ${parentalAsm}
+        filterValues.icrType Oocyte gDMR,Sperm gDMR,Secondary DMR,Oocyte gDMR- secondary DMR
+        filterType.icrType multipleListOr
+        filterLabel.icrType Filter by the gamete the methylation comes from
+        filterValues.parentalAsm yes,no
+        filterType.parentalAsm multipleListOr
+        filterLabel.parentalAsm Filter by whether this study recovered the region
+
+#        track kaplanAsm
+#        parent kaplanImprint off
+#        shortLabel SNP-linked ASM
+#        longLabel Imprinting - ASM Atlas: bimodal regions where methylation follows a heterozygous SNP
+#        type bigBed 9 +
+#        bigDataUrl /gbdb/hg38/imprinting/kaplanImprint/kaplanAsm.bb
+#        visibility dense
+#        priority 3
+#        labelFields name
+#        defaultLabelFields name
+#        urls snps="https://www.ncbi.nlm.nih.gov/snp/$$"
+#        mouseOver <b>${name}</b><br><b>ASM SNPs</b>: ${snps}<br><b>Alleles</b>: ${alleles}<br><b>Cell types</b>: ${cellTypeCount}<br><b>Best adjusted p</b>: ${minAdjP}
+#        filterByRange.snpCount on
+#        filter.snpCount 1:63
+#        filterLimits.snpCount 1:63
+#        filterLabel.snpCount Number of ASM SNPs in the region
+#        filterByRange.cellTypeCount on
+#        filter.cellTypeCount 1:81
+#        filterLimits.cellTypeCount 1:81
+#        filterLabel.cellTypeCount Number of cell types supporting the region
+
+        track kaplanBimodal
+        parent kaplanImprint off
+        shortLabel Bimodal Meth
+        longLabel Imprinting - ASM Atlas: regions where DNA fragments carry two distinct methylation states
+        type bigBed 9 +
+        bigDataUrl /gbdb/hg38/imprinting/kaplanImprint/kaplanBimodal.bb
+        visibility dense
+        priority 4
+        labelFields name
+        defaultLabelFields name
+        mouseOver <b>${name}</b><br>${cellTypes}
+        filterValues.cellTypes Adipocytes,Bladder-Ep,Blood-B,Blood-Granul,Blood-Mono+Macro,Blood-NK,Blood-T,Bone-Osteob,Breast-Basal-Ep,Breast-Luminal-Ep,Colon-Ep,Colon-Fibro,Dermal-Fibro,Endothel,Epid-Kerat,Eryth-prog,Fallopian-Ep,Gallbladder,Gastric-Ep,Head-Neck-Ep,Heart-Cardio,Heart-Fibro,Kidney-Ep,Liver-Hep,Lung-Ep-Alveo,Lung-Ep-Bron,Neuron,Oligodend,Ovary-Ep,Pancreas-Acinar,Pancreas-Alpha,Pancreas-Beta,Pancreas-Delta,Pancreas-Duct,Prostate-Ep,Skeletal-Musc,Small-Int-Ep,Smooth-Musc,Thyroid-Ep
+        filterType.cellTypes multipleListOr
+        filterLabel.cellTypes Filter by cell type
+        filterByRange.cellTypeCount on
+        filter.cellTypeCount 1:22
+        filterLimits.cellTypeCount 1:22
+        filterLabel.cellTypeCount Number of cell types sharing the region

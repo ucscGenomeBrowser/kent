@@ -235,6 +235,11 @@ bedToBigBed -type=bed9+6 -tab \
     -extraIndex=name \
     omimImprint.bed /hive/data/genomes/hg38/chrom.sizes omimImprint.bb
 
+# The OMIM curators confirmed that the (I) marker covers both established and
+# candidate imprinted genes, and that the export gives no way to tell the two
+# apart. The track labels and the description page say so; do not present these
+# genes as settled imprinting calls.
+
 # Check that the (I) marker really means imprinted, rather than being one of
 # GeneScout's display markers like the (S) that flags a gene spanning the edge
 # of a search interval. Compare the flagged loci with the two other subtracks,

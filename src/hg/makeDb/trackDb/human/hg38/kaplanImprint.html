@@ -1,0 +1,180 @@
+<h2>Description</h2>
+
+<p>
+Part of the <a href="hgTrackUi?db=$db&amp;hgsid=${hgsid}&amp;g=$parentTrack">Imprinting</a> track collection, these tracks show an atlas of allele-specific
+methylation built from deep whole-genome bisulfite sequencing of 202 purified samples covering
+about 40 human cell types from 135 donors.
+Because the sequencing was deep and the reads long enough to cover several CpG sites at once, the
+authors could look at one DNA fragment at a time and ask whether a region carried two distinct
+methylation states rather than one intermediate average. Regions that do are called bimodal here.
+Where a nearby heterozygous SNP is available, the two states can be assigned to the two copies of
+the chromosome, which separates the cases where methylation follows the DNA sequence from the much
+rarer cases where it follows the parent the copy came from.
+</p>
+
+<p>
+The collection has three annotation sets:
+</p>
+
+<ul>
+  <li><b>Parental ASM</b>: 458 regions where methylation follows the parent of origin. This is the
+      central result of the study. 45 of them are imprinting control regions already known from the
+      literature, 49 more sit within 200 kb of a known imprinted gene, and the rest are reported
+      here for the first time, many of them active in only one or a few tissues.</li>
+  <li><b>ICRs Revised</b>: 72 known imprinting control regions, with their boundaries redrawn from
+      where the bimodal methylation actually starts and stops. 55 of the 72 had at least one
+      boundary moved.</li>
+  <li><b>Bimodal Meth</b>: more than 385,000 regions where individual DNA fragments carry two
+      distinct methylation states. This is the pool the other two sets were drawn from, and most
+      of it has no known link to imprinting.</li>
+</ul>
+
+<p>
+The authors published these annotations for hg19 only. Everything here was lifted to hg38, so
+positions should be treated with the usual care given to lifted data. See Methods for what was
+lost or changed in the lift.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+In the Parental ASM and ICRs Revised tracks, colour shows the gamete in which the methylation mark
+is laid down:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>Oocyte germline DMR &mdash; the mark is placed in the egg, so the maternal copy is the
+          methylated one</td></tr>
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>Sperm germline DMR &mdash; the mark is placed in sperm, so the paternal copy is the
+          methylated one</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th>
+      <td>Secondary DMR &mdash; the difference between the two copies appears after fertilisation
+          rather than in the gametes</td></tr>
+  <tr><th style="background-color:#000000;width:2em">&nbsp;</th>
+      <td>Black &mdash; the gamete of origin has not been established, which is the case for every
+          region reported for the first time in this study</td></tr>
+</table>
+
+<p>
+The Bimodal Meth track is shaded by how many cell types share a region, from light for a region
+seen in a single cell type to dark for one seen in more than twenty.
+</p>
+
+<p>
+Each track can be filtered from its configuration page. The Parental ASM track filters on whether
+a region is a known control region, on the gamete of origin, and on how many cell types support it.
+The Bimodal Meth track filters on the individual cell types a region was called in. Clicking a
+region opens a details page with the supporting SNPs, the cell types, the best adjusted p-value
+and, for the parent-of-origin regions, the mean methylation of the region in published oocyte,
+sperm, inner cell mass and blastocyst methylomes. The oocyte and sperm values are the direct
+evidence for which parent contributes the methylated copy, and they are missing for some regions.
+</p>
+
+<p>
+Two fields record problems with the underlying data rather than biology. The Note field on the
+Bimodal Meth track marks the 125 regions whose cell type list was cut off in the file the authors
+published. The Lifting note field, present on all four tracks, marks regions that hg38 stretched
+because sequence was inserted inside them; their boundaries no longer match the published hg19
+ones.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Whole-genome bisulfite sequencing was done on 202 healthy samples covering around 40 primary cell
+types, sorted or dissected from 135 donors, at 150 bp paired-end reads and an average of 984
+million read pairs per sample, mapped to hg19 with wgbstools. Rather than averaging methylation
+over a region, each sequenced fragment covering at least three CpG sites was scored on its own and
+called hyper-methylated when at least 65% of its CpGs were methylated, hypo-methylated when at most
+35% were, and mixed in between. A region of at least five consecutive CpGs was called bimodal when
+at least 20% of its fragments were hyper-methylated and at least 20% hypo-methylated, tested with a
+log-likelihood ratio between a one-epiallele and a two-epiallele model fitted by
+expectation-maximisation, with Benjamini-Hochberg correction. Bimodal regions were then intersected
+with 1,360,985 gnomAD SNPs at minor allele frequency of 1% or more. In donors heterozygous at such a
+SNP and with at least five fragments per allele, a Fisher exact test asked whether the genotype of
+the fragment predicted its methylation state, again with FDR correction, at a threshold of 0.1.
+A region where the same allele carried the methylation in every donor was taken as
+sequence-dependent. A region that was bimodal regardless of genotype, and where the allele carrying
+the methylation switched between unrelated donors, was taken as parent-of-origin, requiring at least
+three donors with allele-specific methylation. Parent-of-origin calls were checked against 33
+mother-father-child trios by bisulfite treatment and multiplexed PCR of tongue swab DNA followed by
+NextSeq sequencing, and against published gamete and early-embryo methylomes. See the reference
+below for the full protocol.
+</p>
+
+<p>
+The four region sets were taken from the hg19 custom tracks the authors published, at
+<a href="https://files.cs.huji.ac.il/tommy/UXM_hg19/bed_tracks/parental_ASM.bigbed"
+target="_blank">parental_ASM.bigbed</a>,
+<a href="https://files.cs.huji.ac.il/tommy/UXM_hg19/bed_tracks/ICRs-new.bigbed"
+target="_blank">ICRs-new.bigbed</a>,
+<a href="https://files.cs.huji.ac.il/tommy/UXM_hg19/bed_tracks/bimodal+ASM.bigbed"
+target="_blank">bimodal+ASM.bigbed</a> and
+<a href="https://files.cs.huji.ac.il/tommy/UXM_hg19/bed_tracks/bimodal.bigbed"
+target="_blank">bimodal.bigbed</a>, reachable through the authors'
+<a href="https://genome-euro.ucsc.edu/s/Tomkap/hg19_Imp" target="_blank">saved session</a>. Those
+files hold coordinates and little else, so the SNPs, cell types, p-values, gene links, control
+region names and gamete methylation shown on the details pages were read out of the supplementary
+data of the paper and joined onto the regions by coordinate. Region sets were not otherwise
+changed. Coordinates were lifted from hg19 to hg38 with liftOver. The Parental ASM track lost 2 of
+460 regions in the lift, Bimodal Meth lost 329 of 385,564, and no control region was lost; in every
+case liftOver reported the region as deleted, split or only partly present in hg38. A further 33
+regions across the three tracks changed length by more than 10% because hg38 added sequence inside
+them. These were kept rather than dropped, since one of them is TCEB3C, the only control region on
+chr18, but each carries a note saying its boundaries are no longer reliable. One count differs from
+the paper by design: the paper reports 324,759 bimodal regions while the file the authors published
+for browser display holds 385,564. The build steps are in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/kaplanImprint.txt"
+target="_blank">kaplanImprint.txt</a> and the scripts in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/imprinting"
+target="_blank">the imprinting script directory</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>kaplanParentalAsm</i>.</p>
+
+<p>For automated download and analysis, the genome annotation is stored in bigBed files that can be
+downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/kaplanImprint/"
+target="_blank">our download server</a>. The files for this track are called
+<tt>kaplanParentalAsm.bb</tt>, <tt>kaplanIcr.bb</tt> and <tt>kaplanBimodal.bb</tt>. Individual regions or the whole genome annotation can be obtained using
+our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and binaries can be
+found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool
+can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/kaplanImprint/kaplanParentalAsm.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>The original annotation source data can be downloaded from
+<a href="https://files.cs.huji.ac.il/tommy/UXM_hg19/bed_tracks/parental_ASM.bigbed"
+target="_blank">the authors' server</a> in hg19 coordinates, and the underlying sequencing data from
+GEO under accession
+<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE186458"
+target="_blank">GSE186458</a>. The analysis code is at
+<a href="https://github.com/yonniejon/imprint_atlas" target="_blank">github.com/yonniejon/imprint_atlas</a>.</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Jonathan Rosenski, Tommy Kaplan and colleagues at the Hebrew University of Jerusalem for
+producing this atlas and for making the region sets available as browser tracks.
+</p>
+
+<h2>References</h2>
+
+<p>
+Rosenski J, Peretz A, Magenheim J, Loyfer N, Shemer R, Glaser B, Dor Y, Kaplan T.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40069157" target="_blank">
+Atlas of imprinted and allele-specific DNA methylation in the human body</a>.
+<em>Nat Commun</em>. 2025 Mar 11;16(1):2141.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40069157" target="_blank">40069157</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11897249/" target="_blank">PMC11897249</a>
+</p>
+
