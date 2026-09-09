@@ -507,35 +507,39 @@ var tdbDoc = {
         toggles.forEach( (toggle) => {
             toggle.classList.add(toggle.parentNode.className + "_imgToggle");
         });
+        // Only the current hub spec page carries the search box; the other doc pages
+        // share this script and have no such input.
         let inp = document.getElementById("tdbSearch");
-        inp.addEventListener("input", (e) => {
-            let term = inp.value.trim();
-            if (term.length >= 2) {
-                runSearch(term);
-            } else if (term.length === 1) {
-                // Show helpful message for single character
-                runSearch(term);
-            } else if (term.length === 0) {
-                // Clear search when input is empty
-                clearSearchHighlights();
-                hideSearchStatus();
-                currentResults = [];
-                currentIndex = -1;
-            }
-        });
-
-        // Add keyboard shortcuts for search navigation
-        inp.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                if (currentResults.length > 0) {
-                    jumpToResult(e.shiftKey ? -1 : 1);
+        if (inp) {
+            inp.addEventListener("input", (e) => {
+                let term = inp.value.trim();
+                if (term.length >= 2) {
+                    runSearch(term);
+                } else if (term.length === 1) {
+                    // Show helpful message for single character
+                    runSearch(term);
+                } else if (term.length === 0) {
+                    // Clear search when input is empty
+                    clearSearchHighlights();
+                    hideSearchStatus();
+                    currentResults = [];
+                    currentIndex = -1;
                 }
-            } else if (e.key === "Escape") {
-                e.preventDefault();
-                clearSearch();
-            }
-        });
+            });
+
+            // Add keyboard shortcuts for search navigation
+            inp.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (currentResults.length > 0) {
+                        jumpToResult(e.shiftKey ? -1 : 1);
+                    }
+                } else if (e.key === "Escape") {
+                    e.preventDefault();
+                    clearSearch();
+                }
+            });
+        }
 
         // Add clear search button functionality
         let clearButton = document.getElementById("clearSearch");
@@ -557,7 +561,8 @@ var tdbDoc = {
                 });
                 // Also focus the search input for easy continued searching
                 setTimeout(() => {
-                    inp.focus();
+                    if (inp)
+                        inp.focus();
                 }, 500);
             });
         }
