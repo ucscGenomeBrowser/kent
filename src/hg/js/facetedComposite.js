@@ -568,11 +568,13 @@ $(function() {
         const visDropdown = document.querySelector(
             'select[name="' + embeddedData.track + '"]');
 
-        // The mode to come back to when the container needs to be shown.
-        // Pack rather than full: a faceted composite usually mixes signal and
-        // feature tracks, and pack is the mode that suits both.  An explicit
-        // choice by the user replaces it, below.
-        let preferredVis = "pack";
+        // The mode to come back to when the container needs to be shown.  Full
+        // rather than pack: on a faceted composite this dropdown is a ceiling and
+        // not a mode, since each child carries its own display mode, so full is
+        // the value that clips nothing.  Pack here would hide every child pinned
+        // by onlyVisibility to full.  An explicit choice by the user replaces it,
+        // below.
+        let preferredVis = "full";
         if (visDropdown && visDropdown.value !== "hide") {
             preferredVis = visDropdown.value;
         }

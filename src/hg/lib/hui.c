@@ -10080,8 +10080,10 @@ if (facetedChild)
         return tvHide;
     enum trackVisibility maxVis = tdbVisLimitedByAncestors(cart,tdb->parent,checkBoxToo,
                                                            foldersToo);
-    if (onlyVis != NULL)  // A pinned child either fits under the maximum or doesn't draw
-        return (tvCompare(vis,maxVis) >= 0 ? vis : tvHide);
+    // The container's vis is a ceiling, so it limits a pinned child the same way it
+    // limits any other one.  It must not drop the child instead: a container sitting at
+    // pack over children pinned to full then draws nothing at all, with nothing on the
+    // page to say why.
     return tvMin(vis,maxVis);
     }
 if (subtrackOverride)
