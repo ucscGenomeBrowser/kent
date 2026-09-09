@@ -1,10 +1,10 @@
 # #35920 -- a hub declaring the wrong bigBed type crashed hgTracks or drew garbage item
 # names, and gave no warning until an item of the track came into view. What the reader
 # then saw was a "jsEmbedded" dialog titled with the server's hostname, which says nothing
-# about the real problem.
+# about the real problem. Fixed by #19984 and closed by QA on 2025-12-02.
 #
-# The hub has one track for each half of the problem: ultras says `type bigBed 12 +` over
-# a file with 4 fields, ultraZoos says `type bigBed 4 +` over a file with 3.
+# The hub has one track for each half of the problem: rm35920Ultras says `type bigBed 12 +`
+# over a file with 4 fields, rm35920UltraZoos says `type bigBed 4 +` over a file with 3.
 #
 # The hub is our own copy of the reporter's, at
 # ~/public_html/docentFixtures/Auto-generated_hub/, with bigDataUrl pointing at the local
@@ -13,27 +13,63 @@
 # are what the hub is for. It is the crash and the garbage labels that must be gone, not
 # the malformed hub.
 #
-# The position is where ultras.bb has its first item (uc.1 at chr1:10,537,639-10,537,846),
-# because the ticket is explicit that nothing goes wrong until an item is in view.
+# --- 2026-09-09, rewritten. The script this replaces was never testing the hub. ---
+#
+# The reporter called his two tracks `ultras` and `ultraZoos`, and so did our copy. hg38 has
+# its OWN `ultras`, under the unusualcons superTrack. A track name resolves to `img_data_
+# <name>` first and only then to a hub row's `hub_<n>_<name>`, so the exact native id won
+# every time: `track: {ultras: pack}` turned on the native track (and its superTrack), and
+# `mouseover: {track: ultras}` read the native row. The native track's items are named uc.N
+# as well, so the old `expect: {tip: "uc.1"}` passed on the native data and nothing warned.
+# The nightly went red on 2026-09-08 only because the native row's tooltip stopped matching.
+# The fixture's tracks now carry an rm35920 prefix. A hub fixture must never name a track
+# anything a native assembly might also call it.
+#
+# With the collision gone, what the two malformed tracks actually do on genome-test, hgwbeta
+# and the RR alike (checked all three on 2026-09-09):
+#
+#   rm35920Ultras     bigBed 12 + over 4 fields -- row drawn, EMPTY. No crash, no dialog,
+#                     no garbage. The declared field count has a number, so #19984's
+#                     auto-detection does not apply; hgTracks cannot read the rows as
+#                     declared and drops them.
+#   rm35920UltraZoos  bigBed 4 + over 3 fields -- items drawn, with an EMPTY name. The hgc
+#                     link carries `i=` with nothing after it, which is what a correctly
+#                     declared `type bigBed 3` over the same file produces (measured against
+#                     a probe hub). That is the garbage string gone.
+#
+# So the tooltip assertion the old script carried cannot be restored: the hub track has no
+# named item to hover, on any server. What the ticket asked for is the crash and the garbage
+# names, and that is what is asserted below.
+#
+# The window holds items from both files: ultraZoos has three (chr1:10,533,682-10,533,851)
+# and ultras.bb has uc.1 (chr1:10,537,639-10,537,846), because the ticket is explicit that
+# nothing goes wrong until an item is in view.
+#
+# The hub declares `visibility pack` itself, so there is no `track:` step here: a hub track's
+# cart name carries a per-run hub_<n>_ prefix that `track:` cannot write, and the step that
+# used to be here only ever moved native tracks.
 target: genome-test
 db: hg38
-position: chr1:10537000-10538500
+position: chr1:10533000-10538500
 reset: true
 fast: true
 steps:
   - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/Auto-generated_hub/hub.txt", db: hg38}
-  - go: chr1:10537000-10538500
-  - track: {ultras: pack, ultraZoos: pack}
+  - go: chr1:10533000-10538500
 
-  # Only `ultras` is required to draw. ultraZoos declares `type bigBed 4 +` over a
-  # three-field file and produces no row at all, which is a defensible outcome for a file
-  # that cannot be read as declared -- the ticket asks for no crash and no garbage labels,
-  # not for a malformed track to render. Requiring its row would be asserting a behavior
-  # nobody promised. The row for `ultras` is what catches the crash, since the failure
-  # produced a dialog and no image; jsEmbedded is the string from that dialog.
-  - expect: {rows: [ultras], noText: "jsEmbedded"}
+  # The crash half. Both malformed tracks have to reach the page as rows: the failure
+  # produced a dialog and no image at all, and jsEmbedded is the string from that dialog.
+  - expect:
+      rows: [rm35920Ultras, rm35920UltraZoos]
+      noText: "jsEmbedded"
 
-  # And the item label has to be the name from the file rather than a garbage string, which
-  # is the other half of the ticket. uc.1 is ultras.bb's first item.
-  - mouseover: {track: ultras, item: "uc.1"}
-  - expect: {tip: "uc.1"}
+  # The garbage-name half. The ticket says the bad string appeared when you clicked an item,
+  # so click one. `at:` rather than `item:` because the fixed behavior leaves these boxes
+  # nameless -- there is no name to click by, which is the point. The click has to land on a
+  # real hgc detail page for this track (title "ultras", the hub track's longLabel) and not
+  # on the crash dialog.
+  - click: {track: rm35920UltraZoos, at: "chr1:10533692"}
+  - expect:
+      url: "hgc"
+      text: "ultras"
+      noText: "jsEmbedded"
