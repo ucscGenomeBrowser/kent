@@ -5210,6 +5210,20 @@ There are no extra options that can appear on the type vcfPhasedTrio line.
     </P>
 </DIV>
 
+<DIV class="vcfPhasedColorBy"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfPhasedColorBy &lt;mendelDiff|deNovo|function|noColor&gt;</code></div>
+    <P>
+    How to color the variants drawn on each haplotype lane. <code>noColor</code>, the default,
+    draws them all black. <code>deNovo</code> colors a child variant red when it appears in
+    neither parent. <code>mendelDiff</code> colors a child variant red when it disagrees with
+    the allele the parents imply was transmitted; this needs
+    <A HREF="#vcfParentSamples">vcfParentSamples</A> to be set. <code>function</code> colors by
+    predicted effect on the gene, red for non-synonymous, green for synonymous, blue for UTR or
+    noncoding, and black otherwise; it is offered only when
+    <A HREF="#geneTrack">geneTrack</A> is also set.
+    </P>
+</DIV>
+
 <DIV class="vcfPhasedTrio_example"><span class="types vcfPhasedTrio"></span>
 <div class="format"><B>Example of a VCF Phased Trio track</B></div>
     <pre>

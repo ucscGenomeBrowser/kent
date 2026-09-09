@@ -390,6 +390,7 @@ ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 vcfChildSample vcfPhasedTrio
 vcfParentSamples vcfPhasedTrio
+vcfPhasedColorBy vcfPhasedTrio
 vcfUseAltSampleNames vcfPhasedTrio
 saturationScore hic
 setColorWith bigWig
