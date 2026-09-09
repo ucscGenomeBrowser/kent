@@ -1,0 +1,137 @@
+# 2026-09-09 Claude max: pcLAI local ancestry for HPRC Release 2 haplotypes, hg38
+#            One composite track, one subtrack per haplotype. Alpha only.
+#            Experimental / demo: no Redmine ticket, deliberately. If this turns
+#            into a real track the notes below are the whole record of how it was
+#            built and what is known to be off about it.
+
+# The pcLAI (point cloud local ancestry inference) annotations come in three
+# coordinate systems: each assembly's own coordinates (asm_coord, already shipped
+# on the GenArk HPRC assembly hubs as the hprc2annot contrib collection),
+# CHM13 coordinates, and GRCh38 coordinates. This track uses the GRCh38 set.
+
+mkdir -p /hive/data/genomes/hg38/bed/hprcPclai
+cd /hive/data/genomes/hg38/bed/hprcPclai
+
+# The index CSV lists one s3:// BED path per haplotype: 231 samples x 2
+# haplotypes plus CHM13 = 463 files. Chromosome X and Y are not covered.
+curl -sL https://raw.githubusercontent.com/human-pangenomics/hprc_intermediate_assembly/refs/heads/main/data_tables/annotation/pclai/pclai_v1.1_grch38_coord_local_hprc_r2.index.csv \
+  -o pclai_v1.1_grch38_coord_local_hprc_r2.index.csv
+
+# Download. The submissions bucket resets connections under load, so the script
+# retries and runs only 8-wide. 2.5 GB of BED, a couple of minutes.
+~/kent/src/hg/makeDb/scripts/hprcPclai/hprcPclaiDownload.sh \
+  pclai_v1.1_grch38_coord_local_hprc_r2.index.csv bed > download.log 2>&1
+grep -c '^OK' download.log     # 463
+grep FAIL download.log         # nothing
+
+# Sanity checks before converting: all autosomes, all bed9+1, nothing outside the
+# chrom bounds, nothing inverted, and the files already sorted.
+cat bed/*.bed | wc -l                                      # 11936603
+cat bed/*.bed | awk '{print NF}' | sort -u                 # 10
+cat bed/*.bed | cut -f1 | sort -u | wc -l                  # 22, chr1..chr22
+awk 'NR==FNR{sz[$1]=$2;next} !($1 in sz){nc++} $3>sz[$1]{over++} $2>=$3{inv++} \
+  END{print "nochrom",nc+0,"over",over+0,"inverted",inv+0}' \
+  /hive/data/genomes/hg38/chrom.sizes bed/*.bed            # all zero
+
+# The pcLAI BED format is documented at https://github.com/AI-sandbox/hprc-pclai
+# (README, "Output format"): 0-based half-open like any BED, thickStart ==
+# chromStart, thickEnd == chromEnd, and column 10 is the "centroid" -- the
+# discretized ancestry of the window, written as the PCA centroid of its ancestry
+# cluster, which is why it only ever takes four values. Nothing to convert on the
+# coordinate side.
+#
+# thickStart is one base before chromStart in 54811 of the 11936603 windows
+# (0.46%), against their own spec, and bedToBigBed rejects it. thickEnd always
+# equals chromEnd, so neither column carries information here; the converter sets
+# both to the item bounds rather than dropping those windows.
+cat bed/*.bed | awk -F'\t' '$7!=$2{a++} $7==$2-1{b++} $8!=$3{c++} \
+  END{print a+0, b+0, c+0}'                                # 54811 54811 0
+
+# Convert to one bigBed per haplotype. The source name column packs
+# "SAMPLE/hN/<window>_(PC1,PC2)" and column 10 holds the segment PCA; the script
+# splits those into named fields (haplotype, window, pca, centroid) so they can
+# be shown on mouseover and fed to the details-page scatterplot, and blanks the
+# name column. Fifteen minutes wall clock at -j 16, 754 MB of bigBed.
+mkdir -p bb
+ls bed/*.bed | parallel -j 16 \
+  '~/kent/src/hg/makeDb/scripts/hprcPclai/hprcPclaiMakeBb.sh {} bb/{/.}.bb /hive/data/genomes/hg38/chrom.sizes' \
+  > convert.log 2> convert.err
+grep -c '^OK' convert.log                                  # 463
+awk '{s+=$3} END{print s}' convert.log                     # 11936603, no loss
+grep -h FIXED_THICKSTART convert.err | awk '{s+=$2} END{print s}'   # 54811
+grep -v FIXED_THICKSTART convert.err | grep -viE '^pass[12] '       # nothing
+
+# Reference panel for the details-page scatterplot: the PCA coordinates of the
+# 1000 Genomes haplotypes that define the space each window is placed in. Same
+# file the hprc2annot contrib collection uses, rebuilt from upstream with that
+# collection's generator so there is only one copy of that logic.
+curl -sL https://raw.githubusercontent.com/AI-sandbox/hprc-pclai/main/reference_pca_metadata.tsv \
+  -o reference_pca_metadata.tsv
+~/kent/src/hg/makeDb/scripts/hprc2annot/hprc2annotMakePclaiRefPanel.py \
+  reference_pca_metadata.tsv pclaiRefPanel.json            # 3122 points, 21 populations
+
+# Which haplotypes to check by default. The centroid field only ever takes four
+# values across all 463 haplotypes, so counting them per haplotype says how mixed
+# each one is.
+# 48 haplotypes have a single ancestry, 177 have all four. The default-on list in
+# hprcPclaiDefaultOn.txt was picked from the top of this ranking by the share of
+# the genome the second ancestry covers.
+for f in bed/*.bed; do n=$(basename $f .bed); cut -f10 $f | sort | uniq -c \
+  | sort -rn | awk -v n=$n 'BEGIN{ORS=""} {d++; s=s" "$2":"$1} \
+    END{print n"\t"d"\t"s"\n"}'; done > segStats.tsv
+awk -F'\t' '{n=split($3,q," "); tot=0; for(i=1;i<=n;i++){split(q[i],a,":"); \
+  c[i]=a[2]; tot+=a[2]} if(n>=2) printf "%s\t%d\t%.3f\n",$1,n,c[2]/tot}' \
+  segStats.tsv | sort -k3,3nr | head -20
+
+# Reading the display, and what is left to do
+# --------------------------------------------
+# Dense is the mode that works: one row per haplotype, and since the items carry
+# no label nothing is lost by collapsing them (a window is still clickable and
+# still has its mouseOver). Pack is actively bad here -- the windows abut, and
+# pack pushes each one onto a different row from its neighbour, so a haplotype
+# takes 20+ rows and shows nothing extra. Whole-chromosome is the zoom at which
+# the ancestry blocks are visible; a few-megabase view usually sits inside one
+# block and looks uniform, which is the correct result rather than a bug.
+#
+# Not done, and the reason:
+#  - No categorical filter or color legend on the centroid field. Only four values
+#    occur, so a filter would be genuinely useful, but each value is a coordinate
+#    pair like "(0.445,-1.314)" and comma is the separator filterValues uses. It
+#    needs a comma-free label field alongside centroid first. Naming those four
+#    clusters (African / East Asian / European / South Asian by nearest reference
+#    population) would be our interpretation, not something the authors label, so
+#    it was left out of a demo rather than guessed at.
+#  - The colors are the authors' own itemRgb, a perceptual mapping of the 2D
+#    coordinate. There is no legend because there is no palette to legend; the
+#    details-page scatterplot is what makes a color interpretable.
+#
+# See also doc/contrib/hprc2annot/hprc2annot.txt sections 5c and 5d: building this
+# track is what turned up that the contrib collection had column 10 described
+# wrongly (as an "ancestry segment" coordinate rather than the discretized
+# ancestry centroid) and that the GenArk detailsScript dataUrl was being prefixed
+# twice, so its scatterplot had never drawn. Both are fixed; the field is named
+# centroid in both places now.
+
+# trackDb: 463 subtracks is too many to hand-write, so they are generated from the
+# index CSV. detailsScript and metaDataUrl are repeated on every subtrack on
+# purpose -- both are read as local settings where they are used, so a value on
+# the composite alone would not be seen (bigBedClick.c collects detailsScript.*
+# with trackDbLocalSettingsWildMatch, and hgTrackUi's file fetch whitelists
+# metaDataUrl on the tdb of the clicked track). Explicit per-subtrack priorities
+# keep the sample order in the image stable.
+~/kent/src/hg/makeDb/scripts/hprcPclai/hprcPclaiMakeTrackDb.py \
+  pclai_v1.1_grch38_coord_local_hprc_r2.index.csv \
+  ~/kent/src/hg/makeDb/scripts/hprcPclai/hprcPclaiDefaultOn.txt hprcPclai.ra
+cp hprcPclai.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/
+# and "include hprcPclai.ra alpha" in human/hg38/trackDb.ra
+
+# Sanity check the loaded settings: $D has to have been substituted in both
+# bigDataUrl and metaDataUrl, or the details-page scatterplot will not load.
+hgsql hg38 -N -e "select settings from trackDb_max where tableName='hprcPclaiNA19682H1'" \
+  | tr '\\n' '\n' | grep -E 'bigDataUrl|metaDataUrl'
+
+# A whole chromosome is the zoom at which the ancestry blocks are visible, and it
+# holds a few thousand windows per haplotype, over the 1000-item default at which
+# pack mode stops drawing. Hence "maxItems 40000" on the composite.
+# Quick render check of the seven default-on haplotypes across all of chr1:
+#  https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgRenderTracks?db=hg38&position=chr1&hideTracks=1&hprcPclai=dense

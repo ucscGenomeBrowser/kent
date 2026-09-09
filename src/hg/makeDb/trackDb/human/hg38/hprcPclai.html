@@ -1,0 +1,146 @@
+<h2>Description</h2>
+<p>
+Every person's genome is a mosaic inherited from ancestors of different
+populations, and "local ancestry" describes, region by region along a chromosome,
+where a stretch of DNA came from. Point cloud local ancestry inference (pcLAI)
+does this without picking one population label per region: it places each region
+at a point in a continuous coordinate space, so ancestry that sits between two
+reference populations stays visible as an intermediate position instead of being
+rounded to the nearest label.
+</p>
+<p>
+This track shows pcLAI for Human Pangenome Reference Consortium (HPRC) Release 2,
+projected from each assembly onto GRCh38: both haplotypes of 231 samples, plus
+CHM13, so 463 subtracks in all. Each haplotype is divided into windows of 1000
+SNPs, which works out to roughly a hundred thousand bases, about 26,000 windows
+per haplotype and 11.9 million in total. Only the autosomes are covered.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each item is one genomic window. Items carry no visible label. Holding the mouse
+over an item shows the haplotype, the window identifier, the position of the
+window in the principal-component space that pcLAI uses to describe ancestry, the
+ancestry the window is assigned to if the continuous coordinate is discretized,
+and a confidence score; the same values are on the details page, together with a
+scatterplot
+showing where the window sits relative to the reference haplotypes that define
+the space.
+</p>
+<p>
+The item color is derived from the principal-component position, so windows of
+similar inferred ancestry get similar colors and a run of shared ancestry appears
+as a block of consistent color. Because the color is continuous rather than a set
+of population labels, it is read by comparing regions with each other rather than
+against a fixed legend. Neighboring windows inside one block differ by only one or
+two color steps, and those small differences are not meaningful: the feature to
+read is the block, not the window.
+</p>
+<p>
+Two consequences are worth knowing before concluding that a display looks wrong.
+First, a haplotype with a single ancestry throughout gives one uniform color
+across every chromosome, which is the correct result for that sample rather than a
+rendering problem; 48 of the 463 haplotypes are like this. Second, where a
+haplotype does carry several ancestries the blocks are tens of megabases long, so
+a view of only a few megabases usually falls inside one block and also looks
+uniform. Zooming out to a whole chromosome is what makes the block structure
+visible.
+</p>
+<p>
+The track opens with seven haplotypes turned on. Five of them were picked because
+their ancestry is visibly mixed: NA19682 (both haplotypes), NA19776, HG01496 and
+HG01150 each carry a second ancestry over more than a quarter of the genome. The
+other two, HG002 and CHM13, are there as familiar reference points and are close
+to uniform. The remaining haplotypes can be turned on from the sample-by-haplotype
+matrix on the track configuration page.
+</p>
+<p>
+Dense mode is the mode to use. It draws one row per haplotype, and because the
+items carry no label nothing is lost by collapsing them: a window is still clicked
+or moused over for its values. Pack mode adds nothing here and costs a lot of
+vertical space, since the windows abut and pack puts each one on a different row
+from its neighbour.
+</p>
+
+<h2>Methods</h2>
+<p>
+Conventional local ancestry inference gives every segment of a genome one of a
+fixed set of population labels. pcLAI instead places each segment at a point in a
+continuous coordinate space, so a genome becomes a cloud of points, one per
+window. The coordinate space can be any continuous description of ancestry; here
+it is the first two principal components of a reference PCA embedding built from
+3122 1000 Genomes haplotypes of 21 populations of known origin. Each haplotype was
+split into windows of 1000 SNPs and a coordinate predicted for each, together with
+a confidence score; windows of very low confidence were dropped before the BED
+files were published, which together with the projection onto GRCh38 is why the
+windows do not tile a chromosome without gaps (for NA19682 haplotype 1, 2.73 of
+the 2.88 Gb of autosome is covered, with about 65 Mb of internal gaps). The files
+also
+carry a discretized version of each prediction, written as the PCA centroid of the
+ancestry cluster the window falls in, and across all 463 haplotypes that takes
+only four values. See the reference below for the method, and the
+<a href="https://github.com/AI-sandbox/hprc-pclai" target="_blank">pcLAI repository</a>
+for the code and the reference panel table.
+</p>
+<p>
+The annotation files were obtained from the HPRC Release 2 data collection on the
+public <tt>s3://human-pangenomics</tt> bucket, indexed at
+<a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/tree/main/data_tables/annotation/pclai" target="_blank">the hprc_intermediate_assembly data tables</a>;
+this track uses the GRCh38-coordinate index,
+<tt>pclai_v1.1_grch38_coord_local_hprc_r2.index.csv</tt>. Each per-haplotype BED
+file was converted to a UCSC bigBed file, with the haplotype, the window
+identifier and the window's own principal-component coordinate split out of the
+source item name into their own fields, and the source's centroid column named. All 11,936,603 windows in the source files
+are carried through to the bigBeds; none were dropped. In 54,811 of them (0.46%)
+the source <tt>thickStart</tt> is one base before <tt>chromStart</tt> and so
+outside the item, which is invalid BED and also departs from the format the pcLAI
+authors document; since <tt>thickStart</tt> and
+<tt>thickEnd</tt> carry no information for this annotation they were set to the
+item bounds rather than dropping those windows. The steps are described in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/hprcPclai.txt" target="_blank">makeDoc</a>
+and the build scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/hprcPclai" target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
+track=<i>hprcPclai</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in one bigBed file
+per haplotype, which can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/hprcPclai/" target="_blank">our download server</a>.
+The files are called <tt>SAMPLE.HAPLOTYPE.bb</tt>, for example
+<tt>NA19682.1.bb</tt>. Individual regions or the whole genome annotation can be
+obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the
+source code or downloaded as a precompiled binary for your system. Instructions
+for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/hprcPclai/NA19682.1.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+<p>
+The original annotation source data can be downloaded from the HPRC S3 bucket
+linked above.
+</p>
+
+<h2>Credits</h2>
+<p>
+Annotations were generated by the Human Pangenome Reference Consortium. Thanks to
+the HPRC production team and to the pcLAI authors for making these data available.
+</p>
+
+<h2>References</h2>
+<p>
+Geleta M, Mas Montserrat D, Ioannidis NM, Ioannidis AG.
+<a href="https://doi.org/10.64898/2026.03.23.713813" target="_blank">
+Point cloud local ancestry inference (PCLAI): continuous coordinate-based ancestry along the
+genome</a>.
+<em>bioRxiv</em>. 2026 Mar 25.
+doi: <a href="https://doi.org/10.64898/2026.03.23.713813" target="_blank">10.64898/2026.03.23.713813</a>
+</p>
