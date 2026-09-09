@@ -1,0 +1,79 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack&amp;hgsid=$hgsid">Repeats</a> collection of the zebra finch telomere-to-telomere hub.
+</p>
+<p>
+A tandem repeat is a short motif repeated directly head to tail, from a few bases up to arrays
+spanning megabases. They mutate quickly by slippage during replication, they are the basis of
+many genetic markers, and long arrays of them are what makes centromeric and subtelomeric DNA
+so difficult to assemble. This track shows about 980,000 tandem repeat arrays across both
+euchromatin and heterochromatin.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each array is drawn as a single feature named after its repeat unit. The repeat unit and the
+full array sequence are kept as extra fields on the details page. Item names longer than 255
+characters are truncated for display; the untruncated repeat unit is in the extra fields. The
+track is set to dense by default because of the number of arrays.
+</p>
+
+<h2>Methods</h2>
+<p>
+Tandem repeats were called de novo across the assembly with Tandem Repeats Finder. In the
+manuscript, TRF is used to extract monomer units from satellite arrays for the comparison of
+Tgut191A-like repeats across bird genomes; the genome-wide call set distributed with the
+assembly is what is shown here.
+</p>
+<p>
+The file was taken from GenomeArk at <a href="https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/repeats/bTaeGut7v0.4_MT_rDNA.trf.sorted.v0.1.bed" target="_blank">https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/repeats/bTaeGut7v0.4_MT_rDNA.trf.sorted.v0.1.bed</a>. It is a text format that a track hub cannot use directly, so it was converted to a binary indexed file. The conversion, and the whole hub, is reproduced by the commands in src/hg/makeDb/doc/contrib/bTaeGut7.txt of the UCSC kent source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>tandemRepeats</i>.
+</p>
+
+<p>
+For automated download and analysis, this annotation is a bigBed file inside the hub. Individual
+regions or the whole annotation can be obtained with <tt>bigBedToBed</tt>, which can be compiled from
+source or downloaded as a precompiled binary; instructions are
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool also fetches a range, for example
+<tt>bigBedToBed &lt;hubUrl&gt;/GCF_048771995.1/tandemRepeats.bb -chrom=NC_133024.1 -start=0 -end=100000 stdout</tt>,
+where &lt;hubUrl&gt; is the directory this hub was loaded from.
+</p>
+<p>
+The original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+<p>
+Benson G.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/9862982" target="_blank">
+Tandem repeats finder: a program to analyze DNA sequences</a>.
+<em>Nucleic Acids Res</em>. 1999 Jan 15;27(2):573-80.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/9862982" target="_blank">9862982</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC148217/" target="_blank">PMC148217</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>

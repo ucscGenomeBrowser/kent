@@ -1,0 +1,54 @@
+# hubtools splitHap, 2026-09-07 19:29
+# input hub: hub/hub.txt
+# genomes:   GCF_048771995.1, GCA_048772025.1
+#
+# Records per track.  'source' is what was read out of the input file. A
+# record whose sequence both assemblies have is written to both, so the two
+# genome columns can add up to more than source; where they add up to less,
+# the noSeq, clipped and dropped columns say where the difference went.
+#track         type         source    GCF_048771995.1  GCA_048772025.1  noSeq  clipped  dropped
+gcPercent      bigWig       10495330  5535350          4959611          369    0        0
+seqEntropy     bigWig       10695898  5641633          5053886          379    0        0
+nonBdna        bigBed9      11255555  5917024          5337506          1023   0        2
+covHifi        bigWig       2100354   1108175          992121           58     0        0
+covOnt         bigWig       2069444   1091892          977510           42     0        0
+covClr         bigWig       2063751   1085006          978673           72     0        0
+egapx          bigGenePred  142191    73600            68591            0      0        0
+retrocopies    bigGenePred  182       106              76               0      0        0
+transposons    bigBed9+     530844    292100           238744           0      0        0
+tandemRepeats  bigBed6+     981904    510467           471358           79     0        0
+satellome      bigBed6      901       521              380              0      0        0
+centroSat      bigBed9+     7013      3851             3162             0      0        0
+centroCores    bigBed9+     80        41               39               0      0        0
+centroMarkers  bigBed4      225       114              111              0      0        0
+telomeres      bigBed4+     160       82               78               0      0        0
+itsRepeats     bigBed3      664       336              328              0      0        0
+newRegions     bigBed3      27210     14180            13027            0      0        3
+largeSv        bigBed4      42        21               21               0      0        0
+methyl5mC      bigWig       21975548  11732879         10242669         0      0        0
+compartE1      bigWig       18840     10670            8170             0      3        0
+compartAB      bigBed9      3103      1634             1469             0      0        0
+#
+# Every one of these rows was checked as it was written: the records read
+# equal the records that matched a sequence plus the ones that matched none,
+# and every match either produced an output record or was dropped. splitHap
+# stops rather than write this file if a track does not add up.
+
+# Sequences that neither assembly has. Every record on one of these is in
+# neither output hub.
+#sequence	records
+rDNA_morph_2	639
+rDNA_morph_1	575
+rDNA_morph_3	572
+chrMT	236
+
+# Records reaching past the end of their sequence in the target assembly.
+# The assembly the hub was built on is longer there than the one the records
+# are being moved to. Coverage records are clipped to the end of the
+# sequence, features are dropped, because trimming a feature would move its
+# end and could break its blocks. 'overhang' is the furthest a record
+# reached past the end.
+#sequence	targetSequence	assembly	targetSize	overhang	clipped	dropped
+chr32_mat	NC_133057.1	GCF_048771995.1	5583650	83	1	3
+chr8_mat	NC_133033.1	GCF_048771995.1	32653262	35	1	1
+chr8_pat	CM109758.1	GCA_048772025.1	32694872	34	1	1

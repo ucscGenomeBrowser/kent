@@ -1,0 +1,7 @@
+# the hub stanza; the track stanzas are in
+# src/hg/makeDb/trackDb/contrib/bTaeGut7/trackDb.txt
+hub bTaeGut7
+shortLabel Zebra finch T2T
+longLabel Telomere-to-telomere zebra finch genome bTaeGut7, annotations from Formenti et al. 2026
+descriptionUrl hubDescription.html
+email mhaeussl@ucsc.edu

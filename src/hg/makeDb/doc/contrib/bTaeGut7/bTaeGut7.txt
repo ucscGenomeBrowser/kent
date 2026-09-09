@@ -1,0 +1,212 @@
+# 2026-09-07 Claude (max): bTaeGut7 zebra finch T2T GenArk contributed track hub
+#
+# Track hub for the telomere-to-telomere genome of the zebra finch, individual bTaeGut7,
+# Formenti et al, Cell 2026, PMID 42561917.  The tracks are the ones the authors ship in
+# an IGV session next to the annotations on GenomeArk, so the hub shows the same set as
+# supplementary figure 23 of the paper.
+#
+# Two hubs are built from the same data:
+#   hub/    one genome, GCF_048771995.1 (bTaeGut7.mat, the maternal haplotype)
+#   split/  two genomes, GCF_048771995.1 and GCA_048772025.1 (bTaeGut7.pat)
+# They are alternatives, not a pair.  The single-genome hub keeps every feature in the
+# files and lets the browser draw only what the maternal assembly has; the split hub sends
+# each feature to the haplotype whose assembly actually contains its sequence.
+#
+# The annotation files use the assembly's own sequence names (chr1_mat, chr1_pat, ...)
+# rather than RefSeq or GenBank accessions.  For the single-genome hub the browser resolves
+# those through the GenArk chromAlias, so maternal annotations draw on NC_* and paternal
+# ones are never queried.  The split hub renames them.
+#
+# Hub location, ready for contrib symlinks:
+#   /hive/data/outside/genark/bTaeGut7/hub
+#   /hive/data/outside/genark/bTaeGut7/split
+# Build work area (downloads, converted files, generated description pages, the paper):
+#   /hive/users/max/projects/bTaeGut7
+#   its hub and split entries are symlinks to the two directories above, so the commands
+#   below write straight into the contributed copy
+# Everything that builds this hub is in this directory, next to this file:
+#   makeHub.py       assembles a hub from the trackDb and the converted files
+#   makeHtml.py      writes the description pages
+#   hubHeader.txt    the hub stanza
+#   sourceTracks.tsv track name <-> the name "hubtools import igv" gives the same track
+#   refs/            cached getTrackReferences output, one file per PMID
+#   splitHap.report.txt  per-track record accounting of the split
+# The trackDb and the description pages are with the other contributed GenArk tracks:
+#   ~/kent/src/hg/makeDb/trackDb/contrib/bTaeGut7
+#
+# The trackDb is NOT generated.  trackDb/contrib/bTaeGut7/bTaeGut7.trackDb.txt is a
+# normal hand-maintained trackDb and makeHub.py copies it into the hub unchanged; edit
+# it there to
+# change a label, a colour, a visibility or the track order.  The same file serves both
+# assemblies: a track either has data on both haplotypes or on neither, and all 21 have
+# data on both, so the two trackDbs of the split hub are byte for byte identical.
+
+SCRIPTS=~/kent/src/hg/makeDb/doc/contrib/bTaeGut7
+WORKDIR=/hive/users/max/projects/bTaeGut7
+cd $WORKDIR
+
+##############################################################################
+# 1. the paper, used for the methods section of every description page
+##############################################################################
+# paper/paper.pdf is the bioRxiv preprint, doi 10.1101/2025.10.14.682431, which is the
+# same work as the Cell paper.  Cell is paywalled and there is no PMC full text, so the
+# preprint is what is on disk.  paper.md is only there to be greppable.  Every citation in
+# the description pages is to the published Cell article, not to the preprint.
+
+pdftotext -layout paper/paper.pdf paper/paper.md
+
+##############################################################################
+# 2. turn the IGV session into a hub
+##############################################################################
+# hubtools downloads every file the session refers to, converts the text formats (bed,
+# gff, gtf, wig) to bigBed and bigWig, and translates the IGV display attributes into
+# trackDb settings.  bTaeGut7v0.4 is not a UCSC assembly and GenArk holds only the
+# maternal haplotype, so the chromosome sizes are read from the bigWigs of the session
+# itself, which carry all 84 sequences of the diploid assembly.
+#
+# --download also fetches the files the browser could read straight off GenomeArk, five
+# bigWigs totalling 353 MB.  Without it the hub would hotlink an S3 bucket for a quarter of
+# its tracks, which breaks the day GenomeArk moves a file and cannot be served by a mirror.
+#
+# Downloads land in build/.igvFiles and are kept, so a rerun does not fetch the 1.4 GB of
+# source files again.  That directory is not part of the hub.
+
+hubtools import igv \
+  https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/igv.asm_v0.4.annotation_v0.6.xml \
+  --db GCF_048771995.1 --download -i build -o build
+
+##############################################################################
+# 3. description pages
+##############################################################################
+# makeHtml.py holds the per-track prose and assembles the sections that are the same on
+# every page.  It writes them to where the tree keeps the description pages of contributed
+# GenArk tracks, next to hprc2annot and tiberius:
+#   ~/kent/src/hg/makeDb/trackDb/contrib/bTaeGut7
+# so the pages are in git, and makeHub.py copies them into the hub from there.
+#
+# Citations are not written by hand: they are the cached output of getTrackReferences in
+# $SCRIPTS/refs, added once per PMID with, for example
+#
+#   /cluster/bin/scripts/getTrackReferences 42561917 | grep -v '^Failed to fetch' \
+#       > $SCRIPTS/refs/42561917.html
+
+$SCRIPTS/makeHtml.py
+
+##############################################################################
+# 4. the single genome hub
+##############################################################################
+# makeHub.py copies bTaeGut7.trackDb.txt into the hub, hardlinks each converted file
+# in under the
+# name the trackDb gives it, and adds the description pages.  hubtools names its output
+# after the file names in the session, so satellome.bb arrives called
+# bTaeGut7v04_MT_rDNAsatellomev01bed_14.bb; sourceTracks.tsv maps the two.  The script stops
+# if the trackDb and sourceTracks.tsv disagree, which is what happens when the authors
+# change the session.
+#
+# The result is a classic hub, the same shape splitHap produces, so one trackDb fits both:
+#   hub/hub.txt  hub/genomes.txt  hub/GCF_048771995.1/{trackDb.txt,data,description pages}
+#
+# The group settings are ignored while this is a track hub, but are correct for the day it
+# becomes a set of contributed native tracks: map, genes, varRep and regulation, all of
+# which exist both in the GenArk group set and in the native one.  Note that native hg38
+# splits Variation from Repeats while GenArk has a single "Variation and Repeats"; varRep
+# is the right name in both.
+
+$SCRIPTS/makeHub.py build hub
+hubCheck hub/hub.txt
+
+# to look at it, open
+#   https://genome.ucsc.edu/cgi-bin/hgTracks?db=GCF_048771995.1&hubUrl=<url>/hub/hub.txt
+
+##############################################################################
+# 5. the two genome hub
+##############################################################################
+# splitHap reads the chrom.sizes and chromAlias of both assemblies from GenArk, sends each
+# feature to the haplotype whose assembly has its sequence, renames the sequence to that
+# assembly's name, and rebuilds every bigBed and bigWig.  It writes a classic multi-genome
+# hub: hub.txt, genomes.txt and one directory per accession.
+
+hubtools splitHap hub/hub.txt GCF_048771995.1 GCA_048772025.1 -o split
+
+# hubCheck resolves the relative bigDataUrls of a multi-genome hub only over http, a local
+# path makes it report doubled directories that are not real:
+hubCheck https://<url>/split/hub.txt
+
+# split/splitHap.report.txt, committed here as splitHap.report.txt, has the per-track counts
+# per haplotype and everything that did not make it across.  splitHap checks every track as
+# it writes it (records read = records that matched a sequence + records that matched none,
+# and every match either produced an output record or was dropped) and stops rather than
+# write the report if a track does not add up.  All 21 tracks passed.
+#
+# What the split leaves behind:
+#  - 2022 records sit on chrMT, rDNA_morph_1, rDNA_morph_2 and rDNA_morph_3, which neither
+#    NCBI assembly contains.  They are in neither output hub.
+#  - 8 records reach past the end of their chromosome in the NCBI assembly.  bTaeGut7v0.4,
+#    which the annotations were computed on, is slightly longer than what was submitted:
+#    chr32_mat by 83 bp, chr8_mat by 35 bp and chr8_pat by 34 bp, with the other 77 shared
+#    sequences identical to the base.  3 were coverage records and were clipped to the
+#    chromosome end, 5 were features (3 newRegions, 2 nonBdna) and were dropped.
+#
+# The same length difference means the single genome hub in hub/ carries a handful of
+# features in the last few dozen bases of those three chromosomes that the browser will
+# never draw, because its chrom.sizes came from the session's own bigWigs rather than from
+# GenArk.
+
+##############################################################################
+# feature counts of the conversion, input against output
+##############################################################################
+# track            source features   in hub   note
+# gcPercent               -              -    bigWig, linked on GenomeArk, not converted
+# seqEntropy              -              -    bigWig, linked on GenomeArk, not converted
+# covClr                  -              -    bigWig, linked on GenomeArk, not converted
+# methyl5mC               -              -    bigWig, linked on GenomeArk, not converted
+# compartE1               -              -    bigWig, linked on GenomeArk, not converted
+# covHifi                 -              -    wig converted to bigWig, wigToBigWig -clip
+# covOnt                  -              -    wig converted to bigWig, wigToBigWig -clip
+# newRegions           27210          27210
+# largeSv                 42             42
+# centroMarkers          225            225
+# satellome              901            901
+# telomeres              160            160
+# itsRepeats             664            664
+# compartAB             3103           3103
+# centroSat             7013           7013
+# centroCores             80             80
+# transposons         530844         530844
+# tandemRepeats       981904         981904
+# egapx               142191         142191   transcript lines in the GTF
+# retrocopies            182            182   see below
+# nonBdna           11255564       11255555   9 dropped, see below
+#
+# The two wig coverage files need wigToBigWig -clip: their last fixedStep span runs a few
+# hundred bases past the end of each chromosome.  Only that overhang is clipped.
+#
+# nonBdna: 9 of 11,255,564 motifs reach past the end of their chromosome and are rejected
+# by bedToBigBed.  They are in the source file and are a defect there.
+#
+# retrocopies: the source GFF gives the maternal and the paternal copy of a retrocopy the
+# same ID, which GFF3 does not allow.  gff3ToGenePred merged the two into one transcript
+# spanning two chromosomes and then discarded it as invalid, which lost 31 of the 182
+# records.  hubtools now detects IDs that occur on more than one sequence (213 of them
+# here) and appends the sequence name to ID and Parent before conversion, so all 182
+# survive.  The same rewrite fires on the two centromere GFFs, which have the same defect,
+# though those go the flat-feature route and were not losing anything.
+#
+# Item names longer than 255 characters are truncated for display in tandemRepeats, where
+# the repeat unit is used as the name; the full unit is kept in an extra field.
+
+##############################################################################
+# kent changes this hub depends on
+##############################################################################
+# The description pages link to their container with
+#   <a href="hgTrackUi?db=$db&g=$parentTrack&hgsid=$hgsid">
+# A hub track's real name carries a hub_<id>_ prefix that is assigned per server, so the
+# link cannot be written out when the hub is built.  hg/lib/hVarSubst.c substitutes a short
+# list of variables in a hub track's description page at render time, called from hgTrackUi
+# and hgc, with $parentTrack resolving to the container.  Unknown variables and stray
+# dollar signs are left alone, so this cannot damage an existing hub's page.
+#
+# hubtools gained three things for this hub: the "import igv" subcommand, the "splitHap"
+# subcommand, a GFF3 duplicate-ID fix, and a preference for a non-numeric attribute as the
+# feature name, which is what turns the satellite tracks from "1", "2", "4" into
+# Motif:Tgut716A and friends.

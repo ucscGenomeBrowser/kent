@@ -1,0 +1,70 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack&amp;hgsid=$hgsid">Repeats</a> collection of the zebra finch telomere-to-telomere hub.
+</p>
+<p>
+Satellite DNA is tandemly repeated sequence present in very long arrays, usually in
+centromeric and subtelomeric heterochromatin. Individual satellite families are often specific
+to one species or a small group of species, which makes them useful markers of chromosome
+structure and evolution. This track shows 901 satellite arrays assigned to named families.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each array is drawn as a single feature named after its satellite family, for example
+Tgut716A, or TEL for terminal telomeric repeat.
+</p>
+
+<h2>Methods</h2>
+<p>
+Satellite sequences were identified de novo with SRF, run on the assembly, and with TAREAN,
+run on unassembled Nanopore reads from zebra finch testis after several rounds of subsetting
+with seqtk. Sequences of 20 bp or shorter were discarded and the rest were curated by hand.
+Further satellites were found by inspecting the repeats next to gaps in earlier zebra finch
+assemblies. RepeatMasker v4.1.5 was then used to place the resulting satellite set on the
+assembly. The satellite catalog was built with Satellome (<a href="https://github.com/aglabx/satellome" target="_blank">github.com/aglabx/satellome</a>).
+</p>
+<p>
+The file was taken from GenomeArk at <a href="https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/repeats/bTaeGut7v0.4_MT_rDNA.satellome.v0.1.bed" target="_blank">https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/repeats/bTaeGut7v0.4_MT_rDNA.satellome.v0.1.bed</a>. It is a text format that a track hub cannot use directly, so it was converted to a binary indexed file. The conversion, and the whole hub, is reproduced by the commands in src/hg/makeDb/doc/contrib/bTaeGut7.txt of the UCSC kent source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>satellome</i>.
+</p>
+
+<p>
+For automated download and analysis, this annotation is a bigBed file inside the hub. Individual
+regions or the whole annotation can be obtained with <tt>bigBedToBed</tt>, which can be compiled from
+source or downloaded as a precompiled binary; instructions are
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool also fetches a range, for example
+<tt>bigBedToBed &lt;hubUrl&gt;/GCF_048771995.1/satellome.bb -chrom=NC_133024.1 -start=0 -end=100000 stdout</tt>,
+where &lt;hubUrl&gt; is the directory this hub was loaded from.
+</p>
+<p>
+The original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>

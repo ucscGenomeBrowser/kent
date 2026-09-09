@@ -1,0 +1,79 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack&amp;hgsid=$hgsid">Structural Variation</a> collection of the zebra finch telomere-to-telomere hub.
+</p>
+<p>
+This track marks the sequence that the new assembly resolves and the previous zebra finch
+reference, bTaeGut1.4, did not contain or had collapsed. These regions are where most of the
+newly annotated genes are found, and they are strongly enriched for satellite DNA and other
+repeats. The track contains about 27,000 regions longer than 1 kb.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Plain blocks, one per region. Regions shorter than 1 kb were filtered out by the authors, so
+the track shows the substantial gains rather than every base of difference.
+</p>
+
+<h2>Methods</h2>
+<p>
+The new diploid assembly was aligned to the previous reference GCF_003957565.2 (bTaeGut1.4)
+with FastGA, and the resulting unassembled-region intervals were filtered to keep only those
+longer than 1 kb. Each gene was then classified by how it sits relative to these regions, and
+genes lying entirely inside one, or overlapping one over at least 75 percent of their length,
+were called putative novel or improved genes; novelty was checked by aligning the gene
+sequence back to bTaeGut1.4. The manuscript reports 2,710 genes gained this way, and a
+per-chromosome Fisher test of which feature types are enriched in these regions.
+</p>
+<p>
+The file was taken from GenomeArk at <a href="https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/PUR/bTaeGut7v0.4_MT_rDNA.PUR.fastga.v0.1.bed" target="_blank">https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/PUR/bTaeGut7v0.4_MT_rDNA.PUR.fastga.v0.1.bed</a>. It is a text format that a track hub cannot use directly, so it was converted to a binary indexed file. The conversion, and the whole hub, is reproduced by the commands in src/hg/makeDb/doc/contrib/bTaeGut7.txt of the UCSC kent source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>newRegions</i>.
+</p>
+
+<p>
+For automated download and analysis, this annotation is a bigBed file inside the hub. Individual
+regions or the whole annotation can be obtained with <tt>bigBedToBed</tt>, which can be compiled from
+source or downloaded as a precompiled binary; instructions are
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool also fetches a range, for example
+<tt>bigBedToBed &lt;hubUrl&gt;/GCF_048771995.1/newRegions.bb -chrom=NC_133024.1 -start=0 -end=100000 stdout</tt>,
+where &lt;hubUrl&gt; is the directory this hub was loaded from.
+</p>
+<p>
+The original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+<p>
+Myers G, Durbin R, Zhou C.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41262969" target="_blank">
+FastGA: fast genome alignment</a>.
+<em>Bioinform Adv</em>. 2025;5(1):vbaf238.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41262969" target="_blank">41262969</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12624442/" target="_blank">PMC12624442</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>

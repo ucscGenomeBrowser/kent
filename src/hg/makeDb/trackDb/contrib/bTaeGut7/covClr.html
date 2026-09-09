@@ -1,0 +1,63 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack&amp;hgsid=$hgsid">Read Coverage</a> collection of the zebra finch telomere-to-telomere hub.
+</p>
+<p>
+This track shows coverage of the older PacBio Continuous Long Reads, generated for the
+previous zebra finch reference bTaeGut1.4, after mapping them onto the new assembly. CLR reads
+have a much higher error rate than HiFi reads, and the places where their coverage falls away
+are a direct picture of what the earlier sequencing technology could not reach. Reading it
+next to the Previously Unassembled track shows why those regions were missing.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+A bar graph of read depth, autoscaled to the data in view. Note that these reads come from a
+different individual than the one this genome was assembled from, so some of the variation is
+genuine sequence difference rather than a property of the assembly.
+</p>
+
+<h2>Methods</h2>
+<p>
+PacBio CLR reads generated for the earlier bTaeGut1.4 reference, from a different individual,
+were mapped onto the bTaeGut7 assembly and depth was summarized in fixed windows.
+</p>
+<p>
+The file was taken from GenomeArk at <a href="https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/bTaeGut1/bTaeGut1.4_CLR.cov.bw" target="_blank">https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/bTaeGut1/bTaeGut1.4_CLR.cov.bw</a>. It is already in a binary indexed format that the browser reads over the network, so the track points at it where it is and no copy is kept in the hub. The hub is reproduced by the commands in src/hg/makeDb/doc/contrib/bTaeGut7.txt of the UCSC kent source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>covClr</i>.
+</p>
+
+<p>
+This track points straight at the file on GenomeArk rather than at a copy in the hub, so no
+download step is needed to work with it: <tt>bigWigToBedGraph</tt> reads it over the network, as does the browser.
+</p>
+<p>
+The original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>
