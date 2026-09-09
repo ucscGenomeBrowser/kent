@@ -71,7 +71,7 @@ for each successive variant away from the central variant.  By default, the medi
 the window is used. By clicking on a variant in the display, you will get the option to always 
 use that variant when it is in the current view.</p>
 <p>
-<strong>Haplotype coloring scheme:</strong> There are three ways that reference and alternate 
+<strong>Haplotype coloring scheme:</strong> There are four ways that reference and alternate 
 alleles can be colored:</p>
 <ul>
   <li>
@@ -82,6 +82,11 @@ alleles can be colored:</p>
   are hard to see due when the invisible reference allele is the major allele. Variants used in 
   clustering have purple marks in these rows; variants outside the clustered regions have black 
   marks.</li>
+  <li>
+  The reference allele is invisible and the alternate allele is colored by the effect it is
+  predicted to have on the gene: red for non-synonymous, green for synonymous, blue for UTR or
+  noncoding, and black otherwise. This option is offered only when the track has a
+  <strong>geneTrack</strong> setting naming the gene track to compare against.</li>
   <li>
   The reference allele is blue and the alternate allele is red. Purple indicates a mix of 
   reference and alternate alleles. The central variant has a thick black outline.</li>
