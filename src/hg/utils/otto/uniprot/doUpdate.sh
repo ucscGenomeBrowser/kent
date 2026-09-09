@@ -37,9 +37,15 @@ if ! ./uniprotToTab --help > /dev/null 2>&1; then
     exit 1
 fi
 
+# A killed run would otherwise leave a START with no matching line, which reads the same
+# as a run that is still going. Say it was interrupted, and drop the lock file, which
+# doUniprot's own atexit handler does not get to run on a signal.
+trap 'logRun "INTERRUPTED killed by a signal"; rm -f /hive/data/outside/uniProt/current/doUniprot.lock; exit 130' INT TERM HUP
+
 logRun "START"
 ./doUniprot run > lastRun.log 2>&1
 exitCode=$?
+trap - INT TERM HUP
 logRun "END exit=$exitCode"
 
 if grep -q "Is a doUniprot process already running" lastRun.log ; then
