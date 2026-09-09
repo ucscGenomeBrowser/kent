@@ -6,6 +6,14 @@ possible single-base substitution at every position in the genome, about 8.8 bil
 Unlike predictors that only cover protein-coding changes, the AVI score is defined genome wide,
 so it also scores variants in introns and in intergenic regulatory regions.
 </p>
+<p>
+For an introduction to AlphaGenome and to the AVI score, see the
+<a href="https://deepmind.google.com/science/alphagenome/learning" target="_blank">AlphaGenome
+educational guides</a> at Google DeepMind. The resource and the score are described in detail in
+the
+<a href="https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphagenome-atlas-a-predictive-map-of-every-possible-dna-letter-change-in-the-human-genome/alphagenome-atlas.pdf"
+target="_blank">AlphaGenome Atlas preprint</a>.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -20,9 +28,11 @@ The source data gives two numbers per variant, a raw model score and a PHRED-sca
 it. This track displays the PHRED-scaled score, which is easier to compare across variants: it
 is a rank in which 10 corresponds to the top 10 percent of the most impactful substitutions in
 the genome, 20 to the top 1 percent, and 30 to the top 0.1 percent. Higher values therefore
-indicate a variant predicted to be more damaging. Most positions score low, with a genome-wide
-median near 1.6, so the default view is scaled to 0 to 30 rather than to the observed maximum
-of about 89.
+indicate a variant predicted to be more damaging. Any score above 20 can be considered high, and
+the authors recommend treating 50 as the top of the useful range. Most positions score low, with
+a genome-wide median near 1.6, so the default view is scaled to 0 to 30 rather than to the
+observed maximum of about 89. Scores above the top of the range are drawn clipped at the top of
+the graph; the range can be changed on the track configuration page.
 </p>
 <p>
 Individual scores are only shown when the view is zoomed in far enough. At wider zoom levels the
@@ -36,8 +46,11 @@ a variant: AlphaGenome regulatory predictions, AlphaMissense pathogenicity score
 that fall in coding sequence, measures of evolutionary sequence conservation, and further
 functional annotations. Google DeepMind precomputed the score for all single-base substitutions
 in GRCh38 and released it as a tab-separated, tabix-indexed table of chromosome, position,
-reference allele, alternate allele, raw score and PHRED score. Note that the score has not yet
-been described in a peer-reviewed publication.
+reference allele, alternate allele, raw score and PHRED score. The method is described in the
+AlphaGenome Atlas preprint (see References below), which has been submitted for peer review but
+is not yet published. The authors do not define a pathogenicity cutoff, but recommend that users
+adopt genomic region- or application-aware thresholds, and prefer ranking variants by score over
+applying a hard cutoff where possible.
 </p>
 <p>
 The scores can be downloaded from the
@@ -74,4 +87,14 @@ be used for clinical purposes or relied on for medical advice.
 <p>
 Thanks to Dhavanthi Hariharan, Francesca Pietra, Tom Ward and Elisa Wong at Google DeepMind for
 providing this dataset and for their help with the track description.
+</p>
+
+<h2>References</h2>
+<p>
+Cheng J, Taylor KR, Nicolaisen L, Pan J, Bycroft C, Perino M, Ward T, Hawkes G, Covill LE,
+Weilert M <em>et al</em>.
+<a href="https://storage.googleapis.com/deepmind-media/DeepMind.com/Blog/alphagenome-atlas-a-predictive-map-of-every-possible-dna-letter-change-in-the-human-genome/alphagenome-atlas.pdf"
+target="_blank">AlphaGenome Atlas: in silico mutagenesis of the entire human genome improves
+prioritization and interpretation of non-coding variants</a>. Preprint, 2026. Submitted for peer
+review.
 </p>
