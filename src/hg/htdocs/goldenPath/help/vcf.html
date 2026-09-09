@@ -181,6 +181,16 @@ The remaining settings are OPTIONAL.  Some are specific to VCF:</p>
 <strong>minQual             </strong><em>Q                      </em> # minimum value of Q column to display item, conditional on applyMinQual
 <strong>minFreq             </strong><em>F                      </em> # minimum minor allele frequency to display item; default 0.0 </code></pre>
 <p>
+These VCF settings are also recognized. They are used mainly in track hubs and are rarely
+needed in a custom track line:</p>
+<pre><code><strong>hapClusterMethod </strong><em>centerWeighted|fileOrder|treeFile url</em> # haplotype sort order, default centerWeighted
+<strong>sampleColorFile  </strong><em>url                                  </em> # sample-to-color table, used with hapClusterMethod treeFile
+<strong>minAc            </strong><em>N                                    </em> # minimum alternate allele count to display item; default 0
+<strong>vcfDoQual        </strong><em>true|false                           </em> # show the QUAL controls on the configuration page; default true
+<strong>vcfDoFilter      </strong><em>true|false                           </em> # show the FILTER controls; default true
+<strong>vcfDoMaf         </strong><em>true|false                           </em> # show the allele frequency control; default true
+<strong>vcfDoMinAc       </strong><em>true|false                           </em> # show the allele count control; default true</code></pre>
+<p>
 Other optional settings are not specific to VCF, but relevant:</p>
 <pre><code><strong>name            </strong><em>track label                </em> # default is "User Track"
 <strong>description     </strong><em>center label               </em> # default is "User Supplied Track"
@@ -189,6 +199,15 @@ Other optional settings are not specific to VCF, but relevant:</p>
 <strong>db              </strong><em>genome database            </em> # e.g. hg19 for Human Feb. 2009 (GRCh37)
 <strong>maxWindowToDraw </strong><em>N                          </em> # don't display track when viewing more than N bases
 <strong>chromosomes     </strong><em>chr1,chr2,...              </em> # track contains data only on listed reference assembly sequences </code></pre>
+<p>
+The <strong>visibility</strong> setting controls what the track draws, not just how tightly it is
+packed. In <strong>pack</strong> or <strong>squish</strong> mode, a VCF that has genotype columns
+for two or more samples is drawn as the haplotype sorting display, in which each sample's
+haplotypes run horizontally across the image. In <strong>full</strong> mode the track draws one
+row per variant, and in <strong>dense</strong> mode it collapses every variant onto a single row.
+The hapCluster settings above are ignored in those two modes, and also whenever
+<strong>hapClusterEnabled</strong> is false or the file has no genotypes.</p>
+<p>
 The <a target="_blank" href="hgVcfTrackHelp.html">VCF track configuration</a> help page
 describes the VCF track configuration page options.</p>
 
