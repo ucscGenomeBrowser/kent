@@ -5,21 +5,17 @@ import logging, optparse, sys, glob, gzip, collections, copy, gzip, os, doctest,
 from os.path import *
 from collections import defaultdict
 
-# lxml is not part of the python standard library. On hgwdev it comes from the
-# system package python3-lxml, which is upgraded together with /usr/bin/python3.
-# Do not put a private site-packages directory on sys.path here: this file used to
-# append one from a personal conda environment built for python 3.6, and when the
-# system python moved to 3.9 the compiled lxml in it stopped loading. Every monthly
-# UniProt update then died at this line and the tracks sat unchanged for 19 months
-# before anyone noticed (see redmine #38300).
+# lxml is not part of the python standard library and hgwdev has no system-wide copy.
+# The otto pipeline gets it from a virtualenv, see makeVenv.sh in the otto/uniprot
+# directory. Do not append a site-packages directory to sys.path here: pointing at one
+# person's conda environment is what silently broke the monthly update. refs #38300
 try:
     from lxml import etree # if this fails, comment out this line and uncomment the next one
     #import xml.etree.cElementTree as etree # if using this line, search for cElementTree in this file and comment out the other part
 except ImportError as ex:
-    raise Exception("Cannot import lxml.etree with %s: %s. On hgwdev this module comes "
-        "from the system package python3-lxml. Check with: python3 -c 'import lxml.etree'. "
-        "If the system python does not have it, install it with 'pip install --user lxml' or "
-        "build a private environment, see the README in the otto/uniprot directory." %
+    raise Exception("Cannot import lxml.etree with %s: %s. For the otto pipeline, activate "
+        "the virtualenv ('source venv/bin/activate' in the otto/uniprot directory) or "
+        "rebuild it with ./makeVenv.sh there. Otherwise: pip install lxml" %
         (sys.executable, ex))
 
 debugMode=False

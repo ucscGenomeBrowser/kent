@@ -1,16 +1,12 @@
 PREFIX=/hive/data/outside/otto/uniprot/
 PARSER=../../../../utils/uniprotToTab
 
-# Everything doUniprot calls at run time has to be listed here, otherwise the copy that
-# cron runs is not under version control. uniprotToTab, pslProtCnv and
-# trackDb.template.txt were all missing from this list for years, and the copy of
-# uniprotToTab in ${PREFIX} drifted away from the tree until it stopped working (#38300).
+# Everything doUniprot calls at run time must be listed here, or the copy that cron runs
+# is not under version control. refs #38300
 FILES=*.sh *.as doUniprot mapUniprot_doBlast pslProtCnv trackDb.template.txt README.txt ${PARSER}
 
-# A plain syntax check, using nothing but the python that will run the scripts. This used
-# to be "pylint -E", but every pylint on hgwdev is itself pinned to a python that no longer
-# exists (/cluster/software/bin/pylint wants a gone python3, ~/.local/bin/pylint wants
-# python2), so "make install" aborted on its first line and nobody could install anything.
+# Not "pylint -E": every pylint on hgwdev is itself pinned to a python that no longer
+# exists, so "make install" used to abort on its first line.
 SYNTAXCHECK=python3 -c 'import ast,sys; [ast.parse(open(f).read(), f) for f in sys.argv[1:]]'
 
 install:

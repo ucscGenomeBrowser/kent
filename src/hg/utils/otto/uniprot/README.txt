@@ -1,56 +1,54 @@
 UniProt mapping pipeline, Max 2016/2017, updates in 2021
 
-This is the automated pipeline that updates the UniProt tracks from UniProt.org.
-UniProt puts out a new release every month, see http://www.uniprot.org/news/
+Updates the UniProt tracks from UniProt.org, which puts out a new release every
+month. See http://www.uniprot.org/news/
 
-Two copies of these scripts exist and they are not the same file:
-  the tree copy, src/hg/utils/otto/uniprot in the kent repo, is the one to edit
-  the live copy, /hive/data/outside/otto/uniprot, is the one cron runs
-Edit the tree copy, commit, then "make install" to push it out. "make diff" lists
-files that have drifted apart, which is worth checking now and then: the rsync in
-"make install" uses -u and so refuses to overwrite a live file that is newer than
-the tree, which means a hand edit of the live copy wins silently and forever.
+Two copies of these scripts exist. Edit the one in the kent tree,
+src/hg/utils/otto/uniprot, commit, then "make install" to push it out. The one
+cron runs is /hive/data/outside/otto/uniprot. "make diff" lists files that have
+drifted apart, worth checking now and then: the rsync in "make install" uses -u
+and will not overwrite a live file that is newer than the tree.
+
+How it is started:
+
+Cron, from otto's crontab, on the 26th of the month:
+
+    00 07 26 * * /hive/data/outside/otto/uniprot/doUpdate.sh run
+
+doUpdate.sh activates venv/, checks that the parser can start, runs doUniprot and
+reports the outcome. To start a run by hand, use doUpdate.sh, not doUniprot, so
+the environment and the logging are the same as under cron.
 
 Python environment:
 
-uniprotToTab needs the lxml XML parser, which is not in the python standard
-library. On hgwdev it comes from the system package python3-lxml, and the two are
-upgraded together, so nothing here has to be maintained. Check it with:
+uniprotToTab needs the lxml XML parser. It is not in the python standard library
+and hgwdev has no system-wide copy, so it lives in a virtualenv in venv/. Build
+or rebuild it with:
 
-    python3 -c 'import lxml.etree'
+    cd /hive/data/outside/otto/uniprot && ./makeVenv.sh
 
-Do not put a private virtualenv or conda environment in the path of this pipeline
-without reading redmine #38300 first. There used to be a venv/ directory here, and
-uniprotToTab appended a personal conda site-packages directory to sys.path. Both
-were built for python 3.6 and a venv's python is only a symlink to the system one,
-so when hgwdev moved to python 3.9 the compiled lxml stopped loading. Every monthly
-run then died at the parse step and the tracks sat on release 2024_06 for nineteen
-months. If the system python ever loses lxml, the pipeline now says so loudly on
-the very first second of the run; the repair is to get python3-lxml back, or, as a
-last resort, to build a self-contained conda environment (not a venv, which does
-not carry its own python) and point the shebang of uniprotToTab at it.
+Note that ~/.local is not enough: cron runs this as otto, which does not see
+anyone else's per-user python packages.
 
-Did it run? Failures:
+Did it run?
 
-doUpdate.sh appends one line per run to runLog.txt in the live directory, and that
-file is never truncated, so it is the history of the job:
+runLog.txt gets one line per run and is never truncated, so it is the history of
+the job:
 
     START      a run began
     NOCHANGE   UniProt had no new release, nothing to do, no mail sent
     OK         new release, tracks rebuilt
     FAIL       the run died, exit code and log named on the line
 
-lastRun.log holds the log of the most recent run and is overwritten every month.
-When a run fails, doUpdate.sh keeps a copy as lastFail.log so the evidence is still
-there next month, and mails the last 25 lines to the addresses on the MAILTO line
-in otto's crontab. A month with no new UniProt release sends no mail at all, which
-is the normal otto behaviour, so silence means "nothing to do", not "it worked".
+lastRun.log is the log of the most recent run and is overwritten every month. A
+failing run is kept as lastFail.log, and its last 25 lines are mailed to the
+MAILTO addresses in otto's crontab. A month without a new UniProt release sends
+no mail, so silence means "nothing to do", not "it worked".
 
 version.txt in each bigBed/<db> directory is what the trackDb dataVersion setting
 shows on the track description page. It is only rewritten when the release string
-actually changes, so its date on disk is the date the data last moved, not the date
-the pipeline last ran. Do not "fix" this by rewriting it every run: an unchanged
-file with a fresh date is what made the nineteen-month stall look healthy.
+changes, so its date on disk is the date the data last moved, not the date the
+pipeline last ran.
 
 Directories:
 
@@ -127,6 +125,4 @@ assumptions that may need tweaking one day:
 - I am not sure how to speed up the alignment. NCBI suggests to change the chunking, and create
   e.g. one query file for 10 queries and one query file for 10 targets, and align only
   queries to known targets. Was too much work, so for now the BLAST runs are a bit slow.
-
-   
 

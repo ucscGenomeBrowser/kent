@@ -7,18 +7,21 @@ umask 002
 #echo WARNING: NOT DOWNLOADING
 #./doUniprot run --skipDownload
 
-# There is deliberately no virtualenv here anymore. uniprotToTab needs the lxml XML
-# parser, which on hgwdev comes from the system package python3-lxml and is upgraded
-# together with /usr/bin/python3. A virtualenv used to sit in venv/ instead, but its
-# python was only a symlink to /usr/bin/python3: when the system python moved from 3.6
-# to 3.9 the compiled lxml in the venv stopped loading, every monthly run died at the
-# parse step, and the tracks stayed on release 2024_06 for 19 months (redmine #38300).
-
 runLog=runLog.txt
 
 logRun() {
     echo "`date '+%Y-%m-%d %H:%M:%S'` $*" >> $runLog
 }
+
+# activate the python environment that has the lxml XML parser. Rebuild it with
+# ./makeVenv.sh if this fails.
+if [ ! -f venv/bin/activate ] ; then
+    logRun "PREFLIGHT-FAIL no venv"
+    echo "UniProt update did not start: venv/bin/activate is missing."
+    echo "Rebuild it with: cd /hive/data/outside/otto/uniprot && ./makeVenv.sh"
+    exit 1
+fi
+. venv/bin/activate
 
 # Do not spend 35 minutes downloading UniProt only to find out that the parser cannot
 # start. Run it with --help, which imports lxml and then exits, and stop here if that
@@ -27,9 +30,8 @@ if ! ./uniprotToTab --help > /dev/null 2>&1; then
     logRun "PREFLIGHT-FAIL uniprotToTab cannot start"
     echo "UniProt update did not start: ./uniprotToTab cannot be run."
     echo
-    echo "Almost certainly the lxml python module is missing. Check with:"
-    echo "    python3 -c 'import lxml.etree'"
-    echo "and see /hive/data/outside/otto/uniprot/README.txt for how to repair it."
+    echo "The lxml python module does not import. Rebuild the environment with:"
+    echo "    cd /hive/data/outside/otto/uniprot && ./makeVenv.sh"
     echo
     ./uniprotToTab --help 2>&1 | tail -20
     exit 1

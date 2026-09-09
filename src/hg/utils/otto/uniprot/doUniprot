@@ -1968,10 +1968,8 @@ def writeReleaseString(uprotDir, tabDir):
 
 def checkParserDeps():
     """ make sure that uniprotToTab can start up at all, i.e. that its XML library imports.
-    Called before the download, because the download takes over half an hour and it is
-    pointless to run it when the parser that comes next cannot start. This check exists
-    because exactly that happened for 19 months: the lxml module could not be imported,
-    every run died right here and the tracks stayed on release 2024_06 (redmine #38300).
+    Called before the download, which takes over half an hour, so a missing lxml is
+    reported in the first second of a run instead of after it. refs #38300
     """
     parserFname = join(dirname(__file__), "uniprotToTab")
     if not isfile(parserFname):
@@ -1981,7 +1979,8 @@ def checkParserDeps():
     if os.system("%s --help > /dev/null 2>&1" % parserFname) != 0:
         os.system("%s --help" % parserFname) # show the error message in the log
         errAbort("%s cannot be run, see the error above. Most likely the lxml python module "
-                "is not importable. Check with: python3 -c 'import lxml.etree'" % parserFname)
+                "does not import. Activate the venv with 'source venv/bin/activate', or "
+                "rebuild it with ./makeVenv.sh" % parserFname)
 
 def updateUniprot(args, onlyDbs, taxIdDbs, options):
     " This is the main function that runs a single uniprot update for a list of DBs "
@@ -2323,12 +2322,10 @@ def createVersionFiles(tabDir, bigBedDir, onlyDbs, taxIdDbs):
             fullVersion = versionString + (", mapped to genome through gene transcripts from %s %s on %s (taxId %s, %s)" % \
                 (liftInfo["geneTable"], liftInfo["version"], liftInfo["createdDate"], liftInfo["taxId"], liftInfo["fullMd5"]))
 
-            # Write only when the string really changed. This file is what the trackDb
-            # dataVersion setting shows in the track description, and its date on disk is
-            # what everyone looks at to decide whether the pipeline is still alive.
-            # Rewriting an identical file every run makes a track that has not moved for a
-            # year look like it was updated yesterday, which is how the 19-month stall in
-            # redmine #38300 stayed hidden. An unchanged track keeps its old date.
+            # Write only when the release string really changed. This file feeds the
+            # trackDb dataVersion setting and its date is what people check to see whether
+            # the pipeline is alive, so rewriting an identical file would make a stalled
+            # track look freshly updated. refs #38300
             oldVersion = None
             if isfile(versionFname):
                 oldVersion = open(versionFname, encoding="utf8").read()
