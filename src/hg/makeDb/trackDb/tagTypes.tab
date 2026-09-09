@@ -320,6 +320,7 @@ metadata *
 mergeSpannedItems bigBed
 mgiUrl bed
 mgiUrlLabel bed
+minAc vcf vcfTabix vcfPhasedTrio
 minFreq vcf vcfTabix
 minGrayLevel bed broadPeak narrowPeak bedLogR bigBed
 minLimit *
@@ -624,6 +625,7 @@ useScore *
 vcfDoFilter vcf vcfTabix vcfPhasedTrio
 vcfDoQual vcf vcfTabix vcfPhasedTrio
 vcfDoMaf vcf vcfTabix vcfPhasedTrio
+vcfDoMinAc vcf vcfTabix vcfPhasedTrio
 view *
 viewLimits *
 viewLimitsMax bed bedGraph wig bigWig
