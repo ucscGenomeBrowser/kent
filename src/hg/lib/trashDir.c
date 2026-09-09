@@ -48,12 +48,22 @@ static boolean pathIsUnderDirOrItsTarget(char *dir, char *path)
 /* pathIsUnderDir(), but also accept a path under the directory that dir resolves to.  A
  * configured directory is often reached through a symlink, and sessionData.c stores the
  * resolved spelling of a path whose file is already a symlink, so both spellings turn up in
- * saved sessions.  Only dir is resolved.  Resolving path would defeat the check, because a
- * trash file is often a symlink into session storage on purpose. */
+ * saved sessions.
+ *
+ * Only dir is resolved.  Resolving path would defeat the check, because a trash file is
+ * often a symlink into session storage on purpose.  Only an absolute dir is resolved, so
+ * the answer cannot depend on the working directory of the process.
+ *
+ * Only this one direction is covered: a dir configured as the already-resolved spelling
+ * does not accept a path written through the symlink.
+ *
+ * Do not use this on trashDir().  It is a relative path, "../trash", and
+ * sessionDataPathFromTrash() substitutes exactly that spelling, so accepting the resolved
+ * spelling here would hand that function a path it cannot rewrite. */
 {
 if (pathIsUnderDir(dir, path))
     return TRUE;
-if (isEmpty(dir))
+if (isEmpty(dir) || dir[0] != '/')
     return FALSE;
 char resolved[PATH_MAX];
 if (realpath(dir, resolved) == NULL)
@@ -64,7 +74,7 @@ return pathIsUnderDir(resolved, path);
 boolean isTrashPath(char *path)
 /* Return TRUE if path names a file inside the trash directory. */
 {
-return pathIsUnderDirOrItsTarget(trashDir(), path);
+return pathIsUnderDir(trashDir(), path);
 }
 
 boolean isTrashOrSessionDataPath(char *path)
