@@ -21,6 +21,7 @@ int trf409_l = 0;	/* trf 4.09 new option -l, from trf usage message:
 -l <n> maximum TR length expected (in millions) (eg, -l 3 or -l=3 for 3 million)
                   Human genome HG38 would need -l 6
 */
+int chunkMaxSize = 5000000;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] =
@@ -30,6 +31,7 @@ static struct optionSpec optionSpecs[] =
     {"tempDir", OPTION_STRING},
     {"trf", OPTION_STRING},
     {"maxPeriod", OPTION_INT},
+    {"chunkMaxSize", OPTION_INT},
     {"keep", OPTION_BOOLEAN},
     {"l", OPTION_INT},
     {NULL, 0}
@@ -52,11 +54,12 @@ errAbort(
   "   -tempDir=dir Where to put temp files.\n"
   "   -trf=trfExe explicitly specifies trf executable name\n"
   "   -maxPeriod=N  Maximum period size of repeat (default %d)\n"
+  "   -chunkMaxSize=N  Maximum sequence size for internal breakup (default %d)\n"
   "   -keep  don't delete tmp files\n"
   "   -l=<n> when used here, for new trf v4.09 option:\n"
   "          maximum TR length expected (in millions)\n"
   "          (eg, -l=3 for 3 million), Human genome hg38 would need -l=6",
-  maxPeriod);
+  maxPeriod, chunkMaxSize);
 }
 
 void writeSomeDatToBed(char *inName, FILE *out, char *chromName, int chromOffset,
@@ -173,7 +176,7 @@ for (i=0; i<size; i += oneSize)
 void trfBig(char *input, char *output)
 /* trfBig - Mask tandem repeats on a big sequence file.. */
 {
-int maxSize = 5000000;
+int maxSize = chunkMaxSize;
 int overlapSize = 10000;
 int start, end, s, e;
 int halfOverlapSize = overlapSize/2;
@@ -298,6 +301,7 @@ trfExe = optionVal("trf", trfExe);
 doBed = optionExists("bed") || optionExists("bedAt");
 tempDir = optionVal("tempDir", tempDir);
 maxPeriod = optionInt("maxPeriod", maxPeriod);
+chunkMaxSize = optionInt("chunkMaxSize", chunkMaxSize);
 keep = optionExists("keep");
 trfBig(argv[1], argv[2]);
 return 0;
