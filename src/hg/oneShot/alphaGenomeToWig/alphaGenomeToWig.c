@@ -33,6 +33,7 @@ static long long variantCount = 0;
 static long long skipFieldCount = 0;
 static long long skipMultiBase = 0;
 static long long skipBadNucl = 0;
+static long long skipNoScore = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -127,6 +128,8 @@ if (skipMultiBase)
 if (skipBadNucl)
     fprintf(stderr, "skipped %lld lines whose alt allele was not A, C, G or T\n",
 	    skipBadNucl);
+if (skipNoScore)
+    fprintf(stderr, "skipped %lld lines with an empty score\n", skipNoScore);
 
 long long total = 0, fills = 0, sections = 0;
 int i;
@@ -141,9 +144,12 @@ for (i = 0; i < 4; ++i)
     }
 fprintf(stderr, "wrote %lld values in %lld sections, %lld of them zero fills\n",
 	total, sections, fills);
-if (variantCount + fills != total)
-    errAbort("value accounting is off: %lld scores + %lld fills != %lld written",
-	     variantCount, fills, total);
+/* Compare what came out with what went in, not with itself: total is variantCount plus fills by
+ * construction, so a check between those two can never fail and would validate nothing. */
+long long skipped = skipFieldCount + skipMultiBase + skipBadNucl + skipNoScore;
+if (lineCount - skipped != variantCount)
+    errAbort("line accounting is off: %lld data lines - %lld skipped != %lld scores written",
+	     lineCount, skipped, variantCount);
 }
 
 void alphaGenomeToWig(char *inFile)
@@ -171,7 +177,9 @@ while (lineFileNext(lf, &line, NULL))
 	}
 
     char *chrom = row[0];
-    int pos = lineFileNeedNum(lf, row, 1);
+    /* NeedFullNum, not NeedNum: the latter stops at the first non-digit, so a thousands-separated
+     * "12,345,678" would come through as position 12 and never be noticed. */
+    int pos = lineFileNeedFullNum(lf, row, 1);
     char *alt = row[3];
     char *scoreText = row[5];
 
@@ -199,6 +207,13 @@ while (lineFileNext(lf, &line, NULL))
     if (nuclPos == NULL)
 	{
 	skipBadNucl += 1;
+	continue;
+	}
+    /* The score is copied through as text, so an empty field would write a blank wig line and
+     * wigToBigWig would report it far from the line that caused it. */
+    if (isEmpty(scoreText))
+	{
+	skipNoScore += 1;
 	continue;
 	}
 

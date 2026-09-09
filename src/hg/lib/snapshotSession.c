@@ -14,6 +14,7 @@
 #include "md5.h"
 #include "htmshell.h"
 #include "sessionData.h"
+#include "trashDir.h"
 #include "snapshotSession.h"
 
 /* Bits of randomness in a server-generated snapshot token.  128 bits -> ~24 URL-safe chars, so
@@ -143,9 +144,12 @@ for (i = 0;  type->vars[i] != NULL;  i++)
         continue;
     /* Move the referenced trash file into durable storage when sessionData is configured, and store
      * the durable path.  sessionDataSaveTrashFile returns NULL if the file is gone (expired) - in
-     * that case keep the original value so the reconstruct path can report a clean "expired". */
+     * that case keep the original value so the reconstruct path can report a clean "expired".
+     *   Only a trash path is ours to move, and the value came out of the cart, so check it the way
+     * sessionData.c's own callers do.  A value that is already a durable path (a snapshot being
+     * re-shared) or anything else is stored as it stands. */
     char *durable = NULL;
-    if (isNotEmpty(sessionDir))
+    if (isNotEmpty(sessionDir) && isTrashPath(val))
         durable = sessionDataSaveTrashFile(val, sessionDir);
     appendVar(dy, var, isNotEmpty(durable) ? durable : val);
     freez(&durable);

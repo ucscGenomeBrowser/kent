@@ -222,6 +222,14 @@ var topLinks = (function() {
     //   also gets a "Specify name" button.  url mode passes no opts → just the link + Copy.
     function showResult(body, url, opts) {
         opts = opts || {};
+        // No link to show.  postJson also routes a name-clash reply here, and only the create
+        // step knows what to do with one, so say so rather than printing "undefined" as the link.
+        if (!url) {
+            body.innerHTML = "";
+            body.appendChild(el("p", {textContent: "Could not create the link. Please try again."},
+                {marginTop: "0", color: "#a00"}));
+            return;
+        }
         var canRename = opts.session && opts.loggedIn;
         body.innerHTML = "";
         // Saved sessions and plain page URLs never expire; an anonymous snapshot link (the BLAT
@@ -243,16 +251,12 @@ var topLinks = (function() {
         var copyBtn = el("button", {title: "Copy URL to clipboard"});
         copyBtn.setAttribute("data-target", "tlShareUrl");
         copyBtn.innerHTML = clipboardSvg + "Copy to clipboard";
+        var copied = false;
         copyBtn.addEventListener("click", function(ev) {
-            if (typeof copyToClipboard === "function") copyToClipboard(ev);
+            if (typeof copyToClipboard === "function")
+                copied = copyToClipboard(ev);
         });
         btnRow.appendChild(copyBtn);
-
-        // One-click "Create link & copy": copy right after the session is created.  execCommand copy
-        // still runs while the modal is focused; if a browser blocks it the URL box and Copy button
-        // above are the manual fallback.
-        if (opts.autoCopy)
-            copyBtn.click();
 
         if (canRename) {
             var nameBtn = el("button", {textContent: "Specify name"}, {marginLeft: "8px"});
@@ -260,6 +264,30 @@ var topLinks = (function() {
             btnRow.appendChild(nameBtn);
         }
         body.appendChild(btnRow);
+
+        // One-click "Create link & copy": copy now that the button is on the page.  The copy runs
+        // out of the reply to the save request rather than out of a click of the user's own, and a
+        // browser may refuse it on those grounds, so say which of the two happened instead of
+        // promising the clipboard either way.  autoCopy is spent here: coming back to this view,
+        // e.g. by cancelling out of the name editor, must not copy a second time.
+        if (opts.autoCopy) {
+            opts.autoCopy = false;
+            copyBtn.click();
+            if (!copied) {
+                var note = el("p", {textContent: "Your browser did not allow the copy. Use the " +
+                    "button above to copy the link."}, {marginTop: "8px", color: "#a00"});
+                body.appendChild(note);
+                // The asynchronous clipboard API does not need a click of the user's, so it can
+                // still get there in a browser that grants the permission.  Only then is the
+                // warning wrong, so take it back.
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(function() {
+                        copyBtn.innerHTML = "Copied";
+                        note.remove();
+                    }, function() { });
+                }
+            }
+        }
 
         if (opts.session)
             appendManageNote(body, opts.loggedIn);
@@ -409,16 +437,30 @@ var topLinks = (function() {
         return "_" + randChars(8);
     }
 
+    // Encode a session name the way the server does, i.e. cgiEncodeFull() in lib/cheapcgi.c: a
+    // letter, a digit, "." and "_" stay, everything else becomes %XX.  encodeURIComponent keeps
+    // seven more characters than that, "-" among them, so a name like "fig3-b" would be previewed
+    // as a link the server never makes.
+    function cgiEncodeFull(s) {
+        return encodeURIComponent(s).replace(/[-!~*'()]/g, function(c) {
+            return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+        });
+    }
+
     // Build the exact share URL for a given session name, matching addSessionLink() in hgSession.c:
     // a short "/s/<user>/<name>" link when hgSession.shortLink is on, otherwise the long hgTracks
     // hgS_doOtherUser form.  Logged out, the owner is the reserved anonymous user "l".
     function shareUrlFor(opts, name) {
         var user = opts.loggedIn ? opts.userName : "l";
+        var encUser = cgiEncodeFull(user);
+        var encName = cgiEncodeFull(name);
         var origin = window.location.protocol + "//" + window.location.host;
-        if (opts.shortLink)
-            return origin + "/s/" + encodeURIComponent(user) + "/" + encodeURIComponent(name);
+        // A "/" in either name rules out the short form, since apache's redirect splits the path on
+        // it; addSessionLink() falls back to the long link in that case, so the preview must too.
+        if (opts.shortLink && encUser.indexOf("%2F") < 0 && encName.indexOf("%2F") < 0)
+            return origin + "/s/" + encUser + "/" + encName;
         return origin + "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=" +
-            encodeURIComponent(user) + "&hgS_otherUserSessionName=" + encodeURIComponent(name);
+            encUser + "&hgS_otherUserSessionName=" + encName;
     }
 
     // The initial session-mode view: preview the final link (not yet active), then a single button
@@ -432,8 +474,8 @@ var topLinks = (function() {
         body.innerHTML = "";
         var autoName = presetAutoName || shareName();
         body.appendChild(el("p", {textContent: "This link points to your current view and never " +
-            "times out. It becomes active — and is copied to your clipboard — when you click the " +
-            "button below."}, {marginTop: "0"}));
+            "times out. It becomes active when you click the button below, which also copies it " +
+            "to your clipboard."}, {marginTop: "0"}));
 
         // Optional custom name (logged in only): leave it blank to use the generated name above.
         // A short, space-free name keeps the link tidy (it becomes part of the URL).

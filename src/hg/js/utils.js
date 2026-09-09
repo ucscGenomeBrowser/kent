@@ -49,6 +49,8 @@ function copyToClipboard(ev) {
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
      * The text is either in the attribute data-copy or the innerText.
      * see C function printCopyToClipboardButton(iconId, targetId);
+     * Returns true if the text really reached the clipboard.  A browser will refuse a copy that no
+     * click of the user's asked for, so a caller that copies on its own behalf has to check.
      * */
      
     ev.preventDefault();
@@ -72,10 +74,16 @@ function copyToClipboard(ev) {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    document.execCommand('copy');
+    var ok = false;
+    try {
+        ok = document.execCommand('copy');
+    } catch (e) {
+        ok = false;
+    }
     document.body.removeChild(textArea);
-    buttonEl.innerHTML = 'Copied';
-    ev.preventDefault();
+    if (ok)
+        buttonEl.innerHTML = 'Copied';
+    return ok;
 }
 
 function cfgPageOnVisChange(ev) {

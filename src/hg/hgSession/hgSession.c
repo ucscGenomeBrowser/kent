@@ -378,6 +378,10 @@ int rowIdx = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *encSessionName = row[0];
+    /* A snapshot is a share token, not a session the user made and would recognize (see
+     * lib/snapshotSession.c).  Leave it out of the list, as its "__" prefix promises. */
+    if (snapshotIsSnapshotName(encSessionName))
+        continue;
     char *sessionName = cgiDecodeClone(encSessionName);
     char *link = NULL;
     int shared = atoi(row[1]);
@@ -1052,6 +1056,18 @@ printf("{\"error\": \"%s\"}\n", jsonStringEscape(message));
 hDisconnectCentral(&conn);
 }
 
+static boolean namedSessionExists(struct sqlConnection *conn, char *encUserName,
+                                  char *encSessionName)
+/* Is there already a session by this name for this user?  Both names must be encoded the way they
+ * are stored, i.e. through cgiEncodeFull(). */
+{
+char query[1024];
+sqlSafef(query, sizeof query,
+         "select count(*) from %s where userName = '%s' and sessionName = '%s'",
+         namedSessionTable, encUserName, encSessionName);
+return sqlQuickNum(conn, query) > 0;
+}
+
 static void saveSessionJsonResult(struct sqlConnection *conn, char *encUserName,
                                   char *encSessionName, char *sessionName, char *warning)
 /* Emit {"name": ..., "url": ...} for the "Share a link" AJAX endpoints and disconnect.
@@ -1170,10 +1186,19 @@ if (isNotEmpty(snapshotType))
     char *snapName;
     if (isEmpty(sessionName))
         snapName = snapshotNewName(conn, snapUser);            /* server-generated, unique */
-    else if (startsWith(snapshotNamePrefix, sessionName))
-        snapName = cgiEncodeFull(sessionName);
     else
-        snapName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
+        {
+        if (startsWith(snapshotNamePrefix, sessionName))
+            snapName = cgiEncodeFull(sessionName);
+        else
+            snapName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
+        /* Anonymous names are not the caller's to reuse; see the anon branch below. */
+        if (anon && namedSessionExists(conn, snapUser, snapName))
+            {
+            saveSessionJsonError(conn, "That link already exists.");
+            return;
+            }
+        }
     saveSnapshotSession(conn, snapshotType, snapUser, snapName, cart);
     char *snapDecoded = cgiDecodeClone(snapName);
     saveSessionJsonResult(conn, snapUser, snapName, snapDecoded, NULL);
@@ -1188,13 +1213,24 @@ if (anon)
     /* Every anonymous share uses the shared snapshot naming: a server-generated, guaranteed-unique
      * "__"-token, so tokens never collide/overwrite and the snapshot cleaner can remove abandoned
      * ones.  The top-right Share dialog passes a name it just reserved (for its live preview); we
-     * force the "__" prefix either way so the link stays eligible for cleaning. */
+     * force the "__" prefix either way so the link stays eligible for cleaning.
+     *   A name that came with the request is only ever one the dialog just reserved, which does not
+     * exist yet.  Anonymous links all sit under the single reserved user "l", so a name already in
+     * the table stays as it is and the caller is told so, rather than being written over. */
     if (isEmpty(sessionName))
         encSessionName = snapshotNewName(conn, encUserName);
-    else if (startsWith(snapshotNamePrefix, sessionName))
-        encSessionName = cgiEncodeFull(sessionName);
     else
-        encSessionName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
+        {
+        if (startsWith(snapshotNamePrefix, sessionName))
+            encSessionName = cgiEncodeFull(sessionName);
+        else
+            encSessionName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
+        if (namedSessionExists(conn, encUserName, encSessionName))
+            {
+            saveSessionJsonError(conn, "That link already exists.");
+            return;
+            }
+        }
     sessionName = cgiDecodeClone(encSessionName);   // keep decoded name in sync for the JSON result
     }
 else
@@ -1211,19 +1247,12 @@ else
     encSessionName = cgiEncodeFull(sessionName);
     /* The Share dialog sets failIfExists when the user typed a custom name, so it can warn before
      * clobbering an existing session of theirs.  Report the clash instead of overwriting. */
-    if (failIfExists)
+    if (failIfExists && namedSessionExists(conn, encUserName, encSessionName))
         {
-        char query[1024];
-        sqlSafef(query, sizeof query,
-                 "select count(*) from %s where userName = '%s' and sessionName = '%s'",
-                 namedSessionTable, encUserName, encSessionName);
-        if (sqlQuickNum(conn, query) > 0)
-            {
-            puts("Content-Type:application/json\n");
-            printf("{\"exists\": true}\n");
-            hDisconnectCentral(&conn);
-            return;
-            }
+        puts("Content-Type:application/json\n");
+        printf("{\"exists\": true}\n");
+        hDisconnectCentral(&conn);
+        return;
         }
     }
 
@@ -2351,6 +2380,10 @@ if (loggedIn)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *encSessionName = row[0];
+            /* Snapshots are share tokens, not sessions the user made; keep them out of the list,
+             * as their "__" prefix promises (see lib/snapshotSession.c). */
+            if (snapshotIsSnapshotName(encSessionName))
+                continue;
             char *sessionName = cgiDecodeClone(encSessionName);
             int shared = atoi(row[1]);
             char *firstUse = cloneString(row[2]);
