@@ -42,6 +42,16 @@ logRun "START"
 exitCode=$?
 logRun "END exit=$exitCode"
 
+if grep -q "Is a doUniprot process already running" lastRun.log ; then
+    # A run from last month, or a hand-started one, is still going, or crashed and left
+    # its lock file behind. Say so in one line instead of the failure report below: this
+    # is not a broken pipeline, but a stale lock does need someone to look at it.
+    logRun "LOCKED another doUniprot run holds the lock file"
+    echo "UniProt update skipped: another doUniprot run holds the lock file."
+    echo "If nothing is running, remove /hive/data/outside/uniProt/current/doUniprot.lock"
+    exit 0
+fi
+
 if [ $exitCode -ne 0 ] ; then
     # lastRun.log is overwritten by the next run, so keep a copy. Without one, a
     # failure that nobody reads leaves no trace on disk at all.
