@@ -27,10 +27,10 @@ available for each sample:
 Because 41 samples times six kinds of data is far too many tracks for a checkbox list, samples
 are chosen from a searchable table on this page. Pick the kinds of data you want along the top,
 then select samples in the table; the browser turns on that combination for every sample you
-picked, and keeps each sample's tracks together in the display. The table can be filtered by
-sample class, and searched or sorted by sample name, accession and cell type. Only sample class
-offers filter checkboxes, because a checkbox is only useful when several samples share a value,
-and the other three columns are close to unique per sample.
+picked, and keeps each sample's tracks together in the display. Sample class has filter
+checkboxes in the panel to the left, and every column can be searched with the box under its
+heading and clicked to sort, so a sample can be found by name, cell type, sample class or
+accession.
 </p>
 
 <h2>Display Conventions</h2>
@@ -80,13 +80,17 @@ between the two chromosomes at that CpG.
 </p>
 
 <p>
-The color swatches next to the Sample class filters in the table are:
+The color swatches next to the Sample class filters are:
 </p>
 
 <table class="stdTbl">
-  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th><td>Lymphoblastoid cell line</td></tr>
-  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th><td>Stem cell</td></tr>
-  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th><td>Cancer or immortalized cell line</td></tr>
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>HPRC, a lymphoblastoid (B-lymphocyte, EBV) line from the Human Pangenome Reference
+          Consortium</td></tr>
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>Common cell line, which here also covers GM12878 and HG002: both are lymphoblastoid,
+          but they come from ENCODE and from Genome in a Bottle rather than from the
+          consortium</td></tr>
 </table>
 
 <p>

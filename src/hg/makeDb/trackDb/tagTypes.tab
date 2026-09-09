@@ -120,6 +120,7 @@ defaultLabelFields big*
 defaultLinkedTables genePred bigGenePred
 defaultMaf wigMaf
 defaultMaxWeight bed
+defaultGroupBy *
 defaultSortField *
 denseCoverage bigBed
 densePack bed bigBed

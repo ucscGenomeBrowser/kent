@@ -94,6 +94,7 @@ priority 2.5
     primaryKey Accession
     dataTypes acc|"Percent accessible" peaks|"FIRE peaks" hap|"Haplotype accessibility" cpg|"CpG methylation" cpgHap|"Haplotype CpG" cpgDiff|"CpG haplotype difference"
     defaultSortField Accession
+    defaultGroupBy sample
     maxCheckboxes 50
     noInherit on
     visibility hide

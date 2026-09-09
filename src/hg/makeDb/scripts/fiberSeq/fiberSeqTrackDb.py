@@ -56,27 +56,35 @@ DIFF_LEVELS = [
     ("cpg.diffs_p0.0001.bw", "p < 0.0001", "255,0,0"),
 ]
 
-# Sample classes, derived from the lab's own free-text cell type.  27 of the 41
-# samples are lymphoblastoid, so cell type alone gives one useless bucket; this
-# splits them into three facet values, and is the only faceted column left
-# (written Sample_class in the metadata file, which the table shows as
-# "Sample class").
+# Shown behind an info icon on the Sample class column heading.
+SAMPLE_CLASS_DESCRIPTION = (
+    "HPRC = Lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
+    "Human Pangenome Reference Consortium")
+
+# Sample class swatches, shown next to that facet's checkboxes.
 # Okabe-Ito colors for the swatches.
 SAMPLE_CLASS_COLORS = {
-    "Lymphoblastoid cell line": "#0072B2",
-    "Stem cell": "#009E73",
-    "Cancer or immortalized cell line": "#D55E00",
+    "HPRC": "#0072B2",
+    "Common Cell Line": "#D55E00",
 }
 
 
-def sampleClass(cellType):
-    """Group a free-text cell type into one of three facet values."""
-    low = cellType.lower()
-    if "lymphoblastoid" in low:
-        return "Lymphoblastoid cell line"
-    if "stem cell" in low or "ipsc" in low:
-        return "Stem cell"
-    return "Cancer or immortalized cell line"
+# Lymphoblastoid lines that are not from the Human Pangenome Reference
+# Consortium: GM12878 is the ENCODE line and HG002 is Genome in a Bottle.  Both
+# are B-lymphocyte EBV lines like the HPRC samples, so cell type alone cannot
+# tell them apart and they have to be named.
+NOT_HPRC = {"GM12878", "HG002"}
+
+
+def sampleClass(sample, cellType):
+    """Split a sample two ways for the Sample class column.
+
+    HPRC is a lymphoblastoid (B-lymphocyte, EBV) line from the consortium;
+    everything else, including the two lymphoblastoid lines listed in NOT_HPRC,
+    is a common cell line."""
+    if "lymphoblastoid" in cellType.lower() and sample not in NOT_HPRC:
+        return "HPRC"
+    return "Common Cell Line"
 
 
 def readSamples(path):
@@ -94,7 +102,7 @@ def readSamples(path):
                 "accession": acc,
                 "sample": sample,
                 "cellType": cellType,
-                "sampleClass": sampleClass(cellType),
+                "sampleClass": sampleClass(sample, cellType),
             })
     if not samples:
         sys.exit("no samples read from %s" % path)
@@ -102,30 +110,46 @@ def readSamples(path):
 
 
 def writeMetadata(path, samples):
-    """Facet table.  The first column is the primaryKey; a plain column name gets
+    """The sample table shown on the track UI page.  A plain column name gets
     facet checkboxes, a leading underscore means searchable and sortable but not
-    faceted.  Names are underscore separated rather than camelCase: the header
-    is rendered by toTitleStyle() in facetedComposite.js, which turns an
-    underscore into a space but does not split camelCase, so "sampleClass" would
-    have read "sampleClass" in the table.  A literal space cannot be used
-    instead, because the saved sort order is a space separated list of column
-    names and the submit code drops any name containing whitespace.
+    faceted.
 
-    Cell_type is deliberately underscored at the front.  facetedComposite.js only offers facet
-    values that occur more than once, since a checkbox matching a single row is
-    just a slow search box, and 12 of the 14 cell types here are a single sample
-    each.  As a facet it drew exactly two checkboxes, Lymphoblastoid and
-    Embryonic stem cell, leaving 12 samples unreachable by any cell-type filter.
-    It is more useful as a searchable column.  The same rule is why the sample
-    name cannot be a facet at all: all 41 values are distinct."""
+    Accession is the primaryKey but sits last, since it is the least interesting
+    thing about a sample.  Nothing requires the primaryKey to come first:
+    facetedComposite.js only checks that the column exists, and every use of it
+    is by name.  It is still the default sort, because accession order keeps the
+    common cell lines together and then the HPRC samples together, which sample
+    name in alphabetical order would scatter.
+
+    Sample class is the one faceted column.  Its two values, HPRC and Common
+    Cell Line, each cover many samples, which is what a facet needs:
+    facetedComposite.js only offers a value that occurs more than once, since a
+    checkbox matching a single row is just a slow search box.  The other three
+    are underscored for that reason.  Sample and Accession are unique per row by
+    definition, and 12 of the 14 cell types are a single sample, so as a facet
+    cell type drew two checkboxes and left 12 samples unreachable.
+
+    Names are underscore separated rather than camelCase: the header is rendered
+    by toTitleStyle() in facetedComposite.js, which turns an underscore into a
+    space but does not split camelCase, so "sampleClass" would have read
+    "sampleClass" in the table.  A literal space cannot be used instead, because
+    the saved sort order is a space separated list of column names and the
+    submit code drops any name containing whitespace."""
     with open(path, "w") as f:
-        f.write("Accession\tSample_class\t_Cell_type\t_Sample\n")
+        # A header cell may carry a longer description after a "|", which the
+        # track UI shows behind an info icon on the column heading.
+        f.write("_Sample\t_Cell_type\tSample_class|%s\tAccession\n"
+                % SAMPLE_CLASS_DESCRIPTION)
         for s in samples:
-            f.write("%s\t%s\t%s\t%s\n" % (s["accession"], s["sampleClass"],
-                                          s["cellType"], s["sample"]))
+            f.write("%s\t%s\t%s\t%s\n" % (s["sample"], s["cellType"],
+                                          s["sampleClass"], s["accession"]))
 
 
 def writeColors(path):
+    """Swatches beside a facet's checkboxes, keyed by column name.
+
+    Only faceted columns get swatches, so the key has to match the column name
+    exactly as the header writes it, underscore prefix included if it has one."""
     with open(path, "w") as f:
         json.dump({"Sample_class": SAMPLE_CLASS_COLORS}, f, indent=4)
         f.write("\n")
@@ -202,6 +226,7 @@ def compendium(gbdb, dataUrlDir, samples):
         'hap|"Haplotype accessibility" cpg|"CpG methylation" '
         'cpgHap|"Haplotype CpG" cpgDiff|"CpG haplotype difference"',
         "defaultSortField Accession",
+        "defaultGroupBy sample",
         "maxCheckboxes 50",
         "noInherit on",
         "visibility hide",
