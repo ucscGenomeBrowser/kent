@@ -2449,8 +2449,12 @@ def splitGeneRefseq(fname, outDir, uniprotTaxIds):
 def downloadAndSplitNcbi(taxIdDbs):
     " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
     logging.info("Downloading NCBI gene2refseq file gene2refseq.tsv")
-    # removed -Ss trying to get error messages to show up
-    cmd = "curl https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz | zcat > ncbi/gene2refseq.tsv"
+    # --no-progress-meter, not -s: it drops the progress bar, which otherwise writes a few
+    # hundred lines of percentages into lastRun.log, but still shows errors. Plain -s would
+    # hide the errors too, which is why they were dropped here in the first place.
+    # --fail so an HTTP error is reported as one, instead of piping NCBI's error page into
+    # zcat and failing with a confusing "not in gzip format"
+    cmd = "curl --no-progress-meter --show-error --fail https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz | zcat > ncbi/gene2refseq.tsv"
     run(cmd)
     splitGeneRefseq("ncbi/gene2refseq.gz", NCBIDIR, taxIdDbs)
 
