@@ -553,7 +553,7 @@ hg19 varsInPubs snpedia Wiki summaries of what has been published about individu
 # Variant impact predictor cross-links:
 hg38 mutScore primateAi A pathogenicity predictor that also works from 3D protein structure
 hg38 primateAi mutScore Missense variant clustering within 3D protein structures
-hg38 mutScore revel An ensemble missense pathogenicity score built from multiple predictors
+hg38 mutScore revel An ensemble missense pathogenicity score, recommended by the ACMG, built from multiple predictors
 hg38 revel mutScore Missense variant clustering within 3D protein structures
 hg38 mutScore alphaMissense A deep-learning missense pathogenicity predictor
 hg38 alphaMissense mutScore Missense variant clustering within 3D protein structures
@@ -563,6 +563,14 @@ hg38 >caddSuper1_7 revel An ensemble pathogenicity score for coding variants
 hg38 >caddSuper1_7 clinPred An ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
 hg38 >caddSuper1_7 alphaMissense A deep-learning missense pathogenicity predictor
 hg38 >caddSuper1_7 gnomadVariants Population allele frequencies, useful for judging whether a high-scoring variant is common
+hg38 predictionScoresSuper caddSuper1_7 A deleteriousness score for all single-base substitutions and selected indels, coding and non-coding
+hg38 caddSuper1_7 predictionScoresSuper Other variant impact and pathogenicity prediction scores
+hg38 predictionScoresSuper caddSuper The previous CADD release, with the older model and training set
+hg38 caddSuper predictionScoresSuper Other variant impact and pathogenicity prediction scores
+hg38 predictionScoresSuper revel An ensemble missense pathogenicity score for coding variants
+hg38 revel predictionScoresSuper Other variant impact and pathogenicity prediction scores
+hg38 predictionScoresSuper alphaMissense A deep-learning missense pathogenicity predictor
+hg38 alphaMissense predictionScoresSuper Other variant impact and pathogenicity prediction scores
 
 hg19 >caddSuper1_7 gnomadSuper Population allele frequencies, useful for judging whether a high-scoring variant is common
 hg19 mutScore primateAi A pathogenicity predictor that also works from 3D protein structure
@@ -576,6 +584,14 @@ hg19 clinPred mutScore Missense variant clustering within 3D protein structures
 hg19 >caddSuper1_7 revel An ensemble pathogenicity score for coding variants
 hg19 >caddSuper1_7 clinPred An ensemble missense pathogenicity predictor that incorporates gnomAD allele frequency
 hg19 >caddSuper1_7 alphaMissense A deep-learning missense pathogenicity predictor
+hg19 predictionScoresSuper caddSuper1_7 A deleteriousness score for all single-base substitutions and selected indels, coding and non-coding
+hg19 caddSuper1_7 predictionScoresSuper Other variant impact and pathogenicity prediction scores
+hg19 predictionScoresSuper caddSuper The previous CADD release, with the older model and training set
+hg19 caddSuper predictionScoresSuper Other variant impact and pathogenicity prediction scores
+hg19 predictionScoresSuper revel An ensemble missense pathogenicity score for coding variants
+hg19 revel predictionScoresSuper Other variant impact and pathogenicity prediction scores
+hg19 predictionScoresSuper alphaMissense A deep-learning missense pathogenicity predictor
+hg19 alphaMissense predictionScoresSuper Other variant impact and pathogenicity prediction scores
 
 # Splicing impact cross-links:
 hg38 ~spliceAI abSplice Another deep-learning predictor of splice-altering variants
@@ -599,7 +615,7 @@ hg38 constraintSuper predictionScoresSuper Per-variant deleteriousness and patho
 hg38 predictionScoresSuper constraintSuper Regional and gene-level constraint measured from population variation
 hg38 ~jarvis ukbDepletion Another score for how depleted of variation a non-coding region is
 hg38 ~hmc gnomadPLI Another constraint metric derived from the absence of variation in population data
-hg38 hmc ucscGenePfam The Pfam domains that homologous missense constraint is calculated over
+hg38 hmc ucscGenePfam The Pfam protein domains that homologous missense constraint is calculated over
 hg38 ucscGenePfam hmc Missense constraint measured across homologous positions within these domains
 hg38 promoterAi jarvis A score prioritizing non-coding regions more broadly, not only promoters
 hg38 jarvis promoterAi A deep-learning predictor for variants in promoter regions specifically

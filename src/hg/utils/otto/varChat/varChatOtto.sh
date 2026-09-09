@@ -45,7 +45,18 @@ fi
 mv varChat.hg38.latest.bb varChat.hg38.bb
 mv varChat.hg19.latest.bb varChat.hg19.bb
 
-wget -q https://ucsc-engenome-varchat.s3.eu-west-1.amazonaws.com/latest/version.txt -O version.txt
+# /gbdb/hg38/bbi/varChatVersion.txt symlinks straight to this file, so the browser reads
+# it directly, and wget truncates its -O target before it has anything to put there. Fetch
+# to a temp file and only replace the live one if something actually arrived: the bigBeds
+# above are already live by this point, so a failed fetch would otherwise leave the track
+# showing a blank version until the next upstream release, which can be many months away.
+# refs #38300
+if wget -q https://ucsc-engenome-varchat.s3.eu-west-1.amazonaws.com/latest/version.txt -O version.new.txt && [ -s version.new.txt ]; then
+    mv version.new.txt version.txt
+else
+    rm -f version.new.txt
+    echo "Warning: could not fetch the VarChat version file, keeping $(cat version.txt 2>/dev/null)"
+fi
 
 echo
 echo "Item counts for hg38 old vs. new bigBed. Old: $oldCountHg38 New: $newCountHg38"

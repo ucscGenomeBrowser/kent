@@ -690,7 +690,7 @@
    "level": "full",
    "fmt": "bamGrayMode <aliQual/baseQual/unpaired>",
    "ex": "",
-   "desc": "When bamColorMode is set to \"gray\", you can highlight one of the following: Refer to the SAM format details for a discussion of these values."
+   "desc": "When bamColorMode is set to \"gray\", you can highlight one of the following: - aliQual : (Default) The \"alignment qualities\" of the items are shaded on a scal..."
   },
   {
    "key": "bamColorTag",
@@ -1705,7 +1705,7 @@
    "level": "new",
    "fmt": "highlightColor <hexcolor>",
    "ex": "highlightColor #ff0000",
-   "desc": "Sets the default color for all of the various highlights defined in this stanza"
+   "desc": "Sets the default color for all of the various highlights defined in this stanza In this example, we are using the highlightColor to set the default highlight..."
   },
   {
    "key": "highlightPriority",

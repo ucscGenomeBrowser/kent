@@ -30,8 +30,8 @@ case "$track" in
       | LC_COLLATE=C sort -k1,1 -k2,2n > "$tmp/out.bed"
     type=bed9+6; as=$SCR/segdups.as ;;
   pclai)
-    # existing bed9+1 (name="SAMPLE/hN/<window>_(PC1,PC2)", col10=segment PCA);
-    # -> bed9+3: blank name; window, pca (this window), pcaSegment (=old col10)
+    # existing bed9+1 (name="SAMPLE/hN/<window>_(PC1,PC2)", col10=centroid);
+    # -> bed9+3: blank name; window, pca (this window), centroid (=old col10)
     awk -F'\t' 'BEGIN{OFS="\t"}
       { seg=$4; sub(/^[^/]*\/[^/]*\//,"",seg); k=split(seg,b,"_"); pca=b[k];
         win=(pca!="")?substr(seg,1,length(seg)-length(pca)-1):seg;

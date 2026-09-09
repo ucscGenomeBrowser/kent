@@ -1,15 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # load default python packages
 import logging, optparse, sys, glob, gzip, collections, copy, gzip, os, doctest, re
 from os.path import *
 from collections import defaultdict
 
+# lxml is not part of the python standard library and hgwdev has no system-wide copy.
+# The otto pipeline gets it from a virtualenv, see makeVenv.sh in the otto/uniprot
+# directory. Do not append a site-packages directory to sys.path here: pointing at one
+# person's conda environment is what silently broke the monthly update. refs #38300
 try:
-    from lxml import etree # if this fails, comment out this line and uncomment the next one. Or do the 'pip install' below.
+    from lxml import etree # if this fails, comment out this line and uncomment the next one
     #import xml.etree.cElementTree as etree # if using this line, search for cElementTree in this file and comment out the other part
-except:
-    raise Exception("lxml library not found. install elementtree with 'sudo apt-get install libxml2-dev libxslt-dev python-dev; pip install lxml' or just 'apt-get install python-lxml'. Or read the source code to get rid of the dependency.")
+except ImportError as ex:
+    raise Exception("Cannot import lxml.etree with %s: %s. For the otto pipeline, activate "
+        "the virtualenv ('source venv/bin/activate' in the otto/uniprot directory) or "
+        "rebuild it with ./makeVenv.sh there. Otherwise: pip install lxml" %
+        (sys.executable, ex))
 
 debugMode=False
 
@@ -27,7 +34,7 @@ class FastaReader:
         elif fname=="stdin":
             self.f=sys.stdin
         elif fname.endswith(".gz"):
-            self.f=gzip.open(fname)
+            self.f=gzip.open(fname, "rt")
         else:
             self.f=open(fname)
         self.lastId=None
@@ -72,8 +79,8 @@ def parseFastaAsDict(fname, inDict=None):
     fr = FastaReader(fname)
     for (id, seq) in fr.parse():
         if id in inDict:
-            print inDict
-            print inDict[id]
+            print(inDict)
+            print(inDict[id])
             raise Exception("%s already seen before" % id)
         inDict[id]=seq
     return inDict
@@ -100,7 +107,7 @@ class ProgressMeter:
             sys.stderr.flush()
         self.i += count
         if self.i==self.taskCount:
-            print ""
+            print("")
 
 def setupLogging(progName, options, parser=None, logFileName=None, \
         debug=False, fileLevel=logging.DEBUG, minimumLog=False, fileMode="w"):
@@ -200,14 +207,14 @@ entryHeaders = ["dataset", "acc", "mainIsoAcc", "orgName", "orgCommon", "taxonId
 EntryRec = collections.namedtuple("uprec", entryHeaders)
 
 # all annotations get parsed into this format
-annotHeaders = ["acc", "mainIsoAcc", "varId", "featType", "shortFeatType", "begin", "end", "origAa", "mutAa", "dbSnpId", "disRelated", "disease", "disCode", "pmid", "comment"]
-AnnotRec = collections.namedtuple("mutrec", annotHeaders)
+annotHeaders = ["acc", "mainIsoAcc", "varId", "featType", "shortFeatType", "begin", "end", "origAa", "mutAa", "dbSnpId", "disRelated", "disease", "disCode", "pmid", "longName", "shortName", "syns", "subCellLoc","comment"]
+AnnotRec = collections.namedtuple("annotRec", annotHeaders)
 
 # references from record
 refHeaders = ["name", "citType", "year", "journal", "vol", "page", \
         "title", "authors", "doi", "pmid", "scopeList"]
 RefRec = collections.namedtuple("refRec", refHeaders)
-emptyRef = dict(zip(refHeaders, len(refHeaders)*[""]))
+emptyRef = dict(list(zip(refHeaders, len(refHeaders)*[""])))
 
 def strip_namespace_inplace(etree, namespace=None,remove_from_attr=True):
     """ Takes a parsed ET structure and does an in-place removal of all namespaces,
@@ -229,7 +236,7 @@ def strip_namespace_inplace(etree, namespace=None,remove_from_attr=True):
     if namespace==None: # all namespaces                               
         for elem in etree.getiterator():
             tagname = elem.tag
-            if not isinstance(elem.tag, basestring):
+            if not isinstance(elem.tag, str):
                 continue
             if tagname[0]=='{':
                 elem.tag = tagname[ tagname.index('}',1)+1:]
@@ -281,9 +288,10 @@ def parseDiseases(fname):
     logging.info("read %d disease code -> disease name mappings" % len(dis))
     return dis
 
-def findSaveList(el, path, dataDict, key, attribKey=None, attribVal=None, useAttrib=None, subSubEl=None):
+def findSaveList(el, path, dataDict, key, attribKey=None, attribVal=None, useAttrib=None, subSubEl=None, molAnnots=None):
     """ find all text of subelemets matching path with given optionally attrib and save into dataDict with key
     You can specify a subSubEl of the element to get the text from.
+    If you specify attribKey and attribVal, will only process elements with given key and given value.
     """
     l = []
     for se in el.findall(path):
@@ -296,6 +304,17 @@ def findSaveList(el, path, dataDict, key, attribKey=None, attribVal=None, useAtt
                 val = se.find(subSubEl).text
             else:
                 val = se.text
+
+        # comments sometimes refer to a molecule, save these for later
+        molEl = se.find("molecule")
+        if molEl is not None:
+            molName = molEl.text
+            molAnnots[molName]["comment"] = val
+            val = "Molecule '"+molEl.text+"': "+val
+
+        if attribVal=="ORF" and not val.lower().startswith("orf"):
+            val = "ORF"+val
+
         l.append(val)
     s = "|".join(l)
     dataDict[key] = s
@@ -528,7 +547,7 @@ def parseDbRefs(entryEl):
                 dbRefs[propDb].add(id)
 
     result = {}
-    for db, valList in dbRefs.iteritems():
+    for db, valList in dbRefs.items():
         result[db] = "|".join(valList)
         
     logging.debug("dbRefs: %s" % result)
@@ -602,7 +621,7 @@ def parseFeatDesc(text, disToName):
 
 ignoredTypes = collections.Counter()
 
-def parseFeatures(entryEl, disRefs, defaultDisCodes, disToName, evidPmids, mainIsoAcc):
+def parseFeatures(entryEl, disRefs, defaultDisCodes, disToName, evidPmids, mainIsoAcc, compAnnots):
     " go over features and yield annotation records "
 
     acc = entryEl.find("accession").text
@@ -660,6 +679,22 @@ def parseFeatures(entryEl, disRefs, defaultDisCodes, disToName, evidPmids, mainI
         desc = featEl.attrib.get("description", None)
         if desc==None:
             desc = ""
+
+        # for polypeptide chains. Their annotations were in the main protein entry, spread over 
+        # the comments, cell loc and "components" sections
+        longName = ""
+        shortName = ""
+        cellLoc = ""
+        syns = ""
+        if desc in compAnnots:
+            compAnnot = compAnnots[desc]
+            longName = desc
+            desc = compAnnot.get("comment", "")
+
+            shortName = compAnnot.get("shortName", "")
+            cellLoc = compAnnot.get("subCellLocs", "")
+            syns = compAnnot.get("syns", "")
+
         if "sulfinic" in desc:
             shortFeatType = "sulfo"
 
@@ -714,7 +749,7 @@ def parseFeatures(entryEl, disRefs, defaultDisCodes, disToName, evidPmids, mainI
                 pmid = list(pmids)[0]
                 annotPmids.append(pmid)
 
-        annot = AnnotRec(acc, mainIsoAcc, varId, featType, shortFeatType, begin, end, orig, variant, snpId, diseaseRelated, disName, disCode, ",".join(annotPmids), comments)
+        annot = AnnotRec(acc, mainIsoAcc, varId, featType, shortFeatType, begin, end, orig, variant, snpId, diseaseRelated, disName, disCode, ",".join(annotPmids), longName, shortName, syns, cellLoc, comments)
         logging.debug("Accepted annotation: %s" % str(annot))
 
         yield annot
@@ -732,8 +767,8 @@ def parseEvidence(entryEl):
                 result[evidCode].append(pmid)
     return result
     
-def parseAnnotations(entryEl, mainIsoAcc, disToName):
-    " return MutRecs with disease associated variants "
+def parseAnnotations(entryEl, mainIsoAcc, disToName, compAnnots):
+    " return features with features located on protein sequence "
     # parse the general record comment about diseases
     disRefs, allDiseaseCodes = parseDiseaseComment(entryEl, disToName)
 
@@ -741,7 +776,7 @@ def parseAnnotations(entryEl, mainIsoAcc, disToName):
     logging.debug("Diseases in %s" % acc)
 
     evidPmids = parseEvidence(entryEl)
-    annotRecs = list(parseFeatures(entryEl, disRefs, allDiseaseCodes, disToName, evidPmids, mainIsoAcc))
+    annotRecs = list(parseFeatures(entryEl, disRefs, allDiseaseCodes, disToName, evidPmids, mainIsoAcc, compAnnots))
     return annotRecs
 
 def parseRecInfo(entryEl, entry, isoSeqs):
@@ -759,6 +794,9 @@ def parseRecInfo(entryEl, entry, isoSeqs):
 
     logging.debug("Parsing rec info for acc %s" % acc)
 
+    compAnnots = defaultdict(dict)
+
+    # human-readable gene names and syns
     findSaveList(entryEl, "protein/recommendedName/fullName", entry, "protFullNames")
     findSaveList(entryEl, "protein/recommendedName/shortName", entry, "protShortNames")
     findSaveList(entryEl, "protein/alternativeName/fullName", entry, "protAltFullNames")
@@ -767,13 +805,104 @@ def parseRecInfo(entryEl, entry, isoSeqs):
     findSaveList(entryEl, "gene/name", entry, "geneSynonyms", attribKey="type", attribVal="synonym")
     findSaveList(entryEl, "gene/name", entry, "geneOrdLocus", attribKey="type", attribVal="ordered locus")
     findSaveList(entryEl, "gene/name", entry, "geneOrf", attribKey="type", attribVal="ORF")
+
+    # the rest
     findSaveList(entryEl, "organism/name", entry, "orgName", attribKey="type", attribVal="scientific")
     findSaveList(entryEl, "organism/name", entry, "orgCommon", attribKey="type", attribVal="common")
     findSaveList(entryEl, "organism/dbReference", entry, "taxonId", useAttrib="id")
     findSaveList(entryEl, "comment/isoform/id", entry, "isoIds")
     findSaveList(entryEl, "comment/isoform/name", entry, "isoNames")
     findSaveList(entryEl, "comment/subcellularLocation/location", entry, "subCellLoc")
-    findSaveList(entryEl, "comment", entry, "functionText", attribKey="type", attribVal="function", subSubEl="text")
+    findSaveList(entryEl, "comment", entry, "functionText", attribKey="type", attribVal="function", subSubEl="text", \
+            molAnnots=compAnnots)
+
+    # when we write out the chains later, some may only be copies of the main protein. So we're keeping a mapping
+    # of all synonyms now later for these features
+    synFields= ["protShortNames", "protAltShortNames", "geneOrf", "geneSynonyms", "protAltFullNames", "isoNames", "geneOrdLocus"]
+    syns = []
+    for synField in synFields:
+        fieldSyns = entry[synField].split("|")
+        fieldSyns.sort(key=len) #  prefer short synonyms
+        syns.extend(fieldSyns)
+    # remove empty ones
+    syns = [x.strip() for x in syns]
+    syns = [x for x in syns if x!=""]
+
+    # the full protein is sometimes referenced in the record like a peptide
+    # later so create a faked protein component annotation for the full protein
+    protFullName = entry["protFullNames"].split("|")[0]
+    compAnnots[protFullName]["syns"] = "; ".join(syns)
+    if len(syns)>0:
+        compAnnots[protFullName]["shortName"] = syns[0]
+
+    # protein components have their short names not stored in the features but only in the protein record
+    # so we make a translation table here and use it later when writing the features
+    for compEl in entryEl.findall("protein/component"):
+        recNameEl = compEl.find("recommendedName")
+        if recNameEl==None:
+            assert(False) # component without a name?
+
+        # <fullName>2'-O-methyltransferase</fullName>
+        # <ecNumber>2.1.1.-</ecNumber>
+        # </recommendedName>k
+        #<alternativeName>
+        #<fullName>nsp16</fullName>
+        #</alternativeName>                                                                                                          </component>
+        #</protein>
+        #<gene>
+        #<name type="primary">rep</name>
+        #<name type="ORF">1a-1b</name>
+        #</gene>
+
+        shortName = ""
+        fullName = ""
+        fullNameEl = recNameEl.find("fullName")
+        shortNameEl = recNameEl.find("shortName")
+        if fullNameEl!=None:
+            fullName = fullNameEl.text
+            compAnnots[fullName]["fullName"] = fullName
+        if shortNameEl!=None:
+            shortName = shortNameEl.text
+            compAnnots[fullName]["shortName"] = shortName
+
+        compSyns = []
+        for altEl in compEl.findall("alternativeName"):
+            fullNameEl = altEl.find("fullName")
+            if fullNameEl is not None:
+                compSyns.append(fullNameEl.text)
+            shortNameEl = altEl.find("shortName")
+            if shortNameEl is not None:
+                compSyns.append(shortNameEl.text)
+
+        # if we have no shortName, try to take the gene name
+        # -> not a good idea, as otherwise the components all have the same name
+        #if shortName=="" and entry["geneName"]!="":
+            #compAnnots[fullName]["shortName"] = entry["geneName"]
+
+        # if we have no component shortName, take the shortest alternative name
+        if shortName=="" and len(compSyns)>0:
+            shortName = list(sorted(compSyns, key=len))[0]
+            compAnnots[fullName]["shortName"] = shortName
+
+        if len(compSyns)!=0:
+            if ("compSyns" in compAnnots[fullName]) and fullName!=protFullName:
+                print("Error: multiple alternative names with synonyms?")
+                print(compAnnots)
+                print(compSyns)
+                print(entry)
+                assert(False)
+            compAnnots[fullName]["compSyns"] = "|".join(compSyns)
+
+    # same for subcell localization
+    for commEl in entryEl.findall("comment"):
+        if commEl.attrib.get("type")=="subcellular location":
+            if commEl.find("molecule") is not None:
+                locs = []
+                molName = commEl.find("molecule").text
+                for locEl in commEl.findall("subcellularLocation"):
+                    locs.append(locEl.text)
+                compAnnots[molName]["cellLocs"] = "|".join(locs)
+
 
     mainSeq = entryEl.find("sequence").text
     #entry["mainSeq"] = mainSeq
@@ -817,7 +946,7 @@ def parseRecInfo(entryEl, entry, isoSeqs):
     entry["isoNames"]="|".join(isoNames)
 
     entryRow = EntryRec(**entry)
-    return entryRow, seqs
+    return entryRow, seqs, compAnnots
 
 def parseRefInfo(entryEl, recName):
     for refEl in entryEl.findall("reference"):
@@ -864,7 +993,7 @@ def readIsoforms(inDir, db):
     logging.info("reading isoform sequences from %s (or non-gz version)" % isoFname)
     isoSeqs = parseFastaAsDict(isoFname)
     result = {}
-    for id, seq in isoSeqs.iteritems():
+    for id, seq in isoSeqs.items():
         idParts = id.split("|")
         isoName = idParts[1]
         result[isoName] = seq
@@ -893,7 +1022,7 @@ def openFaFiles(taxonIds, outDir, outPrefix):
     for taxonId in taxonIds:
         taxonId = str(taxonId)
         faFname = join(outDir, outPrefix+"."+taxonId+".fa.gz")
-        faFiles[int(taxonId)] = gzip.open(faFname, "w")
+        faFiles[int(taxonId)] = gzip.open(faFname, "wt")
         logging.debug("Writing fasta seqs for taxon %s to %s" % (taxonId, faFname))
     return faFiles
 
@@ -929,10 +1058,10 @@ def parseUniprot(db, inDir, outDir, taxonIds):
     if options.parse:
         fname = options.parse
         logging.info("Debug parse of %s" % fname)
-        xmlFile = open(fname)
+        xmlFile = open(inDir)
         isoSeqs, recCount = {}, 1
-        outDir = "."
-        outPrefix = "temp"
+        outDir = outDir
+        outPrefix = "swissprot"
         disToName = {}
     else:
         isoSeqs = readIsoforms(inDir, db)
@@ -943,7 +1072,7 @@ def parseUniprot(db, inDir, outDir, taxonIds):
         elif db=="trembl":
             xmlBase = "uniprot_trembl.xml.gz"
             outPrefix = "trembl"
-            recCount = 600000*100
+            recCount = 600000*700
         else:
             raise Exception("unknown db")
 
@@ -952,7 +1081,7 @@ def parseUniprot(db, inDir, outDir, taxonIds):
             logging.debug("Using non-gzipped file %s" % xmlBase2)
             xmlFile = open(join(inDir, xmlBase2))
         else:
-            xmlFile = gzip.open(join(inDir, xmlBase))
+            xmlFile = gzip.open(join(inDir, xmlBase), "rt")
 
         logging.info("Parsing main XML file %s" % xmlFile.name)
         disToName = parseDiseases(join(inDir, "docs", "humdisease.txt"))
@@ -969,7 +1098,7 @@ def parseUniprot(db, inDir, outDir, taxonIds):
         annotOf = openOutTabFile(outDir, "%s.%s.annots.tab" % (outPrefix, taxId), annotHeaders)
         outFhs[taxId] = (entryOf, refOf, annotOf)
 
-    emptyEntry = dict(zip(entryHeaders, len(entryHeaders)*[""]))
+    emptyEntry = dict(list(zip(entryHeaders, len(entryHeaders)*[""])))
 
     pm = ProgressMeter(recCount)
     for recLines in stupidXmlFilter(xmlFile, taxonIds):
@@ -978,15 +1107,17 @@ def parseUniprot(db, inDir, outDir, taxonIds):
     #for _, entryEl in etree.iterparse(xmlFile):
         #if entryEl.tag!="{http://uniprot.org/uniprot}entry":
             #continue
-        #strip_namespace_inplace(entryEl) # die, die stupid namespaces!!
 
         pm.taskCompleted()
         if recLines is None:
             continue
 
         entryEl = etree.fromstring("".join(recLines))
+        strip_namespace_inplace(entryEl) # die, die stupid namespaces!!
 
-        entryTax = int(entryEl.find("organism/dbReference").attrib["id"])
+        dbRefEl = entryEl.find("organism")
+        dbRefEl = entryEl.find("organism/dbReference")
+        entryTax = int(dbRefEl.attrib["id"])
 
         if taxonIds==['all']:
             taxId = "all"
@@ -997,7 +1128,7 @@ def parseUniprot(db, inDir, outDir, taxonIds):
         entryOf, refOf, annotOf = outFhs[entryTax]
 
         entry = copy.copy(emptyEntry)
-        entryRow, seqs = parseRecInfo(entryEl, entry, isoSeqs)
+        entryRow, seqs, compAnnots = parseRecInfo(entryEl, entry, isoSeqs)
 
         writeFaSeqs(faFiles, entryTax, seqs)
 
@@ -1008,19 +1139,10 @@ def parseUniprot(db, inDir, outDir, taxonIds):
         for refRow in refRows:
             refOf.write("\t".join(refRow)+"\n")
 
-        annotRecs = parseAnnotations(entryEl, entryRow.mainIsoAcc, disToName)
+        annotRecs = parseAnnotations(entryEl, entryRow.mainIsoAcc, disToName, compAnnots)
         for annotRow in annotRecs:
             logging.debug("writing row %s" % str(annotRow))
             annotOf.write("\t".join(annotRow)+"\n")
-
-        # clear some RAM (not all)
-        # not needed anymore, since I'm using stupidXmlFilter now
-        # https://stackoverflow.com/questions/12160418/why-is-lxml-etree-iterparse-eating-up-all-my-memory
-        # remove this if using cElementTree
-        #entryEl.clear()
-        #for ancestor in entryEl.xpath('ancestor-or-self::*'):
-            #while ancestor.getprevious() is not None:
-                #del ancestor.getparent()[0]
 
     logging.info("Skipped annotation types: %s" % ignoredTypes.most_common())
 
@@ -1038,14 +1160,14 @@ def main(args, options):
         db = "trembl"
 
     dbDir = args[0]
-
     taxonIds = args[1]
+    refDir = args[2]
+
     if taxonIds=="all":
         taxonIds = ['all']
     else:
         taxonIds=[int(x) for x in taxonIds.split(",")]
 
-    refDir = args[2]
     if not isdir(refDir):
         logging.info("Making directory %s" % refDir)
         os.makedirs(refDir)
@@ -1084,7 +1206,7 @@ the script twice to get all entries.
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
 parser.add_option("", "--test", dest="test", action="store_true", help="run tests")
-parser.add_option("-p", "--parse", dest="parse", action="store", help="parse a single uniprot xml file (debugging)")
+parser.add_option("-p", "--parse", dest="parse", action="store_true", help="parse a single uniprot xml file")
 parser.add_option("", "--trembl", dest="trembl", action="store_true", help="parse trembl. Default is to parse only the swissprot files.")
 (options, args) = parser.parse_args()
 

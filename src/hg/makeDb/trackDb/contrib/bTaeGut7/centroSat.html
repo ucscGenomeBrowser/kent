@@ -1,0 +1,79 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack&amp;hgsid=$hgsid">Centromeres and Telomeres</a> collection of the zebra finch telomere-to-telomere hub.
+</p>
+<p>
+Bird centromeres are built from long arrays of satellite repeat, and in the zebra finch two
+families dominate: Tgut716A and Tgut191A. Because these arrays are hundreds of kilobases of
+nearly identical sequence, they collapsed in every earlier assembly of this species, and
+resolving them is one of the main results of this genome. This track shows about 7,000
+satellite array segments placed with a curated centromere satellite library.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each segment is drawn in the color that the source annotation gives its satellite family, so
+one array appears as a run of features in a single color. The family is in the item name, for
+example Motif:Tgut716A, and the full annotation attributes are on the details page.
+</p>
+
+<h2>Methods</h2>
+<p>
+Centromeric satellite repeats were localized with RepeatMasker using the curated satellite
+library published for the zebra finch by Takki et al. Adjacent hits to the same family were
+merged. The similarity of Tgut716A to crowSat1 was assessed with Censor.
+</p>
+<p>
+The file was taken from GenomeArk at <a href="https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/centromeres/bTaeGut7v0.4_MT_rDNA.RM.Takki2022.v0.1.colored.merged.gff" target="_blank">https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/centromeres/bTaeGut7v0.4_MT_rDNA.RM.Takki2022.v0.1.colored.merged.gff</a>. It is a text format that a track hub cannot use directly, so it was converted to a binary indexed file.
+The GFF is a flat feature annotation rather than a gene annotation, so each line became one
+BED feature, with the color attribute kept as itemRgb and the remaining attributes as an extra
+field. The conversion, and the whole hub, is reproduced by the commands in src/hg/makeDb/doc/contrib/bTaeGut7.txt of the UCSC kent source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>centroSat</i>.
+</p>
+
+<p>
+For automated download and analysis, this annotation is a bigBed file inside the hub. Individual
+regions or the whole annotation can be obtained with <tt>bigBedToBed</tt>, which can be compiled from
+source or downloaded as a precompiled binary; instructions are
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool also fetches a range, for example
+<tt>bigBedToBed &lt;hubUrl&gt;/GCF_048771995.1/centroSat.bb -chrom=NC_133024.1 -start=0 -end=100000 stdout</tt>,
+where &lt;hubUrl&gt; is the directory this hub was loaded from.
+</p>
+<p>
+The original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+<p>
+Takki O, Komissarov A, Kulak M, Galkina S.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35279659" target="_blank">
+Identification of Centromere-Specific Repeats in the Zebra Finch Genome</a>.
+<em>Cytogenet Genome Res</em>. 2022;162(1-2):55-63.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35279659" target="_blank">35279659</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>

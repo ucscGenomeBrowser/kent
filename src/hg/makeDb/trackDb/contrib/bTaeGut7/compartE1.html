@@ -1,0 +1,76 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack&amp;hgsid=$hgsid">Methylation and 3D Chromatin</a> collection of the zebra finch telomere-to-telomere hub.
+</p>
+<p>
+Hi-C measures which parts of the genome are physically close together in the nucleus. When the
+resulting contact matrix is decomposed, the first eigenvector splits the genome into two
+alternating compartments: A, which is open, gene rich and transcribed, and B, which is closed
+and heterochromatic. This track shows that eigenvector at 200 kb resolution, with the sign set
+so that positive values mark the A compartment.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+A bar graph of the first eigenvector at 200 kb, autoscaled to the data in view. Positive values
+are the active A compartment and negative values the heterochromatic B compartment.
+</p>
+
+<h2>Methods</h2>
+<p>
+Adapters were trimmed from the Arima Hi-C reads with cutadapt v5.1 and about 414 million
+trimmed reads were aligned with BWA-MEM v0.7.17 using -SP5M. Read pairs were extracted with
+pairtools parse, then sorted and deduplicated, leaving 41.9 million unique pairs for the
+diploid assembly. Contact matrices were built with cooler cload pairs at 10 kb bins, balanced,
+and zoomified to 10, 20, 50, 100 and 200 kb. Eigenvectors were computed with cooltools eigs-cis
+using a gene density track derived from the EGAPx annotation as the phasing track, so that a
+positive first eigenvector corresponds to the gene rich A compartment.
+</p>
+<p>
+The file was taken from GenomeArk at <a href="https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/3D/bTaeGut7v0.4_MT_rDNA.Cooltools.E1.200kbp.flipped.dip.collated.v0.1.bw" target="_blank">https://genomeark.s3.amazonaws.com/species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/3D/bTaeGut7v0.4_MT_rDNA.Cooltools.E1.200kbp.flipped.dip.collated.v0.1.bw</a>. It is already in a binary indexed format that the browser reads over the network, so the track points at it where it is and no copy is kept in the hub. The hub is reproduced by the commands in src/hg/makeDb/doc/contrib/bTaeGut7.txt of the UCSC kent source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>compartE1</i>.
+</p>
+
+<p>
+This track points straight at the file on GenomeArk rather than at a copy in the hub, so no
+download step is needed to work with it: <tt>bigWigToBedGraph</tt> reads it over the network, as does the browser.
+</p>
+<p>
+The original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+<p>
+Open2C, Abdennur N, Abraham S, Fudenberg G, Flyamer IM, Galitsyna AA, Goloborodko A, Imakaev M,
+Oksuz BA, Venev SV <em>et al</em>.
+<a href="https://dx.plos.org/10.1371/journal.pcbi.1012067" target="_blank">
+Cooltools: Enabling high-resolution Hi-C analysis in Python</a>.
+<em>PLoS Comput Biol</em>. 2024 May;20(5):e1012067.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38709825" target="_blank">38709825</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11098495/" target="_blank">PMC11098495</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>

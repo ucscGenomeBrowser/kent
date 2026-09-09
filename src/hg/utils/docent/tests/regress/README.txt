@@ -24,8 +24,8 @@ how tight the assertion is:
   * a test that only checks a row is PRESENT usually passes on the buggy build too,
     because the bug was an extra row, a wrong label, or a bad tooltip
 
-Two things will rot these tests
--------------------------------
+Three things will rot these tests
+---------------------------------
 
 Most recipes start from the saved session named in the ticket, because that is the
 cheapest way to reach the exact state. A session that is deleted does not fail loudly:
@@ -38,6 +38,14 @@ Six recipes need a test hub on a colleague's public_html. Same problem, same rem
 Fixtures we own live in ~/public_html/docentFixtures/, and `make preflight` checks that
 every hub a script here names still answers. Copy a reporter's hub in there rather than
 loading theirs, so nothing outside this repository can change what a test measures.
+
+A fixture hub must never name a track anything the assembly might also call it. A track
+name resolves to `img_data_<name>` first and only then to a hub row's `hub_<n>_<name>`,
+so an exact native id wins: the hub row is on the page, and every `track:`, `mouseover:`
+and `rows:` in the script reads the NATIVE row instead. Nothing warns. rm35920's fixture
+called its track `ultras`, hg38 has its own `ultras`, and that script asserted a tooltip
+off the native data for as long as it existed -- it looked green and tested nothing.
+Prefix a fixture's track names with the ticket number.
 
 rm36212 is the one to read before writing another
 --------------------------------------------------

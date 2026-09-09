@@ -20,12 +20,27 @@
 @keyframes faceted-spin {
     to { transform: rotate(360deg); }
 }
+/* The data type checkboxes control what every selected sample contributes to
+   the image, which is a different kind of choice from the track settings above
+   them, so box them off. */
+#dataTypeSelector {
+    border: 1px solid black;
+    padding: 0.4em 0.6em;
+    margin-bottom: 0.6em;
+}
+
 #container {
     display: flex;
     width: 100%;
     gap: 1em;
     align-items: flex-start;
     box-sizing: border-box;
+}
+/* Hidden by facetedComposite.js when no column produced any checkboxes.  It is
+   a fixed-width, non-shrinking flex column, so an empty one would otherwise
+   leave 300px of blank space beside the table. */
+#filters.no-facets {
+    display: none;
 }
 #filters {
     display: flex;
@@ -169,6 +184,12 @@ table.dataTable tbody tr:hover {
     width: 100%;
     align-items: center;
     justify-content: space-between;
+    /* Three controls now share this row (the selection tabs, the page-length
+       dropdown and the grouping tabs) and their labels are long enough to
+       overflow a laptop-width window, so let them fall onto a second line
+       rather than run off the edge. */
+    flex-wrap: wrap;
+    row-gap: 0.4em;
 }
 
 /* Tab-like blocks for the "All / Selected" selection filter */
@@ -196,6 +217,24 @@ table.dataTable tbody tr:hover {
     background-color: lightblue;   /* matches the table header band */
     color: #000;
     font-weight: bold;
+}
+
+/* "only" link on a facet value: narrows that facet to the one value.  Revealed
+   on hover, and on keyboard focus so it is reachable without a mouse.  Uses
+   visibility rather than display so the row does not reflow when the pointer
+   arrives.  margin-left:auto pushes it to the right edge of the flex label. */
+a.facet-only {
+    /* Sits right after the count, not pushed to the right edge: at the edge it
+       is far from the value it applies to and easy to miss.  The label is a
+       flex row with a 0.3em gap, so this adds up to a small clear space. */
+    margin-left: 0.3em;
+    font-size: 0.85em;
+    white-space: nowrap;
+    visibility: hidden;
+}
+#filters label:hover a.facet-only,
+a.facet-only:focus {
+    visibility: visible;
 }
 
 /* Active filter chips bar */
@@ -244,4 +283,53 @@ table.dataTable tbody tr:hover {
     padding-bottom: 0.6em;
     border-bottom: 1px solid #ddd;
     margin-bottom: 0.75em;
+}
+
+/* "Group by" tabs, shown next to the All/Active tabs when the composite has
+   data types.  Same look as .filter-tab, with room to breathe from the tabs
+   to its left and a label so the pair reads as a question. */
+#group-by {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-left: 1.2em;
+    flex: 0 0 auto;   /* never squeeze the label onto more lines than needed */
+}
+#group-by > span {
+    color: #333;
+    font-size: 0.9em;
+}
+
+/* Drag handle column for manual row ordering, shown only on the "shown in the
+   browser" tab.  Narrow, muted, and grabby, so it reads as a handle and not as
+   data.  The width goes on the header too: a width on the cell alone is only a
+   suggestion, and the header text would otherwise set the column width. */
+th.dt-reorder, td.dt-reorder {
+    width: 4.5em;
+    text-align: center;
+    white-space: nowrap;
+}
+td.dt-reorder {
+    cursor: grab;
+    user-select: none;
+}
+td.dt-reorder:active {
+    cursor: grabbing;
+}
+svg.dt-grip {
+    height: 1.1em;
+    /* Black, not grey: the selected rows this column appears on are drawn on a
+       saturated blue band, and a grey handle disappeared into it. */
+    fill: #000;
+    vertical-align: middle;
+}
+td.dt-reorder:hover svg.dt-grip {
+    fill: #444;
+}
+/* RowReorder floats a clone of the row being dragged; keep it legible over
+   the striped table underneath. */
+table.dt-rowReorder-float {
+    background-color: #fff;
+    opacity: 0.9;
+    outline: 1px solid #aaa;
 }

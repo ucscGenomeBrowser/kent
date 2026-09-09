@@ -16,7 +16,7 @@ UCSC_JS_FILES=ajax.js alleles.js assemblySearch.js autocomplete.js \
 	myVariantsBlocks.js topLinks.js
 
 # ES6 module files loaded via dynamic import() on hgc details pages
-MODULE_FILES=hgc.histogram.js
+MODULE_FILES=hgc.histogram.js hgc.scatterPlot.js
 
 # STATIC files must pass jshint
 STATIC_FILES=staticDoc.js dbDbTaxonomy.js analytics.js

@@ -1,0 +1,20 @@
+table kaplanAsm
+"Bimodal regions where the methylation state follows a nearby heterozygous SNP (Rosenski et al. 2025)"
+    (
+    string  chrom;         "Reference sequence chromosome or scaffold"
+    uint    chromStart;    "Start position in chromosome"
+    uint    chromEnd;      "End position in chromosome"
+    string  name;          "The ASM SNP, or the number of ASM SNPs in the region"
+    uint    score;         "Not used, always 0"
+    char[1] strand;        "Not applicable, always ."
+    uint    thickStart;    "Start of where display should be thick"
+    uint    thickEnd;      "End of where display should be thick"
+    uint    itemRgb;       "Colour, the same for every region"
+    lstring snps;          "ASM SNPs|dbSNP identifiers of the heterozygous SNPs whose genotype tracks the methylation state"
+    uint    snpCount;      "SNP count|number of ASM SNPs in the region"
+    lstring alleles;       "Alleles|the two alleles of each ASM SNP"
+    lstring cellTypes;     "Cell types|cell types in which the association was seen"
+    uint    cellTypeCount; "Cell type count|number of cell types supporting the association"
+    string  minAdjP;       "Best adjusted p|smallest adjusted p-value over the SNPs and cell types of the region"
+    string  liftNote;      "Lifting note|set when hg38 inserted sequence inside the region, so that its boundaries no longer match the published hg19 ones"
+    )

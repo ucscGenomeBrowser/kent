@@ -20,6 +20,7 @@
 #include "cds.h"
 #include "trackHub.h"
 #include "genbank.h"
+#include "hgConfig.h"
 #include "twoBit.h"
 #include "cacheTwoBit.h"
 #include "hgTracks.h"
@@ -829,6 +830,210 @@ if (haveGbCdnaInfo)
 hFreeConn(&conn);
 }
 
+static boolean txCodonNumbersEnabled()
+/* Is the second, transcript-based codon numbering turned on for this machine?  Off by
+ * default while it is in QA; set showTxCodonNumbers=on in hg.conf to see it. */
+{
+static int enabled = -1;
+if (enabled < 0)
+    enabled = cfgOptionBooleanDefault("showTxCodonNumbers", FALSE);
+return enabled;
+}
+
+static char *txAliTable(char *db, char *acc)
+/* Return the table holding the alignment that gives acc its own transcript coordinates,
+ * or NULL if acc is not that kind of accession.  RefSeq accessions carrying a .version are
+ * aligned in ncbiRefSeqPsl; the older versionless ones that refGene uses are in refSeqAli. */
+{
+if (!startsWith("NM_", acc) && !startsWith("NR_", acc) &&
+    !startsWith("XM_", acc) && !startsWith("XR_", acc))
+    return NULL;
+char *table = (strchr(acc, '.') != NULL) ? "ncbiRefSeqPsl" : "refSeqAli";
+if (!hTableExists(db, table))
+    return NULL;
+return table;
+}
+
+struct txAliWindow
+/* The transcript alignments overlapping one window, and each transcript's own CDS.  Both
+ * are fetched once per window rather than once per item:  per-accession queries cost 35ms
+ * on a page, which is not worth paying on every codon-level view. */
+    {
+    struct hash *pslHash;               /* accession -> struct psl list */
+    struct hash *cdsHash;               /* accession -> struct genbankCds in transcript coords */
+    };
+
+static void loadTxCdsBatch(char *db, char *table, struct hash *pslHash, struct hash *cdsHash)
+/* Fill cdsHash with the CDS, in its own transcript coordinates, of every accession in
+ * pslHash.  This has to come from the transcript's own annotation and not from the
+ * alignment:  for ~800 transcripts on hg38 the alignment does not even reach the start of
+ * the CDS, and anchoring on the alignment would quietly renumber from the wrong base. */
+{
+struct hashEl *el, *elList = hashElListHash(pslHash);
+if (elList == NULL)
+    return;
+struct dyString *accs = dyStringNew(1024);
+int n = 0;
+for (el = elList;  el != NULL && n < 2000;  el = el->next, n++)
+    {
+    if (n > 0)
+        sqlDyStringPrintf(accs, ",");
+    sqlDyStringPrintf(accs, "'%s'", el->name);
+    }
+struct dyString *query = NULL;
+if (sameString(table, "ncbiRefSeqPsl") && hTableExists(db, "ncbiRefSeqCds"))
+    query = sqlDyStringCreate("select id, cds from ncbiRefSeqCds where id in (%-s)",
+                              accs->string);
+else if (hTableExists(db, gbCdnaInfoTable) && hTableExists(db, cdsTable))
+    query = sqlDyStringCreate(
+        "select g.acc, c.name from %s g, %s c where g.cds = c.id and g.acc in (%-s)",
+        gbCdnaInfoTable, cdsTable, accs->string);
+if (query != NULL)
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    struct sqlResult *sr = sqlGetResult(conn, query->string);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct genbankCds *cds;
+        AllocVar(cds);
+        if (genbankCdsParse(row[1], cds) && cds->start < cds->end)
+            hashAdd(cdsHash, row[0], cds);
+        else
+            freez(&cds);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    dyStringFree(&query);
+    }
+dyStringFree(&accs);
+hashElFreeList(&elList);
+}
+
+static struct txAliWindow *txAliInWindow(char *db, char *table, char *chrom)
+/* Return the alignments overlapping this window and their transcripts' CDS.  Two queries
+ * per table per window, the first on the bin index, and the window is never wide:  the
+ * codon coloring this feeds only happens at zoomedToCdsColorLevel. */
+{
+static struct hash *windowHash = NULL;
+if (windowHash == NULL)
+    windowHash = hashNew(0);
+char key[1024];
+safef(key, sizeof(key), "%s:%s:%s:%d:%d", db, table, chrom, winStart, winEnd);
+struct txAliWindow *tw = hashFindVal(windowHash, key);
+if (tw == NULL)
+    {
+    AllocVar(tw);
+    tw->pslHash = hashNew(8);
+    tw->cdsHash = hashNew(8);
+    struct sqlConnection *conn = hAllocConn(db);
+    int rowOffset = 0;
+    struct sqlResult *sr = hRangeQuery(conn, table, chrom, winStart, winEnd, NULL, &rowOffset);
+    char **row;
+    while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
+        {
+        struct psl *psl = pslLoad(row+rowOffset);
+        struct psl *pslList = hashFindVal(tw->pslHash, psl->qName);
+        slAddHead(&pslList, psl);
+        hashReplace(tw->pslHash, psl->qName, pslList);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    loadTxCdsBatch(db, table, tw->pslHash, tw->cdsHash);
+    hashAdd(windowHash, key, tw);
+    }
+return tw;
+}
+
+struct psl *baseColorTxAliForGenePred(struct track *tg, struct genePred *gp,
+        struct genbankCds *retCds)
+/* Return the alignment that gives gp's transcript coordinates of its own, and fill in
+ * retCds with the transcript's CDS in those coordinates, so that codons can be numbered
+ * the way the transcript numbers them as well as the way they fall on the genome.  NULL
+ * when this assembly has no such alignment or no CDS for gp, and codons are then numbered
+ * only along the genome, as they always have been. */
+{
+/* Only look anything up where the second number can actually be seen:  the codon mouseover
+ * that carries it is itself drawn only at zoomedToCdsColorLevel, and that also keeps the
+ * window, and so the alignment query, small. */
+if (!txCodonNumbersEnabled() || !zoomedToCdsColorLevel)
+    return NULL;
+char *db = cdsDb(tg);
+char *table = txAliTable(db, gp->name);
+if (table == NULL)
+    return NULL;
+struct txAliWindow *tw = txAliInWindow(db, table, gp->chrom);
+struct genbankCds *cds = hashFindVal(tw->cdsHash, gp->name);
+if (cds == NULL)
+    return NULL;
+/* One transcript can align in several places, so take the alignment this item came from. */
+struct psl *psl;
+for (psl = hashFindVal(tw->pslHash, gp->name);  psl != NULL;  psl = psl->next)
+    {
+    if (sameString(psl->tName, gp->chrom) &&
+        psl->tStart <= gp->txStart && psl->tEnd >= gp->txEnd)
+        {
+        if (retCds != NULL)
+            *retCds = *cds;
+        return psl;
+        }
+    }
+return NULL;
+}
+
+static int pslTToTxOffset(struct psl *txAli, int t)
+/* Map a genomic coordinate to a 0-based offset in the query, counted in the query's own
+ * 5' to 3' order; -1 if t does not align.  txAli->strand[0] is '-' when the query was
+ * reverse complemented to align, and txAli->qStarts are then in that flipped order. */
+{
+if (txAli->strand[1] == '-' || pslIsProtein(txAli))
+    return -1;                  // tStarts are not plain genomic coords, or blocks are codons
+/* tStarts ascend, so find the block by bisection:  this is called once per codon and a
+ * mucin's alignment has a few hundred blocks. */
+int lo = 0, hi = txAli->blockCount - 1;
+while (lo <= hi)
+    {
+    int mid = (lo + hi) / 2;
+    if (t < txAli->tStarts[mid])
+        hi = mid - 1;
+    else if (t >= txAli->tStarts[mid] + txAli->blockSizes[mid])
+        lo = mid + 1;
+    else
+        {
+        int qOff = txAli->qStarts[mid] + (t - txAli->tStarts[mid]);
+        if (txAli->strand[0] == '-')
+            qOff = txAli->qSize - 1 - qOff;
+        return qOff;
+        }
+    }
+return -1;
+}
+
+static int txCodonIndexForCodon(struct psl *txAli, struct genbankCds *txCds,
+        int start, int end, boolean posStrand)
+/* Return the codon's 1-based number counted in the transcript's own coordinates, or 0 if
+ * that cannot be worked out.  Any of a codon's three bases gives the same answer, so a
+ * codon split across an intron gets one number for both of its pieces. */
+{
+if (txAli == NULL || txCds == NULL || txCds->start >= txCds->end)
+    return 0;
+if (!txCodonNumbersEnabled())
+    return 0;
+int txOff = pslTToTxOffset(txAli, posStrand ? start : end-1);
+if (txOff < 0)
+    return 0;
+int cdsOff = txOff - txCds->start;
+if (cdsOff < 0)
+    return 0;
+return cdsOff/3 + 1;
+}
+
+boolean baseColorCodonIsShifted(struct simpleFeature *sf)
+/* Does this codon's number along the genome disagree with its number in the transcript? */
+{
+return (sf->codonIndex != 0 && sf->txCodonIndex != 0 && sf->txCodonIndex != sf->codonIndex);
+}
+
 static void getCdsFromTbl(char *db, char *acc, char *baseColorSetting, struct genbankCds* cds)
 /* Get CDS from a specified table, doing nothing if not found */
 {
@@ -933,7 +1138,9 @@ else
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart, FALSE);
+    /* This psl is what gave gp its exons, so it is also what says which query bases the
+     * genome does not have; hand it back so the codons carry both numberings. */
+    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart, FALSE, psl, &cds);
     genePredFree(&gp);
     }
 return(sfList);
@@ -1370,10 +1577,15 @@ return sfList;
 }
 
 struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf, 
-        struct genePred *gp, boolean colorStopStart, boolean codonNumbering)
-/* Given an lf and the genePred from which the lf was constructed, 
- * return a list of simpleFeature elements, one per codon (or partial 
- * codon if the codon falls on a gap boundary. */
+        struct genePred *gp, boolean colorStopStart, boolean codonNumbering,
+        struct psl *txAli, struct genbankCds *txCds)
+/* Given an lf and the genePred from which the lf was constructed,
+ * return a list of simpleFeature elements, one per codon (or partial
+ * codon if the codon falls on a gap boundary.
+ * txAli and txCds are the transcript's own alignment and its CDS in transcript
+ * coordinates, from baseColorTxAliForGenePred; together they give each codon a second
+ * number counted the way the transcript counts.  Pass NULL for txAli when there is none,
+ * and codons are numbered only along the genome, as they always have been. */
 {
 unsigned *starts = gp->exonStarts;
 unsigned *ends = gp->exonEnds;
@@ -1549,6 +1761,8 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 				      !posStrand, colorStopStart, &sf->codonAa) :
 			GRAYIX_CDS_ERROR;
                     sf->codonIndex = codonIndex;
+                    sf->txCodonIndex = txCodonIndexForCodon(txAli, txCds, currentStart,
+                                                            currentEnd, posStrand);
 		    slAddHead(&sfList, sf);
 		    }
                 break;
@@ -1606,6 +1820,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
                 errAbort("%s: Too much dna (%d - %d = %d)<br>\n", lf->name, 
 			 currentEnd, currentStart, currentSize);
 
+            sf->txCodonIndex = txCodonIndexForCodon(txAli, txCds, sf->start, sf->end, posStrand);
             sf->codonIndex = codonIndex++;
             slAddHead(&sfList, sf);
             if(posStrand)
@@ -1846,8 +2061,15 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 {
 char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
+/* This codon sits 3' of transcript bases that the assembly does not have, so the number we
+ * count off the genome is not the number NCBI counts off the transcript.  Flag it with the
+ * colour the browser already uses for a query insertion, and with a "!" where the codon
+ * number is being drawn and there is room for one more character. */
+boolean codonShifted = baseColorCodonIsShifted(sf);
+if (codonShifted)
+    color = cdsColor[CDS_QUERY_INSERTION];
 if (zoomedToCodonNumberLevel && sf->codonIndex && ( e - s >= 3))  // don't put exon numbers on split codons because there isn't space.
-    safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
+    safef(codon, sizeof(codon), "%c %d%s", codon[0], sf->codonIndex, codonShifted ? "!" : "");
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
  * so don't waste time drawing the differences here: */

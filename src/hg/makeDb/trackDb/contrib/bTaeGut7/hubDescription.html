@@ -1,0 +1,54 @@
+<h2>Description</h2>
+<p>
+This hub carries the annotations released with the telomere-to-telomere genome of the zebra
+finch, <em>Taeniopygia guttata</em>, individual bTaeGut7. The assembly resolves the somatic
+genome completely, including the centromeres and eleven telomere-to-telomere dot chromosomes,
+and adds 2,710 genes that were missing or incomplete in the previous zebra finch reference.
+</p>
+<p>
+The tracks are shown on the maternal haplotype, which NCBI holds as <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_048771995.1/" target="_blank">GCF_048771995.1</a>. The paternal haplotype
+is a separate assembly, <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCA_048772025.1/" target="_blank">GCA_048772025.1</a>, and is not part of this hub. Annotations that fall on paternal
+sequence are present in the underlying files but are not displayed here, because this assembly
+does not contain those chromosomes.
+</p>
+
+<h2>Tracks</h2>
+<p>
+Three tracks describe the bare sequence and stand on their own: GC Content, Sequence Entropy
+and Non-B DNA. The rest are grouped into collections.
+</p>
+<table class="stdTbl">
+  <tr><th>Collection</th><th>Tracks</th></tr>
+  <tr><td>Read Coverage</td><td>HiFi Coverage, ONT Coverage, CLR Coverage</td></tr>
+  <tr><td>Genes and Retrocopies</td><td>EGAPx Genes, Retrocopies</td></tr>
+  <tr><td>Repeats</td><td>Transposable Elements, Tandem Repeats, Satellite Repeats</td></tr>
+  <tr><td>Centromeres and Telomeres</td><td>Centromeric Satellites, Centromere Cores, Centromere Markers, Telomeres, Interstitial Telomeres</td></tr>
+  <tr><td>Structural Variation</td><td>Previously Unassembled, Large SVs</td></tr>
+  <tr><td>Methylation and 3D Chromatin</td><td>5mC Methylation, Compartment E1, A/B Compartments</td></tr>
+</table>
+
+<h2>Data Access</h2>
+<p>
+Each track has its own description page with download and intersection instructions. The
+original annotation files are on GenomeArk, <a href="https://genomeark.s3.amazonaws.com/index.html?prefix=species/Taeniopygia_guttata/bTaeGut7/manuscript/annotations/" target="_blank">in the bTaeGut7 annotations directory</a>, and the assembly and raw data are under the
+<a href="https://www.genomeark.org/genomeark-all/Taeniopygia_guttata.html" target="_blank">GenomeArk page for this species</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Formenti G, Jain N, Medico JA, Sollitto M, Antipov D, Barcellos S, Biegler M, Borges I, Chang JK,
+Chen Y <em>et al</em>.
+<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(26)00816-0" target="_blank">
+The complete genome of a songbird</a>.
+<em>Cell</em>. 2026 Aug 6;189(16):4922-4945.e12.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42561917" target="_blank">42561917</a>
+</p>
+
+<h2>Credits</h2>
+<p>
+The assembly and all of these annotations were produced by the Vertebrate Genome Laboratory at
+The Rockefeller University and their collaborators, and released through GenomeArk. Thanks to
+Giulio Formenti and Erich D. Jarvis and their co-authors for making the data available before
+and after publication. The analysis code is at <a href="https://github.com/gf777/T2T-zebra-finch" target="_blank">github.com/gf777/T2T-zebra-finch</a>. This hub was assembled at UCSC from the IGV
+session distributed with the annotations, using hubtools.
+</p>

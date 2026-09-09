@@ -1,0 +1,292 @@
+track gcPercent
+shortLabel GC Content
+longLabel GC content in 200 bp windows
+type bigWig
+bigDataUrl gcPercent.bw
+visibility full
+priority 1.1
+group map
+html gcPercent.html
+autoScale on
+viewLimits 0:63.03
+graphTypeDefault points
+windowingFunction mean
+
+track seqEntropy
+shortLabel Sequence Entropy
+longLabel Shannon sequence entropy in 200 bp windows
+type bigWig
+bigDataUrl seqEntropy.bw
+visibility full
+priority 1.2
+group map
+html seqEntropy.html
+autoScale on
+viewLimits 0:1.99
+graphTypeDefault points
+windowingFunction mean
+
+track nonBdna
+shortLabel Non-B DNA
+longLabel Non-B DNA motifs: G-quadruplexes, Z-DNA, triplex and repeat-based structures
+type bigBed 9
+bigDataUrl nonBdna.bb
+visibility dense
+priority 1.3
+group varRep
+html nonBdna.html
+itemRgb on
+maxWindowToDraw 26799200
+
+track readCoverage
+superTrack on show
+shortLabel Read Coverage
+longLabel Long-read sequencing coverage
+priority 2
+group map
+html readCoverage.html
+
+    track covHifi
+    parent readCoverage
+    shortLabel HiFi Coverage
+    longLabel PacBio HiFi read coverage
+    type bigWig
+    bigDataUrl covHifi.bw
+    visibility full
+    priority 2.1
+    html covHifi.html
+    autoScale on
+    viewLimits 0:240.128
+    graphTypeDefault bar
+    windowingFunction mean
+
+    track covOnt
+    parent readCoverage
+    shortLabel ONT Coverage
+    longLabel Oxford Nanopore read coverage
+    type bigWig
+    bigDataUrl covOnt.bw
+    visibility full
+    priority 2.2
+    html covOnt.html
+    autoScale on
+    viewLimits 0:290.112
+    graphTypeDefault bar
+    windowingFunction mean
+
+    track covClr
+    parent readCoverage
+    shortLabel CLR Coverage
+    longLabel PacBio CLR read coverage from the earlier bTaeGut1.4 individual
+    type bigWig
+    bigDataUrl covClr.bw
+    visibility full
+    priority 2.3
+    html covClr.html
+    autoScale on
+    viewLimits 0:562.551
+    graphTypeDefault bar
+    windowingFunction mean
+
+track genes
+superTrack on show
+shortLabel Genes and Retrocopies
+longLabel Gene models and processed retrocopies
+priority 3
+group genes
+html genes.html
+
+    track egapx
+    parent genes
+    shortLabel EGAPx Genes
+    longLabel Protein-coding and lncRNA gene models from NCBI EGAPx
+    type bigGenePred
+    bigDataUrl egapx.bb
+    visibility pack
+    priority 3.1
+    html egapx.html
+
+    track retrocopies
+    parent genes
+    shortLabel Retrocopies
+    longLabel Processed retrocopies identified with RCPedia
+    type bigGenePred
+    bigDataUrl retrocopies.bb
+    visibility pack
+    priority 3.2
+    html retrocopies.html
+
+track repeats
+superTrack on show
+shortLabel Repeats
+longLabel Transposable elements, tandem repeats and satellite arrays
+priority 4
+group varRep
+html repeats.html
+
+    track transposons
+    parent repeats
+    shortLabel Transposable Elements
+    longLabel Transposable elements and interspersed repeats from EDTA2
+    type bigBed 9 +
+    bigDataUrl transposons.bb
+    visibility dense
+    priority 4.1
+    html transposons.html
+    maxWindowToDraw 809629799
+    itemRgb on
+
+    track tandemRepeats
+    parent repeats
+    shortLabel Tandem Repeats
+    longLabel Tandem repeat arrays from Tandem Repeats Finder
+    type bigBed 6 +
+    bigDataUrl tandemRepeats.bb
+    visibility dense
+    priority 4.2
+    html tandemRepeats.html
+    maxWindowToDraw 11605447
+
+    track satellome
+    parent repeats
+    shortLabel Satellite Repeats
+    longLabel Satellite repeat arrays from the Satellome catalog
+    type bigBed 6
+    bigDataUrl satellome.bb
+    visibility pack
+    priority 4.3
+    html satellome.html
+
+track centroTelo
+superTrack on show
+shortLabel Centromeres and Telomeres
+longLabel Centromere cores and markers, telomeres and interstitial telomeric sequences
+priority 5
+group map
+html centroTelo.html
+
+    track centroSat
+    parent centroTelo
+    shortLabel Centromeric Satellites
+    longLabel Centromeric satellite arrays from a curated satellite library
+    type bigBed 9 +
+    bigDataUrl centroSat.bb
+    visibility pack
+    priority 5.1
+    html centroSat.html
+    itemRgb on
+
+    track centroCores
+    parent centroTelo
+    shortLabel Centromere Cores
+    longLabel Centromere core regions predicted by Centromere Detector
+    type bigBed 9 +
+    bigDataUrl centroCores.bb
+    visibility pack
+    priority 5.2
+    html centroCores.html
+    itemRgb on
+
+    track centroMarkers
+    parent centroTelo
+    shortLabel Centromere Markers
+    longLabel Mapped positions of published centromeric and distal primer pairs
+    type bigBed 4
+    bigDataUrl centroMarkers.bb
+    visibility pack
+    priority 5.3
+    html centroMarkers.html
+
+    track telomeres
+    parent centroTelo
+    shortLabel Telomeres
+    longLabel Terminal TTAGGG telomere arrays
+    type bigBed 4 +
+    bigDataUrl telomeres.bb
+    visibility pack
+    priority 5.4
+    html telomeres.html
+
+    track itsRepeats
+    parent centroTelo
+    shortLabel Interstitial Telomeres
+    longLabel Interstitial telomeric sequences away from the chromosome ends
+    type bigBed 3
+    bigDataUrl itsRepeats.bb
+    visibility pack
+    priority 5.5
+    html itsRepeats.html
+
+track structVar
+superTrack on show
+shortLabel Structural Variation
+longLabel Previously unassembled regions and large inter-haplotype variants
+priority 6
+group varRep
+html structVar.html
+
+    track newRegions
+    parent structVar
+    shortLabel Previously Unassembled
+    longLabel Regions missing or collapsed in the earlier bTaeGut1.4 reference
+    type bigBed 3
+    bigDataUrl newRegions.bb
+    visibility pack
+    priority 6.1
+    html newRegions.html
+
+    track largeSv
+    parent structVar
+    shortLabel Large SVs
+    longLabel Large structural variants between the maternal and paternal haplotypes
+    type bigBed 4
+    bigDataUrl largeSv.bb
+    visibility pack
+    priority 6.2
+    html largeSv.html
+
+track chromatin
+superTrack on show
+shortLabel Methylation and 3D Chromatin
+longLabel CpG methylation and Hi-C A/B compartments
+priority 7
+group regulation
+html chromatin.html
+
+    track methyl5mC
+    parent chromatin
+    shortLabel 5mC Methylation
+    longLabel CpG 5-methylcytosine probability from PacBio HiFi reads
+    type bigWig
+    bigDataUrl methyl5mC.bw
+    visibility full
+    priority 7.1
+    html methyl5mC.html
+    autoScale on
+    viewLimits 0:94.529
+    graphTypeDefault bar
+    windowingFunction mean
+
+    track compartE1
+    parent chromatin
+    shortLabel Compartment E1
+    longLabel Hi-C first eigenvector at 200 kb, positive in the active A compartment
+    type bigWig
+    bigDataUrl compartE1.bw
+    visibility full
+    priority 7.2
+    html compartE1.html
+    autoScale on
+    viewLimits -1.143:1.67
+    windowingFunction mean
+
+    track compartAB
+    parent chromatin
+    shortLabel A/B Compartments
+    longLabel Hi-C A and B compartment intervals at 200 kb
+    type bigBed 9
+    bigDataUrl compartAB.bb
+    visibility dense
+    priority 7.3
+    html compartAB.html
+    itemRgb on

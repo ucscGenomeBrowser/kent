@@ -530,9 +530,15 @@ static char *sqlAddressMatch(char *email)
  * recovery address.  An unconfirmed recovEmail is only a string that a signup form typed in --
  * nobody ever proved they can read mail there -- so matching it would let someone who registered
  * with a victim's address as their recovery address capture that victim's login (see
- * confirmRecovEmail).  Callers must pass a non-empty email, or rows with a blank recovEmail
- * match.  Result is allocd and carries the sqlSafef prefix; embed it with %-s. */
+ * confirmRecovEmail).  An empty email matches nothing: rows with a blank recovEmail would
+ * otherwise all match, which is every account on a mirror that has just added the column.
+ * Result is allocd and carries the sqlSafef prefix; embed it with %-s. */
 {
+if (isEmpty(email))
+    {
+    struct dyString *dyNone = sqlDyStringCreate("(0)");
+    return dyStringCannibalize(&dyNone);
+    }
 struct dyString *dy = sqlDyStringCreate("(email='%s'", email);
 if (recovEmailVerifyOk)
     sqlDyStringPrintf(dy, " OR (recovEmail='%s' AND recovEmailVerified='Y')", email);
@@ -874,10 +880,16 @@ void activateAccount(struct sqlConnection *conn)
 char query[256];
 char *token = cgiUsualString("token", "");
 char *username = cgiUsualString("user","");
+/* Let the database decide whether the token is still current: setupNewAccount sets
+ * emailTokenExpires seven days out and the activation mail says the code expires then, so a
+ * link older than that must no longer work.  An unknown user name gives NULL here, and an
+ * account that has already been activated has an empty emailToken, so both fall through to
+ * the same message as a wrong token. */
 sqlSafef(query,sizeof(query),
-    "SELECT emailToken FROM gbMembers WHERE userName='%s'", username);
+    "SELECT emailToken FROM gbMembers WHERE userName='%s' AND emailTokenExpires > NOW()",
+    username);
 char *emailToken = sqlQuickString(conn, query);
-if (sameString(emailToken, token))
+if (isNotEmpty(emailToken) && sameString(emailToken, token))
     {
     sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' WHERE userName='%s'",
     username);
@@ -888,7 +900,8 @@ if (sameString(emailToken, token))
 else
     {
     freez(&errMsg);
-    errMsg = cloneString("This activation link is not valid or has already been used.");
+    errMsg = cloneString("This activation link is not valid, has expired, or has already "
+        "been used.");
     }
 cartSetString(cart, "hgLogin_userName", username);
 
@@ -1126,9 +1139,11 @@ static char *recovEmailSig(char *user, char *newRecov, char *curRecov, char *cur
  * newRecov is already stored, unconfirmed) and a later change (where it is not stored at all
  * until the link is opened, so a typo cannot cost the user a working recovery address).
  * curRecov and curVerified are the account's stored address and flag when the link was minted;
- * because confirmRecovEmail recomputes the signature from what is on the account now, a link
- * stops validating once it has been used, so each link works exactly once and a stale link
- * cannot quietly undo a newer change.  Result is allocd. */
+ * because confirmRecovEmail recomputes the signature from what is on the account now, applying a
+ * link stops it validating, so a stale link cannot quietly undo a newer change.  Note this is a
+ * check on the account's state, not a one-time token: put the account back the way it was when the
+ * link was minted and, within the week, the same link applies again.  That only ever moves the
+ * owner between addresses they have already confirmed for themselves.  Result is allocd. */
 {
 char *salt = cfgOption(CFG_LOGIN_COOKIE_SALT);
 if (isEmpty(salt))

@@ -44,11 +44,28 @@ function createInfoIcon(text) {
     return span;
 }
 
+function copyButtonSaysCopied(buttonEl) {
+    /* Say "Copied" on a copy-to-clipboard button, then put the button's own label back after three
+     * seconds, so it is clear that the button can be used again.  The label is remembered on the
+     * element itself, so a second copy while the message is up does not take "Copied" for it. */
+    if (buttonEl.copyButtonLabel === undefined)
+        buttonEl.copyButtonLabel = buttonEl.innerHTML;
+    if (buttonEl.copyButtonTimer)
+        clearTimeout(buttonEl.copyButtonTimer);
+    buttonEl.innerHTML = 'Copied';
+    buttonEl.copyButtonTimer = setTimeout(function() {
+        buttonEl.innerHTML = buttonEl.copyButtonLabel;
+        buttonEl.copyButtonTimer = null;
+    }, 3000);
+}
+
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
      * The text is either in the attribute data-copy or the innerText.
      * see C function printCopyToClipboardButton(iconId, targetId);
+     * Returns true if the text really reached the clipboard.  A browser will refuse a copy that no
+     * click of the user's asked for, so a caller that copies on its own behalf has to check.
      * */
      
     ev.preventDefault();
@@ -72,10 +89,16 @@ function copyToClipboard(ev) {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    document.execCommand('copy');
+    var ok = false;
+    try {
+        ok = document.execCommand('copy');
+    } catch (e) {
+        ok = false;
+    }
     document.body.removeChild(textArea);
-    buttonEl.innerHTML = 'Copied';
-    ev.preventDefault();
+    if (ok)
+        copyButtonSaysCopied(buttonEl);
+    return ok;
 }
 
 function cfgPageOnVisChange(ev) {

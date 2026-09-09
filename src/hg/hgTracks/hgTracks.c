@@ -12501,7 +12501,7 @@ tg->longLabel = labelAddNote(tg->longLabel,
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "too many features, density shown - zoom in for individual items or use squish or dense mode");
+tg->longLabel = labelAddNote(tg->longLabel, "too many features, density shown, zoom in for individual items or use squish or dense mode");
 }
 
 void labelTrackAsDensityTooManyItems(struct track *tg)

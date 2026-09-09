@@ -129,7 +129,12 @@ for an individual subtrack, click the wrench icon next to the track name in the 
   allows users to quickly validate and compare gene predictions. To display codon colors, select the
   <em>genomic codons</em> option from the <em>Color track by codons</em> pull-down menu. For more 
   information about this feature, go to the <a href="../goldenPath/help/hgCodonColoring.html" 
-  target="_blank">Coloring Gene Predictions and Annotations by Codon</a> page.</li>
+  target="_blank">Coloring Gene Predictions and Annotations by Codon</a> page.
+  Codons are counted along the genome, so where a RefSeq transcript's own sequence differs from
+  the assembly by an insertion or a deletion, the codon number shown here differs from the one
+  NCBI reports for that transcript. Those codons are drawn in orange with a "!" after the codon
+  number, and their mouseover gives both numbers; the RefSeq Alignments and RefSeq Diffs
+  subtracks show the underlying difference.</li>
 </ul>
 
 <p>The <em>RefSeq Diffs</em> track contains five different types of inconsistency between the

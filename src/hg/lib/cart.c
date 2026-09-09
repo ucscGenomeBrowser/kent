@@ -1764,6 +1764,14 @@ return cgiOptionalString("hgsid");
 void printCaptcha() 
 /* print an html page that shows the captcha and on success, reloads the page with the token added as token=x */
 {
+    // A CGI run from the command line has no browser to solve a captcha, so the
+    // challenge page would just replace the output the caller asked for. Only a
+    // real command-line run reaches here with wasSpoofed set: cgiFromCommandLine()
+    // returns early, leaving it FALSE, whenever the web server has set
+    // REQUEST_METHOD, so this cannot be reached from an HTTP request.
+    if (cgiWasSpoofed())
+        return;
+
     char *cfSiteKey = cfgVal(CLOUDFLARESITEKEY);
     if (!cfSiteKey)
         return;

@@ -280,6 +280,16 @@ function blatApplyTooltips() {
 // The snapshot link we created for this page view, cached so re-opening the box doesn't make another.
 var blatShareCachedUrl = null;
 
+// True while the create request is on its way.  The cached URL only exists once the reply is in, so
+// without this a second click during the wait mints a second snapshot session for the same results.
+var blatShareBusy = false;
+
+// Is the share box on screen?  A reply that arrives after the user has clicked the button again to
+// dismiss the box must not reopen it.
+function blatShareBoxOpen(box) {
+    return box.style.display === 'flex';
+}
+
 // Render the share box.  url set -> show the link + Copy; url null -> "Creating link…"; msg (url null)
 // -> show an error.
 function blatShowShareBox(box, url, msg) {
@@ -327,8 +337,11 @@ function blatShareLink() {
     if (/[?&]s=/.test(window.location.search)) { blatShowShareBox(box, window.location.href); return; }
     // Already created one this page view: reuse it rather than creating another session.
     if (blatShareCachedUrl) { blatShowShareBox(box, blatShareCachedUrl); return; }
+    // One is already being created: show it working again instead of asking for a second one.
+    if (blatShareBusy) { blatShowShareBox(box, null); return; }
 
     var cfg = hgBlatData.config;
+    blatShareBusy = true;
     blatShowShareBox(box, null);   // "Creating link…"
     var body = 'hgsid=' + encodeURIComponent(cfg.hgsid || '') +
         '&hgS_doSaveSessionJson=1&hgS_shareAnon=1&hgS_snapshotType=blat';
@@ -336,16 +349,23 @@ function blatShareLink() {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: body})
         .then(function(r) { return r.json(); })
         .then(function(data) {
+            blatShareBusy = false;
             if (!data || !data.name) {
-                blatShowShareBox(box, null, (data && data.error) || 'Could not create the link.');
+                if (blatShareBoxOpen(box))
+                    blatShowShareBox(box, null, (data && data.error) || 'Could not create the link.');
                 return;
             }
             blatShareCachedUrl = window.location.origin + '/cgi-bin/hgBlat?u=l&s=' +
                 encodeURIComponent(data.name);
-            blatShowShareBox(box, blatShareCachedUrl);
+            // Keep a box the user dismissed while waiting closed; the link is cached for the
+            // next click on the button.
+            if (blatShareBoxOpen(box))
+                blatShowShareBox(box, blatShareCachedUrl);
         })
         .catch(function() {
-            blatShowShareBox(box, null, 'Could not reach the server. Please try again.');
+            blatShareBusy = false;
+            if (blatShareBoxOpen(box))
+                blatShowShareBox(box, null, 'Could not reach the server. Please try again.');
         });
 }
 

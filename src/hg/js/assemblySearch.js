@@ -2,7 +2,7 @@
 
 /* jshint esnext: true */
 
-var debug = false;
+var searchDebug = false;   // not "debug": utils.js owns that global name
 var measureTiming = false;
 var urlParams;
 var query = "";
@@ -99,14 +99,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (urlParams.has('debug')) { // accepts no value or other string
        var debugValue = urlParams.get('debug');
        if ("0" === debugValue | "off" === debugValue) {
-         debug = false;
+         searchDebug = false;
        } else {			// any other string turns it on
-         debug = true;
+         searchDebug = true;
        }
     }
 
     // add extra element to the help text bullet list for API example
-    if (debug) {
+    if (searchDebug) {
       var searchTipList = document.getElementById("searchTipList");
       // Create a new list item
       var li = document.createElement("li");
@@ -566,41 +566,6 @@ function sendRequest(name, email, asmId, betterName, comment) {
 
 }  //      sendRequest: function(name, email, asmId, betterName, comment)
 
-// borrowed this code from utils.js
-function copyToClipboard(ev) {
-    /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon.
-     * The attribute data-target of this element is the ID of the element that contains the text to copy.
-     * The text is either in the attribute data-copy or the innerText.
-     * see C function printCopyToClipboardButton(iconId, targetId);
-     * */
-
-    ev.preventDefault();
-
-    var buttonEl = ev.target.closest("button"); // user can click SVG or BUTTON element
-
-    var targetId = buttonEl.getAttribute("data-target");
-    if (targetId===null)
-        targetId = ev.target.parentNode.getAttribute("data-target");
-    var textEl = document.getElementById(targetId);
-    var text = textEl.getAttribute("data-copy");
-    if (text===null)
-        text = textEl.innerText;
-
-    var textArea = document.createElement("textarea");
-    textArea.value = text;
-    // Avoid scrolling to bottom
-    textArea.style.top = "0";
-    textArea.style.left = "0";
-    textArea.style.position = "fixed";
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    buttonEl.innerHTML = 'Copied';
-    ev.preventDefault();
-}
-
 // do not allow both checkboxes to go off
 function atLeastOneCheckBoxOn(e) {
   var mustExist = document.getElementById('mustExist').checked;
@@ -788,14 +753,14 @@ function makeRequest(query, browserExist, resultLimit) {
        historyUrl += ";category=" + refSeqCategory;	// something specific
     if (asmLevel !== "asmLevelAny")	// default is any level of assembly
        historyUrl += ";level=" + asmLevel;	// something specific
-    if (debug)
+    if (searchDebug)
        historyUrl += ";debug=1";
     if (measureTiming)
        historyUrl += ";measureTiming=1";
 
     var url = "/findGenome" + historyUrl;
 
-    if (debug) {
+    if (searchDebug) {
       var apiUrl = "<a href='" + urlPrefix + url + "' target=_blank>" + url + "</a>";
       document.getElementById("recentAjax").innerHTML = apiUrl;
     }
@@ -809,7 +774,7 @@ function makeRequest(query, browserExist, resultLimit) {
     }
     stateObject.maxItemsOutput = maxItemsOutput;
     stateObject.browser = browserExist;
-    stateObject.debug = debug;
+    stateObject.debug = searchDebug;
     stateObject.measureTiming = measureTiming;
     stateObject.wordMatch = wordMatch;
     stateObject.asmStatus = asmStatus;

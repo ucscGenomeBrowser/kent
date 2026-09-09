@@ -1,0 +1,123 @@
+<h2>Description</h2>
+
+<p>
+This track is part of the <a href="hgTrackUi?g=fiberSeq">Fiber-seq</a> collection. It shows the
+fraction of Fiber-seq molecules on which a given position was found to be
+accessible, in seven cell lines that are widely used in functional genomics. All seven are drawn
+as a single overlay with one color per cell line, so a position that is open in one cell type and
+closed in another is easy to spot. Positions where the assay could not decide, because fewer than
+four accessible molecules covered them, are left unscored.
+</p>
+
+<p>
+For the same signal in all 41 samples, along with called peaks and a per-haplotype breakdown, see
+the <a href="hgTrackUi?g=fiberSeqCompendium">Fiber-seq Compendium</a> track.
+</p>
+
+<h2>Display Conventions</h2>
+
+<p>
+The vertical axis is percent of molecules accessible, fixed from 0 to 100, and the seven cell
+lines are overlaid transparently in these colors:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#E69F00;width:2em">&nbsp;</th><td>GM12878, lymphoblastoid</td></tr>
+  <tr><th style="background-color:#56B4E9;width:2em">&nbsp;</th><td>K562, erythroleukemia</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th><td>HepG2, hepatocyte</td></tr>
+  <tr><th style="background-color:#F0E442;width:2em">&nbsp;</th><td>H1, embryonic stem cell</td></tr>
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th><td>Hap1, near-haploid myeloid</td></tr>
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th><td>Hek293T, embryonic kidney</td></tr>
+  <tr><th style="background-color:#CC79A7;width:2em">&nbsp;</th><td>Jurkat, T-lymphocyte</td></tr>
+</table>
+
+<p>
+Individual cell lines can be turned on and off, and the graph type and windowing function
+changed, on this configuration page. The default windowing function is maximum, so a narrow
+accessible element is not averaged away when the view is zoomed out.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Permeabilized cells were treated with the Hia5 N6-adenine methyltransferase, which methylates
+adenines in DNA that is not protected by a bound protein, and high molecular weight DNA was then
+prepared into PacBio SMRTbell libraries and sequenced. Adenine methylation was called from the
+reads with fibertools-rs, and reads were aligned and haplotype-phased. The FIRE pipeline then
+applied a semi-supervised XGBoost classifier to each read to label methyltransferase-sensitive
+patches as Fiber-seq Inferred Regulatory Elements (FIRE elements). The classifier was trained on
+21 GM12878 experiments spanning 5.8 to 13.3 percent adenine methylation, using DNase I and CTCF
+ChIP-seq peaks as positive labels, so that it generalizes across samples with different
+methylation efficiency. The percent-accessible value shown here is the number of reads carrying a
+FIRE element at a position divided by the number of reads covering it. See Vollger et al. for the
+full description.
+</p>
+
+<p>
+The bigWig files were downloaded from
+<a href="https://s3.kopah.uw.edu/userprod/web/public/hashed.PacBio-Fiber-seq/" target="_blank">the
+Stergachis lab data server</a>, one <tt>all.percent.accessible.bw</tt> per sample, and copied to
+UCSC without modification. The download and verification steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/fiberSeq.txt"
+target="_blank">makeDoc</a>, and the scripts that build the track are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/fiberSeq"
+target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>fiberSeqAcc</i>.
+</p>
+
+<p>
+For automated download and analysis, the signal is stored in bigWig files that can be downloaded
+from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/fiberSeq/" target="_blank">our download
+server</a>. There is one directory per sample accession, and the file for this track is called
+<tt>all.percent.accessible.bw</tt>. Individual regions or the whole genome can be obtained using
+our tool <tt>bigWigToBedGraph</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and binaries can be
+found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The
+tool can also be used to obtain values within a given range, e.g.
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/fiberSeq/PM00001/all.percent.accessible.bw
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original data can be downloaded from the
+<a href="https://s3.kopah.uw.edu/userprod/web/public/hashed.PacBio-Fiber-seq/" target="_blank">Stergachis
+lab data server</a>, and the lab maintains its own track hub and documentation at
+<a href="https://fiberseq.github.io/" target="_blank">fiberseq.github.io</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Mitchell Vollger, Andrew Stergachis and Shane Neph for generating this data and for
+making it available to the browser.
+</p>
+
+<h2>References</h2>
+
+<p>
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+WE, Bohaczuk SC <em>et al</em>.
+<a href="https://doi.org/10.1101/2024.06.14.599122" target="_blank">
+A haplotype-resolved view of human gene regulation</a>.
+<em>bioRxiv</em>. 2025 Jun 2;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40501892" target="_blank">40501892</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12157683/" target="_blank">PMC12157683</a>
+</p>
+
+<p>
+Stergachis AB, Debo BM, Haugen E, Churchman LS, Stamatoyannopoulos JA.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/32587015" target="_blank">
+Single-molecule regulatory architectures captured by chromatin fiber sequencing</a>.
+<em>Science</em>. 2020 Jun 26;368(6498):1449-1454.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32587015" target="_blank">32587015</a>
+</p>
+

@@ -4700,9 +4700,33 @@ that identifies the reference sequence.
     grouped together and passed to a single JavaScript function call.
     </p>
     <p>
-    The currently available plot type is <code>histogram</code>, which draws an SVG bar chart
-    from data encoded as space-separated <code>key=value</code> pairs (logfmt format).
-    The histogram plot type accepts the following JSON config keys:
+    Two keys in <code>&lt;jsonConfig&gt;</code> are understood by the browser itself, for
+    every plot type:
+    </p>
+    <ul>
+    <li><code>exportFields</code> &mdash; a JSON list of other bigBed field names. Their
+    values are passed to the JavaScript function as well, in a <code>fieldValues</code>
+    object keyed by field name. This lets one setting drive a visualization that needs
+    several fields, without the values having to be packed into a single field. Names that
+    are not fields of this bigBed are ignored, and at most 32 are exported. Unlike the field
+    the setting names, a field listed here still shows its own row in the details table.</li>
+    <li>any key whose name ends in <code>Url</code> &mdash; treated as a file, in the same way
+    as the <code>bigDataUrl</code> setting. A relative path is resolved against the track's
+    own <code>bigDataUrl</code>, so it can be written relative to the data file rather than
+    as a full URL, and this works whether the hub is loaded over http(s) or from a local
+    path. The file is read by the server, not fetched by the browser, so the host serving it
+    needs no <code>Access-Control-Allow-Origin</code> header. It does have to sit inside the
+    directory tree of a hub attached to the session: the browser requests it through
+    <code>hgTrackUi</code>, which canonicalizes the path and refuses anything outside a
+    connected hub, so a file elsewhere on the web or on the server cannot be read this
+    way.</li>
+    </ul>
+    <p>
+    Two plot types are available.
+    </p>
+    <p>
+    <code>histogram</code> draws an SVG bar chart from data encoded as space-separated
+    <code>key=value</code> pairs (logfmt format). It accepts the JSON config keys
     <code>title</code> (chart heading) and <code>xLabel</code> (x-axis label).
     </p>
     <P><B>Example:</B></P>
@@ -4715,6 +4739,62 @@ detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Alle
     logfmt-encoded histograms such as <code>15=0.025 22=0.016 23=0.747 24=0.211</code>.
     On the details page, each field's table row is replaced by an SVG bar chart drawn by
     the <code>hgc.histogram.js</code> module.
+    </p>
+    <p>
+    <code>scatterPlot</code> draws a cloud of background points and highlights the position
+    of the clicked item within it, which suits a track whose items carry coordinates in some
+    precomputed space. It accepts these JSON config keys:
+    </p>
+    <ul>
+    <li><code>dataUrl</code> &mdash; the file of background points (required). It must live
+    inside the hub, as described above.</li>
+    <li><code>xLabel</code>, <code>yLabel</code> &mdash; axis labels.</li>
+    <li><code>title</code> &mdash; replaces the field description in the left-hand column.</li>
+    <li><code>exportFields</code> &mdash; the fields holding the coordinates to highlight, as
+    described above. Each is drawn as a large dot in its own color, in the order listed, and
+    labelled in the legend below the plot. A track with only one point to highlight can leave
+    this out and put the coordinate in the field the setting names.</li>
+    </ul>
+    <p>
+    Each coordinate field holds one point, written either as <code>(x,y)</code> or as logfmt
+    <code>x=&lt;num&gt; y=&lt;num&gt;</code>; in the logfmt form the keys may carry a suffix,
+    so <code>x1=0.43 y1=-1.41</code> is also read.
+    </p>
+    <p>
+    The <code>dataUrl</code> file holds the background points, as JSON:
+    </p>
+<pre>
+[[x,y], ...]
+{"points": [[x,y], ...]}
+{"points": [{"x":x, "y":y, "l":"mouseover label", "c":"category"}, ...]}
+{"labels": ["category A","category B"], "points": [[x,y,categoryIndex,"mouseover label"], ...]}
+</pre>
+    <p>
+    or, when the URL ends in <code>.tsv</code> or <code>.txt</code>, as a tab-separated file
+    with a header line naming an <code>x</code> and a <code>y</code> column, plus optional
+    <code>l</code> and <code>c</code> columns:
+    </p>
+<pre>
+x	y	l	c
+0.467	-1.368	HG00096_H1	British from England and Scotland
+</pre>
+    <p>
+    Points carrying a category (<code>c</code>, or an index into <code>labels</code>) are
+    colored by it and listed in a legend; without one the cloud is drawn in grey. Points
+    carrying a label (<code>l</code>) show it on mouseover. The form with a separate
+    <code>labels</code> list keeps the file small when long category names repeat across
+    thousands of points. The cloud is drawn on a canvas, so a file of tens of thousands of
+    points still renders quickly.
+    </p>
+    <P><B>Example:</B></P>
+<pre>
+detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":["pca","pcaSegment"],"title":"Position in ancestry space","xLabel":"PC1","yLabel":"PC2"}
+</pre>
+    <p>
+    Here the bigBed fields <code>pca</code> and <code>pcaSegment</code> each hold a point such
+    as <code>(0.433,-1.407)</code>. On the details page the <code>pca</code> row is replaced
+    by a scatterplot of the reference points in <code>pclaiRefPanel.json</code>, with both of
+    the item's own coordinates marked on it.
     </p>
 </DIV>
 

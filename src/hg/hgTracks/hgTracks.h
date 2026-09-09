@@ -384,6 +384,11 @@ struct simpleFeature
                                          * (PSL, BAM, chain, snake); 0 for gene models (genePred). */
     int grayIx;                         /* Level of gray usually. */
     int codonIndex;                     /* 1-based codon index (ignored if 0) */
+    int txCodonIndex;                   /* 1-based codon index counted in the transcript's own
+                                         * coordinates rather than along the genome.  Only set
+                                         * when the transcript aligns with bases this assembly
+                                         * does not have, which is what makes the two disagree;
+                                         * 0 the rest of the time, and for non-codons. */
     char codonAa;                       /* For a codon, its display amino-acid letter:
                                          * AA letter, '*' stop, 'M' start, 'X' error/partial,
                                          * 0 if not a codon.  Set when grayIx is. */

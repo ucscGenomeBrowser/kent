@@ -20,6 +20,8 @@
 #include "jsHelper.h"
 #include "jsonParse.h"
 #include "jsonWrite.h"
+#include "net.h"
+#include "trackHub.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -611,6 +613,11 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         jsonWriteString(jw, "chrom", chrom);
         jsonWriteNumber(jw, "start", bed->chromStart);
         jsonWriteNumber(jw, "end", bed->chromEnd);
+        // Caching turned off for this session (the hgHubConnect file-caching button).
+        // A module that fetches a file has to say so, because a GET the browser has
+        // already cached would defeat it; the same flag hgTrackUi hands its own JS.
+        if (isNotEmpty(cartOptionalString(cart, "udcTimeout")))
+            jsonWriteBoolean(jw, "udcTimeout", TRUE);
         jsonWriteObjectStart(jw, "scripts");
 
         struct hashEl *hel, *helList = hashElListHash(plotTypeHash);
@@ -637,11 +644,77 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 if (isNotEmpty(jsonConfig))
                     {
                     struct jsonElement *configEl = jsonParse(jsonConfig);
+                    // jsonObjectVal hands back NULL for a JSON null, and the hash
+                    // routines below dereference their argument, so a hub writing
+                    // "detailsScript.<plotType>.<field> null" would crash us.
                     struct hash *configHash = jsonObjectVal(configEl, "detailsScript config");
+                    if (configHash == NULL)
+                        {
+                        jsonWriteObjectEnd(jw);
+                        continue;
+                        }
                     struct hashEl *cel, *celList = hashElListHash(configHash);
                     for (cel = celList; cel != NULL; cel = cel->next)
-                        jsonWriteJsonElement(jw, cel->name, cel->val);
+                        {
+                        // A config key ending in "Url" names a file, by the same convention
+                        // trackSettingIsFile() uses. The JS does not fetch it directly: it
+                        // asks hgTrackUi for it, which checks the path against the hubs on
+                        // this cart and reads it with udc. So resolve a relative path here
+                        // against the track's own bigDataUrl, which works whether the hub
+                        // was loaded over http or from a local path. A path the author
+                        // already made absolute is left alone.
+                        struct jsonElement *cval = cel->val;
+                        if (endsWith(cel->name, "Url") && cval != NULL
+                            && cval->type == jsonString && isNotEmpty(cval->val.jeString)
+                            && !hasProtocol(cval->val.jeString)
+                            && cval->val.jeString[0] != '/')
+                            {
+                            char *base = trackDbSetting(tdb, "bigDataUrl");
+                            if (isNotEmpty(base))
+                                {
+                                char *abs = trackHubRelativeUrl(base, cval->val.jeString);
+                                if (abs != NULL)
+                                    {
+                                    jsonWriteString(jw, cel->name, abs);
+                                    freeMem(abs);
+                                    continue;
+                                    }
+                                }
+                            }
+                        jsonWriteJsonElement(jw, cel->name, cval);
+                        }
                     hashElFreeList(&celList);
+
+                    // exportFields names other bigBed fields whose values are exported too,
+                    // so one setting can drive a plot that needs several fields. Only fields
+                    // that exist in this bigBed are exported, so a hub cannot name anything
+                    // else, and the type is checked rather than asserted because jsonListVal
+                    // and jsonStringVal errAbort on a mismatch and this JSON is hub-authored.
+                    struct jsonElement *efEl = hashFindVal(configHash,
+                                                           DETAILS_SCRIPT_EXPORT_FIELDS);
+                    if (efEl != NULL && efEl->type == jsonList)
+                        {
+                        jsonWriteObjectStart(jw, "fieldValues");
+                        struct slRef *ref;
+                        int efCount = 0;
+                        for (ref = efEl->val.jeList;
+                             ref != NULL && efCount < DETAILS_SCRIPT_MAX_EXPORT;
+                             ref = ref->next)
+                            {
+                            struct jsonElement *nameEl = ref->val;
+                            if (nameEl == NULL || nameEl->type != jsonString)
+                                continue;
+                            char *efName = nameEl->val.jeString;
+                            if (isEmpty(efName) || extraFieldPairs == NULL)
+                                continue;
+                            char *efVal = slPairFindVal(extraFieldPairs, efName);
+                            if (efVal == NULL)
+                                continue;
+                            jsonWriteString(jw, efName, efVal);
+                            efCount++;
+                            }
+                        jsonWriteObjectEnd(jw);
+                        }
                     }
                 jsonWriteObjectEnd(jw);
                 }
@@ -655,11 +728,34 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         struct dyString *ds = dyStringNew(1024);
         dyStringPrintf(ds, "var bedDetails = %s;\n", jw->dy->string);
 
-        // Dynamically import and call each plot type's module
+        // Dynamically import and call each plot type's module. The URL carries
+        // ?v=<mtime>, as every other js file does, so that a browser cannot serve a
+        // cached module against newer bedDetails JSON and a mirror cannot pair an old
+        // module with new CGIs. webTimeStampedLinkToResource() errAborts on a missing
+        // file and plotType comes from a hub, so a plotType with no module installed
+        // falls back to the plain path: that leaves a silent failed import as before,
+        // rather than taking the whole details page down over one bad hub setting.
         for (hel = helList; hel != NULL; hel = hel->next)
+            {
+            char modFile[PATH_LEN];
+            safef(modFile, sizeof modFile, "hgc.%s.js", hel->name);
+            char fallBack[PATH_LEN];
+            safef(fallBack, sizeof fallBack, "../js/%s", modFile);
+            char *modUrl = fallBack;
+            char *docRoot = hDocumentRoot();
+            if (docRoot != NULL)
+                {
+                char onDisk[PATH_LEN];
+                safef(onDisk, sizeof onDisk, "%s/js/%s", docRoot, modFile);
+                if (fileExists(onDisk))
+                    modUrl = webTimeStampedLinkToResource(modFile, FALSE);
+                }
             dyStringPrintf(ds, "$(document).ready(function() {\n"
-                "  import('../js/hgc.%s.js').then(function(mod) { mod.%s(bedDetails); });\n"
-                "});\n", hel->name, hel->name);
+                "  import('%s').then(function(mod) { mod.%s(bedDetails); });\n"
+                "});\n", modUrl, hel->name);
+            if (modUrl != fallBack)
+                freeMem(modUrl);
+            }
 
         jsInline(dyStringCannibalize(&ds));
         jsonWriteFree(&jw);

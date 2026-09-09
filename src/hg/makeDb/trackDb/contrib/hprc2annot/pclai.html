@@ -7,8 +7,8 @@ different populations, and "local ancestry" describes, region by region along a
 chromosome, where a stretch of DNA came from. Rather than picking one population
 label per region, pcLAI places each region on a continuous scale, so ancestry
 that sits between two reference populations is not forced into one of them. This
-track divides each haplotype into windows of about a hundred thousand bases and
-reports the ancestry inferred for each one, letting users see how ancestry varies
+track divides each haplotype into windows of 1000 SNPs, roughly a hundred thousand
+bases, and reports the ancestry inferred for each one, letting users see how ancestry varies
 along a single individual's genome.
 </p>
 
@@ -16,13 +16,35 @@ along a single individual's genome.
 <p>
 Each item is one genomic window. Items carry no visible label. Holding the mouse
 over an item shows the window identifier, the position of the window in the
-principal-component space that pcLAI uses to describe ancestry, the position of
-the longer ancestry segment the window belongs to, and a confidence score; the
-same values are on the details page. The item color is derived from the same
-principal-component position, so windows of similar inferred ancestry get similar
-colors and a run of shared ancestry appears as a block of consistent color.
-Because the color is continuous rather than a set of population labels, it is
-read by comparing regions with each other rather than against a fixed legend.
+principal-component space that pcLAI uses to describe ancestry, the ancestry the
+window is assigned to if that continuous position is discretized, and a confidence
+score; the same values are on the details page, together with a scatterplot
+showing where the window sits relative to the reference haplotypes that define the
+space. The item color is derived from the principal-component position, so windows
+of similar inferred ancestry get similar colors and a run of shared ancestry
+appears as a block of consistent color. Because the color is continuous rather
+than a set of population labels, it is read by comparing regions with each other
+rather than against a fixed legend.
+</p>
+<p>
+Neighboring windows inside one block of shared ancestry differ by only one or two
+color steps. Those small differences are not meaningful: the feature to read is
+the block, not the window. Two consequences are worth knowing before concluding
+that a display looks wrong. First, a haplotype with a single ancestry throughout gives one
+uniform color across every chromosome, which is the correct result for that
+sample rather than a rendering problem. Second, where a haplotype does carry
+several ancestries the blocks are tens of megabases long, so a view of only a few
+megabases usually falls inside one block and also looks uniform. Zooming out to a
+whole chromosome is what makes the block structure visible.
+</p>
+<p>
+Assembly <tt>GCA_018466835.2</tt> (sample HG02257) is a useful example of a
+haplotype with several ancestry blocks. Its <tt>chr17</tt> crosses four blocks,
+with transitions near 10.0 Mb, 50.7 Mb and 73.3 Mb, and <tt>chr5</tt> crosses
+four more across its 184 Mb; <tt>chr20</tt> and <tt>chr22</tt> each cross three.
+In that same assembly <tt>chr2</tt>, <tt>chr13</tt> and <tt>chr18</tt> carry a
+single ancestry from end to end and are uniform in color, so picking one of those
+chromosomes gives no sense of what the track shows.
 </p>
 <p>
 The track is best viewed in pack mode. In dense mode the windows are collapsed
@@ -34,13 +56,17 @@ onto one row, which hides the per-window values.
 Conventional local ancestry inference gives every segment of a genome one of a
 fixed set of population labels. Point cloud local ancestry inference instead
 places each segment at a point in a continuous coordinate space, so a genome
-becomes a cloud of points, one per haplotype segment. The coordinate space can be
-any continuous description of ancestry; here it is the first two principal
-components of a reference panel of genomes with known population of origin.
+becomes a cloud of points, one per window. The coordinate space can be any
+continuous description of ancestry; here it is the first two principal components
+of a reference PCA embedding built from 3122 1000 Genomes haplotypes of 21
+populations of known origin.
 Ancestry that falls between the reference populations, which a label-based method
 has to round to the nearest label, therefore stays visible as an intermediate
-position. The files carry both the coordinate of each individual window and the
-coordinate of the longer ancestry segment that window belongs to. See the
+position. Each haplotype is split into windows of 1000 SNPs and a coordinate is
+predicted for each, with a confidence score; windows of very low confidence are
+dropped before the files are published. The files also carry a discretized version
+of each prediction, written as the PCA centroid of the ancestry cluster the window
+falls in, which across the whole release takes only four values. See the
 reference below for the method. This track uses the assembly-coordinate
 (<tt>asm_coord</tt>) output, that is, ancestry placed on each HPRC assembly's own
 sequence; companion outputs projected onto GRCh38 and CHM13 coordinates are
@@ -51,9 +77,9 @@ The annotation files were obtained from the HPRC Release 2 data collection on th
 public <tt>s3://human-pangenomics</tt> bucket, indexed at
 <a href="https://github.com/human-pangenomics/hprc_intermediate_assembly/tree/main/data_tables/annotation/pclai" target="_blank">the hprc_intermediate_assembly data tables</a>.
 The per-assembly BED file was converted to a UCSC bigBed file, with the window
-identifier and the two sets of coordinates split out of the source item name into
-their own fields. The steps are described in the
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/contrib/hprc2annot.txt" target="_blank">makeDoc</a>,
+identifier and the predicted coordinate split out of the source item name into
+their own fields and the source's centroid column named. The steps are described in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/contrib/hprc2annot/hprc2annot.txt" target="_blank">makeDoc</a>,
 the build scripts are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/hprc2annot" target="_blank">kent source tree</a>,
 and the track configuration is in

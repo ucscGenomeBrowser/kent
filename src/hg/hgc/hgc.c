@@ -957,7 +957,9 @@ char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winE
 if (eUrl==NULL)
     return;
 
-char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%%' height='1024'");
+/* One percent sign, not two: this is an argument to the dyStringCreate below, not part of its
+ * format string, so a doubled one would reach the browser as a doubled one. */
+char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%' height='1024'");
 // Resizing requires the hgcDetails pages to include a bit of javascript.
 //
 // Explanation how this works and why the javascript is needed:
@@ -976,6 +978,9 @@ char *iframeOptions = trackDbSettingOrDefault(tdb, "iframeOptions", "width='100%
 // browsers ignore 'unsafe-inline', so an un-nonced inline script never runs.
 // The script stays here, ahead of the iframe, so resizeIframe is defined
 // before the iframed page loads and calls it.
+/* Only one iframe is queued at a time.  Every caller pairs with a printPos/bedPrintPos that
+ * flushes it, and printTrackHtml is a backstop on the paths that do not, so a second call while
+ * one is still queued would mean a new caller has skipped both. */
 dyStringFree(&pendingIframe);
 pendingIframe = dyStringCreate("<br> \
 <script nonce='%s'> \

@@ -3061,6 +3061,11 @@ for (int i = 0; i < n_datatypes; i++)
     slPairAdd(&list, name, cloneString(title));
     }
 freeMem(tdbDataTypes);
+// slPairAdd() prepends, so the list is backwards from the trackDb setting at
+// this point.  The order is what the javascript renders the data type
+// checkboxes in, and what cartDump.c uses to order a sample's subtracks, so it
+// has to match the order the track was written in.
+slReverse(&list);
 return list;
 }
 
@@ -3335,6 +3340,22 @@ if (isNotEmpty(facetSortOrder))
     if (clean)
         jsonWriteString(jw, "facetSortOrder", facetSortOrder);
     }
+// Whether a sample's subtracks are kept together in the image, or all the
+// subtracks of one data type are.  Only meaningful with data types, since
+// without them a sample is a single track.  The cart value wins over the
+// trackDb default; both are checked against the two words we accept, so
+// nothing unvalidated reaches the <script> block.
+if (hasDataTypes)
+    {
+    char groupByVar[1024];
+    safef(groupByVar, sizeof(groupByVar), "%s.groupBy", metaDataId);
+    char *groupBy = cartOptionalString(cart, groupByVar);
+    if (isEmpty(groupBy))
+        groupBy = trackDbSetting(tdb, "defaultGroupBy");
+    if (isNotEmpty(groupBy)
+        && (sameString(groupBy, "sample") || sameString(groupBy, "dataType")))
+        jsonWriteString(jw, "groupBy", groupBy);
+    }
 if (isNotEmpty(subtrackUrls))
     {
     struct slPair *pairs = slPairListFromString((char *)subtrackUrls, TRUE);
@@ -3361,10 +3382,14 @@ jsonWriteFree(&jw);
 
 jsIncludeFile("dataTables-2.2.2.min.js", NULL);
 jsIncludeFile("dataTables.select-3.0.0.min.js", NULL);
+// RowReorder 1.5.1 is the last release for the DataTables 2.x line; 2.0.0
+// requires DataTables 3.
+jsIncludeFile("dataTables.rowReorder-1.5.1.min.js", NULL);
 jsIncludeFile("facetedComposite.js", NULL);
 
 webIncludeResourceFile("dataTables-2.2.2.min.css");
 webIncludeResourceFile("dataTables.select-3.0.0.min.css");
+webIncludeResourceFile("dataTables.rowReorder-1.5.1.min.css");
 webIncludeResourceFile("facetedComposite.css");
 
 

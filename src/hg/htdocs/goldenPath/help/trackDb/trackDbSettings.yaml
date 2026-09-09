@@ -36,9 +36,13 @@
   required: true
   summary: Declares the format of the data and is used to determine display methods and options.
   description: 'Declares the format of the data and is used to determine display methods and options.
-    Valid settings for a hub: bam/cram , bigBarChart , bigBed , bigChain , bigGenePred , bigInteract ,
-    bigLolly , bigMaf , bigNarrowPeak , bigNet , bigPsl , bigWig , halSnake , hic , vcfTabix , vcfPhasedTrio
-    . Detailed descriptions of each type can be found below. In many cases the type setting includes additional
+
+    Valid settings for a hub:
+
+    bam/cram , bigBarChart , bigBed , bigChain , bigGenePred , bigInteract , bigLolly , bigMaf , bigNarrowPeak
+    , bigNet , bigPsl , bigWig , halSnake , hic , vcfTabix , vcfPhasedTrio .
+
+    Detailed descriptions of each type can be found below. In many cases the type setting includes additional
     parameters to further specify the data format. Some track types have additional setting requirements,
     to be discussed below.'
   format: type
@@ -113,15 +117,17 @@
   required: true
   summary: The location of a remote data file containing the bulk of the data for the track.
   description: 'The location of a remote data file containing the bulk of the data for the track. This
-    setting is required for all data tracks in a track hub. The setting is either the full URL (including
-    http: or another protocol) or it is relative to the directory in which the trackDb file containing
-    this setting is located. The file must be in one of the supported remote data file formats: bam/cram,
-    bigBarChart, bigBed, bigChain, bigLolly, bigInteract, bigMaf, bigNet, bigPsl, bigGenePred, bigMethyl,
-    bigNarrowPeak, bigWig, vcfTabix, or hic. Note that bam/cram and vcfTabix/vcfPhasedTrio types require
-    a separate index file that must have the same name as the data file plus a standard suffix (".bai"
-    and ".tbi" respectively), unless bigDataIndex is used. All occurrences of the string $D in the URL
-    will be substituted with the genome assembly database name. This allows a trackDb entry to be used
-    with for multiple assemblies. $D substitution is not implemented for track hubs.'
+    setting is required for all data tracks in a track hub.
+
+    The setting is either the full URL (including http: or another protocol) or it is relative to the
+    directory in which the trackDb file containing this setting is located. The file must be in one of
+    the supported remote data file formats: bam/cram, bigBarChart, bigBed, bigChain, bigLolly, bigInteract,
+    bigMaf, bigNet, bigPsl, bigGenePred, bigMethyl, bigNarrowPeak, bigWig, vcfTabix, or hic. Note that
+    bam/cram and vcfTabix/vcfPhasedTrio types require a separate index file that must have the same name
+    as the data file plus a standard suffix (".bai" and ".tbi" respectively), unless bigDataIndex is used.
+    All occurrences of the string $D in the URL will be substituted with the genome assembly database
+    name. This allows a trackDb entry to be used with for multiple assemblies. $D substitution is not
+    implemented for track hubs.'
   format: bigDataUrl <url/relativePath>
   examples:
   - bigDataUrl http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bb
@@ -155,16 +161,37 @@
     algorithms, or the significance of scores if generated in a special fashion. Credits This section
     helps people find the contacts for questions about the data. Please include an email or laboratory
     web page. References Relevant publications regarding the data. Example: html docs/myFirstTrack.html
-    Or with full path: html https://path/to/location/docs/explainMyData.html To help users understand
-    Public Hub data, we request you provide a web page that explains what your Track Hub is presenting.
-    Adding an html page for your Track Hub is also useful to instruct people on how to cite your data.
+    Or with full path: html https://path/to/location/docs/explainMyData.html
+
+    To help users understand Public Hub data, we request you provide a web page that explains what your
+    Track Hub is presenting. Adding an html page for your Track Hub is also useful to instruct people
+    on how to cite your data.
+
     To be consistent with standard Genome Browser track descriptions, html for tracks should contain several
-    sections as seen below. Here is a link to an example template that you can use. Description A few
-    sentences describing the track. Display Conventions and Configuration If the track has colors, or
-    unusual display properties, explain them in this section, or how to configure special settings. Methods
+    sections as seen below. Here is a link to an example template that you can use.
+
+    Description
+
+    A few sentences describing the track.
+
+    Display Conventions and Configuration
+
+    If the track has colors, or unusual display properties, explain them in this section, or how to configure
+    special settings.
+
+    Methods
+
     This section can explain data-handling algorithms, or the significance of scores if generated in a
-    special fashion. Credits This section helps people find the contacts for questions about the data.
-    Please include an email or laboratory web page. References Relevant publications regarding the data.'
+    special fashion.
+
+    Credits
+
+    This section helps people find the contacts for questions about the data. Please include an email
+    or laboratory web page.
+
+    References
+
+    Relevant publications regarding the data.'
   format: html
   examples:
   - html docs/myFirstTrack.html
@@ -190,7 +217,24 @@
     level of a composite will be ignored. The one exception is a faceted composite , where the parent''s
     visibility is a maximum rather than a value the subtracks inherit, and subtrack visibility lines are
     honored up to that maximum. Be sure to experiment with this setting to verify that it works as expected
-    for your track type and track structure. Valid settings:'
+    for your track type and track structure.
+
+    Valid settings:
+
+    - hide : DEFAULT. The track is not displayed in the Browser image unless the user changes the display
+    setting.
+
+    - dense : The track is displayed as a single line or ribbon. In many cases multiple items are summarized
+    or drawn on top of one another, and the long labels are not displayed.
+
+    - squish : Each item is drawn individually, but at half height and without a label. (Not supported
+    for all types.)
+
+    - pack : Items are displayed individually at full height, but in a much more compact vertical space
+    than in full mode. (Not supported for all types.)
+
+    - full : Each item is displayed as a separate line in the Browser image. Graphed signals may be displayed
+    in varying heights.'
   format: visibility
   examples:
   - visibility dense
@@ -228,10 +272,12 @@
   required: false
   summary: Many track types allow the color of the data displayed in the image to be specified with this
     setting.
-  description: Many track types allow the color of the data displayed in the image to be specified with
+  description: 'Many track types allow the color of the data displayed in the image to be specified with
     this setting. The setting accepts red, green and blue values, each in the range of 0-255 and delimited
     by commas. Though this setting is widely supported, some track types in certain display modes ignore
     it, such as the EST tracks in dense mode.
+
+    This example sets the color to red.'
   format: color <red,green,blue>
   examples:
   - color 255,0,0
@@ -273,11 +319,13 @@
   required: false
   summary: Deprecated.
   description: 'Deprecated. The track type usually implies whether pack and squish are offered, so this
-    setting is rarely needed. Most tracks can be displayed in all five visibilities modes. However on
-    some track types such as wiggles, the squish and pack modes offer no real advantage over the dense
-    and full modes. By default, these tracks will not offer the squish and pack vilibility settings. Nevertheless,
-    you can make your track offer these visibility choices by turning canPack on. Note: subtracks of composites
-    will always offer all five choices.'
+    setting is rarely needed.
+
+    Most tracks can be displayed in all five visibilities modes. However on some track types such as wiggles,
+    the squish and pack modes offer no real advantage over the dense and full modes. By default, these
+    tracks will not offer the squish and pack vilibility settings. Nevertheless, you can make your track
+    offer these visibility choices by turning canPack on. Note: subtracks of composites will always offer
+    all five choices.'
   format: canPack <off/on>
   examples:
   - canPack on
@@ -339,12 +387,14 @@
   level: full
   required: false
   summary: Many track types allow setting a color range that varies from color to altColor .
-  description: Many track types allow setting a color range that varies from color to altColor . For instance
-    the CpG Island tracks use the altColor setting to display the weaker islands, while the stronger ones
-    are rendered in color . If altColor is not specified, the system will use a color halfway between
+  description: 'Many track types allow setting a color range that varies from color to altColor . For
+    instance the CpG Island tracks use the altColor setting to display the weaker islands, while the stronger
+    ones are rendered in color . If altColor is not specified, the system will use a color halfway between
     that specified in the color tag and white instead. Tracks using altColor with the windowing function
     "mean+whiskers" will see the shading of colors impacted, with lighter shades for values within a standard
     deviation around the mean, most noticeable when zoomed out and average calculations are taking place.
+
+    This example sets the alternate color to blue.'
   format: altColor <red,green,blue>
   examples:
   - altColor 0,0,255
@@ -442,9 +492,22 @@
     about that item.
   description: 'By default, items shown in the Browser image can be linked to a details page giving information
     about that item. The link can instead go to the URL declared here. The URL is formatted as a printf
-    line including the following fields in this order: Not all fields need be present, but those present
-    must be in this order, and if a later field is present, all earlier fields must be used. The URL can
-    either be a full external URL or local to the web site.'
+    line including the following fields in this order:
+
+    - %s - item name
+
+    - %s - chromosome name
+
+    - %d - chromosome start position (relative to zero)
+
+    - %d - chromosome end position (relative to one)
+
+    - %s - track name
+
+    - %s - database name
+
+    Not all fields need be present, but those present must be in this order, and if a later field is present,
+    all earlier fields must be used. The URL can either be a full external URL or local to the web site.'
   format: directUrl <url>
   examples:
   - directUrl http://mygenes.org/cgi-bin/geneView/%s
@@ -462,12 +525,14 @@
   required: false
   summary: While description HTML pages can contain download instructions, having external file download
     links directly specified in trackDb makes it possible show thes...
-  description: While description HTML pages can contain download instructions, having external file download
+  description: 'While description HTML pages can contain download instructions, having external file download
     links directly specified in trackDb makes it possible show these links outside the description HTML
     pages. The URLs here are shown above the description page, right under the "data format" link. The
     label can be any string and the URL should be absolute, including the server. Either one can contain
-    spaces, but they must be double-quoted then. This is one of the few statements that can be specified
-    multiple times. In this case, all statements must have a .number suffix, e.g. .1, .2, ...
+    spaces, but they must be double-quoted then.
+
+    This is one of the few statements that can be specified multiple times. In this case, all statements
+    must have a .number suffix, e.g. .1, .2, ...'
   format: downloadUrl <label> <URL>
   examples:
   - downloadUrl GFF https://mywebsite.com/ucscTrack.gff.gz
@@ -488,9 +553,39 @@
   summary: This setting allows integrating an external html page into the default details page, as an
     iframe.
   description: 'This setting allows integrating an external html page into the default details page, as
-    an iframe. The usual replacement variables can be used within this URL: The URL can either be a full
-    external URL or local to the web site. In HTML, iframes cannot be resized easily, so the default static
-    size is 1024 pixels. This can be changed with iframeOptions'
+    an iframe. The usual replacement variables can be used within this URL:
+
+    - $$ - ID, will be replaced by the name of an item or other string id depending upon the fields in
+    the given track''s type.
+
+    - $T - database table name
+
+    - $S - chromomosome name (scaffold name on scaffold assemblies)
+
+    - $[ - left-most position of current viewing window (relative to zero)
+
+    - $] - right-most position of current viewing window (relative to one)
+
+    - ${ - start location of clicked item (relative to zero)
+
+    - $} - end location of clicked item (relative to one)
+
+    - $s - chromosome name without chr prefix (or without scaffold_ or Scaffold_ prefix on scaffold assemblies)
+
+    - $D - database name (e.g. "hg19")
+
+    - $P - item name portion before first : in name
+
+    - $p - item name portion after first : in name up to next colon
+
+    - $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)
+
+    - $n - Scientific Name of current organism (from hgCentral.dbDb)
+
+    The URL can either be a full external URL or local to the web site.
+
+    In HTML, iframes cannot be resized easily, so the default static size is 1024 pixels. This can be
+    changed with iframeOptions'
   format: iframeUrl <url>
   examples:
   - "iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$\n    iframeOptions height='600' width='1024'"
@@ -510,10 +605,15 @@
     HTML <iframe> tag.
   description: 'When iframeUrl is used, this statement specifies a string that is inserted literally into
     the HTML <iframe> tag. It can include options needed for iframe formatting, like width, height, scrolling,
-    etc. If the statement is not present, the default is width=''100%'' height=''1024'' . Note: dynamic
-    resizing of iframes is not trivial, as they have to be resized with javascript, across domains. We
-    recommend keeping the size static and to use scrollbars. Example: iframeOptions width=''800'' height=''800''
-    scrolling=''yes'' This example fixes the size to 800x800 pixels and activates scrollbars.'
+    etc.
+
+    If the statement is not present, the default is width=''100%'' height=''1024'' .
+
+    Note: dynamic resizing of iframes is not trivial, as they have to be resized with javascript, across
+    domains. We recommend keeping the size static and to use scrollbars. Example: iframeOptions width=''800''
+    height=''800'' scrolling=''yes'' This example fixes the size to 800x800 pixels and activates scrollbars.
+
+    This example fixes the size to 800x800 pixels and activates scrollbars.'
   format: iframeOptions <string>
   examples:
   - iframeOptions width='800' height='800' scrolling='yes'
@@ -568,11 +668,13 @@
   required: false
   summary: For bigBed files with more than 8 fields (not counting any extra bigBed fields), this adds
     mouse over text that are different from the "name" field of a bigB...
-  description: For bigBed files with more than 8 fields (not counting any extra bigBed fields), this adds
-    mouse over text that are different from the "name" field of a bigBed file. If the field is empty then
-    the mouse over will fallback to the name field. To make this work, create a bigBed file with at least
-    8 columns and put the text for the mouse over into an extra bigBed field as explained in example 3
-    of the bigBed documentation . The field name from your .as file is the field name for this statement.
+  description: 'For bigBed files with more than 8 fields (not counting any extra bigBed fields), this
+    adds mouse over text that are different from the "name" field of a bigBed file. If the field is empty
+    then the mouse over will fallback to the name field.
+
+    To make this work, create a bigBed file with at least 8 columns and put the text for the mouse over
+    into an extra bigBed field as explained in example 3 of the bigBed documentation . The field name
+    from your .as file is the field name for this statement.'
   format: mouseOverField <fieldName1>
   examples:
   - mouseOverField comment
@@ -614,16 +716,28 @@
   level: new
   required: false
   summary: Restricts a track to a single display mode.
-  description: Restricts a track to a single display mode. The visibility dropdowns and the right-click
+  description: 'Restricts a track to a single display mode. The visibility dropdowns and the right-click
     menu offer only hide and the named mode, so the track either displays that way or is hidden; an unrecognized
     mode is treated as dense . Use this for a track that is only meaningful in one mode - to pick a starting
-    mode that the user can then change, use visibility instead. This setting is also read from the subtracks
-    of a faceted composite , whose own visibility is a maximum for its subtracks rather than a value they
-    inherit. Display modes rank from least to most detailed as hide , dense , squish , pack , full . Both
-    visibility and onlyVisibility are read only from the subtrack's own stanza and are not inherited from
-    the parent; an onlyVisibility line on the faceted composite itself restricts the container's own maximum
-    instead. Changing the maximum does not discard the display modes set on individual subtracks, so restoring
-    a more detailed maximum brings them back as they were.
+    mode that the user can then change, use visibility instead.
+
+    This setting is also read from the subtracks of a faceted composite , whose own visibility is a maximum
+    for its subtracks rather than a value they inherit. Display modes rank from least to most detailed
+    as hide , dense , squish , pack , full .
+
+    - A subtrack with neither setting of its own displays at whatever the parent allows, just as in a
+    conventional composite.
+
+    - A subtrack with its own visibility displays in that mode, or at the parent''s maximum if its own
+    setting is the more detailed of the two.
+
+    - A subtrack with onlyVisibility is pinned to that single mode. It displays if that mode is within
+    the parent''s maximum, and is not displayed at all otherwise.
+
+    Both visibility and onlyVisibility are read only from the subtrack''s own stanza and are not inherited
+    from the parent; an onlyVisibility line on the faceted composite itself restricts the container''s
+    own maximum instead. Changing the maximum does not discard the display modes set on individual subtracks,
+    so restoring a more detailed maximum brings them back as they were.'
   format: onlyVisibility <dense|squish|pack|full>
   examples:
   - "track coverage\n   onlyVisibility dense"
@@ -644,8 +758,10 @@
   required: false
   summary: Track types that show pairwise alignments often need to declare the other species/assembly
     included in the alignment.
-  description: Track types that show pairwise alignments often need to declare the other species/assembly
+  description: 'Track types that show pairwise alignments often need to declare the other species/assembly
     included in the alignment. Types that use this setting include bed, chain, netAlign, psl and snake.
+
+    This example sets the second assembly in the alignment to the mouse mm10 assembly.'
   format: otherDb <otherDb>
   examples:
   - otherDb mm10
@@ -689,7 +805,19 @@
     and a link to a description of the flags meaning. The icon is displayed next to the track''s short
     label in the track groups section below the Browser image, and on the track''s description and configuration
     pages. Multiple pennantIcons can be added on a single track by separating each entry with a semicolon
-    '';''. This setting has three parts:'
+    '';''. This setting has three parts:
+
+    - icon - Can be fully qualified URL (http, https, ftp) to an image file, or the name of an image in
+    the Browser''s images directory in the Browser source tree.
+
+    - text - A single word label. Case is ignored; the label is displayed capitalized lower case.
+
+    - color - An HTML color name to color the text label
+
+    - html - A relative or full html path to a description document explaining the icon''s meaning. This
+    page displays when the user clicks on the icon.
+
+    - tip - A "quoted string" tip that will be seen when the user''s mouse pointer hovers over the icon.'
   format: "pennantIcon <iconFile>/<text color> [html [tip]] \n[; <iconFile>/<text color> [html [tip]]]"
   examples:
   - pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
@@ -710,13 +838,19 @@
   required: false
   summary: The Table Browser (and REST API ) typically allow querying and downloading of some or all of
     the raw data for a track.
-  description: The Table Browser (and REST API ) typically allow querying and downloading of some or all
-    of the raw data for a track. The off value blocks all API getData operations and Table Browser access
-    to datasets with restrictions (for example, those with confidentiality or licensing limitations).
+  description: 'The Table Browser (and REST API ) typically allow querying and downloading of some or
+    all of the raw data for a track. The off value blocks all API getData operations and Table Browser
+    access to datasets with restrictions (for example, those with confidentiality or licensing limitations).
     The tbNoGenome value allows unrestricted API getData operations, while limiting the table browser
     queries within specific genomic regions, but not genome-wide. The noGenome value prohibits API getData
     operations, while allowing table browser queries within specific genomic regions, but not genome-wide.
     By naming additional tables in this setting, access to those tables can be denied as well.
+
+    The table for this track, as well as the decipherRaw and knownToDecipher tables, are blocked from
+    Table Browser access.
+
+    Genome-wide queries are disabled for the track table as well as omimAv and omimAvRepl. Queries on
+    genomic regions are permitted.'
   format: tableBrowser <off/on/noGenome/tbNoGenome> [table1 ...]
   examples:
   - tableBrowser off decipherRaw knownToDecipher
@@ -736,8 +870,41 @@
   summary: Many tracks allow an external link when an individual track data item is examined.
   description: 'Many tracks allow an external link when an individual track data item is examined. Use
     this setting to put a link to an external URL on the details page. The url may include wildcards that
-    will be substituted with values from the track data or other Browser variables: The default prompt
-    the user will see for this url is "outside link:". Use urlLabel to provide a more informative prompt.'
+    will be substituted with values from the track data or other Browser variables:
+
+    - $$ - ID, will be replaced by the name of an item or other string id depending upon the fields in
+    the given track''s type.
+
+    - $T - database table name
+
+    - $S - chromomosome name (scaffold name on scaffold assemblies)
+
+    - $[ - left-most position of current viewing window (relative to zero)
+
+    - $] - right-most position of current viewing window (relative to one)
+
+    - ${ - start location of clicked item (relative to zero)
+
+    - $} - end location of clicked item (relative to one)
+
+    - $s - chromosome name without chr prefix (or without scaffold_ or Scaffold_ prefix on scaffold assemblies)
+
+    - $D - database name (e.g. "hg19")
+
+    - $P - item name portion before first : in name
+
+    - $p - item name portion after first : in name, up to next colon
+
+    - $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)
+
+    - $n - Scientific Name of current organism (from hgCentral.dbDb)
+
+    - $<fieldName> - For bigBed based tracks only (so excluding vcf, vcfPhasedTrio, bam/cram and hic),
+    substitute the <fieldName> value from the bigBed for this item. Note the preceding ''$'' before the
+    brackets.
+
+    The default prompt the user will see for this url is "outside link:". Use urlLabel to provide a more
+    informative prompt.'
   format: url <url>
   examples:
   - "url https://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=$n&term=$$&extra=$<field2>\n \
@@ -758,18 +925,23 @@
   summary: This is similar to the url tag, but allows urls on fields that are not the "name" field.
   description: 'This is similar to the url tag, but allows urls on fields that are not the "name" field.
     Use this statement if you need multiple linkouts on the details page or if your linkout is not based
-    on the name field. Put the identifiers for these links into extended bigBed fields as explained in
-    example 3 of the bigBed documentation . The field names from your .as file are the field names referenced
-    in this statement. The urls in this statement support the same wildcards as the url statement. Make
-    sure to enclose the URLs in double quotes. The default label for the identifier is the field description
-    in the .as file (all text after the # mark). The field can contain multiple values, separated by a
-    comma "," where multiple links will then be created on each item. For instance, a "pmid" field with
-    an entry "11932250,34718705" would create two links. If an entry of comma-separated values contains
-    a "|" symbol, the part before the pipe symbol is used to replace the $$ wildcard and the part after
-    it is used as the label, as opposed to the default label description in the .as file. This pipe substitution
-    is similar to how Wikipedia markup encodes links. In the example below, a value for the field pmid
-    of "11932250|W James Kent" would create a link with the URL https://www.ncbi.nlm.nih.gov/pubmed/11932250
-    and the label "W James Kent".'
+    on the name field.
+
+    Put the identifiers for these links into extended bigBed fields as explained in example 3 of the bigBed
+    documentation . The field names from your .as file are the field names referenced in this statement.
+    The urls in this statement support the same wildcards as the url statement. Make sure to enclose the
+    URLs in double quotes. The default label for the identifier is the field description in the .as file
+    (all text after the # mark).
+
+    The field can contain multiple values, separated by a comma "," where multiple links will then be
+    created on each item. For instance, a "pmid" field with an entry "11932250,34718705" would create
+    two links.
+
+    If an entry of comma-separated values contains a "|" symbol, the part before the pipe symbol is used
+    to replace the $$ wildcard and the part after it is used as the label, as opposed to the default label
+    description in the .as file. This pipe substitution is similar to how Wikipedia markup encodes links.
+    In the example below, a value for the field pmid of "11932250|W James Kent" would create a link with
+    the URL https://www.ncbi.nlm.nih.gov/pubmed/11932250 and the label "W James Kent".'
   format: urls <fieldName1>="<url1>" <fieldName2>="<url2>" ...
   examples:
   - urls pmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
@@ -892,10 +1064,11 @@
     or due to file name constraints. The setting is either the full URL (including http: or another protocol)
     or it is relative to the directory in which the trackDb file containing this setting is located. The
     file must be in one of the supported index data file formats: bai (BAM index) or tbi (tabix index).
-    Example: bigDataIndex http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bam.bai The setting is either
-    the full URL (including http: or another protocol) or it is relative to the directory in which the
-    trackDb file containing this setting is located. The file must be in one of the supported index data
-    file formats: bai (BAM index) or tbi (tabix index).'
+    Example: bigDataIndex http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bam.bai
+
+    The setting is either the full URL (including http: or another protocol) or it is relative to the
+    directory in which the trackDb file containing this setting is located. The file must be in one of
+    the supported index data file formats: bai (BAM index) or tbi (tabix index).'
   format: bigDataIndex <url/relativePath>
   examples:
   - bigDataIndex http://vizhub.wustl.edu/VizHub/hg19/biBrainH3K4me1.bam.bai
@@ -910,7 +1083,25 @@
   required: false
   summary: There are numerous ways to color bam tracks to highlight certain aspects of the data.
   description: 'There are numerous ways to color bam tracks to highlight certain aspects of the data.
-    All of these are user-configurable. Possible settings:'
+    All of these are user-configurable.
+
+    Possible settings:
+
+    - strand : (Default) When colored by strand, mismatched bases are highlighted in bright red , alignments
+    on the reverse strand are colored dark red , and alignments on the forward strand are colored dark
+    blue .
+
+    - gray : When colored in grayscale, items are shaded according to the method specified by bamGrayMode
+    : alignment quality, base qualities, or unpaired ends.
+
+    - tag : Colors are specified in "user-defined tags". SAM/BAM may include user-defined tags, the names
+    of which begin with X, Y or Z and include one other letter or number. The user-defined tag named here
+    specifies red, green and blue (RGB) intensities as a zero-terminated string (tag type Z) containing
+    comma-separated triples of numbers from 0-255. For example, if a SAM/BAM record includes the tag YC:Z:255,0,0,
+    then the item is colored red; YC:Z:0,0,255 makes the item blue. By default, the tag is "YC" unless
+    changed using the bamColorTag setting.
+
+    - off : No additional coloring.'
   format: bamColorMode <strand/gray/tag/off>
   examples: []
 - name: bamGrayMode
@@ -922,10 +1113,20 @@
   context: trackDb
   level: full
   required: false
-  summary: 'When bamColorMode is set to "gray", you can highlight one of the following: Refer to the SAM
-    format details for a discussion of these values.'
-  description: 'When bamColorMode is set to "gray", you can highlight one of the following: Refer to the
-    SAM format details for a discussion of these values.'
+  summary: 'When bamColorMode is set to "gray", you can highlight one of the following: - aliQual : (Default)
+    The "alignment qualities" of the items are shaded on a scal...'
+  description: 'When bamColorMode is set to "gray", you can highlight one of the following:
+
+    - aliQual : (Default) The "alignment qualities" of the items are shaded on a scale of 0 (lightest)
+    to 99 (darkest). Use aliQualRange to specify a default range.
+
+    - baseQual : "Base qualities" are shaded on a scale of 0 (lightest) to 40 (darkest). Use baseQualRange
+    to specify a default range.
+
+    - unpaired : When "unpaired ends" is selected, an item that was paired in sequencing but whose mate
+    was not mapped is colored gray, while singletons and properly paired items are colored black.
+
+    Refer to the SAM format details for a discussion of these values.'
   format: bamGrayMode <aliQual/baseQual/unpaired>
   examples: []
 - name: bamColorTag
@@ -953,9 +1154,20 @@
   level: full
   required: false
   summary: The bam coloring options are all user-configurable within the browser.
-  description: The bam coloring options are all user-configurable within the browser. If your bam dataset
+  description: 'The bam coloring options are all user-configurable within the browser. If your bam dataset
     contains no color tags, this setting should be included to block the Browser from offering the option
     to color tags by an embedded RGB value.
+
+    Sets the bam to use the default coloring scheme based on strand alignment. At the same time, the bam
+    track will not offer the option to color the tags by RGB values, perhaps because this bam has no RGB
+    values.
+
+    These settings will highlight tags by alignment quality score. If the score is at 80 or above, the
+    tag is shaded black; if it is less than 20, the tag is shaded very light gray.
+
+    The bam file includes RGB values in the YC field that will be used to color tags.
+
+    No special coloring will be applied to items.'
   format: noColorTag .
   examples:
   - "bamColorMode strand\n    noColorTag"
@@ -991,8 +1203,18 @@
   required: false
   summary: Insertion and deletion differences between tag sequences and the reference genome can be highlighted
     with the use of these settings.
-  description: Insertion and deletion differences between tag sequences and the reference genome can be
-    highlighted with the use of these settings. These options may be set by the user.
+  description: 'Insertion and deletion differences between tag sequences and the reference genome can
+    be highlighted with the use of these settings. These options may be set by the user.
+
+    - indelDoubleInsert : Use to highlight alignment gaps in both the target (reference) and query (tag)
+    sequence with double ( = ) lines.
+
+    - indelQueryInsert : Use to highlight an insert in the query sequence only by drawing an orange (
+    | ) or purple ( | ) vertical line. Orange lines show unalignable regions in the middle of a sequence,
+    and purple highlights regions at the end of the query sequence.
+
+    - indelPolyA : Use to highlight an apparently valid poly-a tail by drawing a vertical green line (
+    | ).'
   format: indelDoubleInsert <off/on>
   examples:
   - "baseColorUseSequence genbank\n    indelDoubleInsert on\n    indelQueryInsert on\n    indelPolyA on"
@@ -1041,7 +1263,10 @@
     bases).'
   description: 'Searching to join pairs of tags by name will be limited to a maximum distance (default:
     20,000 bases). Use a larger range to increase the likelihood that both reads in a pair will be found
-    even when only one read is in the viewed region. Use a smaller range to speed image rendering.'
+    even when only one read is in the viewed region. Use a smaller range to speed image rendering.
+
+    The dataset includes paired end tags. The maximum search range to join tag pairs by name is capped
+    at 5000.'
   format: pairSearchRange <#>
   examples:
   - "pairedEndsByName .\n    pairSearchRange 5000"
@@ -1168,11 +1393,15 @@
   required: false
   summary: This setting provides a way to choose the basepair thresholds which determine the barChart
     sizes (small, medium, or large charts).
-  description: This setting provides a way to choose the basepair thresholds which determine the barChart
+  description: 'This setting provides a way to choose the basepair thresholds which determine the barChart
     sizes (small, medium, or large charts). The default basepair window size is 50000 and 500000 bases,
     which is intended for one chart per gene in vertebrate genomes. This setting can be used to flexibly
     customize chart sizes based on the basepair window size being visualized when densely annotating a
     sequence.
+
+    In this example, used when displaying barCharts on a 30,000 basepair viral genome, large charts appear
+    in windows up to 499 bases, medium in windows from 500 to 7999 in size, and small when 8000 or more
+    bases are shown in browser window.'
   format: barChartSizeWindows <largeMax> <smallMin>
   examples:
   - barChartSizeWindows 500 8000
@@ -1417,14 +1646,16 @@
   required: false
   summary: In bed formats supporting at least 9 standard bed fields, this setting can be used to activate
     item coloring using the value in the ninth field, itemRgb .
-  description: In bed formats supporting at least 9 standard bed fields, this setting can be used to activate
-    item coloring using the value in the ninth field, itemRgb . The value of the item field must be an
-    R,G,B triplet. When loaded into a table, this field appears as an integer with the RGB values in specific
-    bits of the integer. To observe this field, specify the type as, type bigBed 9 , or, type bigBed 9+
-    , for additional non-standard columns , in the trackDb stanza for the bigBed file. Note that the display
-    of color is affected by the maxItems option. When the track is zoomed to the point that the number
-    of items to display exceeds maxItems , the track is forced into dense mode and the items are drawn
-    from the bigBed summary in the default track color rather than using the itemRgb column .
+  description: 'In bed formats supporting at least 9 standard bed fields, this setting can be used to
+    activate item coloring using the value in the ninth field, itemRgb . The value of the item field must
+    be an R,G,B triplet. When loaded into a table, this field appears as an integer with the RGB values
+    in specific bits of the integer. To observe this field, specify the type as, type bigBed 9 , or, type
+    bigBed 9+ , for additional non-standard columns , in the trackDb stanza for the bigBed file.
+
+    Note that the display of color is affected by the maxItems option. When the track is zoomed to the
+    point that the number of items to display exceeds maxItems , the track is forced into dense mode and
+    the items are drawn from the bigBed summary in the default track color rather than using the itemRgb
+    column .'
   format: itemRgb on
   examples:
   - itemRgb on
@@ -1441,17 +1672,24 @@
   summary: 'Enables a Color by: dropdown in the track controls that lets the user switch among multiple
     pre-computed color schemes without leaving the track display.'
   description: 'Enables a Color by: dropdown in the track controls that lets the user switch among multiple
-    pre-computed color schemes without leaving the track display. Each entry is a fieldName="Human Label"
-    pair. The field name must be an extra bigBed field (defined in the track''s .as file) that contains
-    a pre-computed R,G,B color string, the same format as the standard itemRgb field. The label in double
-    quotes is shown in the dropdown; if omitted, a label is derived automatically by stripping a leading
-    colorBy prefix and replacing underscores with spaces. The special name default (with an optional label)
-    represents the track''s existing itemRgb field (column 9) and is placed first in the dropdown. When
-    no default= entry is given, an unlabeled "Default" option is added automatically. Item coloring must
-    be active for colorFields to work. It is active by default on bigBed tracks with more than 9 fields;
-    it is suppressed only if the track has an explicit color setting or itemRgb off . The currently selected
-    scheme is stored in the cart variable <trackName>.colorField . When a non-default scheme is active,
-    the track long label gains a (Coloring by: <label>) suffix.'
+    pre-computed color schemes without leaving the track display.
+
+    Each entry is a fieldName="Human Label" pair. The field name must be an extra bigBed field (defined
+    in the track''s .as file) that contains a pre-computed R,G,B color string, the same format as the
+    standard itemRgb field. The label in double quotes is shown in the dropdown; if omitted, a label is
+    derived automatically by stripping a leading colorBy prefix and replacing underscores with spaces.
+
+    The special name default (with an optional label) represents the track''s existing itemRgb field (column
+    9) and is placed first in the dropdown. When no default= entry is given, an unlabeled "Default" option
+    is added automatically.
+
+    Item coloring must be active for colorFields to work. It is active by default on bigBed tracks with
+    more than 9 fields; it is suppressed only if the track has an explicit color setting or itemRgb off
+    . The currently selected scheme is stored in the cart variable <trackName>.colorField . When a non-default
+    scheme is active, the track long label gains a (Coloring by: <label>) suffix.
+
+    This creates a three-option dropdown. colorByEvidence and colorByHlaClass must be extra fields in
+    the bigBed whose values are R,G,B strings.'
   format: colorFields default="<label>" <fieldName1>="<label1>" <fieldName2>="<label2>" ...
   examples:
   - colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
@@ -1466,10 +1704,14 @@
   level: base
   required: false
   summary: To color items differently by the strand they align to, use the colorByStrand setting.
-  description: To color items differently by the strand they align to, use the colorByStrand setting.
+  description: 'To color items differently by the strand they align to, use the colorByStrand setting.
     The first color will be used for plus strand alignments and the second for the minus strand. This
     setting is incompatible with spectrum and all items on the same strand will have the same color, regardless
-    of the item's score .
+    of the item''s score .
+
+    Plus strand alignments will be colored red, and minus strand alignments will be blue. This setting
+    is incompatible with spectrum , and therefore all items on the same strand will have the same color,
+    regardless of the item''s score .'
   format: colorByStrand <red,green,blue> <red,green,blue>
   examples:
   - colorByStrand 255,0,0 0,0,255
@@ -1484,9 +1726,11 @@
   required: false
   summary: bigBed specific Type bigBed tracks in dense mode do a density plot based on maximum coverage
     seen at each pixel.
-  description: bigBed specific Type bigBed tracks in dense mode do a density plot based on maximum coverage
-    seen at each pixel. The maxVal corresponds to the count at which the plot reaches maximum darkness.
-    If maxVal is 0 then this will be calculated from the data itself.
+  description: 'bigBed specific
+
+    Type bigBed tracks in dense mode do a density plot based on maximum coverage seen at each pixel. The
+    maxVal corresponds to the count at which the plot reaches maximum darkness. If maxVal is 0 then this
+    will be calculated from the data itself.'
   format: denseCoverage <maxVal>
   examples:
   - denseCoverage 100
@@ -1524,13 +1768,16 @@
   level: deprecated
   required: false
   summary: This setting was renamed June 2022.
-  description: 'This setting was renamed June 2022. Please use detailsStaticTable instead. Provides a
-    template to a tab separated text file where $<fieldName> strings will be substituted for data in the
-    bigBed and displayed as an HTML table. For an example of this, please see the following text file:
-    http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt , where the
-    strings such as "${AC_afr}" will be substituted for the data in that field for the particular item
-    from the bigBed. Note that the same size table is displayed for every item of the bigBed, even if
-    there is missing data in that field for a particular item. For variable size tables, please see detailsDynamicTable
+  description: 'This setting was renamed June 2022. Please use detailsStaticTable instead.
+
+    Provides a template to a tab separated text file where $<fieldName> strings will be substituted for
+    data in the bigBed and displayed as an HTML table. For an example of this, please see the following
+    text file: http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
+    , where the strings such as "${AC_afr}" will be substituted for the data in that field for the particular
+    item from the bigBed.
+
+    Note that the same size table is displayed for every item of the bigBed, even if there is missing
+    data in that field for a particular item. For variable size tables, please see detailsDynamicTable
     .'
   format: extraDetailsTable <url/relativePath>
   examples: []
@@ -1544,35 +1791,38 @@
   level: deprecated
   required: false
   summary: This setting was renamed June 2022.
-  description: 'This setting was renamed June 2022. Please use detailsDynamicTable instead. Tells the
-    system that the data in <fieldName1,...> contains an encoded table that should be turned into a standard
-    HTML table on the details page for that item. If the <fieldName> starts with "_json" or "json", then
-    the system expects the data in <fieldName> to be valid JSON. If the field name starts with anything
-    else, then the table is formatted using "|" and ";" as field and new row separators. The "table title"
-    part of the statment is optional, if present it will be used as the title for the table, if not, then
-    the title will be taken from the autoSql description of the field name, or if there is no autoSql
-    because the data is from an external file, then the field name will be used. An example of both formats
-    is shown below, along with the corresponding trackDb statements: trackDb line: extraTableFields _jsonField1|JSON
-    Title Example,tableField2|NON-JSON Title Example the two columns from the bigBed (or external file):
-    _jsonField1 tableField2 {key:val, key1: val1, key2: val2} key|val;key1|val1;key2|val2 And when clicking
-    on an item in the browser, the following would be displayed: JSON Title Example key val key1 val1
-    key2 val2 NON-JSON Title Example key val key1 val1 key2 val2 Note that the number of columns and rows
-    is variable per item, meaning some items can have different sized tables than other items, contrasting
-    with the extraDetailsTable statement, which enforces the same table size per item. For instance, in
-    the above example, a 3 rows by 2 columns table is created for each field, but if our JSON was instead:
-    {"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3: val3}} then the following nested
-    table would be shown on the details page: JSON Title Example transcript1 annot1 val1 annot2 val2 transcript2
-    annot3 val3 An example of both formats is shown below, along with the corresponding trackDb statements:
-    trackDb line: extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example the
-    two columns from the bigBed (or external file): _jsonField1 tableField2 {key:val, key1: val1, key2:
-    val2} key|val;key1|val1;key2|val2 And when clicking on an item in the browser, the following would
-    be displayed: JSON Title Example key val key1 val1 key2 val2 NON-JSON Title Example key val key1 val1
-    key2 val2 Note that the number of columns and rows is variable per item, meaning some items can have
-    different sized tables than other items, contrasting with the extraDetailsTable statement, which enforces
-    the same table size per item. For instance, in the above example, a 3 rows by 2 columns table is created
-    for each field, but if our JSON was instead: {"transcript1": {annot1: val1, annot2: val2}, "transcript2":
-    {annot3: val3}} then the following nested table would be shown on the details page: JSON Title Example
-    transcript1 annot1 val1 annot2 val2 transcript2 annot3 val3'
+  description: 'This setting was renamed June 2022. Please use detailsDynamicTable instead.
+
+    Tells the system that the data in <fieldName1,...> contains an encoded table that should be turned
+    into a standard HTML table on the details page for that item. If the <fieldName> starts with "_json"
+    or "json", then the system expects the data in <fieldName> to be valid JSON. If the field name starts
+    with anything else, then the table is formatted using "|" and ";" as field and new row separators.
+    The "table title" part of the statment is optional, if present it will be used as the title for the
+    table, if not, then the title will be taken from the autoSql description of the field name, or if
+    there is no autoSql because the data is from an external file, then the field name will be used. An
+    example of both formats is shown below, along with the corresponding trackDb statements: trackDb line:
+    extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example the two columns
+    from the bigBed (or external file): _jsonField1 tableField2 {key:val, key1: val1, key2: val2} key|val;key1|val1;key2|val2
+    And when clicking on an item in the browser, the following would be displayed: JSON Title Example
+    key val key1 val1 key2 val2 NON-JSON Title Example key val key1 val1 key2 val2 Note that the number
+    of columns and rows is variable per item, meaning some items can have different sized tables than
+    other items, contrasting with the extraDetailsTable statement, which enforces the same table size
+    per item. For instance, in the above example, a 3 rows by 2 columns table is created for each field,
+    but if our JSON was instead: {"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3:
+    val3}} then the following nested table would be shown on the details page: JSON Title Example transcript1
+    annot1 val1 annot2 val2 transcript2 annot3 val3
+
+    An example of both formats is shown below, along with the corresponding trackDb statements: trackDb
+    line: extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example the two columns
+    from the bigBed (or external file): _jsonField1 tableField2 {key:val, key1: val1, key2: val2} key|val;key1|val1;key2|val2
+    And when clicking on an item in the browser, the following would be displayed: JSON Title Example
+    key val key1 val1 key2 val2 NON-JSON Title Example key val key1 val1 key2 val2 Note that the number
+    of columns and rows is variable per item, meaning some items can have different sized tables than
+    other items, contrasting with the extraDetailsTable statement, which enforces the same table size
+    per item. For instance, in the above example, a 3 rows by 2 columns table is created for each field,
+    but if our JSON was instead: {"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3:
+    val3}} then the following nested table would be shown on the details page: JSON Title Example transcript1
+    annot1 val1 annot2 val2 transcript2 annot3 val3'
   format: extraTableFields <fieldName1|table title,fieldName2|table title,...>
   examples:
   - extraTableFields _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example
@@ -1593,9 +1843,11 @@
     for data in the bigBed and displayed as an HTML table. For an example of this, please see the following
     text file: http://hgdownload.gi.ucsc.edu/gbdb/hg38/gnomAD/v3.1/variants/v3.1.genomes.popTable.txt
     , where the strings such as "${AC_afr}" will be substituted for the data in that field for the particular
-    item from the bigBed. Note that the same size table is displayed for every item of the bigBed, even
-    if there is missing data in that field for a particular item. For variable size tables, please see
-    detailsDynamicTable .'
+    item from the bigBed.
+
+    Note that the same size table is displayed for every item of the bigBed, even if there is missing
+    data in that field for a particular item. For variable size tables, please see detailsDynamicTable
+    .'
   format: detailsStaticTable <url/relativePath>
   examples: []
 - name: detailsDynamicTable
@@ -1626,18 +1878,19 @@
     which enforces the same table size per item. For instance, in the above example, a 3 rows by 2 columns
     table is created for each field, but if our JSON was instead: {"transcript1": {annot1: val1, annot2:
     val2}, "transcript2": {annot3: val3}} then the following nested table would be shown on the details
-    page: JSON Title Example transcript1 annot1 val1 annot2 val2 transcript2 annot3 val3 An example of
-    both formats is shown below, along with the corresponding trackDb statements: trackDb line: detailsDynamicTable
-    _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example the two columns from the bigBed
-    (or external file): _jsonField1 tableField2 {key:val, key1: val1, key2: val2} key|val;key1|val1;key2|val2
-    And when clicking on an item in the browser, the following would be displayed: JSON Title Example
-    key val key1 val1 key2 val2 NON-JSON Title Example key val key1 val1 key2 val2 Note that the number
-    of columns and rows is variable per item, meaning some items can have different sized tables than
-    other items, contrasting with the extraDetailsTable statement, which enforces the same table size
-    per item. For instance, in the above example, a 3 rows by 2 columns table is created for each field,
-    but if our JSON was instead: {"transcript1": {annot1: val1, annot2: val2}, "transcript2": {annot3:
-    val3}} then the following nested table would be shown on the details page: JSON Title Example transcript1
-    annot1 val1 annot2 val2 transcript2 annot3 val3'
+    page: JSON Title Example transcript1 annot1 val1 annot2 val2 transcript2 annot3 val3
+
+    An example of both formats is shown below, along with the corresponding trackDb statements: trackDb
+    line: detailsDynamicTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example the two
+    columns from the bigBed (or external file): _jsonField1 tableField2 {key:val, key1: val1, key2: val2}
+    key|val;key1|val1;key2|val2 And when clicking on an item in the browser, the following would be displayed:
+    JSON Title Example key val key1 val1 key2 val2 NON-JSON Title Example key val key1 val1 key2 val2
+    Note that the number of columns and rows is variable per item, meaning some items can have different
+    sized tables than other items, contrasting with the extraDetailsTable statement, which enforces the
+    same table size per item. For instance, in the above example, a 3 rows by 2 columns table is created
+    for each field, but if our JSON was instead: {"transcript1": {annot1: val1, annot2: val2}, "transcript2":
+    {annot3: val3}} then the following nested table would be shown on the details page: JSON Title Example
+    transcript1 annot1 val1 annot2 val2 transcript2 annot3 val3'
   format: detailsDynamicTable <fieldName1|table title,fieldName2|table title,...>
   examples:
   - detailsDynamicTable _jsonField1|JSON Title Example,tableField2|NON-JSON Title Example
@@ -1654,19 +1907,96 @@
   required: false
   summary: Adds a custom JavaScript visualization to the item details page for a bigBed track.
   description: 'Adds a custom JavaScript visualization to the item details page for a bigBed track. The
-    visualization is rendered by an ES6 module loaded on demand when the details page is viewed. The setting
-    name has three dot-separated parts: The <jsonConfig> value is a JSON object with configuration for
-    the visualization, such as titles and axis labels. Its keys are merged into the data object passed
-    to the JavaScript function. Multiple fields can be visualized by using multiple detailsScript settings
-    with different field names. Fields sharing the same <plotType> are grouped together and passed to
-    a single JavaScript function call. The currently available plot type is histogram , which draws an
-    SVG bar chart from data encoded as space-separated key=value pairs (logfmt format). The histogram
-    plot type accepts the following JSON config keys: title (chart heading) and xLabel (x-axis label).'
+    visualization is rendered by an ES6 module loaded on demand when the details page is viewed.
+
+    The setting name has three dot-separated parts:
+
+    - <plotType> - determines which JavaScript module to load ( hgc.<plotType>.js ) and which exported
+    function to call.
+
+    - <fieldName> - a bigBed extra field (defined in the autoSql schema) whose value is passed to the
+    JavaScript function. The raw value is suppressed from the HTML table and replaced by the visualization.
+
+    The <jsonConfig> value is a JSON object with configuration for the visualization, such as titles and
+    axis labels. Its keys are merged into the data object passed to the JavaScript function.
+
+    Multiple fields can be visualized by using multiple detailsScript settings with different field names.
+    Fields sharing the same <plotType> are grouped together and passed to a single JavaScript function
+    call.
+
+    Two keys in <jsonConfig> are understood by the browser itself, for every plot type:
+
+    - exportFields - a JSON list of other bigBed field names. Their values are passed to the JavaScript
+    function as well, in a fieldValues object keyed by field name. This lets one setting drive a visualization
+    that needs several fields, without the values having to be packed into a single field. Names that
+    are not fields of this bigBed are ignored, and at most 32 are exported. Unlike the field the setting
+    names, a field listed here still shows its own row in the details table.
+
+    - any key whose name ends in Url - treated as a file, in the same way as the bigDataUrl setting. A
+    relative path is resolved against the track''s own bigDataUrl , so it can be written relative to the
+    data file rather than as a full URL, and this works whether the hub is loaded over http(s) or from
+    a local path. The file is read by the server, not fetched by the browser, so the host serving it needs
+    no Access-Control-Allow-Origin header. It does have to sit inside the directory tree of a hub attached
+    to the session: the browser requests it through hgTrackUi , which canonicalizes the path and refuses
+    anything outside a connected hub, so a file elsewhere on the web or on the server cannot be read this
+    way.
+
+    Two plot types are available.
+
+    histogram draws an SVG bar chart from data encoded as space-separated key=value pairs (logfmt format).
+    It accepts the JSON config keys title (chart heading) and xLabel (x-axis label).
+
+    In this example, the bigBed fields afrHist and eurHist contain logfmt-encoded histograms such as 15=0.025
+    22=0.016 23=0.747 24=0.211 . On the details page, each field''s table row is replaced by an SVG bar
+    chart drawn by the hgc.histogram.js module.
+
+    scatterPlot draws a cloud of background points and highlights the position of the clicked item within
+    it, which suits a track whose items carry coordinates in some precomputed space. It accepts these
+    JSON config keys:
+
+    - dataUrl - the file of background points (required). It must live inside the hub, as described above.
+
+    - xLabel , yLabel - axis labels.
+
+    - title - replaces the field description in the left-hand column.
+
+    - exportFields - the fields holding the coordinates to highlight, as described above. Each is drawn
+    as a large dot in its own color, in the order listed, and labelled in the legend below the plot. A
+    track with only one point to highlight can leave this out and put the coordinate in the field the
+    setting names.
+
+    Each coordinate field holds one point, written either as (x,y) or as logfmt x=<num> y=<num> ; in the
+    logfmt form the keys may carry a suffix, so x1=0.43 y1=-1.41 is also read.
+
+    The dataUrl file holds the background points, as JSON:
+
+    or, when the URL ends in .tsv or .txt , as a tab-separated file with a header line naming an x and
+    a y column, plus optional l and c columns:
+
+    Points carrying a category ( c , or an index into labels ) are colored by it and listed in a legend;
+    without one the cloud is drawn in grey. Points carrying a label ( l ) show it on mouseover. The form
+    with a separate labels list keeps the file small when long category names repeat across thousands
+    of points. The cloud is drawn on a canvas, so a file of tens of thousands of points still renders
+    quickly.
+
+    Here the bigBed fields pca and pcaSegment each hold a point such as (0.433,-1.407) . On the details
+    page the pca row is replaced by a scatterplot of the reference points in pclaiRefPanel.json , with
+    both of the item''s own coordinates marked on it.'
   format: detailsScript.<plotType>.<fieldName> <jsonConfig>
   examples:
   - 'detailsScript.histogram.afrHist {"title":"AFR Allele Frequencies","xLabel":"Allele size (repeat copies)"}
 
     detailsScript.histogram.eurHist {"title":"EUR Allele Frequencies","xLabel":"Allele size (repeat copies)"}'
+  - '[[x,y], ...]
+
+    {"points": [[x,y], ...]}
+
+    {"points": [{"x":x, "y":y, "l":"mouseover label", "c":"category"}, ...]}
+
+    {"labels": ["category A","category B"], "points": [[x,y,categoryIndex,"mouseover label"], ...]}'
+  - "x\ty\tl\tc\n0.467\t-1.368\tHG00096_H1\tBritish from England and Scotland"
+  - detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":["pca","pcaSegment"],"title":"Position
+    in ancestry space","xLabel":"PC1","yLabel":"PC2"}
 - name: exonArrows
   types:
   - bed
@@ -1711,8 +2041,11 @@
   required: false
   summary: A mouseover that shows the exon and intron numbers can be explicitly shown or hidden using
     this setting.
-  description: A mouseover that shows the exon and intron numbers can be explicitly shown or hidden using
+  description: 'A mouseover that shows the exon and intron numbers can be explicitly shown or hidden using
     this setting. The default is "on" for the track types genePred and bigGenePred.
+
+    The text can be set with the options "exonText" and "intronText". It defaults to "exon" and "intron",
+    respectively.'
   format: exonNumbers <on/off>
   examples:
   - exonNumbers off
@@ -1726,17 +2059,25 @@
   level: full
   required: false
   summary: Type bigBed tracks can be filtered on the standard bed field score .
-  description: Type bigBed tracks can be filtered on the standard bed field score . This numerical filter
-    is requested by the scoreFilter setting, which should include the default value. By default the range
-    of values for a score filter is from 0 to 1000. However, you can explicitly set the upper and lower
-    limit of the filter by setting scoreFilterLimits . The score filter will exclude items that fall below
-    the setting. That is, a scoreFilter of 800 will exclude all items with a score below 800. Since the
-    introduction of scoreFilter more powerful filter.<fieldName> options exist where the score column
-    can be filtered with different syntax. In such a way scoreFilter 400 and scoreFilterLimits 0:1000
-    can be replaced with filter.score 400 and filterByRange.score 0:1000 . The advantage of switching
+  description: 'Type bigBed tracks can be filtered on the standard bed field score . This numerical filter
+    is requested by the scoreFilter setting, which should include the default value.
+
+    By default the range of values for a score filter is from 0 to 1000. However, you can explicitly set
+    the upper and lower limit of the filter by setting scoreFilterLimits .
+
+    The score filter will exclude items that fall below the setting. That is, a scoreFilter of 800 will
+    exclude all items with a score below 800.
+
+    Since the introduction of scoreFilter more powerful filter.<fieldName> options exist where the score
+    column can be filtered with different syntax. In such a way scoreFilter 400 and scoreFilterLimits
+    0:1000 can be replaced with filter.score 400 and filterByRange.score 0:1000 . The advantage of switching
     to the filter.<fieldName> approach is that filters can also be added on additional bigBed <fieldNames>
     such as filterText.disease or filterValues.cellType where bigBeds defined with a disease or cellType
     column can be filtered. See filter.<fieldName> for more information and examples.
+
+    The standard bed field of score , which is an integer will be used to filter items in the track. By
+    default, items with scores below 300 will be excluded. The filter cannot be set to less than 200 or
+    more than 1000..'
   format: scoreFilter <low>[:<high>]
   examples:
   - "scoreFilter 300\n    scoreFilterLimits 200:1000"
@@ -1756,11 +2097,12 @@
   description: 'Maximum number of items to display individually in full or pack or squish mode. When the
     maximum is exceeded, the track switches to coverage mode. Default: 1000. For type bigBed tracks, this
     setting can never be larger than the hg.conf setting bigBedMaxItems, which by default is 100,000 at
-    UCSC. bigBedMaxItems is configured globally for a Genome Browser server and sets an upper limit on
-    how many features can be loaded at most from a bigBed file, to avoid a single track making a Genome
-    Browser view unusable at high zoom levels so it the upper limit for all maxItems settings of any tracks
-    shown on a Genome Browser. If you have feedback on these values, please do not hesitate to contact
-    us.'
+    UCSC.
+
+    bigBedMaxItems is configured globally for a Genome Browser server and sets an upper limit on how many
+    features can be loaded at most from a bigBed file, to avoid a single track making a Genome Browser
+    view unusable at high zoom levels so it the upper limit for all maxItems settings of any tracks shown
+    on a Genome Browser. If you have feedback on these values, please do not hesitate to contact us.'
   format: maxItems <integer>
   examples:
   - maxItems 25
@@ -1790,9 +2132,12 @@
   required: false
   summary: When too many individual bed items might be shown in the Browser image (such as might occur
     when a large region of a chromosome is viewed), maxWindowCoverage...
-  description: When too many individual bed items might be shown in the Browser image (such as might occur
-    when a large region of a chromosome is viewed), maxWindowCoverage will switch the track into density
-    coverage plot when the window contains more than the specified number of bases.
+  description: 'When too many individual bed items might be shown in the Browser image (such as might
+    occur when a large region of a chromosome is viewed), maxWindowCoverage will switch the track into
+    density coverage plot when the window contains more than the specified number of bases.
+
+    Browser images that show more than 10,000,000 bases will result in the track data being displayed
+    as a density coverage graph.'
   format: maxWindowCoverage <integer>
   examples:
   - maxWindowCoverage 10000000
@@ -1807,17 +2152,21 @@
   required: false
   summary: When too many individual bed items might be shown in the Browser image (such as might occur
     when a large region of a chromosome is viewed), maxWindowToDraw w...
-  description: When too many individual bed items might be shown in the Browser image (such as might occur
-    when a large region of a chromosome is viewed), maxWindowToDraw will trigger a choice to display a
-    message asking users to zoom in to a smaller region. Depending on the current visibility of the bed
-    track and which other tracks are being shown concurrently, the Browser may automatically reduce the
-    display to pack or dense mode in some cases. The maxWindowToDraw setting allows you to force users
-    to zoom in as an overriding message will block out the data display. Unlike the maxItems setting,
-    which controls the display of vertical space and forces a display to dense when the maximum number
-    of items is exceeded, the maxWindowToDraw setting dictates the number of bases to be displayed in
-    a window before the track is obscured with a message explaining the requirement for zooming-in. Even
-    without this setting, there are browser operations that will ultimately prevent too many items from
-    being displayed by forcing a visualized summary in dense mode as noted.
+  description: 'When too many individual bed items might be shown in the Browser image (such as might
+    occur when a large region of a chromosome is viewed), maxWindowToDraw will trigger a choice to display
+    a message asking users to zoom in to a smaller region.
+
+    Depending on the current visibility of the bed track and which other tracks are being shown concurrently,
+    the Browser may automatically reduce the display to pack or dense mode in some cases. The maxWindowToDraw
+    setting allows you to force users to zoom in as an overriding message will block out the data display.
+    Unlike the maxItems setting, which controls the display of vertical space and forces a display to
+    dense when the maximum number of items is exceeded, the maxWindowToDraw setting dictates the number
+    of bases to be displayed in a window before the track is obscured with a message explaining the requirement
+    for zooming-in. Even without this setting, there are browser operations that will ultimately prevent
+    too many items from being displayed by forcing a visualized summary in dense mode as noted.
+
+    Browser images that show more than 10,000,000 bases will result in the track data being obscured with
+    a note across the genomic range stating the message zoom in to <= 10,000,000 bases to view items .'
   format: maxWindowToDraw <integer>
   examples:
   - maxWindowToDraw 10000000
@@ -1838,10 +2187,12 @@
   required: false
   summary: When a bed track contains the standard field score , and when that score is used to present
     items in gray or color scale (see spectrum ), this setting specif...
-  description: When a bed track contains the standard field score , and when that score is used to present
+  description: 'When a bed track contains the standard field score , and when that score is used to present
     items in gray or color scale (see spectrum ), this setting specifies the lightest shade to be used.
     This prevents the lowest scores from being displayed in too light of a color to easily view. Set the
     value in the range 1 - 9, lightest to darkest.
+
+    This sets the lowest scores to slightly less than medium gray, while the highest scores appear black.'
   format: minGrayLevel  <1-9>
   examples:
   - minGrayLevel   4
@@ -1879,12 +2230,25 @@
   level: base
   required: false
   summary: Replaces useScore .
-  description: 'Replaces useScore . If your track is a bed 5 or greater, then the standard bed score field
-    exists. This score, which is expected to vary from 0-1000, can be used to control the shading of bed
-    items drawn in the Browser image. To activate this feature, set spectrum on . Lower scores will be
-    shaded in light gray by default, while higher scores will trend towards black. This can be modified
-    in a number of ways: Note: The file type must be type bigBed x where x is at least bigBed 5. If only
-    type bigBed is used, the setting will not work as it is assumed to be a bigBed 3.'
+  description: 'Replaces useScore .
+
+    If your track is a bed 5 or greater, then the standard bed score field exists. This score, which is
+    expected to vary from 0-1000, can be used to control the shading of bed items drawn in the Browser
+    image. To activate this feature, set spectrum on . Lower scores will be shaded in light gray by default,
+    while higher scores will trend towards black. This can be modified in a number of ways:
+
+    - minGrayLevel can be used to set the level of the lightest shade
+
+    - scoreMin and scoreMax can be used to define the lower and upper limits of the range that will receive
+    graded shading
+
+    Note: The file type must be type bigBed x where x is at least bigBed 5. If only type bigBed is used,
+    the setting will not work as it is assumed to be a bigBed 3.
+
+    In this example, the track description will be displayed in blue, but the track will remain a gray
+    scale. Items with scores less than or equal to 700 will be shown in very light gray, those with scores
+    between 700 and 900 will display in increasingly darker shades of gray, and items with scores greater
+    than or equal to 900 above will display in black.'
   format: spectrum on
   examples:
   - "spectrum on\n    scoreMin 700\n    scoreMax 900"
@@ -1944,25 +2308,43 @@
   description: 'Decorators allow annotation to be placed on top of BED 12+, bigBed, PSL, and bigGenePred
     tracks by highlighting regions and adding glyphs on top of them. The decorators themselves can be
     configured with a small selection of trackDb settings as follows. For a more interactive introduction
-    to decorators, see the Track Decorators help page. NB: In all of the following settings, decorator.default.
-    is used as a prefix to indicate that the settings should be applied to the decorator and not the primary
-    track. This is necessary because many settings that you can apply to decorators are identical to settings
-    that can be applied to tracks. For example, filterValues can be applied to a main track to filter
-    which items are displayed, but can also be applied to a decorator for that track as decorator.default.filterValues
-    to filter which decorations are drawn. In the future, other names besides "default" may be allowed
-    to permit multiple decorators annotating a single track. Settings decorator.default.bigDataUrl <url>
+    to decorators, see the Track Decorators help page.
+
+    NB: In all of the following settings, decorator.default. is used as a prefix to indicate that the
+    settings should be applied to the decorator and not the primary track. This is necessary because many
+    settings that you can apply to decorators are identical to settings that can be applied to tracks.
+    For example, filterValues can be applied to a main track to filter which items are displayed, but
+    can also be applied to a decorator for that track as decorator.default.filterValues to filter which
+    decorations are drawn. In the future, other names besides "default" may be allowed to permit multiple
+    decorators annotating a single track.
+
+    Settings
+
+    decorator.default.bigDataUrl <url>
+
     This setting is required when adding a decorator to a track. It specifies the path to a bigBed file
-    that contains the decorations. decorator.default.filterValues <specification> Decorators support the
-    same filter options that bigBed tracks do. This includes the filter , filterText , and filterValues
-    settings, as described in the Track Hub Filters Quick Start Guide . decorator.default.mouseOver <specification>
+    that contains the decorations.
+
+    decorator.default.filterValues <specification>
+
+    Decorators support the same filter options that bigBed tracks do. This includes the filter , filterText
+    , and filterValues settings, as described in the Track Hub Filters Quick Start Guide .
+
+    decorator.default.mouseOver <specification>
+
     Decorators also support the same mouseOver and mouseOverField settings that can be applied to bigBed
-    tracks. There is one more setting that is currently specific to decorators. decorator.default.maxLabelBases
-    <integer> This setting controls a failsafe option for deactivating the drawing of decoration labels
-    when they''re in block mode. There will also be a checkbox on the track configuration page to deactivate
-    labels manually, but even when that is on, a track display can quickly become unintelligible if the
-    window displayed is too large - there will simply be too many track items and too many decoration
-    labels to process visually. maxLabelBases sets a maximum window size (in bases) for which labels will
-    be drawn. If not set, the value will default to 200kb.'
+    tracks.
+
+    There is one more setting that is currently specific to decorators.
+
+    decorator.default.maxLabelBases <integer>
+
+    This setting controls a failsafe option for deactivating the drawing of decoration labels when they''re
+    in block mode. There will also be a checkbox on the track configuration page to deactivate labels
+    manually, but even when that is on, a track display can quickly become unintelligible if the window
+    displayed is too large - there will simply be too many track items and too many decoration labels
+    to process visually. maxLabelBases sets a maximum window size (in bases) for which labels will be
+    drawn. If not set, the value will default to 200kb.'
   format: decorator.default.*
   examples: []
 - name: searchIndex
@@ -2076,29 +2458,84 @@
   description: 'There are a number of different filters available for bigBed data. See the Filters Quick
     Start guide for more info. Note: for configurable features, like filters, an additional period "."
     or plus "+" is required in the type declaration, for instance type bigBed 5 . or type bigBed 9 + .
+
     filter.<fieldName> is used for numerical data. It requires a default value to be passed. A value of
     0 (or the lowest value present in the dataset) can be used to enable numerical filtering, but filter
-    nothing by default. By default, the range of values for filter.<fieldName> is 0 to 1000. However,
-    you can explicitly set the upper and lower limits of the filter with filterLimits.<fieldName> . The
-    numeric filters will exclude items that fall below the setting. That is, a filter.<fieldName> of 800
-    will exclude all items with a score below 800. You can also filter values within a range by including
-    the filterByRange.<fieldName> setting. For example, filter.<fieldName> 800:900 will include only items
-    with scores at or above 800 and below 900. It is recommended that filterByRange.<fieldName> be used
-    in combination with filterLimits.<fieldName> to set limit boundaries. The filter label will be the
-    description of the field as specified by the autoSql (.as) file. This label can be customized with
-    the filterLabel.<fieldName> parameter. See the bigBed help page and example 3 for more information
-    about creating unique .as files for bigBed data. Notes: filter.<fieldName> can be used multiple times
-    with different columns Both integers and decimals (floats) are supported Any column/field values that
-    start with non-numerical characters will be treated as zeros Column/fieldName values that start with
-    a number followed by non-numerical characters will be treated as only the number; the non-numerical
-    characters (and any numbers that follow them) will be ignored (see example below) If a column/fieldName
-    contains negative values, be sure to specify a default value at or below the lowest negative value
-    in order to avoid actively filtering items by default (unless that is the intended behavior) In order
-    for filters to work, the track must be " type bigBed N + " or " type bigBed N . ". Including the "+"
-    (for bigBed+ tracks) or a "." (for non-extended bigBed tracks) is required Filters are not supported
-    in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5 By default, all bed tracks that
-    are at least bed5 will have a score filter. Enabling any of the filter*.<fieldName> filter settings
-    will disable that default filter'
+    nothing by default.
+
+    By default, the range of values for filter.<fieldName> is 0 to 1000. However, you can explicitly set
+    the upper and lower limits of the filter with filterLimits.<fieldName> .
+
+    The numeric filters will exclude items that fall below the setting. That is, a filter.<fieldName>
+    of 800 will exclude all items with a score below 800. You can also filter values within a range by
+    including the filterByRange.<fieldName> setting. For example, filter.<fieldName> 800:900 will include
+    only items with scores at or above 800 and below 900. It is recommended that filterByRange.<fieldName>
+    be used in combination with filterLimits.<fieldName> to set limit boundaries.
+
+    The filter label will be the description of the field as specified by the autoSql (.as) file. This
+    label can be customized with the filterLabel.<fieldName> parameter. See the bigBed help page and example
+    3 for more information about creating unique .as files for bigBed data.
+
+    Notes: filter.<fieldName> can be used multiple times with different columns Both integers and decimals
+    (floats) are supported Any column/field values that start with non-numerical characters will be treated
+    as zeros Column/fieldName values that start with a number followed by non-numerical characters will
+    be treated as only the number; the non-numerical characters (and any numbers that follow them) will
+    be ignored (see example below) If a column/fieldName contains negative values, be sure to specify
+    a default value at or below the lowest negative value in order to avoid actively filtering items by
+    default (unless that is the intended behavior) In order for filters to work, the track must be " type
+    bigBed N + " or " type bigBed N . ". Including the "+" (for bigBed+ tracks) or a "." (for non-extended
+    bigBed tracks) is required Filters are not supported in bed3 or bed4 files, even bed 3+x. The file
+    must be at least a bed5 By default, all bed tracks that are at least bed5 will have a score filter.
+    Enabling any of the filter*.<fieldName> filter settings will disable that default filter
+
+    - filter.<fieldName> can be used multiple times with different columns
+
+    - Both integers and decimals (floats) are supported
+
+    - Any column/field values that start with non-numerical characters will be treated as zeros
+
+    - Column/fieldName values that start with a number followed by non-numerical characters will be treated
+    as only the number; the non-numerical characters (and any numbers that follow them) will be ignored
+    (see example below)
+
+    - If a column/fieldName contains negative values, be sure to specify a default value at or below the
+    lowest negative value in order to avoid actively filtering items by default (unless that is the intended
+    behavior)
+
+    - In order for filters to work, the track must be " type bigBed N + " or " type bigBed N . ". Including
+    the "+" (for bigBed+ tracks) or a "." (for non-extended bigBed tracks) is required Filters are not
+    supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5 By default, all bed
+    tracks that are at least bed5 will have a score filter. Enabling any of the filter*.<fieldName> filter
+    settings will disable that default filter
+
+    - Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5
+
+    - By default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the
+    filter*.<fieldName> filter settings will disable that default filter
+
+    In this example, filtering is being enabled for the field score . We are passing a default value of
+    0, which is usually a safe default value to pass as most score values contain only positive numbers.
+    Note, however, that any negative values would be filtered out by default in this example.
+
+    In this second example, we are enabling filtering on the same field score , however, we are passing
+    the integer 300. This means that when the data is loaded, items with scores below 300 will be excluded
+    by default. This value can then be modified in the track description page.
+
+    In this example, we are enabling numerical filtering on the field signal . filterByRange.<fieldName>
+    is also being enabled, allowing for filtering between interval values, this also allows us to pass
+    a range of values to the filter.<fieldName> parameter. In this case, by default only values between
+    300 and 400 are being displayed. Lastly, the filter limits are being modified to accept values between
+    200 and 500 as opposed to the default 0 to 1000.
+
+    This example applies filter.<fieldName> to values in the field named confidenceScore containing some
+    non-numerical values. If items with the four values above were filtered with a minimum value of 6:
+    5 - item would be removed as it is less than the filter value 6 (Uncertain) - item should show up,
+    as it would be interpreted as "6" Unknown - item would be removed as it would be interpreted as 0
+    7.0 - item would appear as decimals are supported
+
+    5 - item would be removed as it is less than the filter value 6 (Uncertain) - item should show up,
+    as it would be interpreted as "6" Unknown - item would be removed as it would be interpreted as 0
+    7.0 - item would appear as decimals are supported'
   format: filter.<fieldName> <default integer>
   examples:
   - filter.score 0
@@ -2119,25 +2556,59 @@
   description: 'There are a number of different filters available for bigBed data. See the Filters Quick
     Start guide for more info. Note: for configurable features, like filters, an additional period "."
     or plus "+" is required in the type declaration, for instance type bigBed 5 . or type bigBed 9 + .
+
     filterText.<fieldName> is used to enable text searching in the specified fieldName. It requires a
     default search string to be passed. An asterisk/wildcard (*) can be used to enable text searching,
     but pass no default value. If a word or string is passed, items matching the string will be filtered
-    by default. See examples below for details. filterText.<fieldName> will enable two kinds of searching,
-    wildcard and regexp. By default, the wildcard option is enabled. This means that a search term with
-    a wildcard (*) item on either end will match any number of additional characters before and/or after
-    the search term. The regexp option allows for searching with regular expression rules . For instance,
-    with wildcard changed to a regexp type of search, putting in .*A\|B.* will match any items with an
-    A or B in it, while .*[0-9] will match any item ending in a number. The optional settings filterType.<fieldName>
-    may be added to switch the default from wildcard to regexp. The filter label will be the description
-    of the field as specified by the autoSql (.as) file. This label can be customized with the filterLabel.<fieldName>
-    parameter. See the bigBed help page and example 3 for more information about creating unique .as files
-    for bigBed data. Notes: filterText.<fieldName> will treat all fields as strings. That is to say, it
-    can be enabled on entirely numerical fields, such as chromStart , if one is looking to filter numerical
-    values as text In order for filters to work, the track must be " type bigBed N + " or " type bigBed
-    N . ". Including the "+" (for bigBed+ tracks) or a "." (for non-extended bigBed tracks) is required
-    Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5 By
-    default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the filter*.<fieldName>
-    filter settings will disable that default filter'
+    by default. See examples below for details.
+
+    filterText.<fieldName> will enable two kinds of searching, wildcard and regexp. By default, the wildcard
+    option is enabled. This means that a search term with a wildcard (*) item on either end will match
+    any number of additional characters before and/or after the search term. The regexp option allows
+    for searching with regular expression rules . For instance, with wildcard changed to a regexp type
+    of search, putting in .*A\|B.* will match any items with an A or B in it, while .*[0-9] will match
+    any item ending in a number. The optional settings filterType.<fieldName> may be added to switch the
+    default from wildcard to regexp.
+
+    The filter label will be the description of the field as specified by the autoSql (.as) file. This
+    label can be customized with the filterLabel.<fieldName> parameter. See the bigBed help page and example
+    3 for more information about creating unique .as files for bigBed data.
+
+    Notes: filterText.<fieldName> will treat all fields as strings. That is to say, it can be enabled
+    on entirely numerical fields, such as chromStart , if one is looking to filter numerical values as
+    text In order for filters to work, the track must be " type bigBed N + " or " type bigBed N . ". Including
+    the "+" (for bigBed+ tracks) or a "." (for non-extended bigBed tracks) is required Filters are not
+    supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5 By default, all bed
+    tracks that are at least bed5 will have a score filter. Enabling any of the filter*.<fieldName> filter
+    settings will disable that default filter
+
+    - filterText.<fieldName> will treat all fields as strings. That is to say, it can be enabled on entirely
+    numerical fields, such as chromStart , if one is looking to filter numerical values as text
+
+    - In order for filters to work, the track must be " type bigBed N + " or " type bigBed N . ". Including
+    the "+" (for bigBed+ tracks) or a "." (for non-extended bigBed tracks) is required Filters are not
+    supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5 By default, all bed
+    tracks that are at least bed5 will have a score filter. Enabling any of the filter*.<fieldName> filter
+    settings will disable that default filter
+
+    - Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5
+
+    - By default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the
+    filter*.<fieldName> filter settings will disable that default filter
+
+    In this example, we are applying a default filter on the field geneName so that only items with BRCA
+    in the geneName are visible. By default, this is a wildcard search of *BRCA* which is equivelant to
+    a regexp search .*BRCA.* . The filter term can be freely changed in the track setting page allowing
+    users to filter on other values in the geneName field.
+
+    This example is enabling filtering on the same field as above, geneName , however, it is not declaring
+    a default search parameter. This is done by passing only an asterisk/wildcard (*). This means that
+    the search box will be present but no geneName items will be filtered out of the data unless the user
+    specifies a value.
+
+    This example once again enables filtering on the same field, however, it is declaring regexp as the
+    filter type and passing a regular expression to be applied by default. In this case, we are targeting
+    all geneName items that are version 1.'
   format: filterText.<fieldName> <default search string>
   examples:
   - filterText.geneName *BRCA*
@@ -2156,48 +2627,105 @@
   description: 'There are a number of different filters available for bigBed data. See the Filters Quick
     Start guide for more info. Note: for configurable features, like filters, an additional period "."
     or plus "+" is required in the type declaration, for instance type bigBed 5 . or type bigBed 9 + .
+
     filterValues.<fieldName> is used to enable filtering by specified values within a field. It can be
     used on fields that can contain one text value or a list of comma-separated values of text, like "classA,classB".
-    Usually these are category names. The option requires at least one value to filter on. Every individual
-    possible value that can ever occur in the field must be passed in a comma separated list. If there
-    are commas in the values, two commas can be used to designate literal commas. You will then be able
-    to select those values as categories, choosing to display only items that belong to one, any, or at
-    least one of the selected values. By default, the user can select multiple values from this list and
-    the filter lets pass any features with at least one of these values ( multiple ). In order to choose
-    the default selection behavior, the optional parameter filterType.<fieldName> may be used. If this
-    parameter is not passed, by default the selection will be set to "one or more match" which is the
-    same as having filterType.fieldName multiple . If the user should only be able to select a single
-    value, single can be passed instead. Another option, multipleListAnd , means that the user can select
-    multiple categories, but the filter will let pass only features where all of these categories are
-    present. Both single and multiple have "list" options. These options split the bigBed field values
-    by commas, meaning that they should only be used when items can contain multiple values at once in
-    the desired filter field. For example, if my data is classifying variants, and they can only be a
-    SNV, insertion, or deletion, I will want to use single and multiple . However, if instead the filter
-    will be on a field classifying functional impact, there can be many values for each item. For example,
-    variant rs11541299, which is both a synonymous variant and a coding sequence variant. In this case,
-    I would want to use one of the "list" options. Most simply singleList or multipleList , or one of
-    the additional varieties of multipleList depending on the desired options. multipleListOr and multipleListAnd
-    both still let the user override the type of combination manually in the user interface with a radio
-    button. If you specify multipleListOnlyOr or multipleListOnlyAnd then the radiobutton is suppressed
-    and the user cannot choose between the options anymore. This can be used in cases where by the nature
-    of the field, it makes little sense to offer the OR or AND search. You can also choose which values
-    to have selected by default using the filterValuesDefault.<fieldName> parameter. It can take a comma
-    separated list just like filterValues.<fieldName> , and any items included will be automatically selected.
-    Not that the values need to be present in both settings. The labels in the menu shown to the user
-    can be configured to display a different name/label than the one present in the bigBed field. This
-    can be helpful when the data values are written in short form, but you want a longer more descriptive
-    name to show up in the UI. The format for this substitution is as follows: E.g. if the value in the
-    bigBed field is AML , a setting like Acute Myeloid Leukemia|AML will show Acute Myeloid Leukemia in
-    the user interface but will lead to the value AML being searched in the bigBed field. This can reduce
-    the size of the bigBed file a lot. See example below for more information. Notes: Currently, all values
-    must be stated individually Value names must match exactly By default, all bed tracks that are at
-    least bed5 will have a score filter. Enabling any of the filter*.<fieldName> filter settings will
-    disable that default filter In order for filters to work, the track must be " type bigBed N + " or
-    " type bigBed N . ". Including the "+" (for bigBed+ tracks) or a "." (for non-extended bigBed tracks)
-    is required Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be at least
-    a bed5 There should not be any white spaces between declared items after commas, e.x. "itemOne,itemTwo,itemThree"
-    The default label can be customized with the filterLabel.<fieldName> parameter When using filter values
-    in a field that incudes commas, an additional comma can be used to escape it. E.x. "fieldOne,fieldTwo,,fieldTwo,fieldThree"'
+    Usually these are category names. The option requires at least one value to filter on.
+
+    Every individual possible value that can ever occur in the field must be passed in a comma separated
+    list. If there are commas in the values, two commas can be used to designate literal commas. You will
+    then be able to select those values as categories, choosing to display only items that belong to one,
+    any, or at least one of the selected values. By default, the user can select multiple values from
+    this list and the filter lets pass any features with at least one of these values ( multiple ).
+
+    In order to choose the default selection behavior, the optional parameter filterType.<fieldName> may
+    be used. If this parameter is not passed, by default the selection will be set to "one or more match"
+    which is the same as having filterType.fieldName multiple . If the user should only be able to select
+    a single value, single can be passed instead. Another option, multipleListAnd , means that the user
+    can select multiple categories, but the filter will let pass only features where all of these categories
+    are present.
+
+    Both single and multiple have "list" options. These options split the bigBed field values by commas,
+    meaning that they should only be used when items can contain multiple values at once in the desired
+    filter field. For example, if my data is classifying variants, and they can only be a SNV, insertion,
+    or deletion, I will want to use single and multiple . However, if instead the filter will be on a
+    field classifying functional impact, there can be many values for each item. For example, variant
+    rs11541299, which is both a synonymous variant and a coding sequence variant. In this case, I would
+    want to use one of the "list" options. Most simply singleList or multipleList , or one of the additional
+    varieties of multipleList depending on the desired options.
+
+    multipleListOr and multipleListAnd both still let the user override the type of combination manually
+    in the user interface with a radio button. If you specify multipleListOnlyOr or multipleListOnlyAnd
+    then the radiobutton is suppressed and the user cannot choose between the options anymore. This can
+    be used in cases where by the nature of the field, it makes little sense to offer the OR or AND search.
+
+    You can also choose which values to have selected by default using the filterValuesDefault.<fieldName>
+    parameter. It can take a comma separated list just like filterValues.<fieldName> , and any items included
+    will be automatically selected. Not that the values need to be present in both settings.
+
+    The labels in the menu shown to the user can be configured to display a different name/label than
+    the one present in the bigBed field. This can be helpful when the data values are written in short
+    form, but you want a longer more descriptive name to show up in the UI. The format for this substitution
+    is as follows:
+
+    E.g. if the value in the bigBed field is AML , a setting like Acute Myeloid Leukemia|AML will show
+    Acute Myeloid Leukemia in the user interface but will lead to the value AML being searched in the
+    bigBed field. This can reduce the size of the bigBed file a lot. See example below for more information.
+
+    Notes: Currently, all values must be stated individually Value names must match exactly By default,
+    all bed tracks that are at least bed5 will have a score filter. Enabling any of the filter*.<fieldName>
+    filter settings will disable that default filter In order for filters to work, the track must be "
+    type bigBed N + " or " type bigBed N . ". Including the "+" (for bigBed+ tracks) or a "." (for non-extended
+    bigBed tracks) is required Filters are not supported in bed3 or bed4 files, even bed 3+x. The file
+    must be at least a bed5 There should not be any white spaces between declared items after commas,
+    e.x. "itemOne,itemTwo,itemThree" The default label can be customized with the filterLabel.<fieldName>
+    parameter When using filter values in a field that incudes commas, an additional comma can be used
+    to escape it. E.x. "fieldOne,fieldTwo,,fieldTwo,fieldThree"
+
+    - Currently, all values must be stated individually
+
+    - Value names must match exactly
+
+    - By default, all bed tracks that are at least bed5 will have a score filter. Enabling any of the
+    filter*.<fieldName> filter settings will disable that default filter
+
+    - In order for filters to work, the track must be " type bigBed N + " or " type bigBed N . ". Including
+    the "+" (for bigBed+ tracks) or a "." (for non-extended bigBed tracks) is required Filters are not
+    supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5 There should not be
+    any white spaces between declared items after commas, e.x. "itemOne,itemTwo,itemThree" The default
+    label can be customized with the filterLabel.<fieldName> parameter When using filter values in a field
+    that incudes commas, an additional comma can be used to escape it. E.x. "fieldOne,fieldTwo,,fieldTwo,fieldThree"
+
+    - Filters are not supported in bed3 or bed4 files, even bed 3+x. The file must be at least a bed5
+
+    - There should not be any white spaces between declared items after commas, e.x. "itemOne,itemTwo,itemThree"
+
+    - The default label can be customized with the filterLabel.<fieldName> parameter
+
+    - When using filter values in a field that incudes commas, an additional comma can be used to escape
+    it. E.x. "fieldOne,fieldTwo,,fieldTwo,fieldThree"
+
+    In this simple example, we are applying filterValues.<fieldName> to the OddEven field, which designates
+    either "Even" or "Odd". We can then filter the data using the OddEven field with a drop-down menu
+    displayed on the track controls page to just evens or odds. As there is no filterType, the user can
+    also show both evens and odds at the same time.
+
+    In this follow up example, we are passing the filterType.fieldName singleList parameter, which means
+    that only one item in the OddEven field can be chosen, in this case "Odd" or "Even". This removes
+    the default that allows multiple selections.
+
+    In this third example, we have added the filterValuesDefault.fieldName parameter as well. Now the
+    default filter when the hub is loaded will have the Odd value preselected.
+
+    In this example the filter is being applied to multiple values in the annotationType field. We can
+    then select from these values in the annotationType field with a drop-down menu displayed on the track
+    settings page, and display only items that match our selections. The selection choices will let us
+    match one, all, or any combination of the supplied values.
+
+    In this follow up to the previous question, we have changed the name of the items that show up in
+    the drop down menu to be more descriptive than the dense file format values. This means that if we
+    wanted to only see items with annotationType of DNA-BR , we would select DNA-binding region from the
+    interface menu.'
   format: filterValues.<fieldName> <value1,value2,value3...>
   examples:
   - filterValues.fieldName fieldValue1|alternativeName1,fieldValue2|alternativeName2...
@@ -2228,11 +2756,48 @@
     as name or score may contain a limited number of discrete values that can be filtered on. These discrete
     values will be displayed in a dropdown list from which the user can choose one or more options. While
     the maximum number of options in the list is not limited, displaying too many options can be confusing
-    for the user. Setting complexities: Because of this complexity, please remember to use the '' \ ''
-    continuation line to ensure the setting is readable: It is probable that this setting will be redefined
-    at some point, given that it is very complicated. However, this current format will be supported until
-    entirely replaced. The best way to understand this setting is with an example. This is an operational
-    example in the hg19 "Open Chrom Synth" track.'
+    for the user.
+
+    Setting complexities:
+
+    - Because filters for different fields are delimited by whitespace, any whitespace in titles and labels
+    should be replaced by the '' _ '' (underscore) character.
+
+    - Each field/option pair is joined by '' = '' (equal sign).
+
+    - The field portion can have a title that is delimited from the field name by '' : (colon)''.
+
+    - A single field filter will have multiple options delimited by commas.
+
+    - If the options are a 1-based index (1,2,3...) then the option list can be preceded with a '' + ''
+    (plus sign) and the options themselves are only labels.
+
+    - Otherwise, each option will be a value and optional label delimited by '' | '' (vertical bar). Note
+    that if one option has a label then all options of that filter must have a label.
+
+    - Finally, options may have CSS style wrapped in {curly} brackets and appended to the end.
+
+    Because of this complexity, please remember to use the '' \ '' continuation line to ensure the setting
+    is readable:
+
+    It is probable that this setting will be redefined at some point, given that it is very complicated.
+    However, this current format will be supported until entirely replaced.
+
+    The best way to understand this setting is with an example. This is an operational example in the
+    hg19 "Open Chrom Synth" track.
+
+    This setting sets up two filters, one on the field " color " and a second for the " ocCode " field.
+    The color filter is given the title "Validation Level". The second option has a value of "255" and
+    a label of "Open Chromatin (OC 2-3)". Note that it will appear as blue in the list due to the {color:#0000FF}
+    style definition. Also notice that all options for this color field have a style defined, even though
+    the first option is black and would be so by default. In this example, the only whitespace within
+    the setting value section immediately precedes the second filter definition. The second filter, "
+    ocCode ", is titled by the inscrutable "OC Code". It is a numeric index filter (as declared by the
+    '' + ''). The value of the second option is 2 and only the label gets defined as "Two: Dnase (all)".
+    Note that the colon in the label is an HTML code.
+
+    The filterBy setting is very powerful. We recommend that you experiment with the settings to determine
+    which work best for your case.'
   format: "filterBy  <field1:title=[+]opt1a...>\n                            [field2:title=[+]opt2a...]"
   examples:
   - "filterBy {field1}[:{Title1}]=[+]\\\n             option1a[|label1a[{style1a}]],\\\n             option1b[|label1b[{style1b}]],...\
@@ -2256,7 +2821,18 @@
   description: 'When a user clicks on a track item in the Browser image, the item detail page is shown.
     This setting specifies an alternate label for the filter on that page. Without this setting, the label
     will be the description of the field as specified by the autoSql (.as) file. Some of the parameters
-    modified by this are: filter.<fieldName> filterText.<fieldName> filterValues.<fieldName>'
+    modified by this are:
+
+    filter.<fieldName> filterText.<fieldName> filterValues.<fieldName>
+
+    - filter.<fieldName>
+
+    - filterText.<fieldName>
+
+    - filterValues.<fieldName>
+
+    In this example, we have a standard "strand" BED field with the default description "+ or - for strand".
+    We have enabled a filter and simplified the label to just "Strand (Orientation)".'
   format: filterLabel.<fieldName> <label>
   examples:
   - "filterValues.strand +,-\n    filterLabel.strand Strand (Orientation)"
@@ -2274,14 +2850,21 @@
   description: 'Sets the display order of filters on the track configuration page. Filters are shown in
     ascending order of filterPriority value (lowest first), so a filter with priority 1 appears above
     one with priority 2. Filters that do not specify a priority sort after all filters that do, sorted
-    alphabetically by field name. The setting applies to any filter declared on <fieldName> , regardless
-    of which filter style is used. filter.<fieldName> , filterText.<fieldName> , and filterValues.<fieldName>
-    all share a single filterPriority.<fieldName> entry. The companion setting highlightPriority.<fieldName>
-    does the same for highlight*.<fieldName> . Numbers may be integers or decimals; only the relative
-    ordering matters, so values like 1 2 3 and 10 20 30 produce the same layout, as do decimal values
-    such as 0.5 1 1.5 . Filters of different types appear in fixed sections in this order: numeric range
-    filters first, then text filters, then values (categorical) filters. filterPriority orders the filters
-    within each section.'
+    alphabetically by field name.
+
+    The setting applies to any filter declared on <fieldName> , regardless of which filter style is used.
+    filter.<fieldName> , filterText.<fieldName> , and filterValues.<fieldName> all share a single filterPriority.<fieldName>
+    entry. The companion setting highlightPriority.<fieldName> does the same for highlight*.<fieldName>
+    .
+
+    Numbers may be integers or decimals; only the relative ordering matters, so values like 1 2 3 and
+    10 20 30 produce the same layout, as do decimal values such as 0.5 1 1.5 . Filters of different types
+    appear in fixed sections in this order: numeric range filters first, then text filters, then values
+    (categorical) filters. filterPriority orders the filters within each section.
+
+    In this example, the variation type filter is shown first, the annotation filter second, and the FILTER
+    tags filter last, regardless of the order in which the filterValues.* lines appear in the stanza or
+    the alphabetical order of field names.'
   format: filterPriority.<fieldName> <number>
   examples:
   - "filterValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...\n    filterValues.annot pLoF,missense,synonymous,other\n\
@@ -2301,14 +2884,25 @@
   description: 'Similar to filters, There are a number of different highlights available for bigBed data.
     See the Filters Quick Start guide for more information on setting up filters. Note: for configurable
     features, like highlights, an additional period "." or plus "+" is required in the type declaration,
-    for instance type bigBed 5 . or type bigBed 9 + . All of these settings follow exactly the same syntax
-    and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained
-    above, except instead of items being excluded from the display, they are striped with a colored background
-    to appear "highlighted" compared to the other items in the display. You can control the default highlight
-    color with the highlightColor setting, or with the color picker on the configuration page when interacting
-    with the track. Please note that at this time only one higlight color is available per track, and
-    if multiple highlight settings are present on the same track, only items that pass ALL highlight settings
-    will highlighted.'
+    for instance type bigBed 5 . or type bigBed 9 + .
+
+    All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName,
+    and filterLimits.fieldName explained above, except instead of items being excluded from the display,
+    they are striped with a colored background to appear "highlighted" compared to the other items in
+    the display. You can control the default highlight color with the highlightColor setting, or with
+    the color picker on the configuration page when interacting with the track. Please note that at this
+    time only one higlight color is available per track, and if multiple highlight settings are present
+    on the same track, only items that pass ALL highlight settings will highlighted.
+
+    In this example, highlighting is enabled for the blockCount field. We are passing a default value
+    of 4, which will highlight items where the blockCount is 4 or above.
+
+    In this example, highlighting is enabled for the score field. We are passing a default value of 300,
+    which will highlight all items with a score of 300 or above.
+
+    In this example, we are enabling highlights for a range on the score field. The highlightByRange setting
+    is also enabled, allowing for highlighting between interval values. Lastly, the highlightLimits are
+    being used to modify the accepted values between 200 and 500 as opposed to the default 0 to 1000.'
   format: highlight.<fieldName> <default integer>
   examples:
   - highlight.blockCount 4
@@ -2327,14 +2921,22 @@
   description: 'Similar to filters, There are a number of different highlights available for bigBed data.
     See the Filters Quick Start guide for more information on setting up filters. Note: for configurable
     features, like highlights, an additional period "." or plus "+" is required in the type declaration,
-    for instance type bigBed 5 . or type bigBed 9 + . All of these settings follow exactly the same syntax
-    and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained
-    above, except instead of items being excluded from the display, they are striped with a colored background
-    to appear "highlighted" compared to the other items in the display. You can control the default highlight
-    color with the highlightColor setting, or with the color picker on the configuration page when interacting
-    with the track. Please note that at this time only one higlight color is available per track, and
-    if multiple highlight settings are present on the same track, only items that pass ALL highlight settings
-    will highlighted.'
+    for instance type bigBed 5 . or type bigBed 9 + .
+
+    All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName,
+    and filterLimits.fieldName explained above, except instead of items being excluded from the display,
+    they are striped with a colored background to appear "highlighted" compared to the other items in
+    the display. You can control the default highlight color with the highlightColor setting, or with
+    the color picker on the configuration page when interacting with the track. Please note that at this
+    time only one higlight color is available per track, and if multiple highlight settings are present
+    on the same track, only items that pass ALL highlight settings will highlighted.
+
+    In this example, we are applying a highlight on the field name so any items that start with NM are
+    highlighted.
+
+    In this example, we are enabling highlighting on the same name field, name but declaring the search
+    parameter with the highlightType . In this case, we are using regular expression to highlight all
+    items in the name field that are version 1.'
   format: highlightText.<fieldName> <default search string>
   examples:
   - highlightText.name NM*
@@ -2352,14 +2954,37 @@
   description: 'Similar to filters, There are a number of different highlights available for bigBed data.
     See the Filters Quick Start guide for more information on setting up filters. Note: for configurable
     features, like highlights, an additional period "." or plus "+" is required in the type declaration,
-    for instance type bigBed 5 . or type bigBed 9 + . All of these settings follow exactly the same syntax
-    and functionality as the filter.fieldName, filterByRange.fieldName, and filterLimits.fieldName explained
-    above, except instead of items being excluded from the display, they are striped with a colored background
-    to appear "highlighted" compared to the other items in the display. You can control the default highlight
-    color with the highlightColor setting, or with the color picker on the configuration page when interacting
-    with the track. Please note that at this time only one higlight color is available per track, and
-    if multiple highlight settings are present on the same track, only items that pass ALL highlight settings
-    will highlighted.'
+    for instance type bigBed 5 . or type bigBed 9 + .
+
+    All of these settings follow exactly the same syntax and functionality as the filter.fieldName, filterByRange.fieldName,
+    and filterLimits.fieldName explained above, except instead of items being excluded from the display,
+    they are striped with a colored background to appear "highlighted" compared to the other items in
+    the display. You can control the default highlight color with the highlightColor setting, or with
+    the color picker on the configuration page when interacting with the track. Please note that at this
+    time only one higlight color is available per track, and if multiple highlight settings are present
+    on the same track, only items that pass ALL highlight settings will highlighted.
+
+    In this example, we are applying highlightValues. to the OddEven field, which designates either "Even"
+    or "Odd". We can then highlight the OddEven field with a drop-down menu displayed on the track controls
+    page to highlight the even or odd items. Since there is no highlightType setting, the user can highlight
+    both even and odd items at the same time.
+
+    In this example, we are passing the highlightType. singleList parameter, which means only one options
+    can be chosen -- "Even" or "Odd". This setting removed the default setting that allows multiple selections.
+
+    In this third example, we are using the highlightValuesDefault. setting to set a default value for
+    the highlight setting. Now the default will be to highlight items with an Odd value when the hub is
+    loaded on the Genome Browser.
+
+    In this fourth example, we are applying a highlight to multiple values in the annotationType field.
+    We can select from these values in the annotationType field with a drop-down menu displayed on the
+    track settings page, and highlight only items that match our selections. The selection choices will
+    let us match one, all or any combination of the supplied values.
+
+    Similar to the last example, but we have changed the name of the items that show up in the drop-down
+    menu to be more descriptive than the dense file format values. For example, if we wanted to highlight
+    only items with annotationType of DNA-BR , on the track settings page, we would select DNA-binding
+    region .'
   format: highlightValues.<fieldName> <value1,value2,value3...>
   examples:
   - highlightValues.OddEven Odd
@@ -2377,8 +3002,12 @@
   context: trackDb
   level: new
   required: false
-  summary: Sets the default color for all of the various highlights defined in this stanza
-  description: Sets the default color for all of the various highlights defined in this stanza
+  summary: Sets the default color for all of the various highlights defined in this stanza In this example,
+    we are using the highlightColor to set the default highlight...
+  description: 'Sets the default color for all of the various highlights defined in this stanza
+
+    In this example, we are using the highlightColor to set the default highlight color. With this setting,
+    all highlight stripes will use the color red, #ff0000 .'
   format: highlightColor <hexcolor>
   examples:
   - 'highlightColor #ff0000'
@@ -2396,13 +3025,20 @@
   description: 'Sets the display order of highlights on the track configuration page. Highlights are shown
     in ascending order of highlightPriority value (lowest first), so a highlight with priority 1 appears
     above one with priority 2. Highlights that do not specify a priority sort after all highlights that
-    do, sorted alphabetically by field name. The setting applies to any highlight declared on <fieldName>
-    , regardless of which highlight style is used. highlight.<fieldName> , highlightText.<fieldName> ,
-    and highlightValues.<fieldName> all share a single highlightPriority.<fieldName> entry. Numbers may
-    be integers or decimals; only the relative ordering matters, so values like 1 2 3 and 10 20 30 produce
-    the same layout, as do decimal values such as 0.5 1 1.5 . Highlights of different types appear in
-    fixed sections in this order: numeric range highlights first, then text highlights, then values (categorical)
-    highlights. highlightPriority orders the highlights within each section.'
+    do, sorted alphabetically by field name.
+
+    The setting applies to any highlight declared on <fieldName> , regardless of which highlight style
+    is used. highlight.<fieldName> , highlightText.<fieldName> , and highlightValues.<fieldName> all share
+    a single highlightPriority.<fieldName> entry.
+
+    Numbers may be integers or decimals; only the relative ordering matters, so values like 1 2 3 and
+    10 20 30 produce the same layout, as do decimal values such as 0.5 1 1.5 . Highlights of different
+    types appear in fixed sections in this order: numeric range highlights first, then text highlights,
+    then values (categorical) highlights. highlightPriority orders the highlights within each section.
+
+    In this example, the variation type highlight is shown first, the annotation highlight second, and
+    the FILTER tags highlight last, regardless of the order in which the highlightValues.* lines appear
+    in the stanza or the alphabetical order of field names.'
   format: highlightPriority.<fieldName> <number>
   examples:
   - "highlightValues.variation_type 3_prime_UTR_variant,5_prime_UTR_variant,...\n    highlightValues.annot\
@@ -2463,11 +3099,14 @@
   level: full
   required: false
   summary: Items can be associated with images and the images can be made visible with these two settings.
-  description: Items can be associated with images and the images can be made visible with these two settings.
-    The itemImagepath specifies a URL path to a directory with image files named in the format {name}.{suffix}
-    . The name is retrieved from the table or remote data file. This image will be displayed on the item
-    detaiIs page. If itemBigImagePath is also supplied, then a link to a larger image will be provided.
-    If the path provided is local to the browser then the path should be relative.
+  description: 'Items can be associated with images and the images can be made visible with these two
+    settings. The itemImagepath specifies a URL path to a directory with image files named in the format
+    {name}.{suffix} . The name is retrieved from the table or remote data file. This image will be displayed
+    on the item detaiIs page. If itemBigImagePath is also supplied, then a link to a larger image will
+    be provided. If the path provided is local to the browser then the path should be relative.
+
+    When the user clicks on a item named fred, then the item details page will show the image images/myTrackImages/fred.png
+    and will also provide a link to a larger image at http://bigImages.com/myTrackImages/fred.jpg .'
   format: itemImagePath <path> <suffix>
   examples:
   - "itemImagePath images/myTrackImages png\n    itemBigImagePath http://bigImages.com/myTrackImages jpg"
@@ -2482,12 +3121,13 @@
   required: false
   summary: Allows merging all track items that extend beyond both sides of the current viewing window
     into one bed item in the display.
-  description: Allows merging all track items that extend beyond both sides of the current viewing window
+  description: 'Allows merging all track items that extend beyond both sides of the current viewing window
     into one bed item in the display. The presence of this setting permits the display to offer this collapsed
-    viewing option, while the on or off denotes what view should be shown by default. The display can
-    be enabled/disabled by the user either on the normal track configuration page, or via selection from
-    the right-click menu. If the track is a bigBed 9 (+), then the merged item will be shaded as the average
-    of all the merged items.
+    viewing option, while the on or off denotes what view should be shown by default.
+
+    The display can be enabled/disabled by the user either on the normal track configuration page, or
+    via selection from the right-click menu. If the track is a bigBed 9 (+), then the merged item will
+    be shaded as the average of all the merged items.'
   format: mergeSpannedItems <on/off>
   examples:
   - mergeSpannedItems on
@@ -2502,10 +3142,21 @@
   level: full
   required: false
   summary: This setting changes the meaning of the bed name field to "identifier description".
-  description: This setting changes the meaning of the bed name field to "identifier description". If
+  description: 'This setting changes the meaning of the bed name field to "identifier description". If
     it is activated, the browser does not show the first word of the BED item name, but uses this first
     word for linking out to the item detail page. This allows putting both an identifier, like a gene
     ID, and its human-readable description into the BED item name field, separated by a space.
+
+    A BED name field of "9005 PITX2" will be shown "PITX2" on the genome browser, but when the user clicks
+    on it, the URL will be built only from the first word, by default cgi-bin/hgc?i=9005&(...). The URL
+    can be changed with directUrl , where %s is replaced by the identifier.
+
+    bigBed files are often created using the UCSC bedToBigBed program. By default, this program expects
+    only a single word for BED item names. To tell the program to accept multiple words separated by spaces
+    (required for this track setting), you will need to use the -tab option for bedToBigBed . This tells
+    the program that that tab characters are used instead of spaces to separate fields of the BED file.
+    Please note that this option will only work if tab characters are used as the field separator throughout
+    your BED file. More information on creating bigBed files is available on our bigBed Track Format page.'
   format: linkIdInName on
   examples:
   - linkIdInName on
@@ -2615,8 +3266,15 @@
   required: false
   summary: By default chains are colored by the alignment chromosome of the query species.
   description: 'By default chains are colored by the alignment chromosome of the query species. This can
-    be overridden with this setting. The three options are: This setting affects chain but not netAlign
-    type tracks.'
+    be overridden with this setting. The three options are:
+
+    - Chromosome - default
+
+    - Normalized Score - chains are colored by score
+
+    - Black - no coloring occurs
+
+    This setting affects chain but not netAlign type tracks.'
   format: chainColor <scheme>
   examples:
   - chainColor Black
@@ -2658,8 +3316,26 @@
   required: false
   summary: Specifies where item sequence can be found (if any) so that item sequence, or differences from
     genomic sequence, can be drawn when viewing a sufficiently sma...
-  description: Specifies where item sequence can be found (if any) so that item sequence, or differences
+  description: 'Specifies where item sequence can be found (if any) so that item sequence, or differences
     from genomic sequence, can be drawn when viewing a sufficiently small region.
+
+    - If extFile is specified, two additional parameters are required, the name of the seq table followed
+    by the name of the extFile table to use in looking up the sequence. These tables are loaded by hgLoadSeq.
+
+    - If hgPcrResult is specified then a PCR result is used.
+
+    - If lfExtra is specified then the sequence of an item is found in the last column of the table or
+    remote file.
+
+    - If nameIsSequence is specified then the 4th column ( name or sequence ) contains the sequence. (see
+    hg/lib/encode/tagAlign.as)
+
+    - If seq1Seq2 is specified then the 7th & 8th columns ( seq1 and seq2 ) contain the left and right
+    pairs of the sequence. (see hg/lib/encode/pairedTagAlign.as)
+
+    - If ss is specified then a user-provided blat sequence is looked for.
+
+    - If 2bit is specified then looks for sequence in the file specified by the otherTwoBitUrl tag.'
   format: "baseColorUseSequence  <extFile {seqTable} /\n                  hgPcrResult / lfExtra / nameIsSequence\
     \ / seq1Seq2 / ss / 2bit >"
   examples: []
@@ -2727,9 +3403,11 @@
   required: false
   summary: In drawing gene models, it can be useful to see "exon arrows" when the transcript extends beyond
     the current window.
-  description: In drawing gene models, it can be useful to see "exon arrows" when the transcript extends
+  description: 'In drawing gene models, it can be useful to see "exon arrows" when the transcript extends
     beyond the current window. This setting, which defaults to zero, ensures that these arrows will not
     be drawn if the interceding intron gap is less than the stated number of bases.
+
+    Don''t draw exon arrows when the gap between exons is 12 bases or less.'
   format: intronGap <#bases>
   examples:
   - intronGap 12
@@ -2756,13 +3434,14 @@
   level: full
   required: false
   summary: This setting is used when the interaction has an orientation (direction of effect).
-  description: This setting is used when the interaction has an orientation (direction of effect). The
+  description: 'This setting is used when the interaction has an orientation (direction of effect). The
     offset setting shows the source (offsetSource) or target (offsetTarget) below the other end type;
     that is vertically displaced in the image. The interaction is drawn with dashed lines when the target
-    region precedes the source region (reverse direction) in the genome. The cluster setting collects
-    all interactions with the same source (clusterSource) or target (clusterTarget) and displays each
-    group as a single linked block display in the browser. This provides an alternate view of an interact
-    file.
+    region precedes the source region (reverse direction) in the genome.
+
+    The cluster setting collects all interactions with the same source (clusterSource) or target (clusterTarget)
+    and displays each group as a single linked block display in the browser. This provides an alternate
+    view of an interact file.'
   format: interactDirectional <true|offsetSource|offsetTarget|clusterSource|clusterTarget>
   examples: []
 - name: interactUp
@@ -2900,9 +3579,11 @@
   level: full
   required: false
   summary: You can include a list of "clades" to group the species into.
-  description: You can include a list of "clades" to group the species into. This option is an alternative
+  description: 'You can include a list of "clades" to group the species into. This option is an alternative
     to speciesOrder , used when there are many species. Each speciesGroup in the list must have its own
     setting (sGroup_<group>), followed by a list of species, specified as for speciesOrder.
+
+    Choose one of these two alternatives to display species.'
   format: speciesGroups <sgroup1> [sgroup2  ...]
   examples:
   - "speciesOrder panTro1 canFam1 mm5 rn3 \\\n                 galGal2 fr1 danRer1\n    speciesGroups\
@@ -2982,7 +3663,18 @@
     due to lack of sequence in relevant portions of the aligning species. These display conventions make
     it easier to visualize the columns in stacked alignments, but they also tend to clutter the display.
     The user has the option to remove these placeholders by unchecking the "Display chains between alignments"
-    option. To set the default of this option to off, set irows to " off ".'
+    option. To set the default of this option to off, set irows to " off ".
+
+    - Single Line '' - '': No bases in the aligned species. Possibly due to a lineage-specific insertion
+    between the aligned blocks in the human genome or a lineage-specific deletion between the aligned
+    blocks in the aligning species.
+
+    - Double line '' = '': Aligning species has one or more unalignable bases in the gap region. Possibly
+    due to excessive evolutionary distance between species or independent indels in the region between
+    the aligned blocks in both species.
+
+    - Pale yellow coloring : Aligning species has Ns in the gap region. Reflects uncertainty in the relationship
+    between the DNA of both species, due to lack of sequence in relevant portions of the aligning species.'
   format: irows off
   examples:
   - irows off
@@ -3057,13 +3749,25 @@
     score , and is thus controlled by the scoreFilter setting. Other examples are pValueFilter, qValueFilter
     and signalFilter, which are filters on non-standard bed fields defined in the broadPeak and narrowPeak
     formats. These numerical filter settings should include the default value. If the numeric field is
-    floating point, the default should contain at least one decimal place. By default the range of values
-    for a numeric filter is 0 to 1000. However, you can explicitly set the upper and lower limits of the
-    filter by setting <column>FilterLimits . The numeric filters will exclude items that fall below the
-    setting. That is, a scoreFilter of 800 will exclude all items with a score below 800. You can also
-    filter for values within a range, by including the <column>FilterByRange setting. For example, a scoreFilter
-    range of 800-900 will include only items with scores at or above 800 and below 900. Note: multiple
-    filters of different fields are allowed.'
+    floating point, the default should contain at least one decimal place.
+
+    By default the range of values for a numeric filter is 0 to 1000. However, you can explicitly set
+    the upper and lower limits of the filter by setting <column>FilterLimits .
+
+    The numeric filters will exclude items that fall below the setting. That is, a scoreFilter of 800
+    will exclude all items with a score below 800. You can also filter for values within a range, by including
+    the <column>FilterByRange setting. For example, a scoreFilter range of 800-900 will include only items
+    with scores at or above 800 and below 900.
+
+    Note: multiple filters of different fields are allowed.
+
+    In this example, the standard bed field score , which is an integer, will be used to filter items
+    in the track. By default, items with scores below 100 will be excluded. Also by default the limits
+    of the scoreFilter are 0-1000.
+
+    The non-standard bed field pValue , which is floating-point, will be filtered by range. The expected
+    data range is 0.0 to 15.0, and by default only items with pValues within the 3.0 to 15.0 range will
+    be displayed.'
   format: <column>Filter <low>[:<high>]
   examples:
   - scoreFilter 100
@@ -3117,11 +3821,16 @@
   summary: Sets the color of the tick marks that mark where item bases differ from the genome.
   description: 'Sets the color of the tick marks that mark where item bases differ from the genome. Those
     marks appear when the track draws with baseColorDefault diffBases and the view is zoomed out past
-    base level. Their default color is red. Both values are worked out from the item''s own color, so
-    this setting does nothing unless the track gives each item a color. In a hub the way to do that is
-    colorByStrand . Without it the setting is read and ignored, and the tick marks stay red. itemRgb does
-    not count here: it colors an item as it is drawn, but it does not give the track the per-item color
-    this setting reads.'
+    base level. Their default color is red.
+
+    - contrastingColor : a color that stands out against the item color, often white.
+
+    - lighterShade : a lighter version of the item color.
+
+    Both values are worked out from the item''s own color, so this setting does nothing unless the track
+    gives each item a color. In a hub the way to do that is colorByStrand . Without it the setting is
+    read and ignored, and the tick marks stay red. itemRgb does not count here: it colors an item as it
+    is drawn, but it does not give the track the per-item color this setting reads.'
   format: baseColorTickColor <lighterShade/contrastingColor>
   examples:
   - "colorByStrand 0,0,200 200,0,0\n    baseColorDefault diffBases\n    baseColorTickColor contrastingColor"
@@ -3156,12 +3865,18 @@
   level: deprecated
   required: false
   summary: Obsolete.
-  description: Obsolete. The Browser does not read this setting. It selected how bases were labelled on
-    psl tracks that also have sequence loaded. The baseColor family replaced it in 2006, and nothing has
-    read either this spelling or the older pslSequenceBases since. all is now baseColorDefault itemBases
+  description: 'Obsolete. The Browser does not read this setting. It selected how bases were labelled
+    on psl tracks that also have sequence loaded. The baseColor family replaced it in 2006, and nothing
+    has read either this spelling or the older pslSequenceBases since. all is now baseColorDefault itemBases
     . different is now baseColorDefault diffBases . no left the choice to the user, which is what happens
     when baseColorDefault is not set. Both replacements need baseColorUseSequence to be set. Remove pslSequence
     from a trackDb file; it has no effect.
+
+    - all is now baseColorDefault itemBases .
+
+    - different is now baseColorDefault diffBases .
+
+    - no left the choice to the user, which is what happens when baseColorDefault is not set.'
   format: pslSequence <no/all/different>
   examples: []
 - name: showCdsAllScales
@@ -3249,26 +3964,30 @@
   summary: This setting is available for both the graph types of tracks (wig, bigWig, bedGraph) and the
     Hi-C heatmap tracks (hic).
   description: 'This setting is available for both the graph types of tracks (wig, bigWig, bedGraph) and
-    the Hi-C heatmap tracks (hic). It behaves slightly differently for each. For graph tracks, the graph
-    of the data displayed in the Browser image is usually scaled on the y-axis in absolute coordinates.
-    However, you can display the data in two types of autoScale which will ensure either that the high
-    score in the current viewing window will peak at the top of the graph, or that all tracks in a composite
-    will be scaled according to the highest point in the viewing window of any visible tracks in the same
-    composite. Like most graph settings, this is configurable by the user. Setting it to " on " in trackDb
-    will default the track to auto-scale to data view . The setting will independently scale its y-axis
-    based on the data within the track. Setting it to " group " in trackDb will default the track to group
-    auto-scale . With this setting, tracks within the same group will share the same y-axis scaling. This
-    means that the maximum and minimum values on the y-axis will be determined based on the data across
-    all tracks within the same group. This can be useful when comparing multiple tracks and wanting to
-    ensure consistency in scaling. The default is " off " which will set the track to use vertical viewing
-    range setting . NOTE: These options can be misleading if a noisy, low signal erroneously appears as
-    significant because there is no high signal in the view window. To use the group option declare the
-    setting only in the parent bigWig composite, not in the individual children tracks. For Hi-C tracks,
-    higher interaction scores are represented with more intense colors. When this setting is set to "
-    off ", the score at which the color reaches maximum intensity is a fixed value that can be chosen
-    with the saturationScore trackDb setting. When this setting is set to " on ", the maximum intensity
-    score changes dynamically depending on the values in the current viewing window. The default value
-    for this setting is " on ". The " group " option for autoScale is not available for Hi-C tracks.'
+    the Hi-C heatmap tracks (hic). It behaves slightly differently for each.
+
+    For graph tracks, the graph of the data displayed in the Browser image is usually scaled on the y-axis
+    in absolute coordinates. However, you can display the data in two types of autoScale which will ensure
+    either that the high score in the current viewing window will peak at the top of the graph, or that
+    all tracks in a composite will be scaled according to the highest point in the viewing window of any
+    visible tracks in the same composite. Like most graph settings, this is configurable by the user.
+    Setting it to " on " in trackDb will default the track to auto-scale to data view . The setting will
+    independently scale its y-axis based on the data within the track. Setting it to " group " in trackDb
+    will default the track to group auto-scale . With this setting, tracks within the same group will
+    share the same y-axis scaling. This means that the maximum and minimum values on the y-axis will be
+    determined based on the data across all tracks within the same group. This can be useful when comparing
+    multiple tracks and wanting to ensure consistency in scaling. The default is " off " which will set
+    the track to use vertical viewing range setting .
+
+    NOTE: These options can be misleading if a noisy, low signal erroneously appears as significant because
+    there is no high signal in the view window. To use the group option declare the setting only in the
+    parent bigWig composite, not in the individual children tracks.
+
+    For Hi-C tracks, higher interaction scores are represented with more intense colors. When this setting
+    is set to " off ", the score at which the color reaches maximum intensity is a fixed value that can
+    be chosen with the saturationScore trackDb setting. When this setting is set to " on ", the maximum
+    intensity score changes dynamically depending on the values in the current viewing window. The default
+    value for this setting is " on ". The " group " option for autoScale is not available for Hi-C tracks.'
   format: autoScale <off/on/group>
   examples:
   - autoScale on
@@ -3305,9 +4024,11 @@
   required: false
   summary: The amount of vertical viewing space for your signal track should be declared, though it is
     configurable by the user.
-  description: The amount of vertical viewing space for your signal track should be declared, though it
-    is configurable by the user. Typically it is set to no more than 100 pixels and no less than 8, with
-    a default of 16 or 32 pixels.
+  description: 'The amount of vertical viewing space for your signal track should be declared, though
+    it is configurable by the user. Typically it is set to no more than 100 pixels and no less than 8,
+    with a default of 16 or 32 pixels.
+
+    The browser will display the track as 16 pixels high, but the user can scale it up to 100 pixels.'
   format: maxHeightPixels <max:default:min>
   examples:
   - maxHeightPixels 100:16:8
@@ -3323,9 +4044,13 @@
   level: base
   required: false
   summary: The data of most interest in a graph track may be contained within a narrow range.
-  description: The data of most interest in a graph track may be contained within a narrow range. Typically
+  description: 'The data of most interest in a graph track may be contained within a narrow range. Typically
     high outlier values can skew a graph and very low values may represent uninteresting data. Use viewLimits
     to set the default viewing range. Also use viewLimitsMax as suggested outer bounds.
+
+    Any data points of 20 or above will be shown as the peak of the graph. Data points that are below
+    5 will not be displayed. Even though the full data range extends to 100, these settings suggest that
+    scores of 20 or more are all considered highly relevant.'
   format: viewLimits <lower:upper>
   examples:
   - "viewLimits 5:20\n    viewLimitsMax0:100"
@@ -3375,11 +4100,13 @@
   required: false
   summary: For bigWigs only When signal data is clicked in the Browser image, the details of the signal
     in the current viewing window are displayed.
-  description: For bigWigs only When signal data is clicked in the Browser image, the details of the signal
-    in the current viewing window are displayed. For bigWigs that reference remote data, the query can
-    be a very expensive operation if the current window is large. To avoid overburdening the Browser,
-    the size of the window to query should be limited. The value of this setting is the maximum window
-    size in bases that should be queried to give the detailed signal numbers.
+  description: 'For bigWigs only
+
+    When signal data is clicked in the Browser image, the details of the signal in the current viewing
+    window are displayed. For bigWigs that reference remote data, the query can be a very expensive operation
+    if the current window is large. To avoid overburdening the Browser, the size of the window to query
+    should be limited. The value of this setting is the maximum window size in bases that should be queried
+    to give the detailed signal numbers.'
   format: maxWindowToQuery <integer>
   examples: []
 - name: negateValues
@@ -3412,13 +4139,14 @@
   level: full
   required: false
   summary: Specifies the URL to a bed 9 bigBed file.
-  description: Specifies the URL to a bed 9 bigBed file. Notably, this file contains regions (chr + chromStart
+  description: 'Specifies the URL to a bed 9 bigBed file. Notably, this file contains regions (chr + chromStart
     + chromEnd) in the first three fields, and then an RGB value in the 9th field. The associated bigWig
-    track will then be colored regionally to reflect this bigBed file. An example of this in use can be
-    seen with CADD 1.7 . It may also be helpful to reference our previously used script for a method on
-    how to generate this file based on score thresholds, colors, and an input bigWig track. It is recommended
-    to use windowingFunction minimum alongside this setting in order to prevent confusing coloring when
-    items are averaged at zoomed out levels.
+    track will then be colored regionally to reflect this bigBed file.
+
+    An example of this in use can be seen with CADD 1.7 . It may also be helpful to reference our previously
+    used script for a method on how to generate this file based on score thresholds, colors, and an input
+    bigWig track. It is recommended to use windowingFunction minimum alongside this setting in order to
+    prevent confusing coloring when items are averaged at zoomed out levels.'
   format: setColorWith <url/relativePath>
   examples:
   - setColorWith url or relative path
@@ -3509,7 +4237,7 @@
   required: false
   summary: Depending upon how large of a genomic region is displayed in the Browser image, it may be necessary
     to summarize the actual signal.
-  description: Depending upon how large of a genomic region is displayed in the Browser image, it may
+  description: 'Depending upon how large of a genomic region is displayed in the Browser image, it may
     be necessary to summarize the actual signal. This user-configurable setting controls how the Browser
     collapses the signal from (for example) 100 or 100 thousand bases down to a single pixel. By default,
     the data is shown using mean+whiskers display, though the maximum , mean , or minimum can alternatively
@@ -3518,6 +4246,9 @@
     as slightly lighter, and the max as the lightest shade. This subtle shading can quickly indicate if
     the condensed data is hiding important information that can be adequately evaluated only by zooming
     in.
+
+    When zoomed out, this track will show the mean signal but include shading representing higher scores.
+    The user may change this setting.'
   format: windowingFunction  <mean/mean+whiskers/maximum/minimum>
   examples:
   - windowingFunction mean
@@ -3535,9 +4266,15 @@
   summary: It can be useful to draw a line across the track's signal graph at some fixed y coordinate.
   description: 'It can be useful to draw a line across the track''s signal graph at some fixed y coordinate.
     Do this by setting yLineOnOff to "on" and specifying the y coordinate with yLineMark . These two settings
-    are configurable by the user. Defaults: off and 0.0. Often confused with these configurable settings
-    is the gridDefault , which simply draws a a line at y=0 across your entire track. This setting might
-    be useful if the lack of data is equivalent to a 0 signal.'
+    are configurable by the user. Defaults: off and 0.0.
+
+    Often confused with these configurable settings is the gridDefault , which simply draws a a line at
+    y=0 across your entire track. This setting might be useful if the lack of data is equivalent to a
+    0 signal.
+
+    The signal is graphed with a default solid line at zero, suggesting that any gaps in data should be
+    interpreted as zero signal. There will also be a line at the signal height of 2.5 that may be used
+    to emphasize which peaks in the signal reach this critical height.'
   format: yLineMark <#>
   examples:
   - "yLineOnOff on\n    yLineMark 2.5\n    gridDefault on"
@@ -3564,9 +4301,10 @@
   level: full
   required: false
   summary: Draw the lollipop heads without the stems that normally connect them to the baseline.
-  description: Draw the lollipop heads without the stems that normally connect them to the baseline. This
-    setting was documented as noStems until August 2026. That spelling never worked, because the Browser
-    has always read lollyNoStems . A track using noStems draws its stems as usual.
+  description: 'Draw the lollipop heads without the stems that normally connect them to the baseline.
+
+    This setting was documented as noStems until August 2026. That spelling never worked, because the
+    Browser has always read lollyNoStems . A track using noStems draws its stems as usual.'
   format: lollyNoStems <on/off>
   examples:
   - lollyNoStems on
@@ -3832,7 +4570,10 @@
   level: full
   required: false
   summary: The name of the other assembly in the pairwise alignment for this track.
-  description: The name of the other assembly in the pairwise alignment for this track.
+  description: 'The name of the other assembly in the pairwise alignment for this track.
+
+    The other species (other than the reference) in the alignment is the tweeter assembly in the same
+    HAL file.'
   format: otherSpecies <otherSpecies>
   examples:
   - otherSpecies tweeter
@@ -3889,7 +4630,23 @@
     tree will be drawn in the left label area. This works best for phased genotypes. fileOrder : Genotypes
     are displayed in the order in which they appear in the VCF file. treeFile url : Genotypes are displayed
     in the order in which they appear in url , a Newick -formatted tree file whose leaf node IDs are the
-    same as the genotype column IDs in the VCF file. The tree will be drawn in the left label area.'
+    same as the genotype column IDs in the VCF file. The tree will be drawn in the left label area.
+
+    - centerWeighted : For diploid organisms, this separates the two haplotypes from each sample and dynamically
+    clusters all haplotypes by similarity, weighted by proximity to a central variant. The clustering
+    tree will be drawn in the left label area. This works best for phased genotypes. fileOrder : Genotypes
+    are displayed in the order in which they appear in the VCF file. treeFile url : Genotypes are displayed
+    in the order in which they appear in url , a Newick -formatted tree file whose leaf node IDs are the
+    same as the genotype column IDs in the VCF file. The tree will be drawn in the left label area.
+
+    - fileOrder : Genotypes are displayed in the order in which they appear in the VCF file. treeFile
+    url : Genotypes are displayed in the order in which they appear in url , a Newick -formatted tree
+    file whose leaf node IDs are the same as the genotype column IDs in the VCF file. The tree will be
+    drawn in the left label area.
+
+    - treeFile url : Genotypes are displayed in the order in which they appear in url , a Newick -formatted
+    tree file whose leaf node IDs are the same as the genotype column IDs in the VCF file. The tree will
+    be drawn in the left label area.'
   format: hapClusterMethod <centerWeighted|fileOrder|treeFile url >
   examples: []
 - name: hapClusterColorBy
@@ -3911,7 +4668,27 @@
     changes the protein sequence of a gene, green if the variant falls within a gene but does not change
     the protein sequence, blue if the variant falls within the UTR of a protein-coding gene or within
     a non-coding gene, and black if intronic or intergenic. refAlt : reference allele is blue, alternate
-    allele is red. base : A is red, C is blue, G is green and T is magenta.'
+    allele is red. base : A is red, C is blue, G is green and T is magenta.
+
+    - altOnly : reference allele is white (invisible), alternate allele is black. This emphasizes haplotypes
+    with alternate alleles. (default) function : If the geneTrack setting is also provided, then reference
+    allele is white (invisible) and alternate allele is red if the variant changes the protein sequence
+    of a gene, green if the variant falls within a gene but does not change the protein sequence, blue
+    if the variant falls within the UTR of a protein-coding gene or within a non-coding gene, and black
+    if intronic or intergenic. refAlt : reference allele is blue, alternate allele is red. base : A is
+    red, C is blue, G is green and T is magenta.
+
+    - function : If the geneTrack setting is also provided, then reference allele is white (invisible)
+    and alternate allele is red if the variant changes the protein sequence of a gene, green if the variant
+    falls within a gene but does not change the protein sequence, blue if the variant falls within the
+    UTR of a protein-coding gene or within a non-coding gene, and black if intronic or intergenic. refAlt
+    : reference allele is blue, alternate allele is red. base : A is red, C is blue, G is green and T
+    is magenta.
+
+    - refAlt : reference allele is blue, alternate allele is red. base : A is red, C is blue, G is green
+    and T is magenta.
+
+    - base : A is red, C is blue, G is green and T is magenta.'
   format: hapClusterColorBy <altOnly|function|refAlt|base>
   examples: []
 - name: geneTrack
@@ -3992,9 +4769,10 @@
   required: false
   summary: Assuming applyMinQual is true , this is the minimum QUAL value required for a variant to be
     displayed.
-  description: Assuming applyMinQual is true , this is the minimum QUAL value required for a variant to
-    be displayed. Assuming applyMinQual is true , this is the minimum QUAL value required for a variant
+  description: 'Assuming applyMinQual is true , this is the minimum QUAL value required for a variant
     to be displayed.
+
+    Assuming applyMinQual is true , this is the minimum QUAL value required for a variant to be displayed.'
   format: minQual < Q >
   examples: []
 - name: minFreq
@@ -4151,18 +4929,22 @@
   required: false
   summary: To declare a supertrack, simply add this setting to a track definition that will hold a few
     standard settings.
-  description: To declare a supertrack, simply add this setting to a track definition that will hold a
-    few standard settings. To set a supertrack to display as default add the word show, superTrack on
+  description: 'To declare a supertrack, simply add this setting to a track definition that will hold
+    a few standard settings. To set a supertrack to display as default add the word show, superTrack on
     show , to the end of the statement. To have the supertrack not display by default use only superTrack
     on . It may help to think of the original declaring supertrack stanza as a light switch that by default
-    is off, and can be flipped on by adding show . All tracks that claim membership to the supertrack
-    should set their own visibilities in lower stanzas by declaring settings such as parent superTrack1
-    and also by having a separate visibility dense line. If no visibility setting is defined for a track,
-    the default setting of hide is assigned. This can cause confusion if one mistakenly tries to set visibilities
-    only at the top supertack stanza, not allowed, and leaves them out for each child. Do not confuse
-    the parent line with how it is used in composites. For example, in supertracks DO NOT follow the example
-    of parent superTrack1 [off/on] , where [off/on] will only work with composite tracks. When attempting
-    to debug visibility settings, it may be helpful to read the note about inheritance found below.
+    is off, and can be flipped on by adding show .
+
+    All tracks that claim membership to the supertrack should set their own visibilities in lower stanzas
+    by declaring settings such as parent superTrack1 and also by having a separate visibility dense line.
+    If no visibility setting is defined for a track, the default setting of hide is assigned. This can
+    cause confusion if one mistakenly tries to set visibilities only at the top supertack stanza, not
+    allowed, and leaves them out for each child.
+
+    Do not confuse the parent line with how it is used in composites. For example, in supertracks DO NOT
+    follow the example of parent superTrack1 [off/on] , where [off/on] will only work with composite tracks.
+    When attempting to debug visibility settings, it may be helpful to read the note about inheritance
+    found below.'
   format: superTrack on show
   examples: []
 - name: parent_supertrack
@@ -4176,18 +4958,22 @@
   required: false
   summary: Membership in a supertrack, composite, or aggregate track is declared by the child, not the
     supertrack itself with a line such as parent superTrack1 .
-  description: Membership in a supertrack, composite, or aggregate track is declared by the child, not
-    the supertrack itself with a line such as parent superTrack1 . Do not confuse the parent line with
-    how it is used in composites. For example, in supertracks DO NOT follow the example of parent compositeTrack1
-    [off/on] , which will only work with composite tracks. Any number of children may belong to one supertrack,
-    but ten is a suggested number for usability considerations. Stylistically, children's stanzas within
-    the trackDB typically are indented directly under the stanza of the parent. However, this is less
-    frequently the case with supertracks, because the children are often scattered in other places within
-    the trackDb file, or the supertrack children are themselves composites containing additional indentation
-    that makes enforcement of the supertrack indentation impractical. All tracks that claim membership
-    to the supertrack should set their own visibilities in lower stanzas by declaring separate settings
-    such as visibility dense .When attempting to debug visibility settings, it may be helpful to read
-    the note about inheritance found below.
+  description: 'Membership in a supertrack, composite, or aggregate track is declared by the child, not
+    the supertrack itself with a line such as parent superTrack1 .
+
+    Do not confuse the parent line with how it is used in composites. For example, in supertracks DO NOT
+    follow the example of parent compositeTrack1 [off/on] , which will only work with composite tracks.
+
+    Any number of children may belong to one supertrack, but ten is a suggested number for usability considerations.
+    Stylistically, children''s stanzas within the trackDB typically are indented directly under the stanza
+    of the parent. However, this is less frequently the case with supertracks, because the children are
+    often scattered in other places within the trackDb file, or the supertrack children are themselves
+    composites containing additional indentation that makes enforcement of the supertrack indentation
+    impractical.
+
+    All tracks that claim membership to the supertrack should set their own visibilities in lower stanzas
+    by declaring separate settings such as visibility dense .When attempting to debug visibility settings,
+    it may be helpful to read the note about inheritance found below.'
   format: parent <superTrack>
   examples: []
 - name: parent
@@ -4313,7 +5099,9 @@
     performance improvements can be gained by creating an index file of the intersections of items in
     all subtracks ("multiBed"). This file, and an accompanying sources file, are optional settings for
     the hideEmptySubtracks feature. Instructions for creating these files are at the MultiBed help page
-    (TBD). NOTE: These settings are required to use the hideEmptySubtracks feature with multi-view composites.'
+    (TBD).
+
+    NOTE: These settings are required to use the hideEmptySubtracks feature with multi-view composites.'
   format: hideEmptySubtracksMultiBedUrl file.bb
   examples: []
 - name: hideEmptySubtracksSourcesUrl
@@ -4358,10 +5146,21 @@
   level: base
   required: false
   summary: Up to 9 subgroups may be declared, one per line.
-  description: Up to 9 subgroups may be declared, one per line. Each subgroup declaration must include
-    a whitespace-delimited tag, title, and one or more tag/title membership pairs joined by an ' = ' equals
-    sign. Because subgroup settings are often lengthy, it is recommended that the ' \ ' line continuation
-    character be used to break up the setting over multiple lines for easier reading.
+  description: 'Up to 9 subgroups may be declared, one per line. Each subgroup declaration must include
+    a whitespace-delimited tag, title, and one or more tag/title membership pairs joined by an '' = ''
+    equals sign.
+
+    - tag : Used in the code to select and sort subtracks based upon their membership. Tag names must
+    be alphanumeric, begin with a letter, not contain a period, and be formed such that the desired sort
+    order of the member subtracks will result.
+
+    - title : Label of the subgroup as it appears on the selection matrix that is displayed to the user,
+    e.g.,"Antibody". Spaces within titles must be replaced by '' _ ''. A limited amount of HTML is allowed
+    in titles, such as the insertion of Greek letters using an HTML code. Any use of HTML should be tested
+    to ensure that it displays correctly.
+
+    Because subgroup settings are often lengthy, it is recommended that the '' \ '' line continuation
+    character be used to break up the setting over multiple lines for easier reading.'
   format: "subGroup1 <gTag1> <gTitle1> <mTag1a=mTitle1a>\n                        [mTag1b=mTitle1b...]"
   examples: []
 - name: subGroups
@@ -4391,13 +5190,15 @@
   required: false
   summary: In order to define the type of UI desired for selecting subtracks based upon groups, additional
     settings are needed at the composite level.
-  description: In order to define the type of UI desired for selecting subtracks based upon groups, additional
+  description: 'In order to define the type of UI desired for selecting subtracks based upon groups, additional
     settings are needed at the composite level. For a one- or two-dimensional array of checkboxes, declare
     the dimensions X and Y. Additional dimensions (called "abc") can be declared with this setting as
-    dimA, dimB, etc. Note that the order of the subgroups in a dimension is exactly the same as the order
-    they appear in the subGroup# setting, regardless of whether the subtrack list is sorted by tags. Please
-    also note that if a hub is not going to use the X,Y matrix, dimX should be the first dimension defined
-    rather than dimA. Also, the setting allButtonPair on will prevent the matrix from displaying.
+    dimA, dimB, etc.
+
+    Note that the order of the subgroups in a dimension is exactly the same as the order they appear in
+    the subGroup# setting, regardless of whether the subtrack list is sorted by tags. Please also note
+    that if a hub is not going to use the X,Y matrix, dimX should be the first dimension defined rather
+    than dimA. Also, the setting allButtonPair on will prevent the matrix from displaying.'
   format: dimensions <dimX=gTag#> [dimY=gTag#] [dimA=gTag# ...]
   examples: []
 - name: filterComposite
@@ -4410,17 +5211,18 @@
   level: full
   required: false
   summary: For the "abc" dimensions, rows of checkboxes will be shown by default.
-  description: For the "abc" dimensions, rows of checkboxes will be shown by default. However, this UI
+  description: 'For the "abc" dimensions, rows of checkboxes will be shown by default. However, this UI
     can be confusing, especially combined with a one- or two-dimensional matrix. Instead, it is recommended
     that you organize "abc" dimensions as drop-down multi-selects, often referred to as "filter" boxes
     due to their similarity to the filterBy setting discussed above. Declare the subtrack filter boxes
     with the filterComposite setting. Filter composites may work with or without the X/Y matrix, but are
-    restricted to the "abc" dimensions. By default, the filter box for selecting subtracks is multi-select,
-    meaning more than one choice is allowed. It is possible to restrict this to a single choice by adding
-    the " =one " option to the filter box definition. This might make sense when there are only 2 choices.
-    The choice of "all" is always available, while choosing nothing is an invalid case. Please note that
-    if a hub is not going to use the X,Y matrix, then dimX should be the first dimension defined rather
-    than dimA.
+    restricted to the "abc" dimensions.
+
+    By default, the filter box for selecting subtracks is multi-select, meaning more than one choice is
+    allowed. It is possible to restrict this to a single choice by adding the " =one " option to the filter
+    box definition. This might make sense when there are only 2 choices. The choice of "all" is always
+    available, while choosing nothing is an invalid case. Please note that if a hub is not going to use
+    the X,Y matrix, then dimX should be the first dimension defined rather than dimA.'
   format: filterComposite <dim[A/B/C][=one]> [dimB dimC ...]
   examples: []
 - name: dimensionAchecked
@@ -4544,10 +5346,12 @@
   required: false
   summary: This version of the compositeTrack setting indicates that the UI for this composite track should
     be handled with facets.
-  description: This version of the compositeTrack setting indicates that the UI for this composite track
-    should be handled with facets. A faceted composite also treats its own visibility as a maximum for
-    its subtracks rather than a value they inherit, so one container can hold tracks that each want a
-    different display mode. See onlyVisibility for how a subtrack picks its own mode within that maximum.
+  description: 'This version of the compositeTrack setting indicates that the UI for this composite track
+    should be handled with facets.
+
+    A faceted composite also treats its own visibility as a maximum for its subtracks rather than a value
+    they inherit, so one container can hold tracks that each want a different display mode. See onlyVisibility
+    for how a subtrack picks its own mode within that maximum.'
   format: compositeTrack faceted
   examples: []
 - name: metaDataUrl
@@ -4803,10 +5607,11 @@
   required: false
   summary: References the next definition file in this hub that will describe the assemblies and tracks
     available at this hub.
-  description: References the next definition file in this hub that will describe the assemblies and tracks
-    available at this hub. Typically, genomes.txt is at the same directory level as this hub.txt; however,
-    it can also be a relative path reference to a different directory level. Not needed if using useOneFile
-    (recommended).
+  description: 'References the next definition file in this hub that will describe the assemblies and
+    tracks available at this hub. Typically, genomes.txt is at the same directory level as this hub.txt;
+    however, it can also be a relative path reference to a different directory level.
+
+    Not needed if using useOneFile (recommended).'
   format: genomesFile <url/relativePath>
   examples:
   - genomesFile genomes.txt
@@ -4866,10 +5671,11 @@
   level: base
   required: false
   summary: For hubs on native assemblies, use the UCSC database name (e.g.
-  description: For hubs on native assemblies, use the UCSC database name (e.g. hg38). Genome assemblies
+  description: 'For hubs on native assemblies, use the UCSC database name (e.g. hg38). Genome assemblies
     in our GenArk Repository can be referenced using their GCA_NNN or GCA_NNN identifier (e.g. GCF_000891275.1).
-    If an assembly is not available in GenArk, request it . For custom assemblies, create your own name.
-    This will appear on title pages in the Genome Browser.
+    If an assembly is not available in GenArk, request it .
+
+    For custom assemblies, create your own name. This will appear on title pages in the Genome Browser.'
   format: genome <str>
   examples:
   - genome ricCom1
@@ -4884,8 +5690,10 @@
   required: false
   summary: Relative path or URL to the file that defines the tracks for the assembly specified by the
     genome setting.
-  description: Relative path or URL to the file that defines the tracks for the assembly specified by
-    the genome setting. Not necessary if using the useOneFile setting (recommended).
+  description: 'Relative path or URL to the file that defines the tracks for the assembly specified by
+    the genome setting.
+
+    Not necessary if using the useOneFile setting (recommended).'
   format: trackDb <url/relativePath>
   examples:
   - trackDb ricCom1/trackDb.txt
@@ -4900,9 +5708,10 @@
   required: false
   summary: Relative path or URL that points to a file defining track groups, which are collections of
     related tracks displayed together under the main Genome Browser im...
-  description: Relative path or URL that points to a file defining track groups, which are collections
-    of related tracks displayed together under the main Genome Browser image. See our assembly hub groups.txt
-    documentation for format details.
+  description: 'Relative path or URL that points to a file defining track groups, which are collections
+    of related tracks displayed together under the main Genome Browser image.
+
+    See our assembly hub groups.txt documentation for format details.'
   format: groups <url/relativePath>
   examples:
   - groups ricCom1/groups.txt
@@ -4949,10 +5758,11 @@
   required: false
   summary: Enables the Genome Browser to automatically convert chromosome names in submitted custom track
     data from alternate naming schemes to the names used in the as...
-  description: Enables the Genome Browser to automatically convert chromosome names in submitted custom
+  description: 'Enables the Genome Browser to automatically convert chromosome names in submitted custom
     track data from alternate naming schemes to the names used in the assembly. This functionality applies
-    to both custom track data and assembly hub data. See our chromAlias documentation for details on the
-    required file format.
+    to both custom track data and assembly hub data.
+
+    See our chromAlias documentation for details on the required file format.'
   format: chromAlias <url/relativePath>
   examples:
   - chromAlias thisGenome.chromAlias.txt
@@ -4966,10 +5776,11 @@
   level: base
   required: false
   summary: Like chromAlias , except the file is in the compressed, binary bigBed format.
-  description: Like chromAlias , except the file is in the compressed, binary bigBed format. This allows
+  description: 'Like chromAlias , except the file is in the compressed, binary bigBed format. This allows
     efficient searching for sequence names without requiring the entire text file to be read, which is
-    important for assemblies with a large number of sequences. See our chromAlias documentation for details
-    on the required file format.
+    important for assemblies with a large number of sequences.
+
+    See our chromAlias documentation for details on the required file format.'
   format: chromAliasBb <url/relativePath>
   examples:
   - chromAliasBb thisGenome.chromAlias.bb
@@ -5019,18 +5830,23 @@
   description: 'By default the Genome Browser translates codons to amino acids with the standard genetic
     code, except for sequences named chrM or chrMT , which use the vertebrate mitochondrial code. An assembly
     hub can assign a different NCBI genetic code to individual sequences with the codonTable setting in
-    the genome stanza. The value is a space-separated list of sequenceName=id pairs, where id is an NCBI
-    translation table number (for example 1 for the standard code, 2 for vertebrate mitochondrial, 13
-    for ascidian mitochondrial). The special name default sets the code used for any sequence not listed.
-    Sequences with no assignment keep the default behavior described above. This affects amino acid display
-    in the base position track''s three-frame translation, in codon-colored annotation tracks such as
-    gene predictions, and on the details pages. Note : sequenceName must be the sequence''s own name as
-    stored in the assembly''s .2bit file (the same name used in chrom.sizes ), for example a RefSeq or
-    GenBank accession such as NC_017929.1 . This is the internal name even when a chromAlias and chromAuthority
-    cause a different name (such as chrM ) to be displayed. Because the special chrM / chrMT mitochondrial
-    default only applies to sequences whose own name is literally chrM or chrMT , an assembly whose mitochondrial
-    sequence has an accession name needs an explicit codonTable entry to translate it with a mitochondrial
-    code. See our assembly hub codonTable documentation for more details.'
+    the genome stanza.
+
+    The value is a space-separated list of sequenceName=id pairs, where id is an NCBI translation table
+    number (for example 1 for the standard code, 2 for vertebrate mitochondrial, 13 for ascidian mitochondrial).
+    The special name default sets the code used for any sequence not listed. Sequences with no assignment
+    keep the default behavior described above. This affects amino acid display in the base position track''s
+    three-frame translation, in codon-colored annotation tracks such as gene predictions, and on the details
+    pages.
+
+    Note : sequenceName must be the sequence''s own name as stored in the assembly''s .2bit file (the
+    same name used in chrom.sizes ), for example a RefSeq or GenBank accession such as NC_017929.1 . This
+    is the internal name even when a chromAlias and chromAuthority cause a different name (such as chrM
+    ) to be displayed. Because the special chrM / chrMT mitochondrial default only applies to sequences
+    whose own name is literally chrM or chrMT , an assembly whose mitochondrial sequence has an accession
+    name needs an explicit codonTable entry to translate it with a mitochondrial code.
+
+    See our assembly hub codonTable documentation for more details.'
   format: codonTable default=<id> <sequenceName>=<id> ...
   examples:
   - codonTable default=1 NC_017929.1=13
@@ -5168,12 +5984,15 @@
   level: deprecated
   required: false
   summary: Deprecated.
-  description: 'Deprecated. Use meta instead. Attaches metadata to a track as a list of name=value pairs
-    on one line. Wrap a value that contains spaces in double quotes. A word starting with # ends the line,
-    so anything after it is a comment. The pairs are shown on the track description page and on the item
-    details page. The meta setting replaces this one. It keeps the metadata in a single file for the whole
-    hub, named by metaDb or metaTab in genomes.txt , instead of repeating it in every stanza. See the
-    metadata guide . The Browser still reads metadata , but meta wins when a stanza has both.'
+  description: 'Deprecated. Use meta instead.
+
+    Attaches metadata to a track as a list of name=value pairs on one line. Wrap a value that contains
+    spaces in double quotes. A word starting with # ends the line, so anything after it is a comment.
+    The pairs are shown on the track description page and on the item details page.
+
+    The meta setting replaces this one. It keeps the metadata in a single file for the whole hub, named
+    by metaDb or metaTab in genomes.txt , instead of repeating it in every stanza. See the metadata guide
+    . The Browser still reads metadata , but meta wins when a stanza has both.'
   format: metadata <name=value> [<name=value> ...]
   examples:
   - metadata cellType=K562 antibody=CTCF lab="Broad Institute"
@@ -5190,11 +6009,15 @@
   level: deprecated
   required: false
   summary: Deprecated.
-  description: Deprecated. Placed on a subtrack, this stops the subtrack from taking settings from its
-    composite parent. Without it a subtrack inherits the parent's type and group , plus every parent setting
-    the subtrack does not define itself. The Browser only checks whether the setting is present, so any
-    value turns it on, including noInherit off . Defining a setting on the subtrack already overrides
-    the inherited value, so this setting is rarely needed.
+  description: 'Deprecated.
+
+    Placed on a subtrack, this stops the subtrack from taking settings from its composite parent. Without
+    it a subtrack inherits the parent''s type and group , plus every parent setting the subtrack does
+    not define itself.
+
+    The Browser only checks whether the setting is present, so any value turns it on, including noInherit
+    off . Defining a setting on the subtrack already overrides the inherited value, so this setting is
+    rarely needed.'
   format: noInherit on
   examples:
   - noInherit on
@@ -5212,12 +6035,15 @@
   level: deprecated
   required: false
   summary: Deprecated.
-  description: Deprecated. Use spectrum instead. Shades each item by its score field, so low scores draw
-    in light gray and high scores draw near black. spectrum on does the same thing and is the spelling
-    to use in a new track. The Browser treats the two names as one setting, and scoreMin , scoreMax and
-    minGrayLevel tune both the same way. In a trackDb file or a hub, any value turns the shading on, including
-    useScore 0 , because the Browser only checks whether the setting is present. In a custom track the
-    value is read, and 0 turns the shading off.
+  description: 'Deprecated. Use spectrum instead.
+
+    Shades each item by its score field, so low scores draw in light gray and high scores draw near black.
+    spectrum on does the same thing and is the spelling to use in a new track. The Browser treats the
+    two names as one setting, and scoreMin , scoreMax and minGrayLevel tune both the same way.
+
+    In a trackDb file or a hub, any value turns the shading on, including useScore 0 , because the Browser
+    only checks whether the setting is present. In a custom track the value is read, and 0 turns the shading
+    off.'
   format: useScore 1
   examples:
   - useScore 1

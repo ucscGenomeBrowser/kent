@@ -1,0 +1,11 @@
+# Subtracks checked by default: haplotypes whose ancestry is visibly mixed, so
+# the track shows block structure without the user having to hunt for a sample.
+# Chosen from the pcaSegment composition of all 463 haplotypes (see the makeDoc);
+# the first five carry a second ancestry over more than a quarter of the genome.
+NA19682.1
+NA19682.2
+NA19776.1
+HG01496.1
+HG01150.2
+HG002.1
+CHM13.0

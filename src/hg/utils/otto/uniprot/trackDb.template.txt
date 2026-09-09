@@ -1,0 +1,224 @@
+# this file is used for building the archive track hub, it is template, not the final file.
+# doUniprot builds the final file.
+# if you modify this file, make sure that you also modify the original of the native track in trackDb/uniprot.ra
+
+track uniprot$VER
+shortLabel UniProt $VER
+longLabel UniProt SwissProt/TrEMBL Protein Annotations, release $VER
+#group genes
+visibility hide
+type bigBed 12 +
+exonNumbers off
+compositeTrack on
+allButtonPair on
+mouseOverField comments
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+itemRgb on
+#dataVersion /gbdb/$D/uniprot/version.txt
+hideEmptySubtracks on
+
+        track unipAliSwissprot$VER
+        shortLabel SwissProt Aln.
+        longLabel UCSC alignment of SwissProt proteins to genome - $VER
+        priority 1
+        parent uniprot$VER
+        visibility hide
+        type bigPsl
+        bigDataUrl $VER/unipAliSwissprot.bb
+        searchIndex name,acc
+        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+        mouseOverField protFullNames
+        itemRgb off
+        color 2,12,120
+        indelDoubleInsert on
+        indelQueryInsert on
+        baseColorTickColor contrastingColor
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        showDiffBasesAllScales on
+
+        track unipAliTrembl$VER
+        shortLabel TrEMBL Aln.
+        longLabel UCSC alignment of TrEMBL proteins to genome - $VER
+        priority 2
+        parent uniprot$VER
+        visibility dense
+        type bigPsl
+        bigDataUrl $VER/unipAliTrembl.bb
+        searchIndex name,acc
+        urls acc="http://www.uniprot.org/uniprot/$$" hgncId="https://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=$$" 
+        labelFields acc,uniprotName,geneName,hgncSym,refSeq,refSeqProt,ensProt,uniprotName
+        mouseOverField protFullNames
+        itemRgb off
+        color 0,150,250
+        indelDoubleInsert on
+        indelQueryInsert on
+        baseColorTickColor contrastingColor
+        baseColorUseCds given
+        baseColorDefault genomicCodons
+        showDiffBasesAllScales on
+
+        track unipLocSignal$VER
+        shortLabel Signal Peptide
+        longLabel UniProt Signal Peptides - $VER
+        priority 3
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipLocSignal.bb
+        color 255,0,150
+        itemRgb off
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipLocExtra$VER
+        shortLabel Extracellular
+        longLabel UniProt Extracellular Domain - $VER
+        priority 4
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipLocExtra.bb
+        color 0,150,255
+        itemRgb off
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipLocTransMemb$VER
+        shortLabel Transmembrane
+        longLabel UniProt Transmembrane Domains - $VER
+        priority 5
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipLocTransMemb.bb
+        color 0,150,0
+        itemRgb off
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipLocCytopl$VER
+        shortLabel Cytoplasmic
+        longLabel UniProt Cytoplasmic Domains - $VER
+        priority 6
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipLocCytopl.bb
+        color 255,150,0
+        itemRgb off
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipChain$VER
+        shortLabel Chains
+        longLabel UniProt Mature Protein Products (Polypeptide Chains) - $VER
+        priority 7
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipChain.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#ptm_processing" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipInterest$VER
+        shortLabel Interest
+        longLabel UniProt Regions of Interest - $VER
+        priority 4
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipInterest.bb
+        itemRgb off
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipDomain$VER
+        shortLabel Domains
+        longLabel UniProt Domains - $VER
+        priority 8
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipDomain.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipDisulfBond$VER
+        shortLabel Disulf. Bonds
+        longLabel UniProt Disulfide Bonds - $VER
+        priority 8
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipDisulfBond.bb
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipModif$VER
+        shortLabel AA Modifications
+        longLabel UniProt Amino Acid Modifications - $VER
+        priority 9
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipModif.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#aaMod_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipMut$VER
+        shortLabel Mutations
+        longLabel UniProt Amino Acid Mutations - $VER
+        priority 10
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipMut.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#pathology_and_biotech" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$" variationId="http://www.uniprot.org/uniprot/$$"
+
+        track unipStruct$VER
+        shortLabel Structure
+        longLabel UniProt Protein Primary/Secondary Structure Annotations - $VER
+        priority 11
+        parent uniprot$VER
+        visibility hide
+        type bigBed 12 +
+        bigDataUrl $VER/unipStruct.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#structure" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipOther$VER
+        shortLabel Other Annot.
+        longLabel UniProt Other Annotations - $VER
+        priority 11
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipOther.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipRepeat$VER
+        shortLabel Repeats
+        longLabel UniProt Repeats - $VER
+        priority 12
+        parent uniprot$VER
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipRepeat.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#family_and_domains" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+        track unipConflict$VER
+        shortLabel Seq. Conflicts
+        longLabel UniProt Sequence Conflicts - $VER
+        priority 13
+        parent uniprot$VER off
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipConflict.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
+#searchTable unipAliSwissprot
+#searchType bigBed
+#searchDescription UniProt/SwissProt manually curated Proteins mapped to the genome by UCSC
+
+#searchTable unipAliTrembl
+#searchType bigBed
+#searchDescription UniProt/TrEMBL predicted Proteins mapped to the genome by UCSC

@@ -4,7 +4,7 @@ parent dnaMethylation
 metaDataUrl /gbdb/hg38/methBase2/mb2_hg38_metadata.tsv
 colorSettingsUrl /gbdb/hg38/methBase2/mb2_hg38_colors.json
 primaryKey accession
-dataTypes hmr levels reads
+dataTypes hmr|"Hypomethylated Regions" levels|"Methylation Level" reads|"Read Coverage"
 maxCheckboxes 20
 shortLabel Methbase
 longLabel Methbase

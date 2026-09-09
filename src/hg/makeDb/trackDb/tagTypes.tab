@@ -120,6 +120,7 @@ defaultLabelFields big*
 defaultLinkedTables genePred bigGenePred
 defaultMaf wigMaf
 defaultMaxWeight bed
+defaultGroupBy *
 defaultSortField *
 denseCoverage bigBed
 densePack bed bigBed
@@ -331,7 +332,7 @@ motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
 mouseOverField big*
-mouseOver bigLolly bigBed bigPsl bigGenePred bed bigDbSnp
+mouseOver bigLolly bigBed bigPsl bigGenePred bed bigDbSnp bigNarrowPeak
 mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
 multiRegionsBedUrl *
@@ -514,12 +515,12 @@ sGroup_Zaire(DRC)_1976-7 wigMaf
 *HighlightPriority bed narrowPeak broadPeak big*
 sampleColorFile vcf vcfTabix
 sampleMetadataFile vcf vcfTabix
-scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
+scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl bigNarrowPeak
 scoreFilterByRange bed peptideMapping bigBed bigPsl
-scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl
+scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl bigNarrowPeak
 scoreFilterMax bed bedlogR peptideMapping bigBed bigPsl
-scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl
-scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl
+scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed bigPsl bigNarrowPeak
+scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed bigPsl bigNarrowPeak
 scoreLabel bed bigBed bigPsl bigGenePred bigLolly
 searchIndex bigBed bigPsl bigGenePred bigBarChart
 searchTrix bigBed bigPsl bigGenePred
@@ -538,8 +539,12 @@ showHardyWeinberg vcf vcfTabix
 showNames bam
 showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
-signalFilter bed narrowPeak broadPeak
-signalFilterLimits bed narrowPeak broadPeak
+signalFilter bed narrowPeak broadPeak bigNarrowPeak
+signalFilterLimits bed narrowPeak broadPeak bigNarrowPeak
+pValueFilter bed narrowPeak broadPeak bigNarrowPeak
+pValueFilterLimits bed narrowPeak broadPeak bigNarrowPeak
+qValueFilter bed narrowPeak broadPeak bigNarrowPeak
+qValueFilterLimits bed narrowPeak broadPeak bigNarrowPeak
 singleCellColumnNames *
 skipFields bigBed bigPsl bigGenePred bigLolly
 skipEmptyFields bigBed bigPsl

@@ -67,10 +67,6 @@ notAutoDbs = [
 maxDiffVersions = 5.0
 checkDbs = ["hg19", "hg38", "mm10", "rn6", "danRer10", "danRer7", "ce11"]
 
-# when we rename the parasol cluster, no need to change this file
-# probably overkill in retrospect but seemed like a good idea back then
-clusterFname = "/cluster/bin/scripts/cluster.txt"
-
 TREMBLCOLOR="0,150,250" # light blue
 SWISSPCOLOR="12,12,120" # dark blue
 
@@ -1419,6 +1415,7 @@ def parseRecordMeta(tabDir, taxId, doTrembl):
 def blatProteinsKeepBest(fullFaFname, db, mapFname, stats):
     " blat the proteins directly, only good for small genomes where we don't have any gene models "
     myDir = dirname(__file__)
+    # consider using miniprot here one day?
     cmd = "blat -q=prot -t=dnax /gbdb/{db}/{db}.2bit {inf} stdout -noHead | sort -k10 | pslReps stdin stdout /dev/null " \
         "-minAli=0.95 -nohead | {myDir}/pslProtCnv > {out}".format(db=db, inf=fullFaFname, out=mapFname, myDir=myDir)
     stats["minAli"]=0.95
@@ -1426,6 +1423,7 @@ def blatProteinsKeepBest(fullFaFname, db, mapFname, stats):
     # originally used "| {myDir}/pslProtCnv " but tried to get rid of the markd-script dependency 
     #pslToProtPsl(nuclFname, mapFname)
     # then later figured that pslToProtPsl() is not the same as pslProtCnv and went back the MarkD way
+    # then in 2024 finally used pslProtToRnaCoords
     #os.remove(nuclFname)
     run(cmd)
 
@@ -1766,7 +1764,7 @@ def parseKeyVal(fname):
         vals[key].append(val)
     return vals
 
-def makeProteinGenomePsl(taxId, protFa, tabFnames, db, cluster, doForce, mapDir, mapDescFname):
+def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescFname):
     """ map proteins of a taxon stored in protFa to db via geneTable and create a PSL file for the mapping
     Will try to reuse the old PSL mapping file if possible, as it is expensive to build.
     Need to BLAST the entire file: BLAST has no option to subset the target (unlike blast or lastz), verified
@@ -1849,7 +1847,7 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, cluster, doForce, mapDir,
         stats["minAli"] = MINALI
         workDir = "clusterRun-map-%s-%s-%s.tmp" % (db, geneTable, fullMd5)
 
-        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), cluster, workDir, mapFname]
+        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), workDir, mapFname]
         if selectFname is not None:
             scriptArgs.append(selectFname)
 
@@ -1964,6 +1962,22 @@ def writeReleaseString(uprotDir, tabDir):
     relFh.close()
     logging.debug("Wrote release version string '%s' to %s" % (relString, relFname))
 
+def checkParserDeps():
+    """ make sure that uniprotToTab can start up at all, i.e. that its XML library imports.
+    Called before the download, which takes over half an hour, so a missing lxml is
+    reported in the first second of a run instead of after it. refs #38300
+    """
+    parserFname = join(dirname(__file__), "uniprotToTab")
+    if not isfile(parserFname):
+        errAbort("%s does not exist. Run 'make install' in the kent tree's "
+                "src/hg/utils/otto/uniprot directory." % parserFname)
+    # --help imports lxml and then exits, so this is a cheap test of the real interpreter
+    if os.system("%s --help > /dev/null 2>&1" % parserFname) != 0:
+        os.system("%s --help" % parserFname) # show the error message in the log
+        errAbort("%s cannot be run, see the error above. Most likely the lxml python module "
+                "does not import. Activate the venv with 'source venv/bin/activate', or "
+                "rebuild it with ./makeVenv.sh" % parserFname)
+
 def updateUniprot(args, onlyDbs, taxIdDbs, options):
     " This is the main function that runs a single uniprot update for a list of DBs "
     uprotDir = options.uniprotDir
@@ -1972,6 +1986,9 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
     bigBedDir = options.bigBedDir
     faDir = options.faDir
     doTrembl = not options.skipTrembl
+
+    if not options.skipParse:
+        checkParserDeps()
 
     if not options.skipDownload and not options.skipParse and not options.onlyDbs:
         # download NCBI -> refseq tables
@@ -2020,10 +2037,6 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
     logging.info("checking/creating pslMap files")
     run("mkdir -p %s" % mapDir)
 
-    # parasol cluster name
-    assert(isfile(clusterFname)) # not running at UCSC?
-    cluster = open(clusterFname).read().strip()
-
     # get the uniProt version for the trackVersion table that we will update later
     relFname = join(tabDir, "version.txt")
     versionString = open(relFname).read()
@@ -2066,7 +2079,7 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             dbMapDir = makeSubDir(mapDir, db)
             mapDescFname = join(dbMapDir, "liftInfo.json")
             mapFname, geneTable, mapMd5, accToMapSource, accToTrans, isNewMap = \
-                makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, cluster, options.force, dbMapDir, mapDescFname)
+                makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, options.force, dbMapDir, mapDescFname)
 
             dbBigBedDir = makeSubDir(bigBedDir, db)
 
@@ -2296,17 +2309,30 @@ def createVersionFiles(tabDir, bigBedDir, onlyDbs, taxIdDbs):
                 continue
 
             liftInfo = json.load(open(join(dbDir, "liftInfo.json")))
-            versionOfh = open(join(dbDir, "version.txt"), "w")
+            versionFname = join(dbDir, "version.txt")
 
             fullVersion = versionString + (", mapped to genome through gene transcripts from %s %s on %s (taxId %s, %s)" % \
                 (liftInfo["geneTable"], liftInfo["version"], liftInfo["createdDate"], liftInfo["taxId"], liftInfo["fullMd5"]))
-            versionOfh.write(fullVersion)
-            versionOfh.close()
+
+            # Write only when the release string really changed. This file feeds the
+            # trackDb dataVersion setting and its date is what people check to see whether
+            # the pipeline is alive, so rewriting an identical file would make a stalled
+            # track look freshly updated. refs #38300
+            oldVersion = None
+            if isfile(versionFname):
+                oldVersion = open(versionFname, encoding="utf8").read()
+
+            if oldVersion == fullVersion:
+                logging.debug("%s already holds the current release string, not rewriting" % versionFname)
+            else:
+                with open(versionFname, "w", encoding="utf8") as versionOfh:
+                    versionOfh.write(fullVersion)
+                logging.info("Wrote release string to %s" % versionFname)
 
             linkName = join("/gbdb", db, "uniprot", "version.txt")
-            makeSymlink(versionOfh.name, linkName)
+            makeSymlink(versionFname, linkName)
 
-            logging.debug("Wrote release string to %s, symlink from %s" % (versionOfh.name, linkName))
+            logging.debug("Release string in %s, symlink from %s" % (versionFname, linkName))
 
     return versionString, shortVersion
 
@@ -2415,8 +2441,12 @@ def splitGeneRefseq(fname, outDir, uniprotTaxIds):
 def downloadAndSplitNcbi(taxIdDbs):
     " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
     logging.info("Downloading NCBI gene2refseq file gene2refseq.tsv")
-    # removed -Ss trying to get error messages to show up
-    cmd = "curl https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz | zcat > ncbi/gene2refseq.tsv"
+    # --no-progress-meter, not -s: it drops the progress bar, which otherwise writes a few
+    # hundred lines of percentages into lastRun.log, but still shows errors. Plain -s would
+    # hide the errors too, which is why they were dropped here in the first place.
+    # --fail so an HTTP error is reported as one, instead of piping NCBI's error page into
+    # zcat and failing with a confusing "not in gzip format"
+    cmd = "curl --no-progress-meter --show-error --fail https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz | zcat > ncbi/gene2refseq.tsv"
     run(cmd)
     splitGeneRefseq("ncbi/gene2refseq.gz", NCBIDIR, taxIdDbs)
 

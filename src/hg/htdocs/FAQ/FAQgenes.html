@@ -25,6 +25,8 @@
 		    "GENCODE" and "All GENCODE" tracks?</a></li>
 <li><a href="#gencode">What is the difference between GENCODE comprehensive and basic?</a></li>
 <li><a href="#ncbiRefseq">What is the difference between "NCBI RefSeq" and "UCSC RefSeq"?</a></li>
+<li><a href="#txIndel">Why does the codon or amino acid number I see differ from the one in a paper
+                       or at NCBI?</a></li>
 <li><a href="#mito">What is the best gene track for mitochondrial gene annotations?</a></li>
 <li><a href="#report">How shall I report a gene transcript in a manuscript?</a></li>
 <li><a href="#ccds">What is CCDS?</a></li>
@@ -437,6 +439,63 @@ SELECT matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert,tB
 <p>A word of caution on the NCBI RefSeq track on hg19: NCBI is not fully supporting hg19 anymore. As a result, 
 some genes are not located on the main chromosomes anymore. An example is NM_001129826/CSAG3.
 For hg19, you may prefer UCSC RefSeq for now.</p>
+<a name="txIndel"></a>
+<h2>Why does the codon or amino acid number I see differ from the one in a paper or at NCBI?</h2>
+<p>
+Because a RefSeq transcript is a sequence in its own right, not a slice of the genome, the two
+can differ in length. Where the transcript carries bases the assembly does not, or the assembly
+carries bases the transcript does not, there are two defensible ways to number the codons of
+that transcript, and they disagree from the indel onwards:
+</p>
+<ul>
+  <li>Counting along the <b>genome</b>, which is what the Genome Browser's gene tracks do. Codons
+  are counted off the exons as they are laid out on the chromosome, so bases that exist only in
+  the transcript are never counted. The RefSeq tracks warn you when this happens: the affected
+  codons are colored orange, an exclamation mark is added after the codon number once you are
+  zoomed in far enough for the numbers to be drawn, and the codon mouseover gives both
+  numbers.</li>
+  <li>Counting along the <b>transcript</b>, which is what NCBI, LOVD, ClinVar and HGVS
+  <em>c.</em> and <em>p.</em> descriptions do. Codons are counted off the transcript sequence,
+  including any bases that are missing from the assembly.</li>
+</ul>
+<p>
+Each codon after the difference is shifted by one for every three bases involved. A 21-base
+insertion in the transcript, for instance, puts the two counts seven codons apart for the whole
+rest of the coding sequence. Neither number is wrong; they answer different questions. But if
+you are writing or reading an <b>HGVS</b> description, the transcript count is the one that is
+meant, because HGVS <em>c.</em> and <em>p.</em> coordinates are defined on the reference
+transcript.
+</p>
+<p>
+<b>This affects RefSeq only.</b> GENCODE, Ensembl and UCSC Genes transcripts are derived from the
+assembly, so their coordinates cannot disagree with it and this problem cannot arise. RefSeq
+transcripts are aligned to the assembly instead, so it can, and it affects both the
+&quot;NCBI RefSeq&quot; and the &quot;UCSC RefSeq&quot; tracks &mdash; often by different amounts,
+because the two use different alignments (see
+<a href="#ncbiRefseq">the previous question</a>).
+</p>
+<p>
+It is uncommon in human and much more common in other assemblies, and the less complete the
+assembly, the more often it happens. In human it clusters in long repetitive coding genes:
+<a href="../cgi-bin/hgTracks?db=hg38&position=chr11:1098960-1099050&refSeqComposite=full"
+target="_blank">MUC2</a> carries about 2,900 coding bases that GRCh38 lacks, and FCGBP about
+3,500. Shirota <em>et al.</em> catalogued these discrepancies systematically
+(<a href="https://doi.org/10.1093/database/baw124" target="_blank">Database 2016, baw124</a>,
+PMID
+<a href="https://pubmed.ncbi.nlm.nih.gov/27589963/" target="_blank">27589963</a>), and the HGVS
+nomenclature pages discuss what it means for choosing a
+<a href="https://hgvs-nomenclature.org/stable/background/refseq/" target="_blank">reference
+sequence</a>.
+</p>
+<p>
+The orange marking above lets you tell at a glance that a number you are about to quote is not
+the transcript's own. The
+underlying insertion or deletion itself is shown in the &quot;RefSeq Alignments&quot; and
+&quot;RefSeq Diffs&quot; subtracks of the RefSeq container. Searching the browser for an HGVS
+term such as <em>NM_002457.5:c.11671A&gt;G</em> uses the transcript numbering and maps it
+through the alignment, so it lands on the right base either way.
+</p>
+
 <a name="mito"></a>
 <h2>What is the best gene track for mitochondrial gene annotations</h2>
 <p>

@@ -141,16 +141,31 @@ def parseLibrary():
         reqText = req.get_text(" ", strip=True).lower() if req else ""
         required = "yes" in reqText or "for hubs" in reqText
 
+        # Walk p and ul in document order. Stopping at the first "Example" paragraph
+        # would lose every later paragraph, which matters for a setting that documents
+        # more than one variant, so the label is skipped rather than ended on. List
+        # items carry real content, so <ul> is folded in as well.
         descParts = []
-        for p in div.find_all("p"):
-            if "isRequired" in (p.get("class") or []):
-                continue
-            txt = p.get_text(" ", strip=True)
-            if txt.lower().startswith("example"):
-                break
+
+        def addPart(txt, prefix=""):
+            # The source wraps paragraphs over several lines, so squeeze each block to
+            # one line; blocks are then joined by newlines to keep them apart.
+            txt = re.sub(r"\s+", " ", txt).strip()
             if txt:
-                descParts.append(txt)
-        description = toAscii(re.sub(r"\s+", " ", " ".join(descParts)).strip())
+                descParts.append(prefix + txt)
+
+        for el in div.find_all(["p", "ul"]):
+            if el.name == "ul":
+                for li in el.find_all("li"):
+                    addPart(li.get_text(" ", strip=True), "- ")
+                continue
+            if "isRequired" in (el.get("class") or []):
+                continue
+            txt = el.get_text(" ", strip=True)
+            if txt.lower().startswith("example"):
+                continue
+            addPart(txt)
+        description = toAscii("\n".join(descParts).strip())
         examples = []
         for pre in div.find_all("pre"):
             ex = toAscii(pre.get_text().strip())

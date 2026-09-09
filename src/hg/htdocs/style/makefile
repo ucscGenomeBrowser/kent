@@ -14,7 +14,8 @@ endif
 
 CSS_FILES=HGStyle.css assemblySearch.css autocomplete.css blueStyle.css \
     dataTables-1.10.12.min.css dataTables-1.13.6.min.css dataTables-2.2.2.min.css \
-    dataTables.buttons-3.2.2.min.css dataTables.select-1.7.0.min.css \
+    dataTables.buttons-3.2.2.min.css dataTables.rowReorder-1.5.1.min.css \
+    dataTables.select-1.7.0.min.css \
     dataTables.select-3.0.0.min.css \
     encodeProject.css facetedComposite.css facets.css floretStyle.css \
     hgHubConnect.css hgMyData.css jquery-ui.css jquery.contextmenu.css \

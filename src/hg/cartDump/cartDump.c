@@ -75,6 +75,20 @@ if (isNotEmpty(facetSortOrder))
 else
     cartRemove(cart, mdid_sort);
 
+// Which of the two dimensions is kept together in the image: "sample" puts a
+// sample's data types side by side, "dataType" puts the same data type for
+// every sample side by side.  Remembered so the next visit to the track UI page
+// comes back with the same button selected.  Only two values are accepted, so a
+// junk value falls back to grouping by sample rather than being stored.
+char mdid_groupBy[1024];
+safef(mdid_groupBy, sizeof(mdid_groupBy), "%s.groupBy", mdid);
+char *groupBy = cgiOptionalString(mdid_groupBy);
+boolean groupByDataType = (isNotEmpty(groupBy) && sameString(groupBy, "dataType"));
+if (isNotEmpty(groupBy) && (groupByDataType || sameString(groupBy, "sample")))
+    cartSetString(cart, mdid_groupBy, groupBy);
+else
+    cartRemove(cart, mdid_groupBy);
+
 // Any ".priority" values left over from an earlier submission are stale, since the
 // loops below assign a fresh, dense 1..N to exactly the subtracks that are on now.
 // Clearing them first means the subtracks the user just turned off don't keep a
@@ -136,18 +150,33 @@ if (hasDataTypes)
         }
 
     // Set each shown subtrack's priority to match the order the data elements
-    // are currently sorted in the faceted table (de_now arrives in that order).
-    // Data elements are the outer loop so a sample's data-type subtracks stay
-    // contiguous, in the sample's sorted position.
+    // are currently sorted in the faceted table (de_now arrives in that order,
+    // and dt_now in the order the data types are declared in trackDb).
+    // Whichever list is the outer loop is the dimension that stays contiguous
+    // in the image: by default that is the data element, so a sample's data
+    // types sit together in the sample's sorted position.  Grouping by data
+    // type swaps the nesting, putting the same data type for every sample
+    // together instead.
     int priority = 0;
-    for (struct slName *de = de_now_list; de != NULL; de = de->next)
+    if (groupByDataType)
         {
         for (struct slName *dt = dt_now_list; dt != NULL; dt = dt->next)
-            {
-            safef(prioritySetting, sizeof(prioritySetting),
-                  "%s_%s_%s.priority", mdid, de->name, dt->name);
-            cartSetInt(cart, prioritySetting, ++priority);
-            }
+            for (struct slName *de = de_now_list; de != NULL; de = de->next)
+                {
+                safef(prioritySetting, sizeof(prioritySetting),
+                      "%s_%s_%s.priority", mdid, de->name, dt->name);
+                cartSetInt(cart, prioritySetting, ++priority);
+                }
+        }
+    else
+        {
+        for (struct slName *de = de_now_list; de != NULL; de = de->next)
+            for (struct slName *dt = dt_now_list; dt != NULL; dt = dt->next)
+                {
+                safef(prioritySetting, sizeof(prioritySetting),
+                      "%s_%s_%s.priority", mdid, de->name, dt->name);
+                cartSetInt(cart, prioritySetting, ++priority);
+                }
         }
 
     }

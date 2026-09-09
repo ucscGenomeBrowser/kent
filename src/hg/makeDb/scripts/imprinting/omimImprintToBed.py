@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """
-Build a bed9+ file of the genes that OMIM curates as imprinted.
+Build a bed9+ file of the genes that OMIM curates as imprinted or candidate
+imprinted.
 
 The OMIM staff curate imprinting from the primary literature, but that call is
 published only through GeneScout, which appends "(I)" to the coordinates in its
-Location column. It is in neither the OMIM gene map nor any OMIM download file,
+Location column. The curators say the marker covers established and candidate
+imprinted genes alike, and the export does not separate the two. It is in neither the OMIM gene map nor any OMIM download file,
 so the input is a GeneScout results table exported by hand from a browser
 (genescout.omim.org sits behind a bot challenge that blocks scripted
 downloads). See the makeDoc for the exact search.

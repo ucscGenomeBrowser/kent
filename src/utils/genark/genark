@@ -4,7 +4,8 @@
 This is a general, subcommand-based tool. Subcommands will be added over time.
 
 Subcommands:
-  addContrib <name>   Install a contributed track collection into the GenArk
+  addContrib <name> [tier]
+                      Install a contributed track collection into the GenArk
                       assembly hubs. <name> is a subdirectory of
                       /hive/data/genomes/asmHubs/contrib/ that is laid out as
                       one directory per assembly accession (GCA_*/GCF_*) plus a
@@ -66,6 +67,25 @@ import time
 
 ASMHUBS = "/hive/data/genomes/asmHubs"
 CONTRIB = os.path.join(ASMHUBS, "contrib")
+
+# Release control for contrib collections. mkGenomes.pl reads these two lists when it
+# composes the per-assembly hub.txt tiers: a collection named in betaGenArk.txt goes into
+# beta.hub.txt, one named in publicGenArk.txt goes into public.hub.txt and the hub.txt
+# that hgwdev and hgdownload serve. alpha.hub.txt ignores both and picks up whatever is
+# on disk under <buildDir>/contrib/, which is why installing a collection makes it visible
+# in alpha with no list edit at all.
+TRACKDB_SRC = os.path.expanduser("~/kent/src/hg/makeDb/trackDb")
+TIER_LISTS = {
+    "beta":   os.path.join(TRACKDB_SRC, "betaGenArk.txt"),
+    "public": os.path.join(TRACKDB_SRC, "publicGenArk.txt"),
+}
+# public is cumulative: every collection in publicGenArk.txt is also in betaGenArk.txt,
+# so promoting to public keeps the beta entry rather than moving it.
+TIER_MEMBERSHIP = {
+    "alpha":  [],
+    "beta":   ["beta"],
+    "public": ["beta", "public"],
+}
 
 ACC_RE = re.compile(r"^GC[AF]_[0-9]{9}\.[0-9]+$")
 
@@ -166,44 +186,150 @@ def rewriteTrackDb(srcPath, name):
     already-prefixed paths are left untouched."""
     out = []
     prefix = "contrib/%s/" % name
+
+    def rebase(val):
+        """Make one local path hub-root relative; leave a URL or a done path alone."""
+        if re.match(r"[a-z]+://", val) or val.startswith(prefix):
+            return val
+        return prefix + os.path.basename(val)
+
+    def rebaseBeside(val):
+        """Make one local path relative to the .bb it is resolved against, i.e. the
+        bare file name. Leaves a URL or an absolute path alone. Idempotent."""
+        if re.match(r"[a-z]+://", val) or val.startswith("/"):
+            return val
+        return os.path.basename(val)
+
     for line in open(srcPath):
         stripped = line.lstrip()
         indent = line[:len(line) - len(stripped)]
         m = re.match(r"(bigDataUrl|linkDataUrl)\s+(\S+)\s*$", stripped)
         if m:
-            key, val = m.group(1), m.group(2)
-            if not re.match(r"[a-z]+://", val) and not val.startswith(prefix):
-                val = prefix + os.path.basename(val)
-            out.append("%s%s %s\n" % (indent, key, val))
+            out.append("%s%s %s\n" % (indent, m.group(1), rebase(m.group(2))))
             continue
         m = re.match(r"html\s+(\S+)\s*$", stripped)
         if m:
-            val = m.group(1)
-            if not val.startswith(prefix):
-                val = prefix + os.path.basename(val)
-            out.append("%shtml %s\n" % (indent, val))
+            out.append("%shtml %s\n" % (indent, rebase(m.group(1))))
+            continue
+        # detailsScript carries its file in a "...Url" key inside a JSON value.
+        # This one must NOT be rebased like bigDataUrl: hgc (bigBedClick.c) resolves
+        # a relative detailsScript Url against the track's own bigDataUrl when it
+        # builds the details page, so prefixing it here as well makes the browser
+        # ask for contrib/<name>/contrib/<name>/<file> and the fetch silently fails.
+        # The collection writes it relative to the accession dir, where the file
+        # sits beside the .bb; in this layout both move into contrib/<name>/
+        # together, so relative-to-the-.bb is just the basename.
+        if stripped.startswith("detailsScript."):
+            line = re.sub(r'("[A-Za-z0-9_]*[Uu]rl"\s*:\s*")([^"]+)(")',
+                          lambda m: m.group(1) + rebaseBeside(m.group(2)) + m.group(3), line)
+            out.append(line)
             continue
         out.append(line)
     return "".join(out)
 
 
-def wireHubTxt(hubTxt, name, block, remove, dryRun):
+def dropTopLevelTracks(text, trackNames):
+    """Return the hub text with the top-level stanzas of trackNames removed.
+
+    The assembly build can bake a snapshot of a contrib collection straight into
+    its hub file, without our markers. Left in place those stanzas would collide
+    with the block we add, giving the hub two "track <name>" entries.
+
+    Stanzas in a useOneFile hub are separated by a blank line, so a dropped one
+    runs from its "track" line to the next blank line or the next stanza. Only a
+    "track" line at column zero starts a stanza, so the indented subtracks of a
+    composite that is not ours are never considered.
+    """
+    if not trackNames:
+        return text
+    out = []
+    dropping = False
+    for line in text.splitlines(keepends=True):
+        m = re.match(r"track\s+(\S+)\s*$", line)
+        if m:
+            # a new stanza starts here, whoever it belongs to
+            dropping = m.group(1) in trackNames
+            if dropping:
+                continue
+        elif dropping:
+            if line.strip() == "":
+                dropping = False    # blank line closes the stanza; drop it too
+            continue
+        out.append(line)
+    return "".join(out)
+
+
+def wireHubTxt(hubTxt, name, block, remove, dryRun, trackNames=None):
     """Insert/replace (or remove) the marked contrib block in the assembly's
-    useOneFile hub.txt. Edits the real file the hub.txt symlink points at."""
+    useOneFile hub file. Edits the real file the path points at."""
     begin = "# BEGIN genark contrib: %s" % name
     end = "# END genark contrib: %s" % name
     blockRe = re.compile(
         r"\n*" + re.escape(begin) + r".*?" + re.escape(end) + r"\n?", re.DOTALL)
     realHub = os.path.realpath(hubTxt)
     text = open(realHub).read()
-    newText = blockRe.sub("\n", text).rstrip("\n") + "\n"
+    newText = blockRe.sub("\n", text)
+    if not remove:
+        # clear any unmarked copy the assembly build wrote, so ours is the only one
+        newText = dropTopLevelTracks(newText, trackNames)
+    newText = newText.rstrip("\n") + "\n"
     if not remove:
         newText += "\n%s\n%s\n%s\n" % (begin, block.rstrip("\n"), end)
     if dryRun:
-        print("  %s %s" % ("unwire hub.txt:" if remove else "wire hub.txt:", realHub))
+        print("  %s %s" % ("unwire" if remove else "wire", realHub))
     else:
         with open(realHub, "w") as fh:
             fh.write(newText)
+
+
+def listMembers(path):
+    """Collection names in one of the GenArk release lists, comments and blanks out."""
+    if not os.path.isfile(path):
+        return []
+    return [l.strip() for l in open(path)
+            if l.strip() and not l.lstrip().startswith("#")]
+
+
+def setTierMembership(name, tier, remove, dryRun):
+    """Add or remove a collection in the release lists that match the tier, and say what
+    changed. Idempotent: a name already listed is left alone.
+
+    Only the lists are touched. beta.hub.txt and public.hub.txt are generated by
+    mkGenomes.pl from these lists and shipped by the otto quickPush.pl, so writing into
+    them by hand here would put content into pushed files outside the normal flow, and
+    the next clade build would drop it again."""
+    # alpha is not a list at all, it is what you get from being on disk, so installing at
+    # the default tier must leave the lists exactly as they are. Only --remove takes a
+    # collection out of them; a tier only ever adds. Otherwise re-running addContrib on an
+    # already promoted collection would quietly demote it.
+    if tier == "alpha" and not remove:
+        return []
+    wanted = TIER_MEMBERSHIP[tier]
+    changed = []
+    for key in ("beta", "public"):
+        path = TIER_LISTS[key]
+        members = listMembers(path)
+        present = name in members
+        want = present or ((not remove) and (key in wanted))
+        if remove:
+            want = False
+        if want == present:
+            continue
+        if dryRun:
+            print("  %s %s in %s" % ("add" if want else "remove", name,
+                                     os.path.basename(path)))
+            changed.append(key)
+            continue
+        text = open(path).read() if os.path.isfile(path) else ""
+        if want:
+            text = text.rstrip("\n") + "\n" + name + "\n"
+        else:
+            keep = [l for l in text.split("\n") if l.strip() != name]
+            text = "\n".join(keep).rstrip("\n") + "\n"
+        with open(path, "w") as fh:
+            fh.write(text)
+        changed.append(key)
+    return changed
 
 
 def addContrib(args):
@@ -221,11 +347,18 @@ def addContrib(args):
     docs = []
     if os.path.isdir(docsDir):
         docs = sorted(f for f in os.listdir(docsDir) if f.endswith(".html"))
+    # Files at the collection root that all assemblies share, such as a scatterplot
+    # background panel named by a detailsScript dataUrl. Linked flat next to the
+    # docs, so contrib/<name>/<file> resolves for every assembly.
+    shared = sorted(f for f in os.listdir(root)
+                    if f.endswith((".json", ".tsv"))
+                    and os.path.isfile(os.path.join(root, f)))
 
     accs = sorted(d for d in os.listdir(root) if ACC_RE.match(d)
                   and os.path.isdir(os.path.join(root, d)))
     if not accs:
         sys.exit("error: no accession directories (GCA_*/GCF_*) under %s" % root)
+    trackNames = contribTrackNames(root, accs)
 
     done = 0
     skipped = 0
@@ -238,11 +371,14 @@ def addContrib(args):
             skipped += 1
             continue
         dest = os.path.join(asmDir, "contrib", name)
-        # the served single-file hub in the build dir (asmHubs/<acc>/hub.txt and
-        # /gbdb/genark/<acc>/hub.txt are symlinks to this); asmId is the build
-        # directory basename, which carries the assembly-name suffix.
+        # the alpha-tier single-file hub in the build dir (asmHubs/<acc>/alpha.hub.txt
+        # and /gbdb/genark/<acc>/alpha.hub.txt are symlinks to this); asmId is the
+        # build directory basename, which carries the assembly-name suffix.
         asmId = os.path.basename(asmDir)
-        hubTxt = os.path.join(asmDir, "%s.singleFile.hub.txt" % asmId)
+        # Only the alpha tier for now: <asmId>.singleFile.hub.txt is what
+        # /gbdb/genark/<acc>/hub.txt points at and is served as the assembly's
+        # default hub, so a contrib collection under test stays out of it.
+        hubTxt = os.path.join(asmDir, "alpha.hub.txt")
 
         if args.remove:
             if os.path.exists(hubTxt):
@@ -266,6 +402,9 @@ def addContrib(args):
         # symlink shared doc pages (flat, so contrib/<name>/<doc> resolves)
         for d in docs:
             symlink(os.path.join(docsDir, d), os.path.join(dest, d), args.dry_run)
+        # and the collection's shared root-level data files
+        for f in shared:
+            symlink(os.path.join(root, f), os.path.join(dest, f), args.dry_run)
 
         # per-assembly trackDb with hub-root-relative paths, and wire it into hub.txt
         srcTdb = os.path.join(accDir, "trackDb.txt")
@@ -278,7 +417,8 @@ def addContrib(args):
                 with open(destTdb, "w") as fh:
                     fh.write(tdb)
             if os.path.exists(hubTxt):
-                wireHubTxt(hubTxt, name, tdb, remove=False, dryRun=args.dry_run)
+                wireHubTxt(hubTxt, name, tdb, remove=False, dryRun=args.dry_run,
+                           trackNames=trackNames)
             else:
                 sys.stderr.write("warn %s: no hub.txt to wire at %s\n" % (acc, hubTxt))
         done += 1
@@ -286,6 +426,25 @@ def addContrib(args):
     verb = "removed from" if args.remove else "installed into"
     print("addContrib %s: %s %d assemblies, skipped %d (no assembly hub)"
           % (name, verb, done, skipped))
+
+    tier = getattr(args, "tier", "alpha")
+    changed = setTierMembership(name, tier, args.remove, args.dry_run)
+    if args.remove:
+        if changed:
+            print("  also removed from: %s"
+                  % ", ".join(os.path.basename(TIER_LISTS[k]) for k in changed))
+    elif tier == "alpha":
+        print("  tier alpha: visible now at "
+              "https://genome-test.gi.ucsc.edu/h/<accession>, and nowhere else. "
+              "The pushes exclude every hub.txt tier file, so this cannot leak.")
+    else:
+        if changed:
+            print("  tier %s: added to %s" % (tier,
+                  ", ".join(os.path.basename(TIER_LISTS[k]) for k in changed)))
+        else:
+            print("  tier %s: already listed, nothing to change" % tier)
+        print("  commit the list change, then the tier hub files are rewritten by the "
+              "next mkGenomes for the clade and shipped by the otto quickPush.pl.")
 
 
 def contribTrackNames(root, accs):
@@ -620,8 +779,16 @@ def main():
     p = sub.add_parser("addContrib",
                        help="install a contrib track collection into the assembly hubs")
     p.add_argument("name", help="contrib subdirectory name under %s" % CONTRIB)
+    p.add_argument("tier", nargs="?", choices=["alpha", "beta", "public"],
+                   default="alpha",
+                   help="how far to release the collection. alpha (default) installs it "
+                        "and wires alpha.hub.txt, which is hgwdev only. beta adds it to "
+                        "betaGenArk.txt, public adds it to publicGenArk.txt as well; "
+                        "those two lists are what mkGenomes.pl reads when it builds the "
+                        "beta and public hub.txt tiers.")
     p.add_argument("--remove", action="store_true",
-                   help="uninstall: remove the symlinks and the hub.txt block")
+                   help="uninstall: remove the symlinks, the hub.txt block, and the "
+                        "collection's entry in both release lists")
     p.set_defaults(func=addContrib)
 
     c = sub.add_parser("checkContrib",

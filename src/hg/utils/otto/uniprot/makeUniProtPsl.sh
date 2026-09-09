@@ -71,10 +71,9 @@ UNIPROTFAGZ=$1
 TRANSCRIPTFA=$2
 TRANSCRIPTPSL=$3
 MINALI=$4
-CLUSTER=$5
-WORKDIR=$6
-OUTFNAME=$7
-PAIRNAME=$8
+WORKDIR=$5
+OUTFNAME=$6
+PAIRNAME=$7
 
 #if [[ "$DB" == "ci3" ]]; then
    #MINALI=0.85
@@ -106,8 +105,8 @@ fi
 if [ -f $WORKDIR/bestAln.psl ] ; then
         echo WARNING: re-using existing protein-transcript alignments to save time! see $WORKDIR/bestAln.psl
 else
-        mkdir $WORKDIR/queries 
-        mkdir $WORKDIR/aligns 
+        mkdir -p $WORKDIR/queries
+        mkdir -p $WORKDIR/aligns
         faSplit about $WORKDIR/uniProt.fa 2500 $WORKDIR/queries/
         ${BLASTDIR}/formatdb -i $WORKDIR/transcripts.fa -p F
 
@@ -119,7 +118,8 @@ else
         done; 
         set -x
         cp mapUniprot_doBlast $WORKDIR/
-        ssh $CLUSTER "cd `pwd`/$WORKDIR && para make jobList"
+        # hgwdev is the parasol head node, so "para make" here talks to the hub directly
+        ( cd $WORKDIR && para make jobList )
         echo Concatenating and filtering protein/transcript alignments
         # sort and pick the best alignments for each protein
         find $WORKDIR/aligns -name '*.psl' | xargs cat | pslReps -noIntrons -nohead -nearTop=0.01 -minAli=$MINALI stdin stdout /dev/null > $WORKDIR/bestAln.psl
@@ -143,7 +143,9 @@ else
 fi
 
 # now combine the two alignments with pslMap
-pslMap $WORKDIR/uniProtVsTranscripts.psl $WORKDIR/transcripts.psl $WORKDIR/uniProtVsGenome.psl -mapInfo=$WORKDIR/mapInfo.tab
+# the query is protein and the target is nucleotide, so pslMap has to be told the types,
+# otherwise it guesses and the block sizes come out in the wrong units
+pslMap $WORKDIR/uniProtVsTranscripts.psl $WORKDIR/transcripts.psl $WORKDIR/uniProtVsGenome.psl -mapInfo=$WORKDIR/mapInfo.tab -inType=prot_na -mapType=na_na
 # 2016: lowering to 95% identity due to hg38 alt loci sucking up our main (and more important) alignments from the
 # 2021: using MINALI is more consistent
 # normal chromosomes
