@@ -56,7 +56,11 @@ stageOf() {
     grep -aq "Moving files from"             $log 2>/dev/null && s="download finished, moving files into place"
     grep -aq "not newer than file in"        $log 2>/dev/null && s="no new UniProt release, nothing to do"
     grep -aq "Converting uniprot XML"        $log 2>/dev/null && s="parsing the SwissProt XML"
-    grep -aq -- "--trembl"                   $log 2>/dev/null && s="parsing the TrEMBL XML, this is the multi-day part"
+    # doUniprot's run() logs its "Running: ..." line only after the command returns, so the
+    # log cannot tell us that the TrEMBL parse has started, only that it has finished.
+    # Ask the process table instead, and fall back to the log once the process is gone.
+    { pgrep -f "uniprotToTab.*--trembl" > /dev/null 2>&1 || grep -aq -- "--trembl" $log 2>/dev/null; } \
+                                             && s="parsing the TrEMBL XML, this is the multi-day part"
     grep -aq "checking/creating pslMap"      $log 2>/dev/null && s="parse done, building the protein-to-genome mappings on the cluster"
     grep -aq "Wrote release string"          $log 2>/dev/null && s="writing version files and flipping the bigBeds"
     grep -aq "Archive: Copied"               $log 2>/dev/null && s="copying to the hgdownload archive"
