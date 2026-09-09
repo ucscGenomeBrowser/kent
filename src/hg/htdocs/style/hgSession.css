@@ -38,10 +38,8 @@
 /* Section heading ("Your saved sessions") separating the save card from the table. */
 #sessionApp .gbSection { margin-top:4px; }
 
-/* Toolbar above the table: DataTables search box + count + import/export. */
+/* Toolbar above the table: DataTables search box, page-length menu and the Select button. */
 #sessionApp .sessToolbar { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:0 0 10px; }
-#sessionApp .sessCount { font-size:13px; color:var(--muted); white-space:nowrap; }
-#sessionApp .sessToolbarActions { margin-left:auto; display:flex; gap:8px; align-items:center; }
 #sessionApp #sessionAppTable_length { margin:0; font-size:14px; color:var(--ink); }
 #sessionApp #sessionAppTable_length select { border:1px solid var(--btnLine); border-radius:0;
     padding:4px 6px; font-size:14px; background:#fff; margin:0 4px; }
@@ -58,8 +56,6 @@
 /* Saved region (band, locus, Mbp position), shown inline after the assembly at normal text
  * size and color, separated by whitespace. */
 #sessionAppTable .sessPos { white-space:nowrap; }
-#sessionAppTable td.sessDescCol { max-width:280px; white-space:nowrap; overflow:hidden;
-    text-overflow:ellipsis; color:var(--muted); }
 #sessionAppTable td.sessActionsCol { white-space:nowrap; }
 /* All action controls (text and icon-only) share one height so they line up. */
 #sessionAppTable td.sessActionsCol .gbPill { display:inline-flex; align-items:center;
@@ -67,7 +63,6 @@
     box-sizing:border-box; vertical-align:middle; }
 #sessionAppTable td.sessActionsCol .gbPill.danger { padding:0 8px; }
 #sessionAppTable .sessIcon { width:17px; height:17px; display:block; }
-#sessionAppTable .sessShareIcon { vertical-align:-2px; margin-right:4px; }
 #sessionAppTable .sessPublic { display:inline-block; margin-left:6px; font-size:11px; font-weight:700;
     color:#1f7a34; }
 /* Lock marks a private (not-shared) session; sharing is the default so only the exception is marked. */

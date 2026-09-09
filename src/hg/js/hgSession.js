@@ -13,7 +13,8 @@
 // Styling: shared house-style components in gbModern.css (.gbPill, .gbCard, .gbModal*, .gbTable,
 // .gbBanner, .gbSection), session-specific layout in hgSession.css.
 
-/* global $, hgSessionData, convertTitleTagsToMouseovers, htmlEncode, commify, gbShowTimingDialog */
+/* global $, hgSessionData, convertTitleTagsToMouseovers, titleTagToMouseover, addMouseover */
+/* global htmlEncode, commify, gbShowTimingDialog */
 
 // Cart action variables (must match the hgs* defines in hgSession.h; hgSessionPrefix is "hgS_").
 var SESS_ACT = {
@@ -30,7 +31,8 @@ var SESS_P = {
     newName:  'hgS_newSessionName',
     share:    'hgS_newSessionShare',
     descr:    'hgS_newSessionDescription',
-    shareAnon:'hgS_shareAnon'
+    shareAnon:'hgS_shareAnon',
+    failIfExists: 'hgS_failIfExists'
 };
 
 var sessData = null;   // set in sessionBuild: {config, sessions}
@@ -153,6 +155,21 @@ function sessConfirm(opts) {
     document.getElementById('sessCfOk').focus();
 }
 
+// A notice with one button, for something the user has to see before the page reloads underneath
+// them and takes the status line with it.  bodyHtml is caller-built safe HTML.
+function sessAlert(title, bodyHtml, onOk) {
+    sessModalOpen(
+        '<div class="gbModalTitle">' + sessEnc(title) + '</div>' +
+        '<div class="gbModalText">' + bodyHtml + '</div>' +
+        '<div class="gbModalBtns">' +
+        '<button type="button" class="gbPill primary" id="sessAlertOk">OK</button></div>');
+    $('#sessAlertOk').on('click', function() {
+        sessModalClose();
+        if (onOk) { onOk(); }
+    });
+    document.getElementById('sessAlertOk').focus();
+}
+
 // ---- session lookup / row helpers ---------------------------------------
 
 function sessByEnc(enc) {
@@ -170,6 +187,25 @@ function sessRowByEnc(enc) {
         if (this.data().encName === enc) { found = this; }
     });
     return found;
+}
+
+function sessApplyTooltips() {
+    // Runs after every table draw, because DataTables renders rows on demand (page two, a re-sort)
+    // and the one-time conversion utils.js does at page load never sees those.  Two jobs:
+    //  - give the plain title attributes in the new rows the same styled mouseovers as the rest of
+    //    the page, skipping whatever has already been converted;
+    //  - hand each info bubble its session description.  The description is the user's own text and
+    //    the tooltip is inserted with innerHTML, so it is passed already escaped: markup in a
+    //    description then reads as the characters that were typed instead of being parsed as HTML.
+    if (typeof titleTagToMouseover !== 'function' || typeof addMouseover !== 'function') { return; }
+    var $table = $('#sessionAppTable');
+    $table.find('[title]').each(function() {
+        if (this.title && this.getAttribute('mouseoverText') === null) { titleTagToMouseover(this); }
+    });
+    $table.find('span.sessInfo[data-enc]').each(function() {
+        var row = sessByEnc(this.getAttribute('data-enc'));
+        if (row && row.description) { addMouseover(this, sessEnc(row.description)); }
+    });
 }
 
 // ---- table cell rendering ------------------------------------------------
@@ -214,7 +250,10 @@ function sessNameCellHtml(row) {
     var html = '<a href="' + sessEnc(row.shareUrl) + '" ' +
         'title="Load this session in the Genome Browser">' + sessEnc(row.name) + '</a>';
     if (row.description) {
-        html += ' <span class="sessInfo" title="' + sessEnc(row.description) + '">&#9432;</span>';
+        // No title attribute here: the description is the user's own text and the tooltip machinery
+        // in utils.js inserts its text with innerHTML, so a title would have markup in a description
+        // parsed as HTML.  sessApplyTooltips() attaches it, escaped, after the row is drawn.
+        html += ' <span class="sessInfo" data-enc="' + sessEnc(row.encName) + '">&#9432;</span>';
     }
     // Sessions are shared by default; mark only the exceptions: a lock for private, a badge for the
     // public gallery.  A plain shared-by-link session gets no marker.
@@ -331,7 +370,13 @@ function sessSaveEdit(row) {
         if (nameChanged) {
             var rp = sessActParams(SESS_ACT.rename, row);
             rp[SESS_P.newName] = newName;
-            sessAjax(rp, finish, function(m) { sessEditError(m); });
+            // A rename moves the public-listing thumbnail, which can fail on its own (a mirror with
+            // no ImageMagick); say so before the reload takes the message away.
+            sessAjax(rp, function(resp) {
+                if (resp && resp.warning) {
+                    sessAlert('Session renamed', sessEnc(resp.warning), finish);
+                } else { finish(); }
+            }, function(m) { sessEditError(m); });
         } else { finish(); }
     }
     function doPriv() {
@@ -403,9 +448,7 @@ function sessShareErr(msg) {
 
 function sessAfterSharedChange(row, newShared) {
     row.shared = newShared;
-    var c = document.getElementById('sessShareChk');
     var g = document.getElementById('sessGalleryChk');
-    if (c) { c.checked = (newShared >= 1); }
     if (g) { g.checked = (newShared >= 2); }
     var r = sessRowByEnc(row.encName);
     if (r) { r.data(row).draw(false); }
@@ -414,7 +457,12 @@ function sessAfterSharedChange(row, newShared) {
 function sessSetGallery(row, want) {
     var p = sessActParams(SESS_ACT.gallery, row);
     p[SESS_P.share] = want;
-    sessAjax(p, function(resp) { sessAfterSharedChange(row, resp.shared); }, function(m) {
+    sessAjax(p, function(resp) {
+        sessAfterSharedChange(row, resp.shared);
+        // The listing itself worked; the picture for it may not have (e.g. a mirror without
+        // ImageMagick convert).  Show what the server said rather than a bare success.
+        if (resp && resp.warning) { sessShareErr(resp.warning); }
+    }, function(m) {
         sessShareErr(m);
         document.getElementById('sessGalleryChk').checked = (row.shared >= 2);
     });
@@ -450,37 +498,63 @@ function sessDoSave() {
     sessDoSaveWithName(name);
 }
 
-function sessDoSaveWithName(name) {
+function sessDoSaveWithName(name, allowOverwrite) {
     var priv = document.getElementById('sessSavePrivate').checked;
     var descEl = document.getElementById('sessSaveDesc');
     var desc = descEl ? descEl.value.trim() : '';
     var p = {};
     p[SESS_ACT.save] = '1';
     p[SESS_P.newName] = name;
+    // Saving under a name you are already using replaces that session's contents, so ask first.
+    // With failIfExists set the CGI answers {exists: true} instead of saving, which is how the
+    // top-right "Share a link" menu handles the same collision.
+    if (!allowOverwrite) { p[SESS_P.failIfExists] = '1'; }
+
     // doSaveSessionJson always saves shared-by-link (the default); chain the optional description
     // and, if the user asked for "only I can load it", make it private, then reload to show the row.
-    function afterDesc() {
-        if (priv) {
-            var sp = {};
-            sp[SESS_ACT.share] = '1';
-            sp[SESS_P.oldName] = name;
-            sp[SESS_P.share] = 0;
-            sessAjax(sp, function() { window.location.reload(); },
-                     function() { window.location.reload(); });
-        } else {
-            window.location.reload();
-        }
+    // The session is saved by the time those run, so a failure in one of them has to be reported: a
+    // silent reload would leave a session sitting there shared by link, or with no description, and
+    // tell the user nothing.
+    function reload() { window.location.reload(); }
+    function partlySaved(problem) {
+        sessAlert('Session saved, with a problem',
+                  'Your session <b>' + sessEnc(name) + '</b> was saved, but ' + sessEnc(problem),
+                  reload);
     }
-    sessAjax(p, function() {
-        if (desc) {
-            var dp = {};
-            dp[SESS_ACT.describe] = '1';
-            dp[SESS_P.oldName] = name;
-            dp[SESS_P.descr] = desc;
-            sessAjax(dp, afterDesc, afterDesc);
-        } else {
-            afterDesc();
+    function afterDesc() {
+        if (!priv) { reload(); return; }
+        var sp = {};
+        sp[SESS_ACT.share] = '1';
+        sp[SESS_P.oldName] = name;
+        sp[SESS_P.share] = 0;
+        sessAjax(sp, reload, function(m) {
+            partlySaved('it could not be made private, so anyone with the link can still load it. ' +
+                        m);
+        });
+    }
+    function afterSave() {
+        if (!desc) { afterDesc(); return; }
+        var dp = {};
+        dp[SESS_ACT.describe] = '1';
+        dp[SESS_P.oldName] = name;
+        dp[SESS_P.descr] = desc;
+        sessAjax(dp, afterDesc, function(m) {
+            partlySaved('the description could not be saved. ' + m);
+        });
+    }
+    sessAjax(p, function(resp) {
+        if (resp && resp.exists) {
+            sessConfirm({
+                title: 'Replace this session?',
+                bodyHtml: 'You already have a session named <b>' + sessEnc(name) + '</b>. Replacing ' +
+                    'it points that name at the view you are looking at now, and what the session ' +
+                    'held before is gone.',
+                okLabel: 'Replace it',
+                onOk: function() { sessModalClose(); sessDoSaveWithName(name, true); }
+            });
+            return;
         }
+        afterSave();
     });
 }
 
@@ -669,6 +743,7 @@ function sessionBuild() {
     if (C.loggedIn) { sessBuildTable(); }
 
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
+    if (C.loggedIn) { sessApplyTooltips(); }
 
     // Timing report (only when loaded with &measureTiming=1): a pill that opens the shared dialog.
     if (sessData.timing) {
@@ -786,6 +861,9 @@ function sessBuildTable() {
               render: function(d, type, row) { return (type === 'display') ? sessActionsHtml(row) : ''; } }
         ]
     });
+
+    // Every redraw brings rows the tooltip conversion has not seen yet.
+    $('#sessionAppTable').on('draw.dt', sessApplyTooltips);
 
     // Delegate the row action buttons.
     $('#sessionAppTable tbody').on('click', 'button[data-act]', function() {

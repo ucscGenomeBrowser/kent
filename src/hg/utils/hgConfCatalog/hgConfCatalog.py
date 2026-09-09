@@ -501,7 +501,7 @@ RELEASE_GATES = {
                "blatNewPageBanner, which does the same job for the results "
                "page."),
         h("sessionNewPage", "flag", "hg/hgSession/hgSession.c", default="FALSE",
-          role="gate", ticket="37996",
+          role="gate", ticket="38157",
           note="Replaces hgSession's classic C-generated 'My Sessions' page with "
                "the JavaScript-built one in hg/js/hgSession.js (a save bar plus a "
                "searchable, sortable session table with inline share/rename/"
@@ -511,12 +511,13 @@ RELEASE_GATES = {
                "in the cart.  Sibling of blatNewForm; comes out once the new page "
                "replaces the old one."),
         h("sessionNewPageBanner", "flag", "hg/hgSession/hgSession.c",
-          default="follows sessionNewPage", role="gate", ticket="37996",
-          note="Whether the classic and new Sessions pages carry the banner that "
-               "links to the other one.  Defaults to whatever sessionNewPage is "
-               "set to: where the new page is enabled a user who took its go-back "
-               "link needs a way to return, and where it is disabled there is "
-               "nothing to advertise.  Set explicitly to override either way.  "
+          default="follows sessionNewPage", role="gate", ticket="38157",
+          note="Whether the classic Sessions page carries the banner advertising "
+               "the new one.  Defaults to whatever sessionNewPage is set to: where "
+               "the new page is disabled there is nothing to advertise.  Set "
+               "explicitly to override either way.  Does not gate the link the "
+               "other way: the new page always offers its way back to the classic "
+               "page, since the cart variable that got the user there sticks.  "
                "Sibling of blatNewFormBanner."),
         h("quickLiftClipToChains", "flag", "hg/lib/quickLift.c",
           default="TRUE", role="gate", verified=True, ticket="38042",

@@ -73,6 +73,12 @@ static boolean sessionNewPageActive();
 static void printSessionNewPageBanner(boolean onNewPage);
 void doMainPageNew(char *userName, char *message);
 
+/* Gallery thumbnail helpers, defined further below with the rest of the gallery code.  The AJAX
+ * endpoints above them have to keep a thumbnail in step with its session, so they need these. */
+int thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *conn,
+                 struct dyString *dyMessage);
+void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnection *conn);
+
 char *cgiDecodeClone(char *encStr)
 /* Allocate and return a CGI-decoded copy of encStr. */
 {
@@ -1047,17 +1053,46 @@ hDisconnectCentral(&conn);
 }
 
 static void saveSessionJsonResult(struct sqlConnection *conn, char *encUserName,
-                                  char *encSessionName, char *sessionName)
+                                  char *encSessionName, char *sessionName, char *warning)
 /* Emit {"name": ..., "url": ...} for the "Share a link" AJAX endpoints and disconnect.
- * sessionName is the human-readable (decoded) name; the client uses it as the rename "old name". */
+ * sessionName is the human-readable (decoded) name; the client uses it as the rename "old name".
+ * warning (may be NULL) is added as "warning" for something that went wrong alongside a save that
+ * did succeed, such as a thumbnail the server could not build. */
 {
 struct dyString *dyUrl = dyStringNew(0);
 addSessionLink(dyUrl, encUserName, encSessionName, FALSE, TRUE);
 puts("Content-Type:application/json\n");
-printf("{\"name\": \"%s\", \"url\": \"%s\"}\n",
-       jsonStringEscape(sessionName), jsonStringEscape(dyUrl->string));
+printf("{\"name\": \"%s\", \"url\": \"%s\"", jsonStringEscape(sessionName),
+       jsonStringEscape(dyUrl->string));
+if (isNotEmpty(warning))
+    printf(", \"warning\": \"%s\"", jsonStringEscape(warning));
+puts("}");
 dyStringFree(&dyUrl);
 hDisconnectCentral(&conn);
+}
+
+static int sessionSharedLevel(struct sqlConnection *conn, char *encUserName, char *encSessionName)
+/* Return the sharing level of this user's session: 0 private, 1 shared by link, 2 in the public
+ * listing.  Returns -1 when the user has no session by that name, which the shared column cannot
+ * express (it is NOT NULL), so the AJAX endpoints can say so instead of reporting a no-op as a
+ * success. */
+{
+char query[512];
+sqlSafef(query, sizeof(query), "select shared from %s where userName = '%s' and sessionName = '%s'",
+         namedSessionTable, encUserName, encSessionName);
+char *shared = sqlQuickString(conn, query);
+if (shared == NULL)
+    return -1;
+return atoi(shared);
+}
+
+static char *thumbnailWarning(struct dyString *dyMessage)
+/* Return what thumbnailAdd had to say for itself, as plain text for a JSON reply, or NULL when it
+ * said nothing.  The message is written for HTML output, so take the <br> back out. */
+{
+if (dyMessage == NULL || dyMessage->stringSize == 0)
+    return NULL;
+return trimSpaces(replaceChars(dyMessage->string, "<br>", " "));
 }
 
 void doAnonNameJson()
@@ -1141,7 +1176,7 @@ if (isNotEmpty(snapshotType))
         snapName = catTwoStrings(snapshotNamePrefix, cgiEncodeFull(sessionName));
     saveSnapshotSession(conn, snapshotType, snapUser, snapName, cart);
     char *snapDecoded = cgiDecodeClone(snapName);
-    saveSessionJsonResult(conn, snapUser, snapName, snapDecoded);
+    saveSessionJsonResult(conn, snapUser, snapName, snapDecoded, NULL);
     return;
     }
 
@@ -1193,7 +1228,7 @@ else
     }
 
 saveCartAsSession(conn, encUserName, encSessionName, 1);  /* shared by link */
-saveSessionJsonResult(conn, encUserName, encSessionName, sessionName);
+saveSessionJsonResult(conn, encUserName, encSessionName, sessionName, NULL);
 }
 
 void doRenameSessionJson(char *userName)
@@ -1228,7 +1263,7 @@ char query[1024];
 
 if (sameString(oldName, newName))
     {
-    saveSessionJsonResult(conn, encUserName, encNewName, newName);
+    saveSessionJsonResult(conn, encUserName, encNewName, newName, NULL);
     return;
     }
 
@@ -1240,13 +1275,19 @@ if (sqlQuickNum(conn, query) > 0)
     saveSessionJsonError(conn, "You already have a session with that name. Please pick another.");
     return;
     }
-sqlSafef(query, sizeof query, "select count(*) from %s where userName = '%s' and sessionName = '%s'",
-         namedSessionTable, encUserName, encOldName);
-if (sqlQuickNum(conn, query) == 0)
+int shared = sessionSharedLevel(conn, encUserName, encOldName);
+if (shared < 0)
     {
     saveSessionJsonError(conn, "Could not find the link to rename.");
     return;
     }
+
+/* A gallery thumbnail's file name is built from the encoded session name, so the picture has to be
+ * moved along with the session or the public listing is left pointing at nothing.  Take the old one
+ * away first, while the row still answers to the old name (the file name also carries firstUse,
+ * which is read from that row). */
+if (shared >= 2)
+    thumbnailRemove(encUserName, encOldName, conn);
 
 /* Same UPDATE that doSessionChange uses to rename a session. */
 sqlSafef(query, sizeof query,
@@ -1254,7 +1295,15 @@ sqlSafef(query, sizeof query,
          namedSessionTable, encNewName, encUserName, encOldName);
 sqlUpdate(conn, query);
 
-saveSessionJsonResult(conn, encUserName, encNewName, newName);
+char *warning = NULL;
+if (shared >= 2)
+    {
+    struct dyString *dyMessage = dyStringNew(256);
+    thumbnailAdd(encUserName, encNewName, conn, dyMessage);
+    warning = thumbnailWarning(dyMessage);
+    }
+
+saveSessionJsonResult(conn, encUserName, encNewName, newName, warning);
 }
 
 int thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *conn, struct dyString *dyMessage)
@@ -1869,6 +1918,10 @@ char *newName = trimSpaces(cartOptionalString(cart, hgsNewSessionName));
 if (isNotEmpty(newName) && !sameString(sessionName, newName))
     {
     char *encNewName = cgiEncodeFull(newName);
+    // A thumbnail's file name is built from the encoded session name, so take the old picture away
+    // before the rename, while the row still answers to the old name.
+    if (shared >= 2)
+        thumbnailRemove(encUserName, encSessionName, conn);
     // In case the user has clicked to confirm that they want to overwrite an existing session,
     // delete the existing row before updating the row that will overwrite it.
     sqlSafef(query, sizeof(query), "delete from %s where userName = '%s' and sessionName = '%s';",
@@ -1889,10 +1942,7 @@ if (isNotEmpty(newName) && !sameString(sessionName, newName))
     renamePrefixedCartVar(hgsMakeDownloadPrefix , encOldSessionName, encNewName);
     renamePrefixedCartVar(hgsDoDownloadPrefix   , encOldSessionName, encNewName);
     if (shared >= 2)
-        {
-        thumbnailRemove(encUserName, encSessionName, conn);
         thumbnailAdd(encUserName, encNewName, conn, dyMessage);
-        }
     }
 
 char sharedVarName[256];
@@ -2152,12 +2202,15 @@ return cartUsualBoolean(cart, "sessionNewPage",
 
 static void printSessionNewPageBanner(boolean onNewPage)
 /* Emit the note that links between the classic and the experimental pages, so neither is a one-way
- * door.  Shown wherever sessionNewPageBanner is on (defaulting to sessionNewPage), like hgBlat's
- * printNewFormBanner.  On the new page gbModern.css supplies .gbBanner; the classic page does not
- * load it, so emit a small inline style there. */
+ * door.  Advertising the new page depends on sessionNewPageBanner (defaulting to sessionNewPage),
+ * like hgBlat's printNewFormBanner, but the way back off the new page is always printed: the
+ * sessionNewPage cart variable sticks, so someone who reached the page by typing the variable into
+ * the URL on a machine where the banner is off would otherwise be stuck there.  On the new page
+ * gbModern.css supplies .gbBanner; the classic page does not load it, so emit a small inline style
+ * there. */
 {
-if (!cfgOptionBooleanDefault("sessionNewPageBanner",
-                             cfgOptionBooleanDefault("sessionNewPage", FALSE)))
+if (!onNewPage && !cfgOptionBooleanDefault("sessionNewPageBanner",
+                                           cfgOptionBooleanDefault("sessionNewPage", FALSE)))
     return;
 if (onNewPage)
     printf("<div class='gbBanner'>You are using the new experimental Sessions page. "
@@ -2496,9 +2549,9 @@ if (isEmpty(sessionName))
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 char query[512];
-sqlSafef(query, sizeof(query), "select shared from %s where userName = '%s' and sessionName = '%s';",
-         namedSessionTable, encUserName, encSessionName);
-int shared = sqlQuickNum(conn, query);
+int shared = sessionSharedLevel(conn, encUserName, encSessionName);
+if (shared < 0)
+    { saveSessionJsonError(conn, "Could not find that session."); return; }
 if (shared >= 2)
     thumbnailRemove(encUserName, encSessionName, conn);
 sqlSafef(query, sizeof(query), "DELETE FROM %s WHERE userName = '%s' AND sessionName = '%s';",
@@ -2522,15 +2575,17 @@ if (isEmpty(sessionName))
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 char query[512];
-sqlSafef(query, sizeof(query), "select shared from %s where userName = '%s' and sessionName = '%s';",
-         namedSessionTable, encUserName, encSessionName);
-int shared = sqlQuickNum(conn, query);
+int shared = sessionSharedLevel(conn, encUserName, encSessionName);
+if (shared < 0)
+    { saveSessionJsonError(conn, "Could not find that session."); return; }
 int newShared = desired ? 1 : 0;
 sqlSafef(query, sizeof(query), "UPDATE %s SET shared = %d WHERE userName = '%s' AND sessionName = '%s';",
          namedSessionTable, newShared, encUserName, encSessionName);
 sqlUpdate(conn, query);
 sessionTouchLastUse(conn, encUserName, encSessionName);
-if (newShared == 0 && shared >= 2)
+/* Either way out of the public listing takes the picture with it: this endpoint drops a session
+ * from shared==2 to 1 as well as to 0, and the file would otherwise be left behind. */
+if (shared >= 2 && newShared < 2)
     thumbnailRemove(encUserName, encSessionName, conn);
 char extra[32];
 safef(extra, sizeof(extra), ", \"shared\": %d", newShared);
@@ -2569,9 +2624,9 @@ if (desired)
         return;
         }
     }
-sqlSafef(query, sizeof(query), "select shared from %s where userName = '%s' and sessionName = '%s';",
-         namedSessionTable, encUserName, encSessionName);
-int shared = sqlQuickNum(conn, query);
+int shared = sessionSharedLevel(conn, encUserName, encSessionName);
+if (shared < 0)
+    { saveSessionJsonError(conn, "Could not find that session."); return; }
 int newShared = desired ? 2 : 1;
 sqlSafef(query, sizeof(query), "UPDATE %s SET shared = %d WHERE userName = '%s' AND sessionName = '%s';",
          namedSessionTable, newShared, encUserName, encSessionName);
@@ -2582,10 +2637,15 @@ if (desired && shared < 2)
     thumbnailAdd(encUserName, encSessionName, conn, dyMsg);
 if (!desired && shared >= 2)
     thumbnailRemove(encUserName, encSessionName, conn);
-dyStringFree(&dyMsg);
-char extra[32];
-safef(extra, sizeof(extra), ", \"shared\": %d", newShared);
-saveSessionJsonOk(conn, extra);
+/* Pass on anything thumbnailAdd had to say, e.g. that this mirror has no ImageMagick convert.  The
+ * session is listed either way, but without this the reply is a bare success and the listing simply
+ * shows no picture. */
+struct dyString *dyExtra = dyStringNew(64);
+dyStringPrintf(dyExtra, ", \"shared\": %d", newShared);
+char *warning = thumbnailWarning(dyMsg);
+if (warning != NULL)
+    dyStringPrintf(dyExtra, ", \"warning\": \"%s\"", jsonStringEscape(warning));
+saveSessionJsonOk(conn, dyExtra->string);
 }
 
 void doOverwriteSessionJson(char *userName)
@@ -2603,18 +2663,11 @@ if (!sqlTableExists(conn, namedSessionTable))
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 char query[1024];
-sqlSafef(query, sizeof(query),
-         "select count(*) from %s where userName = '%s' and sessionName = '%s';",
-         namedSessionTable, encUserName, encSessionName);
-if (sqlQuickNum(conn, query) == 0)
+int shared = sessionSharedLevel(conn, encUserName, encSessionName);
+if (shared < 0)
     { saveSessionJsonError(conn, "Could not find that session to overwrite."); return; }
-sqlSafef(query, sizeof(query), "select shared from %s where userName = '%s' and sessionName = '%s';",
-         namedSessionTable, encUserName, encSessionName);
-int shared = sqlQuickNum(conn, query);
 int useCount = saveCartAsSession(conn, encUserName, encSessionName, shared);
 /* Report the refreshed values so the table row can update in place. */
-boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
-(void)gotSettings;
 sqlSafef(query, sizeof(query),
          "select firstUse, contents from %s where userName = '%s' and sessionName = '%s';",
          namedSessionTable, encUserName, encSessionName);
@@ -2658,6 +2711,8 @@ if (!gotSettings)
 char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 char query[512];
+if (sessionSharedLevel(conn, encUserName, encSessionName) < 0)
+    { saveSessionJsonError(conn, "Could not find that session."); return; }
 sqlSafef(query, sizeof(query), "select settings from %s where userName = '%s' and sessionName = '%s';",
          namedSessionTable, encUserName, encSessionName);
 char *settings = sqlQuickString(conn, query);
