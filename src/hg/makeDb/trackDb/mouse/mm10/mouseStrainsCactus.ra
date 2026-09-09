@@ -1,0 +1,20 @@
+track mouseStrainsCactus
+shortLabel Mouse Strain Alignments
+longLabel Cactus alignment of 16 mouse strains and rat
+type bigMaf
+group compGeno
+visibility hide
+priority 3
+color 0, 10, 100
+altColor 0,90,10
+bigDataUrl https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/mm10.bigMaf.bb
+summary https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/mm10.bigMafSummary.bb
+frames https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/mm10.bigMafFrames.bb
+speciesCodonDefault mm10
+speciesGroups Wild_derived Classical_laboratory Rat/rn6
+sGroup_Wild_derived SPRET_EiJ PWK_PhJ CAST_EiJ WSB_EiJ
+sGroup_Classical_laboratory NZO_HlLtJ C57BL_6NJ NOD_ShiLtJ FVB_NJ DBA_2J CBA_J C3H_HeJ AKR_J BALB_cJ A_J LP_J 129S1_SvImJ
+sGroup_Rat/rn6 rn6
+speciesLabels SPRET_EiJ="SPRET/EiJ" PWK_PhJ="PWK/PhJ" CAST_EiJ="CAST/EiJ" WSB_EiJ="WSB/EiJ" NZO_HlLtJ="NZO/HlLtJ" C57BL_6NJ="C57BL/6NJ" NOD_ShiLtJ="NOD/ShiLtJ" FVB_NJ="FVB/NJ" DBA_2J="DBA/2J" CBA_J="CBA/J" C3H_HeJ="C3H/HeJ" AKR_J="AKR/J" BALB_cJ="BALB/cJ" A_J="A/J" LP_J="LP/J" 129S1_SvImJ="129S1/SvImJ" rn6="Rat/rn6"
+itemFirstCharCase noChange
+treeImage phylo/mouseStrains_18way.png

@@ -980,8 +980,10 @@ sqlDyStringPrintf(dy, ")");
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 
-/* Prevent modification of custom track collections or quickLifts just saved to namedSessionDb: */
-cartCopyLocalHubs(cart);
+/* Prevent modification of the custom track collection just saved to namedSessionDb.  Under
+ * copy-on-write hgCollection asks for its own trash copy before it writes, so this does
+ * nothing.  refs #38273 */
+cartCopyLocalHubsOnSessionLoad(cart);
 return useCount;
 }
 
@@ -1604,7 +1606,7 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
-    cartCopyLocalHubs(cart);
+    cartCopyLocalHubsOnSessionLoad(cart);
     hubConnectLoadHubs(cart);
     cartHideDefaultTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
@@ -1659,7 +1661,7 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(encOtherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
-cartCopyLocalHubs(cart);
+cartCopyLocalHubsOnSessionLoad(cart);
 hubConnectLoadHubs(cart);
 cartHideDefaultTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
@@ -1776,7 +1778,7 @@ if (lf != NULL)
     if (ok)
         {
         dyStringAppend(dyMessage, dyLoadMessage->string);
-        cartCopyLocalHubs(cart);
+        cartCopyLocalHubsOnSessionLoad(cart);
         hubConnectLoadHubs(cart);
         cartHideDefaultTracks(cart);
         cartCheckForCustomTracks(cart, dyMessage);
@@ -2007,7 +2009,7 @@ char *encUserName = cgiEncodeFull(userName);
 char *encSessionName = cgiEncodeFull(sessionName);
 int sharingLevel = getSharingLevel(conn, encUserName, encSessionName);
 cartLoadUserSession(conn, userName, sessionName, cart, NULL, actionVar);
-// Don't cartCopyLocalHubs because we're not going to make any track collection changes
+// No cartCopyLocalHubsOnSessionLoad because we're not going to make any track collection changes
 hubConnectLoadHubs(cart);
 // Some old sessions reference databases that are no longer present, and that triggers an errAbort
 // when cartHideDefaultTracks calls hgTrackDb.  Don't let that stop the process of updating other

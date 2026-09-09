@@ -1,0 +1,236 @@
+<h2>Description</h2>
+
+<p>
+Inbred laboratory mouse strains descend from a small pool of founder animals, so any two
+strains differ at millions of sites and carry long stretches of distinct ancestral haplotype.
+The Mouse Genomes Project built de novo assemblies for 16 of them, 12 classical laboratory
+strains and 4 derived from wild mice, covering most of the genetic diversity in common
+laboratory use. Seven of the eight Collaborative Cross and Diversity Outbred founder strains
+are included; the eighth, C57BL/6J, is the reference assembly itself.
+</p>
+
+<p>
+This track shows a whole-genome multiple alignment of those 16 strain assemblies to the
+mouse reference, with the rat genome included as an outgroup. It was built with Progressive
+Cactus from the assemblies themselves rather than by mapping short reads, so insertions and
+deletions in a strain appear directly in the alignment. Large rearrangements are a different
+matter: the strain scaffolds were joined into chromosomes using the reference as a guide and
+adjacencies that disagreed with it were mostly discarded, so this is not a good source for
+translocations or inversions.
+</p>
+
+<p>
+Note that the assembly included here is C57BL/6NJ, a substrain of the C57BL/6J animal the
+mouse reference was built from, so that row is nearly identical to the reference along most
+of the genome.
+</p>
+
+<p>
+The alignment is symmetric, so it can also be viewed with any of the 16 strains as the
+reference instead of C57BL/6J. To do that, load the
+<a href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/hubIndex.html" target="_blank">Mouse
+strain assemblies</a> hub, which is on our public hub list, and pick a strain assembly from
+its gateway page.
+</p>
+
+<h2>Display Convention and Configuration</h2>
+
+<p>
+Each aligned assembly is shown on its own row, labeled with the strain name. The track
+configuration page lets you choose which assemblies to display. The strains are listed there
+in three groups, wild-derived, classical laboratory, and rat, each with a pair of buttons
+that turn the whole group on or off at once.
+</p>
+
+<p>
+To see the aligned bases at a given position, zoom in to 30,000 bases or fewer and click
+the alignment.
+</p>
+
+<h3>Gap Annotation</h3>
+<p>
+The <em>Display chains between alignments</em> configuration option enables display of gaps
+between alignment blocks, in a manner similar to the Chain track display. Missing sequence
+in any assembly is highlighted by regions of yellow when zoomed out and by Ns at base
+level. The conventions are:
+</p>
+<ul>
+  <li><b>Single line:</b> no bases in the aligned assembly. Possibly a strain-specific
+      insertion between the aligned blocks in the reference, or a strain-specific deletion
+      between the aligned blocks in the other assembly.</li>
+  <li><b>Double line:</b> the aligned assembly has one or more unalignable bases in the gap
+      region, which can happen with independent indels in the region between the aligned
+      blocks in both assemblies.</li>
+  <li><b>Pale yellow coloring:</b> the aligned assembly has Ns in the gap region, reflecting
+      a lack of sequence in the relevant portion of that assembly.</li>
+</ul>
+
+<h3>Genomic Breaks</h3>
+<p>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the aligned DNA
+are shown as follows:
+</p>
+<ul>
+  <li><b>Vertical blue bar:</b> a discontinuity that persists indefinitely on either side,
+      for example a large region of DNA on either side of the bar coming from a different
+      chromosome in the aligned assembly because of a large scale rearrangement.</li>
+  <li><b>Green square brackets:</b> enclose shorter alignments consisting of DNA from one
+      genomic context nested inside a larger chain of alignments from a different genomic
+      context. The alignment within the brackets may represent a short misalignment, a
+      strain-specific transposon insertion that aligns to a paralogous copy elsewhere, or a
+      similar occurrence.</li>
+</ul>
+
+<h3>Base Level</h3>
+<p>
+When zoomed in to base level, the track shows the base composition of each alignment. The
+numbers and symbols on the Gaps line indicate the lengths of gaps in the reference sequence
+at those alignment positions, relative to the longest non-reference sequence. If there is
+sufficient space in the display, the size of the gap is shown. If the space is insufficient
+and the gap size is a multiple of 3, a "*" is displayed; other gap sizes are indicated by
+"+".
+</p>
+
+<p>
+Codon translation is available at base level when the displayed region is annotated as
+coding. To turn it on, pick a species in the Codon Translation section of the configuration
+page and then choose one of these modes:
+</p>
+<ul>
+  <li><b>No codon translation:</b> the gene annotation is not used; bases are displayed
+      without translation.</li>
+  <li><b>Use default species reading frames for translation:</b> the annotations from the
+      assembly chosen in the <em>Default species to establish reading frame</em> menu are
+      used to translate all aligned assemblies.</li>
+  <li><b>Use reading frames for species if available, otherwise no translation:</b> codon
+      translation is done only for assemblies where the region is annotated as protein
+      coding.</li>
+  <li><b>Use reading frames for species if available, otherwise use default species:</b>
+      assemblies annotated as protein coding over the aligned region are translated with
+      their own annotation; the rest are translated using the default assembly.</li>
+</ul>
+
+<h2>Methods</h2>
+
+<p>
+The 16 strain assemblies were produced by the Mouse Genomes Project at the Wellcome Sanger
+Institute from Illumina paired-end reads at 40x to 70x coverage, mate-pair libraries at 3, 6
+and 10 kb, and fosmid and BAC-end sequences. CAST/EiJ, PWK/PhJ and SPRET/EiJ were scaffolded
+further with Dovetail Genomics Chicago libraries through HiRise. Scaffolds were then joined
+into chromosome-scale sequences with Ragout v2.0, using the C57BL/6J GRCm38 sequence as the
+single reference and minimizing the number of structural differences from it. On average 10%
+of synteny block adjacencies in the assemblies were absent from the reference; Ragout kept
+the 38% of those it judged to be real rearrangements and removed the remainder as
+mis-assemblies. The GenBank version of each assembly was used here. A Progressive Cactus
+alignment was then generated
+from those 16 assemblies together with the mouse reference (mm10) and the rat reference
+(rn6), giving 18 genomes in total. Because the laboratory strains are so closely related,
+the Cactus guide tree was binarized as accurately as possible, but incomplete lineage
+sorting is common among these strains and the guide tree may not be correct in every region.
+This has little effect on alignment quality except where insertions and deletions themselves
+fall under incomplete lineage sorting. The guide tree is shown on the track configuration
+page. See the references below for details of both the assemblies and the alignment method.
+</p>
+
+<p>
+The alignment is served directly from the files behind the
+<a href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/" target="_blank">mouse strains
+assembly hub</a> on our download server, at
+<a href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/" target="_blank">https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/</a>.
+No reprocessing was done for this track; only the track configuration differs from the hub.
+The full alignment is also available in HAL format as
+<a href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mouseStrains_1509.hal" target="_blank">mouseStrains_1509.hal</a>,
+and the bigMaf files displayed here were generated from it.
+</p>
+
+<p>
+The steps taken to add this track are recorded in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm10/mouseStrainsCactus.txt" target="_blank">doc/mm10/mouseStrainsCactus.txt</a>,
+and its track configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/mouse/mm10/mouseStrainsCactus.ra" target="_blank">trackDb/mouse/mm10/mouseStrainsCactus.ra</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The alignment can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a>, which returns one MAF block per row. From
+scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
+track=<i>mouseStrainsCactus</i>.
+</p>
+
+<p>
+For automated download and analysis, the alignment is stored in bigMaf format and can be
+downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/" target="_blank">our
+download server</a>. The files are called <tt>mm10.bigMaf.bb</tt> (the alignment, roughly 9 GB),
+<tt>mm10.bigMafSummary.bb</tt> (the zoomed-out summary) and <tt>mm10.bigMafFrames.bb</tt>
+(the coding frames used for codon translation). Individual regions or the whole alignment
+can be converted to MAF with our tool <tt>bigMafToMaf</tt>, which can be compiled from the
+source code or downloaded as a precompiled binary for your system. Instructions for
+downloading source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool reads the file over the network, so a single region can be pulled out without
+downloading the whole alignment:
+</p>
+<pre>
+bigMafToMaf https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/mm10.bigMaf.bb \
+    region.maf -chrom=chr1 -start=3000000 -end=3100000
+</pre>
+
+<p>
+The 16 strain assemblies themselves can be downloaded from
+<a href="https://ftp.ebi.ac.uk/pub/databases/mousegenomes/" target="_blank">the Mouse Genomes
+Project archive at EMBL-EBI</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Alignment generation: Joel Armstrong, Ian Fiddes and Benedict Paten, UC Santa Cruz Genomics
+Institute. Genome assemblies: Thomas Keane and the Mouse Genomes Project, Wellcome Sanger
+Institute.
+</p>
+
+<h2>References</h2>
+
+<p>
+Lilue J, Doran AG, Fiddes IT, Abrudan M, Armstrong J, Bennett R, Chow W, Collins J, Collins S,
+Czechanski A <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-018-0223-8" target="_blank">
+Sixteen diverse laboratory mouse reference genomes define strain-specific haplotypes and novel
+functional loci</a>.
+<em>Nat Genet</em>. 2018 Nov;50(11):1574-1583.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30275530" target="_blank">30275530</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6205630/" target="_blank">PMC6205630</a>
+</p>
+
+<p>
+Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
+<a href="https://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=21665927" target="_blank">
+Cactus: Algorithms for genome multiple sequence alignment</a>.
+<em>Genome Res</em>. 2011 Sep;21(9):1512-28.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>
+</p>
+
+<p>
+Hickey G, Paten B, Earl D, Zerbino D, Haussler D.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23505295" target="_blank">
+HAL: a hierarchical format for storing and analyzing multiple genome alignments</a>.
+<em>Bioinformatics</em>. 2013 May 15;29(10):1341-2.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23505295" target="_blank">23505295</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3654707/" target="_blank">PMC3654707</a>
+</p>
+
+<p>
+Nguyen N, Hickey G, Raney BJ, Armstrong J, Clawson H, Zweig A, Karolchik D, Kent WJ, Haussler D,
+Paten B.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25138168" target="_blank">
+Comparative assembly hubs: web-accessible browsers for comparative genomics</a>.
+<em>Bioinformatics</em>. 2014 Dec 1;30(23):3293-301.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25138168" target="_blank">25138168</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4296145/" target="_blank">PMC4296145</a>
+</p>
+

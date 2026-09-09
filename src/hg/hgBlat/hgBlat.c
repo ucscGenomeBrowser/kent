@@ -64,6 +64,12 @@ boolean autoBigPsl = FALSE;  // DEFAULT VALUE change to TRUE in future
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs */
+
+/* Per-sequence query size limits, enforced below and shown by the new form's character counter
+ * (emitted into hgBlatFormData so the C and JS numbers cannot drift apart).  The total limit for
+ * a multi-sequence submission is 2.5x the per-sequence limit. */
+#define maxSingleSizeDna 75000
+#define maxSingleSizeTx  10000    /* protein and translated queries */
                                 /* this one is 0.5 */
 static boolean issueBotWarning = FALSE;
 
@@ -2256,7 +2262,7 @@ if(feelingLucky && seqList != NULL)
     }
 
 /* Figure out size allowed. */
-maxSingleSize = (isTx ? 10000 : 75000);
+maxSingleSize = (isTx ? maxSingleSizeTx : maxSingleSizeDna);
 maxTotalSize = maxSingleSize * 2.5;
 #ifdef LOWELAB
 maxSeqCount = 200;
@@ -2814,6 +2820,9 @@ jsonWriteBoolean(jw, "keepResults", cartUsualBoolean(cart, "blatKeepResults", FA
 jsonWriteBoolean(jw, "showOnlyLatest",
     sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on"));
 jsonWriteBoolean(jw, "onlyLatest", cartUsualBoolean(cart, "blatOnlyLatest", FALSE));
+/* The enforced per-sequence limits, so the character counter shows the right cap per query type. */
+jsonWriteNumber(jw, "maxSingleDna", maxSingleSizeDna);
+jsonWriteNumber(jw, "maxSingleTx", maxSingleSizeTx);
 /* The example is fetched on demand rather than inlined: it is a real 2.5 kb sequence, which would
  * otherwise be embedded in every page load of the form just to serve the few users who click
  * "Load example".  The sequence is a window over two PTP4A3 exons that is also carried by an alt

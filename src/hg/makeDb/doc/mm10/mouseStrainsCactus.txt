@@ -1,0 +1,79 @@
+# 2026-09-08 - Claude lrnassar - Mouse strains Cactus alignment native track (refs #38308)
+
+# No data was built for this track. The Progressive Cactus alignment of the 16
+# Mouse Genomes Project strain assemblies (plus mm10 and rn6) was made by Joel
+# Armstrong / Ian Fiddes / Benedict Paten in 2016-2018 for the mouseStrains
+# assembly hub (refs #13553), and the bigMaf files already sit on the download
+# server behind that hub:
+#
+#   https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/maf/
+#     mm10.bigMaf.bb          9414245806 bytes (8.8 GB)  2018-11-09
+#     mm10.bigMafSummary.bb     42857864 bytes (41 MB)   2016-12-22
+#     mm10.bigMafFrames.bb       4166336 bytes (4.0 MB)  2016-12-22
+#
+# On hgwdev these are at
+#   /usr/local/apache/htdocs-hgdownload/hubs/mouseStrains/mm10/maf/
+#
+# The track requested in #38308 exposes that same alignment as a native mm10
+# track so users do not have to remember to attach the hub. Nothing is copied
+# into /gbdb; bigDataUrl, summary and frames all point at the download server
+# over https. This follows the hg38 cactus241wayBM track, which serves its
+# bigMaf and frames from hgdownload the same way.
+#
+# Consequence to be aware of: the 8.8 GB file is read over HTTP by every
+# browser node, so the first read of a region on a machine with a cold UDC
+# cache pays a network round trip. If that turns out to be too slow, the
+# 41 MB summary file (which is what zoomed-out views read) is the one worth
+# symlinking into /gbdb/mm10/, not the 8.8 GB alignment.
+
+# The hub's own trackDb stanza is at
+#   https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/mm10.bigMaf.trackDb.txt
+# and the native stanza differs from it in these ways:
+#   - track renamed from the generic "bigMaf" to mouseStrainsCactus
+#   - shortLabel "Mice Strains" -> "Strain Alignments", longLabel reworded
+#   - visibility full -> hide (off by default, per #38308)
+#   - speciesOrder replaced by speciesGroups/sGroup_, splitting the strains
+#     into wild-derived, classical laboratory and outgroup. Those three
+#     sGroup_ tags were added to trackDb/tagTypes.tab.
+#   - speciesLabels added so the side labels read 129S1/SvImJ rather than
+#     129S1_SvImJ. Note that hgTracks runs these labels through hgDirForOrg(),
+#     which turns spaces into underscores, so a label has to be one word
+#     ("Rat", not "Rat rn6").
+#   - itemFirstCharCase noChange, so strain names keep their capitalization
+#   - the outgroup group is named Rat/rn6; a slash in an sGroup_ tag name
+#     passes tdbQuery -strict and renders fine
+#   - treeImage phylo/mouseStrains_18way.png (already in htdocs/images/phylo/)
+#   - speciesCodonDefault mm10, color/altColor to match our other maf tracks
+
+# Verified in the sandbox at each zoom level, all served from the remote files:
+#   whole chromosome (reads the summary file)
+#     hgRenderTracks?db=mm10&position=chr19&mouseStrainsCactus=pack
+#   alignment blocks
+#     hgRenderTracks?db=mm10&position=chr12:56694976-56714605&mouseStrainsCactus=pack
+#   base level with codon translation from the frames file
+#     hgRenderTracks?db=mm10&position=chr12:56700000-56700040&mouseStrainsCactus=pack
+#   click details (all 17 sequences, pretty labels)
+#     hgc?db=mm10&g=mouseStrainsCactus&c=chr12&o=56700000&t=56700040&l=56700000&r=56700040
+
+# Also added a reciprocal pair to trackDb/relatedTracks.ra between this track
+# and mm10Strains1 ("Alternate strains"). #38227 came in because a user kept
+# landing on mm10Strains1 while looking for this alignment, so the two should
+# point at each other.
+
+# Facts checked against the source paper (PMC6205630) while writing the
+# description page, because a first draft got them wrong:
+#   - assembly inputs are Illumina paired-end 40-70x, mate-pairs at 3/6/10 kb,
+#     and fosmid and BAC-end sequences; CAST/EiJ, PWK/PhJ and SPRET/EiJ also got
+#     Dovetail Chicago libraries via HiRise. No optical maps were used.
+#   - the reference's role was in Ragout v2.0 pseudo-chromosome construction,
+#     not error correction. Ragout used C57BL/6J GRCm38 as the single reference
+#     and minimized structural differences from it; on average 10% of synteny
+#     block adjacencies were absent from the reference, of which Ragout kept 38%
+#     as real rearrangements and discarded the rest as mis-assemblies. So the
+#     alignment is not a good source for large rearrangements.
+#   - the CC/DO founder set is C57BL/6J, A/J, 129S1/SvImJ, NOD/ShiLtJ,
+#     NZO/HlLtJ, CAST/EiJ, PWK/PhJ, WSB/EiJ. Seven are among the 16 assemblies;
+#     the eighth, C57BL/6J, is the mm10 reference itself. Note the assembly in
+#     the alignment is C57BL/6NJ, a different substrain from 6J.
+#   - hgIntegrator has no maf support (hAnno.c:391), so the description page
+#     does not claim the Data Integrator works on this track.

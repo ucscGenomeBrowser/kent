@@ -163,7 +163,7 @@ screen stills instead of overwriting them.
 | `zoom: out` / `zoom: in` | One zoom step (2×). |
 | `montage: {name: figure1, shots: [source, lifted]}` | Compose stills already written this run into **one multi-panel PNG**, which is what a journal wants for a figure with parts (A), (B), and so on. Panels are stacked in order and lettered automatically; `labels: [Before, After]` overrides the letters, `labels: false` drops them, `direction: horizontal` puts them side by side, and `gap:` / `labelSize:` tune the spacing and lettering. Composed at deviceScaleFactor 1 with every panel at its **natural pixel size**, so the composite is pixel-for-pixel its inputs: a `make hires` montage is print resolution because the panels were, not because anything was upscaled. Panels narrower than the widest are left-aligned and padded, never stretched. A named shot that was never taken is warned about and skipped. Put it last, after the `shot:`/`pinShot:` steps it names. |
 | `loadSession: https://example.org/settings.txt` | Start from a **saved state** instead of a clean cart, so one tour can begin where another ended and a bug report that arrives as a session link becomes a starting position. Four forms: a **settings file by URL** (as above), a **share link** (`loadSession: https://genome.ucsc.edu/s/Braney/hg38`), a **named session** (`loadSession: {user: Braney, name: hg38}`), or a **local file** written by an earlier `session:` (`loadSession: {file: saved}` → `sessions/<base>/saved.txt`, sent up through hgSession's own upload form, so the project's sessions need not be published at all). Quick and silent, like `hub:` — this is setup, not something the tour demonstrates; add `shot:` to capture where it lands. Whatever the form, the load is issued against `target:` — see **Sessions** for why a share link is not simply followed. |
-| `expect: {rows: [ruler, mane]}` | **The one verb that can fail a run.** Everything else renders happily whatever it is handed, so a wrong figure is written over a right one and only an eye catches it. State the expectation instead and the run stops, non-zero, at the step that broke it. Checks, any combination: `rows:` (these were drawn — plain names, matched by suffix so a lifted `hub_<n>_mane` counts), `exact: true` (…and nothing else), `ordered: true` (…and in that order, top to bottom), `noRows:` (these were not), `height: 2000` (the still is no taller than that in pixels; `"<1200"`, `">=300"` for another comparison), `tip: "mismatch A->C"` (the tooltip now up says this), `text:` / `noText:` (the page does / does not contain this — `noText: "Too Long"` catches the Apache 414 that renders as a perfectly good page), `url:` / `noUrl:` (the current address does / does not contain this — which CGI a click reached, or what a form put in the query string; `noUrl: "%E2%80%8B"` is the only way to see that a search term's zero-width space was stripped, since it is invisible in the page), `has:` / `noHas:` (a CSS selector matches / matches nothing — for a bug whose whole signature is WHERE something sits, like a center label attached to the wrong row: same rows, same height, same pixels. Reach for these last, since an assertion on hgTracks' own ids breaks easily for reasons that are not bugs). A failure names every check that failed **and the rows actually drawn**. `warn: true` downgrades it to a warning for a check worth logging but not worth stopping a build over. |
+| `expect: {rows: [ruler, mane]}` | **The one verb that can fail a run.** Everything else renders happily whatever it is handed, so a wrong figure is written over a right one and only an eye catches it. State the expectation instead and the run stops, non-zero, at the step that broke it. Checks, any combination: `rows:` (these were drawn — plain names, matched by suffix so a lifted `hub_<n>_mane` counts), `exact: true` (…and nothing else), `ordered: true` (…and in that order, top to bottom), `noRows:` (these were not), `height: 2000` (the still is no taller than that in pixels; `"<1200"`, `">=300"` for another comparison), `tip: "mismatch A->C"` (the tooltip now up says this), `text:` / `noText:` (the page does / does not contain this — `noText: "Too Long"` catches the Apache 414 that renders as a perfectly good page), `url:` / `noUrl:` (the current address does / does not contain this — which CGI a click reached, or what a form put in the query string; `noUrl: "%E2%80%8B"` is the only way to see that a search term's zero-width space was stripped, since it is invisible in the page), `color:` (the color a track's row is actually **drawn** in -- `{track: crm4, is: "0,0,255"}`, or `not:` for one it must not be; `part: label` asks about the center label instead of the items, `at:`/`frac:`/`x:` about one item instead of the whole row, and a **list** states several rows in one step. The only check that reads the IMAGE, for a bug that leaves the page identical -- same rows, same height, same names, same tooltips), `has:` / `noHas:` (a CSS selector matches / matches nothing — for a bug whose whole signature is WHERE something sits, like a center label attached to the wrong row: same rows, same height, same pixels. Reach for these last, since an assertion on hgTracks' own ids breaks easily for reasons that are not bugs). A failure names every check that failed **and the rows actually drawn**. `warn: true` downgrades it to a warning for a check worth logging but not worth stopping a build over. |
 | `session: source` | Write `sessions/<base>/<name>.txt`: the **whole cart at this step**, in the format hgSession's "save settings to a local file" produces, so anyone can load it and get this exact view. Every track's visibility, the attached hubs, the custom tracks, the window. Off the video and off the page — it is fetched over the tour's own cookies, so the tour is not disturbed and nothing appears in the mp4. With `sessionUrlBase:` set at the top of the file, the run also prints the ready-made load URL. See **Sessions**. |
 | `shot: source` | Write `<name>.png` **and** pause the video here. On a tracks page the still is the track image (`#imgTbl`), plus any open tooltip/dialog. On any other page (an hgc detail page, an external page a link led to) it is the **viewport only — the top of the page**, never the whole scrolling document. |
 
@@ -259,6 +259,7 @@ all of them are mechanically checkable. `expect:` is the only verb that looks at
   - expect: {rows: [ruler, mane, pubtator], exact: true, height: 2000, noText: "Too Long"}
   - mouseover: {track: quickLiftChain, item: "4.3.157828209.157828210", pin: true}
   - expect: {tip: "mismatch A->C"}
+  - expect: {color: {track: crm4, is: "0,0,255", not: "0,255,0"}}
 ```
 
 A failure prints every check that failed **and the rows that were actually drawn**, then
@@ -298,6 +299,31 @@ Notes:
   the screen run.
 - **A bare number is a ceiling** (`height: 2000` means no taller than 2000), which is the
   check anyone actually wants. `"<1200"`, `">=300"` and `"=850"` are there when it is not.
+- **`color:` reads the pixels, and it is the only check that does.** A bug about color
+  changes nothing else: #36212 draws the items of a track that sets both `itemRgb on` and
+  `color` from the color setting rather than from the file's own RGB column, and the rows,
+  the height, the item names and the tooltips are identical either way. It names the color
+  a row is mostly drawn in:
+
+      expect: {color: {track: crm4, is: "0,0,255"}}                # the items are blue
+      expect: {color: {track: crm4, part: label, is: "0,255,0"}}   # the center label green
+      expect: {color: {track: crm4, at: "chr1:1004500"}}           # one item, not the row
+      expect: {color: [{track: crm3, is: "0,255,0"}, {track: crm4, is: "0,0,255"}]}
+
+  White is background and is not counted; everything else is, black included, since a
+  track with no color of its own draws black items. `is:` and `not:` take `r,g,b` or
+  `#rrggbb` and match within `tolerance:` (default 8) -- **not** a CSS color name, because
+  trackDb's `color 0,255,0` is not CSS `green`. `at:`/`frac:`/`x:` narrow the sample to a
+  column `wide:` px across (default 5) at that position, which is how one item in a row of
+  several colors gets asked about on its own. A row that drew nothing at all fails saying
+  so rather than reporting a color, and the failure always lists the top three colors with
+  their share of the row:
+
+      step 8 (expect) failed: crm4 is drawn 0,255,0, wanted 0,0,255
+        -- the row holds 0,255,0 (98%), 127,255,127 (1%), 190,255,190 (1%)
+
+  The side labels are a separate image and are never included: "what color is this row"
+  must not be answered by the label text.
 - **`warn: true`** logs the failure and carries on, for a check worth recording but not
   worth stopping a build over.
 

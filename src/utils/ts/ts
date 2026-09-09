@@ -9,11 +9,12 @@
 # and /gbdb are shared (hg.conf points at hgwdev MySQL; /gbdb is shared NFS) and
 # trash is shared with the live CGIs, so only the *code* is frozen: a full copy
 # of cgi-bin-$USER + htdocs-$USER plus a rewritten hg.conf.  Data is left
-# shared on purpose (freeze the code, share the data).  The one exception is the
-# udc cache: each ticket gets its own subtree under the shared trash, so one
-# instance cannot serve another a cache entry it wrote (see setUdcDir).  The
-# rewritten hg.conf also drops the cookie domain, or a parked instance could not
-# hold a cart at all (see setCookieDomain).
+# shared on purpose (freeze the code, share the data).  Two caches are the
+# exception, because a cache written by one instance is otherwise read by all of
+# them: the udc cache gets its own subtree under the shared trash (see
+# setUdcDir), and the trackDb cache gets its own directory inside the sandbox
+# (see setTrackDbCacheDir).  The rewritten hg.conf also drops the cookie domain,
+# or a parked instance could not hold a cart at all (see setCookieDomain).
 #
 # Each instance answers on two ports: plain http on its registered port, and
 # https on that port plus 1000, from a self-signed certificate shared by every
@@ -175,6 +176,9 @@ freeze() {
     makeMarker "$tkt" "$dir"
     printf '\n# ts: per-ticket background marker (refs #37867)\nbrowser.style=/style/tsMarker.css\n' \
         >> "$dir/cgi-bin/hg.conf"
+    # the images are keyed to the binaries we are replacing, so drop them
+    rm -rf "$dir/trackDbCache"
+    setTrackDbCacheDir "$tkt" "$dir"
     setUdcDir "$tkt" "$dir"
     setCookieDomain "$tkt" "$dir"
     echo "Freeze complete ($(du -sh "$dir/cgi-bin" "$dir/$HTDOCS_NAME" 2>/dev/null | awk '{print $1}' | paste -sd'+'))."
@@ -220,6 +224,29 @@ setUdcDir() {
     grep -q '^# ts: per-ticket udc cache' "$dir/cgi-bin/hg.conf" && return 0
     printf '\n# ts: per-ticket udc cache (refs #37867)\nudc.cacheDir=%s\n' \
         "$(udcDir "$tkt")" >> "$dir/cgi-bin/hg.conf"
+}
+
+# --- give the ticket its own trackDb cache -----------------------------------
+# The trackDb cache is a shared-memory image of the parsed trackDb, and every
+# user's CGIs write into one cacheTrackDbDir.  Two things about that are wrong
+# for a park.  The image layout is tied to TRACKDB_VERSION in the frozen
+# binaries, so a park built from a branch that changes the cache shares a
+# directory with the live sandbox and with other developers.  And the writer
+# leaves a name.txt beside each image and opens it for write, so whoever wrote
+# it first owns it and the next writer's CGI dies on a permission error, after
+# the image itself has landed - which makes the failure look intermittent.
+# Give each ticket its own directory, inside the sandbox so remove takes it
+# along with everything else.  Unlike the udc cache this is derived from the
+# code rather than data, so a re-freeze clears it.
+tdbCacheDir() { echo "$(tsDir "$1")/trackDbCache"; }
+
+setTrackDbCacheDir() {
+    local tkt="$1" dir="$2"
+    mkdir -p "$(tdbCacheDir "$tkt")"
+    # freeze() writes hg.conf fresh, but conf() calls this on an existing one
+    grep -q '^# ts: per-ticket trackDb cache' "$dir/cgi-bin/hg.conf" && return 0
+    printf '\n# ts: per-ticket trackDb cache (refs #37867)\ncacheTrackDbDir=%s\n' \
+        "$(tdbCacheDir "$tkt")" >> "$dir/cgi-bin/hg.conf"
 }
 
 # --- let the cart survive on a loopback host ---------------------------------
@@ -402,6 +429,7 @@ cmd_conf() {
     ensureCert                                # retrofits https onto a pre-https park
     writeConf "$tkt" "$port"
     setUdcDir "$tkt" "$(tsDir "$tkt")"        # retrofit a sandbox frozen before these existed
+    setTrackDbCacheDir "$tkt" "$(tsDir "$tkt")"
     setCookieDomain "$tkt" "$(tsDir "$tkt")"
     if [[ -n "$running" ]]; then
         startHttpd "$tkt"
@@ -466,7 +494,8 @@ cmd_remove() {
     local port; port="$(regPort "$tkt")"
     [[ -n "$port" ]] || die "RM $tkt not found in registry"
     stopHttpd "$tkt" || true
-    rm -rf "$(tsDir "$tkt")"     # trash is a symlink: removed, not followed
+    rm -rf "$(tsDir "$tkt")"     # takes the ticket's trackDb cache with it;
+                                 # trash is a symlink: removed, not followed
     rm -rf "$(udcDir "$tkt")"    # the ticket's udc cache lives inside the shared trash
     # drop the registry row
     local tmp; tmp="$(mktemp)"

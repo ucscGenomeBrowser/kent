@@ -426,12 +426,18 @@ while ((c = *s++) != 0)
 void eatExcessDotsInPath(char *path)
 /* Remove . and .. components from path in place using two pointers.
  * Single dots are removed, double dots consume the preceding component
- * unless it is also ".." or doesn't exist (relative path).
+ * unless it is also ".." or doesn't exist (relative path).  A ".." at the
+ * root of an absolute path is dropped, so /../a becomes /a, matching
+ * realpath(3).  Any trailing slash is removed.  A non-empty relative path
+ * that reduces to nothing becomes ".", not the empty string, since callers
+ * join the result with "%s/%s" and an empty string there would name the
+ * file system root.  An empty input stays empty.
  * Assumes no // in input (call eatSlashSlashInPath first). */
 {
 char *src = path;
 char *dst = path;
 boolean absolute = (*src == '/');
+boolean wasEmpty = (*src == 0);
 
 if (absolute)
     *dst++ = *src++;
@@ -482,10 +488,11 @@ while (*src)
                 consumed = TRUE;
                 }
             }
-        if (!consumed)
+        if (!consumed && !absolute)
             {
-            /* Write ".." forward */
-            if (dst > path + (absolute ? 1 : 0))
+            /* Nothing left to consume in a relative path, so keep the "..".
+             * An absolute path instead drops it, since /.. is / */
+            if (dst > path)
                 *dst++ = '/';
             *dst++ = '.';
             *dst++ = '.';
@@ -507,58 +514,16 @@ while (*src)
         }
     }
 
+/* "." rather than "" for something like "a/..", so the result stays a
+ * relative path.  There is always room: the input was at least one byte. */
+if (!absolute && dst == path && !wasEmpty)
+    *dst++ = '.';
+
 *dst = 0;
 }
 
-static void eatExcessDotDotInPath(char *path)
-/* If there's a /.. in path take it out.  Turns 
- *      'this/long/../dir/file' to 'this/dir/file
- * and
- *      'this/../file' to 'file'  
- *
- * and
- *      'this/long/..' to 'this'
- * and
- *      'this/..' to  ''   
- * and
- *       /this/..' to '/' */
-{
-/* Take out each /../ individually */
-for (;;)
-    {
-    /* Find first bit that needs to be taken out. */
-    char *excess= strstr(path, "/../");
-    char *excessEnd = excess+4;
-    if (excess == NULL || excess == path)
-        break;
-
-    /* Look for a '/' before this */
-    char *excessStart = matchingCharBeforeInLimits(path, excess, '/');
-    if (excessStart == NULL) /* Preceding '/' not found */
-         excessStart = path;
-    else 
-         excessStart += 1;
-    strcpy(excessStart, excessEnd);
-    }
-
-/* Take out final /.. if any */
-if (endsWith(path, "/.."))
-    {
-    if (!sameString(path, "/.."))  /* We don't want to turn this to blank. */
-	{
-	int len = strlen(path);
-	char *excessStart = matchingCharBeforeInLimits(path, path+len-3, '/');
-	if (excessStart == NULL) /* Preceding '/' not found */
-	     excessStart = path;
-	else 
-	     excessStart += 1;
-	*excessStart = 0;
-	}
-    }
-}
-
 char *simplifyPathToDir(char *path)
-/* Return path with ~ and .. taken out.  Also any // or trailing /.   
+/* Return path with ~, . and .. taken out.  Also any // or trailing /.
  * freeMem result when done. */
 {
 /* Expand ~ if any with result in newPath */
@@ -587,12 +552,9 @@ if (newLen + remainingLen >= sizeof(newPath))
     errAbort("path too big in simplifyPathToDir");
 strcpy(newPath+newLen, s);
 
-/* Remove //, .. and trailing / */
+/* Remove //, . , .. and trailing / */
 eatSlashSlashInPath(newPath);
-eatExcessDotDotInPath(newPath);
-int lastPos = strlen(newPath)-1;
-if (lastPos > 0 && newPath[lastPos] == '/')
-    newPath[lastPos] = 0;
+eatExcessDotsInPath(newPath);
 
 return cloneString(newPath);
 }
@@ -605,16 +567,22 @@ assert(sameString(simplifyPathToDir(""),""));
 assert(sameString(simplifyPathToDir("a"),"a"));
 assert(sameString(simplifyPathToDir("a/b"),"a/b"));
 assert(sameString(simplifyPathToDir("/"),"/"));
-assert(sameString(simplifyPathToDir("/.."),"/.."));
-assert(sameString(simplifyPathToDir("/../a"),"/../a"));
 
 /* Now test removing trailing slash. */
 assert(sameString(simplifyPathToDir("a/"),"a"));
 assert(sameString(simplifyPathToDir("a/b/"),"a/b"));
 
+/* Test . removal. */
+assert(sameString(simplifyPathToDir("."),"."));
+assert(sameString(simplifyPathToDir("./"),"."));
+assert(sameString(simplifyPathToDir("./a"),"a"));
+assert(sameString(simplifyPathToDir("a/."),"a"));
+assert(sameString(simplifyPathToDir("a/./b"),"a/b"));
+assert(sameString(simplifyPathToDir("/a/./b"),"/a/b"));
+
 /* Test .. removal. */
-assert(sameString(simplifyPathToDir("a/.."),""));
-assert(sameString(simplifyPathToDir("a/../"),""));
+assert(sameString(simplifyPathToDir("a/.."),"."));
+assert(sameString(simplifyPathToDir("a/../"),"."));
 assert(sameString(simplifyPathToDir("a/../b"),"b"));
 assert(sameString(simplifyPathToDir("/a/.."),"/"));
 assert(sameString(simplifyPathToDir("/a/../"),"/"));
@@ -623,12 +591,27 @@ assert(sameString(simplifyPathToDir("a/b/.."),"a"));
 assert(sameString(simplifyPathToDir("a/b/../"),"a"));
 assert(sameString(simplifyPathToDir("a/b/../c"),"a/c"));
 assert(sameString(simplifyPathToDir("a/../b/../c"),"c"));
-assert(sameString(simplifyPathToDir("a/../b/../c/.."),""));
+assert(sameString(simplifyPathToDir("a/../b/../c/.."),"."));
 assert(sameString(simplifyPathToDir("/a/../b/../c/.."),"/"));
+assert(sameString(simplifyPathToDir("x/./../y"),"y"));
+
+/* A .. that climbs out of a relative path has to survive, so that a caller
+ * can tell "still inside" from "escaped". */
+assert(sameString(simplifyPathToDir(".."),".."));
+assert(sameString(simplifyPathToDir("../.."),"../.."));
+assert(sameString(simplifyPathToDir("../a"),"../a"));
+assert(sameString(simplifyPathToDir("../../a"),"../../a"));
+assert(sameString(simplifyPathToDir("a/../../b"),"../b"));
+assert(sameString(simplifyPathToDir("h/../../../etc/passwd"),"../../etc/passwd"));
+
+/* A .. at the root of an absolute path is dropped, as in realpath(3). */
+assert(sameString(simplifyPathToDir("/.."),"/"));
+assert(sameString(simplifyPathToDir("/../a"),"/a"));
+assert(sameString(simplifyPathToDir("/a/../../b"),"/b"));
 
 /* Test // removal */
 assert(sameString(simplifyPathToDir("//"),"/"));
-assert(sameString(simplifyPathToDir("//../"),"/.."));
+assert(sameString(simplifyPathToDir("//../"),"/"));
 assert(sameString(simplifyPathToDir("a//b///c"),"a/b/c"));
 assert(sameString(simplifyPathToDir("a/b///"),"a/b"));
 }

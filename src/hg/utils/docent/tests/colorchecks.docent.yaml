@@ -1,0 +1,56 @@
+# `expect: {color: ...}` -- the only check that reads the track IMAGE rather than the page.
+#
+# It was added for #36212 in tests/regress, where a track that sets both `itemRgb on` and
+# `color` draws its items in the wrong one of the two. That bug changes nothing else about
+# the page: same rows, same height, same item names, same tooltips, same image height. So
+# it needed a check that reads pixels, and tests/README.txt's rule is that a verb we touch
+# and find untested belongs here.
+#
+# The fixture is ~/public_html/docentFixtures/itemRgbHub/, which exists because there is
+# nowhere in hg38's trackDb with colors this unambiguous. Four tracks over four identical
+# copies of one bed9 file: every item carries a pure blue itemRgb column (0,0,255), and
+# the tracks that set `color` set a pure green (0,255,0). It declares `visibility pack`
+# itself, so there is no `hide: all` -- a hub track's cart name carries a per-run hub_<n>_
+# prefix that `track:` cannot write.
+#
+# What is asserted here:
+#
+#   is: / not:      the color a row is mostly drawn in, and one it must not be
+#   part: label     the CENTER LABEL instead of the items -- a different slice of the
+#                   same png, and the case that catches a canvas measured against the
+#                   whole table cell rather than against the slice it belongs to
+#   at:             one item rather than the whole row, so a row of several colors can
+#                   still be asked about
+#   a list          several rows in one step, so a failure names every one that is wrong
+#
+# colorchecks.xfail.docent.yaml is the other half, with each of them aimed wrong.
+target: genome-test
+db: hg38
+position: chr1:1000000-1010000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/itemRgbHub/hub.txt", db: hg38}
+  - go: chr1:1000000-1010000
+  - expect:
+      rows: [itemRgbNeither, itemRgbOn, colorOnly, itemRgbAndColor]
+      noText: "Unable to open"
+
+  # The list form, and both directions of the comparison. itemRgbOn takes its items from
+  # the file's RGB column; colorOnly has no itemRgb and takes them from `color`.
+  - expect:
+      color:
+        - {track: itemRgbOn, is: "0,0,255", not: "0,255,0"}
+        - {track: colorOnly, is: "0,255,0", not: "0,0,255"}
+
+  # part: label. A center label is drawn in the track's `color`, so colorOnly's is green
+  # while itemRgbOn, which sets no color, gets the default black. Hex is accepted as well
+  # as r,g,b, and this is the one place it is exercised.
+  - expect:
+      color:
+        - {track: colorOnly, part: label, is: "#00ff00"}
+        - {track: itemRgbOn, part: label, is: "0,0,0"}
+
+  # at: narrows the sample to a column at one genomic position instead of the whole row.
+  # 1,004,500 is inside the fixture's second item (chr1:1,003,500-1,005,500).
+  - expect: {color: {track: itemRgbOn, at: "chr1:1004500", is: "0,0,255"}}

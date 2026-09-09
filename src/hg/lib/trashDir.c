@@ -4,6 +4,7 @@
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
 
+#include <limits.h>
 #include "common.h"
 #include "hash.h"
 #include "hgConfig.h"
@@ -26,7 +27,7 @@ while (s != NULL && s[0] != '\0')
 return FALSE;
 }
 
-static boolean pathIsUnderDir(char *dir, char *path)
+boolean pathIsUnderDir(char *dir, char *path)
 /* Return TRUE if path names something underneath dir.  A '/' is required at the directory
  * boundary, so a sibling directory whose name merely starts the same way (trashBackup next
  * to trash) does not match.  ".." below the boundary is refused. */
@@ -43,6 +44,33 @@ if (strncmp(path, dir, dirLen) != 0 || path[dirLen] != '/' || path[dirLen+1] == 
 return !hasDotDotComponent(path + dirLen + 1);
 }
 
+static boolean pathIsUnderDirOrItsTarget(char *dir, char *path)
+/* pathIsUnderDir(), but also accept a path under the directory that dir resolves to.  A
+ * configured directory is often reached through a symlink, and sessionData.c stores the
+ * resolved spelling of a path whose file is already a symlink, so both spellings turn up in
+ * saved sessions.
+ *
+ * Only dir is resolved.  Resolving path would defeat the check, because a trash file is
+ * often a symlink into session storage on purpose.  Only an absolute dir is resolved, so
+ * the answer cannot depend on the working directory of the process.
+ *
+ * Only this one direction is covered: a dir configured as the already-resolved spelling
+ * does not accept a path written through the symlink.
+ *
+ * Do not use this on trashDir().  It is a relative path, "../trash", and
+ * sessionDataPathFromTrash() substitutes exactly that spelling, so accepting the resolved
+ * spelling here would hand that function a path it cannot rewrite. */
+{
+if (pathIsUnderDir(dir, path))
+    return TRUE;
+if (isEmpty(dir) || dir[0] != '/')
+    return FALSE;
+char resolved[PATH_MAX];
+if (realpath(dir, resolved) == NULL)
+    return FALSE;
+return pathIsUnderDir(resolved, path);
+}
+
 boolean isTrashPath(char *path)
 /* Return TRUE if path names a file inside the trash directory. */
 {
@@ -54,8 +82,8 @@ boolean isTrashOrSessionDataPath(char *path)
  * directories that trash files are moved to when a session is saved. */
 {
 return isTrashPath(path) ||
-       pathIsUnderDir(cfgOption("sessionDataDir"), path) ||
-       pathIsUnderDir(cfgOption("sessionDataDirOld"), path);
+       pathIsUnderDirOrItsTarget(cfgOption("sessionDataDir"), path) ||
+       pathIsUnderDirOrItsTarget(cfgOption("sessionDataDirOld"), path);
 }
 
 boolean isServerUserFilePath(char *path)
@@ -64,7 +92,7 @@ boolean isServerUserFilePath(char *path)
  * directory such as myVariantsDataDir. */
 {
 return isTrashOrSessionDataPath(path) ||
-       pathIsUnderDir(cfgOption("myVariantsDataDir"), path);
+       pathIsUnderDirOrItsTarget(cfgOption("myVariantsDataDir"), path);
 }
 
 boolean isRemoteUrl(char *path)

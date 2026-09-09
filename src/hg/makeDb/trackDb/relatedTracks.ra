@@ -220,40 +220,28 @@ hg38 >cosmicRegions cosmicMuts Individual somatic mutations from the current COS
 hg38 dbSnp155Composite dbSnpArchive Older dbSNP builds, kept for reproducing earlier analyses
 hg38 dbSnpArchive dbSnp155Composite The dbSNP release currently used by the Browser
 hg38 >gtexGene gtexGeneV8 The newer GTEx release, 54 tissues from 948 donors
-hg38 >ucscRetroAli8 ucscRetroAli9 The newer version of this track
-hg38 >wgRnaOld wgRna The newer version of this track
 hg38 >covidHgiGwas covidHgiGwasR4Pval A later release of the same COVID-19 Host Genetics Initiative meta-analysis
 hg38 >colorsDbLegacy longReadVariants Current long-read structural variant callsets, including the up-to-date CoLoRSdb release
-hg38 >crispr crispr10K The same target sites computed over a wider window, exons plus 10 kb rather than 200 bp
-hg38 >transMapV4 transMapV6 The current version of the TransMap alignments
 hg38 >transMapV5 transMapV6 The current version of the TransMap alignments
 hg38 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 hg38 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
 hg38 >genePredArchive knownGene The current default gene set
-hg38 >ensGene knownGene The current GENCODE gene set, which shares its annotation with Ensembl
 
 hg19 >caddSuper caddSuper1_7 The newer CADD release, with an updated model and training set
 hg19 >cosmicRegions cosmicMuts Individual somatic mutations from the current COSMIC release (V101)
 hg19 dbSnp155Composite dbSnpArchive Older dbSNP builds, kept for reproducing earlier analyses
 hg19 dbSnpArchive dbSnp155Composite The dbSNP release currently used by the Browser
 hg19 >gtexGene gtexGeneV8 The newer GTEx release, 54 tissues from 948 donors
-hg19 >wgRnaOld wgRna The newer version of this track
 hg19 >covidHgiGwas covidHgiGwasR4Pval A later release of the same COVID-19 Host Genetics Initiative meta-analysis
-hg19 >crispr crispr10K The same target sites computed over a wider window, exons plus 10 kb rather than 200 bp
-hg19 >transMapV4 transMapV6 The current version of the TransMap alignments
 hg19 >transMapV5 transMapV6 The current version of the TransMap alignments
 hg19 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 hg19 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
 hg19 >genePredArchive knownGene The current default gene set
-hg19 >ensGene knownGene The current GENCODE gene set, which shares its annotation with Ensembl
 
 mm39 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 mm39 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
 
-mm10 >crispr crispr10K The same target sites computed over a wider window, exons plus 10 kb rather than 200 bp
-mm10 >transMapV4 transMapV6 The current version of the TransMap alignments
 mm10 >transMapV5 transMapV6 The current version of the TransMap alignments
-mm10 >ensGene knownGene The current GENCODE gene set, which shares its annotation with Ensembl
 
 # Clinical variant database cross-links:
 hg38 clinvar hgmd Disease-causing mutations curated from the literature by HGMD; the public release lags the licensed version
@@ -413,9 +401,6 @@ hg38 hgnc mane One agreed representative transcript per gene, matched between Re
 hg38 >ccdsGene mane One representative transcript per gene, matched between RefSeq and GENCODE
 hg38 refSeqComposite xenoRefGene RefSeq transcripts from other species, aligned to the human genome
 hg38 xenoRefGene refSeqComposite Human RefSeq transcripts, rather than transcripts from other species
-hg38 ~knownAlt sibAltEvents Another set of alternative splicing and promoter events called from transcript alignments
-hg38 sibTxGraph sibAltEvents Individual alternative splicing and polyadenylation events derived from this graph
-hg38 sibAltEvents sibTxGraph The full alternative splicing graph these events are derived from
 hg38 pseudogenes ucscRetroAli9 Retroposed gene copies, a major source of processed pseudogenes
 hg38 ucscRetroAli9 pseudogenes Curated pseudogene annotations from GENCODE and Yale
 hg38 ncOrfs gwipsvizRiboseq Ribosome profiling data, the main evidence for translation of non-canonical ORFs
@@ -435,9 +420,6 @@ hg19 refSeqComposite hgnc Official gene symbols and names from the HGNC, with pr
 hg19 hgnc refSeqComposite Transcript annotations from NCBI, which use these gene symbols
 hg19 refSeqComposite xenoRefGene RefSeq transcripts from other species, aligned to the human genome
 hg19 xenoRefGene refSeqComposite Human RefSeq transcripts, rather than transcripts from other species
-hg19 ~knownAlt sibAltEvents Another set of alternative splicing and promoter events called from transcript alignments
-hg19 sibTxGraph sibAltEvents Individual alternative splicing and polyadenylation events derived from this graph
-hg19 sibAltEvents sibTxGraph The full alternative splicing graph these events are derived from
 hg19 lrg lrgTranscriptAli The fixed LRG transcript annotations within these regions
 hg19 lrgTranscriptAli lrg The genomic LRG reference regions these transcripts belong to
 hg19 crispr10K crisprAllTargets Cas9 target sites across the whole genome, not only near exons
@@ -464,7 +446,6 @@ danRer11 refSeqComposite xenoRefGene RefSeq transcripts from other species, alig
 danRer11 xenoRefGene refSeqComposite Human RefSeq transcripts, rather than transcripts from other species
 
 # Map and assembly cross-links:
-hg38 ~t2tChain chainNetHs1 Another alignment of the T2T CHM13 assembly to GRCh38
 hg38 ~t2tChain chm13LiftOver Another alignment of the T2T CHM13 assembly to GRCh38
 hg38 problematic LCRs Low-complexity regions measured by longdust, another common source of alignment artifacts
 hg38 LCRs problematic Curated regions that often cause artifacts in sequencing and alignment
@@ -472,7 +453,6 @@ hg38 hg38Patch11 patchesPsl Alignments of the patch and alt sequences to the pri
 hg38 patchesPsl hg38Patch11 The patch and alternate sequences themselves, as placed on the assembly
 hg38 exomeProbesets genotypeArrays Microarray probesets and optical genome mapping sites
 hg38 genotypeArrays exomeProbesets Exome capture kit target regions and probe positions
-hg38 ~cloneEndSuper cloneEndUcsc Another mapping of the same clone library end sequences
 
 hg19 exomeProbesets genotypeArrays Microarray probesets and optical genome mapping sites
 hg19 genotypeArrays exomeProbesets Exome capture kit target regions and probe positions
@@ -646,3 +626,7 @@ hg19 ~jarvis ukbDepletion Another score for how depleted of variation a non-codi
 hg19 ~hmc gnomadPLI Another constraint metric derived from the absence of variation in population data
 hg19 hmc ucscGenePfam The Pfam domains that homologous missense constraint is calculated over
 hg19 ucscGenePfam hmc Missense constraint measured across homologous positions within these domains
+
+# mm10 mouse strain cross-links:
+mm10 mm10Strains1 mouseStrainsCactus Whole-genome alignment of the 16 strain assemblies to the reference
+mm10 mouseStrainsCactus mm10Strains1 Alternate strain sequences mapped to their reference genome location

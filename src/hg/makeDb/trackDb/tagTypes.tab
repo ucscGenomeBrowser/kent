@@ -413,6 +413,7 @@ sGroup_Carnivore wigMaf bigMaf
 sGroup_Carnivora wigMaf bigMaf
 sGroup_Cetartiodactyla wigMaf bigMaf
 sGroup_Chiroptera wigMaf bigMaf
+sGroup_Classical_laboratory bigMaf
 sGroup_Columbia_Medellin wigMaf
 sGroup_CoV_2019 wigMaf
 sGroup_CoV wigMaf
@@ -483,6 +484,7 @@ sGroup_Primates_tarsiidae wigMaf bigMaf
 sGroup_primate wigMaf
 sGroup_Puerto_Rico wigMaf
 sGroup_Punjabo_Pakis wigMaf
+sGroup_Rat/rn6 bigMaf
 sGroup_Reptiles wigMaf bigMaf
 sGroup_Reston_1989-90 wigMaf
 sGroup_Rhabditina wigMaf
@@ -498,6 +500,7 @@ sGroup_vertebrate wigMaf
 sGroup_Vertebrate wigMaf bigMaf
 sGroup_Vertebrates wigMaf
 sGroup_Vietnam_Kinh wigMaf
+sGroup_Wild_derived bigMaf
 sGroup_Virus wigMaf
 sGroup_worm wigMaf
 sGroup_Xenarthra bigMaf

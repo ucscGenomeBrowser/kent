@@ -9802,7 +9802,7 @@ if (canShare)
     "    var link = window.location.origin + window.location.pathname +\n"
     "      '?g=htcBlatAlign&c=%s&o=%d&i=' + encodeURIComponent('%s') +\n"  // db comes from the session
     "      '&u=l&s=' + encodeURIComponent(data.name);\n"
-    "    if (window.topLinks && topLinks.shareUrl) topLinks.shareUrl(link);\n"
+    "    if (window.topLinks && topLinks.shareUrl) topLinks.shareUrl(link, {snapshot: true});\n"
     "  }).catch(function(){ btn.textContent = label; btn.dataset.busy = ''; });\n"
     "});\n"
     "})();\n",
@@ -28030,7 +28030,6 @@ safef(buffer, sizeof buffer, customTextTemplate, groupTag, bigBedTn.forCgi, host
 
 struct customTrack *ctList = getCtList();
 struct customTrack *newCts = customFactoryParse(database, buffer, FALSE, NULL, NULL);
-
 
 /* Optionally clear PREVIOUS BLAT result tracks (those tagged blatResult=on) so the user is not
  * confused about which results are current.  hg.conf "blatOldTracks":
