@@ -71,10 +71,9 @@ UNIPROTFAGZ=$1
 TRANSCRIPTFA=$2
 TRANSCRIPTPSL=$3
 MINALI=$4
-CLUSTER=$5
-WORKDIR=$6
-OUTFNAME=$7
-PAIRNAME=$8
+WORKDIR=$5
+OUTFNAME=$6
+PAIRNAME=$7
 
 #if [[ "$DB" == "ci3" ]]; then
    #MINALI=0.85
@@ -119,7 +118,8 @@ else
         done; 
         set -x
         cp mapUniprot_doBlast $WORKDIR/
-        ssh $CLUSTER "cd `pwd`/$WORKDIR && para make jobList"
+        # hgwdev is the parasol head node, so "para make" here talks to the hub directly
+        ( cd $WORKDIR && para make jobList )
         echo Concatenating and filtering protein/transcript alignments
         # sort and pick the best alignments for each protein
         find $WORKDIR/aligns -name '*.psl' | xargs cat | pslReps -noIntrons -nohead -nearTop=0.01 -minAli=$MINALI stdin stdout /dev/null > $WORKDIR/bestAln.psl

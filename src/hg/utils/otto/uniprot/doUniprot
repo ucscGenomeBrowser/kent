@@ -67,10 +67,6 @@ notAutoDbs = [
 maxDiffVersions = 5.0
 checkDbs = ["hg19", "hg38", "mm10", "rn6", "danRer10", "danRer7", "ce11"]
 
-# when we rename the parasol cluster, no need to change this file
-# probably overkill in retrospect but seemed like a good idea back then
-clusterFname = "/cluster/bin/scripts/cluster.txt"
-
 TREMBLCOLOR="0,150,250" # light blue
 SWISSPCOLOR="12,12,120" # dark blue
 
@@ -1768,7 +1764,7 @@ def parseKeyVal(fname):
         vals[key].append(val)
     return vals
 
-def makeProteinGenomePsl(taxId, protFa, tabFnames, db, cluster, doForce, mapDir, mapDescFname):
+def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescFname):
     """ map proteins of a taxon stored in protFa to db via geneTable and create a PSL file for the mapping
     Will try to reuse the old PSL mapping file if possible, as it is expensive to build.
     Need to BLAST the entire file: BLAST has no option to subset the target (unlike blast or lastz), verified
@@ -1851,7 +1847,7 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, cluster, doForce, mapDir,
         stats["minAli"] = MINALI
         workDir = "clusterRun-map-%s-%s-%s.tmp" % (db, geneTable, fullMd5)
 
-        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), cluster, workDir, mapFname]
+        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), workDir, mapFname]
         if selectFname is not None:
             scriptArgs.append(selectFname)
 
@@ -2041,10 +2037,6 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
     logging.info("checking/creating pslMap files")
     run("mkdir -p %s" % mapDir)
 
-    # parasol cluster name
-    assert(isfile(clusterFname)) # not running at UCSC?
-    cluster = open(clusterFname).read().strip()
-
     # get the uniProt version for the trackVersion table that we will update later
     relFname = join(tabDir, "version.txt")
     versionString = open(relFname).read()
@@ -2087,7 +2079,7 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             dbMapDir = makeSubDir(mapDir, db)
             mapDescFname = join(dbMapDir, "liftInfo.json")
             mapFname, geneTable, mapMd5, accToMapSource, accToTrans, isNewMap = \
-                makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, cluster, options.force, dbMapDir, mapDescFname)
+                makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, options.force, dbMapDir, mapDescFname)
 
             dbBigBedDir = makeSubDir(bigBedDir, db)
 
