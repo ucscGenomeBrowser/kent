@@ -1,5 +1,6 @@
-# #36212 -- EXPECTED TO FAIL.  The bug is live everywhere; this asserts the behavior the
-# ticket asks for, so it fails until the fix lands and then tells us it is time to promote.
+# #36212.  Fixed on master by cbb406cd96e and promoted out of .xfail on 2026-09-09, the
+# first morning genome-test drew the fixed colors.  It ships in v504, so this script fails
+# on the RR and on hgwbeta until that release goes out.
 #
 # A stanza used to be able to combine `itemRgb on` with `color`: the items were drawn from
 # the file's own RGB column and the labels from `color`.  Since 2025 `color` overrides
@@ -19,9 +20,9 @@
 #
 # Measured on 2026-09-08, all three servers, with the fixture hub below:
 #
-#     genome.ucsc.edu       v502   items green
-#     hgwbeta.soe.ucsc.edu  v503   items green
-#     genome-test           v503   items green
+#     genome.ucsc.edu       v502   items green    (still, until v504)
+#     hgwbeta.soe.ucsc.edu  v503   items green    (still, until v504)
+#     genome-test           v503   items green    (blue since cbb406cd96e reached it)
 #
 # And it has been watched to flip, which almost nothing else in this directory has.  The
 # three-line reorder of bedItemRgb() above was built into parked #36212 (port 48099, tree
@@ -74,8 +75,9 @@ steps:
   # file's own RGB.  This one passes today and must keep passing after the fix.
   - expect: {color: {track: itemRgbAndColor, part: label, is: "0,255,0"}}
 
-  # And the bug, last on purpose: this script stops here, so anything below it would
-  # never run.  `itemRgb on` plus `color 0,255,0`: the items come from the file, so blue,
-  # and `not:` names the green they are actually drawn in today so the failure says which
-  # of the two settings won rather than only that the color was unexpected.
+  # And the bug the ticket was filed for, last on purpose: this script stops here, so
+  # anything below it would never run.  `itemRgb on` plus `color 0,255,0`: the items come
+  # from the file, so blue, and `not:` names the green they were drawn in before the fix,
+  # so a regression says which of the two settings won rather than only that the color was
+  # unexpected.
   - expect: {color: {track: itemRgbAndColor, is: "0,0,255", not: "0,255,0"}}
