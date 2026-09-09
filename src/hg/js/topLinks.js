@@ -13,7 +13,7 @@
 // overlay so it works on static pages too (no jQuery UI dependency).
 
 /* jshint esversion: 8 */
-/* global $, document, window, URL, getHgsid, copyToClipboard */
+/* global $, document, window, URL, navigator, getHgsid, copyToClipboard, copyButtonSaysCopied */
 
 var topLinks = (function() {
     "use strict";
@@ -282,7 +282,8 @@ var topLinks = (function() {
                 // warning wrong, so take it back.
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(url).then(function() {
-                        copyBtn.innerHTML = "Copied";
+                        if (typeof copyButtonSaysCopied === "function")
+                            copyButtonSaysCopied(copyBtn);
                         note.remove();
                     }, function() { });
                 }

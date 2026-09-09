@@ -595,10 +595,28 @@ function copyToClipboard(ev) {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    document.execCommand('copy');
+    var ok = false;
+    try {
+        ok = document.execCommand('copy');
+    } catch (e) {
+        ok = false;
+    }
     document.body.removeChild(textArea);
-    buttonEl.innerHTML = 'Copied';
-    ev.preventDefault();
+    if (ok) {
+        /* Say "Copied", then put the button's own label back after three seconds so it is clear
+         * that the button can be used again.  This page does not load utils.js, so it cannot call
+         * copyButtonSaysCopied() there; keep the two in step. */
+        if (buttonEl.copyButtonLabel === undefined)
+            buttonEl.copyButtonLabel = buttonEl.innerHTML;
+        if (buttonEl.copyButtonTimer)
+            clearTimeout(buttonEl.copyButtonTimer);
+        buttonEl.innerHTML = 'Copied';
+        buttonEl.copyButtonTimer = setTimeout(function() {
+            buttonEl.innerHTML = buttonEl.copyButtonLabel;
+            buttonEl.copyButtonTimer = null;
+        }, 3000);
+    }
+    return ok;
 }
 
 // do not allow both checkboxes to go off

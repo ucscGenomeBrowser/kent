@@ -44,6 +44,21 @@ function createInfoIcon(text) {
     return span;
 }
 
+function copyButtonSaysCopied(buttonEl) {
+    /* Say "Copied" on a copy-to-clipboard button, then put the button's own label back after three
+     * seconds, so it is clear that the button can be used again.  The label is remembered on the
+     * element itself, so a second copy while the message is up does not take "Copied" for it. */
+    if (buttonEl.copyButtonLabel === undefined)
+        buttonEl.copyButtonLabel = buttonEl.innerHTML;
+    if (buttonEl.copyButtonTimer)
+        clearTimeout(buttonEl.copyButtonTimer);
+    buttonEl.innerHTML = 'Copied';
+    buttonEl.copyButtonTimer = setTimeout(function() {
+        buttonEl.innerHTML = buttonEl.copyButtonLabel;
+        buttonEl.copyButtonTimer = null;
+    }, 3000);
+}
+
 function copyToClipboard(ev) {
     /* copy a piece of text to clipboard. event.target is some DIV or SVG that is an icon. 
      * The attribute data-target of this element is the ID of the element that contains the text to copy. 
@@ -82,7 +97,7 @@ function copyToClipboard(ev) {
     }
     document.body.removeChild(textArea);
     if (ok)
-        buttonEl.innerHTML = 'Copied';
+        copyButtonSaysCopied(buttonEl);
     return ok;
 }
 
