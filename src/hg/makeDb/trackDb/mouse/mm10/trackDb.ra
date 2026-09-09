@@ -75,6 +75,7 @@ urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.
 release alpha
 
 include mm10Strains1SuperTrack.ra
+include mouseStrainsCactus.ra alpha
 
 track qPcrPrimers override
 group regulation

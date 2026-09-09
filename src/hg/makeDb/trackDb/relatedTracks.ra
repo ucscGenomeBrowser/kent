@@ -610,3 +610,7 @@ hg19 ~jarvis ukbDepletion Another score for how depleted of variation a non-codi
 hg19 ~hmc gnomadPLI Another constraint metric derived from the absence of variation in population data
 hg19 hmc ucscGenePfam The Pfam domains that homologous missense constraint is calculated over
 hg19 ucscGenePfam hmc Missense constraint measured across homologous positions within these domains
+
+# mm10 mouse strain cross-links:
+mm10 mm10Strains1 mouseStrainsCactus Whole-genome alignment of the 16 strain assemblies to the reference
+mm10 mouseStrainsCactus mm10Strains1 Alternate strain sequences mapped to their reference genome location
