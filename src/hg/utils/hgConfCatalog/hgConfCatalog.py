@@ -234,6 +234,20 @@ RELEASE_GATES = {
             "Temporary by intent: each should be deleted once the feature it "
             "guards is public and mirrors have had a cycle to object.",
     "vars": [
+        h("showTxCodonNumbers", "flag", "hg/hgTracks/cds.c", default="FALSE",
+          role="gate", verified=True, ticket="38298",
+          note="A second codon number in the gene-track codon mouseover, counted in the "
+               "transcript's own coordinates, for a transcript that aligns with bases the "
+               "assembly does not have.  The number the browser has always shown is counted "
+               "along the genome, so for those transcripts it disagrees with the number NCBI "
+               "reports, by one codon per three missing bases.  It affects 58 coding "
+               "transcripts on hg38's primary chromosomes but 656 on canFam3, and gets worse "
+               "the poorer the assembly.  With the gate on, such codons also draw in the "
+               "browser's existing query-insertion orange with a \"!\" after the codon "
+               "number.  Read once in txCodonNumbersEnabled(); with it off no alignment is "
+               "looked up, no codon carries a transcript number, and the rendering and the "
+               "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
+               "released."),
         h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
           role="gate", verified=True, ticket="38273",
           note="Copy a track collection's generated hub file when the program that writes "

@@ -20,19 +20,37 @@ from the <em>Color track by codons</em> pull-down menu.</p>
   <li>
   <font color="00CCCC">cyan text</font>: partial codon, either spliced or truncated</li> 
   <li>
-  <font color="FF0000">red "*"</font>: stop codons</li> <li>black "X": error (e.g. truncated 
-  last codon)</li> 
-</ul> 
-<p> 
-All other codons are shown in the original track color, with codon boundaries indicated by 
-alternating lighter and darker shades.</p> 
-<p> 
-<strong>Details</strong><br> 
-Each codon is colored and labeled in the direction of transcription. This coloring applies only to 
+  <font color="FF0000">red "*"</font>: stop codons</li> <li>black "X": error (e.g. truncated
+  last codon)</li>
+  <li>
+  <font color="DC8000">orange codons, with "!" after the codon number</font>: the codon number
+  counted along the genome is not the number the transcript itself uses (see below)</li>
+</ul>
+<p>
+All other codons are shown in the original track color, with codon boundaries indicated by
+alternating lighter and darker shades.</p>
+<p>
+<strong>Details</strong><br>
+Each codon is colored and labeled in the direction of transcription. This coloring applies only to
 gene prediction and annotation tracks; thus the codon sequence is colored in reference to the genome
-and not the associated mRNA. A gene prediction without a CDS will not be colored; these can be 
-non-protein-coding RNAs or predictions where a CDS annotation was not provided in the original 
-data.</p> 
+and not the associated mRNA. A gene prediction without a CDS will not be colored; these can be
+non-protein-coding RNAs or predictions where a CDS annotation was not provided in the original
+data.</p>
+<p>
+<strong>Codons where the two numberings disagree</strong><br>
+Because codons are counted along the genome, a transcript whose own sequence differs from the
+genome by an insertion or a deletion will be numbered differently here than it is by the
+sequence provider. Every codon after the difference is shifted by one codon for each three
+bases involved. RefSeq transcripts are aligned to the genome rather than being derived from
+it, so this happens wherever the RefSeq sequence and the assembly disagree; it is uncommon in
+human but much more frequent in other assemblies, and more frequent the less complete the
+assembly is.</p>
+<p>
+Codons affected this way are drawn in orange with a "!" after the codon number, and their
+mouseover gives both numbers &mdash; the one counted along the genome, which is what this
+track has always shown, and the one counted on the transcript, which is what NCBI and other
+resources report for that transcript. For a RefSeq track, the underlying difference can be
+seen in the RefSeq Alignments and RefSeq Diffs subtracks.</p>
 <p>	
 To view codon coloring, the option must be turned on, the track must be in squish, pack, or full 
 display mode, and the browser must be zoomed-in to a level at which there is at least one pixel per 

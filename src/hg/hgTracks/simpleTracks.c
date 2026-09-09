@@ -3246,8 +3246,31 @@ for (ref = exonList; TRUE; )
                                             aaToAbbr(aaLetter, aaAbbr, sizeof(aaAbbr));
                                             aaName = aaToName(aaLetter);
                                             }
-                                        dyStringPrintf(codonDy, "<b>Codon: </b> c.%d-%d (p.%d)<br>",
+                                        /* These numbers are counted along the genome, as this
+                                         * track has always counted them.  Where the transcript
+                                         * has an indel relative to the genome the transcript's
+                                         * own numbering differs, so show both, and name which
+                                         * is which only in that case:  for every other
+                                         * transcript there is one count and "Codon" says it. */
+                                        boolean shifted = baseColorCodonIsShifted(codon);
+                                        dyStringPrintf(codonDy, "<b>Codon%s: </b> c.%d-%d (p.%d)<br>",
+                                                shifted ? " counted on the genome" : "",
                                                 cStart, cEnd, pPos);
+                                        if (shifted)
+                                            {
+                                            int txCStart = (codon->txCodonIndex - 1) * 3 + 1;
+                                            dyStringPrintf(codonDy,
+                                                "<b>Counted on the transcript: </b> "
+                                                "c.%d-%d (p.%d)<br>",
+                                                txCStart, txCStart+2, codon->txCodonIndex);
+                                            dyStringPrintf(codonDy,
+                                                "<b>Note: </b>This transcript's sequence has an "
+                                                "indel relative to the genome, so the two "
+                                                "numbers differ. "
+                                                "<a target=_blank "
+                                                "href=\"../FAQ/FAQgenes.html#txIndel\">"
+                                                "Help</a><br>");
+                                            }
                                         if (!isEmpty(aaAbbr))
                                             {
                                             if (aaName != NULL)
@@ -4531,7 +4554,16 @@ if (psl && baseColorNeedsCodons)
 else if (drawOpt > baseColorDrawOff)
     {
     if (gp && gp->cdsStart != gp->cdsEnd)
-        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE));
+        {
+        /* Where the transcript has an indel relative to the genome, counting codons along
+         * the genome does not give the transcript's own codon numbers.  This alignment is
+         * what lets each codon carry both numbers; NULL for a track with no alignment. */
+        struct genbankCds txCds;
+        struct psl *txAli = baseColorTxAliForGenePred(tg, gp, &txCds);
+        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons),
+                cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE),
+                txAli, &txCds);
+        }
     }
 if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
     baseColorSetCdsBounds(lf, psl, tg);

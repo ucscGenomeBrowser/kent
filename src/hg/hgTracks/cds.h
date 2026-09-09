@@ -109,10 +109,28 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg);
 
 
 struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf,
-        struct genePred *gp, boolean colorStopStart, boolean codonNumbering);
-/* Given an lf and the genePred from which the lf was constructed, 
- * return a list of simpleFeature elements, one per codon (or partial 
- * codon if the codon falls on a gap boundary. */
+        struct genePred *gp, boolean colorStopStart, boolean codonNumbering,
+        struct psl *txAli, struct genbankCds *txCds);
+/* Given an lf and the genePred from which the lf was constructed,
+ * return a list of simpleFeature elements, one per codon (or partial
+ * codon if the codon falls on a gap boundary.
+ * txAli and txCds are the transcript's own alignment and its CDS in transcript
+ * coordinates, from baseColorTxAliForGenePred; together they give each codon a second
+ * number counted the way the transcript counts.  Pass NULL for txAli when there is none,
+ * and codons are numbered only along the genome, as they always have been. */
+
+struct psl *baseColorTxAliForGenePred(struct track *tg, struct genePred *gp,
+        struct genbankCds *retCds);
+/* Return the alignment that gives gp's transcript coordinates of its own, and fill in
+ * retCds with the transcript's CDS in those coordinates, so that codons can be numbered
+ * the way the transcript numbers them as well as the way they fall on the genome.  NULL
+ * when this assembly has no such alignment or no CDS for gp, and codons are then numbered
+ * only along the genome, as they always have been. */
+
+boolean baseColorCodonIsShifted(struct simpleFeature *sf);
+/* Does this codon's number along the genome disagree with its number in the transcript?
+ * True where an indel in the transcript relative to the genome comes between the CDS
+ * start and this codon, in either direction. */
 
 struct simpleFeature *baseColorCodonsFromPsl(struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade,
