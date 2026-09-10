@@ -12,9 +12,25 @@ char *sessionDataSaveTrashFile(char *trashPath, char *sessionDir);
  * If trashPath is already a soft-link, return the path that it links to.
  * Return NULL if trashPath does not exist (can happen with expired custom track files). */
 
+/* Number of hex characters of md5(encSessionName) used to name a session's data directory.
+ * This was 8 (32 bits) until 2026.  That was safe while a directory only had to be unique among
+ * one user's sessions, but anonymous share links all live under the single reserved user name
+ * "l", which turns it into a birthday problem across every anonymous session: two of them share
+ * a directory more likely than not at ~77,000 sessions, and cleaning one up would take the
+ * other's files with it.  10 hex characters is 40 bits, which pushes that past 1,000,000.
+ * Directories written before the change are named with sessionDirHashLenLegacy characters, so
+ * code that deletes a session's directory must try both lengths. */
+#define sessionDirHashLen 10
+#define sessionDirHashLenLegacy 8
+
 char *sessionDirFromNames(char *sessionDataDir, char *encUserName, char *encSessionName);
 /* Alloc and return the per-session data directory under sessionDataDir (hashed by user and session
  * name), or NULL if sessionDataDir is empty.  errAborts if sessionDataDir is not an absolute path. */
+
+char *sessionDirFromNamesHashLen(char *sessionDataDir, char *encUserName, char *encSessionName,
+                                 int hashLen);
+/* Like sessionDirFromNames but with the number of session-hash characters spelled out, so that
+ * cleanup code can also name a directory written before sessionDirHashLen was widened. */
 
 void sessionDataSaveSession(struct cart *cart, char *encUserName, char *encSessionName,
                             char *dbSuffix);
