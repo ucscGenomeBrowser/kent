@@ -606,7 +606,7 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
         }
     trackHubFixName(trackName);
     cspWriteResponseHeader();
-    puts("Content-type:text/html\n");
+    cgiPrintContentType("text/html");
     puts("<HTML>\n<HEAD>\n");
     printf("<script type='text/javascript' src='../js/utils.js'></script>\n");
     printf("<script nonce='%s'>\n", getNonce());

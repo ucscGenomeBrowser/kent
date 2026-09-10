@@ -57,7 +57,7 @@ static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
 cspWriteResponseHeader();
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 cartVaWebStart(cart, database, format, args);
 pushWarnHandler(errAbortHandler);
 }
@@ -179,7 +179,7 @@ if (start < 0)
     return;
     }
 cspWriteResponseHeader();
-puts("Content-Type: text/html\n");
+cgiPrintContentType("text/html");
 int line;
 boolean autoRefreshFound = FALSE;
 boolean successfullyUploaded = FALSE;
@@ -720,7 +720,7 @@ char **row = NULL;
 struct sqlResult *sr = NULL;
 
 cspWriteResponseHeader();
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 cartWebStart(cart, NULL, "Backup Custom Tracks");
 jsInit();
 
@@ -1242,10 +1242,9 @@ safef(outFile, sizeof outFile, "%s.tar.gz", fileName);
 
 long fSize = fileSize(downPath);
 
-printf("Content-Type: application/octet-stream\n");
 printf("Content-Disposition: attachment; filename=\"%s\"\n", outFile);
 printf("Content-Length: %ld\n", fSize);
-printf("\n");
+cgiPrintContentType("application/octet-stream");
 
 FILE *f = mustOpen(downPath, "r");
 long remaining = fSize;

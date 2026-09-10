@@ -3867,6 +3867,8 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
     if (liftDb)
         tdb->html = getTrackHtml(liftDb, tdb->table);
+    // resolve $hgsid, and for a hub the rest of its description page variables
+    hVarSubstTrackDbHtml(cart, tdb, database);
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
@@ -3881,6 +3883,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
             ; // Get the first parent that has html
         if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
             {
+            hVarSubstTrackDbHtml(cart, tdbParent, database);
             printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
                    COLOR_DARKGREEN,tdbParent->shortLabel);
             printRelatedTracks(database,trackHash,tdb,cart);
@@ -4297,6 +4300,8 @@ char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 // quickLiftChain has static html
 if (liftDb && differentString(trackHubSkipHubName(tdb->track), "quickLiftChain"))
     tdb->html = getTrackHtml(liftDb, tdb->table);
+// resolve $hgsid, and for a hub the rest of its description page variables
+hVarSubstTrackDbHtml(cart, tdb, database);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     char *browserVersion;
@@ -4499,7 +4504,7 @@ struct udcFile *udc = udcFileMayOpen(fileUrl, NULL);
 if (udc == NULL)
     {
     puts("Status: 404 Not Found");
-    puts("Content-Type: text/plain\n");
+    cgiPrintContentType("text/plain");
     printf("Error: could not open %s\n", fileUrl);
     freeMem(fileUrl);
     return;
@@ -4528,7 +4533,7 @@ if (isNotEmpty(ifNone))
         }
     }
 
-puts("Content-Type: text/plain\n");
+cgiPrintContentType("text/plain");
 char *content = udcFileReadAll(fileUrl, NULL, 0, NULL);
 puts(content);
 freeMem(content);

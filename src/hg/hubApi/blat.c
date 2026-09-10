@@ -137,7 +137,7 @@ static void writePslOutput(struct psl *pslList, struct blatType *bt)
 {
 hPrintDisable();
 puts("X-Content-Type-Options: nosniff");
-puts("Content-Type:text/plain\n");
+cgiPrintContentType("text/plain");
 pslxWriteHead(stdout, bt->qType, bt->tType);
 struct psl *psl;
 int n = 0;
@@ -153,7 +153,7 @@ static void writeLegacyJsonOutput(struct psl *pslList, char *db)
 {
 hPrintDisable();
 puts("X-Content-Type-Options: nosniff");
-puts("Content-Type:text/plain\n");
+cgiPrintContentType("text/plain");
 pslWriteAllJson(pslList, stdout, db, TRUE);
 }
 

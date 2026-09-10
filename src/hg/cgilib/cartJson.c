@@ -945,7 +945,7 @@ void cartJsonExecute(struct cartJson *cj)
 /* Get commands from cgi, print Content-type, execute commands, print results as JSON. */
 {
 cartJsonPushErrHandlers();
-puts("Content-Type:text/javascript\n");
+cgiPrintContentType("text/javascript");
 
 // Initialize response JSON object:
 jsonWriteObjectStart(cj->jw, NULL);

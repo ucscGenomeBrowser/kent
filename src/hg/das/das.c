@@ -47,14 +47,10 @@ static void dasHead(int code, boolean justText)
 {
 printf("X-DAS-Version: DAS/0.95\n");
 printf("X-DAS-Status: %d\n", code);
-if (justText)
-    printf("Content-Type:text\n");
-else
-    printf("Content-Type:text/xml\n");
 // these allow access from javascript, see http://www.w3.org/TR/cors/
 printf("Access-Control-Allow-Origin: *\n");
 printf("Access-Control-Expose-Headers: X-DAS-Version X-DAS-Status X-DAS-Capabilities\n");
-printf("\n");
+cgiPrintContentType(justText ? "text" : "text/xml");
 }
 
 static void dasHeader(int code)

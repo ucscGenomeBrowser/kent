@@ -124,6 +124,12 @@ char *findCookieData(char *varName);
 void dumpCookieList();
 /* Print out the cookie list. */
 
+void cgiPrintContentType(char *contentType);
+/* Write the CGI response header: a Content-Type line and the blank line that
+ * ends the header.  contentType NULL means "text/html".  Header lines are not
+ * ordered, so a CGI that also sends Status, Set-Cookie, Content-Disposition or
+ * the like writes those first and calls this last to close the header. */
+
 boolean cgiIsOnWeb();
 /* Return TRUE if looks like we're being run as a CGI. */
 

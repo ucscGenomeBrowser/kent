@@ -3123,7 +3123,7 @@ struct slName *chosenFields;
 struct bedFilter *bf;
 boolean gotResults;
 
-printf("Content-Type: text/plain\n\n");
+cgiPrintContentType("text/plain");
 webStartText();
 checkTableExists(fullTableName);
 bf = constrainBedFields(NULL);
@@ -3172,7 +3172,7 @@ if (sameString(customTrackPseudoDb, db))
     return;
     }
 
-printf("Content-Type: text/plain\n\n");
+cgiPrintContentType("text/plain");
 webStartText();
 checkTableExists(fullTableName);
 hti = getHti(db, table);
@@ -3367,7 +3367,7 @@ saveOutputOptionsState();
 saveIntersectOptionsState();
 saveSequenceOptionsState();
 
-printf("Content-Type: text/plain\n\n");
+cgiPrintContentType("text/plain");
 webStartText();
 bedList = getBedList(FALSE, NULL);
 
@@ -3616,7 +3616,7 @@ boolean gtf2StopCodons = FALSE;
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-printf("Content-Type: text/plain\n\n");
+cgiPrintContentType("text/plain");
 webStartText();
 bedList = getBedList(FALSE, NULL);
 
@@ -3779,7 +3779,7 @@ saveBedCtOptionsState();
 
 if (! doCt)
     {
-    printf("Content-Type: text/plain\n\n");
+    cgiPrintContentType("text/plain");
     webStartText();
     }
 

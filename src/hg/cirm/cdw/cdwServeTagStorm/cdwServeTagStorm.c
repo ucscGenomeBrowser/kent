@@ -108,7 +108,7 @@ void localWebWrap(struct cart *theCart)
 {
 cart = theCart;
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-printf("Content-Type: text/plain\n\n");
+cgiPrintContentType("text/plain");
 user = cdwCurrentUser(conn);
 cdwServeTagStorm(conn); 
 sqlDisconnect(&conn);

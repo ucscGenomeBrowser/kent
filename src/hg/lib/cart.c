@@ -1779,7 +1779,7 @@ void printCaptcha()
     if (cfgOptionBooleanDefault("captchaDebug", FALSE))
         fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
     cspWriteResponseHeader();
-    puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
+    cgiPrintContentType("text/html");
     puts("<html><head>");
     printf("<script nonce='%s'>\n", getNonce());
     printf("function showWidget() { \n"
@@ -1889,7 +1889,7 @@ if (token)
     else
         {
         cspWriteResponseHeader();
-        puts("Content-Type: text/html\n");
+        cgiPrintContentType("text/html");
         puts("<html><body>Internal captcha error: Cloudflare rejected the captcha token. "
                 "Something is not working internally, we are very sorry. You can try reloading the page. "
                 "If this problem persists, send an email to genome-www@soe.ucsc.edu and we will "
@@ -2930,7 +2930,7 @@ if (loginSystemEnabled())
 static void cartJsonStart()
 /* Write the necessary headers for Apache */
 {
-puts("Content-Type: application/json\n");
+cgiPrintContentType("application/json");
 }
 
 static void cartJsonEnd(struct jsonWrite *jw)
@@ -3075,7 +3075,7 @@ if (!cookieName)
 
 addHttpHeaders();
 cartWriteCookie(cart, cookieName);
-printf("Content-Type: %s\n\n", contType);
+cgiPrintContentType(contType);
 cartDidContentType = TRUE;
 }
 
@@ -3138,7 +3138,7 @@ if (!initted && !cgiOptionalString("ajax"))
     {
     if (!cartDidContentType)
         {
-        puts("Content-Type: text/html\n");
+        cgiPrintContentType("text/html");
         cartDidContentType = TRUE;
         }
     htmStart(stdout, "Early Error");

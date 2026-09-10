@@ -332,6 +332,17 @@ void useTempFile()
 doUseTempFile = TRUE;
 }
 
+void cgiPrintContentType(char *contentType)
+/* Write the CGI response header: a Content-Type line and the blank line that
+ * ends the header.  contentType NULL means "text/html".  Header lines are not
+ * ordered, so a CGI that also sends Status, Set-Cookie, Content-Disposition or
+ * the like writes those first and calls this last to close the header. */
+{
+if (contentType == NULL)
+    contentType = "text/html";
+printf("Content-Type: %s\n\n", contentType);
+}
+
 boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. 
  * You cannot use this in your own CGIs to determine if you're run from the command line, 

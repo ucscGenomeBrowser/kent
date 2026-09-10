@@ -1148,10 +1148,9 @@ static void sendHogMessage(char *hogHost)
 {
 puts("X-Content-Type-Options: nosniff");
 cspWriteResponseHeader();
-puts("Content-Type:text/html");
 hPrintf("Status: %d %s\n", err429, err429Msg);
 puts("Retry-After: 30");
-puts("\n");
+cgiPrintContentType("text/html");
 
 hPrintf("<!DOCTYPE HTML>\n");
 hPrintf("<html lang='en'>\n");
@@ -1597,10 +1596,9 @@ static void redirectToHelp()
 {
 puts("X-Content-Type-Options: nosniff");
 cspWriteResponseHeader();
-puts("Content-Type:text/html");
 hPrintf("Status: %d %s\n", err301, err301Msg);
 hPrintf("Location: /goldenPath/help/api.html\n");
-puts("\n");
+cgiPrintContentType("text/html");
 
 hPrintf("<!DOCTYPE HTML>\n");
 hPrintf("<html lang='en'>\n");

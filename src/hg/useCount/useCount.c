@@ -33,7 +33,7 @@ snprintf(safeAddr, sizeof(safeAddr), "%s", remoteAddr);
 char safeVersion[255];
 snprintf(safeVersion, sizeof(safeVersion), "%s", version);
 
-printf("Content-Type:text/html\n\n\n");
+cgiPrintContentType("text/html");
 printf("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 printf("<HTML><HEAD>\n%s",getCspMetaHeader());
 

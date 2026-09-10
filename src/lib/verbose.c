@@ -8,6 +8,7 @@
 #include "portable.h"
 #include "verbose.h"
 #include "obscure.h"
+#include "cheapcgi.h"
 
 
 static int logVerbosity = 1;	/* The level of log verbosity.  0 is silent. */
@@ -151,7 +152,7 @@ void verboseCgi(char *level)
         return;
     verboseSetLevel(levelNum);
     verboseSetLogFile("stdout");
-    puts("Content-type: text/html\n");
+    cgiPrintContentType("text/html");
     doHtml = TRUE;
     verbose(0, "Debugging output activated, level %d", levelNum);
 }

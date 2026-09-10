@@ -226,7 +226,7 @@ if (isEmpty(term))
     fail("Missing search term parameter");
 
 // Write JSON response with list of matches
-puts("Content-Type:text/javascript\n");
+cgiPrintContentType("text/javascript");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteListStart(jw, NULL);
 
