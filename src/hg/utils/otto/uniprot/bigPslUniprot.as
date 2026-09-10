@@ -54,5 +54,6 @@ table bigPsl
     lstring ensGene; "Ensembl Gene IDs"
     lstring ensProt; "Ensembl Protein IDs"
     lstring ensTrans; "Ensembl Transcript IDs"
+    string isMain; "Whether this is the primary sequence of the UniProt record or an alternative isoform"
     )
 
