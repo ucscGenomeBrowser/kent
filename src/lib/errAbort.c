@@ -63,11 +63,14 @@ if (doContentType)
     puts("Error: ");
         
     // Need to destroy < and > in format AND args, to make XSS impossible.
+    // args is read three times below, and a va_list cannot be read twice, so every
+    // read takes a fresh va_copy.  Reading args itself even once spends it and
+    // leaves the later reads printing garbage or nothing at all.
     va_list args_copy;
-    
+
     // first output message to stderr, as before
-    va_copy(args_copy, args); // vfprintf() & co cannot be called twice in a row without a va_copy
-    vfprintf(stderr, format, args);
+    va_copy(args_copy, args);
+    vfprintf(stderr, format, args_copy);
     va_end(args_copy);
 
     va_copy(args_copy, args);
@@ -86,8 +89,10 @@ if (doContentType)
         return;
         }
 
-    vsprintf(buffer, format, args); // write message to buffer
-    
+    va_copy(args_copy, args);
+    vsnprintf(buffer, needed + 1, format, args_copy); // write message to buffer
+    va_end(args_copy);
+
     for (char *p = buffer; *p; ++p)
         { // sanitize buffer
         if (*p == '<') *p = '[';
