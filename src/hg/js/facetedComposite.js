@@ -196,7 +196,11 @@ $(function() {
     // around for a display preference.  The sort column is the exception and
     // does live in the cart, as facetSortOrder, because it also sets the track
     // order in the image.
-    const uiStateKey = `facetedComposite.${embeddedData.mdid}`;
+    // The key carries the assembly as well as the metadata id: localStorage is
+    // per-origin, so two assemblies whose hubs happen to use the same track
+    // name would otherwise share one saved state, and a row order dragged for
+    // one would come back on the other over a different set of samples.
+    const uiStateKey = `facetedComposite.${embeddedData.db || ""}.${embeddedData.mdid}`;
 
     function loadUiState() {
         // A private window throws on access rather than returning null, and a
@@ -303,11 +307,23 @@ $(function() {
             "Check the boxes of the types of tracks you wish to show when a " +
             "sample row is selected below."));
 
+        // Built as nodes rather than from a template string.  Both the name and
+        // the title come from the trackDb 'dataTypes' setting, which on a hub is
+        // whatever the hub author wrote, so they go in as a property value and a
+        // text node instead of being interpolated into HTML.
+        // The leading space is what the old template literal's newline and
+        // indentation collapsed to, and is what separates one checkbox from the
+        // one before it.
         Object.keys(embeddedData.dataTypes).forEach(name => {
             const label = document.createElement("label");
             const dataType = embeddedData.dataTypes[name];
-            label.innerHTML = `
-                <input type="checkbox" class="cbgroup" value="${name}">${dataType.title}`;
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.className = "cbgroup";
+            cb.value = name;
+            label.appendChild(document.createTextNode(" "));
+            label.appendChild(cb);
+            label.appendChild(document.createTextNode(dataType.title));
             selector.appendChild(label);
         });
         const selectedDataTypes = new Set(  // get dataTypes selected initially
@@ -1409,7 +1425,11 @@ $(function() {
                         const name = (bar < 0 ? raw : raw.slice(0, bar)).trim();
                         colNames.push(name);
                         if (bar >= 0) {
-                            const desc = raw.slice(bar + 1).trim();
+                            // The description comes from the hub's metadata
+                            // file and is shown in a tooltip, which renders as
+                            // HTML, so it is encoded here, once, rather than at
+                            // each of the two places that display it.
+                            const desc = htmlEncode(raw.slice(bar + 1).trim());
                             if (desc) colDescriptions[name] = desc;
                         }
                     });
@@ -1444,9 +1464,22 @@ $(function() {
                 hideLoading();  // stop the spinner before showing the error
                 const table = document.getElementById("theMetaDataTable");
                 if (table) {
-                    table.innerHTML =
-                        `<tr><td style="padding:20px;color:#a00;">` +
-                        `Error loading metadata: ${err.message}</td></tr>`;
+                    // The message names the trackDb primaryKey and can quote a
+                    // metadata cell back, both of which come from the hub, so
+                    // it goes in as a text node.  That also keeps a value with
+                    // angle brackets in it readable, where before the markup
+                    // swallowed the very value the reader needs to see.  The
+                    // tbody is what the HTML parser used to add on its own.
+                    const cell = document.createElement("td");
+                    cell.style.padding = "20px";
+                    cell.style.color = "#a00";
+                    cell.appendChild(document.createTextNode(
+                        `Error loading metadata: ${err.message}`));
+                    const row = document.createElement("tr");
+                    row.appendChild(cell);
+                    const body = document.createElement("tbody");
+                    body.appendChild(row);
+                    table.replaceChildren(body);
                 }
             });
     }  // end loadDataAndInit

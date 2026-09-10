@@ -101,9 +101,9 @@ if (!cgiIsOnWeb())
 char *email = checkAuth();
 char sid[EDW_SID_SIZE];
 edwMakeSid(email, sid);
-printf("Content-Type:text/plain\r\n");
 printf("Set-Cookie: email=%s\r\n", cgiEncode(email));
 printf("Set-Cookie: sid=%s\r\n", cgiEncode(sid));
+cgiPrintContentType("text/plain");
 printf("\r\n");
 printf("ok\n");
 return 0;

@@ -6149,7 +6149,7 @@ if(sameString(type, "jsonp"))
     if (!isValidJsonpCallback(jsonp))
         errAbort("invalid callback");
 
-    printf("Content-Type: application/json\n\n");
+    cgiPrintContentType("application/json");
     errAbortSetDoContentType(FALSE);
     jsonObjectAdd(json, "track", newJsonString(cartString(cart, "hgt.trackNameFilter")));
     jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
@@ -6170,18 +6170,21 @@ else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "
     char *file;
     if(sameString(type, "pdf"))
         {
-        printf("Content-Disposition: filename=hgTracks.pdf\nContent-Type: application/pdf\n\n");
+        printf("Content-Disposition: filename=hgTracks.pdf\n");
+        cgiPrintContentType("application/pdf");
         file = convertEpsToPdf(psOutput);
         unlink(psOutput);
         }
     else if(sameString(type, "eps"))
         {
-        printf("Content-Disposition: filename=hgTracks.eps\nContent-Type: application/eps\n\n");
+        printf("Content-Disposition: filename=hgTracks.eps\n");
+        cgiPrintContentType("application/eps");
         file = psOutput;
         }
     else
         {
-        printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+        printf("Content-Disposition: filename=hgTracks.png\n");
+        cgiPrintContentType("image/png");
         file = pngTn.forCgi;
         }
 
@@ -9318,7 +9321,7 @@ if (cartUsualBoolean(cart, "dumpTracks", FALSE))
     struct dyString *dy = dyStringNew(1024);
     logTrackList(dy, trackList);
 
-    printf("Content-type: text/html\n\n");
+    cgiPrintContentType("text/html");
     printf("%s\n", dy->string);
     exit(0);
     }

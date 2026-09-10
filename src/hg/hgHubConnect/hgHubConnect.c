@@ -577,7 +577,9 @@ jsOnEventById("click", "hubValidateButton", "makeIframe(event)");
 
 // API Key section 
 
-if (cfgOptionBooleanDefault("storeUserFiles", FALSE) && cfgOptionBooleanDefault("showHubApiKey", FALSE)) // This should probably not be shown on mirrors, so default to FALSE
+// Not tied to storeUserFiles: an apiKey is also used to bypass the download CAPTCHA, and
+// keys are per-central, so a mirror needs to hand out its own keys without running hubSpace.
+if (cfgOptionBooleanDefault("showHubApiKey", FALSE))
     printApiKeySection();
 puts("</div>"); // hub developement tab
 

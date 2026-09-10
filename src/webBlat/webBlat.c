@@ -475,8 +475,7 @@ else if (cgiVarExists("wb_seq"))
     htmShell("Web BLAT Results", doBlat, NULL);
 else if (cgiVarExists("wb_doDetailLine"))
     {
-    puts("Content-Type:text/html");
-    puts("\n");
+    cgiPrintContentType("text/html");
     doDetailLine();
     }
 else

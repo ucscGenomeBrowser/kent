@@ -21,7 +21,6 @@ void apiFinishOutput(int errorCode, char *errorString, struct jsonWrite *jw)
  * json output, therefore, start with the appropriate header.
  */
 puts("X-Content-Type-Options: nosniff");
-puts("Content-Type:application/json");
 /* potentially with an error code return in the header */
 if (errorCode)
     {
@@ -37,7 +36,7 @@ else if (reachedMaxItems)
     safef(errString, sizeof(errString), "Status: %d %s",err206,err206Msg);
     puts(errString);
     }
-puts("\n");
+cgiPrintContentType("application/json");
 
 if (measureTiming)
     {
@@ -835,7 +834,7 @@ void textFinishOutput()
 /* all done with text output, print it all out */
 {
 puts("X-Content-Type-Options: nosniff");
-puts("Content-Type:text/plain\n");
+cgiPrintContentType("text/plain");
 printf("%s", dyStringCannibalize(&textOutput));
 }
 

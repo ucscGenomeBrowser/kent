@@ -332,6 +332,46 @@ void useTempFile()
 doUseTempFile = TRUE;
 }
 
+static struct slPair *cgiExtraHeaders = NULL;   /* Written ahead of the content type. */
+static boolean didContentType = FALSE;          /* Has the response header been written? */
+
+void cgiAddHttpHeader(char *name, char *value)
+/* Add an HTTP header for cgiPrintContentType() to write ahead of the Content-Type
+ * line, e.g. cgiAddHttpHeader("Cache-Control", "no-store").  Both strings are
+ * cloned.  Has no effect once the header has been written. */
+{
+slPairAdd(&cgiExtraHeaders, name, cloneString(value));
+}
+
+boolean cgiDidContentType()
+/* Return TRUE if the CGI response header has already been written. */
+{
+return didContentType;
+}
+
+void cgiPrintContentType(char *contentType)
+/* Write the CGI response header: any headers added with cgiAddHttpHeader(), a
+ * Content-Type line, and the blank line that ends the header.  contentType NULL
+ * means "text/html".  Header lines are not ordered, so a CGI that also sends
+ * Status, Set-Cookie, Content-Disposition or the like writes those first and
+ * calls this last to close the header.
+ *
+ * Only the first call in a process writes anything.  A second header cannot
+ * reach the browser as a header - it lands in the page body as text - so a
+ * later caller is always the mistaken one, and several flows (hgc emitting the
+ * header early, then webStart asking again) reach here twice by design. */
+{
+if (didContentType)
+    return;
+didContentType = TRUE;
+struct slPair *h;
+for (h = cgiExtraHeaders; h != NULL; h = h->next)
+    printf("%s: %s\n", h->name, (char *)h->val);
+if (contentType == NULL)
+    contentType = "text/html";
+printf("Content-Type: %s\n\n", contentType);
+}
+
 boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. 
  * You cannot use this in your own CGIs to determine if you're run from the command line, 

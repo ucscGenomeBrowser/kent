@@ -170,7 +170,9 @@ done
 # bring the track back.
 #
 # The description pages of the subtracks open with a link back to the container,
-# written as hgTrackUi?db=$db&hgsid=${hgsid}&g=$parentTrack so that the same
-# markup works in a hub. Both $parentTrack and a working $hgsid need an hgTrackDb
-# built after Sep 2026; an older /cluster/bin/x86_64/hgTrackDb stops the trackDb
-# load with 'setting "parentTrack" not found', and resolves $hgsid to nothing.
+# written as hgTrackUi?db=$db&g=$parentTrack. No hgsid: native trackDb html is
+# substituted by hgTrackDb when it loads the table, where there is no cart, so
+# ${hgsid} would resolve to the empty string and the link would come out as
+# 'hgsid=&g=...'. $parentTrack needs an hgTrackDb built after Sep 2026; an older
+# /cluster/bin/x86_64/hgTrackDb stops the trackDb load with 'setting
+# "parentTrack" not found'.

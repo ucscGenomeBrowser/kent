@@ -64,6 +64,60 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="091026"></a>
+<h2>Sep. 10, 2026 &nbsp;&nbsp; New AlphaGenome Variant Impact (AVI) score track for hg38</h2>
+<p>
+We are pleased to announce a new track showing the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=alphaGenome&position=default" target="_blank">AlphaGenome Variant Impact
+(AVI) score</a> from Google DeepMind's AlphaGenome Atlas, on the human GRCh38/hg38 assembly.
+The score combines AlphaGenome's predictions of how a variant affects gene regulation, covering
+expression, splicing, chromatin accessibility and transcription factor binding across hundreds
+of cell types, with AlphaMissense predictions for protein-altering changes. The result is a
+single number that ranks how damaging a substitution is likely to be. Unlike most prediction
+scores, it covers non-coding variants as well as coding ones, across the whole genome.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="https://genome.ucsc.edu/s/Lou/AlphaGenome" target="_blank">
+<img alt="AlphaGenome AVI scores across the TERT locus, showing four per-allele subtracks with
+elevated scores over the gene's 5' end and its highlighted promoter"
+src="/images/newsArchImages/alphaGenome.png" width='65%'></a>
+<p class="gbsCaption"><em>AVI scores at the TERT locus on hg38, one subtrack per alternate
+allele. Scores stay high across the highlighted promoter, shown in red as EH38E3622530, and fall
+to background either side. The two promoter mutations most often seen in cancer sit inside it,
+beyond the end of every TERT transcript.</em></p>
+</div>
+
+<p>
+The track shows the precomputed score for every possible single-base substitution, about 8.8
+billion in all, with one subtrack per alternate allele. Scores are PHRED-scaled, so 10 marks the
+top 10 percent of substitutions genome wide, 20 the top 1 percent and 30 the top 0.1 percent.
+Hover the mouse over any position to see the score, and zoom in to see individual bases.
+</p>
+
+<p>
+The AlphaGenome Variant Impact (AVI) score track can be found in the "Phenotype and Literature"
+group, inside the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=predictionScoresSuper&position=default" target="_blank">Deleteriousness
+Predictions</a> track collection, so it can be compared with other prediction scores such as
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=caddSuper1_7&position=default" target="_blank">CADD</a>,
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=revel&position=default" target="_blank">REVEL</a>,
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=eve&position=default" target="_blank">EVE</a>,
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=primateAi&position=default" target="_blank">PrimateAI</a>
+and <a href="/cgi-bin/hgTrackUi?db=hg38&g=promoterAi&position=default"
+target="_blank">PromoterAI</a>. AlphaGenome has not been validated
+for, and is not approved for, any clinical use.
+</p>
+
+<p>
+We thank Google DeepMind for making the data available. See the
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=alphaGenome&position=default" target="_blank">track description page</a> for
+details on the data, methods and licensing. The AVI data cannot be redistributed by UCSC, so it
+is not available for download or through the Table Browser, and for now we cannot show the
+splicing and feature importance scores. We would like to thank Max Haeussler and Lou Nassar for
+the development and release of this track.
+</p>
+
 <a name="090426"></a>
 <h2>Sep. 4, 2026 &nbsp;&nbsp; ENCODE Expression: mouse developmental time course bulk RNA-seq for mm10 and mm39</h2>
 <p>

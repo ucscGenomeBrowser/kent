@@ -720,8 +720,7 @@ void htmlVaBadRequestAbort(char *format, va_list args)
  * the error message will be printed out by defaultVaWarn before this prints out the header. */
 {
 puts("Status: 400\r");
-puts("Content-Type: text/plain; charset=UTF-8\r");
-puts("\r");
+cgiPrintContentType("text/plain; charset=UTF-8");
 if (format != NULL)
     {
     vfprintf(stdout, format, args);
@@ -1193,8 +1192,7 @@ htmlWarnBoxSetup(f);
 void htmlStart(char *title)
 /* Write the start of an html from CGI */
 {
-puts("Content-Type:text/html");
-puts("\n");
+cgiPrintContentType("text/html");
 _htmStartWithHead(stdout, "", title, TRUE, 1);
 }
 
@@ -1312,8 +1310,7 @@ void htmShellWithHead( char *title, char *head, void (*doMiddle)(), char *method
 /* Preamble. */
 dnaUtilOpen();
 
-puts("Content-Type:text/html");
-puts("\n");
+cgiPrintContentType("text/html");
 
 puts("<HTML>");
 printf("<HEAD>%s<TITLE>%s</TITLE>\n</HEAD>\n\n", head, title);

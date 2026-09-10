@@ -153,7 +153,7 @@ All options are placed in a single line separated by spaces (lines are broken on
 here):</p>
 <pre><code><strong>track type=vcfTabix bigDataUrl=</strong><em>http://...</em>
     <strong>hapClusterEnabled=</strong><em>true|false</em>
-    <strong>hapClusterColorBy=</strong><em>altOnly|refAlt|base</em>
+    <strong>hapClusterColorBy=</strong><em>altOnly|function|refAlt|base</em>
     <strong>hapClusterTreeAngle=</strong><em>triangle|rectangle</em>
     <strong>hapClusterHeight=</strong><em>N</em>
     <strong>applyMinQual=</strong><em>true|false</em> <strong>minQual=</strong><em>Q</em>
@@ -173,13 +173,24 @@ The track type and bigDataUrl are REQUIRED:</p>
 <pre><code><strong>type=vcfTabix bigDataUrl=</strong><em>http://myorg.edu/mylab/my.vcf.gz</em></strong> </code></pre>
 <p>
 The remaining settings are OPTIONAL.  Some are specific to VCF:</p>
-<pre><code><strong>hapClusterEnabled   </strong><em>true|false             </em> # if file has phased genotypes, sort by local similarity
-<strong>hapClusterColorBy   </strong><em>altOnly|refAlt|base    </em> # coloring scheme, default altOnly, conditional on hapClusterEnabled
-<strong>hapClusterTreeAngle </strong><em>triangle|rectangle     </em> # draw leaves as < or [, default <, conditional on hapClusterEnabled
-<strong>hapClusterHeight    </strong><em>N                      </em> # height of track in pixels, default 128, conditional on hapClusterEnabled
-<strong>applyMinQual        </strong><em>true|false             </em> # if true, don't display items with QUAL < minQual; default false
-<strong>minQual             </strong><em>Q                      </em> # minimum value of Q column to display item, conditional on applyMinQual
-<strong>minFreq             </strong><em>F                      </em> # minimum minor allele frequency to display item; default 0.0 </code></pre>
+<pre><code><strong>hapClusterEnabled   </strong><em>true|false                  </em> # if file has phased genotypes, sort by local similarity
+<strong>hapClusterColorBy   </strong><em>altOnly|function|refAlt|base</em> # coloring scheme, default altOnly, conditional on hapClusterEnabled
+<strong>hapClusterTreeAngle </strong><em>triangle|rectangle          </em> # draw leaves as < or [, default <, conditional on hapClusterEnabled
+<strong>hapClusterHeight    </strong><em>N                           </em> # height of track in pixels, default 128, conditional on hapClusterEnabled
+<strong>geneTrack           </strong><em>track name                  </em> # gene track used by the function coloring scheme; without it that scheme is not offered
+<strong>applyMinQual        </strong><em>true|false                  </em> # if true, don't display items with QUAL < minQual; default false
+<strong>minQual             </strong><em>Q                           </em> # minimum value of Q column to display item, conditional on applyMinQual
+<strong>minFreq             </strong><em>F                           </em> # minimum minor allele frequency to display item; default 0.0 </code></pre>
+<p>
+These VCF settings are also recognized. They are used mainly in track hubs and are rarely
+needed in a custom track line:</p>
+<pre><code><strong>hapClusterMethod </strong><em>centerWeighted|fileOrder|treeFile url</em> # haplotype sort order, default centerWeighted
+<strong>sampleColorFile  </strong><em>url                                  </em> # sample-to-color table, used with hapClusterMethod treeFile
+<strong>minAc            </strong><em>N                                    </em> # minimum alternate allele count to display item; default 0
+<strong>vcfDoQual        </strong><em>true|false                           </em> # show the QUAL controls on the configuration page; default true
+<strong>vcfDoFilter      </strong><em>true|false                           </em> # show the FILTER controls; default true
+<strong>vcfDoMaf         </strong><em>true|false                           </em> # show the allele frequency control; default true
+<strong>vcfDoMinAc       </strong><em>true|false                           </em> # show the allele count control; default true</code></pre>
 <p>
 Other optional settings are not specific to VCF, but relevant:</p>
 <pre><code><strong>name            </strong><em>track label                </em> # default is "User Track"
@@ -189,6 +200,15 @@ Other optional settings are not specific to VCF, but relevant:</p>
 <strong>db              </strong><em>genome database            </em> # e.g. hg19 for Human Feb. 2009 (GRCh37)
 <strong>maxWindowToDraw </strong><em>N                          </em> # don't display track when viewing more than N bases
 <strong>chromosomes     </strong><em>chr1,chr2,...              </em> # track contains data only on listed reference assembly sequences </code></pre>
+<p>
+The <strong>visibility</strong> setting controls what the track draws, not just how tightly it is
+packed. In <strong>pack</strong> or <strong>squish</strong> mode, a VCF that has genotype columns
+for two or more samples is drawn as the haplotype sorting display, in which each sample's
+haplotypes run horizontally across the image. In <strong>full</strong> mode the track draws one
+row per variant, and in <strong>dense</strong> mode it collapses every variant onto a single row.
+The hapCluster settings above are ignored in those two modes, and also whenever
+<strong>hapClusterEnabled</strong> is false or the file has no genotypes.</p>
+<p>
 The <a target="_blank" href="hgVcfTrackHelp.html">VCF track configuration</a> help page
 describes the VCF track configuration page options.</p>
 
@@ -228,9 +248,10 @@ to view the trio display:
 <strong>bigDataUrl             </strong><em>http://url.to.vcfFile        </em> # The bigDataUrl is required
 <strong>vcfChildSample         </strong><em>GT ID|alias                  </em> # the Genotype column ID of the "child" sample, with an optional &quot;|&quot; followed by a human readable alias for the ID
 </code></pre>
-<p>There are also two optional settings for vcfPhasedTrio tracks:</p>
-<pre><code><strong>vcfParentSamples       </strong><em>GT ID1|alias1,GT ID2|alias2  </em> # comma separated (no spaces) list of the &quot;parent&quot; samples, with optional aliases
-<strong>vcfUseAltSampleNames   </strong><em>GT ID                        </em> # Use the aliases in the display by default instead of the Genotype column ID
+<p>There are also three optional settings for vcfPhasedTrio tracks:</p>
+<pre><code><strong>vcfParentSamples       </strong><em>GT ID1|alias1,GT ID2|alias2       </em> # comma separated (no spaces) list of the &quot;parent&quot; samples, with optional aliases
+<strong>vcfUseAltSampleNames   </strong><em>GT ID                             </em> # Use the aliases in the display by default instead of the Genotype column ID
+<strong>vcfPhasedColorBy       </strong><em>mendelDiff|deNovo|function|noColor</em> # allele coloring scheme, default noColor; function also requires geneTrack
 </code></pre>
 <p>Other optional settings are not specific to VCF, but relevant:</p>
 <pre><code><strong>maxWindowToDraw        </strong><em>N                            </em> # don't display track when viewing more than N bases

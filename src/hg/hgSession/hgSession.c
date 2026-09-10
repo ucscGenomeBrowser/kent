@@ -758,7 +758,7 @@ if (sessionNewPageActive())
     return;
     }
 cspWriteResponseHeader();
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 if (loginSystemEnabled() || wikiLinkEnabled())
     {
     if (userName)
@@ -1051,7 +1051,7 @@ return dyStringCannibalize(&dyMessage);
 static void saveSessionJsonError(struct sqlConnection *conn, char *message)
 /* Emit a JSON error response for the "Share a link" AJAX endpoints and disconnect. */
 {
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"error\": \"%s\"}\n", jsonStringEscape(message));
 hDisconnectCentral(&conn);
 }
@@ -1077,7 +1077,7 @@ static void saveSessionJsonResult(struct sqlConnection *conn, char *encUserName,
 {
 struct dyString *dyUrl = dyStringNew(0);
 addSessionLink(dyUrl, encUserName, encSessionName, FALSE, TRUE);
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"name\": \"%s\", \"url\": \"%s\"", jsonStringEscape(sessionName),
        jsonStringEscape(dyUrl->string));
 if (isNotEmpty(warning))
@@ -1125,7 +1125,7 @@ if (!sqlTableExists(conn, namedSessionTable))
     return;
     }
 char *name = snapshotNewName(conn, "l");
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"name\": \"%s\"}\n", jsonStringEscape(name));
 hDisconnectCentral(&conn);
 }
@@ -1249,7 +1249,7 @@ else
      * clobbering an existing session of theirs.  Report the clash instead of overwriting. */
     if (failIfExists && namedSessionExists(conn, encUserName, encSessionName))
         {
-        puts("Content-Type:application/json\n");
+        cgiPrintContentType("application/json");
         printf("{\"exists\": true}\n");
         hDisconnectCentral(&conn);
         return;
@@ -2531,7 +2531,7 @@ void doMainPageNew(char *userName, char *message)
 if (isNotEmpty(cartOptionalString(cart, "measureTiming")))
     hgSessionTiming = perfTimerNew();   /* times the page; emitted as hgSessionData.timing */
 cspWriteResponseHeader();
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 cartWebStart(cart, NULL, "My Sessions");
 jsInit();
 jsIncludeDataTablesLibs();
@@ -2565,7 +2565,7 @@ static void saveSessionJsonOk(struct sqlConnection *conn, char *extraFields)
 /* Emit {"success": true[, <extraFields>]} and disconnect.  extraFields (may be NULL) is inserted
  * verbatim after "success": true, e.g. ", \"shared\": 2". */
 {
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"success\": true%s}\n", extraFields ? extraFields : "");
 hDisconnectCentral(&conn);
 }

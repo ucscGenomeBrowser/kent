@@ -41,7 +41,7 @@ else
     printf("Status: %s\n", "400 BAD REQUEST");  
     }
 
-printf("Content-Type: text/html\n\n");
+cgiPrintContentType("text/html");
 puts("ERROR: ");
 if (!field)
     puts(msg);
@@ -84,7 +84,7 @@ struct patcher
 static void printFileReplaceVar(char *filePath) 
 /* dump a text file to stdout with the html header, replace <!--menuBar--> with the menubar */
 {
-printf("Content-Type: text/html\n\n");
+cgiPrintContentType("text/html");
 
 int c;
 FILE *file = fopen(filePath, "r");
@@ -157,25 +157,24 @@ if (sameWord(format, "html"))
     return;
     }
 // pdf, jpeg files are shown directly in the internet browser, not downloaded
-else if (sameWord(format, "jpg"))
-    printf("Content-Type: image/jpeg\n");
+char *contentType = "application/octet-stream";
+if (sameWord(format, "jpg"))
+    contentType = "image/jpeg";
 else if (sameWord(format, "pdf"))
-    printf("Content-Type: application/pdf\n");
+    contentType = "application/pdf";
 else if (sameWord(format, "png"))
-    printf("Content-Type: image/png\n");
+    contentType = "image/png";
 else if (sameWord(format, "json"))
-    printf("Content-Type: application/json\n");
+    contentType = "application/json";
 else if (sameWord(format, "text"))
-    printf("Content-Type: text/plain\n");
+    contentType = "text/plain";
 else
-    {
     printf("Content-Disposition: attachment; filename=%s\n", suggestFileName);
-    printf("Content-Type: application/octet-stream\n");
-    }
 
 /* send pseudo-HTTP header to tell Apache to transfer filePath ( will honor byte range ) */
 printf("Content-Length: %lld\n", (long long)fileSize(filePath));
-printf("X-Sendfile: %s\n\n", filePath);
+printf("X-Sendfile: %s\n", filePath);
+cgiPrintContentType(contentType);
 }
 
 void sendFileByAcc(struct sqlConnection *conn, char* acc, boolean useSubmitFname, char *addExt)

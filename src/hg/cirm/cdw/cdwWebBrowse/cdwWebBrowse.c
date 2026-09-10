@@ -1067,7 +1067,7 @@ user = cdwCurrentUser(conn);
 if (user==NULL && !isPublicSite)
     {
     // this should never happen through normal UI use
-    puts("Content-type: text/html\n\n");
+    cgiPrintContentType("text/html");
     puts("Error: user is not logged in");
     return;
     }
@@ -2214,7 +2214,7 @@ static void doSendMenubar()
 {
 oldVars = hashNew(0);
 cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
-puts("Content-Type: text/html\n\n");
+cgiPrintContentType("text/html");
 char* mb = cdwLocalMenuBar(cart, TRUE);
 puts(mb);
 }

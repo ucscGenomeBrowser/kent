@@ -274,7 +274,7 @@ slFreeList(&unis);
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
-printf("Content-Type: text/html\n\n");
+cgiPrintContentType("text/html");
 htmEmptyShell(doHtml, NULL);
 return 0;
 }

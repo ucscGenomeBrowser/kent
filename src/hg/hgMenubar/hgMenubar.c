@@ -119,7 +119,7 @@ char *newPath = makeRelativePath(pagePath, cgiContainerPath);
 
 char *newHref = catTwoStrings("href=\"", newPath);
 
-printf ("Content-type: text/html\r\n\r\n");
+cgiPrintContentType("text/html");
 
 if (sameString(filePath, NAVBAR_INC_PATH))
     printIncludes(newPath, docRoot);

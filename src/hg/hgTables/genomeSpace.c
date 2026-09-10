@@ -458,7 +458,7 @@ if (start < 0)
     htmlClose();
     return;
     }
-puts("Content-Type: text/html\n");
+cgiPrintContentType("text/html");
 int line;
 boolean autoRefreshFound = FALSE;
 boolean successfullyUploaded = FALSE;

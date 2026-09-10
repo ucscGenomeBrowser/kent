@@ -232,7 +232,13 @@ if (useNew)
             if (userName)
                 safef(botCheckString, 256, "apiKey%s %f", apiKey, fraction);
             else 
-                hUserAbort("Invalid apiKey provided on URL. Make sure that the apiKey is valid. Or contact us.");
+                hUserAbort("Invalid apiKey provided on URL. "
+                        "Make sure that the apiKey is valid, "
+                        "check https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect#hubDeveloper to create one "
+                        "or check this key. Note that an apiKey for genome-euro must be created on "
+                        "https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect and the same for genome-asia or "
+                        "other mirrors, apiKeys are server-specific. If you have problems with the apiKey, "
+                        "contact us.");
             }
         else
             {
@@ -349,11 +355,10 @@ static void jsonHogExit(char *cgiExitName, long enteredMainTime, char *hogHost,
     int retryAfterSeconds)
 /* err429 Too Many Requests to be returned as JSON data */
 {
-puts("Content-Type:application/json");
 printf("Status: %d %s\n", err429, err429Msg);
 if (retryAfterSeconds > 0)
-    printf("Retry-After: %d", retryAfterSeconds);
-puts("\n");	/* blank line between header and body */
+    printf("Retry-After: %d\n", retryAfterSeconds);
+cgiPrintContentType("application/json");
 
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
@@ -394,11 +399,10 @@ else
     {
 
     cspWriteResponseHeader();
-    puts("Content-Type:text/html");
     printf("Status: %d %s\n", err429, err429Msg);
     if (retryAfterSeconds > 0)
-        printf("Retry-After: %d", retryAfterSeconds);
-    puts("\n");	/* blank line between header and body */
+        printf("Retry-After: %d\n", retryAfterSeconds);
+    cgiPrintContentType("text/html");
 
     puts("<!DOCTYPE HTML 4.01 Transitional>\n");
     puts("<html lang='en'>");

@@ -35,10 +35,16 @@ Did it run?
 runLog.txt gets one line per run and is never truncated, so it is the history of
 the job:
 
-    START      a run began
-    NOCHANGE   UniProt had no new release, nothing to do, no mail sent
-    OK         new release, tracks rebuilt
-    FAIL       the run died, exit code and log named on the line
+    PREFLIGHT-FAIL  the venv or the parser was not usable, doUniprot never ran
+    START           a run began
+    END             doUniprot returned, exit code on the line
+    LOCKED          another doUniprot holds the lock file, this run did nothing
+    NOCHANGE        UniProt had no new release, nothing to do, no mail sent
+    OK              new release, tracks rebuilt
+    FAIL            the run died, exit code and log named on the line
+    INTERRUPTED     a signal killed the run, the lock file was removed
+
+A normal month is START, END, then one of LOCKED, NOCHANGE, OK or FAIL.
 
 lastRun.log is the log of the most recent run and is overwritten every month. A
 failing run is kept as lastFail.log, and its last 25 lines are mailed to the

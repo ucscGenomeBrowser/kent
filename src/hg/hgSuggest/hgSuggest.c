@@ -337,8 +337,7 @@ char *prefix = cgiOptionalString("prefix");
 char *type = cgiOptionalString("type");
 char *table = checkParams(database, prefix, type);
 
-puts("Content-Type:text/plain");
-puts("\n");
+cgiPrintContentType("text/plain");
 
 if (sameOk(type, ALT_OR_PATCH))
     suggestAltOrPatch(database, prefix);
