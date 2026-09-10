@@ -357,11 +357,6 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
                "layout."),
-        h("gcOnTheFlyCoExist", "flag", "hg/hgTracks/hgTracks.c",
-          default="FALSE", role="gate", verified=True,
-          note="Let the calculated GC track coexist with the stored one.  A "
-               "sub-flag of gcOnTheFly, so it should be deleted with it "
-               "rather than outliving it."),
         h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box."),
