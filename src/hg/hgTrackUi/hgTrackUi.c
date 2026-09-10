@@ -3306,6 +3306,10 @@ else
 jsonWriteListEnd(jw);
 
 jsonWriteString(jw, "mdid", (char *)metaDataId);
+// The javascript keys its saved UI state (facets, page length, dragged row
+// order) on the assembly plus the metadata id, so two assemblies using the
+// same track name do not share one entry in localStorage.
+jsonWriteString(jw, "db", database);
 jsonWriteString(jw, "primaryKey", (char *)primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
     jsonWriteString(jw, "maxCheckboxes", (char *)maxCheckboxes);
