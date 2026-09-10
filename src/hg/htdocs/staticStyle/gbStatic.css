@@ -245,6 +245,7 @@ img.gbsInlineImg {
 
 p.gbsCaption {
     margin-top: 5px;
+    font-size: 0.9em;
 }
 
 /* TODO: remove these two -- we should use bootstrap class text-right in wrapper element instead */
