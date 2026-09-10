@@ -38,22 +38,15 @@ a.skipNav:focus {
 	background:#e6e3db;
 	font-family:Arial, Helvetica, sans-serif;
 }*/
+/* The one blue of the menu bar, on every page.  #003a72 is the house deep navy, also used for
+   the gateway banner, the footer and the buttons (gb.css .gbBlueDark, gbModern.css --accent).
+   It used to differ per CGI: #2636d1 here, #00457c on hgTracks, #003a72 on the pages that load
+   gbAfterMenu.css.  Change it in this one place only.  refs #38206 */
 #main-menu-whole {
 	width:100%;
 	min-width:1000px; /* NOTE: must cover all top menu options, else wrapping breaks menu */
 	height:32px;
-	background:#2636d1;
-	font-family: Arial,Helvetica,sans-serif;
-	line-height:19px;
-	font-size:13px;
-	margin:0 0 5px 0;
-	position:relative; /* anchor for #topRightLinks */
-}
-#hgTracks-main-menu-whole {
-	width:100%;
-	min-width:1000px; /* NOTE: must cover all top menu options, else wrapping breaks menu */
-	height:32px;
-	background:#00457c;
+	background:#003a72;
 	font-family: Arial,Helvetica,sans-serif;
 	line-height:19px;
 	font-size:13px;
@@ -100,7 +93,7 @@ a.skipNav:focus {
 		height:32px;
 		line-height:32px;
 		padding:0 8px;
-		background:inherit; /* the bar's blue, which is not the same on all pages */
+		background:inherit; /* the bar's blue */
 		z-index:1000;
 	}
 	#trToggle {
@@ -468,6 +461,8 @@ ul.nice-menu ul li {
 
 /* GREG ADDED STYLES FOR GLOBAL NAVIGATION BAR */ 
 /* for home link */
+/* The house icon in homeIconSprite.png is white on a transparent background, so it sits on the
+   bar's own blue and needs no color of its own. */
 span#home-link {
 	top: -2px;
 	position: relative;
@@ -478,25 +473,9 @@ span#home-link {
 	display: inline-block;
 	background-image: url("../images/homeIconSprite.png");
 	background-position: 0 -18px;
-	background-color: #2636d1;
-}
-span#hgTracks-home-link {
-	top: -2px;
-	position: relative;
-	text-indent: -9999px;
-	height: 18px;
-	width: 23px;
-	/* margin-right: 1px; */
-	display: inline-block;
-	background-image: url("../images/hgTracksHomeIconSprite.png");
-	background-position: 0 -18px;
-	background-color: #00457c;
 }
 
 span#home-link:hover {
-	background-position: 0 0;
-}
-span#hgTracks-home-link:hover {
 	background-position: 0 0;
 }
 
