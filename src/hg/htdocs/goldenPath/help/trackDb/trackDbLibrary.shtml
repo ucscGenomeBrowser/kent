@@ -5106,6 +5106,15 @@ detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":
     </P>
 </DIV>
 
+<DIV class="minAc"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>minAc &lt;<EM>N</EM>&gt;</code></div>
+    <P>
+    The minimum alternate allele count required for a variant to be displayed, taken from the
+    AC field of the INFO column. Variants whose INFO has no usable AC are always displayed.
+    By default this is 0 (i.e. display all variants).
+    </P>
+</DIV>
+
 <DIV class="vcfDoFilter"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>
@@ -5124,6 +5133,12 @@ detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":
 <div class="format"><code>vcfDoMaf &lt;on/off&gt;</code></div>
     <p>
     Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
+    </p>
+</DIV>
+<DIV class="vcfDoMinAc"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>vcfDoMinAc &lt;on/off&gt;</code></div>
+    <p>
+    Turns on/off the minimum allele count filter option available by default for VCF tracks
     </p>
 </DIV>
 
@@ -5207,6 +5222,20 @@ There are no extra options that can appear on the type vcfPhasedTrio line.
     <P>
     Make the display use the aliases as the default labels for each haplotype lane instead of the
     ID from the VCF.
+    </P>
+</DIV>
+
+<DIV class="vcfPhasedColorBy"><span class="types vcfPhasedTrio"></span>
+<div class="format"><code>vcfPhasedColorBy &lt;mendelDiff|deNovo|function|noColor&gt;</code></div>
+    <P>
+    How to color the variants drawn on each haplotype lane. <code>noColor</code>, the default,
+    draws them all black. <code>deNovo</code> colors a child variant red when it appears in
+    neither parent. <code>mendelDiff</code> colors a child variant red when it disagrees with
+    the allele the parents imply was transmitted; this needs
+    <A HREF="#vcfParentSamples">vcfParentSamples</A> to be set. <code>function</code> colors by
+    predicted effect on the gene, red for non-synonymous, green for synonymous, blue for UTR or
+    noncoding, and black otherwise; it is offered only when
+    <A HREF="#geneTrack">geneTrack</A> is also set.
     </P>
 </DIV>
 

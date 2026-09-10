@@ -3173,8 +3173,12 @@ for (ref = exonList; TRUE; )
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
                 startPhase = gp->exonFrames[exonIx-1];
-                if (!revStrand) 
-                    endPhase = gp->exonFrames[exonIx];
+                if (!revStrand)
+                    {
+                    // the last exon has no next exon, so it has no end phase
+                    if (exonIx < gp->exonCount)
+                        endPhase = gp->exonFrames[exonIx];
+                    }
                 else 
                     if (exonIx>1)
                         endPhase = gp->exonFrames[exonIx-2];

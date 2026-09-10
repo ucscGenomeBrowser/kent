@@ -34,6 +34,16 @@ haplotype sorting display can be configured. This can be useful for determining 
 between the samples and inferring inheritance at a particular locus.
 </p> 
 <p>
+The haplotype sorting display is drawn only when the track's display mode is set to
+<strong>pack</strong> or <strong>squish</strong>; squish draws it at half the configured height.
+In <strong>full</strong> mode the track shows one row per variant, and in <strong>dense</strong>
+mode it collapses every variant onto a single row. Neither of those modes draws per-sample rows,
+so the settings described below have no effect in them. The haplotype sorting display is
+likewise unavailable in
+<a href="multiRegionHelp.html" target="_blank">multi-region view</a> and when
+<strong>Display data as a density graph</strong> is checked.
+</p>
+<p>
 <strong>Enable Haplotype sorting display:</strong> When this option is checked, each sample's phased
 and/or homozygous genotypes are split into haplotypes, clustered by similarity around a central 
 variant, and sorted for display by their position in the clustering tree. The tree (as 
@@ -61,7 +71,7 @@ for each successive variant away from the central variant.  By default, the medi
 the window is used. By clicking on a variant in the display, you will get the option to always 
 use that variant when it is in the current view.</p>
 <p>
-<strong>Haplotype coloring scheme:</strong> There are three ways that reference and alternate 
+<strong>Haplotype coloring scheme:</strong> There are four ways that reference and alternate 
 alleles can be colored:</p>
 <ul>
   <li>
@@ -72,6 +82,11 @@ alleles can be colored:</p>
   are hard to see due when the invisible reference allele is the major allele. Variants used in 
   clustering have purple marks in these rows; variants outside the clustered regions have black 
   marks.</li>
+  <li>
+  The reference allele is invisible and the alternate allele is colored by the effect it is
+  predicted to have on the gene: red for non-synonymous, green for synonymous, blue for UTR or
+  noncoding, and black otherwise. This option is offered only when the track has a
+  <strong>geneTrack</strong> setting naming the gene track to compare against.</li>
   <li>
   The reference allele is blue and the alternate allele is red. Purple indicates a mix of 
   reference and alternate alleles. The central variant has a thick black outline.</li>

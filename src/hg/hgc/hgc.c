@@ -3251,7 +3251,7 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if ((pepTable != NULL) && hGenBankHaveSeq(srcDb, pepName, pepTable))
+if ((pepTable != NULL) && (pepName != NULL) && hGenBankHaveSeq(srcDb, pepName, pepTable))
     {
     puts("<LI>\n");
     hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
@@ -14350,6 +14350,9 @@ if (strstr(rnaName, "NM_") != NULL)
     }
 else
     {
+    /* No refLink row for this accession.  Zero the whole struct so the fields we
+     * do not fill in read as absent, rather than as whatever was on the stack. */
+    ZeroVar(&rlR);
     rlR.name    = strdup(kgId);
     rlR.mrnaAcc = strdup(kgId);
     rlR.locusLinkId = 0;

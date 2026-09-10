@@ -724,6 +724,11 @@ errCatchFree(&errCatch);
 fieldCount = track->bedSize;
 if (fieldCount == 0)
     track->bedSize = fieldCount = bbi->definedFieldCount;
+else if (fieldCount > bbi->fieldCount)
+    /* The type line asks for more fields than the file holds, and bedRow below is sized by
+     * the file's own count.  Use that count:  it is the only one the file can answer for,
+     * and it is the one hubCheck already requires the type line to match. */
+    track->bedSize = fieldCount = bbi->fieldCount;
 
 struct bigBedInterval *bb, *bbList; 
 char *quickLiftFile = cloneString(trackDbSetting(track->tdb, "quickLiftUrl"));

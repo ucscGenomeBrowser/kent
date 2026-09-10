@@ -308,7 +308,7 @@ function blatShowShareBox(box, url, msg) {
         'these BLAT results. It stores only the results, not your other tracks or settings. The ' +
         'link remains valid for years; to keep your results permanently, save them into a ' +
         `<a href="hgSession?db=${encodeURIComponent(hgBlatData.config.db || '')}` +
-        `&hgsid=${encodeURIComponent(hgBlatData.config.hgsid || '')}">Session</a>.</span>` +
+        `&amp;hgsid=${encodeURIComponent(hgBlatData.config.hgsid || '')}">Session</a>.</span>` +
         '<input id="gbShareInput" class="gbShareInput" type="text" readonly>' +
         '<button type="button" class="gbPill" id="blatShareCopy" title="Copy the link to the clipboard">Copy</button>';
     var inp = document.getElementById('gbShareInput');
@@ -379,7 +379,7 @@ function blatShareLink() {
 function blatRenameModalHtml(cfg) {
     // hgSession link is relative (same /cgi-bin/), carrying db + hgsid so the session page opens in
     // this assembly and cart.
-    var sessionUrl = `hgSession?db=${encodeURIComponent(cfg.db)}&hgsid=${encodeURIComponent(cfg.hgsid)}`;
+    var sessionUrl = `hgSession?db=${encodeURIComponent(cfg.db)}&amp;hgsid=${encodeURIComponent(cfg.hgsid)}`;
     return '<div id="gbModalBg" class="gbModalBg" style="display:none">' +
         '<div class="gbModal" role="dialog" aria-modal="true" aria-labelledby="gbModalTitle">' +
         '<div class="gbModalTitle" id="gbModalTitle">Rename BLAT Track</div>' +
@@ -723,7 +723,7 @@ function blatFormCount() {
     if (!ta || !out) { return; }
     var n = ta.value.replace(/[^A-Za-z*]/g, '').length;
     // The per-sequence limit for the selected query type, passed through from the C constants in
-    // hgBlat.c so the two cannot drift apart (the page claimed a stale 25,000 for years).
+    // hgBlat.c so the two cannot drift apart.
     // "BLAT's guess" counts against the DNA limit - the common case; a protein query that only
     // the server recognizes as such is still rejected there with a warning linking the full
     // limits in the docs.

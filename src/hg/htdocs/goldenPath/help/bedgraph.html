@@ -20,6 +20,7 @@ will result in an error message, but can be addressed by turning the bedGraph in
 wiggle files; converting bedGraph to bigWig and using <code>bigWigToWig</code> will return the
 original bedGraph file.</p>
 
+<a id="structure"></a>
 <h2>General Structure</h2>
 <p>
 The bedGraph format is line-oriented. BedGraph data are preceded by a 
@@ -31,6 +32,7 @@ Following the track definition line are the track data in four column BED format
 <pre><code><em>chromA</em>  <em>chromStartA</em>  <em>chromEndA</em>  <em>dataValueA</em>
 <em>chromB</em>  <em>chromStartB</em>  <em>chromEndB</em>  <em>dataValueB</em></code></pre>
 
+<a id="parameters"></a>
 <h3>Parameters for bedGraph track definition lines</h3>
 <p> 
 All options are placed in a single line separated by spaces:</p>
@@ -51,6 +53,7 @@ documentation contains details on these options. A functional description of the
 seen in the <a href="hgWiggleTrackHelp.html" target="_blank">track configuration</a> description. 
 (Custom tracks do not have interactive configuration options.)
 
+<a id="dataValues"></a>
 <h3>Data Values</h3>
 <p>
 BedGraph track data values can be integer or real, positive or negative values. The
@@ -60,6 +63,7 @@ of length <em>N</em> would be <em>N - 1</em>. The positions listed in the input 
 numerical order, and only the specified positions will be graphed. bedGraph format has four
 columns of data: <pre><code><em>chrom chromStart chromEnd dataValue</em></code></pre></p> 
 <p>
+<a id="example"></a>
 <h2>Example</h2>
 <p>
 This example specifies 9 separate data points in three tracks on chr19 in the region 49,302,001 to 

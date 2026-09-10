@@ -3,6 +3,7 @@
  * Copyright (C) 2019-2024 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
+#include <limits.h>
 #include "common.h"
 #include "cart.h"
 #include "cheapcgi.h"
@@ -88,7 +89,12 @@ if (fileExists(trashPath))
             splitPath(trashPath, trashPathDir, NULL, NULL);
             char fullLinkPath[strlen(trashPathDir) + strlen(existingLink) + 1];
             safef(fullLinkPath, sizeof fullLinkPath, "%s%s", trashPathDir, existingLink);
-            newPath = realpath(fullLinkPath, NULL);
+            // realpath(path, NULL) would allocate with the system malloc, but callers release
+            // what we return with freeMem, which goes through kent's own handler stack.
+            char resolved[PATH_MAX];
+            if (realpath(fullLinkPath, resolved) != NULL)
+                newPath = cloneString(resolved);
+            freeMem(existingLink);
             }
         else
             newPath = existingLink;

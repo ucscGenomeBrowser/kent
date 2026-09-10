@@ -340,6 +340,23 @@ var tdbDoc = {
         }
     },
 
+    repointStaleLinks: function (scope) {
+        // A library blurb can cross-reference a setting that the host page does not list.
+        // The anchor for a setting is written by that page's own table of contents, so on a
+        // frozen older hub spec (trackDbHub.v0/v1/v2.html) such a link has no target here.
+        // Point those at trackDbHub.html, which always serves the current spec and does
+        // document the setting. Links whose target is on the page are left alone, so this
+        // is a no-op on trackDbDoc.html and on the current spec.
+        $(scope).find("a[href^='#']").each(function () {
+            var name = $(this).attr('href').substring(1);
+            if (name.length === 0)
+                return;
+            if (document.getElementById(name) === null
+            &&  document.getElementsByName(name).length === 0)
+                $(this).attr('href','trackDbHub.html#' + name);
+        });
+    },
+
     loadIntro: function (div) {
         // Called at startup to load each track type intro from the library
         var id = $(div).attr('id');
@@ -348,6 +365,7 @@ var tdbDoc = {
             $(intro).addClass("intro");
             $(intro).detach();
             $(div).replaceWith(intro);
+            tdbDoc.repointStaleLinks(intro);
         }
     },
 
@@ -368,6 +386,7 @@ var tdbDoc = {
             //$(details).clone().appendTo(td);
             //$(details).detatch();
             $(td).append(detail);
+            tdbDoc.repointStaleLinks(detail);
         }
         return $(td).find('div.details');
     },
@@ -488,35 +507,39 @@ var tdbDoc = {
         toggles.forEach( (toggle) => {
             toggle.classList.add(toggle.parentNode.className + "_imgToggle");
         });
+        // Only the current hub spec page carries the search box; the other doc pages
+        // share this script and have no such input.
         let inp = document.getElementById("tdbSearch");
-        inp.addEventListener("input", (e) => {
-            let term = inp.value.trim();
-            if (term.length >= 2) {
-                runSearch(term);
-            } else if (term.length === 1) {
-                // Show helpful message for single character
-                runSearch(term);
-            } else if (term.length === 0) {
-                // Clear search when input is empty
-                clearSearchHighlights();
-                hideSearchStatus();
-                currentResults = [];
-                currentIndex = -1;
-            }
-        });
-
-        // Add keyboard shortcuts for search navigation
-        inp.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                if (currentResults.length > 0) {
-                    jumpToResult(e.shiftKey ? -1 : 1);
+        if (inp) {
+            inp.addEventListener("input", (e) => {
+                let term = inp.value.trim();
+                if (term.length >= 2) {
+                    runSearch(term);
+                } else if (term.length === 1) {
+                    // Show helpful message for single character
+                    runSearch(term);
+                } else if (term.length === 0) {
+                    // Clear search when input is empty
+                    clearSearchHighlights();
+                    hideSearchStatus();
+                    currentResults = [];
+                    currentIndex = -1;
                 }
-            } else if (e.key === "Escape") {
-                e.preventDefault();
-                clearSearch();
-            }
-        });
+            });
+
+            // Add keyboard shortcuts for search navigation
+            inp.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    if (currentResults.length > 0) {
+                        jumpToResult(e.shiftKey ? -1 : 1);
+                    }
+                } else if (e.key === "Escape") {
+                    e.preventDefault();
+                    clearSearch();
+                }
+            });
+        }
 
         // Add clear search button functionality
         let clearButton = document.getElementById("clearSearch");
@@ -538,7 +561,8 @@ var tdbDoc = {
                 });
                 // Also focus the search input for easy continued searching
                 setTimeout(() => {
-                    inp.focus();
+                    if (inp)
+                        inp.focus();
                 }, 500);
             });
         }

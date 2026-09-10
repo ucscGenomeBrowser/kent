@@ -443,6 +443,11 @@ else
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
     bedSize = bbi->definedFieldCount;
+else if (bedSize > bbi->fieldCount)
+    /* The type line asks for more fields than the file holds.  Use the file's own count,
+     * the same fallback hgTracks makes, so the item that was drawn is the item described
+     * here. */
+    bedSize = bbi->fieldCount;
 
 /* A bigBed always has at least chrom, chromStart and chromEnd.  A smaller count
  * can only come from a bad type line, and the bedSize - 3 below would then run
