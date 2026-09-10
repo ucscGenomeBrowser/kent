@@ -4,6 +4,7 @@
 # An including makefile sets, before the include:
 #   DOCENT     path to docent.js from THIS directory     (required)
 #   PREFLIGHT  path to preflight.js from THIS directory  (required)
+#   PROOF      path to proof.js from THIS directory      (default: beside PREFLIGHT)
 #   PARITY     which script `make parity` runs           (default: the first one found)
 #
 # Everything else -- which scripts are tests, which have derive baselines -- comes from
@@ -24,8 +25,9 @@ T      ?=
 PASSING := $(filter-out %.xfail,$(patsubst %.docent.yaml,%,$(wildcard *.docent.yaml)))
 PARITY ?= $(firstword $(PASSING))
 TESTS  := $(if $(T),$(addsuffix .docent.yaml,$(T)),$(wildcard *.docent.yaml))
+PROOF  ?= $(dir $(PREFLIGHT))proof.js
 
-.PHONY: test parity clean preflight
+.PHONY: test parity clean preflight proof
 
 # The fixtures the scripts here name but do not contain: saved sessions, hub URLs, the
 # server itself. No browser, so this is seconds, and it is what separates "the fixtures
@@ -33,6 +35,17 @@ TESTS  := $(if $(T),$(addsuffix .docent.yaml,$(T)),$(wildcard *.docent.yaml))
 # the suite, and on its own as often as you like.
 preflight:
 	@$(PW_ENV) node $(PREFLIGHT) .
+
+# What evidence each script has that it would catch its bug, and the tally. No browser
+# and no network, so it costs nothing to run and the number can go straight into a commit
+# message or a ticket. It is a separate target and not part of `make test` on purpose: a
+# script with no proof is not a failure, it is a script whose evidence has not been
+# collected yet, and the two must not arrive as the same red.
+#
+# It DOES fail on a malformed or unknown proof line, because a vocabulary nobody enforces
+# turns into free text and free text cannot be counted.
+proof:
+	@$(PW_ENV) node $(PROOF) . $(T)
 
 test:
 	@if [ -z "$(strip $(TESTS))" ]; then \

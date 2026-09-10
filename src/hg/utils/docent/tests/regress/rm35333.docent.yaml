@@ -13,6 +13,9 @@
 # The position is the first contig in 1q21_contigs.bb (chr1:142,654,935-142,673,231). The
 # ticket's own steps say to go to chr1 after hiding everything, and the crash needs an
 # item in view.
+proof:
+  - "assertion-only 2026-09-04 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hs1
 position: chr1:142654000-142674000

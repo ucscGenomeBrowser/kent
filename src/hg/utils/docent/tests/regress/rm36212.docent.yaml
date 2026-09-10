@@ -42,6 +42,10 @@
 # here that leaves the page identical: same rows, same height, same item names, same
 # tooltips, same image height.  `expect: {color: ...}` reads the pixels hgTracks drew in
 # the row.
+proof:
+  - "sandbox-ab 2026-09-09 -- built the bedItemRgb() reorder into parked #36212 on port 48099 (~/kentItemRgb, branch itemRgb36212); this script fails on the control and passes there"
+  - "server-flip 2026-09-09 -- cbb406cd96e reached genome-test and the nightly's xfail passed"
+
 target: genome-test
 db: hg38
 position: chr1:1000000-1010000

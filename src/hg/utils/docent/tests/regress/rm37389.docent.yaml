@@ -27,6 +27,9 @@
 # /hive/groups/browser/redmineNotes/38252/claude/repro_37388_hgTrackUi.js -- it was written
 # for #38272 but walks the same ground. There is also a Docent tour of this bug at
 # ~/docentTours/bugs/rm37389.docent.yaml, recorded while it was broken.
+proof:
+  - "caught-regression 2026-09-05 -- 1258d7f65e7 broke the description again on the tip only, v502 and v503 still drew it; filed as #38275, fixed in 4be6477ebcb and green again"
+
 target: genome-test
 db: hg38
 reset: true

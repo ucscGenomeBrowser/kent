@@ -20,6 +20,9 @@
 # The item on altSeqLiftOverPsl is called "chr16", which reads oddly next to the alt-contig
 # position but is what hgTracks puts in the map box: the item names the chromosome the alt
 # belongs to.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 reset: true

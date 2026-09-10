@@ -16,6 +16,9 @@
 # does not pass its setting down, and its other members come up at their own trackDb
 # visibility however much the hide: all hid. The row to assert is decipherSnvs; `decipher`
 # turning up instead of it is the sign that the SNVs track drew nothing.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr7:155800000-155806000

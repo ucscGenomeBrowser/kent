@@ -27,6 +27,9 @@
 # rendered correctly -- the buggy build produced "43091450} (T/G)" and would fail it.
 # noText: catches a brace anywhere else the pattern might leak one; the window is narrow
 # and only this track is showing, so nothing else on the page produces one.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr17:43091000-43092000

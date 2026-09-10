@@ -29,6 +29,9 @@
 # hatch.
 #
 # mane is turned on as well so the lift has something it CAN carry.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr17:43044295-43125364

@@ -35,6 +35,9 @@
 #
 # This script uses the braney/crash1 session instead, because that is the cheap way to the
 # same state and rm37388 already depends on it, so preflight covers it either way.
+proof:
+  - "server-flip 2026-09-06 -- cdb348c5512 reached genome-test and the nightly's xfail passed; hgwbeta still served the 451-character page that morning"
+
 target: genome-test
 db: hg38
 reset: true
