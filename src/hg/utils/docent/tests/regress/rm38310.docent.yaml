@@ -1,10 +1,11 @@
-# #38310 -- EXPECTED TO FAIL until the fix ships. A hub track whose `type bigBed N`
-# declares more fields than the file holds drew its row with no items in it.
+# #38310 -- a hub track whose `type bigBed N` declares more fields than the file holds
+# drew its row with no items in it.
 #
-# The fix is written and verified but is NOT on master yet, so there is no server in the
-# world that passes this today. It is an xfail rather than a test for that reason alone:
-# `make test` fails if an xfail PASSES, so the day the fix reaches genome-test the suite
-# says there is a test waiting. When it flips, drop the .xfail from the name.
+# This was an xfail until 2026-09-10. The fix, 68f831e1209, reached master on 2026-09-09
+# and genome-test built it overnight. The nightly then went red because the xfail passed,
+# and the .xfail came off the name. So this script was watched failing on a real server
+# and passing on the next build of that same server. That is what makes it a regression
+# test and not an assertion written after the fact.
 #
 # WHAT WENT WRONG, and why the ticket's own words are not quite right. #38310 says the row
 # came up empty "with no warning". The row is empty, but there IS a message: hgTracks
