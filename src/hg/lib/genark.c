@@ -402,7 +402,7 @@ dbDb->organism = dbDb->genome = hashFindVal(orgHash, row[0]);
 dbDb->orderKey = 99999;
 dbDb->defaultPos = "default";
 if (dbDb->genome == NULL)
-    dbDb->genome = "Other";
+    dbDb->organism = dbDb->genome = "Other";
 
 return dbDb;
 }
@@ -455,6 +455,13 @@ struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
 orgHash = newHash(0);
+
+/* a mirror's hgcentral may not have this table */
+if (!sqlTableExists(conn, "genarkOrg"))
+    {
+    hDisconnectCentral(&conn);
+    return orgHash;
+    }
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
