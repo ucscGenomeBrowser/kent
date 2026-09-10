@@ -10,7 +10,7 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
-    dnaCodonTest pathSimplifyTest
+    dnaCodonTest pathSimplifyTest faSpeedReadTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -28,6 +28,13 @@ pathSimplifyTest: pathSimplifyTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/pathSimplifyTest${EXE}
 	${BIN_DIR}/pathSimplifyTest > output/pathSimplifyTest
 	diff expected/pathSimplifyTest output/pathSimplifyTest
+
+faSpeedReadTest: faSpeedReadTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/faSpeedReadTest faSpeedReadTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/faSpeedReadTest${EXE}
+	${BIN_DIR}/faSpeedReadTest > output/faSpeedReadTest
+	diff expected/faSpeedReadTest output/faSpeedReadTest
 
 dnaCodonTest: dnaCodonTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
