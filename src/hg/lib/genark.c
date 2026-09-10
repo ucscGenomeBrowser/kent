@@ -407,20 +407,49 @@ if (dbDb->genome == NULL)
 return dbDb;
 }
 
-struct dbDb *genarkLiftOverDbs(char *listOfAccs)
-/* return list of dbDb structures for the genark genomes that match listOfAccs */
+struct dbDb *genarkLiftOverDbs(struct slName *accList)
+/* return list of dbDb structures for the genark genomes named in accList */
 {
 if (!cfgOption("genarkLiftOver"))
     return NULL;
 struct dbDb *list = NULL;
-char query[64 * 1024];
+struct slName *acc;
+boolean any = FALSE;
 
-safef(query, sizeof query, "NOSQLINJ select * from %s where gcAccession in (%s)", genarkTableName(), listOfAccs);
+for (acc = accList; acc != NULL; acc = acc->next)
+    {
+    /* every accession in the genark table is a GC[AF]_ accession, so
+     * anything else cannot match and need not reach the query */
+    if (startsWith("GC", acc->name))
+        {
+        any = TRUE;
+        break;
+        }
+    }
+if (!any)
+    return NULL;
+
+/* the escaping in sqlDyStringPrintf needs a live connection, so connect
+ * before the query is built */
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr;
 char **row;
+boolean first = TRUE;
 
-sr = sqlGetResult(conn, query);
+struct dyString *query = sqlDyStringCreate("select * from %s where gcAccession in (",
+    genarkTableName());
+for (acc = accList; acc != NULL; acc = acc->next)
+    {
+    if (!startsWith("GC", acc->name))
+        continue;
+    if (!first)
+        sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "'%s'", acc->name);
+    first = FALSE;
+    }
+sqlDyStringPrintf(query, ")");
+
+sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct dbDb *dbDb = genarkMakeDbDb(row);
@@ -429,16 +458,18 @@ while ((row = sqlNextRow(sr)) != NULL)
 slReverse(&list);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
+dyStringFree(&query);
 return list;
 }
 
 struct dbDb *genarkLiftOverDb(char *acc)
 /* return dbDb structure for GC* acc */
 {
-char query[4096];
-safef(query, sizeof query, "'%s'", acc);
+struct slName *one = slNameNew(acc);
+struct dbDb *list = genarkLiftOverDbs(one);
 
-return genarkLiftOverDbs(query);
+slNameFreeList(&one);
+return list;
 }
 
 struct hash *genarkGetOrgHash()
