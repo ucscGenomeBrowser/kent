@@ -365,9 +365,10 @@ RELEASE_GATES = {
         h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box."),
-        h("showColorPicker", "flag", "hg/lib/hui.c", default="FALSE",
+        h("showColorPicker", "flag", "hg/lib/hui.c", default="TRUE",
           role="gate", verified=True,
-          note="The track colour picker in track UI."),
+          note="The track colour picker in track UI.  On by default; the "
+               "flag stays so a mirror can switch it back off."),
         h("doMyVariants", "flag", "hg/hgCustom/hgCustom.c",
           default="FALSE", role="gate", verified=True,
           note="The My Variants track and its upload path.  Thirteen call "
