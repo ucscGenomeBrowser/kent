@@ -51,9 +51,6 @@ static char *positionCgiName = "position";
 
 DbConnector cartDefaultConnector = hConnectCart;
 DbDisconnect cartDefaultDisconnector = hDisconnectCart;
-static boolean cartDidContentType = FALSE;
-
-struct slPair *httpHeaders = NULL; // A list of headers to output before the content-type
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -3045,38 +3042,22 @@ cartExclude(cart, "verbose");
 return cart;
 }
 
-static void addHttpHeaders()
-/* CGIs can initialize the global variable httpHeaders to control their own HTTP
- * headers. This allows, for example, to prevent web browser caching of hgTracks
- * responses, but implicitly allow web browser caching everywhere else */
-{
-struct slPair *h;
-for (h = httpHeaders; h != NULL; h = h->next)
-    {
-    printf("%s: %s\n", h->name, (char *)h->val);
-    }
-cspWriteResponseHeader();
-}
-
 void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
 /* write http headers including cookie and content type line.
  * contType defaults to text/html when NULL.
  * cookieName defaults to hUserCookie() when NULL */
 {
-/* The CGI header must be written exactly once; a second write lands in the page body.  Some flows
- * (e.g. hgc) emit it early via cartAndCookieWithHtml before a later webStart also asks for it, so
- * guard here rather than trusting every caller to check cartDidContentType first. */
-if (cartDidContentType)
+/* cgiPrintContentType() writes the header only once per process, so the flows that reach here
+ * twice (e.g. hgc emitting it early via cartAndCookieWithHtml, then webStart asking again) do
+ * not need to check first.  Return early anyway, so we do not write a second cookie either. */
+if (cgiDidContentType())
     return;
-if (!contType)
-    contType = "text/html";
 if (!cookieName)
     cookieName = hUserCookie();
 
-addHttpHeaders();
+cspWriteResponseHeader();
 cartWriteCookie(cart, cookieName);
 cgiPrintContentType(contType);
-cartDidContentType = TRUE;
 }
 
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
@@ -3091,7 +3072,7 @@ struct cart *cart = cartForSession(cookieName, exclude, oldVars);
 popWarnHandler();
 popAbortHandler();
 
-if (doContentType && !cartDidContentType)
+if (doContentType)
     cartWriteHeaderAndCont(cart, cookieName, NULL);
 
 return cart;
@@ -3136,11 +3117,7 @@ va_list argscp;
 va_copy(argscp, args);
 if (!initted && !cgiOptionalString("ajax"))
     {
-    if (!cartDidContentType)
-        {
-        cgiPrintContentType("text/html");
-        cartDidContentType = TRUE;
-        }
+    cgiPrintContentType("text/html");
     htmStart(stdout, "Early Error");
     initted = TRUE;
     }

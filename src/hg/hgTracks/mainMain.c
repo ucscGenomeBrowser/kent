@@ -77,7 +77,7 @@ else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && cgiVarExists("myVarSh
     }
 else
     {
-    httpHeaders = slPairNew("Cache-Control", "no-store");
+    cgiAddHttpHeader("Cache-Control", "no-store");
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
     }
 
