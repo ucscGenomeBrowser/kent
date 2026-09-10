@@ -3036,6 +3036,33 @@ var hubCreate = (function() {
         cart.defaultErrorCallback(jqXHR, textStatus);
     }
 
+    function showMirrorOnlyMessage() {
+        // On the mirrors there is no upload infrastructure, so instead of layering a
+        // dialog over a tab that cannot be used, replace the tab with instructions on
+        // where to upload and how to get the uploaded hub back onto this site.
+        let uploadUrl = `${loginHost}/cgi-bin/hgHubConnect#hubUpload`;
+        let hostName = loginHost.replace(/^https?:\/\//, "");
+        $("#hubUpload").html(
+            `<div class='tabSection'>` +
+            `<h4>Hub upload is only possible on ${hostName}</h4>` +
+            `<p>Files can only be uploaded on our main US-based site, for speed reasons. ` +
+            `Your uploaded files are stored there and are not copied to this mirror.</p>` +
+            `<p><a href="${uploadUrl}" style="color:#121E9A"><b>Go to Hub Upload on ${hostName}</b></a></p>` +
+            `<p>A hub that you upload there can be used on any of our sites, including this one. ` +
+            `To use one of your uploaded hubs here:</p>` +
+            `<ol>` +
+            `<li>Upload your files on <a href="${uploadUrl}" style="color:#121E9A">${hostName}</a>.</li>` +
+            `<li>In the file table there, right-click the hub.txt file of your hub and select ` +
+            `"Copy link" to get its URL.</li>` +
+            `<li>Paste this URL into the ` +
+            `<a href="hgHubConnect#unlistedHubs" style="color:#121E9A">Connected Hubs</a> tab ` +
+            `on this site. You can also build a link that connects the hub automatically, see ` +
+            `<a href="../goldenPath/help/hgTrackHubHelp.html#Sharing" ` +
+            `style="color:#121E9A" target="_blank">Sharing Track Hubs</a>.</li>` +
+            `</ol>` +
+            `</div>`);
+    }
+
     let inited = false; // keep track of first init for tab switching purposes
     function init() {
         cart.setCgiAndUrl(fileListEndpoint);
@@ -3048,7 +3075,7 @@ var hubCreate = (function() {
                 warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +
                         `our site: <a href="https:${url.host}${url.pathname}${url.search}">https:${url.host}${url.pathname}${url.search}</a>`);
             } else if ((url.protocol + "//" + url.host) !== loginHost) {
-                warn(`The hub upload feature is only avaiable on our US based public site (<a href="${loginHost}">${loginHost}</a>) for speed purposes. Please go there to upload your hubs, copy the links to the hub.txt files, then use the Connected Hubs tab here to view your files.`);
+                showMirrorOnlyMessage();
             } else if (!inited && isLoggedIn) {
                 cart.send({ getHubSpaceUIState: {}}, handleRefreshState, handleErrorState);
                 cart.flush();
