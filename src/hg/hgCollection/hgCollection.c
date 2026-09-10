@@ -1007,7 +1007,15 @@ static void doMiddle(struct cart *cart)
 char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
 
 if (userName == NULL)
-    errAbort("You must be logged in to edit collections. Visit our <A HREF=\"hgLogin?hgLogin.do.displayLoginPage=1\">login page.</A>");
+    {
+    // Send them back here once they are logged in, rather than to the sessions page
+    char *hgsid = cartSessionId(cart);
+    char *retEnc = wikiLinkEncodeCurrentPageReturnUrl(hgsid);
+    char *loginUrl = retEnc ? wikiLinkUserLoginUrlReturning(hgsid, retEnc)
+                            : wikiLinkUserLoginUrl(hgsid);
+    errAbort("You must be logged in to edit collections. Visit our "
+             "<A HREF=\"%s\">login page.</A>", loginUrl);
+    }
 
 char *db;
 char *genome;

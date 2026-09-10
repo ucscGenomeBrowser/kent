@@ -4592,7 +4592,14 @@ if (issueBotWarning)
     }
 
 cart = theCart;
-track = cartString(cart, "g");
+/* The track name is not kept in the cart, so it has to come with the request.  Without it
+ * there is no page to draw, and saying so beats the bare hash lookup failure that a
+ * hand-edited or truncated URL used to produce. */
+track = cartOptionalString(cart, "g");
+if (isEmpty(track))
+    errAbort("This page needs to know which track to show, and the address it was reached by "
+             "does not name one.  Open a track's settings from the browser, or add the track "
+             "name to the address with the g parameter, e.g. hgTrackUi?db=hg38&g=knownGene");
 getDbAndGenome(cart, &database, &ignored, NULL);
 initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
