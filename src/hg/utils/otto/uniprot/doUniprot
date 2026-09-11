@@ -1514,11 +1514,19 @@ def parseRecordMeta(tabDir, taxId, doTrembl):
     return ret
 
 def twoBitFname(db):
-    " the assembly sequence, wherever this assembly keeps it "
-    hubDir = genArkHubDir(db)
-    if hubDir is not None:
-        return genArkTwoBit(db, hubDir)
+    """ the assembly sequence, wherever this assembly keeps it.
+    Only a real GenArk assembly keeps it in the hub directory. hs1 is served as a hub but
+    keeps its 2bit at the classic /gbdb/<db>/<db>.2bit, same as a classic assembly.
+    """
+    if isGenArk(db):
+        return genArkTwoBit(db, genArkHubDir(db))
     return "/gbdb/{db}/{db}.2bit".format(db=db)
+
+def chromSizesFile(db):
+    " the chrom.sizes of this assembly, wherever it keeps it "
+    if isGenArk(db):
+        return genArkChromSizes(db, genArkHubDir(db))
+    return "/hive/data/genomes/%s/chrom.sizes" % db
 
 def miniprotRamGb(genomeFa):
     """ how much RAM to reserve for a miniprot run on this genome, in whole GB.
@@ -1884,9 +1892,9 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
         cdsName = join(dbDir, "transcripts.cds")
 
         run(["bigGenePredToGenePred", geneBb, gpName])
-        run(["genePredToFakePsl", "-chromSize=%s" % genArkChromSizes(db, hubDir),
+        run(["genePredToFakePsl", "-chromSize=%s" % chromSizesFile(db),
              "noDb", gpName, pslName, cdsName])
-        run(["getRnaPred", "-genomeSeqs=%s" % genArkTwoBit(db, hubDir),
+        run(["getRnaPred", "-genomeSeqs=%s" % twoBitFname(db),
              "noDb", gpName, "all", faName])
 
         logging.info("Created %s and %s for %s/%s from %s" % (faName, pslName, db, geneTable, geneBb))
@@ -2289,11 +2297,7 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             logging.debug("Annotating assembly %s" % db)
             # a GenArk assembly has no /hive/data/genomes directory, its chrom.sizes
             # lives in the hub
-            hubDir = genArkHubDir(db)
-            if hubDir is not None:
-                chromSizesFname = genArkChromSizes(db, hubDir)
-            else:
-                chromSizesFname = "/hive/data/genomes/%s/chrom.sizes" % db
+            chromSizesFname = chromSizesFile(db)
 
             accToMeta = parseRecordMeta(tabDir, taxId, doTrembl)
 

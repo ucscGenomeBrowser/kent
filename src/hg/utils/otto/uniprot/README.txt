@@ -80,7 +80,7 @@ anything. It goes through these steps:
   has a pilot where they provide offsets into the XML but it's not a real produce yet. ]
 - for each UniProt taxon ID, find the relevant UCSC db identifiers, adding a few manual overrides,
   e.g. 9606 always uses both hg19 and hg38. wuhCor1 is skipped, etc.
-  You can limit the script to only certain dbs with e.g. --onlyDbs=hg19
+  You can limit the script to only certain dbs with e.g. --dbs=hg19
   You can display the current mapping with 'doUniprot --db'
   This will also show the correct trackDb make command if you want to remake all trackDbs.
 - for each assembly, try to guess a transcript gene track and find transcript
