@@ -1011,8 +1011,17 @@ genArkGeneSources = [
     ("catGenes",   "contrib/*/catGenes.bb"),
     ("ncbiRefSeq", "bbi/*.ncbiRefSeq.bb"),
     ("ncbiGene",   "bbi/*.ncbiGene.bb"),
-    ("augustus",   "bbi/*.augustus.bb"),
 ]
+# Augustus is deliberately not in that list. It is an ab initio prediction, so mapping
+# UniProt through it stacks its errors on top of ours; aligning the proteins straight to
+# the genome with miniprot is better and much faster than the old BLAT protein search.
+miniprotBin = "/hive/data/outside/otto/uniprot/bin/miniprot"
+miniprotThreads = 16
+
+def miniprotVersion():
+    " version string of the miniprot binary we are using "
+    proc = subprocess.Popen([miniprotBin, "--version"], stdout=PIPE, encoding="utf8")
+    return proc.communicate()[0].strip()
 
 dbIsHubCache = {}
 
@@ -1054,7 +1063,7 @@ def findBestGeneBigBed(db, hubDir):
                 logging.warning("%s: %d files match %s, using %s" % (db, len(matches), fileGlob, matches[0]))
             logging.info("%s: best gene models are %s, from %s" % (db, name, matches[0]))
             return name, matches[0]
-    logging.warning("%s: no gene models found in %s, will have to BLAT the proteins" % (db, hubDir))
+    logging.warning("%s: no gene models found in %s, will align the proteins directly with miniprot" % (db, hubDir))
     return None, None
 
 def findBestGeneTable(db):
@@ -1062,7 +1071,7 @@ def findBestGeneTable(db):
     hubDir = genArkHubDir(db)
     if hubDir is not None:
         name, _ = findBestGeneBigBed(db, hubDir)
-        return name if name else "blat"
+        return name if name else "miniprot"
 
     if db=="hg19":
         tables = ["refGene"]
@@ -1088,8 +1097,8 @@ def findBestGeneTable(db):
                 logging.info("%s: Best gene table is %s. No multi mappers." % (db, table))
                 return table
 
-    assert(db not in ["hg19", "hg38", "mm10", "danRer10", "mm39"]) # never use BLAT on our main dbs
-    return "blat"
+    assert(db not in ["hg19", "hg38", "mm10", "danRer10", "mm39"]) # never align proteins directly on our main dbs
+    return "miniprot"
 
 def gz_is_empty(fname):
     # from https://stackoverflow.com/questions/37874936/how-to-check-empty-gzip-file-in-python
@@ -1478,20 +1487,69 @@ def parseRecordMeta(tabDir, taxId, doTrembl):
                 ret[acc] = row
     return ret
 
-def blatProteinsKeepBest(fullFaFname, db, mapFname, stats):
-    " blat the proteins directly, only good for small genomes where we don't have any gene models "
-    myDir = dirname(__file__)
-    # consider using miniprot here one day?
-    cmd = "blat -q=prot -t=dnax /gbdb/{db}/{db}.2bit {inf} stdout -noHead | sort -k10 | pslReps stdin stdout /dev/null " \
-        "-minAli=0.95 -nohead | {myDir}/pslProtCnv > {out}".format(db=db, inf=fullFaFname, out=mapFname, myDir=myDir)
-    stats["minAli"]=0.95
-    #nuclFname = mapFname+".nucl"
-    # originally used "| {myDir}/pslProtCnv " but tried to get rid of the markd-script dependency 
-    #pslToProtPsl(nuclFname, mapFname)
-    # then later figured that pslToProtPsl() is not the same as pslProtCnv and went back the MarkD way
-    # then in 2024 finally used pslProtToRnaCoords
-    #os.remove(nuclFname)
+def twoBitFname(db):
+    " the assembly sequence, wherever this assembly keeps it "
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        return genArkTwoBit(db, hubDir)
+    return "/gbdb/{db}/{db}.2bit".format(db=db)
+
+def miniprotProteins(fullFaFname, db, mapFname, stats):
+    """ align the UniProt proteins straight to the genome with miniprot and write a PSL.
+    Used when the assembly has no gene models worth mapping through. This replaced both
+    "blat -q=prot" and mapping through Augustus: Augustus is ab initio, so going through it
+    stacks its errors on top of ours, and the BLAT protein search is very slow on a big
+    genome.
+    """
+    workDir = mapFname+".miniprot.tmp"
+    if not isdir(workDir):
+        os.makedirs(workDir)
+
+    # miniprot reads fasta, not 2bit
+    genomeFa = join(workDir, "genome.fa")
+    run(["twoBitToFa", twoBitFname(db), genomeFa])
+
+    gffName = join(workDir, "miniprot.gff")
+    run("%s -t %d --gff %s %s > %s" % (miniprotBin, miniprotThreads, genomeFa, fullFaFname, gffName))
+    os.remove(genomeFa)
+
+    # Name each alignment after the UniProt accession it came from. miniprot calls them
+    # MP000001 and puts the accession in Target=, and its ##PAF meta lines and capitalised
+    # attributes make gff3ToGenePred unhappy, so both are cleaned up here. The ID has to
+    # stay unique for GFF3, hence the .N suffix, which comes off again after the
+    # conversion so that qName is the bare accession.
+    namedName = join(workDir, "named.gff")
+    cmd = """awk -F'\\t' -v OFS='\\t' '
+      /^##PAF/ {next}
+      /^#/     {print; next}
+      $3=="mRNA" {
+          id=""; acc=""
+          if (match($9, /ID=[^;]+/))      id  = substr($9, RSTART+3, RLENGTH-3)
+          if (match($9, /Target=[^ ;]+/)) acc = substr($9, RSTART+7, RLENGTH-7)
+          if (id!="" && acc!="") { map[id]=acc; $9 = "ID=" acc "." (++n[acc]) }
+          print; next
+      }
+      { if (match($9, /Parent=[^;]+/)) {
+            p = substr($9, RSTART+7, RLENGTH-7)
+            if (p in map) $9 = "Parent=" map[p] "." n[map[p]]
+        }
+        print
+      }' %s > %s""" % (gffName, namedName)
     run(cmd)
+
+    gpName = join(workDir, "miniprot.gp")
+    run(["gff3ToGenePred", "-warnAndContinue", "-maxParseErrors=-1", "-maxConvertErrors=-1",
+         namedName, gpName])
+    run("""awk -F'\\t' -v OFS='\\t' '{sub(/\\.[0-9]+$/, "", $1); print}' %s > %s.acc""" % (gpName, gpName))
+
+    cdsName = join(workDir, "miniprot.cds")
+    chromSizes = join(workDir, "chrom.sizes")
+    run("twoBitInfo %s %s" % (twoBitFname(db), chromSizes))
+    run(["genePredToFakePsl", "-chromSize=%s" % chromSizes, "noDb", gpName+".acc", mapFname, cdsName])
+
+    alnCount = len(open(mapFname).readlines())
+    logging.info("%s: miniprot aligned the UniProt proteins to %d genomic locations" % (db, alnCount))
+    stats["aligner"] = "miniprot " + miniprotVersion()
 
 def getTransIds(db, geneTable, transcriptFa):
     """ return all possible transcript IDs given a gene table. The reason that we need is that Uniprot often
@@ -1816,7 +1874,7 @@ def writeMapDesc(stats, db, geneTable, mapDescFname):
         version = open("/gbdb/"+db+"/ncbiRefSeq/ncbiRefSeqVersion.txt").read().strip()
     elif geneTable in ['refGene', 'augustusGene', 'knownGene']:
         version = datetime.datetime.today().strftime('%Y-%m-%d')
-    elif geneTable=="blat":
+    elif geneTable=="miniprot":
         version = "direct"
     elif geneTable in ["ensGene"]:
         version = list(runQuery("hgFixed", "select version from trackVersion where db='%s' and name='ensGene' order by ix desc limit 1;" % db))[0][0]
@@ -1881,7 +1939,7 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     metaMd5 = manyTabMd5(tabFnames)
 
-    if geneTable!="blat":
+    if geneTable!="miniprot":
         transcriptFa, transcriptPsl = makeTranscriptFiles(db, geneTable, taxId, mapDir)
         transMd5 = fastaMd5(transcriptFa)
         pslMd5 = tabMd5(transcriptPsl)
@@ -1895,7 +1953,7 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     selectFname = None
     protToTrans = None
 
-    if geneTable in ["blat"]:
+    if geneTable in ["miniprot"]:
         protMapSource = {"default":"direct"}
     elif geneTable in ["augustusGene"]:
         protMapSource = {"default":"best"}
@@ -1932,9 +1990,9 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     stats["mapFname"] = basename(mapFname)
 
     logging.debug("%s does not exist" % mapFname)
-    if geneTable=="blat":
+    if geneTable=="miniprot":
         logging.error("Could not find any gene table for %s, using BLAT to map proteins" % db)
-        blatProteinsKeepBest(protFa, db, mapFname, stats)
+        miniprotProteins(protFa, db, mapFname, stats)
     else:
         if db in ["ci3"]: # wow: ciona's genome is from a different organism than the refseq transcripts.
             MINALI = 0.85
