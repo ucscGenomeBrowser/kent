@@ -12,7 +12,7 @@ if ($argc != 3) {
   printf STDERR "usage: asmHubGc5Percent.pl asmId asmId.names.tab buildDir\n";
   printf STDERR "where asmId is the assembly identifier,\n";
   printf STDERR "and   asmId.names.tab is naming file for this assembly,\n";
-  printf STDERR "and   buildDir is the directory with bbi/asmId.gc5Base.bw.\n";
+  printf STDERR "and   buildDir is the directory with bbi/asmId.gc5Base|gcOnFly.bw.\n";
   exit 255;
 }
 
