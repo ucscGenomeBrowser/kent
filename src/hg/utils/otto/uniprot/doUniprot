@@ -2333,6 +2333,13 @@ def makeLinks(bigBedDir, onlyDbs, taxIdDbs):
             if onlyDbs is not None and db not in onlyDbs:
                 continue
 
+            if genArkHubDir(db) is not None:
+                # a GenArk assembly is served from its hub, not from /gbdb/<db>/, and
+                # /gbdb/genark belongs to the GenArk build. Its files go into the contrib
+                # collection instead, see installGenArkContrib.
+                logging.debug("%s is a GenArk assembly, no /gbdb symlinks" % db)
+                continue
+
             dbBigBedDir = join(bigBedDir, db)
 
             # find the bigBed files
@@ -2524,12 +2531,78 @@ def createVersionFiles(tabDir, bigBedDir, onlyDbs, taxIdDbs):
                     versionOfh.write(fullVersion)
                 logging.info("Wrote release string to %s" % versionFname)
 
+            hubDir = genArkHubDir(db)
+            if hubDir is not None:
+                # a GenArk assembly has no /gbdb/<db>/uniprot to link into; its files and
+                # its trackDb go into the contrib collection, which carries the version
+                # string inline because a contrib trackDb cannot read a /gbdb path
+                installGenArkContrib(db, hubDir, dbDir, fullVersion, shortVersion)
+                continue
+
             linkName = join("/gbdb", db, "uniprot", "version.txt")
             makeSymlink(versionFname, linkName)
 
             logging.debug("Release string in %s, symlink from %s" % (versionFname, linkName))
 
     return versionString, shortVersion
+
+genArkContribRoot = "/hive/data/genomes/asmHubs/contrib"
+genArkContribName = "uniprot"
+
+def makeContribTrackDb(versionString, shortVersion):
+    """ trackDb stanzas for the GenArk contrib collection, from the same template the
+    archive hub uses. Three differences from the archive: the track names must not carry
+    the release, or they would change every month and break saved sessions; the data files
+    sit beside trackDb.txt rather than in a per-release subdirectory; and dataVersion has
+    to be the literal string, because a contrib trackDb cannot point at a /gbdb path.
+    """
+    templFname = join(dirname(__file__), "trackDb.template.txt")
+    tdb = open(templFname).read()
+
+    tdb = re.sub(r'^(\s*(?:track|parent)\s+\S+?)\$VER', r'\1', tdb, flags=re.MULTILINE)
+    tdb = tdb.replace("bigDataUrl $VER/", "bigDataUrl ")
+    tdb = tdb.replace("$VER", shortVersion)
+
+    lines = [l for l in tdb.splitlines() if not l.startswith("#")]
+    # the composite stanza is first, hang the shared description page and the version off it
+    out = []
+    for line in lines:
+        out.append(line)
+        if line.strip() == "track " + genArkContribName:
+            out.append("html ../docs/%s" % genArkContribName)
+            out.append("dataVersion %s" % versionString)
+    return "\n".join(out) + "\n"
+
+def installGenArkContrib(db, hubDir, dbBigBedDir, versionString, shortVersion):
+    """ write this assembly's bigBeds and a trackDb into the GenArk contrib collection.
+    A GenArk assembly is not served out of /gbdb/<db>/, so the /gbdb symlinks and the
+    trackDb .ra stanza that classic assemblies get do not apply.
+
+    This only fills in the collection under contrib/uniprot/. It deliberately does NOT
+    symlink anything into the GenArk build directories and does not touch any hub.txt:
+    installing the collection is a separate, deliberate step, done with
+    "genark addContrib uniprot" when someone decides to, not something a data update
+    should do behind your back.
+    """
+    acc = basename(hubDir.rstrip("/"))
+    collDir = join(genArkContribRoot, genArkContribName, acc)
+    if not isdir(collDir):
+        os.makedirs(collDir)
+
+    count = 0
+    for bbName in sorted(glob.glob(join(dbBigBedDir, "*.bb"))):
+        # skip the historical per-geneTable files, only the current track files belong here
+        if not basename(bbName).startswith("unip"):
+            continue
+        shutil.copyfile(bbName, join(collDir, basename(bbName)))
+        count += 1
+
+    tdbFname = join(collDir, "trackDb.txt")
+    with open(tdbFname, "w") as ofh:
+        ofh.write(makeContribTrackDb(versionString, shortVersion))
+
+    logging.info("%s: wrote %d bigBeds and a trackDb to %s" % (db, count, collDir))
+    return collDir
 
 def makeTrackDb(archDir, shortVersion):
     " create a trackDb.txt file for the archive hub in archDir "
@@ -2550,6 +2623,13 @@ def copyToArchive(bigBedDir, archRoot, shortVersion, onlyDbs):
     " make copies of the track files under the archiveDir and adapt the 'current' symlink "
     for db in os.listdir(bigBedDir):
         if onlyDbs and db not in onlyDbs:
+            continue
+
+        if genArkHubDir(db) is not None:
+            # goldenPath/archive/<db>/ is a classic-assembly download path; a GenArk
+            # assembly is published under its accession in the hubs tree instead, so
+            # archiving one here would just create a directory nothing can reach
+            logging.debug("%s is a GenArk assembly, not archiving under goldenPath" % db)
             continue
 
         archDir = join(archRoot, db, "uniprot", shortVersion)
