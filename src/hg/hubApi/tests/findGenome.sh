@@ -69,6 +69,13 @@ declare -a testCases=(
     "assemblyHg38|q=hg38&maxItemsOutput=3"
     "assemblyMm39|q=mm39&maxItemsOutput=3"
     "assemblyPrefix|q=GCA_*&maxItemsOutput=10"
+
+    # Regression: an exact NCBI accession search must also find the UCSC
+    # db name it is aliased to (hg38's description cross-references this
+    # accession).  A one-word "exact match" fast path that short-circuits
+    # on the primary key before the FULLTEXT search runs would return only
+    # GCF_000001405.40 and silently drop hg38 -- see findGenome.c history.
+    "assemblyAccessionAlias|q=GCF_000001405.40&browser=mayExist&maxItemsOutput=3"
 )
 
 # Function to clear MySQL caches
