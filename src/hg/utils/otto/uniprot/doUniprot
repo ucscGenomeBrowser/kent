@@ -996,8 +996,57 @@ def hasNoMultiMappers(db, table):
         return False
     return True
 
+# GenArk assemblies keep their gene models as bigBed files in the hub, not as MySQL tables,
+# so they need their own search. In descending order of preference:
+#   CAT        - Comparative Annotation Toolkit, shipped as a contrib collection
+#                (track hprcCatGenes, contrib/hprc2annot/catGenes.bb). Best annotation we
+#                have on the assemblies that carry it.
+#   ncbiRefSeq - RefSeq, the GenArk RefSeq gene track. On most GCF assemblies.
+#   ncbiGene   - the annotation the submitter sent to GenBank with the assembly.
+#   augustus   - ab initio prediction, present almost everywhere, so it is the last resort.
+# Each entry is (name, glob relative to the hub directory). Globs, not constructed names,
+# because the files under bbi/ carry the full asmId with its assembly-name suffix while the
+# hub directory is named with the short accession.
+genArkGeneSources = [
+    ("catGenes",   "contrib/*/catGenes.bb"),
+    ("ncbiRefSeq", "bbi/*.ncbiRefSeq.bb"),
+    ("ncbiGene",   "bbi/*.ncbiGene.bb"),
+    ("augustus",   "bbi/*.augustus.bb"),
+]
+
+dbIsHubCache = {}
+
+def genArkHubDir(db):
+    """ return the /gbdb/genark directory for a GenArk assembly, or None for a classic db.
+    dbDb.nibPath is "hub:/gbdb/genark/GCF/029/289/425/GCF_029289425.2" for these.
+    """
+    if db not in dbIsHubCache:
+        rows = list(runQuery("hgcentral", "select nibPath from dbDb where name='%s'" % db, usePublic=True))
+        nibPath = rows[0][0] if rows else ""
+        dbIsHubCache[db] = nibPath[len("hub:"):] if nibPath.startswith("hub:") else None
+    return dbIsHubCache[db]
+
+def findBestGeneBigBed(db, hubDir):
+    """ find the best gene model bigBed for a GenArk assembly.
+    Returns (sourceName, fileName), or (None, None) if the hub has no gene models at all.
+    """
+    for name, fileGlob in genArkGeneSources:
+        matches = sorted(glob.glob(join(hubDir, fileGlob)))
+        if matches:
+            if len(matches) > 1:
+                logging.warning("%s: %d files match %s, using %s" % (db, len(matches), fileGlob, matches[0]))
+            logging.info("%s: best gene models are %s, from %s" % (db, name, matches[0]))
+            return name, matches[0]
+    logging.warning("%s: no gene models found in %s, will have to BLAT the proteins" % (db, hubDir))
+    return None, None
+
 def findBestGeneTable(db):
     " find the best gene table for a given organism and return it "
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        name, _ = findBestGeneBigBed(db, hubDir)
+        return name if name else "blat"
+
     if db=="hg19":
         tables = ["refGene"]
         # because in 2021, refSeq maps NM_001129826.3 still to chrX_jh159150_fix, confirmed as a bug by Terence
