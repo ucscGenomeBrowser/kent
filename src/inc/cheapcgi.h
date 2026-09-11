@@ -707,6 +707,11 @@ void cgiChangeVar(char *varName, char *value);
 void cgiSetMaxLogLen(int l);
 /* set the size of variable values that are dumped to stderr. Default is 0, which means no logging */
 
+void cgiSkipMalformedPairs(boolean on);
+/* Tell the cookie parser to step over a malformed pair instead of losing the
+ * pair after it or aborting.  hg.conf skipMalformedCgiPairs turns this on;
+ * hgConfig.c pushes it in, since these libraries do not read hg.conf. */
+
 boolean isValidJsonpCallback(char *s);
 /* Return TRUE if s is safe to use as a JSONP callback name: non-empty, not
  * too long, and every dot-separated segment is a C symbol (letters, digits,

@@ -1,0 +1,44 @@
+cookie: first=1; second=2; third=3
+off : [first=1][second=2][third=3]
+on  : [first=1][second=2][third=3]
+
+cookie: first=1;second=2;third=3
+off : [first=1][second=2][third=3]
+on  : [first=1][second=2][third=3]
+
+cookie: ;first=1;second=2
+off : [first=(not found)][second=2][third=(not found)]
+on  : [first=1][second=2][third=(not found)]
+
+cookie: first=1;;second=2;third=3
+off : [first=1][second=(not found)][third=3]
+on  : [first=1][second=2][third=3]
+
+cookie: first=1;second=2;;
+off : aborted: Mangled Cookie input string: no = in ';' (offset 17 in complete cookie string: 'first=1;second=2;;')
+on  : [first=1][second=2][third=(not found)]
+
+cookie: first=1; broken; second=2
+off : [first=1][second=(not found)][third=(not found)]
+on  : [first=1][second=2][third=(not found)]
+
+cookie: first=1; second=2; broken
+off : aborted: Mangled Cookie input string: no = in 'broken' (offset 19 in complete cookie string: 'first=1; second=2; broken')
+on  : [first=1][second=2][third=(not found)]
+
+cookie: broken
+off : aborted: Mangled Cookie input string: no = in 'broken' (offset 0 in complete cookie string: 'broken')
+on  : [first=(not found)][second=(not found)][third=(not found)]
+
+cookie: first=; second=2
+off : [first=][second=2][third=(not found)]
+on  : [first=][second=2][third=(not found)]
+
+cookie: 
+off : [first=(not found)][second=(not found)][third=(not found)]
+on  : [first=(not found)][second=(not found)][third=(not found)]
+
+cookie: ;
+off : aborted: Mangled Cookie input string: no = in ';' (offset 0 in complete cookie string: ';')
+on  : [first=(not found)][second=(not found)][third=(not found)]
+
