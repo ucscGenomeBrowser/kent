@@ -1891,7 +1891,22 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
         gpName = join(dbDir, "transcripts.gp")
         cdsName = join(dbDir, "transcripts.cds")
 
-        run(["bigGenePredToGenePred", geneBb, gpName])
+        run(["bigGenePredToGenePred", geneBb, gpName+".raw"])
+
+        # CAT names its transcripts after the source gene, so paralogs share a name: the
+        # hs1 CAT set has 777 duplicated names in 234903 transcripts, RBMY1F-1 three times
+        # with three different lengths. pslMap then cannot tell which transcript a protein
+        # alignment meant and stops with "inPsl RBMY1F-1 tSize (1887) != mapPsl RBMY1F-1
+        # qSize (1718)". Make the names unique before the fasta and the PSL are derived
+        # from this file, so the two always agree. RefSeq accessions are unique already,
+        # so this is a no-op for them.
+        run("""awk -F'\t' -v OFS='\t' '{ seen[$1]++; if (seen[$1]>1) $1 = $1 "-dup" seen[$1]; print }' %s.raw > %s""" \
+                % (gpName, gpName))
+        dupCount = len(open(gpName+".raw").readlines()) - len(set(l.split("\t")[0] for l in open(gpName)))
+        if dupCount:
+            logging.info("%s: made %d duplicated transcript names unique" % (db, dupCount))
+        os.remove(gpName+".raw")
+
         run(["genePredToFakePsl", "-chromSize=%s" % chromSizesFile(db),
              "noDb", gpName, pslName, cdsName])
         run(["getRnaPred", "-genomeSeqs=%s" % twoBitFname(db),
