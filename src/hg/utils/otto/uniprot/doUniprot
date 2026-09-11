@@ -1902,9 +1902,11 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
         # so this is a no-op for them.
         run("""awk -F'\t' -v OFS='\t' '{ seen[$1]++; if (seen[$1]>1) $1 = $1 "-dup" seen[$1]; print }' %s.raw > %s""" \
                 % (gpName, gpName))
-        dupCount = len(open(gpName+".raw").readlines()) - len(set(l.split("\t")[0] for l in open(gpName)))
+        rawNames = [l.split("\t")[0] for l in open(gpName+".raw")]
+        dupCount = len(rawNames) - len(set(rawNames))
         if dupCount:
-            logging.info("%s: made %d duplicated transcript names unique" % (db, dupCount))
+            logging.info("%s: %d of %d transcripts shared a name with another and were "
+                    "renamed to keep the fasta and the PSL in step" % (db, dupCount, len(rawNames)))
         os.remove(gpName+".raw")
 
         run(["genePredToFakePsl", "-chromSize=%s" % chromSizesFile(db),
