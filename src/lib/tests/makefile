@@ -10,7 +10,7 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
-    dnaCodonTest pathSimplifyTest faSpeedReadTest
+    dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -42,6 +42,13 @@ dnaCodonTest: dnaCodonTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/dnaCodonTest${EXE}
 	${BIN_DIR}/dnaCodonTest > output/dnaCodonTest
 	diff expected/dnaCodonTest output/dnaCodonTest
+
+cgiParseTest: cgiParseTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/cgiParseTest cgiParseTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/cgiParseTest${EXE}
+	${BIN_DIR}/cgiParseTest > output/cgiParseTest
+	diff expected/cgiParseTest output/cgiParseTest
 
 htmlSanitizeTest: htmlSanitizeTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

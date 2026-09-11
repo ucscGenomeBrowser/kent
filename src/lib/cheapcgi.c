@@ -999,6 +999,27 @@ if (s == NULL)
 return s + strspn(s, "&;");
 }
 
+static char *endCurrentPair(char *pair)
+/* Zero-terminate the var=val pair that starts at pair, and return the start of
+ * whatever follows it, or NULL if it was the last one.
+ *
+ * The parsers below used to look for the separator only after the '=', which
+ * made them read across the end of a pair that has no '=' in it at all.  A
+ * query string of "g-catV2&db=hg38" was stored as one variable named
+ * "g-catV2&db", so db was lost with no warning, and the same pair at the end of
+ * the string had no '=' left to find and aborted the whole request.  Finding
+ * the end of the pair first confines both parsers to one pair at a time.
+ * refs #38335 */
+{
+char *end = strchr(pair, '&');
+if (end == NULL)
+    end = strchr(pair, ';');	/* Accomodate DAS. */
+if (end == NULL)
+    return NULL;
+*end = 0;
+return end+1;
+}
+
 boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
 /* Parse out next var/val in a var=val&var=val... cgi formatted string 
  * This will insert zeroes and other things into string. 
@@ -1008,29 +1029,23 @@ boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
  *     while (cgiParseNext(&pt, &var, &val))
  *          printf("%s\t%s\n", var, val); */
 {
-char *var = skipEmptyPairs(*pInput);
-if (var == NULL || var[0] == 0)
-    return FALSE;
-char *val = strchr(var, '=');
-if (val == NULL)
-    errAbort("Mangled CGI input string %s", var);
+char *var, *val;
+for (;;)
+    {
+    var = skipEmptyPairs(*pInput);
+    if (var == NULL || var[0] == 0)
+        return FALSE;
+    *pInput = endCurrentPair(var);
+    val = strchr(var, '=');
+    if (val != NULL)
+        break;
+    /* A pair with no '=' in it names nothing.  Skip it rather than throwing
+     * away the rest of the request over it.  refs #38335 */
+    }
 *val++ = 0;
-char *end = strchr(val, '&');
-if (end == NULL)
-    end = strchr(val, ';');  // For DAS
-if (end == NULL)
-    {
-    end = val + strlen(val);
-    *pInput = NULL;
-    }
-else
-    {
-    *pInput = end+1;
-    *end = 0;
-    }
 *retVar = var;
 *retVal = val;
-cgiDecode(val,val,end-val);
+cgiDecode(val,val,strlen(val));
 return TRUE;
 }
 
@@ -1063,17 +1078,16 @@ if (logCgiVarMaxLen > 0)
 namePt = input;
 while ((namePt = skipEmptyPairs(namePt)) != NULL && namePt[0] != 0)
     {
+    nextNamePt = endCurrentPair(namePt);
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)
 	{
-	errAbort("Mangled CGI input string %s", namePt);
+	/* A pair with no '=' in it names nothing.  Skip it rather than
+	 * aborting and throwing away the rest of the request.  refs #38335 */
+	namePt = nextNamePt;
+	continue;
 	}
     *dataPt++ = 0;
-    nextNamePt = strchr(dataPt, '&');
-    if (nextNamePt == NULL)
-	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
-    if (nextNamePt != NULL)
-         *nextNamePt++ = 0;
 
     if (logMsg && dataPt && strlen(dataPt) < logCgiVarMaxLen)
         dyStringPrintf(logMsg, "%s=%s ", namePt, dataPt); // if dataPt is empty string, still print it, could be important
