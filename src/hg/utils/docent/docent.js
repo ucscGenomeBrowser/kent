@@ -1254,9 +1254,17 @@ const T_START = Date.now();
         // rather than a caption that shrinks to nothing next to a 2500px panel.
         const maxW = Math.max(...rows.map(r => r.img.naturalWidth));
         const fs = labelSize != null ? labelSize : Math.max(11, Math.round(maxW / 55));
+        // The gutter has to fit the WIDEST label, not a fixed two characters. A one-letter
+        // auto label fits anything, but a word label ("virtChrom") overflows a fixed gutter
+        // and paints over the left edge of its own panel -- which reads as the panels being
+        // misaligned, even though every panel is placed at the same x.
+        const style = w => `flex:0 0 ${w}px;font-weight:bold;font-size:${fs}px;`
+          + `line-height:1;color:#111;white-space:nowrap;`;
+        for (const r of rows) r.lab.style.cssText = style(0);
+        const gutter = Math.max(Math.round(fs * 1.5),
+                                ...rows.map(r => r.lab.scrollWidth + Math.round(fs * 0.4)));
         for (const r of rows) {
-          r.lab.style.cssText = `flex:0 0 ${Math.round(fs * 1.5)}px;font-weight:bold;`
-            + `font-size:${fs}px;line-height:1;color:#111;`;
+          r.lab.style.cssText = style(gutter);
           r.img.style.width = r.img.naturalWidth + 'px';   // natural size, never stretched
         }
         return fs;

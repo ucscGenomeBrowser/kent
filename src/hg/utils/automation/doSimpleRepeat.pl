@@ -20,6 +20,7 @@ my $chunkSize = 50000000;	# will be readjusted if seqCount > 100000
 my $trfChunkSize = 500000;	# new argument to trfBig Sept 2026
 my $singleRunSize = 200000000;
 my $clusterBin = qw(/cluster/bin/$MACHTYPE);
+my $clusterScripts = qw(/cluster/bin/scripts);
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;
@@ -340,7 +341,7 @@ twoBitToFa $unmaskedSeq stdout \\
 | $clusterBin/trfBig -chunkMaxSize=$trfChunkSize $trf409Option -trf=$clusterBin/$trfCmd \\
       stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=\$TMPDIR
 if ( -s simpleRepeat.bed ) then
-  $clusterBin/mergeTrf simpleRepeat.bed > simpleRepeat.merge.bed
+  $clusterScripts/mergeTrf.py simpleRepeat.bed > simpleRepeat.merge.bed
 else
   touch -r simpleRepeat.bed simpleRepeat.merge.bed
 endif
@@ -391,7 +392,7 @@ if (\$status) then
   exit 1
 endif
 if ( -s simpleRepeat.bed ) then
-  $clusterBin/mergeTrf simpleRepeat.bed > simpleRepeat.merge.bed
+  $clusterScripts/mergeTrf.py simpleRepeat.bed > simpleRepeat.merge.bed
 else
   touch -r simpleRepeat.bed simpleRepeat.merge.bed
 endif
