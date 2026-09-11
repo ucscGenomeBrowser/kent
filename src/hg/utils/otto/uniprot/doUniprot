@@ -1026,6 +1026,23 @@ def genArkHubDir(db):
         dbIsHubCache[db] = nibPath[len("hub:"):] if nibPath.startswith("hub:") else None
     return dbIsHubCache[db]
 
+def genArkFile(db, hubDir, fileGlob, what):
+    " return the single file matching fileGlob inside a GenArk hub directory "
+    matches = glob.glob(join(hubDir, fileGlob))
+    if len(matches)!=1:
+        errAbort("%s: expected exactly one %s in %s, found %d: %s" % \
+                (db, what, hubDir, len(matches), matches))
+    return matches[0]
+
+def genArkTwoBit(db, hubDir):
+    " the assembly sequence of a GenArk assembly "
+    # named with the short accession, unlike the files under bbi/
+    return genArkFile(db, hubDir, "*.2bit", "2bit file")
+
+def genArkChromSizes(db, hubDir):
+    " the chrom.sizes of a GenArk assembly. Note the .txt suffix, which /hive does not use "
+    return genArkFile(db, hubDir, "*.chrom.sizes.txt", "chrom.sizes file")
+
 def findBestGeneBigBed(db, hubDir):
     """ find the best gene model bigBed for a GenArk assembly.
     Returns (sourceName, fileName), or (None, None) if the hub has no gene models at all.
@@ -1483,8 +1500,10 @@ def getTransIds(db, geneTable, transcriptFa):
       so we can log how many transcript can possibly mapped (and which ones). This is important for debugging.
     """
     # no idea how to get the version suffix out of our mysql tables - thanks Obama!
-    if geneTable=="refGene":
-        logging.debug("Gene table is refGene, reading IDs from %s" % transcriptFa)
+    # A GenArk assembly has no MySQL tables, but the fasta we built from its gene bigBed
+    # holds every transcript ID already, so read them from there as refGene does.
+    if geneTable=="refGene" or genArkHubDir(db) is not None:
+        logging.debug("Reading transcript IDs from %s" % transcriptFa)
         allTrans = set(parseFasta(open(transcriptFa)).keys())
         return allTrans
 
@@ -1733,6 +1752,25 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
     pslFields = "matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert," \
         "tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts"
 
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        # GenArk assembly: no MySQL tables at all, the gene models are a bigGenePred in the
+        # hub. bigGenePredToGenePred gets us back to a genePred, and both of the tools that
+        # follow can work off the hub's own chrom.sizes and 2bit rather than chromInfo, so
+        # nothing here needs a database.
+        geneBb = findBestGeneBigBed(db, hubDir)[1]
+        gpName = join(dbDir, "transcripts.gp")
+        cdsName = join(dbDir, "transcripts.cds")
+
+        run(["bigGenePredToGenePred", geneBb, gpName])
+        run(["genePredToFakePsl", "-chromSize=%s" % genArkChromSizes(db, hubDir),
+             "noDb", gpName, pslName, cdsName])
+        run(["getRnaPred", "-genomeSeqs=%s" % genArkTwoBit(db, hubDir),
+             "noDb", gpName, "all", faName])
+
+        logging.info("Created %s and %s for %s/%s from %s" % (faName, pslName, db, geneTable, geneBb))
+        return faName, pslName
+
     if geneTable=="ncbiRefSeq":
         origFa = "/gbdb/%s/ncbiRefSeq/seqNcbiRefSeq.rna.fa" % db
         shutil.copyfile(origFa, faName)
@@ -1767,7 +1805,14 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
 def writeMapDesc(stats, db, geneTable, mapDescFname):
     " write a little json file that points to the map file used and some basic stats about it "
     logging.debug("making json file with version and other lift info")
-    if geneTable == "ncbiRefSeq":
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        # A GenArk assembly has no ncbiRefSeqVersion.txt. Date the gene models by the
+        # bigBed we actually read, which is what the user needs to tie the mapping to a
+        # particular annotation; the source name is carried separately in geneTable.
+        geneBb = findBestGeneBigBed(db, hubDir)[1]
+        version = datetime.datetime.fromtimestamp(os.path.getmtime(geneBb)).strftime('%Y-%m-%d')
+    elif geneTable == "ncbiRefSeq":
         version = open("/gbdb/"+db+"/ncbiRefSeq/ncbiRefSeqVersion.txt").read().strip()
     elif geneTable in ['refGene', 'augustusGene', 'knownGene']:
         version = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -2121,7 +2166,13 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
                 continue
 
             logging.debug("Annotating assembly %s" % db)
-            chromSizesFname = "/hive/data/genomes/%s/chrom.sizes" % db
+            # a GenArk assembly has no /hive/data/genomes directory, its chrom.sizes
+            # lives in the hub
+            hubDir = genArkHubDir(db)
+            if hubDir is not None:
+                chromSizesFname = genArkChromSizes(db, hubDir)
+            else:
+                chromSizesFname = "/hive/data/genomes/%s/chrom.sizes" % db
 
             accToMeta = parseRecordMeta(tabDir, taxId, doTrembl)
 
