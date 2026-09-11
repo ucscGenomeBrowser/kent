@@ -1,0 +1,134 @@
+<h2>Description</h2>
+
+<p>
+This track is part of the
+<a href="hgTrackUi?hgsid=${hgsid}&amp;g=long_read_transcripts">Long-read Transcripts</a>
+collection.
+</p>
+
+<p>
+It shows reference-divergent transcripts (RDTs) found in the genomes of the
+Human Pangenome Reference Consortium (HPRC), aligned back onto GRCh38. An RDT is
+a transcript that was sequenced and assembled in one of these genomes but that
+does not match the GRCh38 gene annotation well, either because it uses splice
+sites or exons that the reference annotation does not have, or because it comes
+from a region where the donor genome differs from the reference. Transcripts
+like these are invisible to an analysis that maps reads only against GRCh38, so
+they are one way of measuring how much of human transcript diversity a single
+reference genome misses.
+</p>
+
+<p>
+The track holds about 180,000 alignments of roughly 120,000 distinct transcript
+sequences, drawn from 412 haplotype assemblies of 206 individuals. Alignments
+are far from evenly spread. Around 40% of them fall in two places: the MHC
+class I region on chr6 and the immunoglobulin heavy chain locus on chr14. Both
+are among the most polymorphic loci in the genome, so a reference-based
+annotation is expected to describe them poorly.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each item is the alignment of one transcript sequence to GRCh38. Blocks are
+aligned segments, thin connecting lines with arrows are the gaps between them,
+and the arrows give the strand the transcript aligns to. Because these are
+alignments rather than gene models, the display also marks where the transcript
+and the reference disagree: an orange line marks bases that the transcript has
+in the middle of the alignment but the reference does not, a purple line marks
+the same at either end of the transcript, and a pair of horizontal lines marks a
+place where both sequences have an insertion relative to the other. These
+markers can be turned off in the track configuration.
+</p>
+
+<p>
+The item name is the identifier of the transcript in its source haplotype, so it
+carries the sample name, the haplotype, and the PacBio locus and isoform number,
+for example <tt>G_PBKT.HG01960_Hap1_PB.104.1</tt>. Names can be typed into the
+position box to jump to a transcript. The same transcript can align in more than
+one place, so a name can match several positions and the position box then
+offers a list.
+</p>
+
+<p>
+Where the alignments are too dense to tell apart, the track switches by itself to
+a coverage graph. In the most crowded parts of the MHC this happens in a window
+of only a few kilobases; elsewhere it happens once the window passes 200 kbp.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Full-length RNA of 206 HPRC Release 2 samples was sequenced with the PacBio
+<a href="https://www.pacb.com/technology/kinnex/" target="_blank">Kinnex</a>
+protocol. For each sample, transcripts were assembled and annotated against that
+sample's own two haplotype assemblies rather than against GRCh38, giving 412
+per-haplotype transcript annotations. Each transcript was compared to the
+reference annotation lifted onto the haplotype with
+<a href="https://github.com/agshumate/Liftoff" target="_blank">Liftoff</a> and
+classified with
+<a href="https://ccb.jhu.edu/software/stringtie/gffcompare.shtml" target="_blank">gffcompare</a>,
+and coding potential was assessed with
+<a href="https://github.com/alevar/ORFanage" target="_blank">ORFanage</a>.
+Transcripts that diverged from the reference annotation were kept as RDTs. The
+RDT sequences from all haplotypes were then clustered at 99% sequence identity
+and 99% coverage, and one representative sequence per cluster was aligned back
+to GRCh38 to produce this track. The per-haplotype annotations themselves, which
+carry the gene assignment, gffcompare class code, read support and ORF calls for
+every transcript, are available as a track hub on the individual HPRC assemblies
+(see the repository linked below).
+</p>
+
+<p>
+The alignment file was downloaded from
+<a href="https://github.com/maxgmarin/hprc-r2-rdt-testhub" target="_blank">https://github.com/maxgmarin/hprc-r2-rdt-testhub</a>,
+file <tt>Data/HPRC.PanTx.ClusteredRDTsRepSeqs.SID99C99.AlnToHG38.bb</tt>. At
+UCSC it was converted back to text, checked against the GRCh38 chromosome sizes,
+and rebuilt as a bigBed with an index on the transcript name so that names can be
+searched. No alignments were added or dropped: the 180,464 alignments in the
+source file are all present in the track. Note that the source file records no
+mismatch counts, so the per-alignment details page reports every alignment as
+100% identity regardless of how much the transcript actually diverges from
+GRCh38. The commands used are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/hprcRdt.txt" target="_blank">makeDoc</a>,
+and the build script is in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/hprcRdt" target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>hprcRdt</i>.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in a bigBed
+file that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/hprcRdt/" target="_blank">our
+download server</a>. The file for this track is called <tt>hprcRdt.bb</tt>.
+Individual regions or the whole genome annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as
+a precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/hprcRdt/hprcRdt.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original annotation source data can be downloaded from
+<a href="https://github.com/maxgmarin/hprc-r2-rdt-testhub" target="_blank">https://github.com/maxgmarin/hprc-r2-rdt-testhub</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Max Marin at the Dana-Farber Cancer Institute for producing this
+annotation and making it available, and to the
+<a href="https://humanpangenome.org/" target="_blank">Human Pangenome Reference
+Consortium</a> for the assemblies and the sequencing data.
+</p>
