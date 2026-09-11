@@ -11,6 +11,12 @@
 # boolean is a release gate or a mirror knob.  Those two are refused on
 # purpose; see auto_register()'s comments in hgConfCatalog.py.
 #
+# It carries one errand of its own, on the same terms.  When a gate's default
+# is flipped TRUE the hand-written line that turned it on in some machine's
+# hg.conf becomes pointless, and nobody is watching for that, so --redundant
+# names those lines here.  Deleting one is a judgement about a file this job
+# does not own, so it only ever reports them.
+#
 # It runs in the weekly build's own tree, and that tree is shared with a build
 # process that will not tolerate surprises, so three rules are absolute:
 #
@@ -143,6 +149,28 @@ trap 'cleanup; rm -rf "$work"' EXIT
 # whenever a row is waiting to be classified, so the exit code is information.
 "$CATALOG" --reconcile > "$work/reconcile" 2>&1 || true
 
+# The third pass, and the only one that looks outside the tree.  Flipping a
+# gate's default to TRUE leaves a line behind in every hg.conf somebody had
+# turned it on in by hand, and that line then reads on locally whatever the
+# tree says, which is how a wrong default survives on the one machine that
+# would notice.  Silent unless there is a line to delete, so it costs nothing
+# on the nights there is nothing to say.  Non-zero is the news, not an error,
+# hence || true under set -e.
+"$CATALOG" --redundant > "$work/redundant" 2>&1 || true
+redundant=$(sed -n 's/^REDUNDANT .*: \([0-9][0-9]*\)$/\1/p' \
+    "$work/redundant" | head -1)
+: "${redundant:=0}"
+
+# Both mail paths below want this section on the same terms, and the wording
+# has to say whose job it is: the shared conf on this host is not the reporter's
+# to edit, and hgwbeta and the RR cannot be read from here at all.
+redundant_notes() {
+    [[ -s $work/redundant ]] || return 0
+    echo
+    echo "hg.conf lines a flipped default has made pointless:"
+    sed 's/^/  /' "$work/redundant"
+}
+
 # State worth carrying in one line: a bare pulse would say the cron is alive
 # without saying whether it is doing anything, and the point of the heartbeat is
 # to keep this job in mind rather than merely prove it ran.  Count the holding
@@ -157,7 +185,8 @@ waiting=$(sed -n \
 at=$(git rev-parse --short HEAD)
 
 if git diff --quiet -- "$RELPATH"; then
-    beat "nothing to register, $waiting awaiting classification, tree at $at"
+    beat "nothing to register, $waiting awaiting classification," \
+         "$redundant conf line(s) to delete, tree at $at"
     # Still speak up if reconcile found something the machine cannot fix on its
     # own, since that is the whole point of running.  This goes out whatever the
     # heartbeat setting: it is news, not a pulse.
@@ -165,6 +194,7 @@ if git diff --quiet -- "$RELPATH"; then
         echo "hg.conf catalog: nothing to register, but --reconcile has notes:"
         cat "$work/reconcile"
     fi
+    redundant_notes
     exit 0
 fi
 
@@ -215,11 +245,13 @@ if [[ $PUSH == yes ]]; then
     fi
 fi
 
-beat "committed ${count:-0} row(s) at $(git rev-parse --short HEAD), $waiting awaiting classification"
+beat "committed ${count:-0} row(s) at $(git rev-parse --short HEAD)," \
+     "$waiting awaiting classification, $redundant conf line(s) to delete"
 echo "hg.conf catalog: $subject"
 echo
 sed 's/^/  /' "$work/register"
 echo
 echo "Left for a person to decide:"
 sed 's/^/  /' "$work/reconcile"
+redundant_notes
 exit 0

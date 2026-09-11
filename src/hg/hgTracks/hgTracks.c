@@ -9929,7 +9929,7 @@ if (!hideControls)
             hPrintf(" ");
             }
 
-        if (cfgOptionBooleanDefault("showAliases", FALSE) && sameString(virtModeType, "default"))
+        if (cfgOptionBooleanDefault("showAliases", TRUE) && sameString(virtModeType, "default"))
             printAliases(chromName, virtChromName);
 
 	if (virtualSingleChrom()) // DISGUISE VMODE

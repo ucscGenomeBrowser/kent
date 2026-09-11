@@ -14,7 +14,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatModelerPath = "/hive/data/outside/RepeatModeler-2.0.7";
+my $RepeatModelerPath = "/hive/data/outside/RepeatModeler-2.0.9";
 my $RepeatModeler = "$RepeatModelerPath/RepeatModeler";
 my $BuildDatabase = "$RepeatModelerPath/BuildDatabase";
 # configured to consume one entire ku machine node
