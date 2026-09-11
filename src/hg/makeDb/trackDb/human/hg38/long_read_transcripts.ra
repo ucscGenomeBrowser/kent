@@ -6,3 +6,4 @@ group rna
 
 include encode4LongRnaTranscripts.ra
 include clsLongReadRna.ra
+include hprcRdt.ra alpha

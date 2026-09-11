@@ -1,0 +1,25 @@
+track hprcRdt
+superTrack long_read_transcripts
+shortLabel HPRC RDTs
+longLabel Reference-Divergent Transcripts from 206 HPRC Release 2 genomes (PacBio Kinnex)
+type bigPsl
+bigDataUrl /gbdb/$D/hprcRdt/hprcRdt.bb
+visibility pack
+searchIndex name
+indelDoubleInsert on
+indelQueryInsert on
+# above 200 kbp the alignments pile up too densely to read, so switch to a
+# coverage graph. The HLA and IGH loci carry tens of thousands of them.
+maxWindowCoverage 200000
+mouseOver <b>Transcript</b>: ${name}<br><b>Transcript length</b>: ${oChromSize} bp<br><b>Aligned bases</b>: ${match}
+
+# searchIndex on its own only tells hgFind which bigBed index to use. Without a
+# search spec stanza there is no hgFindSpec entry, and the transcript IDs are
+# not findable from the position box at all.
+searchTable hprcRdt
+# "bigBed" and not "bigPsl": hgFindSpec.c only skips the "does this MySQL table
+# exist" check for the literal string "bigBed", so any other big* value makes
+# the spec get dropped at load time for a track that has no table.
+searchType bigBed
+searchDescription HPRC reference-divergent transcript
+searchPriority 50
