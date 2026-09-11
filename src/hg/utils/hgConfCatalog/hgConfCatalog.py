@@ -374,9 +374,10 @@ RELEASE_GATES = {
           note="Let the calculated GC track coexist with the stored one.  A "
                "sub-flag of gcOnTheFly, so it should be deleted with it "
                "rather than outliving it."),
-        h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+        h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="TRUE",
           role="gate", verified=True,
-          note="Show chromosome alias names in the position box."),
+          note="Show chromosome alias names in the position box.  On by "
+               "default; the flag stays so a mirror can switch it back off."),
         h("showColorPicker", "flag", "hg/lib/hui.c", default="TRUE",
           role="gate", verified=True,
           note="The track colour picker in track UI.  On by default; the "
