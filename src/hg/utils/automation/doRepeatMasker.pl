@@ -16,7 +16,7 @@ use HgRemoteScript;
 use HgStepManager;
 
 # Hardcoded command path:
-my $RepeatMaskerPath = "/hive/data/outside/RepeatMasker/RepeatMasker-4.2.1";
+my $RepeatMaskerPath = "/hive/data/outside/RepeatMasker/RepeatMasker-4.2.4";
 my $RepeatMasker = "$RepeatMaskerPath/RepeatMasker";
 # default engine changed from crossmatch to rmblast as of 2022-12
 # with RM version 4.1.4
@@ -338,21 +338,19 @@ chmod a+x RMRun.csh
 # Record RM version used:
 printf "The repeat files provided for this assembly were generated using RepeatMasker.\\
   Smit, AFA, Hubley, R & Green, P.,\\
-  RepeatMasker version 4.2.1\\
-  1996-2025 <http://www.repeatmasker.org>.\\
+  RepeatMasker version 4.2.4\\
+  1996-2026 <http://www.repeatmasker.org>.\\
 \\
 VERSION:\\n" > ../versionInfo.txt
 
 ./dummyRun.csh | grep -v "dev/null" >> ../versionInfo.txt
 
 $RepeatMasker -v >> ../versionInfo.txt
-printf "# RMRBMeta.embl library version: %s\\n" "`grep RELEASE $RepeatMaskerPath/Libraries/RMRBMeta.embl`" >> ../versionInfo.txt
+printf "# FamDB version 3.0.0 June 2026\\n" "# RMRBMeta.embl library version: %s\\n" >> ../versionInfo.txt
 printf "# RepeatMasker engine: %s\\n" "${RepeatMaskerEngine}" >> ../versionInfo.txt
 
 ls -ld $RepeatMaskerPath $RepeatMasker
 $RepeatMasker -v
-echo -n "# RMRBMeta.embl library version: "
-grep RELEASE $RepeatMaskerPath/Libraries/RMRBMeta.embl | sed -e 's/  *\\*\$//;'
 echo "# RepeatMasker engine: $RepeatMaskerEngine"
 _EOF_
   );

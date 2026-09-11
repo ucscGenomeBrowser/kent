@@ -1366,6 +1366,11 @@ if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
     -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
       -trf409=6 -dbHost=$dbHost -smallClusterHub=$trfClusterHub \\
         -workhorse=$workhorse \$asmId
+  if [ -s simpleRepeat.merge.bed ]; then
+    gzip simpleRepeat.merge.bed &
+  else
+    rm -f simpleRepeat.merge.bed
+  fi
   if [ -s simpleRepeat.bed ]; then
     gzip simpleRepeat.bed &
   else
