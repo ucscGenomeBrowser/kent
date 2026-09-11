@@ -1494,6 +1494,43 @@ def twoBitFname(db):
         return genArkTwoBit(db, hubDir)
     return "/gbdb/{db}/{db}.2bit".format(db=db)
 
+def miniprotRamGb(genomeFa):
+    """ how much RAM to reserve for a miniprot run on this genome, in whole GB.
+    Measured on real assemblies: peak RSS is linear in genome size at about 11 GB per Gb
+    of sequence and is flat in the thread count, because the index is built once and shared
+    (2.49 GB at -t 1 versus 2.60 GB at -t 16 on the same 227 Mb). So this is sized off the
+    sequence only, with headroom, and never below a small floor.
+    """
+    bases = os.path.getsize(genomeFa) # near enough, fasta is one byte per base plus headers
+    gb = int(bases / 1e9 * 14) + 1
+    return max(gb, 8)
+
+def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
+    """ run one miniprot job on the parasol cluster.
+    It has to be told both numbers: para's default RAM is the node's RAM divided by its CPU
+    count, which for a 16 CPU job is far less than miniprot needs, and without -cpu parasol
+    would pack more of these onto a node than it has cores for.
+    """
+    ram = miniprotRamGb(genomeFa)
+    jobDir = join(workDir, "cluster")
+    if not isdir(jobDir):
+        os.makedirs(jobDir)
+
+    # a wrapper, so the jobList line stays free of the redirection and quoting that
+    # parasol's job parser does not accept
+    jobSh = join(jobDir, "runMiniprot.sh")
+    with open(jobSh, "w") as ofh:
+        ofh.write("#!/bin/sh\nset -e\n")
+        ofh.write("%s -t %d --gff %s %s > $1\n" % (miniprotBin, miniprotThreads, genomeFa, protFa))
+    os.chmod(jobSh, 0o755)
+
+    jobList = join(jobDir, "jobList")
+    with open(jobList, "w") as ofh:
+        ofh.write("%s {check out exists %s}\n" % (jobSh, gffName))
+
+    logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg" % (db, miniprotThreads, ram))
+    run("cd %s && para make -cpu=%d -ram=%dg jobList" % (jobDir, miniprotThreads, ram))
+
 def miniprotProteins(fullFaFname, db, mapFname, stats):
     """ align the UniProt proteins straight to the genome with miniprot and write a PSL.
     Used when the assembly has no gene models worth mapping through. This replaced both
@@ -1510,7 +1547,7 @@ def miniprotProteins(fullFaFname, db, mapFname, stats):
     run(["twoBitToFa", twoBitFname(db), genomeFa])
 
     gffName = join(workDir, "miniprot.gff")
-    run("%s -t %d --gff %s %s > %s" % (miniprotBin, miniprotThreads, genomeFa, fullFaFname, gffName))
+    runMiniprotOnCluster(db, genomeFa, fullFaFname, gffName, workDir)
     os.remove(genomeFa)
 
     # Name each alignment after the UniProt accession it came from. miniprot calls them
