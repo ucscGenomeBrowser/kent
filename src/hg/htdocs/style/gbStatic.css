@@ -289,6 +289,10 @@ span#home-link {
 /* TODO: Move out of here after static page push. 
  * This is shared with CGI's. Currently also in gbAfterMenu.css */
 
+/* The blue must stay in step with nice_menu.css, which is the one place it is defined.  It is
+ * repeated here on purpose: static pages pull nice_menu.css in through hgMenubar as a bare URL
+ * with no ?v= cache-buster, so a visitor can hold a stale copy of it while getting a fresh copy
+ * of this file.  Without the repeat they would see the old pre-#38206 bar. */
 #main-menu-whole {
     background-color: #003a72 !important;
     font-family: Lato,Arial,Helvetica,sans-serif !important;

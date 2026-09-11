@@ -1,11 +1,6 @@
-/* Override nice-menu: */
+/* Override nice-menu: the font only.  The bar's blue is set once, in nice_menu.css. */
 #main-menu-whole {
-    background-color: #003a72;
     font-family: Lato,Arial,Helvetica,sans-serif;
-}
-
-span#home-link {
-    background-color: #003a72;
 }
 
 ul.nice-menu a {
