@@ -6126,7 +6126,7 @@ puts("</DIV>\n\n");
 boolean tdbSupportsColorOverride(struct trackDb *tdb)
 /* Return TRUE if this track type supports the color override feature. */
 {
-if (!cfgOptionBooleanDefault("showColorPicker", FALSE))
+if (!cfgOptionBooleanDefault("showColorPicker", TRUE))
     return FALSE;
 char *type = tdb->type;
 char *track = tdb->track;

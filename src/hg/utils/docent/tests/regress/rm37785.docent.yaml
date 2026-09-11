@@ -22,6 +22,9 @@
 # of the row it belongs to. Fixed: map_center_mane is in td_data_mane. Buggy: it moved into
 # td_data_knownGene along with the squished slice. Both halves are asserted, because the
 # right map being present says nothing about a stray copy elsewhere.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr11:528907-538911

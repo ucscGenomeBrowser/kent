@@ -16,6 +16,9 @@
 # One track is turned on and lifted so the assertions before the search can tell a drawn
 # view from an error page. mane is deliberately not used: it draws nothing at the window
 # two other quickLift tickets use, and a row check on it would fail for that reason.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr7:155799529-155812871

@@ -66,6 +66,8 @@ Usage:
     hgConfCatalog.py --reconcile --verbose      # ... with the standing drift
     hgConfCatalog.py --sunset        # what should be deleted, and when
     hgConfCatalog.py --sunset-new    # ... only what changed since the backlog
+    hgConfCatalog.py --redundant     # conf lines a flipped default made pointless
+    hgConfCatalog.py --redundant --verbose      # ... and the files it read
     hgConfCatalog.py --update-baseline          # accept the current backlog
     hgConfCatalog.py --refresh --sunset-new     # ... rebuilding the age cache
     hgConfCatalog.py --cache /tmp/ages.json --refresh --sunset-new
@@ -81,6 +83,16 @@ the ones that were cleaned up, and says nothing about the standing backlog.
 --sunset itself reports every overdue gate on every run whether or not anything
 changed.  That is the right thing for a person working the list down and the
 wrong thing for anything automated, which is why it is a separate mode.
+
+--redundant is the third leg of the same idea and the one that closes the loop.
+Flipping a default to TRUE does not turn the feature on anywhere: it was already
+on, on every machine somebody had appended the flag to by hand.  What the flip
+does is make those lines pointless, and a pointless line is not harmless, since
+while it is there the flag reads on locally whatever the tree says.  So this
+mode reads the hg.conf files it can see from hgwdev, joins them against the
+catalog, and names the lines to delete.  Like --reconcile it is silent and exits
+0 when there is nothing to do, which is what lets the nightly cron run it and
+mail only the news.
 """
 
 import argparse
@@ -365,9 +377,10 @@ RELEASE_GATES = {
         h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box."),
-        h("showColorPicker", "flag", "hg/lib/hui.c", default="FALSE",
+        h("showColorPicker", "flag", "hg/lib/hui.c", default="TRUE",
           role="gate", verified=True,
-          note="The track colour picker in track UI."),
+          note="The track colour picker in track UI.  On by default; the "
+               "flag stays so a mirror can switch it back off."),
         h("doMyVariants", "flag", "hg/hgCustom/hgCustom.c",
           default="FALSE", role="gate", verified=True,
           note="The My Variants track and its upload path.  Thirteen call "
@@ -1999,6 +2012,21 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
     for g in overdue:
         print(line(g), file=out)
 
+    # Deleting the flag is only half of it.  A gate that shipped was turned on
+    # by hand on some machine first, and that line has to go too, or the next
+    # person to read the conf file cannot tell a live switch from litter.
+    # Counted over the gates listed above only, so the number belongs where it
+    # is printed; --redundant covers every shipped gate.
+    names = {g["name"] for g in overdue}
+    stale = [r for r in redundant_settings(cat, ages)["redundant"]
+             if r["name"] in names]
+    if stale:
+        print("\n  %d of the gates above are still set by hand in an hg.conf "
+              "readable from here\n  (%d line%s).  hgConfCatalog.py "
+              "--redundant names them."
+              % (len({r["name"] for r in stale}), len(stale),
+                 "" if len(stale) == 1 else "s"), file=out)
+
     due = sorted([g for g in life if g["sunset"] and cur
                   and g["sunset"] > cur], key=lambda g: g["sunset"])
     print("\nSCHEDULED (shipped, deadline not yet reached): %d" % len(due),
@@ -2033,6 +2061,189 @@ def sunset_report(cat, ages, sites=None, out=sys.stdout):
         for g in nodate:
             print(line(g), file=out)
     return len(overdue)
+
+
+# ---------------------------------------------------------------------------
+# settings a machine sets by hand and no longer needs to
+# ---------------------------------------------------------------------------
+
+# A gate is turned on per machine by hand while the feature is in QA, by
+# appending one line to that machine's hg.conf.  Nothing goes back to remove
+# the line when the default in the tree flips TRUE, so the line outlives the
+# reason for it, and while it is there the flag reads on locally whatever the
+# tree says.  That is the mechanism by which a wrong default survives: the
+# people most likely to notice are on the one machine that cannot see it.
+#
+# These are the conf files readable from hgwdev.  hgwbeta, the RR and every
+# mirror keep their own, none of which can be read from here, so the report
+# covers what it can see and says what it cannot.  Those are QA's to clean up.
+MACHINE_CONFS = [
+    ("/usr/local/apache/cgi-bin/hg.conf", "shared dev conf, genome-test reads it"),
+    ("/usr/local/apache/cgi-bin-beta/hg.conf", "the beta CGI install on this host"),
+]
+
+# The six words cfgOptionBooleanDefault accepts, lowercase only, from
+# hg/lib/hgConfig.c.  Anything else there is not a falsy value, it is an
+# errAbort in every CGI that reads the setting, which is worth its own line in
+# the report rather than being quietly skipped.
+TRUE_WORDS = ("yes", "on", "true")
+FALSE_WORDS = ("no", "off", "false")
+
+
+def machine_confs():
+    """The conf files to read, as (path, label), skipping what is not there.
+
+    HGCONF_MACHINE_CONFS overrides the list, colon separated, which is how a
+    test points this at a fixture rather than at the live configuration.  The
+    invoking user's own sandbox conf comes last: a stale line there costs
+    nobody but them, and it is the one file they can fix without asking.
+    """
+    env = os.environ.get("HGCONF_MACHINE_CONFS")
+    if env:
+        pairs = [(p, "from HGCONF_MACHINE_CONFS") for p in env.split(":") if p]
+    else:
+        pairs = list(MACHINE_CONFS)
+        user = os.environ.get("USER")
+        if user:
+            pairs.append(("/usr/local/apache/cgi-bin-%s/hg.conf" % user,
+                          "your own sandbox"))
+    return [(p, why) for p, why in pairs if os.access(p, os.R_OK)]
+
+
+def parse_conf(path):
+    """What one hg.conf sets itself, as a list of (line number, name, value).
+
+    Follows the same rules as parseConfigFile in hg/lib/hgConfig.c and no
+    others.  A "#" comments a line only at the start of it, so a value may
+    contain one and splitting on it would silently truncate a password.
+    `include` and `delete` lines are not settings.
+
+    It deliberately does not follow `include`: this report tells somebody to
+    delete a line out of a named file, so what the file it includes sets is not
+    this file's business.  A name set on two lines is kept twice, because both
+    lines are equally deletable and hiding one would send the reader back.
+    """
+    out = []
+    try:
+        with open(path) as f:
+            for n, line in enumerate(f, 1):
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if re.match(r"(include|delete)\s", line):
+                    continue
+                if "=" not in line:
+                    continue
+                name, val = line.split("=", 1)
+                out.append((n, name.strip(), val.strip()))
+    except (IOError, OSError):
+        return []
+    return out
+
+
+def redundant_settings(cat, ages=None):
+    """Gate settings on this machine that the tree's own default now covers.
+
+    Three populations, and the difference between them is the whole point:
+
+      redundant   the catalog says the default is TRUE and the conf turns it
+                  on.  The line does nothing and can go.
+      optout      the conf turns it off.  That is a live decision, not
+                  litter, and telling somebody to delete it would turn a
+                  feature on behind their back.
+      unparsable  the value is not one of the six words hg.conf accepts, so
+                  every CGI reading that setting aborts on this machine.
+
+    Only gates are considered.  A knob is a switch a machine is entitled to
+    set forever, so setting one to its default value is redundant in the
+    letter and not in the spirit, and nagging about it would be the crying
+    wolf the gate/knob split exists to prevent.
+    """
+    flipped = (ages or {}).get("firstTrue", {})
+    by = {v["name"]: v for v in gates(cat)}
+    found = {"redundant": [], "optout": [], "unparsable": [], "files": []}
+    for path, why in machine_confs():
+        found["files"].append((path, why))
+        for lineno, name, val in parse_conf(path):
+            v = by.get(name)
+            if v is None or v.get("default") != "TRUE":
+                continue
+            rec = {"name": name, "path": path, "line": lineno, "value": val,
+                   "flipped": (flipped.get(name) or {}).get("version")}
+            if val in TRUE_WORDS:
+                found["redundant"].append(rec)
+            elif val in FALSE_WORDS:
+                found["optout"].append(rec)
+            else:
+                # Includes the right word in the wrong case: hgConfig.c
+                # compares with sameString, so "On" is not "on" and the CGI
+                # aborts on it like any other unrecognized value.
+                found["unparsable"].append(rec)
+    return found
+
+
+def redundant_report(cat, ages=None, verbose=False, out=sys.stdout):
+    """Print what --redundant found.  Returns the number of lines to delete.
+
+    Silent and 0 when there is nothing to delete, so a cron can run it beside
+    --reconcile and mail only what needs a person.  --verbose prints the whole
+    picture, including the files read and the opt-outs, which is what somebody
+    working the list wants and what a nightly mail does not.
+    """
+    found = redundant_settings(cat, ages)
+    if verbose:
+        if not found["files"]:
+            print("no hg.conf readable on this machine, so nothing to check.  "
+                  "Set\nHGCONF_MACHINE_CONFS to point somewhere else.", file=out)
+            return 0
+        print("hg.conf files read here: %d" % len(found["files"]), file=out)
+        for path, why in found["files"]:
+            print("  %-46s %s" % (path, why), file=out)
+        print("", file=out)
+
+    order = {path: i for i, (path, _) in enumerate(found["files"])}
+
+    def where_key(r):
+        return (order.get(r["path"], len(order)), r["line"])
+
+    def line(r):
+        where = "%s:%d" % (r["path"], r["line"])
+        when = ("default TRUE since v%d" % r["flipped"] if r["flipped"]
+                else "flip version unknown, refresh the age cache")
+        return "  %-26s %-8s %-52s %s" % (r["name"], r["value"], where, when)
+
+    n = len(found["redundant"])
+    if n:
+        print("REDUNDANT (the tree defaults these on; the line can go): %d"
+              % n, file=out)
+        for r in sorted(found["redundant"], key=where_key):
+            print(line(r), file=out)
+        print("\n  Delete a line only after the release that flipped the "
+              "default is installed\n  on the machine that reads the file.  "
+              "Until then the line is what is turning\n  the feature on there, "
+              "and removing it turns the feature off.\n"
+              "\n  hgwbeta, the RR and the mirrors keep their own hg.conf and "
+              "none of them can\n  be read from hgwdev, so a line may be "
+              "waiting there too.  Those are QA's.", file=out)
+
+    if found["unparsable"]:
+        print("\nNOT A BOOLEAN (%d): hg.conf takes yes, no, on, off, true or "
+              "false, lowercase.\nEvery CGI that reads one of these aborts on "
+              "that machine:" % len(found["unparsable"]), file=out)
+        for r in sorted(found["unparsable"], key=where_key):
+            print(line(r), file=out)
+
+    if verbose and not n and not found["unparsable"]:
+        print("nothing to delete: no gate defaulting TRUE is set by hand in "
+              "the conf files\nreadable here.", file=out)
+
+    if verbose and found["optout"]:
+        print("\nDELIBERATE (%d): the default is on and this machine turns it "
+              "off.  Leave these\nalone; the flag exists so a machine can do "
+              "exactly this:" % len(found["optout"]), file=out)
+        for r in sorted(found["optout"], key=where_key):
+            print(line(r), file=out)
+    return n + len(found["unparsable"])
 
 
 # ---------------------------------------------------------------------------
@@ -2850,6 +3061,10 @@ def main():
                     help="report only the gates that went overdue or stalled "
                          "since %s was accepted, and exit 1 if any did"
                          % os.path.basename(BACKLOG_FILE))
+    ap.add_argument("--redundant", action="store_true",
+                    help="name the hg.conf lines on this machine that set a "
+                         "gate the tree now defaults on, and exit 1 if any "
+                         "exist")
     ap.add_argument("--update-baseline", dest="updateBaseline",
                     action="store_true",
                     help="rewrite %s from the current tree; read the diff "
@@ -2863,7 +3078,8 @@ def main():
                          "the diff before committing it" % AWAITING_TITLE)
     ap.add_argument("--verbose", action="store_true",
                     help="with --reconcile, also print the standing drift "
-                         "that needs no action")
+                         "that needs no action; with --redundant, the files "
+                         "read and the deliberate opt-outs")
     ap.add_argument("--cache",
                     help="read and write the age cache here instead of "
                          "hgConfAges.json next to the harvester.  Also "
@@ -2883,7 +3099,7 @@ def main():
     found = None
     if (args.sunset or args.sunsetNew or args.updateBaseline
             or args.html or args.json or args.refresh
-            or args.autoRegister):
+            or args.autoRegister or args.redundant):
         hh = load_harvester()
         if hh is None:
             print("harvestHgConf.py not importable", file=sys.stderr)
@@ -2917,6 +3133,8 @@ def main():
         sunset_report(cat, ages, sites)
     if args.sunsetNew:
         rc |= 1 if sunset_delta(cat, ages, sites) else 0
+    if args.redundant:
+        rc |= 1 if redundant_report(cat, ages, verbose=args.verbose) else 0
     if args.updateBaseline:
         cur = ages.get("current")
         life = gate_lifecycle(cat, ages)
@@ -2943,7 +3161,7 @@ def main():
 
     if not any([args.check, args.reconcile, args.sunset, args.sunsetNew,
                 args.updateBaseline, args.json, args.html, args.refresh,
-                args.autoRegister]):
+                args.autoRegister, args.redundant]):
         for k, v in sorted(counts(cat).items()):
             print("%-16s %s" % (k, v))
     return rc

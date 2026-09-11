@@ -5,6 +5,7 @@ One script per fixed bug, named for its ticket. Run by hand:
 
     make test               # every *.docent.yaml here
     make test T=rm36382     # just one
+    make proof              # what evidence each script has, and the tally
 
 The candidate list this directory is being built from, with the recipe and assertion
 worked out for each ticket, is at
@@ -14,10 +15,12 @@ worked out for each ticket, is at
 What these are, and what they are not
 -------------------------------------
 
-Each script asserts the behavior the ticket says is correct, on genome-test. None of them
-was run against a build that still had the bug, so none has been seen to fail for the
-reason it exists. That is a deliberate choice about cost, and it puts the whole weight on
-how tight the assertion is:
+Each script asserts the behavior the ticket says is correct, on genome-test. Most were
+written after the fix had already shipped, so most have never been seen to fail for the
+reason they exist. `make proof` says exactly how many have and which ones, reading a
+`proof:` key that every script carries; as of 2026-09-10 it is 4 of 37. That is a
+deliberate choice about cost, and for the other 33 it puts the whole weight on how tight
+the assertion is:
 
   * name the error string the ticket quoted in `noText:`, not a generic "Error"
   * prefer `rows: [...] exact: true` and `noRows:` over a bare `rows:`
@@ -47,15 +50,44 @@ called its track `ultras`, hg38 has its own `ultras`, and that script asserted a
 off the native data for as long as it existed -- it looked green and tested nothing.
 Prefix a fixture's track names with the ticket number.
 
-rm36212 is the one to read before writing another
---------------------------------------------------
+Proof: which scripts have been watched to fail for their own reason
+-------------------------------------------------------------------
 
-It is the only script here that has been watched to fail on a build with the bug AND to
-pass on a build with the fix, which is the evidence every other script in this directory
-would like to have and does not. The recipe: build the fix into a ticket sandbox, point a
-copy of the script at that port with `target: http://127.0.0.1:PORT/cgi-bin`, and record
-in the comment which checks flipped. It costs one build and it settles what a tight
-assertion can only argue.
+Every script carries a top-level `proof:` key, one quoted line per piece of evidence,
+each `<level> <YYYY-MM-DD> -- <what was seen>`. docent.js reads only the keys it names,
+so the key costs a run nothing. `make proof` tallies it and fails on a line that is
+malformed or names a level outside the vocabulary, which is what keeps it countable.
+
+The levels, weakest first:
+
+  assertion-only     asserts the fixed behavior; never seen to fail for its own reason
+  xfail              seen failing right now for its own reason; the fix has not shipped
+  sandbox-ab         seen failing on a build with the bug and passing on a build with
+                     the fix, both built by hand
+  server-flip        seen failing then passing on a real server as a real build arrived
+  caught-regression  went red for a regression that was then filed and fixed
+
+Two ways to earn the middle levels. sandbox-ab is the one you can choose to do: build the
+fix into a ticket sandbox, point a copy of the script at that port with
+`target: http://127.0.0.1:PORT/cgi-bin`, and record which checks flipped. It costs one
+build and it settles what a tight assertion can only argue.
+
+server-flip is the one this directory gets for free, and it is better evidence, because
+nothing about the server changed except the build. Commit a script for an unshipped fix
+as an .xfail. `make test` fails when an xfail PASSES, so the morning the fix reaches
+genome-test the nightly goes red and says so. nightly.sh appends that to
+
+    /hive/users/braney/docentNightly/flips.log
+
+one line per script ever, outside the checkout because --update resets the tree. Then
+drop the .xfail from the name and add the server-flip line to the script's proof: key.
+rm38272, rm36212 and rm38310 all arrived that way.
+
+rm36212 is still the one to read before writing another
+--------------------------------------------------------
+
+It is the worked example of both routes: sandbox-ab on 2026-09-09 against parked #36212
+on port 48099, then server-flip the same morning when cbb406cd96e reached genome-test.
 
 It is also the first script to assert a COLOR, using `expect: {color: ...}`, because it
 is the first bug here that leaves the page identical -- same rows, same height, same item

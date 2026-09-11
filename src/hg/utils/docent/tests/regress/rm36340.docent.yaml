@@ -17,6 +17,9 @@
 #
 # The session is Gerardo's own, kept because what it holds -- a custom track plus a hub on
 # hg38 -- is what made the search return several kinds of hit.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 reset: true

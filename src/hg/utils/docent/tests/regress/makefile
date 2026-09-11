@@ -10,6 +10,7 @@
 #
 #     make test               # every *.docent.yaml here
 #     make test T=rm36382     # just one
+#     make proof              # what evidence each script has that it would catch its bug
 #     make derive             # the derivation alone, for the scripts with a baseline
 #
 # Naming: rm<ticket>.docent.yaml, so the ticket is the filename. Every script says in its
@@ -17,10 +18,14 @@
 # catch -- a regression test whose comment does not name the bug is unmaintainable, since
 # the next reader cannot tell a deliberate assertion from an accident.
 #
-# These assert the FIXED behavior and were never watched to fail on a buggy build, so the
-# assertions are deliberately tight: `exact:` and `noRows:` rather than a bare `rows:`,
-# and `noText:` on the exact error string the ticket quoted. A loose assertion here is
-# indistinguishable from no test at all.
+# Most of these assert the FIXED behavior and were never watched to fail on a buggy build,
+# so the assertions are deliberately tight: `exact:` and `noRows:` rather than a bare
+# `rows:`, and `noText:` on the exact error string the ticket quoted. A loose assertion
+# here is indistinguishable from no test at all.
+#
+# Which ones HAVE been watched to fail for their own reason is recorded in each script's
+# `proof:` key and counted by `make proof`. See README.txt for the levels and for the two
+# ways to earn one.
 
 DOCENT = ../../docent.js
 

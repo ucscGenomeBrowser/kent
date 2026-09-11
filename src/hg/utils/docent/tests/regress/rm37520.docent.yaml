@@ -10,6 +10,9 @@
 # position mane has no features, so its row is legitimately absent. And the chain is
 # itself one of the quickLift tracks this ticket says went missing, so if the lift is
 # dropped across the genome hop the chain goes with it -- which is exactly the check.
+proof:
+  - "assertion-only 2026-09-04 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr7:156982676-156996015

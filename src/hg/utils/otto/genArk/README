@@ -5,21 +5,26 @@ In the process of readjusting the push scripts so they
 will only push out from hgwdev to hgwbeta, and then
 cluster admin cron jobs will push out from hgwbeta to the RR machines
 
+The only RR interaction these scripts have is pushing a 'public.hub.txt'
+file to hgw0 as it renames to 'hub.txt'
+
+The cluster-admin process uses a file list constructed by these scripts
+for just the files that need to go out, new or changed.
+
+What is missing here is a 'removal' step to eliminate obsolete files.
+This could be taken care of via the same 'file list' type of operation.
+Such a list is already constructed, it just needs to be folded into
+the cluster-admin procedure.
+
 ###################################################################
 
 Also using the assemblyList.py script
 from kent/src/hg/hubApi/assemblyList.py
 
 # scripts used to push out the /gbdb/genark/ hierarchy
-# from hgwdev to our RR sites, and the pullHgwdev.sh is
-# running in qateam cron job on the Asia node
+# from hgwdev to our RR sites.
 
-pullHgwdev.sh
 pushRR.sh
-
-### manages the pushing of the beta and public versions of 'contrib'
-### tracks in genark assemblies
-alphaBetaPush.pl
 
 ###################################################################
 # operation procedure

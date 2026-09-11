@@ -638,11 +638,7 @@ boolean doSegments = TRUE;
 #endif
 
 if (fromDb == NULL)
-    {
-    char buffer[4096];
-    safef(buffer, sizeof buffer, "'%s'", trackHubSkipHubName(database));
-    fromDb =  genarkLiftOverDbs(buffer);
-    }
+    fromDb =  genarkLiftOverDb(trackHubSkipHubName(database));
 if (toDb == NULL)
     toDb =  genarkLiftOverDb(cartString(cart, HGLFT_TODB_VAR));
 

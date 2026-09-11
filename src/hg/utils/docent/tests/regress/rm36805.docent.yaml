@@ -24,6 +24,9 @@
 #
 # No build left to watch this fail on: fixed for v492 in December 2025, so hgwbeta and the
 # RR have had it for months.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: mm10
 reset: true

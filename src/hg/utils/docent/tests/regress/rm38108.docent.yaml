@@ -37,6 +37,9 @@
 # pass on it -- the same trap as the "Very Early Error" page. hgTracks gets a row check for
 # the same reason; the other two have no track image, so they name text the CGI itself
 # writes.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 reset: true
