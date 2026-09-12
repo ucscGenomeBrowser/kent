@@ -1460,19 +1460,52 @@ OTHER_CGIS = {
         "what": "hgTables addresses the SAME data by db and table rather than "
                 "by track, so its per-dataset state does not live under the "
                 "track name at all.  This is the biggest structural mismatch "
-                "in the cart: two CGIs, two namespaces, one dataset.",
+                "in the cart: two CGIs, two namespaces, one dataset.\n"
+                "Two conventions run through the names below.  First, the "
+                "pages that offer a Cancel button hold their state twice: "
+                "hgta_<var> is what is in force and hgta_next<Var> is what the "
+                "open form is proposing.  Opening the page copies current to "
+                "next, Submit copies next back, Cancel simply does not copy, "
+                "and Clear deletes the current set "
+                "(hg/hgTables/intersect.c:321 copyCartVars, called at :341 "
+                "and :355).  Second, a filter that belongs to a whole table "
+                "rather than to one of its fields still carries a field slot "
+                "in its name, filled with an empty string for the raw-SQL "
+                "pair and with a bare _ for maxOutput "
+                "(hg/hgTables/filterFields.c:1087-1107).",
         "vars": [
-            v("hgta_fil.v.<db>.<table>.<field>.pat", "string",
+            v("hgta_fil.v.<db>.<table>.<field>.<op>", "string",
               "hg/hgTables/filterFields.c:646", sep="",
-              note="Filter text box.  Sibling types are .dd (dropdown), "
-                   ".cmp (comparison), .rawQuery, .maxOutput."),
+              values=["pat", "dd", "cmp"],
+              valuesSrc="hg/hgTables/hgTables.h:326, filterDdVar and its "
+                        "siblings",
+              note="One field's filter, assembled by filterFieldVarName: pat "
+                   "is the text box, dd the dropdown, cmp the comparison "
+                   "operator."),
+            v("hgta_fil.v.<db>.<table>..rawLogic, "
+              "hgta_fil.v.<db>.<table>..rawQuery", "string",
+              "hg/hgTables/filterFields.c:1087", sep="",
+              note="The free-SQL filter, which applies to the whole table, so "
+                   "the field slot between the last two dots is empty."),
+            v("hgta_fil.v.<db>.<table>._.maxOutput", "int",
+              "hg/hgTables/filterFields.c:1107", sep="",
+              note="Row limit for this table's output.  It is not a filter "
+                   "and is skipped as one at filterFields.c:1594, but it is "
+                   "spelled like one, with a bare _ in the field slot."),
             v("hgta_fs.check.<db>.<table>.<field>", "bool",
               "hg/hgTables/filterFields.c:251", sep="",
               note="Output field selection."),
-            v("hgta_subtrackMerge*", "string",
-              "hg/hgTables/hgTables.h:534", sep="",
-              note="Primary, Op, MoreThreshold, LessThreshold, WigOp, "
-                   "RequireAll, UseMinScore, MinScore."),
+            v("hgta_fs.linked.<db>.<table>", "bool",
+              "hg/hgTables/filterFields.c:571", sep="",
+              note="\"Allow selection from checked tables\": this joinable "
+                   "table's fields are offered on the Select Fields page too. "
+                   " extraTableList (filterFields.c:105) finds the checked "
+                   "tables by scanning the cart for the prefix, so the set of "
+                   "tables is whatever the cart happens to hold."),
+            v("hgta_fil.linked.<db>.<table>", "bool",
+              "hg/hgTables/filterFields.c:1401", sep="",
+              note="The same checkbox on the filter page: this table's fields "
+                   "may be filtered on as well as the primary table's."),
             v("_sel", "bool", "hg/hgTables/compositeTrack.c:67", sep="_",
               note="The one place hgTables does use the track-scoped form: "
                    "it reads subtrack selection the same way hgTracks does."),
@@ -1480,6 +1513,81 @@ OTHER_CGIS = {
               "hg/hgTables/hgTables.h:467", sep="",
               note="Current selection, session-scoped rather than "
                    "per-track."),
+            v("hgta_fieldSelectTable, hgta_filterTable, hgta_histoTable",
+              "string", "hg/hgTables/filterFields.c:525", sep="",
+              note="Which db.table the Select Fields, filter and histogram "
+                   "pages are about.  Separate from hgta_table because those "
+                   "pages can be opened on a linked table."),
+            v("hgta_intersectGroup, hgta_intersectTrack, hgta_intersectTable, "
+              "hgta_intersectOp, hgta_moreThreshold, hgta_lessThreshold, "
+              "hgta_invertTable, hgta_invertTable2", "string",
+              "hg/hgTables/intersect.c:28", sep="",
+              note="The intersection in force.  anyIntersection() keys on "
+                   "hgta_intersectTrack, so removing that one turns the whole "
+                   "intersection off."),
+            v("hgta_nextIntersectGroup, hgta_nextIntersectTrack, "
+              "hgta_nextIntersectTable, hgta_nextIntersectOp, "
+              "hgta_nextMoreThreshold, hgta_nextLessThreshold, "
+              "hgta_nextInvertTable, hgta_nextInvertTable2", "string",
+              "hg/hgTables/intersect.c:34", sep="",
+              note="The pending copy of the eight above, one for one.  A "
+                   "session saved with the intersect page open holds both "
+                   "sets, and they need not agree."),
+            v("hgta_correlateGroup, hgta_correlateTrack, hgta_correlateTable, "
+              "hgta_correlateOp", "string", "hg/hgTables/correlate.c:127",
+              sep="",
+              note="The correlation in force, same pairing as the "
+                   "intersection above."),
+            v("hgta_nextCorrelateGroup, hgta_nextCorrelateTrack, "
+              "hgta_nextCorrelateTable, hgta_nextCorrelateOp", "string",
+              "hg/hgTables/correlate.c:130", sep="",
+              note="The pending copy of the four above."),
+            v("hgta_corrWinSize, hgta_corrMaxLimitCount", "int",
+              "hg/hgTables/hgTables.h:361", sep="",
+              note="Correlation window size and row cap.  These two have no "
+                   "next twin; hg/lib/web.c:1148 removes them along with the "
+                   "eight correlate variables when the assembly changes."),
+            v("hgta_subtrackMerge*, hgta_nextSubtrackMerge*", "string",
+              "hg/hgTables/compositeTrack.c:31", sep="",
+              note="Primary, Op, MoreThreshold, LessThreshold, WigOp, "
+                   "RequireAll, UseMinScore, MinScore, in the current and "
+                   "pending pair."),
+            v("hgta_identifierDb, hgta_identifierTable, "
+              "hgta_pastedIdentifiers, hgta_pastedIdentifiers__filename",
+              "string", "hg/hgTables/identifiers.c:26", sep="",
+              note="The identifier list the query is restricted to, and the "
+                   "db.table it was entered against.  __filename is "
+                   "cheapcgi's companion for an uploaded file "
+                   "(lib/cheapcgi.c:770), holding the name of the file the "
+                   "user picked.  The uploaded list itself is "
+                   "hgta_identifierFile, a server path, described in the "
+                   "#37623 file-variable registry rather than here."),
+            v("hgta_userRegionsDb, hgta_enteredUserRegions", "string",
+              "hg/hgTables/userRegions.c:29", sep="",
+              note="The user's own region list as typed, and the assembly it "
+                   "was typed against.  As with the identifiers above, the "
+                   "uploaded form is a server path, hgta_userRegionsFile, and "
+                   "belongs to the #37623 registry."),
+            v("hgta_outFileName, hgta_outSep, hgta_printCustomTrackHeaders",
+              "string", "hg/hgTables/hgTables.c:1334", sep="",
+              values=["tab", "csv"],
+              valuesSrc="hg/hgTables/hgTables.h:580, for hgta_outSep only",
+              note="Where the output goes and how it is punctuated.  "
+                   "hgta_printCustomTrackHeaders is a boolean read with "
+                   "cartCgiUsualBoolean at bedList.c:372."),
+            v("hgta_ctName, hgta_ctDesc", "string",
+              "hg/hgTables/bedList.c:379", sep="",
+              note="Name and description for the custom track the output is "
+                   "turned into.  Read with cgiUsualString rather than from "
+                   "the cart, but they are ordinary form fields, so they are "
+                   "saved like any other and sit in 493 saved sessions."),
+            v("hgta_mafGeneMafTable, hgta_mafGeneExons, hgta_mafGeneNoTrans, "
+              "hgta_mafGeneOutBlank, hgta_mafOutTable, hgta_mafNumColumns, "
+              "hgta_mafTruncHeader", "string", "hg/cgilib/pal.c:18", sep="",
+              note="Options for the protein-alignment output (hgta_palOut).  "
+                   "Each has a JavaScript twin named without the hgta_ "
+                   "prefix, defined beside it in pal.c, which is what the "
+                   "page's script reads."),
         ],
     },
 }
