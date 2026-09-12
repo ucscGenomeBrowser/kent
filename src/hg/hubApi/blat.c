@@ -316,7 +316,7 @@ double blatDelayFraction = blatDelayStr ? atof(blatDelayStr) : blatDelayFraction
 int extraDelay = 0;
 struct errCatch *bnErrCatch = errCatchNew();
 if (errCatchStart(bnErrCatch))
-    extraDelay = hgBotDelayTimeFrac(blatDelayFraction);
+    extraDelay = hgBotDelayTimeFracOrAbort(blatDelayFraction);
 errCatchEnd(bnErrCatch);
 if (bnErrCatch->gotError)
     apiErrAbort(err500, err500Msg, "bottleneck server unavailable: %s",

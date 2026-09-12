@@ -1451,6 +1451,28 @@ ABUSE = {
         h("bottleneck.except", "internal", "hg/lib/botDelay.c",
           verified=True, family="bottleneck",
           note="IPs exempt from delay."),
+        h("bottleneck.serveOnFailure", "flag", "hg/lib/botDelay.c",
+          default="FALSE", role="gate", verified=True, ticket="37738",
+          family="bottleneck",
+          note="Serve the request when the bottleneck server cannot be reached, "
+               "instead of failing the CGI.  Without it an unreachable bottleneck "
+               "server takes down every CGI that consults it, which is about fifteen "
+               "of them plus das, so one process is a single point of failure for the "
+               "whole site.  hubApi is outside the gate: it catches the failure either "
+               "way and answers with a JSON 500.  Flip it once QA has seen a browser "
+               "run with the bottleneck server stopped."),
+        h("bottleneck.failureDelay", "limit", "hg/lib/botDelay.c",
+          default='"0"', verified=True, ticket="37738", family="bottleneck",
+          note="Milliseconds to delay each request while the bottleneck server is "
+               "unreachable and bottleneck.serveOnFailure is on.  The default of 0 "
+               "serves at full speed, on the reasoning that an outage of ours should "
+               "not slow users down.  Capped at 2000."),
+        h("bottleneck.timeoutSeconds", "limit", "hg/lib/botDelay.c",
+          default='"10"', verified=True, ticket="37738", family="bottleneck",
+          note="Read and write timeout on the bottleneck socket.  The stock socket "
+               "default is 120 seconds, which is far longer than a rate-limit lookup "
+               "can usefully take, and is how long a hung bottleneck server used to "
+               "hold a CGI open."),
         h("hguidIpTracking.maxIps", "limit", "hg/lib/botDelay.c",
           default='"10"', verified=True, family="hguidIpTracking"),
         h("hguidIpTracking.windowSeconds", "limit", "hg/lib/botDelay.c",
