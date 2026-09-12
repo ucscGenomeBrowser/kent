@@ -880,17 +880,21 @@ for (el = elList;  el != NULL && n < 2000;  el = el->next, n++)
         sqlDyStringPrintf(accs, ",");
     sqlDyStringPrintf(accs, "'%s'", el->name);
     }
+struct sqlConnection *conn = hAllocConn(db);
 struct dyString *query = NULL;
 if (sameString(table, "ncbiRefSeqPsl") && hTableExists(db, "ncbiRefSeqCds"))
     query = sqlDyStringCreate("select id, cds from ncbiRefSeqCds where id in (%-s)",
                               accs->string);
-else if (hTableExists(db, gbCdnaInfoTable) && hTableExists(db, cdsTable))
+/* refGene's versionless accessions get their CDS from the genbank tables, which usually
+ * live in hgFixed, so these names arrive database-qualified and only sqlTableExists can
+ * see them; hTableExists looks inside db and would always say no. */
+else if (sameString(table, "refSeqAli") &&
+         sqlTableExists(conn, gbCdnaInfoTable) && sqlTableExists(conn, cdsTable))
     query = sqlDyStringCreate(
         "select g.acc, c.name from %s g, %s c where g.cds = c.id and g.acc in (%-s)",
         gbCdnaInfoTable, cdsTable, accs->string);
 if (query != NULL)
     {
-    struct sqlConnection *conn = hAllocConn(db);
     struct sqlResult *sr = sqlGetResult(conn, query->string);
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
@@ -903,9 +907,9 @@ if (query != NULL)
             freez(&cds);
         }
     sqlFreeResult(&sr);
-    hFreeConn(&conn);
     dyStringFree(&query);
     }
+hFreeConn(&conn);
 dyStringFree(&accs);
 hashElFreeList(&elList);
 }
