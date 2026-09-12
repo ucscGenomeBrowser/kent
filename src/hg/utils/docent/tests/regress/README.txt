@@ -117,3 +117,35 @@ Two things fall out of it that apply to any script here:
 Measured both ways on 2026-09-09: the whole directory was run against the #38310 ticket
 sandbox twice, once with the patched hgTracks and hgc and once with unpatched controls
 built from the same tree. Thirty-seven scripts, identical verdicts, except this one.
+
+Ten scripts for multi-region view, and the two traps they hit
+--------------------------------------------------------------
+
+rm22144, rm23922, rm26772, rm27855, rm29452, rm29787, rm30833, rm34250, rm35472 and
+rm37175 are one batch, written 2026-09-12, and between them they cover the four modes
+(exon, custom regions, alt haplotype, exit), the dialog, the custom-region BED reader,
+hideEmptySubtracks across windows and highlights in both directions across the mode
+change. Before them the only script here that entered multi-region at all was rm35580,
+which uses singleAltHaplo to reach a different bug.
+
+Two things learned writing them, both of which cost a red run first:
+
+**Never assert on a `title` attribute.** hgTracks' own tooltip code moves a title into
+`data-tooltip` once the page's JavaScript has run, so `area[title="chr1:10001-11000"]`
+matches nothing in the live DOM even though the server sent exactly that. The server
+writes both attributes on a map box; assert `data-tooltip`. The same applies to the
+buttons, where the title changes with the mode and would otherwise be a second, free
+assertion -- it is not available.
+
+**Multi-region is reachable from the URL, and the dialog is not.** `virtModeType=`,
+`multiRegionsBedInput=` (the textarea's own cart variable, newlines as %0A),
+`singleAltHaploId=`, `virtWinFull=on` and `<composite>.hideEmptySubtracks=on` all work on
+a `goto:`, which is how nine of the ten set their state -- Docent has no verb that types
+into an arbitrary field, so the textarea and the alt-haplotype input cannot be filled.
+What still needs the real dialog is anything the page's JavaScript decides: rm29452's
+disabled radio and its status line are invisible to curl, because the server sends the
+same HTML on a build with the bug and a build without it.
+
+`virtWinFull=on` is worth knowing for a third reason: without it a region change lands
+zoomed in on one region, so a second region is off screen and a script cannot tell a
+region that failed to resolve from one that is merely not in view.

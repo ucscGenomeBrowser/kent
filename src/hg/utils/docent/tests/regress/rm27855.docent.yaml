@@ -1,0 +1,47 @@
+# #27855 -- hgTracks froze when the alt-haplotype multi-region mode was turned on with the
+# GTEx Gene track in pack.  The ticket's steps are hg19, reset, hide all, GTEx Gene to
+# pack, Multi-region, "show one alternate haplotype ... using ID: chr6_cox_hap2", Submit.
+# Galt's fix went out in July 2021; Daniel checked beta on 2021-07-28 and the RR on
+# 2021-08-04.
+#
+# There is no error string to name in a noText:, because the symptom was a page that never
+# came back.  A hang is what a Docent run is already good at catching: every nav waits for
+# load and the run fails on the timeout, so the assertion that matters here is simply that
+# the steps below complete.  What they add is a positive statement about the page that
+# comes back, so that a build which answers quickly with an empty or default view fails
+# too:
+#
+#   - the mode really engaged (the Multi-region button is drawn pressed, see rm23922),
+#   - gtexGene is drawn and the singleAltHaplo view is not silently the whole chromosome
+#     (`exact: true` -- an alt-haplotype view of chr6_cox_hap2 has these two rows only),
+#   - the graph has items you can click through to hgc.
+#
+# hg19 on purpose: chr6_cox_hap2 is an hg19 alt name, and the GTEx Gene track the ticket
+# names is the hg19 one.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket long after the fix shipped"
+
+target: genome-test
+db: hg19
+position: chr6:28000000-33000000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr6%3A28000000-33000000&pix=1100&hideTracks=1&gtexGene=pack"
+  - expect: {rows: [ruler, gtexGene], exact: true}
+
+  # The mode the ticket froze on.  singleAltHaploId is the cart variable the dialog's
+  # fourth radio writes, and the one rm22144's autocomplete fills in.
+  - goto: "/cgi-bin/hgTracks?db=hg19&pix=1100&virtModeType=singleAltHaplo&singleAltHaploId=chr6_cox_hap2"
+  - expect:
+      rows: [ruler, gtexGene]
+      exact: true
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+      noText: "unexpected current window"
+
+  # The view is not just drawn, it works: a gene in it clicks through to its details.
+  # ABCF1 is named rather than clicked by position, and the assertion is on the item name
+  # rather than on the track's longLabel -- an hgc page that gave up still prints the
+  # longLabel in its own header, so a text: check on that alone passes on a broken one.
+  - click: {track: gtexGene, item: ABCF1}
+  - expect: {text: "ABCF1", url: "g=gtexGene"}

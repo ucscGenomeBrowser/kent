@@ -1,0 +1,55 @@
+# #37175 -- a transcript the user had just searched for showed in the default view and
+# then vanished in exon view.  Brian's change had made hgFind's last match a whitelist:
+# an item named in the cart's hgFind.matches is drawn even when the track's own filters
+# would drop it.  The exon-view code builds its regions from the same gene table with its
+# own copy of those filters, and it had no whitelist, so the searched transcript was
+# filtered out of the region list and the two modes disagreed for no visible reason.
+#
+# Galt added the whitelist to that reader in 492f1437811 (2026-02-27); bcffaeb1cb9
+# corrected the condition after code review, so the shipped test is
+#
+#     if (gene && (!hgFindMatches || !hashLookup(hgFindMatches, gene->name)))
+#         { ... the four filters ... }
+#
+# in initVirtRegionsFromEMGeneTableExons(), hg/hgTracks/hgTracks.c.
+#
+# ENST00000488409.1 is a knownGene transcript whose knownAttrs transcriptClass is
+# 'pseudo', and knownGene.show.pseudo is off by default, so it is one of the transcripts
+# that reader drops.  The two steps are the same URL with and without the whitelist, so
+# nothing but hgFind.matches differs between them and the item appears in the second.
+#
+# hgFind.matches is set here on the URL rather than by searching for the accession,
+# because a search is a whole other CGI's behaviour and this is not a test of hgFind.  It
+# is the cart variable hgFind writes and the one createHgFindMatchHash() reads
+# (hg/hgTracks/simpleTracks.c).
+#
+# There is no expect: check for "this item was drawn", so the item's own map box is named
+# with has:/noHas:.  README.txt says to reach for a selector last, and this is the case it
+# leaves: rows: cannot see one item, the row is drawn either way, and the two views have
+# the same height and the same tooltips.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 492f1437811, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr17:7754000-7755500
+reset: true
+fast: true
+steps:
+  # Exon view, no search.  The pseudogene is filtered out of the region list, so it is
+  # nowhere in the image map.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A7754000-7755500&pix=1100&hideTracks=1&knownGene=pack&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+      noHas: 'area[href*="hgg_gene=ENST00000488409.1"]'
+
+  # The same view, with the pseudogene as the last search.  It is drawn now.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A7754000-7755500&pix=1100&hideTracks=1&knownGene=pack&virtModeType=exonMostly&hgFind.matches=ENST00000488409.1"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="hgg_gene=ENST00000488409.1"]'

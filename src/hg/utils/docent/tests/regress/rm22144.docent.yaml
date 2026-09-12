@@ -1,0 +1,56 @@
+# #22144 -- the multi-region dialog's fourth mode, "show one alternate haplotype or fix
+# patch placed on its chromosome", takes a sequence NAME, and before this ticket the user
+# had to already know UCSC's name for it.  A reader who has the alt from NCBI knows it as
+# HSCHR19KIR_LUCE_A_HAP_CTG3_1 or as RefSeq NT_187643.1, and neither string is anything
+# the input would accept.  The ask was an autocomplete over chromAlias, so that "mhc" or
+# "apd" or the RefSeq accession finds chr6_GL000250v2_alt for them.
+#
+# Angie's fix is bffbb000a3d (2018-09-24), "Added a new mode to hgSuggest: altOrPatch, to
+# match alt haplo or fix patch sequence names.  Use it in hgTracks' multi-region dialog."
+# Its commit message refs #18854, the ticket this one was split out of, not #22144.
+#
+# The dialog wires the input to hgSuggest in popUpHgt, hg/js/hgTracks.js:
+#
+#     autocompleteCat.init($('#singleAltHaploId'),
+#         { baseUrl: 'hgSuggest?db=' + getDb() + '&type=altOrPatch&prefix=', ... });
+#
+# so the behaviour splits in two, and this asserts both halves separately.  Docent has no
+# verb that types into an arbitrary field, so the menu itself cannot be raised here; what
+# CAN be asserted is that the input is in the dialog and that the CGI behind it answers
+# the ticket's own three search terms with the UCSC names.  Each hgSuggest answer is
+# checked for the exact name AND for the alias it was found through, because a server
+# that lost the chromAlias join would still return every alt whose UCSC name starts with
+# the prefix -- and for "mhc", "apd" and "NT_187643" that is nothing at all, so a bare
+# "the reply is not empty" check is what this must not be.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket long after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+  - click: '#hgTracksConfigMultiRegionPage'
+  - wait: '#multiRegionsBedInput'
+
+  # The mode and its input are there at all.  hg38 has alts, so config.c draws this
+  # radio; on an assembly without them there is no fourth row and no input.
+  - expect:
+      has:
+        - '#hgTracksDialog:visible'
+        - '#singleAltHaploId'
+      text: "placed on its chromosome"
+
+  # The CGI the input asks.  A group name that is not a chrom name at all.
+  - goto: "/cgi-bin/hgSuggest?db=hg38&type=altOrPatch&prefix=mhc"
+  - expect: {text: "chr6_GL000251v2_alt (HSCHR6_MHC_COX_CTG1)"}
+
+  # ... one haplotype of that group.
+  - goto: "/cgi-bin/hgSuggest?db=hg38&type=altOrPatch&prefix=apd"
+  - expect: {text: "chr6_GL000250v2_alt (HSCHR6_MHC_APD_CTG1)"}
+
+  # ... and the RefSeq accession the ticket quoted.
+  - goto: "/cgi-bin/hgSuggest?db=hg38&type=altOrPatch&prefix=NT_187643"
+  - expect: {text: "chr19_KI270889v1_alt (NT_187643.1)"}
