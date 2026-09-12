@@ -257,6 +257,20 @@ CONTAINER = {
                    "read treats it as untrusted, because the JSON it lands in "
                    "goes inside a <script> block: anything outside "
                    "alphanumerics and _ . - + = space drops the whole value."),
+            v("groupBy", "enum", "hg/hgTrackUi/hgTrackUi.c:3355",
+              values=["sample", "dataType"], tdb="defaultGroupBy",
+              note="Which of a faceted composite's two dimensions is kept "
+                   "together in the image: 'sample' puts one sample's data "
+                   "types side by side, 'dataType' puts the same data type for "
+                   "every sample side by side.  Only meaningful when the "
+                   "metadata has data types, since without them a sample is a "
+                   "single track.  Written by cartDump (cartDump.c:88), which "
+                   "gets it from facetedComposite.js:1371 and stores it only if "
+                   "it is one of the two words; hgTrackUi reads it back the "
+                   "same way, so nothing unvalidated reaches the <script> "
+                   "block.  The cart value wins over trackDb's "
+                   "defaultGroupBy.  Added with the Fiber-seq faceted "
+                   "composite work, refs #36210."),
             v("filterComp.<groupTag>", "list", "hg/lib/hui.c:3119", multi=True,
               note="One per ABC dimension of a filterComposite.  'All' means "
                    "every option selected."),
