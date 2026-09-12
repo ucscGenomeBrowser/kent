@@ -113,8 +113,6 @@ bigDataUrl bbi/%s.cytoBand.bb\n\n" "${asmId}"
 # $scriptDir/asmHubCytoBand.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.cytoBand.html
 fi
 
-# GCA_964261385.2_aLisVul1.2_alternate_haplotype.gcOnFly.bw
-
 if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gcOnFly.bw ]; then
   rm -f $buildDir/bbi/${asmId}.gcOnFly.bw
   rm -f $buildDir/bbi/${asmId}.gc5Base.bw
@@ -147,12 +145,12 @@ html html/%s.gcOnFly\n\n" "${asmId}" "${asmId}"
 
 else
   if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gc5Base.bw ]; then
-  rm -f $buildDir/bbi/${asmId}.gc5Base.bw
-  rm -f $buildDir/bbi/${asmId}.gcOnFly.bw
-  rm -f $buildDir/html/$asmId.gcOnFly.html
-  rm -f $buildDir/html/$asmId.gc5Base.html
-  ln -s ../trackData/gc5Base/${asmId}.gc5Base.bw $buildDir/bbi/${asmId}.gc5Base.bw
-  printf "track gc5Base
+    rm -f $buildDir/bbi/${asmId}.gc5Base.bw
+    rm -f $buildDir/bbi/${asmId}.gcOnFly.bw
+    rm -f $buildDir/html/$asmId.gcOnFly.html
+    rm -f $buildDir/html/$asmId.gc5Base.html
+    ln -s ../trackData/gc5Base/${asmId}.gc5Base.bw $buildDir/bbi/${asmId}.gc5Base.bw
+    printf "track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
 group map
@@ -169,7 +167,7 @@ type bigWig 0 100
 bigDataUrl bbi/%s.gc5Base.bw
 html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
 
-  $scriptDir/asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
+    $scriptDir/asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
   fi
 fi
 

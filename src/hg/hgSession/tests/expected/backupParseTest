@@ -1,0 +1,40 @@
+hg.conf skipMalformedCgiPairs=off
+
+in  : db=hg38&ctfile_hg38=../trash/ct/probe.bed
+found: 1 [hg38]
+
+in  : db=hg38&&ctfile_hg38=../trash/ct/probe.bed
+found: 0
+
+in  : db=hg38&i&ctfile_hg38=../trash/ct/probe.bed
+found: 0
+
+in  : db=hg38&ctfile_hg38=../trash/ct/probe.bed&g-catV2
+found: aborted: ERROR: Mangled session content string g-catV2
+
+in  : db=hg38&ctfile_hg38=../trash/ct/probe.bed&&
+found: aborted: ERROR: Mangled session content string &
+
+in  : db=hg38&ctfile_hg38=../trash/ct/a.bed&ctfile_mm39=../trash/ct/b.bed
+found: 2 [hg38] [mm39]
+
+hg.conf skipMalformedCgiPairs=on
+
+in  : db=hg38&ctfile_hg38=../trash/ct/probe.bed
+found: 1 [hg38]
+
+in  : db=hg38&&ctfile_hg38=../trash/ct/probe.bed
+found: 1 [hg38]
+
+in  : db=hg38&i&ctfile_hg38=../trash/ct/probe.bed
+found: 1 [hg38]
+
+in  : db=hg38&ctfile_hg38=../trash/ct/probe.bed&g-catV2
+found: 1 [hg38]
+
+in  : db=hg38&ctfile_hg38=../trash/ct/probe.bed&&
+found: 1 [hg38]
+
+in  : db=hg38&ctfile_hg38=../trash/ct/a.bed&ctfile_mm39=../trash/ct/b.bed
+found: 2 [hg38] [mm39]
+
