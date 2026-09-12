@@ -1,0 +1,41 @@
+# #36370 -- two sections were missing from the hgGene details page of a quickLifted
+# knownGene item: "GeneReviews for This Gene" and "Methods, Credits, and Use Restrictions".
+# Their links in the page index did nothing, and the sections themselves were not on the
+# page.  Gerardo's case is the SHH item after a QuickLift from hg38 to hs1.
+#
+# a378dddb8d9 and 3670b9f2a58 render all sections and the Methods page for QuickLift
+# knownGene clicks; dec7900a42f fixed a crash in genePred.c when flipping strands with no
+# exon frames, found in the same work.
+#
+# The assertion is on the two section headings themselves, not on the page index, because
+# the index links were present in the ticket's own screenshots and did nothing -- a test
+# that asked for the link text would have passed on the build the ticket was filed
+# against.
+#
+# This is the knownGene page, which hgGene renders.  rm36059 is the GENCODE Versions
+# archive track, which hgc renders through doGencodeGene, and the two pages are different
+# enough that neither covers the other: the archive page has no GeneReviews or Methods
+# section at all.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {knownGene: pack}
+  - expect: {rows: [knownGene], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [knownGene], noText: "Warning/Error"}
+
+  - click: {track: knownGene, item: "ENST00000297261.7"}
+  - expect:
+      text: "GeneReviews for This Gene"
+      noText: "Warning/Error"
+  - expect: {text: "Methods, Credits, and Use Restrictions"}

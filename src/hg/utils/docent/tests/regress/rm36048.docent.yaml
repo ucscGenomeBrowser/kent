@@ -1,0 +1,42 @@
+# #36048 -- the mergeSpannedItems setting stopped working on a quickLifted track.  Gerardo
+# reported that DECIPHER CNVs merge on hg38 when you zoom in, and after a QuickLift to hs1
+# they do not merge at any zoom, down to a single base.
+#
+# mergeSpannedItems collapses every item that spans the whole window into one synthetic
+# "mergedItem" (hg/hgTracks/bigBedTrack.c, MERGESPAN_TDB_SETTING).  The lifted track lost
+# that, so a window inside a large CNV drew one line per variant instead of one merged box.
+# Fixed in 802ca99f5f0 / a8f3e257363.
+#
+# The merged box is what the assertion reads, on the source and then on the target, and the
+# COUNT in its tooltip is deliberately not asserted: DECIPHER is reloaded by an otto cron,
+# so the number moves with the data and a nightly red would be news about DECIPHER rather
+# than about quickLift.
+#
+# rm38042 reads the same box for a different reason -- there the items were dropped by the
+# lift before they could reach the merge.  Here they lift and the merge itself is what went
+# missing.  Read the two together before changing either.
+#
+# `data-tooltip` and not `title`: hgTracks writes both on a map box and the page's own
+# tooltip code moves the title out of the DOM once its JavaScript has run.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {decipherContainer: show, decipher: pack}
+  - expect:
+      rows: [decipher]
+      has: 'area[data-tooltip^="Merged "]'
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect:
+      rows: [decipher]
+      has: 'area[data-tooltip^="Merged "]'
+      noText: "Warning/Error"

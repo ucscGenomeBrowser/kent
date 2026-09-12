@@ -149,3 +149,37 @@ same HTML on a build with the bug and a build without it.
 `virtWinFull=on` is worth knowing for a third reason: without it a region change lands
 zoomed in on one region, so a second region is off screen and a script cannot tell a
 region that failed to resolve from one that is merely not in view.
+
+Ten more for quickLift, five on hgTracks and five on hgc
+----------------------------------------------------------
+
+rm36048, rm36059, rm36125, rm36370, rm36942, rm37646, rm37815, rm38032, rm38042 and
+rm38146 are one batch, written 2026-09-12. Fourteen scripts here already lifted something
+(they are the ones that call `convert: {quicklift: true}`); these add the parts of the
+lift that had no test: the order tracks come out in, an item bigger than the chains
+quickLift loads, the spanned-item merge, a lolly subtrack, the hide-target-defaults
+checkbox, and five details pages -- GENCODE archive, hgGene, NCBI RefSeq, the Alignment
+Differences description, and the same page with a GenArk assembly as the SOURCE.
+
+Each one costs a convert, which is about 17 seconds: hgConvert plus a hub build plus the
+click through to the browser. Budget for that before adding more.
+
+Three things worth reusing from them:
+
+**The lift is set up through the UI and read from the map.** There is no URL that makes a
+quickLift hub, so every script here does `convert:` then `open: lift`. What comes back
+carries a per-run `hub_<n>_` prefix on every row id and every map box, so `rows:` matches
+by suffix and a `has:` selector has to use a substring (`area[href*="clinvarSubLolly"]`),
+never an exact id.
+
+**Do not assert a count that a data update can move.** rm38042 and rm36048 both read the
+spanned-item merge box, and the tooltip on it counts the items merged -- 45 for ClinVar on
+2026-09-12. That number is reloaded by an otto cron every month. Both scripts assert that
+the box is THERE (`area[data-tooltip^="Merged "]`) and leave the count to a comment, so a
+red morning is news about quickLift rather than about ClinVar.
+
+**A details page carries the track's own labels, so name something else.** rm36125 asserts
+SHH's N-terminal peptide, rm36059 a UniProtKB section, rm36370 two section headings that
+were missing, rm38146 the query sequence read out of a two bit file. Each of those is
+absent from the page the ticket was filed about and present on the fixed one; the track
+name and longLabel are on both.
