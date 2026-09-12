@@ -8915,7 +8915,7 @@ char *curSessVisTracks = cgiTrackVisString(curSessCart);
 
 // get track-related vars from current cart
 struct dyString *dsCgiVars = dyStringNew(0);
-cartEncodeState(cart, dsCgiVars);
+cartEncodeStateRawNames(cart, dsCgiVars);
 outDefaultTracks(cart, dsCgiVars);
 char *this = dyStringCannibalize(&dsCgiVars);
 // TODO: again, better parsing

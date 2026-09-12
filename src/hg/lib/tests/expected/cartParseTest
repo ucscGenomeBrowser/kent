@@ -1,0 +1,55 @@
+reading a stored contents string
+
+in  : db=hg38&position=chr1:1-1000
+cart: [db=hg38][position=chr1:1-1000]
+
+in  : &db=hg38&position=chr1:1-1000
+cart: [&db=hg38][position=chr1:1-1000]
+
+in  : db=hg38&&position=chr1:1-1000
+cart: [&position=chr1:1-1000][db=hg38]
+
+in  : db=hg38&position=chr1:1-1000&&
+cart: [db=hg38][position=chr1:1-1000]
+
+in  : g-catV2&db=hg38
+cart: [g-catV2&db=hg38]
+
+in  : db=hg38&i&position=chr1:1-1000
+cart: [db=hg38][i&position=chr1:1-1000]
+
+in  : db=hg38&g-catV2
+cart: [db=hg38]
+
+in  : db=hg38&ctfile_hg38=/somewhere/else
+cart: cart: dropped ctfile_hg38, value is not a trash or session-data file name
+[db=hg38]
+
+in  : db=hg38&&ctfile_hg38=/somewhere/else
+cart: cart: dropped ?ctfile_hg38, value is not a trash or session-data file name
+[db=hg38]
+
+in  : db=hg38&i&ctfile_hg38=/somewhere/else
+cart: cart: dropped i?ctfile_hg38, value is not a trash or session-data file name
+[db=hg38]
+
+in  : db=hg38&hgtgroup_Tanaka_Cut&Tag_IgG_close=1&position=chr1:1-1000
+cart: [db=hg38][hgtgroup_Tanaka_Cut&Tag_IgG_close=1][position=chr1:1-1000]
+
+in  : db=hg38&hgtgroup_Tanaka_Cut%26Tag_IgG_close=1&position=chr1:1-1000
+cart: [db=hg38][hgtgroup_Tanaka_Cut&Tag_IgG_close=1][position=chr1:1-1000]
+
+in  : db=hg38&hub_2089_hIPS%2c%20biol_rep3.CNhs14216_sel=1
+cart: [db=hg38][hub_2089_hIPS%2c%20biol_rep3.CNhs14216_sel=1]
+
+in  : db=hg38&position=
+cart: [db=hg38][position=]
+
+in  : 
+cart: 
+
+writing a cart out and reading it back
+
+out : db=hg38&hub_1623_CompRoadmapCD4+CD25-N=pack&hub_2089_hIPS%2c%20biol_rep3.CNhs14216_sel=1&hgtgroup_Tanaka_Cut%26Tag_IgG_close=1&a%2526b=1&amp%3Bg=refGene&position=chr1%3A1%2D1000&weird%3Dname=1
+back: [a%26b=1][amp;g=refGene][db=hg38][hgtgroup_Tanaka_Cut&Tag_IgG_close=1][hub_1623_CompRoadmapCD4+CD25-N=pack][hub_2089_hIPS%2c%20biol_rep3.CNhs14216_sel=1][position=chr1:1-1000][weird=name=1]
+
