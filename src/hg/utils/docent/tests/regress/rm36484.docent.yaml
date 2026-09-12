@@ -1,0 +1,32 @@
+# #36484 -- the "All" entry of a filterComposite filter did not work in some browsers.  The
+# code that writes those selects put a stray <BR> immediately after the opening <SELECT>
+# tag, inside the element, and a browser that took the markup literally ended up with a
+# select whose first child was not an option.  4eb85cbf0be removes it -- "yet again", by
+# the commit message, so it had crept back in before.
+#
+# hg/lib/hui.c, filterBySetCfgUi():
+#
+#     -      "class='filterComp'><BR>\n"
+#     +      "class='filterComp'>\n"
+#
+# The assertion is the markup, because that is the whole of the bug: nothing about the
+# rendered page changes in a browser that tolerates the stray tag, so a text: or a
+# screenshot cannot see it.  wgEncodeRegDnase is one of the two hg38 tracks that set
+# filterComposite; the positive has: is there so that the noHas: cannot pass on a page
+# that has no filterComp select at all.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 4eb85cbf0be, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase"
+  - expect:
+      has:
+        - 'select.filterComp'
+        - 'select.filterComp option'
+      noHas: 'select.filterComp br'
+      text: "DNase I Hypersensitivity in 95 cell types from ENCODE"

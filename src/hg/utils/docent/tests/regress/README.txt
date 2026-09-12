@@ -183,3 +183,36 @@ SHH's N-terminal peptide, rm36059 a UniProtKB section, rm36370 two section headi
 were missing, rm38146 the query sequence read out of a two bit file. Each of those is
 absent from the page the ticket was filed about and present on the fixed one; the track
 name and longLabel are on both.
+
+Ten for hgTrackUi, and what makes that page testable
+------------------------------------------------------
+
+rm20460, rm32263, rm34651, rm35906, rm36484, rm36668, rm36917, rm37130, rm37282 and
+rm37743 are one batch, written 2026-09-12. Four scripts here already touched hgTrackUi in
+passing (rm37389, rm37489, rm38126, rm38272); these are about the page itself: the
+superTrack configuration page, composite and subtrack configuration, filters, the color
+override, the parent link, and two bad-input paths.
+
+They are also the cheapest scripts in the directory -- one to three seconds each, because
+hgTrackUi draws no image and most of them never leave it.
+
+**There is no track image, so `rows:` is not available and a positive `text:` is
+mandatory.** A crash gives the browser an empty document, where every `noText:` and every
+`noHas:` passes. Every script here names something the real page says.
+
+**Most of what hgTrackUi does is in ids, names and classes, so `has:`/`noHas:` carries
+these tests.** README says to reach for a selector last, and that is still right for
+hgTracks, where rows, height, text and color can usually say it instead. On a settings
+page the bug often IS the markup: a shared id that should be per-track (rm34651), a stray
+tag inside a select (rm36484), a control that should not be offered for this track type
+(rm20460), a class that greys a dropdown (rm37282). Name the id or class the commit
+changed, and say in the header which one it is.
+
+**A cart round trip is what tells a control that works from one that only looks right.**
+rm35906's clear-filters button set every dropdown to All on screen on the buggy build too;
+only submitting and coming back shows whether anything was saved. rm36668 does the same in
+reverse, checking after the fact that the two checkboxes it clicked really are on.
+
+**A dropdown cannot be driven.** Docent has no verb that picks an option from a select, so
+a visibility is set on the way in through the URL (rm36668) and a button is clicked
+instead where one exists (rm36917, rm37282).

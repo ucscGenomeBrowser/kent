@@ -1,0 +1,39 @@
+# #34651 -- "Density graph options open/close using another track's checkbox".  Every
+# subtrack configuration section on an hgTrackUi page wrote its density-graph options into
+# a div with the SAME id, densGraphOptions, and the inline handler that shows and hides it
+# named that id.  With two sections open, one track's checkbox toggled the other track's
+# options.
+#
+# fa3431cd36b makes the id carry the track name, in the div and in the handler:
+#
+#     printf("<DIV id=\"densGraphOptions%s\" ...", name);
+#     jsInlineF("$(\"input[name='%s']\").click( function() { $('#densGraphOptions%s').toggle();} );\n", varName, name);
+#
+# What that changed is the id, so the id is what this reads: it must be qualified by the
+# track on every page it appears on, and the bare shared id must be gone.  The ticket's own
+# scenario -- two subtrack sections open at once -- is reached by ajax, one expand per
+# section, and a test of that would be a test of the expander rather than of the id.  Two
+# pages, one container and one subtrack, say the same thing about the id and say it without
+# depending on the ajax.
+#
+# `#densGraphOptions` as a CSS selector is exact, so it does not match
+# densGraphOptionsclinvar; the noHas: below is a real check on the old shared id and not a
+# prefix match that can never fail.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from fa3431cd36b, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=clinvar"
+  - expect:
+      has: '#densGraphOptionsclinvar'
+      noHas: '#densGraphOptions'
+
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=jaspar2026"
+  - expect:
+      has: '#densGraphOptionsjaspar2026'
+      noHas: '#densGraphOptions'

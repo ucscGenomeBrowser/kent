@@ -1,0 +1,36 @@
+# #32263 -- a search engine sends a reader straight to a composite CHILD's settings page,
+# and the page said nothing about the container it belongs to, so there was no way up.
+# 276a54d43de adds a line naming the container and a link to its configuration page;
+# d1f0ba05183 reworded it once and it has been reworded again since, so the assertions
+# below name what the page says today rather than what the commit added.
+#
+# refGene ("UCSC RefSeq") is a child of the refSeqComposite container ("NCBI RefSeq"), and
+# the ticket was filed about exactly that pair.
+#
+# The link is followed rather than only asserted, because the bug this guards against is
+# a link that goes nowhere: the href is built by hand from database, chromosome and
+# tdb->parent->track, so a wrong one is easy to write and impossible to see from the child
+# page alone.  hgTrackUi has no track image, so the container page is recognised by its
+# own text.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 276a54d43de, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=refGene"
+  - expect:
+      text: "is part of the track container"
+      has: 'a[href*="hgTrackUi"][href*="g=refSeqComposite"]'
+
+  - click: 'a:has-text("Click here")'
+
+  # The container's own page: its description, and the subtrack list that only a composite
+  # page has.  The child page carries the container's name too, so naming the name would
+  # not say the click went anywhere.
+  - expect:
+      text: "List subtracks"
+      url: "g=refSeqComposite"

@@ -1,0 +1,45 @@
+# #37130 -- "Filters not working on hgTrackUi".  A composite that sets noParentConfig and
+# has a single child lost its filters: the child's own settings page offered none, because
+# the code that decides where a subtrack is configured did not look at noParentConfig.
+#
+# Two commits, and the second is the one asserted.  f91cf65c2a3 added noParentConfig and
+# showCfg to the jaspar container's trackDb to get the filters back; 1bbbf05971f fixed the
+# code in hg/lib/hui.c, in two places:
+#
+#     boolean noParentConfig = tdb && trackDbSetting(tdb, "noParentConfig");
+#     if (!noParentConfig && (configurableByAjax(tdb,cType) > 0))
+#     ...
+#     else if (!noParentConfig && slCount(subtrackRefList) < 2
+#
+# so a subtrack under noParentConfig is configured on its own page rather than through the
+# parent's ajax, single child or not.
+#
+# That makes the test two pages rather than one.  The child has to carry both filters, and
+# the parent has to carry neither -- a fix that simply turned parent configuration back on
+# would put them on both pages and pass a test that only looked at the child.
+#
+# jaspar2026 is a child of the jaspar container, which is the track the ticket was filed
+# about.  Its two filters are the TFName value list and the numeric score.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 1bbbf05971f, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=jaspar2026"
+  - expect:
+      has:
+        - 'select[name="jaspar2026.filterBy.TFName"]'
+        - 'input[name="jaspar2026.filter.score"]'
+      text: "JASPAR 2026 TFBS"
+
+  # The container, which noParentConfig is about: it configures nothing.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=jaspar"
+  - expect:
+      noHas:
+        - 'select[name*="filterBy"]'
+        - 'input[name*=".filter."]'
+      text: "JASPAR Transcription Factors"

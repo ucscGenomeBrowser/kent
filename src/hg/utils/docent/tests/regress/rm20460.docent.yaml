@@ -1,0 +1,43 @@
+# #20460 -- a reader could not change the color of a native track.  The answer is a color
+# override on the track's settings page: a checkbox, a text field holding a hex value, and
+# a spectrum picker beside it.
+#
+# 6d78a8e2d72 is the part this asserts.  The first version offered the control on every
+# track, including types that do not draw items in a single color at all, so it was
+# restricted to the types that support it -- bed, bigBed, genePred, bigGenePred, wig,
+# bigWig, rmsk, interact, bigInteract, bigLolly, vcf and vcfTabix -- behind one function,
+# tdbSupportsColorOverride(), rather than the same list written out twice.
+#
+# So the test is two pages: a genePred track has the control, and a chain track does not.
+# One page alone would not say the restriction is there, and the restriction is what the
+# commit changed.  refGene and chainHs1 are both on hg38 and neither is a composite, so
+# nothing but the type differs between them.
+#
+# The control is behind showColorPicker in hg.conf, which is on for hgwdev and genome-test.
+# A server with it off would fail this script for a reason that is not a bug; the nightly
+# runs against genome-test.  The `noText:` on the chain page is there because a settings
+# page for a track that does not exist would also have no color control.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 6d78a8e2d72, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=refGene"
+  - expect:
+      has:
+        - 'input[type=checkbox][name="refGene.colorOverrideOn"]'
+        - 'input[type=text][name="refGene.colorOverride"]'
+      text: "UCSC annotations of RefSeq RNAs"
+
+  # A chain track is not one of the types the override supports.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=chainHs1"
+  - expect:
+      noHas:
+        - 'input[name="chainHs1.colorOverrideOn"]'
+        - 'input[name="chainHs1.colorOverride"]'
+      text: "Chain"
+      noText: "Can't find"
