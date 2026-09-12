@@ -747,7 +747,7 @@ struct trackDb *lmCloneSuper(struct lm *lm, struct trackDb *tdb, struct hash *su
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *incFiles);
 /* For this hub, Allocate shared memory and clone trackDb list into it. incFiles has a list of include files that may be null. */
 
-void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size);
+void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size, char *incFiles);
 /* For this native db, allocate shared memory and clone trackDb list into it. */
 
 struct trackDb *trackDbCache(char *db, char *tdbPathString, time_t time);

@@ -17,6 +17,7 @@
 #include "fa.h"
 #include "hgConfig.h"
 #include "trackDb.h"
+#include "trackDbExpand.h"
 #include "hCommon.h"
 #include "dbDb.h"
 #include "blatServers.h"
@@ -4486,11 +4487,19 @@ if (doCache)
     }
 
 tdbList = loadTrackDb(db, NULL);
+
+/* A container track can name a metadata file instead of carrying one trackDb row per
+ * subtrack.  Build those subtracks here, before the list is linked up and cached, so
+ * that every reader of trackDb sees the same list either way.  incFiles names the files
+ * the expansion read, which expires the cache when one of them changes. */
+struct dyString *incFiles = dyStringNew(0);
+tdbList = trackDbExpandSubtracks(tdbList, incFiles);
+
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, db);
 
 if (doCache)
-    trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint());
+    trackDbCloneTdbListToSharedMem(db, tdbPathString, tdbList, memCheckPoint(), incFiles->string);
 
 // Store negative cartVersion in priority field so that cartVersion "track" is first in tdbList
 if ((tdbList != NULL) && sameString(tdbList->track, "cartVersion"))

@@ -442,11 +442,12 @@ else
     }
 }
 
-void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size)
-/* For this native db, allocate shared memory and clone trackDb list into it. */
+void trackDbCloneTdbListToSharedMem(char *db, char *tdbPathString, struct trackDb *list, unsigned long size, char *incFiles)
+/* For this native db, allocate shared memory and clone trackDb list into it.  incFiles has a
+ * list of files the trackDb was built from, beyond the trackDb table itself, and may be null. */
 {
 cacheLog("cloning memory for db %s %ld", db, size);
-cloneTdbListToSharedMem(db, tdbPathString, list, size, db, NULL);
+cloneTdbListToSharedMem(db, tdbPathString, list, size, db, incFiles);
 }
 
 void trackDbHubCloneTdbListToSharedMem(char *trackDbUrl, struct trackDb *list, unsigned long size, char *incFiles)

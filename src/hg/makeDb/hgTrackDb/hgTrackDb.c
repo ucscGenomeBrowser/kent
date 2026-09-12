@@ -135,8 +135,11 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (tdbIsDownloadsOnly(tdb) || trackDataAccessibleHash(db, tdb, gbdbHash)) 
+    else if (tdbIsDownloadsOnly(tdb) || trackDbLocalSetting(tdb, "subtrackTemplate") != NULL
+            || trackDataAccessibleHash(db, tdb, gbdbHash)) 
         {
+        /* A track with a subtrackTemplate has no children here.  They are built out of its
+         * metadata file when trackDb is loaded, so this one is not an empty track. */
         slAddHead(&newList, tdb);
         }
     // We will allow these at some point, but currently(10/10/2011) the table browser still chokes.
@@ -162,7 +165,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     if (trackDbLocalSetting(tdb, "compositeTrack") || trackDbLocalSetting(tdb, "view"))
 	{
 	tdb->subtracks = pruneEmptyContainers(tdb->subtracks);
-	if (tdb->subtracks != NULL)
+	if (tdb->subtracks != NULL || trackDbLocalSetting(tdb, "subtrackTemplate") != NULL)
 	    slAddHead(&newList, tdb);
 	else
 	    verbose(3,"pruneEmptyContainers: empty track: '%s'\n",

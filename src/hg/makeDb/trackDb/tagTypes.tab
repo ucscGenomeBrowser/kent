@@ -664,3 +664,5 @@ yLineMark *
 yLineOnOff *
 yAxisNumLabels bigBed bigLolly
 detailsScript* bigBed
+subtrackTemplate *
+dataTypeColumn *
