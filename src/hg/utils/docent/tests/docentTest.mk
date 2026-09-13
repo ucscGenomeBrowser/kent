@@ -47,6 +47,26 @@ preflight:
 proof:
 	@$(PW_ENV) node $(PROOF) . $(T)
 
+# A run leaves a log per script, plus a stills/ and a sessions/ directory per script that
+# takes a shot: or writes a session:.  Nothing reads any of it once the run is over -- the
+# nightly reads this target's OUTPUT, and the failure branches below print a failing log
+# into that output while the file is still there -- so a passing script's log is cleared
+# up rather than left for `git status` to report.  Ignoring them instead would leave the
+# same files on disk and teach git to look away from the directory new tests are written
+# in, which is the wrong half of the problem to solve.
+#
+# A failing script keeps its log.  It is already echoed here, but a file is easier to page
+# through than a terminal, and an xfail that PASSED keeps its log too: that is the flip
+# `make proof` is about, and the morning it happens is the one morning someone will want
+# to read the whole run.
+#
+# The stills and the session file a passing script wrote go with the log, for the same
+# reason: both are rewritten from scratch by the next run, and a script that reads its own
+# session back (`loadSession: {file: ...}`) does so during the run, not after it.
+#
+# WARNING lines are printed before the log goes.  docent warns without failing -- a
+# mouseover whose tooltip never showed its own text is the one that matters, since it
+# means the step measured nothing -- and today those lines reach a file that nobody opens.
 test:
 	@if [ -z "$(strip $(TESTS))" ]; then \
 	  echo "no *.docent.yaml here -- nothing was tested"; exit 1; fi
@@ -61,8 +81,14 @@ test:
 	    echo "  FAILED -- run said:"; sed 's/^/    /' $$b.log; fail=1; \
 	  elif [ $$got -eq 0 ] && [ $$want -eq 1 ]; then \
 	    echo "  FAILED -- this was supposed to fail, and it passed"; fail=1; \
-	  else echo "  ok"; fi; \
+	  else \
+	    echo "  ok"; \
+	    grep -h 'WARNING' $$b.log 2>/dev/null | sed 's/^/    /' || true; \
+	    rm -f $$b.log; \
+	    [ -n "$$b" ] && rm -rf stills/$$b sessions/$$b; \
+	  fi; \
 	done; \
+	rmdir stills sessions 2>/dev/null || true; \
 	if [ $$fail -eq 0 ]; then echo "docent tests passed"; else echo "docent tests FAILED"; exit 1; fi
 
 # Two invariants that need the same script run more than once, so they cannot be
@@ -81,7 +107,11 @@ parity:
 	@echo "=== $(PARITY) again, to catch state left behind by the last run"; \
 	  DOCENT_FAST=1 $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.rerun.log 2>&1 \
 	  || { sed 's/^/    /' parity.rerun.log; exit 1; }
-	@echo "parity passed"
+# Same rule as `test`: the three logs and the mp4 the slow run records are kept only when
+# a step failed, and a failing step exits above before this line is reached.
+	@rm -f parity.fast.log parity.slow.log parity.rerun.log $(PARITY).mp4; \
+	  rmdir stills/$(PARITY) sessions/$(PARITY) stills sessions 2>/dev/null || true; \
+	  echo "parity passed"
 
 # The derivation on its own: DOCENT_DERIVE=1 resolves each `track:` step against the
 # server's trackDb and prints the cart variables, with no browser and no navigation. That
