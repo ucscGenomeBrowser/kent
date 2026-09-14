@@ -1,0 +1,57 @@
+# The MethBase hub that is NOT smithlab's: the v1 "legacy" hub UCSC keeps on hgdownload,
+# still listed on the RR as `MethBase (Legacy)`.
+#
+# Two MethBase hubs are in the RR's public list and users have both in saved sessions, so
+# a suite about MethBase on the RR that only exercised MethBase2 would leave half of it
+# unwatched.  This one is ours -- https://hgdownload.soe.ucsc.edu/hubs/methbase/v1/ -- and
+# it is frozen: 605 profiles, no further updates, which is exactly why it can carry a
+# tighter assertion than the smithlab hub can.  hgdownload also holds v2 and v3
+# directories with no hub.txt at their top level, so `v1` in the URL is load-bearing.
+#
+# It is a different hub in shape as well as in age: superTrack `hg38_methylomes` holding
+# one composite per PAPER (`Hodges_Human_2011`, `Lister_ESC_2009`, ...) rather than per SRA
+# study, subgroups named by cell type rather than by accession, and nine data types in the
+# view subgroup rather than five.  Two of its composites are `visibility full` and the
+# rest are hidden, so a clean connect draws ten rows and this states all ten.
+#
+# The colors are the legacy hub's own: HMR 56,113,193 (the same blue MethBase2 uses) and
+# the methylation level 197,172,24, which MethBase2 draws in orange instead.  As in
+# mbSignal, a bigDataUrl that stopped answering would keep the row and its name and change
+# only the pixels, to the 240,240,180 warning bar.
+
+target: rr
+db: hg38
+position: chr15:24950000-24960000
+reset: true
+fast: true
+steps:
+  - go: chr15:24950000-24960000
+  - hide: all
+  - hub: {url: "https://hgdownload.soe.ucsc.edu/hubs/methbase/v1/hub.txt", db: hg38}
+  - go: chr15:24950000-24960000
+
+  - expect:
+      rows: [ruler,
+             HodgesHuman2011_HumanBCellHMR,     HodgesHuman2011_HumanBCellMeth,
+             HodgesHuman2011_HumanCD133HSCHMR,  HodgesHuman2011_HumanCD133HSCMeth,
+             HodgesHuman2011_HumanNeutHMR,      HodgesHuman2011_HumanNeutMeth,
+             ListerESC2009_HumanH1ESCHMR,       ListerESC2009_HumanH1ESCMeth,
+             ListerESC2009_HumanIMR90HMR,       ListerESC2009_HumanIMR90Meth]
+      exact: true
+      noText: "Too Long"
+
+  - expect:
+      color:
+        - {track: HodgesHuman2011_HumanBCellHMR,  is: "56,113,193", not: "240,240,180"}
+        - {track: HodgesHuman2011_HumanBCellMeth, is: "197,172,24", not: "240,240,180"}
+        - {track: ListerESC2009_HumanH1ESCMeth,   is: "197,172,24", not: "240,240,180"}
+
+  # The container page, reached with the same suffix selector mbContainer uses.  It says
+  # the legacy hub's own superTrack and its hidden composites are still on the page, which
+  # `rows:` cannot: nothing but the two default-on papers is drawn.
+  - click: 'a.trackLink[data-track$="hg38_methylomes"]'
+  - expect:
+      url: "hgTrackUi"
+      text: "Methbase DNA methylation"
+      noText: "Can't find"
+      has: 'a[href*="hgTrackUi"][href*="Akalin_Human_2012"]'

@@ -1,0 +1,47 @@
+# Taking one experiment out of a MethBase study through the matrix, and checking the cart
+# kept it.
+#
+# A control that works and a control that only looks right are the same picture until the
+# form is submitted and the page comes back -- ../regress/rm35906 is the same lesson on a
+# native track's filter buttons.  Here the gesture is the matrix's row button for
+# experiment A00000 (SRX081759), which unchecks that experiment in every view at once, and
+# the check is on the BROWSER page afterwards: SRX081759's two rows are gone and its two
+# sibling experiments are still drawn.
+#
+# So this is the one script here that changes MethBase's state rather than reading it.  It
+# is also the only route this suite has to a hub track's visibility at all: a hub track's
+# cart name carries a per-run `hub_<n>_` prefix, `track:` cannot write it, and Docent has
+# no verb that drives a dropdown.  The matrix buttons are id-free (`A00000` is the
+# subgroup tag from the hub's own trackDb), so the whole path -- browser page, container
+# page, study page, Submit, browser page -- never names the hub's number.
+#
+# 23 rows before, 21 after.  Both halves are asserted: a Submit that dropped everything
+# would satisfy `noRows:` on its own.
+
+target: rr
+db: hg38
+position: chr15:24950000-24960000
+reset: true
+fast: true
+steps:
+  - go: chr15:24950000-24960000
+  - hide: all
+  - hub: {url: "http://smithlab.usc.edu/trackdata/methylation/hub.txt", db: hg38}
+  - go: chr15:24950000-24960000
+  - expect: {rows: [SRP007400_SRX081759_sym, SRP007400_SRX081759_HMR,
+                    SRP007400_SRX081760_sym, SRP007400_SRX081761_HMR]}
+
+  - click: 'a.trackLink[data-track$="Human_methylome_studies"]'
+  - click: 'a[href*="hgTrackUi"][href*="SRP007400"]'
+  - expect: {has: '#btn_minus_A00000_all_left_bottom'}
+
+  - click: '#btn_minus_A00000_all_left_bottom'
+  - click: '#Submit'
+
+  # Back on the browser.  SRX081759 is gone from both of its views, the other two
+  # experiments are untouched, and the rest of the hub's default set is still there.
+  - expect:
+      rows: [SRP007400_SRX081760_sym, SRP007400_SRX081760_HMR,
+             SRP007400_SRX081761_sym, SRP007400_SRX081761_HMR,
+             asm, cpgs, SRP008144_SRX096518_sym]
+      noRows: [SRP007400_SRX081759_sym, SRP007400_SRX081759_HMR]

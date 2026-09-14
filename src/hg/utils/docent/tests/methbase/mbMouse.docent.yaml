@@ -1,0 +1,51 @@
+# MethBase2 on mm39, which is a different hub genome with a different superTrack, a
+# different default study, and one experiment that is missing a data type.
+#
+# The hub declares 32 assemblies.  Every other script here is on hg38, and a hub that
+# answers for hg38 can still be broken for the rest -- genomes.txt names a trackDb file
+# per assembly and each is fetched on its own.  This is the one script that says the mouse
+# half is alive.  mm39 has its own container (`Mouse_methylome_studies`), its own `common`
+# composite over mm39 CpG positions and mm39 ASM, and one study on by default,
+# SRP037785 (Two waves of de novo methylation during mouse germ cell development).
+#
+# THE MISSING HMR IS THE ASSERTION WORTH HAVING.  SRP037785 has five experiments, and four
+# of them have an HMR file: SRX472602 has a sym track and no HMR track.  So the study does
+# not draw a clean five-by-two grid, and the `noRows:` line below states the hole.  A test
+# that only listed the rows it expected to see would pass just as happily on a build that
+# invented a row for it, or on a hub that quietly filled the gap with the wrong file.
+#
+# The position is the mouse H19/Igf2 imprinting control region on chr7, which is where the
+# mm39 ASM signal is high -- the same reason mbSignal sits at SNRPN on hg38.
+#
+# cpgs is drawn here despite `visibility hide` on its own trackDb line, exactly as on hg38:
+# `common` is `visibility full` and a composite's visibility reaches its subtracks.
+
+target: rr
+db: mm39
+position: chr7:142125000-142140000
+reset: true
+fast: true
+steps:
+  - go: chr7:142125000-142140000
+  - hide: all
+  - hub: {url: "http://smithlab.usc.edu/trackdata/methylation/hub.txt", db: mm39}
+  - go: chr7:142125000-142140000
+
+  - expect:
+      rows: [ruler, asm, cpgs,
+             SRP037785_SRX470512_sym, SRP037785_SRX470512_HMR,
+             SRP037785_SRX470552_sym, SRP037785_SRX470552_HMR,
+             SRP037785_SRX470575_sym, SRP037785_SRX470575_HMR,
+             SRP037785_SRX470596_sym, SRP037785_SRX470596_HMR,
+             SRP037785_SRX472602_sym]
+      noRows: [SRP037785_SRX472602_HMR,
+               SRP037785_SRX470512_AMR, SRP037785_SRX470512_coverage]
+      exact: true
+
+  # The mouse files answered, in the hub's own colors for each data type -- the same three
+  # mbSignal checks, against mm39 copies of the data.
+  - expect:
+      color:
+        - {track: asm,                     is: "255,64,64",  not: "240,240,180"}
+        - {track: SRP037785_SRX470512_sym, is: "255,153,0",  not: "240,240,180"}
+        - {track: SRP037785_SRX470512_HMR, is: "56,113,193", not: "240,240,180"}
