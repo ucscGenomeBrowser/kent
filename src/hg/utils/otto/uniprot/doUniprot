@@ -2,7 +2,7 @@
 import urllib.request, urllib.error, urllib.parse, time, os, atexit
 import datetime, optparse, sys, logging, subprocess, glob, shutil
 import sys, gzip, logging,re, json
-import concurrent.futures
+import concurrent.futures, traceback
 
 from urllib.parse import urlparse
 from os.path import *
@@ -2161,7 +2161,15 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     writeMapDesc(stats, db, geneTable, mapDescFname)
 
-    assert(os.path.getsize(mapFname)!=0)
+    if os.path.getsize(mapFname)==0:
+        # Nothing aligned. On an organism with a handful of UniProt proteins this is a fact
+        # about the data, not a failure of the run: taxon 216574, the golden eagle, offers
+        # two proteins and neither of them aligns. Treat it the way an organism with no
+        # proteins at all is already treated, skip the assembly and carry on, rather than
+        # asserting and taking the whole run down. refs #38300
+        logging.warning("%s: no protein aligned to the genome, skipping this assembly" % db)
+        return None, geneTable, fullMd5, protMapSource, protToTrans, True
+
     # if you modify this line, also modify the other return statement above
     return mapFname, geneTable, fullMd5, protMapSource, protToTrans, True
 
@@ -2387,6 +2395,11 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
             mapFname, geneTable, mapMd5, accToMapSource, accToTrans, isNewMap = \
                 makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, options.force, dbMapDir, mapDescFname)
 
+            if mapFname is None or os.path.getsize(mapFname)==0:
+                # covers both the freshly built and the reused mapping file
+                logging.warning("%s: no protein/genome alignments, nothing to build" % db)
+                continue
+
             dbBigBedDir = makeSubDir(bigBedDir, db)
 
             convMapToBigPsl(fullFaFname, mapFname, dbBigBedDir, accToDb, accToMeta, accToMapSource, accToTrans, chromSizesFname, doTrembl)
@@ -2442,7 +2455,10 @@ def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrem
                 # sys.exit(), which raises SystemExit. In a worker thread that would
                 # otherwise kill just that thread and leave the run looking successful,
                 # which is exactly the kind of silent failure this pipeline has a history of.
-                logging.error("taxon %s failed: %s: %s" % (taxId, type(ex).__name__, ex))
+                # Log the traceback too: errAbort raises a bare AssertionError, so without
+                # one the message is just "AssertionError:" and says nothing about where.
+                logging.error("taxon %s failed: %s: %s\n%s" % (taxId, type(ex).__name__, ex,
+                        "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))))
                 failed.append(taxId)
 
     if failed:
