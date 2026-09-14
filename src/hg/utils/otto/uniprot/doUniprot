@@ -1393,7 +1393,7 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
             if mapSource == "best":
                 mapDesc = "Best match(es) when aligning protein against all transcripts"
             elif mapSource == "direct":
-                mapDesc = "Best BLAT match when aligning protein against entire genome"
+                mapDesc = "Best miniprot match when aligning protein against entire genome"
             elif mapSource == "uniprot":
                 mapDesc = "Alignment of protein to transcript(s) annotated by UniProt"
             elif mapSource == "entrez":
@@ -1403,7 +1403,7 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
 
             mapInfoStr = "%s: %s" % (mapDesc, transListStr)
         else:
-            mapInfoStr = "no transcript: direct BLAT to genome"
+            mapInfoStr = "no transcript: direct miniprot alignment to genome"
 
         row.append(mapInfoStr)
 
@@ -1965,8 +1965,13 @@ def writeMapDesc(stats, db, geneTable, mapDescFname):
     " write a little json file that points to the map file used and some basic stats about it "
     logging.debug("making json file with version and other lift info")
     hubDir = genArkHubDir(db)
-    if hubDir is not None:
-        # A GenArk assembly has no ncbiRefSeqVersion.txt. Date the gene models by the
+    if geneTable=="miniprot":
+        # no gene models were involved at all, the proteins went straight to the genome.
+        # This has to be tested before the hub case below: a hub assembly with no gene
+        # models is exactly the one that ends up here, and it has no bigBed to date.
+        version = "direct"
+    elif hubDir is not None:
+        # A hub assembly has no ncbiRefSeqVersion.txt. Date the gene models by the
         # bigBed we actually read, which is what the user needs to tie the mapping to a
         # particular annotation; the source name is carried separately in geneTable.
         geneBb = findBestGeneBigBed(db, hubDir)[1]
@@ -1975,8 +1980,6 @@ def writeMapDesc(stats, db, geneTable, mapDescFname):
         version = open("/gbdb/"+db+"/ncbiRefSeq/ncbiRefSeqVersion.txt").read().strip()
     elif geneTable in ['refGene', 'augustusGene', 'knownGene']:
         version = datetime.datetime.today().strftime('%Y-%m-%d')
-    elif geneTable=="miniprot":
-        version = "direct"
     elif geneTable in ["ensGene"]:
         version = list(runQuery("hgFixed", "select version from trackVersion where db='%s' and name='ensGene' order by ix desc limit 1;" % db))[0][0]
     else:
@@ -2092,7 +2095,7 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     logging.debug("%s does not exist" % mapFname)
     if geneTable=="miniprot":
-        logging.error("Could not find any gene table for %s, using BLAT to map proteins" % db)
+        logging.error("Could not find any gene table for %s, using miniprot to map proteins" % db)
         miniprotProteins(protFa, db, mapFname, stats)
     else:
         if db in ["ci3"]: # wow: ciona's genome is from a different organism than the refseq transcripts.
