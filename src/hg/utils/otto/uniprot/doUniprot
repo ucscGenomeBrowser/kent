@@ -1639,6 +1639,56 @@ def getTransIds(db, geneTable, transcriptFa):
     logging.info("Got %d distinct transcript IDs from MySQL table" % len(allTrans))
     return allTrans
 
+def catSourceTransMap(db, allTransIds):
+    """ map Ensembl transcript accession, without version, to the CAT transcript names we
+    have in our fasta.
+
+    CAT names a transcript after the source gene, e.g. AL627309.3-1, which matches nothing
+    UniProt knows. Every row of the CAT bigBed carries a sourceTranscript field holding the
+    Ensembl transcript it was lifted from, so that is the join. One Ensembl transcript can
+    name several of ours, because paralogs are lifted from the same source, and because
+    duplicate CAT names were made unique with a -dup suffix earlier.
+    """
+    hubDir = genArkHubDir(db)
+    geneBb = findBestGeneBigBed(db, hubDir)[1] if hubDir else None
+    if geneBb is None:
+        logging.warning("%s: no CAT bigBed found, cannot map to Ensembl transcripts" % db)
+        return {}
+
+    # which column is sourceTranscript
+    asText = subprocess.Popen(["bigBedInfo", "-as", geneBb], stdout=PIPE, encoding="utf8").communicate()[0]
+    fields = re.findall(r"^\s+\S+\s+\**(\w+)\s*;", asText, flags=re.MULTILINE)
+    if "sourceTranscript" not in fields or "name" not in fields:
+        logging.warning("%s: %s has no sourceTranscript field, cannot map to Ensembl" % (db, geneBb))
+        return {}
+    nameIdx, srcIdx = fields.index("name"), fields.index("sourceTranscript")
+
+    # Reproduce the -dup suffixes exactly rather than attaching every paralog to every
+    # source transcript. makeTranscriptFiles walks the bigBed in the same order and renames
+    # the second and later rows that share a name, so the same running count recovers which
+    # of our transcripts each bigBed row became.
+    shortToLong = {}
+    seen = {}
+    proc = subprocess.Popen(["bigBedToBed", geneBb, "stdout"], stdout=PIPE, encoding="utf8")
+    for line in proc.stdout:
+        row = line.rstrip("\n").split("\t")
+        if len(row) <= max(nameIdx, srcIdx):
+            continue
+        name = row[nameIdx]
+        seen[name] = seen.get(name, 0) + 1
+        ourId = name if seen[name]==1 else "%s-dup%d" % (name, seen[name])
+        if ourId not in allTransIds:
+            continue
+        src = row[srcIdx].split(".")[0]
+        if not src or src in ("None", "NA"):
+            continue
+        shortToLong.setdefault(src, []).append(ourId)
+    proc.stdout.close()
+
+    logging.info("%s: %d Ensembl transcripts map to %d of our %d CAT transcripts" % \
+            (db, len(shortToLong), sum(len(v) for v in shortToLong.values()), len(allTransIds)))
+    return shortToLong
+
 def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, commonTrans, \
         ofh, verDiffCount, pairCount):
     """ given a list of transcript IDs, write them to select file, if their base (before dot)
@@ -1655,7 +1705,10 @@ def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, c
             continue
 
         commonTrans.add(transId)
-        if transId!=shortToLong[shortId]:
+        # ourIds is a list: usually one transcript, but a CAT gene set can name several,
+        # since paralogs are lifted from the same source transcript
+        ourIds = shortToLong[shortId]
+        if transId not in ourIds:
             verDiffCount+=1
         pairCount += 1
 
@@ -1664,7 +1717,8 @@ def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, c
         # with the acc.version that we have in our transcript file. This saves a few hundred
         # transcripts, sometimes thousands, from getting removed
         for upSeqId in upSeqIds:
-            ofh.write("%s\t%s\n" % (upSeqId, shortToLong[shortId]))
+            for ourId in ourIds:
+                ofh.write("%s\t%s\n" % (upSeqId, ourId))
         foundTransCount+=1
     return foundTransCount, verDiffCount, pairCount
 
@@ -1673,7 +1727,9 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
     PSL file. The tool for this is called pslSelect. This helps force the alignment
     to the correct transcript. It turned out to be absolutely necessary. see makeUniProtPsl.sh """
     # get the UniProt field that holds the list of annotated transcript IDs
-    if "encode" in geneTable or "ensGene" in geneTable:
+    if "encode" in geneTable or "ensGene" in geneTable or geneTable=="catGenes":
+        # CAT is lifted from Ensembl/GENCODE, so its transcripts carry an Ensembl source
+        # transcript and UniProt's Ensembl cross-reference is the one that matches
         transField = "ensemblTrans"
     elif "refGene" in geneTable or "ncbiRefSeq" in geneTable:
         transField = "refSeq"
@@ -1691,9 +1747,16 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
 
     # create a mapping from no-version (short) to with-version accession (long), so we can fix them up later 
     # to the accessions that we actually have in our fasta file
-    shortToLong = {}
-    for acc in allTransIds:
-        shortToLong[acc.split(".")[0]] = acc
+    if geneTable=="catGenes":
+        # CAT names its transcripts after the source gene, so the ids in our fasta match no
+        # UniProt cross-reference at all. The CAT bigBed does carry, per transcript, the
+        # Ensembl transcript it was lifted from, so map through that and use UniProt's
+        # Ensembl cross-reference. refs #38300
+        shortToLong = catSourceTransMap(db, allTransIds)
+    else:
+        shortToLong = {}
+        for acc in allTransIds:
+            shortToLong.setdefault(acc.split(".")[0], []).append(acc)
 
     logging.debug("Example transcript IDs: %s" % list(allTransIds)[:10])
 
