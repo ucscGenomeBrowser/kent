@@ -2,6 +2,7 @@
 import urllib.request, urllib.error, urllib.parse, time, os, atexit
 import datetime, optparse, sys, logging, subprocess, glob, shutil
 import sys, gzip, logging,re, json
+import concurrent.futures
 
 from urllib.parse import urlparse
 from os.path import *
@@ -200,6 +201,12 @@ def parseArgs():
     parser.add_option("", "--archiveDir", dest="archiveDir", action="store", \
             default="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/",
             help="Location of archive directory, default %default")
+    parser.add_option("", "--taxonThreads", dest="taxonThreads", action="store", type="int",
+            default=1,
+            help="how many taxa to process at the same time, default %default. Raising this "
+            "keeps the cluster busy: one taxon at a time leaves it idle during the long "
+            "single-threaded steps between batches. 4 to 6 is a reasonable range. Assemblies "
+            "of the same taxon always run one after the other, they share a fasta file.")
     parser.add_option("", "--mapQa", dest="mapQa", action="store_true", \
             help="output some QA stats for the maps")
     parser.add_option("", "--db", dest="db", action="store_true", \
@@ -1552,7 +1559,7 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     ram = miniprotRamGb(genomeFa)
     jobDir = join(workDir, "cluster")
     if not isdir(jobDir):
-        os.makedirs(jobDir)
+        os.makedirs(jobDir, exist_ok=True)
 
     # a wrapper, so the jobList line stays free of the redirection and quoting that
     # parasol's job parser does not accept
@@ -1583,7 +1590,7 @@ def miniprotProteins(fullFaFname, db, mapFname, stats):
     """
     workDir = mapFname+".miniprot.tmp"
     if not isdir(workDir):
-        os.makedirs(workDir)
+        os.makedirs(workDir, exist_ok=True)
 
     # miniprot reads fasta, not 2bit
     genomeFa = join(workDir, "genome.fa")
@@ -1886,7 +1893,7 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
     """
     #dbDir = join(mapDir, db+"_"+geneTable)
     #if not isdir(dbDir):
-        #os.makedirs(dbDir)
+        #os.makedirs(dbDir, exist_ok=True)
 
     faName = join(dbDir, "transcripts.fa")
     pslName = join(dbDir, "transcripts.psl")
@@ -2049,8 +2056,8 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
         pslMd5 = tabMd5(transcriptPsl)
     else:
         # this usually only happens on viral genomes or other weird cases that don't have a single gene model track
-        # here we blat the proteins directly onto the genome
-        transMd5, pslMd5 = "directBlat-noTranscripts", "directBlat-noPsl"
+        # here we align the proteins directly onto the genome with miniprot
+        transMd5, pslMd5 = "directMiniprot-noTranscripts", "directMiniprot-noPsl"
         transcriptFa, transcriptPsl = None, None
 
     geneToRefSeqs = None
@@ -2160,7 +2167,7 @@ def makeSubDir(parent, child):
     newDir = join(parent, child)
     if not isdir(newDir):
         logging.info("Making dir: %s" % newDir)
-        os.makedirs(newDir)
+        os.makedirs(newDir, exist_ok=True)
     return newDir
 
 def downloadUniprot(uprotDir):
@@ -2174,7 +2181,7 @@ def downloadUniprot(uprotDir):
     # in late 2020, pget started to trigger errors, so removed -P 3 and --use-pget-n=4
     tmpDir = join(uprotDir, "download.tmp")
     if not isdir(tmpDir):
-        os.makedirs(tmpDir)
+        os.makedirs(tmpDir, exist_ok=True)
 
     # the uniprot FTP server is too slow and too unreliable. Switching to EBI's which has rsync !!
     count = 0
@@ -2297,9 +2304,11 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
     relFname = join(tabDir, "version.txt")
     versionString = open(relFname).read()
 
-    for taxId, dbs in taxIdDbs.items():
-        if onlyDbs is not None and len(set(dbs).intersection(onlyDbs))==0:
-            continue
+    runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl)
+
+def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
+    " do all the assemblies of one taxon. Safe to run several of these at once, see runTaxa "
+    if True:
         logging.info("Working on taxon ID %d" % taxId)
 
         faFnames = [
@@ -2315,7 +2324,7 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
         if os.path.getsize(fullFaFname)==0:
             logging.warn("File %s is empty. Taxon ID %s does not have any UniProt annotations." \
                     " Skipping this organism." % (fullFaFname, taxId))
-            continue
+            return
 
         tabFnames = ["tab/swissprot.%d.tab" % taxId]
         if doTrembl:
@@ -2355,6 +2364,50 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             uniprotLift(fullFaFname, annotFnames, chromSizesFname, mapFname, dbBigBedDir, accToDb, accToMeta, options)
 
             shutil.copyfile(mapDescFname, join(dbBigBedDir, "liftInfo.json"))
+
+def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
+    """ work through the taxa, optionally several at a time.
+
+    One taxon at a time leaves the cluster mostly idle: each assembly submits its BLAST
+    batch, waits for it to drain, and then spends the best part of an hour in the
+    single-threaded pslReps that follows before the next assembly submits anything.
+    Running several taxa at once keeps jobs queued while others are in that serial phase.
+
+    Taxa, not assemblies: the assemblies of one taxon share fasta/<taxId>.fa, which is
+    rebuilt at the start of each taxon, so two threads on the same taxon would race on it.
+    Everything below that point is per-assembly - protToGenome/<db>, bigBed/<db>, and the
+    cluster batch directory - so separate taxa do not touch the same files.
+    """
+    todo = [(taxId, dbs) for taxId, dbs in taxIdDbs.items()
+            if onlyDbs is None or len(set(dbs).intersection(onlyDbs))>0]
+
+    if options.taxonThreads <= 1 or len(todo) <= 1:
+        for taxId, dbs in todo:
+            oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl)
+        return
+
+    logging.info("Working on %d taxa, %d at a time" % (len(todo), options.taxonThreads))
+    failed = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=options.taxonThreads) as pool:
+        futures = {}
+        for taxId, dbs in todo:
+            fut = pool.submit(oneTaxon, taxId, dbs, onlyDbs, options, tabDir, faDir,
+                    mapDir, bigBedDir, doTrembl)
+            futures[fut] = taxId
+        for fut in concurrent.futures.as_completed(futures):
+            taxId = futures[fut]
+            try:
+                fut.result()
+            except BaseException as ex:
+                # BaseException, not Exception: run() reports a failed command with
+                # sys.exit(), which raises SystemExit. In a worker thread that would
+                # otherwise kill just that thread and leave the run looking successful,
+                # which is exactly the kind of silent failure this pipeline has a history of.
+                logging.error("taxon %s failed: %s: %s" % (taxId, type(ex).__name__, ex))
+                failed.append(taxId)
+
+    if failed:
+        errAbort("%d of %d taxa failed: %s" % (len(failed), len(todo), ", ".join(str(t) for t in sorted(failed))))
 
 def makeSymlink(target, linkName):
     assert(".new" not in linkName) # make sure that this bug never happens again
@@ -2650,7 +2703,7 @@ def installGenArkContrib(db, hubDir, dbBigBedDir, versionString, shortVersion):
     acc = basename(hubDir.rstrip("/"))
     collDir = join(genArkContribRoot, genArkContribName, acc)
     if not isdir(collDir):
-        os.makedirs(collDir)
+        os.makedirs(collDir, exist_ok=True)
 
     count = 0
     for bbName in sorted(glob.glob(join(dbBigBedDir, "*.bb"))):
@@ -2697,7 +2750,7 @@ def copyToArchive(bigBedDir, archRoot, shortVersion, onlyDbs):
 
         archDir = join(archRoot, db, "uniprot", shortVersion)
         if not isdir(archDir):
-            os.makedirs(archDir)
+            os.makedirs(archDir, exist_ok=True)
 
         inDir = join(bigBedDir, db)
 
