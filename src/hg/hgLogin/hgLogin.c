@@ -2342,15 +2342,22 @@ sqlUpdate(conn, query);
  * because the provider released none (ORCID releases only an ORCID iD, by design) or because
  * they edited the one that was released.  Those have to be confirmed by mail.
  * To tighten this later, add the email_verified test back in the two places that call
- * oauthAddressFromProvider() and in resolveIdentity's matching query; the flag is still carried
+ * oauthProviderEmail() and in resolveIdentity's matching query; the flag is still carried
  * through the cart in oauth_pending_email_verified, it is just not consulted. */
 
-static boolean oauthAddressFromProvider(char *email)
-/* TRUE when email is exactly the address the identity provider released, i.e. it came from the
- * provider and not from the user typing into the form. */
+static char *oauthProviderEmail()
+/* The address the provider released for the pending identity, or NULL if it released none or
+ * released something that is not a usable address.
+ * When this is non-NULL the "choose a username" page must not ask for an address at all.  We
+ * already have one, from a source the person cannot type into, so a text box would only invite
+ * an edit -- and a box we then accept unchanged, without ever writing to it, is the worst of
+ * both worlds: it looks like a question we check the answer to, and it is not.  Either we have
+ * an address and use it, or we do not have one and must confirm what the user types. */
 {
-char *released = cartUsualString(cart, "oauth_pending_email", "");
-return isNotEmpty(released) && isNotEmpty(email) && sameString(email, released);
+char *email = cartUsualString(cart, "oauth_pending_email", "");
+if (isEmpty(email) || spc_email_isvalid(email) == 0)
+    return NULL;
+return email;
 }
 
 void completeAccountPage(struct sqlConnection *conn)
@@ -2365,14 +2372,11 @@ if (isEmpty(provider) || !pendingIdentityValid())
     displayLoginPage(conn);
     return;
     }
+char *providerEmail = oauthProviderEmail();
 char *suggested = cartUsualString(cart, "hgLogin_userName", "");
 if (isEmpty(suggested))
     suggested = suggestUsername(conn, email, name);
-/* Show back what the user typed, so an error does not wipe the address they have to correct;
- * the provider's address is only the starting suggestion. */
-char *typedEmail = cartUsualString(cart, "hgLogin_email", "");
 char *encSuggested = htmlEncode(suggested);   // both go into value="" attributes; escape (XSS)
-char *encEmail = htmlEncode(isNotEmpty(typedEmail) ? typedEmail : email);
 char *label = oauthProviderLabel(provider);
 
 hPrintf("<div id=\"completeAccountBox\" class=\"centeredContainer formBox\">"
@@ -2380,13 +2384,13 @@ hPrintf("<div id=\"completeAccountBox\" class=\"centeredContainer formBox\">"
 hPrintf("<h3>Choose a username</h3>");
 hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
     "You can change the suggested name below.</p>", label, brwName);
-/* Explain why this is always a new account when the provider released no address at all (ORCID
- * does this by design: its OpenID Connect offers only the "openid" scope, so the ORCID iD is all
- * we ever get).  Without an address we cannot tell a returning user from a new one, so every
- * first sign-in lands here, which surprised real users (#38341).  Keyed on whether an address
- * arrived, not on the provider's name: a mirror can call a provider anything it likes in
- * hg.conf, so a name test would silently miss it (#38213). */
-if (isEmpty(email))
+/* Explain why this is always a new account when the provider released no address (ORCID does
+ * this by design: its OpenID Connect offers only the "openid" scope, so the ORCID iD is all we
+ * ever get).  Without an address we cannot tell a returning user from a new one, so every first
+ * sign-in lands here, which surprised real users (#38341).  Keyed on whether an address arrived,
+ * not on the provider's name: a mirror can call a provider anything it likes in hg.conf, so a
+ * name test would silently miss it (#38213). */
+if (providerEmail == NULL)
     hPrintf("<p>A new %s account is created for any %s sign-in we have not seen before, because "
         "%s does not share your email address with us. So you cannot sign in to an existing "
         "account this way. Use another sign-in option if you do not want to create a new "
@@ -2398,23 +2402,37 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"userName\">Username</label>"
     "<input type=\"text\" name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
     "</div>", encSuggested);
-hPrintf("<div class=\"inputGroup\">"
-    "<label for=\"emailAddr\">Email address</label>"
-    "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
-    "</div>", encEmail);
-/* Say up front that the address has to be confirmed, so the confirmation page is not a surprise
- * and people are less likely to type an address they cannot read.  Same condition completeAccount
- * uses to decide whether to send the mail. */
-if (!oauthAddressFromProvider(email) && !sameWord(returnAddr, "NOEMAIL"))
-    hPrintf("<p style=\"font-size:0.9em\">We will email a confirmation link to this address. "
-        "Open the link to finish creating your account.</p>");
+if (providerEmail == NULL)
+    {
+    /* No address from the provider, so we have to ask -- and because anyone can type anything
+     * here, the account is not usable until the mailed link is opened.  Say that next to the box
+     * rather than springing the confirmation page on the user after they submit.  Show back what
+     * they typed so an error does not wipe the address they are being asked to correct. */
+    char *encTyped = htmlEncode(cartUsualString(cart, "hgLogin_email", ""));
+    hPrintf("<div class=\"inputGroup\">"
+        "<label for=\"emailAddr\">Email address</label>"
+        "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
+        "</div>", encTyped);
+    freeMem(encTyped);
+    if (!sameWord(returnAddr, "NOEMAIL"))
+        hPrintf("<p style=\"font-size:0.9em\">We will email a confirmation link to this address. "
+            "Open the link to finish creating your account.</p>");
+    }
+else
+    {
+    /* We already have an address from the provider, so do not ask for one.  A box here would be
+     * a question we do not check the answer to. */
+    char *encProviderEmail = htmlEncode(providerEmail);
+    hPrintf("<p>Your email address, as %s gave it to us, is <b>%s</b>. You can change it later "
+        "on the account page.</p>", label, encProviderEmail);
+    freeMem(encProviderEmail);
+    }
 hPrintf("<div class=\"formControls\">"
     "<input type=\"submit\" name=\"hgLogin.do.completeAccount\" value=\"Create account\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div></form></div><!-- END - completeAccountBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
 freeMem(encSuggested);
-freeMem(encEmail);
 }
 
 void completeAccount(struct sqlConnection *conn)
@@ -2460,7 +2478,11 @@ if (userNameTaken(conn, user))
     completeAccountPage(conn);
     return;
     }
-char *email = cartUsualString(cart, "hgLogin_email", "");
+/* Where the provider gave us an address, that is the account's address, full stop.  The form did
+ * not offer a box for it, so anything sitting in hgLogin_email is left over from an earlier page
+ * in this cart and must not be allowed to stand in for it. */
+char *providerEmail = oauthProviderEmail();
+char *email = (providerEmail != NULL) ? providerEmail : cartUsualString(cart, "hgLogin_email", "");
 if (isEmpty(email))
     {
     freez(&errMsg);
@@ -2475,7 +2497,6 @@ if (spc_email_isvalid(email) == 0)
     completeAccountPage(conn);
     return;
     }
-boolean fromProvider = oauthAddressFromProvider(email);
 
 /* An address the user typed here must not be used to reach an account that already holds it.
  * Typing an address someone else registered used to create a silent second account sharing it
@@ -2486,7 +2507,7 @@ boolean fromProvider = oauthAddressFromProvider(email);
  * Only activated accounts count, the same rule resolveIdentity and chooseAccount apply: an
  * unactivated row holds an address nobody ever proved they own, so letting one block a signup
  * would let anyone reserve a stranger's address. */
-if (!fromProvider)
+if (providerEmail == NULL)
     {
     char query[1024];
     char *addrMatch = sqlAddressMatch(email);
@@ -2512,14 +2533,13 @@ if (!fromProvider)
 char *name = cartUsualString(cart, "oauth_pending_name", "");
 char *realName = isNotEmpty(name) ? name : user;
 
-/* The new account is created "activated" -- its email trusted for future auto-linking (see
- * resolveIdentity) -- only when the provider actually verified this address and the user kept
- * it unchanged.  Otherwise it is created inactive and the usual confirmation mail goes out, so
- * an unverified address can never be planted as a trusted one.  An install that sends no mail
- * has no way to confirm anything, so there it is activated on the spot, the same compromise
- * signup() makes. */
+/* The new account is created "activated" -- its address trusted for future auto-linking (see
+ * resolveIdentity) -- when the address came from the provider.  An address the user typed gets
+ * an inactive account and the usual confirmation mail, so a typed address can never be planted
+ * as a trusted one.  An install that sends no mail has no way to confirm anything, so there it
+ * is activated on the spot, the same compromise signup() makes. */
 boolean canMail = !sameWord(returnAddr, "NOEMAIL");
-boolean activateNow = fromProvider || !canMail;
+boolean activateNow = (providerEmail != NULL) || !canMail;
 
 struct dyString *q = sqlDyStringCreate(
     "INSERT INTO gbMembers SET userName='%s', realName='%s', password='', email='%s', "
@@ -2737,7 +2757,7 @@ static void resolveIdentity(struct sqlConnection *conn, struct oauthIdentity *id
 struct gbMembers *matches = NULL;
 int n = 0;
 /* Any address the provider released counts here, whether or not it set email_verified -- see
- * the note above oauthAddressFromProvider().  Requiring the flag would send every CILogon user
+ * the note above oauthProviderEmail().  Requiring the flag would send every CILogon user
  * to the "choose a username" page even when they already have an account with that address,
  * which is how the duplicate accounts in #38341 got made. */
 if (isNotEmpty(id->email))
