@@ -80,7 +80,7 @@ To use <span class="quicklift">QuickLift</span>, follow these steps:
         use a format not supported by <span class="quicklift">QuickLift</span>, the Convert page
         will display a message: &quot;Some of your tracks failed to lift because the type is not
         supported by QuickLift.&quot; (See
-        <a href="#unsupportedTypes">Unsupported Track Formats</a> below.)
+        <a href="#supportedTypes">Supported Track Formats</a> below.)
         <p>If <span class="quicklift">QuickLift</span> was enabled, clicking a result link will
         display your lifted tracks under a green
         &quot;<span class="quicklift">QuickLift</span> from ...&quot; group in the target
@@ -127,32 +127,40 @@ Clicking a triangle opens a details page showing:
         region</li>
 </ul>
 
-<h2 id="unsupportedTypes">Unsupported Track Formats</h2>
-<p><span class="quicklift">QuickLift</span> does not support the following track formats:</p>
+<a id="unsupportedTypes"></a>
+<h2 id="supportedTypes">Supported Track Formats</h2>
+<p><span class="quicklift">QuickLift</span> lifts the following track formats:</p>
     <ul>
-        <li>WIG &mdash; <a href="/goldenPath/help/bigWig.html" target="_blank">bigWig</a>
-            is supported; WIG tracks can be converted to bigWig using the
-            <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>wigToBigWig</code></a>
-            utility</li>
-        <li>BAM</li>
-        <li>CRAM</li>
-        <li>PSL &mdash; <a href="/FAQ/FAQformat.html#format1" target="_blank">BED</a>
-            is supported; PSL tracks can be converted to BED using the
-            <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>pslToBed</code></a>
-            utility</li>
-        <li>VCF</li>
-        <li>HIC</li>
-        <li>MAF</li>
-        <li>bigChain</li>
-        <li>Interact</li>
-        <li>narrowPeak / broadPeak &mdash;
-            <a href="/goldenPath/help/bigBed.html" target="_blank">bigBed</a>
-            is supported; since narrowPeak and broadPeak are BED-based formats, they can be
-            converted to bigBed using the
-            <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>bedToBigBed</code></a>
-            utility</li>
-        <li>pgSnp</li>
+        <li><a href="/FAQ/FAQformat.html#format1" target="_blank">BED</a> and
+            <a href="/goldenPath/help/bigBed.html" target="_blank">bigBed</a></li>
+        <li><a href="/goldenPath/help/bigWig.html" target="_blank">bigWig</a></li>
+        <li><a href="/FAQ/FAQformat.html#format9" target="_blank">genePred</a> and
+            <a href="/goldenPath/help/bigGenePred.html" target="_blank">bigGenePred</a></li>
+        <li><a href="/FAQ/FAQformat.html#format12" target="_blank">narrowPeak</a> and
+            <a href="/FAQ/FAQformat.html#format13" target="_blank">broadPeak</a></li>
+        <li><a href="/goldenPath/help/bigLolly.html" target="_blank">bigLolly</a></li>
+        <li>bigDbSnp</li>
+        <li>GVF</li>
+        <li><a href="/FAQ/FAQformat.html#format2" target="_blank">PSL</a> and
+            <a href="/goldenPath/help/bigPsl.html" target="_blank">bigPsl</a></li>
+        <li><a href="/goldenPath/help/chain.html" target="_blank">chain</a> and
+            <a href="/goldenPath/help/bigChain.html" target="_blank">bigChain</a></li>
+        <li><a href="/goldenPath/help/bigMaf.html" target="_blank">bigMaf</a> and
+            wigMaf</li>
     </ul>
+<p>
+<span class="quicklift">QuickLift</span> does not lift any other format. BAM, CRAM, VCF, HIC,
+Interact and pgSnp are among the formats it does not lift, and so are the plain MAF and net
+formats. A track in one of these formats stays in the source assembly, and the Convert page
+names the track and its format under the message &quot;Some of your tracks failed to lift
+because the type is not supported by QuickLift.&quot;
+</p>
+<p>
+A WIG track can be converted to
+<a href="/goldenPath/help/bigWig.html" target="_blank">bigWig</a> with the
+<a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank"><code>wigToBigWig</code></a>
+utility, which <span class="quicklift">QuickLift</span> does lift.
+</p>
 
 <h2 id="resources">Resources &amp; Support</h2>
 <ul>

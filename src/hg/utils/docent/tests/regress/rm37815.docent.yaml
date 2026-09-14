@@ -1,0 +1,43 @@
+# #37815 -- a QuickLift landed the user on a target assembly showing its own default
+# tracks as well as the lifted ones, so the view they had built on the source was buried.
+# f80b3826a92 adds a "Hide all default tracks on the target" checkbox to the Convert page,
+# on by default when QuickLift is enabled.
+#
+# The commit is in two halves and both are needed for this to pass.  hgConvert appends
+# hideTracks=on to the QuickLift link when the box is checked; hgTracks then has to leave
+# the QuickLifted tracks visible while it hides the target's defaults, which is the change
+# in hg/hgTracks/hgTracks.c.  Without the first half hs1's own tracks are drawn as well;
+# without the second, hideTracks=on takes the lifted track with it and the target comes up
+# empty.  `exact: true` fails on either.
+#
+# hs1 opens with six tracks of its own at this position, measured on genome-test on
+# 2026-09-12: catLiftOffGenesV1, ncbiRefSeq, ncbiRefSeqCurated, ncbiRefSeqPredicted,
+# cactus11way and multiz11way.  So the row list below is a claim about all six being gone,
+# not a list that happens to match an empty target.
+#
+# Docent's `convert:` re-checks the box after the Assembly menu reloads, because the menu
+# reload reverts it -- the reason `hideDefaults:` is a verb option rather than a click.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from f80b3826a92, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [ruler, mane], exact: true}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+
+  # The lifted track, the synthetic Alignment Differences track that hubConnect adds, and
+  # nothing of hs1's own.
+  - expect:
+      rows: [ruler, quickLiftChain, mane]
+      exact: true
+      noRows: [catLiftOffGenesV1, ncbiRefSeqCurated, cactus11way, multiz11way]
+      noText: "Warning/Error"

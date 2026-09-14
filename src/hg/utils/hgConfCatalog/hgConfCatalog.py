@@ -260,7 +260,7 @@ RELEASE_GATES = {
                "looked up, no codon carries a transcript number, and the rendering and the "
                "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
                "released."),
-        h("skipMalformedCgiPairs", "flag", "lib/cheapcgi.c", default="FALSE",
+        h("skipMalformedCgiPairs", "flag", "hg/lib/hgConfig.c", default="FALSE",
           role="gate", verified=True, ticket="38340",
           note="Step over a CGI or cookie pair that has no =value, instead of losing the "
                "pair after it or aborting the request.  Covers parseCookies in cheapcgi, "

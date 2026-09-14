@@ -1,0 +1,48 @@
+# #36917 -- a superTrack settings page had a "+" and a "-" button per subtrack, which only
+# turned a track on or off.  Visibility has five values, so the pair could not express what
+# a user wanted, and Max replaced them: a row of visibility buttons per track, and a
+# dropdown with "Apply to all tracks" beside "Hide all tracks" and "Show all tracks".
+#
+# This asserts the controls and then uses one of them, because a page can carry all three
+# buttons and still have none of them wired: "Show all tracks" has to reach every child's
+# own visibility dropdown.  Those dropdowns are the vizSelect selects, and hgTrackUi writes
+# them with class hiddenText when the track is hidden and normalText when it is not
+# (hg/hgTrackUi/hgTrackUi.c), so "no child is left hidden" is a check on the page rather
+# than on the cart -- and it does not need a submit.
+#
+# wgEncodeReg (ENCODE3 Regulation) is a superTrack with ten children, all hidden in a fresh
+# cart, which is the state the buttons are for.
+#
+# rm37282 is the other half of this page: what those same buttons do to the superTrack's
+# own dropdown.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeReg"
+  - expect:
+      has:
+        - '#superVizHideAllButton'
+        - '#superVizShowAllButton'
+        - '#superVizApplyAllButton'
+        - 'select#superSubViz'
+        - 'div.seg-btn-group[data-trackname="wgEncodeRegTxn"]'
+      text: "Use the buttons below to set their visibility"
+
+  # wgEncodeRegTxn is one of the children that start hidden, so it is the state the
+  # button has to change.  Not every child starts hidden -- this superTrack has one on by
+  # default -- so the before-check names a track rather than the whole set.
+  - expect: {has: 'select#wgEncodeRegTxn.hiddenText'}
+
+  - click: '#superVizShowAllButton'
+  - sleep: 600
+
+  # Afterwards nothing under the container is left hidden, which is what "all" has to mean.
+  - expect:
+      has: 'select#wgEncodeRegTxn.normalText'
+      noHas: 'select.vizSelect.hiddenText'

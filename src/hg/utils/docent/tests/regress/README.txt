@@ -117,3 +117,102 @@ Two things fall out of it that apply to any script here:
 Measured both ways on 2026-09-09: the whole directory was run against the #38310 ticket
 sandbox twice, once with the patched hgTracks and hgc and once with unpatched controls
 built from the same tree. Thirty-seven scripts, identical verdicts, except this one.
+
+Ten scripts for multi-region view, and the two traps they hit
+--------------------------------------------------------------
+
+rm22144, rm23922, rm26772, rm27855, rm29452, rm29787, rm30833, rm34250, rm35472 and
+rm37175 are one batch, written 2026-09-12, and between them they cover the four modes
+(exon, custom regions, alt haplotype, exit), the dialog, the custom-region BED reader,
+hideEmptySubtracks across windows and highlights in both directions across the mode
+change. Before them the only script here that entered multi-region at all was rm35580,
+which uses singleAltHaplo to reach a different bug.
+
+Two things learned writing them, both of which cost a red run first:
+
+**Never assert on a `title` attribute.** hgTracks' own tooltip code moves a title into
+`data-tooltip` once the page's JavaScript has run, so `area[title="chr1:10001-11000"]`
+matches nothing in the live DOM even though the server sent exactly that. The server
+writes both attributes on a map box; assert `data-tooltip`. The same applies to the
+buttons, where the title changes with the mode and would otherwise be a second, free
+assertion -- it is not available.
+
+**Multi-region is reachable from the URL, and the dialog is not.** `virtModeType=`,
+`multiRegionsBedInput=` (the textarea's own cart variable, newlines as %0A),
+`singleAltHaploId=`, `virtWinFull=on` and `<composite>.hideEmptySubtracks=on` all work on
+a `goto:`, which is how nine of the ten set their state -- Docent has no verb that types
+into an arbitrary field, so the textarea and the alt-haplotype input cannot be filled.
+What still needs the real dialog is anything the page's JavaScript decides: rm29452's
+disabled radio and its status line are invisible to curl, because the server sends the
+same HTML on a build with the bug and a build without it.
+
+`virtWinFull=on` is worth knowing for a third reason: without it a region change lands
+zoomed in on one region, so a second region is off screen and a script cannot tell a
+region that failed to resolve from one that is merely not in view.
+
+Ten more for quickLift, five on hgTracks and five on hgc
+----------------------------------------------------------
+
+rm36048, rm36059, rm36125, rm36370, rm36942, rm37646, rm37815, rm38032, rm38042 and
+rm38146 are one batch, written 2026-09-12. Fourteen scripts here already lifted something
+(they are the ones that call `convert: {quicklift: true}`); these add the parts of the
+lift that had no test: the order tracks come out in, an item bigger than the chains
+quickLift loads, the spanned-item merge, a lolly subtrack, the hide-target-defaults
+checkbox, and five details pages -- GENCODE archive, hgGene, NCBI RefSeq, the Alignment
+Differences description, and the same page with a GenArk assembly as the SOURCE.
+
+Each one costs a convert, which is about 17 seconds: hgConvert plus a hub build plus the
+click through to the browser. Budget for that before adding more.
+
+Three things worth reusing from them:
+
+**The lift is set up through the UI and read from the map.** There is no URL that makes a
+quickLift hub, so every script here does `convert:` then `open: lift`. What comes back
+carries a per-run `hub_<n>_` prefix on every row id and every map box, so `rows:` matches
+by suffix and a `has:` selector has to use a substring (`area[href*="clinvarSubLolly"]`),
+never an exact id.
+
+**Do not assert a count that a data update can move.** rm38042 and rm36048 both read the
+spanned-item merge box, and the tooltip on it counts the items merged -- 45 for ClinVar on
+2026-09-12. That number is reloaded by an otto cron every month. Both scripts assert that
+the box is THERE (`area[data-tooltip^="Merged "]`) and leave the count to a comment, so a
+red morning is news about quickLift rather than about ClinVar.
+
+**A details page carries the track's own labels, so name something else.** rm36125 asserts
+SHH's N-terminal peptide, rm36059 a UniProtKB section, rm36370 two section headings that
+were missing, rm38146 the query sequence read out of a two bit file. Each of those is
+absent from the page the ticket was filed about and present on the fixed one; the track
+name and longLabel are on both.
+
+Ten for hgTrackUi, and what makes that page testable
+------------------------------------------------------
+
+rm20460, rm32263, rm34651, rm35906, rm36484, rm36668, rm36917, rm37130, rm37282 and
+rm37743 are one batch, written 2026-09-12. Four scripts here already touched hgTrackUi in
+passing (rm37389, rm37489, rm38126, rm38272); these are about the page itself: the
+superTrack configuration page, composite and subtrack configuration, filters, the color
+override, the parent link, and two bad-input paths.
+
+They are also the cheapest scripts in the directory -- one to three seconds each, because
+hgTrackUi draws no image and most of them never leave it.
+
+**There is no track image, so `rows:` is not available and a positive `text:` is
+mandatory.** A crash gives the browser an empty document, where every `noText:` and every
+`noHas:` passes. Every script here names something the real page says.
+
+**Most of what hgTrackUi does is in ids, names and classes, so `has:`/`noHas:` carries
+these tests.** README says to reach for a selector last, and that is still right for
+hgTracks, where rows, height, text and color can usually say it instead. On a settings
+page the bug often IS the markup: a shared id that should be per-track (rm34651), a stray
+tag inside a select (rm36484), a control that should not be offered for this track type
+(rm20460), a class that greys a dropdown (rm37282). Name the id or class the commit
+changed, and say in the header which one it is.
+
+**A cart round trip is what tells a control that works from one that only looks right.**
+rm35906's clear-filters button set every dropdown to All on screen on the buggy build too;
+only submitting and coming back shows whether anything was saved. rm36668 does the same in
+reverse, checking after the fact that the two checkboxes it clicked really are on.
+
+**A dropdown cannot be driven.** Docent has no verb that picks an option from a select, so
+a visibility is set on the way in through the URL (rm36668) and a button is clicked
+instead where one exists (rm36917, rm37282).

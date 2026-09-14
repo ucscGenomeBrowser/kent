@@ -1,0 +1,52 @@
+# #30833 -- two things about highlights, found by Jairo while QA'ing #30569.  In the
+# PNG/PDF output the ruler guidelines were drawn on top of the highlight instead of behind
+# it, and -- the half this asserts -- "if you highlight a region and then turn on
+# multi-region mode, the highlights all disappear".
+#
+# Galt's fix is 904babadd41, "Fixing issues with highlights in image/PDF, particularly
+# with multi-region".
+#
+# Only the second half is checked here.  The first lives in an image this suite cannot
+# reach: hgTracks draws the guidelines and the highlight into the PostScript itself
+# (drawHighlights() in hg/hgTracks/hgTracks.c), and what comes back from hgt.psOutput is a
+# page of links to a PDF, so there is nothing for rows:, text: or color: to read.  Say so
+# rather than leave a reader thinking the ticket is covered.
+#
+# In the HTML view a highlight is not in the image at all: hg/js/hgTracks.js
+# imageV2.drawHighlights() appends one <div class='highlightItem'> per highlight to the
+# body, positioned over the image.  So `has: .highlightItem` is the check, and it is the
+# whole signature of this bug -- the rows, the height and the items are identical with the
+# highlight and without it.
+#
+# Entering multi-region rewrites the highlight into virtual coordinates as it goes
+# (hg38#chr1#144874354#144875080#aaedff becomes hg38.multi:0-726#aaedff), which is the
+# conversion the ticket's disappearance was.  rm34250 is the same round trip in the other
+# direction.
+#
+# The highlight is set on the URL because that is the cart variable a drag-select writes,
+# and the two steps are separate navigations on purpose: the highlight has to be in the
+# cart BEFORE the mode changes, or the conversion this is about never happens.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket long after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:144874000-144875500
+reset: true
+fast: true
+steps:
+  # A highlight over the UCSC Unusual Regions item at chr1:144,874,354-144,875,080.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A144874000-144875500&pix=1100&hideTracks=1&problematicSuper=show&problematic=pack&comments=pack&comments_sel=1&highlight=hg38%23chr1%23144874354%23144875080%23aaedff"
+  - expect:
+      rows: [ruler, comments]
+      exact: true
+      has: '.highlightItem'
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # Turn multi-region on.  Nothing else changes, and the highlight has to survive.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr1%20144874354%20144875080%0Achr1%2091386300%2091388400%0A"
+  - expect:
+      rows: [ruler, comments]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - '.highlightItem'

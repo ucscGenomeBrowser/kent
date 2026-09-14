@@ -1,0 +1,83 @@
+# #29452 -- "Exit multi-region mode" was greyed out in the multi-region dialog.  Two users
+# wrote in saying they were locked in the mode (#34775, #34776), and the two halves of the
+# answer are both asserted here because they are the same dialog and the same symptom.
+#
+# The greying was nine lines of JavaScript in popUpHgt, hg/js/hgTracks.js:
+#
+#     if (!hgTracks.virtModeType) {
+#         $('#virtModeTypeDefaultLabel').addClass('disabled');
+#         $('#virtModeType[value="exonMostly"]').prop('checked', true);
+#         $('#virtModeType[value="default"]').prop('disabled', 'disabled');
+#     }
+#
+# and it went wrong twice over.  The dialog page rewrites the hgTracks JS object, and
+# hg/hgTracks/config.c did not put virtModeType back into it, so `!hgTracks.virtModeType`
+# was true even when the browser WAS in multi-region mode: the exit radio was disabled
+# exactly when a user needed it, which is the "help, I'm locked in" report.  Galt put the
+# setting back in 57fc6dd48cd and made it follow the convention of being sent only when it
+# is not "default" in 61fe3764cf9 (both fixes #34776), then deleted the disabling block
+# altogether in 0ca07ef7f6c (fixes #29452), which is the state asserted below.
+#
+# The server has never sent either state: config.c writes CHECKED on whichever mode the
+# cart holds and no disabled attribute at all.  So this has to open the real dialog and
+# let the page's own JavaScript run -- a curl of hgTracksConfigMultiRegionPage=multi-region
+# passes on the buggy build too.
+#
+# These are selector assertions on hgTracks' own ids, which README.txt says to reach for
+# last.  This is the case it leaves: a disabled radio and an enabled one render the same
+# text, and the dialog has no track image for rows:, height: or color: to read.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 0ca07ef7f6c, long after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+
+  # Not in multi-region mode, which is the state the deleted block keyed off.  The button
+  # carries no `pressed` class here -- see rm23922 for that half.
+  - expect: {rows: [ruler], noHas: '#hgTracksConfigMultiRegionPage.pressed'}
+
+  - click: '#hgTracksConfigMultiRegionPage'
+  - wait: '#multiRegionsBedInput'
+
+  # The dialog is a jQuery UI dialog, which hides rather than removes, so ask for it
+  # visible.  The positive text check is here because every noHas: below would also pass
+  # on a dialog that failed to load at all.
+  - expect:
+      has: '#hgTracksDialog:visible'
+      text: "Exit multi-region mode"
+
+  # #29452: exit is selectable, and it is the selection.  On a build with the block,
+  # "default" is disabled and unchecked and "exonMostly" is checked instead, so all four
+  # of these fail together.
+  - expect:
+      has:
+        - 'input[name="virtModeType"][value="default"]:checked'
+        - 'input[name="virtModeType"][value="default"]:enabled'
+      noHas:
+        - '#virtModeTypeDefaultLabel.disabled'
+        - 'input[name="virtModeType"][value="exonMostly"]:checked'
+
+  # Now the same dialog from INSIDE a multi-region view, which is where #34776's users
+  # were stuck.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125364&virtModeType=exonMostly&pix=1100"
+  - expect: {rows: [ruler], has: '#hgTracksConfigMultiRegionPage.pressed'}
+  - click: '#hgTracksConfigMultiRegionPage'
+  - wait: '#multiRegionsBedInput'
+
+  # The status line is written by the JS from hgTracks.virtModeType, so it is the reading
+  # of the object that 57fc6dd48cd put back: without that setting the dialog believed it
+  # was in the default view and said "Select a multi-region viewing mode below" instead.
+  # The exit radio has to be selectable here too, and the mode the browser is actually in
+  # is the one that is checked.
+  - expect:
+      has:
+        - '#hgTracksDialog:visible'
+        - 'input[name="virtModeType"][value="default"]:enabled'
+        - 'input[name="virtModeType"][value="exonMostly"]:checked'
+      text: "The display is currently in"
+      noHas: '#virtModeTypeDefaultLabel.disabled'
