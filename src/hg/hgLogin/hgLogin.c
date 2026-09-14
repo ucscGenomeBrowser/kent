@@ -2389,12 +2389,19 @@ hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
  * ever get).  Without an address we cannot tell a returning user from a new one, so every first
  * sign-in lands here, which surprised real users (#38341).  Keyed on whether an address arrived,
  * not on the provider's name: a mirror can call a provider anything it likes in hg.conf, so a
- * name test would silently miss it (#38213). */
-if (providerEmail == NULL)
+ * name test would silently miss it (#38213).
+ * Test whether anything arrived, not whether oauthProviderEmail() accepted it.  A provider that
+ * sends an address we cannot use -- spc_email_isvalid rejects every byte >= 127, so any
+ * non-ASCII address -- also leaves us asking for one, but telling that user the provider shares
+ * no address would be simply untrue. */
+if (isEmpty(email))
     hPrintf("<p>A new %s account is created for any %s sign-in we have not seen before, because "
         "%s does not share your email address with us. So you cannot sign in to an existing "
         "account this way. Use another sign-in option if you do not want to create a new "
         "account.</p>", brwName, label, label);
+else if (providerEmail == NULL)
+    hPrintf("<p>We cannot use the email address %s gave us, so please enter one below.</p>",
+        label);
 printUsernameNote();
 hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"completeAccountForm\">", hgLoginUrl);
