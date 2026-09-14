@@ -470,16 +470,43 @@ char *namePt = contentsToChop;
 
 struct sqlConnection *ctConn = hAllocConn(CUSTOM_TRASH);
 
+boolean skipMalformed = cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE);
+
 while (isNotEmpty(namePt))
     {
-    char *dataPt = strchr(namePt, '=');
+    char *dataPt;
     char *nextNamePt;
-    if (dataPt == NULL)
-	errAbort("ERROR: Mangled session content string %s", namePt);
-    *dataPt++ = 0;
-    nextNamePt = strchr(dataPt, '&');
-    if (nextNamePt != NULL)
-	*nextNamePt++ = 0;
+    if (skipMalformed)
+	{
+	/* Confine the search for the '=' to this pair.  Otherwise a pair with
+	 * no value runs into the pair after it and renames it, so a ctfile_
+	 * setting right behind one stops matching the prefix and the custom
+	 * track is left out of the backup with no warning.  The same pair at
+	 * the end aborts the whole backup.  refs #38340 */
+	namePt += strspn(namePt, "&");
+	if (namePt[0] == 0)
+	    break;
+	nextNamePt = strchr(namePt, '&');
+	if (nextNamePt != NULL)
+	    *nextNamePt++ = 0;
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    {
+	    namePt = nextNamePt;
+	    continue;
+	    }
+	*dataPt++ = 0;
+	}
+    else
+	{
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    errAbort("ERROR: Mangled session content string %s", namePt);
+	*dataPt++ = 0;
+	nextNamePt = strchr(dataPt, '&');
+	if (nextNamePt != NULL)
+	    *nextNamePt++ = 0;
+	}
     if (startsWith(CT_FILE_VAR_PREFIX, namePt))
 	{
 	cgiDecode(dataPt, dataPt, strlen(dataPt));

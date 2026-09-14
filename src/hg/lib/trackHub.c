@@ -1932,6 +1932,12 @@ dyStringPrintf(dy, "track %s\nquickLifted on\n", track);
 
 if (tdbIsSuperTrack(tdb))
     {
+    // dumpTdbAndChildren walks the settings below, and the source container carries its
+    // own superTrack setting, which is "on hide" whenever the user has not opened it.
+    // That line would land after this one and win, hiding the container and every track
+    // we just lifted into it.  Drop it, the way walkTree drops the copy the children
+    // inherit.
+    hashRemove(tdb->settingsHash, "superTrack");
     dyStringPrintf(dy, "superTrack on show\n");
     }
 

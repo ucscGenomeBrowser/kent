@@ -1,0 +1,72 @@
+in  : db=hg38&position=chr1:1-1000
+next: [db=hg38][position=chr1:1-1000]
+hash: [db=hg38][position=chr1:1-1000]
+
+in  : a=1;b=2;c=3
+next: [a=1][b=2][c=3]
+hash: [a=1][b=2][c=3]
+
+in  : a=1;b=2&c=3
+next: [a=1;b=2][c=3]
+hash: [a=1;b=2][c=3]
+
+in  : &db=hg38&position=chr1:1-1000
+next: [db=hg38][position=chr1:1-1000]
+hash: [db=hg38][position=chr1:1-1000]
+
+in  : db=hg38&&position=chr1:1-1000
+next: [db=hg38][position=chr1:1-1000]
+hash: [db=hg38][position=chr1:1-1000]
+
+in  : db=hg38&position=chr1:1-1000&&
+next: [db=hg38][position=chr1:1-1000]
+hash: [db=hg38][position=chr1:1-1000]
+
+in  : &&;&db=hg38
+next: [db=hg38]
+hash: [db=hg38]
+
+in  : g-catV2&db=hg38
+next: [db=hg38]
+hash: [db=hg38]
+
+in  : db=hg38&i&position=chr1:1-1000
+next: [db=hg38][position=chr1:1-1000]
+hash: [db=hg38][position=chr1:1-1000]
+
+in  : db=hg38&g-catV2
+next: [db=hg38]
+hash: [db=hg38]
+
+in  : g-catV2
+next: 
+hash: 
+
+in  : a=1&b=&c=3
+next: [a=1][b=][c=3]
+hash: [a=1][b=][c=3]
+
+in  : =v
+next: [=v]
+hash: [=v]
+
+in  : a=1&=&b=2
+next: [a=1][=][b=2]
+hash: [a=1][=][b=2]
+
+in  : 
+next: 
+hash: 
+
+in  : &
+next: 
+hash: 
+
+in  : hgt.customText=track name=one
+next: [hgt.customText=track name=one]
+hash: [hgt.customText=track name=one]
+
+in  : position=chr1%3A1-1000&name=a+b&other=x%26y
+next: [position=chr1:1-1000][name=a b][other=x&y]
+hash: [position=chr1:1-1000][name=a b][other=x&y]
+

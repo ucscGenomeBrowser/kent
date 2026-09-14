@@ -260,6 +260,15 @@ RELEASE_GATES = {
                "looked up, no codon carries a transcript number, and the rendering and the "
                "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
                "released."),
+        h("skipMalformedCgiPairs", "flag", "lib/cheapcgi.c", default="FALSE",
+          role="gate", verified=True, ticket="38340",
+          note="Step over a CGI or cookie pair that has no =value, instead of losing the "
+               "pair after it or aborting the request.  Covers parseCookies in cheapcgi, "
+               "hgSession's session backup, and refreshNamedSessionCustomTracks.  The query "
+               "string parsers were fixed unconditionally under #38335 and do not read this "
+               "flag.  The kent libraries cannot read hg.conf, so hgConfig.c hands the "
+               "setting to cheapcgi through cgiSkipMalformedPairs.  Off during QA; flip to "
+               "TRUE once released."),
         h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
           role="gate", verified=True, ticket="38273",
           note="Copy a track collection's generated hub file when the program that writes "
@@ -369,9 +378,10 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Track group chooser as a dropdown rather than the current "
                "layout."),
-        h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+        h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="TRUE",
           role="gate", verified=True,
-          note="Show chromosome alias names in the position box."),
+          note="Show chromosome alias names in the position box.  On by "
+               "default; the flag stays so a mirror can switch it back off."),
         h("showColorPicker", "flag", "hg/lib/hui.c", default="TRUE",
           role="gate", verified=True,
           note="The track colour picker in track UI.  On by default; the "

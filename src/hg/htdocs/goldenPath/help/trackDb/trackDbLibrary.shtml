@@ -1171,6 +1171,14 @@ will be displayed in the custom track.
     <A HREF="../bigChain.html">bigChain help page</A>.</P>
 </DIV>
 
+<DIV class="bigNet_intro">
+<H3>bigNet: Alignment Nets</H3>
+    <P>
+    The bigNet format describes a net, which says which parts of one genome line up with which parts of another. A net is built from chains and sorts them into levels, so it shows which alignment is the real counterpart of a region rather than just one of many possible ones. bigNet files hold the same data as Net files, but they are compressed and indexed as bigBeds. bigNet files are created using the program bedToBigBed with a special AutoSQL file that defines the fields of the bigNet. The resulting bigNet files are in an indexed binary format. The main advantage of the bigNet files is that only portions of the files needed to display a particular region are transferred to UCSC. So for large data sets, bigNet is considerably faster than regular Net files. The bigNet file remains on your web accessible server (http, https, or ftp), not on the UCSC server. Only the portion that is needed for the chromosomal position you are currently viewing is locally cached as a "sparse file".
+    For complete bigNet format definitions please see the
+    <A HREF="../bigNet.html">bigNet help page</A>.</P>
+</DIV>
+
 <DIV class="bigPsl_intro">
 <H3>bigPsl: Pairwise Alignments</H3>
     <P>
