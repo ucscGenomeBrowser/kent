@@ -88,11 +88,11 @@ priority 2.5
     compositeTrack faceted
     type bigWig
     shortLabel Fiber-seq Compendium
-    longLabel Fiber-seq accessibility, FIRE peaks and CpG methylation in 41 samples
+    longLabel Fiber-seq accessibility, peaks, nucleosomes and CpG methylation in 41 samples
     metaDataUrl /gbdb/hg38/fiberSeq/fiberSeqCompendium_metadata.tsv
     colorSettingsUrl /gbdb/hg38/fiberSeq/fiberSeqCompendium_colors.json
     primaryKey Accession
-    dataTypes acc|"Percent accessible" peaks|"FIRE peaks" hap|"Haplotype accessibility" cpg|"CpG methylation" cpgHap|"Haplotype CpG" cpgDiff|"CpG haplotype difference"
+    dataTypes acc|"Percent accessible" peaks|"FIRE peaks" hap|"Haplotype accessibility" nuc|"Nucleosome density" cpg|"CpG methylation" cpgHap|"Haplotype CpG" cpgDiff|"CpG haplotype difference"
     defaultSortField Accession
     defaultGroupBy sample
     maxCheckboxes 50
@@ -164,6 +164,20 @@ priority 2.5
             shortLabel GM12878 Hap2
             longLabel GM12878 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00001_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00001/all.nucleosome.coverage.bw
+        shortLabel GM12878 Nuc
+        longLabel GM12878 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 4
+
         track fiberSeqCompendium_PM00001_cpg
         parent fiberSeqCompendium on
         type bigWig 0 100
@@ -176,7 +190,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 4
+        priority 5
 
         track fiberSeqCompendium_PM00001_cpgHap
         parent fiberSeqCompendium off
@@ -192,7 +206,7 @@ priority 2.5
         shortLabel GM12878 CpG Hap1/2
         longLabel GM12878 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 5
+        priority 6
 
             track fiberSeqCompendium_PM00001_cpgHap_h1
             parent fiberSeqCompendium_PM00001_cpgHap
@@ -223,7 +237,7 @@ priority 2.5
         shortLabel GM12878 CpG diff
         longLabel GM12878 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 6
+        priority 7
 
             track fiberSeqCompendium_PM00001_cpgDiff_l0
             parent fiberSeqCompendium_PM00001_cpgDiff
@@ -321,6 +335,20 @@ priority 2.5
             shortLabel HG002 Hap2
             longLabel HG002 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00002_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00002/all.nucleosome.coverage.bw
+        shortLabel HG002 Nuc
+        longLabel HG002 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 14
+
         track fiberSeqCompendium_PM00002_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -333,7 +361,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 14
+        priority 15
 
         track fiberSeqCompendium_PM00002_cpgHap
         parent fiberSeqCompendium off
@@ -349,7 +377,7 @@ priority 2.5
         shortLabel HG002 CpG Hap1/2
         longLabel HG002 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 15
+        priority 16
 
             track fiberSeqCompendium_PM00002_cpgHap_h1
             parent fiberSeqCompendium_PM00002_cpgHap
@@ -380,7 +408,7 @@ priority 2.5
         shortLabel HG002 CpG diff
         longLabel HG002 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 16
+        priority 17
 
             track fiberSeqCompendium_PM00002_cpgDiff_l0
             parent fiberSeqCompendium_PM00002_cpgDiff
@@ -478,6 +506,20 @@ priority 2.5
             shortLabel K562 Hap2
             longLabel K562 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00004_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00004/all.nucleosome.coverage.bw
+        shortLabel K562 Nuc
+        longLabel K562 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 24
+
         track fiberSeqCompendium_PM00004_cpg
         parent fiberSeqCompendium on
         type bigWig 0 100
@@ -490,7 +532,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 24
+        priority 25
 
         track fiberSeqCompendium_PM00004_cpgHap
         parent fiberSeqCompendium off
@@ -506,7 +548,7 @@ priority 2.5
         shortLabel K562 CpG Hap1/2
         longLabel K562 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 25
+        priority 26
 
             track fiberSeqCompendium_PM00004_cpgHap_h1
             parent fiberSeqCompendium_PM00004_cpgHap
@@ -537,7 +579,7 @@ priority 2.5
         shortLabel K562 CpG diff
         longLabel K562 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 26
+        priority 27
 
             track fiberSeqCompendium_PM00004_cpgDiff_l0
             parent fiberSeqCompendium_PM00004_cpgDiff
@@ -635,6 +677,20 @@ priority 2.5
             shortLabel HepG2 Hap2
             longLabel HepG2 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00005_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00005/all.nucleosome.coverage.bw
+        shortLabel HepG2 Nuc
+        longLabel HepG2 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 34
+
         track fiberSeqCompendium_PM00005_cpg
         parent fiberSeqCompendium on
         type bigWig 0 100
@@ -647,7 +703,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 34
+        priority 35
 
         track fiberSeqCompendium_PM00005_cpgHap
         parent fiberSeqCompendium off
@@ -663,7 +719,7 @@ priority 2.5
         shortLabel HepG2 CpG Hap1/2
         longLabel HepG2 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 35
+        priority 36
 
             track fiberSeqCompendium_PM00005_cpgHap_h1
             parent fiberSeqCompendium_PM00005_cpgHap
@@ -694,7 +750,7 @@ priority 2.5
         shortLabel HepG2 CpG diff
         longLabel HepG2 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 36
+        priority 37
 
             track fiberSeqCompendium_PM00005_cpgDiff_l0
             parent fiberSeqCompendium_PM00005_cpgDiff
@@ -792,6 +848,20 @@ priority 2.5
             shortLabel Panc1 Hap2
             longLabel Panc1 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00006_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00006/all.nucleosome.coverage.bw
+        shortLabel Panc1 Nuc
+        longLabel Panc1 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 44
+
         track fiberSeqCompendium_PM00006_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -804,7 +874,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 44
+        priority 45
 
         track fiberSeqCompendium_PM00006_cpgHap
         parent fiberSeqCompendium off
@@ -820,7 +890,7 @@ priority 2.5
         shortLabel Panc1 CpG Hap1/2
         longLabel Panc1 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 45
+        priority 46
 
             track fiberSeqCompendium_PM00006_cpgHap_h1
             parent fiberSeqCompendium_PM00006_cpgHap
@@ -851,7 +921,7 @@ priority 2.5
         shortLabel Panc1 CpG diff
         longLabel Panc1 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 46
+        priority 47
 
             track fiberSeqCompendium_PM00006_cpgDiff_l0
             parent fiberSeqCompendium_PM00006_cpgDiff
@@ -949,6 +1019,20 @@ priority 2.5
             shortLabel THP-1 Hap2
             longLabel THP-1 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00007_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00007/all.nucleosome.coverage.bw
+        shortLabel THP-1 Nuc
+        longLabel THP-1 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 54
+
         track fiberSeqCompendium_PM00007_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -961,7 +1045,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 54
+        priority 55
 
         track fiberSeqCompendium_PM00007_cpgHap
         parent fiberSeqCompendium off
@@ -977,7 +1061,7 @@ priority 2.5
         shortLabel THP-1 CpG Hap1/2
         longLabel THP-1 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 55
+        priority 56
 
             track fiberSeqCompendium_PM00007_cpgHap_h1
             parent fiberSeqCompendium_PM00007_cpgHap
@@ -1008,7 +1092,7 @@ priority 2.5
         shortLabel THP-1 CpG diff
         longLabel THP-1 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 56
+        priority 57
 
             track fiberSeqCompendium_PM00007_cpgDiff_l0
             parent fiberSeqCompendium_PM00007_cpgDiff
@@ -1106,6 +1190,20 @@ priority 2.5
             shortLabel Hap1 Hap2
             longLabel Hap1 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00008_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00008/all.nucleosome.coverage.bw
+        shortLabel Hap1 Nuc
+        longLabel Hap1 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 64
+
         track fiberSeqCompendium_PM00008_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -1118,7 +1216,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 64
+        priority 65
 
         track fiberSeqCompendium_PM00008_cpgHap
         parent fiberSeqCompendium off
@@ -1134,7 +1232,7 @@ priority 2.5
         shortLabel Hap1 CpG Hap1/2
         longLabel Hap1 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 65
+        priority 66
 
             track fiberSeqCompendium_PM00008_cpgHap_h1
             parent fiberSeqCompendium_PM00008_cpgHap
@@ -1165,7 +1263,7 @@ priority 2.5
         shortLabel Hap1 CpG diff
         longLabel Hap1 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 66
+        priority 67
 
             track fiberSeqCompendium_PM00008_cpgDiff_l0
             parent fiberSeqCompendium_PM00008_cpgDiff
@@ -1263,6 +1361,20 @@ priority 2.5
             shortLabel Jurkat Hap2
             longLabel Jurkat Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00009_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00009/all.nucleosome.coverage.bw
+        shortLabel Jurkat Nuc
+        longLabel Jurkat Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 74
+
         track fiberSeqCompendium_PM00009_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -1275,7 +1387,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 74
+        priority 75
 
         track fiberSeqCompendium_PM00009_cpgHap
         parent fiberSeqCompendium off
@@ -1291,7 +1403,7 @@ priority 2.5
         shortLabel Jurkat CpG Hap1/2
         longLabel Jurkat CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 75
+        priority 76
 
             track fiberSeqCompendium_PM00009_cpgHap_h1
             parent fiberSeqCompendium_PM00009_cpgHap
@@ -1322,7 +1434,7 @@ priority 2.5
         shortLabel Jurkat CpG diff
         longLabel Jurkat CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 76
+        priority 77
 
             track fiberSeqCompendium_PM00009_cpgDiff_l0
             parent fiberSeqCompendium_PM00009_cpgDiff
@@ -1420,6 +1532,20 @@ priority 2.5
             shortLabel H1 Hap2
             longLabel H1 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00010_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00010/all.nucleosome.coverage.bw
+        shortLabel H1 Nuc
+        longLabel H1 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 84
+
         track fiberSeqCompendium_PM00010_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -1432,7 +1558,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 84
+        priority 85
 
         track fiberSeqCompendium_PM00010_cpgHap
         parent fiberSeqCompendium off
@@ -1448,7 +1574,7 @@ priority 2.5
         shortLabel H1 CpG Hap1/2
         longLabel H1 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 85
+        priority 86
 
             track fiberSeqCompendium_PM00010_cpgHap_h1
             parent fiberSeqCompendium_PM00010_cpgHap
@@ -1479,7 +1605,7 @@ priority 2.5
         shortLabel H1 CpG diff
         longLabel H1 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 86
+        priority 87
 
             track fiberSeqCompendium_PM00010_cpgDiff_l0
             parent fiberSeqCompendium_PM00010_cpgDiff
@@ -1577,6 +1703,20 @@ priority 2.5
             shortLabel H9 Hap2
             longLabel H9 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00011_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00011/all.nucleosome.coverage.bw
+        shortLabel H9 Nuc
+        longLabel H9 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 94
+
         track fiberSeqCompendium_PM00011_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -1589,7 +1729,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 94
+        priority 95
 
         track fiberSeqCompendium_PM00011_cpgHap
         parent fiberSeqCompendium off
@@ -1605,7 +1745,7 @@ priority 2.5
         shortLabel H9 CpG Hap1/2
         longLabel H9 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 95
+        priority 96
 
             track fiberSeqCompendium_PM00011_cpgHap_h1
             parent fiberSeqCompendium_PM00011_cpgHap
@@ -1636,7 +1776,7 @@ priority 2.5
         shortLabel H9 CpG diff
         longLabel H9 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 96
+        priority 97
 
             track fiberSeqCompendium_PM00011_cpgDiff_l0
             parent fiberSeqCompendium_PM00011_cpgDiff
@@ -1734,6 +1874,20 @@ priority 2.5
             shortLabel Hek293T Hap2
             longLabel Hek293T Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PM00012_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PM00012/all.nucleosome.coverage.bw
+        shortLabel Hek293T Nuc
+        longLabel Hek293T Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 104
+
         track fiberSeqCompendium_PM00012_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -1746,7 +1900,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 104
+        priority 105
 
         track fiberSeqCompendium_PM00012_cpgHap
         parent fiberSeqCompendium off
@@ -1762,7 +1916,7 @@ priority 2.5
         shortLabel Hek293T CpG Hap1/2
         longLabel Hek293T CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 105
+        priority 106
 
             track fiberSeqCompendium_PM00012_cpgHap_h1
             parent fiberSeqCompendium_PM00012_cpgHap
@@ -1793,7 +1947,7 @@ priority 2.5
         shortLabel Hek293T CpG diff
         longLabel Hek293T CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 106
+        priority 107
 
             track fiberSeqCompendium_PM00012_cpgDiff_l0
             parent fiberSeqCompendium_PM00012_cpgDiff
@@ -1891,6 +2045,20 @@ priority 2.5
             shortLabel HG01123 Hap2
             longLabel HG01123 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00971_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00971/all.nucleosome.coverage.bw
+        shortLabel HG01123 Nuc
+        longLabel HG01123 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 114
+
         track fiberSeqCompendium_PS00971_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -1903,7 +2071,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 114
+        priority 115
 
         track fiberSeqCompendium_PS00971_cpgHap
         parent fiberSeqCompendium off
@@ -1919,7 +2087,7 @@ priority 2.5
         shortLabel HG01123 CpG Hap1/2
         longLabel HG01123 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 115
+        priority 116
 
             track fiberSeqCompendium_PS00971_cpgHap_h1
             parent fiberSeqCompendium_PS00971_cpgHap
@@ -1950,7 +2118,7 @@ priority 2.5
         shortLabel HG01123 CpG diff
         longLabel HG01123 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 116
+        priority 117
 
             track fiberSeqCompendium_PS00971_cpgDiff_l0
             parent fiberSeqCompendium_PS00971_cpgDiff
@@ -2048,6 +2216,20 @@ priority 2.5
             shortLabel HG01258 Hap2
             longLabel HG01258 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00972_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00972/all.nucleosome.coverage.bw
+        shortLabel HG01258 Nuc
+        longLabel HG01258 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 124
+
         track fiberSeqCompendium_PS00972_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -2060,7 +2242,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 124
+        priority 125
 
         track fiberSeqCompendium_PS00972_cpgHap
         parent fiberSeqCompendium off
@@ -2076,7 +2258,7 @@ priority 2.5
         shortLabel HG01258 CpG Hap1/2
         longLabel HG01258 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 125
+        priority 126
 
             track fiberSeqCompendium_PS00972_cpgHap_h1
             parent fiberSeqCompendium_PS00972_cpgHap
@@ -2107,7 +2289,7 @@ priority 2.5
         shortLabel HG01258 CpG diff
         longLabel HG01258 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 126
+        priority 127
 
             track fiberSeqCompendium_PS00972_cpgDiff_l0
             parent fiberSeqCompendium_PS00972_cpgDiff
@@ -2205,6 +2387,20 @@ priority 2.5
             shortLabel HG01358 Hap2
             longLabel HG01358 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00973_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00973/all.nucleosome.coverage.bw
+        shortLabel HG01358 Nuc
+        longLabel HG01358 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 134
+
         track fiberSeqCompendium_PS00973_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -2217,7 +2413,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 134
+        priority 135
 
         track fiberSeqCompendium_PS00973_cpgHap
         parent fiberSeqCompendium off
@@ -2233,7 +2429,7 @@ priority 2.5
         shortLabel HG01358 CpG Hap1/2
         longLabel HG01358 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 135
+        priority 136
 
             track fiberSeqCompendium_PS00973_cpgHap_h1
             parent fiberSeqCompendium_PS00973_cpgHap
@@ -2264,7 +2460,7 @@ priority 2.5
         shortLabel HG01358 CpG diff
         longLabel HG01358 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 136
+        priority 137
 
             track fiberSeqCompendium_PS00973_cpgDiff_l0
             parent fiberSeqCompendium_PS00973_cpgDiff
@@ -2362,6 +2558,20 @@ priority 2.5
             shortLabel HG01361 Hap2
             longLabel HG01361 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00974_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00974/all.nucleosome.coverage.bw
+        shortLabel HG01361 Nuc
+        longLabel HG01361 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 144
+
         track fiberSeqCompendium_PS00974_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -2374,7 +2584,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 144
+        priority 145
 
         track fiberSeqCompendium_PS00974_cpgHap
         parent fiberSeqCompendium off
@@ -2390,7 +2600,7 @@ priority 2.5
         shortLabel HG01361 CpG Hap1/2
         longLabel HG01361 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 145
+        priority 146
 
             track fiberSeqCompendium_PS00974_cpgHap_h1
             parent fiberSeqCompendium_PS00974_cpgHap
@@ -2421,7 +2631,7 @@ priority 2.5
         shortLabel HG01361 CpG diff
         longLabel HG01361 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 146
+        priority 147
 
             track fiberSeqCompendium_PS00974_cpgDiff_l0
             parent fiberSeqCompendium_PS00974_cpgDiff
@@ -2519,6 +2729,20 @@ priority 2.5
             shortLabel HG01891 Hap2
             longLabel HG01891 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00975_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00975/all.nucleosome.coverage.bw
+        shortLabel HG01891 Nuc
+        longLabel HG01891 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 154
+
         track fiberSeqCompendium_PS00975_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -2531,7 +2755,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 154
+        priority 155
 
         track fiberSeqCompendium_PS00975_cpgHap
         parent fiberSeqCompendium off
@@ -2547,7 +2771,7 @@ priority 2.5
         shortLabel HG01891 CpG Hap1/2
         longLabel HG01891 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 155
+        priority 156
 
             track fiberSeqCompendium_PS00975_cpgHap_h1
             parent fiberSeqCompendium_PS00975_cpgHap
@@ -2578,7 +2802,7 @@ priority 2.5
         shortLabel HG01891 CpG diff
         longLabel HG01891 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 156
+        priority 157
 
             track fiberSeqCompendium_PS00975_cpgDiff_l0
             parent fiberSeqCompendium_PS00975_cpgDiff
@@ -2676,6 +2900,20 @@ priority 2.5
             shortLabel HG02071 Hap2
             longLabel HG02071 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00976_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00976/all.nucleosome.coverage.bw
+        shortLabel HG02071 Nuc
+        longLabel HG02071 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 164
+
         track fiberSeqCompendium_PS00976_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -2688,7 +2926,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 164
+        priority 165
 
         track fiberSeqCompendium_PS00976_cpgHap
         parent fiberSeqCompendium off
@@ -2704,7 +2942,7 @@ priority 2.5
         shortLabel HG02071 CpG Hap1/2
         longLabel HG02071 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 165
+        priority 166
 
             track fiberSeqCompendium_PS00976_cpgHap_h1
             parent fiberSeqCompendium_PS00976_cpgHap
@@ -2735,7 +2973,7 @@ priority 2.5
         shortLabel HG02071 CpG diff
         longLabel HG02071 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 166
+        priority 167
 
             track fiberSeqCompendium_PS00976_cpgDiff_l0
             parent fiberSeqCompendium_PS00976_cpgDiff
@@ -2833,6 +3071,20 @@ priority 2.5
             shortLabel HG02074 Hap2
             longLabel HG02074 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00977_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00977/all.nucleosome.coverage.bw
+        shortLabel HG02074 Nuc
+        longLabel HG02074 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 174
+
         track fiberSeqCompendium_PS00977_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -2845,7 +3097,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 174
+        priority 175
 
         track fiberSeqCompendium_PS00977_cpgHap
         parent fiberSeqCompendium off
@@ -2861,7 +3113,7 @@ priority 2.5
         shortLabel HG02074 CpG Hap1/2
         longLabel HG02074 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 175
+        priority 176
 
             track fiberSeqCompendium_PS00977_cpgHap_h1
             parent fiberSeqCompendium_PS00977_cpgHap
@@ -2892,7 +3144,7 @@ priority 2.5
         shortLabel HG02074 CpG diff
         longLabel HG02074 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 176
+        priority 177
 
             track fiberSeqCompendium_PS00977_cpgDiff_l0
             parent fiberSeqCompendium_PS00977_cpgDiff
@@ -2990,6 +3242,20 @@ priority 2.5
             shortLabel HG02132 Hap2
             longLabel HG02132 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00978_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00978/all.nucleosome.coverage.bw
+        shortLabel HG02132 Nuc
+        longLabel HG02132 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 184
+
         track fiberSeqCompendium_PS00978_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3002,7 +3268,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 184
+        priority 185
 
         track fiberSeqCompendium_PS00978_cpgHap
         parent fiberSeqCompendium off
@@ -3018,7 +3284,7 @@ priority 2.5
         shortLabel HG02132 CpG Hap1/2
         longLabel HG02132 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 185
+        priority 186
 
             track fiberSeqCompendium_PS00978_cpgHap_h1
             parent fiberSeqCompendium_PS00978_cpgHap
@@ -3049,7 +3315,7 @@ priority 2.5
         shortLabel HG02132 CpG diff
         longLabel HG02132 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 186
+        priority 187
 
             track fiberSeqCompendium_PS00978_cpgDiff_l0
             parent fiberSeqCompendium_PS00978_cpgDiff
@@ -3147,6 +3413,20 @@ priority 2.5
             shortLabel HG02135 Hap2
             longLabel HG02135 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00979_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00979/all.nucleosome.coverage.bw
+        shortLabel HG02135 Nuc
+        longLabel HG02135 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 194
+
         track fiberSeqCompendium_PS00979_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3159,7 +3439,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 194
+        priority 195
 
         track fiberSeqCompendium_PS00979_cpgHap
         parent fiberSeqCompendium off
@@ -3175,7 +3455,7 @@ priority 2.5
         shortLabel HG02135 CpG Hap1/2
         longLabel HG02135 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 195
+        priority 196
 
             track fiberSeqCompendium_PS00979_cpgHap_h1
             parent fiberSeqCompendium_PS00979_cpgHap
@@ -3206,7 +3486,7 @@ priority 2.5
         shortLabel HG02135 CpG diff
         longLabel HG02135 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 196
+        priority 197
 
             track fiberSeqCompendium_PS00979_cpgDiff_l0
             parent fiberSeqCompendium_PS00979_cpgDiff
@@ -3304,6 +3584,20 @@ priority 2.5
             shortLabel HG02257 Hap2
             longLabel HG02257 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00980_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00980/all.nucleosome.coverage.bw
+        shortLabel HG02257 Nuc
+        longLabel HG02257 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 204
+
         track fiberSeqCompendium_PS00980_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3316,7 +3610,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 204
+        priority 205
 
         track fiberSeqCompendium_PS00980_cpgHap
         parent fiberSeqCompendium off
@@ -3332,7 +3626,7 @@ priority 2.5
         shortLabel HG02257 CpG Hap1/2
         longLabel HG02257 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 205
+        priority 206
 
             track fiberSeqCompendium_PS00980_cpgHap_h1
             parent fiberSeqCompendium_PS00980_cpgHap
@@ -3363,7 +3657,7 @@ priority 2.5
         shortLabel HG02257 CpG diff
         longLabel HG02257 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 206
+        priority 207
 
             track fiberSeqCompendium_PS00980_cpgDiff_l0
             parent fiberSeqCompendium_PS00980_cpgDiff
@@ -3461,6 +3755,20 @@ priority 2.5
             shortLabel HG02486 Hap2
             longLabel HG02486 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00981_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00981/all.nucleosome.coverage.bw
+        shortLabel HG02486 Nuc
+        longLabel HG02486 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 214
+
         track fiberSeqCompendium_PS00981_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3473,7 +3781,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 214
+        priority 215
 
         track fiberSeqCompendium_PS00981_cpgHap
         parent fiberSeqCompendium off
@@ -3489,7 +3797,7 @@ priority 2.5
         shortLabel HG02486 CpG Hap1/2
         longLabel HG02486 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 215
+        priority 216
 
             track fiberSeqCompendium_PS00981_cpgHap_h1
             parent fiberSeqCompendium_PS00981_cpgHap
@@ -3520,7 +3828,7 @@ priority 2.5
         shortLabel HG02486 CpG diff
         longLabel HG02486 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 216
+        priority 217
 
             track fiberSeqCompendium_PS00981_cpgDiff_l0
             parent fiberSeqCompendium_PS00981_cpgDiff
@@ -3618,6 +3926,20 @@ priority 2.5
             shortLabel HG02559 Hap2
             longLabel HG02559 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00982_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00982/all.nucleosome.coverage.bw
+        shortLabel HG02559 Nuc
+        longLabel HG02559 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 224
+
         track fiberSeqCompendium_PS00982_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3630,7 +3952,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 224
+        priority 225
 
         track fiberSeqCompendium_PS00982_cpgHap
         parent fiberSeqCompendium off
@@ -3646,7 +3968,7 @@ priority 2.5
         shortLabel HG02559 CpG Hap1/2
         longLabel HG02559 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 225
+        priority 226
 
             track fiberSeqCompendium_PS00982_cpgHap_h1
             parent fiberSeqCompendium_PS00982_cpgHap
@@ -3677,7 +3999,7 @@ priority 2.5
         shortLabel HG02559 CpG diff
         longLabel HG02559 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 226
+        priority 227
 
             track fiberSeqCompendium_PS00982_cpgDiff_l0
             parent fiberSeqCompendium_PS00982_cpgDiff
@@ -3775,6 +4097,20 @@ priority 2.5
             shortLabel HG02572 Hap2
             longLabel HG02572 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00983_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00983/all.nucleosome.coverage.bw
+        shortLabel HG02572 Nuc
+        longLabel HG02572 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 234
+
         track fiberSeqCompendium_PS00983_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3787,7 +4123,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 234
+        priority 235
 
         track fiberSeqCompendium_PS00983_cpgHap
         parent fiberSeqCompendium off
@@ -3803,7 +4139,7 @@ priority 2.5
         shortLabel HG02572 CpG Hap1/2
         longLabel HG02572 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 235
+        priority 236
 
             track fiberSeqCompendium_PS00983_cpgHap_h1
             parent fiberSeqCompendium_PS00983_cpgHap
@@ -3834,7 +4170,7 @@ priority 2.5
         shortLabel HG02572 CpG diff
         longLabel HG02572 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 236
+        priority 237
 
             track fiberSeqCompendium_PS00983_cpgDiff_l0
             parent fiberSeqCompendium_PS00983_cpgDiff
@@ -3932,6 +4268,20 @@ priority 2.5
             shortLabel HG02717 Hap2
             longLabel HG02717 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00984_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00984/all.nucleosome.coverage.bw
+        shortLabel HG02717 Nuc
+        longLabel HG02717 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 244
+
         track fiberSeqCompendium_PS00984_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -3944,7 +4294,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 244
+        priority 245
 
         track fiberSeqCompendium_PS00984_cpgHap
         parent fiberSeqCompendium off
@@ -3960,7 +4310,7 @@ priority 2.5
         shortLabel HG02717 CpG Hap1/2
         longLabel HG02717 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 245
+        priority 246
 
             track fiberSeqCompendium_PS00984_cpgHap_h1
             parent fiberSeqCompendium_PS00984_cpgHap
@@ -3991,7 +4341,7 @@ priority 2.5
         shortLabel HG02717 CpG diff
         longLabel HG02717 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 246
+        priority 247
 
             track fiberSeqCompendium_PS00984_cpgDiff_l0
             parent fiberSeqCompendium_PS00984_cpgDiff
@@ -4089,6 +4439,20 @@ priority 2.5
             shortLabel HG02886 Hap2
             longLabel HG02886 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00985_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00985/all.nucleosome.coverage.bw
+        shortLabel HG02886 Nuc
+        longLabel HG02886 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 254
+
         track fiberSeqCompendium_PS00985_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -4101,7 +4465,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 254
+        priority 255
 
         track fiberSeqCompendium_PS00985_cpgHap
         parent fiberSeqCompendium off
@@ -4117,7 +4481,7 @@ priority 2.5
         shortLabel HG02886 CpG Hap1/2
         longLabel HG02886 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 255
+        priority 256
 
             track fiberSeqCompendium_PS00985_cpgHap_h1
             parent fiberSeqCompendium_PS00985_cpgHap
@@ -4148,7 +4512,7 @@ priority 2.5
         shortLabel HG02886 CpG diff
         longLabel HG02886 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 256
+        priority 257
 
             track fiberSeqCompendium_PS00985_cpgDiff_l0
             parent fiberSeqCompendium_PS00985_cpgDiff
@@ -4246,6 +4610,20 @@ priority 2.5
             shortLabel HG03516 Hap2
             longLabel HG03516 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00986_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00986/all.nucleosome.coverage.bw
+        shortLabel HG03516 Nuc
+        longLabel HG03516 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 264
+
         track fiberSeqCompendium_PS00986_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -4258,7 +4636,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 264
+        priority 265
 
         track fiberSeqCompendium_PS00986_cpgHap
         parent fiberSeqCompendium off
@@ -4274,7 +4652,7 @@ priority 2.5
         shortLabel HG03516 CpG Hap1/2
         longLabel HG03516 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 265
+        priority 266
 
             track fiberSeqCompendium_PS00986_cpgHap_h1
             parent fiberSeqCompendium_PS00986_cpgHap
@@ -4305,7 +4683,7 @@ priority 2.5
         shortLabel HG03516 CpG diff
         longLabel HG03516 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 266
+        priority 267
 
             track fiberSeqCompendium_PS00986_cpgDiff_l0
             parent fiberSeqCompendium_PS00986_cpgDiff
@@ -4403,6 +4781,20 @@ priority 2.5
             shortLabel HG03804 Hap2
             longLabel HG03804 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00987_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00987/all.nucleosome.coverage.bw
+        shortLabel HG03804 Nuc
+        longLabel HG03804 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 274
+
         track fiberSeqCompendium_PS00987_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -4415,7 +4807,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 274
+        priority 275
 
         track fiberSeqCompendium_PS00987_cpgHap
         parent fiberSeqCompendium off
@@ -4431,7 +4823,7 @@ priority 2.5
         shortLabel HG03804 CpG Hap1/2
         longLabel HG03804 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 275
+        priority 276
 
             track fiberSeqCompendium_PS00987_cpgHap_h1
             parent fiberSeqCompendium_PS00987_cpgHap
@@ -4462,7 +4854,7 @@ priority 2.5
         shortLabel HG03804 CpG diff
         longLabel HG03804 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 276
+        priority 277
 
             track fiberSeqCompendium_PS00987_cpgDiff_l0
             parent fiberSeqCompendium_PS00987_cpgDiff
@@ -4560,6 +4952,20 @@ priority 2.5
             shortLabel HG03942 Hap2
             longLabel HG03942 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00988_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00988/all.nucleosome.coverage.bw
+        shortLabel HG03942 Nuc
+        longLabel HG03942 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 284
+
         track fiberSeqCompendium_PS00988_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -4572,7 +4978,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 284
+        priority 285
 
         track fiberSeqCompendium_PS00988_cpgHap
         parent fiberSeqCompendium off
@@ -4588,7 +4994,7 @@ priority 2.5
         shortLabel HG03942 CpG Hap1/2
         longLabel HG03942 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 285
+        priority 286
 
             track fiberSeqCompendium_PS00988_cpgHap_h1
             parent fiberSeqCompendium_PS00988_cpgHap
@@ -4619,7 +5025,7 @@ priority 2.5
         shortLabel HG03942 CpG diff
         longLabel HG03942 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 286
+        priority 287
 
             track fiberSeqCompendium_PS00988_cpgDiff_l0
             parent fiberSeqCompendium_PS00988_cpgDiff
@@ -4717,6 +5123,20 @@ priority 2.5
             shortLabel HG04160 Hap2
             longLabel HG04160 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00989_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00989/all.nucleosome.coverage.bw
+        shortLabel HG04160 Nuc
+        longLabel HG04160 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 294
+
         track fiberSeqCompendium_PS00989_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -4729,7 +5149,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 294
+        priority 295
 
         track fiberSeqCompendium_PS00989_cpgHap
         parent fiberSeqCompendium off
@@ -4745,7 +5165,7 @@ priority 2.5
         shortLabel HG04160 CpG Hap1/2
         longLabel HG04160 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 295
+        priority 296
 
             track fiberSeqCompendium_PS00989_cpgHap_h1
             parent fiberSeqCompendium_PS00989_cpgHap
@@ -4776,7 +5196,7 @@ priority 2.5
         shortLabel HG04160 CpG diff
         longLabel HG04160 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 296
+        priority 297
 
             track fiberSeqCompendium_PS00989_cpgDiff_l0
             parent fiberSeqCompendium_PS00989_cpgDiff
@@ -4874,6 +5294,20 @@ priority 2.5
             shortLabel HG04187 Hap2
             longLabel HG04187 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS00990_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS00990/all.nucleosome.coverage.bw
+        shortLabel HG04187 Nuc
+        longLabel HG04187 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 304
+
         track fiberSeqCompendium_PS00990_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -4886,7 +5320,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 304
+        priority 305
 
         track fiberSeqCompendium_PS00990_cpgHap
         parent fiberSeqCompendium off
@@ -4902,7 +5336,7 @@ priority 2.5
         shortLabel HG04187 CpG Hap1/2
         longLabel HG04187 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 305
+        priority 306
 
             track fiberSeqCompendium_PS00990_cpgHap_h1
             parent fiberSeqCompendium_PS00990_cpgHap
@@ -4933,7 +5367,7 @@ priority 2.5
         shortLabel HG04187 CpG diff
         longLabel HG04187 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 306
+        priority 307
 
             track fiberSeqCompendium_PS00990_cpgDiff_l0
             parent fiberSeqCompendium_PS00990_cpgDiff
@@ -5031,6 +5465,20 @@ priority 2.5
             shortLabel A549 Hap2
             longLabel A549 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01302_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01302/all.nucleosome.coverage.bw
+        shortLabel A549 Nuc
+        longLabel A549 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 314
+
         track fiberSeqCompendium_PS01302_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5043,7 +5491,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 314
+        priority 315
 
         track fiberSeqCompendium_PS01302_cpgHap
         parent fiberSeqCompendium off
@@ -5059,7 +5507,7 @@ priority 2.5
         shortLabel A549 CpG Hap1/2
         longLabel A549 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 315
+        priority 316
 
             track fiberSeqCompendium_PS01302_cpgHap_h1
             parent fiberSeqCompendium_PS01302_cpgHap
@@ -5090,7 +5538,7 @@ priority 2.5
         shortLabel A549 CpG diff
         longLabel A549 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 316
+        priority 317
 
             track fiberSeqCompendium_PS01302_cpgDiff_l0
             parent fiberSeqCompendium_PS01302_cpgDiff
@@ -5188,6 +5636,20 @@ priority 2.5
             shortLabel MCF-7 Hap2
             longLabel MCF-7 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01305_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01305/all.nucleosome.coverage.bw
+        shortLabel MCF-7 Nuc
+        longLabel MCF-7 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 324
+
         track fiberSeqCompendium_PS01305_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5200,7 +5662,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 324
+        priority 325
 
         track fiberSeqCompendium_PS01305_cpgHap
         parent fiberSeqCompendium off
@@ -5216,7 +5678,7 @@ priority 2.5
         shortLabel MCF-7 CpG Hap1/2
         longLabel MCF-7 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 325
+        priority 326
 
             track fiberSeqCompendium_PS01305_cpgHap_h1
             parent fiberSeqCompendium_PS01305_cpgHap
@@ -5247,7 +5709,7 @@ priority 2.5
         shortLabel MCF-7 CpG diff
         longLabel MCF-7 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 326
+        priority 327
 
             track fiberSeqCompendium_PS01305_cpgDiff_l0
             parent fiberSeqCompendium_PS01305_cpgDiff
@@ -5345,6 +5807,20 @@ priority 2.5
             shortLabel HCT116 Hap2
             longLabel HCT116 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01314_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01314/all.nucleosome.coverage.bw
+        shortLabel HCT116 Nuc
+        longLabel HCT116 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 334
+
         track fiberSeqCompendium_PS01314_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5357,7 +5833,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 334
+        priority 335
 
         track fiberSeqCompendium_PS01314_cpgHap
         parent fiberSeqCompendium off
@@ -5373,7 +5849,7 @@ priority 2.5
         shortLabel HCT116 CpG Hap1/2
         longLabel HCT116 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 335
+        priority 336
 
             track fiberSeqCompendium_PS01314_cpgHap_h1
             parent fiberSeqCompendium_PS01314_cpgHap
@@ -5404,7 +5880,7 @@ priority 2.5
         shortLabel HCT116 CpG diff
         longLabel HCT116 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 336
+        priority 337
 
             track fiberSeqCompendium_PS01314_cpgDiff_l0
             parent fiberSeqCompendium_PS01314_cpgDiff
@@ -5502,6 +5978,20 @@ priority 2.5
             shortLabel Caco-2 Hap2
             longLabel Caco-2 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01319_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01319/all.nucleosome.coverage.bw
+        shortLabel Caco-2 Nuc
+        longLabel Caco-2 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 344
+
         track fiberSeqCompendium_PS01319_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5514,7 +6004,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 344
+        priority 345
 
         track fiberSeqCompendium_PS01319_cpgHap
         parent fiberSeqCompendium off
@@ -5530,7 +6020,7 @@ priority 2.5
         shortLabel Caco-2 CpG Hap1/2
         longLabel Caco-2 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 345
+        priority 346
 
             track fiberSeqCompendium_PS01319_cpgHap_h1
             parent fiberSeqCompendium_PS01319_cpgHap
@@ -5561,7 +6051,7 @@ priority 2.5
         shortLabel Caco-2 CpG diff
         longLabel Caco-2 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 346
+        priority 347
 
             track fiberSeqCompendium_PS01319_cpgDiff_l0
             parent fiberSeqCompendium_PS01319_cpgDiff
@@ -5659,6 +6149,20 @@ priority 2.5
             shortLabel WTC-11 Hap2
             longLabel WTC-11 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01388_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01388/all.nucleosome.coverage.bw
+        shortLabel WTC-11 Nuc
+        longLabel WTC-11 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 354
+
         track fiberSeqCompendium_PS01388_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5671,7 +6175,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 354
+        priority 355
 
         track fiberSeqCompendium_PS01388_cpgHap
         parent fiberSeqCompendium off
@@ -5687,7 +6191,7 @@ priority 2.5
         shortLabel WTC-11 CpG Hap1/2
         longLabel WTC-11 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 355
+        priority 356
 
             track fiberSeqCompendium_PS01388_cpgHap_h1
             parent fiberSeqCompendium_PS01388_cpgHap
@@ -5718,7 +6222,7 @@ priority 2.5
         shortLabel WTC-11 CpG diff
         longLabel WTC-11 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 356
+        priority 357
 
             track fiberSeqCompendium_PS01388_cpgDiff_l0
             parent fiberSeqCompendium_PS01388_cpgDiff
@@ -5816,6 +6320,20 @@ priority 2.5
             shortLabel GM28572 Hap2
             longLabel GM28572 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01517_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01517/all.nucleosome.coverage.bw
+        shortLabel GM28572 Nuc
+        longLabel GM28572 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 364
+
         track fiberSeqCompendium_PS01517_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5828,7 +6346,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 364
+        priority 365
 
         track fiberSeqCompendium_PS01517_cpgHap
         parent fiberSeqCompendium off
@@ -5844,7 +6362,7 @@ priority 2.5
         shortLabel GM28572 CpG Hap1/2
         longLabel GM28572 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 365
+        priority 366
 
             track fiberSeqCompendium_PS01517_cpgHap_h1
             parent fiberSeqCompendium_PS01517_cpgHap
@@ -5875,7 +6393,7 @@ priority 2.5
         shortLabel GM28572 CpG diff
         longLabel GM28572 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 366
+        priority 367
 
             track fiberSeqCompendium_PS01517_cpgDiff_l0
             parent fiberSeqCompendium_PS01517_cpgDiff
@@ -5973,6 +6491,20 @@ priority 2.5
             shortLabel GM28570 Hap2
             longLabel GM28570 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01518_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01518/all.nucleosome.coverage.bw
+        shortLabel GM28570 Nuc
+        longLabel GM28570 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 374
+
         track fiberSeqCompendium_PS01518_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -5985,7 +6517,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 374
+        priority 375
 
         track fiberSeqCompendium_PS01518_cpgHap
         parent fiberSeqCompendium off
@@ -6001,7 +6533,7 @@ priority 2.5
         shortLabel GM28570 CpG Hap1/2
         longLabel GM28570 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 375
+        priority 376
 
             track fiberSeqCompendium_PS01518_cpgHap_h1
             parent fiberSeqCompendium_PS01518_cpgHap
@@ -6032,7 +6564,7 @@ priority 2.5
         shortLabel GM28570 CpG diff
         longLabel GM28570 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 376
+        priority 377
 
             track fiberSeqCompendium_PS01518_cpgDiff_l0
             parent fiberSeqCompendium_PS01518_cpgDiff
@@ -6130,6 +6662,20 @@ priority 2.5
             shortLabel GM25456 Hap2
             longLabel GM25456 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01519_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01519/all.nucleosome.coverage.bw
+        shortLabel GM25456 Nuc
+        longLabel GM25456 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 384
+
         track fiberSeqCompendium_PS01519_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -6142,7 +6688,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 384
+        priority 385
 
         track fiberSeqCompendium_PS01519_cpgHap
         parent fiberSeqCompendium off
@@ -6158,7 +6704,7 @@ priority 2.5
         shortLabel GM25456 CpG Hap1/2
         longLabel GM25456 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 385
+        priority 386
 
             track fiberSeqCompendium_PS01519_cpgHap_h1
             parent fiberSeqCompendium_PS01519_cpgHap
@@ -6189,7 +6735,7 @@ priority 2.5
         shortLabel GM25456 CpG diff
         longLabel GM25456 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 386
+        priority 387
 
             track fiberSeqCompendium_PS01519_cpgDiff_l0
             parent fiberSeqCompendium_PS01519_cpgDiff
@@ -6287,6 +6833,20 @@ priority 2.5
             shortLabel GM25455 Hap2
             longLabel GM25455 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01520_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01520/all.nucleosome.coverage.bw
+        shortLabel GM25455 Nuc
+        longLabel GM25455 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 394
+
         track fiberSeqCompendium_PS01520_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -6299,7 +6859,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 394
+        priority 395
 
         track fiberSeqCompendium_PS01520_cpgHap
         parent fiberSeqCompendium off
@@ -6315,7 +6875,7 @@ priority 2.5
         shortLabel GM25455 CpG Hap1/2
         longLabel GM25455 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 395
+        priority 396
 
             track fiberSeqCompendium_PS01520_cpgHap_h1
             parent fiberSeqCompendium_PS01520_cpgHap
@@ -6346,7 +6906,7 @@ priority 2.5
         shortLabel GM25455 CpG diff
         longLabel GM25455 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 396
+        priority 397
 
             track fiberSeqCompendium_PS01520_cpgDiff_l0
             parent fiberSeqCompendium_PS01520_cpgDiff
@@ -6444,6 +7004,20 @@ priority 2.5
             shortLabel GM27730 Hap2
             longLabel GM27730 Fiber-seq percent accessible, haplotype 2
 
+        track fiberSeqCompendium_PS01524_nuc
+        parent fiberSeqCompendium off
+        type bigWig
+        bigDataUrl /gbdb/hg38/fiberSeq/PS01524/all.nucleosome.coverage.bw
+        shortLabel GM27730 Nuc
+        longLabel GM27730 Fiber-seq nucleosome density, both haplotypes
+        color 0,158,115
+        autoScale on
+        alwaysZero on
+        windowingFunction mean
+        maxHeightPixels 100:40:8
+        onlyVisibility full
+        priority 404
+
         track fiberSeqCompendium_PS01524_cpg
         parent fiberSeqCompendium off
         type bigWig 0 100
@@ -6456,7 +7030,7 @@ priority 2.5
         windowingFunction mean
         maxHeightPixels 100:40:8
         onlyVisibility full
-        priority 404
+        priority 405
 
         track fiberSeqCompendium_PS01524_cpgHap
         parent fiberSeqCompendium off
@@ -6472,7 +7046,7 @@ priority 2.5
         shortLabel GM27730 CpG Hap1/2
         longLabel GM27730 CpG methylation, haplotype 1 (blue) and 2 (orange)
         onlyVisibility full
-        priority 405
+        priority 406
 
             track fiberSeqCompendium_PS01524_cpgHap_h1
             parent fiberSeqCompendium_PS01524_cpgHap
@@ -6503,7 +7077,7 @@ priority 2.5
         shortLabel GM27730 CpG diff
         longLabel GM27730 CpG methylation difference between haplotypes, by significance threshold
         onlyVisibility full
-        priority 406
+        priority 407
 
             track fiberSeqCompendium_PS01524_cpgDiff_l0
             parent fiberSeqCompendium_PS01524_cpgDiff

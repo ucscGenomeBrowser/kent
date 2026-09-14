@@ -198,12 +198,12 @@ def accOverlay(gbdb, samples):
 
 
 def compendium(gbdb, dataUrlDir, samples):
-    """One faceted composite over all six per-sample data types.
+    """One faceted composite over all seven per-sample data types.
 
     Accessibility and CpG methylation are read off the same molecules in the
     same experiment, so they belong in one table: the user picks a sample once,
     and cartDump.c assigns priority with the data element as the outer loop and
-    the data type as the inner one, which keeps a sample's six subtracks
+    the data type as the inner one, which keeps a sample's seven subtracks
     contiguous in the image.  Split across two composites they would draw as an
     accessibility block followed by a methylation block, and comparing the two
     for one sample would mean reading across every other sample.
@@ -214,8 +214,8 @@ def compendium(gbdb, dataUrlDir, samples):
         "compositeTrack faceted",
         "type bigWig",
         "shortLabel Fiber-seq Compendium",
-        "longLabel Fiber-seq accessibility, FIRE peaks and CpG methylation "
-        "in %d samples" % len(samples),
+        "longLabel Fiber-seq accessibility, peaks, nucleosomes and CpG "
+        "methylation in %d samples" % len(samples),
         "metaDataUrl %s/fiberSeqCompendium_metadata.tsv" % dataUrlDir,
         "colorSettingsUrl %s/fiberSeqCompendium_colors.json" % dataUrlDir,
         "primaryKey Accession",
@@ -223,7 +223,8 @@ def compendium(gbdb, dataUrlDir, samples):
         # subtracks within each sample.  No data type name may contain an
         # underscore: hgTrackUi globs "<composite>_*_<dataType>_sel".
         'dataTypes acc|"Percent accessible" peaks|"FIRE peaks" '
-        'hap|"Haplotype accessibility" cpg|"CpG methylation" '
+        'hap|"Haplotype accessibility" nuc|"Nucleosome density" '
+        'cpg|"CpG methylation" '
         'cpgHap|"Haplotype CpG" cpgDiff|"CpG haplotype difference"',
         "defaultSortField Accession",
         "defaultGroupBy sample",
@@ -300,6 +301,28 @@ def compendium(gbdb, dataUrlDir, samples):
                           "%s Fiber-seq percent accessible, haplotype" % name,
                           "maximum", pri(2))
 
+        # Nucleosome density is read depth, not a percentage, so unlike every
+        # other wiggle here it cannot have fixed viewLimits: the per-sample mean
+        # runs from 25 (PS00971) to 142 (GM12878) purely with sequencing depth,
+        # and single loci spike into the hundred thousands.  autoScale per
+        # window is the only setting that shows all 41 samples usefully, and
+        # absolute values are not comparable between samples anyway.
+        out += stanza(8, [
+            "track fiberSeqCompendium_%s_nuc" % acc,
+            "parent fiberSeqCompendium off",
+            "type bigWig",
+            "bigDataUrl %s/%s/all.nucleosome.coverage.bw" % (gbdb, acc),
+            "shortLabel %s Nuc" % name,
+            "longLabel %s Fiber-seq nucleosome density, both haplotypes" % name,
+            "color 0,158,115",
+            "autoScale on",
+            "alwaysZero on",
+            "windowingFunction mean",
+            "maxHeightPixels 100:40:8",
+            "onlyVisibility full",
+            pri(3),
+        ])
+
         out += stanza(8, [
             "track fiberSeqCompendium_%s_cpg" % acc,
             "parent fiberSeqCompendium %s" % on,
@@ -313,7 +336,7 @@ def compendium(gbdb, dataUrlDir, samples):
             "windowingFunction mean",
             "maxHeightPixels 100:40:8",
             "onlyVisibility full",
-            pri(3),
+            pri(4),
         ])
 
         out += hapOverlay(gbdb, acc, name, "cpgHap",
@@ -321,7 +344,7 @@ def compendium(gbdb, dataUrlDir, samples):
                           "%s CpG Hap1/2" % name,
                           "%s CpG methylation, haplotype 1 (blue) and 2 (orange)" % name,
                           "%s CpG methylation, haplotype" % name,
-                          "mean", pri(4))
+                          "mean", pri(5))
 
         out += stanza(8, [
             "track fiberSeqCompendium_%s_cpgDiff" % acc,
@@ -338,7 +361,7 @@ def compendium(gbdb, dataUrlDir, samples):
             "longLabel %s CpG methylation difference between haplotypes, "
             "by significance threshold" % name,
             "onlyVisibility full",
-            pri(5),
+            pri(6),
         ])
         # Least significant first, so the more significant levels draw on top.
         for i, (fname, label, color) in enumerate(DIFF_LEVELS):
@@ -426,9 +449,9 @@ def main():
         f.write(accOverlay(args.gbdb_dir, samples))
         f.write(compendium(args.gbdb_dir, args.gbdb_dir, samples))
 
-    # Per sample: acc, peaks, cpg, three container stanzas (hap, cpgHap,
+    # Per sample: acc, peaks, nuc, cpg, three container stanzas (hap, cpgHap,
     # cpgDiff) and their 2 + 2 + 4 children.
-    nSub = len(DEFAULT_OVERLAY) + len(samples) * (3 + 3 + 8)
+    nSub = len(DEFAULT_OVERLAY) + len(samples) * (4 + 3 + 8)
     print("wrote %s" % raPath)
     print("  %d samples, %d track stanzas" % (len(samples), nSub + 3))
     print("  metadata and colors in %s" % args.data_dir)
