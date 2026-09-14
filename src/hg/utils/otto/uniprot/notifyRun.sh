@@ -47,6 +47,13 @@ send() {
     } | mail -s "uniprot otto: $subject" "$to"
 }
 
+# The pipeline runs as otto, from cron and from a hand-started doUpdate.sh. Restrict every
+# process search to that user: a bare "pgrep -f doUniprot run" also matches the shell that
+# launched this watcher and every status command someone types, so it can never see the run
+# end. That is not hypothetical, it is how this watcher sat believing a run was in progress
+# for three days and never mailed the failure it was there to report.
+runUser=${4:-otto}
+
 # Work out which stage the log has reached. Later matches win, so the order is the order
 # the pipeline goes through.
 stageOf() {
@@ -59,7 +66,7 @@ stageOf() {
     # doUniprot's run() logs its "Running: ..." line only after the command returns, so the
     # log cannot tell us that the TrEMBL parse has started, only that it has finished.
     # Ask the process table instead, and fall back to the log once the process is gone.
-    { pgrep -f "uniprotToTab.*--trembl" > /dev/null 2>&1 || grep -aq -- "--trembl" $log 2>/dev/null; } \
+    { pgrep -u "$runUser" -f "uniprotToTab.*--trembl" > /dev/null 2>&1 || grep -aq -- "--trembl" $log 2>/dev/null; } \
                                              && s="parsing the TrEMBL XML, this is the multi-day part"
     grep -aq "checking/creating pslMap"      $log 2>/dev/null && s="parse done, building the protein-to-genome mappings on the cluster"
     grep -aq "Wrote release string"          $log 2>/dev/null && s="writing version files and flipping the bigBeds"
@@ -69,7 +76,7 @@ stageOf() {
 }
 
 running() {
-    pgrep -f "doUniprot run" > /dev/null 2>&1
+    pgrep -u "$runUser" -f "doUniprot run" > /dev/null 2>&1
 }
 
 if ! running ; then
