@@ -82,6 +82,7 @@ void displayLoginPage(struct sqlConnection *conn);
 void displayAccHelpPage(struct sqlConnection *conn);
 void completeAccountPage(struct sqlConnection *conn);
 void sendEmailLink(struct sqlConnection *conn);
+static void loginAndReturn(struct sqlConnection *conn, char *userName, uint idx);
 
 /* ---- Global helper functions ---- */
 char *browserName()
@@ -767,7 +768,12 @@ void setupNewAccount(struct sqlConnection *conn, char *email, char *username)
 /* Set up  new user account and send activation mail to user */
 {
 char query[256];
-char *token = generateRandomPassword();
+/* Draw the activation token from the same source as the other one-time tokens in this file
+ * (the email-link login token and the OAuth state nonce, both makeRandomKey) rather than from
+ * generateRandomPassword, whose output is far shorter and far less varied.  The token is opaque
+ * -- it is hashed on the next line and only the hash is ever stored or mailed -- so nothing
+ * downstream depends on its shape. */
+char *token = makeRandomKey(128+33);
 char *tokenMD5 = generateTokenMD5(token);
 sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(),emailToken='%s', emailTokenExpires=DATE_ADD(NOW(), INTERVAL 7 DAY), accountActivated='N' WHERE userName='%s'",
     tokenMD5,
@@ -894,6 +900,21 @@ if (isNotEmpty(emailToken) && sameString(emailToken, token))
     sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' WHERE userName='%s'",
     username);
     sqlUpdate(conn, query);
+    /* An account with no password was created by a social login, and the provider button is its
+     * only other way in.  Opening this link proves the mailbox is theirs, which is the same
+     * proof the passwordless email link accepts (see emailLogin), so finish the job and sign
+     * them in rather than bouncing them to a login page with nothing to type.  Accounts that do
+     * have a password keep the old behavior: they know it, and a mailed link should not be worth
+     * a session on its own. */
+    sqlSafef(query, sizeof(query),
+        "SELECT * FROM gbMembers WHERE userName='%s' AND password=''", username);
+    struct gbMembers *m = gbMembersLoadByQuery(conn, query);
+    if (m != NULL)
+        {
+        loginAndReturn(conn, m->userName, m->idx);
+        gbMembersFree(&m);
+        return;
+        }
     freez(&errMsg);
     errMsg = cloneString("Your account has been activated.");
     } 
@@ -1372,8 +1393,15 @@ if (clock1() > atol(expStr))
     displayLoginPage(conn);
     return;
     }
+/* Opening this link proved the user reads mail at newEmail, which is exactly what activation
+ * asks for, so activate the account here too.  Without this an account created by a social
+ * login that released no address (ORCID) stayed unactivated forever even after its owner
+ * confirmed an address the proper way, and so stayed invisible to email-link login and to
+ * auto-linking from another provider.  Any activation token still outstanding pointed at the
+ * old address, so drop it rather than leave a stale link alive. */
 sqlSafef(query, sizeof(query),
-    "UPDATE gbMembers SET email='%s', lastUse=NOW() WHERE userName='%s'", newEmail, user);
+    "UPDATE gbMembers SET email='%s', lastUse=NOW(), accountActivated='Y', "
+    "emailToken='', emailTokenExpires='' WHERE userName='%s'", newEmail, user);
 sqlUpdate(conn, query);
 /* Alert the previous address that the change happened, so a hijack is noticed. */
 if (isNotEmpty(oldEmail) && differentWord(oldEmail, newEmail))
@@ -2305,6 +2333,33 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
+/* What we trust about an email address in a social login is that the *provider* released it,
+ * not that the provider set email_verified.  CILogon leaves that flag at 0 even for a real
+ * institutional sign-in (#37984 note-50), and its addresses come from the university's own
+ * identity provider rather than from anything the person can type, so insisting on the flag
+ * would make every CILogon user confirm an address by mail and would still never let them reach
+ * an account they already have.  What we do not trust is an address the *user* typed: either
+ * because the provider released none (ORCID releases only an ORCID iD, by design) or because
+ * they edited the one that was released.  Those have to be confirmed by mail.
+ * To tighten this later, add the email_verified test back in the two places that call
+ * oauthProviderEmail() and in resolveIdentity's matching query; the flag is still carried
+ * through the cart in oauth_pending_email_verified, it is just not consulted. */
+
+static char *oauthProviderEmail()
+/* The address the provider released for the pending identity, or NULL if it released none or
+ * released something that is not a usable address.
+ * When this is non-NULL the "choose a username" page must not ask for an address at all.  We
+ * already have one, from a source the person cannot type into, so a text box would only invite
+ * an edit -- and a box we then accept unchanged, without ever writing to it, is the worst of
+ * both worlds: it looks like a question we check the answer to, and it is not.  Either we have
+ * an address and use it, or we do not have one and must confirm what the user types. */
+{
+char *email = cartUsualString(cart, "oauth_pending_email", "");
+if (isEmpty(email) || spc_email_isvalid(email) == 0)
+    return NULL;
+return email;
+}
+
 void completeAccountPage(struct sqlConnection *conn)
 /* Ask a first-time social-login user to confirm a username (and email) for a new account. */
 {
@@ -2317,18 +2372,29 @@ if (isEmpty(provider) || !pendingIdentityValid())
     displayLoginPage(conn);
     return;
     }
+char *providerEmail = oauthProviderEmail();
 char *suggested = cartUsualString(cart, "hgLogin_userName", "");
 if (isEmpty(suggested))
     suggested = suggestUsername(conn, email, name);
 char *encSuggested = htmlEncode(suggested);   // both go into value="" attributes; escape (XSS)
-char *encEmail = htmlEncode(email);
+char *label = oauthProviderLabel(provider);
 
 hPrintf("<div id=\"completeAccountBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf("<h3>Choose a username</h3>");
 hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
-    "You can change the suggested name below.</p>",
-    oauthProviderLabel(provider), brwName);
+    "You can change the suggested name below.</p>", label, brwName);
+/* Explain why this is always a new account when the provider released no address (ORCID does
+ * this by design: its OpenID Connect offers only the "openid" scope, so the ORCID iD is all we
+ * ever get).  Without an address we cannot tell a returning user from a new one, so every first
+ * sign-in lands here, which surprised real users (#38341).  Keyed on whether an address arrived,
+ * not on the provider's name: a mirror can call a provider anything it likes in hg.conf, so a
+ * name test would silently miss it (#38213). */
+if (providerEmail == NULL)
+    hPrintf("<p>A new %s account is created for any %s sign-in we have not seen before, because "
+        "%s does not share your email address with us. So you cannot sign in to an existing "
+        "account this way. Use another sign-in option if you do not want to create a new "
+        "account.</p>", brwName, label, label);
 printUsernameNote();
 hPrintf("<span style='color:red;'>%s</span>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"completeAccountForm\">", hgLoginUrl);
@@ -2336,17 +2402,37 @@ hPrintf("<div class=\"inputGroup\">"
     "<label for=\"userName\">Username</label>"
     "<input type=\"text\" name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
     "</div>", encSuggested);
-hPrintf("<div class=\"inputGroup\">"
-    "<label for=\"emailAddr\">Email address</label>"
-    "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
-    "</div>", encEmail);
+if (providerEmail == NULL)
+    {
+    /* No address from the provider, so we have to ask -- and because anyone can type anything
+     * here, the account is not usable until the mailed link is opened.  Say that next to the box
+     * rather than springing the confirmation page on the user after they submit.  Show back what
+     * they typed so an error does not wipe the address they are being asked to correct. */
+    char *encTyped = htmlEncode(cartUsualString(cart, "hgLogin_email", ""));
+    hPrintf("<div class=\"inputGroup\">"
+        "<label for=\"emailAddr\">Email address</label>"
+        "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
+        "</div>", encTyped);
+    freeMem(encTyped);
+    if (!sameWord(returnAddr, "NOEMAIL"))
+        hPrintf("<p style=\"font-size:0.9em\">We will email a confirmation link to this address. "
+            "Open the link to finish creating your account.</p>");
+    }
+else
+    {
+    /* We already have an address from the provider, so do not ask for one.  A box here would be
+     * a question we do not check the answer to. */
+    char *encProviderEmail = htmlEncode(providerEmail);
+    hPrintf("<p>Your email address, as %s gave it to us, is <b>%s</b>. You can change it later "
+        "on the account page.</p>", label, encProviderEmail);
+    freeMem(encProviderEmail);
+    }
 hPrintf("<div class=\"formControls\">"
     "<input type=\"submit\" name=\"hgLogin.do.completeAccount\" value=\"Create account\" class=\"largeButton\">"
     " &nbsp;<a href=\"%s\" class=\"cancelButton\">Cancel</a>"
     "</div></form></div><!-- END - completeAccountBox -->", getReturnToUrlForAttr());
 cartSaveSession(cart);
 freeMem(encSuggested);
-freeMem(encEmail);
 }
 
 void completeAccount(struct sqlConnection *conn)
@@ -2392,7 +2478,11 @@ if (userNameTaken(conn, user))
     completeAccountPage(conn);
     return;
     }
-char *email = cartUsualString(cart, "hgLogin_email", "");
+/* Where the provider gave us an address, that is the account's address, full stop.  The form did
+ * not offer a box for it, so anything sitting in hgLogin_email is left over from an earlier page
+ * in this cart and must not be allowed to stand in for it. */
+char *providerEmail = oauthProviderEmail();
+char *email = (providerEmail != NULL) ? providerEmail : cartUsualString(cart, "hgLogin_email", "");
 if (isEmpty(email))
     {
     freez(&errMsg);
@@ -2407,23 +2497,54 @@ if (spc_email_isvalid(email) == 0)
     completeAccountPage(conn);
     return;
     }
+
+/* An address the user typed here must not be used to reach an account that already holds it.
+ * Typing an address someone else registered used to create a silent second account sharing it
+ * (#38341), which then makes both owners pick from a chooser on every later sign-in.  Send the
+ * user to a sign-in method that can actually show the address is theirs instead.  An address the
+ * provider released is not affected: resolveIdentity has already matched it against existing
+ * accounts and would not have sent us here.
+ * Only activated accounts count, the same rule resolveIdentity and chooseAccount apply: an
+ * unactivated row holds an address nobody ever proved they own, so letting one block a signup
+ * would let anyone reserve a stranger's address. */
+if (providerEmail == NULL)
+    {
+    char query[1024];
+    char *addrMatch = sqlAddressMatch(email);
+    sqlSafef(query, sizeof(query),
+        "SELECT count(*) FROM gbMembers WHERE %-s AND accountActivated='Y'", addrMatch);
+    freeMem(addrMatch);
+    if (sqlQuickNum(conn, query) > 0)
+        {
+        char buf[1024];
+        safef(buf, sizeof(buf),
+            "An account with this email address already exists. %s did not give us that address, "
+            "so we cannot tell that it is yours and cannot sign you in to that account. To reach "
+            "it, sign in with a provider that does give us your email address, or with your "
+            "username and password. To create a new account instead, enter a different email "
+            "address.", oauthProviderLabel(provider));
+        freez(&errMsg);
+        errMsg = cloneString(buf);
+        completeAccountPage(conn);
+        return;
+        }
+    }
+
 char *name = cartUsualString(cart, "oauth_pending_name", "");
 char *realName = isNotEmpty(name) ? name : user;
 
-/* The new account is created "activated" -- its email trusted for future auto-linking (see
- * resolveIdentity) -- only when the provider actually verified this address and the user kept
- * it unchanged.  If the address is unverified (the provider released none, e.g. ORCID, or the
- * user typed a different one), create the account inactive and send the usual confirmation
- * mail, so an unverified address can never be planted as a trusted one.  The user still signs
- * in now either way: their provider identity, not the email, is what logs them in. */
-char *verifiedEmail = cartUsualString(cart, "oauth_pending_email", "");
-boolean emailVerified = cartUsualBoolean(cart, "oauth_pending_email_verified", FALSE)
-                        && isNotEmpty(verifiedEmail) && sameString(email, verifiedEmail);
+/* The new account is created "activated" -- its address trusted for future auto-linking (see
+ * resolveIdentity) -- when the address came from the provider.  An address the user typed gets
+ * an inactive account and the usual confirmation mail, so a typed address can never be planted
+ * as a trusted one.  An install that sends no mail has no way to confirm anything, so there it
+ * is activated on the spot, the same compromise signup() makes. */
+boolean canMail = !sameWord(returnAddr, "NOEMAIL");
+boolean activateNow = (providerEmail != NULL) || !canMail;
 
 struct dyString *q = sqlDyStringCreate(
     "INSERT INTO gbMembers SET userName='%s', realName='%s', password='', email='%s', "
     "lastUse=NOW(), dateActivated=NOW(), accountActivated='%s'",
-    user, realName, emptyForNull(email), emailVerified ? "Y" : "N");
+    user, realName, emptyForNull(email), activateNow ? "Y" : "N");
 sqlUpdate(conn, dyStringContents(q));
 dyStringFree(&q);
 uint idx = sqlLastAutoId(conn);
@@ -2436,9 +2557,18 @@ pending.email = email;
 linkIdentity(conn, idx, &pending);
 
 clearPendingIdentity();
-if (!emailVerified)
-    setupNewAccount(conn, email, user);   // send confirmation mail for the unverified address
-loginAndReturn(conn, user, idx);
+if (activateNow)
+    {
+    loginAndReturn(conn, user, idx);
+    return;
+    }
+/* Unconfirmed address: send the confirmation mail and say so, rather than signing the user in
+ * and leaving a mail nobody has any reason to open.  Activating is what makes the address usable
+ * for signing in by email link and for linking a later social login, so it is worth a click. */
+setupNewAccount(conn, email, user);
+cartRemove(cart, "hgLogin_email");
+cartRemove(cart, "hgLogin_userName");
+redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
 void chooseAccountPage(struct sqlConnection *conn)
@@ -2612,19 +2742,25 @@ gbMembersFree(&m);
 
 static void resolveIdentity(struct sqlConnection *conn, struct oauthIdentity *id)
 /* Log in the user behind an authenticated provider identity:
- *  1. If the provider gave a verified email matching MORE THAN ONE account, always let the
+ *  1. If the provider released an email matching MORE THAN ONE account, always let the
  *     user pick which one -- even if this identity was linked before. Because login cookies
  *     never expire, a user goes through OAuth very rarely, so an occasional pick is cheap
  *     and it lets a person with several same-email accounts choose freely each time.
- *  2. Else if the (provider,subject) is already linked, log into that account.
- *  3. Else if the verified email matches exactly one account, auto-link and log in.
+ *  2. Else if the (provider,subject) is already linked, log into that account -- unless that
+ *     account is still waiting for its address to be confirmed, in which case send the user
+ *     back to their inbox rather than let them skip the confirmation forever.
+ *  3. Else if the email matches exactly one account, auto-link and log in.
  *  4. Else send the user to the "choose a username" page to finish a new account.
  * (Providers that don't release an email, e.g. ORCID, never reach step 1 or 3 and rely on
  *  the stored link from step 2.) */
 {
 struct gbMembers *matches = NULL;
 int n = 0;
-if (id->emailVerified && isNotEmpty(id->email))
+/* Any address the provider released counts here, whether or not it set email_verified -- see
+ * the note above oauthProviderEmail().  Requiring the flag would send every CILogon user
+ * to the "choose a username" page even when they already have an account with that address,
+ * which is how the duplicate accounts in #38341 got made. */
+if (isNotEmpty(id->email))
     {
     char query[1024];
     /* Match the provider email against the primary address and any confirmed recovery address,
@@ -2656,6 +2792,23 @@ struct gbMembers *linked = memberForIdentity(conn, id);
 if (linked != NULL)
     {
     linkIdentity(conn, linked->idx, id);
+    /* The provider identity is proven, but the address on the account may not be: when the
+     * provider released none (ORCID) the user typed it themselves, and completeAccount left the
+     * account unactivated until the mailed link is opened.  Signing in here would make that mail
+     * pointless -- the user would simply click the provider button again and never confirm -- so
+     * send them back to their inbox instead.  Mail a fresh link each time, because the first one
+     * expires after seven days and this is the only way to activate such an account.  An install
+     * that cannot send mail never creates an unactivated account here, but guard anyway rather
+     * than leave the user with nothing to click. */
+    if (!sameString(linked->accountActivated, "Y") && !sameWord(returnAddr, "NOEMAIL")
+        && isNotEmpty(linked->email))
+        {
+        setupNewAccount(conn, linked->email, linked->userName);
+        gbMembersFree(&linked);
+        gbMembersFreeList(&matches);
+        displayActMailSuccess();
+        return;
+        }
     loginAndReturn(conn, linked->userName, linked->idx);
     gbMembersFree(&linked);
     gbMembersFreeList(&matches);

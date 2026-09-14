@@ -143,7 +143,8 @@ grep -c FAIL download.log
 # The flag also moves the per-sample priorities, which is why they are assigned
 # from a running counter rather than a fixed index per data type.  With the flag
 # off the generated fiberSeq.ra is byte-identical to the version before the
-# nucleosome work, which is the check that the counter renumbers correctly.
+# nucleosome work, and with it on to the version that added it, which is the
+# check that the counter renumbers correctly either way.
 
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqCheck.sh /hive/data/genomes/hg38/bed/fiberSeq
 # no lines: all 492 files present, parsing and non-empty

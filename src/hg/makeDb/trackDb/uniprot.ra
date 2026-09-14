@@ -233,6 +233,18 @@ hideEmptySubtracks on
         filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
         mouseOver <b>UniProt record</b>: $uniProtId<br> <b>Position</b>: $position<br> <b>UniProt status</b>: $status
 
+        track unipSplice
+        shortLabel Splice Variants
+        longLabel UniProt Splice Variants
+        priority 14
+        parent uniprot
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl /gbdb/$D/uniprot/unipSplice.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#sequences" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+        mouseOver <b>UniProt record</b>: $uniProtId<br> <b>Position</b>: $position<br> <b>UniProt status</b>: $status
+
 searchTable unipAliSwissprot
 searchType bigBed
 searchDescription UniProt/SwissProt manually curated Proteins mapped to the genome by UCSC

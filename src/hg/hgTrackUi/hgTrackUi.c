@@ -2294,7 +2294,7 @@ jsInline(
 "    box.val('pack');\n"
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
-    oligoMatchVar, oligoMatchVar, 45, oligo);
+    oligoMatchVar, oligoMatchVar, 45, htmlEncode(oligo));   // cart value, encode it
 puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
 
@@ -2320,7 +2320,7 @@ jsInline(
 "    box.val('full');\n"
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
-    gcOnFlyWindowSize, gcOnFlySizeVar, 15, winSize);
+    gcOnFlyWindowSize, gcOnFlySizeVar, 15, htmlEncode(winSize));   // cart value, encode it
 jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
 /* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */

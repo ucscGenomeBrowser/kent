@@ -215,6 +215,17 @@ hideEmptySubtracks on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#Sequence_conflict_section" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
         filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
 
+        track unipSplice$VER
+        shortLabel Splice Variants
+        longLabel UniProt Splice Variants - $VER
+        priority 14
+        parent uniprot$VER off
+        visibility dense
+        type bigBed 12 +
+        bigDataUrl $VER/unipSplice.bb
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#sequences" pmids="https://www.ncbi.nlm.nih.gov/pubmed/$$"
+        filterValues.status Manually reviewed (Swiss-Prot),Unreviewed (TrEMBL)
+
 #searchTable unipAliSwissprot
 #searchType bigBed
 #searchDescription UniProt/SwissProt manually curated Proteins mapped to the genome by UCSC
