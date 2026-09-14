@@ -117,7 +117,7 @@ grep -c FAIL download.log
 # made from the first version of the track will not reproduce for this sample.
 
 # ---------------------------------------------------------------------------
-# Nucleosome density
+# Nucleosome density: mirrored, NOT displayed
 # ---------------------------------------------------------------------------
 
 # Sent separately in September 2026, as all.nucleosome.coverage.bw under the
@@ -128,10 +128,22 @@ grep -c FAIL download.log
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqDownload.sh \
     /hive/data/genomes/hg38/bed/fiberSeq 12 > download.nucleosome.log 2>&1
 
-# It is read depth, not a percentage, which makes it the one wiggle here that
-# cannot take fixed viewLimits: the genome-wide mean runs from 25 (PS00971) to
-# 142 (PM00001) with sequencing depth, and single loci reach 1.7e5.  Drawn with
-# autoScale on, so the axis is comparable within a sample and not between them.
+# The lab then asked us to hold the display back while they settle internally
+# on how they want nucleosomes shown, and to keep the track set on FIRE peaks
+# and CpG methylation.  So the files are mirrored and checked but no subtrack
+# is generated: INCLUDE_NUC in fiberSeqTrackDb.py is False.  Setting it True and
+# regenerating is the whole of turning it on, no download needed.
+#
+# What that flag builds, when the lab comes back: it is read depth, not a
+# percentage, which makes it the one wiggle here that cannot take fixed
+# viewLimits.  The genome-wide mean runs from 25 (PS00971) to 142 (PM00001) with
+# sequencing depth, and single loci reach 1.7e5, so it is drawn with autoScale
+# on and the axis is comparable within a sample but not between samples.
+#
+# The flag also moves the per-sample priorities, which is why they are assigned
+# from a running counter rather than a fixed index per data type.  With the flag
+# off the generated fiberSeq.ra is byte-identical to the version before the
+# nucleosome work, which is the check that the counter renumbers correctly.
 
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqCheck.sh /hive/data/genomes/hg38/bed/fiberSeq
 # no lines: all 492 files present, parsing and non-empty
@@ -212,7 +224,7 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 # ---------------------------------------------------------------------------
 
 # One script writes the whole track stanza plus the two faceted-composite
-# metadata and color files, so the 625 stanzas stay consistent:
+# metadata and color files, so the 584 stanzas stay consistent:
 
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqTrackDb.py
 
@@ -224,13 +236,14 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 # Structure:
 #   fiberSeq            container, group regulation
 #     fiberSeqAcc         multiWig overlay of 7 common cell lines, shown by default
-#     fiberSeqCompendium  faceted composite, 41 samples, seven data types:
-#                         acc, peaks, hap, nuc, cpg, cpgHap, cpgDiff
+#     fiberSeqCompendium  faceted composite, 41 samples, six data types:
+#                         acc, peaks, hap, cpg, cpgHap, cpgDiff
+#                         (a seventh, nuc, is built but held back: see below)
 #
 # Accessibility and methylation started as two composites, fiberSeqCompendium and
 # fiberSeqMeth, and were merged into one.  They cover the identical 41 samples,
 # and cartDump.c assigns priority with the data element as the OUTER loop and the
-# data type as the inner one, so a single composite keeps a sample's seven subtracks
+# data type as the inner one, so a single composite keeps a sample's six subtracks
 # contiguous in the image.  As two composites the display was an accessibility
 # block followed by a methylation block, so comparing the two assays for one
 # sample meant reading across every other sample - which is the whole point,

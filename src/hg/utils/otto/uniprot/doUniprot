@@ -1556,15 +1556,20 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
 
     # a wrapper, so the jobList line stays free of the redirection and quoting that
     # parasol's job parser does not accept
+    # Every path here has to be absolute. A parasol job runs with its working directory
+    # set to the batch directory, not to the directory the pipeline runs in, so a path
+    # like "fasta/7955.fa" simply does not exist from the job's point of view and miniprot
+    # exits without writing anything.
     jobSh = join(jobDir, "runMiniprot.sh")
     with open(jobSh, "w") as ofh:
         ofh.write("#!/bin/sh\nset -e\n")
-        ofh.write("%s -t %d --gff %s %s > $1\n" % (miniprotBin, miniprotThreads, genomeFa, protFa))
+        ofh.write("%s -t %d --gff %s %s > $1\n" % \
+                (miniprotBin, miniprotThreads, abspath(genomeFa), abspath(protFa)))
     os.chmod(jobSh, 0o755)
 
     jobList = join(jobDir, "jobList")
     with open(jobList, "w") as ofh:
-        ofh.write("%s {check out exists %s}\n" % (jobSh, gffName))
+        ofh.write("%s {check out exists %s}\n" % (abspath(jobSh), abspath(gffName)))
 
     logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg" % (db, miniprotThreads, ram))
     run("cd %s && para make -cpu=%d -ram=%dg jobList" % (jobDir, miniprotThreads, ram))

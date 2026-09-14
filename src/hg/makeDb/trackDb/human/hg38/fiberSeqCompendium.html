@@ -6,7 +6,7 @@ full Fiber-seq data for 41 samples: 14 cell lines and 27 lymphoblastoid
 lines derived from individuals sequenced by the Human Pangenome Reference Consortium and the
 Genome in a Bottle project. Chromatin accessibility and CpG methylation are read from the same
 molecules in the same experiment, so both are kept in one table here and can be compared without
-worrying about differences in cell preparation or sequencing depth. Seven kinds of data are
+worrying about differences in cell preparation or sequencing depth. Six kinds of data are
 available for each sample:
 </p>
 
@@ -18,8 +18,6 @@ available for each sample:
   <li>Haplotype accessibility: the percent-accessible signal computed separately for the two
       parental chromosomes and drawn as an overlay, which makes elements that are open on one
       chromosome but not the other visible directly.</li>
-  <li>Nucleosome density: the number of Fiber-seq molecules on which a position was called as
-      covered by a nucleosome, that is, the complement of the accessible signal.</li>
   <li>CpG methylation: percent of reads methylated at each CpG, over both chromosomes.</li>
   <li>Haplotype CpG: the same measure computed separately for the two parental chromosomes.</li>
   <li>CpG haplotype difference: the difference in percent methylation between the two
@@ -27,7 +25,7 @@ available for each sample:
 </ul>
 
 <p>
-Because 41 samples times seven kinds of data is far too many tracks for a checkbox list, samples
+Because 41 samples times six kinds of data is far too many tracks for a checkbox list, samples
 are chosen from a searchable table on this page. Pick the kinds of data you want along the top,
 then select samples in the table; the browser turns on that combination for every sample you
 picked, and keeps each sample's tracks together in the display. Sample class has filter
@@ -44,16 +42,6 @@ scale, so heights are comparable between samples and between the two assays. The
 tracks use maximum as the windowing function, so a narrow element survives zooming out, while
 the methylation tracks use mean, since an average is the meaningful summary for a methylation
 level. FIRE peaks are shown in dense mode by default, one row per sample.
-</p>
-
-<p>
-Nucleosome density is the exception to the fixed scale. It is a count of molecules rather than a
-percentage, so its height depends on how deeply the sample was sequenced: the genome-wide mean
-runs from 25 to 142 across these 41 samples, and a few loci reach into the hundred thousands.
-It is therefore drawn with autoscaling, each window scaled to its own highest value, and the
-numbers on the vertical axis are comparable within a sample but not between samples. Read it as
-the shape against the accessibility signal of the same sample, where a nucleosome-depleted region
-appears as a dip in this track under a peak in that one.
 </p>
 
 <p>
@@ -129,14 +117,6 @@ haplotype-phased; for GM12878 an average 20 kb read spans at least one heterozyg
 </p>
 
 <p>
-Nucleosomes were called on each individual molecule from the same adenine methylation pattern:
-a stretch of DNA long enough to wrap a nucleosome and carrying no methylation is inferred to
-have been protected by one, and the stretches between them are the methyltransferase-sensitive
-patches the FIRE classifier then scores. The nucleosome density track is the per-position count
-of molecules whose nucleosome call covers that position, so it is a read depth and not a rate.
-</p>
-
-<p>
 The FIRE pipeline v0.0.4, a Snakemake workflow, applied a semi-supervised XGBoost classifier to
 label methyltransferase-sensitive patches on each read as FIRE elements. The classifier was
 trained with Mokapot over 15 iterations on 21 GM12878 experiments spanning 5.8 to 13.3 percent
@@ -162,7 +142,7 @@ applied. See Vollger et al. for the full description of all of the above.
 <p>
 The bigWig and bigBed files were downloaded from
 <a href="https://s3.kopah.uw.edu/userprod/web/public/hashed.PacBio-Fiber-seq/" target="_blank">the
-Stergachis lab data server</a>, twelve files per sample. The signal files were copied without
+Stergachis lab data server</a>, eleven files per sample. The signal files were copied without
 modification. The peak files were rebuilt, because their bigBed header recorded three data
 columns while the data has the full ten of a narrowPeak file, which left the browser unable to
 see the signalValue and qValue columns for filtering or display. The rebuild corrects the header

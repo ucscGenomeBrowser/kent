@@ -44,6 +44,14 @@ DEFAULT_OVERLAY = [
 # ragged per-sample mix the source hub had.
 DEFAULT_SELECTED = ["PM00001", "PM00004", "PM00005"]
 
+# Nucleosome density is mirrored for all 41 samples but is not shown.  The lab
+# asked us to hold it back on 2026-09-14, while they settle internally on how
+# they want nucleosomes displayed, and to keep the track set on FIRE peaks and
+# CpG methylation for now.  The files stay in place and the download and check
+# scripts still fetch and verify them, so turning this back on is this one flag
+# plus a regenerate; nothing has to be downloaded again.
+INCLUDE_NUC = False
+
 HAP1_COLOR = "0,114,178"    # Okabe-Ito blue
 HAP2_COLOR = "213,94,0"     # Okabe-Ito vermillion
 
@@ -198,12 +206,12 @@ def accOverlay(gbdb, samples):
 
 
 def compendium(gbdb, dataUrlDir, samples):
-    """One faceted composite over all seven per-sample data types.
+    """One faceted composite over the per-sample data types.
 
     Accessibility and CpG methylation are read off the same molecules in the
     same experiment, so they belong in one table: the user picks a sample once,
     and cartDump.c assigns priority with the data element as the outer loop and
-    the data type as the inner one, which keeps a sample's seven subtracks
+    the data type as the inner one, which keeps a sample's subtracks
     contiguous in the image.  Split across two composites they would draw as an
     accessibility block followed by a methylation block, and comparing the two
     for one sample would mean reading across every other sample.
@@ -214,8 +222,12 @@ def compendium(gbdb, dataUrlDir, samples):
         "compositeTrack faceted",
         "type bigWig",
         "shortLabel Fiber-seq Compendium",
-        "longLabel Fiber-seq accessibility, peaks, nucleosomes and CpG "
-        "methylation in %d samples" % len(samples),
+        # Two literal wordings rather than one with a slot, to keep both under
+        # the 80 characters a longLabel should stay within.
+        ("longLabel Fiber-seq accessibility, peaks, nucleosomes and CpG "
+         "methylation in %d samples" % len(samples)) if INCLUDE_NUC else
+        ("longLabel Fiber-seq accessibility, FIRE peaks and CpG methylation "
+         "in %d samples" % len(samples)),
         "metaDataUrl %s/fiberSeqCompendium_metadata.tsv" % dataUrlDir,
         "colorSettingsUrl %s/fiberSeqCompendium_colors.json" % dataUrlDir,
         "primaryKey Accession",
@@ -223,8 +235,9 @@ def compendium(gbdb, dataUrlDir, samples):
         # subtracks within each sample.  No data type name may contain an
         # underscore: hgTrackUi globs "<composite>_*_<dataType>_sel".
         'dataTypes acc|"Percent accessible" peaks|"FIRE peaks" '
-        'hap|"Haplotype accessibility" nuc|"Nucleosome density" '
-        'cpg|"CpG methylation" '
+        'hap|"Haplotype accessibility" '
+        + ('nuc|"Nucleosome density" ' if INCLUDE_NUC else "")
+        + 'cpg|"CpG methylation" '
         'cpgHap|"Haplotype CpG" cpgDiff|"CpG haplotype difference"',
         "defaultSortField Accession",
         "defaultGroupBy sample",
@@ -245,8 +258,13 @@ def compendium(gbdb, dataUrlDir, samples):
         # order (Peaks, CpG, Acc).  Sample order outer and declared data type
         # order inner matches the row of checkboxes across the top of the table.
         # cartDump.c replaces these with its own priorities as soon as the user
-        # submits a selection, so this only sets the starting order.
-        pri = lambda j: "priority %d" % (i * 10 + j + 1)
+        # submits a selection, so this only sets the starting order.  A running
+        # counter rather than a fixed index per data type, so the numbering stays
+        # contiguous whether or not INCLUDE_NUC adds one in the middle.
+        priN = [0]
+        def pri():
+            priN[0] += 1
+            return "priority %d" % (i * 10 + priN[0])
 
         out += stanza(8, [
             "track fiberSeqCompendium_%s_acc" % acc,
@@ -263,7 +281,7 @@ def compendium(gbdb, dataUrlDir, samples):
             "windowingFunction maximum",
             "maxHeightPixels 100:40:8",
             "onlyVisibility full",
-            pri(0),
+            pri(),
         ])
 
         # bigNarrowPeak, so the point-source offset in the tenth column is drawn
@@ -290,7 +308,7 @@ def compendium(gbdb, dataUrlDir, samples):
             "mouseOver <b>%s FIRE peak</b><br>FIRE score: ${signalValue}"
             "<br>-log10 FDR: ${qValue}<br>Score: ${score}" % name,
             "onlyVisibility dense",
-            pri(1),
+            pri(),
         ])
 
         out += hapOverlay(gbdb, acc, name, "hap",
@@ -299,29 +317,31 @@ def compendium(gbdb, dataUrlDir, samples):
                           "%s Fiber-seq percent accessible, haplotype 1 (blue) "
                           "and 2 (orange)" % name,
                           "%s Fiber-seq percent accessible, haplotype" % name,
-                          "maximum", pri(2))
+                          "maximum", pri())
 
-        # Nucleosome density is read depth, not a percentage, so unlike every
-        # other wiggle here it cannot have fixed viewLimits: the per-sample mean
-        # runs from 25 (PS00971) to 142 (GM12878) purely with sequencing depth,
-        # and single loci spike into the hundred thousands.  autoScale per
-        # window is the only setting that shows all 41 samples usefully, and
-        # absolute values are not comparable between samples anyway.
-        out += stanza(8, [
-            "track fiberSeqCompendium_%s_nuc" % acc,
-            "parent fiberSeqCompendium off",
-            "type bigWig",
-            "bigDataUrl %s/%s/all.nucleosome.coverage.bw" % (gbdb, acc),
-            "shortLabel %s Nuc" % name,
-            "longLabel %s Fiber-seq nucleosome density, both haplotypes" % name,
-            "color 0,158,115",
-            "autoScale on",
-            "alwaysZero on",
-            "windowingFunction mean",
-            "maxHeightPixels 100:40:8",
-            "onlyVisibility full",
-            pri(3),
-        ])
+        # Held back, see INCLUDE_NUC.  Nucleosome density is read depth, not a
+        # percentage, so unlike every other wiggle here it cannot have fixed
+        # viewLimits: the per-sample mean runs from 25 (PS00971) to 142
+        # (GM12878) purely with sequencing depth, and single loci spike into the
+        # hundred thousands.  autoScale per window is the only setting that
+        # shows all 41 samples usefully, and absolute values are not comparable
+        # between samples anyway.
+        if INCLUDE_NUC:
+            out += stanza(8, [
+                "track fiberSeqCompendium_%s_nuc" % acc,
+                "parent fiberSeqCompendium off",
+                "type bigWig",
+                "bigDataUrl %s/%s/all.nucleosome.coverage.bw" % (gbdb, acc),
+                "shortLabel %s Nuc" % name,
+                "longLabel %s Fiber-seq nucleosome density, both haplotypes" % name,
+                "color 0,158,115",
+                "autoScale on",
+                "alwaysZero on",
+                "windowingFunction mean",
+                "maxHeightPixels 100:40:8",
+                "onlyVisibility full",
+                pri(),
+            ])
 
         out += stanza(8, [
             "track fiberSeqCompendium_%s_cpg" % acc,
@@ -336,7 +356,7 @@ def compendium(gbdb, dataUrlDir, samples):
             "windowingFunction mean",
             "maxHeightPixels 100:40:8",
             "onlyVisibility full",
-            pri(4),
+            pri(),
         ])
 
         out += hapOverlay(gbdb, acc, name, "cpgHap",
@@ -344,7 +364,7 @@ def compendium(gbdb, dataUrlDir, samples):
                           "%s CpG Hap1/2" % name,
                           "%s CpG methylation, haplotype 1 (blue) and 2 (orange)" % name,
                           "%s CpG methylation, haplotype" % name,
-                          "mean", pri(5))
+                          "mean", pri())
 
         out += stanza(8, [
             "track fiberSeqCompendium_%s_cpgDiff" % acc,
@@ -361,12 +381,13 @@ def compendium(gbdb, dataUrlDir, samples):
             "longLabel %s CpG methylation difference between haplotypes, "
             "by significance threshold" % name,
             "onlyVisibility full",
-            pri(6),
+            pri(),
         ])
         # Least significant first, so the more significant levels draw on top.
-        for i, (fname, label, color) in enumerate(DIFF_LEVELS):
+        # Not "i": that is the sample index pri() builds its priority from.
+        for level, (fname, label, color) in enumerate(DIFF_LEVELS):
             out += stanza(12, [
-                "track fiberSeqCompendium_%s_cpgDiff_l%d" % (acc, i),
+                "track fiberSeqCompendium_%s_cpgDiff_l%d" % (acc, level),
                 "parent fiberSeqCompendium_%s_cpgDiff" % acc,
                 "type bigWig",
                 "bigDataUrl %s/%s/%s" % (gbdb, acc, fname),
@@ -449,9 +470,9 @@ def main():
         f.write(accOverlay(args.gbdb_dir, samples))
         f.write(compendium(args.gbdb_dir, args.gbdb_dir, samples))
 
-    # Per sample: acc, peaks, nuc, cpg, three container stanzas (hap, cpgHap,
-    # cpgDiff) and their 2 + 2 + 4 children.
-    nSub = len(DEFAULT_OVERLAY) + len(samples) * (4 + 3 + 8)
+    # Per sample: acc, peaks, cpg (plus nuc when enabled), three container
+    # stanzas (hap, cpgHap, cpgDiff) and their 2 + 2 + 4 children.
+    nSub = len(DEFAULT_OVERLAY) + len(samples) * (3 + int(INCLUDE_NUC) + 3 + 8)
     print("wrote %s" % raPath)
     print("  %d samples, %d track stanzas" % (len(samples), nSub + 3))
     print("  metadata and colors in %s" % args.data_dir)
