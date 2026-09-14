@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+""" convert a miniprot GFF3 to a PSL of protein-to-genome alignments.
+
+    miniprotToPsl <miniprot.gff> <protein.fa> <out.psl>
+
+The PSL has the protein as the query, with all query coordinates in nucleotide units,
+i.e. qSize is three times the length of the protein. That is the convention the rest of
+the uniprot pipeline works in: it is what "blat -q=prot -t=dnax | pslProtCnv" used to
+produce, and what the annotation lift needs, since it maps annotations given in protein
+coordinates through this alignment.
+
+Why not the obvious routes:
+ - pafToPsl rejects miniprot's CIGAR, which is splice aware and uses operators (N, U, V,
+   F) that a plain PAF converter does not know.
+ - going through gff3ToGenePred and genePredToFakePsl makes the query the transcript
+   implied by the alignment, so qSize ends up being the aligned CDS length rather than
+   the length of the protein. Measured on zebrafish, that was wrong for 95% of
+   alignments: 79% out by exactly one codon, the trailing stop, and 16% out by other
+   amounts where miniprot aligned only part of the protein.
+
+Every CDS line of a miniprot GFF carries its own "Target=<acc> <start> <end>" giving the
+protein range that block covers, so the alignment can be reconstructed exactly.
+"""
+import sys, re
+from os.path import basename
+
+def readProtLens(faFname):
+    " accession -> length in amino acids "
+    lens = {}
+    name, n = None, 0
+    for line in open(faFname):
+        if line.startswith(">"):
+            if name:
+                lens[name] = n
+            name, n = line[1:].split()[0], 0
+        else:
+            n += len(line.strip())
+    if name:
+        lens[name] = n
+    return lens
+
+targetRe = re.compile(r"Target=(\S+) (\d+) (\d+)")
+parentRe = re.compile(r"Parent=([^;]+)")
+idRe = re.compile(r"ID=([^;]+)")
+
+def readGff(gffFname):
+    """ yield one alignment per mRNA, as (acc, chrom, strand, blocks), where blocks are
+    (protStart, protEnd, genomeStart, genomeEnd), protein coordinates 1-based inclusive
+    and genome coordinates as they appear in the GFF
+    """
+    mrnas = {}   # id -> (acc, chrom, strand)
+    blocks = {}  # id -> list of blocks
+    order = []
+    for line in open(gffFname):
+        if line.startswith("#"):
+            continue
+        f = line.rstrip("\n").split("\t")
+        if len(f) < 9:
+            continue
+        chrom, feat, start, end, strand, attrs = f[0], f[2], int(f[3]), int(f[4]), f[6], f[8]
+        if feat == "mRNA":
+            m, t = idRe.search(attrs), targetRe.search(attrs)
+            if not m or not t:
+                continue
+            mrnas[m.group(1)] = (t.group(1), chrom, strand)
+            blocks[m.group(1)] = []
+            order.append(m.group(1))
+        elif feat == "CDS":
+            p, t = parentRe.search(attrs), targetRe.search(attrs)
+            if not p or not t or p.group(1) not in blocks:
+                continue
+            blocks[p.group(1)].append((int(t.group(2)), int(t.group(3)), start, end))
+
+    for mid in order:
+        if blocks[mid]:
+            acc, chrom, strand = mrnas[mid]
+            yield acc, chrom, strand, blocks[mid]
+
+def makePsl(acc, chrom, strand, blocks, protLen, chromSize):
+    """ build one PSL row, query coordinates in nucleotide units.
+
+    On the minus strand miniprot lists the blocks in protein order, which is descending
+    genomic order. A PSL always lists blocks in ascending target order, and when the
+    strand is '-' the query starts are given on the reverse complemented query, so both
+    have to be converted here.
+    """
+    rc = (strand == "-")
+    # ascending target order, which for the minus strand means reversing miniprot's list
+    blocks = sorted(blocks, key=lambda b: b[2])
+
+    blockSizes, qStarts, tStarts = [], [], []
+    matches = 0
+    for pStart, pEnd, gStart, gEnd in blocks:
+        aaLen = pEnd - pStart + 1
+        size = 3 * aaLen
+        # a block's genomic span can be shorter than 3*aaLen when miniprot placed a
+        # frameshift inside it; trust the genome span, it is what the target coordinates
+        # have to agree with
+        size = min(size, gEnd - gStart + 1)
+        if size <= 0:
+            continue
+        qs = 3 * (protLen - pEnd) if rc else 3 * (pStart - 1)
+        blockSizes.append(size)
+        qStarts.append(qs)
+        tStarts.append(gStart - 1)
+        matches += size
+
+    if not blockSizes:
+        return None
+
+    # gap counts have to agree with the blocks or pslCheck rejects the row
+    qNumInsert = qBaseInsert = tNumInsert = tBaseInsert = 0
+    for i in range(1, len(blockSizes)):
+        qGap = qStarts[i] - (qStarts[i-1] + blockSizes[i-1])
+        if qGap > 0:
+            qNumInsert += 1
+            qBaseInsert += qGap
+        tGap = tStarts[i] - (tStarts[i-1] + blockSizes[i-1])
+        if tGap > 0:
+            tNumInsert += 1
+            tBaseInsert += tGap
+
+    # Derive the overall ranges from the blocks that were actually emitted, not from the
+    # protein ranges in the GFF. A block clamped above, where miniprot put a frameshift
+    # inside it, is shorter than its protein range implies, and pslCheck compares these
+    # against the blocks.
+    qSize = 3 * protLen
+    blockLo = min(qStarts)
+    blockHi = max(qStarts[i] + blockSizes[i] for i in range(len(blockSizes)))
+    # the block starts are on the reverse complemented query when the strand is '-', but
+    # qStart and qEnd are always given in forward query coordinates
+    if rc:
+        qStart, qEnd = qSize - blockHi, qSize - blockLo
+    else:
+        qStart, qEnd = blockLo, blockHi
+    tStart = tStarts[0]
+    tEnd = tStarts[-1] + blockSizes[-1]
+
+    row = [matches, 0, 0, 0, qNumInsert, qBaseInsert, tNumInsert, tBaseInsert,
+           "-" if rc else "+",
+           acc, qSize, qStart, qEnd,
+           chrom, chromSize, tStart, tEnd,
+           len(blockSizes),
+           ",".join(str(x) for x in blockSizes) + ",",
+           ",".join(str(x) for x in qStarts) + ",",
+           ",".join(str(x) for x in tStarts) + ","]
+    return "\t".join(str(x) for x in row)
+
+def main():
+    if len(sys.argv) != 5:
+        sys.stderr.write("usage: %s <miniprot.gff> <protein.fa> <chrom.sizes> <out.psl>\n" % basename(sys.argv[0]))
+        sys.exit(1)
+    gffFname, faFname, chromSizesFname, outFname = sys.argv[1:5]
+
+    protLens = readProtLens(faFname)
+    chromSizes = {}
+    for line in open(chromSizesFname):
+        f = line.split()
+        if len(f) >= 2:
+            chromSizes[f[0]] = int(f[1])
+
+    written, skipped = 0, 0
+    with open(outFname, "w") as ofh:
+        for acc, chrom, strand, blocks in readGff(gffFname):
+            if acc not in protLens:
+                skipped += 1
+                continue
+            if chrom not in chromSizes:
+                skipped += 1
+                continue
+            row = makePsl(acc, chrom, strand, blocks, protLens[acc], chromSizes[chrom])
+            if row is None:
+                skipped += 1
+                continue
+            ofh.write(row + "\n")
+            written += 1
+
+    sys.stderr.write("miniprotToPsl: wrote %d alignments, skipped %d\n" % (written, skipped))
+
+main()

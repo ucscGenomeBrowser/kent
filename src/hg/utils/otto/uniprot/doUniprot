@@ -1600,39 +1600,15 @@ def miniprotProteins(fullFaFname, db, mapFname, stats):
     runMiniprotOnCluster(db, genomeFa, fullFaFname, gffName, workDir)
     os.remove(genomeFa)
 
-    # Name each alignment after the UniProt accession it came from. miniprot calls them
-    # MP000001 and puts the accession in Target=, and its ##PAF meta lines and capitalised
-    # attributes make gff3ToGenePred unhappy, so both are cleaned up here. The ID has to
-    # stay unique for GFF3, hence the .N suffix, which comes off again after the
-    # conversion so that qName is the bare accession.
-    namedName = join(workDir, "named.gff")
-    cmd = """awk -F'\\t' -v OFS='\\t' '
-      /^##PAF/ {next}
-      /^#/     {print; next}
-      $3=="mRNA" {
-          id=""; acc=""
-          if (match($9, /ID=[^;]+/))      id  = substr($9, RSTART+3, RLENGTH-3)
-          if (match($9, /Target=[^ ;]+/)) acc = substr($9, RSTART+7, RLENGTH-7)
-          if (id!="" && acc!="") { map[id]=acc; $9 = "ID=" acc "." (++n[acc]) }
-          print; next
-      }
-      { if (match($9, /Parent=[^;]+/)) {
-            p = substr($9, RSTART+7, RLENGTH-7)
-            if (p in map) $9 = "Parent=" map[p] "." n[map[p]]
-        }
-        print
-      }' %s > %s""" % (gffName, namedName)
-    run(cmd)
-
-    gpName = join(workDir, "miniprot.gp")
-    run(["gff3ToGenePred", "-warnAndContinue", "-maxParseErrors=-1", "-maxConvertErrors=-1",
-         namedName, gpName])
-    run("""awk -F'\\t' -v OFS='\\t' '{sub(/\\.[0-9]+$/, "", $1); print}' %s > %s.acc""" % (gpName, gpName))
-
-    cdsName = join(workDir, "miniprot.cds")
+    # miniprot's GFF carries, on every CDS block, the protein range that block covers, so
+    # the alignment can be turned into a PSL exactly. Going via gff3ToGenePred and
+    # genePredToFakePsl instead makes the query the transcript implied by the alignment,
+    # which gives a qSize of the aligned CDS length rather than of the protein, and the
+    # annotation lift needs the protein. refs #38300
+    myDir = dirname(__file__)
     chromSizes = join(workDir, "chrom.sizes")
     run("twoBitInfo %s %s" % (twoBitFname(db), chromSizes))
-    run(["genePredToFakePsl", "-chromSize=%s" % chromSizes, "noDb", gpName+".acc", mapFname, cdsName])
+    run([join(myDir, "miniprotToPsl"), gffName, fullFaFname, chromSizes, mapFname])
 
     alnCount = len(open(mapFname).readlines())
     logging.info("%s: miniprot aligned the UniProt proteins to %d genomic locations" % (db, alnCount))
