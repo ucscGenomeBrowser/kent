@@ -1023,7 +1023,7 @@ genArkGeneSources = [
 # Augustus is deliberately not in that list. It is an ab initio prediction, so mapping
 # UniProt through it stacks its errors on top of ours; aligning the proteins straight to
 # the genome with miniprot is better and much faster than the old BLAT protein search.
-miniprotBin = "/hive/data/outside/otto/uniprot/bin/miniprot"
+miniprotBin = "/cluster/bin/x86_64/miniprot"
 miniprotThreads = 16
 
 def miniprotVersion():
