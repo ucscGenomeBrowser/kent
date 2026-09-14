@@ -1,0 +1,63 @@
+# One study's configuration page: the five views, the experiment x view matrix, and the
+# state MethBase leaves three of its five data types in.
+#
+# A MethBase study is a composite with two subgroups -- `view` (CpG methylation, HMR, AMR,
+# PMD, CpG reads) and `experiment` (one SRX accession per run) -- and `dimensions dimX=view
+# dimY=experiment`, so hgTrackUi draws it as a matrix.  SRP007400 is the smallest of the
+# two studies the hub turns on by itself: three experiments, five views, fifteen cells.
+#
+# THE ASSERTION THAT IS WORTH SOMETHING is the last one.  Of the five views, the hub ships
+# `sym` full and `HMR` dense; `AMR`, `PMD` and `coverage` are hidden.  hgTrackUi renders a
+# hidden view's subtrack checkboxes DISABLED, with `title='view is hidden'`, so the three
+# data types most people have never seen are not merely off -- they cannot be turned on
+# from the matrix at all.  Setting the view's own dropdown is the only way, and Docent has
+# no verb that drives a select, which is why no script here turns a hidden view on.
+#
+# It was worth writing down because clicking the matrix column button for a hidden view
+# LOOKS like it works: `#btn_plus_v3pmd_all_left_top` checks the boxes, Submit is accepted,
+# and no PMD row is drawn.  Measured on the RR 2026-09-14.
+#
+# Everything here is named by class or by a subgroup tag (`v1hmr`, `A00000`), never by a
+# `hub_<n>_` id.  A00000 is the first entry of `subGroup2 experiment`, which is SRX081759;
+# if the hub ever reorders the subgroup, the checkbox that comes back is a different
+# experiment's and mbSubtracks -- which asserts by track name -- is what will say so.
+
+target: rr
+db: hg38
+position: chr15:24950000-24960000
+reset: true
+fast: true
+steps:
+  - go: chr15:24950000-24960000
+  - hide: all
+  - hub: {url: "http://smithlab.usc.edu/trackdata/methylation/hub.txt", db: hg38}
+  - go: chr15:24950000-24960000
+  - click: 'a.trackLink[data-track$="Human_methylome_studies"]'
+  - click: 'a[href*="hgTrackUi"][href*="SRP007400"]'
+
+  - expect:
+      url: "hgTrackUi"
+      text: "Select subtracks by views and experiment"
+      noText: "Can't find"
+      has:
+        - 'table.greenBox.matrix'
+        - 'select.viewDD.v4sym'
+        - 'select.viewDD.v1hmr'
+        - 'select.viewDD.v2amr'
+        - 'select.viewDD.v3pmd'
+        - 'select.viewDD.v5coverage'
+        - '#btn_plus_A00000_all_left_bottom'
+        - '#btn_minus_v1hmr_all_left_top'
+
+  # The study's own title, from the hub, so this is SRP007400's page and not a page.
+  - expect: {text: "Sperm methylation profiles reveal features of epigenetic inheritance"}
+
+  # The two views the hub ships visible are live; the three it hides are disabled with
+  # hgTrackUi's own reason on them.
+  - expect:
+      has:
+        - 'input.subCB.v4sym.A00000:not(.disabled)'
+        - 'input.subCB.v1hmr.A00000:not(.disabled)'
+        - 'input.subCB.v2amr.A00000.disabled[title="view is hidden"]'
+        - 'input.subCB.v3pmd.A00000.disabled[title="view is hidden"]'
+        - 'input.subCB.v5coverage.A00000.disabled[title="view is hidden"]'

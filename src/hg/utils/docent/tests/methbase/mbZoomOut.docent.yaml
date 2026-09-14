@@ -1,0 +1,48 @@
+# The same four rows as mbSignal, at chromosome scale, where a different half of each
+# remote file answers.
+#
+# A bigWig or bigBed serves a 10 kb window out of its primary data and a 100 Mb window out
+# of its zoom levels, which are a separate part of the file reached by a separate range
+# request.  MethBase's files live on smithlab.usc.edu and are fetched at render time, so
+# "MethBase works" measured only at SNRPN says nothing about whether chr15 whole draws --
+# and whole-chromosome is not a corner case for this hub: MethBase measures partially
+# methylated domains at megabase scale, and a user who searches for a gene and then
+# zooms out is at this scale in two clicks.
+#
+# `noText: "Too Long"` is here for the same reason ../urllen has it.  This hub carries
+# 33,270 tracks on hg38 and every navigation sends the cart's track variables in the URL;
+# an Apache 414 comes back as a perfectly good-looking page with no image on it, so the
+# check has to name the text rather than trust the render.
+#
+# THE COLOR CHECKS DIFFER FROM mbSignal's ON PURPOSE.  Over 100 Mb the ASM and CpG rows are
+# mostly their own black labels and axis marks -- ASM measured 0,0,0 at 97% and its own red
+# at 1% on 2026-09-14 -- so `is:` on the data color would be asserting something that is
+# not true of those two rows at this scale.  They keep `not:` alone, which is the check
+# that matters: a file whose zoom levels did not answer is the 240,240,180 warning bar
+# across the whole row, and that is dominant.  The two rows whose data does dominate keep
+# both.
+
+target: rr
+db: hg38
+position: chr15:24950000-24960000
+reset: true
+fast: true
+steps:
+  - go: chr15:24950000-24960000
+  - hide: all
+  - hub: {url: "http://smithlab.usc.edu/trackdata/methylation/hub.txt", db: hg38}
+  - go: chr15
+
+  - expect:
+      rows: [asm, cpgs, SRP007400_SRX081759_sym, SRP007400_SRX081759_HMR,
+             SRP008144_SRX096518_sym, SRP008144_SRX096518_HMR]
+      noText: "Too Long"
+      height: "<1200"
+
+  - expect:
+      color:
+        - {track: SRP007400_SRX081759_sym, is: "255,153,0",  not: "240,240,180"}
+        - {track: SRP007400_SRX081759_HMR, is: "56,113,193", not: "240,240,180"}
+        - {track: SRP008144_SRX096518_sym, is: "255,153,0",  not: "240,240,180"}
+        - {track: asm,                                       not: "240,240,180"}
+        - {track: cpgs,                                      not: "240,240,180"}

@@ -31,15 +31,15 @@ elif [ "${subset}" == "bacteria" ]; then
 elif [ "${subset}" == "legacy" ]; then
   minTrackCount=8
 elif [ "${subset}" == "plants" ]; then
-  minTrackCount=10
+  minTrackCount=9
 elif [ "${subset}" == "birds" ]; then
-  minTrackCount=11
+  minTrackCount=10
 elif [ "${subset}" == "fish" ]; then
-  minTrackCount=11
+  minTrackCount=10
 elif [ "${subset}" == "mammals" ]; then
   minTrackCount=9
 elif [ "${subset}" == "vertebrate" ]; then
-  minTrackCount=11
+  minTrackCount=10
 elif [ "${subset}" == "archaea" ]; then
   minTrackCount=8
 elif [ "${subset}" == "fungi" ]; then

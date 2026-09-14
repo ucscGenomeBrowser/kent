@@ -1,0 +1,49 @@
+# The container page for Human methylome studies: 511 study composites on one hgTrackUi
+# page, reached the way a user reaches it.
+#
+# This is the page that decides whether MethBase is usable at all.  Nobody scrolls 511
+# studies in the track list, and Docent has no verb that types into a search box, so the
+# route here is the one hgTracks offers: the track group listing at the bottom of the
+# browser page carries `<a class='trackLink' data-track='hub_<n>_Human_methylome_studies'>`,
+# and the selector matches on the SUFFIX of that attribute.  That matters -- every id on a
+# hub page carries a per-hub `hub_<n>_` prefix, and writing the number into a test is how
+# a script starts measuring nothing the day the number changes.  Nothing here names it.
+#
+# The page is 824 kB of HTML as of 2026-09-14.  It is the single most expensive thing the
+# RR does with MethBase, so it is worth having one script that only opens it.
+#
+# `text:` first and `has:` second, deliberately.  hgTrackUi draws no track image, so a
+# crash hands the browser an empty document where every `noHas:` and every `noText:`
+# passes; a positive text check is what tells an empty page from a rendered one (see
+# ../regress/README.txt on the hgTrackUi batch).  The two ids are the superTrack
+# visibility controls, which is what this page is FOR.
+#
+# The study named at the end is SRP000941, the Roadmap reference epigenome set -- a
+# long-standing entry, chosen because a study added or dropped by a hub update must not
+# turn this red.  It is 78 studies down the alphabetical list, so it also says the page
+# was written out whole rather than truncated.
+
+target: rr
+db: hg38
+position: chr15:24950000-24960000
+reset: true
+fast: true
+steps:
+  - go: chr15:24950000-24960000
+  - hide: all
+  - hub: {url: "http://smithlab.usc.edu/trackdata/methylation/hub.txt", db: hg38}
+  - go: chr15:24950000-24960000
+
+  - click: 'a.trackLink[data-track$="Human_methylome_studies"]'
+  - expect:
+      url: "hgTrackUi"
+      text: "Human methylome studies tracks"
+      noText: "Can't find"
+      has:
+        - '#superVizApplyAllButton'
+        - 'select#superSubViz'
+
+  # The children really reached the page, one of them by name and by description.
+  - expect:
+      text: "UCSD Human Reference Epigenome Mapping Project"
+      has: 'a[href*="hgTrackUi"][href*="SRP000941"]'
