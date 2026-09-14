@@ -145,15 +145,6 @@ grep -c FAIL download.log
 # off the generated fiberSeq.ra is byte-identical to the version before the
 # nucleosome work, and with it on to the version that added it, which is the
 # check that the counter renumbers correctly either way.
-#
-# Where to find this change in git: the commits are
-#   d07356d7640  the PM00001 reissue and the nucleosome track
-#   75e82896028  this hold-back
-# The second one reads "uniprot otto: the miniprot cluster job needs absolute
-# paths".  Two sessions were committing in the same working copy at the same
-# time, and the other one picked up these four files out of the shared index
-# before its own commit.  It was pushed that way, so the message stands; go by
-# the file list, not the subject, when reading back through the log here.
 
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqCheck.sh /hive/data/genomes/hg38/bed/fiberSeq
 # no lines: all 492 files present, parsing and non-empty
