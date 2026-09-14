@@ -59,6 +59,47 @@ boolean snapshotIsSnapshotName(char *sessionName)
 return sessionName != NULL && startsWith(snapshotNamePrefix, sessionName);
 }
 
+char *snapshotTypeFromSettings(char *settings)
+/* See snapshotSession.h.  Reads the one tag by walking the lines rather than calling
+ * raFromString(): this runs once per row in the My Sessions listings, and building a hash there
+ * costs ~600ns and three allocations per session that has any settings at all, against ~30ns and
+ * none for the walk.  Same line semantics as raFromString - leading blanks skipped, tag is the
+ * first word, value is the rest of the line. */
+{
+if (isEmpty(settings))
+    return NULL;
+int tagLen = strlen(snapshotTypeSetting);
+char *s = settings;
+while (s != NULL && s[0] != '\0')
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == '\0')
+        break;
+    if (startsWith(snapshotTypeSetting, s) && (s[tagLen] == ' ' || s[tagLen] == '\t'))
+        {
+        char *val = skipLeadingSpaces(s + tagLen);
+        char *lineEnd = strchr(val, '\n');
+        char *type = (lineEnd != NULL) ? cloneStringZ(val, lineEnd - val) : cloneString(val);
+        if (isEmpty(type))
+            freez(&type);
+        return type;
+        }
+    s = strchr(s, '\n');
+    if (s != NULL)
+        s++;
+    }
+return NULL;
+}
+
+boolean snapshotIsSnapshotSettings(char *settings)
+/* See snapshotSession.h. */
+{
+char *type = snapshotTypeFromSettings(settings);
+boolean isSnapshot = (type != NULL);
+freez(&type);
+return isSnapshot;
+}
+
 static char *snapshotSessionDirHashLen(char *sessionDataDir, char *encUserName,
                                        char *encSessionName, int hashLen)
 /* Alloc and return the durable data directory for one snapshot, or NULL if sessionDataDir is empty.
@@ -206,9 +247,12 @@ sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName='%s' AND sessionName='%s'",
                   namedSessionTable, encUserName, encSessionName);
 sqlUpdate(conn, dy->string);
 
-/* settings records the snapshot type, so the row is self-describing for reconstruction/debugging. */
+/* settings records the snapshot type, so the row is self-describing for reconstruction/debugging.
+ * This is also what marks the row as a share token rather than a session the user saved: the
+ * "__" name prefix cannot say that, because a user may have named a session of their own that way
+ * (refs #38313). */
 char settings[256];
-safef(settings, sizeof settings, "snapshotType %s\n", type->name);
+safef(settings, sizeof settings, "%s %s\n", snapshotTypeSetting, type->name);
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy,

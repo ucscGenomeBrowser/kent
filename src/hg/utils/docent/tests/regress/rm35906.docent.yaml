@@ -1,0 +1,44 @@
+# #35906 -- the "Clear filters" button on hgTrackUi looked like it worked and did not.  It
+# set every filter dropdown to All on screen, and a Submit saved nothing: the track came
+# back with its old filters, and for the gnomAD v4.1 track Jairo reported an empty view.
+#
+# The dropdowns are the dropdownchecklist widget, which draws its own checkboxes over a
+# hidden <select> and syncs the two.  e4d45c038f7 adds the line the clear path was missing:
+#
+#     self.sourceSelect.trigger("change", 'ddcl_internal');
+#
+# so the real select is told as well, and a Submit has something to save.
+#
+# That is why this script submits and comes back.  The bug is invisible on the page where
+# the button is clicked -- the checkboxes all read All either way -- and only the round
+# trip through the cart can tell the two builds apart.  The assertion is on the SELECTED
+# attribute the server writes into the reloaded page, which is the cart's own answer.
+#
+# gnomAD v4.1.1 Genomes is the ticket's track.  Its FILTER dropdown comes up on PASS from
+# trackDb rather than on All, which is what makes it a filter worth clearing: a field that
+# already reads All would pass this test on any build.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from e4d45c038f7, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43045295
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV4_1"
+  - expect:
+      has:
+        - '#filterClearButton'
+        - 'select[name="gnomadGenomesVariantsV4_1.filterBy.FILTER"]'
+      noHas: 'select[name="gnomadGenomesVariantsV4_1.filterBy.FILTER"] option[value="All"][selected]'
+
+  - click: '#filterClearButton'
+  - click: '#Submit'
+
+  # Back to the settings page, which is now reading the cart rather than the trackDb
+  # default.  On the build this was filed against the FILTER dropdown came back on PASS.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=gnomadGenomesVariantsV4_1"
+  - expect:
+      has: 'select[name="gnomadGenomesVariantsV4_1.filterBy.FILTER"] option[value="All"][selected]'
+      text: "gnomAD v4.1.1 Genomes"

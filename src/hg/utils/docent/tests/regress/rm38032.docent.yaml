@@ -1,0 +1,53 @@
+# #38032 -- tracks came out on the target assembly in a different order than they had on
+# the source.  Lifting the ClinVar container swapped the copy-number row and the
+# submitted-interpretations row, and a track lifted in a later request always sorted below
+# one lifted earlier no matter where it sat on the source.
+#
+# Two commits, and the second is the one this asserts.  cdb3401bc60 stopped the hub writer
+# handing out a counter in walk order and carried each track's source priority into its hub
+# stanza instead.  That was not enough: c2f76c53033 found that trackHubAddGroupName rewrites
+# every hub track's group to the hub's own name, so all lifted tracks land in one QuickLift
+# group and priorities from different source groups are then compared against each other.
+# Its example is the pair used here -- MANE is priority 100 in the genes group and
+# wgEncodeRegDnaseWig is 1.8 in regulation, the group puts MANE on top on hg38, and the raw
+# priority put it at the bottom on the target.  The fix writes each track's RANK in the list
+# the caller has already sorted, so the target orders on how the source is laid out.
+#
+# `ordered: true` was added to expect: for this bug (074123ba2fb), and this is the first
+# script to use it.  The two tracks are asserted in order on the source first, because
+# "the target matches the source" is only a claim about the target if the source order is
+# stated rather than assumed.
+#
+# `hideDefaults: true` on the convert keeps hs1's own default tracks off the target, so
+# `exact: true` can say the target holds these two and the chain and nothing else.  See
+# rm37815, which is about that checkbox.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from c2f76c53033, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+
+  # wgEncodeReg is a superTrack: hideKids keeps its other members off so the regulation
+  # side of the pair is one row.
+  - track: {mane: pack, wgEncodeReg: hideKids, wgEncodeRegDnaseWig: full}
+  - expect:
+      rows: [ruler, mane, wgEncodeRegDnaseWig]
+      ordered: true
+      exact: true
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+
+  # The same two, the same way up.  The synthetic Alignment Differences track
+  # (quickLiftChain) is added by hubConnect at the top and is not part of the source order.
+  - expect:
+      rows: [ruler, quickLiftChain, mane, wgEncodeRegDnaseWig]
+      ordered: true
+      exact: true
+      noText: "Warning/Error"

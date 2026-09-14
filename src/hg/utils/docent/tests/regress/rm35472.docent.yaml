@@ -1,0 +1,57 @@
+# #35472 -- "hide empty subtracks" counted items in one window only, so in multi-region a
+# subtrack with items in the second window was hidden as empty.  Lou reported it against
+# the GRC Patches composite: the haplotype subtrack disappeared even though it had an item
+# on screen, and scrolling right past the multi-region boundary brought it back.
+#
+# Galt's fix, 9038f4eb685 (2025-06-27), replaced the count with a walk over the windows:
+#
+#     boolean anyWindowHaveItems(struct track *track)
+#     for(;track;track=track->nextWindow)
+#         if (slCount(track->items) > 0) return TRUE;
+#
+# in checkHideEmptySubtracks()'s caller, hg/hgTracks/hgTracks.c.  His commit message says
+# the bug had been there since the feature was added.
+#
+# The recipe is built rather than loaded from the ticket's session, because what it needs
+# is one composite with hideEmptySubtracks and two regions chosen so that each subtrack is
+# empty in one of them.  The Problematic Regions composite on hg38 (`hideEmptySubtracks
+# on` in hg38/problematic.ra) gives that without any fixture of our own:
+#
+#     chr1:144,874,354-144,875,080   comments has an item, encBlacklist does not
+#     chr1:91,386,300-91,388,400     encBlacklist has one, comments does not
+#     grcExclusions                  has no item in either -- it has no chr1 at all
+#
+# so after the fix the two-window view draws BOTH, and grcExclusions is still hidden.
+# That third row is what makes this a test of the fix rather than of the feature being
+# switched off: a build that simply stopped hiding anything would draw grcExclusions too
+# and fail the noRows: below.
+#
+# The single-window step comes first for the same reason.  It pins that the feature is
+# doing its work at all -- with one window, encBlacklist IS empty and IS hidden -- so a
+# server with `problematic.hideEmptySubtracks` off could not pass this script.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 9038f4eb685, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:144874354-144875080
+reset: true
+fast: true
+steps:
+  # One window, over the region only `comments` has an item in.  hideEmptySubtracks is on
+  # by default for this composite, so the other two subtracks are hidden even though all
+  # three are selected.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A144874354-144875080&pix=1100&hideTracks=1&problematicSuper=show&problematic=pack&comments=pack&comments_sel=1&encBlacklist=pack&encBlacklist_sel=1&grcExclusions=pack&grcExclusions_sel=1&problematic.hideEmptySubtracks=on"
+  - expect:
+      rows: [ruler, comments]
+      exact: true
+      noRows: [encBlacklist, grcExclusions]
+
+  # Both regions as custom regions.  Each subtrack is empty in one window and not in the
+  # other, which is the case the old count got wrong.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr1%20144874354%20144875080%0Achr1%2091386300%2091388400%0A"
+  - expect:
+      rows: [ruler, comments, encBlacklist]
+      exact: true
+      noRows: [grcExclusions]
+      has: '#hgTracksConfigMultiRegionPage.pressed'

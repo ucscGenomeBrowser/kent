@@ -1,0 +1,50 @@
+# #38146 -- a quickLift whose SOURCE is a GenArk assembly worked, but clicking either of
+# the alignment links on the difference track errored with
+#
+#     Couldn't connect to database 'GCA_002844635.1' on 'localhost' as hguser.
+#     Unknown database 'GCA_002844635.1'
+#
+# Something took the GenArk accession for a MySQL database name instead of a hub genome.
+# Split out of #37974 so the center-label drag fix there could close separately.  Jairo's
+# case is the pig assembly GCA_002844635.1 (USMARCv1.0) lifted to susScr11, and it is the
+# one used here.
+#
+# 25c1787f5c2 is the fix: hgc reads the chain's query sequence from the two bit file
+# whenever the track names one, instead of opening the query assembly as a database.
+#
+# So the script goes all the way to the page that needed the sequence.  The details page
+# is the first half and the whole-window base alignment is the second, and only the second
+# actually reads query bases -- a test that stopped at the details page would pass on a
+# build that still could not produce the alignment.
+#
+# The GenArk assembly is reached by accession with no hubUrl, the way hgTracks resolves one
+# from the genark table, and nothing is turned on by hand: its default view carries the
+# tracks this lifts.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 25c1787f5c2, after the fix shipped"
+
+target: genome-test
+db: GCA_002844635.1
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=GCA_002844635.1&pix=1100"
+  - expect: {rows: [augustus], noText: "Warning/Error"}
+
+  - convert: {to: susScr11, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, augustus], noText: "Unknown database"}
+
+  # The details page.  The source assembly has to be named as a hub genome, with its own
+  # sequence name, rather than looked up as a database.
+  - click: {track: quickLiftChain, frac: 0.5}
+  - expect:
+      text: "GCA_002844635.1 position"
+      noText: "Unknown database"
+
+  # And the page that reads query bases out of the two bit.
+  - click: 'a:has-text("DNA sequence alignment of whole window")'
+  - expect:
+      text: "Only query sequence"
+      noText: "Couldn't connect to database"
+  - expect: {text: "Base Alignment: susScr11"}

@@ -1,0 +1,58 @@
+# #36668 -- hgTracks crashed when a track had both the rearrangement graph and the density
+# graph turned on.  The reporter's path was a blat search, which makes a custom track, then
+# the track's settings page, both checkboxes, Submit.  The stack ended in
+# wigLeftAxisLabels(), where tg->wigCartData is NULL under snake mode:
+#
+#     lines[1] = wigCart->yLineMark;
+#
+# ba2a019284c settles which one wins rather than making the wiggle path survive a NULL:
+#
+#     // the density graph and the rearrangement graph can't both be on at once.
+#     // if we're wiggling, undo snake mode and use the standard wiggle path.
+#     if (doSnake && checkIfWiggling(cart, track))
+#         doSnake = FALSE;
+#
+# The two settings are ordinary cart booleans, <track>.doSnake and <track>.doWiggle, so any
+# chain track offers both checkboxes and reaches the same code.  chainHs1 is used here
+# rather than a blat custom track: a blat run would put a test of hgBlat in front of a test
+# of hgTracks, and the crash is in neither.
+#
+# The checkboxes are clicked on the settings page and the page is submitted, which is the
+# gesture the ticket describes -- hgTrackUi writes both variables in one request, which is
+# the combination that crashed.  What comes back has to be a browser image: the crash gave
+# an error page with no image at all, so the row list is the assertion and noText: alone
+# would have passed on it.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from ba2a019284c, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  # The visibility is set on the way in, because hgTrackUi's own display-mode control is a
+  # dropdown and Docent has no verb that picks an option from one.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&c=chr17&g=chainHs1&chainHs1=pack"
+  - expect:
+      has:
+        - 'input[name="chainHs1.doSnake"]'
+        - 'input[name="chainHs1.doWiggle"]'
+      text: "Chain"
+
+  - click: 'input[name="chainHs1.doSnake"]'
+  - click: 'input[name="chainHs1.doWiggle"]'
+  - click: '#Submit'
+
+  - expect:
+      rows: [ruler, chainHs1]
+      noText: "wigLeftAxisLabels"
+      url: "hgTracks"
+
+  # And the settings really are both on, which is the whole premise: a click that missed
+  # its checkbox would leave this script asserting that an ordinary chain track draws.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&c=chr17&g=chainHs1"
+  - expect:
+      has:
+        - 'input[name="chainHs1.doSnake"]:checked'
+        - 'input[name="chainHs1.doWiggle"]:checked'

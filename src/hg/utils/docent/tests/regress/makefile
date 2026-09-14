@@ -13,6 +13,11 @@
 #     make proof              # what evidence each script has that it would catch its bug
 #     make derive             # the derivation alone, for the scripts with a baseline
 #
+# A run clears up after itself: a script that passed leaves no log and no stills
+# directory, and any WARNING it printed is echoed here before the log goes. A script that
+# failed keeps its log, and so does an xfail that passed, since that is the flip. So
+# `git status` in this directory shows work in progress and nothing else.
+#
 # Naming: rm<ticket>.docent.yaml, so the ticket is the filename. Every script says in its
 # first lines which ticket it is, what the symptom was, and what the assertion would
 # catch -- a regression test whose comment does not name the bug is unmaintainable, since

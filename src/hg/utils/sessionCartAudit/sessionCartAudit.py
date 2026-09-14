@@ -28,12 +28,23 @@ in the corpus is absorbed, the audit comes back clean, and it has proved
 nothing.  They are matched separately and reported as "wildcard only", which is
 the honest answer: covered by a catch-all, not actually catalogued.
 
-Matching is right-anchored - longest known suffix at a '.' or '_' boundary -
-never left-anchored at the first separator.  That is not a style choice.  Track
-and species names in the real data contain dots (GenArk accessions such as
-GCF_020740605.2), slashes, spaces and parentheses, so the left-hand side cannot
-be delimited by anything except a complete list of what the right-hand side may
-be.
+Matching a track-scoped name is right-anchored - longest known suffix at a '.'
+or '_' boundary - never left-anchored at the first separator.  That is not a
+style choice.  Track and species names in the real data contain dots (GenArk
+accessions such as GCF_020740605.2), slashes, spaces and parentheses, so the
+left-hand side cannot be delimited by anything except a complete list of what
+the right-hand side may be.
+
+Not every catalog row is a suffix, though, and that is the other half of the
+matching.  A row's separator says which it is: "." or "_" means the name
+follows a track name, and anything else means the row already spells out the
+whole cart variable, as hgTables' rows do (hgta_fs.check.<db>.<table>.<field>)
+and as chromGraph's do with a prefix in front (cgs_<track>_pixels).  A whole
+name has to be matched whole.  Testing only suffixes leaves a left-anchored row
+unable to match the variable it describes, because the prefix that anchors it
+is gone before the first candidate is cut - which is why the whole name is
+tried first, and why for a long time 4,299 hgta_ names were reported as covered
+by nothing but a catch-all.
 
 Usage:
     sessionCartAudit.py --check                 # coverage counts
@@ -141,16 +152,24 @@ def loadSibling(subdir, module):
 
 
 def trackVarNames():
-    """Every variable name in the #37838 catalog, however deeply nested."""
+    """Every variable in the #37838 catalog, however deeply nested.
+
+    Returns the bare names and the (name, sep) rows.  The separator matters:
+    it is what says whether a row names a suffix that follows a track name
+    ("." or "_") or a whole cart variable ("" for hgTables and the old
+    per-dataset variables, "cgs_<track>_" for chromGraph, which puts its
+    prefix in front).  peel() needs both, and a set of bare names cannot tell
+    them apart."""
     mod = loadSibling("cartTrackVarCatalog", "cartTrackVarCatalog")
     cat = mod.build()
-    names = set()
+    names, rows = set(), []
 
     def walk(node):
         if isinstance(node, dict):
             name = node.get("name")
             if isinstance(name, str) and ("type" in node or "src" in node):
                 names.add(name)
+                rows.append((name, node.get("sep", ".")))
             for value in node.values():
                 walk(value)
         elif isinstance(node, list):
@@ -158,7 +177,7 @@ def trackVarNames():
                 walk(value)
 
     walk(cat)
-    return names
+    return names, rows
 
 
 def urlCommandNames():
@@ -206,6 +225,54 @@ def compilePatterns(catVars):
     return literals, families, wildcards
 
 
+# A catalog row may stand for more than one variable.  Both shorthands are
+# already in use in the #37838 catalog and both are machine-readable, so the
+# audit reads them rather than making a person expand them: a comma list is
+# several variables that share one description, and a trailing * is a family
+# whose members are listed in the note.
+GLOB = re.compile(r"<[a-zA-Z]+>|\*")
+
+
+def absRegex(pattern):
+    """Compile a whole-variable pattern.  <placeholder> is one token, * is any."""
+    out, pos = [], 0
+    for match in GLOB.finditer(pattern):
+        out.append(re.escape(pattern[pos:match.start()]))
+        out.append("[^.]*" if match.group(0) == "*" else "[^.]+")
+        pos = match.end()
+    out.append(re.escape(pattern[pos:]))
+    return re.compile("^" + "".join(out) + "$")
+
+
+def absolutePatterns(catRows):
+    """The rows that spell out a whole cart variable rather than a suffix.
+
+    A row whose sep is "." or "_" describes what follows a track name, which is
+    what peel()'s suffix walk is for.  Every other sep means the row already
+    names the variable as it appears in the cart, and the sep goes in front of
+    it: sep "" leaves the name alone, and chromGraph's "cgs_<track>_" prefixes
+    it.  These can only ever be matched against the whole name.
+
+    Returns (literals, families, skipped).  A row that is prose rather than a
+    pattern cannot be matched by anything and is returned in skipped, so it can
+    be reported instead of quietly counting for nothing."""
+    literals, families, skipped = set(), [], []
+    for name, sep in catRows:
+        if sep in (".", "_"):
+            continue
+        for part in name.split(","):
+            full = (sep + part.strip()).strip()
+            if not full:
+                continue
+            if " " in full:
+                skipped.append(full)
+            elif GLOB.search(full):
+                families.append((full, absRegex(full)))
+            else:
+                literals.add(full)
+    return literals, families, skipped
+
+
 # ---------------------------------------------------------------- classify
 
 class Audit(object):
@@ -213,9 +280,10 @@ class Audit(object):
     def __init__(self, names, nSess):
         self.names = names
         self.nSess = nSess
-        self.catVars = trackVarNames()
+        self.catVars, catRows = trackVarNames()
         self.urlNames, self.catLeaks = urlCommandNames()
         self.literals, self.families, self.wildcards = compilePatterns(self.catVars)
+        self.absLiterals, self.absFamilies, self.absSkipped = absolutePatterns(catRows)
         # Track-name vocabulary learned from the corpus itself: a bare name
         # whose every observed value is a visibility word is a track.
         self.trackNames = set(n for n, v in names.items()
@@ -246,7 +314,21 @@ class Audit(object):
         return None
 
     def peel(self, name):
-        """Longest catalogued suffix at a separator. -> (stem, suffix, how)"""
+        """Longest catalogued pattern covering the name. -> (stem, suffix, how)
+
+        The whole name is tried first, then the longest suffix at a separator.
+        The whole-name step is not an optimisation: every candidate the suffix
+        walk considers begins after a separator, so a row that is left-anchored
+        on a fixed prefix can never match the variable it describes.
+        hgta_fs.check.<db>.<table>.<field> is the clearest case - by the time
+        the walk reaches a separator the hgta_ that anchors the row is gone -
+        and so is a plain literal like dbRIP.genoRegion, which without this
+        could only ever be tested as its own tail, "genoRegion"."""
+        if name in self.absLiterals:
+            return "", name, "literal"
+        hit = self.famMatch(name, self.absFamilies)
+        if hit:
+            return "", name, hit
         fallback = None
         for i in range(len(name) - 1):
             if name[i] not in "._":
@@ -479,16 +561,17 @@ MISSING_TRACK_VARS = [
 HGTA_SHAPES = [
     ("hgta_fil.v.<db>.<table>.<field>.<op>",
      lambda n: n.startswith("hgta_fil.v.") and n.count(".") == 5,
-     "catalogued with .pat only; .cmp and .dd are also in use"),
+     "catalogued: pat, dd and cmp per field, and the table-wide rawLogic, "
+     "rawQuery and maxOutput, whose field slot is empty or _"),
     ("hgta_fs.check.<db>.<table>.<field>",
      lambda n: n.startswith("hgta_fs.check.") and n.count(".") == 4,
      "catalogued"),
     ("hgta_fs.linked.<db>.<table>",
      lambda n: n.startswith("hgta_fs.linked."),
-     "not catalogued"),
+     "catalogued"),
     ("hgta_fil.linked.<db>.<table>",
      lambda n: n.startswith("hgta_fil.linked."),
-     "not catalogued"),
+     "catalogued"),
 ]
 
 
@@ -506,7 +589,16 @@ def reportCheck(audit, out=sys.stdout):
     print(file=out)
     print("catalog patterns   literals %d  families %d  bare wildcards %d"
           % (len(audit.literals), len(audit.families), len(audit.wildcards)), file=out)
-    print("bare wildcards     %s" % ", ".join(v for v, _ in audit.wildcards), file=out)
+    print("bare wildcards     %s"
+          % ", ".join(sorted(v for v, _ in audit.wildcards)), file=out)
+    print("whole-name rows    literals %d  families %d"
+          % (len(audit.absLiterals), len(audit.absFamilies)), file=out)
+    if audit.absSkipped:
+        print(file=out)
+        print("catalog rows that are prose rather than one pattern, so nothing "
+              "can match them (%d):" % len(audit.absSkipped), file=out)
+        for row in sorted(audit.absSkipped):
+            print("    %s" % row, file=out)
 
 
 def reportRows(audit, bucket, out=sys.stdout, limit=None):
@@ -604,7 +696,10 @@ def asJson(audit, text):
                    "distinctNames": len(audit.names),
                    "nameInstances": sum(v[1] for v in audit.names.values())},
         "coverage": audit.counts(),
-        "bareWildcards": [v for v, _ in audit.wildcards],
+        "bareWildcards": sorted(v for v, _ in audit.wildcards),
+        "wholeNameRows": {"literals": len(audit.absLiterals),
+                          "families": sorted(v for v, _ in audit.absFamilies),
+                          "unusable": sorted(audit.absSkipped)},
         "dbScopes": [{"shape": s, "src": c, "example": e, "sessions": audit.sess(e)}
                      for s, c, e in DB_SCOPES],
         "dbSuffixFamily": {v: dbSuffixFamily(audit, v) for v, _n in DB_SUFFIX_VARS},
@@ -700,7 +795,8 @@ def renderHtml(audit, text):
         "unrecognised name and prove nothing.</p>"
         % (n(audit.nSess), n(sum(v[1] for v in audit.names.values())),
            n(len(audit.names)),
-           ", ".join("<code>%s</code>" % esc(v) for v, _ in audit.wildcards)))
+           ", ".join("<code>%s</code>" % esc(v)
+                     for v in sorted(v for v, _ in audit.wildcards))))
 
     add("<table><tr><th>bucket</th><th class='num'>distinct names</th>"
         "<th>meaning</th></tr>")

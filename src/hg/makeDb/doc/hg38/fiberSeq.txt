@@ -57,12 +57,14 @@ join -t$'\t' -1 1 -2 1 <(cut -f1,2 manifest.tsv) \
 # Mirror the data
 # ---------------------------------------------------------------------------
 
-# 11 files per sample, 451 files, 397 GB:
+# 12 files per sample, 492 files, 576 GB:
 #   all.percent.accessible.bw, hap1/hap2.percent.accessible.bw, fire-peaks.bb
+#   all.nucleosome.coverage.bw
 #   cpg.combined.bw, cpg.hap1.bw, cpg.hap2.bw
 #   cpg.diffs_all.bw, cpg.diffs_p0.01.bw, cpg.diffs_p0.001.bw, cpg.diffs_p0.0001.bw
 # The script resumes, verifies each file against the size the server reports and
-# skips files that are already complete, so it can be re-run safely.
+# skips files that are already complete, so it can be re-run safely.  It takes an
+# optional list of accessions, to refresh one sample without walking all 41.
 
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqDownload.sh \
     /hive/data/genomes/hg38/bed/fiberSeq 12 > download.log 2>&1
@@ -73,18 +75,78 @@ grep -c FAIL download.log
 # Check every file parses and holds data:
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqCheck.sh /hive/data/genomes/hg38/bed/fiberSeq
 
-# This reports two placeholder files at the source:
+# On the first mirror this reported two placeholder files at the source:
 #   PM00001/hap1.percent.accessible.bw  (512 bytes, basesCovered 1)
 #   PM00001/hap2.percent.accessible.bw  (512 bytes, basesCovered 1)
-# They are valid bigWigs that cover a single base with a value of zero, so
-# GM12878's haplotype accessibility overlay draws nothing.  Note that they are
+# They were valid bigWigs covering a single base with a value of zero, so
+# GM12878's haplotype accessibility overlay drew nothing.  Note that they were
 # NOT basesCovered 0, which is why the check tests for less than 1000; the
 # smallest legitimate haplotype file here covers 4.1 million bases (PM00008,
 # the near-haploid Hap1 line, which has little phaseable heterozygosity).
-# Every other sample has real haplotype files, and PM00001's CpG haplotype
-# files are fine.  Reported to the lab; noted on fiberSeqCompendium.html.
-# Nothing else was dropped: all 451 files downloaded, and all 449 non-empty
-# ones parse as bigWig or bigBed.
+# Reported to the lab, and fixed by them - see the PM00001 section below.
+
+# ---------------------------------------------------------------------------
+# 2026-09-14  PM00001 (GM12878) reissued
+# ---------------------------------------------------------------------------
+
+# The lab reprocessed GM12878 and replaced the files IN PLACE, under the same
+# per-sample hash directory, so fiberSeqSamples.tsv did not change.  Ten of its
+# twelve files differ from the first mirror; only cpg.combined.bw is unchanged.
+# A size sweep over all 41 samples confirmed PM00001 is the only one affected.
+
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqDownload.sh \
+    /hive/data/genomes/hg38/bed/fiberSeq 10 PM00001 > download.PM00001.log 2>&1
+
+# The two haplotype files are now real: basesCovered 2,894,029,052 (hap1) and
+# 2,382,899,132 (hap2), against 2,897,956,157 for the combined signal.
+#
+# This is what forced the change to how the downloader writes.  It used
+# "curl -C - -o <finalFile>", which resumes from whatever is already on disk.
+# That is correct for an interrupted transfer and silently corrupting when the
+# server has REPLACED the file: curl would have appended the tail of the new
+# 5.2 GB hap1 file to the 512-byte stub and reported success, and the size check
+# afterwards would have passed because the total matches.  The script now
+# fetches into <file>.part and moves it into place only when complete, so a
+# resume can never land on a finished file, and the final mv is atomic, so
+# hgTracks never reads a half-written file out of /gbdb.
+#
+# The peak file was reissued too but still has the fieldCount 3 header, so the
+# rebuild below is still required.  Its peak calls changed substantially,
+# 429,883 source peaks before and 196,742 now, which is a different call set
+# rather than a reformatting.  Noted on fiberSeqCompendium.html, since figures
+# made from the first version of the track will not reproduce for this sample.
+
+# ---------------------------------------------------------------------------
+# Nucleosome density: mirrored, NOT displayed
+# ---------------------------------------------------------------------------
+
+# Sent separately in September 2026, as all.nucleosome.coverage.bw under the
+# same per-sample trackHub/bw directory.  It is NOT in the lab's own hub.
+# Present for all 41 samples, 141 GB, added to the file list in the download
+# and check scripts and mirrored with a plain re-run:
+
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqDownload.sh \
+    /hive/data/genomes/hg38/bed/fiberSeq 12 > download.nucleosome.log 2>&1
+
+# The lab then asked us to hold the display back while they settle internally
+# on how they want nucleosomes shown, and to keep the track set on FIRE peaks
+# and CpG methylation.  So the files are mirrored and checked but no subtrack
+# is generated: INCLUDE_NUC in fiberSeqTrackDb.py is False.  Setting it True and
+# regenerating is the whole of turning it on, no download needed.
+#
+# What that flag builds, when the lab comes back: it is read depth, not a
+# percentage, which makes it the one wiggle here that cannot take fixed
+# viewLimits.  The genome-wide mean runs from 25 (PS00971) to 142 (PM00001) with
+# sequencing depth, and single loci reach 1.7e5, so it is drawn with autoScale
+# on and the axis is comparable within a sample but not between samples.
+#
+# The flag also moves the per-sample priorities, which is why they are assigned
+# from a running counter rather than a fixed index per data type.  With the flag
+# off the generated fiberSeq.ra is byte-identical to the version before the
+# nucleosome work, which is the check that the counter renumbers correctly.
+
+~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqCheck.sh /hive/data/genomes/hg38/bed/fiberSeq
+# no lines: all 492 files present, parsing and non-empty
 
 # ---------------------------------------------------------------------------
 # Rebuild the FIRE peak bigBeds
@@ -122,12 +184,14 @@ bigBedToBed PM00001/fire-peaks.bb -chrom=chr1 -start=1000000 -end=1100000 stdout
 #
 # Reconciliation, from peakCounts.tsv (accession, source peaks, peaks in the
 # track, peaks dropped on chrEBV):
-#   source peaks     9,487,043
-#   peaks in track   9,486,622
-#   dropped chrEBV         421   in 20 of the 41 samples, 2 to 166 each
+#   source peaks     9,253,902
+#   peaks in track   9,253,593
+#   dropped chrEBV         309   in 20 of the 41 samples, 2 to 54 each
 # Every sample balances exactly: source - chrEBV == in track.  The largest
-# single loss is GM12878 with 166 peaks, which is 0.04 percent of its 429,883.
+# single loss is GM12878 with 54 peaks, which is 0.03 percent of its 196,742.
 # This is mentioned in the methods section of fiberSeqCompendium.html.
+# (Totals as of the PM00001 reissue; before it they were 9,487,043 source,
+# 9,486,622 in track and 421 on chrEBV, all of the difference in that sample.)
 
 # The rebuild also rounds signalValue and qValue to 3 decimals.  They arrive
 # with full double precision (qValues like 22.807437495448326), which reads
@@ -142,7 +206,12 @@ bigBedToBed PM00001/fire-peaks.bb -chrom=chr1 -start=1000000 -end=1100000 stdout
 sed -E 's/^([A-Z0-9]+) ([0-9]+) peaks \(source ([0-9]+), dropped ([0-9]+) on chrEBV\)$/\1\t\2\t\3\t\4/' \
     peakFixReport.txt | awk -F'\t' '{kept+=$2; src+=$3; ebv+=$4; if($3-$4!=$2) mism++}
     END{printf "kept %d source %d chrEBV %d mismatched %d\n", kept, src, ebv, mism+0}'
-# kept 9486622 source 9487043 chrEBV 421 mismatched 0
+# kept 9253593 source 9253902 chrEBV 309 mismatched 0
+#
+# fixOne() skips a sample whose fire-peaks.ucsc.bb is newer than its source, so
+# after the PM00001 reissue only that one rebuilt and the other 40 said "have".
+# That also means the run only prints one "got" line, and peakFixReport.txt has
+# to have PM00001's row replaced rather than being rewritten wholesale.
 
 # Chromosome naming is otherwise already UCSC style, no chromAlias needed:
 bigWigInfo -chroms PM00001/all.percent.accessible.bw | head -12
@@ -155,7 +224,7 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 # ---------------------------------------------------------------------------
 
 # One script writes the whole track stanza plus the two faceted-composite
-# metadata and color files, so the 585 stanzas stay consistent:
+# metadata and color files, so the 584 stanzas stay consistent:
 
 ~/kent/src/hg/makeDb/scripts/fiberSeq/fiberSeqTrackDb.py
 
@@ -169,6 +238,7 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #     fiberSeqAcc         multiWig overlay of 7 common cell lines, shown by default
 #     fiberSeqCompendium  faceted composite, 41 samples, six data types:
 #                         acc, peaks, hap, cpg, cpgHap, cpgDiff
+#                         (a seventh, nuc, is built but held back: see below)
 #
 # Accessibility and methylation started as two composites, fiberSeqCompendium and
 # fiberSeqMeth, and were merged into one.  They cover the identical 41 samples,

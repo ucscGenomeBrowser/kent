@@ -1,0 +1,53 @@
+# Clicking a hypomethylated region and reading its details page.
+#
+# TWO THINGS MAKE THIS AWKWARD, and both are MethBase's own shape rather than accidents:
+#
+# 1. The HMR files are `type bigBed` over a THREE-field file -- no name column.  hgTracks
+#    writes an empty `i=` into every hgc href and gives every box the same title, so the
+#    item cannot be addressed by name at all.  `click: {track:, frac: 0.5}` takes the box
+#    nearest a point instead, which is the same way the GIAB Problematic Regions subtracks
+#    have to be clicked (see ../regress/README.txt).
+#
+# 2. The HMR view comes up `dense`, and a dense row carries no hgc map boxes -- its whole
+#    width is the "click to alter the display density" link.  So the first click here is a
+#    `raw: true` one: it presses the row where a user presses it and lets hgTracks answer,
+#    which sets the view to full.  Only then does the row have items to click.  A plain
+#    `click:` at step 5 fails with "no map box under map_data_... carries an hgc href",
+#    which is worth knowing because it reads like a missing item rather than a dense row.
+#
+# WHAT IS ASSERTED, and why not the labels.  A details page carries the track's shortLabel
+# and longLabel in its own header, so `text: "Sperm / SRX081759 (HMR)"` would pass on a
+# page that failed to find the item at all.  The three checks below are each absent from
+# such a page:
+#
+#   the item's coordinates, without commas, as hgc prints them for a bed feature
+#   its size, which is the feature and not the window
+#   `Pubmed: 21925323`, which comes from the hub's per-study description html at
+#     smithlab.usc.edu -- so this also says that file is still being fetched and rendered
+#
+# The coordinates are one-based on the page (chr15:24954017-24958266) and the bigBed row
+# is chr15 24954016 24958266.
+
+target: rr
+db: hg38
+position: chr15:24950000-24960000
+reset: true
+fast: true
+steps:
+  - go: chr15:24950000-24960000
+  - hide: all
+  - hub: {url: "http://smithlab.usc.edu/trackdata/methylation/hub.txt", db: hg38}
+  - go: chr15:24950000-24960000
+
+  # Dense -> full, by pressing the row.  The rows: check afterwards is setup, not the
+  # assertion: the row was already drawn before the click.
+  - click: {track: SRP007400_SRX081759_HMR, raw: true, frac: 0.5}
+  - expect: {rows: [SRP007400_SRX081759_HMR]}
+
+  - click: {track: SRP007400_SRX081759_HMR, frac: 0.5}
+  - expect:
+      url: "hgc"
+      text: "chr15:24954017-24958266"
+      noText: "Couldn't find item"
+  - expect: {text: "Genomic Size: 4250"}
+  - expect: {text: "Pubmed: 21925323"}

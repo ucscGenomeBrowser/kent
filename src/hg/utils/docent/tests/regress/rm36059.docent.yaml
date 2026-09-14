@@ -1,0 +1,53 @@
+# #36059 -- clicking an item in a quickLifted GENCODE Versions track gave an error instead
+# of a details page:
+#
+#     Can't start query:
+#     select class from wgEncodeGencodeAttrsV48 where name = "ENST00000297261.7"
+#
+# because hgc looked for the GENCODE attribute tables in the destination assembly, where
+# they do not exist.  Gerardo's test case is SHH/ENST00000297261.7, and it is the one used
+# here.
+#
+# 26334016d4d is the fix and it is worth reading: re-vet wgEncodeGencode* in
+# trackHub.c:isVetted() so the hub stanza stops emitting `avoidHandler on` (without that,
+# hgc never reaches doGencodeGene and falls through to the generic showGenePos output);
+# take the MySQL connection from quickLiftDb, since the attrs, tag, pubMed, refSeq and
+# uniProt tables live in the source assembly; use trackHubSkipHubName() for the table name
+# and the Basic/Comp/PseudoGene/PolyA dispatch, which otherwise errAborted with
+# "BUG: gencodeClick on wrong database"; and lift the Position values through the chain so
+# the page shows destination coordinates.
+#
+# So there are three separate ways this page can be wrong and the step below names all
+# three.  The UniProtKB section is the one that says doGencodeGene actually ran: the
+# generic fallback prints a position and little else, so a test that only asked for the
+# transcript name would pass on it.
+#
+# The position is the fourth: measured on genome-test on 2026-09-12, ENST00000297261.7 is
+# chr7:155,799,980-155,812,463 on hg38 and the lifted page reads hs1 chr7:156,983,127-156,995,607.
+# Naming the source coordinate in noText: is what makes that half about the lift rather
+# than about the page having a position at all.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 26334016d4d, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {knownGeneArchive: show, knownGeneV48: pack}
+  - expect: {rows: [knownGeneV48], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [knownGeneV48], noText: "Warning/Error"}
+
+  - click: {track: knownGeneV48, item: "ENST00000297261.7"}
+  - expect:
+      text: "Comments and Description Text from UniProtKB"
+      noText: "Can't start query"
+  - expect: {text: "hs1 chr7:156,983,127-156,995,607"}
+  - expect: {noText: "BUG: gencodeClick on wrong database"}
+  - expect: {noText: "chr7:155,799,980-155,812,463"}

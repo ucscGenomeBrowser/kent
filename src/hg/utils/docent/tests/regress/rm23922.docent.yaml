@@ -1,0 +1,62 @@
+# #23922 -- the Multi-region and Reverse buttons gave no hint that the browser was in a
+# mode.  The agreement at the 2019-07-29 project meeting was to draw the button depressed
+# while its mode is on, so that a view that is not showing what a user expects says why.
+#
+# The state comes from the server, not from the page: hg/hgTracks/hgTracks.c decides
+#
+#     boolean isPressed = FALSE;
+#     if (differentString(virtModeType, "default"))
+#         isPressed = TRUE;
+#
+# and hButtonNoSubmitMaybePressed() adds class='pressed' (hg/lib/hPrint.c,
+# cgiMakeButtonMaybePressedMaybeSubmit() in lib/cheapcgi.c).  The button's title changes
+# with it as well, but do not assert on that: hgTracks' own tooltip code moves a title
+# attribute into data-tooltip once the page's JavaScript has run, so the title is gone
+# from the live DOM even though it is in the HTML the server sent.  The class survives.
+#
+# Both buttons the ticket names are checked, because the styling is one mechanism and a
+# change to it would take both with it.  The transitions are the two a user makes: in,
+# and back out again.  The noHas: at the end is the one that matters, since a button that
+# is stuck pressed after exiting is the same misinformation as one that never presses.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket long after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125364
+  - hide: all
+  - track: {knownGene: pack}
+
+  # Default view: the button is drawn plain.
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # Exon view.  Any multi-region mode presses the button; exonMostly is the cheapest one
+  # to reach, and it needs no BED and no alt haplotype.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125364&virtModeType=exonMostly&pix=1100"
+  - expect:
+      rows: [ruler, knownGene]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # And out again, which is the radio rm29452 is about.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125364&virtModeType=default&pix=1100"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # The other button the ticket names, and the other mode that is easy to be in without
+  # noticing.  `complement=1` alone reverses the DNA rather than the display, so the
+  # variable to set is the one the button itself submits.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125364&pix=1100&hgt.toggleRevCmplDisp=1"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has: '#hgt\.toggleRevCmplDisp.pressed'
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'

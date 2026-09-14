@@ -1,0 +1,36 @@
+# #37743 -- hgTrackUi took a SIGSEGV on a request for a duplicated track that was not in
+# the cart.  A bot tripped it during the v499 release, which is the part worth keeping in
+# mind: the URL needs no login and no session, so anything that crawls a browser page can
+# reach it.
+#
+# The duplicate-track feature names a copy dup_<n>_<track> and keeps the list in the cart.
+# hgTrackUi split that name, found the source track's trackDb entry, then looked the copy
+# up in the cart with dupTrackFindInList(); with no cart entry that returned NULL and the
+# NULL went straight into dupTdbFrom().  7b74ff4b43a adds two lines: if the lookup comes
+# back empty, errAbort with a message that says which name it was.
+#
+# So the fixed behavior is an error page, and that is what this asserts.  The name has to
+# be shaped like a real duplicate -- dup_refGene alone never reaches the lookup, it fails
+# earlier with "Can't find dup_refGene in track database hg38", which is a different path
+# and passes on the crashing build too.  dup_1_refGene is the shape the feature writes.
+#
+# hgTrackUi has no track image, so the positive text: is what tells a crash from a page:
+# a SIGSEGV gives the browser an empty document, where every noText: check passes.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 7b74ff4b43a, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=dup_1_refGene"
+  - expect:
+      text: "Can't find duplicate track dup_1_refGene"
+      url: "hgTrackUi"
+
+  # The other path, named so the two stay told apart: a dup_ name with nothing after the
+  # prefix never reaches the cart lookup at all.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=dup_refGene"
+  - expect: {text: "Can't find dup_refGene in track database hg38"}

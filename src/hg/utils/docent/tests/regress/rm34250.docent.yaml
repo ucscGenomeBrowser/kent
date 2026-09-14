@@ -1,0 +1,60 @@
+# #34250 -- b0b highlighted two regions either side of a patch in multi-region mode, left
+# multi-region mode, and the highlights were gone.  Jonathan could not reproduce it and
+# closed it as working, so what this asserts is the behaviour the ticket was answered
+# with, not a named fix: a highlight made in multi-region mode is still there, and still
+# over the same bases, after exiting to the normal view.
+#
+# It is the other direction of rm30833's round trip, and the direction with the arithmetic
+# in it.  Entering multi-region DISGUISES the highlight into virtual coordinates and
+# exiting undisguises it (imageV2.undisguiseHighlight() in hg/js/hgTracks.js reads them
+# back, and hg/hgTracks/hgTracks.c writes them), so this is where a highlight is lost by
+# being converted to coordinates that no longer exist.  Measured on genome-test on
+# 2026-09-12, the cart's highlight goes
+#
+#     (none)                                    custom-regions view, nothing highlighted
+#     hg38.multi:1-726#aaedff                   the highlight, in virtual coordinates
+#     hg38.chr1:144874355-144875080#aaedff      after exiting
+#
+# and the third line is the first custom region, 1-based: the 726 bases of virtual
+# chromosome the highlight covered are chr1:144,874,355-144,875,080 again.
+#
+# A highlight is not drawn into the image: hg/js/hgTracks.js appends one
+# <div class='highlightItem'> per highlight to the body.  Losing it changes nothing else
+# on the page -- same rows, same height, same items -- so the selector IS the assertion
+# here, and there is nothing looser to fall back on.
+#
+# The last step is the one that would have failed for b0b.  It also asserts that the
+# Multi-region button came back unpressed, so that a run which never left multi-region
+# mode cannot pass it by still having the virtual-coordinate highlight on screen.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket, which was closed as working rather than fixed"
+
+target: genome-test
+db: hg38
+position: chr1:144874000-144875500
+reset: true
+fast: true
+steps:
+  # Custom regions first, so the highlight below is made while in multi-region mode.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A144874000-144875500&pix=1100&hideTracks=1&problematicSuper=show&problematic=pack&comments=pack&comments_sel=1&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr1%20144874354%20144875080%0Achr1%2091386300%2091388400%0A"
+  - expect:
+      rows: [ruler, comments]
+      exact: true
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+      noHas: '.highlightItem'
+
+  # The highlight, in the virtual coordinates the view is in.
+  - goto: "/cgi-bin/hgTracks?pix=1100&highlight=hg38.multi%3A1-726%23aaedff"
+  - expect:
+      rows: [ruler, comments]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - '.highlightItem'
+
+  # Exit.  The highlight has to come back to chr1 coordinates and still be drawn.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=default"
+  - expect:
+      rows: [ruler, comments]
+      exact: true
+      has: '.highlightItem'
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'

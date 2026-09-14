@@ -1,0 +1,46 @@
+# #36942 -- the Alignment Differences track had no description of what its colors mean.
+# The track draws quickLift's liftOver differences as triangles and lines, and a reader
+# had no way to find out that green is an insertion and blue a deletion.
+#
+# 1b4f89e8c61 created the placeholder page and e1428851a49 wrote it: the four colors, the
+# figure showing a triangle mouseOver, and the sentence about clicking one.  The file is
+# hg/htdocs/goldenPath/help/quickLiftChain.html, and it has been edited since -- the
+# sentence now reads "Clicking a triangle opens a details page showing:" -- so the
+# assertions name what the page says today rather than what the commit added.
+#
+# A track description is only worth testing where the user meets it, which is the details
+# page of an item in the track, so this lifts a track, clicks a difference, and reads the
+# Description section that hgc prints under it.  That also makes it a test of the details
+# page being reachable at all -- see rm38146 for the same page with a hub assembly as the
+# source.
+#
+# The colors are asserted by their names rather than by pixel or by hex, because what the
+# ticket asked for is a legend a reader can follow: "Double-sided insertions" is the entry
+# nothing else on the page would produce, and the figure is named as well, since a
+# description that lost its image would still pass on the words alone.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from e1428851a49, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [ruler, mane], exact: true}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+
+  # The Alignment Differences track is the synthetic quickLiftChain row that hubConnect
+  # adds to the lifted hub; it is not in the hub file.
+  - expect: {rows: [quickLiftChain, mane], noText: "Warning/Error"}
+
+  - click: {track: quickLiftChain, frac: 0.5}
+  - expect:
+      text: "Double-sided insertions"
+      has: 'img[src*="quickLiftTrianglesMouseOver"]'
+  - expect: {text: "Clicking a triangle opens a details page showing"}
