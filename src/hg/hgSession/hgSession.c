@@ -379,8 +379,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *encSessionName = row[0];
     /* A snapshot is a share token, not a session the user made and would recognize (see
-     * lib/snapshotSession.c).  Leave it out of the list, as its "__" prefix promises. */
-    if (snapshotIsSnapshotName(encSessionName))
+     * lib/snapshotSession.c).  Leave it out of the list.  Ask the settings column, which
+     * saveSnapshotSession() stamps with the snapshot type - not the "__" name prefix, which users
+     * have also used for sessions of their own that they do need to see here (refs #38313). */
+    if (gotSettings && snapshotIsSnapshotSettings(row[5]))
         continue;
     char *sessionName = cgiDecodeClone(encSessionName);
     char *link = NULL;
@@ -2380,9 +2382,11 @@ if (loggedIn)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *encSessionName = row[0];
-            /* Snapshots are share tokens, not sessions the user made; keep them out of the list,
-             * as their "__" prefix promises (see lib/snapshotSession.c). */
-            if (snapshotIsSnapshotName(encSessionName))
+            /* Snapshots are share tokens, not sessions the user made; keep them out of the list.
+             * The settings column, stamped by saveSnapshotSession(), is what says so - the "__"
+             * name prefix does not, since users have named their own sessions that way and those
+             * belong in the list (refs #38313).  See lib/snapshotSession.c. */
+            if (gotSettings && snapshotIsSnapshotSettings(row[5]))
                 continue;
             char *sessionName = cgiDecodeClone(encSessionName);
             int shared = atoi(row[1]);

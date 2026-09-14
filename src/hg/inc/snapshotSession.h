@@ -6,10 +6,14 @@
  * those variables' backing trash files into durable sessionData storage.  This keeps the row tiny
  * and, crucially, avoids leaking the sharer's unrelated tracks/position to whoever opens the link.
  *
- * Snapshots are always shared-by-link.  Their session names are prefixed "__" so the My Sessions
- * list can hide them by default and the snapshot cleaner can remove abandoned anonymous ones.  Each
- * feature that wants durable shareable links registers a snapshotType naming its variables; the
- * feature reconstructs its view from those variables, and the existing session-load path bumps
+ * Snapshots are always shared-by-link.  Their session names are prefixed "__" so the snapshot
+ * cleaner can recognize abandoned anonymous ones; what marks a row as a snapshot for anything else
+ * (notably the My Sessions listings, which hide them) is the "snapshotType" line in its settings
+ * column, because the name prefix alone is not ours - users have named sessions of their own that
+ * way (refs #38313).
+ *
+ * Each feature that wants durable shareable links registers a snapshotType naming its variables;
+ * the feature reconstructs its view from those variables, and the existing session-load path bumps
  * lastUse on every open so popular links stay alive under the "durable while used" policy.
  *
  * Copyright (C) 2026 The Regents of the University of California
@@ -21,10 +25,18 @@
 #include "cart.h"
 #include "jksql.h"
 
-/* All snapshot session names start with this marker: hidden from the session list by default and
- * eligible for TTL cleaning.  A single leading '_' is reserved for real, user-visible auto-named
- * quick shares; the double '__' means "machine-made, not a normal loadable session". */
+/* All snapshot session names start with this marker, which makes them eligible for TTL cleaning.
+ * A single leading '_' is reserved for real, user-visible auto-named quick shares; the double '__'
+ * means "machine-made, not a normal loadable session".  Note that this is a naming convention we
+ * follow, not a namespace we own: users can and do name their own sessions "__something", so never
+ * use the prefix alone to decide that a row is not the user's (refs #38313) - use
+ * snapshotIsSnapshotSettings() for that. */
 #define snapshotNamePrefix "__"
+
+/* Key of the settings line saveSnapshotSession() writes into namedSessionDb.settings, e.g.
+ * "snapshotType blat".  Its presence is the authoritative mark of a snapshot row; its value is the
+ * struct snapshotType name, so the row says which feature's view it reconstructs. */
+#define snapshotTypeSetting "snapshotType"
 
 /* Reserved userName for logged-out (anonymous) snapshots, matching doSaveSessionJson's convention
  * and the /s/l/<name> short link. */
@@ -53,7 +65,19 @@ boolean snapshotHasRequired(struct snapshotType *type, struct cart *cart);
  * a link that reopens to nothing), otherwise TRUE. */
 
 boolean snapshotIsSnapshotName(char *sessionName);
-/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix). */
+/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix).  Only the snapshot
+ * writer/cleaner should care: a user's own session can carry the same prefix, so this must not be
+ * used to decide whether to show a row to its owner - see snapshotIsSnapshotSettings(). */
+
+char *snapshotTypeFromSettings(char *settings);
+/* Return the snapshot type recorded in a namedSessionDb settings string ("snapshotType blat" ->
+ * "blat"), or NULL when there is none, i.e. the row is an ordinary saved session.  The value is not
+ * checked against the registry, so a type written by a newer build still reads back.  Returns a
+ * string to free. */
+
+boolean snapshotIsSnapshotSettings(char *settings);
+/* Return TRUE if settings marks this row as a snapshot (a share token), rather than a session the
+ * user saved.  This is the test to use when deciding whether to list a row in My Sessions. */
 
 char *snapshotNewName(struct sqlConnection *conn, char *encUserName);
 /* Alloc and return a fresh "__"-prefixed snapshot name, server-generated and checked against
