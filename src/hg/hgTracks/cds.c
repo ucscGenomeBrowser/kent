@@ -872,45 +872,56 @@ static void loadTxCdsBatch(char *db, char *table, struct hash *pslHash, struct h
 struct hashEl *el, *elList = hashElListHash(pslHash);
 if (elList == NULL)
     return;
-struct dyString *accs = dyStringNew(1024);
-int n = 0;
-for (el = elList;  el != NULL && n < 2000;  el = el->next, n++)
-    {
-    if (n > 0)
-        sqlDyStringPrintf(accs, ",");
-    sqlDyStringPrintf(accs, "'%s'", el->name);
-    }
 struct sqlConnection *conn = hAllocConn(db);
-struct dyString *query = NULL;
-if (sameString(table, "ncbiRefSeqPsl") && hTableExists(db, "ncbiRefSeqCds"))
-    query = sqlDyStringCreate("select id, cds from ncbiRefSeqCds where id in (%-s)",
-                              accs->string);
+/* Where the CDS comes from, decided once for the whole list. */
+boolean fromNcbiRefSeq = (sameString(table, "ncbiRefSeqPsl") && hTableExists(db, "ncbiRefSeqCds"));
 /* refGene's versionless accessions get their CDS from the genbank tables, which usually
  * live in hgFixed, so these names arrive database-qualified and only sqlTableExists can
  * see them; hTableExists looks inside db and would always say no. */
-else if (sameString(table, "refSeqAli") &&
-         sqlTableExists(conn, gbCdnaInfoTable) && sqlTableExists(conn, cdsTable))
-    query = sqlDyStringCreate(
-        "select g.acc, c.name from %s g, %s c where g.cds = c.id and g.acc in (%-s)",
-        gbCdnaInfoTable, cdsTable, accs->string);
-if (query != NULL)
+boolean fromGenbank = (sameString(table, "refSeqAli") &&
+                       sqlTableExists(conn, gbCdnaInfoTable) && sqlTableExists(conn, cdsTable));
+if (fromNcbiRefSeq || fromGenbank)
     {
-    struct sqlResult *sr = sqlGetResult(conn, query->string);
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
+    /* In chunks, rather than one query with every accession in it:  the window can hold
+     * more transcripts than one IN list should carry, and a cap that silently dropped the
+     * rest would leave the transcripts past it numbered along the genome with no sign
+     * that anything had been left out. */
+    el = elList;
+    while (el != NULL)
         {
-        struct genbankCds *cds;
-        AllocVar(cds);
-        if (genbankCdsParse(row[1], cds) && cds->start < cds->end)
-            hashAdd(cdsHash, row[0], cds);
+        struct dyString *accs = dyStringNew(1024);
+        int n;
+        for (n = 0;  el != NULL && n < 2000;  el = el->next, n++)
+            {
+            if (n > 0)
+                sqlDyStringPrintf(accs, ",");
+            sqlDyStringPrintf(accs, "'%s'", el->name);
+            }
+        struct dyString *query = NULL;
+        if (fromNcbiRefSeq)
+            query = sqlDyStringCreate("select id, cds from ncbiRefSeqCds where id in (%-s)",
+                                      accs->string);
         else
-            freez(&cds);
+            query = sqlDyStringCreate(
+                "select g.acc, c.name from %s g, %s c where g.cds = c.id and g.acc in (%-s)",
+                gbCdnaInfoTable, cdsTable, accs->string);
+        struct sqlResult *sr = sqlGetResult(conn, query->string);
+        char **row;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct genbankCds *cds;
+            AllocVar(cds);
+            if (genbankCdsParse(row[1], cds) && cds->start < cds->end)
+                hashAdd(cdsHash, row[0], cds);
+            else
+                freez(&cds);
+            }
+        sqlFreeResult(&sr);
+        dyStringFree(&query);
+        dyStringFree(&accs);
         }
-    sqlFreeResult(&sr);
-    dyStringFree(&query);
     }
 hFreeConn(&conn);
-dyStringFree(&accs);
 hashElFreeList(&elList);
 }
 
@@ -1016,8 +1027,11 @@ return -1;
 static int txCodonIndexForCodon(struct psl *txAli, struct genbankCds *txCds,
         int start, int end, boolean posStrand)
 /* Return the codon's 1-based number counted in the transcript's own coordinates, or 0 if
- * that cannot be worked out.  Any of a codon's three bases gives the same answer, so a
- * codon split across an intron gets one number for both of its pieces. */
+ * that cannot be worked out.  Measured from the codon's 5'-most base, so a codon split
+ * across an intron gets one number for both of its pieces.  It has to be the 5'-most base
+ * and not just any of the three: an indel inside the codon - the very thing this numbering
+ * exists to account for - moves the other two bases to transcript offsets that are not
+ * consecutive, and they would divide out to a different codon. */
 {
 if (txAli == NULL || txCds == NULL || txCds->start >= txCds->end)
     return 0;
