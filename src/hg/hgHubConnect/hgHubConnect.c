@@ -693,7 +693,8 @@ if (id != 0)
         jsOnEventByIdF("click", jsId, 
             "document.connectHubForm.elements['hubUrl'].value= '%s';"
             "document.connectHubForm.elements['db'].value= '%s';"
-            "document.connectHubForm.submit();return true;", hubInfo->hubUrl,name);
+            "document.connectHubForm.submit();return true;",
+            javaScriptLiteralEncode(hubInfo->hubUrl), name);
         }
 
     ourCellEnd();
