@@ -1878,7 +1878,9 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
 
     # for debugging
     if len(notFoundAtAll)!=0:
-        notFoundFname = join(mapDir, "lastRun_noAnnotatedTranscriptIDs.txt")
+        # per assembly: mapDir is shared, and with --taxonThreads several assemblies would
+        # otherwise write this same file at the same time
+        notFoundFname = join(mapDir, "lastRun_noAnnotatedTranscriptIDs.%s.txt" % db)
         notFoundFh = open(notFoundFname, "w")
         #notFoundFh.write(str(notFoundAtAll)+"\n")
         for acc in notFoundAtAll:
@@ -2077,7 +2079,6 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     a realignment/rebuild of the pslMap PSL file.
     """
     # use MD5s of the input files to determine if the protein -> genome map has to be rebuilt
-    global MINALI
     protMd5 = fastaMd5(protFa)
 
     stats = OrderedDict()
@@ -2114,15 +2115,23 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
                 geneTable, transcriptFa, geneToRefSeqs, metaMd5, transMd5, stats)
         protToTrans = parseKeyVal(selectFname)
 
-    allMd5s = [protMd5, transMd5, pslMd5]
+    # ciona's genome is from a different organism than the refseq transcripts, so it needs a
+    # lower threshold. Keep it a local and never assign to the global MINALI: with
+    # --taxonThreads several assemblies run at once and would see each other's value.
+    minAli = 0.85 if db in ["ci3"] else MINALI
+
+    allMd5s = [protMd5, transMd5, pslMd5, str(minAli)]
     if selectFname:
         pairMd5 = tabMd5(selectFname)
         allMd5s.append(pairMd5)
         stats["pairMd5"] = pairMd5[:10]
         stats["pairFname"] = selectFname
 
-    # if either the protein sequences, the transcripts, their alignment or the
-    # protein/transcript mapping changes -> create a new PSL mapping file
+    # if either the protein sequences, the transcripts, their alignment, the
+    # protein/transcript mapping or the alignment threshold changes -> create a new PSL
+    # mapping file. minAli belongs in here: it decides which alignments survive, so a
+    # mapping built at one threshold must not be silently reused at another. That is
+    # exactly what happened after the MINALI global leaked across threads. refs #38300
     fullMd5 = listMd5(allMd5s)[:10]
 
     mapFname = join(mapDir, "%(geneTable)s_%(fullMd5)s.psl" % locals())
@@ -2144,12 +2153,10 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
         logging.error("Could not find any gene table for %s, using miniprot to map proteins" % db)
         miniprotProteins(protFa, db, mapFname, stats)
     else:
-        if db in ["ci3"]: # wow: ciona's genome is from a different organism than the refseq transcripts.
-            MINALI = 0.85
-        stats["minAli"] = MINALI
+        stats["minAli"] = minAli
         workDir = "clusterRun-map-%s-%s-%s.tmp" % (db, geneTable, fullMd5)
 
-        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), workDir, mapFname]
+        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(minAli), workDir, mapFname]
         if selectFname is not None:
             scriptArgs.append(selectFname)
 
