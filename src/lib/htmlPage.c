@@ -28,6 +28,35 @@
 #include "htmlPage.h"
 
 
+static size_t htmlPageMaxSize = 0;
+/* Ceiling on the response a fetch will read into memory, 0 for none. */
+
+void htmlPageSetMaxSize(size_t maxSize)
+/* Set a ceiling on the size of a response this module will read into memory.
+ * Past it the fetch errAborts instead, naming the url, so a caller inside an
+ * errCatch can report an outsized page and carry on.  Zero, the default, means
+ * no ceiling.  This exists for the test robots, which run under
+ * pushCarefulMemHandler(): that ceiling is enforced by exit(1) from inside the
+ * allocator, which kills the run outright and writes nothing to the log. */
+{
+htmlPageMaxSize = maxSize;
+}
+
+static struct dyString *htmlSlurpOrAbort(int sd, char *url)
+/* Read the response on sd, honoring the size ceiling.  Closes sd either way.
+ * ErrAborts rather than returning an oversized page. */
+{
+struct dyString *dyText = netSlurpFileMax(sd, htmlPageMaxSize);
+close(sd);
+if (dyText == NULL)
+    {
+    char maxSizeStr[32];
+    sprintLongWithCommas(maxSizeStr, (long long)htmlPageMaxSize);
+    errAbort(HTML_PAGE_TOO_BIG " %s byte limit, from %s", maxSizeStr, url);
+    }
+return dyText;
+}
+
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
 {
@@ -954,8 +983,7 @@ int sd;
 
 cookieOutput(dyHeader, cookies);
 sd = netOpenHttpExt(url, "GET", dyHeader->string);
-dyText = netSlurpFile(sd);
-close(sd);
+dyText = htmlSlurpOrAbort(sd, url);
 dyStringFree(&dyHeader);
 return dyStringCannibalize(&dyText);
 }
@@ -1445,8 +1473,7 @@ else if (sameWord(form->method, "POST"))
     sd = netOpenHttpExt(dyUrl->string, form->method, dyHeader->string);
     mustWriteFd(sd, cgiVars, contentLength);
     }
-dyText = netSlurpFile(sd);
-close(sd);
+dyText = htmlSlurpOrAbort(sd, url);
 newPage = htmlPageParse(url, dyStringCannibalize(&dyText));
 freez(&url);
 dyStringFree(&dyUrl);

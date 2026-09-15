@@ -34,6 +34,16 @@
  * test region's all-fields output can exceed the carefulAlloc ceiling. */
 #define MAX_ROWS_REGION_FILTERED 250000000
 
+/* Ceiling on the allocation the careful memory handler will permit. */
+#define MAX_CAREFUL_ALLOC 500000000
+
+/* Ceiling on one response read into memory.  Well under MAX_CAREFUL_ALLOC because a
+ * response does not cost its own size once: the dyString it accumulates in roughly
+ * doubles when it grows, the old buffer is still live while the new one is filled,
+ * and the parsed page then sits alongside the text.  A page this big is a failure
+ * to report, not a page we want to finish parsing. */
+#define MAX_RESPONSE_BYTES 100000000
+
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -202,10 +212,27 @@ if (basePage != NULL)
     if (!page)
 	{
 	verbose(2, "page is NULL, qs->errMessage=[%s]\n", qs->errMessage);
-	if (startsWith("carefulAlloc: Allocated too much memory", qs->errMessage))
+	/* htmlPage stops reading at MAX_RESPONSE_BYTES and errAborts with this prefix.
+	 * Before that cap existed the response was read until carefulAlloc hit its
+	 * ceiling and called exit(1), which took the whole run down and left nothing
+	 * in the log, so this arm never ran and the offending track was never named.
+	 *
+	 * This is a skip, not an error.  A track dense enough to answer a 5Mb region
+	 * with hundreds of megabytes - hg38 hgdp returns over 600MB, mm39 jaspar2024
+	 * about 760MB - is simply one this robot cannot test, the same situation the
+	 * row count screen below catches before submitting.  Counting it would put an
+	 * error in every weekly run and make the summary as useless a gate as the one
+	 * that never failed.  Clearing errMessage drops it out of the error counts. */
+	if (startsWith(HTML_PAGE_TOO_BIG, qs->errMessage))
 	    {
-	          verbose(1, "Response html page too large (500MB) (%s %s %s %s %s)\n", org, db, group, track, table);
-	    fprintf(logFile, "Response html page too large (500MB) (%s %s %s %s %s)\n", org, db, group, track, table);
+	          verbose(1, "Response html page too large (over %d bytes), skipping (%s %s %s %s %s)\n",
+		MAX_RESPONSE_BYTES, naForNull(org), naForNull(db), naForNull(group),
+		naForNull(track), naForNull(table));
+	    fprintf(logFile, "Response html page too large (over %d bytes), skipping (%s %s %s %s %s)\n",
+		MAX_RESPONSE_BYTES, naForNull(org), naForNull(db), naForNull(group),
+		naForNull(track), naForNull(table));
+	    freez(&qs->errMessage);
+	    qs->hardError = FALSE;
 	    }
 	else
 	    {
@@ -1463,6 +1490,10 @@ if (appendLog)
     logFile = mustOpen(logName, "a");
 else
     logFile = mustOpen(logName, "w");
+/* Line buffer the log.  Finding out that a run died partway through is the whole
+ * point of this robot, and a block of buffered lines lost on the way out is how
+ * an oversized page used to leave no trace of which track it was. */
+setvbuf(logFile, NULL, _IOLBF, 0);
 if (! endsWith(url, "hgTables"))
     warn("Warning: first argument should be a complete URL to hgTables, "
 	 "but doesn't look like one (%s)", url);
@@ -1548,7 +1579,8 @@ return 0;
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(500000000);
+pushCarefulMemHandler(MAX_CAREFUL_ALLOC);
+htmlPageSetMaxSize(MAX_RESPONSE_BYTES);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();

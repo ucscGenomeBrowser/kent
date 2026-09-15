@@ -212,6 +212,14 @@ void htmlPageValidateOrAbort(struct htmlPage *page);
 void htmlPageStrictTagNestCheck(struct htmlPage *page);
 /* Do strict tag nesting check.  Aborts if there is a problem. */
 
+#define HTML_PAGE_TOO_BIG "htmlPage: response larger than the"
+/* Prefix of the errAbort message from a fetch that ran past htmlPageSetMaxSize().
+ * A caller catching that abort recognizes it with startsWith(). */
+
+void htmlPageSetMaxSize(size_t maxSize);
+/* Set a ceiling on the size of a response this module will read into memory.  Past it
+ * the fetch errAborts instead, naming the url.  Zero, the default, means no ceiling. */
+
 char *htmlSlurpWithCookies(char *url, struct htmlCookie *cookies);
 /* Send get message to url with cookies, and return full response as
  * a dyString.  This is not parsed or validated, and includes http
