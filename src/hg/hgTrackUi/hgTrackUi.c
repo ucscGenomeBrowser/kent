@@ -4724,8 +4724,9 @@ if (isDup)
     tdb = dupTdbFrom(tdb, dup);
     }
 
-// A hub's description page never went through hgTrackDb, so its variables are substituted
-// here instead.  This is what lets a hub page link to its container with $parentTrack.
+// resolve $hgsid, which hgTrackDb had no cart to resolve, and for a hub the rest of its
+// description page variables: a hub page never went through hgTrackDb at all.  This is what
+// lets a hub page link to its container with $parentTrack.
 hVarSubstTrackDbHtml(cart, tdb, database);
 
 if(cartOptionalString(cart, "ajax"))

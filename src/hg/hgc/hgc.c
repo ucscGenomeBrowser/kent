@@ -3783,8 +3783,9 @@ for (;tdb != NULL; tdb = tdb->parent)
         tdb->html = getTrackHtml(liftDb, tdb->table);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
-        // a hub's description page never went through hgTrackDb, substitute its variables
-        // here.  tdb is the track the html belongs to, so $parentTrack means its container.
+        // resolve $hgsid, which hgTrackDb had no cart to resolve, and for a hub the rest of
+        // its description page variables: a hub page never went through hgTrackDb at all.
+        // tdb is the track the html belongs to, so $parentTrack means its container.
         hVarSubstTrackDbHtml(cart, tdb, database);
         return tdb->html;
         }

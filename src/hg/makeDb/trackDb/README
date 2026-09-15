@@ -76,11 +76,14 @@ may have the following variables, which will be substituted:
                is not in a container this is the same as ${track}. Useful for
                linking a subtrack's description page back to its container, e.g.
                <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">.
-     ${hgsid} - the current session id. Only a CGI has a cart to take this
-               from. Native trackDb html is substituted once by hgTrackDb when
-               it loads trackDb, and that happens without a cart, so ${hgsid}
-               is empty there. It is meant for hub description pages, which are
-               substituted at render time by hgc and hgTrackUi instead.
+     ${hgsid} - the current session id, in a native trackDb description page
+               only. hgTrackDb has no cart when it loads trackDb, so it leaves
+               the reference alone and hgc and hgTrackUi resolve it when they
+               render the page. It is not available in a hub's description
+               page: a hub is written by someone else, its html is only lightly
+               sanitized, and a session id in a hub page could be sent to the
+               hub's own server by something as ordinary as an <img> tag.
+               A session id is enough on its own to read and write that cart.
 In addition, if there is an otherDb field set in the .ra file, these
 variables are available:
      ${o_ORGANISM} - all upper case other organism, like 'MOUSE'
