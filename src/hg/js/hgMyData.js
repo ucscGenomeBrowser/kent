@@ -3069,7 +3069,12 @@ var hubCreate = (function() {
         cart.debug(debugCartJson);
         // get the file list immediately upon page load
         let activeTab = $("#tabs").tabs( "option", "active" );
-        if (activeTab === 3) {
+        // Which tab this is depends on what the mirror turns on: hgHubConnect only prints
+        // the Hub Development tab when hgHubConnect.validateHub is set, so on a mirror with
+        // storeUserFiles on and validateHub off, Hub Upload is the third tab and not the
+        // fourth.  Find it by its panel instead of counting.
+        let hubUploadTab = $('#tabs > ul > li > a[href="#hubUpload"]').parent().index();
+        if (hubUploadTab >= 0 && activeTab === hubUploadTab) {
             let url = new URL(window.location.href);
             if (url.protocol === "http:") {
                 warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +
