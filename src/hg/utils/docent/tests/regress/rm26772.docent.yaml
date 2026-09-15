@@ -1,0 +1,48 @@
+# #26772 -- a BED of zero-length regions crashed multi-region with
+#
+#     Window out of range on virt
+#
+# and a grey error page.  The input was the COVID GWAS risk variants written as 1-based
+# single positions, chromStart == chromEnd on every line, which is wrong BED but is the
+# mistake a reader makes when they paste a variant list.  Galt's fix rejects the line and
+# says which one it is; Daniel confirmed the message on beta on 2021-01-20 and closed the
+# ticket on the RR six days later.
+#
+# The check is in hg/hgTracks/hgTracks.c, in the reader for custom regions:
+#
+#     warn("BED chromEnd %u must be greater than chromStart %u %s", ...)
+#
+# The virtual chromosome is called "multi" now and was called "virt" in 2021, so the
+# noText: below names the part of the string the rename did not touch.  It is the error
+# the FIX must not produce; the text: beside it is the message it must produce, and both
+# are needed because the page has no track image on either build -- a noText: alone would
+# pass just as happily on the grey page the ticket was filed about.
+#
+# The regions are fed through the multiRegionsBedInput cart variable, which is what the
+# dialog's textarea submits, so this reaches the same reader the dialog does.  Docent has
+# no verb that types into the textarea.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket long after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr3:45901000-45901200
+reset: true
+fast: true
+steps:
+  - go: chr3:45901000-45901200
+
+  # The ticket's own BED, first two lines: 1-based single positions, so chromStart and
+  # chromEnd are equal on both.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&virtModeType=customUrl&multiRegionsBedInput=chr3%2045901089%2045901089%0Achr6%2029798794%2029798794%0A"
+  - expect:
+      text: "BED chromEnd 45901089 must be greater than chromStart 45901089 chr3"
+      noText: "Window out of range on"
+
+  # The same BED with the ends one base past the starts is legal, and has to still work:
+  # a fix that rejected every short region would pass the step above.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr3%2045901089%2045901090%0Achr6%2029798794%2029798795%0A"
+  - expect:
+      rows: [ruler]
+      noText: "must be greater than chromStart"
+      has: '#hgTracksConfigMultiRegionPage.pressed'

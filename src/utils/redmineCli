@@ -1203,12 +1203,22 @@ def fetch_relations(base_url, ticket_id, api_key):
 
 
 def summarize_issue(base_url, ticket_id, api_key):
-    """Return {id, subject, status, tracker} for a ticket, or None if it can't be read
-    (e.g. deleted or no permission)."""
+    """Return {id, subject, status, tracker} for a ticket, or None if the ticket itself
+    is not accessible (deleted -> 404, or no permission -> 403).  Any other failure
+    (network trouble, rate limiting, bad API key) is re-raised, so it is not silently
+    hidden behind a "(not readable)" label."""
     try:
         d = api_get(base_url, f"/issues/{ticket_id}.json", api_key)["issue"]
-    except SystemExit:
-        return None
+    except SystemExit as e:
+        # api_get exits with "Error: HTTP <code> GET <url>: <body>", where body is up to 500
+        # characters of whatever the server sent.  Match the prefix we build, not anywhere in
+        # the string: a 502 or a proxy error page that happens to quote "HTTP 404 GET" in its
+        # own text would otherwise be swallowed and labelled "(not readable)", which is exactly
+        # the confusion this function exists to prevent.
+        msg = str(e)
+        if msg.startswith("Error: HTTP 403 GET ") or msg.startswith("Error: HTTP 404 GET "):
+            return None
+        raise
     return {"id": d["id"], "subject": d.get("subject", ""),
             "status": d.get("status", {}).get("name", ""),
             "tracker": d.get("tracker", {}).get("name", "")}

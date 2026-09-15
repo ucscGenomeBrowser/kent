@@ -5,6 +5,14 @@ set -beEu -o pipefail
 # Sync submodules to the commits pinned by the parent repo, and check for
 # having remains of old htslib copy to deal with switch from old version.
 
+# Every path below is relative to kent/src, but callers reach this script from
+# different directories: src/makefile runs ./submodules/submoduleSetup from
+# src, while userApps/fetchKentSource.sh cds into src/submodules first.  Anchor
+# on kent/src ourselves so the caller's cwd does not matter.  Without this the
+# zlib-ng configure below died on its own log path, and the htslib probe guard
+# silently tested a path that could not exist and so never ran.  refs #38125
+cd "$(dirname "$0")/.."
+
 if [ -e htslib ] ; then
     echo "*********************************************************************" >&2
     echo "Note: an outdated kent/src/htslib/ exists in the working tree." >&2

@@ -10,23 +10,22 @@ regulatory function. These are usually called conserved non-coding elements.
 </p>
 
 <p>
-This track holds conservation and CRISPR resources for danRer11 produced by the Shawn
+This track holds cross-species conservation resources for danRer11 produced by the Shawn
 Burgess laboratory at NHGRI, which the DANIO-CODE consortium includes in its track hub.
-It has two parts. The conservation part is a phastCons score computed from an alignment
-of zebrafish with grass carp, common carp and goldfish, together with the conserved
-non-coding elements called from that score. The CRISPR part is a genome-wide catalogue
-of predicted CRISPR/Cas9 target sites, in three sets: all target sites, those beginning
-with GG, and those beginning with GA. The GG and GA sets matter in practice because
-those dinucleotides are efficiently transcribed by the polymerases used to make the
-guide RNA.
+It is a phastCons score computed from an alignment of zebrafish with grass carp, common
+carp and goldfish, together with the conserved non-coding elements called from that
+score. The same laboratory's CRISPR/Cas9 target-site predictions, also distributed
+through the DANIO-CODE hub, have their own
+<a href="hgTrackUi?g=dcCrispr">CRISPR/Cas9 Targets</a> track, since they aren't a
+conservation resource and aren't specific to DANIO-CODE.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
 The phastCons track is a graph, auto-scaled to the window. The conserved non-coding
-elements and the CRISPR target sites are drawn as blocks, in the colors stored in the
-data files. All five tracks are off by default.
+elements are drawn as blocks, in the colors stored in the data file. Both tracks are off
+by default.
 </p>
 
 <h2>Methods</h2>
@@ -34,10 +33,8 @@ data files. All five tracks are off by default.
 <p>
 The phastCons scores were computed from a whole-genome alignment of zebrafish with three
 other cyprinid fishes, grass carp, common carp and goldfish, and conserved non-coding
-elements were called from the scores. CRISPR/Cas9 target sites were predicted
-genome-wide for the SP6-transcribed guide format, once without a constraint on the
-first two bases and once each for guides starting with GG and with GA. These data were
-produced by the Shawn Burgess laboratory at NHGRI and are distributed from
+elements were called from the scores. These data were produced by the Shawn Burgess
+laboratory at NHGRI and are distributed from
 <a href="https://research.nhgri.nih.gov/manuscripts/Burgess/zebrafish/" target="_blank">
 their own site</a>, which is also where questions about them are best directed.
 </p>
@@ -67,7 +64,8 @@ our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>dcComparativeGenomic
 For automated download and analysis, the annotations are stored in bigWig and bigBed files that
 can be downloaded from
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/danRer11/danioCode/" target="_blank">our
-download server</a>. The files are <tt>ZF_GC_CC_GF.danRer11.bw</tt> (phastCons), <tt>ZF_GC_CC_GF.danRer11.bb</tt> (conserved non-coding elements) and <tt>danRer11_sp6cas_N18_20.colored.bb</tt>, <tt>danRer11_sp6cas_GGN16_18NGG.colored.bb</tt> and <tt>danRer11_sp6cas_GAN16_18NGG.colored.bb</tt> (CRISPR targets). Individual regions or the whole genome annotation can be
+download server</a>. The files are <tt>ZF_GC_CC_GF.danRer11.bw</tt> (phastCons) and
+<tt>ZF_GC_CC_GF.danRer11.bb</tt> (conserved non-coding elements). Individual regions or the whole genome annotation can be
 obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code
 or downloaded as a precompiled binary for your system. Instructions for downloading
 source code and binaries can be found

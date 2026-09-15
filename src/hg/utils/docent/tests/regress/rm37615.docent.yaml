@@ -17,6 +17,9 @@
 #
 # and the same window and variant are reachable, which makes the two scripts easy to read
 # together. gnomadVariants is a superTrack, so hideKids keeps its siblings off.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr17:43091000-43092000

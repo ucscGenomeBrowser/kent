@@ -379,8 +379,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *encSessionName = row[0];
     /* A snapshot is a share token, not a session the user made and would recognize (see
-     * lib/snapshotSession.c).  Leave it out of the list, as its "__" prefix promises. */
-    if (snapshotIsSnapshotName(encSessionName))
+     * lib/snapshotSession.c).  Leave it out of the list.  Ask the settings column, which
+     * saveSnapshotSession() stamps with the snapshot type - not the "__" name prefix, which users
+     * have also used for sessions of their own that they do need to see here (refs #38313). */
+    if (gotSettings && snapshotIsSnapshotSettings(row[5]))
         continue;
     char *sessionName = cgiDecodeClone(encSessionName);
     char *link = NULL;
@@ -758,7 +760,7 @@ if (sessionNewPageActive())
     return;
     }
 cspWriteResponseHeader();
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 if (loginSystemEnabled() || wikiLinkEnabled())
     {
     if (userName)
@@ -1051,7 +1053,7 @@ return dyStringCannibalize(&dyMessage);
 static void saveSessionJsonError(struct sqlConnection *conn, char *message)
 /* Emit a JSON error response for the "Share a link" AJAX endpoints and disconnect. */
 {
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"error\": \"%s\"}\n", jsonStringEscape(message));
 hDisconnectCentral(&conn);
 }
@@ -1077,7 +1079,7 @@ static void saveSessionJsonResult(struct sqlConnection *conn, char *encUserName,
 {
 struct dyString *dyUrl = dyStringNew(0);
 addSessionLink(dyUrl, encUserName, encSessionName, FALSE, TRUE);
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"name\": \"%s\", \"url\": \"%s\"", jsonStringEscape(sessionName),
        jsonStringEscape(dyUrl->string));
 if (isNotEmpty(warning))
@@ -1125,7 +1127,7 @@ if (!sqlTableExists(conn, namedSessionTable))
     return;
     }
 char *name = snapshotNewName(conn, "l");
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"name\": \"%s\"}\n", jsonStringEscape(name));
 hDisconnectCentral(&conn);
 }
@@ -1249,7 +1251,7 @@ else
      * clobbering an existing session of theirs.  Report the clash instead of overwriting. */
     if (failIfExists && namedSessionExists(conn, encUserName, encSessionName))
         {
-        puts("Content-Type:application/json\n");
+        cgiPrintContentType("application/json");
         printf("{\"exists\": true}\n");
         hDisconnectCentral(&conn);
         return;
@@ -2380,9 +2382,11 @@ if (loggedIn)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char *encSessionName = row[0];
-            /* Snapshots are share tokens, not sessions the user made; keep them out of the list,
-             * as their "__" prefix promises (see lib/snapshotSession.c). */
-            if (snapshotIsSnapshotName(encSessionName))
+            /* Snapshots are share tokens, not sessions the user made; keep them out of the list.
+             * The settings column, stamped by saveSnapshotSession(), is what says so - the "__"
+             * name prefix does not, since users have named their own sessions that way and those
+             * belong in the list (refs #38313).  See lib/snapshotSession.c. */
+            if (gotSettings && snapshotIsSnapshotSettings(row[5]))
                 continue;
             char *sessionName = cgiDecodeClone(encSessionName);
             int shared = atoi(row[1]);
@@ -2531,7 +2535,7 @@ void doMainPageNew(char *userName, char *message)
 if (isNotEmpty(cartOptionalString(cart, "measureTiming")))
     hgSessionTiming = perfTimerNew();   /* times the page; emitted as hgSessionData.timing */
 cspWriteResponseHeader();
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 cartWebStart(cart, NULL, "My Sessions");
 jsInit();
 jsIncludeDataTablesLibs();
@@ -2565,7 +2569,7 @@ static void saveSessionJsonOk(struct sqlConnection *conn, char *extraFields)
 /* Emit {"success": true[, <extraFields>]} and disconnect.  extraFields (may be NULL) is inserted
  * verbatim after "success": true, e.g. ", \"shared\": 2". */
 {
-puts("Content-Type:application/json\n");
+cgiPrintContentType("application/json");
 printf("{\"success\": true%s}\n", extraFields ? extraFields : "");
 hDisconnectCentral(&conn);
 }

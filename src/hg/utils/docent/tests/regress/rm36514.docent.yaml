@@ -12,6 +12,9 @@
 # features, so its row is legitimately absent and the assertion would fail for a reason
 # unconnected to the bug. The chain is always drawn in a lifted view, so it is the right
 # way to say "we are on a drawn lifted page and not on an error page".
+proof:
+  - "assertion-only 2026-09-04 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr7:156982676-156996015

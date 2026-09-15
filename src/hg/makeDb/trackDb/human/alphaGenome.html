@@ -1,7 +1,7 @@
 <h2>Description</h2>
 <p>
 This track shows the AlphaGenome Variant Impact (AVI) score, a prediction from Google DeepMind
-of how likely a given substitution is to be disease causing. Scores are provided for every
+of how likely a given substitution is to have an impact. Scores are provided for every
 possible single-base substitution at every position in the genome, about 8.8 billion in total.
 Unlike predictors that only cover protein-coding changes, the AVI score is defined genome wide,
 so it also scores variants in introns and in intergenic regulatory regions.
@@ -28,10 +28,9 @@ The source data gives two numbers per variant, a raw model score and a PHRED-sca
 it. This track displays the PHRED-scaled score, which is easier to compare across variants: it
 is a rank in which 10 corresponds to the top 10 percent of the most impactful substitutions in
 the genome, 20 to the top 1 percent, and 30 to the top 0.1 percent. Higher values therefore
-indicate a variant predicted to be more damaging. Any score above 20 can be considered high, and
-the authors recommend treating 50 as the top of the useful range. Most positions score low, with
-a genome-wide median near 1.6, so the default view is scaled to 0 to 30 rather than to the
-observed maximum of about 89. Scores above the top of the range are drawn clipped at the top of
+indicate a variant predicted to be more damaging. Most substitutions score low, with a
+genome-wide median near 2.9, so the default view is scaled to 0 to 30 rather than to the observed
+maximum of about 89. Scores above the top of the range are drawn clipped at the top of
 the graph; the range can be changed on the track configuration page.
 </p>
 <p>

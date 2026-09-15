@@ -29,6 +29,9 @@
 # would be there even if nothing had drawn. Measured 2026-09-05: 46 rows, 6475px. The
 # floor is left low on purpose -- one of the remote bigDataUrls going away should not fail
 # this test, since the three label checks are what carries it.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg19
 position: chr21:33031597-33041570

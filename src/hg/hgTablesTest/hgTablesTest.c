@@ -188,6 +188,18 @@ if (basePage != NULL)
 	          verbose(1, "Response html page too large (500MB) (%s %s %s %s %s)\n", org, db, group, track, table);
 	    fprintf(logFile, "Response html page too large (500MB) (%s %s %s %s %s)\n", org, db, group, track, table);
 	    }
+	else
+	    {
+	    /* Without this the caller reports only which track it was on, and the
+	     * reason the page was unusable is lost unless someone happens to re-run
+	     * at -verbose=2. */
+	    verbose(1, "No usable page (%s %s %s %s %s): %s\n",
+		naForNull(org), naForNull(db), naForNull(group),
+		naForNull(track), naForNull(table), naForNull(qs->errMessage));
+	    fprintf(logFile, "No usable page (%s %s %s %s %s): %s\n",
+		naForNull(org), naForNull(db), naForNull(group),
+		naForNull(track), naForNull(table), naForNull(qs->errMessage));
+	    }
 	}
 
     /* 
@@ -804,28 +816,33 @@ struct htmlFormVar *tableVar;
 struct slName *table;
 int tableIx;
 
+/* A track whose page does not come back, or comes back unusable, is skipped
+ * rather than fatal.  quickSubmit has already recorded the failure in
+ * tablesTestList, so it is counted in the final summary either way.  Aborting
+ * here used to end the whole run, which meant the summary that carries the
+ * error counts was never written at all, and a single bad page - often just a
+ * truncated response from a busy server - threw away an hour of testing.  This
+ * also covers the old bigPsl special case (2016-06-20). */
 if (trackPage == NULL)
     {
-    // is this an exception?
-    // exception for bigPsl (2016-06-20), may be short-lived.
-    struct sqlConnection *conn = sqlConnect(db);
-    char query[256];
-    sqlSafef(query, sizeof query, "select type from trackDb where tableName='%s'", track);
-    char *type = sqlQuickString(conn, query);
-    sqlDisconnect(&conn);
-    if (sameString(type, "bigPsl"))
-	{
-    	      verbose(1, "Skipping testing track %s since type bigPsl not supported by hgTables at this time (2016-06-20)\n", track);
-    	fprintf(logFile, "Skipping testing track %s since type bigPsl not supported by hgTables at this time (2016-06-20)\n", track);
-	return;
-	}
-    else
-	errAbort("Couldn't select track %s", track);
+    verbose(1, "Skipping track %s: no page returned\n", track);
+    fprintf(logFile, "Skipping track %s: no page returned\n", track);
+    return;
     }
 if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
-    errAbort("Couldn't get main form on trackPage");
+    {
+    verbose(1, "Skipping track %s: no main form on track page\n", track);
+    fprintf(logFile, "Skipping track %s: no main form on track page\n", track);
+    htmlPageFree(&trackPage);
+    return;
+    }
 if ((tableVar = htmlFormVarGet(mainForm, hgtaTable)) == NULL)
-    errAbort("Can't find table var");
+    {
+    verbose(1, "Skipping track %s: no table var on track page\n", track);
+    fprintf(logFile, "Skipping track %s: no table var on track page\n", track);
+    htmlPageFree(&trackPage);
+    return;
+    }
 
 // put the tables in random order:
 if (!noShuffle)
@@ -855,12 +872,28 @@ struct htmlFormVar *trackVar;
 struct slName *track;
 int trackIx;
 
+/* As in testOneTrack, a group we cannot read is skipped rather than fatal, so
+ * that one bad page does not cost the whole run. */
 if (groupPage == NULL)
-    errAbort("Error when changing group to %s", group);
+    {
+    verbose(1, "Skipping group %s: no page returned\n", group);
+    fprintf(logFile, "Skipping group %s: no page returned\n", group);
+    return;
+    }
 if ((mainForm = htmlFormGet(groupPage, "mainForm")) == NULL)
-    errAbort("Couldn't get main form on groupPage");
+    {
+    verbose(1, "Skipping group %s: no main form on group page\n", group);
+    fprintf(logFile, "Skipping group %s: no main form on group page\n", group);
+    htmlPageFree(&groupPage);
+    return;
+    }
 if ((trackVar = htmlFormVarGet(mainForm, hgtaTrack)) == NULL)
-    errAbort("Can't find track var");
+    {
+    verbose(1, "Skipping group %s: no track var on group page\n", group);
+    fprintf(logFile, "Skipping group %s: no track var on group page\n", group);
+    htmlPageFree(&groupPage);
+    return;
+    }
 
 // put the tracks in random order:
 if (!noShuffle)

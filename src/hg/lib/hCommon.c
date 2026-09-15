@@ -10,6 +10,7 @@
 #include "hgConfig.h"
 #include "errAbort.h"
 #include "htmshell.h"
+#include "cheapcgi.h"
 
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
@@ -401,6 +402,19 @@ void hVaUserAbort(char *format, va_list args)
  * from user input. This disables the logging stack dumps. */
 {
 hDumpStackDisallow();
+/* A user error is written for the user to read, so it has to reach the browser.  When we are
+ * called before the CGI has pushed a warn handler of its own - the apiKey and bot checks do
+ * this, from main() - the default handler writes only to stderr unless doContentType is set,
+ * and apache turns that empty response into a 500.  Turn it on so the default handler emits
+ * the Content-Type line and the message (with < and > neutered) to stdout.  This is inert
+ * inside an errCatch, which pushes its own warn handler, so a caller that means to catch the
+ * abort and write its own response (hubApi's JSON) still gets to.
+ *
+ * cgiIsOnWeb() is the right test here even though it is TRUE for a spoofed command-line run
+ * of a CGI: the question is "is this a CGI process", and a spoofed run wants the header too.
+ * A program that never calls cgiSpoof() reads FALSE and keeps writing to stderr only. */
+if (cgiIsOnWeb())
+    errAbortSetDoContentType(TRUE);
 vaErrAbort(format, args);
 }
 
@@ -421,9 +435,11 @@ return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
 }
 
 void cspWriteResponseHeader(void)
-/* Write the Content Security Policy as an http response header, if hg.conf
- * turns it on.  Must be called before the blank line that ends the http header
- * block.  Only the first call in a process writes anything.
+/* Queue the Content Security Policy as an http response header, if hg.conf turns it on.
+ * cgiPrintContentType() writes it, so this only has to run before that does; it does not
+ * have to be the thing that writes the line, and a caller that has already closed the
+ * header block simply loses it rather than printing a header into the page body.
+ * Only the first call in a process queues anything.
  *
  * This exists so that pages which build their own http header block, and so
  * never reach the library code that writes the meta tag, still carry a policy.
@@ -435,5 +451,7 @@ if (written)
 if (!cfgOptionBooleanDefault("cspResponseHeader", FALSE))
     return;
 written = TRUE;
-generateCspResponseHeader(stdout);
+char *policy = getCspPolicyString();
+cgiAddHttpHeader("Content-Security-Policy", policy);
+freeMem(policy);
 }

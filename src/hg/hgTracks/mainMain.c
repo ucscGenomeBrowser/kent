@@ -65,7 +65,7 @@ oldVars = hashNew(10);
 if (cgiVarExists("hgt.redirectTool"))
     {
     // user has selected one of the tools in View > In external tools: Do not plot, just redirect.
-    printf("Content-type: text/html\n\n");
+    cgiPrintContentType("text/html");
     errAbortSetDoContentType(FALSE);
     cart = cartForSession(hUserCookie(), NULL, NULL);
     extToolRedirect(cart, cgiString("hgt.redirectTool"));
@@ -77,7 +77,7 @@ else if (cfgOptionBooleanDefault("doMyVariants", FALSE) && cgiVarExists("myVarSh
     }
 else
     {
-    httpHeaders = slPairNew("Cache-Control", "no-store");
+    cgiAddHttpHeader("Cache-Control", "no-store");
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
     }
 

@@ -997,7 +997,7 @@ track->nextItemButtonable = TRUE;
 static void apiSuccess(struct jsonWrite *jw)
 /* Send 200 JSON response and exit. */
 {
-printf("Content-Type: application/json\n\n");
+cgiPrintContentType("application/json");
 puts(jw->dy->string);
 jsonWriteFree(&jw);
 exit(0);
@@ -1007,7 +1007,7 @@ static void apiError(int httpStatus, char *message)
 /* Send error JSON response with given HTTP status and exit. */
 {
 printf("Status: %d\n", httpStatus);
-printf("Content-Type: application/json\n\n");
+cgiPrintContentType("application/json");
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "error", message);

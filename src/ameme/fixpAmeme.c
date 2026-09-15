@@ -2303,7 +2303,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     }
 
 /* Print out html header.  Make background color brilliant white. */
-puts("Content-Type:text/html\n");
+cgiPrintContentType("text/html");
 printf("<HEAD>\n<TITLE>%s</TITLE>\n</HEAD>\n\n", "Improbizer Results");
 puts("<BODY BGCOLOR='#FFFFFF'>\n");
 

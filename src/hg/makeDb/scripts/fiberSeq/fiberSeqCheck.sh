@@ -21,6 +21,7 @@ sampleList=$scriptDir/fiberSeqSamples.tsv
 bigWigs="all.percent.accessible.bw
 hap1.percent.accessible.bw
 hap2.percent.accessible.bw
+all.nucleosome.coverage.bw
 cpg.combined.bw
 cpg.hap1.bw
 cpg.hap2.bw

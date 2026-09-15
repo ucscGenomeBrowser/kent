@@ -197,6 +197,12 @@ char *chromTable(struct sqlConnection *conn, char *table);
 /* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 
+boolean tableHasDbPrefix(char *table);
+/* Return TRUE when the text before the first dot in table is the name of a
+ * database, as in uniProt.taxon.  A dot on its own does not mean that: a table
+ * name can carry an assembly accession version, the way the HPRCv2 and GenArk
+ * chain/net subtracks do in chainLiftOverGCA_018466835.2. */
+
 char *getDbTable(char *db, char *table);
 /* If table already contains its real database as a dot-prefix, then
  * return a clone of table; otherwise alloc and return db.table . */

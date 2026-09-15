@@ -394,8 +394,7 @@ cartExclude(cart, selfVar);
 
 printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
 	cookieName, cart->userInfo->id, cookieDate());
-puts("Content-Type:text/html");
-puts("\n");
+cgiPrintContentType("text/html");
 
 htmStart(stdout, title);
 

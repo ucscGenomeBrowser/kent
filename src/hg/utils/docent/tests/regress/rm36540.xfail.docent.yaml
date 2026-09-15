@@ -17,7 +17,9 @@
 # xfail instead, which is how this suite pins a trap: the run fails if it ever PASSES, so
 # the day someone fixes it, they are told there is a test waiting rather than left to
 # discover it. If #36540 is reopened and fixed, drop the .xfail from the name.
-#
+proof:
+  - "xfail 2026-09-04 -- red on genome.ucsc.edu v502, hgwbeta v503 and genome-test v503 with the reporter's own hub URL; genome= still does not resolve"
+
 target: genome-test
 reset: true
 fast: true

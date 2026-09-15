@@ -1,0 +1,53 @@
+# #38042 -- an item whose ends fall outside the chains quickLift loads was dropped, even
+# when the part inside the window mapped fine.  In one ClinVar window that removed 44 of
+# the 46 copy number variants.
+#
+# quickLift loads chains for the window plus padding, capped at 1 Mb (QUICKLIFT_RANGE_PAD,
+# hg/lib/quickLift.c).  A ClinVar CNV can run to 159 Mb, so both of its ends sit where no
+# chain reaches, remapRangeList can place neither, and the whole item goes.  7f65d3da8f2
+# pulls the ends in to the nearest aligned base before mapping -- snapToBlock() and
+# clipBedToChains() in quickLift.c, gated by quickLiftClipToChains, on by default.
+#
+# What the assertion reads is the spanned-item merge.  clinvarCnv sets mergeSpannedItems,
+# so every item that spans the whole window is collapsed into one synthetic "mergedItem"
+# box whose tooltip counts them.  An item that fails to lift is dropped before it can reach
+# that merge, so on a build without the fix the spanning CNVs are gone and there is no
+# merged box at all: the two survivors sit inside the window and nothing spans it.  The
+# box is therefore the whole signature, and it is read on the source as well so that the
+# step says the lift preserved something rather than that the track exists.
+#
+# The COUNT is deliberately not asserted.  It was 45 on both sides on 2026-09-12, but
+# ClinVar is reloaded by an otto cron and the number moves with the data, which would turn
+# a nightly red into news about ClinVar instead of about quickLift.
+#
+# `data-tooltip` and not `title`: hgTracks writes both on a map box and the page's own
+# tooltip code moves the title out of the DOM once its JavaScript has run.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 7f65d3da8f2, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {clinvar: pack, clinvarMain: hide, clinvarSubLolly: hide, clinvarCnv: pack}
+
+  # The source: the spanning CNVs are there and the merge has collapsed them.
+  - expect:
+      rows: [ruler, clinvarCnv]
+      exact: true
+      has: 'area[data-tooltip^="Merged "]'
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+
+  # And after the lift.  The other two ClinVar subtracks come back on the target even
+  # though they were hidden on the source, which is #38044 and is not this test's business,
+  # so the row list is not exact here.
+  - expect:
+      rows: [clinvarCnv]
+      has: 'area[data-tooltip^="Merged "]'
+      noText: "Warning/Error"

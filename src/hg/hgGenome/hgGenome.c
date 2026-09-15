@@ -534,7 +534,7 @@ void hggDoUsualHttp()
  * HTTP header and write cart back to database. */
 {
 cartWriteCookie(cart, hUserCookie());
-printf("Content-Type:text/html\r\n\r\n");
+cgiPrintContentType("text/html");
 
 /* Dispatch other pages, that actually want to write HTML. */
 cartWarnCatcher(dispatchPage, cart, cartEarlyWarningHandler);

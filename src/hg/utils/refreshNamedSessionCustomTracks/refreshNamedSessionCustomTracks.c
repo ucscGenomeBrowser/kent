@@ -236,16 +236,53 @@ char *namePt = contentsToChop;
 
 
 verbose(3, "Scanning %s %s\n", userName, sessionName);
+boolean skipMalformed = cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE);
+
 while (isNotEmpty(namePt))
     {
-    char *dataPt = strchr(namePt, '=');
+    char *dataPt;
     char *nextNamePt;
-    if (dataPt == NULL)
-	errAbort("ERROR: Mangled session content string %s", namePt);
-    *dataPt++ = 0;
-    nextNamePt = strchr(dataPt, '&');
-    if (nextNamePt != NULL)
-	*nextNamePt++ = 0;
+    if (skipMalformed)
+	{
+	/* Confine the search for the '=' to this pair.  Otherwise a pair with
+	 * no value renames the pair after it, so a ctfile_ setting behind one
+	 * is never seen and its custom track file is left to expire.  A pair
+	 * with no value at the end of the contents aborts this child, the
+	 * parent exits non-zero, and every session after it in the table goes
+	 * unscanned.  refs #38340 */
+	size_t sepCount = strspn(namePt, "&");
+	if (sepCount > 0)
+	    {
+	    /* Copy the separators of an empty pair through untouched.  This
+	     * loop rebuilds newContents as it walks, so anything it steps over
+	     * silently would be dropped from the session under -hardcore. */
+	    dyStringAppendN(newContents, namePt, sepCount);
+	    namePt += sepCount;
+	    if (namePt[0] == 0)
+		break;
+	    }
+	nextNamePt = strchr(namePt, '&');
+	if (nextNamePt != NULL)
+	    *nextNamePt++ = 0;
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    {
+	    dyStringPrintf(newContents, "%s%s", namePt, (nextNamePt ? "&" : ""));
+	    namePt = nextNamePt;
+	    continue;
+	    }
+	*dataPt++ = 0;
+	}
+    else
+	{
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    errAbort("ERROR: Mangled session content string %s", namePt);
+	*dataPt++ = 0;
+	nextNamePt = strchr(dataPt, '&');
+	if (nextNamePt != NULL)
+	    *nextNamePt++ = 0;
+	}
     dyStringClear(oneSetting);
     dyStringPrintf(oneSetting, "%s=%s%s",
 		   namePt, dataPt, (nextNamePt ? "&" : ""));

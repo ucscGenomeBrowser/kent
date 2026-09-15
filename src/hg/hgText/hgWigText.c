@@ -577,7 +577,7 @@ if ((constraints != NULL) && (constraints[0] == 0))
 
 if (!doCt)
     {
-    printf("Content-Type: text/plain\n\n");
+    cgiPrintContentType("text/plain");
     webStartText();
     }
 
@@ -848,7 +848,7 @@ if (doCt)
 
     if (linesOutput < 1)
 	{
-	printf("Content-Type: text/plain\n\n");
+	cgiPrintContentType("text/plain");
 	webStartText();
 	printf("#\tno results returned from query\n");
 	webEnd();

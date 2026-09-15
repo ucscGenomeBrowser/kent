@@ -471,7 +471,7 @@ for (;;)
 	break;
 	}
     if (bufIx + lineSize >= faFastBufSize)
-	expandFaFastBuf(bufIx, lineSize);
+	expandFaFastBuf(bufIx, bufIx + lineSize + 1);
     for (i=0; i<lineSize; ++i)
         {
 	c = line[i];

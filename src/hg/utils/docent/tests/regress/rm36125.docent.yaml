@@ -1,0 +1,72 @@
+# #36125 -- the list of things that went wrong on NCBI RefSeq tracks after a QuickLift.
+# The half asserted here is the one the ticket opens with: clicking an item in the UCSC
+# RefSeq subtrack came back with
+#
+#     Couldn't set connection database to hub_25071_hs1
+#     mySQL error 1049: Unknown database 'hub_25071_hs1'
+#
+# because hgc took the destination hub genome for a MySQL database.  The ticket's note-4
+# adds the two links that were still broken after the first pass: Predicted Protein came
+# back blank and CDS FASTA alignment raised the same Unknown database error.  Three
+# commits: 2654a3d8584 (subtrack selection, Predicted Protein and CDS FASTA links),
+# fabf13fff3e (the CCDS link routes to the source assembly with coordinates lifted back,
+# and Get Genomic Sequence Near Gene reads the destination assembly at the lifted exon
+# coordinates), and 1f88a89d5bb (the note on a quickLifted CCDS page).
+#
+# So this clicks the item and then follows the link the ticket's note-4 said came back
+# blank.  Both pages are asserted the same way: a positive text that only the real page
+# has, and the ticket's own error string.  The error page carries the track's labels in its
+# own header, so a positive check on those alone would pass on it.
+#
+# NM_000193 is named without its version on purpose.  hgTracks writes the unversioned
+# accession into the map box (i=NM_000193) even though the label shows NM_000193.4, so the
+# script does not break when RefSeq bumps the version.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {refSeqComposite: pack, refGene: pack}
+  - expect: {rows: [refGene], noText: "Warning/Error"}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [refGene], noText: "Warning/Error"}
+
+  # The click the ticket was filed about.  The position printed here is the destination
+  # one: NM_000193.4 is chr7:155,799,980-155,812,463 on hg38 and chr7:156,983,127-156,995,607
+  # on hs1, measured on genome-test on 2026-09-12.  The CCDS link beside it is the other
+  # half of fabf13fff3e -- it has to point back at the SOURCE assembly, because the ccdsGene
+  # handler cannot open the destination hub genome as a database.
+  - click: {track: refGene, item: "NM_000193"}
+  - expect:
+      text: "RefSeq Gene SHH"
+      noText: "Unknown database"
+  - expect:
+      text: "chr7:156983127-156995607"
+      has: 'a[href*="ccdsGene"][href*="db=hg38"]'
+
+  # Two things about the links under the item.  The CDS FASTA alignment link is gone on
+  # purpose -- hgPal would open the destination's hub-virtual db, and its coordinates are
+  # in destination space while the multiZ alignment lives in source coords, so hgc.c skips
+  # the link when liftDb is set.  And Predicted Protein is routed to htcTranslatedPredMRna
+  # rather than htcTranslatedProtein, which is how the peptide comes from the lifted exons
+  # instead of the source assembly's refPep file.
+  - expect:
+      noText: "CDS FASTA alignment"
+      has: 'a[href*="htcTranslatedPredMRna"]'
+  - click: 'a:has-text("Predicted Protein")'
+
+  # The blank page the ticket's note-4 reported.  Asserting the sequence itself and not
+  # merely that the page is not empty: SHH's N terminus is a fact about the gene, so this
+  # says the peptide was translated from the destination assembly at the lifted exon
+  # coordinates and is the right gene, which is what fabf13fff3e and 2654a3d8584 changed.
+  - expect:
+      text: "MLLLARCLLLVLVSSLLVCSGLACGPGRGFGKRRHPKK"
+      noText: "Unknown database"

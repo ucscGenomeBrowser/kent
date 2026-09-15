@@ -1290,7 +1290,7 @@ if (cfgOptionBooleanDefault("doMyVariants", FALSE) && op && sameString(op, "myVa
 
     // Emit CT text: a track line and BED9 rows filtered by current database
     // Plain text response, no HTML
-    puts("Content-Type: text/plain\n");
+    cgiPrintContentType("text/plain");
     /* Keep track name stable so re-import replaces */
     char *userEnc = htmlEncode(user);
     printf("track name=\"myVariants\" type=\"bed 9\" itemRgb=\"on\" visibility=\"pack\" shortLabel=\"My Annotations\" longLabel=\"My Annotations (%s)\"\n", userEnc);

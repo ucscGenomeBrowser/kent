@@ -842,6 +842,16 @@ OTHER_CGIS = {
               note="Second item, for paired features."),
             c("aliTable", "action", "hg/hgc/hgc.c:28618", value="<table>",
               verified=True, note="Alignment table to pull the alignment from."),
+            c("aliTrack", "action", "hg/hgc/hgc.c:8838", value="<track>",
+              verified=True,
+              note="Track hgc was called on, put on the alignment links by "
+                   "aliTrackParam() at hgc.c:7291.  aliTable above is the table "
+                   "name from the assembly the alignments came from, and that "
+                   "name usually exists on the assembly being viewed too, so it "
+                   "cannot tell a quickLifted alignment track from a native one; "
+                   "this can.  Read with cartUsualString and looked up in "
+                   "trackHash.  Added with the quickLift alignment details pages, "
+                   "refs #38249."),
             c("addp", "action", "hg/hgc/hgc.c:28618", verified=True,
               note="Protein-alignment flag."),
             c("pred", "action", "hg/hgc/hgc.c:28618", value="<table>",

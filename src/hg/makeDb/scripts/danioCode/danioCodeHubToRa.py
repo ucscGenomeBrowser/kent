@@ -10,10 +10,18 @@ the same files the hub reads.
 
 What the conversion has to change, and why:
 
-  * Everything is wrapped in one superTrack ("danioCode") so the 11 hub
-    containers show up as a single entry in the zebrafish track list instead of
-    11 unrelated ones.  Nested superTracks are not supported, so the three hub
-    superTracks become composites.
+  * The 11 hub containers are not all wrapped in one superTrack any more: the
+    ones big/generic enough to be found on their own merits (RNA-seq, CAGE-seq,
+    3P-seq, ChIP-seq, Hi-C) become standalone top-level tracks in an existing
+    group (STANDALONE_GROUP), while the rest -- a mixed bag of regulatory
+    element/annotation containers that don't map onto any one existing group --
+    stay nested under the "danioCode" superTrack (NESTED_ORDER).  Nested
+    superTracks are not supported, so the hub superTracks that end up nested
+    (or that have their own child superTracks) become composites.
+  * The CRISPR guide tracks inside the hub's ComparativeGenomics superTrack are
+    the Burgess lab's, not DANIO-CODE's, so they are pulled out into their own
+    top-level superTrack (CRISPR_CONTAINER) instead of riding along inside a
+    "DC Conservation" composite.
   * Track names are made hgTrackDb-legal (letters, digits, '_' and '-' only,
     first character a letter) and are prefixed with "dc" unless they already
     carry a DANIO-CODE accession (DCDnnnnnnSQ / DT), which is unique enough on
@@ -37,11 +45,44 @@ Written 2026-09-04, Claude + Max.
 import sys, re, os, fnmatch
 from collections import OrderedDict
 
-# hub containers, in the order we want them under the superTrack
-TOP_ORDER = ["RNA-seqComposite", "CAGE-seqComposite", "ChIP-seqComposite",
-             "3P-seqComposite", "HiC_Composite", "comp", "comp_cell_type",
-             "copes_and_dopes", "evalidation", "ComparativeGenomics",
-             "consensus_promoters"]
+# Containers big/generic enough to earn their own top-level track in an existing
+# group, rather than hiding inside the danioCode superTrack where nobody who isn't
+# already looking for DANIO-CODE would find them.
+STANDALONE_GROUP = {
+    "RNA-seqComposite":  "rna",
+    "CAGE-seqComposite": "genes",
+    "3P-seqComposite":   "genes",
+    "ChIP-seqComposite": "regulation",
+    "HiC_Composite":     "regulation",
+}
+STANDALONE_ORDER = ["RNA-seqComposite", "CAGE-seqComposite", "3P-seqComposite",
+                     "ChIP-seqComposite", "HiC_Composite"]
+
+# The rest stay nested under the danioCode superTrack: a "mixed bag" of
+# regulatory-element/annotation containers that don't map cleanly onto any one
+# existing group, in the order we want them to appear there.
+NESTED_ORDER = ["comp", "comp_cell_type", "copes_and_dopes", "evalidation",
+                "ComparativeGenomics", "consensus_promoters"]
+
+# hub containers, in the order walk() below emits them.  The danioCode superTrack
+# stanza is written first (see main(), below), so its own children (NESTED_ORDER)
+# must come right after it -- tdbQuery -check rejects a parent/child pair with
+# an unrelated top-level track sitting in between them in the file.
+TOP_ORDER = NESTED_ORDER + STANDALONE_ORDER
+
+# The hub's ComparativeGenomics superTrack mixes actual conservation data with
+# CRISPR guide tracks that have nothing to do with DANIO-CODE (they're the Burgess
+# lab's).  Pull those out into their own top-level superTrack instead, mirroring
+# where hg38 keeps its own (unrelated) crispr tracks -- grouped with mapping and
+# sequencing, not under a "DC Conservation" umbrella, and without "DC" anywhere in
+# the label since they aren't DANIO-CODE's data.
+CRISPR_PARENT_OLD = "ComparativeGenomics"
+CRISPR_CHILDREN_OLD = ["crisprs", "gg_crisprs", "ga_crisprs"]
+CRISPR_CONTAINER = "dcCrispr"
+CRISPR_GROUP = "map"
+CRISPR_LABELS = ("CRISPR/Cas9 Targets",
+                 "CRISPR/Cas9 target sites in the zebrafish genome, from the "
+                 "Shawn Burgess lab at NHGRI (distributed via the DANIO-CODE hub)")
 
 # hub view stanzas carry unhelpfully generic names; give them speaking ones
 VIEW_RENAME = {
@@ -67,7 +108,7 @@ TOP_LABELS = {
     "comp_cell_type":      ("DC Cell Types",    "DANIO-CODE regulatory elements assigned to cell types"),
     "copes_and_dopes":     ("DC COPEs DOPEs",   "DANIO-CODE constitutive and dynamic phylotypic-period elements"),
     "evalidation":         ("DC Enhancers",     "DANIO-CODE transgenic enhancer validation"),
-    "ComparativeGenomics": ("DC Conservation",  "DANIO-CODE conservation and CRISPR targets from the Burgess lab, NHGRI"),
+    "ComparativeGenomics": ("DC Conservation",  "DANIO-CODE cross-species conservation from the Burgess lab, NHGRI"),
     "consensus_promoters": ("DC Promoters",     "DANIO-CODE consensus promoters"),
 }
 
@@ -244,6 +285,13 @@ def main():
         trk = dict(sets)["track"]
         childrenOf.setdefault(parentOf.get(trk), []).append(trk)
 
+    # The CRISPR children are emitted separately, under their own top-level
+    # superTrack (see CRISPR_* above) -- keep the normal walk from also visiting
+    # them under ComparativeGenomics, and keep them out of that composite's
+    # borrowed-type calculation in emitStanza.
+    childrenOf[CRISPR_PARENT_OLD] = [c for c in childrenOf.get(CRISPR_PARENT_OLD, [])
+                                      if c not in CRISPR_CHILDREN_OLD]
+
     typeOf = {}
     for indent, sets in stanzas:
         d = dict(sets)
@@ -296,7 +344,7 @@ def main():
     byOldName = {dict(s)["track"]: (i, s) for i, s in stanzas}
     emitted = set()
 
-    def emitStanza(indent, sets, extra=None, forceHide=False):
+    def emitStanza(indent, sets, extra=None, forceHide=False, parentOverride=None):
         d = dict(sets)
         old = d["track"]
         new = nameMap[old]
@@ -325,7 +373,7 @@ def main():
                 continue
             if key == "parent":
                 pieces = val.split()
-                pieces[0] = nameMap[pieces[0]]
+                pieces[0] = nameMap[parentOverride] if parentOverride else nameMap[pieces[0]]
                 lines.append("%sparent %s" % (pad, " ".join(pieces)))
                 continue
             if key == "bigDataUrl":
@@ -384,8 +432,11 @@ def main():
         extra = None
         forceHide = False
         if depth == 0:
-            extra = ["parent danioCode", "priority %d" % (TOP_ORDER.index(old) + 1)]
             forceHide = True     # keep a new alpha track quiet by default
+            if old in STANDALONE_GROUP:
+                extra = ["group %s" % STANDALONE_GROUP[old]]
+            else:
+                extra = ["parent danioCode", "priority %d" % (NESTED_ORDER.index(old) + 1)]
             if "visibility" not in d:
                 extra.append("visibility hide")
         emitStanza(depth * 4, sets, extra=extra, forceHide=forceHide)
@@ -397,6 +448,26 @@ def main():
         if top not in byOldName:
             sys.exit("hub trackDb has no top-level track %s" % top)
         walk(top, 0)
+
+    # The CRISPR tracks carved out of ComparativeGenomics: their own top-level
+    # superTrack, not a hub stanza, so it is written directly rather than via
+    # walk()/emitStanza's usual "renumber one of the hub's own stanzas" path.
+    nameMap[CRISPR_CONTAINER] = CRISPR_CONTAINER
+    out.append("track %s" % CRISPR_CONTAINER)
+    out.append("superTrack on")
+    out.append("shortLabel %s" % CRISPR_LABELS[0])
+    out.append("longLabel %s" % CRISPR_LABELS[1])
+    out.append("group %s" % CRISPR_GROUP)
+    out.append("visibility hide")
+    out.append("")
+    for oldChild in CRISPR_CHILDREN_OLD:
+        indent, sets = byOldName[oldChild]
+        if oldChild in dropSet:
+            url = dict(sets)["bigDataUrl"]
+            dropped.append((oldChild, url if re.match(r"https?://", url) else baseUrl + url))
+            continue
+        emitStanza(4, sets, parentOverride=CRISPR_CONTAINER)
+        emitted.add(oldChild)
 
     missed = set(byOldName) - emitted - set(o for o, u in dropped)
     if missed:

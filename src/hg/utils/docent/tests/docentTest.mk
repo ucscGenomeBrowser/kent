@@ -4,6 +4,7 @@
 # An including makefile sets, before the include:
 #   DOCENT     path to docent.js from THIS directory     (required)
 #   PREFLIGHT  path to preflight.js from THIS directory  (required)
+#   PROOF      path to proof.js from THIS directory      (default: beside PREFLIGHT)
 #   PARITY     which script `make parity` runs           (default: the first one found)
 #
 # Everything else -- which scripts are tests, which have derive baselines -- comes from
@@ -19,21 +20,61 @@ endif
 PW_DIR ?= /hive/groups/browser/uiTest/pw
 PW_ENV ?= PLAYWRIGHT_BROWSERS_PATH=$(PW_DIR)/browsers NODE_PATH=$(PW_DIR)/node_modules
 T      ?=
+# TARGET points the whole directory at one server, overriding the `target:` each script
+# carries: `make test TARGET=hgwdev-demo9`, or a ticket park, or a full .../cgi-bin URL.
+# It takes the same values `target:` does. docent.js and preflight.js both read
+# DOCENT_TARGET, so the fixture check and the run agree on which server is being driven.
+# Use it to try a suite somewhere else, not to change where it belongs: the committed
+# scripts stay pointed at their own server, which is what the nightly reads.
+TARGET     ?=
+TARGET_ENV := $(if $(TARGET),DOCENT_TARGET=$(TARGET))
 # `make parity` needs one script that is expected to PASS, so an .xfail one is no use as
 # the default. An including makefile can name a better one.
 PASSING := $(filter-out %.xfail,$(patsubst %.docent.yaml,%,$(wildcard *.docent.yaml)))
 PARITY ?= $(firstword $(PASSING))
 TESTS  := $(if $(T),$(addsuffix .docent.yaml,$(T)),$(wildcard *.docent.yaml))
+PROOF  ?= $(dir $(PREFLIGHT))proof.js
 
-.PHONY: test parity clean preflight
+.PHONY: test parity clean preflight proof
 
 # The fixtures the scripts here name but do not contain: saved sessions, hub URLs, the
 # server itself. No browser, so this is seconds, and it is what separates "the fixtures
 # went away" from "a bug came back" -- which are the same red without it. Run it before
 # the suite, and on its own as often as you like.
 preflight:
-	@$(PW_ENV) node $(PREFLIGHT) .
+	@$(TARGET_ENV) $(PW_ENV) node $(PREFLIGHT) .
 
+# What evidence each script has that it would catch its bug, and the tally. No browser
+# and no network, so it costs nothing to run and the number can go straight into a commit
+# message or a ticket. It is a separate target and not part of `make test` on purpose: a
+# script with no proof is not a failure, it is a script whose evidence has not been
+# collected yet, and the two must not arrive as the same red.
+#
+# It DOES fail on a malformed or unknown proof line, because a vocabulary nobody enforces
+# turns into free text and free text cannot be counted.
+proof:
+	@$(PW_ENV) node $(PROOF) . $(T)
+
+# A run leaves a log per script, plus a stills/ and a sessions/ directory per script that
+# takes a shot: or writes a session:.  Nothing reads any of it once the run is over -- the
+# nightly reads this target's OUTPUT, and the failure branches below print a failing log
+# into that output while the file is still there -- so a passing script's log is cleared
+# up rather than left for `git status` to report.  Ignoring them instead would leave the
+# same files on disk and teach git to look away from the directory new tests are written
+# in, which is the wrong half of the problem to solve.
+#
+# A failing script keeps its log.  It is already echoed here, but a file is easier to page
+# through than a terminal, and an xfail that PASSED keeps its log too: that is the flip
+# `make proof` is about, and the morning it happens is the one morning someone will want
+# to read the whole run.
+#
+# The stills and the session file a passing script wrote go with the log, for the same
+# reason: both are rewritten from scratch by the next run, and a script that reads its own
+# session back (`loadSession: {file: ...}`) does so during the run, not after it.
+#
+# WARNING lines are printed before the log goes.  docent warns without failing -- a
+# mouseover whose tooltip never showed its own text is the one that matters, since it
+# means the step measured nothing -- and today those lines reach a file that nobody opens.
 test:
 	@if [ -z "$(strip $(TESTS))" ]; then \
 	  echo "no *.docent.yaml here -- nothing was tested"; exit 1; fi
@@ -43,13 +84,19 @@ test:
 	  case $$b in *.xfail) want=1;; esac; \
 	  if [ $$want = 1 ]; then printf '=== %s (expected to fail)\n' "$$b"; \
 	  else printf '=== %s\n' "$$b"; fi; \
-	  $(PW_ENV) node $(DOCENT) $$f > $$b.log 2>&1; got=$$?; \
+	  $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $$f > $$b.log 2>&1; got=$$?; \
 	  if [ $$got -ne 0 ] && [ $$want -eq 0 ]; then \
 	    echo "  FAILED -- run said:"; sed 's/^/    /' $$b.log; fail=1; \
 	  elif [ $$got -eq 0 ] && [ $$want -eq 1 ]; then \
 	    echo "  FAILED -- this was supposed to fail, and it passed"; fail=1; \
-	  else echo "  ok"; fi; \
+	  else \
+	    echo "  ok"; \
+	    grep -h 'WARNING' $$b.log 2>/dev/null | sed 's/^/    /' || true; \
+	    rm -f $$b.log; \
+	    [ -n "$$b" ] && rm -rf stills/$$b sessions/$$b; \
+	  fi; \
 	done; \
+	rmdir stills sessions 2>/dev/null || true; \
 	if [ $$fail -eq 0 ]; then echo "docent tests passed"; else echo "docent tests FAILED"; exit 1; fi
 
 # Two invariants that need the same script run more than once, so they cannot be
@@ -60,15 +107,19 @@ test:
 #                    Cart bleed between runs would show up here and nowhere else.
 parity:
 	@echo "=== $(PARITY) fast"; \
-	  DOCENT_FAST=1 $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.fast.log 2>&1 \
+	  DOCENT_FAST=1 $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.fast.log 2>&1 \
 	  || { sed 's/^/    /' parity.fast.log; exit 1; }
 	@echo "=== $(PARITY) slow (records an mp4, so this one is not quick)"; \
-	  $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.slow.log 2>&1 \
+	  $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.slow.log 2>&1 \
 	  || { sed 's/^/    /' parity.slow.log; exit 1; }
 	@echo "=== $(PARITY) again, to catch state left behind by the last run"; \
-	  DOCENT_FAST=1 $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.rerun.log 2>&1 \
+	  DOCENT_FAST=1 $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.rerun.log 2>&1 \
 	  || { sed 's/^/    /' parity.rerun.log; exit 1; }
-	@echo "parity passed"
+# Same rule as `test`: the three logs and the mp4 the slow run records are kept only when
+# a step failed, and a failing step exits above before this line is reached.
+	@rm -f parity.fast.log parity.slow.log parity.rerun.log $(PARITY).mp4; \
+	  rmdir stills/$(PARITY) sessions/$(PARITY) stills sessions 2>/dev/null || true; \
+	  echo "parity passed"
 
 # The derivation on its own: DOCENT_DERIVE=1 resolves each `track:` step against the
 # server's trackDb and prints the cart variables, with no browser and no navigation. That
@@ -93,7 +144,7 @@ parity:
 # is not about trackDb at all. Both targets strip exactly that line, so it cannot get
 # into a baseline either. The other two trackDb lines -- a hub genome, an unreachable
 # hubApi -- are real news about the derivation and are left in.
-DERIVE_ENV = DOCENT_DERIVE=1 $(PW_ENV)
+DERIVE_ENV = DOCENT_DERIVE=1 $(TARGET_ENV) $(PW_ENV)
 DERIVE_FILTER = sed '/^trackDb: [0-9][0-9]* tracks for /d'
 BASELINES := $(patsubst expected/%.derive,%,$(wildcard expected/*.derive))
 

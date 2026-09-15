@@ -599,7 +599,7 @@ if (needStart)
     {
     // All callers of this (via webPushErrHandlersCartDb) have skipped Content-type
     // because they want to output text unless we hit this condition:
-    puts("Content-type:text/html\n");
+    cgiPrintContentType("text/html");
     cartWebStart(errCart, errDb, "Error");
     }
 htmlVaWarn(format, args);

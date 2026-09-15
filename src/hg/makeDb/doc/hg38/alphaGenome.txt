@@ -55,3 +55,13 @@ bigWigToBedGraph -chrom=chr21 -start=5010000 -end=5010004 a.bw stdout
 # chr21 5010001 5010002 0         <- ref is A here, so no A>A row, zero filled
 
 # The wig files are only intermediates and can be deleted once the bigWigs check out.
+
+# Link the bigWigs into /gbdb. The directory name carries a leading underscore, which is
+# how we mark data that must not be copied to hgdownload: the admins' sync skips these
+# directories. The same convention is used by the PromoterAI and PrimateAI tracks, which
+# are also under Deleteriousness Predictions and also cannot be redistributed. The build
+# directory under /hive keeps its normal name; only the /gbdb path is underscored.
+mkdir -p /gbdb/hg38/_alphaGenome
+for n in a c g t; do
+    ln -sf /hive/data/genomes/hg38/bed/alphaGenome/$n.bw /gbdb/hg38/_alphaGenome/$n.bw
+done

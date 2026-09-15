@@ -124,6 +124,22 @@ char *findCookieData(char *varName);
 void dumpCookieList();
 /* Print out the cookie list. */
 
+void cgiAddHttpHeader(char *name, char *value);
+/* Add an HTTP header for cgiPrintContentType() to write ahead of the Content-Type
+ * line, e.g. cgiAddHttpHeader("Cache-Control", "no-store").  Both strings are
+ * cloned.  Has no effect once the header has been written. */
+
+boolean cgiDidContentType();
+/* Return TRUE if the CGI response header has already been written. */
+
+void cgiPrintContentType(char *contentType);
+/* Write the CGI response header: any headers added with cgiAddHttpHeader(), a
+ * Content-Type line, and the blank line that ends the header.  contentType NULL
+ * means "text/html".  Header lines are not ordered, so a CGI that also sends
+ * Status, Set-Cookie, Content-Disposition or the like writes those first and
+ * calls this last to close the header.  Only the first call in a process writes
+ * anything. */
+
 boolean cgiIsOnWeb();
 /* Return TRUE if looks like we're being run as a CGI. */
 
@@ -690,6 +706,11 @@ void cgiChangeVar(char *varName, char *value);
 
 void cgiSetMaxLogLen(int l);
 /* set the size of variable values that are dumped to stderr. Default is 0, which means no logging */
+
+void cgiSkipMalformedPairs(boolean on);
+/* Tell the cookie parser to step over a malformed pair instead of losing the
+ * pair after it or aborting.  hg.conf skipMalformedCgiPairs turns this on;
+ * hgConfig.c pushes it in, since these libraries do not read hg.conf. */
 
 boolean isValidJsonpCallback(char *s);
 /* Return TRUE if s is safe to use as a JSONP callback name: non-empty, not

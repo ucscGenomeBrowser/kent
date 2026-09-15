@@ -220,6 +220,11 @@ cfgOptionsHash = newHash(6);
 getConfigFile(filename);
 parseConfigFile(filename, 0);
 hackConfigProfiles();
+
+/* The kent libraries do not read hg.conf, so hand them the settings they need.
+ * Safe to call cfgOptionBooleanDefault here: the hash is built, so it will not
+ * come back through initConfig.  refs #38340 */
+cgiSkipMalformedPairs(cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE));
 }
 
 char* cfgOption(char* name)

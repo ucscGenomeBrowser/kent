@@ -1215,7 +1215,7 @@ static void lookupTerm()
 char *term = getSearchTermUpperCase();
 
 // Write JSON response with list of matches
-puts("Content-Type:text/javascript\n");
+cgiPrintContentType("text/javascript");
 
 // Before accessing hubs, intialize udc cache location from hg.conf:
 setUdcCacheDir();

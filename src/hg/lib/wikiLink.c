@@ -550,14 +550,16 @@ if (sameString(cgiName, "hgLogin") || sameString(cgiName, "hgRenderTracks"))
     return NULL;
 
 /* The query string is what makes a page like hgTrackUi or hgc work at all, since their track
- * and item parameters are not all kept in the cart.  Coming back to a URL the visitor clicked
- * themselves does no more than their reload button would, as long as it was a GET; a POST
- * cannot be replayed from a URL anyway.  hgTracks is the exception: everything it needs is in
- * the cart, and its query string can hold a one-shot zoom or drag that we do not want to
- * repeat. */
+ * and item parameters are not all kept in the cart.  Coming back to that URL does no more than
+ * the visitor's own reload button would, and that holds for a POST as well: the query string
+ * of a POST sits in the form's action URL, which is the address the browser is showing, so
+ * only the form body is left behind and the cart already has what mattered from it.  Dropping
+ * the query string here used to send the track settings page back to hgTrackUi with nothing
+ * but an hgsid, which cannot work, since the track name is deliberately kept out of the cart.
+ * hgTracks is the exception: everything it needs is in the cart, and its query string can hold
+ * a one-shot zoom or drag that we do not want to repeat. */
 char *queryString = getenv("QUERY_STRING");
-char *method = cgiRequestMethod();
-if (sameString(cgiName, "hgTracks") || (method != NULL && differentWord(method, "GET")))
+if (sameString(cgiName, "hgTracks"))
     queryString = NULL;
 
 char *url = currentPageUrl(cgiName, hgsid, queryString);

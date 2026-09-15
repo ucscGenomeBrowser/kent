@@ -1,0 +1,73 @@
+# 2026-09-11 - Claude max - HPRC Reference-Divergent Transcripts (RDTs) on hg38
+
+# Data provided by Max Marin (marin@ds.dfci.harvard.edu), Dana-Farber Cancer
+# Institute, as a draft track hub:
+#   https://github.com/maxgmarin/hprc-r2-rdt-testhub
+#
+# That repository holds two things. The bulk of it is a track hub with one RDT
+# annotation per HPRC haplotype assembly, on 412 GenArk GCA assemblies. Those
+# are not touched here. What this track uses is the single hg38 file, in which
+# the RDT sequences from all haplotypes have been clustered at 99% identity and
+# 99% coverage and one representative per cluster aligned back to GRCh38:
+#   Data/HPRC.PanTx.ClusteredRDTsRepSeqs.SID99C99.AlnToHG38.bb
+#
+# The upstream file is already a valid hg38 bigPsl. We rebuild it rather than
+# copying it, only so that we can add a name index, which the upstream file
+# lacks and which lets people search a transcript ID in the position box.
+
+mkdir -p /hive/data/genomes/hg38/bed/hprcRdt
+
+~/kent/src/hg/makeDb/scripts/hprcRdt/hprcRdtBuild.sh \
+    /hive/data/genomes/hg38/bed/hprcRdt
+
+# The script downloads the file, converts it to bed, refuses to continue if any
+# record falls outside its chromosome, rebuilds the bigBed with
+# -extraIndex=name, and checks that the item count did not change. Output:
+#
+#   alignments in source file: 180464
+#   alignments in bigBed: 180464
+#   distinct representative transcripts: 120451
+#   source haplotypes represented: 412
+#
+# No records were out of bounds and nothing was filtered, so the track holds
+# every alignment in the source file. 180,464 alignments of 120,451 distinct
+# sequences means some representatives align in more than one place; the worst
+# case is one sequence with 10 alignments.
+
+# Sanity checks that were run once on the source data, kept here because they
+# are what would catch a coordinate or strand problem in a future update.
+
+cd /hive/data/genomes/hg38/bed/hprcRdt
+
+# 1. Strand. 70% of alignments are on the minus strand, which looks wrong until
+# you compare against GENCODE: where an RDT alignment overlaps a GENCODE
+# transcript by at least half its length, the strands agree 92% of the time. The
+# skew comes from the pileups in check 2, not from a coordinate convention error.
+hgsql hg38 -Ne "select chrom, txStart, txEnd, name2, strand from wgEncodeGencodeBasicV48 \
+    where chrom not like '%\_%'" | sort -k1,1 -k2,2n > gencode.bed
+awk 'BEGIN{OFS="\t"}{print $1,$2,$3,$4,0,$6}' hprcRdt.bed | sort -k1,1 -k2,2n > rdt.simple.bed
+bedtools intersect -a rdt.simple.bed -b gencode.bed -wa -wb -f 0.5 \
+  | awk -F'\t' '{if($6==$11) s++; else d++} END{print "same:",s,"diff:",d,"pct:",100*s/(s+d)}'
+# same: 839660 diff: 75449 pct: 91.7552
+
+# 2. Where the alignments pile up. The four densest 100 kbp bins are the MHC
+# class I region (chr6:31.2-31.4M, HLA-B/HLA-C, 28808 alignments), the
+# immunoglobulin heavy chain locus (chr14:105.6-105.9M, 29390), HLA-A
+# (chr6:29.9-30.0M, 12508) and the chr1 subtelomere (chr1:0-200k, 12245).
+# These are the most polymorphic loci in the genome, so this is where
+# reference-divergent transcripts are expected to concentrate. It is also why
+# the trackDb stanza sets maxWindowCoverage: past 200 kbp the track draws as a
+# coverage graph instead of unreadable stacked alignments.
+awk -F'\t' '{printf "%s:%d\n", $1, int($2/100000)}' hprcRdt.bed | sort | uniq -c | sort -rn | head -5
+
+# 3. Query coverage. 120k of 180k alignments cover at least 99% of the
+# transcript, 4166 cover less than half. Nothing was filtered on this.
+awk -F'\t' '{r=$21/$16; if(r>=0.99)a++; else if(r>=0.9)b++; else if(r>=0.5)c++; else d++} \
+    END{print "ge99%:"a, "90-99%:"b, "50-90%:"c, "lt50%:"d}' hprcRdt.bed
+# ge99%:119891 90-99%:43803 50-90%:12604 lt50%:4166
+
+rm -f gencode.bed rdt.simple.bed
+
+# The track is added to the existing "long_read_transcripts" superTrack in
+# human/hg38/long_read_transcripts.ra, next to the ENCODE4 and CLS long-read
+# tracks, rather than in a container of its own.

@@ -3,7 +3,7 @@ PARSER=../../../../utils/uniprotToTab
 
 # Everything doUniprot calls at run time must be listed here, or the copy that cron runs
 # is not under version control. refs #38300
-FILES=*.sh *.as doUniprot mapUniprot_doBlast pslProtCnv trackDb.template.txt README.txt ${PARSER}
+FILES=*.sh *.as doUniprot miniprotToPsl mapUniprot_doBlast pslProtCnv trackDb.template.txt README.txt ${PARSER}
 
 # Not "pylint -E": every pylint on hgwdev is itself pinned to a python that no longer
 # exists, so "make install" used to abort on its first line.

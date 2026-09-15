@@ -12,7 +12,7 @@ void apiOut(char *text, char *jsonp)
 {
 // It's debatable whether the type should be text/plain, text/javascript or application/javascript;
 // text/javascript works with all our supported browsers, so we are using that one.
-puts("Content-Type:text/javascript\n");
+cgiPrintContentType("text/javascript");
 
 if (jsonp && isValidJsonpCallback(jsonp))
     {

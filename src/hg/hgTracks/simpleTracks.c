@@ -2715,7 +2715,7 @@ else
     boolean isNotLastExon = (exonIntronNumber<numExons);
 
     static const char *phasePrefix  = 
-        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle-o'></i></a></b>";
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle'></i></a></b>";
 
     if (isNotLastExon)
         {
@@ -2997,7 +2997,112 @@ else
     return splicedBaseCount(lf, g + 1, lf->tallEnd) + 1;
 }
 
-static void exonCdsNote(struct linkedFeatures *lf, int s, int e, char *buf, int bufSize)
+static void sfCdsRange(struct linkedFeatures *lf, struct simpleFeature *sf, int *retLo, int *retHi)
+/* The c. positions of the first and last base of sf, low number first.  On the minus strand
+ * c. counts the other way along the genome, so the two ends swap. */
+{
+int a = cdsMrnaPos(lf, sf->start), b = cdsMrnaPos(lf, sf->end - 1);
+*retLo = min(a, b);
+*retHi = max(a, b);
+}
+
+static void codonCdsRange(struct linkedFeatures *lf, struct simpleFeature *prev,
+                          struct simpleFeature *codon, int *retCStart, int *retCEnd)
+/* The HGVS c. range of one codon from lf->codons, measured rather than computed as
+ * 3*codonIndex-2 .. 3*codonIndex.  The two part company whenever the annotated CDS does not
+ * begin on a codon boundary: exonFrames says so, and baseColorCodonsFromGenePred then makes
+ * codon 1 short instead of shifting every number after it, so from there on the arithmetic
+ * is off by the missing bases.  A codon split across an intron is two list entries sharing
+ * one codonIndex and they are neighbours in the list, so prev and next are all that have to
+ * be looked at.  prev is the list entry before codon, NULL at the head of the list. */
+{
+int lo, hi;
+sfCdsRange(lf, codon, &lo, &hi);
+struct simpleFeature *neighbors[2];
+neighbors[0] = prev;
+neighbors[1] = codon->next;
+int i;
+for (i = 0;  i < ArraySize(neighbors);  i++)
+    {
+    struct simpleFeature *other = neighbors[i];
+    if ((other == NULL) || (other->codonIndex != codon->codonIndex))
+        continue;
+    int oLo, oHi;
+    sfCdsRange(lf, other, &oLo, &oHi);
+    lo = min(lo, oLo);
+    hi = max(hi, oHi);
+    }
+*retCStart = lo;
+*retCEnd = hi;
+}
+
+static int cdsFirstCodonBases(struct track *tg, struct linkedFeatures *lf)
+/* How many coding bases the transcript's first codon has: 3 normally, but 1 or 2 when the
+ * annotated CDS starts part way into a codon, as a 5'-truncated transcript's does.  genePred
+ * records that as the frame of the first coding exon, and baseColorCodonsFromGenePred numbers
+ * the codons accordingly - a short codon 1, not a shifted numbering - so anything turning a
+ * c. position into a p. number has to know about it.  3 when there is no frame to read, which
+ * is also the right answer for every transcript whose CDS starts on a codon boundary. */
+{
+char *type = (tg->tdb != NULL) ? tg->tdb->type : NULL;
+if (type == NULL || !(startsWith("genePred", type) || startsWith("bigGenePred", type)))
+    return 3;
+struct genePred *gp = (struct genePred *)(lf->original);
+/* Same test baseColorCodonsFromGenePred uses to decide whether to trust exonFrames. */
+if (gp == NULL || gp->exonFrames == NULL || gp->optFields < genePredExonFramesFld)
+    return 3;
+int i, i0, iN, iInc;
+if (lf->orientation >= 0)
+    { i0 = 0;  iN = gp->exonCount;  iInc = 1; }
+else
+    { i0 = gp->exonCount - 1;  iN = -1;  iInc = -1; }
+for (i = i0;  i != iN;  i += iInc)
+    {
+    if (gp->exonEnds[i] <= gp->cdsStart || gp->exonStarts[i] >= gp->cdsEnd)
+        continue;       // an all-UTR exon, ahead of the first coding one
+    return (gp->exonFrames[i] > 0) ? 3 - gp->exonFrames[i] : 3;
+    }
+return 3;
+}
+
+static int codonForCdsPos(int firstCodonBases, int c)
+/* The 1-based codon number that c. position c falls in.  With a full first codon this is the
+ * familiar (c+2)/3; with a short one every codon after it is shifted. */
+{
+if (c <= firstCodonBases)
+    return 1;
+return 2 + (c - firstCodonBases - 1) / 3;
+}
+
+static boolean exonCodonRange(struct linkedFeatures *lf, int cdS, int cdE,
+                              int *retP5, int *retP3)
+/* First and last codon number covering the coding interval [cdS, cdE), read off lf->codons
+ * so that the exon's mouseover and the per-codon mouseovers inside it cannot disagree.
+ * FALSE when the track has no codon list, which is when it is not drawing codons at all and
+ * so has no per-codon mouseover to agree with. */
+{
+if (lf->codons == NULL)
+    return FALSE;
+int lo = 0, hi = 0;
+struct simpleFeature *sf;
+for (sf = lf->codons;  sf != NULL;  sf = sf->next)
+    {
+    if (sf->codonIndex <= 0 || sf->start >= cdE || sf->end <= cdS)
+        continue;   // a UTR block (codonIndex 0), or a codon outside this exon
+    if (lo == 0 || sf->codonIndex < lo)
+        lo = sf->codonIndex;
+    if (sf->codonIndex > hi)
+        hi = sf->codonIndex;
+    }
+if (lo == 0)
+    return FALSE;
+*retP5 = lo;
+*retP3 = hi;
+return TRUE;
+}
+
+static void exonCdsNote(struct track *tg, struct linkedFeatures *lf, int s, int e,
+                        char *buf, int bufSize)
 /* Describe the exon [s,e) of a coding transcript in HGVS c. coordinates: the UTR
  * piece(s) as c.-N / c.*N and the coding piece as a c. range together with the
  * codon (p.) numbers it covers.  This is what the popup shows when we are zoomed
@@ -3029,7 +3134,16 @@ if (cdE > cdS)
     {
     int c5 = cdsMrnaPos(lf, posStrand ? cdS : cdE - 1);
     int c3 = cdsMrnaPos(lf, posStrand ? cdE - 1 : cdS);
-    int p5 = (c5 + 2) / 3, p3 = (c3 + 2) / 3;
+    int p5, p3;
+    if (!exonCodonRange(lf, cdS, cdE, &p5, &p3))
+        {
+        /* No codon list to read the numbers off - the track is zoomed out past the level
+         * that builds one - so count them, taking the same short first codon into account
+         * that the codon list would have. */
+        int firstCodonBases = cdsFirstCodonBases(tg, lf);
+        p5 = codonForCdsPos(firstCodonBases, c5);
+        p3 = codonForCdsPos(firstCodonBases, c3);
+        }
     if (p5 == p3)
         safef(buf + len, bufSize - len, "<b>Codons: </b> c.%d-%d (p.%d)<br>", c5, c3, p5);
     else
@@ -3191,10 +3305,10 @@ for (ref = exonList; TRUE; )
                 // draw mapBoxes for the codons if we are zoomed in far enough
                 if (isExon && lf->codons && zoomedToCdsColorLevel)
                     {
-                    struct simpleFeature *codon;
+                    struct simpleFeature *codon, *prevCodon = NULL;
                     struct dyString *codonDy = dyStringNew(0);
                     int codonS, codonE;
-                    for (codon = lf->codons; codon != NULL; codon = codon->next)
+                    for (codon = lf->codons; codon != NULL; prevCodon = codon, codon = codon->next)
                         {
                         codonS = codon->start; codonE = codon->end;
                         if (codonS > e || codonE < s)
@@ -3226,13 +3340,17 @@ for (ref = exonList; TRUE; )
                                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
-                                    int codonHgvsIx = (codon->codonIndex - 1) * 3;
-                                    if (codonHgvsIx >= 0)
+                                    if (codon->codonIndex > 0)
                                         {
-                                        int cStart = codonHgvsIx + 1;
-                                        int cEnd = codonHgvsIx + 3;
+                                        /* The c. range is measured off the codon's own bases
+                                         * rather than taken as 3*codonIndex-2 .. 3*codonIndex:
+                                         * when the annotated CDS does not start on a codon
+                                         * boundary codon 1 is short, and the arithmetic is
+                                         * then wrong for the whole transcript. */
+                                        int cStart, cEnd;
+                                        codonCdsRange(lf, prevCodon, codon, &cStart, &cEnd);
                                         // a codon is a single amino acid; p. is 1-based like c.
-                                        int pPos = codonHgvsIx / 3 + 1;
+                                        int pPos = codon->codonIndex;
                                         // the one-letter amino acid was stored on the codon when it
                                         // was translated (cds.c); map it to its three-letter code
                                         char aaLetter = codon->codonAa;
@@ -3257,20 +3375,21 @@ for (ref = exonList; TRUE; )
                                          * is which only in that case:  for every other
                                          * transcript there is one count and "Codon" says it. */
                                         boolean shifted = baseColorCodonIsShifted(codon);
-                                        dyStringPrintf(codonDy, "<b>Codon%s: </b> c.%d-%d (p.%d)<br>",
-                                                shifted ? " counted on the genome" : "",
+                                        dyStringPrintf(codonDy, "<b>%s: </b> c.%d-%d (p.%d)<br>",
+                                                shifted ? "Genomic codon number" : "Codon",
                                                 cStart, cEnd, pPos);
                                         if (shifted)
                                             {
                                             int txCStart = (codon->txCodonIndex - 1) * 3 + 1;
                                             dyStringPrintf(codonDy,
-                                                "<b>Counted on the transcript: </b> "
+                                                "<b>Transcript codon number: </b> "
                                                 "c.%d-%d (p.%d)<br>",
                                                 txCStart, txCStart+2, codon->txCodonIndex);
                                             dyStringPrintf(codonDy,
-                                                "<b>Note: </b>This transcript's sequence has an "
-                                                "indel relative to the genome, so the two "
-                                                "numbers differ. "
+                                                "<b>Note: </b>This transcript's sequence has "
+                                                "extra or missing bases compared to the genome "
+                                                "at this codon, so the genomic and transcript "
+                                                "codon numbers differ. "
                                                 "<a target=_blank "
                                                 "href=\"../FAQ/FAQgenes.html#txIndel\">"
                                                 "Help</a><br>");
@@ -3344,7 +3463,7 @@ for (ref = exonList; TRUE; )
                                 // coding transcript, too far out to draw the codons: give the
                                 // exon's cDNA range and the codons it covers, so a c. or p.
                                 // position can be found without zooming into every exon
-                                exonCdsNote(lf, s, e, posBuf, sizeof(posBuf));
+                                exonCdsNote(tg, lf, s, e, posBuf, sizeof(posBuf));
                             posNote = posBuf;
                             }
                         }
@@ -4563,6 +4682,7 @@ else if (drawOpt > baseColorDrawOff)
          * the genome does not give the transcript's own codon numbers.  This alignment is
          * what lets each codon carry both numbers; NULL for a track with no alignment. */
         struct genbankCds txCds;
+        ZeroVar(&txCds);   // stays zeroed when there is no alignment to fill it in
         struct psl *txAli = baseColorTxAliForGenePred(tg, gp, &txCds);
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons),
                 cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE),

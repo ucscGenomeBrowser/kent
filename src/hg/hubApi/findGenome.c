@@ -319,42 +319,6 @@ else
 return itemCount;
 }	/*	static long long oneWordSearch(struct sqlConnection *conn, char *searchWord, struct jsonWrite *jw, boolean *prefixSearch) */
 
-static long long exactNameSearch(struct sqlConnection *conn, char *word, struct jsonWrite *jw, long long *totalMatchCount)
-/* fast path for a single-word search: the great majority of single-word
- *  searches are an exact UCSC database name or NCBI/GenArk assembly
- *  accession (e.g. hg38, GCF_052040795.1) that is already present
- *  verbatim in the 'name' column, which is the table's PRIMARY KEY.
- *  Try that direct, indexed equality lookup first since it is an O(log n)
- *  B-TREE seek versus the much more expensive FULLTEXT boolean search in
- *  oneWordSearch().  Simply returns 0, with *totalMatchCount left at 0,
- *  when there is no exact match; the caller then falls back to
- *  oneWordSearch() for the usual FULLTEXT keyword search.
- */
-{
-long long itemCount = 0;
-*totalMatchCount = 0;
-
-struct dyString *query = sqlDyStringCreate("SELECT COUNT(*) FROM %s ", asmListTable);
-sqlDyStringPrintf(query, "WHERE name='%s'", word);
-addConditions(query);	/* add optional SELECT options */
-
-long long matchCount = sqlQuickLongLong(conn, query->string);
-dyStringFree(&query);
-if (matchCount < 1)	// no exact match, let caller fall back to FULLTEXT search
-    return itemCount;
-*totalMatchCount = matchCount;
-
-query = sqlDyStringCreate("SELECT * FROM %s ", asmListTable);
-sqlDyStringPrintf(query, "WHERE name='%s'", word);
-addConditions(query);	/* add optional SELECT options */
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-itemCount = sqlJsonOut(jw, sr);
-sqlFreeResult(&sr);
-dyStringFree(&query);
-
-return itemCount;
-}	/*	static long long exactNameSearch(struct sqlConnection *conn, char *word, struct jsonWrite *jw, long long *totalMatchCount) */
-
 #ifdef NOT
 // disabled 2025-10-22
 static long elapsedTime(struct jsonWrite *jw)
@@ -532,28 +496,20 @@ AllocArray(words, wordCount);
 (void) chopByWhite(searchString, words, wordCount);
 if (1 == wordCount)
     {
-    /* fast path: try an exact PRIMARY KEY match on 'name' first, since
-     * the great majority of single-word searches are an exact UCSC db
-     * name or assembly accession; itemCount stays 0 when there is no
-     * exact match, and the usual FULLTEXT search below runs as before */
-    itemCount = exactNameSearch(conn, words[0], jw, &totalMatchCount);
-    if (itemCount < 1)
+    boolean doQuote = TRUE;
+    /* already quoted, let it go as-is */
+    if (startsWith("\"", words[0]) && endsWith(words[0],"\""))
+	doQuote = FALSE;
+    /* already wildcard, let it go as-is */
+    if (endsWith(words[0],"*"))
+	doQuote = FALSE;
+    if (doQuote && hasWordBreaks(words[0]))
 	{
-	boolean doQuote = TRUE;
-	/* already quoted, let it go as-is */
-	if (startsWith("\"", words[0]) && endsWith(words[0],"\""))
-	    doQuote = FALSE;
-	/* already wildcard, let it go as-is */
-	if (endsWith(words[0],"*"))
-	    doQuote = FALSE;
-	if (doQuote && hasWordBreaks(words[0]))
-	    {
-	    char *quotedWords = quoteWords(words[0]);
-	    endResultSearchString = quotedWords;
-	    itemCount = oneWordSearch(conn, quotedWords, jw, &totalMatchCount, &prefixSearch);
-	    } else {
-	    itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
-	    }
+	char *quotedWords = quoteWords(words[0]);
+	endResultSearchString = quotedWords;
+	itemCount = oneWordSearch(conn, quotedWords, jw, &totalMatchCount, &prefixSearch);
+	} else {
+	itemCount = oneWordSearch(conn, words[0], jw, &totalMatchCount, &prefixSearch);
 	}
     }
 else	/* multiple word search */

@@ -19,6 +19,9 @@
 # The guide named here is chr17:43044497-43044520 and its mouseOver string is unique in
 # this window, so a match cannot be the wrong item. If the CRISPR data is rebuilt and its
 # scores change, this fails with the tooltip it did find, which is a readable break.
+proof:
+  - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr17:43044295-43045295

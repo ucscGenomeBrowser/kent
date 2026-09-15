@@ -440,9 +440,6 @@ freeLinksAndConvert(links, viewMenu);
 dyStringAppend(viewMenu, "</ul>\n</li>\n");
 
 menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
-menuStr = replaceChars(menuStr, "id=\"main-menu-whole\"", "id=\"hgTracks-main-menu-whole\"");
-menuStr = replaceChars(menuStr, "id=\"home-link\"", "id=\"hgTracks-home-link\"");
-
 
 hPuts(menuStr);
 freez(&menuStr);

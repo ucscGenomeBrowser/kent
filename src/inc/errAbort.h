@@ -27,6 +27,9 @@ void errAbortSetDoContentType(boolean value);
 /* change the setting of doContentType, ie. if errorAbort should print a 
  * http Content type line. */
 
+boolean errAbortGetDoContentType();
+/* Current setting of doContentType, so that a caller which changes it can put it back. */
+
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 #if defined(__GNUC__)

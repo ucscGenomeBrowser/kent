@@ -380,11 +380,7 @@ htmlPageWrapper = cgiVarExists("phyloPng_htmlPage"); /* wrap output in a page */
 
 if (onWeb && sameString(getenv("REQUEST_METHOD"),"HEAD"))
     { /* tell browser it's static just so it can save it */
-    if (htmlPageWrapper)
-    	printf("Content-type: text/html\r\n");
-    else
-    	printf("Content-type: image/png\r\n");
-    printf("\r\n");
+    cgiPrintContentType(htmlPageWrapper ? "text/html" : "image/png");
     return 0;
     }
 
@@ -423,8 +419,7 @@ if (useCart)
     {
     if (onWeb)
 	{
-    	printf("Content-type: text/html\r\n");
-	printf("\r\n");
+    	cgiPrintContentType("text/html");
 	cartWebStart(cart, NULL, "%s", "phyloPng Interactive Phylogenetic Tree Png Maker");
 
 	if (isMSIE)  /* cannot handle long urls */
@@ -549,8 +544,7 @@ if (useCart)
 
 if (htmlPageWrapper)
     {
-    printf("Content-type: text/html\r\n");
-    printf("\r\n");
+    cgiPrintContentType("text/html");
     printf("<html><head>\n%s<title>Phylogenetic Tree</title></head><body>",getCspMetaHeader());
     printf("<IMAGE SRC=\"http://%s%s"
 	    "?phyloPng_width=%d"
@@ -628,8 +622,7 @@ if (errMsg)
     {
     if (onWeb)
         {
-        printf("Content-type: text/html\r\n");
-        printf("\r\n");
+        cgiPrintContentType("text/html");
         printf("<html><head>\n%s<title>PhyloTree parse error</title></head><body><pre>",getCspMetaHeader());
         /* we dont think the specific error message coming back are correct or useful
         * so supply a generic err msg */
@@ -675,8 +668,7 @@ if (phyloTree)
 	{
 	if (onWeb)
 	    {
-	    printf("Content-type: text/html\r\n");
-	    printf("\r\n");
+	    cgiPrintContentType("text/html");
 	    printf("<html><head>\n%s<title>PhyloTree error</title></head><body><pre>",getCspMetaHeader());
 	    printf("input tree: [%s]\n\n%s",cgiString("phyloPng_tree"),layoutErrMsg);
 	    puts("</pre></body></html>");
@@ -738,8 +730,7 @@ if (phyloTree)
 
 if (onWeb)
     {
-    printf("Content-type: image/png\r\n");
-    printf("\r\n");
+    cgiPrintContentType("image/png");
     }
 
 if (!mgSaveToPng(stdout, mg, FALSE))

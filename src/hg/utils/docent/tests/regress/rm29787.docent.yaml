@@ -1,0 +1,46 @@
+# #29787 -- multi-region custom regions could not be given in UCSC chrom names on the T2T
+# assembly.  #29421 had taught the T2T hub to show chr1 instead of CP068277.2 with the
+# trackDb setting `chromAuthority ucsc`, and everything followed that except the custom
+# regions reader, which still looked the name up in the assembly's own sequence names:
+#
+#     Couldn't find chromosome/scaffold chr12 in database
+#     Couldn't find chromosome/scaffold chr1 in database
+#
+# Gerardo closed it on 2025-08-22 on the ground that T2T CHM13v2.0 is now a curated
+# assembly, hs1, and Dan's two test cases work there.  So this asserts hs1 and Dan's two
+# BED lines, which is what the ticket was closed on rather than something near it.  hs1 is
+# still served out of a hub, so its rows come back as hub_<n>_catLiftOffGenesV1 and the
+# plain name below matches by suffix.
+#
+# The warn() this must not raise is in the custom regions reader,
+# hg/hgTracks/hgTracks.c, a few lines above the chromStart check that rm26772 asserts.
+#
+# `virtWinFull=on` asks for the whole virtual chromosome rather than the zoomed-in view a
+# region change lands on by default, so BOTH of the ticket's regions are on screen and
+# both are asserted: KRAS's items for chr12, and the window separator's own box for the
+# chr1 region.  Without it the second region would be off screen and a reader could not
+# tell a region that failed to resolve from one that is merely not in view.  The chr1
+# region is named by its data-tooltip and not by its title: hgTracks writes both, and the
+# page moves the title out of the DOM once its own tooltip code has run.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket after it was closed on hs1"
+
+target: genome-test
+db: hs1
+position: chr12:25076496-25122152
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hs1&position=chr12%3A25076496-25122152&pix=1100&hideTracks=1&catLiftOffGenesV1=pack"
+  - expect: {rows: [ruler, catLiftOffGenesV1], exact: true}
+
+  # Dan's two test cases, both in UCSC names.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr12%2025076496%2025122152%0Achr1%2010000%2011000%0A"
+  - expect:
+      rows: [ruler, catLiftOffGenesV1]
+      exact: true
+      noText: "Couldn't find chromosome/scaffold"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="i=KRAS"]'
+        - 'area[data-tooltip="chr1:10001-11000"]'

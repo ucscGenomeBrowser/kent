@@ -10,7 +10,7 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
-    dnaCodonTest pathSimplifyTest
+    dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -29,12 +29,33 @@ pathSimplifyTest: pathSimplifyTest.o ${MYLIBS} mkdirs
 	${BIN_DIR}/pathSimplifyTest > output/pathSimplifyTest
 	diff expected/pathSimplifyTest output/pathSimplifyTest
 
+faSpeedReadTest: faSpeedReadTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/faSpeedReadTest faSpeedReadTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/faSpeedReadTest${EXE}
+	${BIN_DIR}/faSpeedReadTest > output/faSpeedReadTest
+	diff expected/faSpeedReadTest output/faSpeedReadTest
+
 dnaCodonTest: dnaCodonTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/dnaCodonTest dnaCodonTest.o ${MYLIBS} ${L}
 	${STRIP} ${BIN_DIR}/dnaCodonTest${EXE}
 	${BIN_DIR}/dnaCodonTest > output/dnaCodonTest
 	diff expected/dnaCodonTest output/dnaCodonTest
+
+cgiCookieTest: cgiCookieTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/cgiCookieTest cgiCookieTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/cgiCookieTest${EXE}
+	${BIN_DIR}/cgiCookieTest > output/cgiCookieTest
+	diff expected/cgiCookieTest output/cgiCookieTest
+
+cgiParseTest: cgiParseTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/cgiParseTest cgiParseTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/cgiParseTest${EXE}
+	${BIN_DIR}/cgiParseTest > output/cgiParseTest
+	diff expected/cgiParseTest output/cgiParseTest
 
 htmlSanitizeTest: htmlSanitizeTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

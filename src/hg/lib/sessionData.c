@@ -454,28 +454,41 @@ else
 return newFile;
 }
 
-char *sessionDirFromNames(char *sessionDataDir, char *encUserName, char *encSessionName)
+char *sessionDirFromNamesHashLen(char *sessionDataDir, char *encUserName, char *encSessionName,
+                                 int hashLen)
 /* Alloc and return session data directory:
- * sessionDataDir/2ByteHashOfEncUserName/encUserName/8ByteHashOfEncSessionName
+ * sessionDataDir/2ByteHashOfEncUserName/encUserName/hashLenByteHashOfEncSessionName
  * 2ByteHashOfEncUserName spreads userName values across up to 256 subdirectories because
  * we have ~15000 distinct namedSessionDb.userName values in 2019.
- * 8ByteHashOfEncSessionName because session names can be very long.  */
+ * A hash of encSessionName rather than encSessionName itself because session names can be very
+ * long; hashLen is sessionDirHashLen except when naming a directory written before that was
+ * widened.  */
 {
 char *dir = NULL;
 if (isNotEmpty(sessionDataDir))
     {
     if (sessionDataDir[0] != '/')
         errAbort("config setting sessionDataDir must be an absolute path (starting with '/')");
+    if (hashLen < 1 || hashLen > 32)
+        errAbort("sessionDirFromNamesHashLen: hashLen must be in [1,32], got %d", hashLen);
     char *userHash = md5HexForString(encUserName);
     userHash[2] = '\0';
     char *sessionHash = md5HexForString(encSessionName);
-    sessionHash[8] = '\0';
+    sessionHash[hashLen] = '\0';
     struct dyString *dy = dyStringCreate("%s/%s/%s/%s",
                                          sessionDataDir, userHash, encUserName, sessionHash);
     dir = dyStringCannibalize(&dy);
+    freeMem(userHash);
     freeMem(sessionHash);
     }
 return dir;
+}
+
+char *sessionDirFromNames(char *sessionDataDir, char *encUserName, char *encSessionName)
+/* Alloc and return the per-session data directory under sessionDataDir (hashed by user and session
+ * name), or NULL if sessionDataDir is empty.  errAborts if sessionDataDir is not an absolute path. */
+{
+return sessionDirFromNamesHashLen(sessionDataDir, encUserName, encSessionName, sessionDirHashLen);
 }
 
 static char *dayOfMonthString()

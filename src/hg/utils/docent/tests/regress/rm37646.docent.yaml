@@ -1,0 +1,49 @@
+# #37646 -- hgTracks aborted with
+#
+#     Can't find tdb for subtrack ... was getSubtrackTdb called on non-subtrack?
+#
+# when a quickLift hub carried a lolly composite subtrack.  Found while reviewing #37536.
+#
+# The abort was not where the bug was.  3fe4305d047: in lollyLoadItems, when
+# quickLiftIntervalsToBed() returned NULL for an item that did not lift, the loop fell
+# through and reused a stale pop pointer, writing item fields into whatever memory it
+# pointed at.  That clobbered the subtrack's own trackDb strings -- track, shortLabel,
+# type -- and the abort came later, when something asked for the subtrack by a name that
+# was no longer there.
+#
+# So the tight thing to assert is the field that got clobbered, not only that the page
+# came back: every map box hgTracks writes for this row carries g=<track name>, and that
+# name is the string the stale write destroyed.  `rows:` alone would not do it, since a
+# row is drawn under either name.
+#
+# clinvarSubLolly (ClinVar interp, type bigLolly) is a subtrack of the clinvar composite,
+# which is the shape the ticket names.  Whether an item in this particular window fails to
+# lift -- the trigger for the stale pointer -- was not established, so treat this as an
+# assertion about the page the ticket could not produce rather than a reproduction of the
+# corruption.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 3fe4305d047, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {clinvar: pack, clinvarMain: hide, clinvarCnv: hide, clinvarSubLolly: pack}
+  - expect:
+      rows: [ruler, clinvarSubLolly]
+      exact: true
+      has: 'area[href*="g=clinvarSubLolly"]'
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+
+  # The abort left no image at all, so the row list is the positive half and the ticket's
+  # own string is the negative one.  The map-box check is the clobbered field.
+  - expect:
+      rows: [clinvarSubLolly]
+      noText: "Can't find tdb for subtrack"
+      has: 'area[href*="clinvarSubLolly"]'

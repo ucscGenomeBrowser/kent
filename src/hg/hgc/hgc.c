@@ -3783,8 +3783,9 @@ for (;tdb != NULL; tdb = tdb->parent)
         tdb->html = getTrackHtml(liftDb, tdb->table);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
-        // a hub's description page never went through hgTrackDb, substitute its variables
-        // here.  tdb is the track the html belongs to, so $parentTrack means its container.
+        // resolve $hgsid, which hgTrackDb had no cart to resolve, and for a hub the rest of
+        // its description page variables: a hub page never went through hgTrackDb at all.
+        // tdb is the track the html belongs to, so $parentTrack means its container.
         hVarSubstTrackDbHtml(cart, tdb, database);
         return tdb->html;
         }
@@ -23771,7 +23772,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    table, smp->chrom, smp->chromStart+smp->samplePosition[0],
 	    smp->chromStart+smp->samplePosition[smp->sampleCount-1] );
 
-    printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT nonce='%s'>\n", getNonce());
+    cgiPrintContentType("text/html");
+    printf("<HTML><BODY><SCRIPT nonce='%s'>\n", getNonce());
     printf("location.replace('%s')\n",filename);
     printf("</SCRIPT> <NOSCRIPT> No JavaScript support. "
            "Click <b><a href=\"%s\">continue</a></b> for "

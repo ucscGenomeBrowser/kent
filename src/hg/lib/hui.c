@@ -556,7 +556,8 @@ char* fileType = parts[0];
 stripString(fileType, "\"");  // Remove double quotes, weird that chopByWhiteRespectDoubleQuotes doesn't do this
 char* url = parts[1];
 char *newUrl = replaceInUrl(url, "", NULL, database, "", 0, 0, track, FALSE, NULL);
-printf("<br>Download: <a href=\"%s\">%s</a>", newUrl, fileType);
+// downloadUrl may be hub supplied
+printf("<br>Download: <a href=\"%s\">%s</a>", htmlEncode(newUrl), htmlEncode(fileType));
 }
 
 static void makeFileDownloads(struct trackDb *tdb, char *db) 
@@ -4361,19 +4362,19 @@ printf("<OPTION");
 if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,name))
     printf(" SELECTED");
 if (filterBy->useIndex || filterBy->valueAndLabel)
-    printf(" value='%s'",name);
+    printf(" value='%s'",htmlEncode(name));    // filterValues are hub supplied
 if (filterBy->styleFollows)
     {
     char *styler = label + strlen(label)+1;
     if (*styler != '\0')
 	{
 	if (*styler == '#') // Legacy: just the color that follows
-	    printf(" style='color: %s;'",styler);
+	    printf(" style='color: %s;'",htmlEncode(styler));
 	else
-	    printf(" style='%s'",styler);
+	    printf(" style='%s'",htmlEncode(styler));
 	}
     }
-printf(">%s</OPTION>\n",label);
+printf(">%s</OPTION>\n",htmlEncode(label));   // filterValues are hub supplied
 }
 
 static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb,  char *setting)
@@ -4535,9 +4536,9 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++
 	    if (*styler != '\0')
 		{
 		if (*styler == '#') // Legacy: just the color that follows
-		    printf(" style='color: %s;'",styler);
+		    printf(" style='color: %s;'",htmlEncode(styler));
 		else
-		    printf(" style='%s'",styler);
+		    printf(" style='%s'",htmlEncode(styler));
 		}
 	    }
 	printf(">%s</OPTION>\n",htmlEncode(label));   // filterValues are hub supplied
@@ -6126,7 +6127,7 @@ puts("</DIV>\n\n");
 boolean tdbSupportsColorOverride(struct trackDb *tdb)
 /* Return TRUE if this track type supports the color override feature. */
 {
-if (!cfgOptionBooleanDefault("showColorPicker", FALSE))
+if (!cfgOptionBooleanDefault("showColorPicker", TRUE))
     return FALSE;
 char *type = tdb->type;
 char *track = tdb->track;
@@ -8551,7 +8552,8 @@ else
 
 treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
-    printf("</TD><TD VALIGN=\"TOP\"><IMG SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
+    printf("</TD><TD VALIGN=\"TOP\"><IMG SRC=\"../images/%s\"></TD></TR></TABLE>",
+        htmlEncode(treeImage));   // treeImage may be hub supplied
 else
     puts("</TD></TR></TABLE>");
 
@@ -9638,7 +9640,8 @@ puts("</TABLE>");
 
 // if there is a treeImage, put it beside the matrix
 if (treeImage != NULL)
-    printf("</TD><TD><IMG SRC=\"%s\"></TD></TABLE>", treeImage);
+    printf("</TD><TD><IMG SRC=\"%s\"></TD></TABLE>",
+        htmlEncode(treeImage));   // treeImage may be hub supplied
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);
@@ -10287,7 +10290,8 @@ struct dyString *ds = dyStringNew(0);
 
 // generate markup
 if (url)
-    dyStringPrintf(ds, "<a class='pennantIconText' href='%s' target='ucscHelp' ", url);
+    dyStringPrintf(ds, "<a class='pennantIconText' href='%s' target='ucscHelp' ",
+        htmlEncode(url));   // pennantIcon may be hub supplied
 else if (isTextIcon)
     dyStringAppend(ds, "<span class='pennantIconText' ");
 if (isTextIcon)

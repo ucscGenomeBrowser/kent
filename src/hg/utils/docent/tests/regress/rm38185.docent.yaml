@@ -31,6 +31,9 @@
 # The two steps deliberately ask for DIFFERENT positions. After the first step the cart
 # holds chr1:1-1,000, so a second step asking for the same place would be satisfied by the
 # cart whether or not the URL was parsed.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 reset: true

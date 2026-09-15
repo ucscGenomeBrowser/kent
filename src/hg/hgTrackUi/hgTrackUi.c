@@ -2294,7 +2294,7 @@ jsInline(
 "    box.val('pack');\n"
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
-    oligoMatchVar, oligoMatchVar, 45, oligo);
+    oligoMatchVar, oligoMatchVar, 45, htmlEncode(oligo));   // cart value, encode it
 puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
 
@@ -2320,7 +2320,7 @@ jsInline(
 "    box.val('full');\n"
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
-    gcOnFlyWindowSize, gcOnFlySizeVar, 15, winSize);
+    gcOnFlyWindowSize, gcOnFlySizeVar, 15, htmlEncode(winSize));   // cart value, encode it
 jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
 /* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
@@ -3306,6 +3306,10 @@ else
 jsonWriteListEnd(jw);
 
 jsonWriteString(jw, "mdid", (char *)metaDataId);
+// The javascript keys its saved UI state (facets, page length, dragged row
+// order) on the assembly plus the metadata id, so two assemblies using the
+// same track name do not share one entry in localStorage.
+jsonWriteString(jw, "db", database);
 jsonWriteString(jw, "primaryKey", (char *)primaryKey);  // must exist
 if (maxCheckboxes) // only if present in trackDb.settings entry
     jsonWriteString(jw, "maxCheckboxes", (char *)maxCheckboxes);
@@ -3867,6 +3871,8 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
     if (liftDb)
         tdb->html = getTrackHtml(liftDb, tdb->table);
+    // resolve $hgsid, and for a hub the rest of its description page variables
+    hVarSubstTrackDbHtml(cart, tdb, database);
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
@@ -3881,6 +3887,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
             ; // Get the first parent that has html
         if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
             {
+            hVarSubstTrackDbHtml(cart, tdbParent, database);
             printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
                    COLOR_DARKGREEN,tdbParent->shortLabel);
             printRelatedTracks(database,trackHash,tdb,cart);
@@ -4297,6 +4304,8 @@ char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 // quickLiftChain has static html
 if (liftDb && differentString(trackHubSkipHubName(tdb->track), "quickLiftChain"))
     tdb->html = getTrackHtml(liftDb, tdb->table);
+// resolve $hgsid, and for a hub the rest of its description page variables
+hVarSubstTrackDbHtml(cart, tdb, database);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     char *browserVersion;
@@ -4499,7 +4508,7 @@ struct udcFile *udc = udcFileMayOpen(fileUrl, NULL);
 if (udc == NULL)
     {
     puts("Status: 404 Not Found");
-    puts("Content-Type: text/plain\n");
+    cgiPrintContentType("text/plain");
     printf("Error: could not open %s\n", fileUrl);
     freeMem(fileUrl);
     return;
@@ -4528,7 +4537,7 @@ if (isNotEmpty(ifNone))
         }
     }
 
-puts("Content-Type: text/plain\n");
+cgiPrintContentType("text/plain");
 char *content = udcFileReadAll(fileUrl, NULL, 0, NULL);
 puts(content);
 freeMem(content);
@@ -4583,7 +4592,15 @@ if (issueBotWarning)
     }
 
 cart = theCart;
-track = cartString(cart, "g");
+/* The track name is not kept in the cart, so it has to come with the request.  Without it
+ * there is no page to draw, and saying so beats the bare hash lookup failure that a
+ * hand-edited or truncated URL used to produce.  A missing parameter is bad input rather
+ * than a program error, so hUserAbort, which keeps it out of the stack dumps. */
+track = cartOptionalString(cart, "g");
+if (isEmpty(track))
+    hUserAbort("This page needs to know which track to show, and the address it was reached by "
+               "does not name one.  Open a track's settings from the browser, or add the track "
+               "name to the address with the g parameter, e.g. hgTrackUi?db=hg38&g=knownGene");
 getDbAndGenome(cart, &database, &ignored, NULL);
 initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
@@ -4707,8 +4724,9 @@ if (isDup)
     tdb = dupTdbFrom(tdb, dup);
     }
 
-// A hub's description page never went through hgTrackDb, so its variables are substituted
-// here instead.  This is what lets a hub page link to its container with $parentTrack.
+// resolve $hgsid, which hgTrackDb had no cart to resolve, and for a hub the rest of its
+// description page variables: a hub page never went through hgTrackDb at all.  This is what
+// lets a hub page link to its container with $parentTrack.
 hVarSubstTrackDbHtml(cart, tdb, database);
 
 if(cartOptionalString(cart, "ajax"))

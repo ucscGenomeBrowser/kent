@@ -702,7 +702,7 @@ printStep(stepNumber++);
     hPrintf("<TR><TD><DIV ID=\"table-select\">");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     // note that fullTableToTdbHash track hash is missing many tables including knownCanonical so cannot use it. 
-    if (isHubTrack(curTable) || (strchr(curTable, '.') == NULL))  /* In same database */
+    if (isHubTrack(curTable) || !tableHasDbPrefix(curTable))  /* In same database */
         {
         hti = maybeGetHti(database, curTable, conn);
         if (hti != NULL)
@@ -710,7 +710,11 @@ printStep(stepNumber++);
         else if (trackHubDatabase(database))
             /* Hub assembly: assume positional when we can't look up table info. */
             isPositional = TRUE;
-        else
+        else if (strchr(curTable, '.') == NULL)
+            /* Only names that reached this lookup before tableHasDbPrefix() existed
+             * abort on a miss.  A dotted name that turns out not to carry a database
+             * is newly looked up here, and not finding it is not new grounds to stop:
+             * leave it non-positional, the way it was treated when it was skipped. */
             errAbort("Could not find table info for table %s in db %s", curTable, database);
         }
     isLongTabix = isLongTabixTable( curTable);

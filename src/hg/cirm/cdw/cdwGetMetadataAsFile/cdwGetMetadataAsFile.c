@@ -103,7 +103,7 @@ void localWebWrap(struct cart *theCart)
 {
 cart = theCart;
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-printf("Content-Type: text/plain\n\n");
+cgiPrintContentType("text/plain");
 user = cdwCurrentUser(conn);
 cdwGetMetadataAsFile(conn); 
 sqlDisconnect(&conn);

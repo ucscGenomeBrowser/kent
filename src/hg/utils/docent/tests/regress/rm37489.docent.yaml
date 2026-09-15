@@ -24,6 +24,9 @@
 # still exists on genome-test but its quickLift is gone -- it comes back as plain hg38 with
 # clinvarMain, clinvarCnv and clinvarSubLolly and no hub_ prefix on any of them. A lifted
 # session dies with the trash it points at, so a script that needs a lift has to make one.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr13:32396673-32400065

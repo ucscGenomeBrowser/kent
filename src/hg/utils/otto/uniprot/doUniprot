@@ -2,6 +2,7 @@
 import urllib.request, urllib.error, urllib.parse, time, os, atexit
 import datetime, optparse, sys, logging, subprocess, glob, shutil
 import sys, gzip, logging,re, json
+import concurrent.futures, traceback
 
 from urllib.parse import urlparse
 from os.path import *
@@ -55,8 +56,6 @@ notAutoDbs = [
 "wuhCor1",
 # no monkeypox yet
 "mpxvRivers",
-# do not run on hs1, has no good gene model and BLAT protein takes forever
-"hs1",
 # sea urchin doesn't have any normal gene model track, not even Augustus
 "strPur2"
 ]
@@ -202,6 +201,12 @@ def parseArgs():
     parser.add_option("", "--archiveDir", dest="archiveDir", action="store", \
             default="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/",
             help="Location of archive directory, default %default")
+    parser.add_option("", "--taxonThreads", dest="taxonThreads", action="store", type="int",
+            default=1,
+            help="how many taxa to process at the same time, default %default. Raising this "
+            "keeps the cluster busy: one taxon at a time leaves it idle during the long "
+            "single-threaded steps between batches. 4 to 6 is a reasonable range. Assemblies "
+            "of the same taxon always run one after the other, they share a fasta file.")
     parser.add_option("", "--mapQa", dest="mapQa", action="store_true", \
             help="output some QA stats for the maps")
     parser.add_option("", "--db", dest="db", action="store_true", \
@@ -996,8 +1001,111 @@ def hasNoMultiMappers(db, table):
         return False
     return True
 
+# GenArk assemblies keep their gene models as bigBed files in the hub, not as MySQL tables,
+# so they need their own search. In descending order of preference:
+#   CAT        - Comparative Annotation Toolkit, shipped as a contrib collection
+#                (track hprcCatGenes, contrib/hprc2annot/catGenes.bb). Best annotation we
+#                have on the assemblies that carry it.
+#   ncbiRefSeq - RefSeq, the GenArk RefSeq gene track. On most GCF assemblies.
+#   ncbiGene   - the annotation the submitter sent to GenBank with the assembly.
+#   augustus   - ab initio prediction, present almost everywhere, so it is the last resort.
+# Each entry is (name, glob relative to the hub directory). Globs, not constructed names,
+# because the files under bbi/ carry the full asmId with its assembly-name suffix while the
+# hub directory is named with the short accession.
+# Several globs per source, because the layouts differ: a GenArk assembly keeps its gene
+# models under bbi/ and its CAT genes in a contrib collection, while hs1 is a hub assembly
+# that keeps them in /gbdb/hs1/<trackName>/ like a classic assembly does.
+genArkGeneSources = [
+    ("catGenes",   ["contrib/*/catGenes.bb", "catLiftOffGenesV1/*.bb"]),
+    ("ncbiRefSeq", ["bbi/*.ncbiRefSeq.bb", "ncbiRefSeq/ncbiRefSeq.bb"]),
+    ("ncbiGene",   ["bbi/*.ncbiGene.bb"]),
+]
+# Augustus is deliberately not in that list. It is an ab initio prediction, so mapping
+# UniProt through it stacks its errors on top of ours; aligning the proteins straight to
+# the genome with miniprot is better and much faster than the old BLAT protein search.
+miniprotBin = "/cluster/bin/x86_64/miniprot"
+miniprotThreads = 16
+
+def miniprotVersion():
+    " version string of the miniprot binary we are using "
+    proc = subprocess.Popen([miniprotBin, "--version"], stdout=PIPE, encoding="utf8")
+    return proc.communicate()[0].strip()
+
+dbIsHubCache = {}
+
+def genArkHubDir(db):
+    """ return the hub directory of a hub assembly, or None for a classic db.
+    dbDb.nibPath is "hub:<dir>" for these, e.g.
+    hub:/gbdb/genark/GCF/029/289/425/GCF_029289425.2 for a GenArk assembly.
+    """
+    if db not in dbIsHubCache:
+        rows = list(runQuery("hgcentral", "select nibPath from dbDb where name='%s'" % db, usePublic=True))
+        nibPath = rows[0][0] if rows else ""
+        dbIsHubCache[db] = nibPath[len("hub:"):] if nibPath.startswith("hub:") else None
+    return dbIsHubCache[db]
+
+def isGenArk(db):
+    """ true only for the GenArk assemblies, the ones under /gbdb/genark with the
+    accession-sharded layout. Not every hub assembly is one: hs1 is served as a hub from
+    /gbdb/hs1/hubs but keeps its track files in /gbdb/hs1/ like a classic assembly, and
+    its outputs belong there rather than in a contrib collection.
+    """
+    hubDir = genArkHubDir(db)
+    return hubDir is not None and "/gbdb/genark/" in hubDir
+
+def geneSearchRoots(db):
+    " the directories that may hold gene model bigBeds for a hub assembly, best first "
+    roots = []
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        roots.append(hubDir)
+    gbdbDir = join("/gbdb", db)
+    if isdir(gbdbDir):
+        roots.append(gbdbDir)
+    return roots
+
+def genArkFile(db, hubDir, fileGlob, what):
+    " return the single file matching fileGlob inside a GenArk hub directory "
+    matches = glob.glob(join(hubDir, fileGlob))
+    if len(matches)!=1:
+        errAbort("%s: expected exactly one %s in %s, found %d: %s" % \
+                (db, what, hubDir, len(matches), matches))
+    return matches[0]
+
+def genArkTwoBit(db, hubDir):
+    " the assembly sequence of a GenArk assembly "
+    # named with the short accession, unlike the files under bbi/
+    return genArkFile(db, hubDir, "*.2bit", "2bit file")
+
+def genArkChromSizes(db, hubDir):
+    " the chrom.sizes of a GenArk assembly. Note the .txt suffix, which /hive does not use "
+    return genArkFile(db, hubDir, "*.chrom.sizes.txt", "chrom.sizes file")
+
+def findBestGeneBigBed(db, hubDir):
+    """ find the best gene model bigBed for a GenArk assembly.
+    Returns (sourceName, fileName), or (None, None) if the hub has no gene models at all.
+    """
+    for name, fileGlobs in genArkGeneSources:
+        for root in geneSearchRoots(db):
+            for fileGlob in fileGlobs:
+                matches = sorted(glob.glob(join(root, fileGlob)))
+                if matches:
+                    if len(matches) > 1:
+                        logging.warning("%s: %d files match %s, using %s" % \
+                                (db, len(matches), fileGlob, matches[0]))
+                    logging.info("%s: best gene models are %s, from %s" % (db, name, matches[0]))
+                    return name, matches[0]
+    logging.warning("%s: no gene models found in %s, will align the proteins directly "
+            "with miniprot" % (db, geneSearchRoots(db)))
+    return None, None
+
 def findBestGeneTable(db):
     " find the best gene table for a given organism and return it "
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        name, _ = findBestGeneBigBed(db, hubDir)
+        return name if name else "miniprot"
+
     if db=="hg19":
         tables = ["refGene"]
         # because in 2021, refSeq maps NM_001129826.3 still to chrX_jh159150_fix, confirmed as a bug by Terence
@@ -1022,8 +1130,8 @@ def findBestGeneTable(db):
                 logging.info("%s: Best gene table is %s. No multi mappers." % (db, table))
                 return table
 
-    assert(db not in ["hg19", "hg38", "mm10", "danRer10", "mm39"]) # never use BLAT on our main dbs
-    return "blat"
+    assert(db not in ["hg19", "hg38", "mm10", "danRer10", "mm39"]) # never align proteins directly on our main dbs
+    return "miniprot"
 
 def gz_is_empty(fname):
     # from https://stackoverflow.com/questions/37874936/how-to-check-empty-gzip-file-in-python
@@ -1281,14 +1389,18 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
             transListStr = ", ".join(sorted(list(mapInfo[(acc, chrom, start, end)])))
             mapSource = accToMapSource.get(acc)
             if mapSource is None:
-                mapSource = accToMapSource["default"]
+                # "best" is the honest answer when we have nothing better to say: the
+                # alignment survived, but we cannot name the transcript evidence behind it.
+                # Do not turn this into a KeyError - it would throw away hours of cluster
+                # work over one protein.
+                mapSource = accToMapSource.get("default", "best")
 
             protToLocs[acc].append( ("%s:%s-%s" % (chrom, str(start), str(end)), mapSource, transListStr.replace(" ", "")) )
 
             if mapSource == "best":
                 mapDesc = "Best match(es) when aligning protein against all transcripts"
             elif mapSource == "direct":
-                mapDesc = "Best BLAT match when aligning protein against entire genome"
+                mapDesc = "Best miniprot match when aligning protein against entire genome"
             elif mapSource == "uniprot":
                 mapDesc = "Alignment of protein to transcript(s) annotated by UniProt"
             elif mapSource == "entrez":
@@ -1298,7 +1410,7 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
 
             mapInfoStr = "%s: %s" % (mapDesc, transListStr)
         else:
-            mapInfoStr = "no transcript: direct BLAT to genome"
+            mapInfoStr = "no transcript: direct miniprot alignment to genome"
 
         row.append(mapInfoStr)
 
@@ -1412,20 +1524,95 @@ def parseRecordMeta(tabDir, taxId, doTrembl):
                 ret[acc] = row
     return ret
 
-def blatProteinsKeepBest(fullFaFname, db, mapFname, stats):
-    " blat the proteins directly, only good for small genomes where we don't have any gene models "
+def twoBitFname(db):
+    """ the assembly sequence, wherever this assembly keeps it.
+    Only a real GenArk assembly keeps it in the hub directory. hs1 is served as a hub but
+    keeps its 2bit at the classic /gbdb/<db>/<db>.2bit, same as a classic assembly.
+    """
+    if isGenArk(db):
+        return genArkTwoBit(db, genArkHubDir(db))
+    return "/gbdb/{db}/{db}.2bit".format(db=db)
+
+def chromSizesFile(db):
+    " the chrom.sizes of this assembly, wherever it keeps it "
+    if isGenArk(db):
+        return genArkChromSizes(db, genArkHubDir(db))
+    return "/hive/data/genomes/%s/chrom.sizes" % db
+
+def miniprotRamGb(genomeFa):
+    """ how much RAM to reserve for a miniprot run on this genome, in whole GB.
+    Measured on real assemblies: peak RSS is linear in genome size at about 11 GB per Gb
+    of sequence and is flat in the thread count, because the index is built once and shared
+    (2.49 GB at -t 1 versus 2.60 GB at -t 16 on the same 227 Mb). So this is sized off the
+    sequence only, with headroom, and never below a small floor.
+    """
+    bases = os.path.getsize(genomeFa) # near enough, fasta is one byte per base plus headers
+    gb = int(bases / 1e9 * 14) + 1
+    return max(gb, 8)
+
+def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
+    """ run one miniprot job on the parasol cluster.
+    It has to be told both numbers: para's default RAM is the node's RAM divided by its CPU
+    count, which for a 16 CPU job is far less than miniprot needs, and without -cpu parasol
+    would pack more of these onto a node than it has cores for.
+    """
+    ram = miniprotRamGb(genomeFa)
+    jobDir = join(workDir, "cluster")
+    if not isdir(jobDir):
+        os.makedirs(jobDir, exist_ok=True)
+
+    # a wrapper, so the jobList line stays free of the redirection and quoting that
+    # parasol's job parser does not accept
+    # Every path here has to be absolute. A parasol job runs with its working directory
+    # set to the batch directory, not to the directory the pipeline runs in, so a path
+    # like "fasta/7955.fa" simply does not exist from the job's point of view and miniprot
+    # exits without writing anything.
+    jobSh = join(jobDir, "runMiniprot.sh")
+    with open(jobSh, "w") as ofh:
+        ofh.write("#!/bin/sh\nset -e\n")
+        ofh.write("%s -t %d --gff %s %s > $1\n" % \
+                (miniprotBin, miniprotThreads, abspath(genomeFa), abspath(protFa)))
+    os.chmod(jobSh, 0o755)
+
+    jobList = join(jobDir, "jobList")
+    with open(jobList, "w") as ofh:
+        ofh.write("%s {check out exists %s}\n" % (abspath(jobSh), abspath(gffName)))
+
+    logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg" % (db, miniprotThreads, ram))
+    run("cd %s && para make -cpu=%d -ram=%dg jobList" % (jobDir, miniprotThreads, ram))
+
+def miniprotProteins(fullFaFname, db, mapFname, stats):
+    """ align the UniProt proteins straight to the genome with miniprot and write a PSL.
+    Used when the assembly has no gene models worth mapping through. This replaced both
+    "blat -q=prot" and mapping through Augustus: Augustus is ab initio, so going through it
+    stacks its errors on top of ours, and the BLAT protein search is very slow on a big
+    genome.
+    """
+    workDir = mapFname+".miniprot.tmp"
+    if not isdir(workDir):
+        os.makedirs(workDir, exist_ok=True)
+
+    # miniprot reads fasta, not 2bit
+    genomeFa = join(workDir, "genome.fa")
+    run(["twoBitToFa", twoBitFname(db), genomeFa])
+
+    gffName = join(workDir, "miniprot.gff")
+    runMiniprotOnCluster(db, genomeFa, fullFaFname, gffName, workDir)
+    os.remove(genomeFa)
+
+    # miniprot's GFF carries, on every CDS block, the protein range that block covers, so
+    # the alignment can be turned into a PSL exactly. Going via gff3ToGenePred and
+    # genePredToFakePsl instead makes the query the transcript implied by the alignment,
+    # which gives a qSize of the aligned CDS length rather than of the protein, and the
+    # annotation lift needs the protein. refs #38300
     myDir = dirname(__file__)
-    # consider using miniprot here one day?
-    cmd = "blat -q=prot -t=dnax /gbdb/{db}/{db}.2bit {inf} stdout -noHead | sort -k10 | pslReps stdin stdout /dev/null " \
-        "-minAli=0.95 -nohead | {myDir}/pslProtCnv > {out}".format(db=db, inf=fullFaFname, out=mapFname, myDir=myDir)
-    stats["minAli"]=0.95
-    #nuclFname = mapFname+".nucl"
-    # originally used "| {myDir}/pslProtCnv " but tried to get rid of the markd-script dependency 
-    #pslToProtPsl(nuclFname, mapFname)
-    # then later figured that pslToProtPsl() is not the same as pslProtCnv and went back the MarkD way
-    # then in 2024 finally used pslProtToRnaCoords
-    #os.remove(nuclFname)
-    run(cmd)
+    chromSizes = join(workDir, "chrom.sizes")
+    run("twoBitInfo %s %s" % (twoBitFname(db), chromSizes))
+    run([join(myDir, "miniprotToPsl"), gffName, fullFaFname, chromSizes, mapFname])
+
+    alnCount = len(open(mapFname).readlines())
+    logging.info("%s: miniprot aligned the UniProt proteins to %d genomic locations" % (db, alnCount))
+    stats["aligner"] = "miniprot " + miniprotVersion()
 
 def getTransIds(db, geneTable, transcriptFa):
     """ return all possible transcript IDs given a gene table. The reason that we need is that Uniprot often
@@ -1434,8 +1621,10 @@ def getTransIds(db, geneTable, transcriptFa):
       so we can log how many transcript can possibly mapped (and which ones). This is important for debugging.
     """
     # no idea how to get the version suffix out of our mysql tables - thanks Obama!
-    if geneTable=="refGene":
-        logging.debug("Gene table is refGene, reading IDs from %s" % transcriptFa)
+    # A GenArk assembly has no MySQL tables, but the fasta we built from its gene bigBed
+    # holds every transcript ID already, so read them from there as refGene does.
+    if geneTable=="refGene" or genArkHubDir(db) is not None:
+        logging.debug("Reading transcript IDs from %s" % transcriptFa)
         allTrans = set(parseFasta(open(transcriptFa)).keys())
         return allTrans
 
@@ -1449,6 +1638,56 @@ def getTransIds(db, geneTable, transcriptFa):
         allTrans.add(idStr)
     logging.info("Got %d distinct transcript IDs from MySQL table" % len(allTrans))
     return allTrans
+
+def catSourceTransMap(db, allTransIds):
+    """ map Ensembl transcript accession, without version, to the CAT transcript names we
+    have in our fasta.
+
+    CAT names a transcript after the source gene, e.g. AL627309.3-1, which matches nothing
+    UniProt knows. Every row of the CAT bigBed carries a sourceTranscript field holding the
+    Ensembl transcript it was lifted from, so that is the join. One Ensembl transcript can
+    name several of ours, because paralogs are lifted from the same source, and because
+    duplicate CAT names were made unique with a -dup suffix earlier.
+    """
+    hubDir = genArkHubDir(db)
+    geneBb = findBestGeneBigBed(db, hubDir)[1] if hubDir else None
+    if geneBb is None:
+        logging.warning("%s: no CAT bigBed found, cannot map to Ensembl transcripts" % db)
+        return {}
+
+    # which column is sourceTranscript
+    asText = subprocess.Popen(["bigBedInfo", "-as", geneBb], stdout=PIPE, encoding="utf8").communicate()[0]
+    fields = re.findall(r"^\s+\S+\s+\**(\w+)\s*;", asText, flags=re.MULTILINE)
+    if "sourceTranscript" not in fields or "name" not in fields:
+        logging.warning("%s: %s has no sourceTranscript field, cannot map to Ensembl" % (db, geneBb))
+        return {}
+    nameIdx, srcIdx = fields.index("name"), fields.index("sourceTranscript")
+
+    # Reproduce the -dup suffixes exactly rather than attaching every paralog to every
+    # source transcript. makeTranscriptFiles walks the bigBed in the same order and renames
+    # the second and later rows that share a name, so the same running count recovers which
+    # of our transcripts each bigBed row became.
+    shortToLong = {}
+    seen = {}
+    proc = subprocess.Popen(["bigBedToBed", geneBb, "stdout"], stdout=PIPE, encoding="utf8")
+    for line in proc.stdout:
+        row = line.rstrip("\n").split("\t")
+        if len(row) <= max(nameIdx, srcIdx):
+            continue
+        name = row[nameIdx]
+        seen[name] = seen.get(name, 0) + 1
+        ourId = name if seen[name]==1 else "%s-dup%d" % (name, seen[name])
+        if ourId not in allTransIds:
+            continue
+        src = row[srcIdx].split(".")[0]
+        if not src or src in ("None", "NA"):
+            continue
+        shortToLong.setdefault(src, []).append(ourId)
+    proc.stdout.close()
+
+    logging.info("%s: %d Ensembl transcripts map to %d of our %d CAT transcripts" % \
+            (db, len(shortToLong), sum(len(v) for v in shortToLong.values()), len(allTransIds)))
+    return shortToLong
 
 def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, commonTrans, \
         ofh, verDiffCount, pairCount):
@@ -1466,7 +1705,10 @@ def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, c
             continue
 
         commonTrans.add(transId)
-        if transId!=shortToLong[shortId]:
+        # ourIds is a list: usually one transcript, but a CAT gene set can name several,
+        # since paralogs are lifted from the same source transcript
+        ourIds = shortToLong[shortId]
+        if transId not in ourIds:
             verDiffCount+=1
         pairCount += 1
 
@@ -1475,7 +1717,8 @@ def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, c
         # with the acc.version that we have in our transcript file. This saves a few hundred
         # transcripts, sometimes thousands, from getting removed
         for upSeqId in upSeqIds:
-            ofh.write("%s\t%s\n" % (upSeqId, shortToLong[shortId]))
+            for ourId in ourIds:
+                ofh.write("%s\t%s\n" % (upSeqId, ourId))
         foundTransCount+=1
     return foundTransCount, verDiffCount, pairCount
 
@@ -1484,23 +1727,36 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
     PSL file. The tool for this is called pslSelect. This helps force the alignment
     to the correct transcript. It turned out to be absolutely necessary. see makeUniProtPsl.sh """
     # get the UniProt field that holds the list of annotated transcript IDs
-    if "encode" in geneTable or "ensGene" in geneTable:
+    if "encode" in geneTable or "ensGene" in geneTable or geneTable=="catGenes":
+        # CAT is lifted from Ensembl/GENCODE, so its transcripts carry an Ensembl source
+        # transcript and UniProt's Ensembl cross-reference is the one that matches
         transField = "ensemblTrans"
     elif "refGene" in geneTable or "ncbiRefSeq" in geneTable:
         transField = "refSeq"
     else:
-        logging.info("No supported gene track found. The protein/transcript alignments will not be filtered using pslSelect.")
+        logging.info("%s: no UniProt cross-reference matches the ids in %s, so the "
+                "protein/transcript alignments are not filtered with pslSelect" % (db, geneTable))
         stats["noGeneTrack"] = True
-        # anoGam1 for example, has only augustus genes as a track
-        return None, stats, {}
+        # Every alignment that survives is then just the best match we found, so say so:
+        # the same map source the augustus case uses. Returning an empty dict here used to
+        # be safe only because nothing reached this branch; catGenes and ncbiGene do, and
+        # pslToBigPsl looks up accToMapSource["default"] for every protein it writes.
+        return None, stats, {"default":"best"}
 
     allTransIds = getTransIds(db, geneTable, transcriptFa)
 
     # create a mapping from no-version (short) to with-version accession (long), so we can fix them up later 
     # to the accessions that we actually have in our fasta file
-    shortToLong = {}
-    for acc in allTransIds:
-        shortToLong[acc.split(".")[0]] = acc
+    if geneTable=="catGenes":
+        # CAT names its transcripts after the source gene, so the ids in our fasta match no
+        # UniProt cross-reference at all. The CAT bigBed does carry, per transcript, the
+        # Ensembl transcript it was lifted from, so map through that and use UniProt's
+        # Ensembl cross-reference. refs #38300
+        shortToLong = catSourceTransMap(db, allTransIds)
+    else:
+        shortToLong = {}
+        for acc in allTransIds:
+            shortToLong.setdefault(acc.split(".")[0], []).append(acc)
 
     logging.debug("Example transcript IDs: %s" % list(allTransIds)[:10])
 
@@ -1622,7 +1878,9 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
 
     # for debugging
     if len(notFoundAtAll)!=0:
-        notFoundFname = join(mapDir, "lastRun_noAnnotatedTranscriptIDs.txt")
+        # per assembly: mapDir is shared, and with --taxonThreads several assemblies would
+        # otherwise write this same file at the same time
+        notFoundFname = join(mapDir, "lastRun_noAnnotatedTranscriptIDs.%s.txt" % db)
         notFoundFh = open(notFoundFname, "w")
         #notFoundFh.write(str(notFoundAtAll)+"\n")
         for acc in notFoundAtAll:
@@ -1676,13 +1934,49 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
     """
     #dbDir = join(mapDir, db+"_"+geneTable)
     #if not isdir(dbDir):
-        #os.makedirs(dbDir)
+        #os.makedirs(dbDir, exist_ok=True)
 
     faName = join(dbDir, "transcripts.fa")
     pslName = join(dbDir, "transcripts.psl")
 
     pslFields = "matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,tNumInsert," \
         "tBaseInsert,strand,qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,blockCount,blockSizes,qStarts,tStarts"
+
+    hubDir = genArkHubDir(db)
+    if hubDir is not None:
+        # GenArk assembly: no MySQL tables at all, the gene models are a bigGenePred in the
+        # hub. bigGenePredToGenePred gets us back to a genePred, and both of the tools that
+        # follow can work off the hub's own chrom.sizes and 2bit rather than chromInfo, so
+        # nothing here needs a database.
+        geneBb = findBestGeneBigBed(db, hubDir)[1]
+        gpName = join(dbDir, "transcripts.gp")
+        cdsName = join(dbDir, "transcripts.cds")
+
+        run(["bigGenePredToGenePred", geneBb, gpName+".raw"])
+
+        # CAT names its transcripts after the source gene, so paralogs share a name: the
+        # hs1 CAT set has 777 duplicated names in 234903 transcripts, RBMY1F-1 three times
+        # with three different lengths. pslMap then cannot tell which transcript a protein
+        # alignment meant and stops with "inPsl RBMY1F-1 tSize (1887) != mapPsl RBMY1F-1
+        # qSize (1718)". Make the names unique before the fasta and the PSL are derived
+        # from this file, so the two always agree. RefSeq accessions are unique already,
+        # so this is a no-op for them.
+        run("""awk -F'\t' -v OFS='\t' '{ seen[$1]++; if (seen[$1]>1) $1 = $1 "-dup" seen[$1]; print }' %s.raw > %s""" \
+                % (gpName, gpName))
+        rawNames = [l.split("\t")[0] for l in open(gpName+".raw")]
+        dupCount = len(rawNames) - len(set(rawNames))
+        if dupCount:
+            logging.info("%s: %d of %d transcripts shared a name with another and were "
+                    "renamed to keep the fasta and the PSL in step" % (db, dupCount, len(rawNames)))
+        os.remove(gpName+".raw")
+
+        run(["genePredToFakePsl", "-chromSize=%s" % chromSizesFile(db),
+             "noDb", gpName, pslName, cdsName])
+        run(["getRnaPred", "-genomeSeqs=%s" % twoBitFname(db),
+             "noDb", gpName, "all", faName])
+
+        logging.info("Created %s and %s for %s/%s from %s" % (faName, pslName, db, geneTable, geneBb))
+        return faName, pslName
 
     if geneTable=="ncbiRefSeq":
         origFa = "/gbdb/%s/ncbiRefSeq/seqNcbiRefSeq.rna.fa" % db
@@ -1718,12 +2012,22 @@ def makeTranscriptFiles(db, geneTable, taxId, dbDir):
 def writeMapDesc(stats, db, geneTable, mapDescFname):
     " write a little json file that points to the map file used and some basic stats about it "
     logging.debug("making json file with version and other lift info")
-    if geneTable == "ncbiRefSeq":
+    hubDir = genArkHubDir(db)
+    if geneTable=="miniprot":
+        # no gene models were involved at all, the proteins went straight to the genome.
+        # This has to be tested before the hub case below: a hub assembly with no gene
+        # models is exactly the one that ends up here, and it has no bigBed to date.
+        version = "direct"
+    elif hubDir is not None:
+        # A hub assembly has no ncbiRefSeqVersion.txt. Date the gene models by the
+        # bigBed we actually read, which is what the user needs to tie the mapping to a
+        # particular annotation; the source name is carried separately in geneTable.
+        geneBb = findBestGeneBigBed(db, hubDir)[1]
+        version = datetime.datetime.fromtimestamp(os.path.getmtime(geneBb)).strftime('%Y-%m-%d')
+    elif geneTable == "ncbiRefSeq":
         version = open("/gbdb/"+db+"/ncbiRefSeq/ncbiRefSeqVersion.txt").read().strip()
     elif geneTable in ['refGene', 'augustusGene', 'knownGene']:
         version = datetime.datetime.today().strftime('%Y-%m-%d')
-    elif geneTable=="blat":
-        version = "direct"
     elif geneTable in ["ensGene"]:
         version = list(runQuery("hgFixed", "select version from trackVersion where db='%s' and name='ensGene' order by ix desc limit 1;" % db))[0][0]
     else:
@@ -1775,7 +2079,6 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     a realignment/rebuild of the pslMap PSL file.
     """
     # use MD5s of the input files to determine if the protein -> genome map has to be rebuilt
-    global MINALI
     protMd5 = fastaMd5(protFa)
 
     stats = OrderedDict()
@@ -1787,21 +2090,21 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     metaMd5 = manyTabMd5(tabFnames)
 
-    if geneTable!="blat":
+    if geneTable!="miniprot":
         transcriptFa, transcriptPsl = makeTranscriptFiles(db, geneTable, taxId, mapDir)
         transMd5 = fastaMd5(transcriptFa)
         pslMd5 = tabMd5(transcriptPsl)
     else:
         # this usually only happens on viral genomes or other weird cases that don't have a single gene model track
-        # here we blat the proteins directly onto the genome
-        transMd5, pslMd5 = "directBlat-noTranscripts", "directBlat-noPsl"
+        # here we align the proteins directly onto the genome with miniprot
+        transMd5, pslMd5 = "directMiniprot-noTranscripts", "directMiniprot-noPsl"
         transcriptFa, transcriptPsl = None, None
 
     geneToRefSeqs = None
     selectFname = None
     protToTrans = None
 
-    if geneTable in ["blat"]:
+    if geneTable in ["miniprot"]:
         protMapSource = {"default":"direct"}
     elif geneTable in ["augustusGene"]:
         protMapSource = {"default":"best"}
@@ -1812,15 +2115,23 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
                 geneTable, transcriptFa, geneToRefSeqs, metaMd5, transMd5, stats)
         protToTrans = parseKeyVal(selectFname)
 
-    allMd5s = [protMd5, transMd5, pslMd5]
+    # ciona's genome is from a different organism than the refseq transcripts, so it needs a
+    # lower threshold. Keep it a local and never assign to the global MINALI: with
+    # --taxonThreads several assemblies run at once and would see each other's value.
+    minAli = 0.85 if db in ["ci3"] else MINALI
+
+    allMd5s = [protMd5, transMd5, pslMd5, str(minAli)]
     if selectFname:
         pairMd5 = tabMd5(selectFname)
         allMd5s.append(pairMd5)
         stats["pairMd5"] = pairMd5[:10]
         stats["pairFname"] = selectFname
 
-    # if either the protein sequences, the transcripts, their alignment or the
-    # protein/transcript mapping changes -> create a new PSL mapping file
+    # if either the protein sequences, the transcripts, their alignment, the
+    # protein/transcript mapping or the alignment threshold changes -> create a new PSL
+    # mapping file. minAli belongs in here: it decides which alignments survive, so a
+    # mapping built at one threshold must not be silently reused at another. That is
+    # exactly what happened after the MINALI global leaked across threads. refs #38300
     fullMd5 = listMd5(allMd5s)[:10]
 
     mapFname = join(mapDir, "%(geneTable)s_%(fullMd5)s.psl" % locals())
@@ -1838,16 +2149,14 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     stats["mapFname"] = basename(mapFname)
 
     logging.debug("%s does not exist" % mapFname)
-    if geneTable=="blat":
-        logging.error("Could not find any gene table for %s, using BLAT to map proteins" % db)
-        blatProteinsKeepBest(protFa, db, mapFname, stats)
+    if geneTable=="miniprot":
+        logging.error("Could not find any gene table for %s, using miniprot to map proteins" % db)
+        miniprotProteins(protFa, db, mapFname, stats)
     else:
-        if db in ["ci3"]: # wow: ciona's genome is from a different organism than the refseq transcripts.
-            MINALI = 0.85
-        stats["minAli"] = MINALI
+        stats["minAli"] = minAli
         workDir = "clusterRun-map-%s-%s-%s.tmp" % (db, geneTable, fullMd5)
 
-        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), workDir, mapFname]
+        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(minAli), workDir, mapFname]
         if selectFname is not None:
             scriptArgs.append(selectFname)
 
@@ -1859,7 +2168,15 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     writeMapDesc(stats, db, geneTable, mapDescFname)
 
-    assert(os.path.getsize(mapFname)!=0)
+    if os.path.getsize(mapFname)==0:
+        # Nothing aligned. On an organism with a handful of UniProt proteins this is a fact
+        # about the data, not a failure of the run: taxon 216574, the golden eagle, offers
+        # two proteins and neither of them aligns. Treat it the way an organism with no
+        # proteins at all is already treated, skip the assembly and carry on, rather than
+        # asserting and taking the whole run down. refs #38300
+        logging.warning("%s: no protein aligned to the genome, skipping this assembly" % db)
+        return None, geneTable, fullMd5, protMapSource, protToTrans, True
+
     # if you modify this line, also modify the other return statement above
     return mapFname, geneTable, fullMd5, protMapSource, protToTrans, True
 
@@ -1904,7 +2221,7 @@ def makeSubDir(parent, child):
     newDir = join(parent, child)
     if not isdir(newDir):
         logging.info("Making dir: %s" % newDir)
-        os.makedirs(newDir)
+        os.makedirs(newDir, exist_ok=True)
     return newDir
 
 def downloadUniprot(uprotDir):
@@ -1918,7 +2235,7 @@ def downloadUniprot(uprotDir):
     # in late 2020, pget started to trigger errors, so removed -P 3 and --use-pget-n=4
     tmpDir = join(uprotDir, "download.tmp")
     if not isdir(tmpDir):
-        os.makedirs(tmpDir)
+        os.makedirs(tmpDir, exist_ok=True)
 
     # the uniprot FTP server is too slow and too unreliable. Switching to EBI's which has rsync !!
     count = 0
@@ -2041,9 +2358,11 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
     relFname = join(tabDir, "version.txt")
     versionString = open(relFname).read()
 
-    for taxId, dbs in taxIdDbs.items():
-        if onlyDbs is not None and len(set(dbs).intersection(onlyDbs))==0:
-            continue
+    runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl)
+
+def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
+    " do all the assemblies of one taxon. Safe to run several of these at once, see runTaxa "
+    if True:
         logging.info("Working on taxon ID %d" % taxId)
 
         faFnames = [
@@ -2059,7 +2378,7 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
         if os.path.getsize(fullFaFname)==0:
             logging.warn("File %s is empty. Taxon ID %s does not have any UniProt annotations." \
                     " Skipping this organism." % (fullFaFname, taxId))
-            continue
+            return
 
         tabFnames = ["tab/swissprot.%d.tab" % taxId]
         if doTrembl:
@@ -2072,7 +2391,9 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
                 continue
 
             logging.debug("Annotating assembly %s" % db)
-            chromSizesFname = "/hive/data/genomes/%s/chrom.sizes" % db
+            # a GenArk assembly has no /hive/data/genomes directory, its chrom.sizes
+            # lives in the hub
+            chromSizesFname = chromSizesFile(db)
 
             accToMeta = parseRecordMeta(tabDir, taxId, doTrembl)
 
@@ -2080,6 +2401,11 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             mapDescFname = join(dbMapDir, "liftInfo.json")
             mapFname, geneTable, mapMd5, accToMapSource, accToTrans, isNewMap = \
                 makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, options.force, dbMapDir, mapDescFname)
+
+            if mapFname is None or os.path.getsize(mapFname)==0:
+                # covers both the freshly built and the reused mapping file
+                logging.warning("%s: no protein/genome alignments, nothing to build" % db)
+                continue
 
             dbBigBedDir = makeSubDir(bigBedDir, db)
 
@@ -2097,6 +2423,53 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
             uniprotLift(fullFaFname, annotFnames, chromSizesFname, mapFname, dbBigBedDir, accToDb, accToMeta, options)
 
             shutil.copyfile(mapDescFname, join(dbBigBedDir, "liftInfo.json"))
+
+def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
+    """ work through the taxa, optionally several at a time.
+
+    One taxon at a time leaves the cluster mostly idle: each assembly submits its BLAST
+    batch, waits for it to drain, and then spends the best part of an hour in the
+    single-threaded pslReps that follows before the next assembly submits anything.
+    Running several taxa at once keeps jobs queued while others are in that serial phase.
+
+    Taxa, not assemblies: the assemblies of one taxon share fasta/<taxId>.fa, which is
+    rebuilt at the start of each taxon, so two threads on the same taxon would race on it.
+    Everything below that point is per-assembly - protToGenome/<db>, bigBed/<db>, and the
+    cluster batch directory - so separate taxa do not touch the same files.
+    """
+    todo = [(taxId, dbs) for taxId, dbs in taxIdDbs.items()
+            if onlyDbs is None or len(set(dbs).intersection(onlyDbs))>0]
+
+    if options.taxonThreads <= 1 or len(todo) <= 1:
+        for taxId, dbs in todo:
+            oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl)
+        return
+
+    logging.info("Working on %d taxa, %d at a time" % (len(todo), options.taxonThreads))
+    failed = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=options.taxonThreads) as pool:
+        futures = {}
+        for taxId, dbs in todo:
+            fut = pool.submit(oneTaxon, taxId, dbs, onlyDbs, options, tabDir, faDir,
+                    mapDir, bigBedDir, doTrembl)
+            futures[fut] = taxId
+        for fut in concurrent.futures.as_completed(futures):
+            taxId = futures[fut]
+            try:
+                fut.result()
+            except BaseException as ex:
+                # BaseException, not Exception: run() reports a failed command with
+                # sys.exit(), which raises SystemExit. In a worker thread that would
+                # otherwise kill just that thread and leave the run looking successful,
+                # which is exactly the kind of silent failure this pipeline has a history of.
+                # Log the traceback too: errAbort raises a bare AssertionError, so without
+                # one the message is just "AssertionError:" and says nothing about where.
+                logging.error("taxon %s failed: %s: %s\n%s" % (taxId, type(ex).__name__, ex,
+                        "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))))
+                failed.append(taxId)
+
+    if failed:
+        errAbort("%d of %d taxa failed: %s" % (len(failed), len(todo), ", ".join(str(t) for t in sorted(failed))))
 
 def makeSymlink(target, linkName):
     assert(".new" not in linkName) # make sure that this bug never happens again
@@ -2136,6 +2509,13 @@ def makeLinks(bigBedDir, onlyDbs, taxIdDbs):
 
         for db in dbs:
             if onlyDbs is not None and db not in onlyDbs:
+                continue
+
+            if isGenArk(db):
+                # a GenArk assembly is served from its hub, not from /gbdb/<db>/, and
+                # /gbdb/genark belongs to the GenArk build. Its files go into the contrib
+                # collection instead, see installGenArkContrib.
+                logging.debug("%s is a GenArk assembly, no /gbdb symlinks" % db)
                 continue
 
             dbBigBedDir = join(bigBedDir, db)
@@ -2329,12 +2709,78 @@ def createVersionFiles(tabDir, bigBedDir, onlyDbs, taxIdDbs):
                     versionOfh.write(fullVersion)
                 logging.info("Wrote release string to %s" % versionFname)
 
+            hubDir = genArkHubDir(db)
+            if isGenArk(db):
+                # a GenArk assembly has no /gbdb/<db>/uniprot to link into; its files and
+                # its trackDb go into the contrib collection, which carries the version
+                # string inline because a contrib trackDb cannot read a /gbdb path
+                installGenArkContrib(db, hubDir, dbDir, fullVersion, shortVersion)
+                continue
+
             linkName = join("/gbdb", db, "uniprot", "version.txt")
             makeSymlink(versionFname, linkName)
 
             logging.debug("Release string in %s, symlink from %s" % (versionFname, linkName))
 
     return versionString, shortVersion
+
+genArkContribRoot = "/hive/data/genomes/asmHubs/contrib"
+genArkContribName = "uniprot"
+
+def makeContribTrackDb(versionString, shortVersion):
+    """ trackDb stanzas for the GenArk contrib collection, from the same template the
+    archive hub uses. Three differences from the archive: the track names must not carry
+    the release, or they would change every month and break saved sessions; the data files
+    sit beside trackDb.txt rather than in a per-release subdirectory; and dataVersion has
+    to be the literal string, because a contrib trackDb cannot point at a /gbdb path.
+    """
+    templFname = join(dirname(__file__), "trackDb.template.txt")
+    tdb = open(templFname).read()
+
+    tdb = re.sub(r'^(\s*(?:track|parent)\s+\S+?)\$VER', r'\1', tdb, flags=re.MULTILINE)
+    tdb = tdb.replace("bigDataUrl $VER/", "bigDataUrl ")
+    tdb = tdb.replace("$VER", shortVersion)
+
+    lines = [l for l in tdb.splitlines() if not l.startswith("#")]
+    # the composite stanza is first, hang the shared description page and the version off it
+    out = []
+    for line in lines:
+        out.append(line)
+        if line.strip() == "track " + genArkContribName:
+            out.append("html ../docs/%s" % genArkContribName)
+            out.append("dataVersion %s" % versionString)
+    return "\n".join(out) + "\n"
+
+def installGenArkContrib(db, hubDir, dbBigBedDir, versionString, shortVersion):
+    """ write this assembly's bigBeds and a trackDb into the GenArk contrib collection.
+    A GenArk assembly is not served out of /gbdb/<db>/, so the /gbdb symlinks and the
+    trackDb .ra stanza that classic assemblies get do not apply.
+
+    This only fills in the collection under contrib/uniprot/. It deliberately does NOT
+    symlink anything into the GenArk build directories and does not touch any hub.txt:
+    installing the collection is a separate, deliberate step, done with
+    "genark addContrib uniprot" when someone decides to, not something a data update
+    should do behind your back.
+    """
+    acc = basename(hubDir.rstrip("/"))
+    collDir = join(genArkContribRoot, genArkContribName, acc)
+    if not isdir(collDir):
+        os.makedirs(collDir, exist_ok=True)
+
+    count = 0
+    for bbName in sorted(glob.glob(join(dbBigBedDir, "*.bb"))):
+        # skip the historical per-geneTable files, only the current track files belong here
+        if not basename(bbName).startswith("unip"):
+            continue
+        shutil.copyfile(bbName, join(collDir, basename(bbName)))
+        count += 1
+
+    tdbFname = join(collDir, "trackDb.txt")
+    with open(tdbFname, "w") as ofh:
+        ofh.write(makeContribTrackDb(versionString, shortVersion))
+
+    logging.info("%s: wrote %d bigBeds and a trackDb to %s" % (db, count, collDir))
+    return collDir
 
 def makeTrackDb(archDir, shortVersion):
     " create a trackDb.txt file for the archive hub in archDir "
@@ -2357,9 +2803,16 @@ def copyToArchive(bigBedDir, archRoot, shortVersion, onlyDbs):
         if onlyDbs and db not in onlyDbs:
             continue
 
+        if isGenArk(db):
+            # goldenPath/archive/<db>/ is a classic-assembly download path; a GenArk
+            # assembly is published under its accession in the hubs tree instead, so
+            # archiving one here would just create a directory nothing can reach
+            logging.debug("%s is a GenArk assembly, not archiving under goldenPath" % db)
+            continue
+
         archDir = join(archRoot, db, "uniprot", shortVersion)
         if not isdir(archDir):
-            os.makedirs(archDir)
+            os.makedirs(archDir, exist_ok=True)
 
         inDir = join(bigBedDir, db)
 

@@ -50,3 +50,15 @@ ENST00000265713.8 p.495-533
 # this one must stay a single base 1599 nt before c.1483, not codons 1483..1599
 KAT6A c.1483-1599
 KAT6A n.100-200
+# Nothing may be left over after a bare codon number: a dropped tail is the silent
+# truncation this grammar was added to stop, refs #38353
+KAT6A 495-
+KAT6A p.495_
+KAT6A 495--533
+KAT6A p.495_533_600
+# The last codon maps; codon 0, a codon past the end of the protein, and a backwards
+# range are all refused
+KAT6A p.0
+KAT6A p.2004
+KAT6A p.2005
+KAT6A p.533_495

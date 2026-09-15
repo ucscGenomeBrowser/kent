@@ -308,7 +308,7 @@ function blatShowShareBox(box, url, msg) {
         'these BLAT results. It stores only the results, not your other tracks or settings. The ' +
         'link remains valid for years; to keep your results permanently, save them into a ' +
         `<a href="hgSession?db=${encodeURIComponent(hgBlatData.config.db || '')}` +
-        `&hgsid=${encodeURIComponent(hgBlatData.config.hgsid || '')}">Session</a>.</span>` +
+        `&amp;hgsid=${encodeURIComponent(hgBlatData.config.hgsid || '')}">Session</a>.</span>` +
         '<input id="gbShareInput" class="gbShareInput" type="text" readonly>' +
         '<button type="button" class="gbPill" id="blatShareCopy" title="Copy the link to the clipboard">Copy</button>';
     var inp = document.getElementById('gbShareInput');
@@ -379,7 +379,7 @@ function blatShareLink() {
 function blatRenameModalHtml(cfg) {
     // hgSession link is relative (same /cgi-bin/), carrying db + hgsid so the session page opens in
     // this assembly and cart.
-    var sessionUrl = `hgSession?db=${encodeURIComponent(cfg.db)}&hgsid=${encodeURIComponent(cfg.hgsid)}`;
+    var sessionUrl = `hgSession?db=${encodeURIComponent(cfg.db)}&amp;hgsid=${encodeURIComponent(cfg.hgsid)}`;
     return '<div id="gbModalBg" class="gbModalBg" style="display:none">' +
         '<div class="gbModal" role="dialog" aria-modal="true" aria-labelledby="gbModalTitle">' +
         '<div class="gbModalTitle" id="gbModalTitle">Rename BLAT Track</div>' +

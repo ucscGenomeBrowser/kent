@@ -53,36 +53,94 @@ if (type == NULL || isEmpty(type->requiredVar))
 return isNotEmpty(cartOptionalString(cart, type->requiredVar));
 }
 
-boolean snapshotIsSnapshotName(char *sessionName)
-/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix). */
+static boolean snapshotIsSnapshotName(char *sessionName)
+/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix).  File-local:
+ * the only thing that may ask is the writer below, checking its own argument.  A user's own
+ * session can carry the same prefix, so this must never be used to decide whether to show a
+ * row to its owner - snapshotIsSnapshotSettings() is the one for that. */
 {
 return sessionName != NULL && startsWith(snapshotNamePrefix, sessionName);
 }
 
-static char *snapshotSessionDir(char *sessionDataDir, char *encUserName, char *encSessionName)
+char *snapshotTypeFromSettings(char *settings)
+/* See snapshotSession.h.  Reads the one tag by walking the lines rather than calling
+ * raFromString(): this runs once per row in the My Sessions listings, and building a hash there
+ * costs ~600ns and three allocations per session that has any settings at all, against ~30ns and
+ * none for the walk.  Same line semantics as raFromString - leading blanks skipped, tag is the
+ * first word, value is the rest of the line. */
+{
+if (isEmpty(settings))
+    return NULL;
+int tagLen = strlen(snapshotTypeSetting);
+char *s = settings;
+while (s != NULL && s[0] != '\0')
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == '\0')
+        break;
+    if (startsWith(snapshotTypeSetting, s) && (s[tagLen] == ' ' || s[tagLen] == '\t'))
+        {
+        char *val = skipLeadingSpaces(s + tagLen);
+        char *lineEnd = strchr(val, '\n');
+        char *type = (lineEnd != NULL) ? cloneStringZ(val, lineEnd - val) : cloneString(val);
+        if (isEmpty(type))
+            freez(&type);
+        return type;
+        }
+    s = strchr(s, '\n');
+    if (s != NULL)
+        s++;
+    }
+return NULL;
+}
+
+boolean snapshotIsSnapshotSettings(char *settings)
+/* See snapshotSession.h. */
+{
+char *type = snapshotTypeFromSettings(settings);
+boolean isSnapshot = (type != NULL);
+freez(&type);
+return isSnapshot;
+}
+
+static char *snapshotSessionDirHashLen(char *sessionDataDir, char *encUserName,
+                                       char *encSessionName, int hashLen)
 /* Alloc and return the durable data directory for one snapshot, or NULL if sessionDataDir is empty.
  * Like sessionData's sessionDirFromNames but with two extra hash levels drawn from the session name,
  * so a single high-volume user - the anonymous "l", which owns most snapshots - never accumulates
  * millions of entries in one directory.  Layout:
- *   sessionDataDir / <2hex md5(user)> / <encUser> / <2hex sess> / <2hex sess> / <8hex md5(session)>
+ *   sessionDataDir / <2hex md5(user)> / <encUser> / <2hex sess> / <2hex sess> / <hashLen hex sess>
+ * The two fan-out levels are a prefix of the same hash, so they spread the entries out without
+ * adding uniqueness: it is hashLen alone that decides how likely two snapshots are to land in the
+ * same directory, which is why it is sessionDirHashLen and not 8.  hashLen is passed in only so
+ * that the cleaner can also name a directory written before it was widened.
  * Snapshots use their own layout (not sessionDirFromNames), so this never affects normal sessions. */
 {
 if (isEmpty(sessionDataDir))
     return NULL;
 if (sessionDataDir[0] != '/')
     errAbort("config setting sessionDataDir must be an absolute path (starting with '/')");
+if (hashLen < 4 || hashLen > 32)
+    errAbort("snapshotSessionDirHashLen: hashLen must be in [4,32], got %d", hashLen);
 char *userHash = md5HexForString(encUserName);
 char *sessHash = md5HexForString(encSessionName);
 char fan1[3], fan2[3];
 safencpy(fan1, sizeof fan1, sessHash, 2);           /* first 2 hex of the session hash  */
 safencpy(fan2, sizeof fan2, sessHash + 2, 2);       /* next 2 hex -> 65536 buckets total */
 userHash[2] = '\0';
-sessHash[8] = '\0';
+sessHash[hashLen] = '\0';
 struct dyString *dy = dyStringCreate("%s/%s/%s/%s/%s/%s",
                                      sessionDataDir, userHash, encUserName, fan1, fan2, sessHash);
 freeMem(userHash);
 freeMem(sessHash);
 return dyStringCannibalize(&dy);
+}
+
+static char *snapshotSessionDir(char *sessionDataDir, char *encUserName, char *encSessionName)
+/* Alloc and return the durable data directory for one snapshot, or NULL if sessionDataDir is
+ * empty. */
+{
+return snapshotSessionDirHashLen(sessionDataDir, encUserName, encSessionName, sessionDirHashLen);
 }
 
 char *snapshotNewName(struct sqlConnection *conn, char *encUserName)
@@ -192,9 +250,12 @@ sqlDyStringPrintf(dy, "DELETE FROM %s WHERE userName='%s' AND sessionName='%s'",
                   namedSessionTable, encUserName, encSessionName);
 sqlUpdate(conn, dy->string);
 
-/* settings records the snapshot type, so the row is self-describing for reconstruction/debugging. */
+/* settings records the snapshot type, so the row is self-describing for reconstruction/debugging.
+ * This is also what marks the row as a share token rather than a session the user saved: the
+ * "__" name prefix cannot say that, because a user may have named a session of their own that way
+ * (refs #38313). */
 char settings[256];
-safef(settings, sizeof settings, "snapshotType %s\n", type->name);
+safef(settings, sizeof settings, "%s %s\n", snapshotTypeSetting, type->name);
 
 dyStringClear(dy);
 sqlDyStringPrintf(dy,
@@ -271,14 +332,23 @@ for (s = toClean;  s != NULL;  s = s->next)
         {
         /* Remove the durable files first, then the row, so a crash never orphans the DB pointer.
          * Minimal snapshots live under the fanned-out snapshotSessionDir; a full anonymous share
-         * (e.g. the top-right "Share a link" when logged out) uses sessionData's flat layout - remove
-         * whichever exists (removeDirTree ignores a missing path). */
-        char *snapDir = snapshotSessionDir(sessionDataDir, snapshotAnonUser, s->name);
-        char *flatDir = sessionDirFromNames(sessionDataDir, snapshotAnonUser, s->name);
-        removeDirTree(snapDir);
-        removeDirTree(flatDir);
-        freez(&snapDir);
-        freez(&flatDir);
+         * (e.g. the top-right "Share a link" when logged out) uses sessionData's flat layout.  Both
+         * layouts changed name when sessionDirHashLen was widened from 8, so try the old spelling
+         * too - otherwise a snapshot saved before the change would leave its files behind forever.
+         * Remove whichever exist (removeDirTree ignores a missing path). */
+        char *dirs[4];
+        dirs[0] = snapshotSessionDir(sessionDataDir, snapshotAnonUser, s->name);
+        dirs[1] = sessionDirFromNames(sessionDataDir, snapshotAnonUser, s->name);
+        dirs[2] = snapshotSessionDirHashLen(sessionDataDir, snapshotAnonUser, s->name,
+                                            sessionDirHashLenLegacy);
+        dirs[3] = sessionDirFromNamesHashLen(sessionDataDir, snapshotAnonUser, s->name,
+                                             sessionDirHashLenLegacy);
+        int i;
+        for (i = 0;  i < ArraySize(dirs);  i++)
+            {
+            removeDirTree(dirs[i]);
+            freez(&dirs[i]);
+            }
         sqlSafef(query, sizeof query,
                  "DELETE FROM %s WHERE userName='%s' AND sessionName='%s'",
                  namedSessionTable, snapshotAnonUser, s->name);

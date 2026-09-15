@@ -86,7 +86,7 @@ if (mute)
     mg = mgNew(1, 1);
 else
     mg = makeCountPic(count, mgMediumFont());
-fprintf(stdout, "Content-type: image/png\n\n");
+cgiPrintContentType("image/png");
 mgSaveToPng(stdout, mg, FALSE);
 return 0;
 }

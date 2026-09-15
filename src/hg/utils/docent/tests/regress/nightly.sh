@@ -20,6 +20,11 @@
 # editing in ~/kent cannot change what the cron measures.  Nothing here is built, so
 # the clone needs no submodules and no make.
 #
+# When an xfail PASSES -- the fix reached the server -- that flip is appended to
+# flips.log beside the logs, one line per script ever.  It is the only place this job's
+# best evidence is kept: the log it came from is deleted after 60 days, and a mail is
+# not a record.  See `make proof` in this directory for what the flips are for.
+#
 # --update brings that clone to origin/master and then re-runs this script from the
 # result.  Two reasons for the re-exec rather than a separate driver script beside the
 # crontab: the whole job stays in the tree where it can be reviewed and committed, and
@@ -40,10 +45,16 @@ PW=/hive/groups/browser/uiTest/pw
 PW_ENV="env PLAYWRIGHT_BROWSERS_PATH=$PW/browsers NODE_PATH=$PW/node_modules"
 TO=${DOCENT_NIGHTLY_TO:-braney@ucsc.edu}
 LOGDIR=${DOCENT_NIGHTLY_LOGS:-/hive/users/braney/docentNightly/logs}
+FLIPS=${DOCENT_NIGHTLY_FLIPS:-/hive/users/braney/docentNightly/flips.log}
 STAMP=$(date +%Y-%m-%d_%H%M)
+# Only a label for the flips.log line.  Every script here says `target: genome-test`
+# itself; this is not read from them, so override it if that ever stops being true.
+TARGET=${DOCENT_NIGHTLY_TARGET:-genome-test}
 
 mkdir -p "$LOGDIR"
 OUT="$LOGDIR/$STAMP.txt"
+VERDICTS="$LOGDIR/.$STAMP.verdicts"
+trap 'rm -f "$VERDICTS"' EXIT
 
 # A job that could not start has to arrive looking like the others, or a night when
 # nothing ran reads as a quiet night.  Same subject shape, same log file, exit 0.
@@ -119,11 +130,15 @@ TESTS=$(cd "$HERE" && git ls-files '*.docent.yaml' 2>/dev/null \
     fi
     echo
     echo "--- tests ---"
-    if (cd "$HERE" && make test T="$TESTS" 2>&1); then
+    # Written to a file of its own and then echoed, rather than straight into the
+    # block's redirect, because the flip scan below has to read the verdicts back and
+    # $OUT is the file this block is being written to.
+    if (cd "$HERE" && make test T="$TESTS" > "$VERDICTS" 2>&1); then
       tests=pass
     else
       tests=FAIL
     fi
+    cat "$VERDICTS"
 
     if [ "$tests" = FAIL ] && [ "$pf" = MISSING ]; then
       subject_state="FAIL (fixtures missing too)"
@@ -134,6 +149,39 @@ TESTS=$(cd "$HERE" && git ls-files '*.docent.yaml' 2>/dev/null \
     else
       subject_state="pass"
     fi
+  fi
+
+  # An xfail that PASSED is the one piece of evidence this job produces that cannot be
+  # got any other way: the same server, the same fixtures, the same script, one real
+  # build apart.  That is what separates a test that has been watched to fail for its
+  # own reason from a test that only asserts the answer -- see `make proof`.  Until now
+  # it arrived as a red mail and was then thrown away, so record it before the log ages
+  # out, and say what to do with it.
+  #
+  # The record lives OUTSIDE the checkout on purpose.  --update does `reset --hard`, so
+  # anything written into the tree here is gone the next night.
+  #
+  # One line per script, ever.  Without the dedupe this would append every night from
+  # the flip until the promotion commit lands, which is exactly the stretch when nobody
+  # is looking.
+  flipped=$(awk '/^=== /{n=$2} /supposed to fail, and it passed/{print n}' "$VERDICTS" 2>/dev/null)
+  if [ -n "$flipped" ]; then
+    echo
+    echo "--- flips (an xfail passed, so the fix reached this server) ---"
+    for t in $flipped; do
+      if [ -f "$FLIPS" ] && awk -v t="$t" '$2 == t { found = 1 } END { exit !found }' "$FLIPS"; then
+        echo "  $t -- already recorded in $FLIPS"
+      else
+        printf '%s %-22s passed on %s  commit=%s  log=%s\n' \
+          "$(date +%F)" "$t" "$TARGET" \
+          "$(git -C "$HERE" rev-parse --short HEAD 2>/dev/null)" "$STAMP.txt" >> "$FLIPS"
+        echo "  $t -- recorded in $FLIPS"
+      fi
+    done
+    echo
+    echo "  To close one out: drop the .xfail from the script's name, and add a"
+    echo "  server-flip line to its proof: key naming the commit that shipped the fix."
+    echo "  Then \`make proof\` counts it.  Until that commit is pushed this stays red."
   fi
 
   echo

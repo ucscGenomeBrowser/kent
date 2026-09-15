@@ -11,6 +11,9 @@
 #
 # click: {track:, item:} follows the item's own map-box link, which is how hgc is reached.
 # A raw click on the image is swallowed by hgTracks' drag-select handler.
+proof:
+  - "assertion-only 2026-09-04 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 reset: true

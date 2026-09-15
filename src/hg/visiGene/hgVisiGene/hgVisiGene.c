@@ -773,8 +773,7 @@ doDefault(conn, FALSE);
 static void problemPage(char *msg, char *url)
 /* send back a page describing problem */
 {
-printf("Content-Type: text/html\n");
-printf("\n");
+cgiPrintContentType("text/html");
 htmStart(stdout, "do download");
 printf("%s %s",msg,url);
 htmlEnd();
@@ -823,9 +822,8 @@ else
 		freeMem(newUrl);
 		sd = newSd;
 		}
-	    printf("Content-Type: application/octet-stream\n");
 	    printf("Content-Disposition: attachment; filename=%s%s\n", name, extension);
-	    printf("\n");
+	    cgiPrintContentType("application/octet-stream");
 	    while ((readSize = read(sd, buf, sizeof(buf))) > 0)
 	        fwrite(buf, 1,  readSize, stdout);
 	    close(sd);

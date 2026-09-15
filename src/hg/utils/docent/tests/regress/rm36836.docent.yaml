@@ -27,6 +27,9 @@
 # is the half of this bug that was about hub loading rather than about the CGI staying up.
 # gc5Base is in every GenArk hub, and myTrack is the daph hub's only track. Row names are
 # matched by suffix, so the per-run hub_<n>_ prefix on both does not have to be known.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 reset: true
 fast: true

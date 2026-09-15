@@ -31,12 +31,12 @@ void hVarSubstTrackDb(struct trackDb *tdb, char *database);
 /* Substitute variables in trackDb shortLabel, longLabel, and html fields. */
 
 void hVarSubstTrackDbHtml(struct cart *cart, struct trackDb *tdb, char *database);
-/* Substitute variables in the description page of a hub track.  Native trackDb needs no
- * such call: hgTrackDb already substituted the html when it loaded trackDb.  A hub's html
- * comes straight off the hub's web server and has never been through substitution, so it
- * is done here, at render time, where $db, $hgsid and $parentTrack resolve to the hub_<id>_
- * names the CGIs actually use.  Only a short list of variables is recognized and nothing
- * is an error, so a dollar sign in a description page that was not written with this in
- * mind stays a dollar sign. */
+/* Substitute variables in a track's description page, at render time, where there is a
+ * cart and where $db, $hgsid and $parentTrack resolve to the hub_<id>_ names the CGIs
+ * actually use.  A hub's html has never been through substitution, so a short list of
+ * variables is resolved here.  A native page was already done by hgTrackDb, apart from
+ * $hgsid, which cannot be baked into the trackDb table because it is per-request.
+ * Nothing is an error, so a dollar sign in a description page that was not written with
+ * this in mind stays a dollar sign. */
 
 #endif

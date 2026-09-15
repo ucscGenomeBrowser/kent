@@ -595,7 +595,12 @@ if (isNotEmpty(comment))
 fputc('\n', stderr);
 }
 
-#define CONTENT_TYPE "Content-Type: text/plain\n\n"
+INLINE void plainTextHeader()
+/* Close the http header block with a text/plain Content-Type.  Only the first call in the
+ * process writes anything, which is what the callers below want: they each end the request. */
+{
+cgiPrintContentType("text/plain");
+}
 
 static void sendServerCommand(char *org)
 /* If a recognized server command is requested (with minimal auth to prevent DoS), and usher server
@@ -642,7 +647,8 @@ if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
                     {
                     fprintf(stderr, "Spawned usher server background process, details in %s",
                             tnServerStartup.forCgi);
-                    printf(CONTENT_TYPE"Started server for %s\n", org);
+                    plainTextHeader();
+                    printf("Started server for %s\n", org);
                     }
                 else
                     errAbort("Unable to spawn usher server background process, details in %s",
@@ -659,14 +665,16 @@ if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
                 fprintf(stderr, "Usher server reload for %s", org);
                 maybeComment(comment);
                 serverReloadProtobufs(org, treeChoices);
-                printf(CONTENT_TYPE"Sent reload command for %s\n", org);
+                plainTextHeader();
+                printf("Sent reload command for %s\n", org);
                 }
             else if (sameString(command, "stop"))
                 {
                 fprintf(stderr, "Usher server stop for %s", org);
                 maybeComment(comment);
                 serverStop(org);
-                printf(CONTENT_TYPE"Sent stop command for %s\n", org);
+                plainTextHeader();
+                printf("Sent stop command for %s\n", org);
                 }
             else
                 {
@@ -682,14 +690,16 @@ if (isNotEmpty(plain) && isNotEmpty(salty) && serverAuthOk(plain, salty))
                         fprintf(stderr, "Usher server thread count set to %d", val);
                         maybeComment(comment);
                         serverSetThreadCount(org, val);
-                        printf(CONTENT_TYPE"Sent thread %d command for %s\n", val, org);
+                        plainTextHeader();
+                        printf("Sent thread %d command for %s\n", val, org);
                         }
                     else if (sameString(words[0], "timeout"))
                         {
                         fprintf(stderr, "Usher server timeout set to %d", val);
                         maybeComment(comment);
                         serverSetTimeout(org, val);
-                        printf(CONTENT_TYPE"Sent timeout %d command for %s\n", val, org);
+                        plainTextHeader();
+                        printf("Sent timeout %d command for %s\n", val, org);
                         }
                     else
                         errAbort("Unrecognized command '%s'", command);

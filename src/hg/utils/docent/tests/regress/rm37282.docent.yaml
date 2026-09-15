@@ -1,0 +1,48 @@
+# #37282 -- "Hide/Show hgTrackUi visibility for superTracks".  The superTrack settings page
+# drove its buttons by setting the dropdown's value and nothing else, so three things were
+# wrong at once: hiding every child left the container itself showing, the container's own
+# dropdown never greyed out when set to hide, and clicking Hide on one child forced the
+# container to show.
+#
+# 1b1a0aa39ff routes the clicks through the dropdown's change event instead
+# (`dropdown.val(buttonText).trigger('change')`), so superT.selChanged() runs and does all
+# three, and adds a change handler that swaps normalText for hiddenText on the container's
+# own dropdown.  The commit says the fix made the code simpler, which is usually a sign the
+# first version was working around the event it should have been using.
+#
+# So this drives the buttons and reads the classes, which is where the behavior is.  There
+# is no submit and nothing is saved: the assertions are about what the page does as the
+# user clicks, which is the whole of this bug.
+#
+# The third symptom is the last step and it is the one that is easy to lose: a Hide click
+# must leave a hidden container hidden.  A fix that simply stopped touching the container
+# would pass the first two steps and fail nothing else here, so it is stated separately.
+proof:
+  - "assertion-only 2026-09-12 -- written from the ticket and from 1b1a0aa39ff, after the fix shipped"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  # Start with the container showing and one child on, which is what a user who came from
+  # the browser image has.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeReg&wgEncodeReg=show&wgEncodeRegTxn=full"
+  - expect:
+      has: 'select.superDropdown.normalText'
+      noHas: 'select.superDropdown.hiddenText'
+
+  # Hiding every child auto-hides the container, and the container's dropdown greys.
+  - click: '#superVizHideAllButton'
+  - sleep: 600
+  - expect:
+      has: 'select.superDropdown.hiddenText'
+      noHas: 'select.superDropdown.normalText'
+
+  # And a Hide click on a single child does not force the container back to show.
+  - click: 'div.seg-btn-group[data-trackname="wgEncodeRegTxn"] > button:has-text("Hide")'
+  - sleep: 600
+  - expect:
+      has: 'select.superDropdown.hiddenText'
+      noHas: 'select.superDropdown.normalText'

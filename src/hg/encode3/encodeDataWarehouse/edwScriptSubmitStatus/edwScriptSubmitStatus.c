@@ -111,8 +111,7 @@ else
 
 /* Write out HTTP response */
 printf("Content-Length: %ld\r\n", dy->stringSize);
-puts("Content-Type: application/json; charset=UTF-8\r");
-puts("\r");
+cgiPrintContentType("application/json; charset=UTF-8");
 printf("%s", dy->string);
 }
 

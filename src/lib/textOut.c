@@ -130,14 +130,14 @@ if (outToFile)
 trimSpaces(fileName);
 if (isEmpty(fileName))
     {
-    printf("Content-Type: text/plain\n\n");
+    cgiPrintContentType("text/plain");
     }
 else if (isEmpty(compressType) || sameWord(compressType, textOutCompressNone))
     {
     if (!outToFile)
 	{
-	printf("Content-Type: application/octet-stream\n");
-	printf("Content-Disposition: attachment; filename=%s\n\n", fileName);
+	printf("Content-Disposition: attachment; filename=%s\n", fileName);
+	cgiPrintContentType("application/octet-stream");
 	}
     }
 else
@@ -146,12 +146,14 @@ else
     if (!outToFile)
 	{
 	char *suffix = getCompressSuffix(compressType);
-	printf("Content-Type: application/x-%s\n", compressType);
 	if (endsWith(fileName, suffix))
-	    printf("Content-Disposition: attachment; filename=%s\n\n", fileName);
+	    printf("Content-Disposition: attachment; filename=%s\n", fileName);
 	else
-	    printf("Content-Disposition: attachment; filename=%s%s\n\n",
+	    printf("Content-Disposition: attachment; filename=%s%s\n",
 		   fileName, suffix);
+	char contentType[256];
+	safef(contentType, sizeof(contentType), "application/x-%s", compressType);
+	cgiPrintContentType(contentType);
 	/* Send the Content header uncompressed! */
 	fflush(stdout);
 	}

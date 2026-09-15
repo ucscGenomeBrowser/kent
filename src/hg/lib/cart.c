@@ -51,9 +51,6 @@ static char *positionCgiName = "position";
 
 DbConnector cartDefaultConnector = hConnectCart;
 DbDisconnect cartDefaultDisconnector = hDisconnectCart;
-static boolean cartDidContentType = FALSE;
-
-struct slPair *httpHeaders = NULL; // A list of headers to output before the content-type
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -1779,7 +1776,7 @@ void printCaptcha()
     if (cfgOptionBooleanDefault("captchaDebug", FALSE))
         fprintf(stderr, "CAPTCHA_PRINT %s\n", getSessionId());
     cspWriteResponseHeader();
-    puts("Content-Type:text/html\n"); // puts outputs one newline. Header requires two newlines.
+    cgiPrintContentType("text/html");
     puts("<html><head>");
     printf("<script nonce='%s'>\n", getNonce());
     printf("function showWidget() { \n"
@@ -1889,7 +1886,7 @@ if (token)
     else
         {
         cspWriteResponseHeader();
-        puts("Content-Type: text/html\n");
+        cgiPrintContentType("text/html");
         puts("<html><body>Internal captcha error: Cloudflare rejected the captcha token. "
                 "Something is not working internally, we are very sorry. You can try reloading the page. "
                 "If this problem persists, send an email to genome-www@soe.ucsc.edu and we will "
@@ -2872,7 +2869,10 @@ cartDefaultDisconnector(&conn);
 }
 
 void cartWriteCookie(struct cart *cart, char *cookieName)
-/* Write out HTTP Set-Cookie statement for cart. */
+/* Queue the HTTP Set-Cookie statement(s) for the cart.  cgiPrintContentType() writes them,
+ * so this has to run before that does but does not have to be the thing that writes them:
+ * a caller that has already closed the header block loses the cookie rather than printing
+ * a Set-Cookie line into the page body, where it never did anything anyway. */
 {
 char *domain = cfgVal("central.domain");
 if (sameWord("HTTPHOST", domain))
@@ -2901,12 +2901,14 @@ if (sameString(userIdKey,"")) // make sure we do not write any blank cookies.
     }
 else
     {
+    char cookie[1024];
     if (!isEmpty(domain))
-	printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+	safef(cookie, sizeof cookie, "%s=%s; path=/; domain=%s; expires=%s",
 		cookieName, userIdKey, domain, cookieDate());
     else
-	printf("Set-Cookie: %s=%s; path=/; expires=%s\r\n",
+	safef(cookie, sizeof cookie, "%s=%s; path=/; expires=%s",
 		cookieName, userIdKey, cookieDate());
+    cgiAddHttpHeader("Set-Cookie", cookie);
     }
 if (geoMirrorEnabled())
     {
@@ -2915,7 +2917,10 @@ if (geoMirrorEnabled())
     char *redirect = cgiOptionalString("redirect");
     if (redirect)
         {
-        printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
+        char cookie[1024];
+        safef(cookie, sizeof cookie, "redirect=%s; path=/; domain=%s; expires=%s",
+                redirect, cgiServerName(), cookieDate());
+        cgiAddHttpHeader("Set-Cookie", cookie);
         }
     }
 /* Validate login cookies if login is enabled */
@@ -2923,14 +2928,14 @@ if (loginSystemEnabled())
     {
     struct slName *newCookies = loginValidateCookies(cart), *sl;
     for (sl = newCookies;  sl != NULL;  sl = sl->next)
-        printf("Set-Cookie: %s\r\n", sl->name);
+        cgiAddHttpHeader("Set-Cookie", sl->name);
     }
 }
 
 static void cartJsonStart()
 /* Write the necessary headers for Apache */
 {
-puts("Content-Type: application/json\n");
+cgiPrintContentType("application/json");
 }
 
 static void cartJsonEnd(struct jsonWrite *jw)
@@ -3045,38 +3050,27 @@ cartExclude(cart, "verbose");
 return cart;
 }
 
-static void addHttpHeaders()
-/* CGIs can initialize the global variable httpHeaders to control their own HTTP
- * headers. This allows, for example, to prevent web browser caching of hgTracks
- * responses, but implicitly allow web browser caching everywhere else */
-{
-struct slPair *h;
-for (h = httpHeaders; h != NULL; h = h->next)
-    {
-    printf("%s: %s\n", h->name, (char *)h->val);
-    }
-cspWriteResponseHeader();
-}
-
 void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
 /* write http headers including cookie and content type line.
  * contType defaults to text/html when NULL.
  * cookieName defaults to hUserCookie() when NULL */
 {
-/* The CGI header must be written exactly once; a second write lands in the page body.  Some flows
- * (e.g. hgc) emit it early via cartAndCookieWithHtml before a later webStart also asks for it, so
- * guard here rather than trusting every caller to check cartDidContentType first. */
-if (cartDidContentType)
+/* Nothing can be added to a header block that has already been closed, so there is nothing
+ * useful left to do.  The flows that reach here twice - hgc emitting the header early via
+ * cartAndCookieWithHtml and then webStart asking again - are the common case; the other one
+ * is an early warn() during cartNew, which writes its own header before there is a cart to
+ * take a cookie from.  cartAndCookieWithHtml queues the content policy ahead of that warn
+ * for exactly that reason; the cookie cannot be queued that early and is simply lost. */
+if (cgiDidContentType())
     return;
-if (!contType)
-    contType = "text/html";
 if (!cookieName)
     cookieName = hUserCookie();
 
-addHttpHeaders();
+/* These two queue header lines and cgiPrintContentType writes them, so their order here is
+ * a matter of taste rather than of the wire format. */
+cspWriteResponseHeader();
 cartWriteCookie(cart, cookieName);
-printf("Content-Type: %s\n\n", contType);
-cartDidContentType = TRUE;
+cgiPrintContentType(contType);
 }
 
 struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
@@ -3085,13 +3079,18 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
 {
+/* Queue the content policy before anything can write a header.  An early warn during
+ * cartForSession() below prints the Content-Type line itself, and after that no header
+ * line can be added, so a policy queued only at cartWriteHeaderAndCont() time would be
+ * missing from exactly the pages that report a problem. */
+cspWriteResponseHeader();
 // Note: early abort works fine but early warn does not
 htmlPushEarlyHandlers();
 struct cart *cart = cartForSession(cookieName, exclude, oldVars);
 popWarnHandler();
 popAbortHandler();
 
-if (doContentType && !cartDidContentType)
+if (doContentType)
     cartWriteHeaderAndCont(cart, cookieName, NULL);
 
 return cart;
@@ -3136,11 +3135,7 @@ va_list argscp;
 va_copy(argscp, args);
 if (!initted && !cgiOptionalString("ajax"))
     {
-    if (!cartDidContentType)
-        {
-        puts("Content-Type: text/html\n");
-        cartDidContentType = TRUE;
-        }
+    cgiPrintContentType("text/html");
     htmStart(stdout, "Early Error");
     initted = TRUE;
     }

@@ -21,24 +21,26 @@ element annotations derived from them.
 </p>
 
 <p>
-The collection contains the following tracks. Each has its own description page with
-the details of that data type:
+The five main data types are large enough, and general enough, that each is its own
+top-level track in an existing track group rather than another entry hidden inside this
+collection: <a href="hgTrackUi?g=dcRNAseqComposite">DC RNA-seq</a> and
+<a href="hgTrackUi?g=dcCAGEseqComposite">DC CAGE-seq</a> and
+<a href="hgTrackUi?g=dc3PseqComposite">DC 3P-seq</a> in the gene tracks, and
+<a href="hgTrackUi?g=dcChIPseqComposite">DC ChIP-seq</a> and
+<a href="hgTrackUi?g=dcHiC_Composite">DC Hi-C</a> under regulation. The
+Shawn Burgess laboratory's CRISPR/Cas9 target-site predictions, also distributed
+through this hub, are their own
+<a href="hgTrackUi?g=dcCrispr">CRISPR/Cas9 Targets</a> track under mapping and
+sequencing, next to where the browser keeps CRISPR tracks on other genomes.
+</p>
+
+<p>
+This collection holds what is left: a mixed bag of regulatory-element and annotation
+tracks that don't map cleanly onto any one existing group. Each has its own description
+page with the details of that data type:
 </p>
 
 <ul>
-  <li><a href="hgTrackUi?g=dcRNAseqComposite">DC RNA-seq</a> &mdash;
-      strand-specific and unstranded read coverage for 361 RNA-seq samples across 31
-      developmental stages.</li>
-  <li><a href="hgTrackUi?g=dcCAGEseqComposite">DC CAGE-seq</a> &mdash; CAGE
-      signal and tag clusters, which mark the positions where transcription starts.</li>
-  <li><a href="hgTrackUi?g=dcChIPseqComposite">DC ChIP-seq</a> &mdash; signal
-      and called peaks for seven histone modifications, RNA polymerase II and nine
-      transcription factors.</li>
-  <li><a href="hgTrackUi?g=dc3PseqComposite">DC 3P-seq</a> &mdash; signal and
-      tag clusters marking the 3' ends of transcripts.</li>
-  <li><a href="hgTrackUi?g=dcHiC_Composite">DC Hi-C</a> &mdash; insulation index
-      and directionality index computed from Hi-C contact maps, used to locate the
-      boundaries of topologically associating domains.</li>
   <li><a href="hgTrackUi?g=dcComp">DC Elements</a> &mdash; per-stage regulatory
       element annotation at five stages: ChromHMM chromatin states, PADREs, the
       consensus subset cPADREs, and DOPEs.</li>
@@ -50,9 +52,8 @@ the details of that data type:
   <li><a href="hgTrackUi?g=dcEvalidation">DC Enhancers</a> &mdash; a curated set
       of zebrafish enhancers tested in transgenic reporter assays.</li>
   <li><a href="hgTrackUi?g=dcComparativeGenomics">DC Conservation</a> &mdash;
-      phastCons conservation across four cyprinid fishes, the conserved non-coding
-      elements from it, and predicted CRISPR/Cas9 target sites, from the Shawn Burgess
-      laboratory at NHGRI.</li>
+      phastCons conservation across four cyprinid fishes and the conserved non-coding
+      elements from it, from the Shawn Burgess laboratory at NHGRI.</li>
   <li><a href="hgTrackUi?g=dcConsensus_promoters">DC Promoters</a> &mdash;
       consensus promoters called from the CAGE data.</li>
 </ul>
@@ -60,11 +61,12 @@ the details of that data type:
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Each of the tracks above is a container that groups many individual data files. Click a
-track name to open its configuration page, where samples can be selected by
-developmental stage, by sequencing sample, by ChIP-seq target and, for RNA-seq, by
-strand. Nothing is turned on by default; pick the samples you need, since turning on
-all of them at once will make the display very slow.
+Each of the tracks above, and each of the five promoted to their own group, is a
+container that groups many individual data files. Click a track name to open its
+configuration page, where samples can be selected by developmental stage, by
+sequencing sample, by ChIP-seq target and, for RNA-seq, by strand. Nothing is turned on
+by default; pick the samples you need, since turning on all of them at once will make
+the display very slow.
 </p>
 
 <h2>Methods</h2>

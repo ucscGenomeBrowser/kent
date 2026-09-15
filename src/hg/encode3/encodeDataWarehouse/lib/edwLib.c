@@ -958,8 +958,7 @@ return edwValidFileLoadByQuery(conn, query);
 void edwWebHeaderWithPersona(char *title)
 /* Print out HTTP and HTML header through <BODY> tag with persona info */
 {
-printf("Content-Type:text/html\r\n");
-printf("\r\n\r\n");
+cgiPrintContentType("text/html");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
 printf("<HTML><HEAD><TITLE>%s</TITLE>\n", "ENCODE Data Warehouse");

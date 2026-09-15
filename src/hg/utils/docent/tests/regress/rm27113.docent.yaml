@@ -37,6 +37,9 @@
 # express the gesture.
 #
 # Fixed and on the RR on 2026-07-28, so there is no build left to watch this fail on.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr7:155806151-155806250

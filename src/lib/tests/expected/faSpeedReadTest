@@ -1,0 +1,24 @@
+ticket shape, three uneven lines
+  rec 0  lines 3  wrote 138586  read 138586  name rec0  ok
+same shape, overrun too small to abort
+  rec 0  lines 3  wrote 131239  read 131239  name rec0  ok
+one byte short of the initial size
+  rec 0  lines 2  wrote 65536  read 65536  name rec0  ok
+exactly the initial size
+  rec 0  lines 1  wrote 65536  read 65536  name rec0  ok
+one byte over the initial size
+  rec 0  lines 1  wrote 65537  read 65537  name rec0  ok
+crossing the first doubling
+  rec 0  lines 2  wrote 131073  read 131073  name rec0  ok
+short line then a long one
+  rec 0  lines 2  wrote 65536  read 65536  name rec0  ok
+several doublings in one record
+  rec 0  lines 3  wrote 340000  read 340000  name rec0  ok
+evenly wrapped, the ordinary case
+  rec 0  lines 4  wrote 200  read 200  name rec0  ok
+a single short line
+  rec 0  lines 1  wrote 12  read 12  name rec0  ok
+two records in one file
+  rec 0  lines 3  wrote 138586  read 138586  name rec0  ok
+  rec 1  lines 2  wrote 90300  read 90300  name rec1  ok
+11 cases, 0 problems

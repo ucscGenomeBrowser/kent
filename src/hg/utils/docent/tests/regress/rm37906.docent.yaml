@@ -21,6 +21,9 @@
 #     would make the test fail whenever a sample legitimately has nothing here, so it
 #     names one child per composite instead: bamAll for the Cntgs side, bamSLMez1 for the
 #     Seq side. Those two are what "no data under either track" was about.
+proof:
+  - "assertion-only 2026-09-04 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg18
 position: chr19:56940838-56946943

@@ -196,7 +196,11 @@ $(function() {
     // around for a display preference.  The sort column is the exception and
     // does live in the cart, as facetSortOrder, because it also sets the track
     // order in the image.
-    const uiStateKey = `facetedComposite.${embeddedData.mdid}`;
+    // The key carries the assembly as well as the metadata id: localStorage is
+    // per-origin, so two assemblies whose hubs happen to use the same track
+    // name would otherwise share one saved state, and a row order dragged for
+    // one would come back on the other over a different set of samples.
+    const uiStateKey = `facetedComposite.${embeddedData.db || ""}.${embeddedData.mdid}`;
 
     function loadUiState() {
         // A private window throws on access rather than returning null, and a
@@ -219,12 +223,59 @@ $(function() {
         return rowCount < 50 ? -1 : 25;
     }
 
-    function saveUiState(patch) {
+    // Drop the least recently written saved state belonging to some *other*
+    // faceted composite, to make room.  Returns false when there is nothing
+    // left to drop, which is the caller's signal to give up.
+    function evictOtherUiState() {
         try {
-            localStorage.setItem(uiStateKey,
-                                 JSON.stringify(Object.assign(loadUiState(), patch)));
+            let oldestKey = null, oldestTime = Infinity;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (!key || !key.startsWith("facetedComposite.") || key === uiStateKey)
+                    continue;
+                let saved = 0;
+                try {
+                    // An entry we cannot read is the first one to go.
+                    saved = (JSON.parse(localStorage.getItem(key)) || {}).saved || 0;
+                } catch (e) {
+                    saved = 0;
+                }
+                if (saved < oldestTime) {
+                    oldestTime = saved;
+                    oldestKey = key;
+                }
+            }
+            if (oldestKey === null)
+                return false;
+            localStorage.removeItem(oldestKey);
+            return true;
         } catch (e) {
-            /* private window, or the quota is full; the page works without it */
+            return false;
+        }
+    }
+
+    function saveUiState(patch) {
+        // The timestamp is what makes eviction above "least recently written"
+        // rather than arbitrary.
+        const write = () => localStorage.setItem(
+            uiStateKey,
+            JSON.stringify(Object.assign(loadUiState(), patch, {saved: Date.now()})));
+        try {
+            write();
+        } catch (e) {
+            // Out of quota.  A hand-dragged order is one id per row, so a few
+            // large composites can fill the store between them; without the
+            // retry below the first one to hit the limit would leave every
+            // faceted composite on this origin silently unable to save again.
+            while (evictOtherUiState()) {
+                try {
+                    write();
+                    return;
+                } catch (e2) {
+                    /* still no room; drop another and try again */
+                }
+            }
+            /* private window, or nothing left to evict; the page works without it */
         }
     }
 
@@ -303,11 +354,23 @@ $(function() {
             "Check the boxes of the types of tracks you wish to show when a " +
             "sample row is selected below."));
 
+        // Built as nodes rather than from a template string.  Both the name and
+        // the title come from the trackDb 'dataTypes' setting, which on a hub is
+        // whatever the hub author wrote, so they go in as a property value and a
+        // text node instead of being interpolated into HTML.
+        // The leading space is what the old template literal's newline and
+        // indentation collapsed to, and is what separates one checkbox from the
+        // one before it.
         Object.keys(embeddedData.dataTypes).forEach(name => {
             const label = document.createElement("label");
             const dataType = embeddedData.dataTypes[name];
-            label.innerHTML = `
-                <input type="checkbox" class="cbgroup" value="${name}">${dataType.title}`;
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.className = "cbgroup";
+            cb.value = name;
+            label.appendChild(document.createTextNode(" "));
+            label.appendChild(cb);
+            label.appendChild(document.createTextNode(dataType.title));
             selector.appendChild(label);
         });
         const selectedDataTypes = new Set(  // get dataTypes selected initially
@@ -464,7 +527,9 @@ $(function() {
 
         // Determine which column to sort by: use defaultSortField if it matches
         // a metadata column, otherwise fall back to the first data column.
-        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
+        // column 0 is the checkboxes and column 1 the drag handle, so the first
+        // data column is at DATA_COL_OFFSET
+        let defaultSortCol = DATA_COL_OFFSET;
         if (embeddedData.defaultSortField) {
             const idx = colIdxForName(embeddedData.defaultSortField);
             if (idx > 0)
@@ -689,23 +754,29 @@ $(function() {
 
         // Clicking a tab switches the selection filter and redraws. "Selected"
         // is always clickable; with nothing selected it just shows an empty list.
-        function setFilterMode(showSelected) {
+        function setFilterMode(showSelected, keepSavedOrder) {
             toggleCheckbox.checked = showSelected;
             // Rows can only be dragged on the Active tab, and dragging only
             // means something while the table is sorted by the drag column, so
             // entering the tab renumbers that column from whatever order is on
             // screen and sorts by it.  Leaving restores nothing: the column
             // sort the user had is still in the header, one click away.
+            // keepSavedOrder skips the renumbering, for the one caller that is
+            // not a click: restoring this tab on page load, where the order
+            // field already holds the hand-dragged order read back from
+            // localStorage and renumbering would throw it away.
             table.column(reorderColIdx).visible(showSelected, false);
             syncReorderSearchCell(showSelected);
             table.rowReorder[showSelected ? "enable" : "disable"]();
             if (showSelected) {
-                let n = 0;
-                table.rows({order: "current", search: "none"}).every(function () {
-                    const d = this.data();
-                    d[ORDER_FIELD] = n++;
-                    this.data(d);
-                });
+                if (!keepSavedOrder) {
+                    let n = 0;
+                    table.rows({order: "current", search: "none"}).every(function () {
+                        const d = this.data();
+                        d[ORDER_FIELD] = n++;
+                        this.data(d);
+                    });
+                }
                 table.order([reorderColIdx, "asc"]);
             }
             table.draw();
@@ -895,7 +966,7 @@ $(function() {
         // shows every row.  Only restored when something is actually selected,
         // since this tab on an empty selection is a blank table.
         if (savedState.tab === "active" && table.rows({selected: true}).count())
-            setFilterMode(true);
+            setFilterMode(true, true);
 
         return table;
     }  // end initTable
@@ -1054,7 +1125,11 @@ $(function() {
                     delete facets[key];
                 saveUiState({facets: facets});
                 if (narrowing) {
-                    showTracks();
+                    // Only worth turning the container back on when there is
+                    // something for it to draw.  With nothing selected the
+                    // track would come back as an empty image.
+                    if (table.rows({selected: true}).count())
+                        showTracks();
                     // Narrowing by a facet is about finding samples in the full
                     // list, so a facet applied while only the selected rows are
                     // showing would filter a handful of rows the user had
@@ -1409,7 +1484,11 @@ $(function() {
                         const name = (bar < 0 ? raw : raw.slice(0, bar)).trim();
                         colNames.push(name);
                         if (bar >= 0) {
-                            const desc = raw.slice(bar + 1).trim();
+                            // The description comes from the hub's metadata
+                            // file and is shown in a tooltip, which renders as
+                            // HTML, so it is encoded here, once, rather than at
+                            // each of the two places that display it.
+                            const desc = htmlEncode(raw.slice(bar + 1).trim());
                             if (desc) colDescriptions[name] = desc;
                         }
                     });
@@ -1444,9 +1523,22 @@ $(function() {
                 hideLoading();  // stop the spinner before showing the error
                 const table = document.getElementById("theMetaDataTable");
                 if (table) {
-                    table.innerHTML =
-                        `<tr><td style="padding:20px;color:#a00;">` +
-                        `Error loading metadata: ${err.message}</td></tr>`;
+                    // The message names the trackDb primaryKey and can quote a
+                    // metadata cell back, both of which come from the hub, so
+                    // it goes in as a text node.  That also keeps a value with
+                    // angle brackets in it readable, where before the markup
+                    // swallowed the very value the reader needs to see.  The
+                    // tbody is what the HTML parser used to add on its own.
+                    const cell = document.createElement("td");
+                    cell.style.padding = "20px";
+                    cell.style.color = "#a00";
+                    cell.appendChild(document.createTextNode(
+                        `Error loading metadata: ${err.message}`));
+                    const row = document.createElement("tr");
+                    row.appendChild(cell);
+                    const body = document.createElement("tbody");
+                    body.appendChild(row);
+                    table.replaceChildren(body);
                 }
             });
     }  // end loadDataAndInit

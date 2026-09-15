@@ -59,6 +59,7 @@ knownGene                          # hg/lib/hgFind.c
 last                               # hg/lib/tablesTables.c
 mat                                # hg/hgTracks/gvfTrack.c
 next                               # hg/lib/tablesTables.c
+pat                                # hg/hgTracks/gvfTrack.c
 pfamDesc                           # hg/hgc/hgc.c
 prev                               # hg/lib/tablesTables.c
 projectSelect                      # hg/hgc/myVariantsClick.c

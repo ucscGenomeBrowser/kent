@@ -5136,7 +5136,7 @@ struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainList();
 
-struct dyString *dy = newDyString(4096);
+struct slName *genarkAccs = NULL;
 /* Create hash of databases having liftOver chains from this database */
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
@@ -5144,7 +5144,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         hashAdd(hash, chain->fromDb, chain->fromDb);
     if (startsWith("GC", chain->fromDb))
         {
-        dyStringPrintf(dy, "'%s',", chain->fromDb);
+        slNameAddHead(&genarkAccs, chain->fromDb);
         }
 
     }
@@ -5166,12 +5166,12 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (strlen(dy->string) > 0))
+if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
     {
-    dy->string[strlen(dy->string) - 1] = 0;
-    struct dbDb *genarkDbDbs = genarkLiftOverDbs(dy->string);
+    struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
     }
+slNameFreeList(&genarkAccs);
 
 hashFree(&hash);
 hashFree(&dbNameHash);
@@ -5197,7 +5197,7 @@ struct hash *dbNameHash = newHash(3);
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainListForDbFiltered(fromDb);
 
-struct dyString *dy = newDyString(4096);
+struct slName *genarkAccs = NULL;
 /* Create hash of databases having liftOver chains from the fromDb */
 for (chain = chainList; chain != NULL; chain = chain->next)
     if (sameString(chain->fromDb,fromDb))
@@ -5205,7 +5205,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	hashAdd(hash, chain->toDb, chain->toDb);
         if (startsWith("GC", chain->toDb))
             {
-            dyStringPrintf(dy, "'%s',", chain->toDb);
+            slNameAddHead(&genarkAccs, chain->toDb);
             }
         }
 
@@ -5226,12 +5226,12 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (strlen(dy->string) > 0))
+if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
     {
-    dy->string[strlen(dy->string) - 1] = 0;
-    struct dbDb *genarkDbDbs = genarkLiftOverDbs(dy->string);
+    struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
     }
+slNameFreeList(&genarkAccs);
 
 hashFree(&hash);
 liftOverChainFreeList(&chainList);

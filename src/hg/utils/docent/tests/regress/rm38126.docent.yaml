@@ -38,6 +38,9 @@
 # has:/noHas: rather than text:, because a <script> element's contents are not in
 # innerText on either build. A noText: on the script body would have passed everywhere and
 # asserted nothing. This is the case those two checks exist for.
+proof:
+  - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+
 target: genome-test
 db: hg38
 position: chr1:10537500-10538000

@@ -5,7 +5,6 @@ The "Prediction Scores" container track contains subtracks showing the results o
 scores. Usually these are prediction algorithms that use protein features, conservation, nucleotide composition and similar
 signals to determine if a genome variant is pathogenic or not.</p>
 
-<!--
 <h3>AlphaGenome - hg38</h3>
 <p>
 <b>Interpretation:</b> Scores are PHRED-scaled, so 10 marks the top 10 percent of the most
@@ -22,7 +21,6 @@ container, it is not restricted to coding sequence: the track contains four bigW
 genome, including introns and intergenic regulatory regions. The score has not yet been
 described in a peer-reviewed publication, and the data cannot be redistributed by UCSC.
 </p>
--->
 
 <h3>BayesDel - Only hg19</h3>
 <p><a href="hgTrackUi?g=bayesDel">BayesDel</a> is a deleteriousness meta-score for coding and 
@@ -235,7 +233,7 @@ zoomed in to a single gene or exon.</p>
 <h2>Data Access</h2>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
-accessed from scripts through our <a href="https://api.genome.ucsc.edu">API</a>, the track names can
+accessed from scripts through our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>, the track names can
 be found via the table browser or by clicking onto the signal tracks.
 
 <p>
@@ -246,7 +244,7 @@ The files for this track are called usually called by their alternate allele, e.
 regions or the whole genome annotation can be obtained using our tool <tt>bigWigToBedGraph</tt>
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool
 can also be used to obtain only features within a given range, e.g. 
 <tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg19/mcap/mcapA.bw -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
@@ -255,7 +253,7 @@ can also be used to obtain only features within a given range, e.g.
 <p>The original BayesDel files are available at the
 <a target="_blank" href="https://fenglab.chpc.utah.edu/BayesDel/BayesDel.html">BayesDel website</a>.
 <p>The other algorithms also have their own download formats, on the
-<a target="_blank" href="http://bejerano.stanford.edu/mcap/">M-CAP website</a> and the <a href="https://mutscore.iob.ch/" target=_blank>MutScore Website</a>.
+<a target="_blank" href="http://bejerano.stanford.edu/mcap/">M-CAP website</a> and the <a href="https://mutscore.iob.ch/" target="_blank">MutScore Website</a>.
 
 <h2>Methods</h2>
 <p>BayesDel data was converted from the files provided on the
