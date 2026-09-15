@@ -43,7 +43,17 @@ fi
 trap 'logRun "INTERRUPTED killed by a signal"; rm -f /hive/data/outside/uniProt/current/doUniprot.lock; exit 130' INT TERM HUP
 
 logRun "START"
-./doUniprot run > lastRun.log 2>&1
+# Anything after the first argument is handed to doUniprot, so a hand restart can say
+# "./doUpdate.sh run -p" to skip the download and the multi-day parse and still get the
+# lock handling, the run log and the failure mail. Cron passes only "run".
+# Guard the shift rather than hiding its complaint: shift is a POSIX special built-in, so
+# in a shell that follows that rule (dash, which is /bin/sh on Debian and in most
+# containers) shifting an empty argument list ends the script then and there. The run log
+# would show a START with no END, which reads exactly like a run still in progress.
+if [ $# -gt 0 ]; then
+    shift
+fi
+./doUniprot run "$@" > lastRun.log 2>&1
 exitCode=$?
 trap - INT TERM HUP
 logRun "END exit=$exitCode"
