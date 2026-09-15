@@ -86,7 +86,11 @@ const resolveTarget = t => {
   if (/^hgwdev-[a-z0-9._-]+$/i.test(t)) return `https://${t}.gi.ucsc.edu/cgi-bin`;  // personal sandbox
   return t;                                                    // full URL
 };
-const SERVER = resolveTarget(doc.target).replace(/\/$/, '');
+// DOCENT_TARGET overrides `target:` for the whole run, so a suite written against one
+// server can be pointed at another -- a sandbox, a ticket park, a demo browser -- without
+// editing the scripts it is written from. The trackDb cache below keys on SERVER, so a
+// redirected run cannot read back a listing fetched from the server the script names.
+const SERVER = resolveTarget(process.env.DOCENT_TARGET || doc.target).replace(/\/$/, '');
 // SCALE: the same tour rendered at k times the resolution, for figures that have to print.
 // Nothing is upscaled -- a still only ever has the pixels it was drawn with -- so each layer
 // is asked to draw k times as many while the layout is left alone:

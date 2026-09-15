@@ -94,7 +94,9 @@ for (const f of scripts) {
     add({ script: f, kind: 'script', label: f, check: async () => `unreadable YAML: ${e.message}` });
     continue;
   }
-  const server = resolveTarget(doc.target).replace(/\/$/, '');
+  // DOCENT_TARGET redirects the run, so the server fixture has to be the one that will
+  // actually be driven rather than the one the script names. Same override as docent.js.
+  const server = resolveTarget(process.env.DOCENT_TARGET || doc.target).replace(/\/$/, '');
   if (!seenServer.has(server)) seenServer.set(server, f);
   const base = path.basename(f, '.docent.yaml');
 

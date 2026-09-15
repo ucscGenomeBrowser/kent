@@ -9,6 +9,23 @@ Run by hand, not by the kent tree's `make test`:
     make derive             # the derivation alone, against expected/ (no browser)
     make derive-accept      # rewrite those baselines, then read `git diff expected/`
 
+    make test TARGET=hgwdev-demo9      # the same scripts, against another server
+
+TARGET overrides the `target:` each script carries, for every target above, and takes
+the same values it does: a shorthand (rr, genome-test, hgwdev, hgwbeta), a bare
+hgwdev-<name> sandbox or demo, or a full .../cgi-bin URL. It is how you try a suite
+against a branch build -- a sandbox, a ticket park from `ts`, a demo browser -- without
+editing the scripts. `make preflight TARGET=...` checks that server rather than the one
+the scripts name, so the fixture check and the run agree.
+
+Read a redirected run's failures with the server in mind. A script asserts what its OWN
+server draws, so a red one somewhere else can be the other machine's trackDb rather than
+a bug: a demo sandbox that carries only one assembly fails every script on the others,
+and a sandbox trackDb with a track the RR has not released changes what `exact: true`
+counts. Redirecting is for trying a suite elsewhere, not for moving it: the committed
+scripts stay pointed at the server they were written against, which is the one the
+nightly reads.
+
 Most tests drive a real browser against a real server, so they need the network and
 the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md). That is why none of this is
 part of the tree-wide test target: a broken network would fail the build.
