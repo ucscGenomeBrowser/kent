@@ -2715,7 +2715,7 @@ else
     boolean isNotLastExon = (exonIntronNumber<numExons);
 
     static const char *phasePrefix  = 
-        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle-o'></i></a></b>";
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle'></i></a></b>";
 
     if (isNotLastExon)
         {
@@ -3257,20 +3257,21 @@ for (ref = exonList; TRUE; )
                                          * is which only in that case:  for every other
                                          * transcript there is one count and "Codon" says it. */
                                         boolean shifted = baseColorCodonIsShifted(codon);
-                                        dyStringPrintf(codonDy, "<b>Codon%s: </b> c.%d-%d (p.%d)<br>",
-                                                shifted ? " counted on the genome" : "",
+                                        dyStringPrintf(codonDy, "<b>%s: </b> c.%d-%d (p.%d)<br>",
+                                                shifted ? "Genomic codon number" : "Codon",
                                                 cStart, cEnd, pPos);
                                         if (shifted)
                                             {
                                             int txCStart = (codon->txCodonIndex - 1) * 3 + 1;
                                             dyStringPrintf(codonDy,
-                                                "<b>Counted on the transcript: </b> "
+                                                "<b>Transcript codon number: </b> "
                                                 "c.%d-%d (p.%d)<br>",
                                                 txCStart, txCStart+2, codon->txCodonIndex);
                                             dyStringPrintf(codonDy,
-                                                "<b>Note: </b>This transcript's sequence has an "
-                                                "indel relative to the genome, so the two "
-                                                "numbers differ. "
+                                                "<b>Note: </b>This transcript's sequence has "
+                                                "extra or missing bases compared to the genome "
+                                                "at this codon, so the genomic and transcript "
+                                                "codon numbers differ. "
                                                 "<a target=_blank "
                                                 "href=\"../FAQ/FAQgenes.html#txIndel\">"
                                                 "Help</a><br>");
