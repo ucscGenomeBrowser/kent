@@ -53,8 +53,11 @@ if (type == NULL || isEmpty(type->requiredVar))
 return isNotEmpty(cartOptionalString(cart, type->requiredVar));
 }
 
-boolean snapshotIsSnapshotName(char *sessionName)
-/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix). */
+static boolean snapshotIsSnapshotName(char *sessionName)
+/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix).  File-local:
+ * the only thing that may ask is the writer below, checking its own argument.  A user's own
+ * session can carry the same prefix, so this must never be used to decide whether to show a
+ * row to its owner - snapshotIsSnapshotSettings() is the one for that. */
 {
 return sessionName != NULL && startsWith(snapshotNamePrefix, sessionName);
 }
