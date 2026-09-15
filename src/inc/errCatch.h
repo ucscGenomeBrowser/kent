@@ -28,6 +28,7 @@ struct errCatch
     struct dyString *message; /* Error message if any */
     boolean gotError;		 /* Some sort of error was caught. */
     boolean gotWarning;		 /* Some sort of error warning was raised. */
+    boolean savedDoContentType;  /* errAbort's doContentType as it was on entry; see below. */
     };
 
 struct errCatch *errCatchNew();

@@ -262,6 +262,12 @@ void errAbortSetDoContentType(boolean value)
 doContentType = value;
 }
 
+boolean errAbortGetDoContentType()
+/* Current setting of doContentType, so that a caller which changes it can put it back. */
+{
+return doContentType;
+}
+
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 {
