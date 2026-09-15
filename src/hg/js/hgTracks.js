@@ -5288,8 +5288,14 @@ var popUpHgcOrHgGene = {
             e.preventDefault();
             // Share the details-page URL with hgsid stripped; keep (or add) db so it opens
             // standalone, and note that the link shows the page, not the user's active tracks.
-            if (window.topLinks && window.topLinks.shareUrl)
-                window.topLinks.shareUrl(popUpHgcOrHgGene.href, {ensureDb: getDb(), pageNote: true});
+            // If this track lives inside a superTrack, force that superTrack to "show" in the
+            // link too -- superTracks default to hide, so without this the linked-to track
+            // would come up invisible on a fresh page load.
+            if (window.topLinks && window.topLinks.shareUrl) {
+                var rec = hgTracks.trackDb[popUpHgcOrHgGene.table];
+                window.topLinks.shareUrl(popUpHgcOrHgGene.href,
+                    {ensureDb: getDb(), pageNote: true, superTrack: rec && rec.superTrack});
+            }
         });
         appendNonceJsToPage(nonceJs);
         let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";

@@ -215,7 +215,7 @@ return kindOfChild;
 }
 
 char* tdbTopParent(struct trackDb *tdb)
-/* return the name of the top-most parent, so the parent of a composite or the name of the superTrack for 
+/* return the name of the top-most parent, so the parent of a composite or the name of the superTrack for
  * a composite in a superTrack. Or return NULL if this is already a top-level track. */
 {
     if (!tdb->parent)
@@ -225,6 +225,20 @@ char* tdbTopParent(struct trackDb *tdb)
         tdb = tdb->parent;
     }
     return tdb->track;
+}
+
+char* tdbTopSuperTrack(struct trackDb *tdb)
+/* Like tdbTopParent, but only returns a name if the top-most ancestor is itself a superTrack
+ * (as opposed to a plain top-level composite/folder). Used so the client can restore the
+ * superTrack's visibility (which defaults to hide) when linking directly to one of its
+ * descendants, e.g. the hgc "Share a link" button. Returns NULL otherwise. */
+{
+    struct trackDb *top = tdb;
+    while (top->parent)
+        top = top->parent;
+    if (top != tdb && tdbIsSuperTrack(top))
+        return top->track;
+    return NULL;
 }
 
 /////////////////////////
@@ -262,6 +276,13 @@ jsonObjectAdd(ele, "kindOfChild", newJsonNumber(kindOfChild));
 char* topParent = tdbTopParent(track->tdb);
 if (topParent)
     jsonObjectAdd(ele, "topParent", newJsonString(topParent));
+
+// Name of the enclosing superTrack, if any, so a direct link to this track (e.g. the hgc
+// "Share a link" popup) can also turn the superTrack's own visibility to "show" -- superTracks
+// default to hide, so without this the track would not appear when the link is opened fresh.
+char* superTrack = tdbTopSuperTrack(track->tdb);
+if (superTrack)
+    jsonObjectAdd(ele, "superTrack", newJsonString(superTrack));
 
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)
