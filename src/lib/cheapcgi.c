@@ -340,6 +340,8 @@ void cgiAddHttpHeader(char *name, char *value)
  * line, e.g. cgiAddHttpHeader("Cache-Control", "no-store").  Both strings are
  * cloned.  Has no effect once the header has been written. */
 {
+if (didContentType)
+    return;   // the header block is closed; nothing would ever print this
 slPairAdd(&cgiExtraHeaders, name, cloneString(value));
 }
 

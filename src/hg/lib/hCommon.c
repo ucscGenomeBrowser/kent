@@ -435,9 +435,11 @@ return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
 }
 
 void cspWriteResponseHeader(void)
-/* Write the Content Security Policy as an http response header, if hg.conf
- * turns it on.  Must be called before the blank line that ends the http header
- * block.  Only the first call in a process writes anything.
+/* Queue the Content Security Policy as an http response header, if hg.conf turns it on.
+ * cgiPrintContentType() writes it, so this only has to run before that does; it does not
+ * have to be the thing that writes the line, and a caller that has already closed the
+ * header block simply loses it rather than printing a header into the page body.
+ * Only the first call in a process queues anything.
  *
  * This exists so that pages which build their own http header block, and so
  * never reach the library code that writes the meta tag, still carry a policy.
@@ -449,5 +451,7 @@ if (written)
 if (!cfgOptionBooleanDefault("cspResponseHeader", FALSE))
     return;
 written = TRUE;
-generateCspResponseHeader(stdout);
+char *policy = getCspPolicyString();
+cgiAddHttpHeader("Content-Security-Policy", policy);
+freeMem(policy);
 }

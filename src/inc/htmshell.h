@@ -96,6 +96,11 @@ void htmlMemDeath();
 char *getNonce();
 /* make nonce one-use-per-page */
 
+char *getCspPolicyString();
+/* Return the Content Security Policy, the value part of the header, freeMem when done.
+ * Carries the same nonce as the meta tag, since getNonce() is one-per-process, so a page
+ * may safely have both. */
+
 char *getCspMetaHeader();
 /* return meta CSP header string */
 

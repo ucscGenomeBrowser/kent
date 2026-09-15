@@ -2869,7 +2869,10 @@ cartDefaultDisconnector(&conn);
 }
 
 void cartWriteCookie(struct cart *cart, char *cookieName)
-/* Write out HTTP Set-Cookie statement for cart. */
+/* Queue the HTTP Set-Cookie statement(s) for the cart.  cgiPrintContentType() writes them,
+ * so this has to run before that does but does not have to be the thing that writes them:
+ * a caller that has already closed the header block loses the cookie rather than printing
+ * a Set-Cookie line into the page body, where it never did anything anyway. */
 {
 char *domain = cfgVal("central.domain");
 if (sameWord("HTTPHOST", domain))
@@ -2898,12 +2901,14 @@ if (sameString(userIdKey,"")) // make sure we do not write any blank cookies.
     }
 else
     {
+    char cookie[1024];
     if (!isEmpty(domain))
-	printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+	safef(cookie, sizeof cookie, "%s=%s; path=/; domain=%s; expires=%s",
 		cookieName, userIdKey, domain, cookieDate());
     else
-	printf("Set-Cookie: %s=%s; path=/; expires=%s\r\n",
+	safef(cookie, sizeof cookie, "%s=%s; path=/; expires=%s",
 		cookieName, userIdKey, cookieDate());
+    cgiAddHttpHeader("Set-Cookie", cookie);
     }
 if (geoMirrorEnabled())
     {
@@ -2912,7 +2917,10 @@ if (geoMirrorEnabled())
     char *redirect = cgiOptionalString("redirect");
     if (redirect)
         {
-        printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
+        char cookie[1024];
+        safef(cookie, sizeof cookie, "redirect=%s; path=/; domain=%s; expires=%s",
+                redirect, cgiServerName(), cookieDate());
+        cgiAddHttpHeader("Set-Cookie", cookie);
         }
     }
 /* Validate login cookies if login is enabled */
@@ -2920,7 +2928,7 @@ if (loginSystemEnabled())
     {
     struct slName *newCookies = loginValidateCookies(cart), *sl;
     for (sl = newCookies;  sl != NULL;  sl = sl->next)
-        printf("Set-Cookie: %s\r\n", sl->name);
+        cgiAddHttpHeader("Set-Cookie", sl->name);
     }
 }
 
@@ -3047,14 +3055,19 @@ void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
  * contType defaults to text/html when NULL.
  * cookieName defaults to hUserCookie() when NULL */
 {
-/* cgiPrintContentType() writes the header only once per process, so the flows that reach here
- * twice (e.g. hgc emitting it early via cartAndCookieWithHtml, then webStart asking again) do
- * not need to check first.  Return early anyway, so we do not write a second cookie either. */
+/* Nothing can be added to a header block that has already been closed, so there is nothing
+ * useful left to do.  The flows that reach here twice - hgc emitting the header early via
+ * cartAndCookieWithHtml and then webStart asking again - are the common case; the other one
+ * is an early warn() during cartNew, which writes its own header before there is a cart to
+ * take a cookie from.  cartAndCookieWithHtml queues the content policy ahead of that warn
+ * for exactly that reason; the cookie cannot be queued that early and is simply lost. */
 if (cgiDidContentType())
     return;
 if (!cookieName)
     cookieName = hUserCookie();
 
+/* These two queue header lines and cgiPrintContentType writes them, so their order here is
+ * a matter of taste rather than of the wire format. */
 cspWriteResponseHeader();
 cartWriteCookie(cart, cookieName);
 cgiPrintContentType(contType);
@@ -3066,6 +3079,11 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
 {
+/* Queue the content policy before anything can write a header.  An early warn during
+ * cartForSession() below prints the Content-Type line itself, and after that no header
+ * line can be added, so a policy queued only at cartWriteHeaderAndCont() time would be
+ * missing from exactly the pages that report a problem. */
+cspWriteResponseHeader();
 // Note: early abort works fine but early warn does not
 htmlPushEarlyHandlers();
 struct cart *cart = cartForSession(cookieName, exclude, oldVars);
