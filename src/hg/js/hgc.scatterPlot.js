@@ -181,15 +181,24 @@ function makeCloud() {
 
 function catIndexer(cloud) {
     // Maps a category name to its index in cloud.labels, adding it on first sight.
+    // Seeded from the labels the cloud already has: a file is allowed to supply a
+    // labels list to fix the legend order and then give its points in object form,
+    // and without the seeding every one of those names would be appended a second
+    // time and show up twice in the legend.
     let seen = new Map();
+    cloud.labels.forEach((name, i) => {
+        if (!seen.has(name))
+            seen.set(name, i);
+    });
     return function (name) {
         if (!name)
             return -1;
-        if (!seen.has(name)) {
-            seen.set(name, cloud.labels.length);
-            cloud.labels.push(String(name));
+        let key = String(name);
+        if (!seen.has(key)) {
+            seen.set(key, cloud.labels.length);
+            cloud.labels.push(key);
         }
-        return seen.get(name);
+        return seen.get(key);
     };
 }
 
@@ -287,19 +296,24 @@ function labelColor(i, n) {
 }
 
 function niceBounds(points, highlights) {
-    let xs = [], ys = [];
-    for (let p of points) {
-        xs.push(p[0]);
-        ys.push(p[1]);
-    }
-    for (let h of highlights) {
-        xs.push(h.x);
-        ys.push(h.y);
-    }
-    if (xs.length === 0)
+    // Walked rather than collected and passed to Math.min(...xs): a spread is one
+    // argument per point, and this module is meant for clouds of tens of thousands,
+    // where that overflows the call stack (a RangeError somewhere above 120,000 on
+    // current V8) and the plot silently degrades to "data could not be loaded".
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, n = 0;
+    let see = (x, y) => {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+        n++;
+    };
+    for (let p of points)
+        see(p[0], p[1]);
+    for (let h of highlights)
+        see(h.x, h.y);
+    if (n === 0)
         return null;
-    let x0 = Math.min(...xs), x1 = Math.max(...xs);
-    let y0 = Math.min(...ys), y1 = Math.max(...ys);
     // A degenerate range would divide by zero; give it some width.
     if (x1 - x0 < 1e-9) { x0 -= 0.5; x1 += 0.5; }
     if (y1 - y0 < 1e-9) { y0 -= 0.5; y1 += 0.5; }
