@@ -83,6 +83,7 @@ void displayAccHelpPage(struct sqlConnection *conn);
 void completeAccountPage(struct sqlConnection *conn);
 void sendEmailLink(struct sqlConnection *conn);
 static void loginAndReturn(struct sqlConnection *conn, char *userName, uint idx);
+static boolean pendingIdentityValid();
 
 /* ---- Global helper functions ---- */
 char *browserName()
@@ -429,6 +430,22 @@ if (isNotEmpty(provider) && isNotEmpty(address))
             "that account, <b>%s</b>, has never been confirmed. Confirm it once and %s will "
             "sign you straight in from then on.</p>",
             encProvider, brwName, encUser, encAddress, encProvider);
+        /* If that address is wrong the confirmation can never arrive, and this account has no
+         * other way in, so offer to replace it here.  pendingIdentityValid() is the check that
+         * this really is the person who just came back from the provider. */
+        if (pendingIdentityValid())
+            {
+            hPrintf("<p>If <b>%s</b> is not an address you can read, enter the right one and we "
+                "will send the confirmation there instead.</p>", encAddress);
+            hPrintf("<form method=\"post\" action=\"%s\" name=\"fixEmailForm\">", hgLoginUrl);
+            hPrintf("<div class=\"inputGroup\">"
+                "<label for=\"fixEmailAddr\">Email address</label>"
+                "<input type=\"text\" name=\"hgLogin_email\" value=\"\" size=\"30\" "
+                "id=\"fixEmailAddr\"></div>");
+            hPrintf("<div class=\"formControls\">"
+                "<input type=\"submit\" name=\"hgLogin.do.changePendingEmail\" "
+                "value=\"Use this address instead\" class=\"largeButton\"></div></form>");
+            }
         freeMem(encUser);
         }
     freeMem(encProvider);
@@ -815,6 +832,26 @@ sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(),emailToken='%s
 sqlUpdate(conn, query);
 sendActivateMail(email, username, tokenMD5);
 return;
+}
+
+void resendActivateMail(struct sqlConnection *conn, char *email, char *username)
+/* Mail the activation link for an account that already has one outstanding, reusing the token
+ * rather than minting a new one.  Every fresh token silently kills the link in the mail before
+ * it, so a user who clicks the provider button twice and then opens the first message is told
+ * their link is invalid.  Falls back to a new token once the old one has expired. */
+{
+char query[256];
+sqlSafef(query, sizeof(query),
+    "SELECT emailToken FROM gbMembers WHERE userName='%s' AND emailToken<>'' "
+    "AND emailTokenExpires > NOW()", username);
+char *token = sqlQuickString(conn, query);
+if (isEmpty(token))
+    {
+    setupNewAccount(conn, email, username);
+    return;
+    }
+sendActivateMail(email, username, token);
+freeMem(token);
 }
 
 void printPwdEyeIcon(char *iconId, char *slashId)
@@ -1915,6 +1952,13 @@ cartRemove(cart, "hgLogin_email2");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "user");
 cartRemove(cart, "token");
+/* This page is shared with the social-login flows, which leave it a note saying which provider
+ * and address to explain.  Those are cleared when that page renders, but the hand-off is a
+ * JavaScript redirect and a user who never lands on it keeps them in the cart.  Drop them here
+ * so a plain signup can never inherit somebody else's explanation. */
+cartRemove(cart, "hgLogin_actMailProvider");
+cartRemove(cart, "hgLogin_actMailTo");
+cartRemove(cart, "hgLogin_actMailUser");
 redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
@@ -2463,8 +2507,11 @@ else
     /* We already have an address from the provider, so do not ask for one.  A box here would be
      * a question we do not check the answer to. */
     char *encProviderEmail = htmlEncode(providerEmail);
-    hPrintf("<p>Your email address, as %s gave it to us, is <b>%s</b>. You can change it later "
-        "on the account page.</p>", label, encProviderEmail);
+    /* Only promise the change-email page where it exists: it, and the confirmation link that
+     * finishes the change, are all behind login.emailLink, which is off by default. */
+    hPrintf("<p>Your email address, as %s gave it to us, is <b>%s</b>.%s</p>",
+        label, encProviderEmail,
+        emailLinkEnabled() ? " You can change it later on the account page." : "");
     freeMem(encProviderEmail);
     }
 hPrintf("<div class=\"formControls\">"
@@ -2596,9 +2643,14 @@ pending.subject = subject;
 pending.email = email;
 linkIdentity(conn, idx, &pending);
 
+/* clearPendingIdentity frees the cart's copy of oauth_pending_provider, and provider points
+ * straight at it (cartUsualString hands back the cart's own string, not a duplicate), so take
+ * the label while it is still there. */
+char *providerLabel = cloneString(oauthProviderLabel(provider));
 clearPendingIdentity();
 if (activateNow)
     {
+    freeMem(providerLabel);
     loginAndReturn(conn, user, idx);
     return;
     }
@@ -2608,9 +2660,10 @@ if (activateNow)
 setupNewAccount(conn, email, user);
 /* Tell the confirmation page what to explain.  No user name here: this is a brand new account,
  * which is the one thing that page cannot work out for itself. */
-cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(provider));
+cartSetString(cart, "hgLogin_actMailProvider", providerLabel);
 cartSetString(cart, "hgLogin_actMailTo", email);
 cartRemove(cart, "hgLogin_actMailUser");
+freeMem(providerLabel);
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
 redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
@@ -2864,10 +2917,18 @@ if (linked != NULL)
              * because the first expires after seven days and for an account with no password
              * this is the only way to activate it.  An install that cannot send mail no longer
              * creates such an account, but guard rather than leave the user nothing to click. */
-            setupNewAccount(conn, linked->email, linked->userName);
+            resendActivateMail(conn, linked->email, linked->userName);
             cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(id->provider));
             cartSetString(cart, "hgLogin_actMailTo", linked->email);
             cartSetString(cart, "hgLogin_actMailUser", linked->userName);
+            /* Keep the identity signed in the cart so the page can offer to correct the
+             * address.  Without that there is no way back at all for someone who mistyped it
+             * when the account was made: they cannot sign in (this branch), cannot use the
+             * email link or the change-email page (both want an activated account or a login
+             * cookie), and cannot start again, because the user name and this provider identity
+             * are both taken.  The signature is what lets changePendingEmail trust the request
+             * that comes back: only a real provider round trip in this browser can mint it. */
+            setPendingIdentity(id);
             gbMembersFree(&linked);
             gbMembersFreeList(&matches);
             displayActMailSuccess();
@@ -2891,6 +2952,77 @@ if (n == 1)
 gbMembersFreeList(&matches);
 setPendingIdentity(id);
 completeAccountPage(conn);
+}
+
+void changePendingEmail(struct sqlConnection *conn)
+/* Put a different address on the unactivated account behind a still-valid pending identity, and
+ * send the confirmation there.  Reached only from the confirmation page that resolveIdentity
+ * shows such an account (see displayActMailSuccess), and the only way out for someone who
+ * mistyped their address when the account was made: with no password and an address they cannot
+ * read, every other route back in wants an activated account or a login cookie.
+ * The pending signature is the authorization.  Only resolveIdentity mints one, only after a real
+ * provider round trip, and only for this browser, so a request arriving here without one is
+ * refused rather than trusted. */
+{
+char *provider = cartUsualString(cart, "oauth_pending_provider", "");
+char *subject = cartUsualString(cart, "oauth_pending_subject", "");
+if (isEmpty(provider) || isEmpty(subject) || !pendingIdentityValid())
+    {
+    clearPendingIdentity();
+    freez(&errMsg);
+    errMsg = cloneString("Your sign-in expired. Please sign in again.");
+    displayLoginPage(conn);
+    return;
+    }
+struct oauthIdentity id;
+ZeroVar(&id);
+id.provider = provider;
+id.subject = subject;
+struct gbMembers *m = memberForIdentity(conn, &id);
+/* Only an account that is still waiting to be confirmed.  Once it is activated this page is
+ * not reachable any more, and changing the address of a working account belongs in the
+ * change-email flow, which confirms the new address before it takes effect. */
+if ((m == NULL) || sameString(m->accountActivated, "Y"))
+    {
+    clearPendingIdentity();
+    gbMembersFree(&m);
+    displayLoginPage(conn);
+    return;
+    }
+char *email = cartUsualString(cart, "hgLogin_email", "");
+boolean bad = isEmpty(email) || (spc_email_isvalid(email) == 0);
+if (!bad)
+    {
+    /* Same rule as a new signup: an address the user typed must not be pointed at an account
+     * somebody else already confirmed it for. */
+    char query[1024];
+    char *addrMatch = sqlAddressMatch(email);
+    sqlSafef(query, sizeof(query),
+        "SELECT count(*) FROM gbMembers WHERE %-s AND accountActivated='Y'", addrMatch);
+    freeMem(addrMatch);
+    bad = (sqlQuickNum(conn, query) > 0);
+    }
+if (!bad)
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query),
+        "UPDATE gbMembers SET email='%s', emailToken='', emailTokenExpires='' WHERE idx=%u",
+        email, m->idx);
+    sqlUpdate(conn, query);
+    setupNewAccount(conn, email, m->userName);   // new address, so a new token is right
+    cartSetString(cart, "hgLogin_actMailTo", email);
+    }
+else
+    {
+    freez(&errMsg);
+    errMsg = cloneString("Please enter an email address that is not already in use.");
+    cartSetString(cart, "hgLogin_actMailTo", m->email);
+    }
+cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(provider));
+cartSetString(cart, "hgLogin_actMailUser", m->userName);
+cartRemove(cart, "hgLogin_email");
+gbMembersFree(&m);
+displayActMailSuccess();
 }
 
 void oauthStart(struct sqlConnection *conn)
@@ -3208,6 +3340,8 @@ else if (cartVarExists(cart, "hgLogin.do.completeAccount"))
     completeAccount(conn);
 else if (cartVarExists(cart, "hgLogin.do.chooseAccount"))
     chooseAccount(conn);
+else if (cartVarExists(cart, "hgLogin.do.changePendingEmail"))
+    changePendingEmail(conn);
 else if (cartVarExists(cart, "hgLogin.do.emailLinkPage"))
     emailLinkPage(conn);
 else if (cartVarExists(cart, "hgLogin.do.sendEmailLink"))
