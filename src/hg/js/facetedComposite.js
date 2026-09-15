@@ -223,12 +223,59 @@ $(function() {
         return rowCount < 50 ? -1 : 25;
     }
 
-    function saveUiState(patch) {
+    // Drop the least recently written saved state belonging to some *other*
+    // faceted composite, to make room.  Returns false when there is nothing
+    // left to drop, which is the caller's signal to give up.
+    function evictOtherUiState() {
         try {
-            localStorage.setItem(uiStateKey,
-                                 JSON.stringify(Object.assign(loadUiState(), patch)));
+            let oldestKey = null, oldestTime = Infinity;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (!key || !key.startsWith("facetedComposite.") || key === uiStateKey)
+                    continue;
+                let saved = 0;
+                try {
+                    // An entry we cannot read is the first one to go.
+                    saved = (JSON.parse(localStorage.getItem(key)) || {}).saved || 0;
+                } catch (e) {
+                    saved = 0;
+                }
+                if (saved < oldestTime) {
+                    oldestTime = saved;
+                    oldestKey = key;
+                }
+            }
+            if (oldestKey === null)
+                return false;
+            localStorage.removeItem(oldestKey);
+            return true;
         } catch (e) {
-            /* private window, or the quota is full; the page works without it */
+            return false;
+        }
+    }
+
+    function saveUiState(patch) {
+        // The timestamp is what makes eviction above "least recently written"
+        // rather than arbitrary.
+        const write = () => localStorage.setItem(
+            uiStateKey,
+            JSON.stringify(Object.assign(loadUiState(), patch, {saved: Date.now()})));
+        try {
+            write();
+        } catch (e) {
+            // Out of quota.  A hand-dragged order is one id per row, so a few
+            // large composites can fill the store between them; without the
+            // retry below the first one to hit the limit would leave every
+            // faceted composite on this origin silently unable to save again.
+            while (evictOtherUiState()) {
+                try {
+                    write();
+                    return;
+                } catch (e2) {
+                    /* still no room; drop another and try again */
+                }
+            }
+            /* private window, or nothing left to evict; the page works without it */
         }
     }
 
@@ -480,7 +527,9 @@ $(function() {
 
         // Determine which column to sort by: use defaultSortField if it matches
         // a metadata column, otherwise fall back to the first data column.
-        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
+        // column 0 is the checkboxes and column 1 the drag handle, so the first
+        // data column is at DATA_COL_OFFSET
+        let defaultSortCol = DATA_COL_OFFSET;
         if (embeddedData.defaultSortField) {
             const idx = colIdxForName(embeddedData.defaultSortField);
             if (idx > 0)
@@ -705,23 +754,29 @@ $(function() {
 
         // Clicking a tab switches the selection filter and redraws. "Selected"
         // is always clickable; with nothing selected it just shows an empty list.
-        function setFilterMode(showSelected) {
+        function setFilterMode(showSelected, keepSavedOrder) {
             toggleCheckbox.checked = showSelected;
             // Rows can only be dragged on the Active tab, and dragging only
             // means something while the table is sorted by the drag column, so
             // entering the tab renumbers that column from whatever order is on
             // screen and sorts by it.  Leaving restores nothing: the column
             // sort the user had is still in the header, one click away.
+            // keepSavedOrder skips the renumbering, for the one caller that is
+            // not a click: restoring this tab on page load, where the order
+            // field already holds the hand-dragged order read back from
+            // localStorage and renumbering would throw it away.
             table.column(reorderColIdx).visible(showSelected, false);
             syncReorderSearchCell(showSelected);
             table.rowReorder[showSelected ? "enable" : "disable"]();
             if (showSelected) {
-                let n = 0;
-                table.rows({order: "current", search: "none"}).every(function () {
-                    const d = this.data();
-                    d[ORDER_FIELD] = n++;
-                    this.data(d);
-                });
+                if (!keepSavedOrder) {
+                    let n = 0;
+                    table.rows({order: "current", search: "none"}).every(function () {
+                        const d = this.data();
+                        d[ORDER_FIELD] = n++;
+                        this.data(d);
+                    });
+                }
                 table.order([reorderColIdx, "asc"]);
             }
             table.draw();
@@ -911,7 +966,7 @@ $(function() {
         // shows every row.  Only restored when something is actually selected,
         // since this tab on an empty selection is a blank table.
         if (savedState.tab === "active" && table.rows({selected: true}).count())
-            setFilterMode(true);
+            setFilterMode(true, true);
 
         return table;
     }  // end initTable
@@ -1070,7 +1125,11 @@ $(function() {
                     delete facets[key];
                 saveUiState({facets: facets});
                 if (narrowing) {
-                    showTracks();
+                    // Only worth turning the container back on when there is
+                    // something for it to draw.  With nothing selected the
+                    // track would come back as an empty image.
+                    if (table.rows({selected: true}).count())
+                        showTracks();
                     // Narrowing by a facet is about finding samples in the full
                     // list, so a facet applied while only the selected rows are
                     // showing would filter a handful of rows the user had
