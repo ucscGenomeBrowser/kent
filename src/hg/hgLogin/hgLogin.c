@@ -404,6 +404,36 @@ hPrintf(
     "<div id=\"confirmationBox\" class=\"centeredContainer formBox\">"
     "\n"
     "<h2>%s</h2>", brwName);
+/* Arriving here straight after a social sign-in is confusing on its own: the user asked to sign
+ * in, not to fill in a form, and gets told to go and read their mail.  Say first what happened
+ * and which address it turns on.  These are set only by the two flows that send a user here
+ * from a provider sign-in; a plain email signup sets none of them and the page reads as before.
+ * Everything below is either config or an address, both of which can reach the cart from a
+ * request, so encode all of it. */
+char *provider = cartUsualString(cart, "hgLogin_actMailProvider", "");
+char *address = cartUsualString(cart, "hgLogin_actMailTo", "");
+char *existingUser = cartUsualString(cart, "hgLogin_actMailUser", "");
+if (isNotEmpty(provider) && isNotEmpty(address))
+    {
+    char *encProvider = htmlEncode(provider);
+    char *encAddress = htmlEncode(address);
+    if (isEmpty(existingUser))
+        hPrintf("<p>You signed in with %s, and %s did not tell us an email address, so we "
+            "asked you for one. No %s account uses <b>%s</b> yet, so we are making a new "
+            "account for it. Confirming the address is the last step.</p>",
+            encProvider, encProvider, brwName, encAddress);
+    else
+        {
+        char *encUser = htmlEncode(existingUser);
+        hPrintf("<p>Your %s sign-in belongs to the %s account <b>%s</b>, but the address on "
+            "that account, <b>%s</b>, has never been confirmed. Confirm it once and %s will "
+            "sign you straight in from then on.</p>",
+            encProvider, brwName, encUser, encAddress, encProvider);
+        freeMem(encUser);
+        }
+    freeMem(encProvider);
+    freeMem(encAddress);
+    }
 hPrintf(
     "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
     "Please click the confirmation link in the email to activate your account.</p>"
@@ -413,6 +443,9 @@ hPrintf(
     "<p><a href=\"%s\">Return</a></p>", returnURL);
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
+cartRemove(cart, "hgLogin_actMailProvider");
+cartRemove(cart, "hgLogin_actMailTo");
+cartRemove(cart, "hgLogin_actMailUser");
 }
 
 void sendActMailOut(char *email, char *subject, char *msg)
@@ -2573,6 +2606,11 @@ if (activateNow)
  * and leaving a mail nobody has any reason to open.  Activating is what makes the address usable
  * for signing in by email link and for linking a later social login, so it is worth a click. */
 setupNewAccount(conn, email, user);
+/* Tell the confirmation page what to explain.  No user name here: this is a brand new account,
+ * which is the one thing that page cannot work out for itself. */
+cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(provider));
+cartSetString(cart, "hgLogin_actMailTo", email);
+cartRemove(cart, "hgLogin_actMailUser");
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
 redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
@@ -2801,20 +2839,40 @@ if (linked != NULL)
     linkIdentity(conn, linked->idx, id);
     /* The provider identity is proven, but the address on the account may not be: when the
      * provider released none (ORCID) the user typed it themselves, and completeAccount left the
-     * account unactivated until the mailed link is opened.  Signing in here would make that mail
-     * pointless -- the user would simply click the provider button again and never confirm -- so
-     * send them back to their inbox instead.  Mail a fresh link each time, because the first one
-     * expires after seven days and this is the only way to activate such an account.  An install
-     * that cannot send mail never creates an unactivated account here, but guard anyway rather
-     * than leave the user with nothing to click. */
-    if (!sameString(linked->accountActivated, "Y") && !sameWord(returnAddr, "NOEMAIL")
-        && isNotEmpty(linked->email))
+     * account unactivated until the mailed link is opened. */
+    if (!sameString(linked->accountActivated, "Y"))
         {
-        setupNewAccount(conn, linked->email, linked->userName);
-        gbMembersFree(&linked);
-        gbMembersFreeList(&matches);
-        displayActMailSuccess();
-        return;
+        if (isNotEmpty(id->email) && sameWord(id->email, linked->email))
+            {
+            /* ...but this time the provider handed us that very address, which is the same
+             * assurance a new signup through this provider gets (see oauthProviderEmail).  So
+             * confirm it here and let the user in, rather than sending them to fetch a link
+             * proving something we have just been told.  This also settles accounts left
+             * unactivated by an earlier release that asked for an address and took it on
+             * trust. */
+            char query[512];
+            sqlSafef(query, sizeof(query),
+                "UPDATE gbMembers SET accountActivated='Y', dateActivated=NOW(), "
+                "emailToken='', emailTokenExpires='' WHERE idx=%u", linked->idx);
+            sqlUpdate(conn, query);
+            }
+        else if (!sameWord(returnAddr, "NOEMAIL") && isNotEmpty(linked->email))
+            {
+            /* The address on the account is still nobody's word but the user's, so signing in
+             * would make the confirmation mail pointless: they would click the provider button
+             * again and never confirm.  Send them to their inbox, with a fresh link each time,
+             * because the first expires after seven days and for an account with no password
+             * this is the only way to activate it.  An install that cannot send mail no longer
+             * creates such an account, but guard rather than leave the user nothing to click. */
+            setupNewAccount(conn, linked->email, linked->userName);
+            cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(id->provider));
+            cartSetString(cart, "hgLogin_actMailTo", linked->email);
+            cartSetString(cart, "hgLogin_actMailUser", linked->userName);
+            gbMembersFree(&linked);
+            gbMembersFreeList(&matches);
+            displayActMailSuccess();
+            return;
+            }
         }
     loginAndReturn(conn, linked->userName, linked->idx);
     gbMembersFree(&linked);
@@ -3091,6 +3149,7 @@ static char *serverOwned[] = {
     "oauth_pending_email_verified", "oauth_pending_name", "oauth_pending_time",
     "oauth_pending_sig",
     "emailLogin_email", "emailLogin_tokenMd5",
+    "hgLogin_actMailProvider", "hgLogin_actMailTo", "hgLogin_actMailUser",
     };
 int i;
 for (i = 0;  i < ArraySize(serverOwned);  i++)
