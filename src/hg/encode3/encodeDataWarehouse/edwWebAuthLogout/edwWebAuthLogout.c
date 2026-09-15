@@ -13,7 +13,6 @@ int main(int argc, char *argv[])
 printf("Set-Cookie: email=nobody; expires=Thu, 01 Jan 1970 00:00:00 GMT\r\n");
 printf("Set-Cookie: sid=x; expires=Thu, 01 Jan 1970 00:00:00 GMT\r\n");
 cgiPrintContentType("text/plain");
-printf("\r\n");
 printf("logged out\n");
 return 0;
 }

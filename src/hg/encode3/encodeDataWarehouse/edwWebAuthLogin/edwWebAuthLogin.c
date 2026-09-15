@@ -104,7 +104,6 @@ edwMakeSid(email, sid);
 printf("Set-Cookie: email=%s\r\n", cgiEncode(email));
 printf("Set-Cookie: sid=%s\r\n", cgiEncode(sid));
 cgiPrintContentType("text/plain");
-printf("\r\n");
 printf("ok\n");
 return 0;
 }

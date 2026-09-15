@@ -203,7 +203,8 @@ else
 static void fail(char *msg)
 //#*** Copied from hgSuggest... libify to cheapCgi?
 {
-puts("Status: 400\n\n");
+cgiAddHttpHeader("Status", "400 Bad Request");
+cgiPrintContentType("text/plain");
 puts(msg);
 exit(-1);
 }
