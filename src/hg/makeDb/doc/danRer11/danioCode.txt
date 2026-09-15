@@ -138,3 +138,50 @@ cp danioCode.ra ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer11/danioCode.ra
 # Check that the browser reads the files and draws them.  Worth turning on all
 # eleven containers at once, which is what caught the missing 'type' above:
 #   https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgRenderTracks?db=danRer11&position=chr1:20,000,000-20,100,000&hideTracks=1&danioCode=show&dcConsensus_promoters=pack&dcComp=full&dcRNAseqComposite=full&DCD002238SQ_pos=full
+
+# 2026-09-15 Claude max - un-nest danioCode: give the biggest/most generic
+# containers their own top-level slot instead of hiding all eleven behind one
+# superTrack nobody but a DANIO-CODE-aware user would ever open, and split the
+# Burgess-lab CRISPR tracks out of "DC Conservation" since they aren't
+# DANIO-CODE's own data.
+#
+#   RNA-seq            -> top-level, group rna
+#   CAGE-seq, 3P-seq    -> top-level, group genes
+#   ChIP-seq, Hi-C      -> top-level, group regulation
+#   CRISPR (was part of dcComparativeGenomics) -> new top-level superTrack
+#     dcCrispr, group map (mirrors where hg38 keeps its own, unrelated, crispr
+#     tracks), shortLabel/longLabel carry no "DC"/DANIO-CODE branding since
+#     these are the Burgess lab's, not the consortium's
+#   comp, comp_cell_type, copes_and_dopes, evalidation, the remaining
+#     (conservation-only) dcComparativeGenomics, consensus_promoters
+#                       -> stay nested under the danioCode superTrack: a mixed
+#                          bag of regulatory-element/annotation tracks that
+#                          don't map onto one existing group
+#
+# Implemented in the converter (STANDALONE_GROUP / NESTED_ORDER / CRISPR_* at
+# the top of danioCodeHubToRa.py) so it survives the next hub re-import, rather
+# than hand-editing the generated .ra.  Re-run against the cached hub trackDb.txt:
+
+cd /hive/data/genomes/danRer11/bed/danioCode
+~/kent/src/hg/makeDb/scripts/danioCode/danioCodeHubToRa.py \
+    trackDb.txt \
+    https://trackhub2.genereg.net/DANIO-CODE/danRer11/ \
+    danioCode.ra \
+    --drop-list missingUrls.txt \
+    --local-prefix /gbdb/danRer11/danioCode
+# wrote danioCode.ra: 897 stanzas emitted, 4 dropped (same as before -- the
+# restructuring only moves stanzas around and adds one synthetic superTrack
+# stanza, it drops nothing new)
+
+cp danioCode.ra ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer11/danioCode.ra
+
+# tdbQuery -check requires a superTrack's own children to sit contiguously right
+# after it in the file -- an unrelated top-level track (one of the newly
+# standalone composites) sitting between danioCode and one of its remaining
+# children fails with "X comes between parent (danioCode) and child (Y)".  So
+# TOP_ORDER emits danioCode's own children (NESTED_ORDER) immediately after the
+# danioCode stanza, then the standalone tracks, then dcCrispr.
+cd ~/kent/src/hg/makeDb/trackDb
+tdbQuery -check "select count(*) from danRer11"
+# no errors; still alpha-only via "include danioCode.ra alpha" in
+# zebrafish/danRer11/trackDb.ra, so none of this reaches beta/public yet.

@@ -9,6 +9,453 @@ longLabel DANIO-CODE: zebrafish developmental multi-omics data and regulatory el
 group regulation
 priority 4
 
+track dcComp
+shortLabel DC Elements
+longLabel DANIO-CODE ChromHMM states, PADREs and DOPEs by developmental stage
+compositeTrack on
+type bigBed 9
+subGroup1 T SegmentType CHMM=ChromHMM PADREs=PADREs cPADRE=consensus_PADREs DOPEs=DOPEs
+subGroup2 S Stage s01_Dome=Dome s02_Epi75=Epi75 s03_5_9_somites=03_5-9_somites s04_Prim5=Prim5 s05_LongPec=LongPec
+dimensions dimX=T dimY=S
+sortOrder T=+ S=+
+parent danioCode
+priority 1
+visibility hide
+
+    track dcComp_CHMM_Dome
+    shortLabel CHMM_Dome
+    longLabel CHMM_Dome
+    parent dcComp on
+    subGroups T=CHMM S=s01_Dome
+    bigDataUrl /gbdb/danRer11/danioCode/Dome_ChromHMM.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_CHMM_Epi75
+    shortLabel CHMM_Epi75
+    longLabel CHMM_Epi75
+    parent dcComp on
+    subGroups T=CHMM S=s02_Epi75
+    bigDataUrl /gbdb/danRer11/danioCode/Epi75_ChromHMM.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_CHMM_59_somites
+    shortLabel CHMM_5-9_somites
+    longLabel CHMM_5-9_somites
+    parent dcComp on
+    subGroups T=CHMM S=s03_5_9_somites
+    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_ChromHMM.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_CHMM_Prim5
+    shortLabel CHMM_Prim5
+    longLabel CHMM_Prim5
+    parent dcComp on
+    subGroups T=CHMM S=s04_Prim5
+    bigDataUrl /gbdb/danRer11/danioCode/Prim5_ChromHMM.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_CHMM_LongPec
+    shortLabel CHMM_LongPec
+    longLabel CHMM_LongPec
+    parent dcComp on
+    subGroups T=CHMM S=s05_LongPec
+    bigDataUrl /gbdb/danRer11/danioCode/LongPec_ChromHMM.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_PADREs_Dome
+    shortLabel PADREs_Dome
+    longLabel PADREs_Dome
+    parent dcComp on
+    subGroups T=PADREs S=s01_Dome
+    bigDataUrl /gbdb/danRer11/danioCode/Dome_PADREs.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_PADREs_Epi75
+    shortLabel PADREs_Epi75
+    longLabel PADREs_Epi75
+    parent dcComp on
+    subGroups T=PADREs S=s02_Epi75
+    bigDataUrl /gbdb/danRer11/danioCode/Epi75_PADREs.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_PADREs_59_somites
+    shortLabel PADREs_5-9_somites
+    longLabel PADREs_5-9_somites
+    parent dcComp on
+    subGroups T=PADREs S=s03_5_9_somites
+    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_PADREs.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_PADREs_Prim5
+    shortLabel PADREs_Prim5
+    longLabel PADREs_Prim5
+    parent dcComp on
+    subGroups T=PADREs S=s04_Prim5
+    bigDataUrl /gbdb/danRer11/danioCode/Prim5_PADREs.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_PADREs_LongPec
+    shortLabel PADREs_LongPec
+    longLabel PADREs_LongPec
+    parent dcComp on
+    subGroups T=PADREs S=s05_LongPec
+    bigDataUrl /gbdb/danRer11/danioCode/LongPec_PADREs.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cPADRE_Dome
+    shortLabel cPADRE_Dome
+    longLabel cPADRE_Dome
+    parent dcComp on
+    subGroups T=cPADRE S=s01_Dome
+    bigDataUrl /gbdb/danRer11/danioCode/Dome_cPADRE.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cPADRE_Epi75
+    shortLabel cPADRE_Epi75
+    longLabel cPADRE_Epi75
+    parent dcComp on
+    subGroups T=cPADRE S=s02_Epi75
+    bigDataUrl /gbdb/danRer11/danioCode/Epi75_cPADRE.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cPADRE_59_somites
+    shortLabel cPADRE_5-9_somites
+    longLabel cPADRE_5-9_somites
+    parent dcComp on
+    subGroups T=cPADRE S=s03_5_9_somites
+    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_cPADRE.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cPADRE_Prim5
+    shortLabel cPADRE_Prim5
+    longLabel cPADRE_Prim5
+    parent dcComp on
+    subGroups T=cPADRE S=s04_Prim5
+    bigDataUrl /gbdb/danRer11/danioCode/Prim5_cPADRE.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cPADRE_LongPec
+    shortLabel cPADRE_LongPec
+    longLabel cPADRE_LongPec
+    parent dcComp on
+    subGroups T=cPADRE S=s05_LongPec
+    bigDataUrl /gbdb/danRer11/danioCode/LongPec_cPADRE.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_DOPEs_Dome
+    shortLabel DOPEs_Dome
+    longLabel DOPEs_Dome
+    parent dcComp on
+    subGroups T=DOPEs S=s01_Dome
+    bigDataUrl /gbdb/danRer11/danioCode/Dome_DOPEs.bb
+    visibility pack
+    type bigBed 6
+    itemRgb on
+
+    track dcComp_DOPEs_Epi75
+    shortLabel DOPEs_Epi75
+    longLabel DOPEs_Epi75
+    parent dcComp on
+    subGroups T=DOPEs S=s02_Epi75
+    bigDataUrl /gbdb/danRer11/danioCode/Epi75_DOPEs.bb
+    visibility pack
+    type bigBed 6
+    itemRgb on
+
+    track dcComp_DOPEs_59_somites
+    shortLabel DOPEs_5-9_somites
+    longLabel DOPEs_5-9_somites
+    parent dcComp on
+    subGroups T=DOPEs S=s03_5_9_somites
+    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_DOPEs.bb
+    visibility pack
+    type bigBed 6
+    itemRgb on
+
+    track dcComp_DOPEs_Prim5
+    shortLabel DOPEs_Prim5
+    longLabel DOPEs_Prim5
+    parent dcComp on
+    subGroups T=DOPEs S=s04_Prim5
+    bigDataUrl /gbdb/danRer11/danioCode/Prim5_DOPEs.bb
+    visibility pack
+    type bigBed 6
+    itemRgb on
+
+    track dcComp_DOPEs_LongPec
+    shortLabel DOPEs_LongPec
+    longLabel DOPEs_LongPec
+    parent dcComp on
+    subGroups T=DOPEs S=s05_LongPec
+    bigDataUrl /gbdb/danRer11/danioCode/LongPec_DOPEs.bb
+    visibility pack
+    type bigBed 6
+    itemRgb on
+
+track dcComp_cell_type
+shortLabel DC Cell Types
+longLabel DANIO-CODE regulatory elements assigned to cell types
+compositeTrack on
+type bigBed 6
+subGroup1 T Cell_Type all=all blood=blood CNS=CNS CNS_II=CNS_II differentiating_neurons=differentiating_neurons endothelium=endothelium epidermis=epidermis epidermis_olfactory_pronephric=epidermis_olfactory_pronephric midbrain=midbrain muscle=muscle muscle_II=muscle_II neural_crest=neural_crest optic_vesicle=optic_vesicle spinal_cord=spinal_cord
+dimensions dimX=T
+sortOrder T=+
+parent danioCode
+priority 2
+visibility hide
+
+    track dcComp_cell_type_all
+    shortLabel all_cell_types
+    longLabel all_cell_types
+    parent dcComp_cell_type on
+    subGroups T=all
+    bigDataUrl /gbdb/danRer11/danioCode/cell_types.colors.sorted.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_blood
+    shortLabel blood
+    longLabel blood
+    parent dcComp_cell_type on
+    subGroups T=blood
+    bigDataUrl /gbdb/danRer11/danioCode/Blood.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_cns
+    shortLabel CNS
+    longLabel CNS
+    parent dcComp_cell_type on
+    subGroups T=CNS
+    bigDataUrl /gbdb/danRer11/danioCode/CNS.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_cns_II
+    shortLabel CNS_II
+    longLabel CNS_II
+    parent dcComp_cell_type on
+    subGroups T=CNS_II
+    bigDataUrl /gbdb/danRer11/danioCode/CNS_II.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_differentiating_neurons
+    shortLabel differentiating_neurons
+    longLabel differentiating_neurons
+    parent dcComp_cell_type on
+    subGroups T=differentiating_neurons
+    bigDataUrl /gbdb/danRer11/danioCode/Differentiating_neurons.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_endothelium
+    shortLabel endothelium
+    longLabel endothelium
+    parent dcComp_cell_type on
+    subGroups T=endothelium
+    bigDataUrl /gbdb/danRer11/danioCode/Endothelium.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_epidermis
+    shortLabel epidermis
+    longLabel epidermis
+    parent dcComp_cell_type on
+    subGroups T=epidermis
+    bigDataUrl /gbdb/danRer11/danioCode/Epidermis.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_epidermis_olfactory_pronephric
+    shortLabel epidermis_olfactory_pronephric
+    longLabel epidermis_olfactory_pronephric
+    parent dcComp_cell_type on
+    subGroups T=epidermis_olfactory_pronephric
+    bigDataUrl /gbdb/danRer11/danioCode/Epidermis_olfactory_pronephric.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_midbrain
+    shortLabel midbrain
+    longLabel midbrain
+    parent dcComp_cell_type on
+    subGroups T=midbrain
+    bigDataUrl /gbdb/danRer11/danioCode/Midbrain.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_muscle
+    shortLabel muscle
+    longLabel muscle
+    parent dcComp_cell_type on
+    subGroups T=muscle
+    bigDataUrl /gbdb/danRer11/danioCode/Muscle.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_muscle_II
+    shortLabel muscle_II
+    longLabel muscle_II
+    parent dcComp_cell_type on
+    subGroups T=muscle_II
+    bigDataUrl /gbdb/danRer11/danioCode/Muscle_II.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_neural_crest
+    shortLabel neural_crest
+    longLabel neural_crest
+    parent dcComp_cell_type on
+    subGroups T=neural_crest
+    bigDataUrl /gbdb/danRer11/danioCode/Neural_crest.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_optic_vesicle
+    shortLabel optic_vesicle
+    longLabel optic_vesicle
+    parent dcComp_cell_type on
+    subGroups T=optic_vesicle
+    bigDataUrl /gbdb/danRer11/danioCode/Optical_vesicle.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+    track dcComp_cell_type_spinal_cord
+    shortLabel spinal_cord
+    longLabel spinal_cord
+    parent dcComp_cell_type on
+    subGroups T=spinal_cord
+    bigDataUrl /gbdb/danRer11/danioCode/Spinal_cord.colors.bb
+    visibility pack
+    type bigBed 9
+    itemRgb on
+
+track dcCopes_and_dopes
+shortLabel DC COPEs DOPEs
+longLabel DANIO-CODE constitutive and dynamic phylotypic-period elements
+compositeTrack on
+type bigBed 6
+parent danioCode
+priority 3
+visibility hide
+
+    track dcCopes
+    shortLabel copes
+    longLabel COPEs
+    parent dcCopes_and_dopes
+    bigDataUrl /gbdb/danRer11/danioCode/copes_dr11.bb
+    type bigBed 6
+    visibility squish
+    itemRgb on
+
+    track dcDopes_all
+    shortLabel dopes_all
+    longLabel pooled DOPEs
+    parent dcCopes_and_dopes
+    bigDataUrl /gbdb/danRer11/danioCode/dopes_all_dr11.bb
+    type bigBed 6
+    visibility squish
+    itemRgb on
+
+track dcEvalidation
+shortLabel DC Enhancers
+longLabel DANIO-CODE transgenic enhancer validation
+compositeTrack on
+type bigBed 6
+parent danioCode
+priority 4
+visibility hide
+
+    track dcTransgenic_enhancers
+    shortLabel transgenic_enhancers
+    longLabel transgenic enhancers
+    parent dcEvalidation
+    bigDataUrl /gbdb/danRer11/danioCode/transgenic_danRer11.bb
+    type bigBed 6
+    visibility squish
+    itemRgb on
+
+track dcComparativeGenomics
+shortLabel DC Conservation
+longLabel DANIO-CODE cross-species conservation from the Burgess lab, NHGRI
+compositeTrack on
+type bigWig
+parent danioCode
+priority 5
+visibility hide
+
+    track dcPhastcons
+    parent dcComparativeGenomics
+    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bw
+    shortLabel ZF_carp_phastcons
+    longLabel ZF_carp_phastcons
+    type bigWig
+    alwaysZero on
+    autoScale on
+    maxHeightPixels 128:48:4
+    visibility hide
+
+    track dcCNE
+    parent dcComparativeGenomics
+    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bb
+    shortLabel ZF_carp_phastcons_CNE
+    longLabel ZF_carp_phastcons_conserved_non-coding_element
+    type bigBed
+    visibility hide
+
+track dcConsensus_promoters
+shortLabel DC Promoters
+longLabel DANIO-CODE consensus promoters
+bigDataUrl /gbdb/danRer11/danioCode/consens.canonical.danRer11.bigBed
+type bigBed 6
+parent danioCode
+priority 6
+visibility hide
+
 track dcRNAseqComposite
 shortLabel DC RNA-seq
 longLabel DANIO-CODE RNA-seq coverage by developmental stage
@@ -23,8 +470,7 @@ subGroup3 enstage Enumerated_stage s29_Prim_25=29_Prim-25 s00_1_cell=00_1-cell s
 subGroup4 strand Strand neg=- uns=unstranded pos=+
 subGroup5 stage Developmental_stage s1_cell=1-cell s2_cell=2-cell s4_cell=4-cell s16_cell=16-cell s64_cell=64-cell s128_cell=128-cell s256_cell=256-cell s1k_cell=1k-cell High=High Sphere=Sphere Dome=Dome s30_epiboly=30%-epiboly s50_epiboly=50%-epiboly Germ_ring=Germ-ring Shield=Shield s75_epiboly=75%-epiboly Bud=Bud s1_4_somites=1-4_somites s5_9_somites=5-9_somites s10_13_somites=10-13_somites s14_19_somites=14-19_somites s20_25_somites=20-25_somites s26_somites=26+_somites Prim_5=Prim-5 Prim_15=Prim-15 Prim_25=Prim-25 Long_pec=Long-pec Protruding_mouth=Protruding-mouth Day_4=Day_4 Day_5=Day_5 s90_Days_2_Years=90_Days-2_Years
 compositeTrack on
-parent danioCode
-priority 1
+group rna
 
     track dcRnaSeqSignalView
     shortLabel RNA-seq signal
@@ -6563,8 +7009,7 @@ subGroup3 kind Track_kind signal=signal region=tc
 subGroup4 enstage Enumerated_stage s29_Prim_25=29_Prim-25 s00_1_cell=00_1-cell s11_Oblong=11_Oblong s10_High=10_High s12_Sphere=12_Sphere s14_30_epiboly=14_30%-epiboly s17_Shield=17_Shield s05_64_cell=05_64-cell s38_90_Days_2_Years=38_90_Days-2_Years s24_14_19_somites=24_14-19_somites s27_Prim_5=27_Prim-5 s08_512_cell=08_512-cell
 subGroup5 stage Developmental_stage s1_cell=1-cell s64_cell=64-cell s512_cell=512-cell High=High Oblong=Oblong Sphere=Sphere s30_epiboly=30%-epiboly Shield=Shield s14_19_somites=14-19_somites Prim_5=Prim-5 Prim_25=Prim-25 s90_Days_2_Years=90_Days-2_Years
 compositeTrack on
-parent danioCode
-priority 2
+group genes
 
     track dcCageSignalView
     shortLabel Signal
@@ -6950,6 +7395,368 @@ priority 2
         subGroups sample=DCD001514SQ kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
         parent dcCageRegionsView off
 
+track dc3PseqComposite
+shortLabel DC 3P-seq
+longLabel DANIO-CODE 3P-seq signal and tag clusters by developmental stage
+type bed 3
+visibility hide
+filterComposite dimA dimB dimC
+dimensions dimX=stage dimA=kind dimB=sample dimC=enstage
+sortOrder enstage=+ sample=+ kind=-
+subGroup1 view Views regions=regions signal=signal
+subGroup2 sample Sequencing_sample DCD007934DT=DCD007934DT DCD007847DT=DCD007847DT DCD007856DT=DCD007856DT DCD007943DT=DCD007943DT DCD007853DT=DCD007853DT DCD007947DT=DCD007947DT DCD007850DT=DCD007850DT DCD007851DT=DCD007851DT DCD007848DT=DCD007848DT DCD007846DT=DCD007846DT DCD007845DT=DCD007845DT DCD007858DT=DCD007858DT DCD007854DT=DCD007854DT DCD007857DT=DCD007857DT DCD007855DT=DCD007855DT
+subGroup3 kind Track_kind signal=signal region=tc
+subGroup4 enstage Enumerated_stage s00_1_cell=00_1-cell s33_Protruding_mouth=33_Protruding-mouth s12_Sphere=12_Sphere s17_Shield=17_Shield s38_90_Days_2_Years=38_90_Days-2_Years s27_Prim_5=27_Prim-5 s03_16_cell=03_16-cell
+subGroup5 stage Developmental_stage s1_cell=1-cell s16_cell=16-cell Sphere=Sphere Shield=Shield Prim_5=Prim-5 Protruding_mouth=Protruding-mouth s90_Days_2_Years=90_Days-2_Years
+compositeTrack on
+group genes
+
+    track dc3PseqSignalView
+    shortLabel Signal
+    longLabel Signal
+    type bigWig
+    visibility full
+    parent dc3PseqComposite on
+    view signal
+
+        track DCD007934DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007934DT_signal.bigWig
+        shortLabel DCD007934DT_signal
+        longLabel Prim-5, Bartel_Lab, GSE32880
+        type bigWig
+        visibility full
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007934DT kind=signal view=signal enstage=s27_Prim_5 stage=Prim_5
+        parent dc3PseqSignalView on
+
+        track DCD007947DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007947DT_signal.bigWig
+        shortLabel DCD007947DT_signal
+        longLabel 90_Days-2_Years, Bartel_Lab, GSE32880
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007947DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqSignalView off
+
+        track DCD007943DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007943DT_signal.bigWig
+        shortLabel DCD007943DT_signal
+        longLabel Protruding-mouth, Bartel_Lab, GSE32880
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007943DT kind=signal view=signal enstage=s33_Protruding_mouth stage=Protruding_mouth
+        parent dc3PseqSignalView off
+
+        track DCD007845DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007845DT_signal.bigWig
+        shortLabel DCD007845DT_signal
+        longLabel 1-cell, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007845DT kind=signal view=signal enstage=s00_1_cell stage=s1_cell
+        parent dc3PseqSignalView off
+
+        track DCD007848DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007848DT_signal.bigWig
+        shortLabel DCD007848DT_signal
+        longLabel 16-cell, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007848DT kind=signal view=signal enstage=s03_16_cell stage=s16_cell
+        parent dc3PseqSignalView off
+
+        track DCD007847DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007847DT_signal.bigWig
+        shortLabel DCD007847DT_signal
+        longLabel 16-cell, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007847DT kind=signal view=signal enstage=s03_16_cell stage=s16_cell
+        parent dc3PseqSignalView off
+
+        track DCD007846DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007846DT_signal.bigWig
+        shortLabel DCD007846DT_signal
+        longLabel 16-cell, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007846DT kind=signal view=signal enstage=s03_16_cell stage=s16_cell
+        parent dc3PseqSignalView off
+
+        track DCD007850DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007850DT_signal.bigWig
+        shortLabel DCD007850DT_signal
+        longLabel Sphere, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007850DT kind=signal view=signal enstage=s12_Sphere stage=Sphere
+        parent dc3PseqSignalView off
+
+        track DCD007851DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007851DT_signal.bigWig
+        shortLabel DCD007851DT_signal
+        longLabel Shield, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007851DT kind=signal view=signal enstage=s17_Shield stage=Shield
+        parent dc3PseqSignalView off
+
+        track DCD007853DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007853DT_signal.bigWig
+        shortLabel DCD007853DT_signal
+        longLabel Prim-5, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007853DT kind=signal view=signal enstage=s27_Prim_5 stage=Prim_5
+        parent dc3PseqSignalView off
+
+        track DCD007854DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007854DT_signal.bigWig
+        shortLabel DCD007854DT_signal
+        longLabel Protruding-mouth, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007854DT kind=signal view=signal enstage=s33_Protruding_mouth stage=Protruding_mouth
+        parent dc3PseqSignalView off
+
+        track DCD007855DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007855DT_signal.bigWig
+        shortLabel DCD007855DT_signal
+        longLabel 90_Days-2_Years, Bartel_Lab, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007855DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqSignalView off
+
+        track DCD007856DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007856DT_signal.bigWig
+        shortLabel DCD007856DT_signal
+        longLabel 90_Days-2_Years, Bartel_Lab, brain, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007856DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqSignalView off
+
+        track DCD007857DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007857DT_signal.bigWig
+        shortLabel DCD007857DT_signal
+        longLabel 90_Days-2_Years, Bartel_Lab, ovary, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007857DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqSignalView off
+
+        track DCD007858DT_signal
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007858DT_signal.bigWig
+        shortLabel DCD007858DT_signal
+        longLabel 90_Days-2_Years, Bartel_Lab, testis, GSE37453
+        type bigWig
+        visibility hide
+        color 158,202,225
+        autoScale on
+        maxHeightPixels 128:32:8
+        subGroups sample=DCD007858DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqSignalView off
+
+    track dc3PseqRegionsView
+    shortLabel Regions
+    longLabel Regions
+    type bigBed
+    visibility dense
+    parent dc3PseqComposite on
+    view regions
+
+        track DCD007934DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007934DT_tagCluster.bigBed
+        shortLabel DCD007934DT_tagCluster
+        longLabel Prim-5, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007934DT kind=region view=regions enstage=s27_Prim_5 stage=Prim_5
+        parent dc3PseqRegionsView off
+
+        track DCD007947DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007947DT_tagCluster.bigBed
+        shortLabel DCD007947DT_tagCluster
+        longLabel 90_Days-2_Years, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007947DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqRegionsView off
+
+        track DCD007943DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007943DT_tagCluster.bigBed
+        shortLabel DCD007943DT_tagCluster
+        longLabel Protruding-mouth, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007943DT kind=region view=regions enstage=s33_Protruding_mouth stage=Protruding_mouth
+        parent dc3PseqRegionsView off
+
+        track DCD007845DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007845DT_tagCluster.bigBed
+        shortLabel DCD007845DT_tagCluster
+        longLabel 1-cell, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007845DT kind=region view=regions enstage=s00_1_cell stage=s1_cell
+        parent dc3PseqRegionsView off
+
+        track DCD007848DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007848DT_tagCluster.bigBed
+        shortLabel DCD007848DT_tagCluster
+        longLabel 16-cell, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007848DT kind=region view=regions enstage=s03_16_cell stage=s16_cell
+        parent dc3PseqRegionsView off
+
+        track DCD007847DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007847DT_tagCluster.bigBed
+        shortLabel DCD007847DT_tagCluster
+        longLabel 16-cell, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007847DT kind=region view=regions enstage=s03_16_cell stage=s16_cell
+        parent dc3PseqRegionsView off
+
+        track DCD007846DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007846DT_tagCluster.bigBed
+        shortLabel DCD007846DT_tagCluster
+        longLabel 16-cell, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007846DT kind=region view=regions enstage=s03_16_cell stage=s16_cell
+        parent dc3PseqRegionsView off
+
+        track DCD007850DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007850DT_tagCluster.bigBed
+        shortLabel DCD007850DT_tagCluster
+        longLabel Sphere, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007850DT kind=region view=regions enstage=s12_Sphere stage=Sphere
+        parent dc3PseqRegionsView off
+
+        track DCD007851DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007851DT_tagCluster.bigBed
+        shortLabel DCD007851DT_tagCluster
+        longLabel Shield, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007851DT kind=region view=regions enstage=s17_Shield stage=Shield
+        parent dc3PseqRegionsView off
+
+        track DCD007853DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007853DT_tagCluster.bigBed
+        shortLabel DCD007853DT_tagCluster
+        longLabel Prim-5, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007853DT kind=region view=regions enstage=s27_Prim_5 stage=Prim_5
+        parent dc3PseqRegionsView off
+
+        track DCD007854DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007854DT_tagCluster.bigBed
+        shortLabel DCD007854DT_tagCluster
+        longLabel Protruding-mouth, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007854DT kind=region view=regions enstage=s33_Protruding_mouth stage=Protruding_mouth
+        parent dc3PseqRegionsView off
+
+        track DCD007855DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007855DT_tagCluster.bigBed
+        shortLabel DCD007855DT_tagCluster
+        longLabel 90_Days-2_Years, Bartel_Lab, nan, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007855DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqRegionsView off
+
+        track DCD007856DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007856DT_tagCluster.bigBed
+        shortLabel DCD007856DT_tagCluster
+        longLabel 90_Days-2_Years, Bartel_Lab, brain, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007856DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqRegionsView off
+
+        track DCD007857DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007857DT_tagCluster.bigBed
+        shortLabel DCD007857DT_tagCluster
+        longLabel 90_Days-2_Years, Bartel_Lab, ovary, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007857DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqRegionsView off
+
+        track DCD007858DT_tagCluster
+        bigDataUrl /gbdb/danRer11/danioCode/DCD007858DT_tagCluster.bigBed
+        shortLabel DCD007858DT_tagCluster
+        longLabel 90_Days-2_Years, Bartel_Lab, testis, GSE37453
+        type bigBed
+        visibility hide
+        itemRgb on
+        subGroups sample=DCD007858DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
+        parent dc3PseqRegionsView off
+
 track dcChIPseqComposite
 shortLabel DC ChIP-seq
 longLabel DANIO-CODE ChIP-seq signal and peaks by target and developmental stage
@@ -6965,8 +7772,7 @@ subGroup4 kind Track_kind signal=signal peak=peak
 subGroup5 target ChIP-seq_target H3K4me3=H3K4me3 nanog_like=nanog-like H2AFV=H2AFV H3K36me3=H3K36me3 sox10=sox10 Pol_II_4H8=Pol_II_4H8 H3K27ac=H3K27ac H3K4me1=H3K4me1 Cdx4=Cdx4 H3K27me3=H3K27me3 Sall4=Sall4 Pol_II_8WG16=Pol_II_8WG16 Mxtx2=Mxtx2 Pou5f3=Pou5f3 H3K14ac=H3K14ac zgata1=zgata1 CTCF=CTCF Zic3=Zic3
 subGroup6 stage Developmental_stage s256_cell=256-cell s512_cell=512-cell Oblong=Oblong Sphere=Sphere Dome=Dome s30_epiboly=30%-epiboly s50_epiboly=50%-epiboly Shield=Shield s75_epiboly=75%-epiboly Bud=Bud s5_9_somites=5-9_somites s26_somites=26+_somites Prim_5=Prim-5 Long_pec=Long-pec Protruding_mouth=Protruding-mouth s90_Days_2_Years=90_Days-2_Years nan=nan
 compositeTrack on
-parent danioCode
-priority 3
+group regulation
 
     track dcChipSignalView
     shortLabel Signal
@@ -9468,369 +10274,6 @@ priority 3
         subGroups enstage=s31_Long_pec target=H3K27me3 kind=peak sample=DCD000630SQ view=peaks stage=Long_pec
         parent dcChipPeaksView off
 
-track dc3PseqComposite
-shortLabel DC 3P-seq
-longLabel DANIO-CODE 3P-seq signal and tag clusters by developmental stage
-type bed 3
-visibility hide
-filterComposite dimA dimB dimC
-dimensions dimX=stage dimA=kind dimB=sample dimC=enstage
-sortOrder enstage=+ sample=+ kind=-
-subGroup1 view Views regions=regions signal=signal
-subGroup2 sample Sequencing_sample DCD007934DT=DCD007934DT DCD007847DT=DCD007847DT DCD007856DT=DCD007856DT DCD007943DT=DCD007943DT DCD007853DT=DCD007853DT DCD007947DT=DCD007947DT DCD007850DT=DCD007850DT DCD007851DT=DCD007851DT DCD007848DT=DCD007848DT DCD007846DT=DCD007846DT DCD007845DT=DCD007845DT DCD007858DT=DCD007858DT DCD007854DT=DCD007854DT DCD007857DT=DCD007857DT DCD007855DT=DCD007855DT
-subGroup3 kind Track_kind signal=signal region=tc
-subGroup4 enstage Enumerated_stage s00_1_cell=00_1-cell s33_Protruding_mouth=33_Protruding-mouth s12_Sphere=12_Sphere s17_Shield=17_Shield s38_90_Days_2_Years=38_90_Days-2_Years s27_Prim_5=27_Prim-5 s03_16_cell=03_16-cell
-subGroup5 stage Developmental_stage s1_cell=1-cell s16_cell=16-cell Sphere=Sphere Shield=Shield Prim_5=Prim-5 Protruding_mouth=Protruding-mouth s90_Days_2_Years=90_Days-2_Years
-compositeTrack on
-parent danioCode
-priority 4
-
-    track dc3PseqSignalView
-    shortLabel Signal
-    longLabel Signal
-    type bigWig
-    visibility full
-    parent dc3PseqComposite on
-    view signal
-
-        track DCD007934DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007934DT_signal.bigWig
-        shortLabel DCD007934DT_signal
-        longLabel Prim-5, Bartel_Lab, GSE32880
-        type bigWig
-        visibility full
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007934DT kind=signal view=signal enstage=s27_Prim_5 stage=Prim_5
-        parent dc3PseqSignalView on
-
-        track DCD007947DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007947DT_signal.bigWig
-        shortLabel DCD007947DT_signal
-        longLabel 90_Days-2_Years, Bartel_Lab, GSE32880
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007947DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqSignalView off
-
-        track DCD007943DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007943DT_signal.bigWig
-        shortLabel DCD007943DT_signal
-        longLabel Protruding-mouth, Bartel_Lab, GSE32880
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007943DT kind=signal view=signal enstage=s33_Protruding_mouth stage=Protruding_mouth
-        parent dc3PseqSignalView off
-
-        track DCD007845DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007845DT_signal.bigWig
-        shortLabel DCD007845DT_signal
-        longLabel 1-cell, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007845DT kind=signal view=signal enstage=s00_1_cell stage=s1_cell
-        parent dc3PseqSignalView off
-
-        track DCD007848DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007848DT_signal.bigWig
-        shortLabel DCD007848DT_signal
-        longLabel 16-cell, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007848DT kind=signal view=signal enstage=s03_16_cell stage=s16_cell
-        parent dc3PseqSignalView off
-
-        track DCD007847DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007847DT_signal.bigWig
-        shortLabel DCD007847DT_signal
-        longLabel 16-cell, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007847DT kind=signal view=signal enstage=s03_16_cell stage=s16_cell
-        parent dc3PseqSignalView off
-
-        track DCD007846DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007846DT_signal.bigWig
-        shortLabel DCD007846DT_signal
-        longLabel 16-cell, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007846DT kind=signal view=signal enstage=s03_16_cell stage=s16_cell
-        parent dc3PseqSignalView off
-
-        track DCD007850DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007850DT_signal.bigWig
-        shortLabel DCD007850DT_signal
-        longLabel Sphere, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007850DT kind=signal view=signal enstage=s12_Sphere stage=Sphere
-        parent dc3PseqSignalView off
-
-        track DCD007851DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007851DT_signal.bigWig
-        shortLabel DCD007851DT_signal
-        longLabel Shield, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007851DT kind=signal view=signal enstage=s17_Shield stage=Shield
-        parent dc3PseqSignalView off
-
-        track DCD007853DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007853DT_signal.bigWig
-        shortLabel DCD007853DT_signal
-        longLabel Prim-5, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007853DT kind=signal view=signal enstage=s27_Prim_5 stage=Prim_5
-        parent dc3PseqSignalView off
-
-        track DCD007854DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007854DT_signal.bigWig
-        shortLabel DCD007854DT_signal
-        longLabel Protruding-mouth, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007854DT kind=signal view=signal enstage=s33_Protruding_mouth stage=Protruding_mouth
-        parent dc3PseqSignalView off
-
-        track DCD007855DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007855DT_signal.bigWig
-        shortLabel DCD007855DT_signal
-        longLabel 90_Days-2_Years, Bartel_Lab, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007855DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqSignalView off
-
-        track DCD007856DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007856DT_signal.bigWig
-        shortLabel DCD007856DT_signal
-        longLabel 90_Days-2_Years, Bartel_Lab, brain, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007856DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqSignalView off
-
-        track DCD007857DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007857DT_signal.bigWig
-        shortLabel DCD007857DT_signal
-        longLabel 90_Days-2_Years, Bartel_Lab, ovary, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007857DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqSignalView off
-
-        track DCD007858DT_signal
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007858DT_signal.bigWig
-        shortLabel DCD007858DT_signal
-        longLabel 90_Days-2_Years, Bartel_Lab, testis, GSE37453
-        type bigWig
-        visibility hide
-        color 158,202,225
-        autoScale on
-        maxHeightPixels 128:32:8
-        subGroups sample=DCD007858DT kind=signal view=signal enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqSignalView off
-
-    track dc3PseqRegionsView
-    shortLabel Regions
-    longLabel Regions
-    type bigBed
-    visibility dense
-    parent dc3PseqComposite on
-    view regions
-
-        track DCD007934DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007934DT_tagCluster.bigBed
-        shortLabel DCD007934DT_tagCluster
-        longLabel Prim-5, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007934DT kind=region view=regions enstage=s27_Prim_5 stage=Prim_5
-        parent dc3PseqRegionsView off
-
-        track DCD007947DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007947DT_tagCluster.bigBed
-        shortLabel DCD007947DT_tagCluster
-        longLabel 90_Days-2_Years, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007947DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqRegionsView off
-
-        track DCD007943DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007943DT_tagCluster.bigBed
-        shortLabel DCD007943DT_tagCluster
-        longLabel Protruding-mouth, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007943DT kind=region view=regions enstage=s33_Protruding_mouth stage=Protruding_mouth
-        parent dc3PseqRegionsView off
-
-        track DCD007845DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007845DT_tagCluster.bigBed
-        shortLabel DCD007845DT_tagCluster
-        longLabel 1-cell, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007845DT kind=region view=regions enstage=s00_1_cell stage=s1_cell
-        parent dc3PseqRegionsView off
-
-        track DCD007848DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007848DT_tagCluster.bigBed
-        shortLabel DCD007848DT_tagCluster
-        longLabel 16-cell, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007848DT kind=region view=regions enstage=s03_16_cell stage=s16_cell
-        parent dc3PseqRegionsView off
-
-        track DCD007847DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007847DT_tagCluster.bigBed
-        shortLabel DCD007847DT_tagCluster
-        longLabel 16-cell, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007847DT kind=region view=regions enstage=s03_16_cell stage=s16_cell
-        parent dc3PseqRegionsView off
-
-        track DCD007846DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007846DT_tagCluster.bigBed
-        shortLabel DCD007846DT_tagCluster
-        longLabel 16-cell, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007846DT kind=region view=regions enstage=s03_16_cell stage=s16_cell
-        parent dc3PseqRegionsView off
-
-        track DCD007850DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007850DT_tagCluster.bigBed
-        shortLabel DCD007850DT_tagCluster
-        longLabel Sphere, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007850DT kind=region view=regions enstage=s12_Sphere stage=Sphere
-        parent dc3PseqRegionsView off
-
-        track DCD007851DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007851DT_tagCluster.bigBed
-        shortLabel DCD007851DT_tagCluster
-        longLabel Shield, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007851DT kind=region view=regions enstage=s17_Shield stage=Shield
-        parent dc3PseqRegionsView off
-
-        track DCD007853DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007853DT_tagCluster.bigBed
-        shortLabel DCD007853DT_tagCluster
-        longLabel Prim-5, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007853DT kind=region view=regions enstage=s27_Prim_5 stage=Prim_5
-        parent dc3PseqRegionsView off
-
-        track DCD007854DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007854DT_tagCluster.bigBed
-        shortLabel DCD007854DT_tagCluster
-        longLabel Protruding-mouth, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007854DT kind=region view=regions enstage=s33_Protruding_mouth stage=Protruding_mouth
-        parent dc3PseqRegionsView off
-
-        track DCD007855DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007855DT_tagCluster.bigBed
-        shortLabel DCD007855DT_tagCluster
-        longLabel 90_Days-2_Years, Bartel_Lab, nan, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007855DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqRegionsView off
-
-        track DCD007856DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007856DT_tagCluster.bigBed
-        shortLabel DCD007856DT_tagCluster
-        longLabel 90_Days-2_Years, Bartel_Lab, brain, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007856DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqRegionsView off
-
-        track DCD007857DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007857DT_tagCluster.bigBed
-        shortLabel DCD007857DT_tagCluster
-        longLabel 90_Days-2_Years, Bartel_Lab, ovary, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007857DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqRegionsView off
-
-        track DCD007858DT_tagCluster
-        bigDataUrl /gbdb/danRer11/danioCode/DCD007858DT_tagCluster.bigBed
-        shortLabel DCD007858DT_tagCluster
-        longLabel 90_Days-2_Years, Bartel_Lab, testis, GSE37453
-        type bigBed
-        visibility hide
-        itemRgb on
-        subGroups sample=DCD007858DT kind=region view=regions enstage=s38_90_Days_2_Years stage=s90_Days_2_Years
-        parent dc3PseqRegionsView off
-
 track dcHiC_Composite
 shortLabel DC Hi-C
 longLabel DANIO-CODE Hi-C insulation and directionality index by developmental stage
@@ -9846,8 +10289,7 @@ subGroup4 enstage Enumerated_stage s07_256_cell=07_256-cell s18_75_epiboly=18_75
 subGroup5 resolution Window_size_for_index_calculation s50000=50kb s500000=500kb s1000000=1MB
 subGroup6 stage Developmental_stage s256_cell=256-cell Dome=Dome s75_epiboly=75%-epiboly Prim_5=Prim-5
 compositeTrack on
-parent danioCode
-priority 5
+group regulation
 
     track dcHicSignalView
     shortLabel Signal
@@ -10169,427 +10611,15 @@ priority 5
         subGroups enstage=s27_Prim_5 type=ii sample=DCD003041SQ stage=Prim_5 resolution=s500000 view=signal
         parent dcHicSignalView off
 
-track dcComp
-shortLabel DC Elements
-longLabel DANIO-CODE ChromHMM states, PADREs and DOPEs by developmental stage
-compositeTrack on
-type bigBed 9
-subGroup1 T SegmentType CHMM=ChromHMM PADREs=PADREs cPADRE=consensus_PADREs DOPEs=DOPEs
-subGroup2 S Stage s01_Dome=Dome s02_Epi75=Epi75 s03_5_9_somites=03_5-9_somites s04_Prim5=Prim5 s05_LongPec=LongPec
-dimensions dimX=T dimY=S
-sortOrder T=+ S=+
-parent danioCode
-priority 6
-visibility hide
-
-    track dcComp_CHMM_Dome
-    shortLabel CHMM_Dome
-    longLabel CHMM_Dome
-    parent dcComp on
-    subGroups T=CHMM S=s01_Dome
-    bigDataUrl /gbdb/danRer11/danioCode/Dome_ChromHMM.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_CHMM_Epi75
-    shortLabel CHMM_Epi75
-    longLabel CHMM_Epi75
-    parent dcComp on
-    subGroups T=CHMM S=s02_Epi75
-    bigDataUrl /gbdb/danRer11/danioCode/Epi75_ChromHMM.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_CHMM_59_somites
-    shortLabel CHMM_5-9_somites
-    longLabel CHMM_5-9_somites
-    parent dcComp on
-    subGroups T=CHMM S=s03_5_9_somites
-    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_ChromHMM.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_CHMM_Prim5
-    shortLabel CHMM_Prim5
-    longLabel CHMM_Prim5
-    parent dcComp on
-    subGroups T=CHMM S=s04_Prim5
-    bigDataUrl /gbdb/danRer11/danioCode/Prim5_ChromHMM.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_CHMM_LongPec
-    shortLabel CHMM_LongPec
-    longLabel CHMM_LongPec
-    parent dcComp on
-    subGroups T=CHMM S=s05_LongPec
-    bigDataUrl /gbdb/danRer11/danioCode/LongPec_ChromHMM.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_PADREs_Dome
-    shortLabel PADREs_Dome
-    longLabel PADREs_Dome
-    parent dcComp on
-    subGroups T=PADREs S=s01_Dome
-    bigDataUrl /gbdb/danRer11/danioCode/Dome_PADREs.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_PADREs_Epi75
-    shortLabel PADREs_Epi75
-    longLabel PADREs_Epi75
-    parent dcComp on
-    subGroups T=PADREs S=s02_Epi75
-    bigDataUrl /gbdb/danRer11/danioCode/Epi75_PADREs.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_PADREs_59_somites
-    shortLabel PADREs_5-9_somites
-    longLabel PADREs_5-9_somites
-    parent dcComp on
-    subGroups T=PADREs S=s03_5_9_somites
-    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_PADREs.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_PADREs_Prim5
-    shortLabel PADREs_Prim5
-    longLabel PADREs_Prim5
-    parent dcComp on
-    subGroups T=PADREs S=s04_Prim5
-    bigDataUrl /gbdb/danRer11/danioCode/Prim5_PADREs.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_PADREs_LongPec
-    shortLabel PADREs_LongPec
-    longLabel PADREs_LongPec
-    parent dcComp on
-    subGroups T=PADREs S=s05_LongPec
-    bigDataUrl /gbdb/danRer11/danioCode/LongPec_PADREs.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cPADRE_Dome
-    shortLabel cPADRE_Dome
-    longLabel cPADRE_Dome
-    parent dcComp on
-    subGroups T=cPADRE S=s01_Dome
-    bigDataUrl /gbdb/danRer11/danioCode/Dome_cPADRE.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cPADRE_Epi75
-    shortLabel cPADRE_Epi75
-    longLabel cPADRE_Epi75
-    parent dcComp on
-    subGroups T=cPADRE S=s02_Epi75
-    bigDataUrl /gbdb/danRer11/danioCode/Epi75_cPADRE.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cPADRE_59_somites
-    shortLabel cPADRE_5-9_somites
-    longLabel cPADRE_5-9_somites
-    parent dcComp on
-    subGroups T=cPADRE S=s03_5_9_somites
-    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_cPADRE.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cPADRE_Prim5
-    shortLabel cPADRE_Prim5
-    longLabel cPADRE_Prim5
-    parent dcComp on
-    subGroups T=cPADRE S=s04_Prim5
-    bigDataUrl /gbdb/danRer11/danioCode/Prim5_cPADRE.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cPADRE_LongPec
-    shortLabel cPADRE_LongPec
-    longLabel cPADRE_LongPec
-    parent dcComp on
-    subGroups T=cPADRE S=s05_LongPec
-    bigDataUrl /gbdb/danRer11/danioCode/LongPec_cPADRE.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_DOPEs_Dome
-    shortLabel DOPEs_Dome
-    longLabel DOPEs_Dome
-    parent dcComp on
-    subGroups T=DOPEs S=s01_Dome
-    bigDataUrl /gbdb/danRer11/danioCode/Dome_DOPEs.bb
-    visibility pack
-    type bigBed 6
-    itemRgb on
-
-    track dcComp_DOPEs_Epi75
-    shortLabel DOPEs_Epi75
-    longLabel DOPEs_Epi75
-    parent dcComp on
-    subGroups T=DOPEs S=s02_Epi75
-    bigDataUrl /gbdb/danRer11/danioCode/Epi75_DOPEs.bb
-    visibility pack
-    type bigBed 6
-    itemRgb on
-
-    track dcComp_DOPEs_59_somites
-    shortLabel DOPEs_5-9_somites
-    longLabel DOPEs_5-9_somites
-    parent dcComp on
-    subGroups T=DOPEs S=s03_5_9_somites
-    bigDataUrl /gbdb/danRer11/danioCode/Hpf12_DOPEs.bb
-    visibility pack
-    type bigBed 6
-    itemRgb on
-
-    track dcComp_DOPEs_Prim5
-    shortLabel DOPEs_Prim5
-    longLabel DOPEs_Prim5
-    parent dcComp on
-    subGroups T=DOPEs S=s04_Prim5
-    bigDataUrl /gbdb/danRer11/danioCode/Prim5_DOPEs.bb
-    visibility pack
-    type bigBed 6
-    itemRgb on
-
-    track dcComp_DOPEs_LongPec
-    shortLabel DOPEs_LongPec
-    longLabel DOPEs_LongPec
-    parent dcComp on
-    subGroups T=DOPEs S=s05_LongPec
-    bigDataUrl /gbdb/danRer11/danioCode/LongPec_DOPEs.bb
-    visibility pack
-    type bigBed 6
-    itemRgb on
-
-track dcComp_cell_type
-shortLabel DC Cell Types
-longLabel DANIO-CODE regulatory elements assigned to cell types
-compositeTrack on
-type bigBed 6
-subGroup1 T Cell_Type all=all blood=blood CNS=CNS CNS_II=CNS_II differentiating_neurons=differentiating_neurons endothelium=endothelium epidermis=epidermis epidermis_olfactory_pronephric=epidermis_olfactory_pronephric midbrain=midbrain muscle=muscle muscle_II=muscle_II neural_crest=neural_crest optic_vesicle=optic_vesicle spinal_cord=spinal_cord
-dimensions dimX=T
-sortOrder T=+
-parent danioCode
-priority 7
-visibility hide
-
-    track dcComp_cell_type_all
-    shortLabel all_cell_types
-    longLabel all_cell_types
-    parent dcComp_cell_type on
-    subGroups T=all
-    bigDataUrl /gbdb/danRer11/danioCode/cell_types.colors.sorted.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_blood
-    shortLabel blood
-    longLabel blood
-    parent dcComp_cell_type on
-    subGroups T=blood
-    bigDataUrl /gbdb/danRer11/danioCode/Blood.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_cns
-    shortLabel CNS
-    longLabel CNS
-    parent dcComp_cell_type on
-    subGroups T=CNS
-    bigDataUrl /gbdb/danRer11/danioCode/CNS.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_cns_II
-    shortLabel CNS_II
-    longLabel CNS_II
-    parent dcComp_cell_type on
-    subGroups T=CNS_II
-    bigDataUrl /gbdb/danRer11/danioCode/CNS_II.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_differentiating_neurons
-    shortLabel differentiating_neurons
-    longLabel differentiating_neurons
-    parent dcComp_cell_type on
-    subGroups T=differentiating_neurons
-    bigDataUrl /gbdb/danRer11/danioCode/Differentiating_neurons.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_endothelium
-    shortLabel endothelium
-    longLabel endothelium
-    parent dcComp_cell_type on
-    subGroups T=endothelium
-    bigDataUrl /gbdb/danRer11/danioCode/Endothelium.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_epidermis
-    shortLabel epidermis
-    longLabel epidermis
-    parent dcComp_cell_type on
-    subGroups T=epidermis
-    bigDataUrl /gbdb/danRer11/danioCode/Epidermis.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_epidermis_olfactory_pronephric
-    shortLabel epidermis_olfactory_pronephric
-    longLabel epidermis_olfactory_pronephric
-    parent dcComp_cell_type on
-    subGroups T=epidermis_olfactory_pronephric
-    bigDataUrl /gbdb/danRer11/danioCode/Epidermis_olfactory_pronephric.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_midbrain
-    shortLabel midbrain
-    longLabel midbrain
-    parent dcComp_cell_type on
-    subGroups T=midbrain
-    bigDataUrl /gbdb/danRer11/danioCode/Midbrain.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_muscle
-    shortLabel muscle
-    longLabel muscle
-    parent dcComp_cell_type on
-    subGroups T=muscle
-    bigDataUrl /gbdb/danRer11/danioCode/Muscle.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_muscle_II
-    shortLabel muscle_II
-    longLabel muscle_II
-    parent dcComp_cell_type on
-    subGroups T=muscle_II
-    bigDataUrl /gbdb/danRer11/danioCode/Muscle_II.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_neural_crest
-    shortLabel neural_crest
-    longLabel neural_crest
-    parent dcComp_cell_type on
-    subGroups T=neural_crest
-    bigDataUrl /gbdb/danRer11/danioCode/Neural_crest.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_optic_vesicle
-    shortLabel optic_vesicle
-    longLabel optic_vesicle
-    parent dcComp_cell_type on
-    subGroups T=optic_vesicle
-    bigDataUrl /gbdb/danRer11/danioCode/Optical_vesicle.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-    track dcComp_cell_type_spinal_cord
-    shortLabel spinal_cord
-    longLabel spinal_cord
-    parent dcComp_cell_type on
-    subGroups T=spinal_cord
-    bigDataUrl /gbdb/danRer11/danioCode/Spinal_cord.colors.bb
-    visibility pack
-    type bigBed 9
-    itemRgb on
-
-track dcCopes_and_dopes
-shortLabel DC COPEs DOPEs
-longLabel DANIO-CODE constitutive and dynamic phylotypic-period elements
-compositeTrack on
-type bigBed 6
-parent danioCode
-priority 8
-visibility hide
-
-    track dcCopes
-    shortLabel copes
-    longLabel COPEs
-    parent dcCopes_and_dopes
-    bigDataUrl /gbdb/danRer11/danioCode/copes_dr11.bb
-    type bigBed 6
-    visibility squish
-    itemRgb on
-
-    track dcDopes_all
-    shortLabel dopes_all
-    longLabel pooled DOPEs
-    parent dcCopes_and_dopes
-    bigDataUrl /gbdb/danRer11/danioCode/dopes_all_dr11.bb
-    type bigBed 6
-    visibility squish
-    itemRgb on
-
-track dcEvalidation
-shortLabel DC Enhancers
-longLabel DANIO-CODE transgenic enhancer validation
-compositeTrack on
-type bigBed 6
-parent danioCode
-priority 9
-visibility hide
-
-    track dcTransgenic_enhancers
-    shortLabel transgenic_enhancers
-    longLabel transgenic enhancers
-    parent dcEvalidation
-    bigDataUrl /gbdb/danRer11/danioCode/transgenic_danRer11.bb
-    type bigBed 6
-    visibility squish
-    itemRgb on
-
-track dcComparativeGenomics
-shortLabel DC Conservation
-longLabel DANIO-CODE conservation and CRISPR targets from the Burgess lab, NHGRI
-compositeTrack on
-type bigBed 9 +
-parent danioCode
-priority 10
+track dcCrispr
+superTrack on
+shortLabel CRISPR/Cas9 Targets
+longLabel CRISPR/Cas9 target sites in the zebrafish genome, from the Shawn Burgess lab at NHGRI (distributed via the DANIO-CODE hub)
+group map
 visibility hide
 
     track dcCrisprs
-    parent dcComparativeGenomics
+    parent dcCrispr
     bigDataUrl /gbdb/danRer11/danioCode/danRer11_sp6cas_N18_20.colored.bb
     shortLabel All Targets
     longLabel CRISPR/Cas9 Targets
@@ -10599,7 +10629,7 @@ visibility hide
     itemRgb on
 
     track dcGg_crisprs
-    parent dcComparativeGenomics
+    parent dcCrispr
     bigDataUrl /gbdb/danRer11/danioCode/danRer11_sp6cas_GGN16_18NGG.colored.bb
     shortLabel GG Targets
     longLabel GG CRISPR/Cas9 Targets
@@ -10609,7 +10639,7 @@ visibility hide
     itemRgb on
 
     track dcGa_crisprs
-    parent dcComparativeGenomics
+    parent dcCrispr
     bigDataUrl /gbdb/danRer11/danioCode/danRer11_sp6cas_GAN16_18NGG.colored.bb
     shortLabel GA Targets
     longLabel GA CRISPR/Cas9 Targets
@@ -10617,31 +10647,3 @@ visibility hide
     visibility hide
     useScore 0
     itemRgb on
-
-    track dcPhastcons
-    parent dcComparativeGenomics
-    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bw
-    shortLabel ZF_carp_phastcons
-    longLabel ZF_carp_phastcons
-    type bigWig
-    alwaysZero on
-    autoScale on
-    maxHeightPixels 128:48:4
-    visibility hide
-
-    track dcCNE
-    parent dcComparativeGenomics
-    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bb
-    shortLabel ZF_carp_phastcons_CNE
-    longLabel ZF_carp_phastcons_conserved_non-coding_element
-    type bigBed
-    visibility hide
-
-track dcConsensus_promoters
-shortLabel DC Promoters
-longLabel DANIO-CODE consensus promoters
-bigDataUrl /gbdb/danRer11/danioCode/consens.canonical.danRer11.bigBed
-type bigBed 6
-parent danioCode
-priority 11
-visibility hide
