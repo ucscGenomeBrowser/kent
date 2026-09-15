@@ -411,8 +411,13 @@ if (pHgvs && *pHgvs)
 // negative positions.  In c. and n. terms a hyphen is an intron offset -- c.1483-1599 is a
 // single base 1599 nt before c.1483 -- so those keep the underscore as their only range
 // separator, and posIntRangeExp must not be used to build a c. or n. pattern.
+// These three patterns are anchored at both ends.  Everything else here is free to leave a
+// tail for a later stage to make sense of, but a bare codon number has nothing after it to
+// explain, so an unanchored pattern would read "KAT6A 495--533" as codon 495 and say nothing
+// about the rest.  Silently dropping a tail is the very thing this grammar was added to stop.
+#define endOfTerm "\\)?[ \t]*$"
 #define posIntRangeExp posIntExp "([-_]" posIntExp ")?"
-#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntRangeExp "\\)?"
+#define pseudoHgvsGeneSymbolProtPosExp "^" geneSymbolExp maybePDot posIntRangeExp endOfTerm
 //      0..........................                             whole matching string
 //      1...................                                    gene symbol
 //                           2.....                             1-based start position
@@ -423,7 +428,7 @@ if (pHgvs && *pHgvs)
 // symbol.  Here the "p" is required: without it "NM_006766.5 1483" would silently become a
 // codon number, and a bare number after an accession is far more likely to be something else.
 #define pDot "[ :]+p\\.?\\(?"
-#define pseudoHgvsNMPDotPosExp "^" versionedRefSeqNMExp pDot posIntRangeExp "\\)?"
+#define pseudoHgvsNMPDotPosExp "^" versionedRefSeqNMExp pDot posIntRangeExp endOfTerm
 //      0..........................                             whole matching string
 //      1...............                                        acc & optional dot version
 //             2........                                        optional dot version
@@ -433,7 +438,7 @@ if (pHgvs && *pHgvs)
 //                                       6.......               optional range sep and end position
 //                                          7.....              1-based end position
 
-#define pseudoHgvsENSPDotPosExp "^" ensTranscriptExp pDot posIntRangeExp "\\)?"
+#define pseudoHgvsENSPDotPosExp "^" ensTranscriptExp pDot posIntRangeExp endOfTerm
 //      0..........................                             whole matching string
 //      1.....................................  ENS transcript ID including optional lift suffix
 //         2...                                 optional non-human species code e.g. MUS for mouse
