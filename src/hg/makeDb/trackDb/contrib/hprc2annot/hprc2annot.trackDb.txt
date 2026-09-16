@@ -90,8 +90,8 @@ type bigBed 9 +
 bigDataUrl pclai.bb
 group compGeno
 priority 30
-visibility dense
-onlyVisibility dense
+visibility squish
+onlyVisibility squish
 itemRgb on
 mouseOver Window ${window}<br>Window PC1,PC2: ${pca}<br>Ancestry centroid: ${centroid}<br>Confidence: ${score}
 dataVersion HPRC Release 2, pcLAI v1.1

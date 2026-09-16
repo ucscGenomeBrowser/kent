@@ -323,7 +323,7 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # Repointed to doc/contrib/hprc2annot/hprc2annot.txt.
 
 ##############################################################################
-# 5e. 2026-09-16: pcLAI default visibility pack -> dense
+# 5e. 2026-09-16: pcLAI default visibility pack -> squish
 ##############################################################################
 # Mark reported that on HG00408 pat (GCA_041900255.1) the pcLAI track shows only
 # one color and you cannot see where ancestry changes, and suggested pinning the
@@ -354,27 +354,47 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # and on the most admixed haplotype in the set, HG01496 pat (GCA_042027595.1,
 # 43% dominant centroid), chr2 in dense shows four ancestries in clean blocks.
 #
-# So hprc2annot.trackDb.txt now has "visibility dense" plus "onlyVisibility dense"
-# on hprcPclai, which leaves only hide/dense in the track's vis dropdown. The
-# equivalent hg38 native composite (doc/hg38/hprcPclai.txt) was already dense.
-# Re-wire after the edit, in this order:
+# Dense was the first thing tried, and it is wrong for this track. In tvDense
+# hgTracks draws one merged row and emits no per-item map boxes at all: the whole
+# row maps to "Click to alter the display density of pcLAI Ancestry", there is no
+# hgc link and no mouseOver. That takes away the ancestry scatterplot built for
+# the details page in section 5b, which is the most useful thing the track has.
+# Counted on the image map of one 1.7 Mb view, 16 windows in range:
+#   pack    16 hgc links, 16 mouseOvers, 561 px tall on chr18
+#   squish  16 hgc links, 16 mouseOvers,  97 px
+#   dense    0 hgc links,  0 mouseOvers,  81 px
+#
+# So the track is squish, not dense. Squish keeps every map box and uses
+# half-height rows with no label column, and because the windows tile without
+# overlapping they collapse to one row on chr18 (three or four on the 243 Mb
+# chr2). Zoomed in it is indistinguishable from dense; only at chromosome scale
+# does dense look better, drawing a solid bar where squish leaves a 1 px gap
+# between windows.
+#
+# hprc2annot.trackDb.txt therefore has "visibility squish" plus
+# "onlyVisibility squish" on hprcPclai, which leaves Hide and Squish in the vis
+# dropdown (verified on hgTrackUi). The equivalent hg38 native composite
+# (doc/hg38/hprcPclai.txt) is still dense and has the same blind spot; it is a
+# composite, so its subtracks would each need the change.
+#
+# Re-wire after any such edit, in this order:
 #   hprc2annotMakeTrackDb.py
 #   genark addContrib hprc2annot
 #
 # What onlyVisibility does and does not do on a plain track: hgTracks and
 # hgTrackUi build the vis dropdown from it (hTvGetVizArr in hg/lib/hui.c), so the
-# menu offers hide and dense only. It is not clamped at draw time -- only the
+# menu offers hide and squish only. It is not clamped at draw time -- only the
 # faceted-child path in hui.c calls tvFromVisOnlySetting -- so hprcPclai=pack in a
 # URL, or a cart that already holds pack, still draws packed. Anyone who looked at
 # the track before this change keeps their pack setting until they reset.
 #
-# Run of 2026-09-16: 462 assemblies, alpha and beta wired, 460 pclai stanzas
-# updated (GCA_044166515.1 and GCA_044166665.1 have no pclai source file, so their
-# hubs correctly have no pclai stanza). Diff against a pre-run copy of every
-# alpha/beta hub file: alpha 3 lines each (visibility pack -> dense +
-# onlyVisibility), beta the same 3 plus the two 2026-09-09 pcLAI fixes it had
-# never received, plus the BEGIN/END marker lines. genark checkContrib reported no
-# contrib problems.
+# Runs of 2026-09-16: 462 assemblies, alpha and beta wired both times, 460 pclai
+# stanzas updated (GCA_044166515.1 and GCA_044166665.1 have no pclai source file,
+# so their hubs correctly have no pclai stanza). Checked against a pre-run copy of
+# every alpha/beta hub file: no duplicated track names anywhere, neighbouring
+# collections (Tiberius on 2 assemblies) preserved, and beta additionally picked up
+# the two 2026-09-09 pcLAI fixes it had never received. genark checkContrib
+# reported no contrib problems.
 
 ##############################################################################
 # 6. Testing / serving
