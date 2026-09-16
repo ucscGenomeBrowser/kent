@@ -134,4 +134,34 @@ hgsql hg38 -N -e "select settings from trackDb_max where tableName='hprcPclaiNA1
 # holds a few thousand windows per haplotype, over the 1000-item default at which
 # pack mode stops drawing. Hence "maxItems 40000" on the composite.
 # Quick render check of the seven default-on haplotypes across all of chr1:
-#  https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgRenderTracks?db=hg38&position=chr1&hideTracks=1&hprcPclai=dense
+#  https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgRenderTracks?db=hg38&position=chr1&hideTracks=1&hprcPclai=squish
+
+##############################################################################
+# 2026-09-16: squish, not dense (refs #35415)
+##############################################################################
+# The composite was "visibility dense" until now. Dense is the wrong mode for
+# this track: in tvDense hgTracks draws one merged row per subtrack and emits no
+# per-item map boxes at all, so there is no hgc link and no mouseOver, and the
+# ancestry scatterplot on the details page cannot be reached. Measured on
+# hgwdev-max, chr18:10,800,000-12,500,000:
+#   hprcPclai=dense    0 hgc links in the image map
+#   hprcPclai=squish 134 hgc links, 134 mouseOver tooltips
+#
+# Now "visibility squish" plus "onlyVisibility squish" on the composite stanza,
+# written by hprcPclaiMakeTrackDb.py. onlyVisibility on a composite governs the
+# composite's own dropdown, which is the only vis dropdown the track has (the
+# subtracks get checkboxes), so this is enough: hgTrackUi offers Hide and Squish.
+# It is a UI limit only -- hg/lib/hui.c does not clamp it at draw time for a
+# non-faceted track -- so hprcPclai=pack in a URL still draws packed.
+#
+# Squish suits this data because the windows tile without overlapping and the
+# subtracks carry no item labels, so each haplotype collapses to one row at a
+# 20 Mb view. At whole-chromosome zoom it spreads to three or four rows and gets
+# noisy; 10-30 Mb is the window where the track reads best.
+#
+# Demo link, the seven default-on haplotypes over a region where NA19776 hap 1
+# switches ancestry at about chr2:70.5 Mb:
+#  https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgTracks?db=hg38&position=chr2:60000000-80000000&hideTracks=1&hprcPclai=squish
+# On a fresh cart that shows the seven hprcPclaiDefaultOn.txt haplotypes, one
+# squish row each, 1235 clickable windows. The same change went into the GenArk
+# contrib collection; see doc/contrib/hprc2annot/hprc2annot.txt section 5e.
