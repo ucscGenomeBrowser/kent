@@ -29,6 +29,7 @@ struct oauthProvider
     char *userinfoUrl;      /* userinfo endpoint */
     char *scopes;           /* space-separated scopes */
     char *issuer;           /* OIDC issuer, for endpoint discovery */
+    boolean trustEmail;     /* accept this provider's address without email_verified */
     boolean discovered;     /* TRUE once discovery has run (avoid repeating) */
     };
 
@@ -49,6 +50,19 @@ if (isEmpty(val))
     val = cfgOption(key);
     }
 return val;
+}
+
+static boolean provCfgBoolean(char *name, char *field, boolean def)
+/* Like provCfg, but read as a boolean.  cfgOptionBooleanDefault takes yes/no, on/off and
+ * true/false, and errAborts on anything else, so a typo in hg.conf is reported rather than
+ * silently taken as off. */
+{
+char key[256];
+safef(key, sizeof(key), "login.oauth.%s.%s", name, field);
+if (cfgOption(key) != NULL)
+    return cfgOptionBooleanDefault(key, def);
+safef(key, sizeof(key), "login.%s.%s", name, field);
+return cfgOptionBooleanDefault(key, def);
 }
 
 static char *cfgTrim(char *name, char *field)
@@ -110,6 +124,11 @@ p->tokenUrl = cfgTrim(name, "tokenUrl");
 p->userinfoUrl = cfgTrim(name, "userinfoUrl");
 p->scopes = cfgTrim(name, "scopes");
 p->issuer = cfgTrim(name, "issuer");
+/* Off unless an admin turns it on for a named provider.  It says "this provider's address is
+ * as good as a verified one", which is true of a federation that gets the address from the
+ * user's own institution and never lets them type it, and is not true in general -- GitHub,
+ * for one, will hand over a primary address its owner has never confirmed. */
+p->trustEmail = provCfgBoolean(name, "trustEmail", FALSE);
 fillBuiltinDefaults(p);
 if (isEmpty(p->type))
     p->type = "oidc";
@@ -504,6 +523,18 @@ if (errCatch->gotError)
     id = NULL;
     }
 errCatchFree(&errCatch);
+/* An address the provider did not mark verified is only a string it is holding for the user,
+ * and the user may well have typed it themselves.  Unless hg.conf vouches for this provider,
+ * forget it and let hgLogin treat the sign-in as one that came with no address at all: it then
+ * asks for one and confirms it by mail, the same as ORCID, which releases none.  Dropping it
+ * rather than flagging it also keeps it out of the account matching in resolveIdentity, where
+ * an unverified address would otherwise be enough to reach somebody else's account. */
+if ((id != NULL) && isNotEmpty(id->email) && !id->emailVerified && !p->trustEmail)
+    {
+    fprintf(stderr, "hgLogin oauth: %s did not verify the address it released; asking the user "
+        "for one instead (set login.oauth.%s.trustEmail=on to accept it)\n", name, name);
+    freez(&id->email);
+    }
 return id;
 }
 
