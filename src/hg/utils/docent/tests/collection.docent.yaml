@@ -1,0 +1,91 @@
+# hgCollection is the one CGI no other script in tests/ or tests/regress reaches, and it
+# matters because it shares visibility logic with hgTracks by COPY rather than by call.
+# hg/hgCollection/hgCollection.c carries its own isParentVisible() at line 269, a verbatim
+# copy of the one in hg/lib/trackHub.c.  Nine scripts in regress/ caught the trackHub.c
+# copy on the #37547 cart-visibility branch; nothing caught this one, and it was found by
+# grep afterwards.  (There is a third copy in hg/lib/hgFind.c at line 2957, which decides
+# whether a search result lands under "Visible Tracks" on hgSearch.  It has no test yet.)
+#
+# What the copy decides, and it is narrower than it first looks: its only caller is
+# checkForVisible(), which builds the "Visible Tracks" folder at the top of the builder's
+# source tree (addVisibleTracks).  It is NOT on the save path, so the bug drops a track you
+# have on in the browser out of that shortcut folder and leaves a saved collection alone.
+#
+# The track has to be a leaf whose container is hidden by default, or this passes on a
+# broken build -- see the rule in regress/README.txt.  It also has to be one hgCollection
+# will show at all: trackCanBeAdded() (line 141) keeps only leaves of type wig, bigWig or
+# bedGraph, which is why the assertion names a cell-line leaf and not the multiWig
+# container above it.  wgEncodeRegMarkH3k4me1H1hesc is both: `type bigWig`, under
+# wgEncodeRegMarkH3k4me1 which is `visibility hide` and `superTrack wgEncodeReg hide`,
+# under a superTrack that is itself `superTrack on hide`.
+#
+# The noHas: is the other half.  wgEncodeRegMarkH3k27acH1hesc sits under a container that
+# IS visible by default, so it would stay in the folder on a broken build and is the wrong
+# track to assert.  Naming it here instead says the hideKids reached hgCollection: without
+# it, `has:` could be passing because the whole superTrack came up by default rather than
+# because the cart said so.
+#
+# Both selectors are scoped to li#visible.  A track name is the jsTree node id, and the
+# same id is used for that track under its group folder, so an unscoped selector would
+# also match the copy under Regulation the moment anyone opened that folder.
+#
+# The page draws no track image, so `rows:` is unavailable and a positive text: check is
+# mandatory -- the logged-out page is an errAbort with no folder and no tree, on which
+# every noHas: and every noText: passes.
+#
+# The account is a fixture like a saved session: ~/.docentLogin carries one [section] per
+# hgcentral database, because a login is a row in gbMembers in one of them.  genome-test,
+# every sandbox and every ticket park read hgcentraltest, so this script and a redirected
+# run of it use the same account.  `make preflight` reports the account and the central it
+# resolved.  See ../README.md under `login`.
+proof:
+  - "assertion-only 2026-09-16 -- written against master, where the behavior is correct; the bug it is aimed at exists only on the #37547 branch so far"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+
+  # Same shape as firstrequest.docent.yaml: empty the superTrack, then turn on the one
+  # member, so the cart says exactly what is visible and nothing arrives by default.
+  - track: {wgEncodeReg: hideKids}
+  - track: {wgEncodeRegMarkH3k4me1: full}
+  - expect: {rows: [ruler, wgEncodeRegMarkH3k4me1], exact: true}
+
+  - login: true
+  - goto: "/cgi-bin/hgCollection?db=hg38"
+
+  # The tree is built from an inline trackData map after the page's JavaScript runs, so
+  # nothing here can be read out of the first paint. The folder settles into one of two
+  # terminal states and that IS the fact under test: addVisibleTracks writes
+  # `,children:true` into the node only when checkForVisible() found something, so jsTree
+  # renders it `jstree-open` when the cart has visible tracks and `jstree-leaf` when it
+  # does not. Waiting for either one means a build that lost the tracks fails at the
+  # expect: below, which says what it wanted, instead of timing out in a wait: 15 seconds
+  # later with a Playwright message. Measured on genome-test: the folder settles about
+  # 30ms after load, whichever way it goes. The folder arrives open -- clicking it closes
+  # it, so there is no expansion step here.
+  - wait: 'li#visible.jstree-open, li#visible.jstree-leaf'
+
+  - expect:
+      text: "Track Collection Builder"
+      noText: "You must be logged in"
+      has: 'li#visible.jstree-open'
+      noHas: 'li#visible.jstree-leaf'
+
+  # The children land about 11ms after the class that announces them, so wait rather than
+  # rely on the gap. This line is only reached when the folder has said it has children.
+  - wait: 'li#visible li.jstree-node'
+
+  # The seven H3K4Me1 leaves are what the cart says is visible. Two of them are named,
+  # including the one whose track name does not follow its siblings'
+  # (wgEncodeBroadHistoneGm12878H3k4me1StdSig), so a rename shows up here rather than
+  # quietly halving what this checks.
+  - expect:
+      has: ['li#visible li#wgEncodeRegMarkH3k4me1H1hesc',
+            'li#visible li#wgEncodeBroadHistoneGm12878H3k4me1StdSig']
+      noHas: 'li#visible li#wgEncodeRegMarkH3k27acH1hesc'
