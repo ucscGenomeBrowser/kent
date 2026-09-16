@@ -1,0 +1,4 @@
+relative symlink: freed cleanly, nothing left behind
+absolute symlink: freed cleanly, nothing left behind
+missing file: returned NULL
+passed
