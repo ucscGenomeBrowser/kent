@@ -123,7 +123,7 @@ COMMIT=$(git -C "$HERE" rev-parse --short HEAD 2>/dev/null)
 
 BUILDLOG=$LOGDIR/.build.$STAMP
 {
-    make -C "$SRC" -j8 topLibs && make -C "$SRC/hg/lib" -j8 && make -C "$SRC/hg/hgTracks" -j8 compile
+    make -C "$SRC" -j8 libs && make -C "$SRC/hg/hgTracks" -j8 compile
 } > "$BUILDLOG" 2>&1
 if [ $? -ne 0 ] || [ ! -x "$SRC/hg/hgTracks/hgTracks" ]; then
     bail "The build of master failed at $COMMIT.  That is news about the tree, not about this job.
