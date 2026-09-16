@@ -107,6 +107,12 @@ What is covered
                 script here that uses `login:`. Asserts on the folder's own jsTree class
                 first -- open when checkForVisible() found something, leaf when it did not
                 -- and then on the leaves inside it.
+  search        hgSearch, and the THIRD copy of isParentVisible() -- the one in
+                hg/lib/hgFind.c at line 2957, feeding isTrackVisible() at 2977. It sets
+                category->visibility, which is what files a result under "Visible Tracks"
+                rather than "Currently Hidden Tracks". Turns on a searchable GENCODE
+                archive subtrack, whose containers are hidden by default, and asserts the
+                result lands on the visible side. No login needed, unlike collection.
   composite     clinvar with clinvarCnv hidden: the two-request split (#37953). One
                 request would leave clinvarCnv_sel=1 and the CNV row drawn.
   views         hideKids on the VIEW that holds the subtrack, with the sibling views
@@ -180,13 +186,6 @@ Still to write
   loadSession:    the three remote forms -- only the local-file form is covered
   the YAML lint   `{item:name}` with no space warns and drops the argument. This needs a
                   test that reads stderr, which the harness does not do yet.
-  hgFind's copy   there is a THIRD copy of isParentVisible(), in hg/lib/hgFind.c at line
-                  2957, feeding isTrackVisible() at 2977. It decides category->visibility,
-                  which is what puts a search result under "Visible Tracks" rather than
-                  "Hidden Tracks" on hgSearch (hgSearch.c:174, js/hgSearch.js:44). Same
-                  bug, same shape, and no login needed. wgEncodeGencodeBasicV49 is a
-                  searchable subtrack three levels under a hidden container, which is the
-                  right shape for it.
 
 A test that needs a stable server-side fixture (a hub, a custom track) should carry it
 in the script rather than assume something on disk.
