@@ -26,6 +26,33 @@ counts. Redirecting is for trying a suite elsewhere, not for moving it: the comm
 scripts stay pointed at the server they were written against, which is the one the
 nightly reads.
 
+`make preflight` prints how the target is configured, so the log says which server was
+driven AND how it differs from the one the scripts name:
+
+    target      https://hgwdev-braney.gi.ucsc.edu/cgi-bin
+                /usr/local/apache/cgi-bin-braney/hg.conf
+                central.db                   hgcentraltest
+                db.trackDb                   trackDb_braney,trackDb
+                curatedHubPrefix             braney
+                browser.quickLift            on
+                browser.quickLiftAlignments  on
+                browser.recTrackSets         on
+
+Those are read off the hg.conf the server reads, following its includes the way
+hg/lib/hgConfig.c does, so the value printed is the EFFECTIVE one -- a sandbox conf that
+sets nothing still shows what it inherits from the shared conf it includes. Only a fixed
+list of settings is printed, because hg.conf includes hg.conf.private.
+
+It works for a server on this machine: genome-test, hgwdev, an hgwdev-<name> sandbox or
+demo, or a ticket park from `ts` on 127.0.0.1 (looked up by port in its registry). For
+hgwbeta or the RR it says the conf cannot be read from here, which is true and is better
+than a guess.
+
+Even with that in the log, a config difference and a code difference can still look
+alike. The reliable way to tell them apart is to swap only the BINARY: drop a control
+build's CGIs into the same sandbox, leave its hg.conf alone, and re-run. If the failures
+follow the binary they are the code.
+
 Most tests drive a real browser against a real server, so they need the network and
 the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md). That is why none of this is
 part of the tree-wide test target: a broken network would fail the build.
