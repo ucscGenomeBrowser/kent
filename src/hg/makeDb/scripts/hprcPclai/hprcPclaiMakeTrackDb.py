@@ -80,7 +80,13 @@ def main():
     w("group hprc\n")
     w("type bigBed 9 +\n")
     w("itemRgb on\n")
-    w("visibility dense\n")
+    # squish, not dense, and pinned there. In tvDense hgTracks draws one merged row
+    # per subtrack and emits no per-item map boxes at all, so the scatterplot on the
+    # details page and the mouseOver below both become unreachable. squish keeps
+    # every map box, and since the windows tile without overlapping each haplotype
+    # still collapses to one or two thin rows instead of pack's ~50.
+    w("visibility squish\n")
+    w("onlyVisibility squish\n")
     w("priority 30\n")
     # A whole chromosome holds a few thousand windows per haplotype, well over the
     # 1000-item default at which pack mode gives up drawing; the block structure
