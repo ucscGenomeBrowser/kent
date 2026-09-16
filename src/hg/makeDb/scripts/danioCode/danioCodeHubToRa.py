@@ -15,13 +15,16 @@ What the conversion has to change, and why:
     3P-seq, ChIP-seq, Hi-C) become standalone top-level tracks in an existing
     group (STANDALONE_GROUP), while the rest -- a mixed bag of regulatory
     element/annotation containers that don't map onto any one existing group --
-    stay nested under the "danioCode" superTrack (NESTED_ORDER).  Nested
-    superTracks are not supported, so the hub superTracks that end up nested
-    (or that have their own child superTracks) become composites.
-  * The CRISPR guide tracks inside the hub's ComparativeGenomics superTrack are
-    the Burgess lab's, not DANIO-CODE's, so they are pulled out into their own
-    top-level superTrack (CRISPR_CONTAINER) instead of riding along inside a
-    "DC Conservation" composite.
+    stay nested under the "danioCode" superTrack (NESTED_ORDER), whose own label
+    is "DANIO-CODE Elements", so their own shortLabels don't repeat the
+    DANIO-CODE name.  Nested superTracks are not supported, so the hub
+    superTracks that end up nested (or that have their own child superTracks)
+    become composites.
+  * The hub's ComparativeGenomics superTrack mixes two things that aren't
+    DANIO-CODE's own data, both from the Burgess lab: phastCons/CNE
+    conservation and CRISPR guide tracks.  Both are pulled out into their own
+    standalone top-level tracks (TOP_LABELS["ComparativeGenomics"] and
+    CRISPR_CONTAINER) instead of riding along inside one composite together.
   * Track names are made hgTrackDb-legal (letters, digits, '_' and '-' only,
     first character a letter) and are prefixed with "dc" unless they already
     carry a DANIO-CODE accession (DCDnnnnnnSQ / DT), which is unique enough on
@@ -49,20 +52,29 @@ from collections import OrderedDict
 # group, rather than hiding inside the danioCode superTrack where nobody who isn't
 # already looking for DANIO-CODE would find them.
 STANDALONE_GROUP = {
-    "RNA-seqComposite":  "rna",
-    "CAGE-seqComposite": "genes",
-    "3P-seqComposite":   "genes",
-    "ChIP-seqComposite": "regulation",
-    "HiC_Composite":     "regulation",
+    "RNA-seqComposite":    "rna",
+    "CAGE-seqComposite":   "genes",
+    "3P-seqComposite":     "genes",
+    "ChIP-seqComposite":   "regulation",
+    "HiC_Composite":       "regulation",
+    "ComparativeGenomics": "compGeno",
 }
 STANDALONE_ORDER = ["RNA-seqComposite", "CAGE-seqComposite", "3P-seqComposite",
-                     "ChIP-seqComposite", "HiC_Composite"]
+                     "ChIP-seqComposite", "HiC_Composite", "ComparativeGenomics"]
+
+# Everything else defaults to hidden (see forceHide in walk(), below) since most
+# of these composites hold hundreds of subtracks and turning them all on would
+# be very slow.  These two keep the hub's own "visibility full": the hub also
+# pre-selected exactly one representative subtrack "on" in each (an RNA-seq
+# sample and an H3K4me3 ChIP-seq signal), so this shows just that one sample per
+# composite by default, not the whole pile.
+VISIBLE_BY_DEFAULT = {"RNA-seqComposite", "ChIP-seqComposite"}
 
 # The rest stay nested under the danioCode superTrack: a "mixed bag" of
 # regulatory-element/annotation containers that don't map cleanly onto any one
 # existing group, in the order we want them to appear there.
 NESTED_ORDER = ["comp", "comp_cell_type", "copes_and_dopes", "evalidation",
-                "ComparativeGenomics", "consensus_promoters"]
+                "consensus_promoters"]
 
 # hub containers, in the order walk() below emits them.  The danioCode superTrack
 # stanza is written first (see main(), below), so its own children (NESTED_ORDER)
@@ -74,8 +86,8 @@ TOP_ORDER = NESTED_ORDER + STANDALONE_ORDER
 # CRISPR guide tracks that have nothing to do with DANIO-CODE (they're the Burgess
 # lab's).  Pull those out into their own top-level superTrack instead, mirroring
 # where hg38 keeps its own (unrelated) crispr tracks -- grouped with mapping and
-# sequencing, not under a "DC Conservation" umbrella, and without "DC" anywhere in
-# the label since they aren't DANIO-CODE's data.
+# sequencing, not lumped in with the Burgess lab's own conservation track, and
+# without "DC"/DANIO-CODE anywhere in the label since they aren't DANIO-CODE's data.
 CRISPR_PARENT_OLD = "ComparativeGenomics"
 CRISPR_CHILDREN_OLD = ["crisprs", "gg_crisprs", "ga_crisprs"]
 CRISPR_CONTAINER = "dcCrispr"
@@ -99,17 +111,22 @@ VIEW_RENAME = {
 # short/long labels of the hub containers are all "<X> tracks"; give the
 # native container something that reads better in the track list
 TOP_LABELS = {
-    "RNA-seqComposite":    ("DC RNA-seq",       "DANIO-CODE RNA-seq coverage by developmental stage"),
-    "CAGE-seqComposite":   ("DC CAGE-seq",      "DANIO-CODE CAGE-seq signal and tag clusters by developmental stage"),
-    "ChIP-seqComposite":   ("DC ChIP-seq",      "DANIO-CODE ChIP-seq signal and peaks by target and developmental stage"),
-    "3P-seqComposite":     ("DC 3P-seq",        "DANIO-CODE 3P-seq signal and tag clusters by developmental stage"),
-    "HiC_Composite":       ("DC Hi-C",          "DANIO-CODE Hi-C insulation and directionality index by developmental stage"),
-    "comp":                ("DC Elements",      "DANIO-CODE ChromHMM states, PADREs and DOPEs by developmental stage"),
-    "comp_cell_type":      ("DC Cell Types",    "DANIO-CODE regulatory elements assigned to cell types"),
-    "copes_and_dopes":     ("DC COPEs DOPEs",   "DANIO-CODE constitutive and dynamic phylotypic-period elements"),
-    "evalidation":         ("DC Enhancers",     "DANIO-CODE transgenic enhancer validation"),
-    "ComparativeGenomics": ("DC Conservation",  "DANIO-CODE cross-species conservation from the Burgess lab, NHGRI"),
-    "consensus_promoters": ("DC Promoters",     "DANIO-CODE consensus promoters"),
+    "RNA-seqComposite":    ("DANIO-CODE RNA-seq",     "DANIO-CODE RNA-seq coverage by developmental stage"),
+    "CAGE-seqComposite":   ("DANIO-CODE CAGE-seq",    "DANIO-CODE CAGE-seq signal and tag clusters by developmental stage"),
+    "ChIP-seqComposite":   ("DANIO-CODE ChIP-seq",    "DANIO-CODE ChIP-seq signal and peaks by target and developmental stage"),
+    "3P-seqComposite":     ("DANIO-CODE 3P-seq",      "DANIO-CODE 3P-seq signal and tag clusters by developmental stage"),
+    "HiC_Composite":       ("DANIO-CODE Hi-C",        "DANIO-CODE Hi-C insulation and directionality index by developmental stage"),
+    # nested under the danioCode superTrack, which already carries the DANIO-CODE
+    # name, so these five don't repeat it themselves
+    "comp":                ("Elements",      "DANIO-CODE ChromHMM states, PADREs and DOPEs by developmental stage"),
+    "comp_cell_type":      ("Cell Types",    "DANIO-CODE regulatory elements assigned to cell types"),
+    "copes_and_dopes":     ("COPEs DOPEs",   "DANIO-CODE constitutive and dynamic phylotypic-period elements"),
+    "evalidation":         ("Enhancers",     "DANIO-CODE transgenic enhancer validation"),
+    "consensus_promoters": ("Promoters",     "DANIO-CODE consensus promoters"),
+    # standalone, not DANIO-CODE's own data -- the Burgess lab's, distributed via
+    # the DANIO-CODE hub (see CRISPR_LABELS above for the other Burgess lab track)
+    "ComparativeGenomics": ("Burgess Fish PhastCons",
+                            "DANIO-CODE Fish PhastCons conservation from the Burgess lab, NHGRI"),
 }
 
 ACCESSION_RE = re.compile(r"DCD\d+(SQ|DT)")
@@ -335,7 +352,7 @@ def main():
     out.append("")
     out.append("track danioCode")
     out.append("superTrack on")
-    out.append("shortLabel DANIO-CODE")
+    out.append("shortLabel DANIO-CODE Elements")
     out.append("longLabel DANIO-CODE: zebrafish developmental multi-omics data and regulatory elements")
     out.append("group regulation")
     out.append("priority 4")
@@ -432,7 +449,7 @@ def main():
         extra = None
         forceHide = False
         if depth == 0:
-            forceHide = True     # keep a new alpha track quiet by default
+            forceHide = old not in VISIBLE_BY_DEFAULT  # keep a new alpha track quiet by default
             if old in STANDALONE_GROUP:
                 extra = ["group %s" % STANDALONE_GROUP[old]]
             else:

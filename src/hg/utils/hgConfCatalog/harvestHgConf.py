@@ -40,16 +40,23 @@ count, which is the work of removing it later.
 
 Ages.  --age dates each variable by walking the history once with
 -G'cfgOption' and recording the first commit that added a line reading it, then
-mapping that commit's date onto the CGI_VERSION in effect at the time, taken
-from the history of hg/inc/versionInfo.h.  Both traversals are slow (about 3.5
-minutes together) so the result is cached in hgConfAges.json next to this
-script and committed; pass --refresh to rebuild it, and --cache (or
-HGCONF_AGE_CACHE) to put it somewhere other than the tree, which is what lets
-an automated run refresh without dirtying a git checkout.  This is what lets
-hgConfCatalog.py --sunset report a gate's real age instead of a
+asking which release branch first contains that commit.  The traversals are
+slow (about 4.5 minutes all told) so the result is cached in hgConfAges.json
+next to this script and committed; pass --refresh to rebuild it, and --cache
+(or HGCONF_AGE_CACHE) to put it somewhere other than the tree, which is what
+lets an automated run refresh without dirtying a git checkout.  This is what
+lets hgConfCatalog.py --sunset report a gate's real age instead of a
 hand-maintained guess.
 
-The cache must be rebuilt after a release bumps CGI_VERSION.  Existing entries
+The release comes from the branches rather than from the calendar because a
+branch is cut at a point in history, not at a moment in time.  Dating a commit
+by mapping its timestamp onto the CGI_VERSION in effect is what this used to
+do, and it was wrong for every one of the 28 flips the cache then held: the
+version stamped at or before a commit is the release already branched, so the
+commit ships in the next one, and a commit written before a cut but merged
+after it ships a release later still.
+
+The cache must be rebuilt after a release branch is cut.  Existing entries
 never change, so the cost of a stale one is omission: a flag added since it was
 built has no date, and a flag whose default flipped TRUE since has no deadline.
 Both are reported rather than assumed, by --sunset's staleness warning and by
@@ -101,9 +108,14 @@ MACRO_DIRS = ["inc", "hg/inc"]
 # is reconciled against.
 DOC_FILES = ["product/ex.hg.conf", "product/minimal.hg.conf"]
 
-# Where the release version lives, and the file whose history gives the
-# date -> version mapping used by --age.
+# Where the release version lives.
 VERSION_FILE = "hg/inc/versionInfo.h"
+
+# The release branches, which are what --age dates a commit against.  Matches
+# a local v${N}_branch as well as a remote one, since the weekly build's own
+# checkout keeps both.
+RELEASE_BRANCH_RE = re.compile(
+    r'^(?:refs/heads/|refs/remotes/[^/]+/)v(\d+)_branch$')
 
 # The committed age cache.  HGCONF_AGE_CACHE moves it, which is what lets an
 # automated refresh write somewhere other than a git checkout: the default is a
@@ -115,7 +127,7 @@ CACHE = os.environ.get("HGCONF_AGE_CACHE") or os.path.join(
 # Bumped when the shape of the cache changes.  A cache written by an older
 # version is still usable for dates, so a mismatch is reported rather than
 # treated as an error, but the fields added since will be missing.
-CACHE_SCHEMA = 2
+CACHE_SCHEMA = 3
 
 # "refs #37925", "#37925", "fixes #37925".  Three digits minimum, so a commit
 # talking about #10 or a C preprocessor line does not read as a ticket.
@@ -558,39 +570,86 @@ def git(*args):
                           capture_output=True, text=True).stdout
 
 
-def version_timeline():
-    """[(timestamp, version)] for every CGI_VERSION bump, oldest first.
+def master_ref():
+    """The ref to treat as the mainline when looking for a branch point."""
+    for ref in ("refs/remotes/origin/master", "refs/heads/master"):
+        if git("rev-parse", "--verify", "-q", ref).strip():
+            return ref
+    return "HEAD"
 
-    Read out of the history of hg/inc/versionInfo.h rather than hardcoded, so
-    it stays right as releases happen.
+
+def release_cutpoints():
+    """[(version, sha)] for every release branch, oldest first.
+
+    The sha is where v${N}_branch left the mainline, which is the fact that
+    decides a release: everything reachable from it is in that branch and
+    shipped in v${N}, and everything committed after it went to v${N+1}.
+
+    Not the "New version number v${N}" commit, tempting though that is, since
+    it needs no branches and falls out of the versionInfo.h history for free.
+    It is the branch point for the recent releases and was not for 163 of the
+    494 branches in the tree, the last of them v409, so trusting it would
+    misdate the older settings and give no warning.
     """
-    out = git("log", "--format=%at", "-p", "--follow", VERSION_FILE)
-    stamps = []
-    ts = None
-    for line in out.splitlines():
-        if re.match(r'^\d{9,}$', line):
-            ts = int(line)
-        elif line.startswith("+#define CGI_VERSION"):
-            m = re.search(r'"(\d+)"', line)
-            if m and ts is not None:
-                stamps.append((ts, int(m.group(1))))
-    stamps.sort()
-    return stamps
+    mr = master_ref()
+    local, remote = {}, {}
+    for line in git("for-each-ref", "--format=%(refname)",
+                    "refs/heads/v*_branch",
+                    "refs/remotes/*/v*_branch").splitlines():
+        m = RELEASE_BRANCH_RE.match(line.strip())
+        if m:
+            side = local if line.startswith("refs/heads/") else remote
+            side.setdefault(int(m.group(1)), line.strip())
+    # A remote branch is the shared truth; a local branch of the same name is
+    # whatever this checkout has done to it, and the weekly build's tree has
+    # 105 of those.
+    refs = dict(local)
+    refs.update(remote)
+    cuts = []
+    for v in sorted(refs):
+        sha = git("merge-base", mr, refs[v]).strip()
+        if sha:
+            cuts.append((v, sha))
+    return cuts
 
 
-def version_at(ts, timeline):
-    """The CGI_VERSION in development when ts happened.
+def version_at(shas, cuts):
+    """{sha: version} for each commit, by the first release branch holding it.
 
-    A commit lands after version N is stamped and ships in N+1, so the version
-    a variable was introduced in is the one stamped at or before its commit.
+    A commit's release is the lowest N whose branch contains it.  Dating it
+    from the calendar instead is what this replaced, and it was wrong for all
+    28 flips the cache held: the branch is cut at a point in history, not at a
+    moment in time, so a commit written before the cut but merged after it
+    ships in the next release.  quickLiftClipToChains was committed three days
+    before the v502 cut, merged the day after, and shipped in v503.
+
+    Done as one sweep rather than a containment test per commit.  The cut
+    points lie in order along the mainline, so `rev-list prev..cut` walks the
+    whole history once across all the branches and each commit falls in the
+    gap it shipped in.  The first gap a commit appears in is its release, so
+    later gaps are ignored and a commit found early is dropped from the search.
+
+    Two answers this cannot give.  A commit no branch contains has not shipped
+    at all, and is left out rather than credited to the release being built;
+    the caller decides what to say about it.  And the oldest branch in the tree
+    is v9, so a commit from before it is a floor rather than a real release:
+    checked against a containment test per branch, this agrees on all 30 flips
+    and on 422 of the 429 introducing commits, the other seven being 2001 and
+    2002 settings (db.host, central.*) reported as v10 rather than v9.
     """
-    ver = None
-    for stamp, v in timeline:
-        if stamp <= ts:
-            ver = v
-        else:
+    want = set(shas)
+    found = {}
+    prev = None
+    for v, sha in cuts:
+        if not want:
             break
-    return ver
+        for line in git("rev-list",
+                        "%s..%s" % (prev, sha) if prev else sha).splitlines():
+            if line in want:
+                found[line] = v
+                want.discard(line)
+        prev = sha
+    return found
 
 
 def current_version():
@@ -716,7 +775,15 @@ def harvest_ages(names=None, refresh=False):
               "minutes.\n(If that path is not the one you meant, stop now and "
               "fix --cache or\nHGCONF_AGE_CACHE.)" % CACHE, file=sys.stderr)
 
-    timeline = version_timeline()
+    cuts = release_cutpoints()
+    if not cuts:
+        # Every version in the cache would be None, and a committed cache like
+        # that reads as "nothing can be dated" rather than as a broken run.
+        # The likely causes are a shallow or single-branch clone, or a
+        # KENT_SRC pointing somewhere that is not a kent checkout at all.
+        raise SystemExit("no v*_branch release branches in %s, so no commit "
+                         "can be dated.\nRefusing to write an undated cache."
+                         % ROOT)
 
     # Pass one: any literal in a cfgOption* call on an added line.
     # Deliberately looser than the real scan, since here a false positive only
@@ -753,12 +820,28 @@ def harvest_ages(names=None, refresh=False):
                            + [s for lst in flips.values() for _, s in lst]
                            + [s for lst in chased.values() for _, s in lst])
 
+    # Every introducing commit, dated against the release branches in one
+    # sweep.  The lists all start with the commit that introduced the read, so
+    # that is the only one worth dating.
+    shipped = version_at({lst[0][1] for lst in
+                          list(hits.values()) + list(flips.values())
+                          + list(chased.values())}, cuts)
+    # A commit no branch contains is on master waiting for the next cut.  Name
+    # the release it will ship in, and say that it has not shipped, because the
+    # two readers want different halves: a sunset deadline is arithmetic on the
+    # number, while "delete the hg.conf line that this made pointless" must not
+    # happen until the release is actually installed somewhere.
+    pending = cuts[-1][0] + 1
+
     def record(lst, via):
         ts, sha = lst[0]
-        return {"ts": ts, "version": version_at(ts, timeline),
-                "commit": sha[:11], "tickets": tickets_in(msgs.get(sha)),
-                "subject": (msgs.get(sha, "").splitlines() or [""])[0][:120],
-                "via": via}
+        rec = {"ts": ts, "version": shipped.get(sha, pending),
+               "commit": sha[:11], "tickets": tickets_in(msgs.get(sha)),
+               "subject": (msgs.get(sha, "").splitlines() or [""])[0][:120],
+               "via": via}
+        if sha not in shipped:
+            rec["released"] = False
+        return rec
 
     first = {n: record(lst, "call") for n, lst in hits.items()}
     for n, lst in chased.items():
@@ -766,7 +849,7 @@ def harvest_ages(names=None, refresh=False):
 
     ages = {"schema": CACHE_SCHEMA,
             "current": current_version(),
-            "timeline": timeline,
+            "releases": [[v, sha] for v, sha in cuts],
             "first": first,
             "firstTrue": {n: record(lst, "call") for n, lst in flips.items()}}
     with open(CACHE, "w") as f:
@@ -963,8 +1046,8 @@ def report_tickets(found, ages, out=sys.stdout):
           "the one that\n  asked for the flag.", file=out)
     show(flip)
 
-    # A dated name with no version is older than the first CGI_VERSION stamp
-    # the timeline reaches, so it belongs here rather than nowhere.
+    # A dated name with no version is older than the oldest release branch in
+    # the tree, so it belongs here rather than nowhere.
     old = [r for r in rows if not r["kind"]
            and (r["version"] or 0) < REDMINE_ERA]
     print("\nBEFORE REDMINE (added before ~v%d, so there is no ticket to "

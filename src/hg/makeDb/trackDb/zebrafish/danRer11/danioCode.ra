@@ -4,13 +4,13 @@
 
 track danioCode
 superTrack on
-shortLabel DANIO-CODE
+shortLabel DANIO-CODE Elements
 longLabel DANIO-CODE: zebrafish developmental multi-omics data and regulatory elements
 group regulation
 priority 4
 
 track dcComp
-shortLabel DC Elements
+shortLabel Elements
 longLabel DANIO-CODE ChromHMM states, PADREs and DOPEs by developmental stage
 compositeTrack on
 type bigBed 9
@@ -223,7 +223,7 @@ visibility hide
     itemRgb on
 
 track dcComp_cell_type
-shortLabel DC Cell Types
+shortLabel Cell Types
 longLabel DANIO-CODE regulatory elements assigned to cell types
 compositeTrack on
 type bigBed 6
@@ -375,7 +375,7 @@ visibility hide
     itemRgb on
 
 track dcCopes_and_dopes
-shortLabel DC COPEs DOPEs
+shortLabel COPEs DOPEs
 longLabel DANIO-CODE constitutive and dynamic phylotypic-period elements
 compositeTrack on
 type bigBed 6
@@ -402,7 +402,7 @@ visibility hide
     itemRgb on
 
 track dcEvalidation
-shortLabel DC Enhancers
+shortLabel Enhancers
 longLabel DANIO-CODE transgenic enhancer validation
 compositeTrack on
 type bigBed 6
@@ -419,48 +419,21 @@ visibility hide
     visibility squish
     itemRgb on
 
-track dcComparativeGenomics
-shortLabel DC Conservation
-longLabel DANIO-CODE cross-species conservation from the Burgess lab, NHGRI
-compositeTrack on
-type bigWig
-parent danioCode
-priority 5
-visibility hide
-
-    track dcPhastcons
-    parent dcComparativeGenomics
-    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bw
-    shortLabel ZF_carp_phastcons
-    longLabel ZF_carp_phastcons
-    type bigWig
-    alwaysZero on
-    autoScale on
-    maxHeightPixels 128:48:4
-    visibility hide
-
-    track dcCNE
-    parent dcComparativeGenomics
-    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bb
-    shortLabel ZF_carp_phastcons_CNE
-    longLabel ZF_carp_phastcons_conserved_non-coding_element
-    type bigBed
-    visibility hide
-
 track dcConsensus_promoters
-shortLabel DC Promoters
+shortLabel Promoters
 longLabel DANIO-CODE consensus promoters
 bigDataUrl /gbdb/danRer11/danioCode/consens.canonical.danRer11.bigBed
 type bigBed 6
 parent danioCode
-priority 6
+priority 5
 visibility hide
 
 track dcRNAseqComposite
-shortLabel DC RNA-seq
+shortLabel DANIO-CODE RNA-seq
 longLabel DANIO-CODE RNA-seq coverage by developmental stage
 type bigWig
-visibility hide
+visibility full
+priority 1
 filterComposite dimA dimB dimC
 dimensions dimX=stage dimA=strand dimB=sample dimC=enstage
 sortOrder enstage=+ sample=+ strand=-
@@ -6996,7 +6969,7 @@ group rna
         parent dcRnaSeqSignalView off
 
 track dcCAGEseqComposite
-shortLabel DC CAGE-seq
+shortLabel DANIO-CODE CAGE-seq
 longLabel DANIO-CODE CAGE-seq signal and tag clusters by developmental stage
 type bed 3
 visibility hide
@@ -7396,7 +7369,7 @@ group genes
         parent dcCageRegionsView off
 
 track dc3PseqComposite
-shortLabel DC 3P-seq
+shortLabel DANIO-CODE 3P-seq
 longLabel DANIO-CODE 3P-seq signal and tag clusters by developmental stage
 type bed 3
 visibility hide
@@ -7758,10 +7731,11 @@ group genes
         parent dc3PseqRegionsView off
 
 track dcChIPseqComposite
-shortLabel DC ChIP-seq
+shortLabel DANIO-CODE ChIP-seq
 longLabel DANIO-CODE ChIP-seq signal and peaks by target and developmental stage
 type bed 3
-visibility hide
+visibility full
+priority 1
 filterComposite dimA dimB dimC
 dimensions dimX=stage dimY=target dimA=kind dimB=sample dimC=enstage
 sortOrder enstage=+ sample=+ kind=-
@@ -10275,7 +10249,7 @@ group regulation
         parent dcChipPeaksView off
 
 track dcHiC_Composite
-shortLabel DC Hi-C
+shortLabel DANIO-CODE Hi-C
 longLabel DANIO-CODE Hi-C insulation and directionality index by developmental stage
 type bigWig
 visibility hide
@@ -10610,6 +10584,33 @@ group regulation
         maxHeightPixels 128:32:8
         subGroups enstage=s27_Prim_5 type=ii sample=DCD003041SQ stage=Prim_5 resolution=s500000 view=signal
         parent dcHicSignalView off
+
+track dcComparativeGenomics
+shortLabel Burgess Fish PhastCons
+longLabel DANIO-CODE Fish PhastCons conservation from the Burgess lab, NHGRI
+compositeTrack on
+type bigWig
+group compGeno
+visibility hide
+
+    track dcPhastcons
+    parent dcComparativeGenomics
+    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bw
+    shortLabel ZF_carp_phastcons
+    longLabel ZF_carp_phastcons
+    type bigWig
+    alwaysZero on
+    autoScale on
+    maxHeightPixels 128:48:4
+    visibility hide
+
+    track dcCNE
+    parent dcComparativeGenomics
+    bigDataUrl /gbdb/danRer11/danioCode/ZF_GC_CC_GF.danRer11.bb
+    shortLabel ZF_carp_phastcons_CNE
+    longLabel ZF_carp_phastcons_conserved_non-coding_element
+    type bigBed
+    visibility hide
 
 track dcCrispr
 superTrack on

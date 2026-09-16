@@ -185,3 +185,52 @@ cd ~/kent/src/hg/makeDb/trackDb
 tdbQuery -check "select count(*) from danRer11"
 # no errors; still alpha-only via "include danioCode.ra alpha" in
 # zebrafish/danRer11/trackDb.ra, so none of this reaches beta/public yet.
+
+# 2026-09-16 Claude max - relabel and un-nest the Burgess lab conservation track
+#
+#   danioCode superTrack shortLabel -> "DANIO-CODE Elements" (was "DANIO-CODE")
+#   dcComparativeGenomics (phastCons + CNE, Burgess lab) -> un-nested into its own
+#     top-level track, shortLabel "Burgess Fish PhastCons", group compGeno
+#     (Comparative Genomics), alongside dcCrispr as the two Burgess-lab tracks
+#     distributed via the DANIO-CODE hub but not DANIO-CODE's own data
+#   the five remaining nested composites (comp, comp_cell_type, copes_and_dopes,
+#     evalidation, consensus_promoters) drop the "DANIO-CODE " shortLabel prefix,
+#     since it is now redundant with the superTrack's own label
+#
+# Implemented in TOP_LABELS / STANDALONE_GROUP / NESTED_ORDER in
+# danioCodeHubToRa.py, then regenerated the same way as before:
+
+cd /hive/data/genomes/danRer11/bed/danioCode
+~/kent/src/hg/makeDb/scripts/danioCode/danioCodeHubToRa.py \
+    trackDb.txt \
+    https://trackhub2.genereg.net/DANIO-CODE/danRer11/ \
+    danioCode.ra \
+    --drop-list missingUrls.txt \
+    --local-prefix /gbdb/danRer11/danioCode
+cp danioCode.ra ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer11/danioCode.ra
+cd ~/kent/src/hg/makeDb/trackDb
+tdbQuery -check "select count(*) from danRer11"
+# no errors
+
+# Also rewrote every description page's intro: dropped the internal link to the
+# superTrack in favor of a line crediting the DANIO-CODE project and linking to
+# https://danio-code-dcc.genereg.net/, cut each intro to two sentences or fewer,
+# and for danioCode.html and dcComparativeGenomics.html (now "Burgess Fish
+# PhastCons") dropped the general explainer paragraphs (what non-coding
+# regulation is, what conservation is) entirely.
+
+# Loaded into the personal sandbox to review before committing:
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=danRer11 update
+# Loaded 2041 track descriptions total; tdbQuery -check clean
+
+# 2026-09-16 Claude max - turn on one RNA-seq and one ChIP-seq sample by default
+#
+# Everything was visibility hide (see the note above, still open on #38239 for
+# most of the collection). dcRNAseqComposite and dcChIPseqComposite each already
+# had exactly one subtrack marked "on" by the hub itself (an RNA-seq sample and
+# an H3K4me3 ChIP-seq signal track), so let those two composites keep the hub's
+# own "visibility full" instead of forcing hide -- one sample per composite
+# shows by default, not the whole pile (RNA-seq alone has 544 subtracks).
+# VISIBLE_BY_DEFAULT in danioCodeHubToRa.py controls which composites this
+# applies to; regenerated the same way as before and reloaded trackDb_max.

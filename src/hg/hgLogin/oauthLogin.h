@@ -13,6 +13,13 @@
  *   login.oauth.<name>.tokenUrl        or to override discovery)
  *   login.oauth.<name>.userinfoUrl
  *   login.oauth.<name>.scopes        Space-separated (default "openid email profile")
+ *   login.oauth.<name>.trustEmail    Accept this provider's address even when it does not
+ *                                    say email_verified (default off).  Turn it on only for
+ *                                    a provider that gets the address from somewhere the
+ *                                    user cannot type into, e.g. a federation that reads it
+ *                                    from the user's own institution.  Without it, an
+ *                                    unverified address is discarded and the user is asked
+ *                                    for one and has to confirm it by mail.
  *
  * "google", "orcid" and "github" are known names with built-in endpoints, so those only
  * need clientId/clientSecret.  The older login.<name>.clientId/clientSecret keys are still

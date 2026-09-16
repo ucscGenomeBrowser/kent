@@ -1487,14 +1487,35 @@ space or slash):
     login.oauth.cilogon.issuer=https://cilogon.org
     login.oauth.lsaii.issuer=https://login.aai.lifescience-ri.eu/oidc
 
+CILogon needs one more setting. It sends the address it got from the user's institution but
+does not mark it as verified, even for a real institutional sign-in, so by default hgLogin
+discards it and asks the user to type an address and confirm it by mail. That is a pointless
+round trip for an address the institution already vouched for, so tell hgLogin to take
+CILogon's word for it:
+
+    login.oauth.cilogon.trustEmail=on
+
+Turn trustEmail on only for a provider that reads the address from somewhere the user cannot
+type into, such as a federation that gets it from the user's own institution. It is off for
+every provider unless you set it. Leave it off for GitHub in particular: GitHub will hand over
+a primary address whose owner never confirmed it, and with trustEmail on, an address like that
+is enough to be signed in to an existing account that uses it.
+
+Without trustEmail, a provider that does not verify an address is not refused; hgLogin simply
+behaves as if no address had been sent, which is also what happens with ORCID (ORCID's OpenID
+Connect offers only the "openid" scope and never releases an address at all). The user is asked
+for an address, and the account does not work until they open the link mailed to it.
+
 (For social login, login.cookieSalt must be set, to a secret random string: it is the key that signs the
 identity handed back from the provider, so hgLogin refuses to run a social login without it.)
 
 A provider's button appears on the login and sign-up pages only when both its client id and
 secret are set, so unconfigured mirrors are unaffected. When a provider reports an email
-address that it has verified, and that address matches an existing account, that account is
-automatically linked to the new identity and the user is signed in; if the address matches
-several accounts, the user is asked which one to use. GitHub is a plain OAuth 2.0 provider
+address that it has verified (or one you have trusted with trustEmail), and that address
+matches an existing account, that account is automatically linked to the new identity and the
+user is signed in; if the address matches several accounts, the user is asked which one to
+use. An address hgLogin will not trust never takes part in that matching at all, so it cannot
+be used to reach somebody else's account. GitHub is a plain OAuth 2.0 provider
 rather than OpenID Connect and is handled as a special case; it is the only non-OIDC provider
 supported without extra code. (The older, un-prefixed keys login.google.clientId and
 login.orcid.clientId are still recognized for backward compatibility.)

@@ -26,6 +26,33 @@ counts. Redirecting is for trying a suite elsewhere, not for moving it: the comm
 scripts stay pointed at the server they were written against, which is the one the
 nightly reads.
 
+`make preflight` prints how the target is configured, so the log says which server was
+driven AND how it differs from the one the scripts name:
+
+    target      https://hgwdev-braney.gi.ucsc.edu/cgi-bin
+                /usr/local/apache/cgi-bin-braney/hg.conf
+                central.db                   hgcentraltest
+                db.trackDb                   trackDb_braney,trackDb
+                curatedHubPrefix             braney
+                browser.quickLift            on
+                browser.quickLiftAlignments  on
+                browser.recTrackSets         on
+
+Those are read off the hg.conf the server reads, following its includes the way
+hg/lib/hgConfig.c does, so the value printed is the EFFECTIVE one -- a sandbox conf that
+sets nothing still shows what it inherits from the shared conf it includes. Only a fixed
+list of settings is printed, because hg.conf includes hg.conf.private.
+
+It works for a server on this machine: genome-test, hgwdev, an hgwdev-<name> sandbox or
+demo, or a ticket park from `ts` on 127.0.0.1 (looked up by port in its registry). For
+hgwbeta or the RR it says the conf cannot be read from here, which is true and is better
+than a guess.
+
+Even with that in the log, a config difference and a code difference can still look
+alike. The reliable way to tell them apart is to swap only the BINARY: drop a control
+build's CGIs into the same sandbox, leave its hg.conf alone, and re-run. If the failures
+follow the binary they are the code.
+
 Most tests drive a real browser against a real server, so they need the network and
 the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md). That is why none of this is
 part of the tree-wide test target: a broken network would fail the build.
@@ -60,6 +87,18 @@ What is covered
 
   selftest      session: -> expect: -> loadSession:, on hg38 at SHH. Saves the cart,
                 changes the view, restores it from the local file, checks rows both times.
+  heavysession  the same three steps as selftest, on a Recommended Track Set: 34 rows in,
+                saved, moved away, loaded back, `exact: true` on both halves. selftest
+                round-trips two rows, which barely reaches outIfNotPresent() in hgSession
+                -- the function that writes a trackDb default for every track that is
+                deliberately NOT in the cart, and the one a broken save-and-reload path
+                shows up in. A path that dropped four rows left selftest green.
+  firstrequest  a track turned on has to be drawn by the request that turned it on, with
+                no `go:`, `open:` or `convert:` in between. The bug it exists for lags by
+                exactly one request, so any script that navigates before asserting reads a
+                correct image and passes. It names wgEncodeRegMarkH3k4me1 for the reason
+                in its header: a top-level track or a default-visible child would pass on
+                the broken build too.
   composite     clinvar with clinvarCnv hidden: the two-request split (#37953). One
                 request would leave clinvarCnv_sel=1 and the CNV row drawn.
   views         hideKids on the VIEW that holds the subtrack, with the sibling views
@@ -133,6 +172,18 @@ Still to write
   loadSession:    the three remote forms -- only the local-file form is covered
   the YAML lint   `{item:name}` with no space warns and drops the argument. This needs a
                   test that reads stderr, which the harness does not do yet.
+  hgCollection    no script here or in regress/ reaches that CGI at all, and it shares
+                  visibility logic with hgTracks by COPY rather than by call:
+                  hg/hgCollection/hgCollection.c carries its own isParentVisible(), a
+                  verbatim copy of the one in hg/lib/trackHub.c. The copy in trackHub.c
+                  was caught by nine scripts in regress/ on the #37547 branch; the copy in
+                  hgCollection.c was found by grep afterwards, and would have dropped a
+                  container's children out of a saved collection in the same silent way.
+                  A test needs a `collection:` verb: the page puts tracks into a
+                  collection by dragging between two jsTrees, and `drag:` is the
+                  genomic drag-select on the track image, not that. Its buttons are
+                  #newCollection, #doNewCollection, #saveCollections and #discardChanges,
+                  which is enough to open and save one but not to put a track in it.
 
 A test that needs a stable server-side fixture (a hub, a custom track) should carry it
 in the script rather than assume something on disk.
