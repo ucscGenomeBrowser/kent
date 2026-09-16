@@ -24,6 +24,9 @@
 # Playwright runtime), SCRIPTS/BASES (to build an explicit subset).
 
 DOCENT  ?= $(HOME)/kent/src/hg/utils/docent/docent.js
+# docent.js requires targetConf.js from beside it (target, hg.conf, hgcentral, account),
+# so a change there changes what a tour renders and has to rebuild one too.
+DOCENTDEPS ?= $(DOCENT) $(dir $(DOCENT))targetConf.js
 SCRIPTS ?= $(wildcard *.docent.yaml)
 BASES   ?= $(SCRIPTS:.docent.yaml=)
 FIGDIR  ?= ..
@@ -45,7 +48,7 @@ FAST_ENV = $(if $(FAST),DOCENT_FAST=1 ,)
 
 all: $(MP4S)
 
-$(FIGDIR)/%.mp4: %.docent.yaml $(DOCENT)
+$(FIGDIR)/%.mp4: %.docent.yaml $(DOCENTDEPS)
 	$(FAST_ENV)$(PW_ENV) node $(DOCENT) $<
 
 # hires: the same tours rendered for print -- SCALE times the pixels (a wider server image

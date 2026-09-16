@@ -42,19 +42,12 @@ const path = require('path');
 const os = require('os');
 const yaml = require('js-yaml');
 
+// Shared with docent.js, which is the point: this program checks the fixtures for the
+// server the run will actually drive, so it has to resolve the target, its hg.conf, its
+// hgcentral and its account exactly the way the run will.
+const { serverFor, hgConfFor, readHgConf, centralDbFor, loginLookup } = require('../targetConf.js');
+
 const DIR = process.argv[2] || '.';
-const SERVERS = {
-  'rr': 'https://genome.ucsc.edu/cgi-bin',
-  'genome-test': 'https://genome-test.gi.ucsc.edu/cgi-bin',
-  'hgwdev': 'https://hgwdev.gi.ucsc.edu/cgi-bin',
-  'hgwbeta': 'https://hgwbeta.soe.ucsc.edu/cgi-bin',
-};
-const resolveTarget = t => {
-  if (!t) return SERVERS['genome-test'];
-  if (SERVERS[t]) return SERVERS[t];
-  if (/^hgwdev-[a-z0-9._-]+$/i.test(t)) return `https://${t}.gi.ucsc.edu/cgi-bin`;
-  return t;
-};
 const enc = encodeURIComponent;
 
 // The settings that change what a test sees, and nothing else. central.db says which
@@ -64,75 +57,6 @@ const enc = encodeURIComponent;
 const HG_CONF_KEYS = ['central.db', 'db.trackDb', 'curatedHubPrefix',
                       'browser.quickLift', 'browser.quickLiftAlignments',
                       'browser.recTrackSets'];
-
-// Which hg.conf the server named by a target: reads, when that server runs on this
-// machine. There is no way to ask a browser over http what its hg.conf says, so this is
-// a lookup by convention rather than a measurement, and it answers null for anything off
-// this host -- hgwbeta, the RR, a colleague's machine.
-function hgConfFor(server) {
-  let u;
-  try { u = new URL(server); } catch (e) { return null; }
-  const host = u.hostname;                            // 127.0.0.1 keeps its dots
-  const name = host.split('.')[0];                    // hgwdev-braney out of the FQDN
-  if (name === 'hgwdev' || name === 'genome-test') return '/usr/local/apache/cgi-bin/hg.conf';
-  if (name.startsWith('hgwdev-'))                     // a sandbox or a demo browser
-    return `/usr/local/apache/cgi-bin-${name.slice('hgwdev-'.length)}/hg.conf`;
-  if ((host === '127.0.0.1' || host === 'localhost') && u.port) {
-    // A ticket park from `ts`: its port is in the registry, and the frozen hg.conf sits
-    // under the ticket's own directory. A park is the one target whose conf is NOT the
-    // live sandbox's, which is the whole reason for parking it.
-    const root = process.env.TS_ROOT || path.join(os.homedir(), 'ticketSandboxes');
-    let reg;
-    try { reg = fs.readFileSync(path.join(root, 'ports.tsv'), 'utf8'); } catch (e) { return null; }
-    for (const line of reg.split('\n')) {
-      const f = line.split('\t');
-      if (f[1] === u.port) return path.join(root, f[0], 'cgi-bin', 'hg.conf');
-    }
-  }
-  return null;
-}
-
-// hg.conf as hg/lib/hgConfig.c reads it: `include` pulls another file in relative to the
-// including one, `delete` drops a name, and a later assignment wins over an earlier one
-// (parseConfigLine hashAdds and cfgOption reads the most recently added).
-function readHgConf(file, out = new Map(), seen = new Set(), depth = 0) {
-  if (depth > 10 || seen.has(file)) return out;
-  seen.add(file);
-  let text;
-  try { text = fs.readFileSync(file, 'utf8'); } catch (e) { return out; }
-  for (const raw of text.split('\n')) {
-    const line = raw.trim();
-    if (!line || line.startsWith('#')) continue;
-    if (/^include\s/.test(line))
-      readHgConf(path.resolve(path.dirname(file), line.slice(7).trim()), out, seen, depth + 1);
-    else if (/^delete\s/.test(line))
-      for (const name of line.slice(6).trim().split(/\s+/)) out.delete(name);
-    else {
-      const eq = line.indexOf('=');
-      if (eq > 0) out.set(line.slice(0, eq).trim(), line.slice(eq + 1).trim());
-    }
-  }
-  return out;
-}
-
-// Which hgcentral a server reads. Read from its hg.conf when that is on this machine,
-// because a sandbox may say so for itself -- 45 of the personal confs on hgwdev set
-// central.db to hgcentraltest and two do not. Otherwise a table for the servers whose
-// conf is somewhere else. docent.js carries the same lookup; keep the two in step.
-const CENTRAL_BY_HOST = {
-  'genome.ucsc.edu': 'hgcentral',
-  'genome-euro.ucsc.edu': 'hgcentral',         // its own database of the same name
-  'genome-asia.ucsc.edu': 'hgcentral',         // ... and so is this one
-  'hgwbeta.soe.ucsc.edu': 'hgcentralbeta',
-};
-function centralDbFor(server) {
-  const file = hgConfFor(server);
-  if (file) {
-    const db = readHgConf(file).get('central.db');
-    if (db) return db;
-  }
-  try { return CENTRAL_BY_HOST[new URL(server).hostname] || null; } catch (e) { return null; }
-}
 
 const PAD = '              ';
 function reportTargetConf(server) {
@@ -153,57 +77,16 @@ function reportTargetConf(server) {
     console.log(`${PAD}${k.padEnd(w)}  ${conf.has(k) ? conf.get(k) : 'unset'}`);
 }
 
-// The credentials a `login:` step needs, resolved the same way docent.js resolves them:
-// keyed by the HGCENTRAL the server reads, because an account is a row in gbMembers in
-// one of them. genome-test, hgwdev, every sandbox and every ticket park read
-// hgcentraltest, so one account covers all of them; hgwbeta and the RR are separate sets
-// of accounts. Checked here because a missing password is exactly the kind of fixture
-// this program exists for -- the run would otherwise get as far as hgLogin before it
-// said so.
-//
-// No password, and no line of the file, is ever printed, and no login is attempted: a
-// wrong password fails loudly at the step itself, which is the one thing preflight cannot
-// do for it.
-function loginSections(text) {
-  const out = [];
-  let cur = null;
-  for (const raw of text.split('\n')) {
-    const line = raw.trim();
-    if (!line || line.startsWith('#')) continue;
-    const sec = /^\[(.+)\]$/.exec(line);
-    if (sec) { cur = { central: sec[1].trim(), user: '', password: '' }; out.push(cur); continue; }
-    const eq = line.indexOf('=');
-    if (eq < 0 || !cur) continue;
-    const k = line.slice(0, eq).trim(), v = line.slice(eq + 1).trim();
-    if (k === 'user' || k === 'password') cur[k] = v;
-  }
-  return out;
-}
-
-// Returns {label, why}: what to show for this server's account, and why it is unusable.
-// Keyed by the hgcentral the server reads, since that is where gbMembers lives.
+// What to print for the account a `login:` step will use on this server, and why it
+// cannot be used if it cannot. The lookup itself is in targetConf.js, shared with the run.
+// No login is attempted: a wrong password fails loudly at the step itself, which is the
+// one thing this program cannot do for it. No password is printed, here or anywhere.
 function loginAccount(server) {
-  const env = process.env;
-  if (env.DOCENT_LOGIN_USER && env.DOCENT_LOGIN_PASSWORD)
-    return { label: `${env.DOCENT_LOGIN_USER} (from the environment)`, why: null };
-  const central = centralDbFor(server);
-  const where = central ? `central.db ${central}` : 'central.db unknown';
-  const file = env.DOCENT_LOGIN_FILE || path.join(os.homedir(), '.docentLogin');
-  let text;
-  try { text = fs.readFileSync(file, 'utf8'); }
-  catch (e) { return { label: where, why: `no ${file}, and no DOCENT_LOGIN_USER/PASSWORD` }; }
-  const perm = fs.statSync(file).mode & 0o777;
-  if (perm & 0o077)
-    return { label: where, why: `${file} is readable by group or other (mode ${perm.toString(8)}); chmod 600 it` };
-  const secs = loginSections(text);
-  const match = (central && secs.find(x => x.central === central))
-             || secs.find(x => x.central === 'default');
-  if (!match)
-    return { label: where, why: `${file} has no section for ${where}`
-      + (secs.length ? ` (it has ${secs.map(x => `[${x.central}]`).join(' ')})` : ' (it has no [section] at all)') };
-  if (!match.user || !match.password)
-    return { label: `[${match.central}]`, why: `[${match.central}] in ${file} needs a "user=" and a "password=" line` };
-  return { label: `${match.user} (from [${match.central}], ${where})`, why: null };
+  const c = loginLookup(server);
+  const where = c.central ? `central.db ${c.central}` : 'central.db unknown';
+  if (c.why) return { label: where, why: c.why };
+  const from = c.source === 'the environment' ? 'the environment' : `[${c.section}]`;
+  return { label: `${c.user} (from ${from}, ${where})`, why: null };
 }
 
 const fixtures = [];
@@ -258,8 +141,9 @@ for (const f of scripts) {
     continue;
   }
   // DOCENT_TARGET redirects the run, so the server fixture has to be the one that will
-  // actually be driven rather than the one the script names. Same override as docent.js.
-  const server = resolveTarget(process.env.DOCENT_TARGET || doc.target).replace(/\/$/, '');
+  // actually be driven rather than the one the script names. serverFor() is the same
+  // function docent.js uses, so the two cannot drift apart.
+  const server = serverFor(doc.target);
   if (!seenServer.has(server)) seenServer.set(server, f);
   const base = path.basename(f, '.docent.yaml');
 

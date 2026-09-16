@@ -31,6 +31,13 @@ PLAYWRIGHT_BROWSERS_PATH=$PW/browsers NODE_PATH=$PW/node_modules \
   node docent.js AP1.docent.yaml
 ```
 
+`docent.js` is not a single file: it requires `targetConf.js` from beside it, which
+answers where a run is pointed (`target:` and `DOCENT_TARGET`), which `hg.conf` that
+server reads, which hgcentral that names, and which account a `login:` step signs in
+with. `tests/preflight.js` requires the same module, which is the point of it being one:
+the fixture check has to resolve all four exactly the way the run will. Copy the pair, or
+run `docent.js` where it sits.
+
 Needs `playwright`, `js-yaml`, and `ffmpeg`. At UCSC these live in one pinned shared
 install at `/hive/groups/browser/uiTest/pw` (`browsers` for Chromium, `node_modules`
 for the modules), which every browser-driving test in the tree uses; its `README.md`

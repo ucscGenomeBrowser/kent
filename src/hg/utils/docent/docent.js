@@ -26,6 +26,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
+// Shared with tests/preflight.js so a run and its fixture check cannot disagree about
+// which server is being driven, which hg.conf it reads, or which account signs in.
+// docent.js is no longer a single file: targetConf.js has to travel with it.
+const { resolveTarget, serverFor, loginLookup } = require('./targetConf.js');
 
 // ---------- parse script + config ----------
 const SCRIPT = process.argv[2];
@@ -71,26 +75,14 @@ const STILLDIR = STILLPARENT ? path.resolve(HERE, STILLPARENT, base)
 const SESSDIR = path.join(
   path.resolve(HERE, process.env.DOCENT_SESSIONS || doc.sessions || 'sessions'), base);
 
-// `target:` takes a shorthand from this table, a bare `hgwdev-<user>` sandbox name
-// (expanded below), or a full https://.../cgi-bin URL. Default is genome-test, so a
-// script that forgets to say where it runs does not silently hit someone's sandbox.
-const SERVERS = {
-  'rr': 'https://genome.ucsc.edu/cgi-bin',
-  'genome-test': 'https://genome-test.gi.ucsc.edu/cgi-bin',
-  'hgwdev': 'https://hgwdev.gi.ucsc.edu/cgi-bin',
-  'hgwbeta': 'https://hgwbeta.soe.ucsc.edu/cgi-bin',
-};
-const resolveTarget = t => {
-  if (!t) return SERVERS['genome-test'];
-  if (SERVERS[t]) return SERVERS[t];
-  if (/^hgwdev-[a-z0-9._-]+$/i.test(t)) return `https://${t}.gi.ucsc.edu/cgi-bin`;  // personal sandbox
-  return t;                                                    // full URL
-};
-// DOCENT_TARGET overrides `target:` for the whole run, so a suite written against one
-// server can be pointed at another -- a sandbox, a ticket park, a demo browser -- without
-// editing the scripts it is written from. The trackDb cache below keys on SERVER, so a
-// redirected run cannot read back a listing fetched from the server the script names.
-const SERVER = resolveTarget(process.env.DOCENT_TARGET || doc.target).replace(/\/$/, '');
+// `target:` takes a shorthand (rr, genome-test, hgwdev, hgwbeta), a bare `hgwdev-<user>`
+// sandbox name, or a full https://.../cgi-bin URL; DOCENT_TARGET overrides it for the
+// whole run, so a suite written against one server can be pointed at another -- a sandbox,
+// a ticket park, a demo browser -- without editing the scripts. Both rules live in
+// targetConf.js, beside the fixture check that has to agree with them. The trackDb cache
+// below keys on SERVER, so a redirected run cannot read back a listing fetched from the
+// server the script names.
+const SERVER = serverFor(doc.target);
 // SCALE: the same tour rendered at k times the resolution, for figures that have to print.
 // Nothing is upscaled -- a still only ever has the pixels it was drawn with -- so each layer
 // is asked to draw k times as many while the layout is left alone:
@@ -340,140 +332,15 @@ const CURSOR_INIT = ({ box, svg }) => {
 // so there is no way to hand the browser a cookie: a script that needs one of those pages
 // has to sign in the way a person does.
 //
-// An account is a row in gbMembers in ONE hgcentral, so that database is what the
-// credentials are keyed by -- not the server, and not the sandbox. genome-test, hgwdev,
-// every hgwdev-<name> sandbox and every ticket park read hgcentraltest, so one account
-// covers all of them; hgwbeta reads hgcentralbeta and the RR reads hgcentral, which are
-// different sets of accounts entirely.
-//
-// Which central a server reads is READ rather than assumed, because a sandbox may say so
-// for itself: of the personal hg.conf files on hgwdev today, 45 set central.db to
-// hgcentraltest and two do not (hgcentralgsid, hgcentralbeta). tests/preflight.js has a
-// fuller copy of this hg.conf reader and prints what it found; keep the two in step.
-const CENTRAL_BY_HOST = {                      // servers whose hg.conf is on another machine
-  'genome.ucsc.edu': 'hgcentral',
-  'genome-euro.ucsc.edu': 'hgcentral',         // its own database of the same name
-  'genome-asia.ucsc.edu': 'hgcentral',         // ... and so is this one
-  'hgwbeta.soe.ucsc.edu': 'hgcentralbeta',
-};
-
-function hgConfFor(server) {
-  let u;
-  try { u = new URL(server); } catch (e) { return null; }
-  const host = u.hostname, name = host.split('.')[0];
-  if (name === 'hgwdev' || name === 'genome-test') return '/usr/local/apache/cgi-bin/hg.conf';
-  if (name.startsWith('hgwdev-')) return `/usr/local/apache/cgi-bin-${name.slice(7)}/hg.conf`;
-  if ((host === '127.0.0.1' || host === 'localhost') && u.port) {
-    const root = process.env.TS_ROOT || path.join(os.homedir(), 'ticketSandboxes');
-    let reg;
-    try { reg = fs.readFileSync(path.join(root, 'ports.tsv'), 'utf8'); } catch (e) { return null; }
-    for (const line of reg.split('\n')) {
-      const f = line.split('\t');
-      if (f[1] === u.port) return path.join(root, f[0], 'cgi-bin', 'hg.conf');
-    }
-  }
-  return null;
-}
-
-// hg.conf as hg/lib/hgConfig.c reads it: `include` is relative to the including file,
-// `delete` drops a name, and a later assignment wins over an earlier one.
-function readHgConf(file, out = new Map(), seen = new Set(), depth = 0) {
-  if (depth > 10 || seen.has(file)) return out;
-  seen.add(file);
-  let text;
-  try { text = fs.readFileSync(file, 'utf8'); } catch (e) { return out; }
-  for (const raw of text.split('\n')) {
-    const line = raw.trim();
-    if (!line || line.startsWith('#')) continue;
-    if (/^include\s/.test(line))
-      readHgConf(path.resolve(path.dirname(file), line.slice(7).trim()), out, seen, depth + 1);
-    else if (/^delete\s/.test(line))
-      for (const name of line.slice(6).trim().split(/\s+/)) out.delete(name);
-    else {
-      const eq = line.indexOf('=');
-      if (eq > 0) out.set(line.slice(0, eq).trim(), line.slice(eq + 1).trim());
-    }
-  }
-  return out;
-}
-
-function centralDbFor(server) {
-  const file = hgConfFor(server);
-  if (file) {
-    const db = readHgConf(file).get('central.db');
-    if (db) return db;
-  }
-  try { return CENTRAL_BY_HOST[new URL(server).hostname] || null; } catch (e) { return null; }
-}
-
-// A password cannot go in a script. It is read from a file outside the tree that only its
-// owner can read -- the arrangement hg.conf uses for hg.conf.private, and for the same
-// reason -- one section per hgcentral:
-//
-//     [hgcentraltest]
-//     user=docentTest
-//     password=...
-//
-// [default] is used when no section matches, and when the central cannot be worked out
-// at all (a server on another machine that is not in CENTRAL_BY_HOST).
-//
-// Nothing here prints a password, and `login:` has no argument that could carry one.
-function loginFile() {
-  return process.env.DOCENT_LOGIN_FILE || path.join(os.homedir(), '.docentLogin');
-}
-
-// Parse the sectioned file into [{central, user, password}], in file order. Lines before
-// any [section] are ignored rather than treated as a default: an unsectioned file is one
-// written against the older single-account form, and silently using it everywhere is how
-// an hgcentraltest password would reach the RR.
-function loginSections(text) {
-  const out = [];
-  let cur = null;
-  for (const raw of text.split('\n')) {
-    const line = raw.trim();
-    if (!line || line.startsWith('#')) continue;
-    const sec = /^\[(.+)\]$/.exec(line);
-    if (sec) { cur = { central: sec[1].trim(), user: '', password: '' }; out.push(cur); continue; }
-    const eq = line.indexOf('=');
-    if (eq < 0 || !cur) continue;
-    const k = line.slice(0, eq).trim(), v = line.slice(eq + 1).trim();
-    if (k === 'user' || k === 'password') cur[k] = v;
-  }
-  return out;
-}
-
+// Which account that is, and why it is keyed by hgcentral rather than by server, is in
+// targetConf.js. All this adds is the failure: `login:` is a step, so it throws, while
+// preflight reports the same sentence as a missing fixture. A password cannot go in a
+// script, `login:` has no argument that could carry one, and nothing here prints one.
 function loginCreds(server) {
-  const env = process.env;
-  // A single-run override, for trying an account without writing it down. It applies to
-  // whatever server this run drives, which is why it wins over the file.
-  if (env.DOCENT_LOGIN_USER && env.DOCENT_LOGIN_PASSWORD)
-    return { user: env.DOCENT_LOGIN_USER, password: env.DOCENT_LOGIN_PASSWORD, from: 'the environment' };
-  const central = centralDbFor(server);
-  const where = central ? `${server} (central.db ${central})` : `${server} (central.db unknown)`;
-  const file = loginFile();
-  let text;
-  try { text = fs.readFileSync(file, 'utf8'); }
-  catch (e) {
-    throw new Error(`login: no credentials for ${where}. Write ${file} with a `
-      + `[<hgcentral database>] section holding "user=" and "password=" lines (mode 0600), `
-      + `or set DOCENT_LOGIN_USER and DOCENT_LOGIN_PASSWORD for this run.`);
-  }
-  // Refuse a file anyone else can read, the way hg/lib/hgConfig.c checkConfigPerms refuses
-  // a group- or world-readable hg.conf. A test that quietly used a readable password file
-  // would make one on every machine it ran on.
-  const perm = fs.statSync(file).mode & 0o777;
-  if (perm & 0o077)
-    throw new Error(`login: ${file} is readable by group or other (mode ${perm.toString(8)}); chmod 600 it`);
-  const secs = loginSections(text);
-  const match = (central && secs.find(x => x.central === central))
-             || secs.find(x => x.central === 'default');
-  if (!match)
-    throw new Error(`login: ${file} has no section for ${where}`
-      + (secs.length ? ` (it has ${secs.map(x => `[${x.central}]`).join(' ')})` : ' (it has no [section] at all)')
-      + '; add one, or a [default]');
-  if (!match.user || !match.password)
-    throw new Error(`login: [${match.central}] in ${file} needs a "user=" line and a "password=" line`);
-  return { user: match.user, password: match.password, from: `[${match.central}] in ${file}` };
+  const c = loginLookup(server);
+  if (c.why) throw new Error(`login: ${c.why}`);
+  return { user: c.user, password: c.password,
+           from: c.source === 'the environment' ? c.source : `[${c.section}] in ${c.source}` };
 }
 
 function absurl(u) {
