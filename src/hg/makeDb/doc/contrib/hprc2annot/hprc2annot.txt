@@ -4,6 +4,8 @@
 # 2026-09-09 Claude (max): pcLAI field pcaSegment renamed to centroid and its
 #                          description corrected (see section 5c); genark
 #                          detailsScript dataUrl double-prefix bug fixed
+# 2026-09-16 Claude (max): pcLAI default visibility pack -> dense, pinned with
+#                          onlyVisibility (see section 5e)
 
 # Builds a GenArk "contributed track" hub (contribTracks.html model) that adds
 # seven annotation tracks to the ~462 HPRC Release 2 assemblies already present as
@@ -321,6 +323,60 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # Repointed to doc/contrib/hprc2annot/hprc2annot.txt.
 
 ##############################################################################
+# 5e. 2026-09-16: pcLAI default visibility pack -> dense
+##############################################################################
+# Mark reported that on HG00408 pat (GCA_041900255.1) the pcLAI track shows only
+# one color and you cannot see where ancestry changes, and suggested pinning the
+# track to dense.
+#
+# The colors are not wrong. Column 9 of the source BED is passed through
+# untouched by hprc2annotBuildOne.sh, and a full comparison of that assembly's
+# built pclai.bb against a fresh download of
+#   .../HG00408/local_ancestry/bed/HG00408_pat_hprc_r2_v1.0.1.pclai_v1.1.asm_coord.bed
+# is identical on (chrom, start, end, itemRgb) for all 25,475 windows.
+#
+# Two things make it look like one color:
+#   - That haplotype really is almost all one ancestry: 25,435 of 25,475 windows
+#     sit in the East Asian centroid, 30 in South Asian and 10 in European. The
+#     only visible color changes are chr18:11.0-12.3M, chr18:55.6-58.0M and
+#     chr20:18.6-19.8M. Across the collection this is common, not special: 71 of
+#     460 haplotypes have a single centroid and 228 are >=99% one centroid.
+#   - The authors encode each window's own PC1/PC2 as a continuous RGB, so within
+#     one ancestry cluster the shades differ by a few units out of 255 (445
+#     distinct values in this file, all of them the same orange to the eye).
+#
+# The display was the real problem. In pack the ~100 kb windows stack into ~50
+# rows at chromosome scale, each item a 1-2 px sliver on a white background, and
+# the track is ~500 px tall and unreadable. In dense it is one continuous colored
+# bar 16 px tall where the ancestry blocks are obvious. Compare:
+#   .../hgRenderTracks?db=GCA_041900255.1&position=chr18&hideTracks=1&hprcPclai=pack
+#   .../hgRenderTracks?db=GCA_041900255.1&position=chr18&hideTracks=1&hprcPclai=dense
+# and on the most admixed haplotype in the set, HG01496 pat (GCA_042027595.1,
+# 43% dominant centroid), chr2 in dense shows four ancestries in clean blocks.
+#
+# So hprc2annot.trackDb.txt now has "visibility dense" plus "onlyVisibility dense"
+# on hprcPclai, which leaves only hide/dense in the track's vis dropdown. The
+# equivalent hg38 native composite (doc/hg38/hprcPclai.txt) was already dense.
+# Re-wire after the edit, in this order:
+#   hprc2annotMakeTrackDb.py
+#   genark addContrib hprc2annot
+#
+# What onlyVisibility does and does not do on a plain track: hgTracks and
+# hgTrackUi build the vis dropdown from it (hTvGetVizArr in hg/lib/hui.c), so the
+# menu offers hide and dense only. It is not clamped at draw time -- only the
+# faceted-child path in hui.c calls tvFromVisOnlySetting -- so hprcPclai=pack in a
+# URL, or a cart that already holds pack, still draws packed. Anyone who looked at
+# the track before this change keeps their pack setting until they reset.
+#
+# Run of 2026-09-16: 462 assemblies, alpha and beta wired, 460 pclai stanzas
+# updated (GCA_044166515.1 and GCA_044166665.1 have no pclai source file, so their
+# hubs correctly have no pclai stanza). Diff against a pre-run copy of every
+# alpha/beta hub file: alpha 3 lines each (visibility pack -> dense +
+# onlyVisibility), beta the same 3 plus the two 2026-09-09 pcLAI fixes it had
+# never received, plus the BEGIN/END marker lines. genark checkContrib reported no
+# contrib problems.
+
+##############################################################################
 # 6. Testing / serving
 ##############################################################################
 # For QA the hub is exposed via ~/public_html and loaded on the browser:
@@ -347,9 +403,17 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #     "# BEGIN/END genark contrib: hprc2annot" markers (idempotent), first
 #     clearing any unmarked copy of our stanzas that the assembly build baked in
 #     (otherwise the hub would declare each track twice).
-# Only the alpha tier is written for now. <asmId>.singleFile.hub.txt, which
-# /gbdb/genark/<acc>/hub.txt points at and which is served as the assembly's
-# default hub, is deliberately left alone.
+# Since 2026-09-16 it also wires beta.hub.txt, and public.hub.txt, for a
+# collection already named in betaGenArk.txt / publicGenArk.txt. Those two files
+# are otherwise only rewritten by mkGenomes.pl at the next clade build, which
+# inlines the same per-assembly trackDb, so this just means a trackDb fix reaches
+# hgwbeta the same day instead of waiting for a rebuild, and the rebuild converges
+# on the same content. It never promotes a collection: the tier argument, and
+# only the tier argument, edits the release lists.
+# <asmId>.singleFile.hub.txt, which /gbdb/genark/<acc>/hub.txt points at and which
+# is served as the assembly's default hub (so it is what genome-test shows), is
+# deliberately left alone. To see the alpha tier on hgwdev, attach it by hand:
+#   hgTracks?genome=<acc>&hubUrl=/gbdb/genark/GCA/nnn/nnn/nnn/<acc>/alpha.hub.txt
 # A full GenArk hub rebuild regenerates hub.txt, so re-run addContrib after a
 # rebuild, or add hprc2annot handling to the build's asmHubTrackDb.sh for a
 # durable inclusion.
