@@ -1,0 +1,52 @@
+# Turning a track on has to draw it in the SAME request that turned it on.
+#
+# The bug this exists for lags by exactly one request: the visibility reaches the cart,
+# the image drawn in reply to that request does not have the row, and the next request --
+# any next request -- draws it. So it is invisible to almost every script in this suite
+# and in regress/, because a script that navigates after a `track:` step supplies the
+# extra request itself and reads a correct image. Only an assertion made BEFORE any
+# `go:`, `open:` or `convert:` can see it.
+#
+# Two things have to be true of the track, or this passes on a build that has the bug:
+#
+#   * It must not be visible by default. A default-visible track is already in the list.
+#   * Its container must not be visible by default either. hgTracks adds every TOP-LEVEL
+#     track as a lightweight stub so the track controls can list it, so a top-level track
+#     is built whatever the cart says -- microsat, gtexGene and windowmaskerSdust all draw
+#     on a build with this bug.
+#
+# wgEncodeRegMarkH3k4me1 is both: `visibility hide`, and `superTrack wgEncodeReg hide`
+# under a superTrack that is itself `superTrack on hide`. Its sibling
+# wgEncodeRegMarkH3k27ac is `superTrack wgEncodeReg full` and draws on a broken build --
+# same superTrack, same request, opposite verdicts -- so it is the wrong track to name
+# here and the right one to name in a comment.
+#
+# The hideKids step is setup and is allowed its own requests. What is under test is the
+# ONE `track:` step after it, and nothing runs between that step and the assertion.
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+
+  # Empty the superTrack first. `hide: all` is not enough: a superTrack does not pass its
+  # own visibility to its members, so turning it on later would bring every member up at
+  # its trackDb visibility and H3K27Ac would arrive alongside. hideKids writes an explicit
+  # hide for each member into the cart, which outlives the `wgEncodeReg=show` that the
+  # next step sends. See supertrack.docent.yaml for the same idiom.
+  - track: {wgEncodeReg: hideKids}
+  - expect: {rows: [ruler], exact: true, noText: "Too Long"}
+
+  # The gesture under test, in one request. Docent sends the containers above the track
+  # along with it, so this is `wgEncodeReg=show` plus `wgEncodeRegMarkH3k4me1=full`.
+  - track: {wgEncodeRegMarkH3k4me1: full}
+
+  # No navigation between the step above and this line, on purpose. `exact: true` also
+  # says the hides from the hideKids step survived the superTrack being shown again.
+  - expect:
+      rows: [ruler, wgEncodeRegMarkH3k4me1]
+      exact: true
+      noText: "Too Long"
