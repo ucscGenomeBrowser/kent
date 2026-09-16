@@ -188,6 +188,18 @@ Still to write
 A test that needs a stable server-side fixture (a hub, a custom track) should carry it
 in the script rather than assume something on disk.
 
+The one fixture that cannot be carried anywhere is a login. hgCollection refuses a
+visitor who is not signed in, and the login cookie is checked against a salted hash, so
+a script that needs that page uses the `login:` step, and the step reads an account from
+~/.docentLogin. That file is one [section] per HGCENTRAL DATABASE, because an account is
+a row in gbMembers in one of them: genome-test, hgwdev, every sandbox and every ticket
+park read hgcentraltest and share one account, while hgwbeta and the RR are separate sets
+of accounts. Which central a server reads is read from its hg.conf rather than guessed
+from the host -- a sandbox can point itself somewhere else, and two on hgwdev do today.
+`make preflight` says which account and which central it resolved for the server being
+driven, and refuses a file that is readable by group or other. No password is ever
+printed and none can be written in a script. ../README.md under `login` has the format.
+
 colorchecks is the one exception, and the reason is worth knowing before someone else
 hits it. `color:` has to address a ROW by name, and a custom track cannot be addressed
 by name at all: hgTracks assigns its row id (`ct_<name>_<number>`), which is why

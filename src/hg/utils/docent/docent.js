@@ -333,6 +333,149 @@ const CURSOR_INIT = ({ box, svg }) => {
   else add();
 };
 
+// ---------- LOGIN: the one fixture that cannot live in the repository ----------
+// hgCollection, and the saving half of hgSession, refuse to run for a visitor who is not
+// logged in (hgCollection.c doMiddle, "You must be logged in to edit collections"). The
+// login cookie is validated against a salted hash (login.cookieSalt, hg/lib/wikiLink.c),
+// so there is no way to hand the browser a cookie: a script that needs one of those pages
+// has to sign in the way a person does.
+//
+// An account is a row in gbMembers in ONE hgcentral, so that database is what the
+// credentials are keyed by -- not the server, and not the sandbox. genome-test, hgwdev,
+// every hgwdev-<name> sandbox and every ticket park read hgcentraltest, so one account
+// covers all of them; hgwbeta reads hgcentralbeta and the RR reads hgcentral, which are
+// different sets of accounts entirely.
+//
+// Which central a server reads is READ rather than assumed, because a sandbox may say so
+// for itself: of the personal hg.conf files on hgwdev today, 45 set central.db to
+// hgcentraltest and two do not (hgcentralgsid, hgcentralbeta). tests/preflight.js has a
+// fuller copy of this hg.conf reader and prints what it found; keep the two in step.
+const CENTRAL_BY_HOST = {                      // servers whose hg.conf is on another machine
+  'genome.ucsc.edu': 'hgcentral',
+  'genome-euro.ucsc.edu': 'hgcentral',         // its own database of the same name
+  'genome-asia.ucsc.edu': 'hgcentral',         // ... and so is this one
+  'hgwbeta.soe.ucsc.edu': 'hgcentralbeta',
+};
+
+function hgConfFor(server) {
+  let u;
+  try { u = new URL(server); } catch (e) { return null; }
+  const host = u.hostname, name = host.split('.')[0];
+  if (name === 'hgwdev' || name === 'genome-test') return '/usr/local/apache/cgi-bin/hg.conf';
+  if (name.startsWith('hgwdev-')) return `/usr/local/apache/cgi-bin-${name.slice(7)}/hg.conf`;
+  if ((host === '127.0.0.1' || host === 'localhost') && u.port) {
+    const root = process.env.TS_ROOT || path.join(os.homedir(), 'ticketSandboxes');
+    let reg;
+    try { reg = fs.readFileSync(path.join(root, 'ports.tsv'), 'utf8'); } catch (e) { return null; }
+    for (const line of reg.split('\n')) {
+      const f = line.split('\t');
+      if (f[1] === u.port) return path.join(root, f[0], 'cgi-bin', 'hg.conf');
+    }
+  }
+  return null;
+}
+
+// hg.conf as hg/lib/hgConfig.c reads it: `include` is relative to the including file,
+// `delete` drops a name, and a later assignment wins over an earlier one.
+function readHgConf(file, out = new Map(), seen = new Set(), depth = 0) {
+  if (depth > 10 || seen.has(file)) return out;
+  seen.add(file);
+  let text;
+  try { text = fs.readFileSync(file, 'utf8'); } catch (e) { return out; }
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+    if (!line || line.startsWith('#')) continue;
+    if (/^include\s/.test(line))
+      readHgConf(path.resolve(path.dirname(file), line.slice(7).trim()), out, seen, depth + 1);
+    else if (/^delete\s/.test(line))
+      for (const name of line.slice(6).trim().split(/\s+/)) out.delete(name);
+    else {
+      const eq = line.indexOf('=');
+      if (eq > 0) out.set(line.slice(0, eq).trim(), line.slice(eq + 1).trim());
+    }
+  }
+  return out;
+}
+
+function centralDbFor(server) {
+  const file = hgConfFor(server);
+  if (file) {
+    const db = readHgConf(file).get('central.db');
+    if (db) return db;
+  }
+  try { return CENTRAL_BY_HOST[new URL(server).hostname] || null; } catch (e) { return null; }
+}
+
+// A password cannot go in a script. It is read from a file outside the tree that only its
+// owner can read -- the arrangement hg.conf uses for hg.conf.private, and for the same
+// reason -- one section per hgcentral:
+//
+//     [hgcentraltest]
+//     user=docentTest
+//     password=...
+//
+// [default] is used when no section matches, and when the central cannot be worked out
+// at all (a server on another machine that is not in CENTRAL_BY_HOST).
+//
+// Nothing here prints a password, and `login:` has no argument that could carry one.
+function loginFile() {
+  return process.env.DOCENT_LOGIN_FILE || path.join(os.homedir(), '.docentLogin');
+}
+
+// Parse the sectioned file into [{central, user, password}], in file order. Lines before
+// any [section] are ignored rather than treated as a default: an unsectioned file is one
+// written against the older single-account form, and silently using it everywhere is how
+// an hgcentraltest password would reach the RR.
+function loginSections(text) {
+  const out = [];
+  let cur = null;
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+    if (!line || line.startsWith('#')) continue;
+    const sec = /^\[(.+)\]$/.exec(line);
+    if (sec) { cur = { central: sec[1].trim(), user: '', password: '' }; out.push(cur); continue; }
+    const eq = line.indexOf('=');
+    if (eq < 0 || !cur) continue;
+    const k = line.slice(0, eq).trim(), v = line.slice(eq + 1).trim();
+    if (k === 'user' || k === 'password') cur[k] = v;
+  }
+  return out;
+}
+
+function loginCreds(server) {
+  const env = process.env;
+  // A single-run override, for trying an account without writing it down. It applies to
+  // whatever server this run drives, which is why it wins over the file.
+  if (env.DOCENT_LOGIN_USER && env.DOCENT_LOGIN_PASSWORD)
+    return { user: env.DOCENT_LOGIN_USER, password: env.DOCENT_LOGIN_PASSWORD, from: 'the environment' };
+  const central = centralDbFor(server);
+  const where = central ? `${server} (central.db ${central})` : `${server} (central.db unknown)`;
+  const file = loginFile();
+  let text;
+  try { text = fs.readFileSync(file, 'utf8'); }
+  catch (e) {
+    throw new Error(`login: no credentials for ${where}. Write ${file} with a `
+      + `[<hgcentral database>] section holding "user=" and "password=" lines (mode 0600), `
+      + `or set DOCENT_LOGIN_USER and DOCENT_LOGIN_PASSWORD for this run.`);
+  }
+  // Refuse a file anyone else can read, the way hg/lib/hgConfig.c checkConfigPerms refuses
+  // a group- or world-readable hg.conf. A test that quietly used a readable password file
+  // would make one on every machine it ran on.
+  const perm = fs.statSync(file).mode & 0o777;
+  if (perm & 0o077)
+    throw new Error(`login: ${file} is readable by group or other (mode ${perm.toString(8)}); chmod 600 it`);
+  const secs = loginSections(text);
+  const match = (central && secs.find(x => x.central === central))
+             || secs.find(x => x.central === 'default');
+  if (!match)
+    throw new Error(`login: ${file} has no section for ${where}`
+      + (secs.length ? ` (it has ${secs.map(x => `[${x.central}]`).join(' ')})` : ' (it has no [section] at all)')
+      + '; add one, or a [default]');
+  if (!match.user || !match.password)
+    throw new Error(`login: [${match.central}] in ${file} needs a "user=" line and a "password=" line`);
+  return { user: match.user, password: match.password, from: `[${match.central}] in ${file}` };
+}
+
 function absurl(u) {
   if (/^https?:/.test(u)) return u;
   if (u.startsWith('/cgi-bin/')) return SERVER.replace(/\/cgi-bin$/, '') + u;
@@ -2097,6 +2240,42 @@ const T_START = Date.now();
         // Click through to the requested assembly so we end on the browser.
         if (!await openHubAssembly(db))
           console.warn(`addPublicHub: no assembly link for db "${db}" on the connect page`);
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
+      case 'login': {
+        // Sign in through hgLogin, so the steps after this one can reach a page that
+        // needs a user -- hgCollection above all. Credentials come from loginCreds(),
+        // never from the script. Takes no argument, or {shot:}.
+        const o = (arg && typeof arg === 'object') ? arg : {};
+        const c = loginCreds(SERVER);
+        console.log(`LOGIN ${c.user} on ${SERVER} (credentials from ${c.from})`);
+        await nav('/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1');
+        await page.waitForSelector('#accountLoginForm', { timeout: 15000 });
+        await glideTo('#userName'); await page.click('#userName');
+        await typeIn(page, '#userName', c.user);
+        await typeIn(page, '#password', c.password);
+        await clickGlide('input[name="hgLogin.do.displayLogin"]');
+        await page.waitForLoadState('load');
+        // hgLogin answers a bad password by drawing the same form again with a red
+        // message, which is a perfectly good page: without this check every later step
+        // would run logged out and the failure would surface somewhere else entirely.
+        if (await page.$('#accountLoginForm')) {
+          const why = (await page.innerText('body')).split('\n').map(l => l.trim())
+                        .filter(Boolean).slice(0, 8).join(' | ');
+          throw new Error(`login: still on the login page as ${c.user} -- ${why}`);
+        }
+        // hgLogin answers a good password with a page that navigates ITSELF a moment
+        // later: returnToURL(150) writes setTimeout(function(){location=...}, 150). Return
+        // while that timer is pending and the next step's goto: races it, and the browser
+        // aborts one of the two -- which arrives as a flat `net::ERR_ABORTED` on a URL
+        // that is perfectly fine. So wait for the redirect to land before going on. The
+        // failure path above is checked first, since that page never leaves hgLogin and
+        // there is no redirect to wait for.
+        await page.waitForURL(u => !/\/hgLogin(\?|$)/.test(String(u)), { timeout: 10000 })
+                  .catch(() => {});
+        await page.waitForLoadState('load').catch(() => {});
+        await captureState();
         if (o.shot) { await shot(o.shot); return; }
         break;
       }

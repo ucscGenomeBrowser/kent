@@ -115,6 +115,25 @@ function readHgConf(file, out = new Map(), seen = new Set(), depth = 0) {
   return out;
 }
 
+// Which hgcentral a server reads. Read from its hg.conf when that is on this machine,
+// because a sandbox may say so for itself -- 45 of the personal confs on hgwdev set
+// central.db to hgcentraltest and two do not. Otherwise a table for the servers whose
+// conf is somewhere else. docent.js carries the same lookup; keep the two in step.
+const CENTRAL_BY_HOST = {
+  'genome.ucsc.edu': 'hgcentral',
+  'genome-euro.ucsc.edu': 'hgcentral',         // its own database of the same name
+  'genome-asia.ucsc.edu': 'hgcentral',         // ... and so is this one
+  'hgwbeta.soe.ucsc.edu': 'hgcentralbeta',
+};
+function centralDbFor(server) {
+  const file = hgConfFor(server);
+  if (file) {
+    const db = readHgConf(file).get('central.db');
+    if (db) return db;
+  }
+  try { return CENTRAL_BY_HOST[new URL(server).hostname] || null; } catch (e) { return null; }
+}
+
 const PAD = '              ';
 function reportTargetConf(server) {
   console.log(`  target      ${server}`);
@@ -132,6 +151,59 @@ function reportTargetConf(server) {
   console.log(`${PAD}${file}`);
   for (const k of HG_CONF_KEYS)
     console.log(`${PAD}${k.padEnd(w)}  ${conf.has(k) ? conf.get(k) : 'unset'}`);
+}
+
+// The credentials a `login:` step needs, resolved the same way docent.js resolves them:
+// keyed by the HGCENTRAL the server reads, because an account is a row in gbMembers in
+// one of them. genome-test, hgwdev, every sandbox and every ticket park read
+// hgcentraltest, so one account covers all of them; hgwbeta and the RR are separate sets
+// of accounts. Checked here because a missing password is exactly the kind of fixture
+// this program exists for -- the run would otherwise get as far as hgLogin before it
+// said so.
+//
+// No password, and no line of the file, is ever printed, and no login is attempted: a
+// wrong password fails loudly at the step itself, which is the one thing preflight cannot
+// do for it.
+function loginSections(text) {
+  const out = [];
+  let cur = null;
+  for (const raw of text.split('\n')) {
+    const line = raw.trim();
+    if (!line || line.startsWith('#')) continue;
+    const sec = /^\[(.+)\]$/.exec(line);
+    if (sec) { cur = { central: sec[1].trim(), user: '', password: '' }; out.push(cur); continue; }
+    const eq = line.indexOf('=');
+    if (eq < 0 || !cur) continue;
+    const k = line.slice(0, eq).trim(), v = line.slice(eq + 1).trim();
+    if (k === 'user' || k === 'password') cur[k] = v;
+  }
+  return out;
+}
+
+// Returns {label, why}: what to show for this server's account, and why it is unusable.
+// Keyed by the hgcentral the server reads, since that is where gbMembers lives.
+function loginAccount(server) {
+  const env = process.env;
+  if (env.DOCENT_LOGIN_USER && env.DOCENT_LOGIN_PASSWORD)
+    return { label: `${env.DOCENT_LOGIN_USER} (from the environment)`, why: null };
+  const central = centralDbFor(server);
+  const where = central ? `central.db ${central}` : 'central.db unknown';
+  const file = env.DOCENT_LOGIN_FILE || path.join(os.homedir(), '.docentLogin');
+  let text;
+  try { text = fs.readFileSync(file, 'utf8'); }
+  catch (e) { return { label: where, why: `no ${file}, and no DOCENT_LOGIN_USER/PASSWORD` }; }
+  const perm = fs.statSync(file).mode & 0o777;
+  if (perm & 0o077)
+    return { label: where, why: `${file} is readable by group or other (mode ${perm.toString(8)}); chmod 600 it` };
+  const secs = loginSections(text);
+  const match = (central && secs.find(x => x.central === central))
+             || secs.find(x => x.central === 'default');
+  if (!match)
+    return { label: where, why: `${file} has no section for ${where}`
+      + (secs.length ? ` (it has ${secs.map(x => `[${x.central}]`).join(' ')})` : ' (it has no [section] at all)') };
+  if (!match.user || !match.password)
+    return { label: `[${match.central}]`, why: `[${match.central}] in ${file} needs a "user=" and a "password=" line` };
+  return { label: `${match.user} (from [${match.central}], ${where})`, why: null };
 }
 
 const fixtures = [];
@@ -212,6 +284,11 @@ for (const f of scripts) {
       } else if (typeof arg === 'string' && /^https?:/.test(arg)) {
         add({ script: f, kind: 'session-url', label: arg, check: urlCheck(arg) });
       }
+    } else if (verb === 'login') {
+      // Keyed by server, so a directory pointed at two of them reports two accounts.
+      const acct = loginAccount(server);
+      add({ script: f, kind: 'login', label: `${acct.label} on ${server}`,
+            check: async () => acct.why });
     } else if (verb === 'goto' && typeof arg === 'string') {
       // A hub can also arrive inside a goto: URL, which is the only way to write a test
       // about the genome= form (the hub: verb builds db=). Pull hubUrl out of the query
