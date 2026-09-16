@@ -188,14 +188,20 @@ function checkLoginStatus() {
     // Check user login status and update UI accordingly
     const returnTo = encodeURIComponent(window.location.href);
     fetch(`/cgi-bin/hubApi/liftOver/loginStatus?returnTo=${returnTo}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("loginStatus request failed: " + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             updateUIForLoginStatus(data);
         })
         .catch(error => {
             console.log('Login status check failed:', error);
-            // Assume not logged in on error
-            updateUIForLoginStatus({userName: null});
+            // Status could not be determined (blocked, down, bad response, etc).
+            // Do not guess; show a neutral unavailable state instead.
+            updateUIForLoginStatus(null);
         });
 }
 
@@ -214,6 +220,37 @@ function updateUIForLoginStatus(loginData) {
         const formContainer = document.getElementById('formContainer');
         const title = formContainer.querySelector('h1');
         title.parentNode.insertBefore(loginBanner, title.nextSibling);
+    }
+
+    // loginData is null when the loginStatus check failed or was blocked;
+    // treat missing loginUrl/signupUrl the same way rather than building
+    // links out of undefined values.
+    var statusUnavailable = !loginData ||
+        (!loginData.userName && (!loginData.loginUrl || !loginData.signupUrl));
+
+    if (statusUnavailable) {
+        loginBanner.textContent =
+            'Unable to verify sign-in status right now. Please reload the page' +
+            ' or try again later.';
+
+        emailInput.value = '';
+        emailInput.placeholder = 'Sign-in status unavailable';
+        emailInput.disabled = true;
+        emailInput.style.backgroundColor = '#f0f0f0';
+
+        const emailForm = document.getElementById('emailForm');
+        const description = emailForm.querySelector('.description');
+        if (description) {
+            description.textContent =
+                'Sign-in status could not be verified, so requests cannot be' +
+                ' submitted right now.';
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.value = 'Unavailable';
+        submitBtn.style.backgroundColor = '#ddd';
+        submitBtn.style.cursor = 'not-allowed';
+        return;
     }
 
     if (loginData.userName) {
