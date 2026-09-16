@@ -75,7 +75,12 @@ function checkAssemblyCompatibility(asm1, asm2) {
                 ";" + "toGenome=" + encodeURIComponent(asm2);
 
     fetch(url)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+            throw new Error("listExisting request failed: " + response.status);
+        }
+        return response.json();
+      })
       .then(response => {
 //      console.log(JSON.stringify(response, null, 2));
         if (response.itemsReturned >= 1) {
@@ -397,7 +402,13 @@ function dismissLiftExists() {
 }
 
 function onSearchError(jqXHR, textStatus, errorThrown, term) {
-    return [{label: 'No genomes found', value: '', genome: '', disabled: true}];
+    // This callback only fires when the search request itself failed
+    // (network error, non-2xx status, bad response) -- not for a
+    // legitimate zero-match result -- so say so rather than implying
+    // there were no matching genomes.
+    console.error("Genome search failed:", textStatus, errorThrown);
+    return [{label: 'Genome search is temporarily unavailable, please try again shortly',
+             value: '', genome: '', disabled: true}];
 }
 
 document.addEventListener("DOMContentLoaded", () => {
