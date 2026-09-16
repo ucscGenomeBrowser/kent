@@ -10,8 +10,11 @@
 #include "dystring.h"
 #include "ra.h"
 #include "udc.h"
+#include "jsonParse.h"
+#include "htmlColor.h"
 #include "hdb.h"
 #include "hgConfig.h"
+#include "sqlNum.h"
 #include "trackDb.h"
 #include "trackDbExpand.h"
 
@@ -21,7 +24,68 @@ struct subTemplate
     struct subTemplate *next;
     char *dataType;             /* Name of the data type, last part of the track name. */
     struct slPair *settings;    /* Settings, with ${column} references not yet filled in. */
+    char *whenColumn;           /* Column the condition tests, NULL when there is no condition. */
+    char *whenOp;               /* Comparison the condition makes. */
+    double whenValue;           /* Number the condition compares against. */
     };
+
+static void templateTakeWhen(struct subTemplate *temp, char *fileName)
+/* Move the stanza's dataTypeWhen line out of its settings and into the condition fields,
+ * so that it makes a subtrack for some rows only rather than becoming a track setting. */
+{
+struct slPair *pair, *prev = NULL;
+
+for (pair = temp->settings; pair != NULL; prev = pair, pair = pair->next)
+    if (sameString(pair->name, "dataTypeWhen"))
+        break;
+if (pair == NULL)
+    return;
+if (prev == NULL)
+    temp->settings = pair->next;
+else
+    prev->next = pair->next;
+
+char *dupe = cloneString(pair->val);
+char *words[4];
+if (chopByWhite(dupe, words, ArraySize(words)) != 3)
+    errAbort("dataTypeWhen of %s is '%s', and should be a column, a comparison and a number",
+        fileName, (char *)pair->val);
+temp->whenColumn = cloneString(words[0]);
+temp->whenOp = cloneString(words[1]);
+temp->whenValue = sqlDouble(words[2]);
+freeMem(dupe);
+}
+
+static boolean templateApplies(struct subTemplate *temp, char **row, struct hash *colHash,
+    char *fileName)
+/* Does this stanza make a subtrack out of this row?  A stanza with no condition always does. */
+{
+if (temp->whenColumn == NULL)
+    return TRUE;
+
+int colIx = hashIntValDefault(colHash, temp->whenColumn, -1);
+if (colIx < 0)
+    errAbort("dataTypeWhen of %s tests column '%s', which the metadata file does not have",
+        fileName, temp->whenColumn);
+double value = sqlDouble(row[colIx]);
+char *op = temp->whenOp;
+
+if (sameString(op, ">"))
+    return value > temp->whenValue;
+if (sameString(op, ">="))
+    return value >= temp->whenValue;
+if (sameString(op, "<"))
+    return value < temp->whenValue;
+if (sameString(op, "<="))
+    return value <= temp->whenValue;
+if (sameString(op, "=="))
+    return value == temp->whenValue;
+if (sameString(op, "!="))
+    return value != temp->whenValue;
+errAbort("dataTypeWhen of %s compares with '%s', and should use one of > >= < <= == !=",
+    fileName, op);
+return FALSE;
+}
 
 static struct subTemplate *templatesFromFile(char *fileName)
 /* Read the template file.  Each stanza starts with a dataType line. */
@@ -39,6 +103,7 @@ while ((stanza = raNextStanzAsPairs(lf)) != NULL)
     temp->dataType = cloneString(stanza->val);
     temp->settings = stanza->next;
     stanza->next = NULL;
+    templateTakeWhen(temp, fileName);
     slAddHead(&list, temp);
     }
 lineFileClose(&lf);
@@ -46,7 +111,59 @@ slReverse(&list);
 return list;
 }
 
-static char *fillInRow(char *template, char **row, struct hash *colHash, char *fileName)
+static struct hash *colorHashFromFile(char *fileName)
+/* Read a colorSettingsUrl file into a hash of column name to a hash of column value to
+ * an "r,g,b" string.  This is the file the faceted UI already reads for its facet
+ * swatches: an object keyed by column name, whose values are objects keyed by a value
+ * of that column, whose leaves are #rrggbb codes. */
+{
+char *text = udcFileReadAll(fileName, NULL, 64*1024*1024, NULL);
+struct hash *byColumn = hashNew(0);
+struct hashCookie columns = hashFirst(jsonObjectVal(jsonParse(text), fileName));
+struct hashEl *column;
+
+while ((column = hashNext(&columns)) != NULL)
+    {
+    struct hash *colors = hashNew(0);
+    struct hashCookie values = hashFirst(jsonObjectVal(column->val, column->name));
+    struct hashEl *value;
+    while ((value = hashNext(&values)) != NULL)
+        {
+        char *code = jsonStringVal(value->val, value->name);
+        unsigned packed;
+        if (!htmlColorForCode(code, &packed))
+            errAbort("Color '%s' of %s in %s is not an #rrggbb code",
+                code, value->name, fileName);
+        int r, g, b;
+        htmlColorToRGB(packed, &r, &g, &b);
+        char rgb[32];
+        safef(rgb, sizeof(rgb), "%d,%d,%d", r, g, b);
+        hashAdd(colors, value->name, cloneString(rgb));
+        }
+    hashAdd(byColumn, column->name, colors);
+    }
+freeMem(text);
+return byColumn;
+}
+
+static char *colorLookup(struct hash *colorHash, char *colName, char *value, char *lookup,
+    char *fileName)
+/* Return the color the palette gives this value of this column.  A value the palette
+ * does not mention is black, which is what the stanzas this replaces used. */
+{
+if (differentString(lookup, "colorSettings"))
+    errAbort("Template of %s asks for a '%s' lookup, which is not a kind of lookup there is",
+        fileName, lookup);
+if (colorHash == NULL)
+    errAbort("Template of %s does a colorSettings lookup, but the track has no colorSettingsUrl",
+        fileName);
+struct hash *colors = hashFindVal(colorHash, colName);
+char *color = (colors == NULL ? NULL : hashFindVal(colors, value));
+return (color == NULL ? "0,0,0" : color);
+}
+
+static char *fillInRow(char *template, char **row, struct hash *colHash,
+    struct hash *colorHash, char *fileName)
 /* Return a copy of template with every ${column} replaced by that column of row. */
 {
 if (strstr(template, "${") == NULL)
@@ -72,18 +189,28 @@ for (;;)
         errAbort("Column name too long in template '%s' of %s", template, fileName);
     memcpy(colName, open + 2, nameSize);
     colName[nameSize] = 0;
+
+    /* ${column:colorSettings} puts in the color the palette gives that column's value,
+     * rather than the value itself. */
+    char *lookup = strchr(colName, ':');
+    if (lookup != NULL)
+        *lookup++ = 0;
     int colIx = hashIntValDefault(colHash, colName, -1);
     if (colIx < 0)
         errAbort("Template of %s asks for column '%s', which the metadata file does not have",
             fileName, colName);
-    dyStringAppend(dy, row[colIx]);
+    char *val = row[colIx];
+    if (lookup != NULL)
+        val = colorLookup(colorHash, colName, val, lookup, fileName);
+    dyStringAppend(dy, val);
     s = close + 1;
     }
 return dyStringCannibalize(&dy);
 }
 
 static struct trackDb *tdbFromTemplate(struct trackDb *parent, struct subTemplate *temp,
-    char *key, char **row, struct hash *colHash, char *fileName, int priorityIx)
+    char *key, char **row, struct hash *colHash, struct hash *colorHash, char *fileName,
+    int priorityIx)
 /* Make one subtrack of parent from one template stanza and one metadata row. */
 {
 struct trackDb *tdb = trackDbNew();
@@ -102,7 +229,7 @@ struct dyString *dy = dyStringNew(512);
 struct slPair *pair;
 for (pair = temp->settings; pair != NULL; pair = pair->next)
     {
-    char *val = fillInRow(pair->val, row, colHash, fileName);
+    char *val = fillInRow(pair->val, row, colHash, colorHash, fileName);
     hashAdd(tdb->settingsHash, pair->name, val);
     dyStringPrintf(dy, "%s %s\n", pair->name, val);
     }
@@ -130,14 +257,20 @@ char *templateFile = hReplaceGbdb(trackDbSetting(parent, "subtrackTemplate"));
 char *metaFile = hReplaceGbdb(trackDbSetting(parent, "metaDataUrl"));
 char *primaryKey = trackDbSetting(parent, "primaryKey");
 char *dataTypeColumn = trackDbSetting(parent, "dataTypeColumn");
+char *colorFile = hReplaceGbdb(trackDbSetting(parent, "colorSettingsUrl"));
 
 if (metaFile == NULL || primaryKey == NULL)
     errAbort("Track %s has subtrackTemplate but no metaDataUrl or no primaryKey",
         parent->track);
 if (incFiles != NULL)
+    {
     dyStringPrintf(incFiles, "%s\n%s\n", templateFile, metaFile);
+    if (colorFile != NULL)
+        dyStringPrintf(incFiles, "%s\n", colorFile);
+    }
 
 struct subTemplate *templates = templatesFromFile(templateFile);
+struct hash *colorHash = (colorFile == NULL ? NULL : colorHashFromFile(colorFile));
 struct lineFile *lf = udcWrapShortLineFile(metaFile, NULL, 256*1024*1024);
 
 /* The first line names the columns.  Remember where each one is. */
@@ -182,8 +315,10 @@ while (lineFileNextReal(lf, &line))
         {
         if (typeList != NULL && !slNameInList(typeList, temp->dataType))
             continue;
+        if (!templateApplies(temp, row, colHash, metaFile))
+            continue;
         priorityIx += 1;
-        slAddHead(&list, tdbFromTemplate(parent, temp, row[keyIx], row, colHash,
+        slAddHead(&list, tdbFromTemplate(parent, temp, row[keyIx], row, colHash, colorHash,
             metaFile, priorityIx));
         }
     slFreeList(&typeList);
