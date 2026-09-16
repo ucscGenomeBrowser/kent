@@ -1,35 +1,23 @@
 <h2>Description</h2>
 
 <p>
-DANIO-CODE is an international consortium that annotates the non-coding part of the
-zebrafish genome, in the same spirit as ENCODE for the human genome. Rather than
-cataloguing genes, it maps the sequences that control when and where genes are used:
-promoters, enhancers, chromatin states and the contacts between them. What sets the
-zebrafish effort apart is that it is centered on development, so the annotation is
-built stage by stage, from the fertilized egg through gastrulation and organogenesis to
-the adult fish.
+This collection was produced by the
+<a href="https://danio-code-dcc.genereg.net/" target="_blank">DANIO-CODE project</a>,
+which annotates non-coding regulatory elements in the zebrafish genome, similar to the
+ENCODE consortium's tracks on the mouse and human genomes.
 </p>
 
 <p>
-The consortium collected and reprocessed 1,802 zebrafish functional genomics datasets
-from a single pipeline per data type, so that samples from different laboratories can
-be compared with each other, and used them to annotate more than 140,000 candidate
-cis-regulatory elements across development. This collection shows those data on
-danRer11: RNA-seq coverage, CAGE-seq transcription start sites, ChIP-seq signal and
-peaks, 3P-seq polyadenylation sites, Hi-C chromosome folding, and the regulatory
-element annotations derived from them.
-</p>
-
-<p>
-The five main data types are large enough, and general enough, that each is its own
-top-level track in an existing track group rather than another entry hidden inside this
-collection: <a href="hgTrackUi?g=dcRNAseqComposite">DC RNA-seq</a> and
-<a href="hgTrackUi?g=dcCAGEseqComposite">DC CAGE-seq</a> and
-<a href="hgTrackUi?g=dc3PseqComposite">DC 3P-seq</a> in the gene tracks, and
-<a href="hgTrackUi?g=dcChIPseqComposite">DC ChIP-seq</a> and
-<a href="hgTrackUi?g=dcHiC_Composite">DC Hi-C</a> under regulation. The
-Shawn Burgess laboratory's CRISPR/Cas9 target-site predictions, also distributed
-through this hub, are their own
+Six data types are large enough, and general enough, that each is its own top-level
+track in an existing track group rather than another entry hidden inside this
+collection: <a href="hgTrackUi?g=dcRNAseqComposite">DANIO-CODE RNA-seq</a> and
+<a href="hgTrackUi?g=dcCAGEseqComposite">DANIO-CODE CAGE-seq</a> and
+<a href="hgTrackUi?g=dc3PseqComposite">DANIO-CODE 3P-seq</a> in the gene tracks, and
+<a href="hgTrackUi?g=dcChIPseqComposite">DANIO-CODE ChIP-seq</a> and
+<a href="hgTrackUi?g=dcHiC_Composite">DANIO-CODE Hi-C</a> under regulation, and
+<a href="hgTrackUi?g=dcComparativeGenomics">Burgess Fish PhastCons</a> under
+comparative genomics. The Shawn Burgess laboratory's CRISPR/Cas9 target-site
+predictions, also distributed through this hub, are their own
 <a href="hgTrackUi?g=dcCrispr">CRISPR/Cas9 Targets</a> track under mapping and
 sequencing, next to where the browser keeps CRISPR tracks on other genomes.
 </p>
@@ -41,27 +29,24 @@ page with the details of that data type:
 </p>
 
 <ul>
-  <li><a href="hgTrackUi?g=dcComp">DC Elements</a> &mdash; per-stage regulatory
+  <li><a href="hgTrackUi?g=dcComp">Elements</a> &mdash; per-stage regulatory
       element annotation at five stages: ChromHMM chromatin states, PADREs, the
       consensus subset cPADREs, and DOPEs.</li>
-  <li><a href="hgTrackUi?g=dcComp_cell_type">DC Cell Types</a> &mdash;
+  <li><a href="hgTrackUi?g=dcComp_cell_type">Cell Types</a> &mdash;
       regulatory elements assigned to a cell type using single-cell ATAC-seq.</li>
-  <li><a href="hgTrackUi?g=dcCopes_and_dopes">DC COPEs DOPEs</a> &mdash; open
+  <li><a href="hgTrackUi?g=dcCopes_and_dopes">COPEs DOPEs</a> &mdash; open
       chromatin regions that carry no histone mark at any stage, split by whether they
       stay open throughout development or only at some stages.</li>
-  <li><a href="hgTrackUi?g=dcEvalidation">DC Enhancers</a> &mdash; a curated set
+  <li><a href="hgTrackUi?g=dcEvalidation">Enhancers</a> &mdash; a curated set
       of zebrafish enhancers tested in transgenic reporter assays.</li>
-  <li><a href="hgTrackUi?g=dcComparativeGenomics">DC Conservation</a> &mdash;
-      phastCons conservation across four cyprinid fishes and the conserved non-coding
-      elements from it, from the Shawn Burgess laboratory at NHGRI.</li>
-  <li><a href="hgTrackUi?g=dcConsensus_promoters">DC Promoters</a> &mdash;
+  <li><a href="hgTrackUi?g=dcConsensus_promoters">Promoters</a> &mdash;
       consensus promoters called from the CAGE data.</li>
 </ul>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Each of the tracks above, and each of the five promoted to their own group, is a
+Each of the tracks above, and each of the six promoted to their own group, is a
 container that groups many individual data files. Click a track name to open its
 configuration page, where samples can be selected by developmental stage, by
 sequencing sample, by ChIP-seq target and, for RNA-seq, by strand. Nothing is turned on

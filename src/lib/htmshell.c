@@ -1109,14 +1109,6 @@ safef(meta, sizeof meta, "<meta http-equiv='Content-Security-Policy' content=\"%
 return cloneString(meta);
 }
 
-char *getCspMetaResponseHeader(char *policy)
-/* get the policy string as an http response header */
-{
-char response[4096];
-safef(response, sizeof response, "Content-Security-Policy: %s\n", policy); 
-return cloneString(response);
-}
-
 char *getCspMetaHeader()
 /* return meta CSP header string */
 {
@@ -1134,17 +1126,6 @@ fputs(meta, f);
 freeMem(meta);
 }
 
-void generateCspResponseHeader(FILE *f)
-/* generate the CSP as an http response header.  Carries the same nonce as the
- * meta tag, since getNonce() is one-per-process, so a page may safely have both.
- * Must be called before the blank line that ends the http header block. */
-{
-char *policy = getCspPolicyString();
-char *header = getCspMetaResponseHeader(policy);
-fputs(header, f);
-freeMem(header);
-freeMem(policy);
-}
 
 
 void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, int dirDepth)
