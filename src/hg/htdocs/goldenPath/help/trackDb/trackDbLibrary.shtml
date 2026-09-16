@@ -1419,6 +1419,28 @@ There are no extra options that can appear on the type hic line.
 -->
 </DIV>
 
+<DIV class="denseClick"><span class="types bed bigBed genePred bigGenePred psl bigPsl"></span>
+<div class="format"><code>denseClick &lt;on/off&gt;</code></div>
+    <P>In dense mode the whole track row is normally one link that switches the
+    track to pack, so a click cannot reach an item. With <code>denseClick on</code>
+    each item on the dense row gets its own link to its details page, and its own
+    mouseover. A click on a part of the row that holds no item still switches the
+    track to pack, as does a click on the center label or the visibility menu you
+    get by right-clicking the row.</P>
+    <P>Items are still drawn the way dense always draws them, all on one row, so
+    the track keeps its height. This is the difference from
+    <A onclick="return jumpTo(this);" HREF="#">squish</A>, which also gives every
+    item a link but puts overlapping items on separate rows.</P>
+    <P>Where several items fall under the same pixel only the first one can be
+    clicked, and at most one link is made per pixel of the row. A track drawn
+    from summary data rather than from items, which is what a bigBed does when
+    zoomed out far enough, has nothing to link and is unaffected.</P>
+    <P>The setting is inherited, so putting it on a composite turns it on for
+    every subtrack.</P>
+    <P><B>Example:</B></P>
+    <pre>   denseClick on</pre>
+</DIV>
+
 <DIV class="denseCoverage"><span class="types bigBed"></span>
 <div class="format"><code>denseCoverage &lt;maxVal&gt;</code></div>
     <P><I>bigBed specific</I></P>

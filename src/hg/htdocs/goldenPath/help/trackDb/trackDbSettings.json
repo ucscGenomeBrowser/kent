@@ -1154,6 +1154,25 @@
    "desc": "To color items differently by the strand they align to, use the colorByStrand setting."
   },
   {
+   "key": "denseClick",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed",
+    "genePred",
+    "bigGenePred",
+    "psl",
+    "bigPsl"
+   ],
+   "level": "new",
+   "fmt": "denseClick <on/off>",
+   "ex": "denseClick on",
+   "desc": "In dense mode the whole track row is normally one link that switches the track to pack, so a click cannot reach an item."
+  },
+  {
    "key": "denseCoverage",
    "category": "bigBed - Item or Region Track Settings",
    "roles": [
@@ -3097,6 +3116,22 @@
    "desc": "The minimum minor allele frequency required for a variant to be displayed."
   },
   {
+   "key": "minAc",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "minAc < N >",
+   "ex": "",
+   "desc": "The minimum alternate allele count required for a variant to be displayed, taken from the AC field of the INFO column."
+  },
+  {
    "key": "vcfDoFilter",
    "category": "vcfTabix - Variant Call Format Track Settings",
    "roles": [
@@ -3143,6 +3178,22 @@
    "fmt": "vcfDoMaf <on/off>",
    "ex": "",
    "desc": "Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks"
+  },
+  {
+   "key": "vcfDoMinAc",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "vcfDoMinAc <on/off>",
+   "ex": "",
+   "desc": "Turns on/off the minimum allele count filter option available by default for VCF tracks"
   },
   {
    "key": "sampleMetadataFile",
@@ -3215,6 +3266,20 @@
    "fmt": "vcfUseAltSampleNames <on/off>",
    "ex": "",
    "desc": "Make the display use the aliases as the default labels for each haplotype lane instead of the ID from the VCF."
+  },
+  {
+   "key": "vcfPhasedColorBy",
+   "category": "vcfPhasedTrio - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "vcfPhasedColorBy <mendelDiff|deNovo|function|noColor>",
+   "ex": "",
+   "desc": "How to color the variants drawn on each haplotype lane."
   },
   {
    "key": "superTrack",
