@@ -1376,6 +1376,20 @@ if (res == NULL)
 return res;
 }
 
+static boolean jsLiteralBackslash(char c)
+/* Is this a character that we put a backslash in front of in a javascript string literal? */
+{
+return (c == '\''
+     || c == '\"'
+     || c == '&'
+     || c == '\\'
+     || c == '\n'
+     || c == '\r'
+     || c == '\t'
+     || c == '\b'
+     || c == '\f');
+}
+
 char *javaScriptLiteralEncode(char *inString)
 /* Use backslash escaping on newline
  * and quote chars, backslash and others.
@@ -1394,16 +1408,9 @@ if (inString == NULL)
 in = inString;
 while ((c = *in++) != 0)
     {
-    if (c == '\''
-     || c == '\"'
-     || c == '&'
-     || c == '\\'
-     || c == '\n'
-     || c == '\r'
-     || c == '\t'
-     || c == '\b'
-     || c == '\f'
-	)
+    if (c == '<')
+        outSize += 4;   // "\x3C", see below
+    else if (jsLiteralBackslash(c))
         outSize += 2;
     else
         outSize += 1;
@@ -1415,16 +1422,19 @@ in = inString;
 out = outString;
 while ((c = *in++) != 0)
     {
-    if (c == '\''
-     || c == '\"'
-     || c == '&'
-     || c == '\\'
-     || c == '\n'
-     || c == '\r'
-     || c == '\t'
-     || c == '\b'
-     || c == '\f'
-	)
+    if (c == '<')
+	{
+	/* These literals end up inside an inline <script> block, and the HTML parser looks
+	 * for "</script>" in there before javascript ever sees the text.  A backslash does
+	 * not hide the < from the parser, but \x3C is the same character to javascript and
+	 * leaves no < to be found. */
+	*out++ = '\\';
+	*out++ = 'x';
+	*out++ = '3';
+	*out++ = 'C';
+	continue;
+	}
+    if (jsLiteralBackslash(c))
         *out++ = '\\';
     *out++ = c;
     }
@@ -2630,8 +2640,9 @@ if (anyAll != NULL)
         else
             checked = sameString(val,selected);
         }
+    // the label is HTML text here, not a javascript literal
     dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked ? " SELECTED" : ""),
-                   val, javaScriptLiteralEncode(label));
+                   val, htmlEncode(label));
     if (label != val)
         freeMem(val);
     }
@@ -2652,7 +2663,7 @@ for (; valPair != NULL; valPair = valPair->next)
     if (valPair->val != NULL)
         label = valPair->val;
     dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked ? " SELECTED" : ""),
-                   (char *)valPair->name, javaScriptLiteralEncode(label));
+                   (char *)valPair->name, htmlEncode(label));
     }
 
 dyStringPrintf(output,"</SELECT>\n");

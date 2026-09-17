@@ -118,11 +118,17 @@ def getTaxIdDbs(onlyDbs):
     if onlyDbs is a set, keep only these dbs.
     If onlyDbs is None, remove all nonAutoDbs.
     """
-    query = "select taxId, name from dbDb where active=1 order by orderKey;"
+    query = "select taxId, name, nibPath from dbDb where active=1 order by orderKey;"
     rows = runQuery("hgcentral", query, usePublic=True)
     taxIdToDbs = defaultdict(list)
-    # take only the first database for every taxonId
-    for taxId, dbCode in rows:
+    # Take the first assembly of each kind for every taxon: the first GenArk one and the
+    # first classic one. Taking only the very first, as this did, stopped updating the
+    # classic assembly the moment a GenArk assembly for the same organism appeared and
+    # sorted ahead of it. Cow is the example: ARS_UCD2.0 arrived, so bosTau9 silently
+    # stayed on the UniProt release it had, while the new data went into a GenArk contrib
+    # collection. Users are still on bosTau9. refs #38300
+    seen = defaultdict(set)
+    for taxId, dbCode, nibPath in rows:
 
         if onlyDbs:
             if dbCode not in onlyDbs:
@@ -132,7 +138,9 @@ def getTaxIdDbs(onlyDbs):
                 continue
 
         taxId = int(taxId)
-        if taxId not in taxIdToDbs:
+        kind = "genark" if (nibPath or "").startswith("hub:") else "classic"
+        if kind not in seen[taxId]:
+            seen[taxId].add(kind)
             taxIdToDbs[taxId].append(dbCode)
 
     for taxId, manNames in manualTaxIdDbs.items():
