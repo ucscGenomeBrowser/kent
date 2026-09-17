@@ -4494,6 +4494,7 @@ struct trackDb *chainTdb = NULL;
  * loaded, so the numbers below describe the visible part and not the whole item. */
 boolean clipped = FALSE;
 
+char *namedChainTrack = chainTrack;    /* as the type line spells it, for the message below */
 if (isBig && !isLifted)
     {
     chainTrack = netChainTrackName(tdb, chainTrack);
@@ -4579,12 +4580,24 @@ if ((net->chainId != 0) && (!isBig || (chainTdb != NULL)))
 	}
     htmlHorizontalLine();
     }
-else if ((net->chainId != 0) && isLifted)
+else if (net->chainId != 0)
     {
-    char *sourceDb = trackDbSetting(tdb, "quickLiftDb");
-    printf("<BR>This net was lifted from %s, so its chains are not on this assembly "
-           "and the alignment cannot be shown here.<BR>\n",
-           isEmpty(sourceDb) ? "another assembly" : sourceDb);
+    /* Only an isBig track with no chain track to follow gets here. */
+    if (isLifted)
+        {
+        char *sourceDb = trackDbSetting(tdb, "quickLiftDb");
+        printf("<BR>This net was lifted from %s, so its chains are not on this assembly "
+               "and the alignment cannot be shown here.<BR>\n",
+               isEmpty(sourceDb) ? "another assembly" : sourceDb);
+        }
+    else
+        {
+        /* A hub whose type line names a chain track this assembly does not have.  Say so
+         * rather than dropping the whole section without a word. */
+        htmlPrintf("<BR>This track's type line names the chain track %s, which is not on "
+                   "this assembly, so the alignment cannot be shown here.<BR>\n",
+                   emptyForNull(namedChainTrack));
+        }
     htmlHorizontalLine();
     }
 printf("<B>Type:</B> %s<BR>\n", net->type);
