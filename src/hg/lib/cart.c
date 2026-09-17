@@ -357,18 +357,45 @@ static void loadHash(struct hash *hash, char *contents)
 /* Load a hash from a cart-like string. */
 {
 char *namePt, *dataPt, *nextNamePt;
+boolean skipMalformed = cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE);
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
     {
-    dataPt = strchr(namePt, '=');
-    if (dataPt == NULL)
-	errAbort("Mangled input string %s", namePt);
-    *dataPt++ = 0;
-    nextNamePt = strchr(dataPt, '&');
-    if (nextNamePt == NULL)
-	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
-    if (nextNamePt != NULL)
-         *nextNamePt++ = 0;
+    if (skipMalformed)
+	{
+	/* Step over the separators of an empty pair, then confine the search for
+	 * the '=' to this pair.  Without both, a setting with a name and no value
+	 * renames the setting after it, and the same pair at the end of the string
+	 * aborts the CGI.  This string is a saved session or a cart row rather than
+	 * a request, so the reader has no way to clear it.  refs #38340 */
+	namePt += strspn(namePt, "&;");
+	if (namePt[0] == 0)
+	    break;
+	nextNamePt = strchr(namePt, '&');
+	if (nextNamePt == NULL)
+	    nextNamePt = strchr(namePt, ';');	/* Accomodate DAS. */
+	if (nextNamePt != NULL)
+	    *nextNamePt++ = 0;
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    {
+	    namePt = nextNamePt;
+	    continue;
+	    }
+	*dataPt++ = 0;
+	}
+    else
+	{
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    errAbort("Mangled input string %s", namePt);
+	*dataPt++ = 0;
+	nextNamePt = strchr(dataPt, '&');
+	if (nextNamePt == NULL)
+	    nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
+	if (nextNamePt != NULL)
+	     *nextNamePt++ = 0;
+	}
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     if (cartValueIsAcceptable(namePt, dataPt))
         hashAdd(hash, namePt, cloneString(dataPt));
