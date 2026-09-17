@@ -4649,6 +4649,34 @@
     be drawn in the left label area.'
   format: hapClusterMethod <centerWeighted|fileOrder|treeFile url >
   examples: []
+- name: sampleColorFile
+  types:
+  - vcf
+  - vcfTabix
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: Colors the haplotype clustering tree that hapClusterMethod treeFile draws in the left label
+    area.
+  description: 'Colors the haplotype clustering tree that hapClusterMethod treeFile draws in the left
+    label area. The file is tab-separated: a sample name in the first column, matching a genotype column
+    ID in the VCF file, and a color in the second. The color may be a color name, a # -prefixed six-digit
+    hex code, or comma-separated red, green and blue values from 0 to 255. Samples the file does not name
+    are drawn black.
+
+    Several colorings can be offered at once. Give a space-separated list of label = url pairs and the
+    track configuration page adds a drop-down to choose among them, displaying an underscore in a label
+    as a space. The drop-down appears only while hapClusterMethod is set to treeFile , and the first file
+    in the list is the one used until the user picks another.'
+  format: sampleColorFile <url>
+  examples:
+  - "HG00096\t#1f77b4\nHG00099\tsteelblue\nNA18939\t255,127,14"
+  - "track myVcf\n    type vcfTabix\n    bigDataUrl /path/to/myVcf.vcf.gz\n    hapClusterMethod treeFile\
+    \ /path/to/tree.nwk\n    sampleColorFile Population=/path/to/byPop.txt Sequencing_center=/path/to/byCenter.txt\n\
+    \      ..."
 - name: hapClusterColorBy
   types:
   - vcf
@@ -4790,6 +4818,24 @@
     is 0.0 (i.e. display all variants).
   format: minFreq < F >
   examples: []
+- name: minAc
+  types:
+  - vcf
+  - vcfTabix
+  - vcfPhasedTrio
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: The minimum alternate allele count required for a variant to be displayed, taken from the AC
+    field of the INFO column.
+  description: The minimum alternate allele count required for a variant to be displayed, taken from the
+    AC field of the INFO column. Variants whose INFO has no usable AC are always displayed. By default
+    this is 0 (i.e. display all variants).
+  format: minAc < N >
+  examples: []
 - name: vcfDoFilter
   types:
   - vcf
@@ -4835,6 +4881,21 @@
   description: Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks
   format: vcfDoMaf <on/off>
   examples: []
+- name: vcfDoMinAc
+  types:
+  - vcf
+  - vcfTabix
+  - vcfPhasedTrio
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: Turns on/off the minimum allele count filter option available by default for VCF tracks
+  description: Turns on/off the minimum allele count filter option available by default for VCF tracks
+  format: vcfDoMinAc <on/off>
+  examples: []
 - name: sampleMetadataFile
   types:
   - vcf
@@ -4859,6 +4920,25 @@
     NA18939\tJPT\tEAS\tEast Asia"
   - "track myVcf\n    type vcfTabix\n    bigDataUrl /path/to/myVcf.vcf.gz\n    sampleMetadataFile /path/to/sampleMeta.txt\n\
     \      ..."
+- name: showHardyWeinberg
+  types:
+  - vcf
+  - vcfTabix
+  - vcfPhasedTrio
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: When a user clicks on a variant with exactly two alleles, adds a line to the details page giving
+    the genotype frequencies that Hardy-Weinberg equilibrium pre...
+  description: When a user clicks on a variant with exactly two alleles, adds a line to the details page
+    giving the genotype frequencies that Hardy-Weinberg equilibrium predicts from the observed allele
+    frequencies. Off by default. There is no control for this on the track configuration page; it is set
+    in trackDb.
+  format: showHardyWeinberg <on/off>
+  examples: []
 - name: vcfPhasedTrio
   types:
   - vcfPhasedTrio
@@ -4917,6 +4997,24 @@
   description: Make the display use the aliases as the default labels for each haplotype lane instead
     of the ID from the VCF.
   format: vcfUseAltSampleNames <on/off>
+  examples: []
+- name: vcfPhasedColorBy
+  types:
+  - vcfPhasedTrio
+  roles:
+  - leaf
+  category: vcfPhasedTrio - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: How to color the variants drawn on each haplotype lane.
+  description: How to color the variants drawn on each haplotype lane. noColor , the default, draws them
+    all black. deNovo colors a child variant red when it appears in neither parent. mendelDiff colors
+    a child variant red when it disagrees with the allele the parents imply was transmitted; this needs
+    vcfParentSamples to be set. function colors by predicted effect on the gene, red for non-synonymous,
+    green for synonymous, blue for UTR or noncoding, and black otherwise; it is offered only when geneTrack
+    is also set.
+  format: vcfPhasedColorBy <noColor|function|deNovo|mendelDiff>
   examples: []
 - name: superTrack
   types:

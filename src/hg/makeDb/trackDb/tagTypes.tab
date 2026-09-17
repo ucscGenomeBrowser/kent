@@ -516,7 +516,7 @@ sGroup_Zaire(DRC)_1976-7 wigMaf
 *FilterPriority bed narrowPeak broadPeak big*
 *HighlightPriority bed narrowPeak broadPeak big*
 sampleColorFile vcf vcfTabix
-sampleMetadataFile vcf vcfTabix
+sampleMetadataFile vcf vcfTabix vcfPhasedTrio
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl bigNarrowPeak
 scoreFilterByRange bed peptideMapping bigBed bigPsl
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl bigNarrowPeak
@@ -537,7 +537,7 @@ showCdsMaxZoom psl bigPsl chain bigChain
 showCfg *
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
-showHardyWeinberg vcf vcfTabix
+showHardyWeinberg vcf vcfTabix vcfPhasedTrio
 showNames bam
 showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed

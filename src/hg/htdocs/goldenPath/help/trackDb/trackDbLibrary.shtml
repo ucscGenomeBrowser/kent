@@ -5026,6 +5026,34 @@ detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":
     </p>
 </div>
 
+<div class="sampleColorFile"><span class="types vcf vcfTabix"></span>
+<div class="format"><code>sampleColorFile &lt;url&gt;</code></div>
+    <p>Colors the haplotype clustering tree that <code>hapClusterMethod treeFile</code> draws in
+    the left label area. The file is tab-separated: a sample name in the first column, matching a
+    genotype column ID in the VCF file, and a color in the second. The color may be a color name,
+    a <code>#</code>-prefixed six-digit hex code, or comma-separated red, green and blue values
+    from 0 to 255. Samples the file does not name are drawn black.</p>
+    <p>Several colorings can be offered at once. Give a space-separated list of
+    <code><em>label</em>=<em>url</em></code> pairs and the track configuration page adds a
+    drop-down to choose among them, displaying an underscore in a label as a space. The drop-down
+    appears only while <a href="#hapClusterMethod">hapClusterMethod</a> is set to
+    <code>treeFile</code>, and the first file in the list is the one used until the user picks
+    another.</p>
+    <P>Example color file:</P>
+    <pre>
+HG00096	#1f77b4
+HG00099	steelblue
+NA18939	255,127,14</pre>
+    <P>Example trackDb entry:</P>
+    <pre>
+    track myVcf
+    type vcfTabix
+    bigDataUrl /path/to/myVcf.vcf.gz
+    hapClusterMethod treeFile /path/to/tree.nwk
+    sampleColorFile Population=/path/to/byPop.txt Sequencing_center=/path/to/byCenter.txt
+      ...</pre>
+</div>
+
 <DIV class="hapClusterColorBy"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
@@ -5178,6 +5206,18 @@ NA18939	JPT	EAS	East Asia</pre>
       ...</pre>
 </DIV>
 
+<DIV class="showHardyWeinberg"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>showHardyWeinberg &lt;on/off&gt;</code></div>
+    <P>
+    When a user clicks on a variant with exactly two alleles, adds a line to the details page
+    giving the genotype frequencies that
+    <A HREF="https://en.wikipedia.org/wiki/Hardy%E2%80%93Weinberg_principle"
+    TARGET=_blank>Hardy-Weinberg equilibrium</A> predicts from the observed allele frequencies.
+    Off by default. There is no control for this on the track configuration page; it is set
+    in trackDb.
+    </P>
+</DIV>
+
 <DIV class="vcfTabix_example"><span class="types vcfTabix"></span>
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
@@ -5234,7 +5274,7 @@ There are no extra options that can appear on the type vcfPhasedTrio line.
 </DIV>
 
 <DIV class="vcfPhasedColorBy"><span class="types vcfPhasedTrio"></span>
-<div class="format"><code>vcfPhasedColorBy &lt;mendelDiff|deNovo|function|noColor&gt;</code></div>
+<div class="format"><code>vcfPhasedColorBy &lt;noColor|function|deNovo|mendelDiff&gt;</code></div>
     <P>
     How to color the variants drawn on each haplotype lane. <code>noColor</code>, the default,
     draws them all black. <code>deNovo</code> colors a child variant red when it appears in
