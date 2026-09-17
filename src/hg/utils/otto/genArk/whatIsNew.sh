@@ -1,4 +1,10 @@
 #!/bin/bash
+#############################################################################
+###  this script lives in the source tree at:
+###      kent/src/hg/utils/otto/genArk/whatIsNew.sh
+###  edit that copy instead of the in-use copy at:
+###      /hive/data/inside/GenArk/pushRR/whatIsNew.sh
+#############################################################################
 
 export TOP="/hive/data/inside/GenArk/pushRR"
 
@@ -92,5 +98,6 @@ fi
 
 ./quickLiftNew.sh
 ./liftOverNew.sh
+./loopDetect.sh
 
 exit $?
