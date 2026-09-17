@@ -8850,12 +8850,14 @@ if (ali->tdb == NULL)
 if (ali->tdb == NULL)
     return;
 
-char *liftDb = trackDbSetting(ali->tdb, "quickLiftDb");
-if (liftDb == NULL)
+// Both halves of the pair or neither.  Nothing filters a hub's trackDb, so a stanza can
+// carry quickLiftDb on its own, and taking the assembly without the chain file would leave
+// the table resolved against one assembly and the query run on the other.
+if (!quickLiftIsLifted(ali->tdb))
     return;
 
 ali->quickLiftFile = trackDbSetting(ali->tdb, "quickLiftUrl");
-ali->db = liftDb;
+ali->db = trackDbSetting(ali->tdb, "quickLiftDb");
 quickLiftResolveTable(ali->tdb, bareTable, &ali->table, &ali->db);
 }
 
