@@ -10057,12 +10057,19 @@ if (tdbIsContainerChild(tdb))
         // inheriting the parent's.  NOTE: tdb->visibility can't tell "asked for something"
         // from "inherited a default", since trackDbFieldsFromSettings() fills it through
         // the inheriting trackDbSetting() - hence trackDbLocalSetting here.
+        // A trackDb "visibility hide" is only a default though, and a generated hub
+        // trackDb can carry one on every subtrack; taking it for a request to hide left a
+        // checked subtrack undrawable with nothing on the page to say why.  So only a cart
+        // value counts as the user asking for hide - trackDb hide falls back like no
+        // setting at all, since whether the child shows is the checkbox's business.
+        boolean askedToHide = (subtrackOverride && vis == tvHide);
         boolean hasOwnVis = (subtrackOverride
-                             || trackDbLocalSetting(tdb, "visibility") != NULL);
+                             || (trackDbLocalSetting(tdb, "visibility") != NULL
+                                 && vis != tvHide));
         if (onlyVis != NULL)
             {
             // onlyVisibility pins the child to a single mode, but asking to hide still hides
-            if (!(hasOwnVis && vis == tvHide))
+            if (!askedToHide)
                 vis = tvFromVisOnlySetting(onlyVis);
             }
         else if (!hasOwnVis)
