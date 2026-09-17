@@ -2829,7 +2829,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     struct trackDb *tdb = childRef->val;
     if (childRef == superTdb->children) // first time through
         {
-        printf("<TR style='border-bottom: none'><TD style='margin-bottom:10px' NOWRAP colspan=2>\n");
+        printf("<TR style='border-bottom: none'><TD style='padding-bottom:8px' NOWRAP colspan=2>\n");
 
         // Hide/show everything with a single click, the two most common cases
         printf("<button type='button' id='superVizHideAllButton'>Hide all tracks</button>\n");
