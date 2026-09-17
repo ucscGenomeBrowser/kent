@@ -1,5 +1,5 @@
 {
- "current": 502,
+ "current": 503,
  "first": {
   "../cgi-bin/RNAplot": {
    "commit": "a127c65d3af",
@@ -9,7 +9,7 @@
     11957
    ],
    "ts": 1394017544,
-   "version": 296,
+   "version": 297,
    "via": "call"
   },
   "../goldenPath/help/query.html": {
@@ -19,7 +19,18 @@
     28072
    ],
    "ts": 1633958818,
-   "version": 421,
+   "version": 422,
+   "via": "call"
+  },
+  "../goldenPath/newsarch.html": {
+   "commit": "a9c71c94309",
+   "released": false,
+   "subject": "BLAT dated banner: make the news announcement URL an hg.conf setting. refs #37996",
+   "tickets": [
+    37996
+   ],
+   "ts": 1788559098,
+   "version": 504,
    "via": "call"
   },
   "../htdocs/urw-fonts": {
@@ -27,7 +38,7 @@
    "subject": "turn freeType fonts on by default.  Look for them in ../htdocs/urw-fonts",
    "tickets": [],
    "ts": 1617745525,
-   "version": 412,
+   "version": 413,
    "via": "call"
   },
   "../images/floret.jpg": {
@@ -45,7 +56,7 @@
     17316
    ],
    "ts": 1465232412,
-   "version": 333,
+   "version": 334,
    "via": "call"
   },
   "/data/tmp": {
@@ -53,7 +64,7 @@
    "subject": "Adding use of /data/tmp or customTrash.tmpdir directory for database loading",
    "tickets": [],
    "ts": 1168645950,
-   "version": 149,
+   "version": 150,
    "via": "call"
   },
   "/dev/shm/trackDbCache": {
@@ -63,7 +74,7 @@
     35945
    ],
    "ts": 1771635048,
-   "version": 494,
+   "version": 495,
    "via": "call"
   },
   "/gbdb": {
@@ -73,7 +84,7 @@
     13634
    ],
    "ts": 1493419148,
-   "version": 348,
+   "version": 349,
    "via": "call"
   },
   "/gbdb/": {
@@ -81,7 +92,7 @@
    "subject": "library changes for the browser box: This changes mostly hdb and jksql,",
    "tickets": [],
    "ts": 1389803637,
-   "version": 294,
+   "version": 295,
    "via": "call"
   },
   "/gbdb/$db/trackDb.ix": {
@@ -89,7 +100,7 @@
    "subject": "add config variable to put trix file somewhere else",
    "tickets": [],
    "ts": 1287777831,
-   "version": 242,
+   "version": 243,
    "via": "call"
   },
   "/usr/share/fonts/default/Type1": {
@@ -97,7 +108,7 @@
    "subject": "support font choice in freetype font support",
    "tickets": [],
    "ts": 1601426972,
-   "version": 404,
+   "version": 405,
    "via": "call"
   },
   "0": {
@@ -107,7 +118,7 @@
     36533
    ],
    "ts": 1761309294,
-   "version": 489,
+   "version": 490,
    "via": "call"
   },
   "1": {
@@ -117,7 +128,7 @@
     28049
    ],
    "ts": 1630527962,
-   "version": 419,
+   "version": 420,
    "via": "call"
   },
   "10": {
@@ -127,7 +138,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "10000": {
@@ -135,7 +146,7 @@
    "subject": "use 10,000 for the number of items to load from a bigBed",
    "tickets": [],
    "ts": 1705605275,
-   "version": 459,
+   "version": 460,
    "via": "call"
   },
   "100000": {
@@ -143,7 +154,7 @@
    "subject": "make maxItemsPossible an hg.conf variable",
    "tickets": [],
    "ts": 1710536073,
-   "version": 462,
+   "version": 463,
    "via": "call"
   },
   "1000000": {
@@ -151,7 +162,7 @@
    "subject": "limit maxItems to maxItemsPerRow (1,000).   Use one million for the",
    "tickets": [],
    "ts": 1705353483,
-   "version": 459,
+   "version": 460,
    "via": "call"
   },
   "20": {
@@ -159,7 +170,7 @@
    "subject": "implement cgiApoptosis system",
    "tickets": [],
    "ts": 1306951036,
-   "version": 251,
+   "version": 252,
    "via": "call"
   },
   "20s": {
@@ -167,7 +178,7 @@
    "subject": "making sure that hgGeneGraph is not spawning more and more dot programs. This came up because on Nov 14 today, a lot of ",
    "tickets": [],
    "ts": 1731599443,
-   "version": 473,
+   "version": 474,
    "via": "call"
   },
   "3": {
@@ -177,7 +188,7 @@
     37889
    ],
    "ts": 1784666288,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "50000": {
@@ -185,7 +196,7 @@
    "subject": "use summary information in bigBeds when filters are off and there are",
    "tickets": [],
    "ts": 1706218657,
-   "version": 459,
+   "version": 460,
    "via": "call"
   },
   "600": {
@@ -195,7 +206,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "90": {
@@ -203,7 +214,7 @@
    "subject": "Adding parallel-fetch loading of remote bigDataUrl tracks using pthreads",
    "tickets": [],
    "ts": 1309810115,
-   "version": 253,
+   "version": 254,
    "via": "call"
   },
   "BAMMaxItems": {
@@ -211,7 +222,7 @@
    "subject": "change BAM support to use maxItems as a signal to go into coverage",
    "tickets": [],
    "ts": 1745884559,
-   "version": 481,
+   "version": 482,
    "via": "literal"
   },
   "Bitmap": {
@@ -219,7 +230,7 @@
    "subject": "finalizing freeType font work",
    "tickets": [],
    "ts": 1605990583,
-   "version": 407,
+   "version": 408,
    "via": "call"
   },
   "Examples": {
@@ -229,7 +240,7 @@
     25796
    ],
    "ts": 1711460186,
-   "version": 462,
+   "version": 463,
    "via": "call"
   },
   "HGDB_ASSEMBLYLIST_STATUS_TABLE": {
@@ -239,7 +250,7 @@
     32897
    ],
    "ts": 1723597387,
-   "version": 469,
+   "version": 470,
    "via": "call"
   },
   "HGDB_CAN_DO_COVERAGE": {
@@ -249,7 +260,7 @@
     952
    ],
    "ts": 1417828027,
-   "version": 309,
+   "version": 310,
    "via": "call"
   },
   "HGDB_CLADETABLE": {
@@ -257,7 +268,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "call"
   },
   "HGDB_DBDBTABLE": {
@@ -265,7 +276,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "call"
   },
   "HGDB_DEFAULTCARTTABLE": {
@@ -273,7 +284,7 @@
    "subject": "add ability to have a default cart other than the empty one.",
    "tickets": [],
    "ts": 1606057828,
-   "version": 407,
+   "version": 408,
    "via": "call"
   },
   "HGDB_DEFAULTDBTABLE": {
@@ -281,7 +292,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "call"
   },
   "HGDB_GENARK_STATUS_TABLE": {
@@ -289,7 +300,7 @@
    "subject": "check to make sure genark table exists before using it.",
    "tickets": [],
    "ts": 1620777844,
-   "version": 414,
+   "version": 415,
    "via": "call"
   },
   "HGDB_GENOMECLADETABLE": {
@@ -297,7 +308,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "call"
   },
   "HGDB_HUB_PUBLIC_TABLE": {
@@ -307,7 +318,7 @@
     6162
    ],
    "ts": 1322699150,
-   "version": 259,
+   "version": 260,
    "via": "call"
   },
   "HGDB_HUB_STATUS_TABLE": {
@@ -317,7 +328,7 @@
     6162
    ],
    "ts": 1322699150,
-   "version": 259,
+   "version": 260,
    "via": "call"
   },
   "HGDB_NAMED_SESSION_DB": {
@@ -327,7 +338,7 @@
     28525
    ],
    "ts": 1680816542,
-   "version": 446,
+   "version": 447,
    "via": "call"
   },
   "HGDB_SESSIONDBTABLE": {
@@ -335,7 +346,7 @@
    "subject": "allow for different names for the sessionDb and userDb tables",
    "tickets": [],
    "ts": 1428523543,
-   "version": 314,
+   "version": 315,
    "via": "call"
   },
   "HGDB_USERDBTABLE": {
@@ -343,7 +354,7 @@
    "subject": "allow for different names for the sessionDb and userDb tables",
    "tickets": [],
    "ts": 1428523543,
-   "version": 314,
+   "version": 315,
    "via": "call"
   },
   "Helvetica": {
@@ -351,7 +362,7 @@
    "subject": "get the postscript driver to allow font specification.   Use the correct",
    "tickets": [],
    "ts": 1601502828,
-   "version": 404,
+   "version": 405,
    "via": "call"
   },
   "JKSQL_TRACE": {
@@ -361,7 +372,7 @@
     13634
    ],
    "ts": 1499369605,
-   "version": 351,
+   "version": 352,
    "via": "call"
   },
   "LIFTOVERCHAINNAME": {
@@ -369,7 +380,7 @@
    "subject": "allow quickLiftChain and liftOverChain tables to have different names",
    "tickets": [],
    "ts": 1757548483,
-   "version": 487,
+   "version": 488,
    "via": "call"
   },
   "Please take our survey": {
@@ -377,7 +388,7 @@
    "subject": "Adding back support for hg.conf settings survey and surveyLabel to hgGateway.",
    "tickets": [],
    "ts": 1467842604,
-   "version": 335,
+   "version": 336,
    "via": "call"
   },
   "QUICKLIFTCHAINNAME": {
@@ -385,7 +396,7 @@
    "subject": "allow quickLiftChain and liftOverChain tables to have different names",
    "tickets": [],
    "ts": 1757548483,
-   "version": 487,
+   "version": 488,
    "via": "call"
   },
   "Search Help": {
@@ -395,7 +406,7 @@
     15554
    ],
    "ts": 1630066704,
-   "version": 419,
+   "version": 420,
    "via": "call"
   },
   "abort": {
@@ -403,7 +414,7 @@
    "subject": "Oops. I meant to turn this to default abort a long time ago.",
    "tickets": [],
    "ts": 1518138351,
-   "version": 360,
+   "version": 361,
    "via": "call"
   },
   "addJs": {
@@ -413,7 +424,7 @@
     33973
    ],
    "ts": 1718373644,
-   "version": 466,
+   "version": 467,
    "via": "call"
   },
   "allowNib": {
@@ -424,7 +435,7 @@
     12717
    ],
    "ts": 1396453562,
-   "version": 297,
+   "version": 298,
    "via": "call"
   },
   "alwaysItemRgb": {
@@ -434,7 +445,7 @@
     28498
    ],
    "ts": 1718883805,
-   "version": 466,
+   "version": 467,
    "via": "call"
   },
   "analytics.trackButtons": {
@@ -444,7 +455,7 @@
     27283
    ],
    "ts": 1625574799,
-   "version": 417,
+   "version": 418,
    "via": "call"
   },
   "analytics.trackClicks": {
@@ -454,7 +465,7 @@
     21916
    ],
    "ts": 1615475195,
-   "version": 411,
+   "version": 412,
    "via": "call"
   },
   "analyticsHostList": {
@@ -462,7 +473,7 @@
    "subject": "Fixup usage of htmlEnd cartEnd to lessen their proliferation and add googleAnalytics",
    "tickets": [],
    "ts": 1210281570,
-   "version": 181,
+   "version": 182,
    "via": "call"
   },
   "analyticsKey": {
@@ -470,7 +481,7 @@
    "subject": "Fixup usage of htmlEnd cartEnd to lessen their proliferation and add googleAnalytics",
    "tickets": [],
    "ts": 1210281570,
-   "version": 181,
+   "version": 182,
    "via": "call"
   },
   "apiFromEmail": {
@@ -480,7 +491,7 @@
     31811
    ],
    "ts": 1768592697,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "archivecentral.db": {
@@ -488,7 +499,7 @@
    "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
    "tickets": [],
    "ts": 1081990199,
-   "version": null,
+   "version": 59,
    "via": "call"
   },
   "archivecentral.host": {
@@ -496,7 +507,7 @@
    "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
    "tickets": [],
    "ts": 1081990199,
-   "version": null,
+   "version": 59,
    "via": "call"
   },
   "archivecentral.password": {
@@ -504,7 +515,7 @@
    "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
    "tickets": [],
    "ts": 1081990199,
-   "version": null,
+   "version": 59,
    "via": "call"
   },
   "archivecentral.user": {
@@ -512,7 +523,7 @@
    "subject": "Add support for liftover of genome positions.  Allow non-current databases in assembly dropdowns.",
    "tickets": [],
    "ts": 1081990199,
-   "version": null,
+   "version": 59,
    "via": "call"
   },
   "authTableName": {
@@ -522,7 +533,7 @@
     36428
    ],
    "ts": 1759362093,
-   "version": 488,
+   "version": 489,
    "via": "call"
   },
   "autoBlatBigPsl": {
@@ -532,7 +543,7 @@
     32751
    ],
    "ts": 1747717532,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "barbMergePixels": {
@@ -542,7 +553,7 @@
     37889
    ],
    "ts": 1784666288,
-   "version": 501,
+   "version": 502,
    "via": "literal"
   },
   "bigBedMaxItems": {
@@ -550,7 +561,7 @@
    "subject": "limit maxItems to maxItemsPerRow (1,000).   Use one million for the",
    "tickets": [],
    "ts": 1705353483,
-   "version": 459,
+   "version": 460,
    "via": "literal"
   },
   "bigBedOnePath": {
@@ -560,7 +571,18 @@
     19984
    ],
    "ts": 1762212019,
-   "version": 489,
+   "version": 490,
+   "via": "call"
+  },
+  "bigNet": {
+   "commit": "d11a21c48cd",
+   "released": false,
+   "subject": "bigNet: gate the track type behind an hg.conf flag, refs #20824",
+   "tickets": [
+    20824
+   ],
+   "ts": 1788787783,
+   "version": 504,
    "via": "call"
   },
   "bigWarn": {
@@ -568,7 +590,7 @@
    "subject": "make sure bigWarn statements end up in the log.",
    "tickets": [],
    "ts": 1538093483,
-   "version": 371,
+   "version": 372,
    "via": "literal"
   },
   "blatNewForm": {
@@ -578,7 +600,7 @@
     37893
    ],
    "ts": 1786461522,
-   "version": 502,
+   "version": 503,
    "via": "call"
   },
   "blatNewFormBanner": {
@@ -588,7 +610,29 @@
     37893
    ],
    "ts": 1786461522,
-   "version": 502,
+   "version": 503,
+   "via": "call"
+  },
+  "blatNewFormNewsUrl": {
+   "commit": "a9c71c94309",
+   "released": false,
+   "subject": "BLAT dated banner: make the news announcement URL an hg.conf setting. refs #37996",
+   "tickets": [
+    37996
+   ],
+   "ts": 1788559098,
+   "version": 504,
+   "via": "literal"
+  },
+  "blatNewFormSwitchDate": {
+   "commit": "7a69a5535f1",
+   "released": false,
+   "subject": "BLAT classic form: announce the new-page switch date via hg.conf, fix stale input limits. refs #37996",
+   "tickets": [
+    37996
+   ],
+   "ts": 1788558250,
+   "version": 504,
    "via": "call"
   },
   "blatNewPageBanner": {
@@ -596,7 +640,7 @@
    "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
    "tickets": [],
    "ts": 1785029100,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "blatOldTracks": {
@@ -606,7 +650,18 @@
     37893
    ],
    "ts": 1786029878,
-   "version": 501,
+   "version": 502,
+   "via": "literal"
+  },
+  "blatOnlyLatestCheckbox": {
+   "commit": "994528edb7d",
+   "released": false,
+   "subject": "Adding an opt-in \"Keep only last search\" checkbox to the new BLAT search form. refs #36292",
+   "tickets": [
+    36292
+   ],
+   "ts": 1788554116,
+   "version": 504,
    "via": "literal"
   },
   "blatResultsGroup": {
@@ -616,7 +671,7 @@
     38086
    ],
    "ts": 1786977282,
-   "version": 502,
+   "version": 503,
    "via": "call"
   },
   "blatServers": {
@@ -624,7 +679,7 @@
    "subject": "hgPcr working",
    "tickets": [],
    "ts": 1607490135,
-   "version": 408,
+   "version": 412,
    "via": "call"
   },
   "blatServersTbl": {
@@ -632,7 +687,7 @@
    "subject": "hgPcr working",
    "tickets": [],
    "ts": 1607490135,
-   "version": 408,
+   "version": 412,
    "via": "literal"
   },
   "blatShowLocus": {
@@ -642,7 +697,7 @@
     35993
    ],
    "ts": 1751289752,
-   "version": 483,
+   "version": 484,
    "via": "call"
   },
   "blockRtracklayer": {
@@ -652,7 +707,7 @@
     35790
    ],
    "ts": 1748382665,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "bottleneck.except": {
@@ -660,7 +715,7 @@
    "subject": "improving botDelay to give us control to allow our own robots to run unbottlenecked if desired via hg.conf setting bottl",
    "tickets": [],
    "ts": 1340841914,
-   "version": 269,
+   "version": 270,
    "via": "call"
   },
   "bottleneck.host": {
@@ -668,7 +723,7 @@
    "subject": "Making it so that hgBotDelay skips bottleneck if no",
    "tickets": [],
    "ts": 1075568737,
-   "version": null,
+   "version": 50,
    "via": "call"
   },
   "bottleneck.port": {
@@ -676,7 +731,7 @@
    "subject": "Making it so that hgBotDelay skips bottleneck if no",
    "tickets": [],
    "ts": 1075568737,
-   "version": null,
+   "version": 50,
    "via": "call"
   },
   "browser.background": {
@@ -684,7 +739,7 @@
    "subject": "add hDocumentRoot() option",
    "tickets": [],
    "ts": 1138387183,
-   "version": 125,
+   "version": 126,
    "via": "call"
   },
   "browser.bgcolor": {
@@ -692,7 +747,7 @@
    "subject": "added ability to set html backgroud color in hg.conf",
    "tickets": [],
    "ts": 1212268459,
-   "version": 183,
+   "version": 184,
    "via": "call"
   },
   "browser.cgiExpireMinutes": {
@@ -700,7 +755,7 @@
    "subject": "implement cgiApoptosis system",
    "tickets": [],
    "ts": 1306951036,
-   "version": 251,
+   "version": 252,
    "via": "literal"
   },
   "browser.cgiRoot": {
@@ -708,7 +763,7 @@
    "subject": "add hCgiRoot",
    "tickets": [],
    "ts": 1209503202,
-   "version": 181,
+   "version": 182,
    "via": "call"
   },
   "browser.cgiTime": {
@@ -718,7 +773,7 @@
     10611
    ],
    "ts": 1366389695,
-   "version": 282,
+   "version": 283,
    "via": "literal"
   },
   "browser.documentRoot": {
@@ -726,7 +781,7 @@
    "subject": "add hDocumentRoot() option",
    "tickets": [],
    "ts": 1138387183,
-   "version": 125,
+   "version": 126,
    "via": "call"
   },
   "browser.dumpStack": {
@@ -742,7 +797,7 @@
    "subject": "added exportedDataHubs dialog and code to deal with quickLifted hubs",
    "tickets": [],
    "ts": 1710276069,
-   "version": 462,
+   "version": 463,
    "via": "call"
   },
   "browser.geoSuffix": {
@@ -750,7 +805,7 @@
    "subject": "added support for database-based GUI menu items in Mirror menu. also added support for hg.conf browser.geoSuffix for tes",
    "tickets": [],
    "ts": 1358384453,
-   "version": 277,
+   "version": 278,
    "via": "call"
   },
   "browser.indelOptions": {
@@ -758,7 +813,7 @@
    "subject": "Added routines for indel display options (double-sided gaps, query inserts).",
    "tickets": [],
    "ts": 1172531106,
-   "version": 152,
+   "version": 153,
    "via": "call"
   },
   "browser.javaScriptDir": {
@@ -766,7 +821,7 @@
    "subject": "change jsIncludeFile to use a new hg.conf setting (browser.javaScriptDir) to support developer specific javascript direc",
    "tickets": [],
    "ts": 1213046137,
-   "version": 183,
+   "version": 184,
    "via": "literal"
   },
   "browser.node": {
@@ -776,7 +831,7 @@
     3104
    ],
    "ts": 1324590647,
-   "version": 260,
+   "version": 261,
    "via": "call"
   },
   "browser.popularGenomes": {
@@ -786,7 +841,7 @@
     36232
    ],
    "ts": 1772565923,
-   "version": 494,
+   "version": 495,
    "via": "call"
   },
   "browser.quickLift": {
@@ -794,7 +849,18 @@
    "subject": "ongoing work on quickLift.  Added support for SQL beds",
    "tickets": [],
    "ts": 1739736793,
-   "version": 477,
+   "version": 478,
+   "via": "call"
+  },
+  "browser.quickLiftAlignments": {
+   "commit": "992aeef92fe",
+   "released": false,
+   "subject": "quickLift: gate the alignment lift behind an hg.conf flag, refs #38249",
+   "tickets": [
+    38249
+   ],
+   "ts": 1788805867,
+   "version": 504,
    "via": "call"
   },
   "browser.recTrackSets": {
@@ -804,7 +870,7 @@
     25601
    ],
    "ts": 1597276217,
-   "version": 402,
+   "version": 403,
    "via": "call"
   },
   "browser.recTrackSetsDetectChange": {
@@ -814,7 +880,7 @@
     25601
    ],
    "ts": 1596221452,
-   "version": 401,
+   "version": 402,
    "via": "call"
   },
   "browser.sessionKey": {
@@ -826,7 +892,7 @@
     37925
    ],
    "ts": 1785013052,
-   "version": 501,
+   "version": 502,
    "via": "literal"
   },
   "browser.style": {
@@ -834,7 +900,7 @@
    "subject": "support browser.style",
    "tickets": [],
    "ts": 1339101635,
-   "version": 268,
+   "version": 271,
    "via": "call"
   },
   "browser.styleDir": {
@@ -842,7 +908,7 @@
    "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
    "tickets": [],
    "ts": 1287763278,
-   "version": 242,
+   "version": 243,
    "via": "literal"
   },
   "browser.styleImagesDir": {
@@ -850,7 +916,7 @@
    "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
    "tickets": [],
    "ts": 1287763278,
-   "version": 242,
+   "version": 243,
    "via": "literal"
   },
   "browser.trixPath": {
@@ -858,7 +924,7 @@
    "subject": "add config variable to put trix file somewhere else",
    "tickets": [],
    "ts": 1287777831,
-   "version": 242,
+   "version": 243,
    "via": "literal"
   },
   "cacheTrackDb": {
@@ -866,7 +932,7 @@
    "subject": "first cut at caching trackDb in a shared memory location.   No changes",
    "tickets": [],
    "ts": 1559163344,
-   "version": 382,
+   "version": 383,
    "via": "call"
   },
   "cacheTrackDbDir": {
@@ -874,7 +940,7 @@
    "subject": "changes in response to code review (thanks Jonathan!)",
    "tickets": [],
    "ts": 1560989665,
-   "version": 383,
+   "version": 384,
    "via": "call"
   },
   "canColorItems": {
@@ -884,7 +950,7 @@
     37778
    ],
    "ts": 1784830360,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "canDoHgcInPopUp": {
@@ -894,7 +960,7 @@
     33216
    ],
    "ts": 1722544493,
-   "version": 468,
+   "version": 469,
    "via": "call"
   },
   "canDupTracks": {
@@ -902,7 +968,7 @@
    "subject": "put track duplication under hg.conf control",
    "tickets": [],
    "ts": 1668556121,
-   "version": 439,
+   "version": 440,
    "via": "call"
   },
   "canSnake": {
@@ -910,7 +976,18 @@
    "subject": "add option to show chains as snakes under hg.conf control",
    "tickets": [],
    "ts": 1675293513,
-   "version": 443,
+   "version": 444,
+   "via": "call"
+  },
+  "captchaDebug": {
+   "commit": "5abe782bada",
+   "released": false,
+   "subject": "cart.c: gate the captcha session-id debug print behind hg.conf captchaDebug, refs #38247",
+   "tickets": [
+    38247
+   ],
+   "ts": 1788538366,
+   "version": 504,
    "via": "call"
   },
   "cart.db": {
@@ -918,7 +995,7 @@
    "subject": "allow cart to be configured on a seperate server",
    "tickets": [],
    "ts": 1075367860,
-   "version": null,
+   "version": 49,
    "via": "call"
   },
   "cart.host": {
@@ -926,7 +1003,7 @@
    "subject": "allow cart to be configured on a seperate server",
    "tickets": [],
    "ts": 1075367860,
-   "version": null,
+   "version": 49,
    "via": "call"
   },
   "cart.password": {
@@ -934,7 +1011,7 @@
    "subject": "allow cart to be configured on a seperate server",
    "tickets": [],
    "ts": 1075367860,
-   "version": null,
+   "version": 49,
    "via": "call"
   },
   "cart.trace": {
@@ -942,7 +1019,7 @@
    "subject": "If hg.conf has cart.trace, print out some cart properties when opening, overloading (hgSession) or closing the cart, to ",
    "tickets": [],
    "ts": 1214856869,
-   "version": 185,
+   "version": 186,
    "via": "call"
   },
   "cart.user": {
@@ -950,7 +1027,7 @@
    "subject": "allow cart to be configured on a seperate server",
    "tickets": [],
    "ts": 1075367860,
-   "version": null,
+   "version": 49,
    "via": "call"
   },
   "cartTrace": {
@@ -958,7 +1035,7 @@
    "subject": "special penalty for bots with invalid hgsids",
    "tickets": [],
    "ts": 1747861717,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "cartVersion": {
@@ -966,7 +1043,7 @@
    "subject": "implement cart editing.  Needs doc.  ;-)",
    "tickets": [],
    "ts": 1621989098,
-   "version": 415,
+   "version": 416,
    "via": "literal"
   },
   "cdw.siteIsPublic": {
@@ -976,7 +1053,7 @@
     21315
    ],
    "ts": 1524281568,
-   "version": 364,
+   "version": 365,
    "via": "call"
   },
   "central.cookie": {
@@ -992,7 +1069,7 @@
    "subject": "Added logic to deal with new config options in the hg.conf file to",
    "tickets": [],
    "ts": 1027103884,
-   "version": null,
+   "version": 15,
    "via": "call"
   },
   "central.domain": {
@@ -1000,7 +1077,7 @@
    "subject": "Moved domain name of cookie to config file.",
    "tickets": [],
    "ts": 1011330594,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "central.host": {
@@ -1008,7 +1085,7 @@
    "subject": "Fixed crash in hgFind on December browser from uninitialized",
    "tickets": [],
    "ts": 1007489063,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "central.password": {
@@ -1016,7 +1093,7 @@
    "subject": "Reading hgcentral host,user,password from hg.conf file.",
    "tickets": [],
    "ts": 1008702317,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "central.user": {
@@ -1024,7 +1101,7 @@
    "subject": "Reading hgcentral host,user,password from hg.conf file.",
    "tickets": [],
    "ts": 1008702317,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "cgb.server": {
@@ -1032,7 +1109,7 @@
    "subject": "Added hIsCgbServer().",
    "tickets": [],
    "ts": 1225492469,
-   "version": 194,
+   "version": 195,
    "via": "call"
   },
   "chainFileRequestEmail": {
@@ -1042,7 +1119,7 @@
     31811
    ],
    "ts": 1768592697,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "cladeTableName": {
@@ -1050,7 +1127,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "literal"
   },
   "cloudFlareSecretKey": {
@@ -1060,7 +1137,7 @@
     35790
    ],
    "ts": 1748382665,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "cloudFlareSiteKey": {
@@ -1070,8 +1147,19 @@
     35790
    ],
    "ts": 1748382665,
-   "version": 482,
+   "version": 483,
    "via": "literal"
+  },
+  "collectionHubCopyOnWrite": {
+   "commit": "59e2bbf2d3a",
+   "released": false,
+   "subject": "Copy a track collection's hub file when the program that writes it asks for a copy, instead of on every session load.",
+   "tickets": [
+    38273
+   ],
+   "ts": 1788884462,
+   "version": 504,
+   "via": "call"
   },
   "cramRef": {
    "commit": "173bacbf6c2",
@@ -1080,7 +1168,7 @@
     14717
    ],
    "ts": 1450125196,
-   "version": 326,
+   "version": 327,
    "via": "call"
   },
   "cspResponseHeader": {
@@ -1088,7 +1176,7 @@
    "subject": "hg/lib: add an option to send the content policy as an http response header",
    "tickets": [],
    "ts": 1787436539,
-   "version": 502,
+   "version": 503,
    "via": "call"
   },
   "curatedHubPrefix": {
@@ -1096,7 +1184,7 @@
    "subject": "changes to support curated hubs",
    "tickets": [],
    "ts": 1653607507,
-   "version": 431,
+   "version": 432,
    "via": "call"
   },
   "curl": {
@@ -1106,7 +1194,7 @@
     33415
    ],
    "ts": 1725407550,
-   "version": 470,
+   "version": 471,
    "via": "call"
   },
   "customTracks.botCheckMult": {
@@ -1116,7 +1204,7 @@
     28049
    ],
    "ts": 1630527962,
-   "version": 419,
+   "version": 420,
    "via": "literal"
   },
   "customTracks.db": {
@@ -1140,7 +1228,7 @@
    "subject": "add support for maf tracks",
    "tickets": [],
    "ts": 1212241357,
-   "version": 183,
+   "version": 184,
    "via": "call"
   },
   "customTracks.password": {
@@ -1156,7 +1244,7 @@
    "subject": "Adding use of /data/tmp or customTrash.tmpdir directory for database loading",
    "tickets": [],
    "ts": 1168645950,
-   "version": 149,
+   "version": 150,
    "via": "literal"
   },
   "customTracks.useAll": {
@@ -1180,7 +1268,7 @@
    "subject": "removed global databases from CGI library; implemented abilility to have remote genome databases",
    "tickets": [],
    "ts": 1220469713,
-   "version": 190,
+   "version": 191,
    "via": "call"
   },
   "db": {
@@ -1188,7 +1276,7 @@
    "subject": "removed global databases from CGI library; implemented abilility to have remote genome databases",
    "tickets": [],
    "ts": 1220469713,
-   "version": 190,
+   "version": 191,
    "via": "call"
   },
   "db.database": {
@@ -1196,7 +1284,7 @@
    "subject": "Simple tests for functions generated by -dbLink flag",
    "tickets": [],
    "ts": 1051599622,
-   "version": null,
+   "version": 20,
    "via": "call"
   },
   "db.host": {
@@ -1204,7 +1292,7 @@
    "subject": "added hgConfig.c to read configuration from file:",
    "tickets": [],
    "ts": 995440953,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "db.mdb": {
@@ -1212,7 +1300,7 @@
    "subject": "The metaTbl has been renamed 'mdb' and objType has been dropped.",
    "tickets": [],
    "ts": 1271187624,
-   "version": 228,
+   "version": 229,
    "via": "call"
   },
   "db.metaDb": {
@@ -1220,7 +1308,7 @@
    "subject": "Renamed mdb to metaDb",
    "tickets": [],
    "ts": 1272407602,
-   "version": 229,
+   "version": 230,
    "via": "call"
   },
   "db.metaTbl": {
@@ -1228,7 +1316,7 @@
    "subject": "Tightening screws. Don't allow shared metaTbl update except from protected file.",
    "tickets": [],
    "ts": 1270078568,
-   "version": 227,
+   "version": 228,
    "via": "call"
   },
   "db.neverLocal": {
@@ -1236,7 +1324,7 @@
    "subject": "renaming to db.neverLocal to keep in line with the other hg.conf directives",
    "tickets": [],
    "ts": 1379018757,
-   "version": 289,
+   "version": 290,
    "via": "call"
   },
   "db.password": {
@@ -1244,7 +1332,7 @@
    "subject": "added hgConfig.c to read configuration from file:",
    "tickets": [],
    "ts": 995440953,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "db.relatedTrack": {
@@ -1254,7 +1342,7 @@
     25721
    ],
    "ts": 1599847080,
-   "version": 403,
+   "version": 404,
    "via": "call"
   },
   "db.trackDb": {
@@ -1262,7 +1350,7 @@
    "subject": "Added support for multiple trackDb tables in database to be chosen from hg.conf file",
    "tickets": [],
    "ts": 1019784415,
-   "version": null,
+   "version": 13,
    "via": "call"
   },
   "db.trackDbLocal": {
@@ -1270,7 +1358,7 @@
    "subject": "added support for trackDbLocal use to override trackDb entries (for MGC)",
    "tickets": [],
    "ts": 1076060492,
-   "version": null,
+   "version": 50,
    "via": "call"
   },
   "db.user": {
@@ -1278,7 +1366,7 @@
    "subject": "added hgConfig.c to read configuration from file:",
    "tickets": [],
    "ts": 995440953,
-   "version": null,
+   "version": 10,
    "via": "call"
   },
   "dbDbTableName": {
@@ -1286,7 +1374,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "literal"
   },
   "defaultCartName": {
@@ -1294,7 +1382,7 @@
    "subject": "add ability to have a default cart other than the empty one.",
    "tickets": [],
    "ts": 1606057828,
-   "version": 407,
+   "version": 408,
    "via": "literal"
   },
   "defaultDbTableName": {
@@ -1302,7 +1390,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "literal"
   },
   "defaultGenome": {
@@ -1318,7 +1406,7 @@
    "subject": "mysql load data file warnings abort - adding some caution about changing stuff, so for now warning detection activates o",
    "tickets": [],
    "ts": 1332788999,
-   "version": 264,
+   "version": 265,
    "via": "call"
   },
   "doHgcInPopUp": {
@@ -1328,7 +1416,7 @@
     33216
    ],
    "ts": 1710372599,
-   "version": 462,
+   "version": 464,
    "via": "call"
   },
   "doMyVariants": {
@@ -1336,7 +1424,7 @@
    "subject": "Initial myVariants implementation: a form on hgTracks where users can enter item details in one of three ways: hgvs/item",
    "tickets": [],
    "ts": 1777669800,
-   "version": 497,
+   "version": 498,
    "via": "call"
   },
   "dot": {
@@ -1346,7 +1434,7 @@
     13634
    ],
    "ts": 1493419148,
-   "version": 348,
+   "version": 349,
    "via": "call"
   },
   "downloads.server": {
@@ -1354,7 +1442,7 @@
    "subject": "Switch ENCODE downloads link to appropriate downloads server.  Also, Add link to multi-view help.",
    "tickets": [],
    "ts": 1236644294,
-   "version": 201,
+   "version": 202,
    "via": "literal"
   },
   "drawDot": {
@@ -1362,7 +1450,7 @@
    "subject": "ongoing work on snakes... added optional dotplot for bigPsl hgc pages",
    "tickets": [],
    "ts": 1677880376,
-   "version": 444,
+   "version": 445,
    "via": "call"
   },
   "encodeDataWarehouse.dataRoot": {
@@ -1370,7 +1458,7 @@
    "subject": "Header for edwWebXSendFile",
    "tickets": [],
    "ts": 1389017887,
-   "version": 293,
+   "version": 294,
    "via": "literal"
   },
   "encodeDataWarehouse.key": {
@@ -1378,7 +1466,7 @@
    "subject": "Header for edwWebXSendFile",
    "tickets": [],
    "ts": 1389017887,
-   "version": 293,
+   "version": 294,
    "via": "literal"
   },
   "examples": {
@@ -1388,7 +1476,7 @@
     28072
    ],
    "ts": 1633958818,
-   "version": 421,
+   "version": 422,
    "via": "call"
   },
   "fonts.extra": {
@@ -1404,7 +1492,7 @@
    "subject": "make hg.conf option false by default after comment from Braney",
    "tickets": [],
    "ts": 1398168708,
-   "version": 298,
+   "version": 299,
    "via": "call"
   },
   "freeType": {
@@ -1412,7 +1500,7 @@
    "subject": "finalizing freeType font work",
    "tickets": [],
    "ts": 1605990583,
-   "version": 407,
+   "version": 408,
    "via": "call"
   },
   "freeTypeDir": {
@@ -1420,7 +1508,7 @@
    "subject": "support font choice in freetype font support",
    "tickets": [],
    "ts": 1601426972,
-   "version": 404,
+   "version": 405,
    "via": "literal"
   },
   "freeTypeFont": {
@@ -1428,7 +1516,7 @@
    "subject": "get the postscript driver to allow font specification.   Use the correct",
    "tickets": [],
    "ts": 1601502828,
-   "version": 404,
+   "version": 405,
    "via": "literal"
   },
   "ftpProxy": {
@@ -1438,7 +1526,7 @@
     19124
    ],
    "ts": 1490312529,
-   "version": 346,
+   "version": 347,
    "via": "call"
   },
   "galaxyUrl": {
@@ -1448,7 +1536,7 @@
     12642
    ],
    "ts": 1436454092,
-   "version": 318,
+   "version": 319,
    "via": "call"
   },
   "gbdbLoc1": {
@@ -1456,7 +1544,7 @@
    "subject": "library changes for the browser box: This changes mostly hdb and jksql,",
    "tickets": [],
    "ts": 1389803637,
-   "version": 294,
+   "version": 295,
    "via": "call"
   },
   "gbdbLoc2": {
@@ -1464,7 +1552,7 @@
    "subject": "library changes for the browser box: This changes mostly hdb and jksql,",
    "tickets": [],
    "ts": 1389803637,
-   "version": 294,
+   "version": 295,
    "via": "call"
   },
   "gcOnTheFly": {
@@ -1474,7 +1562,7 @@
     35958
    ],
    "ts": 1773781044,
-   "version": 495,
+   "version": 496,
    "via": "call"
   },
   "gcOnTheFlyCoExist": {
@@ -1484,7 +1572,7 @@
     35958
    ],
    "ts": 1773781044,
-   "version": 495,
+   "version": 496,
    "via": "call"
   },
   "genarkHubPrefix": {
@@ -1492,7 +1580,7 @@
    "subject": "if a track hub specifies a database that's not native, look for in among",
    "tickets": [],
    "ts": 1618532443,
-   "version": 413,
+   "version": 414,
    "via": "call"
   },
   "genarkLiftOver": {
@@ -1500,7 +1588,7 @@
    "subject": "let genark hubs appear in hgConvert if we can figure out their UCSC org",
    "tickets": [],
    "ts": 1751324456,
-   "version": 484,
+   "version": 485,
    "via": "call"
   },
   "genbankDb": {
@@ -1510,7 +1598,7 @@
     16809
    ],
    "ts": 1455140367,
-   "version": 328,
+   "version": 329,
    "via": "call"
   },
   "geneTracks": {
@@ -1518,7 +1606,7 @@
    "subject": "Add exon search: jump to GENE exon N from position box",
    "tickets": [],
    "ts": 1780651456,
-   "version": 499,
+   "version": 500,
    "via": "call"
   },
   "genome-archive.cse.ucsc.edu": {
@@ -1526,7 +1614,7 @@
    "subject": "Initial implementation of archive central database access functions.  Not tested.",
    "tickets": [],
    "ts": 1081920256,
-   "version": null,
+   "version": 59,
    "via": "call"
   },
   "genome@soe.ucsc.edu": {
@@ -1534,7 +1622,7 @@
    "subject": "add the ability to put the hgHubConnect contact email address in hg.conf (by request of the Lowe lab)",
    "tickets": [],
    "ts": 1314056201,
-   "version": 255,
+   "version": 256,
    "via": "call"
   },
   "genomeCladeTableName": {
@@ -1542,7 +1630,7 @@
    "subject": "allow using different names for the following tables:  dbDb, defaultDb,",
    "tickets": [],
    "ts": 1426458132,
-   "version": 313,
+   "version": 314,
    "via": "literal"
   },
   "genomeSpace": {
@@ -1552,7 +1640,7 @@
     12559
    ],
    "ts": 1407261448,
-   "version": 303,
+   "version": 304,
    "via": "call"
   },
   "genomeSpace.{variable}": {
@@ -1564,7 +1652,7 @@
     37925
    ],
    "ts": 1785013052,
-   "version": 501,
+   "version": 502,
    "via": "literal"
   },
   "gisaid.server": {
@@ -1580,7 +1668,7 @@
    "subject": "get gisaid locations from hg.conf",
    "tickets": [],
    "ts": 1245110210,
-   "version": 208,
+   "version": 209,
    "via": "call"
   },
   "gisaid.structUrl": {
@@ -1588,7 +1676,7 @@
    "subject": "get gisaid locations from hg.conf",
    "tickets": [],
    "ts": 1245110210,
-   "version": 208,
+   "version": 209,
    "via": "call"
   },
   "graphvizPath": {
@@ -1598,7 +1686,7 @@
     13634
    ],
    "ts": 1495663460,
-   "version": 349,
+   "version": 350,
    "via": "call"
   },
   "grepIndex.default": {
@@ -1624,7 +1712,7 @@
     34420
    ],
    "ts": 1753309501,
-   "version": 485,
+   "version": 486,
    "via": "call"
   },
   "groupDropdown": {
@@ -1634,7 +1722,7 @@
     36592
    ],
    "ts": 1762185794,
-   "version": 489,
+   "version": 490,
    "via": "call"
   },
   "gsid.server": {
@@ -1650,7 +1738,7 @@
    "subject": "added support for expires; made customized signed encrypted buttons; made https secure callback to paypal for ipn verifi",
    "tickets": [],
    "ts": 1169847381,
-   "version": 150,
+   "version": 151,
    "via": "call"
   },
   "gtexBodyMap": {
@@ -1660,7 +1748,7 @@
     17369
    ],
    "ts": 1478823437,
-   "version": 341,
+   "version": 342,
    "via": "call"
   },
   "help.html": {
@@ -1676,7 +1764,7 @@
    "subject": "allow maximum sequence count to be defined in hg.conf hgBlat.maxSequenceCount no redmine",
    "tickets": [],
    "ts": 1531153919,
-   "version": 368,
+   "version": 369,
    "via": "call"
   },
   "hgEncodeVocabDocBaseUrl": {
@@ -1687,7 +1775,7 @@
     12717
    ],
    "ts": 1396052803,
-   "version": 297,
+   "version": 298,
    "via": "call"
   },
   "hgGateway.dbDbTaxonomy": {
@@ -1697,7 +1785,7 @@
     15277
    ],
    "ts": 1461098208,
-   "version": 331,
+   "version": 332,
    "via": "call"
   },
   "hgHubConnect.cacheDir": {
@@ -1707,7 +1795,7 @@
     13625
    ],
    "ts": 1497566680,
-   "version": 350,
+   "version": 351,
    "via": "call"
   },
   "hgHubConnect.validateHub": {
@@ -1717,7 +1805,7 @@
     18870
    ],
    "ts": 1555438924,
-   "version": 380,
+   "version": 381,
    "via": "call"
   },
   "hgPhyloPlaceEnabled": {
@@ -1727,7 +1815,7 @@
     25943
    ],
    "ts": 1605819841,
-   "version": 407,
+   "version": 408,
    "via": "call"
   },
   "hgPhyloPlaceServerDir": {
@@ -1735,7 +1823,7 @@
    "subject": "Performance improvements for trees with millions of sequences:",
    "tickets": [],
    "ts": 1666994886,
-   "version": 438,
+   "version": 439,
    "via": "call"
   },
   "hgSession.shortLink": {
@@ -1745,7 +1833,7 @@
     8520
    ],
    "ts": 1543425030,
-   "version": 374,
+   "version": 375,
    "via": "call"
   },
   "hgTracks.trackReordering": {
@@ -1763,7 +1851,7 @@
     30376
    ],
    "ts": 1670590925,
-   "version": 440,
+   "version": 441,
    "via": "call"
   },
   "hgc.ghostscriptPath": {
@@ -1795,7 +1883,7 @@
    "subject": "Initial version",
    "tickets": [],
    "ts": 1033493421,
-   "version": null,
+   "version": 16,
    "via": "call"
   },
   "hgdbtest.password": {
@@ -1803,7 +1891,7 @@
    "subject": "Initial version",
    "tickets": [],
    "ts": 1033493421,
-   "version": null,
+   "version": 16,
    "via": "call"
   },
   "hgdbtest.user": {
@@ -1811,7 +1899,7 @@
    "subject": "Initial version",
    "tickets": [],
    "ts": 1033493421,
-   "version": null,
+   "version": 16,
    "via": "call"
   },
   "hgdownload.cse.ucsc.edu": {
@@ -1819,7 +1907,7 @@
    "subject": "Switch ENCODE downloads link to appropriate downloads server.  Also, Add link to multi-view help.",
    "tickets": [],
    "ts": 1236644294,
-   "version": 201,
+   "version": 202,
    "via": "call"
   },
   "hgdownload.soe.ucsc.edu": {
@@ -1829,7 +1917,7 @@
     21876
    ],
    "ts": 1534279737,
-   "version": 369,
+   "version": 370,
    "via": "call"
   },
   "hgta.disableAllTables": {
@@ -1837,7 +1925,7 @@
    "subject": "added option to disable All Tables in table browser to support collaborator",
    "tickets": [],
    "ts": 1220898038,
-   "version": 190,
+   "version": 191,
    "via": "call"
   },
   "hgta.disableSendOutput": {
@@ -1847,7 +1935,7 @@
     12717
    ],
    "ts": 1396048348,
-   "version": 297,
+   "version": 298,
    "via": "call"
   },
   "hguid": {
@@ -1855,7 +1943,7 @@
    "subject": "Added support for hg.conf option central.cookie to hUserCookie().",
    "tickets": [],
    "ts": 1119895266,
-   "version": 110,
+   "version": 111,
    "via": "call"
   },
   "hguidIpAccess": {
@@ -1865,7 +1953,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "hguidIpTracking.enabled": {
@@ -1875,7 +1963,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "hguidIpTracking.maxIps": {
@@ -1885,7 +1973,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "literal"
   },
   "hguidIpTracking.table": {
@@ -1895,7 +1983,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "literal"
   },
   "hguidIpTracking.windowSeconds": {
@@ -1905,7 +1993,7 @@
     37494
    ],
    "ts": 1779123521,
-   "version": 498,
+   "version": 499,
    "via": "literal"
   },
   "hotkeys": {
@@ -1915,7 +2003,7 @@
     15370
    ],
    "ts": 1432293321,
-   "version": 316,
+   "version": 317,
    "via": "call"
   },
   "httpProxy": {
@@ -1923,7 +2011,7 @@
    "subject": "Adding support for http(s) proxy",
    "tickets": [],
    "ts": 1271230977,
-   "version": 228,
+   "version": 229,
    "via": "call"
   },
   "httpsCertCheck": {
@@ -1935,7 +2023,7 @@
     28458
    ],
    "ts": 1636484999,
-   "version": 423,
+   "version": 424,
    "via": "call"
   },
   "httpsCertCheckDepth": {
@@ -1947,7 +2035,7 @@
     28458
    ],
    "ts": 1636484999,
-   "version": 423,
+   "version": 424,
    "via": "call"
   },
   "httpsCertCheckDomainExceptions": {
@@ -1957,7 +2045,7 @@
     28458
    ],
    "ts": 1637011807,
-   "version": 423,
+   "version": 424,
    "via": "call"
   },
   "httpsCertCheckVerbose": {
@@ -1969,7 +2057,7 @@
     28458
    ],
    "ts": 1636484999,
-   "version": 423,
+   "version": 424,
    "via": "call"
   },
   "httpsProxy": {
@@ -1977,7 +2065,7 @@
    "subject": "Initial check-in of proxy stuff. Added support for https_proxy for configuring https proxy. Added no_proxy for configuri",
    "tickets": [],
    "ts": 1489987469,
-   "version": 346,
+   "version": 347,
    "via": "call"
   },
   "hub.assemblyListTableName": {
@@ -1987,7 +2075,7 @@
     32897
    ],
    "ts": 1723597387,
-   "version": 469,
+   "version": 470,
    "via": "literal"
   },
   "hub.genArkTableName": {
@@ -1995,7 +2083,7 @@
    "subject": "check to make sure genark table exists before using it.",
    "tickets": [],
    "ts": 1620777844,
-   "version": 414,
+   "version": 415,
    "via": "literal"
   },
   "hub.publicTableName": {
@@ -2005,7 +2093,7 @@
     6162
    ],
    "ts": 1322761458,
-   "version": 259,
+   "version": 260,
    "via": "literal"
   },
   "hub.statusTableName": {
@@ -2015,7 +2103,7 @@
     6162
    ],
    "ts": 1322761458,
-   "version": 259,
+   "version": 260,
    "via": "literal"
   },
   "hubApi.allowHtml": {
@@ -2025,7 +2113,7 @@
     18869
    ],
    "ts": 1556747181,
-   "version": 381,
+   "version": 382,
    "via": "literal"
   },
   "hubApi.blatDelayFraction": {
@@ -2035,7 +2123,7 @@
     36315
    ],
    "ts": 1779204234,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "hubApi.relaySecret": {
@@ -2045,7 +2133,7 @@
     31811
    ],
    "ts": 1784911899,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "hubApi.showActive0": {
@@ -2055,7 +2143,7 @@
     18869
    ],
    "ts": 1557342520,
-   "version": 381,
+   "version": 382,
    "via": "literal"
   },
   "hubSearchText": {
@@ -2065,7 +2153,7 @@
     13625
    ],
    "ts": 1497564976,
-   "version": 350,
+   "version": 351,
    "via": "call"
   },
   "hubSearchTextTable": {
@@ -2075,7 +2163,7 @@
     13625
    ],
    "ts": 1497564976,
-   "version": 350,
+   "version": 351,
    "via": "literal"
   },
   "hubSearchTrixFile": {
@@ -2083,7 +2171,7 @@
    "subject": "adding the ability to search hubs for content.",
    "tickets": [],
    "ts": 1400027199,
-   "version": 299,
+   "version": 300,
    "via": "call"
   },
   "hubSpaceLockTimeout": {
@@ -2093,7 +2181,7 @@
     37964
    ],
    "ts": 1785868015,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "hubSpaceTusdEndpoint": {
@@ -2101,7 +2189,7 @@
    "subject": "Make hubspace tusd endpoint defined by hg.conf variable hubSpaceTusdEndpoint",
    "tickets": [],
    "ts": 1736896778,
-   "version": 476,
+   "version": 477,
    "via": "call"
   },
   "hubSpaceUrl": {
@@ -2109,7 +2197,7 @@
    "subject": "oops I deleted the web accessible file uploads location not the tusd endpoint location, refs Hiram email",
    "tickets": [],
    "ts": 1736899712,
-   "version": 476,
+   "version": 477,
    "via": "call"
   },
   "hubSurvey": {
@@ -2119,7 +2207,7 @@
     5819
    ],
    "ts": 1320257085,
-   "version": 258,
+   "version": 259,
    "via": "call"
   },
   "hubSurveyLabel": {
@@ -2129,7 +2217,7 @@
     5819
    ],
    "ts": 1320257085,
-   "version": 258,
+   "version": 259,
    "via": "call"
   },
   "ignoreDefaultKnown": {
@@ -2137,7 +2225,7 @@
    "subject": "dealing with carts that have knownGene in them when a different default",
    "tickets": [],
    "ts": 1605213740,
-   "version": 406,
+   "version": 407,
    "via": "call"
   },
   "isCirmPublicSite": {
@@ -2145,7 +2233,7 @@
    "subject": "CIRM: fixing download instructions for cirm public site",
    "tickets": [],
    "ts": 1509408499,
-   "version": 357,
+   "version": 358,
    "via": "call"
   },
   "isGbib": {
@@ -2153,7 +2241,7 @@
    "subject": "adding a hg.conf option \"isGbib\", after gbib meeting",
    "tickets": [],
    "ts": 1412673765,
-   "version": 306,
+   "version": 307,
    "via": "call"
   },
   "isGbic": {
@@ -2163,7 +2251,7 @@
     14399
    ],
    "ts": 1481841338,
-   "version": 342,
+   "version": 343,
    "via": "call"
   },
   "js": {
@@ -2171,7 +2259,7 @@
    "subject": "change jsIncludeFile to use a new hg.conf setting (browser.javaScriptDir) to support developer specific javascript direc",
    "tickets": [],
    "ts": 1213046137,
-   "version": 183,
+   "version": 184,
    "via": "call"
   },
   "keep": {
@@ -2181,7 +2269,7 @@
     37893
    ],
    "ts": 1786029878,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "liftDailyLimit": {
@@ -2191,7 +2279,7 @@
     31811
    ],
    "ts": 1778537350,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "liftOverChainName": {
@@ -2199,7 +2287,7 @@
    "subject": "allow quickLiftChain and liftOverChain tables to have different names",
    "tickets": [],
    "ts": 1757548483,
-   "version": 487,
+   "version": 488,
    "via": "literal"
   },
   "localDb.host": {
@@ -2207,7 +2295,7 @@
    "subject": "add sqlExecProglocal function",
    "tickets": [],
    "ts": 1204076245,
-   "version": 176,
+   "version": 177,
    "via": "call"
   },
   "localDb.password": {
@@ -2215,7 +2303,7 @@
    "subject": "add sqlExecProglocal function",
    "tickets": [],
    "ts": 1204076245,
-   "version": 176,
+   "version": 177,
    "via": "call"
   },
   "localDb.user": {
@@ -2223,7 +2311,7 @@
    "subject": "add sqlExecProglocal function",
    "tickets": [],
    "ts": 1204076245,
-   "version": 176,
+   "version": 177,
    "via": "call"
   },
   "logCgiVarMaxLen": {
@@ -2233,7 +2321,7 @@
     36533
    ],
    "ts": 1761309294,
-   "version": 489,
+   "version": 490,
    "via": "literal"
   },
   "logProxy": {
@@ -2243,7 +2331,7 @@
     19124
    ],
    "ts": 1490334966,
-   "version": 346,
+   "version": 347,
    "via": "call"
   },
   "login.acceptAnyId": {
@@ -2253,7 +2341,7 @@
     17327
    ],
    "ts": 1481589963,
-   "version": 342,
+   "version": 343,
    "via": "literal"
   },
   "login.acceptIdx": {
@@ -2263,7 +2351,7 @@
     17327
    ],
    "ts": 1481589963,
-   "version": 342,
+   "version": 343,
    "via": "literal"
   },
   "login.approvedReturn": {
@@ -2273,7 +2361,7 @@
     36485
    ],
    "ts": 1760470384,
-   "version": 489,
+   "version": 490,
    "via": "literal"
   },
   "login.basicAuth": {
@@ -2283,7 +2371,7 @@
     19424
    ],
    "ts": 1494971740,
-   "version": 349,
+   "version": 350,
    "via": "literal"
   },
   "login.browserAddr": {
@@ -2293,7 +2381,7 @@
     8250
    ],
    "ts": 1340388788,
-   "version": 268,
+   "version": 269,
    "via": "literal"
   },
   "login.browserName": {
@@ -2303,7 +2391,7 @@
     8250
    ],
    "ts": 1340388788,
-   "version": 268,
+   "version": 269,
    "via": "literal"
   },
   "login.cookieSalt": {
@@ -2313,7 +2401,7 @@
     17327
    ],
    "ts": 1481563506,
-   "version": 342,
+   "version": 343,
    "via": "literal"
   },
   "login.emailLink": {
@@ -2324,7 +2412,7 @@
     37984
    ],
    "ts": 1785837116,
-   "version": 501,
+   "version": 502,
    "via": "literal"
   },
   "login.https": {
@@ -2334,7 +2422,7 @@
     17778
    ],
    "ts": 1469834335,
-   "version": 336,
+   "version": 337,
    "via": "literal"
   },
   "login.mailReturnAddr": {
@@ -2344,7 +2432,7 @@
     8250
    ],
    "ts": 1340388788,
-   "version": 268,
+   "version": 269,
    "via": "literal"
   },
   "login.mailSignature": {
@@ -2354,7 +2442,7 @@
     8250
    ],
    "ts": 1340388788,
-   "version": 268,
+   "version": 269,
    "via": "literal"
   },
   "login.oauth.providers": {
@@ -2364,7 +2452,7 @@
     37984
    ],
    "ts": 1785786753,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "login.orcid.sandbox": {
@@ -2374,7 +2462,7 @@
     37929
    ],
    "ts": 1785046566,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "login.pwdEyeIcon": {
@@ -2384,7 +2472,18 @@
     37921
    ],
    "ts": 1784918088,
-   "version": 501,
+   "version": 502,
+   "via": "literal"
+  },
+  "login.recovEmailChange": {
+   "commit": "d33d0e1c191",
+   "released": false,
+   "subject": "hgLogin: let users set or change their recovery email address, refs #38197",
+   "tickets": [
+    38197
+   ],
+   "ts": 1788270969,
+   "version": 504,
    "via": "literal"
   },
   "login.relativeLink": {
@@ -2392,7 +2491,7 @@
    "subject": "CIRM: fixing a bug in hgLogin that appears only when using it through a",
    "tickets": [],
    "ts": 1494004030,
-   "version": 348,
+   "version": 349,
    "via": "call"
   },
   "login.systemName": {
@@ -2400,7 +2499,7 @@
    "subject": "Reuse the wiki cookies so that the existing session user can stay logged in and do not need to login to the new hgLogin ",
    "tickets": [],
    "ts": 1336170706,
-   "version": 266,
+   "version": 267,
    "via": "literal"
   },
   "mafClickMafFrag": {
@@ -2408,7 +2507,19 @@
    "subject": "Gate new mafFrag MAF click display behind hg.conf mafClickMafFrag setting",
    "tickets": [],
    "ts": 1773191684,
-   "version": 495,
+   "version": 496,
+   "via": "call"
+  },
+  "mallocTopPad": {
+   "commit": "d2a2afcd6c5",
+   "released": false,
+   "subject": "hgTracks: let hg.conf set how big a step malloc takes, refs #38225",
+   "tickets": [
+    38094,
+    38225
+   ],
+   "ts": 1788295054,
+   "version": 504,
    "via": "call"
   },
   "maxDisplayPixelWidth": {
@@ -2418,7 +2529,7 @@
     10411
    ],
    "ts": 1411156813,
-   "version": 305,
+   "version": 306,
    "via": "call"
   },
   "maxItemsPossible": {
@@ -2426,7 +2537,7 @@
    "subject": "make maxItemsPossible an hg.conf variable",
    "tickets": [],
    "ts": 1710536073,
-   "version": 462,
+   "version": 463,
    "via": "literal"
   },
   "maxMem": {
@@ -2434,7 +2545,7 @@
    "subject": "set up a mechanism to limit memory through an hg.conf variable",
    "tickets": [],
    "ts": 1707329543,
-   "version": 460,
+   "version": 461,
    "via": "call"
   },
   "maxTrackImageHeightPx": {
@@ -2444,7 +2555,7 @@
     34152
    ],
    "ts": 1722815935,
-   "version": 468,
+   "version": 469,
    "via": "literal"
   },
   "mergeRecommended": {
@@ -2452,7 +2563,7 @@
    "subject": "make recommended track sets merge with current cart instead of",
    "tickets": [],
    "ts": 1677280741,
-   "version": 444,
+   "version": 445,
    "via": "call"
   },
   "mgc.server": {
@@ -2460,7 +2571,7 @@
    "subject": "configure mgc host in hg.conf file",
    "tickets": [],
    "ts": 1056327149,
-   "version": null,
+   "version": 27,
    "via": "call"
   },
   "microbeTraceHost": {
@@ -2468,7 +2579,7 @@
    "subject": "Add linkout (per subtree) to MicrobeTrace (in addition to Nextstrain) if subtreeSize is at most 500.",
    "tickets": [],
    "ts": 1694560564,
-   "version": 453,
+   "version": 454,
    "via": "call"
   },
   "modernAlignPage": {
@@ -2478,7 +2589,7 @@
     37893
    ],
    "ts": 1786377300,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "mouseOverEnabled": {
@@ -2488,7 +2599,7 @@
     21980
    ],
    "ts": 1604004988,
-   "version": 406,
+   "version": 407,
    "via": "call"
   },
   "multiRegionButtonTop": {
@@ -2498,7 +2609,7 @@
     26385
    ],
    "ts": 1615695868,
-   "version": 411,
+   "version": 412,
    "via": "call"
   },
   "myVariantsDataDir": {
@@ -2508,7 +2619,7 @@
     33808
    ],
    "ts": 1778695677,
-   "version": 498,
+   "version": 499,
    "via": "call"
   },
   "n022003l.pfb": {
@@ -2516,7 +2627,7 @@
    "subject": "support font choice in freetype font support",
    "tickets": [],
    "ts": 1601426972,
-   "version": 404,
+   "version": 405,
    "via": "call"
   },
   "na": {
@@ -2524,7 +2635,7 @@
    "subject": "Warning only for javascriipt developers",
    "tickets": [],
    "ts": 1261009586,
-   "version": 221,
+   "version": 222,
    "via": "call"
   },
   "name": {
@@ -2536,7 +2647,7 @@
     37925
    ],
    "ts": 1785013052,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "namedSessionAlt": {
@@ -2544,7 +2655,7 @@
    "subject": "trying to lock out bots that make hgsids, no redmine",
    "tickets": [],
    "ts": 1747859850,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "namedSessionDbName": {
@@ -2554,7 +2665,7 @@
     28525
    ],
    "ts": 1680816542,
-   "version": 446,
+   "version": 447,
    "via": "literal"
   },
   "newBotDelay": {
@@ -2564,7 +2675,7 @@
     35584
    ],
    "ts": 1746636630,
-   "version": 481,
+   "version": 482,
    "via": "call"
   },
   "newCustomTrackValidate": {
@@ -2572,7 +2683,7 @@
    "subject": "This is a squashed merge to make git-reports code-review simpler.",
    "tickets": [],
    "ts": 1334362081,
-   "version": 265,
+   "version": 266,
    "via": "call"
   },
   "newExonTooltips": {
@@ -2580,7 +2691,7 @@
    "subject": "more features to hubtools: search in both parent and subdirs, better docs",
    "tickets": [],
    "ts": 1726837398,
-   "version": 471,
+   "version": 472,
    "via": "call"
   },
   "newTrackControls": {
@@ -2588,7 +2699,7 @@
    "subject": "more features to hubtools: search in both parent and subdirs, better docs",
    "tickets": [],
    "ts": 1726837398,
-   "version": 471,
+   "version": 472,
    "via": "call"
   },
   "nextstrainHost": {
@@ -2598,7 +2709,7 @@
     25943
    ],
    "ts": 1605819841,
-   "version": 407,
+   "version": 408,
    "via": "call"
   },
   "noCookieTrace": {
@@ -2606,7 +2717,7 @@
    "subject": "after comments from QA, making warning about request without cookie depend on hg.conf statement, no redmine, email from ",
    "tickets": [],
    "ts": 1746608684,
-   "version": 481,
+   "version": 482,
    "via": "call"
   },
   "noProxy": {
@@ -2614,7 +2725,7 @@
    "subject": "fixing some minor details for no_proxy.",
    "tickets": [],
    "ts": 1490221738,
-   "version": 346,
+   "version": 347,
    "via": "call"
   },
   "noSqlInj.dumpStack": {
@@ -2622,7 +2733,7 @@
    "subject": "fix SQL Injection",
    "tickets": [],
    "ts": 1370287013,
-   "version": 284,
+   "version": 285,
    "via": "call"
   },
   "noSqlInj.level": {
@@ -2630,7 +2741,7 @@
    "subject": "fix SQL Injection",
    "tickets": [],
    "ts": 1370287013,
-   "version": 284,
+   "version": 285,
    "via": "call"
   },
   "no_proxy": {
@@ -2638,7 +2749,7 @@
    "subject": "Initial check-in of proxy stuff. Added support for https_proxy for configuring https proxy. Added no_proxy for configuri",
    "tickets": [],
    "ts": 1489987469,
-   "version": 346,
+   "version": 347,
    "via": "call"
   },
   "off": {
@@ -2648,7 +2759,7 @@
     13626
    ],
    "ts": 1406686778,
-   "version": 303,
+   "version": 304,
    "via": "call"
   },
   "okUserAgent": {
@@ -2658,7 +2769,7 @@
     35790
    ],
    "ts": 1748382665,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "on": {
@@ -2666,7 +2777,7 @@
    "subject": "make sure bigWarn statements end up in the log.",
    "tickets": [],
    "ts": 1538093483,
-   "version": 371,
+   "version": 372,
    "via": "call"
   },
   "ottoTable": {
@@ -2676,7 +2787,7 @@
     31811
    ],
    "ts": 1768858256,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "paraLoadTimeout": {
@@ -2684,7 +2795,7 @@
    "subject": "add ability to set a timeout on remote loads",
    "tickets": [],
    "ts": 1726705995,
-   "version": 471,
+   "version": 472,
    "via": "call"
   },
   "parallelFetch.threads": {
@@ -2692,7 +2803,7 @@
    "subject": "Adding parallel-fetch loading of remote bigDataUrl tracks using pthreads",
    "tickets": [],
    "ts": 1309810115,
-   "version": 253,
+   "version": 254,
    "via": "literal"
   },
   "parallelFetch.timeout": {
@@ -2700,7 +2811,7 @@
    "subject": "Adding parallel-fetch loading of remote bigDataUrl tracks using pthreads",
    "tickets": [],
    "ts": 1309810115,
-   "version": 253,
+   "version": 254,
    "via": "literal"
   },
   "paypalAcademicFee": {
@@ -2708,7 +2819,7 @@
    "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
    "tickets": [],
    "ts": 1169534292,
-   "version": 150,
+   "version": 151,
    "via": "call"
   },
   "paypalCert": {
@@ -2716,7 +2827,7 @@
    "subject": "added support for expires; made customized signed encrypted buttons; made https secure callback to paypal for ipn verifi",
    "tickets": [],
    "ts": 1169847381,
-   "version": 150,
+   "version": 151,
    "via": "call"
   },
   "paypalCommercialFee": {
@@ -2724,7 +2835,7 @@
    "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
    "tickets": [],
    "ts": 1169534292,
-   "version": 150,
+   "version": 151,
    "via": "call"
   },
   "paypalEmail": {
@@ -2732,7 +2843,7 @@
    "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
    "tickets": [],
    "ts": 1169534292,
-   "version": 150,
+   "version": 151,
    "via": "call"
   },
   "paypalIpnServer": {
@@ -2740,7 +2851,7 @@
    "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
    "tickets": [],
    "ts": 1169534292,
-   "version": 150,
+   "version": 151,
    "via": "call"
   },
   "paypalServer": {
@@ -2748,15 +2859,26 @@
    "subject": "inital add of gsidMember cgi for managing GSID membership signup and paypal payments",
    "tickets": [],
    "ts": 1169534292,
-   "version": 150,
+   "version": 151,
    "via": "call"
+  },
+  "pngTimingSampleRate": {
+   "commit": "7007b23dcc1",
+   "released": false,
+   "subject": "hgTracks: measure how long the track image takes to reach the reader, refs #38109",
+   "tickets": [
+    38109
+   ],
+   "ts": 1787863674,
+   "version": 504,
+   "via": "literal"
   },
   "pq.crossHost": {
    "commit": "f6a79b66b48",
    "subject": "dealing with move to hgofbeta",
    "tickets": [],
    "ts": 1237513847,
-   "version": 202,
+   "version": 203,
    "via": "call"
   },
   "pq.db": {
@@ -2764,7 +2886,7 @@
    "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
    "tickets": [],
    "ts": 1082579076,
-   "version": null,
+   "version": 61,
    "via": "call"
   },
   "pq.host": {
@@ -2772,7 +2894,7 @@
    "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
    "tickets": [],
    "ts": 1082579076,
-   "version": null,
+   "version": 61,
    "via": "call"
   },
   "pq.password": {
@@ -2780,7 +2902,7 @@
    "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
    "tickets": [],
    "ts": 1082579076,
-   "version": null,
+   "version": 61,
    "via": "call"
   },
   "pq.user": {
@@ -2788,7 +2910,7 @@
    "subject": "Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.",
    "tickets": [],
    "ts": 1082579076,
-   "version": null,
+   "version": 61,
    "via": "call"
   },
   "punishInvalidHgsid": {
@@ -2796,7 +2918,7 @@
    "subject": "trying to lock out bots that make hgsids, no redmine",
    "tickets": [],
    "ts": 1747859850,
-   "version": 482,
+   "version": 483,
    "via": "call"
   },
   "quickLift.lengthLimit": {
@@ -2804,7 +2926,7 @@
    "subject": "allow quickLift highlight colors and limit to be set in hg.conf",
    "tickets": [],
    "ts": 1744479416,
-   "version": 480,
+   "version": 481,
    "via": "literal"
   },
   "quickLiftChainName": {
@@ -2812,7 +2934,7 @@
    "subject": "allow quickLiftChain and liftOverChain tables to have different names",
    "tickets": [],
    "ts": 1757548483,
-   "version": 487,
+   "version": 488,
    "via": "literal"
   },
   "quickLiftClipToChains": {
@@ -2822,7 +2944,7 @@
     38042
    ],
    "ts": 1786129679,
-   "version": 501,
+   "version": 503,
    "via": "call"
   },
   "relatedTrack": {
@@ -2832,7 +2954,7 @@
     25721
    ],
    "ts": 1597863829,
-   "version": 402,
+   "version": 404,
    "via": "call"
   },
   "resolvCmd": {
@@ -2842,7 +2964,7 @@
     30445
    ],
    "ts": 1672929454,
-   "version": 441,
+   "version": 443,
    "via": "call"
   },
   "resolvPrefix": {
@@ -2852,7 +2974,7 @@
     34240
    ],
    "ts": 1722939734,
-   "version": 469,
+   "version": 470,
    "via": "call"
   },
   "resolvProts": {
@@ -2862,7 +2984,7 @@
     30445
    ],
    "ts": 1672929454,
-   "version": 441,
+   "version": 443,
    "via": "call"
   },
   "restoreMapFind": {
@@ -2870,7 +2992,7 @@
    "subject": "optimization to avoid worrying about overlapping map boxes.",
    "tickets": [],
    "ts": 1473376447,
-   "version": 338,
+   "version": 339,
    "via": "call"
   },
   "rnaPlotPath": {
@@ -2881,7 +3003,7 @@
     11957
    ],
    "ts": 1394017544,
-   "version": 296,
+   "version": 297,
    "via": "literal"
   },
   "ro.password": {
@@ -2889,7 +3011,7 @@
    "subject": "user ro user/pass if in .hg.conf; add option to not strip version numbers",
    "tickets": [],
    "ts": 1073381567,
-   "version": null,
+   "version": 47,
    "via": "call"
   },
   "ro.user": {
@@ -2897,7 +3019,7 @@
    "subject": "user ro user/pass if in .hg.conf; add option to not strip version numbers",
    "tickets": [],
    "ts": 1073381567,
-   "version": null,
+   "version": 47,
    "via": "call"
   },
   "rrcentral.db": {
@@ -2937,7 +3059,7 @@
    "subject": "Updated version seems to work.  Added radio buttons for each database to update.  The form now connects to rtdbServer an",
    "tickets": [],
    "ts": 1137805232,
-   "version": 125,
+   "version": 126,
    "via": "call"
   },
   "rtdb.port": {
@@ -2945,7 +3067,7 @@
    "subject": "Updated version seems to work.  Added radio buttons for each database to update.  The form now connects to rtdbServer an",
    "tickets": [],
    "ts": 1137805232,
-   "version": 125,
+   "version": 126,
    "via": "call"
   },
   "rtdb.server": {
@@ -2953,7 +3075,7 @@
    "subject": "Updated version seems to work.  Added radio buttons for each database to update.  The form now connects to rtdbServer an",
    "tickets": [],
    "ts": 1137805232,
-   "version": 125,
+   "version": 126,
    "via": "call"
   },
   "rtdb.update": {
@@ -2961,7 +3083,7 @@
    "subject": "Added stuff for putting the rtdbUpdate command in a hg.conf file instead of a #define.",
    "tickets": [],
    "ts": 1131501225,
-   "version": 120,
+   "version": 121,
    "via": "call"
   },
   "searchHelpLabel": {
@@ -2971,7 +3093,7 @@
     15554
    ],
    "ts": 1630066704,
-   "version": 419,
+   "version": 420,
    "via": "literal"
   },
   "searchHelpUrl": {
@@ -2981,7 +3103,7 @@
     15554
    ],
    "ts": 1630066704,
-   "version": 419,
+   "version": 420,
    "via": "call"
   },
   "sessionDataDbPrefix": {
@@ -2991,7 +3113,7 @@
     22440
    ],
    "ts": 1548294122,
-   "version": 376,
+   "version": 380,
    "via": "call"
   },
   "sessionDataDir": {
@@ -3001,7 +3123,7 @@
     22440
    ],
    "ts": 1548294122,
-   "version": 376,
+   "version": 380,
    "via": "call"
   },
   "sessionDataDirOld": {
@@ -3011,7 +3133,7 @@
     22440
    ],
    "ts": 1558553100,
-   "version": 382,
+   "version": 383,
    "via": "call"
   },
   "sessionDbName": {
@@ -3019,7 +3141,7 @@
    "subject": "allow for different names for the sessionDb and userDb tables",
    "tickets": [],
    "ts": 1428523543,
-   "version": 314,
+   "version": 315,
    "via": "literal"
   },
   "sessionKey": {
@@ -3027,7 +3149,7 @@
    "subject": "initial work on creating a random session key for greater securiy of cart data",
    "tickets": [],
    "ts": 1392064220,
-   "version": 295,
+   "version": 297,
    "via": "call"
   },
   "sessionNewPage": {
@@ -3038,7 +3160,7 @@
     38157
    ],
    "ts": 1787303142,
-   "version": 502,
+   "version": 503,
    "via": "call"
   },
   "sessionNewPageBanner": {
@@ -3049,7 +3171,7 @@
     38157
    ],
    "ts": 1787303142,
-   "version": 502,
+   "version": 503,
    "via": "call"
   },
   "sessionThumbnail.convertPath": {
@@ -3059,7 +3181,7 @@
     17469
    ],
    "ts": 1467834304,
-   "version": 335,
+   "version": 336,
    "via": "call"
   },
   "sessionThumbnail.imgDir": {
@@ -3069,7 +3191,7 @@
     15312
    ],
    "ts": 1464391764,
-   "version": 333,
+   "version": 334,
    "via": "call"
   },
   "sessionThumbnail.suppress": {
@@ -3079,7 +3201,7 @@
     17469
    ],
    "ts": 1467834304,
-   "version": 335,
+   "version": 336,
    "via": "call"
   },
   "sessionThumbnail.webPath": {
@@ -3089,7 +3211,7 @@
     15312
    ],
    "ts": 1464391764,
-   "version": 333,
+   "version": 334,
    "via": "call"
   },
   "showAliases": {
@@ -3099,7 +3221,7 @@
     29201
    ],
    "ts": 1776021684,
-   "version": 496,
+   "version": 497,
    "via": "call"
   },
   "showColorPicker": {
@@ -3110,7 +3232,7 @@
     37329
    ],
    "ts": 1775850884,
-   "version": 496,
+   "version": 497,
    "via": "call"
   },
   "showDownloadUi": {
@@ -3120,7 +3242,7 @@
     30024
    ],
    "ts": 1674844319,
-   "version": 442,
+   "version": 444,
    "via": "call"
   },
   "showEarlyErrors": {
@@ -3130,7 +3252,7 @@
     15332
    ],
    "ts": 1431788802,
-   "version": 316,
+   "version": 317,
    "via": "call"
   },
   "showHubApiKey": {
@@ -3140,7 +3262,7 @@
     34405
    ],
    "ts": 1730990980,
-   "version": 473,
+   "version": 474,
    "via": "call"
   },
   "showIgv": {
@@ -3148,7 +3270,7 @@
    "subject": "Merging Jim Robinsons code into the kent tree. Due to whitespace changes in his IDE, I'm merging this manually.",
    "tickets": [],
    "ts": 1757518383,
-   "version": 487,
+   "version": 488,
    "via": "call"
   },
   "showLiftRequest": {
@@ -3158,7 +3280,7 @@
     37973
    ],
    "ts": 1785534915,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "showMouseovers": {
@@ -3166,7 +3288,7 @@
    "subject": "Add code to create tooltips under our control. Convert title attributes",
    "tickets": [],
    "ts": 1680797081,
-   "version": 446,
+   "version": 451,
    "via": "call"
   },
   "showTableCache": {
@@ -3174,7 +3296,7 @@
    "subject": "support showTableCache config in sqlListTables",
    "tickets": [],
    "ts": 1251159044,
-   "version": 213,
+   "version": 214,
    "via": "call"
   },
   "showTutorial": {
@@ -3182,7 +3304,18 @@
    "subject": "Proof of concept tutorial overlay done",
    "tickets": [],
    "ts": 1676665727,
-   "version": 443,
+   "version": 450,
+   "via": "call"
+  },
+  "showTxCodonNumbers": {
+   "commit": "68b9911e4c1",
+   "released": false,
+   "subject": "Show the transcript's own codon number where it differs from the genomic one",
+   "tickets": [
+    38298
+   ],
+   "ts": 1788968947,
+   "version": 504,
    "via": "call"
   },
   "signalsHandler": {
@@ -3190,7 +3323,19 @@
    "subject": "added handler for a few signals that will log the errors",
    "tickets": [],
    "ts": 1192231361,
-   "version": 168,
+   "version": 169,
+   "via": "call"
+  },
+  "skipMalformedCgiPairs": {
+   "commit": "3eedbb76366",
+   "released": false,
+   "subject": "Skip a CGI or cookie pair with no =value in three more parsers, refs #38340",
+   "tickets": [
+    38335,
+    38340
+   ],
+   "ts": 1789154414,
+   "version": 504,
    "via": "call"
   },
   "sleepOn429": {
@@ -3198,7 +3343,18 @@
    "subject": "making sleep depend on hg.conf statement suggested by Jonathan, no redmine ticket yet",
    "tickets": [],
    "ts": 1747075805,
-   "version": 481,
+   "version": 482,
+   "via": "call"
+  },
+  "snapshot.ttlDays": {
+   "commit": "32cd2100d9d",
+   "released": false,
+   "subject": "Reusable \"view snapshot\" sessions for durable, minimal Share-a-link links",
+   "tickets": [
+    38197
+   ],
+   "ts": 1788271324,
+   "version": 504,
    "via": "call"
   },
   "sqlNeverLocal": {
@@ -3206,7 +3362,7 @@
    "subject": "adding flag to hg.conf to disable LOCAL in mysql commands entirely",
    "tickets": [],
    "ts": 1378947455,
-   "version": 289,
+   "version": 290,
    "via": "call"
   },
   "storeUserFiles": {
@@ -3214,7 +3370,7 @@
    "subject": "Experiment number one, can succesfully upload a file and store it via",
    "tickets": [],
    "ts": 1683331173,
-   "version": 447,
+   "version": 476,
    "via": "call"
   },
   "style": {
@@ -3222,7 +3378,7 @@
    "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
    "tickets": [],
    "ts": 1287763278,
-   "version": 242,
+   "version": 243,
    "via": "call"
   },
   "style/images": {
@@ -3230,7 +3386,7 @@
    "subject": "add ability to put styleDir and styleImagesDir in hg.conf",
    "tickets": [],
    "ts": 1287763278,
-   "version": 242,
+   "version": 243,
    "via": "call"
   },
   "suggest.browserName": {
@@ -3238,7 +3394,7 @@
    "subject": "Feature 9142 suggestion form code checkin for preview1",
    "tickets": [],
    "ts": 1370305021,
-   "version": 284,
+   "version": 285,
    "via": "literal"
   },
   "suggest.filterKeyword": {
@@ -3246,7 +3402,7 @@
    "subject": "Feature 9142 suggestion form code checkin for preview1",
    "tickets": [],
    "ts": 1370305021,
-   "version": 284,
+   "version": 285,
    "via": "literal"
   },
   "suggest.humanThreshold": {
@@ -3256,7 +3412,7 @@
     31325
    ],
    "ts": 1686448986,
-   "version": 449,
+   "version": 450,
    "via": "literal"
   },
   "suggest.mailFromAddr": {
@@ -3264,7 +3420,7 @@
    "subject": "Feature 9142 suggestion form code checkin for preview1",
    "tickets": [],
    "ts": 1370305021,
-   "version": 284,
+   "version": 285,
    "via": "literal"
   },
   "suggest.mailReturnAddr": {
@@ -3272,7 +3428,7 @@
    "subject": "Feature 9142 suggestion form code checkin for preview1",
    "tickets": [],
    "ts": 1370305021,
-   "version": 284,
+   "version": 285,
    "via": "literal"
   },
   "suggest.mailSignature": {
@@ -3280,7 +3436,7 @@
    "subject": "Feature 9142 suggestion form code checkin for preview1",
    "tickets": [],
    "ts": 1370305021,
-   "version": 284,
+   "version": 285,
    "via": "literal"
   },
   "suggest.mailToAddr": {
@@ -3288,7 +3444,7 @@
    "subject": "Feature 9142 suggestion form code checkin for preview1",
    "tickets": [],
    "ts": 1370305021,
-   "version": 284,
+   "version": 285,
    "via": "literal"
   },
   "suggest.secretKey": {
@@ -3298,7 +3454,7 @@
     31325
    ],
    "ts": 1686448986,
-   "version": 449,
+   "version": 450,
    "via": "literal"
   },
   "suggest.siteKey": {
@@ -3308,7 +3464,7 @@
     31325
    ],
    "ts": 1686448986,
-   "version": 449,
+   "version": 450,
    "via": "literal"
   },
   "suppressVeryEarlyErrors": {
@@ -3318,7 +3474,7 @@
     16439
    ],
    "ts": 1448389745,
-   "version": 325,
+   "version": 326,
    "via": "call"
   },
   "survey": {
@@ -3326,7 +3482,7 @@
    "subject": "removed global databases from CGI library; implemented abilility to have remote genome databases",
    "tickets": [],
    "ts": 1220469713,
-   "version": 190,
+   "version": 191,
    "via": "call"
   },
   "surveyLabel": {
@@ -3334,7 +3490,7 @@
    "subject": "Generalize survey link",
    "tickets": [],
    "ts": 1268873488,
-   "version": 226,
+   "version": 227,
    "via": "call"
   },
   "surveyLabelImage": {
@@ -3344,7 +3500,7 @@
     17622
    ],
    "ts": 1468945272,
-   "version": 335,
+   "version": 336,
    "via": "call"
   },
   "svgBarChart": {
@@ -3352,7 +3508,7 @@
    "subject": "Putting this under control of svgBarChart variable in hg.conf to keep feature from leaking to users too soon.  Changing ",
    "tickets": [],
    "ts": 1610398585,
-   "version": 408,
+   "version": 409,
    "via": "call"
   },
   "tableList": {
@@ -3360,7 +3516,7 @@
    "subject": "use showTableCache config option",
    "tickets": [],
    "ts": 1307643864,
-   "version": 252,
+   "version": 253,
    "via": "call"
   },
   "test.preview": {
@@ -3368,7 +3524,7 @@
    "subject": "Support for genome browser preview site.",
    "tickets": [],
    "ts": 1296195020,
-   "version": 246,
+   "version": 247,
    "via": "call"
   },
   "textSize": {
@@ -3376,7 +3532,7 @@
    "subject": "Adding configuration button and page to genome browser",
    "tickets": [],
    "ts": 1107300837,
-   "version": 97,
+   "version": 98,
    "via": "literal"
   },
   "traceGbdb": {
@@ -3386,7 +3542,7 @@
     27121
    ],
    "ts": 1617884170,
-   "version": 412,
+   "version": 413,
    "via": "call"
   },
   "trackDb.db": {
@@ -3394,7 +3550,7 @@
    "subject": "Added more logic to handle non-hg18 scenarios in trackDbConn().",
    "tickets": [],
    "ts": 1207267695,
-   "version": 179,
+   "version": 180,
    "via": "call"
   },
   "trackDb.host": {
@@ -3402,7 +3558,7 @@
    "subject": "Added hConnectLogicalDb() and trackDbConn() to support loading trackDb from",
    "tickets": [],
    "ts": 1207056687,
-   "version": 178,
+   "version": 179,
    "via": "call"
   },
   "trackDb.ix": {
@@ -3410,7 +3566,7 @@
    "subject": "Trix is in /gbdb/ so must have separate name for beta version in order to avoid beta stepping on RR.  This is done by a ",
    "tickets": [],
    "ts": 1286826571,
-   "version": 241,
+   "version": 242,
    "via": "call"
   },
   "trackDb.password": {
@@ -3418,7 +3574,7 @@
    "subject": "Added hConnectLogicalDb() and trackDbConn() to support loading trackDb from",
    "tickets": [],
    "ts": 1207056687,
-   "version": 178,
+   "version": 179,
    "via": "call"
   },
   "trackDb.user": {
@@ -3426,7 +3582,7 @@
    "subject": "Added hConnectLogicalDb() and trackDbConn() to support loading trackDb from",
    "tickets": [],
    "ts": 1207056687,
-   "version": 178,
+   "version": 179,
    "via": "call"
   },
   "trackHubsCanAddGroups": {
@@ -3434,7 +3590,7 @@
    "subject": "allow track hubs to make groups",
    "tickets": [],
    "ts": 1713468691,
-   "version": 463,
+   "version": 464,
    "via": "call"
   },
   "trackLog": {
@@ -3444,7 +3600,7 @@
     13626
    ],
    "ts": 1406686778,
-   "version": 303,
+   "version": 304,
    "via": "literal"
   },
   "trustTrackDb": {
@@ -3452,7 +3608,7 @@
    "subject": "add hg.conf variable (trustTrackDb) to force the CGI's to validate",
    "tickets": [],
    "ts": 1702500856,
-   "version": 458,
+   "version": 459,
    "via": "call"
   },
   "tusdBasePath": {
@@ -3460,7 +3616,7 @@
    "subject": "Start on trackHubWizard module",
    "tickets": [],
    "ts": 1696622621,
-   "version": 454,
+   "version": 476,
    "via": "call"
   },
   "tusdDataDir": {
@@ -3468,7 +3624,7 @@
    "subject": "Resolve tusdDataDir hg.conf setting because it may be a symlink, refs Jairo email",
    "tickets": [],
    "ts": 1745945935,
-   "version": 481,
+   "version": 482,
    "via": "call"
   },
   "tusdMountPoint": {
@@ -3476,7 +3632,7 @@
    "subject": "Fix hubspace pre-create hook to check for an apiKey only if a valid login cookie was not provided. Add a new hg.conf sta",
    "tickets": [],
    "ts": 1752863113,
-   "version": 484,
+   "version": 485,
    "via": "call"
   },
   "tusdPort": {
@@ -3484,7 +3640,7 @@
    "subject": "Start on trackHubWizard module",
    "tickets": [],
    "ts": 1696622621,
-   "version": 454,
+   "version": 476,
    "via": "call"
   },
   "udc.cacheDir": {
@@ -3492,7 +3648,7 @@
    "subject": "fixing cgis so that udcCache dir is set by new hg.conf setting udc.cacheDir=",
    "tickets": [],
    "ts": 1240526548,
-   "version": 204,
+   "version": 205,
    "via": "call"
   },
   "udc.localDir": {
@@ -3500,7 +3656,7 @@
    "subject": "changes to UDC that allow to",
    "tickets": [],
    "ts": 1427470679,
-   "version": 313,
+   "version": 315,
    "via": "call"
   },
   "udc.useLocalDiskCache": {
@@ -3508,7 +3664,7 @@
    "subject": "changes to UDC that allow to",
    "tickets": [],
    "ts": 1427470679,
-   "version": 313,
+   "version": 315,
    "via": "call"
   },
   "udcFuse.mountPoint": {
@@ -3516,7 +3672,7 @@
    "subject": "If udcFuse.mountPoint is set in hg.conf, translate BAM URLs into filenames underneath that mount point, which mirrors th",
    "tickets": [],
    "ts": 1257208425,
-   "version": 218,
+   "version": 217,
    "via": "call"
   },
   "udcLog": {
@@ -3524,7 +3680,7 @@
    "subject": "a very basic instrumentation of UDC  (no redmine)",
    "tickets": [],
    "ts": 1446850035,
-   "version": 324,
+   "version": 325,
    "via": "call"
   },
   "useBlatBigPsl": {
@@ -3532,7 +3688,7 @@
    "subject": "implements blat results to custom track using bigPsl.  Requires hg.conf",
    "tickets": [],
    "ts": 1479949312,
-   "version": 341,
+   "version": 342,
    "via": "call"
   },
   "userDataDir": {
@@ -3540,7 +3696,7 @@
    "subject": "Experiment number one, can succesfully upload a file and store it via",
    "tickets": [],
    "ts": 1683331173,
-   "version": 447,
+   "version": 476,
    "via": "call"
   },
   "userDbName": {
@@ -3548,7 +3704,7 @@
    "subject": "allow for different names for the sessionDb and userDb tables",
    "tickets": [],
    "ts": 1428523543,
-   "version": 314,
+   "version": 315,
    "via": "literal"
   },
   "vcfMaxItems": {
@@ -3556,7 +3712,7 @@
    "subject": "limit VCF track loads to 10,000 items",
    "tickets": [],
    "ts": 1705608166,
-   "version": 459,
+   "version": 460,
    "via": "literal"
   },
   "versionStamped": {
@@ -3564,7 +3720,7 @@
    "subject": "changes to facilitate beta builds on dev.  Appropriating beta target, and assuming that USER=beta exists on dev.",
    "tickets": [],
    "ts": 1374884581,
-   "version": 286,
+   "version": 287,
    "via": "call"
   },
   "warnSeconds": {
@@ -3574,7 +3730,7 @@
     30809
    ],
    "ts": 1678714969,
-   "version": 444,
+   "version": 445,
    "via": "call"
   },
   "wiki.host": {
@@ -3598,7 +3754,7 @@
    "subject": "Adding a session cookie variable",
    "tickets": [],
    "ts": 1180133719,
-   "version": 159,
+   "version": 160,
    "via": "literal"
   },
   "wiki.userNameCookie": {
@@ -3614,7 +3770,7 @@
    "subject": "Initial contents for wiki track item edit and display",
    "tickets": [],
    "ts": 1179861012,
-   "version": 159,
+   "version": 160,
    "via": "call"
   },
   "wikiTrack.browser": {
@@ -3622,7 +3778,7 @@
    "subject": "Add the delete item function, and a cfg variable for browser return URL",
    "tickets": [],
    "ts": 1180724798,
-   "version": 160,
+   "version": 161,
    "via": "literal"
   },
   "wikiTrack.dbList": {
@@ -3630,7 +3786,7 @@
    "subject": "Enhance wikiTrackEnabled to check against database list",
    "tickets": [],
    "ts": 1207697804,
-   "version": 179,
+   "version": 180,
    "via": "literal"
   },
   "wikiTrack.editors": {
@@ -3646,7 +3802,7 @@
    "subject": "make the wiki track read only be an option in hg.conf",
    "tickets": [],
    "ts": 1340646970,
-   "version": 268,
+   "version": 269,
    "via": "literal"
   },
   "yes": {
@@ -3656,7 +3812,7 @@
     10611
    ],
    "ts": 1366389695,
-   "version": 282,
+   "version": 283,
    "via": "call"
   }
  },
@@ -3669,7 +3825,7 @@
     12717
    ],
    "ts": 1396453562,
-   "version": 297,
+   "version": 298,
    "via": "call"
   },
   "alwaysItemRgb": {
@@ -3679,7 +3835,7 @@
     28498
    ],
    "ts": 1718883805,
-   "version": 466,
+   "version": 467,
    "via": "call"
   },
   "analytics.trackButtons": {
@@ -3689,7 +3845,7 @@
     27283
    ],
    "ts": 1625574799,
-   "version": 417,
+   "version": 418,
    "via": "call"
   },
   "analytics.trackClicks": {
@@ -3699,7 +3855,7 @@
     21916
    ],
    "ts": 1615475195,
-   "version": 411,
+   "version": 412,
    "via": "call"
   },
   "bigBedOnePath": {
@@ -3707,7 +3863,7 @@
    "subject": "make bigBedOnePath be on by default",
    "tickets": [],
    "ts": 1768605506,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "blatNewPageBanner": {
@@ -3715,7 +3871,7 @@
    "subject": "hgBlat/hgc: single-page BLAT results view with shareable alignment links",
    "tickets": [],
    "ts": 1785029100,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "canDoHgcInPopUp": {
@@ -3725,7 +3881,7 @@
     36953
    ],
    "ts": 1768517066,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "canDupTracks": {
@@ -3733,7 +3889,7 @@
    "subject": "changed it so by default users can duplicate tracks",
    "tickets": [],
    "ts": 1675377896,
-   "version": 443,
+   "version": 444,
    "via": "call"
   },
   "canSnake": {
@@ -3741,7 +3897,7 @@
    "subject": "make canSnake and mergeRecommend to be on by default",
    "tickets": [],
    "ts": 1719434505,
-   "version": 467,
+   "version": 468,
    "via": "call"
   },
   "forceTwoBit": {
@@ -3751,7 +3907,7 @@
     22554
    ],
    "ts": 1698750081,
-   "version": 456,
+   "version": 457,
    "via": "call"
   },
   "freeType": {
@@ -3759,7 +3915,7 @@
    "subject": "turn freeType fonts on by default.  Look for them in ../htdocs/urw-fonts",
    "tickets": [],
    "ts": 1617745525,
-   "version": 412,
+   "version": 413,
    "via": "call"
   },
   "gcOnTheFly": {
@@ -3767,7 +3923,7 @@
    "subject": "restore the hg.conf switches to control the gcOnFly track - lost in later edits",
    "tickets": [],
    "ts": 1775509540,
-   "version": 496,
+   "version": 497,
    "via": "call"
   },
   "greyBarIcons": {
@@ -3777,7 +3933,7 @@
     36956
    ],
    "ts": 1768516916,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "hgHubConnect.validateHub": {
@@ -3787,7 +3943,7 @@
     28831
    ],
    "ts": 1646686731,
-   "version": 427,
+   "version": 428,
    "via": "call"
   },
   "mergeRecommended": {
@@ -3795,7 +3951,7 @@
    "subject": "make canSnake and mergeRecommend to be on by default",
    "tickets": [],
    "ts": 1719434505,
-   "version": 467,
+   "version": 468,
    "via": "call"
   },
   "name": {
@@ -3807,7 +3963,7 @@
     37925
    ],
    "ts": 1785013052,
-   "version": 501,
+   "version": 502,
    "via": "call"
   },
   "newBotDelay": {
@@ -3817,7 +3973,7 @@
     36952
    ],
    "ts": 1768508493,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "quickLiftClipToChains": {
@@ -3827,7 +3983,29 @@
     38042
    ],
    "ts": 1786129679,
-   "version": 501,
+   "version": 503,
+   "via": "call"
+  },
+  "showAliases": {
+   "commit": "c69d3e1d9de",
+   "released": false,
+   "subject": "hgTracks: turn on chromAlias names by default, refs #29201",
+   "tickets": [
+    29201
+   ],
+   "ts": 1789064034,
+   "version": 504,
+   "via": "call"
+  },
+  "showColorPicker": {
+   "commit": "ba5aa085f49",
+   "released": false,
+   "subject": "hui.c: turn the track color picker on by default, refs #20460",
+   "tickets": [
+    20460
+   ],
+   "ts": 1789063395,
+   "version": 504,
    "via": "call"
   },
   "showDownloadUi": {
@@ -3835,7 +4013,7 @@
    "subject": "Make 'download tracks in view' menu option present by default. Can still be turned off via hg.conf",
    "tickets": [],
    "ts": 1719608805,
-   "version": 467,
+   "version": 468,
    "via": "call"
   },
   "showEarlyErrors": {
@@ -3845,7 +4023,7 @@
     33992
    ],
    "ts": 1719327093,
-   "version": 467,
+   "version": 468,
    "via": "call"
   },
   "showTutorial": {
@@ -3855,7 +4033,7 @@
     33992
    ],
    "ts": 1718741667,
-   "version": 466,
+   "version": 467,
    "via": "call"
   },
   "sleepOn429": {
@@ -3863,7 +4041,7 @@
    "subject": "making sleep depend on hg.conf statement suggested by Jonathan, no redmine ticket yet",
    "tickets": [],
    "ts": 1747075805,
-   "version": 481,
+   "version": 482,
    "via": "call"
   },
   "storeUserFiles": {
@@ -3871,7 +4049,7 @@
    "subject": "Start on trackHubWizard module",
    "tickets": [],
    "ts": 1696622621,
-   "version": 454,
+   "version": 476,
    "via": "call"
   },
   "svgBarChart": {
@@ -3879,7 +4057,7 @@
    "subject": "make svgBarChart and multiRegionButtonTop be on by default",
    "tickets": [],
    "ts": 1648598692,
-   "version": 428,
+   "version": 429,
    "via": "call"
   },
   "trackHubsCanAddGroups": {
@@ -3889,7 +4067,7 @@
     36955
    ],
    "ts": 1768784169,
-   "version": 492,
+   "version": 493,
    "via": "call"
   },
   "trustTrackDb": {
@@ -3897,7 +4075,7 @@
    "subject": "add hg.conf variable (trustTrackDb) to force the CGI's to validate",
    "tickets": [],
    "ts": 1702500856,
-   "version": 458,
+   "version": 459,
    "via": "call"
   },
   "udc.useLocalDiskCache": {
@@ -3905,7 +4083,7 @@
    "subject": "changes to UDC that allow to",
    "tickets": [],
    "ts": 1427470679,
-   "version": 313,
+   "version": 315,
    "via": "call"
   },
   "useBlatBigPsl": {
@@ -3913,1795 +4091,1987 @@
    "subject": "make offering custom tracks with blat results the default",
    "tickets": [],
    "ts": 1493840576,
-   "version": 348,
+   "version": 349,
    "via": "call"
   }
  },
- "schema": 2,
- "timeline": [
+ "releases": [
   [
-   1083000392,
-   61
+   9,
+   "4eea986357e44b498b0cfe82116df2a26175b7db"
   ],
   [
-   1083198572,
-   62
+   10,
+   "179a26926bc6fa93b57447b34291620b68dd76ee"
   ],
   [
-   1083803564,
-   63
+   11,
+   "280bf2a0366d4206ed46da422dd0f6cdd495b551"
   ],
   [
-   1084407923,
-   64
+   12,
+   "eda94b500dfe956d44383c419302793e4619e68d"
   ],
   [
-   1085012895,
-   65
+   13,
+   "1d22e6b88ac7f666439ccc7ddb993d1f48ebaab1"
   ],
   [
-   1085617787,
-   66
+   14,
+   "114221a32c362244a6df9299797afafbb67a1123"
   ],
   [
-   1086222927,
-   67
+   15,
+   "5dbc1ac4549cd084992dfd0d34f843c349d55379"
   ],
   [
-   1087432372,
-   68
+   16,
+   "a3f4b0593a71c954ce5857a282b8ead00bea4b0d"
   ],
   [
-   1088091841,
-   69
+   17,
+   "c8e558e88627bdf34c689094cb30749bb9afff09"
   ],
   [
-   1088642743,
-   70
+   18,
+   "9705b5e707c8632aa9eb8b35b79d288fd3cfffa1"
   ],
   [
-   1089246583,
-   71
+   19,
+   "f23ab34cd3c7b9bd9ed34a3725e454e71aba6171"
   ],
   [
-   1089850784,
-   72
+   20,
+   "4109a06906a9845573f14f232108d500ffec7a11"
   ],
   [
-   1090457152,
-   73
+   21,
+   "4109a06906a9845573f14f232108d500ffec7a11"
   ],
   [
-   1091062193,
-   74
+   22,
+   "65985380945149f876fe912c3af3ba6cad8874ae"
   ],
   [
-   1091680195,
-   75
+   23,
+   "a2cca08f5fcda4f0f6d9512fb3e9c2471039f150"
   ],
   [
-   1092330165,
-   76
+   24,
+   "00579ef1e1c77cf6b1174ab9a57e5acf62805ca5"
   ],
   [
-   1092876057,
-   77
+   25,
+   "fb314f89d850e2a4d7e53cad6ba3207cb36be148"
   ],
   [
-   1093489066,
-   78
+   26,
+   "dc76fd23b2b3b78e92bc48ab8d96c5a7b165785c"
   ],
   [
-   1094080476,
-   79
+   27,
+   "48c2b714c1b1284584eba2ae8bf45bde9b2020cd"
   ],
   [
-   1094692445,
-   80
+   28,
+   "fcbd690a502bf274cc3d1c3244ca6550f6cebd28"
   ],
   [
-   1095299549,
-   81
+   29,
+   "16a1c565bbb9a19f84b0c44ed7b5fa6c5284a7ba"
   ],
   [
-   1095902852,
-   82
+   30,
+   "07cc8d2a4139ea2205df5ae594219ac9988f15ba"
   ],
   [
-   1096509804,
-   83
+   31,
+   "fd06f1eeacc7da84663f65b6b44ce858069be18b"
   ],
   [
-   1097109572,
-   84
+   32,
+   "88ec650d0eaaa3def08ae73d30f6d9fd268a9205"
   ],
   [
-   1097719756,
-   85
+   33,
+   "98995a0b90f2743e1c82f48a89c00ebc2ccc99d2"
   ],
   [
-   1098363749,
-   86
+   34,
+   "ef3be72c80b681ecb29a594951c2a31972c67288"
   ],
   [
-   1098927804,
-   87
+   35,
+   "c9322fece2e893c778badeab6645ad9c8736ac47"
   ],
   [
-   1099533875,
-   88
+   36,
+   "772f7783cbeba0ea2af499344c825be5e4d1d763"
   ],
   [
-   1100136828,
-   89
+   37,
+   "43a01c21eda6e4cd5a5fc4ef1113547d8701666d"
   ],
   [
-   1100745210,
-   90
+   38,
+   "af653e31205a31e7bae2964143d6dcaf26ff2306"
   ],
   [
-   1101951169,
-   91
+   39,
+   "48acab606a0e2b45c1b73aa432df861663d6ba26"
   ],
   [
-   1102558229,
-   92
+   40,
+   "8ba7f8750223cff0a6dbffe923c74832d4e26745"
   ],
   [
-   1103160824,
-   93
+   41,
+   "50aed4a62b4bd4b5c468754ca42cfd1bc231fe10"
   ],
   [
-   1104976088,
-   94
+   43,
+   "0671eb94d0fb4c1825370f27926669b96a109cb3"
   ],
   [
-   1105580570,
-   95
+   44,
+   "a4a8bb7b03bb3c4ab4671be3f109caacd2cfd530"
   ],
   [
-   1106183127,
-   96
+   45,
+   "d28d620ec4e45f39030ab6b06ae96842e7265ec2"
   ],
   [
-   1106787974,
-   97
+   46,
+   "373f353fdfe26397f390e60469ad2d72c2170876"
   ],
   [
-   1107394613,
-   98
+   47,
+   "83b3a07fccd468f2a65d4a1ffb6ca8a70f17fa6a"
   ],
   [
-   1107998795,
-   99
+   48,
+   "2733a11e8477b1eb5cfe463a23d544613dd2c673"
   ],
   [
-   1108604347,
-   100
+   49,
+   "1622d427119e439d1e244cec04e32cf93c6f7c49"
   ],
   [
-   1109640724,
-   101
+   50,
+   "231e8aa1fb029e305761802652713921460535e1"
   ],
   [
-   1110853700,
-   102
+   51,
+   "c59db8ca7961211de4261e36e7d75ac3251307a4"
   ],
   [
-   1112062681,
-   103
+   52,
+   "a7bb8a3130f90972275857aa1486b5032aefde54"
   ],
   [
-   1113272365,
-   104
+   53,
+   "c6ce9b97c0ef19b194341705b0456d84b78dc5de"
   ],
   [
-   1114478989,
-   105
+   54,
+   "327176f4737148ae63661dd9a9f2201f6b2841f1"
   ],
   [
-   1115690595,
-   106
+   55,
+   "3845f83468a1449bf69d6c6c69f7d01c600f34cc"
   ],
   [
-   1116905830,
-   107
+   56,
+   "daa184f564d30fb2a66543b1f99ab49d1b73f367"
   ],
   [
-   1118110288,
-   108
+   57,
+   "0b4377276af7ecc44d0c3e97c5b2548d64a890e0"
   ],
   [
-   1118803134,
-   109
+   58,
+   "2817315dbc8134da36a9155c8c8da1201c5b7e8b"
   ],
   [
-   1119455697,
-   110
+   59,
+   "2e8cf96fbd5a84820e24e958ad8715fbef26063d"
   ],
   [
-   1119937672,
-   111
+   60,
+   "276ff43ff6c1655e5265428fa165cf454206c780"
   ],
   [
-   1121139238,
-   112
+   61,
+   "fc0bad11970ae2b6c56ad14e40ff6e2748281984"
   ],
   [
-   1122348794,
-   113
+   62,
+   "6ba227f55ac3d981204e2e0bf930c910cad60770"
   ],
   [
-   1123555381,
-   114
+   63,
+   "ac6d5581d96e773ad418b14a8749a8af95e16a8a"
   ],
   [
-   1124756649,
-   115
+   64,
+   "c1c18ca80992a632fabcf6317d05dba29ae6dc30"
   ],
   [
-   1125973515,
-   116
+   65,
+   "a17e50b0f7a040937d5407008aa2b73db4f00033"
   ],
   [
-   1127185640,
-   117
+   66,
+   "7e9dd4d1e727d51d349bf9ba993893020c8ba057"
   ],
   [
-   1128391635,
-   118
+   67,
+   "2e627bf6b3f45b82d91c4377333b468b6d3a618a"
   ],
   [
-   1129603750,
-   119
+   68,
+   "877a66a86223ff5c31d3947dcee66e16f7b70c39"
   ],
   [
-   1130815147,
-   120
+   69,
+   "7a0a44b2687a96bcab3931917a8fde7b2735540d"
   ],
   [
-   1132022188,
-   121
+   70,
+   "6ed4e406ab646ffc0edf22a2382829224b9eb528"
   ],
   [
-   1133234557,
-   122
+   71,
+   "fb4679a6d664e39bbda2f1172c90ce754aaf1777"
   ],
   [
-   1134436064,
-   123
+   72,
+   "3960ee6d67260d13e3a6c95196ac20910060866a"
   ],
   [
-   1136256664,
-   124
+   73,
+   "5a0bf73bb3befa0d569af4ccfbda5f506e267e9a"
   ],
   [
-   1137468821,
-   125
+   74,
+   "5eedf2f5886070b165e226f98be522fd3abfbe07"
   ],
   [
-   1138677482,
-   126
+   75,
+   "992ccd7d4e969eb62f8f116b7e9f5cda2381dec7"
   ],
   [
-   1139885733,
-   127
+   76,
+   "7a0a44b2687a96bcab3931917a8fde7b2735540d"
   ],
   [
-   1141091258,
-   128
+   77,
+   "65d31e26ae1030662c5b472a01442f7ea2e7c2e4"
   ],
   [
-   1142311138,
-   129
+   78,
+   "5ad32a938def00d6053c9c09f441ac920b66a4cd"
   ],
   [
-   1143509104,
-   130
+   79,
+   "dc55218e40b61314f514e93f13e42edd7950e69c"
   ],
   [
-   1144715111,
-   131
+   80,
+   "a62763f2042501311dde4a92116cf9cc472137ca"
   ],
   [
-   1145924740,
-   132
+   81,
+   "ef7ff85bdbfb35d764bebb6cf2ab3f9eb6fa6dcf"
   ],
   [
-   1147136901,
-   133
+   82,
+   "e602ed26f007913a13848bd1c6f69ad6a2eda55e"
   ],
   [
-   1149044621,
-   134
+   83,
+   "76ecd4df07cf90977d3c51d86e78824572f5f1cb"
   ],
   [
-   1150169152,
-   135
+   84,
+   "c3aa69deabd235c3004796cbc1d875b40b646f89"
   ],
   [
-   1151376220,
-   136
+   85,
+   "efe10d8f3b4aa92028f8597510a7411972bec040"
   ],
   [
-   1152578328,
-   137
+   86,
+   "63d5af68dcd996fd0e9d665b0a3ea9fb813ea561"
   ],
   [
-   1153786261,
-   138
+   87,
+   "5cda4b6e6151457c4a910bcb979a754593454318"
   ],
   [
-   1155000843,
-   139
+   88,
+   "100b4bfc07c63499c4a1fc06a4712c7acbb5d3ad"
   ],
   [
-   1155696241,
-   140
+   89,
+   "66854e55550600178a2341f2867cdec745af17ca"
   ],
   [
-   1156818415,
-   141
+   90,
+   "f73eb9fe04a12f2af2f6e35a2b724e61dfe53368"
   ],
   [
-   1158022924,
-   142
+   91,
+   "7b572922c5874cd27dedda754bfa782c6f57aa15"
   ],
   [
-   1159320002,
-   143
+   92,
+   "b02a883a34e51586411a6735fb02162331ec1634"
   ],
   [
-   1160448589,
-   144
+   93,
+   "21c44b76d1e0d7d00768bbabff8bdc79d7a3e7f0"
   ],
   [
-   1161664143,
-   145
+   94,
+   "eb40d7c6127a78716f2dbe55009bce14b9d65797"
   ],
   [
-   1162873390,
-   146
+   95,
+   "76b71f4bd827f096009b016e8b96eb0f16e10425"
   ],
   [
-   1164684472,
-   147
+   96,
+   "9d9f11a4180fa57291593dcb76c61db507ac0a4d"
   ],
   [
-   1165901494,
-   148
+   97,
+   "1050c2fd1c5d89070ff3a9bae1eded9163cb9b43"
   ],
   [
-   1167762781,
-   149
+   98,
+   "7a45644204d7abb7ff2aa552a77b128efb57c520"
   ],
   [
-   1168993216,
-   150
+   99,
+   "7e719dc2587a020bb4eb18571955113677c91e28"
   ],
   [
-   1170134632,
-   151
+   100,
+   "545e7baf5bd9fc1198f2facf3cc9b45c0287009b"
   ],
   [
-   1171336671,
-   152
+   101,
+   "10fa3d676cfa8e62b1ad20229e10f3f9dc6cb45d"
   ],
   [
-   1172548086,
-   153
+   102,
+   "539a6dee12fef894bedbef66fe644616caf5da30"
   ],
   [
-   1173739885,
-   154
+   103,
+   "f6cdf58af8be58330a05878117e6620cb60c89d8"
   ],
   [
-   1174998968,
-   155
+   104,
+   "b0008a6b3e79b4b06d58c61ef5852bf233ee7042"
   ],
   [
-   1175613397,
-   156
+   105,
+   "251d2ec3d7c97edebde8afb99d5e74dc2df3274a"
   ],
   [
-   1176822506,
-   157
+   106,
+   "2791081d1ca80a148eaef31fe9b2f2418f162d4f"
   ],
   [
-   1178031397,
-   158
+   107,
+   "e68062de46a3cafce61eabe1ad26d3a3c3b00f9a"
   ],
   [
-   1179242641,
-   159
+   108,
+   "69851c5c79c6e65ce78e2577cd4d2f05778f5fc1"
   ],
   [
-   1180473780,
-   160
+   109,
+   "81f50bf468c38e92fec4daad6fa333276e529786"
   ],
   [
-   1181662965,
-   161
+   110,
+   "e54ed0640999b7625866ff120a79eb3671cf01c5"
   ],
   [
-   1182881142,
-   162
+   111,
+   "8db15cded564e64c96d263df83717c95001190d0"
   ],
   [
-   1184081096,
-   163
+   112,
+   "49b765303ab24bb2412c11dfdbaccc3c31cb54e1"
   ],
   [
-   1185297364,
-   164
+   113,
+   "f31c936a5e26d75a17b351d04f1b19e2a4c232bf"
   ],
   [
-   1186504517,
-   165
+   114,
+   "a68067b5e711e498fa8b5861958119417a9bc345"
   ],
   [
-   1188271757,
-   166
+   115,
+   "f7da1192981954f6b52d989123f16d552b6e7367"
   ],
   [
-   1190133736,
-   167
+   116,
+   "09ce46d7dc5fb6a02868dae048866c332b4fcbed"
   ],
   [
-   1191346174,
-   168
+   117,
+   "ae5e91ca63f603f04eae91a6dd778311eaaa7632"
   ],
   [
-   1192538649,
-   169
+   118,
+   "ef1553b4d188a30b877279b92873f6fc6a6ad1b0"
   ],
   [
-   1193761932,
-   170
+   119,
+   "50f9be2fc0b85d7b1ea12105621d6e34994bd70e"
   ],
   [
-   1194976762,
-   171
+   120,
+   "00562478a58c800c3d7484e2b1fa3cf80b5b3a8c"
   ],
   [
-   1196789240,
-   172
+   121,
+   "c53e6761c5b7c31ebfb5a9981ce21b3ab66a02d9"
   ],
   [
-   1199304454,
-   173
+   122,
+   "de4915a92d7326eb26f0efcafa309fcbde45ac04"
   ],
   [
-   1200419811,
-   174
+   123,
+   "54e4c4bb8467b7e4ff57ddd218e9612ac952247d"
   ],
   [
-   1201889964,
-   175
+   124,
+   "a1b2a822a455ab1243a0bdb1651f5b945f836b49"
   ],
   [
-   1203447977,
-   176
+   125,
+   "9f43ff8aaff4ff17040149fdbfe1fcb58c8e61a1"
   ],
   [
-   1204653400,
-   177
+   126,
+   "acba99ed2b00697b708d040f5a2e8588ea9250d6"
   ],
   [
-   1205851073,
-   178
+   127,
+   "c6820bfceaa436fd18a62c13d22263f829d3ee56"
   ],
   [
-   1207072453,
-   179
+   128,
+   "8ace526c17526eb8200a88bae10c479fc1b1f275"
   ],
   [
-   1208278256,
-   180
+   129,
+   "9f5cb64c90dcda90e2e4813341fda855a29557ad"
   ],
   [
-   1209488128,
-   181
+   130,
+   "20de4678da7abc5a7eca60d3610315686de4df76"
   ],
   [
-   1210696230,
-   182
+   131,
+   "5c6513be7d4066a11ee548d078b52eb7387afe63"
   ],
   [
-   1211904411,
-   183
+   132,
+   "499295091293bcb7179d2b957bbebb7604028e6d"
   ],
   [
-   1213118356,
-   184
+   133,
+   "88c5543c0e8222b0baa93f9fe1aeb02abd4d3970"
   ],
   [
-   1214326324,
-   185
+   134,
+   "b0eedac360f7a912422cec7e4b34ebc3f49af7e7"
   ],
   [
-   1215535485,
-   186
+   135,
+   "a9873a315d8c8b947b9797dcede5ec51d3ef0f5c"
   ],
   [
-   1216755623,
-   187
+   136,
+   "80a7e834beebfaf8306f3c5e7ec1cb0eebab3db1"
   ],
   [
-   1217956423,
-   188
+   137,
+   "991f1278b8f8ec39e28bccb97f5b33c2d6bc64b9"
   ],
   [
-   1219172274,
-   189
+   138,
+   "0a3967f64e404eeb84df86c30432ece7c592406e"
   ],
   [
-   1220372950,
-   190
+   139,
+   "e6e1e97e341590f5a3f2ae2b15dda9b86785fe72"
   ],
   [
-   1221580169,
-   191
+   140,
+   "50262aee8c08b10d0ba60b7d53cc5acbfd1a18c8"
   ],
   [
-   1222791901,
-   192
+   141,
+   "6e531ed7b6411d08c4c5758aaabf475991068053"
   ],
   [
-   1224004094,
-   193
+   142,
+   "49855bf4126f799d09b49846eae60b1f88319c69"
   ],
   [
-   1225211783,
-   194
+   143,
+   "7b58499aef782bd7324d27d9c94e9dcd7626431b"
   ],
   [
-   1226463909,
-   195
+   144,
+   "228a1801ec241f4b5369fb8de8089d8e22325514"
   ],
   [
-   1228201525,
-   196
+   145,
+   "40b2c03a8d03d24e232af9797274a4e04a0fee66"
   ],
   [
-   1229440845,
-   197
+   146,
+   "523442583964122fc732ada5cf15bca8d75a6361"
   ],
   [
-   1231865799,
-   198
+   147,
+   "f7f6ebcdc824628757f3493339f491d34e5f88c3"
   ],
   [
-   1233074543,
-   199
+   148,
+   "27947a79d5a32bebbfdc10dd8c7186d7051bc1a5"
   ],
   [
-   1234217110,
-   200
+   149,
+   "018c24f588ecbb3daffb2729ec7834a10a4526c3"
   ],
   [
-   1235491783,
-   201
+   150,
+   "321b21ffc1786ffb397c78ee594e6cf8fba0536b"
   ],
   [
-   1236695843,
-   202
+   151,
+   "8568917262bb8f0dca665d5d3a564d9c52d100ae"
   ],
   [
-   1238512963,
-   203
+   152,
+   "2ab7f85edba4f8359b1f8ed2e2afc042d63df901"
   ],
   [
-   1239720354,
-   204
+   153,
+   "adc9069edc566e0447343f099f93b47194cb4803"
   ],
   [
-   1240928889,
-   205
+   154,
+   "eca6f859703f0a5f56bf9e93feb726887913f662"
   ],
   [
-   1242138151,
-   206
+   155,
+   "9c67e19209efc0874248d7b43950edb2724edee2"
   ],
   [
-   1243351235,
-   207
+   156,
+   "b3e1edf581c99ba7aa7b03b877da18cacd1e07b0"
   ],
   [
-   1244561430,
-   208
+   157,
+   "dc65a5180397bb0ade5202d6a34f6aab9e1e2dbb"
   ],
   [
-   1245771765,
-   209
+   158,
+   "7eb16c6471998416445aaedf0ff7ffcaa8e14f1d"
   ],
   [
-   1246989447,
-   210
+   159,
+   "a7d6fee3e1cdc26dbcd6dc617016acbda65939ab"
   ],
   [
-   1248188010,
-   211
+   160,
+   "cb39a05a5d3cabc35f356d97d1349ce646d3685d"
   ],
   [
-   1249423500,
-   212
+   161,
+   "18da379f482736fd96f6efd7c610f877224b9ea7"
   ],
   [
-   1250612429,
-   213
+   162,
+   "7867e7334f565306d6c9bf1e27f794eba3afc2bb"
   ],
   [
-   1251916116,
-   214
+   163,
+   "c6e7ccf7373072e356351c7b7cd11fe3e95c2bae"
   ],
   [
-   1253007416,
-   215
+   164,
+   "ee064e267f4aa31e2c078c95b3243f9207688c14"
   ],
   [
-   1254191030,
-   216
+   165,
+   "e37486816191b1456f5676cf3abf5a8ded51a02e"
   ],
   [
-   1255410234,
-   217
+   166,
+   "3a5ebe398fcc37866df283c57e34487e7605f655"
   ],
   [
-   1256682677,
-   218
+   167,
+   "7cfa2939651aacf1e6cd29a87cf0fe634a456eec"
   ],
   [
-   1257826742,
-   217
+   168,
+   "dddd28f63b90d78445dfe7272ab0f35623115cc1"
   ],
   [
-   1257829055,
-   219
+   169,
+   "b15f9408378b6386d2a3b0d236253fa3979e5668"
   ],
   [
-   1259696214,
-   220
+   170,
+   "db98ff7cae234929413b3b2afe4450fd40c27f18"
   ],
   [
-   1260818616,
-   221
+   171,
+   "6adeb0a9d457c723fb02b73de1bc3db35b553a19"
   ],
   [
-   1262666957,
-   222
+   172,
+   "c51b6074bf87fe23941fcc7112245001512c0888"
   ],
   [
-   1263935264,
-   223
+   173,
+   "ca3b14707bed0bb3b6b1f5de7fa528fea0b91893"
   ],
   [
-   1265157183,
-   224
+   174,
+   "c19142a30599e68ac726a0a41bfeac92e1820dd0"
   ],
   [
-   1266358319,
-   225
+   175,
+   "4c458a08bb809194b92e3a5e0d668d58403d48b3"
   ],
   [
-   1267574909,
-   226
+   176,
+   "ada538633adee49af86ffb5b9c149ffd92b7ba7f"
   ],
   [
-   1269376878,
-   227
+   177,
+   "ceb1f6a34cf997bdd2133948563ed823a2032c2d"
   ],
   [
-   1270519421,
-   228
+   178,
+   "0d524c97fa94109f1eda8559873d6944c057f5b8"
   ],
   [
-   1271726084,
-   229
+   179,
+   "59fe9af85867d91125e50800d44bc87a40c592c8"
   ],
   [
-   1272945610,
-   230
+   180,
+   "2b18495c32b98d3c4e9118618a6cec60c16e884e"
   ],
   [
-   1274149094,
-   231
+   181,
+   "f9a5e90062dba347542bbaae6b44d99080a73872"
   ],
   [
-   1274759250,
-   232
+   182,
+   "cf25b645204ad7b9f14956470a252a743f39178c"
   ],
   [
-   1275931415,
-   233
+   183,
+   "c1af7e3368a7cccdf7810d96ec36dd4f8627cf0e"
   ],
   [
-   1277194871,
-   234
+   184,
+   "12acd524819668e444f06e033ca0cc621ce1e4ee"
   ],
   [
-   1278381270,
-   235
+   185,
+   "df2cd37a50e32ab26e017167cfa1fb6861d0cdcc"
   ],
   [
-   1279588409,
-   236
+   186,
+   "3877bb15339c3c4f4bfe236ae310e13130f601a0"
   ],
   [
-   1280792666,
-   237
+   187,
+   "39491bcb3645e622e7f796847c9d4fd92282d393"
   ],
   [
-   1282005295,
-   238
+   188,
+   "11911af241a1ae3b2e4ff2dfbd4baac8329504ea"
   ],
   [
-   1283215033,
-   239
+   189,
+   "9498c2dcec4f06e1f4b7e2e2bf6c98a762594e78"
   ],
   [
-   1284425921,
-   240
+   190,
+   "2a75fc89731472aea7e1e5254dfa035ea5f81359"
   ],
   [
-   1285633883,
-   241
+   191,
+   "34e89b2f6e30f9895474fb8d1b2c4baa2c02502b"
   ],
   [
-   1286843663,
-   242
+   192,
+   "8ddbf34d08f4f7319f355fdfb08549858e6cefa6"
   ],
   [
-   1288656499,
-   243
+   193,
+   "7c35989d252ca5dae866055cd09d5835015e5f5f"
   ],
   [
-   1291684644,
-   244
+   194,
+   "39ff6c3f42261d68cd82a4490f57ff2d41043940"
   ],
   [
-   1294103894,
-   245
+   195,
+   "527fad0c60b01cf92da477bee5012f9fe7e81f55"
   ],
   [
-   1295927540,
-   246
+   196,
+   "c7e46f1eafcb67642187d78ff08cd5f01784906c"
   ],
   [
-   1297659859,
-   247
+   197,
+   "30303a0bf863e0100dd8420b73dc22b595c03112"
   ],
   [
-   1299546759,
-   248
+   198,
+   "a7df4fae2a34e44f8b22889269d12fad9c153e70"
   ],
   [
-   1301358008,
-   249
+   199,
+   "64be8bb7c397277a35c816d7d667620af8eff124"
   ],
   [
-   1303190974,
-   250
+   200,
+   "fc285fbf2dafa62f8c388f768b6f60e89744b69f"
   ],
   [
-   1304985869,
-   251
+   201,
+   "453b8bdb6c7fcebfd60ee9fc1ca95423d65dac3a"
   ],
   [
-   1307405455,
-   252
+   202,
+   "5367e0af43727a3d3fa8174f7a97db7a682f0789"
   ],
   [
-   1309221497,
-   253
+   203,
+   "b07162eda4e070c85fdb1a8030e0c09dd2548429"
   ],
   [
-   1311040066,
-   254
+   204,
+   "efa129f47e1463cbc8afb113ae298bd12b9e5476"
   ],
   [
-   1312761727,
-   255
+   205,
+   "426f8b45bbd518725fefe99427673423d02a2683"
   ],
   [
-   1314626193,
-   256
+   206,
+   "330cec87e7aff9358ebd286d38d7fed2abeee278"
   ],
   [
-   1316390535,
-   257
+   207,
+   "98404900aba0110651e54ace1c530daa2b57b77e"
   ],
   [
-   1318210352,
-   258
+   208,
+   "3cd9a6e7ed86ba8e078371f7ff6500ecd119e2c9"
   ],
   [
-   1320620848,
-   259
+   209,
+   "280001f3dc5b4a6c977afa399be6bc984b584045"
   ],
   [
-   1323123467,
-   260
+   210,
+   "f2a8f52cc63f1af7d4da812446d808ef9e8a6da8"
   ],
   [
-   1325552759,
-   261
+   211,
+   "c7f16b06ea4a84a27f990cc5a754ce62bcaaf84b"
   ],
   [
-   1327366177,
-   262
+   212,
+   "70bfff7ab4babf1532db22eb16ba3ac7282b12d0"
   ],
   [
-   1329184970,
-   263
+   213,
+   "1a46dc8fbdcdd6b69e8490f555a9d63feda53019"
   ],
   [
-   1331001396,
-   264
+   214,
+   "c61f722a522678efe35e7183277c67fb18ef7501"
   ],
   [
-   1332809147,
-   265
+   215,
+   "f72129aa5f7ca407d509104160008a75fc9b5bdb"
   ],
   [
-   1335236152,
-   266
+   216,
+   "7604c311b73d682198fb699038da8d8a15c2a1de"
   ],
   [
-   1337045795,
-   267
+   217,
+   "59d048415bd5f757f0d1f44e09830f866b5551f4"
   ],
   [
-   1338868516,
-   268
+   218,
+   "59d048415bd5f757f0d1f44e09830f866b5551f4"
   ],
   [
-   1340680533,
-   269
+   219,
+   "b411a38a19c1f8d127262551191c268cb14f60f2"
   ],
   [
-   1342501784,
-   270
+   220,
+   "76846a83bd04c40d426bc4ba93360bb0081ea0de"
   ],
   [
-   1344302527,
-   271
+   221,
+   "6d6f809e75b463387d9ba48457fe0cc518993559"
   ],
   [
-   1346109081,
-   272
+   222,
+   "8a4ec26a72758e52715125125b89bfa97b2bbede"
   ],
   [
-   1347950853,
-   273
+   223,
+   "37e25343ed93ada9fc6ae553dec568d28b35818e"
   ],
   [
-   1349803060,
-   274
+   224,
+   "9d9f0f9dc763a894204834097e2cb39c1ffc7018"
   ],
   [
-   1351552378,
-   275
+   225,
+   "66cd82e9e1ae6011e1821dec9c00159cb458d9db"
   ],
   [
-   1354587689,
-   276
+   226,
+   "81d6d3a62c0486e745f8a3717bd6310da16b012c"
   ],
   [
-   1355789959,
-   277
+   227,
+   "dfd87f5bb8e68c89e3f9541c82a472490c20a75d"
   ],
   [
-   1358900007,
-   278
+   228,
+   "7d1a28fa84b68e2e9437a8352c83fff89be3977a"
   ],
   [
-   1360628017,
-   279
+   229,
+   "d63dce216df252f8607a099ad7af5b55b497e116"
   ],
   [
-   1362441698,
-   280
+   230,
+   "96af23c4d50f88098a0a8778e50a1dc896be444b"
   ],
   [
-   1364167642,
-   281
+   231,
+   "74a144cc45e976febc076489aebd06f13f45c845"
   ],
   [
-   1366078435,
-   282
+   232,
+   "ce9114a6295bce0490e02c8b52397a881c97e354"
   ],
   [
-   1367881842,
-   283
+   233,
+   "d76fe2cccb2e5504a420ba197c2e86e9f44e0a1e"
   ],
   [
-   1369609639,
-   284
+   234,
+   "bd2d24747d0255e0aa46daffd6e9fbca0a28b5b8"
   ],
   [
-   1371510520,
-   285
+   235,
+   "29b380a5a0ac7fbfc6064e3d89da23d37d9e13a1"
   ],
   [
-   1373327467,
-   286
+   236,
+   "480ef9433b12d277fd3b2e4cfcf02742c49095e3"
   ],
   [
-   1375141398,
-   287
+   237,
+   "08edc4e0e8900497ceeba90b103d30c680494b87"
   ],
   [
-   1376932858,
-   288
+   238,
+   "43f41483c221b47089a679246f190f547312a781"
   ],
   [
-   1378756711,
-   289
+   239,
+   "789507ff767fca0cb9429fec969de3ef99bdec5c"
   ],
   [
-   1380560889,
-   290
+   240,
+   "7ba3b466779ce36cbe0fb3df0b4b37c7a2ec71cb"
   ],
   [
-   1382376551,
-   291
+   241,
+   "63187211f571642ec1454668fa7a7c159e913e98"
   ],
   [
-   1384194827,
-   292
+   242,
+   "ebdcbb883bc26757d144750eed9665302e8ff0b5"
   ],
   [
-   1386652146,
-   293
+   243,
+   "7af80422d07a7d8a5e97acc508356ae9daed9ca7"
   ],
   [
-   1389636356,
-   294
+   244,
+   "880049dedecc59273725dd599726129e11657722"
   ],
   [
-   1391450204,
-   295
+   245,
+   "e4a8d53163c50ba432ccae8fcf5e47f13f5e80da"
   ],
   [
-   1393264729,
-   296
+   246,
+   "0f7df68ca4f98c206261ff357883bd51f8a8783c"
   ],
   [
-   1395076775,
-   297
+   247,
+   "c313c7f0cc97ed59e26945dedf219634c8823789"
   ],
   [
-   1396889830,
-   298
+   248,
+   "5f97f94fe4852affedf106c44feea002f30636ef"
   ],
   [
-   1398704469,
-   299
+   249,
+   "ff5a896c0c886c874c27486d7f973f9464609232"
   ],
   [
-   1400518778,
-   300
+   250,
+   "1b106c25ed6982ef236b7cdf14ab27847acd52d4"
   ],
   [
-   1402334098,
-   301
+   251,
+   "4576fbe943968f2cf01bb2ef05219f4700dc7642"
   ],
   [
-   1404148813,
-   302
+   252,
+   "cf085e5994cc2627b26afc4e87f64276b311ed5d"
   ],
   [
-   1405967143,
-   303
+   253,
+   "9f49872ba55e3b6ac2b9df18836abe16975262e0"
   ],
   [
-   1407779409,
-   304
+   254,
+   "bef0931284f34efd4be9e479a618bc78bc50c85e"
   ],
   [
-   1409677142,
-   305
+   255,
+   "47da605062b5b5157a2be43c4c75b020c1ea4e8c"
   ],
   [
-   1411404946,
-   306
+   256,
+   "4b767968fb4824816010ea9113d4c5e313a1fec8"
   ],
   [
-   1413220997,
-   307
+   257,
+   "bc0d565479a2e9ef1afb9815dc33940093e792df"
   ],
   [
-   1415037450,
-   308
+   258,
+   "d192ea631733b26c67dbc418afbe8afad3f1d9ef"
   ],
   [
-   1416851817,
-   309
+   259,
+   "7022dbb45bbed9166bd651826040029c7aed9fb9"
   ],
   [
-   1420481039,
-   310
+   260,
+   "22c875dcc26f2d473da0dd75f29ffe7a97411dda"
   ],
   [
-   1422297454,
-   311
+   261,
+   "45ea7546772f415d6521e97c7b8359691eb37be1"
   ],
   [
-   1424136244,
-   312
+   262,
+   "278efe2eb6f380e8d8710927804ceb2179ba07a3"
   ],
   [
-   1425920753,
-   313
+   263,
+   "3174e407d461355179a6e0e3dac93438d6c8b151"
   ],
   [
-   1427735294,
-   314
+   264,
+   "8e93e2cf5ef4c0580c1a457e5c542f40a0378fa3"
   ],
   [
-   1429549651,
-   315
+   265,
+   "85049154a7acb39498bd5e27de18b4b465f91739"
   ],
   [
-   1431363680,
-   316
+   266,
+   "788b7f650b40a5d8a63bc707312169e417253601"
   ],
   [
-   1433177734,
-   317
+   267,
+   "464fc33b71f9a2fa35e9a4824a4c09e3b103590c"
   ],
   [
-   1434992111,
-   318
+   268,
+   "e09adec9a6c80be299b18fa7f43b983fbc3c31df"
   ],
   [
-   1436806658,
-   319
+   269,
+   "710fd032d8026229191cb682c977d062e92e1e05"
   ],
   [
-   1438621013,
-   320
+   270,
+   "28a9105faa8a618bc692fe4140bb3bd5a0023a07"
   ],
   [
-   1440435677,
-   321
+   271,
+   "3f896c1d6e44eb5e7eb26f5d1cd094a855b91e52"
   ],
   [
-   1442251268,
-   322
+   272,
+   "581f2145a75407036c03d4a02d675dbbb4501fa4"
   ],
   [
-   1444068028,
-   323
+   273,
+   "695ca35c07b3b5d2ace4ee35b958bee05d499f32"
   ],
   [
-   1445888794,
-   324
+   274,
+   "0d9af2933132c0b2e3e50f79afde4794f8e98c50"
   ],
   [
-   1447696663,
-   325
+   275,
+   "a28a75e238dc509752af38757670edb8331439fb"
   ],
   [
-   1449511280,
-   326
+   276,
+   "1f9c6ca6454e4744e54b6bb4fc848cb61cc77840"
   ],
   [
-   1452534787,
-   327
+   277,
+   "1289775bac9e6a16c21e56674b38dcb46a227d68"
   ],
   [
-   1454954770,
-   328
+   278,
+   "c51a2df63ed79f586ee01b529336a6e6e7084081"
   ],
   [
-   1456769895,
-   329
+   279,
+   "3a30c43c6cfa41b64f12430fa4567d23862008f3"
   ],
   [
-   1458580197,
-   330
+   280,
+   "59a5dc9e2af53051551a325876320d9a7a3827e1"
   ],
   [
-   1460394279,
-   331
+   281,
+   "c0706b9962b3011600c89e01c6d0d35930e5b4bc"
   ],
   [
-   1462210568,
-   332
+   282,
+   "444c682ab5a2ab024877073f6ff9e2276783fad8"
   ],
   [
-   1464023337,
-   333
+   283,
+   "52f2367a83f59411e581d9eb290a45f1f7ab6e35"
   ],
   [
-   1465838556,
-   334
+   284,
+   "7ec80b7a78515f7ac9d6946bc42e6ebcbaaf0afe"
   ],
   [
-   1467656030,
-   335
+   285,
+   "c6a3bdf52726bbb55596c26f614953de657d078e"
   ],
   [
-   1469468547,
-   336
+   286,
+   "450b31a3d3fd62d0d9ac6ac3eb2dccf3a3081546"
   ],
   [
-   1471282322,
-   337
+   287,
+   "279d58e1af5c8e897f750476a0951f367c9bc6c5"
   ],
   [
-   1473181557,
-   338
+   288,
+   "6ceb34a30ef0a0f125cab6c3735f88400e54d277"
   ],
   [
-   1474909128,
-   339
+   289,
+   "97599d3e950fdeff08ef7b75294b6cc46eab7559"
   ],
   [
-   1476724856,
-   340
+   290,
+   "6ac4a6188f086d8f54e9f4c932268c007cac6294"
   ],
   [
-   1478541988,
-   341
+   291,
+   "2bdcd8854aba45b82e1adac9b4a2187f5fe67f23"
   ],
   [
-   1480960967,
-   342
+   292,
+   "9728de09ab43aa474903cf1652730036690c1aae"
   ],
   [
-   1483984657,
-   343
+   293,
+   "7d31719e9dfdabc918fa5c9cb79efa9f61514f8c"
   ],
   [
-   1485799329,
-   344
+   294,
+   "9f9453fcbb497a1d579d4c49cbbde538859bed37"
   ],
   [
-   1487622731,
-   345
+   295,
+   "e820098f5db276206a514b17250bca0097a60ca2"
   ],
   [
-   1489424348,
-   346
+   296,
+   "90bc91fdb6d2c4af193fe4959eca712ff1043b84"
   ],
   [
-   1491238349,
-   347
+   297,
+   "a1330599a7f057efbe393fcef546f0a1626aab54"
   ],
   [
-   1493055334,
-   348
+   298,
+   "2a8c780153e48bb67a5255e988b0179e2ed19b65"
   ],
   [
-   1494867549,
-   349
+   299,
+   "705878cd8ff816c29e84541b69538459895e34bf"
   ],
   [
-   1496683746,
-   350
+   300,
+   "3763a32af7d8b4da8b81a6630d777e58d7a6f468"
   ],
   [
-   1498496689,
-   351
+   301,
+   "ada7c001eb96477f591e354b269e0a082b254480"
   ],
   [
-   1500311064,
-   352
+   302,
+   "7c524fdb4834ced3181474e60142c79a131c3aa8"
   ],
   [
-   1502124608,
-   353
+   303,
+   "5ee517af0a25ef214f08b0a94978a1156cd895a4"
   ],
   [
-   1503939926,
-   354
+   304,
+   "252642dc5fd7adb9b66a4f46ce17ab5b86568871"
   ],
   [
-   1505756991,
-   355
+   305,
+   "c461e20a8eb52b6659ffcfd5dae74e31d7d8df67"
   ],
   [
-   1507568406,
-   356
+   306,
+   "736dfeae1de40173ef57f0633ae396963f6d7dd9"
   ],
   [
-   1509384124,
-   357
+   307,
+   "2580e94ea0f585f2b42946d1e9e0d59aba2ebd07"
   ],
   [
-   1511805976,
-   358
+   308,
+   "9f356714605a8aabf9222097c660182c4d840623"
   ],
   [
-   1513619620,
-   359
+   309,
+   "92bc9806aa002a6983ca216bf5380b0e9e36da4c"
   ],
   [
-   1516643836,
-   360
+   310,
+   "5a18530dd4eef1b0a2897cf1e0bd97757aa19b17"
   ],
   [
-   1518459607,
-   361
+   311,
+   "daffbc8531d23ff06ad2ec71099b94a208d0f86d"
   ],
   [
-   1520273492,
-   362
+   312,
+   "2818c736736d67ff294c78b52286372392ccaccc"
   ],
   [
-   1522084780,
-   363
+   313,
+   "32c7f3b46142c9fdf7cd4b5dda72066312408f9a"
   ],
   [
-   1523900823,
-   364
+   314,
+   "b9fedaa784455ab697568f85f1798c1dfb1f8d2b"
   ],
   [
-   1525714651,
-   365
+   315,
+   "17d08fcbb54abbb125559c636af1bd2854b993bb"
   ],
   [
-   1527613639,
-   366
+   316,
+   "9a8b415af0d164f989c98a02f905346bc73289ba"
   ],
   [
-   1529342313,
-   367
+   317,
+   "b0c0cca3ab7d60b8534828a221bd108e7c67998b"
   ],
   [
-   1531148275,
-   368
+   318,
+   "1438da9564bbb8bca26300ae0acbca8eaec3d293"
   ],
   [
-   1532970654,
-   369
+   319,
+   "61af439f4d3e52b7cfa2e69c195363800ca673aa"
   ],
   [
-   1534784258,
-   370
+   320,
+   "e6e9b7d6159d0279bd43cb59423e43d9ecdfff0d"
   ],
   [
-   1536603209,
-   371
+   321,
+   "3b126622f17f6bfa76555593943f91901d7077e5"
   ],
   [
-   1538415460,
-   372
+   322,
+   "fca97061051f1f554cec3c0af1bc688e000508a0"
   ],
   [
-   1540228143,
-   373
+   323,
+   "a6e3be297999d1675a73ea82f70b7a02c9485f50"
   ],
   [
-   1542045728,
-   374
+   324,
+   "1b5807d618427baaf58229e65bfb61aa7a0a5390"
   ],
   [
-   1544464982,
-   375
+   325,
+   "f41801c3f1bf374a916413c042a3b686811158e9"
   ],
   [
-   1547489095,
-   376
+   326,
+   "742b8770d00d3f8c3918c1121f9478cf9c30b17d"
   ],
   [
-   1549302941,
-   377
+   327,
+   "8c499497a75ae6b8d0224ee7c57e9c9e2cb148d0"
   ],
   [
-   1551117457,
-   378
+   328,
+   "64e89425bacbd3edca1700e59d05b1bb6ed3cc9b"
   ],
   [
-   1552929777,
-   379
+   329,
+   "9b3862d47ff6d827ecf515a3763b98eb6e6b1012"
   ],
   [
-   1554743212,
-   380
+   330,
+   "d6e967120ecde85d34edfd23b0aee992a463b059"
   ],
   [
-   1556559375,
-   381
+   331,
+   "bd08264f774011783956bfb528701b9dc732e936"
   ],
   [
-   1558372362,
-   382
+   332,
+   "d80445b60cff9e72fcfe51995be767f59a735a36"
   ],
   [
-   1560187187,
-   383
+   333,
+   "0be5973c33c20adcdf29ff2b52ba6b2d83eed89c"
   ],
   [
-   1562001414,
-   384
+   334,
+   "52006074179b4c6766f89a5a8861179f9d07fa1a"
   ],
   [
-   1563815090,
-   385
+   335,
+   "2618c345307ad1f19a28d54865ed9709114978f7"
   ],
   [
-   1565629388,
-   386
+   336,
+   "9267845b10041f488a126bbf7475d800b2a4f330"
   ],
   [
-   1567444308,
-   387
+   337,
+   "97e40314ec4f1b7bc3ebac5f7d541b224057eae7"
   ],
   [
-   1569258369,
-   388
+   338,
+   "840623808e1ddb54e8a5ccbf34136fb4a767c75c"
   ],
   [
-   1571074594,
-   389
+   339,
+   "e45747fa3be910c892981352b9cac298178cfd27"
   ],
   [
-   1572891278,
-   390
+   340,
+   "2d208dcc8ef34de7627709e16e6f70f6fe6a8b8c"
   ],
   [
-   1575310340,
-   391
+   341,
+   "a1494fec288ca82de0a42c1f6315412fba7a154a"
   ],
   [
-   1578334091,
-   392
+   342,
+   "adadb2305d035d1b900ab1a1671e52a8b8d470a9"
   ],
   [
-   1580148599,
-   393
+   343,
+   "1234f3ad8d68b1865c6010b29ae2d9ab488f54d5"
   ],
   [
-   1581963008,
-   394
+   344,
+   "aab9cab184eb26a03a49ef5cf63cc8a503972a85"
   ],
   [
-   1583773152,
-   395
+   345,
+   "48727b3128e7d2a5a6bd0c01b74dcac357d1e45d"
   ],
   [
-   1585588116,
-   396
+   346,
+   "8a6afbbee7c7de66122e80b34daec9244819c4c7"
   ],
   [
-   1587402608,
-   397
+   347,
+   "d53b61de2752fd4bc6995101d47eaa8ab7e697aa"
   ],
   [
-   1589218687,
-   398
+   348,
+   "4558738b4fb6ac1522a042b40509772845825f99"
   ],
   [
-   1591031026,
-   399
+   349,
+   "ba9d5d0321eac8766a88194623cbd51b46b34d0d"
   ],
   [
-   1592845137,
-   400
+   350,
+   "b75b79c29bfa4b7ddfd08654d4e26b944de26dc6"
   ],
   [
-   1594659564,
-   401
+   351,
+   "45d468a020251066818949cde30a17de3023b927"
   ],
   [
-   1596474027,
-   402
+   352,
+   "5f3ca34a0412ffc6b3e172eb1ca77a72fd5e0e0f"
   ],
   [
-   1598288808,
-   403
+   353,
+   "deb9aa671e2647557581e6c30265c1963ff45e2c"
   ],
   [
-   1600102920,
-   404
+   354,
+   "6b9a6437044e4efd36158d81a7847ec6b0eac262"
   ],
   [
-   1601917970,
-   405
+   355,
+   "d1c3664c53b17dd2a8394bbed9b13f69df7c43c5"
   ],
   [
-   1603731707,
-   406
+   356,
+   "8248a721c03198c87194c2c684685d395df82847"
   ],
   [
-   1605549879,
-   407
+   357,
+   "ee250cad347b57996f7cc1125d4be37f49c7fd06"
   ],
   [
-   1607331029,
-   407
+   358,
+   "cedef52b772e1cca44c8d8729289e50975506313"
   ],
   [
-   1607363812,
-   408
+   359,
+   "a918c18ac10288dfd3c9e8742358ccd8dc890f18"
   ],
   [
-   1607550721,
-   408
+   360,
+   "13889ea27d528c17e6ab49c80c04ebe9d27fd2f1"
   ],
   [
-   1610993186,
-   409
+   361,
+   "14f34a6c6cdc3691f0932bf2a5a77cd718f11ee4"
   ],
   [
-   1611326818,
-   409
+   362,
+   "233637b92cf24f9f4c70517a74723fa3cf79d530"
   ],
   [
-   1612815032,
-   410
+   363,
+   "a97dcf79cc86cb79231374f6250927a360b03645"
   ],
   [
-   1614622058,
-   411
+   364,
+   "e9584261fd10552c1f343762abca017591c83f96"
   ],
   [
-   1616444795,
-   412
+   365,
+   "ba4364c153babdfd10240d96af82658f83da163f"
   ],
   [
-   1618247105,
-   413
+   366,
+   "34b031125c38ca2905e347369c3242d66699ea38"
   ],
   [
-   1620062609,
-   414
+   367,
+   "46c6b163494aff7c1726068b62418494b7fe9fe7"
   ],
   [
-   1621876182,
-   415
+   368,
+   "1561d467333dbf45f1630539b0a090d8d6baabb8"
   ],
   [
-   1623690308,
-   416
+   369,
+   "2e6c47ae43ce4a804b3e3b6934036635a8e776cc"
   ],
   [
-   1625505385,
-   417
+   370,
+   "6ad507c36972b05ffc53c857a9aef43304859c68"
   ],
   [
-   1627319810,
-   418
+   371,
+   "d0aaa83d87a554c2dd7c3816b6da0a850a7d18ee"
   ],
   [
-   1629133906,
-   419
+   372,
+   "7b07752c88d957fcd8dd5d282bf6dd194b15be96"
   ],
   [
-   1631034514,
-   420
+   373,
+   "c66f3aa17c73ef4818516700180e50ffffad0e30"
   ],
   [
-   1632762637,
-   421
+   374,
+   "94ca49469aa9a2c7eb6d58ce0ca45eaa3289db2c"
   ],
   [
-   1634576925,
-   422
+   375,
+   "0a8766dc9b50da2cca3ee86fdb02c95bb7e9893e"
   ],
   [
-   1636475447,
-   423
+   376,
+   "6ef40810240496b20cdd47ce1656d8d6d179aa24"
   ],
   [
-   1638814829,
-   424
+   377,
+   "4563dcac2feca42b6cb92fd296b314b4e82c731f"
   ],
   [
-   1641839720,
-   425
+   378,
+   "b2391196654ee34389cc9a02d2ae390f8af607ee"
   ],
   [
-   1643676333,
-   426
+   379,
+   "1480ab5517f7db63adba53747f687c4a73e69729"
   ],
   [
-   1645467168,
-   427
+   380,
+   "5a88f873d6dcc86b01809fb805f84532c93b38af"
   ],
   [
-   1647277890,
-   428
+   381,
+   "781ab6c4fc3af29965c301695d7f70309565843b"
   ],
   [
-   1649092475,
-   429
+   382,
+   "580c1ee47a8c40dbe5b8f3e97bdf8c801552b12a"
   ],
   [
-   1650906762,
-   430
+   383,
+   "c81af79a92834c5685f102b581fe54986dc337ce"
   ],
   [
-   1652721470,
-   431
+   384,
+   "96a4979aed12ea101da486a1c5bb0229c219d909"
   ],
   [
-   1654539643,
-   432
+   385,
+   "52148600588f39f123013614612c81257488fdc3"
   ],
   [
-   1656349742,
-   433
+   386,
+   "4f42ac5eef7748338089fb2fa2621569bdc9f029"
   ],
   [
-   1658164399,
-   434
+   387,
+   "658dfc03388febb94358c1e04deb6f52312331fd"
   ],
   [
-   1659979825,
-   435
+   388,
+   "ecf836c5e37e333870adbc97ad3e38c1939056d1"
   ],
   [
-   1661793023,
-   436
+   389,
+   "c1f5ad256c535d3dcf03c897a8728a4dbc30ae86"
   ],
   [
-   1663608148,
-   437
+   390,
+   "591e3cbcda755521392d61fa1b6e2d9d462b04a5"
   ],
   [
-   1665421645,
-   438
+   391,
+   "cce8d6c511e3b139fc8437ff53c438ea57350108"
   ],
   [
-   1667239503,
-   439
+   392,
+   "daf028a3af7cea339f52f2be2aa1485eab315583"
   ],
   [
-   1669054316,
-   440
+   393,
+   "b412374f3148d14f102d1173a845781eab27d39e"
   ],
   [
-   1670868829,
-   441
+   394,
+   "e5e8c31dd056d42cee8356af6228db4da7f28e3d"
   ],
   [
-   1673288087,
-   442
+   395,
+   "1b5577e8f23436a133037ad7db987ad9894b508f"
   ],
   [
-   1675102472,
-   443
+   396,
+   "c08af2897fd394984f965637ed91fb2a7cda299a"
   ],
   [
-   1676917346,
-   444
+   397,
+   "df321bdd31c2fe13eecbe2dff0d5461a5b1c32ee"
   ],
   [
-   1678728123,
-   445
+   398,
+   "d23d2136d43f72838418c5c296109d1fc289c340"
   ],
   [
-   1680541885,
-   446
+   399,
+   "b07650d95d9277aced9e2027203659b0729a1060"
   ],
   [
-   1682356714,
-   447
+   400,
+   "e24be750c2eaaeb78ed10b81b44471b19476c6c1"
   ],
   [
-   1684170325,
-   448
+   401,
+   "40cd595d31dd07aedc461b8792a9a9297348570b"
   ],
   [
-   1685984740,
-   449
+   402,
+   "b78d3ab17bc388d13818cf1afa834692968a608c"
   ],
   [
-   1687806483,
-   450
+   403,
+   "5f7f06147265d248e99118adb21d85b08a882b1a"
   ],
   [
-   1689618452,
-   451
+   404,
+   "6e371d4a360481e6f6515b9c761ee1c529ccde81"
   ],
   [
-   1691427942,
-   452
+   405,
+   "896f24b746d09cf115f347d8292b86013dcc8a33"
   ],
   [
-   1693248221,
-   453
+   406,
+   "126705aca26f380da73ae4c8998bd64edd09118c"
   ],
   [
-   1695064564,
-   454
+   407,
+   "42c276ca22c56f4afc32294df7ef280ad4620f79"
   ],
   [
-   1696869360,
-   455
+   408,
+   "bd784c0cd021f8e050ff1f78e9bae128a71682f6"
   ],
   [
-   1698687391,
-   456
+   409,
+   "0db4ddfb542d0b3045cc80ce9de099bd4f005a9f"
   ],
   [
-   1700513834,
-   457
+   410,
+   "22aeab2a8676808f9b2ec675b41c2946ef2800f6"
   ],
   [
-   1702313616,
-   458
+   411,
+   "b8032901670f0266e9c228bd9fda6a74463c65b9"
   ],
   [
-   1704737186,
-   459
+   412,
+   "3c35fb1a00fbb4ecf3701e2679b62a3c5aacab40"
   ],
   [
-   1706555770,
-   460
+   413,
+   "02f273a3899445ed872fd366177ae693faec2c7d"
   ],
   [
-   1708368072,
-   461
+   414,
+   "9f5beb3a14154081fa490588943fa4b7f4ab0662"
   ],
   [
-   1710178885,
-   462
+   415,
+   "d04609be06e5269e6c47e9cec1ebb3802aba984c"
   ],
   [
-   1711994375,
-   463
+   416,
+   "ddaf486012f0411e815853fcfb7adfa73113411b"
   ],
   [
-   1713807088,
-   464
+   417,
+   "3183269829f070c9976373c808cfcfebaf4a25d2"
   ],
   [
-   1715621754,
-   465
+   418,
+   "7687d17e509506ec79dbca9f188f67bb4ff986db"
   ],
   [
-   1717436583,
-   466
+   419,
+   "945ea737087057c1190caded309a53537333ea0b"
   ],
   [
-   1719264355,
-   467
+   420,
+   "4069de964171b015cdf61e9a4cdb7cd2c4bf8a3b"
   ],
   [
-   1721063784,
-   468
+   421,
+   "30eb18412a46f8376ba1b031d393159777a0590a"
   ],
   [
-   1722886302,
-   469
+   422,
+   "5b02224b48e2c6dce7767559d08ebaa2798b678d"
   ],
   [
-   1724695866,
-   470
+   423,
+   "db9dbdd0aaa3a906a54b9a0a8ae0a516efdcfdbc"
   ],
   [
-   1726508999,
-   471
+   424,
+   "9b267b40b1b9a6818886f2b51cf9d69b0e8b7d9e"
   ],
   [
-   1728338962,
-   472
+   425,
+   "1d27cd7fb6e35a4328ee06a73f1a5b0821956b81"
   ],
   [
-   1730137833,
-   473
+   426,
+   "414610df564cd8055f16956e9fbbde4488b3387c"
   ],
   [
-   1731954637,
-   474
+   427,
+   "87a799fab9e776e6d437edb5e0e7503d30541f46"
   ],
   [
-   1733771455,
-   475
+   428,
+   "343590bdfc6fd45427d54b922944781eff4a1c22"
   ],
   [
-   1736798220,
-   476
+   429,
+   "796395d2e9ad7e006411e29c451b394a4e760393"
   ],
   [
-   1738610438,
-   477
+   430,
+   "d2487ecf0f6491fcec2d901b6e64c9961572df64"
   ],
   [
-   1740424814,
-   478
+   431,
+   "caf9ecd5cc981e03b1d31885abc49f1992873963"
   ],
   [
-   1742234717,
-   479
+   432,
+   "04c4e71a347cfb4774bd1139996eebc48c936bdd"
   ],
   [
-   1744056846,
-   480
+   433,
+   "f9e5a987858f88f2f3ce5fdca8a14e5f52065d9a"
   ],
   [
-   1745864196,
-   481
+   434,
+   "f4ff2d1f35b3b450642695a48e57d20acb4b5614"
   ],
   [
-   1747679088,
-   482
+   435,
+   "baeb88c428b3e0aa041a7c97740b6e28d5db8b25"
   ],
   [
-   1749530451,
-   483
+   436,
+   "03120dc602a76d48ada675d28511ec53a1ecb756"
   ],
   [
-   1751322727,
-   484
+   437,
+   "8eb698a50a97e1da02a8df3ebbc26379273dafc8"
   ],
   [
-   1753127415,
-   485
+   438,
+   "34dfbf4b8910ce44315ac4ac0fe7e3e6f08f4540"
   ],
   [
-   1754951180,
-   486
+   439,
+   "683e63378776fb639a6de9d06eb6928500f4c378"
   ],
   [
-   1756746182,
-   487
+   440,
+   "9352e0e86596837a0cf6b3ea805cb3c615cf94c6"
   ],
   [
-   1758575040,
-   488
+   441,
+   "cb452184c990541a6109b6921e19912758534eb3"
   ],
   [
-   1760387937,
-   489
+   442,
+   "657ff9bb0c3e403f010c0de7848e6baf12fb2c4e"
   ],
   [
-   1762212459,
-   490
+   443,
+   "2c16cc726ba2e25098de6f3e16bd88ead5a192f0"
   ],
   [
-   1764012000,
-   491
+   444,
+   "2d8ef74e61f892042592a21712bbebaf19edd385"
   ],
   [
-   1765831925,
-   492
+   445,
+   "ab909bd4cde74f88f5557180d33d9b2b6f508d86"
   ],
   [
-   1769450596,
-   493
+   446,
+   "07beac33fc2abb48bea11162ac9b833b7a0d383b"
   ],
   [
-   1771266492,
-   494
+   447,
+   "a04e280e8401aa9f7c02abf1c038b9aa6b253ab1"
   ],
   [
-   1773075673,
-   495
+   448,
+   "479ae8f44bd5005ad8737700bde652cbd971d913"
   ],
   [
-   1774890279,
-   496
+   449,
+   "c8aba189173469b2ef7d3ed0a0bf8691945fbae6"
   ],
   [
-   1776707280,
-   497
+   450,
+   "925d3cb6efcdd497a15d38b0fa3178495b2247c4"
   ],
   [
-   1778519024,
-   498
+   451,
+   "9461b863e8b83742a6db23c5c701babd0e04a819"
   ],
   [
-   1780333234,
-   499
+   452,
+   "35790f88922555190ea4d4fbfceff48f2345ba26"
   ],
   [
-   1782752883,
-   500
+   453,
+   "dd1b035041ad3777603524c4f8befdafc92074c0"
   ],
   [
-   1784567050,
-   501
+   454,
+   "aebb39bf84fcc61c71d9c044557d143676913d90"
   ],
   [
-   1786381213,
-   502
+   455,
+   "5ea537a921cd0adc0c6d14986f2e0f5581b0c6ed"
+  ],
+  [
+   456,
+   "3f37c7999a4f1e808626906f2bc565d394e8c291"
+  ],
+  [
+   457,
+   "a743fa87e218b7d9219a0878db8ec8357a349e8f"
+  ],
+  [
+   458,
+   "debba9d1a4a931d8433a25ff3f3bc375cc1bc765"
+  ],
+  [
+   459,
+   "27a9920b341c46d62dd0f1756d441454af4a7520"
+  ],
+  [
+   460,
+   "9ec2d3b4769060d4397f24cce21b14cf520e7a63"
+  ],
+  [
+   461,
+   "731e70a56c0bba9a52531926aef6321b3fd4c48e"
+  ],
+  [
+   462,
+   "b3ccd2e0dda6280a2218d9702da4c1906a9a9387"
+  ],
+  [
+   463,
+   "885271695ba17ace9cad2c1b3fff5676850cdbfe"
+  ],
+  [
+   464,
+   "66aa4f5bb547a8748b2306bc973d9e94b37ad9d2"
+  ],
+  [
+   465,
+   "5a48c29d628d7e98d2166bf612c2301b247d9189"
+  ],
+  [
+   466,
+   "87b390a59ee5e4f3942b557b3a76eadf3ab1ca0d"
+  ],
+  [
+   467,
+   "59b7a06348394b4db4d0b7de1881a64a173b4042"
+  ],
+  [
+   468,
+   "2b39887ff5c279d7cb931034ed9e6547fd233b62"
+  ],
+  [
+   469,
+   "034516d1afe0c545d6d9f80aa041fb7c21a716e3"
+  ],
+  [
+   470,
+   "a04d3c0e3c4d4ef6fcbe5298eef425c6cc9aab60"
+  ],
+  [
+   471,
+   "882e1939634c785f6b65c6e72eee66092020267a"
+  ],
+  [
+   472,
+   "14e458a2850b153c5abf5c8cc329accdb0047d37"
+  ],
+  [
+   473,
+   "3e6e726f55156e6611cedb85de6865419d6b0762"
+  ],
+  [
+   474,
+   "d84be30109fa6c2778b3e22282f000e9671ac381"
+  ],
+  [
+   475,
+   "b0a393711fb4a727d4ea8894a617eb12f621824b"
+  ],
+  [
+   476,
+   "6fdc309d2cb5c4e8a209f9a0064df807662a46de"
+  ],
+  [
+   477,
+   "6bf2d8427849abe775b422f71dae6665021a0ff8"
+  ],
+  [
+   478,
+   "3933038e366f5c27945dcbb18862c91c756c2e5c"
+  ],
+  [
+   479,
+   "864846249d1323e9d51366ea37d6b3684b0abc9b"
+  ],
+  [
+   480,
+   "4e801961d8639c42956fb5455f9f537f24ba4e1d"
+  ],
+  [
+   481,
+   "e225fe12308746322ff2f9c98e457e5fdeaadf20"
+  ],
+  [
+   482,
+   "e4481bfc920729522f59d98b7fdfd09023e9ce4f"
+  ],
+  [
+   483,
+   "5979e7af5c783447c2a49ac0c258462fb105d847"
+  ],
+  [
+   484,
+   "6faaa066eb3d0d5533adc3a116fe55ae3811c33e"
+  ],
+  [
+   485,
+   "4e659bf04039e0f74771574ce690495b260bfa58"
+  ],
+  [
+   486,
+   "95b2b325bf5a1fe48ee74a56408275edaf61049d"
+  ],
+  [
+   487,
+   "3d9de30bc53b04ca42d2895c50f212112e495f81"
+  ],
+  [
+   488,
+   "74ac286082643c919ab8a886f6b042ee8270dbc2"
+  ],
+  [
+   489,
+   "d936a9302857d83fee2d5ed42434b8a563d0568e"
+  ],
+  [
+   490,
+   "44cb29b33b2a210b5d5128cf6ab922b7dd3e20e6"
+  ],
+  [
+   491,
+   "7f14c2c4279efdcd56538d0d723c91d1b524633d"
+  ],
+  [
+   492,
+   "2c3b7caa00e7919ed469162e424a347a536272e5"
+  ],
+  [
+   493,
+   "8a748fa554412d3884ad3b2c8f7f7fdf44516850"
+  ],
+  [
+   494,
+   "4cd6ad0b09382e69acd8e81516f933840f402ecf"
+  ],
+  [
+   495,
+   "5d996a665e1c6fb8df5a7066628b7234fe39c437"
+  ],
+  [
+   496,
+   "d1d64e7c5b7de79d77961f21c2c89fc67656a31d"
+  ],
+  [
+   497,
+   "a746f55ca33cdc60a96b927ba47531dbb18169b1"
+  ],
+  [
+   498,
+   "8b9dbe3ac3f2aa9ab1b624d7ce8bbb52285e3fe6"
+  ],
+  [
+   499,
+   "184ab740318f02847038ea7dfb9a0bf770356d67"
+  ],
+  [
+   500,
+   "ca3f79d3f99dc69466ff167a62df20013f26f0e0"
+  ],
+  [
+   501,
+   "77bf415bd054a996057ac32cfd0966aa0202be66"
+  ],
+  [
+   502,
+   "8b8a7a3b6f869eec4052714460b94d39115538cd"
+  ],
+  [
+   503,
+   "1606fc917aecf60bcc17002a8602678d763f39e5"
   ]
- ]
+ ],
+ "schema": 3
 }

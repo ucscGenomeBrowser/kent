@@ -1,0 +1,69 @@
+# The THIRD copy of isParentVisible(), the one in hg/lib/hgFind.c at line 2957.
+#
+# The same function exists three times in the tree, character for character:
+# hg/lib/trackHub.c:1818, hg/hgCollection/hgCollection.c:269 and hg/lib/hgFind.c:2957.
+# Nine scripts in regress/ cover the trackHub.c copy and collection.docent.yaml covers
+# hgCollection's; this is the third. Each copy asks the same question -- are this track's
+# containers visible -- by reading the cart itself rather than going through the accessor,
+# so a change to how visibility is stored has to reach all three or two of them quietly
+# start answering from the trackDb default instead of from the cart.
+#
+# What this copy decides: isTrackVisible() at hgFind.c:2977 sets category->visibility, and
+# hgSearch groups its results by it -- "Visible Tracks" when it is set, "Currently Hidden
+# Tracks" when it is not (hgSearch.c:174, js/hgSearch.js:44). So the symptom is a search
+# result for a track you have on in the browser filed under the hidden heading, where a
+# user looking for it will not think to open.
+#
+# Unlike hgCollection this needs no login, which is why it is worth having even though the
+# other two copies are covered: it is the cheap one.
+#
+# The track has to be a searchable leaf whose containers are hidden by default, or the
+# test passes on a broken build (regress/README.txt has the rule).
+# wgEncodeGencodeBasicV49 is in hgFindSpec, and its chain is
+# wgEncodeGencodeV49ViewGenes -> wgEncodeGencodeV49 (visibility 0) ->
+# wgEncodeGencodeSuper, a superTrack that is `superTrack on` with no `show`, so isShow is
+# FALSE. Read the cart wrongly and the walk stops at the superTrack and the leaf is
+# hidden, which is exactly what the branch did.
+#
+# The hideKids step is not tidiness. Without it, showing the superTrack brings every other
+# archived version up at its own visibility -- V50 draws alongside, and lands in Visible
+# Tracks with V49 -- and then `exact:` here would have to be rewritten every time GENCODE
+# ships a version. With it, this script says the same thing next year.
+#
+# ENST00000297261 rather than a gene symbol: it is one of SHH's transcripts, it reaches
+# the GENCODE sets, and it searches 65 categories where SHH searches 319. No count is
+# asserted -- the numbers move when any of those tracks is reloaded.
+proof:
+  - "assertion-only 2026-09-16 -- written against master, where the behavior is correct; the bug it is aimed at exists only on the #37547 branch so far"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+
+  - track: {wgEncodeGencodeSuper: hideKids}
+  - track: {wgEncodeGencodeBasicV49: pack}
+
+  # One round of five variables: the leaf, its `_sel`, the view, the composite and the
+  # superTrack. That the leaf draws at all is the precondition for the rest -- a search
+  # category cannot be visible for a track that is not.
+  - expect: {rows: [ruler, wgEncodeGencodeBasicV49], exact: true}
+
+  - goto: "/cgi-bin/hgSearch?db=hg38&search=ENST00000297261"
+
+  # The results arrive by ajax. Wait for either heading, so a build that files the track
+  # on the wrong side fails at the expect: below -- which names what it wanted -- rather
+  # than timing out here with a Playwright message.
+  - wait: 'li[id="Visible Tracks"], li[id="Currently Hidden Tracks"]'
+
+  # hgSearch draws no track image, so rows: is unavailable and a positive check is
+  # mandatory: a crash or an early error gives a document where every noHas: passes.
+  - expect:
+      text: "Track Data"
+      noText: "Error"
+      has: 'li[id="Visible Tracks"] li#wgEncodeGencodeBasicV49'
+      noHas: 'li[id="Currently Hidden Tracks"] li#wgEncodeGencodeBasicV49'

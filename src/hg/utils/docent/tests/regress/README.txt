@@ -50,6 +50,57 @@ called its track `ultras`, hg38 has its own `ultras`, and that script asserted a
 off the native data for as long as it existed -- it looked green and tested nothing.
 Prefix a fixture's track names with the ticket number.
 
+Two rules for a test about visibility, cart state or session loading
+---------------------------------------------------------------------
+
+Both came out of the #37547 cart-visibility branch, where nine scripts here went red for
+a real bug and a second bug of the same shape went past every one of them.
+
+**Assert before you navigate.** A bug in this area can lag by exactly one request: the
+visibility reaches the cart, the image drawn in reply does not carry the row, and the
+next request -- any next request -- draws it. A script shaped `track:` -> `go:` ->
+`expect:` supplies that extra request itself and passes on the broken build. A script
+shaped `track:` -> `expect:` fails. So when the point of a script is that a track comes
+on, put an `expect:` straight after the `track:` step, before any `go:`, `open:` or
+`convert:`, even when the script needs the navigation for its own reason afterwards. It
+costs one assertion.
+
+Twenty-five scripts here have a `track:` step and forty do not. Of the twenty-five, all
+but two already assert straight after it. The two are rm36514 and rm37520, and neither
+can: both turn on mane at the ticket's own position, chr7:156,982,676-156,996,015, where
+mane has no features on hg38 at all, so there is no row to assert and no other check on
+that page can tell the cart from the image -- the track controls below it show `pack` on
+a broken build too, because the cart really did take the visibility. Their headers say so, so that the gap is
+not read as an oversight and closed with a check that passes on anything.
+tests/firstrequest.docent.yaml covers the class once, on its own.
+
+**Name a child of a container that is hidden by default.** Two shapes of track stay green
+on a build whose visibility handling is broken, for two different reasons:
+
+  * A TOP-LEVEL track. hgTracks adds every top-level track as a lightweight stub so the
+    track controls can list it, so it is built whatever the cart lookup returned.
+    microsat, gtexGene and windowmaskerSdust all drew on the broken #37547 build.
+  * A DEFAULT-VISIBLE child. Its container is in the list already.
+    wgEncodeRegMarkH3k27ac drew while its sibling wgEncodeRegMarkH3k4me1 did not -- same
+    superTrack, same request, opposite verdicts.
+
+wgEncodeRegMarkH3k4me1 is the known-good example: `visibility hide`, and
+`superTrack wgEncodeReg hide` under a superTrack that is itself `superTrack on hide`.
+This is the cheapest rule in this file -- it changes which track a script names, not how
+the script is written -- and without it a script reads as coverage and is not.
+
+Reading a run that was redirected somewhere else
+--------------------------------------------------
+
+`make test TARGET=...` points the whole directory at another server, and a red script
+there can be that machine's configuration rather than a bug. `make preflight TARGET=...`
+now prints the target's central.db, db.trackDb, curatedHubPrefix and quickLift settings
+when the server is on this machine, so the log carries its own explanation; see
+../README.txt. When that is not enough, swap only the BINARY -- drop a control build's
+CGIs into the same sandbox, leave its hg.conf alone, and re-run. If the failures follow
+the binary they are the code. On #37547 that experiment is what turned nine plausible
+failures into nine proven ones.
+
 Proof: which scripts have been watched to fail for their own reason
 -------------------------------------------------------------------
 

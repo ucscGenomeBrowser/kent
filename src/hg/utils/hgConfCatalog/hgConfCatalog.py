@@ -2173,8 +2173,10 @@ def redundant_settings(cat, ages=None):
             v = by.get(name)
             if v is None or v.get("default") != "TRUE":
                 continue
+            flip = flipped.get(name) or {}
             rec = {"name": name, "path": path, "line": lineno, "value": val,
-                   "flipped": (flipped.get(name) or {}).get("version")}
+                   "flipped": flip.get("version"),
+                   "unreleased": flip.get("released") is False}
             if val in TRUE_WORDS:
                 found["redundant"].append(rec)
             elif val in FALSE_WORDS:
@@ -2213,8 +2215,15 @@ def redundant_report(cat, ages=None, verbose=False, out=sys.stdout):
 
     def line(r):
         where = "%s:%d" % (r["path"], r["line"])
-        when = ("default TRUE since v%d" % r["flipped"] if r["flipped"]
-                else "flip version unknown, refresh the age cache")
+        if not r["flipped"]:
+            when = "flip version unknown, refresh the age cache"
+        elif r.get("unreleased"):
+            # The flip is on master and no branch carries it yet, so no machine
+            # anywhere is running it.  Saying "since" here would invite exactly
+            # the deletion the paragraph below warns against.
+            when = "default TRUE in v%d, not released yet" % r["flipped"]
+        else:
+            when = "default TRUE since v%d" % r["flipped"]
         return "  %-26s %-8s %-52s %s" % (r["name"], r["value"], where, when)
 
     n = len(found["redundant"])

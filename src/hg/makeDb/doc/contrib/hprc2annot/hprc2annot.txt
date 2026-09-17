@@ -102,10 +102,13 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #
 # Final hub: 462 assemblies (HG002 excluded); 2770 bigBed files. Per-track feature
 # counts for the collection are in log/summary.tsv, regenerated at the end of every
-# build run (see section 3). Feature counts are near-lossless: cat/liftoff lose
-# <0.02% (gff3ToGenePred invalid-strand / past-chrom-end); censat,
-# censatCentromeres, pcLAI lossless; segdups lossless except the one HG00735 hap2
-# case above.
+# build run (see section 3). What is retained there covers liftoff, segdups and
+# methylation across all 462 assemblies, and pcLAI for one. Within that, liftoff
+# loses 0.015% (gff3ToGenePred invalid-strand / past-chrom-end), segdups loses only
+# the HG00735 hap2 rows noted above, and methylation and pcLAI lose nothing. cat,
+# censat and censatCentromeres have no retained counts, because the 2026-07-25
+# methylation-only re-run truncated stats.tsv before the append fix landed. Treat
+# those three as unmeasured unless the collection is rebuilt.
 
 ##############################################################################
 # 3. Build

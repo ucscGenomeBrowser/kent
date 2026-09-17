@@ -68,7 +68,6 @@ else
         char *db = NULL;
         char *reqLm = NULL;
         time_t lastModified = 0;
-        boolean isHubToolsUpload = FALSE;
         char *parentDir = NULL, *encodedParentDir = NULL;
 
         struct lineFile *lf = lineFileStdin(FALSE);
@@ -217,6 +216,8 @@ else
                 char *existingType = existingHubTypeForDir(userName, parentDirForCheck);
                 row->hubType = existingType ? existingType : "trackHub";
                 }
+            // both the browser and hubtools set batchHasHubTxt when the upload brings
+            // its own hub.txt, which makes that hub.txt the user's to write, not ours
             char *batchHasHubTxtStr = jsonQueryString(req, "", "Event.Upload.MetaData.batchHasHubTxt", NULL);
             boolean batchHasHubTxt = sameOk(batchHasHubTxtStr, "true");
             boolean userOwnNamedHubTxt = userHasOwnNamedHubTxtInDir(userName, parentDirForCheck, hubDir);
@@ -233,7 +234,7 @@ else
             int hubLockFd = -1;
             if (hubDir)
                 hubLockFd = lockHubDir(hubDir);
-            if (!isHubToolsUpload && !isHubTxt)
+            if (!isHubTxt)
                 {
                 if (!userAuth)
                     {
@@ -242,7 +243,7 @@ else
                         // createNewTempHubForUpload is a no-op when the hub.txt and its
                         // row are already there, and it backfills the row when they are not
                         createNewTempHubForUpload(reqId, row, userDataDir);
-                        upgradeExistingHubToAssembly(row, userDataDir);
+                        upgradeExistingHubToAssembly(row, userDataDir, TRUE);
                         }
                     else
                         createNewTempHubForUpload(reqId, row, userDataDir);
@@ -250,7 +251,7 @@ else
                 else if (isTwoBit)
                     {
                     // user's hub.txt is authoritative; just flip rows to assemblyHub.
-                    upgradeExistingHubToAssembly(row, userDataDir);
+                    upgradeExistingHubToAssembly(row, userDataDir, FALSE);
                     }
                 }
             // still under the hub lock: makeParentDirRows checks for a row and then

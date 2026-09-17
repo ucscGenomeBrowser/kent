@@ -26,6 +26,33 @@ counts. Redirecting is for trying a suite elsewhere, not for moving it: the comm
 scripts stay pointed at the server they were written against, which is the one the
 nightly reads.
 
+`make preflight` prints how the target is configured, so the log says which server was
+driven AND how it differs from the one the scripts name:
+
+    target      https://hgwdev-braney.gi.ucsc.edu/cgi-bin
+                /usr/local/apache/cgi-bin-braney/hg.conf
+                central.db                   hgcentraltest
+                db.trackDb                   trackDb_braney,trackDb
+                curatedHubPrefix             braney
+                browser.quickLift            on
+                browser.quickLiftAlignments  on
+                browser.recTrackSets         on
+
+Those are read off the hg.conf the server reads, following its includes the way
+hg/lib/hgConfig.c does, so the value printed is the EFFECTIVE one -- a sandbox conf that
+sets nothing still shows what it inherits from the shared conf it includes. Only a fixed
+list of settings is printed, because hg.conf includes hg.conf.private.
+
+It works for a server on this machine: genome-test, hgwdev, an hgwdev-<name> sandbox or
+demo, or a ticket park from `ts` on 127.0.0.1 (looked up by port in its registry). For
+hgwbeta or the RR it says the conf cannot be read from here, which is true and is better
+than a guess.
+
+Even with that in the log, a config difference and a code difference can still look
+alike. The reliable way to tell them apart is to swap only the BINARY: drop a control
+build's CGIs into the same sandbox, leave its hg.conf alone, and re-run. If the failures
+follow the binary they are the code.
+
 Most tests drive a real browser against a real server, so they need the network and
 the shared Playwright install (/hive/groups/browser/uiTest/pw; see ../README.md). That is why none of this is
 part of the tree-wide test target: a broken network would fail the build.
@@ -60,6 +87,32 @@ What is covered
 
   selftest      session: -> expect: -> loadSession:, on hg38 at SHH. Saves the cart,
                 changes the view, restores it from the local file, checks rows both times.
+  heavysession  the same three steps as selftest, on a Recommended Track Set: 34 rows in,
+                saved, moved away, loaded back, `exact: true` on both halves. selftest
+                round-trips two rows, which barely reaches outIfNotPresent() in hgSession
+                -- the function that writes a trackDb default for every track that is
+                deliberately NOT in the cart, and the one a broken save-and-reload path
+                shows up in. A path that dropped four rows left selftest green.
+  firstrequest  a track turned on has to be drawn by the request that turned it on, with
+                no `go:`, `open:` or `convert:` in between. The bug it exists for lags by
+                exactly one request, so any script that navigates before asserting reads a
+                correct image and passes. It names wgEncodeRegMarkH3k4me1 for the reason
+                in its header: a top-level track or a default-visible child would pass on
+                the broken build too.
+  collection    hgCollection, which no other script here or in regress/ reaches. It shares
+                visibility logic with hgTracks by COPY rather than by call:
+                hg/hgCollection/hgCollection.c carries its own isParentVisible(), a
+                verbatim copy of the one in hg/lib/trackHub.c, and it decides what goes in
+                the builder's "Visible Tracks" folder. Needs a login, so it is the one
+                script here that uses `login:`. Asserts on the folder's own jsTree class
+                first -- open when checkForVisible() found something, leaf when it did not
+                -- and then on the leaves inside it.
+  search        hgSearch, and the THIRD copy of isParentVisible() -- the one in
+                hg/lib/hgFind.c at line 2957, feeding isTrackVisible() at 2977. It sets
+                category->visibility, which is what files a result under "Visible Tracks"
+                rather than "Currently Hidden Tracks". Turns on a searchable GENCODE
+                archive subtrack, whose containers are hidden by default, and asserts the
+                result lands on the visible side. No login needed, unlike collection.
   composite     clinvar with clinvarCnv hidden: the two-request split (#37953). One
                 request would leave clinvarCnv_sel=1 and the CNV row drawn.
   views         hideKids on the VIEW that holds the subtrack, with the sibling views
@@ -136,6 +189,18 @@ Still to write
 
 A test that needs a stable server-side fixture (a hub, a custom track) should carry it
 in the script rather than assume something on disk.
+
+The one fixture that cannot be carried anywhere is a login. hgCollection refuses a
+visitor who is not signed in, and the login cookie is checked against a salted hash, so
+a script that needs that page uses the `login:` step, and the step reads an account from
+~/.docentLogin. That file is one [section] per HGCENTRAL DATABASE, because an account is
+a row in gbMembers in one of them: genome-test, hgwdev, every sandbox and every ticket
+park read hgcentraltest and share one account, while hgwbeta and the RR are separate sets
+of accounts. Which central a server reads is read from its hg.conf rather than guessed
+from the host -- a sandbox can point itself somewhere else, and two on hgwdev do today.
+`make preflight` says which account and which central it resolved for the server being
+driven, and refuses a file that is readable by group or other. No password is ever
+printed and none can be written in a script. ../README.md under `login` has the format.
 
 colorchecks is the one exception, and the reason is worth knowing before someone else
 hits it. `color:` has to address a ROW by name, and a custom track cannot be addressed

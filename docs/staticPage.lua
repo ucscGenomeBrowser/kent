@@ -33,9 +33,19 @@ end
 
 -- Helper function to convert an attributes table into
 -- a string that can be put into HTML tags.
+-- The keys are sorted first because pairs() has no defined order, so an element
+-- with more than one attribute would otherwise come out in a different order
+-- from one build to the next.  That renders the same, but it makes the output
+-- unreproducible and leaves the install rsync re-pushing files nobody edited.
 local function attributes(attr)
+  local keys = {}
+  for x in pairs(attr) do
+    table.insert(keys, x)
+  end
+  table.sort(keys)
   local attr_table = {}
-  for x,y in pairs(attr) do
+  for _,x in ipairs(keys) do
+    local y = attr[x]
     if y and y ~= "" then
       table.insert(attr_table, ' ' .. x .. '="' .. escape(y,true) .. '"')
     end

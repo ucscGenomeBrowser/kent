@@ -26,6 +26,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
+// Shared with tests/preflight.js so a run and its fixture check cannot disagree about
+// which server is being driven, which hg.conf it reads, or which account signs in.
+// docent.js is no longer a single file: targetConf.js has to travel with it.
+const { resolveTarget, serverFor, loginLookup } = require('./targetConf.js');
 
 // ---------- parse script + config ----------
 const SCRIPT = process.argv[2];
@@ -71,26 +75,14 @@ const STILLDIR = STILLPARENT ? path.resolve(HERE, STILLPARENT, base)
 const SESSDIR = path.join(
   path.resolve(HERE, process.env.DOCENT_SESSIONS || doc.sessions || 'sessions'), base);
 
-// `target:` takes a shorthand from this table, a bare `hgwdev-<user>` sandbox name
-// (expanded below), or a full https://.../cgi-bin URL. Default is genome-test, so a
-// script that forgets to say where it runs does not silently hit someone's sandbox.
-const SERVERS = {
-  'rr': 'https://genome.ucsc.edu/cgi-bin',
-  'genome-test': 'https://genome-test.gi.ucsc.edu/cgi-bin',
-  'hgwdev': 'https://hgwdev.gi.ucsc.edu/cgi-bin',
-  'hgwbeta': 'https://hgwbeta.soe.ucsc.edu/cgi-bin',
-};
-const resolveTarget = t => {
-  if (!t) return SERVERS['genome-test'];
-  if (SERVERS[t]) return SERVERS[t];
-  if (/^hgwdev-[a-z0-9._-]+$/i.test(t)) return `https://${t}.gi.ucsc.edu/cgi-bin`;  // personal sandbox
-  return t;                                                    // full URL
-};
-// DOCENT_TARGET overrides `target:` for the whole run, so a suite written against one
-// server can be pointed at another -- a sandbox, a ticket park, a demo browser -- without
-// editing the scripts it is written from. The trackDb cache below keys on SERVER, so a
-// redirected run cannot read back a listing fetched from the server the script names.
-const SERVER = resolveTarget(process.env.DOCENT_TARGET || doc.target).replace(/\/$/, '');
+// `target:` takes a shorthand (rr, genome-test, hgwdev, hgwbeta), a bare `hgwdev-<user>`
+// sandbox name, or a full https://.../cgi-bin URL; DOCENT_TARGET overrides it for the
+// whole run, so a suite written against one server can be pointed at another -- a sandbox,
+// a ticket park, a demo browser -- without editing the scripts. Both rules live in
+// targetConf.js, beside the fixture check that has to agree with them. The trackDb cache
+// below keys on SERVER, so a redirected run cannot read back a listing fetched from the
+// server the script names.
+const SERVER = serverFor(doc.target);
 // SCALE: the same tour rendered at k times the resolution, for figures that have to print.
 // Nothing is upscaled -- a still only ever has the pixels it was drawn with -- so each layer
 // is asked to draw k times as many while the layout is left alone:
@@ -332,6 +324,24 @@ const CURSOR_INIT = ({ box, svg }) => {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
   else add();
 };
+
+// ---------- LOGIN: the one fixture that cannot live in the repository ----------
+// hgCollection, and the saving half of hgSession, refuse to run for a visitor who is not
+// logged in (hgCollection.c doMiddle, "You must be logged in to edit collections"). The
+// login cookie is validated against a salted hash (login.cookieSalt, hg/lib/wikiLink.c),
+// so there is no way to hand the browser a cookie: a script that needs one of those pages
+// has to sign in the way a person does.
+//
+// Which account that is, and why it is keyed by hgcentral rather than by server, is in
+// targetConf.js. All this adds is the failure: `login:` is a step, so it throws, while
+// preflight reports the same sentence as a missing fixture. A password cannot go in a
+// script, `login:` has no argument that could carry one, and nothing here prints one.
+function loginCreds(server) {
+  const c = loginLookup(server);
+  if (c.why) throw new Error(`login: ${c.why}`);
+  return { user: c.user, password: c.password,
+           from: c.source === 'the environment' ? c.source : `[${c.section}] in ${c.source}` };
+}
 
 function absurl(u) {
   if (/^https?:/.test(u)) return u;
@@ -2097,6 +2107,42 @@ const T_START = Date.now();
         // Click through to the requested assembly so we end on the browser.
         if (!await openHubAssembly(db))
           console.warn(`addPublicHub: no assembly link for db "${db}" on the connect page`);
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
+      case 'login': {
+        // Sign in through hgLogin, so the steps after this one can reach a page that
+        // needs a user -- hgCollection above all. Credentials come from loginCreds(),
+        // never from the script. Takes no argument, or {shot:}.
+        const o = (arg && typeof arg === 'object') ? arg : {};
+        const c = loginCreds(SERVER);
+        console.log(`LOGIN ${c.user} on ${SERVER} (credentials from ${c.from})`);
+        await nav('/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1');
+        await page.waitForSelector('#accountLoginForm', { timeout: 15000 });
+        await glideTo('#userName'); await page.click('#userName');
+        await typeIn(page, '#userName', c.user);
+        await typeIn(page, '#password', c.password);
+        await clickGlide('input[name="hgLogin.do.displayLogin"]');
+        await page.waitForLoadState('load');
+        // hgLogin answers a bad password by drawing the same form again with a red
+        // message, which is a perfectly good page: without this check every later step
+        // would run logged out and the failure would surface somewhere else entirely.
+        if (await page.$('#accountLoginForm')) {
+          const why = (await page.innerText('body')).split('\n').map(l => l.trim())
+                        .filter(Boolean).slice(0, 8).join(' | ');
+          throw new Error(`login: still on the login page as ${c.user} -- ${why}`);
+        }
+        // hgLogin answers a good password with a page that navigates ITSELF a moment
+        // later: returnToURL(150) writes setTimeout(function(){location=...}, 150). Return
+        // while that timer is pending and the next step's goto: races it, and the browser
+        // aborts one of the two -- which arrives as a flat `net::ERR_ABORTED` on a URL
+        // that is perfectly fine. So wait for the redirect to land before going on. The
+        // failure path above is checked first, since that page never leaves hgLogin and
+        // there is no redirect to wait for.
+        await page.waitForURL(u => !/\/hgLogin(\?|$)/.test(String(u)), { timeout: 10000 })
+                  .catch(() => {});
+        await page.waitForLoadState('load').catch(() => {});
+        await captureState();
         if (o.shot) { await shot(o.shot); return; }
         break;
       }

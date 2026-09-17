@@ -20,17 +20,35 @@ topPriorities = {
     'mm39': 2,
     'hs1': 3,
     'hg19': 4,
-    'mm10': 5,
-    'dm6': 6,
-    'danRer11': 7,
-    'mm9': 8,
-    'hetGla2': 9,
-    'rn6': 10,
-    'hg18': 11,
-    'galGal6': 12,
-    'bosTau9': 13,
-    'ce11': 14,
-    'canFam4': 15,
+    'GCF_028858775.2' : 5,  # mPanTro3_v2.0 Chimp
+    'GCF_049350105.2' : 6,	# T2T_MMU8v2.0 Rhesus
+    'GCF_029289425.2' : 7,	# mPanPan1_v2.0 Bonobo
+    'GCF_029281585.2' : 8,	# mGorGor1_v2.1 Gorilla
+    'GCF_028885655.2' : 9,	# mPonAbe1_v2.0 Orangutan
+    'GCF_037993035.2' : 10,	# T2T_MFA8v1.1 Crab-eating macaque
+    'GCA_049354715.1' : 11,	# calJac240_pri Marmoset
+    'GCF_011100555.1' : 12,	# mCalJa1.2 Marmoset
+    'GCF_040939455.1' : 13,	# Inina_mat1.0 Mouse lemur
+    'GCF_036323735.1' : 14,	# rn8 rat
+    'GCF_041296265.1' : 15,	# TB_T2T horse
+    'GCF_016772045.1' : 16,	# ARS_UI_Ramb_v2.0 Sheep
+    'GCF_002263795.3' : 17,	# ARS_UCD2.0 Cow
+    'GCF_018350175.1' : 18,	# Fca126_mat1.0 Cat
+    'GCF_016699485.2' : 19,	# GRCg7b Chicken
+    'GCF_003957565.2' : 20,	# bTaeGut1.4 Zebra finch
+    'GCF_049306965.1' : 21,	# GRCz12tu Zebrafish
+    'GCA_052040795.1' : 22,	# GRCz12ab Zebrafish
+    'mm10': 23,
+    'dm6': 24,
+    'danRer11': 25,
+    'mm9': 26,
+    'hetGla2': 27,
+    'rn6': 28,
+    'hg18': 29,
+    'galGal6': 30,
+    'bosTau9': 31,
+    'ce11': 32,
+    'canFam4': 33,
 }
 
 ### key will be dbDb/GCx name, value will be priority number
@@ -129,7 +147,7 @@ def asmAliasData():
 def dbDbData():
     # Run the MySQL command and capture the output as bytes
     result = subprocess.run(
-        ["hgsql", "-hgenome-centdb", "-N", "-e", "SELECT name,scientificName,organism,taxId,sourceName,description FROM dbDb WHERE active=1;", "hgcentral"],
+        ["hgsql", "-hgenome-centdb", "-N", "-e", "SELECT name,scientificName,organism,taxId,sourceName,description,nibPath FROM dbDb WHERE active=1;", "hgcentral"],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     if result.returncode != 0:
@@ -471,7 +489,7 @@ def processDbDbData(data, clades, years, ncbi):
         cladeP = cladePriority(clade)
 
         # corresponds with the SELECT statement
-        # name,scientificName,organism,taxId,sourceName,description
+        # name,scientificName,organism,taxId,sourceName,description,nibPath
         # Create a dictionary for each row
         dataDict = {
             "name": columns[0],
@@ -480,6 +498,7 @@ def processDbDbData(data, clades, years, ncbi):
             "taxId": columns[3],
             "sourceName": columns[4],
             "description": columns[5],
+            "nibPath": columns[6],
             "clade": clade,
             "year": year,
             "gcAccession": gcAccession,
@@ -491,6 +510,29 @@ def processDbDbData(data, clades, years, ncbi):
         dataList.append(utf8Encoded)
 
     return sorted(dataList, key=lambda x: x['sortOrder'])
+
+####################################################################
+### a dbDb row whose nibPath is a curated-hub pointer into the
+### auto-generated GenArk hub tree (nibPath = "hub:/gbdb/genark/...")
+### is not a real native assembly -- it's the exact same hub data as
+### the corresponding genArk-sourced row, just under the dbDb name
+### instead of its GCA/GCF accession. Drop these so assemblyList only
+### carries one row per assembly. Hand-curated hubs like hs1, whose
+### nibPath is "hub:" but not under /gbdb/genark/, are one-of-a-kind
+### and must stay.
+####################################################################
+genarkCuratedNibPath = "hub:/gbdb/genark/"
+
+def dropGenarkCuratedDuplicates(dbDbItems):
+    kept = []
+    dropped = 0
+    for item in dbDbItems:
+        if item["nibPath"].startswith(genarkCuratedNibPath):
+            dropped += 1
+            continue
+        kept.append(item)
+    print(f"# dropped {dropped} dbDb rows that are curated-hub duplicates of a genArk entry")
+    return kept
 
 ####################################################################
 ### Function to remove non-alphanumeric characters
@@ -825,6 +867,7 @@ def main():
     # Get the dbDb.hgcentral table data
     rawData = dbDbData()
     dbDbItems = processDbDbData(rawData, dbDbClades, dbDbYears, dbDbNcbi)
+    dbDbItems = dropGenarkCuratedDuplicates(dbDbItems)
     aliasData = asmAliasData()
 
     # read the GenArk data from hgdownload into a list of dictionaries

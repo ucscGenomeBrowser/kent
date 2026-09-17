@@ -1,0 +1,5 @@
+# firstrequest.docent.yaml: track steps derived against https://genome-test.gi.ucsc.edu/cgi-bin, db hg38
+step 3 track {"wgEncodeReg":"hideKids"}
+  round 1 (10 vars): TFrPeakClusters=hide encRegTfbsClustered=hide encTfChipPk=hide wgEncodeRegDnase=hide wgEncodeRegDnaseClustered=hide wgEncodeRegDnaseWig=hide wgEncodeRegMarkH3k27ac=hide wgEncodeRegMarkH3k4me1=hide wgEncodeRegMarkH3k4me3=hide wgEncodeRegTxn=hide
+step 5 track {"wgEncodeRegMarkH3k4me1":"full"}
+  round 1 (2 vars): wgEncodeRegMarkH3k4me1=full wgEncodeReg=show
