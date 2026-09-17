@@ -212,12 +212,30 @@ def getGenArkTaxIdDbs(onlyDbs, options):
     minProt = options.minProteins
     skipAsm = readSkipList(options.skipList)
 
+    # Keep only the newest version of each assembly, and do it against the whole list
+    # before anything else is filtered out. GenArk lists every version it has carried, so
+    # GCA_018466835.1 sits beside GCA_018466835.2. Doing this after the skip list would
+    # leave the old version behind whenever the new one was skipped, which is exactly the
+    # HPRC case: 94 of the 108 human assemblies that survived the HPRC list were .1
+    # versions of accessions whose .2 had just been removed.
+    newest = {}
+    for acc in accToTax:
+        base, _, ver = acc.rpartition(".")
+        ver = int(ver) if ver.isdigit() else 0
+        if base not in newest or ver > newest[base][0]:
+            newest[base] = (ver, acc)
+    oldCount = len(accToTax) - len(newest)
+    accToTax = {acc: accToTax[acc] for _, acc in newest.values()}
+
+    # an entry on the skip list names an assembly, not one of its versions
+    skipBases = set(a.rpartition(".")[0] for a in skipAsm if "." in a)
+
     taxIdToDbs = defaultdict(list)
     skippedTaxa, skippedAsm, noHub, blacklisted = set(), 0, 0, 0
     for acc, taxId in sorted(accToTax.items()):
         if onlyDbs is not None and acc not in onlyDbs:
             continue
-        if acc in skipAsm:
+        if acc in skipAsm or acc.rpartition(".")[0] in skipBases:
             blacklisted += 1
             continue
         if counts.get(taxId, 0) < minProt:
@@ -233,8 +251,8 @@ def getGenArkTaxIdDbs(onlyDbs, options):
     logging.info("GenArk plan: %d assemblies over %d taxa with at least %d UniProt proteins" % \
             (sum(len(v) for v in taxIdToDbs.values()), len(taxIdToDbs), minProt))
     logging.info("GenArk plan: skipped %d assemblies over %d taxa below the protein threshold, "
-            "%d on the skip list, and %d not present under %s" % \
-            (skippedAsm, len(skippedTaxa), blacklisted, noHub, genArkRoot))
+            "%d on the skip list, %d superseded by a newer version, and %d not present "
+            "under %s" % (skippedAsm, len(skippedTaxa), blacklisted, oldCount, noHub, genArkRoot))
     return taxIdToDbs
 
 def getTaxIdDbs(onlyDbs, options):
