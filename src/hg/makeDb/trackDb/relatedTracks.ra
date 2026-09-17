@@ -237,6 +237,7 @@ hg19 >transMapV5 transMapV6 The current version of the TransMap alignments
 hg19 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 hg19 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
 hg19 >genePredArchive knownGene The current default gene set
+hg19 >ensGene knownGene The current GENCODE gene set, which shares its annotation with Ensembl
 
 mm39 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 mm39 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
