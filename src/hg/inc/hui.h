@@ -1149,6 +1149,22 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
+void hubTrackBareNamesFromTdbList(struct trackDb *tdbList);
+/* Let hubTrackOwnsBareName() answer from this list of tracks rather than from trackDb.
+ * A CGI that has already built the full track list should call this once, with it: the
+ * list holds the assembly's tracks and the attached hubs' together, and a hub track is
+ * always "hub_<id>_"-prefixed there, so an undecorated name can only match a native
+ * track.  Without this the question costs a trackDb query per distinct bare name. */
+
+boolean hubTrackOwnsBareName(char *db, char *hubTrack);
+/* A hub track can be named on a URL or in the cart without its "hub_<id>_" prefix, so
+ * that hub links stay readable, and the visibility and selection code falls back to that
+ * bare name when the decorated one has no value.  The bare name is the hub track's alone
+ * only when the assembly has no track of that name: when it does, the variable belongs to
+ * the native track, and letting the hub track take it moves the user's setting to a track
+ * they were not looking at and drops it from the one they were.  Takes the decorated hub
+ * track name; FALSE for anything that isn't one. */
+
 enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,
                                         boolean *subtrackOverride);
 // returns visibility NOT limited by ancestry.

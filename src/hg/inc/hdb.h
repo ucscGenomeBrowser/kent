@@ -581,7 +581,12 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList);
  * subtrack then inheritance will be handled.  (Unless a subtrack has
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found.
- * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout. */
+ * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
+ *   Pass tdbList whenever you look up more than one track.  With it NULL this loads the
+ * whole trackDb to find one name, and that is only cheap where the shared-memory cache
+ * is on (cacheTrackDbDir in hg.conf) - with the cache off hTrackDb() does not memoize,
+ * so a loop over N names is N full trackDb loads.  To ask only whether a name exists,
+ * hMaybeTrackInfo() is a single-row query instead. */
 #define hTrackDbForTrack(db,track) tdbForTrack(db,track,NULL)
 
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);

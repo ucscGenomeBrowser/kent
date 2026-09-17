@@ -2822,8 +2822,15 @@ if (vis == tvHide)
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 setting = cartOptionalString(cart, objName);
-if (setting == NULL)
-    setting = cartOptionalString(cart, trackHubSkipHubName(objName));
+if (setting == NULL && startsWith("hub_", subtrack->track))
+    {
+    // a hub subtrack may be checked under its bare name, but not when the assembly has a
+    // track of that name - then the variable is that track's
+    char *bareSetting = cartOptionalString(cart, trackHubSkipHubName(objName));
+    if (bareSetting != NULL && hubTrackOwnsBareName(cartOptionalString(cart, "db"),
+                                                    subtrack->track))
+        setting = bareSetting;
+    }
 if (setting != NULL)
     {
     if (sameWord("on",setting)) // ouch! cartUsualInt was interpreting "on" as 0, which was bad bug!
@@ -9992,6 +9999,86 @@ else
     return b;
 }
 
+static struct hash *bareNameTrackNames = NULL;  // native track names, from the caller's list
+
+static void rAddTrackNames(struct hash *hash, struct trackDb *tdbList)
+/* Add every track name in the list, its containers, and its descendants to hash. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    hashStore(hash, tdb->track);
+    if (tdb->parent != NULL)            // supertracks are reachable only this way
+        hashStore(hash, tdb->parent->track);
+    rAddTrackNames(hash, tdb->subtracks);
+    }
+}
+
+void hubTrackBareNamesFromTdbList(struct trackDb *tdbList)
+/* Let hubTrackOwnsBareName() answer from this list of tracks rather than from trackDb.
+ * A CGI that has already built the full track list should call this once, with it: the
+ * list holds the assembly's tracks and the attached hubs' together, and a hub track is
+ * always "hub_<id>_"-prefixed there, so an undecorated name can only match a native
+ * track.  Without this the question costs a trackDb query per distinct bare name. */
+{
+hashFree(&bareNameTrackNames);
+bareNameTrackNames = hashNew(16);
+rAddTrackNames(bareNameTrackNames, tdbList);
+}
+
+boolean hubTrackOwnsBareName(char *db, char *hubTrack)
+/* A hub track can be named on a URL or in the cart without its "hub_<id>_" prefix, so
+ * that hub links stay readable, and the visibility and selection code falls back to that
+ * bare name when the decorated one has no value.  The bare name is the hub track's alone
+ * only when the assembly has no track of that name: when it does, the variable belongs to
+ * the native track, and letting the hub track take it moves the user's setting to a track
+ * they were not looking at and drops it from the one they were.  Takes the decorated hub
+ * track name; FALSE for anything that isn't one.
+ *   With a list registered this is a read-only hash lookup, safe to call from anywhere.
+ * The trackDb fallback is not: it opens a connection and fills a static cache, so a
+ * caller that has no list must reach it on the main thread.  hgTracks registers its list
+ * in loadFromTrackDb(), so it never takes that path. */
+{
+if (hubTrack == NULL || !startsWith("hub_", hubTrack))
+    return FALSE;
+char *underscore = strchr(hubTrack + 4, '_');   // "hub_" alone is not a decorated name
+if (underscore == NULL)
+    return FALSE;
+char *bareName = underscore + 1;
+if (startsWith("hub_", bareName))
+    return TRUE;    // a bare name that is itself decorated is no native track's
+if (isEmpty(db) || trackHubDatabase(db) || isHubTrack(db))
+    return TRUE;    // an assembly hub has no native trackDb to collide with
+
+// The cheap way: the caller handed us its track list, so this is one hash lookup.
+if (bareNameTrackNames != NULL)
+    return (hashLookup(bareNameTrackNames, bareName) == NULL);
+
+// Otherwise ask trackDb for just this name.  That is a query, so remember the answers:
+// one request asks this of many tracks, and of the same name for every subtrack of a
+// container.  NOTE: not hTrackDbForTrack(), which would be tidier - hTrackDb() only
+// memoizes through the shared-memory cache, so with cacheTrackDbDir unset it reloads the
+// whole trackDb on every call.
+static struct hash *nativeCache = NULL;
+if (nativeCache == NULL)
+    nativeCache = hashNew(0);
+char key[1024];
+safef(key, sizeof(key), "%s:%s", db, bareName);
+struct hashEl *hel = hashLookup(nativeCache, key);
+if (hel == NULL)
+    {
+    boolean isNative = FALSE;
+    struct sqlConnection *conn = hAllocConn(db);
+    if (conn != NULL)
+        {
+        isNative = (hMaybeTrackInfo(conn, bareName) != NULL);
+        hFreeConn(&conn);
+        }
+    hel = hashAddInt(nativeCache, key, isNative);
+    }
+return (ptToInt(hel->val) == 0);
+}
+
 enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,
                                         boolean *subtrackOverride)
 // returns visibility NOT limited by ancestry.
@@ -10011,11 +10098,18 @@ if (cart != NULL) // cart is optional
     {
     char *cartVis = cartOptionalString(cart, tdb->track);
     boolean cgiVar = FALSE;
-    // check hub tracks for visibility settings without the hub prefix
-    if (startsWith("hub_", tdb->track) && (cartVis == NULL))
+    // check hub tracks for visibility settings without the hub prefix, but not when the
+    // assembly has a track of that name - then the bare name is that track's.  Ask the URL
+    // first: hubTrackOwnsBareName() can cost a query, and almost no request has a bare name
+    // on it at all.
+    if (cartVis == NULL && startsWith("hub_", tdb->track))
         {
-        cartVis = cgiOptionalString( trackHubSkipHubName(tdb->track));
-        cgiVar = TRUE;
+        char *bareVis = cgiOptionalString(trackHubSkipHubName(tdb->track));
+        if (bareVis != NULL && hubTrackOwnsBareName(cartOptionalString(cart, "db"), tdb->track))
+            {
+            cartVis = bareVis;
+            cgiVar = TRUE;
+            }
         }
 
     if (cartVis != NULL)
