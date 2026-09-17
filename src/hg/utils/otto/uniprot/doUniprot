@@ -169,6 +169,33 @@ def readGenArkList(fname):
     logging.info("Read %d GenArk assemblies from %s" % (len(accToTax), fname))
     return accToTax
 
+def readSkipList(fname):
+    """ read a file of assemblies to leave alone, one name or accession per line.
+
+    Blank lines and anything after a # are ignored, so the file can say why each entry is
+    there. Accessions may carry the full asmId with its assembly-name suffix, as the GenArk
+    orderLists do, and only the accession part is used, so
+    kent/src/hg/makeDb/doc/hprcAsmHub/hprc.orderList.tsv can be handed over unchanged.
+    """
+    if not fname:
+        return set()
+    skip = set()
+    lineCount = 0
+    for line in open(fname, encoding="latin1"):
+        line = line.split("#")[0].strip()
+        if not line:
+            continue
+        name = line.split()[0].split("\t")[0]
+        lineCount += 1
+        skip.add(name)
+        # GCA_018466835.2_HG02257_mat_hprc_f2 -> GCA_018466835.2
+        parts = name.split("_")
+        if len(parts) > 2 and accRe.match("%s_%s" % (parts[0], parts[1])):
+            skip.add("%s_%s" % (parts[0], parts[1]))
+    # len(skip) counts both name forms of an accession, so report the lines read
+    logging.info("Read %d assemblies to skip from %s" % (lineCount, fname))
+    return skip
+
 def getGenArkTaxIdDbs(onlyDbs, options):
     """ build the plan from the GenArk assembly list instead of from dbDb.
 
@@ -183,11 +210,15 @@ def getGenArkTaxIdDbs(onlyDbs, options):
     accToTax = readGenArkList(options.genArkList)
     counts = taxonProteinCounts(options.uniprotDir)
     minProt = options.minProteins
+    skipAsm = readSkipList(options.skipList)
 
     taxIdToDbs = defaultdict(list)
-    skippedTaxa, skippedAsm, noHub = set(), 0, 0
+    skippedTaxa, skippedAsm, noHub, blacklisted = set(), 0, 0, 0
     for acc, taxId in sorted(accToTax.items()):
         if onlyDbs is not None and acc not in onlyDbs:
+            continue
+        if acc in skipAsm:
+            blacklisted += 1
             continue
         if counts.get(taxId, 0) < minProt:
             skippedTaxa.add(taxId)
@@ -202,7 +233,8 @@ def getGenArkTaxIdDbs(onlyDbs, options):
     logging.info("GenArk plan: %d assemblies over %d taxa with at least %d UniProt proteins" % \
             (sum(len(v) for v in taxIdToDbs.values()), len(taxIdToDbs), minProt))
     logging.info("GenArk plan: skipped %d assemblies over %d taxa below the protein threshold, "
-            "and %d not present under %s" % (skippedAsm, len(skippedTaxa), noHub, genArkRoot))
+            "%d on the skip list, and %d not present under %s" % \
+            (skippedAsm, len(skippedTaxa), blacklisted, noHub, genArkRoot))
     return taxIdToDbs
 
 def getTaxIdDbs(onlyDbs, options):
@@ -213,6 +245,7 @@ def getTaxIdDbs(onlyDbs, options):
     if options.genArkList:
         return getGenArkTaxIdDbs(onlyDbs, options)
 
+    skipAsm = readSkipList(options.skipList)
     query = "select taxId, name, nibPath from dbDb where active=1 order by orderKey;"
     rows = runQuery("hgcentral", query, usePublic=True)
     taxIdToDbs = defaultdict(list)
@@ -229,7 +262,7 @@ def getTaxIdDbs(onlyDbs, options):
             if dbCode not in onlyDbs:
                 continue
         else:
-            if dbCode in notAutoDbs:
+            if dbCode in notAutoDbs or dbCode in skipAsm:
                 continue
 
         taxId = int(taxId)
@@ -315,6 +348,11 @@ def parseArgs():
             "/hive/data/genomes/asmHubs/UCSC_GI.assemblyHubList.txt or a fresh copy of "
             "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt . Use with "
             "--minProteins, which decides how much of GenArk is worth running.")
+    parser.add_option("", "--skipList", dest="skipList", action="store",
+            help="file of assemblies to leave alone, one name or accession per line, with "
+            "# comments. Entries may carry the full asmId, so a GenArk orderList works as "
+            "is: --skipList=kent/src/hg/makeDb/doc/hprcAsmHub/hprc.orderList.tsv drops the "
+            "464 HPRC haplotype assemblies, which take human from 572 assemblies to 108.")
     parser.add_option("", "--minProteins", dest="minProteins", action="store", type="int",
             default=1,
             help="skip a taxon with fewer than this many UniProt proteins, default %default, "
