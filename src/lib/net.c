@@ -560,6 +560,10 @@ char buf[MAXURLSIZE];
 /* Make local copy of URL. */
 if (strlen(url) >= sizeof(buf))
     errAbort("Url too long: '%s'", url);
+/* keep the caller's string for the error messages below: the local copy gets
+ * chopped into pieces as we parse, so by the time something goes wrong there is
+ * no url left to report */
+char *origUrl = url;
 strcpy(buf, url);
 url = buf;
 
@@ -660,24 +664,24 @@ int brCount = countChars(s, ']');
 
 // double-check any stray brackets
 if ((brCount != blCount) || (brCount > 1))
-    errAbort("badly formed url, stray square brackets in IPv6 address");
+    errAbort("badly formed url %s, stray square brackets in IPv6 address", origUrl);
 
 /* Save port if it's there.  If not default to 80. */
 bl = strchr(s, '['); // IPV6 address in url surrounded by brackets []
 br = strrchr(s, ']'); // IPV6 address in url surrounded by brackets []
 
 if (!br != !bl)  // logical XOR
-    errAbort("badly formed url, unbalanced square brackets around IPv6 address.");
+    errAbort("badly formed url %s, unbalanced square brackets around IPv6 address.", origUrl);
 
 if (!br && isIpv6Address(s))  // host looks like IPv6 address but no brackets.
-    errAbort("badly formed url, should be protocol://[IPv6-address]:port/. Put square brackets around literal IPv6 address.");
+    errAbort("badly formed url %s, should be protocol://[IPv6-address]:port/. Put square brackets around literal IPv6 address.", origUrl);
 
 // trim off the brackets around the ipv6 host name
 if (br)
     {
     // expecting *s == [
     if (*s != '[')
-	errAbort("badly formed url %s, expected [ at start of ipv6 address", s);
+	errAbort("badly formed url %s, expected [ at start of ipv6 address", origUrl);
     ++s;    // skip [
     *br = 0; // erase ]
     t = br+1;
@@ -685,7 +689,7 @@ if (br)
     if (c == 0)
 	t = NULL;
     else if (c != ':')
-	errAbort("badly formed url %s, stray characters after ] at end of ipv6 address", s);
+	errAbort("badly formed url %s, stray characters after ] at end of ipv6 address", origUrl);
     }
 else
     {
@@ -693,13 +697,20 @@ else
     }
 
 if (br && !isIpv6Address(s))  // host has brackets but does not look like IPv6 address.
-    errAbort("badly formed url, brackets found, but not valid literal IPv6 address.");
+    errAbort("badly formed url %s, brackets found, but not valid literal IPv6 address.", origUrl);
 
 if (t) // the port was explicitly provided
     {
     *t++ = 0;
     if (!isdigit(t[0]))
-	errAbort("Non-numeric port name %s", t);
+	{
+	/* a url with only one slash, https:/host/file, has no "://" so the protocol
+	 * defaults to http, the host becomes "https" and the port is empty.  Say what
+	 * is really wrong with it rather than complaining about the port. */
+	if (isEmpty(t) && !stringIn("://", origUrl))
+	    errAbort("badly formed url %s, expected :// after the protocol", origUrl);
+	errAbort("Non-numeric port name '%s' in url %s", t, origUrl);
+	}
     safecpy(parsed->port, sizeof(parsed->port), t);
     }
 else // get default port for each protocol

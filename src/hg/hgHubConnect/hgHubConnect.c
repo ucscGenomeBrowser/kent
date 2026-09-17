@@ -359,15 +359,20 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	ourPrintCellLink(hub->trackHub->shortLabel, hub->hubUrl);
 	}
     else
-	ourPrintCell("");
+	{
+	// hub did not open, so we have no short label.  Show the url instead, otherwise the
+	// row is just an error message and there is no way to tell which hub it is about.
+	ourPrintCell(htmlEncode(hub->hubUrl));
+	}
 
     boolean hubHasError = (!isEmpty(hub->errorMessage));
     if (hubHasError)
 	{
 	ourCellStart();
+	// the message usually quotes the hub url back at us, and that came from a stranger
 	printf("<span class=\"hubError\">ERROR: %s </span>"
-	    "<a TARGET=_BLANK href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>\n", 
-	    hub->errorMessage);
+	    "<a TARGET=_BLANK href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>\n",
+	    htmlEncode(hub->errorMessage));
 	
 	safef(id, sizeof id, "hubClearButton%d", count);
 	// give people a chance to clear the error 
@@ -715,17 +720,18 @@ if (hubHasNoError)
 else
     {
     ourCellStart();
+    // the message can quote text that the hub itself supplied, so escape it
     printf("<span class=\"hubError\">ERROR: %s </span>"
-        "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>", 
-        hubInfo->errorMessage);
+        "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>",
+        htmlEncode(hubInfo->errorMessage));
     safef(jsId, sizeof jsId, "hubClearButton%d", count);
     printf(
     "<input name=\"hubClearButton\" id='%s' "
             "class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
             , jsId);
-    jsOnEventByIdF("click", jsId, 
+    jsOnEventByIdF("click", jsId,
         "document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-        "document.resetHubForm.submit();return true;", hubInfo->hubUrl);
+        "document.resetHubForm.submit();return true;", javaScriptLiteralEncode(hubInfo->hubUrl));
     ourCellEnd();
     }
 
