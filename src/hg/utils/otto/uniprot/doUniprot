@@ -210,11 +210,18 @@ def parseArgs():
             default="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/",
             help="Location of archive directory, default %default")
     parser.add_option("", "--taxonThreads", dest="taxonThreads", action="store", type="int",
-            default=1,
+            default=20,
             help="how many taxa to process at the same time, default %default. Raising this "
             "keeps the cluster busy: one taxon at a time leaves it idle during the long "
-            "single-threaded steps between batches. 4 to 6 is a reasonable range. Assemblies "
+            "single-threaded steps between batches. Around 20 is a reasonable working value. Assemblies "
             "of the same taxon always run one after the other, they share a fasta file.")
+    parser.add_option("", "--minProteins", dest="minProteins", action="store", type="int",
+            default=1,
+            help="skip a taxon with fewer than this many UniProt proteins, default %default, "
+            "i.e. skip only the empty ones. UniProt annotates most species barely at all: of "
+            "the 3974 taxa that have a GenArk assembly and a SwissProt entry, the median has "
+            "four proteins and only 558 have more than a hundred. Raise this when running "
+            "across many assemblies, to skip the ones that cannot produce a useful track.")
     parser.add_option("", "--mapQa", dest="mapQa", action="store_true", \
             help="output some QA stats for the maps")
     parser.add_option("", "--db", dest="db", action="store_true", \
@@ -2383,9 +2390,10 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
 
         accToDb = concatFiles(faFnames, fullFaFname)
 
-        if os.path.getsize(fullFaFname)==0:
-            logging.warn("File %s is empty. Taxon ID %s does not have any UniProt annotations." \
-                    " Skipping this organism." % (fullFaFname, taxId))
+        protCount = len(accToDb)
+        if protCount < max(1, options.minProteins):
+            logging.warning("Taxon %s has %d UniProt proteins, fewer than the %d required. "
+                    "Skipping this organism." % (taxId, protCount, max(1, options.minProteins)))
             return
 
         tabFnames = ["tab/swissprot.%d.tab" % taxId]
