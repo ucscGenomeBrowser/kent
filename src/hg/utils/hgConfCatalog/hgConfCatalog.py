@@ -444,6 +444,21 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
+          default="FALSE", role="gate", verified=True, ticket="38285",
+          note="Pulls the MANE Select/Plus Clinical transcript out into its "
+               "own section on the hgSearch disambiguation page, above an "
+               "\"Other transcripts\" section for the rest.  Applies when a "
+               "gene-symbol + codon-range search (e.g. \"BRCA1 100-200\") "
+               "returns many RefSeq isoform predictions merged onto one "
+               "genomic footprint, which otherwise gives no indication of "
+               "which transcript is the clinically relevant one.  Read once, "
+               "in hgPositionsJson(), and only reached at all when a hit's "
+               "table is ncbiRefSeq* or refGene, so a typical search never "
+               "pays for the check.  Added in the current release, so it is "
+               "doing exactly what a gate is supposed to do and has not "
+               "earned a deadline yet.  On in cgi-bin-max's hg.conf for "
+               "testing; not yet turned on anywhere shared."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
         h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",
