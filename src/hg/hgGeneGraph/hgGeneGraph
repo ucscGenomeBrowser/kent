@@ -31,7 +31,7 @@
 # ggGeneName (symbols), ggGeneClass (HPRD/Panther class)
 
 # these are default python modules on python 2.7, no errors expected here
-import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib
+import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib, html
 from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -49,7 +49,7 @@ try:
             sqlConnect, sqlQuery, errAbort, cfgOption, runCmd, cgiGetAll, printHgcHeader, \
             printHgcSection, getNonce, getCspMetaHeader, jsOnEventById, \
             jsInlineFinish, webStartGbNoBanner, htmlPageEnd, hConnectCentral, \
-            sqlTableExists, readSmallFile, forceUnicode
+            sqlTableExists, sqlUpdate, readSmallFile, forceUnicode
 except:
     print("Content-type: text/html\n")
     print("Cannot find the directory cgi-bin/pyLib in Apache. This is an installation error.")
@@ -522,7 +522,7 @@ def buildGraph(conn, gene, geneCount, minSupp, addNeighbors):
         errAbort("Cannot find the gg* tables in hgFixed. This mirror's database may need updating.")
 
     if len(links)==0:
-        errAbort("Sorry, the gene %s is not a valid gene symbol or is not present in any gene interaction database." % cgi.escape(gene))
+        errAbort("Sorry, the gene %s is not a valid gene symbol or is not present in any gene interaction database." % html.escape(gene))
 
     links = filterLinks(links)
 
@@ -1195,7 +1195,7 @@ def printGraph(conn, weightedLinks, alg, addNeighbors, targetGene, format):
         jsonStr = json.dumps(weightedLinks)
 
     if len(weightedLinks)==0:
-        geneName = cgi.escape(cgiString("gene"))
+        geneName = html.escape(cgiString("gene"))
         selfLink = makeSelfLink("Remove all filters", {"supportLevel": None})
         errAbort("Sorry, there are no direct interactions with %s that fulfill your "
             "filter criteria. %s" % (geneName, selfLink))
@@ -1924,17 +1924,20 @@ def removeInteraction(param, captcha, comment):
         errAbort( "illegal CGI parameter")
     
     causeGene, themeGene = fields
-    ip = cgi.escape(os.environ["REMOTE_ADDR"])
+    ip = html.escape(os.environ["REMOTE_ADDR"])
 
     conn = hConnectCentral()
     if not sqlTableExists(conn, "ggFeedback"):
-        sqlQuery(conn, "CREATE TABLE ggFeedback (causeGene varchar(255), themeGene varchar(255), pmid varchar(255), " \
+        # sqlQuery() reads cursor.description, which is None after a statement that returns no
+        # rows, so it cannot run a CREATE
+        sqlUpdate(conn, "CREATE TABLE ggFeedback (causeGene varchar(255), themeGene varchar(255), pmid varchar(255), " \
                 "comment varchar(10000), time TIMESTAMP, ip varchar(255), INDEX allIdx (causeGene, themeGene, pmid));")
 
-    cur = conn.cursor()
-    cur.execute("INSERT INTO ggFeedback VALUES (%s, %s, %s, NOW(), %s, %s)", (causeGene, themeGene, 0, comment, ip))
-    cur.close()
-    conn.close()
+    # name the columns: the positional version put NOW() into "comment" and the comment text
+    # into "time". sqlUpdate() commits, which a plain cursor.execute() does not, so nothing
+    # written here used to survive the end of the request.
+    sqlUpdate(conn, "INSERT INTO ggFeedback (causeGene, themeGene, pmid, comment, time, ip) "
+            "VALUES (%s, %s, %s, %s, NOW(), %s)", (causeGene, themeGene, 0, comment, ip))
     print ("Interaction successfully removed.<p>")
 
     lastGene = getCgiVar("lastGene")
