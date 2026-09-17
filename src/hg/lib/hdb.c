@@ -4413,7 +4413,12 @@ struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)
  * the supertrack trackDb subtrack fields are not set here (would be
  * incompatible with the returned list)
  * Returns list sorted by priority
- *	NOTE: this result is cached, do not free it !
+ *	NOTE: do not free this result - when the cache is on it is shared memory.
+ * NOTE: "cached" here means the shared-memory trackDb cache, which is only on when
+ * cacheTrackDbDir is set in hg.conf (it is not on a sandbox by default).  There is no
+ * memoizing besides that: with the cache off, every call reloads and relinks the whole
+ * trackDb, so calling this once per track name is quadratic.  Load the list once and
+ * pass it around - see tdbForTrack()'s tdbList argument.
  */
 {
 if (trackHubDatabase(db))

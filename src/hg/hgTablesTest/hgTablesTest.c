@@ -161,10 +161,10 @@ AllocVar(qs);
 qs->hardError = TRUE;
 qs->errMessage = cloneString(message);
 tablesTestNew(qs, type, org, db, group, track, table);
-verbose(1, "Caught abort testing %s (%s %s %s %s %s): %s",
+verbose(1, "Caught abort testing %s (%s %s %s %s %s): %s\n",
 	type, naForNull(org), naForNull(db), naForNull(group),
 	naForNull(track), naForNull(table), naForNull(message));
-fprintf(logFile, "Caught abort testing %s (%s %s %s %s %s): %s",
+fprintf(logFile, "Caught abort testing %s (%s %s %s %s %s): %s\n",
 	type, naForNull(org), naForNull(db), naForNull(group),
 	naForNull(track), naForNull(table), naForNull(message));
 }
