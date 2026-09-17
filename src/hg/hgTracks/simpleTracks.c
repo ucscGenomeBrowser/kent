@@ -5926,13 +5926,14 @@ genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer
 
 boolean denseClickEnabled(struct track *tg)
 /* Should a dense row of this track get one clickable map box per item, instead
- * of a single box that expands the track?  Off unless denseClick is set in
- * hg.conf, and a track can override that with a denseClick trackDb setting. */
+ * of a single box that expands the track?  The hg.conf denseClick flag is a
+ * gate over the whole feature: while it is off, which is the default, no track
+ * gets this no matter what its trackDb says.  With the gate on, a track opts in
+ * with a denseClick trackDb setting. */
 {
-char *setting = trackDbSetting(tg->tdb, "denseClick");
-if (setting != NULL)
-    return trackDbSettingOn(tg->tdb, "denseClick");
-return cfgOptionBooleanDefault("denseClick", FALSE);
+if (!cfgOptionBooleanDefault("denseClick", FALSE))
+    return FALSE;
+return trackDbSettingOn(tg->tdb, "denseClick");
 }
 
 static void denseMapItem(struct track *tg, struct hvGfx *hvg, struct slList *item,
