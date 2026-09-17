@@ -933,6 +933,26 @@ wiggleDataStreamFree(&wds);
 
 }
 
+static boolean trackLineHasSetting(char *trackLine, char *setting)
+/* Does the var=value list of a custom track line set this variable?  Parses a copy,
+ * hashVarLine() chops up the line it is given. */
+{
+char *copy = cloneString(trackLine);
+char *pLine = copy;
+nextWord(&pLine);
+pLine = skipLeadingSpaces(pLine);
+if (isEmpty(pLine))   // a bare "track" line sets nothing
+    {
+    freeMem(copy);
+    return FALSE;
+    }
+struct hash *vars = hashVarLine(pLine, 1);
+boolean gotIt = (hashFindVal(vars, setting) != NULL);
+freeHashAndVals(&vars);
+freeMem(copy);
+return gotIt;
+}
+
 void makeDownloadSessionCtData(char *param1, char *backgroundProgress)
 /* Download tables and data to save save in compressed archive. */
 {
@@ -1095,7 +1115,22 @@ if ((row = sqlNextRow(sr)) != NULL)
 
 		if (!extra->trackLine)
 		    errAbort("origTrackLine is NULL!");
-		fprintf(fct, "%s\n", extra->trackLine);
+		// The archive holds one file per track and tar walks the directory in
+		// whatever order the file system hands out, so the order of the session
+		// is lost unless the track line itself carries it.  The original track
+		// line rarely has a priority, the one hgTracks orders the tracks by
+		// does, so write that one out with it: the tdb priority the browser
+		// assigned when it loaded the track, or the cart variable that a
+		// drag-and-drop reorder left behind.  A track line that names its own
+		// priority is left alone, the user asked for that one.  A reader that
+		// does not care about the order is unaffected, priority is optional.
+		char prioVar[256];
+		safef(prioVar, sizeof prioVar, "%s.priority", track->tdb->track);
+		double priority = cartUsualDouble(cart, prioVar, track->tdb->priority);
+		if (priority != 0 && !trackLineHasSetting(extra->trackLine, "priority"))
+		    fprintf(fct, "%s priority='%g'\n", extra->trackLine, priority);
+		else
+		    fprintf(fct, "%s\n", extra->trackLine);
     
 
 		if (!extra->bigDataUrl)

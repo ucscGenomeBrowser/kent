@@ -1269,7 +1269,8 @@ safef(message, sizeof(message),
     "Someone (probably you, from IP address %s) gave this address as the recovery email address "
     "for the %s account \"%s\".\nTo confirm that this mailbox is yours, open this link in your "
     "browser:\n\n%s\n\nThe link works once and expires in seven days.  Until it is opened, this "
-    "address cannot be used to sign in to that account and will not receive a password reset.\n\n"
+    "email address cannot be used to sign in to that account and will not receive a "
+    "password-reset email.\n\n"
     "If this is *not* you, do not open the link: someone typed your address by mistake, and "
     "ignoring this message is all it takes to keep them from using it.\n\n%s\n%s",
     emptyForNull(remoteAddr), brwName, user, url, signature, returnAddr);
@@ -1528,7 +1529,7 @@ if (!sigOk || isEmpty(user) || spc_email_isvalid(recovEmail) == 0)
 if (clock1() > atol(expStr))
     {
     freez(&errMsg);
-    errMsg = cloneString("This confirmation link has expired.");
+    errMsg = cloneString("This confirmation link has expired. Please request a new one.");
     displayLoginPage(conn);
     return;
     }
@@ -1590,16 +1591,19 @@ char *encCurRecov = htmlEncode(isNotEmpty(curRecov) ? curRecov : "(none)");
 
 hPrintf("<div id=\"changeRecovEmailBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
-hPrintf("<h3>Recovery Email</h3>");
+hPrintf("<h3>Change recovery email</h3>");
 hPrintf("<p><span style='color:red;'>%s</span></p>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"changeRecovEmailForm\">", hgLoginUrl);
 hPrintf("<p>Signed in as <b>%s</b>.<br>Current recovery email address: <b>%s</b>%s</p>",
     encUser, encCurRecov,
     (isNotEmpty(curRecov) && !curConfirmed) ? " (waiting to be confirmed)" : "");
-hPrintf("<p style=\"font-size:0.9em\">A second address you can use to get back into your "
-    "account: it can sign you in, including with the Google and ORCID buttons, and it receives "
-    "a copy of a password reset. We email it a link to confirm it, and it does nothing until "
-    "you open that link. Your current address keeps working until then.</p>");
+hPrintf("<p style=\"font-size:0.9em\">You can add a second email address to get back into "
+    "your account. Once confirmed, it can sign you in, including through the Google and "
+    "ORCID buttons, and it will get a copy of the password-reset email whenever one is sent "
+    "for this account. We will email a confirmation link to the new address. Until that "
+    "link is opened, the email address cannot be used to sign in and will not receive a "
+    "password-reset email.%s</p>",
+    isNotEmpty(curRecov) ? " Your current recovery email address keeps working until then." : "");
 freeMem(encUser);
 freeMem(encCurRecov);
 if (hasPassword)
@@ -1708,7 +1712,7 @@ hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
 hPrintf("<h3>Almost done. Please check your email</h3>");
 hPrintf("<p>We sent a confirmation link to <b>%s</b>. Open the link in that message to finish "
     "setting your recovery email address. The link works once and expires in seven days. Until "
-    "then nothing about your account changes.</p></div>", encRecov);
+    "that link is opened, nothing about your account changes.</p></div>", encRecov);
 freeMem(encRecov);
 returnToURL(3000);
 }

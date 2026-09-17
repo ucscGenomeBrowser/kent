@@ -1,4 +1,10 @@
 #!/bin/bash
+#############################################################################
+###  this script lives in the source tree at:
+###      kent/src/hg/utils/otto/genArk/whatIsNew.sh
+###  edit that copy instead of the in-use copy at:
+###      /hive/data/inside/GenArk/pushRR/whatIsNew.sh
+#############################################################################
 
 export TOP="/hive/data/inside/GenArk/pushRR"
 
@@ -35,7 +41,7 @@ zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort \
 # what new needs to get from hgwdev go beta
 rm -f new.files.ready.to.beta.txt
 touch new.files.ready.to.beta.txt
-if [ "${devCount}" -gt "${betaCount}" ]; then
+if [ "${devCount}" -ne "${betaCount}" ]; then
    export newFiles=`echo ${devCount} ${betaCount} | awk '{printf "%d", $1-$2}'`
    printf "### ${newFiles} new files to go out from hgwdev to beta not /contrib/\n"
    zegrep -v "${doNotCount}" dev.todayList.gz | cut -f2 | sort \
@@ -64,7 +70,7 @@ rm -f rsync.gbdb.genark.fileList.txt
 
 rm -f new.files.ready.to.go.txt
 touch new.files.ready.to.go.txt
-if [ "${betaCount}" -gt "${hgw1Count}" ]; then
+if [ "${betaCount}" -ne "${hgw1Count}" ]; then
    export newFiles=`echo ${betaCount} ${hgw1Count} | awk '{printf "%d", $1-$2}'`
    printf "### ${newFiles} new files to go out from beta to the RR not /contrib/\n"
    zegrep -v "${doNotCount}" hgwbeta.todayList.gz | cut -f2 | sort \
@@ -92,5 +98,6 @@ fi
 
 ./quickLiftNew.sh
 ./liftOverNew.sh
+./loopDetect.sh
 
 exit $?

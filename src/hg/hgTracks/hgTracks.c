@@ -6343,7 +6343,14 @@ struct trackDb *tdbList;
 int trackDbCartVersion = 0;
 
 if(trackNameFilter == NULL)
+    {
     tdbList = hTrackDbWithCartVersion(database, &trackDbCartVersion);
+    // getTrackList() asks whether an undecorated cart/CGI variable belongs to a native
+    // track or to an attached hub's track of the same name.  Answer it from the assembly's
+    // track list, which we have right here, instead of a trackDb query per name.  Only
+    // the unfiltered list can answer it, so the filtered branch leaves it to the query.
+    hubTrackBareNamesFromTdbList(tdbList);
+    }
 else
     {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
@@ -7712,6 +7719,9 @@ for (track = trackList; track != NULL; track = track->next)
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
                 s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
+                // the bare name is the native track's if the assembly has one by that name
+                if (s != NULL && !hubTrackOwnsBareName(database, track->tdb->parent->track))
+                    s = NULL;
                 if (s)
                     {
                     cartSetString(cart, track->tdb->parent->track, s);
@@ -7727,7 +7737,17 @@ for (track = trackList; track != NULL; track = track->next)
 
             s = cartOptionalString(cart, buffer);
             if (s == NULL && startsWith("hub_", track->tdb->parent->track))
-                s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+                {
+                char *bare = trackHubSkipHubName(buffer);
+                char *bareVal = cartOptionalString(cart, bare);
+                // the bare name is the native track's if the assembly has one by that name
+                if (bareVal != NULL
+                    && hubTrackOwnsBareName(database, track->tdb->parent->track))
+                    {
+                    s = bareVal;
+                    usedThis = bare;
+                    }
+                }
 
             if (s != NULL)
                 {
@@ -7764,9 +7784,14 @@ for (track = trackList; track != NULL; track = track->next)
         }
     else
         {
-        // maybe this track is on the URL without the hub_ prefix
+        // maybe this track is on the URL without the hub_ prefix - but not if the
+        // assembly has a track of that name, in which case the bare name is that one's
         if (startsWith("hub_", track->track))
+            {
             s = cgiOptionalString(trackHubSkipHubName(track->track));
+            if (s && !hubTrackOwnsBareName(database, track->track))
+                s = NULL;
+            }
         if (s != NULL && !track->limitedVisSet)
             {
             track->visibility = hTvFromString(s);
@@ -7786,7 +7811,16 @@ for (track = trackList; track != NULL; track = track->next)
 
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
-            s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+            {
+            char *bare = trackHubSkipHubName(buffer);
+            char *bareVal = cartOptionalString(cart, bare);
+            // the bare name is the native track's if the assembly has one by that name
+            if (bareVal != NULL && hubTrackOwnsBareName(database, track->track))
+                {
+                s = bareVal;
+                usedThis = bare;
+                }
+            }
         if (s != NULL)
             hideKids = TRUE;
         cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
@@ -7801,8 +7835,14 @@ for (track = trackList; track != NULL; track = track->next)
             char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
             if (s == NULL && startsWith("hub_", subtrack->track))
                 {
-                undecoratedVis = TRUE;
+                // the bare name is the native track's if the assembly has one by that
+                // name.  Look the value up before asking: this runs for every subtrack of
+                // the container, and almost no request has a bare name on it at all.
                 s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+                if (s != NULL && hubTrackOwnsBareName(database, subtrack->track))
+                    undecoratedVis = TRUE;
+                else
+                    s = NULL;
                 }
 
             safef(buffer, sizeof buffer, "%s_sel", subtrack->track);

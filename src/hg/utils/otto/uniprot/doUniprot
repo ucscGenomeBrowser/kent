@@ -113,11 +113,106 @@ def errAbort(msg):
     logging.error(msg)
     assert(False) # generate stacktrace
 
-def getTaxIdDbs(onlyDbs):
+def taxonProteinCounts(uprotDir):
+    """ taxon id -> number of UniProt proteins, SwissProt and TrEMBL together.
+
+    Needed before anything is parsed, to decide which taxa are worth running at all, so it
+    is read from the fasta headers, which carry OX=<taxid>. Scanning TrEMBL means reading
+    40 GB, about twenty minutes, so the answer is cached beside the download and rebuilt
+    only when it is missing or older than the fasta it came from.
+    """
+    cacheFname = join(uprotDir, "taxonProteinCounts.tab")
+    sprotFa = join(uprotDir, "uniprot_sprot.fasta.gz")
+    tremblFa = join(uprotDir, "uniprot_trembl.fasta.gz")
+
+    if isfile(cacheFname) and os.path.getmtime(cacheFname) >= os.path.getmtime(sprotFa):
+        counts = {}
+        for line in open(cacheFname):
+            taxId, count = line.rstrip("\n").split("\t")
+            counts[int(taxId)] = int(count)
+        logging.info("Read protein counts for %d taxa from %s" % (len(counts), cacheFname))
+        return counts
+
+    logging.info("Counting UniProt proteins per taxon, this reads the whole fasta and takes a while")
+    counts = defaultdict(int)
+    for faFname in (sprotFa, tremblFa):
+        if not isfile(faFname):
+            logging.warning("%s does not exist, not counting it" % faFname)
+            continue
+        cmd = "zcat %s | grep -o 'OX=[0-9]*'" % faFname
+        proc = subprocess.Popen(cmd, shell=True, stdout=PIPE, encoding="utf8")
+        for line in proc.stdout:
+            counts[int(line[3:])] += 1
+        proc.stdout.close()
+        proc.wait()
+
+    with open(cacheFname, "w") as ofh:
+        for taxId in sorted(counts):
+            ofh.write("%d\t%d\n" % (taxId, counts[taxId]))
+    logging.info("Wrote protein counts for %d taxa to %s" % (len(counts), cacheFname))
+    return counts
+
+def readGenArkList(fname):
+    """ parse the GenArk assembly list, accession -> taxon id.
+    Tab separated: accession, asmName, scientificName, commonName, taxId, clade.
+    """
+    accToTax = {}
+    # latin1: the organism and common names carry bytes that are not valid UTF-8, and
+    # python would stop on the first one. Only the accession and the taxon id are used.
+    for line in open(fname, encoding="latin1"):
+        if line.startswith("#"):
+            continue
+        f = line.rstrip("\n").split("\t")
+        if len(f) < 5 or not f[4].isdigit():
+            continue
+        accToTax[f[0]] = int(f[4])
+    logging.info("Read %d GenArk assemblies from %s" % (len(accToTax), fname))
+    return accToTax
+
+def getGenArkTaxIdDbs(onlyDbs, options):
+    """ build the plan from the GenArk assembly list instead of from dbDb.
+
+    dbDb holds the few thousand assemblies the browser serves directly; GenArk holds about
+    fifty thousand. Most of those are not worth running: UniProt annotates most species
+    barely at all, and an assembly whose organism has a handful of proteins cannot produce
+    a useful track. --minProteins is the filter, and it wants to be high to start with.
+    A bacterial proteome is only a few thousand proteins, so a threshold of a few thousand
+    pulls in the whole of the bacteria clade; 20000 keeps it to the large eukaryotic
+    proteomes. refs #38300
+    """
+    accToTax = readGenArkList(options.genArkList)
+    counts = taxonProteinCounts(options.uniprotDir)
+    minProt = options.minProteins
+
+    taxIdToDbs = defaultdict(list)
+    skippedTaxa, skippedAsm, noHub = set(), 0, 0
+    for acc, taxId in sorted(accToTax.items()):
+        if onlyDbs is not None and acc not in onlyDbs:
+            continue
+        if counts.get(taxId, 0) < minProt:
+            skippedTaxa.add(taxId)
+            skippedAsm += 1
+            continue
+        if genArkAccDir(acc) is None or not isdir(genArkAccDir(acc)):
+            # listed but not served from /gbdb/genark here, nothing to build against
+            noHub += 1
+            continue
+        taxIdToDbs[taxId].append(acc)
+
+    logging.info("GenArk plan: %d assemblies over %d taxa with at least %d UniProt proteins" % \
+            (sum(len(v) for v in taxIdToDbs.values()), len(taxIdToDbs), minProt))
+    logging.info("GenArk plan: skipped %d assemblies over %d taxa below the protein threshold, "
+            "and %d not present under %s" % (skippedAsm, len(skippedTaxa), noHub, genArkRoot))
+    return taxIdToDbs
+
+def getTaxIdDbs(onlyDbs, options):
     """ return a dict with taxonId -> list of most recent dbs (e.g. for human, it's hg19 and hg38) 
     if onlyDbs is a set, keep only these dbs.
     If onlyDbs is None, remove all nonAutoDbs.
     """
+    if options.genArkList:
+        return getGenArkTaxIdDbs(onlyDbs, options)
+
     query = "select taxId, name, nibPath from dbDb where active=1 order by orderKey;"
     rows = runQuery("hgcentral", query, usePublic=True)
     taxIdToDbs = defaultdict(list)
@@ -210,11 +305,23 @@ def parseArgs():
             default="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/",
             help="Location of archive directory, default %default")
     parser.add_option("", "--taxonThreads", dest="taxonThreads", action="store", type="int",
-            default=1,
+            default=20,
             help="how many taxa to process at the same time, default %default. Raising this "
             "keeps the cluster busy: one taxon at a time leaves it idle during the long "
-            "single-threaded steps between batches. 4 to 6 is a reasonable range. Assemblies "
+            "single-threaded steps between batches. Around 20 is a reasonable working value. Assemblies "
             "of the same taxon always run one after the other, they share a fasta file.")
+    parser.add_option("", "--genArkList", dest="genArkList", action="store",
+            help="build the plan from this GenArk assembly list instead of from dbDb, e.g. "
+            "/hive/data/genomes/asmHubs/UCSC_GI.assemblyHubList.txt or a fresh copy of "
+            "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt . Use with "
+            "--minProteins, which decides how much of GenArk is worth running.")
+    parser.add_option("", "--minProteins", dest="minProteins", action="store", type="int",
+            default=1,
+            help="skip a taxon with fewer than this many UniProt proteins, default %default, "
+            "i.e. skip only the empty ones. UniProt annotates most species barely at all: of "
+            "the 3974 taxa that have a GenArk assembly and a SwissProt entry, the median has "
+            "four proteins and only 558 have more than a hundred. Raise this when running "
+            "across many assemblies, to skip the ones that cannot produce a useful track.")
     parser.add_option("", "--mapQa", dest="mapQa", action="store_true", \
             help="output some QA stats for the maps")
     parser.add_option("", "--db", dest="db", action="store_true", \
@@ -225,7 +332,7 @@ def parseArgs():
     (options, args) = parser.parse_args()
 
     if options.db:
-        taxIdDbs = getTaxIdDbs(None)
+        taxIdDbs = getTaxIdDbs(None, options)
         print("-- Current TaxId<->database assignment:")
         for key, val in taxIdDbs.items():
             print (key, val)
@@ -1041,11 +1148,30 @@ def miniprotVersion():
 
 dbIsHubCache = {}
 
+genArkRoot = "/gbdb/genark"
+accRe = re.compile(r"^GC[AF]_[0-9]{9}\.[0-9]+$")
+
+def genArkAccDir(acc):
+    """ the /gbdb/genark directory of a GenArk accession, from the accession alone.
+    The path is sharded on the digits, three at a time:
+    GCF_029289425.2 -> /gbdb/genark/GCF/029/289/425/GCF_029289425.2
+    """
+    if not accRe.match(acc):
+        return None
+    prefix, digits = acc.split("_")
+    digits = digits.split(".")[0]
+    return join(genArkRoot, prefix, digits[0:3], digits[3:6], digits[6:9], acc)
+
 def genArkHubDir(db):
     """ return the hub directory of a hub assembly, or None for a classic db.
-    dbDb.nibPath is "hub:<dir>" for these, e.g.
+    For an assembly named by its accession, which is how the GenArk list names them, the
+    path follows from the accession. Otherwise dbDb.nibPath says "hub:<dir>", e.g.
     hub:/gbdb/genark/GCF/029/289/425/GCF_029289425.2 for a GenArk assembly.
     """
+    accDir = genArkAccDir(db)
+    if accDir is not None:
+        return accDir if isdir(accDir) else None
+
     if db not in dbIsHubCache:
         rows = list(runQuery("hgcentral", "select nibPath from dbDb where name='%s'" % db, usePublic=True))
         nibPath = rows[0][0] if rows else ""
@@ -2383,9 +2509,10 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
 
         accToDb = concatFiles(faFnames, fullFaFname)
 
-        if os.path.getsize(fullFaFname)==0:
-            logging.warn("File %s is empty. Taxon ID %s does not have any UniProt annotations." \
-                    " Skipping this organism." % (fullFaFname, taxId))
+        protCount = len(accToDb)
+        if protCount < max(1, options.minProteins):
+            logging.warning("Taxon %s has %d UniProt proteins, fewer than the %d required. "
+                    "Skipping this organism." % (taxId, protCount, max(1, options.minProteins)))
             return
 
         tabFnames = ["tab/swissprot.%d.tab" % taxId]
@@ -2925,7 +3052,7 @@ def main():
     if options.onlyDbs:
         onlyDbs = set(options.onlyDbs.split(","))
 
-    taxIdDbs = getTaxIdDbs(onlyDbs)
+    taxIdDbs = getTaxIdDbs(onlyDbs, options)
 
     if options.mapQa:
         mapQa(options.tabDir, options.faDir, options.mapDir, onlyDbs, taxIdDbs)
