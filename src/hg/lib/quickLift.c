@@ -643,8 +643,17 @@ for (i = 0; i < lifted->blockCount; i++)
 // disagree about the shared sequence's strand), and "-+" would tell pslShow to reverse
 // complement the protein as though it were DNA.  Turn it over so the minus lands on the
 // target side, where the protein display expects it.
+// pslRc makes the target strand explicit as it turns the alignment over, so the
+// assignment below is the other half of this test, not something to do as well.
 if (lifted->strand[0] == '-')
     pslRc(lifted);
+else
+    {
+    // A protein psl carries the target strand explicitly, and pslTransMap normalized the
+    // target onto the forward strand on the way out.
+    lifted->strand[1] = '+';
+    lifted->strand[2] = 0;
+    }
 
 lifted->qStart /= 3;
 lifted->qEnd /= 3;
@@ -655,10 +664,6 @@ for (i = 0; i < lifted->blockCount; i++)
     lifted->blockSizes[i] /= 3;
     lifted->qStarts[i] /= 3;
     }
-// A protein psl carries the target strand explicitly, and pslTransMap normalized the
-// target onto the forward strand on the way out.
-lifted->strand[1] = '+';
-lifted->strand[2] = 0;
 return TRUE;
 }
 
