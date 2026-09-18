@@ -444,6 +444,15 @@ return ret;
 
 void printApiKeySection()
 {
+// This section has to stand on its own: a mirror can set showHubApiKey without setting
+// storeUserFiles, and then nothing that hgHubConnectOfferUpload pulls in is on the page.
+// jsIncludeFile and webIncludeResourceFile only emit a tag the first time, so asking for
+// these again when the upload tab is also up costs nothing.
+jsIncludeFile("lodash.3.10.0.compat.min.js", NULL);
+jsIncludeFile("cart.js", NULL);
+jsIncludeFile("hubApiKey.js", NULL);
+webIncludeResourceFile("font-awesome.min.css"); // the spinner shown while a key is made
+
 puts("<div id='apiKeySection' class='tabSection'>");
 puts("<h4>API key</h4>");
 char *userName = wikiLinkUserName();
@@ -476,9 +485,11 @@ else
         }
     printf("<div id='revokeDiv' class='help' style='display: %s'>\nTo revoke any API keys associated with your account, click the revoke button: <button id='revokeApiKeys'>Revoke</button>\n</div>", existingKey != NULL ? "block" : "none");
     // add the event handlers for clicking the generate/revoke buttons
+    // note the namespace: a button's id also lands on window, so a bare generateApiKey
+    // here would be the button element itself rather than the function
     jsInlineF(""
-    "document.getElementById('generateApiKey').addEventListener('click', generateApiKey);\n"
-    "document.getElementById('revokeApiKeys').addEventListener('click', revokeApiKeys);\n"
+    "document.getElementById('generateApiKey').addEventListener('click', hubApiKey.generate);\n"
+    "document.getElementById('revokeApiKeys').addEventListener('click', hubApiKey.revoke);\n"
     );
     }
 
@@ -1779,11 +1790,16 @@ void doAsync(struct cart *theCart)
 {
 cart = theCart;
 struct cartJson *cj = cartJsonNew(cart);
-cartJsonRegisterHandler(cj, hgHubGetHubSpaceUIState, getHubSpaceUIState);
-cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
-cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
+// the file commands are hubSpace's, and a site can hand out API keys without running it
+if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
+    {
+    cartJsonRegisterHandler(cj, hgHubGetHubSpaceUIState, getHubSpaceUIState);
+    cartJsonRegisterHandler(cj, hgHubDeleteFile, doRemoveFile);
+    cartJsonRegisterHandler(cj, hgHubMoveFile, doMoveFile);
+    }
 cartJsonRegisterHandler(cj, hgHubGenerateApiKey, cjGenerateApiKey);
 cartJsonRegisterHandler(cj, hgHubRevokeApiKey, cjRevokeApiKey);
+cartJsonRegisterHandler(cj, hgHubSyncApiKey, cjSyncApiKey);
 cartJsonExecute(cj);
 }
 
@@ -1798,7 +1814,10 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
-if (cfgOptionBooleanDefault("storeUserFiles", FALSE) && cgiOptionalString(CARTJSON_COMMAND))
+// showHubApiKey counts here as well as storeUserFiles: the Generate/Revoke buttons are
+// cartJson requests, and they are offered on sites that do not run hubSpace
+if ((cfgOptionBooleanDefault("storeUserFiles", FALSE) ||
+     cfgOptionBooleanDefault("showHubApiKey", FALSE)) && cgiOptionalString(CARTJSON_COMMAND))
     cartEmptyShellNoContent(doAsync, hUserCookie(), excludeVars, oldVars);
 else
     cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);

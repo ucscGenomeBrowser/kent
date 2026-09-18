@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""Sum a set of single-base PRO-cap signal bigWigs into one bigWig.
+
+ENCODE releases PRO-cap signal per replicate and per sequencing run; the track
+shows the sum over all of them for a cell type and strand.  Minus-strand ENCODE
+signal is already negative and is kept that way, so the values sum directly.
+
+Chromosomes are restricted to those in the chrom.sizes file.  A chromosome in an
+input that is not in chrom.sizes, or whose size disagrees, is an error rather
+than a silent drop.
+"""
+import argparse
+import numpy as np
+import pyBigWig
+from pycbio.sys import cli, fileOps
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("chromSizes")
+    parser.add_argument("outBigWig")
+    parser.add_argument("inBigWigs", nargs="+")
+    return cli.parseOptsArgsWithLogging(parser)
+
+def loadChromSizes(chromSizes):
+    sizes = {}
+    for line in fileOps.iterLines(chromSizes):
+        chrom, size = line.split("\t")[0:2]
+        sizes[chrom] = int(size)
+    return sizes
+
+def checkChroms(inBigWigs, sizes):
+    "chroms used by the inputs, in chrom.sizes order, validating names and sizes"
+    used = set()
+    for inBw in inBigWigs:
+        with pyBigWig.open(inBw) as bw:
+            for chrom, size in bw.chroms().items():
+                if chrom not in sizes:
+                    raise cli.PycbioException(f"{inBw}: chromosome {chrom} is not in the "
+                                              "chrom.sizes file; add it or filter it out upstream")
+                if sizes[chrom] != size:
+                    raise cli.PycbioException(f"{inBw}: chromosome {chrom} is {size} bases, "
+                                              f"chrom.sizes says {sizes[chrom]}; wrong assembly?")
+                used.add(chrom)
+    return [c for c in sizes if c in used]
+
+def addIntervals(acc, intervals):
+    "add one bigWig's intervals for a chromosome into the accumulator"
+    starts = np.fromiter((i[0] for i in intervals), dtype=np.int64, count=len(intervals))
+    ends = np.fromiter((i[1] for i in intervals), dtype=np.int64, count=len(intervals))
+    values = np.fromiter((i[2] for i in intervals), dtype=np.float64, count=len(intervals))
+    single = (ends - starts) == 1
+    np.add.at(acc, starts[single], values[single])
+    for start, end, value in zip(starts[~single], ends[~single], values[~single]):
+        acc[start:end] += value
+    return len(intervals)
+
+def sumChrom(inBigWigs, chrom, size):
+    acc = np.zeros(size, dtype=np.float64)
+    inCnt = 0
+    for inBw in inBigWigs:
+        with pyBigWig.open(inBw) as bw:
+            if chrom in bw.chroms():
+                intervals = bw.intervals(chrom)
+                if intervals is not None:
+                    inCnt += addIntervals(acc, intervals)
+    return acc, inCnt
+
+def runsOfNonZero(acc):
+    "(starts, ends, values) of maximal runs of equal, non-zero values"
+    changed = np.empty(len(acc), dtype=bool)
+    changed[0] = True
+    changed[1:] = acc[1:] != acc[:-1]
+    starts = np.flatnonzero(changed)
+    ends = np.append(starts[1:], len(acc))
+    values = acc[starts]
+    keep = values != 0.0
+    return starts[keep], ends[keep], values[keep]
+
+def writeChrom(outBw, chrom, acc):
+    starts, ends, values = runsOfNonZero(acc)
+    if len(starts) > 0:
+        outBw.addEntries([chrom] * len(starts), starts.tolist(), ends=ends.tolist(),
+                         values=values.tolist())
+    return len(starts), int((ends - starts).sum())
+
+def proCapNetMergeSignal(opts, args):
+    sizes = loadChromSizes(args.chromSizes)
+    chroms = checkChroms(args.inBigWigs, sizes)
+    fileOps.ensureFileDir(args.outBigWig)
+    totalIn = totalOut = totalBases = 0
+    with fileOps.AtomicFileCreate(args.outBigWig) as tmpBw:
+        outBw = pyBigWig.open(tmpBw, "w")
+        outBw.addHeader([(c, sizes[c]) for c in chroms], maxZooms=10)
+        for chrom in chroms:
+            acc, inCnt = sumChrom(args.inBigWigs, chrom, sizes[chrom])
+            outCnt, bases = writeChrom(outBw, chrom, acc)
+            totalIn += inCnt
+            totalOut += outCnt
+            totalBases += bases
+        outBw.close()
+    print(f"{args.outBigWig}: {len(args.inBigWigs)} inputs, {totalIn} input intervals, "
+          f"{totalOut} merged intervals, {totalBases} bases covered")
+
+def main():
+    opts, args = parseArgs()
+    with cli.ErrorHandler(noStackExcepts=(OSError, cli.PycbioException)):
+        proCapNetMergeSignal(opts, args)
+
+main()

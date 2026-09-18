@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+"""Re-encode a genome-wide ProCapNet prediction bigWig into fixedStep sections.
+
+The published files store one bedGraph-style interval per base, which costs 12
+raw bytes per base where a fixedStep section costs 4.  The hg38 files also store
+a literal NaN at every unresolved (N) reference base, which makes autoScale and
+every summary statistic NaN.  This drops the NaN bases and keeps every other
+value bit-for-bit, since bigWig values are float32 either way.
+"""
+import argparse
+import numpy as np
+import pyBigWig
+from pycbio.sys import cli, fileOps
+
+CHUNK_SIZE = 10000000
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--chunkSize", type=int, default=CHUNK_SIZE,
+                        help="bases held in memory at a time")
+    parser.add_argument("chromSizes")
+    parser.add_argument("inBigWig")
+    parser.add_argument("outBigWig")
+    return cli.parseOptsArgsWithLogging(parser)
+
+def loadChromSizes(chromSizes):
+    sizes = {}
+    for line in fileOps.iterLines(chromSizes):
+        chrom, size = line.split("\t")[0:2]
+        sizes[chrom] = int(size)
+    return sizes
+
+def checkChroms(inBw, sizes):
+    "input chroms in chrom.sizes order, validating names and sizes"
+    for chrom, size in inBw.chroms().items():
+        if chrom not in sizes:
+            raise cli.PycbioException(f"chromosome {chrom} is not in the chrom.sizes file; "
+                                      "add it or filter it out upstream")
+        if sizes[chrom] != size:
+            raise cli.PycbioException(f"chromosome {chrom} is {size} bases, chrom.sizes says "
+                                      f"{sizes[chrom]}; wrong assembly?")
+    return [c for c in sizes if c in inBw.chroms()]
+
+def dataRuns(values):
+    "(start, end) of maximal runs of non-NaN values, as offsets into values"
+    hasData = ~np.isnan(values)
+    edges = np.diff(np.concatenate(([0], hasData.view(np.int8), [0])))
+    return np.flatnonzero(edges == 1), np.flatnonzero(edges == -1)
+
+def writeChunk(outBw, chrom, chunkStart, values):
+    starts, ends = dataRuns(values)
+    for start, end in zip(starts, ends):
+        outBw.addEntries(chrom, int(chunkStart + start), values=values[start:end],
+                         span=1, step=1)
+    return int((ends - starts).sum())
+
+def convertChrom(inBw, outBw, chrom, size, chunkSize):
+    kept = 0
+    for chunkStart in range(0, size, chunkSize):
+        chunkEnd = min(chunkStart + chunkSize, size)
+        values = inBw.values(chrom, chunkStart, chunkEnd, numpy=True)
+        kept += writeChunk(outBw, chrom, chunkStart, values)
+    return kept
+
+def proCapNetPredToFixedStep(opts, args):
+    sizes = loadChromSizes(args.chromSizes)
+    inBw = pyBigWig.open(args.inBigWig)
+    chroms = checkChroms(inBw, sizes)
+    fileOps.ensureFileDir(args.outBigWig)
+    total = kept = 0
+    with fileOps.AtomicFileCreate(args.outBigWig) as tmpBw:
+        outBw = pyBigWig.open(tmpBw, "w")
+        outBw.addHeader([(c, sizes[c]) for c in chroms], maxZooms=10)
+        for chrom in chroms:
+            total += sizes[chrom]
+            kept += convertChrom(inBw, outBw, chrom, sizes[chrom], opts.chunkSize)
+        outBw.close()
+    inBw.close()
+    print(f"{args.outBigWig}: {len(chroms)} chroms, {total} bases, {kept} with data, "
+          f"{total - kept} dropped as no-data or NaN")
+
+def main():
+    opts, args = parseArgs()
+    with cli.ErrorHandler(noStackExcepts=(OSError, cli.PycbioException)):
+        proCapNetPredToFixedStep(opts, args)
+
+main()

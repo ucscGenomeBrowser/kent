@@ -39,6 +39,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "errCatch.h"
+#include "geoMirror.h"
 #include "sessionData.h"
 #include "snapshotSession.h"
 #include "jsonParse.h"
@@ -72,6 +73,7 @@ char *excludeVars[] = {"Submit", "submit", hgsSessionDataDbSuffix, NULL};
 static boolean sessionNewPageActive();
 static void printSessionNewPageBanner(boolean onNewPage);
 void doMainPageNew(char *userName, char *message);
+static void sessionListToJson(char *userName, struct jsonWrite *jw);
 
 /* Gallery thumbnail helpers, defined further below with the rest of the gallery code.  The AJAX
  * endpoints above them have to keep a thumbnail in step with its session, so they need these. */
@@ -2306,6 +2308,24 @@ hashElFreeList(&list);
 return n;
 }
 
+static void writeMirrorJson(struct jsonWrite *jw, struct slPair *node)
+/* Write one gbNode (name=shortLabel, val=domain) into an open object as the label the table and
+ * the note show, e.g. "genome-euro", the shortLabel as the mouseover, e.g. "European Server",
+ * and the URL of that node's hgSession.  No hgsid on that URL: the cart is per node.  The URL
+ * asks for this same page there rather than the classic one, and carries the anchor that scrolls
+ * straight to the session table. */
+{
+char *domain = node->val;
+char *shortName = cloneString(domain);
+char *dot = strchr(shortName, '.');
+if (dot != NULL)
+    *dot = '\0';
+jsonWriteString(jw, "label", shortName);
+jsonWriteString(jw, "title", node->name);
+jsonWriteStringf(jw, "url", "https://%s/cgi-bin/hgSession?sessionNewPage=1#sessions", domain);
+freez(&shortName);
+}
+
 static void sessionDataToJson(char *userName, struct jsonWrite *jw)
 /* Fill jw (an open object) with { config:{...}, sessions:[...] } for the experimental page. */
 {
@@ -2348,6 +2368,31 @@ jsonWriteStringf(jw, "classicUrl", "hgSession?sessionNewPage=0&%s=%s",
 jsonWriteString(jw, "helpUrl", "../goldenPath/help/hgSessionHelp.html");
 jsonWriteString(jw, "galleryUrl", "../goldenPath/help/sessions.html");
 jsonWriteStringf(jw, "publicSessionsUrl", "../cgi-bin/hgPublicSessions?%s", cartSidUrlString(cart));
+/* The geo mirror nodes (hgcentral gbNode).  Each node keeps its own namedSessionDb, so the JS
+ * asks the other nodes for their session lists and merges them into the table, marking each row
+ * with the server it came from.  "mirrors" are the other nodes, "thisServer" is this one. */
+struct slPair *thisNode = geoMirrorThisNode();
+if (thisNode != NULL)
+    {
+    jsonWriteObjectStart(jw, "thisServer");
+    writeMirrorJson(jw, thisNode);
+    jsonWriteObjectEnd(jw);
+    slPairFreeValsAndList(&thisNode);
+    }
+struct slPair *mirrors = geoMirrorOtherNodes();
+if (mirrors != NULL)
+    {
+    jsonWriteListStart(jw, "mirrors");
+    struct slPair *mirror;
+    for (mirror = mirrors; mirror != NULL; mirror = mirror->next)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        writeMirrorJson(jw, mirror);
+        jsonWriteObjectEnd(jw);
+        }
+    jsonWriteListEnd(jw);
+    slPairFreeValsAndList(&mirrors);
+    }
 /* Reset-to-defaults link, same as showCartLinks(). */
 char returnAddress[512];
 safef(returnAddress, sizeof(returnAddress), "%s?%s", hgSessionName(), cartSidUrlString(cart));
@@ -2356,6 +2401,13 @@ jsonWriteStringf(jw, "resetUrl", "../cgi-bin/cartReset?%s&destination=%s",
 jsonWriteObjectEnd(jw);   // config
 perfTimerStep(hgSessionTiming, "page header + config");
 
+sessionListToJson(userName, jw);
+}
+
+static void sessionListToJson(char *userName, struct jsonWrite *jw)
+/* Write the "sessions" list for userName into jw (an open object): one object per saved session. */
+{
+boolean loggedIn = isNotEmpty(userName);
 jsonWriteListStart(jw, "sessions");
 if (loggedIn)
     {
@@ -2561,6 +2613,163 @@ jsonWriteFree(&jw);
 perfTimerFree(&hgSessionTiming);
 
 cartWebEnd();
+}
+
+/* ---- Cross-mirror session list ---- */
+
+#define mirrorReadTimeout 8     /* seconds to wait for a mirror node's answer before giving up */
+
+static int mirrorConnect(char *domain, char *cookieHeader)
+/* Send a session list request to one mirror node and return the socket to read the answer from,
+ * or -1.  Only sends - the answers are read afterwards, so that the nodes work on their queries
+ * at the same time instead of one after the other. */
+{
+char url[512];
+safef(url, sizeof(url), "https://%s/cgi-bin/hgSession?%s=1", domain, hgsDoSessionListJson);
+int sd = -1;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    sd = netHttpConnect(url, "GET", "HTTP/1.0", "hgSession", cookieHeader);
+    if (sd >= 0)
+        setReadWriteTimeouts(sd, mirrorReadTimeout);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    sd = -1;
+errCatchFree(&errCatch);
+return sd;
+}
+
+static struct jsonElement *mirrorRead(int sd, char *domain)
+/* Read one mirror node's answer and return its parsed "sessions" list, or NULL if the node did
+ * not send one.  A node running a release without the endpoint answers with an HTML error page,
+ * so the answer is parsed here and written back out by us rather than passed through. */
+{
+struct jsonElement *sessions = NULL;
+char url[512];
+safef(url, sizeof(url), "https://%s/cgi-bin/hgSession", domain);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int redirectSd = -1;
+    char *redirectUrl = NULL;
+    if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &redirectSd, &redirectUrl))
+        {
+        if (redirectSd >= 0)
+            {
+            close(sd);
+            sd = redirectSd;
+            }
+        struct dyString *dy = netSlurpFile(sd);
+        struct jsonElement *parsed = jsonParse(dy->string);   /* errAborts if it is not JSON */
+        if (parsed != NULL)
+            sessions = jsonFindNamedField(parsed, "", "sessions");
+        dyStringFree(&dy);
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    sessions = NULL;
+errCatchFree(&errCatch);
+close(sd);
+return sessions;
+}
+
+void doMirrorSessionsJson()
+/* AJAX for this server's own hgSession.js: ask every other mirror node for the sessions the
+ * logged-in user has saved there and hand them back as
+ *   {"mirrors": [{"label":.., "title":.., "url":.., "sessions":[..]}, ..]}.
+ * A node that does not answer, times out, or runs a release without the session list endpoint is
+ * reported with "error" instead of "sessions" and the page says so; it never holds up the table,
+ * which the browser has already drawn from this server's own sessions.
+ *
+ * Runs before the cart is created: it needs nothing from the cart, and the fetches take long
+ * enough that it should not be holding a cart open.  The user's login cookies are passed on to
+ * the other nodes, which share our cookie salt, so that they can recognize the same user. */
+{
+char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+char *cookieHeader = wikiLinkLoginCookieHeader();
+struct slPair *nodes = (isNotEmpty(userName) && cookieHeader != NULL) ?
+                       geoMirrorOtherNodes() : NULL;
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteListStart(jw, "mirrors");
+int nodeCount = slCount(nodes), i;
+if (nodeCount > 0)
+    {
+    int *sockets = NULL;
+    AllocArray(sockets, nodeCount);
+    struct slPair *node;
+    /* Send all of the requests before reading any of the answers, so that the nodes work on
+     * their queries at the same time and this takes as long as the slowest one, not as long as
+     * all of them together. */
+    for (i = 0, node = nodes; node != NULL; i++, node = node->next)
+        sockets[i] = mirrorConnect(node->val, cookieHeader);
+    for (i = 0, node = nodes; node != NULL; i++, node = node->next)
+        {
+        struct jsonElement *sessions = (sockets[i] >= 0) ? mirrorRead(sockets[i], node->val) : NULL;
+        jsonWriteObjectStart(jw, NULL);
+        writeMirrorJson(jw, node);
+        if (sessions != NULL)
+            jsonWriteJsonElement(jw, "sessions", sessions);
+        else
+            jsonWriteString(jw, "error", "no answer");
+        jsonWriteObjectEnd(jw);
+        }
+    freez(&sockets);
+    slPairFreeValsAndList(&nodes);
+    }
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+printf("Cache-Control: no-store\n");
+cgiPrintContentType("application/json");
+printf("%s\n", jw->dy->string);
+jsonWriteFree(&jw);
+freez(&cookieHeader);
+}
+
+static void sessionListCorsHeaders()
+/* Let one of our other mirror nodes read this response with the user's login cookie attached.
+ * Only an Origin that matches a gbNode domain gets the header, so no other page can ask the
+ * browser to hand it someone's session list.  The value printed is the one we built ourselves,
+ * never the raw request header. */
+{
+printf("Vary: Origin\n");
+char *origin = getenv("HTTP_ORIGIN");
+if (isEmpty(origin))
+    return;
+struct slPair *nodes = geoMirrorOtherNodes(), *node;
+for (node = nodes; node != NULL; node = node->next)
+    {
+    char allowed[512];
+    safef(allowed, sizeof(allowed), "https://%s", (char *)node->val);
+    if (sameString(origin, allowed))
+        {
+        printf("Access-Control-Allow-Origin: %s\n", allowed);
+        printf("Access-Control-Allow-Credentials: true\n");
+        break;
+        }
+    }
+slPairFreeValsAndList(&nodes);
+}
+
+void doSessionListJson()
+/* AJAX for hgSession.js running on another mirror node: return this server's saved sessions for
+ * the logged-in user, as {"sessions":[...]}.  Answered before the cart is created - a request
+ * from another node must not leave a cart behind here - so the user is identified from the login
+ * cookie alone, and an unauthenticated request gets an empty list rather than an error. */
+{
+char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+sessionListCorsHeaders();
+printf("Cache-Control: no-store\n");
+cgiPrintContentType("application/json");
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+sessionListToJson(userName, jw);
+jsonWriteObjectEnd(jw);
+printf("%s\n", jw->dy->string);
+jsonWriteFree(&jw);
 }
 
 /* ---- JSON action endpoints for the experimental page's inline table actions ---- */
@@ -2939,6 +3148,22 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
+/* The session list another mirror node asks for is answered before the cart exists, so that a
+ * request from a node does not create a cart - and a row in userDb and sessionDb - here. */
+if (cgiOptionalString(hgsDoSessionListJson) != NULL)
+    {
+    doSessionListJson();
+    cgiExitTime("hgSession", enteredMainTime);
+    return 0;
+    }
+/* Likewise the fan-out to the other nodes: it needs nothing from the cart, and it waits on
+ * other servers long enough that it should not be holding one open. */
+if (cgiOptionalString(hgsDoMirrorSessions) != NULL)
+    {
+    doMirrorSessionsJson();
+    cgiExitTime("hgSession", enteredMainTime);
+    return 0;
+    }
 hgSession();
 cgiExitTime("hgSession", enteredMainTime);
 return 0;

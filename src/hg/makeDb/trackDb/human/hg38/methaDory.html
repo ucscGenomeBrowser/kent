@@ -109,20 +109,17 @@ See Ferraro <em>et al.</em> for the full method.
 </p>
 
 <p>
-The two source files, a table of episignature probes and a spreadsheet of signature metadata, were
-provided directly by the MethaDory authors on 16 September 2026; the tool and its models are at
+The two source files, a table of episignature probes and a spreadsheet of signature metadata, came
+directly from the MethaDory authors on 16 September 2026; the tool and its models are at
 <a href="https://github.com/f-ferraro/MethaDory" target="_blank">github.com/f-ferraro/MethaDory</a>.
 The probe table gives Illumina probe IDs rather than coordinates, so positions were taken from the
-Illumina array manifests already loaded in the Genome Browser, preferring the
-<a href="hgTrackUi?g=snpArrayIllumina850k&amp;hgsid=${hgsid}">EPIC 850k</a> manifest and falling
-back to <a href="hgTrackUi?g=epicV2illuminaMethylation&amp;hgsid=${hgsid}">EPIC v2</a> and
-<a href="hgTrackUi?g=snpArrayIllumina450k&amp;hgsid=${hgsid}">450k</a>; 267,974 of the sites in
-this track come from the EPIC 850k manifest and 926 from EPIC v2. Where two manifests carry the
-same probe they agree on its position except for a single probe genome-wide, and disagree on the
-strand annotation for 1,558 of the probes used here; strand is not shown in this track since it is
-a property of the assay and not of the CpG site. Of the 847,863 probe-by-signature rows in the
-source table, 373 rows (293 distinct probes) were dropped because the probe appears in none of the
-three manifests, and the remaining 847,490 rows were merged into 268,900 CpG sites. The build
+<a href="hgTrackUi?g=snpArrayIllumina850k&amp;hgsid=${hgsid}">EPIC 850k</a>,
+<a href="hgTrackUi?g=epicV2illuminaMethylation&amp;hgsid=${hgsid}">EPIC v2</a> and
+<a href="hgTrackUi?g=snpArrayIllumina450k&amp;hgsid=${hgsid}">450k</a> manifests already loaded in
+the Genome Browser, in that order of preference. Of the 847,863 probe-by-signature records, 373
+(293 distinct probes) were dropped because the probe is in none of the three manifests; the rest
+were merged into 268,900 CpG sites. Strand is not shown, since it is a property of the assay rather
+than of the CpG site. The build
 steps are documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/episignatures.txt" target="_blank">makeDoc</a>
 and the scripts are in
@@ -143,7 +140,7 @@ that share sites.
 <tr><th>Study</th><th>PubMed</th><th>Episignatures</th><th>Disorders</th><th>Probes reported</th><th>Distinct probes</th></tr>
 <tr><td>AlJawahiri2022</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/35341651/" target="_blank">35341651</a></td><td>1</td><td>Coffin-Siris syndrome 9</td><td>224</td><td>224</td></tr>
 <tr><td>Anderson2026</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/41468891/" target="_blank">41468891</a></td><td>1</td><td>KDM2A syndrome</td><td>498</td><td>493</td></tr>
-<tr><td>ArefEshghi2018</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/30459321/" target="_blank">30459321</a></td><td>3</td><td>Coffin-Siris syndrome 1, Nicolaiders-Baraitser syndrome, Coffin-Siris Syndrome 3</td><td>637</td><td>597</td></tr>
+<tr><td>ArefEshghi2018</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/30459321/" target="_blank">30459321</a></td><td>3</td><td>Coffin-Siris syndrome 1, Nicolaides-Baraitser syndrome, Coffin-Siris Syndrome 3</td><td>637</td><td>597</td></tr>
 <tr><td>ArefEshghi2020</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/32109418/" target="_blank">32109418</a>, <a href="https://pubmed.ncbi.nlm.nih.gov/35904121/" target="_blank">35904121</a></td><td>34</td><td>Helsmoortel-Van der Aa syndrome (central variants), Helsmoortel-Van der Aa syndrome (terminal variants), Bafopathies, Alpha-thalassemia X-linked intellectual disability, BRWD3-related genetic disorder (MRX93), ICF2; ICF3; ICF4, CHD2-related neurodevelopmental disorder, CHARGE syndrome, CHD8-related neurodevelopmental disorder with overgrowth, Menke-Hennekam syndrome, DNMT1-related disorder, Tatton-Brown-Rahman syndrome, ICF syndrome, Kleefstra syndrome, HIST1H1E syndrome, Koolen-de Vries syndrome, Genitopatellar syndrome, Say-Barber-Biesecker-Young-Simpson syndrome, Claes-Jensen syndrome, Wiedemann-Steiner syndrome, Kabuki syndrome, KMT5B syndrome, Cornelia de Lange syndrome, Sotos syndrome, NSD1 duplication, Börjeson-Forssman-Lehmann syndrome, SETD1B-related neurodevelopmental disorder, Smith-Magenis syndrome, Floating harbour syndrome, Intellectual developmental disorder; X-linked syndromic; Nascimento type, Intellectual developmental disorder; X-linked 97, Down syndrome, Phelan-McDermid syndrome, Dup7</td><td>3,923</td><td>3,643</td></tr>
 <tr><td>Awamleh2022</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/35361921/" target="_blank">35361921</a></td><td>1</td><td>Bohring-Opitz Syndrome</td><td>763</td><td>763</td></tr>
 <tr><td>Awamleh2023</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/36440975/" target="_blank">36440975</a></td><td>1</td><td>KBG syndrome</td><td>95</td><td>95</td></tr>
@@ -155,7 +152,7 @@ that share sites.
 <tr><td>Butcher2017</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/28475860/" target="_blank">28475860</a></td><td>2</td><td>CHARGE syndrome, Kabuki syndrome</td><td>384</td><td>370</td></tr>
 <tr><td>Cappuccio2020</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/32694869/" target="_blank">32694869</a></td><td>1</td><td>intellectual disability and blepharophimosis</td><td>163</td><td>163</td></tr>
 <tr><td>Caraffi2023</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/38351292/" target="_blank">38351292</a></td><td>1</td><td>Mowat-Wilson syndrome</td><td>296</td><td>296</td></tr>
-<tr><td>ChaterDiehl2019</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/31288860/" target="_blank">31288860</a></td><td>1</td><td>Nicolaiders-Baraitser syndrome</td><td>429</td><td>429</td></tr>
+<tr><td>ChaterDiehl2019</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/31288860/" target="_blank">31288860</a></td><td>1</td><td>Nicolaides-Baraitser syndrome</td><td>429</td><td>429</td></tr>
 <tr><td>Choufani2015</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/26690673/" target="_blank">26690673</a></td><td>1</td><td>Sotos syndrome</td><td>7,033</td><td>7,033</td></tr>
 <tr><td>Choufani2020</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/32243864/" target="_blank">32243864</a></td><td>1</td><td>Weaver syndrome</td><td>229</td><td>229</td></tr>
 <tr><td>Choufani2022</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/36130591/" target="_blank">36130591</a></td><td>1</td><td>Au-Kline syndrome</td><td>429</td><td>429</td></tr>
@@ -214,7 +211,7 @@ that share sites.
 <tr><td>Verberne2022</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/35887345/" target="_blank">35887345</a></td><td>1</td><td>JARID2-related syndrome</td><td>150</td><td>150</td></tr>
 <tr><td>Vos2024</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/38787418/" target="_blank">38787418</a></td><td>1</td><td>Chung-Jansen syndrome</td><td>212</td><td>212</td></tr>
 <tr><td>Wang2026</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/42134323/" target="_blank">42134323</a></td><td>1</td><td>Kabuki syndrome</td><td>589</td><td>589</td></tr>
-<tr><td>Xiao2024</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/38770750/" target="_blank">38770750</a></td><td>1</td><td>PURA-related disoder</td><td>480</td><td>480</td></tr>
+<tr><td>Xiao2024</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/38770750/" target="_blank">38770750</a></td><td>1</td><td>PURA-related disorder</td><td>480</td><td>480</td></tr>
 </table>
 <!-- END generated -->
 
@@ -307,7 +304,7 @@ and duplication of <em>NSD1</em>. Entries beginning with "chr" are recurrent cop
 <tr><td>PHIP1</td><td>Chung-Jansen syndrome</td><td>1</td><td>Vos2024</td><td>212</td><td>212</td></tr>
 <tr><td>PQBP1</td><td>Renpenning syndrome</td><td>2</td><td>Haghshenas2023, Levy2022</td><td>5,347</td><td>5,288</td></tr>
 <tr><td>PTBP1</td><td>Skeletal Dysplasia; Tooth Anomalies; and Developmental Delay</td><td>1</td><td>Masson2025</td><td>2,831</td><td>2,831</td></tr>
-<tr><td>PURA</td><td>PURA-related disoder</td><td>1</td><td>Xiao2024</td><td>480</td><td>480</td></tr>
+<tr><td>PURA</td><td>PURA-related disorder</td><td>1</td><td>Xiao2024</td><td>480</td><td>480</td></tr>
 <tr><td>RNU2-2</td><td>RNU2-2</td><td>1</td><td>Leitao2025</td><td>201</td><td>201</td></tr>
 <tr><td>RNU2-2.biallellic</td><td>RNU2-2.biallelic</td><td>1</td><td>Leitao2025</td><td>184</td><td>184</td></tr>
 <tr><td>RNU2-2.n35</td><td>RNU2-2.n35</td><td>1</td><td>Leitao2025</td><td>185</td><td>185</td></tr>
@@ -317,7 +314,7 @@ and duplication of <em>NSD1</em>. Entries beginning with "chr" are recurrent cop
 <tr><td>SETD2c1740</td><td>SETD2c1740</td><td>1</td><td>Lee2023</td><td>217</td><td>204</td></tr>
 <tr><td>SETD5</td><td>SETD5-related disorder</td><td>1</td><td>Levy2022</td><td>2,795</td><td>2,795</td></tr>
 <tr><td>SIN3A</td><td>Witteveen-Kolk syndrome</td><td>1</td><td>CoenenvanderSpek2023</td><td>120</td><td>120</td></tr>
-<tr><td>SMARCA2</td><td>Nicolaiders-Baraitser syndrome</td><td>2</td><td>ArefEshghi2018, ChaterDiehl2019</td><td>785</td><td>686</td></tr>
+<tr><td>SMARCA2</td><td>Nicolaides-Baraitser syndrome</td><td>2</td><td>ArefEshghi2018, ChaterDiehl2019</td><td>785</td><td>686</td></tr>
 <tr><td>SMARCA2.BISS</td><td>intellectual disability and blepharophimosis</td><td>2</td><td>Cappuccio2020, Levy2022</td><td>10,349</td><td>10,222</td></tr>
 <tr><td>SMARCA2bis-ADNPbnl</td><td>intellectual disability and blepharophimosis</td><td>1</td><td>Sarli2024</td><td>238</td><td>238</td></tr>
 <tr><td>SMARCA4c2650</td><td>SMARCA4c2650</td><td>1</td><td>Levy2022</td><td>464</td><td>464</td></tr>

@@ -1,6 +1,6 @@
-# Docker QA browser instances on hgwdev (refs #37655)
+# Docker QA browser instances on hgwdev (refs #37655, #38377)
 
-This file is the maintainer's handoff for the three-Docker-browsers-on-hgwdev
+This file is the maintainer's handoff for the Docker-browsers-on-hgwdev
 project. The user-facing doc for QA lives at
 `~build/dockerStuff/qa-docker-doc.wiki` (mirrored at
 https://hgwdev.gi.ucsc.edu/~braney/qa-docker-doc.txt). The full design doc is
@@ -8,31 +8,38 @@ at https://hgwdev.gi.ucsc.edu/~braney/three-docker-plan.html.
 
 ## What this is
 
-Three side-by-side Docker browser instances run on hgwdev so anyone can
-reproduce a user-reported bug against the exact code version that user is on,
-without touching production hgwdev. The three:
+Side-by-side Docker browser instances run on hgwdev so anyone can reproduce a
+user-reported bug against the exact code version that user is on, without
+touching production hgwdev. The instances:
 
 - `kent-tip`  -> image `kent:tip`, port 127.0.0.1:8081, current master + alpha CGIs, rebuilt nightly
 - `kent-beta` -> image `kent:beta` (amd64), port 127.0.0.1:8082, current beta CGIs, exists only between `autoBuild.sh do_final` and the next `do_wrapup`
 - `kent-beta-arm64` -> image `kent:beta-arm64`, port 127.0.0.1:8084, the arm64 beta compiled from source in-image (runs emulated on this amd64 host via QEMU), exists only between `do_final` and the next `do_wrapup`. Lets QA smoke-test the arm64 release artifact before it is pushed at `do_wrapup`. NOT overlaid (amd64 cgi-bin-beta binaries can't run under arm64), so it is genuine beta code baked at build time.
 - `kent-rel`  -> image `genomebrowser/server:latest`, port 127.0.0.1:8083, the released image, refreshed at `do_wrapup`
+- `kent-vNNN` -> image `genomebrowser/server:vNNN`, port 127.0.0.1:8NNN, a past release, kept so a bug can be reproduced against a release a user is still on (refs #38377). The port encodes the release: v503 -> 8503. Not overlaid, for the same reason `rel` is not: it has to be the code that shipped. Started by hand with `run-instance.sh vNNN`, not by the build, and there is no rule yet for how many to keep.
 
 The lifecycle scripts in this directory implement the build/start/refresh/remove
 cycle: `buildTipImage.sh`, `run-instance.sh`, `refresh-instance.sh`,
 `remove-instance.sh`, `overlay-cgi.sh`, `smoke-instance.sh`, `start-all.sh`,
 `stop-all.sh`, the shell-in helpers `kent-tip` / `kent-beta` /
 `kent-beta-arm64` / `kent-rel`, and the off-host `tunnel-tip.sh` /
-`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh`. `autoBuild.sh` was
-modified to invoke the lifecycle scripts at `do_final` (build kent:beta +
+`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh`. Each lifecycle
+script also takes a release name (`run-instance.sh v503`), and `start-all.sh` /
+`stop-all.sh` pick up every `kent-vNNN` container that exists rather than a
+list. Off-host access to a release instance is `tunnel-release.sh vNNN`, one
+script for all of them, because which releases we keep changes. `autoBuild.sh`
+was modified to invoke the lifecycle scripts at `do_final` (build kent:beta +
 kent:beta-arm64, refresh + smoke-test both) and `do_wrapup` (refresh kent-rel +
 tear down kent-beta and kent-beta-arm64).
 
-`smoke-instance.sh [tip|beta|beta-arm64|rel ...] [--version NN]` is a quick
+`smoke-instance.sh [tip|beta|beta-arm64|rel|vNNN ...] [--version NN]` is a quick
 post-start health check: container running, hgGateway, an hg38 + hg19 hgTracks
 render (a real drawn PNG, not just HTTP 200, so it exercises Apache + the CGI +
 MariaDB + trackDb together), hgBlat, hgTables, and the CGI version. With no
-instance argument it tests both beta instances. `do_final` runs it after each
-beta instance starts; a smoke failure is NON-FATAL (the build continues) but is
+instance argument it tests both beta instances. A release instance is checked
+against the version in its own name, so `smoke-instance.sh v503` proves the
+container really is v503. `do_final` runs it after each beta instance starts;
+a smoke failure is NON-FATAL (the build continues) but is
 made obvious -- a loud banner, a marker file that survives the checkpoint/resume,
 and a warning re-surfaced in the end-of-phase summary and the completion email.
 
@@ -89,7 +96,8 @@ What's not yet exercised live:
 ## TODO
 
 1. **Apache reverse-proxy vhosts** for
-   `hgwdev-dock-{tip,beta,rel}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083}`.
+   `hgwdev-dock-{tip,beta,rel}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083}`,
+   and something equivalent for the release instances on 8NNN.
    This touches production hgwdev Apache and DNS, so likely a sysadmin ticket.
    Until then, the `tunnel-*.sh` scripts cover off-host access; on-host
    testing (including Claude/Playwright running on hgwdev) hits 127.0.0.1
