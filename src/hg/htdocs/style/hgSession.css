@@ -13,7 +13,7 @@
 
 /* Save-current-view card - the primary action.  Neutral light-grey panel. */
 #sessionApp .sessSaveCard { border:0; background:#f6f8fa; padding:14px 16px;
-    display:flex; flex-direction:column; gap:12px; margin:0 0 20px; }
+    display:flex; flex-direction:column; gap:12px; margin:0 0 12px; }
 #sessionApp .sessSaveHead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
 /* Title and the current-view summary share one font size (title is just bold). */
 #sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:var(--accent); }
