@@ -41,6 +41,7 @@
 # by hovering -- a last exon can be a few pixels wide, and `expect: {tip: ...}` is a substring
 # test that cannot say a string is ABSENT.
 proof:
+  - "release-ab 2026-09-18 -- fails on the released v499 through v503 docker images and passes on genome-test. The failure names the exon tooltip the fix adds. e2d86e5b1db is on master only, so failing on every release is correct"
   - "assertion-only 2026-09-17 -- and it cannot become anything stronger: the fix changes no byte of any page, by design.  See the header."
   - "assertion-only 2026-09-17 -- measured, not assumed: on ticket sandbox 38252, with e2d86e5b1db reverted, this script still PASSES.  That is the expected result and it is what the header claims; a red there would have meant the fix was visible after all"
   - "assertion-only 2026-09-17 -- and again on v503_branch in ticket sandbox 38316, the release that predates the fix: still green, which is the whole point of the header"
