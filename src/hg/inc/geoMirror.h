@@ -21,6 +21,15 @@ char *geoMirrorCountry6(struct sqlConnection *centralConn, char *ipStr);
 int geoMirrorDefaultNode(struct sqlConnection *centralConn, char *ipStr);
 // return default node for given IP
 
+struct slPair *geoMirrorThisNode();
+/* Return this node (browser.node) as a single pair of name=shortLabel, val=domain, or NULL when
+ * geo mirroring is off or gbNode has no row for it.  slPairFreeValsAndList when done. */
+
+struct slPair *geoMirrorOtherNodes();
+/* Return the other geo mirror nodes, as pairs of name=shortLabel, val=domain, ordered by node.
+ * The node this CGI is running on (browser.node) is left out.  Returns NULL when geo mirroring
+ * is off or this is the only node.  slPairFreeValsAndList when done. */
+
 char *geoMirrorMenu();
 /* Create customized geoMirror menu string for substitution of  into 
  * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc 

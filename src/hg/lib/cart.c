@@ -357,18 +357,45 @@ static void loadHash(struct hash *hash, char *contents)
 /* Load a hash from a cart-like string. */
 {
 char *namePt, *dataPt, *nextNamePt;
+boolean skipMalformed = cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE);
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
     {
-    dataPt = strchr(namePt, '=');
-    if (dataPt == NULL)
-	errAbort("Mangled input string %s", namePt);
-    *dataPt++ = 0;
-    nextNamePt = strchr(dataPt, '&');
-    if (nextNamePt == NULL)
-	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
-    if (nextNamePt != NULL)
-         *nextNamePt++ = 0;
+    if (skipMalformed)
+	{
+	/* Step over the separators of an empty pair, then confine the search for
+	 * the '=' to this pair.  Without both, a setting with a name and no value
+	 * renames the setting after it, and the same pair at the end of the string
+	 * aborts the CGI.  This string is a saved session or a cart row rather than
+	 * a request, so the reader has no way to clear it.  refs #38340 */
+	namePt += strspn(namePt, "&;");
+	if (namePt[0] == 0)
+	    break;
+	nextNamePt = strchr(namePt, '&');
+	if (nextNamePt == NULL)
+	    nextNamePt = strchr(namePt, ';');	/* Accomodate DAS. */
+	if (nextNamePt != NULL)
+	    *nextNamePt++ = 0;
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    {
+	    namePt = nextNamePt;
+	    continue;
+	    }
+	*dataPt++ = 0;
+	}
+    else
+	{
+	dataPt = strchr(namePt, '=');
+	if (dataPt == NULL)
+	    errAbort("Mangled input string %s", namePt);
+	*dataPt++ = 0;
+	nextNamePt = strchr(dataPt, '&');
+	if (nextNamePt == NULL)
+	    nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
+	if (nextNamePt != NULL)
+	     *nextNamePt++ = 0;
+	}
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     if (cartValueIsAcceptable(namePt, dataPt))
         hashAdd(hash, namePt, cloneString(dataPt));
@@ -938,6 +965,12 @@ if (row != NULL)
         if (isNotEmpty(actionVar))
             cartRemove(cart, actionVar);
         hDisconnectCentral(&conn2);
+
+        /* A full (non-merge) load just threw away whatever the user had in the browser before.
+         * Leave a marker so that the next hgTracks page can say what was opened and that the
+         * old view is gone.  A merge keeps the current view, so it needs no note. */
+        if (!merge)
+            cartSetString(cart, hgsSessionJustLoaded, "on");
 
         /* When loading another user's session, strip accepted-share cart vars
          * so we don't carry shares from the session owner into the current user's

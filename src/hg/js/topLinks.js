@@ -142,7 +142,7 @@ var topLinks = (function() {
         if (changeEmailUrl)
             addLink(ul, changeEmailUrl, "Change email");
         if (changeRecovEmailUrl)
-            addLink(ul, changeRecovEmailUrl, "Recovery email");
+            addLink(ul, changeRecovEmailUrl, "Change recovery email");
         addLink(ul, logoutUrl, "Sign out");
         body.appendChild(ul);
         showModal("Account", body);

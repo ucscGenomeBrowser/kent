@@ -1,0 +1,73 @@
+# #38257 -- clicking "My Track Hubs" in the Account popup left the popup on screen, and did
+# not change the tab either.  Only on hgHubConnect, and only there because that is the one
+# link in the popup whose target can be the page you are already on.
+#
+# Nothing in the popup ever closed it.  It went away because every link in it loads another
+# page, and loading a page takes the whole DOM with it.  On hgHubConnect, hgHubConnect.js
+# watches for its own links and calls preventDefault() so it can switch tab instead of
+# reloading, so no navigation happened and the popup stayed.  The popup's overlay also called
+# ev.stopPropagation() on every click, so hgHubConnect.js never saw the click and the tab did
+# not switch either -- two separate faults with one symptom.
+#
+# 7d0ceafa7c0, hg/js/topLinks.js.  The overlay lets a click on a link through
+# (`if (!ev.target.closest("a")) ev.stopPropagation()`), and every link in the popup closes it
+# itself on the next tick -- deferred, because detaching the link while its click is still
+# being dispatched would rob hgHubConnect.js of the tab switch.
+#
+# Both halves are asserted, because either one alone would have looked fixed to a reporter
+# who only checked the thing they filed: the popup is GONE, and the Connected Hubs tab is the
+# active one.  The popup is built by JavaScript with inline styles and no id or class of its
+# own, so the check for it is the one string it puts on the page that hgHubConnect does not:
+# "My Track Hubs" appears nowhere in that page's own markup.
+#
+# THIS IS THE FIRST SCRIPT IN regress/ THAT LOGS IN.  The Account popup only exists for a
+# signed-in reader, so there is no way to reach it otherwise.  `login:` takes no credentials
+# and reads ~/.docentLogin, one section per hgcentral database; genome-test reads
+# hgcentraltest, and `make preflight` reports the account it resolved.  Anyone without that
+# file fails this one script at the login step, which is why it is worth saying here rather
+# than leaving the next reader to work it out from a red run.
+# NOT YET WATCHED TO FAIL, and the reason is the login rather than the check.  Run against
+# ticket sandbox 38252 (master with this batch's fixes reverted), the script dies at its
+# first step: `login` fails with "Execution context was destroyed, most likely because of a
+# navigation", reproducibly, twice.  That is the hgLogin redirect race the docent README
+# calls a standing open item -- hgLogin answers a good password with returnToURL(150), a
+# page that navigates itself -- and it does not happen against genome-test.  So this is the
+# one script in the batch whose A/B is blocked by the harness, not by the tree.  The same
+# thing happens against the v503 park (38316), so it is the park and not the build.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38257 and 7d0ceafa7c0 after the fix reached genome-test"
+
+target: genome-test
+db: hg38
+# Wide enough to be outside nice_menu.css's @media (max-width: 1100px) rule, which folds the
+# top-right links into the hamburger and makes #loginLink invisible.  Docent's default
+# viewport is 1000px, which is inside it.
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgHubConnect?db=hg38"
+  - expect:
+      text: "Connected Hubs"
+      has: '#loginLink[data-username]'
+      noText: "My Track Hubs"
+
+  # Open the Account popup.  #loginLink has href='#' and a handler; the popup is built here.
+  - click: '#loginLink'
+  - expect:
+      text: "Signed in as"
+      has: 'a:has-text("My Track Hubs")'
+
+  # The link that used to do neither of the two things it should.
+  - click: 'a:has-text("My Track Hubs")'
+  # The popup closes on the next tick, after the click has been fully dispatched, so wait
+  # for the half that settles last rather than sleeping.
+  - wait: 'li.ui-tabs-active a[href="#unlistedHubs"]'
+  - expect:
+      # The tab really did switch: hgHubConnect.js saw the click.
+      has: 'li.ui-tabs-active a[href="#unlistedHubs"]'
+      # ...and the popup is off the page.  Both strings it printed are gone.
+      noText: ["Signed in as", "My Track Hubs"]
+      # Still on hgHubConnect: the click was answered in place, not by a reload.
+      url: hgHubConnect

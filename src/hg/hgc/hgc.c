@@ -3961,36 +3961,38 @@ return chain;
 void linkToOtherBrowserHub(char *otherDb, char *chrom, int start, int end,  char *hubUrl)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"%s?genome=%s&position=%s%%3A%d-%d&hubUrl=%s\">",
-       hgTracksName(), otherDb, chrom, start+1, end, hubUrl);
+printf("<A TARGET=\"_blank\" HREF=\"%s?genome=", hgTracksName());
+htmlPrintf("%s&position=%s%%3A%d-%d", otherDb, chrom, start+1, end);
+printf("&hubUrl=%s\">", hubUrl);
 }
 
 void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&%s&position=%s%%3A%d-%d\">",
-       hgTracksName(), otherDb, extra, chrom, start+1, end);
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=", hgTracksName());
+htmlPrintf("%s&%s&position=%s%%3A%d-%d\">", otherDb, extra, chrom, start+1, end);
 }
 
 void linkToOtherBrowserSearch(char *otherDb, char *tag)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&ct=&position=%s\">",
-       hgTracksName(), otherDb, tag);
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=", hgTracksName());
+htmlPrintf("%s&ct=&position=%s\">", otherDb, tag);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
-       hgTracksName(), otherDb, chrom, start+1, end);
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=", hgTracksName());
+htmlPrintf("%s&ct=&position=%s%%3A%d-%d\">", otherDb, chrom, start+1, end);
 }
 
 void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, char *title)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
-       title, hgTracksName(), otherDb, chrom, start+1, end);
+htmlPrintf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"", title);
+printf("%s?db=", hgTracksName());
+htmlPrintf("%s&ct=&position=%s%%3A%d-%d\">", otherDb, chrom, start+1, end);
 }
 
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg, char *hubUrl)
@@ -4007,7 +4009,7 @@ if (subChain != NULL && otherOrg != NULL)
         linkToOtherBrowserHub(otherDb, subChain->qName, qs-1, qe, hubUrl);
     else
         linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
-    printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", trackHubSkipHubName(otherOrg));
+    htmlPrintf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", trackHubSkipHubName(otherOrg));
     }
 chainFree(&toFree);
 }
@@ -4050,17 +4052,23 @@ safef(headerText, sizeof headerText, "reference: %s, query: %s\n", trackHubSkipH
 genericHeader(parentTdb, headerText);
 
 if (hubUrl != NULL)
-    printf("<A HREF=\"hgTracks?hubUrl=%s&genome=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", hubUrl, otherDb, aliasQName,  qs, qe,   aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+    {
+    printf("<A HREF=\"hgTracks?hubUrl=%s&genome=", hubUrl);
+    htmlPrintf("%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName,  qs, qe,   aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+    }
 else if (otherIsActive)
-    printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, aliasQName, qs, qe, trackHubSkipHubName(otherDb));
+    htmlPrintf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=_BLANK>%s:%d-%d</A> link to block in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, qs, qe, aliasQName, qs, qe, trackHubSkipHubName(otherDb));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
 if (hubUrl != NULL)
-   printf("<A HREF=\"hgTracks?hubUrl=%s&genome=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", hubUrl,otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+   {
+   printf("<A HREF=\"hgTracks?hubUrl=%s&genome=", hubUrl);
+   htmlPrintf("%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+   }
 else if (otherIsActive)
-    printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
+    htmlPrintf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d\" TARGET=\"_blank\">%s:%d-%d</A> link to same window size in query assembly: <B>%s</B></A><BR>\n", otherDb, aliasQName, newQs, newQe,aliasQName, newQs, newQe, trackHubSkipHubName(otherDb) );
 printTrackHtml(tdb);
 } 
 
@@ -4157,35 +4165,41 @@ else if (otherIsActive && subChain != chain)
     }
 chainFree(&toFree);
 
-printf("<B>%s position:</B> <A HREF=\"%s?%s&db=%s&position=%s:%d-%d\">%s:%d-%d</A>"
-       "  size: %d <BR>\n",
-       trackHubSkipHubName(thisOrg), hgTracksName(), cartSidUrlString(cart), database,
-       chain->tName, chain->tStart+1, chain->tEnd, chain->tName, chain->tStart+1, chain->tEnd,
-       chain->tEnd-chain->tStart);
+htmlPrintf("<B>%s position:</B> ", trackHubSkipHubName(thisOrg));
+printf("<A HREF=\"%s?%s&db=", hgTracksName(), cartSidUrlString(cart));
+htmlPrintf("%s&position=%s:%d-%d\">%s:%d-%d</A>  size: %d <BR>\n",
+           database, chain->tName, chain->tStart+1, chain->tEnd,
+           chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
 if (sameWord(otherDb, "seq"))
     {
-    printf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
+    htmlPrintf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
 	otherOrg, chain->qName, qs, qe, chain->qEnd - chain->qStart);
     }
 else
     {
     /* prints link to other db browser only if db exists and is active */
     /* else just print position with no link for the other db */
-    printf("<B>%s position: </B>", otherOrg);
+    htmlPrintf("<B>%s position: </B>", otherOrg);
     if (otherIsActive)
-        printf(" <A target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">",
-               hgTracksName(), otherDb, chain->qName, qs, qe);
+        {
+        printf(" <A target=\"_blank\" href=\"%s?db=", hgTracksName());
+        htmlPrintf("%s&position=%s%%3A%d-%d\">", otherDb, chain->qName, qs, qe);
+        }
     else if (hubUrl != NULL)
-        printf(" <A target=\"_blank\" href=\"%s?genome=%s&hubUrl=%s&position=%s%%3A%d-%d\">",
-               hgTracksName(), otherDb, hubUrl, chain->qName, qs, qe);
-    printf("%s:%d-%d", chain->qName, qs, qe);
+        {
+        printf(" <A target=\"_blank\" href=\"%s?genome=", hgTracksName());
+        htmlPrintf("%s", otherDb);
+        printf("&hubUrl=%s&position=", hubUrl);
+        htmlPrintf("%s%%3A%d-%d\">", chain->qName, qs, qe);
+        }
+    htmlPrintf("%s:%d-%d", chain->qName, qs, qe);
     if (otherIsActive || hubUrl)
         printf("</A>");
     printf(" size: %d<BR>\n", chain->qEnd - chain->qStart);
     }
-printf("<B>Chain ID:</B> %s<BR>\n", item);
+htmlPrintf("<B>Chain ID:</B> %s<BR>\n", item);
 printf("<B>Score:</B> %1.0f\n", chain->score);
 
 if (nullSubset)
@@ -4239,10 +4253,10 @@ if (lifted)
 if (quickLiftIsLifted(tdb) && !quickLiftIsOwnChainTrack(tdb))
     // A lifted chain is only worked out over the window being viewed, so the whole chain's
     // extent is not knowable here and the usual sentence would be wrong.
-    printf("<BR>This chain comes from %s and is mapped onto %s as the browser draws it, so "
-           "the fields above describe the part of it around the window rather than the "
-           "whole chain.<BR>\n",
-           trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
+    htmlPrintf("<BR>This chain comes from %s and is mapped onto %s as the browser draws it, so "
+               "the fields above describe the part of it around the window rather than the "
+               "whole chain.<BR>\n",
+               trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
 else
     printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
 printf("<BR>\n");
@@ -4337,7 +4351,7 @@ void printLabeledNumber(char *org, char *label, long long number)
 char *space = " ";
 if (org == NULL)
     org = space = "";
-printf("<B>%s%s%s:</B> ", org, space, label);
+htmlPrintf("<B>%s%s%s:</B> ", org, space, label);
 printLongWithCommas(stdout, number);
 printf("<BR>\n");
 }
@@ -4348,7 +4362,7 @@ void printLabeledPercent(char *org, char *label, long p, long q)
 char *space = " ";
 if (org == NULL)
     org = space = "";
-printf("<B>%s%s%s:</B> ", org, space, label);
+htmlPrintf("<B>%s%s%s:</B> ", org, space, label);
 printLongWithCommas(stdout, p);
 if (q != 0)
     printf(" (%3.1f%%)", 100.0 * p / q);
@@ -4494,6 +4508,7 @@ struct trackDb *chainTdb = NULL;
  * loaded, so the numbers below describe the visible part and not the whole item. */
 boolean clipped = FALSE;
 
+char *namedChainTrack = chainTrack;    /* as the type line spells it, for the message below */
 if (isBig && !isLifted)
     {
     chainTrack = netChainTrackName(tdb, chainTrack);
@@ -4579,20 +4594,32 @@ if ((net->chainId != 0) && (!isBig || (chainTdb != NULL)))
 	}
     htmlHorizontalLine();
     }
-else if ((net->chainId != 0) && isLifted)
+else if (net->chainId != 0)
     {
-    char *sourceDb = trackDbSetting(tdb, "quickLiftDb");
-    printf("<BR>This net was lifted from %s, so its chains are not on this assembly "
-           "and the alignment cannot be shown here.<BR>\n",
-           isEmpty(sourceDb) ? "another assembly" : sourceDb);
+    /* Only an isBig track with no chain track to follow gets here. */
+    if (isLifted)
+        {
+        char *sourceDb = trackDbSetting(tdb, "quickLiftDb");
+        htmlPrintf("<BR>This net was lifted from %s, so its chains are not on this assembly "
+                   "and the alignment cannot be shown here.<BR>\n",
+                   isEmpty(sourceDb) ? "another assembly" : sourceDb);
+        }
+    else
+        {
+        /* A hub whose type line names a chain track this assembly does not have.  Say so
+         * rather than dropping the whole section without a word. */
+        htmlPrintf("<BR>This track's type line names the chain track %s, which is not on "
+                   "this assembly, so the alignment cannot be shown here.<BR>\n",
+                   emptyForNull(namedChainTrack));
+        }
     htmlHorizontalLine();
     }
-printf("<B>Type:</B> %s<BR>\n", net->type);
+htmlPrintf("<B>Type:</B> %s<BR>\n", net->type);
 printf("<B>Level:</B> %d<BR>\n", (net->level+1)/2);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n",
-       org, net->tName, net->tStart+1, net->tEnd);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n",
-       otherOrg, net->qName, net->qStart+1, net->qEnd);
+htmlPrintf("<B>%s position:</B> %s:%d-%d<BR>\n",
+           org, net->tName, net->tStart+1, net->tEnd);
+htmlPrintf("<B>%s position:</B> %s:%d-%d<BR>\n",
+           otherOrg, net->qName, net->qStart+1, net->qEnd);
 printf("<B>Strand:</B> %c<BR>\n", net->strand[0]);
 printLabeledNumber(NULL, "Score", net->score);
 if (net->chainId)
@@ -5193,15 +5220,15 @@ int seqEnd =   cartInt(cart, "r");
 char *chromName = cartString(cart, "c");
 safef(position, 128, "%s:%d-%d", chromName, seqStart, seqEnd);
 ourPos = cloneString(addCommasToPos(database, position));
-printf("<B>%s position:</B> %s<BR>", trackHubSkipHubName(database), ourPos);
+htmlPrintf("<B>%s position:</B> %s<BR>", trackHubSkipHubName(database), ourPos);
 
 int qs,qe;
 qChainRangePlusStrand(subChain, &qs, &qe);
 safef(position, 128, "%s:%d-%d", subChain->qName, qs-1, qe);
 otherPos = cloneString(addCommasToPos(otherDb, position));
-printf("<B>%s position: </B>", trackHubSkipHubName(otherDb));
+htmlPrintf("<B>%s position: </B>", trackHubSkipHubName(otherDb));
 linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
-printf("%s</A><BR><BR>",  otherPos);
+htmlPrintf("%s</A><BR><BR>",  otherPos);
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 
 if (otherTbf != NULL || 
@@ -5258,7 +5285,7 @@ if (deletions)
     {
     printf("<BR><B>Deletions in Window:</B><BR>");
     printf("<TABLE border=\"1\"> <TR>\n");
-    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Bases</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    htmlPrintf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Bases</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
     for(hr = regions; hr; hr = hr->next)
         {
         if (hr->type != QUICKTYPE_DEL)
@@ -5270,7 +5297,9 @@ if (deletions)
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
-        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   hilite, ourPos, otherPos, hr->otherBaseCount, hr->otherBases);
+        printf("<TR%s>", hilite);
+        htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
+        printf("<TD>%.*s</TD><TD>", hr->otherBaseCount, hr->otherBases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5282,7 +5311,7 @@ if (insertions)
     {
     printf("<BR><B>Insertions in Window:</B><BR>");
     printf("<TABLE border=\"1\"> <TR>\n");
-    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Bases</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    htmlPrintf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Bases</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
     for(hr = regions; hr; hr = hr->next)
         {
         if (hr->type != QUICKTYPE_INSERT)
@@ -5294,7 +5323,9 @@ if (insertions)
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
-        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s</TD><TD>",   hilite, ourPos, otherPos, hr->baseCount, hr->bases);
+        printf("<TR%s>", hilite);
+        htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
+        printf("<TD>%.*s</TD><TD>", hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5306,7 +5337,7 @@ if (doubles)
     {
     printf("<BR><B>Double Gaps in Window:</B><BR>");
     printf("<TABLE border=\"1\"> <TR>\n");
-    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD># Bases in %s</TD><TD>#Bases in %s</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb), trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    htmlPrintf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD># Bases in %s</TD><TD>#Bases in %s</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb), trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
     for(hr = regions; hr; hr = hr->next)
         {
         if (hr->type != QUICKTYPE_DOUBLE)
@@ -5318,7 +5349,9 @@ if (doubles)
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
-        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%d</TD><TD>",   hilite, ourPos, otherPos, hr->baseCount, hr->otherBaseCount);
+        printf("<TR%s>", hilite);
+        htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
+        printf("<TD>%d</TD><TD>%d</TD><TD>", hr->baseCount, hr->otherBaseCount);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5330,7 +5363,7 @@ if (mismatches)
     {
     printf("<BR><B>Mismatches in Window:</B><BR>");
     printf("<TABLE border=\"1\"> <TR>\n");
-    printf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Change</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
+    htmlPrintf("<TR><TD>%s Position</TD><TD>%s Position</TD><TD>Change</TD><TD>Alignment</TD><TR>", trackHubSkipHubName(database), trackHubSkipHubName(otherDb));
     for(hr = regions; hr; hr = hr->next)
         {
         if (hr->type != QUICKTYPE_MISMATCH)
@@ -5342,7 +5375,9 @@ if (mismatches)
         snprintf(position, 128, "%s:%ld-%ld", hr->oChrom, hr->oChromStart, hr->oChromEnd);
         otherPos = cloneString(addCommasToPos(database, position));
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
-        printf("<TR%s><TD>%s</TD><TD>%s</TD><TD>%.*s -> %.*s</TD><TD>",   hilite, ourPos, otherPos, hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
+        printf("<TR%s>", hilite);
+        htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
+        printf("<TD>%.*s -> %.*s</TD><TD>", hr->otherBaseCount, hr->otherBases, hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -8850,12 +8885,14 @@ if (ali->tdb == NULL)
 if (ali->tdb == NULL)
     return;
 
-char *liftDb = trackDbSetting(ali->tdb, "quickLiftDb");
-if (liftDb == NULL)
+// Both halves of the pair or neither.  Nothing filters a hub's trackDb, so a stanza can
+// carry quickLiftDb on its own, and taking the assembly without the chain file would leave
+// the table resolved against one assembly and the query run on the other.
+if (!quickLiftIsLifted(ali->tdb))
     return;
 
 ali->quickLiftFile = trackDbSetting(ali->tdb, "quickLiftUrl");
-ali->db = liftDb;
+ali->db = trackDbSetting(ali->tdb, "quickLiftDb");
 quickLiftResolveTable(ali->tdb, bareTable, &ali->table, &ali->db);
 }
 

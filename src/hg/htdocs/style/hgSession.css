@@ -38,6 +38,12 @@
 /* Section heading ("Your saved sessions") separating the save card from the table. */
 #sessionApp .gbSection { margin-top:4px; }
 
+/* Note at the end of the table toolbar, pointing at our other servers: they keep their own
+ * sessions, so a session saved there is not in this list. */
+#sessionApp .sessMirrorNote { margin:0; }
+#sessionApp .sessMirrorNote a { color:var(--accent); }
+#sessionApp .sessMirrorNote a:hover { color:var(--accentHover); }
+
 /* Toolbar above the table: DataTables search box, page-length menu and the Select button. */
 #sessionApp .sessToolbar { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:0 0 10px; }
 #sessionApp #sessionAppTable_length { margin:0; font-size:14px; color:var(--ink); }

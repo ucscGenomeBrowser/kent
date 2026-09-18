@@ -232,6 +232,48 @@ sqlFreeResult(&sr);
 return cloneString(response);
 }
 
+static struct slPair *geoMirrorNodeList(boolean wantSelf)
+/* Return gbNode as pairs of name=shortLabel, val=domain, ordered by node: either every node but
+ * this one (wantSelf FALSE) or only this one (wantSelf TRUE). */
+{
+if (!geoMirrorEnabled())
+    return NULL;
+char *myNode = geoMirrorNode();
+char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
+char query[256];
+sqlSafef(query, sizeof query, "SELECT node, domain, shortLabel from gbNode%s order by node",
+         geoSuffix);
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slPair *nodes = NULL;
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[0], myNode) != wantSelf)
+        continue;
+    slPairAdd(&nodes, row[2], cloneString(row[1]));
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slReverse(&nodes);
+return nodes;
+}
+
+struct slPair *geoMirrorThisNode()
+/* Return this node (browser.node) as a single pair of name=shortLabel, val=domain, or NULL when
+ * geo mirroring is off or gbNode has no row for it.  slPairFreeValsAndList when done. */
+{
+return geoMirrorNodeList(TRUE);
+}
+
+struct slPair *geoMirrorOtherNodes()
+/* Return the other geo mirror nodes, as pairs of name=shortLabel, val=domain, ordered by node.
+ * The node this CGI is running on (browser.node) is left out.  Returns NULL when geo mirroring
+ * is off or this is the only node.  slPairFreeValsAndList when done. */
+{
+return geoMirrorNodeList(FALSE);
+}
+
 char *geoMirrorMenu()
 /* Create customized geoMirror menu string for substitution of  into 
  * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc 

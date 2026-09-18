@@ -172,19 +172,21 @@ function sessAlert(title, bodyHtml, onOk) {
 
 // ---- session lookup / row helpers ---------------------------------------
 
-function sessByEnc(enc) {
+function sessByKey(key) {
+    // Rows are keyed by uid, not by session name: the table also holds sessions merged in from our
+    // other servers, and the same name can exist on more than one of them.
     var list = sessData.sessions;
     for (var i = 0; i < list.length; i++) {
-        if (list[i].encName === enc) { return list[i]; }
+        if (list[i].uid === key) { return list[i]; }
     }
     return null;
 }
 
-function sessRowByEnc(enc) {
-    // Return the DataTables row API for the session with this encName, or null.
+function sessRowByKey(key) {
+    // Return the DataTables row API for the session with this uid, or null.
     var found = null;
     sessDt.rows().every(function() {
-        if (this.data().encName === enc) { found = this; }
+        if (this.data().uid === key) { found = this; }
     });
     return found;
 }
@@ -202,8 +204,8 @@ function sessApplyTooltips() {
     $table.find('[title]').each(function() {
         if (this.title && this.getAttribute('mouseoverText') === null) { titleTagToMouseover(this); }
     });
-    $table.find('span.sessInfo[data-enc]').each(function() {
-        var row = sessByEnc(this.getAttribute('data-enc'));
+    $table.find('span.sessInfo[data-key]').each(function() {
+        var row = sessByKey(this.getAttribute('data-key'));
         if (row && row.description) { addMouseover(this, sessEnc(row.description)); }
     });
 }
@@ -234,15 +236,24 @@ var SESS_LOCK_SVG = '<svg class="sessLock" xmlns="http://www.w3.org/2000/svg" vi
 
 function sessActionsHtml(row) {
     // Order: Share, Edit, then the icon-only Overwrite (floppy) and Delete (trash).
-    var e = sessEnc(row.encName);
-    return '<button type="button" class="gbPill" data-act="share" data-enc="' + e + '" ' +
+    if (row.remote) {
+        // A session on another server can only be shown here: sharing, renaming, overwriting and
+        // deleting all go through the cart and the session table of the server that holds it. So
+        // the one action offered is to go over there, where the full row of buttons is waiting.
+        return '<button type="button" class="gbPill" data-act="server" data-key="' +
+            sessEnc(row.uid) + '" title="Open your sessions on ' + sessEnc(row.serverTitle || '') +
+            ', where this session can be shared, renamed or deleted">Go to ' +
+            sessEnc(row.server || 'server') + '</button>';
+    }
+    var e = sessEnc(row.uid);
+    return '<button type="button" class="gbPill" data-act="share" data-key="' + e + '" ' +
         'title="Copy a shareable link or change who can see this session">Share</button>' +
-        '<button type="button" class="gbPill" data-act="edit" data-enc="' + e + '" ' +
+        '<button type="button" class="gbPill" data-act="edit" data-key="' + e + '" ' +
         'title="Rename this session or edit its description">Edit</button>' +
-        '<button type="button" class="gbPill" data-act="overwrite" data-enc="' + e + '" ' +
+        '<button type="button" class="gbPill" data-act="overwrite" data-key="' + e + '" ' +
         'aria-label="Overwrite with current view" ' +
         'title="Overwrite this session with your current browser view">' + SESS_SAVE_SVG + '</button>' +
-        '<button type="button" class="gbPill danger" data-act="delete" data-enc="' + e + '" ' +
+        '<button type="button" class="gbPill danger" data-act="delete" data-key="' + e + '" ' +
         'aria-label="Delete this session" title="Delete this session">' + SESS_TRASH_SVG + '</button>';
 }
 
@@ -253,7 +264,7 @@ function sessNameCellHtml(row) {
         // No title attribute here: the description is the user's own text and the tooltip machinery
         // in utils.js inserts its text with innerHTML, so a title would have markup in a description
         // parsed as HTML.  sessApplyTooltips() attaches it, escaped, after the row is drawn.
-        html += ' <span class="sessInfo" data-enc="' + sessEnc(row.encName) + '">&#9432;</span>';
+        html += ' <span class="sessInfo" data-key="' + sessEnc(row.uid) + '">&#9432;</span>';
     }
     // Sessions are shared by default; mark only the exceptions: a lock for private, a badge for the
     // public gallery.  A plain shared-by-link session gets no marker.
@@ -273,7 +284,7 @@ function sessDoOverwrite(row) {
         row.useCount = resp.useCount;
         if (resp.created) { row.created = resp.created; }
         if (resp.db) { row.db = resp.db; }
-        var r = sessRowByEnc(row.encName);
+        var r = sessRowByKey(row.uid);
         if (r) { r.data(row).draw(false); }
         sessModalClose();
         sessMsg('Overwrote “' + row.name + '” with your current browser view.', 'ok');
@@ -301,11 +312,11 @@ function sessOpenDelete(row) {
         okClass: 'danger',
         onOk: function() {
             sessAjax(sessActParams(SESS_ACT.del, row), function() {
-                var r = sessRowByEnc(row.encName);
+                var r = sessRowByKey(row.uid);
                 if (r) { r.remove().draw(false); }
                 var list = sessData.sessions;
                 for (var i = 0; i < list.length; i++) {
-                    if (list[i].encName === row.encName) { list.splice(i, 1); break; }
+                    if (list[i].uid === row.uid) { list.splice(i, 1); break; }
                 }
                 sessModalClose();
                 sessMsg('Deleted “' + row.name + '”.', 'ok');
@@ -360,7 +371,7 @@ function sessSaveEdit(row) {
             // encName changes on rename; reload for authoritative state.
             window.location.reload();
         } else {
-            var r = sessRowByEnc(row.encName);
+            var r = sessRowByKey(row.uid);
             if (r) { r.data(row).draw(false); }
             sessModalClose();
             sessMsg('Saved changes to “' + row.name + '”.', 'ok');
@@ -450,7 +461,7 @@ function sessAfterSharedChange(row, newShared) {
     row.shared = newShared;
     var g = document.getElementById('sessGalleryChk');
     if (g) { g.checked = (newShared >= 2); }
-    var r = sessRowByEnc(row.encName);
+    var r = sessRowByKey(row.uid);
     if (r) { r.data(row).draw(false); }
 }
 
@@ -688,9 +699,85 @@ function sessRecentHtml(recent) {
         'description identical">Update now</button></div>';
 }
 
+function sessScrollToTable() {
+    // Arriving from another server's Server column or "Go to" button, on a #sessions link. The
+    // browser cannot act on that anchor by itself: the table is built here, long after it has
+    // given up looking for the element, so scroll to it once it exists.
+    if (window.location.hash !== '#sessions') { return; }
+    var el = document.getElementById('sessions');
+    if (el) { el.scrollIntoView(); }
+}
+
+function sessMirrorLinks(mirrors) {
+    // "genome-euro", or "genome-euro or genome-asia", each linking to that server's own hgSession.
+    var links = mirrors.map(function(m) {
+        return '<a href="' + sessEnc(m.url) + '" target="_blank" title="' + sessEnc(m.title) +
+            '">' + sessEnc(m.label) + '</a>';
+    });
+    return links.length > 1 ?
+        links.slice(0, -1).join(', ') + ' or ' + links[links.length - 1] : links[0];
+}
+
+function sessMirrorNoteHtml(C) {
+    // Placeholder in the table toolbar, filled in by sessMergeMirrors() once the other servers
+    // have answered - or not answered.
+    return (C.mirrors || []).length ? '<div class="sessMirrorNote"></div>' : '';
+}
+
+function sessMirrorStatus(html) {
+    var el = document.querySelector('#sessionApp .sessMirrorNote');
+    if (el) { el.innerHTML = html; }
+}
+
+function sessMergeMirrors() {
+    // Each of our servers keeps its own sessions, so the ones saved on the others are fetched
+    // after this server's table is already on the screen, and merged into it - every row marked
+    // in the Server column with the server it lives on.  One request: our own hgSession is what
+    // asks the other nodes, so nothing here depends on cross-origin requests.
+    var C = sessData.config;
+    var mirrors = C.mirrors || [];
+    if (!C.loggedIn || !mirrors.length) { return; }
+    sessMirrorStatus('Also looking for your sessions on ' + sessMirrorLinks(mirrors) + '…');
+    $.ajax({
+        type: 'GET',
+        url: 'hgSession',
+        data: { hgS_doMirrorSessions: 1 },
+        dataType: 'json',
+        cache: false,
+        success: function(resp) {
+            var added = [], failed = [], n = 0;
+            (resp.mirrors || []).forEach(function(m) {
+                if (!m.sessions) { failed.push(m); return; }
+                m.sessions.forEach(function(row) {
+                    row.uid = 'R' + (n++);
+                    row.remote = true;
+                    row.server = m.label;
+                    row.serverTitle = m.title;
+                    row.serverUrl = m.url;
+                    added.push(row);
+                });
+            });
+            if (added.length) {
+                sessData.sessions = sessData.sessions.concat(added);
+                sessDt.rows.add(added).draw(false);   // keeps the current sort, search and page
+            }
+            // Only a server that did not answer is worth a word: one that did has its sessions in
+            // the table now, named in the Server column.
+            sessMirrorStatus(failed.length ?
+                'Missing a session? We could not reach ' + sessMirrorLinks(failed) + '.' : '');
+        },
+        error: function() {
+            sessMirrorStatus('Missing a session? We could not reach ' +
+                             sessMirrorLinks(mirrors) + '.');
+        }
+    });
+}
+
 function sessTableHtml(C) {
     if (!C.loggedIn) { return ''; }
-    return '<div class="gbSection">Your saved sessions</div>' +
+    // id="sessions" is the anchor a link from one of our other servers arrives on, see
+    // sessScrollToTable().
+    return '<div class="gbSection" id="sessions">Your saved sessions</div>' +
         '<table id="sessionAppTable" class="gbTable" style="width:100%"></table>';
 }
 
@@ -709,9 +796,20 @@ function sessionBuild() {
         '<a href="' + sessEnc(C.helpUrl) + '" target="_blank">Sessions User’s Guide</a> and the ' +
         '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</div>';
 
+    // Every row carries the server it lives on; at this point they are all this server's own.
+    // The sessions merged in later from the other nodes get theirs in sessMergeMirrors().
+    (sessData.sessions || []).forEach(function(s, i) {
+        s.uid = 'L' + i;
+        s.server = C.thisServer ? C.thisServer.label : '';
+        s.serverTitle = C.thisServer ? C.thisServer.title : '';
+        s.serverUrl = '';   // this is that server, so the Server cell here is text, not a link
+    });
+
     // The session most recently saved/overwritten (max lastUse), for the one-click "Update now".
+    // Only this server's own sessions: "Update now" saves through this server's cart.
     var recent = null;
     (sessData.sessions || []).forEach(function(s) {
+        if (s.remote) { return; }
         if (!recent || s.lastUseEpoch > recent.lastUseEpoch) { recent = s; }
     });
 
@@ -751,8 +849,8 @@ function sessionBuild() {
         $(this).find('.caret').html(open ? '▸' : '▾');
     });
 
-    // Session table.
-    if (C.loggedIn) { sessBuildTable(); }
+    // Session table, then the sessions our other servers hold, merged in as they arrive.
+    if (C.loggedIn) { sessBuildTable(); sessScrollToTable(); sessMergeMirrors(); }
 
     if (typeof convertTitleTagsToMouseovers === 'function') { convertTitleTagsToMouseovers(); }
     if (C.loggedIn) { sessApplyTooltips(); }
@@ -789,6 +887,8 @@ function sessSetSelectMode(on) {
     sessSelectMode = on;
     sessDt.column(0).visible(on);   // the leading checkbox column
     var b = document.getElementById('sessSelectBtn');
+    var cancel = document.getElementById('sessSelCancelBtn');
+    if (cancel) { cancel.style.display = on ? '' : 'none'; }
     if (on) {
         b.textContent = 'Delete all selected';
         b.classList.add('primary');
@@ -800,23 +900,23 @@ function sessSetSelectMode(on) {
 }
 
 function sessDeleteSelected() {
-    var encs = [];
+    var keys = [];
     $('#sessionAppTable tbody .sessSelChk:checked').each(function() {
-        encs.push(this.getAttribute('data-enc'));
+        keys.push(this.getAttribute('data-key'));
     });
-    if (encs.length === 0) { sessSetSelectMode(false); return; }   // nothing picked: just exit
+    if (keys.length === 0) { sessSetSelectMode(false); return; }   // nothing picked: just exit
     sessConfirm({
         title: 'Delete selected sessions',
-        bodyHtml: 'Delete <b>' + encs.length + '</b> selected session' +
-            (encs.length === 1 ? '' : 's') + '? This cannot be undone.',
-        okLabel: 'Delete ' + encs.length,
+        bodyHtml: 'Delete <b>' + keys.length + '</b> selected session' +
+            (keys.length === 1 ? '' : 's') + '? This cannot be undone.',
+        okLabel: 'Delete ' + keys.length,
         okClass: 'danger',
         onOk: function() {
             sessModalClose();
-            var remaining = encs.length;
+            var remaining = keys.length;
             function done() { if (--remaining === 0) { window.location.reload(); } }
-            encs.forEach(function(enc) {
-                var row = sessByEnc(enc);
+            keys.forEach(function(key) {
+                var row = sessByKey(key);
                 if (!row) { done(); return; }
                 sessAjax(sessActParams(SESS_ACT.del, row), done, done);
             });
@@ -838,8 +938,9 @@ function sessBuildTable() {
             { title: '<input type="checkbox" id="sessSelAll" title="Select all on this page">',
               className: 'sessSelCol', data: null, orderable: false, searchable: false, visible: false,
               render: function(d, type, row) {
-                  return '<input type="checkbox" class="sessSelChk" data-enc="' +
-                      sessEnc(row.encName) + '">'; } },
+                  if (row.remote) { return ''; }
+                  return '<input type="checkbox" class="sessSelChk" data-key="' +
+                      sessEnc(row.uid) + '">'; } },
             { title: 'Session', className: 'sessNameCol', data: 'name',
               render: function(d, type, row) {
                   return (type === 'display') ? sessNameCellHtml(row) : row.name; } },
@@ -868,6 +969,18 @@ function sessBuildTable() {
                       sessEnc(row.lastUseDate || row.lastUse) + '</span>' : row.lastUseEpoch; } },
             { title: 'Views', data: 'useCount',
               render: function(d, type) { return (type === 'display') ? sessNum(d) : d; } },
+            { title: 'Server', data: 'server',
+              render: function(d, type, row) {
+                  if (type !== 'display') { return row.server || ''; }
+                  // The session lives on that server and only there. Another server's name links
+                  // to its own sessions page; this one's is plain text, it is where you already
+                  // are. Either way the gbNode label ("European Server") is the mouseover.
+                  var label = sessEnc(row.server || ''), title = sessEnc(row.serverTitle || '');
+                  if (!row.remote || !row.serverUrl) {
+                      return '<span title="' + title + '">' + label + '</span>';
+                  }
+                  return '<a href="' + sessEnc(row.serverUrl) + '" title="' + title +
+                      '">' + label + '</a>'; } },
             { title: 'Actions', className: 'sessActionsCol', data: null, orderable: false,
               searchable: false,
               render: function(d, type, row) { return (type === 'display') ? sessActionsHtml(row) : ''; } }
@@ -880,12 +993,13 @@ function sessBuildTable() {
     // Delegate the row action buttons.
     $('#sessionAppTable tbody').on('click', 'button[data-act]', function() {
         var act = this.getAttribute('data-act');
-        var row = sessByEnc(this.getAttribute('data-enc'));
+        var row = sessByKey(this.getAttribute('data-key'));
         if (!row) { return; }
         if (act === 'overwrite') { sessOpenOverwrite(row); }
         else if (act === 'share') { sessOpenShare(row); }
         else if (act === 'edit') { sessOpenEdit(row); }
         else if (act === 'delete') { sessOpenDelete(row); }
+        else if (act === 'server' && row.serverUrl) { window.location.href = row.serverUrl; }
     });
 
     // Bulk-select control: a "Select" button after the length dropdown reveals a checkbox column and
@@ -898,6 +1012,23 @@ function sessBuildTable() {
     selBtn.title = 'Select multiple sessions to delete them at once';
     document.querySelector('#sessionApp .sessToolbar').appendChild(selBtn);
     $(selBtn).on('click', sessToggleSelect);
+    // Way out of select mode: without it the only exit is "Delete all selected" with nothing
+    // checked.  Only shown while select mode is on.
+    var cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.id = 'sessSelCancelBtn';
+    cancelBtn.className = 'gbPill';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.title = 'Leave select mode and clear the checkboxes';
+    cancelBtn.style.display = 'none';
+    document.querySelector('#sessionApp .sessToolbar').appendChild(cancelBtn);
+    $(cancelBtn).on('click', function() { sessSetSelectMode(false); });
+    // The "missing a session?" note rides along at the end of the toolbar, after the buttons, so
+    // that it does not take a line of its own above the table.
+    var note = sessMirrorNoteHtml(sessData.config);
+    if (note) {
+        document.querySelector('#sessionApp .sessToolbar').insertAdjacentHTML('beforeend', note);
+    }
     // Header "select all" toggles every checkbox on the current page.
     $('#sessionAppTable').on('change', '#sessSelAll', function() {
         $('#sessionAppTable tbody .sessSelChk').prop('checked', this.checked);

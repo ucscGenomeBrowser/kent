@@ -479,3 +479,104 @@ for (tdb = tdbList ; tdb; tdb = next)
     }
 return ret;
 }
+
+struct maneLookup
+/* An open handle on the "mane" bigGenePred track, for repeated region lookups. */
+    {
+    struct bbiFile *bbi;
+    int protAccIx;
+    int maneStatIx;
+    };
+
+struct maneLookup *maneLookupOpen(char *db, struct trackDb **tdbList)
+/* Open the "mane" bigGenePred track for db, if it exists, for repeated calls to
+ * maneStatusForRegion.  Returns NULL if this assembly has no mane track (e.g. non-human,
+ * or hg19) -- callers should treat that as "can't tell", not an error.  tdbList is passed
+ * through to tdbForTrack, so pass a pointer already shared with other tdbForTrack calls in
+ * the same request to avoid a second trackDb load. */
+{
+struct trackDb *tdb = tdbForTrack(db, "mane", tdbList);
+if (tdb == NULL)
+    return NULL;
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (isEmpty(fileName))
+    return NULL;
+
+struct maneLookup *ml = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct bbiFile *bbi = bigBedFileOpen(hReplaceGbdb(fileName));
+    struct asObject *as = bigBedAsOrDefault(bbi);
+    AllocVar(ml);
+    ml->bbi = bbi;
+    ml->protAccIx = asColumnFindIx(as->columnList, "ncbiProtAcc");
+    ml->maneStatIx = asColumnFindIx(as->columnList, "maneStat");
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    ml = NULL;
+errCatchFree(&errCatch);
+return ml;
+}
+
+static boolean protAccMatches(char *rowProtAcc, struct slName *protAccList)
+/* Return TRUE if rowProtAcc matches one of protAccList, ignoring version (".N") suffixes. */
+{
+char *rowDot = strchr(rowProtAcc, '.');
+int rowLen = rowDot ? (rowDot - rowProtAcc) : (int)strlen(rowProtAcc);
+struct slName *pa;
+for (pa = protAccList; pa != NULL; pa = pa->next)
+    {
+    char *paDot = strchr(pa->name, '.');
+    int paLen = paDot ? (paDot - pa->name) : (int)strlen(pa->name);
+    if (rowLen > 0 && rowLen == paLen && memcmp(rowProtAcc, pa->name, rowLen) == 0)
+        return TRUE;
+    }
+return FALSE;
+}
+
+char *maneStatusForRegion(struct maneLookup *ml, char *chrom, int start, int end,
+                          struct slName *protAccList, char **retProtAcc)
+/* Look for a MANE transcript overlapping chrom:start-end whose NCBI protein accession
+ * (ignoring version suffix) matches one of protAccList.  Returns a cloned "MANE Select" /
+ * "MANE Plus Clinical" string, or NULL if ml is NULL or there is no match.  On a match,
+ * *retProtAcc is set to a cloned copy of the matching (versioned) NCBI protein accession,
+ * so callers can identify the single MANE transcript out of a group of merged accessions. */
+{
+if (ml == NULL || ml->protAccIx < 0 || ml->maneStatIx < 0)
+    return NULL;
+char *result = NULL;
+struct lm *lm = lmInit(0);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    struct bigBedInterval *intervalList = bigBedIntervalQuery(ml->bbi, chrom, start, end, 0, lm);
+    struct bigBedInterval *interval;
+    char startBuf[16], endBuf[16], *row[ml->bbi->fieldCount];
+    for (interval = intervalList; interval != NULL && result == NULL; interval = interval->next)
+        {
+        bigBedIntervalToRow(interval, chrom, startBuf, endBuf, row, ml->bbi->fieldCount);
+        if (protAccMatches(row[ml->protAccIx], protAccList))
+            {
+            result = cloneString(row[ml->maneStatIx]);
+            if (retProtAcc != NULL)
+                *retProtAcc = cloneString(row[ml->protAccIx]);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+lmCleanup(&lm);
+return result;
+}
+
+void maneLookupClose(struct maneLookup **pMl)
+/* Close a maneLookup opened by maneLookupOpen. */
+{
+if (pMl != NULL && *pMl != NULL)
+    {
+    bigBedFileClose(&(*pMl)->bbi);
+    freez(pMl);
+    }
+}

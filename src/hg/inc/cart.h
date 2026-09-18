@@ -500,6 +500,11 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 #define hgsLoadUrlName hgSessionPrefix "loadUrlName"
 #define hgsDoLoadUrl hgSessionPrefix "doLoadUrl"
 
+// Set when a saved session has just replaced the whole cart, so that the next hgTracks page can
+// tell the user what they opened and that their previous browser configuration is gone.
+// hgTracks removes it as soon as it has seen it.
+#define hgsSessionJustLoaded hgSessionPrefix "sessionJustLoaded"
+
 #define namedSessionTable cartNamedSessionDbTable()
 
 void sessionTouchLastUse(struct sqlConnection *conn, char *encUserName,

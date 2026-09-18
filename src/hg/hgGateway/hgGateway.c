@@ -1036,6 +1036,17 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
 /* maximum limit of how many matches to display from genark */
 #define GENARK_LIMIT 20
 
+static char *devAlphaHubTxt(char *hubUrl)
+/* On hgwdev, genome-test and hgwdev sandboxes, GenArk hubs are staged under
+ * alpha.hub.txt instead of hub.txt.  On those hosts, swap the trailing
+ * hub.txt for alpha.hub.txt; otherwise return an unchanged copy.
+ * Result is always newly allocated; free when done. */
+{
+if (hIsPrivateHost())
+    return replaceChars(hubUrl, "hub.txt", "alpha.hub.txt");
+return cloneString(hubUrl);
+}
+
 static struct gHubMatch *filterGenarkMatches(char *genarkHubUrl, struct genark *matchList)
 /* Turn the sql results into a struct gHubMatch list */
 {
@@ -1049,7 +1060,9 @@ for (match = matchList; match != NULL; match = match->next)
     // the match contains tab-sep accession, hubUrl, asmName, scientificName, commonName
     char hubUrl[PATH_LEN+1];
     safef(hubUrl, sizeof(hubUrl), "%s/%s", genarkHubUrl, match->hubUrl);
-    slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
+    char *finalHubUrl = devAlphaHubTxt(hubUrl);
+    slAddHead(&ret, gHubMatchNew(match->gcAccession, finalHubUrl, match->asmName, match->scientificName, match->commonName, -1));
+    freeMem(finalHubUrl);
     if (c > GENARK_LIMIT)
 	break;
     }
@@ -1081,7 +1094,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	++c;
 	char genarkUrl[PATH_MAX];
 	safef(genarkUrl, sizeof(genarkUrl), "%s/%s", genarkPrefix, el->hubUrl);
-	slAddHead(&ret, gHubMatchNew(el->name, genarkUrl, NULL, el->scientificName, el->commonName, *el->priority));
+	char *finalHubUrl = devAlphaHubTxt(genarkUrl);
+	slAddHead(&ret, gHubMatchNew(el->name, finalHubUrl, NULL, el->scientificName, el->commonName, *el->priority));
+	freeMem(finalHubUrl);
 	}
 	else
 	{

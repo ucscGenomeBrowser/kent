@@ -3,8 +3,6 @@
 /* This file contains all the code needed to get the HubSpace UI functioning.
  * There are some helper functions that are sort of general and could probably
  * be added to utils.js or similar as well as 3 main pieces:
- * - the api key generation/revocation: functions to request new/revoke old apiKeys
- *       this code runs on the Hub Development tab of hgHubConnect
  * - uppyOptions and uppy constructor: Uppy is a 3rd party library for handling
  *       user uploads. The uppyOptions object and constructor are used to modify
  *       the default behavior, including what to do when a file has been added
@@ -22,6 +20,10 @@
  *
  *   TODO: most of this code could probably be modularized successfully, or split up
  *   so it is easier to read.
+ *
+ * The API key generation and revocation used to be a fourth piece here. It is in
+ * hubApiKey.js now: the Hub Development tab offers those controls on sites that do not
+ * run hubSpace, and such a site never loads this file.
  */
 
 
@@ -180,63 +182,6 @@ function refreshBatchSelects(uppyInstance) {
     if (plugin && uppyInstance.getFiles().length > 1) {
         plugin.addBatchSelectsToDashboard();
     }
-}
-
-function generateApiKey() {
-    let apiKeyInstr = document.getElementById("apiKeyInstructions");
-    let apiKeyDiv = document.getElementById("apiKey");
-
-    if (!document.getElementById("spinner")) {
-        let spinner = document.createElement("i");
-        spinner.id = "spinner";
-        spinner.classList.add("fa", "fa-spinner", "fa-spin");
-        document.getElementById("generateApiKey").after(spinner);
-    }
-
-    let handleSuccess = function(reqObj) {
-        apiKeyDiv.textContent = reqObj.apiKey;
-        apiKeyInstr.style.display = "block";
-        let revokeDiv= document.getElementById("revokeDiv");
-        revokeDiv.style.display = "block";
-        document.getElementById("spinner").remove();
-
-        // remove the word 'already' from the message if we have just re-generated a key
-        let refreshSpan = document.getElementById("removeOnGenerate");
-        if (refreshSpan) {
-            refreshSpan.style.display = "none";
-        }
-    };
-
-    let cartData = {generateApiKey: {}};
-    cart.setCgiAndUrl(fileListEndpoint);
-    cart.send(cartData, handleSuccess);
-    cart.flush();
-}
-
-function revokeApiKeys() {
-    let apiKeyInstr = document.getElementById("apiKeyInstructions");
-    let apiKeyDiv = document.getElementById("apiKey");
-
-    if (!document.getElementById("spinner")) {
-        let spinner = document.createElement("i");
-        spinner.id = "spinner";
-        spinner.classList.add("fa", "fa-spinner", "fa-spin");
-        document.getElementById("revokeApiKeys").after(spinner);
-    }
-
-    let handleSuccess = function(req) {
-        apiKeyInstr.style.display = "none";
-        document.getElementById("spinner").remove();
-        let generateDiv = document.getElementById("generateDiv");
-        generateDiv.style.display = "block";
-        let revokeDiv = document.getElementById("revokeDiv");
-        revokeDiv.style.display = "none";
-    };
-
-    let cartData = {revokeApiKey: {}};
-    cart.setCgiAndUrl(fileListEndpoint);
-    cart.send(cartData, handleSuccess);
-    cart.flush();
 }
 
 const fileNameRegex = /[0-9a-zA-Z._]+/g; // allowed characters in file names

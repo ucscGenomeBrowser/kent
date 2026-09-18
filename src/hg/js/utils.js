@@ -1049,6 +1049,27 @@ function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
     });
 }
 
+function notifBoxOnce(msg, id) {
+/* Show a notification that is meant for this page only, e.g. to say what just happened.
+ * Unlike notifBoxSetup() it does not use localStorage, so it has no "Don't show again"
+ * button: the message is gone on the next page anyway. */
+    let boxId = id + "notifBoxOnce";
+    if (document.getElementById(boxId))
+        return;
+    let box = document.createElement("div");
+    box.className = "notifBox notifBoxOnce";
+    box.id = boxId;
+    box.innerHTML = msg +
+        "<div style='text-align: center'><button id='" + id + "notifyOnceHide'>Close</button></div>";
+    let parentEl = document.getElementById('TrackHeaderForm');
+    if (!parentEl)
+        parentEl = document.body;
+    parentEl.appendChild(box);
+    $("#" + id + "notifyOnceHide").click(function() {
+        $("#" + boxId).remove();
+    });
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";

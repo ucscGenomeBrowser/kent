@@ -1,0 +1,228 @@
+# [Claude/lrnassar] MaveMD - clinically calibrated multiplexed variant effect measurements (2026-09-17)
+# refs #37800
+
+# MaveMD ("MAVEs for MeDicine") is not a separate database. It is a curated collection inside
+# MaveDB holding the score sets that carry clinical evidence calibrations, so everything comes
+# from the ordinary MaveDB API. The collection URN is
+#   urn:mavedb:collection-603dafbf-4a3f-4d70-ab8c-aafb226fbff4
+# which is not documented; it was read out of the MaveDB front end, which fetches it to render
+# the mavedb.org/mavemd page.
+# Reference: McEwen et al. (2025) medRxiv, PMID 41332838. A local copy of the paper is in
+# paper/ alongside this build:
+#   mkdir -p paper && cd paper
+#   curl -s "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12668102/fullTextXML" -o paper.xml
+#   # paper.md is that XML flattened to markdown (title, abstract, sections) for grepping
+#
+# Two things from the paper shaped the build:
+#  1. The paper counts a "dataset" at the MaveDB experiment level, not the score set level.
+#     The collection is 84 score sets drawn from 81 experiments; three experiments contributed
+#     two score sets each. Say "score set" in the docs, not "dataset".
+#  2. Counts are measurement-level. A variant measured by several assays contributes several
+#     measurements. Our 460,490 items are 275,875 distinct ClinGen alleles, which is why a
+#     codon studied by several groups stacks over a hundred items deep.
+
+# Request pacing is what MaveDB asked us for directly (Benjamin Capodanno, 21 Aug 2026 email):
+# metadata at no more than two concurrent requests, score and variant endpoints sequential,
+# page at 100k variants, and back off rather than retry immediately on a 504, because the
+# gateway gives up while their query keeps running. fetchMaveMd.py implements all of this.
+
+mkdir -p /hive/data/outside/mavemd/2026-09-17
+mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
+
+# Download: the collection, one metadata record per score set, and one flat CSV per score set
+# from score-sets/{urn}/variants/data. The CSV joins the assay score to the post-mapped HGVS
+# terms, ClinGen allele IDs, gnomAD frequencies, the most recent ClinVar release, and every
+# calibration's functional class and ACMG call. All calibrations are requested, research-use-only
+# ones included; only the newest of the twelve available ClinVar releases is requested.
+~/kent/src/hg/makeDb/scripts/mavemd/fetchMaveMd.py /hive/data/outside/mavemd/2026-09-17
+
+#   MaveDB API 2026.2.7.2
+#   Collection MaveMD: 84 score sets, modified 2026-04-30
+#   Downloaded 242.1 MB in 257 seconds
+
+# Build both tracks: the per-variant bigBed and the per-score-set heatmap.
+~/kent/src/hg/makeDb/scripts/mavemd/runBuild.sh \
+    /hive/data/outside/mavemd/2026-09-17 \
+    /hive/data/genomes/hg38/bed/mavemd/2026-09-17
+
+# Scripts (all in ~/kent/src/hg/makeDb/scripts/mavemd/):
+#   fetchMaveMd.py         download the collection from the API
+#
+# GENCODE VERSION: mavemdLib.py hardcodes GENCODE_ATTRS/GENCODE_GENEPRED to the V50 tables,
+# used only for the six ENSP-stated score sets. Bump both when hg38 moves to a newer GENCODE;
+# the RefSeq route (ncbiRefSeqLink/ncbiRefSeqCurated) is unversioned and needs no attention.
+#   mavemdLib.py           shared: codon projection, color tables, BED field hygiene
+#   makeMaveMdVariants.py  per-variant bed12+31 -> mavemdVar.bb
+#   makeMaveMdHeatmap.py   per-score-set bed12+20 -> mavemdMap.bb
+#   mavemdVariants.as, mavemdHeatmap.as
+#   runBuild.sh            driver for the two converters plus bedToBigBed
+
+# COORDINATES. MaveDB's VRS mapper resolves about a third of the collection to the genome and
+# the rest only to a protein sequence, so placement takes three routes:
+#   154,895  MaveDB's own genomic HGVS term, run through kent's hgvsToVcf
+#   296,516  projected from the protein term onto its codon
+#     9,079  the submitter's original transcript term, run through hgvsToVcf
+#   460,490  placed, of 481,717 measurements (95.6%)
+#
+# The codon projection resolves the protein accession to its transcript and walks that CDS to
+# the requested codon. MaveDB states protein terms against RefSeq for most score sets and
+# Ensembl for six, so both routes exist: NP_ through ncbiRefSeqLink + ncbiRefSeqCurated, ENSP
+# through wgEncodeGencodeAttrsV50 + wgEncodeGencodeCompV50. All 40 protein accessions resolve.
+#
+# 2,986 items sit in a codon split across an exon junction, so its three bases are not a 3 bp
+# run. Those are written as BED12 with the two real blocks, so the intron draws as a thin
+# connector rather than as a solid item up to 95 kb wide. The heatmap column is drawn on the
+# longest contiguous run of the codon's bases (CodonMap.codonBlock), keeping the block off
+# the intron.
+#
+# CROSS-CHECK. 130,955 measurements carry both a genomic and a protein term, so the projection
+# is run on those too and must land on the genomic coordinate. 41 disagreed (0.0313%), all
+# nonsense terms (p.XxxNNNTer) where MaveDB's protein term names a codon one position off from
+# the nucleotide change; mostly the ENSP-mapped score sets 00000662-0-1 and 00000673-0-1.
+# makeMaveMdVariants.py aborts above 0.5%.
+
+# NOT PLACED (21,227 of 481,717):
+#   18,963  haplotypes: several substitutions measured as one unit, no single position.
+#           All from urn:mavedb:00000665-a/b/c/d-1. The earlier MaveDB track excluded
+#           haplotype datasets for the same reason.
+#    1,961  submitted term rejected by hgvsToVcf. These were qualified with a transcript and
+#           submitted; they are mostly PTEN NM_000314.8:c.79_80delins... terms spanning an
+#           exon junction, which hgvsToVcf expands to a ~2 kb REF and then rejects on a
+#           reference mismatch. Dropping them is correct.
+#      114  genomic term rejected by hgvsToVcf (terms like NC_000003.12:g.=)
+#      126  no usable HGVS term of any kind (includes rows named "_wt")
+#       63  protein term is not a single substitution
+
+# Eleven score sets state their variants as bare terms with no accession (c.34_36delinsCTT).
+# MaveDB leaves those unmapped, but their neighbours in the same score set carry a post-mapped
+# cDNA term naming the transcript, so the bare terms are qualified from it and then placed.
+# This is what recovered most of the 9,079 hgvsToVcf placements.
+
+# HEATMAP. All 84 score sets produce a map. Rows are the 20 standard amino acids ordered by
+# class (A V L I M F Y W R H K D E S T N Q G C P), matching the MaveDB and popEVE heatmap
+# tracks, plus a final row for nonsense. A synonymous measurement fills the reference
+# residue's cell.
+#   427,471  measurements with a single amino acid substitution
+#   385,732  cells drawn. 41,739 measurements are a later nucleotide change encoding a
+#            substitution already measured at that position. The strongest evidence wins the
+#            cell (CSV order is not a defined rule and flipped 611 cells between pathogenic
+#            and benign); the cell is marked '+', or '!' where the measurements disagree in
+#            direction. 1,865 cells disagree.
+#
+# One calibration colors a whole map, or its cells are not comparable to each other. 16 score
+# sets have no MaveDB primary and their rows fall to different calibrations, so the one that
+# classifies the most variants wins and every cell is recolored to it.
+#
+# The renderer splits the score array with chopCommas (keeps a trailing empty field) but the
+# label array with chopByCharRespectDoubleQuotesKeepEmpty (drops one). If the last cell of the
+# last row is empty the counts disagree and the track aborts, so the converter puts a
+# placeholder label on that one cell. 40 score sets needed it. Same trap as popEVE.
+
+# ASSAY METADATA. The experiment record's controlled keywords carry the fields McEwen et al.
+# argue a clinician judges an assay by, so four of them ride on every item: Phenotypic Assay
+# Method, Phenotypic Assay Model System, Molecular Mechanism Assessed, Variant Library Creation
+# Method. The last matters most: an in vitro construct library introduces a synthetic copy of
+# the target, so it cannot see an effect on splicing or NMD and can read falsely normal for
+# one; an endogenous locus library can. 61 score sets use construct libraries, 16 endogenous,
+# 7 unstated. The keyword value is in keyword.label, not keyword.value.
+#
+# Not exposed by the API: the paper's per-assay "can this assay detect splicing / NMD
+# variants" curation, and the rest of the ~180 curated fields. Only the controlled keywords
+# above come through, so the library route is the closest available proxy.
+#
+# NON-ASCII. MaveDB free text carries en dashes and accented author names (Gronbaek-Thygesen
+# and Olvera-Leon are spelled with o-slash, ae and o-acute upstream). The browser does not
+# transcode UTF-8, so these reach the details page as
+# mojibake. mavemdLib.bedField() converts every non-ASCII character to a numeric HTML entity;
+# 35,694 variant rows and 6 heatmap rows needed it. Re-check after any rebuild with:
+#   LC_ALL=C grep -cP '[^\x00-\x7F]' mavemdVar.bed mavemdMap.bed     # must be 0
+
+# SCORE DIRECTION. Functional scores have no common scale and no common direction across score
+# sets; the paper calls out MSH2, where LOWER scores mean normal activity. Nothing in the build
+# compares raw scores across score sets, and the colors come from the functional class and the
+# ACMG code rather than from the score, so this is a documentation problem only. It is called
+# out in a warn-note on mavemdVar.html.
+
+# COLORS. Cells and items are colored by the ACMG evidence code on an 11-class red-to-blue
+# diverging ramp, red toward pathogenic and blue toward benign, darkening with strength. The
+# strength ladder is MaveDB's own StrengthOfEvidenceProvided enum, taken from their OpenAPI
+# spec, not assumed: VERY_STRONG, STRONG, MODERATE_PLUS, MODERATE, SUPPORTING. Score sets that
+# classify variants without assigning an ACMG code use a separate purple-green palette, so a
+# measurement is not mistaken for a clinical claim.
+
+# WHICH CALIBRATION IS SHOWN. A score set can carry up to six calibrations. MaveDB curates a
+# `primary` flag with its own promote and demote API endpoints, so where that primary actually
+# classifies the variant it is their editorial choice and is used as-is: 170,197 items.
+#
+# Two traps. 21 score sets have no primary at all. A further 33 designate one that carries no
+# functionalClassifications, so it says nothing about any variant and arrives as NA on every
+# CSV row - it exists but cannot be displayed. Those are different situations and the item's
+# "Calibration chosen by" field distinguishes them, because telling a user "no primary
+# designated" about a score set that has one is simply false. 171,760 items are in that second
+# case; an earlier build mislabelled all of them.
+#
+# Every calibration's call is listed on the details page regardless of which one is displayed.
+
+# Build results:
+#   mavemdVar.bb   460,490 items, 46 fields (bed12+34)
+#
+# PROVENANCE OF THE ANNOTATIONS. clinvarRelease and gnomadVersion ride on each item that has a
+# ClinVar or gnomAD annotation (60,737 and 3,979 respectively), so a stale annotation is visible
+# rather than silent. This build used ClinVar 2026-01 and gnomAD v4.1, whichever the API served;
+# fetchMaveMd.py always asks for the newest ClinVar namespace the score set offers, so the
+# release moves on its own between builds and is not pinned anywhere.
+
+# LINKOUTS. The urls setting linkifies publicationUrl, scoreSet (to its MaveDB page) and
+# clinGenId (to the ClinGen Allele Registry, which serves both CA genomic and PA protein
+# alleles). hgc percent-encodes the substituted value, so the score set URN arrives as
+# urn%3Amavedb%3A...%2D0%2D1; mavedb.org resolves that fine. There is no separate mavedbUrl
+# field: it used to store 460,490 copies of 84 distinct strings that are just a prefix plus
+# scoreSet, so linkifying scoreSet replaces it.
+#
+# DEFAULT DISPLAY. mavemdMap pack at priority 1, mavemdVar dense at priority 2. The variant
+# track in pack is ~5,900 px tall over a well studied gene, so it is not a reasonable thing to
+# open onto; dense gives a compact colored strip and the user switches to pack once zoomed to
+# a few codons or filtered to one gene.
+#   mavemdMap.bb        84 items, 32 fields (bed12+20)
+#
+# Install: the bigDataUrl and dataVersion settings point at /gbdb, so the links have to be
+# repointed at each new dated build directory. runBuild.sh does not do this.
+mkdir -p /gbdb/hg38/mavemd
+cd /gbdb/hg38/mavemd
+ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/mavemdVar.bb mavemdVar.bb
+ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/mavemdMap.bb mavemdMap.bb
+ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/version.txt  version.txt
+
+# Load trackDb. "make DBS=hg38" writes the per-user sandbox tables (trackDb_$USER); the track
+# is gated "include mavemd.ra alpha" so "make alpha DBS=hg38" is what puts it on dev.
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS=hg38
+#
+# STRAND comes from the transcript of the protein term, so it is set on every item that has a
+# usable one (427,471), not only on the ones the codon projection ultimately placed: 186,869 +,
+# 240,602 -. The remaining 33,019 are '.' - 23,940 placed from a genomic HGVS term with no
+# protein term, and 9,079 placed by hgvsToVcf from the submitted term.
+
+# Version file for the dataVersion trackDb setting.
+cd /hive/data/genomes/hg38/bed/mavemd/2026-09-17
+python3 -c "
+import json
+c=json.load(open('/hive/data/outside/mavemd/2026-09-17/collection.json'))
+api=open('/hive/data/outside/mavemd/2026-09-17/apiVersion.txt').read().split()[-1]
+open('version.txt','w').write('MaveDB collection modified %s (MaveDB API %s)\n'%(c['modificationDate'],api))
+"
+
+# trackDb: human/hg38/mavemd.ra, included from trackDb.ra as "include mavemd.ra alpha".
+# The filterValues blocks in that file are generated by makeMaveMdVariants.py --raFragment;
+# paste mavemdFilters.ra in rather than maintaining the value lists by hand. Paste it INSIDE
+# the stanza with no blank lines: a blank line ends a .ra stanza, so blank separators between
+# the filter groups silently orphan every setting after the first one. hgTrackDb loads without
+# complaint and the filters just never appear in hgTrackUi. Check after a make with:
+#   hgsql hg38 -Ne "select settings from trackDb_$USER where tableName='mavemdVar'" \
+#     | tr '\\' '\n' | grep -c filterValues ClinVar terms
+# containing a comma are escaped by doubling it, which is what slNameListFromCommaEscaped wants.
+# No filterType is set on those fields on purpose: the list types run COMPARE_HASH_LIST_OR in
+# hgTracks/bigBedTrack.c, which splits the field VALUE on commas before looking it up, so a
+# ClinVar term with a comma could never match its own menu entry. The default whole-field
+# match is correct here and still multi-select.
+# relatedTracks.ra carries reciprocal links between mavedb and mavemd.

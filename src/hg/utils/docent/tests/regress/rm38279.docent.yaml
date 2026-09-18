@@ -1,0 +1,95 @@
+# #38279 -- a track that switched to a density graph did not say why.
+#
+# Three different things put a bigBed, VCF or BAM track into density mode, and the display
+# looked the same whichever one did it: the user ticking "Display data as a density graph"
+# on the configuration page, the window being wider than the track's maxWindowCoverage, or
+# the track having more features in the window than it is willing to read.  The two label
+# functions for this already existed but were reachable only through
+# labelTrackAsFilteredNumber(), whose callers all guard it with `if (filtered)`, so none of
+# the three automatic cases said anything at all.
+#
+# d83026b7d89 adds labelTrackAsDensityIfActive(), called once from makeActiveImage() after
+# every path into density mode has been settled, with one message per cause:
+#
+#     the user asked for it   (density mode active, configure the track to switch it off)
+#     too many features       (too many features, density shown, zoom in to see details)
+#     window too wide         (too many features, density shown, zoom in for individual
+#                              items or use squish or dense mode)
+#
+# Each step names the message it expects AND the message it must not get, because the whole
+# of the fix is picking the right one of the three.  A version that appended the same
+# sentence to every density track would pass a test that only asked whether a note is there.
+#
+# Where the note can be read, and where it cannot
+# -----------------------------------------------
+# The note is appended to the track's longLabel, which reaches three places: the center
+# label drawn INSIDE the track image, the hgTracks JSON in a <script> block, and the title
+# of the track's link in the controls below the image.  Only the third is markup a check
+# here can see -- body.innerText skips a script, and no check reads text out of the image.
+#
+# hgTracks' own tooltip code takes every title on the page, puts the text in a
+# `mouseoverText` attribute and blanks the title (utils.js, convertTitleTagsToMouseovers ->
+# titleTagToMouseover -> addMouseover), so the selector reads mouseoverText.  README.txt
+# says to assert data-tooltip: that is right for a MAP BOX, where the server writes both
+# attributes, and wrong here, where the server writes only a title.
+#
+# All three tracks named below are TOP-LEVEL on purpose.  The controls list a composite or
+# a superTrack under the container's own label, so a subtrack's note never reaches it: the
+# first draft of this script used jaspar2026, whose note is in the JSON and the pixels and
+# nowhere a check can reach.  A subtrack is not testable this way.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38279 and d83026b7d89 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the CRISPR Targets label carries none of the three density notes"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # 1. Too many features to read.  CRISPR Targets over 500 kb is far past the 10,000
+  # features hg.conf's bigBedMaxItems allows, so loadBigBedSummary() sets limitWiggle.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1500000&hideTracks=1&crisprAllTargets=pack&pix=1100"
+  - expect:
+      rows: [ruler, crisprAllTargets]
+      has: 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(too many features, density shown, zoom in to see details)"]'
+      noHas:
+        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="density mode active"]'
+        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="use squish or dense mode"]'
+
+  # 2. Window wider than the track allows.  UniProt Variants sets maxWindowCoverage
+  # 10000000, so an 11 Mb window trips winTooBigDoWiggle() -- a different cause from step 1,
+  # and the message says so.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-12000000&hideTracks=1&spMut=pack&pix=1100"
+  - expect:
+      rows: [ruler, spMut]
+      has: 'a.trackLink[data-track="spMut"][mouseoverText*="(too many features, density shown, zoom in for individual items or use squish or dense mode)"]'
+      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="zoom in to see details"]'
+
+  # 3. The same track just inside its own threshold: 9.5 Mb, still drawn, and no note.  This
+  # is what says the note follows maxWindowCoverage rather than merely following the track,
+  # and it is the cheapest check here -- one window change on a track already loaded.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-10500000&hideTracks=1&spMut=pack&pix=1100"
+  - expect:
+      rows: [ruler, spMut]
+      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="density shown"]'
+
+  # 4. The user asked for it.  mane.doWiggle=on is the configuration page's checkbox, set
+  # here through the URL because Docent cannot tick one.  This is the only one of the three
+  # the user chose, and the only message that tells them how to undo it.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11102837-11267747&hideTracks=1&mane=full&mane.doWiggle=on&pix=1100"
+  - expect:
+      rows: [ruler, mane]
+      has: 'a.trackLink[data-track="mane"][mouseoverText*="(density mode active, configure the track to switch it off)"]'
+      noHas: 'a.trackLink[data-track="mane"][mouseoverText*="too many features"]'
+
+  # 5. The control, from the ticket's own test plan: same window, checkbox cleared, plus
+  # GENCODE.  Nothing is in density mode, so no track anywhere on the page may carry any of
+  # the three notes -- including the tracks listed under the image that are set to hide,
+  # which is the ticket's fifth check.  Without this step a fix that labelled everything
+  # would pass every check above.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11102837-11267747&hideTracks=1&knownGene=pack&mane=pack&mane.doWiggle=%5B%5D&pix=1100"
+  - expect:
+      rows: [ruler, knownGene, mane]
+      noHas:
+        - 'a.trackLink[mouseoverText*="density shown"]'
+        - 'a.trackLink[mouseoverText*="density mode active"]'

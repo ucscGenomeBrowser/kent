@@ -237,6 +237,7 @@ hg19 >transMapV5 transMapV6 The current version of the TransMap alignments
 hg19 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 hg19 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
 hg19 >genePredArchive knownGene The current default gene set
+hg19 >ensGene knownGene The current GENCODE gene set, which shares its annotation with Ensembl
 
 mm39 knownGeneArchive wgEncodeGencodeSuper All transcripts from each GENCODE release, including sets never used as the default gene track
 mm39 wgEncodeGencodeSuper knownGeneArchive Previous default gene tracks, one per GENCODE release
@@ -609,6 +610,10 @@ hg38 spliceImpactSuper nmd Regions where premature termination codons are predic
 hg19 ~spliceAI abSplice Another deep-learning predictor of splice-altering variants
 hg19 spliceImpactSuper predictionScoresSuper Pathogenicity scores for coding and non-coding variants generally, not only splicing
 hg19 predictionScoresSuper spliceImpactSuper Prediction scores and databases for variants that disrupt splicing
+
+# MaveDB / MaveMD cross-links:
+hg38 mavedb mavemd The clinically curated subset, with ACMG functional evidence calibrations
+hg38 mavemd mavedb The full set of variant effect maps in MaveDB, without clinical calibration
 
 # Constraint score cross-links:
 hg38 constraintSuper predictionScoresSuper Per-variant deleteriousness and pathogenicity scores, rather than regional constraint

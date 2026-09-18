@@ -1,0 +1,49 @@
+== protein, chain on the same strand
+chain: t=chrSrc:100-400 q=chrRef:100-400 qStrand=+ blocks 100-400/100-400
+before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	100	400	1	100,	0,	100,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+lifted   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrRef	1000	100	400	1	100,	0,	100,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+
+== protein, chain on the opposite strand
+chain: t=chrSrc:600-900 q=chrRef:600-900 qStrand=- blocks 600-900/600-900
+before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	600	900	1	100,	0,	600,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+lifted   100	0	0	0	0	0	0	0	+-	prot	100	0	100	chrRef	1000	100	400	1	100,	0,	600,
+         strand='+-' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+
+== protein, chain gaps the reference
+chain: t=chrSrc:100-400 q=chrRef:100-401 qStrand=+ blocks 100-250/100-250 250-400/251-401
+before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	100	400	1	100,	0,	100,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+lifted   100	0	0	0	0	0	1	1	++	prot	100	0	100	chrRef	1000	100	401	2	50,50,	0,50,	100,251,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=50 pslCheck errors=0
+
+== protein, lift splits a codon
+chain: t=chrSrc:100-401 q=chrRef:100-400 qStrand=+ blocks 100-250/100-250 251-401/250-400
+before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	100	400	1	100,	0,	100,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+lifted   299	0	0	0	1	1	0	0	+	prot	300	0	300	chrRef	1000	100	399	2	150,149,	0,151,	100,250,
+         strand='+' isProtein=0 qSize=300 blockSizes[0]=150 pslCheck errors=0
+
+== mRNA, chain on the same strand
+chain: t=chrSrc:100-400 q=chrRef:100-400 qStrand=+ blocks 100-400/100-400
+before   300	0	0	0	0	0	0	0	+	mrna	300	0	300	chrSrc	1000	100	400	1	300,	0,	100,
+         strand='+' isProtein=0 qSize=300 blockSizes[0]=300 pslCheck errors=0
+lifted   300	0	0	0	0	0	0	0	+	mrna	300	0	300	chrRef	1000	100	400	1	300,	0,	100,
+         strand='+' isProtein=0 qSize=300 blockSizes[0]=300 pslCheck errors=0
+
+== mRNA, chain on the opposite strand
+chain: t=chrSrc:600-900 q=chrRef:600-900 qStrand=- blocks 600-900/600-900
+before   300	0	0	0	0	0	0	0	+	mrna	300	0	300	chrSrc	1000	600	900	1	300,	0,	600,
+         strand='+' isProtein=0 qSize=300 blockSizes[0]=300 pslCheck errors=0
+lifted   300	0	0	0	0	0	0	0	-	mrna	300	0	300	chrRef	1000	100	400	1	300,	0,	100,
+         strand='-' isProtein=0 qSize=300 blockSizes[0]=300 pslCheck errors=0
+
+== no chain over the alignment
+chain: t=chrSrc:100-400 q=chrRef:100-400 qStrand=+ blocks 100-400/100-400
+before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	700	1000	1	100,	0,	700,
+         strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
+lifted   did not lift
+
+passed

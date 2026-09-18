@@ -193,8 +193,13 @@ if (userName)
     char *encUserName = cgiEncode(userName);
     char *userPrefix = md5HexForString(encUserName);
     userPrefix[2] = '\0';
+    // the directory on disk is named encUserName, so a user name like "abc-def" is
+    // stored as the literal characters "abc%2Ddef". Encode a second time so apache
+    // looks for that literal '%': the URL component must be "abc%252Ddef".
+    // writeHubStanzasForFile does the same thing to a file name for bigDataUrl
     struct dyString *userDirDy = dyStringNew(0);
-    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix, encUserName);
+    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix,
+        cgiEncodeFull(encUserName));
     retUrl = dyStringCannibalize(&userDirDy);
     }
 return retUrl;

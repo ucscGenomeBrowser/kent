@@ -3555,6 +3555,20 @@ def relBigDataUrl(urlPrefix, fname):
         return fname
     return urlPrefix + "/" + fname
 
+def ctSortByPriority(tdbData):
+    """ order the custom tracks of one assembly the way the session shows them. The
+    archive has one file per track and the tar was made from a directory listing, so the
+    file order is meaningless; the order lives in the priority of the track line, which
+    hgSession writes into every track of the archive. Archives made before it did that
+    have no priority, for those keep the file name order, which is at least stable. """
+    def sortKey(item):
+        fname, tdb = item
+        prio = tdb.get("priority", "")
+        # a track line without a priority sorts after all of the numbered ones
+        return (0, float(prio), fname) if isNumber(prio) else (1, 0.0, fname)
+
+    return sorted(tdbData.items(), key=sortKey)
+
 def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
     """ convert one db part of a track archive: append a 'genome' stanza and one stanza
     per custom track to the already-open hub.txt handle ofh, and put converted or
@@ -3577,7 +3591,7 @@ def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
     getUrlsFnames = []
     doneFnames = set()
     tdbIdx = startIdx
-    for fname, tdb in tdbData.items():
+    for fname, tdb in ctSortByPriority(tdbData):
         tdb["shortLabel"] = tdb["name"]
 
         tdbIdx += 1
@@ -3590,6 +3604,11 @@ def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
 
         # the description= attribute is optional in a custom track line
         tdb["longLabel"] = tdb.pop("description", tdb["shortLabel"])
+
+        # hgTracks shows hub tracks that have no priority in alphabetical order of their
+        # label, so renumber the tracks here to keep the order of the session. The
+        # counter runs across assemblies, so two 'genome' stanzas cannot interleave.
+        tdb["priority"] = str(tdbIdx)
 
         normalizeOnOff(tdb)
 

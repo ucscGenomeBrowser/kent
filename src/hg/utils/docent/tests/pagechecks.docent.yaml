@@ -15,6 +15,13 @@
 #   click: {track:, frac:}   the item box nearest a point, and its hgc link. The only way
 #                   in for a track whose items cannot be named -- a `type bigBed 3` gets
 #                   an EMPTY i= in its hgc href and the same title on every box.
+#   box:            WHERE an element sits on the screen, which a selector cannot say at
+#                   all. #38251 moved the narrow-window menu icon out of the blue bar and
+#                   slid it across the menu items with every selector still matching.
+#   text:/noText:   as LISTS. They took one string until 2026-09-17, and a list handed to
+#                   a check that stringifies its argument fails OPEN: ["a", "b"] becomes
+#                   "a,b", which no page contains, so it passes on anything and passes
+#                   silently. Six scripts next door were written that way and looked green.
 #
 # pagechecks.xfail.docent.yaml is the other half: the same view with each of the four
 # aimed the wrong way, because a check that cannot fail is not a check.
@@ -45,6 +52,23 @@ steps:
       noHas:
         - "#td_data_ruler map[name=map_center_mane]"
         - "map[name=map_center_noSuchTrack]"
+
+  # box:. The blue menu bar is the same on every page and is the structure #38251 broke:
+  # the icon belongs at the right-hand end of the bar, clear of the menu items, and the bar
+  # stays one row. The three clauses are each exercised once -- inside:, clear: with a gap:,
+  # and the two sizes.
+  - expect:
+      box:
+        - {sel: "#topRightLinks", inside: "#main-menu-whole"}
+        - {sel: "#topRightLinks", clear: "#main-menu ul.nice-menu > li > a", gap: 8}
+        - {sel: "#main-menu-whole", height: "<=40", width: ">=1000"}
+
+  # text: and noText: given lists. Every string has to be checked on its own: joined into
+  # one string these would be "hide all,default tracks,chr7:..." and match nothing at all.
+  # Three of each, so a check that only ever looked at the first entry would be caught too.
+  - expect:
+      text: ["chr7:155,799,529-155,812,871", "Visible Tracks", "Mapping and Sequencing"]
+      noText: ["Warning/Error", "Too Long", "Unknown database"]
 
   # The positional click. frac: 0.5 is the middle of the row; mane HAS named items here,
   # so this is not the case that needs it, but it is the case where the result can be
