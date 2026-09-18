@@ -3,9 +3,9 @@
 // An opt-in modern alternative to the classic server-rendered hgSession page, applying hgBlat's
 // facelift strategy (#37996): hgSession.c emits the session list and page config as an inline JSON
 // global (hgSessionData) into an empty #sessionApp container, and this file builds the UI - a
-// save-current-view card, a custom-track backup link, a searchable/sortable DataTable of saved
-// sessions with inline Overwrite/Share/Edit/Delete, and an "Advanced" panel split into a load
-// column and a save column.
+// save-current-view card, a searchable/sortable DataTable of saved sessions with inline
+// Overwrite/Share/Edit/Delete, and an "Advanced" panel (custom-track backup, a load column and a
+// save column).
 //
 // The inline table actions POST to small JSON endpoints in hgSession.c (hgS_doDeleteJson, etc.) and
 // update the table in place.  Navigation actions (load a session, load from URL/file, save to file,
@@ -432,7 +432,7 @@ function sessOpenShare(row) {
         'title="Compose an email with this link">Email</a></div>' +
         '<div class="gbModalText" style="margin-top:14px">Sessions are loadable by anyone with the ' +
         'link by default; use <b>Edit</b> to make one private.</div>' +
-        '<label class="gbModalLabel" style="font-weight:400;color:inherit">' +
+        '<label class="gbModalLabel" style="font-weight:400;color:inherit;font-size:14px">' +
         '<input type="checkbox" id="sessGalleryChk"> List it in the ' +
         '<a href="' + sessEnc(sessData.config.publicSessionsUrl) + '" target="_blank">' +
         'Public Sessions</a> gallery</label>' +
@@ -623,29 +623,26 @@ function sessAdvancedHtml(C) {
         '<a href="' + sessEnc(C.resetUrl) + '" ' +
         'title="Reset all browser settings to their defaults">Reset the browser to defaults</a>' +
         '</div></div>';
+    // Back up custom tracks - a button again, across the top of the panel above both columns.
+    var backup =
+        '<div class="sessAdvTop"><form action="hgSession" method="POST">' + sid +
+        '<button type="submit" class="gbPill" name="hgS_showDownload_" value="Submit" ' +
+        'title="Download your custom tracks as a .tar.gz archive you can reload later">' +
+        'Back up custom tracks (.tar.gz)</button></form></div>';
 
     // Two columns - what you load from, and what you save to - rather than one undifferentiated
     // list; "Other" (reset) belongs to neither, so it spans both underneath.
     return '<div class="sessAdv">' +
         '<div class="sessAdvHead" id="sessAdvHead"><span class="caret">▸</span>' +
-        '<span>Advanced — load another user’s session, load from a URL or file, ' +
-        'save to a file, reset the browser</span></div>' +
+        '<span>Advanced — back up custom tracks, load another user’s session, load from a URL ' +
+        'or file, save to a file, reset the browser</span></div>' +
         '<div class="sessAdvBody" id="sessAdvBody" style="display:none">' +
+        backup +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Load</div>' +
         loadUser + loadUrl + loadFile + '</div>' +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Save</div>' + saveFile + '</div>' +
         '<div class="sessAdvOther">' + other + '</div>' +
         '</div></div>';
-}
-
-function sessBackupHtml(C) {
-    // A single plain link, sitting on its own line right above the Advanced dropdown - visible
-    // without opening Advanced, but not a whole bar/button the way it once was.
-    if (!C.loggedIn) { return ''; }
-    return '<div class="sessBackupLink"><a href="hgSession?hgS_showDownload_=Submit&' +
-        sessEnc(C.cartVar) + '=' + sessEnc(C.hgsid) + '" ' +
-        'title="Download your custom tracks as a .tar.gz archive you can reload later">' +
-        'Back up custom tracks (.tar.gz)</a></div>';
 }
 
 // ---- build the whole page -----------------------------------------------
@@ -684,23 +681,29 @@ function sessSaveCardHtml(C) {
     }
     var what = loc ? '<span class="sessSaveWhat">' + loc + '</span>' : '';
     // Ghost text for the name field is a real generated name, not an explanation of the feature -
-    // the "Session name" label above the box already says what it is.
+    // the "Session name" label and its info bubble already say what it is.
     var randName = sessEnc(sessRandomShareName());
+    var nameTip = 'Optional. Leave this blank and your session will be saved under an ' +
+        'automatically generated random name, like the one shown here.';
+    var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
+        'the Public Sessions gallery if this session is made public.';
     return '<div class="sessSaveCard">' +
         '<div class="sessSaveHead"><span class="sessSaveTitle">' +
         'Save the current view as a stable session link</span>' + what + '</div>' +
         '<div class="sessSaveRow">' +
-        '<div class="sessSaveField"><span class="lab">Session name</span>' +
+        '<div class="sessSaveField"><span class="lab">Session name ' +
+        '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></span>' +
         '<input id="sessSaveName" class="sessSaveInput" type="text" maxlength="255" ' +
         'placeholder="' + randName + '"></div>' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
-        'Only I can load it</label>' +
+        'Private: Session can only be loaded by myself</label>' +
         '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
         'title="Save your current browser view as a named session">Save session</button>' +
         '</div>' +
-        '<div class="sessSaveField"><span class="lab">Description</span>' +
+        '<div class="sessSaveField"><span class="lab">Description ' +
+        '<span class="sessInfo" title="' + descTip + '">&#9432;</span></span>' +
         '<input id="sessSaveDesc" class="sessSaveInput" type="text" maxlength="512" ' +
-        'placeholder="Optional — shown on hover and in the Public Sessions gallery"></div>' +
+        'placeholder="Optional"></div>' +
         '</div>';
 }
 
@@ -836,7 +839,6 @@ function sessionBuild() {
         '<div id="sessMsg" class="sessMsg"></div>' +
         sessRecentHtml(recent) +
         sessSaveCardHtml(C) +
-        sessBackupHtml(C) +
         sessAdvancedHtml(C) +
         sessTableHtml(C)
     );
