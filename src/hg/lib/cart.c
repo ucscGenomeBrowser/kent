@@ -966,6 +966,12 @@ if (row != NULL)
             cartRemove(cart, actionVar);
         hDisconnectCentral(&conn2);
 
+        /* A full (non-merge) load just threw away whatever the user had in the browser before.
+         * Leave a marker so that the next hgTracks page can say what was opened and that the
+         * old view is gone.  A merge keeps the current view, so it needs no note. */
+        if (!merge)
+            cartSetString(cart, hgsSessionJustLoaded, "on");
+
         /* When loading another user's session, strip accepted-share cart vars
          * so we don't carry shares from the session owner into the current user's
          * cart. Shares are per-user; they should be re-accepted via share link. */
