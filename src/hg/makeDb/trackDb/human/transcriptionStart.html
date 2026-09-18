@@ -1,0 +1,100 @@
+<h2>Description</h2>
+
+<p>
+Transcription begins when RNA polymerase II starts making an RNA at a
+transcription start site (TSS). A gene or a regulatory element does not use a
+single start site: polymerase initiates across a spread of nearby bases, on both
+strands, and which bases get used is set largely by the local DNA sequence and by
+the chromatin state around it. Knowing where transcription starts, and how
+sharply, matters for reading a promoter, for telling a promoter from an enhancer,
+and for deciding which of a gene's annotated transcripts is actually made in a
+given cell.
+</p>
+
+<p>
+Transcription start site is the common term and the one used here, but it names
+a position where transcription initiation is the event. Initiation is the more
+accurate word: polymerase does not start at one fixed point but initiates over a
+window of bases, at rates that differ base by base, so what these tracks report
+is the distribution of initiation across a region rather than a single site.
+</p>
+
+<p>
+No single assay settles where a TSS is. Run-on methods catch the nascent RNA at
+the moment it is made, cap-based methods read the protected 5' end of a finished
+transcript, long reads follow a transcript from one end to the other, and
+sequence models predict initiation without an experiment at all. Each sees a
+different slice of the same event, and they disagree in informative ways. This
+collection gathers those lines of evidence in one place so they can be compared
+at a locus.
+</p>
+
+<p>
+Tracks currently in the collection:
+</p>
+
+<ul>
+<li><a href="hgTrackUi?g=encode4ProCap">PRO-cap</a>: initiation events measured
+directly by PRO-cap in six cell lines by ENCODE 4.</li>
+<li><a href="hgTrackUi?g=proCapNet">ProCapNet</a>: genome-wide, base-resolution
+predictions of initiation from DNA sequence alone, from six models each trained
+on one of those cell lines, together with per-base scores showing which bases
+each model used.</li>
+</ul>
+
+<p>
+Each track has its own description page covering what it measures or predicts,
+how it was made, and how to download it. On T2T-CHM13 only the ProCapNet
+predictions are available, since the PRO-cap experiments and the contribution
+scores were produced against GRCh38. More TSS evidence tracks will be added here
+over time.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Tracks are grouped by the evidence they carry, with measurements before
+predictions. Signal tracks that distinguish the two strands draw the plus strand
+upward and the minus strand downward, so a divergent promoter reads as a pair of
+peaks straddling the element.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+Each track listed above has its own description page with details on methods,
+file locations and how to download and intersect the data.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+PRO-cap data was generated as part of ENCODE by Sagar Shah and the Yu and Lis
+labs at Cornell University. ProCapNet was developed by Kelly Cochran in the
+Kundaje lab at Stanford University, and the genome-wide predictions and
+contribution scores were generated in collaboration with the GENCODE consortium.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Cochran K, Yin M, Mantripragada A, Schreiber J, Marinov GK, Shah SR, Yu H, Lis JT, Kundaje A.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/38853896" target="_blank">
+Dissecting the cis-regulatory syntax of transcription initiation with deep learning</a>.
+<em>bioRxiv</em>. 2024 Nov 21;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38853896" target="_blank">38853896</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11160661/" target="_blank">PMC11160661</a>
+</p>
+
+
+
+<p>
+Kwak H, Fuda NJ, Core LJ, Lis JT.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">
+Precise maps of RNA polymerase reveal how promoters direct initiation and pausing</a>.
+<em>Science</em>. 2013 Feb 22;339(6122):950-3.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">23430654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3974810/" target="_blank">PMC3974810</a>
+</p>
+

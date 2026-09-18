@@ -1,0 +1,124 @@
+# Transcription start sites: ENCODE 4 PRO-cap and ProCapNet, #35528, Claude
+Thu Sep 17 2026 (Claude/markd)
+
+# Scripts are in ~/kent/src/hg/makeDb/outside/proCapNet.  The cell lines, their
+# ENCODE accessions and their colors are in proCapNetExperiments.tsv there.
+
+##############################################################################
+# ProCapNet predictions and sequence-contribution scores
+##############################################################################
+
+# The predictions are 24 GB per file and are re-encoded, so they are fetched to
+# a working area outside the track directory.  The contribution scores are used
+# unaltered and go straight to their final home.
+
+mkdir -p /hive/data/outside/proCapNet/hg38 /hive/data/genomes/hg38/bed/proCapNet
+cd /hive/data/genomes/hg38/bed/proCapNet
+~/kent/src/hg/makeDb/outside/proCapNet/proCapNetDownload hg38 \
+    ~/kent/src/hg/makeDb/outside/proCapNet/proCapNetExperiments.tsv \
+    /hive/data/outside/proCapNet/hg38/pred contrib
+# 290 GB, about 25 minutes at six parallel streams
+
+# Re-encode the predictions from one bedGraph interval per base into fixedStep
+# sections, which cuts the size by about a third without changing a value, and
+# drop the bases holding a literal NaN.  Those NaNs are all in unresolved (N)
+# reference sequence and make the track's autoScale and summary statistics NaN.
+~/kent/src/hg/makeDb/outside/proCapNet/proCapNetPredBuild \
+    /hive/data/genomes/hg38/chrom.sizes /hive/data/outside/proCapNet/hg38/pred pred 6
+# all 12 files report the same counts:
+#   24 chroms, 3088269832 bases, 2924001250 with data,
+#   164268582 dropped as no-data or NaN   (5.3%, the N regions)
+# about 24 GB in, 15.7 to 15.9 GB out per file
+
+# confirm the summary statistics are numbers again, they were nan before
+bigWigInfo pred/K562.proCapNet.pos.bw | egrep 'basesCovered|mean|std'
+#   basesCovered: 2,924,001,250
+#   mean: 0.019478
+#   std: 0.300502
+
+# spot check that the re-encoding is lossless, comparing random windows of the
+# converted file against the download
+python3 - <<'PYEOF'
+import numpy as np, pyBigWig, random
+src = pyBigWig.open("/hive/data/outside/proCapNet/hg38/pred/K562.pos.bigWig")
+out = pyBigWig.open("pred/K562.proCapNet.pos.bw")
+random.seed(7)
+bad = 0
+for chrom in ("chr1", "chr7", "chr14", "chr21", "chrX"):
+    for _ in range(3):
+        s = random.randrange(0, src.chroms()[chrom] - 200000)
+        a = src.values(chrom, s, s + 200000, numpy=True)
+        b = out.values(chrom, s, s + 200000, numpy=True)
+        na, nb = np.isnan(a), np.isnan(b)
+        if not (na == nb).all() or not (a[~na] == b[~nb]).all():
+            bad += 1
+print("mismatched windows:", bad)
+PYEOF
+# mismatched windows: 0
+
+##############################################################################
+# ENCODE 4 PRO-cap
+##############################################################################
+
+mkdir -p /hive/data/genomes/hg38/bed/encode4ProCap
+cd /hive/data/genomes/hg38/bed/encode4ProCap
+
+# Resolve the portal metadata: for each of the six experiments take only the
+# plus and minus strand signal of unique reads files belonging to that
+# experiment's default analysis, which drops files superseded by a later
+# reprocessing.
+~/kent/src/hg/makeDb/outside/proCapNet/proCapNetEncodeMeta \
+    ~/kent/src/hg/makeDb/outside/proCapNet/proCapNetExperiments.tsv encodeFiles.tsv
+#   A673    ENCSR046BCI  4 files
+#   Caco-2  ENCSR100LIJ  4 files
+#   Calu3   ENCSR935RNW  4 files
+#   HUVEC   ENCSR098LLB  2 files
+#   K562    ENCSR261KBX  4 files
+#   MCF10A  ENCSR799DGV  8 files
+
+# ENCODE publishes no pooled PRO-cap file, so download the per-replicate files
+# and sum them per cell line and strand.  MCF10A has two sequencing runs per
+# biological replicate, hence eight files.  Minus strand signal is negative as
+# released and is kept that way.
+~/kent/src/hg/makeDb/outside/proCapNet/proCapNetEncodeBuild \
+    encodeFiles.tsv /hive/data/genomes/hg38/chrom.sizes \
+    /hive/data/outside/proCapNet/encode/raw .
+#   K562.ENCSR261KBX.pos.bw: 2 inputs, 3227685 input intervals, 3051479 merged intervals,
+#                3194212 bases covered
+# every input interval is accounted for; total signal is conserved exactly
+
+# sanity check: the summed signal equals the sum of the inputs
+python3 - <<'PYEOF'
+import pyBigWig
+def total(f):
+    bw = pyBigWig.open(f); s = bw.header()["sumData"]; bw.close(); return s
+raw = "/hive/data/outside/proCapNet/encode/raw"
+print(total(raw + "/ENCFF994CSC.pos.bigWig") + total(raw + "/ENCFF580QEK.pos.bigWig"),
+      total("K562.ENCSR261KBX.pos.bw"))
+PYEOF
+# 9605200.0 9605200.0
+
+##############################################################################
+# trackDb
+##############################################################################
+
+# The stanzas are generated, along with the metadata.tsv and colors.json each
+# faceted composite reads, which are written into the composite's /gbdb
+# directory.  The composites must be faceted: a container multiWig under a plain
+# composite is flattened away by hgTrackUi and never drawn.
+cd ~/kent/src/hg/makeDb/outside/proCapNet
+./proCapNetTrackDb hg38 proCapNetExperiments.tsv \
+    ~/kent/src/hg/makeDb/trackDb/human/hg38/transcriptionStart.ra /gbdb/hg38
+
+# transcriptionStart.ra is generated; the include line in human/hg38/trackDb.ra
+# is added by hand:
+#   include transcriptionStart.ra alpha
+
+##############################################################################
+# cleanup
+##############################################################################
+
+# The downloads are only needed to build the tracks: the predictions for the
+# re-encoding, the ENCODE per-replicate files for the summing.  /hive charges
+# twice the apparent size, so this returns about 580 GB of disk.
+rm -rf /hive/data/outside/proCapNet/hg38/pred /hive/data/outside/proCapNet/encode

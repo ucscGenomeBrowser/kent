@@ -1,0 +1,245 @@
+#!/usr/bin/env python3
+"""Generate the transcriptionStart.ra trackDb file and the faceted-composite
+metadata tables for one assembly.
+
+Layout is a superTrack holding one faceted composite per data source: proCapNet
+for the model predictions and sequence-contribution scores, encode4ProCap for the
+experimental PRO-cap signal.  hs1 has predictions only.
+
+The composites must be faceted rather than plain.  A container multiWig may be a
+composite child, but hui.c compositeUiSubtracks() walks descendant leaves, so
+under a plain composite the multiWig is flattened away and never drawn.  A faceted
+composite is routed to facetedCompositeUi() instead, which builds its rows from
+metaDataUrl and leaves the multiWig intact.  fiberSeqCompendium is the same
+pattern.
+
+Subtrack names are <composite>_<primaryKey>_<dataType>, which is how the faceted
+UI maps a table cell to a track.
+"""
+import argparse
+import json
+from pycbio.sys import cli, fileOps
+from pycbio.tsv import TsvReader
+
+GBDB = "/gbdb/{db}/{track}"
+DOWNLOAD = "https://hgdownload.soe.ucsc.edu/gbdb/{db}/{track}/$$"
+
+SAMPLE_CLASS_DESC = "Cancer = cell line derived from a tumor"
+SAMPLE_CLASS_COLORS = {"Cancer": "#D55E00", "Non-cancer": "#0072B2"}
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("db")
+    parser.add_argument("experimentsTsv")
+    parser.add_argument("outRa")
+    parser.add_argument("gbdbDir",
+                        help="/gbdb directory holding the track directories, where "
+                             "the metadata and color files are written")
+    return cli.parseOptsArgsWithLogging(parser)
+
+def stanza(indent, lines):
+    pad = " " * indent
+    return "".join(pad + line + "\n" for line in lines) + "\n"
+
+def downloadCell(db, track, exp):
+    """The Files column, one comma-separated token per bigWig.
+
+    Each token is path|label: the path substitutes into the subtrackUrls $$ and
+    the label is what the cell shows, so the table offers a named link per file
+    rather than a bare file name."""
+    if track == "proCapNet":
+        files = [(f"pred/{exp.cell}.proCapNet.pos.bw", "+ strand"),
+                 (f"pred/{exp.cell}.proCapNet.neg.bw", "- strand")]
+        if db == "hg38":
+            files.append((f"contrib/{exp.cell}.proCapNet-contrib.bw", "contribution"))
+    else:
+        files = [(f"{exp.cell}.{exp.procapAcc}.pos.bw", "+ strand"),
+                 (f"{exp.cell}.{exp.procapAcc}.neg.bw", "- strand")]
+    return ",".join(f"{path}|{label}" for path, label in files)
+
+def writeMetadata(path, experiments, accField, db, track):
+    """The cell line table shown on the faceted track UI page.  A plain column
+    name gets facet checkboxes, a leading underscore means searchable and sortable
+    but not faceted.  facetedComposite.js only offers a facet value that occurs
+    more than once, so Sample_class is the only column worth faceting: cell,
+    tissue and accession are unique per row and would each draw six checkboxes
+    that match one row apiece.
+
+    Cell_line is the primaryKey, so it names the tracks and is shown as its own
+    column; there is no second column repeating the cell name.
+
+    Column names are underscore separated because toTitleStyle() in
+    facetedComposite.js turns an underscore into a space but does not split
+    camelCase.  A header cell may carry a description after a "|", shown behind an
+    info icon."""
+    fileOps.ensureFileDir(path)
+    with fileOps.AtomicFileOpen(path) as fh:
+        print(f"_Tissue\tSample_class|{SAMPLE_CLASS_DESC}\tExperiment\tFiles\tCell_line",
+              file=fh)
+        for exp in experiments:
+            print(f"{exp.tissue}\t{exp.sampleClass}\t{getattr(exp, accField)}\t"
+                  f"{downloadCell(db, track, exp)}\t{exp.cell}", file=fh)
+
+def writeColors(path):
+    "swatches beside the facet checkboxes, keyed by the faceted column name"
+    fileOps.ensureFileDir(path)
+    with fileOps.AtomicFileOpen(path) as fh:
+        json.dump({"Sample_class": SAMPLE_CLASS_COLORS}, fh, indent=4)
+        print(file=fh)
+
+def superStanza():
+    return stanza(0, [
+        "track transcriptionStart",
+        "superTrack on show",
+        "shortLabel TSS",
+        "longLabel Experimental and computational evidence for transcription start sites (TSS)",
+        "group rna",
+    ])
+
+def compositeStanza(db, track, shortLabel, longLabel, dataTypes, accUrl, priority):
+    gbdb = GBDB.format(db=db, track=track)
+    return stanza(4, [
+        f"track {track}",
+        "parent transcriptionStart",
+        "compositeTrack faceted",
+        "type bigWig",
+        f"shortLabel {shortLabel}",
+        f"longLabel {longLabel}",
+        f"metaDataUrl {gbdb}/metadata.tsv",
+        f"colorSettingsUrl {gbdb}/colors.json",
+        "primaryKey Cell_line",
+        f"dataTypes {dataTypes}",
+        f"subtrackUrls Experiment={accUrl} Files={DOWNLOAD.format(db=db, track=track)}",
+        "defaultSortField Cell_line",
+        "maxCheckboxes 50",
+        "noInherit on",
+        "visibility hide",
+        f"priority {priority}",
+    ])
+
+def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, longLabel,
+                  childLabel, priority):
+    """One cell line's two strands as an overlay, plus strand drawn up and minus
+    strand drawn down.  The ProCapNet minus-strand files hold positive values and
+    are flipped with negateValues; the ENCODE minus-strand signal is already
+    negative and is not flipped.
+
+    fileTag is the part of the file name that says what the file holds, so a
+    bigWig downloaded on its own still names its source: the model for the
+    predictions, the ENCODE experiment accession for the measurements.
+
+    The parent line says "on", which makes these default-on and is what checks
+    the signal data type in the faceted UI.  The contribution scores stay off, so
+    opening the composite gives signal rather than every data type at once."""
+    gbdb = GBDB.format(db=db, track=composite) + subDir
+    negate = ["negateValues on"] if dataType == "pred" else []
+    out = stanza(8, [
+        f"track {composite}_{exp.cell}_{dataType}",
+        f"parent {composite} on",
+        "container multiWig",
+        "aggregate solidOverlay",
+        "showSubtrackColorOnUi on",
+        "type bigWig",
+        "autoScale on",
+        "alwaysZero on",
+        "maxHeightPixels 100:40:8",
+        f"color {exp.color}",
+        f"shortLabel {shortLabel}",
+        f"longLabel {longLabel}",
+        "onlyVisibility full",
+        f"priority {priority}",
+    ])
+    out += stanza(12, [
+        f"track {composite}_{exp.cell}_{dataType}_pos",
+        f"parent {composite}_{exp.cell}_{dataType}",
+        "type bigWig",
+        f"bigDataUrl {gbdb}/{exp.cell}.{fileTag}.pos.bw",
+        f"color {exp.color}",
+        f"shortLabel {shortLabel} +",
+        f"longLabel {childLabel}, plus strand",
+    ])
+    out += stanza(12, [
+        f"track {composite}_{exp.cell}_{dataType}_neg",
+        f"parent {composite}_{exp.cell}_{dataType}",
+        "type bigWig",
+        f"bigDataUrl {gbdb}/{exp.cell}.{fileTag}.neg.bw",
+        f"color {exp.color}",
+        f"altColor {exp.color}",
+    ] + negate + [
+        f"shortLabel {shortLabel} -",
+        f"longLabel {childLabel}, minus strand",
+    ])
+    return out
+
+def contribStanza(db, exp, priority):
+    gbdb = GBDB.format(db=db, track="proCapNet")
+    return stanza(8, [
+        f"track proCapNet_{exp.cell}_contrib",
+        "parent proCapNet off",
+        "type bigWig",
+        f"bigDataUrl {gbdb}/contrib/{exp.cell}.proCapNet-contrib.bw",
+        "logo on",
+        "autoScale on",
+        "alwaysZero on",
+        "maxHeightPixels 100:40:8",
+        f"color {exp.color}",
+        f"shortLabel {exp.cell} Contrib",
+        f"longLabel {exp.cell} ProCapNet sequence-contribution scores",
+        "onlyVisibility full",
+        f"priority {priority}",
+    ])
+
+def proCapNetComposite(db, experiments):
+    dataTypes = 'pred|"Predicted PRO-cap"'
+    if db == "hg38":
+        dataTypes += ' contrib|"Sequence contribution scores"'
+    out = compositeStanza(db, "proCapNet", "ProCapNet",
+                          "ProCapNet predicted PRO-cap and sequence-contribution scores",
+                          dataTypes, "https://www.encodeproject.org/annotations/$$/", 2)
+    for priority, exp in enumerate(experiments, 1):
+        out += strandOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",
+                             f"{exp.cell} Pred",
+                             f"{exp.cell} ProCapNet predicted PRO-cap, plus strand up and minus strand down",
+                             f"{exp.cell} ProCapNet predicted PRO-cap", priority)
+    if db == "hg38":
+        for priority, exp in enumerate(experiments, 11):
+            out += contribStanza(db, exp, priority)
+    return out
+
+def encode4ProCapComposite(db, experiments):
+    out = compositeStanza(db, "encode4ProCap", "PRO-cap",
+                          "PRO-cap nascent RNA transcription start sites from ENCODE 4",
+                          'procap|"PRO-cap"',
+                          "https://www.encodeproject.org/experiments/$$/", 1)
+    for priority, exp in enumerate(experiments, 1):
+        out += strandOverlay(db, "encode4ProCap", exp, "procap", "", exp.procapAcc,
+                             f"{exp.cell} PRO-cap",
+                             f"{exp.cell} PRO-cap transcription start sites, plus strand up and minus strand down",
+                             f"{exp.cell} PRO-cap transcription start sites", priority)
+    return out
+
+def proCapNetTrackDb(opts, args):
+    experiments = list(TsvReader(args.experimentsTsv))
+    fileOps.ensureFileDir(args.outRa)
+    with fileOps.AtomicFileOpen(args.outRa) as fh:
+        print(f"# Generated by hg/makeDb/outside/proCapNet/proCapNetTrackDb for {args.db}.",
+              file=fh)
+        print("# Do not edit by hand, edit the script and regenerate.\n", file=fh)
+        fh.write(superStanza())
+        if args.db == "hg38":
+            fh.write(encode4ProCapComposite(args.db, experiments))
+        fh.write(proCapNetComposite(args.db, experiments))
+    writeMetadata(f"{args.gbdbDir}/proCapNet/metadata.tsv", experiments, "modelAcc",
+                  args.db, "proCapNet")
+    writeColors(f"{args.gbdbDir}/proCapNet/colors.json")
+    if args.db == "hg38":
+        writeMetadata(f"{args.gbdbDir}/encode4ProCap/metadata.tsv", experiments, "procapAcc",
+                      args.db, "encode4ProCap")
+        writeColors(f"{args.gbdbDir}/encode4ProCap/colors.json")
+
+def main():
+    opts, args = parseArgs()
+    with cli.ErrorHandler(noStackExcepts=(OSError, cli.PycbioException)):
+        proCapNetTrackDb(opts, args)
+
+main()
