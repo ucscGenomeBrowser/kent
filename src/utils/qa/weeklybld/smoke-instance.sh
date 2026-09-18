@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# smoke-instance.sh [tip|beta|beta-arm64|rel ...] [--version NN]
+# smoke-instance.sh [tip|beta|beta-arm64|rel|vNNN ...] [--version NN]
 #
 # Quick smoke test of one or more docker browser QA instances on hgwdev. With no
 # instance arguments it tests the two beta instances (beta + beta-arm64) -- the
@@ -17,6 +17,8 @@
 #   - hgBlat and hgTables load,
 #   - and it reports the CGI version parsed from the hgTracks title. Pass
 #     --version NN (e.g. --version 501) to make a version mismatch a failure.
+#     A release instance names its own version, so kent-v503 is checked against
+#     v503 with no --version needed. refs #38377
 #
 # Exit status is 0 only if every check on every instance passed. refs #37655
 #
@@ -28,9 +30,9 @@ instances=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --version|-v) want_version="${2:?--version needs a number}"; shift 2 ;;
-        tip|beta|beta-arm64|rel) instances+=("$1"); shift ;;
+        tip|beta|beta-arm64|rel|v[0-9][0-9][0-9]) instances+=("$1"); shift ;;
         -h|--help)
-            echo "usage: $(basename "$0") [tip|beta|beta-arm64|rel ...] [--version NN]" >&2
+            echo "usage: $(basename "$0") [tip|beta|beta-arm64|rel|vNNN ...] [--version NN]" >&2
             exit 1 ;;
         *) echo "unknown argument: $1" >&2; exit 1 ;;
     esac
@@ -43,6 +45,8 @@ port_of() {
         beta)       echo 8082 ;;
         rel)        echo 8083 ;;
         beta-arm64) echo 8084 ;;
+        # a release instance's port encodes the release, as in run-instance.sh
+        v[0-9][0-9][0-9]) echo $(( 8000 + 10#${1#v} )) ;;
     esac
 }
 
@@ -87,6 +91,12 @@ check() {
 }
 
 for name in "${instances[@]}"; do
+    # a release instance carries its expected version in its name; --version
+    # still wins, so an explicit check can override it. refs #38377
+    expect="$want_version"
+    if [[ -z "$expect" && "$name" =~ ^v([0-9]+)$ ]]; then
+        expect="${BASH_REMATCH[1]}"
+    fi
     port="$(port_of "$name")"
     container="kent-$name"
     base="http://127.0.0.1:${port}"
@@ -115,8 +125,8 @@ for name in "${instances[@]}"; do
             | grep -oE 'UCSC Genome Browser v[0-9]+' | head -1 | grep -oE 'v[0-9]+')"
     if [[ -z "$ver" ]]; then
         printf '    FAIL  %-16s could not read CGI version from title\n' "version"; overall=1
-    elif [[ -n "$want_version" && "$ver" != "v$want_version" ]]; then
-        printf '    FAIL  %-16s %s but expected v%s\n' "version" "$ver" "$want_version"; overall=1
+    elif [[ -n "$expect" && "$ver" != "v$expect" ]]; then
+        printf '    FAIL  %-16s %s but expected v%s\n' "version" "$ver" "$expect"; overall=1
     else
         printf '    ok    %-16s %s\n' "version" "$ver"
     fi

@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# run-instance.sh <tip|beta|rel>
+# run-instance.sh <tip|beta|rel|vNNN>
 #
-# Start one of the three docker browser instances on hgwdev. The image is fully
+# Start one of the docker browser instances on hgwdev. The image is fully
 # self-contained: MariaDB, Apache and the CGIs were baked in at build time by
 # browserSetup.sh, so NOTHING from the hgwdev filesystem is bind-mounted into
 # the container. Anything that must survive a refresh (the MariaDB data dir and
@@ -10,6 +10,11 @@
 # baked content on first use and persist across refresh-instance cycles. For
 # tip and beta, the matching hgwdev CGIs are copied in on top afterward (see
 # overlay-cgi.sh) -- a copy, not a mount.
+#
+# A release name (v499, v503, ...) starts a past release from its published
+# image on Docker Hub. That instance is deliberately NOT overlaid: the point of
+# it is to run the exact code a user on that release is running, so a bug can be
+# reproduced against it. refs #38377
 # refs #37655
 #
 set -eEu -o pipefail
@@ -17,7 +22,7 @@ set -eEu -o pipefail
 selfDir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 usage() {
-    echo "usage: $(basename "$0") tip|beta|rel" >&2
+    echo "usage: $(basename "$0") tip|beta|rel|vNNN" >&2
     exit 1
 }
 
@@ -31,6 +36,18 @@ case "$name" in
     # beta-arm64 is an arm64 image running emulated on this amd64 host, so pin
     # the platform explicitly; it needs the QEMU binfmt handlers registered.
     beta-arm64) port=8084; image=kent:beta-arm64; platform="--platform linux/arm64" ;;
+    # A past release. The port encodes the release number (v503 -> 8503), so the
+    # mapping needs neither a table nor an allocator, and the tag is the
+    # multi-arch manifest buildReleaseDocker.sh pushes, so docker picks the
+    # image for this architecture. refs #38377
+    v[0-9][0-9][0-9])
+        port=$(( 8000 + 10#${name#v} ))
+        image="genomebrowser/server:$name"
+        if (( port <= 8084 )); then
+            echo "$name would want port $port, which is inside the tip/beta/rel block" >&2
+            exit 1
+        fi
+        ;;
     *)          usage ;;
 esac
 container="kent-$name"
