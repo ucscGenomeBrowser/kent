@@ -1434,12 +1434,31 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 }
 
+static struct htmlPage *rootPageGet(char *url)
+/* Fetch the page the whole run starts from, following a redirect if the server
+ * sends one.  Both hgwdev and a sandbox answer plain http with a 301 to https,
+ * and a url given with no scheme is fetched over http, so without this the run
+ * parses the redirect page, finds no form in it, and dies several steps later
+ * saying "Null form in htmlPageSetVar", which names neither the url nor the
+ * redirect.  Every later request is built from this page, so following the
+ * redirect here also puts the rest of the run on the url the server asked for. */
+{
+struct htmlPage *page = htmlPageForwarded(url, NULL);
+if (page == NULL)
+    errAbort("Couldn't get %s", url);
+if (!sameString(page->url, url))
+    verbose(1, "%s redirected to %s\n", url, page->url);
+if (page->status->status != 200)
+    errAbort("%s returned HTTP status code %d", page->url, page->status->status);
+return page;
+}
+
 int hgTablesTest(char *url, char *logName)
 /* hgTablesTest - Test hgTables web page.  Returns the exit code: zero only if
  * the run finished and no test hit a hard error. */
 {
 /* Get default page, and open log. */
-struct htmlPage *rootPage = htmlPageGet(url);
+struct htmlPage *rootPage = rootPageGet(url);
 if (appendLog)
     logFile = mustOpen(logName, "a");
 else
@@ -1452,8 +1471,8 @@ fprintf(logFile,"seed=%d\n",seed);
  
 showRunningHostName();
 
-verbose(1, "Testing URL %s\n", url);
-fprintf(logFile, "Testing URL %s\n", url);
+verbose(1, "Testing URL %s\n", rootPage->url);
+fprintf(logFile, "Testing URL %s\n", rootPage->url);
 
 /* Show what database server we are connecting to. 
 Matters for expected rows in tables. */

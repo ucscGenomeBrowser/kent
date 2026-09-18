@@ -528,12 +528,17 @@ errCatchFree(&errCatch);
  * forget it and let hgLogin treat the sign-in as one that came with no address at all: it then
  * asks for one and confirms it by mail, the same as ORCID, which releases none.  Dropping it
  * rather than flagging it also keeps it out of the account matching in resolveIdentity, where
- * an unverified address would otherwise be enough to reach somebody else's account. */
+ * an unverified address would otherwise be enough to reach somebody else's account.
+ * Keep the address itself in emailUnverified, though.  "Released nothing" and "released
+ * something we will not take" look identical downstream once email is NULL, and they are not
+ * the same thing to tell a user: telling a CILogon user that CILogon shares no address is
+ * simply untrue (#38339). */
 if ((id != NULL) && isNotEmpty(id->email) && !id->emailVerified && !p->trustEmail)
     {
     fprintf(stderr, "hgLogin oauth: %s did not verify the address it released; asking the user "
         "for one instead (set login.oauth.%s.trustEmail=on to accept it)\n", name, name);
-    freez(&id->email);
+    id->emailUnverified = id->email;
+    id->email = NULL;
     }
 return id;
 }
@@ -547,6 +552,7 @@ if (id != NULL)
     freeMem(id->provider);
     freeMem(id->subject);
     freeMem(id->email);
+    freeMem(id->emailUnverified);
     freeMem(id->displayName);
     freez(pId);
     }

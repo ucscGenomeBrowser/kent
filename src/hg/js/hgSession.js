@@ -4,7 +4,8 @@
 // facelift strategy (#37996): hgSession.c emits the session list and page config as an inline JSON
 // global (hgSessionData) into an empty #sessionApp container, and this file builds the UI - a
 // save-current-view card, a searchable/sortable DataTable of saved sessions with inline
-// Overwrite/Share/Edit/Delete, and an "Advanced" panel for loading and backup.
+// Overwrite/Share/Edit/Delete, and an "Advanced" panel (custom-track backup, a load column and a
+// save column).
 //
 // The inline table actions POST to small JSON endpoints in hgSession.c (hgS_doDeleteJson, etc.) and
 // update the table in place.  Navigation actions (load a session, load from URL/file, save to file,
@@ -431,7 +432,7 @@ function sessOpenShare(row) {
         'title="Compose an email with this link">Email</a></div>' +
         '<div class="gbModalText" style="margin-top:14px">Sessions are loadable by anyone with the ' +
         'link by default; use <b>Edit</b> to make one private.</div>' +
-        '<label class="gbModalLabel" style="font-weight:400;color:inherit">' +
+        '<label class="gbModalLabel" style="font-weight:400;color:inherit;font-size:14px">' +
         '<input type="checkbox" id="sessGalleryChk"> List it in the ' +
         '<a href="' + sessEnc(sessData.config.publicSessionsUrl) + '" target="_blank">' +
         'Public Sessions</a> gallery</label>' +
@@ -616,25 +617,32 @@ function sessAdvancedHtml(C) {
         'value="gzip"> gzip</label>' +
         '<button type="submit" class="gbPill" name="hgS_doSaveLocal" value="submit" ' +
         'title="Download the current browser settings as a session file">Save</button></form></div>';
-    var backup =
-        '<div class="sessAdvItem"><span class="lab">Back up custom tracks</span>' +
-        '<form class="sessAdvRow" action="hgSession" method="POST">' + sid +
-        '<button type="submit" class="gbPill" name="hgS_showDownload_" value="Submit" ' +
-        'title="Download your custom tracks as a .tar.gz archive you can reload later">' +
-        'Back up custom tracks (.tar.gz)</button></form></div>';
     var other =
         '<div class="sessAdvItem"><span class="lab">Other</span>' +
         '<div class="sessAdvLinks">' +
         '<a href="' + sessEnc(C.resetUrl) + '" ' +
         'title="Reset all browser settings to their defaults">Reset the browser to defaults</a>' +
         '</div></div>';
+    // Back up custom tracks - a button again, across the top of the panel above both columns.
+    var backup =
+        '<div class="sessAdvTop"><form action="hgSession" method="POST">' + sid +
+        '<button type="submit" class="gbPill" name="hgS_showDownload_" value="Submit" ' +
+        'title="Download your custom tracks as a .tar.gz archive you can reload later">' +
+        'Back up custom tracks (.tar.gz)</button></form></div>';
 
+    // Two columns - what you load from, and what you save to - rather than one undifferentiated
+    // list; "Other" (reset) belongs to neither, so it spans both underneath.
     return '<div class="sessAdv">' +
         '<div class="sessAdvHead" id="sessAdvHead"><span class="caret">▸</span>' +
-        '<span>Advanced — load another user’s session, load from a URL or file, ' +
-        'save to a file, reset the browser</span></div>' +
+        '<span>Advanced — back up custom tracks, load another user’s session, load from a URL ' +
+        'or file, save to a file, reset the browser</span></div>' +
         '<div class="sessAdvBody" id="sessAdvBody" style="display:none">' +
-        loadUser + loadUrl + loadFile + saveFile + backup + other + '</div></div>';
+        backup +
+        '<div class="sessAdvCol"><div class="sessAdvColHead">Load</div>' +
+        loadUser + loadUrl + loadFile + '</div>' +
+        '<div class="sessAdvCol"><div class="sessAdvColHead">Save</div>' + saveFile + '</div>' +
+        '<div class="sessAdvOther">' + other + '</div>' +
+        '</div></div>';
 }
 
 // ---- build the whole page -----------------------------------------------
@@ -672,31 +680,48 @@ function sessSaveCardHtml(C) {
         loc += ', ' + sessNum(C.trackCount) + ' track' + (C.trackCount === 1 ? '' : 's') + ' shown';
     }
     var what = loc ? '<span class="sessSaveWhat">' + loc + '</span>' : '';
+    // Ghost text for the name field is a real generated name, not an explanation of the feature -
+    // the info bubble already says what it is.
+    var randName = sessEnc(sessRandomShareName());
+    // "[sessionName]", not "<sessionName>": the tooltip is inserted via innerHTML (addMouseover in
+    // utils.js), so a literal "<...>" is parsed as an (invisible) tag instead of shown as text.
+    var nameTip = 'Optional. Leave this blank and your session will be saved under an ' +
+        'automatically generated random name, like the one shown here. The session name ' +
+        'becomes part of the session’s URL, e.g. https://genome.ucsc.edu/s/' +
+        sessEnc(C.userName) + '/[sessionName].';
+    var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
+        'the Public Sessions gallery if this session is made public.';
     return '<div class="sessSaveCard">' +
         '<div class="sessSaveHead"><span class="sessSaveTitle">' +
         'Save the current view as a stable session link</span>' + what + '</div>' +
         '<div class="sessSaveRow">' +
+        '<div class="sessSaveField">' +
         '<input id="sessSaveName" class="sessSaveInput" type="text" maxlength="255" ' +
-        'placeholder="Session name — or leave empty to save with a randomly generated name">' +
+        'placeholder="Session name, default ' + randName + '">' +
+        '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></div>' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
-        'Only I can load it</label>' +
+        'Private: Session can only be loaded by myself</label>' +
         '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
         'title="Save your current browser view as a named session">Save session</button>' +
         '</div>' +
+        '<div class="sessSaveField">' +
         '<input id="sessSaveDesc" class="sessSaveInput" type="text" maxlength="512" ' +
-        'placeholder="Description (optional) — shown on hover and in the Public Sessions gallery">' +
+        'placeholder="Description (optional)">' +
+        '<span class="sessInfo" title="' + descTip + '">&#9432;</span></div>' +
         '</div>';
 }
 
 function sessRecentHtml(recent) {
     // A quick shortcut to re-save the session the user most recently saved, keeping its name and
-    // description.  Hidden when there are no saved sessions.
+    // description.  Hidden when there are no saved sessions.  The button's own mouseover is easy to
+    // miss, so a visible (i) bubble carries the same text.
     if (!recent) { return ''; }
+    var tip = 'Overwrite this session with the currently active view; keeps the session name and ' +
+        'description identical';
     return '<div class="sessRecent">Most recently saved session: <b>' + sessEnc(recent.name) +
         '</b> <span class="sessRecentTime">(' + sessEnc(recent.lastUse) + ')</span> ' +
-        '<button type="button" class="gbPill" id="sessUpdateNow" ' +
-        'title="Overwrite this session with the currently active view; keeps the session name and ' +
-        'description identical">Update now</button></div>';
+        '<button type="button" class="gbPill" id="sessUpdateNow" title="' + tip + '">' +
+        'Overwrite now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
 }
 
 function sessScrollToTable() {
@@ -789,12 +814,12 @@ function sessionBuild() {
     var C = sessData.config;
     var app = $('#sessionApp');
 
-    var intro = '<div class="sessIntro">' + sessAccountHtml(C) +
-        (sessAccountHtml(C) ? '<br>' : '') +
-        'A session is a stable link to a Genome Browser view that you can save, load later, share ' +
-        'or copy into a manuscript. See the ' +
+    var acctHtml = sessAccountHtml(C);
+    var intro = '<div class="sessIntro">' + (acctHtml ? '<p>' + acctHtml + '</p>' : '') +
+        '<p>A session is a stable link to a Genome Browser view that you can save, load later, ' +
+        'share or copy into a manuscript. See the ' +
         '<a href="' + sessEnc(C.helpUrl) + '" target="_blank">Sessions User’s Guide</a> and the ' +
-        '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</div>';
+        '<a href="' + sessEnc(C.galleryUrl) + '" target="_blank">Session Gallery</a>.</p></div>';
 
     // Every row carries the server it lives on; at this point they are all this server's own.
     // The sessions merged in later from the other nodes get theirs in sessMergeMirrors().
@@ -805,8 +830,8 @@ function sessionBuild() {
         s.serverUrl = '';   // this is that server, so the Server cell here is text, not a link
     });
 
-    // The session most recently saved/overwritten (max lastUse), for the one-click "Update now".
-    // Only this server's own sessions: "Update now" saves through this server's cart.
+    // The session most recently saved/overwritten (max lastUse), for the one-click "Overwrite now".
+    // Only this server's own sessions: "Overwrite now" saves through this server's cart.
     var recent = null;
     (sessData.sessions || []).forEach(function(s) {
         if (s.remote) { return; }
@@ -828,14 +853,14 @@ function sessionBuild() {
         if (ev.key === 'Enter') { ev.preventDefault(); sessDoSave(); }
     });
 
-    // One-click update of the most recently saved session.
+    // One-click overwrite of the most recently saved session.
     if (recent) {
         $('#sessUpdateNow').on('click', function() {
             sessConfirm({
-                title: 'Update session',
+                title: 'Overwrite session',
                 bodyHtml: 'Overwrite <b>' + sessEnc(recent.name) + '</b> with the view you are ' +
                     'looking at now? The session name and description stay the same.',
-                okLabel: 'Update now',
+                okLabel: 'Overwrite now',
                 onOk: function() { sessDoOverwrite(recent); }
             });
         });

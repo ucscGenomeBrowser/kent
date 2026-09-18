@@ -140,8 +140,10 @@ gsidTable.do.                      # hg/gsid/gsidTable/gsidTable.c
 haplotypes_distMinor               # hg/hgGene/alleles.c
 hc_one_url                         # hg/hgHubConnect/hgHubConnect.c
 hgLogin.do.                        # hg/hgLogin/hgLogin.c
+hgLogin_actMailChanged             # hg/hgLogin/hgLogin.c
 hgLogin_actMailProvider            # hg/hgLogin/hgLogin.c
 hgLogin_actMailTo                  # hg/hgLogin/hgLogin.c
+hgLogin_actMailUnverified          # hg/hgLogin/hgLogin.c
 hgLogin_actMailUser                # hg/hgLogin/hgLogin.c
 hgLogin_changeRequired             # hg/hgLogin/hgLogin.c
 hgLogin_chosenIdx                  # hg/hgLogin/hgLogin.c
@@ -339,6 +341,7 @@ nohead                             # hg/pslCat/pslCat.c
 numTests                           # hg/hgCoordConv/hgCoordConv.c
 o                                  # hg/hgc/cgapSageClick.c
 oauth_pending_email                # hg/hgLogin/hgLogin.c
+oauth_pending_email_unverified     # hg/hgLogin/hgLogin.c
 oauth_pending_email_verified       # hg/hgLogin/hgLogin.c
 oauth_pending_name                 # hg/hgLogin/hgLogin.c
 oauth_pending_provider             # hg/hgLogin/hgLogin.c

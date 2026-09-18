@@ -13,21 +13,24 @@
 
 /* Save-current-view card - the primary action.  Neutral light-grey panel. */
 #sessionApp .sessSaveCard { border:0; background:#f6f8fa; padding:14px 16px;
-    display:flex; flex-direction:column; gap:12px; margin:0 0 20px; }
+    display:flex; flex-direction:column; gap:12px; margin:0 0 12px; }
 #sessionApp .sessSaveHead { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
 /* Title and the current-view summary share one font size (title is just bold). */
 #sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:var(--accent); }
 #sessionApp .sessSaveWhat { font-size:14px; }
 #sessionApp .sessSaveRow { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-#sessionApp .sessSaveInput { flex:1 1 320px; min-width:220px; height:34px; box-sizing:border-box;
+/* Name/description: no label - the placeholder and the info bubble after the box say what it is -
+ * and a box sized for what people actually type rather than the full card width. */
+#sessionApp .sessSaveField { display:flex; align-items:center; gap:6px; }
+#sessionApp .sessSaveInput { width:260px; max-width:100%; height:34px; box-sizing:border-box;
     padding:0 11px; font-size:14px; border:1px solid var(--btnLine); border-radius:0; background:#fff;
     font-family:inherit; }
-/* The optional description input spans the card on its own line below the name row. */
-#sessionApp #sessSaveDesc { width:100%; flex:none; }
+#sessionApp #sessSaveDesc { width:650px; }
+
 #sessionApp .sessSaveCheck { display:flex; align-items:center; gap:7px; font-size:13px;
     color:var(--ink); white-space:nowrap; }
 
-/* One-click "update the most recently saved session" - a compact thin bar above the save card. */
+/* One-click "overwrite the most recently saved session" - a compact thin bar above the save card. */
 #sessionApp .sessRecent { display:flex; align-items:center; gap:8px; flex-wrap:wrap;
     border:0; background:#f6f8fa; padding:6px 12px; font-size:14px; margin:0 0 12px; }
 #sessionApp .sessRecent .gbPill { padding:2px 10px; }
@@ -86,6 +89,17 @@
 #sessionApp .sessAdvBody { padding:16px 16px; display:grid; grid-template-columns:1fr 1fr;
     gap:18px 28px; background:#f6f8fa; font-size:14px; }
 @media (max-width:820px) { #sessionApp .sessAdvBody { grid-template-columns:1fr; } }
+/* Load column and save column, so the panel reads as two purposes instead of one flat list. */
+#sessionApp .sessAdvCol { display:flex; flex-direction:column; gap:18px; }
+#sessionApp .sessAdvColHead { font-weight:700; color:var(--ink); font-size:12px;
+    text-transform:uppercase; letter-spacing:.03em; opacity:.7; }
+/* Back up custom tracks - a button across the top of the panel, above the two columns. */
+#sessionApp .sessAdvTop { grid-column:1 / -1; border-bottom:1px solid var(--btnLine);
+    padding-bottom:14px; margin-bottom:4px; }
+#sessionApp .sessAdvTop form { margin:0; }
+/* "Other" (reset) belongs to neither column, so it spans both, below them. */
+#sessionApp .sessAdvOther { grid-column:1 / -1; border-top:1px solid var(--btnLine);
+    padding-top:14px; margin-top:4px; }
 #sessionApp .sessAdvItem { display:flex; flex-direction:column; gap:7px; }
 #sessionApp .sessAdvItem > .lab { font-weight:700; color:var(--ink); }
 #sessionApp .sessAdvRow { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
