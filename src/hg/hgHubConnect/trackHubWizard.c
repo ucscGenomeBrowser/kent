@@ -23,6 +23,7 @@
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "htmshell.h"
+#include "geoMirror.h"
 #include <limits.h>
 #include "errCatch.h"
 
@@ -177,18 +178,45 @@ void getHubSpaceUIState(struct cartJson *cj, struct hash *paramHash)
 outUiDataForUser(cj->jw);
 }
 
+static void syncApiKeyToOtherNodes(char *userName, char *apiKey)
+/* Tell every other geo mirror node about this user's new key (apiKey non-NULL) or that it was
+ * revoked (apiKey NULL), so a key generated on any UCSC mirror works on all of them.  Best
+ * effort: a peer that is slow or down is logged and skipped, never fails the local action,
+ * which has already succeeded by the time this is called. */
+{
+if (!cfgOptionBooleanDefault("syncHubApiKeys", FALSE))
+    return;
+char *apiKeyOrEmpty = apiKey ? apiKey : "";
+char *sig = hubSpaceApiKeySyncSig(userName, apiKeyOrEmpty);
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+jsonWriteObjectStart(jw, hgHubSyncApiKey);
+jsonWriteString(jw, "userName", userName);
+jsonWriteString(jw, "apiKey", apiKeyOrEmpty);
+jsonWriteString(jw, "sig", sig);
+jsonWriteObjectEnd(jw);
+jsonWriteObjectEnd(jw);
+struct slPair *cgiVars = slPairNew(CARTJSON_COMMAND, jw->dy->string);
+geoMirrorNotifyOtherNodes("hgHubConnect", cgiVars);
+slPairFree(&cgiVars);
+jsonWriteFree(&jw);
+}
+
 void cjRevokeApiKey(struct cartJson *cj, struct hash *paramHash)
 /* Wrapper for cartJson to call lib function revokeApiKey, removes any api keys for the user */
 {
 struct errCatch *errCatch = errCatchNew();
+char *userName = getUserName();
 if (errCatchStart(errCatch))
     {
-    char *userName = getUserName();
     hubSpaceRevokeApiKey(userName);
     }
 errCatchEnd(errCatch);
 if (!(errCatch->gotError))
+    {
     jsonWriteString(cj->jw, "revoke", "true");
+    syncApiKeyToOtherNodes(userName, NULL);
+    }
 else
     jsonWriteStringf(cj->jw, "error", "revokeApiKey() error: '%s'", errCatch->message->string);
 errCatchFree(&errCatch);
@@ -199,18 +227,58 @@ void cjGenerateApiKey(struct cartJson *cj, struct hash *paramHash)
 {
 struct errCatch *errCatch = errCatchNew();
 char *apiKey = NULL;
+char *userName = getUserName();
 
 if (errCatchStart(errCatch))
     {
-    char *userName = getUserName();
     apiKey = hubSpaceGenerateApiKey(userName);
     }
 
 errCatchEnd(errCatch);
 if (apiKey)
+    {
     jsonWriteString(cj->jw, "apiKey", apiKey);
+    syncApiKeyToOtherNodes(userName, apiKey);
+    }
 else if (errCatch->gotError)
     jsonWriteStringf(cj->jw, "error", "generateApiKey() error: '%s'", errCatch->message->string);
+errCatchFree(&errCatch);
+}
+
+void cjSyncApiKey(struct cartJson *cj, struct hash *paramHash)
+/* Adopt an api key (or a revocation) that a peer geo mirror is telling us about, so the key
+ * works the same on every UCSC mirror.  Only ever called by geoMirrorNotifyOtherNodes() on
+ * another mirror -- never call syncApiKeyToOtherNodes() from in here, or mirrors would keep
+ * re-notifying each other forever. Rejects the request unless sig proves it was signed with
+ * this site's login.cookieSalt, which every geo mirror of a site already shares. */
+{
+if (!cfgOptionBooleanDefault("syncHubApiKeys", FALSE))
+    {
+    jsonWriteString(cj->jw, "error", "hgHubSyncApiKey: not enabled on this site");
+    return;
+    }
+char *userName = cartJsonRequiredParam(paramHash, "userName", cj->jw, "hgHubSyncApiKey");
+char *apiKey = cartJsonRequiredParam(paramHash, "apiKey", cj->jw, "hgHubSyncApiKey");
+char *sig = cartJsonRequiredParam(paramHash, "sig", cj->jw, "hgHubSyncApiKey");
+if (!userName || !apiKey || !sig)
+    return;
+
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    char *expectedSig = hubSpaceApiKeySyncSig(userName, apiKey);
+    if (!sameString(sig, expectedSig))
+        errAbort("hgHubSyncApiKey: bad signature");
+    if (isNotEmpty(apiKey))
+        hubSpaceSetApiKey(userName, apiKey);
+    else
+        hubSpaceRevokeApiKey(userName);
+    }
+errCatchEnd(errCatch);
+if (!(errCatch->gotError))
+    jsonWriteString(cj->jw, "synced", "true");
+else
+    jsonWriteStringf(cj->jw, "error", "hgHubSyncApiKey error: '%s'", errCatch->message->string);
 errCatchFree(&errCatch);
 }
 

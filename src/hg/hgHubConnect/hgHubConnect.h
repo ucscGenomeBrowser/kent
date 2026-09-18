@@ -19,12 +19,17 @@
 #define hgHubMoveFile "moveFile"
 #define hgHubGenerateApiKey "generateApiKey"
 #define hgHubRevokeApiKey "revokeApiKey"
+#define hgHubSyncApiKey "hgHubSyncApiKey"
 
 void cjRevokeApiKey(struct cartJson *cj, struct hash *paramHash);
 /* Remove any api keys for the user */
 
 void cjGenerateApiKey(struct cartJson *cj, struct hash *paramHash);
 /* Make a random (but not crypto-secure api key for use of hubtools to upload to hubspace */
+
+void cjSyncApiKey(struct cartJson *cj, struct hash *paramHash);
+/* Adopt an api key (or a revocation) that a peer geo mirror is telling us about.  Only ever
+ * called by another mirror's geoMirrorNotifyOtherNodes(), never by a browser. */
 
 void doRemoveFile(struct cartJson *cj, struct hash *paramHash);
 /* Process the request to remove a file */

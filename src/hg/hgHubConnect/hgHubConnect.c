@@ -1799,6 +1799,7 @@ if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
     }
 cartJsonRegisterHandler(cj, hgHubGenerateApiKey, cjGenerateApiKey);
 cartJsonRegisterHandler(cj, hgHubRevokeApiKey, cjRevokeApiKey);
+cartJsonRegisterHandler(cj, hgHubSyncApiKey, cjSyncApiKey);
 cartJsonExecute(cj);
 }
 

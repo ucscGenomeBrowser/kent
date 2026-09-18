@@ -7,6 +7,9 @@
 #include "geoMirror.h"
 #include "hgConfig.h"
 #include "internet.h"
+#include "net.h"
+#include "cheapcgi.h"
+#include "errCatch.h"
 
 /* geographic server (mirror) support
 
@@ -341,9 +344,43 @@ struct slPair *geoMirrorOtherNodes()
 return geoMirrorNodeList(FALSE);
 }
 
+void geoMirrorNotifyOtherNodes(char *cgiName, struct slPair *cgiVars)
+/* Best-effort: fire cgiVars (name=value) as a GET request at cgiName on every other geo mirror
+ * node (per geoMirrorOtherNodes()).  No-ops if geo mirroring is off or this is the only node.
+ * Adds no authentication of its own -- callers must put their own signed proof into cgiVars,
+ * since the receiving CGI runs with no session/cart tying the request to a user.  A slow or
+ * unreachable peer is logged with warn() and skipped; the caller's own action must already be
+ * complete locally before this is called, since a peer being down must never fail the local
+ * action. */
+{
+struct slPair *nodes = geoMirrorOtherNodes();
+struct slPair *node;
+for (node = nodes; node != NULL; node = node->next)
+    {
+    struct dyString *url = dyStringCreate("http://%s/cgi-bin/%s?", (char *)node->val, cgiName);
+    struct slPair *var;
+    for (var = cgiVars; var != NULL; var = var->next)
+        dyStringPrintf(url, "%s%s=%s", (var == cgiVars) ? "" : "&", var->name,
+                       cgiEncodeFull((char *)var->val));
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        struct dyString *response = netSlurpUrl(url->string);
+        dyStringFree(&response);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        warn("geoMirrorNotifyOtherNodes: failed to reach %s (%s): %s",
+             node->name, (char *)node->val, errCatch->message->string);
+    errCatchFree(&errCatch);
+    dyStringFree(&url);
+    }
+slPairFreeValsAndList(&nodes);
+}
+
 char *geoMirrorMenu()
-/* Create customized geoMirror menu string for substitution of  into 
- * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc 
+/* Create customized geoMirror menu string for substitution of  into
+ * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc
  * Reads hgcentral geo tables and hg.conf settings. 
  * Free the returned string when done. */
 {
