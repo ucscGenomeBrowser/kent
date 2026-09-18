@@ -683,10 +683,12 @@ function sessSaveCardHtml(C) {
     // Ghost text for the name field is a real generated name, not an explanation of the feature -
     // the info bubble already says what it is.
     var randName = sessEnc(sessRandomShareName());
+    // "[sessionName]", not "<sessionName>": the tooltip is inserted via innerHTML (addMouseover in
+    // utils.js), so a literal "<...>" is parsed as an (invisible) tag instead of shown as text.
     var nameTip = 'Optional. Leave this blank and your session will be saved under an ' +
         'automatically generated random name, like the one shown here. The session name ' +
         'becomes part of the session’s URL, e.g. https://genome.ucsc.edu/s/' +
-        sessEnc(C.userName) + '/<sessionName>.';
+        sessEnc(C.userName) + '/[sessionName].';
     var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
         'the Public Sessions gallery if this session is made public.';
     return '<div class="sessSaveCard">' +
