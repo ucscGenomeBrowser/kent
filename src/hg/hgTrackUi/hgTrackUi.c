@@ -3750,6 +3750,9 @@ if (tdbIsFacetedComposite(tdb))
 
 if (tdbParent->html)
     {
+    // the excerpt below is the container's own description page, so it needs the same
+    // substitution the track's page gets further down
+    hVarSubstTrackDbHtml(cart, tdbParent, database);
     // collapsed panel for Description
     printf("<p><table>");  // required by jsCollapsible
     jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
@@ -4723,11 +4726,6 @@ if (isDup)
         errAbort("Can't find duplicate track %s", dupWholeName);
     tdb = dupTdbFrom(tdb, dup);
     }
-
-// resolve $hgsid, which hgTrackDb had no cart to resolve, and for a hub the rest of its
-// description page variables: a hub page never went through hgTrackDb at all.  This is what
-// lets a hub page link to its container with $parentTrack.
-hVarSubstTrackDbHtml(cart, tdb, database);
 
 if(cartOptionalString(cart, "ajax"))
     {
