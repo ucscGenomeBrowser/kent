@@ -684,7 +684,9 @@ function sessSaveCardHtml(C) {
     // the "Session name" label and its info bubble already say what it is.
     var randName = sessEnc(sessRandomShareName());
     var nameTip = 'Optional. Leave this blank and your session will be saved under an ' +
-        'automatically generated random name, like the one shown here.';
+        'automatically generated random name, like the one shown here. The session name ' +
+        'becomes part of the session’s URL, e.g. https://genome.ucsc.edu/s/' +
+        sessEnc(C.userName) + '/<sessionName>.';
     var descTip = 'Shown when the session is loaded, in the table below on mouseover, and in ' +
         'the Public Sessions gallery if this session is made public.';
     return '<div class="sessSaveCard">' +
