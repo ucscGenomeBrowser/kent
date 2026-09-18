@@ -133,14 +133,21 @@ What is covered
   ordered.xfail the same two rows named the wrong way round. Expected to fail -- a flag
                 that cannot fail is not a check, it is a second copy of the set test.
   pagechecks    the `expect:` checks that read the PAGE rather than the track image --
-                `url:`/`noUrl:` on the address, `has:`/`noHas:` on a CSS selector -- plus
-                the positional form of `click:` (`{track:, frac:}`), which follows the
-                item box nearest a point. All four exist for bugs that rows:, height: and
+                `url:`/`noUrl:` on the address, `has:`/`noHas:` on a CSS selector, `box:`
+                on where an element sits, and `text:`/`noText:` given LISTS -- plus the
+                positional form of `click:` (`{track:, frac:}`), which follows the item
+                box nearest a point. They exist for bugs that rows:, height: and a plain
                 text: cannot see: a search term's zero-width space stripped out of a URL
-                (#36387), a center label attached to the wrong row (#37785), and an item
-                that cannot be named at all because its track is `type bigBed 3` (#36335).
-  pagechecks    the same four aimed the wrong way at once. Expected to fail. The message
-    .xfail      names every check that failed, so one run says which of the four broke.
+                (#36387), a center label attached to the wrong row (#37785), an item that
+                cannot be named at all because its track is `type bigBed 3` (#36335), and
+                the menu icon leaving the blue bar with every selector still matching
+                (#38251). The list form is here because it used to fail OPEN: text: took
+                one string, so ["a", "b"] became "a,b", matched nothing and passed on any
+                page, silently.
+  pagechecks    the same checks aimed the wrong way at once. Expected to fail. The message
+    .xfail      names every one that failed, so one run says which broke. Each list holds
+                one entry aimed wrongly and one aimed rightly, so it fails only if every
+                entry is really looked at on its own.
   colorchecks   `color:`, the one check that reads the track IMAGE: is:/not: on the color
                 a row is mostly drawn in, `part: label` for the center label instead of
                 the items, `at:` for one item rather than the whole row, and the list
