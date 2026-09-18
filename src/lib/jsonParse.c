@@ -204,8 +204,9 @@ for(i = 0;; i++)
 		dyStringAppendC(ds, '\\');
                 break;
             default:
-                // we don't need to convert \,/ or "
-		dyStringAppendC(ds, c);
+                // \\, \/ and \" stand for the character after the backslash, which the
+                // dyStringAppendC below adds.  Adding it here as well doubled it, so a URL
+                // came back out of the parser as "https:////host//path".
                 break;
             }
         dyStringAppendC(ds, c);
