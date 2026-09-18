@@ -171,11 +171,11 @@ for (table = hgp->tableList; table != NULL; table = table->next)
                     maneLookupTimeMs += clock1000() - maneT0;
                     if (maneStatus != NULL)
                         {
-                        jsonWriteString(jw, "maneStatus", maneStatus);
+                        jsonWriteString(jw, "maneStatus", htmlEncode(maneStatus));
                         // the single accession that is the actual MANE transcript, since
                         // pos->name/posName above may be a "/"-joined group of transcripts
                         // that all share this genomic footprint
-                        jsonWriteString(jw, "maneProtAcc", maneProtAcc);
+                        jsonWriteString(jw, "maneProtAcc", htmlEncode(maneProtAcc));
                         }
                     slFreeList(&protAccList);
                     }
