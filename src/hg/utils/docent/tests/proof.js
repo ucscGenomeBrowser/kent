@@ -17,6 +17,7 @@
  *
  *     proof:
  *       - "sandbox-ab 2026-09-09 -- ticket sandbox on 48099, patched and control builds"
+ *       - "release-ab 2026-09-17 -- fails on v503_branch 707b184e329, passes on genome-test"
  *       - "server-flip 2026-09-10 -- 68f831e1209 reached genome-test, the xfail passed"
  *
  * QUOTE every line. Nearly all of them name a ticket, and a bare `#` in an unquoted YAML
@@ -48,6 +49,8 @@ const LEVELS = [
    'seen failing right now for the reason it exists; the fix has not shipped'],
   ['sandbox-ab',
    'seen failing on a build with the bug and passing on a build with the fix, both built by hand'],
+  ['release-ab',
+   'seen failing on a RELEASED version that predates the fix and passing on one that carries it'],
   ['server-flip',
    'seen failing then passing on a real server as a real build arrived'],
   ['caught-regression',

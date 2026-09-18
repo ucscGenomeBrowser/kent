@@ -1,0 +1,77 @@
+# #38206 -- the blue menu bar was three different blues.
+#
+#     #2636d1   nice_menu.css, so hgTables, hgBlat, hgc and the other cart CGIs
+#     #00457c   hgTracks, through a set of ids of its own
+#     #003a72   the gateway and the static pages, which override nice_menu.css afterwards
+#
+# It showed up on the new account/login icon of #36267, which carries the main bar's dark
+# blue and so appeared as a mismatched patch on hgTables.
+#
+# 57490a621bd settles on #003a72, the house deep navy already used for the gateway banner,
+# the footer and the buttons.  The part of that which is CODE, and the part this script can
+# see, is in hg/hgTracks/menu.c: hgTracks used to rewrite the shared markup into ids of its
+# own so that its own rules could reach it,
+#
+#     menuStr = replaceChars(menuStr, "id=\"main-menu-whole\"", "id=\"hgTracks-main-menu-whole\"");
+#     menuStr = replaceChars(menuStr, "id=\"home-link\"", "id=\"hgTracks-home-link\"");
+#
+# and those two lines are gone, so its bar and its house icon are styled by the same rules as
+# everyone else's.  The rules they used to reach are gone from nice_menu.css with them, along
+# with hgTracksHomeIconSprite.png.
+#
+# So the test is in two halves, and neither is the rendered color.  `expect:` cannot read a
+# computed style, and the one check here that reads pixels, `color:`, samples a track row in
+# the image -- it cannot be asked about a page element.  What it can say instead is that the
+# markup and the stylesheet no longer have anywhere for a second blue to come from:
+#
+#   1. hgTracks serves the shared ids, and the hgTracks-prefixed ones are gone from it.  The
+#      same two ids on hgTables and on hgGateway say the bar really is one bar rather than
+#      three that happen to agree today.
+#   2. nice_menu.css, as the server actually serves it, sets #main-menu-whole to #003a72 and
+#      no longer carries any rule for the hgTracks ids or for the deleted sprite.  A CSS file
+#      opened by URL renders as a plain text document, so text:/noText: read it directly.
+#
+# The colors themselves cannot be named in a noText:.  The comment 57490a621bd added to
+# nice_menu.css quotes #2636d1 and #00457c to say what they used to be, and a rule further
+# down the file uses #00457c for something that is not the menu bar.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38206 and 57490a621bd after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: hgTracks serves #hgTracks-main-menu-whole and #hgTracks-home-link and neither shared id"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # hgTracks: the CGI that had its own ids.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1001000&hideTracks=1&pix=1100"
+  - expect:
+      rows: [ruler]
+      has: ['#main-menu-whole', '#home-link']
+      noHas: ['#hgTracks-main-menu-whole', '#hgTracks-home-link']
+
+  # hgTables, which had the vivid blue straight out of nice_menu.css.
+  - goto: "/cgi-bin/hgTables?db=hg38"
+  - expect:
+      text: Table Browser
+      has: ['#main-menu-whole', '#home-link']
+      noHas: ['#hgTracks-main-menu-whole', '#hgTracks-home-link']
+
+  # hgGateway, which already used #003a72 by overriding nice_menu.css after it.
+  - goto: "/cgi-bin/hgGateway?db=hg38"
+  - expect:
+      has: ['#main-menu-whole', '#home-link']
+      noHas: ['#hgTracks-main-menu-whole', '#hgTracks-home-link']
+
+  # The stylesheet the server is really serving.  One rule, one blue, and no leftovers.
+  - goto: "/style/nice_menu.css"
+  # Chromium builds the plain-text view of a non-HTML document in a <pre>, and it is not
+  # always there when the load event fires -- without this wait the step below reads an
+  # empty body and fails for a reason that is not the stylesheet.
+  - wait: 'pre'
+  - expect:
+      text: "background:#003a72"
+      noText:
+        - "hgTracks-main-menu-whole"
+        - "hgTracks-home-link"
+        - "hgTracksHomeIconSprite"

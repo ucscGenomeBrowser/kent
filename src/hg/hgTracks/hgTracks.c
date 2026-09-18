@@ -12648,13 +12648,13 @@ void labelTrackAsDensity(struct track *tg)
 /* Add text to track long label to indicate the user asked for density mode */
 {
 tg->longLabel = labelAddNote(tg->longLabel,
-    "density mode active, configure the track to switch it off");
+    "density graph: turn off on the track settings page");
 }
 
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "too many features, density shown, zoom in for individual items or use squish or dense mode");
+tg->longLabel = labelAddNote(tg->longLabel, "density graph: too many items, zoom in");
 }
 
 void labelTrackAsDensityTooManyItems(struct track *tg)
@@ -12662,7 +12662,7 @@ void labelTrackAsDensityTooManyItems(struct track *tg)
  * too many items to draw one by one */
 {
 tg->longLabel = labelAddNote(tg->longLabel,
-    "too many features, density shown, zoom in to see details");
+    "density graph: too many items, zoom in or use dense");
 }
 
 void labelTrackAsDensityIfActive(struct track *tg)

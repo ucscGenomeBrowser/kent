@@ -183,6 +183,17 @@ for (const f of scripts) {
         const url = decodeURIComponent(m[1]);
         add({ script: f, kind: 'hub', label: url, check: urlCheck(url, 'hub') });
       }
+      // And so can a session settings file. `loadSession:` is the verb for one, but it
+      // builds the URL itself, so a test about db= TOGETHER WITH a session load has to
+      // spell the whole thing out in a goto: -- and the settings file it names rots the
+      // same way any other fixture does, silently, because hgTracks answers a missing one
+      // with a perfectly good page.
+      const sm = /[?&]hgS_loadUrlName=([^&]+)/.exec(arg);
+      if (sm) {
+        const url = decodeURIComponent(sm[1]);
+        if (/^https?:/.test(url))
+          add({ script: f, kind: 'session-url', label: url, check: urlCheck(url) });
+      }
     } else if (verb === 'hub' || verb === 'addHub') {
       const url = (typeof arg === 'string') ? arg : (o && o.url);
       // A hub.txt replaced by a directory listing or an error page still answers 200, so

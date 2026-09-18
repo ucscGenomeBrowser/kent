@@ -2991,6 +2991,21 @@
    "desc": "Assuming hapClusterEnabled is true , this specifies how genotypes are ordered for display: centerWeighted : For diploid organisms, this separates the two hap..."
   },
   {
+   "key": "sampleColorFile",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix"
+   ],
+   "level": "new",
+   "fmt": "sampleColorFile <url>",
+   "ex": "HG00096\t#1f77b4\nHG00099\tsteelblue\nNA18939\t255,127,14",
+   "desc": "Colors the haplotype clustering tree that hapClusterMethod treeFile draws in the left label area."
+  },
+  {
    "key": "hapClusterColorBy",
    "category": "vcfTabix - Variant Call Format Track Settings",
    "roles": [
@@ -3097,6 +3112,22 @@
    "desc": "The minimum minor allele frequency required for a variant to be displayed."
   },
   {
+   "key": "minAc",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "minAc < N >",
+   "ex": "",
+   "desc": "The minimum alternate allele count required for a variant to be displayed, taken from the AC field of the INFO column."
+  },
+  {
    "key": "vcfDoFilter",
    "category": "vcfTabix - Variant Call Format Track Settings",
    "roles": [
@@ -3145,6 +3176,22 @@
    "desc": "Turns on/off the Minor Allele Frequency filter options available by default for VCF tracks"
   },
   {
+   "key": "vcfDoMinAc",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "vcfDoMinAc <on/off>",
+   "ex": "",
+   "desc": "Turns on/off the minimum allele count filter option available by default for VCF tracks"
+  },
+  {
    "key": "sampleMetadataFile",
    "category": "vcfTabix - Variant Call Format Track Settings",
    "roles": [
@@ -3159,6 +3206,22 @@
    "fmt": "sampleMetadataFile <url>",
    "ex": "#sample\tPopulation\tSuperpopulation\tRegion\nHG00096\tGBR\tEUR\tEurope\nHG00099\tGBR\tEUR\tEurope\nNA18939\tJPT\tEAS\tEast Asia",
    "desc": "Specifies a tab-separated file that provides metadata columns for VCF samples."
+  },
+  {
+   "key": "showHardyWeinberg",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "showHardyWeinberg <on/off>",
+   "ex": "",
+   "desc": "When a user clicks on a variant with exactly two alleles, adds a line to the details page giving the genotype frequencies that Hardy-Weinberg equilibrium pre..."
   },
   {
    "key": "vcfPhasedTrio",
@@ -3215,6 +3278,20 @@
    "fmt": "vcfUseAltSampleNames <on/off>",
    "ex": "",
    "desc": "Make the display use the aliases as the default labels for each haplotype lane instead of the ID from the VCF."
+  },
+  {
+   "key": "vcfPhasedColorBy",
+   "category": "vcfPhasedTrio - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "vcfPhasedColorBy <noColor|function|deNovo|mendelDiff>",
+   "ex": "",
+   "desc": "How to color the variants drawn on each haplotype lane."
   },
   {
    "key": "superTrack",
