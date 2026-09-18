@@ -1501,11 +1501,28 @@ def tree_names(cat):
     def literal(n):
         return not any(ch in n for ch in "<*") and not n.startswith("{")
 
+    # Which of several reads gets cited has to be a property of the name, not
+    # of the order the walk happened to find the files in.  This string is
+    # written into urlNamesNotCataloged.txt, and a first-one-wins pick rewrote
+    # thirty of its lines whenever the file was regenerated from a different
+    # checkout of the same commit, which buries the one name that changed.
+    # The file header tells whoever reviews the baseline to look twice at a
+    # name read under the CGIs this catalog covers, so when a name is read in
+    # several places, one of those wins the citation.
+    watched = ("hg/hgTracks/", "hg/hgc/", "hg/hgTrackUi/", "hg/hgTables/",
+               "hg/lib/")
+
+    def site_key(src):
+        path, _, line = src.rpartition(":")
+        return (0 if path.startswith(watched) else 1, path,
+                int(line) if line.isdigit() else 0)
+
     site = {}
     for which in found:
         for pairs in found[which].values():
             for name, src in pairs:
-                site.setdefault(name, src)
+                if name not in site or site_key(src) < site_key(site[name]):
+                    site[name] = src
 
     cat_names = set()
     for e in all_cmds(cat):
