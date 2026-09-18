@@ -2503,7 +2503,11 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
         downloadUniprot(uprotDir)
 
     downVersion = readRelStringUniprot(uprotDir)
-    tabVersion = open(join(tabDir, "version.txt")).read()
+    # No version file means nothing has been parsed into this directory yet, so parse.
+    # Do not assume it is there: it is absent on a first run, and removing it is the way to
+    # force a reparse when the release has not changed but the taxon list has.
+    versionFname = join(tabDir, "version.txt")
+    tabVersion = open(versionFname).read() if isfile(versionFname) else None
 
     doParse = True
     if downVersion==tabVersion:
