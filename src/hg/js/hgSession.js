@@ -706,7 +706,7 @@ function sessSaveCardHtml(C) {
         '</div>' +
         '<div class="sessSaveField">' +
         '<input id="sessSaveDesc" class="sessSaveInput" type="text" maxlength="512" ' +
-        'placeholder="Optional">' +
+        'placeholder="Description (optional)">' +
         '<span class="sessInfo" title="' + descTip + '">&#9432;</span></div>' +
         '</div>';
 }
