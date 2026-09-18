@@ -54,6 +54,16 @@ CONFLICT_FRAC = 0.8
 DIRECTIONS = ["Strong hypermethylation", "Weak hypermethylation",
               "Weak hypomethylation", "Strong hypomethylation", "Conflicting"]
 
+# Plain typos in the metadata sheet's Disorder column, fixed here rather than
+# in the sheet since they show up verbatim in the bigBed and the filter menu.
+# This is not the same kind of call as the study/author conflicts flagged
+# below: those are ambiguous provenance questions, these are just misspelled
+# eponyms/words.
+DISORDER_SPELLING_FIXES = {
+    "Nicolaiders-Baraitser syndrome": "Nicolaides-Baraitser syndrome",
+    "PURA-related disoder": "PURA-related disorder",
+}
+
 
 def readMeta(fname):
     """Read the xlsx metadata sheet, keyed on the 'signature' column, which is
@@ -77,6 +87,7 @@ def readMeta(fname):
         # a disorder name can contain a comma, and comma is the separator both
         # of the bigBed list fields and of trackDb filterValues, so swap it out
         disorder = vals[idx["Disorder"]].replace(",", ";")
+        disorder = DISORDER_SPELLING_FIXES.get(disorder, disorder)
         meta[key] = {
             "study": vals[idx["StudyID"]],
             "pmid": vals[idx["PMID"]],
