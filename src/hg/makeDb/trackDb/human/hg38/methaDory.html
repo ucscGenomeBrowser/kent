@@ -109,20 +109,17 @@ See Ferraro <em>et al.</em> for the full method.
 </p>
 
 <p>
-The two source files, a table of episignature probes and a spreadsheet of signature metadata, were
-provided directly by the MethaDory authors on 16 September 2026; the tool and its models are at
+The two source files, a table of episignature probes and a spreadsheet of signature metadata, came
+directly from the MethaDory authors on 16 September 2026; the tool and its models are at
 <a href="https://github.com/f-ferraro/MethaDory" target="_blank">github.com/f-ferraro/MethaDory</a>.
 The probe table gives Illumina probe IDs rather than coordinates, so positions were taken from the
-Illumina array manifests already loaded in the Genome Browser, preferring the
-<a href="hgTrackUi?g=snpArrayIllumina850k&amp;hgsid=${hgsid}">EPIC 850k</a> manifest and falling
-back to <a href="hgTrackUi?g=epicV2illuminaMethylation&amp;hgsid=${hgsid}">EPIC v2</a> and
-<a href="hgTrackUi?g=snpArrayIllumina450k&amp;hgsid=${hgsid}">450k</a>; 267,974 of the sites in
-this track come from the EPIC 850k manifest and 926 from EPIC v2. Where two manifests carry the
-same probe they agree on its position except for a single probe genome-wide, and disagree on the
-strand annotation for 1,558 of the probes used here; strand is not shown in this track since it is
-a property of the assay and not of the CpG site. Of the 847,863 probe-by-signature rows in the
-source table, 373 rows (293 distinct probes) were dropped because the probe appears in none of the
-three manifests, and the remaining 847,490 rows were merged into 268,900 CpG sites. The build
+<a href="hgTrackUi?g=snpArrayIllumina850k&amp;hgsid=${hgsid}">EPIC 850k</a>,
+<a href="hgTrackUi?g=epicV2illuminaMethylation&amp;hgsid=${hgsid}">EPIC v2</a> and
+<a href="hgTrackUi?g=snpArrayIllumina450k&amp;hgsid=${hgsid}">450k</a> manifests already loaded in
+the Genome Browser, in that order of preference. Of the 847,863 probe-by-signature records, 373
+(293 distinct probes) were dropped because the probe is in none of the three manifests; the rest
+were merged into 268,900 CpG sites. Strand is not shown, since it is a property of the assay rather
+than of the CpG site. The build
 steps are documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/episignatures.txt" target="_blank">makeDoc</a>
 and the scripts are in
