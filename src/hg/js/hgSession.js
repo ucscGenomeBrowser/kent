@@ -3,9 +3,9 @@
 // An opt-in modern alternative to the classic server-rendered hgSession page, applying hgBlat's
 // facelift strategy (#37996): hgSession.c emits the session list and page config as an inline JSON
 // global (hgSessionData) into an empty #sessionApp container, and this file builds the UI - a
-// save-current-view card, a searchable/sortable DataTable of saved sessions with inline
-// Overwrite/Share/Edit/Delete, and an "Advanced" panel split into a load column and a save
-// column, with the custom-track backup link across the top of both.
+// save-current-view card, a custom-track backup link, a searchable/sortable DataTable of saved
+// sessions with inline Overwrite/Share/Edit/Delete, and an "Advanced" panel split into a load
+// column and a save column.
 //
 // The inline table actions POST to small JSON endpoints in hgSession.c (hgS_doDeleteJson, etc.) and
 // update the table in place.  Navigation actions (load a session, load from URL/file, save to file,
@@ -623,13 +623,6 @@ function sessAdvancedHtml(C) {
         '<a href="' + sessEnc(C.resetUrl) + '" ' +
         'title="Reset all browser settings to their defaults">Reset the browser to defaults</a>' +
         '</div></div>';
-    // A single link, not a button: custom-track backup used to be its own row down in the Save
-    // column; it now sits across the very top of the panel, above both columns.
-    var backup =
-        '<div class="sessAdvTop"><a href="hgSession?hgS_showDownload_=Submit&' +
-        sessEnc(C.cartVar) + '=' + sessEnc(C.hgsid) + '" ' +
-        'title="Download your custom tracks as a .tar.gz archive you can reload later">' +
-        'Back up custom tracks (.tar.gz)</a></div>';
 
     // Two columns - what you load from, and what you save to - rather than one undifferentiated
     // list; "Other" (reset) belongs to neither, so it spans both underneath.
@@ -638,12 +631,21 @@ function sessAdvancedHtml(C) {
         '<span>Advanced — load another user’s session, load from a URL or file, ' +
         'save to a file, reset the browser</span></div>' +
         '<div class="sessAdvBody" id="sessAdvBody" style="display:none">' +
-        backup +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Load</div>' +
         loadUser + loadUrl + loadFile + '</div>' +
         '<div class="sessAdvCol"><div class="sessAdvColHead">Save</div>' + saveFile + '</div>' +
         '<div class="sessAdvOther">' + other + '</div>' +
         '</div></div>';
+}
+
+function sessBackupHtml(C) {
+    // A single plain link, sitting on its own line right above the Advanced dropdown - visible
+    // without opening Advanced, but not a whole bar/button the way it once was.
+    if (!C.loggedIn) { return ''; }
+    return '<div class="sessBackupLink"><a href="hgSession?hgS_showDownload_=Submit&' +
+        sessEnc(C.cartVar) + '=' + sessEnc(C.hgsid) + '" ' +
+        'title="Download your custom tracks as a .tar.gz archive you can reload later">' +
+        'Back up custom tracks (.tar.gz)</a></div>';
 }
 
 // ---- build the whole page -----------------------------------------------
@@ -834,6 +836,7 @@ function sessionBuild() {
         '<div id="sessMsg" class="sessMsg"></div>' +
         sessRecentHtml(recent) +
         sessSaveCardHtml(C) +
+        sessBackupHtml(C) +
         sessAdvancedHtml(C) +
         sessTableHtml(C)
     );

@@ -42,6 +42,11 @@
 /* Info bubble (navy circled i) used for the recent-update hint and session descriptions. */
 #sessionApp .sessInfo { color:var(--accent); cursor:help; font-size:15px; line-height:1; }
 
+/* Back up custom tracks - one plain link sitting just above the Advanced dropdown. */
+#sessionApp .sessBackupLink { font-size:14px; margin:0 0 10px; }
+#sessionApp .sessBackupLink a { color:var(--accent); }
+#sessionApp .sessBackupLink a:hover { color:var(--accentHover); }
+
 /* Section heading ("Your saved sessions") separating the save card from the table. */
 #sessionApp .gbSection { margin-top:4px; }
 
@@ -97,11 +102,6 @@
 #sessionApp .sessAdvCol { display:flex; flex-direction:column; gap:18px; }
 #sessionApp .sessAdvColHead { font-weight:700; color:var(--ink); font-size:12px;
     text-transform:uppercase; letter-spacing:.03em; opacity:.7; }
-/* Back up custom tracks - a single link across the top of the panel, above the two columns. */
-#sessionApp .sessAdvTop { grid-column:1 / -1; border-bottom:1px solid var(--btnLine);
-    padding-bottom:14px; margin-bottom:4px; }
-#sessionApp .sessAdvTop a { color:var(--accent); }
-#sessionApp .sessAdvTop a:hover { color:var(--accentHover); }
 /* "Other" (reset) belongs to neither column, so it spans both, below them. */
 #sessionApp .sessAdvOther { grid-column:1 / -1; border-top:1px solid var(--btnLine);
     padding-top:14px; margin-top:4px; }
