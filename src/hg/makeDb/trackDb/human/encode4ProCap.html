@@ -1,0 +1,160 @@
+<h2>Description</h2>
+
+<p>
+Transcription begins when RNA polymerase II starts making an RNA at a
+transcription start site. A promoter or an enhancer does not use a single start
+site: polymerase initiates across a spread of nearby bases, on both strands, and
+which bases are used is set largely by the local DNA sequence. PRO-cap is a
+nascent RNA run-on assay that captures the 5' end of each new transcript, so each
+read reports the exact base and strand of one initiation event. Unlike RNA-seq or
+CAGE, PRO-cap sees unstable RNAs as well as stable ones, which makes initiation
+at enhancers visible.
+</p>
+
+<p>
+This track shows PRO-cap signal from six ENCODE 4 experiments, one per cell line.
+The predictions a deep learning model makes from sequence alone, trained on this
+same data, are in the <a href="hgTrackUi?g=proCapNet">ProCapNet</a> track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Cell lines are listed in the table on this page, one row each. Use the Sample
+class facet to narrow the list, and the Experiment column to open the experiment
+on the ENCODE portal.
+</p>
+
+<p>
+Each track is an overlay of the two strands: plus strand reads are drawn upward
+and minus strand reads downward. The y axis is the number of initiation events
+measured at that base, summed over the experiment's replicates, so tracks with
+deeper sequencing reach higher values. Tracks are colored by cell line:
+</p>
+<ul>
+<li><span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span> <b>A673</b> Ewing sarcoma</li>
+<li><span style="display:inline-block; background-color:#D55E00; width:18px; height:12px; vertical-align:middle;"></span> <b>Caco-2</b> colorectal adenocarcinoma</li>
+<li><span style="display:inline-block; background-color:#009E73; width:18px; height:12px; vertical-align:middle;"></span> <b>Calu3</b> lung adenocarcinoma</li>
+<li><span style="display:inline-block; background-color:#CC79A7; width:18px; height:12px; vertical-align:middle;"></span> <b>HUVEC</b> umbilical vein endothelial cells</li>
+<li><span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span> <b>K562</b> chronic myelogenous leukemia</li>
+<li><span style="display:inline-block; background-color:#56B4E9; width:18px; height:12px; vertical-align:middle;"></span> <b>MCF10A</b> non-tumorigenic breast epithelium</li>
+</ul>
+
+<h2>Methods</h2>
+
+<p>
+PRO-cap, in the CoPRO form described by Tome <em>et al</em>., permeabilizes cells
+and runs a nuclear run-on reaction with biotinylated NTPs, which RNA polymerase
+incorporates into the nascent transcripts it is actively making. Biotinylated
+RNAs are captured on streptavidin beads, selected for a 5' cap so that only
+transcripts still carrying their original start are kept, then reverse
+transcribed and paired-end sequenced. The 5' end of the second read marks the
+base at which transcription started, and the read's strand gives the strand of
+initiation. The six experiments here were produced by the Yu and Lis labs at
+Cornell University and processed through the ENCODE PRO-cap pipeline, which maps
+reads, removes PCR duplicates using unique molecular identifiers, and writes
+single-base plus and minus strand signal for the uniquely mapping reads.
+</p>
+
+<p>
+The signal files were downloaded from the
+<a href="https://www.encodeproject.org" target="_blank">ENCODE portal</a>, taking
+for each experiment only the plus and minus strand signal of unique reads files
+belonging to that experiment's default analysis, which drops files superseded by
+a later reprocessing. The experiments are ENCSR046BCI, ENCSR100LIJ, ENCSR935RNW,
+ENCSR098LLB, ENCSR261KBX and ENCSR799DGV for A673, Caco-2, Calu3, HUVEC, K562 and
+MCF10A respectively, and are linked from the Experiment column of the table on
+this page. ENCODE releases PRO-cap signal per replicate and, for MCF10A, per
+sequencing run, and publishes no pooled file, so the files were summed at UCSC to
+give one track per cell line per strand: two files for A673, Caco-2, Calu3 and
+K562, one for HUVEC, which has a single released replicate, and four for MCF10A.
+This is the same merge the ProCapNet models were trained on. Minus strand signal
+is negative as released by ENCODE and is kept that way. Total signal is
+conserved exactly by the summing. The steps are recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/transcriptionStart.txt"
+target="_blank">makeDoc</a> and the scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/proCapNet"
+target="_blank">the kent source tree</a>, including the manifest recording exactly
+which ENCODE files went into each track.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>encode4ProCap</i>.
+</p>
+
+<p>
+The Files column of the table on this page links each cell line's bigWigs
+directly, so a single file can be fetched without working out its path.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in bigWig
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4ProCap/" target="_blank">our
+download server</a>. The files are named for the cell line, the ENCODE experiment accession and the
+strand, for example <tt>K562.ENCSR261KBX.pos.bw</tt> and
+<tt>K562.ENCSR261KBX.neg.bw</tt>. Individual regions or the whole
+genome annotation can be obtained using our tool <tt>bigWigToBedGraph</tt>, which
+can be compiled from the source code or downloaded as a precompiled binary for
+your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.pos.bw
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The unmerged per-replicate files can be downloaded from the
+<a href="https://www.encodeproject.org" target="_blank">ENCODE portal</a> under the
+experiment accessions listed above.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+PRO-cap data was generated as part of ENCODE by Sagar Shah and the Yu and Lis labs
+at Cornell University. Thanks to the ENCODE Consortium and the ENCODE production
+laboratories for making the data available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Tome JM, Tippens ND, Lis JT.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30349116" target="_blank">
+Single-molecule nascent RNA sequencing identifies regulatory domain architecture at promoters and
+enhancers</a>.
+<em>Nat Genet</em>. 2018 Nov;50(11):1533-1541.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30349116" target="_blank">30349116</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6422046/" target="_blank">PMC6422046</a>
+</p>
+
+
+
+<p>
+Kwak H, Fuda NJ, Core LJ, Lis JT.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">
+Precise maps of RNA polymerase reveal how promoters direct initiation and pausing</a>.
+<em>Science</em>. 2013 Feb 22;339(6122):950-3.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">23430654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3974810/" target="_blank">PMC3974810</a>
+</p>
+
+
+
+<p>
+Luo Y, Hitz BC, Gabdank I, Hilton JA, Kagda MS, Lam B, Myers Z, Sud P, Jou J, Lin K <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">
+New developments on the Encyclopedia of DNA Elements (ENCODE) data portal</a>.
+<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D882-D889.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">31713622</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7061942/" target="_blank">PMC7061942</a>
+</p>
+

@@ -7,6 +7,9 @@
 #include "geoMirror.h"
 #include "hgConfig.h"
 #include "internet.h"
+#include "net.h"
+#include "cheapcgi.h"
+#include "errCatch.h"
 
 /* geographic server (mirror) support
 
@@ -232,29 +235,96 @@ sqlFreeResult(&sr);
 return cloneString(response);
 }
 
+struct geoNode
+/* One row of hgcentral gbNode. */
+    {
+    struct geoNode *next;
+    char *node;         /* the browser.node number, as text */
+    char *domain;       /* e.g. genome-euro.ucsc.edu */
+    char *shortLabel;   /* e.g. European Server */
+    };
+
+static char *geoMirrorThisHost()
+/* The host name this request came in under, without any port, or NULL when there is none (the
+ * command line).  Not freed: it comes from the environment. */
+{
+static char host[256];
+char *httpHost = getenv("HTTP_HOST");
+if (isEmpty(httpHost))
+    return NULL;
+safecpy(host, sizeof host, httpHost);
+char *colon = strchr(host, ':');            // HTTP_HOST carries the port when it is not 80/443
+if (colon != NULL)
+    *colon = '\0';
+return host;
+}
+
+static struct geoNode *geoMirrorSelf(struct geoNode *nodeList)
+/* Which of the gbNode rows is the server answering this request?  The host the visitor typed
+ * decides it whenever that host is one of the nodes, so a machine serving a node other than the
+ * one browser.node names -- a sandbox, or two nodes behind one apache -- does not take itself for
+ * its own peer.  browser.node is the fallback, for a host that is in no gbNode row at all
+ * (hgwdev.gi.ucsc.edu rather than genome-test.gi.ucsc.edu, a bare IP, the command line). */
+{
+struct geoNode *node;
+char *myHost = geoMirrorThisHost();
+if (isNotEmpty(myHost))
+    for (node = nodeList; node != NULL; node = node->next)
+        if (sameWord(myHost, node->domain))
+            return node;
+char *myNode = geoMirrorNode();
+for (node = nodeList; node != NULL; node = node->next)
+    if (sameString(node->node, myNode))
+        return node;
+return NULL;
+}
+
+static void geoNodeFreeList(struct geoNode **pList)
+/* Free a list of geoNode. */
+{
+struct geoNode *node, *next;
+for (node = *pList; node != NULL; node = next)
+    {
+    next = node->next;
+    freeMem(node->node);
+    freeMem(node->domain);
+    freeMem(node->shortLabel);
+    freeMem(node);
+    }
+*pList = NULL;
+}
+
 static struct slPair *geoMirrorNodeList(boolean wantSelf)
 /* Return gbNode as pairs of name=shortLabel, val=domain, ordered by node: either every node but
  * this one (wantSelf FALSE) or only this one (wantSelf TRUE). */
 {
 if (!geoMirrorEnabled())
     return NULL;
-char *myNode = geoMirrorNode();
 char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
 char query[256];
 sqlSafef(query, sizeof query, "SELECT node, domain, shortLabel from gbNode%s order by node",
          geoSuffix);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = sqlGetResult(conn, query);
-struct slPair *nodes = NULL;
+struct geoNode *nodeList = NULL, *node;
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (sameString(row[0], myNode) != wantSelf)
-        continue;
-    slPairAdd(&nodes, row[2], cloneString(row[1]));
+    AllocVar(node);
+    node->node = cloneString(row[0]);
+    node->domain = cloneString(row[1]);
+    node->shortLabel = cloneString(row[2]);
+    slAddHead(&nodeList, node);
     }
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
+slReverse(&nodeList);
+struct geoNode *self = geoMirrorSelf(nodeList);
+struct slPair *nodes = NULL;
+for (node = nodeList; node != NULL; node = node->next)
+    if ((node == self) == wantSelf)
+        slPairAdd(&nodes, node->shortLabel, cloneString(node->domain));
+geoNodeFreeList(&nodeList);
 slReverse(&nodes);
 return nodes;
 }
@@ -274,9 +344,43 @@ struct slPair *geoMirrorOtherNodes()
 return geoMirrorNodeList(FALSE);
 }
 
+void geoMirrorNotifyOtherNodes(char *cgiName, struct slPair *cgiVars)
+/* Best-effort: fire cgiVars (name=value) as a GET request at cgiName on every other geo mirror
+ * node (per geoMirrorOtherNodes()).  No-ops if geo mirroring is off or this is the only node.
+ * Adds no authentication of its own -- callers must put their own signed proof into cgiVars,
+ * since the receiving CGI runs with no session/cart tying the request to a user.  A slow or
+ * unreachable peer is logged with warn() and skipped; the caller's own action must already be
+ * complete locally before this is called, since a peer being down must never fail the local
+ * action. */
+{
+struct slPair *nodes = geoMirrorOtherNodes();
+struct slPair *node;
+for (node = nodes; node != NULL; node = node->next)
+    {
+    struct dyString *url = dyStringCreate("http://%s/cgi-bin/%s?", (char *)node->val, cgiName);
+    struct slPair *var;
+    for (var = cgiVars; var != NULL; var = var->next)
+        dyStringPrintf(url, "%s%s=%s", (var == cgiVars) ? "" : "&", var->name,
+                       cgiEncodeFull((char *)var->val));
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        struct dyString *response = netSlurpUrl(url->string);
+        dyStringFree(&response);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        warn("geoMirrorNotifyOtherNodes: failed to reach %s (%s): %s",
+             node->name, (char *)node->val, errCatch->message->string);
+    errCatchFree(&errCatch);
+    dyStringFree(&url);
+    }
+slPairFreeValsAndList(&nodes);
+}
+
 char *geoMirrorMenu()
-/* Create customized geoMirror menu string for substitution of  into 
- * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc 
+/* Create customized geoMirror menu string for substitution of  into
+ * <!-- OPTIONAL_MIRROR_MENU --> in htdocs/inc/globalNavBar.inc
  * Reads hgcentral geo tables and hg.conf settings. 
  * Free the returned string when done. */
 {

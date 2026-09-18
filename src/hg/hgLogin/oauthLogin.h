@@ -39,6 +39,11 @@ struct oauthIdentity
     char *subject;          /* stable, unique id from the provider */
     char *email;            /* email reported by provider, or NULL */
     boolean emailVerified;  /* TRUE if the provider asserts the email is verified */
+    char *emailUnverified;  /* an address the provider released that we would not take: it did
+                             * not say the address is verified and hg.conf does not trust this
+                             * provider (see trustEmail).  Never used to match an account or to
+                             * sign anyone in -- only to say why we are asking the user for an
+                             * address, and to offer it back as a starting point. */
     char *displayName;      /* full name from provider, or NULL */
     };
 

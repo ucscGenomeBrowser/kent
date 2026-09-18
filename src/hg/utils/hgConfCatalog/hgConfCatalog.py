@@ -313,6 +313,22 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
+        h("syncHubApiKeys", "flag", "hg/hgHubConnect/trackHubWizard.c",
+          default="FALSE", role="gate", verified=True, ticket="38323",
+          note="Make an api key generated on one UCSC geo mirror (genome.ucsc.edu, "
+               "genome-euro, genome-asia) work on all of them, instead of only on the "
+               "central database of whichever mirror issued it.  Read at the top of "
+               "syncApiKeyToOtherNodes() (the sender, called from cjGenerateApiKey and "
+               "cjRevokeApiKey) and cjSyncApiKey() (the receiver): off, generate/revoke "
+               "behave exactly as before the gate existed, and the hgHubSyncApiKey cartJson "
+               "command is refused outright rather than merely unreachable.  Uses "
+               "geoMirrorNotifyOtherNodes() (hg/lib/geoMirror.c) to find peer mirrors from "
+               "hgcentral.gbNode and login.cookieSalt to sign the request, so no separate "
+               "list of mirror addresses or secret needed provisioning.  Third read is in "
+               "getBotCheckString() (hg/lib/botDelay.c), which picks the wording of the "
+               "invalid-apiKey error: with the gate off it still says keys are "
+               "server-specific, since off they are.  Off during QA; "
+               "flip to TRUE once released."),
         h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "

@@ -1,0 +1,42 @@
+# Transcription start sites: ProCapNet predictions, #35528, Claude
+Thu Sep 17 2026 (Claude/markd)
+
+# hs1 has the ProCapNet predictions only.  There is no PRO-cap experiment and no
+# sequence-contribution score set on this assembly.  See
+# makeDb/doc/hg38/transcriptionStart.txt for the hg38 build, which carries all
+# three.  Scripts are in ~/kent/src/hg/makeDb/outside/proCapNet.
+
+mkdir -p /hive/data/outside/proCapNet/hs1 /hive/data/genomes/hs1/bed/proCapNet
+cd /hive/data/genomes/hs1/bed/proCapNet
+~/kent/src/hg/makeDb/outside/proCapNet/proCapNetDownload hs1 \
+    ~/kent/src/hg/makeDb/outside/proCapNet/proCapNetExperiments.tsv \
+    /hive/data/outside/proCapNet/hs1/pred
+# 300 GB, about 30 minutes at six parallel streams
+
+# Re-encode from one bedGraph interval per base into fixedStep sections.  Unlike
+# hg38 these files hold no NaN, so every base is kept.
+~/kent/src/hg/makeDb/outside/proCapNet/proCapNetPredBuild \
+    /hive/data/genomes/hs1/chrom.sizes /hive/data/outside/proCapNet/hs1/pred pred 6
+# all 12 files report:
+#   24 chroms, 3117275501 bases, 3117275501 with data, 0 dropped
+# about 25 GB in, 16.7 to 17.0 GB out per file
+
+# the mean matches the published file exactly, so nothing was altered
+bigWigInfo pred/K562.proCapNet.pos.bw | egrep 'basesCovered|mean'
+#   basesCovered: 3,117,275,501
+#   mean: 0.019773
+
+cd ~/kent/src/hg/makeDb/outside/proCapNet
+./proCapNetTrackDb hs1 proCapNetExperiments.tsv \
+    ~/kent/src/hg/makeDb/trackDb/human/hs1/transcriptionStart.ra /gbdb/hs1
+
+# transcriptionStart.ra is generated; the include line in human/hs1/trackDb.ra
+# is added by hand:
+#   include transcriptionStart.ra alpha
+
+# hs1 is a curated hub assembly, so the stanzas reach the browser through the
+# hub built under /gbdb/hs1/hubs/$USER by the trackDb make, and are visible only
+# when curatedHubPrefix in the sandbox hg.conf names that directory.
+
+# the downloads are only needed for the re-encoding
+rm -rf /hive/data/outside/proCapNet/hs1/pred

@@ -1,0 +1,227 @@
+<h2>Description</h2>
+
+<p>
+ProCapNet is a neural network trained to predict PRO-cap signal from DNA
+sequence alone. PRO-cap is a run-on assay that captures the 5' end of each
+nascent RNA, so it reports the exact base and strand at which RNA polymerase II
+started transcribing, including at enhancers and at unstable transcripts that
+RNA-seq and CAGE miss. Six separate models were trained, one on each of six cell
+lines with ENCODE PRO-cap data.
+</p>
+
+<p>
+This track holds two kinds of output from those models:
+</p>
+
+<ul>
+<li><b>Predicted PRO-cap</b>: what the model expects the PRO-cap signal to be,
+at every base of the genome, on both strands. The sequence rules that govern
+where initiation happens are largely shared between cell types, so any one model
+highlights sequence capable of driving initiation, including at regions where no
+PRO-cap experiment has been done.</li>
+<li><b>Sequence contribution scores</b>: how much each individual base pushed
+the model's prediction up or down. Bases inside a functional element such as a
+TATA box or an initiator carry high scores, and the pattern of high-scoring
+bases often spells out the recognition sequence of a promoter-associated
+transcription factor. These are computed only around MANE Select transcription
+start sites, and exist for GRCh38 only.</li>
+</ul>
+
+<p>
+Predictions are not measurements: they say what the sequence looks capable of,
+not what a given cell is doing. The matching experimental data is in the
+<a href="hgTrackUi?g=encode4ProCap">PRO-cap</a> track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Cell lines are listed in the table on this page, one row each, with a checkbox
+per data type. Use the Sample class facet to narrow the list, and the Group
+tracks by buttons to order the browser by sample or by data type.
+</p>
+
+<p>
+Each predicted PRO-cap track is an overlay of the two strands: plus strand
+predictions are drawn upward and minus strand predictions downward. The y axis
+is the predicted number of PRO-cap reads at that base.
+</p>
+
+<p>
+Contribution scores are drawn as a sequence logo when zoomed in far enough to
+show individual bases: the letter of the reference base is scaled by its score,
+so a run of tall letters is a motif the model relied on. At lower zoom the same
+values are drawn as a wiggle. Scores can be negative, meaning the base argued
+against initiation being placed where it was. Scores exist only in the roughly
+2 kb window around each MANE Select transcription start site, about 38.7 Mb of
+the genome. Everywhere else the track is empty, which is not the same as a score
+of zero.
+</p>
+
+<p>
+Read depth differs between the six PRO-cap experiments the models were trained
+on, and both predicted signal and contribution scores scale with it, so the
+y axis is not comparable between cell lines. Tracks are colored by the cell line
+the model was trained on:
+</p>
+<ul>
+<li><span style="display:inline-block; background-color:#0072B2; width:18px; height:12px; vertical-align:middle;"></span> <b>A673</b> Ewing sarcoma</li>
+<li><span style="display:inline-block; background-color:#D55E00; width:18px; height:12px; vertical-align:middle;"></span> <b>Caco-2</b> colorectal adenocarcinoma</li>
+<li><span style="display:inline-block; background-color:#009E73; width:18px; height:12px; vertical-align:middle;"></span> <b>Calu3</b> lung adenocarcinoma</li>
+<li><span style="display:inline-block; background-color:#CC79A7; width:18px; height:12px; vertical-align:middle;"></span> <b>HUVEC</b> umbilical vein endothelial cells</li>
+<li><span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span> <b>K562</b> chronic myelogenous leukemia</li>
+<li><span style="display:inline-block; background-color:#56B4E9; width:18px; height:12px; vertical-align:middle;"></span> <b>MCF10A</b> non-tumorigenic breast epithelium</li>
+</ul>
+
+<h2>Methods</h2>
+
+<h3>Model</h3>
+
+<p>
+ProCapNet adapts the BPNet architecture. It reads 2,114 bp of one-hot encoded
+sequence and outputs both a base-resolution profile over the central 1,000 bp,
+covering both strands as a single softmax so the model can learn strand
+asymmetry, and a scalar giving the log total number of initiation events in that
+window. Training used ENCODE PRO-cap read alignments in which the first read of
+each pair was discarded and only the single 5'-most base of the second read was
+kept, merged across replicates and kept separate by strand. Each model was
+trained on all PRO-cap peaks in its cell line plus randomly sampled
+DNase-hypersensitive sites from the same cell line at a 7:1 peak to background
+ratio, with 7-fold cross-validation split by chromosome. Bases that are not
+uniquely mappable by 36-mer reads were given zero loss weight during training.
+Full details are in Cochran <em>et al</em>.
+</p>
+
+<h3>Predicted PRO-cap</h3>
+
+<p>
+Genome-wide predictions were generated by the Kundaje lab by applying the model
+to every 2,114 bp window at a stride of 250 bp, so each base is the average of
+four overlapping predictions, then averaging across the seven cross-validation
+models and across the forward and reverse-complemented sequence. On hg38 no
+prediction was made where most of a window was unresolved (N) in the reference.
+</p>
+
+<h3>Sequence contribution scores</h3>
+
+<p>
+Scores were computed with DeepSHAP, which estimates each base's contribution by
+contrasting the model's output on the real sequence against its output on a set
+of reference sequences, here 25 dinucleotide shuffles of the sequence being
+scored. Because DeepSHAP needs a single scalar to explain, the base-resolution
+profile output was summarized by mean-normalizing the pre-softmax logits and
+taking their dot product with the post-softmax profile, which weights each
+base's logit by its predicted probability of being used and sums over the
+1,000 bp output window and both strands. This is the profile or TSS-positioning
+task; ProCapNet can also produce scores for its read-count task, which are not
+shown here. Each scored sequence was run through all seven cross-validation
+models and in both orientations, and the scores averaged.
+</p>
+
+<h3>Processing at UCSC</h3>
+
+<p>
+The bigWig files were downloaded from
+<a href="https://mitra.stanford.edu/kundaje/kcochran/ucsc_track_hubs_public/ProCapNet/"
+target="_blank">the Kundaje lab server</a>. The contribution score files are used
+unaltered. In the prediction files the per-base values were re-encoded from one
+interval per base into fixedStep sections, which cuts the file size by about a
+third and changes no value. Bases carrying a literal NaN in the published hg38
+files, all of them in unresolved (N) reference sequence, were dropped so that the
+track autoscales and summarizes correctly; this removed 164,268,582 of the
+3,088,269,832 bases on the primary hg38 chromosomes, leaving 2,924,001,250 bases
+with a prediction. The hs1 files had no such bases and all 3,117,275,501 were
+kept. Nothing else was altered: every retained value is bit for bit the published
+value. The steps are recorded in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/transcriptionStart.txt"
+target="_blank">makeDoc</a> and the scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/proCapNet"
+target="_blank">the kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>proCapNet</i>.
+</p>
+
+<p>
+The Files column of the table on this page links each cell line's bigWigs
+directly, so a single file can be fetched without working out its path.
+</p>
+
+<p>
+For automated download and analysis, the genome annotation is stored in bigWig
+files that can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/proCapNet/" target="_blank">our
+download server</a>. Predictions are under <tt>pred/</tt> and are named for the
+cell line, the model and the strand, for example
+<tt>K562.proCapNet.pos.bw</tt> and <tt>K562.proCapNet.neg.bw</tt>. Contribution
+scores are under <tt>contrib/</tt>, for example
+<tt>K562.proCapNet-contrib.bw</tt>. The T2T-CHM13 predictions are in the same
+layout under <tt>/gbdb/hs1/proCapNet/pred/</tt>; there are no contribution scores
+for that assembly. Individual regions or the whole genome annotation
+can be obtained using our tool <tt>bigWigToBedGraph</tt>, which can be compiled
+from the source code or downloaded as a precompiled binary for your system.
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/proCapNet/pred/K562.proCapNet.pos.bw
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+The original files can be downloaded from
+<a href="https://mitra.stanford.edu/kundaje/kcochran/ucsc_track_hubs_public/ProCapNet/"
+target="_blank">the Kundaje lab server</a>. The trained models are on the ENCODE
+portal, linked from the Experiment column of the table on this page.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+ProCapNet was developed by Kelly Cochran in the Kundaje lab at Stanford
+University. The genome-wide predictions and contribution scores were generated by
+Kelly Cochran in collaboration with the GENCODE consortium. Thanks to Kelly
+Cochran and Anshul Kundaje for making the data available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Cochran K, Yin M, Mantripragada A, Schreiber J, Marinov GK, Shah SR, Yu H, Lis JT, Kundaje A.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/38853896" target="_blank">
+Dissecting the cis-regulatory syntax of transcription initiation with deep learning</a>.
+<em>bioRxiv</em>. 2024 Nov 21;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38853896" target="_blank">38853896</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11160661/" target="_blank">PMC11160661</a>
+</p>
+
+
+
+<p>
+Avsec Ž, Weilert M, Shrikumar A, Krueger S, Alexandari A, Dalal K, Fropf R, McAnany C, Gagneur J,
+Kundaje A <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33603233" target="_blank">
+Base-resolution models of transcription-factor binding reveal soft motif syntax</a>.
+<em>Nat Genet</em>. 2021 Mar;53(3):354-366.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33603233" target="_blank">33603233</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8812996/" target="_blank">PMC8812996</a>
+</p>
+
+
+
+<p>
+Kwak H, Fuda NJ, Core LJ, Lis JT.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">
+Precise maps of RNA polymerase reveal how promoters direct initiation and pausing</a>.
+<em>Science</em>. 2013 Feb 22;339(6122):950-3.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">23430654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3974810/" target="_blank">PMC3974810</a>
+</p>
+
