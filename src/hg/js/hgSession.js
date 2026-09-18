@@ -695,7 +695,7 @@ function sessSaveCardHtml(C) {
         '<div class="sessSaveRow">' +
         '<div class="sessSaveField">' +
         '<input id="sessSaveName" class="sessSaveInput" type="text" maxlength="255" ' +
-        'placeholder="' + randName + '">' +
+        'placeholder="Session name, default ' + randName + '">' +
         '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></div>' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
         'Private: Session can only be loaded by myself</label>' +
