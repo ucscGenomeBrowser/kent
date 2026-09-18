@@ -4418,7 +4418,8 @@ return newTrack;
 }
 
 /* Setting names whose file contents are safe to serve via hgFetch.
- * Only admin-configured (native track) values are checked -- never hub or custom tracks.
+ * Only admin-configured values are checked -- native tracks and curated hubs,
+ * never user hubs or custom tracks.
  * Do NOT add bigDataUrl or bigDataIndex here -- those may be restricted (we
  * might change this later to instead respect the tableBrowser setting in trackDb). */
 static char *fetchableSettings[] = {"metaDataUrl", "colorSettingsUrl", NULL};
@@ -4442,6 +4443,28 @@ for (p = fetchableSettings; *p != NULL; p++)
     char *val = trackDbSetting(tdb, *p);
     if (val != NULL && sameString(val, fileUrl))
         return TRUE;
+    }
+return FALSE;
+}
+
+static boolean trackIsFromCuratedHub(char *db, char *track,
+                                     struct hubConnectStatus *hubStatusList)
+/* Check if a hub track comes from the curated hub that dbDb names for this assembly.
+ * A curated hub such as hs1 keeps its data outside the hub.txt directory, so
+ * fileUrlMatchesHub rejects it, but its trackDb is admin-configured and as
+ * trustworthy as a native track's.  A user hub attached to the same assembly is
+ * not, hence the match against the one hub dbDb names. */
+{
+char *curatedUrl = NULL;
+if (!hubConnectGetCuratedUrl(trackHubSkipHubName(db), &curatedUrl) || isEmpty(curatedUrl))
+    return FALSE;
+curatedUrl = hReplaceGbdb(curatedUrl);
+unsigned hubId = hubIdFromTrackName(track);
+struct hubConnectStatus *hubStatus;
+for (hubStatus = hubStatusList; hubStatus != NULL; hubStatus = hubStatus->next)
+    {
+    if (hubStatus->id == hubId)
+        return sameString(hubStatus->hubUrl, curatedUrl);
     }
 return FALSE;
 }
@@ -4476,17 +4499,18 @@ while (hubStatus != NULL)
     hubStatus = hubStatus->next;
     }
 
-// For native database tracks (not hub or custom tracks), check if fileUrl matches
-// a whitelisted trackDb setting.  Only native tracks are checked here because their
-// settings are admin-configured and trusted.  Hub and custom track settings are
-// user-controlled and could be used for SSRF attacks.
+// For native database tracks and curated hub tracks, check if fileUrl matches a
+// whitelisted trackDb setting.  Only these are checked here because their settings are
+// admin-configured and trusted.  User hub and custom track settings are user-controlled
+// and could be used for SSRF attacks.
 if (!matchFound)
     {
     char *track = cartOptionalString(cart, "track");
     char *sourceDb = cartOptionalString(cart, "sourceDb"); // for future quickLift use
     if (sourceDb == NULL)
         sourceDb = database;
-    if (track != NULL && !isHubTrack(track) && !isCustomTrack(track))
+    if (track != NULL && !isCustomTrack(track) &&
+        (!isHubTrack(track) || trackIsFromCuratedHub(sourceDb, track, hubStatusList)))
         {
         struct trackDb *tdb = tdbForTrack(sourceDb, track, NULL);
         if (tdb != NULL)
