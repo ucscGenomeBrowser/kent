@@ -1,0 +1,187 @@
+<h2>Description</h2>
+
+<p>
+This track is part of the <a href="hgTrackUi?g=mavemd">MaveMD</a> collection. It shows one item
+per measured variant per score set, so a variant measured in several experiments appears once
+for each of them.
+</p>
+
+<p>
+Each item carries the assay score, the functional class that score falls into, and, where the
+score set has been calibrated against variants of known clinical significance, the ACMG/AMP
+functional evidence code that follows: PS3 for evidence of a damaging effect, BS3 for evidence
+of a normal one, at a strength set by the calibration's odds of pathogenicity following the
+ClinGen recommendations for the PS3/BS3 criterion (Brnich <em>et al.</em>). ClinVar
+significance, gnomAD allele frequency and the ClinGen allele ID are attached where they exist.
+</p>
+
+<p>
+Each item also carries the assay metadata: what the assay measured, in what model system, the
+molecular mechanism assessed, and how the variant library was built. That last field matters
+clinically. An assay built on an in vitro construct library introduces a synthetic copy of the
+target sequence, so it cannot detect an effect on splicing or on nonsense-mediated decay and
+can read falsely normal for such a variant. An assay that edits the endogenous locus can.
+</p>
+
+<p>
+Two cautions when comparing variants. Many of the evidence codes come from calibrations MaveDB
+marks research use only; each item names its calibration and flags this. And the functional
+score has no common scale or direction between score sets, so a higher score does not always
+mean a more normal protein. Compare by functional class or evidence code, which mean the same
+thing everywhere.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Items are colored by the ACMG functional evidence code from the calibration named in the item
+details. Red shades carry evidence toward pathogenic, blue toward benign, darkening with the
+strength of the evidence.
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#67001f;width:2em">&nbsp;</th>
+      <td>PS3, very strong</td></tr>
+  <tr><th style="background-color:#b2182b;width:2em">&nbsp;</th><td>PS3, strong</td></tr>
+  <tr><th style="background-color:#d6604d;width:2em">&nbsp;</th><td>PS3, moderate plus</td></tr>
+  <tr><th style="background-color:#f4a582;width:2em">&nbsp;</th><td>PS3, moderate</td></tr>
+  <tr><th style="background-color:#fddbc7;width:2em">&nbsp;</th><td>PS3, supporting</td></tr>
+  <tr><th style="background-color:#e8e8e8;width:2em">&nbsp;</th>
+      <td>Evidence not met: measured and calibrated, but the score reaches no threshold in
+          either direction</td></tr>
+  <tr><th style="background-color:#d1e5f0;width:2em">&nbsp;</th><td>BS3, supporting</td></tr>
+  <tr><th style="background-color:#92c5de;width:2em">&nbsp;</th><td>BS3, moderate</td></tr>
+  <tr><th style="background-color:#4393c3;width:2em">&nbsp;</th><td>BS3, moderate plus</td></tr>
+  <tr><th style="background-color:#2166ac;width:2em">&nbsp;</th><td>BS3, strong</td></tr>
+  <tr><th style="background-color:#053061;width:2em">&nbsp;</th><td>BS3, very strong</td></tr>
+</table>
+
+<p>
+Score sets that classify their variants without assigning an ACMG code are a measurement rather
+than a clinical claim, and use a separate palette:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#762a83;width:2em">&nbsp;</th>
+      <td>Abnormal function measured, no ACMG evidence code assigned</td></tr>
+  <tr><th style="background-color:#bdbdbd;width:2em">&nbsp;</th><td>Indeterminate</td></tr>
+  <tr><th style="background-color:#7fbf7b;width:2em">&nbsp;</th>
+      <td>Normal function measured, no ACMG evidence code assigned</td></tr>
+  <tr><th style="background-color:#d9d9d9;width:2em">&nbsp;</th>
+      <td>Measured, but no calibration covers this variant</td></tr>
+</table>
+
+<p>
+Filters are available on the ACMG evidence code, the functional class, the gene, the ClinVar
+significance and the assay metadata, and none are applied by default. Because every
+substitution at a codon is a separate item, a well studied gene stacks deeply and the track
+falls back to a density graph in all but narrow windows; filtering to one gene or one evidence
+code makes individual variants readable. Item names, ClinGen allele IDs and MaveDB variant
+identifiers are searchable from the position box.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+MaveMD curates MaveDB score sets for clinical relevance, integrates them with ClinVar and the
+ClinGen Allele Registry, and exports evidence structured for ACMG/AMP variant classification
+(McEwen <em>et al.</em>). Candidates were drawn from MaveDB, from publications cited in ClinVar
+for functional evidence, and from community recommendation, then restricted to genes with a
+moderate or stronger gene-disease association in ClinGen or GenCC.
+</p>
+
+<p>
+Data are downloaded from the <a href="https://api.mavedb.org" target="_blank">MaveDB API</a>,
+one request per score set. MaveDB resolves some score sets to the genome and others only to a
+protein sequence, so a variant is placed from its genomic term where one exists, otherwise by
+projecting its protein term onto the corresponding codon through RefSeq or GENCODE, otherwise
+by converting the submitter's transcript term. Haplotypes, several substitutions measured as a
+single unit, have no one position and are excluded.
+</p>
+
+<p>
+The build scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mavemd"
+target="_blank">kent source tree</a>, the steps that run them and the counts for each build in
+the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mavemd.txt"
+target="_blank">makeDoc</a>, and the track configuration in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/hg38/mavemd.ra"
+target="_blank">human/hg38/mavemd.ra</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet
+or tab-sep tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>mavemdVar</i>.</p>
+
+<p>For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mavemd/" target="_blank">our download
+server</a>. The file for this track is called <tt>mavemdVar.bb</tt>. Individual regions or the
+whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be
+compiled from the source code or downloaded as a precompiled binary for your system.
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
+can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mavemd/mavemdVar.bb -chrom=chr17
+-start=7668402 -end=7687550 stdout</tt></p>
+
+<p>The original annotation source data can be downloaded from the MaveDB API at
+<a href="https://api.mavedb.org" target="_blank">https://api.mavedb.org</a>.</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Alan Rubin, Benjamin Capodanno and Jeremy Stone of the MaveDB team for curating the
+MaveMD collection and for advice on retrieving it, and to the many groups whose experiments
+make up the underlying score sets.
+</p>
+
+<h2>References</h2>
+
+<p>
+McEwen AE, Stone J, Tejura M, Gupta P, Capodanno BJ, Da EY, Grindstaff SB, Moore N, Reinhart D,
+Snyder AE <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41332838" target="_blank">
+MaveMD: A functional data resource for genomic medicine</a>.
+<em>medRxiv</em>. 2025 Nov 19;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41332838" target="_blank">41332838</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12668102/" target="_blank">PMC12668102</a>
+</p>
+
+<p>
+Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff
+SB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">
+MaveDB 2024: a curated community database with over seven million variant effects from multiplexed
+functional assays</a>.
+<em>Genome Biol</em>. 2025 Jan 21;26(1):13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">39838450</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11753097/" target="_blank">PMC11753097</a>
+</p>
+
+<p>
+Arbesfeld JA, Da EY, Stevenson JS, Kuzma K, Paul A, Farris T, Capodanno BJ, Grindstaff SB, Riehle K,
+Saraiva-Agostinho N <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">
+Mapping MAVE data for use in human genomics applications</a>.
+<em>Genome Biol</em>. 2025 Jun 25;26(1):179.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">40563119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12188674/" target="_blank">PMC12188674</a>
+</p>
+
+<p>
+Brnich SE, Abou Tayoun AN, Couch FJ, Cutting GR, Greenblatt MS, Heinen CD, Kanavy DM, Luo X, McNulty
+SM, Starita LM <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31892348" target="_blank">
+Recommendations for application of the functional evidence PS3/BS3 criterion using the ACMG/AMP
+sequence variant interpretation framework</a>.
+<em>Genome Med</em>. 2019 Dec 31;12(1):3.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31892348" target="_blank">31892348</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6938631/" target="_blank">PMC6938631</a>
+</p>
+

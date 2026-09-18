@@ -611,6 +611,10 @@ hg19 ~spliceAI abSplice Another deep-learning predictor of splice-altering varia
 hg19 spliceImpactSuper predictionScoresSuper Pathogenicity scores for coding and non-coding variants generally, not only splicing
 hg19 predictionScoresSuper spliceImpactSuper Prediction scores and databases for variants that disrupt splicing
 
+# MaveDB / MaveMD cross-links:
+hg38 mavedb mavemd The clinically curated subset, with ACMG functional evidence calibrations
+hg38 mavemd mavedb The full set of variant effect maps in MaveDB, without clinical calibration
+
 # Constraint score cross-links:
 hg38 constraintSuper predictionScoresSuper Per-variant deleteriousness and pathogenicity scores, rather than regional constraint
 hg38 predictionScoresSuper constraintSuper Regional and gene-level constraint measured from population variation

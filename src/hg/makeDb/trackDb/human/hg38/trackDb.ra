@@ -929,6 +929,8 @@ include long_read_transcripts.ra
 
 include mavedb.ra
 
+include mavemd.ra alpha
+
 include vgpLiftOver.ra alpha
 include psuVsUcscChains.ra alpha
 
