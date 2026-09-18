@@ -19,13 +19,9 @@
 #sessionApp .sessSaveTitle { font-size:14px; font-weight:700; color:var(--accent); }
 #sessionApp .sessSaveWhat { font-size:14px; }
 #sessionApp .sessSaveRow { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-/* Name/description each get a label above the box (like .sessAdvItem) instead of a wordy
- * placeholder, and a box sized for what people actually type rather than the full card width. */
-#sessionApp .sessSaveField { display:flex; flex-direction:column; gap:5px; }
-#sessionApp .sessSaveField > .lab { font-weight:700; color:var(--ink); font-size:13px; }
-/* Width, not flex-basis: .sessSaveField is a column flex container, so a flex-basis here would
- * set the item's height (the column's main axis), not its width - that bug once made these boxes
- * hundreds of pixels tall. */
+/* Name/description: no label - the placeholder and the info bubble after the box say what it is -
+ * and a box sized for what people actually type rather than the full card width. */
+#sessionApp .sessSaveField { display:flex; align-items:center; gap:6px; }
 #sessionApp .sessSaveInput { width:260px; max-width:100%; height:34px; box-sizing:border-box;
     padding:0 11px; font-size:14px; border:1px solid var(--btnLine); border-radius:0; background:#fff;
     font-family:inherit; }

@@ -681,7 +681,7 @@ function sessSaveCardHtml(C) {
     }
     var what = loc ? '<span class="sessSaveWhat">' + loc + '</span>' : '';
     // Ghost text for the name field is a real generated name, not an explanation of the feature -
-    // the "Session name" label and its info bubble already say what it is.
+    // the info bubble already says what it is.
     var randName = sessEnc(sessRandomShareName());
     var nameTip = 'Optional. Leave this blank and your session will be saved under an ' +
         'automatically generated random name, like the one shown here. The session name ' +
@@ -693,19 +693,19 @@ function sessSaveCardHtml(C) {
         '<div class="sessSaveHead"><span class="sessSaveTitle">' +
         'Save the current view as a stable session link</span>' + what + '</div>' +
         '<div class="sessSaveRow">' +
-        '<div class="sessSaveField"><span class="lab">Session name ' +
-        '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></span>' +
+        '<div class="sessSaveField">' +
         '<input id="sessSaveName" class="sessSaveInput" type="text" maxlength="255" ' +
-        'placeholder="' + randName + '"></div>' +
+        'placeholder="' + randName + '">' +
+        '<span class="sessInfo" title="' + nameTip + '">&#9432;</span></div>' +
         '<label class="sessSaveCheck"><input type="checkbox" id="sessSavePrivate"> ' +
         'Private: Session can only be loaded by myself</label>' +
         '<button type="button" class="gbPill primary" id="sessSaveBtn" ' +
         'title="Save your current browser view as a named session">Save session</button>' +
         '</div>' +
-        '<div class="sessSaveField"><span class="lab">Description ' +
-        '<span class="sessInfo" title="' + descTip + '">&#9432;</span></span>' +
+        '<div class="sessSaveField">' +
         '<input id="sessSaveDesc" class="sessSaveInput" type="text" maxlength="512" ' +
-        'placeholder="Optional"></div>' +
+        'placeholder="Optional">' +
+        '<span class="sessInfo" title="' + descTip + '">&#9432;</span></div>' +
         '</div>';
 }
 
