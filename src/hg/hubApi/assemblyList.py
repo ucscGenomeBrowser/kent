@@ -14,47 +14,59 @@ from datetime import datetime, UTC
 
 # priorities derived from the 'Monthly usage stats' report
 # from the qateam cron job running on the first day of the month
-# special top priorities
-topPriorities = {
-    'hg38': 1,
-    'mm39': 2,
-    'hs1': 3,
-    'hg19': 4,
-    'GCF_028858775.2' : 5,  # mPanTro3_v2.0 Chimp
-    'GCF_049350105.2' : 6,	# T2T_MMU8v2.0 Rhesus
-    'GCF_029289425.2' : 7,	# mPanPan1_v2.0 Bonobo
-    'GCF_029281585.2' : 8,	# mGorGor1_v2.1 Gorilla
-    'GCF_028885655.2' : 9,	# mPonAbe1_v2.0 Orangutan
-    'GCF_037993035.2' : 10,	# T2T_MFA8v1.1 Crab-eating macaque
-    'GCA_049354715.1' : 11,	# calJac240_pri Marmoset
-    'GCF_011100555.1' : 12,	# mCalJa1.2 Marmoset
-    'GCF_040939455.1' : 13,	# Inina_mat1.0 Mouse lemur
-    'GCF_036323735.1' : 14,	# rn8 rat
-    'GCF_041296265.1' : 15,	# TB_T2T horse
-    'GCF_016772045.1' : 16,	# ARS_UI_Ramb_v2.0 Sheep
-    'GCF_002263795.3' : 17,	# ARS_UCD2.0 Cow
-    'GCF_018350175.1' : 18,	# Fca126_mat1.0 Cat
-    'GCF_016699485.2' : 19,	# GRCg7b Chicken
-    'GCF_003957565.2' : 20,	# bTaeGut1.4 Zebra finch
-    'GCF_049306965.1' : 21,	# GRCz12tu Zebrafish
-    'GCA_052040795.1' : 22,	# GRCz12ab Zebrafish
-    'mm10': 23,
-    'dm6': 24,
-    'danRer11': 25,
-    'mm9': 26,
-    'hetGla2': 27,
-    'rn6': 28,
-    'hg18': 29,
-    'galGal6': 30,
-    'bosTau9': 31,
-    'ce11': 32,
-    'canFam4': 33,
-}
+# special top priorities -- ORDER MATTERS: this is a plain list, not
+# a dict, precisely so a new identifier can just be inserted wherever
+# it belongs without renumbering anything by hand. initTopPriorities()
+# turns list position into the actual priority number (1, 2, 3, ...).
+topPriorityNames = [
+    'hg38',
+    'mm39',
+    'hs1',
+    'hg19',
+    'GCA_018852605.3',	# human (NA24385 HG002 pat 2024)
+    'GCA_018852615.3',	# human (NA24385 HG002 mat 2024)
+    'GCA_054883195.1',	# human (H9 T2T hap1 2026)
+    'GCA_054883165.1',	# human (H9 T2T hap2 2026)
+    'GCF_028858775.2',	# mPanTro3_v2.0 Chimp
+    'GCF_049350105.2',	# T2T_MMU8v2.0 Rhesus
+    'GCF_029289425.2',	# mPanPan1_v2.0 Bonobo
+    'GCF_029281585.2',	# mGorGor1_v2.1 Gorilla
+    'GCF_028885655.2',	# mPonAbe1_v2.0 Orangutan
+    'GCF_037993035.2',	# T2T_MFA8v1.1 Crab-eating macaque
+    'GCF_049354715.1',	# calJac240_pri Marmoset
+    'GCF_011100555.1',	# mCalJa1.2 Marmoset
+    'GCF_040939455.1',	# Inina_mat1.0 Mouse lemur
+    'GCF_036323735.1',	# rn8 rat
+    'GCF_041296265.1',	# TB_T2T horse
+    'GCF_016772045.1',	# ARS_UI_Ramb_v2.0 Sheep
+    'GCF_002263795.3',	# ARS_UCD2.0 Cow
+    'GCF_018350175.1',	# Fca126_mat1.0 Cat
+    'GCF_016699485.2',	# GRCg7b Chicken
+    'GCF_003957565.2',	# bTaeGut1.4 Zebra finch
+    'GCF_049306965.1',	# GRCz12tu Zebrafish
+    'GCA_052040795.1',	# GRCz12ab Zebrafish
+    'mm10',
+    'dm6',
+    'danRer11',
+    'mm9',
+    'hetGla2',
+    'rn6',
+    'hg18',
+    'galGal6',
+    'bosTau9',
+    'ce11',
+    'canFam4',
+]
+
+### key will be dbDb/GCx name, value will be priority number.
+### Populated by initTopPriorities() from topPriorityNames above.
+topPriorities = {}
 
 ### key will be dbDb/GCx name, value will be priority number
 allPriorities = {}
 
-priorityCounter = len(topPriorities) + 1
+### set for real by initTopPriorities(), once topPriorityNames is known
+priorityCounter = 1
 
 # key is clade, value is priority, will be initialized
 # by initCladePriority() function
@@ -233,6 +245,21 @@ hasn't changed.
 
 
 """
+
+####################################################################
+### turn topPriorityNames (list order = priority order) into the
+### topPriorities dict, and set priorityCounter to continue right
+### after it. This is the only place priority numbers 1..N get
+### assigned for topPriorityNames -- add/reorder identifiers there,
+### nothing here needs to change.
+####################################################################
+def initTopPriorities():
+    global topPriorities
+    global priorityCounter
+
+    for i, name in enumerate(topPriorityNames, start=1):
+        topPriorities[name] = i
+    priorityCounter = len(topPriorityNames) + 1
 
 ####################################################################
 ### the various listings are ordered by these clade priorities to get
@@ -613,6 +640,65 @@ def addYearsStatus(genArks, years, status):
     return
 
 ####################################################################
+### GenArk accessions NCBI flags as the species' reference genome,
+### read directly from the genark database's assemblySummary tables
+### rather than re-parsing the assembly_summary_*.txt flat files a
+### second time. Needed early, before establishPriorities(), so
+### GenArk 'reference' assemblies can be ranked ahead of their
+### non-reference siblings within each clade grouping.
+####################################################################
+def readGenArkReferenceSet():
+    referenceSet = set()
+    tables = [
+        "assemblySummaryGenbank",
+        "assemblySummaryGenbankHistorical",
+        "assemblySummaryRefseq",
+        "assemblySummaryRefseqHistorical",
+    ]
+    for table in tables:
+        result = subprocess.run(
+            ["hgsql", "-N", "-e",
+             f"SELECT assemblyAccession FROM {table} WHERE refseqCategory='reference genome';",
+             "genark"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        if result.returncode != 0:
+            print(f"Error executing MySQL command on {table}: {result.stderr.decode('utf-8')}")
+            exit(1)
+        for line in result.stdout.decode('utf-8').strip().split('\n'):
+            if line:
+                referenceSet.add(line)
+    print(f"# genArk reference-genome accessions: {len(referenceSet)}")
+    return referenceSet
+
+####################################################################
+### give key the next priority value if it doesn't have one yet.
+### Returns 1 if assigned, 0 if key already had a priority.
+####################################################################
+def assignPriority(key):
+    global allPriorities, priorityCounter
+    if key in allPriorities:
+        return 0
+    allPriorities[key] = priorityCounter
+    priorityCounter += 1
+    return 1
+
+####################################################################
+### assign priorities to a list of GenArk accessions, giving every
+### 'reference' genome in the list a priority ahead of the rest of
+### the list, while preserving the incoming relative order within
+### each of those two groups. Returns the number of accessions that
+### were actually assigned a new priority.
+####################################################################
+def assignGenArkBucket(gcAccessions, genArkRefCategory):
+    referenceFirst = [g for g in gcAccessions if genArkRefCategory.get(g, "") == "reference"]
+    theRest = [g for g in gcAccessions if genArkRefCategory.get(g, "") != "reference"]
+    itemCount = 0
+    for gcAcc in referenceFirst + theRest:
+        itemCount += assignPriority(gcAcc)
+    return itemCount
+
+####################################################################
 ### for the genArk set, establish some ad-hoc priorities
 ####################################################################
 def establishPriorities(dbDb, genArk):
@@ -635,6 +721,10 @@ def establishPriorities(dbDb, genArk):
 
     primateList = extractClade('primates', genArk)
     mammalList = extractClade('mammals', genArk)
+
+    # lookup used by assignGenArkBucket() to rank 'reference' genArk
+    # assemblies ahead of their non-reference siblings within a bucket
+    genArkRefCategory = {item['gcAccession']: item.get('refSeqCategory', '') for item in genArk}
 
     versionScan = {}	# key is dbDb name without number version extension,
                         # value is highest version number seen for this bare
@@ -686,58 +776,42 @@ def establishPriorities(dbDb, genArk):
 
     itemCount = 0
     # and now the GenArk GCF/RefSeq homo sapiens should be lined up here next
-    for item in genArk:
-        gcAccession = item['gcAccession']
-        if not gcAccession.startswith("GCF_"):
-            continue
-        if gcAccession not in allPriorities:
-            sciName = item['scientificName']
-            if sciName.lower() == "homo sapiens":
-                allPriorities[gcAccession] = priorityCounter
-                priorityCounter += 1
-                itemCount += 1
+    candidates = [item['gcAccession'] for item in genArk
+                  if item['gcAccession'].startswith("GCF_")
+                  and item['scientificName'].lower() == "homo sapiens"]
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCF homo sapiens count: {itemCount:4}")
 
     itemCount = 0
     # and now the GenArk GCA/GenBank homo sapiens should be lined up here next
     #   GCA/GenBank second
-    for item in genArk:
-        gcAccession = item['gcAccession']
-        if not gcAccession.startswith("GCA_"):
-            continue
-        if gcAccession not in allPriorities:
-            sciName = item['scientificName']
-            if sciName.lower() == "homo sapiens":
-                allPriorities[gcAccession] = priorityCounter
-                priorityCounter += 1
-                itemCount += 1
+    candidates = [item['gcAccession'] for item in genArk
+                  if item['gcAccession'].startswith("GCA_")
+                  and item['scientificName'].lower() == "homo sapiens"]
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA homo sapiens count: {itemCount:4}")
 
     itemCount = 0
     # the primates, GCF/RefSeq first
-    for asmId, commonName in primateList.items():
+    candidates = []
+    for asmId in primateList:
         gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
-        if not gcAcc.startswith("GCF_"):
-            continue
-        if gcAcc not in allPriorities:
-            allPriorities[gcAcc] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+        if gcAcc.startswith("GCF_"):
+            candidates.append(gcAcc)
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCF primates count: {itemCount:4}")
 
     itemCount = 0
     # and the GCA/GenBank primates
-    for asmId, commonName in primateList.items():
+    candidates = []
+    for asmId in primateList:
         gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
-        if not gcAcc.startswith("GCA_"):
-            continue
-        if gcAcc not in allPriorities:
-            allPriorities[gcAcc] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+        if gcAcc.startswith("GCA_"):
+            candidates.append(gcAcc)
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA primates count: {itemCount:4}")
 
@@ -758,27 +832,23 @@ def establishPriorities(dbDb, genArk):
 
     itemCount = 0
     # the mammals, GCF/RefSeq first
-    for asmId, commonName in mammalList.items():
+    candidates = []
+    for asmId in mammalList:
         gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
-        if not gcAcc.startswith("GCF_"):
-            continue
-        if gcAcc not in allPriorities:
-            allPriorities[gcAcc] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+        if gcAcc.startswith("GCF_"):
+            candidates.append(gcAcc)
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCF mammals count: {itemCount:4}")
 
     itemCount = 0
     # and the GCA/GenBank mammals
-    for asmId, commonName in mammalList.items():
+    candidates = []
+    for asmId in mammalList:
         gcAcc = asmId.split('_')[0] + "_" + asmId.split('_')[1]
-        if not gcAcc.startswith("GCA_"):
-            continue
-        if gcAcc not in allPriorities:
-            allPriorities[gcAcc] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+        if gcAcc.startswith("GCA_"):
+            candidates.append(gcAcc)
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA mammals count: {itemCount:4}")
 
@@ -801,27 +871,15 @@ def establishPriorities(dbDb, genArk):
 
     itemCount = 0
     # GCF RefSeq from GenArk next priority
-    for item in genArk:
-        gcAccession = item['gcAccession']
-        if not gcAccession.startswith("GCF_"):
-            continue
-        if gcAccession not in allPriorities:
-            allPriorities[gcAccession] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+    candidates = [item['gcAccession'] for item in genArk if item['gcAccession'].startswith("GCF_")]
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCF count: {itemCount:4}")
 
     itemCount = 0
     # GCA GenBank from GenArk next priority
-    for item in genArk:
-        gcAccession = item['gcAccession']
-        if not gcAccession.startswith("GCA_"):
-            continue
-        if gcAccession not in allPriorities:
-            allPriorities[gcAccession] = priorityCounter
-            priorityCounter += 1
-            itemCount += 1
+    candidates = [item['gcAccession'] for item in genArk if item['gcAccession'].startswith("GCA_")]
+    itemCount = assignGenArkBucket(candidates, genArkRefCategory)
     totalItemCount += itemCount
     print(f"{totalItemCount:4} - total\tgenArk GCA count: {itemCount:4}")
 
@@ -858,6 +916,7 @@ def main():
     set_utf8_encoding()
 
     initCladePriority()
+    initTopPriorities()
 
     dbDbNameCladeFile = sys.argv[1]
 
@@ -873,6 +932,15 @@ def main():
     # read the GenArk data from hgdownload into a list of dictionaries
     genArkUrl = "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt"
     genArkItems = readGenArkData(genArkUrl)
+
+    # stamp refSeqCategory early so establishPriorities() can rank
+    # 'reference' genArk assemblies ahead of their non-reference
+    # siblings within each clade grouping; readAsmSummary()/
+    # addYearsStatus() below re-stamp this later from the flat files
+    # for the final output value, same as before this feature existed
+    genArkReferenceSet = readGenArkReferenceSet()
+    for item in genArkItems:
+        item['refSeqCategory'] = "reference" if item['gcAccession'] in genArkReferenceSet else ""
 
     establishPriorities(dbDbItems, genArkItems)
 
