@@ -417,6 +417,40 @@
     <pre>    html docs/myFirstTrack.html</pre>
     Or with full path:
     <pre>    html https://path/to/location/docs/explainMyData.html</pre>
+    <p><b>Variables in the description page</b></p>
+    <p>The description page may use the variables below, written in the form
+    <code>${name}</code>. They are replaced when the page is shown, both on the track
+    settings page and on the item details page.</p>
+    <table class='bedExtraTbl'>
+        <tr><td><code>${db}</code></td><td>the assembly the track is being viewed on, for
+            example <code>hg38</code></td></tr>
+        <tr><td><code>${organism}</code></td><td>the organism in lower case, for example
+            <code>human</code></td></tr>
+        <tr><td><code>${Organism}</code></td><td>the organism with an initial capital, for
+            example <code>Human</code></td></tr>
+        <tr><td><code>${ORGANISM}</code></td><td>the organism in upper case, for example
+            <code>HUMAN</code></td></tr>
+        <tr><td><code>${date}</code></td><td>the release description of the assembly, for
+            example <code>Dec. 2013 (GRCh38/hg38)</code></td></tr>
+        <tr><td><code>${track}</code></td><td>the name of this track</td></tr>
+        <tr><td><code>${parentTrack}</code></td><td>the name of the container this track sits
+            in, either a <a href="#compositeTrack">compositeTrack</a> or a
+            <a href="#superTrack">superTrack</a>. A <a href="#view">view</a> is skipped, since
+            a view has no description page of its own. For a track that is not inside a
+            container, this is the same as <code>${track}</code>.</td></tr>
+        <tr><td><code>${downloadsServer}</code></td><td><code>hgdownload.soe.ucsc.edu</code>
+            </td></tr>
+    </table>
+    <p><code>${track}</code> and <code>${parentTrack}</code> come out with the prefix the
+    Genome Browser gives a hub track's name, so they can be used to build a link back into
+    the Browser. This is how the page of a track inside a container links to the container's
+    own page:</p>
+    <p><code>&lt;a href="hgTrackUi?db=${db}&amp;amp;g=${parentTrack}"&gt;Back to the
+    container&lt;/a&gt;</code></p>
+    <p>Nothing else is replaced. A dollar sign followed by anything other than the names
+    listed above is left alone, so shell, awk and JavaScript examples elsewhere on the page
+    are safe. Other trackDb settings are not available as variables, and neither is the
+    session id.</p>
 </DIV>
 
 <DIV class="lessCommon_intro">
