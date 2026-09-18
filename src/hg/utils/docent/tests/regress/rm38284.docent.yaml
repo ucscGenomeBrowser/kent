@@ -1,0 +1,82 @@
+# #38284 (from the mail list, #38278) -- at gene-level zoom the exon popup spent its one
+# useful line on "Codons: Zoom in to show cDNA position", so finding a c. or p. position
+# meant zooming into one exon after another.
+#
+# c3322bc2d3f, hg/hgTracks/simpleTracks.c only.  A coding exon now gets the cDNA range it
+# covers and the codons that range spans, plus the c.-N / c.*N range of any UTR part of it:
+#
+#     Codons:  c.1364-1482 (p.455-494)
+#     5' UTR:  c.-325_-1
+#
+# Two smaller changes came with it.  A non-coding transcript already got a spliced n. range,
+# but only at codon-level zoom, where the number is of little use; that gate is gone.  Chain
+# and LRG tracks are left alone, through a new `isTranscript` flag, because a chain block has
+# no cDNA coordinates to report.
+#
+# The numbers are read off the map boxes rather than by hovering.  hgTracks writes the popup
+# text into `data-tooltip` on each AREA (README.txt: assert data-tooltip, never title), so a
+# selector can name the exact exon of the exact transcript and can also say what must NOT be
+# there -- and `expect: {tip: ...}` cannot, since it is a substring test on whatever tooltip
+# happens to be up.  Exon 8 of KAT6A is 119 bp in a 122 kb window, about one pixel wide, so
+# hovering it by coordinate would be a coin toss as well.
+#
+# One real mouseover is kept, on exon 17, which is 5,389 bp and cannot be missed.  That is
+# what says the string reaches a reader rather than only the markup.
+#
+# MANE rather than GENCODE for the KAT6A steps: it draws exactly one transcript for the
+# gene, so there is one row and one set of exon boxes, and ENST00000265713.8 is that
+# transcript.  The ticket's own numbers are used throughout, and the CDS is 6,015 nt, which
+# is 2,005 codons -- so the last codon of exon 17 coming out at 2,005 is the arithmetic
+# checking itself.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38284 and c3322bc2d3f after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: no exon carries a cDNA or codon range"
+
+target: genome-test
+db: hg38
+position: chr8:41929478-42051987
+reset: true
+fast: true
+steps:
+  - go: chr8:41929478-42051987
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [ruler, mane]}
+
+  # The three exons the ticket names, each identified by its own cDNA range.  Exon 8 is
+  # entirely coding; exon 2 carries the 5' UTR; exon 17 carries the 3' UTR.  KAT6A is on the
+  # minus strand, so exon 1 is the last block in genomic order -- which is also why these
+  # are worth asserting: the arithmetic runs in spliced space and in transcription order.
+  - expect:
+      has:
+        - '#td_data_mane area[data-tooltip*="c.1364-1482 (p.455-494)"]'
+        - '#td_data_mane area[data-tooltip*="c.-325_-1"]'
+        - '#td_data_mane area[data-tooltip*="c.1-600 (p.1-200)"]'
+        - '#td_data_mane area[data-tooltip*="c.3353-6015 (p.1118-2005)"]'
+        - '#td_data_mane area[data-tooltip*="c.*1_*2726"]'
+      noHas: 'area[data-tooltip*="Zoom in to show cDNA position"]'
+
+  # The same exon 17 line, raised as a real tooltip.  5,389 bp wide, so the hover cannot
+  # land on a neighbour.
+  - mouseover: {track: mane, at: chr8:41932000}
+  - expect: {tip: "c.3353-6015 (p.1118-2005)"}
+
+  # A non-coding transcript at a 33 kb window.  It used to show the "Zoom in" text here and
+  # give the n. range only once you were close enough to see codons.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chrX:73819000-73852000&hideTracks=1&knownGene=pack&pix=1100"
+  - expect:
+      rows: [ruler, knownGene]
+      has: '#td_data_knownGene area[data-tooltip*="ENST00000650627.1"][data-tooltip*="n.12802_13180"]'
+      noHas: 'area[data-tooltip*="Zoom in to show cDNA position"]'
+
+  # The control the commit went out of its way to keep: a chain track's blocks have no cDNA
+  # coordinates, so they must not grow a cDNA line.  chainRheMac10 draws "Block" popups at
+  # this window, which is the same code path, so this is a real exercise of the isTranscript
+  # guard and not a track that simply never reaches it.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr8:41929478-42051987&hideTracks=1&mane=pack&chainNetRheMac10=full&chainRheMac10=pack&chainRheMac10_sel=1&pix=1100"
+  - expect:
+      rows: [ruler, mane, chainRheMac10]
+      has: '#td_data_chainRheMac10 area[data-tooltip*="Block"]'
+      noHas:
+        - '#td_data_chainRheMac10 area[data-tooltip*="Codons"]'
+        - '#td_data_chainRheMac10 area[data-tooltip*="UTR"]'

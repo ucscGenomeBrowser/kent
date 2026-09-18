@@ -1,0 +1,78 @@
+# #10138 -- "no function apart from sessions to create a stable url to a GB view".  Filed in
+# 2019: people were mailing each other hgsid links, which stop working, because making a
+# saved session is more ceremony than "send someone what I am looking at" deserves.
+#
+# The answer is a "Share a link" item at the right-hand end of the blue bar, on every page.
+# Three commits carry it, and the first one does not say so -- it is `refs #38197`, which is
+# why `git log --grep=10138` does not find the work:
+#
+#     32cd2100d9d  reusable "view snapshot" sessions for durable, minimal share links
+#     c1ac48b0feb  scope the snapshot-lifetime wording to the BLAT alignment share
+#     11d5b26d979  widen the session data directory hash from 8 to 10 hex characters
+#     3f97b357c59  create the session only when the user asks, and copy in one click
+#     c5a326f3cc4  the top-right "Share a link" and "Login" links themselves
+#
+# WHAT THIS ASSERTS, and why it stops where it does.  The dialog now PREVIEWS the link it is
+# going to make and writes nothing until the button is clicked.  That is 3f97b357c59, and it
+# is the part a reader notices: before it, three opens of the dialog gave three different
+# links and left orphan rows behind in namedSessionDb.  So the checks are that the preview is
+# on screen, that it is the short /s/<user>/<name> form with the reserved anonymous user "l",
+# and that no ACTIVE link exists yet -- #tlShareUrl is the box the result view puts the live
+# URL in, and it must not be there before the button is pressed.
+#
+# THE BUTTON IS DELIBERATELY NOT CLICKED.  Clicking it writes a row into hgcentraltest under
+# user "l", and this suite runs every night; a test that leaves a row behind on every run is
+# litter in a shared database, and snapshotCleaner would not touch it for 1,460 days.  What
+# the click would add is the round trip -- follow the link, get the view back -- and that is
+# out of reach anyway: the created URL lands in a read-only div (#tlShareUrl, with the URL in
+# data-copy) rather than in an anchor, so there is nothing for a click: step to follow and no
+# way to carry a string from one step into the next.  Verified 2026-09-17 that opening the
+# dialog writes nothing: namedSessionDb held 153 rows for user "l" before and after.
+#
+# A wide viewport is needed.  Below 1,100px nice_menu.css folds the top-right links into the
+# hamburger and #shareLink is not visible, so a click on it times out (see rm38251).
+proof:
+  - "assertion-only 2026-09-17 -- written from #10138 and 3f97b357c59 after the work reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the Share dialog has no preview and no Create link & copy button, and #tlShareUrl is already there -- the link was minted on open"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125483
+  - hide: all
+  - track: {knownGene: pack}
+
+  # The two links themselves, at the right-hand end of the bar.  Logged out, so the account
+  # link is a plain Login link straight to hgLogin.
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#topRightLinks #loginLink'
+        - '#topRightLinks #shareLink[data-sharemode="session"]'
+
+  - click: '#shareLink'
+  - sleep: 800
+
+  # The dialog.  The sentence is the whole of 3f97b357c59 in words: the link exists as a
+  # preview and becomes real only on the button.
+  - expect:
+      text: "It becomes active when you click the button below"
+      has: 'button:has-text("Create link & copy")'
+      noHas: '#tlShareUrl'
+
+  # The previewed link is the short form under the reserved anonymous user "l".  Written
+  # without a host so that a run redirected at another server still reads it.
+  - expect: {text: "/s/l/"}
+
+  # hgTrackUi, the other page that offers the link, in its other mode.  menuBar() in
+  # lib/web.c writes #shareLink only on hgTracks and hgTrackUi, and it asks for a different
+  # thing on each: "session" shares the view, "url" shares the page address with the hgsid
+  # stripped.  Naming the mode is what stops this being a check that an id exists.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=knownGene"
+  - expect:
+      text: "GENCODE"
+      has: '#topRightLinks #shareLink[data-sharemode="url"]'

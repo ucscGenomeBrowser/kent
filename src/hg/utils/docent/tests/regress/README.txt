@@ -115,13 +115,39 @@ The levels, weakest first:
   xfail              seen failing right now for its own reason; the fix has not shipped
   sandbox-ab         seen failing on a build with the bug and passing on a build with
                      the fix, both built by hand
+  release-ab         seen failing on a RELEASED version that predates the fix and passing
+                     on one that carries it
   server-flip        seen failing then passing on a real server as a real build arrived
   caught-regression  went red for a regression that was then filed and fixed
 
-Two ways to earn the middle levels. sandbox-ab is the one you can choose to do: build the
-fix into a ticket sandbox, point a copy of the script at that port with
-`target: http://127.0.0.1:PORT/cgi-bin`, and record which checks flipped. It costs one
-build and it settles what a tight assertion can only argue.
+RELEASE-AB IS THE ONE TO REACH FOR, and it is the standard this directory now works to.
+Build a released version into a ticket sandbox and point the whole directory at it:
+
+    ts create NNNNN "v503_branch, detached, as the A/B baseline"
+    make -j 24 cgi CGI_BIN=$TS/cgi USER=bin DOCUMENTROOT_USER=$TS/htdocs-$LOGNAME
+    make test TARGET=http://127.0.0.1:PORT/cgi-bin
+
+A script that fails there and passes on genome-test has been watched to fail for its own
+reason, and the claim is reproducible by anyone from a tag, forever. sandbox-ab is the
+same shape with a tree you patched yourself, which is weaker for one reason: nobody else
+can rebuild it, and after a rebase nor can you.
+
+Three things it needs. Build the JS and the HTDOCS into the freeze as well, not only the
+CGIs -- three of the twenty-two fixes in the 2026-09-17 batch live in hg/js or
+htdocs/style and would not have travelled with a CGI-only build. Check that the baseline
+really predates the fix (`git merge-base --is-ancestor <fix> origin/vNNN_branch`): three
+of that batch's fixes were already in v503, so v503 is the wrong baseline for them and an
+older release is their standard. And read every failure MESSAGE rather than the verdict,
+because a release is a month of unrelated change as well as the fix you are testing.
+
+The hand-patched route is documented below because it is still what you do for a fix too
+recent for any release. Build the fix into a ticket sandbox, point a copy of the script
+at that port with `target: http://127.0.0.1:PORT/cgi-bin`, and record which checks
+flipped. What it CANNOT do is undo a fix that later work has built on: `git revert` then
+conflicts, and a reconstructed "master minus this one commit" is a state that never
+existed. Two attempts to force it through a wholesale file restore did not even compile,
+both times in code unrelated to the ticket. Take the conflict as the answer and use a
+release instead.
 
 server-flip is the one this directory gets for free, and it is better evidence, because
 nothing about the server changed except the build. Commit a script for an unshipped fix
@@ -267,3 +293,99 @@ reverse, checking after the fact that the two checkboxes it clicked really are o
 **A dropdown cannot be driven.** Docent has no verb that picks an option from a select, so
 a visibility is set on the way in through the URL (rm36668) and a button is clicked
 instead where one exists (rm36917, rm37282).
+
+Twenty-two for one QA list, and what the A/B against v503 said about them
+--------------------------------------------------------------------------
+
+rm10138, rm36940, rm37969, rm38171, rm38184, rm38198, rm38200, rm38205, rm38206, rm38223,
+rm38236, rm38248, rm38251, rm38257, rm38279, rm38281, rm38283, rm38284, rm38285, rm38302,
+rm38303 and rm38309 are one batch, written 2026-09-17 from a list of tickets that had no
+script here. They are not a theme: they run from a menu-bar color to a SIGSEGV in a
+quickLift view.
+
+EVERY ONE OF THEM WAS THEN RUN AGAINST v503, which is the whole point and is what the
+release-ab level above is for. v503_branch (707b184e329) went into ticket sandbox 38316,
+CGIs, js and htdocs; twenty-one of the twenty-four fix commits landed after that branch was
+cut, so the release has the bugs. Eighteen scripts failed there on their own check and now
+carry a release-ab line quoting the failure. The four that did not are each worth reading:
+
+  rm38171   its fix (6a8e756b473, 2026-08-24) is IN v503, so the script passes there.
+            v502 or older is its baseline.
+  rm36940   the fixture hub draws no rows at all on v503, so the run never reaches the
+            field-count check. Its evidence is a hand-patched sandbox instead.
+  rm38257   `login:` dies against a park on both baselines -- the hgLogin returnToURL(150)
+            race -- so its A/B is blocked by the harness, not by the tree.
+  rm38309   PASSES on v503, which is exactly what its header claims: the fix changes no
+            byte of any page. That claim is now measured rather than argued.
+
+One script had to be rewritten because of what the A/B said. rm38251 PASSED on a build
+with its bug, at every width from 390 to 1099, and only the measurement showed why -- see
+its header. That is the case for doing this at all: without the A/B it would have sat here
+looking green forever.
+
+**text: and noText: used to take ONE string, and a YAML list failed open.** `noText: ["a",
+"b"]` stringified to `"a,b"`, which no page contains, so the check passed on anything -- and
+passed silently, which is worse than failing. Six scripts in this batch were written that
+way and six of them looked green. Both now take a list, like `rows:`, `noRows:`, `has:` and
+`noHas:` always did, so the trap is gone; it is written down because the shape of it will
+come back the next time a check is added that stringifies its argument.
+
+**A title becomes `mouseoverText`, not `data-tooltip`.** The rule above says to assert
+data-tooltip, and that is right for a MAP BOX, where the server writes both attributes.
+Everywhere else the server writes only a title, and utils.js
+(convertTitleTagsToMouseovers -> titleTagToMouseover -> addMouseover) moves the text into a
+`mouseoverText` attribute and BLANKS the title. rm38279 reads the density note off the
+track controls that way.
+
+**A subtrack's longLabel is not readable at all.** The controls below the image list a
+composite or superTrack under the container's own label, so a note appended to a CHILD's
+longLabel reaches only the center label inside the image and the hgTracks JSON in a
+<script> block -- and `text:` reads body.innerText, which skips a script. rm38279 was first
+written against jaspar2026 and was measuring nothing. Name a top-level track.
+
+**A CSS or JS file can be read as a page.** `goto: /style/nice_menu.css` renders as a plain
+text document, so text:/noText: read the stylesheet the server is really serving. rm38206
+and rm38251 both use it. Follow the goto with `wait: 'pre'`: Chromium builds that view a
+moment after the load event, and without the wait the step reads an empty body perhaps one
+run in five.
+
+**`expect:` could not ask where a box is, and now it can.** rm38251's bug is geometry -- an
+icon landing outside the blue bar, sliding across the menu items -- and no check reached it:
+a selector says what is in the page and never where, and `color:` samples a track row inside
+the image. `box:` was added for it: `inside:`, `clear:` (with an optional `gap:`) and
+`height:`/`width:`, all reading real bounding boxes, and a failure that prints the
+measurement. rm38251 asserts all three symptoms on the four pages b82bce91b10 measured.
+
+Two things that shape a `box:` check. **One viewport per run** -- `size:` is read once, when
+the browser context is made -- so a layout bug that only shows at certain widths needs one
+script per width; rm38251 takes 700px and says which other width is worth having. And
+**name the LINK, not the list item**: an `li` box carries padding and is wider than its
+label, so on the home page the last `li` runs 16px past the icon while the links have 17px
+of clear space. A check on the `li` goes red for a reason that is not a bug.
+
+**Docent's default viewport is 1000px, which is inside a media query.** nice_menu.css folds
+the top-right links into the hamburger below 1100px, so `#shareLink` and `#loginLink` are
+not visible and a click on either times out after 30 seconds. rm10138 and rm38257 set
+`size: [1400, 900]`. rm38251 wants the opposite and sets 700.
+
+**A hub's files are cached by udc on the server.** An edit to a fixture hub is not visible
+for minutes, and the trackDb, the bigBed and each html page expire independently, so a run
+can see a new trackDb and an old description page. The cache is owned by apache and cannot
+be cleared from a developer account. Give a changed page a NEW FILE NAME.
+
+Three fixtures were added for these, under ~/public_html/docentFixtures/: rm36940 (seven
+bigBed tracks differing only in the field count on the type line, copied from Jairo's hub so
+that nothing outside this repository can change it), rm38283 (one description page full of
+dollar variables, shared by a composite, a subtrack under a view, and a superTrack child)
+and rm38184 (a one-line session settings file). preflight.js now reads hgS_loadUrlName out
+of a goto: URL as well, so the last of those is checked like any other fixture.
+
+rm38257 is the FIRST SCRIPT HERE THAT LOGS IN. The Account popup exists only for a signed-in
+reader, so there was no other way in. `login:` reads ~/.docentLogin, one section per
+hgcentral database; anyone without that file fails this one script at its first step.
+
+Two things in this batch are deliberately not asserted, each said again in its own script:
+dd8d4476a69, the spacing follow-up on #38281, had not reached genome-test that day; and
+#38303's own case needs a symlinked session-data directory, which genome-test does not have
+(`namei -l /data/apache/userdata/sessions` shows no symlink), so that script covers the
+trash branch of the same check instead.
