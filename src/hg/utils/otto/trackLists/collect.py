@@ -38,7 +38,13 @@ def sh(cmd, timeout=None):
 def q(s):
     return "'" + s.replace("'", "'\\''") + "'"
 
-def note(msg):
+def progress(msg):
+    """Running commentary. Goes to stdout, which trackLists.sh redirects to a log file,
+    so the weekly cron mail carries only what warn() writes."""
+    print(msg, flush=True)
+
+def warn(msg):
+    """Something a person has to look at. Goes to stderr, which cron mails."""
     print(msg, file=sys.stderr, flush=True)
 
 # --- trackDb ---------------------------------------------------------------
@@ -76,23 +82,27 @@ def trackdb(dbs):
             tdb[db] = rows
     return tdb
 
-def container_of(tt, track):
-    """Return the outermost composite or supertrack a track hangs off, "" if none.
+def ancestors_of(tt, track):
+    """Return the containers a track hangs off, immediate parent first, [] if none.
 
-    The page splits the restricted list into cohort variant-frequency projects and
-    everything else. Nothing on an individual track says which it is; the only place
-    that is written down is the container it belongs to, so record it here and let
-    the page decide. Walks with a seen set because a parent loop in trackDb should
-    produce an empty answer, not hang the nightly run."""
-    cur, seen = track, set()
-    while cur not in seen:
-        seen.add(cur)
+    The page needs both ends of this chain. The outermost entry decides which table a
+    row lands in: the restricted list is split into cohort variant-frequency projects
+    and everything else, and nothing on an individual track says which it is, only the
+    container it belongs to. The rest of the chain says whether some other restricted
+    row already stands for this one, which is what keeps a parent's subtracks out of
+    the table -- alphaGenome's four are labelled "Mutation: A" through "Mutation: T"
+    and sort under M, nowhere near the track they belong to. Walks with a seen set
+    because a parent loop in trackDb should give a short answer, not hang the run."""
+    chain, cur, seen = [], track, {track}
+    while True:
         p = (tt.get(cur) or {}).get("parent") or (tt.get(cur) or {}).get("subTrack") or ""
         p = p.split()[0] if p else ""     # value is "varFreqs on", we want the name
-        if not p or p not in tt:
+        if not p or p not in tt or p in seen:
             break
+        chain.append(p)
+        seen.add(p)
         cur = p
-    return "" if cur == track else cur
+    return chain
 
 LICENSE_RE = re.compile(r"distribut|licen|restrict|permission|agreement", re.I)
 
@@ -139,20 +149,20 @@ def contrib_crawl(cache, refresh=False):
     f = os.path.join(cache, "contrib.txt")
     fresh = os.path.exists(f) and time.time() - os.path.getmtime(f) < CONTRIB_MAX_AGE
     if fresh and not refresh:
-        note("contrib: using cache (%.1f days old)"
-             % ((time.time() - os.path.getmtime(f)) / 86400))
+        progress("contrib: using cache (%.1f days old)"
+                 % ((time.time() - os.path.getmtime(f)) / 86400))
     else:
-        note("contrib: crawling %s, this takes >10 minutes ..." % GENARK)
+        progress("contrib: crawling %s, this takes >10 minutes ..." % GENARK)
         tmp = f + ".tmp"
         rc = subprocess.run("find -L %s -mindepth 7 -maxdepth 7 -type d -path '*/contrib/*' "
                             "> %s 2>/dev/null" % (q(GENARK), q(tmp)), shell=True)
         if rc.returncode == 0 and os.path.getsize(tmp) > 0:
             os.replace(tmp, f)
-            note("contrib: crawl done, %d rows" % sum(1 for _ in open(f)))
+            progress("contrib: crawl done, %d rows" % sum(1 for _ in open(f)))
         else:
             if os.path.exists(tmp):
                 os.remove(tmp)
-            note("contrib: crawl FAILED; keeping previous cache" if os.path.exists(f)
+            warn("contrib: crawl FAILED; keeping previous cache" if os.path.exists(f)
                  else "contrib: crawl FAILED and no cache exists")
     if not os.path.exists(f):
         return []
@@ -170,44 +180,64 @@ def contrib_crawl(cache, refresh=False):
 
 # --- otto ------------------------------------------------------------------
 
+# keyword in the crontab command -> (label on the page, kind, what it updates,
+#                                     assemblies the job rebuilds)
+#
+# The assembly list is written down here rather than worked out from trackDb. The
+# obvious shortcut, counting assemblies that have a table matching the keyword, counts
+# tables nothing has touched in years: 84 assemblies have an ncbiRefSeq table but
+# ottoNcbiRefSeq.sh runs four of them, and 61 have a grcIncidentDb table but
+# runUpdate.sh works through ten. The column is there to tell someone running a mirror
+# what will drift out from under them, so it has to come from the job. None means the
+# job chooses its own assemblies at run time -- UniProt walks dbDb and the GenArk list
+# -- and for those the trackDb count is the best answer there is. A run reports any
+# assembly named here with no matching table in trackDb, so a list that falls behind
+# the job it describes says so rather than going quietly wrong.
 OTTO = {
- "panelApp":("PanelApp","track",["panelApp"]),
- "decipher":("DECIPHER","track",["decipher"]),
- "gwas":("GWAS Catalog","track",["gwasCatalog"]),
- "geneReviews":("GeneReviews","track",["geneReviews"]),
- "dbVar":("dbVar","track",["dbVar_"]),
- "orphanet":("Orphanet","track",["orphadata"]),
- "clinvar":("ClinVar","track",["clinvar"]),
- "mane":("MANE","track",["mane"]),
- "genCC":("GenCC","track",["genCC"]),
- "g2p":("Gene2Phenotype","track",["g2p"]),
- "omim":("OMIM","track",["omim"]),
- "lovd":("LOVD","track",["lovd"]),
- "mitoMap":("MITOMAP","track",["mitoMap"]),
- "clinGen":("ClinGen","track",["clinGen"]),
- "varChat":("VarChat","track",["varChat"]),
- "vista":("VISTA Enhancers","track",["vistaEnhancers"]),
- "civic":("CIViC","track",["civic"]),
- "pubtatorDbSnp":("PubTator","track",["pubtator"]),
- "ncbiRefSeq":("NCBI RefSeq","track",["ncbiRefSeq"]),
- "uniprot":("UniProt","track",["unipFull","unipMut","uniprot"]),
- "grcIncidentDb":("GRC Incident","track",["grcIncident"]),
+ "panelApp":("PanelApp","track",["panelApp"],["hg19","hg38"]),
+ "decipher":("DECIPHER","track",["decipher"],["hg38"]),   # hg19 is frozen
+ "gwas":("GWAS Catalog","track",["gwasCatalog"],["hg18","hg19","hg38"]),
+ "geneReviews":("GeneReviews","track",["geneReviews"],["hg18","hg19","hg38"]),
+ "dbVar":("dbVar","track",["dbVar_"],["hg19","hg38"]),
+ "orphanet":("Orphanet","track",["orphadata"],["hg19","hg38"]),
+ "clinvar":("ClinVar","track",["clinvar"],["hg19","hg38"]),
+ "mane":("MANE","track",["mane"],["hg38"]),
+ "genCC":("GenCC","track",["genCC"],["hg19","hg38"]),
+ "g2p":("Gene2Phenotype","track",["g2p"],["hg19","hg38"]),
+ "omim":("OMIM","track",["omim"],["hg18","hg19","hg38"]),
+ "lovd":("LOVD","track",["lovd"],["hg19","hg38"]),
+ "mitoMap":("MITOMAP","track",["mitoMap"],["hg19","hg38"]),
+ "clinGen":("ClinGen","track",["clinGen"],["hg19","hg38"]),
+ "varChat":("VarChat","track",["varChat"],["hg19","hg38"]),
+ "vista":("VISTA Enhancers","track",["vistaEnhancers"],["hg38","mm10"]),
+ "civic":("CIViC","track",["civic"],["hg19","hg38"]),
+ "pubtatorDbSnp":("PubTator","track",["pubtator"],["hg19","hg38"]),
+ "strchive":("STRchive","track",["strchive"],["hg19","hg38","hs1"]),
+ "ncbiRefSeq":("NCBI RefSeq","track",["ncbiRefSeq"],["hg19","hg38","mm10","mm39"]),
+ "uniprot":("UniProt","track",["unipFull","unipMut","uniprot"],None),
+ "grcIncidentDb":("GRC Incident","track",["grcIncident"],
+                  ["hg19","hg38","mm9","mm10","mm39","danRer7","danRer10","danRer11",
+                   "galGal5","galGal6"]),
  "insight":("InSiGHT VCEP ClinVar","hub",
             "updates a hub rather than a trackDb track: insightClinVar and "
-            "pms2clParalogVars, on hg19 and hg38"),
+            "pms2clParalogVars, on hg19 and hg38",
+            ["hg19","hg38"]),
  "malacards":("MalaCards","table",
               "loads the hg38 malacards table; no track shows it, but the gene "
-              "details page uses it for the MalaCards disease links"),
+              "details page uses it for the MalaCards disease links",
+              ["hg38"]),
  "refSeqHistorical":("RefSeq Historical","notifier",
-                     "checks whether NCBI has a new release; changes no data"),
+                     "checks whether NCBI has a new release; changes no data",
+                     None),
  "vcepVersions":("VCEP spec versions","notifier",
-                 "compares our VCEP pages against the ClinGen registry"),
+                 "compares our VCEP pages against the ClinGen registry",
+                 None),
 }
 # commands the keyword match gets wrong or too coarse
 OVERRIDE = {
- "omimUploadWrapper": ("infrastructure",     "pushes the OMIM tables to hgwbeta"),
- "covidCheck":        ("UniProt (wuhCor1)",  "UniProt; Mutations on wuhCor1"),
- "clinGenCspec":      ("ClinGen CSpec",      "ClinGen VCEP Specifications"),
+ "omimUploadWrapper": ("infrastructure",    "pushes the OMIM tables to hgwbeta", None),
+ "covidCheck":        ("UniProt (wuhCor1)", "UniProt; Mutations on wuhCor1", ["wuhCor1"]),
+ "clinGenCspec":      ("ClinGen CSpec",     "ClinGen VCEP Specifications", ["hg19","hg38"]),
 }
 INFRA = ["readOnlyKentMirror","lastLog","ottoCompareGitVsHiveFiles","liftRequest",
          "GenArk","buildPublicSessionThumbnails","generateTipOfDay","cellBrowser",
@@ -233,15 +263,17 @@ def cron_english(s):
             "mon":"Mon","tue":"Tue","wed":"Wed","thu":"Thu","fri":"Fri"}
     return "weekly (%s) at %s" % ("/".join(days.get(x.lower(), x) for x in dow.split(",")), t)
 
-def labels_for(tdb, prefixes):
-    labels, dbs = set(), set()
+def tracks_for(tdb, prefixes):
+    """Map each shortLabel to the databases whose trackDb has a matching table, and
+    return the databases as well."""
+    hits, dbs = collections.defaultdict(set), set()
     for db, tt in tdb.items():
         for t, s in tt.items():
             if any(t.lower().startswith(p.lower()) for p in prefixes):
                 dbs.add(db)
                 if s.get("shortLabel"):
-                    labels.add(s["shortLabel"])
-    return sorted(labels), sorted(dbs)
+                    hits[s["shortLabel"]].add(db)
+    return hits, dbs
 
 def parse_otto(path, tdb):
     rows = []
@@ -255,8 +287,10 @@ def parse_otto(path, tdb):
         sched, cmd = m.group(1), m.group(2)
         hit = next((k for k in OVERRIDE if k in cmd), None)
         if hit:
-            name, detail = OVERRIDE[hit]
+            name, detail, builds = OVERRIDE[hit]
             rows.append(dict(schedule=cron_english(sched), command=cmd, name=name, detail=detail,
+                             assemblies=len(builds) if builds else "",
+                             assemblyList=sorted(builds) if builds else [],
                              kind="infrastructure" if name == "infrastructure" else "track"))
             continue
         key = next((k for k in OTTO if re.search(re.escape(k), cmd, re.I)), None)
@@ -266,15 +300,42 @@ def parse_otto(path, tdb):
             rows.append(dict(schedule=cron_english(sched), command=cmd, name=kind,
                              detail="", kind=kind))
             continue
-        name, kind, ref = OTTO[key]
+        name, kind, ref, builds = OTTO[key]
         if kind == "track":
-            labels, dbs = labels_for(tdb, ref)
+            hits, seen = tracks_for(tdb, ref)
+            # A job with a written-down assembly list speaks for those assemblies only.
+            # Filter the track names the same way, so a table left behind on an assembly
+            # the job stopped building cannot put its label on the page either.
+            labels = sorted(l for l, d in hits.items() if builds is None or d & set(builds))
             rows.append(dict(schedule=cron_english(sched), command=cmd, name=name,
-                             detail="; ".join(labels), assemblies=len(dbs), kind="track"))
+                             detail="; ".join(labels),
+                             assemblies=len(builds) if builds else len(seen),
+                             assemblyList=sorted(builds) if builds else [],
+                             trackDbAssemblies=sorted(seen), kind="track"))
         else:
             rows.append(dict(schedule=cron_english(sched), command=cmd, name=name,
-                             detail=ref, kind=kind))
+                             detail=ref,
+                             assemblies=len(builds) if builds else "",
+                             assemblyList=sorted(builds) if builds else [],
+                             kind=kind))
     return rows
+
+def assembly_drift(otto):
+    """Where a job's written-down assembly list and trackDb disagree.
+
+    absent: the job names an assembly with no matching table, so either the list or the
+    keyword that finds the tables is out of date. extra: a table sits on an assembly the
+    job does not rebuild, which is a leftover and is the reason the count is written
+    down rather than counted."""
+    out = []
+    for j in otto:
+        if not j.get("assemblyList") or "trackDbAssemblies" not in j:
+            continue
+        builds, seen = set(j["assemblyList"]), set(j["trackDbAssemblies"])
+        if builds - seen or seen - builds:
+            out.append(dict(name=j["name"], builds=len(builds),
+                            absent=sorted(builds - seen), extra=sorted(seen - builds)))
+    return out
 
 # --- main ------------------------------------------------------------------
 
@@ -293,18 +354,18 @@ def main():
 
     t0 = time.time()
     dbs = databases()
-    note("databases: %d" % len(dbs))
+    progress("databases: %d" % len(dbs))
     tdb = trackdb(dbs)
-    note("trackDb loaded (%.0fs)" % (time.time() - t0))
+    progress("trackDb loaded (%.0fs)" % (time.time() - t0))
 
     restricted = restricted_from_trackdb(tdb)
-    note("flagged in trackDb: %d" % len(restricted))
+    progress("flagged in trackDb: %d" % len(restricted))
 
     # ground truth 1: real MySQL tracks absent from hgdownload
     t1 = time.time()
     with ThreadPoolExecutor(max_workers=12) as ex:
         listings = dict(ex.map(lambda d: dl_listing(d, a.cache), dbs))
-    note("hgdownload listings: %.0fs" % (time.time() - t1))
+    progress("hgdownload listings: %.0fs" % (time.time() - t1))
 
     def tables(db):
         return set(sh("hgsql -h %s -N -e %s %s 2>/dev/null"
@@ -355,9 +416,12 @@ def main():
         elif code[:1] != "4":
             unchecked.append(dict(db=db, track=t, path=p, code=code or "none"))
 
-    # which composite or supertrack each one belongs to; the page groups on this
+    # which composite or supertrack each one belongs to; the page groups on the
+    # outermost one and uses the rest to drop rows another row already stands for
     for (db, t), v in restricted.items():
-        c = container_of(tdb[db], t)
+        chain = ancestors_of(tdb[db], t)
+        c = chain[-1] if chain else ""
+        v["ancestors"] = chain
         v["container"] = c
         v["containerLabel"] = (tdb[db].get(c) or {}).get("shortLabel", "") if c else ""
 
@@ -370,33 +434,73 @@ def main():
         contrib=contrib,
         partialDownloads=partial,
         uncheckedDownloads=unchecked,
-        counts=dict(databases=len(dbs)),
+        counts=dict(databases=len(dbs), restrictedRows=len(restricted),
+                    fileChecks=len(checks)),
         generated=time.strftime("%Y-%m-%d"),
     )
     json.dump(result, open(a.out, "w"), indent=1)
-    note("wrote %s in %.0fs: %d restricted rows, %d exposed, %d otto jobs, %d contributors"
-         % (a.out, time.time() - t0, len(result["restricted"]), len(exposed),
-            len(result["otto"]), len(contrib)))
+    progress("wrote %s in %.0fs: %d restricted rows, %d exposed, %d otto jobs, %d contributors"
+             % (a.out, time.time() - t0, len(result["restricted"]), len(exposed),
+                len(result["otto"]), len(contrib)))
+
+    # A table on an assembly the job does not rebuild is a leftover, not a fault, and
+    # there are 51 of them behind GRC Incident alone. Report it where a person can go
+    # and look, not in the mail, or the mail stops being worth opening.
+    drift = assembly_drift(result["otto"])
+    stale = [d for d in drift if d["extra"]]
+    if stale:
+        progress("")
+        progress("note: %d otto job(s) have a matching trackDb table on assemblies they do"
+                 % len(stale))
+        progress("      not rebuild. Those tables are left over and are not counted:")
+        for d in stale:
+            names = " ".join(d["extra"][:8]) + (" ..." if len(d["extra"]) > 8 else "")
+            progress("      %-22s rebuilds %d, %d more with a table: %s"
+                     % (d["name"], d["builds"], len(d["extra"]), names))
+
     if partial:
-        note("")
-        note("note: %d database(s) have too little published on hgdownload for the"
+        warn("")
+        warn("note: %d database(s) have too little published on hgdownload for the"
              % len(partial))
-        note("      'absent from hgdownload' test to mean anything, so they were skipped:")
+        warn("      'absent from hgdownload' test to mean anything, so they were skipped:")
         for p in partial:
-            note("      %-14s %d of %d trackDb tables published"
+            warn("      %-14s %d of %d trackDb tables published"
                  % (p["db"], p["published"], p["tracks"]))
     if exposed:
-        note("")
-        note("*** %d file(s) marked restricted are reachable on hgdownload:" % len(exposed))
+        warn("")
+        warn("*** %d file(s) marked restricted are reachable on hgdownload:" % len(exposed))
         for e in exposed:
-            note("      %s  %s  %s" % (e["db"], e["track"], e["path"]))
+            warn("      %s  %s  %s" % (e["db"], e["track"], e["path"]))
     if unchecked:
-        note("")
-        note("note: %d file(s) could not be checked against hgdownload (no HTTP"
+        warn("")
+        warn("note: %d file(s) could not be checked against hgdownload (no HTTP"
              % len(unchecked))
-        note("      response); they are neither reported as reachable nor as blocked:")
+        warn("      response); they are neither reported as reachable nor as blocked:")
         for u in unchecked:
-            note("      %-6s %-16s %s (%s)" % (u["db"], u["track"], u["path"], u["code"]))
+            warn("      %-6s %-16s %s (%s)" % (u["db"], u["track"], u["path"], u["code"]))
+
+    # An otto job nobody has described drops off the page without a word, which is how
+    # STRchive went missing from it for a month. Say so every run until someone adds it.
+    unnamed = [j for j in result["otto"] if j["kind"] == "unclassified"]
+    if unnamed:
+        warn("")
+        warn("note: %d otto job(s) are not in the keyword table, so the page can say"
+             % len(unnamed))
+        warn("      nothing about them but when they run. Add a keyword to OTTO in")
+        warn("      collect.py to describe one:")
+        for j in unnamed:
+            warn("      %-22s %s" % (j["schedule"], j["command"]))
+
+    missing = [d for d in drift if d["absent"]]
+    if missing:
+        warn("")
+        warn("note: %d otto job(s) name an assembly with no matching table in trackDb on"
+             % len(missing))
+        warn("      %s. Either the assembly list in OTTO or the keyword that finds the"
+             % BETA)
+        warn("      tables needs updating:")
+        for d in missing:
+            warn("      %-22s %s" % (d["name"], " ".join(d["absent"])))
     return 0
 
 if __name__ == "__main__":
