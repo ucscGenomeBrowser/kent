@@ -389,3 +389,39 @@ dd8d4476a69, the spacing follow-up on #38281, had not reached genome-test that d
 #38303's own case needs a symlinked session-data directory, which genome-test does not have
 (`namei -l /data/apache/userdata/sessions` shows no symlink), so that script covers the
 trash branch of the same check instead.
+
+
+Six from the tours, 2026-09-19
+------------------------------
+
+rm38249 rm38268 rm38298 rm38335 rm37996 rm38364 were written from Docent TOURS rather than
+from a ticket alone. Each ticket had had a before-and-after pair built for it and posted as
+a video or a picture, so the state was already reachable and the difference between the two
+builds was already measured; turning that into a script was the cheap half.
+
+That is why five of the six carry release-ab and the sixth sandbox-ab on their first day.
+The before was not inferred, it was rendered: hgwbeta returns "Mangled CGI input string
+bogus" (rm38335), one codon number instead of two (rm38298), the ASCII table with no banner
+(rm37996), "not supported by QuickLift" for all four alignment families (rm38249) and
+"Can't find strchive in track database hg19" (rm38268). rm38364's before is ts park 38373,
+master frozen two days before the merge, because that feature is newer than any release.
+
+Three things in this batch are worth copying:
+
+  * WHERE THE TEXT LIVES decides how it is read. rm38309 reads its exon text out of a map
+    box's data-tooltip, but rm38298's codon tooltip is not in the served map at all -- the
+    page's own JavaScript builds it on mouseenter -- so that one hovers and asserts `tip:`.
+    rm38268's item label is in the drawn PNG and nowhere else, so it asserts the map box's
+    href and tooltip instead of a `text:` that can never match.
+  * A SUPERTRACK STILL DOES NOT PASS ITS SETTING to its members. rm38268 opens strVar to
+    reach strchive and then cannot use `exact:` on hg38, because the other repeat tracks
+    come up at their own visibilities. Naming them to hide would rot the day one is added.
+  * AN hg.conf GATE BELONGS IN THE HEADER, loudly. rm38364 fails every check if
+    `denseClick` is off on the server under test, and that is a configuration answer, not a
+    regression. The header carries the grep that settles it, the way rm38248 carries the
+    hgsql that settles its missing table.
+
+rm37996 has a DATE ON IT. The new hgBlat results page is opt-in while it is tested and the
+banner names 2026-10-21 as the day it becomes the default. On that day the first two steps
+come out and the goto: gains blatNewPage=1. A red run then is this script asking to be
+updated rather than a bug.

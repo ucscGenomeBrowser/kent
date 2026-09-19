@@ -1,0 +1,42 @@
+# #38249 -- quickLift refused every kind of alignment track. The ticket adds three
+# families: psl and bigPsl, maf and bigMaf and wigMaf, and chain and bigChain.
+#
+# The tour this was written from is ~/docentTours/bugs/rm38249{,fixed}.docent.yaml, and the
+# picture on the ticket is hgConvert's "failed to lift" table on each build. Here the
+# assertion is the other end of the same lift: the four tracks DRAW on the target.
+#
+# One of each family at BRCA1: mrna (psl), unipAliSwissprot (bigPsl), multiz100way (wigMaf)
+# and chainMm39 (chain), with knownGene for company. chainMm39 rather than chainHs1 because
+# it exists on hgwbeta too, which is what let the before be measured.
+#
+# The chain track lives under the placental chain/net supertrack, so the view has to be
+# opened -- a superTrack does not pass its setting to its members, and the net subtracks
+# come up with it. They are noise here and are left alone rather than named one by one.
+#
+# `noRows: netAlign` is NOT asserted: nets are not one of the three families and are still
+# refused, which the Convert page says in so many words. Nor is the count of unsupported
+# types, because hgwbeta and genome-test carry different chain and net data.
+proof:
+  - "release-ab 2026-09-19 -- fails on hgwbeta (v503) and passes on genome-test. On v503 hgConvert lists all four as `not supported by QuickLift` -- chain mm39, wigMaf, psl and bigPsl -- and the lifted view draws knownGene and the uniprot annotation subtracks and none of them"
+  - "assertion-only 2026-09-19 -- written from #38249 after the fix reached genome-test"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483&hideTracks=1&knownGene=dense&mrna=pack&unipAliSwissprot=pack&uniprot=pack&cons100way=full&multiz100way=pack&placentalChainNet=show&placentalChainNetViewchain=show&chainMm39=pack&pix=1100"
+  - expect:
+      rows: [knownGene, mrna, unipAliSwissprot, multiz100way, chainMm39]
+
+  - convert:
+      to: hs1
+      quicklift: true
+      hideDefaults: true
+  - click: 'a[href*="hgTracks?"][href*="quickLift."]'
+
+  # The whole point: all four families came across, on the target, in one lift.
+  - expect:
+      rows: [quickLiftChain, mrna, unipAliSwissprot, multiz100way, chainMm39]
+      noText: "Warning/Error"
