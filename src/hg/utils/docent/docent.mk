@@ -48,8 +48,11 @@ FAST_ENV = $(if $(FAST),DOCENT_FAST=1 ,)
 
 all: $(MP4S)
 
+# $@ is passed through so FIGDIR really decides where the mp4 lands. Without it docent.js
+# falls back to its own default, the script directory's parent, and a project that keeps
+# its scripts in one repo and its output in another writes the video into the repo.
 $(FIGDIR)/%.mp4: %.docent.yaml $(DOCENTDEPS)
-	$(FAST_ENV)$(PW_ENV) node $(DOCENT) $<
+	$(FAST_ENV)$(PW_ENV) node $(DOCENT) $< $@
 
 # hires: the same tours rendered for print -- SCALE times the pixels (a wider server image
 # drawn with a bigger track font, the HTML zoomed to match), stills only, written to their
