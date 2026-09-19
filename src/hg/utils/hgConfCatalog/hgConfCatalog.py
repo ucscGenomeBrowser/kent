@@ -825,6 +825,27 @@ MIRROR_KNOBS = {
                "is compared with sameString against \"on\", so only that "
                "exact value turns it on and true, 1 and yes do not, unlike "
                "every flag read through cfgOptionBooleanDefault."),
+        h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
+          default="TRUE", role="knob", public=True, verified=True,
+          ticket="38157",
+          note="Whether hgTracks shows the note that names the session just "
+               "opened and its owner, and says the browser configuration the "
+               "user had before is gone.  showSessionLoadNotice draws it once "
+               "and once only: the marker hgS_sessionJustLoaded is taken out "
+               "of the cart on the same page, so the next page does not have "
+               "it.  A recommended track set is left alone, because it merges "
+               "into the cart instead of replacing it and has its own label "
+               "beside the assembly name.  Born TRUE at 3bcf86a0995 and "
+               "documented in product/ex.hg.conf as an off switch, so it "
+               "never held the feature back; the off position is for a site "
+               "whose users open sessions constantly and do not need telling, "
+               "which is a deployment call.",
+          debatable="A site-wide off switch born in the same commit as a "
+                    "user-visible change has the shape of a gate, and nobody "
+                    "has said whether a mirror is meant to keep this one.  "
+                    "If the note turns out to be uncontroversial there is "
+                    "nothing left for the switch to do, and it should be "
+                    "deleted rather than kept as a knob."),
     ],
 }
 
@@ -1682,13 +1703,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", ticket="38157",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/hgTracks.c.  Came in at 3bcf86a0995, hgTracks: "
-               "tell the user what a session load just did, refs #38157. "
-               "Needs a description and a gate or knob call."),
     ],
 }
 
