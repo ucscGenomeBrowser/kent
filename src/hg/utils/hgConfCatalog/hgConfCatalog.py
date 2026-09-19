@@ -1682,6 +1682,13 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
+          default="TRUE", ticket="38157",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/hgTracks.c.  Came in at 3bcf86a0995, hgTracks: "
+               "tell the user what a session load just did, refs #38157. "
+               "Needs a description and a gate or knob call."),
     ],
 }
 
