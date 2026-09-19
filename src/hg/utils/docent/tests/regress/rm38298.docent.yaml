@@ -1,0 +1,43 @@
+# #38298 -- the codon tooltip gave one position, and on a transcript whose sequence differs
+# from the genome the transcript position and the genomic position are not the same number.
+#
+# From MLQ #38209. On canFam3 the NCBI RefSeq tooltip for NM_001131049.1 (DNM1) at
+# chr9:55,282,762 said `Codon: c.745-747 (p.249)`, which does not agree with its own amino
+# acid label: translating c.745-747 from that transcript's CDS gives Ser, not the Arg the
+# tooltip names. The transcript has extra or missing bases against the genome at that
+# codon, so the two numberings drift apart; the right transcript position is c.766-768
+# (p.256), 21 nucleotides further along.
+#
+# The fix prints BOTH, each labelled, with a note saying why they differ. So the assertion
+# is the two labelled numbers together. Either one alone would pass on a build that printed
+# only the old line, because the old line is still there under a new label.
+#
+# The codon tooltip has to be HOVERED. Unlike an exon or an item box, it is not in the
+# served map at all: the map areas of ncbiRefSeqCurated carry only `DNM1/NM_001131049.1`,
+# and the codon text is built by the page's own JavaScript when the pointer arrives. So
+# this is one `mouseover:` and three `tip:` checks on the tooltip it raises, rather than a
+# `has:` on a data-tooltip the way rm38309 reads its exon text.
+#
+# canFam3 rather than hg38 because the drift is the point and this is the case the MLQ
+# brought in. A transcript that matches the genome has one number and would not test it.
+proof:
+  - "release-ab 2026-09-19 -- fails on hgwbeta (v503) and passes on genome-test. On v503 the same hover gives one line, `Codon: c.745-747 (p.249)`, with neither label and no note"
+  - "assertion-only 2026-09-19 -- written from #38298 after the fix reached genome-test"
+
+target: genome-test
+db: canFam3
+position: chr9:55282743-55282778
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=canFam3&position=chr9:55282743-55282778&hideTracks=1&refSeqComposite=full&ncbiRefSeqCurated=full&pix=1100"
+  - expect: {rows: [ncbiRefSeqCurated]}
+
+  - mouseover: {track: ncbiRefSeqCurated, at: "chr9:55282762", hold: 2}
+
+  # The three claims, on the one tooltip that is now up. Both numbers, each under its own
+  # label, and the sentence that says why one feature has two of them. Either number alone
+  # would pass on the old build, because the old line is still there under a new label.
+  - expect: {tip: "Genomic codon number: c.745-747 (p.249)"}
+  - expect: {tip: "Transcript codon number: c.766-768 (p.256)"}
+  - expect: {tip: "extra or missing bases compared to the genome at this codon"}

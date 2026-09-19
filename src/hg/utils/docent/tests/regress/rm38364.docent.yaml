@@ -1,0 +1,45 @@
+# #38364 -- in dense, hgTracks covered the whole row with one map box that switched the
+# track to pack, so nothing inside a dense track pointed at a details page. The trackDb
+# setting `denseClick on` gives every item on a dense row its own map box, with its own hgc
+# link and its own mouseover, while the track keeps its one-row height.
+#
+# READ THIS BEFORE CALLING A RED RUN A REGRESSION. The feature is behind an hg.conf GATE,
+# `denseClick`, and the default is OFF. While it is off no track gets per-item boxes
+# whatever its trackDb says, and every check below fails for a reason that is not code:
+#
+#     grep denseClick /usr/local/apache/cgi-bin/hg.conf     # on genome-test's host
+#
+# The track is hg38 hprcPclai, the setting's first user, which had been pinned to squish
+# precisely because dense had nothing to click. It is ALPHA ONLY -- `include hprcPclai.ra
+# alpha` in human/hg38/trackDb.ra -- so this script cannot be pointed at hgwbeta or the RR.
+#
+# Three things are asserted and the third is the one that is easy to lose:
+#
+#   1. the row is still ONE row (height), because the whole point is dense that clicks;
+#   2. an item carries its own hgc link and its own mouseover text;
+#   3. the CENTER LABEL still holds a full-width box that switches the track to pack, which
+#      is the way out of dense. The per-item boxes take the row, so if that box ever went,
+#      a reader in dense would be stuck with no way back and nothing would say so. That
+#      box is in map_center_<track> and its href sets the COMPOSITE, hprcPclai=pack, not
+#      the subtrack -- which is why it is matched on the href and not on the track name.
+proof:
+  - "sandbox-ab 2026-09-19 -- fails on ts park 38373 (master frozen 2026-09-17, two days before the merge, reading the same hg38 alpha trackDb) and passes on genome-test. There the same window serves 1 hgc link against 1,250 here, the hover says `Click to alter the display density`, and a click on the row opens the track into pack, 165px to 1023px"
+  - "assertion-only 2026-09-19 -- written from #38364 and 00e77db940c after the merge reached genome-test"
+
+target: genome-test
+db: hg38
+position: chr2:60000000-80000000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr2:60000000-80000000&hideTracks=1&hprcPclai=dense&pix=1200"
+  - expect:
+      rows: [hprcPclaiCHM13H0, hprcPclaiHG002H1]
+      # Seven haplotypes, one row each, plus the ruler: still dense.
+      height: "<260"
+      has:
+        # An item of its own, with an hgc link and the track's own mouseOver pattern.
+        - '#td_data_hprcPclaiCHM13H0 area[href*="g=hprcPclaiCHM13H0"][data-tooltip*="Window PC1,PC2"]'
+        - '#td_data_hprcPclaiCHM13H0 area[href*="g=hprcPclaiCHM13H0"][data-tooltip*="Confidence:"]'
+        # And the way out of dense, untouched: the center label's full-width toggle.
+        - 'map[name="map_center_hprcPclaiCHM13H0"] area[href*="hprcPclai=pack"]'
