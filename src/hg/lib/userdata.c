@@ -193,8 +193,13 @@ if (userName)
     char *encUserName = cgiEncode(userName);
     char *userPrefix = md5HexForString(encUserName);
     userPrefix[2] = '\0';
+    // the directory on disk is named encUserName, so a user name like "abc-def" is
+    // stored as the literal characters "abc%2Ddef". Encode a second time so apache
+    // looks for that literal '%': the URL component must be "abc%252Ddef".
+    // writeHubStanzasForFile does the same thing to a file name for bigDataUrl
     struct dyString *userDirDy = dyStringNew(0);
-    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix, encUserName);
+    dyStringPrintf(userDirDy, "%s/%s/%s/", getHubSpaceUrl(), userPrefix,
+        cgiEncodeFull(encUserName));
     retUrl = dyStringCannibalize(&userDirDy);
     }
 return retUrl;
@@ -632,10 +637,13 @@ if (fd >= 0)
     close(fd);
 }
 
-void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir)
-/* When a 2bit lands in a hub, add the assembly stanza to hub.txt (if the
- * backend owns it) and flip every row for this hub to hubType='assemblyHub'.
- * No-op unless rowForFile is a 2bit. */
+void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir,
+    boolean backendOwnsHubTxt)
+/* When a 2bit arrives into a hub, mark every hubSpace row for this hub as
+ * hubType='assemblyHub'. When backendOwnsHubTxt, first add the assembly stanza to
+ * the synthesized hub.txt, which is itself a no-op if that file does not exist.
+ * Pass FALSE for a hub.txt the user uploaded, whose contents are theirs to write.
+ * The whole function is a no-op unless rowForFile is a 2bit. */
 {
 if (!sameOk(rowForFile->fileType, "2bit"))
     return;
@@ -644,11 +652,18 @@ char *hubDir = hubPathFromParentDir(rowForFile->parentDir, userDataDir);
 struct dyString *hubFileDy = dyStringCreate("%s%shub.txt",
     hubDir, endsWith(hubDir, "/") ? "" : "/");
 char *hubFile = dyStringCannibalize(&hubFileDy);
-upgradeHubTxtForAssembly(hubFile, rowForFile->db, rowForFile->location);
+// rewrite hub.txt before any row is touched. upgradeHubTxtForAssembly aborts on a
+// failed write and the caller's errCatch does not roll back mysql, so flipping the
+// rows first would leave a hub marked assemblyHub whose hub.txt has no twoBitPath
+if (backendOwnsHubTxt)
+    upgradeHubTxtForAssembly(hubFile, rowForFile->db, rowForFile->location);
 
 setAssemblyHubTypeForDir(rowForFile->userName, hubDir);
-// hub.txt just changed on disk, so the row's size and md5 are out of date
-refreshHubTextRow(rowForFile->userName, hubFile);
+if (backendOwnsHubTxt)
+    {
+    // hub.txt just changed on disk, so the row's size and md5 are out of date
+    refreshHubTextRow(rowForFile->userName, hubFile);
+    }
 
 freeMem(hubFile);
 }

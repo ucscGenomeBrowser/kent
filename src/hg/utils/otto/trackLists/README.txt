@@ -27,6 +27,43 @@ a MySQL track that exists here but is missing from hgdownload is almost
 certainly restricted, and a file we call restricted that hgdownload still
 serves is a bug worth mailing about.
 
+Where the otto assembly counts come from
+----------------------------------------
+The Assemblies column of list 2 is written down in the OTTO table in collect.py,
+one list per job, not worked out from trackDb. Counting the assemblies that have
+a table matching the keyword counts tables nothing has touched in years: 84
+assemblies have an ncbiRefSeq table but ottoNcbiRefSeq.sh runs four, and 61 have
+a grcIncidentDb table but runUpdate.sh works through ten. The column exists to
+tell someone running a mirror what will drift out from under them, so it has to
+come from the job. Adding a job, or changing the assemblies one builds, means
+editing that list.
+
+None in place of a list means the job picks its own assemblies at run time.
+UniProt is the only one: doUniprot walks dbDb and the GenArk assembly list and
+decides from the protein counts, so there is nothing fixed to write down, and
+the trackDb count is the best answer available.
+
+A run reports the two ways a list and trackDb can disagree. An assembly named in
+OTTO with no matching table goes to stderr, so cron mails it: either the list or
+the keyword is out of date. A table on an assembly the job does not rebuild goes
+to the log instead, because those are leftovers, there are 51 of them behind GRC
+Incident alone, and nothing is wrong.
+
+An otto job whose command matches no keyword is reported both ways: named on the
+page under "Jobs we have not described yet", and in the cron mail. It used to be
+dropped silently, which is how STRchive was missing from the page for a month.
+
+What the weekly cron mails
+--------------------------
+Nothing, on a good week. Both scripts write their progress to stdout and anything
+needing a person to stderr; trackLists.sh sends stdout to lastRun.log and leaves
+stderr alone, so a message from this cron line means one of: a restricted file is
+reachable on hgdownload, an assembly list disagrees with trackDb, an otto job has
+no description, an assembly is too thinly published for the download test, or the
+run failed. The mail used to be the entire progress log every Thursday with the
+three reachable files buried in the middle, which is the same as no mail at all.
+Do not add an unredirected echo to trackLists.sh.
+
 Careful with the public page
 ----------------------------
 The hgdownload cross-check names restricted files that are currently

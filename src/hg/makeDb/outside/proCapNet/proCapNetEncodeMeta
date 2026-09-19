@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Query the ENCODE portal for the PRO-cap signal bigWigs of each experiment
+and write the file manifest used to build the observed PRO-cap tracks.
+
+Only files belonging to the experiment's default analysis are kept, which drops
+superseded files from older analyses of the same experiment.  Both biological
+and sequencing-run level files are kept; they are summed downstream.
+"""
+import argparse
+import json
+import urllib.request
+from pycbio.sys import cli, fileOps
+from pycbio.tsv import TsvReader, TsvWriter
+
+ENCODE_URL = "https://www.encodeproject.org"
+STRAND_OUTPUT_TYPES = {"plus strand signal of unique reads": "pos",
+                       "minus strand signal of unique reads": "neg"}
+OUT_COLUMNS = ("cell", "encodeAcc", "analysisAcc", "fileAcc", "strand",
+               "bioRep", "techRep", "size", "url")
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--assembly", default="GRCh38",
+                        help="ENCODE assembly name to select files for")
+    parser.add_argument("experimentsTsv")
+    parser.add_argument("outTsv")
+    return cli.parseOptsArgsWithLogging(parser)
+
+def encodeGet(path):
+    req = urllib.request.Request(ENCODE_URL + path, headers={"accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=120) as fh:
+        return json.load(fh)
+
+def defaultAnalysis(encodeAcc):
+    exp = encodeGet(f"/experiments/{encodeAcc}/?frame=page")
+    analysis = exp.get("default_analysis")
+    if analysis is None:
+        raise cli.PycbioException(f"experiment {encodeAcc} has no default_analysis; "
+                                  "pick the analysis explicitly and extend this script")
+    return analysis
+
+def experimentFiles(encodeAcc, assembly):
+    "signal bigWigs of the default analysis, as (strand, fileJson) pairs"
+    analysis = defaultAnalysis(encodeAcc)
+    found = encodeGet(f"/search/?type=File&dataset=/experiments/{encodeAcc}/"
+                      f"&file_format=bigWig&frame=object&limit=all")["@graph"]
+    selected = [(STRAND_OUTPUT_TYPES[f["output_type"]], f) for f in found
+                if (analysis in (f.get("analyses") or []))
+                and (f["output_type"] in STRAND_OUTPUT_TYPES)
+                and (f.get("assembly") == assembly)
+                and (f["status"] == "released")]
+    if len(selected) == 0:
+        raise cli.PycbioException(f"no released {assembly} signal bigWigs found in analysis "
+                                  f"{analysis} of experiment {encodeAcc}")
+    return analysis, selected
+
+def writeExperiment(tw, exp, assembly):
+    analysis, selected = experimentFiles(exp.procapAcc, assembly)
+    for strand, f in selected:
+        tw.writeColumns(cell=exp.cell, encodeAcc=exp.procapAcc,
+                        analysisAcc=analysis.split("/")[2], fileAcc=f["accession"],
+                        strand=strand, bioRep=",".join(map(str, f["biological_replicates"])),
+                        techRep=",".join(f["technical_replicates"]), size=f["file_size"],
+                        url=ENCODE_URL + f["href"])
+    return len(selected)
+
+def proCapNetEncodeMeta(opts, args):
+    experiments = list(TsvReader(args.experimentsTsv))
+    fileOps.ensureFileDir(args.outTsv)
+    with fileOps.AtomicFileCreate(args.outTsv) as tmpTsv:
+        with TsvWriter(tmpTsv, columns=OUT_COLUMNS) as tw:
+            for exp in experiments:
+                cnt = writeExperiment(tw, exp, opts.assembly)
+                print(f"{exp.cell}\t{exp.procapAcc}\t{cnt} files")
+
+def main():
+    opts, args = parseArgs()
+    with cli.ErrorHandler(noStackExcepts=(OSError, cli.PycbioException)):
+        proCapNetEncodeMeta(opts, args)
+
+main()

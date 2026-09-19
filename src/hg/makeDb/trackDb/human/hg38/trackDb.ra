@@ -929,6 +929,8 @@ include long_read_transcripts.ra
 
 include mavedb.ra
 
+include mavemd.ra alpha
+
 include vgpLiftOver.ra alpha
 include psuVsUcscChains.ra alpha
 
@@ -957,3 +959,7 @@ include imprinting.ra alpha
 # include hg38.GCF_040939455.1.chainNet.ra alpha
 
 include hprcPclai.ra alpha
+
+include episignatures.ra alpha
+
+include transcriptionStart.ra alpha

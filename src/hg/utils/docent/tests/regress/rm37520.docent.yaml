@@ -10,6 +10,15 @@
 # position mane has no features, so its row is legitimately absent. And the chain is
 # itself one of the quickLift tracks this ticket says went missing, so if the lift is
 # dropped across the genome hop the chain goes with it -- which is exactly the check.
+#
+# There is no assertion between the `track:` step and the `convert:` below it, and that is
+# a gap this script cannot close. README says a test about turning a track on should
+# assert before it navigates, because a visibility bug can lag by one request. mane draws
+# nothing at the ticket's position -- chr7:156,982,676-156,996,015 has no MANE features on
+# hg38 -- so there is no row to name, and the track controls show `pack` on a broken build
+# too, since the cart did take the visibility. Do not add a check here that would pass on
+# any page; tests/firstrequest.docent.yaml covers that class instead.
+
 proof:
   - "assertion-only 2026-09-04 -- written from the ticket after the fix had shipped"
 

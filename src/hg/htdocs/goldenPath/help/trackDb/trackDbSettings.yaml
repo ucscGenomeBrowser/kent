@@ -161,7 +161,21 @@
     algorithms, or the significance of scores if generated in a special fashion. Credits This section
     helps people find the contacts for questions about the data. Please include an email or laboratory
     web page. References Relevant publications regarding the data. Example: html docs/myFirstTrack.html
-    Or with full path: html https://path/to/location/docs/explainMyData.html
+    Or with full path: html https://path/to/location/docs/explainMyData.html Variables in the description
+    page The description page may use the variables below, written in the form ${name} . They are replaced
+    when the page is shown, both on the track settings page and on the item details page. ${db} the assembly
+    the track is being viewed on, for example hg38 ${organism} the organism in lower case, for example
+    human ${Organism} the organism with an initial capital, for example Human ${ORGANISM} the organism
+    in upper case, for example HUMAN ${date} the release description of the assembly, for example Dec.
+    2013 (GRCh38/hg38) ${track} the name of this track ${parentTrack} the name of the container this track
+    sits in, either a compositeTrack or a superTrack . A view is skipped, since a view has no description
+    page of its own. For a track that is not inside a container, this is the same as ${track} . ${downloadsServer}
+    hgdownload.soe.ucsc.edu ${track} and ${parentTrack} come out with the prefix the Genome Browser gives
+    a hub track''s name, so they can be used to build a link back into the Browser. This is how the page
+    of a track inside a container links to the container''s own page: <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">Back
+    to the container</a> Nothing else is replaced. A dollar sign followed by anything other than the names
+    listed above is left alone, so shell, awk and JavaScript examples elsewhere on the page are safe.
+    Other trackDb settings are not available as variables, and neither is the session id.
 
     To help users understand Public Hub data, we request you provide a web page that explains what your
     Track Hub is presenting. Adding an html page for your Track Hub is also useful to instruct people
@@ -191,7 +205,22 @@
 
     References
 
-    Relevant publications regarding the data.'
+    Relevant publications regarding the data.
+
+    Variables in the description page
+
+    The description page may use the variables below, written in the form ${name} . They are replaced
+    when the page is shown, both on the track settings page and on the item details page.
+
+    ${track} and ${parentTrack} come out with the prefix the Genome Browser gives a hub track''s name,
+    so they can be used to build a link back into the Browser. This is how the page of a track inside
+    a container links to the container''s own page:
+
+    <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">Back to the container</a>
+
+    Nothing else is replaced. A dollar sign followed by anything other than the names listed above is
+    left alone, so shell, awk and JavaScript examples elsewhere on the page are safe. Other trackDb settings
+    are not available as variables, and neither is the session id.'
   format: html
   examples:
   - html docs/myFirstTrack.html
@@ -4683,6 +4712,34 @@
     be drawn in the left label area.'
   format: hapClusterMethod <centerWeighted|fileOrder|treeFile url >
   examples: []
+- name: sampleColorFile
+  types:
+  - vcf
+  - vcfTabix
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: Colors the haplotype clustering tree that hapClusterMethod treeFile draws in the left label
+    area.
+  description: 'Colors the haplotype clustering tree that hapClusterMethod treeFile draws in the left
+    label area. The file is tab-separated: a sample name in the first column, matching a genotype column
+    ID in the VCF file, and a color in the second. The color may be a color name, a # -prefixed six-digit
+    hex code, or comma-separated red, green and blue values from 0 to 255. Samples the file does not name
+    are drawn black.
+
+    Several colorings can be offered at once. Give a space-separated list of label = url pairs and the
+    track configuration page adds a drop-down to choose among them, displaying an underscore in a label
+    as a space. The drop-down appears only while hapClusterMethod is set to treeFile , and the first file
+    in the list is the one used until the user picks another.'
+  format: sampleColorFile <url>
+  examples:
+  - "HG00096\t#1f77b4\nHG00099\tsteelblue\nNA18939\t255,127,14"
+  - "track myVcf\n    type vcfTabix\n    bigDataUrl /path/to/myVcf.vcf.gz\n    hapClusterMethod treeFile\
+    \ /path/to/tree.nwk\n    sampleColorFile Population=/path/to/byPop.txt Sequencing_center=/path/to/byCenter.txt\n\
+    \      ..."
 - name: hapClusterColorBy
   types:
   - vcf
@@ -4926,6 +4983,25 @@
     NA18939\tJPT\tEAS\tEast Asia"
   - "track myVcf\n    type vcfTabix\n    bigDataUrl /path/to/myVcf.vcf.gz\n    sampleMetadataFile /path/to/sampleMeta.txt\n\
     \      ..."
+- name: showHardyWeinberg
+  types:
+  - vcf
+  - vcfTabix
+  - vcfPhasedTrio
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: When a user clicks on a variant with exactly two alleles, adds a line to the details page giving
+    the genotype frequencies that Hardy-Weinberg equilibrium pre...
+  description: When a user clicks on a variant with exactly two alleles, adds a line to the details page
+    giving the genotype frequencies that Hardy-Weinberg equilibrium predicts from the observed allele
+    frequencies. Off by default. There is no control for this on the track configuration page; it is set
+    in trackDb.
+  format: showHardyWeinberg <on/off>
+  examples: []
 - name: vcfPhasedTrio
   types:
   - vcfPhasedTrio
@@ -5001,7 +5077,7 @@
     vcfParentSamples to be set. function colors by predicted effect on the gene, red for non-synonymous,
     green for synonymous, blue for UTR or noncoding, and black otherwise; it is offered only when geneTrack
     is also set.
-  format: vcfPhasedColorBy <mendelDiff|deNovo|function|noColor>
+  format: vcfPhasedColorBy <noColor|function|deNovo|mendelDiff>
   examples: []
 - name: superTrack
   types:

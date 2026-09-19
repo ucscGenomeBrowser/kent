@@ -1,0 +1,69 @@
+# #37969 -- a quickLift of a session with a visible bigWig segfaulted hgTracks, and the
+# investigation of it turned up a second bug in the same code that dropped every track in a
+# container.
+#
+# The crash: hg/hgTracks/bigWigTrack.c looped over chain blocks using the chain
+# chainSubsetOnT() handed back without testing it for NULL, which is what comes back when a
+# chain in the list does not intersect the window.  The page died partway through rendering,
+# and since the cart is never saved the freshly attached quickLift hub went with it.  Fixed
+# by 07ba37612b1 and 5dd36916814, neither of which mentions this ticket, which is why it
+# stayed open.
+#
+# The container bug, bd450177553, is the one this script is mostly about, because nothing
+# else covers it.  The hub we write for the target set the container to `show` and then let
+# dumpTdbAndChildren write the SOURCE assembly's own `superTrack on hide` after it.  The
+# later line won, so the container came up hidden on the target and took every track that
+# had just been lifted into it with it.  One hashRemove() in hg/lib/trackHub.c drops the
+# stale setting.  Jairo measured it as 0 of 10 tracks against 10 of 10, and an image 81 px
+# tall against 560 px.
+#
+# The two halves are one recipe, which is why they are one script: lift a bigWig that lives
+# inside a hidden superTrack, then look at a narrow window.  If the container setting is
+# wrong there is no row at all; if the NULL check is missing the page stops halfway.  Both
+# show up as "the row is not drawn", so `rows:` is the assertion for both and nothing else
+# would do -- a noText: passes on a page that died mid-render.
+#
+# hg19 -> hg38 on purpose.  rm38236 already drives hg38 -> hs1 through 07ba37612b1, and this
+# is the pair the ticket was filed with.
+#
+# One thing worth knowing before reading a red run here, from Jairo's QA: the lift only
+# carries a track if its CONTAINER is open in the source cart.  `jarvis=full` on its own
+# builds a hub with zero track stanzas, and the result is a target page with nothing but the
+# chain track -- which looks exactly like the bug this asserts.  That is why the track: step
+# below names the superTrack as well, and why the expect: after it is not optional.
+proof:
+  - "assertion-only 2026-09-17 -- written from #37969 and bd450177553 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the lifted view draws neither jarvis nor linsight"
+
+target: genome-test
+db: hg19
+position: chr17:41196312-41277500
+reset: true
+fast: true
+steps:
+  - go: chr17:41196312-41277500
+  - hide: all
+
+  # Two bigWig children of constraintSuper, which is `superTrack on hide`.  A container that
+  # is hidden by default is the whole point: bd450177553 is about the hide setting the
+  # source carries, so a container that was open anyway would not exercise it.
+  - track: {constraintSuper: hideKids}
+  - track: {jarvis: full, linsight: full}
+  - expect: {rows: [ruler, jarvis, linsight], exact: true}
+
+  - convert: {to: hg38, quicklift: true}
+  - open: lift
+
+  # On the target.  Before bd450177553 this page had the chain track and nothing else,
+  # whatever had been lifted into the container.
+  - expect:
+      rows: [quickLiftChain, jarvis, linsight]
+      noText: "Warning/Error"
+
+  # And a narrow window, which is what the crash needed.  Jairo saw 6,015 bytes with no
+  # closing html tag on hgwbeta and a complete page on hgwdev, at windows this size.
+  - go: chr17:43044295-43045295
+  - expect: {rows: [ruler, jarvis, linsight]}
+
+  - go: chr17:43044295-43044723
+  - expect: {rows: [ruler, jarvis, linsight]}

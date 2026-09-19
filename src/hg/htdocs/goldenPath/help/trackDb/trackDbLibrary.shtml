@@ -417,6 +417,40 @@
     <pre>    html docs/myFirstTrack.html</pre>
     Or with full path:
     <pre>    html https://path/to/location/docs/explainMyData.html</pre>
+    <p><b>Variables in the description page</b></p>
+    <p>The description page may use the variables below, written in the form
+    <code>${name}</code>. They are replaced when the page is shown, both on the track
+    settings page and on the item details page.</p>
+    <table class='bedExtraTbl'>
+        <tr><td><code>${db}</code></td><td>the assembly the track is being viewed on, for
+            example <code>hg38</code></td></tr>
+        <tr><td><code>${organism}</code></td><td>the organism in lower case, for example
+            <code>human</code></td></tr>
+        <tr><td><code>${Organism}</code></td><td>the organism with an initial capital, for
+            example <code>Human</code></td></tr>
+        <tr><td><code>${ORGANISM}</code></td><td>the organism in upper case, for example
+            <code>HUMAN</code></td></tr>
+        <tr><td><code>${date}</code></td><td>the release description of the assembly, for
+            example <code>Dec. 2013 (GRCh38/hg38)</code></td></tr>
+        <tr><td><code>${track}</code></td><td>the name of this track</td></tr>
+        <tr><td><code>${parentTrack}</code></td><td>the name of the container this track sits
+            in, either a <a href="#compositeTrack">compositeTrack</a> or a
+            <a href="#superTrack">superTrack</a>. A <a href="#view">view</a> is skipped, since
+            a view has no description page of its own. For a track that is not inside a
+            container, this is the same as <code>${track}</code>.</td></tr>
+        <tr><td><code>${downloadsServer}</code></td><td><code>hgdownload.soe.ucsc.edu</code>
+            </td></tr>
+    </table>
+    <p><code>${track}</code> and <code>${parentTrack}</code> come out with the prefix the
+    Genome Browser gives a hub track's name, so they can be used to build a link back into
+    the Browser. This is how the page of a track inside a container links to the container's
+    own page:</p>
+    <p><code>&lt;a href="hgTrackUi?db=${db}&amp;amp;g=${parentTrack}"&gt;Back to the
+    container&lt;/a&gt;</code></p>
+    <p>Nothing else is replaced. A dollar sign followed by anything other than the names
+    listed above is left alone, so shell, awk and JavaScript examples elsewhere on the page
+    are safe. Other trackDb settings are not available as variables, and neither is the
+    session id.</p>
 </DIV>
 
 <DIV class="lessCommon_intro">
@@ -5048,6 +5082,34 @@ detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":
     </p>
 </div>
 
+<div class="sampleColorFile"><span class="types vcf vcfTabix"></span>
+<div class="format"><code>sampleColorFile &lt;url&gt;</code></div>
+    <p>Colors the haplotype clustering tree that <code>hapClusterMethod treeFile</code> draws in
+    the left label area. The file is tab-separated: a sample name in the first column, matching a
+    genotype column ID in the VCF file, and a color in the second. The color may be a color name,
+    a <code>#</code>-prefixed six-digit hex code, or comma-separated red, green and blue values
+    from 0 to 255. Samples the file does not name are drawn black.</p>
+    <p>Several colorings can be offered at once. Give a space-separated list of
+    <code><em>label</em>=<em>url</em></code> pairs and the track configuration page adds a
+    drop-down to choose among them, displaying an underscore in a label as a space. The drop-down
+    appears only while <a href="#hapClusterMethod">hapClusterMethod</a> is set to
+    <code>treeFile</code>, and the first file in the list is the one used until the user picks
+    another.</p>
+    <P>Example color file:</P>
+    <pre>
+HG00096	#1f77b4
+HG00099	steelblue
+NA18939	255,127,14</pre>
+    <P>Example trackDb entry:</P>
+    <pre>
+    track myVcf
+    type vcfTabix
+    bigDataUrl /path/to/myVcf.vcf.gz
+    hapClusterMethod treeFile /path/to/tree.nwk
+    sampleColorFile Population=/path/to/byPop.txt Sequencing_center=/path/to/byCenter.txt
+      ...</pre>
+</div>
+
 <DIV class="hapClusterColorBy"><span class="types vcf vcfTabix"></span>
 <div class="format"><code>hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
     <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
@@ -5200,6 +5262,18 @@ NA18939	JPT	EAS	East Asia</pre>
       ...</pre>
 </DIV>
 
+<DIV class="showHardyWeinberg"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>showHardyWeinberg &lt;on/off&gt;</code></div>
+    <P>
+    When a user clicks on a variant with exactly two alleles, adds a line to the details page
+    giving the genotype frequencies that
+    <A HREF="https://en.wikipedia.org/wiki/Hardy%E2%80%93Weinberg_principle"
+    TARGET=_blank>Hardy-Weinberg equilibrium</A> predicts from the observed allele frequencies.
+    Off by default. There is no control for this on the track configuration page; it is set
+    in trackDb.
+    </P>
+</DIV>
+
 <DIV class="vcfTabix_example"><span class="types vcfTabix"></span>
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
@@ -5256,7 +5330,7 @@ There are no extra options that can appear on the type vcfPhasedTrio line.
 </DIV>
 
 <DIV class="vcfPhasedColorBy"><span class="types vcfPhasedTrio"></span>
-<div class="format"><code>vcfPhasedColorBy &lt;mendelDiff|deNovo|function|noColor&gt;</code></div>
+<div class="format"><code>vcfPhasedColorBy &lt;noColor|function|deNovo|mendelDiff&gt;</code></div>
     <P>
     How to color the variants drawn on each haplotype lane. <code>noColor</code>, the default,
     draws them all black. <code>deNovo</code> colors a child variant red when it appears in

@@ -76,6 +76,14 @@ fileTypeExtensions = {
 # matches parentDirSegmentRegex in hg/js/hgMyData.js
 hubNameSegmentRegex = re.compile(r"^[0-9a-zA-Z._]+$")
 
+# Settings whose value names another file in the hub, beyond the "ends in Url or
+# File" rule below. The first line is the rest of trackSettingIsFile() in
+# hg/lib/trackDbCustom.c, the second the genome stanza settings it does not cover.
+hubFilePathSettings = set([
+    "bigDataIndex", "frames", "setColorWith", "summary", "searchTrix",
+    "twoBitPath", "chromSizes", "chromAliasBb", "groups", "htmlPath", "liftOver",
+    "trackDb"])
+
 asHead = """table bed
 "Browser extensible data (<=12 fields) "
     (
@@ -2802,6 +2810,101 @@ def findUploadFiles(tdbDir, fileList):
         paths.append(localPath)
     return paths
 
+def isHubFilePathSetting(setting):
+    """ True if a hub or trackDb setting's value names another file in the hub.
+    Mirrors trackSettingIsFile() in hg/lib/trackDbCustom.c, with the genome stanza
+    settings that fit neither of its suffix rules added in hubFilePathSettings. """
+    return (setting.endswith("Url") or setting.endswith("File") or
+            setting in hubFilePathSettings or
+            (setting.startswith("decorator.") and setting.endswith(".url")))
+
+def hubLocalHubTxt(tdbDir):
+    """ return the path of the hub.txt in tdbDir, or None if there is none. A hub can
+    name the file hub.txt or <prefix>.hub.txt, so accept either, preferring the plain
+    name. errAborts when several *.hub.txt files leave the choice ambiguous. """
+    fname = join(tdbDir, "hub.txt")
+    if isfile(fname):
+        return fname
+    cands = sorted(glob.glob(join(tdbDir, "*.hub.txt")))
+    if len(cands) == 1:
+        return cands[0]
+    if len(cands) > 1:
+        errAbort("%s holds more than one hub.txt: %s. A hub has one. Remove the others "
+                "or rename the one you want to hub.txt." %
+                (tdbDir, ", ".join(basename(c) for c in cands)))
+    return None
+
+def hubGenomeFileMap(hubTxt):
+    """ work out which genome each file of a local hub belongs to. Returns
+    (fileGenome, genomes): fileGenome maps a file's path relative to the hub directory,
+    '/' separated, to a genome name, and genomes lists the hub's genomes in hub order.
+    Handles both a useOneFile hub.txt and the classic hub.txt / genomes.txt /
+    trackDb.txt layout. """
+    hubDir = hubDirUrl(hubTxt)
+    # a block of comments parses to a block with no settings, so drop those first:
+    # a comment header above the hub stanza would otherwise look like a bad hub.txt
+    blocks = [b for b in hubStanzaBlocks(hubReadText(hubTxt)) if b[0]]
+    if not blocks or "hub" not in blocks[0][0]:
+        return {}, []
+
+    # (genome, stanza, baseDir) for every stanza that can name a file. baseDir is the
+    # directory holding the file the stanza was read from, which is what its relative
+    # paths resolve against
+    entries = []
+    if any("genome" in kv for kv, _ in blocks):
+        # useOneFile: the genome stanzas and their tracks all live in hub.txt, and a
+        # track belongs to the last genome stanza above it. The hub stanza has no
+        # genome and so is skipped, unless the hub was written without a blank line
+        # between the two, which puts both keys in one block
+        genome = None
+        for kv, _ in blocks:
+            if "genome" in kv:
+                genome = kv["genome"]
+            if genome:
+                entries.append((genome, kv, hubDir))
+    elif "genomesFile" in blocks[0][0]:
+        genomesTxt = hubJoin(hubDir, blocks[0][0]["genomesFile"])
+        text = hubReadTextMaybe(genomesTxt)
+        if text is None:
+            return {}, []
+        genomesDir = hubDirUrl(genomesTxt)
+        for kv, _ in hubStanzaBlocks(text):
+            if "genome" not in kv:
+                continue
+            genome = kv["genome"]
+            entries.append((genome, kv, genomesDir))
+            if "trackDb" not in kv:
+                continue
+            tdbTxt = hubJoin(genomesDir, kv["trackDb"])
+            tdbText = hubReadTextMaybe(tdbTxt)
+            if tdbText is None:
+                logging.warning("%s: genome %s references trackDb %s, which does not "
+                        "exist. Files of that assembly may upload without a genome." %
+                        (genomesTxt, genome, kv["trackDb"]))
+                continue
+            tdbBaseDir = hubDirUrl(tdbTxt)
+            for tkv, _ in hubStanzaBlocks(tdbText):
+                entries.append((genome, tkv, tdbBaseDir))
+
+    fileGenome = {}
+    genomes = []
+    for genome, kv, baseDir in entries:
+        if genome not in genomes:
+            genomes.append(genome)
+        for setting, val in kv.items():
+            if not isHubFilePathSetting(setting):
+                continue
+            # a remote or absolute path is not one of the files we are uploading
+            if not val or "://" in val or os.path.isabs(val):
+                continue
+            rel = relpath(normpath(join(baseDir, val)), hubDir).replace(os.sep, "/")
+            if rel == ".." or rel.startswith("../"):
+                continue
+            # first stanza to claim a file wins, so a file shared by two genomes keeps
+            # the genome of the stanza that came first in the hub
+            fileGenome.setdefault(rel, genome)
+    return fileGenome, genomes
+
 def uploadFiles(tdbDir, hubName, fileList=None, force=False):
     """upload track hub files to hubspace. Server name and token can come from ~/.hubtools.conf.
     If fileList is given, only those files (relative to tdbDir) are uploaded,
@@ -2825,6 +2928,30 @@ def uploadFiles(tdbDir, hubName, fileList=None, force=False):
 
     logging.debug("trackDb directory is %s" % tdbDir)
     localPaths = findUploadFiles(tdbDir, fileList)
+
+    # The genome of each file goes into the hubSpace db column, which is where the
+    # hubspace UI gets the db= of the links it hands out. Read it from the hub rather
+    # than asking the user for it, since the hub already says which assembly it is on.
+    hubTxt = hubLocalHubTxt(tdbDir)
+    fileGenome, hubGenomes = ({}, [])
+    if hubTxt:
+        fileGenome, hubGenomes = hubGenomeFileMap(hubTxt)
+        logging.debug("hub genomes: %s, %d files mapped to a genome" %
+                (",".join(hubGenomes), len(fileGenome)))
+        if not hubGenomes:
+            logging.warning("Could not find a genome stanza in %s. The uploaded files "
+                    "get no assembly, so links from My Data will have no db." % hubTxt)
+    else:
+        logging.warning("No hub.txt in %s, so the server will build one and the uploaded "
+                "files get no assembly. Links from My Data will have no db." % tdbDir)
+    # A hub on one genome puts every file on it, including the files no stanza names,
+    # like index files and description pages. With more than one genome there is no such
+    # default: a file we could not tie to a genome stanza is left without one.
+    defaultGenome = hubGenomes[0] if len(hubGenomes) == 1 else ""
+    # Tells the pre-finish hook that the user brought their own hub.txt, so it must not
+    # synthesize one or append track stanzas to this one.
+    batchHasHubTxt = "true" if hubTxt else "false"
+
     for localPath in localPaths:
         logging.debug("localPath: %s" % localPath)
         fbase = basename(localPath)
@@ -2850,13 +2977,15 @@ def uploadFiles(tdbDir, hubName, fileList=None, force=False):
             logging.debug("file %s not in upload cache for hub %s" % (localPath, hubName))
 
         fileType = getFileType(fbase)
+        genome = fileGenome.get(remoteRelPath, defaultGenome)
 
         meta = {
                 "apiKey" : apiKey,
                 "parentDir" : parentDir,
-                "genome" : "",
+                "genome" : genome,
                 "fileName" : fbase,
                 "hubtools" : "true",
+                "batchHasHubTxt" : batchHasHubTxt,
                 "fileType": fileType,
                 "lastModified" : str(int(localMtime)*1000),
         }
@@ -3426,6 +3555,20 @@ def relBigDataUrl(urlPrefix, fname):
         return fname
     return urlPrefix + "/" + fname
 
+def ctSortByPriority(tdbData):
+    """ order the custom tracks of one assembly the way the session shows them. The
+    archive has one file per track and the tar was made from a directory listing, so the
+    file order is meaningless; the order lives in the priority of the track line, which
+    hgSession writes into every track of the archive. Archives made before it did that
+    have no priority, for those keep the file name order, which is at least stable. """
+    def sortKey(item):
+        fname, tdb = item
+        prio = tdb.get("priority", "")
+        # a track line without a priority sorts after all of the numbered ones
+        return (0, float(prio), fname) if isNumber(prio) else (1, 0.0, fname)
+
+    return sorted(tdbData.items(), key=sortKey)
+
 def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
     """ convert one db part of a track archive: append a 'genome' stanza and one stanza
     per custom track to the already-open hub.txt handle ofh, and put converted or
@@ -3448,7 +3591,7 @@ def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
     getUrlsFnames = []
     doneFnames = set()
     tdbIdx = startIdx
-    for fname, tdb in tdbData.items():
+    for fname, tdb in ctSortByPriority(tdbData):
         tdb["shortLabel"] = tdb["name"]
 
         tdbIdx += 1
@@ -3461,6 +3604,11 @@ def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
 
         # the description= attribute is optional in a custom track line
         tdb["longLabel"] = tdb.pop("description", tdb["shortLabel"])
+
+        # hgTracks shows hub tracks that have no priority in alphabetical order of their
+        # label, so renumber the tracks here to keep the order of the session. The
+        # counter runs across assemblies, so two 'genome' stanzas cannot interleave.
+        tdb["priority"] = str(tdbIdx)
 
         normalizeOnOff(tdb)
 

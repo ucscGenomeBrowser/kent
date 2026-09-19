@@ -1,0 +1,76 @@
+# #38309 -- hgTracks read one element past the end of a transcript's exonFrames array on the
+# last exon of a forward-strand transcript.  Found with valgrind while working on #37525:
+#
+#     Invalid read of size 4
+#        at linkedFeaturesItemExonMaps (linkedFeatures.c:1030)
+#      Address is 0 bytes after a block of size 8 alloc'd by sqlSignedDynamicArray
+#
+# an 8-byte block being a two-exon transcript's exonFrames, read at index 2.  The end phase of
+# an exon is the frame of the NEXT exon along the transcript; on the last exon there is no
+# next exon and exonIx has reached exonCount.  The minus-strand branch already guarded its own
+# end of the transcript (`if (exonIx>1)`); the plus-strand branch did not.  Introduced in
+# d540e9dca32 (2024-01-23) and fixed in e2d86e5b1db.
+#
+# READ THIS BEFORE TRUSTING THE SCRIPT.  IT CANNOT CATCH THE BUG IT IS NAMED FOR, and no
+# Docent script can.  makeExonFrameText() prints an end phase only when the exon is NOT the
+# last one, so the value read out of bounds was always thrown away before it reached the
+# browser.  Brian measured that rather than assuming it: on a patched and an unpatched build
+# of the same tree, 591 codon-phase tooltips at chr12:459,900-462,400 and all 70 image-map
+# tooltips at chr21:33,031,597-33,041,570 come out byte for byte the same.  The only thing
+# that separates the two builds is valgrind.  #38316, "Valgrind regression tests for the
+# CGIs", is the ticket that would actually catch this class.
+#
+# WHAT IT DOES GUARD is worth having anyway, and it is not a consolation prize: it pins the
+# invariant that KEEPS the bug invisible.  The out-of-bounds read is harmless only because
+# `isNotLastExon` decides not to print the value.  A change that started printing an end phase
+# on the last exon would put the garbage on the page -- and the read is still there in every
+# build older than e2d86e5b1db, and in any future caller that copies this code.  So:
+#
+#   a last exon has a start phase and NO end phase        the invariant
+#   the exon before it has both                           so the check is about the last exon
+#                                                         rather than about phases being absent
+#
+# Both strands, because the two branches of the fix are separate code: the plus-strand branch
+# is the one e2d86e5b1db guarded, and the minus-strand branch is the one that was already
+# guarded and must stay that way.
+#
+# ENST00000356577.10 (chr21, plus, 12 exons) and ENST00000265713.8 (chr8, minus, 17 exons) are
+# both MANE Select, so the MANE track draws exactly one transcript per gene and there is one
+# set of exon boxes to read.  The window is the whole transcript: exon popups exist only under
+# 400 kb, and both of these fit.  The text is read off the map boxes' data-tooltip rather than
+# by hovering -- a last exon can be a few pixels wide, and `expect: {tip: ...}` is a substring
+# test that cannot say a string is ABSENT.
+proof:
+  - "release-ab 2026-09-18 -- fails on the released v499 through v503 docker images and passes on genome-test. The failure names the exon tooltip the fix adds. e2d86e5b1db is on master only, so failing on every release is correct"
+  - "assertion-only 2026-09-17 -- and it cannot become anything stronger: the fix changes no byte of any page, by design.  See the header."
+  - "assertion-only 2026-09-17 -- measured, not assumed: on ticket sandbox 38252, with e2d86e5b1db reverted, this script still PASSES.  That is the expected result and it is what the header claims; a red there would have meant the fix was visible after all"
+  - "assertion-only 2026-09-17 -- and again on v503_branch in ticket sandbox 38316, the release that predates the fix: still green, which is the whole point of the header"
+
+target: genome-test
+db: hg38
+position: chr21:33543000-33577600
+reset: true
+fast: true
+steps:
+  # Plus strand: the branch e2d86e5b1db guarded.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr21:33543000-33577600&hideTracks=1&mane=pack&pix=1100"
+  - expect:
+      rows: [ruler, mane]
+      has:
+        # The exon before last: start AND end, because it has a next exon to take the end
+        # phase from.
+        - '#td_data_mane area[data-tooltip*="Exon 11 of 12"][data-tooltip*="start "]'
+        - '#td_data_mane area[data-tooltip*="Exon 11 of 12"][data-tooltip*=", end "]'
+        # The last exon: a start phase and nothing else.
+        - '#td_data_mane area[data-tooltip*="Exon 12 of 12"][data-tooltip*="start "]'
+      noHas: '#td_data_mane area[data-tooltip*="Exon 12 of 12"][data-tooltip*=", end "]'
+
+  # Minus strand: the branch that was already guarded, and has to stay guarded.  KAT6A's
+  # exon 17 is the last one in transcription order and the leftmost in genomic order.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr8:41929478-42051987&hideTracks=1&mane=pack&pix=1100"
+  - expect:
+      rows: [ruler, mane]
+      has:
+        - '#td_data_mane area[data-tooltip*="Exon 16 of 17"][data-tooltip*=", end "]'
+        - '#td_data_mane area[data-tooltip*="Exon 17 of 17"][data-tooltip*="start "]'
+      noHas: '#td_data_mane area[data-tooltip*="Exon 17 of 17"][data-tooltip*=", end "]'

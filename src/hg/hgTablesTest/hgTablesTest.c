@@ -150,6 +150,25 @@ for (i=0; i<ArraySize(test->info); ++i)
 fprintf(f, "%s\n", test->status->errMessage);
 }
 
+static void recordAbort(char *message, char *type, char *org, char *db,
+	char *group, char *track, char *table)
+/* Turn a caught errAbort into a hard error in the summary.  quickSubmit records
+ * how the page fetch went; nothing records what a test made of the page it got,
+ * so without this an abort inside a test would vanish from the counts. */
+{
+struct qaStatus *qs;
+AllocVar(qs);
+qs->hardError = TRUE;
+qs->errMessage = cloneString(message);
+tablesTestNew(qs, type, org, db, group, track, table);
+verbose(1, "Caught abort testing %s (%s %s %s %s %s): %s\n",
+	type, naForNull(org), naForNull(db), naForNull(group),
+	naForNull(track), naForNull(table), naForNull(message));
+fprintf(logFile, "Caught abort testing %s (%s %s %s %s %s): %s\n",
+	type, naForNull(org), naForNull(db), naForNull(group),
+	naForNull(track), naForNull(table), naForNull(message));
+}
+
 struct htmlPage *quickSubmit(struct htmlPage *basePage,
 	char *org, char *db, char *group, char *track, char *table,
 	char *testName, char *button, char *buttonVal)
@@ -713,7 +732,7 @@ if (obsolete)
 return obsolete;
 }
 
-void testOneTable(struct htmlPage *trackPage, char *org, char *db,
+static void testOneTableBody(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
 /* Test stuff on one table if we haven't already tested this table. */
 {
@@ -805,7 +824,22 @@ if (!hashLookup(uniqHash, fullName))
     }
 }
 
-void testOneTrack(struct htmlPage *groupPage, char *org, char *db,
+void testOneTable(struct htmlPage *trackPage, char *org, char *db,
+	char *group, char *track, char *table)
+/* Test one table, surviving an abort from anything it calls.  Most of the
+ * errAborts in this program are in the output tests below testOneTableBody, and
+ * any one of them used to end the whole run. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    testOneTableBody(trackPage, org, db, group, track, table);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    recordAbort(errCatch->message->string, "table", org, db, group, track, table);
+errCatchFree(&errCatch);
+}
+
+static void testOneTrackBody(struct htmlPage *groupPage, char *org, char *db,
 	char *group, char *track, int maxTables)
 /* Test a little something on up to maxTables in one track. */
 {
@@ -861,7 +895,20 @@ for (table = tableVar->values, tableIx = 0;
 htmlPageFree(&trackPage);
 }
 
-void testOneGroup(struct htmlPage *dbPage, char *org, char *db, char *group, 
+void testOneTrack(struct htmlPage *groupPage, char *org, char *db,
+	char *group, char *track, int maxTables)
+/* Test one track, surviving an abort. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    testOneTrackBody(groupPage, org, db, group, track, maxTables);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    recordAbort(errCatch->message->string, "track", org, db, group, track, NULL);
+errCatchFree(&errCatch);
+}
+
+static void testOneGroupBody(struct htmlPage *dbPage, char *org, char *db, char *group, 
 	int maxTracks)
 /* Test a little something on up to maxTracks in one group */
 {
@@ -911,6 +958,19 @@ for (track = trackVar->values, trackIx = 0;
 
 /* Clean up. */
 htmlPageFree(&groupPage);
+}
+
+void testOneGroup(struct htmlPage *dbPage, char *org, char *db, char *group,
+	int maxTracks)
+/* Test one group, surviving an abort. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    testOneGroupBody(dbPage, org, db, group, maxTracks);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    recordAbort(errCatch->message->string, "group", org, db, group, NULL, NULL);
+errCatchFree(&errCatch);
 }
 
 void testGroups(struct htmlPage *dbPage, char *org, char *db, int maxGroups)
@@ -1023,7 +1083,7 @@ dbDbFreeList(&dbList);
 return list;
 }
 
-void testDb(struct htmlPage *orgPage, char *org, char *db)
+static void testDbBody(struct htmlPage *orgPage, char *org, char *db)
 /* Test on one database. */
 {
 struct htmlPage *dbPage;
@@ -1038,6 +1098,20 @@ if (dbPage != NULL)
 htmlPageFree(&dbPage);
 }
 
+
+void testDb(struct htmlPage *orgPage, char *org, char *db)
+/* Test one database, surviving an abort.  The setup steps here - the test
+ * region, the group list - abort on their own, and one bad database should not
+ * cost the databases after it. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    testDbBody(orgPage, org, db);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    recordAbort(errCatch->message->string, "db", org, db, NULL, NULL, NULL);
+errCatchFree(&errCatch);
+}
 
 void testOrg(struct htmlPage *rootPage, struct htmlForm *rootForm, char *org)
 /* Test on organism.  */
@@ -1306,6 +1380,17 @@ for (type = typeList; type != NULL; type = type->next)
 }
 
 
+static int countHardErrors(struct tablesTest *list)
+/* Count the tests that ended in a hard error. */
+{
+int count = 0;
+struct tablesTest *test;
+for (test = list; test != NULL; test = test->next)
+    if (test->status->errMessage != NULL && test->status->hardError)
+        ++count;
+return count;
+}
+
 void reportSummary(struct tablesTest *list, FILE *f)
 /* Report summary of test results. */
 {
@@ -1334,11 +1419,46 @@ for (test = list; test != NULL; test = test->next)
     }
 }
 
-void hgTablesTest(char *url, char *logName)
-/* hgTablesTest - Test hgTables web page. */
+static void catchRootTest(void (*test)(struct htmlPage *rootPage), char *name,
+	struct htmlPage *rootPage)
+/* Run one of the whole-program uniProt tests, surviving an abort.  These run
+ * last, so an abort in the first of them used to take the other two and the
+ * summary with it. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    test(rootPage);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    recordAbort(errCatch->message->string, name, NULL, "uniProt", NULL, NULL, NULL);
+errCatchFree(&errCatch);
+}
+
+static struct htmlPage *rootPageGet(char *url)
+/* Fetch the page the whole run starts from, following a redirect if the server
+ * sends one.  Both hgwdev and a sandbox answer plain http with a 301 to https,
+ * and a url given with no scheme is fetched over http, so without this the run
+ * parses the redirect page, finds no form in it, and dies several steps later
+ * saying "Null form in htmlPageSetVar", which names neither the url nor the
+ * redirect.  Every later request is built from this page, so following the
+ * redirect here also puts the rest of the run on the url the server asked for. */
+{
+struct htmlPage *page = htmlPageForwarded(url, NULL);
+if (page == NULL)
+    errAbort("Couldn't get %s", url);
+if (!sameString(page->url, url))
+    verbose(1, "%s redirected to %s\n", url, page->url);
+if (page->status->status != 200)
+    errAbort("%s returned HTTP status code %d", page->url, page->status->status);
+return page;
+}
+
+int hgTablesTest(char *url, char *logName)
+/* hgTablesTest - Test hgTables web page.  Returns the exit code: zero only if
+ * the run finished and no test hit a hard error. */
 {
 /* Get default page, and open log. */
-struct htmlPage *rootPage = htmlPageGet(url);
+struct htmlPage *rootPage = rootPageGet(url);
 if (appendLog)
     logFile = mustOpen(logName, "a");
 else
@@ -1351,8 +1471,8 @@ fprintf(logFile,"seed=%d\n",seed);
  
 showRunningHostName();
 
-verbose(1, "Testing URL %s\n", url);
-fprintf(logFile, "Testing URL %s\n", url);
+verbose(1, "Testing URL %s\n", rootPage->url);
+fprintf(logFile, "Testing URL %s\n", rootPage->url);
 
 /* Show what database server we are connecting to. 
 Matters for expected rows in tables. */
@@ -1386,9 +1506,9 @@ else
     }
 
 /* Do some more complex tests on uniProt. */
-testJoining(rootPage);
-testFilter(rootPage);
-testIdentifier(rootPage);
+catchRootTest(testJoining, "joining", rootPage);
+catchRootTest(testFilter, "filter", rootPage);
+catchRootTest(testIdentifier, "identifier", rootPage);
 
 /* Clean up and report. */
 htmlPageFree(&rootPage);
@@ -1397,6 +1517,32 @@ reportSummary(tablesTestList, stdout);
 reportAll(tablesTestList, logFile);
 fprintf(logFile, "---------------------------------------------\n");
 reportSummary(tablesTestList, logFile);
+
+/* A run that tested nothing, or that could not read a page it asked for, is
+ * not a pass.  Before #38356 the first unreadable page ended the run with
+ * errAbort, so the caller at least saw a nonzero exit.  Now that the run
+ * carries on and counts such a page as a hard error, the exit code has to
+ * carry the same news, or a caller reading only the exit code is told a run
+ * that failed on every track succeeded.  Soft errors are deliberately not
+ * counted here: the page was read and the answer was wrong, which is a report
+ * about hgTables rather than about this run.  They are still in the summary. */
+int testCount = slCount(tablesTestList);
+int hardCount = countHardErrors(tablesTestList);
+if (testCount == 0)
+    {
+    verbose(1, "No tests ran.\n");
+    fprintf(logFile, "No tests ran.\n");
+    return 1;
+    }
+if (hardCount > 0)
+    {
+    verbose(1, "Exiting nonzero: %d of %d tests hit a hard error.\n",
+	hardCount, testCount);
+    fprintf(logFile, "Exiting nonzero: %d of %d tests hit a hard error.\n",
+	hardCount, testCount);
+    return 1;
+    }
+return 0;
 }
 
 int main(int argc, char *argv[])
@@ -1423,7 +1569,7 @@ appendLog = optionExists("appendLog");
 noShuffle = optionExists("noShuffle");
 if (clOrg != NULL)
    clOrgs = BIGNUM;
-hgTablesTest(argv[1], argv[2]);
+int status = hgTablesTest(argv[1], argv[2]);
 carefulCheckHeap();
-return 0;
+return status;
 }

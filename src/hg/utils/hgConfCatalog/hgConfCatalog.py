@@ -313,6 +313,22 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
+        h("syncHubApiKeys", "flag", "hg/hgHubConnect/trackHubWizard.c",
+          default="FALSE", role="gate", verified=True, ticket="38323",
+          note="Make an api key generated on one UCSC geo mirror (genome.ucsc.edu, "
+               "genome-euro, genome-asia) work on all of them, instead of only on the "
+               "central database of whichever mirror issued it.  Read at the top of "
+               "syncApiKeyToOtherNodes() (the sender, called from cjGenerateApiKey and "
+               "cjRevokeApiKey) and cjSyncApiKey() (the receiver): off, generate/revoke "
+               "behave exactly as before the gate existed, and the hgHubSyncApiKey cartJson "
+               "command is refused outright rather than merely unreachable.  Uses "
+               "geoMirrorNotifyOtherNodes() (hg/lib/geoMirror.c) to find peer mirrors from "
+               "hgcentral.gbNode and login.cookieSalt to sign the request, so no separate "
+               "list of mirror addresses or secret needed provisioning.  Third read is in "
+               "getBotCheckString() (hg/lib/botDelay.c), which picks the wording of the "
+               "invalid-apiKey error: with the gate off it still says keys are "
+               "server-specific, since off they are.  Off during QA; "
+               "flip to TRUE once released."),
         h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c",
           default="FALSE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
@@ -333,7 +349,7 @@ RELEASE_GATES = {
                "- mRNA/EST, PSL and similar hgc details - instead of the classic "
                "two-frame <frameset>.  Off during QA; flip to TRUE once released."),
         h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
-          role="gate", verified=True,
+          role="gate", verified=True, ticket="37893",
           note="The banner on the classic BLAT results page that offers a "
                "one-click switch to the new sortable table display.  Guards "
                "the advertisement, not the feature: turning it on makes the "
@@ -354,10 +370,11 @@ RELEASE_GATES = {
           note="Put BLAT result custom tracks in their own \"BLAT Results\" track "
                "group (with a \"Delete all\" button) instead of Custom Tracks, and "
                "give headerless queries a useful default name (query size + top-hit "
-               "gene) rather than \"blat YourSeq\".  Read in three CGIs that must "
-               "agree: hgBlat.c:1493 (naming), hgc.c:27514 (tags the track "
-               "group=blat), hgTracks.c:7262 (synthesizes the group).  Off during "
-               "QA; flip to TRUE once released."),
+               "gene) rather than \"blat YourSeq\".  Four reads that must agree: "
+               "hgBlat.c (naming), hgc.c (tags the track group=blat), hgTracks.c "
+               "(synthesizes the group) and customFactory.c (refuses a "
+               "hand-written group=blat when the group does not exist).  Off "
+               "during QA; flip to TRUE once released."),
         h("genarkLiftOver", "flag", "hg/lib/genark.c", default="FALSE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
@@ -444,6 +461,21 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
+          default="FALSE", role="gate", verified=True, ticket="38285",
+          note="Pulls the MANE Select/Plus Clinical transcript out into its "
+               "own section on the hgSearch disambiguation page, above an "
+               "\"Other transcripts\" section for the rest.  Applies when a "
+               "gene-symbol + codon-range search (e.g. \"BRCA1 100-200\") "
+               "returns many RefSeq isoform predictions merged onto one "
+               "genomic footprint, which otherwise gives no indication of "
+               "which transcript is the clinically relevant one.  Read once, "
+               "in hgPositionsJson(), and only reached at all when a hit's "
+               "table is ncbiRefSeq* or refGene, so a typical search never "
+               "pays for the check.  Added in the current release, so it is "
+               "doing exactly what a gate is supposed to do and has not "
+               "earned a deadline yet.  On in cgi-bin-max's hg.conf for "
+               "testing; not yet turned on anywhere shared."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
         h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",
@@ -779,15 +811,41 @@ MIRROR_KNOBS = {
                "search\" checkbox, the opt-in inverse of blatOldTracks above: "
                "results accumulate by default and a user asks for the earlier "
                "ones to be removed.  Two call sites that have to agree, "
-               "hgBlat.c:2815 which shows the box and hgc.c:27616 which acts "
-               "on the cart variable blatOnlyLatest it sets, so a stale cart "
-               "value cannot delete tracks on a machine where the feature is "
-               "off.  A knob in spirit for the same reason as blatOldTracks, "
-               "and a string rather than a flag, so it carries no gate/knob "
-               "role.  Being a string has one consequence worth knowing: it "
+               "hgBlat.c which shows the box and hgc.c which acts on the cart "
+               "variable blatOnlyLatest it sets, so a stale cart value cannot "
+               "delete tracks on a machine where the feature is off.  "
+               "Temporary, not a lasting mirror switch: the setting exists "
+               "because the behavior was argued over, and on 2026-09-18 in "
+               "#37996 the author said it should become the default soon and "
+               "the setting and its code should then come out.  A gate in "
+               "spirit, but a string rather than a flag, so it carries no "
+               "gate/knob role and the sunset report cannot chase it; that "
+               "decision lives here.  Being a string has one consequence "
+               "worth knowing: it "
                "is compared with sameString against \"on\", so only that "
                "exact value turns it on and true, 1 and yes do not, unlike "
                "every flag read through cfgOptionBooleanDefault."),
+        h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
+          default="TRUE", role="knob", public=True, verified=True,
+          ticket="38157",
+          note="Whether hgTracks shows the note that names the session just "
+               "opened and its owner, and says the browser configuration the "
+               "user had before is gone.  showSessionLoadNotice draws it once "
+               "and once only: the marker hgS_sessionJustLoaded is taken out "
+               "of the cart on the same page, so the next page does not have "
+               "it.  A recommended track set is left alone, because it merges "
+               "into the cart instead of replacing it and has its own label "
+               "beside the assembly name.  Born TRUE at 3bcf86a0995 and "
+               "documented in product/ex.hg.conf as an off switch, so it "
+               "never held the feature back; the off position is for a site "
+               "whose users open sessions constantly and do not need telling, "
+               "which is a deployment call.",
+          debatable="A site-wide off switch born in the same commit as a "
+                    "user-visible change has the shape of a gate, and nobody "
+                    "has said whether a mirror is meant to keep this one.  "
+                    "If the note turns out to be uncontroversial there is "
+                    "nothing left for the switch to do, and it should be "
+                    "deleted rather than kept as a knob."),
     ],
 }
 
@@ -1616,7 +1674,8 @@ RUNTIME_NAMES = {
                "provider names in login.oauth.providers, so the whole family "
                "is invisible to any scan.  The fields are clientId, "
                "clientSecret, label, type, issuer, authUrl, tokenUrl, "
-               "userinfoUrl and scopes.  A second read tries the older "
+               "userinfoUrl, scopes, and trustEmail, which is the one read as "
+               "a boolean.  A second read tries the older "
                "login.<provider>.<field> spelling, which is why a mirror can "
                "have credentials under either prefix."),
         h("{temp}", "internal", "hg/hgcentralTidy/hgcentralTidy.c",
@@ -1671,6 +1730,7 @@ SECTIONS = [
 ]
 
 AWAITING_TITLE = "Awaiting review"
+RUNTIME_TITLE = "Runtime-built names"
 
 
 def build():
@@ -2173,8 +2233,10 @@ def redundant_settings(cat, ages=None):
             v = by.get(name)
             if v is None or v.get("default") != "TRUE":
                 continue
+            flip = flipped.get(name) or {}
             rec = {"name": name, "path": path, "line": lineno, "value": val,
-                   "flipped": (flipped.get(name) or {}).get("version")}
+                   "flipped": flip.get("version"),
+                   "unreleased": flip.get("released") is False}
             if val in TRUE_WORDS:
                 found["redundant"].append(rec)
             elif val in FALSE_WORDS:
@@ -2213,8 +2275,15 @@ def redundant_report(cat, ages=None, verbose=False, out=sys.stdout):
 
     def line(r):
         where = "%s:%d" % (r["path"], r["line"])
-        when = ("default TRUE since v%d" % r["flipped"] if r["flipped"]
-                else "flip version unknown, refresh the age cache")
+        if not r["flipped"]:
+            when = "flip version unknown, refresh the age cache"
+        elif r.get("unreleased"):
+            # The flip is on master and no branch carries it yet, so no machine
+            # anywhere is running it.  Saying "since" here would invite exactly
+            # the deletion the paragraph below warns against.
+            when = "default TRUE in v%d, not released yet" % r["flipped"]
+        else:
+            when = "default TRUE since v%d" % r["flipped"]
         return "  %-26s %-8s %-52s %s" % (r["name"], r["value"], where, when)
 
     n = len(found["redundant"])
@@ -2388,6 +2457,14 @@ def awaiting_review(cat):
     """Rows the writer put in the holding pen, still unclassified."""
     for sec in cat["sections"]:
         if sec["title"] == AWAITING_TITLE:
+            return list(sec["vars"])
+    return []
+
+
+def runtime_names(cat):
+    """Rows standing for a family whose real name is built at run time."""
+    for sec in cat["sections"]:
+        if sec["title"] == RUNTIME_TITLE:
             return list(sec["vars"])
     return []
 
@@ -2680,7 +2757,14 @@ def reconcile(cat, out=sys.stdout, verbose=False):
     # A flag the writer put in the holding pen is unclassified too, but it is
     # already written down and reported under its own heading below, so saying
     # it twice under two different instructions would just be confusing.
-    unclassified = sorted(tree_flags - classified - pending)
+    #
+    # A run-time-built name is exempt because it is not a flag.  A row like
+    # {key} stands for a whole family of settings, read here with a boolean
+    # accessor and elsewhere as a string or a credential, so neither answer to
+    # "gate or knob" is true of it and there is no single default to sunset.
+    # The family is described in the row's note instead.
+    runtime = {v["name"] for v in runtime_names(cat)}
+    unclassified = sorted(tree_flags - classified - pending - runtime)
     if unclassified:
         problems += len(unclassified)
         print("\nboolean flag classified neither gate nor knob (%d): nobody "
@@ -2689,8 +2773,12 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         for n in unclassified:
             print("    %-40s %s" % (n, sorted(tree[n]["sites"])[0]), file=out)
     elif verbose:
-        print("all %d boolean flags in the tree are classified" %
-              len(tree_flags), file=out)
+        exempt = len(tree_flags & runtime)
+        print("all %d boolean flags in the tree are classified%s" %
+              (len(tree_flags) - exempt,
+               ", and %d built at run time %s exempt"
+               % (exempt, "is" if exempt == 1 else "are")
+               if exempt else ""), file=out)
 
     # Does the catalog's default= still match the tree's?
     #

@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 #include "htmshell.h"
+#include "md5.h"
 
 
 char *hubSpaceKeysCommaSepFieldNames = "userName,apiKey";
@@ -170,6 +171,16 @@ sqlUpdate(conn, dyStringCannibalize(&query));
 hDisconnectCentral(&conn);
 }
 
+static void hubSpaceSaveApiKey(char *userName, char *apiKey)
+/* Insert apiKey for userName into the api key table, replacing any existing key. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
+struct dyString *query = sqlDyStringCreate("insert into %s values ('%s', '%s') on duplicate key update apiKey='%s'", tableName, userName, apiKey, apiKey);
+sqlUpdate(conn, dyStringCannibalize(&query));
+hDisconnectCentral(&conn);
+}
+
 char *hubSpaceGenerateApiKey(char *userName)
 /* Make a random (but not crypto-secure) api key for userName, for use of hubtools to upload
  * to hubspace or for bypassing cloudflare. errAborts if userName is NULL.
@@ -179,11 +190,31 @@ if (!userName)
     errAbort("hubSpaceGenerateApiKey: no userName. You must be logged in to generate an api key");
 
 char *apiKey = makeRandomKey(256); // just needs some arbitrary length
-// save this key to the database for this user, the 'on duplicate' part automatically revokes old keys
-struct sqlConnection *conn = hConnectCentral();
-char *tableName = cfgOptionDefault("authTableName", AUTH_TABLE_DEFAULT);
-struct dyString *query = sqlDyStringCreate("insert into %s values ('%s', '%s') on duplicate key update apiKey='%s'", tableName, userName, apiKey, apiKey);
-sqlUpdate(conn, dyStringCannibalize(&query));
-hDisconnectCentral(&conn);
+hubSpaceSaveApiKey(userName, apiKey);
 return apiKey;
+}
+
+void hubSpaceSetApiKey(char *userName, char *apiKey)
+/* Set userName's api key to apiKey, replacing any existing key -- unlike hubSpaceGenerateApiKey,
+ * this does not make up a new key.  Used to adopt a key that a peer geo mirror generated, so
+ * that a key works the same on every UCSC mirror.  errAborts if userName or apiKey is NULL. */
+{
+if (!userName || !apiKey)
+    errAbort("hubSpaceSetApiKey: need both a userName and an apiKey");
+hubSpaceSaveApiKey(userName, apiKey);
+}
+
+char *hubSpaceApiKeySyncSig(char *userName, char *apiKey)
+/* Return a signature over userName and apiKey (empty string for a revoke), made with the
+ * login.cookieSalt shared secret that is already required to be identical across all of a
+ * site's geo mirrors (it is what makes the login cookie itself verifiable on every mirror).
+ * A peer mirror recomputes this to check that a hubSpaceSetApiKey/revoke request genuinely
+ * came from another UCSC mirror acting for this user, not from an outside caller. */
+{
+char *salt = cfgOption("login.cookieSalt");
+if (isEmpty(salt))
+    errAbort("hubSpaceApiKeySyncSig: login.cookieSalt must be set to sync api keys across mirrors");
+char buf[1024];
+safef(buf, sizeof buf, "%s-%s-%s", salt, userName, apiKey ? apiKey : "");
+return md5HexForString(buf);
 }

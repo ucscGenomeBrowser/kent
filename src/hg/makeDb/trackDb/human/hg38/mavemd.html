@@ -1,0 +1,93 @@
+<h2>Description</h2>
+
+<p>
+A multiplexed assay of variant effect (MAVE) measures what thousands of variants in a gene do
+to that gene's function, all in one experiment. MaveMD is a clinically curated collection
+inside <a href="https://mavedb.org" target="_blank">MaveDB</a>: score sets selected for clinical
+relevance, standardized, and annotated with the metadata a laboratory needs in order to judge
+whether an assay is fit to support a variant classification.
+</p>
+
+<p>
+Score sets were selected by searching MaveDB, by finding publications cited in ClinVar for
+functional evidence, and by asking the genetics community, then restricted to genes with a
+moderate or stronger gene-disease association in ClinGen or GenCC and curated by a
+multidisciplinary team (McEwen <em>et al.</em>). Where the authors of a study, or a later
+reanalysis, compared the assay against variants already classified as pathogenic or benign, the
+resulting thresholds carry an ACMG/AMP PS3 or BS3 evidence code. Many score sets have no such
+calibration; those still carry the measurement and its functional class. A large share of the
+evidence codes shown come from calibrations MaveDB marks research use only, which is stated on
+each item.
+</p>
+
+<p>
+This collection shows those measurements on the human genome. It covers several dozen score
+sets across a few dozen disease-associated genes and grows as MaveDB curates more; the date of
+the data shown is on each track's configuration page. Two views are available:
+</p>
+
+<ul>
+  <li><a href="hgTrackUi?g=mavemdMap">MaveMD Maps</a> draws each score set as a variant effect
+      map, one column per amino acid position and one row per substitution. This is the view
+      for seeing at a glance which parts of a protein tolerate change.</li>
+  <li><a href="hgTrackUi?g=mavemdVar">MaveMD Variants</a> draws one item per measured variant,
+      carrying its assay score, its ACMG functional evidence code where one exists, the assay
+      metadata, and matching ClinVar and gnomAD annotations. This is the view for looking up a
+      single variant and for filtering.</li>
+</ul>
+
+<p>
+The Maps view is a subset of the Variants view drawn differently: it can only show a variant
+that is a single amino acid substitution, so nucleotide-level variants outside coding sequence,
+insertions and deletions appear in the Variants track alone.
+</p>
+
+<p>
+A broader, uncurated selection of MaveDB experiments, without clinical calibration, is in the
+<a href="hgTrackUi?g=mavedb">MaveDB Experiments</a> collection.
+</p>
+
+<h2>References</h2>
+
+<p>
+McEwen AE, Stone J, Tejura M, Gupta P, Capodanno BJ, Da EY, Grindstaff SB, Moore N, Reinhart D,
+Snyder AE <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41332838" target="_blank">
+MaveMD: A functional data resource for genomic medicine</a>.
+<em>medRxiv</em>. 2025 Nov 19;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/41332838" target="_blank">41332838</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12668102/" target="_blank">PMC12668102</a>
+</p>
+
+<p>
+Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff
+SB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">
+MaveDB 2024: a curated community database with over seven million variant effects from multiplexed
+functional assays</a>.
+<em>Genome Biol</em>. 2025 Jan 21;26(1):13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">39838450</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11753097/" target="_blank">PMC11753097</a>
+</p>
+
+<p>
+Arbesfeld JA, Da EY, Stevenson JS, Kuzma K, Paul A, Farris T, Capodanno BJ, Grindstaff SB, Riehle K,
+Saraiva-Agostinho N <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">
+Mapping MAVE data for use in human genomics applications</a>.
+<em>Genome Biol</em>. 2025 Jun 25;26(1):179.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">40563119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12188674/" target="_blank">PMC12188674</a>
+</p>
+
+<p>
+Brnich SE, Abou Tayoun AN, Couch FJ, Cutting GR, Greenblatt MS, Heinen CD, Kanavy DM, Luo X, McNulty
+SM, Starita LM <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31892348" target="_blank">
+Recommendations for application of the functional evidence PS3/BS3 criterion using the ACMG/AMP
+sequence variant interpretation framework</a>.
+<em>Genome Med</em>. 2019 Dec 31;12(1):3.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31892348" target="_blank">31892348</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6938631/" target="_blank">PMC6938631</a>
+</p>
+

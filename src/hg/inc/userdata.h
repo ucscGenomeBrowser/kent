@@ -111,11 +111,13 @@ boolean userHasOwnNamedHubTxtInDir(char *userName, char *hubName, char *hubDir);
 char *existingHubTypeForDir(char *userName, char *hubName);
 /* Return the hubType of this user's hub dir row, or NULL if no such row exists. */
 
-void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir);
-/* Race-proofing: when a 2bit arrives into a hub that already has a synthesized
- * hub.txt, upgrade that hub.txt to include the assembly stanza and mark every
- * hubSpace row for this hub as hubType='assemblyHub'. No-op unless rowForFile
- * is a 2bit, or the synthesized hub.txt does not exist. */
+void upgradeExistingHubToAssembly(struct hubSpace *rowForFile, char *userDataDir,
+    boolean backendOwnsHubTxt);
+/* When a 2bit arrives into a hub, mark every hubSpace row for this hub as
+ * hubType='assemblyHub'. When backendOwnsHubTxt, first add the assembly stanza to
+ * the synthesized hub.txt, which is itself a no-op if that file does not exist.
+ * Pass FALSE for a hub.txt the user uploaded, whose contents are theirs to write.
+ * The whole function is a no-op unless rowForFile is a 2bit. */
 
 int lockHubDir(char *hubDir);
 /* Acquire an exclusive flock on hubDir/.hub.lock; returns a file descriptor.

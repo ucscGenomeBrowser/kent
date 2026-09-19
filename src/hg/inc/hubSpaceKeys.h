@@ -77,5 +77,17 @@ char *hubSpaceGenerateApiKey(char *userName);
  * to hubspace or for bypassing cloudflare. errAborts if userName is NULL.
  * Run in an errCatch to handle errors. */
 
+void hubSpaceSetApiKey(char *userName, char *apiKey);
+/* Set userName's api key to apiKey, replacing any existing key -- unlike hubSpaceGenerateApiKey,
+ * this does not make up a new key.  Used to adopt a key that a peer geo mirror generated, so
+ * that a key works the same on every UCSC mirror.  errAborts if userName or apiKey is NULL. */
+
+char *hubSpaceApiKeySyncSig(char *userName, char *apiKey);
+/* Return a signature over userName and apiKey (empty string for a revoke), made with the
+ * login.cookieSalt shared secret that is already required to be identical across all of a
+ * site's geo mirrors (it is what makes the login cookie itself verifiable on every mirror).
+ * A peer mirror recomputes this to check that a hubSpaceSetApiKey/revoke request genuinely
+ * came from another UCSC mirror acting for this user, not from an outside caller. */
+
 #endif /* HUBSPACEKEYS_H */
 

@@ -1,0 +1,61 @@
+# #38285 -- the position box took a single codon but not a range of them, and would not
+# take a transcript accession with a p. term at all.
+#
+# Two commits, fa5b31d3050 and 0f23d17640c.  Before them:
+#
+#     KAT6A p.495_533            landed on codon 495 and SILENTLY DROPPED the rest
+#     KAT6A 495-533              the same silent truncation
+#     ENST00000265713.8 p.495    fell through to a text search and landed on SHH
+#     NM_006766.5 p.495          gave the whole gene
+#
+# The first two are the ones that matter most here.  They were already accepted and already
+# answering, just answering wrongly, so nothing told the reader that half of what they typed
+# had been thrown away.
+#
+# Every assertion is the resolved POSITION, read out of the #positionDisplay span, because
+# that is the only place the answer is: a search that resolves to the wrong interval returns
+# a perfectly good page.  The intervals below are the ticket's own, and each one differs
+# from what the buggy build returned, so a positive check is enough and a noText: on an
+# error string would test nothing.
+#
+# The two control terms at the end are not decoration.  A hyphen means something different
+# after `c.` than after a bare gene symbol -- `KAT6A c.1483-1599` is one intronic base, not a
+# range -- and a fix that made the hyphen mean "range" everywhere would break it while
+# passing every check above.  `KAT6A` alone must still give the whole gene.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38285, fa5b31d3050 and 0f23d17640c after both reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: KAT6A p.495_533 does not resolve to chr8:41,949,358-41,955,416"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # A range of codons, underscore form.  6,059 bp, 39 codons plus the introns between them.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=KAT6A+p.495_533&pix=1100"
+  - expect: {rows: [ruler], text: "chr8:41,949,358-41,955,416"}
+
+  # The same range with a hyphen and no p. at all, which is what 0f23d17640c added.  A bare
+  # number after a gene symbol has meant a codon for years, so a bare range has to mean
+  # codons too.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=KAT6A+495-533&pix=1100"
+  - expect: {rows: [ruler], text: "chr8:41,949,358-41,955,416"}
+
+  # A transcript accession instead of a gene symbol.  An ENST with a p. term used to fall
+  # through to a text search and land on SHH.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=ENST00000265713.8+p.495_533&pix=1100"
+  - expect: {rows: [ruler], text: "chr8:41,949,358-41,955,416"}
+
+  # One codon, addressed by a RefSeq accession.  13 bp, and a different interval from the
+  # three above, so the cart cannot be what satisfies this step.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NM_006766.5+p.495&pix=1100"
+  - expect: {rows: [ruler], text: "chr8:41,955,404-41,955,416"}
+
+  # Control 1: after `c.` a hyphen is HGVS intron offset notation, not a range.  This term
+  # resolves to eleven bases around one intronic position and must not move.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=KAT6A+c.1483-1599&pix=1100"
+  - expect: {rows: [ruler], text: "chr8:41,957,005-41,957,015"}
+
+  # Control 2: the bare gene symbol still gives the whole gene.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=KAT6A&pix=1100"
+  - expect: {rows: [ruler], text: "chr8:41,929,479-42,051,987"}

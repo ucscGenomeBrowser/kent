@@ -1,0 +1,70 @@
+# #38198 -- a second quickLift in the same session never updated a track that was already in
+# the lift hub.
+#
+# The hub writer skipped any track whose name it found in the hub file, so a track that had
+# been lifted once was frozen in the state it had at that moment.  Two consequences, both
+# confirmed on hgwdev: a subtrack switched on after the first lift never reached the target,
+# and a visibility change on a track that had already been lifted never reached it either.
+# Found while testing #38032.
+#
+# f001e39d156 (merged as 437e6ad4150), hg/lib/trackHub.c.  walkTree() no longer takes the set
+# of names already in the file and no longer skips a track for being there; it writes every
+# visible track into a dyString, and the new writeMergedHubFile() merges that over the file --
+# a generated stanza replaces the old stanza of the same track IN THE SLOT THE OLD ONE HELD,
+# so parents stay ahead of their children, and a track in the file that was not generated this
+# time is kept, so tracks still accumulate across lifts.  The skip could not simply be
+# dropped: a duplicate track name makes hub loading abort.
+#
+# This asserts the visibility half, on a top-level track, and it asserts it with the image
+# HEIGHT, which is unusual here and is the only thing that can say it.  dense and pack draw
+# the same row under the same name with the same items, so rows:, text: and has: are all
+# blind to the difference; what changes is how many lines of transcripts the row takes.
+# Measured on 2026-09-17: 100 px after the dense lift and 436 px after the pack lift, with
+# hide: all and one gene track, so the bounds below are deliberately far from both numbers --
+# a GENCODE update moves how many transcripts BRCA1 packs into, and this test is not about
+# that.  Anything under 200 px is a row that did not re-pack.
+#
+# WHY NOT THE SUBTRACK HALF, which is what the ticket was filed about: it cannot be seen from
+# a rendered page today.  A composite is written to the hub with ALL of its valid children,
+# hidden ones included, and those children come back VISIBLE on the target -- that is #38044,
+# still open.  So a subtrack switched on between the two lifts is already drawn on the first
+# target, and both builds look the same.  Measured with clinvar before this script was
+# written: lift one with clinvarMain and clinvarSubLolly hidden still drew all three rows on
+# hs1.  If #38044 is ever fixed, that route becomes the tighter test and belongs here.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38198 and f001e39d156 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the second lift's target is 100px, not >300"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125483
+  - hide: all
+  - track: {knownGene: dense}
+  - expect: {rows: [ruler, knownGene], exact: true, height: "<120"}
+
+  # First lift.  One line of transcripts on the target, because that is what the source said.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect:
+      rows: [quickLiftChain, knownGene]
+      height: "<200"
+      noText: "Warning/Error"
+
+  # Back to the source and change nothing but the visibility.  The track's name is in the hub
+  # file from the first lift, which is the condition the bug needed.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - track: {knownGene: pack}
+  - expect: {rows: [ruler, knownGene], height: ">300"}
+
+  # Second lift.  The stanza has to be rewritten with the state the track has NOW.  Before
+  # f001e39d156 this page came back the same height as the first one.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect:
+      rows: [quickLiftChain, knownGene]
+      height: ">300"
+      noText: "Warning/Error"

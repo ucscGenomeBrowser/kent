@@ -3010,6 +3010,21 @@
    "desc": "Assuming hapClusterEnabled is true , this specifies how genotypes are ordered for display: centerWeighted : For diploid organisms, this separates the two hap..."
   },
   {
+   "key": "sampleColorFile",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix"
+   ],
+   "level": "new",
+   "fmt": "sampleColorFile <url>",
+   "ex": "HG00096\t#1f77b4\nHG00099\tsteelblue\nNA18939\t255,127,14",
+   "desc": "Colors the haplotype clustering tree that hapClusterMethod treeFile draws in the left label area."
+  },
+  {
    "key": "hapClusterColorBy",
    "category": "vcfTabix - Variant Call Format Track Settings",
    "roles": [
@@ -3212,6 +3227,22 @@
    "desc": "Specifies a tab-separated file that provides metadata columns for VCF samples."
   },
   {
+   "key": "showHardyWeinberg",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "showHardyWeinberg <on/off>",
+   "ex": "",
+   "desc": "When a user clicks on a variant with exactly two alleles, adds a line to the details page giving the genotype frequencies that Hardy-Weinberg equilibrium pre..."
+  },
+  {
    "key": "vcfPhasedTrio",
    "category": "vcfPhasedTrio - Variant Call Format Track Settings",
    "roles": [
@@ -3277,7 +3308,7 @@
     "vcfPhasedTrio"
    ],
    "level": "new",
-   "fmt": "vcfPhasedColorBy <mendelDiff|deNovo|function|noColor>",
+   "fmt": "vcfPhasedColorBy <noColor|function|deNovo|mendelDiff>",
    "ex": "",
    "desc": "How to color the variants drawn on each haplotype lane."
   },

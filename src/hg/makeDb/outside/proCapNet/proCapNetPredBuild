@@ -1,0 +1,29 @@
+#!/bin/bash -e
+# Re-encode all downloaded ProCapNet prediction bigWigs into fixedStep bigWigs.
+# usage: proCapNetPredBuild chrom.sizes inDir outDir [jobs]
+
+if [ $# -lt 3 ] ; then
+    echo "usage: proCapNetPredBuild chrom.sizes inDir outDir [jobs]" >&2
+    exit 1
+fi
+chromSizes=$1
+inDir=$2
+outDir=$3
+jobs=${4-4}
+scriptDir=$(dirname $0)
+
+mkdir -p $outDir
+# The download is named <cell>.<strand>.bigWig; the output says what the file
+# holds, <cell>.proCapNet.<strand>.bw, so a bigWig downloaded on its own still
+# names the model it came from.  Already-converted files are skipped, so an
+# interrupted run can be restarted.
+ls $inDir/*.bigWig \
+    | awk -v outDir=$outDir -v sizes=$chromSizes -v prog=$scriptDir/proCapNetPredToFixedStep \
+          '{n = $0; sub(/.*\//, "", n);
+            sub(/\.bigWig$/, "", n);
+            strand = n; sub(/.*\./, "", strand);
+            cell = n; sub(/\.[^.]*$/, "", cell);
+            out = outDir "/" cell ".proCapNet." strand ".bw";
+            if (system("test -s " out) != 0)
+                print prog, sizes, $0, out}' \
+    | xargs -d '\n' -P $jobs -I CMD sh -c CMD

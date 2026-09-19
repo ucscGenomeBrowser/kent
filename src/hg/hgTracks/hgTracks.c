@@ -53,6 +53,7 @@
 #include "jsHelper.h"
 #include "mafTrack.h"
 #include "hgConfig.h"
+#include "ra.h"
 #include "encode.h"
 #include "agpFrag.h"
 #include "imageV2.h"
@@ -6343,7 +6344,14 @@ struct trackDb *tdbList;
 int trackDbCartVersion = 0;
 
 if(trackNameFilter == NULL)
+    {
     tdbList = hTrackDbWithCartVersion(database, &trackDbCartVersion);
+    // getTrackList() asks whether an undecorated cart/CGI variable belongs to a native
+    // track or to an attached hub's track of the same name.  Answer it from the assembly's
+    // track list, which we have right here, instead of a trackDb query per name.  Only
+    // the unfiltered list can answer it, so the filtered branch leaves it to the query.
+    hubTrackBareNamesFromTdbList(tdbList);
+    }
 else
     {
     tdbList = hTrackDbForTrack(database, trackNameFilter);
@@ -7712,6 +7720,9 @@ for (track = trackList; track != NULL; track = track->next)
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
                 s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
+                // the bare name is the native track's if the assembly has one by that name
+                if (s != NULL && !hubTrackOwnsBareName(database, track->tdb->parent->track))
+                    s = NULL;
                 if (s)
                     {
                     cartSetString(cart, track->tdb->parent->track, s);
@@ -7727,7 +7738,17 @@ for (track = trackList; track != NULL; track = track->next)
 
             s = cartOptionalString(cart, buffer);
             if (s == NULL && startsWith("hub_", track->tdb->parent->track))
-                s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+                {
+                char *bare = trackHubSkipHubName(buffer);
+                char *bareVal = cartOptionalString(cart, bare);
+                // the bare name is the native track's if the assembly has one by that name
+                if (bareVal != NULL
+                    && hubTrackOwnsBareName(database, track->tdb->parent->track))
+                    {
+                    s = bareVal;
+                    usedThis = bare;
+                    }
+                }
 
             if (s != NULL)
                 {
@@ -7764,9 +7785,14 @@ for (track = trackList; track != NULL; track = track->next)
         }
     else
         {
-        // maybe this track is on the URL without the hub_ prefix
+        // maybe this track is on the URL without the hub_ prefix - but not if the
+        // assembly has a track of that name, in which case the bare name is that one's
         if (startsWith("hub_", track->track))
+            {
             s = cgiOptionalString(trackHubSkipHubName(track->track));
+            if (s && !hubTrackOwnsBareName(database, track->track))
+                s = NULL;
+            }
         if (s != NULL && !track->limitedVisSet)
             {
             track->visibility = hTvFromString(s);
@@ -7786,7 +7812,16 @@ for (track = trackList; track != NULL; track = track->next)
 
         s = cartOptionalString(cart, buffer);
         if (s == NULL && startsWith("hub_", track->track))
-            s = cartOptionalString(cart, usedThis = trackHubSkipHubName(buffer));
+            {
+            char *bare = trackHubSkipHubName(buffer);
+            char *bareVal = cartOptionalString(cart, bare);
+            // the bare name is the native track's if the assembly has one by that name
+            if (bareVal != NULL && hubTrackOwnsBareName(database, track->track))
+                {
+                s = bareVal;
+                usedThis = bare;
+                }
+            }
         if (s != NULL)
             hideKids = TRUE;
         cartRemove(cart, usedThis);   // we don't want these _hideKids variables in the cart
@@ -7801,8 +7836,14 @@ for (track = trackList; track != NULL; track = track->next)
             char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
             if (s == NULL && startsWith("hub_", subtrack->track))
                 {
-                undecoratedVis = TRUE;
+                // the bare name is the native track's if the assembly has one by that
+                // name.  Look the value up before asking: this runs for every subtrack of
+                // the container, and almost no request has a bare name on it at all.
                 s = hideTracks ? cgiOptionalString(trackHubSkipHubName(subtrack->track)) : cartOptionalString(cart, trackHubSkipHubName(subtrack->track));
+                if (s != NULL && hubTrackOwnsBareName(database, subtrack->track))
+                    undecoratedVis = TRUE;
+                else
+                    s = NULL;
                 }
 
             safef(buffer, sizeof buffer, "%s_sel", subtrack->track);
@@ -12084,6 +12125,112 @@ jsInlineF("notifBoxSetup(\"hgTracks\", \"%s\", \"%s\");\n", msgId, msg);
 jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 }
 
+void notifyOnce (char *msg, char *msgId)
+/* Like notify(), but for a message that only makes sense on this page, e.g. after a session was
+ * loaded.  It has no "Don't show again" button, as it is gone on the next page anyway. */
+{
+jsInlineF("notifBoxOnce(\"%s\", \"%s\");\n", msg, msgId);
+}
+
+static char *jsSafe(char *text)
+/* Return text ready to go into a double-quoted Javascript string that is assigned to innerHTML:
+ * html-encoded first, so no tag or quote from a session name or description can escape, then
+ * backslash-escaped for the Javascript literal. */
+{
+return javaScriptLiteralEncode(htmlEncode(text));
+}
+
+static void sessionNoticeText(struct dyString *dy, char *sessionName, char *sessionOwner)
+/* Add the body of the note to dy: what was opened, by whom and when, and its description if it
+ * has one.  The date and the description come from hgcentral; if the session is not there
+ * anymore (it can be deleted after it was loaded) just say what the cart remembers. */
+{
+char *created = NULL, *description = NULL;
+struct sqlConnection *conn = hConnectCentral();
+char *encOwner = cgiEncodeFull(sessionOwner);
+char *encName = cgiEncodeFull(sessionName);
+char query[1024];
+sqlSafef(query, sizeof(query),
+        "SELECT firstUse, settings FROM %s WHERE userName='%s' AND sessionName='%s'",
+        namedSessionTable, encOwner, encName);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    created = cloneString(row[0]);
+    if (isNotEmpty(row[1]))
+        {
+        struct hash *settings = raFromString(row[1]);
+        description = cloneString(hashFindVal(settings, "description"));
+        hashFree(&settings);
+        }
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+freeMem(encOwner);
+freeMem(encName);
+
+char *loggedIn = wikiLinkUserName();
+boolean isOwn = (loggedIn != NULL && sameString(loggedIn, sessionOwner));
+dyStringPrintf(dy, "You have opened the saved session <b>%s</b>, ", jsSafe(sessionName));
+if (isOwn)
+    dyStringPrintf(dy, "saved by yourself");
+else
+    dyStringPrintf(dy, "saved by user <b>%s</b>", jsSafe(sessionOwner));
+if (isNotEmpty(created))
+    {
+    // firstUse is a mysql datetime, "2026-09-18 11:22:33", the day is enough here
+    char *day = firstWordInLine(created);
+    dyStringPrintf(dy, " on %s", jsSafe(day));
+    }
+dyStringPrintf(dy, ". ");
+
+if (isNotEmpty(description))
+    {
+    // descriptions are stored with the line breaks escaped, and can be long
+    description = replaceChars(description, "\\n", " ");
+    description = replaceChars(description, "\\r", " ");
+    description = trimSpaces(description);
+    boolean truncated = FALSE;
+    if (strlen(description) > 300)
+        {
+        description[300] = 0;
+        truncated = TRUE;
+        }
+    dyStringPrintf(dy, "Session description: <i>%s%s</i> ",
+            jsSafe(description), (truncated ? "..." : ""));
+    }
+
+dyStringPrintf(dy, "The tracks, position and settings you had in the browser before have been "
+        "replaced by this session and cannot be brought back. If you want to keep a browser "
+        "configuration, save it under My Data &gt; My Sessions before you open a session. ");
+}
+
+static void showSessionLoadNotice()
+/* If a saved session has just been loaded into this cart, put a note at the top of the page
+ * saying what was opened and that the previous view is gone.  Only on that one page: the marker
+ * is taken out of the cart here, so the next page does not have it anymore.  Recommended track
+ * sets are left alone: they merge into the cart instead of replacing it and have their own label
+ * next to the assembly name. */
+{
+if (trackImgOnly || !cartVarExists(cart, hgsSessionJustLoaded))
+    return;
+cartRemove(cart, hgsSessionJustLoaded);
+if (!cfgOptionBooleanDefault("sessionLoadNotice", TRUE))
+    return;
+
+char *sessionName = cartOptionalString(cart, hgsOtherUserSessionName);
+char *sessionOwner = cartOptionalString(cart, hgsOtherUserName);
+if (isEmpty(sessionName) || isEmpty(sessionOwner) || hasRecTrackSet(cart))
+    return;
+
+struct dyString *dy = dyStringNew(1024);
+sessionNoticeText(dy, sessionName, sessionOwner);
+dyStringPrintf(dy, "This note is shown only once, it is gone on the next page.");
+notifyOnce(dy->string, "sessionLoad");
+dyStringFree(&dy);
+}
+
 static boolean noPixVariableSetAndInteractive(void) 
 {
 /* if the user is a humand and there is no pix variable in the cart, then run a
@@ -12447,6 +12594,9 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"<A HREF='hgTracks?hgsid=%s|url|&udcTimeout=[]'>here</A>.",cartSessionId(cart));
     notify(buf, "udcTimeout");
     }
+
+showSessionLoadNotice();
+
 #ifdef DEBUG
 if (cdsQueryCache != NULL)
     cacheTwoBitRangesPrintStats(cdsQueryCache, stderr);
@@ -12498,13 +12648,13 @@ void labelTrackAsDensity(struct track *tg)
 /* Add text to track long label to indicate the user asked for density mode */
 {
 tg->longLabel = labelAddNote(tg->longLabel,
-    "density mode active, configure the track to switch it off");
+    "density graph: turn off on the track settings page");
 }
 
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "too many features, density shown, zoom in for individual items or use squish or dense mode");
+tg->longLabel = labelAddNote(tg->longLabel, "density graph: too many items, zoom in");
 }
 
 void labelTrackAsDensityTooManyItems(struct track *tg)
@@ -12512,7 +12662,7 @@ void labelTrackAsDensityTooManyItems(struct track *tg)
  * too many items to draw one by one */
 {
 tg->longLabel = labelAddNote(tg->longLabel,
-    "too many features, density shown, zoom in to see details");
+    "density graph: too many items, zoom in or use dense");
 }
 
 void labelTrackAsDensityIfActive(struct track *tg)

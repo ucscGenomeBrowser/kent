@@ -31,6 +31,13 @@ PLAYWRIGHT_BROWSERS_PATH=$PW/browsers NODE_PATH=$PW/node_modules \
   node docent.js AP1.docent.yaml
 ```
 
+`docent.js` is not a single file: it requires `targetConf.js` from beside it, which
+answers where a run is pointed (`target:` and `DOCENT_TARGET`), which `hg.conf` that
+server reads, which hgcentral that names, and which account a `login:` step signs in
+with. `tests/preflight.js` requires the same module, which is the point of it being one:
+the fixture check has to resolve all four exactly the way the run will. Copy the pair, or
+run `docent.js` where it sits.
+
 Needs `playwright`, `js-yaml`, and `ffmpeg`. At UCSC these live in one pinned shared
 install at `/hive/groups/browser/uiTest/pw` (`browsers` for Chromium, `node_modules`
 for the modules), which every browser-driving test in the tree uses; its `README.md`
@@ -162,8 +169,9 @@ screen stills instead of overwriting them.
 | `open: lift` | Click the returned coordinate link → the lifted view. |
 | `zoom: out` / `zoom: in` | One zoom step (2×). |
 | `montage: {name: figure1, shots: [source, lifted]}` | Compose stills already written this run into **one multi-panel PNG**, which is what a journal wants for a figure with parts (A), (B), and so on. Panels are stacked in order and lettered automatically; `labels: [Before, After]` overrides the letters, `labels: false` drops them, `direction: horizontal` puts them side by side, and `gap:` / `labelSize:` tune the spacing and lettering. Composed at deviceScaleFactor 1 with every panel at its **natural pixel size**, so the composite is pixel-for-pixel its inputs: a `make hires` montage is print resolution because the panels were, not because anything was upscaled. Panels narrower than the widest are left-aligned and padded, never stretched. A named shot that was never taken is warned about and skipped. Put it last, after the `shot:`/`pinShot:` steps it names. |
+| `login` | **Sign in through hgLogin**, for the pages that refuse a visitor who is not logged in -- hgCollection above all (`hgCollection.c` doMiddle: *You must be logged in to edit collections*), and the saving half of hgSession. The login cookie is validated against a salted hash (`login.cookieSalt`, `hg/lib/wikiLink.c`), so there is no cookie to hand the browser: a script that needs one of those pages has to sign in the way a person does. **The step takes no credentials and cannot be given any.** They are read from `~/.docentLogin` (override with `DOCENT_LOGIN_FILE`), **one section per hgcentral database** -- an account is a row in `gbMembers` in one of them, so that is the key, not the server and not the sandbox:<br><br>`[hgcentraltest]`<br>`user=docentTest`<br>`password=...`<br><br>genome-test, hgwdev, every `hgwdev-<name>` sandbox and every ticket park read hgcentraltest, so one account covers all of them; hgwbeta reads hgcentralbeta and the RR reads hgcentral. Which central a server reads is **read from its hg.conf**, not assumed from the host, because a sandbox can say so for itself -- 45 of the personal confs on hgwdev set `central.db=hgcentraltest` and two do not. A server whose conf is on another machine falls back to a small table (the RR, the two mirrors, hgwbeta), and `[default]` catches the rest. A run redirected with `DOCENT_TARGET` looks up the server it is really driving. The file is refused unless it is mode 0600 -- the rule `hg/lib/hgConfig.c` applies to `hg.conf`. `DOCENT_LOGIN_USER` + `DOCENT_LOGIN_PASSWORD` override the file for one run. Nothing prints a password. A wrong password fails the step rather than carrying on logged out, because hgLogin answers one by drawing the same form again, which is a perfectly good page. Map form `login: {shot: signed_in}`. `make preflight` reports the account and the central it resolved, so a missing password is caught before the browser starts. |
 | `loadSession: https://example.org/settings.txt` | Start from a **saved state** instead of a clean cart, so one tour can begin where another ended and a bug report that arrives as a session link becomes a starting position. Four forms: a **settings file by URL** (as above), a **share link** (`loadSession: https://genome.ucsc.edu/s/Braney/hg38`), a **named session** (`loadSession: {user: Braney, name: hg38}`), or a **local file** written by an earlier `session:` (`loadSession: {file: saved}` → `sessions/<base>/saved.txt`, sent up through hgSession's own upload form, so the project's sessions need not be published at all). Quick and silent, like `hub:` — this is setup, not something the tour demonstrates; add `shot:` to capture where it lands. Whatever the form, the load is issued against `target:` — see **Sessions** for why a share link is not simply followed. |
-| `expect: {rows: [ruler, mane]}` | **The one verb that can fail a run.** Everything else renders happily whatever it is handed, so a wrong figure is written over a right one and only an eye catches it. State the expectation instead and the run stops, non-zero, at the step that broke it. Checks, any combination: `rows:` (these were drawn — plain names, matched by suffix so a lifted `hub_<n>_mane` counts), `exact: true` (…and nothing else), `ordered: true` (…and in that order, top to bottom), `noRows:` (these were not), `height: 2000` (the still is no taller than that in pixels; `"<1200"`, `">=300"` for another comparison), `tip: "mismatch A->C"` (the tooltip now up says this), `text:` / `noText:` (the page does / does not contain this — `noText: "Too Long"` catches the Apache 414 that renders as a perfectly good page), `url:` / `noUrl:` (the current address does / does not contain this — which CGI a click reached, or what a form put in the query string; `noUrl: "%E2%80%8B"` is the only way to see that a search term's zero-width space was stripped, since it is invisible in the page), `color:` (the color a track's row is actually **drawn** in -- `{track: crm4, is: "0,0,255"}`, or `not:` for one it must not be; `part: label` asks about the center label instead of the items, `at:`/`frac:`/`x:` about one item instead of the whole row, and a **list** states several rows in one step. The only check that reads the IMAGE, for a bug that leaves the page identical -- same rows, same height, same names, same tooltips), `has:` / `noHas:` (a CSS selector matches / matches nothing — for a bug whose whole signature is WHERE something sits, like a center label attached to the wrong row: same rows, same height, same pixels. Reach for these last, since an assertion on hgTracks' own ids breaks easily for reasons that are not bugs). A failure names every check that failed **and the rows actually drawn**. `warn: true` downgrades it to a warning for a check worth logging but not worth stopping a build over. |
+| `expect: {rows: [ruler, mane]}` | **The one verb that can fail a run.** Everything else renders happily whatever it is handed, so a wrong figure is written over a right one and only an eye catches it. State the expectation instead and the run stops, non-zero, at the step that broke it. Checks, any combination: `rows:` (these were drawn — plain names, matched by suffix so a lifted `hub_<n>_mane` counts), `exact: true` (…and nothing else), `ordered: true` (…and in that order, top to bottom), `noRows:` (these were not), `height: 2000` (the still is no taller than that in pixels; `"<1200"`, `">=300"` for another comparison), `tip: "mismatch A->C"` (the tooltip now up says this), `text:` / `noText:` (the page does / does not contain this, one string or a **list** of them — `noText: "Too Long"` catches the Apache 414 that renders as a perfectly good page), `url:` / `noUrl:` (the current address does / does not contain this — which CGI a click reached, or what a form put in the query string; `noUrl: "%E2%80%8B"` is the only way to see that a search term's zero-width space was stripped, since it is invisible in the page), `color:` (the color a track's row is actually **drawn** in -- `{track: crm4, is: "0,0,255"}`, or `not:` for one it must not be; `part: label` asks about the center label instead of the items, `at:`/`frac:`/`x:` about one item instead of the whole row, and a **list** states several rows in one step. The only check that reads the IMAGE, for a bug that leaves the page identical -- same rows, same height, same names, same tooltips), `has:` / `noHas:` (a CSS selector matches / matches nothing — for a bug whose whole signature is where something sits in the page's TREE, like a center label attached to the wrong row: same rows, same height, same pixels. Reach for these last, since an assertion on hgTracks' own ids breaks easily for reasons that are not bugs), `box:` (where an element sits on the SCREEN — `{sel: "#topRightLinks", inside: "#main-menu-whole"}`, plus `clear:` for what it must not overlap and `height:`/`width:` for its own size. The only check that reads a bounding box, for a bug that leaves every selector matching and every word of the page in place). A failure names every check that failed **and the rows actually drawn**. `warn: true` downgrades it to a warning for a check worth logging but not worth stopping a build over. |
 | `session: source` | Write `sessions/<base>/<name>.txt`: the **whole cart at this step**, in the format hgSession's "save settings to a local file" produces, so anyone can load it and get this exact view. Every track's visibility, the attached hubs, the custom tracks, the window. Off the video and off the page — it is fetched over the tour's own cookies, so the tour is not disturbed and nothing appears in the mp4. With `sessionUrlBase:` set at the top of the file, the run also prints the ready-made load URL. See **Sessions**. |
 | `shot: source` | Write `<name>.png` **and** pause the video here. On a tracks page the still is the track image (`#imgTbl`), plus any open tooltip/dialog. On any other page (an hgc detail page, an external page a link led to) it is the **viewport only — the top of the page**, never the whole scrolling document. |
 
@@ -260,6 +268,7 @@ all of them are mechanically checkable. `expect:` is the only verb that looks at
   - mouseover: {track: quickLiftChain, item: "4.3.157828209.157828210", pin: true}
   - expect: {tip: "mismatch A->C"}
   - expect: {color: {track: crm4, is: "0,0,255", not: "0,255,0"}}
+  - expect: {box: {sel: "#topRightLinks", inside: "#main-menu-whole"}}
 ```
 
 A failure prints every check that failed **and the rows that were actually drawn**, then
@@ -299,6 +308,39 @@ Notes:
   the screen run.
 - **A bare number is a ceiling** (`height: 2000` means no taller than 2000), which is the
   check anyone actually wants. `"<1200"`, `">=300"` and `"=850"` are there when it is not.
+- **`text:`, `noText:`, `has:`, `noHas:`, `rows:` and `noRows:` all take one value or a
+  list.** That matters most for the two text checks. A check that stringifies its argument
+  turns `["a", "b"]` into `"a,b"`, which no page contains, so a list handed to one that did
+  not accept it would pass on anything — and pass *silently*, which is worse than failing.
+- **`box:` is where an element sits on the screen, and it is the only check that can ask.**
+  `has:`/`noHas:` say what is in the page and never where it is; `color:` reads pixels but
+  only inside a track's row. #38251 moved the narrow-window menu icon out of the blue bar
+  and slid it across the menu items, with every selector still matching and every word of
+  the page still there:
+
+      expect: {box: {sel: "#topRightLinks", inside: "#main-menu-whole"}}
+      expect: {box: {sel: "#topRightLinks", clear: "ul.nice-menu > li > a", gap: 8}}
+      expect: {box: {sel: "#main-menu-whole", height: "<=40", width: ">=1000"}}
+      expect: {box: [{sel: "#a", inside: "#bar"}, {sel: "#b", inside: "#bar"}]}
+
+  `inside:` wants every edge within that element's box, with `tolerance:` px of slack
+  (default 1) for a border that rounds the wrong way. `clear:` wants no overlap with
+  anything that selector matches, and `gap:` asks for that many pixels of clear space
+  rather than merely for no touching. `height:`/`width:` take the same comparison grammar
+  as the image `height:` above. **Every element `sel:` matches has to satisfy every clause**,
+  so `{sel: "ul.nice-menu > li", inside: "#main-menu-whole"}` is "every menu item is in the
+  bar"; `inside:` and `clear:` take the first match of their own selector, since a container
+  is one element. An element with no box at all — `display:none`, never laid out — is
+  skipped rather than treated as a zero-sized box at the origin, which would sit "inside"
+  anything. Boxes are read in document coordinates, so a page scrolled between two reads
+  still compares. A failure gives the measurement:
+
+      step 2 (expect) failed: #topRightLinks is not inside #main-menu: 32px below it
+        -- it is at 964,114 30x32, #main-menu at 30,114 970x0
+
+  One viewport per run: `size:` is read once, when the browser context is made, so a script
+  cannot sweep widths. A layout bug that only appears at certain widths needs one script per
+  width.
 - **`color:` reads the pixels, and it is the only check that does.** A bug about color
   changes nothing else: #36212 draws the items of a track that sets both `itemRgb on` and
   `color` from the color setting rather than from the file's own RGB column, and the rows,

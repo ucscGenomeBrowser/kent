@@ -414,55 +414,84 @@ hPrintf(
 char *provider = cartUsualString(cart, "hgLogin_actMailProvider", "");
 char *address = cartUsualString(cart, "hgLogin_actMailTo", "");
 char *existingUser = cartUsualString(cart, "hgLogin_actMailUser", "");
-if (isNotEmpty(provider) && isNotEmpty(address))
+char *unverified = cartUsualString(cart, "hgLogin_actMailUnverified", "");
+boolean justChanged = isNotEmpty(cartUsualString(cart, "hgLogin_actMailChanged", ""));
+boolean fromProvider = isNotEmpty(provider) && isNotEmpty(address);
+/* Decide up front whether the "use a different address" form is coming, so the generic "we
+ * have sent you a mail" paragraph can be printed above it.  Below the form it read as if a
+ * confirmation had already gone to whatever was about to be typed into it.  The form is only
+ * for an existing account whose address was never confirmed, and only for the person who just
+ * came back from the provider -- pendingIdentityValid() is that check. */
+boolean offerNewAddress = fromProvider && isNotEmpty(existingUser) && pendingIdentityValid();
+char *encProvider = htmlEncode(provider);
+char *encAddress = htmlEncode(address);
+if (fromProvider)
     {
-    char *encProvider = htmlEncode(provider);
-    char *encAddress = htmlEncode(address);
     if (isEmpty(existingUser))
-        hPrintf("<p>You signed in with %s, and %s did not tell us an email address, so we "
-            "asked you for one. No %s account uses <b>%s</b> yet, so we are making a new "
-            "account for it. Confirming the address is the last step.</p>",
-            encProvider, encProvider, brwName, encAddress);
+        {
+        /* An address the provider released and we would not take is not the same as no address
+         * at all, and CILogon is the first case of it (#38339). */
+        if (isNotEmpty(unverified))
+            hPrintf("<p>You signed in with %s, and %s does not tell us whether the email "
+                "address it gave us belongs to you. A new %s account has been created because "
+                "no account uses <b>%s</b>.</p>",
+                encProvider, encProvider, brwName, encAddress);
+        else
+            hPrintf("<p>You signed in with %s, and %s did not tell us an email address, so we "
+                "asked you for one. No %s account uses <b>%s</b> yet, so we are making a new "
+                "account for it. Confirming the address is the last step.</p>",
+                encProvider, encProvider, brwName, encAddress);
+        }
     else
         {
         char *encUser = htmlEncode(existingUser);
-        hPrintf("<p>Your %s sign-in belongs to the %s account <b>%s</b>, but the address on "
-            "that account, <b>%s</b>, has never been confirmed. Confirm it once and %s will "
-            "sign you straight in from then on.</p>",
-            encProvider, brwName, encUser, encAddress, encProvider);
-        /* If that address is wrong the confirmation can never arrive, and this account has no
-         * other way in, so offer to replace it here.  pendingIdentityValid() is the check that
-         * this really is the person who just came back from the provider. */
-        if (pendingIdentityValid())
-            {
-            hPrintf("<p>If <b>%s</b> is not an address you can read, enter the right one and we "
-                "will send the confirmation there instead.</p>", encAddress);
-            hPrintf("<form method=\"post\" action=\"%s\" name=\"fixEmailForm\">", hgLoginUrl);
-            hPrintf("<div class=\"inputGroup\">"
-                "<label for=\"fixEmailAddr\">Email address</label>"
-                "<input type=\"text\" name=\"hgLogin_email\" value=\"\" size=\"30\" "
-                "id=\"fixEmailAddr\"></div>");
-            hPrintf("<div class=\"formControls\">"
-                "<input type=\"submit\" name=\"hgLogin.do.changePendingEmail\" "
-                "value=\"Use this address instead\" class=\"largeButton\"></div></form>");
-            }
+        /* Say that the address was changed.  Without this the page comes back looking exactly
+         * as it did before the change, the new address being the only sign anything happened. */
+        if (justChanged)
+            hPrintf("<p>The email address on the %s account <b>%s</b> is now <b>%s</b>.</p>",
+                brwName, encUser, encAddress);
+        else
+            hPrintf("<p>Your %s sign-in is linked to the %s account <b>%s</b>, but the email "
+                "address on that account, <b>%s</b>, has not been confirmed. Once it is "
+                "confirmed, %s will sign you in directly.</p>",
+                encProvider, brwName, encUser, encAddress, encProvider);
         freeMem(encUser);
         }
-    freeMem(encProvider);
-    freeMem(encAddress);
     }
+/* A rejected address (changePendingEmail) leaves its reason here, and this page is where the
+ * user sees it -- nothing else prints it on the way through. */
+if (isNotEmpty(errMsg))
+    hPrintf("<p><span style='color:red;'>%s</span></p>", errMsg);
 hPrintf(
     "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
     "Please click the confirmation link in the email to activate your account.</p>"
     "<p>You may have to look in your spam folder for an email from genome-www@soe.ucsc.edu, "
-    "especially if you use Microsoft Outlook or Hotmail.</p>"
-    "\n"
-    "<p><a href=\"%s\">Return</a></p>", returnURL);
+    "especially if you use Microsoft Outlook or Hotmail.</p>");
+if (offerNewAddress)
+    {
+    /* If that address is wrong the confirmation can never arrive, and this account has no other
+     * way in, so offer to replace it here. */
+    hPrintf("<p>If <b>%s</b> is not the right email address, enter the right one, and we will "
+        "send the confirmation there instead.</p>", encAddress);
+    hPrintf("<form method=\"post\" action=\"%s\" name=\"fixEmailForm\">", hgLoginUrl);
+    hPrintf("<div class=\"inputGroup\">"
+        "<label for=\"fixEmailAddr\">Email address</label>"
+        "<input type=\"text\" name=\"hgLogin_email\" value=\"\" size=\"30\" "
+        "id=\"fixEmailAddr\"></div>");
+    hPrintf("<div class=\"formControls\">"
+        "<input type=\"submit\" name=\"hgLogin.do.changePendingEmail\" "
+        "value=\"Use this address instead\" class=\"largeButton\"></div></form>");
+    }
+hPrintf("\n<p><a href=\"%s\">Return</a></p>", returnURL);
+freeMem(encProvider);
+freeMem(encAddress);
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
 cartRemove(cart, "hgLogin_actMailProvider");
 cartRemove(cart, "hgLogin_actMailTo");
 cartRemove(cart, "hgLogin_actMailUser");
+cartRemove(cart, "hgLogin_actMailUnverified");
+cartRemove(cart, "hgLogin_actMailChanged");
 }
 
 void sendActMailOut(char *email, char *subject, char *msg)
@@ -1269,7 +1298,8 @@ safef(message, sizeof(message),
     "Someone (probably you, from IP address %s) gave this address as the recovery email address "
     "for the %s account \"%s\".\nTo confirm that this mailbox is yours, open this link in your "
     "browser:\n\n%s\n\nThe link works once and expires in seven days.  Until it is opened, this "
-    "address cannot be used to sign in to that account and will not receive a password reset.\n\n"
+    "email address cannot be used to sign in to that account and will not receive a "
+    "password-reset email.\n\n"
     "If this is *not* you, do not open the link: someone typed your address by mistake, and "
     "ignoring this message is all it takes to keep them from using it.\n\n%s\n%s",
     emptyForNull(remoteAddr), brwName, user, url, signature, returnAddr);
@@ -1528,7 +1558,7 @@ if (!sigOk || isEmpty(user) || spc_email_isvalid(recovEmail) == 0)
 if (clock1() > atol(expStr))
     {
     freez(&errMsg);
-    errMsg = cloneString("This confirmation link has expired.");
+    errMsg = cloneString("This confirmation link has expired. Please request a new one.");
     displayLoginPage(conn);
     return;
     }
@@ -1590,16 +1620,19 @@ char *encCurRecov = htmlEncode(isNotEmpty(curRecov) ? curRecov : "(none)");
 
 hPrintf("<div id=\"changeRecovEmailBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
-hPrintf("<h3>Recovery Email</h3>");
+hPrintf("<h3>Change recovery email</h3>");
 hPrintf("<p><span style='color:red;'>%s</span></p>", errMsg ? errMsg : "");
 hPrintf("<form method=\"post\" action=\"%s\" name=\"changeRecovEmailForm\">", hgLoginUrl);
 hPrintf("<p>Signed in as <b>%s</b>.<br>Current recovery email address: <b>%s</b>%s</p>",
     encUser, encCurRecov,
     (isNotEmpty(curRecov) && !curConfirmed) ? " (waiting to be confirmed)" : "");
-hPrintf("<p style=\"font-size:0.9em\">A second address you can use to get back into your "
-    "account: it can sign you in, including with the Google and ORCID buttons, and it receives "
-    "a copy of a password reset. We email it a link to confirm it, and it does nothing until "
-    "you open that link. Your current address keeps working until then.</p>");
+hPrintf("<p style=\"font-size:0.9em\">You can add a second email address to get back into "
+    "your account. Once confirmed, it can sign you in, including through the Google and "
+    "ORCID buttons, and it will get a copy of the password-reset email whenever one is sent "
+    "for this account. We will email a confirmation link to the new address. Until that "
+    "link is opened, the email address cannot be used to sign in and will not receive a "
+    "password-reset email.%s</p>",
+    isNotEmpty(curRecov) ? " Your current recovery email address keeps working until then." : "");
 freeMem(encUser);
 freeMem(encCurRecov);
 if (hasPassword)
@@ -1708,7 +1741,7 @@ hPrintf("<div class=\"centeredContainer formBox\"><h2>%s</h2>", brwName);
 hPrintf("<h3>Almost done. Please check your email</h3>");
 hPrintf("<p>We sent a confirmation link to <b>%s</b>. Open the link in that message to finish "
     "setting your recovery email address. The link works once and expires in seven days. Until "
-    "then nothing about your account changes.</p></div>", encRecov);
+    "that link is opened, nothing about your account changes.</p></div>", encRecov);
 freeMem(encRecov);
 returnToURL(3000);
 }
@@ -1959,6 +1992,8 @@ cartRemove(cart, "token");
 cartRemove(cart, "hgLogin_actMailProvider");
 cartRemove(cart, "hgLogin_actMailTo");
 cartRemove(cart, "hgLogin_actMailUser");
+cartRemove(cart, "hgLogin_actMailUnverified");
+cartRemove(cart, "hgLogin_actMailChanged");
 redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
 }
 
@@ -2375,6 +2410,10 @@ safef(timeStr, sizeof(timeStr), "%ld", clock1());
 cartSetString(cart, "oauth_pending_provider", id->provider);
 cartSetString(cart, "oauth_pending_subject", id->subject);
 cartSetString(cart, "oauth_pending_email", emptyForNull(id->email));
+/* Not signed, the same as oauth_pending_name: it decides nothing, it only picks the wording of
+ * the page that asks for an address.  dropRequestSuppliedFlowVars keeps a request-supplied copy
+ * from standing in for ours. */
+cartSetString(cart, "oauth_pending_email_unverified", emptyForNull(id->emailUnverified));
 char *emailVerified = id->emailVerified ? "1" : "0";
 cartSetString(cart, "oauth_pending_email_verified", emailVerified);
 cartSetString(cart, "oauth_pending_name", emptyForNull(id->displayName));
@@ -2391,6 +2430,7 @@ static void clearPendingIdentity()
 cartRemove(cart, "oauth_pending_provider");
 cartRemove(cart, "oauth_pending_subject");
 cartRemove(cart, "oauth_pending_email");
+cartRemove(cart, "oauth_pending_email_unverified");
 cartRemove(cart, "oauth_pending_email_verified");
 cartRemove(cart, "oauth_pending_name");
 cartRemove(cart, "oauth_pending_time");
@@ -2437,6 +2477,20 @@ if (isEmpty(email) || spc_email_isvalid(email) == 0)
 return email;
 }
 
+static char *oauthUnverifiedEmail()
+/* The address the provider released for the pending identity and we would not take, because it
+ * did not say the address is verified and hg.conf does not trust the provider (see
+ * oauthFetchIdentity).  NULL when the provider released nothing at all.
+ * This is the difference between "we were told nothing" and "we were told something we cannot
+ * act on", which the user needs to hear and which the form can start from.  Never match on it:
+ * whatever the user does with it, it still has to be confirmed by mail. */
+{
+char *email = cartUsualString(cart, "oauth_pending_email_unverified", "");
+if (isEmpty(email))
+    return NULL;
+return email;
+}
+
 void completeAccountPage(struct sqlConnection *conn)
 /* Ask a first-time social-login user to confirm a username (and email) for a new account. */
 {
@@ -2470,8 +2524,22 @@ hPrintf("<p>You signed in with %s. Pick a username for your new %s account. "
  * Test whether anything arrived, not whether oauthProviderEmail() accepted it.  A provider that
  * sends an address we cannot use -- spc_email_isvalid rejects every byte >= 127, so any
  * non-ASCII address -- also leaves us asking for one, but telling that user the provider shares
- * no address would be simply untrue. */
-if (isEmpty(email))
+ * no address would be simply untrue.
+ * Same for a provider that did release an address which we then dropped because it would not
+ * say the address is verified: CILogon does exactly this, and "does not share your email
+ * address with us" was plainly wrong for it (#38339). */
+char *unverified = oauthUnverifiedEmail();
+if (isEmpty(email) && unverified != NULL)
+    {
+    char *encUnverified = htmlEncode(unverified);
+    hPrintf("<p>%s gave us the email address <b>%s</b>, but does not tell us whether that "
+        "address belongs to you. So we cannot use it to sign you in, even if an account "
+        "already has this address. Enter your email address below. Once it is confirmed, %s "
+        "will sign you in directly. If you already have an account, use another sign-in "
+        "option instead.</p>", label, encUnverified, label);
+    freeMem(encUnverified);
+    }
+else if (isEmpty(email))
     hPrintf("<p>A new %s account is created for any %s sign-in we have not seen before, because "
         "%s does not share your email address with us. So you cannot sign in to an existing "
         "account this way. Use another sign-in option if you do not want to create a new "
@@ -2491,8 +2559,14 @@ if (providerEmail == NULL)
     /* No address from the provider, so we have to ask -- and because anyone can type anything
      * here, the account is not usable until the mailed link is opened.  Say that next to the box
      * rather than springing the confirmation page on the user after they submit.  Show back what
-     * they typed so an error does not wipe the address they are being asked to correct. */
-    char *encTyped = htmlEncode(cartUsualString(cart, "hgLogin_email", ""));
+     * they typed so an error does not wipe the address they are being asked to correct.
+     * Nothing typed yet and the provider did release an address we could not take?  Start from
+     * that one.  It is almost always the address the person wants, and it still has to survive
+     * the duplicate check and the confirmation mail, so offering it grants nothing. */
+    char *typed = cartUsualString(cart, "hgLogin_email", "");
+    if (isEmpty(typed) && (unverified != NULL) && (spc_email_isvalid(unverified) != 0))
+        typed = unverified;
+    char *encTyped = htmlEncode(typed);
     hPrintf("<div class=\"inputGroup\">"
         "<label for=\"emailAddr\">Email address</label>"
         "<input type=\"text\" name=\"hgLogin_email\" value=\"%s\" size=\"30\" id=\"emailAddr\">"
@@ -2604,12 +2678,23 @@ if (providerEmail == NULL)
     if (sqlQuickNum(conn, query) > 0)
         {
         char buf[1024];
-        safef(buf, sizeof(buf),
-            "An account with this email address already exists. %s did not give us that address, "
-            "so we cannot tell that it is yours and cannot sign you in to that account. To reach "
-            "it, sign in with a provider that does give us your email address, or with your "
-            "username and password. To create a new account instead, enter a different email "
-            "address.", oauthProviderLabel(provider));
+        /* The provider may well have handed us this very address and we dropped it for want of
+         * a verified flag (CILogon, #38339).  Saying it never gave us the address would be
+         * wrong there, and the way out is a different one: what is missing is the provider's
+         * word that the address is the user's, not the address itself. */
+        char *unverified = oauthUnverifiedEmail();
+        if ((unverified != NULL) && sameWord(unverified, email))
+            safef(buf, sizeof(buf),
+                "An account with this email address already exists. To sign in to that account, "
+                "use a sign-in option that verifies your email address, or use your username and "
+                "password. To create a new account instead, enter a different email address.");
+        else
+            safef(buf, sizeof(buf),
+                "An account with this email address already exists. %s did not give us that "
+                "address, so we cannot tell that it belongs to you. To sign in to that account, "
+                "use a sign-in option that verifies your email address, or use your username and "
+                "password. To create a new account instead, enter a different email address.",
+                oauthProviderLabel(provider));
         freez(&errMsg);
         errMsg = cloneString(buf);
         completeAccountPage(conn);
@@ -2647,10 +2732,14 @@ linkIdentity(conn, idx, &pending);
  * straight at it (cartUsualString hands back the cart's own string, not a duplicate), so take
  * the label while it is still there. */
 char *providerLabel = cloneString(oauthProviderLabel(provider));
+/* Same reason: the confirmation page has to know whether the provider released an address we
+ * would not take, and clearPendingIdentity is about to drop that too. */
+char *unverifiedLabel = cloneString(emptyForNull(oauthUnverifiedEmail()));
 clearPendingIdentity();
 if (activateNow)
     {
     freeMem(providerLabel);
+    freeMem(unverifiedLabel);
     loginAndReturn(conn, user, idx);
     return;
     }
@@ -2662,8 +2751,10 @@ setupNewAccount(conn, email, user);
  * which is the one thing that page cannot work out for itself. */
 cartSetString(cart, "hgLogin_actMailProvider", providerLabel);
 cartSetString(cart, "hgLogin_actMailTo", email);
+cartSetString(cart, "hgLogin_actMailUnverified", unverifiedLabel);
 cartRemove(cart, "hgLogin_actMailUser");
 freeMem(providerLabel);
+freeMem(unverifiedLabel);
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
 redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
@@ -2921,6 +3012,10 @@ if (linked != NULL)
             cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(id->provider));
             cartSetString(cart, "hgLogin_actMailTo", linked->email);
             cartSetString(cart, "hgLogin_actMailUser", linked->userName);
+            /* Same hand-off, same stale-note risk as the plain signup above: nothing was
+             * changed here and no address was dropped, so say neither. */
+            cartRemove(cart, "hgLogin_actMailUnverified");
+            cartRemove(cart, "hgLogin_actMailChanged");
             /* Keep the identity signed in the cart so the page can offer to correct the
              * address.  Without that there is no way back at all for someone who mistyped it
              * when the account was made: they cannot sign in (this branch), cannot use the
@@ -3011,12 +3106,16 @@ if (!bad)
     sqlUpdate(conn, query);
     setupNewAccount(conn, email, m->userName);   // new address, so a new token is right
     cartSetString(cart, "hgLogin_actMailTo", email);
+    /* The page we are about to show is the same one the user just came from, so say that the
+     * change went through.  Otherwise the swapped-in address is the only sign of it. */
+    cartSetString(cart, "hgLogin_actMailChanged", "1");
     }
 else
     {
     freez(&errMsg);
     errMsg = cloneString("Please enter an email address that is not already in use.");
     cartSetString(cart, "hgLogin_actMailTo", m->email);
+    cartRemove(cart, "hgLogin_actMailChanged");
     }
 cartSetString(cart, "hgLogin_actMailProvider", oauthProviderLabel(provider));
 cartSetString(cart, "hgLogin_actMailUser", m->userName);
@@ -3278,10 +3377,12 @@ static void dropRequestSuppliedFlowVars()
 static char *serverOwned[] = {
     "oauth_state", "oauth_provider",
     "oauth_pending_provider", "oauth_pending_subject", "oauth_pending_email",
+    "oauth_pending_email_unverified",
     "oauth_pending_email_verified", "oauth_pending_name", "oauth_pending_time",
     "oauth_pending_sig",
     "emailLogin_email", "emailLogin_tokenMd5",
     "hgLogin_actMailProvider", "hgLogin_actMailTo", "hgLogin_actMailUser",
+    "hgLogin_actMailUnverified", "hgLogin_actMailChanged",
     };
 int i;
 for (i = 0;  i < ArraySize(serverOwned);  i++)

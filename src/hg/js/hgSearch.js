@@ -362,7 +362,7 @@ var hgSearch = (function() {
         $("[id*='extraInfo']").remove();
     }
 
-    function printMatches(list, matches, title, searchDesc, doShowMore) {
+    function printMatches(list, matches, title, searchDesc, doShowMore, maneSection) {
         var printCount = 0;
         _.each(matches, function(match, printCount) {
             var position = match.position.split(':');
@@ -409,9 +409,16 @@ var hgSearch = (function() {
                 } else {
                     url = "hgc?db=" + db + "&g=" + hgcTitle + "&i=" + match.position + "&c=0&o=0&l=0&r=0" ;
                 }
-                matchTitle = match.posName;
-                //if (match.canonical === true)
-                matchTitle = "<b>" + matchTitle + "</b>";
+                if (maneSection && match.maneProtAcc) {
+                    // match.posName can be a "/"-joined group of transcripts that all
+                    // share this genomic footprint; show only the actual MANE one.
+                    matchTitle = "<b>" + match.maneProtAcc + "</b>";
+                } else {
+                    matchTitle = "<b>" + match.posName + "</b>";
+                }
+                if (maneSection && match.maneStatus) {
+                    matchTitle = match.maneStatus + ": " + matchTitle;
+                }
             }
             if (printCount < 500) {
                 let newListObj = document.createElement("li");
@@ -519,6 +526,14 @@ var hgSearch = (function() {
             }
     }
 
+    function nonManeMatches(matches) {
+        /* If any of matches are MANE transcripts, they get their own section elsewhere
+         * (see updateSearchResults), so exclude them here to avoid showing the same
+         * transcript twice. If none are MANE, return matches unchanged. */
+        let maneMatches = matches.filter(function(m) { return m.maneStatus; });
+        return maneMatches.length > 0 ? matches.filter(function(m) { return !m.maneStatus; }) : matches;
+    }
+
     function printMoreResults(trackName, nodeAfter) {
         /* Print the 11-500 result before nodeAfter */
         let results = uiState.resultHash[trackName];
@@ -527,7 +542,7 @@ var hgSearch = (function() {
         // show the 11-500th elements
         // after this, only CSS is used to show hide them, since they are part of the
         // page already
-        printMatches(nodeAfter, results.matches.slice(10), title, searchDesc, true);
+        printMatches(nodeAfter, nonManeMatches(results.matches).slice(10), title, searchDesc, true);
     }
 
     function updateSearchResults(uiState) {
@@ -578,11 +593,34 @@ var hgSearch = (function() {
                 newListObj.appendChild(ctrlImg);
                 let descText = document.createTextNode(" " + searchDesc + ":");
                 newListObj.appendChild(descText);
+                // If any of the matches are MANE transcripts (RefSeq protein-position
+                // searches only), call them out in their own small section above the
+                // full list, since with many isoform predictions the MANE transcript(s)
+                // can otherwise be hard to spot.
+                let maneMatches = matches.filter(function(m) { return m.maneStatus; });
+                if (maneMatches.length > 0) {
+                    let maneHeader = document.createElement("div");
+                    maneHeader.className = "maneSectionHeader";
+                    maneHeader.textContent = "MANE transcript" + (maneMatches.length > 1 ? "s" : "");
+                    newListObj.appendChild(maneHeader);
+                    let maneList = document.createElement("ul");
+                    printMatches(maneList, maneMatches, title, searchDesc, false, true);
+                    newListObj.appendChild(maneList);
+                }
+                // The rest of the matches, excluding any already shown above as MANE
+                // transcripts (if there were none, this is just the full match list).
+                let otherMatches = nonManeMatches(matches);
+                if (maneMatches.length > 0 && otherMatches.length > 0) {
+                    let otherHeader = document.createElement("div");
+                    otherHeader.className = "maneSectionHeader";
+                    otherHeader.textContent = "Other transcripts";
+                    newListObj.appendChild(otherHeader);
+                }
                 // Now loop through each actual hit on this table and unpack onto list
                 let subList = document.createElement("ul");
                 // only print the first 10 at first
-                printMatches(subList, matches.slice(0,10), title, searchDesc, false);
-                if (matches.length > 10) {
+                printMatches(subList, otherMatches.slice(0,10), title, searchDesc, false);
+                if (otherMatches.length > 10) {
                     let idStr = idKey + "_" + categoryCount;
                     let showMoreLi = document.createElement("li");
                     showMoreLi.id = idStr;
@@ -604,10 +642,10 @@ var hgSearch = (function() {
                     let showMoreA = document.createElement("a");
                     showMoreA.id = idStr + "_showMoreLink";
                     let newText = "";
-                    if (matches.length > 500) {
-                        newText = " Show 490 (out of " + (matches.length) + " total) more matches for " + searchDesc;
+                    if (otherMatches.length > 500) {
+                        newText = " Show 490 (out of " + (otherMatches.length) + " total) more matches for " + searchDesc;
                     } else {
-                        newText = " Show " + (matches.length - 10) + " more matches for " + searchDesc;
+                        newText = " Show " + (otherMatches.length - 10) + " more matches for " + searchDesc;
                     }
                     showMoreA.textContent = newText;
                     showMoreDiv.appendChild(showMoreA);

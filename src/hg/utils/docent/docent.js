@@ -26,6 +26,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
+// Shared with tests/preflight.js so a run and its fixture check cannot disagree about
+// which server is being driven, which hg.conf it reads, or which account signs in.
+// docent.js is no longer a single file: targetConf.js has to travel with it.
+const { resolveTarget, serverFor, loginLookup } = require('./targetConf.js');
 
 // ---------- parse script + config ----------
 const SCRIPT = process.argv[2];
@@ -71,26 +75,14 @@ const STILLDIR = STILLPARENT ? path.resolve(HERE, STILLPARENT, base)
 const SESSDIR = path.join(
   path.resolve(HERE, process.env.DOCENT_SESSIONS || doc.sessions || 'sessions'), base);
 
-// `target:` takes a shorthand from this table, a bare `hgwdev-<user>` sandbox name
-// (expanded below), or a full https://.../cgi-bin URL. Default is genome-test, so a
-// script that forgets to say where it runs does not silently hit someone's sandbox.
-const SERVERS = {
-  'rr': 'https://genome.ucsc.edu/cgi-bin',
-  'genome-test': 'https://genome-test.gi.ucsc.edu/cgi-bin',
-  'hgwdev': 'https://hgwdev.gi.ucsc.edu/cgi-bin',
-  'hgwbeta': 'https://hgwbeta.soe.ucsc.edu/cgi-bin',
-};
-const resolveTarget = t => {
-  if (!t) return SERVERS['genome-test'];
-  if (SERVERS[t]) return SERVERS[t];
-  if (/^hgwdev-[a-z0-9._-]+$/i.test(t)) return `https://${t}.gi.ucsc.edu/cgi-bin`;  // personal sandbox
-  return t;                                                    // full URL
-};
-// DOCENT_TARGET overrides `target:` for the whole run, so a suite written against one
-// server can be pointed at another -- a sandbox, a ticket park, a demo browser -- without
-// editing the scripts it is written from. The trackDb cache below keys on SERVER, so a
-// redirected run cannot read back a listing fetched from the server the script names.
-const SERVER = resolveTarget(process.env.DOCENT_TARGET || doc.target).replace(/\/$/, '');
+// `target:` takes a shorthand (rr, genome-test, hgwdev, hgwbeta), a bare `hgwdev-<user>`
+// sandbox name, or a full https://.../cgi-bin URL; DOCENT_TARGET overrides it for the
+// whole run, so a suite written against one server can be pointed at another -- a sandbox,
+// a ticket park, a demo browser -- without editing the scripts. Both rules live in
+// targetConf.js, beside the fixture check that has to agree with them. The trackDb cache
+// below keys on SERVER, so a redirected run cannot read back a listing fetched from the
+// server the script names.
+const SERVER = serverFor(doc.target);
 // SCALE: the same tour rendered at k times the resolution, for figures that have to print.
 // Nothing is upscaled -- a still only ever has the pixels it was drawn with -- so each layer
 // is asked to draw k times as many while the layout is left alone:
@@ -332,6 +324,24 @@ const CURSOR_INIT = ({ box, svg }) => {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
   else add();
 };
+
+// ---------- LOGIN: the one fixture that cannot live in the repository ----------
+// hgCollection, and the saving half of hgSession, refuse to run for a visitor who is not
+// logged in (hgCollection.c doMiddle, "You must be logged in to edit collections"). The
+// login cookie is validated against a salted hash (login.cookieSalt, hg/lib/wikiLink.c),
+// so there is no way to hand the browser a cookie: a script that needs one of those pages
+// has to sign in the way a person does.
+//
+// Which account that is, and why it is keyed by hgcentral rather than by server, is in
+// targetConf.js. All this adds is the failure: `login:` is a step, so it throws, while
+// preflight reports the same sentence as a missing fixture. A password cannot go in a
+// script, `login:` has no argument that could carry one, and nothing here prints one.
+function loginCreds(server) {
+  const c = loginLookup(server);
+  if (c.why) throw new Error(`login: ${c.why}`);
+  return { user: c.user, password: c.password,
+           from: c.source === 'the environment' ? c.source : `[${c.section}] in ${c.source}` };
+}
 
 function absurl(u) {
   if (/^https?:/.test(u)) return u;
@@ -1011,6 +1021,116 @@ const T_START = Date.now();
       return { top, total, box: [xa, xb, w, h] };
     }, { id, frac, xpx: (o.x != null) ? Number(o.x) : null, wide: Number(o.wide || 5) });
   }
+  // A size against a comparison spec: a bare number is a CEILING, which is the check anyone
+  // actually wants, and "<1200", ">=300", "=850" are there when it is not. Shared by the
+  // image `height:` and by `box:`, so the two cannot drift into different grammars.
+  // Returns null when it holds, or the text of what went wrong.
+  function cmpSize(got, spec, what) {
+    const m = /^\s*(<=|>=|<|>|=)?\s*(\d+)\s*$/.exec(String(spec));
+    if (!m) return `${what}: cannot read "${spec}"`;
+    const n = Number(m[2]), op = m[1] || '<=';
+    const ok = op === '<' ? got < n : op === '>' ? got > n
+      : op === '>=' ? got >= n : op === '=' ? got === n : got <= n;
+    return ok ? null : `${what} is ${Math.round(got)}px, wanted ${op}${n}`;
+  }
+  // The bounding boxes of everything a selector matches, in DOCUMENT coordinates (the page's
+  // own scroll added in), so two elements can be compared even when the page has been
+  // scrolled between the two reads. An element with no box at all -- display:none, or never
+  // laid out -- is dropped rather than reported as a zero-sized box at the origin, which
+  // would sit "inside" anything.
+  async function elemRects(sel) {
+    return await page.evaluate(s => {
+      const out = [];
+      document.querySelectorAll(s).forEach(e => {
+        const r = e.getBoundingClientRect();
+        if (r.width <= 0 && r.height <= 0) return;
+        out.push({ left: r.left + scrollX, top: r.top + scrollY,
+                   right: r.right + scrollX, bottom: r.bottom + scrollY,
+                   width: r.width, height: r.height });
+      });
+      return out;
+    }, sel).catch(() => null);
+  }
+  const showRect = r => `${Math.round(r.left)},${Math.round(r.top)} `
+    + `${Math.round(r.width)}x${Math.round(r.height)}`;
+  // box: WHERE an element sits, which no other check here can ask. has:/noHas: say what is in
+  // the page and never where it is, and color: samples a track row inside the image and
+  // cannot be pointed at a page element. #38251 is the bug that needs this: the narrow-window
+  // menu icon left the blue bar and slid across the menu items, with the same elements, the
+  // same text and the same selectors matching either way.
+  //
+  //   box: {sel: "#topRightLinks", inside: "#main-menu-whole"}   every edge within that box
+  //   box: {sel: "#topRightLinks", clear: "ul.nice-menu > li > a", gap: 8}  overlaps none
+  //   box: {sel: "#main-menu-whole", height: "<=34", width: ">=1000"}
+  //
+  // Name the LINK rather than the list item when asking about overlap: an li's box carries
+  // padding and is wider than the label inside it, so a clear: on the li can fail for a
+  // reason that is not a bug.
+  //
+  // EVERY element `sel:` matches has to satisfy every clause, which is the natural reading of
+  // `{sel: "ul.nice-menu > li", inside: "#main-menu-whole"}` -- every menu item is in the bar
+  // -- and behaves the way a first-match rule would when the selector names one element.
+  // `inside:` and `clear:` take the first match of THEIR selector, since a container is one
+  // element, except that `clear:` is checked against all of them: "it must not cover any menu
+  // item" is the question being asked.
+  //
+  // `tolerance:` (default 1px) is slack on `inside:`, for a border or a rounded edge that
+  // rounds the wrong way. `gap:` on `clear:` asks for that many pixels of clear space rather
+  // than merely for no overlap.
+  async function boxCheck(o) {
+    const bad = [];
+    if (!o.sel) return ['box: needs sel:'];
+    const mine = await elemRects(o.sel);
+    if (mine == null) return [`box: cannot read the selector "${o.sel}"`];
+    if (!mine.length) return [`box: nothing with a box matches "${o.sel}"`];
+    const tol = (o.tolerance != null) ? Number(o.tolerance) : 1;
+    // Which of several matches went wrong is worth saying, and saying nothing when there is
+    // only one: "ul.nice-menu > li (3 of 9)" reads badly for a single #topRightLinks.
+    const which = i => mine.length > 1 ? `${o.sel} (${i + 1} of ${mine.length})` : o.sel;
+    let outer = null, others = null;
+    if (o.inside != null) {
+      outer = await elemRects(o.inside);
+      if (outer == null) bad.push(`box: cannot read the selector "${o.inside}"`);
+      else if (!outer.length) bad.push(`box: nothing with a box matches "${o.inside}"`);
+    }
+    if (o.clear != null) {
+      others = await elemRects(o.clear);
+      if (others == null) bad.push(`box: cannot read the selector "${o.clear}"`);
+      else if (!others.length) bad.push(`box: nothing with a box matches "${o.clear}"`);
+    }
+    const gap = Number(o.gap || 0);
+    mine.forEach((me, i) => {
+      if (outer && outer.length) {
+        const b = outer[0];
+        const off = [];
+        if (me.left   < b.left   - tol) off.push(`${Math.round(b.left - me.left)}px past its left`);
+        if (me.right  > b.right  + tol) off.push(`${Math.round(me.right - b.right)}px past its right`);
+        if (me.top    < b.top    - tol) off.push(`${Math.round(b.top - me.top)}px above it`);
+        if (me.bottom > b.bottom + tol) off.push(`${Math.round(me.bottom - b.bottom)}px below it`);
+        if (off.length)
+          bad.push(`${which(i)} is not inside ${o.inside}: ${off.join(', ')}`
+                 + ` -- it is at ${showRect(me)}, ${o.inside} at ${showRect(b)}`);
+      }
+      if (others && others.length) {
+        // A selector can legitimately match the element under test as well (every li, say,
+        // against every li); an element never has to be clear of itself.
+        const hits = others.filter(r => !(r.left === me.left && r.top === me.top
+                                       && r.width === me.width && r.height === me.height)
+                                     && me.left < r.right + gap && r.left < me.right + gap
+                                     && me.top < r.bottom + gap && r.top < me.bottom + gap);
+        if (hits.length)
+          bad.push(`${which(i)} at ${showRect(me)} is not clear of ${hits.length} of `
+                 + `${others.length} "${o.clear}"`
+                 + (gap ? ` by ${gap}px` : '') + `: ${hits.slice(0, 3).map(showRect).join('; ')}`);
+      }
+      for (const [k, spec] of [['height', o.height], ['width', o.width]]) {
+        if (spec == null) continue;
+        const why = cmpSize(me[k], spec, `${which(i)} ${k}`);
+        if (why) bad.push(why);
+      }
+    });
+    return bad;
+  }
   // "r,g,b" or "#rrggbb" -> [r,g,b]. No color NAMES on purpose: trackDb's `color 0,255,0`
   // is not CSS `green` (#008000), and a script that says one and means the other would be
   // wrong in a way nobody would look for.
@@ -1411,8 +1531,14 @@ const T_START = Date.now();
   //   expect: {url: "hgSearch", noUrl: "%E2%80%8B"}  the address bar does / does not
   //   expect: {has: "#td_data_mane map[name=map_center_mane]"}  this selector matches
   //   expect: {noHas: "#td_data_knownGene map[name=map_center_mane]"}  ... does not
+  //   expect: {box: {sel: "#topRightLinks", inside: "#main-menu-whole"}}  where it sits
   //   expect: {color: {track: crm4, is: "0,0,255"}}   the items in that row are drawn blue
   //   expect: {color: {track: crm4, part: label, is: "0,255,0"}}  ... its center label green
+  //
+  // `text:`, `noText:`, `has:`, `noHas:`, `rows:` and `noRows:` all take one value or a LIST
+  // of them. That matters most for the two text checks: a check that stringifies its argument
+  // turns ["a", "b"] into "a,b", which no page contains, so it would pass on anything -- and
+  // pass silently, which is worse than failing.
   //
   // `url:`/`noUrl:` are a substring check on the CURRENT address, which is the only place
   // some things are visible at all: which CGI a click actually reached, and what the page
@@ -1420,13 +1546,17 @@ const T_START = Date.now();
   // before the position box submits it, and the term is invisible in the rendered page --
   // the only evidence either way is whether `%E2%80%8B` survives into the URL.
   //
-  // `has:`/`noHas:` are for a bug whose whole signature is WHERE something sits in the
-  // page. #37785 attached a squishyPack track's center label to the wrong row: same rows
-  // drawn, same total height, same pixels -- only the row the label hangs off changed, so
-  // rows:, height: and text: are all blind to it. Both take a CSS selector, or a list of
+  // `has:`/`noHas:` are for a bug whose whole signature is where something sits in the
+  // page's TREE. #37785 attached a squishyPack track's center label to the wrong row: same
+  // rows drawn, same total height, same pixels -- only the row the label hangs off changed,
+  // so rows:, height: and text: are all blind to it. Both take a CSS selector, or a list of
   // them, and each may name several elements. Reach for these last: an assertion on
   // hgTracks' own ids and classes is the most likely thing here to break for a reason
   // that is not a bug.
+  //
+  // `box:` is for where something sits on the SCREEN, which a selector cannot say at all.
+  // #38251's icon left the blue bar and slid across the menu items at narrow widths with
+  // every selector still matching. See boxCheck().
   //
   // `color:` is the one check that reads the IMAGE rather than the page, because a bug about
   // color changes nothing else: same rows, same height, same items, same tooltips. It names
@@ -1485,23 +1615,20 @@ const T_START = Date.now();
     const banned = list(o.noRows).filter(w => drawn(w));
     if (banned.length) bad.push(`rows that should not be drawn: ${banned.join(', ')}`);
     if (o.height != null) {
-      // A bare number is a ceiling, which is the check anyone actually wants.
-      const m = /^\s*(<=|>=|<|>|=)?\s*(\d+)\s*$/.exec(String(o.height));
-      if (!m) bad.push(`height: cannot read "${o.height}"`);
-      else {
-        const n = Number(m[2]), op = m[1] || '<=';
-        const ok = op === '<' ? height < n : op === '>' ? height > n
-          : op === '>=' ? height >= n : op === '=' ? height === n : height <= n;
-        if (!ok) bad.push(`image is ${height}px, wanted ${op}${n}`);
-      }
+      const why = cmpSize(height, o.height, 'image');
+      if (why) bad.push(why);
     }
     if (o.tip != null && !seen.tip.includes(String(o.tip)))
       bad.push(seen.tip ? `tooltip says "${seen.tip}", wanted "${o.tip}"`
                         : `no tooltip is up, wanted "${o.tip}"`);
-    if (o.text != null && !seen.text.includes(String(o.text)))
-      bad.push(`page does not contain "${o.text}"`);
-    if (o.noText != null && seen.text.includes(String(o.noText)))
-      bad.push(`page contains "${o.noText}"`);
+    // text:/noText: take one string or a LIST of them, the way has:/noHas: do. They have to:
+    // a list handed to a check that stringifies its argument fails OPEN -- ["a", "b"] becomes
+    // "a,b", which no page contains, so the check passes on anything and passes silently.
+    // Six scripts in one batch were written that way and all six looked green.
+    for (const want of list(o.text))
+      if (!seen.text.includes(want)) bad.push(`page does not contain "${want}"`);
+    for (const want of list(o.noText))
+      if (seen.text.includes(want)) bad.push(`page contains "${want}"`);
     if (o.url != null && !url.includes(String(o.url)))
       bad.push(`url is "${url}", wanted it to contain "${o.url}"`);
     if (o.noUrl != null && url.includes(String(o.noUrl)))
@@ -1516,6 +1643,10 @@ const T_START = Date.now();
       if (n > 0) bad.push(`${n} element(s) match "${sel}", wanted none`);
       else if (n < 0) bad.push(`noHas: cannot read the selector "${sel}"`);
     }
+    // box: where an element sits. A list is allowed and every entry is checked, so one step
+    // can state a whole layout and a failure names every part of it that came out wrong.
+    for (const one of (o.box == null ? [] : (Array.isArray(o.box) ? o.box : [o.box])))
+      bad.push(...await boxCheck((typeof one === 'object') ? one : { sel: one }));
     // color: the pixels hgTracks drew in a row, which no other check here can see. A list
     // is allowed, and every entry is checked, so one step can state the whole of a color
     // matrix and a failure names every row that came out wrong rather than only the first.
@@ -2097,6 +2228,42 @@ const T_START = Date.now();
         // Click through to the requested assembly so we end on the browser.
         if (!await openHubAssembly(db))
           console.warn(`addPublicHub: no assembly link for db "${db}" on the connect page`);
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
+      case 'login': {
+        // Sign in through hgLogin, so the steps after this one can reach a page that
+        // needs a user -- hgCollection above all. Credentials come from loginCreds(),
+        // never from the script. Takes no argument, or {shot:}.
+        const o = (arg && typeof arg === 'object') ? arg : {};
+        const c = loginCreds(SERVER);
+        console.log(`LOGIN ${c.user} on ${SERVER} (credentials from ${c.from})`);
+        await nav('/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1');
+        await page.waitForSelector('#accountLoginForm', { timeout: 15000 });
+        await glideTo('#userName'); await page.click('#userName');
+        await typeIn(page, '#userName', c.user);
+        await typeIn(page, '#password', c.password);
+        await clickGlide('input[name="hgLogin.do.displayLogin"]');
+        await page.waitForLoadState('load');
+        // hgLogin answers a bad password by drawing the same form again with a red
+        // message, which is a perfectly good page: without this check every later step
+        // would run logged out and the failure would surface somewhere else entirely.
+        if (await page.$('#accountLoginForm')) {
+          const why = (await page.innerText('body')).split('\n').map(l => l.trim())
+                        .filter(Boolean).slice(0, 8).join(' | ');
+          throw new Error(`login: still on the login page as ${c.user} -- ${why}`);
+        }
+        // hgLogin answers a good password with a page that navigates ITSELF a moment
+        // later: returnToURL(150) writes setTimeout(function(){location=...}, 150). Return
+        // while that timer is pending and the next step's goto: races it, and the browser
+        // aborts one of the two -- which arrives as a flat `net::ERR_ABORTED` on a URL
+        // that is perfectly fine. So wait for the redirect to land before going on. The
+        // failure path above is checked first, since that page never leaves hgLogin and
+        // there is no redirect to wait for.
+        await page.waitForURL(u => !/\/hgLogin(\?|$)/.test(String(u)), { timeout: 10000 })
+                  .catch(() => {});
+        await page.waitForLoadState('load').catch(() => {});
+        await captureState();
         if (o.shot) { await shot(o.shot); return; }
         break;
       }

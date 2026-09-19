@@ -1,0 +1,51 @@
+# #38223 -- submitting hgLiftOver's main form left the cart's formMethod stuck on GET, and
+# a file upload through hgCustom then silently did nothing.
+#
+# hgLiftOver.c:101 carried a hidden field inside its own POST form:
+#
+#     <input name='formMethod' value='GET' type='hidden'>
+#
+# The cart saves every submitted field (loadCgiOverHash in cart.c), so that one set the
+# SITE-WIDE formMethod variable.  hgCustom reads it when it writes its own form tag, and a
+# file's contents never travel over GET, so the upload arrived empty and the page simply
+# redisplayed the blank Add Custom Tracks form: no error, no track.  The same week, the RR
+# access logs held 19 other hgCustom requests that hit 414 Request-URI Too Long for the same
+# reason.  It was found while investigating #38199, where a custom track ran green and then
+# vanished.
+#
+# 29179bd78a9 deletes the field.  hgLiftOver.c was the only CGI in the tree with one.
+#
+# So the script does what the reporter did: submit hgLiftOver's form, then look at hgCustom.
+# The form tag is the whole assertion, and it has to be read AFTER a submit rather than on a
+# first visit -- hgCustom writes POST for a cart that has never heard of formMethod, so a
+# check on a clean cart passes on the build this ticket was filed about.
+#
+# No region is pasted before the Submit.  What travels is the form's own hidden fields, which
+# is where the bug was; hgLiftOver's answer to an empty query is not what is under test.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38223 and 29179bd78a9 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: hgLiftOver's form carries the hidden formMethod input"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # The field is gone from the page it was written on.
+  - goto: "/cgi-bin/hgLiftOver"
+  - expect:
+      text: "Currently selected genome"
+      has: 'form[name="mainForm"][method="POST"]'
+      noHas: 'input[name="formMethod"]'
+
+  # Submit it, the way the reporter did.  On the build with the bug this is the request that
+  # wrote formMethod=GET into the cart.
+  - click: '#Submit'
+
+  # hgCustom, in the same session.  Its form has to be POST, or a file upload reaches it
+  # empty.  The cart variable is site-wide, so nothing about this URL can undo it.
+  - goto: "/cgi-bin/hgCustom?db=hg19"
+  - expect:
+      text: "Add Custom Tracks"
+      has: 'form#mainForm[method="POST"]'
+      noHas: 'form#mainForm[method="GET"]'

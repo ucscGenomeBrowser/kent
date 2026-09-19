@@ -1,0 +1,42 @@
+#!/bin/bash -e
+# Download the ProCapNet prediction and sequence-contribution bigWigs from the
+# Kundaje lab server for one assembly.  Contribution scores exist for hg38 only.
+#
+# The predictions are re-encoded before use, so they are fetched to a working
+# directory outside the track data directory and can be deleted afterwards.  The
+# contribution scores are used unaltered and are fetched straight to the track
+# data directory under their final name.
+#
+# The hub names some cell lines in upper case where we use the cell name, so the
+# file names come from the cell and hubCell columns of the experiments table.
+#
+# usage: proCapNetDownload hg38|hs1 experimentsTsv predWorkDir [contribDir]
+
+if [ $# -lt 3 ] ; then
+    echo "usage: proCapNetDownload hg38|hs1 experimentsTsv predWorkDir [contribDir]" >&2
+    exit 1
+fi
+db=$1
+experimentsTsv=$2
+predWorkDir=$3
+contribDir=$4
+hubUrl=https://mitra.stanford.edu/kundaje/kcochran/ucsc_track_hubs_public/ProCapNet
+fetchList=$(mktemp)
+trap "rm -f $fetchList" EXIT
+
+mkdir -p $predWorkDir
+awk -F'\t' -v url=$hubUrl/$db/procapnet_preds -v dir=$predWorkDir 'NR>1 {
+        print url "/" $2 ".pos.bigWig\t" dir "/" $1 ".pos.bigWig"
+        print url "/" $2 ".neg.bigWig\t" dir "/" $1 ".neg.bigWig"
+    }' $experimentsTsv > $fetchList
+
+if [ -n "$contribDir" ] ; then
+    mkdir -p $contribDir
+    awk -F'\t' -v url=$hubUrl/$db/procapnet_contrib_scores -v dir=$contribDir 'NR>1 {
+            print url "/" $2 ".profile_contrib_scores.bigWig\t" dir "/" $1 ".proCapNet-contrib.bw"
+        }' $experimentsTsv >> $fetchList
+fi
+
+# --continue-at lets an interrupted run restart without refetching
+awk -F'\t' '{print "curl -sSf --retry 5 --continue-at - -o " $2 " " $1}' $fetchList \
+    | xargs -d '\n' -P 6 -I CMD sh -c CMD

@@ -364,10 +364,13 @@ linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 
 
 static struct linkedFeatures *lfFromLiftedChain(struct chain *chain, struct chain *lifted,
-    int qs, boolean doSnake)
+    int qs, boolean doSnake, double normScore)
 /* Build the drawing item for one chain that has been mapped onto the reference.  The
  * blocks come from the lifted alignment, so unlike the native loaders this one does not
- * leave the components for loadLinks to fetch. */
+ * leave the components for loadLinks to fetch.  normScore is the chain's normalized score
+ * when the track is coloring by score, or a negative number when it is not; the native
+ * loader uses that number for both the shade and the dense-mode sort, so this one has to
+ * as well. */
 {
 struct linkedFeatures *lf;
 char buf[16];
@@ -376,8 +379,16 @@ AllocVar(lf);
 lf->start = lf->tallStart = lifted->tStart;
 lf->end = lf->tallEnd = lifted->tEnd;
 lf->qSize = lifted->qSize;
-lf->grayIx = maxShade;
-lf->score = chain->score;
+if (normScore >= 0)
+    {
+    lf->grayIx = hGrayInRange(normScore, 0, 100, maxShade+1);
+    lf->score = normScore;
+    }
+else
+    {
+    lf->grayIx = maxShade;
+    lf->score = chain->score;
+    }
 lf->filterColor = -1;
 
 lf->orientation = (lifted->qStrand == '-') ? -1 : 1;
@@ -419,6 +430,29 @@ lf->components = sfList;
 return lf;
 }
 
+static struct hash *chainNormScoreHash(char *db, char *table, struct quickLiftRange *range)
+/* chain id -> normScore, as a string, for the chains in one source range.  chainLoadRange
+ * throws the column away and struct chain has nowhere to keep it, so read it separately
+ * rather than color a lifted chain track differently from a native one.  Returns NULL
+ * when the table has no normScore column, which the trackDb setting only claims. */
+{
+struct hash *hash = NULL;
+struct sqlConnection *conn = hAllocConn(db);
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, table, range->chrom, range->start, range->end,
+    NULL, &rowOffset);
+if (sqlCountColumns(sr) > rowOffset + 11)
+    {
+    hash = newHash(8);
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(hash, row[rowOffset + 10], lmCloneString(hash->lm, row[rowOffset + 11]));
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return hash;
+}
+
 static void quickLiftChainLoadItems(struct track *tg)
 /* Load chains out of the assembly this track came from and map them onto the reference.
  * A chain is an alignment between that assembly and some other species, so lifting one
@@ -447,6 +481,11 @@ if (tg->isBigBed)
         linkFile = bigChainGetLinkFile(chainFile);
     }
 
+// normScore lives in a column of the SQL chain table and nowhere in a bigChain file, so
+// only the SQL side can color by it, which is also the only side the native loaders do.
+boolean useNormScore = !tg->isBigBed && (chainCart->chainColor == chainColorScoreColors) &&
+    chainDbNormScoreAvailable(tg->tdb);
+
 struct hash *chainHash = newHash(8);
 struct hash *mapPsls = NULL;
 struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, chromName,
@@ -456,11 +495,16 @@ struct linkedFeatures *list = NULL;
 for (range = rangeList; range != NULL; range = range->next)
     {
     struct chain *chain, *chainList;
+    struct hash *normScores = NULL;
     if (tg->isBigBed)
         chainList = chainLoadIdRangeHub(NULL, chainFile, linkFile, range->chrom,
             range->start, range->end, -1);
     else
+        {
         chainList = chainLoadRange(liftDb, table, range->chrom, range->start, range->end);
+        if (useNormScore)
+            normScores = chainNormScoreHash(liftDb, table, range);
+        }
 
     for (chain = chainList; chain != NULL; chain = chain->next)
         {
@@ -476,8 +520,18 @@ for (range = rangeList; range != NULL; range = range->next)
         if (lifted == NULL)
             continue;
 
-        slAddHead(&list, lfFromLiftedChain(chain, lifted, qs, doSnake));
+        double normScore = -1;
+        if (normScores != NULL)
+            {
+            char id[32];
+            safef(id, sizeof id, "%d", chain->id);
+            char *val = hashFindVal(normScores, id);
+            if (val != NULL)
+                normScore = sqlFloat(val);
+            }
+        slAddHead(&list, lfFromLiftedChain(chain, lifted, qs, doSnake, normScore));
         }
+    hashFree(&normScores);
     }
 
 // put the list back into the order the chains were loaded in, which is what decides

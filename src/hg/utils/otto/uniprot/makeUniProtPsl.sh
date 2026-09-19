@@ -14,10 +14,10 @@
 # $2 = the transcript fasta file
 # $3 = the transcript->genome PSL file
 # $4 = MINALI, the minimum percent ID, e.g. 0.93
-# $5 = the parasol cluster
-# $6 = temporary workdir
-# $7 = OUTPUT: the nucleotide PSL output file to create
-# $8 = optional: tsv table with mapping from uniprot to transcript
+# $5 = temporary workdir
+# $6 = OUTPUT: the nucleotide PSL output file to create
+# $7 = optional: tsv table with mapping from uniprot to transcript
+# (there used to be a parasol cluster argument here, removed when ku went away)
 
 # Will always rm -rf the work directory, before and after a run
 
@@ -107,7 +107,19 @@ if [ -f $WORKDIR/bestAln.psl ] ; then
 else
         mkdir -p $WORKDIR/queries
         mkdir -p $WORKDIR/aligns
-        faSplit about $WORKDIR/uniProt.fa 2500 $WORKDIR/queries/
+        # Aim for a job count rather than a fixed chunk size. At a flat 2500 bytes this made
+        # 18894 jobs for zebrafish that averaged 13 seconds each, so parasol overhead and
+        # creating 18894 tiny result files cost more than the BLAST did. The cluster is not
+        # the bottleneck either way - it absorbed 57 CPU hours in 12 minutes - but every one
+        # of those files then has to be opened again by the single-threaded pslReps below,
+        # over NFS, which is the slowest part of the whole per-assembly run. refs #38300
+        targetJobs=1000
+        faBytes=`stat -c %s $WORKDIR/uniProt.fa`
+        chunkSize=`expr $faBytes / $targetJobs`
+        # keep the old size as a floor, so a small protein set still splits sensibly
+        if [ $chunkSize -lt 2500 ]; then chunkSize=2500; fi
+        echo "splitting `expr $faBytes / 1000000` MB of protein into chunks of $chunkSize bytes"
+        faSplit about $WORKDIR/uniProt.fa $chunkSize $WORKDIR/queries/
         ${BLASTDIR}/formatdb -i $WORKDIR/transcripts.fa -p F
 
         # create joblist and run
