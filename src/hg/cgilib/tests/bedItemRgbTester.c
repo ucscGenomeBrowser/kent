@@ -1,9 +1,8 @@
 /* bedItemRgbTester - check which stanza wins when a track says both "itemRgb" and "color".
  *
  * bedItemRgb() decides whether a BED track draws its items in the colors the file carries or
- * in the one color the stanza names.  It lives in hg/cgilib/bedCart.c, and the test is here
- * because hg/cgilib has no tests directory of its own; the link line below pulls in
- * jkhgapcgi.a for it.
+ * in the one color the stanza names.  It lives in hg/cgilib/bedCart.c, so the test lives
+ * here beside it.
  *
  * The rule has four steps and the order of the first three is the whole of #36212.  An
  * explicit "itemRgb off" wins, then an explicit "itemRgb on" wins, and only then does the
