@@ -1,0 +1,4 @@
+mallocTopPad in hg.conf: (not set)
+first heap growth:       under 4 MB, the library's own default step
+mallocTopPad in hg.conf: 33554432
+first heap growth:       16 MB or more, a configured step

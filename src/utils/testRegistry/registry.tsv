@@ -61,7 +61,7 @@
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
 38198	504	-	rm38198.docent.yaml	library	-	needs one: a second lift has to update a track already in the hub
-38225	504	-	-	perf	-	needs one: the malloc step size now comes from hg.conf; the test has to read the knob back and see it applied
+38225	504	hg/lib/tests/mallocTopPadTester.c	-	perf	sandbox-ab	the hg.conf step size reaches the C library: the heap grows in one 16 MB jump, not the default one
 38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries, not the seconds
 38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash
 38248	504	-	rm38248.docent.yaml	library	-	needs one: a deprecated versioned NP_ accession has to resolve to RefSeq Historical

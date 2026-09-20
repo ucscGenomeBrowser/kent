@@ -8,6 +8,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/trashDirTester \
+	${BIN_DIR}/mallocTopPadTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
 	${BIN_DIR}/sessionDataTester \
@@ -23,7 +24,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
-test: binTest quickLiftTest sessionDataTest trashDirTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -94,6 +95,16 @@ trashDirTest: ${BIN_DIR}/trashDirTester mkdirs
 	    "the symlink, relative" `pwd`/output/sd/link `pwd`/output/sd/real \
 	    >> output/trashDirTest
 	diff expected/trashDirTest output/trashDirTest
+
+# Twice: once with the setting and once without, because the answer is the DIFFERENCE between
+# them.  A single run could pass on a library whose own default happened to be large.
+mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
+	echo "include ${HOME}/.hg.conf" > output/topPadOff.conf
+	echo "include ${HOME}/.hg.conf" > output/topPadOn.conf
+	echo "mallocTopPad=33554432" >> output/topPadOn.conf
+	HGDB_CONF=output/topPadOff.conf ${BIN_DIR}/mallocTopPadTester > output/mallocTopPadTest
+	HGDB_CONF=output/topPadOn.conf ${BIN_DIR}/mallocTopPadTester >> output/mallocTopPadTest
+	diff expected/mallocTopPadTest output/mallocTopPadTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
