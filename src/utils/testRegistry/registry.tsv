@@ -64,7 +64,7 @@
 38225	504	hg/lib/tests/mallocTopPadTester.c	-	perf	sandbox-ab	the hg.conf step size reaches the C library: the heap grows in one 16 MB jump, not the default one
 38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries. BLOCKED: the change is in a static function in hgTracks/simpleTracks.c
 38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash. BLOCKED: the change is in hgTracks/bigWigTrack.c
-38248	504	-	rm38248.docent.yaml	library	-	needs one: a deprecated versioned NP_ accession has to resolve to RefSeq Historical. Reachable: hgHgvs is public, so this extends the existing hgvs test, and needs only reads
+38248	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38248.docent.yaml	library	assertion-only	a deprecated versioned NP_ accession still maps, through ncbiRefSeqLinkHistorical. The ticket's other half, taking the NEWEST deprecated transcript, is NOT pinned: with the order by removed and with a plain string sort, every term I could build gives identical coordinates, because the versions differ only in UTR ends
 38249	504	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	unrecorded	the target strand of a reverse complemented protein, found in the #38349 review
 38253	504	-	-	perf	-	needs one: item coverage is built from feature runs, not one counter per base. BLOCKED: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
 38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start. BLOCKED: the change is in hgTracks.c, the file that holds main

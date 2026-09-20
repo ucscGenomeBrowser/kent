@@ -77,3 +77,11 @@ chr8	42049489	42049490	KAT6A n.100-200	0	-
 chr8	41932207	41932210	KAT6A p.2004	0	-
 # Failed to parse 'KAT6A p.2005' as HGVS
 # Failed to parse 'KAT6A p.533_495' as HGVS
+
+# A protein accession that is no longer current resolves through ncbiRefSeqLinkHistorical,
+# which is what lets an old paper's term still find its position.  NP_000054.2 has three
+# deprecated transcript versions behind it, NP_055615.8 has versions .8, .9 and .10.
+# refs #38248
+chr6	31927752	31927755	NP_000054.2:p.Met1Leu	0	+
+chr6	31943457	31943460	NP_000054.2:p.Gly500Arg	0	+
+chr7	37342687	37342690	NP_055615.8:p.Met1Leu	0	-

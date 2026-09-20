@@ -62,3 +62,11 @@ KAT6A p.0
 KAT6A p.2004
 KAT6A p.2005
 KAT6A p.533_495
+
+# A protein accession that is no longer current resolves through ncbiRefSeqLinkHistorical,
+# which is what lets an old paper's term still find its position.  NP_000054.2 has three
+# deprecated transcript versions behind it, NP_055615.8 has versions .8, .9 and .10.
+# refs #38248
+NP_000054.2:p.Met1Leu
+NP_000054.2:p.Gly500Arg
+NP_055615.8:p.Met1Leu
