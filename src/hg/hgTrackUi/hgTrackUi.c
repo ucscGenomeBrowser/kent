@@ -4625,9 +4625,9 @@ cart = theCart;
  * than a program error, so hUserAbort, which keeps it out of the stack dumps. */
 track = cartOptionalString(cart, "g");
 if (isEmpty(track))
-    hUserAbort("This page needs to know which track to show, and the address it was reached by "
-               "does not name one.  Open a track's settings from the browser, or add the track "
-               "name to the address with the g parameter, e.g. hgTrackUi?db=hg38&g=knownGene");
+    hUserAbort("This page's address does not include a track name.  Add the track name to the "
+               "address with the g parameter, e.g. hgTrackUi?db=hg38&g=knownGene, or open a "
+               "track's settings from the Genome Browser.");
 getDbAndGenome(cart, &database, &ignored, NULL);
 initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));

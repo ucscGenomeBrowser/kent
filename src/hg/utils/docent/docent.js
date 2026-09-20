@@ -372,6 +372,8 @@ const T_START = Date.now();
   await ctx.addInitScript(CURSOR_INIT, { box: CURSOR_BOX, svg: CURSOR_SVG });
   await ctx.addInitScript(() => { try { localStorage.setItem('hgTracks_hideTutorial', '1'); } catch (e) {} });
   const page = await ctx.newPage();
+  const T_REC = Date.now();        // the recorder starts with the page; see FLASH below
+  const shotSecs = [];             // when each shot: was taken, seconds into the recording
   const cur = { x: 120, y: 120 };
   const pinnedTips = [];   // recorded mouseover tooltips for the next pinShot (per view)
 
@@ -679,6 +681,7 @@ const T_START = Date.now();
       // unusable as a figure. Capture the viewport only, i.e. the top of the page.
       await page.screenshot({ path: p });
     }
+    shotSecs.push((Date.now() - T_REC) / 1000);
     console.log('SHOT', p);
     await sleep(SHOTHOLD);
   }
@@ -2425,7 +2428,43 @@ const T_START = Date.now();
   const vdir = path.join(HERE, '.vid_' + base);
   const webm = fs.readdirSync(vdir).filter(f => f.endsWith('.webm')).map(f => path.join(vdir, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
   const FF = execFileSync('python3', ['-c', 'import imageio_ffmpeg,sys;sys.stdout.write(imageio_ffmpeg.get_ffmpeg_exe())']).toString().trim();
-  execFileSync(FF, ['-y', '-loglevel', 'error', '-i', webm, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '22', '-preset', 'veryfast', '-movflags', '+faststart', OUTMP4]);
+  // THE CAPTURE ARTIFACT, and why the transcode is where it is dealt with.
+  //
+  // Playwright's screenshot captures from the same surface the video recorder reads, so a
+  // `shot:` taken while recording can leave ONE bad frame in the video: the track image
+  // painted on a grey, unpainted page. It is a race -- a re-render may or may not carry
+  // it -- and a sweep of 46 finished tours found it in 24. Proved by rendering a tour with
+  // every `shot:` removed, which is always clean.
+  //
+  // It cannot be fixed at the capture. CDP's Page.captureScreenshot with fromSurface:false
+  // does keep the recorder out of it, but Chromium then IGNORES the clip and answers with
+  // the whole viewport, so every still would need cropping and a taller-than-viewport
+  // image could not be captured at all. Measured, not assumed.
+  //
+  // So the frame is dropped here instead, in the one encode that was going to happen
+  // anyway. Nothing is re-encoded twice and the stills are untouched. The search is
+  // narrowed to the moments a shot was actually taken (shotSecs), so an ordinary dark
+  // frame in the tour itself is never a candidate. Refs #37892, found on #38364.
+  const FPS = 25, DIP = 20, NEAR = 0.5;
+  let vfilter = null;
+  if (shotSecs.length) {
+    const stats = execFileSync(FF, ['-loglevel', 'error', '-i', webm, '-vf',
+      `fps=${FPS},scale=160:-1,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-`,
+      '-f', 'null', '-'], { maxBuffer: 1 << 28 }).toString();
+    const y = [...stats.matchAll(/YAVG=([0-9.]+)/g)].map(m => +m[1]);
+    const bad = [];
+    for (let i = 1; i < y.length - 1; i++)
+      if (y[i] < y[i - 1] - DIP && y[i] < y[i + 1] - DIP &&
+          shotSecs.some(t => Math.abs(t - i / FPS) < NEAR)) bad.push(i);
+    if (bad.length) {
+      vfilter = `fps=${FPS},select='not(${bad.map(i => `eq(n\,${i})`).join('+')})',setpts=N/${FPS}/TB`;
+      console.log(`  (dropped ${bad.length} capture-artifact frame(s) at ` +
+                  bad.map(i => (i / FPS).toFixed(2) + 's').join(', ') + ')');
+    }
+  }
+  execFileSync(FF, ['-y', '-loglevel', 'error', '-i', webm,
+    ...(vfilter ? ['-vf', vfilter, '-r', String(FPS)] : []),
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '22', '-preset', 'veryfast', '-movflags', '+faststart', OUTMP4]);
   fs.rmSync(vdir, { recursive: true, force: true });
   if (process.env.DOCENT_TIME) console.log(`--- mp4 transcode: ${((Date.now() - tVid) / 1000).toFixed(1)}s`);
   console.log('DONE ->', OUTMP4, '| stills in', STILLDIR,

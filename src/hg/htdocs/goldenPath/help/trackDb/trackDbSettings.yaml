@@ -1744,6 +1744,40 @@
   format: colorByStrand <red,green,blue> <red,green,blue>
   examples:
   - colorByStrand 255,0,0 0,0,255
+- name: denseClick
+  types:
+  - bed
+  - bigBed
+  - genePred
+  - bigGenePred
+  - psl
+  - bigPsl
+  roles:
+  - leaf
+  category: bigBed - Item or Region Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: In dense mode the whole track row is normally one link that switches the track to pack, so
+    a click cannot reach an item.
+  description: 'In dense mode the whole track row is normally one link that switches the track to pack,
+    so a click cannot reach an item. With denseClick on each item on the dense row gets its own link to
+    its details page, and its own mouseover. A click on a part of the row that holds no item still switches
+    the track to pack, as does a click on the center label or the visibility menu you get by right-clicking
+    the row.
+
+    Items are still drawn the way dense always draws them, all on one row, so the track keeps its height.
+    This is the difference from squish , which also gives every item a link but puts overlapping items
+    on separate rows.
+
+    Where several items fall under the same pixel only the first one can be clicked, and at most one link
+    is made per pixel of the row. A track drawn from summary data rather than from items, which is what
+    a bigBed does when zoomed out far enough, has nothing to link and is unaffected.
+
+    The setting is inherited, so putting it on a composite turns it on for every subtrack.'
+  format: denseClick <on/off>
+  examples:
+  - denseClick on
 - name: denseCoverage
   types:
   - bigBed

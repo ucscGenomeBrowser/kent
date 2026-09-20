@@ -286,7 +286,15 @@ hgsql hg38 -Ne "select searchName, shortCircuit, searchPriority from hgFindSpec_
 #   chr7:27,000,000-28,000,000 (1 Mb)    1937 px
 #   chr7 (whole chromosome)              3345 px
 # There is no automatic fallback at any of those, so the stanza has the same
-# maxWindowCoverage 200000 as methaDory. Above 200 kb the track draws as a coverage
-# graph, 81 px, and below it stays in pack with the probe IDs, which is the point of
-# zooming in. The 110 kb view is still tall; a reader who does not want the labels can
-# switch that one to squish, 121 px.
+# maxWindowCoverage as methaDory. It was 200000 at first and raised to 10000000 on
+# 2026-09-18, because 200 kb sent most gene-neighbourhood views to the coverage graph.
+# Above that the track draws as a coverage graph, 81 px, and below it stays in pack.
+#
+# Heights at 1100 px wide, HOXA hot spot unless noted, for the tall views this allows:
+#                                       epigenCentral   methaDory
+#   200 kb                pack             1281 px       1889 px
+#   1 Mb                  pack             1937 px       5729 px
+#   5 Mb                  pack             2129 px       7777 px
+#   10 Mb                 pack             2193 px       8273 px
+#   10 Mb                 squish            553 px        825 px
+#   10 Mb, typical region pack              353 px       2769 px

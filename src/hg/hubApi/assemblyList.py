@@ -44,7 +44,7 @@ topPriorityNames = [
     'GCF_016699485.2',	# GRCg7b Chicken
     'GCF_003957565.2',	# bTaeGut1.4 Zebra finch
     'GCF_049306965.1',	# GRCz12tu Zebrafish
-    'GCA_052040795.1',	# GRCz12ab Zebrafish
+    'GCF_052040795.1',	# GRCz12ab Zebrafish
     'mm10',
     'dm6',
     'danRer11',

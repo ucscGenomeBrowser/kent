@@ -433,9 +433,8 @@ if (fromProvider)
          * at all, and CILogon is the first case of it (#38339). */
         if (isNotEmpty(unverified))
             hPrintf("<p>You signed in with %s, and %s does not tell us whether the email "
-                "address it gave us really belongs to you, so we asked you for one. No %s "
-                "account uses <b>%s</b> yet, so we are making a new account for it. Confirming "
-                "the address is the last step.</p>",
+                "address it gave us belongs to you. A new %s account has been created because "
+                "no account uses <b>%s</b>.</p>",
                 encProvider, encProvider, brwName, encAddress);
         else
             hPrintf("<p>You signed in with %s, and %s did not tell us an email address, so we "
@@ -2534,10 +2533,10 @@ if (isEmpty(email) && unverified != NULL)
     {
     char *encUnverified = htmlEncode(unverified);
     hPrintf("<p>%s gave us the email address <b>%s</b>, but does not tell us whether that "
-        "address really belongs to you, so we cannot use it to sign you in to an account that "
-        "already has it. Enter an address below and confirm it once; after that this sign-in "
-        "will work on its own. If you already have an account, use another sign-in option "
-        "instead.</p>", label, encUnverified);
+        "address belongs to you. So we cannot use it to sign you in, even if an account "
+        "already has this address. Enter your email address below. Once it is confirmed, %s "
+        "will sign you in directly. If you already have an account, use another sign-in "
+        "option instead.</p>", label, encUnverified, label);
     freeMem(encUnverified);
     }
 else if (isEmpty(email))
@@ -2686,18 +2685,16 @@ if (providerEmail == NULL)
         char *unverified = oauthUnverifiedEmail();
         if ((unverified != NULL) && sameWord(unverified, email))
             safef(buf, sizeof(buf),
-                "An account with this email address already exists. %s gave us that address but "
-                "does not tell us that it is yours, so we cannot sign you in to that account. To "
-                "reach it, sign in with a provider that does confirm your email address, or with "
-                "your username and password. To create a new account instead, enter a different "
-                "email address.", oauthProviderLabel(provider));
+                "An account with this email address already exists. To sign in to that account, "
+                "use a sign-in option that verifies your email address, or use your username and "
+                "password. To create a new account instead, enter a different email address.");
         else
             safef(buf, sizeof(buf),
                 "An account with this email address already exists. %s did not give us that "
-                "address, so we cannot tell that it is yours and cannot sign you in to that "
-                "account. To reach it, sign in with a provider that does give us your email "
-                "address, or with your username and password. To create a new account instead, "
-                "enter a different email address.", oauthProviderLabel(provider));
+                "address, so we cannot tell that it belongs to you. To sign in to that account, "
+                "use a sign-in option that verifies your email address, or use your username and "
+                "password. To create a new account instead, enter a different email address.",
+                oauthProviderLabel(provider));
         freez(&errMsg);
         errMsg = cloneString(buf);
         completeAccountPage(conn);

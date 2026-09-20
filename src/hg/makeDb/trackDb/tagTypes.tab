@@ -122,6 +122,7 @@ defaultMaf wigMaf
 defaultMaxWeight bed
 defaultGroupBy *
 defaultSortField *
+denseClick bigBed bed bigPsl genePred bigGenePred psl
 denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *

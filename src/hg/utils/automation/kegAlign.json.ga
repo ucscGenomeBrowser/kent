@@ -56,7 +56,7 @@
     ],
     "format-version": "0.1",
     "license": "MIT",
-    "name": "kegAlign_2026-06-11",
+    "name": "kegAlign_2026-09-19",
     "report": {
         "markdown": "\n# Workflow Execution Report\n\n## Workflow Inputs\n```galaxy\ninvocation_inputs()\n```\n\n## Workflow Outputs\n```galaxy\ninvocation_outputs()\n```\n\n## Workflow\n```galaxy\nworkflow_display()\n```\n"
     },
@@ -84,7 +84,7 @@
             "tool_state": "{\"default\": \"both\", \"multiple\": false, \"validators\": [], \"restrictions\": [\"both\", \"minus\", \"plus\"], \"parameter_type\": \"text\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "4bd8509b-bd3c-458e-bec7-8eb33693918a",
+            "uuid": "67512870-f9e0-48ff-916b-6d15a0014ec2",
             "when": null,
             "workflow_outputs": []
         },
@@ -111,7 +111,7 @@
             "tool_state": "{\"optional\": true, \"tag\": null}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "98c64d32-3f93-46c0-8d65-ac602eb2b6cf",
+            "uuid": "d0434f02-e8fd-42de-bcdf-a1889af1e042",
             "when": null,
             "workflow_outputs": []
         },
@@ -138,7 +138,7 @@
             "tool_state": "{\"default\": 1, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "a9327d57-01f6-4e5d-908c-3d88a99fd0b2",
+            "uuid": "ecdda3c3-5fa6-40a8-9f0d-9a39799f52c5",
             "when": null,
             "workflow_outputs": []
         },
@@ -165,7 +165,7 @@
             "tool_state": "{\"default\": true, \"validators\": [], \"parameter_type\": \"boolean\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "c871c94d-d1e8-4cc0-ab18-0d1b6413dcb8",
+            "uuid": "5354337b-6de3-4fea-ba0d-f204695abd42",
             "when": null,
             "workflow_outputs": []
         },
@@ -192,7 +192,7 @@
             "tool_state": "{\"default\": 910, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "abf41b9c-e453-463f-986c-34b893384c21",
+            "uuid": "8258818a-9e92-446f-a08c-ab5c98069e20",
             "when": null,
             "workflow_outputs": []
         },
@@ -219,7 +219,7 @@
             "tool_state": "{\"default\": 3000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "b9c13a54-08e7-4007-bfde-52e20fcc6a9a",
+            "uuid": "5a9af1d2-3479-40fc-bbb1-445b03bda9eb",
             "when": null,
             "workflow_outputs": []
         },
@@ -246,7 +246,7 @@
             "tool_state": "{\"default\": 9400, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "93652cc4-7c1a-4ec3-8928-d30e6f8a59dc",
+            "uuid": "fc0cbc90-e019-4577-8155-efd439da2e14",
             "when": null,
             "workflow_outputs": []
         },
@@ -273,7 +273,7 @@
             "tool_state": "{\"default\": 3000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "e97d87e0-2df4-494d-af78-c7b49664f027",
+            "uuid": "ef5abad9-d4ba-4f78-b2ef-6aef4a450203",
             "when": null,
             "workflow_outputs": []
         },
@@ -300,7 +300,7 @@
             "tool_state": "{\"default\": 3000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "d67c9c1e-024f-4ec1-8f9b-3e0fb53f2122",
+            "uuid": "addb46d7-89f9-4894-a350-30ecfd3129fa",
             "when": null,
             "workflow_outputs": []
         },
@@ -327,7 +327,7 @@
             "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": \"\"}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "85fb7a10-67cf-42df-b1d8-ba4a90c07e2e",
+            "uuid": "13147c3c-0050-4935-9707-f70ebcee616a",
             "when": null,
             "workflow_outputs": []
         },
@@ -354,7 +354,7 @@
             "tool_state": "{\"default\": 1000, \"validators\": [{\"min\": null, \"max\": null, \"negate\": false, \"type\": \"in_range\"}], \"parameter_type\": \"integer\", \"optional\": false}",
             "tool_version": null,
             "type": "parameter_input",
-            "uuid": "a5c62d0c-7ed5-4dfe-84b9-8afaabc3f8ef",
+            "uuid": "cfbe852e-b6c5-4bff-b03e-867ebecbe53a",
             "when": null,
             "workflow_outputs": []
         },
@@ -381,7 +381,7 @@
             "tool_state": "{\"optional\": false, \"format\": [\"fasta\"], \"tag\": null}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "6e8cdde2-a9f4-4ee5-936d-5eee44c1e257",
+            "uuid": "5323d547-c5ac-4840-8500-e729199a8999",
             "when": null,
             "workflow_outputs": []
         },
@@ -408,7 +408,7 @@
             "tool_state": "{\"optional\": false, \"tag\": null}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "166abb8b-dd9b-448b-9925-2ecd116b0ed9",
+            "uuid": "6298e9ce-75a5-4c32-9878-1997df92229d",
             "when": null,
             "workflow_outputs": []
         },
@@ -435,13 +435,13 @@
             "tool_state": "{\"optional\": true, \"tag\": null}",
             "tool_version": null,
             "type": "data_input",
-            "uuid": "f86d7c3c-b66c-42eb-863d-f027cc717dde",
+            "uuid": "295c7681-a116-41ce-88b6-9d134154709e",
             "when": null,
             "workflow_outputs": []
         },
         "14": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
             "errors": null,
             "id": 14,
             "input_connections": {
@@ -464,24 +464,24 @@
                 "top": 775.6800560140603
             },
             "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
             "tool_shed_repository": {
-                "changeset_revision": "ab83aa685821",
+                "changeset_revision": "30b60202d990",
                 "name": "text_processing",
                 "owner": "bgruening",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
             "tool_state": "{\"code\": \"BEGIN{FS=\\\" \\\"} /^>/ {print $1; next} {print}\", \"infile\": {\"__class__\": \"ConnectedValue\"}, \"variables\": [], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "9.5+galaxy3",
+            "tool_version": "9.11+galaxy0",
             "type": "tool",
-            "uuid": "1d736295-f9d4-40b7-9140-d6e4ab905ba8",
+            "uuid": "5daa6684-45e8-421a-947e-042f128d797e",
             "when": null,
             "workflow_outputs": []
         },
         "15": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
             "errors": null,
             "id": 15,
             "input_connections": {
@@ -504,24 +504,24 @@
                 "top": 923.0842722787343
             },
             "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy3",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
             "tool_shed_repository": {
-                "changeset_revision": "ab83aa685821",
+                "changeset_revision": "30b60202d990",
                 "name": "text_processing",
                 "owner": "bgruening",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
             "tool_state": "{\"code\": \"BEGIN{FS=\\\" \\\"} /^>/ {print $1; next} {print}\", \"infile\": {\"__class__\": \"ConnectedValue\"}, \"variables\": [], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "9.5+galaxy3",
+            "tool_version": "9.11+galaxy0",
             "type": "tool",
-            "uuid": "5b8d95b6-7fd1-4447-ba6f-35fabc159ffb",
+            "uuid": "f0276fab-94f9-4346-9a30-af64e0896cb5",
             "when": null,
             "workflow_outputs": []
         },
         "16": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy3",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.3.1+galaxy0",
             "errors": null,
             "id": 16,
             "input_connections": {
@@ -585,10 +585,6 @@
                 },
                 {
                     "description": "runtime parameter for tool KegAlign",
-                    "name": "query"
-                },
-                {
-                    "description": "runtime parameter for tool KegAlign",
                     "name": "scoring_options"
                 },
                 {
@@ -602,10 +598,6 @@
                 {
                     "description": "runtime parameter for tool KegAlign",
                     "name": "sequence_options"
-                },
-                {
-                    "description": "runtime parameter for tool KegAlign",
-                    "name": "target"
                 },
                 {
                     "description": "runtime parameter for tool KegAlign",
@@ -629,30 +621,30 @@
                 "top": 43.847290417174904
             },
             "post_job_actions": {},
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.1.2.9+galaxy3",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/kegalign/kegalign/0.3.1+galaxy0",
             "tool_shed_repository": {
-                "changeset_revision": "c05177db395f",
+                "changeset_revision": "142d9964568d",
                 "name": "kegalign",
                 "owner": "richard-burhans",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"developer\": {\"alignment_type\": \"vertebrates_default\"}, \"gapped_extension_options\": {\"ydrop\": {\"__class__\": \"ConnectedValue\"}, \"gappedthresh\": {\"__class__\": \"ConnectedValue\"}, \"notrivial\": false}, \"interpolation_options\": {\"inner\": {\"__class__\": \"ConnectedValue\"}}, \"output_options\": {\"format\": {\"format_selector\": \"axt\", \"__current_case__\": 4, \"axt_type\": \"axt\"}}, \"query\": {\"__class__\": \"RuntimeValue\"}, \"scoring_options\": {\"scoring\": {\"__class__\": \"RuntimeValue\"}, \"ambiguous_selector\": \"x\", \"ambiguous_params\": {\"set_ambiguous_params_selector\": \"false\", \"__current_case__\": 0}}, \"seeding_options\": {\"seed\": {\"seed_selector\": \"12of19\", \"__current_case__\": 0}, \"step\": {\"__class__\": \"ConnectedValue\"}, \"notransition\": {\"__class__\": \"ConnectedValue\"}}, \"sequence_options\": {\"strand_selector\": {\"__class__\": \"ConnectedValue\"}}, \"system_options\": {\"wga_chunk_size\": \"250000\", \"lastz_interval_size\": \"10000000\", \"seq_block_size\": \"400000000\", \"num_gpu\": \"-1\", \"debug\": false}, \"target\": {\"__class__\": \"RuntimeValue\"}, \"ungapped_extension_options\": {\"xdrop\": {\"__class__\": \"ConnectedValue\"}, \"hspthresh\": {\"__class__\": \"ConnectedValue\"}, \"noentropy\": false}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"developer\": {\"alignment_type\": \"vertebrates_default\"}, \"gapped_extension_options\": {\"ydrop\": {\"__class__\": \"ConnectedValue\"}, \"gappedthresh\": {\"__class__\": \"ConnectedValue\"}, \"notrivial\": false}, \"interpolation_options\": {\"inner\": {\"__class__\": \"ConnectedValue\"}}, \"output_options\": {\"format\": {\"format_selector\": \"axt\", \"__current_case__\": 4, \"axt_type\": \"axt\"}}, \"query\": {\"__class__\": \"ConnectedValue\"}, \"scoring_options\": {\"scoring\": {\"__class__\": \"ConnectedValue\"}, \"ambiguous_selector\": \"x\", \"ambiguous_params\": {\"set_ambiguous_params_selector\": \"false\", \"__current_case__\": 0}}, \"seeding_options\": {\"seed\": {\"seed_selector\": \"12of19\", \"__current_case__\": 0}, \"step\": {\"__class__\": \"ConnectedValue\"}, \"notransition\": {\"__class__\": \"ConnectedValue\"}}, \"sequence_options\": {\"strand_selector\": {\"__class__\": \"ConnectedValue\"}}, \"system_options\": {\"wga_chunk_size\": \"250000\", \"lastz_interval_size\": \"10000000\", \"seq_block_size\": \"400000000\", \"num_gpu\": \"-1\", \"debug\": false}, \"target\": {\"__class__\": \"ConnectedValue\"}, \"ungapped_extension_options\": {\"xdrop\": {\"__class__\": \"ConnectedValue\"}, \"hspthresh\": {\"__class__\": \"ConnectedValue\"}, \"noentropy\": false}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "0.1.2.9+galaxy3",
+            "tool_version": "0.3.1+galaxy0",
             "type": "tool",
-            "uuid": "7bd758b4-e2cc-4d43-8612-3cd939405586",
+            "uuid": "719fe6b1-be63-4565-b765-5ba6c8580ead",
             "when": null,
             "workflow_outputs": [
                 {
                     "label": "kegalign_out",
                     "output_name": "kegalign_output",
-                    "uuid": "24f83c68-0256-4320-a26f-89c323a9fb00"
+                    "uuid": "5d5c3555-3c13-4259-acc3-40d957148595"
                 }
             ]
         },
         "17": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy7",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy8",
             "errors": null,
             "id": 17,
             "input_connections": {
@@ -661,12 +653,7 @@
                     "output_name": "kegalign_output"
                 }
             },
-            "inputs": [
-                {
-                    "description": "runtime parameter for tool Batched LASTZ",
-                    "name": "input"
-                }
-            ],
+            "inputs": [],
             "label": "batched_lastz_step",
             "name": "Batched LASTZ",
             "outputs": [
@@ -688,34 +675,34 @@
                     "output_name": "output"
                 }
             },
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy7",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/richard-burhans/batched_lastz/batched_lastz/1.04.22+galaxy8",
             "tool_shed_repository": {
-                "changeset_revision": "8cf5c6162cae",
+                "changeset_revision": "47c147eb546b",
                 "name": "batched_lastz",
                 "owner": "richard-burhans",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"developer\": {\"debug_enabled\": false, \"alignment_type\": \"vertebrates_default\"}, \"input\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"developer\": {\"debug_enabled\": false, \"alignment_type\": \"vertebrates_default\"}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "1.04.22+galaxy7",
+            "tool_version": "1.04.22+galaxy8",
             "type": "tool",
-            "uuid": "cd784f91-7a6a-4f48-847d-2761981ca7fe",
+            "uuid": "a894990f-b08c-4842-a7a3-d2890286ef27",
             "when": null,
             "workflow_outputs": [
                 {
                     "label": "batched_lastz_out",
                     "output_name": "output",
-                    "uuid": "8acf1b56-2262-4e1d-ad4e-23b4810d3011"
+                    "uuid": "f0116202-5822-4de7-ba6c-2fd1f5fb197e"
                 }
             ]
         },
         "18": {
             "annotation": "",
-            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_axtchain/ucsc_axtchain/482+galaxy1",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_axtchain/ucsc_axtchain/482+galaxy2",
             "errors": null,
             "id": 18,
             "input_connections": {
-                "in_axt": {
+                "in_aln": {
                     "id": 17,
                     "output_name": "output"
                 },
@@ -743,6 +730,10 @@
             "inputs": [
                 {
                     "description": "runtime parameter for tool axtChain",
+                    "name": "in_aln"
+                },
+                {
+                    "description": "runtime parameter for tool axtChain",
                     "name": "linear_gap_options"
                 }
             ],
@@ -767,24 +758,24 @@
                     "output_name": "out"
                 }
             },
-            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_axtchain/ucsc_axtchain/482+galaxy1",
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_axtchain/ucsc_axtchain/482+galaxy2",
             "tool_shed_repository": {
-                "changeset_revision": "64d732725a73",
+                "changeset_revision": "ac3a3feb4cf1",
                 "name": "ucsc_axtchain",
                 "owner": "iuc",
                 "tool_shed": "toolshed.g2.bx.psu.edu"
             },
-            "tool_state": "{\"in_axt\": {\"__class__\": \"ConnectedValue\"}, \"in_query\": {\"__class__\": \"ConnectedValue\"}, \"in_target\": {\"__class__\": \"ConnectedValue\"}, \"linear_gap_options\": {\"linear_gap\": \"linear_gap_file\", \"__current_case__\": 2, \"lineargap_input\": {\"__class__\": \"ConnectedValue\"}}, \"minScore\": {\"__class__\": \"ConnectedValue\"}, \"scoreScheme\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"details_output\": false, \"in_aln\": {\"__class__\": \"RuntimeValue\"}, \"in_axt\": {\"__class__\": \"ConnectedValue\"}, \"in_query\": {\"__class__\": \"ConnectedValue\"}, \"in_target\": {\"__class__\": \"ConnectedValue\"}, \"linear_gap_options\": {\"linear_gap\": \"linear_gap_file\", \"__current_case__\": 2, \"lineargap_input\": {\"__class__\": \"ConnectedValue\"}}, \"minScore\": {\"__class__\": \"ConnectedValue\"}, \"scoreScheme\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
             "tool_uuid": null,
-            "tool_version": "482+galaxy1",
+            "tool_version": "482+galaxy2",
             "type": "tool",
-            "uuid": "c248d115-b952-4b3a-ab3b-ed91a94ea6af",
+            "uuid": "9df4713c-f411-4da6-b4a5-372adf08a69d",
             "when": null,
             "workflow_outputs": [
                 {
                     "label": "all_chain",
                     "output_name": "out",
-                    "uuid": "d3eff1f8-a6e8-4af6-83bd-9a5f108d5bff"
+                    "uuid": "cb8ee9ae-03f4-41ac-93da-f9f14fbfc14e"
                 }
             ]
         },
@@ -839,13 +830,13 @@
             "tool_uuid": null,
             "tool_version": "482+galaxy0",
             "type": "tool",
-            "uuid": "3bbdbbe9-c326-49f3-ad76-72c46e90242f",
+            "uuid": "b202cc57-8925-491f-bfe8-e7d38ce3b257",
             "when": null,
             "workflow_outputs": [
                 {
                     "label": "chainSwap",
                     "output_name": "out",
-                    "uuid": "da08bdb1-37c4-40a8-b077-49558df48985"
+                    "uuid": "e795d6e9-c3bf-47e1-af86-483a818b4ffe"
                 }
             ]
         },
@@ -887,22 +878,6 @@
                 "annotation": "",
                 "comments": [
                     {
-                        "color": "none",
-                        "data": {
-                            "text": "Assemblies in fasta format, masked. "
-                        },
-                        "id": 1,
-                        "position": [
-                            24.800000000000068,
-                            234.51597279574764
-                        ],
-                        "size": [
-                            310,
-                            55
-                        ],
-                        "type": "markdown"
-                    },
-                    {
                         "child_comments": [
                             1
                         ],
@@ -924,6 +899,22 @@
                             276
                         ],
                         "type": "frame"
+                    },
+                    {
+                        "color": "none",
+                        "data": {
+                            "text": "Assemblies in fasta format, masked. "
+                        },
+                        "id": 1,
+                        "position": [
+                            24.800000000000068,
+                            234.51597279574764
+                        ],
+                        "size": [
+                            310,
+                            55
+                        ],
+                        "type": "markdown"
                     }
                 ],
                 "creator": [
@@ -1028,7 +1019,7 @@
                     },
                     "3": {
                         "annotation": "",
-                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "errors": null,
                         "id": 3,
                         "input_connections": {
@@ -1051,16 +1042,16 @@
                             "top": 369.9560090641513
                         },
                         "post_job_actions": {},
-                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "tool_shed_repository": {
-                            "changeset_revision": "c41d78ae5fee",
+                            "changeset_revision": "30b60202d990",
                             "name": "text_processing",
                             "owner": "bgruening",
                             "tool_shed": "toolshed.g2.bx.psu.edu"
                         },
                         "tool_state": "{\"code\": \"BEGIN{FS=\\\" \\\"} /^>/ {print $1; next} {print}\", \"infile\": {\"__class__\": \"ConnectedValue\"}, \"variables\": [], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
                         "tool_uuid": null,
-                        "tool_version": "9.5+galaxy2",
+                        "tool_version": "9.11+galaxy0",
                         "type": "tool",
                         "uuid": "1d736295-f9d4-40b7-9140-d6e4ab905ba8",
                         "when": null,
@@ -1068,7 +1059,7 @@
                     },
                     "4": {
                         "annotation": "",
-                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "errors": null,
                         "id": 4,
                         "input_connections": {
@@ -1091,16 +1082,16 @@
                             "top": 545.2584925326347
                         },
                         "post_job_actions": {},
-                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "tool_shed_repository": {
-                            "changeset_revision": "c41d78ae5fee",
+                            "changeset_revision": "30b60202d990",
                             "name": "text_processing",
                             "owner": "bgruening",
                             "tool_shed": "toolshed.g2.bx.psu.edu"
                         },
                         "tool_state": "{\"code\": \"BEGIN{FS=\\\" \\\"} /^>/ {print $1; next} {print}\", \"infile\": {\"__class__\": \"ConnectedValue\"}, \"variables\": [], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
                         "tool_uuid": null,
-                        "tool_version": "9.5+galaxy2",
+                        "tool_version": "9.11+galaxy0",
                         "type": "tool",
                         "uuid": "5b8d95b6-7fd1-4447-ba6f-35fabc159ffb",
                         "when": null,
@@ -1266,7 +1257,7 @@
                     },
                     "9": {
                         "annotation": "",
-                        "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/482+galaxy0",
+                        "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/502+galaxy0",
                         "errors": null,
                         "id": 9,
                         "input_connections": {
@@ -1297,16 +1288,16 @@
                             "top": 0.0
                         },
                         "post_job_actions": {},
-                        "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/482+galaxy0",
+                        "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/502+galaxy0",
                         "tool_shed_repository": {
-                            "changeset_revision": "9f2d2c96a189",
+                            "changeset_revision": "ca3572fb1eab",
                             "name": "ucsc_chainantirepeat",
                             "owner": "iuc",
                             "tool_shed": "toolshed.g2.bx.psu.edu"
                         },
                         "tool_state": "{\"in_chain\": {\"__class__\": \"ConnectedValue\"}, \"in_query\": {\"__class__\": \"ConnectedValue\"}, \"in_target\": {\"__class__\": \"ConnectedValue\"}, \"minScore\": null, \"noCheckScore\": null, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
                         "tool_uuid": null,
-                        "tool_version": "482+galaxy0",
+                        "tool_version": "502+galaxy0",
                         "type": "tool",
                         "uuid": "b0738b52-0d84-4877-8b9b-b8392cd7c2e0",
                         "when": null,
@@ -1614,13 +1605,13 @@
             },
             "tool_id": null,
             "type": "subworkflow",
-            "uuid": "f52733e2-de01-47f1-b632-8fb0922d2b2e",
+            "uuid": "6a620c92-eb8b-4d8e-a4bf-1d1f6dccd9d4",
             "when": null,
             "workflow_outputs": [
                 {
                     "label": "lift.over.chain",
                     "output_name": "liftover_chain_file",
-                    "uuid": "e6e778ba-231e-43e8-afca-04999e233b38"
+                    "uuid": "5dc6e360-1845-49c3-92d2-7a358ebdcd05"
                 }
             ]
         },
@@ -1662,22 +1653,6 @@
                 "annotation": "",
                 "comments": [
                     {
-                        "color": "none",
-                        "data": {
-                            "text": "Assemblies in fasta format, masked. "
-                        },
-                        "id": 1,
-                        "position": [
-                            24.800000000000068,
-                            234.51597279574764
-                        ],
-                        "size": [
-                            310,
-                            55
-                        ],
-                        "type": "markdown"
-                    },
-                    {
                         "child_comments": [
                             1
                         ],
@@ -1699,6 +1674,22 @@
                             276
                         ],
                         "type": "frame"
+                    },
+                    {
+                        "color": "none",
+                        "data": {
+                            "text": "Assemblies in fasta format, masked. "
+                        },
+                        "id": 1,
+                        "position": [
+                            24.800000000000068,
+                            234.51597279574764
+                        ],
+                        "size": [
+                            310,
+                            55
+                        ],
+                        "type": "markdown"
                     }
                 ],
                 "creator": [
@@ -1803,7 +1794,7 @@
                     },
                     "3": {
                         "annotation": "",
-                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "errors": null,
                         "id": 3,
                         "input_connections": {
@@ -1826,16 +1817,16 @@
                             "top": 369.9560090641513
                         },
                         "post_job_actions": {},
-                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "tool_shed_repository": {
-                            "changeset_revision": "c41d78ae5fee",
+                            "changeset_revision": "30b60202d990",
                             "name": "text_processing",
                             "owner": "bgruening",
                             "tool_shed": "toolshed.g2.bx.psu.edu"
                         },
                         "tool_state": "{\"code\": \"BEGIN{FS=\\\" \\\"} /^>/ {print $1; next} {print}\", \"infile\": {\"__class__\": \"ConnectedValue\"}, \"variables\": [], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
                         "tool_uuid": null,
-                        "tool_version": "9.5+galaxy2",
+                        "tool_version": "9.11+galaxy0",
                         "type": "tool",
                         "uuid": "1d736295-f9d4-40b7-9140-d6e4ab905ba8",
                         "when": null,
@@ -1843,7 +1834,7 @@
                     },
                     "4": {
                         "annotation": "",
-                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "errors": null,
                         "id": 4,
                         "input_connections": {
@@ -1866,16 +1857,16 @@
                             "top": 545.2584925326347
                         },
                         "post_job_actions": {},
-                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.5+galaxy2",
+                        "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_awk_tool/9.11+galaxy0",
                         "tool_shed_repository": {
-                            "changeset_revision": "c41d78ae5fee",
+                            "changeset_revision": "30b60202d990",
                             "name": "text_processing",
                             "owner": "bgruening",
                             "tool_shed": "toolshed.g2.bx.psu.edu"
                         },
                         "tool_state": "{\"code\": \"BEGIN{FS=\\\" \\\"} /^>/ {print $1; next} {print}\", \"infile\": {\"__class__\": \"ConnectedValue\"}, \"variables\": [], \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
                         "tool_uuid": null,
-                        "tool_version": "9.5+galaxy2",
+                        "tool_version": "9.11+galaxy0",
                         "type": "tool",
                         "uuid": "5b8d95b6-7fd1-4447-ba6f-35fabc159ffb",
                         "when": null,
@@ -2041,7 +2032,7 @@
                     },
                     "9": {
                         "annotation": "",
-                        "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/482+galaxy0",
+                        "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/502+galaxy0",
                         "errors": null,
                         "id": 9,
                         "input_connections": {
@@ -2072,16 +2063,16 @@
                             "top": 0.0
                         },
                         "post_job_actions": {},
-                        "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/482+galaxy0",
+                        "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/ucsc_chainantirepeat/ucsc_chainantirepeat/502+galaxy0",
                         "tool_shed_repository": {
-                            "changeset_revision": "9f2d2c96a189",
+                            "changeset_revision": "ca3572fb1eab",
                             "name": "ucsc_chainantirepeat",
                             "owner": "iuc",
                             "tool_shed": "toolshed.g2.bx.psu.edu"
                         },
                         "tool_state": "{\"in_chain\": {\"__class__\": \"ConnectedValue\"}, \"in_query\": {\"__class__\": \"ConnectedValue\"}, \"in_target\": {\"__class__\": \"ConnectedValue\"}, \"minScore\": null, \"noCheckScore\": null, \"__page__\": 0, \"__rerun_remap_job_id__\": null}",
                         "tool_uuid": null,
-                        "tool_version": "482+galaxy0",
+                        "tool_version": "502+galaxy0",
                         "type": "tool",
                         "uuid": "b0738b52-0d84-4877-8b9b-b8392cd7c2e0",
                         "when": null,
@@ -2389,13 +2380,13 @@
             },
             "tool_id": null,
             "type": "subworkflow",
-            "uuid": "a12d6b50-066d-4b1d-b9fc-1ddc32e481c2",
+            "uuid": "fef3c24f-5f96-4901-85ad-aa87b438db87",
             "when": null,
             "workflow_outputs": [
                 {
                     "label": "swap.lift.over",
                     "output_name": "liftover_chain_file",
-                    "uuid": "852e2cb0-b4dd-476f-9c8b-e86fa30b347e"
+                    "uuid": "a992bf89-03dc-417b-afa9-5cfe100953e1"
                 }
             ]
         }
@@ -2408,6 +2399,6 @@
         "chain",
         "net"
     ],
-    "uuid": "45670dee-8499-4871-bc3a-c8e9391c8220",
-    "version": 1
+    "uuid": "168589f1-fbd7-4255-9d41-432d52d630c0",
+    "version": 5
 }

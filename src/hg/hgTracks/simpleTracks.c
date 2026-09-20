@@ -5046,8 +5046,10 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 {
-// Don't bother if we are imageV2 and a dense child.
-if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+// Don't bother if we are imageV2 and a dense child, unless denseClick is on for
+// this track, in which case the dense row is meant to be clickable per item.
+if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)
+||  denseClickEnabled(tg))
     {
     char *directUrl = trackDbSetting(tg->tdb, "directUrl");
     boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
@@ -5922,6 +5924,58 @@ genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer
                             doButtons);
 }
 
+boolean denseClickEnabled(struct track *tg)
+/* Should a dense row of this track get one clickable map box per item, instead
+ * of a single box that expands the track?  The hg.conf denseClick flag is a
+ * gate over the whole feature: while it is off, which is the default, no track
+ * gets this no matter what its trackDb says.  With the gate on, a track opts in
+ * with a denseClick trackDb setting. */
+{
+if (!cfgOptionBooleanDefault("denseClick", FALSE))
+    return FALSE;
+return trackDbSettingOn(tg->tdb, "denseClick");
+}
+
+static void denseMapItem(struct track *tg, struct hvGfx *hvg, struct slList *item,
+                         int xOff, int y, int width, double scale, char *pixelUsed)
+/* Put down a map box for one item of a dense row, so that a click on it reaches
+ * the item's details page instead of expanding the track.  A dense row can hold
+ * tens of thousands of items, so skip an item whose every pixel already belongs
+ * to an earlier item: that box would sit under the earlier one and could never
+ * be clicked.  This holds the row to at most one box per pixel. */
+{
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int x2 = round((eClp - winStart)*scale) + xOff;
+if (x2 <= x1)
+    x2 = x1 + 1;
+int p1 = x1 - xOff;
+int p2 = x2 - xOff;
+if (p1 < 0)
+    p1 = 0;
+if (p2 > width)
+    p2 = width;
+if (p1 >= p2)
+    return;
+boolean anyFree = FALSE;
+int p;
+for (p = p1;  p < p2;  ++p)
+    {
+    if (!pixelUsed[p])
+        {
+        anyFree = TRUE;
+        pixelUsed[p] = TRUE;
+        }
+    }
+if (!anyFree)
+    return;
+tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+            s, e, x1, y, x2 - x1, tg->heightPer);
+}
+
 static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd,
                                       struct hvGfx *hvg, int xOff, int yOff, int width,
                                       MgFont *font, Color color, enum trackVisibility vis)
@@ -5930,11 +5984,18 @@ static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct slList *item;
 int y = yOff;
+/* In dense the whole row is normally one box that expands the track.  With
+ * denseClick on, each item gets its own box instead; the whole-row box that
+ * doTrackMap puts down afterwards still covers the gaps between items. */
+boolean denseMaps = (vis == tvDense && width > 0 && !tg->mapsSelf && denseClickEnabled(tg));
+char *pixelUsed = (denseMaps ? needMem(width) : NULL);
 for (item = tg->items; item != NULL; item = item->next)
     {
     if (tg->itemColor != NULL)
         color = tg->itemColor(tg, item, hvg);
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    if (denseMaps)
+        denseMapItem(tg, hvg, item, xOff, y, width, scale, pixelUsed);
     if (vis == tvFull)
         {
         /* The doMapItems will make the mapboxes normally but make */
@@ -5992,6 +6053,7 @@ for (item = tg->items; item != NULL; item = item->next)
         y += tg->lineHeight;
         }
     }
+freez(&pixelUsed);
 }
 
 void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
@@ -6281,8 +6343,10 @@ void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
  * Fallback to itemName if there is no mouseOver field.
  * (derived from genericMapItem) */
 {
-// Don't bother if we are imageV2 and a dense child.
-if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
+// Don't bother if we are imageV2 and a dense child, unless denseClick is on for
+// this track, in which case the dense row is meant to be clickable per item.
+if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb)
+&&  !denseClickEnabled(tg))
     return;
 
 struct linkedFeatures *lf = item;
@@ -6829,8 +6893,10 @@ static void bedPlusLabelMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				int x, int y, int width, int height)
 /* Special mouseover text from item->label. (derived from genericMapItem) */
 {
-// Don't bother if we are imageV2 and a dense child.
-if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+// Don't bother if we are imageV2 and a dense child, unless denseClick is on for
+// this track, in which case the dense row is meant to be clickable per item.
+if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)
+|| denseClickEnabled(tg))
     {
     struct bedPlusLabel *bpl = item;;
     char *mouseOverText = isEmpty(bpl->label) ? bpl->bed.name : bpl->label;

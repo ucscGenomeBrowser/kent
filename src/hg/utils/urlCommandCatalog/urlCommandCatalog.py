@@ -323,6 +323,47 @@ SESSIONS = {
                "knows is refused, and so is a save whose required cart "
                "variables are not there yet, rather than minting a link that "
                "would reopen to nothing.  Removed at hgSession.c:1109."),
+        # The marker cartNew leaves behind after a full session load, so the
+        # next hgTracks page can say what was opened.  It is written by the
+        # code rather than typed, but it is an ordinary cart variable, so a
+        # request can supply it, which is why it is described here rather than
+        # accepted as internal state.  That was the mistake made with
+        # hgS_shareAnon above.
+        c("hgS_sessionJustLoaded", "action", "hg/hgTracks/hgTracks.c:12216",
+          value="on", verified=True,
+          note="Set by cartNew at hg/lib/cart.c:973 on a full session load and "
+               "not on a merge, and consumed by showSessionLoadNotice on the "
+               "next hgTracks page, which removes it so the note is shown "
+               "once.  Supplying it on a URL replays the note, and nothing "
+               "else: the text is built from hgS_otherUserName and "
+               "hgS_otherUserSessionName, which stay in the cart after a load, "
+               "and the note is suppressed anyway when a recommended track set "
+               "is active.  The hg.conf knob sessionLoadNotice turns the whole "
+               "note off.  A trackImgOnly render returns before the remove, so "
+               "the marker survives an image-only request and is consumed by "
+               "the next full page."),
+        # The two mirror endpoints are answered in main() before cartNew, so
+        # they are hgSession commands that never meet a cart.  They are
+        # described rather than listed in the hgS_* family below because that
+        # is the part worth knowing: a node asking for a session list must not
+        # create a userDb and sessionDb row here.
+        c("hgS_doSessionListJson", "action", "hg/hgSession/hgSession.c:3153",
+          verified=True, nocart=True,
+          note="Answer this user's saved sessions as JSON.  Read with "
+               "cgiOptionalString in main() before the cart exists, and the "
+               "CGI exits straight after answering, so a request from another "
+               "mirror node makes no cart and no hgcentral row.  hgSession "
+               "builds this URL itself at hgSession.c:2628 when it fans out to "
+               "the other nodes."),
+        c("hgS_doMirrorSessions", "action", "hg/hgSession/hgSession.c:3161",
+          verified=True, nocart=True,
+          note="Ask this server for the sessions saved on our other servers: "
+               "it sends hgS_doSessionListJson to each node, reads the "
+               "answers, and returns the combined list as JSON.  Called by "
+               "hg/js/hgSession.js:769 for the new Sessions page.  Read "
+               "before the cart exists as well, because the fan-out waits on "
+               "other servers long enough that it should not hold a cart "
+               "open."),
         c("hgS_*", "action", "hg/hgSession/hgSession.h:19", value="<varies>",
           note="hgSession's own command family. All transient.",
           members=["hgS_doNewSession", "hgS_doSaveLocal", "hgS_doLoadLocal",

@@ -14,12 +14,12 @@ html episignatures.html
     visibility pack
     itemRgb on
     noScoreFilter on
-    maxWindowCoverage 200000
+    maxWindowCoverage 10000000
     searchIndex name
     skipFields disorders,signatures,loci,deltaBetas,pvalues,studies,disorderSummary
     detailsDynamicTable _jsonSignatures|Episignatures at this CpG site
     urls publications="https://pubmed.ncbi.nlm.nih.gov/$$/"
-    mouseOver ${name}<br>${sigCount} episignature(s): ${disorderSummary}<br>Methylation change: ${direction}, largest delta-beta ${maxAbsDelta}
+    mouseOver <b>Probe:</b> ${name}<br><b>Episignatures at this probe:</b> ${sigCount}<br><b>Disorders:</b> ${disorderSummary}<br><b>Direction and strength:</b> ${direction}<br><b>Largest absolute delta-beta:</b> ${maxAbsDelta}
     filterByRange.maxAbsDelta on
     filter.maxAbsDelta 0:1
     filterLimits.maxAbsDelta 0:1
@@ -47,12 +47,12 @@ html episignatures.html
     itemRgb on
     noScoreFilter on
     tableBrowser off
-    maxWindowCoverage 200000
+    maxWindowCoverage 10000000
     searchIndex name
     skipFields signatureList
     detailsDynamicTable comparisonTable|Episignatures at this CpG site
     urls displayOmim="https://omim.org/entry/$$"
-    mouseOver ${name}<br>${sigCount} episignature(s), strongest is ${displaySignature} (${displayDisorder})<br>Methylation change: ${direction}, delta-beta ${maxAbsDelta}
+    mouseOver <b>Probe:</b> ${name}<br><b>Episignatures at this probe:</b> ${sigCount}<br><b>Strongest episignature:</b> ${displaySignature}<br><b>Disorder:</b> ${displayDisorder}<br><b>OMIM:</b> ${displayOmim}<br><b>Direction:</b> ${direction}<br><b>Absolute delta-beta:</b> ${maxAbsDelta}
     filterByRange.maxAbsDelta on
     filter.maxAbsDelta 0:1
     filterLimits.maxAbsDelta 0:1

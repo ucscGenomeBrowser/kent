@@ -1,0 +1,45 @@
+# #38268 -- STRchive, a weekly otto update from the project's own GitHub releases, and the
+# track added to hg19 and hs1 beside the hg38 one.
+#
+# An otto job is the reason to have this script: a release that arrives empty, or a build
+# that drops an assembly, looks exactly like a quiet morning. So the check is that the
+# track DRAWS a named item at a fixed locus on each assembly it is supposed to be on.
+#
+# hs1 IS NOT CHECKED HERE. On 2026-09-19 hgwdev has strchive on hg19 and hs1 and
+# genome-test has it on hg19 only, so the hs1 half had not been pushed yet. Add a third
+# step when it has.
+#
+# The item name and its coordinates come from the bigBed itself (/gbdb/hg19/strVar/
+# strchive.bb and the hg38 one), not from the page, so a rename or a shift upstream fails
+# this rather than passing quietly. They are read off the map box: the drawn label is in
+# the PNG and no `text:` can see it. The tooltip is asserted with them, because an otto
+# release that lost its extra fields would still draw a box in the right place.
+#
+# `exact: true` keeps it honest about the window: the locus is picked so that this one
+# repeat is the only thing in view, and the container is opened with strVar=show because
+# strchive sits under the Tandem Repeat Variation supertrack.
+proof:
+  - "release-ab 2026-09-19 -- fails on hgwbeta (v503) and passes on genome-test. hgwbeta answers hgTrackUi?db=hg19&g=strchive with `Can't find strchive in track database hg19 chromosome chr1`; the track is not there at all"
+  - "assertion-only 2026-09-19 -- written from #38268 after the hg19 track reached genome-test"
+
+target: genome-test
+db: hg19
+position: chr1:1370000-1372500
+reset: true
+fast: true
+steps:
+  # hg19, the assembly this ticket adds. HMNR7_VWA1 at chr1:1,371,178-1,371,198.
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr1:1370000-1372500&hideTracks=1&strVar=show&strchive=pack&pix=1100"
+  - expect:
+      rows: [ruler, strchive]
+      exact: true
+      has: '#td_data_strchive area[href*="i=HMNR7_VWA1"][href*="o=1371178"][data-tooltip*="Gene:</b> VWA1"]'
+
+  # hg38, which had the track already and must keep it. Same repeat, chr1:1,435,798-1,435,818.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1435000-1436500&hideTracks=1&strVar=show&strchive=pack&pix=1100"
+  # No `exact:` here. strVar is a superTrack and does not pass its setting to its members,
+  # so opening it brings hg38's other repeat tracks up at their own visibilities. Naming
+  # them to hide would rot the day the supertrack gains one.
+  - expect:
+      rows: [strchive]
+      has: '#td_data_strchive area[href*="i=HMNR7_VWA1"][href*="o=1435798"][data-tooltip*="Gene:</b> VWA1"]'

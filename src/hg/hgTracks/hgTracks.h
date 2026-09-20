@@ -745,6 +745,10 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 
+boolean denseClickEnabled(struct track *tg);
+/* Should a dense row of this track get one clickable map box per item, instead */
+/* of a single box that expands the track? */
+
 void mapStatusMessage(char *format, ...)
 /* Write out stuff that will cause a status message to
  * appear when the mouse is over this box. */
