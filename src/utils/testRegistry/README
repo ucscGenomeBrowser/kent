@@ -48,8 +48,14 @@ The docent column names that suite's script for the same ticket, or "-".  Many
 tickets have both, and should: a docent script watches the page and a unit test
 watches the thing the page cannot show.  What the column is really for is
 `unwatched`, the tickets with neither, where nothing anywhere would go red if the
-bug came back.  `check` verifies the script exists and belongs to that ticket, so
-this column rots no more quietly than the other one.
+bug came back.
+
+`check` verifies both values, which matters more than it sounds.  A named script
+has to exist and has to belong to that ticket.  A "-" has to still be true: if
+somebody writes rm<ticket>.docent.yaml later, the check fails and asks for the
+row to be updated.  Without that second half the "-" rows would be the one thing
+in this file nothing verified, and `unwatched` is built entirely out of them, so
+a ticket could sit on that queue long after it had left it.
 
 The rule is about the change, not about where the file lives.  A wording fix that
 happens to touch hg/lib needs no unit test; a performance rewrite inside hgTracks

@@ -14,3 +14,4 @@
 38000	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	out of order, so the sort check fires
 38007	504	lib/tests/pathSimplifyTest.c	rm38007.docent.yaml	library	assertion-only	names a docent script that is not there
 38008	504	lib/tests/pathSimplifyTest.c	rm38303.docent.yaml	library	assertion-only	names another ticket's docent script
+36212	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	its docent script is in the tree but this row says there is none

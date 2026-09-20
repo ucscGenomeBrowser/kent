@@ -19,7 +19,10 @@
 #             test and does not have one.  A suite whose cases are make targets adds
 #             ::target, e.g. tests/makefile::relPath
 #   docent    the browser test that watches the same ticket, from the docent suite in
-#             hg/utils/docent/tests/regress, or "-" when there is none.  Not a second copy
+#             hg/utils/docent/tests/regress, or "-" when there is none.  BOTH values are
+#             checked: a named script must exist and must belong to this ticket, and a "-"
+#             must still be true, so a script written later for a ticket whose row says "-"
+#             fails rather than passing unnoticed.  Not a second copy
 #             of that suite: it is here so "nothing is watching this ticket at all" is a
 #             question the tool can answer, which is the question worth acting on.  A
 #             docent script does not make a unit test unnecessary where the why is

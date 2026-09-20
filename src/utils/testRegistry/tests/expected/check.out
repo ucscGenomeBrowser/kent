@@ -8,5 +8,6 @@ input/bad.tsv:11: ticket 38005: no test, so the evidence column must be -
 input/bad.tsv:15: ticket 38007: hg/utils/docent/tests/regress/rm38007.docent.yaml is not in the tree
 input/bad.tsv:16: ticket 38008: a docent script for this ticket is named rm38008.*, not rm38303.docent.yaml
 input/bad.tsv: ticket 38006 says both covered and waiting
+input/bad.tsv: ticket 36212 says no docent script, but rm36212.docent.yaml is in the tree; put it in the docent column
 input/bad.tsv: rows are not sorted by ticket then test
   exit 1

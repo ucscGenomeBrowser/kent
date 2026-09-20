@@ -22,7 +22,13 @@ are half the value of the table: a ticket nobody has looked at and a ticket
 somebody looked at and could not test are different states, and without them the
 two are indistinguishable.
 
-The docent column names the browser test that watches the same ticket, or "-".
+The docent column names the browser test that watches the same ticket, or "-",
+and BOTH values are checked.  A named script has to exist and has to belong to
+that ticket; a "-" has to still be true, so a script appearing later for a
+ticket whose row says "-" is a failure rather than a silence.  Without that
+second half the "-" rows would be the only thing here nothing verified, and
+`unwatched` -- the list of tickets nothing would catch -- is built entirely out
+of them.
 It is not a second copy of the docent suite: it is here so that "nothing is
 watching this ticket at all" is a question the tool answers, which is the
 question worth acting on.  A docent script does not make a unit test pointless
@@ -54,6 +60,7 @@ covered numbers and redmineCli prints the others.
 """
 
 import argparse
+import glob
 import os
 import sys
 
@@ -187,6 +194,20 @@ def check(rows, fileName=REGISTRY):
         if len({r.docent for r in group}) > 1:
             problems.append("%s: ticket %s names more than one docent script" %
                             (fileName, ticket))
+
+        # A "-" is a claim that no browser test watches this ticket, and
+        # `unwatched` is built out of those claims, so it is checked like any
+        # other.  Somebody writing the docent script is the good outcome here;
+        # the failure exists so the row gets updated rather than going stale and
+        # leaving the ticket on a queue it has left.
+        if all(r.docent == "-" for r in group):
+            found = sorted(glob.glob(os.path.join(KENT_SRC, DOCENT_DIR,
+                                                  "rm%s.*docent.yaml" % ticket)))
+            if found:
+                problems.append("%s: ticket %s says no docent script, but %s "
+                                "is in the tree; put it in the docent column" %
+                                (fileName, ticket,
+                                 os.path.basename(found[0])))
 
     ordered = sorted(rows, key=lambda r: (int(r.ticket) if r.ticket.isdigit()
                                           else 0, r.test))
