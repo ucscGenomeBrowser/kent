@@ -142,6 +142,22 @@ geoMirrorSelfTest: mkdirs
 	HGDB_CONF=output/geoNode.conf ${BIN_DIR}/geoMirrorSelfTester > output/geoMirrorSelfTest
 	diff expected/geoMirrorSelfTest output/geoMirrorSelfTest
 
+# NOT in the test target above, and waiting on one grant.  This is the one test here that
+# WRITES to a central database, so it is pointed at hgcentralregress,
+# which exists for tests and which nothing else reads.  makeHgCentralRegress.sh creates it and
+# is safe to run every time.  login.cookieSalt is set because the sync signature is made with
+# it; the value is a test value and means nothing outside this run.
+hubSpaceKeysTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hubSpaceKeysTester hubSpaceKeysTester.c ${MYLIBS} $L
+	./makeHgCentralRegress.sh > /dev/null
+	echo "include ${HOME}/.hg.conf" > output/regress.conf
+	echo "central.db=hgcentralregress" >> output/regress.conf
+	echo "login.cookieSalt=testSaltForRegressRuns" >> output/regress.conf
+	HGDB_CONF=output/regress.conf ${BIN_DIR}/hubSpaceKeysTester > output/hubSpaceKeysTest
+	diff expected/hubSpaceKeysTest output/hubSpaceKeysTest
+# It runs as soon as central.user has UPDATE and DELETE on hgcentralregress; see
+# makeHgCentralRegress.sh for the grant.  Add it to the test target on that day.
+
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
 
