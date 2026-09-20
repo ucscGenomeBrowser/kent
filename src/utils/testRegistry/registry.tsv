@@ -76,7 +76,7 @@
 38283	504	-	rm38283.docent.yaml	library	-	needs one: description page variables substituted once, and in the container
 38285	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38285.docent.yaml	library	unrecorded	bare codon numbers and ranges, with expected/hgvs/validTerms.txt beside it
 38302	504	-	rm38302.docent.yaml	invisible	-	needs one: an activation token that is missing, empty or older than seven days is invalid
-38303	504	-	rm38303.docent.yaml	invisible	-	needs one: a session file path spelled through a symlinked config directory, which broke 583 saved sessions
+38303	504	hg/lib/tests/trashDirTester.c	rm38303.docent.yaml	invisible	sandbox-ab	a session file path spelled through a symlinked config directory, which broke 583 saved sessions
 38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon
 38313	504	-	-	library	-	needs one: a user's own __ sessions must not be hidden from My Sessions
 38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink
