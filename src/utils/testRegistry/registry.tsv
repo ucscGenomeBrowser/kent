@@ -58,7 +58,7 @@
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it. BLOCKED: dumpTdbAndChildren is static in trackHub.c and its public caller needs a cart
 37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields
-38086	504	-	-	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. BLOCKED: checkGroup is static in customFactory.c and the path needs a cart
+38086	504	-	rm38086.docent.yaml	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: checkGroup is static in customFactory.c and the path needs a cart
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
 38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position. BLOCKED: needs a live cart, so hgcentral rows to read and write
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
@@ -69,7 +69,7 @@
 38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is in hgTracks/bigWigTrack.c
 38248	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38248.docent.yaml	library	assertion-only	a deprecated versioned NP_ accession still maps, through ncbiRefSeqLinkHistorical. The ticket's other half, taking the NEWEST deprecated transcript, is NOT pinned: with the order by removed and with a plain string sort, every term I could build gives identical coordinates, because the versions differ only in UTR ends
 38249	504	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	unrecorded	the target strand of a reverse complemented protein, found in the #38349 review
-38253	504	-	-	perf	-	needs one: item coverage is built from feature runs, not one counter per base. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
+38253	504	-	rm38253.docent.yaml	perf	-	needs one: item coverage is built from feature runs, not one counter per base. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
 38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: the change is in hgTracks.c, the file that holds main
 38256	504	hg/utils/hubCheck/tests/makefile::relPath	-	library	unrecorded	a local hub given by a relative path: bigDataUrl resolved once, not twice
 38260	504	hg/utils/hubCheck/tests/makefile::missingFile	-	library	unrecorded	hubCheck must say something about a bigDataUrl it cannot open
@@ -82,7 +82,7 @@
 38303	504	hg/lib/tests/trashDirTester.c	rm38303.docent.yaml	invisible	sandbox-ab	a session file path spelled through a symlinked config directory, which broke 583 saved sessions
 38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is inside drawing code in hgTracks/simpleTracks.c
 38313	504	hg/lib/tests/snapshotTypeTester.c	-	library	sandbox-ab	the fast snapshotType reader agrees with raFromString, including on a longer tag that starts the same
-38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: doKnownGene is static in hgc.c, 27000 lines and not linkable on its own
+38317	504	-	rm38317.docent.yaml	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: doKnownGene is static in hgc.c, 27000 lines and not linkable on its own
 38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack
 38320	504	lib/tests/faSpeedReadTest.c	-	invisible	unrecorded	the buffer grower and its caller must agree on the size
 38323	504	-	-	library	-	needs one: an api key made on one geo mirror has to work on all of them. BLOCKED: needs hubSpaceKeys rows in hgcentral, which means a test that writes
