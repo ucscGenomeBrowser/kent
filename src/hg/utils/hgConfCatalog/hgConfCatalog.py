@@ -1703,6 +1703,14 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("denseClick", "flag", "hg/hgTracks/simpleTracks.c", default="FALSE",
+          ticket="38364",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/simpleTracks.c.  Came in at 4d36c5c0a9c, "
+               "hgTracks: a dense row can have one clickable map box per "
+               "item, refs #38364.  Needs a description and a gate or knob "
+               "call."),
     ],
 }
 
