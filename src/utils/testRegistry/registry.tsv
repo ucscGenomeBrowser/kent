@@ -83,7 +83,7 @@
 38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack
 38320	504	lib/tests/faSpeedReadTest.c	-	invisible	unrecorded	the buffer grower and its caller must agree on the size
 38323	504	-	-	library	-	needs one: an api key made on one geo mirror has to work on all of them
-38328	504	-	-	invisible	-	needs one: the liftOver accession list passed as an slName list
+38328	504	hg/lib/tests/genarkLiftOverTester.c	-	invisible	sandbox-ab	the accession list is escaped where the values are, and a non-accession never reaches the query
 38335	504	lib/tests/cgiParseTest.c	rm38335.docent.yaml	invisible	unrecorded	a pair with no =value must not lose the variable
 38340	504	hg/hgSession/tests/backupParseTest.c	-	invisible	unrecorded	the same pair, read back out of a session backup
 38340	504	lib/tests/cgiCookieTest.c	-	invisible	unrecorded	the same pair in a cookie header
