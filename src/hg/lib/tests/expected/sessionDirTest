@@ -1,0 +1,19 @@
+current: /userdata/sessions/76/someUser/de19e57883
+legacy:  /userdata/sessions/76/someUser/de19e578
+  current width 10, legacy width 8
+  the legacy name is a prefix of the current one
+
+shape
+  /userdata/sessions/76/someUser/03c7c0ace3
+  spreading directory is 2 characters
+  two users, same session name, same directory? no
+
+no directory configured
+  empty sessionDataDir -> NULL
+
+refused
+  a relative sessionDataDir                aborted
+  hashLen 0                                aborted
+  hashLen 33, past the end of an md5       aborted
+
+0 failures

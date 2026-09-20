@@ -26,7 +26,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest bedItemRgbTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
-	snapshotTypeTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	snapshotTypeTest sessionDirTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -140,6 +140,11 @@ snapshotTypeTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/snapshotTypeTester snapshotTypeTester.c ${MYLIBS} $L
 	${BIN_DIR}/snapshotTypeTester > output/snapshotTypeTest
 	diff expected/snapshotTypeTest output/snapshotTypeTest
+
+sessionDirTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/sessionDirTester sessionDirTester.c ${MYLIBS} $L
+	${BIN_DIR}/sessionDirTester > output/sessionDirTest
+	diff expected/sessionDirTest output/sessionDirTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output

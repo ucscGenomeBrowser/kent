@@ -48,7 +48,7 @@
 # renamed or deleted without coming here.
 #
 #ticket	release	test	docent	why	evidence	note
-10138	504	-	rm10138.docent.yaml	invisible	-	needs one: the session data directory hash went from 8 to 10 hex characters
+10138	504	hg/lib/tests/sessionDirTester.c	rm10138.docent.yaml	invisible	sandbox-ab	the session directory hash is 10 characters and the legacy 8 is a prefix of it
 20824	504	hg/utils/netToBigNet/tests/makefile::simpleTest	-	library	unrecorded	a net converted to bigNet and back, byte compared
 27988	504	-	-	invisible	-	needs one: a server that is not the node hg.conf names has to recognise itself
 36212	504	hg/lib/tests/bedItemRgbTester.c	rm36212.docent.yaml	library	sandbox-ab	an explicit itemRgb on beats the presence of a color setting, in the stanza and from a parent
