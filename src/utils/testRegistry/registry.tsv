@@ -51,7 +51,7 @@
 10138	504	-	rm10138.docent.yaml	invisible	-	needs one: the session data directory hash went from 8 to 10 hex characters
 20824	504	hg/utils/netToBigNet/tests/makefile::simpleTest	-	library	unrecorded	a net converted to bigNet and back, byte compared
 27988	504	-	-	invisible	-	needs one: a server that is not the node hg.conf names has to recognise itself
-36212	504	-	rm36212.docent.yaml	library	-	needs one: an explicit itemRgb on has to beat the presence of a color setting
+36212	504	hg/lib/tests/bedItemRgbTester.c	rm36212.docent.yaml	library	sandbox-ab	an explicit itemRgb on beats the presence of a color setting, in the stanza and from a parent
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it
 37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields

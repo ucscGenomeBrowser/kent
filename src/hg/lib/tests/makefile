@@ -24,7 +24,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
-test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest bedItemRgbTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -105,6 +105,19 @@ mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
 	HGDB_CONF=output/topPadOff.conf ${BIN_DIR}/mallocTopPadTester > output/mallocTopPadTest
 	HGDB_CONF=output/topPadOn.conf ${BIN_DIR}/mallocTopPadTester >> output/mallocTopPadTest
 	diff expected/mallocTopPadTest output/mallocTopPadTest
+
+# bedItemRgb lives in hg/cgilib, which has no tests directory, so this one test links
+# jkhgapcgi.a on top of the libraries the rest of this directory uses.  Two runs, because the
+# last step of the rule reads hg.conf's alwaysItemRgb and a mirror may turn it off.
+bedItemRgbTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/bedItemRgbTester bedItemRgbTester.c \
+	    ${MYLIBDIR}/jkhgapcgi.a ${MYLIBS} $L
+	echo "include ${HOME}/.hg.conf" > output/rgbOn.conf
+	echo "include ${HOME}/.hg.conf" > output/rgbOff.conf
+	echo "alwaysItemRgb=off" >> output/rgbOff.conf
+	HGDB_CONF=output/rgbOn.conf ${BIN_DIR}/bedItemRgbTester > output/bedItemRgbTest
+	HGDB_CONF=output/rgbOff.conf ${BIN_DIR}/bedItemRgbTester >> output/bedItemRgbTest
+	diff expected/bedItemRgbTest output/bedItemRgbTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
