@@ -24,7 +24,8 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
-test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest bedItemRgbTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest bedItemRgbTest \
+	hVarSubstHtmlTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -118,6 +119,11 @@ bedItemRgbTest: mkdirs
 	HGDB_CONF=output/rgbOn.conf ${BIN_DIR}/bedItemRgbTester > output/bedItemRgbTest
 	HGDB_CONF=output/rgbOff.conf ${BIN_DIR}/bedItemRgbTester >> output/bedItemRgbTest
 	diff expected/bedItemRgbTest output/bedItemRgbTest
+
+hVarSubstHtmlTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hVarSubstHtmlTester hVarSubstHtmlTester.c ${MYLIBS} $L
+	${BIN_DIR}/hVarSubstHtmlTester > output/hVarSubstHtmlTest
+	diff expected/hVarSubstHtmlTest output/hVarSubstHtmlTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
