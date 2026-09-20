@@ -70,7 +70,7 @@
 38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start
 38256	504	hg/utils/hubCheck/tests/makefile::relPath	-	library	unrecorded	a local hub given by a relative path: bigDataUrl resolved once, not twice
 38260	504	hg/utils/hubCheck/tests/makefile::missingFile	-	library	unrecorded	hubCheck must say something about a bigDataUrl it cannot open
-38268	504	-	rm38268.docent.yaml	invisible	-	needs one: the tightened dataVersion path check
+38268	504	hg/lib/tests/dataVersionPathTester.c	rm38268.docent.yaml	invisible	sandbox-ab	a hub track's dataVersion may name a file only under /gbdb, and only by a plain path
 38272	504	-	rm38272.docent.yaml	invisible	-	needs one: a GenArk quickLift source assembly must not be looked for in MySQL
 38273	504	-	-	perf	-	needs one: a collection's hub file is copied when it is written, not on every session load; the test has to count the copies
 38283	504	hg/lib/tests/hVarSubstHtmlTester.c	rm38283.docent.yaml	library	sandbox-ab	a hub description page may not use $hgsid, and a native one may use only the braced form

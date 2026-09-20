@@ -25,7 +25,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest bedItemRgbTest \
-	hVarSubstHtmlTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	hVarSubstHtmlTest dataVersionPathTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -124,6 +124,11 @@ hVarSubstHtmlTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hVarSubstHtmlTester hVarSubstHtmlTester.c ${MYLIBS} $L
 	${BIN_DIR}/hVarSubstHtmlTester > output/hVarSubstHtmlTest
 	diff expected/hVarSubstHtmlTest output/hVarSubstHtmlTest
+
+dataVersionPathTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
+	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
+	diff expected/dataVersionPathTest output/dataVersionPathTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
