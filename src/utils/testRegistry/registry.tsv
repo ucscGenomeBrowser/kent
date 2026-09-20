@@ -78,7 +78,7 @@
 38302	504	-	rm38302.docent.yaml	invisible	-	needs one: an activation token that is missing, empty or older than seven days is invalid
 38303	504	hg/lib/tests/trashDirTester.c	rm38303.docent.yaml	invisible	sandbox-ab	a session file path spelled through a symlinked config directory, which broke 583 saved sessions
 38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon
-38313	504	-	-	library	-	needs one: a user's own __ sessions must not be hidden from My Sessions
+38313	504	hg/lib/tests/snapshotTypeTester.c	-	library	sandbox-ab	the fast snapshotType reader agrees with raFromString, including on a longer tag that starts the same
 38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink
 38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack
 38320	504	lib/tests/faSpeedReadTest.c	-	invisible	unrecorded	the buffer grower and its caller must agree on the size

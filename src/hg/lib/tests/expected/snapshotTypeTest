@@ -1,0 +1,23 @@
+the ordinary cases
+  the tag alone                          fast=blat         ra=blat         
+  with other tags around it              fast=blat         ra=blat         
+  no trailing newline                    fast=blat         ra=blat         
+  a tab after the tag                    fast=blat         ra=blat         
+  extra blanks after the tag             fast=blat         ra=blat         
+
+the cases that must NOT match
+  a longer tag that starts the same      fast=(none)       ra=(none)       
+  the tag as a value                     fast=(none)       ra=(none)       
+  no such tag                            fast=(none)       ra=(none)       
+  the tag with nothing after it          fast=(none)       ra=(none)       
+
+the edges
+  empty settings                         fast=(none)       ra=(none)       
+  only a newline                         fast=(none)       ra=(none)       
+  leading blank lines                    fast=blat         ra=blat         
+  leading spaces on the line             fast=blat         ra=blat         
+  two of them: walk takes the first, ra the last fast=blat         ra=view         differ, known
+
+NULL settings: fast=(none)
+
+0 disagreements
