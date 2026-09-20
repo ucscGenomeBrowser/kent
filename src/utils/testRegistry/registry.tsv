@@ -1,0 +1,89 @@
+# registry.tsv - which unit test defends which Redmine ticket.  refs #38391
+#
+# A bug ticket has no way to say whether a test now defends its fix, and a test has no way
+# to say which bug it came from.  This table answers both, and says which tickets are still
+# waiting for a test.  It is hand written: nothing generates it, so adding the row is part
+# of writing the test.
+#
+# Unit tests only.  The browser-page regression tests are the docent suite, refs #38252,
+# where the script is already named for its ticket.  A ticket whose fix only changes what a
+# page says is that suite's job and is not in here at all.
+#
+# Seven tab separated columns, sorted by ticket then by test:
+#
+#   ticket    the Redmine number, digits only
+#   release   the version the fix ships in, digits only, from the ticket's Target version.
+#             The table starts at v504.  A fix on master with no target version yet takes
+#             "-" until the ticket says.
+#   test      the file to open, as a path from kent/src, or "-" for a ticket that needs a
+#             test and does not have one.  A suite whose cases are make targets adds
+#             ::target, e.g. tests/makefile::relPath
+#   docent    the browser test that watches the same ticket, from the docent suite in
+#             hg/utils/docent/tests/regress, or "-" when there is none.  Not a second copy
+#             of that suite: it is here so "nothing is watching this ticket at all" is a
+#             question the tool can answer, which is the question worth acting on.  A
+#             docent script does not make a unit test unnecessary where the why is
+#             invisible; rm38309 cannot see a read past the end of an array, it asserts
+#             something next to it.
+#   why       why this ticket needs a unit test rather than a browser test:
+#                 invisible  the fix changes nothing on screen.  No browser test can see
+#                            it, so a unit test is the only test there can be.
+#                 perf       the fix is about speed or memory.  The test has to catch
+#                            backsliding, so it measures work done -- queries, passes,
+#                            allocations, bytes -- and never wall-clock seconds.
+#                 library    the fix is in library code that a browser reaches only
+#                            through a page, where much else can go wrong first.
+#   evidence  what has been seen, weakest first: unrecorded, assertion-only, sandbox-ab,
+#             release-ab, caught-regression.  "-" on a row with no test.  The vocabulary is
+#             proof.js's from the docent suite, minus the two levels that need a browser,
+#             so the two tables can be read on one scale.  Every row starts at unrecorded
+#             and earns its way up by measurement, not by argument.
+#   note      what the test holds down.  On a row with no test, what it would have to hold
+#             down, which is the first thing the person who writes it needs.
+#
+# One ticket can have several rows and one test can defend several tickets; both happen
+# here already.  A ticket cannot be both covered and waiting.
+#
+# `testRegistry check` reads every row and fails when one has rotted, so a test cannot be
+# renamed or deleted without coming here.
+#
+#ticket	release	test	docent	why	evidence	note
+10138	504	-	rm10138.docent.yaml	invisible	-	needs one: the session data directory hash went from 8 to 10 hex characters
+20824	504	hg/utils/netToBigNet/tests/makefile::simpleTest	-	library	unrecorded	a net converted to bigNet and back, byte compared
+27988	504	-	-	invisible	-	needs one: a server that is not the node hg.conf names has to recognise itself
+36212	504	-	rm36212.docent.yaml	library	-	needs one: an explicit itemRgb on has to beat the presence of a color setting
+37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
+37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it
+37984	504	-	-	library	-	needs one: lib/hmac.c is new and has no test of its own
+38086	504	-	-	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track
+38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
+38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position
+38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
+38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
+38198	504	-	rm38198.docent.yaml	library	-	needs one: a second lift has to update a track already in the hub
+38225	504	-	-	perf	-	needs one: the malloc step size now comes from hg.conf; the test has to read the knob back and see it applied
+38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries, not the seconds
+38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash
+38248	504	-	rm38248.docent.yaml	library	-	needs one: a deprecated versioned NP_ accession has to resolve to RefSeq Historical
+38249	504	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	unrecorded	the target strand of a reverse complemented protein, found in the #38349 review
+38253	504	-	-	perf	-	needs one: item coverage is built from feature runs, not one counter per base; the test has to go red if a per-base pass comes back
+38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start
+38256	504	hg/utils/hubCheck/tests/makefile::relPath	-	library	unrecorded	a local hub given by a relative path: bigDataUrl resolved once, not twice
+38260	504	hg/utils/hubCheck/tests/makefile::missingFile	-	library	unrecorded	hubCheck must say something about a bigDataUrl it cannot open
+38268	504	-	rm38268.docent.yaml	invisible	-	needs one: the tightened dataVersion path check
+38272	504	-	rm38272.docent.yaml	invisible	-	needs one: a GenArk quickLift source assembly must not be looked for in MySQL
+38273	504	-	-	perf	-	needs one: a collection's hub file is copied when it is written, not on every session load; the test has to count the copies
+38283	504	-	rm38283.docent.yaml	library	-	needs one: description page variables substituted once, and in the container
+38285	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38285.docent.yaml	library	unrecorded	bare codon numbers and ranges, with expected/hgvs/validTerms.txt beside it
+38302	504	-	rm38302.docent.yaml	invisible	-	needs one: an activation token that is missing, empty or older than seven days is invalid
+38303	504	-	rm38303.docent.yaml	invisible	-	needs one: a session file path spelled through a symlinked config directory, which broke 583 saved sessions
+38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon
+38313	504	-	-	library	-	needs one: a user's own __ sessions must not be hidden from My Sessions
+38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink
+38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack
+38320	504	lib/tests/faSpeedReadTest.c	-	invisible	unrecorded	the buffer grower and its caller must agree on the size
+38323	504	-	-	library	-	needs one: an api key made on one geo mirror has to work on all of them
+38328	504	-	-	invisible	-	needs one: the liftOver accession list passed as an slName list
+38335	504	lib/tests/cgiParseTest.c	rm38335.docent.yaml	invisible	unrecorded	a pair with no =value must not lose the variable
+38340	504	hg/hgSession/tests/backupParseTest.c	-	invisible	unrecorded	the same pair, read back out of a session backup
+38340	504	lib/tests/cgiCookieTest.c	-	invisible	unrecorded	the same pair in a cookie header

@@ -285,6 +285,10 @@ test: testAll
 	cd twoBitToFa && ${MAKE} test
 	cd twoBitInfo && ${MAKE} test
 	cd bedGeneParts && ${MAKE} test
+# testRegistry is not an app, so the testAll rule above cannot reach it.  Its test checks
+# that every row of the ticket-to-test registry still names a test that is in the tree,
+# refs #38391.
+	cd testRegistry && ${MAKE} test
 
 clean: $(ALL_APPS:%=%.clean)
 	touch non-empty-rm.o

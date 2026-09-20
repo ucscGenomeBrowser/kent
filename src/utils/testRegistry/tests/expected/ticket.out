@@ -1,0 +1,6 @@
+#38340  v504  hg/hgSession/tests/backupParseTest.c  (invisible, unrecorded)  -- a valueless pair in a session backup
+#38340  v-  lib/tests/cgiCookieTest.c  (invisible, unrecorded)  -- the same pair in a cookie header, no target version yet
+#38303  v504  no unit test yet (invisible)  -- needs one: a session file path spelled through a symlinked config directory
+        docent: hg/utils/docent/tests/regress/rm38303.docent.yaml
+#99999 is not in the registry
+  exit 1

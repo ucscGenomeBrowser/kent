@@ -1,0 +1,120 @@
+testRegistry - which unit test defends which Redmine ticket.  refs #38391
+
+A bug ticket has no way to say whether a test now defends its fix, and a test
+has no way to say which bug it came from.  The two questions are asked from
+opposite ends, and before this neither the tree nor Redmine answered either one.
+
+    registry.tsv    the table.  Hand written.  One row per ticket per test.
+    testRegistry    reads it and answers questions about it.
+    tests/          this tool's own tests, and the check that the table is true.
+
+    ./testRegistry                    the whole table
+    ./testRegistry ticket 38320       what defends this ticket
+    ./testRegistry test faSpeedRead   which tickets a test defends
+    ./testRegistry release 504        everything that ships in one release
+    ./testRegistry needed             the tickets waiting for a test
+    ./testRegistry unwatched          the tickets with no test of any kind
+    ./testRegistry why perf           one reason at a time
+    ./testRegistry tickets            just the numbers, for a join
+    ./testRegistry check              every row still names a live test
+
+Which tickets belong in here
+----------------------------
+
+A ticket is in the table when a unit test is the right test for it, whether or
+not one has been written.  The why column says which of three reasons applies,
+and getting this right is most of the work:
+
+  invisible   the fix changes nothing on screen.  Reading past the end of an
+              array, freeing memory through the wrong handler, a session path
+              that stops being accepted: the page looks the same either way, so
+              a browser test cannot tell whether the bug is back.  A unit test is
+              the only test there can be.
+
+  perf        the fix is about speed or memory, and the danger is backsliding:
+              the slow path comes back in a later edit and nothing goes red.
+              Measure work done -- queries, passes over the data, allocations,
+              bytes of cache -- and never wall-clock seconds, because a test that
+              times a loop goes red on a busy machine and then gets deleted.
+
+  library     the fix is in library code that a browser reaches only through a
+              page, where a dozen other things can go wrong first and produce the
+              same red.
+
+A ticket whose fix only changes what a page says is not in the table at all.
+That is the docent suite's job, refs #38252.
+
+The docent column names that suite's script for the same ticket, or "-".  Many
+tickets have both, and should: a docent script watches the page and a unit test
+watches the thing the page cannot show.  What the column is really for is
+`unwatched`, the tickets with neither, where nothing anywhere would go red if the
+bug came back.  `check` verifies the script exists and belongs to that ticket, so
+this column rots no more quietly than the other one.
+
+The rule is about the change, not about where the file lives.  A wording fix that
+happens to touch hg/lib needs no unit test; a performance rewrite inside hgTracks
+needs one badly.  Sorting by directory gets both of these backwards.
+
+Scope
+-----
+
+Unit tests, and tickets from v504 on.  The browser-page regression tests are a
+different thing and already have their own registry: the docent suite, refs
+#38252, names each script for its ticket and tallies its own evidence with
+`make proof`.  Putting both in one table would have buried a dozen unit tests
+under ninety-five browser ones.
+
+Starting at v504 rather than at the beginning is deliberate.  A registry that
+tries to be complete about ten years of tickets is never finished and never
+trusted; one that starts at a release and is complete from there can be read as
+"every v504 ticket with a unit test is in here".
+
+Adding a row
+------------
+
+Write the test, then add the row, the same day.  Five tab separated columns,
+sorted by ticket then by test; registry.tsv's own header describes each one, and
+`check` enforces the sort so two people adding rows do not collide.
+
+The release column is the ticket's Target version, which is also what a release
+report groups on.  A fix that has landed on master with no target version set
+takes "-" until the ticket says.
+
+The evidence column is proof.js's vocabulary from the docent suite, minus the
+two levels that need a browser.  "assertion-only" means the test asserts the
+fixed behavior and nobody has ever seen it fail for the reason it exists, which
+is weaker than it looks; "unrecorded" means not even that was written down.
+Every row starts at unrecorded and earns its way up, and upgrading one is a real
+measurement, not a guess: build the test against a binary without the fix and
+watch it go red.
+
+What it does not do
+-------------------
+
+It does not scan the tree.  A generated registry cannot hold a note, cannot be
+argued with, and the day it disagrees with a person the person is the one who is
+right.  So the table is written by hand and `check` only asks whether what it
+says is still true.
+
+It does not talk to Redmine, or to a database, or to the network.  A check that
+needs a server is a check that gets skipped.  Coverage questions that need the
+set of all tickets are a join instead: `testRegistry tickets` prints the covered
+numbers and redmineCli prints the others, e.g.
+
+    redmineCli sql "select i.id from issues i join versions v on v.id =
+        i.fixed_version_id where v.name = '504'" --tsv | sort > all
+    ./testRegistry tickets | sort > covered
+    comm -23 all covered
+
+The check runs with the tests
+-----------------------------
+
+utils/makefile's test target runs `make test` here, so `make test` from src
+reaches it.  It takes about a second and needs nothing built.  A red run means a
+row has rotted: a test was renamed or deleted and its row was not, so the
+registry is claiming a bug is covered when it is not.  Fix registry.tsv, not the
+check.
+
+Related tickets: #38252 the docent regression suite, #38326 continuous
+integration for the browser suite, #38188 the shared browser UI testing
+framework, #38316 valgrind regression tests.
