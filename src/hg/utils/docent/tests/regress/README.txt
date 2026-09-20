@@ -425,3 +425,80 @@ rm37996 has a DATE ON IT. The new hgBlat results page is opt-in while it is test
 banner names 2026-10-21 as the day it becomes the default. On that day the first two steps
 come out and the goto: gains blatNewPage=1. A red run then is this script asking to be
 updated rather than a bug.
+
+
+Three for tickets nothing was watching, 2026-09-20
+--------------------------------------------------
+
+rm38253, rm38317 and rm38086 were written because #38391's test registry said those three
+tickets had neither a unit test nor a script here. They have little else in common, and
+each one needed a different answer to the same question: what about this bug is steady
+enough to assert.
+
+A COVERAGE GRAPH REPORTS ITSELF THROUGH A SECOND TOOLTIP. hgTracks has two, and their ids
+differ only in the case of one letter. hg/js/utils.js hangs an item's tooltip off
+`#mouseoverContainer` -- the text of a map box's title. A wiggle, or a bigBed in density
+mode, has no map box at all: the `mouseOver` module in hg/js/hgTracks.js writes the value
+under the cursor into `#mouseOverText`, read from per-pixel spans hgTracks leaves in a trash
+.json. docent.js looked only at the first, so `tip:` on a graph read an empty string and
+then waited out its timeout. It now reads whichever is up. Two things follow from the same
+mistake: `mouseover: {value: ...}` was documented for wiggles and had never matched
+anything, because it went to hg/js/mouseOver.js's `mapData.spans` -- an older copy of that
+module which the page does not load -- and because a track's own center label is titled
+"Click to alter the display density of <track>", so a value of 3 matched the label of a
+track called rm38253stairs before any span was read. Asking by value now skips the map
+boxes.
+
+`tip:` IS A SUBSTRING TEST, AND A NUMBER NEEDS A DELIMITER. That is right for an item, whose
+tooltip is markup and whose tail can render differently from the title it came from. It is
+wrong for a graph, whose tooltip is the number and nothing else: `tip: "1"` is also
+satisfied by "1.5" and by "13", and a mean computed with the wrong divisor is exactly the
+fraction that would slip through. `noTip:` was added for this -- name the other digits and
+the decimal point and one number is left. It is the same prefix trap rm38279 hit with two
+messages sharing a head, in a place where no closing paren was available to carry.
+
+A FLAT STEP IS WHAT MAKES AN EXACT NUMBER ASSERTABLE. rm38253's fixture is six features,
+three nested inside each other in each of two groups, so their coverage is a staircase whose
+steps are flat: 1 2 3 2 1 over 20 kb, and the same again over 20 bp. Each pixel's value is
+the mean coverage of the bases it covers, and the mean of a constant is that constant, so a
+reading taken in the middle of a step does not depend on where a pixel boundary falls, on
+insideWidth, or on the window being a round number of bases. The two windows also take the
+two sampling paths on purpose -- 120 kb samples down, 200 bp samples up -- and the up path
+is the one pixelSweep.sh never reaches, because every cell in it is wider than insideWidth.
+doWiggle is set in the fixture's trackDb rather than through the URL, since cartOrTdbBoolean
+reads either and a hub track's cart name carries a hub number no script can know in advance.
+
+A SCRIPT CANNOT ALWAYS FLIP ON ITS OWN FIX, AND rm38253 SAYS SO IN ITS HEADER. #38253 is a
+rewrite that is required to draw the same picture it replaced; it was verified with 96 pixel
+comparisons that found no real difference. So both builds answer 1 2 3 2 1 and no baseline
+can tell them apart. The script is worth having anyway, for the other direction: the sweep
+is new arithmetic with a cursor, two sampling paths and edge bases, and nothing watched it.
+Its proof is assertion-only and the header explains that it can never be anything else,
+which is different from a script whose evidence has merely not been collected yet.
+
+WHEN THE VISIBLE SYMPTOM IS RANDOM, FIND THE OTHER ONE. #38317 prints an OMIM link built
+from an uninitialised value, so the link comes and goes between loads of the same URL -- QA
+counted it on 1 of 10 loads on beta and on 10 of 10 on hgw0. A script that only asked for
+its absence would pass on an unfixed build most of the time, and an earlier probe of this
+ticket did exactly that and concluded the bug did not reproduce. The same struct is read a
+second time further down, and that read is deterministic: it stops the page dead, right
+after "Links to sequence:", with no Translated Protein link and no Genomic Sequence link, on
+every load of all three assemblies. rm38317 asks for those two links, and its release-ab
+against hgwbeta was measured, not inferred. Lou Nassar's note of 2026-09-18 is what
+identified the truncation; the ticket's own description does not mention it.
+
+AN hg.conf GATE CAN ALSO TAKE A BASELINE AWAY. rm38086 fails every check on hgwbeta and
+answers with the old track name "blat YourSeq", which looks exactly like a before picture
+and is not one: v503_branch already carries those commits, so what beta is showing is almost
+certainly `blatResultsGroup` being off, and `make preflight` cannot read beta's hg.conf from
+here to settle it. The released docker images are no help either, since a public image sets
+no such flag. Its proof is assertion-only and the header says why rather than leaving the
+next reader to try beta again.
+
+One selector trap, already in this file for center labels and worth repeating for a button:
+NEVER ASSERT A title ATTRIBUTE. rm38086's first draft matched `button#blat_delAll[title=...]`
+and `a.trackLink[...][title=...]`, both of which are in the served HTML and neither of which
+matches once the page's JavaScript has run: hgTracks copies every title into a
+`mouseoverText` attribute and blanks the title. The BLAT track's long label also carries a
+date stamp -- "BLAT 102bp SMYD4, 2026-09-20" -- so the selector matches its head and stops
+at the comma.

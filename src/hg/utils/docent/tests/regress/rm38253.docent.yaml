@@ -1,0 +1,100 @@
+# #38253 -- drawing a track as a coverage graph counted every base in the window.
+#
+# countOverlaps() called needHugeZeroedMem() for one unsigned per base of the window, added
+# one to every base of every feature, then read the whole array back to make about 1,200
+# pixels: 100 MB per track on a 25 Mb view, and the top entry in the hgTracks profile.
+# b46fbfda913 (merged fb5899cd611) replaced it with a run-length step function -- two events
+# per feature, sorted, swept into runs, sampled by countsToPixelsDown() and
+# countsToPixelsUp() through a forward cursor.
+#
+# THIS SCRIPT CANNOT FLIP ON THAT FIX, and is not meant to. The rewrite is required to draw
+# the same picture it replaced -- it was verified with 96 pixel comparisons that found no
+# real difference -- so the numbers below are what BOTH builds report and a release-ab would
+# pass on v503 as readily as on v504. What the script is for is the other direction: the
+# sweep is new arithmetic with a cursor, two sampling paths and edge bases, nothing watched
+# it, and #38391's registry says so. It pins the answers so the next change to that code
+# has to keep them.
+#
+# The fixture is six features, three nested inside each other in each of two groups, so the
+# coverage they add up to is a staircase with FLAT steps:
+#
+#   wide1/2/3  chr1:1,000,001-1,100,000    1  2  3  2  1 in 20 kb steps
+#   fine1/2/3  chr1:1,200,001-1,200,100    1  2  3  2  1 in 20 bp steps
+#
+# A flat step is the whole point. Each pixel's value is the MEAN coverage over the bases it
+# covers, and the mean of a constant is that constant, so a reading taken in the middle of a
+# step does not depend on where a pixel boundary falls, on insideWidth, or on the window
+# being a round number of bases. That is what makes an exact number assertable here at all.
+#
+# The two windows take the two sampling paths on purpose. 120 kb over ~950 pixels is about
+# 126 bases per pixel and samples DOWN; 200 bp over the same pixels is about 4.7 pixels per
+# base and samples UP. countsToPixelsUp() is the path pixelSweep.sh does not reach -- every
+# cell in it is wider than insideWidth -- so it is the half of the rewrite that had the
+# least verification and the most need of this.
+#
+# doWiggle is a trackDb setting in the fixture hub (cartOrTdbBoolean reads either), not a
+# cart variable, because a hub track's cart name carries the per-run hub_<n>_ prefix and no
+# URL written in advance can name it.
+#
+# Every reading carries noTip:. `tip:` is a substring test, so `tip: "1"` is also satisfied
+# by "1.5" and by "13" -- and a mean computed with the wrong divisor is exactly the fraction
+# that would slip through. The other three digits and the decimal point leave one number.
+proof:
+  - "assertion-only 2026-09-20 -- written from #38253 and b46fbfda913. It cannot be a server-flip or a release-ab: the rewrite keeps the drawn values identical on purpose, so both builds answer 1 2 3 2 1"
+  - "assertion-only 2026-09-20 -- each of the twelve readings was pointed at a neighbouring step's value and every one of them failed, so the checks discriminate rather than merely passing"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # DOWN-SAMPLE: 120 kb, about 126 bases per pixel.
+  - goto: "/cgi-bin/hgTracks?db=hg38&hubUrl=https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38253/hub.txt&position=chr1:990000-1110000&hideTracks=1&rm38253stairs=full&pix=1100"
+  - expect:
+      rows: [ruler, rm38253stairs]
+
+  # Before the first feature: no coverage, and the graph says so rather than leaving a gap.
+  - mouseover: {track: rm38253stairs, at: "chr1:995000"}
+  - expect: {tip: "0", noTip: [".", "1", "2", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1010000"}
+  - expect: {tip: "1", noTip: [".", "0", "2", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1030000"}
+  - expect: {tip: "2", noTip: [".", "0", "1", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1050000"}
+  - expect: {tip: "3", noTip: [".", "0", "1", "2"]}
+
+  # Down the other side. The staircase is symmetric, so a sweep that lost its cursor after
+  # the peak -- kept the highest run it had seen, or never stepped past it -- still reads 3
+  # here. These two are the ones that catch that.
+  - mouseover: {track: rm38253stairs, at: "chr1:1070000"}
+  - expect: {tip: "2", noTip: [".", "0", "1", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1090000"}
+  - expect: {tip: "1", noTip: [".", "0", "2", "3"]}
+
+  # UP-SAMPLE: 200 bp, about 4.7 pixels per base, the path pixelSweep.sh never takes.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1199950-1200150&pix=1100"
+  - expect:
+      rows: [ruler, rm38253stairs]
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1200010"}
+  - expect: {tip: "1", noTip: [".", "0", "2", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1200030"}
+  - expect: {tip: "2", noTip: [".", "0", "1", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1200050"}
+  - expect: {tip: "3", noTip: [".", "0", "1", "2"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1200070"}
+  - expect: {tip: "2", noTip: [".", "0", "1", "3"]}
+
+  - mouseover: {track: rm38253stairs, at: "chr1:1200090"}
+  - expect: {tip: "1", noTip: [".", "0", "2", "3"]}
+
+  # After the last feature, still inside the drawn image.
+  - mouseover: {track: rm38253stairs, at: "chr1:1200120"}
+  - expect: {tip: "0", noTip: [".", "1", "2", "3"]}
