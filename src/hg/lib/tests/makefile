@@ -26,7 +26,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
-	snapshotTypeTest sessionDirTest geoMirrorSelfTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -157,6 +157,14 @@ hubSpaceKeysTest: mkdirs
 	diff expected/hubSpaceKeysTest output/hubSpaceKeysTest
 # It runs as soon as central.user has UPDATE and DELETE on hgcentralregress; see
 # makeHgCentralRegress.sh for the grant.  Add it to the test target on that day.
+
+# The conf a CGI reads, not the developer's own: isGenArk() needs genarkHubPrefix, which is
+# set in the shared one.
+asForDbTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asForDbTester asForDbTester.c ${MYLIBS} $L
+	echo "include /usr/local/apache/cgi-bin/hg.conf" > output/genark.conf
+	HGDB_CONF=output/genark.conf ${BIN_DIR}/asForDbTester > output/asForDbTest 2>&1
+	diff expected/asForDbTest output/asForDbTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output

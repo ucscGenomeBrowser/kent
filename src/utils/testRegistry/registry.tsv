@@ -51,7 +51,7 @@
 10138	504	hg/lib/tests/sessionDirTester.c	rm10138.docent.yaml	invisible	sandbox-ab	the session directory hash is 10 characters and the legacy 8 is a prefix of it
 20824	504	hg/utils/netToBigNet/tests/makefile::simpleTest	-	library	unrecorded	a net converted to bigNet and back, byte compared
 27988	504	hg/lib/tests/geoMirrorSelfTester.c	-	invisible	sandbox-ab	the host the visitor typed decides which gbNode row the server calls itself
-36212	504	hg/lib/tests/bedItemRgbTester.c	rm36212.docent.yaml	library	sandbox-ab	an explicit itemRgb on beats the presence of a color setting, in the stanza and from a parent
+36212	504	hg/cgilib/tests/bedItemRgbTester.c	rm36212.docent.yaml	library	sandbox-ab	an explicit itemRgb on beats the presence of a color setting, in the stanza and from a parent
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it. BLOCKED: dumpTdbAndChildren is static in trackHub.c and its public caller needs a cart
 37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields
@@ -71,7 +71,7 @@
 38256	504	hg/utils/hubCheck/tests/makefile::relPath	-	library	unrecorded	a local hub given by a relative path: bigDataUrl resolved once, not twice
 38260	504	hg/utils/hubCheck/tests/makefile::missingFile	-	library	unrecorded	hubCheck must say something about a bigDataUrl it cannot open
 38268	504	hg/lib/tests/dataVersionPathTester.c	rm38268.docent.yaml	invisible	sandbox-ab	a hub track's dataVersion may name a file only under /gbdb, and only by a plain path
-38272	504	-	rm38272.docent.yaml	invisible	-	needs one: a GenArk quickLift source assembly must not be looked for in MySQL. Reachable: asForDb is public; needs a genark accession and a tdb whose as can be built
+38272	504	hg/lib/tests/asForDbTester.c	rm38272.docent.yaml	invisible	sandbox-ab	a GenArk accession as a quickLift source is not looked for in MySQL, while an unknown name still aborts
 38273	504	-	-	perf	-	needs one: a collection's hub file is copied when it is written, not on every session load; the test has to count the copies. BLOCKED: needs a cart and a trash file
 38283	504	hg/lib/tests/hVarSubstHtmlTester.c	rm38283.docent.yaml	library	sandbox-ab	a hub description page may not use $hgsid, and a native one may use only the braced form
 38285	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38285.docent.yaml	library	unrecorded	bare codon numbers and ranges, with expected/hgvs/validTerms.txt beside it
