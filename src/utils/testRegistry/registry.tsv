@@ -50,39 +50,39 @@
 #ticket	release	test	docent	why	evidence	note
 10138	504	hg/lib/tests/sessionDirTester.c	rm10138.docent.yaml	invisible	sandbox-ab	the session directory hash is 10 characters and the legacy 8 is a prefix of it
 20824	504	hg/utils/netToBigNet/tests/makefile::simpleTest	-	library	unrecorded	a net converted to bigNet and back, byte compared
-27988	504	-	-	invisible	-	needs one: a server that is not the node hg.conf names has to recognise itself
+27988	504	hg/lib/tests/geoMirrorSelfTester.c	-	invisible	sandbox-ab	the host the visitor typed decides which gbNode row the server calls itself
 36212	504	hg/lib/tests/bedItemRgbTester.c	rm36212.docent.yaml	library	sandbox-ab	an explicit itemRgb on beats the presence of a color setting, in the stanza and from a parent
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
-37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it
+37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it. BLOCKED: dumpTdbAndChildren is static in trackHub.c and its public caller needs a cart
 37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields
-38086	504	-	-	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track
+38086	504	-	-	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. BLOCKED: checkGroup is static in customFactory.c and the path needs a cart
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
-38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position
+38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position. BLOCKED: needs a live cart, so hgcentral rows to read and write
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
-38198	504	-	rm38198.docent.yaml	library	-	needs one: a second lift has to update a track already in the hub
+38198	504	-	rm38198.docent.yaml	library	-	needs one: a second lift has to update a track already in the hub. BLOCKED: readStanzas is static in trackHub.c and the public entry takes a cart and a trash file
 38225	504	hg/lib/tests/mallocTopPadTester.c	-	perf	sandbox-ab	the hg.conf step size reaches the C library: the heap grows in one 16 MB jump, not the default one
-38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries, not the seconds
-38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash
-38248	504	-	rm38248.docent.yaml	library	-	needs one: a deprecated versioned NP_ accession has to resolve to RefSeq Historical
+38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries. BLOCKED: the change is in a static function in hgTracks/simpleTracks.c
+38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash. BLOCKED: the change is in hgTracks/bigWigTrack.c
+38248	504	-	rm38248.docent.yaml	library	-	needs one: a deprecated versioned NP_ accession has to resolve to RefSeq Historical. Reachable: hgHgvs is public, so this extends the existing hgvs test, and needs only reads
 38249	504	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	unrecorded	the target strand of a reverse complemented protein, found in the #38349 review
-38253	504	-	-	perf	-	needs one: item coverage is built from feature runs, not one counter per base; the test has to go red if a per-base pass comes back
-38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start
+38253	504	-	-	perf	-	needs one: item coverage is built from feature runs, not one counter per base. BLOCKED: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
+38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start. BLOCKED: the change is in hgTracks.c, the file that holds main
 38256	504	hg/utils/hubCheck/tests/makefile::relPath	-	library	unrecorded	a local hub given by a relative path: bigDataUrl resolved once, not twice
 38260	504	hg/utils/hubCheck/tests/makefile::missingFile	-	library	unrecorded	hubCheck must say something about a bigDataUrl it cannot open
 38268	504	hg/lib/tests/dataVersionPathTester.c	rm38268.docent.yaml	invisible	sandbox-ab	a hub track's dataVersion may name a file only under /gbdb, and only by a plain path
-38272	504	-	rm38272.docent.yaml	invisible	-	needs one: a GenArk quickLift source assembly must not be looked for in MySQL
-38273	504	-	-	perf	-	needs one: a collection's hub file is copied when it is written, not on every session load; the test has to count the copies
+38272	504	-	rm38272.docent.yaml	invisible	-	needs one: a GenArk quickLift source assembly must not be looked for in MySQL. Reachable: asForDb is public; needs a genark accession and a tdb whose as can be built
+38273	504	-	-	perf	-	needs one: a collection's hub file is copied when it is written, not on every session load; the test has to count the copies. BLOCKED: needs a cart and a trash file
 38283	504	hg/lib/tests/hVarSubstHtmlTester.c	rm38283.docent.yaml	library	sandbox-ab	a hub description page may not use $hgsid, and a native one may use only the braced form
 38285	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38285.docent.yaml	library	unrecorded	bare codon numbers and ranges, with expected/hgvs/validTerms.txt beside it
-38302	504	-	rm38302.docent.yaml	invisible	-	needs one: an activation token that is missing, empty or older than seven days is invalid
+38302	504	-	rm38302.docent.yaml	invisible	-	needs one: an activation token that is missing, empty or older than seven days is invalid. BLOCKED: the check is static in hgLogin.c and needs gbMembers rows
 38303	504	hg/lib/tests/trashDirTester.c	rm38303.docent.yaml	invisible	sandbox-ab	a session file path spelled through a symlinked config directory, which broke 583 saved sessions
-38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon
+38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon. BLOCKED: the change is inside drawing code in hgTracks/simpleTracks.c
 38313	504	hg/lib/tests/snapshotTypeTester.c	-	library	sandbox-ab	the fast snapshotType reader agrees with raFromString, including on a longer tag that starts the same
-38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink
+38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink. BLOCKED: doKnownGene is static in hgc.c, 27000 lines and not linkable on its own
 38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack
 38320	504	lib/tests/faSpeedReadTest.c	-	invisible	unrecorded	the buffer grower and its caller must agree on the size
-38323	504	-	-	library	-	needs one: an api key made on one geo mirror has to work on all of them
+38323	504	-	-	library	-	needs one: an api key made on one geo mirror has to work on all of them. BLOCKED: needs hubSpaceKeys rows in hgcentral, which means a test that writes
 38328	504	hg/lib/tests/genarkLiftOverTester.c	-	invisible	sandbox-ab	the accession list is escaped where the values are, and a non-accession never reaches the query
 38335	504	lib/tests/cgiParseTest.c	rm38335.docent.yaml	invisible	unrecorded	a pair with no =value must not lose the variable
 38340	504	hg/hgSession/tests/backupParseTest.c	-	invisible	unrecorded	the same pair, read back out of a session backup
