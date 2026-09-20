@@ -54,7 +54,7 @@
 36212	504	-	rm36212.docent.yaml	library	-	needs one: an explicit itemRgb on has to beat the presence of a color setting
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it
-37984	504	-	-	library	-	needs one: lib/hmac.c is new and has no test of its own
+37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields
 38086	504	-	-	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
 38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position
