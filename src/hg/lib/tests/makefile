@@ -12,7 +12,6 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
 	${BIN_DIR}/sessionDataTester \
-	${BIN_DIR}/trashDirTester \
 #	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
