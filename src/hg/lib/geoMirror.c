@@ -357,7 +357,9 @@ struct slPair *nodes = geoMirrorOtherNodes();
 struct slPair *node;
 for (node = nodes; node != NULL; node = node->next)
     {
-    struct dyString *url = dyStringCreate("http://%s/cgi-bin/%s?", (char *)node->val, cgiName);
+    // https, not http: the mirrors redirect http to https and netSlurpUrl does not follow
+    // redirects, so an http request never reaches the CGI at all
+    struct dyString *url = dyStringCreate("https://%s/cgi-bin/%s?", (char *)node->val, cgiName);
     struct slPair *var;
     for (var = cgiVars; var != NULL; var = var->next)
         dyStringPrintf(url, "%s%s=%s", (var == cgiVars) ? "" : "&", var->name,
@@ -412,7 +414,7 @@ if (geoMirrorEnabled())
             dyStringAppend(dy, "visibility:hidden;");
         dyStringAppend(dy, "\" src=\"../images/greenChecksmCtr.png\">\n");
         if (!sameString(node, myNode))
-            dyStringPrintf(dy, "<a href=\"http://%s/cgi-bin/hgGateway?redirect=manual\">", domain);
+            dyStringPrintf(dy, "<a href=\"https://%s/cgi-bin/hgGateway?redirect=manual\">", domain);
         dyStringPrintf(dy, "%s", shortLabel);
         if (!sameString(node, myNode))
             dyStringAppend(dy, "</a>");

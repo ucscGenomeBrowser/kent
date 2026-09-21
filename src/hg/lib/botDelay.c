@@ -231,23 +231,29 @@ if (useNew)
 
             if (userName)
                 safef(botCheckString, 256, "apiKey%s %f", apiKey, fraction);
-            else if (cfgOptionBooleanDefault("syncHubApiKeys", FALSE))
-                // hgHubConnect copies a new or revoked key to the other geo mirror nodes,
-                // so a key made on any of them is valid here
-                hUserAbort("Invalid apiKey provided on URL. "
-                        "Make sure that the apiKey is valid, "
-                        "check https://genome.ucsc.edu/cgi-bin/hgHubConnect#hubDeveloper to create one "
-                        "or check this key. An apiKey created on any UCSC genome browser mirror "
-                        "(genome.ucsc.edu, genome-euro.ucsc.edu, genome-asia.ucsc.edu) works on all of "
-                        "them. If you have problems with the apiKey, contact us.");
             else
-                hUserAbort("Invalid apiKey provided on URL. "
-                        "Make sure that the apiKey is valid, "
-                        "check https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect#hubDeveloper to create one "
-                        "or check this key. Note that an apiKey for genome-euro must be created on "
-                        "https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect and the same for genome-asia or "
-                        "other mirrors, apiKeys are server-specific. If you have problems with the apiKey, "
-                        "contact us.");
+                {
+                // Point at this server, whichever one it is, rather than at a hardcoded
+                // host: the key has to be created where it is used, unless the mirrors
+                // are syncing keys between themselves.
+                char keyUrl[1024];
+                safef(keyUrl, sizeof(keyUrl), "http%s://%s/cgi-bin/hgHubConnect#hubDeveloper",
+                        cgiAppendSForHttps(), cgiServerNamePort());
+                if (cfgOptionBooleanDefault("syncHubApiKeys", FALSE))
+                    // hgHubConnect copies a new or revoked key to the other geo mirror nodes,
+                    // so a key made on any of them is valid here
+                    hUserAbort("Invalid apiKey provided on URL. "
+                            "Make sure that the apiKey is valid, "
+                            "check %s to create one or check this key. An apiKey created on any "
+                            "UCSC genome browser mirror works on all of them. "
+                            "If you have problems with the apiKey, contact us.", keyUrl);
+                else
+                    hUserAbort("Invalid apiKey provided on URL. "
+                            "Make sure that the apiKey is valid, "
+                            "check %s to create one or check this key. Note that apiKeys are "
+                            "server-specific, so the key must be created on the same server where "
+                            "it is used. If you have problems with the apiKey, contact us.", keyUrl);
+                }
             }
         else
             {
