@@ -4,6 +4,18 @@ shortLabel Episignatures
 longLabel DNA Methylation Episignatures of Rare Developmental Disorders
 group regulation
 html episignatures.html
+# Supertrack-level filter. Rendered on the supertrack's own hgTrackUi page
+# (superTrackUi() in hgTrackUi.c). Cart values stored under
+# "episignatures.filter.maxAbsDelta.min/max" are inherited at read time by
+# both subtracks via cartOptionalStringClosestToHome() walking tdb->parent,
+# so one control filters methaDory and epigenCentral together. A
+# subtrack-level filter.maxAbsDelta would always win over this one; neither
+# subtrack sets one, since the field means the same thing (and is named the
+# same, maxAbsDelta, in both .as files) in both.
+filterByRange.maxAbsDelta on
+filter.maxAbsDelta 0:1
+filterLimits.maxAbsDelta 0:1
+filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at this probe
 
     track methaDory
     parent episignatures
@@ -20,10 +32,6 @@ html episignatures.html
     detailsDynamicTable _jsonSignatures|Episignatures at this CpG site
     urls publications="https://pubmed.ncbi.nlm.nih.gov/$$/"
     mouseOver <b>Probe:</b> ${name}<br><b>Episignatures at this probe:</b> ${sigCount}<br><b>Disorders:</b> ${disorderSummary}<br><b>Direction and strength:</b> ${direction}<br><b>Largest absolute delta-beta:</b> ${maxAbsDelta}
-    filterByRange.maxAbsDelta on
-    filter.maxAbsDelta 0:1
-    filterLimits.maxAbsDelta 0:1
-    filterLabel.maxAbsDelta Largest absolute delta-beta at this probe
     filterValues.disorders 16p11.2 microdeletion,ARID1A duplication syndrome,ARID1A-ARID1B.c.6200,ARID1B duplication syndrome,Alpha-thalassemia X-linked intellectual disability,Arboleda-Tham syndrome,Armfield X-linked intellectual disability,Au-Kline syndrome,Autosomal dominant intellectual developmental disorder 65,BCL11B-related disorder,BRWD3-related genetic disorder (MRX93),Bafopathies,Beck-Fahrner syndrome,Bohring-Opitz Syndrome,Börjeson-Forssman-Lehmann syndrome,CDK13-Related Congenital Heart Defects; Dysmorphic Facial Features; and Intellectual Developmental Disorder,CHARGE syndrome,CHD2-related neurodevelopmental disorder,CHD8-related neurodevelopmental disorder with overgrowth,CTCF-related disorder,CUL3-related neurodevelopmental disorder,Chung-Jansen syndrome,Claes-Jensen syndrome,Coffin-Siris Syndrome 3,Coffin-Siris syndrome 1,Coffin-Siris syndrome 6,Coffin-Siris syndrome 9,Cornelia de Lange syndrome,DEGCAGS syndrome,DNMT1-related disorder,DYRK1A syndrome,DiGeorge syndrome or velocardiofacial syndrome,Down syndrome,Dup7,EHMT1-duplication,Fanconi anemia,Fetal alcohol syndrome,Floating harbour syndrome,Gabriele-de Vries syndrome,Genitopatellar syndrome,HIST1H1E syndrome,HNRNPU-related neurodevelopmental disorder,Hao-Fountain syndrome,Helsmoortel-Van der Aa syndrome (central variants),Helsmoortel-Van der Aa syndrome (terminal variants),ICF syndrome,ICF2; ICF3; ICF4,Intellectual developmental disorder; X-linked 97,Intellectual developmental disorder; X-linked syndromic; Nascimento type,Intellectual developmental disorder; autosomal dominant 49,JARID2-related syndrome,KBG syndrome,KDM2A syndrome,KDM2B-related neurodevelopmental disorder,KMT2B dystonia syndrome,KMT2C-related syndrome,KMT5B syndrome,Kabuki syndrome,Karayol-Borroto-Haghshenas neurodevelopmental syndrome,Kleefstra syndrome,Koolen-de Vries syndrome,Luscan-Lumish syndrome,MN1 C-terminal truncation (MCTT) syndrome,MORC2-related disorders,Menke-Hennekam syndrome,Mowat-Wilson syndrome,Myopathy; lactic acidosis; and sideroblastic anemia 2,NOTCH1  Congenital heart defects,NSD1 duplication,Neurodevelopmental disorder with dysmorphic facies and behavioral abnormalities,Neurodevelopmental disorder with impaired speech and hyperkinetic movements,Nicolaides-Baraitser syndrome,Nil-Deshwar Neurodevelopmental Syndrome,PURA-related disorder,Phelan-McDermid syndrome,Pitt-Hopkins syndrome,Potocki-Lupski syndrome,Prenatal valproic acid exposure,RNU2-2,RNU2-2.biallelic,RNU2-2.n35,RNU4-2,Recurrent constellations of embryonic malformations,Renpenning syndrome,Rubinstein-Taybi Syndrome,SETD1B-related neurodevelopmental disorder,SETD2c1740,SETD5-related disorder,SMARCA4c2650,SPEN haploinsufficiency,SRCAP.proximal,Say-Barber-Biesecker-Young-Simpson syndrome,Schuurs-Hoeijmakers syndrome,Sifrim-Hitz-Weiss syndrome,Skeletal Dysplasia; Tooth Anomalies; and Developmental Delay,Smith-Magenis Syndrome,Smith-Magenis syndrome,Snijders Blok-Campeau syndrome,Sotos syndrome,Tatton-Brown-Rahman syndrome,Weaver syndrome,Wiedemann-Steiner syndrome,Witteveen-Kolk syndrome,Wolf-Hirschhorn syndrome,intellectual disability and blepharophimosis
     filterType.disorders multipleListOr
     filterValues.loci ADNPc,ADNPt,ANKRD11-chr16q24.3del,ARID1A-ARID1B-SMARCB1-SMARCA4-SMARCA2,ARID1A-ARID1B.c.6200,ARID1Adup,ARID1B,ARID1Bdup,ARID2,ASXL1,ATRX,BCL11B,BRWD3,CDCA7-ZBTB24-HELLS,CDK13,CHD2,CHD3,CHD4,CHD7,CHD8,CREBBP-EP300,CREBBP-EP300.MKHK,CREBBP.RSTS1,CTCF,CUL3,DNMT1,DNMT3A,DNMT3B,DOT1L,DYRK1A,EED-EZH2,EHMT1,EHMT1dup,EP300.RSTS2,EZH2,FAM50A,FANCA,FASD,HIST1H1E,HNRNPK,HNRNPU,JARID2,KANSL1,KAT6A,KAT6B.GTPTS,KAT6B.SBBYSS,KDM2A,KDM2B,KDM4B,KDM5C,KMT2A,KMT2Bdyt,KMT2C,KMT2D,KMT2D-KDM6A,KMT5B,MN1,MORC2,MSL2,NIPBL-RAD21-SMC3-SMC1A,NOTCH1,NSD1,NSD1dup,NSD2,PACS1,PHF6,PHIP1,PQBP1,PTBP1,PURA,RNU2-2,RNU2-2.biallellic,RNU2-2.n35,RNU4-2,SETD1B,SETD2.LLS,SETD2c1740,SETD5,SIN3A,SMARCA2,SMARCA2.BISS,SMARCA2bis-ADNPbnl,SMARCA4c2650,SMARCB1,SMS,SOX11,SPEN,SRCAP.FLHS,SRCAP.proximal,SRSF1,TCF4,TET3,TRIP12,UBE2A,USP7,VACTERL.combined,VACTERL.intermediate,VACTERL.robust,ValproicAcid,YARS2,YY1,ZEB2,ZNF142,ZNF699,ZNF711,chr16p11.2del,chr17p11.2del,chr17p11.2dup,chr21tris,chr22q11.2del,chr22q13.3del,chr7q11.23del,chr7q11.23dup
@@ -53,10 +61,6 @@ html episignatures.html
     detailsDynamicTable comparisonTable|Episignatures at this CpG site
     urls displayOmim="https://omim.org/entry/$$"
     mouseOver <b>Probe:</b> ${name}<br><b>Episignatures at this probe:</b> ${sigCount}<br><b>Strongest episignature:</b> ${displaySignature}<br><b>Disorder:</b> ${displayDisorder}<br><b>OMIM:</b> ${displayOmim}<br><b>Direction:</b> ${direction}<br><b>Absolute delta-beta:</b> ${maxAbsDelta}
-    filterByRange.maxAbsDelta on
-    filter.maxAbsDelta 0:1
-    filterLimits.maxAbsDelta 0:1
-    filterLabel.maxAbsDelta Largest absolute delta-beta at this probe
     filterByRange.sigCount on
     filter.sigCount 1:6
     filterLimits.sigCount 1:6

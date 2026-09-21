@@ -47,7 +47,7 @@ longLabel Protein Data Bank (PDB) Sequence Matches
 group genes
 type bed 12
 visibility hide
-iframeUrl http://www.pdb.org/pdb/explore/explore.do?structureId=$$
+iframeUrl https://www.rcsb.org/structure/$$
 iframeOptions width='1000' height='800' scrolling='yes'
 priority 30
 

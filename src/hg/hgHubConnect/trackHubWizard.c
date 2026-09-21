@@ -178,28 +178,71 @@ void getHubSpaceUIState(struct cartJson *cj, struct hash *paramHash)
 outUiDataForUser(cj->jw);
 }
 
+static void reportSyncResults(struct slPair *results)
+/* Log what each peer said about the sync.  A peer that refuses the request answers with a
+ * body carrying an "error", which is not a connection failure and so has to be looked at
+ * here, or a misconfigured mirror would look exactly like a working one.  stderr rather
+ * than warn(): this is between servers, and the person who clicked Generate has no way to
+ * act on it, while an admin reading error_log does. */
+{
+struct slPair *result;
+for (result = results; result != NULL; result = result->next)
+    {
+    char *body = (char *)result->val;
+    if (body == NULL)
+        continue;   // already logged by geoMirrorNotifyOtherNodes
+    if (stringIn("\"error\"", body) || !stringIn("\"synced\"", body))
+        fprintf(stderr, "hgHubSyncApiKey: %s refused the api key sync: %s\n",
+                result->name, body);
+    }
+}
+
 static void syncApiKeyToOtherNodes(char *userName, char *apiKey)
 /* Tell every other geo mirror node about this user's new key (apiKey non-NULL) or that it was
  * revoked (apiKey NULL), so a key generated on any UCSC mirror works on all of them.  Best
- * effort: a peer that is slow or down is logged and skipped, never fails the local action,
- * which has already succeeded by the time this is called. */
+ * effort: a peer that is slow, down or refusing is logged and skipped, never fails the local
+ * action, which has already succeeded by the time this is called. */
 {
 if (!cfgOptionBooleanDefault("syncHubApiKeys", FALSE))
     return;
 char *apiKeyOrEmpty = apiKey ? apiKey : "";
-char *sig = hubSpaceApiKeySyncSig(userName, apiKeyOrEmpty);
+long now = (long)time(NULL);
+char nowString[32];
+safef(nowString, sizeof nowString, "%ld", now);
+char *sig = hubSpaceApiKeySyncSig(userName, apiKeyOrEmpty, now);
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 jsonWriteObjectStart(jw, hgHubSyncApiKey);
 jsonWriteString(jw, "userName", userName);
 jsonWriteString(jw, "apiKey", apiKeyOrEmpty);
+// a string, not a number, so that both sides sign and check the same characters
+jsonWriteString(jw, "time", nowString);
 jsonWriteString(jw, "sig", sig);
 jsonWriteObjectEnd(jw);
 jsonWriteObjectEnd(jw);
 struct slPair *cgiVars = slPairNew(CARTJSON_COMMAND, jw->dy->string);
-geoMirrorNotifyOtherNodes("hgHubConnect", cgiVars);
+struct slPair *results = geoMirrorNotifyOtherNodes("hgHubConnect", cgiVars);
+reportSyncResults(results);
+slPairFreeValsAndList(&results);
 slPairFree(&cgiVars);
 jsonWriteFree(&jw);
+}
+
+static void syncApiKeyBestEffort(char *userName, char *apiKey)
+/* syncApiKeyToOtherNodes() in an errCatch of its own.  The local generate or revoke has
+ * already succeeded and been written into the response by the time we get here, so an
+ * errAbort in the sync (login.cookieSalt unset, say) must not escape: cartJsonExecute's
+ * outer catch would throw the response away and replace it with an error, leaving the user
+ * looking at a failure over a key that is sitting in the database. */
+{
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    syncApiKeyToOtherNodes(userName, apiKey);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    fprintf(stderr, "hgHubSyncApiKey: could not sync the api key to the other mirrors: %s\n",
+            errCatch->message->string);
+errCatchFree(&errCatch);
 }
 
 void cjRevokeApiKey(struct cartJson *cj, struct hash *paramHash)
@@ -215,7 +258,7 @@ errCatchEnd(errCatch);
 if (!(errCatch->gotError))
     {
     jsonWriteString(cj->jw, "revoke", "true");
-    syncApiKeyToOtherNodes(userName, NULL);
+    syncApiKeyBestEffort(userName, NULL);
     }
 else
     jsonWriteStringf(cj->jw, "error", "revokeApiKey() error: '%s'", errCatch->message->string);
@@ -238,36 +281,37 @@ errCatchEnd(errCatch);
 if (apiKey)
     {
     jsonWriteString(cj->jw, "apiKey", apiKey);
-    syncApiKeyToOtherNodes(userName, apiKey);
+    syncApiKeyBestEffort(userName, apiKey);
     }
 else if (errCatch->gotError)
     jsonWriteStringf(cj->jw, "error", "generateApiKey() error: '%s'", errCatch->message->string);
 errCatchFree(&errCatch);
 }
 
-void cjSyncApiKey(struct cartJson *cj, struct hash *paramHash)
-/* Adopt an api key (or a revocation) that a peer geo mirror is telling us about, so the key
- * works the same on every UCSC mirror.  Only ever called by geoMirrorNotifyOtherNodes() on
- * another mirror -- never call syncApiKeyToOtherNodes() from in here, or mirrors would keep
- * re-notifying each other forever. Rejects the request unless sig proves it was signed with
- * this site's login.cookieSalt, which every geo mirror of a site already shares. */
+static void syncApiKeyFromPeer(struct jsonWrite *jw, char *userName, char *apiKey,
+                               char *timeStamp, char *sig)
+/* Adopt an api key (or a revocation, when apiKey is empty) that a peer geo mirror is telling
+ * us about, so the key works the same on every UCSC mirror.  Never notify the other nodes
+ * from in here, or the mirrors would keep re-notifying each other forever.  Refuses the
+ * request unless sig proves it was signed, recently, with this site's login.cookieSalt,
+ * which every geo mirror of a site already shares.  Writes the answer into jw. */
 {
 if (!cfgOptionBooleanDefault("syncHubApiKeys", FALSE))
     {
-    jsonWriteString(cj->jw, "error", "hgHubSyncApiKey: not enabled on this site");
+    jsonWriteString(jw, "error", "hgHubSyncApiKey: not enabled on this site");
     return;
     }
-char *userName = cartJsonRequiredParam(paramHash, "userName", cj->jw, "hgHubSyncApiKey");
-char *apiKey = cartJsonRequiredParam(paramHash, "apiKey", cj->jw, "hgHubSyncApiKey");
-char *sig = cartJsonRequiredParam(paramHash, "sig", cj->jw, "hgHubSyncApiKey");
-if (!userName || !apiKey || !sig)
+if (isEmpty(userName) || apiKey == NULL || isEmpty(timeStamp) || isEmpty(sig))
+    {
+    jsonWriteString(jw, "error", "hgHubSyncApiKey: need userName, apiKey, time and sig");
     return;
-
+    }
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    char *expectedSig = hubSpaceApiKeySyncSig(userName, apiKey);
-    if (!sameString(sig, expectedSig))
+    // One message for a bad signature and for a stale one, and nothing about which it was:
+    // a caller guessing at the salt learns nothing from the answer it gets back
+    if (!hubSpaceApiKeySyncSigOk(userName, apiKey, timeStamp, sig))
         errAbort("hgHubSyncApiKey: bad signature");
     if (isNotEmpty(apiKey))
         hubSpaceSetApiKey(userName, apiKey);
@@ -276,10 +320,65 @@ if (errCatchStart(errCatch))
     }
 errCatchEnd(errCatch);
 if (!(errCatch->gotError))
-    jsonWriteString(cj->jw, "synced", "true");
+    jsonWriteString(jw, "synced", "true");
 else
-    jsonWriteStringf(cj->jw, "error", "hgHubSyncApiKey error: '%s'", errCatch->message->string);
+    jsonWriteStringf(jw, "error", "hgHubSyncApiKey error: '%s'", errCatch->message->string);
 errCatchFree(&errCatch);
+}
+
+boolean doApiKeySyncIfRequested()
+/* If this request is a peer geo mirror telling us about an api key, answer it and return TRUE,
+ * else return FALSE and leave the request to the normal cart path.
+ *   This runs before the cart exists, and has to.  A peer's request carries no hguid cookie
+ * and no apiKey= variable, so building a cart for it would hand it a captcha page instead of
+ * running this (forceUserIdOrCaptcha in cart.c) on any site that sets cloudFlareSiteKey --
+ * which is every site that needs api keys in the first place -- and would leave behind a junk
+ * userDb and sessionDb row for every sync besides.  There is no user session here to build a
+ * cart from: the request is signed, not logged in.
+ *   Any other cartJson command sent along in the same request is ignored, so this path can
+ * only ever reach the one handler. */
+{
+char *commandJson = cgiOptionalString(CARTJSON_COMMAND);
+// cheap test first, so an ordinary cartJson request is not parsed twice
+if (isEmpty(commandJson) || !stringIn(hgHubSyncApiKey, commandJson))
+    return FALSE;
+
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+struct errCatch *errCatch = errCatchNew();
+boolean isSync = FALSE;
+if (errCatchStart(errCatch))
+    {
+    struct jsonElement *commandObj = jsonParse(commandJson);
+    struct jsonElement *syncObj = jsonFindNamedField(commandObj, "", hgHubSyncApiKey);
+    if (syncObj != NULL)
+        {
+        isSync = TRUE;
+        syncApiKeyFromPeer(jw, jsonOptionalStringField(syncObj, "userName", NULL),
+                           jsonOptionalStringField(syncObj, "apiKey", NULL),
+                           jsonOptionalStringField(syncObj, "time", NULL),
+                           jsonOptionalStringField(syncObj, "sig", NULL));
+        }
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    // the string only looked like a sync command: say so rather than falling through to the
+    // cart path, which would try to run whatever this is a second time
+    isSync = TRUE;
+    jsonWritePopToLevel(jw, 1);
+    jsonWriteStringf(jw, "error", "hgHubSyncApiKey: %s", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+
+if (isSync)
+    {
+    cgiPrintContentType("text/javascript");
+    jsonWriteObjectEnd(jw);
+    puts(jw->dy->string);
+    }
+jsonWriteFree(&jw);
+return isSync;
 }
 
 

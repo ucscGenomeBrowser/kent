@@ -28,7 +28,8 @@
 #             docent script does not make a unit test unnecessary where the why is
 #             invisible; rm38309 cannot see a read past the end of an array, it asserts
 #             something next to it.
-#   why       why this ticket needs a unit test rather than a browser test:
+#   why       why this ticket needs a unit test rather than a browser test, or that it does
+#             not need one:
 #                 invisible  the fix changes nothing on screen.  No browser test can see
 #                            it, so a unit test is the only test there can be.
 #                 perf       the fix is about speed or memory.  The test has to catch
@@ -36,6 +37,14 @@
 #                            allocations, bytes -- and never wall-clock seconds.
 #                 library    the fix is in library code that a browser reaches only
 #                            through a page, where much else can go wrong first.
+#                 page       the opposite claim: what changed is what a page says or does,
+#                            so the docent suite is the right test and NO unit test is
+#                            wanted.  These rows exist so that judgement is written down
+#                            and can be argued with, instead of living in somebody's head
+#                            as "that one does not need a unit test".  A page row never
+#                            names a unit test, and `needed` leaves it out; `unwatched`
+#                            does not, since a ticket with no test of any kind is worth
+#                            seeing whichever kind it should have had.
 #   evidence  what has been seen, weakest first: unrecorded, assertion-only, sandbox-ab,
 #             release-ab, caught-regression.  "-" on a row with no test.  The vocabulary is
 #             proof.js's from the docent suite, minus the two levels that need a browser,
@@ -55,38 +64,67 @@
 20824	504	hg/utils/netToBigNet/tests/makefile::simpleTest	-	library	unrecorded	a net converted to bigNet and back, byte compared
 27988	504	hg/lib/tests/geoMirrorSelfTester.c	-	invisible	sandbox-ab	the host the visitor typed decides which gbNode row the server calls itself
 36212	504	hg/cgilib/tests/bedItemRgbTester.c	rm36212.docent.yaml	library	sandbox-ab	an explicit itemRgb on beats the presence of a color setting, in the stanza and from a parent
+36292	504	-	-	page	-	the Keep-only-last-search checkbox on the BLAT form. The fix is in hg/hgBlat, hg/js, so what changed is what a page says or does
+36621	504	-	-	page	-	header dependencies written by the compiler; the test is that the tree builds. The fix is in the makefiles, so what changed is what a page says or does
+36940	504	-	rm36940.docent.yaml	page	-	the bigBedOnePath fallback removed, leaving one load path. The fix is in hg/hgTracks, hg/hgc, so what changed is what a page says or does
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
+37595	504	-	-	page	-	where the iframe sits on an item details page. The fix is in hg/hgc, so what changed is what a page says or does
+37621	504	-	-	page	-	a quickLift bigWig block placed by the window, not the chain. The fix is in hg/hgTracks, so what changed is what a page says or does
+37929	504	-	-	page	-	the login page's wording and the social sign-in buttons. The fix is in hg/hgLogin, hg/lib, so what changed is what a page says or does
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it. BLOCKED: dumpTdbAndChildren is static in trackHub.c and its public caller needs a cart
 37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields
-38086	504	-	-	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. BLOCKED: checkGroup is static in customFactory.c and the path needs a cart
+37996	504	-	rm37996.docent.yaml	page	-	the new BLAT results page and its banner. The fix is in hg/hgBlat, hg/js, so what changed is what a page says or does
+38086	504	-	rm38086.docent.yaml	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: checkGroup is static in customFactory.c and the path needs a cart
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
 38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position. BLOCKED: needs a live cart, so hgcentral rows to read and write
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
+38192	504	-	-	page	-	Login and Sign out returning to a page reached by POST. The fix is in hg/lib, hg/hgTrackUi, so what changed is what a page says or does
+38197	504	-	-	page	-	setting and validating a recovery email address. The fix is in hg/hgLogin, hg/lib, so what changed is what a page says or does
 38198	504	-	rm38198.docent.yaml	library	-	needs one: a second lift has to update a track already in the hub. BLOCKED: readStanzas is static in trackHub.c and the public entry takes a cart and a trash file
+38200	504	-	rm38200.docent.yaml	page	-	a table name ending in an accession, and escaped examples. The fix is in hg/hgTables, so what changed is what a page says or does
+38205	504	-	rm38205.docent.yaml	page	-	the session description taken back out of the cart. The fix is in hg/hgSession, so what changed is what a page says or does
+38206	504	-	rm38206.docent.yaml	page	-	one blue for the menu bar on every page. The fix is in hg/htdocs/style, so what changed is what a page says or does
+38208	504	-	-	page	-	an obsolete hg.conf flag and its code removed. The fix is in hg/hgTracks, so what changed is what a page says or does
+38223	504	-	rm38223.docent.yaml	page	-	a stray formMethod value in the form. The fix is in hg/hgLiftOver, so what changed is what a page says or does
 38225	504	hg/lib/tests/mallocTopPadTester.c	-	perf	sandbox-ab	the hg.conf step size reaches the C library: the heap grows in one 16 MB jump, not the default one
 38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: the change is in a static function in hgTracks/simpleTracks.c
 38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is in hgTracks/bigWigTrack.c
 38248	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38248.docent.yaml	library	assertion-only	a deprecated versioned NP_ accession still maps, through ncbiRefSeqLinkHistorical. The ticket's other half, taking the NEWEST deprecated transcript, is NOT pinned: with the order by removed and with a plain string sort, every term I could build gives identical coordinates, because the versions differ only in UTR ends
 38249	504	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	unrecorded	the target strand of a reverse complemented protein, found in the #38349 review
-38253	504	-	-	perf	-	needs one: item coverage is built from feature runs, not one counter per base. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
+38251	504	-	rm38251.docent.yaml	page	-	the narrow-screen menu icon covering the menu bar. The fix is in hg/htdocs/style, hg/js, so what changed is what a page says or does
+38253	504	-	rm38253.docent.yaml	perf	-	needs one: item coverage is built from feature runs, not one counter per base. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
 38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: the change is in hgTracks.c, the file that holds main
 38256	504	hg/utils/hubCheck/tests/makefile::relPath	-	library	unrecorded	a local hub given by a relative path: bigDataUrl resolved once, not twice
+38257	504	-	rm38257.docent.yaml	page	-	the Account dialog closing when a link in it is clicked. The fix is in hg/js, so what changed is what a page says or does
 38260	504	hg/utils/hubCheck/tests/makefile::missingFile	-	library	unrecorded	hubCheck must say something about a bigDataUrl it cannot open
+38264	504	-	-	page	-	lightweight snapshot sessions for share links. The fix is in no commit names this ticket, so what changed is what a page says or does
 38268	504	hg/lib/tests/dataVersionPathTester.c	rm38268.docent.yaml	invisible	sandbox-ab	a hub track's dataVersion may name a file only under /gbdb, and only by a plain path
 38272	504	hg/lib/tests/asForDbTester.c	rm38272.docent.yaml	invisible	sandbox-ab	a GenArk accession as a quickLift source is not looked for in MySQL, while an unknown name still aborts
 38273	504	-	-	perf	-	needs one: a collection's hub file is copied when it is written, not on every session load; the test has to count the copies. BLOCKED: needs a cart and a trash file
+38275	504	-	-	page	-	a quickLift from GenArk losing the track description page. The fix is in hg/hgc, so what changed is what a page says or does
+38279	504	-	rm38279.docent.yaml	page	-	the track label saying why a track switched to density mode. The fix is in hg/hgTracks, so what changed is what a page says or does
+38281	504	-	rm38281.docent.yaml	page	-	hide-all and show-all buttons on a container page. The fix is in hg/hgTrackUi, hg/js, so what changed is what a page says or does
 38283	504	hg/lib/tests/hVarSubstHtmlTester.c	rm38283.docent.yaml	library	sandbox-ab	a hub description page may not use $hgsid, and a native one may use only the braced form
+38284	504	-	rm38284.docent.yaml	page	-	the exon mouseover's cDNA and codon range. The fix is in no commit names this ticket, so what changed is what a page says or does
 38285	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38285.docent.yaml	library	unrecorded	bare codon numbers and ranges, with expected/hgvs/validTerms.txt beside it
+38298	504	-	rm38298.docent.yaml	page	-	both transcript and genome coding position shown when they differ. The fix is in hg/hgTracks, so what changed is what a page says or does
 38302	504	-	rm38302.docent.yaml	invisible	-	needs one: an activation token that is missing, empty or older than seven days is invalid. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the check is static in hgLogin.c and needs gbMembers rows
 38303	504	hg/lib/tests/trashDirTester.c	rm38303.docent.yaml	invisible	sandbox-ab	a session file path spelled through a symlinked config directory, which broke 583 saved sessions
 38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is inside drawing code in hgTracks/simpleTracks.c
+38310	504	-	rm38310.docent.yaml	page	-	a hub track declaring more bigBed fields than the file has. The fix is in hg/hgTracks, hg/hgc, so what changed is what a page says or does
+38311	504	-	-	page	-	the New Sessions page's watermark and tooltip. The fix is in hg/js, hg/htdocs/style, so what changed is what a page says or does
 38313	504	hg/lib/tests/snapshotTypeTester.c	-	library	sandbox-ab	the fast snapshotType reader agrees with raFromString, including on a longer tag that starts the same
-38317	504	-	-	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: doKnownGene is static in hgc.c, 27000 lines and not linkable on its own
+38317	504	-	rm38317.docent.yaml	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: doKnownGene is static in hgc.c, 27000 lines and not linkable on its own
 38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack
 38320	504	lib/tests/faSpeedReadTest.c	-	invisible	unrecorded	the buffer grower and its caller must agree on the size
 38323	504	-	-	library	-	needs one: an api key made on one geo mirror has to work on all of them. BLOCKED: needs hubSpaceKeys rows in hgcentral, which means a test that writes
 38328	504	hg/lib/tests/genarkLiftOverTester.c	-	invisible	sandbox-ab	the accession list is escaped where the values are, and a non-accession never reaches the query
 38335	504	lib/tests/cgiParseTest.c	rm38335.docent.yaml	invisible	unrecorded	a pair with no =value must not lose the variable
+38339	504	-	-	page	-	the wording when CILogon returns an unverified email. The fix is in hg/hgLogin, so what changed is what a page says or does
 38340	504	hg/hgSession/tests/backupParseTest.c	-	invisible	unrecorded	the same pair, read back out of a session backup
 38340	504	lib/tests/cgiCookieTest.c	-	invisible	unrecorded	the same pair in a cookie header
+38356	504	-	-	page	-	the hgTablesTest robot finishing a run instead of aborting. The fix is in hg/hgTablesTest, so what changed is what a page says or does
+38364	504	-	rm38364.docent.yaml	page	-	a density mode that keeps items clickable. The fix is in hg/hgTracks, so what changed is what a page says or does
+38372	504	-	-	page	-	changing genome on hgCustom re-submitting the form. The fix is in hg/hgCustom, so what changed is what a page says or does
+38384	504	-	-	page	-	a 400 fetching faceted composite metadata on a curated hub. The fix is in hg/hgTrackUi, so what changed is what a page says or does

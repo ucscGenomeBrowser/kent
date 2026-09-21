@@ -81,8 +81,9 @@ grep -c FAIL download.log
 # They were valid bigWigs covering a single base with a value of zero, so
 # GM12878's haplotype accessibility overlay drew nothing.  Note that they were
 # NOT basesCovered 0, which is why the check tests for less than 1000; the
-# smallest legitimate haplotype file here covers 4.1 million bases (PM00008,
-# the near-haploid Hap1 line, which has little phaseable heterozygosity).
+# smallest legitimate haplotype file here covers 399,383,234 bases (PM00008
+# hap1, the near-haploid Hap1 line, which has little phaseable heterozygosity;
+# every other sample's haplotype files cover 2.1 billion bases or more).
 # Reported to the lab, and fixed by them - see the PM00001 section below.
 
 # ---------------------------------------------------------------------------
@@ -197,8 +198,8 @@ bigBedToBed PM00001/fire-peaks.bb -chrom=chr1 -start=1000000 -end=1100000 stdout
 # The rebuild also rounds signalValue and qValue to 3 decimals.  They arrive
 # with full double precision (qValues like 22.807437495448326), which reads
 # badly in a mouseover and on the details page and costs a third of the file
-# size: 467 MB over the 41 files before rounding, 313 MB after.  pValue is the
-# sentinel -1 throughout and is untouched.
+# size: 500 MB over the 41 files before rounding, 320 MB after (recounted after
+# the PM00001 reissue).  pValue is the sentinel -1 throughout and is untouched.
 #
 # The rebuilt files are named fire-peaks.ucsc.bb and are what trackDb points
 # at; the originals are kept next to them for comparison.
@@ -308,9 +309,14 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #                 Embryonic stem cell 2), so as a facet it drew two checkboxes
 #                 and left 12 samples unreachable.  Underscored, so it is a
 #                 searchable and sortable column instead.
-#      sampleClass 3 values, all count > 1.  Derived from the lab's free-text
-#                 cell type, and worth replacing when they give us real HPRC
-#                 metadata (donor sex, population) that would facet properly.
+#      sampleClass 2 values, HPRC (20) and Common Cell Line (21), both count > 1.
+#                 Read from the fifth column of fiberSeqSamples.tsv, which
+#                 carries the lab's own classification (the Note column of
+#                 Mitchell's sample sheet).  It used to be derived from the
+#                 free-text cell type, which misfiled five lymphoblastoid lines
+#                 that are not HPRC - see the note below.  Still worth extending
+#                 when the lab sends real donor metadata (sex, population), which
+#                 would give more than one useful facet.
 #
 # 6. Subtracks need an explicit priority.  Without one they fall back to a label
 #    sort, which showed a sample's data types as Peaks, CpG, Acc on a first
@@ -318,6 +324,25 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #    (i*10 + j + 1), which matches the row of data type checkboxes across the
 #    top of the table.  cartDump.c clears "<mdid>_*.priority" and writes its own
 #    on every submit, so this only sets the starting order.
+#
+#    The children INSIDE each multiWig need their own priority too, and there it
+#    is not cosmetic.  makeContainerTrack() in hg/hgTracks/container.c sorts a
+#    container's children with trackPriCmp, which compares priority alone and
+#    returns 0 on a tie, and slSort is not stable - so children left on the
+#    parent's inherited priority draw in an arbitrary order.  For cpgDiff that
+#    decides the picture: it is a solidOverlay and all four files hold the same
+#    value at a shared base, so the level drawn last is the colour the user sees.
+#    Left unset, p<0.01 painted over p<0.001 and p<0.0001, i.e. the least
+#    stringent tier won and the track said the opposite of what it meant.
+#    Measured at chr20:29,300,000-29,305,000, where 107 of the 133 p<0.01 bases
+#    are also p<0.0001: before, 98 image columns showed only yellow and 2 showed
+#    red; after giving the four levels priority 1-4, 88 columns show red and 51
+#    show grey.  The two haplotype children carry priority 1 and 2 for the same
+#    reason, though transparentOverlay makes their order much less visible.
+#
+#    The haplotype children also take their shortLabel prefix from the
+#    container's own shortLabel, so the CpG pair reads "<sample> CpG Hap1/2"
+#    rather than colliding with the accessibility pair's "<sample> Hap1/2".
 #
 # 7. mouseOver text only appears in pack or full.  Dense makes no per-item map
 #    boxes at all, so no bigBed-like track has a per-item hover there.  Since

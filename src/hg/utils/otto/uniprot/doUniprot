@@ -2329,6 +2329,13 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     if isfile(mapFname) and not doForce:
         logging.info("%s already exists, not rebuilding the protein -> genome mapping PSL" % mapFname)
         assert(os.path.getsize(mapFname)!=0)
+        # The lift info describes the mapping, so it has to exist wherever the mapping
+        # does. A run that was interrupted between building the PSL and writing this file
+        # leaves the PSL behind on its own, and the next run then reuses the PSL and falls
+        # over copying the file that was never written. Write it here too. refs #38300
+        if not isfile(mapDescFname):
+            logging.info("%s is missing next to the reused mapping, writing it" % mapDescFname)
+            writeMapDesc(stats, db, geneTable, mapDescFname)
         # careful: if you modify this, also modify the other return statement below
         return mapFname, geneTable, fullMd5, protMapSource, protToTrans, False
 
@@ -2501,9 +2508,19 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
         # download NCBI -> refseq tables
         downloadAndSplitNcbi(taxIdDbs)
         downloadUniprot(uprotDir)
+    else:
+        # the per-taxon NCBI tables are keyed on the plan, not on the UniProt release, so a
+        # plan with taxa that have never been run needs them even when the download is
+        # skipped. This is the GenArk case: 104 tables existed for the dbDb plan of 109
+        # taxa, against 664 taxa here.
+        splitNcbiIfNeeded(taxIdDbs)
 
     downVersion = readRelStringUniprot(uprotDir)
-    tabVersion = open(join(tabDir, "version.txt")).read()
+    # No version file means nothing has been parsed into this directory yet, so parse.
+    # Do not assume it is there: it is absent on a first run, and removing it is the way to
+    # force a reparse when the release has not changed but the taxon list has.
+    versionFname = join(tabDir, "version.txt")
+    tabVersion = open(versionFname).read() if isfile(versionFname) else None
 
     doParse = True
     if downVersion==tabVersion:
@@ -3082,17 +3099,44 @@ def splitGeneRefseq(fname, outDir, uniprotTaxIds):
 
     writeGeneTsv(geneToTrans, lastTax, outDir)
 
-def downloadAndSplitNcbi(taxIdDbs):
-    " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
-    logging.info("Downloading NCBI gene2refseq file gene2refseq.tsv")
+ncbiGeneFname = join(NCBIDIR, "gene2refseq.gz")
+
+def downloadNcbi():
+    " download the NCBI gene -> RefSeq transcript file "
+    logging.info("Downloading NCBI gene2refseq")
     # --no-progress-meter, not -s: it drops the progress bar, which otherwise writes a few
     # hundred lines of percentages into lastRun.log, but still shows errors. Plain -s would
     # hide the errors too, which is why they were dropped here in the first place.
-    # --fail so an HTTP error is reported as one, instead of piping NCBI's error page into
-    # zcat and failing with a confusing "not in gzip format"
-    cmd = "curl --no-progress-meter --show-error --fail https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz | zcat > ncbi/gene2refseq.tsv"
-    run(cmd)
-    splitGeneRefseq("ncbi/gene2refseq.gz", NCBIDIR, taxIdDbs)
+    # --fail so an HTTP error is reported as one, instead of writing NCBI's error page to
+    # the file and failing later with a confusing "not in gzip format".
+    # Keep it gzipped: this used to unpack to gene2refseq.tsv, 16 GB, while the split below
+    # went on reading gene2refseq.gz, so the download and the split named different files
+    # and the per-taxon tables were built from whichever .gz happened to be lying around.
+    tmpName = ncbiGeneFname + ".tmp"
+    run("curl --no-progress-meter --show-error --fail "
+        "https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz > %s" % tmpName)
+    os.rename(tmpName, ncbiGeneFname)
+
+def splitNcbiIfNeeded(taxIdDbs):
+    """ make sure there is a per-taxon NCBI gene -> RefSeq table for every taxon we will
+    map through RefSeq models. Splitting is cheap next to downloading, and the tables are
+    per taxon, so a plan with new taxa needs it even when the download is skipped.
+    """
+    missing = [t for t in taxIdDbs if not isfile(join(NCBIDIR, "%s.tsv" % t))]
+    if not missing:
+        return
+    if not isfile(ncbiGeneFname):
+        errAbort("%s is missing and the download was skipped, so the per-taxon NCBI tables "
+                "for %d taxa cannot be built. Run without --skipDownload." %
+                (ncbiGeneFname, len(missing)))
+    logging.info("%d of %d taxa have no NCBI gene table yet, splitting %s" % \
+            (len(missing), len(taxIdDbs), ncbiGeneFname))
+    splitGeneRefseq(ncbiGeneFname, NCBIDIR, taxIdDbs)
+
+def downloadAndSplitNcbi(taxIdDbs):
+    " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
+    downloadNcbi()
+    splitGeneRefseq(ncbiGeneFname, NCBIDIR, taxIdDbs)
 
 def delFlag():
     global flagFname

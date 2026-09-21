@@ -14,7 +14,7 @@ This track shows a whole-genome multiple alignment of those 16 strain assemblies
 mouse reference, with the rat genome included as an outgroup. It was built with Progressive
 Cactus from the assemblies themselves rather than by mapping short reads, so insertions and
 deletions in a strain appear directly in the alignment. Large rearrangements are a different
-matter: the strain scaffolds were joined into chromosomes using the reference as a guide and
+matter: the strain scaffolds were joined into chromosomes using the reference as a guide, and
 adjacencies that disagreed with it were mostly discarded, so this is not a good source for
 translocations or inversions.
 </p>
@@ -33,7 +33,7 @@ strain assemblies</a> hub, which is on our public hub list, and pick a strain as
 its gateway page.
 </p>
 
-<h2>Display Convention and Configuration</h2>
+<h2>Display Conventions and Configuration</h2>
 
 <p>
 Each aligned assembly is shown on its own row, labeled with the strain name. The track
@@ -73,7 +73,7 @@ are shown as follows:
 <ul>
   <li><b>Vertical blue bar:</b> a discontinuity that persists indefinitely on either side,
       for example a large region of DNA on either side of the bar coming from a different
-      chromosome in the aligned assembly because of a large scale rearrangement.</li>
+      chromosome in the aligned assembly because of a large-scale rearrangement.</li>
   <li><b>Green square brackets:</b> enclose shorter alignments consisting of DNA from one
       genomic context nested inside a larger chain of alignments from a different genomic
       context. The alignment within the brackets may represent a short misalignment, a
@@ -121,12 +121,12 @@ into chromosome-scale sequences with Ragout v2.0, using the C57BL/6J GRCm38 sequ
 single reference and minimizing the number of structural differences from it. On average 10%
 of synteny block adjacencies in the assemblies were absent from the reference; Ragout kept
 the 38% of those it judged to be real rearrangements and removed the remainder as
-mis-assemblies. The GenBank version of each assembly was used here. A Progressive Cactus
+misassemblies. The GenBank version of each assembly was used here. A Progressive Cactus
 alignment was then generated
 from those 16 assemblies together with the mouse reference (mm10) and the rat reference
 (rn6), giving 18 genomes in total. Because the laboratory strains are so closely related,
 the Cactus guide tree was binarized as accurately as possible, but incomplete lineage
-sorting is common among these strains and the guide tree may not be correct in every region.
+sorting is common among these strains, and the guide tree may not be correct in every region.
 This has little effect on alignment quality except where insertions and deletions themselves
 fall under incomplete lineage sorting. The guide tree is shown on the track configuration
 page. See the references below for details of both the assemblies and the alignment method.
@@ -156,8 +156,8 @@ and its track configuration is in
 The alignment can be explored interactively with the
 <a href="../cgi-bin/hgTables">Table Browser</a>, which returns one MAF block per row. From
 scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
-track=<i>mouseStrainsCactus</i>.
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, using the track name
+<i>mouseStrainsCactus</i>.
 </p>
 
 <p>
@@ -196,6 +196,15 @@ Institute.
 <h2>References</h2>
 
 <p>
+Hickey G, Paten B, Earl D, Zerbino D, Haussler D.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23505295" target="_blank">
+HAL: a hierarchical format for storing and analyzing multiple genome alignments</a>.
+<em>Bioinformatics</em>. 2013 May 15;29(10):1341-2.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23505295" target="_blank">23505295</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3654707/" target="_blank">PMC3654707</a>
+</p>
+
+<p>
 Lilue J, Doran AG, Fiddes IT, Abrudan M, Armstrong J, Bennett R, Chow W, Collins J, Collins S,
 Czechanski A <em>et al</em>.
 <a href="https://doi.org/10.1038/s41588-018-0223-8" target="_blank">
@@ -207,24 +216,6 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6205630/" target="_blank">PMC
 </p>
 
 <p>
-Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
-<a href="https://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=21665927" target="_blank">
-Cactus: Algorithms for genome multiple sequence alignment</a>.
-<em>Genome Res</em>. 2011 Sep;21(9):1512-28.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>
-</p>
-
-<p>
-Hickey G, Paten B, Earl D, Zerbino D, Haussler D.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/23505295" target="_blank">
-HAL: a hierarchical format for storing and analyzing multiple genome alignments</a>.
-<em>Bioinformatics</em>. 2013 May 15;29(10):1341-2.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23505295" target="_blank">23505295</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3654707/" target="_blank">PMC3654707</a>
-</p>
-
-<p>
 Nguyen N, Hickey G, Raney BJ, Armstrong J, Clawson H, Zweig A, Karolchik D, Kent WJ, Haussler D,
 Paten B.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/25138168" target="_blank">
@@ -232,5 +223,14 @@ Comparative assembly hubs: web-accessible browsers for comparative genomics</a>.
 <em>Bioinformatics</em>. 2014 Dec 1;30(23):3293-301.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25138168" target="_blank">25138168</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4296145/" target="_blank">PMC4296145</a>
+</p>
+
+<p>
+Paten B, Earl D, Nguyen N, Diekhans M, Zerbino D, Haussler D.
+<a href="https://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=21665927" target="_blank">
+Cactus: Algorithms for genome multiple sequence alignment</a>.
+<em>Genome Res</em>. 2011 Sep;21(9):1512-28.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/21665927" target="_blank">21665927</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3166836/" target="_blank">PMC3166836</a>
 </p>
 

@@ -11,6 +11,7 @@
 #include "hgConfig.h"
 #include "htmshell.h"
 #include "md5.h"
+#include "hmac.h"
 
 
 char *hubSpaceKeysCommaSepFieldNames = "userName,apiKey";
@@ -204,17 +205,80 @@ if (!userName || !apiKey)
 hubSpaceSaveApiKey(userName, apiKey);
 }
 
-char *hubSpaceApiKeySyncSig(char *userName, char *apiKey)
-/* Return a signature over userName and apiKey (empty string for a revoke), made with the
- * login.cookieSalt shared secret that is already required to be identical across all of a
- * site's geo mirrors (it is what makes the login cookie itself verifiable on every mirror).
- * A peer mirror recomputes this to check that a hubSpaceSetApiKey/revoke request genuinely
- * came from another UCSC mirror acting for this user, not from an outside caller. */
+static boolean hasNewLine(char *s)
+/* Return TRUE if s is non-NULL and holds a carriage return or a line feed. */
+{
+return (s != NULL && (strchr(s, '\n') != NULL || strchr(s, '\r') != NULL));
+}
+
+static char *apiKeySyncSalt()
+/* The shared secret the mirrors sign api key syncs with.  errAborts if it is not set. */
 {
 char *salt = cfgOption("login.cookieSalt");
 if (isEmpty(salt))
     errAbort("hubSpaceApiKeySyncSig: login.cookieSalt must be set to sync api keys across mirrors");
+return salt;
+}
+
+char *hubSpaceApiKeySyncSig(char *userName, char *apiKey, long timeStamp)
+/* Return a signature over userName, apiKey (empty string for a revoke) and timeStamp (unix
+ * seconds), made with the login.cookieSalt shared secret that is already required to be
+ * identical across all of a site's geo mirrors (it is what makes the login cookie itself
+ * verifiable on every mirror).  A peer mirror recomputes this to check that a
+ * hubSpaceSetApiKey/revoke request genuinely came from another UCSC mirror acting for this
+ * user, not from an outside caller.  HMAC rather than a plain hash of secret+message, so
+ * the construction does not depend on the hash resisting length extension. */
+{
+// The fields are joined with a newline, so no field may contain one: otherwise ("a", "b\nc")
+// and ("a\nb", "c") join to the same string and one signature covers both, and a peer that
+// checks the signature would still write the wrong userName's row.  A real userName is an
+// email address and a real apiKey is hex from makeRandomKey(), so this costs nothing -- but
+// the receiving side takes both from the request, so it has to be enforced, not assumed.
+if (hasNewLine(userName) || hasNewLine(apiKey))
+    errAbort("hubSpaceApiKeySyncSig: a userName or apiKey may not contain a newline");
 char buf[1024];
-safef(buf, sizeof buf, "%s-%s-%s", salt, userName, apiKey ? apiKey : "");
-return md5HexForString(buf);
+safef(buf, sizeof buf, "hgHubSyncApiKey\n%s\n%s\n%ld", userName, apiKey ? apiKey : "",
+        timeStamp);
+return hmacSha256(apiKeySyncSalt(), buf);
+}
+
+static boolean constantTimeSameString(char *a, char *b)
+/* Return TRUE if a and b are equal, in time that does not depend on how far along they
+ * first differ, so comparing a signature does not leak it one byte at a time. */
+{
+if (a == NULL || b == NULL)
+    return (a == b);
+size_t aLen = strlen(a), bLen = strlen(b);
+// The lengths of our signatures are not secret, only their contents
+if (aLen != bLen)
+    return FALSE;
+unsigned char diff = 0;
+size_t i;
+for (i = 0;  i < aLen;  i++)
+    diff |= (unsigned char)(a[i] ^ b[i]);
+return (diff == 0);
+}
+
+boolean hubSpaceApiKeySyncSigOk(char *userName, char *apiKey, char *timeStampString, char *sig)
+/* Return TRUE if sig is what this site would have signed over userName, apiKey and
+ * timeStampString, and that timestamp is inside HUB_APIKEY_SYNC_WINDOW of now.  The window
+ * is what bounds replay: without it a captured sync could be resent at any time to
+ * reinstate a key its owner had since revoked.  errAborts if login.cookieSalt is unset. */
+{
+if (isEmpty(userName) || apiKey == NULL || isEmpty(timeStampString) || isEmpty(sig))
+    return FALSE;
+// refused here rather than left to errAbort in hubSpaceApiKeySyncSig, so that a peer asking
+// about a nonsense userName gets the same plain "no" as one with a bad signature
+if (hasNewLine(userName) || hasNewLine(apiKey))
+    return FALSE;
+char *end = NULL;
+long timeStamp = strtol(timeStampString, &end, 10);
+if (end == timeStampString || (end != NULL && *end != '\0'))
+    return FALSE;
+// Signed in the future as well as in the past: mirror clocks are not identical, and a peer
+// a few seconds ahead of us must still be able to talk to us.
+long age = (long)time(NULL) - timeStamp;
+if (age < -HUB_APIKEY_SYNC_WINDOW || age > HUB_APIKEY_SYNC_WINDOW)
+    return FALSE;
+return constantTimeSameString(sig, hubSpaceApiKeySyncSig(userName, apiKey, timeStamp));
 }

@@ -81,7 +81,9 @@ struct trackDb *tdbList = NULL;
 // trackDb load per request, not a second one on top of theirs.
 struct maneLookup *maneLookup = NULL;
 boolean maneLookupAttempted = FALSE;
-boolean measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
+boolean measureTiming = FALSE;
+if (cart)
+    measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
 long maneLookupTimeMs = 0;
 for (table = hgp->tableList; table != NULL; table = table->next)
     {

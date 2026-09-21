@@ -82,7 +82,17 @@ LEVELS = [
 # one.  The vocabulary is short on purpose: a fourth reason should be argued for
 # on the ticket before it is added here, because every one of these is a claim
 # about what browser tests cannot do.
-WHYS = ["invisible", "perf", "library"]
+UNIT_WHYS = ["invisible", "perf", "library"]
+
+# The opposite claim: what changed is what a page says or does, so the docent
+# suite is the right test and no unit test is wanted.  These rows are here so the
+# judgement is written down and can be argued with, rather than living in
+# somebody's head as "that one does not need a unit test".  `needed` leaves them
+# out; `unwatched` does not, because a ticket with no test of any kind is worth
+# seeing whichever kind it should have had.
+NO_UNIT_WHY = "page"
+
+WHYS = UNIT_WHYS + [NO_UNIT_WHY]
 
 # Where the browser-side suite keeps its scripts, refs #38252.  Named here so the
 # docent column is checked for rot the same way the test column is.
@@ -172,6 +182,8 @@ def check(rows, fileName=REGISTRY):
             if row.evidence != "-":
                 bad(row, "no test, so the evidence column must be -")
             continue
+        if row.why == NO_UNIT_WHY:
+            bad(row, "why is '%s', so this row cannot name a unit test" % NO_UNIT_WHY)
         if row.evidence not in LEVELS:
             bad(row, "evidence '%s' is not one of %s" %
                 (row.evidence, ", ".join(LEVELS)))
@@ -229,7 +241,8 @@ def byTicketMap(rows):
 
 def summary(rows):
     covered = {r.ticket for r in rows if r.test != "-"}
-    waiting = {r.ticket for r in rows if r.test == "-"}
+    waiting = {r.ticket for r in rows
+               if r.test == "-" and r.why in UNIT_WHYS}
     tests = {r.fileName() for r in rows if r.test != "-"}
     print("%d tickets covered by %d tests, %d waiting for one" %
           (len(covered), len(tests), len(waiting)))
@@ -238,13 +251,17 @@ def summary(rows):
         releases.setdefault(row.release, set()).add(row.ticket)
     for release in sorted(releases, key=lambda v: (v == "-", v)):
         print("  v%-6s %3d tickets" % (release, len(releases[release])))
+    noUnit = {r.ticket for r in rows if r.why == NO_UNIT_WHY}
+    if noUnit:
+        print("  %d more want no unit test at all: a page test is the right one"
+              % len(noUnit))
     watched = {r.ticket for r in rows if r.docent != "-"}
     nothing = {r.ticket for r in rows
                if r.test == "-" and r.docent == "-"}
     print("%d also have a docent script, %d have no test of any kind"
           % (len(watched), len(nothing)))
     print("why a unit test:")
-    for why in WHYS:
+    for why in UNIT_WHYS:
         n = len({r.ticket for r in rows if r.why == why})
         if n:
             print("  %-10s %3d tickets" % (why, n))
@@ -285,11 +302,11 @@ def byTicket(rows, ticket):
 
 
 def needed(rows):
-    hits = [r for r in rows if r.test == "-"]
+    hits = [r for r in rows if r.test == "-" and r.why in UNIT_WHYS]
     if not hits:
         print("every ticket in the registry has a test")
         return 0
-    for why in WHYS:
+    for why in UNIT_WHYS:
         group = [r for r in hits if r.why == why]
         if not group:
             continue
@@ -313,7 +330,8 @@ def unwatched(rows):
         group = [r for r in hits if r.why == why]
         if not group:
             continue
-        print("\n%s" % why)
+        print("\n%s%s" % (why, "  (a page test is the right one, not a unit test)"
+                          if why == NO_UNIT_WHY else ""))
         for row in group:
             print("  #%s  v%s  %s" % (row.ticket, row.release, row.note))
     print("\n%d tickets with nothing watching them" % len(hits))

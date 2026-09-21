@@ -1453,6 +1453,90 @@ function getHgsid()
     return "";
 }
 
+function addHgsidToLinks(root)
+{// add the session id to every link under root that points at one of our own CGIs
+ // A track description page is written by whoever wrote the track or the hub, and is only
+ // lightly sanitized, so the session id cannot be put into it on the server: an <img> in
+ // such a page would then send the id to whatever host the page names. Doing it here means
+ // only an <a href> that stays on this host, in this cgi-bin directory, ever sees it, and
+ // the id is never in what the page's author gets to read back.
+    var hgsid = getHgsid();
+    if (!hgsid)
+        return;
+    // the page doing this is itself a CGI, so its own directory is the cgi-bin directory
+    var cgiDir = window.location.pathname.replace(/[^\/]*$/, '');
+    var links = (root || document).querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute('href');
+        // an empty href, or one that only jumps within this page, is not a link to a CGI
+        if (!href || href.charAt(0) === '#')
+            continue;
+        var url;
+        try {
+            url = new URL(href, document.baseURI);
+        } catch (e) {
+            continue;     // mailto:, a malformed href, anything we cannot place
+        }
+        if (url.host !== window.location.host || url.pathname.replace(/[^\/]*$/, '') !== cgiDir)
+            continue;
+        // a CGI has no filename extension; a .html or a .png sitting in the same directory
+        // is not one, and neither is a link to the directory itself
+        if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(url.pathname.replace(/^.*\//, '')))
+            continue;
+        // keep the fragment at the end, and leave the rest of the href byte for byte: it may
+        // hold encodings that a round trip through URL would rewrite
+        var hash = '';
+        var hashAt = href.indexOf('#');
+        if (hashAt !== -1) {
+            hash = href.substring(hashAt);
+            href = href.substring(0, hashAt);
+        }
+        // a description page written while the server still filled in a $hgsid variable can
+        // carry the reference itself.  Nothing resolves it now, and hgsid=$hgsid is not a
+        // session id, so drop it and let the real one take its place below.
+        href = href.replace(/([?&])hgsid=(?:\$\{hgsid\}|\$hgsid)(&|$)/i, '$1')
+                   .replace(/[?&]$/, '');
+        if (/[?&]hgsid=/i.test(href))
+            continue;
+        links[i].setAttribute('href', href + (href.indexOf('?') === -1 ? '?' : '&') +
+                              'hgsid=' + encodeURIComponent(hgsid) + hash);
+    }
+}
+
+function offsiteLinksToNewTab(root)
+{// send every link under root that leaves this server to a new tab, and keep that tab from
+ // reaching back. rel=noopener stops the page that opens from steering the tab it came from
+ // through window.opener; rel=noreferrer keeps our own URL, which carries the session id,
+ // out of the Referer header it sends. The href on a track description page is written by
+ // whoever wrote the track or the hub, so neither is theoretical.
+    var links = (root || document).querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute('href');
+        if (!href || href.charAt(0) === '#')
+            continue;
+        var url;
+        try {
+            url = new URL(href, document.baseURI);
+        } catch (e) {
+            continue;
+        }
+        // a page somewhere else: a mailto: or an ftp: link has nothing to gain from a tab
+        if ((url.protocol !== 'http:' && url.protocol !== 'https:') ||
+            url.host === window.location.host)
+            continue;
+        // leave a target the page asked for alone, but still add the rel: the popup in
+        // hgTracks puts target=_blank on everything before this runs
+        if (!links[i].getAttribute('target'))
+            links[i].setAttribute('target', '_blank');
+        var rel = links[i].getAttribute('rel') || '';
+        if (!/\bnoopener\b/.test(rel))
+            rel += (rel ? ' ' : '') + 'noopener';
+        if (!/\bnoreferrer\b/.test(rel))
+            rel += ' noreferrer';
+        links[i].setAttribute('rel', rel);
+    }
+}
+
 function undecoratedDb(db)
 // return the db name with any hub_id_ stripped
 {

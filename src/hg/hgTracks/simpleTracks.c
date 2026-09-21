@@ -3388,7 +3388,7 @@ for (ref = exonList; TRUE; )
                                             dyStringPrintf(codonDy,
                                                 "<b>Note: </b>This transcript's sequence has "
                                                 "extra or missing bases compared to the genome "
-                                                "at this codon, so the genomic and transcript "
+                                                "before this codon, so the genomic and transcript "
                                                 "codon numbers differ. "
                                                 "<a target=_blank "
                                                 "href=\"../FAQ/FAQgenes.html#txIndel\">"
