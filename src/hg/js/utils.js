@@ -1503,6 +1503,40 @@ function addHgsidToLinks(root)
     }
 }
 
+function offsiteLinksToNewTab(root)
+{// send every link under root that leaves this server to a new tab, and keep that tab from
+ // reaching back. rel=noopener stops the page that opens from steering the tab it came from
+ // through window.opener; rel=noreferrer keeps our own URL, which carries the session id,
+ // out of the Referer header it sends. The href on a track description page is written by
+ // whoever wrote the track or the hub, so neither is theoretical.
+    var links = (root || document).querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute('href');
+        if (!href || href.charAt(0) === '#')
+            continue;
+        var url;
+        try {
+            url = new URL(href, document.baseURI);
+        } catch (e) {
+            continue;
+        }
+        // a page somewhere else: a mailto: or an ftp: link has nothing to gain from a tab
+        if ((url.protocol !== 'http:' && url.protocol !== 'https:') ||
+            url.host === window.location.host)
+            continue;
+        // leave a target the page asked for alone, but still add the rel: the popup in
+        // hgTracks puts target=_blank on everything before this runs
+        if (!links[i].getAttribute('target'))
+            links[i].setAttribute('target', '_blank');
+        var rel = links[i].getAttribute('rel') || '';
+        if (!/\bnoopener\b/.test(rel))
+            rel += (rel ? ' ' : '') + 'noopener';
+        if (!/\bnoreferrer\b/.test(rel))
+            rel += ' noreferrer';
+        links[i].setAttribute('rel', rel);
+    }
+}
+
 function undecoratedDb(db)
 // return the db name with any hub_id_ stripped
 {

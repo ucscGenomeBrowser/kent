@@ -4784,7 +4784,7 @@ else
     htmlDoEscape();
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
-    jsAddHgsidToLinks();
+    jsFixUpPageLinks();
     jsonPrintGlobals();
     webEnd();
     }

@@ -165,11 +165,13 @@ void jsBeginCollapsibleSectionOldStyle(struct cart *cart, char *track, char *sec
 void jsEndCollapsibleSection();
 /* End the collapsible <TR id=...>. */
 
-void jsAddHgsidToLinks();
-/* Emit the javascript that gives every link on this page to one of our own CGIs the current
- * session id.  See addHgsidToLinks() in utils.js: a track description page comes from
- * whoever wrote the track or the hub, so the session id cannot be substituted into it on
- * the server without also handing it to an <img> that points somewhere else. */
+void jsFixUpPageLinks();
+/* Emit the javascript that tidies up this page's links once it is rendered: our own CGI
+ * links get the current session id, and links that leave this server open in a new tab with
+ * rel="noopener noreferrer".  See addHgsidToLinks() and offsiteLinksToNewTab() in utils.js.
+ * A track description page comes from whoever wrote the track or the hub, so the session id
+ * cannot be substituted into it on the server without also handing it to an <img> that
+ * points somewhere else. */
 
 void jsReloadOnBackButton(struct cart *cart);
 /* Add some javascript to detect that the back button (or reload) has been pressed,

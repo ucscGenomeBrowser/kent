@@ -3825,7 +3825,7 @@ if (html != NULL && html[0] != 0)
     puts("</div>");
     }
 hPrintf("<BR>\n");
-jsAddHgsidToLinks();
+jsFixUpPageLinks();
 }
 
 static struct chain *quickLiftChainInRange(struct trackDb *tdb, int id)

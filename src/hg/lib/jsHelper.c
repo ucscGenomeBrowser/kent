@@ -331,11 +331,13 @@ safef(buf, sizeof(buf), "setCheckBoxesWithPrefix(this, '%s', %s); return false",
 return buf;
 }
 
-void jsAddHgsidToLinks()
-/* Emit the javascript that gives every link on this page to one of our own CGIs the current
- * session id.  See addHgsidToLinks() in utils.js: a track description page comes from
- * whoever wrote the track or the hub, so the session id cannot be substituted into it on
- * the server without also handing it to an <img> that points somewhere else. */
+void jsFixUpPageLinks()
+/* Emit the javascript that tidies up this page's links once it is rendered: our own CGI
+ * links get the current session id, and links that leave this server open in a new tab with
+ * rel="noopener noreferrer".  See addHgsidToLinks() and offsiteLinksToNewTab() in utils.js.
+ * A track description page comes from whoever wrote the track or the hub, so the session id
+ * cannot be substituted into it on the server without also handing it to an <img> that
+ * points somewhere else. */
 {
 static boolean done = FALSE;
 if (done)
@@ -343,7 +345,8 @@ if (done)
 done = TRUE;
 jsIncludeFile("utils.js", NULL);
 // jsInlineFinish() writes this at the end of the body, so the page is parsed by then
-jsInline("addHgsidToLinks(document);\n");
+jsInline("addHgsidToLinks(document);\n"
+         "offsiteLinksToNewTab(document);\n");
 }
 
 /* cgiMakeCheckAllSubmitButton really belongs in cheapcgi.c, but that is compiled without access to jsHelper.h */
