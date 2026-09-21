@@ -12,11 +12,13 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
 	${BIN_DIR}/sessionDataTester \
-#	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/hgvsTester \
 	${BIN_DIR}/sqlCheck 
+# annoGratorTester is left out, like the annoGratorTest target below.  A commented
+# line inside the list above would comment out every entry after it, because the
+# backslash on the line before joins them into one line.
 
 ${BIN_DIR}/%: %.c ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
