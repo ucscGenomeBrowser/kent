@@ -36095,3 +36095,19 @@ ln -s /hive/data/genomes/hg19/bed/clinPred/{a,c,g,t}.color.bb /gbdb/hg19/clinPre
 #   Dixon visibility pack, Schmitt+McArthur hide) + tads/tadsDixon/tadsSchmitt/tadsMcArthur .html.
 #   Gated: include tad.ra alpha in human/hg19/trackDb.ra.
 cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg19 FIND=find
+
+#########################################################################
+# mei - Mobile Element Insertions, euL1db subtracks (DONE 2026-09-21 Lou)
+# refs #37524
+#
+# hg19 carries two of the six subtracks of the "Mobile Insertions" (mei)
+# superTrack: meiEul1db (8,991 curated L1-HS insertion polymorphisms) and
+# meiEul1dbRef (1,544 reference-genome L1HS copies), both from euL1db
+# v1.00 (Mir et al. 2015, PMID 25352549). euL1db's coordinates are hg19
+# natively; the hg38 copies are lifted from these.
+#
+# The stanza lives in trackDb/human/mei.ra (shared across assemblies via
+# $D) and every build step for both assemblies is documented together in:
+#   ~/kent/src/hg/makeDb/doc/hg38/mei.txt
+#
+# Files: /gbdb/hg19/mei/eul1db.bb, /gbdb/hg19/mei/eul1dbRef.bb

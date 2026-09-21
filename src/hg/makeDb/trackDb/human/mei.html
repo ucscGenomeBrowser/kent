@@ -14,47 +14,62 @@ been implicated in a number of human diseases.
 </p>
 
 <p>
-Tracks in this collection report MEI calls assembled from long-read
-genome sequencing. Items are colored by element class.
+Tracks in this collection report MEI calls from several sources: long-read
+genome assemblies, short-read whole-genome sequencing, and curated
+aggregations of published insertion calls. Items are colored by element
+class. Because the callsets differ in cohort, sequencing technology and
+caller, the same insertion site may be present in one subtrack and absent
+from another.
 </p>
 
 <h3>Available subtracks</h3>
 <ul>
-  <li><a href="hgTrackUi?g=meiHgsvc3">HGSVC3 65 MEIs</a> -
+  <li><a href="hgTrackUi?db=hg38&g=meiHgsvc3">HGSVC3 65 MEIs</a> -
       mobile element insertions identified in 65 diverse long-read
       assembled samples relative to the reference assembly
       (HGSVC3, Logsdon et al. 2025, <em>Nature</em>). Available on
       both GRCh38/hg38 (12,642 MEIs) and T2T-CHM13/hs1 (12,919 MEIs).</li>
-  <li><a href="hgTrackUi?g=meiDeepmei1kg">DeepMEI 1000G MEIs</a> -
+  <li><a href="hgTrackUi?db=hg38&g=meiDeepmei1kg">DeepMEI 1000G MEIs</a> -
       91,617 mobile element insertions called by the DeepMEI
       convolutional neural network on the 3,202 high-coverage 1000
       Genomes samples (Xu et al. 2023, bioRxiv). hg38 only.</li>
-  <li><a href="hgTrackUi?g=meiHmeid">HMEID 5675 MEIs</a> -
+  <li><a href="hgTrackUi?db=hg38&g=meiHmeid">HMEID 5675 MEIs</a> -
       36,699 mobile element insertions called by MELT on 5,675 samples
       from the NyuWa Chinese cohort and the 1000 Genomes Project,
       with per-cohort and per-super-population allele frequencies
       (Niu et al. 2022, <em>Nucleic Acids Res</em>). hg38 only.</li>
-  <li><a href="hgTrackUi?g=meiSwegen">SweGen 1000 MEIs</a> -
+  <li><a href="hgTrackUi?db=hg38&g=meiSwegen">SweGen 1000 MEIs</a> -
       18,090 mobile element insertions called by MELT v2.0.2 on the
       1,000 SweGen Swedish whole-genome samples (Ameur et al. 2017,
       <em>Eur J Hum Genet</em>), lifted from GRCh37 to hg38. The
       short-variant frequencies for the same cohort are in the
-      <a href="hgTrackUi?g=swegen">SweGen</a> subtrack of
-      <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a>.</li>
+      <a href="hgTrackUi?db=hg38&g=swefreq">SweGen</a> subtrack of
+      <a href="hgTrackUi?db=hg38&g=varFreqs">SNV Frequencies</a>.</li>
+  <li><a href="hgTrackUi?db=hg38&g=meiEul1db">euL1db Insertions</a> -
+      curated L1-HS insertion polymorphisms aggregated from 32 published
+      studies covering 943 samples (euL1db, Mir et al. 2015,
+      <em>Nucleic Acids Res</em>), lifted from hg19. Available on hg19
+      and hg38.</li>
+  <li><a href="hgTrackUi?db=hg38&g=meiEul1dbRef">euL1db Ref L1HS</a> -
+      the L1-HS copies already present in the reference genome, as
+      catalogued by euL1db from the RepeatMasker annotation. The
+      companion to the euL1db Insertions track. Available on hg19 and
+      hg38.</li>
 </ul>
 
 <p>
-Related: <a href="hgTrackUi?g=longReadVariants">Long-read Structural Variants</a>
+Related: <a href="hgTrackUi?db=hg38&g=longReadVariants">Long-read Structural Variants</a>
 contains the parent SV callsets from which several of these MEI tracks
-are derived. <a href="hgTrackUi?g=rmsk">RepeatMasker</a> shows
+are derived. <a href="hgTrackUi?db=hg38&g=rmsk">RepeatMasker</a> shows
 all annotated mobile elements in the reference genome (regardless of
 whether they are polymorphic).
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each MEI is shown as a 1-bp anchor block at the position where the
-insertion attaches to the reference. Items are colored by element class:
+In the four insertion callsets (HGSVC3, DeepMEI, HMEID and SweGen) each
+MEI is shown as a 1-bp anchor block at the position where the insertion
+attaches to the reference, colored by element class:
 </p>
 <ul>
   <li><span style="display:inline-block;background-color:#0072B2;width:18px;height:12px;vertical-align:middle;"></span> <b>Alu</b> &mdash; SINE (Short INterspersed Element)</li>
@@ -63,6 +78,14 @@ insertion attaches to the reference. Items are colored by element class:
   <li><span style="display:inline-block;background-color:#CC79A7;width:18px;height:12px;vertical-align:middle;"></span> <b>HERVK</b> (Human Endogenous Retrovirus K) &mdash; endogenous retrovirus</li>
   <li><span style="display:inline-block;background-color:#000000;width:18px;height:12px;vertical-align:middle;"></span> <b>snRNA</b> &mdash; small nuclear RNA</li>
 </ul>
+
+<p>
+The two euL1db subtracks differ. Their items span real genomic intervals
+rather than a 1-bp anchor, and they are colored on a different basis:
+euL1db Insertions by the lineage of the contributing insertion calls
+(germline, somatic, both, or unknown) and euL1db Ref L1HS by L1HS
+sub-group. Each of those pages describes its own color scheme.
+</p>
 
 <p>
 Filters available on the subtrack configuration page allow restricting
@@ -79,12 +102,77 @@ the autoSql schema, citation and download instructions.
 </p>
 
 <h2>References</h2>
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+
+
+<p>
+Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, K&#228;h&#228;ri AK, Lundin P, Che H
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">
+SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish
+population</a>.
+<em>Eur J Hum Genet</em>. 2017 Nov;25(11):1253-1260.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">28832569</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC5765326</a>
+</p>
+
+<p>
+Byrska-Bishop M, Evani US, Zhao X, Basile AO, Abel HJ, Regier AA, Corvelo A, Clarke WE, Musunuri R,
+Nagulapalli K <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/36055201" target="_blank">
+High-coverage whole-genome sequencing of the expanded 1000 Genomes Project cohort including 602
+trios</a>.
+<em>Cell</em>. 2022 Sep 1;185(18):3426-3440.e19.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36055201" target="_blank">36055201</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9439720/" target="_blank">PMC9439720</a>
+</p>
+
+<p>
+Gardner EJ, Lam VK, Harris DN, Chuang NT, Scott EC, Pittard WS, Mills RE, 1000 Genomes Project
+Consortium, Devine SE.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28855259" target="_blank">
+The Mobile Element Locator Tool (MELT): population-scale mobile element discovery and biology</a>.
+<em>Genome Res</em>. 2017 Nov;27(11):1916-1929.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28855259" target="_blank">28855259</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5668948/" target="_blank">PMC5668948</a>
+</p>
+
 <p>
 Logsdon GA, Ebert P, Audano PA, Loftus M, Porubsky D, Ebler J, Yilmaz F, Hallast P, Prodanov T, Yoo
 D <em>et al</em>.
-<a href="https://doi.org/10.1038/s41586-025-09140-6" target="_blank">
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40702183" target="_blank">
 Complex genetic variation in nearly complete human genomes</a>.
 <em>Nature</em>. 2025 Aug;644(8076):430-441.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40702183" target="_blank">40702183</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12350169/" target="_blank">PMC12350169</a>
+</p>
+
+<p>
+Mir AA, Philippe C, Cristofari G.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25352549" target="_blank">
+euL1db: the European database of L1HS retrotransposon insertions in humans</a>.
+<em>Nucleic Acids Res</em>. 2015 Jan;43(Database issue):D43-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25352549" target="_blank">25352549</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383891/" target="_blank">PMC4383891</a>
+</p>
+
+<p>
+Niu Y, Teng X, Zhou H, Shi Y, Li Y, Tang Y, Zhang P, Luo H, Kang Q, Xu T <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/35212372" target="_blank">
+Characterizing mobile element insertions in 5675 genomes</a>.
+<em>Nucleic Acids Res</em>. 2022 Mar 21;50(5):2493-2508.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35212372" target="_blank">35212372</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8934628/" target="_blank">PMC8934628</a>
+</p>
+<p>
+Xu X, Huang Y, Wang X, Cheng J, Yuan H, Bu F.
+<a href="https://doi.org/10.1101/2023.03.07.531451" target="_blank">
+Identification of mobile element insertion from whole genome sequencing
+data using deep neural network model</a>.
+<em>bioRxiv</em>. 2023 March 8. doi:10.1101/2023.03.07.531451.
 </p>

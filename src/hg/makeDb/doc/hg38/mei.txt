@@ -132,7 +132,7 @@ sort -k1,1 -k2,2n meiHmeid.bed > meiHmeid.sorted.bed
 
 bedToBigBed -tab \
     -as=$HOME/kent/src/hg/makeDb/scripts/mei/meiHmeid.as \
-    -type=bed9+27 \
+    -type=bed9+28 \
     meiHmeid.sorted.bed \
     /hive/data/genomes/hg38/chrom.sizes \
     meiHmeid.bb
@@ -272,3 +272,62 @@ bedToBigBed -tab \
     /hive/data/genomes/hg38/bed/mei/eul1db/eul1dbRef.hg38.sorted.bed \
     /hive/data/genomes/hg38/chrom.sizes \
     /hive/data/genomes/hg38/bed/mei/eul1db/eul1dbRef.hg38.bb
+
+############################################################
+# /gbdb symlinks for the whole collection
+# The trackDb stanza lives in trackDb/human/mei.ra and uses $D, so each
+# assembly needs its own symlink directory. The SweGen file is
+# underscore-prefixed because the callset cannot be redistributed (see
+# below), which keeps it off the public download server; the stanza also
+# carries "tableBrowser off", which blocks both hgTables and the REST API.
+
+mkdir -p /gbdb/hg38/mei /gbdb/hs1/mei /gbdb/hg19/mei
+
+ln -s /hive/data/genomes/hg38/bed/mei/meiHgsvc3.bb            /gbdb/hg38/mei/hgsvc3.bb
+ln -s /hive/data/genomes/hg38/bed/mei/deepmei/deepmei1kg.bb   /gbdb/hg38/mei/deepmei1kg.bb
+ln -s /hive/data/genomes/hg38/bed/mei/hmei/meiHmeid.bb        /gbdb/hg38/mei/hmeid.bb
+ln -s /hive/data/genomes/hg38/bed/mei/swegen/meiSwegen.bb     /gbdb/hg38/mei/_swegen.bb
+ln -s /hive/data/genomes/hg38/bed/mei/eul1db/eul1db.hg38.bb   /gbdb/hg38/mei/eul1db.bb
+ln -s /hive/data/genomes/hg38/bed/mei/eul1db/eul1dbRef.hg38.bb /gbdb/hg38/mei/eul1dbRef.bb
+ln -s /hive/data/genomes/hs1/bed/mei/meiHgsvc3.bb             /gbdb/hs1/mei/hgsvc3.bb
+ln -s /hive/data/genomes/hg19/bed/mei/eul1db/eul1db.hg19.bb   /gbdb/hg19/mei/eul1db.bb
+ln -s /hive/data/genomes/hg19/bed/mei/eul1db/eul1dbRef.hg19.bb /gbdb/hg19/mei/eul1dbRef.bb
+
+############################################################
+# 2026-09-21 Lou - QA fixes (refs #37524)
+
+# 1) meiHgsvc3: inserted sequence on the PALMER-only records.
+# The source CSV merges three different INFO schemas. Most records follow
+# the VCF convention (ALT[0] == REF[0], len(ALT)-1 == SVLEN), but the 96
+# GRCh38 / 111 T2T-CHM13 records whose INFO carries SEQ/CALLERS do not:
+# there ALT is the element itself (len(ALT) == SVLEN, and on 70 of the 96
+# ALT[0] differs from REF[0]), and 13 of them carry a truncated ALT.
+# meiHgsvc3CsvToBed.py took alt[1:] unconditionally, which dropped the
+# first base of the element on all 96 and left insertSeq disagreeing with
+# svLen. The script now prefers INFO SEQ when present, which always
+# matches SVLEN. Rebuilt both assemblies with the commands above;
+# item counts and every other column are unchanged.
+
+# 2) meiEul1db: sample and individual joins.
+# euL1db's foreign keys are 1-based row numbers, not names: SRIP.txt's
+# sampleID column indexes Samples.txt (943 rows) and Samples.txt's
+# Individual_id column indexes Individuals.txt (741 rows). Both totals
+# match Table 1 of Mir et al. 2015. meiEul1dbToBed.py keyed both lookup
+# tables by name, so neither join ever matched and individualCount,
+# tissues, diseases and populations were empty on all 8,991 MRIPs, while
+# the contributing-samples table printed row numbers instead of sample
+# names. Both loaders now key on the row number and the sample table
+# prints the name. The adjacent population filter compared against
+# "Unknown" while the data says "unknown", so it never fired either; it is
+# now case-insensitive. After the fix: individualCount set on 8,976
+# records, tissues 8,976, diseases 6,781, populations 7,589 (hg19; 7,586
+# after the lift to hg38, which loses 3 MRIPs). Rebuilt the
+# hg19 bigBed and re-lifted to hg38 with the commands above; item counts
+# (8,991 / 8,988) and all other columns are unchanged.
+
+# 3) meiSwegen: /gbdb/hg38/mei/swegen.bb renamed to _swegen.bb. The
+# callset cannot be redistributed, and the underscore prefix is what keeps
+# a file off the public download server. "tableBrowser off" already
+# blocked hgTables and the REST API (verified: the API returns HTTP 403
+# "protected data"), but without the prefix the bigBed itself would have
+# been mirrored to hgdownload. mei.ra was updated to match.

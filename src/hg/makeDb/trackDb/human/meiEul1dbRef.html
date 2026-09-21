@@ -3,7 +3,7 @@
 This track shows the L1-HS (human-specific LINE-1) retrotransposon copies that are
 already present in the human reference genome, as catalogued by
 <a href="http://eul1db.unice.fr" target="_blank">euL1db</a>. Unlike the companion
-<a href="hgTrackUi?g=meiEul1db">euL1db Insertions</a> track, which shows polymorphic
+<a href="hgTrackUi?db=hg38&g=meiEul1db">euL1db Insertions</a> track, which shows polymorphic
 insertions not present (or variably present) in the reference, the items here are
 the L1-HS copies that the reference genome already contains. Together, the two
 tracks provide a comprehensive view of L1-HS positions in the genome &mdash; both
@@ -33,9 +33,13 @@ integrity.
 
 <h2>Methods</h2>
 <p>
-The reference L1-HS catalogue was assembled by the euL1db curators by aligning
-the L1HS consensus sequence to the hg19 reference genome and classifying each
-match into one of the L1HS sub-groups. See Mir et al. 2015 for further details.
+The reference L1-HS catalogue was assembled by the euL1db curators from the
+UCSC <a href="hgTrackUi?db=hg38&g=rmsk">RepeatMasker</a> track table for hg19: the L1HS
+annotations were extracted and each element was annotated with its sub-group,
+integrity and position on the L1HS consensus sequence. euL1db uses this table
+internally to decide whether a given insertion polymorphism corresponds to an
+L1HS copy already present in the reference. See Mir et al. 2015 for further
+details.
 </p>
 <p>
 Track files were generated from the euL1db v1.00 ReferenceL1HS.txt table (data
@@ -44,10 +48,11 @@ dump downloaded March 2018) using the script
    target="_blank">meiEul1dbRefToBed.py</a>. The hg19 BED was lifted to hg38 with
 <tt>liftOver</tt>; of 1,544 hg19 elements, 1,540 lifted successfully. For
 details see
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19/mei.txt"
-   target="_blank">hg19/mei.txt</a> and the scripts directory
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
+   target="_blank">doc/hg38/mei.txt</a> and the scripts directory
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
-   target="_blank">src/hg/makeDb/scripts/mei</a>.
+   target="_blank">src/hg/makeDb/scripts/mei</a>,
+   and the track configuration is in <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/mei.ra" target="_blank">trackDb/human/mei.ra</a>.
 </p>
 
 <h2>Data Access</h2>
@@ -62,7 +67,7 @@ track=<i>meiEul1dbRef</i>.
 <p>
 For automated download and analysis, the annotation is stored in a bigBed
 file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">our download
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/" target="_blank">our download
 server</a>. The file for this track is called <tt>eul1dbRef.bb</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt>.
