@@ -140,8 +140,8 @@ longLabel Sequence matches in Genbank for Ebola Zaire with length < 10kbp
 group genes
 type psl
 visibility hide
-iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
-iframeOptions width='800' height='800' scrolling='yes'
+# a link, not an iframe: NCBI sends X-Frame-Options: SAMEORIGIN, so nuccore cannot be framed
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 priority 10
 
 track genbankNotZaire
@@ -150,8 +150,8 @@ longLabel Sequence matches in Genbank for non-Ebola/Zaire Viruses with length < 
 group genes
 type psl
 visibility hide
-iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
-iframeOptions width='1000' height='800' scrolling='yes'
+# a link, not an iframe: NCBI sends X-Frame-Options: SAMEORIGIN, so nuccore cannot be framed
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 priority 20
 
 track pdb
@@ -160,7 +160,7 @@ longLabel Protein Data Bank (PDB) sequence matches
 group genes
 type bed 12
 visibility hide
-iframeUrl http://www.pdb.org/pdb/explore/explore.do?structureId=$$
+iframeUrl https://www.rcsb.org/structure/$$
 iframeOptions width='1000' height='800' scrolling='yes'
 priority 30
 
