@@ -40,6 +40,12 @@ def pubLinks(pmidField, authorYear):
     return ", ".join(out) if out else "&nbsp;"
 
 
+def studyAnchor(study):
+    """The #fragment a study's row in the Studies table is addressed by, also
+    used as the anchor's id so the Genes and loci table can link to it."""
+    return "study-" + study
+
+
 def studyTable(fname, out):
     authorYear = loadAuthorYear()
     out.write('<table class="stdTbl">\n')
@@ -47,13 +53,25 @@ def studyTable(fname, out):
               "<th>Disorders</th><th>Probes reported</th><th>Distinct probes</th></tr>\n")
     with open(fname) as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
-            out.write("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+            out.write('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td>'
                       "<td>%s</td><td>%s</td></tr>\n"
-                      % (html.escape(r["study"]), pubLinks(r["pmid"], authorYear),
+                      % (html.escape(studyAnchor(r["study"]), quote=True),
+                         html.escape(r["study"]), pubLinks(r["pmid"], authorYear),
                          r["signatures"], html.escape(r["disorders"]) or "&nbsp;",
                          "{:,}".format(int(r["probeRows"])),
                          "{:,}".format(int(r["uniqProbes"]))))
     out.write("</table>\n")
+
+
+def studyLinks(studiesField):
+    out = []
+    for study in studiesField.split(","):
+        study = study.strip()
+        if not study:
+            continue
+        out.append('<a href="#%s">%s</a>'
+                   % (html.escape(studyAnchor(study), quote=True), html.escape(study)))
+    return ", ".join(out) if out else "&nbsp;"
 
 
 def locusTable(fname, out):
@@ -66,7 +84,7 @@ def locusTable(fname, out):
                       "<td>%s</td><td>%s</td></tr>\n"
                       % (html.escape(r["locus"]),
                          html.escape(r["disorders"]) or "&nbsp;",
-                         r["signatures"], html.escape(r["studies"]),
+                         r["signatures"], studyLinks(r["studies"]),
                          "{:,}".format(int(r["probeRows"])),
                          "{:,}".format(int(r["uniqProbes"]))))
     out.write("</table>\n")
