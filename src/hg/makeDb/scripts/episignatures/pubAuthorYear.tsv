@@ -1,0 +1,100 @@
+# First-author last name and publication year for every PubMed ID (or, for the one
+# signature that has no PubMed record, the DOI/URL) cited by the MethaDory Studies table
+# and the EpigenCentral locus table. Used so those tables can link out with a readable
+# "Lastname Year" label instead of the bare PMID.
+#
+# The year is PubMed's own citable pubdate year, which can differ by one from the
+# StudyID/signature key used elsewhere in the track (those were assigned by the source
+# labs, sometimes from an epub-ahead-of-print date); that is expected and not a typo.
+#
+# All PMIDs were looked up via PubMed esummary and the DOI via Crossref on 2026-09-21.
+# On a data refresh, add an entry here for every new id before rebuilding the HTML
+# tables; makeHtmlTables.py and epigenCentralToBed.py errAbort on an id with no entry.
+#id	authorYear
+23356856	Grafodatskaya 2013
+25701644	Bacalini 2015
+26166478	Strong 2015
+26690673	Choufani 2015
+28475860	Butcher 2017
+29456765	Schenkel 2018
+30459321	Aref-Eshghi 2018
+30873861	Cobben 2019
+31029150	Bend 2019
+31160375	Jeffries 2019
+31288860	Chater-Diehl 2019
+31311581	Siu 2019
+31685013	Krzyzewska 2019
+31910894	Ciolfi 2020
+32109418	Aref-Eshghi 2020
+32243864	Choufani 2020
+32303053	Kimura 2020
+32623772	Turinsky 2020
+32694869	Cappuccio 2020
+32758449	Breen 2020
+33407854	Schenkel 2021
+33498634	Haghshenas 2021
+33596411	Radio 2021
+33909990	Rots 2021
+33916664	Velasco 2021
+34345024	Courraud 2021
+34380541	Ciolfi 2021
+34440289	Naumova 2021
+34445317	Rooney 2021
+35063350	Rouxel 2022
+35163737	Foroutan 2022
+35341651	Al-Jawahiri 2022
+35361921	Awamleh 2022
+35887345	Verberne 2022
+35904121	Levy 2022
+36130591	Choufani 2022
+36399132	Coenen-van der Spek 2023
+36430143	van der Laan 2022
+36440975	Awamleh 2023
+36797465	Haghshenas 2023
+37047575	Krzyzewska 2023
+37071997	Bogaert 2023
+37120726	Rooney 2023
+37166351	Lee 2023
+37762546	van der Laan 2023
+37827158	Nil 2023
+37860968	Sabbagh 2024
+37865086	Pagliara 2023
+38054406	Karimi 2024
+38126281	van der Laan 2024
+38282074	Awamleh 2024
+38351292	Caraffi 2024
+38384171	Rots 2024
+38571311	van der Laan 2024
+38770750	Xiao 2024
+38787418	Vos 2024
+38797891	Lee 2024
+38815585	Karayol 2024
+38884529	Sarli 2024
+39013459	Rots 2024
+39089258	Haghshenas 2024
+39097820	Haghshenas 2024
+39107278	LaFlamme 2024
+39355979	van der Sluijs 2025
+39424669	Karimi 2024
+39501558	van der Laan 2025
+39669601	Kawai 2024
+39824190	Karimi 2025
+40044822	Houdayer 2025
+40280028	Mak 2025
+40302207	Peymani 2026
+40379786	Nava 2025
+40410387	Hildonen 2025
+40965981	Masson 2025
+40977504	van der Laan 2025
+41028553	van der Laan 2026
+41468891	Anderson 2026
+41501857	Dombrowsky 2026
+41882293	Sabbagh 2026
+41912934	Leitão 2026
+41952182	Santini 2026
+42134323	Wang 2026
+42318777	Awamleh 2026
+42492524	Reko 2026
+42527582	Chen 2026
+10.20517/jtgg.2020.23	Goodman 2020
+https://www.oaepublish.com/articles/jtgg.2020.23	Goodman 2020
