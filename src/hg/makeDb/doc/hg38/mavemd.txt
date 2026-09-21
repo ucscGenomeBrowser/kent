@@ -52,7 +52,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # used only for the six ENSP-stated score sets. Bump both when hg38 moves to a newer GENCODE;
 # the RefSeq route (ncbiRefSeqLink/ncbiRefSeqCurated) is unversioned and needs no attention.
 #   mavemdLib.py           shared: codon projection, color tables, BED field hygiene
-#   makeMaveMdVariants.py  per-variant bed12+31 -> mavemdVar.bb
+#   makeMaveMdVariants.py  per-variant bed12+34 -> mavemdVar.bb
 #   makeMaveMdHeatmap.py   per-score-set bed12+20 -> mavemdMap.bb
 #   mavemdVariants.as, mavemdHeatmap.as
 #   runBuild.sh            driver for the two converters plus bedToBigBed

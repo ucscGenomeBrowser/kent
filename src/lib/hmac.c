@@ -24,6 +24,18 @@ for(i = 0; i < 20; i++)
 return cloneString(hmacStr);
 }
 
+char *hmacSha256(char *key, char *data)
+/* Calculate a openssl SHA256 keyed-hash message authentication code (HMAC) */
+{
+unsigned char* digest;
+digest=HMAC(EVP_sha256(), key, strlen(key), (unsigned char*)data, strlen(data), NULL, NULL);
+char hmacStr[64+1];   /* the last sprintf writes its terminating zero at [64] */
+int i;
+for(i = 0; i < 32; i++)
+    sprintf(&hmacStr[i*2], "%02x", (unsigned int)digest[i]);
+return cloneString(hmacStr);
+}
+
 char *hmacMd5(char *key, char *data)
 /* Calculate a openssl MD5 keyed-hash message authentication code (HMAC) */
 {

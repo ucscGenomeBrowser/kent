@@ -8,7 +8,6 @@
 #define hVarSubst_h
 
 #include "trackDb.h"
-#include "cart.h"
 
 
 char *hVarSubst(char *desc, struct trackDb *tdb, char *database, char *src);
@@ -23,20 +22,15 @@ void hVarSubstInVar(char *desc, struct trackDb *tdb, char *database, char **varP
  * occur, freeing the old memory if necessary.  See hVarSubst for details.
  */
 
-void hVarSubstWithCart(char *desc, struct cart *cart, struct trackDb *tdb, char *database,
-                       char **varPtr);
-/* Like hVarSubstInVar, but if cart is non-NULL, $hgsid will be substituted. */
-
 void hVarSubstTrackDb(struct trackDb *tdb, char *database);
 /* Substitute variables in trackDb shortLabel, longLabel, and html fields. */
 
-void hVarSubstTrackDbHtml(struct cart *cart, struct trackDb *tdb, char *database);
-/* Substitute variables in a track's description page, at render time, where there is a
- * cart and where $db, $hgsid and $parentTrack resolve to the hub_<id>_ names the CGIs
- * actually use.  A hub's html has never been through substitution, so a short list of
- * variables is resolved here.  A native page was already done by hgTrackDb, apart from
- * $hgsid, which cannot be baked into the trackDb table because it is per-request.
- * Nothing is an error, so a dollar sign in a description page that was not written with
- * this in mind stays a dollar sign. */
+void hVarSubstTrackDbHtml(struct trackDb *tdb, char *database);
+/* Substitute variables in a hub track's description page, at render time, where $db,
+ * $track and $parentTrack resolve to the hub_<id>_ names the CGIs actually use.  A hub's
+ * html has never been through substitution, so a short list of variables is resolved here.
+ * A native page was already done by hgTrackDb, so it is left alone.  Nothing is an error,
+ * so a dollar sign in a description page that was not written with this in mind stays a
+ * dollar sign. */
 
 #endif

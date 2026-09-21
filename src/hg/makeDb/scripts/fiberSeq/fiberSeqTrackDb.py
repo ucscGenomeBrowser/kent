@@ -77,40 +77,26 @@ SAMPLE_CLASS_COLORS = {
 }
 
 
-# Lymphoblastoid lines that are not from the Human Pangenome Reference
-# Consortium: GM12878 is the ENCODE line and HG002 is Genome in a Bottle.  Both
-# are B-lymphocyte EBV lines like the HPRC samples, so cell type alone cannot
-# tell them apart and they have to be named.
-NOT_HPRC = {"GM12878", "HG002"}
-
-
-def sampleClass(sample, cellType):
-    """Split a sample two ways for the Sample class column.
-
-    HPRC is a lymphoblastoid (B-lymphocyte, EBV) line from the consortium;
-    everything else, including the two lymphoblastoid lines listed in NOT_HPRC,
-    is a common cell line."""
-    if "lymphoblastoid" in cellType.lower() and sample not in NOT_HPRC:
-        return "HPRC"
-    return "Common Cell Line"
-
-
 def readSamples(path):
-    """Read fiberSeqSamples.tsv into a list of dicts, in file order."""
+    """Read fiberSeqSamples.tsv into a list of dicts, in file order.
+
+    sampleClass comes from the lab's own sample sheet, not from the cell type:
+    five of the lymphoblastoid lines are common cell lines rather than HPRC
+    samples, so there is nothing in the cell type that tells the two apart."""
     samples = []
     with open(path) as f:
         for line in f:
             if line.startswith("#") or not line.strip():
                 continue
             fields = line.rstrip("\n").split("\t")
-            if len(fields) < 4:
-                sys.exit("bad sample line, want 4 fields: %s" % line.rstrip())
-            acc, sample, cellType, _hash = fields[:4]
+            if len(fields) < 5:
+                sys.exit("bad sample line, want 5 fields: %s" % line.rstrip())
+            acc, sample, cellType, _hash, sampleClass = fields[:5]
             samples.append({
                 "accession": acc,
                 "sample": sample,
                 "cellType": cellType,
-                "sampleClass": sampleClass(sample, cellType),
+                "sampleClass": sampleClass,
             })
     if not samples:
         sys.exit("no samples read from %s" % path)
@@ -385,6 +371,14 @@ def compendium(gbdb, dataUrlDir, samples):
         ])
         # Least significant first, so the more significant levels draw on top.
         # Not "i": that is the sample index pri() builds its priority from.
+        #
+        # The priority is what makes that happen and is not decoration.  This is
+        # a solid overlay and all four files hold the same value at a shared
+        # base, so the level that draws last is the colour the user sees.  Order
+        # of declaration does not survive: makeContainerTrack() in
+        # hg/hgTracks/container.c sorts the children with trackPriCmp, which
+        # compares priority alone, and slSort is not a stable sort, so children
+        # left on the parent's inherited priority draw in an arbitrary order.
         for level, (fname, label, color) in enumerate(DIFF_LEVELS):
             out += stanza(12, [
                 "track fiberSeqCompendium_%s_cpgDiff_l%d" % (acc, level),
@@ -394,6 +388,7 @@ def compendium(gbdb, dataUrlDir, samples):
                 "color %s" % color,
                 "shortLabel %s %s" % (name, label),
                 "longLabel %s CpG haplotype difference, %s" % (name, label),
+                "priority %d" % (level + 1),
             ])
     return out
 
@@ -419,6 +414,10 @@ def hapOverlay(gbdb, acc, name, dataType, file1, file2,
         "onlyVisibility full",
         priority,
     ])
+    # Haplotype 1 then haplotype 2.  This overlay is transparent, so the order
+    # barely shows, but a child without its own priority inherits the parent's
+    # and then draws in whatever order slSort happens to leave it in - see the
+    # longer note on the cpgDiff children, where the same thing is visible.
     for hap, fname, color in (("h1", file1, HAP1_COLOR), ("h2", file2, HAP2_COLOR)):
         n = hap[1]
         out += stanza(12, [
@@ -427,7 +426,11 @@ def hapOverlay(gbdb, acc, name, dataType, file1, file2,
             "type bigWig",
             "bigDataUrl %s/%s/%s" % (gbdb, acc, fname),
             "color %s" % color,
-            "shortLabel %s Hap%s" % (name, n),
+            "priority %s" % n,
+            # Take the prefix from the container's own shortLabel, so the CpG
+            # children come out "<sample> CpG Hap1" rather than colliding with
+            # the accessibility children's "<sample> Hap1".
+            "shortLabel %s%s" % (shortLabel.removesuffix("1/2"), n),
             "longLabel %s %s" % (childLongLabel, n),
         ])
     return out

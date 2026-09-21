@@ -97,6 +97,12 @@ python3 ~/kent/src/hg/makeDb/scripts/episignatures/makeHtmlTables.py \
 # "Studies" and "Genes and loci" headings. The counts quoted in the Description
 # and Methods paragraphs of that page have to be updated by hand at the same
 # time.
+#
+# Both tables link out to PubMed with a "Lastname Year" label rather than the bare
+# PMID, looked up from scripts/episignatures/pubAuthorYear.tsv (also used by
+# epigenCentralToBed.py for the EpigenCentral locus table). On a refresh, add an
+# entry for every new PMID before regenerating the tables; the scripts errAbort on
+# an id with no entry rather than falling back to the raw number.
 
 # Colour: five classes, from the strongest effect at the site. Warm = hyper,
 # cool = hypo, darker = |delta-beta| >= 0.10, purple = conflicting. Three things

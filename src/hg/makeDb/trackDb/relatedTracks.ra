@@ -365,6 +365,12 @@ hg38 jaspar wgEncodeReg4TfPeaks Transcription factor peak clusters from ENCODE 4
 hg38 wgEncodeReg4TfPeaks jaspar Computationally predicted binding sites from position weight matrices
 hg38 singleCellSignalsPeaks wgEncodeReg4Atac Bulk ATAC-seq accessibility, averaged by organ and tissue
 hg38 wgEncodeReg4Atac singleCellSignalsPeaks Chromatin accessibility resolved by individual cell type
+hg38 fiberSeq dnaMethylation Methylation measured by bisulfite and other assays
+hg38 dnaMethylation fiberSeq Accessibility and CpG methylation read from the same single molecules
+hg38 fiberSeq cCREs Candidate regulatory elements called from short-read ENCODE data
+hg38 cCREs fiberSeq Regulatory elements called on single molecules, resolved by haplotype
+hg38 fiberSeq wgEncodeRegDnase Chromatin accessibility measured by DNase hypersensitivity
+hg38 wgEncodeRegDnase fiberSeq Chromatin accessibility measured one molecule at a time
 
 hg19 geneHancer oreganno Literature-curated regulatory elements and transcription factor binding sites
 hg19 oreganno geneHancer Enhancers and promoters with predicted target genes, integrated from several sources
@@ -614,6 +620,11 @@ hg19 predictionScoresSuper spliceImpactSuper Prediction scores and databases for
 # MaveDB / MaveMD cross-links:
 hg38 mavedb mavemd The clinically curated subset, with ACMG functional evidence calibrations
 hg38 mavemd mavedb The full set of variant effect maps in MaveDB, without clinical calibration
+# One-way: MaveMD carries a snapshot of ClinVar and gnomAD annotations from the MaveDB API,
+# so point readers at our always-current tracks. No reciprocal line, since MaveMD is too
+# narrow to be worth listing on two of the most heavily used tracks we have.
+hg38 >mavemd clinvar Our current ClinVar release, rather than the snapshot MaveMD's calibrations were computed against
+hg38 >mavemd gnomadVariants Our current gnomAD release, rather than the frequencies MaveMD supplies with each measurement
 
 # Constraint score cross-links:
 hg38 constraintSuper predictionScoresSuper Per-variant deleteriousness and pathogenicity scores, rather than regional constraint

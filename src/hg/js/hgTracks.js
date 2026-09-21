@@ -5766,6 +5766,13 @@ var popUp = {
 	//alert(cleanHtml);  // DEBUG REMOVE
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
+        // the description page inside carries no session id of its own, so add it to the
+        // links in it that stay on this server, and put a rel on the ones that do not --
+        // the replace above has already given every link in it a target
+        var popDiv = document.getElementById('pop');
+        addHgsidToLinks(popDiv);
+        offsiteLinksToNewTab(popDiv);
+
 	appendNonceJsToPage(nonceJs);
 
         // Strategy for popups with js:

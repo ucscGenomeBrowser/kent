@@ -27,9 +27,11 @@ void cjRevokeApiKey(struct cartJson *cj, struct hash *paramHash);
 void cjGenerateApiKey(struct cartJson *cj, struct hash *paramHash);
 /* Make a random (but not crypto-secure api key for use of hubtools to upload to hubspace */
 
-void cjSyncApiKey(struct cartJson *cj, struct hash *paramHash);
-/* Adopt an api key (or a revocation) that a peer geo mirror is telling us about.  Only ever
- * called by another mirror's geoMirrorNotifyOtherNodes(), never by a browser. */
+boolean doApiKeySyncIfRequested();
+/* If this request is a peer geo mirror telling us about an api key (or a revocation), answer
+ * it and return TRUE, else return FALSE and leave the request to the normal cart path.  Only
+ * ever sent by another mirror's geoMirrorNotifyOtherNodes(), never by a browser, so it must
+ * be answered before a cart is built: see the comment on the definition. */
 
 void doRemoveFile(struct cartJson *cj, struct hash *paramHash);
 /* Process the request to remove a file */

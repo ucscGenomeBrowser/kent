@@ -8,11 +8,14 @@ back to their codon here.
 
 The projection is: NP_ accession -> NM_ transcript (hg38 ncbiRefSeqLink) -> genePred
 (hg38 ncbiRefSeqCurated) -> the CDS bases in transcription order -> the three genomic
-bases of codon N.  It is validated in makeMaveMdVariants.py against the ~154k variants
-that carry both a genomic and a protein term, so a drift in either RefSeq or MaveDB's
+bases of codon N.  makeMaveMdVariants.py validates it against every variant that carries
+both a genomic term and a resolvable protein term, so a drift in either RefSeq or MaveDB's
 mapper shows up as a coordinate disagreement rather than as silently wrong placements.
+That set is smaller than the genomic-route placement count, because some variants have a
+genomic term and no protein term; the makeDoc records both figures per build.
 """
 
+import re
 import subprocess
 import sys
 
@@ -96,6 +99,21 @@ ACMG_SEVERITY = ['PS3_very_strong', 'PS3', 'PS3_moderate_plus', 'PS3_moderate',
                  'PS3_not_met', 'BS3_not_met']
 
 
+# Accessions reach hgsql() by string interpolation, so they are checked against this
+# first. Today they can only arrive via PROTEIN_TERM in makeMaveMdVariants.py, whose
+# character class already excludes quotes, but that regex is far from the query and a
+# future edit to it should not be able to open this up silently.
+SAFE_ACCESSION = re.compile(r'^[A-Za-z0-9_.]+$')
+
+
+def checkAccession(acc):
+    """Fail loudly on an accession that has no business being pasted into SQL."""
+    if not SAFE_ACCESSION.match(acc):
+        raise ValueError('refusing to query on accession %r: expected letters, digits, '
+                         'underscore and dot only' % acc)
+    return acc
+
+
 def hgsql(db, query):
     """Run a query and return rows as lists of strings."""
     out = subprocess.run(['hgsql', db, '-N', '-e', query],
@@ -127,6 +145,7 @@ def loadProteinToTranscript(db, protAccs):
     mapping = {}
     unresolved = []
     for acc in protAccs:
+        checkAccession(acc)
         base = acc.split('.')[0]
         if acc.startswith('ENSP'):
             table, col, key = GENCODE_ATTRS, 'transcriptId', 'proteinId'
@@ -214,6 +233,7 @@ def loadCodonMaps(db, transcripts):
     maps = {}
     missing = []
     for tx in transcripts:
+        checkAccession(tx)
         table = GENCODE_GENEPRED if tx.startswith('ENST') else 'ncbiRefSeqCurated'
         rows = hgsql(db, "select chrom, strand, cdsStart, cdsEnd, exonStarts, exonEnds "
                          "from %s where name = '%s'" % (table, tx))

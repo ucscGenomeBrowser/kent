@@ -2294,6 +2294,18 @@ There are no extra options that can appear on the type hic line.
     are drawn from the bigBed summary in the default track color rather than using
     the <code>itemRgb column</code>.
   </P>
+    <P>Whether the items are drawn from the <code>itemRgb</code> column also depends on
+    the <A onclick="jumpTo(this)" href="#color"><code>color</code></A> setting:</P>
+    <ul>
+    <li><code>itemRgb on</code>: items take the colors in the file. A <code>color</code>
+    setting in the same stanza still colors the track label, but it does not override
+    the items.</li>
+    <li><code>itemRgb off</code>: items take the <code>color</code> setting, or black if
+    there is none.</li>
+    <li><code>color</code> alone: items take the <code>color</code> setting.</li>
+    <li>Neither setting: items take the colors in the file. This is the default on
+    genome.ucsc.edu.</li>
+    </ul>
     <P><B>Example:</B></P>
     <pre>   itemRgb on</pre>
 </DIV>
@@ -2322,8 +2334,9 @@ There are no extra options that can appear on the type hic line.
     </P>
     <P>
     Item coloring must be active for <code>colorFields</code> to work. It is active by
-    default on bigBed tracks with more than 9 fields; it is suppressed only if the track has
-    an explicit <code>color</code> setting or <code>itemRgb off</code>. The currently
+    default on bigBed tracks with more than 9 fields. It is suppressed by
+    <code>itemRgb off</code>, or by a <code>color</code> setting in a stanza that does not
+    also say <code>itemRgb on</code>. The currently
     selected scheme is stored in the cart variable <code>&lt;trackName&gt;.colorField</code>.
     When a non-default scheme is active, the track long label gains a
     <em>(Coloring by: &lt;label&gt;)</em> suffix.

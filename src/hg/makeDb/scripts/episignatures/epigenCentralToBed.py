@@ -28,6 +28,7 @@ so neither can drift away from the bigBed the way a hand-edited list would.
 """
 
 import argparse
+import os
 import sys
 from collections import OrderedDict, Counter
 
@@ -83,6 +84,20 @@ def readRefs(fname):
     return refs
 
 
+def loadAuthorYear():
+    """id (PMID or DOI) -> "Lastname Year", from the checked-in lookup shared with
+    makeHtmlTables.py."""
+    fname = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pubAuthorYear.tsv")
+    authorYear = {}
+    with open(fname) as fh:
+        for line in fh:
+            if line.startswith("#") or not line.strip():
+                continue
+            pmid, ay = line.rstrip("\n").split("\t")
+            authorYear[pmid] = ay
+    return authorYear
+
+
 def writeRa(fh, signatures):
     """The filterValues/filterType lines for the signature menu.
 
@@ -100,20 +115,24 @@ def writeRa(fh, signatures):
 
 def writeHtml(fh, signatures, refs):
     """The "Included episignatures" table of the description page."""
+    authorYear = loadAuthorYear()
     fh.write('<table class="stdTbl">\n')
     fh.write("<tr><th>Episignature</th><th>Disorder</th><th>OMIM</th>"
              "<th>CpG probes</th><th>Reference</th></tr>\n")
     for sig in sorted(signatures, key=str.lower):
         rec = signatures[sig]
         pmid, doi = refs.get(sig, ("", ""))
-        if pmid:
-            ref = ('<a href="https://pubmed.ncbi.nlm.nih.gov/%s/" target="_blank">'
-                   'PMID %s</a>' % (pmid, pmid))
-        elif doi:
-            ref = ('<a href="https://doi.org/%s" target="_blank">doi:%s</a>'
-                   % (doi, doi))
-        else:
+        id_ = pmid or doi
+        if not id_:
             raise ValueError("no reference for signature %s in the reference table" % sig)
+        if id_ not in authorYear:
+            raise ValueError("no author/year in pubAuthorYear.tsv for id %s" % id_)
+        if pmid:
+            ref = ('<a href="https://pubmed.ncbi.nlm.nih.gov/%s/" target="_blank">%s</a>'
+                   % (pmid, authorYear[id_]))
+        else:
+            ref = ('<a href="https://doi.org/%s" target="_blank">%s</a>'
+                   % (doi, authorYear[id_]))
         fh.write("<tr><td>%s</td><td>%s</td>"
                  '<td><a href="https://omim.org/entry/%s" target="_blank">%s</a></td>'
                  "<td>%d</td><td>%s</td></tr>\n"
