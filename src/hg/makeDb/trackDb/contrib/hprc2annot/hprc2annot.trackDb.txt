@@ -84,8 +84,8 @@ dataVersion HPRC Release 2, SEDEF segdups v1.1
 html ../docs/segdups
 
 track hprcPclai
-shortLabel pcLAI Ancestry
-longLabel Pangenome local ancestry inference (pcLAI)
+shortLabel PCLAI Ancestry
+longLabel Point cloud local ancestry inference (PCLAI)
 type bigBed 9 +
 bigDataUrl pclai.bb
 group compGeno
@@ -95,7 +95,7 @@ onlyVisibility dense
 denseClick on
 itemRgb on
 mouseOver Window ${window}<br>Window PC1,PC2: ${pca}<br>Ancestry centroid: ${centroid}<br>Confidence: ${score}
-dataVersion HPRC Release 2, pcLAI v1.1
+dataVersion HPRC Release 2, PCLAI v1.1
 detailsScript.scatterPlot.pca {"dataUrl":"../pclaiRefPanel.json","exportFields":["pca","centroid"],"title":"Position in ancestry space","xLabel":"PC1","yLabel":"PC2"}
 html ../docs/pclai
 
