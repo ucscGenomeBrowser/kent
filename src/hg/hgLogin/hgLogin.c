@@ -72,7 +72,7 @@ boolean recovEmailVerifyOk = FALSE; /* TRUE when gbMembers has the recovEmailVer
 
 /* Forward declarations for functions used before their definitions. */
 static void printSocialButtons(boolean dividerAbove, boolean dividerBelow, char *action);
-static void printEmailLinkButton();
+static void printEmailLinkButton(boolean dividerAbove);
 static boolean emailLinkEnabled();
 static boolean recovEmailChangeEnabled();
 void changeRecovEmailPage(struct sqlConnection *conn);
@@ -969,7 +969,7 @@ if (pwdEyeIconEnabled)
     }
 cartSaveSession(cart);
 hPrintf("</form>\n");
-printEmailLinkButton();
+printEmailLinkButton(TRUE);
 printSocialButtons(TRUE, FALSE, "Sign in");
 hPrintf(
     "</div><!-- END - loginBox -->"
@@ -2238,11 +2238,14 @@ if (!recovEmailVerifyOk || isEmpty(cfgOption(CFG_LOGIN_COOKIE_SALT)))
 return !sameWord(returnAddr, "NOEMAIL");
 }
 
-static void printEmailLinkButton()
-/* Print a grey button that opens the passwordless email-link login page, if enabled. */
+static void printEmailLinkButton(boolean dividerAbove)
+/* Print a grey button that opens the passwordless email-link login page, if enabled,
+ * optionally preceded by an "or" divider. */
 {
 if (!emailLinkEnabled())
     return;
+if (dividerAbove)
+    hPrintf("<div class=\"orDivider\"><span>or</span></div>");
 hPrintf("<a class=\"socialButton\" href=\"%s?hgLogin.do.emailLinkPage=1\">"
     "Email me a sign-in link</a>", hgLoginUrl);
 }
