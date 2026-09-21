@@ -1799,7 +1799,8 @@ if (cfgOptionBooleanDefault("storeUserFiles", FALSE))
     }
 cartJsonRegisterHandler(cj, hgHubGenerateApiKey, cjGenerateApiKey);
 cartJsonRegisterHandler(cj, hgHubRevokeApiKey, cjRevokeApiKey);
-cartJsonRegisterHandler(cj, hgHubSyncApiKey, cjSyncApiKey);
+// hgHubSyncApiKey is deliberately not registered here: it comes from a peer mirror with no
+// user session behind it and is answered by doApiKeySyncIfRequested() before any cart exists
 cartJsonExecute(cj);
 }
 
@@ -1814,9 +1815,13 @@ long enteredMainTime = clock1000();
 
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+if (doApiKeySyncIfRequested())
+    {
+    // a peer mirror's api key sync: answered without a cart, nothing else to do
+    }
 // showHubApiKey counts here as well as storeUserFiles: the Generate/Revoke buttons are
 // cartJson requests, and they are offered on sites that do not run hubSpace
-if ((cfgOptionBooleanDefault("storeUserFiles", FALSE) ||
+else if ((cfgOptionBooleanDefault("storeUserFiles", FALSE) ||
      cfgOptionBooleanDefault("showHubApiKey", FALSE)) && cgiOptionalString(CARTJSON_COMMAND))
     cartEmptyShellNoContent(doAsync, hUserCookie(), excludeVars, oldVars);
 else

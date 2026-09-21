@@ -82,12 +82,24 @@ void hubSpaceSetApiKey(char *userName, char *apiKey);
  * this does not make up a new key.  Used to adopt a key that a peer geo mirror generated, so
  * that a key works the same on every UCSC mirror.  errAborts if userName or apiKey is NULL. */
 
-char *hubSpaceApiKeySyncSig(char *userName, char *apiKey);
-/* Return a signature over userName and apiKey (empty string for a revoke), made with the
- * login.cookieSalt shared secret that is already required to be identical across all of a
- * site's geo mirrors (it is what makes the login cookie itself verifiable on every mirror).
- * A peer mirror recomputes this to check that a hubSpaceSetApiKey/revoke request genuinely
- * came from another UCSC mirror acting for this user, not from an outside caller. */
+#define HUB_APIKEY_SYNC_WINDOW 300
+/* How many seconds either side of now a signed api key sync is accepted for.  Bounds how
+ * long a captured sync stays replayable; also absorbs clock skew between the mirrors. */
+
+char *hubSpaceApiKeySyncSig(char *userName, char *apiKey, long timeStamp);
+/* Return a signature over userName, apiKey (empty string for a revoke) and timeStamp (unix
+ * seconds), made with the login.cookieSalt shared secret that is already required to be
+ * identical across all of a site's geo mirrors (it is what makes the login cookie itself
+ * verifiable on every mirror).  A peer mirror recomputes this to check that a
+ * hubSpaceSetApiKey/revoke request genuinely came from another UCSC mirror acting for this
+ * user, not from an outside caller.  HMAC rather than a plain hash of secret+message, so
+ * the construction does not depend on the hash resisting length extension. */
+
+boolean hubSpaceApiKeySyncSigOk(char *userName, char *apiKey, char *timeStampString, char *sig);
+/* Return TRUE if sig is what this site would have signed over userName, apiKey and
+ * timeStampString, and that timestamp is inside HUB_APIKEY_SYNC_WINDOW of now.  The window
+ * is what bounds replay: without it a captured sync could be resent at any time to
+ * reinstate a key its owner had since revoked.  errAborts if login.cookieSalt is unset. */
 
 #endif /* HUBSPACEKEYS_H */
 

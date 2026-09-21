@@ -344,40 +344,58 @@ struct slPair *geoMirrorOtherNodes()
 return geoMirrorNodeList(FALSE);
 }
 
-void geoMirrorNotifyOtherNodes(char *cgiName, struct slPair *cgiVars)
+struct slPair *geoMirrorNotifyOtherNodes(char *cgiName, struct slPair *cgiVars)
 /* Best-effort: fire cgiVars (name=value) as a GET request at cgiName on every other geo mirror
- * node (per geoMirrorOtherNodes()).  No-ops if geo mirroring is off or this is the only node.
- * Adds no authentication of its own -- callers must put their own signed proof into cgiVars,
+ * node (per geoMirrorOtherNodes()).  Returns one pair per node attempted, name=node domain and
+ * val=the response body, or val=NULL for a node that could not be reached or answered anything
+ * but a 200 -- the caller is expected to look at what came back, since a peer that refuses the
+ * request answers with a body, not with a connection failure.  Returns NULL when geo mirroring
+ * is off or this is the only node.  slPairFreeValsAndList when done.
+ *   Adds no authentication of its own -- callers must put their own signed proof into cgiVars,
  * since the receiving CGI runs with no session/cart tying the request to a user.  A slow or
- * unreachable peer is logged with warn() and skipped; the caller's own action must already be
+ * unreachable peer is logged to stderr and skipped; the caller's own action must already be
  * complete locally before this is called, since a peer being down must never fail the local
  * action. */
 {
 struct slPair *nodes = geoMirrorOtherNodes();
-struct slPair *node;
+struct slPair *node, *results = NULL;
 for (node = nodes; node != NULL; node = node->next)
     {
-    // https, not http: the mirrors redirect http to https and netSlurpUrl does not follow
-    // redirects, so an http request never reaches the CGI at all
-    struct dyString *url = dyStringCreate("https://%s/cgi-bin/%s?", (char *)node->val, cgiName);
+    char *domain = (char *)node->val;
+    // https, not http: the mirrors redirect http to https, and sending a secret in the clear
+    // to Germany and Japan would leave it in each peer's access log besides
+    struct dyString *url = dyStringCreate("https://%s/cgi-bin/%s?", domain, cgiName);
     struct slPair *var;
     for (var = cgiVars; var != NULL; var = var->next)
         dyStringPrintf(url, "%s%s=%s", (var == cgiVars) ? "" : "&", var->name,
                        cgiEncodeFull((char *)var->val));
+    char *body = NULL;
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
         {
-        struct dyString *response = netSlurpUrl(url->string);
-        dyStringFree(&response);
+        // MustOpenPastHeader, not netSlurpUrl: it errAborts on anything but a 200 and hands
+        // back the body alone, so the caller does not have to pick it out of the headers
+        int sd = netUrlMustOpenPastHeader(url->string);
+        struct dyString *response = netSlurpFile(sd);
+        close(sd);
+        body = dyStringCannibalize(&response);
         }
     errCatchEnd(errCatch);
     if (errCatch->gotError)
-        warn("geoMirrorNotifyOtherNodes: failed to reach %s (%s): %s",
-             node->name, (char *)node->val, errCatch->message->string);
+        {
+        // stderr, not warn(): this is between two servers, and the person who clicked the
+        // button in the browser can do nothing about a peer being down
+        fprintf(stderr, "geoMirrorNotifyOtherNodes: failed to reach %s (%s): %s\n",
+                node->name, domain, errCatch->message->string);
+        freez(&body);
+        }
     errCatchFree(&errCatch);
+    slPairAdd(&results, domain, body);
     dyStringFree(&url);
     }
 slPairFreeValsAndList(&nodes);
+slReverse(&results);
+return results;
 }
 
 char *geoMirrorMenu()
