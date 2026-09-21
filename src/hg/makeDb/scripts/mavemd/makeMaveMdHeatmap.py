@@ -34,10 +34,26 @@ csv.field_size_limit(10 ** 7)
 FALLBACK_BOUNDS = '0,1'
 FALLBACK_COLORS = '#f7f7f7,#b2182b'
 
-# Drawn above each map, so it has to stay short enough not to be truncated. The second half
-# names whichever palette --classPalette selected for measurements with no ACMG code.
-LEGEND_BASE = 'Red PS3 pathogenic - blue BS3 benign - %s measured only'
-LEGEND_CLASS_NAME = {'purple': 'purple/green', 'grey': 'dark/light grey', 'brown': 'brown/tan'}
+def assayLine(meta):
+    """One line naming what a score set measured, for the legend and the cell mouseovers.
+
+    Two maps of the same gene routinely disagree because they measured different things:
+    PTEN abundance against PTEN lipid phosphatase activity, GCK activity against GCK
+    abundance, KCNE1 trafficking with and without KCNQ1. A reader cannot make sense of that
+    without knowing which assay they are looking at, so the assay travels with the map
+    rather than sitting a click away on the details page.
+
+    Method and model system come first because they are short and always present; the score
+    set title can be long and is the part that gets truncated.
+
+    The separator is a plain hyphen, not a middot: the legend is drawn as raster text by
+    hgTracks, so an HTML entity from bedField() would appear literally as "&#183;".
+    """
+    method = meta.get('assayMethod') or ''
+    model = meta.get('assayModel') or ''
+    title = meta.get('title') or ''
+    head = '%s in %s' % (method, model) if method and model else (method or model)
+    return ' - '.join(p for p in (head, title) if p)
 
 
 def severityRank(cell):
@@ -247,8 +263,7 @@ def main():
                 chosenTitle = chosenSource = ''
                 chosenRuo = False
             entries.append(buildEntry(urn, gene, meta, byPos, codonMap,
-                                      chosenTitle, chosenSource, chosenRuo, stats,
-                                      args.classPalette))
+                                      chosenTitle, chosenSource, chosenRuo, stats))
             stats['scoreSetsWritten'] += 1
 
     entries = [e for e in entries if e]
@@ -262,8 +277,7 @@ def main():
         sys.stderr.write("  %-32s %d\n" % (key, stats[key]))
 
 
-def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, stats,
-               paletteName='purple'):
+def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, stats):
     """Assemble one heatmap BED12+ line for a score set."""
     cols = sorted((min(entry['bases']), protPos) for protPos, entry in byPos.items())
     colStarts = [c[0] for c in cols]
@@ -290,6 +304,7 @@ def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, st
             stats['overlap'] += 1
             return None
 
+    assay = assayLine(meta)
     scoreParts = []
     labelParts = []
     measured = 0
@@ -329,6 +344,8 @@ def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, st
                             'they disagree in direction. Strongest shown')
             elif cell.get('multi'):
                 bits.append('several nucleotide changes measured here; strongest shown')
+            if assay:
+                bits.append('<b>Assay:</b> %s' % assay)
             # The label field is comma-split by the renderer, so labels carry no commas.
             labelParts.append('<br>'.join(bits).replace(',', ';'))
 
@@ -352,7 +369,7 @@ def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, st
         len(lib.HEATMAP_ROWS), ','.join(lib.HEATMAP_ROWS),
         FALLBACK_BOUNDS, FALLBACK_COLORS,
         ','.join(scoreParts), ','.join(labelParts),
-        LEGEND_BASE % LEGEND_CLASS_NAME.get(paletteName, paletteName),
+        assay,
         urn, meta.get('title', ''),
         meta.get('assayMethod', ''), meta.get('assayModel', ''),
         meta.get('assayMechanism', ''), meta.get('libraryMethod', ''),
