@@ -1,10 +1,10 @@
 <h2>Description</h2>
 
 <p>
-This track is part of the <a href="hgTrackUi?g=fiberSeq">Fiber-seq</a> collection. It holds the
-full Fiber-seq data for 41 samples: 14 cell lines and 27 lymphoblastoid
-lines derived from individuals sequenced by the Human Pangenome Reference Consortium and the
-Genome in a Bottle project. Chromatin accessibility and CpG methylation are read from the same
+This track is part of the <a href="hgTrackUi?db=hg38&amp;g=fiberSeq">Fiber-seq</a> collection. It holds the
+full Fiber-seq data for 41 samples: 14 cell lines and 27 lymphoblastoid lines, 20 of them from
+individuals sequenced by the Human Pangenome Reference Consortium and the rest from ENCODE, the
+Genome in a Bottle project and other sources. Chromatin accessibility and CpG methylation are read from the same
 molecules in the same experiment, so both are kept in one table here and can be compared without
 worrying about differences in cell preparation or sequencing depth. Six kinds of data are
 available for each sample:
@@ -89,15 +89,19 @@ The color swatches next to the Sample class filters are:
       <td>HPRC, a lymphoblastoid (B-lymphocyte, EBV) line from the Human Pangenome Reference
           Consortium</td></tr>
   <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
-      <td>Common cell line, which here also covers GM12878 and HG002: both are lymphoblastoid,
-          but they come from ENCODE and from Genome in a Bottle rather than from the
-          consortium</td></tr>
+      <td>Common cell line. Seven of these are lymphoblastoid as well but come from elsewhere:
+          GM12878 from ENCODE, HG002 from the Genome in a Bottle project, and GM25455, GM25456,
+          GM27730, GM28570 and GM28572. The classification is the one supplied by the
+          laboratory, not one inferred from the cell type</td></tr>
 </table>
 
 <p>
 Peaks carry two filterable values, the FIRE score in the signalValue field and the false
 discovery rate as a -log10 value in the qValue field, and both can be filtered from a peak
-track's own configuration page, along with the score. No filter is applied by default. A short
+track's own configuration page, along with the score. No filter is applied by default. The FDR
+value stops at 100, which is the highest the pipeline reports rather than a real ceiling on
+significance, and 9 percent of the peaks in this track sit at it; filtering at the top of that
+range therefore selects a large group rather than a handful of outstanding peaks. A short
 tick inside each peak marks the point source, the single base the pipeline picked as the summit.
 Switching a peak track to pack or full also gives each peak a mouseover with its FIRE score and
 FDR; dense mode has no per-peak hover, which is a property of dense display rather than of this
@@ -161,9 +165,12 @@ target="_blank">kent source tree</a>.
 <p>
 GM12878 (accession PM00001) was reprocessed by the lab in September 2026 and every file for that
 sample was replaced here. The earlier release had two placeholder haplotype accessibility bigWigs
-covering a single base, so its haplotype overlay drew nothing; those now carry full data. Its
-peak calls and CpG haplotype values changed with the reprocessing as well, so figures made from
-the first version of this track will not reproduce exactly for that sample.
+covering a single base, so its haplotype overlay drew nothing; the cause was that most molecules
+had been left unassigned to either chromosome. The lab re-phased the sample using sequence from
+the parents, so this is the one sample here whose haplotypes come from a trio rather than from
+the reads alone, and those tracks now carry full data. Its peak calls and CpG haplotype values
+changed with the reprocessing as well, so figures made from the first version of this track will
+not reproduce exactly for that sample.
 </p>
 
 <h2>Data Access</h2>
@@ -173,7 +180,11 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
 tab-sep tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu">API</a>, track=<i>fiberSeqCompendium</i>.
+<a href="https://api.genome.ucsc.edu">API</a>, one sample and data type at a time, for example
+track=<i>fiberSeqCompendium_PM00001_acc</i> for GM12878 accessibility or
+<i>fiberSeqCompendium_PM00001_cpg</i> for its CpG methylation. The container name
+<i>fiberSeqCompendium</i> holds no data of its own and cannot be queried, and the peak
+subtracks are not yet available through the API.
 </p>
 
 <p>
@@ -217,7 +228,7 @@ assembling it into track hubs and for their help in arranging these tracks for t
 <h2>References</h2>
 
 <p>
-Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sede&#241;o-Cort&#233;s AE, Fondrie
 WE, Bohaczuk SC <em>et al</em>.
 <a href="https://doi.org/10.1101/2024.06.14.599122" target="_blank">
 A haplotype-resolved view of human gene regulation</a>.

@@ -153,6 +153,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00001/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel GM12878 Hap1
             longLabel GM12878 Fiber-seq percent accessible, haplotype 1
 
@@ -161,6 +162,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00001/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel GM12878 Hap2
             longLabel GM12878 Fiber-seq percent accessible, haplotype 2
 
@@ -199,7 +201,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00001/cpg.hap1.bw
             color 0,114,178
-            shortLabel GM12878 Hap1
+            priority 1
+            shortLabel GM12878 CpG Hap1
             longLabel GM12878 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00001_cpgHap_h2
@@ -207,7 +210,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00001/cpg.hap2.bw
             color 213,94,0
-            shortLabel GM12878 Hap2
+            priority 2
+            shortLabel GM12878 CpG Hap2
             longLabel GM12878 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00001_cpgDiff
@@ -232,6 +236,7 @@ priority 2.5
             color 137,143,143
             shortLabel GM12878 All
             longLabel GM12878 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00001_cpgDiff_l1
             parent fiberSeqCompendium_PM00001_cpgDiff
@@ -240,6 +245,7 @@ priority 2.5
             color 235,229,52
             shortLabel GM12878 p < 0.01
             longLabel GM12878 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00001_cpgDiff_l2
             parent fiberSeqCompendium_PM00001_cpgDiff
@@ -248,6 +254,7 @@ priority 2.5
             color 245,148,22
             shortLabel GM12878 p < 0.001
             longLabel GM12878 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00001_cpgDiff_l3
             parent fiberSeqCompendium_PM00001_cpgDiff
@@ -256,6 +263,7 @@ priority 2.5
             color 255,0,0
             shortLabel GM12878 p < 0.0001
             longLabel GM12878 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00002_acc
         parent fiberSeqCompendium off
@@ -310,6 +318,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00002/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG002 Hap1
             longLabel HG002 Fiber-seq percent accessible, haplotype 1
 
@@ -318,6 +327,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00002/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG002 Hap2
             longLabel HG002 Fiber-seq percent accessible, haplotype 2
 
@@ -356,7 +366,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00002/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG002 Hap1
+            priority 1
+            shortLabel HG002 CpG Hap1
             longLabel HG002 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00002_cpgHap_h2
@@ -364,7 +375,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00002/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG002 Hap2
+            priority 2
+            shortLabel HG002 CpG Hap2
             longLabel HG002 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00002_cpgDiff
@@ -389,6 +401,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG002 All
             longLabel HG002 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00002_cpgDiff_l1
             parent fiberSeqCompendium_PM00002_cpgDiff
@@ -397,6 +410,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG002 p < 0.01
             longLabel HG002 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00002_cpgDiff_l2
             parent fiberSeqCompendium_PM00002_cpgDiff
@@ -405,6 +419,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG002 p < 0.001
             longLabel HG002 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00002_cpgDiff_l3
             parent fiberSeqCompendium_PM00002_cpgDiff
@@ -413,6 +428,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG002 p < 0.0001
             longLabel HG002 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00004_acc
         parent fiberSeqCompendium on
@@ -467,6 +483,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00004/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel K562 Hap1
             longLabel K562 Fiber-seq percent accessible, haplotype 1
 
@@ -475,6 +492,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00004/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel K562 Hap2
             longLabel K562 Fiber-seq percent accessible, haplotype 2
 
@@ -513,7 +531,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00004/cpg.hap1.bw
             color 0,114,178
-            shortLabel K562 Hap1
+            priority 1
+            shortLabel K562 CpG Hap1
             longLabel K562 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00004_cpgHap_h2
@@ -521,7 +540,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00004/cpg.hap2.bw
             color 213,94,0
-            shortLabel K562 Hap2
+            priority 2
+            shortLabel K562 CpG Hap2
             longLabel K562 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00004_cpgDiff
@@ -546,6 +566,7 @@ priority 2.5
             color 137,143,143
             shortLabel K562 All
             longLabel K562 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00004_cpgDiff_l1
             parent fiberSeqCompendium_PM00004_cpgDiff
@@ -554,6 +575,7 @@ priority 2.5
             color 235,229,52
             shortLabel K562 p < 0.01
             longLabel K562 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00004_cpgDiff_l2
             parent fiberSeqCompendium_PM00004_cpgDiff
@@ -562,6 +584,7 @@ priority 2.5
             color 245,148,22
             shortLabel K562 p < 0.001
             longLabel K562 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00004_cpgDiff_l3
             parent fiberSeqCompendium_PM00004_cpgDiff
@@ -570,6 +593,7 @@ priority 2.5
             color 255,0,0
             shortLabel K562 p < 0.0001
             longLabel K562 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00005_acc
         parent fiberSeqCompendium on
@@ -624,6 +648,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00005/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HepG2 Hap1
             longLabel HepG2 Fiber-seq percent accessible, haplotype 1
 
@@ -632,6 +657,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00005/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HepG2 Hap2
             longLabel HepG2 Fiber-seq percent accessible, haplotype 2
 
@@ -670,7 +696,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00005/cpg.hap1.bw
             color 0,114,178
-            shortLabel HepG2 Hap1
+            priority 1
+            shortLabel HepG2 CpG Hap1
             longLabel HepG2 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00005_cpgHap_h2
@@ -678,7 +705,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00005/cpg.hap2.bw
             color 213,94,0
-            shortLabel HepG2 Hap2
+            priority 2
+            shortLabel HepG2 CpG Hap2
             longLabel HepG2 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00005_cpgDiff
@@ -703,6 +731,7 @@ priority 2.5
             color 137,143,143
             shortLabel HepG2 All
             longLabel HepG2 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00005_cpgDiff_l1
             parent fiberSeqCompendium_PM00005_cpgDiff
@@ -711,6 +740,7 @@ priority 2.5
             color 235,229,52
             shortLabel HepG2 p < 0.01
             longLabel HepG2 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00005_cpgDiff_l2
             parent fiberSeqCompendium_PM00005_cpgDiff
@@ -719,6 +749,7 @@ priority 2.5
             color 245,148,22
             shortLabel HepG2 p < 0.001
             longLabel HepG2 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00005_cpgDiff_l3
             parent fiberSeqCompendium_PM00005_cpgDiff
@@ -727,6 +758,7 @@ priority 2.5
             color 255,0,0
             shortLabel HepG2 p < 0.0001
             longLabel HepG2 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00006_acc
         parent fiberSeqCompendium off
@@ -781,6 +813,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00006/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel Panc1 Hap1
             longLabel Panc1 Fiber-seq percent accessible, haplotype 1
 
@@ -789,6 +822,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00006/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel Panc1 Hap2
             longLabel Panc1 Fiber-seq percent accessible, haplotype 2
 
@@ -827,7 +861,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00006/cpg.hap1.bw
             color 0,114,178
-            shortLabel Panc1 Hap1
+            priority 1
+            shortLabel Panc1 CpG Hap1
             longLabel Panc1 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00006_cpgHap_h2
@@ -835,7 +870,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00006/cpg.hap2.bw
             color 213,94,0
-            shortLabel Panc1 Hap2
+            priority 2
+            shortLabel Panc1 CpG Hap2
             longLabel Panc1 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00006_cpgDiff
@@ -860,6 +896,7 @@ priority 2.5
             color 137,143,143
             shortLabel Panc1 All
             longLabel Panc1 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00006_cpgDiff_l1
             parent fiberSeqCompendium_PM00006_cpgDiff
@@ -868,6 +905,7 @@ priority 2.5
             color 235,229,52
             shortLabel Panc1 p < 0.01
             longLabel Panc1 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00006_cpgDiff_l2
             parent fiberSeqCompendium_PM00006_cpgDiff
@@ -876,6 +914,7 @@ priority 2.5
             color 245,148,22
             shortLabel Panc1 p < 0.001
             longLabel Panc1 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00006_cpgDiff_l3
             parent fiberSeqCompendium_PM00006_cpgDiff
@@ -884,6 +923,7 @@ priority 2.5
             color 255,0,0
             shortLabel Panc1 p < 0.0001
             longLabel Panc1 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00007_acc
         parent fiberSeqCompendium off
@@ -938,6 +978,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00007/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel THP-1 Hap1
             longLabel THP-1 Fiber-seq percent accessible, haplotype 1
 
@@ -946,6 +987,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00007/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel THP-1 Hap2
             longLabel THP-1 Fiber-seq percent accessible, haplotype 2
 
@@ -984,7 +1026,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00007/cpg.hap1.bw
             color 0,114,178
-            shortLabel THP-1 Hap1
+            priority 1
+            shortLabel THP-1 CpG Hap1
             longLabel THP-1 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00007_cpgHap_h2
@@ -992,7 +1035,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00007/cpg.hap2.bw
             color 213,94,0
-            shortLabel THP-1 Hap2
+            priority 2
+            shortLabel THP-1 CpG Hap2
             longLabel THP-1 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00007_cpgDiff
@@ -1017,6 +1061,7 @@ priority 2.5
             color 137,143,143
             shortLabel THP-1 All
             longLabel THP-1 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00007_cpgDiff_l1
             parent fiberSeqCompendium_PM00007_cpgDiff
@@ -1025,6 +1070,7 @@ priority 2.5
             color 235,229,52
             shortLabel THP-1 p < 0.01
             longLabel THP-1 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00007_cpgDiff_l2
             parent fiberSeqCompendium_PM00007_cpgDiff
@@ -1033,6 +1079,7 @@ priority 2.5
             color 245,148,22
             shortLabel THP-1 p < 0.001
             longLabel THP-1 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00007_cpgDiff_l3
             parent fiberSeqCompendium_PM00007_cpgDiff
@@ -1041,6 +1088,7 @@ priority 2.5
             color 255,0,0
             shortLabel THP-1 p < 0.0001
             longLabel THP-1 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00008_acc
         parent fiberSeqCompendium off
@@ -1095,6 +1143,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00008/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel Hap1 Hap1
             longLabel Hap1 Fiber-seq percent accessible, haplotype 1
 
@@ -1103,6 +1152,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00008/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel Hap1 Hap2
             longLabel Hap1 Fiber-seq percent accessible, haplotype 2
 
@@ -1141,7 +1191,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00008/cpg.hap1.bw
             color 0,114,178
-            shortLabel Hap1 Hap1
+            priority 1
+            shortLabel Hap1 CpG Hap1
             longLabel Hap1 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00008_cpgHap_h2
@@ -1149,7 +1200,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00008/cpg.hap2.bw
             color 213,94,0
-            shortLabel Hap1 Hap2
+            priority 2
+            shortLabel Hap1 CpG Hap2
             longLabel Hap1 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00008_cpgDiff
@@ -1174,6 +1226,7 @@ priority 2.5
             color 137,143,143
             shortLabel Hap1 All
             longLabel Hap1 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00008_cpgDiff_l1
             parent fiberSeqCompendium_PM00008_cpgDiff
@@ -1182,6 +1235,7 @@ priority 2.5
             color 235,229,52
             shortLabel Hap1 p < 0.01
             longLabel Hap1 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00008_cpgDiff_l2
             parent fiberSeqCompendium_PM00008_cpgDiff
@@ -1190,6 +1244,7 @@ priority 2.5
             color 245,148,22
             shortLabel Hap1 p < 0.001
             longLabel Hap1 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00008_cpgDiff_l3
             parent fiberSeqCompendium_PM00008_cpgDiff
@@ -1198,6 +1253,7 @@ priority 2.5
             color 255,0,0
             shortLabel Hap1 p < 0.0001
             longLabel Hap1 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00009_acc
         parent fiberSeqCompendium off
@@ -1252,6 +1308,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00009/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel Jurkat Hap1
             longLabel Jurkat Fiber-seq percent accessible, haplotype 1
 
@@ -1260,6 +1317,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00009/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel Jurkat Hap2
             longLabel Jurkat Fiber-seq percent accessible, haplotype 2
 
@@ -1298,7 +1356,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00009/cpg.hap1.bw
             color 0,114,178
-            shortLabel Jurkat Hap1
+            priority 1
+            shortLabel Jurkat CpG Hap1
             longLabel Jurkat CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00009_cpgHap_h2
@@ -1306,7 +1365,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00009/cpg.hap2.bw
             color 213,94,0
-            shortLabel Jurkat Hap2
+            priority 2
+            shortLabel Jurkat CpG Hap2
             longLabel Jurkat CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00009_cpgDiff
@@ -1331,6 +1391,7 @@ priority 2.5
             color 137,143,143
             shortLabel Jurkat All
             longLabel Jurkat CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00009_cpgDiff_l1
             parent fiberSeqCompendium_PM00009_cpgDiff
@@ -1339,6 +1400,7 @@ priority 2.5
             color 235,229,52
             shortLabel Jurkat p < 0.01
             longLabel Jurkat CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00009_cpgDiff_l2
             parent fiberSeqCompendium_PM00009_cpgDiff
@@ -1347,6 +1409,7 @@ priority 2.5
             color 245,148,22
             shortLabel Jurkat p < 0.001
             longLabel Jurkat CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00009_cpgDiff_l3
             parent fiberSeqCompendium_PM00009_cpgDiff
@@ -1355,6 +1418,7 @@ priority 2.5
             color 255,0,0
             shortLabel Jurkat p < 0.0001
             longLabel Jurkat CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00010_acc
         parent fiberSeqCompendium off
@@ -1409,6 +1473,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00010/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel H1 Hap1
             longLabel H1 Fiber-seq percent accessible, haplotype 1
 
@@ -1417,6 +1482,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00010/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel H1 Hap2
             longLabel H1 Fiber-seq percent accessible, haplotype 2
 
@@ -1455,7 +1521,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00010/cpg.hap1.bw
             color 0,114,178
-            shortLabel H1 Hap1
+            priority 1
+            shortLabel H1 CpG Hap1
             longLabel H1 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00010_cpgHap_h2
@@ -1463,7 +1530,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00010/cpg.hap2.bw
             color 213,94,0
-            shortLabel H1 Hap2
+            priority 2
+            shortLabel H1 CpG Hap2
             longLabel H1 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00010_cpgDiff
@@ -1488,6 +1556,7 @@ priority 2.5
             color 137,143,143
             shortLabel H1 All
             longLabel H1 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00010_cpgDiff_l1
             parent fiberSeqCompendium_PM00010_cpgDiff
@@ -1496,6 +1565,7 @@ priority 2.5
             color 235,229,52
             shortLabel H1 p < 0.01
             longLabel H1 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00010_cpgDiff_l2
             parent fiberSeqCompendium_PM00010_cpgDiff
@@ -1504,6 +1574,7 @@ priority 2.5
             color 245,148,22
             shortLabel H1 p < 0.001
             longLabel H1 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00010_cpgDiff_l3
             parent fiberSeqCompendium_PM00010_cpgDiff
@@ -1512,6 +1583,7 @@ priority 2.5
             color 255,0,0
             shortLabel H1 p < 0.0001
             longLabel H1 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00011_acc
         parent fiberSeqCompendium off
@@ -1566,6 +1638,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00011/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel H9 Hap1
             longLabel H9 Fiber-seq percent accessible, haplotype 1
 
@@ -1574,6 +1647,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00011/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel H9 Hap2
             longLabel H9 Fiber-seq percent accessible, haplotype 2
 
@@ -1612,7 +1686,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00011/cpg.hap1.bw
             color 0,114,178
-            shortLabel H9 Hap1
+            priority 1
+            shortLabel H9 CpG Hap1
             longLabel H9 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00011_cpgHap_h2
@@ -1620,7 +1695,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00011/cpg.hap2.bw
             color 213,94,0
-            shortLabel H9 Hap2
+            priority 2
+            shortLabel H9 CpG Hap2
             longLabel H9 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00011_cpgDiff
@@ -1645,6 +1721,7 @@ priority 2.5
             color 137,143,143
             shortLabel H9 All
             longLabel H9 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00011_cpgDiff_l1
             parent fiberSeqCompendium_PM00011_cpgDiff
@@ -1653,6 +1730,7 @@ priority 2.5
             color 235,229,52
             shortLabel H9 p < 0.01
             longLabel H9 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00011_cpgDiff_l2
             parent fiberSeqCompendium_PM00011_cpgDiff
@@ -1661,6 +1739,7 @@ priority 2.5
             color 245,148,22
             shortLabel H9 p < 0.001
             longLabel H9 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00011_cpgDiff_l3
             parent fiberSeqCompendium_PM00011_cpgDiff
@@ -1669,6 +1748,7 @@ priority 2.5
             color 255,0,0
             shortLabel H9 p < 0.0001
             longLabel H9 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PM00012_acc
         parent fiberSeqCompendium off
@@ -1723,6 +1803,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00012/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel Hek293T Hap1
             longLabel Hek293T Fiber-seq percent accessible, haplotype 1
 
@@ -1731,6 +1812,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00012/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel Hek293T Hap2
             longLabel Hek293T Fiber-seq percent accessible, haplotype 2
 
@@ -1769,7 +1851,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00012/cpg.hap1.bw
             color 0,114,178
-            shortLabel Hek293T Hap1
+            priority 1
+            shortLabel Hek293T CpG Hap1
             longLabel Hek293T CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PM00012_cpgHap_h2
@@ -1777,7 +1860,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PM00012/cpg.hap2.bw
             color 213,94,0
-            shortLabel Hek293T Hap2
+            priority 2
+            shortLabel Hek293T CpG Hap2
             longLabel Hek293T CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PM00012_cpgDiff
@@ -1802,6 +1886,7 @@ priority 2.5
             color 137,143,143
             shortLabel Hek293T All
             longLabel Hek293T CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PM00012_cpgDiff_l1
             parent fiberSeqCompendium_PM00012_cpgDiff
@@ -1810,6 +1895,7 @@ priority 2.5
             color 235,229,52
             shortLabel Hek293T p < 0.01
             longLabel Hek293T CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PM00012_cpgDiff_l2
             parent fiberSeqCompendium_PM00012_cpgDiff
@@ -1818,6 +1904,7 @@ priority 2.5
             color 245,148,22
             shortLabel Hek293T p < 0.001
             longLabel Hek293T CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PM00012_cpgDiff_l3
             parent fiberSeqCompendium_PM00012_cpgDiff
@@ -1826,6 +1913,7 @@ priority 2.5
             color 255,0,0
             shortLabel Hek293T p < 0.0001
             longLabel Hek293T CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00971_acc
         parent fiberSeqCompendium off
@@ -1880,6 +1968,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00971/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG01123 Hap1
             longLabel HG01123 Fiber-seq percent accessible, haplotype 1
 
@@ -1888,6 +1977,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00971/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG01123 Hap2
             longLabel HG01123 Fiber-seq percent accessible, haplotype 2
 
@@ -1926,7 +2016,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00971/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG01123 Hap1
+            priority 1
+            shortLabel HG01123 CpG Hap1
             longLabel HG01123 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00971_cpgHap_h2
@@ -1934,7 +2025,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00971/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG01123 Hap2
+            priority 2
+            shortLabel HG01123 CpG Hap2
             longLabel HG01123 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00971_cpgDiff
@@ -1959,6 +2051,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG01123 All
             longLabel HG01123 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00971_cpgDiff_l1
             parent fiberSeqCompendium_PS00971_cpgDiff
@@ -1967,6 +2060,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG01123 p < 0.01
             longLabel HG01123 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00971_cpgDiff_l2
             parent fiberSeqCompendium_PS00971_cpgDiff
@@ -1975,6 +2069,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG01123 p < 0.001
             longLabel HG01123 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00971_cpgDiff_l3
             parent fiberSeqCompendium_PS00971_cpgDiff
@@ -1983,6 +2078,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG01123 p < 0.0001
             longLabel HG01123 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00972_acc
         parent fiberSeqCompendium off
@@ -2037,6 +2133,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00972/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG01258 Hap1
             longLabel HG01258 Fiber-seq percent accessible, haplotype 1
 
@@ -2045,6 +2142,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00972/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG01258 Hap2
             longLabel HG01258 Fiber-seq percent accessible, haplotype 2
 
@@ -2083,7 +2181,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00972/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG01258 Hap1
+            priority 1
+            shortLabel HG01258 CpG Hap1
             longLabel HG01258 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00972_cpgHap_h2
@@ -2091,7 +2190,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00972/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG01258 Hap2
+            priority 2
+            shortLabel HG01258 CpG Hap2
             longLabel HG01258 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00972_cpgDiff
@@ -2116,6 +2216,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG01258 All
             longLabel HG01258 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00972_cpgDiff_l1
             parent fiberSeqCompendium_PS00972_cpgDiff
@@ -2124,6 +2225,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG01258 p < 0.01
             longLabel HG01258 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00972_cpgDiff_l2
             parent fiberSeqCompendium_PS00972_cpgDiff
@@ -2132,6 +2234,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG01258 p < 0.001
             longLabel HG01258 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00972_cpgDiff_l3
             parent fiberSeqCompendium_PS00972_cpgDiff
@@ -2140,6 +2243,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG01258 p < 0.0001
             longLabel HG01258 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00973_acc
         parent fiberSeqCompendium off
@@ -2194,6 +2298,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00973/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG01358 Hap1
             longLabel HG01358 Fiber-seq percent accessible, haplotype 1
 
@@ -2202,6 +2307,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00973/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG01358 Hap2
             longLabel HG01358 Fiber-seq percent accessible, haplotype 2
 
@@ -2240,7 +2346,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00973/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG01358 Hap1
+            priority 1
+            shortLabel HG01358 CpG Hap1
             longLabel HG01358 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00973_cpgHap_h2
@@ -2248,7 +2355,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00973/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG01358 Hap2
+            priority 2
+            shortLabel HG01358 CpG Hap2
             longLabel HG01358 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00973_cpgDiff
@@ -2273,6 +2381,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG01358 All
             longLabel HG01358 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00973_cpgDiff_l1
             parent fiberSeqCompendium_PS00973_cpgDiff
@@ -2281,6 +2390,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG01358 p < 0.01
             longLabel HG01358 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00973_cpgDiff_l2
             parent fiberSeqCompendium_PS00973_cpgDiff
@@ -2289,6 +2399,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG01358 p < 0.001
             longLabel HG01358 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00973_cpgDiff_l3
             parent fiberSeqCompendium_PS00973_cpgDiff
@@ -2297,6 +2408,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG01358 p < 0.0001
             longLabel HG01358 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00974_acc
         parent fiberSeqCompendium off
@@ -2351,6 +2463,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00974/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG01361 Hap1
             longLabel HG01361 Fiber-seq percent accessible, haplotype 1
 
@@ -2359,6 +2472,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00974/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG01361 Hap2
             longLabel HG01361 Fiber-seq percent accessible, haplotype 2
 
@@ -2397,7 +2511,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00974/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG01361 Hap1
+            priority 1
+            shortLabel HG01361 CpG Hap1
             longLabel HG01361 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00974_cpgHap_h2
@@ -2405,7 +2520,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00974/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG01361 Hap2
+            priority 2
+            shortLabel HG01361 CpG Hap2
             longLabel HG01361 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00974_cpgDiff
@@ -2430,6 +2546,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG01361 All
             longLabel HG01361 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00974_cpgDiff_l1
             parent fiberSeqCompendium_PS00974_cpgDiff
@@ -2438,6 +2555,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG01361 p < 0.01
             longLabel HG01361 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00974_cpgDiff_l2
             parent fiberSeqCompendium_PS00974_cpgDiff
@@ -2446,6 +2564,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG01361 p < 0.001
             longLabel HG01361 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00974_cpgDiff_l3
             parent fiberSeqCompendium_PS00974_cpgDiff
@@ -2454,6 +2573,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG01361 p < 0.0001
             longLabel HG01361 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00975_acc
         parent fiberSeqCompendium off
@@ -2508,6 +2628,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00975/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG01891 Hap1
             longLabel HG01891 Fiber-seq percent accessible, haplotype 1
 
@@ -2516,6 +2637,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00975/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG01891 Hap2
             longLabel HG01891 Fiber-seq percent accessible, haplotype 2
 
@@ -2554,7 +2676,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00975/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG01891 Hap1
+            priority 1
+            shortLabel HG01891 CpG Hap1
             longLabel HG01891 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00975_cpgHap_h2
@@ -2562,7 +2685,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00975/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG01891 Hap2
+            priority 2
+            shortLabel HG01891 CpG Hap2
             longLabel HG01891 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00975_cpgDiff
@@ -2587,6 +2711,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG01891 All
             longLabel HG01891 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00975_cpgDiff_l1
             parent fiberSeqCompendium_PS00975_cpgDiff
@@ -2595,6 +2720,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG01891 p < 0.01
             longLabel HG01891 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00975_cpgDiff_l2
             parent fiberSeqCompendium_PS00975_cpgDiff
@@ -2603,6 +2729,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG01891 p < 0.001
             longLabel HG01891 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00975_cpgDiff_l3
             parent fiberSeqCompendium_PS00975_cpgDiff
@@ -2611,6 +2738,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG01891 p < 0.0001
             longLabel HG01891 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00976_acc
         parent fiberSeqCompendium off
@@ -2665,6 +2793,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00976/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02071 Hap1
             longLabel HG02071 Fiber-seq percent accessible, haplotype 1
 
@@ -2673,6 +2802,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00976/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02071 Hap2
             longLabel HG02071 Fiber-seq percent accessible, haplotype 2
 
@@ -2711,7 +2841,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00976/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02071 Hap1
+            priority 1
+            shortLabel HG02071 CpG Hap1
             longLabel HG02071 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00976_cpgHap_h2
@@ -2719,7 +2850,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00976/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02071 Hap2
+            priority 2
+            shortLabel HG02071 CpG Hap2
             longLabel HG02071 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00976_cpgDiff
@@ -2744,6 +2876,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02071 All
             longLabel HG02071 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00976_cpgDiff_l1
             parent fiberSeqCompendium_PS00976_cpgDiff
@@ -2752,6 +2885,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02071 p < 0.01
             longLabel HG02071 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00976_cpgDiff_l2
             parent fiberSeqCompendium_PS00976_cpgDiff
@@ -2760,6 +2894,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02071 p < 0.001
             longLabel HG02071 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00976_cpgDiff_l3
             parent fiberSeqCompendium_PS00976_cpgDiff
@@ -2768,6 +2903,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02071 p < 0.0001
             longLabel HG02071 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00977_acc
         parent fiberSeqCompendium off
@@ -2822,6 +2958,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00977/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02074 Hap1
             longLabel HG02074 Fiber-seq percent accessible, haplotype 1
 
@@ -2830,6 +2967,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00977/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02074 Hap2
             longLabel HG02074 Fiber-seq percent accessible, haplotype 2
 
@@ -2868,7 +3006,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00977/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02074 Hap1
+            priority 1
+            shortLabel HG02074 CpG Hap1
             longLabel HG02074 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00977_cpgHap_h2
@@ -2876,7 +3015,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00977/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02074 Hap2
+            priority 2
+            shortLabel HG02074 CpG Hap2
             longLabel HG02074 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00977_cpgDiff
@@ -2901,6 +3041,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02074 All
             longLabel HG02074 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00977_cpgDiff_l1
             parent fiberSeqCompendium_PS00977_cpgDiff
@@ -2909,6 +3050,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02074 p < 0.01
             longLabel HG02074 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00977_cpgDiff_l2
             parent fiberSeqCompendium_PS00977_cpgDiff
@@ -2917,6 +3059,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02074 p < 0.001
             longLabel HG02074 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00977_cpgDiff_l3
             parent fiberSeqCompendium_PS00977_cpgDiff
@@ -2925,6 +3068,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02074 p < 0.0001
             longLabel HG02074 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00978_acc
         parent fiberSeqCompendium off
@@ -2979,6 +3123,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00978/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02132 Hap1
             longLabel HG02132 Fiber-seq percent accessible, haplotype 1
 
@@ -2987,6 +3132,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00978/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02132 Hap2
             longLabel HG02132 Fiber-seq percent accessible, haplotype 2
 
@@ -3025,7 +3171,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00978/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02132 Hap1
+            priority 1
+            shortLabel HG02132 CpG Hap1
             longLabel HG02132 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00978_cpgHap_h2
@@ -3033,7 +3180,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00978/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02132 Hap2
+            priority 2
+            shortLabel HG02132 CpG Hap2
             longLabel HG02132 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00978_cpgDiff
@@ -3058,6 +3206,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02132 All
             longLabel HG02132 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00978_cpgDiff_l1
             parent fiberSeqCompendium_PS00978_cpgDiff
@@ -3066,6 +3215,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02132 p < 0.01
             longLabel HG02132 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00978_cpgDiff_l2
             parent fiberSeqCompendium_PS00978_cpgDiff
@@ -3074,6 +3224,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02132 p < 0.001
             longLabel HG02132 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00978_cpgDiff_l3
             parent fiberSeqCompendium_PS00978_cpgDiff
@@ -3082,6 +3233,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02132 p < 0.0001
             longLabel HG02132 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00979_acc
         parent fiberSeqCompendium off
@@ -3136,6 +3288,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00979/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02135 Hap1
             longLabel HG02135 Fiber-seq percent accessible, haplotype 1
 
@@ -3144,6 +3297,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00979/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02135 Hap2
             longLabel HG02135 Fiber-seq percent accessible, haplotype 2
 
@@ -3182,7 +3336,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00979/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02135 Hap1
+            priority 1
+            shortLabel HG02135 CpG Hap1
             longLabel HG02135 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00979_cpgHap_h2
@@ -3190,7 +3345,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00979/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02135 Hap2
+            priority 2
+            shortLabel HG02135 CpG Hap2
             longLabel HG02135 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00979_cpgDiff
@@ -3215,6 +3371,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02135 All
             longLabel HG02135 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00979_cpgDiff_l1
             parent fiberSeqCompendium_PS00979_cpgDiff
@@ -3223,6 +3380,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02135 p < 0.01
             longLabel HG02135 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00979_cpgDiff_l2
             parent fiberSeqCompendium_PS00979_cpgDiff
@@ -3231,6 +3389,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02135 p < 0.001
             longLabel HG02135 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00979_cpgDiff_l3
             parent fiberSeqCompendium_PS00979_cpgDiff
@@ -3239,6 +3398,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02135 p < 0.0001
             longLabel HG02135 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00980_acc
         parent fiberSeqCompendium off
@@ -3293,6 +3453,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00980/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02257 Hap1
             longLabel HG02257 Fiber-seq percent accessible, haplotype 1
 
@@ -3301,6 +3462,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00980/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02257 Hap2
             longLabel HG02257 Fiber-seq percent accessible, haplotype 2
 
@@ -3339,7 +3501,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00980/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02257 Hap1
+            priority 1
+            shortLabel HG02257 CpG Hap1
             longLabel HG02257 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00980_cpgHap_h2
@@ -3347,7 +3510,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00980/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02257 Hap2
+            priority 2
+            shortLabel HG02257 CpG Hap2
             longLabel HG02257 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00980_cpgDiff
@@ -3372,6 +3536,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02257 All
             longLabel HG02257 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00980_cpgDiff_l1
             parent fiberSeqCompendium_PS00980_cpgDiff
@@ -3380,6 +3545,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02257 p < 0.01
             longLabel HG02257 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00980_cpgDiff_l2
             parent fiberSeqCompendium_PS00980_cpgDiff
@@ -3388,6 +3554,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02257 p < 0.001
             longLabel HG02257 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00980_cpgDiff_l3
             parent fiberSeqCompendium_PS00980_cpgDiff
@@ -3396,6 +3563,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02257 p < 0.0001
             longLabel HG02257 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00981_acc
         parent fiberSeqCompendium off
@@ -3450,6 +3618,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00981/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02486 Hap1
             longLabel HG02486 Fiber-seq percent accessible, haplotype 1
 
@@ -3458,6 +3627,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00981/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02486 Hap2
             longLabel HG02486 Fiber-seq percent accessible, haplotype 2
 
@@ -3496,7 +3666,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00981/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02486 Hap1
+            priority 1
+            shortLabel HG02486 CpG Hap1
             longLabel HG02486 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00981_cpgHap_h2
@@ -3504,7 +3675,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00981/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02486 Hap2
+            priority 2
+            shortLabel HG02486 CpG Hap2
             longLabel HG02486 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00981_cpgDiff
@@ -3529,6 +3701,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02486 All
             longLabel HG02486 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00981_cpgDiff_l1
             parent fiberSeqCompendium_PS00981_cpgDiff
@@ -3537,6 +3710,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02486 p < 0.01
             longLabel HG02486 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00981_cpgDiff_l2
             parent fiberSeqCompendium_PS00981_cpgDiff
@@ -3545,6 +3719,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02486 p < 0.001
             longLabel HG02486 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00981_cpgDiff_l3
             parent fiberSeqCompendium_PS00981_cpgDiff
@@ -3553,6 +3728,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02486 p < 0.0001
             longLabel HG02486 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00982_acc
         parent fiberSeqCompendium off
@@ -3607,6 +3783,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00982/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02559 Hap1
             longLabel HG02559 Fiber-seq percent accessible, haplotype 1
 
@@ -3615,6 +3792,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00982/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02559 Hap2
             longLabel HG02559 Fiber-seq percent accessible, haplotype 2
 
@@ -3653,7 +3831,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00982/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02559 Hap1
+            priority 1
+            shortLabel HG02559 CpG Hap1
             longLabel HG02559 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00982_cpgHap_h2
@@ -3661,7 +3840,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00982/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02559 Hap2
+            priority 2
+            shortLabel HG02559 CpG Hap2
             longLabel HG02559 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00982_cpgDiff
@@ -3686,6 +3866,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02559 All
             longLabel HG02559 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00982_cpgDiff_l1
             parent fiberSeqCompendium_PS00982_cpgDiff
@@ -3694,6 +3875,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02559 p < 0.01
             longLabel HG02559 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00982_cpgDiff_l2
             parent fiberSeqCompendium_PS00982_cpgDiff
@@ -3702,6 +3884,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02559 p < 0.001
             longLabel HG02559 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00982_cpgDiff_l3
             parent fiberSeqCompendium_PS00982_cpgDiff
@@ -3710,6 +3893,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02559 p < 0.0001
             longLabel HG02559 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00983_acc
         parent fiberSeqCompendium off
@@ -3764,6 +3948,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00983/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02572 Hap1
             longLabel HG02572 Fiber-seq percent accessible, haplotype 1
 
@@ -3772,6 +3957,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00983/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02572 Hap2
             longLabel HG02572 Fiber-seq percent accessible, haplotype 2
 
@@ -3810,7 +3996,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00983/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02572 Hap1
+            priority 1
+            shortLabel HG02572 CpG Hap1
             longLabel HG02572 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00983_cpgHap_h2
@@ -3818,7 +4005,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00983/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02572 Hap2
+            priority 2
+            shortLabel HG02572 CpG Hap2
             longLabel HG02572 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00983_cpgDiff
@@ -3843,6 +4031,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02572 All
             longLabel HG02572 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00983_cpgDiff_l1
             parent fiberSeqCompendium_PS00983_cpgDiff
@@ -3851,6 +4040,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02572 p < 0.01
             longLabel HG02572 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00983_cpgDiff_l2
             parent fiberSeqCompendium_PS00983_cpgDiff
@@ -3859,6 +4049,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02572 p < 0.001
             longLabel HG02572 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00983_cpgDiff_l3
             parent fiberSeqCompendium_PS00983_cpgDiff
@@ -3867,6 +4058,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02572 p < 0.0001
             longLabel HG02572 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00984_acc
         parent fiberSeqCompendium off
@@ -3921,6 +4113,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00984/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02717 Hap1
             longLabel HG02717 Fiber-seq percent accessible, haplotype 1
 
@@ -3929,6 +4122,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00984/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02717 Hap2
             longLabel HG02717 Fiber-seq percent accessible, haplotype 2
 
@@ -3967,7 +4161,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00984/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02717 Hap1
+            priority 1
+            shortLabel HG02717 CpG Hap1
             longLabel HG02717 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00984_cpgHap_h2
@@ -3975,7 +4170,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00984/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02717 Hap2
+            priority 2
+            shortLabel HG02717 CpG Hap2
             longLabel HG02717 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00984_cpgDiff
@@ -4000,6 +4196,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02717 All
             longLabel HG02717 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00984_cpgDiff_l1
             parent fiberSeqCompendium_PS00984_cpgDiff
@@ -4008,6 +4205,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02717 p < 0.01
             longLabel HG02717 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00984_cpgDiff_l2
             parent fiberSeqCompendium_PS00984_cpgDiff
@@ -4016,6 +4214,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02717 p < 0.001
             longLabel HG02717 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00984_cpgDiff_l3
             parent fiberSeqCompendium_PS00984_cpgDiff
@@ -4024,6 +4223,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02717 p < 0.0001
             longLabel HG02717 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00985_acc
         parent fiberSeqCompendium off
@@ -4078,6 +4278,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00985/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG02886 Hap1
             longLabel HG02886 Fiber-seq percent accessible, haplotype 1
 
@@ -4086,6 +4287,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00985/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG02886 Hap2
             longLabel HG02886 Fiber-seq percent accessible, haplotype 2
 
@@ -4124,7 +4326,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00985/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG02886 Hap1
+            priority 1
+            shortLabel HG02886 CpG Hap1
             longLabel HG02886 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00985_cpgHap_h2
@@ -4132,7 +4335,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00985/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG02886 Hap2
+            priority 2
+            shortLabel HG02886 CpG Hap2
             longLabel HG02886 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00985_cpgDiff
@@ -4157,6 +4361,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG02886 All
             longLabel HG02886 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00985_cpgDiff_l1
             parent fiberSeqCompendium_PS00985_cpgDiff
@@ -4165,6 +4370,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG02886 p < 0.01
             longLabel HG02886 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00985_cpgDiff_l2
             parent fiberSeqCompendium_PS00985_cpgDiff
@@ -4173,6 +4379,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG02886 p < 0.001
             longLabel HG02886 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00985_cpgDiff_l3
             parent fiberSeqCompendium_PS00985_cpgDiff
@@ -4181,6 +4388,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG02886 p < 0.0001
             longLabel HG02886 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00986_acc
         parent fiberSeqCompendium off
@@ -4235,6 +4443,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00986/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG03516 Hap1
             longLabel HG03516 Fiber-seq percent accessible, haplotype 1
 
@@ -4243,6 +4452,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00986/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG03516 Hap2
             longLabel HG03516 Fiber-seq percent accessible, haplotype 2
 
@@ -4281,7 +4491,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00986/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG03516 Hap1
+            priority 1
+            shortLabel HG03516 CpG Hap1
             longLabel HG03516 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00986_cpgHap_h2
@@ -4289,7 +4500,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00986/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG03516 Hap2
+            priority 2
+            shortLabel HG03516 CpG Hap2
             longLabel HG03516 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00986_cpgDiff
@@ -4314,6 +4526,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG03516 All
             longLabel HG03516 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00986_cpgDiff_l1
             parent fiberSeqCompendium_PS00986_cpgDiff
@@ -4322,6 +4535,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG03516 p < 0.01
             longLabel HG03516 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00986_cpgDiff_l2
             parent fiberSeqCompendium_PS00986_cpgDiff
@@ -4330,6 +4544,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG03516 p < 0.001
             longLabel HG03516 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00986_cpgDiff_l3
             parent fiberSeqCompendium_PS00986_cpgDiff
@@ -4338,6 +4553,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG03516 p < 0.0001
             longLabel HG03516 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00987_acc
         parent fiberSeqCompendium off
@@ -4392,6 +4608,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00987/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG03804 Hap1
             longLabel HG03804 Fiber-seq percent accessible, haplotype 1
 
@@ -4400,6 +4617,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00987/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG03804 Hap2
             longLabel HG03804 Fiber-seq percent accessible, haplotype 2
 
@@ -4438,7 +4656,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00987/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG03804 Hap1
+            priority 1
+            shortLabel HG03804 CpG Hap1
             longLabel HG03804 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00987_cpgHap_h2
@@ -4446,7 +4665,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00987/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG03804 Hap2
+            priority 2
+            shortLabel HG03804 CpG Hap2
             longLabel HG03804 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00987_cpgDiff
@@ -4471,6 +4691,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG03804 All
             longLabel HG03804 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00987_cpgDiff_l1
             parent fiberSeqCompendium_PS00987_cpgDiff
@@ -4479,6 +4700,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG03804 p < 0.01
             longLabel HG03804 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00987_cpgDiff_l2
             parent fiberSeqCompendium_PS00987_cpgDiff
@@ -4487,6 +4709,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG03804 p < 0.001
             longLabel HG03804 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00987_cpgDiff_l3
             parent fiberSeqCompendium_PS00987_cpgDiff
@@ -4495,6 +4718,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG03804 p < 0.0001
             longLabel HG03804 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00988_acc
         parent fiberSeqCompendium off
@@ -4549,6 +4773,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00988/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG03942 Hap1
             longLabel HG03942 Fiber-seq percent accessible, haplotype 1
 
@@ -4557,6 +4782,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00988/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG03942 Hap2
             longLabel HG03942 Fiber-seq percent accessible, haplotype 2
 
@@ -4595,7 +4821,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00988/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG03942 Hap1
+            priority 1
+            shortLabel HG03942 CpG Hap1
             longLabel HG03942 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00988_cpgHap_h2
@@ -4603,7 +4830,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00988/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG03942 Hap2
+            priority 2
+            shortLabel HG03942 CpG Hap2
             longLabel HG03942 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00988_cpgDiff
@@ -4628,6 +4856,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG03942 All
             longLabel HG03942 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00988_cpgDiff_l1
             parent fiberSeqCompendium_PS00988_cpgDiff
@@ -4636,6 +4865,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG03942 p < 0.01
             longLabel HG03942 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00988_cpgDiff_l2
             parent fiberSeqCompendium_PS00988_cpgDiff
@@ -4644,6 +4874,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG03942 p < 0.001
             longLabel HG03942 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00988_cpgDiff_l3
             parent fiberSeqCompendium_PS00988_cpgDiff
@@ -4652,6 +4883,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG03942 p < 0.0001
             longLabel HG03942 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00989_acc
         parent fiberSeqCompendium off
@@ -4706,6 +4938,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00989/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG04160 Hap1
             longLabel HG04160 Fiber-seq percent accessible, haplotype 1
 
@@ -4714,6 +4947,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00989/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG04160 Hap2
             longLabel HG04160 Fiber-seq percent accessible, haplotype 2
 
@@ -4752,7 +4986,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00989/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG04160 Hap1
+            priority 1
+            shortLabel HG04160 CpG Hap1
             longLabel HG04160 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00989_cpgHap_h2
@@ -4760,7 +4995,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00989/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG04160 Hap2
+            priority 2
+            shortLabel HG04160 CpG Hap2
             longLabel HG04160 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00989_cpgDiff
@@ -4785,6 +5021,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG04160 All
             longLabel HG04160 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00989_cpgDiff_l1
             parent fiberSeqCompendium_PS00989_cpgDiff
@@ -4793,6 +5030,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG04160 p < 0.01
             longLabel HG04160 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00989_cpgDiff_l2
             parent fiberSeqCompendium_PS00989_cpgDiff
@@ -4801,6 +5039,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG04160 p < 0.001
             longLabel HG04160 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00989_cpgDiff_l3
             parent fiberSeqCompendium_PS00989_cpgDiff
@@ -4809,6 +5048,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG04160 p < 0.0001
             longLabel HG04160 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS00990_acc
         parent fiberSeqCompendium off
@@ -4863,6 +5103,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00990/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HG04187 Hap1
             longLabel HG04187 Fiber-seq percent accessible, haplotype 1
 
@@ -4871,6 +5112,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00990/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HG04187 Hap2
             longLabel HG04187 Fiber-seq percent accessible, haplotype 2
 
@@ -4909,7 +5151,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00990/cpg.hap1.bw
             color 0,114,178
-            shortLabel HG04187 Hap1
+            priority 1
+            shortLabel HG04187 CpG Hap1
             longLabel HG04187 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS00990_cpgHap_h2
@@ -4917,7 +5160,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS00990/cpg.hap2.bw
             color 213,94,0
-            shortLabel HG04187 Hap2
+            priority 2
+            shortLabel HG04187 CpG Hap2
             longLabel HG04187 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS00990_cpgDiff
@@ -4942,6 +5186,7 @@ priority 2.5
             color 137,143,143
             shortLabel HG04187 All
             longLabel HG04187 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS00990_cpgDiff_l1
             parent fiberSeqCompendium_PS00990_cpgDiff
@@ -4950,6 +5195,7 @@ priority 2.5
             color 235,229,52
             shortLabel HG04187 p < 0.01
             longLabel HG04187 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS00990_cpgDiff_l2
             parent fiberSeqCompendium_PS00990_cpgDiff
@@ -4958,6 +5204,7 @@ priority 2.5
             color 245,148,22
             shortLabel HG04187 p < 0.001
             longLabel HG04187 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS00990_cpgDiff_l3
             parent fiberSeqCompendium_PS00990_cpgDiff
@@ -4966,6 +5213,7 @@ priority 2.5
             color 255,0,0
             shortLabel HG04187 p < 0.0001
             longLabel HG04187 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01302_acc
         parent fiberSeqCompendium off
@@ -5020,6 +5268,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01302/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel A549 Hap1
             longLabel A549 Fiber-seq percent accessible, haplotype 1
 
@@ -5028,6 +5277,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01302/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel A549 Hap2
             longLabel A549 Fiber-seq percent accessible, haplotype 2
 
@@ -5066,7 +5316,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01302/cpg.hap1.bw
             color 0,114,178
-            shortLabel A549 Hap1
+            priority 1
+            shortLabel A549 CpG Hap1
             longLabel A549 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01302_cpgHap_h2
@@ -5074,7 +5325,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01302/cpg.hap2.bw
             color 213,94,0
-            shortLabel A549 Hap2
+            priority 2
+            shortLabel A549 CpG Hap2
             longLabel A549 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01302_cpgDiff
@@ -5099,6 +5351,7 @@ priority 2.5
             color 137,143,143
             shortLabel A549 All
             longLabel A549 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01302_cpgDiff_l1
             parent fiberSeqCompendium_PS01302_cpgDiff
@@ -5107,6 +5360,7 @@ priority 2.5
             color 235,229,52
             shortLabel A549 p < 0.01
             longLabel A549 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01302_cpgDiff_l2
             parent fiberSeqCompendium_PS01302_cpgDiff
@@ -5115,6 +5369,7 @@ priority 2.5
             color 245,148,22
             shortLabel A549 p < 0.001
             longLabel A549 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01302_cpgDiff_l3
             parent fiberSeqCompendium_PS01302_cpgDiff
@@ -5123,6 +5378,7 @@ priority 2.5
             color 255,0,0
             shortLabel A549 p < 0.0001
             longLabel A549 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01305_acc
         parent fiberSeqCompendium off
@@ -5177,6 +5433,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01305/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel MCF-7 Hap1
             longLabel MCF-7 Fiber-seq percent accessible, haplotype 1
 
@@ -5185,6 +5442,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01305/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel MCF-7 Hap2
             longLabel MCF-7 Fiber-seq percent accessible, haplotype 2
 
@@ -5223,7 +5481,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01305/cpg.hap1.bw
             color 0,114,178
-            shortLabel MCF-7 Hap1
+            priority 1
+            shortLabel MCF-7 CpG Hap1
             longLabel MCF-7 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01305_cpgHap_h2
@@ -5231,7 +5490,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01305/cpg.hap2.bw
             color 213,94,0
-            shortLabel MCF-7 Hap2
+            priority 2
+            shortLabel MCF-7 CpG Hap2
             longLabel MCF-7 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01305_cpgDiff
@@ -5256,6 +5516,7 @@ priority 2.5
             color 137,143,143
             shortLabel MCF-7 All
             longLabel MCF-7 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01305_cpgDiff_l1
             parent fiberSeqCompendium_PS01305_cpgDiff
@@ -5264,6 +5525,7 @@ priority 2.5
             color 235,229,52
             shortLabel MCF-7 p < 0.01
             longLabel MCF-7 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01305_cpgDiff_l2
             parent fiberSeqCompendium_PS01305_cpgDiff
@@ -5272,6 +5534,7 @@ priority 2.5
             color 245,148,22
             shortLabel MCF-7 p < 0.001
             longLabel MCF-7 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01305_cpgDiff_l3
             parent fiberSeqCompendium_PS01305_cpgDiff
@@ -5280,6 +5543,7 @@ priority 2.5
             color 255,0,0
             shortLabel MCF-7 p < 0.0001
             longLabel MCF-7 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01314_acc
         parent fiberSeqCompendium off
@@ -5334,6 +5598,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01314/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel HCT116 Hap1
             longLabel HCT116 Fiber-seq percent accessible, haplotype 1
 
@@ -5342,6 +5607,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01314/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel HCT116 Hap2
             longLabel HCT116 Fiber-seq percent accessible, haplotype 2
 
@@ -5380,7 +5646,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01314/cpg.hap1.bw
             color 0,114,178
-            shortLabel HCT116 Hap1
+            priority 1
+            shortLabel HCT116 CpG Hap1
             longLabel HCT116 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01314_cpgHap_h2
@@ -5388,7 +5655,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01314/cpg.hap2.bw
             color 213,94,0
-            shortLabel HCT116 Hap2
+            priority 2
+            shortLabel HCT116 CpG Hap2
             longLabel HCT116 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01314_cpgDiff
@@ -5413,6 +5681,7 @@ priority 2.5
             color 137,143,143
             shortLabel HCT116 All
             longLabel HCT116 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01314_cpgDiff_l1
             parent fiberSeqCompendium_PS01314_cpgDiff
@@ -5421,6 +5690,7 @@ priority 2.5
             color 235,229,52
             shortLabel HCT116 p < 0.01
             longLabel HCT116 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01314_cpgDiff_l2
             parent fiberSeqCompendium_PS01314_cpgDiff
@@ -5429,6 +5699,7 @@ priority 2.5
             color 245,148,22
             shortLabel HCT116 p < 0.001
             longLabel HCT116 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01314_cpgDiff_l3
             parent fiberSeqCompendium_PS01314_cpgDiff
@@ -5437,6 +5708,7 @@ priority 2.5
             color 255,0,0
             shortLabel HCT116 p < 0.0001
             longLabel HCT116 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01319_acc
         parent fiberSeqCompendium off
@@ -5491,6 +5763,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01319/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel Caco-2 Hap1
             longLabel Caco-2 Fiber-seq percent accessible, haplotype 1
 
@@ -5499,6 +5772,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01319/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel Caco-2 Hap2
             longLabel Caco-2 Fiber-seq percent accessible, haplotype 2
 
@@ -5537,7 +5811,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01319/cpg.hap1.bw
             color 0,114,178
-            shortLabel Caco-2 Hap1
+            priority 1
+            shortLabel Caco-2 CpG Hap1
             longLabel Caco-2 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01319_cpgHap_h2
@@ -5545,7 +5820,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01319/cpg.hap2.bw
             color 213,94,0
-            shortLabel Caco-2 Hap2
+            priority 2
+            shortLabel Caco-2 CpG Hap2
             longLabel Caco-2 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01319_cpgDiff
@@ -5570,6 +5846,7 @@ priority 2.5
             color 137,143,143
             shortLabel Caco-2 All
             longLabel Caco-2 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01319_cpgDiff_l1
             parent fiberSeqCompendium_PS01319_cpgDiff
@@ -5578,6 +5855,7 @@ priority 2.5
             color 235,229,52
             shortLabel Caco-2 p < 0.01
             longLabel Caco-2 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01319_cpgDiff_l2
             parent fiberSeqCompendium_PS01319_cpgDiff
@@ -5586,6 +5864,7 @@ priority 2.5
             color 245,148,22
             shortLabel Caco-2 p < 0.001
             longLabel Caco-2 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01319_cpgDiff_l3
             parent fiberSeqCompendium_PS01319_cpgDiff
@@ -5594,6 +5873,7 @@ priority 2.5
             color 255,0,0
             shortLabel Caco-2 p < 0.0001
             longLabel Caco-2 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01388_acc
         parent fiberSeqCompendium off
@@ -5648,6 +5928,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01388/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel WTC-11 Hap1
             longLabel WTC-11 Fiber-seq percent accessible, haplotype 1
 
@@ -5656,6 +5937,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01388/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel WTC-11 Hap2
             longLabel WTC-11 Fiber-seq percent accessible, haplotype 2
 
@@ -5694,7 +5976,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01388/cpg.hap1.bw
             color 0,114,178
-            shortLabel WTC-11 Hap1
+            priority 1
+            shortLabel WTC-11 CpG Hap1
             longLabel WTC-11 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01388_cpgHap_h2
@@ -5702,7 +5985,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01388/cpg.hap2.bw
             color 213,94,0
-            shortLabel WTC-11 Hap2
+            priority 2
+            shortLabel WTC-11 CpG Hap2
             longLabel WTC-11 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01388_cpgDiff
@@ -5727,6 +6011,7 @@ priority 2.5
             color 137,143,143
             shortLabel WTC-11 All
             longLabel WTC-11 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01388_cpgDiff_l1
             parent fiberSeqCompendium_PS01388_cpgDiff
@@ -5735,6 +6020,7 @@ priority 2.5
             color 235,229,52
             shortLabel WTC-11 p < 0.01
             longLabel WTC-11 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01388_cpgDiff_l2
             parent fiberSeqCompendium_PS01388_cpgDiff
@@ -5743,6 +6029,7 @@ priority 2.5
             color 245,148,22
             shortLabel WTC-11 p < 0.001
             longLabel WTC-11 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01388_cpgDiff_l3
             parent fiberSeqCompendium_PS01388_cpgDiff
@@ -5751,6 +6038,7 @@ priority 2.5
             color 255,0,0
             shortLabel WTC-11 p < 0.0001
             longLabel WTC-11 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01517_acc
         parent fiberSeqCompendium off
@@ -5805,6 +6093,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01517/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel GM28572 Hap1
             longLabel GM28572 Fiber-seq percent accessible, haplotype 1
 
@@ -5813,6 +6102,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01517/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel GM28572 Hap2
             longLabel GM28572 Fiber-seq percent accessible, haplotype 2
 
@@ -5851,7 +6141,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01517/cpg.hap1.bw
             color 0,114,178
-            shortLabel GM28572 Hap1
+            priority 1
+            shortLabel GM28572 CpG Hap1
             longLabel GM28572 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01517_cpgHap_h2
@@ -5859,7 +6150,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01517/cpg.hap2.bw
             color 213,94,0
-            shortLabel GM28572 Hap2
+            priority 2
+            shortLabel GM28572 CpG Hap2
             longLabel GM28572 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01517_cpgDiff
@@ -5884,6 +6176,7 @@ priority 2.5
             color 137,143,143
             shortLabel GM28572 All
             longLabel GM28572 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01517_cpgDiff_l1
             parent fiberSeqCompendium_PS01517_cpgDiff
@@ -5892,6 +6185,7 @@ priority 2.5
             color 235,229,52
             shortLabel GM28572 p < 0.01
             longLabel GM28572 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01517_cpgDiff_l2
             parent fiberSeqCompendium_PS01517_cpgDiff
@@ -5900,6 +6194,7 @@ priority 2.5
             color 245,148,22
             shortLabel GM28572 p < 0.001
             longLabel GM28572 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01517_cpgDiff_l3
             parent fiberSeqCompendium_PS01517_cpgDiff
@@ -5908,6 +6203,7 @@ priority 2.5
             color 255,0,0
             shortLabel GM28572 p < 0.0001
             longLabel GM28572 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01518_acc
         parent fiberSeqCompendium off
@@ -5962,6 +6258,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01518/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel GM28570 Hap1
             longLabel GM28570 Fiber-seq percent accessible, haplotype 1
 
@@ -5970,6 +6267,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01518/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel GM28570 Hap2
             longLabel GM28570 Fiber-seq percent accessible, haplotype 2
 
@@ -6008,7 +6306,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01518/cpg.hap1.bw
             color 0,114,178
-            shortLabel GM28570 Hap1
+            priority 1
+            shortLabel GM28570 CpG Hap1
             longLabel GM28570 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01518_cpgHap_h2
@@ -6016,7 +6315,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01518/cpg.hap2.bw
             color 213,94,0
-            shortLabel GM28570 Hap2
+            priority 2
+            shortLabel GM28570 CpG Hap2
             longLabel GM28570 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01518_cpgDiff
@@ -6041,6 +6341,7 @@ priority 2.5
             color 137,143,143
             shortLabel GM28570 All
             longLabel GM28570 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01518_cpgDiff_l1
             parent fiberSeqCompendium_PS01518_cpgDiff
@@ -6049,6 +6350,7 @@ priority 2.5
             color 235,229,52
             shortLabel GM28570 p < 0.01
             longLabel GM28570 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01518_cpgDiff_l2
             parent fiberSeqCompendium_PS01518_cpgDiff
@@ -6057,6 +6359,7 @@ priority 2.5
             color 245,148,22
             shortLabel GM28570 p < 0.001
             longLabel GM28570 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01518_cpgDiff_l3
             parent fiberSeqCompendium_PS01518_cpgDiff
@@ -6065,6 +6368,7 @@ priority 2.5
             color 255,0,0
             shortLabel GM28570 p < 0.0001
             longLabel GM28570 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01519_acc
         parent fiberSeqCompendium off
@@ -6119,6 +6423,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01519/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel GM25456 Hap1
             longLabel GM25456 Fiber-seq percent accessible, haplotype 1
 
@@ -6127,6 +6432,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01519/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel GM25456 Hap2
             longLabel GM25456 Fiber-seq percent accessible, haplotype 2
 
@@ -6165,7 +6471,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01519/cpg.hap1.bw
             color 0,114,178
-            shortLabel GM25456 Hap1
+            priority 1
+            shortLabel GM25456 CpG Hap1
             longLabel GM25456 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01519_cpgHap_h2
@@ -6173,7 +6480,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01519/cpg.hap2.bw
             color 213,94,0
-            shortLabel GM25456 Hap2
+            priority 2
+            shortLabel GM25456 CpG Hap2
             longLabel GM25456 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01519_cpgDiff
@@ -6198,6 +6506,7 @@ priority 2.5
             color 137,143,143
             shortLabel GM25456 All
             longLabel GM25456 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01519_cpgDiff_l1
             parent fiberSeqCompendium_PS01519_cpgDiff
@@ -6206,6 +6515,7 @@ priority 2.5
             color 235,229,52
             shortLabel GM25456 p < 0.01
             longLabel GM25456 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01519_cpgDiff_l2
             parent fiberSeqCompendium_PS01519_cpgDiff
@@ -6214,6 +6524,7 @@ priority 2.5
             color 245,148,22
             shortLabel GM25456 p < 0.001
             longLabel GM25456 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01519_cpgDiff_l3
             parent fiberSeqCompendium_PS01519_cpgDiff
@@ -6222,6 +6533,7 @@ priority 2.5
             color 255,0,0
             shortLabel GM25456 p < 0.0001
             longLabel GM25456 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01520_acc
         parent fiberSeqCompendium off
@@ -6276,6 +6588,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01520/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel GM25455 Hap1
             longLabel GM25455 Fiber-seq percent accessible, haplotype 1
 
@@ -6284,6 +6597,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01520/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel GM25455 Hap2
             longLabel GM25455 Fiber-seq percent accessible, haplotype 2
 
@@ -6322,7 +6636,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01520/cpg.hap1.bw
             color 0,114,178
-            shortLabel GM25455 Hap1
+            priority 1
+            shortLabel GM25455 CpG Hap1
             longLabel GM25455 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01520_cpgHap_h2
@@ -6330,7 +6645,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01520/cpg.hap2.bw
             color 213,94,0
-            shortLabel GM25455 Hap2
+            priority 2
+            shortLabel GM25455 CpG Hap2
             longLabel GM25455 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01520_cpgDiff
@@ -6355,6 +6671,7 @@ priority 2.5
             color 137,143,143
             shortLabel GM25455 All
             longLabel GM25455 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01520_cpgDiff_l1
             parent fiberSeqCompendium_PS01520_cpgDiff
@@ -6363,6 +6680,7 @@ priority 2.5
             color 235,229,52
             shortLabel GM25455 p < 0.01
             longLabel GM25455 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01520_cpgDiff_l2
             parent fiberSeqCompendium_PS01520_cpgDiff
@@ -6371,6 +6689,7 @@ priority 2.5
             color 245,148,22
             shortLabel GM25455 p < 0.001
             longLabel GM25455 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01520_cpgDiff_l3
             parent fiberSeqCompendium_PS01520_cpgDiff
@@ -6379,6 +6698,7 @@ priority 2.5
             color 255,0,0
             shortLabel GM25455 p < 0.0001
             longLabel GM25455 CpG haplotype difference, p < 0.0001
+            priority 4
 
         track fiberSeqCompendium_PS01524_acc
         parent fiberSeqCompendium off
@@ -6433,6 +6753,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01524/hap1.percent.accessible.bw
             color 0,114,178
+            priority 1
             shortLabel GM27730 Hap1
             longLabel GM27730 Fiber-seq percent accessible, haplotype 1
 
@@ -6441,6 +6762,7 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01524/hap2.percent.accessible.bw
             color 213,94,0
+            priority 2
             shortLabel GM27730 Hap2
             longLabel GM27730 Fiber-seq percent accessible, haplotype 2
 
@@ -6479,7 +6801,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01524/cpg.hap1.bw
             color 0,114,178
-            shortLabel GM27730 Hap1
+            priority 1
+            shortLabel GM27730 CpG Hap1
             longLabel GM27730 CpG methylation, haplotype 1
 
             track fiberSeqCompendium_PS01524_cpgHap_h2
@@ -6487,7 +6810,8 @@ priority 2.5
             type bigWig
             bigDataUrl /gbdb/hg38/fiberSeq/PS01524/cpg.hap2.bw
             color 213,94,0
-            shortLabel GM27730 Hap2
+            priority 2
+            shortLabel GM27730 CpG Hap2
             longLabel GM27730 CpG methylation, haplotype 2
 
         track fiberSeqCompendium_PS01524_cpgDiff
@@ -6512,6 +6836,7 @@ priority 2.5
             color 137,143,143
             shortLabel GM27730 All
             longLabel GM27730 CpG haplotype difference, All
+            priority 1
 
             track fiberSeqCompendium_PS01524_cpgDiff_l1
             parent fiberSeqCompendium_PS01524_cpgDiff
@@ -6520,6 +6845,7 @@ priority 2.5
             color 235,229,52
             shortLabel GM27730 p < 0.01
             longLabel GM27730 CpG haplotype difference, p < 0.01
+            priority 2
 
             track fiberSeqCompendium_PS01524_cpgDiff_l2
             parent fiberSeqCompendium_PS01524_cpgDiff
@@ -6528,6 +6854,7 @@ priority 2.5
             color 245,148,22
             shortLabel GM27730 p < 0.001
             longLabel GM27730 CpG haplotype difference, p < 0.001
+            priority 3
 
             track fiberSeqCompendium_PS01524_cpgDiff_l3
             parent fiberSeqCompendium_PS01524_cpgDiff
@@ -6536,4 +6863,5 @@ priority 2.5
             color 255,0,0
             shortLabel GM27730 p < 0.0001
             longLabel GM27730 CpG haplotype difference, p < 0.0001
+            priority 4
 

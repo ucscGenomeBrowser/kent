@@ -1,17 +1,18 @@
 <h2>Description</h2>
 
 <p>
-This track is part of the <a href="hgTrackUi?g=fiberSeq">Fiber-seq</a> collection. It shows the
+This track is part of the <a href="hgTrackUi?db=hg38&amp;g=fiberSeq">Fiber-seq</a> collection. It shows the
 fraction of Fiber-seq molecules on which a given position was found to be
 accessible, in seven cell lines that are widely used in functional genomics. All seven are drawn
 as a single overlay with one color per cell line, so a position that is open in one cell type and
-closed in another is easy to spot. Positions where the assay could not decide, because fewer than
-four accessible molecules covered them, are left unscored.
+closed in another is easy to spot. A position covered by Fiber-seq molecules but not found
+accessible on any of them is scored zero; only positions with no molecule coverage at all carry
+no value.
 </p>
 
 <p>
 For the same signal in all 41 samples, along with called peaks and a per-haplotype breakdown, see
-the <a href="hgTrackUi?g=fiberSeqCompendium">Fiber-seq Compendium</a> track.
+the <a href="hgTrackUi?db=hg38&amp;g=fiberSeqCompendium">Fiber-seq Compendium</a> track.
 </p>
 
 <h2>Display Conventions</h2>
@@ -71,7 +72,9 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
 tab-sep tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu">API</a>, track=<i>fiberSeqAcc</i>.
+<a href="https://api.genome.ucsc.edu">API</a>, one cell line at a time, for example
+track=<i>fiberSeqAcc_PM00001</i> for GM12878. The container name <i>fiberSeqAcc</i> holds no
+data of its own and cannot be queried.
 </p>
 
 <p>
@@ -104,7 +107,7 @@ making it available to the browser.
 <h2>References</h2>
 
 <p>
-Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sede&#241;o-Cort&#233;s AE, Fondrie
 WE, Bohaczuk SC <em>et al</em>.
 <a href="https://doi.org/10.1101/2024.06.14.599122" target="_blank">
 A haplotype-resolved view of human gene regulation</a>.

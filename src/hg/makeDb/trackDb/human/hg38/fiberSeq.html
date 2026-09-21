@@ -20,22 +20,22 @@ it can be split by haplotype.
 
 <p>
 This collection holds the Fiber-seq data from the Stergachis and Vollger labs for 41 samples,
-covering common cell lines and lymphoblastoid lines from individuals sequenced by the Human
-Pangenome Reference Consortium and the Genome in a Bottle project. It contains two tracks:
+covering common cell lines and 20 lymphoblastoid lines from individuals sequenced by the Human
+Pangenome Reference Consortium. It contains two tracks:
 </p>
 
 <ul>
-  <li><a href="hgTrackUi?g=fiberSeqAcc">Fiber-seq Acc</a> shows percent-accessible chromatin
+  <li><a href="hgTrackUi?db=hg38&amp;g=fiberSeqAcc">Fiber-seq Acc</a> shows percent-accessible chromatin
       for seven widely used cell lines as a single overlay, so accessibility can be compared
       across cell types at a glance.</li>
-  <li><a href="hgTrackUi?g=fiberSeqCompendium">Fiber-seq Compendium</a> holds everything, for
+  <li><a href="hgTrackUi?db=hg38&amp;g=fiberSeqCompendium">Fiber-seq Compendium</a> holds everything, for
       every one of the 41 samples: the percent-accessible signal, the called FIRE regulatory
       element peaks, CpG methylation, and per-haplotype versions of the accessibility and the
       methylation. Samples are selected from a searchable table.</li>
 </ul>
 
 <p>
-Related data can be found in the <a href="hgTrackUi?g=dnaMethylation">DNA Methylation</a>
+Related data can be found in the <a href="hgTrackUi?db=hg38&amp;g=dnaMethylation">DNA Methylation</a>
 collection, which holds methylation measured by other assays.
 </p>
 
@@ -43,8 +43,10 @@ collection, which holds methylation measured by other assays.
 
 <p>
 Both tracks have their own display conventions and color schemes; see the individual track
-description pages linked above. Signal tracks are scaled 0 to 100 percent throughout, so a bar
-height means the same thing in every track and every sample.
+description pages linked above. The accessibility and methylation signals are scaled 0 to 100
+percent throughout, so a bar height means the same thing in every track and every sample. The
+exception is the CpG haplotype difference, which is a difference between two percentages and so
+runs from -100 to +100.
 </p>
 
 <h2>Methods</h2>
@@ -73,7 +75,7 @@ their help in arranging the tracks.
 <h2>References</h2>
 
 <p>
-Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sede&#241;o-Cort&#233;s AE, Fondrie
 WE, Bohaczuk SC <em>et al</em>.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/40501892" target="_blank">
 A haplotype-resolved view of human gene regulation</a>.
