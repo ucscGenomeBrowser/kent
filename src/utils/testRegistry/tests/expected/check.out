@@ -2,11 +2,12 @@ input/bad.tsv:5: ticket 37263: already on line 4
 input/bad.tsv:6: ticket 38000: lib/tests/noSuchTest.c is not in the tree
 input/bad.tsv:7: ticket 38001: release 'v504' is not a version number
 input/bad.tsv:8: ticket 38002: evidence 'watched-it' is not one of unrecorded, assertion-only, sandbox-ab, release-ab, caught-regression
-input/bad.tsv:9: ticket 38003: why 'slow' is not one of invisible, perf, library
+input/bad.tsv:9: ticket 38003: why 'slow' is not one of invisible, perf, library, page
 input/bad.tsv:10: ticket 38004: no note, so nobody can tell what the test holds down
 input/bad.tsv:11: ticket 38005: no test, so the evidence column must be -
 input/bad.tsv:15: ticket 38007: hg/utils/docent/tests/regress/rm38007.docent.yaml is not in the tree
 input/bad.tsv:16: ticket 38008: a docent script for this ticket is named rm38008.*, not rm38303.docent.yaml
+input/bad.tsv:18: ticket 38009: why is 'page', so this row cannot name a unit test
 input/bad.tsv: ticket 38006 says both covered and waiting
 input/bad.tsv: ticket 36212 says no docent script, but rm36212.docent.yaml is in the tree; put it in the docent column
 input/bad.tsv: rows are not sorted by ticket then test

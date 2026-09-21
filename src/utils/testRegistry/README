@@ -41,8 +41,17 @@ and getting this right is most of the work:
               page, where a dozen other things can go wrong first and produce the
               same red.
 
-A ticket whose fix only changes what a page says is not in the table at all.
-That is the docent suite's job, refs #38252.
+  page        the opposite claim: what changed is what a page says or does, so a
+              docent script is the right test and no unit test is wanted.  The
+              row still exists, because "this one does not need a unit test" is a
+              judgement somebody should be able to read and argue with.  It names
+              what changed and where the fix is, so the claim is checkable.
+
+A ticket whose fix only changes what a page says IS in the table, with why=page
+and no unit test.  It was not, at first, and that was a mistake: a table holding
+only the tickets that want a unit test cannot answer "how much of the release is
+tested", because the tickets it leaves out are indistinguishable from the ones
+nobody has looked at.  All 66 v504 tickets are here.
 
 The docent column names that suite's script for the same ticket, or "-".  Many
 tickets have both, and should: a docent script watches the page and a unit test
