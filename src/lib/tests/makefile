@@ -10,7 +10,8 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
-    dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest
+    dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
+    hmacTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -21,6 +22,13 @@ mkdirs:
 testSumDoubles: testSumDoubles.o ${MYLIBS}
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ./testSumDoubles testSumDoubles.o ${MYLIBS} ${L}
+
+hmacTest: hmacTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/hmacTest hmacTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/hmacTest${EXE}
+	${BIN_DIR}/hmacTest > output/hmacTest
+	diff expected/hmacTest output/hmacTest
 
 pathSimplifyTest: pathSimplifyTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

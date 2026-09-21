@@ -1,0 +1,395 @@
+#!/usr/bin/env python3
+"""testRegistry - which unit test defends which Redmine ticket.  refs #38391
+
+A bug ticket has no way to say whether a test now defends its fix, and a test
+has no way to say which bug it came from.  The two questions are asked from
+opposite ends and neither the tree nor Redmine answers either one, so this reads
+a hand written table, registry.tsv, and answers both.
+
+    testRegistry                    the whole table
+    testRegistry ticket 38320       what defends this ticket
+    testRegistry test faSpeedRead   which tickets a test defends
+    testRegistry release 504        everything that ships in one release
+    testRegistry needed             the tickets waiting for a test to be written
+    testRegistry unwatched          the tickets with no test of any kind
+    testRegistry why perf           one reason at a time: invisible, perf, library
+    testRegistry tickets            just the numbers that have one, for a join
+    testRegistry check              every row still names a live test
+
+A row whose test column is "-" is a ticket that needs a unit test and does not
+have one, with what the test would have to hold down in its note.  Those rows
+are half the value of the table: a ticket nobody has looked at and a ticket
+somebody looked at and could not test are different states, and without them the
+two are indistinguishable.
+
+The docent column names the browser test that watches the same ticket, or "-",
+and BOTH values are checked.  A named script has to exist and has to belong to
+that ticket; a "-" has to still be true, so a script appearing later for a
+ticket whose row says "-" is a failure rather than a silence.  Without that
+second half the "-" rows would be the only thing here nothing verified, and
+`unwatched` -- the list of tickets nothing would catch -- is built entirely out
+of them.
+It is not a second copy of the docent suite: it is here so that "nothing is
+watching this ticket at all" is a question the tool answers, which is the
+question worth acting on.  A docent script does not make a unit test pointless
+where the why is invisible -- rm38309 cannot see a read past the end of an
+array, it asserts something next to it -- but a ticket with neither is a ticket
+nobody would notice breaking again.
+
+The why column is the part that took the most arguing.  "The fix is in a library
+file" is the wrong rule in both directions: a wording change in a library file
+needs no unit test, and a performance rewrite in hgTracks needs one badly, since
+nothing else can tell that the old slow path has come back.  So the column names
+the reason a browser test cannot do the job, and a perf row says what has to be
+measured, because a test that times a loop is a test that goes red on a busy
+machine and gets deleted.
+
+`check` is the point of the file being checked in rather than derived.  A test
+that is renamed or deleted takes its row's meaning with it, and a registry that
+quietly names files nobody has, saying a bug is covered when it is not, is worse
+than no registry.  So `check` fails the build the day a row rots, and
+tests/makefile runs it, which is how it reaches `make test` from src.
+
+It reads the table and the file system and nothing else: no network, no
+database, no Redmine.  That is deliberate, because a check that needs a server
+is a check that gets skipped.
+
+Coverage questions that need the set of all tickets ("which v504 tickets have no
+unit test") are a join, not a mode here: `testRegistry tickets` prints the
+covered numbers and redmineCli prints the others.
+"""
+
+import argparse
+import glob
+import os
+import sys
+
+# Weakest first, and the order is the point.  This is proof.js's vocabulary from
+# the docent suite (hg/utils/docent/tests/proof.js), minus xfail and server-flip,
+# which need a browser and a server to mean anything.  The two scales are kept
+# compatible on purpose, so one reader can compare a unit row with a docent one.
+# "unrecorded" is not in proof.js; it is this file's way of saying nobody has
+# written down what was seen.
+LEVELS = [
+    "unrecorded",
+    "assertion-only",
+    "sandbox-ab",
+    "release-ab",
+    "caught-regression",
+]
+
+# Why a unit test, and not a browser test.  registry.tsv's header describes each
+# one.  The vocabulary is short on purpose: a fourth reason should be argued for
+# on the ticket before it is added here, because every one of these is a claim
+# about what browser tests cannot do.
+WHYS = ["invisible", "perf", "library"]
+
+# Where the browser-side suite keeps its scripts, refs #38252.  Named here so the
+# docent column is checked for rot the same way the test column is.
+DOCENT_DIR = "hg/utils/docent/tests/regress"
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REGISTRY = os.path.join(HERE, "registry.tsv")
+# utils/testRegistry/ -> src/.  Every path in the table is written from src,
+# because that is how the tree is talked about everywhere else.
+KENT_SRC = os.path.normpath(os.path.join(HERE, "..", ".."))
+
+
+class Row:
+    """One line of registry.tsv."""
+
+    def __init__(self, ticket, release, test, docent, why, evidence, note,
+                 lineNo):
+        self.ticket = ticket
+        self.release = release
+        self.test = test
+        self.docent = docent
+        self.why = why
+        self.evidence = evidence
+        self.note = note
+        self.lineNo = lineNo
+
+    def fileName(self):
+        """The path half of the test column, without any ::target."""
+        return self.test.split("::")[0]
+
+    def path(self):
+        """Where that file is on disk."""
+        return os.path.join(KENT_SRC, self.fileName())
+
+
+def readRegistry(fileName=REGISTRY):
+    """Parse the table.  A malformed line aborts: a half read registry would
+    answer "no test" for a ticket that has one, which is the one wrong answer
+    this must never give."""
+    rows = []
+    with open(fileName) as f:
+        for lineNo, line in enumerate(f, 1):
+            line = line.rstrip("\n")
+            if not line or line.startswith("#"):
+                continue
+            fields = line.split("\t")
+            if len(fields) != 7:
+                sys.exit("%s:%d: %d columns, want 7" %
+                         (fileName, lineNo, len(fields)))
+            rows.append(Row(*fields, lineNo=lineNo))
+    return rows
+
+
+def check(rows, fileName=REGISTRY):
+    """Every complaint, printed, and the count returned.  Non-zero fails the
+    build."""
+    problems = []
+
+    def bad(row, why):
+        problems.append("%s:%d: ticket %s: %s" %
+                        (fileName, row.lineNo, row.ticket, why))
+
+    seen = {}
+    for row in rows:
+        if not row.ticket.isdigit():
+            bad(row, "ticket is not a number")
+        # "-" is a fix that has landed but has no target version yet.  Anything
+        # else has to be a version, because the column is what a release report
+        # groups on.
+        if row.release != "-" and not row.release.isdigit():
+            bad(row, "release '%s' is not a version number" % row.release)
+        if row.docent != "-":
+            if not row.docent.startswith("rm%s." % row.ticket):
+                bad(row, "a docent script for this ticket is named rm%s.*, "
+                         "not %s" % (row.ticket, row.docent))
+            elif not os.path.exists(os.path.join(KENT_SRC, DOCENT_DIR,
+                                                 row.docent)):
+                bad(row, "%s/%s is not in the tree" % (DOCENT_DIR, row.docent))
+        if row.why not in WHYS:
+            bad(row, "why '%s' is not one of %s" % (row.why, ", ".join(WHYS)))
+        if not row.note.strip():
+            bad(row, "no note, so nobody can tell what the test holds down")
+
+        if row.test == "-":
+            # A ticket waiting for a test.  There is no file to check, and any
+            # evidence level would be a claim about a test that is not there.
+            if row.evidence != "-":
+                bad(row, "no test, so the evidence column must be -")
+            continue
+        if row.evidence not in LEVELS:
+            bad(row, "evidence '%s' is not one of %s" %
+                (row.evidence, ", ".join(LEVELS)))
+
+        key = (row.ticket, row.test)
+        if key in seen:
+            bad(row, "already on line %d" % seen[key])
+        seen[key] = row.lineNo
+
+        if not os.path.exists(row.path()):
+            # The rot this file exists to catch.
+            bad(row, "%s is not in the tree" % row.fileName())
+
+    for ticket, group in byTicketMap(rows).items():
+        if len(group) > 1 and any(r.test == "-" for r in group):
+            problems.append("%s: ticket %s says both covered and waiting" %
+                            (fileName, ticket))
+        # One ticket, one answer about its browser test.  Two rows disagreeing
+        # is how a table starts lying about what is watching a ticket.
+        if len({r.docent for r in group}) > 1:
+            problems.append("%s: ticket %s names more than one docent script" %
+                            (fileName, ticket))
+
+        # A "-" is a claim that no browser test watches this ticket, and
+        # `unwatched` is built out of those claims, so it is checked like any
+        # other.  Somebody writing the docent script is the good outcome here;
+        # the failure exists so the row gets updated rather than going stale and
+        # leaving the ticket on a queue it has left.
+        if all(r.docent == "-" for r in group):
+            found = sorted(glob.glob(os.path.join(KENT_SRC, DOCENT_DIR,
+                                                  "rm%s.*docent.yaml" % ticket)))
+            if found:
+                problems.append("%s: ticket %s says no docent script, but %s "
+                                "is in the tree; put it in the docent column" %
+                                (fileName, ticket,
+                                 os.path.basename(found[0])))
+
+    ordered = sorted(rows, key=lambda r: (int(r.ticket) if r.ticket.isdigit()
+                                          else 0, r.test))
+    if [r.lineNo for r in ordered] != [r.lineNo for r in rows]:
+        problems.append("%s: rows are not sorted by ticket then test" % fileName)
+
+    for line in problems:
+        print(line)
+    return len(problems)
+
+
+def byTicketMap(rows):
+    """Rows grouped by ticket."""
+    out = {}
+    for row in rows:
+        out.setdefault(row.ticket, []).append(row)
+    return out
+
+
+def summary(rows):
+    covered = {r.ticket for r in rows if r.test != "-"}
+    waiting = {r.ticket for r in rows if r.test == "-"}
+    tests = {r.fileName() for r in rows if r.test != "-"}
+    print("%d tickets covered by %d tests, %d waiting for one" %
+          (len(covered), len(tests), len(waiting)))
+    releases = {}
+    for row in rows:
+        releases.setdefault(row.release, set()).add(row.ticket)
+    for release in sorted(releases, key=lambda v: (v == "-", v)):
+        print("  v%-6s %3d tickets" % (release, len(releases[release])))
+    watched = {r.ticket for r in rows if r.docent != "-"}
+    nothing = {r.ticket for r in rows
+               if r.test == "-" and r.docent == "-"}
+    print("%d also have a docent script, %d have no test of any kind"
+          % (len(watched), len(nothing)))
+    print("why a unit test:")
+    for why in WHYS:
+        n = len({r.ticket for r in rows if r.why == why})
+        if n:
+            print("  %-10s %3d tickets" % (why, n))
+    print("evidence, weakest first:")
+    for level in LEVELS:
+        n = len([r for r in rows if r.evidence == level])
+        if n:
+            print("  %-18s %3d rows" % (level, n))
+
+
+def show(rows):
+    for row in rows:
+        print("%-6s v%-5s %-42s %-26s %-10s %-15s %s" %
+              (row.ticket, row.release, row.test, row.docent, row.why,
+               row.evidence, row.note))
+    print()
+    summary(rows)
+
+
+def byTicket(rows, ticket):
+    ticket = ticket.lstrip("#")
+    hits = [r for r in rows if r.ticket == ticket]
+    if not hits:
+        # Not the same as "there is no test": nobody has said either way.
+        print("#%s is not in the registry" % ticket)
+        return 1
+    for row in hits:
+        if row.test == "-":
+            print("#%s  v%s  no unit test yet (%s)  -- %s" %
+                  (row.ticket, row.release, row.why, row.note))
+        else:
+            print("#%s  v%s  %s  (%s, %s)  -- %s" %
+                  (row.ticket, row.release, row.test, row.why, row.evidence,
+                   row.note))
+        if row.docent != "-":
+            print("        docent: %s/%s" % (DOCENT_DIR, row.docent))
+    return 0
+
+
+def needed(rows):
+    hits = [r for r in rows if r.test == "-"]
+    if not hits:
+        print("every ticket in the registry has a test")
+        return 0
+    for why in WHYS:
+        group = [r for r in hits if r.why == why]
+        if not group:
+            continue
+        print("\n%s" % why)
+        for row in group:
+            print("  #%s  v%s  %s%s" %
+                  (row.ticket, row.release,
+                   "" if row.docent == "-" else "[%s] " % row.docent, row.note))
+    print("\n%d tickets waiting for a unit test" % len(hits))
+    return 0
+
+
+def unwatched(rows):
+    """The tickets with neither a unit test nor a docent script.  This is the
+    queue: nothing anywhere would go red if one of these came back."""
+    hits = [r for r in rows if r.test == "-" and r.docent == "-"]
+    if not hits:
+        print("every ticket in the registry has a test of some kind")
+        return 0
+    for why in WHYS:
+        group = [r for r in hits if r.why == why]
+        if not group:
+            continue
+        print("\n%s" % why)
+        for row in group:
+            print("  #%s  v%s  %s" % (row.ticket, row.release, row.note))
+    print("\n%d tickets with nothing watching them" % len(hits))
+    return 0
+
+
+def byWhy(rows, why):
+    hits = [r for r in rows if r.why == why]
+    if not hits:
+        print("nothing in the registry is marked '%s'" % why)
+        return 1
+    show(hits)
+    return 0
+
+
+def byTest(rows, pattern):
+    hits = [r for r in rows if pattern in r.test and r.test != "-"]
+    if not hits:
+        print("no test in the registry matches '%s'" % pattern)
+        return 1
+    for row in hits:
+        print("%-48s defends #%s (v%s, %s)" %
+              (row.test, row.ticket, row.release, row.evidence))
+    return 0
+
+
+def byRelease(rows, release):
+    release = release.lstrip("vV")
+    hits = [r for r in rows if r.release == release]
+    if not hits:
+        print("nothing in the registry ships in v%s" % release)
+        return 1
+    show(hits)
+    return 0
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("mode", nargs="?", default="list",
+                    choices=["list", "ticket", "test", "release", "why",
+                             "needed", "unwatched", "tickets", "check"])
+    ap.add_argument("arg", nargs="?",
+                    help="a ticket number, part of a path, a release, or a why")
+    ap.add_argument("--registry", default=REGISTRY,
+                    help="another table to read, for testing this tool")
+    args = ap.parse_args()
+
+    rows = readRegistry(args.registry)
+
+    if args.mode == "check":
+        return 1 if check(rows, args.registry) else 0
+    if args.mode == "needed":
+        return needed(rows)
+    if args.mode == "unwatched":
+        return unwatched(rows)
+    if args.mode == "tickets":
+        for ticket in sorted({r.ticket for r in rows if r.test != "-"},
+                             key=int):
+            print(ticket)
+        return 0
+    if args.mode in ("ticket", "test", "release", "why"):
+        if not args.arg:
+            ap.error("%s needs an argument" % args.mode)
+        if args.mode == "ticket":
+            return byTicket(rows, args.arg)
+        if args.mode == "test":
+            return byTest(rows, args.arg)
+        if args.mode == "why":
+            return byWhy(rows, args.arg)
+        return byRelease(rows, args.arg)
+
+    show(rows)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

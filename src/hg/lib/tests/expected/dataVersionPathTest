@@ -1,0 +1,11 @@
+a hub track, which is somebody else's instruction
+  under /gbdb, no such file          /gbdb/hg38/noSuchDataVersion.txt   opened it, and there was no such file
+  a file outside /gbdb               /etc/passwd                        refused, the path came back unread
+  climbing out of /gbdb              /gbdb/hg38/../../etc/passwd        refused, the path came back unread
+  a prefix that only looks right     /gbdbNot/hg38/x.txt                refused, the path came back unread
+  not a path at all                  v27 2026-01-01                     refused, the path came back unread
+
+a native track, which is ours
+  no such file                       /no/such/dir/version.txt           opened it, and there was no such file
+  not a path at all                  v27 2026-01-01                     refused, the path came back unread
+

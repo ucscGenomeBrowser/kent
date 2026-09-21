@@ -30,7 +30,7 @@
 #   https://hgdownload.soe.ucsc.edu/hubs/mouseStrains/mm10/mm10.bigMaf.trackDb.txt
 # and the native stanza differs from it in these ways:
 #   - track renamed from the generic "bigMaf" to mouseStrainsCactus
-#   - shortLabel "Mice Strains" -> "Strain Alignments", longLabel reworded
+#   - shortLabel "Mice Strains" -> "Mouse Strain Alignments", longLabel reworded
 #   - visibility full -> hide (off by default, per #38308)
 #   - speciesOrder replaced by speciesGroups/sGroup_, splitting the strains
 #     into wild-derived, classical laboratory and outgroup. Those three

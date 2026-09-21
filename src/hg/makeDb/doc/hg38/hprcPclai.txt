@@ -165,3 +165,43 @@ hgsql hg38 -N -e "select settings from trackDb_max where tableName='hprcPclaiNA1
 # On a fresh cart that shows the seven hprcPclaiDefaultOn.txt haplotypes, one
 # squish row each, 1235 clickable windows. The same change went into the GenArk
 # contrib collection; see doc/contrib/hprc2annot/hprc2annot.txt section 5e.
+
+##############################################################################
+# 2026-09-16: back to dense, with denseClick on (refs #38364, refs #35415)
+##############################################################################
+# The section above moved this track to squish and pinned it there, because
+# dense drew one merged row per subtrack and emitted no per-item map boxes at
+# all: no hgc link, no mouseOver, no way to reach the ancestry scatterplot.
+# #38364 adds the missing piece. With "denseClick on" every item on a dense row
+# gets its own map box, so it carries an hgc link and its own mouseOver, while
+# still being drawn on the single dense row. Measured on a build of branch
+# denseClick38364, same region as the section above,
+# chr2:60,000,000-80,000,000, the seven default-on haplotypes:
+#   dense, denseClick off     0 hgc links (the behavior that forced squish)
+#   dense, denseClick on   1249 hgc links
+#   squish                 1235 hgc links
+# The rendered PNG is identical with the setting on and off; only the image map
+# changes.
+#
+# So dense now does everything squish did, and it is the better mode for this
+# data: dense is always exactly one row per haplotype, where squish spreads to
+# three or four at whole-chromosome zoom and gets noisy. The stanza is back to
+# "visibility dense", and onlyVisibility moves to dense with it. onlyVisibility
+# is still worth keeping, for the reason it was added: it stops a reader landing
+# in pack, which at 463 subtracks would be enormous.
+#
+# denseClick is inherited, so the one line on the composite covers every
+# subtrack. hgTracks ignores a setting it does not understand, so the line is
+# inert rather than harmful on an older browser.
+#
+# Timing, which matters more for the GenArk copy than for this one. The code is
+# on branch denseClick38364 and goes to master after the v504 final build on
+# 2026-09-21, so it ships in v505. This track is alpha only
+# ("include hprcPclai.ra alpha" in human/hg38/trackDb.ra) and hgwdev CGIs are
+# built from master, so it picks the behavior up within days of the push. The
+# same one-line change went into the GenArk contrib collection,
+# trackDb/contrib/hprc2annot/hprc2annot.trackDb.txt, and hprc2annot is listed in
+# betaGenArk.txt, so it reaches hgwbeta. hgwbeta runs the release branch, so it
+# will show a dense row with no clickable items until v505 gets there, roughly
+# three weeks after the push. Neither copy is in publicGenArk.txt, so no RR user
+# sees either state.

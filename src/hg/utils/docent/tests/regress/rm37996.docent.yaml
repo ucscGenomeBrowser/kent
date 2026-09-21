@@ -1,0 +1,41 @@
+# #37996 -- hgBlat answered with a fixed-width ASCII table that is hard to read and does not
+# say how much of the query each hit covers.
+#
+# The new results page is a sortable, filterable table with a query-coverage bar, the gene
+# locus of each hit, and the share and rename actions in its header. It is OPT-IN while it
+# is being tested: the old page carries a banner offering it, and the banner names
+# 2026-10-21 as the day it becomes the default.
+#
+# WHEN THE DEFAULT CHANGES, the first two steps here come out and the goto: gains
+# blatNewPage=1. A red run on that day is this script asking to be updated, not a bug. The
+# new page cannot be reached by URL alone: blatNewPage=1 on the search request is not
+# enough, because the page is built from the result the banner link points at.
+#
+# The query is a 102 bp human sequence sent by GET, so nothing is typed and no suggestion
+# menu is involved. Nothing about the number of hits is asserted -- an assembly or a
+# database update moves it -- only what the new table is made of.
+proof:
+  - "release-ab 2026-09-19 -- fails on hgwbeta (v503) and passes on genome-test. The same query on v503 returns the ASCII table and no banner at all, so there is nothing to click through to"
+  - "assertion-only 2026-09-19 -- written from #37996 after the new page reached genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # The old page, with the offer on it.
+  - goto: "/cgi-bin/hgBlat?userSeq=ctgggcaacatagcaagaccccatctctacaaaaaatacaaaaattagccgggcgtggtggcgcgcgcctgtagtcccagctactcgggaggctgaggcagg&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - expect:
+      text: "BLAT Search Results"
+      has: 'a[href*="blatNewPage=1"]'
+
+  - click: 'a[href*="blatNewPage=1"]'
+  - sleep: 1500
+
+  # The new page. Query coverage and the locus are the two columns the ticket asks for and
+  # the ASCII table never had.
+  - expect:
+      url: "blatNewPage=1"
+      text: ["Query coverage", "Locus"]
+      has: 'input[placeholder*="Filter hits"]'
+      noText: "QSIZE IDENTITY"

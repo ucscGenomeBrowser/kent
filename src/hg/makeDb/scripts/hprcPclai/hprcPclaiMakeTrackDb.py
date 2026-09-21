@@ -80,13 +80,18 @@ def main():
     w("group hprc\n")
     w("type bigBed 9 +\n")
     w("itemRgb on\n")
-    # squish, not dense, and pinned there. In tvDense hgTracks draws one merged row
-    # per subtrack and emits no per-item map boxes at all, so the scatterplot on the
-    # details page and the mouseOver below both become unreachable. squish keeps
-    # every map box, and since the windows tile without overlapping each haplotype
-    # still collapses to one or two thin rows instead of pack's ~50.
-    w("visibility squish\n")
-    w("onlyVisibility squish\n")
+    # dense, and pinned there. This track was on squish only because dense drew
+    # one merged row per subtrack with no per-item map boxes, which left the
+    # mouseOver below and the details-page scatterplot unreachable. denseClick
+    # (#38364) gives a dense row one hgc link and one mouseOver per item, so
+    # dense now does everything squish did and always takes exactly one row per
+    # haplotype, where squish spreads to three or four at whole-chromosome zoom.
+    # denseClick is inherited, so the one line covers all 463 subtracks.
+    # onlyVisibility stays, moved to dense: it is what keeps a reader out of
+    # pack, which at 463 subtracks would be enormous.
+    w("denseClick on\n")
+    w("visibility dense\n")
+    w("onlyVisibility dense\n")
     w("priority 30\n")
     # A whole chromosome holds a few thousand windows per haplotype, well over the
     # 1000-item default at which pack mode gives up drawing; the block structure

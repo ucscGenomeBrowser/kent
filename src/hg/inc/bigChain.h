@@ -77,5 +77,23 @@ char *bigChainGetLinkFile(char *chainBigBedName);
 /* Construct the file name of the chain link file from the name of a chain file. 
  * That is, change file.bb to file.link.bb */
 
+struct chain;
+struct cBlock;
+struct bigLink;
+
+struct bigChain *chainRecToBigChain(struct chain *chain);
+/* make a bigChain from a chain */
+
+struct bigLink *chainBlockToBigLink(struct chain *chain, struct cBlock *cblk);
+/* make a chain link from a chain block */
+
+void chainToBigChainOne(struct chain *chain, struct bigChain **bigChains, struct bigLink **bigLinks);
+/* convert one chain to a bigChain and a bigLink per block, adding them to the
+ * heads of the given lists */
+
+void chainToBigChainList(struct chain *chains, struct bigChain **bigChains, struct bigLink **bigLinks);
+/* convert a list of chains to bigChains and bigLinks, sorted by target position.
+ * The new records are added to whatever is already on the given lists */
+
 #endif /* BIGCHAIN_H */
 

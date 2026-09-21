@@ -1,0 +1,44 @@
+# #38335 -- a CGI variable with no =value aborted the whole request, and every other
+# parameter on the URL was thrown away with it.
+#
+# This is the sibling of #38185. That ticket taught both parsers in lib/cheapcgi.c to skip
+# a ZERO-LENGTH pair, the `a=1&&b=2` case. A non-empty segment with no `=` in it still went
+# wrong, and in two different ways depending on where it sat:
+#
+#   trailing   Very Early Error / Mangled CGI input string bogus, and no page at all
+#   middle     silent: the request drew hg38's default window, so the position that
+#              travelled beside the bad segment was simply gone
+#
+# So the assertion is the POSITION ITSELF in both steps, not the absence of an error. The
+# middle case produced no error to look for, which is the same trap #38185 documents: a
+# `noText:` on the error string alone would pass on the build this ticket is about.
+#
+# The two steps ask for DIFFERENT chromosomes on purpose. After the first step the cart
+# holds chr1:1-1,000, so a second step asking for the same place would be satisfied by the
+# cart whether or not the URL was parsed.
+#
+# NOT covered: #38340, the same loop copied into three more places (cookies, the session
+# backup, the nightly custom-track refresh). It is behind the hg.conf flag
+# skipMalformedCgiPairs, off by default, so genome-test behaves the old way there.
+proof:
+  - "release-ab 2026-09-19 -- both steps fail on hgwbeta (v503) for this ticket's own reason and pass on genome-test. Trailing: 2,726 bytes, `Very Early Error / Mangled CGI input string bogus`. Middle: the page draws, but at chr7:155,799,529-155,812,871, hg38's default, with no error anywhere"
+  - "assertion-only 2026-09-19 -- written from #38335 after the fix reached genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # A valueless segment in the MIDDLE. The position that follows it used to be lost.
+  - goto: "/cgi-bin/hgTracks?db=hg38&bogus&position=chr1:1-1000&pix=1100"
+  - expect:
+      rows: [ruler]
+      text: "chr1:1-1,000"
+      noText: "Mangled CGI input string"
+
+  # The same segment at the END, which is where it aborted the whole request.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr3:1-1000&pix=1100&bogus"
+  - expect:
+      rows: [ruler]
+      text: "chr3:1-1,000"
+      noText: ["Mangled CGI input string", "Very Early Error"]

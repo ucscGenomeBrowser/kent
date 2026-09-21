@@ -1,0 +1,96 @@
+# #38086 -- BLAT result tracks were dropped in with every other custom track, under names
+# that said nothing about the search.
+#
+# A search left a track called "blat YourSeq" in the Custom Tracks group, next to whatever
+# else the user had loaded, and a second search left another one beside it. There was no way
+# to see which was which and no way to clear them as a set.
+#
+# Four commits, and this script asks for all four:
+#
+#   f48fc325d72  a "BLAT Results" group of its own, a "Delete all" button on the group
+#                header, a delete icon per track, and names built from the query
+#   99880a42ac5  the group's priority derived from the hub increment, so it sits directly
+#                below Custom Tracks whatever hubs are attached
+#   4fd18ab7854  the track is named after the gene whose exon the top hit lands in, and a
+#                protein query's length is called aa, not bp
+#   5915dcd2939  a new result track comes up VISIBLE, not hidden by a stale cart variable
+#
+# GATED. All of it is behind hg.conf `blatResultsGroup`, which is off by default and on for
+# dev. With it off hgBlat writes the old names, hgc tags no group, and hgTracks builds no
+# group to put them in -- so on a server that has not set it every check below fails, and
+# that is the configuration and not a bug. `make preflight` prints the effective hg.conf.
+#
+# The track is made by the results page itself: hgBlat writes an ajax call to
+# hgc?g=buildBigPsl and fires it on document.ready, so visiting the search URL is the whole
+# gesture. Nothing is typed, nothing is clicked, and no suggestion menu is involved. Nothing
+# about the number of hits is asserted -- an assembly update moves it.
+#
+# TWO NAMES ARE ASSERTED IN FULL, and each is a different half of 4fd18ab7854. "102bp SMYD4"
+# is a 102-base query whose top hit is an exon of SMYD4 at chr17:1,809,779; "60aa TP53" is a
+# 60-residue protein query, and the aa is the point -- the old code called every query length
+# bp. The query sizes cannot move. The two gene symbols come from a locus lookup, so a
+# renamed gene at either locus is what would move these, not a code change; if one goes red
+# on its own, look there before looking at hgBlat.
+#
+# The old name is asserted as absent as well. "blat YourSeq" is exactly what a headerless
+# query produced before, and it is the string that says the new naming is in force rather
+# than merely that some name is there.
+#
+# The long label carries a date stamp, so the two selectors match its head and stop at the
+# comma: "BLAT 102bp SMYD4, 2026-09-20". They read `mouseoverText` and not `title`, because
+# hgTracks' own tooltip code takes every title on the page, copies the text into a
+# `mouseoverText` attribute and blanks the title. A `[title=...]` selector here matches
+# nothing, whatever the page says when you read its source.
+#
+# HGWBETA IS NOT A BASELINE FOR THIS ONE. Run there it fails every check and answers with
+# "blat YourSeq", which looks like the before picture and is not evidence: v503_branch
+# already carries these commits, so what beta is showing is almost certainly the hg.conf
+# gate being off, and `make preflight` cannot read beta's hg.conf from here to settle it.
+# The five released docker images are no better, since a public image sets no such flag
+# either. That is why the proof below is assertion-only and not release-ab.
+proof:
+  - "assertion-only 2026-09-20 -- written from #38086 and its four commits after they reached genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # A 102 bp human query, sent by GET. The results page builds the custom track itself.
+  - goto: "/cgi-bin/hgBlat?userSeq=ctgggcaacatagcaagaccccatctctacaaaaaatacaaaaattagccgggcgtggtggcgcgcgcctgtagtcccagctactcgggaggctgaggcagg&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - expect:
+      text: "BLAT Search Results"
+  - sleep: 3000
+
+  # The group, its two buttons, the per-track delete icon, and the track drawn. The row is
+  # matched as `img_data_ct_*` because a custom track's table name carries a per-run number
+  # that no script can know in advance. That it is drawn at all is 5915dcd2939: the track
+  # comes up visible, and a stale visibility variable used to leave it hidden.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1809779-1810005&pix=1100"
+  - expect:
+      text: ["BLAT Results", "102bp SMYD4"]
+      noText: "blat YourSeq"
+      has:
+        - 'a[name="blatGroup"]'
+        - 'button#blat_delAll[mouseoverText="Delete all BLAT result tracks"]'
+        - 'button.hgtButtonHideGroup[data-group-name="blat"]'
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 102bp SMYD4,"]'
+        - 'div.trackDeleteIcon[data-track^="ct_"]'
+        - 'img[id^="img_data_ct_"]'
+
+  # A protein query. Its length is 60 amino acids and the label has to say aa.
+  - goto: "/cgi-bin/hgBlat?userSeq=MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP&type=protein&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - expect:
+      text: "BLAT Search Results"
+  - sleep: 3000
+
+  # BOTH searches are now in the one group. That is what the group and its Delete all are
+  # for: before this, a second search was a second unnamed track somewhere in Custom Tracks.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1809779-1810005&pix=1100"
+  - expect:
+      text: ["BLAT Results", "102bp SMYD4", "60aa TP53"]
+      noText: ["blat YourSeq", "60bp TP53"]
+      has:
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 102bp SMYD4,"]'
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 60aa TP53,"]'
+        - 'button#blat_delAll'

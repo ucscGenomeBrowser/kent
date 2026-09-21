@@ -1,0 +1,38 @@
+======== hg.conf alwaysItemRgb=(not set, defaults on)
+one setting
+  (nothing)                                            item colors
+  itemRgb on                                           item colors
+  itemRgb off                                          one color
+  color 255,0,0                                        one color
+
+both settings
+  itemRgb on  + color 255,0,0                          item colors
+  itemRgb off + color 255,0,0                          one color
+  color 255,0,0 + itemRgb on  (other order)            item colors
+
+from a parent
+  child of a stanza with color                         one color
+  child says itemRgb on, parent says color             item colors
+
+no track
+  NULL                                                 item colors
+
+======== hg.conf alwaysItemRgb=off
+one setting
+  (nothing)                                            one color
+  itemRgb on                                           item colors
+  itemRgb off                                          one color
+  color 255,0,0                                        one color
+
+both settings
+  itemRgb on  + color 255,0,0                          item colors
+  itemRgb off + color 255,0,0                          one color
+  color 255,0,0 + itemRgb on  (other order)            item colors
+
+from a parent
+  child of a stanza with color                         one color
+  child says itemRgb on, parent says color             item colors
+
+no track
+  NULL                                                 item colors
+

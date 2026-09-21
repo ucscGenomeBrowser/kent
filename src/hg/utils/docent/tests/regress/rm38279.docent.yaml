@@ -11,14 +11,28 @@
 # d83026b7d89 adds labelTrackAsDensityIfActive(), called once from makeActiveImage() after
 # every path into density mode has been settled, with one message per cause:
 #
-#     the user asked for it   (density mode active, configure the track to switch it off)
-#     too many features       (too many features, density shown, zoom in to see details)
-#     window too wide         (too many features, density shown, zoom in for individual
-#                              items or use squish or dense mode)
+#     the user asked for it   (density graph: turn off on the track settings page)
+#     too many items          (density graph: too many items, zoom in or use dense)
+#     window too wide         (density graph: too many items, zoom in)
+#
+# 07f0635fd35 reworded all three on 2026-09-18 after QA read them: say "density graph" to
+# match the checkbox, and name only the escape that works for each cause.  The wording
+# above is that second wording, and the note below about the shared prefix is a direct
+# consequence of it.
 #
 # Each step names the message it expects AND the message it must not get, because the whole
 # of the fix is picking the right one of the three.  A version that appended the same
 # sentence to every density track would pass a test that only asked whether a note is there.
+#
+# Since the reword, the window-size message is a strict PREFIX of the too-many-items one:
+#
+#     density graph: too many items, zoom in
+#     density graph: too many items, zoom in or use dense
+#
+# mouseoverText*= is a substring match, so a bare `noHas` on the shorter one matches the
+# longer one too and fails on the very track it is meant to pass.  labelAddNote() wraps a
+# note as " (%s)", so every check below carries the closing paren, which makes the shorter
+# message match itself and nothing else.  Do not drop it.
 #
 # Where the note can be read, and where it cannot
 # -----------------------------------------------
@@ -40,6 +54,7 @@
 proof:
   - "assertion-only 2026-09-17 -- written from #38279 and d83026b7d89 after the fix reached genome-test"
   - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the CRISPR Targets label carries none of the three density notes"
+  - "assertion-only 2026-09-18 -- reworded for 07f0635fd35, which changed all three label strings; the four label steps were re-read off genome-test by hand and the release-ab line above still stands, since v503 carries no note at all and the reword cannot reach it"
 
 target: genome-test
 db: hg38
@@ -51,10 +66,10 @@ steps:
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1500000&hideTracks=1&crisprAllTargets=pack&pix=1100"
   - expect:
       rows: [ruler, crisprAllTargets]
-      has: 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(too many features, density shown, zoom in to see details)"]'
+      has: 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(density graph: too many items, zoom in or use dense)"]'
       noHas:
-        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="density mode active"]'
-        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="use squish or dense mode"]'
+        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="turn off on the track settings page"]'
+        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(density graph: too many items, zoom in)"]'
 
   # 2. Window wider than the track allows.  UniProt Variants sets maxWindowCoverage
   # 10000000, so an 11 Mb window trips winTooBigDoWiggle() -- a different cause from step 1,
@@ -62,8 +77,8 @@ steps:
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-12000000&hideTracks=1&spMut=pack&pix=1100"
   - expect:
       rows: [ruler, spMut]
-      has: 'a.trackLink[data-track="spMut"][mouseoverText*="(too many features, density shown, zoom in for individual items or use squish or dense mode)"]'
-      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="zoom in to see details"]'
+      has: 'a.trackLink[data-track="spMut"][mouseoverText*="(density graph: too many items, zoom in)"]'
+      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="zoom in or use dense"]'
 
   # 3. The same track just inside its own threshold: 9.5 Mb, still drawn, and no note.  This
   # is what says the note follows maxWindowCoverage rather than merely following the track,
@@ -71,7 +86,7 @@ steps:
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-10500000&hideTracks=1&spMut=pack&pix=1100"
   - expect:
       rows: [ruler, spMut]
-      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="density shown"]'
+      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="density graph"]'
 
   # 4. The user asked for it.  mane.doWiggle=on is the configuration page's checkbox, set
   # here through the URL because Docent cannot tick one.  This is the only one of the three
@@ -79,17 +94,16 @@ steps:
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11102837-11267747&hideTracks=1&mane=full&mane.doWiggle=on&pix=1100"
   - expect:
       rows: [ruler, mane]
-      has: 'a.trackLink[data-track="mane"][mouseoverText*="(density mode active, configure the track to switch it off)"]'
-      noHas: 'a.trackLink[data-track="mane"][mouseoverText*="too many features"]'
+      has: 'a.trackLink[data-track="mane"][mouseoverText*="(density graph: turn off on the track settings page)"]'
+      noHas: 'a.trackLink[data-track="mane"][mouseoverText*="too many items"]'
 
   # 5. The control, from the ticket's own test plan: same window, checkbox cleared, plus
   # GENCODE.  Nothing is in density mode, so no track anywhere on the page may carry any of
   # the three notes -- including the tracks listed under the image that are set to hide,
   # which is the ticket's fifth check.  Without this step a fix that labelled everything
-  # would pass every check above.
+  # would pass every check above.  Since the reword all three notes begin "density graph:",
+  # so one check covers them; before it, this took a list of two.
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11102837-11267747&hideTracks=1&knownGene=pack&mane=pack&mane.doWiggle=%5B%5D&pix=1100"
   - expect:
       rows: [ruler, knownGene, mane]
-      noHas:
-        - 'a.trackLink[mouseoverText*="density shown"]'
-        - 'a.trackLink[mouseoverText*="density mode active"]'
+      noHas: 'a.trackLink[mouseoverText*="density graph"]'

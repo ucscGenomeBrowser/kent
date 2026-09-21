@@ -1,0 +1,24 @@
+a hub's description page
+  $db resolves                   <p>assembly $db</p>                -> <p>assembly hg38</p>
+  ${db} in braces too            <p>assembly ${db}</p>              -> <p>assembly hg38</p>
+  $$db stays a dollar            <p>$$db</p>                        -> <p>$db</p>
+  $hgsid is NOT a variable       <img src="http://x/p?s=$hgsid">    -> <img src="http://x/p?s=$hgsid">
+  ${hgsid} is NOT a variable     <img src="http://x/p?s=${hgsid}">  -> <img src="http://x/p?s=${hgsid}">
+  a price is not a variable      <p>costs $5 million</p>            -> <p>costs $5 million</p>
+
+a native description page
+  ${hgsid} is acted on           <a href="x?hgsid=${hgsid}">go</a>  -> <a href="x?hgsid=12345_abcdef">go</a>
+  $hgsid is left alone           <a href="x?hgsid=$hgsid">go</a>    -> <a href="x?hgsid=$hgsid">go</a>
+  $db was done by hgTrackDb      <p>assembly $db</p>                -> <p>assembly $db</p>
+  a price is not a variable      <p>costs $5 million</p>            -> <p>costs $5 million</p>
+
+with no cart at all
+  hub page, ${hgsid}             <img src="http://x/p?s=${hgsid}">  -> <img src="http://x/p?s=${hgsid}">
+  native page, ${hgsid}          <a href="x?hgsid=${hgsid}">go</a>  -> <a href="x?hgsid=${hgsid}">go</a>
+  hub page, $db                  <p>assembly $db</p>                -> <p>assembly hg38</p>
+
+nothing to substitute
+  no dollar at all               <p>plain</p>                       -> <p>plain</p>
+  empty page                                                        -> 
+  a NULL track                   returned, no crash
+

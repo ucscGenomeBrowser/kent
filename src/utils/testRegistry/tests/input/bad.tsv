@@ -1,0 +1,17 @@
+# Every complaint check can make, one per row, so a change to check that stops making one
+# of them shows up as a diff rather than as silence.
+#ticket	release	test	docent	why	evidence	note
+37263	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	fine
+37263	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	the same row twice
+38000	504	lib/tests/noSuchTest.c	-	library	assertion-only	the file is not in the tree
+38001	v504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	the release column carries the v
+38002	504	lib/tests/pathSimplifyTest.c	-	library	watched-it	no such evidence level
+38003	504	lib/tests/pathSimplifyTest.c	-	slow	assertion-only	no such reason
+38004	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	
+38005	504	-	-	perf	assertion-only	no test, but a claim of evidence anyway
+38006	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	this one says covered
+38006	504	-	-	library	-	while this one says waiting
+38000	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	out of order, so the sort check fires
+38007	504	lib/tests/pathSimplifyTest.c	rm38007.docent.yaml	library	assertion-only	names a docent script that is not there
+38008	504	lib/tests/pathSimplifyTest.c	rm38303.docent.yaml	library	assertion-only	names another ticket's docent script
+36212	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	its docent script is in the tree but this row says there is none

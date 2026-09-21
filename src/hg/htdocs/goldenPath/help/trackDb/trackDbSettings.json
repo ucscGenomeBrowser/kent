@@ -1154,6 +1154,25 @@
    "desc": "To color items differently by the strand they align to, use the colorByStrand setting."
   },
   {
+   "key": "denseClick",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bed",
+    "bigBed",
+    "genePred",
+    "bigGenePred",
+    "psl",
+    "bigPsl"
+   ],
+   "level": "new",
+   "fmt": "denseClick <on/off>",
+   "ex": "denseClick on",
+   "desc": "In dense mode the whole track row is normally one link that switches the track to pack, so a click cannot reach an item."
+  },
+  {
    "key": "denseCoverage",
    "category": "bigBed - Item or Region Track Settings",
    "roles": [
