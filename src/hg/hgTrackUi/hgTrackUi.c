@@ -3752,7 +3752,7 @@ if (tdbParent->html)
     {
     // the excerpt below is the container's own description page, so it needs the same
     // substitution the track's page gets further down
-    hVarSubstTrackDbHtml(cart, tdbParent, database);
+    hVarSubstTrackDbHtml(tdbParent, database);
     // collapsed panel for Description
     printf("<p><table>");  // required by jsCollapsible
     jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
@@ -3874,8 +3874,8 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
     if (liftDb)
         tdb->html = getTrackHtml(liftDb, tdb->table);
-    // resolve $hgsid, and for a hub the rest of its description page variables
-    hVarSubstTrackDbHtml(cart, tdb, database);
+    // a hub's description page has not been substituted yet
+    hVarSubstTrackDbHtml(tdb, database);
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
@@ -3890,7 +3890,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
             ; // Get the first parent that has html
         if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
             {
-            hVarSubstTrackDbHtml(cart, tdbParent, database);
+            hVarSubstTrackDbHtml(tdbParent, database);
             printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
                    COLOR_DARKGREEN,tdbParent->shortLabel);
             printRelatedTracks(database,trackHash,tdb,cart);
@@ -4307,8 +4307,8 @@ char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 // quickLiftChain has static html
 if (liftDb && differentString(trackHubSkipHubName(tdb->track), "quickLiftChain"))
     tdb->html = getTrackHtml(liftDb, tdb->table);
-// resolve $hgsid, and for a hub the rest of its description page variables
-hVarSubstTrackDbHtml(cart, tdb, database);
+// a hub's description page has not been substituted yet
+hVarSubstTrackDbHtml(tdb, database);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     char *browserVersion;
@@ -4784,6 +4784,7 @@ else
     htmlDoEscape();
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
+    jsAddHgsidToLinks();
     jsonPrintGlobals();
     webEnd();
     }

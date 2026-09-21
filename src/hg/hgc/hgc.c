@@ -3783,10 +3783,9 @@ for (;tdb != NULL; tdb = tdb->parent)
         tdb->html = getTrackHtml(liftDb, tdb->table);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
-        // resolve $hgsid, which hgTrackDb had no cart to resolve, and for a hub the rest of
-        // its description page variables: a hub page never went through hgTrackDb at all.
-        // tdb is the track the html belongs to, so $parentTrack means its container.
-        hVarSubstTrackDbHtml(cart, tdb, database);
+        // a hub's description page never went through hgTrackDb, so resolve its variables
+        // here.  tdb is the track the html belongs to, so $parentTrack means its container.
+        hVarSubstTrackDbHtml(tdb, database);
         return tdb->html;
         }
     }
@@ -3826,6 +3825,7 @@ if (html != NULL && html[0] != 0)
     puts("</div>");
     }
 hPrintf("<BR>\n");
+jsAddHgsidToLinks();
 }
 
 static struct chain *quickLiftChainInRange(struct trackDb *tdb, int id)
