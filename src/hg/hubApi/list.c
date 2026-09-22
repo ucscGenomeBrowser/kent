@@ -201,6 +201,8 @@ static void bigFileChromInfoOutput(struct jsonWrite *jw,
 /* output the chromosome list for the bigDataUrl file */
 {
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+if (NULL == bbi)
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time for endpoint '/list/chromosomes'", thisTrack->type, thisTrack->track);
 struct bbiChromInfo *chrList = bbiChromList(bbi);
 slSort(chrList, chromInfoCmp);
 struct bbiChromInfo *el = chrList;
