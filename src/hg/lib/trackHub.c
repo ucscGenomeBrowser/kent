@@ -1294,7 +1294,10 @@ char *trackHubSkipHubName(char *name)
 {
 if ((name == NULL) || !startsWith("hub_", name))
     return name;
-return strchr(&name[4], '_') + 1;
+char *ptr = strchr(&name[4], '_');
+if (ptr == NULL)
+    return name;
+return ptr + 1;
 }
 
 struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)

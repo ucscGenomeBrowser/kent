@@ -4464,7 +4464,7 @@ struct hubConnectStatus *hubStatus;
 for (hubStatus = hubStatusList; hubStatus != NULL; hubStatus = hubStatus->next)
     {
     if (hubStatus->id == hubId)
-        return sameString(hubStatus->hubUrl, curatedUrl);
+        return sameOk(hubStatus->hubUrl, curatedUrl);
     }
 return FALSE;
 }
