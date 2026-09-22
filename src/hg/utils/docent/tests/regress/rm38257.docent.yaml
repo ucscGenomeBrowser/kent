@@ -36,6 +36,7 @@
 # thing happens against the v503 park (38316), so it is the park and not the build.
 proof:
   - "assertion-only 2026-09-17 -- written from #38257 and 7d0ceafa7c0 after the fix reached genome-test"
+  - "assertion-only 2026-09-21 -- the wait: was on the wrong half and the script raced itself; put the old wait: back and it goes red on genome-test, with the fix in place"
 
 target: genome-test
 db: hg38
@@ -61,9 +62,17 @@ steps:
 
   # The link that used to do neither of the two things it should.
   - click: 'a:has-text("My Track Hubs")'
-  # The popup closes on the next tick, after the click has been fully dispatched, so wait
-  # for the half that settles last rather than sleeping.
-  - wait: 'li.ui-tabs-active a[href="#unlistedHubs"]'
+  # Wait for the POPUP to go, not for the tab to arrive.  The two halves do not settle in
+  # the order this script first assumed: hgHubConnect.js switches the tab synchronously
+  # inside the click dispatch, while topLinks.js closes the popup from a
+  # setTimeout(..., 0), so the tab is the half that settles FIRST.  Waiting for it returned
+  # a tick early, the expect below read a page that still had the popup on it, and the
+  # script failed about half the time on a build with the fix in it -- 2026-09-19 and 09-20
+  # green, 09-21 red, then two of three reds on a re-run the same morning.  Measured with a
+  # MutationObserver over the click: tab active at t=43ms, popup gone on the next task.
+  # "My Track Hubs" is the popup's own string, as the header says, so its removal is the
+  # popup's removal.
+  - wait: {gone: 'text=My Track Hubs'}
   - expect:
       # The tab really did switch: hgHubConnect.js saw the click.
       has: 'li.ui-tabs-active a[href="#unlistedHubs"]'

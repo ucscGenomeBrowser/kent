@@ -176,7 +176,15 @@ screen stills instead of overwriting them.
 | `shot: source` | Write `<name>.png` **and** pause the video here. On a tracks page the still is the track image (`#imgTbl`), plus any open tooltip/dialog. On any other page (an hgc detail page, an external page a link led to) it is the **viewport only — the top of the page**, never the whole scrolling document. |
 
 Escape hatches for anything the verbs don't cover: `goto: <url>`, `click: <sel>`,
-`hover: <sel>`, `wait: <sel>`, `sleep: <ms>`.
+`hover: <sel>`, `wait: <sel>`, `wait: {gone: <sel>}`, `sleep: <ms>`.
+
+`wait:` goes both ways on purpose. A script that asserts what a click did has to wait on
+the half of the answer that settles **last**, and that is not always the half that
+appears -- a handler can do its visible work inside the click dispatch and defer the rest
+to a `setTimeout(..., 0)`. Waiting for the wrong half returns a tick early and the assert
+reads a page that is still mid-answer, which arrives as a script that passes about half
+the time. `{gone:}` waits for a selector to leave the DOM, so the vanishing half can be
+the one waited on. tests/regress/rm38257.docent.yaml is the worked example.
 
 ## Sessions
 
