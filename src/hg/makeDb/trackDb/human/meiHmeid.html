@@ -73,9 +73,8 @@ parameters; BAM coverage was estimated with goleft v0.1.8 covstats.
 After the MELT MakeVCF step, sites were filtered to those that (i) lie
 outside low-complexity regions, (ii) are genotyped in &gt;25% of
 individuals, (iii) have more than 2 split reads, (iv) carry a MELT
-ASSESS score &gt;3 (i.e. ASSESS &ge; 4 in the unfiltered output, but
-HMEID retains ASSESS 3 sites that otherwise pass) and (v) are marked
-PASS in the FILTER column. Alu and L1 subfamilies were assigned by
+ASSESS score of at least 3, meaning target-site duplication evidence on
+at least one side, and (v) are marked PASS in the FILTER column. Alu and L1 subfamilies were assigned by
 MELT's CALU and LINEU modules. 2,998 of 2,999 NyuWa samples and 2,677
 of 2,691 1KGP samples passed processing, yielding the final callset of
 36,699 MEIs in 5,675 genomes. Allele frequencies were computed per
@@ -92,7 +91,8 @@ the steps in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
 target="_blank">makeDoc file</a>. Conversion uses scripts in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
-target="_blank">src/hg/makeDb/scripts/mei</a>: VCF-style positions
+target="_blank">src/hg/makeDb/scripts/mei</a>,
+and the track configuration is in <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/mei.ra" target="_blank">trackDb/human/mei.ra</a>: VCF-style positions
 (1-based POS, anchor base) are converted to half-open BED coordinates
 (<tt>chromStart = POS - 1</tt>, <tt>chromEnd = chromStart + 1</tt>),
 MELT SVTYPE codes (<tt>ALU</tt>, <tt>LINE1</tt>, <tt>SVA</tt>,
@@ -108,22 +108,22 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
 there to spreadsheet or tab-separated tables. From scripts, the data can
-be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+be accessed through our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
 track=<i>meiHmeid</i>.
 </p>
 <p>
 For automated download and analysis, the genome annotation is stored in
 a bigBed file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/" target="_blank">
 our download server</a>. The file for this track is called
-<tt>hmeid.bb</tt> in <tt>/gbdb/hg38/mei/</tt>. Individual regions or the
+<tt>hmeid.bb</tt> in <tt>/gbdb/$db/mei/</tt>. Individual regions or the
 whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt>, which can be compiled from the source code or
 downloaded as a precompiled binary for your system. Instructions for
 downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/hmeid.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/hmeid.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
 </p>
 <p>
 The original annotation source data can be downloaded from the

@@ -45,7 +45,7 @@ not present in the reference and is therefore not drawn; its length is
 reported on the detail page (svLen) and in the item label
 (<tt>class-svLen:carrierCount</tt>). bigBed does support truly zero-width
 features between nucleotides, but for consistency with the
-<a href="hgTrackUi?g=longReadVariants">long-read SV tracks</a>, this track uses the
+<a href="hgTrackUi?db=hg38&g=longReadVariants">long-read SV tracks</a>, this track uses the
 1-bp anchor representation instead.
 </p>
 <p>
@@ -77,11 +77,12 @@ ultra-long), and complemented with Strand-seq, Bionano optical mapping,
 Hi-C, Iso-Seq and RNA-seq. Haplotype-resolved diploid assemblies were
 produced and structural variants called with PAV. Mobile element
 insertions were identified from the union of two independent MEI
-callsets, L1ME-AID and PALMER; all single-caller calls were manually
+callsets, L1ME-AID and PALMER2; all single-caller calls were manually
 curated. Orthogonal validation against an independent MELT-LRA callset
-showed an average concordance of 90.8% on GRCh38. Roughly 93% of MEIs
-are supported by both callers; the remaining single-caller calls split
-about 6:1 in favour of PALMER (PALMER-only ~6%, L1ME-AID-only ~1%).
+showed a concordance of 92.5% on GRCh38 and 92.1% on T2T-CHM13. Roughly 93% of MEIs
+are supported by both callers (93.6% on GRCh38, 92.4% on T2T-CHM13); the
+remaining single-caller calls split about 6:1 in favour of L1ME-AID
+(L1ME-AID-only 5.5% on GRCh38, PALMER-only 0.9%).
 The Caller Count, PALMER Validated and L1ME-AID Validated filters can
 be used to restrict the display to the high-confidence dual-validated
 subset. Calls are restricted to non-low-confidence regions
@@ -102,7 +103,8 @@ bigBed following the steps described in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
 target="_blank">makeDoc file</a>. Conversion uses scripts in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
-target="_blank">src/hg/makeDb/scripts/mei</a>: VCF-style positions
+target="_blank">src/hg/makeDb/scripts/mei</a>,
+and the track configuration is in <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/mei.ra" target="_blank">trackDb/human/mei.ra</a>: VCF-style positions
 (1-based POS, anchor base) are converted to half-open BED coordinates
 (<tt>chromStart = POS - 1</tt>, <tt>chromEnd = chromStart + 1</tt>),
 genotypes are tallied across the 65 samples, and items are colored by
@@ -115,23 +117,22 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
 there to spreadsheet or tab-separated tables. From scripts, the data can
-be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+be accessed through our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
 track=<i>meiHgsvc3</i>.
 </p>
 <p>
 For automated download and analysis, the genome annotation is stored in
 a bigBed file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/" target="_blank">
 our download server</a>.  The file for this track is called
-<tt>hgsvc3.bb</tt> in <tt>/gbdb/hg38/mei/</tt> (GRCh38) or
-<tt>/gbdb/hs1/mei/</tt> (T2T-CHM13). Individual regions or the whole
+<tt>hgsvc3.bb</tt> in <tt>/gbdb/$db/mei/</tt>. Individual regions or the whole
 genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a
 precompiled binary for your system. Instructions for downloading source
 code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/hgsvc3.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/hgsvc3.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
 </p>
 <p>
 The original annotation source data can be downloaded from the

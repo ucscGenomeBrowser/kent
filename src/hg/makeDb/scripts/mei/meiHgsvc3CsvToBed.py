@@ -152,8 +152,16 @@ def main():
             l1meAid = "Yes" if row[idx["L1ME-AID"]] == "1" else "No"
             palmer = "Yes" if row[idx["PALMER"]] == "1" else "No"
 
-            # Inserted DNA: VCF convention puts the anchor base at ALT[0] (= REF[0]).
-            insertSeq = alt[1:] if len(alt) > 1 else ""
+            # Inserted DNA. Most records follow the VCF convention of carrying the
+            # anchor base at ALT[0] (= REF[0]), so the element is ALT minus that
+            # base. The PALMER-only records do not: ALT there is the element
+            # itself (len(ALT) == SVLEN, and ALT[0] usually differs from REF[0]),
+            # and some of them carry a truncated ALT. Those records supply the
+            # full element in INFO SEQ, which always matches SVLEN, so prefer it.
+            if "SEQ" in info and info["SEQ"] is not True:
+                insertSeq = info["SEQ"]
+            else:
+                insertSeq = alt[1:] if len(alt) > 1 else ""
 
             # Name format: <class>-<svLen>:<carrierCount> (e.g. Alu-281:33).
             name = f"{cls}-{svLen}:{carrierCount}"

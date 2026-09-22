@@ -3016,7 +3016,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    boolean isGenarkHub = sameOk(db->nibPath, "genark");
+    boolean isGenarkHub = db->nibPath &&
+	(sameOk(db->nibPath, "genark") || startsWith("hub:/gbdb/genark", db->nibPath));
     if (!doCheck || (isGenarkHub || hashLookup(hash, db->name)))
         {
 	slAddHead(&dbList, db);

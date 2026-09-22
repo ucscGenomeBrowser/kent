@@ -765,12 +765,16 @@ function propagateAssemblyHubMeta(uppyInstance) {
     // We detect the hub-defining files by filename rather than by meta.fileType,
     // because setFileMeta updates Uppy's state immutably - file objects captured
     // from getFiles() earlier in this event may still carry old meta.
+    //
+    // Returns a promise that settles once the metadata is stamped. Reading a
+    // hub.txt is asynchronous, so callers that must see the stamped values wait
+    // on it. The promise never rejects.
     let files = uppyInstance.getFiles();
     let twoBit = files.find(looksLikeTwoBit);
     let hubTxt = files.find(looksLikeHubTxt);
     if (!twoBit && !hubTxt) {
         hubCreate.clearLastHubBatchDescriptor();
-        return;
+        return Promise.resolve();
     }
 
     function applyGenomeToSiblings(genome, alsoLockHubDefiners, hubType) {
@@ -809,7 +813,7 @@ function propagateAssemblyHubMeta(uppyInstance) {
     if (hubTxt) {
         hubBatchParsesInFlight++;
         setUploadButtonEnabled(false);
-        hubCreate.parseHubBatch(uppyInstance.getFiles()).then((descriptor) => {
+        return hubCreate.parseHubBatch(uppyInstance.getFiles()).then((descriptor) => {
             // Skip stale parses; only the latest-completed one applies.
             if (descriptor !== hubCreate.getLastHubBatchDescriptor()) return;
             for (let e of descriptor.errors) {
@@ -846,11 +850,11 @@ function propagateAssemblyHubMeta(uppyInstance) {
             hubBatchParsesInFlight--;
             if (hubBatchParsesInFlight === 0) setUploadButtonEnabled(true);
         });
-        return;
     }
 
     let asmGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
     applyGenomeToSiblings(asmGenome, false, "assemblyHub");
+    return Promise.resolve();
 }
 
 // create a custom uppy plugin to batch change the type and db fields
@@ -1208,14 +1212,23 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             // adopts its genome and gets hubType=assemblyHub. Also handle hub.txt:
             // parse it client-side and, if it declares an assembly hub, mirror
             // those values onto every file (hub.txt wins).
-            propagateAssemblyHubMeta(this.uppy);
+            let stamped = propagateAssemblyHubMeta(this.uppy);
 
             if (this.uppy.getFiles().length > 1) {
                 this.addBatchSelectsToDashboard();
             } else {
-                // only open the file editor when there is one file
-                const dash = uppy.getPlugin("Dashboard");
-                dash.toggleFileCard(true, file.id);
+                // only open the file editor when there is one file, and only after
+                // the hub.txt parse. The card copies file.meta when it opens and
+                // writes that copy back on save, so an earlier open saves hg38.
+                stamped.then(() => {
+                    if (!this.uppy.getFile(file.id)) {
+                        return;
+                    }
+                    const dash = this.uppy.getPlugin("Dashboard");
+                    if (dash) {
+                        dash.toggleFileCard(true, file.id);
+                    }
+                });
             }
         });
         this.uppy.on("file-removed", (file) => {
