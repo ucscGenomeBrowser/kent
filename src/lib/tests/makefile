@@ -94,6 +94,8 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
+	${BIN_DIR}/htmlPageTest input/valuelessAttrs.html > output/valuelessAttrs.out
+	diff expected/valuelessAttrs.out output/valuelessAttrs.out
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \

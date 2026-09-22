@@ -580,7 +580,10 @@ for (;;)
 		    break;
 		    }
 
-		/* Get name - everything up to equals. */
+		/* Get name - everything up to equals, white space or tag end.
+		 * A name that ends at white space belongs to a valueless
+		 * attribute such as the SELECTED in <OPTION SELECTED value='x'>,
+		 * unless the equals is merely separated from it by spaces. */
 		e = s;
 		for (;;)
 		    {
@@ -591,6 +594,16 @@ for (;;)
 		        break;
 		    else if (c == 0)
 		        break;
+		    else if (isspace(c))
+		        {
+			char *afterSpaces = skipLeadingSpaces(e);
+			if (*afterSpaces == '=')
+			    {
+			    e = afterSpaces;
+			    c = *e;
+			    }
+			break;
+			}
 		    e += 1;
 		    }
 		if (c == 0)
