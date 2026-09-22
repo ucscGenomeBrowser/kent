@@ -119,9 +119,14 @@ dataVersionPathTest: mkdirs
 	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
 	diff expected/dataVersionPathTest output/dataVersionPathTest
 
+# genarkLiftOver is set in the conf rather than assumed.  genarkLiftOverDbs returns nothing
+# at all when the option is off, so a developer's own hg.conf without it turns every line of
+# the expected output into "0 back" and the test goes red for a reason that is not the code.
 genarkLiftOverTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/genarkLiftOverTester genarkLiftOverTester.c ${MYLIBS} $L
-	${BIN_DIR}/genarkLiftOverTester > output/genarkLiftOverTest
+	echo "include ${HOME}/.hg.conf" > output/genarkLiftOver.conf
+	echo "genarkLiftOver=on" >> output/genarkLiftOver.conf
+	HGDB_CONF=output/genarkLiftOver.conf ${BIN_DIR}/genarkLiftOverTester > output/genarkLiftOverTest
 	diff expected/genarkLiftOverTest output/genarkLiftOverTest
 
 snapshotTypeTest: mkdirs

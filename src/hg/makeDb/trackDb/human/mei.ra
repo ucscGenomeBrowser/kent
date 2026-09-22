@@ -1,7 +1,7 @@
 track mei
 superTrack on
-shortLabel Mobile Insertions
-longLabel Mobile element insertions (polymorphic)
+shortLabel Mobile Element Insertions
+longLabel Mobile Element Insertions (polymorphic)
 group varRep
 visibility hide
 
