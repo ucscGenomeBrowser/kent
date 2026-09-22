@@ -41,6 +41,7 @@
 #include "hash.h"
 #include "decorator.h"
 #include "decoratorUi.h"
+#include "htmlSanitize.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -1137,9 +1138,13 @@ va_start(args, format);
 struct dyString *dy = dyStringNew(0);
 dyStringVaPrintf(dy, format, args);
 va_end(args);
+char *sanitized = htmlSanitize(dy->string);
 char *encoded = attributeEncode(dy->string);
-hPrintf(" TITLE=\"%s\" data-tooltip=\"%s\"", encoded, encoded);
+char *encSanitized = attributeEncode(sanitized);
+hPrintf(" TITLE=\"%s\" data-tooltip=\"%s\"", encoded, encSanitized);
 freeMem(encoded);
+freeMem(sanitized);
+freeMem(encSanitized);
 dyStringFree(&dy);
 }
 
@@ -1332,7 +1337,13 @@ if (x < xEnd)
         hPrintf("\" ");
         if (statusLine != NULL)
             {
-            hPrintf(" TITLE='%s' data-tooltip='%s' ", item, statusLine);
+            char *encItem = attributeEncode(item);
+            char *sanitized = htmlSanitize(statusLine);
+            char *encoded = attributeEncode(sanitized);
+            hPrintf(" TITLE='%s' data-tooltip='%s' ", encItem, encoded);
+            freeMem(sanitized);
+            freeMem(encoded);
+            freeMem(encItem);
             }
         hPrintf("%s>\n", dyStringContents(id));
         }

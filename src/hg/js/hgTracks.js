@@ -4501,15 +4501,16 @@ var rightClick = {
                                 title = decodeURIComponent(a[1].replace(/\+/g, " "));
                             }
                         }
+                        var titleHtml = htmlEncode(title);
 
                         if (displayItemFunctions) {
-                            o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
+                            o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  titleHtml] = {
                                 onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                     "selectWholeGene"); return true;
                                           }
                                 };
-                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] =
+                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + titleHtml] =
                                 {   onclick: function(menuItemClicked, menuObject) {
                                         rightClick.hit(menuItemClicked, menuObject,
                                                        "highlightItem");
@@ -4518,7 +4519,7 @@ var rightClick = {
                                 };
                             var itemForColor = rightClick.itemFromHref(href);
                             if (hgTracks.canColorItems && itemForColor) {
-                                o[rightClick.makeImgTag("palette.png") + " Color " + title + "..."] =
+                                o[rightClick.makeImgTag("palette.png") + " Color " + titleHtml + "..."] =
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                            "colorThisItem");
@@ -4528,7 +4529,7 @@ var rightClick = {
                                 if (rightClick.findItemColor(itemForColor.track,
                                                              itemForColor.name)) {
                                     o[rightClick.makeImgTag("palette.png") +
-                                            " Remove color from " + title] =
+                                            " Remove color from " + titleHtml] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                                "removeItemColor");
@@ -4605,7 +4606,7 @@ var rightClick = {
                                     }
                                 }
                             }
-                            o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+title] = {
+                            o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+titleHtml] = {
                                 onclick: function(menuItemClicked, menuObject) {
                                     rightClick.hit(menuItemClicked, menuObject, "getDna");
                                     return true; }
@@ -4634,7 +4635,7 @@ var rightClick = {
                                 item = rightClick.makeImgTag("book.png") + " Show details...";
                             else
                                 item = rightClick.makeImgTag("book.png")+" Show details for "+
-                                       title + "...";
+                                       htmlEncode(title) + "...";
                             o[item] = {onclick: function(menuItemClicked, menuObject) {
                                        rightClick.hit(menuItemClicked,menuObject,"followLink");
                                        return true; }
