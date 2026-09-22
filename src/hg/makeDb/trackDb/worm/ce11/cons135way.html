@@ -751,16 +751,6 @@ level (see <em>Gap Annotation</em>, below). </p>
 <b>Table 1.</b> <em>Genome assemblies included in the 135-way Conservation track.</em>
 </blockquote></p>
 
-Downloads for data in this track are available:
-<ul>
-<li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/ce11/multiz135way/">Multiz alignments</a> (MAF format), and phylogenetic trees
-<li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/">PhyloP conservation</a> (WIG format)
-<li>
-<a href="http://hgdownload.soe.ucsc.edu/goldenPath/ce11/phastCons135way/">PhastCons conservation</a> (WIG format)
-</ul>
-
 <h2>Display Conventions and Configuration</h2>
 <p>
 The track configuration options allow the user to display the three different
@@ -987,6 +977,38 @@ are transformed using a monotonic function of the form a * log(x) + b.) The
 raw log odds scores are retained in the "name" field and can be seen on the
 details page or in the browser when the track's display mode is set to
 "pack" or "full".
+</p>
+
+<h2>Data Access</h2>
+<p>
+The alignments and the conservation scores can be retrieved for a single region or for a list of
+regions with the <a
+href="hgTables?db=ce11&amp;hgta_group=compGeno&amp;hgta_track=cons135way">Table Browser</a>,
+which returns the alignments in MAF format and the scores as wiggle data. The scores and the
+conserved elements, though not the alignments, can also be joined with other annotations in the
+<a href="hgIntegrator?db=ce11">Data Integrator</a>. For automated access, our <a
+href="../goldenPath/help/api.html">REST API</a> serves the alignment and conservation tracks
+individually, by name.
+</p>
+<p>
+Downloads for data in this track are available:
+<ul>
+<li>
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/ce11/multiz135way/" target="_blank">Multiz alignments</a> (MAF format), and phylogenetic trees
+<li>
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phyloP135way/" target="_blank">PhyloP conservation</a> (WIG format)
+<li>
+<a href="https://hgdownload.soe.ucsc.edu/goldenPath/ce11/phastCons135way/" target="_blank">PhastCons conservation</a> (WIG format)
+</ul>
+</p>
+<p>
+Genome-wide alignment and conservation files are large. Among our command-line programs,
+<tt>mafsInRegion</tt>, <tt>mafSpeciesSubset</tt> and <tt>mafFrags</tt> pull out a region, a
+subset of species, or the alignment underlying a gene, and <tt>bigWigToWig</tt> and
+<tt>bigWigSummary</tt> read the conservation files. They can be downloaded from the <a
+href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities directory</a>, and
+each one prints its usage when run with no arguments. See our <a
+href="../FAQ/FAQdownloads.html">Data Access FAQ</a> for more information.
 </p>
 
 <h2>Credits</h2>
