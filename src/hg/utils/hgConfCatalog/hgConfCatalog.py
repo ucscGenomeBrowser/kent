@@ -1703,6 +1703,14 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("hgGateway.showRefBadge", "flag", "hg/hgGateway/hgGateway.c",
+          default="FALSE", ticket="38401",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgGateway/hgGateway.c.  Came in at 81a04805893, highlight "
+               "NCBI \"reference\" assemblies in the search result and hg.conf "
+               "gated with hgGateway.showRefBadge=on default is off refs "
+               "#38401.  Needs a description and a gate or knob call."),
         h("denseClick", "flag", "hg/hgTracks/simpleTracks.c", default="FALSE",
           ticket="38364",
           note="Written down by --auto-register, not yet reviewed by a "
