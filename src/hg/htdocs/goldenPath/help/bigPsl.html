@@ -66,6 +66,12 @@ an example of bigPsl input. -->
     uint seqType;   		"0=empty, 1=nucleotide, 2=amino_acid"
     ) </code></pre>
 <p>
+The fields that begin with <code>o</code> hold what a PSL file calls the query; the corresponding
+PSL field name is given in parentheses above. Despite the <code>Chrom</code> in their names, the
+aligned sequence need not be a chromosome, and usually is not one: it is typically a transcript, a
+protein, or another query sequence. Alignments between two genomes are normally stored as
+<a href="chain.html">chain</a> and <a href="net.html">net</a> files rather than as bigPsl.</p>
+<p>
 The value of the <code>oStrand</code> field indicates whether or not the stored psl data should be
 reverse-complemented before it is outputted or displayed. This is necessary because the bigPsl file 
 stores reference coordinates on the positive strand, as required by the BED format. The 
