@@ -1,0 +1,19 @@
+no ceiling reads the whole file                            ok
+ceiling above the file reads it                            ok
+ceiling exactly at the file size reads it                  ok
+ceiling one byte under returns nothing                     ok
+ceiling under the very first read returns nothing          ok
+an empty file is read, not refused                         ok
+over the ceiling under carefulAlloc, nothing comes back    ok
+the abandoned buffer is freed, not left counted            ok
+a page that is read is still held                          ok
+and is released when the caller frees it                   ok
+ten refused reads in a row leak nothing                    ok
+uncapped, the allocator still exits the process            ok
+capped, the same read returns nothing and the process lives ok
+no ceiling fetches the whole response                      ok
+ceiling exactly at the response size fetches it            ok
+ceiling one byte under aborts with the message the robot reads ok
+a ceiling well under the response aborts the same way      ok
+the ceiling can be turned back off                         ok
+0 failures

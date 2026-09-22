@@ -125,6 +125,7 @@
 38340	504	hg/hgSession/tests/backupParseTest.c	-	invisible	unrecorded	the same pair, read back out of a session backup
 38340	504	lib/tests/cgiCookieTest.c	-	invisible	unrecorded	the same pair in a cookie header
 38356	504	-	-	page	-	the hgTablesTest robot finishing a run instead of aborting. The fix is in hg/hgTablesTest, so what changed is what a page says or does
+38359	-	lib/tests/netSlurpMaxTest.c	-	invisible	sandbox-ab	a response past the ceiling is refused and the buffer freed, instead of the run dying inside carefulAlloc with nothing in the log. Nothing reaches a page: the only caller is the hgTablesTest robot. Release is "-" because the fix is held for after the v504 branch cut and the ticket has no target version yet
 38364	504	-	rm38364.docent.yaml	page	-	a density mode that keeps items clickable. The fix is in hg/hgTracks, so what changed is what a page says or does
 38372	504	-	-	page	-	changing genome on hgCustom re-submitting the form. The fix is in hg/hgCustom, so what changed is what a page says or does
 38384	504	-	-	page	-	a 400 fetching faceted composite metadata on a curated hub. The fix is in hg/hgTrackUi, so what changed is what a page says or does

@@ -1547,8 +1547,13 @@ int netUrlOpen(char *url)
 return netUrlOpenSockets(url, NULL);
 }
 
-struct dyString *netSlurpFile(int sd)
-/* Slurp file into dynamic string and return. */
+struct dyString *netSlurpFileMax(int sd, size_t maxSize)
+/* Slurp file into dynamic string and return.  If maxSize is nonzero and the
+ * data runs past it, stop reading, free what was read, and return NULL.  The
+ * caller still owns sd and should close it either way.  Freeing before the
+ * return matters to a caller running under pushCarefulMemHandler: the whole
+ * point of the cap is to stay under that ceiling, and a buffer abandoned here
+ * would count against it for the rest of the run. */
 {
 char buf[4*1024];
 int readSize;
@@ -1556,8 +1561,21 @@ struct dyString *dy = dyStringNew(4*1024);
 
 /* Slurp file into dy and return. */
 while ((readSize = read(sd, buf, sizeof(buf))) > 0)
+    {
+    if (maxSize != 0 && (size_t)dy->stringSize + readSize > maxSize)
+        {
+        dyStringFree(&dy);
+        return NULL;
+        }
     dyStringAppendN(dy, buf, readSize);
+    }
 return dy;
+}
+
+struct dyString *netSlurpFile(int sd)
+/* Slurp file into dynamic string and return. */
+{
+return netSlurpFileMax(sd, 0);
 }
 
 struct dyString *netSlurpUrl(char *url)

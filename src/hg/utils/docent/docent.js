@@ -2428,7 +2428,22 @@ const T_START = Date.now();
         }
         break;
       case 'hover': await glideTo(arg); await page.hover(arg); break;
-      case 'wait': await page.waitForSelector(arg, { timeout: 15000 }); break;
+      case 'wait': {
+        // A selector to wait FOR, or {gone: <sel>} for one to wait OUT. Both directions are
+        // needed because a script that asserts what a click did has to wait on the half of the
+        // answer that settles LAST, and that is not always the half that appears. #38257 is the
+        // case that forced it: hgHubConnect.js switches the tab inside the click dispatch, while
+        // topLinks.js closes the Account popup from a setTimeout(..., 0), so waiting for the tab
+        // returns a tick early and the popup is still on the page. That is a race the script
+        // loses about half the time, and it reads as the fix having come undone.
+        if (arg && typeof arg === 'object') {
+          if (!arg.gone) throw new Error('wait: an object argument takes gone: <selector>');
+          await page.waitForSelector(arg.gone, { state: 'detached', timeout: 15000 });
+        } else {
+          await page.waitForSelector(arg, { timeout: 15000 });
+        }
+        break;
+      }
       case 'sleep': await sleep(Number(arg)); return;
       default: console.warn('unknown verb:', verb);
     }

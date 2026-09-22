@@ -61,7 +61,8 @@ chrAlias: chrAlias01 chrAlias02 chrAlias03 chrAlias04 chrAlias05 chrAlias06 \
 	chrAlias07 chrAlias08 chrAlias09 chrAlias10 chrAlias11
 
 supportedTypes: altGraphX barChart chain ctgPos expRatio \
-	interact netAlign peptideMapping pgSnp bigDbSnp bigMaf bigChain
+	interact netAlign peptideMapping pgSnp bigDbSnp bigMaf bigChain \
+	bigNarrowPeak
 
 supportedTypes0: altGraphX barChart chain ctgPos expRatio factorSource gvf \
 	interact netAlign peptideMapping pgSnp
@@ -1367,6 +1368,18 @@ bigMaf: setOutput
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hg38" -track="rbestNetHs1" -chrom="chr1" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
 	@printf "### $@ '${SERVERNAME}/list/schema?track=rbestNetHs1;genome=hg38'\n"
 	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/schema" -genome="hg38" -track="rbestNetHs1" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c >> testOutput/$@.gz
+	@zdiff expected/$@.gz testOutput/$@.gz
+
+# bigNarrowPeak was missing from allowedBigBedType() so none of these three
+# endpoints worked for it: /list/chromosomes crashed the CGI and the other two
+# reported the bigDataUrl as missing, refs #38395
+bigNarrowPeak: setOutput
+	@printf "### $@ '${SERVERNAME}/list/chromosomes?track=fiberSeqCompendium_PM00001_peaks;genome=hg38'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/chromosomes" -genome="hg38" -track="fiberSeqCompendium_PM00001_peaks" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c > testOutput/$@.gz
+	@printf "### $@ '${SERVERNAME}/getData/track?track=fiberSeqCompendium_PM00001_peaks;chrom=chr21;genome=hg38;jsonOutputArrays=1;maxItemsOutput=5'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/getData/track" -genome="hg38" -track="fiberSeqCompendium_PM00001_peaks" -chrom="chr21" -jsonOutputArrays -maxItemsOutput=5 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/getData#/getData#;' | gzip -c >> testOutput/$@.gz
+	@printf "### $@ '${SERVERNAME}/list/schema?track=fiberSeqCompendium_PM00001_peaks;genome=hg38'\n"
+	@./jsonConsumer.pl -serverName="${SERVERNAME}" -endpoint="/list/schema" -genome="hg38" -track="fiberSeqCompendium_PM00001_peaks" 2>&1 | egrep -v "${excludeLines}" | sed -e 's#https://.*/list#/list#;' | gzip -c >> testOutput/$@.gz
 	@zdiff expected/$@.gz testOutput/$@.gz
 
 bigChain: setOutput

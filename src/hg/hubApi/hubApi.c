@@ -87,7 +87,10 @@ static char *urlPrefix = "";	/* initalized to support self references */
 struct slName *supportedTypes = NULL;
 
 static void initSupportedTypes()
-/* initalize the list of supported track types */
+/* initalize the list of supported track types
+ * a bed-like big* type added here must also be added to allowedBigBedType()
+ * in apiUtils.c, which is what actually opens the file
+ */
 {
 struct slName *el = newSlName("bed");
 slAddHead(&supportedTypes, el);
