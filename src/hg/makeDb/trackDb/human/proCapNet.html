@@ -118,27 +118,6 @@ shown here. Each scored sequence was run through all seven cross-validation
 models and in both orientations, and the scores averaged.
 </p>
 
-<h3>Processing at UCSC</h3>
-
-<p>
-The bigWig files were downloaded from
-<a href="https://mitra.stanford.edu/kundaje/kcochran/ucsc_track_hubs_public/ProCapNet/"
-target="_blank">the Kundaje lab server</a>. The contribution score files are used
-unaltered. In the prediction files the per-base values were re-encoded from one
-interval per base into fixedStep sections, which cuts the file size by about a
-third and changes no value. Bases carrying a literal NaN in the published hg38
-files, all of them in unresolved (N) reference sequence, were dropped so that the
-track autoscales and summarizes correctly; this removed 164,268,582 of the
-3,088,269,832 bases on the primary hg38 chromosomes, leaving 2,924,001,250 bases
-with a prediction. The hs1 files had no such bases and all 3,117,275,501 were
-kept. Nothing else was altered: every retained value is bit for bit the published
-value. The steps are recorded in the
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/transcriptionStart.txt"
-target="_blank">makeDoc</a> and the scripts are in
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/proCapNet"
-target="_blank">the kent source tree</a>.
-</p>
-
 <h2>Data Access</h2>
 
 <p>
@@ -175,10 +154,12 @@ The tool can also be used to obtain features within a given range, e.g.
 </p>
 
 <p>
-The original files can be downloaded from
-<a href="https://mitra.stanford.edu/kundaje/kcochran/ucsc_track_hubs_public/ProCapNet/"
-target="_blank">the Kundaje lab server</a>. The trained models are on the ENCODE
-portal, linked from the Experiment column of the table on this page.
+The ProCapNet models are on the
+<a href="https://www.encodeproject.org" target="_blank">ENCODE portal</a> as
+BPNet-model annotations, one per cell line, linked from the Experiment column of
+the table on this page. Each annotation also holds the trained model, sequence
+contribution scores and predicted signal over a selected set of regions. The
+genome-wide predictions shown here are not part of that ENCODE release.
 </p>
 
 <h2>Credits</h2>

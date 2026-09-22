@@ -3,8 +3,8 @@
 
 track transcriptionStart
 superTrack on show
-shortLabel TSS
-longLabel Experimental and computational evidence for transcription start sites (TSS)
+shortLabel Transcription Initiation (TSS)
+longLabel Transcription Initiation (TSS)
 group rna
 
     track encode4ProCap
