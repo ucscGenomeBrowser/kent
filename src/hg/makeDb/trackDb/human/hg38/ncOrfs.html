@@ -72,7 +72,7 @@ and colors the features by Kozak strength.</p>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary">GENCODE ncORFs primary</a></td>
-      <td>GENCODE non-canonical ORFs &ndash; primary set</td>
+      <td>GENCODE non-canonical ORFs: primary set</td>
       <td style="text-align: right;">10,127</td>
       <td style="text-align: right;">0.45%</td>
       <td style="text-align: right;">0.02%</td>
@@ -84,7 +84,7 @@ and colors the features by Kozak strength.</p>
     </tr>
     <tr>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsComprehensive">GENCODE ncORFs comprehensive</a></td>
-      <td>GENCODE non-canonical ORFs &ndash; comprehensive set</td>
+      <td>GENCODE non-canonical ORFs: comprehensive set</td>
       <td style="text-align: right;">28,359</td>
       <td style="text-align: right;">2.24%</td>
       <td style="text-align: right;">0.06%</td>
@@ -162,25 +162,11 @@ and colors the features by Kozak strength.</p>
 The three <b>GENCODE ncORF</b> tracks display non-canonical translated open reading frames
 identified from ribosome profiling (Ribo-seq) data and mapped to the GENCODE annotation by
 the <a href="https://www.gencodegenes.org/" target="_blank">GENCODE</a> / TransCODE
-consortium.
-</p>
-<ul>
-  <li><b>Phase I</b> &ndash; a consolidated catalog of ATG-initiated ncORFs of at least 16
-      codons, called from Ribo-seq data across seven publications and mapped to GENCODE v35.
-      Sense-overlapping ORFs were merged, leaving a unique set; over 3,000 are found in
-      more than one publication and so are flagged as replicated. This was the basis of
-      the original ncORF reference release for Ensembl/GENCODE, HGNC, UniProtKB, and
-      PeptideAtlas.</li>
-  <li><b>Phase II Comprehensive</b> &ndash; the expanded catalog (GENCODE v45). Additional
-      published Ribo-seq datasets were incorporated and the size and start-codon
-      restrictions from Phase I were lifted, so this set includes shorter and non-AUG
-      ORFs.</li>
-  <li><b>Phase II Primary</b> &ndash; a high-confidence subset of Phase II filtered for
-      translations with especially robust Ribo-seq signatures, comparable to canonical
-      protein-coding genes.</li>
-</ul>
-<p>
-See the
+consortium. <b>Phase I</b> is a consolidated catalog of 7,264 ATG-initiated ncORFs called
+from seven Ribo-seq publications. <b>Phase II</b> expands this to a Comprehensive set of
+28,359 ncORFs with the length and start-codon restrictions removed, and a high-confidence
+Primary set of 10,127 ncORFs selected using translation signature scores derived from
+Ribo-seq data. See the
 <a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">GENCODE ncORFs Phase I subtrack page</a>
 or the Phase II
 <a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfsPrimary">primary</a> /
@@ -191,9 +177,9 @@ pages for download URLs, methods, and references.
 <h3>5ULTRA uORFs</h3>
 <p>
 <a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA</a> is a pipeline for
-prioritizing 5' UTR variants by their impact on protein translation. As part of the project,
-Chaldebas et al. compiled a reference set of 22,567 ATG-initiated uORFs from two databases
-(Ribo-uORF and uORFdb), mapped to MANE Select transcripts and classified into three functional
+annotating 5' UTR variants by their impact on protein translation. As part of the project,
+Chaldebas et al. compiled a reference set of 22,567 ATG-initiated uORFs from three databases
+(Ribo-uORF, uORFdb, and sorfs.org), mapped to MANE Select transcripts and classified into three
 types. See the <a href="hgTrackUi?db=hg38&g=fiveUltraUorfs">5ULTRA uORFs subtrack page</a>
 for more details.
 </p>
@@ -269,36 +255,38 @@ Every ORF in every subtrack carries three additional annotation fields derived f
 genomic sequence around its start codon:
 </p>
 <ul>
-  <li><b>startCodon</b> &ndash; first three bases of the ORF on the transcript strand
+  <li><b>startCodon</b>: first three bases of the ORF on the transcript strand
       (ATG / CTG / GTG / TTG / ACG / other).</li>
-  <li><b>kozakStrength</b> &ndash; categorical Kozak label
-      (<i>Strong</i> if both position &minus;3 is A/G and position +4 is G;
-       <i>Moderate</i> if only one of those holds;
-       <i>Weak</i> if neither;
-       <i>non-ATG</i> for non-AUG starts where the Kozak rule does not apply;
-       <i>None</i> if the context could not be retrieved).</li>
-  <li><b>kozakTE</b> &ndash; numeric Kozak translational efficiency (TE), looked up from the
+  <li><b>kozakStrength</b>: categorical Kozak label. <i>Strong</i> if both position
+      &minus;3 is A/G and position +4 is G. <i>Moderate</i> if only one of those holds.
+      <i>Weak</i> if neither. <i>non-ATG</i> for non-AUG starts where the Kozak rule
+      does not apply. <i>None</i> if the context could not be retrieved.</li>
+  <li><b>kozakTE</b>: numeric Kozak translational efficiency (TE), looked up from the
       11-base TIS context in the Noderer 2014 FACS-seq TE table and divided by 100.
       <code>-1</code> for non-ATG starts and rows with no lookup.</li>
 </ul>
 
 <p>
 Features in every subtrack are colored by the categorical <b>kozakStrength</b>
-field. The same legend applies to all subtracks:
+field. The same legend applies to all subtracks except the three GENCODE ncORF tracks
+(Phase I, Phase II Primary, Phase II Comprehensive), which use a similar but visually
+distinct palette; see the
+<a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">GENCODE ncORFs page</a> for their
+exact colors:
 </p>
 <p>
-<span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>Strong</b> &ndash; A/G at position &minus;3 and G at position +4<br>
-<span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b> &ndash; only one of those two positions matches<br>
-<span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b> &ndash; neither position matches<br>
-<span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>non-ATG</b> &ndash; near-cognate start codon; the Kozak rule does not apply<br>
-<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> &ndash; chromosome edge or other case where the 11-base context could not be read
+<span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>Strong</b>: A/G at position &minus;3 and G at position +4.<br>
+<span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b>: only one of position &minus;3 (A/G) or position +4 (G) matches.<br>
+<span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b>: neither position &minus;3 (A/G) nor position +4 (G) matches.<br>
+<span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>non-ATG</b>: near-cognate start codon. The Kozak rule does not apply.<br>
+<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b>: chromosome edge or other case where the 11-base context could not be read.
 </p>
 
 <p>
 Per-subtrack counts of ATG vs. non-ATG starts and the Strong / Moderate / Weak breakdown
-are shown in the table at the top of this page. The high non-ATG fraction in UTRannotator,
-MetamORF, and nuORFdb is inherent to those catalogs &mdash; they explicitly include
-non-canonical CTG/GTG/TTG starts. GENCODE Phase I restricted itself to ATG-only starts.
+are shown in the table at the top of this page. UTRannotator, MetamORF, and nuORFdb
+explicitly include non-canonical CTG/GTG/TTG starts, which explains their high non-ATG
+fraction. GENCODE Phase I restricted itself to ATG-only starts.
 </p>
 
 <p>
@@ -348,21 +336,22 @@ binary for your system. Instructions for downloading source code and binaries ca
 The tool can also be used to obtain features within a given range, e.g. for the GENCODE
 Phase I ncORF subtrack:
 </p>
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.peptides.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 
 <p>
-File names for all eight subtracks (under
+File names for all nine subtracks (under
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/ncOrfs/" target="_blank">/gbdb/hg38/ncOrfs/</a>):
 </p>
 <ul>
-  <li><tt>utrAnnotUorfs.kozak.bb</tt> &ndash; UTRannotator uORFs</li>
-  <li><tt>gencNcOrf/Ribo-seq_ORFs.kozak.bb</tt> &ndash; GENCODE Phase I ncORFs</li>
-  <li><tt>gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb</tt> &ndash; GENCODE Phase II primary</li>
-  <li><tt>gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb</tt> &ndash; GENCODE Phase II comprehensive</li>
-  <li><tt>nuorfdb/nuorfdb.kozak.bb</tt> &ndash; nuORFdb</li>
-  <li><tt>metamorf/MetamORF.kozak.bb</tt> &ndash; MetamORF</li>
-  <li><tt>openprot/openprot.kozak.bb</tt> &ndash; OpenProt</li>
-  <li><tt>openprot/openprot.ms2.kozak.bb</tt> &ndash; OpenProt MS&ge;2</li>
+  <li><tt>utrAnnotUorfs.kozak.bb</tt>: UTRannotator uORFs</li>
+  <li><tt>gencNcOrf/Ribo-seq_ORFs.kozak.peptides.bb</tt>: GENCODE Phase I ncORFs</li>
+  <li><tt>gencNcOrf/Ribo-seq_ORFs.primary.kozak.bb</tt>: GENCODE Phase II primary</li>
+  <li><tt>gencNcOrf/Ribo-seq_ORFs.comprehensive.kozak.bb</tt>: GENCODE Phase II comprehensive</li>
+  <li><tt>fiveUltraUorfs/fiveUltraUorfs.bb</tt>: 5ULTRA uORFs</li>
+  <li><tt>nuorfdb/nuorfdb.kozak.bb</tt>: nuORFdb</li>
+  <li><tt>metamorf/MetamORF.kozak.bb</tt>: MetamORF</li>
+  <li><tt>openprot/openprot.kozak.bb</tt>: OpenProt</li>
+  <li><tt>openprot/openprot.ms2.kozak.bb</tt>: OpenProt MS&ge;2</li>
 </ul>
 <h2>References</h2>
 <p>
