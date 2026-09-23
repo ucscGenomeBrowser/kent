@@ -21,6 +21,8 @@
 <li><a href="#ccres">What are cCREs, and which cCRE track should I use?</a></li>
 <li><a href="#cellType">How do I restrict a search to one cell type or tissue?</a></li>
 <li><a href="#myGene">I have a gene. How do I find the factors that regulate it?</a></li>
+<li><a href="#variantEffect">I have a variant, not a region. What does it do to
+                             regulation?</a></li>
 <li><a href="#otherGenomes">What is available for assemblies other than human and mouse?</a></li>
 <li><a href="#summary">Summary: regulatory tracks by category</a></li>
 </ul>
@@ -53,8 +55,10 @@ sense that the factor was found there in that experiment. It tells you nothing a
 types, and the experiment has to have been done for your factor and your tissue for the data to
 exist at all.</p>
 <p>
-A <em>predicted</em> binding site comes from scanning the genome sequence for a motif, a short
-pattern that the factor is known to prefer. Predictions exist everywhere in the genome for every
+A <em>predicted</em> binding site comes from scanning the genome sequence for a
+<a href="/goldenPath/help/hgRegMotifHelp.html">motif</a>, the sequence theme a given factor
+prefers, usually stored as a position weight matrix and not a single spelling. Predictions exist
+everywhere in the genome for every
 factor with a known motif, regardless of cell type, and most of them are not bound <em>in
 vivo</em>. A typical transcription factor motif occurs hundreds of thousands of times in the
 human genome, while the factor binds only a few thousand of those positions in any given cell.</p>
@@ -90,23 +94,27 @@ For human, three tracks cover most needs. All three are in the <em>Regulation</e
   Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=encTfChipPk">hg19</a> and
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=encTfChipPk">hg38</a>. An older clustered version of
   the
-  same data is on <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeRegTfbsClusteredV3">hg19 as
-  Txn Factor ChIP</a>.</li>
+  same data, <em>Txn Factor ChIP</em>, is on
+  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeRegTfbsClusteredV3">hg19</a>.</li>
   <li>
   <strong>JASPAR Transcription Factors</strong> is the <em>predicted</em> set, made by scanning
-  the genome with the JASPAR CORE profiles. The current track is JASPAR 2026. Scores are scaled from
-  0 to 1000 and reflect how well the sequence matches the profile; the track shows only sites
-  scoring 400 or above by default, and you can raise that threshold in the track settings.
-  Available for <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a>,
+  the genome with the JASPAR CORE profiles. Scores are scaled from 0 to 1000 and reflect how well
+  the sequence matches the profile; the track shows only sites scoring 400 or above by default,
+  and you can raise that threshold in the track settings. Clicking a site shows the
+  <a href="/goldenPath/help/hgRegMotifHelp.html">motif display</a>, with the sequence logo and the
+  matrix behind the score. The track holds several JASPAR releases as separate subtracks, so check
+  which one you have turned on before you quote a version. JASPAR 2026 is on
   <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=jaspar">hg38</a>,
-  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a>,
   <a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=jaspar">mm39</a>,
   <a href="../cgi-bin/hgTrackUi?db=danRer11&amp;g=jaspar">danRer11</a>,
+  <a href="../cgi-bin/hgTrackUi?db=galGal6&amp;g=jaspar">galGal6</a>,
   <a href="../cgi-bin/hgTrackUi?db=dm6&amp;g=jaspar">dm6</a>,
   <a href="../cgi-bin/hgTrackUi?db=ce11&amp;g=jaspar">ce11</a>,
-  <a href="../cgi-bin/hgTrackUi?db=galGal6&amp;g=jaspar">galGal6</a>,
   <a href="../cgi-bin/hgTrackUi?db=ci3&amp;g=jaspar">ci3</a> and
-  <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a>.</li>
+  <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a>. On
+  <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a> and
+  <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a> the newest release is JASPAR
+  2024.</li>
 </ul>
 <p>
 Two older tracks still come up in questions. <strong>TFBS Conserved</strong> shows predicted
@@ -250,15 +258,19 @@ It depends on what you mean by a promoter, and the tracks disagree enough that i
   Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=refSeqFuncElems">hg38</a> and
   <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=refSeqFuncElems">mm10</a>.</li>
   <li>
-  <strong>MPRAs</strong> is a collection of massively parallel reporter assay results. These
-  measure regulatory activity for many sequences at once.
+  <strong>MPRAs</strong> is a collection of massively parallel reporter assay results, which
+  measure regulatory activity for many sequences at once. The MPRA Base half holds 40,938 tested
+  elements; the MPRAVarDB half holds tested variants and is covered under
+  <a href="#variantEffect">variant effects</a> below.
   Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpra">hg38</a>.</li>
 </ul>
 <p>
-For the chromatin evidence behind the called elements, see
-<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">ENCODE4 Regulation</a> on hg38, which
-carries DNase, ATAC-seq, histone
-modification and CTCF signal organized by tissue, and the older ENCODE3 Regulation container on
+For the chromatin evidence behind the called elements, see <strong>ENCODE4 Regulation</strong>,
+which carries DNase, ATAC-seq, histone modification and CTCF signal organized by tissue, on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a> and
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=encode4Reg">mm10</a>. This replaced <strong>ENCODE3
+Regulation</strong>
+as the default in July 2026; ENCODE3 is kept for archival use and is still on
 <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeReg">hg19</a> and
 <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg">hg38</a>.</p>
 
@@ -272,25 +284,37 @@ across many biosamples, then classifying each region as promoter-like, enhancer-
 and so on. The word <em>candidate</em> is doing real work here: these are regions worth testing,
 not confirmed regulatory elements.</p>
 <p>
-The <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cCREs">ENCODE cCREs</a> container on hg38 holds
-several versions. The <strong>ENCODE4
-cCREs</strong> registry is the current one and should be your default. The <strong>ENCODE4 Core
-Collection</strong> is a smaller, higher-confidence subset. <strong>ENCODE3 cCREs</strong> is the
-earlier release, kept because a great many published analyses used it and coordinates need to
-stay reproducible. The container also carries per-biosample subtracks, which is how you restrict
-the classification to one cell type. <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=cCREs">Mouse
-mm10</a> carries the same three versions.</p>
+The <strong>ENCODE cCREs</strong> container on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cCREs">hg38</a> holds several versions. The
+<strong>ENCODE4
+cCREs</strong> registry became the default in July 2026 and is the one to use: 2.3 million human
+and 927,000 mouse elements. The <strong>ENCODE4 Core Collection</strong> is a smaller,
+higher-confidence subset, covering the 170 human and 18 mouse biosamples that were profiled with
+all four core assays. <strong>ENCODE3 cCREs</strong> is the earlier release, kept for archival
+use because a great many published analyses used it and coordinates need to stay reproducible. The
+container also carries per-biosample subtracks, which is how you restrict
+the classification to one cell type. Mouse
+<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=cCREs">mm10</a> carries the same three versions.</p>
 
 <a name="cellType"></a>
 <h2>Working with the data</h2>
 
 <h6>How do I restrict a search to one cell type or tissue?</h6>
 <p>
-Most of the large regulatory tracks are composites or superTracks holding many subtracks, one
-per cell type or experiment, and they arrive with only a summary view turned on. Click the track
-name to open its configuration page, where you will find the list of subtracks and, on the
-bigger tracks, filters. ReMap, for instance, lets you filter by transcription factor directly in
-the track settings, so you can show one factor across all its experiments.</p>
+Most of the large regulatory tracks are collections holding many separate tracks, one per cell
+type or experiment, and they arrive with only a summary view turned on. Click the track name to
+open its configuration page, where you will find the list and, on the bigger collections,
+filters. ReMap, for instance, lets you filter by transcription factor directly in the track
+settings, so you can show one factor across all its experiments.</p>
+<p>
+The largest collections use a different configuration page. Where there are hundreds or
+thousands of individual experiments, as in the per-experiment tracks of
+<strong>ENCODE4 Regulation</strong> on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a>, the page shows facets down the
+left side and a
+paginated table on the right: tick the tissue, assay or biosample you want and the table narrows
+to the matching experiments. This is usually a faster way to reach one cell type than reading a
+long list.</p>
 <p>
 To find a track rather than configure one, the
 <a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a> page searches track
@@ -326,22 +350,65 @@ To do this systematically, the
 return a table, and the <a href="../cgi-bin/hgTables">Table Browser</a> will do the same for a
 region or for a list of genes.</p>
 
+<a name="variantEffect"></a>
+<h6>I have a variant, not a region. What does it do to regulation?</h6>
+<p>
+This is a different question from the rest of this page. Everything above annotates regions and
+tells you what is where; the tracks here take one base change and tell you what it does. The
+same measured and predicted distinction applies, so start with the one track that is
+measured.</p>
+<p>
+<strong>MPRAVarDB</strong> holds 239,028 variants that were put
+through a reporter assay and scored for allelic effect, drawn from 18 MPRA studies covering more
+than 30 cell lines and more than 30 diseases or traits. The variants come from GWAS and eQTL
+fine-mapping, from saturation mutagenesis of 20 disease-associated regulatory elements, and from
+smaller focused screens, so the coverage is concentrated on loci people have already had reason
+to care about. Items are colored by significance, dark red for FDR below 0.05. If your variant
+is in here, you have an experimental answer and not a guess. It lives in the
+<strong>MPRAs</strong> collection, alongside MPRA Base, which tests whole elements.
+Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpraVarDb">hg38</a>.</p>
+<p>
+Most variants will not be in it, since 239,028 tested positions is a very small part of the
+genome. Two prediction tracks fill the gap by scoring every possible substitution, and neither
+is in the <em>Regulation</em> group: look under <em>Phenotype and Disease Associations</em>, in
+the <strong>Deleteriousness Predictions</strong> collection on
+<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=predictionScoresSuper">hg38</a>.</p>
+<ul>
+  <li>
+  <strong>AlphaGenome</strong> gives the AlphaGenome Variant Impact score from Google DeepMind,
+  which folds together predicted effects on expression, splicing, chromatin accessibility and
+  transcription factor binding across hundreds of cell types, plus AlphaMissense for changes
+  that alter protein. It is precomputed for every possible single-base substitution in the
+  genome, about 8.8 billion of them, with one track per alternate allele. Scores are PHRED
+  scaled, so 10 marks the top 10 percent of substitutions genome-wide, 20 the top 1 percent and
+  30 the top 0.1 percent. Unusually for a score of this kind it covers non-coding bases as well
+  as coding ones, which is what makes it useful here. Available for
+  <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=alphaGenome">hg38</a>.</li>
+  <li>
+  <strong>PromoterAI</strong>, from Illumina, scores every possible single-base substitution in
+  proximal promoter regions. Narrower than AlphaGenome and aimed squarely at promoter variants.
+  Available for <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=promoterAi">hg38</a>.</li>
+</ul>
+<p>
+A high score from either says a model thinks the change is disruptive, not that anyone has
+measured it. Where a variant appears in both MPRAVarDB and a prediction track, the measurement
+is the better evidence.</p>
+
 <a name="otherGenomes"></a>
 <h6>What is available for assemblies other than human and mouse?</h6>
 <p>
-Considerably less, and this is a matter of what data exists rather than what we have loaded. The
-large regulatory resources were built for human first and mouse second. JASPAR predictions are
-the most widely available, since they only require the genome sequence and a motif, and are
-present for zebrafish, fly, worm, chicken, sea squirt and yeast in addition to human and mouse.
-ReMap and ORegAnno cover fly. Most of the remaining tracks described on this page are human and
-mouse only.</p>
+Much less. The limit is usually the data itself: these resources were built for human first, and
+most never went further than mouse. JASPAR is the main exception, since it needs only the genome
+sequence and a motif, so it covers zebrafish, fly, worm, chicken, sea squirt and yeast as well.
+ReMap and ORegAnno also cover fly. Everything else described on this page is human and mouse
+only.</p>
 <p>
-Coverage also differs between assemblies of the same organism. On mouse, mm10 carries most of
-the regulatory tracks while mm39 has only JASPAR, ReMap and VISTA, because several of the source
-projects have not released mm39 versions. If a track you need is on mm10 but not mm39, the
-<a href="../cgi-bin/hgLiftOver">LiftOver</a> tool can convert coordinates between the two,
-though you should check the result. Human has the same problem on a smaller scale: a few of
-these tracks are still hg19 only, and TFBS Conserved was never rebuilt for hg38.</p>
+Mouse is split awkwardly between its own assemblies. mm10 carries most of these tracks and mm39
+has only JASPAR, ReMap and VISTA, because several of the source projects never released mm39
+versions. If you need something that is on mm10 but not mm39,
+<a href="../cgi-bin/hgLiftOver">LiftOver</a> will convert the coordinates, though check the
+result before trusting it. Human has a milder version of the same problem: a few tracks are
+still hg19 only, and TFBS Conserved was never rebuilt for hg38.</p>
 <p>
 For assemblies not hosted at UCSC, or for tracks we do not carry, check the
 <a href="../cgi-bin/hgHubConnect">public hubs</a> list, where other groups publish data through
@@ -386,18 +453,18 @@ not shown.</p>
     </tr>
     <tr>
       <td>JASPAR Transcription Factors</td>
-      <td>Motif matches from the JASPAR CORE collection</td>
+      <td>Motif matches from the JASPAR CORE collection; several releases as subtracks</td>
       <td>Predicted</td>
-      <td><a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a>,
-      <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=jaspar">hg38</a>,
-      <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a>,
+      <td>JASPAR 2026 on <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=jaspar">hg38</a>,
       <a href="../cgi-bin/hgTrackUi?db=mm39&amp;g=jaspar">mm39</a>,
-          <a href="../cgi-bin/hgTrackUi?db=danRer11&amp;g=jaspar">danRer11</a>,
+      <a href="../cgi-bin/hgTrackUi?db=danRer11&amp;g=jaspar">danRer11</a>,
+          <a href="../cgi-bin/hgTrackUi?db=galGal6&amp;g=jaspar">galGal6</a>,
           <a href="../cgi-bin/hgTrackUi?db=dm6&amp;g=jaspar">dm6</a>,
           <a href="../cgi-bin/hgTrackUi?db=ce11&amp;g=jaspar">ce11</a>,
-          <a href="../cgi-bin/hgTrackUi?db=galGal6&amp;g=jaspar">galGal6</a>,
           <a href="../cgi-bin/hgTrackUi?db=ci3&amp;g=jaspar">ci3</a>,
-          <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a></td>
+          <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a>; up to JASPAR 2024 on
+          <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a> and
+          <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a></td>
     </tr>
     <tr>
       <td>TFBS Conserved</td>
@@ -456,7 +523,7 @@ not shown.</p>
     </tr>
     <tr>
       <td>ENCODE cCREs</td>
-      <td>Candidate elements classified from chromatin signal</td>
+      <td>Candidate elements classified from chromatin signal; ENCODE4 is the default</td>
       <td>Predicted from measured signal</td>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cCREs">hg38</a>,
       <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=cCREs">mm10</a></td>
@@ -469,8 +536,8 @@ not shown.</p>
       <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=refSeqFuncElems">mm10</a></td>
     </tr>
     <tr>
-      <td>MPRAs</td>
-      <td>Massively parallel reporter assay activity</td>
+      <td>MPRAs (MPRA Base)</td>
+      <td>Reporter assay activity for 40,938 tested regulatory elements</td>
       <td>Measured</td>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpra">hg38</a></td>
     </tr>
@@ -479,13 +546,14 @@ not shown.</p>
     </tr>
     <tr>
       <td>ENCODE4 Regulation</td>
-      <td>DNase, ATAC, histone marks and CTCF by tissue</td>
+      <td>DNase, ATAC, histone marks and CTCF by tissue; the current default</td>
       <td>Measured</td>
-      <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a></td>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg4">hg38</a>,
+      <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=encode4Reg">mm10</a></td>
     </tr>
     <tr>
       <td>ENCODE3 Regulation</td>
-      <td>DNase, histone marks and transcription signal</td>
+      <td>DNase, histone marks and transcription signal; archival, replaced by ENCODE4</td>
       <td>Measured</td>
       <td><a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=wgEncodeReg">hg19</a>,
       <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=wgEncodeReg">hg38</a></td>
@@ -509,6 +577,29 @@ not shown.</p>
       <td>Variants associated with expression of nearby genes</td>
       <td>Measured</td>
       <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=gtexEqtlHighConf">hg38</a></td>
+    </tr>
+    <tr>
+      <td colspan="4"><em>Effect of a single variant</em></td>
+    </tr>
+    <tr>
+      <td>MPRAVarDB</td>
+      <td>239,028 variants tested for allelic effect in reporter assays</td>
+      <td>Measured</td>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=mpraVarDb">hg38</a></td>
+    </tr>
+    <tr>
+      <td>AlphaGenome</td>
+      <td>Variant Impact score for every single-base substitution, coding and non-coding;
+          under Phenotype and Disease Associations</td>
+      <td>Predicted</td>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=alphaGenome">hg38</a></td>
+    </tr>
+    <tr>
+      <td>PromoterAI</td>
+      <td>Score for every single-base substitution in proximal promoters; under Phenotype and
+          Disease Associations</td>
+      <td>Predicted</td>
+      <td><a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=promoterAi">hg38</a></td>
     </tr>
   </tbody>
 </table>
