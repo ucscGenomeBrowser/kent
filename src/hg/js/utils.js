@@ -4464,7 +4464,7 @@ function titleTagToMouseover(mapEl) {
     if (mapEl.dataset.tooltip)
         addMouseover(mapEl, mapEl.dataset.tooltip);
     else
-        addMouseover(mapEl, mapEl.title);
+        addMouseover(mapEl, htmlEncode(mapEl.title));
 }
 
 function gbShowTimingDialog(serverRows, clientRows) {
