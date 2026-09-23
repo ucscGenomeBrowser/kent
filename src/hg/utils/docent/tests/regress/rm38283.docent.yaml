@@ -63,9 +63,16 @@ steps:
   # hgc, for the subtrack that sits under a view inside a composite.
   - click: {track: rm38283Sub, item: itemA}
   - expect:
-      # $parentTrack skipped the view and named the composite.  The href is matched at its
-      # END because the hub id in front of the name changes every run.
-      has: 'a[href$="_rm38283Comp"]'
+      # $parentTrack skipped the view and named the composite.  The hub id in front of the
+      # name changes every run, so the name is matched after its "_".  Since #38380 the page
+      # adds &hgsid= to every cgi-bin link, so the name is followed by "&" or by nothing.
+      # Two things keep this a test of the substitution and not of the page around it:
+      # the link text, because hgc prints its own hgTrackUi and hgTables links naming the
+      # composite, and the delimiter, because "_rm38283Super" below is a prefix of
+      # "_rm38283SuperKid".
+      has: >-
+        a:has-text("go to the container")[href*="_rm38283Comp&"],
+        a:has-text("go to the container")[href$="_rm38283Comp"]
       noHas: 'a[href*="rm38283View"]'
   - expect: {text: "DBIS hg38"}
   - expect: {text: "BRACEDDB hg38"}
@@ -86,5 +93,7 @@ steps:
   - go: chr17:7667000-7676000
   - click: {track: rm38283SuperKid, item: itemB}
   - expect:
-      has: 'a[href$="_rm38283Super"]'
+      has: >-
+        a:has-text("go to the container")[href*="_rm38283Super&"],
+        a:has-text("go to the container")[href$="_rm38283Super"]
       text: "DBIS hg38"
