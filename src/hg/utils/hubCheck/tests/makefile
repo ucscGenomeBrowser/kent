@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName fieldCountMismatch relPath missingFile
+test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName fieldCountMismatch fieldCountTooFew relPath missingFile
 
 one:	mkout
 	-${hubCheck} input/hub1.txt > output/output1.txt
@@ -76,6 +76,10 @@ dotInName: mkout
 fieldCountMismatch: mkout
 	-cd input && ${hubCheck} fieldCountMismatch.txt > ../output/fieldCountMismatch.output.txt 2>/dev/null
 	diff expected/fieldCountMismatch.output.txt output/fieldCountMismatch.output.txt
+
+fieldCountTooFew: mkout
+	-cd input && ${hubCheck} fieldCountTooFew.txt > ../output/fieldCountTooFew.output.txt 2>/dev/null
+	diff expected/fieldCountTooFew.output.txt output/fieldCountTooFew.output.txt
 
 # A hub reached by a relative path, with its data file in a subdirectory below
 # hub.txt. Deliberately NOT run from inside input/, because the point is to check
