@@ -4485,6 +4485,7 @@ fileUrl = resolveDotDots(urlClone);
 freeMem(urlClone);
 
 boolean matchFound = FALSE;
+char *track = cartOptionalString(cart, "track");
 
 // Check if fileUrl falls under a connected hub's base directory
 struct hubConnectStatus *hubStatusList = hubConnectStatusListFromCartAll(cart);
@@ -4505,7 +4506,6 @@ while (hubStatus != NULL)
 // and could be used for SSRF attacks.
 if (!matchFound)
     {
-    char *track = cartOptionalString(cart, "track");
     char *sourceDb = cartOptionalString(cart, "sourceDb"); // for future quickLift use
     if (sourceDb == NULL)
         sourceDb = database;
@@ -4520,8 +4520,21 @@ if (!matchFound)
 
 if (!matchFound)
     {
+    struct dyString *dy = dyStringNew(512);
+    dyStringPrintf(dy, "Requested URL '%s' does not fall under any connected hub's "
+                       "directory, and does not match a whitelisted trackDb setting.",
+                       fileUrl);
+    if (isNotEmpty(track))
+        dyStringPrintf(dy, "  This URL is the value of a fetchable trackDb setting "
+                           "('metaDataUrl' or 'colorSettingsUrl') in the stanza for "
+                           "track '%s'.  Those settings name, respectively, the TSV "
+                           "table of per-subtrack metadata and the JSON file of facet "
+                           "colors used to build the filter/metadata table on this "
+                           "page.  For a track hub, such a URL must point to a file "
+                           "inside the hub's own directory (alongside hub.txt), not an "
+                           "external URL.", track);
     puts("Status: 400 Bad Request");
-    errAbort("Supplied fileUrl does not match any connected hubs or track settings.");
+    errAbort("%s", dyStringContents(dy));
     }
 
 // By now we know that fileUrl points to something valid to fetch and return to the user.
