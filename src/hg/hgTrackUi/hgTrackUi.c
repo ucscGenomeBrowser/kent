@@ -4453,20 +4453,21 @@ static boolean trackIsFromCuratedHub(char *db, char *track,
  * A curated hub such as hs1 keeps its data outside the hub.txt directory, so
  * fileUrlMatchesHub rejects it, but its trackDb is admin-configured and as
  * trustworthy as a native track's.  A user hub attached to the same assembly is
- * not, hence the match against the one hub dbDb names. */
+ * not, hence the match against the curated directory dbDb names.  Any copy in
+ * that directory counts, not only this server's curatedHubPrefix, so that a link
+ * to one sandbox's copy (/gbdb/hs1/hubs/<name>/hub.txt) also works on another. */
 {
-char *curatedUrl = NULL;
-if (!hubConnectGetCuratedUrl(trackHubSkipHubName(db), &curatedUrl) || isEmpty(curatedUrl))
-    return FALSE;
-curatedUrl = hReplaceGbdb(curatedUrl);
 unsigned hubId = hubIdFromTrackName(track);
 struct hubConnectStatus *hubStatus;
 for (hubStatus = hubStatusList; hubStatus != NULL; hubStatus = hubStatus->next)
     {
     if (hubStatus->id == hubId)
-        return sameOk(hubStatus->hubUrl, curatedUrl);
+        return hubConnectIsCuratedHubUrl(trackHubSkipHubName(db), hubStatus->hubUrl);
     }
-return FALSE;
+// Not in the cart: each server attaches its own curated copy for the assembly,
+// so a link to another sandbox's copy arrives here with a different hub in the
+// cart.  Check that hub by id, reading only its URL.
+return hubConnectIdIsCuratedHub(trackHubSkipHubName(db), hubId);
 }
 
 void handleFileFetch(struct cart *cart)

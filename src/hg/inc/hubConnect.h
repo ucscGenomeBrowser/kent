@@ -217,6 +217,14 @@ boolean hubConnectIsCurated(char *db);
 boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
 /* Check to see if this db is a curated hub and if so return its hubUrl */
 
+boolean hubConnectIsCuratedHubUrl(char *db, char *hubUrl);
+/* Return TRUE if hubUrl is any of the curated copies of the assembly hub for db,
+ * whichever curatedHubPrefix (alpha, beta, public, a sandbox name) it belongs to. */
+
+boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId);
+/* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
+ * hub for db.  Only reads the hub's URL, never fetches the hub. */
+
 boolean hubsCanAddGroups();
 /* can track hubs have their own groups? */
 
