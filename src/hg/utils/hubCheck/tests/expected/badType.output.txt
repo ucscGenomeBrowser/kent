@@ -1,12 +1,14 @@
-Found 11 problems:
+Found 13 problems:
 error in type line "bigBed 6 %" for track "baddTypBogus". Only "+" or "." is allowed after bigBed numFields setting.
 error in type line "bigBed 6 +3" for track "badTypePlusMore". Only "+" or "." is allowed after bigBed numFields setting.
 error in type line "bigBed 6+" for track "badTypePlus". A space is needed after the "+" or "." character.
 error in type line "bigBed 6." for track "badTypeDot". A space is needed after the "+" or "." character.
+error: unrecognized type "wig" for track "invalidType". Valid types are: bam, bigBarChart, bigBed, bigChain, bigGenePred, bigInteract, bigLolly, bigMaf, bigMethyl, bigNarrowPeak, bigPsl, bigRmsk, bigWig, halSnake, hic, longTabix, vcfPhasedTrio, vcfTabix. See https://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#type for the more incornation list.
 warning: missing description page for track. Add 'html badTypeDot.html' line to the 'badTypeDot' track stanza. 
 warning: missing description page for track. Add 'html badTypePlus.html' line to the 'badTypePlus' track stanza. 
 warning: missing description page for track. Add 'html badTypePlusMore.html' line to the 'badTypePlusMore' track stanza. 
 warning: missing description page for track. Add 'html baddTypBogus.html' line to the 'baddTypBogus' track stanza. 
 warning: missing description page for track. Add 'html goodTypeDot.html' line to the 'goodTypeDot' track stanza. 
 warning: missing description page for track. Add 'html goodTypePlus.html' line to the 'goodTypePlus' track stanza. 
+warning: missing description page for track. Add 'html invalidType.html' line to the 'invalidType' track stanza. 
 warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

@@ -298,6 +298,12 @@ int htmlEncodeTextExtended(char *s, char *out, int outSize)
 {
 int total = 0;
 char c = 0;
+if (s == NULL)
+    {
+    if (out)
+        *out = '\0';
+    return 0;
+    }
 do
     {
     c=*s++;
@@ -358,6 +364,12 @@ int nonAlphaNumericHexEncodeText(char *s, char *out, int outSize,
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
+if (s == NULL)
+    {
+    if (out)
+        *out = '\0';
+    return 0;
+    }
 int encodedSize = strlen(prefix) + 2 + strlen(postfix);
 int total = 0;
 char c = 0;

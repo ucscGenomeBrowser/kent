@@ -1294,7 +1294,10 @@ char *trackHubSkipHubName(char *name)
 {
 if ((name == NULL) || !startsWith("hub_", name))
     return name;
-return strchr(&name[4], '_') + 1;
+char *ptr = strchr(&name[4], '_');
+if (ptr == NULL)
+    return name;
+return ptr + 1;
 }
 
 struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)
@@ -1537,6 +1540,8 @@ if (bigDataUrl != NULL)
         if (startsWithWord("bigBed", type) && (typeString != NULL))
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
+            if (numFields < 3)
+                errAbort("Track \"%s\" declares 'type bigBed %u', but a bigBed has at least 3 fields (chrom, chromStart, chromEnd). Change the type line to match the file's field count, or leave the number off and the count is read from the file.", trackHubSkipHubName(tdb->track), numFields);
             if (numFields > bbi->fieldCount)
                 errAbort("bigBed file '%s' has %d fields, but track \"%s\" declares 'type bigBed %d'. Either regenerate the bigBed with the correct number of fields, or change the type line to match the file's field count.", bigDataUrl, bbi->fieldCount, trackHubSkipHubName(tdb->track), numFields);
             }

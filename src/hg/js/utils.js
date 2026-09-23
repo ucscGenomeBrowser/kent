@@ -4051,9 +4051,9 @@ var dragReorder = {
                             let tdb = hgTracks.trackDb[tdbKey];
                             let tooltip = " click or right click to configure... drag to reorder";
                             if (typeof tdb.parentLabel !== 'undefined') {
-                                addMouseover(span, tdb.parentLabel + tooltip + " highlighted subtracks");
+                                addMouseover(span, htmlEncode(tdb.parentLabel + tooltip + " highlighted subtracks"));
                             } else {
-                                addMouseover(span, tdb.shortLabel + tooltip);
+                                addMouseover(span, htmlEncode(tdb.shortLabel + tooltip));
                             }
                             span.addEventListener("click", (e) => {
                                 // trigger a click on the <a> of the td
@@ -4464,7 +4464,7 @@ function titleTagToMouseover(mapEl) {
     if (mapEl.dataset.tooltip)
         addMouseover(mapEl, mapEl.dataset.tooltip);
     else
-        addMouseover(mapEl, mapEl.title);
+        addMouseover(mapEl, htmlEncode(mapEl.title));
 }
 
 function gbShowTimingDialog(serverRows, clientRows) {

@@ -160,6 +160,27 @@ one line per script ever, outside the checkout because --update resets the tree.
 drop the .xfail from the name and add the server-flip line to the script's proof: key.
 rm38272, rm36212 and rm38310 all arrived that way.
 
+The status page
+---------------
+
+After each run nightly.sh calls nightlyStatus.py, which rewrites
+
+    https://hgwdev.gi.ucsc.edu/~braney/docentStatus/
+
+from the logs, flips.log and the proof: lines. One row per committed script, anchored by
+its name, so a ticket can link to docentStatus/#rm38236: the state and the date it has
+held since, the last 14 days, the strongest proof: level in plain words, and a link to
+try it on genome-test and on hgwbeta. The mail says whether the page was written; a
+failure there changes nothing else.
+
+The try-it link is the script's steps as far as one URL can rebuild them, with track:
+steps resolved by DOCENT_DERIVE. It stops at the first step that needs the page itself
+(convert:, click:, login: and the like), so for most quickLift scripts it reaches the
+view before the convert and not the bug. Every link is fetched with a fresh cart before
+it is offered, and the page says "Verified" only when that fetch draws the rows the
+expect: step names. A reader's own cart is not fresh, so leftover settings can change
+what they see; a toggle such as hgt.toggleRevCmplDisp flips again on every load.
+
 rm36212 is still the one to read before writing another
 --------------------------------------------------------
 

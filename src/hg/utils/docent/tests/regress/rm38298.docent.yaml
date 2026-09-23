@@ -4,7 +4,7 @@
 # From MLQ #38209. On canFam3 the NCBI RefSeq tooltip for NM_001131049.1 (DNM1) at
 # chr9:55,282,762 said `Codon: c.745-747 (p.249)`, which does not agree with its own amino
 # acid label: translating c.745-747 from that transcript's CDS gives Ser, not the Arg the
-# tooltip names. The transcript has extra or missing bases against the genome at that
+# tooltip names. The transcript has extra or missing bases against the genome before that
 # codon, so the two numberings drift apart; the right transcript position is c.766-768
 # (p.256), 21 nucleotides further along.
 #
@@ -40,4 +40,7 @@ steps:
   # would pass on the old build, because the old line is still there under a new label.
   - expect: {tip: "Genomic codon number: c.745-747 (p.249)"}
   - expect: {tip: "Transcript codon number: c.766-768 (p.256)"}
-  - expect: {tip: "extra or missing bases compared to the genome at this codon"}
+  # d459a7a421c (max, 2026-09-21) corrected "at this codon" to "before this codon": the indel
+  # lies upstream of the shifted codon, not in it. The check carries the whole clause so a
+  # rewording shows up here rather than half-matching.
+  - expect: {tip: "extra or missing bases compared to the genome before this codon, so the genomic and transcript codon numbers differ"}
