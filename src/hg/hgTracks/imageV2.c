@@ -17,6 +17,7 @@
 #include "customComposite.h"
 #include "chromAlias.h"
 #include "trackHub.h"
+#include "htmlSanitize.h"
 
 // Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
@@ -1897,7 +1898,13 @@ for (;item!=NULL;item=item->next)
         if (cfgOptionBooleanDefault("showMouseovers", FALSE))
             {
             if (isNotEmpty(item->tooltip))
-                hPrintf(" title='%s' data-tooltip='%s'", encodedString, attributeEncode(item->tooltip));
+                {
+                char *sanitized = htmlSanitize(item->tooltip);
+                char *encoded = attributeEncode(sanitized);
+                hPrintf(" title='%s' data-tooltip='%s'", encodedString, encoded);
+                freeMem(encoded);
+                freeMem(sanitized);
+                }
             else
                 hPrintf(" TITLE='%s'", encodedString);
             }
@@ -1912,7 +1919,11 @@ for (;item!=NULL;item=item->next)
     else if (isNotEmpty(item->tooltip) && cfgOptionBooleanDefault("showMouseovers", FALSE))
         {
         // some items have no title string (no item name) but do have tooltips
-        hPrintf(" data-tooltip='%s'", attributeEncode(item->tooltip));
+        char *sanitized = htmlSanitize(item->tooltip);
+        char *encoded = attributeEncode(sanitized);
+        hPrintf(" data-tooltip='%s'", encoded);
+        freeMem(encoded);
+        freeMem(sanitized);
         }
     if (item->id != NULL)
         hPrintf(" id='%s'", item->id);
@@ -2092,6 +2103,8 @@ else if (slice->link != NULL)
         hPrintf("  <A HREF='%s'",slice->link);
     if (slice->title != NULL)
         {
+        char *sanitized = htmlSanitize(slice->title);
+        char *encSanitized = attributeEncode(sanitized);
         if (sliceType == stButton)
             {
             enum browserType browser = cgiClientBrowser(NULL,NULL,NULL);
@@ -2099,14 +2112,16 @@ else if (slice->link != NULL)
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if (imgTrack->reorderable)
                 hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",
-                        attributeEncode(slice->title), newLine, ellipsis, newLine,
+                        encSanitized, newLine, ellipsis, newLine,
                         (tdbIsCompositeChild(imgTrack->tdb) ? " highlighted subtracks" : "") );
             else
                 hPrintf(" TITLE='%s%sclick or right click to configure%s'",
-                        attributeEncode(slice->title), newLine, ellipsis);
+                        encSanitized, newLine, ellipsis);
             }
         else
-            hPrintf(" TITLE='Click for: &#x0A;%s'", attributeEncode(slice->title) );
+            hPrintf(" TITLE='Click for: &#x0A;%s'", encSanitized );
+        freeMem(sanitized);
+        freeMem(encSanitized);
         }
     hPrintf(">\n" );
     }
@@ -2241,6 +2256,12 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
             (imgTrack->centerLabelSeen != clAlways ? " clOpt" : ""),
             (imgTrack->ajaxRetrieval ? " mustRetrieve" : ""));
 
+    char *sanitized = NULL, *encSanitized = NULL;
+    if (imgTrack->reorderable)
+        {
+        sanitized = htmlSanitize(imgTrack->tdb->longLabel);
+        encSanitized = attributeEncode(sanitized);
+        }
     if (imgBox->showSideLabel && imgBox->plusStrand)
         {
         // button
@@ -2252,7 +2273,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
             hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",
-                    name,attributeEncode(imgTrack->tdb->longLabel),newLine);
+                    name,encSanitized,newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
@@ -2282,7 +2303,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name, sizeof(name), "side_%s", trackName);
         if (imgTrack->reorderable)
             hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",
-                    name,attributeEncode(imgTrack->tdb->longLabel),newLine);
+                    name,encSanitized,newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
@@ -2295,6 +2316,8 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
+    freeMem(encSanitized);
+    freeMem(sanitized);
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
