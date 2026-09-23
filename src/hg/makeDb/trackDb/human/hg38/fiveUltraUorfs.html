@@ -14,8 +14,7 @@ Ensembl/GENCODE and RefSeq. Only ATG-initiated uORFs are included.
 uORFs are short open reading frames found upstream of the main protein-coding sequence. When a
 ribosome scans from the 5' cap, it may translate a uORF before reaching the main start codon,
 which often reduces production of the downstream protein. Genetic variants that create, disrupt,
-or alter uORFs can therefore change protein output and contribute to disease, particularly when they
-affect genes where tight translational control is critical.
+or alter uORFs can therefore change protein output and contribute to disease.
 </p>
 
 <p>
@@ -23,49 +22,57 @@ Each uORF is classified into one of three types based on the position of its sto
 to the main CDS start:
 </p>
 <ul>
-  <li>A <b>non-overlapping</b> uORF has its stop codon upstream of the main CDS start. After
-      the ribosome finishes translating the uORF it may re-initiate at the CDS or disengage,
-      reducing overall protein output.</li>
+  <li>A <b>non-overlapping</b> uORF has its stop codon upstream of the main CDS start.</li>
   <li>An <b>overlapping</b> uORF has its stop codon within the CDS but in a different reading
-      frame. The ribosome traverses the CDS start codon without recognizing it, which prevents
-      initiation of the main protein and typically causes a stronger inhibitory effect.</li>
-  <li>An <b>N-terminal extension</b> is an upstream ATG that is in-frame with the main CDS and
-      has no intervening stop codon. The resulting protein has an extended N-terminal sequence.
-      Variants that convert an overlapping uORF into an N-terminal extension change the protein
-      product rather than merely suppressing translation.</li>
+      frame.</li>
+  <li>An <b>N-terminal extension</b> is an upstream ATG that is in-frame with the main CDS, with
+      no stop codon between the two start codons, producing a protein with an extended
+      N-terminus.</li>
 </ul>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Items are colored by Kozak consensus strength, using the same color scheme as all other subtracks
+Items are colored by Kozak context strength, using the same color scheme as all other subtracks
 in this collection:
 </p>
+<table class="stdTbl">
+  <tr>
+    <th style="background-color:#F5A623;width:1.5em">&nbsp;</th>
+    <td><b>Strong</b>: both position &minus;3 (A/G) and position +4 (G) match.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#5B9BD5;width:1.5em">&nbsp;</th>
+    <td><b>Moderate</b>: only one of position &minus;3 (A/G) or position +4 (G) matches.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#A9A9A9;width:1.5em">&nbsp;</th>
+    <td><b>Weak</b>: neither position &minus;3 (A/G) nor position +4 (G) matches.</td>
+  </tr>
+  <tr>
+    <th style="background-color:#D3D3D3;width:1.5em">&nbsp;</th>
+    <td><b>No context</b>: Kozak context not available.</td>
+  </tr>
+</table>
+
 <p>
-<span style="display:inline-block; background-color:#F5A623; width:18px; height:12px; vertical-align:middle;"></span> <b>Strong</b> &ndash; A/G at position &minus;3 and G at position +4<br>
-<span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b> &ndash; only one of those two positions matches<br>
-<span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b> &ndash; neither position matches<br>
-<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> &ndash; Kozak context not available
+uORFs can span multiple exons. Each uORF borrows its exon/intron structure from an overlapping
+MANE Select transcript. If no MANE transcript has introns that match the uORF's endpoints, the
+GENCODE comprehensive annotation is used instead. The source transcript is recorded in the
+<b>intronsSource</b> field (<tt>none</tt> if no matching transcript was found).
 </p>
 
 <p>
-Because all uORFs in this set are ATG-initiated, the non-ATG category does not apply here.
-uORF type (Non-Overlapping, Overlapping, N-terminal extension) is shown in the mouseover and
-can be used as a filter.
+The track can be filtered by:
 </p>
+<ul>
+  <li>uORF type</li>
+  <li>Kozak strength</li>
+</ul>
 
 <p>
-The exon/intron structure is projected from the overlapping MANE Select transcript so that uORFs
-spanning multiple exons are drawn correctly. If no suitable MANE transcript could provide intron
-boundaries at the exact uORF endpoints, the GENCODE comprehensive annotation is used as a fallback.
-The source transcript ID is recorded in the <b>intronsSource</b> field
-(<tt>none</tt> if no host transcript was found in either pool).
-</p>
-
-<p>
-Mouseover shows the gene symbol, uORF type, rank within the gene, Kozak strength, and the donor
-transcript used for intron structure. The track can be filtered by uORF type and by Kozak strength
-(Strong, Moderate, Weak).
+<b>Mouseover</b> shows the gene symbol, uORF type, rank within the gene, Kozak strength, and the
+donor transcript used for intron structure.
 </p>
 
 <h2>Data Access</h2>
@@ -101,9 +108,9 @@ and can be obtained by installing the package and running <tt>5ULTRA-download-da
 <h2>Methods</h2>
 
 <p>
-Chaldebas et al. compiled a reference set of uORFs from two sources: the Ribo-uORF database
-(501,554 translated uORFs supported by 1,495 ribosome profiling datasets) and the uORFdb database
-of computationally predicted uORFs. Only ATG-initiated uORFs were retained.
+Chaldebas et al. compiled a reference set of uORFs from three sources: the Ribo-uORF database
+(501,554 translated uORFs supported by 1,495 ribosome profiling datasets), the uORFdb database
+of computationally predicted uORFs, and the sorfs.org database. Only ATG-initiated uORFs were retained.
 These were mapped to the 5' UTRs of 18,775 MANE Select protein-coding transcripts from
 GENCODE v45 basic annotation, yielding 22,567 uORFs. Of these, 8,067 (35.7%) have direct
 ribosome profiling support. Each uORF was classified as Non-Overlapping, Overlapping, or
@@ -115,7 +122,7 @@ See Chaldebas et al. 2026 for full details.
 The uORF reference BED file was obtained from the
 <a href="https://github.com/mchaldebas/5ULTRA" target="_blank">5ULTRA GitHub repository</a>
 (installed via <tt>5ULTRA-download-data</tt>; file <tt>uORFs.MANE.hg38.bed</tt>).
-Colors were remapped to the Okabe-Ito colorblind-safe palette. To recover exon/intron structure
+Colors were remapped to distinguish Kozak strength (see Display Conventions). To recover exon/intron structure
 for uORFs that span introns, each feature was projected onto an overlapping MANE Select transcript
 using the <tt>addIntrons.py</tt> script in the kent source tree; a GENCODE v49 comprehensive
 bigBed was used as fallback when no MANE candidate could provide intact boundaries at the uORF

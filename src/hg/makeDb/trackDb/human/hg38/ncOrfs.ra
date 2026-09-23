@@ -29,7 +29,7 @@ group genes
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.peptides.bb
     shortLabel GENCODE Phase I ncORFs
-    longLabel ncORFs: GENCODE Phase I non-canonical ORFs with Ribo-seq and peptide evidence
+    longLabel ncORFs: GENCODE Phase I non-canonical ORFs with Ribo-seq, peptide evidence
     type bigGenePred
     itemRgb on
     baseColorUseCds given
@@ -37,10 +37,10 @@ group genes
     mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides
     filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
     filterType.startCodon multipleListOr
-    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
     filterLimits.kozakTE -1:1.5
     filterValues.replicated yes,no
     filterType.replicated multipleListOr
