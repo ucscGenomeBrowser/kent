@@ -128,3 +128,26 @@ ln -s /hive/data/genomes/hg38/bed/problematic/GIAB/notinalllowmapandsegdupregion
 wget https://zenodo.org/records/16755940/files/hg38.pm151b-v3.easy.bed.gz?download=1
 mv hg38.pm151b-v3.easy.bed.gz\?download\=1 hg38.pm151b-v3.easy.bed.gz
 bedToBigBed hg38.pm151b-v3.easy.bed.gz ../../../chrom.sizes hg38.pm151b-v3.easy.bb
+
+# Panmask Difficult track: inverse of Panmask Easy, Claude for Max, Sep 22 2026, refs #38375
+# Anna pointed out that a track called "Panmask" under a "Problematic Regions" container is
+# confusing, since it marks the easy regions, not the problematic ones. Rather than changing
+# the released Panmask Easy track, we add a second track with the inverse regions, for use in
+# the Problematic Regions Recommended Track Set. Checked the source first: Zenodo record
+# 16755940 is still at v1.4 (Aug 6 2025, finalized Sep 22 2025), same version already in use,
+# and the local file's MD5 matches the file on Zenodo, so no re-download was needed.
+cd /hive/data/genomes/hg38/bed/problematic/panmask
+# Panmask covers only the 24 main chromosomes (no chrM, no alts/randoms/fixes), so restrict
+# the complement to that same set rather than the full 711-sequence chrom.sizes, and exclude
+# assembly gaps from the complement with the !gap idiom, so centromeric N-runs don't get
+# double-counted as "hard" on top of the existing Gap track.
+awk '$1 !~ /_/ && $1 != "chrM" {printf "%s\t%s\thg38.2bit\n", $1, $2}' \
+    ../../../chrom.sizes > primary24.chrom.sizes
+featureBits hg38 '!/gbdb/hg38/problematic/hg38.pm151b-v3.easy.bb' '!gap' \
+    -chromSize=primary24.chrom.sizes -bed=hg38.pm151b-v3.notEasy.bed -minSize=1
+# 359,192,609 bases of 2,937,659,104 (12.227%) -- the complement of Panmask Easy's 87.8%
+bedSort hg38.pm151b-v3.notEasy.bed hg38.pm151b-v3.notEasy.bed
+cut -f1-3 hg38.pm151b-v3.notEasy.bed > hg38.pm151b-v3.notEasy.bed3
+bedToBigBed hg38.pm151b-v3.notEasy.bed3 ../../../chrom.sizes hg38.pm151b-v3.notEasy.bb -type=bed3 -tab
+gzip -k hg38.pm151b-v3.notEasy.bed3
+mv hg38.pm151b-v3.notEasy.bed3.gz hg38.pm151b-v3.notEasy.bed.gz

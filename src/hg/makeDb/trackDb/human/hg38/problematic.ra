@@ -190,6 +190,17 @@ group map
     visibility hide
     html problematic
 
+    track panmask151bDifficult
+    parent problematicSuper on
+    release alpha
+    bigDataUrl /gbdb/hg38/problematic/hg38.pm151b-v3.notEasy.bb
+    shortLabel Panmask Difficult 151b
+    longLabel Panmask Difficult 151b Regions: Lower accuracy for variant calling, inverse of Panmask Easy
+    type bigBed 3
+    dataVersion Inverse of pm151b-v3.easy.bed.gz (Panmask v1.4, Aug 6 2025), computed with featureBits
+    visibility hide
+    html problematic
+
 searchTable comments
 searchPriority 0.5
 searchType bigBed
