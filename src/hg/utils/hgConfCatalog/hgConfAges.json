@@ -1,6 +1,17 @@
 {
- "current": 503,
+ "current": 504,
  "first": {
+  "(not set, defaults on)": {
+   "commit": "a0a3411bca2",
+   "subject": "bedItemRgbTester: pin the order of the itemRgb and color tests",
+   "tickets": [
+    36212,
+    38391
+   ],
+   "ts": 1789867176,
+   "version": 504,
+   "via": "call"
+  },
   "../cgi-bin/RNAplot": {
    "commit": "a127c65d3af",
    "subject": "Fixing RNAplot problem with newer versions, refs #11957, note 178 and",
@@ -24,7 +35,6 @@
   },
   "../goldenPath/newsarch.html": {
    "commit": "a9c71c94309",
-   "released": false,
    "subject": "BLAT dated banner: make the news announcement URL an hg.conf setting. refs #37996",
    "tickets": [
     37996
@@ -576,7 +586,6 @@
   },
   "bigNet": {
    "commit": "d11a21c48cd",
-   "released": false,
    "subject": "bigNet: gate the track type behind an hg.conf flag, refs #20824",
    "tickets": [
     20824
@@ -615,7 +624,6 @@
   },
   "blatNewFormNewsUrl": {
    "commit": "a9c71c94309",
-   "released": false,
    "subject": "BLAT dated banner: make the news announcement URL an hg.conf setting. refs #37996",
    "tickets": [
     37996
@@ -626,7 +634,6 @@
   },
   "blatNewFormSwitchDate": {
    "commit": "7a69a5535f1",
-   "released": false,
    "subject": "BLAT classic form: announce the new-page switch date via hg.conf, fix stale input limits. refs #37996",
    "tickets": [
     37996
@@ -655,7 +662,6 @@
   },
   "blatOnlyLatestCheckbox": {
    "commit": "994528edb7d",
-   "released": false,
    "subject": "Adding an opt-in \"Keep only last search\" checkbox to the new BLAT search form. refs #36292",
    "tickets": [
     36292
@@ -854,7 +860,6 @@
   },
   "browser.quickLiftAlignments": {
    "commit": "992aeef92fe",
-   "released": false,
    "subject": "quickLift: gate the alignment lift behind an hg.conf flag, refs #38249",
    "tickets": [
     38249
@@ -981,7 +986,6 @@
   },
   "captchaDebug": {
    "commit": "5abe782bada",
-   "released": false,
    "subject": "cart.c: gate the captcha session-id debug print behind hg.conf captchaDebug, refs #38247",
    "tickets": [
     38247
@@ -1152,7 +1156,6 @@
   },
   "collectionHubCopyOnWrite": {
    "commit": "59e2bbf2d3a",
-   "released": false,
    "subject": "Copy a track collection's hub file when the program that writes it asks for a copy, instead of on every session load.",
    "tickets": [
     38273
@@ -1399,6 +1402,16 @@
    "tickets": [],
    "ts": 1267825341,
    "version": 226,
+   "via": "call"
+  },
+  "denseClick": {
+   "commit": "4d36c5c0a9c",
+   "subject": "hgTracks: a dense row can have one clickable map box per item, refs #38364",
+   "tickets": [
+    38364
+   ],
+   "ts": 1789583940,
+   "version": 504,
    "via": "call"
   },
   "detectMysqlLoadWarnings": {
@@ -1786,6 +1799,17 @@
    ],
    "ts": 1461098208,
    "version": 332,
+   "via": "call"
+  },
+  "hgGateway.showRefBadge": {
+   "commit": "81a04805893",
+   "released": false,
+   "subject": "highlight NCBI \"reference\" assemblies in the search result and hg.conf gated with hgGateway.showRefBadge=on default is o",
+   "tickets": [
+    38401
+   ],
+   "ts": 1790033310,
+   "version": 505,
    "via": "call"
   },
   "hgHubConnect.cacheDir": {
@@ -2395,14 +2419,14 @@
    "via": "literal"
   },
   "login.cookieSalt": {
-   "commit": "e5c786377ce",
-   "subject": "Better cookies and validation for hgLogin: instead of sending gbMembers.idx as",
+   "commit": "14ecff07305",
+   "subject": "hgHubConnect: an api key made on one geo mirror now works on all of them, behind syncHubApiKeys",
    "tickets": [
-    17327
+    38323
    ],
-   "ts": 1481563506,
-   "version": 343,
-   "via": "literal"
+   "ts": 1789747566,
+   "version": 504,
+   "via": "call"
   },
   "login.emailLink": {
    "commit": "4b04bd017d7",
@@ -2477,7 +2501,6 @@
   },
   "login.recovEmailChange": {
    "commit": "d33d0e1c191",
-   "released": false,
    "subject": "hgLogin: let users set or change their recovery email address, refs #38197",
    "tickets": [
     38197
@@ -2512,7 +2535,6 @@
   },
   "mallocTopPad": {
    "commit": "d2a2afcd6c5",
-   "released": false,
    "subject": "hgTracks: let hg.conf set how big a step malloc takes, refs #38225",
    "tickets": [
     38094,
@@ -2864,7 +2886,6 @@
   },
   "pngTimingSampleRate": {
    "commit": "7007b23dcc1",
-   "released": false,
    "subject": "hgTracks: measure how long the track image takes to reach the reader, refs #38109",
    "tickets": [
     38109
@@ -3137,12 +3158,14 @@
    "via": "call"
   },
   "sessionDbName": {
-   "commit": "1d8785d66ed",
-   "subject": "allow for different names for the sessionDb and userDb tables",
-   "tickets": [],
-   "ts": 1428523543,
-   "version": 315,
-   "via": "literal"
+   "commit": "c62c5810fff",
+   "subject": "pyLib: align the python bottleneck code with hg/lib/botDelay.c, refs #38369",
+   "tickets": [
+    38369
+   ],
+   "ts": 1789652279,
+   "version": 504,
+   "via": "call"
   },
   "sessionKey": {
    "commit": "4b5cd619507",
@@ -3150,6 +3173,16 @@
    "tickets": [],
    "ts": 1392064220,
    "version": 297,
+   "via": "call"
+  },
+  "sessionLoadNotice": {
+   "commit": "3bcf86a0995",
+   "subject": "hgTracks: tell the user what a session load just did, refs #38157",
+   "tickets": [
+    38157
+   ],
+   "ts": 1789740928,
+   "version": 504,
    "via": "call"
   },
   "sessionNewPage": {
@@ -3283,6 +3316,16 @@
    "version": 502,
    "via": "call"
   },
+  "showManeInSearch": {
+   "commit": "1db5c89d97f",
+   "subject": "hgSearch: highlight MANE transcript(s) in RefSeq protein-position search results, refs #38285",
+   "tickets": [
+    38285
+   ],
+   "ts": 1789646996,
+   "version": 504,
+   "via": "call"
+  },
   "showMouseovers": {
    "commit": "447513356fc",
    "subject": "Add code to create tooltips under our control. Convert title attributes",
@@ -3309,7 +3352,6 @@
   },
   "showTxCodonNumbers": {
    "commit": "68b9911e4c1",
-   "released": false,
    "subject": "Show the transcript's own codon number where it differs from the genomic one",
    "tickets": [
     38298
@@ -3328,7 +3370,6 @@
   },
   "skipMalformedCgiPairs": {
    "commit": "3eedbb76366",
-   "released": false,
    "subject": "Skip a CGI or cookie pair with no =value in three more parsers, refs #38340",
    "tickets": [
     38335,
@@ -3348,7 +3389,6 @@
   },
   "snapshot.ttlDays": {
    "commit": "32cd2100d9d",
-   "released": false,
    "subject": "Reusable \"view snapshot\" sessions for durable, minimal Share-a-link links",
    "tickets": [
     38197
@@ -3509,6 +3549,16 @@
    "tickets": [],
    "ts": 1610398585,
    "version": 409,
+   "via": "call"
+  },
+  "syncHubApiKeys": {
+   "commit": "14ecff07305",
+   "subject": "hgHubConnect: an api key made on one geo mirror now works on all of them, behind syncHubApiKeys",
+   "tickets": [
+    38323
+   ],
+   "ts": 1789747566,
+   "version": 504,
    "via": "call"
   },
   "tableList": {
@@ -3700,12 +3750,14 @@
    "via": "call"
   },
   "userDbName": {
-   "commit": "1d8785d66ed",
-   "subject": "allow for different names for the sessionDb and userDb tables",
-   "tickets": [],
-   "ts": 1428523543,
-   "version": 315,
-   "via": "literal"
+   "commit": "c62c5810fff",
+   "subject": "pyLib: align the python bottleneck code with hg/lib/botDelay.c, refs #38369",
+   "tickets": [
+    38369
+   ],
+   "ts": 1789652279,
+   "version": 504,
+   "via": "call"
   },
   "vcfMaxItems": {
    "commit": "5a73e86ce84",
@@ -3986,9 +4038,18 @@
    "version": 503,
    "via": "call"
   },
+  "sessionLoadNotice": {
+   "commit": "3bcf86a0995",
+   "subject": "hgTracks: tell the user what a session load just did, refs #38157",
+   "tickets": [
+    38157
+   ],
+   "ts": 1789740928,
+   "version": 504,
+   "via": "call"
+  },
   "showAliases": {
    "commit": "c69d3e1d9de",
-   "released": false,
    "subject": "hgTracks: turn on chromAlias names by default, refs #29201",
    "tickets": [
     29201
@@ -3999,7 +4060,6 @@
   },
   "showColorPicker": {
    "commit": "ba5aa085f49",
-   "released": false,
    "subject": "hui.c: turn the track color picker on by default, refs #20460",
    "tickets": [
     20460
@@ -6071,6 +6131,10 @@
   [
    503,
    "1606fc917aecf60bcc17002a8602678d763f39e5"
+  ],
+  [
+   504,
+   "74623f843857f2254e5327c78b98f00c3f7098ff"
   ]
  ],
  "schema": 3
