@@ -144,6 +144,16 @@ boolean quickLiftBarChartEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
  * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that. */
 
+boolean quickLiftGtexEnabled(struct cart *cart);
+/* Return TRUE if a quickLifted GTEx gene track is drawn as GTEx, with its bar charts, from
+ * genes and gene models read out of the assembly it came from through the chain.  Off, it
+ * is drawn as a plain bed.  Off unless hg.conf says browser.quickLiftGtex=on,
+ * and a cart variable of the same name overrides that. */
+
+boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb);
+/* Return TRUE if tdb is a quickLifted GTEx gene track to draw and click as GTEx:  it is
+ * lifted, its name past the hub prefix starts with gtexGene, and browser.quickLiftGtex is on. */
+
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
  * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says

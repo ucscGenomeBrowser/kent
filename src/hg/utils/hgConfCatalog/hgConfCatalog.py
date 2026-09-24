@@ -475,6 +475,21 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("browser.quickLiftGtex", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38512",
+          note="Draw a quickLifted GTEx gene expression track (gtexGene, "
+               "gtexGeneV4, gtexGeneV8) as GTEx, with its bar charts, from "
+               "genes and gene models read out of the assembly it came from "
+               "through the quickLift chain.  Read in quickLiftGtexEnabled() "
+               "and asked in fillInFromType() (simpleTracks.c), which gives a "
+               "lifted track gtexGeneMethods despite its hub prefix, in "
+               "gtexLiftDb() (gtexTracks.c), and in hgc's doMiddle, which "
+               "sends a click on a lifted GTEx item to doGtexGeneExpr().  Off, "
+               "a lifted GTEx track is drawn as a plain bed and clicks go to "
+               "the generic details page, as before.  Asked when the page "
+               "is drawn, so it applies to tracks lifted before it was set.  "
+               "A cart variable of the same name overrides it, like "
+               "browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "

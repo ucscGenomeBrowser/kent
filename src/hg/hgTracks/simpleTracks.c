@@ -16027,7 +16027,9 @@ else if (sameWord(type, "lorax"))
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
-else if (startsWith("gtexGene", track->track))
+else if (startsWith("gtexGene", track->track) ||
+         // a quickLifted GTEx track carries its hub's prefix, refs #38512
+         quickLiftIsLiftedGtex(cart, track->tdb))
     gtexGeneMethods(track);
 else if (startsWith("rnaStruct", track->track))
     rnaSecStrMethods(track);

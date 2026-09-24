@@ -19,6 +19,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "quickLift.h"
+#include "trackHub.h"
 #include "genePredReader.h"
 #include "bigChain.h"
 #include "bigLink.h"
@@ -374,15 +375,17 @@ for(chain = chainList; chain; chain = chain->next)
     int padStart = start - QUICKLIFT_RANGE_PAD;
     if (padStart < 0)
         padStart = 0;
-    if (quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
-        {
-        struct quickLiftRange *range;
-        AllocVar(range);
-        range->chrom = cloneString(chain->qName);
-        range->start = qStart;
-        range->end = qEnd;
-        slAddHead(&rangeList, range);
-        }
+    // a chain with no block in the padded window maps nothing into it, and quickLiftSql
+    // leaves it out of the chain hash, so leave it out here too:  a lift on a details page
+    // then goes through the chains hgTracks drew with.  refs #38512
+    if (!quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+        continue;
+    struct quickLiftRange *range;
+    AllocVar(range);
+    range->chrom = cloneString(chain->qName);
+    range->start = qStart;
+    range->end = qEnd;
+    slAddHead(&rangeList, range);
 
     // the query range was read off the chain as it came, so swap only afterwards
     chainSwap(chain);
@@ -1026,6 +1029,18 @@ char *cfgEnabled = cartOrCfgOption(cart, "browser.quickLift");
 return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
 }
 
+static int cartGate(struct cart *cart, char *name)
+/* What the cart says about the gate name:  1 for on, 0 for off, -1 when it says nothing and
+ * hg.conf decides.  The hg.conf half stays a literal cfgOptionBooleanDefault in each caller,
+ * which is what the hg.conf catalog's harvester finds. */
+{
+char *cartEnabled = cartOptionalString(cart, name);
+if (cartEnabled == NULL)
+    return -1;
+return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
+       sameString(cartEnabled, "yes");
+}
+
 boolean quickLiftAlignmentsEnabled(struct cart *cart)
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
  * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says
@@ -1035,11 +1050,9 @@ boolean quickLiftAlignmentsEnabled(struct cart *cart)
  * the cfgOption* accessors, which is why browser.quickLift itself is missing from the
  * hg.conf catalog. */
 {
-char *cartEnabled = cartOptionalString(cart, "browser.quickLiftAlignments");
-
-if (cartEnabled != NULL)
-    return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
-           sameString(cartEnabled, "yes");
+int fromCart = cartGate(cart, "browser.quickLiftAlignments");
+if (fromCart >= 0)
+    return fromCart;
 return cfgOptionBooleanDefault("browser.quickLiftAlignments", FALSE);
 }
 
@@ -1048,12 +1061,32 @@ boolean quickLiftBarChartEnabled(struct cart *cart)
  * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that, the
  * same way as quickLiftAlignmentsEnabled. */
 {
-char *cartEnabled = cartOptionalString(cart, "browser.quickLiftBarChart");
-
-if (cartEnabled != NULL)
-    return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
-           sameString(cartEnabled, "yes");
+int fromCart = cartGate(cart, "browser.quickLiftBarChart");
+if (fromCart >= 0)
+    return fromCart;
 return cfgOptionBooleanDefault("browser.quickLiftBarChart", FALSE);
+}
+
+boolean quickLiftGtexEnabled(struct cart *cart)
+/* Return TRUE if a quickLifted GTEx gene track is drawn as GTEx, with its bar charts, from
+ * genes and gene models read out of the assembly it came from through the chain.  Off, it
+ * is drawn as a plain bed.  Off unless hg.conf says browser.quickLiftGtex=on,
+ * and a cart variable of the same name overrides that, the same way as
+ * quickLiftBarChartEnabled.  refs #38512 */
+{
+int fromCart = cartGate(cart, "browser.quickLiftGtex");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftGtex", FALSE);
+}
+
+boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb)
+/* Return TRUE if tdb is a quickLifted GTEx gene track to draw and click as GTEx:  it is
+ * lifted, its name past the hub prefix starts with gtexGene, and browser.quickLiftGtex is on.
+ * refs #38512 */
+{
+return quickLiftIsLifted(tdb) && startsWith("gtexGene", trackHubSkipHubName(tdb->track)) &&
+       quickLiftGtexEnabled(cart);
 }
 
 static int hrCmp(const void *va, const void *vb)
