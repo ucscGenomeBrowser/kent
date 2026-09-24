@@ -1090,7 +1090,7 @@ if (errCatchStart(errCatch))
     if (!sameString(tdb->track, "cytoBandIdeo"))
         {
         trackHubAddDescription(genome->trackDbFile, tdb);
-        if (!tdb->html)
+        if (isEmpty(tdb->html))
             warn("warning: missing description page for track. Add 'html %s.html' line to the '%s' track stanza. ",
                  tdb->track, tdb->track);
         else

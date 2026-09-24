@@ -104,6 +104,18 @@ variant calls for clinical or research human samples. Like the HighRepro track i
 (see above), it shows regions that are easy to sequence, not those that are problematic. The data
 was derived from the HPRC assemblies, and this track presents the 151b-easy panmask set.</p>
 
+<!--
+<h3>Panmask Difficult 151b Regions</h3>
+<p>
+The <b>Panmask Difficult 151b Regions</b> subtrack is the complement of the Panmask Easy 151b Regions
+track above: it marks the bases of the genome that Panmask did not classify as easy, so a
+variant caller can expect lower accuracy there. Unlike Panmask Easy, this track directly
+represents difficult regions, matching the rest of this container track, so it is the version
+used in the Problematic Regions Recommended Track Set. It was built at UCSC, not downloaded, by
+inverting the Panmask Easy 151b regions with the <tt>featureBits</tt> tool and removing assembly
+gaps, restricted to the 24 chromosomes that Panmask itself covers.</p>
+-->
+
 <h2>Display Conventions and Configuration</h2>
 
 <p>

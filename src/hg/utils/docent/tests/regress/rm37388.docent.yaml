@@ -3,11 +3,9 @@
 #
 #     Couldn't set connection database to GCA_018466835.2
 #
-# The session is kept for this one. It is braney/crash1 on genome-test, and it pins a
-# state that is genuinely awkward to build: hg38 at chrM:577-16569 with a quickLift hub
-# active, its chain from GCA_018466835.2, and an xenoRefGene track from that hub. Building
-# that in steps would mean attaching a hub and running a convert whose target is a
-# GenArk assembly, which is more moving parts than the bug needs.
+# The state is hg38 at chrM with a quickLift hub active, its chain from GCA_018466835.2, and
+# an xenoRefGene track from that hub.  It used to come from the saved session braney/crash1,
+# which only genome-test could load, so it is built in steps now; see the first steps.
 #
 # click: {track:, item:} follows the item's own map-box link, which is how hgc is reached.
 # A raw click on the image is swallowed by hgTracks' drag-select handler.
@@ -19,12 +17,15 @@ db: hg38
 reset: true
 fast: true
 steps:
-  - loadSession: {user: braney, name: crash1}
-
-  # The guard. A session that has been renamed or deleted is not an error: hgTracks
-  # answers 200 with an early-error page carrying no track image, and every noText check
-  # on that page passes. Without this line a deleted session turns this test green.
-  - expect: {noText: "Could not find session"}
+  # The lifted view is built in steps, not loaded from a session.  A quickLift session names
+  # its hub by a path on the server that made it, and re-pointing it does not work (#38046),
+  # so braney/crash1 ran only on genome-test.  These steps run on any server.  They lift the
+  # mitochondrion of GenArk GCA_018466835.2 to hg38, the state crash1 held.
+  - goto: "/cgi-bin/hgTracks?db=GCA_018466835.2&position=chrMT_JAGYVI020000079v1_random:1-16566&pix=1100"
+  - expect: {rows: [xenoRefGene]}
+  - goto: "/cgi-bin/hgConvert?db=GCA_018466835.2&position=chrMT_JAGYVI020000079v1_random:1-16566&hglft_toOrg=Human&hglft_toDb=hg38&doQuickLift=on&hglft_doConvert=submit"
+  - click: 'a[href*="hgTracks?"][href*="quickLift."]'
+  - expect: {rows: [xenoRefGene], text: "chrM"}
 
   - click: {track: xenoRefGene, item: "NM_126741.2"}
 

@@ -1,0 +1,21 @@
+hub fieldCountTooFew
+shortLabel fieldCountTooFew
+longLabel fieldCountTooFew
+email braney@soe.ucsc.edu
+useOneFile on
+
+genome mm10
+
+track fieldTooFew1
+type bigBed 1
+bigDataUrl test6field.bb
+shortLabel fieldTooFew1
+longLabel fieldTooFew1
+visibility dense
+
+track fieldTooFew2
+type bigBed 2
+bigDataUrl test6field.bb
+shortLabel fieldTooFew2
+longLabel fieldTooFew2
+visibility dense

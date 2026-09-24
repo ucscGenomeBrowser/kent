@@ -33,18 +33,26 @@
 # the gear on RefSeq mRNAs. The script that checks any server that way is at
 # /hive/groups/browser/redmineNotes/38252/claude/repro_37388_hgTrackUi.js.
 #
-# This script uses the braney/crash1 session instead, because that is the cheap way to the
-# same state and rm37388 already depends on it, so preflight covers it either way.
+# This script builds the same kind of state in steps, on the mitochondrion the way rm37388
+# does.  It used to load the saved session braney/crash1, which only genome-test could load.
 proof:
   - "server-flip 2026-09-06 -- cdb348c5512 reached genome-test and the nightly's xfail passed; hgwbeta still served the 451-character page that morning"
+  - "release-ab 2026-09-23 -- with the lift built in steps: fails on genome.ucsc.edu (v503) at step 7, whose page says Couldn't set connection database, and passes on hgwbeta (v504) and genome-test"
 
 target: genome-test
 db: hg38
 reset: true
 fast: true
 steps:
-  - loadSession: {user: braney, name: crash1}
-  - expect: {noText: "Could not find session", rows: [xenoRefGene]}
+  # The lifted view is built in steps, not loaded from a session.  A quickLift session names
+  # its hub by a path on the server that made it, and re-pointing it does not work (#38046),
+  # so braney/crash1 ran only on genome-test.  These steps run on any server.  They lift the
+  # mitochondrion of GenArk GCA_018466835.2 to hg38, the state crash1 held.
+  - goto: "/cgi-bin/hgTracks?db=GCA_018466835.2&position=chrMT_JAGYVI020000079v1_random:1-16566&pix=1100"
+  - expect: {rows: [xenoRefGene]}
+  - goto: "/cgi-bin/hgConvert?db=GCA_018466835.2&position=chrMT_JAGYVI020000079v1_random:1-16566&hglft_toOrg=Human&hglft_toDb=hg38&doQuickLift=on&hglft_doConvert=submit"
+  - click: 'a[href*="hgTracks?"][href*="quickLift."]'
+  - expect: {rows: [xenoRefGene], text: "chrM"}
 
   # The track's own settings link, which is the gesture a user makes to configure a lifted
   # track. hgTrackUi has no track image, so there is no row to assert on: the checks are on

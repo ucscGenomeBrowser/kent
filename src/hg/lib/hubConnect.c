@@ -1353,6 +1353,79 @@ boolean hubConnectIsCurated(char *db)
 return hubConnectGetCuratedUrl(db, NULL);
 }
 
+static boolean hubUrlInCuratedDir(char *dir, char *hubUrl)
+/* Return TRUE if hubUrl is <dir>/<prefix>/hub.txt ('hs1' style) or
+ * <dir>/<prefix>.hub.txt or <dir>/hub.txt (GenArk style). */
+{
+int dirLen = strlen(dir);
+if (dirLen == 0 || !startsWith(dir, hubUrl) || hubUrl[dirLen] != '/')
+    return FALSE;
+char *rest = hubUrl + dirLen + 1;
+char *slash = strchr(rest, '/');
+if (slash == NULL)          // GenArk
+    return endsWith(rest, "hub.txt");
+if (slash > rest)           // hs1, with a non-empty <prefix>
+    return sameString(slash + 1, "hub.txt");
+return FALSE;
+}
+
+boolean hubConnectIsCuratedHubUrl(char *db, char *hubUrl)
+/* Return TRUE if hubUrl is any of the curated copies of the assembly hub for db,
+ * whichever curatedHubPrefix (alpha, beta, public, a sandbox name) it belongs to.
+ * hubConnectGetCuratedUrl() only returns the copy this server's curatedHubPrefix
+ * points to, so a link made on one sandbox fails that test on every other one.
+ * The copies all sit in the dbDb nibPath directory. */
+{
+if (isEmpty(db) || isEmpty(hubUrl) || strstr(hubUrl, "..") != NULL)
+    return FALSE;
+struct sqlConnection *conn = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
+          dbDbTable(), db, hubCuratedPrefix);
+char *nibPath = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+if (isEmpty(nibPath))
+    return FALSE;
+
+// lookForCuratedHubs() stores the hub.txt URL after hReplaceGbdb(), which picks
+// gbdbLoc1 or gbdbLoc2 per file.  On a mirror the directory and the hub.txt can
+// resolve differently, so try the raw path and both replacements.
+char *dir = nibPath + strlen(hubCuratedPrefix);
+boolean ret = hubUrlInCuratedDir(dir, hubUrl);
+if (!ret)
+    {
+    char *loc1Dir = hReplaceGbdbLocal(dir);
+    ret = hubUrlInCuratedDir(loc1Dir, hubUrl);
+    freeMem(loc1Dir);
+    }
+char *gbdbLoc2 = cfgOption("gbdbLoc2");
+if (!ret && gbdbLoc2 != NULL && startsWith("/gbdb/", dir))
+    {
+    char *loc2Dir = replaceChars(dir, "/gbdb/", gbdbLoc2);
+    ret = hubUrlInCuratedDir(loc2Dir, hubUrl);
+    freeMem(loc2Dir);
+    }
+freeMem(nibPath);
+return ret;
+}
+
+boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId)
+/* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
+ * hub for db (see hubConnectIsCuratedHubUrl).  Only reads the hub's URL: unlike
+ * hubFromId() it never fetches the hub, so an id taken from a CGI parameter
+ * cannot make us open or re-check an arbitrary hub. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[1024];
+sqlSafef(query, sizeof query, "select hubUrl from %s where id=%u",
+         getHubStatusTableName(), hubId);
+char *hubUrl = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+boolean ret = hubConnectIsCuratedHubUrl(db, hubUrl);
+freeMem(hubUrl);
+return ret;
+}
+
 static int lookForCuratedHubs(struct cart *cart, char *db,  char *curatedHubPrefix)
 /* Check to see if db is a curated hub which will require the hub to be attached. 
  * The variable curatedHubPrefix has the release to use (alpha, beta, public, or a user name ) */

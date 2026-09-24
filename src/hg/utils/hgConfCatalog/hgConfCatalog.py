@@ -594,6 +594,23 @@ RELEASE_GATES = {
                "browser behaved before the change rather than anything about "
                "the machine, so it is a gate and should go once nobody has "
                "asked for the old behaviour."),
+        h("hgGateway.showRefBadge", "flag", "hg/hgGateway/hgGateway.c",
+          default="FALSE", role="gate", verified=True, ticket="38401",
+          note="A green \"reference\" word before an assembly in the "
+               "gateway search results when NCBI's refSeqCategory for it "
+               "is \"reference\".  Only the GenArk matches from "
+               "assemblyList can carry it; a dbDb assembly and a match "
+               "from the NCBI assembly search never do.  With the gate "
+               "off, isReference is always FALSE in the JSON and "
+               "autocompleteCat.js draws no badge and no mouseover."),
+        h("denseClick", "flag", "hg/hgTracks/simpleTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38364",
+          note="One clickable map box per item in a dense row, so a click "
+               "reaches the item's details page instead of expanding the "
+               "track.  Read once, in denseClickEnabled().  A gate over the "
+               "whole feature: with it on, a track still has to opt in with "
+               "the denseClick trackDb setting, and with it off no track "
+               "gets it whatever its trackDb says."),
     ],
 }
 
@@ -1703,22 +1720,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("hgGateway.showRefBadge", "flag", "hg/hgGateway/hgGateway.c",
-          default="FALSE", ticket="38401",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgGateway/hgGateway.c.  Came in at 81a04805893, highlight "
-               "NCBI \"reference\" assemblies in the search result and hg.conf "
-               "gated with hgGateway.showRefBadge=on default is off refs "
-               "#38401.  Needs a description and a gate or knob call."),
-        h("denseClick", "flag", "hg/hgTracks/simpleTracks.c", default="FALSE",
-          ticket="38364",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/simpleTracks.c.  Came in at 4d36c5c0a9c, "
-               "hgTracks: a dense row can have one clickable map box per "
-               "item, refs #38364.  Needs a description and a gate or knob "
-               "call."),
     ],
 }
 

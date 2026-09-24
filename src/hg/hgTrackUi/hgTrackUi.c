@@ -4453,20 +4453,21 @@ static boolean trackIsFromCuratedHub(char *db, char *track,
  * A curated hub such as hs1 keeps its data outside the hub.txt directory, so
  * fileUrlMatchesHub rejects it, but its trackDb is admin-configured and as
  * trustworthy as a native track's.  A user hub attached to the same assembly is
- * not, hence the match against the one hub dbDb names. */
+ * not, hence the match against the curated directory dbDb names.  Any copy in
+ * that directory counts, not only this server's curatedHubPrefix, so that a link
+ * to one sandbox's copy (/gbdb/hs1/hubs/<name>/hub.txt) also works on another. */
 {
-char *curatedUrl = NULL;
-if (!hubConnectGetCuratedUrl(trackHubSkipHubName(db), &curatedUrl) || isEmpty(curatedUrl))
-    return FALSE;
-curatedUrl = hReplaceGbdb(curatedUrl);
 unsigned hubId = hubIdFromTrackName(track);
 struct hubConnectStatus *hubStatus;
 for (hubStatus = hubStatusList; hubStatus != NULL; hubStatus = hubStatus->next)
     {
     if (hubStatus->id == hubId)
-        return sameOk(hubStatus->hubUrl, curatedUrl);
+        return hubConnectIsCuratedHubUrl(trackHubSkipHubName(db), hubStatus->hubUrl);
     }
-return FALSE;
+// Not in the cart: each server attaches its own curated copy for the assembly,
+// so a link to another sandbox's copy arrives here with a different hub in the
+// cart.  Check that hub by id, reading only its URL.
+return hubConnectIdIsCuratedHub(trackHubSkipHubName(db), hubId);
 }
 
 void handleFileFetch(struct cart *cart)
@@ -4485,6 +4486,7 @@ fileUrl = resolveDotDots(urlClone);
 freeMem(urlClone);
 
 boolean matchFound = FALSE;
+char *track = cartOptionalString(cart, "track");
 
 // Check if fileUrl falls under a connected hub's base directory
 struct hubConnectStatus *hubStatusList = hubConnectStatusListFromCartAll(cart);
@@ -4505,7 +4507,6 @@ while (hubStatus != NULL)
 // and could be used for SSRF attacks.
 if (!matchFound)
     {
-    char *track = cartOptionalString(cart, "track");
     char *sourceDb = cartOptionalString(cart, "sourceDb"); // for future quickLift use
     if (sourceDb == NULL)
         sourceDb = database;
@@ -4520,8 +4521,21 @@ if (!matchFound)
 
 if (!matchFound)
     {
+    struct dyString *dy = dyStringNew(512);
+    dyStringPrintf(dy, "Requested URL '%s' does not fall under any connected hub's "
+                       "directory, and does not match a whitelisted trackDb setting.",
+                       fileUrl);
+    if (isNotEmpty(track))
+        dyStringPrintf(dy, "  This URL is the value of a fetchable trackDb setting "
+                           "('metaDataUrl' or 'colorSettingsUrl') in the stanza for "
+                           "track '%s'.  Those settings name, respectively, the TSV "
+                           "table of per-subtrack metadata and the JSON file of facet "
+                           "colors used to build the filter/metadata table on this "
+                           "page.  For a track hub, such a URL must point to a file "
+                           "inside the hub's own directory (alongside hub.txt), not an "
+                           "external URL.", track);
     puts("Status: 400 Bad Request");
-    errAbort("Supplied fileUrl does not match any connected hubs or track settings.");
+    errAbort("%s", dyStringContents(dy));
     }
 
 // By now we know that fileUrl points to something valid to fetch and return to the user.
