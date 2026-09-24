@@ -334,8 +334,10 @@ carry a release-ab line quoting the failure. The four that did not are each wort
             v502 or older is its baseline.
   rm36940   the fixture hub draws no rows at all on v503, so the run never reaches the
             field-count check. Its evidence is a hand-patched sandbox instead.
-  rm38257   `login:` dies against a park on both baselines -- the hgLogin returnToURL(150)
-            race -- so its A/B is blocked by the harness, not by the tree.
+  rm38257   `login:` died against a park on both baselines, so its A/B was blocked by the
+            harness. Fixed 2026-09-24 (#38311): run a park on its HTTPS port. The script now
+            PASSES on the v503 park (49106), whose topLinks.js lacks 7d0ceafa7c0, so it does
+            not yet tell the two builds apart. Unexplained.
   rm38309   PASSES on v503, which is exactly what its header claims: the fix changes no
             byte of any page. That claim is now measured rather than argued.
 

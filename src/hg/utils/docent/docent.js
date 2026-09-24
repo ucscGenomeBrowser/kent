@@ -391,8 +391,14 @@ const T_START = Date.now();
   if (DERIVE) { await deriveMain(); return; }
   fs.mkdirSync(STILLDIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, args: ['--force-color-profile=srgb'] });
+  // A ticket park's https port serves one self-signed certificate shared by every park, so
+  // accept it there -- and only there, never for a real server. The https port is the one a
+  // `login:` needs on a park: hgLogin writes its form action as https:// on the port it was
+  // reached on, so the plain-http port posts the password to a TLS listener that is not there.
+  const loopback = /^https:\/\/(127\.0\.0\.1|localhost)(:|\/)/.test(SERVER);
   const ctx = await browser.newContext({
     viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE,
+    ...(loopback ? { ignoreHTTPSErrors: true } : {}),
     ...(FAST ? {} : { recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } } }),
   });
   if (SCALE > 1) await ctx.addInitScript(SCALE_INIT, SCALE_ARGS);
@@ -2293,7 +2299,19 @@ const T_START = Date.now();
         // hgLogin answers a bad password by drawing the same form again with a red
         // message, which is a perfectly good page: without this check every later step
         // would run logged out and the failure would surface somewhere else entirely.
-        if (await page.$('#accountLoginForm')) {
+        // On a fast server (a loopback ticket park) a navigation can still be under way when
+        // this query runs -- the POST's own answer, or the good-password page's redirect
+        // below -- and Playwright throws "Execution context was destroyed". Either page
+        // could be the one arriving, so wait for it to load and ask again rather than guess.
+        let onForm;
+        for (let tries = 0; ; tries++) {
+          try { onForm = await page.$('#accountLoginForm'); break; }
+          catch (e) {
+            if (!/Execution context was destroyed/.test(e.message) || tries >= 4) throw e;
+            await page.waitForLoadState('load').catch(() => {});
+          }
+        }
+        if (onForm) {
           const why = (await page.innerText('body')).split('\n').map(l => l.trim())
                         .filter(Boolean).slice(0, 8).join(' | ');
           throw new Error(`login: still on the login page as ${c.user} -- ${why}`);
@@ -2428,6 +2446,19 @@ const T_START = Date.now();
         }
         break;
       case 'hover': await glideTo(arg); await page.hover(arg); break;
+      case 'fill': {
+        // Type into an arbitrary form field: {<selector>: <text>}, one or more pairs, in order.
+        // The named verbs type into the boxes they own (position, hub URL, hub search); this is
+        // for any other box, such as the session name on the Sessions page save card (#38311).
+        // The field is emptied first, so a value left from an earlier step cannot run into it.
+        if (!arg || typeof arg !== 'object') throw new Error('fill: takes {<selector>: <text>}');
+        for (const [sel, text] of Object.entries(arg)) {
+          await glideTo(sel);
+          await page.fill(sel, '');
+          await typeIn(page, sel, text);
+        }
+        break;
+      }
       case 'wait': {
         // A selector to wait FOR, or {gone: <sel>} for one to wait OUT. Both directions are
         // needed because a script that asserts what a click did has to wait on the half of the

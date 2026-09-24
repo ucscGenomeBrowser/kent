@@ -1,0 +1,68 @@
+# #38311 -- on the new Sessions page, Replace on the save card reset who could load the
+# session.  Saving under a name you already use asks "Replace this session?", and the Replace
+# button re-posted the save (hgS_doSaveSessionJson), which always writes shared=1
+# (saveCartAsSession(..., 1) in hgSession.c).  A private session became shared by link, and
+# a session in the Public Sessions gallery dropped out of it.
+#
+# 0cdd15681f1, hg/js/hgSession.js.  Replace now posts hgS_doOverwriteJson, which reads the
+# row's own shared value and keeps it.  The dialog gained "Who can load it stays as it is."
+#
+# The script saves a PRIVATE session, then saves over the same name from the save card with
+# the private box left unticked, and asserts the row still carries its lock.  The description
+# typed on the second save is how the script knows the Replace went through: the row only
+# gains its (i) icon after the save chain has finished and the page has reloaded, so waiting
+# for that icon waits for the answer, and a Replace that did nothing cannot pass.
+#
+# The page is opted into with sessionNewPage=1 on the URL, so no hg.conf gate is needed.
+# It saves under the docentTest account of whichever central the target reads, so it needs
+# a [section] for that central in ~/.docentLogin (hgcentraltest, hgcentralbeta, hgcentral).
+# The session is deleted at the start, in case an earlier run died before its own cleanup,
+# and again at the end.  The two deletes are plain GETs of the JSON endpoint, which answers
+# {"error": "Could not find that session."} when there is nothing to delete.
+#
+# v503 FAILS AT THE DIALOG, NOT AT THE LOCK.  v503's save card has no Replace dialog at all:
+# it saves over an existing name straight away (fc8de100a34 added the dialog, in v504), and
+# that save writes shared=1 just the same.  So on a v503 server the step that waits for
+# #sessCfOk is the one that goes red.
+#
+# A failed run skips the cleanup and leaves rm38311 behind; the next run's first step
+# deletes it.  On a ticket park, run against the HTTPS port: hgLogin writes its form action
+# as https:// on the port it was reached on, so on the http port the password never arrives.
+proof:
+  - "release-ab 2026-09-24 -- passes on hgwbeta (v504) and genome-test, fails on hgw0 (v503) at step 12, the wait for the Replace dialog, which v503 does not have; the row it left on hgcentral had gone from shared=0 to shared=1, the bug as filed"
+  - "sandbox-ab 2026-09-24 -- ts park 38311 (master) with only hg/js/hgSession.js swapped for a copy with 0cdd15681f1 reverted: fails at step 13, the dialog sentence; with that check taken out it fails at step 16, the lock, and the row reads shared=1. The real hgSession.js back in the same park passes"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38311"
+
+  # Save rm38311 as a private session.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessSaveName'
+  - expect:
+      noHas: '#sessionAppTable tr:has(a:text-is("rm38311"))'
+  - fill: {'#sessSaveName': rm38311}
+  - click: '#sessSavePrivate'
+  - click: '#sessSaveBtn'
+  - wait: '#sessionAppTable tr:has(a:text-is("rm38311")) .sessLockWrap'
+
+  # Save over it from the save card, private box NOT ticked, with a description.
+  - fill: {'#sessSaveName': rm38311, '#sessSaveDesc': "rm38311 replaced"}
+  - click: '#sessSaveBtn'
+  - wait: '#sessCfOk'
+  - expect:
+      text: ["Replace this session?", "Who can load it stays as it is."]
+  - click: '#sessCfOk'
+  - wait: '#sessionAppTable tr:has(a:text-is("rm38311")) .sessInfo'
+  - expect:
+      has: '#sessionAppTable tr:has(a:text-is("rm38311")) .sessLockWrap'
+
+  # Clean up.
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38311"
+  - expect:
+      text: '"success": true'
