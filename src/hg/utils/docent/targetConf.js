@@ -62,9 +62,11 @@ function hgConfFor(server) {
     const root = process.env.TS_ROOT || path.join(os.homedir(), 'ticketSandboxes');
     let reg;
     try { reg = fs.readFileSync(path.join(root, 'ports.tsv'), 'utf8'); } catch (e) { return null; }
+    // The registry holds the http port; the same park answers https on that port + 1000.
+    const httpPort = String(u.protocol === 'https:' ? Number(u.port) - 1000 : Number(u.port));
     for (const line of reg.split('\n')) {
       const f = line.split('\t');
-      if (f[1] === u.port) return path.join(root, f[0], 'cgi-bin', 'hg.conf');
+      if (f[1] === httpPort) return path.join(root, f[0], 'cgi-bin', 'hg.conf');
     }
   }
   return null;
@@ -104,6 +106,7 @@ const CENTRAL_BY_HOST = {
   'genome-euro.ucsc.edu': 'hgcentral',         // its own database of the same name
   'genome-asia.ucsc.edu': 'hgcentral',         // ... and so is this one
   'hgwbeta.soe.ucsc.edu': 'hgcentralbeta',
+  'hgw0.soe.ucsc.edu': 'hgcentral',            // the RR node that takes a release first
 };
 
 // Which hgcentral a server reads. Read from its hg.conf wherever that is possible, because
