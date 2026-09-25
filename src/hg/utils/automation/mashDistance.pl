@@ -17,16 +17,12 @@ use FindBin qw($Bin);
 use lib "$Bin";
 use HgAutomate;
 use AssemblyDivergence;
-use AsmHub qw(asmIdToPath);
 
 use vars qw/
     $opt_workDir
     $opt_regenerate
-    $opt_dbHost
     $opt_help
     /;
-
-my $dbHost = 'hgwdev';
 
 sub usage {
   my ($status) = @_;
@@ -38,17 +34,22 @@ pairwise pipeline fits:
     doBlastzChainNet.pl  (lastz/chain/net)     for everything else
 aSeq and bSeq can each be, in any combination:
   - a plain path to a .2bit, .fa/.fasta, or .fa.gz/.fasta.gz file
-  - a GenArk accession, e.g. GCA_060551615.1, translated to its standard
-    location: /gbdb/genark/GCA/060/551/615/GCA_060551615.1/GCA_060551615.1.2bit
-  - a UCSC database name, e.g. hg38, translated to /gbdb/hg38/hg38.2bit
+  - a GenArk accession, e.g. GCA_060551615.1
+  - a UCSC database name, e.g. hg38
 
-For a GenArk assembly (basename starting with GCA_/GCF_ and built under
-/hive/data/genomes/asmHubs/), or for a plain UCSC database's own sequence
-file (e.g. /gbdb/hg38/hg38.2bit, recognized via an hgcentraltest dbDb
-lookup), the mash sketch is cached permanently in that assembly's own
-mashSketch/ directory and reused on every future call for it -- no need
-to re-sketch the same genome for every pairwise check.  For anything
-else, sketches are one-off, written to -workDir.
+A GenArk accession or UCSC db name is resolved entirely under
+/hive/data/genomes/ (reachable from every cluster node, unlike /gbdb or
+hgcentraltest, which this never touches): its mash sketch is cached
+permanently in that assembly's own mashSketch/ directory and reused on
+every future call for it.
+  - A GenArk accession with no cache yet still works: the source .2bit
+    is found automatically in its own build tree (also under
+    /hive/data/genomes/), no path needed.
+  - A bare UCSC db name with no cache yet does NOT get looked up
+    anywhere -- that call just fails.  Sketch it at least once by its
+    real path (e.g. /gbdb/hg38/hg38.2bit) first; every call after that
+    can use the bare db name and will hit the cache.
+Anything else is a one-off sketch, written to -workDir.
 
 Prints, to stdout, lines suitable for parsing by another script:
     mashDistance=<float>
@@ -67,44 +68,31 @@ options:
                           exists, cached or fallback.  Use after changing
                           sketch parameters, after a re-built assembly, or
                           some other change to the assembly.
-    -dbHost host          Host to run the hgcentraltest dbDb lookup on
-                          (see above), default: $dbHost.  hgcentraltest
-                          is only reachable from hgwdev -- change this
-                          only if you know what you're doing.
     -help                 This help.
 ";
   exit $status;
 }
 
-# Accept an existing path as-is (unchanged, original behavior).  Also
-# accept two "just tell me the name" shorthands and translate them to
-# the standard, already-built location for that assembly -- everything
-# under /gbdb is a fixed, predictable layout, so this is plain path
-# construction, no database lookup needed:
-#   GCA_060551615.1 -> /gbdb/genark/GCA/060/551/615/GCA_060551615.1/GCA_060551615.1.2bit
-#   hg38            -> /gbdb/hg38/hg38.2bit
+# Accept an existing path as-is (unchanged, original behavior).  A bare
+# GenArk accession or a bare word (a likely UCSC db name) is passed
+# straight through untouched -- AssemblyDivergence::sketch() resolves
+# those itself against its /hive/data/genomes/-based cache, never /gbdb
+# or hgcentraltest (neither of which a cluster node can reach).  Only
+# reject here what's clearly a broken path (contains a '/' but doesn't
+# exist), so a typo'd path fails fast with a clear message instead of a
+# confusing croak two calls deep.
 sub resolveSeqArg {
   my ($arg) = @_;
   return $arg if (-e $arg);
-  if ($arg =~ m/^(GC[AF]_\d{9}\.\d+)$/) {
-    my $accession = $1;
-    my $path = "/gbdb/genark/" . &asmIdToPath($accession) . "/$accession/$accession.2bit";
-    return $path if (-e $path);
-    die "mashDistance.pl: '$arg' looks like a GenArk accession, but " .
-        "$path doesn't exist\n";
-  }
-  my $path = "/gbdb/$arg/$arg.2bit";
-  return $path if (-e $path);
-  die "mashDistance.pl: can't find '$arg' as a path, a GenArk accession " .
-      "under /gbdb/genark/, or a UCSC database's .2bit under /gbdb/\n";
+  return $arg if ($arg !~ m{/});
+  die "mashDistance.pl: can't find path '$arg'\n";
 } # resolveSeqArg
 
-my $ok = GetOptions('workDir=s', 'regenerate', 'dbHost=s', 'help');
+my $ok = GetOptions('workDir=s', 'regenerate', 'help');
 &usage(1) if (!$ok);
 &usage(0) if ($opt_help);
 &usage(1) if (scalar(@ARGV) != 2);
 my ($aSeq, $bSeq) = @ARGV;
-$dbHost = $opt_dbHost if ($opt_dbHost);
 
 $aSeq = &resolveSeqArg($aSeq);
 $bSeq = &resolveSeqArg($bSeq);
@@ -119,7 +107,7 @@ if ($workDir) {
   $cleanupWorkDir = 1;
 }
 
-my $dist = &AssemblyDivergence::mashDistance($aSeq, $bSeq, $workDir, $opt_regenerate, $dbHost);
+my $dist = &AssemblyDivergence::mashDistance($aSeq, $bSeq, $workDir, $opt_regenerate);
 my ($pipeline, $preset, $warning) = &AssemblyDivergence::choosePipeline($dist);
 
 print "mashDistance=$dist\n";
