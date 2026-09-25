@@ -14,7 +14,7 @@
  *
  * No database and no files: the chains are built here in the shape quickLiftSourceRanges
  * leaves in the hash, which is the reference on the query side after a chainSwap.
- * refs #38349 */
+ * refs #38349, #38249 */
 
 /* Copyright (C) 2026 The Regents of the University of California
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
@@ -199,6 +199,29 @@ runCase("mRNA, chain on the opposite strand",
         pslOnSource("mrna", 100, 600, FALSE));
 }
 
+static void emptyBlock()
+/* #38249.  The UniProt bigPsl files store block sizes in bases and pslFromBigPsl divides
+ * them by three, so a block shorter than a codon loads with size 0.  pslTransMap rejects
+ * such an alignment and aborts, which took down the whole lifted SwissProt track.  The lift
+ * has to leave the empty block out and map the rest. */
+{
+int refStarts[] = {100}, srcStarts[] = {100}, sizes[] = {600};
+// The shape of Q96ME1-2 in hg19, whose first block is a single base:  query on the minus
+// strand, so the empty block sits at the far end of the query, where pslCheck notices it.
+struct psl *psl = pslNew("prot", 100, 0, 100, srcChrom, seqSize, 100, 400, "-+", 2, 0);
+
+psl->blockCount = 2;
+psl->blockSizes[0] = 0;
+psl->qStarts[0] = 0;
+psl->tStarts[0] = 100;
+psl->blockSizes[1] = 90;
+psl->qStarts[1] = 10;
+psl->tStarts[1] = 130;
+psl->match = 90;
+runCase("protein, a block shorter than a codon",
+        chainFromBlocks('+', 1, refStarts, srcStarts, sizes), psl);
+}
+
 static void noChain()
 /* Nothing covers the alignment, so it is dropped rather than half-lifted. */
 {
@@ -217,6 +240,7 @@ oppositeStrandProtein();
 targetGap();
 splitCodon();
 mrnaBothStrands();
+emptyBlock();
 noChain();
 printf("passed\n");
 return 0;

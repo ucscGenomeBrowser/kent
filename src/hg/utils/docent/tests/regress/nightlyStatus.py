@@ -158,11 +158,13 @@ def candidates(yamlPath, doc):
     steps = doc.get('steps') or []
     nExpect = sum(norm(s)[0] == 'expect' for s in steps)
     base, cgiVars, tracks, cands, seen, stop = None, {}, None, [], 0, None
+    session = False
     for i, s in enumerate(steps, 1):
         verb, arg = norm(s)
         if verb == 'expect':
             seen += 1
             cands.append({'url': urlOf(db, pos, base, cgiVars), 'reached': seen,
+                          'session': session,
                           'expect': arg if isinstance(arg, dict) else {}})
             continue
         if verb in PASSIVE:
@@ -187,6 +189,10 @@ def candidates(yamlPath, doc):
         elif verb == 'loadSession' and isinstance(arg, dict) and arg.get('user'):
             cgiVars.update({'hgS_doOtherUser': 'submit', 'hgS_otherUserName': arg['user'],
                             'hgS_otherUserSessionName': arg.get('name')})
+            session = True
+        elif verb == 'loadSession' and isinstance(arg, str) and re.match(r'https?://', arg):
+            # A session file by URL (sessionFiles/), which any server can load.
+            cgiVars.update({'hgS_doLoadUrl': 'submit', 'hgS_loadUrlName': arg})
         else:
             stop = verb
             break
@@ -237,7 +243,13 @@ def tryIt(name, r):
     if 'url' not in r:
         return f'<span class="note">Run the script: {e(r["reason"])}.</span>'
     u = e(r['url'])
-    links = f'<a href="{TEST}{u}">genome-test</a> · <a href="{BETA}{u}">hgwbeta</a>'
+    # A saved session lives in one machine's central, and hgwbeta reads a different one,
+    # so a link that loads one would only answer "Could not find session" there.
+    if r.get('session'):
+        links = f'<a href="{TEST}{u}">genome-test</a> <span class="note">(a saved ' \
+                f'session, so not on hgwbeta)</span>'
+    else:
+        links = f'<a href="{TEST}{u}">genome-test</a> · <a href="{BETA}{u}">hgwbeta</a>'
     n, m = r['reached'], r['total']
     if n == m:
         reach = f'Reaches the last check ({n} of {m}).'

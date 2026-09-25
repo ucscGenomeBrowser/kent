@@ -158,8 +158,9 @@ def main():
             # itself (len(ALT) == SVLEN, and ALT[0] usually differs from REF[0]),
             # and some of them carry a truncated ALT. Those records supply the
             # full element in INFO SEQ, which always matches SVLEN, so prefer it.
-            if "SEQ" in info and info["SEQ"] is not True:
-                insertSeq = info["SEQ"]
+            seq = info.get("SEQ")
+            if isinstance(seq, str) and seq:
+                insertSeq = seq
             else:
                 insertSeq = alt[1:] if len(alt) > 1 else ""
 

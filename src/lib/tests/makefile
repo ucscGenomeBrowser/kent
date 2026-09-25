@@ -449,6 +449,11 @@ udcCacheSizesCheck: udcCacheSizesCheck.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/udcCacheSizesCheck udcCacheSizesCheck.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcCacheSizesCheck
 
+# https ferry thread leak check, needs a remote url, run with httpsFerryLeakTest.sh:
+httpsFerryLeakTest: httpsFerryLeakTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/httpsFerryLeakTest httpsFerryLeakTest.o ${MYLIBS} ${L}
+
 testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/testOutOfMem testOutOfMem.o ${MYLIBS} ${L}

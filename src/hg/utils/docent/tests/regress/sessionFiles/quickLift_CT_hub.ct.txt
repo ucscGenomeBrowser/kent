@@ -1,0 +1,207 @@
+browser position chr21:33031596-33041570
+track db='hg38' name='1 bed3' priority='10' description='CT testing type = bed 3' visibility=pack
+chr21	33031596	33034920
+chr21	33034920	33038244
+chr21	33038244	33041570
+track db='hg38' name='2 bed4' priority='20' description='CT testing type = bed 4' visibility=pack
+chr21	33031596	33034089	item_0
+chr21	33034089	33036582	item_1
+chr21	33036582	33039075	item_2
+chr21	33039075	33041570	item_3
+track db='hg38' name='3 bed5' priority='30' description='CT testing type = bed 5' visibility=pack
+chr21	33031596	33033590	item_0	0
+chr21	33033590	33035584	item_1	100
+chr21	33035584	33037578	item_2	200
+chr21	33037578	33039572	item_3	300
+chr21	33039572	33041570	item_4	400
+track db='hg38' name='4 bed6' priority='40' description='CT testing type = bed 6' visibility=pack
+chr21	33031596	33033258	item_0	0	-
+chr21	33033258	33034920	item_1	100	+
+chr21	33034920	33036582	item_2	200	-
+chr21	33036582	33038244	item_3	300	+
+chr21	33038244	33039906	item_4	400	-
+chr21	33039906	33041570	item_5	500	+
+track db='hg38' name='5 bed8' priority='50' description='CT testing type = bed 8' visibility=pack
+chr21	33031596	33032842	item_0	0	-	33031658	33032780
+chr21	33032842	33034088	item_1	100	+	33032945	33033985
+chr21	33034088	33035334	item_2	200	-	33034150	33035272
+chr21	33035334	33036580	item_3	300	+	33035437	33036477
+chr21	33036580	33037826	item_4	400	-	33036642	33037764
+chr21	33037826	33039072	item_5	500	+	33037929	33038969
+chr21	33039072	33040318	item_6	600	-	33039134	33040256
+chr21	33040318	33041570	item_7	700	+	33040422	33041466
+track db='hg38' name='6 bed9' priority='60' description='CT testing type = bed 9' visibility=pack itemRgb='On'
+chr21	33031596	33032704	item_0	0	-	33031651	33032649	255,0,0
+chr21	33032704	33033812	item_1	100	+	33032796	33033720	238,68,0
+chr21	33033812	33034920	item_2	200	-	33033867	33034865	204,102,0
+chr21	33034920	33036028	item_3	300	+	33035012	33035936	170,136,0
+chr21	33036028	33037136	item_4	400	-	33036083	33037081	136,170,0
+chr21	33037136	33038244	item_5	500	+	33037228	33038152	96,192,32
+chr21	33038244	33039352	item_6	600	-	33038299	33039297	68,238,0
+chr21	33039352	33040460	item_7	700	+	33039444	33040368	0,255,0
+chr21	33040460	33041570	item_8	800	-	33040515	33041515	255,0,0
+track db='hg38' name='7 bed12' priority='70' description='CT testing type = bed 12' visibility=pack itemRgb='On'
+chr21	33031596	33032427	item_0	0	-	33031637	33032386	255,0,0	3	166,166,166	0,332,665
+
+chr21	33032427	33033258	item_1	100	+	33032496	33033189	238,68,0	2	277,277	0,554
+
+chr21	33033258	33034089	item_2	200	-	33033299	33034048	204,102,0	3	166,166,166	0,332,665
+
+chr21	33034089	33034920	item_3	300	+	33034158	33034851	170,136,0	2	277,277	0,554
+
+chr21	33034920	33035751	item_4	400	-	33034961	33035710	136,170,0	3	166,166,166	0,332,665
+
+chr21	33035751	33036582	item_5	500	+	33035820	33036513	96,192,32	2	277,277	0,554
+
+chr21	33036582	33037413	item_6	600	-	33036623	33037372	68,238,0	3	166,166,166	0,332,665
+
+chr21	33037413	33038244	item_7	700	+	33037482	33038175	0,255,0	2	277,277	0,554
+
+chr21	33038244	33039075	item_8	800	-	33038285	33039034	255,0,0	3	166,166,166	0,332,665
+
+chr21	33039075	33039906	item_9	900	+	33039144	33039837	238,68,0	2	277,277	0,554
+
+chr21	33039906	33040737	item_10	0	-	33039947	33040696	204,102,0	3	166,166,166	0,332,665
+
+chr21	33040737	33041570	item_11	100	+	33040806	33041501	170,136,0	2	277,277	0,556
+
+track type=wiggle_0 priority='80' name='8 Wiggle bedGraph Format' description='wiggle bedGraph format thru zero' visibility=full color=200,100,0 altColor=0,100,200
+chr21	33031597	33032705	 -1.00
+chr21	33032705	33033813	 -0.75
+chr21	33033813	33034921	 -0.50
+chr21	33034921	33036029	 -0.25
+chr21	33036029	33037137	  0.00
+chr21	33037137	33038245	  0.25
+chr21	33038245	33039353	  0.50
+chr21	33039353	33040461	  0.75
+chr21	33040461	33041569	  1.00
+track type=wiggle_0 priority='90' name='9 Wiggle bedGraph to zero' description='wiggle bedGraph format to zero' visibility=full color=200,100,0 altColor=0,100,200
+chr21	33031597	33032705	 -1.00
+chr21	33032705	33033813	 -0.75
+chr21	33033813	33034921	 -0.50
+chr21	33034921	33036029	 -0.25
+chr21	33036029	33037137	  0.00
+chr21	33037137	33038245	 -0.25
+chr21	33038245	33039353	 -0.50
+chr21	33039353	33040461	 -0.75
+chr21	33040461	33041569	 -1.00
+track type=wiggle_0 priority='100' name='10 Wiggle bedGraph from zero' description='wiggle bedGraph format from zero' visibility=full color=200,100,0 altColor=0,100,200
+chr21	33031597	33032705	  1.00
+chr21	33032705	33033813	  0.75
+chr21	33033813	33034921	  0.50
+chr21	33034921	33036029	  0.25
+chr21	33036029	33037137	  0.00
+chr21	33037137	33038245	  0.25
+chr21	33038245	33039353	  0.50
+chr21	33039353	33040461	  0.75
+chr21	33040461	33041569	  1.00
+track type=wiggle_0 priority='110' name='11 wiggle variableStep' description='variableStep format' visibility=full autoScale=off viewLimits=5.0:25.0 color=255,200,0 yLineMark=11.76 yLineOnOff=on
+variableStep chrom=chr21 span=1108
+33031597	10.0
+33032705	12.5
+33033813	15.0
+33034921	17.5
+33036029	20.0
+33037137	17.5
+33038245	15.0
+33039353	12.5
+33040461	10.0
+track type=wiggle_0 priority='120' name='12 wiggle fixedStep' description='wiggle fixed step graphType=points' visibility=full autoScale=off viewLimits=0:1000 color=0,200,100 maxHeightPixels=100:50:20 graphType=points
+fixedStep chrom=chr21 start=33031597 step=1108 span=997
+1000
+ 900
+ 800
+ 700
+ 600
+ 500
+ 400
+ 300
+ 200
+ 100
+track type=bigWig priority='80' name='13 bigWig bedGraph thru 0' description='bigWig from bedGraph format thru zero' visibility=full color=200,100,0 altColor=0,100,200 bigDataUrl="http://hgwdev.gi.ucsc.edu/~hiram/ctDb/wigBedGraphThruZero.bw"
+track type=bigWig priority='90' name='14 bigWig bedGraph to zero' description='bigWig from bedGraph format to zero' visibility=full color=200,100,0 altColor=0,100,200 bigDataUrl="http://hgwdev.gi.ucsc.edu/~hiram/ctDb/wigBedGraphToZero.bw"
+track type=bigWig priority='100' name='15 bigWig bedGraph from zero' description='bigWig from bedGraph format from zero' visibility=full color=200,100,0 altColor=0,100,200 bigDataUrl="http://hgwdev.gi.ucsc.edu/~hiram/ctDb/wigBedGraphFromZero.bw"
+track type=bigWig priority='110' name='16 bigWig variableStep' description='bigWig variableStep format' visibility=full autoScale=off viewLimits=5.0:25.0 color=255,200,0 yLineMark=11.76 yLineOnOff=on bigDataUrl="http://hgwdev.gi.ucsc.edu/~hiram/ctDb/wigVariableStep.bw"
+track type=bigWig priority='120' name='17 bigWig fixedStep' description='bigWig fixed step graphType=points' visibility=full autoScale=off viewLimits=0:1000 color=0,200,100 maxHeightPixels=100:50:20 graphType=points bigDataUrl="http://hgwdev.gi.ucsc.edu/~hiram/ctDb/wigFixedStep.bw"
+track type=bigWig priority='120' name='18 bigWig fixedStep log' description='bigWig fixed step graphType=points log scale' transformFunc=log visibility=full autoScale=off viewLimits=0:1000 color=0,200,100 maxHeightPixels=100:50:20 graphType=points bigDataUrl="http://hgwdev.gi.ucsc.edu/~hiram/ctDb/wigFixedStep.bw"
+track type=bam priority='140' name='19 BAM Example One' description='Bam Ex. 1: 1000 Genomes read alignments (individual NA12878)' pairEndsByName=. pairSearchRange=10000 chromosomes=chr21 bamColorMode=gray maxWindowToDraw=200000 db=hg38 visibility=squish bigDataUrl=http://hgwdev.gi.ucsc.edu/goldenPath/help/examples/bamExample.bam
+track type=bigBed db='hg38' name='20 bigBed3' priority='150' description='CT testing type = bigBed 3' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType03.bb' visibility=pack
+track type=bigBed db='hg38' name='21 bigBed4' priority='160' description='CT testing type = bigBed 4' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType04.bb' visibility=pack
+track type=bigBed db='hg38' name='22 bigBed5' priority='170' description='CT testing type = bigBed 5' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType05.bb' visibility=pack
+track type=bigBed db='hg38' name='23 bigBed6' priority='180' description='CT testing type = bigBed 6' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType06.bb' visibility=pack
+track type=bigBed db='hg38' name='24 bigBed8' priority='190' description='CT testing type = bigBed 8' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType08.bb' visibility=pack
+track type=bigBed db='hg38' name='25 bigBed9' priority='200' description='CT testing type = bigBed 9' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType09.bb' visibility=pack itemRgb='On'
+track type=bigBed db='hg38' name='26 bigBed12' priority='210' description='CT testing type = bigBed 12' bigDataUrl='http://hgwdev.gi.ucsc.edu/~hiram/ctDb/bigBedType12.bb' visibility=pack itemRgb='On'
+track name=GFF example description="GFF TeleGene(tm) Regulatory Regions" visibility=2
+chr21	TeleGene	enhancer	33031596	33200100	500	+	.	touch1
+chr21	TeleGene	promoter	33037136	33210100	900	+	.	touch2
+chr21	TeleGene	promoter	33039136	33225000	800	-	.	touch3
+track name=GTF example description="GTF table browser output UCSC Genes"
+chr21	hg19_knownGene	exon	33026871	33027740	0.000000	-	.	gene_id "uc002yoz.1"; transcript_id "uc002yoz.1"; 
+chr21	hg19_knownGene	exon	33030247	33030540	0.000000	-	.	gene_id "uc002yoz.1"; transcript_id "uc002yoz.1"; 
+chr21	hg19_knownGene	exon	33031710	33031813	0.000000	-	.	gene_id "uc002yoz.1"; transcript_id "uc002yoz.1"; 
+chr21	hg19_knownGene	start_codon	33032083	33032085	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	CDS	33032083	33032154	0.000000	+	0	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	exon	33031935	33032154	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	CDS	33036103	33036199	0.000000	+	0	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	exon	33036103	33036199	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	CDS	33038762	33038831	0.000000	+	2	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	exon	33038762	33038831	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	CDS	33039571	33039688	0.000000	+	1	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	exon	33039571	33039688	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	CDS	33040784	33040888	0.000000	+	0	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	stop_codon	33040889	33040891	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+chr21	hg19_knownGene	exon	33040784	33041243	0.000000	+	.	gene_id "uc002ypa.3"; transcript_id "uc002ypa.3"; 
+track type=pgSnp visibility=3 db=hg38 name="pgSnp" description="Personal Genome SNP example"
+browser position chr21:33031924-33032937
+chr21   33032007 33032008       T/G     2       21,70   90,70
+chr21   33032031 33032032       T/G/A   3       9,60,7  80,80,30
+chr21   33032035 33032035       -/CGG   2       20,80   0,0
+chr21   33032088 33032093       -/CTCGG 2       30,70   0,0
+chr21   33032277 33032278       T       1       15      90
+chr21   33032771 33032772       A       1       36      80
+chr21   33032827 33032828       A/T     2       15,5    0,0
+chr21   33032879 33032880       C       1       0       0
+chr21   33032915 33032916       -       1       0       0
+track type=vcfTabix name="VCF Example One" description="VCF Ex. 1: 1000 Genomes phase 1 interim SNVs" chromosomes=chr21 maxWindowToDraw=200000 db=hg38 visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz
+track type=broadPeak visibility=pack db=hg38 name="bPk" description="ENCODE broadPeak Example"
+chr21     33031596       33034089 .       116      .       4.89716 3.70716 -1
+chr21     33034089       33036582 .       503      .       2.46426 1.54117 -1
+chr21     33036582       33039075 .       907      .       3.22803 2.12614 -1
+track type=narrowPeak visibility=pack db=hg38 name="nPk" description="ENCODE narrowPeak Example"
+chr21    33033812 33034920 .       100       .       182     5.0945  -1  50
+chr21    33036028 33037136 .       400       .       910      4.6052  -1  40
+chr21    33039352 33040460 .       900       .       482     9.2103  -1  75
+track name="Blat PSL" description="PSL example BLAT search output" visibility=full
+9975  0          0    0                0       0    0      0       +    YourSeq 9975    0       9975    chr21   48129895 33031595 33041570 1 9975, 0, 33031595,
+track name=testBedDetail type=bedDetail description="Test bedDetail set from Rachel" visibility=3
+chr2	74803744	74808800	intron22	0	-	intron22	BC025997.1
+chr2	170460203	170460535	intron20	0	+	intron20	BC063711.1,BC073875.1
+chr2	170462655	170463613	intron21	0	+	intron21	BC063711.1,BC073875.1
+chr2	170463657	170465180	intron26	0	+	intron26	BC063711.1,BC073875.1
+chr2	170488442	170489669	intron27	0	+	intron27	BC073875.1
+chr2	170460770	170462548	intron24	0	+	intron24	BC063711.1,BC073875.1
+chr2	74786835	74787277	intron25	0	-	intron25	BC025997.1
+chr2	74802705	74803582	intron41	0	-	intron41	BC025997.1
+chr2	170441408	170460151	intron42	0	+	intron42	BC063711.1
+chr2	74867453	74875099	intron9	0	-	intron9	BC025997.1
+chr2	170460611	170460696	intron8	0	+	intron8	BC063711.1,BC073875.1
+chr2	74786000	74786824	intron36	0	-	intron36	BC025997.1
+chr2	170465267	170470973	intron31	0	+	intron31	BC063711.1,BC073875.1
+chr2	74834349	74842090	intron30	0	-	intron30	BC025997.1
+chr21	32986708	33086457	testExample1	0	+	testExample1	BC093007.1,AF100757.1,AK223178.1,BC009292.2,BC004302.1
+chr21	33035835	33036709	testExample2	0	+	testExample2	BC093007.1,AF100757.1,AK223178.1,BC009292.2,BC004302.1
+chr21	33006708	33086457	testExample3	0	+	testExample3	BC093007.1,AF100757.1,AK223178.1,BC009292.2,BC004302.1
+track type=bigGenePred baseColorDefault=genomicCodons visibility=full name="bigGenePred" description="A bigGenePred file with sparse hg19 data" bigDataUrl=https://genecats.gi.ucsc.edu/qa/customTracks/testing/hg19bigGenePred.bb
+track type="longTabix" name="longRange" bigDataUrl=http://hgwdev.cse.ucsc.edu/~braney/longRange/Esc_40kb_hindIII_rep1.over10.gz
+track type=bigChain name="bigChain Example One" description="A bigChain file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb linkDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.link.bb
+track type=bigPsl name="bigPsl Example One" description="A bigPsl file" bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb
+track type=bam visibility=full doWiggle=on name=exampleCRAM bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram
+track type=interact name="interact Example Text" description="An interact file text" interactDirectional=true maxHeightPixels=200:100:50 visibility=full interactUp=true
+chr21	33030690	33036618	ENSG00000238390/GH21J031658	12	25.5	eQTLs,C-HiC,Distance	126,47,142	chr21	33030690	33033576	GH21J031658	.	chr21	33036617	33036618	ENSG00000238390	+
+chr21	33030690	33033576	SOD1/GH21J031658	554	1360.43	eRNA_co-expression,Distance	237,177,32	chr21	33030690	33033576	GH21J031658	.	chr21	33031933	33031934	SOD1	+
+track type=bigInteract visibility=full name="interact bb Example" description="A bigInteract file" useScore=true bigDataUrl=https://genecats.gi.ucsc.edu/qa/customTracks/testing/hg19interact.bb
+track type=hic name="hic Example ONE" description="hic Ex. 1: in situ Hi-C on HMEC" db=hg38 visibility=dense color=0,0,0 drawMode=arc saturationScore=12 normalization=KR resolution=5000 bigDataUrl=https://hgdownload2.gi.ucsc.edu/gbdb/hg19/bbi/hic/GSE63525_HMEC_combined.hic
+browser position chr21:32,000,000-35,000,000
+track type=hic name="hic Example TWO" description="hic Ex. 2: in situ Hi-C on HMEC" db=hg38 visibility=dense color=0,255,0 drawMode=square saturationScore=50 normalization=VC_SQRT resolution=10000 bigDataUrl=http://hgdownload.soe.ucsc.edu/gbdb/hg19/bbi/hic/GSE63525_HMEC_combined.hic
+#browser position chr21:32,000,000-35,000,000

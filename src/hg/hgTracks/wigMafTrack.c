@@ -2078,6 +2078,9 @@ boolean startSub2 = FALSE;
 int mafOrigOffset = 0;
 struct mafPriv *mp = getMafPriv(track);
 char *mafFile = NULL;
+// A quickLifted track's tables and frames belong to the assembly it came from, and there
+// is no database of that name here at all when the reference is a hub assembly.
+boolean lifted = quickLiftIsLifted(track->tdb);
 struct sqlConnection *conn2 = NULL;
 struct sqlConnection *conn3 = NULL;
 char *tableName = NULL;
@@ -2089,7 +2092,7 @@ if (mp->ct != NULL)
     tableName = mp->ct->dbTableName;
     mafFile = getCustomMafFile(track);
     }
-else if (!track->isBigBed)
+else if (!track->isBigBed && !lifted)
     {
     conn2 = hAllocConn(database);
     conn3 = hAllocConn(database);
@@ -2127,6 +2130,11 @@ if (cartVarExistsAnyLevel(cart, track->tdb,FALSE,"frames"))
     framesTable = cartOptionalStringClosestToHome(cart, track->tdb,FALSE,"frames");
 else
     framesTable = trackDbSetting(track->tdb, "frames");
+
+// The frames are in the other assembly's coordinates and are not lifted, so a lifted
+// track shows bases without codon translation.
+if (lifted)
+    framesTable = NULL;
 
 if (framesTable)
     {

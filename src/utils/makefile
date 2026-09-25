@@ -81,6 +81,7 @@ UTILS_APPLIST = \
 	newPythonProg \
 	nibFrag \
 	nibSize \
+	pafToPsl \
 	paraFetch \
 	paraSync \
 	pslMap \
