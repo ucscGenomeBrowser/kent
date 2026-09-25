@@ -635,6 +635,10 @@ hg38 hmc ucscGenePfam The Pfam protein domains that homologous missense constrai
 hg38 ucscGenePfam hmc Missense constraint measured across homologous positions within these domains
 hg38 promoterAi jarvis A score prioritizing non-coding regions more broadly, not only promoters
 hg38 jarvis promoterAi A deep-learning predictor for variants in promoter regions specifically
+hg38 epigenCentral epicV2illuminaMethylation Array probes that include every CpG site in this track
+hg38 epicV2illuminaMethylation epigenCentral CpG probes of this array that are part of curated DNA methylation episignatures
+hg38 epigenCentral snpArrayIllumina850k Array probes that include nearly all CpG sites in this track
+hg38 snpArrayIllumina850k epigenCentral CpG probes of this array that are part of curated DNA methylation episignatures
 
 hg19 constraintSuper predictionScoresSuper Per-variant deleteriousness and pathogenicity scores, rather than regional constraint
 hg19 predictionScoresSuper constraintSuper Regional and gene-level constraint measured from population variation
