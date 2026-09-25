@@ -66,8 +66,7 @@ options:
     -regenerate           Re-sketch and overwrite even if a .msh already
                           exists, cached or fallback.  Use after changing
                           sketch parameters, after a re-built assembly, or
-                          to pick up sketches made before -I <accession>
-                          labeling was added.
+                          some other change to the assembly.
     -dbHost host          Host to run the hgcentraltest dbDb lookup on
                           (see above), default: $dbHost.  hgcentraltest
                           is only reachable from hgwdev -- change this
