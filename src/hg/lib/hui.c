@@ -4112,7 +4112,10 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 // bigData file that isn't reachable at UI time both return NULL here.
 // That's fine for filterValues.* settings as long as a filterLabel.*
 // override is provided; buildFilterBy() already tolerates a NULL `as`.
-struct asObject *as = asForTdb(NULL, tdb);
+// VCF filters are on INFO fields, which are not autoSql columns.
+struct asObject *as = NULL;
+if (!startsWith("vcf", tdb->type))
+    as = asForTdb(NULL, tdb);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -7218,11 +7221,12 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
+    boolean isVcf = startsWith("vcf", tdb->type);
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
         char *trackDbLabel = getLabelSetting(cart, tdb, filter->fieldName);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, filter->setting);
-        if (as != NULL)
+        if (as != NULL && !isVcf)
             {
             struct asColumn *asCol = asColumnFind(as, filter->fieldName);
             if (asCol != NULL)
