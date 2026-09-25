@@ -19,7 +19,8 @@ use Exporter;
 # treated as constants) exported by this module:
 @EXPORT_OK = (
     # Support for common command line options:
-    qw( commify asmSize ncbiGeneDescription
+    qw( commify asmSize ncbiGeneDescription asmIdToPath
+        accessionFromPath mashSketchDir
       ),
 );
 
@@ -50,6 +51,41 @@ sub asmIdToPath($) {
   my $d2 = substr($asmId, 10, 3);
   my $ret = sprintf("%s/%s/%s/%s", $gcX, $d0, $d1, $d2);
   return $ret;
+}
+
+# given any path to a sequence file (.2bit, .fa/.fasta, .fa.gz/.fasta.gz),
+# return the bare NCBI accession (e.g. GCA_939628115.1) if the basename
+# starts with one -- the standard GenArk convention is that these files
+# are named <asmId>.2bit, i.e. <accession>_<name>.2bit, but this only
+# needs the accession prefix to match.  Returns undef if the basename
+# doesn't look like an accession at all (an arbitrary/non-GenArk file).
+sub accessionFromPath($) {
+  my ($path) = @_;
+  my $base = basename($path);
+  return undef if ($base !~ m/^(GC[AF]_\d{9}\.\d+)/);
+  return $1;
+}
+
+# given a bare accession (or full asmId -- only the accession prefix is
+# used), resolve and return the standard GenArk mashSketch cache
+# directory for it:
+#   /hive/data/genomes/asmHubs/{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/asmId/mashSketch
+# by locating the actual on-disk asmId directory, the same way
+# asmHubChainNet.pl resolves a bare accession to its full build
+# directory name.  Returns undef if no such build directory exists
+# (accession not built here, wrong accession, etc.) -- callers should
+# fall back to an ordinary scratch directory in that case.
+sub mashSketchDir($) {
+  my ($accession) = @_;
+  return undef if ($accession !~ m/^GC[AF]_\d{9}/);
+  my $gcX = substr($accession, 0, 3);
+  my $hubBuildDir = ($gcX eq 'GCA') ? 'genbankBuild' : 'refseqBuild';
+  my $accDir = "/hive/data/genomes/asmHubs/$hubBuildDir/" . &asmIdToPath($accession);
+  my $asmId = `ls -d $accDir/${accession}_* 2> /dev/null | head -1`;
+  chomp $asmId;
+  return undef if (! $asmId);
+  $asmId =~ s#.*/##;
+  return "$accDir/$asmId/mashSketch";
 }
 
 # Look up NCBI's own annotation provider/name/date for an accession from

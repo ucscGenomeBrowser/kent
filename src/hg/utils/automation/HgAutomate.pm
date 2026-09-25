@@ -857,6 +857,24 @@ sub databaseExists {
   return length($line);     # will be zero if not existing, >0 if exists
 }
 
+sub isUcscDb {
+  # True if $db is a registered assembly name in hgcentraltest.dbDb's
+  # 'name' column.  Unlike databaseExists() (which checks for a MySQL
+  # schema of that name on $dbHost), this checks the dbDb metadata table
+  # specifically -- the right check for "is this a real UCSC assembly
+  # name" as opposed to "does some database happen to exist with this
+  # name."  Like all hgcentraltest access, this always runs on $dbHost
+  # (hgcentraltest is only reachable from hgwdev) via ssh, regardless of
+  # what host is actually calling it.
+  my ($dbHost, $db) = @_;
+  return 0 if ($dbHost =~ m/nohost/i);
+  confess "Must have exactly 2 arguments" if (scalar(@_) != 2);
+  my $query = "select name from dbDb where name = \"$db\";";
+  my $line = `echo '$query' | $HgAutomate::runSSH $dbHost $centralDbSql`;
+  chomp $line;
+  return length($line);     # will be zero if not existing, >0 if exists
+}
+
 sub dbTableExists {
   my ($dbHost, $db, $table) = @_;
   return 0 if ($dbHost =~ m/nohost/i);
