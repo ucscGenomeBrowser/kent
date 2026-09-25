@@ -28,12 +28,6 @@ use AsmHub qw(accessionFromPath mashSketchDir);
 use File::Basename qw(basename);
 use File::Path qw(make_path);
 
-# default host to run hgcentraltest dbDb lookups on -- hgcentraltest is
-# only reachable from hgwdev, never from a random cluster node, so any
-# caller running this code somewhere else (e.g. inside a cluster job)
-# MUST pass its own real $dbHost through to mashDistance()/sketch()
-# rather than rely on this default.
-our $defaultDbHost = 'hgwdev';
 use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
@@ -60,10 +54,11 @@ our $mashLastzMin = 0.15; # distance >= this -> doBlastzChainNet.pl (lastz);
                            #   proxy out here anyway
 
 #########################################################################
-# mashDistance($seqA, $seqB, $workDir, $regenerate, $dbHost) -> distance (float, ~0.0 .. 1.0)
+# mashDistance($seqA, $seqB, $workDir, $regenerate) -> distance (float, ~0.0 .. 1.0)
 #   $seqA, $seqB: paths to .2bit or fasta(.gz)/fastq(.gz) files -- anything
 #                 mash itself or 'twoBitToFa ... stdout | mash sketch -'
-#                 can consume.
+#                 can consume.  See sketch() below for what else these
+#                 can be (a GenArk accession, a UCSC db name).
 #   $workDir:     fallback scratch directory to sketch into, used only
 #                 when a sequence file can't be resolved to a persistent
 #                 cache location (see sketch() below).  Fallback sketch
@@ -74,20 +69,11 @@ our $mashLastzMin = 0.15; # distance >= this -> doBlastzChainNet.pl (lastz);
 #                 .msh already exists (cached or fallback) -- e.g. after
 #                 changing sketch parameters, or to pick up a rebuilt
 #                 assembly, or to fix an ID stored under an older format.
-#   $dbHost:      optional; host to run the hgcentraltest dbDb lookup on,
-#                 for recognizing a plain UCSC database's own .2bit (see
-#                 sketch() below).  Defaults to $defaultDbHost ('hgwdev').
-#                 hgcentraltest is ONLY reachable from hgwdev -- a caller
-#                 running this from any other host (a cluster node, a
-#                 workhorse, etc.) must pass the real dbHost explicitly;
-#                 HgAutomate::runSSH takes care of actually running the
-#                 query there regardless of where this code executes.
 # Dies if mash/twoBitToFa can't be run or their output can't be parsed.
 sub mashDistance {
-  my ($seqA, $seqB, $workDir, $regenerate, $dbHost) = @_;
-  $dbHost = $defaultDbHost if (! $dbHost);
-  my $aMsh = &sketch($seqA, $workDir, 'a', $regenerate, $dbHost);
-  my $bMsh = &sketch($seqB, $workDir, 'b', $regenerate, $dbHost);
+  my ($seqA, $seqB, $workDir, $regenerate) = @_;
+  my $aMsh = &sketch($seqA, $workDir, 'a', $regenerate);
+  my $bMsh = &sketch($seqB, $workDir, 'b', $regenerate);
   my $mashOut = `mash dist $aMsh $bMsh`;
   chomp $mashOut;
   my @fields = split(/\t/, $mashOut);
@@ -107,45 +93,83 @@ sub seqBaseName {
   return $base;
 }
 
-# sketch($seq, $workDir, $tag, $regenerate, $dbHost) -> path to a .msh file for $seq.
-#   If $seq's basename identifies a GenArk accession (e.g.
-#   GCA_939628115.1_Tfree1.0.2bit) that has an actual build directory
-#   under /hive/data/genomes/asmHubs/, or is a plain UCSC database's own
-#   .2bit (e.g. /gbdb/hg38/hg38.2bit, confirmed via an hgcentraltest
-#   dbDb lookup on $dbHost), the sketch is written into (or, if already
-#   present, reused from) that assembly's own mashSketch/ directory --
-#   so it accumulates once per assembly and is shared by every future
-#   comparison involving it, cluster run or standalone mashDistance.pl
-#   check alike, instead of being rebuilt from scratch every time.
-#   Otherwise falls back to a one-off sketch named mashSketch.$tag.msh
-#   under $workDir, as before.
+# sketch($seq, $workDir, $tag, $regenerate) -> path to a .msh file for $seq.
+#   $seq can be an existing sequence file path, a bare GenArk accession
+#   (e.g. GCA_939628115.1), or a bare UCSC database name (e.g. hg38).
+#
+#   The persistent mashSketch/ cache -- and everything needed to find
+#   it -- lives entirely under $HgAutomate::clusterData
+#   (/hive/data/genomes/), which is reachable from every cluster node.
+#   This deliberately never touches /gbdb/ or hgcentraltest: cluster
+#   jobs can't reach hgwdev (where hgcentraltest lives) and shouldn't
+#   try, and /gbdb isn't mounted on cluster nodes at all.  So:
+#     - a GenArk accession or UCSC db name with an already-cached .msh
+#       is a pure clusterData filesystem check -- always works, anywhere.
+#     - on a cache MISS, this only proceeds if $seq already IS a real,
+#       existing sequence file (i.e. the caller resolved it themselves,
+#       e.g. to a GenArk build-tree .2bit under clusterData, or handed a
+#       literal /gbdb/... path from somewhere that does have it mounted)
+#       -- a bare name with no cache and no real file in hand just fails
+#       (see the final croak below), it never goes looking for one.
+#
+#   Cached sketches accumulate once per assembly and are shared by
+#   every future comparison involving it, cluster run or standalone
+#   mashDistance.pl check alike.  Anything that isn't a GenArk accession
+#   or a recognized UCSC db falls back to a one-off sketch named
+#   mashSketch.$tag.msh under $workDir, as before.
 sub sketch {
-  my ($seq, $workDir, $tag, $regenerate, $dbHost) = @_;
-  $dbHost = $defaultDbHost if (! $dbHost);
+  my ($seq, $workDir, $tag, $regenerate) = @_;
   my $prefix;
   my $id;
+  my $srcSeq = $seq;   # actual file to sketch from, only needed on a cache miss
+
   my $accession = &accessionFromPath($seq);
   if ($accession) {
-    my $cacheDir = &mashSketchDir($accession);
+    my $cacheDir = &mashSketchDir($accession);   # pure clusterData 'ls', no /gbdb
     if ($cacheDir) {
-      make_path($cacheDir) if (! -d $cacheDir);
-      $prefix = "$cacheDir/$accession";
-      $id = $accession;
+      if (! $regenerate && -e "$cacheDir/$accession.msh") {
+        return "$cacheDir/$accession.msh";   # cache hit -- done
+      }
+      if (-e $srcSeq) {
+        make_path($cacheDir) if (! -d $cacheDir);
+        $prefix = "$cacheDir/$accession";
+        $id = $accession;
+      } else {
+        # Bare accession, no cache yet, no path in hand -- mashSketchDir()
+        # only returns a cacheDir when it already found a real build
+        # directory, so the real .2bit is right there next to
+        # mashSketch/ in that same GenArk build tree (clusterData, not
+        # /gbdb): .../<asmId>/mashSketch -> .../<asmId>/<asmId>.2bit
+        my $buildDir = $cacheDir;
+        $buildDir =~ s#/mashSketch$##;
+        my $builtSeq = "$buildDir/" . basename($buildDir) . ".2bit";
+        if (-e $builtSeq) {
+          make_path($cacheDir) if (! -d $cacheDir);
+          $prefix = "$cacheDir/$accession";
+          $id = $accession;
+          $srcSeq = $builtSeq;
+        }
+      }
     }
   }
+
   if (! $prefix) {
-    # Not a GenArk accession -- see if it's a plain UCSC database's own
-    # sequence file instead.  This dbDb lookup always runs on $dbHost
-    # (hgcentraltest is only reachable from hgwdev), never on whatever
-    # host happens to be running this Perl process.
     my $db = &seqBaseName($seq);
-    if ($db ne '' && &HgAutomate::isUcscDb($dbHost, $db)) {
+    if ($db ne '') {
       my $cacheDir = "$HgAutomate::clusterData/$db/mashSketch";
-      make_path($cacheDir) if (! -d $cacheDir);
-      $prefix = "$cacheDir/$db";
-      $id = $db;
+      if (! $regenerate && -e "$cacheDir/$db.msh") {
+        return "$cacheDir/$db.msh";   # cache hit -- pure filesystem, done
+      }
+      # Not cached yet -- only proceed with a source we already have in
+      # hand (see the sub's header comment above); never search for one.
+      if (-e $srcSeq) {
+        make_path($cacheDir) if (! -d $cacheDir);
+        $prefix = "$cacheDir/$db";
+        $id = $db;
+      }
     }
   }
+
   if (! $prefix) {
     $prefix = "$workDir/mashSketch.$tag";
     $id = basename($seq);
@@ -157,12 +181,16 @@ sub sketch {
   # legible this way.
   my $mshFile = "$prefix.msh";
   if ($regenerate || ! -e $mshFile) {
-    if ($seq =~ /\.2bit$/) {
-      (system("twoBitToFa $seq stdout | mash sketch -k 21 -s 10000 -I $id -o $prefix - 2> /dev/null") == 0)
-        || croak "mashDistance: twoBitToFa/mash sketch failed on $seq\n";
+    croak "mashDistance: no sequence file to sketch for '$seq' -- not an " .
+	  "existing path, a cached/buildable GenArk accession, or a " .
+	  "cached/known UCSC db\n"
+      if (! -e $srcSeq);
+    if ($srcSeq =~ /\.2bit$/) {
+      (system("twoBitToFa $srcSeq stdout | mash sketch -k 21 -s 10000 -I $id -o $prefix - 2> /dev/null") == 0)
+        || croak "mashDistance: twoBitToFa/mash sketch failed on $srcSeq\n";
     } else {
-      (system("mash sketch -k 21 -s 10000 -I $id -o $prefix $seq 2> /dev/null") == 0)
-        || croak "mashDistance: mash sketch failed on $seq\n";
+      (system("mash sketch -k 21 -s 10000 -I $id -o $prefix $srcSeq 2> /dev/null") == 0)
+        || croak "mashDistance: mash sketch failed on $srcSeq\n";
     }
   }
   return $mshFile;

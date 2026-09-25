@@ -701,11 +701,7 @@ sub estimateDivergence {
   }
   &HgAutomate::verbose(1,
       "Estimating $tDb/$qDb divergence with mash to pick -minimapPreset ...\n");
-  # $dbHost matters here: hgcentraltest (used to recognize a plain UCSC
-  # db's own .2bit) is only reachable from hgwdev, never from whatever
-  # host might eventually run this -- pass our own $dbHost through
-  # rather than let AssemblyDivergence.pm assume one.
-  my $dist = eval { &AssemblyDivergence::mashDistance($tSeq, $qSeq, $buildDir, $opt_regenerateMash, $dbHost); };
+  my $dist = eval { &AssemblyDivergence::mashDistance($tSeq, $qSeq, $buildDir, $opt_regenerateMash); };
   if ($@) {
     $minimapPreset = 'asm5';
     warn "estimateDivergence: $@" .
