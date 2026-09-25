@@ -58,7 +58,7 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     maxWindowCoverage 10000000
     searchIndex name
     labelFields name,displaySignature
-    defaultLabelFields displaySignature
+    defaultLabelFields name,displaySignature
     skipFields signatureList
     detailsDynamicTable comparisonTable|Episignatures at this CpG site
     urls displayOmim="https://omim.org/entry/$$"
