@@ -1729,16 +1729,26 @@ def chromSizesFile(db):
         return genArkChromSizes(db, genArkHubDir(db))
     return "/hive/data/genomes/%s/chrom.sizes" % db
 
-def miniprotRamGb(genomeFa):
-    """ how much RAM to reserve for a miniprot run on this genome, in whole GB.
-    Measured on real assemblies: peak RSS is linear in genome size at about 11 GB per Gb
-    of sequence and is flat in the thread count, because the index is built once and shared
-    (2.49 GB at -t 1 versus 2.60 GB at -t 16 on the same 227 Mb). So this is sized off the
-    sequence only, with headroom, and never below a small floor.
+def miniprotRamGb(genomeFa, protFa):
+    """ how much RAM to reserve for a miniprot run, in whole GB.
+
+    Two terms, and the second one was learned the hard way. The genome index is linear in
+    sequence and flat in the thread count, measured at about 11 GB per Gb (2.49 GB at -t 1
+    against 2.60 GB at -t 16 on the same 227 Mb, then 2.60 / 4.69 / 8.93 GB for 227 / 424 /
+    811 Mb). But that was measured with 125 proteins held constant, so it missed that the
+    alignment work scales with the protein set as well: the real runs align whole proteomes,
+    78457 sequences for zebrafish against 125 in the measurement, and a 0.46 Gb genome that
+    the genome term alone put at 5 GB died with "[morecore] insufficient memory" inside an
+    8 GB reservation.
+
+    So add a term for the protein input and keep the generous floor. Reserving too much
+    only costs queue slots on a cluster that absorbs these jobs easily; reserving too little
+    throws away the whole assembly after it has already run for minutes. refs #38300
     """
-    bases = os.path.getsize(genomeFa) # near enough, fasta is one byte per base plus headers
-    gb = int(bases / 1e9 * 14) + 1
-    return max(gb, 8)
+    genomeBytes = os.path.getsize(genomeFa) # fasta is about one byte per base plus headers
+    protBytes = os.path.getsize(protFa)
+    gb = int(genomeBytes / 1e9 * 14) + int(protBytes / 1e9 * 100) + 1
+    return max(gb, 16)
 
 def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     """ run one miniprot job on the parasol cluster.
@@ -1746,7 +1756,7 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     count, which for a 16 CPU job is far less than miniprot needs, and without -cpu parasol
     would pack more of these onto a node than it has cores for.
     """
-    ram = miniprotRamGb(genomeFa)
+    ram = miniprotRamGb(genomeFa, protFa)
     jobDir = join(workDir, "cluster")
     if not isdir(jobDir):
         os.makedirs(jobDir, exist_ok=True)
@@ -2239,9 +2249,19 @@ def listMd5(arr):
     return m.hexdigest()
 
 def readGeneToRefSeq(taxId):
-    " return entrezId -> list of Refseq from tsv file "
+    """ return entrezId -> list of Refseq from tsv file, empty if we have none for this taxon.
+
+    Not every organism is in NCBI's gene2refseq, so for some taxa this file cannot exist.
+    The caller only uses it to resolve UniProt's Entrez cross-references to transcripts and
+    already checks whether it got anything, so an empty answer costs a little filtering
+    accuracy rather than the assembly. It used to raise and take the taxon down. refs #38300
+    """
     g2refseq = {}
     fname = join(NCBIDIR, str(taxId)+".tsv")
+    if not isfile(fname):
+        logging.warning("taxon %s is not in the NCBI gene2refseq tables, so UniProt's Entrez "
+                "cross-references cannot be resolved for it" % taxId)
+        return g2refseq
     for line in open(fname):
         geneId, transList = line.rstrip("\n").split('\t')
         transList = transList.split(',')
@@ -3132,6 +3152,16 @@ def splitNcbiIfNeeded(taxIdDbs):
     logging.info("%d of %d taxa have no NCBI gene table yet, splitting %s" % \
             (len(missing), len(taxIdDbs), ncbiGeneFname))
     splitGeneRefseq(ncbiGeneFname, NCBIDIR, taxIdDbs)
+
+    # Some organisms are not in gene2refseq at all, so the split cannot produce a table for
+    # them and they would send every future run back to re-split 2.4 GB. Leave an empty file
+    # to record that we looked; readGeneToRefSeq treats it as "nothing known", which is true.
+    stillMissing = [t for t in missing if not isfile(join(NCBIDIR, "%s.tsv" % t))]
+    for taxId in stillMissing:
+        open(join(NCBIDIR, "%s.tsv" % taxId), "w").close()
+    if stillMissing:
+        logging.info("%d taxa are not in gene2refseq at all, wrote empty tables for them" % \
+                len(stillMissing))
 
 def downloadAndSplitNcbi(taxIdDbs):
     " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
