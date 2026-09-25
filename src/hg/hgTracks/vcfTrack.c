@@ -14,7 +14,6 @@
 #include "hdb.h"
 #include "hgColors.h"
 #include "hgTracks.h"
-#include "bigBedFilter.h"
 #include "iupac.h"
 #include "net.h"
 #include "pgSnp.h"
@@ -240,168 +239,6 @@ slReverse(&retList);
 vcff->records = retList;
 }
 
-struct vcfInfoFilter
-/* One generic trackDb filter (filter.*, filterText.*, filterValues.*, as for bigBed) on a VCF
- * INFO field or on the fixed ID or QUAL column. */
-    {
-    struct vcfInfoFilter *next;
-    char *field;                    /* INFO key, or ID or QUAL */
-    const struct vcfInfoDef *def;   /* Header definition of the INFO key, NULL for ID and QUAL */
-    struct bigBedFilter *filter;    /* The comparison, made by the bigBed filter code */
-    };
-
-static void addVcfInfoFilter(struct vcfInfoFilter **pList, struct vcfFile *vcff, char *field,
-                             struct bigBedFilter *filter)
-/* If filter is not NULL, add it to *pList as a filter on the INFO field (or ID/QUAL column) field. */
-{
-if (filter == NULL)
-    return;
-struct vcfInfoFilter *vf;
-AllocVar(vf);
-vf->field = field;
-vf->def = vcfInfoDefForKey(vcff, field);
-vf->filter = filter;
-slAddHead(pList, vf);
-}
-
-static void checkVcfFilterField(struct vcfFile *vcff, struct trackDb *tdb, char *field)
-/* errAbort if a trackDb filter is on a field that is neither a declared INFO key nor ID/QUAL,
- * like the bigBed filters do for a field that is not in the autoSql. */
-{
-if (vcfInfoDefForKey(vcff, field) == NULL && differentString(field, "ID")
-&& differentString(field, "QUAL"))
-    errAbort("track %s: trackDb filter on field '%s', but the VCF header has no INFO "
-             "definition for it.", tdb->track, field);
-}
-
-static struct vcfInfoFilter *vcfBuildInfoFilters(struct vcfFile *vcff, struct trackDb *tdb)
-/* Build the generic trackDb filters of a VCF track, using the bigBed filter code, where the
- * field names are INFO keys. The field number of the bigBed filter is not used. */
-{
-struct vcfInfoFilter *list = NULL;
-struct trackDbFilter *tdbFilter;
-for (tdbFilter = tdbGetTrackNumFilters(tdb);  tdbFilter != NULL;  tdbFilter = tdbFilter->next)
-    {
-    checkVcfFilterField(vcff, tdb, tdbFilter->fieldName);
-    addVcfInfoFilter(&list, vcff, tdbFilter->fieldName,
-                     bigBedMakeNumberFilterOnField(cart, tdb, tdbFilter->name, NULL,
-                                                   tdbFilter->fieldName, 0, FALSE));
-    }
-for (tdbFilter = tdbGetTrackTextFilters(tdb);  tdbFilter != NULL;  tdbFilter = tdbFilter->next)
-    {
-    checkVcfFilterField(vcff, tdb, tdbFilter->fieldName);
-    addVcfInfoFilter(&list, vcff, tdbFilter->fieldName,
-                     bigBedMakeFilterTextOnField(cart, tdb, tdbFilter->name,
-                                                 tdbFilter->fieldName, 0, FALSE));
-    }
-filterBy_t *filterBy;
-for (filterBy = filterBySetGet(tdb, cart, NULL);  filterBy != NULL;  filterBy = filterBy->next)
-    {
-    checkVcfFilterField(vcff, tdb, filterBy->column);
-    if (filterBy->slChoices && differentString(filterBy->slChoices->name, "All"))
-        addVcfInfoFilter(&list, vcff, filterBy->column,
-                         bigBedMakeFilterByOnField(cart, tdb, filterBy->column, 0,
-                                                   filterBy->slChoices, FALSE));
-    }
-return list;
-}
-
-static char *vcfDatumToString(union vcfDatum datum, enum vcfInfoType type, char *buf, int bufSize)
-/* Return the string form of one INFO value, for the bigBed filter comparison. */
-{
-switch (type)
-    {
-    case vcfInfoInteger:
-        safef(buf, bufSize, "%d", datum.datInt);
-        return buf;
-    case vcfInfoFloat:
-        // 15 significant digits: the value parsed from the VCF text comes back unchanged
-        safef(buf, bufSize, "%.15g", datum.datFloat);
-        return buf;
-    case vcfInfoCharacter:
-        safef(buf, bufSize, "%c", datum.datChar);
-        return buf;
-    default:
-        return datum.datString;
-    }
-}
-
-static boolean vcfInfoFilterPass(struct vcfRecord *rec, struct vcfInfoFilter *vf)
-/* Return TRUE if rec passes one generic trackDb filter.
- * - A field with several values (e.g. Number=A) passes if any of its values passes. For
- *   filterType multipleListOr/multipleListAnd the values are compared as a list, like a
- *   comma-separated bigBed field.
- * - A missing value ('.' or key absent) fails a numeric filter (as in bcftools view -i). For text
- *   and value filters it is compared as the empty string, so the wildcard '*' still shows it.
- * - A Flag field has the value 1 if the key is present and 0 if it is absent. */
-{
-struct bigBedFilter *filter = vf->filter;
-boolean isNumeric = (filter->comparisonType == COMPARE_LESS
-                     || filter->comparisonType == COMPARE_MORE
-                     || filter->comparisonType == COMPARE_BETWEEN);
-boolean isList = (filter->comparisonType == COMPARE_HASH_LIST_AND
-                  || filter->comparisonType == COMPARE_HASH_LIST_OR);
-if (vf->def == NULL)
-    {
-    // the fixed columns ID or QUAL
-    char *val = sameString(vf->field, "ID") ? rec->name : rec->qual;
-    if (sameString(val, "."))
-        return isNumeric ? FALSE : bigBedFilterOneValue(filter, "");
-    return bigBedFilterOneValue(filter, val);
-    }
-const struct vcfInfoElement *el = vcfRecordFindInfo(rec, vf->field);
-if (vf->def->type == vcfInfoFlag)
-    {
-    char *val = "0";
-    if (el != NULL)
-        {
-        val = "1";
-        // older VCFs can have a value on a flag, e.g. VCF 3.2's DB=0 or DB=1
-        if (el->count > 0 && isNotEmpty(el->values[0].datString))
-            val = el->values[0].datString;
-        }
-    return bigBedFilterOneValue(filter, val);
-    }
-struct dyString *listVal = isList ? dyStringNew(0) : NULL;
-boolean gotValue = FALSE;
-int i;
-for (i = 0;  el != NULL && i < el->count;  i++)
-    {
-    if (el->missingData[i])
-        continue;
-    char buf[64];
-    char *val = vcfDatumToString(el->values[i], vf->def->type, buf, sizeof buf);
-    gotValue = TRUE;
-    if (isList)
-        {
-        if (dyStringLen(listVal) > 0)
-            dyStringAppendC(listVal, ',');
-        dyStringAppend(listVal, val);
-        }
-    else if (bigBedFilterOneValue(filter, val))
-        return TRUE;
-    }
-if (isList)
-    {
-    boolean pass = bigBedFilterOneValue(filter, dyStringContents(listVal));
-    dyStringFree(&listVal);
-    return pass;
-    }
-if (!gotValue && !isNumeric)
-    return bigBedFilterOneValue(filter, "");
-return FALSE;
-}
-
-static boolean vcfInfoFiltersFail(struct vcfRecord *rec, struct vcfInfoFilter *filters)
-/* Return TRUE if rec fails any of the generic trackDb filters. */
-{
-struct vcfInfoFilter *vf;
-for (vf = filters;  vf != NULL;  vf = vf->next)
-    if (!vcfInfoFilterPass(rec, vf))
-        return TRUE;
-return FALSE;
-}
-
 static void filterRecords(struct vcfFile *vcff, struct track *tg)
 /* If a filter is specified in the cart, remove any records that don't pass filter. Adapt longLabel if something was filtered. */
 {
@@ -414,9 +251,8 @@ boolean gotQualFilter = getMinQual(tdb, &minQual);
 boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
 boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
 boolean gotMinAcFilter = getMinAc(tdb, &minAc);
-struct vcfInfoFilter *infoFilters = vcfBuildInfoFilters(vcff, tdb);
 int filtOut = 0;
-if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter || infoFilters != NULL)
+if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter)
     {
     struct vcfRecord *rec, *nextRec, *newList = NULL;
     for (rec = vcff->records;  rec != NULL;  rec = nextRec)
@@ -425,8 +261,7 @@ if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter || in
         if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
                (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
                (gotMinFreqFilter && minFreqFail(rec, minFreq)) ||
-               (gotMinAcFilter && minAcFail(rec, minAc)) ||
-               (infoFilters != NULL && vcfInfoFiltersFail(rec, infoFilters)) ))
+               (gotMinAcFilter && minAcFail(rec, minAc)) ))
             slAddHead(&newList, rec);
         else 
             filtOut++;

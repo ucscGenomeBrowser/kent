@@ -87,10 +87,4 @@ void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 char *vcfHaplotypeOrSample(struct cart *cart);
 /* Return "Sample" if the current organism is uniploid (like SARS-CoV-2), "Haplotype" otherwise. */
 
-struct asObject *vcfInfoAsObj(struct cart *cart, struct trackDb *tdb);
-/* Return a pseudo-autoSql object that describes the fields of a VCF track that can be used by the
- * generic trackDb filters (filter.*, filterText.*, filterValues.* etc): one column per INFO
- * definition in the VCF header, named by the INFO key, with the header's Description as comment,
- * followed by the fixed columns ID and QUAL.  Returns NULL if the file cannot be opened. */
-
 #endif//def VCF_UI

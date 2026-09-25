@@ -1777,7 +1777,7 @@ There are no extra options that can appear on the type hic line.
     -->
 </DIV>
 
-<DIV class="filter"><span class="types bed bigBed vcf vcfTabix"></span>
+<DIV class="filter"><span class="types bed bigBed"></span>
 <div class="format">
     <code>filter.&lt;fieldName&gt; &lt;default integer&gt;</code><BR>
     <code>filterByRange.&lt;fieldName&gt; &lt;off/on&gt;</code><BR>
@@ -1788,39 +1788,6 @@ There are no extra options that can appear on the type hic line.
     more info. Note: for configurable features, like filters, an additional period
     &quot;.&quot; or plus &quot;+&quot; is required in the type declaration,
     for instance <code>type bigBed 5 .</code> or <code>type bigBed 9 +</code>.</p>
-    <P><B>VCF tracks:</B> the settings <code>filter.*</code>, <code>filterByRange.*</code>,
-    <code>filterLimits.*</code>, <code>filterText.*</code>, <code>filterValues.*</code>,
-    <code>filterValuesDefault.*</code>, <code>filterType.*</code>, <code>filterLabel.*</code>
-    and <code>filterPriority.*</code> also work on <code>vcfTabix</code> and <code>vcf</code>
-    tracks. There, &lt;fieldName&gt; is the key of an INFO field, e.g.
-    <code>filter.AF 0.01</code> or <code>filterText.CSQ *missense*</code>.
-    The key must be declared in an <code>##INFO</code> line of the VCF header; the
-    header's <code>Description</code> is the default label of the filter. In addition, the
-    fixed columns <code>ID</code> and <code>QUAL</code> can be used as field names. These
-    filters are combined with the other VCF filters (minimum QUAL, FILTER column, minimum
-    allele frequency and count). The details for VCF values:</P>
-    <ul>
-    <li>If a field has more than one value, e.g. <code>Number=A</code> with one value per
-    alternate allele, the variant passes if any one of its values passes. With
-    <code>filterType multipleListOr</code> or <code>multipleListAnd</code>, the values are
-    compared as a list, like a comma-separated bigBed field.</li>
-    <li>A missing value (<code>.</code>), or a variant without this INFO key, never passes a
-    numeric filter. For text and value filters, it is compared as an empty string, so the
-    default wildcard <code>*</code> still shows it.</li>
-    <li>A <code>Flag</code> field has the value 1 if the key is present and 0 if not, so
-    <code>filter.DB 1</code> shows only variants with the flag, and
-    <code>filterValues.DB 1|present,0|absent</code> makes a menu.</li>
-    </ul>
-    <P><B>Example:</B></P>
-    <pre>
-    track myVariants
-    type vcfTabix
-    filter.AF 0.01
-    filterByRange.AC on
-    filter.AC 2:100
-    filterLimits.AC 0:1000
-    filterText.CSQ *
-    filterLabel.CSQ Consequence</pre>
     <P><code> filter.&lt;fieldName&gt; </code> is used for numerical data. It requires
     a default value to be passed. A value of 0 (or the lowest value present in the dataset) 
     can be used to enable numerical filtering, but filter nothing by default.</P>
@@ -1904,7 +1871,7 @@ There are no extra options that can appear on the type hic line.
     <code>7.0</code> - item would appear as decimals are supported</P>
 </DIV>
 
-<DIV class="filterText"><span class="types bigBed vcf vcfTabix"></span>
+<DIV class="filterText"><span class="types bigBed"></span>
 <div class="format">
     <code>filterText.&lt;fieldName&gt; &lt;default search string&gt;</code><BR>
     <code>filterType.&lt;fieldName&gt; &lt;wildcard/regexp&gt;</code><BR>
@@ -1970,7 +1937,7 @@ There are no extra options that can appear on the type hic line.
     In this case, we are targeting all <code>geneName</code> items that are version 1.</P>
 </DIV>
 
-<DIV class="filterValues"><span class="types bigBed vcf vcfTabix"></span>
+<DIV class="filterValues"><span class="types bigBed"></span>
 <div class="format">
     <code>filterValues.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
     <code>filterValuesDefault.&lt;fieldName&gt; &lt;value1,value2,value3...&gt;</code><BR>
@@ -2090,7 +2057,7 @@ There are no extra options that can appear on the type hic line.
     <code>DNA-BR</code>, we would select <code>DNA-binding region</code> from the interface menu.</P>
 </DIV>
 
-<DIV class="filterLabel"><span class="types bed bigBed vcf vcfTabix"></span>
+<DIV class="filterLabel"><span class="types bed bigBed"></span>
 <div class="format"><code>filterLabel.&lt;fieldName&gt; &lt;label&gt;</code></div>
     <P>When a user clicks on a track item in the Browser image,
     the item detail page is shown. This setting specifies an
@@ -2110,7 +2077,7 @@ There are no extra options that can appear on the type hic line.
     the label to just "Strand (Orientation)".</P>
 </DIV>
 
-<DIV class="filterPriority"><span class="types bed bigBed vcf vcfTabix"></span>
+<DIV class="filterPriority"><span class="types bed bigBed"></span>
 <div class="format"><code>filterPriority.&lt;fieldName&gt; &lt;number&gt;</code></div>
     <P>Sets the display order of filters on the track configuration page.
     Filters are shown in ascending order of <code>filterPriority</code>

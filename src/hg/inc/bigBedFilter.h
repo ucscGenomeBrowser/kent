@@ -120,21 +120,6 @@ double priority;   /* display order; lower shows first (default TRACKDB_FILTER_D
 struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, boolean isHighlight);
 /* Add a bigBed filter using a trackDb filterBy statement. */
 
-struct bigBedFilter *bigBedMakeNumberFilterOnField(struct cart *cart, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, int fieldNum, boolean isHighlight);
-/* Make a filter/highlight on field number fieldNum if the trackDb or cart wants us to.
- * Like bigBedMakeNumberFilter, but the caller has already resolved the field number, so
- * this can also be used on things that are not bigBed rows, e.g. VCF INFO fields. */
-
-struct bigBedFilter *bigBedMakeFilterTextOnField(struct cart *cart, struct trackDb *tdb, char *filterName, char *field, int fieldNum, boolean isHighlight);
-/* Add a filter using a trackDb filterText statement on field number fieldNum. */
-
-struct bigBedFilter *bigBedMakeFilterByOnField(struct cart *cart, struct trackDb *tdb, char *field, int fieldNum, struct slName *choices, boolean isHighlight);
-/* Add a filter using a trackDb filterBy/filterValues statement on field number fieldNum. */
-
-boolean bigBedFilterOneValue(struct bigBedFilter *filter, char *fieldVal);
-/* Return TRUE if the string value of a field passes one filter. The field number
- * in the filter is not used, the caller has already picked the field. */
-
 boolean bigBedFilterInterval(struct bbiFile *bbi, char **bedRow, struct bigBedFilter *filters);
 /* Go through a row and filter based on filters.  Return TRUE if all filters are passed. */
 
