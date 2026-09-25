@@ -4043,6 +4043,17 @@ if (trackDbLabel == NULL)
 return trackDbLabel;
 }
 
+struct asObject *asForTrackDbFilters(struct cart *cart, struct sqlConnection *conn, struct trackDb *tdb)
+/* Return the autoSql object whose column names the trackDb filter settings (filter.<field>,
+ * filterText.<field>, filterValues.<field>, ...) refer to, or NULL.  For VCF tracks these are the
+ * INFO fields declared in the VCF header (plus ID and QUAL), for all other tracks the track's
+ * autoSql. */
+{
+if (tdbIsVcf(tdb))
+    return vcfInfoAsObj(cart, tdb);
+return asForTdb(conn, tdb);
+}
+
 static filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, struct trackDbFilter *tdbFilter, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
@@ -4112,7 +4123,7 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 // bigData file that isn't reachable at UI time both return NULL here.
 // That's fine for filterValues.* settings as long as a filterLabel.*
 // override is provided; buildFilterBy() already tolerates a NULL `as`.
-struct asObject *as = asForTdb(NULL, tdb);
+struct asObject *as = asForTrackDbFilters(cart, NULL, tdb);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -7050,7 +7061,7 @@ if (trackDbFilters)
     struct sqlConnection *conn = NULL;
     if (!isHubTrack(db) && !isGenArk(db))
         conn = hAllocConnTrack(db, tdb);
-    struct asObject *as = asForTdb(conn, tdb);
+    struct asObject *as = asForTrackDbFilters(cart, conn, tdb);
     hFreeConn(&conn);
 
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
@@ -7194,7 +7205,7 @@ if (trackDbFilters)
     struct sqlConnection *conn = NULL;
     if (!isHubTrack(db) && !isGenArk(db))
         conn = hAllocConnTrack(db, tdb);
-    struct asObject *as = asForTdb(conn, tdb);
+    struct asObject *as = asForTrackDbFilters(cart, conn, tdb);
     hFreeConn(&conn);
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
@@ -7244,6 +7255,57 @@ if (trackDbFilters)
 return count;
 }
 
+static boolean trackDbFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb,
+                                     boolean *pIsBoxOpened, boolean boxed, boolean parentLevel,
+                                     char *name, char *title)
+// Show the numeric (filter.*), text (filterText.*) and multi-select (filterValues.*, filterBy)
+// filters of a track, but no highlights.  Returns TRUE if any filter was shown.
+{
+boolean gotFilter = FALSE;
+if (numericFiltersShowAll(db, cart, tdb, pIsBoxOpened, boxed, parentLevel, name, title, FALSE) > 0)
+    gotFilter = TRUE;
+
+if (textFiltersShowAll(db, cart, tdb, FALSE))
+    gotFilter = TRUE;
+
+// Add any multi-selects next
+filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+if (filterBySet != NULL)
+    {
+    if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
+        jsIncludeFile("hui.js",NULL);
+
+    if (!*pIsBoxOpened)   // Note filterBy boxes are not double "boxed",
+        printf("<BR>"); // if there are no other filters
+    filterBySetCfgUi(cart,tdb,filterBySet,TRUE, name);
+    filterBySetFree(&filterBySet);
+    gotFilter = TRUE;
+    }
+return gotFilter;
+}
+
+boolean trackDbFiltersCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name,
+                            boolean boxed)
+// Put up only the generic trackDb filter controls of a track (filter.*, filterText.*,
+// filterValues.* and their older *Filter forms), without the score filter and highlights.
+// For track types with their own configuration UI, e.g. VCF, where the fields are INFO keys.
+// Returns TRUE if any filter control was shown.
+{
+if (cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
+    }
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+boolean isBoxOpened = FALSE;
+boolean gotFilter = trackDbFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel,
+                                          name, NULL);
+if (isBoxOpened)
+    cfgEndBox(boxed);
+return gotFilter;
+}
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,
                 int maxScore, boolean boxed)
 // Put up UI for filtering bed track based on a score
@@ -7262,27 +7324,10 @@ if (parentLevel)
         return;
 boolean skipScoreFilter = FALSE;
 
-// Numeric filters are first
+// Numeric filters are first, then text filters, then the multi-selects
 boolean isBoxOpened = FALSE;
-if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title, FALSE) > 0)
+if (trackDbFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title))
     skipScoreFilter = TRUE;
-
-if (textFiltersShowAll(db, cart, tdb, FALSE))
-    skipScoreFilter = TRUE;
-
-// Add any multi-selects next
-filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-if (filterBySet != NULL)
-    {
-    if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
-        jsIncludeFile("hui.js",NULL);
-
-    if (!isBoxOpened)   // Note filterBy boxes are not double "boxed",
-        printf("<BR>"); // if there are no other filters
-    filterBySetCfgUi(cart,tdb,filterBySet,TRUE, name);
-    filterBySetFree(&filterBySet);
-    skipScoreFilter = TRUE;
-    }
 
 // add any highlights:
 // Numeric highlights are first

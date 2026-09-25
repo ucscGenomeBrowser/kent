@@ -45,12 +45,13 @@ if (fieldNum < 0)
 return fieldNum;
 }
 
-struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, boolean isHighlight)
-/* Make a filter/highlight on this column if the trackDb or cart wants us to. */
+struct bigBedFilter *bigBedMakeNumberFilterOnField(struct cart *cart, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, int fieldNum, boolean isHighlight)
+/* Make a filter/highlight on field number fieldNum if the trackDb or cart wants us to.
+ * Like bigBedMakeNumberFilter, but the caller has already resolved the field number, so
+ * this can also be used on things that are not bigBed rows, e.g. VCF INFO fields. */
 {
 struct bigBedFilter *ret = NULL;
 char *setting = trackDbSettingClosestToHome(tdb, filter);
-int fieldNum =  getFieldNum(bbi, field);
 if (setting)
     {
     boolean invalid = FALSE;
@@ -122,8 +123,15 @@ if (setting)
 return ret;
 }
 
-struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field, boolean isHighlight)
-/* Add a bigBed filter using a trackDb filterText statement. */
+struct bigBedFilter *bigBedMakeNumberFilter(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filter, char *defaultLimits,  char *field, boolean isHighlight)
+/* Make a filter/highlight on this column if the trackDb or cart wants us to. */
+{
+int fieldNum =  getFieldNum(bbi, field);
+return bigBedMakeNumberFilterOnField(cart, tdb, filter, defaultLimits, field, fieldNum, isHighlight);
+}
+
+struct bigBedFilter *bigBedMakeFilterTextOnField(struct cart *cart, struct trackDb *tdb, char *filterName, char *field, int fieldNum, boolean isHighlight)
+/* Add a filter using a trackDb filterText statement on field number fieldNum. */
 {
 struct bigBedFilter *filter;
 char *setting = trackDbSettingClosestToHome(tdb, filterName);
@@ -135,7 +143,7 @@ if (isEmpty(value))
 char *typeValue = getFilterType(cart, tdb, field, FILTERTEXT_WILDCARD);
 
 AllocVar(filter);
-filter->fieldNum =  getFieldNum(bbi, field);
+filter->fieldNum = fieldNum;
 
 if (sameString(typeValue, FILTERTEXT_REGEXP) )
     {
@@ -151,6 +159,17 @@ else
 filter->isHighlight = isHighlight;
 
 return filter;
+}
+
+struct bigBedFilter *bigBedMakeFilterText(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *filterName, char *field, boolean isHighlight)
+/* Add a bigBed filter using a trackDb filterText statement. */
+{
+char *setting = trackDbSettingClosestToHome(tdb, filterName);
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
+if (isEmpty(value))
+    return NULL;
+int fieldNum =  getFieldNum(bbi, field);
+return bigBedMakeFilterTextOnField(cart, tdb, filterName, field, fieldNum, isHighlight);
 }
 
 char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
@@ -171,8 +190,8 @@ if (setting == NULL)
 return setting;
 }
 
-struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices, boolean isHighlight)
-/* Add a bigBed filter using a trackDb filterBy statement. */
+struct bigBedFilter *bigBedMakeFilterByOnField(struct cart *cart, struct trackDb *tdb, char *field, int fieldNum, struct slName *choices, boolean isHighlight)
+/* Add a filter using a trackDb filterBy/filterValues statement on field number fieldNum. */
 {
 struct bigBedFilter *filter;
 char *setting = NULL;
@@ -182,7 +201,7 @@ else
 setting = getFilterType(cart, tdb, field,  FILTERBY_DEFAULT);
 
 AllocVar(filter);
-filter->fieldNum =  getFieldNum(bbi, field);
+filter->fieldNum = fieldNum;
 filter->comparisonType = COMPARE_HASH;
 if (setting) 
     {
@@ -207,6 +226,13 @@ for(; choices; choices = choices->next)
 
 filter->isHighlight = isHighlight;
 return filter;
+}
+
+struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices, boolean isHighlight)
+/* Add a bigBed filter using a trackDb filterBy statement. */
+{
+int fieldNum =  getFieldNum(bbi, field);
+return bigBedMakeFilterByOnField(cart, tdb, field, fieldNum, choices, isHighlight);
 }
 
 static void addGencodeFilters(struct cart *cart, struct trackDb *tdb, struct bigBedFilter **pFilters)
@@ -357,29 +383,26 @@ for (;filterBy != NULL; filterBy = filterBy->next)
 return highlights;
 }
 
-boolean bigBedFilterOne(struct bigBedFilter *filter, char **bedRow, struct bbiFile *bbi)
-/* Return TRUE if a bedRow passes one filter or is in hgFindMatches */
+boolean bigBedFilterOneValue(struct bigBedFilter *filter, char *fieldVal)
+/* Return TRUE if the string value of a field passes one filter. The field number
+ * in the filter is not used, the caller has already picked the field. */
 {
-if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
-    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
-    return TRUE;
-
-double val = atof(bedRow[filter->fieldNum]);
+double val = atof(fieldVal);
 
 switch(filter->comparisonType)
     {
     case COMPARE_WILDCARD:
-        if ( !wildMatch(filter->wildCardString, bedRow[filter->fieldNum]))
+        if ( !wildMatch(filter->wildCardString, fieldVal))
             return FALSE;
         break;
     case COMPARE_REGEXP:
-        if (regexec(&filter->regEx,bedRow[filter->fieldNum], 0, NULL,0 ) != 0)
+        if (regexec(&filter->regEx,fieldVal, 0, NULL,0 ) != 0)
             return FALSE;
         break;
     case COMPARE_HASH_LIST_AND:
     case COMPARE_HASH_LIST_OR:
         {
-        struct slName *values = commaSepToSlNames(bedRow[filter->fieldNum]);
+        struct slName *values = commaSepToSlNames(fieldVal);
         unsigned found = 0;
         struct hash *seenHash = newHash(3);
         for(; values; values = values->next)
@@ -405,7 +428,7 @@ switch(filter->comparisonType)
         break;
 
     case COMPARE_HASH:
-        if (!hashLookup(filter->valueHash, bedRow[filter->fieldNum]))
+        if (!hashLookup(filter->valueHash, fieldVal))
             return FALSE;
         break;
     case COMPARE_LESS:
@@ -422,6 +445,16 @@ switch(filter->comparisonType)
         break;
     }
 return TRUE;
+}
+
+boolean bigBedFilterOne(struct bigBedFilter *filter, char **bedRow, struct bbiFile *bbi)
+/* Return TRUE if a bedRow passes one filter or is in hgFindMatches */
+{
+if ((bbi->definedFieldCount > 3) && (hgFindMatches != NULL) && 
+    (bedRow[3] != NULL)  && hashLookup(hgFindMatches, bedRow[3]) != NULL)
+    return TRUE;
+
+return bigBedFilterOneValue(filter, bedRow[filter->fieldNum]);
 }
 
 

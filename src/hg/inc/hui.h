@@ -1267,6 +1267,13 @@ boolean bedScoreHasCfgUi(struct trackDb *tdb);
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
+boolean trackDbFiltersCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name,
+                            boolean boxed);
+// Put up only the generic trackDb filter controls of a track (filter.*, filterText.*,
+// filterValues.* and their older *Filter forms), without the score filter and highlights.
+// For track types with their own configuration UI, e.g. VCF, where the fields are INFO keys.
+// Returns TRUE if any filter control was shown.
+
 void crossSpeciesCfgUi(struct cart *cart, struct trackDb *tdb);
 // Put up UI for selecting rainbow chromosome color or intensity score.
 
@@ -1580,6 +1587,12 @@ struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table
 
 struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb);
 // Get autoSQL description if any associated with table, ignoring errAborts if any.
+
+struct asObject *asForTrackDbFilters(struct cart *cart, struct sqlConnection *conn, struct trackDb *tdb);
+/* Return the autoSql object whose column names the trackDb filter settings (filter.<field>,
+ * filterText.<field>, filterValues.<field>, ...) refer to, or NULL.  For VCF tracks these are the
+ * INFO fields declared in the VCF header (plus ID and QUAL), for all other tracks the track's
+ * autoSql. */
 
 struct asObject *asForDb(struct trackDb *tdb, char* database);
 /* return asObject given a database name. NULL if not found */

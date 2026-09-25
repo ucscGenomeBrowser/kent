@@ -14,6 +14,7 @@
 #include "vcfUi.h"
 #include "knetUdc.h"
 #include "udc.h"
+#include "asParse.h"
 
 INLINE char *nameOrDefault(char *thisName, char *defaultVal)
 /* If thisName is not a placeholder value, return it; otherwise return default. */
@@ -195,7 +196,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 }
 
 //TODO: share this code w/hgTracks, hgc in hg/lib/vcfFile.c
-static struct vcfFile *vcfHopefullyOpenHeader(struct cart *cart, struct trackDb *tdb)
+static struct vcfFile *vcfHopefullyOpenHeaderUncached(struct cart *cart, struct trackDb *tdb)
 /* Defend against network errors and return the vcfFile object with header data, or NULL. */
 {
 knetUdcInstall();
@@ -243,6 +244,69 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 return vcff;
+}
+
+static struct vcfFile *vcfHopefullyOpenHeader(struct cart *cart, struct trackDb *tdb)
+/* Return the vcfFile object with header data, or NULL, opening the file only once per track
+ * in this CGI run: the config UI and the generic trackDb filter code both need the header. */
+{
+static struct hash *vcffCache = NULL;
+if (vcffCache == NULL)
+    vcffCache = hashNew(0);
+struct hashEl *hel = hashLookup(vcffCache, tdb->track);
+if (hel != NULL)
+    return hel->val;
+struct vcfFile *vcff = vcfHopefullyOpenHeaderUncached(cart, tdb);
+hashAdd(vcffCache, tdb->track, vcff);
+return vcff;
+}
+
+static struct asColumn *vcfFilterAsColumn(char *name, char *comment, char *asType)
+/* Make one pseudo-autoSql column for vcfInfoAsObj. */
+{
+struct asColumn *col;
+AllocVar(col);
+col->name = cloneString(name);
+col->comment = cloneString(isNotEmpty(comment) ? comment : name);
+col->lowType = asTypeFindLow(asType);
+return col;
+}
+
+struct asObject *vcfInfoAsObj(struct cart *cart, struct trackDb *tdb)
+/* Return a pseudo-autoSql object that describes the fields of a VCF track that can be used by the
+ * generic trackDb filters (filter.*, filterText.*, filterValues.* etc): one column per INFO
+ * definition in the VCF header, named by the INFO key, with the header's Description as comment,
+ * followed by the fixed columns ID and QUAL.  Returns NULL if the file cannot be opened. */
+{
+struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
+if (vcff == NULL)
+    return NULL;
+struct asObject *asObj;
+AllocVar(asObj);
+asObj->name = cloneString("vcfInfo");
+asObj->comment = cloneString("VCF INFO fields");
+struct hash *seen = hashNew(0);
+struct vcfInfoDef *def;
+for (def = vcff->infoDefs;  def != NULL;  def = def->next)
+    {
+    char *asType = "string";
+    if (def->type == vcfInfoInteger || def->type == vcfInfoFlag)
+        asType = "int";
+    else if (def->type == vcfInfoFloat)
+        asType = "double";
+    else if (def->type == vcfInfoCharacter)
+        asType = "char";
+    slAddHead(&asObj->columnList, vcfFilterAsColumn(def->key, def->description, asType));
+    hashStore(seen, def->key);
+    }
+// If an INFO key has the same name as a fixed column, the INFO field wins, also in hgTracks
+if (!hashLookup(seen, "ID"))
+    slAddHead(&asObj->columnList, vcfFilterAsColumn("ID", "Variant ID", "string"));
+if (!hashLookup(seen, "QUAL"))
+    slAddHead(&asObj->columnList, vcfFilterAsColumn("QUAL", "Quality score (QUAL)", "double"));
+slReverse(&asObj->columnList);
+hashFree(&seen);
+return asObj;
 }
 
 static void vcfCfgHapClusterEnable(struct cart *cart, struct trackDb *tdb, char *name,
@@ -735,6 +799,8 @@ if (vcff != NULL)
         vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
     if (doVcfMinAcUi)
         vcfCfgMinAc(cart, tdb, vcff, name, parentLevel);
+    // The generic trackDb filters (filter.<INFO key>, filterValues.<INFO key>, ...), same UI as bigBed
+    trackDbFiltersCfgUi(cartString(cart, "db"), cart, tdb, name, FALSE);
     }
 else
     {
