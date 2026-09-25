@@ -57,6 +57,8 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     tableBrowser off
     maxWindowCoverage 10000000
     searchIndex name
+    labelFields name,displaySignature
+    defaultLabelFields displaySignature
     skipFields signatureList
     detailsDynamicTable comparisonTable|Episignatures at this CpG site
     urls displayOmim="https://omim.org/entry/$$"
@@ -68,7 +70,7 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     filterValues.direction Gain,Loss
     filterType.direction multipleListOr
     filterLabel.direction Direction of methylation change
-    filterValues.signatureList 16pDel|Autism spectrum (16pDel),ANKRD11|KBG syndrome (ANKRD11),ARID1B|Coffin-Siris syndrome 1 (ARID1B),ASXL1|Bohring-Opitz syndrome (ASXL1),CHD7|CHARGE syndrome (CHD7),CHD8|Intellectual developmental disorder with autism and macrocephaly (CHD8),Dup7|Chromosome 7q11.23 duplication syndrome (Dup7),DYRK1A|Intellectual developmental disorder autosomal dominant 7 (DYRK1A),EHMT1|Kleefstra syndrome 1 (EHMT1),EZH2|Weaver syndrome (EZH2),FHS|Floating-Harbor syndrome (FHS),HNRNPK|Au-Kline syndrome (HNRNPK),KANSL1|Koolen-De Vries syndrome (KANSL1),KMT2A|Wiedemann-Steiner syndrome (KMT2A),KMT2B|Dystonia 28 childhood-onset (KMT2B),KMT2C|Kleefstra syndrome 2 (KMT2C),KMT2D_2017|Kabuki syndrome 1 (KMT2D_2017),KMT2D_2026|Kabuki syndrome 1 (KMT2D_2026),MN1|CEBALID syndrome (MN1),NSD1|Sotos syndrome (NSD1),SMARCA2|Nicolaides-Baraitser syndrome (SMARCA2),SRCAP|Developmental delay hypotonia musculoskeletal defects and behavioral abnormalities (SRCAP),T21|Down syndrome (T21),Williams|Williams-Beuren syndrome (Williams)
+    filterValues.signatureList 16pDel|Autism spectrum (16pDel),ANKRD11|KBG syndrome (ANKRD11),ARID1B|Coffin-Siris syndrome 1 (ARID1B),ASXL1|Bohring-Opitz syndrome (ASXL1),CHD7|CHARGE syndrome (CHD7),CHD8|Intellectual developmental disorder with autism and macrocephaly (CHD8),Dup7|Chromosome 7q11.23 duplication syndrome (Dup7),DYRK1A|Intellectual developmental disorder; autosomal dominant 7 (DYRK1A),EHMT1|Kleefstra syndrome 1 (EHMT1),EZH2|Weaver syndrome (EZH2),FHS|Floating-Harbor syndrome (FHS),HNRNPK|Au-Kline syndrome (HNRNPK),KANSL1|Koolen-De Vries syndrome (KANSL1),KMT2A|Wiedemann-Steiner syndrome (KMT2A),KMT2B|Dystonia 28; childhood-onset (KMT2B),KMT2C|Kleefstra syndrome 2 (KMT2C),KMT2D_2017|Kabuki syndrome 1 (KMT2D_2017),KMT2D_2026|Kabuki syndrome 1 (KMT2D_2026),MN1|CEBALID syndrome (MN1),NSD1|Sotos syndrome (NSD1),SMARCA2|Nicolaides-Baraitser syndrome (SMARCA2),SRCAP|Developmental delay; hypotonia; musculoskeletal defects; and behavioral abnormalities (SRCAP),T21|Down syndrome (T21),Williams|Williams-Beuren syndrome (Williams)
     filterType.signatureList multipleListAnd
     filterLabel.signatureList Episignature
 
