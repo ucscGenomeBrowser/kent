@@ -260,6 +260,18 @@ join -t$'\t' /tmp/md.pos /tmp/ec.pos | awk -F'\t' '$2!=$3' | wc -l
 # rather than editing either by hand. The counts quoted in the Description and Methods
 # paragraphs of that page have to be updated at the same time.
 #
+# One of those counts, in Display Conventions, is how many multi-signature sites also carry
+# a signature in the opposite direction to the strongest one, which the color and the
+# direction filter do not show (1,618 of 2,848 in this build). Recount it with:
+python3 -c "
+m = x = 0
+for l in open('epigenCentral.bed'):
+    rows = [r.split('|') for r in l.rstrip('\\n').split('\\t')[16].split(';')][1:]
+    if len(rows) > 1:
+        m += 1
+        x += len({r[3] for r in rows if r[3] != 'NA'}) > 1
+print(x, 'of', m)"
+#
 # The publication behind each signature comes from the hub's README and is kept in
 # scripts/episignatures/epigenCentralRefs.tsv, since the README is not machine
 # readable. All 18 distinct PMIDs were checked against PubMed esummary before being
@@ -268,9 +280,10 @@ join -t$'\t' /tmp/md.pos /tmp/ec.pos | awk -F'\t' '$2!=$3' | wc -l
 # displaying a different number, which is why they are generated here instead.
 
 # A comma in a filterValues entry is the entry separator and cannot be escaped when the
-# filterType is one of the *List* kinds, so the commas inside four of the disorder names
-# ("Dystonia 28, childhood-onset" and friends) are dropped in the menu labels by
-# writeRa() in epigenCentralToBed.py. The bigBed keeps the names as the source has them.
+# filterType is one of the *List* kinds, so the commas inside three of the disorder names
+# ("Dystonia 28, childhood-onset" and friends) become semicolons in the menu labels, as in
+# the methaDory menu, by writeRa() in epigenCentralToBed.py. The bigBed keeps the names as
+# the source has them. (Changed from dropping the commas during QA, 2026-09-25.)
 
 # Track search: the position box finds a probe by its cg number. The bigBed carries
 # -extraIndex=name and episignatures.ra has a matching searchTable stanza. Both this
