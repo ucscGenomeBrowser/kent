@@ -667,6 +667,50 @@ for (i = 0; i < lifted->blockCount; i++)
 return TRUE;
 }
 
+static struct psl *pslWithoutEmptyBlocks(struct psl *psl)
+/* A copy of a protein alignment with its zero-length blocks taken out, or NULL if it has
+ * none.  The copy can be left with no blocks at all.  The UniProt bigPsl files store block sizes in bases, and a block shorter than a
+ * codon comes out of pslFromBigPsl with size 0.  Drawing does not mind, but pslTransMap
+ * checks the alignment after converting it to nucleotides and aborts on the empty block,
+ * which takes down every item in the track.  About one alignment in eight has one. */
+{
+int i, j;
+
+for (i = 0; i < psl->blockCount; i++)
+    if (psl->blockSizes[i] == 0)
+        break;
+if (i == psl->blockCount)
+    return NULL;
+
+struct psl *copy = pslClone(psl);
+for (i = 0, j = 0; i < copy->blockCount; i++)
+    {
+    if (copy->blockSizes[i] == 0)
+        continue;
+    copy->blockSizes[j] = copy->blockSizes[i];
+    copy->qStarts[j] = copy->qStarts[i];
+    copy->tStarts[j] = copy->tStarts[i];
+    j++;
+    }
+copy->blockCount = j;
+if (j == 0)
+    return copy;
+
+// Removing an end block moves the bounds, and pslIsProtein compares tEnd with the last
+// block, so put them back in step.  pslRecalcBounds does not know about protein units.
+int last = j - 1;
+int tStart = copy->tStarts[0];
+int tEnd = copy->tStarts[last] + 3 * copy->blockSizes[last];
+if (copy->strand[1] == '-')
+    reverseIntRange(&tStart, &tEnd, copy->tSize);
+copy->tStart = tStart;
+copy->tEnd = tEnd;
+copy->qStart = copy->qStarts[0];
+copy->qEnd = copy->qStarts[last] + copy->blockSizes[last];
+pslComputeInsertCounts(copy);
+return copy;
+}
+
 struct psl *quickLiftPsl(struct hash *chainHash, struct hash **pMapPsls, struct psl *psl)
 // Map the target side of an alignment from the other assembly onto our current reference.
 // The query side (the mRNA, EST or protein the alignment is to) is left alone.  Returns
@@ -685,8 +729,15 @@ struct psl *mapPsl = mapPslForChain(pMapPsls, chain);
 if (psl->tSize != mapPsl->qSize)
     return NULL;
 
-struct psl *lifted = pslTransMap(pslTransMapNoOpts, psl, pslTypeUnspecified,
-                                 mapPsl, pslTypeUnspecified);
+struct psl *trimmed = pslIsProtein(psl) ? pslWithoutEmptyBlocks(psl) : NULL;
+if (trimmed && (trimmed->blockCount == 0))
+    {
+    pslFree(&trimmed);
+    return NULL;
+    }
+struct psl *lifted = pslTransMap(pslTransMapNoOpts, trimmed ? trimmed : psl,
+                                 pslTypeUnspecified, mapPsl, pslTypeUnspecified);
+pslFree(&trimmed);
 if (lifted != NULL)
     {
     // before counting, so quickLiftPslCounts sees both sides in the same units

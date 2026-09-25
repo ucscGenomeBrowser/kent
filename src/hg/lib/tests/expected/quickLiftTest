@@ -40,6 +40,15 @@ before   300	0	0	0	0	0	0	0	+	mrna	300	0	300	chrSrc	1000	600	900	1	300,	0,	600,
 lifted   300	0	0	0	0	0	0	0	-	mrna	300	0	300	chrRef	1000	100	400	1	300,	0,	100,
          strand='-' isProtein=0 qSize=300 blockSizes[0]=300 pslCheck errors=0
 
+== protein, a block shorter than a codon
+chain: t=chrSrc:100-700 q=chrRef:100-700 qStrand=+ blocks 100-700/100-700
+before   90	0	0	0	0	0	0	0	-+	prot	100	0	100	chrSrc	1000	100	400	2	0,90,	0,10,	100,130,
+Error: invalid PSL: prot:0-100 chrSrc:100-400 -+ before
+	prot query block 0 start 100 >= qEnd 100
+         strand='-+' isProtein=1 qSize=100 blockSizes[0]=0 pslCheck errors=1
+lifted   90	0	0	0	0	0	0	0	+-	prot	100	0	90	chrRef	1000	130	400	1	90,	0,	600,
+         strand='+-' isProtein=1 qSize=100 blockSizes[0]=90 pslCheck errors=0
+
 == no chain over the alignment
 chain: t=chrSrc:100-400 q=chrRef:100-400 qStrand=+ blocks 100-400/100-400
 before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	700	1000	1	100,	0,	700,
