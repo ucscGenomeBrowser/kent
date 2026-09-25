@@ -24,21 +24,27 @@ the model's prediction up or down. Bases inside a functional element such as a
 TATA box or an initiator carry high scores, and the pattern of high-scoring
 bases often spells out the recognition sequence of a promoter-associated
 transcription factor. These are computed only around MANE Select transcription
-start sites, and exist for GRCh38 only.</li>
+start sites.</li>
 </ul>
 
 <p>
+The predictions are available on GRCh38/hg38 and T2T-CHM13/hs1. The contribution
+scores are available on GRCh38/hg38 only, because they are computed at MANE
+Select transcription start sites and MANE is not defined for T2T-CHM13.
+</p>
+
+<p>
 Predictions are not measurements: they say what the sequence looks capable of,
-not what a given cell is doing. The matching experimental data is in the
-<a href="hgTrackUi?g=encode4ProCap">PRO-cap</a> track.
+not what a given cell is doing. The matching experimental data is in the PRO-cap
+track, available on GRCh38/hg38.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 
 <p>
 Cell lines are listed in the table on this page, one row each, with a checkbox
-per data type. Use the Sample class facet to narrow the list, and the Group
-tracks by buttons to order the browser by sample or by data type.
+per data type. Use the <b>Sample class</b> facet to narrow the list, and the
+<b>Group tracks by</b> buttons to order the browser by sample or by data type.
 </p>
 
 <p>
@@ -118,6 +124,20 @@ shown here. Each scored sequence was run through all seven cross-validation
 models and in both orientations, and the scores averaged.
 </p>
 
+<h3>Source</h3>
+
+<p>
+The ProCapNet model implementation is at
+<a href="https://github.com/kundajelab/ProCapNet" target="_blank">kundajelab/ProCapNet</a>.
+The steps that turned the published files into these tracks are recorded in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/$db/transcriptionStart.txt"
+target="_blank">doc/$db/transcriptionStart.txt</a>, the scripts they run are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/proCapNet"
+target="_blank">makeDb/outside/proCapNet</a>, and the track configuration is in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/$db/transcriptionStart.ra"
+target="_blank">trackDb/human/$db/transcriptionStart.ra</a>.
+</p>
+
 <h2>Data Access</h2>
 
 <p>
@@ -125,7 +145,9 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
 spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>proCapNet</i>.
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>. The API returns one
+bigWig at a time, so name a single strand of one cell line rather than the
+container, for example track=<i>proCapNet_K562_pred_pos</i>.
 </p>
 
 <p>
@@ -136,20 +158,18 @@ directly, so a single file can be fetched without working out its path.
 <p>
 For automated download and analysis, the genome annotation is stored in bigWig
 files that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/proCapNet/" target="_blank">our
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/proCapNet/" target="_blank">our
 download server</a>. Predictions are under <tt>pred/</tt> and are named for the
 cell line, the model and the strand, for example
 <tt>K562.proCapNet.pos.bw</tt> and <tt>K562.proCapNet.neg.bw</tt>. Contribution
-scores are under <tt>contrib/</tt>, for example
-<tt>K562.proCapNet-contrib.bw</tt>. The T2T-CHM13 predictions are in the same
-layout under <tt>/gbdb/hs1/proCapNet/pred/</tt>; there are no contribution scores
-for that assembly. Individual regions or the whole genome annotation
+scores, which exist for GRCh38 only, are under <tt>contrib/</tt>, for example
+<tt>K562.proCapNet-contrib.bw</tt>. Individual regions or the whole genome annotation
 can be obtained using our tool <tt>bigWigToBedGraph</tt>, which can be compiled
 from the source code or downloaded as a precompiled binary for your system.
 Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/proCapNet/pred/K562.proCapNet.pos.bw
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/$db/proCapNet/pred/K562.proCapNet.pos.bw
 -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 
@@ -188,7 +208,7 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11160661/" target="_blank">PM
 
 
 <p>
-Avsec Ž, Weilert M, Shrikumar A, Krueger S, Alexandari A, Dalal K, Fropf R, McAnany C, Gagneur J,
+Avsec &#381;, Weilert M, Shrikumar A, Krueger S, Alexandari A, Dalal K, Fropf R, McAnany C, Gagneur J,
 Kundaje A <em>et al</em>.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/33603233" target="_blank">
 Base-resolution models of transcription-factor binding reveal soft motif syntax</a>.

@@ -1,7 +1,7 @@
 track episignatures
 superTrack on
 shortLabel Episignatures
-longLabel DNA Methylation Episignatures of Rare Developmental Disorders
+longLabel DNA methylation episignatures of rare developmental disorders
 group regulation
 html episignatures.html
 # Supertrack-level filter. Rendered on the supertrack's own hgTrackUi page

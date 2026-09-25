@@ -9,6 +9,7 @@
 #include "cart.h"
 #include "trackDb.h"
 #include "vcf.h"
+#include "bigBedFilter.h"
 
 #define VCF_HAP_HEIGHT_VAR "hapClusterHeight"
 #define VCF_DEFAULT_HAP_HEIGHT 128
@@ -55,6 +56,7 @@
 #define VCF_DO_MIN_AC_UI "vcfDoMinAc"
 #define VCF_MIN_AC_VAR "minAc"
 #define VCF_DEFAULT_MIN_AC 0
+#define VCF_DO_INFOFILTER_UI "vcfDoInfoFilter"
 
 #define VCF_PHASED_CHILD_SAMPLE_SETTING "vcfChildSample"
 #define VCF_PHASED_PARENTS_SAMPLE_SETTING "vcfParentSamples"
@@ -71,6 +73,66 @@
 #define VCF_PHASED_COLORBY_DE_NOVO "deNovo"
 #define VCF_PHASED_COLORBY_FUNCTION "function"
 #define VCF_PHASED_COLORBY_DEFAULT "noColor"
+
+#define VCF_COLOR_BY_INFO "colorByInfo"
+
+struct vcfColorByInfo
+/* Parsed trackDb mapping from one INFO field's values to display colors. */
+    {
+    char *fieldKey;             // INFO key chosen by `colorByInfo <FIELD>`
+    struct hash *valueToRgb;    // string value -> struct rgbColor *; used for top-level lookup
+    struct slPair *orderedColors; // declaration-order list (name=value string, val=struct rgbColor *)
+                                  // walked in priority order for sub-field lookup
+    int subFieldIndex;          // 0-based column in pipe-separated INFO annotation;
+                                // -1 when this map targets the top-level value
+    char *subFieldName;         // diagnostic; NULL when subFieldIndex == -1
+    };
+
+int vcfInfoDefSubFieldIndex(const struct vcfInfoDef *def, const char *subFieldName);
+/* Parse the "Format: A|B|C|..." clause out of def->description (same syntax
+ * looksTabular() in lib/vcf.c keys off of) and return the 0-based index of
+ * subFieldName, or -1 if the description has no Format clause or the name is
+ * absent. */
+
+struct vcfColorByInfo *vcfColorByInfoFromTdb(struct trackDb *tdb, struct vcfFile *vcff);
+/* Parse colorByInfo / colorByInfo.<FIELD> settings; returns NULL when
+ * the feature is not configured on this track. The vcff header is used to check
+ * that the field is a String INFO field and to resolve the named sub-field of a
+ * pipe-separated INFO annotation (e.g. vep.Consequence). Warns and returns NULL
+ * when the field can't be used. */
+
+boolean vcfColorByInfoLookup(struct vcfColorByInfo *cbi,
+                             const struct vcfRecord *rec,
+                             struct rgbColor *out);
+/* Look up rec's value for cbi->fieldKey and copy its RGB into *out.
+ * Returns FALSE when no mapping applies (caller should use a fallback). */
+
+struct vcfInfoFilter
+/* A linked list of optional trackDb defined filters on the INFO fields. This
+ * is largely derived from bigBedFilter.h, but is limited by the type of the
+ * INFO sub-field itself */
+    {
+    struct vcfInfoFilter *next;
+    struct vcfInfoDef *infoDef;
+    enum bigBedFilterType comparisonType;  // the type of the comparison
+    double value1, value2;
+    struct hash *valueHash;
+    unsigned numValuesInHash;
+    regex_t regEx;
+    char *wildCardString;
+    boolean isHighlight; // are we highlighting this record or filtering it?
+    int subFieldIndex;   // 0-based column in pipe-separated INFO annotation (e.g. vep);
+                         // -1 when this filter targets the top-level value
+    char *subFieldName;  // sub-field name from trackDb (e.g. "Consequence"); NULL when
+                         // this filter is not a sub-field filter
+    };
+
+struct vcfInfoFilter *buildVcfInfoFilters(struct vcfFile *vcff, struct cart *cart, struct trackDb *tdb);
+/* Parse the cart/trackDb current filters into something we can filter the records on.
+ * Warns about and skips any filter whose INFO field is missing or has the wrong type. */
+
+boolean vcfInfoFilterOneRecord(struct vcfRecord *rec, struct vcfInfoFilter *vcfInfoFilters);
+/* Return true if rec passes all the filters on the INFO fields defined in vcfInfoFilters */
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
 			   boolean parentLevel, struct vcfFile *vcff,

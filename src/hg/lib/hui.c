@@ -4112,7 +4112,10 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 // bigData file that isn't reachable at UI time both return NULL here.
 // That's fine for filterValues.* settings as long as a filterLabel.*
 // override is provided; buildFilterBy() already tolerates a NULL `as`.
-struct asObject *as = asForTdb(NULL, tdb);
+// VCF filters are on INFO fields, which are not autoSql columns.
+struct asObject *as = NULL;
+if (!startsWith("vcf", tdb->type))
+    as = asForTdb(NULL, tdb);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -6938,7 +6941,10 @@ if (filterSettings)
     struct slName *filter = NULL;
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
-        if (differentString(filter->name,NO_SCORE_FILTER))
+        // vcfDoFilter and vcfDoInfoFilter are VCF UI toggles, not filters on a field
+        if (differentString(filter->name,NO_SCORE_FILTER)
+            && differentString(filter->name, VCF_DO_FILTER_UI)
+            && differentString(filter->name, VCF_DO_INFOFILTER_UI))
             {
             AllocVar(tdbFilter);
             slAddHead(&trackDbFilterList, tdbFilter);
@@ -7032,7 +7038,7 @@ if (sameString("qValue", field))
 return -1;
 }
 
-static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
+int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
                                  boolean boxed, boolean parentLevel,char *name, char *title,
                                  boolean isHighlight)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
@@ -7052,6 +7058,7 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
+    boolean isVcf = startsWith("vcf", tdb->type);
 
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
@@ -7059,7 +7066,7 @@ if (trackDbFilters)
         char *scoreName = cloneString(filter->name);
         char *trackDbLabel = getLabelSetting(cart, tdb, field);
 
-        if (as != NULL)
+        if (as != NULL && !isVcf)
             {
             struct asColumn *asCol = asColumnFind(as, field);
             if (asCol != NULL)
@@ -7158,6 +7165,24 @@ if (!blocked)  // scoreFilter is implicit unless NO_SCORE_FILTER
 return FALSE;
 }
 
+char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
+/* Figure out how the trackDb is specifying the HIGHLIGHT_TYPE variable and return its setting */
+{
+char settingString[4096];
+safef(settingString, sizeof settingString, "%s.%s", HIGHLIGHT_TYPE_NAME_LOW, field);
+char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s.%s", field, HIGHLIGHT_TYPE_NAME_CAP);
+    setting = cartOrTdbString(cart, tdb, settingString, NULL);
+    }
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s%s", field, HIGHLIGHT_TYPE_NAME_CAP);
+    setting = cartOrTdbString(cart, tdb, settingString, def);
+    }
+return setting;
+}
 
 char *getFilterType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
 // figure out how the trackDb is specifying the FILTER_TYPE variable and return its setting
@@ -7178,7 +7203,7 @@ if (setting == NULL)
 return setting;
 }
 
-static int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight)
+int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight)
 /* Show all the text filters for this track. */
 {
 int count = 0;
@@ -7196,11 +7221,12 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
+    boolean isVcf = startsWith("vcf", tdb->type);
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
         char *trackDbLabel = getLabelSetting(cart, tdb, filter->fieldName);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, filter->setting);
-        if (as != NULL)
+        if (as != NULL && !isVcf)
             {
             struct asColumn *asCol = asColumnFind(as, filter->fieldName);
             if (asCol != NULL)

@@ -15,6 +15,7 @@ LIB_FILES = \
 	EnsGeneAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
+	AssemblyDivergence.pm \
 	AsmHub.pm
 
 SCRIPT_FILES = \
@@ -46,6 +47,7 @@ SCRIPT_FILES = \
 	doGenscan.pl \
 	doHgNearBlastp.pl \
 	doIdKeys.pl \
+	doMiniMap2.pl \
 	ensemblInfo.pl \
 	synBlastp.csh \
 	doRecipBest.pl \
@@ -65,6 +67,7 @@ SCRIPT_FILES = \
 	makeDownloads.pl \
 	makeGenomeDb.pl \
 	makePushQSql.pl \
+	mashDistance.pl \
 	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
 	partitionSequence.pl \

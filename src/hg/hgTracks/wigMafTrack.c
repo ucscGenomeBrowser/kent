@@ -322,7 +322,7 @@ for (range = rangeList; range != NULL; range = range->next)
 // which is how the maf drawing code builds the name it searches for.
 char refSrc[512];
 safef(refSrc, sizeof refSrc, "%s.%s", hubConnectSkipHubPrefix(database), chromName);
-return quickLiftMafs(chainHash, srcList, liftDb, refSrc,
+return quickLiftMafs(chainHash, srcList, liftDb, database, chromName, refSrc,
                      hChromSize(database, chromName));
 }
 

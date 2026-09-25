@@ -1472,6 +1472,15 @@ struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
 // only the named column's clause is returned.
 // The 'and' param and dyString in/out allows stringing multiple where clauses together
 
+
+int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight);
+/* Show all the text filters for this track. */
+
+int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
+                                 boolean boxed, boolean parentLevel,char *name, char *title,
+                                 boolean isHighlight);
+// Shows all *Filter style filters.  Note that these are in random order and have no graceful title
+
 boolean makeDownloadsLink(char *database, struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)
 
