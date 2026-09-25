@@ -89,6 +89,7 @@ hideEmptySubtracksLabel *
 hideEmptySubtracksMultiBedUrl *
 hideEmptySubtracksSourcesUrl *
 color *
+colorByInfo* vcf vcfTabix vcfPhasedTrio
 colorByStrand bigBed bed genePred bigGenePred
 colorChromDefault psl bigPsl
 colorSettingsUrl *
@@ -334,7 +335,7 @@ motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
 mouseOverField big*
-mouseOver bigLolly bigBed bigPsl bigGenePred bed bigDbSnp bigNarrowPeak
+mouseOver bigLolly bigBed bigPsl bigGenePred bed bigDbSnp bigNarrowPeak vcfTabix
 mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
 multiRegionsBedUrl *

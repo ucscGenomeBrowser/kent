@@ -1,0 +1,26 @@
+track gnomadVariantsV4_1_1Vcf
+parent gnomadVariants
+compositeTrack on
+shortLabel gnomAD v4.1.1 VCF
+longLabel Genome Aggregation Database (gnomAD) Genome and Exome Variants v4.1.1 (experimental VCF)
+type vcfTabix
+visibility hide
+configureByPopup off
+maxWindowToDraw 200000
+filterValues.vep.Consequence 3_prime_UTR_variant,5_prime_UTR_variant,NMD_transcript_variant,TF_binding_site_variant,coding_sequence_variant,downstream_gene_variant,frameshift_variant,incomplete_terminal_codon_variant,inframe_deletion,inframe_insertion,intergenic_variant,intron_variant,mature_miRNA_variant,missense_variant,non_coding_transcript_exon_variant,non_coding_transcript_variant,protein_altering_variant,regulatory_region_variant,splice_acceptor_variant,splice_donor_variant,splice_region_variant,start_lost,start_retained_variant,stop_gained,stop_lost,stop_retained_variant,synonymous_variant,transcript_ablation,upstream_gene_variant
+filterLabel.vep.Consequence VEP consequence
+filterType.vep.Consequence multipleListOr
+colorByInfo vep.Consequence
+colorByInfo.vep.Consequence frameshift_variant=#D55E00,stop_gained=#D55E00,stop_lost=#D55E00,start_lost=#D55E00,splice_donor_variant=#D55E00,splice_acceptor_variant=#D55E00,transcript_ablation=#D55E00,missense_variant=#E69F00,inframe_deletion=#E69F00,inframe_insertion=#E69F00,protein_altering_variant=#E69F00,splice_region_variant=#E69F00,synonymous_variant=#009E73,start_retained_variant=#009E73,stop_retained_variant=#009E73
+
+    track gnomadExomesV4_1_1Vcf
+    parent gnomadVariantsV4_1_1Vcf on
+    shortLabel gnomAD v4.1.1 VCF Exomes
+    longLabel gnomAD v4.1.1 Exome Variants (experimental VCF)
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br><b>AF</b>: ${AF} (${AC}/${AN})<br><b>Gene</b>: ${vep.SYMBOL}<br><b>Consequence</b>: ${vep.Consequence}<br><b>FILTER</b>: ${FILTER}<br><b>PopMax AF</b>: ${AF_grpmax}<br><b>Homozygotes</b>: ${nhomalt}
+
+    track gnomadGenomesV4_1_1Vcf
+    parent gnomadVariantsV4_1_1Vcf on
+    shortLabel gnomAD v4.1.1 VCF Genomes
+    longLabel gnomAD v4.1.1 Genome Variants (experimental VCF)
+    mouseOver <b>Position</b>: $chrom:${chromStart}-${chromEnd} ($ref/$alt)<br><b>AF</b>: ${AF} (${AC}/${AN})<br><b>Gene</b>: ${vep.SYMBOL}<br><b>Consequence</b>: ${vep.Consequence}<br><b>FILTER</b>: ${FILTER}<br><b>PopMax AF</b>: ${AF_grpmax}<br><b>Homozygotes</b>: ${nhomalt}
