@@ -27,7 +27,10 @@ cd /hive/data/genomes/hg38/bed/proCapNet
     /hive/data/genomes/hg38/chrom.sizes /hive/data/outside/proCapNet/hg38/pred pred 6
 # all 12 files report the same counts:
 #   24 chroms, 3088269832 bases, 2924001250 with data,
-#   164268582 dropped as no-data or NaN   (5.3%, the N regions)
+#   164268582 dropped as no-data or NaN   (5.3%)
+# That is more than the 150610728 gap bases on the primary chromosomes, because
+# no prediction was made where most of a 2114 bp window was unresolved, which
+# also takes out sequence flanking each gap.
 # about 24 GB in, 15.7 to 15.9 GB out per file
 
 # confirm the summary statistics are numbers again, they were nan before
@@ -75,6 +78,11 @@ cd /hive/data/genomes/hg38/bed/encode4ProCap
 #   HUVEC   ENCSR098LLB  2 files
 #   K562    ENCSR261KBX  4 files
 #   MCF10A  ENCSR799DGV  8 files
+# A copy of the resulting file is committed as
+# outside/proCapNet/proCapNetEncodeFiles.tsv.  It is the record of which ENCODE
+# file accessions went into each track: re-running the step later can resolve to
+# different files, because the default analysis of an experiment changes when
+# ENCODE reprocesses it.
 
 # ENCODE publishes no pooled PRO-cap file, so download the per-replicate files
 # and sum them per cell line and strand.  MCF10A has two sequencing runs per

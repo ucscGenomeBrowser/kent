@@ -54,7 +54,9 @@ base at which transcription started, and the read's strand gives the strand of
 initiation. The six experiments here were produced by the Yu and Lis labs at
 Cornell University and processed through the ENCODE PRO-cap pipeline, which maps
 reads, removes PCR duplicates using unique molecular identifiers, and writes
-single-base plus and minus strand signal for the uniquely mapping reads.
+single-base plus and minus strand signal for the uniquely mapping reads. These
+experiments are part of the ENCODE 4 nascent transcriptome survey described in
+Shah <em>et al</em>.
 </p>
 
 <p>
@@ -75,8 +77,9 @@ conserved exactly by the summing. The steps are recorded in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/transcriptionStart.txt"
 target="_blank">makeDoc</a> and the scripts are in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/proCapNet"
-target="_blank">the kent source tree</a>, including the manifest recording exactly
-which ENCODE files went into each track.
+target="_blank">the kent source tree</a>, including
+<tt>proCapNetEncodeFiles.tsv</tt>, which records exactly which ENCODE file
+accessions went into each track.
 </p>
 
 <h2>Data Access</h2>
@@ -86,7 +89,9 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
 spreadsheet or tab-sep tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>encode4ProCap</i>.
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>. The API returns one
+bigWig at a time, so name a single strand of one cell line rather than the
+container, for example track=<i>encode4ProCap_K562_procap_pos</i>.
 </p>
 
 <p>
@@ -125,6 +130,20 @@ laboratories for making the data available.
 </p>
 
 <h2>References</h2>
+
+
+<p>
+Shah SR, Chen Y, Leung AK, Navarro PVC, Paramo MI, Gupta J, Gurumurthy A, Fite RF, Weimer AK,
+Cochran K <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41040139" target="_blank">
+The nascent transcriptome delineates the regulatory landscape in human health and disease</a>.
+<em>bioRxiv</em>. 2026 Jun 9;.
+DOI: <a href="https://doi.org/10.1101/2025.09.24.676871"
+target="_blank">10.1101/2025.09.24.676871</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/41040139" target="_blank">41040139</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12485982/" target="_blank">PMC12485982</a>
+</p>
+
 
 
 <p>
