@@ -36,6 +36,7 @@ body.loading .modal {
 
 .searchResult {
     font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 .maneSectionHeader {
@@ -113,7 +114,11 @@ body.loading .modal {
 #grid {
     width: 100%;
     display: grid;
-    grid-template-columns: minmax(150px,400px) 1fr;
+    /* minmax(0,1fr), not a bare 1fr (== minmax(auto,1fr)): a long unbroken
+     * match string (e.g. a "/"-joined group of MANE transcript accessions)
+     * in the results column would otherwise inflate that column's auto
+     * minimum to its content width, stealing space from the sidebar. */
+    grid-template-columns: minmax(150px,400px) minmax(0,1fr);
     gap: 25px;
     padding-left: 15px;
 }

@@ -1361,6 +1361,49 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         html sfariSparkExomes
         tableBrowser off
 
+        track sfariSparkWgs45k
+        shortLabel SFARI SPARK 45k WGS
+        longLabel SNV Frequencies: SFARI SPARK - 45,178 WGS, August 2026 release, AC>=2
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/_sfari/sparkWgs45k.vcf.gz
+        dataVersion SPARK WGS 2026_08
+        visibility hide
+        priority 24
+        html sfariSparkExomes
+        tableBrowser off
+
+        track sfariSparkWgs45kAsd
+        shortLabel SFARI SPARK 45k WGS ASD
+        longLabel SNV Frequencies: SFARI SPARK - 45,178 WGS, August 2026 release, from genotypes, ASD/non-ASD counts
+        type vcfTabix
+        parent varFreqs on
+        bigDataUrl /gbdb/$D/varFreqs/_sfari/sparkWgs45kAsd.vcf.gz
+        dataVersion SPARK WGS 2026_08
+        visibility hide
+        priority 24.1
+        html sfariSparkExomes
+        tableBrowser off
+        filter.AF 0:1
+        filterByRange.AF on
+        filterLimits.AF 0:1
+        filterLabel.AF Allele frequency, all
+        filter.AF_AUT 0:1
+        filterByRange.AF_AUT on
+        filterLimits.AF_AUT 0:1
+        filterLabel.AF_AUT Allele frequency, autistic
+        filter.AF_NON_AUT 0:1
+        filterByRange.AF_NON_AUT on
+        filterLimits.AF_NON_AUT 0:1
+        filterLabel.AF_NON_AUT Allele frequency, non-autistic
+        filter.VARLEN -1000:1000
+        filterByRange.VARLEN on
+        filterLimits.VARLEN -1000:1000
+        filterLabel.VARLEN Length change in bp (ALT minus REF, negative for deletions)
+        filterText.BCSQ *
+        filterType.BCSQ wildcard
+        filterLabel.BCSQ Predicted consequence (e.g. *missense*, *frameshift*, *stop_gained*)
+
         #track mcps
         #shortLabel Mexico City Prospective Study 10k WGS+141k WES
         #longLabel SNV Frequencies: Mexico City Prospective Study (MCPS)
