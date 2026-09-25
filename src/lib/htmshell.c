@@ -178,7 +178,7 @@ char *htmlTextStripTags(char *s)
 {
 if (s == NULL)
     return NULL;
-char *scrubbed = needMem(strlen(s));
+char *scrubbed = needMem(strlen(s) + 1);
 char *from=s;
 char *to=scrubbed;
 while (*from!='\0')
@@ -203,7 +203,7 @@ char *htmlTextStripJavascriptCssAndTags(char *s)
 {
 if (s == NULL)
     return NULL;
-char *scrubbed = needMem(strlen(s));
+char *scrubbed = needMem(strlen(s) + 1);
 char *from=s;
 char *to=scrubbed;
 while (*from!='\0')
