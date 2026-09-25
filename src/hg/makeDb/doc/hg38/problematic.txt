@@ -145,7 +145,9 @@ awk '$1 !~ /_/ && $1 != "chrM" {printf "%s\t%s\thg38.2bit\n", $1, $2}' \
     ../../../chrom.sizes > primary24.chrom.sizes
 featureBits hg38 '!/gbdb/hg38/problematic/hg38.pm151b-v3.easy.bb' '!gap' \
     -chromSize=primary24.chrom.sizes -bed=hg38.pm151b-v3.notEasy.bed -minSize=1
-# 359,192,609 bases of 2,937,659,104 (12.227%) -- the complement of Panmask Easy's 87.8%
+# 359,192,609 bases of 2,937,659,104 (12.2%) -- the complement of Panmask Easy's 87.8% on this
+# same primary24/gap-excluded set (checked with featureBits on the Easy bigBed directly, sums
+# to 100% as expected; problematic.html's Easy figure updated to 87.8% to match).
 bedSort hg38.pm151b-v3.notEasy.bed hg38.pm151b-v3.notEasy.bed
 cut -f1-3 hg38.pm151b-v3.notEasy.bed > hg38.pm151b-v3.notEasy.bed3
 bedToBigBed hg38.pm151b-v3.notEasy.bed3 ../../../chrom.sizes hg38.pm151b-v3.notEasy.bb -type=bed3 -tab
