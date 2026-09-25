@@ -153,24 +153,6 @@ filter->isHighlight = isHighlight;
 return filter;
 }
 
-char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
-{
-char settingString[4096];
-safef(settingString, sizeof settingString, "%s.%s", HIGHLIGHT_TYPE_NAME_LOW, field);
-char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
-if (setting == NULL)
-    {
-    safef(settingString, sizeof settingString, "%s.%s", field, HIGHLIGHT_TYPE_NAME_CAP);
-    setting = cartOrTdbString(cart, tdb, settingString, NULL);
-    }
-if (setting == NULL)
-    {
-    safef(settingString, sizeof settingString, "%s%s", field, HIGHLIGHT_TYPE_NAME_CAP);
-    setting = cartOrTdbString(cart, tdb, settingString, def);
-    }
-return setting;
-}
-
 struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices, boolean isHighlight)
 /* Add a bigBed filter using a trackDb filterBy statement. */
 {

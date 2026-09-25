@@ -216,6 +216,7 @@ html gnomadConstraint
 # The missense and pLI contraint tracks
 include gnomad.constraint.ra
 include gnomadCoverage.ra
+include gnomadV4.1.1.ra alpha
 
 track gnomadStructuralVariants
 parent gnomadVariants on

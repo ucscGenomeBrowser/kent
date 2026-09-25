@@ -18,6 +18,7 @@
 #include "net.h"
 #include "pgSnp.h"
 #include "phyloTree.h"
+#include "regexHelper.h"
 #include "trackHub.h"
 #include "trashDir.h"
 #include "variantProjector.h"
@@ -251,8 +252,9 @@ boolean gotQualFilter = getMinQual(tdb, &minQual);
 boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
 boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
 boolean gotMinAcFilter = getMinAc(tdb, &minAc);
+struct vcfInfoFilter *infoFilters = buildVcfInfoFilters(vcff, cart, tdb);
 int filtOut = 0;
-if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter)
+if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter || infoFilters != NULL)
     {
     struct vcfRecord *rec, *nextRec, *newList = NULL;
     for (rec = vcff->records;  rec != NULL;  rec = nextRec)
@@ -261,7 +263,8 @@ if (gotQualFilter || gotFilterFilter || gotMinFreqFilter || gotMinAcFilter)
         if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
                (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
                (gotMinFreqFilter && minFreqFail(rec, minFreq)) ||
-               (gotMinAcFilter && minAcFail(rec, minAc)) ))
+               (gotMinAcFilter && minAcFail(rec, minAc)) ||
+               (infoFilters != NULL && !vcfInfoFilterOneRecord(rec, infoFilters)) ))
             slAddHead(&newList, rec);
         else 
             filtOut++;
@@ -280,7 +283,311 @@ struct pgSnpVcfStartEnd
     struct pgSnp pgs;
     unsigned int vcfStart;
     unsigned int vcfEnd;
+    struct rgbColor infoColor;  // set when a colorByInfo mapping applied to this record
+    boolean hasInfoColor;
+    char *mouseOver;            // resolved from trackDb mouseOver template; NULL when unset
 };
+
+static void vcfPgSnpColorByDrawAt(struct track *tg, void *item, struct hvGfx *hvg,
+                                   int xOff, int y, double scale, MgFont *font,
+                                   Color color, enum trackVisibility vis)
+/* Draw a pgSnp item as a solid box, using the colorByInfo mapping if one
+ * applied to this record. Records whose value wasn't in the map (or whose
+ * INFO key was missing) draw black. */
+{
+struct pgSnpVcfStartEnd *psvs = item;
+Color drawColor = MG_BLACK;
+if (psvs->hasInfoColor)
+    drawColor = hvGfxFindColorIx(hvg, psvs->infoColor.r,
+                                 psvs->infoColor.g, psvs->infoColor.b);
+bedDrawSimpleAt(tg, item, hvg, xOff, y, scale, font, drawColor, vis);
+}
+
+static Color vcfPgSnpItemNameColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* Match the pack-mode label to the box color. */
+{
+struct pgSnpVcfStartEnd *psvs = item;
+if (psvs->hasInfoColor)
+    return hvGfxFindColorIx(hvg, psvs->infoColor.r,
+                            psvs->infoColor.g, psvs->infoColor.b);
+return MG_BLACK;
+}
+
+static char *vcfDatumToString(union vcfDatum datum, enum vcfInfoType type)
+/* Render one vcfDatum as a freshly allocated string. Mirrors vcfPrintDatum
+ * in inc/vcf.h, which writes to a FILE *. */
+{
+char buf[64];
+switch (type)
+    {
+    case vcfInfoInteger:
+        safef(buf, sizeof(buf), "%d", datum.datInt);
+        return cloneString(buf);
+    case vcfInfoFloat:
+        safef(buf, sizeof(buf), "%g", datum.datFloat);
+        return cloneString(buf);
+    case vcfInfoCharacter:
+        safef(buf, sizeof(buf), "%c", datum.datChar);
+        return cloneString(buf);
+    default:
+        return cloneString(isEmpty(datum.datString) ? "" : datum.datString);
+    }
+}
+
+static char *vcfMouseOverJoinSubField(const struct vcfInfoElement *ele,
+                                      enum vcfInfoType type, int subIx)
+/* Walk every annotation on ele, split on '|', pick out the sub-field at subIx,
+ * and comma-join the unique values. Pipe-separated sub-fields only exist on
+ * String INFO elements; other types short-circuit to NULL. Returns NULL when no
+ * annotation supplies a non-empty value. */
+{
+if (type != vcfInfoString)
+    return NULL;
+struct hash *seen = hashNew(4);
+struct dyString *out = dyStringNew(64);
+int v;
+for (v = 0; v < ele->count; v++)
+    {
+    if (ele->missingData[v])
+        continue;
+    char *annot = ele->values[v].datString;
+    if (isEmpty(annot))
+        continue;
+    char *clone = cloneString(annot);
+    char *tokens[128];
+    int nTok = chopByChar(clone, '|', tokens, ArraySize(tokens));
+    if (subIx < nTok && !isEmpty(tokens[subIx]) && !hashLookup(seen, tokens[subIx]))
+        {
+        hashAdd(seen, tokens[subIx], NULL);
+        if (out->stringSize > 0)
+            dyStringAppend(out, ", ");
+        dyStringAppend(out, tokens[subIx]);
+        }
+    freeMem(clone);
+    }
+hashFree(&seen);
+if (out->stringSize == 0)
+    {
+    dyStringFree(&out);
+    return NULL;
+    }
+return dyStringCannibalize(&out);
+}
+
+struct vcfMouseOverField
+/* One $name or ${name} reference in a trackDb mouseOver template. */
+    {
+    struct vcfMouseOverField *next;
+    char *name;                 // name as written in the template, e.g. AF or vep.SYMBOL
+    struct vcfInfoDef *def;     // INFO def to read; NULL for the fixed record fields
+    int subFieldIndex;          // column in a pipe-separated INFO value; -1 for the whole value
+    };
+
+static char *vcfMouseOverFixedNames[] = {"chrom", "chromStart", "chromEnd", "ref", "alt",
+                                         "FILTER"};
+
+static boolean isMouseOverNameChar(char c)
+/* Return TRUE if c can be part of a bare $name in a mouseOver template. */
+{
+return isalnum(c) || c == '_' || c == '.';
+}
+
+static struct vcfMouseOverField *vcfMouseOverFieldNew(char *name, struct vcfFile *vcff)
+/* Return a field for name, or NULL if name is not a fixed record field, an INFO key,
+ * or a KEY.SubField whose KEY is a String INFO field with a Format: A|B|C clause. */
+{
+struct vcfMouseOverField *field;
+AllocVar(field);
+field->name = cloneString(name);
+field->subFieldIndex = -1;
+if (stringArrayIx(name, vcfMouseOverFixedNames, ArraySize(vcfMouseOverFixedNames)) >= 0)
+    return field;
+field->def = vcfInfoDefForKey(vcff, name);
+if (field->def != NULL)
+    return field;
+char *dotPos = strchr(name, '.');
+if (dotPos != NULL)
+    {
+    char *baseKey = cloneStringZ(name, dotPos - name);
+    struct vcfInfoDef *def = vcfInfoDefForKey(vcff, baseKey);
+    freeMem(baseKey);
+    if (def != NULL && def->type == vcfInfoString)
+        {
+        field->subFieldIndex = vcfInfoDefSubFieldIndex(def, dotPos + 1);
+        if (field->subFieldIndex >= 0)
+            {
+            field->def = def;
+            return field;
+            }
+        }
+    }
+freeMem(field->name);
+freeMem(field);
+return NULL;
+}
+
+static int vcfMouseOverFieldCmpLongestFirst(const void *va, const void *vb)
+/* Compare fields so the longest name sorts first. */
+{
+const struct vcfMouseOverField *a = *((struct vcfMouseOverField **)va);
+const struct vcfMouseOverField *b = *((struct vcfMouseOverField **)vb);
+return strlen(b->name) - strlen(a->name);
+}
+
+static struct vcfMouseOverField *vcfMouseOverFieldsFromTemplate(char *template,
+                                                                struct vcfFile *vcff)
+/* Return one field for each distinct $name or ${name} in template that vcff can fill,
+ * longest name first so a bare $chrom is not replaced inside $chromStart. */
+{
+struct vcfMouseOverField *fields = NULL;
+struct hash *seen = hashNew(0);
+char *s = template;
+while ((s = strchr(s, '$')) != NULL)
+    {
+    s++;
+    char *start = s;
+    char *end;
+    if (*s == '{')
+        {
+        start = s + 1;
+        end = strchr(start, '}');
+        if (end == NULL)
+            break;
+        s = end + 1;
+        }
+    else
+        {
+        end = start;
+        while (isMouseOverNameChar(*end))
+            end++;
+        // a period right after a bare name ends the sentence, not the name
+        while (end > start && end[-1] == '.')
+            end--;
+        s = end;
+        }
+    if (end == start)
+        continue;
+    char *name = cloneStringZ(start, end - start);
+    if (!hashLookup(seen, name))
+        {
+        hashAdd(seen, name, NULL);
+        struct vcfMouseOverField *field = vcfMouseOverFieldNew(name, vcff);
+        if (field != NULL)
+            slAddHead(&fields, field);
+        }
+    freeMem(name);
+    }
+hashFree(&seen);
+slSort(&fields, vcfMouseOverFieldCmpLongestFirst);
+return fields;
+}
+
+static char *vcfMouseOverValue(struct vcfMouseOverField *field, struct vcfRecord *rec)
+/* Return the value of field for rec, or NULL when rec has no value for it. */
+{
+if (field->def == NULL)
+    {
+    char buf[64];
+    if (sameString(field->name, "chrom"))
+        return cloneString(rec->chrom);
+    if (sameString(field->name, "chromStart"))
+        {
+        safef(buf, sizeof(buf), "%u", rec->chromStart);
+        return cloneString(buf);
+        }
+    if (sameString(field->name, "chromEnd"))
+        {
+        safef(buf, sizeof(buf), "%u", rec->chromEnd);
+        return cloneString(buf);
+        }
+    if (sameString(field->name, "ref"))
+        return cloneString(rec->alleles[0]);
+    if (sameString(field->name, "alt"))
+        return (rec->alleleCount > 1) ? cloneString(rec->alleles[1]) : NULL;
+    if (sameString(field->name, "FILTER") && rec->filterCount > 0)
+        {
+        struct dyString *dy = dyStringNew(32);
+        int i;
+        for (i = 0; i < rec->filterCount; i++)
+            {
+            if (i > 0)
+                dyStringAppendC(dy, ';');
+            dyStringAppend(dy, rec->filters[i]);
+            }
+        return dyStringCannibalize(&dy);
+        }
+    return NULL;
+    }
+const struct vcfInfoElement *ele = vcfRecordFindInfo(rec, field->def->key);
+if (ele == NULL || ele->count < 1 || ele->missingData[0])
+    return NULL;
+if (field->subFieldIndex < 0)
+    return vcfDatumToString(ele->values[0], field->def->type);
+return vcfMouseOverJoinSubField(ele, field->def->type, field->subFieldIndex);
+}
+
+static char *vcfMouseOverFromTemplate(char *template, struct vcfMouseOverField *fields,
+                                      struct vcfRecord *rec)
+/* Resolve the trackDb mouseOver template against rec's coordinates and INFO values.
+ * fields come from vcfMouseOverFieldsFromTemplate. */
+{
+int n = slCount(fields);
+if (n == 0)
+    return cloneString(template);
+char **names;
+char **vals;
+AllocArray(names, n);
+AllocArray(vals, n);
+struct vcfMouseOverField *field;
+int i = 0;
+for (field = fields; field != NULL; field = field->next, i++)
+    {
+    names[i] = field->name;
+    vals[i] = vcfMouseOverValue(field, rec);
+    }
+char *result = replaceFieldInPattern(template, n, names, vals);
+for (i = 0; i < n; i++)
+    freeMem(vals[i]);
+freeMem(names);
+freeMem(vals);
+return result;
+}
+
+static void vcfPgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+                            char *itemName, char *mapItemName, int start, int end,
+                            int x, int y, int width, int height)
+/* Drop-in for indelTweakMapItem that also honors the trackDb mouseOver
+ * template when one is resolved on this item. Always passes the original
+ * (un-trimmed) vcfStart/vcfEnd to the map box so the hgc click target stays
+ * aligned with the VCF coordinates. */
+{
+struct pgSnpVcfStartEnd *psvs = item;
+if (isNotEmpty(psvs->mouseOver))
+    {
+    char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+    boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
+    mapBoxHgcOrHgGene(hvg, psvs->vcfStart, psvs->vcfEnd, x, y, width, height,
+                      tg->track, mapItemName, psvs->mouseOver,
+                      directUrl, withHgsid, NULL);
+    }
+else
+    pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
+                 x, y, width, height);
+}
+
+static void vcfInstallColorByInfo(struct track *tg)
+/* Activate trackDb-driven INFO-field coloring on the pgSnp render path
+ * when colorByInfo is set in trackDb, and install the mouseOver map-item
+ * callback when a mouseOver template is set. No-op otherwise. */
+{
+if (trackDbSetting(tg->tdb, VCF_COLOR_BY_INFO) != NULL)
+    {
+    tg->drawItemAt = vcfPgSnpColorByDrawAt;
+    tg->itemNameColor = vcfPgSnpItemNameColor;
+    }
+if (trackDbSetting(tg->tdb, "mouseOver") != NULL)
+    tg->mapItem = vcfPgSnpMapItem;
+}
 
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
@@ -298,12 +605,21 @@ if (sameString(tdb->type, "vcfPhasedTrio"))
     phasedSamples = vcfPhasedGetSampleOrder(cart, tdb, FALSE, hideOtherSamples);
     }
 
+struct vcfColorByInfo *colorBy = vcfColorByInfoFromTdb(tdb, vcff);
+char *mouseOverTemplate = trackDbSetting(tdb, "mouseOver");
+struct vcfMouseOverField *mouseOverFields = NULL;
+if (isNotEmpty(mouseOverTemplate))
+    mouseOverFields = vcfMouseOverFieldsFromTemplate(mouseOverTemplate, vcff);
 vcff->allPhased = TRUE;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
     struct pgSnpVcfStartEnd *psvs = needMem(sizeof(*psvs));
     psvs->vcfStart = vcfRecordTrimIndelLeftBase(rec);
     psvs->vcfEnd = vcfRecordTrimAllelesRight(rec);
+    if (vcfColorByInfoLookup(colorBy, rec, &psvs->infoColor))
+        psvs->hasInfoColor = TRUE;
+    if (isNotEmpty(mouseOverTemplate))
+        psvs->mouseOver = vcfMouseOverFromTemplate(mouseOverTemplate, mouseOverFields, rec);
     for (sample = phasedSamples; sample != NULL; sample = sample->next)
         {
         const struct vcfGenotype *gt = vcfRecordFindGenotype(rec, sample->name);
@@ -2348,7 +2664,10 @@ if (errCatchStart(errCatch))
         // all are phased or not, which throws off track heights in each window. Similar to hapCluster
         // mode, just switch to pgSnp view when in multi-region for now.
         if (slCount(windows) > 1 || tg->visibility == tvDense)
+            {
             pgSnpMethods(tg);
+            vcfInstallColorByInfo(tg);
+            }
         tg->items = vcfFileToPgSnp(vcff, tg->tdb);
             // pgSnp bases coloring/display decision on count of items:
         tg->extraUiData = vcff;
@@ -3140,6 +3459,7 @@ void vcfTabixMethods(struct track *track)
 knetUdcInstall();
 pgSnpMethods(track);
 track->mapItem = indelTweakMapItem;
+vcfInstallColorByInfo(track);
 // Disinherit next/prev flag and methods since we don't support next/prev:
 track->nextExonButtonable = FALSE;
 track->nextPrevExon = NULL;
@@ -3208,6 +3528,7 @@ void vcfMethods(struct track *track)
 {
 pgSnpMethods(track);
 track->mapItem = indelTweakMapItem;
+vcfInstallColorByInfo(track);
 // Disinherit next/prev flag and methods since we don't support next/prev:
 track->nextExonButtonable = FALSE;
 track->nextPrevExon = NULL;
