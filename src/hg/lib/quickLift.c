@@ -790,8 +790,51 @@ chain->blockList = blockList;
 return chain;
 }
 
+static int mafRefStartCmp(const void *va, const void *vb)
+/* Compare two maf blocks by where their first row starts. */
+{
+const struct mafAli *a = *((struct mafAli **)va);
+const struct mafAli *b = *((struct mafAli **)vb);
+return a->components->start - b->components->start;
+}
+
+static void quickLiftMafRefBases(struct mafAli *mafList, char *refDb, char *refChrom)
+/* Put the reference assembly's own bases into the first row of each lifted block.  Inside a
+ * chain block the two assemblies run in step, but they need not agree base for base, and
+ * the row still carries the other assembly's letters.  The gaps stay where they are, since
+ * the other rows are lined up against them.  The sequence is read once for the whole span. */
+{
+struct mafAli *maf;
+int spanStart = INT_MAX, spanEnd = 0;
+
+for (maf = mafList; maf != NULL; maf = maf->next)
+    {
+    struct mafComp *ref = maf->components;
+    spanStart = min(spanStart, ref->start);
+    spanEnd = max(spanEnd, ref->start + ref->size);
+    }
+if (spanStart >= spanEnd)
+    return;
+
+struct dnaSeq *seq = hDnaFromSeq(refDb, refChrom, spanStart, spanEnd, dnaMixed);
+for (maf = mafList; maf != NULL; maf = maf->next)
+    {
+    struct mafComp *ref = maf->components;
+    char *base = seq->dna + (ref->start - spanStart);
+    int left = ref->size;   // a maf from a hub can claim fewer bases than its text holds
+    char *text;
+    for (text = ref->text; (*text != 0) && (left > 0); text++)
+        if (*text != '-')
+            {
+            *text = *base++;
+            left--;
+            }
+    }
+dnaSeqFree(&seq);
+}
+
 struct mafAli *quickLiftMafs(struct hash *chainHash, struct mafAli *mafList,
-    char *sourceDb, char *refSrc, int refSrcSize)
+    char *sourceDb, char *refDb, char *refChrom, char *refSrc, int refSrcSize)
 // Map MAF blocks from the other assembly onto our current reference.
 //
 // A MAF block has to be one contiguous run on its first row, and the lift does not keep
@@ -802,7 +845,8 @@ struct mafAli *quickLiftMafs(struct hash *chainHash, struct mafAli *mafList,
 // row's coordinates change, and mafSubset does the rest of the arithmetic.
 //
 // refSrc is the name the browser expects on the reference row, "<db>.<chrom>", with no hub
-// prefix.  Blocks whose reference does not map are dropped.
+// prefix.  The bases on that row are read from refDb, which is the reference's real database
+// name and may carry a hub prefix.  Blocks whose reference does not map are dropped.
 {
 struct mafAli *outList = NULL;
 struct mafAli *maf, *nextMaf;
@@ -870,7 +914,9 @@ for (maf = mafList; maf != NULL; maf = nextMaf)
     freeMem(srcBuf);
     mafAliFree(&maf);
     }
-slReverse(&outList);
+// a chain that turns the alignment over hands the blocks back last to first
+slSort(&outList, mafRefStartCmp);
+quickLiftMafRefBases(outList, refDb, refChrom);
 return outList;
 }
 

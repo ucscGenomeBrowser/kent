@@ -895,7 +895,10 @@ var hgSearch = (function() {
                 let callbackData = {};
                 let trackName = i.parentNode.parentNode.parentNode.id.replace(/Results$/,"");
                 let matchList = uiState.positionMatches.find((matches) => matches.name === trackName);
-                let id, match, matchStr = i.childNodes[0].textContent;
+                // use the full link text, not just the first child node: a MANE
+                // transcript link has a "MANE Select: " text node before the
+                // bolded accession, so childNodes[0] alone would miss the accession
+                let id, match, matchStr = i.textContent;
                 // switch lookup depending on the different search categories:
                 let decoder = function(str) {
                     // helper decoder to change the html encoded entities in
@@ -941,8 +944,15 @@ var hgSearch = (function() {
                     callbackData.internalId = "";
                 } else { // regular track item  search result click
                     match = matchList.matches.find((elem) => {
+                        // mirror the title construction in printMatches(): a MANE
+                        // transcript is displayed as its protein accession (optionally
+                        // prefixed with the MANE status), not the raw posName
+                        let title = elem.maneProtAcc ? elem.maneProtAcc : elem.posName;
+                        if (elem.maneStatus) {
+                            title = elem.maneStatus + ": " + title;
+                        }
                         geneSymbol = elem.posName.replace(/ .*$/,"");
-                        return decoder(elem.posName) === matchStr;
+                        return decoder(title) === matchStr;
                     });
                     callbackData.label = geneSymbol;
                     callbackData.value = geneSymbol;

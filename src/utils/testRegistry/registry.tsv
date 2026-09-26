@@ -113,7 +113,7 @@
 38303	504	hg/lib/tests/trashDirTester.c	rm38303.docent.yaml	invisible	sandbox-ab	a session file path spelled through a symlinked config directory, which broke 583 saved sessions
 38309	504	-	rm38309.docent.yaml	invisible	-	needs one: exonFrames must not be read past the end on a transcript's last exon. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is inside drawing code in hgTracks/simpleTracks.c
 38310	504	-	rm38310.docent.yaml	page	-	a hub track declaring more bigBed fields than the file has. The fix is in hg/hgTracks, hg/hgc, so what changed is what a page says or does
-38311	504	-	-	page	-	the New Sessions page's watermark and tooltip. The fix is in hg/js, hg/htdocs/style, so what changed is what a page says or does
+38311	504	-	rm38311.docent.yaml	page	-	the New Sessions page's watermark and tooltip. The fix is in hg/js, hg/htdocs/style, so what changed is what a page says or does
 38313	504	hg/lib/tests/snapshotTypeTester.c	-	library	sandbox-ab	the fast snapshotType reader agrees with raFromString, including on a longer tag that starts the same
 38317	504	-	rm38317.docent.yaml	invisible	-	needs one: doKnownGene must not read an uninitialised stack refLink. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: doKnownGene is static in hgc.c, 27000 lines and not linkable on its own
 38318	504	hg/lib/tests/sessionDataTester.c	-	invisible	unrecorded	the returned path must be freeable through kent's own handler stack

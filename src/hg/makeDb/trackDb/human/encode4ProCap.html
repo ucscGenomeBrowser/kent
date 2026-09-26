@@ -21,8 +21,8 @@ GRCh38/hg38 and T2T-CHM13/hs1.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Cell lines are listed in the table on this page, one row each. Use the Sample
-class facet to narrow the list, and the Experiment column to open the experiment
+Cell lines are listed in the table on this page, one row each. Use the <b>Sample
+class</b> facet to narrow the list, and the <b>Experiment</b> column to open the experiment
 on the ENCODE portal.
 </p>
 
@@ -44,40 +44,34 @@ deeper sequencing reach higher values. Tracks are colored by cell line:
 <h2>Methods</h2>
 
 <p>
-PRO-cap, in the CoPRO form described by Tome <em>et al</em>., permeabilizes cells
-and runs a nuclear run-on reaction with biotinylated NTPs, which RNA polymerase
-incorporates into the nascent transcripts it is actively making. Biotinylated
-RNAs are captured on streptavidin beads, selected for a 5' cap so that only
-transcripts still carrying their original start are kept, then reverse
-transcribed and paired-end sequenced. The 5' end of the second read marks the
-base at which transcription started, and the read's strand gives the strand of
-initiation. The six experiments here were produced by the Yu and Lis labs at
-Cornell University and processed through the ENCODE PRO-cap pipeline, which maps
-reads, removes PCR duplicates using unique molecular identifiers, and writes
-single-base plus and minus strand signal for the uniquely mapping reads. These
-experiments are part of the ENCODE 4 nascent transcriptome survey described in
-Shah <em>et al</em>.
+PRO-cap, in the CoPRO form of Tome <em>et al.</em>, 2018, runs a nuclear run-on
+reaction with biotinylated NTPs, captures the biotinylated nascent RNAs, selects
+for a 5' cap so that only transcripts carrying their original start are kept, and
+sequences them paired-end. The 5' end of the second read marks the base at which
+transcription started and its strand gives the strand of initiation. The six
+experiments were produced by the Yu and Lis labs at Cornell University as part of
+the ENCODE 4 nascent transcriptome survey described in Shah <em>et al.</em>,
+2026, and processed through the ENCODE PRO-cap pipeline.
 </p>
 
 <p>
 The signal files were downloaded from the
 <a href="https://www.encodeproject.org" target="_blank">ENCODE portal</a>, taking
-for each experiment only the plus and minus strand signal of unique reads files
-belonging to that experiment's default analysis, which drops files superseded by
-a later reprocessing. The experiments are ENCSR046BCI, ENCSR100LIJ, ENCSR935RNW,
-ENCSR098LLB, ENCSR261KBX and ENCSR799DGV for A673, Caco-2, Calu3, HUVEC, K562 and
-MCF10A respectively, and are linked from the Experiment column of the table on
-this page. ENCODE releases PRO-cap signal per replicate and, for MCF10A, per
-sequencing run, and publishes no pooled file, so the files were summed at UCSC to
-give one track per cell line per strand: two files for A673, Caco-2, Calu3 and
-K562, one for HUVEC, which has a single released replicate, and four for MCF10A.
-This is the same merge the ProCapNet models were trained on. Minus strand signal
-is negative as released by ENCODE and is kept that way. Total signal is
-conserved exactly by the summing. The steps are recorded in the
+only the plus and minus strand signal of unique reads belonging to each
+experiment's default analysis. ENCODE publishes no pooled file, so the
+per-replicate files were summed at UCSC into one track per cell line and strand,
+the same merge the ProCapNet models were trained on. Total signal is conserved
+exactly by the summing, and minus strand signal is negative as released. The
+experiments are ENCSR046BCI, ENCSR100LIJ, ENCSR935RNW, ENCSR098LLB, ENCSR261KBX
+and ENCSR799DGV for A673, Caco-2, Calu3, HUVEC, K562 and MCF10A respectively.
+</p>
+
+<p>
+The steps are recorded in
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/transcriptionStart.txt"
-target="_blank">makeDoc</a> and the scripts are in
+target="_blank">doc/hg38/transcriptionStart.txt</a> and the scripts are in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/outside/proCapNet"
-target="_blank">the kent source tree</a>, including
+target="_blank">makeDb/outside/proCapNet</a>, including
 <tt>proCapNetEncodeFiles.tsv</tt>, which records exactly which ENCODE file
 accessions went into each track.
 </p>
@@ -108,8 +102,9 @@ strand, for example <tt>K562.ENCSR261KBX.pos.bw</tt> and
 <tt>K562.ENCSR261KBX.neg.bw</tt>. Individual regions or the whole
 genome annotation can be obtained using our tool <tt>bigWigToBedGraph</tt>, which
 can be compiled from the source code or downloaded as a precompiled binary for
-your system. Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+your system. Instructions for downloading source code and binaries are on the
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">utilities download page</a>.
 The tool can also be used to obtain features within a given range, e.g.
 <tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.pos.bw
 -chrom=chr21 -start=0 -end=100000000 stdout</tt>
@@ -131,7 +126,6 @@ laboratories for making the data available.
 
 <h2>References</h2>
 
-
 <p>
 Shah SR, Chen Y, Leung AK, Navarro PVC, Paramo MI, Gupta J, Gurumurthy A, Fite RF, Weimer AK,
 Cochran K <em>et al</em>.
@@ -143,8 +137,6 @@ target="_blank">10.1101/2025.09.24.676871</a>; PMID: <a
 href="https://www.ncbi.nlm.nih.gov/pubmed/41040139" target="_blank">41040139</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12485982/" target="_blank">PMC12485982</a>
 </p>
-
-
 
 <p>
 Tome JM, Tippens ND, Lis JT.
@@ -158,8 +150,6 @@ href="https://www.ncbi.nlm.nih.gov/pubmed/30349116" target="_blank">30349116</a>
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6422046/" target="_blank">PMC6422046</a>
 </p>
 
-
-
 <p>
 Kwak H, Fuda NJ, Core LJ, Lis JT.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">
@@ -170,8 +160,6 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">234
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3974810/" target="_blank">PMC3974810</a>
 </p>
 
-
-
 <p>
 Luo Y, Hitz BC, Gabdank I, Hilton JA, Kagda MS, Lam B, Myers Z, Sud P, Jou J, Lin K <em>et al</em>.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">
@@ -181,4 +169,3 @@ DOI: <a href="https://doi.org/10.1093/nar/gkz1062" target="_blank">10.1093/nar/g
 href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">31713622</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7061942/" target="_blank">PMC7061942</a>
 </p>
-

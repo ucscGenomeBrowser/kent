@@ -590,7 +590,8 @@ for (range = rangeList; range != NULL; range = range->next)
 // the reference row has to be named the way the code below goes looking for it
 char refSrc[512];
 safef(refSrc, sizeof refSrc, "%s.%s", hubConnectSkipHubPrefix(database), seqName);
-return quickLiftMafs(chainHash, srcList, liftDb, refSrc, hChromSize(database, seqName));
+return quickLiftMafs(chainHash, srcList, liftDb, database, seqName, refSrc,
+                     hChromSize(database, seqName));
 }
 
 static void mafOrAxtClick2(struct sqlConnection *conn, struct sqlConnection *conn2, struct trackDb *tdb, char *axtOtherDb, char *fileName)

@@ -4,7 +4,7 @@
 track transcriptionStart
 superTrack on show
 shortLabel Transcription Initiation (TSS)
-longLabel Transcription Initiation (TSS)
+longLabel Transcription initiation (TSS)
 group rna
 
     track proCapNet
@@ -12,7 +12,7 @@ group rna
     compositeTrack faceted
     type bigWig
     shortLabel ProCapNet
-    longLabel ProCapNet predicted PRO-cap and sequence-contribution scores
+    longLabel ProCapNet predicted PRO-cap
     metaDataUrl /gbdb/hs1/proCapNet/metadata.tsv
     colorSettingsUrl /gbdb/hs1/proCapNet/colors.json
     primaryKey Cell_line
@@ -33,8 +33,9 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 0,114,178
-        shortLabel A673 Pred
+        shortLabel A673 Predicted
         longLabel A673 ProCapNet predicted PRO-cap, plus strand up and minus strand down
         onlyVisibility full
         priority 1
@@ -44,7 +45,7 @@ group rna
             type bigWig
             bigDataUrl /gbdb/hs1/proCapNet/pred/A673.proCapNet.pos.bw
             color 0,114,178
-            shortLabel A673 Pred +
+            shortLabel A673 Predicted +
             longLabel A673 ProCapNet predicted PRO-cap, plus strand
 
             track proCapNet_A673_pred_neg
@@ -54,7 +55,7 @@ group rna
             color 0,114,178
             altColor 0,114,178
             negateValues on
-            shortLabel A673 Pred -
+            shortLabel A673 Predicted -
             longLabel A673 ProCapNet predicted PRO-cap, minus strand
 
         track proCapNet_Caco-2_pred
@@ -66,8 +67,9 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 213,94,0
-        shortLabel Caco-2 Pred
+        shortLabel Caco-2 Predicted
         longLabel Caco-2 ProCapNet predicted PRO-cap, plus strand up and minus strand down
         onlyVisibility full
         priority 2
@@ -77,7 +79,7 @@ group rna
             type bigWig
             bigDataUrl /gbdb/hs1/proCapNet/pred/Caco-2.proCapNet.pos.bw
             color 213,94,0
-            shortLabel Caco-2 Pred +
+            shortLabel Caco-2 Predicted +
             longLabel Caco-2 ProCapNet predicted PRO-cap, plus strand
 
             track proCapNet_Caco-2_pred_neg
@@ -87,7 +89,7 @@ group rna
             color 213,94,0
             altColor 213,94,0
             negateValues on
-            shortLabel Caco-2 Pred -
+            shortLabel Caco-2 Predicted -
             longLabel Caco-2 ProCapNet predicted PRO-cap, minus strand
 
         track proCapNet_Calu3_pred
@@ -99,8 +101,9 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 0,158,115
-        shortLabel Calu3 Pred
+        shortLabel Calu3 Predicted
         longLabel Calu3 ProCapNet predicted PRO-cap, plus strand up and minus strand down
         onlyVisibility full
         priority 3
@@ -110,7 +113,7 @@ group rna
             type bigWig
             bigDataUrl /gbdb/hs1/proCapNet/pred/Calu3.proCapNet.pos.bw
             color 0,158,115
-            shortLabel Calu3 Pred +
+            shortLabel Calu3 Predicted +
             longLabel Calu3 ProCapNet predicted PRO-cap, plus strand
 
             track proCapNet_Calu3_pred_neg
@@ -120,7 +123,7 @@ group rna
             color 0,158,115
             altColor 0,158,115
             negateValues on
-            shortLabel Calu3 Pred -
+            shortLabel Calu3 Predicted -
             longLabel Calu3 ProCapNet predicted PRO-cap, minus strand
 
         track proCapNet_HUVEC_pred
@@ -132,8 +135,9 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 204,121,167
-        shortLabel HUVEC Pred
+        shortLabel HUVEC Predicted
         longLabel HUVEC ProCapNet predicted PRO-cap, plus strand up and minus strand down
         onlyVisibility full
         priority 4
@@ -143,7 +147,7 @@ group rna
             type bigWig
             bigDataUrl /gbdb/hs1/proCapNet/pred/HUVEC.proCapNet.pos.bw
             color 204,121,167
-            shortLabel HUVEC Pred +
+            shortLabel HUVEC Predicted +
             longLabel HUVEC ProCapNet predicted PRO-cap, plus strand
 
             track proCapNet_HUVEC_pred_neg
@@ -153,7 +157,7 @@ group rna
             color 204,121,167
             altColor 204,121,167
             negateValues on
-            shortLabel HUVEC Pred -
+            shortLabel HUVEC Predicted -
             longLabel HUVEC ProCapNet predicted PRO-cap, minus strand
 
         track proCapNet_K562_pred
@@ -165,8 +169,9 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 230,159,0
-        shortLabel K562 Pred
+        shortLabel K562 Predicted
         longLabel K562 ProCapNet predicted PRO-cap, plus strand up and minus strand down
         onlyVisibility full
         priority 5
@@ -176,7 +181,7 @@ group rna
             type bigWig
             bigDataUrl /gbdb/hs1/proCapNet/pred/K562.proCapNet.pos.bw
             color 230,159,0
-            shortLabel K562 Pred +
+            shortLabel K562 Predicted +
             longLabel K562 ProCapNet predicted PRO-cap, plus strand
 
             track proCapNet_K562_pred_neg
@@ -186,7 +191,7 @@ group rna
             color 230,159,0
             altColor 230,159,0
             negateValues on
-            shortLabel K562 Pred -
+            shortLabel K562 Predicted -
             longLabel K562 ProCapNet predicted PRO-cap, minus strand
 
         track proCapNet_MCF10A_pred
@@ -198,8 +203,9 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 86,180,233
-        shortLabel MCF10A Pred
+        shortLabel MCF10A Predicted
         longLabel MCF10A ProCapNet predicted PRO-cap, plus strand up and minus strand down
         onlyVisibility full
         priority 6
@@ -209,7 +215,7 @@ group rna
             type bigWig
             bigDataUrl /gbdb/hs1/proCapNet/pred/MCF10A.proCapNet.pos.bw
             color 86,180,233
-            shortLabel MCF10A Pred +
+            shortLabel MCF10A Predicted +
             longLabel MCF10A ProCapNet predicted PRO-cap, plus strand
 
             track proCapNet_MCF10A_pred_neg
@@ -219,6 +225,6 @@ group rna
             color 86,180,233
             altColor 86,180,233
             negateValues on
-            shortLabel MCF10A Pred -
+            shortLabel MCF10A Predicted -
             longLabel MCF10A ProCapNet predicted PRO-cap, minus strand
 

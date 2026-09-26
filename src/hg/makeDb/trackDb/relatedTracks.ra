@@ -359,6 +359,10 @@ hg38 cpgIslandSuper dnaMethylation Measured methylation levels, which are often 
 hg38 dnaMethylation cpgIslandSuper CpG-dense regions predicted from the reference sequence
 hg38 epdNew fantom5 Transcription start sites and their usage, measured by CAGE
 hg38 fantom5 epdNew Experimentally supported promoters curated in EPDnew
+hg38 transcriptionStart fantom5 Transcription start sites and their usage, measured by CAGE
+hg38 fantom5 transcriptionStart Transcription initiation measured by PRO-cap and predicted by ProCapNet
+hg38 transcriptionStart epdNew Experimentally supported promoters curated in EPDnew
+hg38 epdNew transcriptionStart Transcription initiation measured by PRO-cap and predicted by ProCapNet
 hg38 gtexEqtlHighConf gtexGeneV8 Gene expression levels in the same GTEx tissues
 hg38 gtexGeneV8 gtexEqtlHighConf Variants associated with expression of nearby genes in the same tissues
 hg38 jaspar wgEncodeReg4TfPeaks Transcription factor peak clusters from ENCODE 4 ChIP-seq experiments
@@ -635,6 +639,10 @@ hg38 hmc ucscGenePfam The Pfam protein domains that homologous missense constrai
 hg38 ucscGenePfam hmc Missense constraint measured across homologous positions within these domains
 hg38 promoterAi jarvis A score prioritizing non-coding regions more broadly, not only promoters
 hg38 jarvis promoterAi A deep-learning predictor for variants in promoter regions specifically
+hg38 epigenCentral epicV2illuminaMethylation Array probes that include every CpG site in this track
+hg38 epicV2illuminaMethylation epigenCentral CpG probes of this array that are part of curated DNA methylation episignatures
+hg38 epigenCentral snpArrayIllumina850k Array probes that include nearly all CpG sites in this track
+hg38 snpArrayIllumina850k epigenCentral CpG probes of this array that are part of curated DNA methylation episignatures
 
 hg19 constraintSuper predictionScoresSuper Per-variant deleteriousness and pathogenicity scores, rather than regional constraint
 hg19 predictionScoresSuper constraintSuper Regional and gene-level constraint measured from population variation

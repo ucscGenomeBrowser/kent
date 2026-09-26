@@ -103,11 +103,12 @@ def writeRa(fh, signatures):
 
     The menu label is "Disorder (SIGNATURE)". A comma in a filterValues entry is the
     entry separator and, with a *List* filterType, cannot be escaped at all, so the
-    commas inside a few disorder names are dropped here rather than in the bigBed.
+    commas inside a few disorder names become semicolons here rather than in the
+    bigBed, as the methaDory menu does.
     """
     entries = []
     for sig in sorted(signatures, key=str.lower):
-        disorder = signatures[sig]["disorder"].replace(",", "")
+        disorder = signatures[sig]["disorder"].replace(",", ";")
         entries.append("%s|%s (%s)" % (sig, disorder, sig))
     fh.write("    filterValues.signatureList %s\n" % ",".join(entries))
     fh.write("    filterType.signatureList multipleListAnd\n")
