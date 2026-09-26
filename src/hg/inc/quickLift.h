@@ -104,11 +104,12 @@ struct psl *quickLiftPsl(struct hash *chainHash, struct hash **pMapPsls, struct 
 // caller keeps across a run of items; point it at a NULL hash to start.
 
 struct mafAli *quickLiftMafs(struct hash *chainHash, struct mafAli *mafList,
-    char *sourceDb, char *refSrc, int refSrcSize);
+    char *sourceDb, char *refDb, char *refChrom, char *refSrc, int refSrcSize);
 // Map MAF blocks from the other assembly onto our current reference.  A block is cut at
 // every chain block boundary, since a MAF block has to be one contiguous run on its first
 // row and the lift does not keep the reference contiguous.  refSrc is the name the browser
-// expects on the reference row, "<db>.<chrom>", with no hub prefix.
+// expects on the reference row, "<db>.<chrom>", with no hub prefix.  The bases on that row
+// are replaced with refDb's own sequence of refChrom.
 
 boolean quickLiftIsLifted(struct trackDb *tdb);
 // TRUE when this track's data comes from another assembly and there is enough to lift it.

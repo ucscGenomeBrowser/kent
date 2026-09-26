@@ -21,8 +21,8 @@ GRCh38/hg38 and T2T-CHM13/hs1.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Cell lines are listed in the table on this page, one row each. Use the Sample
-class facet to narrow the list, and the Experiment column to open the experiment
+Cell lines are listed in the table on this page, one row each. Use the <b>Sample
+class</b> facet to narrow the list, and the <b>Experiment</b> column to open the experiment
 on the ENCODE portal.
 </p>
 
@@ -44,7 +44,7 @@ deeper sequencing reach higher values. Tracks are colored by cell line:
 <h2>Methods</h2>
 
 <p>
-PRO-cap, in the CoPRO form described by Tome <em>et al</em>., permeabilizes cells
+PRO-cap, in the CoPRO form described by Tome <em>et al.</em>, 2018, permeabilizes cells
 and runs a nuclear run-on reaction with biotinylated NTPs, which RNA polymerase
 incorporates into the nascent transcripts it is actively making. Biotinylated
 RNAs are captured on streptavidin beads, selected for a 5' cap so that only
@@ -56,7 +56,7 @@ Cornell University and processed through the ENCODE PRO-cap pipeline, which maps
 reads, removes PCR duplicates using unique molecular identifiers, and writes
 single-base plus and minus strand signal for the uniquely mapping reads. These
 experiments are part of the ENCODE 4 nascent transcriptome survey described in
-Shah <em>et al</em>.
+Shah <em>et al.</em>, 2026.
 </p>
 
 <p>
@@ -108,8 +108,9 @@ strand, for example <tt>K562.ENCSR261KBX.pos.bw</tt> and
 <tt>K562.ENCSR261KBX.neg.bw</tt>. Individual regions or the whole
 genome annotation can be obtained using our tool <tt>bigWigToBedGraph</tt>, which
 can be compiled from the source code or downloaded as a precompiled binary for
-your system. Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+your system. Instructions for downloading source code and binaries are on the
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">utilities download page</a>.
 The tool can also be used to obtain features within a given range, e.g.
 <tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.pos.bw
 -chrom=chr21 -start=0 -end=100000000 stdout</tt>
@@ -131,6 +132,25 @@ laboratories for making the data available.
 
 <h2>References</h2>
 
+<p>
+Kwak H, Fuda NJ, Core LJ, Lis JT.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">
+Precise maps of RNA polymerase reveal how promoters direct initiation and pausing</a>.
+<em>Science</em>. 2013 Feb 22;339(6122):950-3.
+DOI: <a href="https://doi.org/10.1126/science.1229386" target="_blank">10.1126/science.1229386</a>;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">23430654</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3974810/" target="_blank">PMC3974810</a>
+</p>
+
+<p>
+Luo Y, Hitz BC, Gabdank I, Hilton JA, Kagda MS, Lam B, Myers Z, Sud P, Jou J, Lin K <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">
+New developments on the Encyclopedia of DNA Elements (ENCODE) data portal</a>.
+<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D882-D889.
+DOI: <a href="https://doi.org/10.1093/nar/gkz1062" target="_blank">10.1093/nar/gkz1062</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">31713622</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7061942/" target="_blank">PMC7061942</a>
+</p>
 
 <p>
 Shah SR, Chen Y, Leung AK, Navarro PVC, Paramo MI, Gupta J, Gurumurthy A, Fite RF, Weimer AK,
@@ -144,8 +164,6 @@ href="https://www.ncbi.nlm.nih.gov/pubmed/41040139" target="_blank">41040139</a>
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12485982/" target="_blank">PMC12485982</a>
 </p>
 
-
-
 <p>
 Tome JM, Tippens ND, Lis JT.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/30349116" target="_blank">
@@ -157,28 +175,3 @@ target="_blank">10.1038/s41588-018-0234-5</a>; PMID: <a
 href="https://www.ncbi.nlm.nih.gov/pubmed/30349116" target="_blank">30349116</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6422046/" target="_blank">PMC6422046</a>
 </p>
-
-
-
-<p>
-Kwak H, Fuda NJ, Core LJ, Lis JT.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">
-Precise maps of RNA polymerase reveal how promoters direct initiation and pausing</a>.
-<em>Science</em>. 2013 Feb 22;339(6122):950-3.
-DOI: <a href="https://doi.org/10.1126/science.1229386" target="_blank">10.1126/science.1229386</a>;
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/23430654" target="_blank">23430654</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3974810/" target="_blank">PMC3974810</a>
-</p>
-
-
-
-<p>
-Luo Y, Hitz BC, Gabdank I, Hilton JA, Kagda MS, Lam B, Myers Z, Sud P, Jou J, Lin K <em>et al</em>.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">
-New developments on the Encyclopedia of DNA Elements (ENCODE) data portal</a>.
-<em>Nucleic Acids Res</em>. 2020 Jan 8;48(D1):D882-D889.
-DOI: <a href="https://doi.org/10.1093/nar/gkz1062" target="_blank">10.1093/nar/gkz1062</a>; PMID: <a
-href="https://www.ncbi.nlm.nih.gov/pubmed/31713622" target="_blank">31713622</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7061942/" target="_blank">PMC7061942</a>
-</p>
-

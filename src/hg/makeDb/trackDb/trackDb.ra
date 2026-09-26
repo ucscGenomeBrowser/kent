@@ -301,6 +301,7 @@ html crispr
     detailsTabUrls _offset=/gbdb/$db/crispr/crisprDetails.tab
     url http://crispor.gi.ucsc.edu/crispor.py?org=$D&pos=$S:${&pam=NGG
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+    colorFields default="Efficiency (Doench/Fusi)" _specColor="Off-target specificity (MIT score)" _crisprScanColor="Efficiency (Moreno-Mateos)"
     html crispr
 
 track crispors

@@ -152,6 +152,14 @@ if (tPos != psl->tEnd - psl->tStart)
     return FALSE;
     }
 
+// block offsets computed above are measured from position 0 of the CIGAR,
+// which is the *untrimmed* qStart/tStart the PAF reported -- save those
+// before trimming for leading/trailing indels below, so the shift to
+// absolute coordinates doesn't double-count the trim.
+int origQStart = psl->qStart;
+int origQEnd = psl->qEnd;
+int origTStart = psl->tStart;
+
 // handle leading and trailing indels: PSL blocks must start and end on a match
 if (insl > 0)
     { qNumInsert -= 1; qBaseInsert -= insl; psl->qStart += insl; }
@@ -165,16 +173,16 @@ else if (insr < 0)
 
 // shift target block positions to absolute target coordinates
 for (i = 0; i < psl->blockCount; i++)
-    psl->tStarts[i] += psl->tStart;
+    psl->tStarts[i] += origTStart;
 
 // shift query block positions to absolute coordinates, taking the query
 // strand into account
 if (psl->strand[0] == '-')
     for (i = 0; i < psl->blockCount; i++)
-	psl->qStarts[i] = psl->qSize - psl->qEnd + psl->qStarts[i];
+	psl->qStarts[i] = psl->qSize - origQEnd + psl->qStarts[i];
 else
     for (i = 0; i < psl->blockCount; i++)
-	psl->qStarts[i] += psl->qStart;
+	psl->qStarts[i] += origQStart;
 
 psl->qNumInsert = qNumInsert;
 psl->qBaseInsert = qBaseInsert;

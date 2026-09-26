@@ -8,6 +8,20 @@ The data contains 32,559 trios and 8,895 quads (one sibling without autism), and
 </p>
 
 <p>
+The <a href="https://base.sfari.org/dataset/DS0000135" target="_blank">SPARK WGS August 2026
+release</a> (SFARI Base dataset DS0000135) adds whole genomes for 45,178 individuals from
+21,003 families, 20,858 of them with autism. This is a mostly new set of people: only 14 of
+them are also in the 12,519-genome release and 201 in the exome release. It includes about
+4,900 trios with an autistic child and 1,800 quads. The genomes were sequenced PCR-free on
+the Illumina NovaSeq X at Broad Clinical Labs. Two tracks show this release. "SFARI SPARK 45k
+WGS" was made from a frequency table that SFARI released with the data. It has no
+autism/non-autism split, its allele counts are estimates, and variants seen only once are
+left out. "SFARI SPARK 45k WGS ASD" was computed from the genotypes. It has exact counts,
+the autism/non-autism split and all variants, including those seen once. For now it covers
+only the DSCAM gene on chr21 (see Methods).
+</p>
+
+<p>
 The same frequencies shown here are also available publicly on the
 <a href="https://genomes.sfari.org/" target="_blank">SFARI Genome Browser</a>.
 See (SPARK et al, Neuron 2018) for details.
@@ -51,7 +65,7 @@ target="_blank">SPARK Welcome Packet</a>.
 <h2>Methods</h2>
 
 <p>The genome browser track project was approved by the Simons Foundation under request
-number 14584.1. The multi-sample project VCFs (pVCFs) for both the WES and WGS releases were
+number 14584.1. The multi-sample project VCFs (pVCFs) for the 2024 WES and the 12,519-genome WGS releases were
 downloaded from <a href="https://base.sfari.org/" target="_blank">SFARI Base</a> using Globus.
 No minimum allele frequency cutoff was applied.</p>
 
@@ -66,10 +80,51 @@ are also annotated with predicted protein consequences using
 against Ensembl gene models; that annotation is displayed in the combined frequency tracks of
 this collection. The exact commands for both steps are in the makeDoc file linked below.</p>
 
+<p>
+The WGS August 2026 release is handled differently. It was downloaded from SFARI Base with
+Globus, but only the table <tt>SPARK.WGS.2026_08.gatk.pvcf_variant_frequencies.tsv</tt> was
+used. SFARI made this table from the pVCFs with <tt>bcftools query</tt>. It lists chromosome,
+position, REF, ALT and AF, with AF rounded to six decimals. It has no allele count or allele
+number, so we estimated them. At every site, including sites on chrX and chrY, all low
+frequencies are exact multiples of 1/90,356, and 90,356 is two alleles for each of the
+45,178 individuals. For example, all of the 179 million alleles seen once have AF=1.1e-05.
+None has 1.2e-05, which is what a site with more than about 4% missing genotypes would give.
+We therefore set AN=90,356 for every variant and computed AC as AF &times; AN, rounded to the
+nearest integer. Multiallelic records were split into one record per alternate allele.
+Alleles with an estimated AC of 1 were removed. The remaining alleles were left-aligned
+against the reference with <tt>bcftools norm</tt>. The script is
+<tt>sparkWgs45kToVcf.sh</tt>.
+</p>
+
+<p>
+The track "SFARI SPARK 45k WGS ASD" was made from the genotype-level pVCFs of the same
+release, which are split into 2.5 Mb chunks. The samples were grouped by the <tt>asd</tt>
+column of the release's sample metadata file: 20,858 autistic and 24,320 non-autistic
+individuals, with no sample left unassigned. As for the older SPARK tracks, <tt>bcftools
++fill-tags</tt> computed AC, AN and AF overall and per group from the called genotypes.
+Missing genotypes do not count towards AN. The genotypes were then removed. Multiallelic
+records were split and left-aligned with <tt>bcftools norm</tt>. Alleles that no individual
+carries after joint genotyping (AC=0) were removed. There is no allele count cutoff. The
+INFO field <tt>VARLEN</tt> is the length of ALT minus the length of REF: positive for
+insertions, negative for deletions, 0 for substitutions. Unlike the other SPARK tracks,
+this track also shows the predicted protein consequences (<tt>BCSQ</tt>) on its details
+page, computed with <tt>bcftools csq</tt> against Ensembl release 115. The scripts are
+<tt>sparkWgs45kPvcfToSites.sh</tt> and <tt>sparkWgs45kPvcfRange.sh</tt>.
+</p>
+
 <p>The sequencing and variant-calling methods are documented as follows by SFARI:</p>
 <ul>
   <li>
-    <b>WGS</b>:
+    <b>WGS, August 2026 release</b>: DNA was extracted from saliva at Broad Clinical Labs or
+    Prevention Genetics. Genomes were sequenced PCR-free on the Illumina NovaSeq X at Broad
+    Clinical Labs. Samples were kept if contamination was 2.5% or less and 75% or more of
+    reads were mapped. Genetic relationships were checked against the SPARK pedigrees. Reads
+    were realigned to GRCh38 with BWA-MEM2 v2.3, duplicates were marked with GATK
+    MarkDuplicates, and per-sample gVCFs were called with GATK HaplotypeCaller v4.6.2.0. All
+    gVCFs were then joint-called with GLnexus v1.4.1 using its GATK configuration.
+  </li>
+  <li>
+    <b>WGS, 12,519 genomes</b>:
     This release consists of sequence and variant call data for 12,519
     unique individuals, of which 12,517 (99.98%) have available genome-wide
     SNP genotype data. Sequencing and genotyping of all samples in this
@@ -137,7 +192,8 @@ The complete, runnable command history for downloading, counting and annotating 
 alongside every other cohort in this collection, is in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt" target="_blank">makeDoc file</a>;
 search it for &quot;SFARI SPARK&quot;. The scripts it calls, including
-<tt>sparkMergeVcfAddCounts.sh</tt> (allele counts) and <tt>mergeAndAnnotate.sh</tt> (merge plus
+<tt>sparkMergeVcfAddCounts.sh</tt> (allele counts), <tt>sparkWgs45kToVcf.sh</tt> (45k WGS frequency table conversion),
+<tt>sparkWgs45kPvcfToSites.sh</tt> (45k WGS genotype counts) and <tt>mergeAndAnnotate.sh</tt> (merge plus
 consequence annotation), are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/varFreqs" target="_blank">varFreqs scripts directory</a>.
 </p>

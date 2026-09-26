@@ -4,16 +4,588 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See kent/LICENSE or http://genome.ucsc.edu/license/ for licensing information. */
 
+#include <regex.h>
 #include "common.h"
 #include "cheapcgi.h"
 #include "errCatch.h"
 #include "hCommon.h"
 #include "hui.h"
 #include "jsHelper.h"
+#include "regexHelper.h"
 #include "vcf.h"
 #include "vcfUi.h"
 #include "knetUdc.h"
 #include "udc.h"
+#include "obscure.h"
+#include "bigBedFilter.h"
+#include "htmlColor.h"
+#include "basicBed.h"
+#include "web.h"
+
+// helper functions for each type of of vcfInfoFilter
+static struct vcfInfoDef *vcfInfoDefForFilter(struct vcfFile *vcff, struct trackDb *tdb,
+                                              char *field, boolean wantNumber, boolean isList)
+/* Return the vcfInfoDef for a filter on INFO field. Warn and return NULL when the field
+ * is not in the VCF header, has the wrong Number, or has the wrong type. The field must be
+ * Number=1, or Number=1 or Number=. for a list filter. A numeric filter needs an Integer or
+ * Float field, and a text or value filter needs a String field. */
+{
+struct vcfInfoDef *infoDef = vcfInfoDefForKey(vcff, field);
+if (infoDef == NULL)
+    warn("track %s: can't filter on INFO field %s: it is not in the VCF header",
+         tdb->track, field);
+else if (isList && infoDef->fieldCount != 1 && infoDef->fieldCount != -1)
+    warn("track %s: can't filter on INFO field %s: a list filter needs a Number=1 or "
+         "Number=. field", tdb->track, field);
+else if (!isList && infoDef->fieldCount != 1)
+    warn("track %s: can't filter on INFO field %s: only Number=1 fields can be filtered",
+         tdb->track, field);
+else if (wantNumber && infoDef->type != vcfInfoInteger && infoDef->type != vcfInfoFloat)
+    warn("track %s: can't filter on INFO field %s: a numeric filter needs an Integer or "
+         "Float field", tdb->track, field);
+else if (!wantNumber && infoDef->type != vcfInfoString)
+    warn("track %s: can't filter on INFO field %s: a text or value filter needs a String field",
+         tdb->track, field);
+else
+    return infoDef;
+return NULL;
+}
+
+static struct vcfInfoFilter *vcfInfoFilterMakeNumberFilter(struct cart *cart, struct vcfFile *vcff, struct trackDb *tdb, char *filterName, char *defaultLimits, char *fieldName, boolean isHighlight)
+{
+struct vcfInfoFilter *filter = NULL;
+char *setting = trackDbSettingClosestToHome(tdb, filterName);
+struct vcfInfoDef *infoDef = vcfInfoDefForFilter(vcff, tdb, fieldName, TRUE, FALSE);
+if (infoDef == NULL)
+    return NULL;
+
+if (setting)
+    {
+    boolean invalid = FALSE;
+    double minValueTdb = 0,maxValueTdb = NO_VALUE;
+    double minLimit=NO_VALUE,maxLimit=NO_VALUE,min = minValueTdb,max = maxValueTdb;
+    colonPairToDoubles(setting,&minValueTdb,&maxValueTdb);
+    colonPairToDoubles(defaultLimits,&minLimit,&maxLimit);
+    getScoreFloatRangeFromCart(cart,tdb,FALSE,filterName,&minLimit,&maxLimit,&min,&max);
+    if ((int)minLimit != NO_VALUE || (int)maxLimit != NO_VALUE)
+        {
+        // assume tdb default values within range!
+        // (don't give user errors that have no consequence)
+        if ((min != minValueTdb && (((int)minLimit != NO_VALUE && min < minLimit)
+                                || ((int)maxLimit != NO_VALUE && min > maxLimit)))
+        ||  (max != maxValueTdb && (((int)minLimit != NO_VALUE && max < minLimit)
+                                || ((int)maxLimit != NO_VALUE && max > maxLimit))))
+            {
+            invalid = TRUE;
+            char value[64];
+            if ((int)max == NO_VALUE) // min only is allowed, but max only is not
+                safef(value, sizeof(value), "entered minimum (%g)", min);
+            else
+                safef(value, sizeof(value), "entered range (min:%g and max:%g)", min, max);
+            char limits[64];
+            if ((int)minLimit != NO_VALUE && (int)maxLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates limits (%g to %g)", minLimit, maxLimit);
+            else if ((int)minLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates lower limit (%g)", minLimit);
+            else //if ((int)maxLimit != NO_VALUE)
+                safef(limits, sizeof(limits), "violates uppper limit (%g)", maxLimit);
+            warn("invalid filter by %s: %s %s for track %s", fieldName, value, limits, tdb->track);
+            }
+        }
+    if (invalid)
+        {
+        char filterLimitName[64];
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filterName, _MIN);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        safef(filterLimitName, sizeof(filterLimitName), "%s%s", filterName, _MAX);
+        cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
+        }
+    else if (((int)min != NO_VALUE && ((int)minLimit == NO_VALUE || minLimit != min))
+         ||  ((int)max != NO_VALUE && ((int)maxLimit == NO_VALUE || maxLimit != max)))
+         // Assumes min==NO_VALUE or min==minLimit is no filter
+         // Assumes max==NO_VALUE or max==maxLimit is no filter!
+        {
+        AllocVar(filter);
+        filter->infoDef = infoDef;
+        if ((int)max == NO_VALUE || ((int)maxLimit != NO_VALUE && maxLimit == max))
+            {
+            filter->comparisonType = COMPARE_MORE;
+            filter->value1 = min;
+            }
+        else if ((int)min == NO_VALUE || ((int)minLimit != NO_VALUE && minLimit == min))
+            {
+            filter->comparisonType = COMPARE_LESS;
+            filter->value1 = max;
+            }
+        else
+            {
+            filter->comparisonType = COMPARE_BETWEEN;
+            filter->value1 = min;
+            filter->value2 = max;
+            }
+        if (isHighlight)
+            filter->isHighlight = TRUE;
+        }
+    }
+return filter;
+}
+
+static struct vcfInfoFilter *vcfInfoFilterMakeFilterText(struct cart *cart, struct vcfFile *vcff, struct trackDb *tdb, char *filterName, char *fieldName, boolean isHighlight)
+{
+struct vcfInfoFilter *filter;
+char *setting = trackDbSettingClosestToHome(tdb, filterName);
+char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filterName, setting);
+if (isEmpty(value))
+    return NULL;
+char *typeValue = getFilterType(cart, tdb, fieldName, FILTERTEXT_WILDCARD);
+struct vcfInfoDef *infoDef = vcfInfoDefForFilter(vcff, tdb, fieldName, FALSE, FALSE);
+if (infoDef == NULL)
+    return NULL;
+
+AllocVar(filter);
+filter->infoDef = infoDef;
+if (sameString(typeValue, FILTERTEXT_REGEXP))
+    {
+    filter->comparisonType = COMPARE_REGEXP;
+    regcomp(&filter->regEx, value, REG_NOSUB);
+    }
+else
+    {
+    filter->comparisonType = COMPARE_WILDCARD;
+    filter->wildCardString = cloneString(value);
+    }
+
+filter->isHighlight = isHighlight;
+return filter;
+}
+
+int vcfInfoDefSubFieldIndex(const struct vcfInfoDef *def, const char *subFieldName)
+/* Parse the "Format: A|B|C|..." clause out of def->description (the same syntax
+ * looksTabular() in lib/vcf.c keys off of) and return the 0-based index of subFieldName,
+ * or -1 if the description has no Format clause or the name is absent. */
+{
+if (def == NULL || isEmpty(def->description) || isEmpty(subFieldName))
+    return -1;
+regmatch_t substrs[8];
+if (!regexMatchSubstr(def->description, COL_DESC_REGEX, substrs, ArraySize(substrs)))
+    return -1;
+int matchSize = substrs[0].rm_eo - substrs[0].rm_so;
+char copy[matchSize + 1];
+safencpy(copy, sizeof(copy), def->description + substrs[0].rm_so, matchSize);
+char *words[256];
+int nWords = chopByChar(copy, '|', words, ArraySize(words));
+int i;
+for (i = 0; i < nWords; i++)
+    if (sameString(words[i], subFieldName))
+        return i;
+return -1;
+}
+
+static struct vcfInfoFilter *vcfInfoFilterMakeFilterBy(struct cart *cart, struct vcfFile *vcff, struct trackDb *tdb, char *field, struct slName *choices, boolean isHighlight)
+/* Add a vcfInfoFilter using trackDb filterBy statement.
+ * field may be a plain INFO key, or a dotted key.subField referring to a named
+ * sub-field of a pipe-separated INFO annotation (e.g. vep.Consequence). */
+{
+struct vcfInfoFilter *filter;
+char *setting = NULL;
+if (isHighlight)
+    setting = getHighlightType(cart, tdb, field, HIGHLIGHTBY_DEFAULT);
+else
+    setting = getFilterType(cart, tdb, field, FILTERBY_DEFAULT);
+
+enum bigBedFilterType comparisonType = COMPARE_HASH;
+if (setting)
+    {
+    if (sameString(setting, FILTERBY_SINGLE_LIST)
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_OR)
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_OR)
+            || sameString(setting, HIGHLIGHTBY_SINGLE_LIST)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_OR)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_ONLY_OR))
+                comparisonType = COMPARE_HASH_LIST_OR;
+    else if (sameString(setting, FILTERBY_MULTIPLE_LIST_AND)
+            || sameString(setting, FILTERBY_MULTIPLE_LIST_ONLY_AND)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_AND)
+            || sameString(setting, HIGHLIGHTBY_MULTIPLE_LIST_ONLY_AND))
+                comparisonType = COMPARE_HASH_LIST_AND;
+    }
+boolean isList = (comparisonType != COMPARE_HASH);
+
+char *dotPos = strchr(field, '.');
+struct vcfInfoDef *infoDef;
+char *baseKey;
+char *subFieldName = NULL;
+int subFieldIndex = -1;
+if (dotPos != NULL)
+    {
+    baseKey = cloneStringZ(field, dotPos - field);
+    subFieldName = cloneString(dotPos + 1);
+    // Sub-field filters allow any Number, since fields like vep are Number=.
+    infoDef = vcfInfoDefForKey(vcff, baseKey);
+    if (infoDef == NULL || infoDef->type != vcfInfoString)
+        {
+        warn("track %s: can't filter on %s: %s is not a String INFO field in the VCF header",
+             tdb->track, field, baseKey);
+        freeMem(baseKey);
+        freeMem(subFieldName);
+        return NULL;
+        }
+    subFieldIndex = vcfInfoDefSubFieldIndex(infoDef, subFieldName);
+    if (subFieldIndex < 0)
+        {
+        warn("track %s: filterValues.%s: sub-field '%s' not found in %s INFO Format clause",
+             tdb->track, field, subFieldName, baseKey);
+        freeMem(baseKey);
+        freeMem(subFieldName);
+        return NULL;
+        }
+    freeMem(baseKey);
+    }
+else
+    {
+    infoDef = vcfInfoDefForFilter(vcff, tdb, field, FALSE, isList);
+    if (infoDef == NULL)
+        return NULL;
+    }
+
+AllocVar(filter);
+filter->infoDef = infoDef;
+filter->subFieldIndex = subFieldIndex;
+filter->subFieldName = subFieldName;
+filter->comparisonType = comparisonType;
+filter->valueHash = newHash(5);
+filter->numValuesInHash = slCount(choices);
+
+for(; choices; choices = choices->next)
+    hashStore(filter->valueHash, choices->name);
+
+filter->isHighlight = isHighlight;
+return filter;
+}
+
+struct vcfColorByInfo *vcfColorByInfoFromTdb(struct trackDb *tdb, struct vcfFile *vcff)
+/* Parse colorByInfo / colorByInfo.<FIELD> settings; returns NULL when
+ * the feature is not configured on this track. The vcff header is used to check
+ * that the field is a String INFO field and to resolve the named sub-field of a
+ * pipe-separated INFO annotation (e.g. vep.Consequence). Warns and returns NULL
+ * when the field can't be used. */
+{
+char *fieldKey = trackDbSetting(tdb, VCF_COLOR_BY_INFO);
+if (isEmpty(fieldKey))
+    return NULL;
+char settingKey[256];
+safef(settingKey, sizeof(settingKey), "%s.%s", VCF_COLOR_BY_INFO, fieldKey);
+char *mapStr = trackDbSetting(tdb, settingKey);
+if (isEmpty(mapStr))
+    return NULL;
+
+// If fieldKey is dotted (e.g. vep.Consequence), resolve the named sub-field's
+// index within the INFO def's Format clause; the stored fieldKey drops the
+// suffix so vcfRecordFindInfo finds the parent INFO element at lookup time.
+char *baseKey = fieldKey;
+char *subFieldName = NULL;
+int subFieldIndex = -1;
+char *dotPos = strchr(fieldKey, '.');
+char baseKeyBuf[256];
+if (dotPos == NULL)
+    {
+    struct vcfInfoDef *def = vcfInfoDefForKey(vcff, fieldKey);
+    if (def == NULL || def->type != vcfInfoString)
+        {
+        warn("track %s: can't color by %s: it is not a String INFO field in the VCF header",
+             tdb->track, fieldKey);
+        return NULL;
+        }
+    }
+else
+    {
+    int baseLen = dotPos - fieldKey;
+    safencpy(baseKeyBuf, sizeof(baseKeyBuf), fieldKey, baseLen);
+    baseKey = baseKeyBuf;
+    subFieldName = dotPos + 1;
+    struct vcfInfoDef *def = vcfInfoDefForKey(vcff, baseKey);
+    if (def == NULL || def->type != vcfInfoString)
+        {
+        warn("track %s: can't color by %s: %s is not a String INFO field in the VCF header",
+             tdb->track, fieldKey, baseKey);
+        return NULL;
+        }
+    subFieldIndex = vcfInfoDefSubFieldIndex(def, subFieldName);
+    if (subFieldIndex < 0)
+        {
+        warn("track %s: colorByInfo %s: sub-field '%s' not in %s INFO Format clause",
+             tdb->track, fieldKey, subFieldName, baseKey);
+        return NULL;
+        }
+    }
+
+struct vcfColorByInfo *cbi;
+AllocVar(cbi);
+cbi->fieldKey = cloneString(baseKey);
+cbi->valueToRgb = newHash(5);
+cbi->orderedColors = NULL;
+cbi->subFieldIndex = subFieldIndex;
+cbi->subFieldName = (subFieldName != NULL) ? cloneString(subFieldName) : NULL;
+
+// Comma-separated key=colorSpec pairs. Only #rrggbb hex codes and HTML
+// color names are accepted; the r,g,b triple form would collide with
+// the pair separator. Build a hash for fast top-level lookup AND an
+// ordered slPair list so the sub-field path can iterate in declaration
+// order (first declared key with any match across annotations wins).
+char *clone = cloneString(mapStr);
+char *pairs[64];
+int nPairs = chopByChar(clone, ',', pairs, ArraySize(pairs));
+int i;
+for (i = 0; i < nPairs; i++)
+    {
+    char *eq = strchr(pairs[i], '=');
+    if (eq == NULL)
+        continue;
+    *eq++ = 0;
+    char *key = trimSpaces(pairs[i]);
+    char *colorSpec = trimSpaces(eq);
+    if (isEmpty(key) || isEmpty(colorSpec))
+        continue;
+    unsigned rgb;
+    if (!htmlColorForCode(colorSpec, &rgb) && !htmlColorForName(colorSpec, &rgb))
+        continue;
+    struct rgbColor *c;
+    AllocVar(c);
+    *c = bedColorToRgb(rgb);
+    hashAdd(cbi->valueToRgb, key, c);
+    slPairAdd(&cbi->orderedColors, key, c);
+    }
+slReverse(&cbi->orderedColors);
+freeMem(clone);
+return cbi;
+}
+
+boolean vcfColorByInfoLookup(struct vcfColorByInfo *cbi,
+                             const struct vcfRecord *rec,
+                             struct rgbColor *out)
+/* Look up rec's value for cbi->fieldKey and copy its RGB into *out.
+ * Returns FALSE when no mapping applies (caller should use a fallback). */
+{
+if (cbi == NULL || rec == NULL)
+    return FALSE;
+const struct vcfInfoElement *ele = vcfRecordFindInfo((struct vcfRecord *)rec, cbi->fieldKey);
+if (ele == NULL || ele->count < 1 || ele->missingData[0])
+    return FALSE;
+
+if (cbi->subFieldIndex < 0)
+    {
+    // Top-level lookup: single value per record, direct hash hit.
+    char *valStr = ele->values[0].datString;
+    if (isEmpty(valStr))
+        return FALSE;
+    struct rgbColor *c = hashFindVal(cbi->valueToRgb, valStr);
+    if (c == NULL)
+        return FALSE;
+    *out = *c;
+    return TRUE;
+    }
+
+// Sub-field lookup: a record can carry many transcript annotations; collect
+// every map key any of them matches, then walk the ordered list to return the
+// earliest-declared (highest-priority) hit.
+struct hash *seen = hashNew(4);
+int v;
+for (v = 0; v < ele->count; v++)
+    {
+    if (ele->missingData[v])
+        continue;
+    char *annot = ele->values[v].datString;
+    if (isEmpty(annot))
+        continue;
+    char *clone = cloneString(annot);
+    char *tokens[128];
+    int nTok = chopByChar(clone, '|', tokens, ArraySize(tokens));
+    if (cbi->subFieldIndex < nTok)
+        {
+        // The Consequence sub-field can be '&'-joined SO terms within one
+        // annotation; each term participates independently in the map lookup.
+        char *terms[16];
+        int nTerms = chopByChar(tokens[cbi->subFieldIndex], '&',
+                                terms, ArraySize(terms));
+        int t;
+        for (t = 0; t < nTerms; t++)
+            if (hashLookup(cbi->valueToRgb, terms[t]))
+                hashStore(seen, terms[t]);
+        }
+    freeMem(clone);
+    }
+
+struct slPair *p;
+for (p = cbi->orderedColors; p != NULL; p = p->next)
+    {
+    if (hashLookup(seen, p->name))
+        {
+        *out = *(struct rgbColor *)p->val;
+        hashFree(&seen);
+        return TRUE;
+        }
+    }
+hashFree(&seen);
+return FALSE;
+}
+
+struct vcfInfoFilter *buildVcfInfoFilters(struct vcfFile *vcff, struct cart *cart, struct trackDb *tdb)
+/* Parse the cart/trackDb current filters into something we can filter the records on.
+ * Warns about and skips any filter whose INFO field is missing or has the wrong type. */
+{
+struct vcfInfoFilter *filters = NULL, *filter;
+
+struct trackDbFilter *tdbFilters = tdbGetTrackNumFilters(tdb);
+for (; tdbFilters; tdbFilters = tdbFilters->next)
+    {
+    if ((filter = vcfInfoFilterMakeNumberFilter(cart, vcff, tdb, tdbFilters->name, NULL, tdbFilters->fieldName, FALSE)) != NULL)
+        slAddHead(&filters, filter);
+    }
+
+// then the text filters
+tdbFilters = tdbGetTrackTextFilters(tdb);
+for (; tdbFilters; tdbFilters = tdbFilters->next)
+    {
+    if ((filter = vcfInfoFilterMakeFilterText(cart, vcff, tdb, tdbFilters->name, tdbFilters->fieldName, FALSE)) != NULL)
+        slAddHead(&filters, filter);
+    }
+
+// finally the hash filters
+filterBy_t *filterBySet = filterBySetGet(tdb, cart, NULL);
+filterBy_t *filterBy = filterBySet;
+for (; filterBy != NULL; filterBy = filterBy->next)
+    {
+    if (filterBy->slChoices && differentString(filterBy->slChoices->name, "All"))
+        {
+        if ((filter = vcfInfoFilterMakeFilterBy(cart, vcff, tdb, filterBy->column, filterBy->slChoices, FALSE)) != NULL)
+            slAddHead(&filters, filter);
+        }
+    }
+return filters;
+}
+
+boolean vcfInfoFilterOneRecord(struct vcfRecord *rec, struct vcfInfoFilter *vcfInfoFilters)
+/* Return true if rec passes all the filters on the INFO fields defined in vcfInfoFilters */
+{
+struct vcfInfoFilter *filter;
+for (filter = vcfInfoFilters; filter != NULL; filter = filter->next)
+    {
+    struct vcfInfoDef *def = filter->infoDef;
+    const struct vcfInfoElement *vcfInfoEle = vcfRecordFindInfo(rec, def->key);
+    // Records missing the filtered key, or with an explicit "." value, don't satisfy the filter.
+    if (vcfInfoEle == NULL || vcfInfoEle->count < 1 || vcfInfoEle->missingData[0])
+        return FALSE;
+    if (filter->subFieldName != NULL)
+        {
+        // The filter targets a named sub-field of a pipe-separated INFO value (e.g.
+        // vep.Consequence). One VCF record can carry multiple transcript-level annotations;
+        // the variant passes if any annotation's indexed sub-field hits the value set.
+        boolean anyMatch = FALSE;
+        int v;
+        for (v = 0; v < vcfInfoEle->count && !anyMatch; v++)
+            {
+            if (vcfInfoEle->missingData[v])
+                continue;
+            char *annot = vcfInfoEle->values[v].datString;
+            if (isEmpty(annot))
+                continue;
+            char *clone = cloneString(annot);
+            char *tokens[128];
+            int nTok = chopByChar(clone, '|', tokens, ArraySize(tokens));
+            if (filter->subFieldIndex < nTok)
+                {
+                // Consequence and similar SO-term fields can be ampersand-joined within one
+                // annotation (e.g. splice_donor_variant&intron_variant); any term hit passes.
+                char *terms[16];
+                int nTerms = chopByChar(tokens[filter->subFieldIndex], '&',
+                                        terms, ArraySize(terms));
+                int t;
+                for (t = 0; t < nTerms; t++)
+                    {
+                    if (hashLookup(filter->valueHash, terms[t]))
+                        {
+                        anyMatch = TRUE;
+                        break;
+                        }
+                    }
+                }
+            freeMem(clone);
+            }
+        if (!anyMatch)
+            return FALSE;
+        continue;
+        }
+    union vcfDatum val = vcfInfoEle->values[0];
+    // vcfDatum is a union typed by def->type; pick the right member as a double for numeric ops.
+    double dval = 0;
+    if (def->type == vcfInfoInteger)
+        dval = (double)val.datInt;
+    else if (def->type == vcfInfoFloat)
+        dval = val.datFloat;
+    switch (filter->comparisonType)
+        {
+        case COMPARE_WILDCARD:
+            if (!wildMatch(filter->wildCardString, val.datString))
+                return FALSE;
+            break;
+        case COMPARE_REGEXP:
+            if (regexec(&filter->regEx, val.datString, 0, NULL, 0) != 0)
+                return FALSE;
+            break;
+        case COMPARE_HASH_LIST_AND:
+        case COMPARE_HASH_LIST_OR:
+            {
+            // the VCF parser already split the comma-separated values into ele->values
+            unsigned found = 0;
+            struct hash *seenHash = newHash(3);
+            int v;
+            for (v = 0; v < vcfInfoEle->count; v++)
+                {
+                char *value = vcfInfoEle->values[v].datString;
+                if (vcfInfoEle->missingData[v] || isEmpty(value))
+                    continue;
+                if (hashLookup(seenHash, value))
+                    continue;
+                hashStore(seenHash, value);
+                if (hashLookup(filter->valueHash, value))
+                    {
+                    found++;
+                    if (filter->comparisonType == COMPARE_HASH_LIST_OR)
+                        break;
+                    }
+                }
+            hashFree(&seenHash);
+            if (filter->comparisonType == COMPARE_HASH_LIST_AND)
+                {
+                if (found < filter->numValuesInHash)
+                    return FALSE;
+                }
+            else if (!found)
+                return FALSE;
+            }
+            break;
+        case COMPARE_HASH:
+            if (!hashLookup(filter->valueHash, val.datString))
+                return FALSE;;
+            break;
+        case COMPARE_LESS:
+            if (!(dval <= filter->value1))
+                return FALSE;
+            break;
+        case COMPARE_MORE:
+            if (!(dval >= filter->value1))
+                return FALSE;
+            break;
+        case COMPARE_BETWEEN:
+            if (!((dval >= filter->value1) && (dval <= filter->value2)))
+                return FALSE;
+            break;
+        default:
+            break;
+        }
+    }
+return TRUE;
+}
 
 INLINE char *nameOrDefault(char *thisName, char *defaultVal)
 /* If thisName is not a placeholder value, return it; otherwise return default. */
@@ -702,6 +1274,47 @@ char *phasedInfoText = "Check this box to color child variants red if they do no
 printInfoIcon(phasedInfoText);
 }
 
+static void vcfCfgInfoFilterUi(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff, char *name, boolean parentLevel)
+/* Show the filters on the INFO fields, if any */
+{
+if (cartOptionalString(cart, "ajax") == NULL)
+    {
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
+    }
+
+if (parentLevel)
+    if (trackDbSettingOn(tdb->parent, "noParentConfig"))
+        return;
+
+// Skip everything (including the heading) when no INFO filters are defined.
+struct trackDbFilter *numFilters = tdbGetTrackNumFilters(tdb);
+struct trackDbFilter *textFilters = tdbGetTrackTextFilters(tdb);
+filterBy_t *filterBySet = filterBySetGet(tdb, cart, name);
+if (numFilters == NULL && textFilters == NULL && filterBySet == NULL)
+    return;
+
+printf("<B>Filter on INFO fields:</B><BR>\n");
+
+char *db = cartString(cart, "db");
+boolean isBoxOpened = FALSE;
+numericFiltersShowAll(db, cart, tdb, &isBoxOpened, TRUE, parentLevel, name, NULL, FALSE);
+
+textFiltersShowAll(db, cart, tdb, FALSE);
+
+if (filterBySet != NULL)
+    {
+    if (!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
+        jsIncludeFile("hui.js",NULL);
+
+    if (!isBoxOpened)   // filterBy boxes are not double "boxed" when alone
+        printf("<BR>");
+    filterBySetCfgUi(cart, tdb, filterBySet, TRUE, name);
+    filterBySetFree(&filterBySet);
+    }
+}
+
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* VCF: Variant Call Format.  redmine #3710 */
 {
@@ -715,6 +1328,8 @@ if (vcff != NULL)
     boolean doVcfQualUi = cartOrTdbBoolean(cart, tdb, VCF_DO_QUAL_UI, TRUE);
     boolean doVcfMafUi = cartOrTdbBoolean(cart, tdb, VCF_DO_MAF_UI, TRUE);
     boolean doVcfMinAcUi = cartOrTdbBoolean(cart, tdb, VCF_DO_MIN_AC_UI, TRUE);
+    boolean doVcfInfoFilterUi = cartOrTdbBoolean(cart, tdb, VCF_DO_INFOFILTER_UI, TRUE)
+                                && bedHasFilters(tdb);
     if (vcff->genotypeCount > 1 && !sameString(tdb->type, "vcfPhasedTrio"))
         {
         vcfCfgHapCluster(cart, tdb, vcff, name, parentLevel);
@@ -723,9 +1338,13 @@ if (vcff != NULL)
         {
         vcfCfgPhasedTrioUi(cart, tdb, vcff, name, parentLevel);
         }
-    if (differentString(tdb->track,"evsEsp6500") && (doVcfFilterUi || doVcfQualUi))
-        {
+    boolean isEvsEsp = sameString(tdb->track, "evsEsp6500");
+    boolean printFiltersH3 = (!isEvsEsp && (doVcfQualUi || doVcfFilterUi))
+                             || doVcfMafUi || doVcfMinAcUi || doVcfInfoFilterUi;
+    if (printFiltersH3)
         puts("<H3>Filters</H3>");
+    if (!isEvsEsp)
+        {
         if (doVcfQualUi)
             vcfCfgMinQual(cart, tdb, vcff, name, parentLevel);
         if (doVcfFilterUi)
@@ -735,6 +1354,8 @@ if (vcff != NULL)
         vcfCfgMinAlleleFreq(cart, tdb, vcff, name, parentLevel);
     if (doVcfMinAcUi)
         vcfCfgMinAc(cart, tdb, vcff, name, parentLevel);
+    if (doVcfInfoFilterUi)
+        vcfCfgInfoFilterUi(cart, tdb, vcff, name, parentLevel);
     }
 else
     {
@@ -754,4 +1375,3 @@ if (!boxed && fileExists(hHelpFile("hgVcfTrackHelp")))
 	   "configuration help</A></P>");
 cfgEndBox(boxed);
 }
-

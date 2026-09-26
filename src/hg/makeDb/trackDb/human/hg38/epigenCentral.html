@@ -23,7 +23,7 @@ listed together on that row.
 Each CpG site is drawn as a single-base feature, colored by the direction of the methylation
 change. Delta-beta is the mean methylation in cases minus the mean methylation in controls, so a
 positive value is a gain of methylation in cases and a negative value is a loss. Where a site
-belongs to several episignatures, the color, the mouse-over and the delta-beta shown come from
+belongs to several episignatures, the color, the mouse-over, and the delta-beta shown come from
 the episignature with the largest absolute delta-beta at that site.
 </p>
 
@@ -35,23 +35,32 @@ the episignature with the largest absolute delta-beta at that site.
 </table>
 
 <p>
+The <b>Direction of methylation change</b> filter uses the same strongest episignature, so it does
+not catch a site where a weaker episignature changes in the opposite direction; about 1,600 of
+the 2,850 sites with more than one episignature are of this kind. The table on the details page
+lists every episignature at the site with its own direction.
+</p>
+
+<p>
 The mouse-over gives the probe ID, how many episignatures cover the site, and the episignature
-with the largest effect there with its disorder, direction and delta-beta.
+with the largest effect there with its disorder, direction, and delta-beta.
 </p>
 
 <p>
 Clicking a site opens a page with a table of every episignature at that site, one row each,
 giving the gene or locus, the disorder, its OMIM entry, the direction, the delta-beta, the
-adjusted p-value and the multiple-testing correction that the publishing study used. Studies
+adjusted p-value, and the multiple-testing correction that the publishing study used. Studies
 differ in which correction they applied, so the adjusted p-values in one row are not always
 directly comparable with those in another.
 </p>
 
 <p>
-Three filters are available on the track configuration page. The episignature filter keeps only
-sites that are part of <em>all</em> of the selected episignatures, which is the way to find the
-CpGs that two or more disorders have in common. The other two keep a site by how many
-episignatures cover it and by the direction and size of the strongest change at it.
+Four filters are available on the track configuration page. The <b>Episignature</b> filter
+keeps only sites that are part of <em>all</em> of the selected episignatures, which is the way
+to find the CpGs that two or more disorders have in common. The others keep a site by the
+<b>Number of episignatures at this probe</b>, the <b>Direction of methylation change</b>, and the
+<b>Absolute delta-beta of the strongest episignature at this probe</b>. The last one also
+appears on the Episignatures collection page, where it filters both tracks at once.
 </p>
 
 <h2>Included episignatures</h2>
@@ -99,10 +108,10 @@ Each episignature was established by comparing genome-wide DNA methylation, meas
 methylation arrays in blood, between a group of individuals carrying pathogenic variants in the
 gene or locus concerned and a control group, and keeping the CpG probes whose case-control
 difference survived correction for multiple testing. The studies behind the individual
-signatures are listed in the table above and differ in cohort size, array version and
+signatures are listed in the table above and differ in cohort size, array version, and
 statistical treatment; EpigenCentral collects their published probe lists, adds the disorder and
 OMIM annotation, and serves them together. The portal and the classification it offers are
-described in Turinsky et al.
+described in Turinsky <em>et al.</em>
 </p>
 
 <p>
@@ -118,10 +127,12 @@ were removed, since the site's own count of episignatures already counted each o
 check on the coordinates, 5,000 sampled sites all fall on a CG dinucleotide in the hg38 sequence,
 and all 14,236 probes the track shares with the MethaDory track are at the same position in both.
 One entry, the Dup7 signature at cg19457237, has no direction or delta-beta in the source data
-and is shown as NA. The commands are in the
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/episignatures.txt" target="_blank">makeDoc</a>
-and the scripts in
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/episignatures" target="_blank">src/hg/makeDb/scripts/episignatures</a>.
+and is shown as NA. The commands are in the makedoc,
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/episignatures.txt" target="_blank">doc/hg38/episignatures.txt</a>,
+the scripts in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/episignatures" target="_blank">makeDb/scripts/episignatures</a>,
+and the track settings in
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/hg38/episignatures.ra" target="_blank">trackDb/human/hg38/episignatures.ra</a>.
 </p>
 
 <h2>Data Access</h2>
@@ -129,7 +140,7 @@ and the scripts in
 <p>
 At the request of the data providers this track is not available through the
 <a href="../cgi-bin/hgTables">Table Browser</a>, the
-<a href="../cgi-bin/hgIntegrator">Data Integrator</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>, or the
 <a href="https://api.genome.ucsc.edu" target="_blank">REST API</a>. Please obtain the data from
 EpigenCentral instead, either from the portal at
 <a href="https://epigen.ccm.sickkids.ca/" target="_blank">epigen.ccm.sickkids.ca</a> or from the
@@ -138,7 +149,7 @@ track hub repository at
 where the same annotation is distributed as a bigBed file. The file can be read with our tool
 <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
 binary for your system; instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 </p>
 
 <h2>Credits</h2>
@@ -148,7 +159,7 @@ Thanks to Prajkta Kallurkar and the Centre for Computational Medicine, and to th
 the Hospital for Sick Children in Toronto, for curating the episignatures and for building the
 track hub this track is based on. Thanks also to the groups whose published episignatures are
 collected here, listed in the table above. The track was brought to the Genome Browser by Eliza
-Alde, Barali Kitiyakara and Jairo Navarro.
+Alde, Barali Kitiyakara, Max Haeussler, and Jairo Navarro.
 </p>
 
 <h2>References</h2>
@@ -158,5 +169,6 @@ Turinsky AL, Choufani S, Lu K, Liu D, Mashouri P, Min D, Weksberg R, Brudno M.
 <a href="https://www.ncbi.nlm.nih.gov/pubmed/32623772" target="_blank">
 EpigenCentral: Portal for DNA methylation data analysis and classification in rare diseases</a>.
 <em>Hum Mutat</em>. 2020 Oct;41(10):1722-1733.
+DOI: <a href="https://doi.org/10.1002/humu.24076" target="_blank">10.1002/humu.24076</a>;
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/32623772" target="_blank">32623772</a>
 </p>
