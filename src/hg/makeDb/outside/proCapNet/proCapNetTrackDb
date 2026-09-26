@@ -143,6 +143,7 @@ def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, lon
         "autoScale on",
         "alwaysZero on",
         "maxHeightPixels 100:40:8",
+        "windowingFunction maximum",
         f"color {exp.color}",
         f"shortLabel {shortLabel}",
         f"longLabel {longLabel}",

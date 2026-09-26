@@ -33,6 +33,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 0,114,178
         shortLabel A673 PRO-cap
         longLabel A673 PRO-cap transcription start sites, plus strand up and minus strand down
@@ -65,6 +66,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 213,94,0
         shortLabel Caco-2 PRO-cap
         longLabel Caco-2 PRO-cap transcription start sites, plus strand up and minus strand down
@@ -97,6 +99,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 0,158,115
         shortLabel Calu3 PRO-cap
         longLabel Calu3 PRO-cap transcription start sites, plus strand up and minus strand down
@@ -129,6 +132,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 204,121,167
         shortLabel HUVEC PRO-cap
         longLabel HUVEC PRO-cap transcription start sites, plus strand up and minus strand down
@@ -161,6 +165,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 230,159,0
         shortLabel K562 PRO-cap
         longLabel K562 PRO-cap transcription start sites, plus strand up and minus strand down
@@ -193,6 +198,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 86,180,233
         shortLabel MCF10A PRO-cap
         longLabel MCF10A PRO-cap transcription start sites, plus strand up and minus strand down
@@ -242,6 +248,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 0,114,178
         shortLabel A673 Predicted
         longLabel A673 ProCapNet predicted PRO-cap, plus strand up and minus strand down
@@ -275,6 +282,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 213,94,0
         shortLabel Caco-2 Predicted
         longLabel Caco-2 ProCapNet predicted PRO-cap, plus strand up and minus strand down
@@ -308,6 +316,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 0,158,115
         shortLabel Calu3 Predicted
         longLabel Calu3 ProCapNet predicted PRO-cap, plus strand up and minus strand down
@@ -341,6 +350,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 204,121,167
         shortLabel HUVEC Predicted
         longLabel HUVEC ProCapNet predicted PRO-cap, plus strand up and minus strand down
@@ -374,6 +384,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 230,159,0
         shortLabel K562 Predicted
         longLabel K562 ProCapNet predicted PRO-cap, plus strand up and minus strand down
@@ -407,6 +418,7 @@ group rna
         autoScale on
         alwaysZero on
         maxHeightPixels 100:40:8
+        windowingFunction maximum
         color 86,180,233
         shortLabel MCF10A Predicted
         longLabel MCF10A ProCapNet predicted PRO-cap, plus strand up and minus strand down
