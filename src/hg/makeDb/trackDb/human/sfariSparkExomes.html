@@ -17,8 +17,7 @@ the Illumina NovaSeq X at Broad Clinical Labs. Two tracks show this release. "SF
 WGS" was made from a frequency table that SFARI released with the data. It has no
 autism/non-autism split, its allele counts are estimates, and variants seen only once are
 left out. "SFARI SPARK 45k WGS ASD" was computed from the genotypes. It has exact counts,
-the autism/non-autism split and all variants, including those seen once. For now it covers
-only the DSCAM gene on chr21 (see Methods).
+the autism/non-autism split and all variants, including those seen once (see Methods).
 </p>
 
 <p>
@@ -104,12 +103,15 @@ individuals, with no sample left unassigned. As for the older SPARK tracks, <tt>
 +fill-tags</tt> computed AC, AN and AF overall and per group from the called genotypes.
 Missing genotypes do not count towards AN. The genotypes were then removed. Multiallelic
 records were split and left-aligned with <tt>bcftools norm</tt>. Alleles that no individual
-carries after joint genotyping (AC=0) were removed. There is no allele count cutoff. The
-INFO field <tt>VARLEN</tt> is the length of ALT minus the length of REF: positive for
-insertions, negative for deletions, 0 for substitutions. Unlike the other SPARK tracks,
-this track also shows the predicted protein consequences (<tt>BCSQ</tt>) on its details
-page, computed with <tt>bcftools csq</tt> against Ensembl release 115. The scripts are
-<tt>sparkWgs45kPvcfToSites.sh</tt> and <tt>sparkWgs45kPvcfRange.sh</tt>.
+carries after joint genotyping (AC=0) were removed. There is no allele count cutoff.
+Records that GLnexus marks with the filter <tt>MONOALLELIC</tt> are alleles it could not
+merge into an overlapping site. In these, only the carriers have a genotype, so AN would
+count only them and AF would be 1. For these records, AN was set to twice the number of
+individuals in each group and AF was recomputed from AC. The INFO field <tt>VARLEN</tt> is
+the length of ALT minus the length of REF: positive for insertions, negative for
+deletions, 0 for substitutions. The pVCFs were processed in 500 kb pieces on our compute
+cluster. The scripts are <tt>sparkWgs45kPvcfToSites.sh</tt>,
+<tt>sparkWgs45kPvcfJobs.sh</tt> and <tt>sparkWgs45kPvcfMerge.sh</tt>.
 </p>
 
 <p>The sequencing and variant-calling methods are documented as follows by SFARI:</p>

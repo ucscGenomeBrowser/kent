@@ -1352,3 +1352,33 @@ cd run
 para create -cpu=2 -ram=4g jobList
 para try
 para push -maxJob=200      # capped to spare /hive, 75 TB read in total
+# All 6,188 jobs ran OK (average 26 min, longest 5.6 h while reading /hive,
+# 29 h from submission to the last job with at most ~130 running).
+# Pieces hold 436,319,161 input records, the same as the AF table: norm split
+# 47,268,026, realigned 32,593,833, no REF mismatches, no duplicates.
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/pvcfSites
+mkdir -p chroms
+ls pieces | sort -V | parallel -j 8 'bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kPvcfMerge.sh chroms/{}.vcf.gz pieces/{}/*.bcf 2> chroms/{}.merge.log'
+/cluster/software/src/bcftools-1.22/bcftools concat --threads 8 -Oz -o sparkWgs45kAsd.vcf.gz \
+    $(ls chroms/*.vcf.gz | sort -V)
+tabix -p vcf sparkWgs45kAsd.vcf.gz      # 13 GB
+# 518,290,049 records, 166,084,635 singletons (AC=1), 12,030,738 MONOALLELIC
+# records with corrected AN, 7,665,197 with AN < 45,178 (1,508,111 of them on
+# chrY, where only the 20,367 males are called; chrX is called diploid in males,
+# as in the older SPARK tracks). VARLEN -356 to 1,066. No adjacent duplicate
+# CHROM/POS/REF/ALT. The DSCAM region is identical to the demo build without its
+# BCSQ. APOE rs429358 AF=0.1456 (AUT 0.1472, NON_AUT 0.1442), rs7412 AF=0.0755.
+# /gbdb/hg38/varFreqs/_sfari/sparkWgs45kAsd.vcf.gz now points to this file.
+# The VCF track filters (Christopher's code, refs #37617) only accept INFO
+# fields with Number=1, and fill-tags writes AC/AF and the per-group fields as
+# Number=A. Every record has one ALT after norm -m-, so Number=1 is correct:
+# sparkWgs45kPvcfToSites.sh now writes it, and the finished file was fixed with
+B=/cluster/software/src/bcftools-1.22/bcftools
+$B view -h sparkWgs45kAsd.vcf.gz | sed -E '/^##INFO=<ID=[^,]*,Number=A,/s/,Number=A,/,Number=1,/' > newHeader.txt
+$B reheader -h newHeader.txt -o sparkWgs45kAsd.n1.vcf.gz sparkWgs45kAsd.vcf.gz
+tabix -p vcf sparkWgs45kAsd.n1.vcf.gz
+mv -f sparkWgs45kAsd.n1.vcf.gz sparkWgs45kAsd.vcf.gz
+mv -f sparkWgs45kAsd.n1.vcf.gz.tbi sparkWgs45kAsd.vcf.gz.tbi
+rm newHeader.txt
+# Check: AF_AUT >= 0.001 at chr19:44908600-44908900 hides 122 of 125 variants,
+# the same as bcftools view -i 'AF_AUT>=0.001'.
