@@ -53,6 +53,18 @@ logRun "START"
 if [ $# -gt 0 ]; then
     shift
 fi
+
+# A monthly run covers a hundred or more organisms and there are always a few that cannot be
+# built: an organism UniProt barely annotates, one NCBI has no gene table for, a genome that
+# needs more memory than we reserved. Without this, any one of them stops the other hundred
+# from being published. Failures are still reported in full and each gets its own log under
+# failedTaxa/. Pass --allowFailures yourself to override this default. refs #38300
+case " $* " in
+    *" --allowFailures"*) ;;
+    *) set -- "$@" --allowFailures=10 ;;
+esac
+
+echo "running: ./doUniprot run $*"
 ./doUniprot run "$@" > lastRun.log 2>&1
 exitCode=$?
 trap - INT TERM HUP
@@ -82,6 +94,11 @@ if [ $exitCode -ne 0 ] ; then
     echo
     echo "Last 25 lines of the log:"
     tail -25 lastFail.log
+    if [ -d failedTaxa ] ; then
+        echo
+        echo "Per-taxon failure logs, one file each, kept until the next failure of that taxon:"
+        ls -1 failedTaxa/*.log 2>/dev/null | sed "s|^|    /hive/data/outside/otto/uniprot/|"
+    fi
     exit $exitCode
 fi
 

@@ -366,6 +366,13 @@ def parseArgs():
             "/hive/data/genomes/asmHubs/UCSC_GI.assemblyHubList.txt or a fresh copy of "
             "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt . Use with "
             "--minProteins, which decides how much of GenArk is worth running.")
+    parser.add_option("", "--allowFailures", dest="allowFailures", action="store", type="int",
+            default=0,
+            help="carry on and publish if no more than this many taxa fail, default %default. "
+            "A run across hundreds of assemblies will always have a few organisms that cannot "
+            "be built, and without this a handful of them stops the other hundreds from being "
+            "published. Every failure is still reported and gets its own log under %s/." %
+            taxonFailDir)
     parser.add_option("", "--skipList", dest="skipList", action="store",
             help="file of assemblies to leave alone, one name or accession per line, with "
             "# comments. Entries may carry the full asmId, so a GenArk orderList works as "
@@ -2652,6 +2659,41 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
 
             shutil.copyfile(mapDescFname, join(dbBigBedDir, "liftInfo.json"))
 
+taxonFailDir = "failedTaxa"
+
+def writeTaxonFailLog(taxId, dbs, ex, trace):
+    """ write one file per failed taxon, holding what failed and how, and return its name.
+
+    lastRun.log is overwritten by the next run and holds every taxon interleaved, so a
+    failure that someone wants to look at a day later is hard to find in it. One file per
+    taxon, named after the taxon, survives and is easy to point at.
+    """
+    if not isdir(taxonFailDir):
+        os.makedirs(taxonFailDir, exist_ok=True)
+    fname = join(taxonFailDir, "%s.log" % taxId)
+    with open(fname, "w") as ofh:
+        ofh.write("taxon:      %s\n" % taxId)
+        ofh.write("assemblies: %s\n" % ", ".join(dbs))
+        ofh.write("when:       %s\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        ofh.write("failure:    %s: %s\n\n" % (type(ex).__name__, ex))
+        ofh.write(trace)
+    return fname
+
+def reportFailedTaxa(failed, todo):
+    " print a block naming every failed taxon, its assemblies and where to read about it "
+    dbsByTax = dict(todo)
+    logging.error("")
+    logging.error("%d taxa failed. Each one has a log of its own:" % len(failed))
+    for taxId in sorted(failed):
+        dbs = ", ".join(dbsByTax.get(taxId, []))
+        logging.error("    taxon %-10s %-56s %s/%s.log" % (taxId, dbs[:56], taxonFailDir, taxId))
+    logging.error("")
+    logging.error("Those logs are under %s in %s and are not overwritten by the next run." % \
+            (taxonFailDir, os.getcwd()))
+    logging.error("To retry just these, add: --dbs=%s" % \
+            ",".join(sorted(set(d for t in failed for d in dbsByTax.get(t, [])))))
+    logging.error("")
+
 def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
     """ work through the taxa, optionally several at a time.
 
@@ -2692,12 +2734,28 @@ def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrem
                 # which is exactly the kind of silent failure this pipeline has a history of.
                 # Log the traceback too: errAbort raises a bare AssertionError, so without
                 # one the message is just "AssertionError:" and says nothing about where.
-                logging.error("taxon %s failed: %s: %s\n%s" % (taxId, type(ex).__name__, ex,
-                        "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))))
+                trace = "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))
+                logFname = writeTaxonFailLog(taxId, dict(todo).get(taxId, []), ex, trace)
+                logging.error("taxon %s failed: %s: %s (details in %s)" % \
+                        (taxId, type(ex).__name__, ex, logFname))
+                logging.error(trace)
                 failed.append(taxId)
 
-    if failed:
-        errAbort("%d of %d taxa failed: %s" % (len(failed), len(todo), ", ".join(str(t) for t in sorted(failed))))
+    if not failed:
+        return
+
+    reportFailedTaxa(failed, todo)
+
+    allowed = options.allowFailures
+    if len(failed) <= allowed:
+        logging.warning("%d taxa failed, which is within the %d allowed, so the run carries "
+                "on and the assemblies that did build will be published. Re-run the failed "
+                "taxa with --dbs once they are fixed." % (len(failed), allowed))
+        return
+
+    errAbort("%d of %d taxa failed, more than the %d allowed by --allowFailures. "
+            "Nothing will be published. See %s for what went wrong." % \
+            (len(failed), len(todo), allowed, taxonFailDir))
 
 def makeSymlink(target, linkName):
     assert(".new" not in linkName) # make sure that this bug never happens again
