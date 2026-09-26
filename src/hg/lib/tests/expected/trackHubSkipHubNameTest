@@ -1,0 +1,18 @@
+a hub track name loses its hub_<id>_ prefix
+  hub_12_myTrack                   -> "myTrack"
+  hub_12_my_track_name             -> "my_track_name"
+  hub_12_                          -> ""
+  hub__myTrack                     -> "myTrack"
+
+a name that starts hub_ with no second underscore is returned whole
+  hub_12                           -> the whole name
+  hub_                             -> the whole name
+  hub_myTrack                      -> the whole name
+
+any other name is returned whole
+  knownGene                        -> the whole name
+  myhub_12_track                   -> the whole name
+  HUB_12_track                     -> the whole name
+  hub                              -> the whole name
+  (empty string)                   -> the whole name
+  NULL                             -> NULL
