@@ -1573,6 +1573,7 @@ const T_START = Date.now();
   //   expect: {url: "hgSearch", noUrl: "%E2%80%8B"}  the address bar does / does not
   //   expect: {has: "#td_data_mane map[name=map_center_mane]"}  this selector matches
   //   expect: {noHas: "#td_data_knownGene map[name=map_center_mane]"}  ... does not
+  //   expect: {value: {sel: "#positionInput", is: "chr7:1-100"}}  this form field holds this
   //   expect: {box: {sel: "#topRightLinks", inside: "#main-menu-whole"}}  where it sits
   //   expect: {color: {track: crm4, is: "0,0,255"}}   the items in that row are drawn blue
   //   expect: {color: {track: crm4, part: label, is: "0,255,0"}}  ... its center label green
@@ -1693,6 +1694,29 @@ const T_START = Date.now();
       const n = await page.locator(sel).count().catch(() => -1);
       if (n > 0) bad.push(`${n} element(s) match "${sel}", wanted none`);
       else if (n < 0) bad.push(`noHas: cannot read the selector "${sel}"`);
+    }
+    // value: what a form field holds NOW. A selector cannot ask that: a framework that draws
+    // the field sets the value PROPERTY, and [value=...] matches only the attribute, which it
+    // never touches. The selector has to name exactly one field, since reading the first of
+    // several would quietly pick one. A list is allowed, like color:.
+    for (const one of (o.value == null ? [] : (Array.isArray(o.value) ? o.value : [o.value]))) {
+      if (!one || typeof one !== 'object' || !one.sel) {
+        bad.push('value: takes {sel: <selector>, is: <text>} or not: in place of is:');
+        continue;
+      }
+      if (one.is == null && one.not == null) { bad.push(`value: ${one.sel} needs is: or not:`); continue; }
+      const n = await page.locator(one.sel).count().catch(() => -1);
+      if (n !== 1) {
+        bad.push(n < 0 ? `value: cannot read the selector "${one.sel}"`
+                       : `value: ${n} elements match "${one.sel}", wanted exactly one`);
+        continue;
+      }
+      const got = await page.locator(one.sel).inputValue({ timeout: 2000 }).catch(() => null);
+      if (got == null) bad.push(`value: "${one.sel}" is not a form field`);
+      else if (one.is != null && got !== String(one.is))
+        bad.push(`${one.sel} holds "${got}", wanted "${one.is}"`);
+      else if (one.not != null && got === String(one.not))
+        bad.push(`${one.sel} holds "${got}", which it should not`);
     }
     // box: where an element sits. A list is allowed and every entry is checked, so one step
     // can state a whole layout and a failure names every part of it that came out wrong.
@@ -2362,6 +2386,46 @@ const T_START = Date.now();
         } else {
           console.warn('addCustomTrack: submit did not reach the manage page (data error?)');
         }
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
+      case 'hubUpload': {
+        // Add files to the Hub Upload dashboard (hgHubConnect -> Hub Upload -> Upload), the
+        // way a user dropping them there would. Takes {name:, text:} for one file, or
+        // {files: [{name:, text:}, ...]} for several, and shot:. The files in one step arrive
+        // together, as one batch, which is what the dashboard does with a multi-file drop.
+        // Nothing is uploaded: the files wait in the dashboard, so a run leaves nothing on the
+        // server. The page needs a user, so a login: step comes first.
+        const o = (arg && typeof arg === 'object') ? arg : {};
+        const files = o.files || (o.name != null ? [{ name: o.name, text: o.text }] : []);
+        if (!files.length)
+          throw new Error('hubUpload: takes {name:, text:} or {files: [{name:, text:}, ...]}');
+        await nav(`/cgi-bin/hgHubConnect?db=${state.db}#hubUpload`);
+        await page.waitForSelector('#hubUpload', { timeout: 15000 });
+        // The Upload button is a DataTables button, disabled until the user's file list has
+        // come back, which only happens for a logged-in user on a server with storeUserFiles.
+        await page.waitForFunction(() => {
+          const b = document.querySelector('.uploadButton');
+          return !!b && !b.classList.contains('disabled');
+        }, null, { timeout: 20000 }).catch(() => {
+          throw new Error('hubUpload: the Upload button never became clickable -- is there a '
+                          + 'login: step before this one, and is storeUserFiles on for this server?');
+        });
+        await clickGlide('.uploadButton');
+        await page.waitForSelector('.uppy-Dashboard-inner', { timeout: 15000 });
+        // The dashboard has two hidden file inputs, one of them with webkitdirectory for a
+        // folder drop. The plain one is the file drop.
+        const input = (await page.evaluateHandle(() =>
+          [...document.querySelectorAll('input.uppy-Dashboard-input')]
+            .find(i => i.type === 'file' && !i.webkitdirectory))).asElement();
+        if (!input) throw new Error('hubUpload: the Hub Upload dashboard has no file input');
+        await input.setInputFiles(files.map(f => ({
+          name: String(f.name), mimeType: 'text/plain', buffer: Buffer.from(String(f.text ?? '')),
+        })));
+        // Wait on uppy's own list rather than on what the dashboard draws: with one file the
+        // dashboard can show the file card instead of the list, so no list item appears.
+        await page.waitForFunction(n => typeof uppy !== 'undefined' && uppy.getFiles().length >= n,
+                                   files.length, { timeout: 15000 });
         if (o.shot) { await shot(o.shot); return; }
         break;
       }

@@ -191,6 +191,9 @@ Still to write
   montage:        panel order, lettering, a named shot that was never taken
   goShow:         the suggestion menu, including a `pick:` that matches nothing
   loadSession:    the three remote forms -- only the local-file form is covered
+  hubUpload:,
+  expect value:   covered only by regress/rm38398 (one hub.txt, then the file card), not
+                  by a case here. Several files in one step, as a batch, is untested.
   the YAML lint   `{item:name}` with no space warns and drops the argument. This needs a
                   test that reads stderr, which the harness does not do yet.
 

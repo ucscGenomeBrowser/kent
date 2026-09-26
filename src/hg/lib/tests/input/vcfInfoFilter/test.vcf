@@ -1,0 +1,14 @@
+##fileformat=VCFv4.2
+##INFO=<ID=AF,Number=1,Type=Float,Description="Allele frequency">
+##INFO=<ID=AC,Number=1,Type=Integer,Description="Allele count">
+##INFO=<ID=GENE,Number=1,Type=String,Description="Gene symbol">
+##INFO=<ID=CLASS,Number=1,Type=String,Description="Clinical class">
+##INFO=<ID=PAIR,Number=2,Type=String,Description="Two values, so not filterable as a single value">
+##INFO=<ID=vep,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|SYMBOL">
+##contig=<ID=chr1,length=1000>
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+chr1	100	rs1	A	G	50	PASS	AF=0.5;AC=10;GENE=BRCA1;CLASS=pathogenic;PAIR=a,b;vep=G|missense_variant|BRCA1,G|intron_variant|BRCA1
+chr1	200	rs2	C	T	50	PASS	AF=0.001;AC=1;GENE=TP53;CLASS=benign;vep=T|synonymous_variant|TP53
+chr1	300	rs3	G	A	50	PASS	AF=0.2;AC=4;GENE=BRCA2;CLASS=uncertain;vep=A|splice_donor_variant&intron_variant|BRCA2
+chr1	400	rs4	T	C	50	PASS	AF=.;GENE=.;vep=C|synonymous_variant|OR4F5,C|stop_gained|OR4F5
+chr1	500	rs5	A	T	50	PASS	.

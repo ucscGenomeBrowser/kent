@@ -69,6 +69,9 @@
 36940	504	-	rm36940.docent.yaml	page	-	the bigBedOnePath fallback removed, leaving one load path. The fix is in hg/hgTracks, hg/hgc, so what changed is what a page says or does
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
 37595	504	-	-	page	-	where the iframe sits on an item details page. The fix is in hg/hgc, so what changed is what a page says or does
+37617	505	hg/lib/tests/vcfInfoFilterTester.c	-	library	sandbox-ab	filter.*, filterText.* and filterValues.* on VCF INFO fields and vep sub-fields, and the warning for each filter the VCF header cannot support
+37617	505	lib/tests/htmlEncodeTest.c	-	library	sandbox-ab	the tag strippers return a terminated string for a label with no tags in it
+37618	505	hg/lib/tests/vcfInfoFilterTester.c	-	library	sandbox-ab	colorByInfo on an INFO field and on a vep sub-field, where the value declared first wins across a record's annotations
 37621	504	-	-	page	-	a quickLift bigWig block placed by the window, not the chain. The fix is in hg/hgTracks, so what changed is what a page says or does
 37929	504	-	-	page	-	the login page's wording and the social sign-in buttons. The fix is in hg/hgLogin, hg/lib, so what changed is what a page says or does
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it. BLOCKED: dumpTdbAndChildren is static in trackHub.c and its public caller needs a cart
@@ -88,6 +91,7 @@
 38208	504	-	-	page	-	an obsolete hg.conf flag and its code removed. The fix is in hg/hgTracks, so what changed is what a page says or does
 38223	504	-	rm38223.docent.yaml	page	-	a stray formMethod value in the form. The fix is in hg/hgLiftOver, so what changed is what a page says or does
 38225	504	hg/lib/tests/mallocTopPadTester.c	-	perf	sandbox-ab	the hg.conf step size reaches the C library: the heap grows in one 16 MB jump, not the default one
+38226	505	lib/tests/htmlEncodeTest.c	rm38226.docent.yaml	library	sandbox-ab	htmlEncode and attributeEncode return an empty string for NULL, which an item with no name hands them
 38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: the change is in a static function in hgTracks/simpleTracks.c
 38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is in hgTracks/bigWigTrack.c
 38248	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38248.docent.yaml	library	assertion-only	a deprecated versioned NP_ accession still maps, through ncbiRefSeqLinkHistorical. The ticket's other half, taking the NEWEST deprecated transcript, is NOT pinned: with the order by removed and with a plain string sort, every term I could build gives identical coordinates, because the versions differ only in UTR ends
@@ -129,3 +133,5 @@
 38364	504	-	rm38364.docent.yaml	page	-	a density mode that keeps items clickable. The fix is in hg/hgTracks, so what changed is what a page says or does
 38372	504	-	-	page	-	changing genome on hgCustom re-submitting the form. The fix is in hg/hgCustom, so what changed is what a page says or does
 38384	504	-	-	page	-	a 400 fetching faceted composite metadata on a curated hub. The fix is in hg/hgTrackUi, so what changed is what a page says or does
+38398	505	-	rm38398.docent.yaml	page	-	the Hub Upload file card keeping the genome and hub name a hub.txt names. The fix is in hg/js, so what changed is what a page says or does
+38414	505	hg/lib/tests/trackHubSkipHubNameTester.c	-	invisible	sandbox-ab	a hub_ name with no second underscore comes back whole, not as a pointer one past NULL

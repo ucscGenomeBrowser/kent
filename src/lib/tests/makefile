@@ -11,7 +11,7 @@ test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
     dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
-    hmacTest netSlurpMaxTest
+    hmacTest netSlurpMaxTest htmlEncodeTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -29,6 +29,13 @@ hmacTest: hmacTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/hmacTest${EXE}
 	${BIN_DIR}/hmacTest > output/hmacTest
 	diff expected/hmacTest output/hmacTest
+
+htmlEncodeTest: htmlEncodeTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/htmlEncodeTest htmlEncodeTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/htmlEncodeTest${EXE}
+	${BIN_DIR}/htmlEncodeTest > output/htmlEncodeTest
+	diff expected/htmlEncodeTest output/htmlEncodeTest
 
 netSlurpMaxTest: netSlurpMaxTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

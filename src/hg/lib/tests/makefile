@@ -27,7 +27,8 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
-	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest \
+	trackHubSkipHubNameTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -171,6 +172,18 @@ asForDbTest: mkdirs
 	echo "include /usr/local/apache/cgi-bin/hg.conf" > output/genark.conf
 	HGDB_CONF=output/genark.conf ${BIN_DIR}/asForDbTester > output/asForDbTest 2>&1
 	diff expected/asForDbTest output/asForDbTest
+
+# The warnings for filters a VCF cannot support are part of what is checked, so the tester
+# prints them in line with its other output rather than on stderr.
+vcfInfoFilterTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/vcfInfoFilterTester vcfInfoFilterTester.c ${MYLIBS} $L
+	${BIN_DIR}/vcfInfoFilterTester > output/vcfInfoFilterTest
+	diff expected/vcfInfoFilterTest output/vcfInfoFilterTest
+
+trackHubSkipHubNameTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackHubSkipHubNameTester trackHubSkipHubNameTester.c ${MYLIBS} $L
+	${BIN_DIR}/trackHubSkipHubNameTester > output/trackHubSkipHubNameTest
+	diff expected/trackHubSkipHubNameTest output/trackHubSkipHubNameTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
