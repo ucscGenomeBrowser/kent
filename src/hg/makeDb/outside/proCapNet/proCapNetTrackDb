@@ -92,7 +92,7 @@ def superStanza():
         "track transcriptionStart",
         "superTrack on show",
         "shortLabel Transcription Initiation (TSS)",
-        "longLabel Transcription Initiation (TSS)",
+        "longLabel Transcription initiation (TSS)",
         "group rna",
     ])
 
@@ -183,7 +183,7 @@ def contribStanza(db, exp, priority):
         "alwaysZero on",
         "maxHeightPixels 100:40:8",
         f"color {exp.color}",
-        f"shortLabel {exp.cell} Contrib",
+        f"shortLabel {exp.cell} Contribution",
         f"longLabel {exp.cell} ProCapNet sequence-contribution scores",
         "onlyVisibility full",
         f"priority {priority}",
@@ -198,7 +198,7 @@ def proCapNetComposite(db, experiments):
                           dataTypes, "https://www.encodeproject.org/annotations/$$/", 2)
     for priority, exp in enumerate(experiments, 1):
         out += strandOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",
-                             f"{exp.cell} Pred",
+                             f"{exp.cell} Predicted",
                              f"{exp.cell} ProCapNet predicted PRO-cap, plus strand up and minus strand down",
                              f"{exp.cell} ProCapNet predicted PRO-cap", priority)
     if db == "hg38":
