@@ -722,8 +722,13 @@ if (htmlPath != NULL)
 	char *fetched = lineFileReadAll(lf);
 	lineFileClose(&lf);
 	/* This one came in over the network from a hub, so print only what we allow. */
-	htmlString = htmlSanitize(fetched);
-	freeMem(fetched);
+	if (hubHtmlSanitizeOn())
+	    {
+	    htmlString = htmlSanitize(fetched);
+	    freeMem(fetched);
+	    }
+	else
+	    htmlString = fetched;
 	}
     }
 return htmlString;
