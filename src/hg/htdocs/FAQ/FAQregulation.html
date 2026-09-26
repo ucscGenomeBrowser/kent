@@ -41,13 +41,9 @@ work with.</p>
 <p>
 The Genome Browser carries a large number of tracks that annotate regulatory regions. Most of
 them are in the <em>Regulation</em> track group, which you will find below the browser image on
-the <a href="../cgi-bin/hgTracks?db=hg38">main browser page</a>. It is not always obvious which
-one you want, because these tracks answer quite different questions even when they all look
-like boxes on the screen.</p>
+the <a href="../cgi-bin/hgTracks">main browser page</a>.</p>
 
 <h6>What is the difference between measured and predicted binding sites?</h6>
-<p>
-Nearly every question we get about these tracks comes down to this distinction.</p>
 <p>
 A <em>measured</em> binding site comes from an experiment, usually ChIP-seq, in which one
 protein was pulled down in one cell type under one set of conditions. The site is real in the
@@ -116,19 +112,6 @@ For human, three tracks cover most needs. All three are in the <em>Regulation</e
   <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a> the newest release is JASPAR
   2024.</li>
 </ul>
-<p>
-Two older tracks still come up in questions. <strong>TFBS Conserved</strong> shows predicted
-sites that are conserved across human, mouse and rat, on
-<a href="../cgi-bin/hgTrackUi?db=hg17&amp;g=tfbsConsSites">hg17</a>,
-<a href="../cgi-bin/hgTrackUi?db=hg18&amp;g=tfbsConsSites">hg18</a> and
-<a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=tfbsConsSites">hg19</a> only; it has not been updated in
-many years and
-there is no hg38 version. <strong>ORegAnno</strong> is a curated collection of regulatory
-elements taken from the literature, so it is small but every entry has a citation, on
-<a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=oreganno">hg19</a>,
-<a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=oreganno">hg38</a>,
-<a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=oreganno">mm10</a> and
-<a href="../cgi-bin/hgTrackUi?db=dm6&amp;g=oreganno">dm6</a>.</p>
 
 <a name="notFound"></a>
 <h6>I cannot find my transcription factor in any track. Where else can I look?</h6>
@@ -140,7 +123,7 @@ may be no public ChIP-seq for it in that organism. The
 and download the peaks per factor, and that is the quickest way to check.</p>
 <p>
 If the experiment exists but is newer than our tracks, or was done in a cell type we do not
-carry, you will need to bring the data in yourself. The usual sources are:</p>
+carry, you will need to load the data yourself as a custom track. The usual sources are:</p>
 <ul>
   <li>
   The <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a>, for anything
@@ -195,9 +178,7 @@ need to download the file. Then paste one custom track line at
 <a href="../cgi-bin/hgCustom">Add Custom Tracks</a>:</p>
 <pre>track type=bigBed name="CTCF K562 peaks" bigDataUrl=https://www.encodeproject.org/files/ENCFF002CEL/@@download/ENCFF002CEL.bigBed</pre>
 <p>
-The Browser does not download the whole file. bigBed and bigWig are indexed, so it fetches only
-the part covering the region you are looking at, which is why a multi-gigabyte signal file opens
-in a moment. Full instructions are on the
+Full instructions are on the
 <a href="/goldenPath/help/customTrack.html">custom tracks help page</a> and the
 <a href="/goldenPath/help/hgTrackHubHelp.html">track hub help page</a>.</p>
 
@@ -281,8 +262,7 @@ A candidate cis-regulatory element, or cCRE, is a region that looks regulatory i
 data. Nobody has shown that it regulates anything. ENCODE built the
 Registry of cCREs by combining DNase accessibility with histone modification and CTCF signal
 across many biosamples, then classifying each region as promoter-like, enhancer-like, CTCF-only
-and so on. The word <em>candidate</em> is doing real work here: these are regions worth testing,
-not confirmed regulatory elements.</p>
+and so on.</p>
 <p>
 The <strong>ENCODE cCREs</strong> container on
 <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=cCREs">hg38</a> holds several versions. The
@@ -400,15 +380,15 @@ is the better evidence.</p>
 Much less. The limit is usually the data itself: these resources were built for human first, and
 most never went further than mouse. JASPAR is the main exception, since it needs only the genome
 sequence and a motif, so it covers zebrafish, fly, worm, chicken, sea squirt and yeast as well.
-ReMap and ORegAnno also cover fly. Everything else described on this page is human and mouse
+ReMap also covers fly. Everything else described on this page is human and mouse
 only.</p>
 <p>
 Mouse is split awkwardly between its own assemblies. mm10 carries most of these tracks and mm39
 has only JASPAR, ReMap and VISTA, because several of the source projects never released mm39
 versions. If you need something that is on mm10 but not mm39,
 <a href="../cgi-bin/hgLiftOver">LiftOver</a> will convert the coordinates, though check the
-result before trusting it. Human has a milder version of the same problem: a few tracks are
-still hg19 only, and TFBS Conserved was never rebuilt for hg38.</p>
+result before trusting it. Human has a milder version of the same problem: a few tracks, such
+as the older clustered Txn Factor ChIP, are still hg19 only.</p>
 <p>
 For assemblies not hosted at UCSC, or for tracks we do not carry, check the
 <a href="../cgi-bin/hgHubConnect">public hubs</a> list, where other groups publish data through
@@ -465,23 +445,6 @@ not shown.</p>
           <a href="../cgi-bin/hgTrackUi?db=sacCer3&amp;g=jaspar">sacCer3</a>; up to JASPAR 2024 on
           <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=jaspar">hg19</a> and
           <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=jaspar">mm10</a></td>
-    </tr>
-    <tr>
-      <td>TFBS Conserved</td>
-      <td>Conserved motif matches; not updated recently, no hg38 version</td>
-      <td>Predicted</td>
-      <td><a href="../cgi-bin/hgTrackUi?db=hg17&amp;g=tfbsConsSites">hg17</a>,
-      <a href="../cgi-bin/hgTrackUi?db=hg18&amp;g=tfbsConsSites">hg18</a>,
-      <a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=tfbsConsSites">hg19</a></td>
-    </tr>
-    <tr>
-      <td>ORegAnno</td>
-      <td>Regulatory elements curated from the literature</td>
-      <td>Measured, curated</td>
-      <td><a href="../cgi-bin/hgTrackUi?db=hg19&amp;g=oreganno">hg19</a>,
-      <a href="../cgi-bin/hgTrackUi?db=hg38&amp;g=oreganno">hg38</a>,
-      <a href="../cgi-bin/hgTrackUi?db=mm10&amp;g=oreganno">mm10</a>,
-      <a href="../cgi-bin/hgTrackUi?db=dm6&amp;g=oreganno">dm6</a></td>
     </tr>
     <tr>
       <td colspan="4"><em>Promoters and transcription start sites</em></td>
@@ -606,7 +569,7 @@ not shown.</p>
 
 <p>
 For the full set of tracks on any assembly, open the <em>Regulation</em> group on the
-<a href="../cgi-bin/hgTracks?db=hg38">browser page</a>, or use
+<a href="../cgi-bin/hgTracks">browser page</a>, or use
 <a href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a>.</p>
 
 <!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
