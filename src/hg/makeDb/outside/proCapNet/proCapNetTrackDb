@@ -25,7 +25,10 @@ GBDB = "/gbdb/{db}/{track}"
 DOWNLOAD = "https://hgdownload.soe.ucsc.edu/gbdb/{db}/{track}/$$"
 
 SAMPLE_CLASS_DESC = "Cancer = cell line derived from a tumor"
-SAMPLE_CLASS_COLORS = {"Cancer": "#D55E00", "Non-cancer": "#0072B2"}
+# Deliberately outside the Okabe-Ito palette the cell lines use.  Sharing a hue
+# with a cell line makes a track's color read as its sample class: A673 is a
+# cancer line and draws in #0072B2, which was the Non-cancer swatch.
+SAMPLE_CLASS_COLORS = {"Cancer": "#000000", "Non-cancer": "#808080"}
 
 def parseArgs():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -194,7 +197,7 @@ def proCapNetComposite(db, experiments):
     if db == "hg38":
         dataTypes += ' contrib|"Sequence contribution scores"'
     out = compositeStanza(db, "proCapNet", "ProCapNet",
-                          "ProCapNet predicted PRO-cap and sequence-contribution scores",
+                          "ProCapNet predicted PRO-cap",
                           dataTypes, "https://www.encodeproject.org/annotations/$$/", 2)
     for priority, exp in enumerate(experiments, 1):
         out += strandOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",

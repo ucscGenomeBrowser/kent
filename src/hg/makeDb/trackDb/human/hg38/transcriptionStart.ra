@@ -221,7 +221,7 @@ group rna
     compositeTrack faceted
     type bigWig
     shortLabel ProCapNet
-    longLabel ProCapNet predicted PRO-cap and sequence-contribution scores
+    longLabel ProCapNet predicted PRO-cap
     metaDataUrl /gbdb/hg38/proCapNet/metadata.tsv
     colorSettingsUrl /gbdb/hg38/proCapNet/colors.json
     primaryKey Cell_line
