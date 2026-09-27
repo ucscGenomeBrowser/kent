@@ -10,6 +10,32 @@
 #include "seqOut.h"
 
 
+static boolean pslBlockInSeqs(struct psl *psl, int i, int qStart, int qSize,
+	int tStart, int tSize, int mulFactor, int *retQs, int *retTs, int *retSz)
+/* Place block i of psl in the query and target sequences we were handed, clipping it to what
+ * those sequences actually hold.  The loops below index arrays that are only as long as the two
+ * sequences, so a psl whose coordinates do not belong to the sequence it is being displayed
+ * against - a bigPsl that stores its query side in bases while its block sizes are in codons,
+ * or any file a track hub cares to supply - would otherwise read and write past their ends.
+ * Returns FALSE when nothing of the block lands inside both sequences. */
+{
+int qs = psl->qStarts[i] - qStart;
+int ts = psl->tStarts[i] - tStart;
+int sz = psl->blockSizes[i];
+if (qs < 0 || qs >= qSize || ts < 0 || ts >= tSize)
+    return FALSE;
+if (sz > qSize - qs)
+    sz = qSize - qs;
+if (sz > (tSize - ts) / mulFactor)
+    sz = (tSize - ts) / mulFactor;
+if (sz <= 0)
+    return FALSE;
+*retQs = qs;
+*retTs = ts;
+*retSz = sz;
+return TRUE;
+}
+
 static void pslShowAlignmentStranded(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
 	char *tName, bioSeq *tSeq, int tStart, int tEnd, FILE *f)
@@ -81,9 +107,10 @@ tolowers(qLetters);
 
     for (i=0; i<psl->blockCount; ++i)
 	{
-	int qs = psl->qStarts[i] - qStart;
-	int ts = psl->tStarts[i] - tStart;
-	int sz = psl->blockSizes[i]-1;
+	int qs, ts, sz;
+	if (!pslBlockInSeqs(psl, i, qStart, qSize, tStart, tSeq->size, mulFactor, &qs, &ts, &sz))
+	    continue;
+	sz -= 1;                        /* this loop marks the first and last base of the block */
 	colorFlags[qs] = socBrightBlue;
 	qLetters[qs] = toupper(qLetters[qs]);
 	colorFlags[qs+sz] = socBrightBlue;
@@ -137,9 +164,9 @@ fprintf(f, "<PRE><TT>");
 
     for (i=0; i<psl->blockCount; ++i)
 	{
-	int qs = psl->qStarts[i] - qStart;
-	int ts = psl->tStarts[i] - tStart;
-	int sz = psl->blockSizes[i];
+	int qs, ts, sz;
+	if (!pslBlockInSeqs(psl, i, qStart, qSize, tStart, tSeq->size, mulFactor, &qs, &ts, &sz))
+	    continue;
 	if (isProt)
 	    {
 	    for (j=0; j<sz; ++j)
@@ -208,9 +235,10 @@ fprintf(f, "<PRE><TT>");
 	{
 	for (i=0; i<psl->blockCount; ++i)
 	    {
-	    int qs = psl->qStarts[i] - qStart;
-	    int ts = psl->tStarts[i] - tStart;
-	    int sz = psl->blockSizes[i];
+	    int qs, ts, sz;
+	    if (!pslBlockInSeqs(psl, i, qStart, qSize, tStart, tSeq->size, mulFactor,
+				&qs, &ts, &sz))
+		continue;
 
 	    bafSetPos(&baf, qs, ts);
 	    bafStartLine(&baf);
@@ -234,16 +262,17 @@ fprintf(f, "<PRE><TT>");
 	}
     else
 	{
-	int lastQe = psl->qStarts[0] - qStart;
-	int lastTe = psl->tStarts[0] - tStart;
+	int lastQe = max(0, psl->qStarts[0] - qStart);
+	int lastTe = max(0, psl->tStarts[0] - tStart);
 	int maxSkip = 8;
 	bafSetPos(&baf, lastQe, lastTe);
 	bafStartLine(&baf);
 	for (i=0; i<psl->blockCount; ++i)
 	    {
-	    int qs = psl->qStarts[i] - qStart;
-	    int ts = psl->tStarts[i] - tStart;
-	    int sz = psl->blockSizes[i];
+	    int qs, ts, sz;
+	    if (!pslBlockInSeqs(psl, i, qStart, qSize, tStart, tSeq->size, mulFactor,
+				&qs, &ts, &sz))
+		continue;
 	    boolean doBreak = TRUE;
 	    int qSkip = qs - lastQe;
 	    int tSkip = ts - lastTe;
