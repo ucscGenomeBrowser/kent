@@ -697,7 +697,7 @@ const T_START = Date.now();
       const overlays = [];
       const tip = window.__docentTip && window.__docentTip();
       if (tip) overlays.push(tip);
-      for (const d of document.querySelectorAll('.ui-dialog')) if (d.offsetWidth > 0) overlays.push(d);
+      for (const d of document.querySelectorAll('.ui-dialog, .context-menu')) if (d.offsetWidth > 0) overlays.push(d);
       if (!overlays.length) return null;
       const a = im.getBoundingClientRect();
       let x = a.left, y = a.top, x2 = a.right, y2 = a.bottom;
@@ -728,6 +728,13 @@ const T_START = Date.now();
     let key = null;
     for (const c of cands) {
       key = await page.evaluate(k => {
+        // A trailing * matches by prefix, for a custom track, whose id carries a random
+        // number no script can know in advance (ct_rm38087_723 is ct_rm38087_*).
+        if (k.endsWith('*')) {
+          const pre = [...document.querySelectorAll('[id^="img_data_"]')]
+            .find(e => e.id.startsWith('img_data_' + k.slice(0, -1)));
+          return pre ? pre.id.replace('img_data_', '') : null;
+        }
         if (document.getElementById('img_data_' + k)) return k;
         const el = [...document.querySelectorAll('[id^="img_data_"]')]
           .find(e => e.id === 'img_data_' + k || e.id.endsWith('_' + k));
@@ -1779,7 +1786,13 @@ const T_START = Date.now();
   // Optional `track:` picks the row the drag runs over (y); default is the middle of
   // the image. `shot:` captures the open dialog (e.g. the Figure 1A drag-select box).
   // `then:` = zoom (default, clicks Zoom In) | highlight (Single Highlight) | cancel
-  // (Escape, leaves the view unchanged).
+  // (Escape, leaves the view unchanged) | none (leaves the dialog OPEN, so later steps can
+  // tick its checkbox or press one of its other buttons with click:).
+  // `dialog: auto` stops the verb forcing the dialog on. By default it arms
+  // hgTracks.enableHighlightingDialog and opens the dialog itself, so a figure always gets
+  // one. With auto the selection is handed to the page's own dragSelect.selectEnd(), which
+  // opens the dialog only if the user has not switched it off and otherwise zooms straight
+  // away, so a script can see what the "Don't show this again" checkbox did (#38071).
   async function drag(o) {
     // A bare string is the region; `range:` is the same thing with room for other
     // keys. Both expand to the from:/to: endpoints the rest of this function uses.
@@ -1844,13 +1857,15 @@ const T_START = Date.now();
     // highlight_shot.js does it.
     await glide(x1, y); await sleep(200);
     // Arm the highlighting dialog and open a zero-width selection at the start point.
-    await page.evaluate(({ ix1, y1, y2 }) => {
+    const auto = o.dialog === 'auto';
+    if (o.dialog != null && !auto) throw new Error(`drag: dialog: takes only "auto", not "${o.dialog}"`);
+    await page.evaluate(({ ix1, y1, y2, auto }) => {
       try {
-        hgTracks.enableHighlightingDialog = true;
+        if (!auto) hgTracks.enableHighlightingDialog = true;
         dragSelect.startTime = Date.now();
         $(imageV2.imgTbl).imgAreaSelect({ x1: ix1, y1, x2: ix1, y2, show: true });
       } catch (_) {}
-    }, { ix1: x1 - tbl.x, y1, y2 });
+    }, { ix1: x1 - tbl.x, y1, y2, auto });
     // Sweep to the end, widening the band to the cursor's x at every step.
     const dsteps = Math.max(10, Math.round(Math.abs(x2 - x1) / 9));
     for (let i = 1; i <= dsteps; i++) {
@@ -1863,6 +1878,38 @@ const T_START = Date.now();
     }
     cur.x = x2; cur.y = y;
     await sleep(200);
+    if (auto) {
+      // Let the page decide: the same call imgAreaSelect makes when the mouse is released,
+      // with an event that carries no modifier keys. It either opens the dialog or zooms.
+      const before = await page.evaluate(() => { try { return hgTracks.winStart + '-' + hgTracks.winEnd; } catch (e) { return ''; } });
+      const was = page.url();
+      const r = await page.evaluate(({ ix1, ix2, y1, y2, ey }) => {
+        try {
+          const tb = imageV2.imgTbl[0], ofs = jQuery(tb).offset();
+          const ev = { altKey: false, metaKey: false, ctrlKey: false, shiftKey: true,
+                       pageX: ofs.left + ix2, pageY: ofs.top + ey };
+          const selection = { x1: Math.min(ix1, ix2), x2: Math.max(ix1, ix2), y1, y2,
+                              width: Math.abs(ix2 - ix1), height: y2 - y1, event: ev };
+          dragSelect.selectEnd(tb, selection, ev);
+          return true;
+        } catch (e) { return String((e && e.message) || e); }
+      }, { ix1: x1 - tbl.x, ix2: x2 - tbl.x, y1, y2, ey: y - tbl.y });
+      if (r !== true) throw new Error('drag: dragSelect.selectEnd failed (' + r + ')');
+      const how = await Promise.race([
+        page.waitForSelector('#dragSelectDialog:visible', { timeout: 10000 }).then(() => 'dialog'),
+        page.waitForFunction(prev => { try { return (hgTracks.winStart + '-' + hgTracks.winEnd) !== prev; } catch (e) { return false; } },
+                             before, { timeout: 10000 }).then(() => 'zoom'),
+        page.waitForFunction(u => location.href !== u, was, { timeout: 10000 }).then(() => 'zoom'),
+      ]).catch(() => null);
+      if (!how) throw new Error('drag: dialog: auto -- neither the dialog nor a zoom followed the selection');
+      if (how === 'zoom') {
+        console.log('drag: no dialog, the page zoomed straight away');
+        await page.waitForSelector('#imgTbl'); await sleep(400);
+        await captureState();
+        return;
+      }
+      console.log('drag: the page opened the drag-select dialog');
+    } else {
     // Band is fully drawn — now raise the Drag-and-select dialog.
     const res = await page.evaluate(({ f1, f2, posStr }) => {
       try {
@@ -1876,9 +1923,13 @@ const T_START = Date.now();
     }, { f1: (x1 - dataLeft) / dataW, f2: (x2 - dataLeft) / dataW, posStr });
     const up = await page.waitForSelector('#dragSelectDialog:visible', { timeout: 4000 }).then(() => true).catch(() => false);
     if (!up) throw new Error('drag: drag-select dialog did not open' + (res === true ? '' : ' (' + res + ')'));
+    }
     await sleep(400);
     if (o.shot) await shot(o.shot);
     const act = o.then || 'zoom';
+    if (!['zoom', 'highlight', 'cancel', 'none'].includes(act))
+      throw new Error(`drag: then: takes zoom, highlight, cancel or none, not "${act}"`);
+    if (act === 'none') return;
     if (act === 'cancel') { await page.keyboard.press('Escape'); }
     else {
       const label = (act === 'highlight') ? 'Single Highlight' : 'Zoom In';
@@ -2509,6 +2560,85 @@ const T_START = Date.now();
           await captureState();
         }
         break;
+      case 'rightClick': {
+        // Open hgTracks' right-click menu over a track and, with pick:, choose an entry by a
+        // substring of its text. Addressed like click: -- item:/title: by identity, or
+        // at:/frac:/x: for a bare point on the row. The menu is the only way in to what it
+        // offers (Delete Custom Track, Hide all other tracks, Move to top ...), and each
+        // entry runs in place, so the verb waits out the page's ajax rather than a load.
+        // With no pick: the menu is left open, for a shot: of it or an expect: on its text.
+        if (!arg || typeof arg !== 'object' || !arg.track)
+          throw new Error('rightClick: takes {track: <name>, item:|title:|at:|frac:|x:, pick: <menu text>}');
+        const named = arg.item ?? arg.title;
+        const it = (named != null)
+          ? await itemXY(arg.track, named, arg.title != null && arg.item == null, false)
+          : await posXY(arg.track, arg);
+        await glide(it.x, it.y); await sleep(200);
+        await page.mouse.click(it.x, it.y, { button: 'right' });
+        const menuUp = await page.waitForSelector('.context-menu:visible', { timeout: 8000 }).then(() => true).catch(() => false);
+        if (!menuUp) throw new Error(`rightClick: no menu came up over ${arg.track}`);
+        await sleep(300);
+        if (arg.pick == null) {
+          if (arg.shot) { await shot(arg.shot); return; }
+          break;
+        }
+        const offered = await page.$$eval('.context-menu-item', els => els
+          .filter(e => e.offsetWidth > 0).map(e => (e.innerText || e.textContent || '').trim()));
+        // An exact entry wins over a substring, so pick: Hide is the visibility entry and
+        // not "Hide all other tracks".
+        const want = String(arg.pick).trim().toLowerCase();
+        let i = offered.findIndex(t => t.toLowerCase() === want);
+        if (i < 0) i = offered.findIndex(t => t.toLowerCase().includes(want));
+        if (i < 0) throw new Error(`rightClick: no menu entry "${arg.pick}"; the menu offered: ${offered.join(' | ')}`);
+        console.log('rightClick:', arg.track, '->', offered[i]);
+        if (arg.shot) await shot(arg.shot);
+        const entry = page.locator('.context-menu-item:visible').nth(i);
+        const box = await entry.boundingBox();
+        if (box) { await glide(box.x + Math.min(40, box.width / 2), box.y + box.height / 2); await sleep(200); }
+        const was = page.url();
+        await entry.click();
+        // An entry answers with an in-place redraw, an hgc/hgTrackUi dialog, or a full
+        // navigation (View image, Configure). Wait for the page to go quiet either way.
+        await page.waitForFunction(u => location.href !== u || !window.jQuery || jQuery.active === 0,
+                                   was, { timeout: 20000 }).catch(() => {});
+        await page.waitForLoadState('load').catch(() => {});
+        await page.waitForSelector('#imgTbl', { timeout: 20000 }).catch(() => {});
+        await sleep(300);
+        await captureState();
+        break;
+      }
+      case 'setVis': {
+        // Set a track's visibility with its own dropdown under the image, IN PLACE: the
+        // select changes and its change event fires, and the page's handler does the rest,
+        // with no navigation. `track:` is the other half: it asks for the mode in a URL and
+        // draws a fresh page, so it can never see what the dropdown's handler does to the
+        // page it is on -- the Visible Tracks list keeping a hidden track (#38035), say.
+        // {<track>: <mode>, ...} in order; `in: visible` uses the copy in the Visible Tracks
+        // group, `in: group` the one in the track's own group (a visible track has both).
+        if (!arg || typeof arg !== 'object') throw new Error('setVis: takes {<track>: <mode>}');
+        const where = arg.in;
+        if (where != null && where !== 'visible' && where !== 'group')
+          throw new Error(`setVis: in: takes visible or group, not "${where}"`);
+        for (const [name, mode] of Object.entries(arg)) {
+          if (name === 'in' || name === 'shot') continue;
+          const own = `select[name="${name}"]`;
+          const sel = (where === 'visible') ? `[id^="visible-"] ${own}`
+                    : (where === 'group') ? `${own}:not([id^="visible-"] ${own})` : own;
+          const opts = await page.locator(sel).first()
+            .evaluate(el => [...el.options].map(o => o.value)).catch(() => null);
+          if (!opts) throw new Error(`setVis: no visibility dropdown for ${name}` +
+                                     (where ? ` in the ${where === 'visible' ? 'Visible Tracks' : 'its own'} group` : '') + ' on this page');
+          if (!opts.includes(String(mode))) throw new Error(`setVis: ${name} offers ${opts.join('/')}, not ${mode}`);
+          console.log('setVis:', `${name}=${mode}`, where ? `(${where})` : '');
+          await openSelectVisible(sel, String(mode), 6, true);
+        }
+        // The handler posts the new value to the cart and may redraw; let that finish.
+        await page.waitForFunction(() => !window.jQuery || jQuery.active === 0, null, { timeout: 20000 }).catch(() => {});
+        await sleep(300);
+        await captureState();
+        if (arg.shot) { await shot(arg.shot); return; }
+        break;
+      }
       case 'hover': await glideTo(arg); await page.hover(arg); break;
       case 'fill': {
         // Type into an arbitrary form field: {<selector>: <text>}, one or more pairs, in order.

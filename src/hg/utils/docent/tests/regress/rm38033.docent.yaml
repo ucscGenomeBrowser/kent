@@ -1,0 +1,53 @@
+# #38033 -- quickLift reported items it could not lift as "filtered out".  Every item that
+# came back NULL from the lift was counted by the same variable the trackDb filters use
+# (hg/hgTracks/bigBedTrack.c), so a lifted view said "(2 items filtered out)" when no
+# filter had removed anything, and sent the reader hunting for a filter that is not there.
+#
+# b53f0365865 is the fix: it counts the two cases apart and gives the lift failure its own
+# words, " (N items could not be lifted)" (labelAsNotLiftedNumber, hg/lib/trackDbCustom.c).
+# It is in origin/v503_branch and not in origin/v502_branch, so v502 is the baseline with
+# the bug.
+#
+# The window is the one from the ticket's 2026-09-03 note and the tour in
+# ~/genecats/docentTours/rm38033.docent.yaml: ClinVar SNVs on hg38 lifted to hs1, then the
+# round hs1 window chr1:99,960,000-99,980,000, where two variants have no clean mapping
+# through the chain and no filter is set.
+#
+# The label is drawn INTO the track image, so `text:` cannot see it.  The one place it is
+# in the page as text is the hgTracks.trackDb JSON in an inline <script>, which a CSS or
+# Playwright text selector skips, so the checks are XPath over the script text.  Each is
+# anchored on the ClinVar SNV longLabel and reads only the parenthesis that follows it, so
+# another track's label cannot satisfy it.
+#
+#   * has "... < 50bp (" + "items could not be lifted" -- the new wording is there.  On the
+#     buggy build it does not exist at all.
+#   * noHas "items filtered out" on the same label -- this is the bug itself.  On v502 the
+#     same row reads "(2 items filtered out)".
+#
+# The count is not asserted.  ClinVar is reloaded weekly by otto, so the number moves with
+# the data, and the ticket is about which words the count carries, not the count.
+proof:
+  - "assertion-only 2026-09-26 -- written from the ticket and from b53f0365865, after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304, private trash) at the lifted view: the ClinVar SNV entry says \" items filtered out\" and not \" items could not be lifted\"; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr1:100111880-100131880
+reset: true
+fast: true
+steps:
+  - go: chr1:100111880-100131880
+  - hide: all
+  - track: {clinvar: pack, clinvarCnv: hide, clinvarSubLolly: hide}
+  - expect: {rows: [ruler, clinvarMain], exact: true}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:99960000-99980000
+
+  - expect:
+      rows: [ruler, quickLiftChain, clinvarMain]
+      exact: true
+      noText: "Warning/Error"
+      has: 'xpath=//script[contains(substring-before(substring-after(., "Short Nucleotide Variants < 50bp ("), ")"), " items could not be lifted")]'
+      noHas: 'xpath=//script[contains(substring-before(substring-after(., "Short Nucleotide Variants < 50bp ("), ")"), " items filtered out")]'

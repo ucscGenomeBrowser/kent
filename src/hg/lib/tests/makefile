@@ -27,7 +27,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
-	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest \
+	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
 	trackHubSkipHubNameTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
@@ -179,6 +179,13 @@ vcfInfoFilterTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/vcfInfoFilterTester vcfInfoFilterTester.c ${MYLIBS} $L
 	${BIN_DIR}/vcfInfoFilterTester > output/vcfInfoFilterTest
 	diff expected/vcfInfoFilterTest output/vcfInfoFilterTest
+
+# per-allele counts from a VCF record with more alleles than the old fixed array held.
+# refs #38154
+pgSnpManyAllelesTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/pgSnpManyAllelesTester pgSnpManyAllelesTester.c ${MYLIBS} $L
+	${BIN_DIR}/pgSnpManyAllelesTester > output/pgSnpManyAllelesTest
+	diff expected/pgSnpManyAllelesTest output/pgSnpManyAllelesTest
 
 trackHubSkipHubNameTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackHubSkipHubNameTester trackHubSkipHubNameTester.c ${MYLIBS} $L

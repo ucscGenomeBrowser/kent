@@ -1,0 +1,51 @@
+# #38082 -- a track hub whose genomes.txt names a GCA accession that the asmAlias table
+# maps to a GCF silently loaded the GCF assembly instead, and the hub's tracks never
+# attached.  No error: the user got a different assembly with none of their tracks.
+# GCA_000002655.1 is the case from Lou's asmAliasBugTest hub: both it and
+# GCF_000002655.1 are real GenArk assemblies, and hgcentral asmAlias has the row
+# GCA_000002655.1 -> GCF_000002655.1.
+#
+# Hiram's fix is d05963670ee + fa9b7f8c38f + 8d662255bea.  The last one is the rule that
+# stuck: asmAliasFindUnlessGenArk (hg/lib/asmAlias.c) translates through asmAlias only
+# when the name is not already a GenArk assembly, and hubConnectLoadHubs uses it for db.
+# All three are in origin/v503_branch and none is in origin/v502_branch.  0fbe2a386b7 and
+# 1fc16d4ddd3 only switched the otto asmAlias update off and back on.
+#
+# The fixture, ~/public_html/docentFixtures/rm38082, is a copy of Lou's hub with the
+# track renamed rm38082asmAlias, so nothing outside this repository can change it and no
+# native track can shadow it.  Its one bigBed has testItem1 at CM000169.1:10000-20000.
+#
+# What each step would catch on the buggy build:
+#
+#   * the first expect: db=GCA_000002655.1 on its own was redirected to the GCF.  The
+#     page then names the GCF assembly, so the check is on the GCA accession in the title
+#     and the GCF one absent.
+#   * the second: the hub on the GCA.  The redirect sent the hub's genome to the GCF,
+#     where the hub has no genome stanza, so its row was never drawn.  rows exact plus the
+#     item's map box, since a row can draw empty.
+proof:
+  - "assertion-only 2026-09-26 -- written from the ticket and from 8d662255bea, after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): db=GCA_000002655.1 lands on hub_135170_GCF_000002655.1, the title names the GCF; passes on genome-test"
+
+target: genome-test
+db: GCA_000002655.1
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=GCA_000002655.1&position=CM000169.1:9000-21000&pix=1100"
+  - expect:
+      url: "GCA_000002655.1"
+      has: 'xpath=//title[contains(., "GCA_000002655.1")]'
+      noHas: 'xpath=//title[contains(., "GCF_000002655.1")]'
+      noText: "Warning/Error"
+
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38082/hub.txt", db: GCA_000002655.1, position: "CM000169.1:9000-21000"}
+  - expect:
+      rows: [ruler, rm38082asmAlias]
+      exact: true
+      has:
+        - '[id^="td_data_hub_"][id$="_rm38082asmAlias"] area[href*="i=testItem1"]'
+        - 'xpath=//title[contains(., "GCA_000002655.1")]'
+      noHas: 'xpath=//title[contains(., "GCF_000002655.1")]'
+      noText: "Warning/Error"
