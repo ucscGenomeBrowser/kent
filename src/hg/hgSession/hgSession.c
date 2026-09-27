@@ -970,6 +970,11 @@ sqlDyStringPrintf(dy, ") VALUES (");
 sqlDyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
 sqlDyStringPrintf(dy, "'");
 cleanHgSessionFromCart(cart);
+/* A pending "session just loaded" marker (and the name/owner it refers to) belongs to the
+ * live cart's next page view, not to a session's own saved contents. */
+cartRemove(cart, hgsSessionJustLoaded);
+cartRemove(cart, hgsOtherUserSessionName);
+cartRemove(cart, hgsOtherUserName);
 struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
 
