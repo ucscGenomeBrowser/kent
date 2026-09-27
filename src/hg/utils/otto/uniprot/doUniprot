@@ -371,8 +371,8 @@ def parseArgs():
             help="carry on and publish if no more than this many taxa fail, default %default. "
             "A run across hundreds of assemblies will always have a few organisms that cannot "
             "be built, and without this a handful of them stops the other hundreds from being "
-            "published. Every failure is still reported and gets its own log under %s/." %
-            taxonFailDir)
+            "published. Every failure is still reported and gets its own log under "
+            "the failedTaxa directory.")
     parser.add_option("", "--skipList", dest="skipList", action="store",
             help="file of assemblies to leave alone, one name or accession per line, with "
             "# comments. Entries may carry the full asmId, so a GenArk orderList works as "
