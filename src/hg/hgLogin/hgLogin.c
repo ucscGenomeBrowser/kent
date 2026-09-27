@@ -473,7 +473,12 @@ if (offerNewAddress)
      * way in, so offer to replace it here. */
     hPrintf("<p>If <b>%s</b> is not the right email address, enter the right one, and we will "
         "send the confirmation there instead.</p>", encAddress);
+    /* One token per render of this form, checked back by changePendingEmail: a link built
+     * without having seen this page cannot carry it. */
+    char *formToken = makeRandomKey(128+33);
+    cartSetString(cart, "oauth_pending_formToken", formToken);
     hPrintf("<form method=\"post\" action=\"%s\" name=\"fixEmailForm\">", hgLoginUrl);
+    hPrintf("<input type=\"hidden\" name=\"pendingFormToken\" value=\"%s\">", formToken);
     hPrintf("<div class=\"inputGroup\">"
         "<label for=\"fixEmailAddr\">Email address</label>"
         "<input type=\"text\" name=\"hgLogin_email\" value=\"\" size=\"30\" "
@@ -3062,9 +3067,15 @@ void changePendingEmail(struct sqlConnection *conn)
  * provider round trip, and only for this browser, so a request arriving here without one is
  * refused rather than trusted. */
 {
-char *provider = cartUsualString(cart, "oauth_pending_provider", "");
+// Clone this: clearPendingIdentity below frees the cart's copy, but we still use provider
+// after calling it, to label the confirmation page.
+char *provider = cloneString(cartUsualString(cart, "oauth_pending_provider", ""));
 char *subject = cartUsualString(cart, "oauth_pending_subject", "");
-if (isEmpty(provider) || isEmpty(subject) || !pendingIdentityValid())
+char *formToken = cartUsualString(cart, "oauth_pending_formToken", "");
+boolean postedRightToken = sameString(emptyForNull(cgiRequestMethod()), "POST") &&
+    isNotEmpty(formToken) && sameString(formToken, cgiUsualString("pendingFormToken", ""));
+cartRemove(cart, "oauth_pending_formToken");   // one-time use either way
+if (isEmpty(provider) || isEmpty(subject) || !pendingIdentityValid() || !postedRightToken)
     {
     clearPendingIdentity();
     freez(&errMsg);
@@ -3112,6 +3123,8 @@ if (!bad)
     /* The page we are about to show is the same one the user just came from, so say that the
      * change went through.  Otherwise the swapped-in address is the only sign of it. */
     cartSetString(cart, "hgLogin_actMailChanged", "1");
+    // One change per pending identity: clear it so the form this came from cannot be reused.
+    clearPendingIdentity();
     }
 else
     {
@@ -3386,6 +3399,7 @@ static char *serverOwned[] = {
     "emailLogin_email", "emailLogin_tokenMd5",
     "hgLogin_actMailProvider", "hgLogin_actMailTo", "hgLogin_actMailUser",
     "hgLogin_actMailUnverified", "hgLogin_actMailChanged",
+    "oauth_pending_formToken",
     };
 int i;
 for (i = 0;  i < ArraySize(serverOwned);  i++)
