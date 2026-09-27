@@ -103,8 +103,18 @@ sub seqBaseName {
 #   This deliberately never touches /gbdb/ or hgcentraltest: cluster
 #   jobs can't reach hgwdev (where hgcentraltest lives) and shouldn't
 #   try, and /gbdb isn't mounted on cluster nodes at all.  So:
+#     - a GenArk accession only qualifies for the persistent cache when
+#       mashSketchDir() finds a real on-disk <asmId>_* build directory;
+#       a UCSC db name only qualifies when $HgAutomate::clusterData/$db
+#       is a real directory.  Both are pure filesystem checks (no ssh),
+#       and both exist so an arbitrary local file that merely happens to
+#       share a real assembly's basename (e.g. a stray /tmp/hg38.2bit)
+#       can't get cached into -- and silently corrupt -- that assembly's
+#       real, shared cache.  Anything not backed by a real build/db
+#       directory falls through to the -workDir one-off sketch instead.
 #     - a GenArk accession or UCSC db name with an already-cached .msh
-#       is a pure clusterData filesystem check -- always works, anywhere.
+#       is then just a pure clusterData filesystem check -- always
+#       works, anywhere.
 #     - on a cache MISS, this only proceeds if $seq already IS a real,
 #       existing sequence file (i.e. the caller resolved it themselves,
 #       e.g. to a GenArk build-tree .2bit under clusterData, or handed a
@@ -155,7 +165,14 @@ sub sketch {
 
   if (! $prefix) {
     my $db = &seqBaseName($seq);
-    if ($db ne '') {
+    # Require a real /hive/data/genomes/$db directory before trusting
+    # $db as an actual UCSC assembly -- pure filesystem check, mirroring
+    # mashSketchDir()'s build-directory requirement for GenArk above.
+    # Without this, any existing sequence file whose basename happens to
+    # match a real db name (e.g. a stray local /tmp/hg38.2bit passed via
+    # -target2Bit) would get cached straight into -- and silently
+    # corrupt -- that db's real, shared production cache.
+    if ($db ne '' && -d "$HgAutomate::clusterData/$db") {
       my $cacheDir = "$HgAutomate::clusterData/$db/mashSketch";
       if (! $regenerate && -e "$cacheDir/$db.msh") {
         return "$cacheDir/$db.msh";   # cache hit -- pure filesystem, done

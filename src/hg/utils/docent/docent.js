@@ -1563,6 +1563,32 @@ const T_START = Date.now();
     await captureState();
     if (o.shot) await shot(o.shot);
   }
+  // The warning text the server put on the page, for a failure message. hgTracks lists each
+  // warn() as an <li> under #warnList. hgCustom prints a red "Error" (orange "Warning") span
+  // and the message after it. Without this a run that fails on noText: "Warning/Error", or
+  // on a custom track that never loaded, says only THAT the server complained, and the why
+  // is left in the Apache error log. The 2026-09-27 nightly lost two scripts that way to a
+  // 20-minute hgdownload outage, and the log alone could not tell it from a regression.
+  async function serverWarnings() {
+    const said = await page.evaluate(() => {
+      const out = [...document.querySelectorAll('#warnList li')].map(e => e.textContent);
+      // hgCustom writes <B><span>Error</span><P>message</B>, and the parser moves the
+      // message out of the span's element, so take the page text that follows the span.
+      const body = document.body ? document.body.innerText : '';
+      for (const s of document.querySelectorAll('span')) {
+        const t = s.textContent.trim();
+        if ((t !== 'Error' && t !== 'Warning') || !/red|orange/i.test(s.style.color)) continue;
+        const r = document.createRange();
+        r.setStartAfter(s);
+        r.setEnd(document.body, document.body.childNodes.length);
+        const after = r.toString().trim().split('\n')[0];
+        if (after) out.push(`${t}: ${after}`);
+      }
+      return out;
+    }).catch(() => []);
+    const clip = s => s.replace(/\s+/g, ' ').trim().slice(0, 400);
+    return [...new Set(said.map(clip).filter(Boolean))].slice(0, 5);
+  }
   // The only verb that can fail a run. Every other verb renders happily whatever it is
   // handed: a superTrack that came up whole and made an image 7,581 px tall, a subtrack
   // that never hid, a pinned tooltip that grabbed the neighbouring item, an Apache 414
@@ -1772,7 +1798,8 @@ const T_START = Date.now();
       console.log(`EXPECT ok -- ${seen.rows.length} row(s), ${height}px`);
       return;
     }
-    const msg = bad.join('; ') + `\n  drawn: ${seen.rows.join(', ') || '(none)'}`;
+    const said = (await serverWarnings()).map(w => `\n  server said: ${w}`).join('');
+    const msg = bad.join('; ') + `\n  drawn: ${seen.rows.join(', ') || '(none)'}` + said;
     if (o.warn) console.warn('EXPECT (warning only):', msg);
     else throw new Error(msg);
   }
@@ -2436,6 +2463,7 @@ const T_START = Date.now();
           await captureState();
         } else {
           console.warn('addCustomTrack: submit did not reach the manage page (data error?)');
+          for (const w of await serverWarnings()) console.warn(`  server said: ${w}`);
         }
         if (o.shot) { await shot(o.shot); return; }
         break;
