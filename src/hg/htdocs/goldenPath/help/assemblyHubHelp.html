@@ -46,7 +46,8 @@ added.</p>
 <ul style="margin-left: 20px;">
     <li><a href="#gOnRamp">G-OnRamp</a></li>
     <li><a href="#makeHub">MakeHub</a></li>
-    <li><a href="#exampleNcbiAssemblyHubs">Example NCBI Assembly Hubs</a></li>   
+    <li><a href="#exampleNcbiAssemblyHubs">Example NCBI Assembly Hubs</a></li>
+    <li><a href="#exploringHubFiles">Exploring the Files Behind the Hub</a></li>
         </ul>
     </li>
 </ul>
@@ -547,246 +548,94 @@ genomes with the UCSC Genome Browser. More information is available on their
 <a id="exampleNcbiAssemblyHubs"></a>
 <h3>Example NCBI assembly hubs</h3>
 <p>
-There is a collection of example NCBI assembly hubs that can be used directly or copied as
-templates. A large collection of script-generated assembly hubs can be browsed on the development server, with
-links defaulting to the  <b>genome-test site</b>. To load these hubs on the public UCSC site, copy
-the hub.txt link and replace the test server domain with the public domain.</p>
+UCSC builds assembly hubs from NCBI GenBank and RefSeq genomes and publishes them as
+<a href="https://hgdownload.gi.ucsc.edu/hubs/" target="_blank">GenArk</a>, the UCSC Genome
+Repository. Every hub there is public. You can load one in the Genome Browser as it stands, or
+copy its structure as a working template for a hub of your own.</p>
 <p>
-The following table provides links to launch various assembly hubs grouped by species subsets. By
-scrolling down each page, you can access rows for individual assemblies (or groups of assemblies,
-e.g., bacteria). Clicking the &quot;common name&quot; hyperlink (e.g., &quot;African bush
-elephant&quot; on the Vertebrate Mammalian page) loads the selected hub.</p>
-<div id="tableContainer"></div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const tableContainer = document.getElementById('tableContainer');
-
-  // Map each first-column entry to a unique URL
-  const linkMap = {
-    'non-Mammalian other Vertebrate assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_other/vertebrate_other.ncbi.html',
-    'Vertebrate Mammalian assembly hub': 'https://genome-test.gi.ucsc.edu/~hiram/hubs/genbank/vertebrate_mammalian/vertebrate_mammalian.ncbi.html',
-    'Plant assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/plant/plant.ncbi.html',
-    'Protozoa assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/protozoa/protozoa.ncbi.html',
-    'Invertebrates assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/invertebrate/invertebrate.ncbi.html',
-    'Fungi assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/fungi/fungi.ncbi.html',
-    'Archaea assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/archaea/archaea.ncbi.html',
-    'Bacteria assembly hub': 'https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/bacteria/bacteria.ncbi.html'
-  };
-
-  // Create table elements
-  const table = document.createElement('table');
-  table.setAttribute('border', '1');
-  table.setAttribute('cellpadding', '5');
-  table.setAttribute('cellspacing', '0');
-  table.style.borderCollapse = 'collapse';
-
-  const thead = document.createElement('thead');
-  const headerRow = document.createElement('tr');
-
-  const headers = [
-    {name: 'species subset', type: 'string'},
-    {name: 'number of species', type: 'number'},
-    {name: 'number of assemblies', type: 'number'},
-    {name: 'total contig count', type: 'number'},
-    {name: 'total nucleotide count', type: 'number'},
-    {name: 'average contig size', type: 'number'},
-    {name: 'average assembly size', type: 'number'}
-  ];
-
-  headers.forEach(h => {
-    const th = document.createElement('th');
-    th.setAttribute('data-type', h.type);
-    th.style.cursor = 'pointer';
-    th.style.fontWeight = 'bold';
-    th.textContent = h.name + ' ';
-
-    // Show both arrows by default (three-state: original, ascending, descending)
-    const span = document.createElement('span');
-    span.className = 'sort-arrow';
-    span.innerText = '▲▼'; 
-    th.appendChild(span);
-    headerRow.appendChild(th);
-  });
-
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
-
-  const tbody = document.createElement('tbody');
-  const data = [
-    ['non-Mammalian other Vertebrate assembly hub', '156', '172', '18,548,615', '193,684,015,605', '10,441', '1,126,069,858'],
-    ['Vertebrate Mammalian assembly hub', '118', '204', '30,643,657', '498,264,459,566', '16,259', '2,442,472,841'],
-    ['Plant assembly hub', '190', '269', '34,577,423', '145,341,422,954', '4203', '540,302,687'],
-    ['Protozoa assembly hub', '282', '338', '3,939,128', '16,816,724,183', '4269', '49,753,621'],
-    ['Invertebrates assembly hub', '392', '492', '32,264,511', '170,439,035,382', '5282', '346,420,803'],
-    ['Fungi assembly hub', '1106', '1215', '4,143,097', '38,677,096,556', '9,335', '31,833,001'],
-    ['Archaea assembly hub', '688', '742', '57,569', '2,010,246,046', '34,918', '2,709,226'],
-    ['Bacteria assembly hub', '34,005', '58,658', '8,397,216', '234,147,691,500', '27,883', '3,991,743']
-  ];
-
-  data.forEach(rowData => {
-    const tr = document.createElement('tr');
-    rowData.forEach((value, colIndex) => {
-      const td = document.createElement('td');
-
-      if (colIndex === 0) {
-        // Create a link for the first column
-        const a = document.createElement('a');
-        // Use the mapping to find the correct URL, fallback to '#' if not found
-        a.href = linkMap[value] || '#';
-        a.textContent = value + ' ';
-        
-        // Add an external link icon
-        const icon = document.createElement('span');
-        icon.innerHTML = '&#x2197;'; // Unicode arrow
-        icon.style.fontSize = '0.8em';
-        icon.style.textDecoration = 'none';
-        a.appendChild(icon);
-
-        td.innerHTML = '';
-        td.appendChild(a);
-      } else {
-        td.textContent = value;
-      }
-
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
-
-  table.appendChild(tbody);
-  tableContainer.appendChild(table);
-
-  // Store the original order of rows
-  const originalRows = Array.from(tbody.querySelectorAll('tr'));
-
-  // Sorting logic with three-state toggle
-  const tableHeaders = thead.querySelectorAll('th');
-  let currentSortCol = null;
-  // States: 0 = original, 1 = ascending, 2 = descending
-  let sortState = 0; 
-
-  tableHeaders.forEach((header, colIndex) => {
-    header.addEventListener('click', () => {
-      if (currentSortCol === colIndex) {
-        sortState = (sortState + 1) % 3; 
-      } else {
-        currentSortCol = colIndex;
-        sortState = 1; // ascending first
-      }
-
-      const type = header.getAttribute('data-type');
-      const arrow = header.querySelector('.sort-arrow');
-      let rows = originalRows.slice(); 
-
-      if (sortState === 0) {
-        // Return to original order
-        tbody.innerHTML = '';
-        originalRows.forEach(r => tbody.appendChild(r));
-        arrow.innerText = '▲▼';
-      } else {
-        // Sort rows
-        rows.sort((a, b) => {
-          let aText = a.children[colIndex].innerText;
-          let bText = b.children[colIndex].innerText;
-
-          if (type === 'number') {
-            aText = aText.replace(/,/g, '');
-            bText = bText.replace(/,/g, '');
-            var compA = parseFloat(aText);
-            var compB = parseFloat(bText);
-          } else {
-            var compA = aText.toLowerCase();
-            var compB = bText.toLowerCase();
-          }
-
-          if (compA < compB) return (sortState === 1) ? -1 : 1;
-          if (compA > compB) return (sortState === 1) ? 1 : -1;
-          return 0;
-        });
-
-        tbody.innerHTML = '';
-        rows.forEach(row => tbody.appendChild(row));
-
-        // Update arrows
-        tableHeaders.forEach(h => {
-          const sp = h.querySelector('.sort-arrow');
-          if (sp) sp.innerText = '▲▼'; 
-        });
-        arrow.innerText = (sortState === 1) ? '▲' : '▼';
-      }
-    });
-  });
-});
-</script>
-<p>These assemblies use <b>NCBI accession naming patterns</b>. Prototype gene tracks from NCBI gene
-predictions are available for a few assemblies. No BLAT servers are provided. Users can copy the
-skeleton structure of a hub to run their own BLAT server locally. Brief instructions are available
-on each assembly gateway page under &quot;Download files for this assembly hub.&quot;
+The GenArk index groups assemblies by clade, covering primates, mammals, birds, fishes, other
+vertebrates, invertebrates, plants, fungi, viruses, archaea and bacteria. It also lists curated
+collections drawn from those clades, among them the Vertebrate Genomes Project, the California
+Conservation Genomics Project and the Human Pangenome Reference Consortium. Assemblies that a
+newer version has superseded move to a separate legacy collection. New assemblies are added
+continuously, so the index is the place to check what exists today, not any list copied onto
+this page.</p>
+<p>
+Each clade page gives one row per assembly, with a common name, a scientific name, an NCBI
+accession, a BioSample, a BioProject and a release date. The common name links to the assembly
+open in the Genome Browser, and the scientific name links to the directory of files that make up
+the hub.</p>
+<p>
+These hubs follow <b>NCBI accession naming patterns</b>, so the genome name is an accession such
+as <code>GCA_030020305.1</code> instead of a UCSC database name such as <code>hg38</code>. Gene
+predictions from NCBI RefSeq, Augustus and other sources are available for many of the
+assemblies. BLAT and In-Silico PCR run on a shared dynamic <code>gfServer</code>, which is how
+tens of thousands of assemblies can offer BLAT without a dedicated server each. If you want the
+same arrangement for your own hub, see
+<a href="#configuringDynamicGfServer">Configuring assembly hubs to use a dynamic gfServer</a>
+below.</p>
 
 <a id="exampleLoadingAfricanBushElephant"></a>
-<h4>Example: Loading the African bush elephant assembly hub and reviewing the related genomes.txt
-	and trackDb.txt</h4>
+<h4>Example: loading an assembly hub and reading the hub.txt behind it</h4>
 <p>
-Here are some quick steps to load an example hub from this collection, along with an explanation
-of how to view the files behind the hub.</p>
+These steps load one GenArk assembly, the African savanna elephant, and then open the files it
+was built from. Every other assembly in the index works the same way.</p>
 <ol>
-    <li>Click the
-	    <a href="https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/vertebrate_mammalian.ncbi.html"
-		    target="_blank">Vertebrate Mammalian assembly hub</a> link above.</li>
-    <li>Scroll down to the <b>common name</b> column and click the hyperlink for
-	    <b>"African bush elephant"</b>.</li>
-    <li>You will arrive at a gateway page titled <em>"African bush elephant Genome Browser - 
-		    GCA_000001905.1_Loxafr3.0 assembly"</em>. This page includes a section,
-	    <b>Data file downloads</b>, where you can access the underlying
-	    files.</li>
-    <li>Click <b>Go</b> (or use the top Genome Browser blue bar menu) to view this assembly hub.
-	    (Note: this will open on our <b>genome-test site</b>.).</li>
-    <li>To load this hub on our public site, copy the hyperlink for 
-            <a href="https://genome-test.gi.ucsc.edu/cgi-bin/hgGateway?hubUrl=http://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/hub.ncbi.txt&genome=GCA_000001905.1_Loxafr3.0"
-                    target="_blank">African bush elephant</a> and paste it into your browser.
-	    Then, change the beginning of the URL from</li>
-<pre>
-https://genome-test.gi.ucsc.edu/...
-</pre>
-        to
-<pre>
-https://genome.ucsc.edu/...
-</pre>
+    <li>Open the <a href="https://hgdownload.gi.ucsc.edu/hubs/" target="_blank">GenArk index</a>
+	    and click <b>mammals</b>.</li>
+    <li>Search the page for <b>African savanna elephant (hap1 mLoxAfr1 2023)</b>, accession
+	    <code>GCA_030020305.1</code>.</li>
+    <li>Click the common name to open the assembly in the Genome Browser. The same assembly is
+	    also reachable at
+	    <a href="https://genome.ucsc.edu/h/GCA_030020305.1"
+		    target="_blank">https://genome.ucsc.edu/h/GCA_030020305.1</a>, a short form of the
+	    hub URL that works for any GenArk accession.</li>
+    <li>Back on the index, click the scientific name to open the
+	    <a href="https://hgdownload.gi.ucsc.edu/hubs/GCA/030/020/305/GCA_030020305.1/"
+		    target="_blank">directory of files behind the hub</a>. The path splits the
+	    accession three digits at a time, so <code>GCA_030020305.1</code> lives under
+	    <code>hubs/GCA/030/020/305/</code>.</li>
 </ol>
+
+<a id="exploringHubFiles"></a>
 <h3>Exploring the files behind the hub</h3>
 <p>
-To better understand how the hub works, you can review the associated files:</p>
-<ol>
-	<li>Go to the GCA_000001905.1_Loxafr3.0 directory </b>
-	    <a href="https://genome-test.gi.ucsc.edu/gbdb/hubs/genbank/vertebrate_mammalian/GCA_000001905.1_Loxafr3.0/"
-	       target="_blank">link</a>.</li>
-    <li>Locate the file <b> GCA_000001905.1_Loxafr3.0.ncbi.2bit</b>. This binary indexed file allows
-	    the Browser to display the genome sequence.</li>
-    <li>Open <b>GCA_000001905.1_Loxafr3.0.genomes.ncbi.txt</b>. This <code>genomes.txt</code> file
-	    defines each assembly in the hub. It points to the genome's <code>.2bit</code> file
-	    (<code>twoBitPath</code>) and specifies the <code>trackDb</code> file that contains the
-	    track definitions. (In the case of this large hub with 204 assemblies, the main
-	    genomes.txt file is one directory up, and this stanza is included there.)</li>
-    <li>Review <b>GCA_000001905.1_Loxafr3.0.trackDb.ncbi.txt</b>. This <code>trackDb.txt</code>
-	    file defines the tracks displayed in the hub. It contains <code>bigDataUrl</code> lines
-	    that tell the Browser where to retrieve data for each track, along with optional
-	    settings such as:</li>
-    <ul>
-	    <li><a href="/goldenPath/help/trackDb/trackDbHub.html#searchIndex"
-			    target="_blank">searchIndex</a>
-		    and <a href="/goldenPath/help/trackDb/trackDbHub.html#searchTrix"
-			    target="_blank">searchTrix</a>: support data searches within the hub</li>
-            <li><a href="/goldenPath/help/trackDb/trackDbHub.html#url"
-                            target="_blank">url</a>  and
-		              <a href="/goldenPath/help/trackDb/trackDbHub.html#urlLabel"
-                            target="_blank">urlLabel</a>: create outbound links to external
-		    resources</li>
-	    <li><a href="/goldenPath/help/trackDb/trackDbHub.html#html"
-                            target="_blank">html</a>: links to a file with descriptive information
-		    displayed when users click into a track</li>
-    </ul>
-</ol>
+That directory holds the complete hub. Reading a few of its files shows the components described
+earlier on this page at work in a real example:</p>
+<ul>
+    <li><b>hub.txt</b> is a <a href="#singleFileHub">single-file hub</a>. It sets
+	    <code>useOneFile on</code>, so the hub stanza, the genome stanza and every track
+	    stanza sit in this one file instead of being split across <code>hub.txt</code>,
+	    <code>genomes.txt</code> and <code>trackDb.txt</code>.</li>
+    <li>The genome stanza names the sequence and its indexes. <code>twoBitPath</code> points at
+	    <code>GCA_030020305.1.2bit</code>, <code>chromSizes</code> and
+	    <code>chromAliasBb</code> supply chromosome sizes and
+	    <a href="#chromAlias">alias names</a>, and <code>defaultPos</code> sets the position
+	    the browser opens on.</li>
+    <li>The <code>blat</code>, <code>transBlat</code> and <code>isPcr</code> lines in that stanza
+	    name a dynamic <code>gfServer</code> together with the assembly's path, which is what
+	    lets one server answer for many assemblies.</li>
+    <li>Every track stanza carries a <code>bigDataUrl</code> naming a file under
+	    <code>bbi/</code>, the directory holding the bigBed and bigWig files with the actual
+	    data.</li>
+    <li>Optional track settings appear throughout, including
+	    <a href="/goldenPath/help/trackDb/trackDbHub.html#searchIndex"
+		    target="_blank">searchIndex</a> and
+	    <a href="/goldenPath/help/trackDb/trackDbHub.html#searchTrix"
+		    target="_blank">searchTrix</a>, which make a track searchable through the indexes
+	    under <code>ixIxx/</code>;
+	    <a href="/goldenPath/help/trackDb/trackDbHub.html#url" target="_blank">url</a> and
+	    <a href="/goldenPath/help/trackDb/trackDbHub.html#urlLabel"
+		    target="_blank">urlLabel</a>, which turn item names into outbound links; and
+	    <a href="/goldenPath/help/trackDb/trackDbHub.html#html" target="_blank">html</a>,
+	    which attaches a description page from <code>html/</code> to a track.</li>
+    <li><b>groups.txt</b> defines the track groups that organize the browser display, as covered
+	    under <a href="#groupsTxt">groups.txt</a> above.</li>
+</ul>
+<p>
+A <b>trackDb.txt</b> holding the same track definitions sits next to <code>hub.txt</code> in the
+directory. The assemblies also ship files that are not part of the hub definition, such as
+<code>GCA_030020305.1.fa.gz</code>, the AGP, and RepeatMasker and RepeatModeler output.</p>
 
 <a id="addingBlatServers"></a>
 <h2>Adding BLAT servers</h2>
