@@ -1570,7 +1570,14 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
         # chr1    11994   12144   B4E2Z4  1000    +       11994   12144   0       1       150,    0,      186     336     +       336     186,          249250621        150     0       0       0       0
         row = line.rstrip("\n").split("\t")
 
-        row[-1] = "2" # seqType field: 0=empty, 1=nucleotide, 2=amino_acid
+        # The seqType field (0=empty, 1=nucleotide, 2=amino_acid) used to be stamped "2" here.
+        # It describes the coordinates, not the letters in oSequence, and ours are nucleotides:
+        # these proteins reach the genome through transcripts, so a query is three bases per
+        # residue.  Declaring amino acids made pslFromBigPsl() divide the block sizes by three
+        # and leave the query coordinates alone, which left every reader with an alignment whose
+        # two sides were in different units - a heap overflow in the alignment page, blocks drawn
+        # short in hgTracks, and blocks shorter than a codon loading as size 0, which aborted
+        # pslTransMap and took the lifted SwissProt track down (#38249).  refs #38300
 
         acc = row[3]
         recAnnot = accToMeta.get(acc, None)

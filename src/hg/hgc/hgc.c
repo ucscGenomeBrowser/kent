@@ -8572,6 +8572,12 @@ hFreeConn(&conn);
 }
 
 
+/* Residues left out of the alignment because their codon spans an exon junction, set by the
+ * bigPsl alignment pages when they convert an na-like protein psl and reported by
+ * showGfAlignment().  It travels this way because showGfAlignment() is reached through
+ * showSomeAlignment(), whose signature is shared with every other alignment page. */
+static int gNaLikeDroppedAa = 0;
+
 int showGfAlignment(struct psl *psl, bioSeq *qSeq, FILE *f,
 		    enum gfType qType, int qStart, int qEnd, char *qName)
 /* Show protein/DNA alignment or translated DNA alignment. */
@@ -8581,6 +8587,19 @@ int tStart = psl->tStart;
 int tEnd = psl->tEnd;
 char tName[256];
 struct dnaSeq *tSeq;
+
+/* A protein psl counts its query in amino acids, so the sequence the block coordinates are about
+ * to be laid onto has to be qSize long.  Anything else means the psl and the sequence stored with
+ * it do not describe each other, and drawing from coordinates that are not this sequence's reads
+ * off the end of it.  Say so instead, the way showPartialDnaAlignment() does for the DNA case. */
+if (qType == gftProt && qSeq->size != psl->qSize)
+    {
+    fprintf(f, "<p><b>Cannot display alignment.</b> The query sequence stored for %s is %d amino "
+	       "acids long, but the alignment was made against a query of %d.  The query "
+	       "coordinates in this file do not match the sequence it carries.\n",
+	    psl->qName, qSeq->size, psl->qSize);
+    return 0;
+    }
 
 /* protein psl's have a tEnd that isn't quite right */
 if ((psl->strand[1] == '+') && (qType == gftProt))
@@ -8597,6 +8616,14 @@ if (qName == NULL)
 else
     fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
 	    qName, psl->tName, psl->tStart+1, psl->tEnd);
+
+if (gNaLikeDroppedAa == 1)
+    fprintf(f, "<p>One amino acid of %s is not shown below: its codon is split across an exon "
+	       "junction, so it has no single position in the genome.</p>\n", psl->qName);
+else if (gNaLikeDroppedAa > 1)
+    fprintf(f, "<p>%d amino acids of %s are not shown below: their codons are split across exon "
+	       "junctions, so they have no single position in the genome.</p>\n",
+	    gNaLikeDroppedAa, psl->qName);
 
 if (!cartUsualBoolean(cart, "blatNewPage", FALSE))  /* no "frame" in the new single-page view */
     fputs("Click on links in the frame to the left to navigate through "
@@ -9055,7 +9082,17 @@ if (seq == NULL)
     }
 struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
 enum gfType type = gftRna;
-if (pslIsProtein(psl))
+/* A protein whose query side is counted in bases rather than residues - the UniProt alignments,
+ * which reach the genome through transcripts - has to be converted before it can be shown against
+ * the protein it stores, or its coordinates address three times the sequence there is. */
+struct psl *protPsl = pslProtFromNaLike(psl, rnaSeq->size, &gNaLikeDroppedAa);
+if (protPsl != NULL)
+    {
+    pslFree(&psl);
+    psl = protPsl;
+    type = gftProt;
+    }
+else if (pslIsProtein(psl))
     type = gftProt;
 showSomeAlignment(psl, rnaSeq, type, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
@@ -9139,13 +9176,28 @@ if (seq == NULL)
 if (cdsString)
     genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
+struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
+/* The same conversion htcBigPslAli() makes: a query counted in bases has to become one counted
+ * in residues before it can be shown against the protein stored with it.  Convert before
+ * trimming, which only touches the target side, so the window still decides what is shown. */
+struct psl *protPsl = pslProtFromNaLike(wholePsl, rnaSeq->size, &gNaLikeDroppedAa);
+if (protPsl != NULL)
+    {
+    pslFree(&wholePsl);
+    wholePsl = protPsl;
+    }
 if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
     partPsl = wholePsl;
 else
     partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
-struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
-showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
-                            NULL, cdsStart, cdsEnd);
+if (protPsl != NULL)
+    /* showSomePartialDnaAlignment() renders a nucleotide query.  A protein one belongs on the
+     * translated path, which has no partial form, so show the whole alignment rather than
+     * laying residue coordinates out as though they were bases. */
+    showSomeAlignment(wholePsl, rnaSeq, gftProt, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+else
+    showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
+                                NULL, cdsStart, cdsEnd);
 }
 
 static struct dnaSeq *getBaseColorSequence(char *db, char *itemName, char *table)
