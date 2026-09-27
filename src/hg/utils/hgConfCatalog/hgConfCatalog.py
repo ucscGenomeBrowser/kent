@@ -393,8 +393,31 @@ RELEASE_GATES = {
                "take traffic from the browser UI."),
         h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c",
           default="FALSE", role="gate", verified=True,
-          note="Track group chooser as a dropdown rather than the current "
-               "layout."),
+          note="A \"Genomes:\" dropdown added to a hub's group header, next "
+               "to its Hide group/Refresh buttons, shown whenever the hub "
+               "declares more than one genome in its genomesFile.  Lists "
+               "every genome trackHub.c parsed for that hub, labeled "
+               "\"<name> - <organism>, <freeze>\" via hOrganism()/"
+               "hFreezeFromDb() -- the same lookup hgTracks already uses for "
+               "the page title, so it resolves both a native UCSC db (via "
+               "hgcentral's dbDb table) and a GenArk-style hub genome (via "
+               "the hub's own genomes.txt fields) uniformly, a GenArk "
+               "accession like GCF_011064425.1 included.  The select is "
+               "width-capped with ellipsis, but each option's title "
+               "attribute carries the full label, and the browser's native "
+               "popup still renders at full width regardless.  The "
+               "currently loaded genome is preselected.  Choosing another "
+               "resets TrackForm's position field to that genome's own "
+               "default position (via hDbDb(), same as the label lookup) "
+               "before resubmitting, since a coordinate carried over from a "
+               "different assembly usually does not exist there; option "
+               "values are the hub genomes' raw names -- bare for a native "
+               "UCSC assembly, hub_<id>_-prefixed for a GenArk-style "
+               "twoBitPath genome -- exactly what hgTracks already accepts "
+               "as db elsewhere.  Added nearly a year ago and still off "
+               "everywhere but cgi-bin-max's and cgi-bin-emalekos's "
+               "hg.conf, so it is overdue rather than fresh; see the "
+               "sunset report."),
         h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="TRUE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box.  On by "
