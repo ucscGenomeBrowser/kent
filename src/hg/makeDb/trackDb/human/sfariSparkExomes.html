@@ -15,7 +15,9 @@ them are also in the 12,519-genome release and 201 in the exome release. It incl
 4,900 trios with an autistic child and 1,800 quads. The genomes were sequenced PCR-free on
 the Illumina NovaSeq X at Broad Clinical Labs. The track "SFARI SPARK 45k WGS ASD" shows
 this release. Its counts were computed from the genotypes, with the autism/non-autism split
-and all variants, including those seen only once (see Methods).
+and all variants, including those seen only once. Millions of long insertions in this release
+are bacterial DNA from the saliva samples, not human variants. They are marked and hidden by
+default (see Methods).
 </p>
 
 <p>
@@ -94,6 +96,21 @@ the length of ALT minus the length of REF: positive for insertions, negative for
 deletions, 0 for substitutions. The pVCFs were processed in 500 kb pieces on our compute
 cluster. The scripts are <tt>sparkWgs45kPvcfToSites.sh</tt>,
 <tt>sparkWgs45kPvcfJobs.sh</tt> and <tt>sparkWgs45kPvcfMerge.sh</tt>.
+</p>
+
+<p>
+This release contains millions of long insertions whose inserted sequence is DNA from
+bacteria that live in the mouth, such as <em>Streptococcus mitis</em> and <em>Neisseria
+subflava</em>. The DNA was extracted from saliva. We think that reads which are partly
+bacterial were soft-clipped by the aligner, and the variant caller then turned the bacterial
+part into an insertion. To find them, every inserted sequence of 20 bp or longer was aligned
+to the human genome with <tt>bwa mem</tt>. An insertion whose sequence aligns over less than
+80% of its length, or with more than 10% mismatches, and which is not also in the gnomAD v4.1
+genomes, gets the value <tt>NonHumanIns</tt> in the FILTER column. These insertions are hidden
+by default; to show them, uncheck NonHumanIns under "Exclude variants with these FILTER
+values" on this configuration page. The gnomAD check keeps real insertions that are missing
+from the reference genome, some of which are common. The script is
+<tt>sparkWgs45kFlagNonHumanIns.sh</tt>.
 </p>
 
 <p>The sequencing and variant-calling methods are documented as follows by SFARI:</p>

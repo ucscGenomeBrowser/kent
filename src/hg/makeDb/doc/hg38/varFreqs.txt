@@ -1320,3 +1320,61 @@ rm -rf pieces chroms
 # Note: GLnexus's INFO/AF, which SFARI's AF table is made from, does not always
 # match the genotypes, e.g. chr21:40011372 G>A has AF=1.1e-05 (one allele) but
 # two 0/1 calls. The counts here come from the genotypes.
+
+# 2026-09-26 Claude max
+# Artifact: 22.9M insertions >= 50 bp (4.4% of all records; 21.2M with AC < 10)
+# vs 66 such indels in chr21:40-42 Mb for the 12k DeepVariant pilot and 5,145 in
+# gnomAD v4.1 genomes. 94% are not a copy of nearby reference, none of 40 had a
+# BLAT hit in hg38, lengths peak at 50-150 bp (read length); NCBI megablast of 5
+# gave oral bacteria (Streptococcus mitis, Neisseria subflava, Rothia
+# mucilaginosa, Solobacterium moorei, a phage). The DNA is from saliva, so most
+# likely soft-clipped bacterial read ends turned into insertions by
+# HaplotypeCaller. Write-up sent to SFARI:
+#   https://hgwdev.gi.ucsc.edu/~max/sfari/sparkWgs45kInsertionArtifacts.html
+# Fix: FILTER NonHumanIns on insertions >= 20 bp whose inserted sequence does not
+# align to hg38 with bwa mem (>= 80% of its length, <= 10% NM) and that gnomAD
+# v4.1 genomes does not have (keeps real non-reference insertions, e.g.
+# chr21:40348226 with AF 0.42). Controls: 400 random hg38 pieces each of 20-150
+# bp all pass as human; of shuffled pieces 7/400 (20 bp), 26/400 (25 bp), 1/400
+# (30 bp) and 0 above pass as human, so a few short artifacts stay unflagged.
+# minimap2 -x sr was tried first and missed 37% of real 60 bp hg38 pieces.
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/nonHumanIns
+ln -s /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa hg38.fa
+~/software/bwa/bwa index -a bwtsw -p hg38bwa hg38.fa      # 45 min
+cd ../pvcfSites
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kFlagNonHumanIns.sh \
+    sparkWgs45kAsd.vcf.gz ../nonHumanIns/hg38bwa sparkWgs45kAsd.nhi.vcf.gz 20 48 \
+    > ../nonHumanIns/flag.log 2>&1
+mv -f sparkWgs45kAsd.nhi.vcf.gz sparkWgs45kAsd.vcf.gz
+mv -f sparkWgs45kAsd.nhi.vcf.gz.tbi sparkWgs45kAsd.vcf.gz.tbi
+# 25,275,365 records flagged NonHumanIns (1,935,011 of them also MONOALLELIC);
+# 267,799 not-human insertions kept because gnomAD has them; total unchanged at
+# 518,290,049. Distinct inserted sequences not human: 71% (20-29 bp), 75%
+# (30-49), 92% (50-99), 99% (100-149), 82% (>=150).
+# The track hides them by default with the new trackDb setting
+# excludeFilterValues NonHumanIns (the default for the existing "Exclude variants
+# with these FILTER values" checkboxes; hgTracks/vcfTrack.c, lib/vcfUi.c).
+
+##########
+# 2026-09-26 Claude max
+# Combined tracks varFreqsAffected/varFreqsBackground rebuilt with SFARI SPARK
+# 45k WGS (key SPARK45k, is_disease=1, AUT -> affected, NON_AUT -> background),
+# refs #38424. The merge reads a copy without the NonHumanIns records:
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/pvcfSites
+B=/cluster/software/src/bcftools-1.22/bcftools
+for c in $(seq 1 22) X Y; do echo chr$c; done | parallel -j 24 \
+    "$B view -r {} -e 'FILTER~\"NonHumanIns\"' -Ob -o merge.work/{}.bcf sparkWgs45kAsd.vcf.gz"
+$B concat -Oz --threads 8 -o sparkWgs45kAsd.noNonHumanIns.vcf.gz merge.work/chr{1..22}.bcf merge.work/chr{X,Y}.bcf
+tabix -p vcf sparkWgs45kAsd.noNonHumanIns.vcf.gz     # 493,014,684 records
+# databases.tsv: added SPARK45k, the 12k pilot SFARI_WGS is now displayed as
+# "SFARI SPARK iWGS v1.1 Pilot"; populations.tsv: SPARK45k AUT/NON_AUT arms.
+# The build writes varFreqsNew*.bb, which are moved over the live files at the
+# end, so hgwdev's /gbdb never points at a half-written bigBed.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+      merged.annotated.vcf.gz.tbi normalized_files.txt
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz --output-prefix varFreqsNew \
+    --split-affected --threads 8 --work-dir /hive/data/genomes/hg38/bed/varFreqs/all \
+    > rebuild45k.log 2>&1

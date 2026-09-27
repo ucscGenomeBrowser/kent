@@ -19,10 +19,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         maxWindowToDraw 5000000
         priority 0.11
         mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Affected AF:</b> ${affectedAF}<br><b>Affected AC/AN:</b> ${affectedAC} / ${affectedAN}<br><b>Affected cohorts:</b> ${affectedCohorts}<br><b>Top affected by AF:</b> ${topAffectedSources}<br><b>Background AF:</b> ${backgroundAF}
-        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
+        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
-        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
+        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
         filterType.backgroundSources multipleListOr
         filterLabel.backgroundSources Background source (population or unaffected)
         # Variant type and consequence filters
@@ -645,10 +645,10 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         maxWindowToDraw 5000000
         priority 0.1
         mouseOver <b>Var:</b> ${name}<br><b>AA change:</b> ${aaChange}<br><b>Var type:</b> ${varType}<br><b>Conseq:</b> ${consequence}<br><b>Background AF:</b> ${backgroundAF}<br><b>Background AC/AN:</b> ${backgroundAC} / ${backgroundAN}<br><b>Sources:</b> ${backgroundSources}<br><b>Top population sources by AF:</b> ${topBackgroundSources}<br><b>Affected AF:</b> ${affectedAF}
-        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
+        filterValues.affectedCohorts SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GREGoR|GREGoR,SCHEMA|SCHEMA,GA4K|GA4K PacBio LR
         filterType.affectedCohorts multipleListOr
         filterLabel.affectedCohorts Affected/case cohort
-        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
+        filterValues.backgroundSources AllOfUs|AllOfUs,SPARK|SFARI SPARK WES,SFARI_WGS|SFARI SPARK iWGS v1.1 Pilot,SPARK45k|SFARI SPARK 45k WGS,GenomeAsia|GenomeAsia SNVs,GenomeAsiaIndel|GenomeAsia Indels,NPM|NPM Singapore,KOVA|KOVA Korea,ToMMo|ToMMo Japan,FinnGen|FinnGen Finland,Saudi|Saudi,SweGen|SweGen Sweden,TOPMed|TOPMed,ABraOM|ABraOM Brazil,ALFA|ALFA,MGRB|MGRB Australia,HRC|HRC,SGDP|SGDP,HGDP1kG|gnomAD HGDP+1kG,GREGoR|GREGoR,SCHEMA|SCHEMA,CoLoRSdb|CoLoRSdb PacBio LR,SVatalog|SVatalog 101 10XG SR,Tishkoff180|Tishkoff 180 African WGS,WBBC|WBBC China,ChinaMAP|China ChinaMAP,GenomeIndia|GenomeIndia 9.7k WGS,GoNL|GoNL Netherlands ~13x SR,HostSeq|HostSeq Canada
         filterType.backgroundSources multipleListOr
         filterLabel.backgroundSources Background source (population or unaffected)
         # Variant type and consequence filters
@@ -1370,6 +1370,7 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         dataVersion SPARK WGS 2026_08
         visibility hide
         priority 24.1
+        excludeFilterValues NonHumanIns
         html sfariSparkExomes
         tableBrowser off
         filter.AF 0:1
