@@ -1627,10 +1627,10 @@ hPrintf("<p>Signed in as <b>%s</b>.<br>Current recovery email address: <b>%s</b>
     encUser, encCurRecov,
     (isNotEmpty(curRecov) && !curConfirmed) ? " (waiting to be confirmed)" : "");
 hPrintf("<p style=\"font-size:0.9em\">You can add a second email address to get back into "
-    "your account. Once confirmed, it can sign you in, including through the Google and "
-    "ORCID buttons, and it will get a copy of the password-reset email whenever one is sent "
-    "for this account. We will email a confirmation link to the new address. Until that "
-    "link is opened, the email address cannot be used to sign in and will not receive a "
+    "your account. Once confirmed, it can sign you in, including through the Google, GitHub, "
+    "and CILogon sign-in options, and it will get a copy of the password-reset email whenever "
+    "one is sent for this account. We will email a confirmation link to the new address. Until "
+    "that link is opened, the email address cannot be used to sign in and will not receive a "
     "password-reset email.%s</p>",
     isNotEmpty(curRecov) ? " Your current recovery email address keeps working until then." : "");
 freeMem(encUser);
