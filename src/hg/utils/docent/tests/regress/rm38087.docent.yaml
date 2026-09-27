@@ -1,0 +1,88 @@
+# #38087 -- deleting a custom track from the page left pieces of it behind until a reload.
+#
+# The ticket added "Delete Custom Track" to the track right-click menu. Two follow-up
+# commits on the same ticket fixed the older delete path, the trash icon in the track list
+# under the image, and that path is what this script drives:
+#
+#   e11bc091d66  the right-click item, and one shared deleteCustomTrack() helper
+#   a1354aabe7a  the trash icon also takes the track's row out of the image
+#   e782dd6b9d7  ...and out of the Visible Tracks group, not only the cell that was clicked
+#
+# All three are in origin/v503_branch and none is in origin/v502_branch, so v502 is the
+# release-ab baseline for this script. All three are hg/js/hgTracks.js only, so a
+# baseline build needs the JS installed, not only the CGIs.
+#
+# Before the fix, a click on the trash icon sent the delete to hgCustom and removed the one
+# table cell that held the icon. A visible custom track is listed twice under the image,
+# once in the Custom Tracks group and once in Visible Tracks, so the second copy stayed,
+# and so did the track's row in the image. Both went only on the next page load.
+#
+# Checks, and what each one catches:
+#   * before the click: the track is drawn and has a delete icon in BOTH groups. This is what makes
+#     the checks after the click mean something -- a page that never listed the second
+#     copy would pass them on the broken build.
+#   * after the click, no delete icon for it is left anywhere (e782dd6b9d7: the old code
+#     left the Visible Tracks copy) and its image row is gone (a1354aabe7a).
+#   * after a reload, the track is still gone, so the delete really reached hgCustom and
+#     is not only a change to the page.
+#   * then the same again for a second custom track, deleted with right-click > Delete
+#     Custom Track (e11bc091d66).
+#
+# The second half drives the right-click menu item itself, with rightClick:. The item is
+# new in e11bc091d66, so on a build without it the menu simply has no such entry and the
+# step fails naming what the menu did offer. The same three checks follow it.
+#
+# A custom track's id carries a random number (ct_rm38087_1234), so rows: cannot name it.
+# The checks use has:/noHas: with a prefix match on the id instead.
+proof:
+  - "assertion-only 2026-09-26 -- written from the three commits after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): after the trash-icon click the Visible Tracks copy of the delete icon and the track's image row (ct_rm38087_723) are both still there; passes on genome-test"
+  - "release-ab 2026-09-26 -- the right-click half, run alone, fails on v502_branch (park 38304): the menu offers no Delete Custom Track entry; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - addCustomTrack: |
+      track name=rm38087 description="Docent rm38087 custom track" visibility=pack
+      chr7	155799600	155800200	firstItem	0	+
+      chr7	155805000	155806000	secondItem	0	-
+  - expect:
+      has:
+        - 'tr[id^="tr_ct_rm38087"]'
+        - '[id^="visible-"] div.trackDeleteIcon[data-track^="ct_rm38087"]'
+        - 'div.trackDeleteIcon[data-track^="ct_rm38087"]:not([id^="visible-"] *)'
+      noText: "Error"
+
+  # Click the copy in the Custom Tracks group, so the Visible Tracks copy is the one the
+  # old code would have left behind. A sleep rather than a wait for the row to go, so a
+  # broken build fails at the expect below and names what was left.
+  - click: 'div.trackDeleteIcon[data-track^="ct_rm38087"]:not([id^="visible-"] *)'
+  - sleep: 2000
+  - expect:
+      noHas: ['div.trackDeleteIcon[data-track^="ct_rm38087"]', 'tr[id^="tr_ct_rm38087"]']
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871"
+  - expect:
+      noHas: ['div.trackDeleteIcon[data-track^="ct_rm38087"]', 'tr[id^="tr_ct_rm38087"]']
+      noText: "rm38087"
+
+  # The right-click menu entry. A second track, so the first half cannot have removed it.
+  - addCustomTrack: |
+      track name=rm38087menu description="Docent rm38087 menu custom track" visibility=pack
+      chr7	155799600	155800200	menuItem	0	+
+  - expect:
+      has:
+        - 'tr[id^="tr_ct_rm38087menu"]'
+        - '[id^="visible-"] div.trackDeleteIcon[data-track^="ct_rm38087menu"]'
+  - rightClick: {track: "ct_rm38087menu_*", frac: 0.5, pick: "Delete Custom Track"}
+  - expect:
+      noHas: ['div.trackDeleteIcon[data-track^="ct_rm38087menu"]', 'tr[id^="tr_ct_rm38087menu"]']
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871"
+  - expect:
+      noHas: ['div.trackDeleteIcon[data-track^="ct_rm38087menu"]', 'tr[id^="tr_ct_rm38087menu"]']
+      noText: "rm38087menu"
