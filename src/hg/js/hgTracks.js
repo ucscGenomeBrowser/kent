@@ -7415,6 +7415,14 @@ var downloadCurrentTrackData = {
         downloadCurrentTrackData.downloadData[track] = data;
     },
 
+    stopWaiting: function() {
+        // clear the timer that waits on the api and forget its id, so that the next
+        // download can start.  The id has to be forgotten and not just cleared: it is
+        // the one place that records whether a download is still running
+        clearInterval(downloadCurrentTrackData.intervalId);
+        downloadCurrentTrackData.intervalId = null;
+    },
+
     convertJson: function(data, outType, withHeaders) {
         if (outType !== "tsv" && outType !== "csv") {
             alert("ERROR: incorrect output format option");
@@ -7774,7 +7782,7 @@ var downloadCurrentTrackData = {
     makeDownloadFile: function(key) {
         if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
             // first stop the timer so we don't execute again
-            clearInterval(downloadCurrentTrackData.intervalId);
+            downloadCurrentTrackData.stopWaiting();
             let outType = $("#outputFormat")[0].selectedOptions[0].value;
             let withHeaders = document.getElementById("downloadTrackHeaders").checked;
             var blob = null;
@@ -7817,6 +7825,14 @@ var downloadCurrentTrackData = {
     },
 
     startDownload: function() {
+        // A second click while the first download is still running used to start a second
+        // timer and overwrite the id of the first, leaving a timer nothing could stop:  it
+        // went on firing every 200ms after the data had been handed over and cleared, with
+        // nothing left to build a file from.  One download at a time, and the click that
+        // comes too early is simply ignored, the one already running will finish.
+        if (downloadCurrentTrackData.intervalId !== null) {
+            return;
+        }
         trackList = [];
         downloadCurrentTrackData.trackInfo = {};
         $(".downloadTrackName:checked").each(function(i, elem) {
@@ -7879,7 +7895,7 @@ var downloadCurrentTrackData = {
                     delete downloadCurrentTrackData.currentRequests[seqUrl];
                 } else {
                     if (4 === this.readyState && this.status >= 400) {
-                        clearInterval(downloadCurrentTrackData.intervalId);
+                        downloadCurrentTrackData.stopWaiting();
                         downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
                         delete downloadCurrentTrackData.currentRequests[seqUrl];
                     }
@@ -7904,7 +7920,7 @@ var downloadCurrentTrackData = {
                 delete downloadCurrentTrackData.currentRequests[apiUrl];
             } else {
                 if (4 === this.readyState && this.status >= 400) {
-                    clearInterval(downloadCurrentTrackData.intervalId);
+                    downloadCurrentTrackData.stopWaiting();
                     downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
                     delete downloadCurrentTrackData.currentRequests[apiUrl];
                 }
