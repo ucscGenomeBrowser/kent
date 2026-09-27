@@ -1361,18 +1361,6 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         html sfariSparkExomes
         tableBrowser off
 
-        track sfariSparkWgs45k
-        shortLabel SFARI SPARK 45k WGS
-        longLabel SNV Frequencies: SFARI SPARK - 45,178 WGS, August 2026 release, AC>=2
-        type vcfTabix
-        parent varFreqs on
-        bigDataUrl /gbdb/$D/varFreqs/_sfari/sparkWgs45k.vcf.gz
-        dataVersion SPARK WGS 2026_08
-        visibility hide
-        priority 24
-        html sfariSparkExomes
-        tableBrowser off
-
         track sfariSparkWgs45kAsd
         shortLabel SFARI SPARK 45k WGS ASD
         longLabel SNV Frequencies: SFARI SPARK - 45,178 WGS, August 2026 release, from genotypes, ASD/non-ASD counts
