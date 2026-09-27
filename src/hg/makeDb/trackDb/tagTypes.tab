@@ -144,6 +144,7 @@ downloadUrl* *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
+excludeFilterValues vcf vcfTabix vcfPhasedTrio
 exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
 exonNumbers genePred bed broadPeak psl big*

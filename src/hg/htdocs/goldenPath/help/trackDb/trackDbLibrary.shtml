@@ -5220,6 +5220,17 @@ NA18939	255,127,14</pre>
     </P>
 </DIV>
 
+<DIV class="excludeFilterValues"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>excludeFilterValues &lt;<EM>value1,value2,...</EM>&gt;</code></div>
+    <P>
+    A comma-separated list of values of the VCF FILTER column. Variants with any of these
+    values are hidden by default. The values must be defined in the VCF header; they are
+    shown pre-checked in the "Exclude variants with these FILTER values" list on the track
+    configuration page, where the user can uncheck them. By default nothing is excluded.
+    </P>
+    <P>Example: <code>excludeFilterValues NonHumanIns</code></P>
+</DIV>
+
 <DIV class="vcfDoFilter"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
 <div class="format"><code>vcfDoFilter &lt;on/off&gt;</code></div>
     <p>

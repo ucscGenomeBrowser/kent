@@ -57,7 +57,8 @@ return FALSE;
 }
 
 static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues)
-/* Return TRUE and set retValues if cart contains FILTER column values to exclude */
+/* Return TRUE and set retValues if cart, or else trackDb, contains FILTER column values to
+ * exclude */
 {
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
     {
@@ -65,6 +66,13 @@ if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
 									VCF_EXCLUDE_FILTER_VAR);
     if (retValues != NULL)
 	*retValues = selectedValues;
+    return TRUE;
+    }
+char *tdbDefault = trackDbSettingClosestToHome(tdb, VCF_EXCLUDE_FILTER_VAR);
+if (isNotEmpty(tdbDefault))
+    {
+    if (retValues != NULL)
+	*retValues = slNameListFromComma(tdbDefault);
     return TRUE;
     }
 return FALSE;

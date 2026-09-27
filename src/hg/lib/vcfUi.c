@@ -997,6 +997,13 @@ for (i=0, filt=vcff->filterDefs;  filt != NULL;  i++, filt = filt->next)
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR);
+else
+    {
+    // trackDb can set the default, e.g. to hide artifact-flagged records
+    char *tdbDefault = trackDbSettingClosestToHome(tdb, VCF_EXCLUDE_FILTER_VAR);
+    if (isNotEmpty(tdbDefault))
+        selectedValues = slNameListFromComma(tdbDefault);
+    }
 cgiMakeCheckboxGroupWithVals(cartVar, labels, values, filterCount, selectedValues, 1);
 }
 
