@@ -81,10 +81,10 @@
 37996	504	-	rm37996.docent.yaml	page	-	the new BLAT results page and its banner. The fix is in hg/hgBlat, hg/js, so what changed is what a page says or does
 38086	504	-	rm38086.docent.yaml	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: checkGroup is static in customFactory.c and the path needs a cart
 38107	503	lib/tests/pngWriteTest.c	-	perf	sandbox-ab	every row of a written PNG carries the UP filter, and the decoded pixels are exactly the ones drawn
-38120	503	lib/tests/udcDotsTest.c	-	library	sandbox-ab	. and .. in a remote URL resolve in the cache path the way the server resolves them, a path without them is unchanged, and climbing above the host aborts
+38120	503	lib/tests/udcDotsTest.c	rm38120.docent.yaml	library	sandbox-ab	. and .. in a remote URL resolve in the cache path the way the server resolves them, a path without them is unchanged, and climbing above the host aborts
 38125	503	lib/tests/pngWriteTest.c	-	library	unrecorded	a PNG written through zlib-ng decodes to exactly the pixels drawn
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
-38154	503	hg/lib/tests/pgSnpManyAllelesTester.c	-	library	sandbox-ab	per-allele counts from AN and AC on a record with 150 ALT alleles, more than the old fixed array of 80
+38154	503	hg/lib/tests/pgSnpManyAllelesTester.c	rm38154.docent.yaml	library	sandbox-ab	per-allele counts from AN and AC on a record with 150 ALT alleles, more than the old fixed array of 80
 38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position. BLOCKED: needs a live cart, so hgcentral rows to read and write
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
