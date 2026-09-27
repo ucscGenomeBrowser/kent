@@ -360,10 +360,11 @@ while ((next = strchr(next, '$')) != NULL)
             /* Escape the value before it goes into the page.  A hub's description html was
              * sanitized once, when the hub was read (trackHub.c, htmlSanitize); this pass
              * runs at render time, long after, so anything it inserted raw would be markup
-             * that nothing had ever looked at.  Two of the variables are exactly that:
-             * $organism and $date come straight out of a hub's genomes.txt with no
-             * validation.  None of the variables in either list is meant to carry markup,
-             * so escaping them all costs nothing and leaves no gap to keep track of. */
+             * that nothing had ever looked at.  $organism and $date come straight out of a
+             * hub's genomes.txt, restricted at parse time (trackHub.c,
+             * checkHubDisplayText) to a safe display-label character set.  None of the
+             * variables in either list is meant to carry markup, so escaping them all here
+             * too costs nothing. */
             struct dyString *raw = dyStringNew(64);
             substVar(desc, tdb, database, varName, raw);
             char *escaped = htmlEncode(raw->string);
