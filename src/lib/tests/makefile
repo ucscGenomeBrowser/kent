@@ -11,7 +11,7 @@ test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
     dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
-    hmacTest netSlurpMaxTest htmlEncodeTest
+    hmacTest netSlurpMaxTest htmlEncodeTest cgiDecodeTest udcDotsTest pngWriteTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -71,6 +71,26 @@ cgiCookieTest: cgiCookieTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/cgiCookieTest${EXE}
 	${BIN_DIR}/cgiCookieTest > output/cgiCookieTest
 	diff expected/cgiCookieTest output/cgiCookieTest
+
+# cgiDecode on malformed %hh escapes, and a check that it never reads past its input.
+# refs #37262
+cgiDecodeTest: cgiDecodeTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/cgiDecodeTest cgiDecodeTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/cgiDecodeTest > output/cgiDecodeTest
+	diff expected/cgiDecodeTest output/cgiDecodeTest
+
+# the cache path udc makes for a remote URL with "." or ".." in it.  refs #38120
+udcDotsTest: udcDotsTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/udcDotsTest udcDotsTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/udcDotsTest > output/udcDotsTest
+	diff expected/udcDotsTest output/udcDotsTest
+
+# a PNG written from a memGfx decodes to the same pixels, with the UP row filter.
+# refs #38107, #38125
+pngWriteTest: pngWriteTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/pngWriteTest pngWriteTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/pngWriteTest output/pngWriteTest.png > output/pngWriteTest
+	diff expected/pngWriteTest output/pngWriteTest
 
 cgiParseTest: cgiParseTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
