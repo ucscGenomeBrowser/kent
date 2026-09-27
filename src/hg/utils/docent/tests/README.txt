@@ -185,12 +185,20 @@ Still to write
   pinShot:        several tooltips in one figure, cursors drawn
   convert:        quickLift onto a GenArk haplotype, hideDefaults re-checked -- note a
                   session taken after it cannot be checked in, see #38046
-  drag:           each of then: zoom / highlight / cancel
+  drag:           each of then: zoom / highlight / cancel. then: none and dialog: auto are
+                  covered only by regress/rm38071
+  setVis:         covered only by regress/rm38035 (in: visible). in: group, a mode the
+                  dropdown lacks, and a track with no dropdown are untested
+  rightClick:     covered only by regress/rm38035 and rm38087, all with pick: and frac:.
+                  item:, no pick: (menu left open, shot), and a pick that misses are untested
   addHub:,
   addPublicHub:   the two hub attach paths (a stable hub URL is the hard part)
   montage:        panel order, lettering, a named shot that was never taken
   goShow:         the suggestion menu, including a `pick:` that matches nothing
   loadSession:    the three remote forms -- only the local-file form is covered
+  hubUpload:,
+  expect value:   covered only by regress/rm38398 (one hub.txt, then the file card), not
+                  by a case here. Several files in one step, as a batch, is untested.
   the YAML lint   `{item:name}` with no space warns and drops the argument. This needs a
                   test that reads stderr, which the harness does not do yet.
 

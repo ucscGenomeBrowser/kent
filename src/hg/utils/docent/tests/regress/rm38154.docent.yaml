@@ -1,0 +1,53 @@
+# #38154 -- the Japan ToMMo 61k WGS subtrack of SNV Frequencies crashed hgTracks on hg38.
+# Any window holding a VCF record with more than about eighty ALT alleles segfaulted and
+# the user got a 500 page instead of an image.  The record Matt found is a tandem repeat
+# at chr11:47,348,908 with 178 ALT alleles.
+#
+# Two fixes, both in origin/v503_branch and neither in origin/v502_branch:
+#
+#   01fbc2b46b7  alleleCountsFromVcfRecord() (hg/lib/pgSnp.c) declared
+#                int alCounts[VCF_MAX_ALLELE_LEN], 80, a string length used as an allele
+#                count, and wrote one entry per allele.  179 ints into 80 destroyed the
+#                return address.  Now sized from the record.  This is the crash.
+#   a5b8db176c6  vcfToPgSnp() (hg/hgTracks/vcfTrack.c) abbreviated every allele longer
+#                than two characters to two plus "..." once a record had five or more
+#                alleles, which wrote past the shorter strings and drew different alleles
+#                as the same label.  Now an allele that fits is shown in full.
+#
+# Step one is the crash.  A segfault gives a 500 and no image at all, so the ToMMo row
+# drawn with the map box of the 11-base repeat record (o=47348907, t=47348918) is the
+# check; a page that did not render cannot draw either.  Pack and not dense, because in
+# dense the VCF row writes no per-item map boxes.  Every display mode crashed, per Matt.
+#
+# Step two is the label, at the record chr11:47,300,206 (REF CTTT, ALT CTTTT, CTT, TTTT,
+# C, CTTTTT, ATTT, CT).  The pgSnp item name is in the map box href, so the check reads it
+# there: "CTTT/CTTTT/CTT/..." now, "CT.../CT.../CT.../..." on the buggy build (Jairo's
+# 2026-09-02 note on the ticket measured the second one on the v502 RR).
+#
+# varFreqs is a superTrack, so hideKids leaves ToMMo as the one member drawn.
+proof:
+  - "assertion-only 2026-09-26 -- written from the ticket and from 01fbc2b46b7 + a5b8db176c6, after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): step 1 draws no ToMMo row, hgTracks died on signal 11 in the park error_log; the step-2 record there is named CT.../CT.../CT.../TT.../C/...; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr11:47348858-47348958
+reset: true
+fast: true
+steps:
+  - go: chr11:47348858-47348958
+  - hide: all
+  - track: {varFreqs: hideKids, tommo60kjpn: pack}
+  - expect:
+      rows: [ruler, tommo60kjpn]
+      exact: true
+      has: 'area[href*="g=tommo60kjpn"][href*="o=47348907&t=47348918"]'
+      noText: ["Internal Server Error", "Warning/Error"]
+
+  - go: chr11:47300150-47300260
+  - expect:
+      rows: [ruler, tommo60kjpn]
+      exact: true
+      has: 'area[href*="g=tommo60kjpn"][href*="o=47300205"][href*="i=CTTT%2FCTTTT%2FCTT%2FTTTT%2F"]'
+      noHas: 'area[href*="g=tommo60kjpn"][href*="i=CT...%2FCT...%2F"]'
+      noText: ["Internal Server Error", "Warning/Error"]
