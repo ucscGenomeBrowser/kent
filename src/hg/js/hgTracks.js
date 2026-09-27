@@ -7396,8 +7396,15 @@ var trackSearch = {
 ////////
 var downloadCurrentTrackData = {
     downloadData: {}, // container for holding data while it comes in from the api
+    sequenceData: null, // the region's DNA, only fetched for the GenBank output
+    trackInfo: {}, // trackDb of the requested tracks, keyed by the name sent to the api
     currentRequests: {}, // pending requests
     intervalId: null, // the id of the timer that waits on the api
+
+    // the keys of an api getData/track reply that are not tracks
+    nonTrackKeys: new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
+        "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
+        "bigDataUrl", "chromSize", "hubUrl"]),
 
     failedTrackDataRequest: function(msg) {
         msgJson = JSON.parse(msg);
@@ -7416,9 +7423,7 @@ var downloadCurrentTrackData = {
         let outSep = outType === "tsv" ? '\t' : ',';
         // TODO: someday we will probably want to include some of these fields
         // for each track downloaded, perhaps as an option
-        let ignoredKeys = new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
-            "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
-            "bigDataUrl", "chromSize", "hubUrl"]);
+        let ignoredKeys = downloadCurrentTrackData.nonTrackKeys;
         let columnTypes;
         let cleanData = {};
         // first get rid of top level non track object keys
@@ -7459,6 +7464,313 @@ var downloadCurrentTrackData = {
         return new Blob([str], {type: "text/plain"});
     },
 
+    // The GenBank flat file writer below turns the region's DNA plus the track
+    // items into a feature table. The format is fixed column: feature keys start
+    // at column 6, locations and qualifiers at column 22, lines wrap at 80.
+
+    gbIndent: "                     ", // 21 spaces, the qualifier indent
+
+    gbWrap: function(firstPrefix, contPrefix, text, breakChars) {
+        // wrap text to 79 columns, breaking after one of breakChars, and put
+        // contPrefix in front of every line but the first
+        let out = "";
+        let line = firstPrefix + text;
+        while (line.length > 79) {
+            let breakPos = -1;
+            for (let c of breakChars) {
+                breakPos = Math.max(breakPos, line.lastIndexOf(c, 78));
+            }
+            if (breakPos <= contPrefix.length) {
+                breakPos = 78;  // nothing to break on, cut it
+            }
+            out += line.slice(0, breakPos + 1).replace(/\s+$/, "") + "\n";
+            line = contPrefix + line.slice(breakPos + 1).replace(/^\s+/, "");
+        }
+        return out + line + "\n";
+    },
+
+    gbQualifier: function(name, value) {
+        // a /name="value" qualifier. Inner quotes are doubled, as the format wants,
+        // and very long values are cut, they are usually not what people are after
+        let str = String(value).replace(/\s+/g, " ");
+        if (str.length > 300) {
+            str = str.slice(0, 300) + "...";
+        }
+        // the doubling has to come after the cut: cutting a doubled pair in half would
+        // leave a lone quote, and the value would end there as far as a parser is concerned
+        str = str.replace(/"/g, '""');
+        return downloadCurrentTrackData.gbWrap(downloadCurrentTrackData.gbIndent,
+            downloadCurrentTrackData.gbIndent, "/" + name + "=\"" + str + "\"", " ");
+    },
+
+    gbLocation: function(blocks, strand, partialLeft, partialRight) {
+        // blocks are [start, end] pairs, 1-based, inclusive, in ascending order.
+        // "<" and ">" mark a feature that runs off the edge of the downloaded region
+        let parts = [];
+        for (let i = 0; i < blocks.length; i++) {
+            let s = String(blocks[i][0]);
+            let e = String(blocks[i][1]);
+            if (i === 0 && partialLeft) { s = "<" + s; }
+            if (i === blocks.length - 1 && partialRight) { e = ">" + e; }
+            parts.push(s === e ? s : s + ".." + e);
+        }
+        let loc = parts.length > 1 ? "join(" + parts.join(",") + ")" : parts[0];
+        if (strand === "-") {
+            loc = "complement(" + loc + ")";
+        }
+        return loc;
+    },
+
+    gbFeature: function(key, blocks, strand, partialLeft, partialRight, quals) {
+        let loc = downloadCurrentTrackData.gbLocation(blocks, strand, partialLeft, partialRight);
+        let str = downloadCurrentTrackData.gbWrap("     " + key.padEnd(16),
+            downloadCurrentTrackData.gbIndent, loc, ",");
+        for (let q of quals) {
+            str += downloadCurrentTrackData.gbQualifier(q[0], q[1]);
+        }
+        return str;
+    },
+
+    // columns that become the feature location or a dedicated qualifier, so they
+    // are not repeated as /note
+    gbCoordColumns: new Set(["chrom", "chromStart", "chromEnd", "txStart", "txEnd",
+        "tStart", "tEnd", "tName", "tSize", "start", "end", "strand", "blockCount",
+        "blockSizes", "chromStarts", "blockStarts", "tStarts", "qStarts", "exonCount",
+        "exonStarts", "exonEnds", "thickStart", "thickEnd", "cdsStart", "cdsEnd",
+        "reserved", "itemRgb", "bin"]),
+
+    gbTrackFeatures: function(trackName, label, type, rows, colTypes, winStart, winEnd) {
+        // turn the api rows of one track into GenBank feature table entries,
+        // returns a list of {start:, text:} so that all tracks can be sorted together
+        let idx = {};
+        if (colTypes) {
+            colTypes.forEach(function(col, i) { idx[col.name] = i; });
+        } else {
+            // no column info from the api, assume the usual bed order
+            ["chrom", "chromStart", "chromEnd", "name", "score", "strand"].forEach(
+                function(n, i) { idx[n] = i; });
+        }
+        let pick = function(names) {
+            for (let n of names) {
+                if (n in idx) { return n; }
+            }
+            return null;
+        };
+        let startCol = pick(["chromStart", "txStart", "tStart", "start"]);
+        let endCol = pick(["chromEnd", "txEnd", "tEnd", "end"]);
+        if (startCol === null || endCol === null) {
+            return [];  // no coordinates, nothing we can place on the sequence
+        }
+        let nameCol = pick(["name", "qName", "geneName", "id"]);
+        let geneCol = pick(["geneName", "name2", "geneSymbol", "gene"]);
+        let strandCol = pick(["strand"]);
+        let cdsStartCol = pick(["thickStart", "cdsStart"]);
+        let cdsEndCol = pick(["thickEnd", "cdsEnd"]);
+        let sizesCol = pick(["blockSizes"]);
+        let relStartsCol = pick(["chromStarts", "blockStarts"]);
+        let absStartsCol = pick(["tStarts"]);
+        let exonStartsCol = pick(["exonStarts"]);
+        let exonEndsCol = pick(["exonEnds"]);
+        let splitNums = function(str) {
+            if (str === null || str === undefined) { return []; }
+            return String(str).split(",").filter(function(s) { return s.length > 0; }).map(Number);
+        };
+        // cut blocks down to the region and make them 1-based and relative to it
+        let clip = function(blocks) {
+            let out = [];
+            for (let b of blocks) {
+                let s = Math.max(b[0], winStart);
+                let e = Math.min(b[1], winEnd);
+                if (e > s) { out.push([s - winStart + 1, e - winStart]); }
+            }
+            return out;
+        };
+        let features = [];
+        for (let row of rows) {
+            if (!Array.isArray(row)) { continue; }
+            let start = Number(row[idx[startCol]]);
+            let end = Number(row[idx[endCol]]);
+            if (isNaN(start) || isNaN(end)) { continue; }
+            let strand = strandCol !== null ? String(row[idx[strandCol]] || "") : "";
+            // a psl strand can be two characters, the target strand is the last one
+            strand = strand.length > 0 ? strand.slice(-1) : "";
+            let blocks = null;
+            if (sizesCol !== null && (relStartsCol !== null || absStartsCol !== null)) {
+                // bed12 block starts are relative to chromStart, psl tStarts are not
+                let relative = relStartsCol !== null;
+                let sizes = splitNums(row[idx[sizesCol]]);
+                let starts = splitNums(row[idx[relative ? relStartsCol : absStartsCol]]);
+                let offset = relative ? start : 0;
+                if (sizes.length > 0 && sizes.length === starts.length) {
+                    blocks = [];
+                    for (let i = 0; i < sizes.length; i++) {
+                        blocks.push([offset + starts[i], offset + starts[i] + sizes[i]]);
+                    }
+                }
+            } else if (exonStartsCol !== null && exonEndsCol !== null) {
+                let exonStarts = splitNums(row[idx[exonStartsCol]]);
+                let exonEnds = splitNums(row[idx[exonEndsCol]]);
+                if (exonStarts.length > 0 && exonStarts.length === exonEnds.length) {
+                    blocks = [];
+                    for (let i = 0; i < exonStarts.length; i++) {
+                        blocks.push([exonStarts[i], exonEnds[i]]);
+                    }
+                }
+            }
+            // a block list that does not describe the item is a sign the columns hold
+            // something else, so fall back to one block covering the whole item
+            if (blocks !== null) {
+                let blockEnd = start;
+                for (let b of blocks) {
+                    if (b[0] < blockEnd || b[1] <= b[0] || b[1] > end) {
+                        blocks = null;
+                        break;
+                    }
+                    blockEnd = b[1];
+                }
+            }
+            if (blocks === null) {
+                blocks = [[start, end]];
+            }
+            let exons = clip(blocks);
+            if (exons.length === 0) { continue; }
+            let quals = [];
+            let name = nameCol !== null ? String(row[idx[nameCol]]) : "";
+            if (name.length > 0) {
+                quals.push(["label", name]);  // what sequence viewers show on the feature
+            }
+            if (geneCol !== null && geneCol !== nameCol && row[idx[geneCol]]) {
+                quals.push(["gene", row[idx[geneCol]]]);
+            }
+            // the track name is in here too, it is what leads back to the browser or the api
+            quals.push(["note", "UCSC track: " +
+                (label === trackName ? trackName : label + " (" + trackName + ")")]);
+            for (let col in idx) {
+                if (downloadCurrentTrackData.gbCoordColumns.has(col) ||
+                        col === nameCol || col === geneCol) {
+                    continue;
+                }
+                let val = row[idx[col]];
+                if (val === null || val === undefined || val === "" || val === ".") {
+                    continue;
+                }
+                quals.push(["note", col + ": " + val]);
+            }
+            let cdsStart = cdsStartCol !== null ? Number(row[idx[cdsStartCol]]) : 0;
+            let cdsEnd = cdsEndCol !== null ? Number(row[idx[cdsEndCol]]) : 0;
+            let hasCds = downloadCurrentTrackData.isGeneModelType(type) &&
+                !isNaN(cdsStart) && !isNaN(cdsEnd) && cdsEnd > cdsStart;
+            let key = "misc_feature";
+            if (hasCds) {
+                key = "mRNA";
+            } else if (blocks.length > 1) {
+                key = "misc_RNA";
+            }
+            features.push({start: exons[0][0],
+                text: downloadCurrentTrackData.gbFeature(key, exons, strand,
+                    start < winStart, end > winEnd, quals)});
+            if (hasCds) {
+                let cdsBlocks = [];
+                for (let b of blocks) {
+                    let s = Math.max(b[0], cdsStart);
+                    let e = Math.min(b[1], cdsEnd);
+                    if (e > s) { cdsBlocks.push([s, e]); }
+                }
+                let cdsExons = clip(cdsBlocks);
+                if (cdsExons.length > 0) {
+                    features.push({start: cdsExons[0][0],
+                        text: downloadCurrentTrackData.gbFeature("CDS", cdsExons, strand,
+                            cdsStart < winStart, cdsEnd > winEnd, quals)});
+                }
+            }
+        }
+        return features;
+    },
+
+    convertGenbank: function(data, seqData) {
+        // write a GenBank flat file: the DNA of the region plus the track items
+        // as features. Coordinates are 1-based and relative to the region.
+        if (!seqData || !seqData.dna) {
+            alert("Download failed: could not get the sequence for this region.");
+            return null;
+        }
+        let seq = seqData.dna.toLowerCase();
+        // the sequence reply is what the coordinates are relative to, so it sets the
+        // region.  It is also the only one of the two that names the sequence on a hub
+        // assembly, and it names it the way the assembly does, e.g. CP139523.1 rather
+        // than the chr1 alias the browser displays
+        let chrom = seqData.chrom !== undefined ? seqData.chrom : data.chrom;
+        let winStart = seqData.start !== undefined ? seqData.start : data.start;
+        let winEnd = winStart + seq.length;
+        // a hub assembly arrives as hub_<id>_<accession>, and the hub id is local to this
+        // browser session, so it has no business in a file someone keeps or passes on
+        let db = undecoratedTrack(data.genome);
+        let columnTypes = data.columnTypes;
+        let features = [];
+        let skipped = [];
+        _.each(data, function(val, track) {
+            if (downloadCurrentTrackData.nonTrackKeys.has(track) || !Array.isArray(val)) {
+                return;
+            }
+            let tdb = downloadCurrentTrackData.trackInfo[track] || {};
+            let label = tdb.shortLabel || track;
+            if (downloadCurrentTrackData.isWiggleType(tdb.type)) {
+                // the dialog greys these out, this is for a track that got here anyway:
+                // one feature per wiggle value would be millions of lines and would
+                // mean nothing to a sequence viewer
+                skipped.push(label);
+                return;
+            }
+            features = features.concat(downloadCurrentTrackData.gbTrackFeatures(track, label,
+                tdb.type, val, columnTypes ? columnTypes[track] : null, winStart, winEnd));
+        });
+        features.sort(function(a, b) { return a.start - b.start; });
+
+        let posStr = chrom + ":" + (winStart + 1) + "-" + winEnd;
+        let months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                      "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        let now = new Date();
+        let date = String(now.getDate()).padStart(2, "0") + "-" + months[now.getMonth()] +
+            "-" + now.getFullYear();
+        let organism = hgTracks.organism || db;
+        let sciName = hgTracks.scientificName || organism;
+        let str = "LOCUS       " + (db + "_" + chrom + "_" + (winStart + 1) + "_" + winEnd).padEnd(16) +
+            " " + String(seq.length).padStart(11) + " bp    DNA     linear   UNK " + date + "\n";
+        str += downloadCurrentTrackData.gbWrap("DEFINITION  ", "            ",
+            sciName + " " + posStr + " (" + db + "), from the UCSC Genome Browser.", " ");
+        str += "ACCESSION   " + chrom + "\n";
+        str += "VERSION     " + chrom + "\n";
+        str += "KEYWORDS    .\n";
+        str += "SOURCE      " + organism + "\n";
+        str += "  ORGANISM  " + sciName + "\n";
+        str += downloadCurrentTrackData.gbWrap("COMMENT     ", "            ",
+            "Sequence and annotations downloaded from the UCSC Genome Browser, " +
+            "https://genome.ucsc.edu. Assembly " + db + ", region " + posStr +
+            ". Positions in this file are relative to the start of the region.", " ");
+        if (skipped.length > 0) {
+            str += downloadCurrentTrackData.gbWrap("            ", "            ",
+                "Not included, these tracks hold numeric data rather than features: " +
+                skipped.join(", ") + ".", " ");
+        }
+        str += "FEATURES             Location/Qualifiers\n";
+        str += downloadCurrentTrackData.gbFeature("source", [[1, seq.length]], "", false, false,
+            [["organism", sciName], ["mol_type", "genomic DNA"],
+             ["note", "UCSC Genome Browser assembly " + db + ", " + posStr]]);
+        for (let feature of features) {
+            str += feature.text;
+        }
+        str += "ORIGIN      \n";
+        for (let i = 0; i < seq.length; i += 60) {
+            let line = String(i + 1).padStart(9);
+            for (let j = 0; j < 60; j += 10) {
+                line += " " + seq.slice(i + j, i + j + 10);
+            }
+            str += line.replace(/\s+$/, "") + "\n";
+        }
+        str += "//\n";
+        return new Blob([str], {type: "text/plain"});
+    },
+
     makeDownloadFile: function(key) {
         if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
             // first stop the timer so we don't execute again
@@ -7468,6 +7780,9 @@ var downloadCurrentTrackData = {
             var blob = null;
             if (outType === 'json') {
                 blob = new Blob([JSON.stringify(downloadCurrentTrackData.downloadData[key])], {type: "text/plain"});
+            } else if (outType === 'gb') {
+                blob = downloadCurrentTrackData.convertGenbank(downloadCurrentTrackData.downloadData[key],
+                    downloadCurrentTrackData.sequenceData);
             } else {
                 blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType, withHeaders);
             }
@@ -7485,6 +7800,9 @@ var downloadCurrentTrackData = {
                     case "csv":
                         if (!fname.endsWith(".csv")) {fname += ".csv";}
                         break;
+                    case "gb":
+                        if (!fname.endsWith(".gb")) {fname += ".gb";}
+                        break;
                     default:
                         if (!fname.endsWith(".txt")) {fname += ".txt";}
                         break;
@@ -7493,18 +7811,22 @@ var downloadCurrentTrackData = {
                 anchor.click();
                 window.URL.revokeObjectURL(anchor.href);
                 downloadCurrentTrackData.downloadData = {};
+                downloadCurrentTrackData.sequenceData = null;
             }
         }
     },
 
     startDownload: function() {
         trackList = [];
+        downloadCurrentTrackData.trackInfo = {};
         $(".downloadTrackName:checked").each(function(i, elem) {
             trackName = elem.id;
             if (getDb().startsWith("hub_")) {
                 // when we are working with assembly hubs, we undecorate the name
                 trackName = undecoratedTrack(elem.id);
             }
+            // the api replies with the undecorated name, keep the trackDb under it
+            downloadCurrentTrackData.trackInfo[trackName] = hgTracks.trackDb[elem.id];
             trackList.push(trackName);
         });
         if (trackList.length == 0) {
@@ -7524,6 +7846,48 @@ var downloadCurrentTrackData = {
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
         db = getDb();
+        if ($("#outputFormat")[0].selectedOptions[0].value === "gb") {
+            // GenBank output carries the DNA of the region as well, so it can get big.
+            // The api itself would serve most of a chromosome, but the sequence arrives as
+            // one json string and is then copied into the file, so the web browser needs
+            // several times the region in memory and a big region can kill the tab.
+            if (end - start > downloadCurrentTrackData.maxGenbankRegion) {
+                alert("This region is " + (end - start).toLocaleString() + " bp, more than the " +
+                    downloadCurrentTrackData.maxGenbankRegion.toLocaleString() + " bp limit for " +
+                    "GenBank output: the file holds the sequence of the whole region and your " +
+                    "web browser may not have the memory to build it. Zoom in, or use the Table " +
+                    "Browser or our download server for a whole chromosome.");
+                return;
+            }
+            if (end - start > 5000000 &&
+                    !confirm("This region is " + (end - start).toLocaleString() + " bp. " +
+                        "The GenBank file contains the sequence of the whole region and " +
+                        "may take a while to build. Continue?")) {
+                return;
+            }
+            downloadCurrentTrackData.sequenceData = null;
+            let seqUrl = "../cgi-bin/hubApi/getData/sequence?";
+            seqUrl += "chrom=" + chrom;
+            seqUrl += ";start=" + start;
+            seqUrl += ";end=" + end;
+            seqUrl += ";genome=" + db;
+            var seqRequest = new XMLHttpRequest();
+            downloadCurrentTrackData.currentRequests[seqUrl] = true;
+            seqRequest.onreadystatechange = function() {
+                if (4 === this.readyState && 200 === this.status) {
+                    downloadCurrentTrackData.sequenceData = JSON.parse(this.responseText);
+                    delete downloadCurrentTrackData.currentRequests[seqUrl];
+                } else {
+                    if (4 === this.readyState && this.status >= 400) {
+                        clearInterval(downloadCurrentTrackData.intervalId);
+                        downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
+                        delete downloadCurrentTrackData.currentRequests[seqUrl];
+                    }
+                }
+            };
+            seqRequest.open("GET", seqUrl, true);
+            seqRequest.send();
+        }
         apiUrl = "../cgi-bin/hubApi/getData/track?";
         apiUrl += "chrom=" + chrom;
         apiUrl += ";start=" + start;
@@ -7554,6 +7918,67 @@ var downloadCurrentTrackData = {
         downloadCurrentTrackData.intervalId = setInterval(downloadCurrentTrackData.makeDownloadFile, 200, apiUrl);
     },
 
+
+    // file name suffix per output format, the same ones makeDownloadFile appends
+    fileExtensions: {json: ".txt", csv: ".csv", tsv: ".tsv", gb: ".gb"},
+
+    maxGenbankRegion: 100000000, // bases, see the check in startDownload
+
+    isGeneModelType: function(type) {
+        // only these carry a transcript model, where the thick part really is the CDS.
+        // bigRmsk, for one, keeps the aligned parts of a repeat in the same columns, and
+        // calling that a coding sequence would put an invented protein in the file
+        let words = (type || "").split(" ");
+        if (words[0] === "genePred" || words[0] === "bigGenePred") {
+            return true;
+        }
+        if (words[0] === "bed" || words[0] === "bigBed") {
+            return parseInt(words[1], 10) >= 12;
+        }
+        return false;
+    },
+
+    isWiggleType: function(type) {
+        // numeric data, which has no GenBank feature equivalent.  Only the first word
+        // of the type, so that wigMaf, which does have features, is not caught
+        let first = (type || "").split(" ")[0];
+        return first === "wig" || first === "bigWig" || first === "mathWig";
+    },
+
+    outputFormatChanged: function(outType) {
+        // keep the rest of the dialog in step with the format that is now selected
+        let isGenbank = outType === "gb";
+        $("#downloadHeaderOpt").toggle(!isGenbank);
+        $("#downloadGenbankNote").toggle(isGenbank);
+        // show the suffix the file will really get
+        let nameInput = document.getElementById("downloadFileName");
+        if (nameInput) {
+            let ext = downloadCurrentTrackData.fileExtensions[outType] || ".txt";
+            nameInput.value = nameInput.value.replace(/\.(txt|csv|tsv|gb|json)$/i, "") + ext;
+        }
+        // GenBank has nothing to write for a wiggle, so grey those tracks out
+        $(".downloadTrackName").each(function(i, elem) {
+            if (elem.dataset.alwaysDisabled === "1" ||
+                    !downloadCurrentTrackData.isWiggleType(elem.dataset.trackType)) {
+                return;
+            }
+            if (isGenbank) {
+                // remember the tick so that leaving GenBank again puts it back
+                if (!elem.disabled) {
+                    elem.dataset.checkedBeforeGb = elem.checked ? "1" : "0";
+                }
+                elem.checked = false;
+            } else if (elem.dataset.checkedBeforeGb !== undefined) {
+                elem.checked = elem.dataset.checkedBeforeGb === "1";
+                delete elem.dataset.checkedBeforeGb;
+            }
+            elem.disabled = isGenbank;
+            let label = elem.nextElementSibling;
+            if (label && label.tagName === "LABEL") {
+                label.style.color = isGenbank ? "#888" : "";
+            }
+        });
+    },
 
     showDownloadUi: function() {
         // Populate the dialog with the current list of tracks
@@ -7590,22 +8015,73 @@ var downloadCurrentTrackData = {
                 autoOpen: false,
                 buttons: downloadTrackDataButtons
             });
+            // jquery-ui draws its dialogs in a smaller font than the page and squashes
+            // the two buttons it adds itself, so put both back to what the rest of the
+            // page uses.  This has to happen before the first open, because the dialog
+            // measures and centers itself on the size its contents have at that moment.
+            let dialogFont = {"font-family": $("body").css("font-family"),
+                              "font-size": $("body").css("font-size")};
+            let dialogWrap = $(downloadDialog).closest(".ui-dialog");
+            dialogWrap.css(dialogFont);
+            dialogWrap.find(".ui-dialog-content").css(dialogFont);
+            // jquery-ui pins the button pane to "height: 1em", so a button of normal
+            // height hangs out of the bottom of the dialog.  Let the pane size itself,
+            // its clearfix then takes care of the floated button set inside it
+            dialogWrap.find(".ui-dialog-buttonpane").css(dialogFont).css("height", "auto");
+            dialogWrap.find(".ui-dialog-buttonpane button").css(dialogFont)
+                .css("padding", "3px 10px");
         }
-        htmlStr = "<p>Use this selection window to download track data" +
-            " for the current region (" + genomePos.get() + "). Please note that large regions" +
-            " may be slow to download.</p>";
-        htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
-            "&nbsp;" +
-            "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
-            "</div>";
+        // the strand the browser is showing, which the Reverse button flips
+        let strandStr = hgTracks.revCmplDisp ? "(- strand)" : "(+ strand)";
+        htmlStr = "<p>Use this selection window to download track data for the current region:" +
+            // the position is data, not prose, so it gets the monospace treatment and a
+            // line of its own
+            "<br><span style=\"font-family: 'Roboto Mono', 'Courier New', monospace; " +
+            "font-weight: bold\">" + genomePos.get() + "&nbsp;&nbsp;" + strandStr + "</span><br>" +
+            "Large regions may be slow to download.</p>";
+        // the output format comes first: it decides which tracks can be downloaded at all
+        htmlStr += "<div>";
+        htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
+        htmlStr += "<select name='outputFormat' id='outputFormat'>";
+        htmlStr += "<option selected value='json'>JSON</option>";
+        htmlStr += "<option value='csv'>CSV</option>";
+        htmlStr += "<option value='tsv'>TSV</option>";
+        // the GenBank output is under hg.conf control for now
+        let withGenbank = typeof showGenbankDownload !== 'undefined' && showGenbankDownload;
+        if (withGenbank) {
+            htmlStr += "<option value='gb'>GenBank</option>";
+        }
+        htmlStr += "</select>";
+        // an option of the format, so it sits with it and disappears with it
+        htmlStr += "<div id='downloadHeaderOpt'>";
+        htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
+        htmlStr += "<input type='checkbox' checked id='downloadTrackHeaders'></input>";
+        htmlStr += "</div>";
+        // its own block, so that it does not move up next to the format select when the
+        // column header option above it is hidden
+        htmlStr += "<div>";
+        htmlStr += "<label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
+        // undecoratedTrack strips the hub_<id>_ that a hub assembly's name carries, the
+        // hub id is this browser's cart detail and means nothing in a file name
+        htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
+            " value='" + undecoratedTrack(getDb()) + ".tracks'></input>";
+        htmlStr += "</div>";
+        htmlStr += "</div>";
+        htmlStr += "<div style='margin-top: 12px'>";
         _.each(hgTracks.trackDb, function(track, trackName) {
             showDisabledMsg = false;
             if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
                 htmlStr += "<input type=checkbox class='downloadTrackName' id='" + trackName + "'";
+                // the first word of the type is all the output formats need. A hub writes
+                // its own type strings and this one goes into an html attribute, so keep
+                // it to the characters a type name can legitimately have
+                htmlStr += " data-track-type='" +
+                    (track.type || "").split(" ")[0].replace(/[^A-Za-z0-9]/g, "") + "'";
                 if (trackName.startsWith("ct_") || trackName === "hgPcrResult" ||
                         track.type === "mathWig" || !tdbIsLeaf(track)) {
                     showDisabledMsg = true;
-                    htmlStr += " disabled ";
+                    // disabled whatever the output format is, so the format must not undo it
+                    htmlStr += " data-always-disabled='1' disabled ";
                 } else {
                     htmlStr += " checked ";
                 }
@@ -7618,24 +8094,39 @@ var downloadCurrentTrackData = {
                 htmlStr += "<br>";
             }
         });
-        htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
-        htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
-            " value='" + getDb() + ".tracks'></input>";
-        htmlStr += "<br>";
-        htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
-        htmlStr += "<select name='outputFormat' id='outputFormat'>";
-        htmlStr += "<option selected value='json'>JSON</option>";
-        htmlStr += "<option value='csv'>CSV</option>";
-        htmlStr += "<option value='tsv'>TSV</option>";
-        htmlStr += "</select>";
-        htmlStr += "<br>";
-        htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
-        htmlStr += "<input type='checkbox' checked id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
+        htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
+            "&nbsp;" +
+            "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
+            "</div>";
+        if (withGenbank) {
+            htmlStr += "<div id='downloadGenbankNote' " +
+                "style='display: none; margin-top: 12px; font-size: 90%'>The GenBank file also " +
+                "contains the DNA sequence of the region, always on the forward strand, even " +
+                "when the browser is showing the reverse complement. Tracks with numerical " +
+                "data, e.g. bigWigs, have no GenBank equivalent and are greyed out." +
+                "<br>" +
+                "GenBank files can be read by all sequence editors, e.g. SnapGene, Benchling, " +
+                "Geneious Prime, ApE, Vector NTI, CLC, Lasergene, MacVector, UGENE, Serial Cloner, " +
+                "Clone Manager, BioEdit, Artemis and DNA Strider. You can " +
+                "<a href='mailto:genome@soe.ucsc.edu'>contact us</a> if the file does not look " +
+                "the way you expect in your software.</div>";
+        }
         downloadDialog.innerHTML = htmlStr;
+        if (withGenbank) {
+            $("#outputFormat").on("change", function() {
+                downloadCurrentTrackData.outputFormatChanged(this.value);
+            });
+            // start out consistent with the format the select opens on
+            downloadCurrentTrackData.outputFormatChanged($("#outputFormat")[0].value);
+        }
         $("#checkAllDownloadTracks").on("click", function() {
             $(".downloadTrackName").each(function(i, elem) {
-                elem.checked = true;
+                // a disabled box can still be checked from script, and :checked finds it
+                // again when the download starts, so leave the greyed out tracks alone
+                if (!elem.disabled) {
+                    elem.checked = true;
+                }
             });
         });
         $("#uncheckAllDownloadTracks").on("click", function() {

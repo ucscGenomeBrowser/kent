@@ -9142,6 +9142,10 @@ if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
 
 // remove the hg.conf option once this feature is released
+if (cfgOptionBooleanDefault("showGenbankDownload", FALSE))
+    jsInline("var showGenbankDownload = true;\n");
+
+// remove the hg.conf option once this feature is released
 if (cfgOptionBooleanDefault("showIgv", FALSE))
     {
     puts(" <button id='hgtIgv' type='button' "
@@ -12359,6 +12363,12 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
 
 jsonForClient = newJsonObject(newHash(8));
 jsonObjectAdd(jsonForClient, "cgiVersion", newJsonString(CGI_VERSION));
+// the javascript track data download needs these for the GenBank output
+if (isNotEmpty(organism))
+    jsonObjectAdd(jsonForClient, "organism", newJsonString(trackHubSkipHubName(organism)));
+char *sciName = hScientificName(database);
+if (isNotEmpty(sciName))
+    jsonObjectAdd(jsonForClient, "scientificName", newJsonString(sciName));
 boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
 
 if(!trackImgOnly)

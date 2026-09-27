@@ -476,6 +476,28 @@ RELEASE_GATES = {
                "doing exactly what a gate is supposed to do and has not "
                "earned a deadline yet.  On in cgi-bin-max's hg.conf for "
                "testing; not yet turned on anywhere shared."),
+        h("showGenbankDownload", "flag", "hg/hgTracks/hgTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38433",
+          note="A GenBank flat file option in the \"Download Current Track "
+               "Data\" dialog, beside its JSON, CSV and TSV output.  The file "
+               "holds the DNA of the region plus the selected track items as "
+               "a feature table, with blocks as join() locations and "
+               "thickStart..thickEnd as a CDS, so the region opens in "
+               "SnapGene, Benchling or ApE.  Read once, and the flag is the "
+               "only door into the format:  the writer in hgTracks.js runs "
+               "from one value of the format select, and the second api call "
+               "that fetches the sequence fires only for that value, so with "
+               "the flag off neither is reachable and the select offers the "
+               "three formats it always did.  What the flag does not cover is "
+               "the dialog rework that came with the same ticket -- output "
+               "format first, page-sized font and buttons, the position on "
+               "its own line -- which is not GenBank-specific and lands for "
+               "everyone.  Sits behind showDownloadUi, the gate on the dialog "
+               "itself, which has defaulted TRUE since v467.  Added in the "
+               "current release, so it is doing exactly what a gate is "
+               "supposed to do and has not earned a deadline yet.  On in "
+               "cgi-bin-max's hg.conf for testing; not yet turned on anywhere "
+               "shared."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
         h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",
