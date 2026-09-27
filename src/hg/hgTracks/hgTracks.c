@@ -7708,8 +7708,8 @@ for (track = trackList; track != NULL; track = track->next)
             // QuickLifted tracks are exempt from hideTracks -- their visibility is
             // carried over from the source assembly's cart (and may still be under the
             // undecorated name until migrated below), so consult the cart, not the URL.
-            boolean superFromCart = !hideTracks ||
-                (trackDbSetting(track->tdb, "quickLiftUrl") != NULL);
+            boolean isQuickLift = (trackDbSetting(track->tdb, "quickLiftUrl") != NULL);
+            boolean superFromCart = !hideTracks || isQuickLift;
             // first deal with visibility of super track
             char *s = superFromCart ? cartOptionalString(cart, track->tdb->parent->track) : cgiOptionalString(track->tdb->parent->track);
             if (s)
@@ -7720,8 +7720,10 @@ for (track = trackList; track != NULL; track = track->next)
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
                 s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
-                // the bare name is the native track's if the assembly has one by that name
-                if (s != NULL && !hubTrackOwnsBareName(database, track->tdb->parent->track))
+                // the bare name is the native track's if the assembly has one by that name --
+                // except for a quickLifted track, whose bare name is always its own: it is
+                // meant to reuse the source assembly's name regardless of what else is native here
+                if (s != NULL && !isQuickLift && !hubTrackOwnsBareName(database, track->tdb->parent->track))
                     s = NULL;
                 if (s)
                     {
