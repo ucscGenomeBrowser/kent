@@ -31,7 +31,7 @@
 # ggGeneName (symbols), ggGeneClass (HPRD/Panther class)
 
 # these are default python modules on python 2.7, no errors expected here
-import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib, html
+import sys, cgi, os, string, urllib.request, urllib.parse, urllib.error, operator, hashlib, html, random
 from sys import exit
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -1892,10 +1892,17 @@ def flagInteraction(param):
     print("You can leave your email address in the comment if you want to give us the possibility to comment.<P>")
 
     print ("Optional comment: <br>")
-    print(('<FORM method="GET" action="%s">' % basename(__file__)))
+    print(('<FORM method="POST" action="%s">' % basename(__file__)))
     print(('<INPUT TYPE="HIDDEN" NAME="remove" VALUE="%s"></INPUT>' % param))
+    # A short arithmetic question, checked back in removeInteraction() against the salted
+    # hash of its answer, keeps this write-capable form from being submitted from anywhere
+    # but this page.
+    numA = random.randint(1, 9)
+    numB = random.randint(1, 9)
+    print(('<INPUT TYPE="HIDDEN" NAME="captchaHash" VALUE="%s"></INPUT>' % saltedHash(str(numA+numB))))
     print ('<TEXTAREA rows="6" cols="50" name="comment"></TEXTAREA>')
     print ("<P>")
+    print ('What is %d + %d? <INPUT TYPE="TEXT" NAME="captcha" SIZE="4"></INPUT></P>' % (numA, numB))
 
     print ('<INPUT TYPE="SUBMIT" name="submit" value="Report Interaction as inaccurate"></INPUT>')
     print ('</FORM>')
@@ -1918,11 +1925,16 @@ def flagInteraction(param):
     #con.row_factory = namedtuple_factory
     ##con.row_factory = sqlite3.Row
 
-def removeInteraction(param, captcha, comment):
+def removeInteraction(param, captcha, captchaHash, comment):
+    if os.environ.get("REQUEST_METHOD") != "POST":
+        errAbort("This action requires a form submission, not a link.")
+    if captcha is None or captchaHash is None or saltedHash(captcha.strip()) != captchaHash:
+        errAbort("The answer to the arithmetic question was not correct. Please go back and try again.")
+
     fields = param.split(":")
     if len(fields)!=2:
         errAbort( "illegal CGI parameter")
-    
+
     causeGene, themeGene = fields
     ip = html.escape(os.environ["REMOTE_ADDR"])
 
@@ -2018,8 +2030,9 @@ def htmlMiddle():
     remove = getCgiVar("remove")
     if remove!=None:
         captcha = getCgiVar("captcha")
+        captchaHash = getCgiVar("captchaHash", maxLen=40)
         comment = getCgiVar("comment", allowAnyChar=True, maxLen=10000)
-        removeInteraction(remove, captcha, comment)
+        removeInteraction(remove, captcha, captchaHash, comment)
         exit(0)
         
     docId = getCgiVar("docId")
