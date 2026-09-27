@@ -17,7 +17,7 @@ group rna
     colorSettingsUrl /gbdb/hs1/proCapNet/colors.json
     primaryKey Cell_line
     dataTypes pred|"Predicted PRO-cap"
-    subtrackUrls Experiment=https://www.encodeproject.org/annotations/$$/ Files=https://hgdownload.soe.ucsc.edu/gbdb/hs1/proCapNet/$$
+    subtrackUrls Experiment=https://www.encodeproject.org/annotations/$$/
     defaultSortField Cell_line
     maxCheckboxes 50
     noInherit on

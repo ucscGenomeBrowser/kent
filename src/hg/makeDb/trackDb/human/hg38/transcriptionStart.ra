@@ -17,7 +17,7 @@ group rna
     colorSettingsUrl /gbdb/hg38/encode4ProCap/colors.json
     primaryKey Cell_line
     dataTypes procap|"PRO-cap"
-    subtrackUrls Experiment=https://www.encodeproject.org/experiments/$$/ Files=https://hgdownload.soe.ucsc.edu/gbdb/hg38/encode4ProCap/$$
+    subtrackUrls Experiment=https://www.encodeproject.org/experiments/$$/
     defaultSortField Cell_line
     maxCheckboxes 50
     noInherit on
@@ -232,7 +232,7 @@ group rna
     colorSettingsUrl /gbdb/hg38/proCapNet/colors.json
     primaryKey Cell_line
     dataTypes pred|"Predicted PRO-cap" contrib|"Sequence contribution scores"
-    subtrackUrls Experiment=https://www.encodeproject.org/annotations/$$/ Files=https://hgdownload.soe.ucsc.edu/gbdb/hg38/proCapNet/$$
+    subtrackUrls Experiment=https://www.encodeproject.org/annotations/$$/
     defaultSortField Cell_line
     maxCheckboxes 50
     noInherit on
