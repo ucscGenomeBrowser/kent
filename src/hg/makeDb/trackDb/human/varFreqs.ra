@@ -1350,8 +1350,8 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         priority 26
 
         track sfariSparkWgs
-        shortLabel SFARI SPARK 12k WGS
-        longLabel SNV Frequencies: SFARI SPARK - 12,519 WGS
+        shortLabel SFARI SPARK iWGS v1.1 Pilot
+        longLabel SNV Frequencies: SFARI SPARK iWGS v1.1 Pilot - 12,519 WGS
         type vcfTabix
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz
