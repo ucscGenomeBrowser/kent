@@ -22,10 +22,12 @@ from pycbio.sys import cli, fileOps
 from pycbio.tsv import TsvReader
 
 GBDB = "/gbdb/{db}/{track}"
-DOWNLOAD = "https://hgdownload.soe.ucsc.edu/gbdb/{db}/{track}/$$"
 
 SAMPLE_CLASS_DESC = "Cancer = cell line derived from a tumor"
-SAMPLE_CLASS_COLORS = {"Cancer": "#D55E00", "Non-cancer": "#0072B2"}
+# Deliberately outside the Okabe-Ito palette the cell lines use.  Sharing a hue
+# with a cell line makes a track's color read as its sample class: A673 is a
+# cancer line and draws in #0072B2, which was the Non-cancer swatch.
+SAMPLE_CLASS_COLORS = {"Cancer": "#000000", "Non-cancer": "#808080"}
 
 def parseArgs():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -41,23 +43,7 @@ def stanza(indent, lines):
     pad = " " * indent
     return "".join(pad + line + "\n" for line in lines) + "\n"
 
-def downloadCell(db, track, exp):
-    """The Files column, one comma-separated token per bigWig.
-
-    Each token is path|label: the path substitutes into the subtrackUrls $$ and
-    the label is what the cell shows, so the table offers a named link per file
-    rather than a bare file name."""
-    if track == "proCapNet":
-        files = [(f"pred/{exp.cell}.proCapNet.pos.bw", "+ strand"),
-                 (f"pred/{exp.cell}.proCapNet.neg.bw", "- strand")]
-        if db == "hg38":
-            files.append((f"contrib/{exp.cell}.proCapNet-contrib.bw", "contribution"))
-    else:
-        files = [(f"{exp.cell}.{exp.procapAcc}.pos.bw", "+ strand"),
-                 (f"{exp.cell}.{exp.procapAcc}.neg.bw", "- strand")]
-    return ",".join(f"{path}|{label}" for path, label in files)
-
-def writeMetadata(path, experiments, accField, db, track):
+def writeMetadata(path, experiments, accField):
     """The cell line table shown on the faceted track UI page.  A plain column
     name gets facet checkboxes, a leading underscore means searchable and sortable
     but not faceted.  facetedComposite.js only offers a facet value that occurs
@@ -74,11 +60,11 @@ def writeMetadata(path, experiments, accField, db, track):
     info icon."""
     fileOps.ensureFileDir(path)
     with fileOps.AtomicFileOpen(path) as fh:
-        print(f"_Tissue\tSample_class|{SAMPLE_CLASS_DESC}\tExperiment\tFiles\tCell_line",
+        print(f"_Tissue\tSample_class|{SAMPLE_CLASS_DESC}\tExperiment\tCell_line",
               file=fh)
         for exp in experiments:
             print(f"{exp.tissue}\t{exp.sampleClass}\t{getattr(exp, accField)}\t"
-                  f"{downloadCell(db, track, exp)}\t{exp.cell}", file=fh)
+                  f"{exp.cell}", file=fh)
 
 def writeColors(path):
     "swatches beside the facet checkboxes, keyed by the faceted column name"
@@ -92,7 +78,7 @@ def superStanza():
         "track transcriptionStart",
         "superTrack on show",
         "shortLabel Transcription Initiation (TSS)",
-        "longLabel Transcription Initiation (TSS)",
+        "longLabel Transcription initiation (TSS)",
         "group rna",
     ])
 
@@ -109,7 +95,7 @@ def compositeStanza(db, track, shortLabel, longLabel, dataTypes, accUrl, priorit
         f"colorSettingsUrl {gbdb}/colors.json",
         "primaryKey Cell_line",
         f"dataTypes {dataTypes}",
-        f"subtrackUrls Experiment={accUrl} Files={DOWNLOAD.format(db=db, track=track)}",
+        f"subtrackUrls Experiment={accUrl}",
         "defaultSortField Cell_line",
         "maxCheckboxes 50",
         "noInherit on",
@@ -143,6 +129,7 @@ def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, lon
         "autoScale on",
         "alwaysZero on",
         "maxHeightPixels 100:40:8",
+        "windowingFunction maximum",
         f"color {exp.color}",
         f"shortLabel {shortLabel}",
         f"longLabel {longLabel}",
@@ -183,7 +170,7 @@ def contribStanza(db, exp, priority):
         "alwaysZero on",
         "maxHeightPixels 100:40:8",
         f"color {exp.color}",
-        f"shortLabel {exp.cell} Contrib",
+        f"shortLabel {exp.cell} Contribution",
         f"longLabel {exp.cell} ProCapNet sequence-contribution scores",
         "onlyVisibility full",
         f"priority {priority}",
@@ -194,11 +181,11 @@ def proCapNetComposite(db, experiments):
     if db == "hg38":
         dataTypes += ' contrib|"Sequence contribution scores"'
     out = compositeStanza(db, "proCapNet", "ProCapNet",
-                          "ProCapNet predicted PRO-cap and sequence-contribution scores",
+                          "ProCapNet predicted PRO-cap",
                           dataTypes, "https://www.encodeproject.org/annotations/$$/", 2)
     for priority, exp in enumerate(experiments, 1):
         out += strandOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",
-                             f"{exp.cell} Pred",
+                             f"{exp.cell} Predicted",
                              f"{exp.cell} ProCapNet predicted PRO-cap, plus strand up and minus strand down",
                              f"{exp.cell} ProCapNet predicted PRO-cap", priority)
     if db == "hg38":
@@ -229,12 +216,10 @@ def proCapNetTrackDb(opts, args):
         if args.db == "hg38":
             fh.write(encode4ProCapComposite(args.db, experiments))
         fh.write(proCapNetComposite(args.db, experiments))
-    writeMetadata(f"{args.gbdbDir}/proCapNet/metadata.tsv", experiments, "modelAcc",
-                  args.db, "proCapNet")
+    writeMetadata(f"{args.gbdbDir}/proCapNet/metadata.tsv", experiments, "modelAcc")
     writeColors(f"{args.gbdbDir}/proCapNet/colors.json")
     if args.db == "hg38":
-        writeMetadata(f"{args.gbdbDir}/encode4ProCap/metadata.tsv", experiments, "procapAcc",
-                      args.db, "encode4ProCap")
+        writeMetadata(f"{args.gbdbDir}/encode4ProCap/metadata.tsv", experiments, "procapAcc")
         writeColors(f"{args.gbdbDir}/encode4ProCap/colors.json")
 
 def main():

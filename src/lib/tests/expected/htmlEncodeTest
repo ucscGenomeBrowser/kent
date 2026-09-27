@@ -1,0 +1,29 @@
+encoders
+  htmlEncode       NULL         -> "" (0 chars)
+  htmlEncode       (empty)      -> "" (0 chars)
+  htmlEncode       a<b>&'"      -> "a&lt;b&gt;&amp;&#39;&quot;" (26 chars)
+  attributeEncode  NULL         -> "" (0 chars)
+  attributeEncode  (empty)      -> "" (0 chars)
+  attributeEncode  a b'c        -> "a&#x20;b&#x27;c" (15 chars)
+
+tag strippers
+  tags         plain label                              -> "plain label" (11 chars)
+  tags         x                                        -> "x" (1 chars)
+  tags         <b>bold</b> label                        -> "bold label" (10 chars)
+  tags         <i>all tag</i>                           -> "all tag" (7 chars)
+  tags         unclosed <b                              -> "unclosed " (9 chars)
+  tags         a<script>x()</script>b                   -> "ax()b" (5 chars)
+  tags         a<style>p{}</style>b                     -> "ap{}b" (5 chars)
+  js+css+tags  plain label                              -> "plain label" (11 chars)
+  js+css+tags  x                                        -> "x" (1 chars)
+  js+css+tags  <b>bold</b> label                        -> " bold  label" (12 chars)
+  js+css+tags  <i>all tag</i>                           -> " all tag " (9 chars)
+  js+css+tags  unclosed <b                              -> "unclosed " (9 chars)
+  js+css+tags  a<script>x()</script>b                   -> "a b" (3 chars)
+  js+css+tags  a<style>p{}</style>b                     -> "a b" (3 chars)
+  tags         (empty)                                  -> "" (0 chars)
+  js+css+tags  (empty)                                  -> "" (0 chars)
+  tags         NULL                                     -> NULL
+  js+css+tags  NULL                                     -> NULL
+
+heap markers intact

@@ -1720,6 +1720,13 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("hubHtmlSanitize", "flag", "hg/lib/trackHub.c", default="FALSE",
+          ticket="38126",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/trackHub.c.  Came in at beb596d6144, trackHub: add an "
+               "hg.conf switch for hub description page handling, refs "
+               "#38126.  Needs a description and a gate or knob call."),
     ],
 }
 

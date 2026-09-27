@@ -1,0 +1,68 @@
+# #38155 -- vcfParseGenotypes() stored the GT allele index straight from the file without
+# checking it against the record's allele count, and callers then used it to index arrays
+# sized by that count.  A genotype like 100/100 on a record with one ALT read past the
+# end of those arrays: the hgc details page silently dropped every sample from its
+# counts, and other records could crash hgTracks outright.
+#
+# Two fixes, both in origin/v503_branch and neither in origin/v502_branch:
+#
+#   6c676a0e9ed  parseAlleleIx (lib/vcf.c) returns missing data for an index the record
+#                has no allele for, and hapIxA/hapIxB become signed char.
+#   de609b74899  ...and for an index above SCHAR_MAX, which used to narrow into another
+#                real allele (260 came out as 4).
+#
+# The library is unit tested (lib/tests vcfParseBadGenotypeIx, vcfParseManyAlleles).  This
+# script is the browser's side of it, Jairo's QA plan from the ticket (2026-08-26 note).
+# The fixture, ~/public_html/docentFixtures/rm38155, copies his two VCFs:
+#
+#   rm38155badgt  one record, chr1:1000000 REF A ALT G, twenty samples all GT 100/100
+#   rm38155ix     the lib test's badGenotypeIx.vcf.gz: multiAllelic, biAllelic and
+#                 outOfRange (GT 100/100, 5/5, 300/2) at chr1:1000, 2000, 3000
+#
+# Step one, the details page, Jairo's case 1.  Fixed, every out-of-range index is missing
+# data and is counted as such:
+#     Alleles: A: 0 (0.000%); G: 0 (0.000%); unknown: 40 (100.000%)
+#     Genotypes: A/A: 0 (0.000%); ?/?: 20 (100.000%)
+# On v502 the page has no "unknown" and no "?/?" at all -- the samples just vanish -- so
+# the two text: checks are the discriminating ones.
+#
+# Step two, Jairo's case 2: the three records in one view.  All three must be drawn,
+# including outOfRange, and the page must render.  His note says the unfixed code crashed
+# here, but on 2026-09-26 this step PASSED on a v502_branch build (park 38304), so it does
+# not discriminate: an out-of-bounds read does not crash on every build.  It stays as a
+# guard on the view; step one is the check that flips.
+proof:
+  - "assertion-only 2026-09-26 -- written from the ticket, Jairo's QA plan and 6c676a0e9ed + de609b74899, after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304) at the details page: neither unknown: 40 nor ?/?: 20 is there; step two passes on v502 too; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr1:999900-1000100
+reset: true
+fast: true
+steps:
+  - go: chr1:999900-1000100
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38155/hub.txt", position: "chr1:999900-1000100"}
+  # rm38155ix has nothing in this window, and a VCF row with no records is not drawn.
+  - expect:
+      rows: [ruler, rm38155badgt]
+      exact: true
+      has: '[id^="td_data_hub_"][id$="_rm38155badgt"] area[href*="o=999999"]'
+
+  - click: {track: rm38155badgt, at: "chr1:1000000"}
+  - expect:
+      text:
+        - "unknown: 40 (100.000%)"
+        - "?/?: 20 (100.000%)"
+      noText: "Warning/Error"
+
+  - go: chr1:500-3500
+  - expect:
+      rows: [ruler, rm38155ix]
+      exact: true
+      has:
+        - '[id^="td_data_hub_"][id$="_rm38155ix"] area[href*="o=999&"]'
+        - '[id^="td_data_hub_"][id$="_rm38155ix"] area[href*="o=1999&"]'
+        - '[id^="td_data_hub_"][id$="_rm38155ix"] area[href*="o=2999&"]'
+      noText: ["Warning/Error", "Internal Server Error"]

@@ -1,0 +1,57 @@
+# #38057 -- pages across several CGIs should show the values a request hands them as
+# plain text.
+#
+# Fixed in a1d7c07c50f and b03051dec6a, both in origin/v503_branch and neither in
+# origin/v502_branch.
+#
+# Each step opens a page with a test value in its fields, then checks that the value is
+# shown as text: `noHas:` checks that no element with the test id appeared, and `value:`
+# checks that the field holds the whole value. The `value:` check also fails on a page that
+# was not drawn at all, so `noHas:` cannot pass on an empty page. hgLinkIn has no field, so
+# it checks the text of its own message instead.
+#
+# Only pages that a plain URL reaches without a login or an upload are here.
+proof:
+  - "assertion-only 2026-09-26 -- written from a1d7c07c50f and b03051dec6a, after the fix shipped in v503"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304); run one page at a time there, all five page steps fail for their own reason; passes on genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # hgHubConnect: the Public Hubs search box and the assembly filter beside it.
+  - goto: "/cgi-bin/hgHubConnect?db=hg38&hubSearchTerms=%22%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E&hubDbFilter=%22%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38057"
+      value:
+        - {sel: "#hubSearchTerms", is: '"><b id=docentxss38057>x</b>'}
+        - {sel: "#hubDbFilter", is: '"><b id=docentxss38057>x</b>'}
+
+  # hgTracks Track Search, the simple field.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hgt_tSearch=Search&tsSimple=%27%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38057"
+      value: {sel: "#simpleSearch", is: "'><b id=docentxss38057>x</b>"}
+
+  # hgTracks Track Search, the advanced name and description fields.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hgt_tSearch=Search&tsName=%27%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E&tsDescr=%27%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38057"
+      value:
+        - {sel: "#nameSearch", is: "'><b id=docentxss38057>x</b>"}
+        - {sel: "#descSearch", is: "'><b id=docentxss38057>x</b>"}
+
+  # hgFileSearch, the same two fields.
+  - goto: "/cgi-bin/hgFileSearch?db=hg19&tsName=%27%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E&tsDescr=%27%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38057"
+      value:
+        - {sel: "#nameSearch", is: "'><b id=docentxss38057>x</b>"}
+        - {sel: "#descSearch", is: "'><b id=docentxss38057>x</b>"}
+
+  # hgLinkIn: the id and the resource come back in its "No results found" message.
+  - goto: "/cgi-bin/hgLinkIn?resource=%22%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E&id=%22%3E%3Cb%20id%3Ddocentxss38057%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38057"
+      text: '"><b id=docentxss38057>x</b>'

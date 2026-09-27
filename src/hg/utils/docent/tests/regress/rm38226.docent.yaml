@@ -1,0 +1,62 @@
+# #38226 -- the text of an hgTracks item tooltip is cleaned before it reaches the page.
+# A hub's mouseover can carry markup, and the tooltip is meant to show it: bold, italics,
+# line breaks and links are why tooltips take markup at all. What changed is that the text
+# now goes through htmlSanitize() on its way into the page, so elements and attributes
+# outside its allowlist are removed and the rest is kept.
+#
+# The fixture hub is ours, at ~/public_html/docentFixtures/rm38226/. rm38226Tooltip is a
+# bigBed 4 + with `mouseOverField description`, and each item's description holds one case:
+#
+#   rm38226Bold    <b>rm38226 kept bold</b> and plain text   a kept element stays markup
+#   rm38226Class   <span class="rm38226Class">...</span>     class is not on the allowlist
+#   rm38226Form    text then <form id="rm38226Form">...      form is not on the allowlist
+#
+# The first half asserts the markup is still drawn as markup, so the cleaning cannot go too
+# far and turn every tooltip into plain text. The other two assert the removals.
+#
+# rm38226NoName is a bigBed 3, whose items have no name. The first version of the fix
+# assumed every item had one, and hgRenderTracks answered a bigBed 3 custom track with a
+# 500 (reported on the ticket 2026-09-23 from the imageComp cron). The row must draw.
+# That half cannot be shown failing on a release: the crash came in with 2cdae04ddc1 and
+# went out with 0c48fcbee53, and no release carries one without the other.
+#
+# The hub declares `visibility pack` itself, so there is no `track:` step: a hub track's
+# cart name carries a per-run hub_<n>_ prefix.
+proof:
+  - "release-ab 2026-09-26 -- fails on hgwbeta (v504, whose v504_branch lacks 2cdae04ddc1) and passes on genome-test. On v504 both rows draw and the bold tooltip passes, and the run stops at the removal check: 1 element(s) match #mouseoverContainer .rm38226Class, wanted none"
+
+target: genome-test
+db: hg38
+position: chr1:1000500-1006500
+reset: true
+fast: true
+steps:
+  - go: chr1:1000500-1006500
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38226/hub.txt", db: hg38}
+  - go: chr1:1000500-1006500
+
+  # Both rows draw, the name-less one included.
+  - expect:
+      rows: [rm38226Tooltip, rm38226NoName]
+      noText: ["Internal Server Error", "jsEmbedded"]
+
+  # A kept element is still markup inside the tooltip, not escaped text.
+  - mouseover: {track: rm38226Tooltip, item: rm38226Bold}
+  - expect:
+      tip: "rm38226 kept bold"
+      noTip: "<b>"
+      has: '#mouseoverContainer b:has-text("rm38226 kept bold")'
+
+  # The span and its text stay; the attribute that is not on the allowlist goes.
+  - mouseover: {track: rm38226Tooltip, item: rm38226Class}
+  - expect:
+      tip: "rm38226 span text"
+      has: '#mouseoverContainer span:has-text("rm38226 span text")'
+      noHas: '#mouseoverContainer .rm38226Class'
+
+  # The text before the form stays; the form and what is inside it go.
+  - mouseover: {track: rm38226Tooltip, item: rm38226Form}
+  - expect:
+      tip: "rm38226 before form"
+      noHas: ['#mouseoverContainer form', '#rm38226Form', '#rm38226Input']

@@ -262,5 +262,9 @@ boolean trackHubBigNetEnabled();
 /* Return TRUE if the bigNet track type is turned on.  Off unless hg.conf says
  * bigNet=on.  Everything that accepts or advertises the type asks this. */
 
+boolean hubHtmlSanitizeOn();
+/* Return TRUE if description HTML from hubs and custom tracks goes through htmlSanitize.
+ * Off unless hg.conf says hubHtmlSanitize=on. */
+
 #endif /* TRACKHUB_H */
 

@@ -627,8 +627,9 @@ GCA_964261355.1_pHetGlaV3	naked mole-rat (pHap 2024)
 GCA_005190385.4_mMonMon2.pri	narwhal
 GCF_005190385.1_NGI_Narwhal_1	narwhal (Baffin Bay 2019)
 GCA_005190385.3_NGI_Narwhal_2	narwhal (Baffin Bay Population NGI 2022)
-GCF_001595765.1_Mnat.v1	Natal long-fingered bat
-GCA_054644295.1_mMinNat1.hap1	Natal long-fingered bat (hap1 2026)
+GCF_001595765.1_Mnat.v1	Natal long-fingered bat (2016)
+GCA_054644295.1_mMinNat1.hap1	Natal long-fingered bat (hap1 2026 genbank)
+GCF_054644295.1_mMinNat1.hap1	Natal long-fingered bat (hap1 2026 refseq)
 GCA_054644305.1_mMinNat1.hap2	Natal long-fingered bat (hap2 2026)
 GCA_964656225.1_mPipNat1.hap1.1	Nathusius's pipistrelle (hap1.1 2025)
 GCA_964656225.2_mPipNat1.hap1.2	Nathusius's pipistrelle (hap1.2 2025)

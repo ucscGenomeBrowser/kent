@@ -1,0 +1,47 @@
+# #37990 -- the Drag-and-select color picker came up on the default blue, not the color
+# the user had saved.
+#
+# The ticket's path: pick a color, tick "Don't show this again", click Save Color. The
+# checkbox makes the dialog's close handler remove the dialog from the page instead of
+# hiding it, so the next drag builds a new one, and the new picker started on the default
+# #aac6ff.
+#
+# 9a1633df437 is the fix. It is in origin/v503_branch and not in origin/v502_branch, so
+# v502 is the release-ab baseline. hg/js/hgTracks.js only, so a baseline build needs the
+# JS installed, not only the CGIs.
+#
+# The cause was in how the picker is BUILT, not in the checkbox. dragSelect.saveHlColor
+# writes hgTracks.prevHlColor, which hgTracks also fills from the cart variable
+# prevHlColor on every page load. makeHighlightPicker's own loadHlColor() read a different
+# prevHlColor, a global in hui.js that nothing on hgTracks ever sets, and so it fell through
+# to the default. The fix passes dragSelect.loadHlColor() in as the starting color.
+#
+# That means any first build of the dialog shows the bug, not only a rebuild after the
+# checkbox, and this script uses that. It puts a saved color in the cart with the URL, opens
+# the dialog once with a drag, and reads the hex box beside the swatch. Fixed: the saved
+# #ff0000. Broken: #aac6ff. The box is what every button in the dialog reads, so it is the
+# color Save Color and Add Highlight would use.
+#
+# Why not the ticket's own path: the drag: verb always acts on the dialog it opens (Zoom
+# In, Single Highlight, or Escape), so a script cannot tick the checkbox and click Save
+# Color. It would need a `then: none` that leaves the dialog open. The drag: verb also
+# sets hgTracks.enableHighlightingDialog back to true before it opens the dialog, so it
+# could not see a dialog that stays away either.
+#
+# `then: cancel` closes the dialog with Escape. With the box unticked jQuery UI only hides
+# it, so the field can still be read afterwards.
+proof:
+  - "assertion-only 2026-09-26 -- written from 9a1633df437 after the fix shipped; reaches the same line through the first build of the dialog, not through the checkbox"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): #hlColorInput holds the default #aac6ff, not the saved #ff0000; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&prevHlColor=%23ff0000&pix=1100"
+  - expect: {rows: [ruler]}
+  - drag: {range: "chr7:155,803,000-155,806,000", then: cancel}
+  - expect:
+      value: {sel: "#hlColorInput", is: "#ff0000"}
