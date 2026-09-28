@@ -33,7 +33,10 @@ from urllib.parse import urlencode, urljoin
 import urllib.request
 import urllib.error
 
-HTTP_TIMEOUT = 30
+# Seconds to wait for a response.  The wuhCor1 phylogenetic tree tracks take ~40s in hgTracks,
+# and the hg38 470-way and 241-way alignment details pages take 2-6 minutes in hgc.
+HGTRACKS_TIMEOUT = 120
+HGC_TIMEOUT = 600
 HTTP_PIX = "1200"
 MAX_LINKS_PER_TRACK = 4
 
@@ -91,8 +94,9 @@ def hgsql(hgdb_conf, db, query):
 
 
 def active_assemblies(hgdb_conf):
+    # Hub-backed assemblies (nibPath "hub:...") have no MySQL database to list tracks from.
     return hgsql(hgdb_conf, "hgcentralbeta",
-                 "SELECT name FROM dbDb WHERE active = 1")
+                 "SELECT name FROM dbDb WHERE active = 1 AND nibPath NOT LIKE 'hub:%'")
 
 
 def default_position(hgdb_conf, assembly):
@@ -114,8 +118,8 @@ def make_opener():
     return opener
 
 
-def http_get(opener, url):
-    with opener.open(url, timeout=HTTP_TIMEOUT) as resp:
+def http_get(opener, url, timeout=HGTRACKS_TIMEOUT):
+    with opener.open(url, timeout=timeout) as resp:
         return resp.status, resp.read().decode("utf-8", errors="replace")
 
 
@@ -142,7 +146,7 @@ def check_hgc_urls(opener, urls, log_prefix):
     """GET each URL, report HTTP != 200 or 'HGERROR' in response body."""
     for url in urls:
         try:
-            status, body = http_get(opener, url)
+            status, body = http_get(opener, url, timeout=HGC_TIMEOUT)
         except urllib.error.HTTPError as e:
             err(f"{log_prefix}: HTTP {e.code} for {url}")
             continue
