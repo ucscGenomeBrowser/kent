@@ -2166,7 +2166,7 @@ for(; tdb; tdb = tdbNext)
             {
             //if (checkCartVisibility(cart, tdb->parent))
                 {
-                tdb->parent->visibility = hTvFromString("tvShow");
+                tdb->parent->visibility = tvShow;
                 // a superTrack is not in the list we are walking, so it has no rank
                 // of its own.  Slot it just above the first child that brought it in.
                 outTrack(out, cart, tdb->parent, rank - 0.5);

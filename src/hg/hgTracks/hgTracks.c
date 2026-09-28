@@ -7705,11 +7705,15 @@ for (track = trackList; track != NULL; track = track->next)
 
         if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
             {
-            // QuickLifted tracks are exempt from hideTracks -- their visibility is
-            // carried over from the source assembly's cart (and may still be under the
-            // undecorated name until migrated below), so consult the cart, not the URL.
-            boolean superFromCart = !hideTracks ||
-                (trackDbSetting(track->tdb, "quickLiftUrl") != NULL);
+            // hideTracks means we just arrived from a quickLift.  The lift hub has already
+            // written the container the way it is on the source ("superTrack on show"), so
+            // the hub stanza decides, not the cart.  Drop any value an earlier lift left
+            // under the hub name, and leave the source's own undecorated value alone:  that
+            // one belongs to the source assembly, and it is gone anyway whenever the source
+            // container is back at its default.
+            if (hideTracks && (trackDbSetting(track->tdb, "quickLiftUrl") != NULL))
+                cartRemove(cart, track->tdb->parent->track);
+            boolean superFromCart = !hideTracks;
             // first deal with visibility of super track
             char *s = superFromCart ? cartOptionalString(cart, track->tdb->parent->track) : cgiOptionalString(track->tdb->parent->track);
             if (s)
