@@ -175,7 +175,7 @@ def accOverlay(gbdb, samples):
         "maxHeightPixels 100:50:8",
         "visibility full",
         "priority 1",
-        "shortLabel Fiber-seq Acc",
+        "shortLabel Fiber-seq Accessible",
         "longLabel Fiber-seq percent-accessible chromatin in seven common cell lines",
     ])
     for acc, color in DEFAULT_OVERLAY:
