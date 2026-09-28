@@ -281,9 +281,18 @@ hgsql hg38 -Ne "select searchName, shortCircuit, searchPriority from hgFindSpec_
 
 # Lou asked on the ticket for downloads to be off, so the stanza has "tableBrowser off"
 # and the Data Access section points at EpigenCentral's own portal and repository. That
-# switch covers the Table Browser, the Data Integrator and the REST API; the bigBed
-# still sits in /gbdb and is reachable on hgdownload, so it is not a hard block, and QA
-# should confirm with the lab that this is what they wanted.
+# switch covers the Table Browser, the Data Integrator and the REST API, but the bigBed
+# itself still sits in /gbdb and would otherwise be reachable on hgdownload.
+#
+# 2026-09-28 Claude max: refs #38112
+# Hide the bigBed from hgdownload the same way the restricted varFreqs subtracks do
+# (see the 2026-05-15 entry in varFreqs.txt): prefix the gbdb filename with "_", which
+# hgdownload's rsync excludes. Only epigenCentral needs this; methaDory.bb in the same
+# /gbdb/hg38/episignatures/ directory keeps its plain name since it stays downloadable.
+cd /gbdb/hg38/episignatures
+mv epigenCentral.bb _epigenCentral.bb
+# Symlink target under /hive/data/genomes/... unchanged. Updated the bigDataUrl in the
+# epigenCentral stanza of human/hg38/episignatures.ra to match.
 
 # Visibility: the track is sparse almost everywhere, 15,035 sites over the genome, but it
 # has one hot spot at the HOXA cluster. Measured heights at 1100px wide, pack, with no
