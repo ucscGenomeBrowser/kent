@@ -4,7 +4,7 @@
 # Do not edit by hand, edit the script and regenerate.
 
 track fiberSeq
-superTrack on show
+superTrack on
 shortLabel Fiber-seq
 longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation
 group regulation
@@ -24,7 +24,7 @@ priority 2.5
     maxHeightPixels 100:50:8
     visibility full
     priority 1
-    shortLabel Fiber-seq Acc
+    shortLabel Fiber-seq Accessible
     longLabel Fiber-seq percent-accessible chromatin in seven common cell lines
 
         track fiberSeqAcc_PM00001

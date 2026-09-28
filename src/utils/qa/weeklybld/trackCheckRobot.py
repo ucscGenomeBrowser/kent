@@ -5,7 +5,9 @@ For each active assembly in hgcentralbeta.dbDb:
   - Look up default position
   - For each track in that assembly's trackDb:
       * Hide all tracks (GET hgTracks with hgt.hideAll=yes) using a session cookie jar
-      * Enable just this track (GET hgTracks with <track>=full)
+      * Enable just this track (GET hgTracks with <track>=full).  A subtrack of a
+        faceted composite can no longer override its hidden ancestors (#37662), so
+        for those the parent chain is set to full and <track>_sel=1 is added.
       * Scrape hgc URLs from the rendered track image map (<AREA HREF=...>)
       * GET up to MAX_LINKS_PER_TRACK of them, check 200 and "HGERROR" in body
 
@@ -32,6 +34,8 @@ import time
 from urllib.parse import urlencode, urljoin
 import urllib.request
 import urllib.error
+
+from trackCheckAnalyze import extract_error_text
 
 # Seconds to wait for a response.  The wuhCor1 phylogenetic tree tracks take ~40s in hgTracks,
 # and the hg38 470-way and 241-way alignment details pages take 2-6 minutes in hgc.
@@ -94,9 +98,19 @@ def hgsql(hgdb_conf, db, query):
 
 
 def active_assemblies(hgdb_conf):
-    # Hub-backed assemblies (nibPath "hub:...") have no MySQL database to list tracks from.
-    return hgsql(hgdb_conf, "hgcentralbeta",
-                 "SELECT name FROM dbDb WHERE active = 1 AND nibPath NOT LIKE 'hub:%'")
+    """Return active assemblies that have a MySQL database to list tracks from.
+    Hub-backed assemblies (nibPath "hub:...") usually have none, but some (hs1,
+    rn8, mpxvRivers) do and still get checked."""
+    databases = set(hgsql(hgdb_conf, "hgcentralbeta", "SHOW DATABASES"))
+    rows = hgsql(hgdb_conf, "hgcentralbeta",
+                 "SELECT name, nibPath FROM dbDb WHERE active = 1")
+    out = []
+    for row in rows:
+        name, _, nib_path = row.partition("\t")
+        if nib_path.startswith("hub:") and name not in databases:
+            continue
+        out.append(name)
+    return out
 
 
 def default_position(hgdb_conf, assembly):
@@ -106,7 +120,32 @@ def default_position(hgdb_conf, assembly):
 
 
 def trackdb_tracks(hgdb_conf, assembly):
-    return hgsql(hgdb_conf, assembly, "SELECT tableName FROM trackDb")
+    """Return (tracks, parents, faceted): track names in trackDb order, a map of
+    track -> parent/superTrack name, and the set of faceted composites."""
+    tracks, parents, faceted = [], {}, set()
+    for row in hgsql(hgdb_conf, assembly, "SELECT tableName, settings FROM trackDb"):
+        name, _, settings = row.partition("\t")
+        tracks.append(name)
+        # hgsql -B escapes the newlines between settings as a literal \n
+        for line in settings.split("\\n"):
+            words = line.split()
+            if len(words) < 2:
+                continue
+            if words[0] in ("parent", "superTrack") and words[1] != "on":
+                parents[name] = words[1]
+            elif words[0] == "compositeTrack" and words[1] == "faceted":
+                faceted.add(name)
+    return tracks, parents, faceted
+
+
+def ancestors(track, parents):
+    """Return the parent chain of track, nearest first."""
+    out = []
+    t = parents.get(track)
+    while t and t not in out:
+        out.append(t)
+        t = parents.get(t)
+    return out
 
 
 def make_opener():
@@ -129,13 +168,15 @@ AREA_HGC_RE = re.compile(
 )
 
 
-def extract_hgc_links(body, base_url):
-    """Return unique hgc URLs found in track image AREA tags."""
+def extract_hgc_links(body, base_url, only_track=None):
+    """Return unique hgc URLs found in track image AREA tags, optionally only
+    those whose g= is only_track."""
     seen = set()
     out = []
+    g_re = re.compile(r"[?&]g=" + re.escape(only_track) + r"(&|$)") if only_track else None
     for m in AREA_HGC_RE.finditer(body):
         href = m.group(1).replace("&amp;", "&")
-        if href in seen:
+        if href in seen or (g_re and not g_re.search(href)):
             continue
         seen.add(href)
         out.append(urljoin(base_url, href))
@@ -156,12 +197,14 @@ def check_hgc_urls(opener, urls, log_prefix):
         if status != 200:
             err(f"{log_prefix}: unexpected response code {status} for {url}")
             continue
-        idx = body.find("HGERROR")
-        if idx >= 0:
-            err(f"{log_prefix}: HGERROR at {url}")
+        if "HGERROR" in body:
+            msgs = extract_error_text(body)
+            what = f" ({'; '.join(msgs)})" if msgs else ""
+            err(f"{log_prefix}: HGERROR{what} at {url}")
 
 
-def exercise_track(http_proto, server, assembly, track, default_pos):
+def exercise_track(http_proto, server, assembly, track, default_pos,
+                   parents, faceted):
     """Two-step GET: hide all, then enable track. Scrape hgc links, GET them."""
     opener = make_opener()
     base = f"{http_proto}://{server}/cgi-bin/hgTracks"
@@ -179,7 +222,16 @@ def exercise_track(http_proto, server, assembly, track, default_pos):
         return
 
     # Step 2: enable just this track.
-    url2 = f"{base}?{urlencode({**common, track: 'full'})}"
+    enable = {track: "full"}
+    chain = ancestors(track, parents)
+    in_faceted = any(a in faceted for a in chain)
+    if in_faceted:
+        # Faceted children are clamped by their ancestors' visibility, and the
+        # other default-selected subtracks will draw too, so keep only our links.
+        for a in chain:
+            enable[a] = "full"
+        enable[f"{track}_sel"] = "1"
+    url2 = f"{base}?{urlencode({**common, **enable})}"
     try:
         status, body = http_get(opener, url2)
     except Exception as e:
@@ -189,7 +241,7 @@ def exercise_track(http_proto, server, assembly, track, default_pos):
         err(f"{assembly}.{track}: enable got HTTP {status}")
         return
 
-    links = extract_hgc_links(body, url2)
+    links = extract_hgc_links(body, url2, track if in_faceted else None)
     if not links:
         # No clickable items at default position — not an error, just no coverage.
         Counters.skipped += 1
@@ -232,20 +284,20 @@ def main():
             err(f"{asm}: no default position in dbDb")
             continue
 
-        if props["table"] == "all":
-            try:
-                tracks = trackdb_tracks(args.hgdb_conf, asm)
-            except Exception as e:
-                err(f"{asm}: could not list tracks: {e}")
-                continue
-        else:
+        try:
+            tracks, parents, faceted = trackdb_tracks(args.hgdb_conf, asm)
+        except Exception as e:
+            err(f"{asm}: could not list tracks: {e}")
+            continue
+        if props["table"] != "all":
             tracks = [props["table"]]
 
         before_checked = Counters.checked
         before_skipped = Counters.skipped
         for t in tracks:
             try:
-                exercise_track(props["httpProto"], props["server"], asm, t, pos)
+                exercise_track(props["httpProto"], props["server"], asm, t, pos,
+                               parents, faceted)
             except Exception as e:
                 err(f"{asm}.{t}: unexpected exception: {e}")
         log(f"checked {Counters.checked - before_checked} of {len(tracks)} "
