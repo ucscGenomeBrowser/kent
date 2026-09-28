@@ -1378,3 +1378,20 @@ python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
     --annotated-vcf merged.annotated.vcf.gz --output-prefix varFreqsNew \
     --split-affected --threads 8 --work-dir /hive/data/genomes/hg38/bed/varFreqs/all \
     > rebuild45k.log 2>&1
+# Merged variants: 1,505,737,716 (was 1,374,129,993). varFreqsAffected
+# 425,183,826 items / 38.6 GB (was 133,290,997; the 20,858 SPARK 45k ASD genomes
+# add many rare WGS variants), varFreqsBackground 1,381,032,442 items / 71.0 GB
+# (was 1,278,354,588); 191 fields (SPARK45k adds AC/AF and AUT/NON_AUT AC/AF).
+# APOE rs429358: affectedAC/AN 38,922 / 254,866 = 32,782 + 6,140 and
+# 213,150 + 41,716 (SPARK45k AUT), SPARK45k ASD AF 0.147186 as in the subtrack.
+mv varFreqsAffected.bb varFreqsAffected.bb.preSpark45k.bak
+mv varFreqsNewAffected.bb varFreqsAffected.bb
+mv varFreqsBackground.bb varFreqsBackground.bb.preSpark45k.bak
+mv varFreqsNewBackground.bb varFreqsBackground.bb
+mv -f varFreqsNewAffected.as varFreqsAffected.as
+mv -f varFreqsNewBackground.as varFreqsBackground.as
+mv varFreqs.trackDb.ra varFreqs.trackDb.ra.preSpark45k
+mv varFreqsNew.trackDb.ra varFreqs.trackDb.ra
+# varFreqs.ra: SPARK45k in the affectedCohorts/backgroundSources menus and the
+# commented per-cohort filter blocks, taken from varFreqs.trackDb.ra; the
+# affected longLabel now says ~150,000 individuals.

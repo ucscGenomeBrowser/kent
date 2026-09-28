@@ -9,7 +9,7 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
 
         track varFreqsAffected
         shortLabel Disease cohorts
-        longLabel SNV Frequencies: variants in ~130,000 affected or case individuals (autism, schizophrenia, rare disease cohorts)
+        longLabel SNV Frequencies: variants in ~150,000 affected or case individuals (autism, schizophrenia, rare disease cohorts)
         type bigBed 9 +
         parent varFreqs on
         bigDataUrl /gbdb/$D/varFreqs/_affected/varFreqsAffected.bb
@@ -85,9 +85,13 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filter.SPARKAF 0:1
         # filterLimits.SPARKAF 0:1
         # filterByRange.SFARI_WGSAF on
-        # filterLabel.SFARI_WGSAF SFARI SPARK WGS AF
+        # filterLabel.SFARI_WGSAF SFARI SPARK iWGS v1.1 Pilot AF
         # filter.SFARI_WGSAF 0:1
         # filterLimits.SFARI_WGSAF 0:1
+        # filterByRange.SPARK45kAF on
+        # filterLabel.SPARK45kAF SFARI SPARK 45k WGS AF
+        # filter.SPARK45kAF 0:1
+        # filterLimits.SPARK45kAF 0:1
         # filterByRange.GenomeAsiaAF on
         # filterLabel.GenomeAsiaAF GenomeAsia SNVs AF
         # filter.GenomeAsiaAF 0:1
@@ -202,9 +206,13 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filter.SPARKAC 0:2000000
         # filterLimits.SPARKAC 0:2000000
         # filterByRange.SFARI_WGSAC on
-        # filterLabel.SFARI_WGSAC SFARI SPARK WGS AC
+        # filterLabel.SFARI_WGSAC SFARI SPARK iWGS v1.1 Pilot AC
         # filter.SFARI_WGSAC 0:2000000
         # filterLimits.SFARI_WGSAC 0:2000000
+        # filterByRange.SPARK45kAC on
+        # filterLabel.SPARK45kAC SFARI SPARK 45k WGS AC
+        # filter.SPARK45kAC 0:2000000
+        # filterLimits.SPARK45kAC 0:2000000
         # filterByRange.GenomeAsiaAC on
         # filterLabel.GenomeAsiaAC GenomeAsia SNVs AC
         # filter.GenomeAsiaAC 0:2000000
@@ -376,23 +384,40 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SPARKAC_NON_AUT SFARI SPARK WES Non-ASD family AC
         # filter.SPARKAC_NON_AUT 0:2000000
         # filterLimits.SPARKAC_NON_AUT 0:2000000
-        # SFARI SPARK WGS populations
+        # SFARI SPARK iWGS v1.1 Pilot populations
         # filterByRange.SFARI_WGSAF_AUT on
-        # filterLabel.SFARI_WGSAF_AUT SFARI SPARK WGS ASD proband AF
+        # filterLabel.SFARI_WGSAF_AUT SFARI SPARK iWGS v1.1 Pilot ASD proband AF
         # filter.SFARI_WGSAF_AUT 0:1
         # filterLimits.SFARI_WGSAF_AUT 0:1
         # filterByRange.SFARI_WGSAF_NON_AUT on
-        # filterLabel.SFARI_WGSAF_NON_AUT SFARI SPARK WGS Non-ASD family AF
+        # filterLabel.SFARI_WGSAF_NON_AUT SFARI SPARK iWGS v1.1 Pilot Non-ASD family AF
         # filter.SFARI_WGSAF_NON_AUT 0:1
         # filterLimits.SFARI_WGSAF_NON_AUT 0:1
         # filterByRange.SFARI_WGSAC_AUT on
-        # filterLabel.SFARI_WGSAC_AUT SFARI SPARK WGS ASD proband AC
+        # filterLabel.SFARI_WGSAC_AUT SFARI SPARK iWGS v1.1 Pilot ASD proband AC
         # filter.SFARI_WGSAC_AUT 0:2000000
         # filterLimits.SFARI_WGSAC_AUT 0:2000000
         # filterByRange.SFARI_WGSAC_NON_AUT on
-        # filterLabel.SFARI_WGSAC_NON_AUT SFARI SPARK WGS Non-ASD family AC
+        # filterLabel.SFARI_WGSAC_NON_AUT SFARI SPARK iWGS v1.1 Pilot Non-ASD family AC
         # filter.SFARI_WGSAC_NON_AUT 0:2000000
         # filterLimits.SFARI_WGSAC_NON_AUT 0:2000000
+        # SFARI SPARK 45k WGS populations
+        # filterByRange.SPARK45kAF_AUT on
+        # filterLabel.SPARK45kAF_AUT SFARI SPARK 45k WGS ASD proband AF
+        # filter.SPARK45kAF_AUT 0:1
+        # filterLimits.SPARK45kAF_AUT 0:1
+        # filterByRange.SPARK45kAF_NON_AUT on
+        # filterLabel.SPARK45kAF_NON_AUT SFARI SPARK 45k WGS Non-ASD family AF
+        # filter.SPARK45kAF_NON_AUT 0:1
+        # filterLimits.SPARK45kAF_NON_AUT 0:1
+        # filterByRange.SPARK45kAC_AUT on
+        # filterLabel.SPARK45kAC_AUT SFARI SPARK 45k WGS ASD proband AC
+        # filter.SPARK45kAC_AUT 0:2000000
+        # filterLimits.SPARK45kAC_AUT 0:2000000
+        # filterByRange.SPARK45kAC_NON_AUT on
+        # filterLabel.SPARK45kAC_NON_AUT SFARI SPARK 45k WGS Non-ASD family AC
+        # filter.SPARK45kAC_NON_AUT 0:2000000
+        # filterLimits.SPARK45kAC_NON_AUT 0:2000000
         # GenomeAsia SNVs populations
         # filterByRange.GenomeAsiaAF_NEA on
         # filterLabel.GenomeAsiaAF_NEA GenomeAsia SNVs Northeast Asian AF
@@ -711,9 +736,13 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filter.SPARKAF 0:1
         # filterLimits.SPARKAF 0:1
         # filterByRange.SFARI_WGSAF on
-        # filterLabel.SFARI_WGSAF SFARI SPARK WGS AF
+        # filterLabel.SFARI_WGSAF SFARI SPARK iWGS v1.1 Pilot AF
         # filter.SFARI_WGSAF 0:1
         # filterLimits.SFARI_WGSAF 0:1
+        # filterByRange.SPARK45kAF on
+        # filterLabel.SPARK45kAF SFARI SPARK 45k WGS AF
+        # filter.SPARK45kAF 0:1
+        # filterLimits.SPARK45kAF 0:1
         # filterByRange.GenomeAsiaAF on
         # filterLabel.GenomeAsiaAF GenomeAsia SNVs AF
         # filter.GenomeAsiaAF 0:1
@@ -828,9 +857,13 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filter.SPARKAC 0:2000000
         # filterLimits.SPARKAC 0:2000000
         # filterByRange.SFARI_WGSAC on
-        # filterLabel.SFARI_WGSAC SFARI SPARK WGS AC
+        # filterLabel.SFARI_WGSAC SFARI SPARK iWGS v1.1 Pilot AC
         # filter.SFARI_WGSAC 0:2000000
         # filterLimits.SFARI_WGSAC 0:2000000
+        # filterByRange.SPARK45kAC on
+        # filterLabel.SPARK45kAC SFARI SPARK 45k WGS AC
+        # filter.SPARK45kAC 0:2000000
+        # filterLimits.SPARK45kAC 0:2000000
         # filterByRange.GenomeAsiaAC on
         # filterLabel.GenomeAsiaAC GenomeAsia SNVs AC
         # filter.GenomeAsiaAC 0:2000000
@@ -1002,23 +1035,40 @@ pennantIcon New red ../goldenPath/newsarch.html#070126 "Released Jul. 1, 2026"
         # filterLabel.SPARKAC_NON_AUT SFARI SPARK WES Non-ASD family AC
         # filter.SPARKAC_NON_AUT 0:2000000
         # filterLimits.SPARKAC_NON_AUT 0:2000000
-        # SFARI SPARK WGS populations
+        # SFARI SPARK iWGS v1.1 Pilot populations
         # filterByRange.SFARI_WGSAF_AUT on
-        # filterLabel.SFARI_WGSAF_AUT SFARI SPARK WGS ASD proband AF
+        # filterLabel.SFARI_WGSAF_AUT SFARI SPARK iWGS v1.1 Pilot ASD proband AF
         # filter.SFARI_WGSAF_AUT 0:1
         # filterLimits.SFARI_WGSAF_AUT 0:1
         # filterByRange.SFARI_WGSAF_NON_AUT on
-        # filterLabel.SFARI_WGSAF_NON_AUT SFARI SPARK WGS Non-ASD family AF
+        # filterLabel.SFARI_WGSAF_NON_AUT SFARI SPARK iWGS v1.1 Pilot Non-ASD family AF
         # filter.SFARI_WGSAF_NON_AUT 0:1
         # filterLimits.SFARI_WGSAF_NON_AUT 0:1
         # filterByRange.SFARI_WGSAC_AUT on
-        # filterLabel.SFARI_WGSAC_AUT SFARI SPARK WGS ASD proband AC
+        # filterLabel.SFARI_WGSAC_AUT SFARI SPARK iWGS v1.1 Pilot ASD proband AC
         # filter.SFARI_WGSAC_AUT 0:2000000
         # filterLimits.SFARI_WGSAC_AUT 0:2000000
         # filterByRange.SFARI_WGSAC_NON_AUT on
-        # filterLabel.SFARI_WGSAC_NON_AUT SFARI SPARK WGS Non-ASD family AC
+        # filterLabel.SFARI_WGSAC_NON_AUT SFARI SPARK iWGS v1.1 Pilot Non-ASD family AC
         # filter.SFARI_WGSAC_NON_AUT 0:2000000
         # filterLimits.SFARI_WGSAC_NON_AUT 0:2000000
+        # SFARI SPARK 45k WGS populations
+        # filterByRange.SPARK45kAF_AUT on
+        # filterLabel.SPARK45kAF_AUT SFARI SPARK 45k WGS ASD proband AF
+        # filter.SPARK45kAF_AUT 0:1
+        # filterLimits.SPARK45kAF_AUT 0:1
+        # filterByRange.SPARK45kAF_NON_AUT on
+        # filterLabel.SPARK45kAF_NON_AUT SFARI SPARK 45k WGS Non-ASD family AF
+        # filter.SPARK45kAF_NON_AUT 0:1
+        # filterLimits.SPARK45kAF_NON_AUT 0:1
+        # filterByRange.SPARK45kAC_AUT on
+        # filterLabel.SPARK45kAC_AUT SFARI SPARK 45k WGS ASD proband AC
+        # filter.SPARK45kAC_AUT 0:2000000
+        # filterLimits.SPARK45kAC_AUT 0:2000000
+        # filterByRange.SPARK45kAC_NON_AUT on
+        # filterLabel.SPARK45kAC_NON_AUT SFARI SPARK 45k WGS Non-ASD family AC
+        # filter.SPARK45kAC_NON_AUT 0:2000000
+        # filterLimits.SPARK45kAC_NON_AUT 0:2000000
         # GenomeAsia SNVs populations
         # filterByRange.GenomeAsiaAF_NEA on
         # filterLabel.GenomeAsiaAF_NEA GenomeAsia SNVs Northeast Asian AF
