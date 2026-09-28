@@ -313,7 +313,7 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #                 Embryonic stem cell 2), so as a facet it drew two checkboxes
 #                 and left 12 samples unreachable.  Underscored, so it is a
 #                 searchable and sortable column instead.
-#      sampleClass 3 values, HPRC (20), Common Cell Line (16) and Rare disease
+#      sampleClass 3 values, HPRC (20), Common cell line (16) and Rare disease
 #                 sample (5), all count > 1.  Read from the fifth column of
 #                 fiberSeqSamples.tsv, which carries the lab's own
 #                 classification.  It used to be derived from the free-text cell

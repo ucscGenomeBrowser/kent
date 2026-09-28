@@ -74,7 +74,7 @@ SAMPLE_CLASS_DESCRIPTION = (
 # Okabe-Ito colors for the swatches.
 SAMPLE_CLASS_COLORS = {
     "HPRC": "#0072B2",
-    "Common Cell Line": "#D55E00",
+    "Common cell line": "#D55E00",
     "Rare disease sample": "#009E73",
 }
 
