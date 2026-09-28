@@ -3,8 +3,8 @@
 <p>
 This track is part of the <a href="hgTrackUi?db=hg38&amp;g=fiberSeq">Fiber-seq</a> collection. It holds the
 full Fiber-seq data for 41 samples: 14 cell lines and 27 lymphoblastoid lines, 20 of them from
-individuals sequenced by the Human Pangenome Reference Consortium and the rest from ENCODE, the
-Genome in a Bottle project and other sources. Chromatin accessibility and CpG methylation are read from the same
+individuals sequenced by the Human Pangenome Reference Consortium and five from rare disease
+cases. Chromatin accessibility and CpG methylation are read from the same
 molecules in the same experiment, so both are kept in one table here and can be compared without
 worrying about differences in cell preparation or sequencing depth. Six kinds of data are
 available for each sample:
@@ -89,11 +89,16 @@ The color swatches next to the Sample class filters are:
       <td>HPRC, a lymphoblastoid (B-lymphocyte, EBV) line from the Human Pangenome Reference
           Consortium</td></tr>
   <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
-      <td>Common cell line. Seven of these are lymphoblastoid as well but come from elsewhere:
-          GM12878 from ENCODE, HG002 from the Genome in a Bottle project, and GM25455, GM25456,
-          GM27730, GM28570 and GM28572. The classification is the one supplied by the
-          laboratory, not one inferred from the cell type</td></tr>
+      <td>Common cell line. Two of these are lymphoblastoid as well but come from elsewhere:
+          GM12878 from ENCODE and HG002 from the Genome in a Bottle project</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th>
+      <td>Rare disease sample, from a case consented to broad genomic data sharing. Five so far:
+          GM25455, GM25456, GM27730, GM28570 and GM28572</td></tr>
 </table>
+
+<p>
+The classification is the one supplied by the laboratory, not one inferred from the cell type.
+</p>
 
 <p>
 Peaks carry two filterable values, the FIRE score in the signalValue field and the false
