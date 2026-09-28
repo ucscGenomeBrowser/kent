@@ -4,7 +4,7 @@
 # Do not edit by hand, edit the script and regenerate.
 
 track fiberSeq
-superTrack on show
+superTrack on
 shortLabel Fiber-seq
 longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation
 group regulation

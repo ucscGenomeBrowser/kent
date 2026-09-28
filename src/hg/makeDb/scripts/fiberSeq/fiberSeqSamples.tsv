@@ -35,8 +35,8 @@ PS01305	MCF-7	Breast epithelial adenocarcinoma	3f29e4e4b63b744ce4aeb72bbeecd70f	
 PS01314	HCT116	Colon epithelial colorectal carcinoma	91cbfbadf9e012ed9a83a8987f7d12dd	Common Cell Line
 PS01319	Caco-2	Colon epithelial colorectal adenocarcinoma	c26fd5d56fd09f84ff28c7c4b9f99559	Common Cell Line
 PS01388	WTC-11	Induced pluripotent stem cell iPSC	85dce624f9c36c4f2ff11bc22af93dd1	Common Cell Line
-PS01517	GM28572	Lymphoblastoid B-lymphocyte EBV-transformed	0b5ee552d04d5730df674bd9ab288ce9	Common Cell Line
-PS01518	GM28570	Lymphoblastoid B-lymphocyte EBV-transformed	f185df42c50391eebc7e3b69d5fd945f	Common Cell Line
-PS01519	GM25456	Lymphoblastoid B-lymphocyte EBV-transformed	5612ea912092183984914c6d25998b1f	Common Cell Line
-PS01520	GM25455	Lymphoblastoid B-lymphocyte EBV-transformed	27d0455403f6b4221c7267604c468aff	Common Cell Line
-PS01524	GM27730	Lymphoblastoid B-lymphocyte EBV-transformed	8f7783e80526113d9dda6bb3ed387bee	Common Cell Line
+PS01517	GM28572	Lymphoblastoid B-lymphocyte EBV-transformed	0b5ee552d04d5730df674bd9ab288ce9	Rare disease sample
+PS01518	GM28570	Lymphoblastoid B-lymphocyte EBV-transformed	f185df42c50391eebc7e3b69d5fd945f	Rare disease sample
+PS01519	GM25456	Lymphoblastoid B-lymphocyte EBV-transformed	5612ea912092183984914c6d25998b1f	Rare disease sample
+PS01520	GM25455	Lymphoblastoid B-lymphocyte EBV-transformed	27d0455403f6b4221c7267604c468aff	Rare disease sample
+PS01524	GM27730	Lymphoblastoid B-lymphocyte EBV-transformed	8f7783e80526113d9dda6bb3ed387bee	Rare disease sample
