@@ -611,6 +611,15 @@ RELEASE_GATES = {
                "whole feature: with it on, a track still has to opt in with "
                "the denseClick trackDb setting, and with it off no track "
                "gets it whatever its trackDb says."),
+        h("hubHtmlSanitize", "flag", "hg/lib/trackHub.c", default="FALSE",
+          role="gate", verified=True, ticket="38126",
+          note="Passes description HTML from hubs and custom tracks through "
+               "htmlSanitize() on the way in.  Read once, in "
+               "hubHtmlSanitizeOn(), which every entry point and hubCheck "
+               "ask.  Off is the older behavior: customTrack.c falls back to "
+               "jsStripJavascript().  Added off for v504 because QA found "
+               "pages the filter changes; the default is meant to flip to "
+               "TRUE in v505 once those are fixed."),
     ],
 }
 
@@ -1720,13 +1729,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("hubHtmlSanitize", "flag", "hg/lib/trackHub.c", default="FALSE",
-          ticket="38126",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/trackHub.c.  Came in at beb596d6144, trackHub: add an "
-               "hg.conf switch for hub description page handling, refs "
-               "#38126.  Needs a description and a gate or knob call."),
     ],
 }
 
