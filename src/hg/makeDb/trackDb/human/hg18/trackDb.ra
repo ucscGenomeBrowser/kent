@@ -469,27 +469,6 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-# Overrides for track pgSnp:
-    track pgKb1Comb override
-    pgSiftPredTab pgKb1Sift
-    pgPolyphenPredTab pgPolyKb1
-
-    track pgNb1 override
-    pgSiftPredTab pgNb1Sift
-    pgPolyphenPredTab pgPolyNb1
-
-    track pgMd8 override
-    pgSiftPredTab pgMd8Sift
-    pgPolyphenPredTab pgPolyMd8
-
-    track pgTk1 override
-    pgSiftPredTab pgTk1Sift
-    pgPolyphenPredTab pgPolyTk1
-
-    track pgAbtSolid override
-    pgSiftPredTab pgAbtSift
-    pgPolyphenPredTab pgPolyAbt
-
 
 track pgPop
 compositeTrack on
