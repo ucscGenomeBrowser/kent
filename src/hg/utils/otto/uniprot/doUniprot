@@ -2362,7 +2362,15 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     if isfile(mapFname) and not doForce:
         logging.info("%s already exists, not rebuilding the protein -> genome mapping PSL" % mapFname)
-        assert(os.path.getsize(mapFname)!=0)
+        # An empty mapping is a real answer, not a broken file: an organism UniProt has two
+        # proteins for, neither of which aligns, produces one. The caller already treats a
+        # freshly built empty mapping that way and carries on, but reusing a cached one used to
+        # assert here, so such an assembly failed on every run after the first. The golden
+        # eagle did, until this. refs #38300
+        if os.path.getsize(mapFname) == 0:
+            logging.warning("%s: the cached protein -> genome mapping is empty, nothing aligns "
+                    "for this assembly" % db)
+            return mapFname, geneTable, fullMd5, protMapSource, protToTrans, False
         # The lift info describes the mapping, so it has to exist wherever the mapping
         # does. A run that was interrupted between building the PSL and writing this file
         # leaves the PSL behind on its own, and the next run then reuses the PSL and falls
