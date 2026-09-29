@@ -1109,6 +1109,27 @@ printf "composite chainNet\n" 1>&2
 fi
 
 ###################################################################
+# check for miniMap2/chain/net available
+
+export mm2=`ls -d ${buildDir}/trackData/miniMap2.* 2> /dev/null | wc -l`
+
+if [ "${mm2}" -gt 0 ]; then
+  if [ "${mm2}" -eq 1 ]; then
+printf "single miniMap2 chainNet\n" 1>&2
+    export miniMap2Dir=`ls -d ${buildDir}/trackData/miniMap2.*`
+    export oOrganism=`basename "${miniMap2Dir}" | sed -e 's/miniMap2.//;'`
+    # single chainNet here, no need for a composite track, does the symLinks too
+    $scriptDir/asmHubMiniMap2ChainNetTrackDb.sh $asmId $buildDir
+    $scriptDir/asmHubMiniMap2ChainNet.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab $oOrganism > $buildDir/html/$asmId.miniMap2ChainNet.html
+  else
+printf "composite miniMap2 chainNet\n" 1>&2
+    # multiple chainNets here, create composite track, does the symLinks too
+    $scriptDir/asmHubMiniMap2ChainNetTrackDb.pl $buildDir
+    $scriptDir/asmHubMiniMap2ChainNetComposite.pl $asmId $ncbiAsmId $buildDir/html/$asmId.names.tab > $buildDir/html/$asmId.miniMap2ChainNet.html
+  fi
+fi
+
+###################################################################
 # crisprAll track
 
 if [ -s ${buildDir}/trackData/crisprAll/crispr.bb ]; then

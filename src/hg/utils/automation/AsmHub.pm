@@ -20,7 +20,7 @@ use Exporter;
 @EXPORT_OK = (
     # Support for common command line options:
     qw( commify asmSize ncbiGeneDescription asmIdToPath
-        accessionFromPath mashSketchDir
+        accessionFromPath mashSketchDir asmBuildDir
       ),
 );
 
@@ -67,15 +67,15 @@ sub accessionFromPath($) {
 }
 
 # given a bare accession (or full asmId -- only the accession prefix is
-# used), resolve and return the standard GenArk mashSketch cache
-# directory for it:
-#   /hive/data/genomes/asmHubs/{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/asmId/mashSketch
-# by locating the actual on-disk asmId directory, the same way
-# asmHubChainNet.pl resolves a bare accession to its full build
-# directory name.  Returns undef if no such build directory exists
-# (accession not built here, wrong accession, etc.) -- callers should
-# fall back to an ordinary scratch directory in that case.
-sub mashSketchDir($) {
+# used), resolve and return the actual on-disk GenArk build directory for
+# it:
+#   /hive/data/genomes/asmHubs/{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/asmId
+# by locating the real asmId directory, the same way asmHubChainNet.pl
+# resolves a bare accession to its full build directory name.  Returns
+# undef if no such build directory exists (accession not built here,
+# wrong accession, etc.) -- callers should treat that as "not a real,
+# built GenArk assembly" and fall back accordingly.
+sub asmBuildDir($) {
   my ($accession) = @_;
   return undef if ($accession !~ m/^GC[AF]_\d{9}/);
   my $gcX = substr($accession, 0, 3);
@@ -85,7 +85,16 @@ sub mashSketchDir($) {
   chomp $asmId;
   return undef if (! $asmId);
   $asmId =~ s#.*/##;
-  return "$accDir/$asmId/mashSketch";
+  return "$accDir/$asmId";
+}
+
+# given a bare accession, return its standard GenArk mashSketch cache
+# directory (see asmBuildDir() above) -- undef under the same conditions.
+sub mashSketchDir($) {
+  my ($accession) = @_;
+  my $buildDir = &asmBuildDir($accession);
+  return undef if (! $buildDir);
+  return "$buildDir/mashSketch";
 }
 
 # Look up NCBI's own annotation provider/name/date for an accession from
