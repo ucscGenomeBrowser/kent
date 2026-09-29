@@ -67,13 +67,15 @@ DIFF_LEVELS = [
 # Shown behind an info icon on the Sample class column heading.
 SAMPLE_CLASS_DESCRIPTION = (
     "HPRC = Lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
-    "Human Pangenome Reference Consortium")
+    "Human Pangenome Reference Consortium. Rare disease samples are cases "
+    "consented to broad genomic data sharing")
 
 # Sample class swatches, shown next to that facet's checkboxes.
 # Okabe-Ito colors for the swatches.
 SAMPLE_CLASS_COLORS = {
     "HPRC": "#0072B2",
-    "Common Cell Line": "#D55E00",
+    "Common cell line": "#D55E00",
+    "Rare disease sample": "#009E73",
 }
 
 
@@ -173,7 +175,7 @@ def accOverlay(gbdb, samples):
         "maxHeightPixels 100:50:8",
         "visibility full",
         "priority 1",
-        "shortLabel Fiber-seq Acc",
+        "shortLabel Fiber-seq Accessible",
         "longLabel Fiber-seq percent-accessible chromatin in seven common cell lines",
     ])
     for acc, color in DEFAULT_OVERLAY:
@@ -464,7 +466,7 @@ def main():
                 "# Do not edit by hand, edit the script and regenerate.\n\n")
         f.write(stanza(0, [
             "track fiberSeq",
-            "superTrack on show",
+            "superTrack on",
             "shortLabel Fiber-seq",
             "longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation",
             "group regulation",

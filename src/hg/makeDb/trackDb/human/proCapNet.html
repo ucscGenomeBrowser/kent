@@ -15,7 +15,7 @@ This track holds two kinds of output from those models:
 
 <ul>
 <li><b>Predicted PRO-cap</b>: what the model expects the PRO-cap signal to be,
-at every base of the genome, on both strands. The sequence rules that govern
+at every base of the primary chromosomes, on both strands. The sequence rules that govern
 where initiation happens are largely shared between cell types, so any one model
 highlights sequence capable of driving initiation, including at regions where no
 PRO-cap experiment has been done.</li>
@@ -43,9 +43,10 @@ track, available on GRCh38/hg38.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Cell lines are listed in the table on this page, one row each, with a checkbox
-per data type. Use the <b>Sample class</b> facet to narrow the list, and the
-<b>Group tracks by</b> buttons to order the browser by sample or by data type.
+The matrix on this page has one row per cell line and one column per data type,
+so a checkbox turns on one strand of one cell line's predictions, or its
+contribution scores. Use the <b>Sample class</b> filter to restrict the matrix to
+cancer or non-cancer lines.
 </p>
 
 <p>
@@ -79,6 +80,21 @@ the model was trained on:
 <li><span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span> <b>K562</b> chronic myelogenous leukemia</li>
 <li><span style="display:inline-block; background-color:#56B4E9; width:18px; height:12px; vertical-align:middle;"></span> <b>MCF10A</b> non-tumorigenic breast epithelium</li>
 </ul>
+
+<p>
+One model was trained per cell line. Each links to its ENCODE annotation,
+which holds the trained model itself.
+</p>
+
+<table class="stdTbl">
+<tr><th>Cell line</th><th>Tissue</th><th>Sample class</th><th>ENCODE model</th></tr>
+<tr><td>A673</td><td>Muscle</td><td>Cancer</td><td><a href="https://www.encodeproject.org/annotations/ENCSR072YCM/" target="_blank">ENCSR072YCM</a></td></tr>
+<tr><td>Caco-2</td><td>Colon</td><td>Cancer</td><td><a href="https://www.encodeproject.org/annotations/ENCSR182QNJ/" target="_blank">ENCSR182QNJ</a></td></tr>
+<tr><td>Calu3</td><td>Lung</td><td>Cancer</td><td><a href="https://www.encodeproject.org/annotations/ENCSR797DEF/" target="_blank">ENCSR797DEF</a></td></tr>
+<tr><td>HUVEC</td><td>Blood vessel</td><td>Non-cancer</td><td><a href="https://www.encodeproject.org/annotations/ENCSR801ECP/" target="_blank">ENCSR801ECP</a></td></tr>
+<tr><td>K562</td><td>Blood</td><td>Cancer</td><td><a href="https://www.encodeproject.org/annotations/ENCSR740IPL/" target="_blank">ENCSR740IPL</a></td></tr>
+<tr><td>MCF10A</td><td>Breast</td><td>Non-cancer</td><td><a href="https://www.encodeproject.org/annotations/ENCSR860TYZ/" target="_blank">ENCSR860TYZ</a></td></tr>
+</table>
 
 <h2>Methods</h2>
 
