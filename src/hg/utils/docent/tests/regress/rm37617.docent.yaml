@@ -1,0 +1,47 @@
+# #37617 -- trackDb filters on VCF INFO fields: filter.*, filterText.* and filterValues.*,
+# the same settings bigBed tracks already take.
+#
+# The code is 2521d696f50 (max: the bigBed filter settings on VCF tracks) and de6d2d4e5d0
+# with bd6026f91fd (Christopher Lee: filters, coloring and mouseovers for VCF tracks, and the
+# fix after the merge with master), in hg/lib/vcfUi.c and hg/hgTracks/vcfTrack.c.  The
+# ticket says the settings are not documented yet; the experimental gnomAD v4.1.1 trackDb,
+# hg/makeDb/trackDb/human/hg38/gnomadV4.1.1.ra, is the one real example, and it is not to
+# be QA'd, so this script uses a fixture instead.
+#
+# The fixture, ~/public_html/docentFixtures/rm37617/, is four hg38 variants in
+# rm37617n1.vcf.gz with AF 0.5, 0.001, 0.2 and 0.05, and a track with `filter.AF 0.1`.  The
+# trackDb value is the default minimum, so with a fresh cart the two variants below 0.1
+# (chr1:1,000,300 and chr1:1,000,700) must not be drawn and the two above it must.  Before
+# the change a VCF track ignored filter.AF and drew all four.
+#
+# The fixture declares AF as Number=1.  With Number=A, which is how gnomAD and most real
+# VCFs declare AF, the same filter is silently ignored on genome-test on 2026-09-29: all
+# four items draw and no warning appears.  This script does not assert that; it tests the
+# feature as it works today.
+#
+# The unit test for the same settings is hg/lib/tests/vcfInfoFilterTester.c.  This script
+# is the page half: the filter reaching the drawn track.
+proof:
+  - "assertion-only 2026-09-29 -- written from #37617 and 2521d696f50, de6d2d4e5d0, bd6026f91fd"
+  - "release-ab 2026-09-29 -- fails on hgwbeta (v504, whose v504_branch lacks all three commits) and passes on genome-test. On v504 all four variants draw: the areas at chr1:1,000,300 and chr1:1,000,700 are there"
+
+target: genome-test
+db: hg38
+position: chr1:1000000-1000800
+reset: true
+fast: true
+steps:
+  - go: chr1:1000000-1000800
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm37617/rm37617hub.txt", db: hg38}
+  - go: chr1:1000000-1000800
+
+  # The row draws, with the two variants at or above AF 0.1 and neither below it.
+  - expect:
+      rows: [rm37617Filter]
+      has:
+        - 'area[href*="rm37617Filter"][href*="t=1000100&"]'
+        - 'area[href*="rm37617Filter"][href*="t=1000500&"]'
+      noHas:
+        - 'area[href*="rm37617Filter"][href*="t=1000300&"]'
+        - 'area[href*="rm37617Filter"][href*="t=1000700&"]'
