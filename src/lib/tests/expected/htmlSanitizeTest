@@ -74,7 +74,7 @@ in : <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 out: <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 
 in : <p style="list-style:u&#114l(http://example.com/x.png);color:re&#100">a</p>
-out: <p style="color:re&#100;">a</p>
+out: <p style="color:re&#100;;">a</p>
      (removed the value of the style property list-style)
 
 in : <p style="font-family:'AT&T Sans'">a</p>
@@ -119,4 +119,28 @@ out: <svg><rect width="9" height="9"></rect></svg>
 
 in : <circle r="5"/>text after
 out: text after
+
+in : <table class="stdTbl wide"><tr><td class="copyLinkSpanX">cell</td></tr></table>
+out: <table class="stdTbl"><tr><td>cell</td></tr></table>
+
+in : <span id='urlText0'><em>https://http_host/h/GCA_1</em></span><span class='copyLinkSpan' data-target='urlText0'></span>
+out: <span id="descPage-urlText0"><em>https://http_host/h/GCA_1</em></span><span class="copyLinkSpan" data-target="descPage-urlText0"></span>
+
+in : <p style='font-family:"Verdana",sans-serif;color:black'>a</p>
+out: <p style="font-family:&quot;Verdana&quot;,sans-serif;color:black;">a</p>
+
+in : <p style="list-style:u&#114;l(http://example.com/x); color:green">a</p>
+out: <p style="color:green;">a</p>
+     (removed the value of the style property list-style)
+
+in : <p style="color:re&#100;;text-align:center">a</p>
+out: <p style="color:re&#100;;text-align:center;">a</p>
+
+in : <p style="list-style:url&lpar;//example.com/x.png);color:red">a</p>
+out: <p style="color:red;">a</p>
+     (removed the value of the style property list-style)
+
+in : <p style="color:red&foo;position:fixed">a</p>
+out: <p>a</p>
+     (removed the value of the style property color)
 
