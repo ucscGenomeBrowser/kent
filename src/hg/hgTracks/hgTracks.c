@@ -12658,7 +12658,7 @@ tg->longLabel = labelAddNote(tg->longLabel,
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "density graph: too many items, zoom in");
+tg->longLabel = labelAddNote(tg->longLabel, "density graph: window too large, zoom in");
 }
 
 void labelTrackAsDensityTooManyItems(struct track *tg)

@@ -1,0 +1,41 @@
+# #38428 -- simple svg drawings in hub description pages, such as a color legend, came out
+# empty once the description filter was on.
+#
+# The fix is 7a356d85dba, in src/lib/htmlSanitize.c: svg, g, circle, ellipse, rect, line,
+# polyline, polygon and path now come through with their size, position, fill and stroke
+# attributes, and the parts of a drawing that are never drawn (defs, clipPath, gradients and
+# the like) still go.  The unit test is src/lib/tests/htmlSanitizeTest.c.
+#
+# HG.CONF GATE.  The filter runs only with hubHtmlSanitize=on (hg/lib/trackHub.c,
+# hubHtmlSanitizeOn(), default off).  With the gate off the page is not filtered at all and
+# the svg is on the page on every build, fixed or not, so a red run here first asks:
+#     grep hubHtmlSanitize /usr/local/apache/cgi-bin/hg.conf
+# It was turned on for genome-test on 2026-09-29.
+#
+# The fixture, ~/public_html/docentFixtures/rm38428/, is one hg38 track whose description
+# page draws a yellow circle and a red square in svg.  The square's svg also holds a script,
+# which must still be removed.  Before the fix the filter removed both svg elements and
+# everything inside them, so the legend's cells were empty.
+proof:
+  - "assertion-only 2026-09-29 -- written from #38428 and 7a356d85dba"
+  - "release-ab 2026-09-29 -- fails on v504 and passes on genome-test, both with hubHtmlSanitize=on. v504_branch d46687cc563 built from ~/kentV504 into ts park 38423 (CGIs, js, htdocs), gate set in its hg.conf: the legend text is there, nothing matches svg circle or svg rect"
+
+target: genome-test
+db: hg38
+position: chr1:1000000-1010000
+reset: true
+fast: true
+steps:
+  - go: chr1:1000000-1010000
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38428/hub.txt", db: hg38}
+  - go: chr1:1000000-1010000
+  - expect: {rows: [rm38428Legend]}
+
+  # The track's own settings page, which is where its description is printed.  The filter
+  # keeps an id but prefixes it (descPage-), so ids are matched by their ending.
+  - click: 'a[href*="hgTrackUi"][href*="rm38428Legend"]'
+  - expect:
+      text: ["This legend is drawn in svg.", "Yellow circle", "Red square"]
+      has: ['svg circle[cx="1"][r="1"]', 'svg rect[width="2"][height="2"]']
+      noHas: ['[id$="rm38428Script"]', 'svg script']
