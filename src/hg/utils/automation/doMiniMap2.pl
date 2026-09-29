@@ -22,11 +22,13 @@ use warnings;
 use strict;
 use FindBin qw($Bin);
 use lib "$Bin";
+use File::Basename qw(basename);
 use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
 use AssemblyDivergence qw(mashDistance choosePipeline
 			   $mashAsm5Max $mashAsm10Max $mashLastzMin $mashWarnMax);
+use AsmHub qw(accessionFromPath asmBuildDir asmIdToPath);
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;
@@ -152,8 +154,12 @@ in place of blat -fastMap:
     net:   Nets the alignments, uses netChainSubset to extract liftOver chains.
     load:  Installs liftOver chain files, calls hgAddLiftOverChain on $dbHost.
     cleanup: Removes or compresses intermediate files.
-All operations are performed in the build directory which is
-$HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/mm2.\$toDb.\$date unless -buildDir is given.
+All operations are performed in the build directory, which defaults to
+$HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/miniMap2\$ToDb.\$date
+for a plain UCSC database \$fromDb, or to
+.../asmHubs/{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/<asmId>/trackData/miniMap2\$ToDb.\$date
+when \$fromDb is a GenArk accession (matching how pairwise lastz builds are
+organized under GenArk) -- unless -buildDir is given.
 ";
   # Detailed help (-help):
   print STDERR "
@@ -182,7 +188,7 @@ my ($tDb, $qDb);
 # Other:
 my ($buildDir);
 my ($tSeq, $tSizes, $qSeq, $qSizes, $QDb, $fileServer);
-my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath, $dbExists);
+my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -241,8 +247,14 @@ sub getClusterSeqs {
       }
     }
     if (! defined $tSeqScratch) {
-     die "align: can't find $tDb/$tDb.2bit in " .
-       join("/, ", @okFilesystems) . "/ -- please distribute.\n";
+      # No pre-staged cluster-scratch copy -- fall back to $tSeq, already
+      # resolved by getSeqAndSizes() (GenArk build tree or clusterData),
+      # which every cluster node can also reach, just not as fast as true
+      # scratch storage:
+      &HgAutomate::verbose(1,
+	  "align: no cluster-scratch copy of $tDb/$tDb.2bit found in " .
+	  join("/, ", @okFilesystems) . "/ -- using $tSeq instead.\n");
+      $tSeqScratch = $tSeq;
     }
   }
 
@@ -262,8 +274,11 @@ sub getClusterSeqs {
       }
     }
     if (! defined $qSeqScratch) {
-      die "align: can't find $qDb/$qDb.2bit in " .
-        join("/, ", @okFilesystems) . "/ -- please distribute.\n";
+      # Same fallback as the target side above:
+      &HgAutomate::verbose(1,
+	  "align: no cluster-scratch copy of $qDb/$qDb.2bit found in " .
+	  join("/, ", @okFilesystems) . "/ -- using $qSeq instead.\n");
+      $qSeqScratch = $qSeq;
     }
   }
   &HgAutomate::verbose(1, "Using $paraHub, $tSeqScratch and $qSeqScratch\n");
@@ -570,22 +585,103 @@ sub doLoad {
 				      "$runDir/$liftOverChainFile");
 
   my $whatItDoes =
-"It makes links from $HgAutomate::gbdb/ and goldenPath/ (download area) to the liftOver
-chains file, calls hgAddLiftOverChain to register the $HgAutomate::gbdb location, and
-builds the quickLift chain/link bigBed pair (for any target/query pair, regardless of
-whether \$tDb is a real UCSC database).";
+"It builds the chain/chainLiftOver/quickLift bigBed pairs, links them into
+$HgAutomate::gbdb/ (GenArk hub-build/accession chain, or native db layout --
+see installLinks() in ottoRequestWatch.sh, which this mirrors), and calls
+hgAddLiftOverChain + addQuickLift.py to register both in hgcentral.  None of
+this needs \$tDb to be a real MySQL database -- hgAddLiftOverChain and
+addQuickLift.py both work fine with obsolete/nonexistent ones by design
+(see hgAddLiftOverChain.c's own comment to that effect).";
   my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
 wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
 wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
+
+# Full-chain bigChain pair, from the complete alignment (all.chain.gz) --
+# the standard genome-browser Chain/Net-style track pair.  Built for any
+# target/query pair -- nothing about this needs \$tDb to be a real
+# database, only \$tSizes and the chain files doNet already produced.
+hgLoadChain -test -noBin -tIndex $tDb chain$QDb $runDir/$tDb.$qDb.all.chain.gz
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
+
+totalBases=`ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
+basesCovered=`bigBedInfo chain${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > $buildDir/fb.$tDb.chain${QDb}Link.txt
+
+rm -f link.tab chain.tab chain${QDb}.tab chain${QDb}Link.tab
+
+# LiftOver-subset bigChain pair, from the netChainSubset-extracted chain
+# (over.chain.gz) -- the strict, single-best-path-per-region subset.
+# Also built unconditionally, same reasoning as above.
+hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $runDir/$liftOverChainFile
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainLiftOver${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $tSizes chainLiftOver${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainLiftOver${QDb}Link.tab $tSizes chainLiftOver${QDb}Link.bb
+
+liftOverBasesCovered=`bigBedInfo chainLiftOver${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+liftOverPercentCovered=`echo \$liftOverBasesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$liftOverBasesCovered" "\$totalBases" "\$liftOverPercentCovered" > $buildDir/fb.$tDb.chainLiftOver${QDb}.txt
+
+rm -f link.tab chain.tab chainLiftOver${QDb}.tab chainLiftOver${QDb}Link.tab
 _EOF_
   );
 
-  if ($dbExists) {
+  # Where the liftOver chain / quickLift bigBeds get linked, and what gets
+  # registered in hgcentral, depends only on whether $tDb LOOKS like a
+  # GenArk accession (a plain name-pattern check, same as everywhere else
+  # in this pipeline) -- never on whether it's a real MySQL database.
+  # This mirrors ottoRequestWatch.sh's installLinks() exactly, except
+  # resolving the GenArk build directory via genbankBuild/refseqBuild
+  # (AsmHub::asmBuildDir(), verified against the real on-disk layout)
+  # rather than the allBuild path installLinks() itself uses.
+  my $tAccession = &accessionFromPath($tDb);
+  if ($tAccession) {
+    my $tBuildDir = &asmBuildDir($tAccession);
+    die "doLoad: '$tDb' looks like a GenArk accession, but no build " .
+	"directory was found for it under $HgAutomate::clusterData/asmHubs/\n"
+      if (! $tBuildDir);
+    my $accessionPath = &asmIdToPath($tAccession) . "/$tAccession";
+    my $accLevelDir = "$HgAutomate::clusterData/asmHubs/$accessionPath";
+    my $gbdbGenarkDir = "/gbdb/genark/$accessionPath";
     $bossScript->add(<<_EOF_
-# Link to standardized location of liftOver files:
+# GenArk assembly: link into the hub-build directory, then the
+# accession-level convenience symlinks, then the public gbdb symlinks --
+# same three-tier chain installLinks() uses.
+mkdir -p $tBuildDir/liftOver $tBuildDir/quickLift
+rm -f $tBuildDir/liftOver/$liftOverChainFile
+ln -s $runDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
+rm -f $tBuildDir/quickLift/$qDb.bb $tBuildDir/quickLift/$qDb.link.bb
+ln -s $runDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
+ln -s $runDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
+
+mkdir -p $accLevelDir
+rm -f $accLevelDir/liftOver $accLevelDir/quickLift
+ln -s $tBuildDir/liftOver $accLevelDir/liftOver
+ln -s $tBuildDir/quickLift $accLevelDir/quickLift
+
+mkdir -p $gbdbGenarkDir
+rm -f $gbdbGenarkDir/liftOver $gbdbGenarkDir/quickLift
+ln -s $accLevelDir/liftOver $gbdbGenarkDir/liftOver
+ln -s $accLevelDir/quickLift $gbdbGenarkDir/quickLift
+
+# Register in hgcentral (works fine without a real MySQL database for
+# \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
+hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbGenarkDir/liftOver/$liftOverChainFile $tDb $qDb
+$Bin/addQuickLift.py $tDb $qDb $gbdbGenarkDir/quickLift/$qDb.bb
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
+# Not a GenArk accession -- native-db-style layout (same as
+# installLinks()'s native-db branch), whether or not \$tDb is actually a
+# real MySQL database (e.g. hs1: a full sequence build, no database).
 mkdir -p $liftOverChainDir
 rm -f $liftOverChainPath
 ln -s $runDir/$liftOverChainFile $liftOverChainPath
@@ -601,53 +697,24 @@ rm -f $HgAutomate::goldenPath/$tDb/liftOver/$liftOverChainFile
 ln -s $liftOverChainPath $HgAutomate::goldenPath/$tDb/liftOver/
 
 # Link from genome browser fileserver:
-mkdir -p $HgAutomate::gbdb/$tDb/liftOver
+mkdir -p $HgAutomate::gbdb/$tDb/liftOver $HgAutomate::gbdb/$tDb/quickLift
 rm -f $HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile
 ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
+rm -f $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
+ln -s $runDir/$tDb.$qDb.quick.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
+ln -s $runDir/$tDb.$qDb.quickLink.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
 
-# Add an entry to liftOverChain table in central database (specified in
-# ~/.hg.conf) so that hgLiftOver will know that this is available:
-hgAddLiftOverChain $tDb $qDb
-_EOF_
-    );
-  } else {
-    $bossScript->add(<<_EOF_
-# Full-chain bigChain pair, from the complete alignment (all.chain.gz) --
-# the standard genome-browser Chain/Net-style track pair:
-hgLoadChain -test -noBin -tIndex $tDb chain$QDb $runDir/$tDb.$qDb.all.chain.gz
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
-awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
-
-totalBases=`ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
-basesCovered=`bigBedInfo chain${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
-percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > $buildDir/fb.$tDb.chain${QDb}Link.txt
-
-rm -f link.tab chain.tab chain${QDb}.tab chain${QDb}Link.tab
-
-# LiftOver-subset bigChain pair, from the netChainSubset-extracted chain
-# (over.chain.gz) -- the strict, single-best-path-per-region subset:
-hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $runDir/$liftOverChainFile
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainLiftOver${QDb}.tab
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $tSizes chainLiftOver${QDb}.bb
-awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainLiftOver${QDb}Link.tab $tSizes chainLiftOver${QDb}Link.bb
-
-liftOverBasesCovered=`bigBedInfo chainLiftOver${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
-liftOverPercentCovered=`echo \$liftOverBasesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$liftOverBasesCovered" "\$totalBases" "\$liftOverPercentCovered" > $buildDir/fb.$tDb.chainLiftOver${QDb}.txt
-
-rm -f link.tab chain.tab chainLiftOver${QDb}.tab chainLiftOver${QDb}Link.tab
+# Register in hgcentral (works fine without a real MySQL database for
+# \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
+hgAddLiftOverChain -minMatch=0.1 -multiple -path=$HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile $tDb $qDb
+$Bin/addQuickLift.py $tDb $qDb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
 _EOF_
     );
   }
 
-  # quickLift bigBed pair: built for any target/query pair regardless of
-  # $dbExists -- it only needs the quick.chain.txt/quick.link.txt doNet
-  # already produced, plus $qSizes, no dependency on \$tDb being a real
-  # database.
+  # quickLift bigBed pair: built for any target/query pair -- it only
+  # needs the quick.chain.txt/quick.link.txt doNet already produced,
+  # plus $qSizes, no dependency on \$tDb being a real database.
   $bossScript->add(<<_EOF_
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
 bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
@@ -690,47 +757,52 @@ _EOF_
 } # doCleanup
 
 
+# resolveAssemblySeq($db, $opt2Bit, $optSizes) -> ($seq, $sizes)
+#   $opt2Bit/$optSizes, if given (-target2Bit etc.), always win.
+#   Otherwise, if $db looks like a GenArk accession (accessionFromPath())
+#   with a real build directory (AsmHub::asmBuildDir()), resolve straight
+#   to that build tree's own <asmId>.2bit/.chrom.sizes -- the same
+#   resolution AssemblyDivergence.pm's sketch() already does for mash,
+#   just for the actual alignment inputs here.  Otherwise falls back to
+#   the traditional /scratch/data or clusterData/$db/$db.2bit UCSC-db
+#   location, as before.  Doesn't require the result to actually exist --
+#   getSeqAndSizes() checks that afterward.
+sub resolveAssemblySeq {
+  my ($db, $opt2Bit, $optSizes) = @_;
+  my $accession = &accessionFromPath($db);
+  my $asmBuild = $accession ? &asmBuildDir($accession) : undef;
+  my $asmId = $asmBuild ? basename($asmBuild) : undef;
+
+  my $seq;
+  if ($opt2Bit) {
+    $seq = $opt2Bit;
+  } elsif ($asmBuild) {
+    $seq = "$asmBuild/$asmId.2bit";
+  } else {
+    $seq = "/scratch/data/$db/$db.2bit";
+    if (! -e $seq) {
+      # allow it to exist here too:
+      my $fs = "$HgAutomate::clusterData";
+      &HgAutomate::verbose(1, "checking $fs/$db/$db.2bit\n");
+      $seq = "$fs/$db/$db.2bit" if (-e "$fs/$db/$db.2bit");
+    }
+  }
+
+  my $sizes;
+  if ($optSizes) {
+    $sizes = $optSizes;
+  } elsif ($asmBuild) {
+    $sizes = "$asmBuild/$asmId.chrom.sizes";
+  } else {
+    $sizes = "$HgAutomate::clusterData/$db/chrom.sizes";
+  }
+
+  return ($seq, $sizes);
+} # resolveAssemblySeq
+
 sub getSeqAndSizes {
-  if ($opt_target2Bit) {
-    $tSeq = $opt_target2Bit
-  } else {
-    # Test assumptions about 2bit and chrom.sizes files.
-    $tSeq = "/scratch/data/$tDb/$tDb.2bit";
-    if (! -e $tSeq) {
-      # allow it to exist here too:
-      my $fs = "$HgAutomate::clusterData";
-	&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
-        if (-e "$fs/$tDb/$tDb.2bit") {
-          $tSeq = "$fs/$tDb/$tDb.2bit";
-        }
-    }
-  }
-
-  if ($opt_targetSizes) {
-    $tSizes = $opt_targetSizes;
-  } else {
-    $tSizes = "$HgAutomate::clusterData/$tDb/chrom.sizes";
-  }
-
-  if ($opt_query2Bit) {
-    $qSeq = $opt_query2Bit;
-  } else {
-    $qSeq = "/scratch/data/$qDb/$qDb.2bit";
-    if (! -e $qSeq) {
-      # allow it to exist here too:
-      my $fs = "$HgAutomate::clusterData";
-	&HgAutomate::verbose(1, "checking $fs/$qDb/$qDb.2bit\n");
-        if (-e "$fs/$qDb/$qDb.2bit") {
-          $qSeq = "$fs/$qDb/$qDb.2bit";
-        }
-    }
-  }
-
-  if ($opt_querySizes) {
-    $qSizes = $opt_querySizes;
-  } else {
-    $qSizes = "$HgAutomate::clusterData/$qDb/chrom.sizes";
-  }
+  ($tSeq, $tSizes) = &resolveAssemblySeq($tDb, $opt_target2Bit, $opt_targetSizes);
+  ($qSeq, $qSizes) = &resolveAssemblySeq($qDb, $opt_query2Bit, $opt_querySizes);
 
   my $problem = 0;
   foreach my $file ($tSeq, $tSizes, $qSeq, $qSizes) {
@@ -743,7 +815,7 @@ sub getSeqAndSizes {
     warn "Run $base -help for a description of expected files.\n";
     exit 1;
   }
-}
+} # getSeqAndSizes
 
 
 sub estimateDivergence {
@@ -812,10 +884,6 @@ sub estimateDivergence {
 &usage(1) if (scalar(@ARGV) != 2);
 ($tDb, $qDb) = @ARGV;
 
-# may be working on a 2bit file that does not have a database browser
-$dbExists = 0;
-$dbExists = 1 if (&HgAutomate::databaseExists($dbHost, $tDb));
-
 &getSeqAndSizes();
 $QDb = ucfirst($qDb);
 $liftOverChainDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
@@ -830,8 +898,19 @@ $ramG = $opt_ram ? $opt_ram : $ramG;
 
 my $date = `date +%Y-%m-%d`;
 chomp $date;
-$buildDir = $opt_buildDir ? $opt_buildDir :
-  "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/miniMap2${QDb}.$date";
+if ($opt_buildDir) {
+  $buildDir = $opt_buildDir;
+} else {
+  # GenArk target: build under its own trackData/, same convention
+  # ottoRequestWatch.sh expects pairwise lastz builds to already be in
+  # (".../<asmId>/trackData/lastz<Q>.YYYY-MM-DD") -- not under
+  # clusterData/$tDb/bed/, which only exists for native UCSC databases.
+  my $tAccession = &accessionFromPath($tDb);
+  my $tAsmBuild = $tAccession ? &asmBuildDir($tAccession) : undef;
+  $buildDir = $tAsmBuild ?
+    "$tAsmBuild/trackData/miniMap2${QDb}.$date" :
+    "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/miniMap2${QDb}.$date";
+}
 
 if (! -d $buildDir) {
   if ($stepper->stepPrecedes('align', $stepper->getStartStep())) {
