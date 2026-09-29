@@ -830,6 +830,18 @@ cartRemove(cart, hgsNewSessionName);
 cartRemove(cart, hgsNewSessionDescription);
 }
 
+static void clearSessionJustLoadedMarker(struct cart *cart)
+/* A pending "session just loaded" marker (and the name/owner it refers to) belongs to the
+ * live cart's next page view, not to a session's own saved contents.  Call this at every
+ * place that bakes the current cart into a persistent artifact (a named session, a local
+ * download) -- but not at hgSession's own generic end-of-request cleanup, which must leave
+ * the marker alone so hgTracks still gets to show the notice on its next page. */
+{
+cartRemove(cart, hgsSessionJustLoaded);
+cartRemove(cart, hgsOtherUserSessionName);
+cartRemove(cart, hgsOtherUserName);
+}
+
 static void outIfNotPresent(struct cart *cart, struct dyString *dy, char *track, int tdbVis)
 /* Output default trackDb visibility if it's not mentioned in the cart. */
 {
@@ -970,11 +982,7 @@ sqlDyStringPrintf(dy, ") VALUES (");
 sqlDyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
 sqlDyStringPrintf(dy, "'");
 cleanHgSessionFromCart(cart);
-/* A pending "session just loaded" marker (and the name/owner it refers to) belongs to the
- * live cart's next page view, not to a session's own saved contents. */
-cartRemove(cart, hgsSessionJustLoaded);
-cartRemove(cart, hgsOtherUserSessionName);
-cartRemove(cart, hgsOtherUserName);
+clearSessionJustLoadedMarker(cart);
 struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
 
@@ -1765,6 +1773,7 @@ char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
+clearSessionJustLoadedMarker(cart);
 
 cartDumpHgSession(cart);
 
