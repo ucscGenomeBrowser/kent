@@ -84,6 +84,21 @@ static char *cases[] = {
     "<rect width=\"9\" height=\"9\"/></svg>",
 /* a shape outside a drawing loses its tag */
 "<circle r=\"5\"/>text after",
+/* a class survives only when it is one of ours */
+"<table class=\"stdTbl wide\"><tr><td class=\"copyLinkSpanX\">cell</td></tr></table>",
+/* the share link on a GenArk page keeps its copy button, and the button still finds the link */
+"<span id='urlText0'><em>https://http_host/h/GCA_1</em></span>"
+    "<span class='copyLinkSpan' data-target='urlText0'></span>",
+/* a quote written as a reference does not cut the declaration in two, so our own output
+ * reads back unchanged */
+"<p style='font-family:\"Verdana\",sans-serif;color:black'>a</p>",
+/* nor does the semicolon of a number, and the declaration after a refused one survives */
+"<p style=\"list-style:u&#114;l(http://example.com/x); color:green\">a</p>",
+"<p style=\"color:re&#100;;text-align:center\">a</p>",
+/* a name a browser would decode to a parenthesis is refused */
+"<p style=\"list-style:url&lpar;//example.com/x.png);color:red\">a</p>",
+/* a name a browser does not know leaves its semicolon to end the declaration */
+"<p style=\"color:red&foo;position:fixed\">a</p>",
 };
 
 int main(int argc, char *argv[])
