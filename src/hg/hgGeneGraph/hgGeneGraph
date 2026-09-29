@@ -330,6 +330,15 @@ def saltedHash(word, length=5):
     hashStr = "".join(hashlib.sha1(inStr.encode("utf8")).hexdigest()[:length]).lower()
     return hashStr
 
+def captchaHashFor(param, answer):
+    """ Hash of an arithmetic-captcha answer, bound to the specific removal target and a
+    secret from hg.conf.private, so one solved answer is only good for the one form it was
+    shown on.  param is length-prefixed so a differently-split (param, answer) pair cannot
+    concatenate to the same bytes and collide. """
+    secret = cfgOption("hgGeneGraph.captchaSecret", "PITX2")
+    inStr = "%s%d:%s%s" % (secret, len(param), param, answer)
+    return hashlib.sha1(inStr.encode("utf8")).hexdigest()[:10]
+
 
 def reqMinSupp(links, minArtSupp, maxResCount, targetGene):
     """ remove all 'text mining only' links with less than minArtSupp supporting documents
@@ -1894,12 +1903,12 @@ def flagInteraction(param):
     print ("Optional comment: <br>")
     print(('<FORM method="POST" action="%s">' % basename(__file__)))
     print(('<INPUT TYPE="HIDDEN" NAME="remove" VALUE="%s"></INPUT>' % param))
-    # A short arithmetic question, checked back in removeInteraction() against the salted
-    # hash of its answer, keeps this write-capable form from being submitted from anywhere
-    # but this page.
+    # A short arithmetic question, checked back in removeInteraction() against a hash of its
+    # answer and this target, keeps this write-capable form from being submitted from anywhere
+    # but this page, or replayed against a different target.
     numA = random.randint(1, 9)
     numB = random.randint(1, 9)
-    print(('<INPUT TYPE="HIDDEN" NAME="captchaHash" VALUE="%s"></INPUT>' % saltedHash(str(numA+numB))))
+    print(('<INPUT TYPE="HIDDEN" NAME="captchaHash" VALUE="%s"></INPUT>' % captchaHashFor(param, str(numA+numB))))
     print ('<TEXTAREA rows="6" cols="50" name="comment"></TEXTAREA>')
     print ("<P>")
     print ('What is %d + %d? <INPUT TYPE="TEXT" NAME="captcha" SIZE="4"></INPUT></P>' % (numA, numB))
@@ -1928,7 +1937,7 @@ def flagInteraction(param):
 def removeInteraction(param, captcha, captchaHash, comment):
     if os.environ.get("REQUEST_METHOD") != "POST":
         errAbort("This action requires a form submission, not a link.")
-    if captcha is None or captchaHash is None or saltedHash(captcha.strip()) != captchaHash:
+    if captcha is None or captchaHash is None or captchaHashFor(param, captcha.strip()) != captchaHash:
         errAbort("The answer to the arithmetic question was not correct. Please go back and try again.")
 
     fields = param.split(":")
