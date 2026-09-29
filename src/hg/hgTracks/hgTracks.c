@@ -9145,7 +9145,18 @@ if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
 
 // remove the hg.conf option once this feature is released
 if (cfgOptionBooleanDefault("showGenbankDownload", FALSE))
+    {
     jsInline("var showGenbankDownload = true;\n");
+    // How much sequence the javascript will turn into a GenBank file, in bases.  The
+    // file holds the whole region and is built in the web browser's memory, so the
+    // ceiling belongs to the machine and its users rather than to the code.  Printed
+    // as a number, and a value that is not a positive one falls back to the default,
+    // so a typo in hg.conf cannot write broken javascript or refuse every region.
+    long long maxGbRegion = atoll(cfgOptionDefault("maxGenbankRegion", "25000000"));
+    if (maxGbRegion <= 0)
+        maxGbRegion = 25000000;
+    jsInlineF("var maxGenbankRegion = %lld;\n", maxGbRegion);
+    }
 
 // remove the hg.conf option once this feature is released
 if (cfgOptionBooleanDefault("showIgv", FALSE))

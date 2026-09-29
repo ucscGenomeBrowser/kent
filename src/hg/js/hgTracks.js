@@ -7415,12 +7415,20 @@ var downloadCurrentTrackData = {
         downloadCurrentTrackData.downloadData[track] = data;
     },
 
+    setBusy: function(busy) {
+        // the dialog gives no other sign that anything is happening between the click and
+        // the browser's own download, which is seconds once a few tracks are selected
+        $("#downloadTracksStatus").toggle(busy);
+        $("#downloadTracksGo").prop("disabled", busy);
+    },
+
     stopWaiting: function() {
         // clear the timer that waits on the api and forget its id, so that the next
         // download can start.  The id has to be forgotten and not just cleared: it is
         // the one place that records whether a download is still running
         clearInterval(downloadCurrentTrackData.intervalId);
         downloadCurrentTrackData.intervalId = null;
+        downloadCurrentTrackData.setBusy(false);
     },
 
     convertJson: function(data, outType, withHeaders) {
@@ -7434,9 +7442,14 @@ var downloadCurrentTrackData = {
         let ignoredKeys = downloadCurrentTrackData.nonTrackKeys;
         let columnTypes;
         let cleanData = {};
-        // first get rid of top level non track object keys
+        // first get rid of top level non track object keys.  A track's value is always
+        // the array of its rows, so anything else is one of the api's own fields: that
+        // test, rather than the list of names, is what keeps a field the api adds later
+        // from being written out as if it were a track.  maxItemsLimit and
+        // dataDownloadUrl, which only show up when a reply was truncated, used to end up
+        // here, and the string one was then iterated one character per row
         _.each(data, function(val, key) {
-            if (ignoredKeys.has(key)) {
+            if (ignoredKeys.has(key) || !Array.isArray(val)) {
                 // squirrel away the columnTypes if requested
                 if (key === "columnTypes") {
                     columnTypes = data[key];
@@ -7451,7 +7464,7 @@ var downloadCurrentTrackData = {
             str += "track name=\"" + track + "\"\n";
             if (withHeaders) {
                 let headers = [];
-                if (columnTypes) {
+                if (columnTypes && columnTypes[track]) {
                     for (let i of columnTypes[track]) {
                         headers.push(i.name);
                     }
@@ -7755,6 +7768,11 @@ var downloadCurrentTrackData = {
             "Sequence and annotations downloaded from the UCSC Genome Browser, " +
             "https://genome.ucsc.edu. Assembly " + db + ", region " + posStr +
             ". Positions in this file are relative to the start of the region.", " ");
+        if (data.maxItemsLimit) {
+            str += downloadCurrentTrackData.gbWrap("            ", "            ",
+                "INCOMPLETE: the data API stopped at the limit it puts on one request, so " +
+                "some annotations in this region are missing from this file.", " ");
+        }
         if (skipped.length > 0) {
             str += downloadCurrentTrackData.gbWrap("            ", "            ",
                 "Not included, these tracks hold numeric data rather than features: " +
@@ -7785,14 +7803,15 @@ var downloadCurrentTrackData = {
             downloadCurrentTrackData.stopWaiting();
             let outType = $("#outputFormat")[0].selectedOptions[0].value;
             let withHeaders = document.getElementById("downloadTrackHeaders").checked;
+            let data = downloadCurrentTrackData.downloadData[key];
             var blob = null;
             if (outType === 'json') {
-                blob = new Blob([JSON.stringify(downloadCurrentTrackData.downloadData[key])], {type: "text/plain"});
+                blob = new Blob([JSON.stringify(data)], {type: "text/plain"});
             } else if (outType === 'gb') {
-                blob = downloadCurrentTrackData.convertGenbank(downloadCurrentTrackData.downloadData[key],
+                blob = downloadCurrentTrackData.convertGenbank(data,
                     downloadCurrentTrackData.sequenceData);
             } else {
-                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType, withHeaders);
+                blob = downloadCurrentTrackData.convertJson(data, outType, withHeaders);
             }
             if (blob) {
                 anchor = document.createElement("a");
@@ -7820,6 +7839,16 @@ var downloadCurrentTrackData = {
                 window.URL.revokeObjectURL(anchor.href);
                 downloadCurrentTrackData.downloadData = {};
                 downloadCurrentTrackData.sequenceData = null;
+            }
+            // the api stops at a limit on the number of items it will return and says so
+            // in the reply. Say it out loud: the file looks complete otherwise, and a
+            // truncated set of annotations is worse than none if nobody notices
+            if (data && data.maxItemsLimit) {
+                alert("Your file is incomplete. The data API returned " +
+                    (data.itemsReturned ? data.itemsReturned.toLocaleString() + " items and " : "") +
+                    "stopped at the limit it puts on one request. Zoom in, or select fewer " +
+                    "tracks, to get everything in this region. The Table Browser and our " +
+                    "download server have no such limit.");
             }
         }
     },
@@ -7867,9 +7896,10 @@ var downloadCurrentTrackData = {
             // The api itself would serve most of a chromosome, but the sequence arrives as
             // one json string and is then copied into the file, so the web browser needs
             // several times the region in memory and a big region can kill the tab.
-            if (end - start > downloadCurrentTrackData.maxGenbankRegion) {
+            let regionLimit = downloadCurrentTrackData.genbankRegionLimit();
+            if (end - start > regionLimit) {
                 alert("This region is " + (end - start).toLocaleString() + " bp, more than the " +
-                    downloadCurrentTrackData.maxGenbankRegion.toLocaleString() + " bp limit for " +
+                    regionLimit.toLocaleString() + " bp limit for " +
                     "GenBank output: the file holds the sequence of the whole region and your " +
                     "web browser may not have the memory to build it. Zoom in, or use the Table " +
                     "Browser or our download server for a whole chromosome.");
@@ -7931,6 +7961,7 @@ var downloadCurrentTrackData = {
         // the onreadystatechange callback above will trigger
         // when the data has safely arrived
         // wait for the request to complete before making the download file
+        downloadCurrentTrackData.setBusy(true);
         downloadCurrentTrackData.intervalId = setInterval(downloadCurrentTrackData.makeDownloadFile, 200, apiUrl);
     },
 
@@ -7938,7 +7969,16 @@ var downloadCurrentTrackData = {
     // file name suffix per output format, the same ones makeDownloadFile appends
     fileExtensions: {json: ".txt", csv: ".csv", tsv: ".tsv", gb: ".gb"},
 
-    maxGenbankRegion: 100000000, // bases, see the check in startDownload
+    // Bases. Only the fallback: hgTracks.c writes the hg.conf setting of the same name
+    // into the page, and that is what normally decides. Kept here so the check still has
+    // a sane number if the page was served without it, e.g. from a cached javascript
+    // file older than the setting.
+    maxGenbankRegionDefault: 25000000,
+
+    genbankRegionLimit: function() {
+        return (typeof maxGenbankRegion !== 'undefined' && maxGenbankRegion > 0) ?
+            maxGenbankRegion : downloadCurrentTrackData.maxGenbankRegionDefault;
+    },
 
     isGeneModelType: function(type) {
         // only these carry a transcript model, where the thick part really is the CDS.
@@ -8046,6 +8086,15 @@ var downloadCurrentTrackData = {
             dialogWrap.find(".ui-dialog-buttonpane").css(dialogFont).css("height", "auto");
             dialogWrap.find(".ui-dialog-buttonpane button").css(dialogFont)
                 .css("padding", "3px 10px");
+            // Somewhere to say that a download is being prepared. It goes in the button
+            // pane rather than in the dialog body, because the body scrolls once the
+            // track list is long and a message the user has to scroll to find is no
+            // better than no message. The Download button gets an id so that it can be
+            // disabled while the file is being built.
+            dialogWrap.find(".ui-dialog-buttonpane button").first().attr("id", "downloadTracksGo");
+            dialogWrap.find(".ui-dialog-buttonset").after(
+                "<span id='downloadTracksStatus' style='display: none; padding-left: 10px'>" +
+                "Preparing the file, this can take a while for a large region...</span>");
         }
         // the strand the browser is showing, which the Reverse button flips
         let strandStr = hgTracks.revCmplDisp ? "(- strand)" : "(+ strand)";

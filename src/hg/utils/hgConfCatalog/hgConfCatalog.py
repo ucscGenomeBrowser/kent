@@ -1182,6 +1182,25 @@ LIMITS = {
         h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c",
           verified=True, note="Log a warning for any hgTracks render slower "
                               "than this."),
+        h("maxGenbankRegion", "limit", "hg/hgTracks/hgTracks.c",
+          default='"25000000"', verified=True, ticket="38433",
+          note="Bases.  The largest region the \"Download Current Track Data\" "
+               "dialog will write as a GenBank file, which unlike its other "
+               "formats carries the DNA of the whole region.  A ceiling is "
+               "needed because the file is built in the web browser rather "
+               "than by a CGI:  a 50 Mbp region answers with 340 MB of track "
+               "json and 50 MB of sequence, which is parsed, copied into the "
+               "file text and copied again into the Blob, so the tab needs "
+               "several times the region in memory and can be killed by it.  "
+               "25 Mbp measured as the point where that stays comfortable; a "
+               "mirror serving well provisioned desktops can raise it and a "
+               "GBiB should lower it, which is why it is a knob rather than a "
+               "number in the javascript.  Read only when showGenbankDownload "
+               "is on, and written into the page for hgTracks.js; a value that "
+               "is not a positive number falls back to the default rather than "
+               "aborting the CGI or writing broken javascript.  The javascript "
+               "carries the same default for a page served without the "
+               "setting, e.g. from a cached older hgTracks.js."),
         h("hubSpaceLockTimeout", "limit", "hg/lib/userdata.c",
           default='"300"', verified=True, ticket="37964",
           note="Seconds an upload will wait for another upload to the same "
