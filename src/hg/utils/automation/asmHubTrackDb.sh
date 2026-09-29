@@ -1111,12 +1111,16 @@ fi
 ###################################################################
 # check for miniMap2/chain/net available
 
-export mm2=`ls -d ${buildDir}/trackData/miniMap2.* 2> /dev/null | wc -l`
+# a -swap run's default swapDir is itself named 'miniMap2.<otherDb>.swap',
+# which also matches this glob alongside its own dateless symlink
+# 'miniMap2.<otherDb>' -- exclude those real *.swap work directories so
+# each query genome is only counted/processed once.
+export mm2=`ls -d ${buildDir}/trackData/miniMap2.* 2> /dev/null | grep -v '\.swap$' | wc -l`
 
 if [ "${mm2}" -gt 0 ]; then
   if [ "${mm2}" -eq 1 ]; then
 printf "single miniMap2 chainNet\n" 1>&2
-    export miniMap2Dir=`ls -d ${buildDir}/trackData/miniMap2.*`
+    export miniMap2Dir=`ls -d ${buildDir}/trackData/miniMap2.* | grep -v '\.swap$'`
     export oOrganism=`basename "${miniMap2Dir}" | sed -e 's/miniMap2.//;'`
     # single chainNet here, no need for a composite track, does the symLinks too
     $scriptDir/asmHubMiniMap2ChainNetTrackDb.sh $asmId $buildDir

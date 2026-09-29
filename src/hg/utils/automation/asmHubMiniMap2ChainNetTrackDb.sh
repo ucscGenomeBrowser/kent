@@ -30,8 +30,15 @@ printf "# asmHubMiniMap2ChainNetTrackDb.sh $asmId $buildDir\n" 1>&2
 
 for D in ${buildDir}/trackData/miniMap2.*
 do
-  targetDb=$accessionId
   mm2Dir=`basename "${D}"`
+  # a -swap run's default swapDir is itself named 'miniMap2.<otherDb>.swap',
+  # which also matches this glob alongside its own dateless symlink
+  # 'miniMap2.<otherDb>' -- skip that real *.swap work directory so this
+  # query genome is only processed once, via its dateless symlink.
+  case "${mm2Dir}" in
+    *.swap) continue ;;
+  esac
+  targetDb=$accessionId
   # doMiniMap2.pl names this directory 'miniMap2.$QDb' where $QDb is
   # ucfirst() of the query db/accession; OtherDb below reproduces the
   # exact case used in the chain*.bb file names, otherDb reconstructs

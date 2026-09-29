@@ -58,6 +58,11 @@ my %loStats;	# key is asmId, value is featureBits measure for lift over
 open (TD, "ls -d ${targetBuildDir}/trackData/miniMap2.*|") or die "can not ls -d ${targetBuildDir}/trackData/miniMap2.*";
 while (my $mm2Dir = <TD>) {
   chomp $mm2Dir;
+  # a -swap run's default swapDir is itself named 'miniMap2.<otherDb>.swap',
+  # which also matches this glob alongside its own dateless symlink
+  # 'miniMap2.<otherDb>' -- skip that real *.swap work directory so this
+  # query genome is only processed once, via its dateless symlink.
+  next if ($mm2Dir =~ m/\.swap$/);
   my $Qdb = basename($mm2Dir);
   # the hubDateName will translate the accessionId into an asmId
   # side effect it also returns the date

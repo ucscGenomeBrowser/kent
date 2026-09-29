@@ -63,6 +63,11 @@ sub queryDbFromQDb($) {
 open (DL, "ls -d $buildDir/trackData/miniMap2.*|") or die "can not list $buildDir/trackData/miniMap2.*";
 while (my $mm2Dir = <DL>) {
   chomp $mm2Dir;
+  # a -swap run's default swapDir is itself named 'miniMap2.<otherDb>.swap',
+  # which also matches this glob alongside its own dateless symlink
+  # 'miniMap2.<otherDb>' -- skip that real *.swap work directory so this
+  # query genome is only processed once, via its dateless symlink.
+  next if ($mm2Dir =~ m/\.swap$/);
   my $Qdb = basename($mm2Dir);
   $Qdb =~ s/miniMap2.//;
   my $queryDb = &queryDbFromQDb($Qdb);
