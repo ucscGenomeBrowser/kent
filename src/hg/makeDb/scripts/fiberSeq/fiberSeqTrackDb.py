@@ -298,7 +298,18 @@ def compendium(gbdb, dataUrlDir, samples):
             "scoreFilterLimits 0:1000",
             "mouseOver <b>%s FIRE peak</b><br>FIRE score: ${signalValue}"
             "<br>-log10 FDR: ${qValue}<br>Score: ${score}" % name,
-            "onlyVisibility dense",
+            # "visibility", not "onlyVisibility" as every other data type here
+            # uses, and the difference is not cosmetic.  onlyVisibility PINS a
+            # faceted child: tdbVisLimitedByAncestors() in hg/lib/hui.c
+            # overwrites the computed visibility with it, so a request for pack
+            # or full is discarded and the dropdown offers only hide and dense.
+            # That made the mouseOver above dead config, since no bigBed-like
+            # track draws per-item map boxes in dense.  A plain "visibility" is
+            # a default instead: peaks still come up dense, as the lab asked in
+            # July, but switching to pack or full now works and the mouseOver
+            # appears.  The signal types keep onlyVisibility, where pinning to
+            # full costs nothing - a bigWig draws the same at pack and full.
+            "visibility dense",
             pri(),
         ])
 
