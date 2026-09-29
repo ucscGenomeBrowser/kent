@@ -37,7 +37,7 @@ static char *cases[] = {
 "<div><b>bold<p>para",
 "<div style=\"color:red\"/>the rest of the page is not inside that div",
 /* a page built of tags that are never closed is not a way to make us work all day */
-"<svg><svg><svg><svg>text",
+"<object><object><object><object>text",
 /* a stray quote inside an unquoted value does not swallow the page */
 "<a href=https://example.com/x\\\">link text</a> and more text",
 /* a form and everything in it goes */
@@ -63,6 +63,42 @@ static char *cases[] = {
 "<div>a &lt; b</ <b>bold</b></div>",
 /* a name we already renamed is not renamed again, on either side of the link */
 "<h2 id=\"descPage-methods\">M</h2><a href=\"#descPage-methods\">jump</a>",
+/* a colored circle in a legend survives, the way UniBind draws one */
+"<td><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 2 2\" "
+    "width=\"2em\"><g>\n<circle cx=\"1\" cy=\"1\" r=\"1\" style=\"fill: rgb(209,213,23)\" />"
+    "</g></svg></td>",
+/* shapes written with a closing slash are siblings, not each inside the one before */
+"<svg><path d=\"M0 0L1 1\"/><rect x=\"1\" y=\"1\" width=\"2\" height=\"2\"/>"
+    "<circle r=\"1\"></circle></svg>",
+/* nothing in a drawing may run, link, load or animate */
+"<svg onload=\"alert(1)\"><script>alert(1)</script>"
+    "<a href=\"javascript:alert(1)\"><rect width=\"10\" height=\"10\"/></a>"
+    "<use href=\"#x\"/><animate attributeName=\"href\" to=\"javascript:alert(1)\"/>"
+    "<image href=\"https://example.com/x.png\"/>"
+    "<foreignObject><p>text</p></foreignObject></svg>",
+/* a fill or a stroke cannot fetch anything, however the url is spelled */
+"<svg><circle r=\"1\" fill=\"url(https://example.com/x.svg#p)\"/>"
+    "<rect stroke=\"u&#114;l(https://example.com/y)\" fill=\"#c00\"/></svg>",
+/* a shape that only clips another is not drawn on its own */
+"<svg><defs><clipPath id=\"c\"><path d=\"M0 0L9 9\"/></clipPath></defs>"
+    "<rect width=\"9\" height=\"9\"/></svg>",
+/* a shape outside a drawing loses its tag */
+"<circle r=\"5\"/>text after",
+/* a class survives only when it is one of ours */
+"<table class=\"stdTbl wide\"><tr><td class=\"copyLinkSpanX\">cell</td></tr></table>",
+/* the share link on a GenArk page keeps its copy button, and the button still finds the link */
+"<span id='urlText0'><em>https://http_host/h/GCA_1</em></span>"
+    "<span class='copyLinkSpan' data-target='urlText0'></span>",
+/* a quote written as a reference does not cut the declaration in two, so our own output
+ * reads back unchanged */
+"<p style='font-family:\"Verdana\",sans-serif;color:black'>a</p>",
+/* nor does the semicolon of a number, and the declaration after a refused one survives */
+"<p style=\"list-style:u&#114;l(http://example.com/x); color:green\">a</p>",
+"<p style=\"color:re&#100;;text-align:center\">a</p>",
+/* a name a browser would decode to a parenthesis is refused */
+"<p style=\"list-style:url&lpar;//example.com/x.png);color:red\">a</p>",
+/* a name a browser does not know leaves its semicolon to end the declaration */
+"<p style=\"color:red&foo;position:fixed\">a</p>",
 };
 
 int main(int argc, char *argv[])
