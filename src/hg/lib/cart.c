@@ -282,9 +282,11 @@ return FALSE;
 static boolean cartVarHoldsFileNamePair(char *var)
 /* Return TRUE if var is one of the variables that hold a pair of file names.
  * hgPcrResult_targetStyle is a display setting that shares the hgPcrResult_ prefix with the
- * per-db result variables, so it is excluded by name. */
+ * per-db result variables, so it is excluded by name.  So is hgPcrResult_imgOrd: hgPcrResult
+ * is also the name of the track, and that is where hgTracks saves the track's place in the
+ * image after a drag.  refs #38442 */
 {
-if (sameString(var, PCR_RESULT_TARGET_STYLE))
+if (sameString(var, PCR_RESULT_TARGET_STYLE) || sameString(var, PCR_RESULT_TRACK_NAME "_imgOrd"))
     return FALSE;
 int i;
 for (i = 0;  i < ArraySize(fileNamePairCartVarPrefixes);  i++)
