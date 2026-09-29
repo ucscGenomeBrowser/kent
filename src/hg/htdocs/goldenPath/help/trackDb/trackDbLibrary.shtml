@@ -417,8 +417,8 @@
     <pre>    html docs/myFirstTrack.html</pre>
     Or with full path:
     <pre>    html https://path/to/location/docs/explainMyData.html</pre>
-    <p><b>Variables in the description page</b></p>
-    <p>The description page may use the variables below, written in the form
+    <p><b>Variables in a hub's description page</b></p>
+    <p>A hub's description page may use the variables below, written in the form
     <code>${name}</code>. They are replaced when the page is shown, both on the track
     settings page and on the item details page.</p>
     <table class='bedExtraTbl'>
@@ -447,10 +447,15 @@
     own page:</p>
     <p><code>&lt;a href="hgTrackUi?db=${db}&amp;amp;g=${parentTrack}"&gt;Back to the
     container&lt;/a&gt;</code></p>
-    <p>Nothing else is replaced. A dollar sign followed by anything other than the names
-    listed above is left alone, so shell, awk and JavaScript examples elsewhere on the page
-    are safe. Other trackDb settings are not available as variables, and neither is the
-    session id.</p>
+    <p>These are the only names a hub's description page can use. Other trackDb settings
+    are not available as variables, and neither is the session id. UCSC's own description
+    pages are substituted when trackDb is loaded and follow different rules.</p>
+    <p>Take care with a dollar sign that is not meant as a variable. The bare form
+    <code>$db</code> is recognised as well as <code>${db}</code>, so a shell or awk example
+    that happens to use <code>$db</code> or <code>$track</code> as its own variable will come
+    out with the value substituted in. Write <code>$$</code> for a literal dollar sign:
+    <code>$$db</code> is shown as <code>$db</code>, and <code>$$</code> on its own is shown
+    as <code>$</code>.</p>
 </DIV>
 
 <DIV class="lessCommon_intro">

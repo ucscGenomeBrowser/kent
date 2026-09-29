@@ -161,21 +161,24 @@
     algorithms, or the significance of scores if generated in a special fashion. Credits This section
     helps people find the contacts for questions about the data. Please include an email or laboratory
     web page. References Relevant publications regarding the data. Example: html docs/myFirstTrack.html
-    Or with full path: html https://path/to/location/docs/explainMyData.html Variables in the description
-    page The description page may use the variables below, written in the form ${name} . They are replaced
-    when the page is shown, both on the track settings page and on the item details page. ${db} the assembly
-    the track is being viewed on, for example hg38 ${organism} the organism in lower case, for example
-    human ${Organism} the organism with an initial capital, for example Human ${ORGANISM} the organism
-    in upper case, for example HUMAN ${date} the release description of the assembly, for example Dec.
-    2013 (GRCh38/hg38) ${track} the name of this track ${parentTrack} the name of the container this track
-    sits in, either a compositeTrack or a superTrack . A view is skipped, since a view has no description
-    page of its own. For a track that is not inside a container, this is the same as ${track} . ${downloadsServer}
-    hgdownload.soe.ucsc.edu ${track} and ${parentTrack} come out with the prefix the Genome Browser gives
-    a hub track''s name, so they can be used to build a link back into the Browser. This is how the page
-    of a track inside a container links to the container''s own page: <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">Back
-    to the container</a> Nothing else is replaced. A dollar sign followed by anything other than the names
-    listed above is left alone, so shell, awk and JavaScript examples elsewhere on the page are safe.
-    Other trackDb settings are not available as variables, and neither is the session id.
+    Or with full path: html https://path/to/location/docs/explainMyData.html Variables in a hub''s description
+    page A hub''s description page may use the variables below, written in the form ${name} . They are
+    replaced when the page is shown, both on the track settings page and on the item details page. ${db}
+    the assembly the track is being viewed on, for example hg38 ${organism} the organism in lower case,
+    for example human ${Organism} the organism with an initial capital, for example Human ${ORGANISM}
+    the organism in upper case, for example HUMAN ${date} the release description of the assembly, for
+    example Dec. 2013 (GRCh38/hg38) ${track} the name of this track ${parentTrack} the name of the container
+    this track sits in, either a compositeTrack or a superTrack . A view is skipped, since a view has
+    no description page of its own. For a track that is not inside a container, this is the same as ${track}
+    . ${downloadsServer} hgdownload.soe.ucsc.edu ${track} and ${parentTrack} come out with the prefix
+    the Genome Browser gives a hub track''s name, so they can be used to build a link back into the Browser.
+    This is how the page of a track inside a container links to the container''s own page: <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">Back
+    to the container</a> These are the only names a hub''s description page can use. Other trackDb settings
+    are not available as variables, and neither is the session id. UCSC''s own description pages are substituted
+    when trackDb is loaded and follow different rules. Take care with a dollar sign that is not meant
+    as a variable. The bare form $db is recognised as well as ${db} , so a shell or awk example that happens
+    to use $db or $track as its own variable will come out with the value substituted in. Write $$ for
+    a literal dollar sign: $$db is shown as $db , and $$ on its own is shown as $ .
 
     To help users understand Public Hub data, we request you provide a web page that explains what your
     Track Hub is presenting. Adding an html page for your Track Hub is also useful to instruct people
@@ -207,9 +210,9 @@
 
     Relevant publications regarding the data.
 
-    Variables in the description page
+    Variables in a hub''s description page
 
-    The description page may use the variables below, written in the form ${name} . They are replaced
+    A hub''s description page may use the variables below, written in the form ${name} . They are replaced
     when the page is shown, both on the track settings page and on the item details page.
 
     ${track} and ${parentTrack} come out with the prefix the Genome Browser gives a hub track''s name,
@@ -218,9 +221,14 @@
 
     <a href="hgTrackUi?db=${db}&amp;g=${parentTrack}">Back to the container</a>
 
-    Nothing else is replaced. A dollar sign followed by anything other than the names listed above is
-    left alone, so shell, awk and JavaScript examples elsewhere on the page are safe. Other trackDb settings
-    are not available as variables, and neither is the session id.'
+    These are the only names a hub''s description page can use. Other trackDb settings are not available
+    as variables, and neither is the session id. UCSC''s own description pages are substituted when trackDb
+    is loaded and follow different rules.
+
+    Take care with a dollar sign that is not meant as a variable. The bare form $db is recognised as well
+    as ${db} , so a shell or awk example that happens to use $db or $track as its own variable will come
+    out with the value substituted in. Write $$ for a literal dollar sign: $$db is shown as $db , and
+    $$ on its own is shown as $ .'
   format: html
   examples:
   - html docs/myFirstTrack.html
