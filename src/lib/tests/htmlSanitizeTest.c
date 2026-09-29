@@ -37,7 +37,7 @@ static char *cases[] = {
 "<div><b>bold<p>para",
 "<div style=\"color:red\"/>the rest of the page is not inside that div",
 /* a page built of tags that are never closed is not a way to make us work all day */
-"<svg><svg><svg><svg>text",
+"<object><object><object><object>text",
 /* a stray quote inside an unquoted value does not swallow the page */
 "<a href=https://example.com/x\\\">link text</a> and more text",
 /* a form and everything in it goes */
@@ -63,6 +63,27 @@ static char *cases[] = {
 "<div>a &lt; b</ <b>bold</b></div>",
 /* a name we already renamed is not renamed again, on either side of the link */
 "<h2 id=\"descPage-methods\">M</h2><a href=\"#descPage-methods\">jump</a>",
+/* a colored circle in a legend survives, the way UniBind draws one */
+"<td><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 2 2\" "
+    "width=\"2em\"><g>\n<circle cx=\"1\" cy=\"1\" r=\"1\" style=\"fill: rgb(209,213,23)\" />"
+    "</g></svg></td>",
+/* shapes written with a closing slash are siblings, not each inside the one before */
+"<svg><path d=\"M0 0L1 1\"/><rect x=\"1\" y=\"1\" width=\"2\" height=\"2\"/>"
+    "<circle r=\"1\"></circle></svg>",
+/* nothing in a drawing may run, link, load or animate */
+"<svg onload=\"alert(1)\"><script>alert(1)</script>"
+    "<a href=\"javascript:alert(1)\"><rect width=\"10\" height=\"10\"/></a>"
+    "<use href=\"#x\"/><animate attributeName=\"href\" to=\"javascript:alert(1)\"/>"
+    "<image href=\"https://example.com/x.png\"/>"
+    "<foreignObject><p>text</p></foreignObject></svg>",
+/* a fill or a stroke cannot fetch anything, however the url is spelled */
+"<svg><circle r=\"1\" fill=\"url(https://example.com/x.svg#p)\"/>"
+    "<rect stroke=\"u&#114;l(https://example.com/y)\" fill=\"#c00\"/></svg>",
+/* a shape that only clips another is not drawn on its own */
+"<svg><defs><clipPath id=\"c\"><path d=\"M0 0L9 9\"/></clipPath></defs>"
+    "<rect width=\"9\" height=\"9\"/></svg>",
+/* a shape outside a drawing loses its tag */
+"<circle r=\"5\"/>text after",
 };
 
 int main(int argc, char *argv[])
