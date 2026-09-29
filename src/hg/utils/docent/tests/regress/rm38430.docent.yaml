@@ -1,0 +1,31 @@
+# #38430 -- hgGateway showed a hub assembly's description page without the #38126 filter.
+#
+# The fix is 7b3bd7a453e, eight lines in src/hg/hgGateway/hgGateway.c:
+# maybeGetDescriptionText() now passes a hub assembly's page through htmlSanitize(), the way
+# every other page that shows hub HTML already did.  Sub-ticket of #38126.
+#
+# HG.CONF GATE.  The filter runs only with hubHtmlSanitize=on (hg/lib/trackHub.c,
+# hubHtmlSanitizeOn(), default off).  With the gate off the gateway shows the page raw on
+# every build, fixed or not, so a red run here first asks:
+#     grep hubHtmlSanitize /usr/local/apache/cgi-bin/hg.conf
+# It was turned on for genome-test on 2026-09-29.
+#
+# The fixture, ~/public_html/docentFixtures/rm38430/, is an assembly hub: one sequence (a
+# copy of hg38 chrM) and an htmlPath page with a paragraph, a script and a form.  The
+# paragraph must reach the gateway's description panel; the script and the form must not.
+proof:
+  - "assertion-only 2026-09-29 -- written from #38430 and 7b3bd7a453e"
+  - "release-ab 2026-09-29 -- fails on v504 and passes on genome-test, both with hubHtmlSanitize=on. v504_branch d46687cc563 built from ~/kentV504 into ts park 38423 (CGIs, js, htdocs), gate set in its hg.conf: the gateway description panel carries the form, its input and the script"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?hubUrl=https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38430/hub.txt&genome=rm38430asm&pix=1000"
+  - goto: "/cgi-bin/hgGateway"
+  # The filter keeps an id but prefixes it (descPage-), so ids are matched by their ending.
+  - wait: '#descriptionText [id$="rm38430Text"]'
+  - expect:
+      text: "This paragraph must survive the filter on the gateway page."
+      noHas: ['#descriptionText form', '#descriptionText script', 'input[name="rm38430Input"]', '[id$="rm38430Script"]']
