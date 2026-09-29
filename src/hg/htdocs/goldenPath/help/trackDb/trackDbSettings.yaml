@@ -1686,14 +1686,15 @@
     the items are drawn from the bigBed summary in the default track color rather than using the itemRgb
     column .
 
-    Whether the items are drawn from the itemRgb column also depends on the color setting:
+    Whether the items are drawn from the itemRgb column also depends on the color setting. Both settings
+    are inherited from a track''s parent , and an explicit itemRgb wins wherever it is set:
 
-    - itemRgb on : items take the colors in the file. A color setting in the same stanza still colors
-    the track label, but it does not override the items.
+    - itemRgb on : items take the colors in the file. A color setting still colors the track label, but
+    it does not override the items.
 
     - itemRgb off : items take the color setting, or black if there is none.
 
-    - color alone: items take the color setting.
+    - color with no itemRgb : items take the color setting.
 
     - Neither setting: items take the colors in the file. This is the default on genome.ucsc.edu.'
   format: itemRgb on
@@ -1724,8 +1725,8 @@
     is added automatically.
 
     Item coloring must be active for colorFields to work. It is active by default on bigBed tracks with
-    more than 9 fields. It is suppressed by itemRgb off , or by a color setting in a stanza that does
-    not also say itemRgb on . The currently selected scheme is stored in the cart variable <trackName>.colorField
+    more than 9 fields. It is suppressed by itemRgb off , or by a color setting when neither the track
+    nor its parent says itemRgb on . The currently selected scheme is stored in the cart variable <trackName>.colorField
     . When a non-default scheme is active, the track long label gains a (Coloring by: <label>) suffix.
 
     This creates a three-option dropdown. colorByEvidence and colorByHlaClass must be extra fields in
