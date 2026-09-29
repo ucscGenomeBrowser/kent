@@ -141,3 +141,4 @@
 38384	504	-	-	page	-	a 400 fetching faceted composite metadata on a curated hub. The fix is in hg/hgTrackUi, so what changed is what a page says or does
 38398	505	-	rm38398.docent.yaml	page	-	the Hub Upload file card keeping the genome and hub name a hub.txt names. The fix is in hg/js, so what changed is what a page says or does
 38414	505	hg/lib/tests/trackHubSkipHubNameTester.c	-	invisible	sandbox-ab	a hub_ name with no second underscore comes back whole, not as a pointer one past NULL
+38442	505	hg/lib/tests/cartPcrVarTester.c	-	library	sandbox-ab	hgPcrResult_imgOrd, the PCR track's place after a drag, survives a cart load while a result that is not two trash files is still dropped
