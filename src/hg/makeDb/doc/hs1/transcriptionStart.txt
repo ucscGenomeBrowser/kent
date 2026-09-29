@@ -28,7 +28,7 @@ bigWigInfo pred/K562.proCapNet.pos.bw | egrep 'basesCovered|mean'
 
 cd ~/kent/src/hg/makeDb/outside/proCapNet
 ./proCapNetTrackDb hs1 proCapNetExperiments.tsv \
-    ~/kent/src/hg/makeDb/trackDb/human/hs1/transcriptionStart.ra /gbdb/hs1
+    ~/kent/src/hg/makeDb/trackDb/human/hs1/transcriptionStart.ra
 
 # transcriptionStart.ra is generated; the include line in human/hs1/trackDb.ra
 # is added by hand:

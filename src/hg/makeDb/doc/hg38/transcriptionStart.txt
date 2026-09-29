@@ -110,13 +110,14 @@ PYEOF
 # trackDb
 ##############################################################################
 
-# The stanzas are generated, along with the metadata.tsv and colors.json each
-# faceted composite reads, which are written into the composite's /gbdb
-# directory.  The composites must be faceted: a container multiWig under a plain
-# composite is flattened away by hgTrackUi and never drawn.
+# The stanzas are generated.  These are traditional composites: a faceted one is
+# routed to facetedCompositeUi(), which returns before the wiggle controls are
+# drawn, and signal tracks need those.  The matrix is declared over the leaf
+# bigWigs, so each strand is a cell; the multiWig containers carry no subGroups
+# because a container spans both strands.
 cd ~/kent/src/hg/makeDb/outside/proCapNet
 ./proCapNetTrackDb hg38 proCapNetExperiments.tsv \
-    ~/kent/src/hg/makeDb/trackDb/human/hg38/transcriptionStart.ra /gbdb/hg38
+    ~/kent/src/hg/makeDb/trackDb/human/hg38/transcriptionStart.ra
 
 # transcriptionStart.ra is generated; the include line in human/hg38/trackDb.ra
 # is added by hand:
