@@ -3383,20 +3383,14 @@ track->itemName = vcfHapClusterTrackName;
 track->mapsSelf = TRUE;
 }
 
-static unsigned vcfMaxItems()
-/* Get the maximum number of items to grab from a vcf file.  Defaults to ten thousand. */
+static unsigned vcfMaxItems(struct trackDb *tdb)
+/* Get the maximum number of items to grab from a vcf file: trackDb setting maxItems,
+ * else hg.conf setting vcfMaxItems, else ten thousand. */
 {
-static boolean set = FALSE;
-static unsigned maxItems = 0;
-
-if (!set)
-    {
-    char *maxItemsStr = cfgOptionDefault("vcfMaxItems", "10000");
-
-    maxItems = sqlUnsigned(maxItemsStr);
-    }
-
-return maxItems;
+char *maxItemsStr = trackDbSettingClosestToHome(tdb, "maxItems");
+if (maxItemsStr == NULL)
+    maxItemsStr = cfgOptionDefault("vcfMaxItems", "10000");
+return sqlUnsigned(maxItemsStr);
 }
 
 static void vcfTabixLoadItems(struct track *tg)
@@ -3424,7 +3418,7 @@ if (slCount(windows)>1)
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileAndIndexMayOpenExt(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, vcfMaxItems(), 
+    vcff = vcfTabixFileAndIndexMayOpenExt(fileOrUrl, tbiFileOrUrl, chromName, winStart, winEnd, vcfMaxErr, vcfMaxItems(tg->tdb),
         "Too many items in region.Zoom in to view track.");
     if (vcff != NULL)
 	{
