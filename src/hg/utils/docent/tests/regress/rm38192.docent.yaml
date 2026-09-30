@@ -1,0 +1,96 @@
+# #38192 -- the blue-bar Login and Sign out did not know how to get back to the page they
+# were clicked on.  The part this script watches is a page reached by POST.  Clicking a
+# track name in the list under the browser image posts the hgTracks form to hgTrackUi, so
+# the track name is in the address but the request is a POST.  The code that built the
+# return address ignored the query string for anything but a GET, so Login and Sign out
+# came back to hgTrackUi?hgsid= with no track name, and hgTrackUi died with
+# `hashMustFindVal: 'g' not found`.
+#
+# Commits.  75593a4e317 is the first fix (return to the caller page at all); it is in v503,
+# so this script does not watch it on its own.  543c9ee045b (v504) makes the return address
+# keep the query string of a POST, and points hgCollection's own "must be logged in" link
+# back at hgCollection instead of hgSession.  0a5f9cb3637 and 21563551af4 (v504) make
+# hgTrackUi answer a missing track name with a sentence instead of the hash error.
+#
+# Four checks, each of which fails on v503 by itself:
+#
+#   * Logged out, the address of the hgLogin page that Login opens carries g=knownGene in
+#     its returnto, and so does that page's Cancel link.
+#   * hgTrackUi with no g= says "does not include a track name", not hashMustFindVal.
+#   * hgCollection's login link carries hgCollection in its returnto, not hgSession.
+#   * Logged in, the Sign out URL on #loginLink carries g=knownGene, and the full round trip
+#     lands on the GENCODE settings page, signed out.  That is the bug as filed: on v503 the
+#     same clicks land on hgTrackUi?hgsid= and the hash error.
+#
+# The track link is named by data-track, not by its label, because the label carries the
+# GENCODE version and changes with each data release.  The landing check names "Track
+# Settings", which only the real settings page prints.
+#
+# NOT covered: static help pages and login.approvedReturn (hgwdev has that setting
+# commented out, so the mirrors' behaviour cannot be seen here), and the Login round trip
+# itself, because the `login` step always opens hgLogin on its own and does not follow the
+# returnto.  The Sign out round trip covers the same return code.
+#
+# Signs in as docentTest (see ~/.docentLogin) and signs out again; it creates nothing.  On
+# a ticket park, target the HTTPS port.
+#
+# A REAL BUG THIS SCRIPT DOES NOT WATCH, from Gerardo's note of 2026-09-26: with a long
+# parameter on the hgCollection URL (a Cloudflare token, or &junk= and 400 hyphens), the
+# errAbort message passes the 1024-byte buffer in htmlVaEncodeErrorText() (src/lib/htmshell.c)
+# and is cut to "Visit our", with no link.  No fix is on master as of 2026-09-30.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38192, 543c9ee045b, 0a5f9cb3637 and 21563551af4"
+  - "release-ab 2026-09-30 -- passes on genome-test and hgwbeta (v504); fails on v503 (ts park 38316, https 49106) at step 7, the hgLogin URL, whose returnto is hgTrackUi?hgsid=... with no g=. With each earlier check removed in turn, v503 also fails the other three: the missing-g page says hashMustFindVal, hgCollection's link has no hgCollection in it, the Sign out URL has no knownGene, and the Sign out round trip lands on hgTrackUi?hgsid= with hashMustFindVal"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  # Logged out.  The POST: a track name in the list under the image.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483&hideTracks=1&knownGene=pack&pix=1100"
+  - click: 'a.trackLink[data-track="knownGene"]'
+  - wait: '#loginLink'
+  - expect: {url: "hgTrackUi", text: "Track Settings"}
+
+  # The address the blue-bar Login carries.  On v503 its returnto stops at the hgsid.
+  - click: '#loginLink'
+  - wait: '#accountLoginForm'
+  - expect:
+      url: "g%3DknownGene"
+      has: 'a.cancelButton[href*="g=knownGene"]'
+
+  # What that address drew on v503 when it was followed.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38"
+  - expect:
+      text: "does not include a track name"
+      noText: "hashMustFindVal"
+
+  # hgCollection's own login link comes back to hgCollection.
+  - goto: "/cgi-bin/hgCollection?db=hg38"
+  - expect:
+      text: "You must be logged in to edit collections"
+      has: 'a[href*="hgLogin"][href*="hgCollection"]'
+      noHas: 'a[href*="hgLogin"][href*="hgSession"]'
+
+  # Logged in.  The same POST, then Sign out from the Account popup.
+  - login: true
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483&hideTracks=1&knownGene=pack&pix=1100"
+  - click: 'a.trackLink[data-track="knownGene"]'
+  - wait: '#loginLink[data-username]'
+  - expect:
+      url: "hgTrackUi"
+      has: '#loginLink[data-logouturl*="g%3DknownGene"]'
+  - click: '#loginLink'
+  - click: 'a:text-is("Sign out")'
+  # hgLogin signs out and then navigates itself (returnToURL).  Wait for the signed-in page
+  # to go first, or the next wait could match it; then for whichever page arrives at the
+  # end: the settings page, or the error the bug drew.
+  - wait: {gone: '#loginLink[data-username]'}
+  - wait: 'text=/Track Settings|hashMustFindVal|does not include a track name/'
+  - expect:
+      url: "g=knownGene"
+      text: "Track Settings"
+      noText: ["hashMustFindVal", "does not include a track name"]
+      has: '#loginLink:not([data-username])'

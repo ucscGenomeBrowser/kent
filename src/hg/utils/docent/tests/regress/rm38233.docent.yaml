@@ -1,0 +1,82 @@
+# #38233 -- the RefSeq gene tracks asked the database for each gene's status while the
+# image was being drawn, one query per gene.  A performance fix: the colors must not change.
+#
+# One commit, aeb00b82ee5 (merged by 74c172cc792).  refGeneColor in hg/hgTracks/simpleTracks.c
+# shades a RefSeq item by its status: Reviewed and Validated keep the track color,
+# Provisional is lighter, and everything else (Predicted, Inferred, Model) is lightest.  It
+# used to open a connection and run one SELECT per item.  Now refSeqStatusHashLoad() builds a
+# name->status hash with one query when the track loads, and the draw callback reads that.
+#
+# What can go wrong with the new code is that the hash comes back empty or NULL, and then
+# EVERY item is drawn in the plain track color -- the same picture as a view where every
+# gene is Reviewed.  The commit message names one way that already nearly happened:
+# hTableExists() answers FALSE for "hgFixed.refSeqStatus", because the name carries its
+# database, and that would have dropped the shading for refGene and xenoRefGene without a
+# word.  So the checks that matter here are the two SHADED colors, each with `not:` on the
+# plain one.  A check that an item is drawn in the plain color alone passes on that broken
+# build too; it is here only to pin the matrix.
+#
+# The colors, for the track color 12,12,120 that refGene and all three ncbiRefSeq leaves use:
+#
+#     Reviewed / Validated        12,12,120     the track color
+#     Provisional                109,109,174    (6*c + 4*255) / 10
+#     Predicted / Model / other  174,174,210    (c + 2*255) / 3
+#
+# Two windows, chosen so that each row holds genes of one status only, which is what makes
+# the whole-row color a fair reading:
+#
+#   * SHH, chr7:155,799,529-155,812,871.  refGene and ncbiRefSeqCurated hold only Reviewed
+#     transcripts; ncbiRefSeqPredicted holds only XM_ Model transcripts, so it is lightest.
+#     This reads ncbiRefSeqLink.
+#   * FMO9P, chr1:166,600,000-166,630,000.  One gene, NR_002925, and nothing else within
+#     20 kb on refGene or ncbiRefSeq.  It is Provisional in hgFixed.refSeqStatus (which
+#     refGene reads) and in ncbiRefSeqLink (which ncbiRefSeqCurated reads), so both rows
+#     are lighter.  This is the refGene path the hTableExists() trap would have broken.
+#
+# Checked by hgsql on 2026-09-30.  The statuses come from NCBI and can move with a RefSeq
+# reload.  If a shaded check goes red, check the status before calling it a regression:
+#     hgsql hg38 -Ne "select id,status from ncbiRefSeqLink where id like 'NR_002925%'"
+#     hgsql hgFixed -Ne "select status from refSeqStatus where mrnaAcc='NR_002925'"
+#
+# This script CANNOT fail on a build without the fix, and that is by design.  #38233 must
+# draw the same picture it replaced (eight scenarios were pixel-identical), so v503 passes
+# it too.  It watches the other direction: the batched lookup is new code, and a bug in it
+# shows as shading that is lost, which this catches.  It does not count queries; nothing a
+# page shows can do that.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38233 and aeb00b82ee5; passes on genome-test, hgwbeta and v503 (ts 38316), as it must, since the fix draws the same picture"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {refSeqComposite: pack, ncbiRefSeqCurated: pack, ncbiRefSeqPredicted: pack, refGene: pack, ncbiRefSeqOther: hide, ncbiRefSeqPsl: hide, ncbiRefSeqSelect: hide, ncbiRefSeqHgmd: hide, ncbiRefSeqHistorical: hide, ncbiRefSeqGenomicDiff: hide}
+
+  # The rows really drew, and SHH is on the page, before any color means anything.
+  - expect:
+      rows: [ncbiRefSeqCurated, ncbiRefSeqPredicted, refGene]
+      has: 'area[href*="i=NM_000193"]'
+
+  # Reviewed: the track color.  Passes on a build that lost the shading too; see the header.
+  - expect:
+      color:
+        - {track: ncbiRefSeqCurated, is: "12,12,120"}
+        - {track: refGene, is: "12,12,120"}
+
+  # Model (XM_): lightest.  An empty or missing status hash draws these 12,12,120.
+  - expect: {color: {track: ncbiRefSeqPredicted, is: "174,174,210", not: "12,12,120"}}
+
+  # Provisional, on both status tables.  refGene reads hgFixed.refSeqStatus, the table the
+  # hTableExists() trap in the commit message would have dropped.
+  - go: chr1:166600000-166630000
+  - expect:
+      rows: [ncbiRefSeqCurated, refGene]
+      has: 'area[href*="i=NR_002925"]'
+  - expect:
+      color:
+        - {track: refGene, is: "109,109,174", not: "12,12,120"}
+        - {track: ncbiRefSeqCurated, is: "109,109,174", not: "12,12,120"}

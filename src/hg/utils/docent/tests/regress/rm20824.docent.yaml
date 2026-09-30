@@ -1,0 +1,63 @@
+# #20824 -- a bigNet track type for hubs: the netAlign data in a bigBed, so a hub can carry
+# a real alignment net instead of a mafNet stand-in.
+#
+# Commits: 353a34ac7e7 (the type), f29b65452a1 (quickLift of it), 357d4dbeca6 (review
+# fixes), d11a21c48cd (the hg.conf gate), b18f2f9facb, 8449e4fa9d0 (a type line naming a
+# chain track the assembly lacks), f19df2f8365 (hgc: the chain and net details pages built
+# with htmlPrintf), 964cacf58de (the trackDb doc blurb).  None of them is in v503.
+#
+# HG.CONF GATE: `bigNet=on`.  Off by default.  With it off, the net row is drawn as the
+# yellow "Unsupported type" bar and every check below goes red, which is a configuration
+# answer and not a regression.  Settle it with
+#     grep -n '^bigNet' /usr/local/apache/cgi-bin/hg.conf        (genome-test)
+# genome-test and every ticket park (they include genome-test's hg.conf) have it on, and
+# so did hgwbeta on 2026-09-30, where this script passed.  ~/kent/confs/hgwbeta.hg.conf
+# does not carry the line, so that copy is not the one to read for beta.  #20824 says
+# the line is added to the RR hg.conf with the v504 CGI release.
+#
+# The fixture is ~braney/docentFixtures/rm20824, a copy of the demo hub posted on the ticket:
+# hg38 chr22 against mm39, the same rows as the native chainMm39 and netMm39.  Its tracks
+# carry the rm20824 prefix so that no native row can stand in for them.
+#
+# What is asserted:
+#   * the net row DRAWS ITS ITEMS.  The row exists on a build without the type too -- it is
+#     the warning bar -- so rows: alone is blind; the color check says the row is not
+#     240,240,180 (undefinedYellowColor), the bar rm38310 also reads.
+#   * the row carries item map boxes, which the warning bar has none of.
+#   * the details page of the top-level fill prints the net's own fields, with the exact
+#     values the native netMm39 row gives for the same fill: its span on each side, the
+#     chain id, and the aligning-base count.  A page that aborted early carries the
+#     track's label in its header, so the label is not what is asserted.
+#
+# NOT asserted: quickLift of a bigNet (it needs a convert: and the lifted details page says
+# it has no chain to follow, #38249), and the XSS escaping in f19df2f8365, which changes no
+# byte of a page built from well-formed data.
+proof:
+  - "assertion-only 2026-09-30 -- written from #20824 and the demo hub after the type reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test, hgwbeta (v504) and ts park 38423 (v504_branch); fails on ts park 38316 (v503_branch, same hg.conf with bigNet=on) at step 4: no rm20824Net item box, and the row is drawn 240,240,180 (72%), the Unsupported type bar"
+
+target: genome-test
+db: hg38
+position: chr22:17500000-17510000
+reset: true
+fast: true
+steps:
+  - go: chr22:17500000-17510000
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm20824/hub.txt", db: hg38, position: "chr22:17500000-17510000"}
+  - expect:
+      rows: [rm20824Chain, rm20824Net]
+      has: 'area[href*="rm20824Net"][href*="i=1"]'
+      noText: "Unsupported type"
+      color:
+        - {track: rm20824Net, not: "240,240,180"}
+
+  # The top-level fill under this window: chr22 against mouse chr6, chain 287.  Named by its
+  # tooltip, since every fill's box is titled with its level ("1") and a bare "1" is also a
+  # substring of every href on the page.
+  - click: {track: rm20824Net, title: "chr6 + 120440k"}
+  - expect:
+      url: "hgc"
+      text: ["Human position:", "chr22:17084921-18177998", "Mouse position:",
+             "chr6:120440121-121250251", "Chain ID:", "287", "257,389"]
+      noText: ["Missing field in bigNet", "Unsupported type"]

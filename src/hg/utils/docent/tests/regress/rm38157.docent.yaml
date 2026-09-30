@@ -1,0 +1,69 @@
+# #38157 -- the hgSession facelift.  This script watches one part of it: the note hgTracks
+# now shows when a saved session has just been loaded.  Before it, opening a session replaced
+# the whole cart and said nothing, so a user's own view was gone without a word.
+#
+# 3bcf86a0995, hg/hgTracks/hgTracks.c (showSessionLoadNotice, sessionNoticeText), hg/lib/cart.c
+# (the hgsSessionJustLoaded marker a full session load leaves) and hg/js/utils.js
+# (notifBoxOnce).  The note names the session, says who saved it and when, shows its
+# description, and warns that the previous configuration cannot be brought back.  It is shown
+# on that one page only: hgTracks takes the marker out of the cart as it draws the note.
+#
+# The script saves rm38157 with a description on the new Sessions page, then opens it the way
+# a session link does (hgS_doOtherUser).  It asserts the note's own sentences -- the name, "saved
+# by yourself" (the owner is signed in), the description, and the warning -- and then that the
+# next hgTracks page has no note.  #imgTbl is the positive check that the page really drew.
+#
+# The rest of the facelift is covered elsewhere or not at all.  rm38311 watches Replace on the
+# save card.  rm27988 watches the Server column.  The layout of the new page (field widths,
+# info bubbles, the Advanced panel) is left to a person.
+#
+# hg.conf: `sessionLoadNotice` defaults to on (cfgOptionBooleanDefault(..., TRUE)), and
+# genome-test does not set it.  A server with sessionLoadNotice=off fails at the wait for
+# .notifBoxOnce, and that is the configuration, not a regression:
+#     grep -n sessionLoadNotice /usr/local/apache/cgi-bin/hg.conf
+# The new Sessions page is opted into with sessionNewPage=1 on the URL.
+#
+# The session is deleted at the start, in case an earlier run died, and again at the end.  On
+# a ticket park, run against the HTTPS port so that login works.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38157 and 3bcf86a0995 after it reached genome-test and hgwbeta"
+  - "release-ab 2026-09-30 -- passes on genome-test and on hgwbeta (v504); fails on v503 (ts park 38316, v503_branch 707b184e329, https 49106) at step 10, the wait for .notifBoxOnce: the session saved with its description and loaded, and v503 drew the tracks with no note"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38157"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+
+  # Save rm38157 with a description.  The (i) icon is drawn only when the save has finished.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessSaveName'
+  - fill: {'#sessSaveName': rm38157, '#sessSaveDesc': "rm38157 load notice"}
+  - click: '#sessSaveBtn'
+  - wait: '#sessionAppTable tr:has(a:text-is("rm38157")) .sessInfo'
+
+  # Open it as a session link does.  The note is on this page.
+  - goto: "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=docentTest&hgS_otherUserSessionName=rm38157"
+  - wait: '.notifBoxOnce'
+  - expect:
+      text:
+        - "You have opened the saved session rm38157, saved by yourself on "
+        - "Session description: rm38157 load notice"
+        - "cannot be brought back"
+      has: ['#imgTbl', '.notifBoxOnce']
+
+  # And only on that page.
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      has: '#imgTbl'
+      noHas: '.notifBoxOnce'
+      noText: "You have opened the saved session"
+
+  # Clean up.
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38157"
+  - expect:
+      text: '"success": true'
