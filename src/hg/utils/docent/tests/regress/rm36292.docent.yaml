@@ -1,0 +1,95 @@
+# #36292 -- "Keep only last search", an opt-in checkbox on the new BLAT search form.  Since
+# #32751 every BLAT search leaves a custom track behind, and users asked for a way to keep
+# only the newest one.  Unchecked (the default), results accumulate as before.  Checked, the
+# next search removes the reader's earlier BLAT result tracks.
+#
+# 994528edb7d: hg/hgBlat/hgBlat.c (showOnlyLatest and onlyLatest in hgBlatFormData),
+# hg/js/hgBlat.js (the checkbox, a hidden blatOnlyLatest field, the localStorage memory),
+# hg/hgc/hgc.c (buildBigPsl drops every earlier blatResult=on track when the box was ticked).
+#
+# HG.CONF GATE: `blatOnlyLatestCheckbox=on`, off by default.  With it off the checkbox is not
+# drawn and hgc never removes anything, so the script fails at the wait for the checkbox --
+# a configuration answer, not a regression.  Settle it with
+#     grep -n '^blatOnlyLatestCheckbox' /usr/local/apache/cgi-bin/hg.conf
+# genome-test has it on, and so does every ticket park, since they include that hg.conf.
+# The script also leans on blatResultsGroup=on (#38086), for the track labels it reads.
+# The checkbox is on the NEW form only, which blatNewForm=off keeps opt-in until the switch
+# date; the script opts in with blatNewForm=1 on the URL.
+#
+# What is asserted, in order:
+#   * two searches with the box unchecked leave two tracks.  That is the default the ticket
+#     says must not change, and it is also what makes the later checks mean something.
+#   * a third search sent with blatOnlyLatest=1 -- the hidden field the checkbox drives --
+#     leaves ONE track, the third.  This is the hgc half, the removal, on its own.
+#   * the new form draws the checkbox, labelled, and unticked once blatOnlyLatest is back
+#     to 0.  Ticking it sets the hidden field.
+#   * a fourth search from the form, box ticked, leaves one track again: the fourth.
+#
+# NOT asserted: that the choice is remembered across visits.  That is localStorage, and each
+# Docent run starts in a fresh browser context, so the next visit is always a first one.
+proof:
+  - "assertion-only 2026-09-30 -- written from #36292 after 994528edb7d reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test, hgwbeta (v504) and ts park 38423 (v504_branch); fails on ts park 38316 (v503_branch, same hg.conf with blatOnlyLatestCheckbox=on) at step 13: after the blatOnlyLatest=1 search, SMYD4 and TP53 are both still listed in the BLAT group. An earlier draft that went straight to the form failed there at the wait for #blat_onlyLatest: v503 draws the new form with no such checkbox"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # Two searches, box unchecked, by GET.  The results page builds each track itself, through
+  # an ajax call to hgc, hence the sleeps (as in rm38086).
+  - goto: "/cgi-bin/hgBlat?userSeq=ctgggcaacatagcaagaccccatctctacaaaaaatacaaaaattagccgggcgtggtggcgcgcgcctgtagtcccagctactcgggaggctgaggcagg&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - expect:
+      text: "BLAT Search Results"
+  - sleep: 3000
+  - goto: "/cgi-bin/hgBlat?userSeq=MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP&type=protein&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - expect:
+      text: "BLAT Search Results"
+  - sleep: 3000
+
+  # Unchecked keeps both.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1809779-1810005&pix=1100"
+  - expect:
+      has:
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 102bp SMYD4,"]'
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 60aa TP53,"]'
+
+  # A third search with the box's hidden field set, as the form sends it when ticked.
+  - goto: "/cgi-bin/hgBlat?userSeq=GTCTCCTGCAGCGTCTGGGGTTTCCGTTGCAGTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCGAGTTATGGCGACGAAGGCCGTGTGCGTGCTGAAGGGCGACGGCCCAGTGCAGGGC&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&blatOnlyLatest=1&Submit=submit"
+  - expect:
+      text: "BLAT Search Results"
+  - sleep: 3000
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr21:31659700-31659820&pix=1100"
+  - expect:
+      has: 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 120bp SOD1,"]'
+      noHas:
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 102bp SMYD4,"]'
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 60aa TP53,"]'
+
+  # The new form, and the checkbox on it, unticked with the cart variable back at 0.
+  - goto: "/cgi-bin/hgBlat?blatNewForm=1&blatOnlyLatest=0&db=hg38"
+  - wait: '#blat_onlyLatest'
+  - expect:
+      text: "Keep only last search"
+      has: ['#blat_onlyLatest:not(:checked)', 'input#blatOnlyLatestVal[value="0"]']
+
+  # Tick it and search a fourth time, from the form.
+  - click: '#blat_onlyLatest'
+  - expect:
+      has: ['#blat_onlyLatest:checked', 'input#blatOnlyLatestVal[value="1"]']
+  - fill: {'textarea[name="userSeq"]': "CCTCCCCCAGTCACGCTTTCCCACCCCCTGCAGTGGGGGCTCCAGAAGCGGGCAGGAAGCCACAGGACCCCATCTCGGGGCATGGAGAACCTTGGGCTCT"}
+  - click: '#blatFormBox input[type="submit"][name="Submit"]'
+  # A search from the new form lands on the new results page, which is titled differently.
+  - wait: '#blatResults'
+  - expect:
+      text: "Human (hg38) BLAT Results"
+  - sleep: 3000
+
+  # Only the fourth search is left.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155806000-155806100&pix=1100"
+  - expect:
+      has: 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 100bp SHH,"]'
+      noHas:
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 120bp SOD1,"]'
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 102bp SMYD4,"]'
+        - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 60aa TP53,"]'
