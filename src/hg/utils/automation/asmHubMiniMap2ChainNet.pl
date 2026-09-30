@@ -26,7 +26,25 @@ my $ncbiAsmId = shift;
 my $namesFile = shift;
 my $queryId = shift;
 
+# the exact case used in the chain*.bb/chainLiftOver*.bb file names
+# (asmHubMiniMap2ChainNetTrackDb.sh's $OtherDb), before it gets resolved
+# below into a full asmId for the getAssemblyInfo() lookup
+my $fileOtherDb = $queryId;
+
 # if assembly hub, need to find the real full assembly ID
+my $targetBuildDir = "";
+if ($asmId =~ m/^GC/) {
+  my $gcX = substr($asmId,0,3);
+  my $d0 = substr($asmId,4,3);
+  my $d1 = substr($asmId,7,3);
+  my $d2 = substr($asmId,10,3);
+  my $hubBuildDir = "refseqBuild";
+  $hubBuildDir = "genbankBuild" if ($gcX eq "GCA");
+  $targetBuildDir = "/hive/data/genomes/asmHubs/$hubBuildDir/$gcX/$d0/$d1/$d2/$asmId";
+} else {
+  $targetBuildDir = "/hive/data/genomes/$asmId";
+}
+
 if ($queryId =~ m/^GC/) {
   my $gcX = substr($queryId,0,3);
   my $d0 = substr($queryId,4,3);
@@ -46,6 +64,17 @@ chomp $sciName;
 
 my ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $asmId);
 my ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $queryId);
+
+my $hgDownload = "https://hgdownload.soe.ucsc.edu";
+my @accParts = split('_', $asmId);
+my $accession = "$accParts[0]_$accParts[1]";
+my $asmIdPath = &AsmHub::asmIdToPath($asmId);
+my $downloadDir = "$hgDownload/hubs/$asmIdPath/$accession/bbi";
+my $chainUrl = "$downloadDir/$asmId.chainMiniMap2$fileOtherDb.bb";
+my $chainLinkUrl = "$downloadDir/$asmId.chainMiniMap2${fileOtherDb}Link.bb";
+my $haveLiftOver = ( -s "$targetBuildDir/bbi/$asmId.chainLiftOverMiniMap2$fileOtherDb.bb" ) ? 1 : 0;
+my $loChainUrl = "$downloadDir/$asmId.chainLiftOverMiniMap2$fileOtherDb.bb";
+my $loChainLinkUrl = "$downloadDir/$asmId.chainLiftOverMiniMap2${fileOtherDb}Link.bb";
 
 print <<_EOF_
 <h2>Description</h2>
@@ -130,6 +159,45 @@ The program <em>netChainSubset</em> was then used to extract the
 best/longest syntenic part of that net back out of the chain, giving the
 chain used to lift over coordinates between the two assemblies.
 </p>
+
+<h2>Data Access</h2>
+<p>
+The underlying data for this track are stored as bigChain/bigLink file pairs on our
+<a href="$downloadDir" target=_blank>download server</a>:
+<ul>
+<li><b><code>$asmId.chainMiniMap2$fileOtherDb.bb</code></b> and
+<b><code>$asmId.chainMiniMap2${fileOtherDb}Link.bb</code></b> (Chain)</li>
+_EOF_
+    ;
+if ($haveLiftOver) {
+print "<li><b><code>$asmId.chainLiftOverMiniMap2$fileOtherDb.bb</code></b> and
+<b><code>$asmId.chainLiftOverMiniMap2${fileOtherDb}Link.bb</code></b> (Lift Over Chain)</li>
+";
+}
+print "</ul>
+Regions, or the whole genome, can be extracted from these files with our command line tool
+<b>bigChainToChain</b>, available from the
+<a href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'
+target=_blank>utilities download directory</a>:
+<pre>
+bigChainToChain $chainUrl \\\n    $chainLinkUrl stdout
+</pre>
+";
+if ($haveLiftOver) {
+print "or, for the lift over chain:
+<pre>
+bigChainToChain $loChainUrl \\\n    $loChainLinkUrl stdout
+</pre>
+";
+}
+print "This can be restricted to a single region with the <b>-chrom=</b>, <b>-start=</b> and
+<b>-end=</b> options, for example:
+<pre>
+bigChainToChain $chainUrl \\\n    $chainLinkUrl stdout -chrom=chr1 -start=0 -end=1000000
+</pre>
+</p>
+";
+print <<_EOF_
 
 <h2>Credits</h2>
 <p>

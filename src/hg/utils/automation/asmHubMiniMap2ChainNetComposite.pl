@@ -39,6 +39,12 @@ if ($asmId =~ m/^GC/) {
   $targetBuildDir = "/hive/data/genomes/$asmId";
 }
 
+my $hgDownload = "https://hgdownload.soe.ucsc.edu";
+my @accParts = split('_', $asmId);
+my $accession = "$accParts[0]_$accParts[1]";
+my $asmIdPath = &AsmHub::asmIdToPath($asmId);
+my $downloadDir = "$hgDownload/hubs/$asmIdPath/$accession/bbi";
+
 # doMiniMap2.pl names buildDir/trackData/miniMap2.$QDb where $QDb is
 # ucfirst() of the actual query db/accession.  Reconstruct the actual
 # db name/accession, except for a GenArk accession (already starts with
@@ -54,6 +60,7 @@ my %queryCommonName;	# key is asmId, value is assembly common name
 my %querySubmitter;	# key is asmId, value is assembly submitter
 my %fbStats;	# key is asmId, value is featureBits measure for chains
 my %loStats;	# key is asmId, value is featureBits measure for lift over
+my %fileOtherDb;	# key is asmId, value is the $QDb used in the chain*.bb file names
 
 open (TD, "ls -d ${targetBuildDir}/trackData/miniMap2.*|") or die "can not ls -d ${targetBuildDir}/trackData/miniMap2.*";
 while (my $mm2Dir = <TD>) {
@@ -73,6 +80,7 @@ while (my $mm2Dir = <TD>) {
      $qAsmId = "${accession}${qAsmName}";
   }
   $queryDates{$qAsmId} = $qDate;
+  $fileOtherDb{$qAsmId} = $Qdb;
   my ($qCommonName, undef, $qSubmitter) = &HgAutomate::getAssemblyInfo($dbHost, $qAsmId);
   $queryCommonName{$qAsmId} = $qCommonName;
   $querySubmitter{$qAsmId} = $qSubmitter;
@@ -181,6 +189,40 @@ foreach my $oAsmId (@orderedByFBits) {
  printf "<td>%s</td><td>%s</td></tr>\n", $queryCommonName{$oAsmId}, $oAsmId;
 }
 printf "</tbody></table>\n";
+
+printf "<h2>Data Access</h2>\n";
+printf "<p>\n";
+printf "The underlying data for these tracks are stored as bigChain/bigLink file pairs, one\n";
+printf "pair per query assembly (and, where present, a second pair for its lift over chain),\n";
+printf "on our <a href='%s' target=_blank>download server</a>:\n", $downloadDir;
+printf "</p>\n";
+printf "<table border='1'>\n";
+printf "<thead><tr><th>assembly</th><th>chain</th><th>lift over chain</th></tr></thead>\n";
+printf "<tbody>\n";
+foreach my $oAsmId (@orderedByFBits) {
+  my $Qdb = $fileOtherDb{$oAsmId};
+  printf "<tr><td>%s</td><td><code>%s.chainMiniMap2%s.bb</code></td>", $oAsmId, $asmId, $Qdb;
+  if (defined($loStats{$oAsmId}) && $loStats{$oAsmId} ne "n/a") {
+    printf "<td><code>%s.chainLiftOverMiniMap2%s.bb</code></td></tr>\n", $asmId, $Qdb;
+  } else {
+    printf "<td>&nbsp;</td></tr>\n";
+  }
+}
+printf "</tbody></table>\n";
+printf "<p>\n";
+printf "Regions, or the whole genome, can be extracted from these files with our command\n";
+printf "line tool <b>bigChainToChain</b>, available from the\n";
+printf "<a href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'\n";
+printf "target=_blank>utilities download directory</a>.  Each bigChain file has a\n";
+printf "companion <b>...Link.bb</b> file that must be given as the second argument, for\n";
+printf "example, for %s:\n", $orderedByFBits[0];
+printf "<pre>\n";
+printf "bigChainToChain %s/%s.chainMiniMap2%s.bb \\\n", $downloadDir, $asmId, $fileOtherDb{$orderedByFBits[0]};
+printf "    %s/%s.chainMiniMap2%sLink.bb stdout\n", $downloadDir, $asmId, $fileOtherDb{$orderedByFBits[0]};
+printf "</pre>\n";
+printf "optionally restricted to a single region with the <b>-chrom=</b>, <b>-start=</b> and\n";
+printf "<b>-end=</b> options.\n";
+printf "</p>\n";
 
 print <<_EOF_
 <h3>Chain Track</h3>
