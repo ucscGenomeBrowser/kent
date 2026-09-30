@@ -13,26 +13,23 @@
 #
 #     the user asked for it   (density graph: turn off on the track settings page)
 #     too many items          (density graph: too many items, zoom in or use dense)
-#     window too wide         (density graph: too many items, zoom in)
+#     window too wide         (density graph: window too large, zoom in)
 #
 # 07f0635fd35 reworded all three on 2026-09-18 after QA read them: say "density graph" to
-# match the checkbox, and name only the escape that works for each cause.  The wording
-# above is that second wording, and the note below about the shared prefix is a direct
-# consequence of it.
+# match the checkbox, and name only the escape that works for each cause.  32eec44ad31
+# reworded the window-size one again on 2026-09-29: winTooBigDoWiggle() compares the window
+# width against maxWindowCoverage and never counts anything, so "too many items" named the
+# wrong cause.  The wording above is the current one.
 #
 # Each step names the message it expects AND the message it must not get, because the whole
 # of the fix is picking the right one of the three.  A version that appended the same
 # sentence to every density track would pass a test that only asked whether a note is there.
 #
-# Since the reword, the window-size message is a strict PREFIX of the too-many-items one:
-#
-#     density graph: too many items, zoom in
-#     density graph: too many items, zoom in or use dense
-#
-# mouseoverText*= is a substring match, so a bare `noHas` on the shorter one matches the
-# longer one too and fails on the very track it is meant to pass.  labelAddNote() wraps a
-# note as " (%s)", so every check below carries the closing paren, which makes the shorter
-# message match itself and nothing else.  Do not drop it.
+# labelAddNote() wraps a note as " (%s)", and every check below carries the parens.  Between
+# the two rewordings the window-size message was a strict prefix of the too-many-items one,
+# and the closing paren was what kept a substring match on the shorter one from matching the
+# longer one.  The current three share no such prefix, but keep the parens: the next reword
+# can bring the trap back.
 #
 # Where the note can be read, and where it cannot
 # -----------------------------------------------
@@ -55,6 +52,7 @@ proof:
   - "assertion-only 2026-09-17 -- written from #38279 and d83026b7d89 after the fix reached genome-test"
   - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the CRISPR Targets label carries none of the three density notes"
   - "assertion-only 2026-09-18 -- reworded for 07f0635fd35, which changed all three label strings; the four label steps were re-read off genome-test by hand and the release-ab line above still stands, since v503 carries no note at all and the reword cannot reach it"
+  - "assertion-only 2026-09-30 -- reworded for 32eec44ad31, which changed the window-size note to 'window too large'; the nightly went red at step 2 on the old string, steps 1 and 2 were re-read off genome-test, and the release-ab line still stands, since v503 carries no note at all"
 
 target: genome-test
 db: hg38
@@ -69,7 +67,7 @@ steps:
       has: 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(density graph: too many items, zoom in or use dense)"]'
       noHas:
         - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="turn off on the track settings page"]'
-        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(density graph: too many items, zoom in)"]'
+        - 'a.trackLink[data-track="crisprAllTargets"][mouseoverText*="(density graph: window too large, zoom in)"]'
 
   # 2. Window wider than the track allows.  UniProt Variants sets maxWindowCoverage
   # 10000000, so an 11 Mb window trips winTooBigDoWiggle() -- a different cause from step 1,
@@ -77,8 +75,8 @@ steps:
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-12000000&hideTracks=1&spMut=pack&pix=1100"
   - expect:
       rows: [ruler, spMut]
-      has: 'a.trackLink[data-track="spMut"][mouseoverText*="(density graph: too many items, zoom in)"]'
-      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="zoom in or use dense"]'
+      has: 'a.trackLink[data-track="spMut"][mouseoverText*="(density graph: window too large, zoom in)"]'
+      noHas: 'a.trackLink[data-track="spMut"][mouseoverText*="too many items"]'
 
   # 3. The same track just inside its own threshold: 9.5 Mb, still drawn, and no note.  This
   # is what says the note follows maxWindowCoverage rather than merely following the track,
