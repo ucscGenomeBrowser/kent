@@ -196,6 +196,18 @@ _sas,INFO/gnomad_AF_sas,INFO/gnomad_AN_sas,INFO/gnomad_popmax,INFO/gnomad_faf95_
 sh ~/kent/src/hg/makeDb/scripts/varFreqs/vcfFilterParallel.sh /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz hgdp1k.freq.parallel.vcf.gz "$KEEP" 30 50 &
 tabix -p vcf hgdp1k.freq.vcf.gz
 
+# phasedVars hgdp1kSnv: smaller genotype VCF for HGDP1k, Claude/Max, Sep 29 2026
+# The 3.5TB genotype VCF is too slow for haplotype clustering at higher zoom levels.
+# Keep only SNVs with INFO/AC>5, only FORMAT/GT and INFO/AC,AN,AF. 60 jobs, 10 Mbp chunks.
+# Test region chr20:40-41Mbp: 57698 variants -> 11310, 4.8MB
+cd /hive/data/genomes/hg38/bed/varFreqs/hgdp1k/
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/hgdp1kCommonSnvs.sh gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz hgdp1k.snvAc6.vcf.gz 60 10 > hgdp1kCommonSnvs.log 2>&1
+# took 45 minutes, 3.5TB -> 17GB
+bcftools index -n gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz
+# 189381961
+bcftools index -n hgdp1k.snvAc6.vcf.gz
+# 34033926
+
 # Swefreq, Max, Feb 2026
 # downloaded files from https://swefreq.nbis.se/dataset/SweGen/download
 # Access was approved through the website, but I emailed swefreq@scilifelab.se, it needed a reminder email
