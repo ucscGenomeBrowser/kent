@@ -27,7 +27,7 @@ html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
         track chainMiniMap2Hg38
         parent chainNetMiniMap2Hg38Viewchain
         subGroups view=chain
-        shortLabel human/GRCh38/hg38 mm2 Chain
+        shortLabel hg38 mm2 Chain
         longLabel human/GRCh38/hg38 minimap2 Chained Alignments
         type bigChain hg38
         bigDataUrl /gbdb/hs1/chainNet/hs1.chainMiniMap2Hg38.bb
@@ -44,7 +44,7 @@ html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
         track chainLiftOverMiniMap2Hg38
         parent chainNetMiniMap2Hg38ViewLiftOver
         subGroups view=liftover
-        shortLabel human (GRCh38/hg38) mm2 loChain
+        shortLabel hg38 mm2 loChain
         longLabel human (GRCh38/hg38) minimap2 Lift Over Chained Alignments
         type bigChain hg38
         bigDataUrl /gbdb/hs1/chainNet/hs1.chainLiftOverMiniMap2Hg38.bb
