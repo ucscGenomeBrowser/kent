@@ -8102,7 +8102,8 @@ var downloadCurrentTrackData = {
             // the position is data, not prose, so it gets the monospace treatment and a
             // line of its own
             "<br><span style=\"font-family: 'Roboto Mono', 'Courier New', monospace; " +
-            "font-weight: bold\">" + genomePos.get() + "&nbsp;&nbsp;" + strandStr + "</span><br>" +
+            "font-weight: bold\">" + htmlEncode(genomePos.get()) + "&nbsp;&nbsp;" + strandStr +
+            "</span><br>" +
             "Large regions may be slow to download.</p>";
         // the output format comes first: it decides which tracks can be downloaded at all
         htmlStr += "<div>";
@@ -8129,14 +8130,15 @@ var downloadCurrentTrackData = {
         // undecoratedTrack strips the hub_<id>_ that a hub assembly's name carries, the
         // hub id is this browser's cart detail and means nothing in a file name
         htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
-            " value='" + undecoratedTrack(getDb()) + ".tracks'></input>";
+            " value='" + htmlEncode(undecoratedTrack(getDb())) + ".tracks'></input>";
         htmlStr += "</div>";
         htmlStr += "</div>";
         htmlStr += "<div style='margin-top: 12px'>";
         _.each(hgTracks.trackDb, function(track, trackName) {
             showDisabledMsg = false;
             if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
-                htmlStr += "<input type=checkbox class='downloadTrackName' id='" + trackName + "'";
+                htmlStr += "<input type=checkbox class='downloadTrackName' id='" +
+                    htmlEncode(trackName) + "'";
                 // the first word of the type is all the output formats need. A hub writes
                 // its own type strings and this one goes into an html attribute, so keep
                 // it to the characters a type name can legitimately have
@@ -8151,10 +8153,11 @@ var downloadCurrentTrackData = {
                     htmlStr += " checked ";
                 }
                 htmlStr +=  ">";
-                htmlStr += "<label>" + track.shortLabel + "</label>";
+                htmlStr += "<label>" + htmlEncode(track.shortLabel) + "</label>";
                 htmlStr += "</input>";
                 if (showDisabledMsg) {
-                    htmlStr += "&nbsp;<span id='" + trackName + "Tooltip'><a href='#'>(?)</a></span>";
+                    htmlStr += "&nbsp;<span id='" + htmlEncode(trackName) +
+                        "Tooltip'><a href='#'>(?)</a></span>";
                 }
                 htmlStr += "<br>";
             }
