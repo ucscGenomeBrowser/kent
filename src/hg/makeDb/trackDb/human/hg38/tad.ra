@@ -51,11 +51,10 @@ subGroup2 organ Organ_system brain=Brain cardiovascular=Cardiovascular immune=Im
 dimensions dimX=organ dimY=stype
 sortOrder stype=+ organ=+
 showSubtrackColorOnUi on
-allButtonPair on
 
     track tadsSchmittGM12878
     parent tadsSchmitt on
-    shortLabel GM12878 bnd
+    shortLabel GM12878
     longLabel TAD boundaries in GM12878 lymphoblastoid cells (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittGM12878.bb
@@ -65,7 +64,7 @@ allButtonPair on
 
     track tadsSchmittH1
     parent tadsSchmitt on
-    shortLabel H1-hESC bnd
+    shortLabel H1-hESC
     longLabel TAD boundaries in H1 human embryonic stem cells (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittH1.bb
@@ -75,7 +74,7 @@ allButtonPair on
 
     track tadsSchmittIMR90
     parent tadsSchmitt on
-    shortLabel IMR90 bnd
+    shortLabel IMR90
     longLabel TAD boundaries in IMR90 fetal lung fibroblasts (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittIMR90.bb
@@ -85,7 +84,7 @@ allButtonPair on
 
     track tadsSchmittMES
     parent tadsSchmitt off
-    shortLabel Mesendoderm bnd
+    shortLabel Mesendoderm
     longLabel TAD boundaries in H1-derived mesendoderm cells (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittMES.bb
@@ -95,7 +94,7 @@ allButtonPair on
 
     track tadsSchmittMSC
     parent tadsSchmitt off
-    shortLabel Mesench SC bnd
+    shortLabel Mesenchymal SC
     longLabel TAD boundaries in H1-derived mesenchymal stem cells (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittMSC.bb
@@ -105,7 +104,7 @@ allButtonPair on
 
     track tadsSchmittNPC
     parent tadsSchmitt off
-    shortLabel Neural prog bnd
+    shortLabel Neural progenitor
     longLabel TAD boundaries in H1-derived neural progenitor cells (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittNPC.bb
@@ -115,7 +114,7 @@ allButtonPair on
 
     track tadsSchmittTRO
     parent tadsSchmitt off
-    shortLabel Trophoblast bnd
+    shortLabel Trophoblast
     longLabel TAD boundaries in H1-derived trophoblast-like cells (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittTRO.bb
@@ -125,7 +124,7 @@ allButtonPair on
 
     track tadsSchmittAD
     parent tadsSchmitt off
-    shortLabel Adrenal bnd
+    shortLabel Adrenal
     longLabel TAD boundaries in adrenal gland (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittAD.bb
@@ -135,7 +134,7 @@ allButtonPair on
 
     track tadsSchmittAO
     parent tadsSchmitt off
-    shortLabel Aorta bnd
+    shortLabel Aorta
     longLabel TAD boundaries in aorta (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittAO.bb
@@ -145,7 +144,7 @@ allButtonPair on
 
     track tadsSchmittBL
     parent tadsSchmitt off
-    shortLabel Bladder bnd
+    shortLabel Bladder
     longLabel TAD boundaries in bladder (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittBL.bb
@@ -155,7 +154,7 @@ allButtonPair on
 
     track tadsSchmittCO
     parent tadsSchmitt on
-    shortLabel Cortex bnd
+    shortLabel Cortex
     longLabel TAD boundaries in dorsolateral prefrontal cortex (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittCO.bb
@@ -165,7 +164,7 @@ allButtonPair on
 
     track tadsSchmittHC
     parent tadsSchmitt off
-    shortLabel Hippocampus bnd
+    shortLabel Hippocampus
     longLabel TAD boundaries in hippocampus (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittHC.bb
@@ -175,7 +174,7 @@ allButtonPair on
 
     track tadsSchmittLG
     parent tadsSchmitt off
-    shortLabel Lung bnd
+    shortLabel Lung
     longLabel TAD boundaries in lung (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLG.bb
@@ -185,7 +184,7 @@ allButtonPair on
 
     track tadsSchmittLI
     parent tadsSchmitt on
-    shortLabel Liver bnd
+    shortLabel Liver
     longLabel TAD boundaries in liver (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLI.bb
@@ -195,7 +194,7 @@ allButtonPair on
 
     track tadsSchmittLV
     parent tadsSchmitt off
-    shortLabel Left ventricle bnd
+    shortLabel Left ventricle
     longLabel TAD boundaries in left ventricle of heart (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittLV.bb
@@ -205,7 +204,7 @@ allButtonPair on
 
     track tadsSchmittOV
     parent tadsSchmitt off
-    shortLabel Ovary bnd
+    shortLabel Ovary
     longLabel TAD boundaries in ovary (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittOV.bb
@@ -215,7 +214,7 @@ allButtonPair on
 
     track tadsSchmittPA
     parent tadsSchmitt off
-    shortLabel Pancreas bnd
+    shortLabel Pancreas
     longLabel TAD boundaries in pancreas (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittPA.bb
@@ -225,7 +224,7 @@ allButtonPair on
 
     track tadsSchmittPO
     parent tadsSchmitt off
-    shortLabel Psoas muscle bnd
+    shortLabel Psoas muscle
     longLabel TAD boundaries in psoas muscle (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittPO.bb
@@ -235,7 +234,7 @@ allButtonPair on
 
     track tadsSchmittRV
     parent tadsSchmitt off
-    shortLabel Right ventricle bnd
+    shortLabel Right ventricle
     longLabel TAD boundaries in right ventricle of heart (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittRV.bb
@@ -245,7 +244,7 @@ allButtonPair on
 
     track tadsSchmittSB
     parent tadsSchmitt off
-    shortLabel Small bowel bnd
+    shortLabel Small bowel
     longLabel TAD boundaries in small bowel (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittSB.bb
@@ -255,7 +254,7 @@ allButtonPair on
 
     track tadsSchmittSX
     parent tadsSchmitt off
-    shortLabel Spleen bnd
+    shortLabel Spleen
     longLabel TAD boundaries in spleen (Schmitt et al. 2016)
     type bigBed 4
     bigDataUrl /gbdb/$D/bbi/tad/tadsSchmittSX.bb
@@ -276,8 +275,9 @@ spectrum on
 filter.contexts 4:37
 filterByRange.contexts on
 filterLimits.contexts 1:37
-filterLabel.contexts Minimum number of cell-type maps sharing the boundary (1-37)
-mouseOver <b>Boundary recurrent:</b> $contexts / 37 cell-type maps<br><b>Percentile:</b> $percentile
+filterLabel.contexts Number of cell-type maps sharing the boundary
+labelFields none
+mouseOver <b>Boundary recurrent:</b> $contexts / 37 cell-type maps<br><b>Stability percentile (0-1):</b> $percentile
 html tadsMcArthur
 
 include tads3dgb.ra

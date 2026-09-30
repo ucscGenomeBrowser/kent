@@ -27,7 +27,7 @@ html tadsEncode
     track tadsEncode_ENCSR097DFP
     parent tadsEncode on
     shortLabel Heart
-    longLabel ENCODE TADs in Heart (ENCSR097DFP)
+    longLabel ENCODE TADs in heart (ENCSR097DFP)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/heart.bb
     color 116,50,165
@@ -37,7 +37,7 @@ html tadsEncode
     track tadsEncode_ENCSR639NRL
     parent tadsEncode on
     shortLabel Left cerebral cortex
-    longLabel ENCODE TADs in Left cerebral cortex (ENCSR639NRL)
+    longLabel ENCODE TADs in left cerebral cortex (ENCSR639NRL)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/leftcerebralcortex.bb
     color 155,155,18
@@ -46,7 +46,7 @@ html tadsEncode
 
     track tadsEncode_ENCSR028GRK
     parent tadsEncode on
-    shortLabel Mouse embryonic stem
+    shortLabel Mouse ESC
     longLabel ENCODE TADs in Mouse embryonic stem cell (ENCSR028GRK)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/mouseembryonicstemcell.bb
@@ -57,7 +57,7 @@ html tadsEncode
     track tadsEncode_ENCSR820CZQ
     parent tadsEncode off
     shortLabel Adrenal gland
-    longLabel ENCODE TADs in Adrenal gland (ENCSR820CZQ)
+    longLabel ENCODE TADs in adrenal gland (ENCSR820CZQ)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/adrenalgland.bb
     color 90,179,68
@@ -87,7 +87,7 @@ html tadsEncode
     track tadsEncode_ENCSR136LVP
     parent tadsEncode off
     shortLabel Gastrocnemius
-    longLabel ENCODE TADs in Gastrocnemius (ENCSR136LVP)
+    longLabel ENCODE TADs in gastrocnemius (ENCSR136LVP)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/gastrocnemius.bb
     color 137,135,170
@@ -97,7 +97,7 @@ html tadsEncode
     track tadsEncode_ENCSR471ZWB
     parent tadsEncode off
     shortLabel Mature B cell
-    longLabel ENCODE TADs in Mature B cell (ENCSR471ZWB)
+    longLabel ENCODE TADs in mature B cell (ENCSR471ZWB)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/matureBcell.bb
     color 254,75,173
@@ -106,7 +106,7 @@ html tadsEncode
 
     track tadsEncode_ENCSR357JYI
     parent tadsEncode off
-    shortLabel Mouse trophoblast stem
+    shortLabel Mouse trophoblast SC
     longLabel ENCODE TADs in Mouse trophoblast stem cell (ENCSR357JYI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/mousetrophoblaststemcell.bb
@@ -127,7 +127,7 @@ html tadsEncode
     track tadsEncode_ENCSR516LTA
     parent tadsEncode off
     shortLabel Regulatory T cell
-    longLabel ENCODE TADs in Regulatory T cell (ENCSR516LTA)
+    longLabel ENCODE TADs in regulatory T cell (ENCSR516LTA)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/regulatoryTcell.bb
     color 254,75,173
@@ -166,7 +166,7 @@ html tadsEncode
 
     track tadsEncode_ENCSR799QDS
     parent tadsEncode off
-    shortLabel v-Abl transformed
+    shortLabel v-Abl pro-B cell
     longLabel ENCODE TADs in v-Abl transformed pro-B cells (ENCSR799QDS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm10/bbi/tad/tadsEncode/vAbltransformedproBcells.bb

@@ -7,13 +7,13 @@ that separates two adjacent topologically associating domains. These are
 </p>
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each boundary is a 40 kb bin; the bin width reflects the localization precision of the
-40 kb analysis, not a measured physical width. Subtracks are grouped by sample type
-(cell line vs. primary tissue) and organ system, and colored by organ system. Because the
-same boundary is reported independently per sample, turning on multiple subtracks lets you
-read boundary conservation directly: a boundary present in many samples is constitutive,
-while one present in few is cell-type specific. By default a representative subset of
-samples is shown.
+Each boundary is a bin of about 40 kb, the fixed segment size used in the Hi-C analysis. The
+bin width reflects the localization precision of the analysis, not a measured physical
+width. Subtracks are grouped by sample type (cell line vs. primary tissue) and organ system,
+and colored by organ system. Because the same boundary is reported independently per sample,
+turning on multiple subtracks shows boundary conservation directly: a boundary present in
+many samples is stable across cell types, while one present in few is cell-type specific. By
+default, 5 samples are shown: GM12878, H1, IMR90, dorsolateral prefrontal cortex, and liver.
 </p>
 <h2>Methods</h2>
 <p>
@@ -37,8 +37,12 @@ The underlying bigBed files can be downloaded from our
 
 <h2>References</h2>
 <p>
-Schmitt AD, Hu M, Jung I, Xu Z, Qiu Y, Tan CL, Li Y, Lin S, Lin Y, Barr CL, Ren B.
-A Compendium of Chromatin Contact Maps Reveals Spatially Active Regions in the Human
-Genome. <em>Cell Rep</em>. 2016;17(8):2042-2059.
-<a href="https://doi.org/10.1016/j.celrep.2016.10.061" target="_blank">doi:10.1016/j.celrep.2016.10.061</a>
+Schmitt AD, Hu M, Jung I, Xu Z, Qiu Y, Tan CL, Li Y, Lin S, Lin Y, Barr CL <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27851967" target="_blank">
+A Compendium of Chromatin Contact Maps Reveals Spatially Active Regions in the Human Genome</a>.
+<em>Cell Rep</em>. 2016 Nov 15;17(8):2042-2059.
+DOI: <a href="https://doi.org/10.1016/j.celrep.2016.10.061"
+target="_blank">10.1016/j.celrep.2016.10.061</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/27851967" target="_blank">27851967</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5478386/" target="_blank">PMC5478386</a>
 </p>
