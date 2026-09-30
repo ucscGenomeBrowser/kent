@@ -1679,7 +1679,7 @@ static void loadLinks(struct track *tg, int seqStart, int seqEnd,
 // load up the chain elements into linkedFeatures
 {
 int start, end, extra;
-char fullName[64];
+char fullName[HDB_MAX_TABLE_STRING];
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
 struct linkedFeatures *lf;
@@ -1713,7 +1713,7 @@ if (hash->size)
     safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
     if (!hTableExists(database, fullName))
 	{
-	strcpy(fullName, tg->table);
+	safecpy(fullName, sizeof fullName, tg->table);
 	isSplit = FALSE;
 	}
 

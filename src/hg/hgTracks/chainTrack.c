@@ -148,7 +148,7 @@ struct hash *hash;	/* Hash of chain ids. */
 double scale = ((double)(winEnd - winStart))/width;
 #endif /* OLD */
 
-char fullName[64];
+char fullName[HDB_MAX_TABLE_STRING];
 int start, end, extra;
 struct simpleFeature *lastSf = NULL;
 int maxOverLeft = 0, maxOverRight = 0;
@@ -226,13 +226,19 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 /* if some chains are actually loaded */
 if (hash->elCount) 
     {
-    boolean isSplit = TRUE;
-    /* Make up range query. */
-    safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
-    if (tg->isBigBed || !hTableExists(database, fullName))
+    boolean isSplit = FALSE;
+    /* Make up range query.  A bigChain's links come from its own file, so the split
+     * chrom_table name is only needed for native database tables. */
+    safecpy(fullName, sizeof fullName, tg->table);
+    if (!tg->isBigBed)
 	{
-	strcpy(fullName, tg->table);
-	isSplit = FALSE;
+	char splitName[HDB_MAX_TABLE_STRING];
+	safef(splitName, sizeof splitName, "%s_%s", chromName, tg->table);
+	if (hTableExists(database, splitName))
+	    {
+	    safecpy(fullName, sizeof fullName, splitName);
+	    isSplit = TRUE;
+	    }
 	}
 
     /* in dense mode we don't draw the lines
