@@ -336,6 +336,109 @@ download the 348 bigBeds in trackDb from
 lngbdb sgdpCopyNumber/*.bb
 
 ================================================================
+* sgdpCopyNumber facets (2026-09-21 Claude lrnassar)
+----------------------------------------------------------------
+Reorganized the 319 sgdpCopyNumber subtracks as a faceted composite, so the
+samples are picked from a searchable metadata table rather than from 319
+checkboxes.  No data files changed; the same bigBeds are pointed at by the same
+/gbdb paths.  refs #29344
+
+Sample attributes come from the SGDP sample tables published by the Reich lab.
+Fetch them into the track data directory:
+
+  ~/kent/src/hg/makeDb/scripts/sgdpCopyNumber/sgdpCopyNumberFetchMeta.sh
+
+  SGDP_metadata.279public.21signedLetter.44Fan.samples.txt   344 samples, keyed
+      on the sequencing library id (Illumina_ID), which is also the bigBed name
+  ena.ftp.pointers.txt                                       280 samples, adds
+      the BioSample accession, and covers one sample (S_Naxi-2) that is absent
+      from the file above
+
+Build the metadata table, the facet color map and the trackDb stanzas:
+
+  cd /hive/data/genomes/hs1/bed/sgdpCopyNumber
+  ~/kent/src/hg/makeDb/scripts/sgdpCopyNumber/sgdpCopyNumberBuild.py
+
+It reads the sample list from sgdpCopyNumberSamples.tsv, a frozen manifest of
+(library id, legacy subtrack name, bigDataUrl) checked in beside the script.  It
+deliberately does not read the trackDb .ra: at release the generated stanzas
+replace sgdpCopyNumber.trackDb.ra, and their names no longer carry the
+<region>_<population>_ prefix that the legacy fallback needs, so a script reading
+its own output would quietly drop those two fields.  It joins the manifest to the
+two files above on the library id and writes:
+
+  sgdpCopyNumber_metadata.tsv      319 rows, 11 columns
+  sgdpCopyNumber_colors.json       Okabe-Ito color per region, for the facet swatches
+  sgdpCopyNumber.alpha.trackDb.ra  copied by hand into trackDb/human/hs1 after review
+
+317 of the 319 rows join to the published sample tables.  The two that do not are
+LP6005442-DNA_A09, whose old name gave it Oceania / Australian, and
+LP6005619-DNA_D01, whose old name carried no region prefix at all, so it has
+neither.  Everything else on those two rows is blank.  The script prints both,
+with the region and population it recovered, so a new unmatched sample shows up
+in the build output rather than silently getting empty facets.
+
+Missing values follow the column's role.  A faceted column (Region, Country, Sex,
+DNA_source) uses the literal NA, which the faceted UI knows to leave out of the
+checkbox list; every other column is left genuinely empty, which keeps "NA" out
+of the table and stops the _BioSample link template pointing at an accession
+called NA.  _BioSample carries a leading underscore for the same reason the other
+non-facet columns do: 269 of its 319 values are unique, so it is a facet of no
+use, and the underscore keeps it a searchable column.  The JS strips leading
+underscores before matching subtrackUrls, so the trackDb line still reads
+BioSample=...
+
+Symlink the two generated files into /gbdb:
+
+  ln -s /hive/data/genomes/hs1/bed/sgdpCopyNumber/sgdpCopyNumber_metadata.tsv \
+        /gbdb/hs1/sgdpCopyNumber/
+  ln -s /hive/data/genomes/hs1/bed/sgdpCopyNumber/sgdpCopyNumber_colors.json \
+        /gbdb/hs1/sgdpCopyNumber/
+
+Subtracks were renamed from <region>_<population>_<library>_wssd to
+sgdpCopyNumber_<library>, which the faceted composite requires: a subtrack name
+has to be the parent name plus the primary key value.  The per-subtrack
+'visibility dense' lines were dropped, because a faceted composite honors a
+child's own display mode and pinning them to dense removes the per-item click
+that the exact copy number is read from.
+
+While the rewrite is in development the old and new versions are both in the
+tree, gated on the include line in t2t-supplied.trackDb.ra, so beta and the RR
+keep serving the current track:
+
+  include sgdpCopyNumber.trackDb.ra beta,public
+  include sgdpCopyNumber.alpha.trackDb.ra alpha
+
+Push order at release: sgdpCopyNumber_metadata.tsv and sgdpCopyNumber_colors.json
+are new files under /gbdb/hs1/sgdpCopyNumber and have to reach beta and the RR
+before the trackDb change does.  Without the metadata file the configuration page
+has nothing to build its table from, so the track would ship with an empty picker
+and no way to turn any sample on.
+
+When it is released, sgdpCopyNumber.trackDb.ra becomes the generated file and
+both release tags come off.  The sgdpCopyNumber_subset track, which is the
+first 29 samples in plate order and exists only because the full picker was
+unusable, is not in the alpha version.
+
+Description page rewritten at the same time.  The old one carried a 319 row
+table of the Eichler lab's internal /net/eichler filesystem paths, which the
+faceted table replaces, and it described the estimates as 500 bp windows without
+saying that the 500 bp is uniquely mappable sequence rather than genomic span.
+Measured on LP6005441-DNA_A01: 1,179,227 intervals, median span 1,692 bp, and a
+single 34.6 Mb interval over the Yq heterochromatin, so the clarification
+matters.  The 22 entry copy number color legend was checked against the data;
+field 9 (itemRgb) and field 4 (rounded copy number) agree with the legend, and
+field 4 is field 10 rounded for every row tested.
+
+Two things in the 2022 data that a rebuild would be needed to fix, noted here
+rather than changed.  The .as labels are swapped relative to what the fields
+hold: 'name' is described as "Individual name" but holds the rounded copy number,
+and 'ID' is described as "Copy Number" and holds the fractional value, so the
+click page reads "Item: 4" over "Copy Number 4.31".  And the fractional value is
+stored at full float precision (10.891912873996796), which is noise past two
+decimals.
+
+================================================================
 * encode (2022-04-26 markd)
 ----------------------------------------------------------------
 Michael Sauria

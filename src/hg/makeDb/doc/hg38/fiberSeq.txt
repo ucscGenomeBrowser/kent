@@ -6,7 +6,9 @@
 # Shane Neph then sent 41 per-sample CpG methylation hubs to include alongside it
 # (attachment cpg-hprc.txt on the "Fiber-seq in the genome browser" thread,
 # 2026-09-07).  The CpG sample list is the same 41 samples as the accessibility
-# compendium, so both became faceted composites under one container.
+# compendium, so both went under one container.  They started as two faceted
+# composites and were merged into one soon after; see the trackDb section below
+# for why.
 
 # The data lives on the UW Kopah S3 (Ceph) server under a per-sample hash
 # directory.  We mirror it rather than pointing bigDataUrl at UW, since that
@@ -304,16 +306,17 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #      hgTrackUi?db=hg38&g=fiberSeqCompendium_PM00004_peaks
 #    draws min/max boxes for all three with the right limit hints.
 #
-# 5. Facet columns: only "sampleClass" is faceted.  facetedComposite.js offers
-#    a facet value only when it occurs more than once (a checkbox matching a
-#    single row is just a slow search box), so:
-#      accession  41 distinct, all count 1, and excluded anyway as primaryKey
-#      _sample    41 distinct, all count 1 - can never be a facet
-#      _cellType  14 distinct but only 2 with count > 1 (Lymphoblastoid 27,
+# 5. Facet columns: only "Sample_class" is faceted.  Names below are the column
+#    headings as writeMetadata() emits them, not the dict keys used inside the
+#    script.  facetedComposite.js offers a facet value only when it occurs more
+#    than once (a checkbox matching a single row is just a slow search box), so:
+#      Accession  41 distinct, all count 1, and excluded anyway as primaryKey
+#      _Sample    41 distinct, all count 1 - can never be a facet
+#      _Cell_type 14 distinct but only 2 with count > 1 (Lymphoblastoid 27,
 #                 Embryonic stem cell 2), so as a facet it drew two checkboxes
 #                 and left 12 samples unreachable.  Underscored, so it is a
 #                 searchable and sortable column instead.
-#      sampleClass 3 values, HPRC (20), Common cell line (16) and Rare disease
+#      Sample_class 3 values, HPRC (20), Common cell line (16) and Rare disease
 #                 sample (5), all count > 1.  Read from the fifth column of
 #                 fiberSeqSamples.tsv, which carries the lab's own
 #                 classification.  It used to be derived from the free-text cell

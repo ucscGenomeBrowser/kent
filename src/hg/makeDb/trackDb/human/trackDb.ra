@@ -5649,7 +5649,7 @@ include phasedVars.ra
 # each assembly gets only the tracks that were actually built for it.  Alpha only
 # until the STRchive auto-push is installed, #38268 -- beta and public still get
 # the hg38-only human/hg38/strVar.ra.  Drop the "alpha" here to release it.
-include strVarNew.ra alpha
+include strVarNew.ra alpha,beta
 
 track dnaMethylation
 superTrack on

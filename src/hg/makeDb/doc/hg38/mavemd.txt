@@ -75,6 +75,20 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # longest contiguous run of the codon's bases (CodonMap.codonBlock), keeping the block off
 # the intron.
 #
+# WILD-TYPE RESIDUE CHECK. The cross-check below can only run where a variant has both a
+# genomic and a protein term, and 18 of the 40 protein accessions have no genomic-route
+# variants at all; they hold 97% of the projected items, so a shifted CDS in any of them
+# would move every item and still pass. So addProteinSequence() in mavemdLib.py translates
+# each transcript's CDS straight from hg38.2bit, and every projected codon is checked against
+# the reference residue its own HGVS term asserts. Per accession, above 25% mismatch the build
+# aborts (that is a moved transcript); individual mismatches are dropped rather than placed.
+#
+# 39 of 40 accessions match at 0.000%. NP_689629.2 (FKRP) has 99 mismatches out of 4,123, all
+# nonsense terms whose numbering is one codon downstream of their own reference residue
+# (offset -1 matches 99 of 99). Those 99 still reach the variant track through MaveDB's own
+# genomic mapping, which is independent of the protein numbering; the heatmap has no such
+# fallback, so it drops those cells.
+
 # CROSS-CHECK. 130,955 measurements carry both a genomic and a protein term, so the projection
 # is run on those too and must land on the genomic coordinate. 41 disagreed (0.0313%), all
 # nonsense terms (p.XxxNNNTer) where MaveDB's protein term names a codon one position off from
@@ -109,14 +123,16 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 #            and benign); the cell is marked '+', or '!' where the measurements disagree in
 #            direction. 1,865 cells disagree.
 #
-# One calibration colors a whole map, or its cells are not comparable to each other. 16 score
-# sets have no MaveDB primary and their rows fall to different calibrations, so the one that
-# classifies the most variants wins and every cell is recolored to it.
+# One calibration colors a whole map, or its cells are not comparable to each other. Of the
+# score sets with no usable MaveDB primary, 16 have rows that fall to more than one
+# calibration; for those the one that classifies the most variants wins and every cell is
+# recolored to it. (54 score sets reach the fallback in total: 21 with no primary at all and
+# 33 whose primary classifies nothing.)
 #
 # The renderer splits the score array with chopCommas (keeps a trailing empty field) but the
 # label array with chopByCharRespectDoubleQuotesKeepEmpty (drops one). If the last cell of the
 # last row is empty the counts disagree and the track aborts, so the converter puts a
-# placeholder label on that one cell. 40 score sets needed it. Same trap as popEVE.
+# placeholder label on that one cell. 43 score sets needed it. Same trap as popEVE.
 
 # ASSAY METADATA. The experiment record's controlled keywords carry the fields McEwen et al.
 # argue a clinician judges an assay by, so four of them ride on every item: Phenotypic Assay
@@ -141,7 +157,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # sets; the paper calls out MSH2, where LOWER scores mean normal activity. Nothing in the build
 # compares raw scores across score sets, and the colors come from the functional class and the
 # ACMG code rather than from the score, so this is a documentation problem only. It is called
-# out in a warn-note on mavemdVar.html.
+# out in the Description section of mavemdVar.html.
 
 # COLORS. Cells and items are colored by the ACMG evidence code on an 11-class red-to-blue
 # diverging ramp, red toward pathogenic and blue toward benign, darkening with strength. The
@@ -219,10 +235,13 @@ open('version.txt','w').write('MaveDB collection modified %s (MaveDB API %s)\n'%
 # the filter groups silently orphan every setting after the first one. hgTrackDb loads without
 # complaint and the filters just never appear in hgTrackUi. Check after a make with:
 #   hgsql hg38 -Ne "select settings from trackDb_$USER where tableName='mavemdVar'" \
-#     | tr '\\' '\n' | grep -c filterValues ClinVar terms
-# containing a comma are escaped by doubling it, which is what slNameListFromCommaEscaped wants.
+#     | tr '\\' '\n' | grep -c filterValues
+#
+# ClinVar terms containing a comma are escaped by doubling it, which is what
+# slNameListFromCommaEscaped wants.
 # No filterType is set on those fields on purpose: the list types run COMPARE_HASH_LIST_OR in
 # hgTracks/bigBedTrack.c, which splits the field VALUE on commas before looking it up, so a
 # ClinVar term with a comma could never match its own menu entry. The default whole-field
 # match is correct here and still multi-select.
-# relatedTracks.ra carries reciprocal links between mavedb and mavemd.
+# relatedTracks.ra carries reciprocal links between mavedb and mavemd, plus one-way links
+# from mavemd to clinvar and gnomadVariants.

@@ -45,6 +45,11 @@ NA = ('NA', '', '-', None)
 # genomic mapping, stop rather than publish coordinates we no longer trust.
 MAX_PROJECTION_MISMATCH = 0.005
 
+# Per-accession ceiling for the wild-type residue check. Individual variants that fail are
+# dropped rather than placed at a position the genome contradicts, so this threshold only
+# has to catch a transcript that has moved wholesale, which fails at close to 100%.
+MAX_RESIDUE_MISMATCH = 0.25
+
 
 def clean(value):
     """Normalise the CSV's several spellings of "no value" to an empty string."""
@@ -264,6 +269,8 @@ def main():
     parser.add_argument('downloadDir')
     parser.add_argument('outBed')
     parser.add_argument('--db', default='hg38')
+    parser.add_argument('--twoBit', default='/hive/data/genomes/hg38/hg38.2bit',
+                        help='genome sequence, for the wild-type residue check')
     parser.add_argument('--classPalette', default='purple',
                         choices=sorted(lib.CLASS_PALETTES),
                         help='palette for measurements with no ACMG code')
@@ -292,6 +299,7 @@ def main():
     if unresolvedProt:
         sys.stderr.write("  WARNING: no transcript for %s\n" % ', '.join(unresolvedProt))
     codonMaps, missingTx = lib.loadCodonMaps(args.db, sorted(set(protToTx.values())))
+    lib.addProteinSequence(args.db, codonMaps, args.twoBit, workDir)
     if missingTx:
         sys.stderr.write("  WARNING: no ncbiRefSeqCurated entry for %s\n" % ', '.join(missingTx))
     for acc, tx in sorted(protToTx.items()):
@@ -306,6 +314,9 @@ def main():
 
     stats = collections.Counter()
     filterValues = collections.defaultdict(set)
+    residueChecked = collections.Counter()
+    residueBad = collections.Counter()
+    residueExamples = []
     projectionChecked = 0
     projectionMismatch = 0
     mismatchExamples = []
@@ -338,6 +349,7 @@ def main():
                 # pins down nothing narrower.
                 projected = None
                 codonBases = None
+                residueMismatch = False
                 strand = '.'
                 if protMatch:
                     tx = protToTx.get(protMatch.group('acc'))
@@ -345,7 +357,29 @@ def main():
                     if codonMap:
                         codonBases = codonMap.codon(int(protMatch.group('pos')))
                         strand = codonMap.strand
-                        if codonBases:
+                        # Does the genome actually hold the residue the HGVS term asserts?
+                        # This covers every projected codon, unlike the comparison against
+                        # MaveDB's own genomic mapping, which can only see the accessions
+                        # that happen to have genomic-route variants too.
+                        pos1 = int(protMatch.group('pos'))
+                        wtOne = lib.THREE_TO_ONE.get(protMatch.group('wt'))
+                        if codonMap.protein and wtOne and pos1 <= len(codonMap.protein):
+                            acc = protMatch.group('acc')
+                            residueChecked[acc] += 1
+                            if codonMap.protein[pos1 - 1] != wtOne:
+                                # The codon we would place does not hold the residue the
+                                # term names, so the projection would put this variant at
+                                # the wrong position. Refuse to place it. In this build
+                                # every case is a nonsense term whose numbering is one
+                                # codon downstream of its own reference residue.
+                                residueBad[acc] += 1
+                                residueMismatch = True
+                                if len(residueExamples) < 10:
+                                    residueExamples.append(
+                                        '%s %s: term says %s, genome has %s'
+                                        % (urn, protein, wtOne,
+                                           codonMap.protein[pos1 - 1]))
+                        if codonBases and not residueMismatch:
                             start, end = codonMap.codonSpan(int(protMatch.group('pos')))
                             projected = (codonMap.chrom, start, end)
 
@@ -377,11 +411,19 @@ def main():
 
                 if place is None:
                     submittedProtein = clean(row.get('hgvs_pro'))
-                    if submittedProtein.startswith('p.[') or ';' in submittedProtein:
+                    submittedNt = clean(row.get('hgvs_nt'))
+                    # A haplotype can be stated on either axis. PTEN 00000054-a-1 states
+                    # 1,236 of them as nucleotides only, e.g. c.[1207G>T;1209C>T], with no
+                    # protein term at all; testing hgvs_pro alone files them under
+                    # "submitted term rejected" and understates the haplotype count.
+                    if (submittedProtein.startswith('p.[') or ';' in submittedProtein
+                            or submittedNt.startswith('c.[') or ';' in submittedNt):
                         # A haplotype is several substitutions measured as one unit, so it
                         # has no single position. The earlier MaveDB track excluded these
                         # for the same reason.
                         stats['skipHaplotype'] += 1
+                    elif residueMismatch:
+                        stats['skipResidueMismatch'] += 1
                     elif protein and not protMatch:
                         stats['skipProteinTermNotASubstitution'] += 1
                     elif genomic:
@@ -516,6 +558,27 @@ def main():
                     if value:
                         filterValues[field].add(value)
 
+    if residueChecked:
+        sys.stderr.write("Wild-type residue check, per protein accession:\n")
+        failed = []
+        for acc in sorted(residueChecked):
+            n, bad = residueChecked[acc], residueBad[acc]
+            rate = bad / n
+            flag = ('  <-- FAILS' if rate > MAX_RESIDUE_MISMATCH
+                    else ('  (dropped)' if bad else ''))
+            sys.stderr.write("    %-18s %6d checked, %5d mismatched (%.3f%%)%s\n"
+                             % (acc, n, bad, 100 * rate, flag))
+            if rate > MAX_RESIDUE_MISMATCH:
+                failed.append(acc)
+        for example in residueExamples:
+            sys.stderr.write("      %s\n" % example)
+        if failed:
+            sys.exit("ERROR: the reference residue in the genome disagrees with the HGVS "
+                     "term for more than %.0f%% of the projected codons in: %s. That is a "
+                     "moved transcript or assembly annotation, not stray upstream rows; "
+                     "do not publish these coordinates."
+                     % (100 * MAX_RESIDUE_MISMATCH, ', '.join(failed)))
+
     if projectionChecked:
         rate = projectionMismatch / projectionChecked
         sys.stderr.write("Codon projection cross-check: %d of %d disagreed with MaveDB's "
@@ -564,7 +627,10 @@ def main():
                 # still multi-select.
                 escaped = [v.replace(',', ',,') for v in values]
                 fh.write('filterValues.%s %s\n' % (field, ','.join(escaped)))
-                fh.write('filterLabel.%s %s\n\n' % (field, label))
+                # One newline, not two: a blank line ends a trackDb stanza, so a
+                # fragment with blank separators silently orphans every setting after
+                # the first when it is pasted in.
+                fh.write('filterLabel.%s %s\n' % (field, label))
         sys.stderr.write("Wrote trackDb filter fragment to %s\n" % args.raFragment)
 
 
