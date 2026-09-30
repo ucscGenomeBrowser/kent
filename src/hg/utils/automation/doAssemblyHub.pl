@@ -19,6 +19,7 @@ use lib "$Bin";
 use HgAutomate;
 use HgRemoteScript;
 use HgStepManager;
+use AsmHub qw(accessionFromPath);
 
 # Option variable names, both common and peculiar to this script:
 use vars @HgAutomate::commonOptionVars;
@@ -43,6 +44,7 @@ use vars qw/
 my $stepper = new HgStepManager(
     [ { name => 'download',   func => \&doDownload },
       { name => 'sequence',   func => \&doSequence },
+      { name => 'mashSketch',   func => \&doMashSketch },
       { name => 'assemblyGap',   func => \&doAssemblyGap },
       { name => 'chromAlias',   func => \&doChromAlias },
       { name => 'gatewayPage',   func => \&doGatewayPage },
@@ -146,6 +148,9 @@ Automates build of assembly hub.  Steps:
                 files from NCBI in:
                       $sourceDir/GC[AF]/123/456/789/asmId
     sequence: establish AGP and 2bit file from NCBI directory
+    mashSketch: mash sketch the unmasked 2bit sequence into buildDir/mashSketch/,
+                the permanent cache AssemblyDivergence.pm/mashDistance.pl use to
+                pick an alignment pipeline/preset for a pair of assemblies
     assemblyGap: create assembly and gap bigBed files and indexes
                  for assembly track names
     chromAlias:  construct asmId.chromAlias.txt for alias name recognition
@@ -998,6 +1003,45 @@ _EOF_
   );
   $bossScript->execute();
 } # doSequence
+
+#########################################################################
+# * step: mashSketch [workhorse]
+sub doMashSketch {
+  my $runDir = "$buildDir/mashSketch";
+  &HgAutomate::mustMkdir($runDir);
+
+  # AssemblyDivergence.pm/AsmHub.pm's mashSketchDir() expects the cache
+  # file named after the bare accession (e.g. GCA_939628115.1.msh), not
+  # the full asmId (e.g. GCA_939628115.1_Tfree1.0) -- accessionFromPath()
+  # only needs the accession prefix to match, so it works on the bare
+  # asmId string here the same way it works on a path's basename.
+  my $accession = &accessionFromPath($asmId);
+  if (! $accession) {
+    &HgAutomate::verbose(1,
+	"# mashSketch: '$asmId' is not a GCA/GCF accession, skipping\n");
+    return;
+  }
+
+  my $whatItDoes =
+"mash sketch the unmasked 2bit sequence for use by AssemblyDivergence.pm/
+mashDistance.pl (mash distance -> alignment pipeline/preset triage) so it
+never has to be built again for this assembly.";
+  my $bossScript = newBash HgRemoteScript("$runDir/doMashSketch.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId="$defaultName"
+export accession="$accession"
+
+if [ ../\$asmId.unmasked.2bit -nt \$accession.msh ]; then
+  twoBitToFa ../\$asmId.unmasked.2bit stdout \\
+    | mash sketch -k 21 -s 10000 -I \$accession -o \$accession - 2> /dev/null
+  touch -r ../\$asmId.unmasked.2bit \$accession.msh
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doMashSketch
 
 #########################################################################
 # * step: assemblyGap [workhorse]

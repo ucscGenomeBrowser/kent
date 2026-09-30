@@ -1021,6 +1021,13 @@ boolean trackHubBigNetEnabled()
 return cfgOptionBooleanDefault("bigNet", FALSE);
 }
 
+boolean hubHtmlSanitizeOn()
+/* Return TRUE if description HTML from hubs and custom tracks goes through htmlSanitize.
+ * Off unless hg.conf says hubHtmlSanitize=on. */
+{
+return cfgOptionBooleanDefault("hubHtmlSanitize", FALSE);
+}
+
 static void validateOneTrack( struct trackHub *hub, 
     struct trackHubGenome *genome, struct trackDb *tdb)
 /* Validate a track's trackDb entry. */
@@ -1369,8 +1376,13 @@ void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb)
 char *html = trackHubDescriptionText(trackDbFile, tdb);
 if (html == NULL)
     return;                     /* no page of its own, so leave any it inherited alone */
-tdb->html = htmlSanitize(html);
-freeMem(html);
+if (hubHtmlSanitizeOn())
+    {
+    tdb->html = htmlSanitize(html);
+    freeMem(html);
+    }
+else
+    tdb->html = html;
 }
 
 struct slName *trackHubDescriptionRemovals(char *trackDbFile, struct trackDb *tdb)
@@ -1379,6 +1391,11 @@ struct slName *trackHubDescriptionRemovals(char *trackDbFile, struct trackDb *td
 {
 char *html = trackHubDescriptionText(trackDbFile, tdb);
 struct slName *removed = NULL;
+if (!hubHtmlSanitizeOn())
+    {
+    freeMem(html);
+    return NULL;
+    }
 char *clean = htmlSanitizeReport(html, &removed);
 freeMem(html);
 freeMem(clean);
@@ -2164,7 +2181,7 @@ for(; tdb; tdb = tdbNext)
             {
             //if (checkCartVisibility(cart, tdb->parent))
                 {
-                tdb->parent->visibility = hTvFromString("tvShow");
+                tdb->parent->visibility = tvShow;
                 // a superTrack is not in the list we are walking, so it has no rank
                 // of its own.  Slot it just above the first child that brought it in.
                 outTrack(out, cart, tdb->parent, rank - 0.5);

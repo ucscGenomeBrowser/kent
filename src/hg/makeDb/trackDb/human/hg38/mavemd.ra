@@ -30,7 +30,7 @@ dataVersion /gbdb/$D/mavemd/version.txt
     maxWindowCoverage 200000
     searchIndex name,clinGenId,variantUrn
     skipEmptyFields on
-    urls publicationUrl="$$" scoreSet="https://mavedb.org/score-sets/$$" clinGenId="https://reg.clinicalgenome.org/allele/$$"
+    urls publicationUrl="$$" scoreSet="https://mavedb.org/score-sets/$$" clinGenId="https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=$$"
     mouseOver <b>${name}</b><br><b>Effect:</b> ${funcClass}<br><b>Assay score:</b> ${funcScore}<br><b>Dataset:</b> ${scoreSetTitle}<br><b>ACMG evidence:</b> ${acmgOutcome}
     filterValues.acmgOutcome BS3,BS3_moderate,BS3_moderate_plus,BS3_supporting,BS3_very_strong,PS3,PS3_moderate,PS3_moderate_plus,PS3_not_met,PS3_supporting,PS3_very_strong
     filterLabel.acmgOutcome ACMG functional evidence

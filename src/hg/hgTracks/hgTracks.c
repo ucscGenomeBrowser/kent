@@ -7705,11 +7705,15 @@ for (track = trackList; track != NULL; track = track->next)
 
         if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
             {
-            // QuickLifted tracks are exempt from hideTracks -- their visibility is
-            // carried over from the source assembly's cart (and may still be under the
-            // undecorated name until migrated below), so consult the cart, not the URL.
-            boolean isQuickLift = (trackDbSetting(track->tdb, "quickLiftUrl") != NULL);
-            boolean superFromCart = !hideTracks || isQuickLift;
+            // hideTracks means we just arrived from a quickLift.  The lift hub has already
+            // written the container the way it is on the source ("superTrack on show"), so
+            // the hub stanza decides, not the cart.  Drop any value an earlier lift left
+            // under the hub name, and leave the source's own undecorated value alone:  that
+            // one belongs to the source assembly, and it is gone anyway whenever the source
+            // container is back at its default.
+            if (hideTracks && (trackDbSetting(track->tdb, "quickLiftUrl") != NULL))
+                cartRemove(cart, track->tdb->parent->track);
+            boolean superFromCart = !hideTracks;
             // first deal with visibility of super track
             char *s = superFromCart ? cartOptionalString(cart, track->tdb->parent->track) : cgiOptionalString(track->tdb->parent->track);
             if (s)
@@ -7720,10 +7724,8 @@ for (track = trackList; track != NULL; track = track->next)
             else if (startsWith("hub_", track->tdb->parent->track))
                 {
                 s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
-                // the bare name is the native track's if the assembly has one by that name --
-                // except for a quickLifted track, whose bare name is always its own: it is
-                // meant to reuse the source assembly's name regardless of what else is native here
-                if (s != NULL && !isQuickLift && !hubTrackOwnsBareName(database, track->tdb->parent->track))
+                // the bare name is the native track's if the assembly has one by that name
+                if (s != NULL && !hubTrackOwnsBareName(database, track->tdb->parent->track))
                     s = NULL;
                 if (s)
                     {
@@ -12726,7 +12728,7 @@ tg->longLabel = labelAddNote(tg->longLabel,
 void labelTrackAsDensityWindowSize(struct track *tg)
 /* Add text to track long label to indicate density mode because window size exceeds some threshold */
 {
-tg->longLabel = labelAddNote(tg->longLabel, "density graph: too many items, zoom in");
+tg->longLabel = labelAddNote(tg->longLabel, "density graph: window too large, zoom in");
 }
 
 void labelTrackAsDensityTooManyItems(struct track *tg)

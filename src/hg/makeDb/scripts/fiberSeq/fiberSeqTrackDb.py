@@ -67,22 +67,25 @@ DIFF_LEVELS = [
 # Shown behind an info icon on the Sample class column heading.
 SAMPLE_CLASS_DESCRIPTION = (
     "HPRC = Lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
-    "Human Pangenome Reference Consortium")
+    "Human Pangenome Reference Consortium. Rare disease samples are cases "
+    "consented to broad genomic data sharing")
 
 # Sample class swatches, shown next to that facet's checkboxes.
 # Okabe-Ito colors for the swatches.
 SAMPLE_CLASS_COLORS = {
     "HPRC": "#0072B2",
-    "Common Cell Line": "#D55E00",
+    "Common cell line": "#D55E00",
+    "Rare disease sample": "#009E73",
 }
 
 
 def readSamples(path):
     """Read fiberSeqSamples.tsv into a list of dicts, in file order.
 
-    sampleClass comes from the lab's own sample sheet, not from the cell type:
-    five of the lymphoblastoid lines are common cell lines rather than HPRC
-    samples, so there is nothing in the cell type that tells the two apart."""
+    sampleClass comes from the lab's own sample sheet, not from the cell type.
+    The 27 lymphoblastoid lines split three ways, 20 HPRC and 5 rare disease
+    samples and 2 common cell lines, and nothing in the cell type tells them
+    apart.  Expect the rare disease group to grow; the lab is sending more."""
     samples = []
     with open(path) as f:
         for line in f:
@@ -111,17 +114,19 @@ def writeMetadata(path, samples):
     Accession is the primaryKey but sits last, since it is the least interesting
     thing about a sample.  Nothing requires the primaryKey to come first:
     facetedComposite.js only checks that the column exists, and every use of it
-    is by name.  It is still the default sort, because accession order keeps the
-    common cell lines together and then the HPRC samples together, which sample
-    name in alphabetical order would scatter.
+    is by name.  It is still the default sort, because accession order mostly
+    groups samples of a kind together, which sample name in alphabetical order
+    would scatter.  Only mostly: the accessions were assigned as the lab
+    produced the data, so the common cell lines fall in two runs either side of
+    the HPRC block.
 
-    Sample class is the one faceted column.  Its two values, HPRC and Common
-    Cell Line, each cover many samples, which is what a facet needs:
-    facetedComposite.js only offers a value that occurs more than once, since a
-    checkbox matching a single row is just a slow search box.  The other three
-    are underscored for that reason.  Sample and Accession are unique per row by
-    definition, and 12 of the 14 cell types are a single sample, so as a facet
-    cell type drew two checkboxes and left 12 samples unreachable.
+    Sample class is the one faceted column.  Its three values, HPRC, Common cell
+    line and Rare disease sample, each cover many samples, which is what a facet
+    needs: facetedComposite.js only offers a value that occurs more than once,
+    since a checkbox matching a single row is just a slow search box.  The other
+    three are underscored for that reason.  Sample and Accession are unique per
+    row by definition, and 12 of the 14 cell types are a single sample, so as a
+    facet cell type drew two checkboxes and left 12 samples unreachable.
 
     Names are underscore separated rather than camelCase: the header is rendered
     by toTitleStyle() in facetedComposite.js, which turns an underscore into a
@@ -173,7 +178,7 @@ def accOverlay(gbdb, samples):
         "maxHeightPixels 100:50:8",
         "visibility full",
         "priority 1",
-        "shortLabel Fiber-seq Acc",
+        "shortLabel Fiber-seq Accessible",
         "longLabel Fiber-seq percent-accessible chromatin in seven common cell lines",
     ])
     for acc, color in DEFAULT_OVERLAY:
@@ -293,7 +298,18 @@ def compendium(gbdb, dataUrlDir, samples):
             "scoreFilterLimits 0:1000",
             "mouseOver <b>%s FIRE peak</b><br>FIRE score: ${signalValue}"
             "<br>-log10 FDR: ${qValue}<br>Score: ${score}" % name,
-            "onlyVisibility dense",
+            # "visibility", not "onlyVisibility" as every other data type here
+            # uses, and the difference is not cosmetic.  onlyVisibility PINS a
+            # faceted child: tdbVisLimitedByAncestors() in hg/lib/hui.c
+            # overwrites the computed visibility with it, so a request for pack
+            # or full is discarded and the dropdown offers only hide and dense.
+            # That made the mouseOver above dead config, since no bigBed-like
+            # track draws per-item map boxes in dense.  A plain "visibility" is
+            # a default instead: peaks still come up dense, as the lab asked in
+            # July, but switching to pack or full now works and the mouseOver
+            # appears.  The signal types keep onlyVisibility, where pinning to
+            # full costs nothing - a bigWig draws the same at pack and full.
+            "visibility dense",
             pri(),
         ])
 
@@ -464,7 +480,7 @@ def main():
                 "# Do not edit by hand, edit the script and regenerate.\n\n")
         f.write(stanza(0, [
             "track fiberSeq",
-            "superTrack on show",
+            "superTrack on",
             "shortLabel Fiber-seq",
             "longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation",
             "group regulation",

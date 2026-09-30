@@ -13,7 +13,8 @@
 #
 #   ticket    the Redmine number, digits only
 #   release   the version the fix ships in, digits only, from the ticket's Target version.
-#             The table starts at v504.  A fix on master with no target version yet takes
+#             The table starts at v504, plus the v503
+#             tickets that were given a test afterwards.  A fix on master with no target version yet takes
 #             "-" until the ticket says.
 #   test      the file to open, as a path from kent/src, or "-" for a ticket that needs a
 #             test and does not have one.  A suite whose cases are make targets adds
@@ -67,15 +68,23 @@
 36292	504	-	-	page	-	the Keep-only-last-search checkbox on the BLAT form. The fix is in hg/hgBlat, hg/js, so what changed is what a page says or does
 36621	504	-	-	page	-	header dependencies written by the compiler; the test is that the tree builds. The fix is in the makefiles, so what changed is what a page says or does
 36940	504	-	rm36940.docent.yaml	page	-	the bigBedOnePath fallback removed, leaving one load path. The fix is in hg/hgTracks, hg/hgc, so what changed is what a page says or does
+37262	503	lib/tests/cgiDecodeTest.c	-	perf	sandbox-ab	malformed and cut-short %hh escapes decode to '?', and decoding never reads past the length it is given, the read-ahead that made it quadratic
 37263	504	lib/tests/pathSimplifyTest.c	-	library	unrecorded	dot-dot collapsing, checked against the right answer rather than against the old one
 37595	504	-	-	page	-	where the iframe sits on an item details page. The fix is in hg/hgc, so what changed is what a page says or does
+37617	505	hg/lib/tests/vcfInfoFilterTester.c	rm37617.docent.yaml	library	sandbox-ab	filter.*, filterText.* and filterValues.* on VCF INFO fields and vep sub-fields, and the warning for each filter the VCF header cannot support
+37617	505	lib/tests/htmlEncodeTest.c	rm37617.docent.yaml	library	sandbox-ab	the tag strippers return a terminated string for a label with no tags in it
+37618	505	hg/lib/tests/vcfInfoFilterTester.c	rm37618.docent.yaml	library	sandbox-ab	colorByInfo on an INFO field and on a vep sub-field, where the value declared first wins across a record's annotations
 37621	504	-	-	page	-	a quickLift bigWig block placed by the window, not the chain. The fix is in hg/hgTracks, so what changed is what a page says or does
 37929	504	-	-	page	-	the login page's wording and the social sign-in buttons. The fix is in hg/hgLogin, hg/lib, so what changed is what a page says or does
 37969	504	-	rm37969.docent.yaml	library	-	needs one: a quickLifted container must not hide the tracks inside it. BLOCKED: dumpTdbAndChildren is static in trackHub.c and its public caller needs a cart
 37984	504	lib/tests/hmacTest.c	-	library	sandbox-ab	the pending social identity is signed with hmacMd5, not a plain md5 of salt plus fields
 37996	504	-	rm37996.docent.yaml	page	-	the new BLAT results page and its banner. The fix is in hg/hgBlat, hg/js, so what changed is what a page says or does
 38086	504	-	rm38086.docent.yaml	invisible	-	needs one: a stale cart visibility variable must not hide a new BLAT result track. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: checkGroup is static in customFactory.c and the path needs a cart
+38107	503	lib/tests/pngWriteTest.c	-	perf	sandbox-ab	every row of a written PNG carries the UP filter, and the decoded pixels are exactly the ones drawn
+38120	503	lib/tests/udcDotsTest.c	rm38120.docent.yaml	library	sandbox-ab	. and .. in a remote URL resolve in the cache path the way the server resolves them, a path without them is unchanged, and climbing above the host aborts
+38125	503	lib/tests/pngWriteTest.c	-	library	unrecorded	a PNG written through zlib-ng decodes to exactly the pixels drawn
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
+38154	503	hg/lib/tests/pgSnpManyAllelesTester.c	rm38154.docent.yaml	library	sandbox-ab	per-allele counts from AN and AC on a record with 150 ALT alleles, more than the old fixed array of 80
 38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position. BLOCKED: needs a live cart, so hgcentral rows to read and write
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
@@ -88,10 +97,11 @@
 38208	504	-	-	page	-	an obsolete hg.conf flag and its code removed. The fix is in hg/hgTracks, so what changed is what a page says or does
 38223	504	-	rm38223.docent.yaml	page	-	a stray formMethod value in the form. The fix is in hg/hgLiftOver, so what changed is what a page says or does
 38225	504	hg/lib/tests/mallocTopPadTester.c	-	perf	sandbox-ab	the hg.conf step size reaches the C library: the heap grows in one 16 MB jump, not the default one
+38226	505	lib/tests/htmlEncodeTest.c	rm38226.docent.yaml	library	sandbox-ab	htmlEncode and attributeEncode return an empty string for NULL, which an item with no name hands them
 38233	504	-	-	perf	-	needs one: RefSeq status is asked once per track, not once per gene; the test has to count the queries. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: the change is in a static function in hgTracks/simpleTracks.c
 38236	504	-	rm38236.docent.yaml	library	-	needs one: a quickLift chain with no aligned block in the window must not crash. Brian's call 2026-09-20: docent covers it, and it has a script.  Left here so the reason stays recorded. BLOCKED for a unit test: the change is in hgTracks/bigWigTrack.c
 38248	504	hg/lib/tests/input/hgvs/validTerms.txt	rm38248.docent.yaml	library	assertion-only	a deprecated versioned NP_ accession still maps, through ncbiRefSeqLinkHistorical. The ticket's other half, taking the NEWEST deprecated transcript, is NOT pinned: with the order by removed and with a plain string sort, every term I could build gives identical coordinates, because the versions differ only in UTR ends
-38249	504	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	unrecorded	the target strand of a reverse complemented protein, found in the #38349 review
+38249	505	hg/lib/tests/quickLiftTester.c	rm38249.docent.yaml	library	sandbox-ab	the target strand of a reverse complemented protein (57f2a4a958e, found in the #38349 review, in v504), and a protein block shorter than a codon that made pslTransMap abort (896eb991fff, v505). Each fix backed out by hand on 2026-09-29 turns the test red
 38251	504	-	rm38251.docent.yaml	page	-	the narrow-screen menu icon covering the menu bar. The fix is in hg/htdocs/style, hg/js, so what changed is what a page says or does
 38253	504	-	rm38253.docent.yaml	perf	-	needs one: item coverage is built from feature runs, not one counter per base. Docent covers it as of 2026-09-20, refs #38252. BLOCKED for a unit test: countOverlaps is static in hgTracks/simpleTracks.c and takes a struct track
 38254	504	-	-	invisible	-	needs one: a composite subtrack's visibility has to settle before the parallel loaders start. Brian's call 2026-09-20 was that docent covers these, but THIS ONE HAS NO DOCENT SCRIPT, so nothing watches it; it needs one on #38252. BLOCKED for a unit test: the change is in hgTracks.c, the file that holds main
@@ -129,3 +139,9 @@
 38364	504	-	rm38364.docent.yaml	page	-	a density mode that keeps items clickable. The fix is in hg/hgTracks, so what changed is what a page says or does
 38372	504	-	-	page	-	changing genome on hgCustom re-submitting the form. The fix is in hg/hgCustom, so what changed is what a page says or does
 38384	504	-	-	page	-	a 400 fetching faceted composite metadata on a curated hub. The fix is in hg/hgTrackUi, so what changed is what a page says or does
+38387	505	-	-	page	-	three-letter assembly names (hs1, rn7, dm6) found by the search box in a release image. The fix is in src/product/installer/browserSetup.sh (ft_min_word_len=3), so only a released docker image or a fresh mirror can show it; hgwdev has always run 3. Seen 2026-09-29 on the docker QA instances: kent-tip (built after the fix) runs 3 and hubApi/findGenome?q=hs1 finds hs1; kent-beta (built 2026-09-21) runs 4 and does not
+38398	505	-	rm38398.docent.yaml	page	-	the Hub Upload file card keeping the genome and hub name a hub.txt names. The fix is in hg/js, so what changed is what a page says or does
+38414	505	hg/lib/tests/trackHubSkipHubNameTester.c	-	invisible	sandbox-ab	a hub_ name with no second underscore comes back whole, not as a pointer one past NULL
+38428	505	lib/tests/htmlSanitizeTest.c	rm38428.docent.yaml	library	sandbox-ab	simple svg drawings (svg, g and the shapes, with their size, position, fill and stroke) survive the sanitizer, and the non-drawing parts (defs, script, event attributes) do not. Backed out by hand on 2026-09-29: every svg case comes out empty. Behind the hubHtmlSanitize gate, off on every server on 2026-09-29
+38430	505	-	rm38430.docent.yaml	page	-	hgGateway passing a hub assembly's description page through the sanitizer like the other hub pages. The fix is in hg/hgGateway, so what changed is what a page says or does. Behind the hubHtmlSanitize gate, off on every server on 2026-09-29
+38442	505	hg/lib/tests/cartPcrVarTester.c	rm38442.docent.yaml	library	sandbox-ab	hgPcrResult_imgOrd, the PCR track's place after a drag, survives a cart load while a result that is not two trash files is still dropped

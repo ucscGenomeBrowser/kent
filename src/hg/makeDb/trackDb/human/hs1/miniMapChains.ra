@@ -1,0 +1,52 @@
+##############################################################################
+# hg38 - human (GRCh38/hg38)
+##############################################################################
+track chainNetMiniMap2Hg38
+compositeTrack on
+shortLabel miniMap2 Chain/Net
+longLabel minimap2 Chain and Lift Over Alignments
+subGroup1 view Views chain=Chain liftover=LiftOver
+dragAndDrop subTracks
+visibility hide
+group compGeno
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+otherDb hg38
+html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
+
+    track chainNetMiniMap2Hg38Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMiniMap2Hg38
+    spectrum on
+
+        track chainMiniMap2Hg38
+        parent chainNetMiniMap2Hg38Viewchain
+        subGroups view=chain
+        shortLabel hg38 mm2 Chain
+        longLabel human/GRCh38/hg38 minimap2 Chained Alignments
+        type bigChain hg38
+        bigDataUrl /gbdb/hs1/chainNet/hs1.chainMiniMap2Hg38.bb
+        linkDataUrl /gbdb/hs1/chainNet/hs1.chainMiniMap2Hg38Link.bb
+        priority 1
+
+    track chainNetMiniMap2Hg38ViewLiftOver
+    shortLabel Lift Over
+    view liftover
+    visibility hide
+    parent chainNetMiniMap2Hg38
+    spectrum on
+
+        track chainLiftOverMiniMap2Hg38
+        parent chainNetMiniMap2Hg38ViewLiftOver
+        subGroups view=liftover
+        shortLabel hg38 mm2 loChain
+        longLabel human (GRCh38/hg38) minimap2 Lift Over Chained Alignments
+        type bigChain hg38
+        bigDataUrl /gbdb/hs1/chainNet/hs1.chainLiftOverMiniMap2Hg38.bb
+        linkDataUrl /gbdb/hs1/chainNet/hs1.chainLiftOverMiniMap2Hg38Link.bb
+        priority 2

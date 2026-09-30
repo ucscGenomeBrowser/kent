@@ -4,7 +4,7 @@
 # Do not edit by hand, edit the script and regenerate.
 
 track fiberSeq
-superTrack on show
+superTrack on
 shortLabel Fiber-seq
 longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation
 group regulation
@@ -24,7 +24,7 @@ priority 2.5
     maxHeightPixels 100:50:8
     visibility full
     priority 1
-    shortLabel Fiber-seq Acc
+    shortLabel Fiber-seq Accessible
     longLabel Fiber-seq percent-accessible chromatin in seven common cell lines
 
         track fiberSeqAcc_PM00001
@@ -129,7 +129,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>GM12878 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 2
 
         track fiberSeqCompendium_PM00001_hap
@@ -294,7 +294,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG002 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 12
 
         track fiberSeqCompendium_PM00002_hap
@@ -459,7 +459,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>K562 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 22
 
         track fiberSeqCompendium_PM00004_hap
@@ -624,7 +624,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HepG2 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 32
 
         track fiberSeqCompendium_PM00005_hap
@@ -789,7 +789,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>Panc1 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 42
 
         track fiberSeqCompendium_PM00006_hap
@@ -954,7 +954,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>THP-1 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 52
 
         track fiberSeqCompendium_PM00007_hap
@@ -1119,7 +1119,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>Hap1 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 62
 
         track fiberSeqCompendium_PM00008_hap
@@ -1284,7 +1284,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>Jurkat FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 72
 
         track fiberSeqCompendium_PM00009_hap
@@ -1449,7 +1449,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>H1 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 82
 
         track fiberSeqCompendium_PM00010_hap
@@ -1614,7 +1614,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>H9 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 92
 
         track fiberSeqCompendium_PM00011_hap
@@ -1779,7 +1779,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>Hek293T FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 102
 
         track fiberSeqCompendium_PM00012_hap
@@ -1944,7 +1944,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG01123 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 112
 
         track fiberSeqCompendium_PS00971_hap
@@ -2109,7 +2109,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG01258 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 122
 
         track fiberSeqCompendium_PS00972_hap
@@ -2274,7 +2274,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG01358 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 132
 
         track fiberSeqCompendium_PS00973_hap
@@ -2439,7 +2439,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG01361 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 142
 
         track fiberSeqCompendium_PS00974_hap
@@ -2604,7 +2604,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG01891 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 152
 
         track fiberSeqCompendium_PS00975_hap
@@ -2769,7 +2769,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02071 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 162
 
         track fiberSeqCompendium_PS00976_hap
@@ -2934,7 +2934,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02074 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 172
 
         track fiberSeqCompendium_PS00977_hap
@@ -3099,7 +3099,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02132 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 182
 
         track fiberSeqCompendium_PS00978_hap
@@ -3264,7 +3264,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02135 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 192
 
         track fiberSeqCompendium_PS00979_hap
@@ -3429,7 +3429,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02257 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 202
 
         track fiberSeqCompendium_PS00980_hap
@@ -3594,7 +3594,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02486 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 212
 
         track fiberSeqCompendium_PS00981_hap
@@ -3759,7 +3759,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02559 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 222
 
         track fiberSeqCompendium_PS00982_hap
@@ -3924,7 +3924,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02572 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 232
 
         track fiberSeqCompendium_PS00983_hap
@@ -4089,7 +4089,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02717 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 242
 
         track fiberSeqCompendium_PS00984_hap
@@ -4254,7 +4254,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG02886 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 252
 
         track fiberSeqCompendium_PS00985_hap
@@ -4419,7 +4419,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG03516 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 262
 
         track fiberSeqCompendium_PS00986_hap
@@ -4584,7 +4584,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG03804 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 272
 
         track fiberSeqCompendium_PS00987_hap
@@ -4749,7 +4749,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG03942 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 282
 
         track fiberSeqCompendium_PS00988_hap
@@ -4914,7 +4914,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG04160 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 292
 
         track fiberSeqCompendium_PS00989_hap
@@ -5079,7 +5079,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HG04187 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 302
 
         track fiberSeqCompendium_PS00990_hap
@@ -5244,7 +5244,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>A549 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 312
 
         track fiberSeqCompendium_PS01302_hap
@@ -5409,7 +5409,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>MCF-7 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 322
 
         track fiberSeqCompendium_PS01305_hap
@@ -5574,7 +5574,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>HCT116 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 332
 
         track fiberSeqCompendium_PS01314_hap
@@ -5739,7 +5739,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>Caco-2 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 342
 
         track fiberSeqCompendium_PS01319_hap
@@ -5904,7 +5904,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>WTC-11 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 352
 
         track fiberSeqCompendium_PS01388_hap
@@ -6069,7 +6069,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>GM28572 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 362
 
         track fiberSeqCompendium_PS01517_hap
@@ -6234,7 +6234,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>GM28570 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 372
 
         track fiberSeqCompendium_PS01518_hap
@@ -6399,7 +6399,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>GM25456 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 382
 
         track fiberSeqCompendium_PS01519_hap
@@ -6564,7 +6564,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>GM25455 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 392
 
         track fiberSeqCompendium_PS01520_hap
@@ -6729,7 +6729,7 @@ priority 2.5
         scoreFilter 0
         scoreFilterLimits 0:1000
         mouseOver <b>GM27730 FIRE peak</b><br>FIRE score: ${signalValue}<br>-log10 FDR: ${qValue}<br>Score: ${score}
-        onlyVisibility dense
+        visibility dense
         priority 402
 
         track fiberSeqCompendium_PS01524_hap

@@ -89,7 +89,7 @@ hideEmptySubtracksLabel *
 hideEmptySubtracksMultiBedUrl *
 hideEmptySubtracksSourcesUrl *
 color *
-colorByInfo* vcf vcfTabix vcfPhasedTrio
+colorByInfo* vcf vcfTabix
 colorByStrand bigBed bed genePred bigGenePred
 colorChromDefault psl bigPsl
 colorSettingsUrl *

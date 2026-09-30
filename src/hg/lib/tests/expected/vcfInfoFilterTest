@@ -1,0 +1,117 @@
+5 records in input/vcfInfoFilter/test.vcf
+
+FILTERS
+no filter settings
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filter.AF 0.01 (a minimum; a missing AF fails)
+    1 filter
+    pass: rs1 rs3
+filter.AF 0:0.3 (a range)
+    1 filter
+    pass: rs2 rs3
+filter.AC 5 (an Integer field)
+    1 filter
+    pass: rs1
+filter.AF 0.01 with the cart minimum at 0.3
+    1 filter
+    pass: rs1
+filterText.GENE BRCA* (wildcard)
+    1 filter
+    pass: rs1 rs3
+filterText.GENE ^TP (regular expression)
+    1 filter
+    pass: rs2
+filterValues.GENE with TP53 chosen in the cart
+    1 filter
+    pass: rs2
+filterValues.vep.Consequence, missense_variant chosen
+    1 filter
+    pass: rs1
+filterValues.vep.Consequence, intron_variant chosen (a second annotation, and one term of an &-joined pair)
+    1 filter
+    pass: rs1 rs3
+filterValues.vep.Consequence, two values chosen
+    1 filter
+    pass: rs2 rs4
+two filters together: filter.AF 0.01 and filterText.GENE BRCA*
+    2 filters
+    pass: rs1 rs3
+
+FILTERS THE VCF CANNOT SUPPORT
+filter.NOPE 1 (not in the header)
+    warning: track vcfTest: can't filter on INFO field NOPE: it is not in the VCF header
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filter.GENE 1 (a number filter on a String field)
+    warning: track vcfTest: can't filter on INFO field GENE: a numeric filter needs an Integer or Float field
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filterText.AF 0.5 (a text filter on a Float field)
+    warning: track vcfTest: can't filter on INFO field AF: a text or value filter needs a String field
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filterText.PAIR a (a Number=2 field)
+    warning: track vcfTest: can't filter on INFO field PAIR: only Number=1 fields can be filtered
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filterValues.vep.Nope (not in the Format clause)
+    warning: track vcfTest: filterValues.vep.Nope: sub-field 'Nope' not found in vep INFO Format clause
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filterValues.AF.x (a sub-field of a Float field)
+    warning: track vcfTest: can't filter on AF.x: AF is not a String INFO field in the VCF header
+    0 filters
+    pass: rs1 rs2 rs3 rs4 rs5
+filter.NOPE 1 beside filter.AF 0.01
+    warning: track vcfTest: can't filter on INFO field NOPE: it is not in the VCF header
+    1 filter
+    pass: rs1 rs3
+
+SUB-FIELD INDEX
+    vep Allele      0
+    vep Consequence 1
+    vep SYMBOL      2
+    vep Nope        -1
+    vep empty name  -1
+    GENE (no Format clause) -1
+    no INFO def     -1
+
+COLORS
+colorByInfo CLASS, a hex code and a color name
+    rs1 255,0,0
+    rs2 0,128,0
+    rs3 default
+    rs4 default
+    rs5 default
+colorByInfo vep.Consequence, stop_gained declared before synonymous_variant
+    rs1 230,159,0
+    rs2 0,158,115
+    rs3 213,94,0
+    rs4 213,94,0
+    rs5 default
+colorByInfo vep.Consequence, synonymous_variant declared first
+    rs1 default
+    rs2 0,158,115
+    rs3 default
+    rs4 0,158,115
+    rs5 default
+an entry that is not a color is skipped, the rest still apply
+    rs1 default
+    rs2 0,0,255
+    rs3 default
+    rs4 default
+    rs5 default
+no colorByInfo setting
+    no color map
+colorByInfo with no colorByInfo.<FIELD> map
+    no color map
+colorByInfo AF (a Float field)
+    warning: track vcfTest: can't color by AF: it is not a String INFO field in the VCF header
+    no color map
+colorByInfo NOPE (not in the header)
+    warning: track vcfTest: can't color by NOPE: it is not a String INFO field in the VCF header
+    no color map
+colorByInfo vep.Nope (not in the Format clause)
+    warning: track vcfTest: colorByInfo vep.Nope: sub-field 'Nope' not in vep INFO Format clause
+    no color map

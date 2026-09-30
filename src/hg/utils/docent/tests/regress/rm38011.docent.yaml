@@ -1,0 +1,68 @@
+# #38011 -- hgLogin pages should show the values a request hands them as plain text.
+#
+# Fixed in 1a7b4e1d39c and 67f89eb6f4f, both in origin/v503_branch and neither in
+# origin/v502_branch.
+#
+# Each step opens a login page with a test value in its fields, then checks that the value
+# is shown as text: `noHas:` checks that no element with the test id appeared, and `value:`
+# checks that the field holds the whole value. The `value:` check also fails on a page
+# that was not drawn at all, so `noHas:` cannot pass on an empty page.
+#
+# The returnto steps check that a returnto which is not a plain URL is refused with
+# "Invalid returnto URL", and that an ordinary one, query string and all, still reaches the
+# Cancel link unchanged. The second check keeps a fix that refused every returnto from
+# passing.
+proof:
+  - "assertion-only 2026-09-26 -- written from 1a7b4e1d39c and 67f89eb6f4f, after the fix shipped in v503"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304); run one page at a time there, every page step fails for its own reason and the ordinary-returnto control passes on both; passes on genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # The login page: the user name field.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&hgLogin_userName=%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38011"
+      value: {sel: 'input[name="hgLogin_userName"]', is: '"><b id=docentxss38011>x</b>'}
+
+  # The account-help page: the user name and the email fields.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayAccHelpPage=1&hgLogin_userName=%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E&hgLogin_email=%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38011"
+      value:
+        - {sel: 'input[name="hgLogin_userName"]', is: '"><b id=docentxss38011>x</b>'}
+        - {sel: 'input[name="hgLogin_email"]', is: '"><b id=docentxss38011>x</b>'}
+
+  # The sign-up page.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.signupPage=1&hgLogin_userName=%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E&hgLogin_email=%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38011"
+      value:
+        - {sel: 'input[name="hgLogin_userName"]', is: '"><b id=docentxss38011>x</b>'}
+        - {sel: 'input[name="hgLogin_email"]', is: '"><b id=docentxss38011>x</b>'}
+
+  # The "mail sent" page shows the address in body text.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1&hgLogin_sendMailTo=%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38011"
+      text: 'for "><b id=docentxss38011>x</b> have been sent'
+
+  # A returnto that is not a plain URL is refused.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayAccHelpPage=1&returnto=https%3A%2F%2Fgenome-test.gi.ucsc.edu%2Fcgi-bin%2FhgSession%3Fx%22%3E%3Cb%20id%3Ddocentxss38011%3Ex%3C%2Fb%3E"
+  - expect:
+      noHas: "#docentxss38011"
+      text: "Invalid returnto URL"
+
+  # So is one with a scheme other than http(s).
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayAccHelpPage=1&returnto=javascript%3Aalert(38011)"
+  - expect:
+      noHas: 'a[href^="javascript:alert"]'
+      text: "Invalid returnto URL"
+
+  # An ordinary returnto still works, query string and all.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayAccHelpPage=1&returnto=https%3A%2F%2Fgenome-test.gi.ucsc.edu%2Fcgi-bin%2FhgSession%3Fx%3D1%26y%3D2"
+  - expect:
+      has: 'a[href="https://genome-test.gi.ucsc.edu/cgi-bin/hgSession?x=1&y=2"]'
+      noText: "Invalid returnto URL"

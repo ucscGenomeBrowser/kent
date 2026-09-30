@@ -46,14 +46,16 @@ def assayLine(meta):
     Method and model system come first because they are short and always present; the score
     set title can be long and is the part that gets truncated.
 
-    The separator is a plain hyphen, not a middot: the legend is drawn as raster text by
-    hgTracks, so an HTML entity from bedField() would appear literally as "&#183;".
+    The whole line is flattened to ASCII, separator included: the legend is drawn as raster
+    text by hgTracks, so anything bedField() turns into an HTML entity appears literally on
+    the image. MaveDB titles carry en dashes ("BRCA2 exons 15-26", "CARD11 exons 3-5"), so
+    the dash in the title matters as much as the one between the fields.
     """
     method = meta.get('assayMethod') or ''
     model = meta.get('assayModel') or ''
     title = meta.get('title') or ''
     head = '%s in %s' % (method, model) if method and model else (method or model)
-    return ' - '.join(p for p in (head, title) if p)
+    return lib.asciiText(' - '.join(p for p in (head, title) if p))
 
 
 def severityRank(cell):
@@ -103,6 +105,10 @@ def main():
     parser.add_argument('downloadDir')
     parser.add_argument('outBed')
     parser.add_argument('--db', default='hg38')
+    parser.add_argument('--twoBit', default='/hive/data/genomes/hg38/hg38.2bit',
+                        help='genome sequence, for the wild-type residue check')
+    parser.add_argument('--workDir', default='.',
+                        help='scratch directory for the sequence fetch')
     parser.add_argument('--classPalette', default='purple',
                         choices=sorted(lib.CLASS_PALETTES),
                         help='palette for measurements with no ACMG code')
@@ -121,6 +127,7 @@ def main():
                     protAccs.add(match.group('acc'))
     protToTx, unresolved = lib.loadProteinToTranscript(args.db, sorted(protAccs))
     codonMaps, missing = lib.loadCodonMaps(args.db, sorted(set(protToTx.values())))
+    lib.addProteinSequence(args.db, codonMaps, args.twoBit, args.workDir)
     if unresolved:
         sys.stderr.write("  WARNING: no transcript for %s\n" % ', '.join(unresolved))
     if missing:
@@ -166,6 +173,15 @@ def main():
                     stats['skipOtherTranscript'] += 1
                     continue
                 protPos = int(match.group('pos'))
+                # The column is placed from the protein term, so a term whose numbering
+                # disagrees with the genome would put the cell one codon off. The variant
+                # track can fall back on MaveDB's genomic mapping for these; a map has no
+                # such fallback, so the cell is dropped instead of drawn in the wrong place.
+                wtOne = lib.THREE_TO_ONE.get(match.group('wt'))
+                if (codonMap.protein and wtOne and protPos <= len(codonMap.protein)
+                        and codonMap.protein[protPos - 1] != wtOne):
+                    stats['skipResidueMismatch'] += 1
+                    continue
                 block = codonMap.codonBlock(protPos)
                 if block is None:
                     stats['skipPositionPastCds'] += 1

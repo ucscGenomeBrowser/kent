@@ -1,0 +1,38 @@
+# #38039 -- a multiple alignment with too many species crashed its configuration page.
+# Michael Hiller reported it with a bigMaf of 700+ genomes. hgTrackUi built the Codon
+# Translation dropdown in a fixed nodeNames[512] array on the stack, so the 512th species
+# wrote past its end. Three more fixed arrays on the same path dropped data without
+# crashing: speciesOrder was cut into species[2000], so the species table lost everything
+# past the 2000th. Fixed by 38bab7f62d2 (Mark Diekhans), which sizes all of them from
+# the list. That commit is in v503_branch and not in v502_branch.
+#
+# The fixture is ~braney/docentFixtures/rm38039: a bigMaf track whose speciesOrder names
+# 2500 species, s0001 to s2500, with a frames file, since the dropdown is only drawn for a
+# track that has one. 2500 trips both bugs. The page never reads the alignments, so the
+# bigMaf holds a single block, and the track is hidden so hgTracks never draws it.
+#
+# The checks, on the configuration page:
+#   * the page is the track's own configuration page and reached the Codon Translation
+#     line. This passes on the broken build too, since the crash comes just after it, and
+#     is here so the two checks below cannot pass on some other page
+#   * the dropdown holds the LAST species, s2500. On v502 the page ends at "Default
+#     species to establish reading frame: " and there is no dropdown at all
+#   * the species table has a checkbox for s2500. On v502 the table stops at s2000
+# Each names s2500, not just any species, because a page cut short at 2000 still lists
+# the first 2000 and would pass a check on s0001.
+proof:
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): nothing matches the s2500 option or the s2500 checkbox; the v502 page ends right after \"Default species to establish reading frame: \" and its species table stops at s2000. Passes on genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38039/hub.txt", position: "chr1:1000000-1000100"}
+  - click: 'a[href*="hgTrackUi"][href*="rm38039Maf"]'
+  - expect:
+      url: "hgTrackUi"
+      text: ["rm38039 bigMaf with 2500 species", "Codon Translation", "Default species to establish reading frame"]
+      has:
+        - 'select[name="speciesCodonDefault"] option[value="s2500"]'
+        - 'input[type="checkbox"][name$="rm38039Maf.s2500"]'

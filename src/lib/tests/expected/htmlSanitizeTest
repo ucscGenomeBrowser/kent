@@ -53,9 +53,9 @@ out: <div><b>bold<p>para</p></b></div>
 in : <div style="color:red"/>the rest of the page is not inside that div
 out: <div style="color:red;">the rest of the page is not inside that div</div>
 
-in : <svg><svg><svg><svg>text
+in : <object><object><object><object>text
 out: text
-     (removed the svg element and everything inside it)
+     (removed the object element and everything inside it)
 
 in : <a href=https://example.com/x\">link text</a> and more text
 out: <a href="https://example.com/x\&quot;">link text</a> and more text
@@ -74,7 +74,7 @@ in : <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 out: <table border="1"><tr><td colspan="2" bgcolor="#eee">cell</td></tr></table>
 
 in : <p style="list-style:u&#114l(http://example.com/x.png);color:re&#100">a</p>
-out: <p style="color:re&#100;">a</p>
+out: <p style="color:re&#100;;">a</p>
      (removed the value of the style property list-style)
 
 in : <p style="font-family:'AT&T Sans'">a</p>
@@ -93,4 +93,54 @@ out: <div>a &lt; b&lt;/ <b>bold</b></div>
 
 in : <h2 id="descPage-methods">M</h2><a href="#descPage-methods">jump</a>
 out: <h2 id="descPage-methods">M</h2><a href="#descPage-methods">jump</a>
+
+in : <td><svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 2 2" width="2em"><g>
+<circle cx="1" cy="1" r="1" style="fill: rgb(209,213,23)" /></g></svg></td>
+out: <td><svg viewbox="0 0 2 2" width="2em"><g>
+<circle cx="1" cy="1" r="1" style="fill:rgb(209,213,23);"></circle></g></svg></td>
+
+in : <svg><path d="M0 0L1 1"/><rect x="1" y="1" width="2" height="2"/><circle r="1"></circle></svg>
+out: <svg><path d="M0 0L1 1"></path><rect x="1" y="1" width="2" height="2"></rect><circle r="1"></circle></svg>
+
+in : <svg onload="alert(1)"><script>alert(1)</script><a href="javascript:alert(1)"><rect width="10" height="10"/></a><use href="#x"/><animate attributeName="href" to="javascript:alert(1)"/><image href="https://example.com/x.png"/><foreignObject><p>text</p></foreignObject></svg>
+out: <svg><a><rect width="10" height="10"></rect></a><p>text</p></svg>
+     (removed the attribute onload)
+     (removed the script element and everything inside it)
+     (removed a link that used the javascript: scheme)
+
+in : <svg><circle r="1" fill="url(https://example.com/x.svg#p)"/><rect stroke="u&#114;l(https://example.com/y)" fill="#c00"/></svg>
+out: <svg><circle r="1"></circle><rect fill="#c00"></rect></svg>
+     (removed the value of the svg attribute fill)
+     (removed the value of the svg attribute stroke)
+
+in : <svg><defs><clipPath id="c"><path d="M0 0L9 9"/></clipPath></defs><rect width="9" height="9"/></svg>
+out: <svg><rect width="9" height="9"></rect></svg>
+     (removed the defs element and everything inside it)
+
+in : <circle r="5"/>text after
+out: text after
+
+in : <table class="stdTbl wide"><tr><td class="copyLinkSpanX">cell</td></tr></table>
+out: <table class="stdTbl"><tr><td>cell</td></tr></table>
+
+in : <span id='urlText0'><em>https://http_host/h/GCA_1</em></span><span class='copyLinkSpan' data-target='urlText0'></span>
+out: <span id="descPage-urlText0"><em>https://http_host/h/GCA_1</em></span><span class="copyLinkSpan" data-target="descPage-urlText0"></span>
+
+in : <p style='font-family:"Verdana",sans-serif;color:black'>a</p>
+out: <p style="font-family:&quot;Verdana&quot;,sans-serif;color:black;">a</p>
+
+in : <p style="list-style:u&#114;l(http://example.com/x); color:green">a</p>
+out: <p style="color:green;">a</p>
+     (removed the value of the style property list-style)
+
+in : <p style="color:re&#100;;text-align:center">a</p>
+out: <p style="color:re&#100;;text-align:center;">a</p>
+
+in : <p style="list-style:url&lpar;//example.com/x.png);color:red">a</p>
+out: <p style="color:red;">a</p>
+     (removed the value of the style property list-style)
+
+in : <p style="color:red&foo;position:fixed">a</p>
+out: <p>a</p>
+     (removed the value of the style property color)
 

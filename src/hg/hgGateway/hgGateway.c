@@ -27,6 +27,7 @@
 #include "regexHelper.h"
 #include "suggest.h"
 #include "trackHub.h"
+#include "htmlSanitize.h"
 #include "web.h"
 #include "botDelay.h"
 #include "genark.h"
@@ -54,6 +55,13 @@ if (errCatchStart(errCatch))
     char *htmlPath = hHtmlPath(db);
     if (isNotEmpty(htmlPath))
         descText = udcFileReadAll(htmlPath, NULL, 0, NULL);
+    /* A hub's page gets the same treatment here as everywhere else we show one. */
+    if (descText != NULL && trackHubDatabase(db) && hubHtmlSanitizeOn())
+        {
+        char *clean = htmlSanitize(descText);
+        freeMem(descText);
+        descText = clean;
+        }
     }
 errCatchEnd(errCatch);
 // Just ignore errors for now.

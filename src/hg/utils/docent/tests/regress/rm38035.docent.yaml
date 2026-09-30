@@ -1,0 +1,61 @@
+# #38035 -- hiding a track left it listed in the Visible Tracks group until a refresh.
+# Bob found it (#37982) with three gestures: the track's visibility dropdown set to hide,
+# right-click > Hide, and right-click > Hide all other tracks. The dropdown changed at once
+# but the entry stayed in the Visible Tracks list; a refresh took it away.
+#
+# e5cddda75c0 is the fix (hg/js/hgTracks.js): a new removeTrackFromVisibleGroup(), called
+# from the dropdown's change handler and from both right-click paths. It is in
+# origin/v503_branch and not in origin/v502_branch. A baseline build needs the JS.
+#
+# All three gestures act IN PLACE, so none of them can be reached with `track:`, which
+# asks for a mode in a URL and draws a new page. setVis: fires the dropdown's own change
+# event and rightClick: opens the menu, and neither navigates.
+#
+# Checks, and what each one catches:
+#   * before each gesture, the track has an entry in the Visible Tracks group. Without this
+#     the noHas checks after it would pass on a page that never listed the track.
+#   * after each gesture, the entry is gone from the Visible Tracks group, with no reload in
+#     between. This is exactly the leftover the ticket describes.
+#   * after the dropdown, the track's image row is gone as well, so the hide itself worked.
+#
+# The tracks are three native hg38 tracks that draw in this window. The Visible Tracks
+# entries carry data-track=<track>, the attribute the fix looks up.
+proof:
+  - "assertion-only 2026-09-26 -- written from e5cddda75c0, after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304) at each of the three gestures, run one at a time: the hidden track keeps its Visible Tracks entry after the dropdown, after right-click Hide, and after Hide all other tracks; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - track: {knownGene: pack, mane: pack, gc5BaseBw: dense, rmsk: dense}
+  - expect:
+      rows: [knownGene, mane, gc5BaseBw, rmsk]
+      has:
+        - '[id^="visible-"] [data-track="mane"]'
+        - '[id^="visible-"] [data-track="rmsk"]'
+        - '[id^="visible-"] [data-track="gc5BaseBw"]'
+        - '[id^="visible-"] [data-track="knownGene"]'
+
+  # 1. The dropdown, used in the Visible Tracks group itself as in the ticket.
+  - setVis: {mane: hide, in: visible}
+  - expect:
+      noRows: [mane]
+      noHas: '[id^="visible-"] [data-track="mane"]'
+      has: '[id^="visible-"] [data-track="rmsk"]'
+
+  # 2. Right-click > Hide.
+  - rightClick: {track: rmsk, frac: 0.5, pick: "Hide"}
+  - expect:
+      noHas: '[id^="visible-"] [data-track="rmsk"]'
+      has: '[id^="visible-"] [data-track="knownGene"]'
+
+  # 3. Right-click > Hide all other tracks, from knownGene: gc5BaseBw goes.
+  - rightClick: {track: knownGene, frac: 0.5, pick: "Hide all other tracks"}
+  - expect:
+      noHas: '[id^="visible-"] [data-track="gc5BaseBw"]'
+      has: '[id^="visible-"] [data-track="knownGene"]'

@@ -34,6 +34,8 @@
 proof:
   - "assertion-only 2026-09-17 -- written from #38198 and f001e39d156 after the fix reached genome-test"
   - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the second lift's target is 100px, not >300"
+  - "sandbox-ab 2026-09-28 -- container reopen section: fails on genome-test, which does not carry the fix (dba11b63364 on master), and passes on ts park 38198 (superVis38198, 25d72992255). Each of its three checks was removed in turn and the next one still failed on genome-test: lift 2 target, the source after lift 2, lift 3 target"
+  - "release-ab 2026-09-29 -- container reopen section: fails on hgwbeta (v504, whose v504_branch lacks dba11b63364) and passes on genome-test. On v504 step 26 fails, rows not drawn: wgEncodeReg4MarkH3k27ac after lift 2"
 
 target: genome-test
 db: hg38
@@ -68,3 +70,58 @@ steps:
       rows: [quickLiftChain, knownGene]
       height: ">300"
       noText: "Warning/Error"
+
+  # ---- The reopen of 2026-09-23: a container set back to show stayed hidden. ----------------
+  #
+  # Jairo's recipe: show the ENCODE4 Regulation container (wgEncodeReg4) with H3K27ac on and
+  # lift; hide the container and lift; show it again and lift.  After the third lift H3K27ac
+  # was missing from the target, and it stayed missing.
+  #
+  # The hub file was not the cause.  On the page a lift opens, hgTracks read a quickLifted
+  # superTrack's state from the cart: it copied the source's bare wgEncodeReg4 into
+  # hub_<n>_wgEncodeReg4 and then removed the bare one.  So lift 2 stored hide under the hub
+  # name.  Setting the container back to show is setting it back to its default, and hgTracks
+  # prunes a cart value equal to the default, so lift 3 had nothing to carry and the stored
+  # hide won forever.  The same step also deleted the source's own wgEncodeReg4=hide.
+  # dba11b63364 (hg/hgTracks/hgTracks.c, hg/lib/trackHub.c) drops the hub_ value after a lift
+  # and leaves the source's value alone.
+  #
+  # Three checks, and each would fail on the old build:
+  #   * after lift 3, H3K27ac is on the target (the bug itself);
+  #   * back on the source after lift 2, the container is still hidden (the deleted setting);
+  #   * after lift 2, H3K27ac is still on the target.  That is the chosen behavior, not an
+  #     accident: a container hidden on the source keeps the stanza an earlier lift wrote,
+  #     the same as a hidden track.  If that rule is ever changed on purpose, change this line.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - hide: all
+  - track: {wgEncodeReg4: hideKids, wgEncodeReg4MarkH3k27ac: full}
+  - expect: {rows: [ruler, wgEncodeReg4MarkH3k27ac], exact: true}
+
+  # Lift 1, container showing.  This one worked before the fix too.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, wgEncodeReg4MarkH3k27ac], noText: "Warning/Error"}
+
+  # Hide the container on the source.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - track: {wgEncodeReg4: hide}
+  - expect: {rows: [ruler], noRows: [wgEncodeReg4MarkH3k27ac]}
+
+  # Lift 2, container hidden.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, wgEncodeReg4MarkH3k27ac], noText: "Warning/Error"}
+
+  # Back on the source, straight after the target visit, with no change made.  Before the fix
+  # visiting the target had removed wgEncodeReg4=hide, so the container came back.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - expect: {rows: [ruler], noRows: [wgEncodeReg4MarkH3k27ac]}
+
+  # Show the container again.  H3K27ac keeps full from the first step.
+  - track: {wgEncodeReg4: show}
+  - expect: {rows: [ruler, wgEncodeReg4MarkH3k27ac]}
+
+  # Lift 3.  Before dba11b63364 the target drew only the chain and knownGene here.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, wgEncodeReg4MarkH3k27ac], noText: "Warning/Error"}

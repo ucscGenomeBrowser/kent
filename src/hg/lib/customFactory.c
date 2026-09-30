@@ -3924,8 +3924,13 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
 		close(sd);
 		char *fetched = dyStringCannibalize(&ds);
 		/* This came in over the network, so keep only what we allow. */
-		track->tdb->html = htmlSanitize(fetched);
-		freeMem(fetched);
+		if (hubHtmlSanitizeOn())
+		    {
+		    track->tdb->html = htmlSanitize(fetched);
+		    freeMem(fetched);
+		    }
+		else
+		    track->tdb->html = fetched;
 		}
 	    }
 	}
