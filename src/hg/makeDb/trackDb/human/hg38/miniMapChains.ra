@@ -1,0 +1,72 @@
+##############################################################################
+# hs1 - human (T2T CHM13v2.0/hs1)
+##############################################################################
+track chainNetMiniMap2Hs1
+compositeTrack on
+shortLabel miniMap2 Chain/Net
+longLabel minimap2 Chain and Lift Over Alignments
+subGroup1 view Views chain=Chain liftover=LiftOver
+dragAndDrop subTracks
+visibility hide
+group compGeno
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+sortOrder view=+
+otherDb hs1
+html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
+
+    track chainNetMiniMap2Hs1Viewchain
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMiniMap2Hs1
+    spectrum on
+
+        track chainMiniMap2Hs1
+        parent chainNetMiniMap2Hs1Viewchain
+        subGroups view=chain
+        shortLabel hs1 mm2 Chain
+        longLabel human (T2T CHM13v2.0/hs1) minimap2 Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1.bb
+        linkDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1Link.bb
+        priority 1
+
+        track chainMiniMap2Hs1Swap
+        parent chainNetMiniMap2Hs1Viewchain
+        subGroups view=chain
+        shortLabel hs1 mm2 Swap Chain
+        longLabel Swapped from hs1 human (T2T CHM13v2.0/hs1) minimap2 Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1Swap.bb
+        linkDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1LinkSwap.bb
+        priority 2
+
+    track chainNetMiniMap2Hs1ViewLiftOver
+    shortLabel Lift Over
+    view liftover
+    visibility hide
+    parent chainNetMiniMap2Hs1
+    spectrum on
+
+        track chainLiftOverMiniMap2Hs1
+        parent chainNetMiniMap2Hs1ViewLiftOver
+        subGroups view=liftover
+        shortLabel hs1 mm2 loChain
+        longLabel human (T2T CHM13v2.0/hs1) minimap2 Lift Over Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/hg38/chainNet/hg38.chainLiftOverMiniMap2Hs1.bb
+        linkDataUrl /gbdb/hg38/chainNet/hg38.chainLiftOverMiniMap2Hs1Link.bb
+        priority 3
+
+        track chainLiftOverMiniMap2Hs1Swap
+        parent chainNetMiniMap2Hs1ViewLiftOver
+        subGroups view=liftover
+        shortLabel hs1 mm2 Swap loChain
+        longLabel Swapped from hs1 human (T2T CHM13v2.0/hs1) minimap2 Lift Over Chained Alignments
+        type bigChain hs1
+        bigDataUrl /gbdb/hg38/chainNet/hg38.chainLiftOverMiniMap2Hs1Swap.bb
+        linkDataUrl /gbdb/hg38/chainNet/hg38.chainLiftOverMiniMap2Hs1SwapLink.bb
+        priority 4
