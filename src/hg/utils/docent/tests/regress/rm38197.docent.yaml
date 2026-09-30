@@ -1,0 +1,94 @@
+# #38197 -- a recovery email address is confirmed by mail before it counts for anything, and
+# a new hgLogin page lets a signed-in user set or change it.  This script watches the part
+# that can be seen without a mailbox: the page itself and the ways in to it.
+#
+# Commits: 1d079d218c2 (confirm the recovery address by mail), d33d0e1c191 (the new page,
+# the account-menu entries in topLinks.js, web.c and hgSession.c), dccbd05b94e (heading and
+# menu entry renamed from "Recovery email" to "Change recovery email", description
+# reworded), b9bd7488e55 (the description names Google, GitHub and CILogon instead of the
+# ORCID button, which no server here offers).  None is in v503.
+#
+# What is asserted:
+#
+#   * Logged out, the page refuses with "Please log in first to change your recovery email
+#     address.", and a recovery confirmation link that is not valid is refused with "This
+#     confirmation link is not valid or has already been used."
+#   * Logged in, the blue-bar Account popup offers "Change recovery email", and the link
+#     opens the page.
+#   * The page has its heading, the "Signed in as" line, the new description, and the three
+#     fields (current password, new address twice).  noText "ORCID" watches b9bd7488e55.
+#   * hgSession's account list offers the same entry, under the new name.
+#
+# The current recovery address of the account is on the page; it is not asserted, because
+# it belongs to the account and not to the code.
+#
+# NOT covered, because each needs a real mailbox: the confirmation mail, its one-time
+# signed link and seven-day expiry, the notice to the main address, and the rule that an
+# unconfirmed address cannot sign in (email link, Google, GitHub, CILogon) or get a
+# password-reset copy.  The script never submits the form, so docentTest's recovery address
+# is never changed.
+#
+# hg.conf GATE: the page and both menu entries exist only with login.recovEmailChange=on,
+# and they also hide themselves without login.cookieSalt or outbound mail
+# (recovEmailChangeEnabled() in hgLogin.c).  With the gate off every check after the login
+# fails, and that is a configuration answer.  Settle it with
+#   grep recovEmailChange /usr/local/apache/cgi-bin/hg.conf
+# genome-test has it on (2026-09-30).  The ticket parks include that hg.conf, so they have
+# it too.
+#
+# Signs in as docentTest (see ~/.docentLogin).  On a ticket park, target the HTTPS port.
+#
+# RED ON hgwbeta UNTIL v505, AND THAT IS EXPECTED.  b9bd7488e55 was committed 2026-09-27,
+# after v504_branch was cut, so the v504 release still says "including through the Google
+# and ORCID buttons".  Gerardo's note of 2026-09-27 says it goes out in the next release.
+# On hgwbeta and the v504 park this script fails at the description check and passes every
+# other check.  When v505 reaches hgwbeta it goes green there.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38197, d33d0e1c191, dccbd05b94e and b9bd7488e55"
+  - "release-ab 2026-09-30 -- passes on genome-test; fails on v503 (ts park 38316, https 49106) at step 2, the logged-out refusal, which v503 does not have; with that check taken out it fails at the bogus confirmRecovEmail link, which v503 answers with a plain login page; and, measured before that check was added, at the #loginLink check, which has no data-changerecovemailurl on v503. On v504 (hgwbeta, and ts park 38423 https 49084) it fails only at step 13, the b9bd7488e55 wording, which is not in v504_branch; with that line taken out both pass"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  # Logged out, the page asks for a login.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.changeRecovEmailPage=1"
+  - expect:
+      text: "Please log in first to change your recovery email address."
+  # A recovery confirmation link that is not valid is refused, with the ticket's message.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.confirmRecovEmail=1&user=docentTest&token=bogus"
+  - expect:
+      text: "This confirmation link is not valid or has already been used."
+
+  - login: true
+  - goto: "/cgi-bin/hgGateway?db=hg38"
+  - wait: '#loginLink[data-username]'
+  - expect:
+      has: '#loginLink[data-changerecovemailurl*="changeRecovEmailPage"]'
+  - click: '#loginLink'
+  - expect:
+      text: "Signed in as"
+      has: 'a:text-is("Change recovery email")'
+      noHas: 'a:text-is("Recovery email")'
+  - click: 'a:text-is("Change recovery email")'
+  - wait: '#changeRecovEmailBox'
+  - expect:
+      url: "changeRecovEmailPage"
+      has:
+        - 'h3:text-is("Change recovery email")'
+        - 'form[name="changeRecovEmailForm"] #curPassword'
+        - 'form[name="changeRecovEmailForm"] #newRecovEmail1'
+        - 'form[name="changeRecovEmailForm"] #newRecovEmail2'
+      text:
+        - "Signed in as docentTest."
+        - "Current recovery email address:"
+        - "including through the Google, GitHub, and CILogon sign-in options"
+        - "Until that link is opened, the email address cannot be used to sign in"
+      noText: ["ORCID", "Please log in first"]
+
+  # hgSession's account list carries the same entry.
+  - goto: "/cgi-bin/hgSession?hgS_doMainPage=1"
+  - expect:
+      has: 'a[href*="changeRecovEmailPage"]:text-is("Change recovery email")'
