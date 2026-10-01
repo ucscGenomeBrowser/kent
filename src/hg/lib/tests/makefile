@@ -102,8 +102,10 @@ trashDirTest: ${BIN_DIR}/trashDirTester mkdirs
 
 # Twice: once with the setting and once without, because the answer is the DIFFERENCE between
 # them.  A single run could pass on a library whose own default happened to be large.
+# The off conf sets 0 by name, because the developer's conf may include one that sets it.
 mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
 	echo "include ${HOME}/.hg.conf" > output/topPadOff.conf
+	echo "mallocTopPad=0" >> output/topPadOff.conf
 	echo "include ${HOME}/.hg.conf" > output/topPadOn.conf
 	echo "mallocTopPad=33554432" >> output/topPadOn.conf
 	HGDB_CONF=output/topPadOff.conf ${BIN_DIR}/mallocTopPadTester > output/mallocTopPadTest
