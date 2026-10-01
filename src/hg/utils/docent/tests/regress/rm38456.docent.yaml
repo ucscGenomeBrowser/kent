@@ -10,8 +10,8 @@
 # The fix reads the name and db with defaults.  For the share flag it asks the REQUEST, not the
 # cart: the cart keeps hgS_newSessionShare on purpose (cleanHgSessionFromCart), so it is still
 # there long after the form that set it.  When the request carries neither the flag nor the
-# checkbox's boolshad. shadow, an existing session keeps its own sharing level and a new one
-# is saved private.
+# checkbox's shadow, boolshad.hgS_newSessionShare, an existing session keeps its own sharing
+# level and a new one is saved private.
 #
 # Three checks, in this order:
 #   1. Fresh cart, no share flag: the original stack dump.  The fixed build adds the session
