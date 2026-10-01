@@ -89,9 +89,9 @@ def median(lst):
     if len(lst) < 1:
         return None
     if len(lst) %2 == 1:
-        return lst[((len(lst)+1)/2)-1]
+        return lst[((len(lst)+1)//2)-1]
     else:
-        return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
+        return float(sum(lst[(len(lst)//2)-1:(len(lst)//2)+1]))/2.0
 
 def determineScore(tpmCutoffs, tpm):
     """
@@ -276,7 +276,7 @@ def expMatrixToBarchartBed(options):
                     validTpms, bedLikeFile, options.useMean)
     # Find the number which divides the list of non 0 TPM scores into ten blocks.
     tpmMedian = sorted(validTpms)
-    blockSizes = len(tpmMedian)/10
+    blockSizes = len(tpmMedian)//10
 
     # Create a list of the ten TPM values at the edge of each block.
     # These used to cast a TPM score to one of ten value between 0-1000.
@@ -284,7 +284,9 @@ def expMatrixToBarchartBed(options):
     for i in range(1,10):
         tpmCutoffs.append(tpmMedian[blockSizes*i])
 
-    # Sort the bed like file to prepare it for the join.
+    # Sort the bed like file to prepare it for the join. The flush is needed since
+    # the sort below reads the file by name, through the shell.
+    bedLikeFile.flush()
     sortedBedLikeFile = tempfile.NamedTemporaryFile( mode = "w+")
     cmd = "sort -k1 " + bedLikeFile.name + " > " + sortedBedLikeFile.name
     os.system(cmd)
@@ -324,6 +326,7 @@ def expMatrixToBarchartBed(options):
         bedFile.write(bedLine)
 
     # Run Max's indexing script: TODO: add verbose options
+    bedFile.flush()
     indexedBedFile = tempfile.NamedTemporaryFile(mode="w+")
     cmd = "bedJoinTabOffset " + options.matrixFile.name + " " + bedFile.name + " " + indexedBedFile.name
     if not options.verbose: cmd += " 2>&1 >/dev/null"
