@@ -1,0 +1,63 @@
+# #38254 -- a composite subtrack could draw at two different heights on the same view.
+#
+# One hunk, 4c20412187794 (merged as 39d5f23118d), in findLeavesForParallelLoad()
+# (hg/hgTracks/hgTracks.c).  A composite subtrack does not know its own visibility until
+# something asks, and asking is what stores the answer (limitedVisFromComposite).  The
+# loader started its background threads first and waited for them later, and in between
+# the main thread walked the same subtracks and asked each one.  So one thread wrote the
+# setting while another read it.  The fix settles each subtrack's visibility on the main
+# thread before any thread starts.
+#
+# The symptom is the ticket's own case: the InSiGHT Lynch Syndrome VCEP recommended track
+# set (saved session View/insightVcepHg38) on hg38 at chr17:43,044,295-43,125,364.  The
+# ClinVar lolly subtrack, clinvarSubLolly, is in pack.  lollyTrack.c divides its
+# maxHeightPixels of 128 by 1.5 in pack, so the right band is 85 px.  The race lets the
+# loader see the wrong visibility and draw the full 128.
+#
+# The check is the height of that band: the div.sliceDiv.dataImg in the lolly row, which
+# hgTracks writes with the height of the slice it drew.  It is read on four renders of the
+# same view, because a race does not have to lose every time.
+#
+# Measured 2026-09-30, the same v503 hgTracks binary (ts 38316) run from the command line
+# against the session, changing only parallelFetch.threads in hg.conf:
+#
+#     threads=0    85 85 85 85      one thread at a time: no race
+#     threads=20   128 128 128 128  the shipped default
+#     v504 (ts 38423), threads=20:  85 85 85
+#
+# So on this view today the race loses every time on v503, not about half the time as the
+# ticket measured on 2026-09-04, and the difference follows the thread count and not the
+# code, which is what makes it this ticket's bug.
+#
+# The session is a named session in hgcentral, so it exists only where that central holds
+# it.  hgcentraltest (genome-test, hgwdev, every park) and hgcentralbeta (hgwbeta) both do.
+# The rows check below is what says the session really loaded.
+#
+# hg.conf: the bug needs parallel loading.  A server with parallelFetch.threads=0 passes this
+# on a build with the bug.  genome-test and hgwbeta leave it at the default of 20.
+#
+# NOT covered: the wider effects named in the fix comment (the BRCA1/BRCA2 ENIGMA hg19
+# session, where the race hid two ClinVar subtracks and squashed the gnomAD rows), and the
+# other loaders that read the same setting (barChart, chain, GTEx, HAL snake).
+proof:
+  - "assertion-only 2026-09-30 -- written from #38254 and 4c20412187794 after the fix shipped"
+  - "release-ab 2026-09-30 -- fails on v503 (ts 38316, v503_branch 707b184e329) and on v502 (ts 38304), passes on genome-test, hgwbeta and v504_branch (ts 38423). On v503 the lolly band is 128px where it should be 85px; the same v503 binary draws 85px with parallelFetch.threads=0"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125364
+reset: true
+fast: true
+steps:
+  - loadSession: {user: View, name: insightVcepHg38}
+  - go: chr17:43044295-43125364
+  - expect:
+      rows: [mane, clinvarMain, clinvarSubLolly]
+      box: {sel: "#td_data_clinvarSubLolly div.sliceDiv.dataImg", height: "=85"}
+
+  - go: chr17:43044295-43125364
+  - expect: {rows: [clinvarSubLolly], box: {sel: "#td_data_clinvarSubLolly div.sliceDiv.dataImg", height: "=85"}}
+  - go: chr17:43044295-43125364
+  - expect: {rows: [clinvarSubLolly], box: {sel: "#td_data_clinvarSubLolly div.sliceDiv.dataImg", height: "=85"}}
+  - go: chr17:43044295-43125364
+  - expect: {rows: [clinvarSubLolly], box: {sel: "#td_data_clinvarSubLolly div.sliceDiv.dataImg", height: "=85"}}

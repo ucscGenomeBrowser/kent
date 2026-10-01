@@ -1,0 +1,52 @@
+# #38384 -- on a curated-hub assembly, a faceted composite's settings page showed "Error
+# loading metadata: HTTP Status: 400" in place of its table.
+#
+# hs1 is a curated hub: the browser attaches /gbdb/hs1/hubs/<curatedHubPrefix>/hub.txt and
+# every track name gains a hub_<n>_ prefix.  The page's JavaScript (hg/js/facetedComposite.js)
+# fetches the track's metaDataUrl through hgTrackUi?fileUrl=..., and handleFileFetch in
+# hgTrackUi.c let a fileUrl through only if it sat under the hub.txt directory or, for a
+# NON-hub track, equalled a whitelisted trackDb setting.  An hs1 metaDataUrl is a /gbdb path
+# outside the hub directory, and the track is a hub track, so both checks failed and the
+# fetch got 400 "Supplied fileUrl does not match any connected hubs or track settings."
+#
+# The fix: 6d4c0206731, hgTrackUi.c.  A track from THIS assembly's curated hub (matched by hub
+# id, so a user hub attached to hs1 is still refused) gets the setting whitelist.
+# b3a26a6aff3 (#29344, not in v504) later widened the same check to any curated hub copy.
+#
+# THE TICKET'S OWN TRACK CANNOT BE USED ANY MORE.  66fafe88184 (2026-09-29) rebuilt ProCapNet
+# as a traditional composite, so it has no metaDataUrl and no faceted table.  This script uses
+# hs1's other faceted composite, sgdpCopyNumber, whose metaDataUrl is
+# /gbdb/hs1/sgdpCopyNumber/sgdpCopyNumber_metadata.tsv: the same shape, the same code path.
+#
+# CONFIG: only the ALPHA curated hub carries a faceted composite on hs1
+# (grep -c 'compositeTrack faceted' /gbdb/hs1/hubs/*/trackDb.txt).  genome-test reads alpha
+# (curatedHubPrefix=alpha).  hgwbeta reads beta and the ticket parks read braney, and neither
+# has one, so on those this script fails at the link click for a configuration reason.  That
+# is why there is no release-ab line.
+#
+# The A/B was done on the request instead, from the command line on 2026-09-30: the v503 and
+# v504_branch hgTrackUi binaries (parks 38316 and 38423), each run with its own park hg.conf
+# copied and curatedHubPrefix set to alpha, given the same genome-test hgsid and the fileUrl
+# the page asks for.  v503 answers "Status: 400" and "Supplied fileUrl does not match any
+# connected hubs or track settings."; v504 answers 200 with the TSV.
+#
+# What is asserted: the table draws rows of the metadata (a sample id from the TSV and its
+# country), and the red error cell is absent.  The error is written into the table by the
+# page's JavaScript, so the wait is for a row, and noText then reads the drawn page.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38384 after 6d4c0206731 reached genome-test; the ticket's ProCapNet is no longer faceted, so sgdpCopyNumber stands in"
+
+target: genome-test
+db: hs1
+position: chr1:1000000-1010000
+reset: true
+fast: true
+steps:
+  - go: chr1:1000000-1010000
+  - click: 'a[href*="hgTrackUi"][href*="_sgdpCopyNumber"]'
+  - wait: '#theMetaDataTable tbody tr td'
+  - sleep: 500
+  - expect:
+      url: "hgTrackUi"
+      text: ["SGDP Copy Number", "LP6005441-DNA_G08", "Algeria"]
+      noText: ["Error loading metadata", "HTTP Status: 400", "Supplied fileUrl does not match"]

@@ -28,7 +28,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -102,8 +102,10 @@ trashDirTest: ${BIN_DIR}/trashDirTester mkdirs
 
 # Twice: once with the setting and once without, because the answer is the DIFFERENCE between
 # them.  A single run could pass on a library whose own default happened to be large.
+# The off conf sets 0 by name, because the developer's conf may include one that sets it.
 mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
 	echo "include ${HOME}/.hg.conf" > output/topPadOff.conf
+	echo "mallocTopPad=0" >> output/topPadOff.conf
 	echo "include ${HOME}/.hg.conf" > output/topPadOn.conf
 	echo "mallocTopPad=33554432" >> output/topPadOn.conf
 	HGDB_CONF=output/topPadOff.conf ${BIN_DIR}/mallocTopPadTester > output/mallocTopPadTest
@@ -191,6 +193,13 @@ trackHubSkipHubNameTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackHubSkipHubNameTester trackHubSkipHubNameTester.c ${MYLIBS} $L
 	${BIN_DIR}/trackHubSkipHubNameTester > output/trackHubSkipHubNameTest
 	diff expected/trackHubSkipHubNameTest output/trackHubSkipHubNameTest
+
+# hgPcrResult_ cart variables fed through the cart's own parse.  The dropped ones are also
+# reported on stderr, the way the CGIs log them, so that goes to /dev/null.  refs #38442
+cartPcrVarTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartPcrVarTester cartPcrVarTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartPcrVarTester > output/cartPcrVarTest 2> /dev/null
+	diff expected/cartPcrVarTest output/cartPcrVarTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output

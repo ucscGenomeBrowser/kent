@@ -1,10 +1,10 @@
 # 2026-07-16 Claude (max): HPRC Release 2 GenArk contributed track hub (refs #35415)
 # 2026-08-28 Claude (max): QA fixes -- liftoff transcript names, segdups strand,
-#                          pcLAI rebuild, stats retention, docs/trackDb into git
-# 2026-09-09 Claude (max): pcLAI field pcaSegment renamed to centroid and its
+#                          PCLAI rebuild, stats retention, docs/trackDb into git
+# 2026-09-09 Claude (max): PCLAI field pcaSegment renamed to centroid and its
 #                          description corrected (see section 5c); genark
 #                          detailsScript dataUrl double-prefix bug fixed
-# 2026-09-16 Claude (max): pcLAI default visibility pack -> dense, pinned with
+# 2026-09-16 Claude (max): PCLAI default visibility pack -> dense, pinned with
 #                          onlyVisibility (see section 5e)
 
 # Builds a GenArk "contributed track" hub (contribTracks.html model) that adds
@@ -75,7 +75,7 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #   hard-corrects the mapping so each file builds against the assembly whose
 #   sequences actually match (otherwise those bigBeds come out empty).
 # - Excluded samples: HG002 (hg002v1.1 uses a bespoke chr-name scheme not present
-#   in its GenArk aliases; only pcLAI exists for it) and CHM13 (= hs1, no
+#   in its GenArk aliases; only PCLAI exists for it) and CHM13 (= hs1, no
 #   annotation data here).
 # - HG00735 hap2 (GCA_018472765.3): the segdups source was computed on a different
 #   contig version (JAHBCG02*) than the GenArk .3 assembly, so ~40k contig-level
@@ -103,9 +103,9 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # Final hub: 462 assemblies (HG002 excluded); 2770 bigBed files. Per-track feature
 # counts for the collection are in log/summary.tsv, regenerated at the end of every
 # build run (see section 3). What is retained there covers liftoff, segdups and
-# methylation across all 462 assemblies, and pcLAI for one. Within that, liftoff
+# methylation across all 462 assemblies, and PCLAI for one. Within that, liftoff
 # loses 0.015% (gff3ToGenePred invalid-strand / past-chrom-end), segdups loses only
-# the HG00735 hap2 rows noted above, and methylation and pcLAI lose nothing. cat,
+# the HG00735 hap2 rows noted above, and methylation and PCLAI lose nothing. cat,
 # censat and censatCentromeres have no retained counts, because the 2026-07-25
 # methylation-only re-run truncated stats.tsv before the append fix landed. Treat
 # those three as unmeasured unless the collection is rebuilt.
@@ -195,20 +195,20 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #   liftoff    Liftoff   PMID 33320174
 #   censat/cen cenSat    PMID 35357911
 #   segdups    SEDEF     PMID 30423092
-# pcLAI has no PMID; the preprint reference was taken from the Crossref record for
+# PCLAI has no PMID; the preprint reference was taken from the Crossref record for
 # doi 10.64898/2026.03.23.713813 rather than written by hand:
 #   curl -sH 'Accept: application/json' https://api.crossref.org/works/<doi>
 # methylation: HPRC has not supplied a method citation.
 
 ##############################################################################
-# 5b. pcLAI scatterplot on the details page
+# 5b. PCLAI scatterplot on the details page
 ##############################################################################
-# Clicking a pcLAI window shows where it sits in the ancestry space, as a
+# Clicking a PCLAI window shows where it sits in the ancestry space, as a
 # scatterplot of the 1000 Genomes reference haplotypes with the window's own
 # coordinate and its segment's coordinate marked. This uses the trackDb
 # detailsScript mechanism with the scatterPlot plot type (hg/js/hgc.scatterPlot.js).
 #
-# The background points are the pcLAI authors' published reference panel:
+# The background points are the PCLAI authors' published reference panel:
 #   https://github.com/AI-sandbox/hprc-pclai/blob/main/reference_pca_metadata.tsv
 # turned into the module's JSON by
 #   hprc2annotMakePclaiRefPanel.py reference_pca_metadata.tsv \
@@ -219,7 +219,7 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # Mandinka"), which would otherwise show in the plot legend.
 #
 # The four values the centroid field ever takes across all 460 assemblies are the
-# four ancestry cluster centres pcLAI discretizes to, which is worth knowing when
+# four ancestry cluster centres PCLAI discretizes to, which is worth knowing when
 # reading the plot (nearest reference population to each -- our own reading of the
 # panel, not a label the authors assign):
 #   (-1.743,0.207)  African       (Yoruba / Mende / Esan)
@@ -235,21 +235,21 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # assembly's contrib/hprc2annot/ (see section 7).
 
 ##############################################################################
-# 5c. 2026-09-09: pcLAI "pcaSegment" -> "centroid", and what was wrong
+# 5c. 2026-09-09: PCLAI "pcaSegment" -> "centroid", and what was wrong
 ##############################################################################
 # Prompted by building the same annotation as a native hg38 track
-# (doc/hg38/hprcPclai.txt) and reading the pcLAI authors' own format description
+# (doc/hg38/hprcPclai.txt) and reading the PCLAI authors' own format description
 # for the first time:
 #   https://github.com/AI-sandbox/hprc-pclai  (README, "Output format (BED)")
 #
 # What we had wrong. Column 10 of the source BED was documented here, in pclai.as
 # and on the description page as "the PCA coordinate of the longer ancestry
 # segment this window belongs to". It is not that. The authors call the column
-# "centroid": the discretized pcLAI annotation of the window, written as the PCA
+# "centroid": the discretized PCLAI annotation of the window, written as the PCA
 # centroid of the ancestry cluster the window falls into. That is why it only ever
 # takes four values -- not because segments are megabases long and share a
 # coordinate, but because there are four clusters. The old reading also implied a
-# segmentation step in the method that does not exist: pcLAI predicts one
+# segmentation step in the method that does not exist: PCLAI predicts one
 # coordinate per window and nothing else, and the visible blocks in the display
 # are simply runs of windows with similar predictions.
 #
@@ -301,7 +301,7 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 ##############################################################################
 # 5d. genark addContrib bug: detailsScript dataUrl was prefixed twice
 ##############################################################################
-# Found while checking the pcLAI details page after the rename: the scatterplot
+# Found while checking the PCLAI details page after the rename: the scatterplot
 # had never been drawing on the GenArk hubs. The request went to
 #   contrib/hprc2annot/contrib/hprc2annot/pclaiRefPanel.json
 # and hgTrackUi's file fetch quietly returned nothing.
@@ -316,9 +316,9 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # its own rebaseBeside() that reduces a local path to its basename and leaves a URL
 # or an absolute path alone; it is idempotent, so addContrib can be re-run.
 #
-# Only shows up for a collection that uses detailsScript, i.e. only pcLAI today.
+# Only shows up for a collection that uses detailsScript, i.e. only PCLAI today.
 # Test after any change to that resolution path: load an assembly hub, click a
-# pcLAI window, and confirm the "Window PCA" row draws a plot rather than sitting
+# PCLAI window, and confirm the "Window PCA" row draws a plot rather than sitting
 # empty (an empty cell is exactly what a failed fetch looks like).
 #
 # While there: the makeDoc link on all seven description pages still pointed at
@@ -326,9 +326,9 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # Repointed to doc/contrib/hprc2annot/hprc2annot.txt.
 
 ##############################################################################
-# 5e. 2026-09-16: pcLAI default visibility pack -> squish
+# 5e. 2026-09-16: PCLAI default visibility pack -> squish
 ##############################################################################
-# Mark reported that on HG00408 pat (GCA_041900255.1) the pcLAI track shows only
+# Mark reported that on HG00408 pat (GCA_041900255.1) the PCLAI track shows only
 # one color and you cannot see where ancestry changes, and suggested pinning the
 # track to dense.
 #
@@ -359,7 +359,7 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 #
 # Dense was the first thing tried, and it is wrong for this track. In tvDense
 # hgTracks draws one merged row and emits no per-item map boxes at all: the whole
-# row maps to "Click to alter the display density of pcLAI Ancestry", there is no
+# row maps to "Click to alter the display density of PCLAI Ancestry", there is no
 # hgc link and no mouseOver. That takes away the ancestry scatterplot built for
 # the details page in section 5b, which is the most useful thing the track has.
 # Counted on the image map of one 1.7 Mb view, 16 windows in range:
@@ -396,7 +396,7 @@ gh api repos/$R/contents/data_tables/annotation/segdups/segdups_hprc_r2_v1.1.ind
 # so their hubs correctly have no pclai stanza). Checked against a pre-run copy of
 # every alpha/beta hub file: no duplicated track names anywhere, neighbouring
 # collections (Tiberius on 2 assemblies) preserved, and beta additionally picked up
-# the two 2026-09-09 pcLAI fixes it had never received. genark checkContrib
+# the two 2026-09-09 PCLAI fixes it had never received. genark checkContrib
 # reported no contrib problems.
 
 ##############################################################################

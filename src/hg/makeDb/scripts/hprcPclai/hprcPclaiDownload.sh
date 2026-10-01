@@ -1,5 +1,5 @@
 #!/bin/bash
-# Download the pcLAI GRCh38-coordinate BED files for all HPRC Release 2 haplotypes.
+# Download the PCLAI GRCh38-coordinate BED files for all HPRC Release 2 haplotypes.
 # The index CSV lists one s3:// path per haplotype; s3:// is rewritten to the
 # public https endpoint of the same bucket. The submissions bucket resets
 # connections under load, so downloads are retried and run only 8-wide.

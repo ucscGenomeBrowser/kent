@@ -1,0 +1,66 @@
+# #38456 -- a request to hgSession's classic Save action (hgS_doNewSession) that left out one
+# of the Save form's inputs stopped with a stack dump.  doNewSession() read the session name
+# with cartString() and the share flag with cartBoolean(), and both abort when the variable is
+# missing:
+#   hashMustFindVal: 'hgS_newSessionShare' not found
+#   hashMustFindVal: 'hgS_newSessionName' not found
+# The Save form always sends both, so only a hand-made request reached it.  outDefaultTracks()
+# also read db with cartString(), and a brand-new cart has no db.
+#
+# The fix reads the name and db with defaults.  For the share flag it asks the REQUEST, not the
+# cart: the cart keeps hgS_newSessionShare on purpose (cleanHgSessionFromCart), so it is still
+# there long after the form that set it.  When the request carries neither the flag nor the
+# checkbox's shadow, boolshad.hgS_newSessionShare, an existing session keeps its own sharing
+# level and a new one is saved private.
+#
+# Three checks, in this order:
+#   1. Fresh cart, no share flag: the original stack dump.  The fixed build adds the session
+#      and says it "may not be shared".
+#   2. The cart now holds hgS_newSessionShare=on, set by a plain page load, and the request
+#      still has no flag.  The session is private, so the overwrite must say "may not be
+#      shared".  An early version of the fix tested cartVarExists() and failed here: it read
+#      the stored "on" and made the private session shared by link.
+#   3. No name at all: the fixed build gives its own "without a name" message.
+# Step 1 needs a cart that has never held hgS_newSessionShare.  reset: true gives a fresh
+# browser, and nothing before step 1 visits the classic Save form.
+#
+# No hg.conf gate.  It saves under the docentTest account of whichever central the target
+# reads, so it needs a [section] for that central in ~/.docentLogin.  The session is deleted
+# at the start, in case an earlier run died before its own cleanup, and again at the end.
+proof:
+  - "server-flip 2026-09-30 -- failed on genome-test at step 4 (hashMustFindVal) before 35c5facfb9e reached it, passed on genome-test after make alpha the same day, every check ok"
+  - "sandbox-ab 2026-09-30 -- passes on hgwdev-braney with the fix; fails on genome-test (master without it) at step 4, check 1, page contains hashMustFindVal"
+  - "sandbox-ab 2026-09-30 -- hgwdev-braney rebuilt with the request test swapped for cartVarExists(): fails at step 7, check 2, page says may be shared; with only the doNewSession name read reverted: fails at step 9, check 3, hashMustFindVal; the real fix back in: passes"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38456"
+
+  # 1. Fresh cart, no share flag.
+  - goto: "/cgi-bin/hgSession?hgS_doNewSession=1&hgS_newSessionName=rm38456"
+  - expect:
+      text: ["Added a new session", "rm38456", "may not be shared"]
+      noText: ["hashMustFindVal"]
+
+  # 2. The cart holds a stored share value; the request does not.
+  - goto: "/cgi-bin/hgSession?hgS_newSessionShare=on"
+  - goto: "/cgi-bin/hgSession?hgS_doNewSession=1&hgS_newSessionName=rm38456"
+  - expect:
+      text: ["Overwrote the contents of session", "may not be shared"]
+      noText: ["hashMustFindVal", "may be shared"]
+
+  # 3. No name.
+  - goto: "/cgi-bin/hgSession?hgS_doNewSession=1"
+  - expect:
+      text: ["Unable to save a session without a name"]
+      noText: ["hashMustFindVal"]
+
+  # Clean up.
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38456"
+  - expect:
+      text: '"success": true'

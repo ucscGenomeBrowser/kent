@@ -35,6 +35,7 @@ proof:
   - "assertion-only 2026-09-17 -- written from #38198 and f001e39d156 after the fix reached genome-test"
   - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the second lift's target is 100px, not >300"
   - "sandbox-ab 2026-09-28 -- container reopen section: fails on genome-test, which does not carry the fix (dba11b63364 on master), and passes on ts park 38198 (superVis38198, 25d72992255). Each of its three checks was removed in turn and the next one still failed on genome-test: lift 2 target, the source after lift 2, lift 3 target"
+  - "release-ab 2026-09-29 -- container reopen section: fails on hgwbeta (v504, whose v504_branch lacks dba11b63364) and passes on genome-test. On v504 step 26 fails, rows not drawn: wgEncodeReg4MarkH3k27ac after lift 2"
 
 target: genome-test
 db: hg38

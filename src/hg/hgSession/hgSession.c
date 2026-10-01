@@ -870,7 +870,7 @@ static void outDefaultTracks(struct cart *cart, struct dyString *dy)
 /* Output the default trackDb visibility for all tracks
  * in trackDb if the track is not mentioned in the cart. */
 {
-database = cartString(cart, "db");
+database = cartUsualString(cart, "db", hDefaultDb());
 struct trackDb *tdb = NULL;
 // Some old sessions reference databases that are no longer present, and that triggers an errAbort
 // when calling hgTrackDb.  Just move on instead of errAborting.
@@ -1009,18 +1009,34 @@ if (userName == NULL)
     return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
 /* Clone: saveCartAsSession() removes this cart variable, which frees the cart's own copy. */
-char *sessionName = trimSpaces(cloneString(cartString(cart, hgsNewSessionName)));
+char *sessionName = trimSpaces(cloneString(cartUsualString(cart, hgsNewSessionName, "")));
 if (isEmpty(sessionName))
     return "Error: Unable to save a session without a name.  Please add one and try again.";
 
 char *encSessionName = cgiEncodeFull(sessionName);
-boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 
 if (sqlTableExists(conn, namedSessionTable))
     {
-    int useCount = saveCartAsSession(conn, encUserName, encSessionName, shareSession);
+    int sharingLevel;
+    /* Ask the request, not the cart: the cart keeps hgsNewSessionShare on purpose (see
+     * cleanHgSessionFromCart), so it is there long after the form that set it. */
+    if (cgiBooleanDefined(hgsNewSessionShare) || cgiVarExists(hgsNewSessionShare))
+        sharingLevel = cartBoolean(cart, hgsNewSessionShare);
+    else
+        {
+        /* The Save form always sends the checkbox's shadow, so this request did not come from it.
+         * Do not widen who can load the session: keep an existing session's level, and make a new
+         * one private (sqlQuickNum returns 0 when there is no row). */
+        struct dyString *query = sqlDyStringCreate(
+                 "select shared from %s where userName = '%s' and sessionName = '%s'",
+                 namedSessionTable, encUserName, encSessionName);
+        sharingLevel = sqlQuickNum(conn, query->string);
+        dyStringFree(&query);
+        }
+    boolean shareSession = (sharingLevel > 0);
+    int useCount = saveCartAsSession(conn, encUserName, encSessionName, sharingLevel);
     if (useCount > INITIAL_USE_COUNT)
 	dyStringPrintf(dyMessage,
 	  "Overwrote the contents of session <B>%s</B> "
@@ -2084,7 +2100,7 @@ if (userName == NULL)
     return "Unable to re-save session -- please log in and try again.";
 struct sqlConnection *conn = hConnectCentral();
 /* Clone: cartLoadUserSession() and saveCartAsSession() both free the cart's own copy. */
-char *sessionName = trimSpaces(cloneString(cartString(cart, hgsNewSessionName)));
+char *sessionName = trimSpaces(cloneString(cartUsualString(cart, hgsNewSessionName, "")));
 if (isEmpty(sessionName))
     return "Error: Unable to save a session without a name.  Please add one and try again.";
 

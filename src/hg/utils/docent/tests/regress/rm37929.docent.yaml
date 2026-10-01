@@ -1,0 +1,88 @@
+# #37929 -- hgLogin gained a passwordless sign-in link sent by email, and a Change email page
+# that applies a new address only when a link mailed to it is opened.  This script watches
+# the pages a reader sees on the way in, not the mail.
+#
+# The ticket ran across three releases.  The feature (5f7a14fde8c, 4b04bd017d7) is in v502;
+# the single-use confirm link and the em-dash and sentence-case fixes (663d6e61cc7,
+# 39c57b82b85, 304aeae2700) are in v503.  Two changes are v504 only, and they are the ones
+# that let this script tell v503 from v504:
+#
+#   * 3eb8de69a3d: the headings "Change password", "Change email" and "Sign up using
+#     email", which were Title Case.
+#   * 547d1ed1912 (refs #38302, asked for on this ticket in note of 2026-09-18): an "or"
+#     divider between the Login/Cancel buttons and "Email me a sign-in link".  Before it,
+#     a reader who filled in the form could take the grey button for the confirmation step.
+#
+# The rest is asserted because it is what the ticket delivers, although v503 has it too:
+# the email-link page, the "login link" choice on the account-help page, the change-email
+# page's refusal when logged out, and its refusal of a confirmation link that is not valid,
+# with the ticket's own message.  Logged in, the change-email page shows the account and its
+# fields.  The form is never submitted, so docentTest's email is never changed.
+#
+# NOT covered, because each needs a real mailbox: that a sign-in link arrives and signs the
+# reader in, the account chooser when one address matches several accounts and its
+# gbMembers.lastUse update, and the change-email confirmation mail and its single use.
+#
+# hg.conf GATE: the email-link button, the email-link page and the Change email page exist
+# only with login.emailLink=on (emailLinkEnabled() in hgLogin.c).  With it off the divider,
+# email-link and change-email checks fail, and that is a configuration answer.  Settle it
+# with   grep emailLink /usr/local/apache/cgi-bin/hg.conf
+# genome-test has it on (2026-09-30), and the ticket parks include that hg.conf.
+#
+# Signs in as docentTest (see ~/.docentLogin).  On a ticket park, target the HTTPS port.
+proof:
+  - "assertion-only 2026-09-30 -- written from #37929, 3eb8de69a3d and 547d1ed1912"
+  - "release-ab 2026-09-30 -- passes on genome-test and hgwbeta (v504); fails on v503 (ts park 38316, https 49106) and on v502 (ts park 38304, https 49113) at step 2, no or-divider before the email-link button. On v503 with that check taken out it fails at step 4, the heading is Sign Up Using Email; with that one also taken out it fails at step 16, Change Email. The email-link, account-help and refusal checks pass on v503, as the header says"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  # The login page: an "or" divider straight before the email-link button.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1"
+  - expect:
+      has:
+        - '#accountLoginForm'
+        - '#accountLoginForm + .orDivider + a.socialButton[href*="hgLogin.do.emailLinkPage=1"]'
+      text: "Email me a sign-in link"
+
+  # The sign-up page heading is sentence case.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.signupPage=1"
+  - expect:
+      has: 'h3:text-is("Sign up using email")'
+      noText: "Sign Up Using Email"
+
+  # The email-link page and the account-help choice that leads to it.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.emailLinkPage=1"
+  - expect:
+      has: ['h3:text-is("Email me a sign-in link")', 'input[value="Send login link"]']
+      text: "we'll send you a link that signs you in without a password"
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayAccHelpPage=1"
+  - expect:
+      text: ["Having trouble signing in?", "so I can sign in without a password"]
+
+  # Change email, logged out: refused, and a confirmation link that is not valid is refused.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.changeEmailPage=1"
+  - expect:
+      text: "Please log in first to change your email address."
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.confirmChangeEmail=1&user=docentTest&token=bogus"
+  - expect:
+      text: "This confirmation link is not valid or has already been used."
+
+  # Logged in: the change-email and change-password pages, with sentence-case headings.
+  - login: true
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.changeEmailPage=1"
+  - wait: '#changeEmailBox'
+  - expect:
+      has:
+        - 'h3:text-is("Change email")'
+        - '#changeEmailBox #curPassword'
+        - '#changeEmailBox #newEmail1'
+      text: ["Signed in as docentTest.", "Current email address:"]
+      noText: ["Change Email", "Please log in first"]
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1"
+  - expect:
+      has: 'h3:text-is("Change password")'
+      noText: "Change Password"

@@ -21,9 +21,9 @@ GRCh38/hg38 and T2T-CHM13/hs1.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-Cell lines are listed in the table on this page, one row each. Use the <b>Sample
-class</b> facet to narrow the list, and the <b>Experiment</b> column to open the experiment
-on the ENCODE portal.
+The matrix on this page has one row per cell line and one column per strand, so a
+checkbox turns on one strand of one cell line. Use the <b>Sample class</b> filter
+to restrict the matrix to cancer or non-cancer lines.
 </p>
 
 <p>
@@ -40,6 +40,20 @@ deeper sequencing reach higher values. Tracks are colored by cell line:
 <li><span style="display:inline-block; background-color:#E69F00; width:18px; height:12px; vertical-align:middle;"></span> <b>K562</b> chronic myelogenous leukemia</li>
 <li><span style="display:inline-block; background-color:#56B4E9; width:18px; height:12px; vertical-align:middle;"></span> <b>MCF10A</b> non-tumorigenic breast epithelium</li>
 </ul>
+
+<p>
+The six experiments, each linking to its record on the ENCODE portal.
+</p>
+
+<table class="stdTbl">
+<tr><th>Cell line</th><th>Tissue</th><th>Sample class</th><th>ENCODE experiment</th></tr>
+<tr><td>A673</td><td>Muscle</td><td>Cancer</td><td><a href="https://www.encodeproject.org/experiments/ENCSR046BCI/" target="_blank">ENCSR046BCI</a></td></tr>
+<tr><td>Caco-2</td><td>Colon</td><td>Cancer</td><td><a href="https://www.encodeproject.org/experiments/ENCSR100LIJ/" target="_blank">ENCSR100LIJ</a></td></tr>
+<tr><td>Calu3</td><td>Lung</td><td>Cancer</td><td><a href="https://www.encodeproject.org/experiments/ENCSR935RNW/" target="_blank">ENCSR935RNW</a></td></tr>
+<tr><td>HUVEC</td><td>Blood vessel</td><td>Non-cancer</td><td><a href="https://www.encodeproject.org/experiments/ENCSR098LLB/" target="_blank">ENCSR098LLB</a></td></tr>
+<tr><td>K562</td><td>Blood</td><td>Cancer</td><td><a href="https://www.encodeproject.org/experiments/ENCSR261KBX/" target="_blank">ENCSR261KBX</a></td></tr>
+<tr><td>MCF10A</td><td>Breast</td><td>Non-cancer</td><td><a href="https://www.encodeproject.org/experiments/ENCSR799DGV/" target="_blank">ENCSR799DGV</a></td></tr>
+</table>
 
 <h2>Methods</h2>
 
@@ -61,9 +75,7 @@ only the plus and minus strand signal of unique reads belonging to each
 experiment's default analysis. ENCODE publishes no pooled file, so the
 per-replicate files were summed at UCSC into one track per cell line and strand,
 the same merge the ProCapNet models were trained on. Total signal is conserved
-exactly by the summing, and minus strand signal is negative as released. The
-experiments are ENCSR046BCI, ENCSR100LIJ, ENCSR935RNW, ENCSR098LLB, ENCSR261KBX
-and ENCSR799DGV for A673, Caco-2, Calu3, HUVEC, K562 and MCF10A respectively.
+exactly by the summing, and minus strand signal is negative as released.
 </p>
 
 <p>

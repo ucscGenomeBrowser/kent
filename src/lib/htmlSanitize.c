@@ -32,15 +32,23 @@ static char *keepElements =
     "table caption thead tbody tfoot tr th td col colgroup "
     "img figure figcaption "
     "section article header footer main aside nav details summary "
-    "iframe";
-    /* iframe is here but only survives when its source is a video host, see iframeSrcOk. */
+    "iframe "
+    "svg g circle ellipse rect line polyline polygon path";
+    /* iframe is here but only survives when its source is a video host, see iframeSrcOk.
+     * The svg elements are a drawing subset: shapes and their colors, with nothing that
+     * links, loads, animates or embeds.  Every one but svg itself survives only inside an
+     * svg, see svgShapeElements. */
 
 /* Elements that go away with everything inside them. */
 static char *killElements =
-    "script style noscript template svg math frame frameset "
+    "script style noscript template math frame frameset "
     "object embed applet param form input button select option optgroup "
     "textarea label fieldset legend base meta link title "
-    "audio video source track canvas map area marquee dialog slot portal xml";
+    "audio video source track canvas map area marquee dialog slot portal xml "
+    "defs symbol clippath mask pattern marker filter lineargradient radialgradient "
+    "desc metadata";
+    /* The last rows are the parts of a drawing that are never drawn themselves.  Keeping
+     * what is inside one would draw a clip outline or a gradient's shape on the page. */
 
 /* Elements written without a closing tag.  Killing one of these takes no content with it. */
 static char *voidElements =
@@ -49,11 +57,19 @@ static char *voidElements =
 /* Killed elements that never showed a reader anything, so there is nothing to tell the
  * hub author about. */
 static char *silentKillElements =
-    "title meta link base param source track xml slot portal template noscript";
+    "title meta link base param source track xml slot portal template noscript "
+    "desc metadata";
 
 /* Elements whose content is text rather than markup.  When one of these is never closed we
  * drop the rest of the input rather than pour its content onto the page as text. */
 static char *rawTextElements = "script style textarea title noscript template xml";
+
+/* The svg elements that mean something only inside an svg. */
+static char *svgShapeElements = "g circle ellipse rect line polyline polygon path";
+
+/* Attributes that color and place a shape, allowed on every svg element. */
+#define svgPaintAttrs "fill fill-opacity fill-rule stroke stroke-width stroke-opacity " \
+    "stroke-linecap stroke-linejoin stroke-dasharray opacity transform"
 
 /* Attributes allowed, by element.  The first row is for every kept element. */
 struct attrRule
@@ -63,7 +79,7 @@ struct attrRule
     };
 
 static struct attrRule attrRules[] = {
-    {"*",        "title dir lang style id"},
+    {"*",        "title dir lang style id class"},
     {"a",        "href target rel name"},
     {"img",      "src alt width height border align hspace vspace"},
     {"table",    "width border cellpadding cellspacing align bgcolor summary"},
@@ -79,7 +95,7 @@ static struct attrRule attrRules[] = {
     {"hr",       "width size align noshade"},
     {"p",        "align"},
     {"div",      "align"},
-    {"span",     "align"},
+    {"span",     "align data-target"},
     {"h1",       "align"},
     {"h2",       "align"},
     {"h3",       "align"},
@@ -91,6 +107,15 @@ static struct attrRule attrRules[] = {
     {"tbody",    "align valign"},
     {"tfoot",    "align valign"},
     {"iframe",   "src width height frameborder allowfullscreen allow loading"},
+    {"svg",      "width height viewbox preserveaspectratio " svgPaintAttrs},
+    {"g",        svgPaintAttrs},
+    {"circle",   "cx cy r " svgPaintAttrs},
+    {"ellipse",  "cx cy rx ry " svgPaintAttrs},
+    {"rect",     "x y width height rx ry " svgPaintAttrs},
+    {"line",     "x1 y1 x2 y2 " svgPaintAttrs},
+    {"polyline", "points " svgPaintAttrs},
+    {"polygon",  "points " svgPaintAttrs},
+    {"path",     "d " svgPaintAttrs},
 };
 
 /* Properties allowed inside a style attribute. */
@@ -105,7 +130,14 @@ static char *styleProperties =
     "font font-size font-weight font-style font-family font-variant "
     "line-height letter-spacing text-decoration text-transform text-indent "
     "list-style list-style-type list-style-position "
-    "float clear display overflow overflow-x overflow-y opacity";
+    "float clear display overflow overflow-x overflow-y opacity "
+    "fill fill-opacity stroke stroke-width stroke-opacity";
+
+/* Class names allowed.  A class from outside would pick up whatever our own stylesheets and
+ * scripts do with that name, so only names we want that for get through.  stdTbl is the
+ * bordered table in HGStyle.css, and copyLinkSpan is where hgGateway.js puts a copy button
+ * for the link named by the span's data-target.  Our own GenArk description pages use both. */
+static char *classNames = "stdTbl copyLinkSpan";
 
 /* URL schemes allowed in href and src.  A URL with no scheme at all is allowed too. */
 static char *urlSchemes = "http https mailto ftp";
@@ -124,7 +156,7 @@ static char *videoHosts =
 #define maxTagAttrs 32
 
 static struct hash *keepHash = NULL, *killHash = NULL, *voidHash = NULL, *rawTextHash = NULL;
-static struct hash *silentKillHash = NULL;
+static struct hash *silentKillHash = NULL, *svgShapeHash = NULL, *classNameHash = NULL;
 static struct hash *attrHash = NULL, *stylePropHash = NULL, *schemeHash = NULL, *videoHostHash = NULL;
 
 static struct hash *hashOfWords(char *words, int sizePow2)
@@ -148,6 +180,8 @@ killHash = hashOfWords(killElements, 7);
 silentKillHash = hashOfWords(silentKillElements, 5);
 voidHash = hashOfWords(voidElements, 6);
 rawTextHash = hashOfWords(rawTextElements, 5);
+svgShapeHash = hashOfWords(svgShapeElements, 4);
+classNameHash = hashOfWords(classNames, 3);
 stylePropHash = hashOfWords(styleProperties, 8);
 schemeHash = hashOfWords(urlSchemes, 4);
 videoHostHash = hashOfWords(videoHosts, 4);
@@ -536,6 +570,144 @@ while ((open = stringIn("/*", s)) != NULL)
     }
 }
 
+/* Named character references we let through in a style value.  They are the ones our own
+ * escaping writes, so the filter has to read its own output back unchanged, and none of them
+ * can spell anything a browser would act on. */
+static char *safeEntityNames[] = {"quot", "amp", "apos", "lt", "gt"};
+
+static int entityNameLen(char *s)
+/* s points just past an ampersand.  Return the length of the entity name there, or 0. */
+{
+if (!isalpha((unsigned char)*s))
+    return 0;
+int len = 1;
+while (isalnum((unsigned char)s[len]))
+    ++len;
+return len;
+}
+
+static boolean isSafeEntityName(char *s, int len)
+/* Is the name of length len at s one of safeEntityNames? */
+{
+int i;
+for (i = 0;  i < ArraySize(safeEntityNames);  ++i)
+    {
+    if (strlen(safeEntityNames[i]) == len && strncmp(s, safeEntityNames[i], len) == 0)
+        return TRUE;
+    }
+return FALSE;
+}
+
+static char *referenceSemicolon(char *amp)
+/* amp points at an ampersand.  If it starts a character reference whose semicolon a browser
+ * takes as part of the reference, return that semicolon, otherwise NULL.  A number always
+ * counts.  A name counts only when it is one we let through, because a name a browser does
+ * not know leaves its semicolon to end the declaration. */
+{
+char *p = amp + 1;
+if (*p == '#')
+    {
+    p += 1;
+    char *digits;
+    if (*p == 'x' || *p == 'X')
+        {
+        digits = ++p;
+        while (isxdigit((unsigned char)*p))
+            ++p;
+        }
+    else
+        {
+        digits = p;
+        while (isdigit((unsigned char)*p))
+            ++p;
+        }
+    return (p > digits && *p == ';') ? p : NULL;
+    }
+int len = entityNameLen(p);
+if (len > 0 && p[len] == ';' && isSafeEntityName(p, len))
+    return p + len;
+return NULL;
+}
+
+static char *declarationEnd(char *s)
+/* Return the semicolon that ends the declaration starting at s, or NULL if it runs to the
+ * end.  The semicolon of a character reference is part of the value.  Our own output writes
+ * a quote as &quot;, so splitting there would cut apart a declaration we already allowed. */
+{
+char *p;
+for (p = s;  *p != 0;  ++p)
+    {
+    if (*p == '&')
+        {
+        char *semi = referenceSemicolon(p);
+        if (semi != NULL)
+            p = semi;
+        }
+    else if (*p == ';')
+        return p;
+    }
+return NULL;
+}
+
+static boolean hasOtherEntityName(char *value)
+/* Does value hold a named reference other than the safe ones?  A browser decodes a name it
+ * knows before the CSS parser runs, and some decode to a parenthesis or a backslash.  A name
+ * at the very end counts even without its semicolon, because the semicolon ended the
+ * declaration and we write one back after it. */
+{
+char *p;
+for (p = strchr(value, '&');  p != NULL;  p = strchr(p+1, '&'))
+    {
+    int len = entityNameLen(p+1);
+    if (len > 0 && (p[len+1] == ';' || p[len+1] == 0) && !isSafeEntityName(p+1, len))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static boolean endsInOpenReference(char *value)
+/* Does value end in a reference with no semicolon of its own, one a browser reads the same
+ * with or without it?  The semicolon we write after the value would then close it, and the
+ * next pass would read that semicolon as part of the value. */
+{
+char *amp = strrchr(value, '&');
+if (amp == NULL)
+    return FALSE;
+char *p = amp + 1;
+if (*p == '#')
+    {
+    p += 1;
+    boolean hex = (*p == 'x' || *p == 'X');
+    if (hex)
+        p += 1;
+    char *digits = p;
+    while (hex ? isxdigit((unsigned char)*p) : isdigit((unsigned char)*p))
+        ++p;
+    return (p > digits && *p == 0);
+    }
+int len = entityNameLen(p);
+return (len > 0 && p[len] == 0 && isSafeEntityName(p, len));
+}
+
+static boolean cssValueOk(char *value)
+/* Is value one we will print as a style property, or as an svg attribute that takes the
+ * same values?  Look at the text a browser will see, not the text the author wrote.  A
+ * browser turns a character reference into the character it names before the CSS parser
+ * runs, so u&#114l( would otherwise walk past the check below.  Numbers are decoded here.
+ * A name other than the safe ones is refused outright.  A name without its semicolon is
+ * decoded only from a legacy handful that all name Latin-1 punctuation, which cannot spell
+ * anything. */
+{
+if (hasOtherEntityName(value))
+    return FALSE;
+char *lower = decodeNumericRefs(value);
+tolowers(lower);
+boolean ok = (stringIn("url(", lower) == NULL && stringIn("expression", lower) == NULL
+              && strchr(lower, '\\') == NULL);
+freeMem(lower);
+return ok;
+}
+
 static char *filterStyle(char *val, struct sanitizer *san)
 /* Return the declarations of val that we allow, or NULL if none of them survive. */
 {
@@ -545,7 +717,7 @@ struct dyString *out = dyStringNew(strlen(dupe)+1);
 char *decl = dupe;
 while (decl != NULL && *decl != 0)
     {
-    char *next = strchr(decl, ';');
+    char *next = declarationEnd(decl);
     if (next != NULL)
         *next++ = 0;
     char *colon = strchr(decl, ':');
@@ -557,22 +729,16 @@ while (decl != NULL && *decl != 0)
         tolowers(prop);
         if (isNotEmpty(prop) && isNotEmpty(value))
             {
-            /* Look at the text a browser will see, not the text the author wrote.  A
-             * browser turns a character reference into the character it names before the
-             * CSS parser runs, so u&#114l( would otherwise walk past the check below.
-             * Only the numeric form needs decoding here.  A named reference has to end in
-             * a semicolon, apart from a legacy handful that all name Latin-1 punctuation,
-             * and a semicolon has already ended the declaration before we get here. */
-            char *lower = decodeNumericRefs(value);
-            tolowers(lower);
             if (hashLookup(stylePropHash, prop) == NULL)
                 ;                       /* not a property we print, and nothing to explain */
-            else if (stringIn("url(", lower) != NULL || stringIn("expression", lower) != NULL
-                     || strchr(lower, '\\') != NULL)
+            else if (!cssValueOk(value))
                 noteRemoved(san, "removed the value of the style property %s", prop);
             else
-                dyStringPrintf(out, "%s:%s;", prop, value);
-            freeMem(lower);
+                {
+                /* Close an open reference, so the output reads back the same. */
+                dyStringPrintf(out, "%s:%s%s;", prop, value,
+                               endsInOpenReference(value) ? ";" : "");
+                }
             }
         }
     decl = next;
@@ -615,6 +781,7 @@ return FALSE;
 static void writeAttributes(struct sanitizer *san, char *element, char *attrText, char *tagEnd)
 /* Write the attributes of element that we allow, from the text between attrText and tagEnd. */
 {
+boolean isSvg = sameString(element, "svg") || (hashLookup(svgShapeHash, element) != NULL);
 boolean isAnchor = sameString(element, "a");
 boolean isFrame = sameString(element, "iframe");
 boolean hasTarget = FALSE;
@@ -681,6 +848,34 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
             dyStringAppendC(san->out, '"');
             }
         }
+    else if (sameString(attr, "class"))
+        {
+        /* Keep the names on our list and drop the rest. */
+        struct dyString *kept = dyStringNew(0);
+        char *word, *rest = value;
+        while ((word = nextWord(&rest)) != NULL)
+            {
+            if (hashLookup(classNameHash, word) != NULL)
+                {
+                if (kept->stringSize > 0)
+                    dyStringAppendC(kept, ' ');
+                dyStringAppend(kept, word);
+                }
+            }
+        if (kept->stringSize > 0)
+            dyStringPrintf(san->out, " class=\"%s\"", kept->string);
+        dyStringFree(&kept);
+        }
+    else if (sameString(attr, "data-target"))
+        {
+        /* It names an id on this same page, and that id is being renamed. */
+        if (isNotEmpty(value))
+            {
+            dyStringAppend(san->out, " data-target=\"" htmlSanitizeIdPrefix);
+            appendEscaped(san->out, skipIdPrefix(value));
+            dyStringAppendC(san->out, '"');
+            }
+        }
     else if (sameString(attr, "id") || (isAnchor && sameString(attr, "name")))
         {
         /* An id here lands in a page of ours, next to ids our own JavaScript looks up,
@@ -695,6 +890,11 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
         }
     else if (isAnchor && sameString(attr, "rel"))
         relValue = cloneString(value);          /* a repeat of it never reaches here */
+    else if (isSvg && !cssValueOk(value))
+        {
+        /* A fill or a stroke can name a url, and a browser will fetch it. */
+        noteRemoved(san, "removed the value of the svg attribute %s", attr);
+        }
     else
         {
         if (isAnchor && sameString(attr, "target"))
@@ -742,20 +942,22 @@ while ((s = nextAttribute(s, tagEnd, &name, &nameLen, &val, &valLen)) != NULL)
 return NULL;
 }
 
-static void closeThrough(struct sanitizer *san, char *name)
-/* Close name, and anything opened inside it, if name is open at all. */
+static boolean isOpen(struct sanitizer *san, char *name)
+/* Is name open around the current position? */
 {
 struct slName *el;
-boolean found = FALSE;
 for (el = san->openStack;  el != NULL;  el = el->next)
     {
     if (sameString(el->name, name))
-        {
-        found = TRUE;
-        break;
-        }
+        return TRUE;
     }
-if (!found)
+return FALSE;
+}
+
+static void closeThrough(struct sanitizer *san, char *name)
+/* Close name, and anything opened inside it, if name is open at all. */
+{
+if (!isOpen(san, name))
     return;
 while (san->openStack != NULL)
     {
@@ -864,6 +1066,9 @@ while (*s != 0)
         }
     if (hashLookup(keepHash, name) == NULL)
         continue;                       /* tag goes, text inside it stays */
+    boolean isSvg = sameString(name, "svg") || (hashLookup(svgShapeHash, name) != NULL);
+    if (isSvg && !sameString(name, "svg") && !isOpen(san, "svg"))
+        continue;                       /* a shape outside a drawing draws nothing */
     if (!isVoid && san->depth >= maxNestDepth)
         {
         noteRemoved(san, "dropped tags nested more than %d deep", maxNestDepth);
@@ -872,7 +1077,14 @@ while (*s != 0)
     dyStringPrintf(san->out, "<%s", name);
     writeAttributes(san, name, attrText, tagEnd);
     dyStringAppendC(san->out, '>');
-    if (!isVoid)
+    if (isSvg && tagEnd[-1] == '/')
+        {
+        /* Inside an svg a trailing slash does close the element, and a drawing is mostly
+         * shapes written that way.  Close it in so many words, so that the page reads the
+         * same whether or not a browser takes the slash to mean anything. */
+        dyStringPrintf(san->out, "</%s>", name);
+        }
+    else if (!isVoid)
         {
         /* A trailing slash does not close an element like this one, whatever the author
          * meant by it, so remember it as open.  Anything still open at the end is closed

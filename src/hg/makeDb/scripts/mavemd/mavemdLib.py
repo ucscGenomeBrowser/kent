@@ -15,6 +15,7 @@ That set is smaller than the genomic-route placement count, because some variant
 genomic term and no protein term; the makeDoc records both figures per build.
 """
 
+import os
 import re
 import subprocess
 import sys
@@ -177,6 +178,7 @@ class CodonMap(object):
         self.strand = strand
         self.cdsBases = cdsBases
         self.protLen = len(cdsBases) // 3
+        self.protein = None      # filled in by addProteinSequence()
 
     def codon(self, protPos):
         """Genomic positions of codon protPos (1-based), or None if out of range."""
@@ -267,6 +269,34 @@ def loadCodonMaps(db, transcripts):
     return maps, missing
 
 
+DASHES = {0x2010: '-', 0x2011: '-', 0x2012: '-', 0x2013: '-', 0x2014: '-', 0x2015: '-',
+          0x2212: '-', 0x00ad: '-'}
+
+
+def asciiText(value):
+    """Flatten text to ASCII, for fields hgTracks draws as raster rather than HTML.
+
+    bedField() turns non-ASCII into numeric HTML entities, which is right for the details
+    page and the mouseovers but wrong for the heatmap legend: that is drawn with a graphics
+    library, so an entity appears literally as "&#8211;" on the image. MaveDB score set
+    titles carry en dashes ("BRCA2 exons 15-26"), so anything bound for the legend comes
+    through here first.
+    """
+    text = '' if value is None else str(value)
+    out = []
+    for ch in text:
+        code = ord(ch)
+        if code < 128:
+            out.append(ch)
+        elif code in DASHES:
+            out.append('-')
+        else:
+            import unicodedata
+            folded = unicodedata.normalize('NFKD', ch).encode('ascii', 'ignore').decode()
+            out.append(folded)
+    return ''.join(out)
+
+
 def bedField(value):
     """Render one BED field: no tabs, no newlines, no non-ASCII.
 
@@ -281,6 +311,89 @@ def bedField(value):
     while '  ' in text:
         text = text.replace('  ', ' ')
     return ''.join(c if ord(c) < 128 else '&#%d;' % ord(c) for c in text.strip())
+
+
+CODON_TABLE = {}
+for _bases, _aas in (
+        ('TTT TTC', 'F'), ('TTA TTG CTT CTC CTA CTG', 'L'), ('ATT ATC ATA', 'I'),
+        ('ATG', 'M'), ('GTT GTC GTA GTG', 'V'), ('TCT TCC TCA TCG AGT AGC', 'S'),
+        ('CCT CCC CCA CCG', 'P'), ('ACT ACC ACA ACG', 'T'), ('GCT GCC GCA GCG', 'A'),
+        ('TAT TAC', 'Y'), ('TAA TAG TGA', '*'), ('CAT CAC', 'H'), ('CAA CAG', 'Q'),
+        ('AAT AAC', 'N'), ('AAA AAG', 'K'), ('GAT GAC', 'D'), ('GAA GAG', 'E'),
+        ('TGT TGC', 'C'), ('TGG', 'W'), ('CGT CGC CGA CGG AGA AGG', 'R'),
+        ('GGT GGC GGA GGG', 'G')):
+    for _b in _bases.split():
+        CODON_TABLE[_b] = _aas
+
+COMPLEMENT = str.maketrans('ACGTacgtNn', 'TGCAtgcaNn')
+
+
+def addProteinSequence(db, maps, twoBit, workDir):
+    """Translate each transcript's CDS from the genome and hang it on its CodonMap.
+
+    This is what lets makeMaveMdVariants.py check a projected codon against the reference
+    residue the HGVS term asserts. The cross-check against MaveDB's own genomic mapping
+    cannot do that job: 18 of the 40 protein accessions have no genomic-route variants at
+    all, and they hold 97% of the projected items, so a shifted CDS in any of them would
+    move every item and still pass.
+    """
+    bedPath = os.path.join(workDir, 'cdsExons.bed')
+    faPath = os.path.join(workDir, 'cdsExons.fa')
+    runs = []
+    with open(bedPath, 'w') as fh:
+        for cm in maps.values():
+            start = None
+            prev = None
+            for pos in sorted(cm.cdsBases):
+                if start is None:
+                    start = prev = pos
+                elif pos == prev + 1:
+                    prev = pos
+                else:
+                    fh.write('%s\t%d\t%d\t%s:%d-%d\n'
+                             % (cm.chrom, start, prev + 1, cm.chrom, start, prev + 1))
+                    runs.append((cm.chrom, start, prev + 1))
+                    start = prev = pos
+            if start is not None:
+                fh.write('%s\t%d\t%d\t%s:%d-%d\n'
+                         % (cm.chrom, start, prev + 1, cm.chrom, start, prev + 1))
+                runs.append((cm.chrom, start, prev + 1))
+
+    # -bedPos makes the fasta id chrom:start-end; the bed needs a name column either way
+    subprocess.run(['twoBitToFa', '-bed=' + bedPath, '-bedPos', twoBit, faPath],
+                   check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    seq = {}
+    name = None
+    chunks = []
+    with open(faPath) as fh:
+        for line in fh:
+            if line.startswith('>'):
+                if name:
+                    seq[name] = ''.join(chunks)
+                name = line[1:].strip()
+                chunks = []
+            else:
+                chunks.append(line.strip())
+    if name:
+        seq[name] = ''.join(chunks)
+
+    base = {}
+    for chrom, start, end in runs:
+        s = seq.get('%s:%d-%d' % (chrom, start, end))
+        if s is None:
+            continue
+        for offset, ch in enumerate(s):
+            base[(chrom, start + offset)] = ch
+
+    for cm in maps.values():
+        letters = []
+        for pos in cm.cdsBases:
+            ch = base.get((cm.chrom, pos), 'N')
+            letters.append(ch.translate(COMPLEMENT) if cm.strand == '-' else ch)
+        cds = ''.join(letters).upper()
+        cm.protein = ''.join(CODON_TABLE.get(cds[i:i + 3], 'X')
+                             for i in range(0, len(cds) - 2, 3))
 
 
 def fmtScore(value, places=4):

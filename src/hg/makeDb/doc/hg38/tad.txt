@@ -126,14 +126,14 @@ make DBS=hg38 FIND=find
 # subtrackUrls (like wgEncodeReg4); the readable biosample name (_Biosample) and full ENCODE
 # summary (_Description) are shown in the metadata table but not faceted. shortLabels are
 # word-boundary summaries (no mid-word truncation; CD4-positive->CD4+ etc.); bigBed filenames
-# keep the readable biosample symbol. (A549 organ "musculature of body"->Muscle and similar
-# follow ENCODE's organ_slim verbatim; organ reflects ENCODE's annotation, not a disease-origin call.)
+# keep the readable biosample symbol. (Organ is ENCODE's organ_slim annotation, not our own call
+# on where a cancer cell line came from, e.g. A673 "musculature of body" -> Muscle.)
 
 cd /hive/data/outside/tad/encode/build
 python3 buildTadsEncode.py
 # -> hg38/tadsEncode/<symbol>.bb  (117 bigBeds, bigBed 4+5)
-# -> hg38/tadsEncode_metadata.tsv (118 rows; cols Biosample Organ Biosample_type Assay
-#    Life_stage Calls _Biosample)
+# -> hg38/tadsEncode_metadata.tsv (118 rows; cols Accession _Biosample Organ Biosample_type
+#    Assay Life_stage Calls _Description)
 # -> hg38/tadsEncode.ra  (faceted composite header + 117 subtrack stanzas)
 
 # Symlink bigBeds (directory symlink) and metadata TSV into /gbdb
