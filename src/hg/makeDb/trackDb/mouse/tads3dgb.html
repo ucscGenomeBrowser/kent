@@ -9,16 +9,16 @@ intervals are 3DGB's own, with no UCSC re-calling, merging, or recurrence scorin
 </p>
 <p>
 The calls are native to mm10. On mm39 they are shown lifted from mm10 (noted in each track's
-long label). By default all subtracks are off; use the faceted selector to enable datasets.
+long label). By default a small set of reference datasets is shown (mESC, CH12-LX, and mESC
+WT MicroC). Use the faceted selector to enable other datasets.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each subtrack is drawn as boxes spanning the self-interacting domains and is
-<b>colored by organ</b>. These datasets are <b>not a cross-comparable consensus</b>; each
-represents one dataset's own TAD calls. Because calls are made on binned Hi-C data (3DGB calls
-TADs at 25 kb), domain edges are uncertain to roughly the bin size, and domains do not tile
-the genome end to end.
+Each subtrack is <b>colored by organ</b>. These datasets are <b>not a cross-comparable
+consensus</b>. Each represents one dataset's own TAD calls. Because 3DGB calls TADs from
+Hi-C data analyzed in fixed-size 20 or 25 kb bins, domain edges are only accurate to roughly
+one bin, and domains do not cover the whole genome.
 </p>
 <p>
 The facets are <b>Organ</b>, <b>Cell type</b>, <b>Assay</b>, <b>Year</b>, and <b>Study</b>.
@@ -29,10 +29,10 @@ were manually curated for the human datasets and are not provided here.)
 <h2>Methods</h2>
 <p>
 TAD domains were called by the 3D Genome Browser pipeline and are displayed verbatim. UCSC
-performed only a format normalization (reshaping the published per-dataset BED-like file to a
-plain four-column bigBed) and, for mm39, a <b>liftOver</b> from mm10; no domain coordinates
-were changed and no re-calling was performed. The dataset metadata used for the faceted
-selector was copied directly from the 3D Genome Browser.
+performed only a format normalization (reshaping the published per-dataset BED-like file to
+a plain four-column bigBed) and, for mm39, a <b>liftOver</b> from mm10. No re-calling was
+performed, and the mm10 coordinates are unchanged from the 3DGB files. The dataset metadata
+used for the faceted selector was copied directly from the 3D Genome Browser.
 </p>
 
 <h2>Data Access</h2>
@@ -60,7 +60,11 @@ studies, when using these data.
 <h2>References</h2>
 <p>
 Yu S, Fu Y, Wong JH, Wang J, Zhao H, Zhao J, Yue F.
-The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D
-genome architecture. <em>Nucleic Acids Res</em>. 2026;54(D1):D48-D54.
-<a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">doi:10.1093/nar/gkaf1109</a>
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41206958" target="_blank">
+The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D genome
+architecture</a>.
+<em>Nucleic Acids Res</em>. 2026 Jan 6;54(D1):D48-D54.
+DOI: <a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">10.1093/nar/gkaf1109</a>; PMID:
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41206958" target="_blank">41206958</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12807788/" target="_blank">PMC12807788</a>
 </p>

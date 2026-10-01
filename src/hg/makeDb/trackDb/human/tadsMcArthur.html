@@ -15,31 +15,29 @@ resolution (25 kb for the Rao-lab set, 40 kb for the others).
 </p>
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each 100 kb &quot;bookend&quot; boundary bin is shaded by the number of cell-type maps
-sharing it (1&ndash;37): darker indicates a boundary shared by more cell types. Use the
-<b>filter</b> to show only boundaries shared by at least a chosen number of maps. We
-describe these as <em>recurrent across N of 37 maps</em>, not &quot;conserved&quot;.
+Each boundary (about 100 kb) is shaded by the number of cell-type maps sharing it
+(1&ndash;37): darker indicates a boundary shared by more cell types. Use the <b>filter</b>
+to show only boundaries shared by at least a chosen number of maps.
 </p>
 <p>
-<b>Interpreting the score:</b> the score counts how many independent cell-type maps agree on a
-boundary, which serves as a confidence measure. High values mark <b>constitutive</b> boundaries
+<b>Interpreting the score:</b> the score counts how many independent cell-type maps agree on
+a boundary, which serves as a confidence measure. High values mark <b>stable</b> boundaries
 shared across cell types: the most reliable, and enriched for CTCF binding and evolutionary
-constraint. Boundaries seen in only one or a few maps are largely cell-type-specific. Raising the
-filter yields a smaller, higher-confidence set of boundaries.
+constraint. Boundaries seen in only one or a few maps are largely cell-type-specific.
+Raising the filter yields a smaller, higher-confidence set of boundaries.
 </p>
 <p>
-<b>Default filter:</b> this track initially shows boundaries shared by at least <b>4 of the 37
-maps</b>. Boundaries seen in only 1&ndash;3 maps are no more CTCF-enriched or evolutionarily
-constrained than expected by chance. Lower the <b>filter</b> (minimum maps) to 1 to display all
+<b>Default filter:</b> this track initially shows boundaries shared by at least
+<b>4 of the 37 maps</b>. Lower the <b>filter</b> (minimum maps) to 1 to display all
 boundaries.
 </p>
 <h2>Methods</h2>
 <p>
 TAD boundaries from 37 re-processed cell-type maps were each represented as the 100 kb
-windows flanking every TAD (&quot;bookend&quot; boundaries); the genome was tiled into
-100 kb windows and, for each window, the number of maps with a boundary in it was counted
-(McArthur &amp; Capra, 2021). Data were obtained from the authors' repository on assembly
-hg19 and lifted to this assembly with the UCSC <b>liftOver</b> tool where needed.
+windows at both ends of every TAD. The genome was divided into 100 kb windows and, for each
+window, the number of maps with a boundary in it was counted (McArthur &amp; Capra, 2021).
+Data were obtained from the authors' repository on assembly hg19 and lifted to this assembly
+with the UCSC <b>liftOver</b> tool where needed.
 </p>
 
 <h2>Data Access</h2>
@@ -55,8 +53,13 @@ The underlying bigBed files can be downloaded from our
 
 <h2>References</h2>
 <p>
-McArthur E, Capra JA. Topologically associating domain boundaries that are stable across
-diverse cell types are evolutionarily constrained and enriched for heritability.
-<em>Am J Hum Genet</em>. 2021;108(2):269-283.
-<a href="https://doi.org/10.1016/j.ajhg.2021.01.001" target="_blank">doi:10.1016/j.ajhg.2021.01.001</a>
+McArthur E, Capra JA.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33545030" target="_blank">
+Topologically associating domain boundaries that are stable across diverse cell types are
+evolutionarily constrained and enriched for heritability</a>.
+<em>Am J Hum Genet</em>. 2021 Feb 4;108(2):269-283.
+DOI: <a href="https://doi.org/10.1016/j.ajhg.2021.01.001"
+target="_blank">10.1016/j.ajhg.2021.01.001</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/33545030" target="_blank">33545030</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7895846/" target="_blank">PMC7895846</a>
 </p>

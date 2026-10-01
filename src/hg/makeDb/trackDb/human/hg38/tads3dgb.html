@@ -1,12 +1,12 @@
 <h2>Description</h2>
 <p>
 This composite shows <b>TAD domains</b> from the
-<a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>
-(3DGB) across <b>464 human Hi-C and Micro-C datasets</b> on hg38. Each subtrack is one
-3DGB dataset, displayed exactly as called and published by 3DGB. TAD domains are
-megabase-scale regions of the genome that preferentially self-interact; their boundaries
-(frequently bound by CTCF and cohesin) insulate neighboring regions and constrain
-enhancer-promoter contacts.
+<a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a> (3DGB)
+across <b>464 human Hi-C and Micro-C datasets</b> on hg38. Each subtrack is one 3DGB
+dataset, displayed exactly as called and published by 3DGB. TAD domains are regions of the
+genome, typically hundreds of kilobases to about a megabase, that preferentially
+self-interact. Their boundaries (frequently bound by CTCF and cohesin) insulate neighboring
+regions and constrain enhancer-promoter contacts.
 </p>
 <p>
 The 464 datasets span a wide range of normal and cancer samples, baseline and
@@ -18,20 +18,18 @@ no UCSC re-calling, merging, lifting, or recurrence scoring.
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each subtrack is drawn as boxes spanning the self-interacting domains and is
-<b>colored by organ</b>. By default a small set of canonical reference datasets is shown
-(GM12878, H1-ESC, IMR-90, and HMEC); all other datasets are turned off and can be enabled
-through the faceted selector. Mousing over a domain shows the dataset name, organ, and
-assay.
+Each subtrack is <b>colored by organ</b>. By default a small set of canonical reference
+datasets is shown (GM12878, H1-ESC, IMR-90, and HMEC). All other datasets are turned off and
+can be enabled through the faceted selector. Mousing over a domain shows the dataset name,
+organ, and assay.
 </p>
 <p>
 These 464 datasets are <b>not a cross-comparable consensus</b>. Each represents one
 dataset's own TAD calls, made by different laboratories on different samples; coordinates
-are therefore not directly comparable across subtracks, and they are not directly
-comparable to the other TAD tracks in this set (which use different callers and
-resolutions). Because calls are made on binned Hi-C data (3DGB calls TADs at 25 kb),
-domain edges are uncertain to roughly the bin size, and domains do not tile the genome end
-to end.
+are therefore not directly comparable across subtracks, and they are not directly comparable
+to the other TAD tracks in this set (which use different callers and resolutions). Because
+3DGB calls TADs from Hi-C data analyzed in fixed-size 20 or 25 kb bins, domain edges are
+only accurate to roughly one bin, and domains do not cover the whole genome.
 </p>
 
 <h3>Faceted selector</h3>
@@ -66,7 +64,7 @@ flags these so they can be identified or filtered out:
       as an input to another track in this TAD set. These include Schmitt 2016 (11 datasets,
       also shown directly as the <b>Schmitt 2016 boundaries</b> track here), Rao 2014 (7
       datasets; the Rao 2014 Hi-C maps are also offered in the browser), a few ENCODE
-      datasets (overlapping the <b>ENCODE contact domains</b> track), and several studies
+      datasets (overlapping the <b>ENCODE TADs</b> track), and several studies
       (e.g. Dixon 2015) that are inputs to the <b>TAD boundary stability</b> track rather
       than displayed individually. The flag is intended to help avoid double-counting; it
       does not imply each dataset is separately viewable elsewhere.</li>
@@ -114,14 +112,23 @@ studies, when using these data.
 
 <h2>References</h2>
 <p>
-Yu S, Fu Y, Wong JH, Wang J, Zhao H, Zhao J, Yue F.
-The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D
-genome architecture. <em>Nucleic Acids Res</em>. 2026;54(D1):D48-D54.
-<a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">doi:10.1093/nar/gkaf1109</a>
+Wang Y, Song F, Zhang B, Zhang L, Xu J, Kuang D, Li D, Choudhary MNK, Li Y, Hu M <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30286773" target="_blank">
+The 3D Genome Browser: a web-based browser for visualizing 3D genome organization and long-range
+chromatin interactions</a>.
+<em>Genome Biol</em>. 2018 Oct 4;19(1):151.
+DOI: <a href="https://doi.org/10.1186/s13059-018-1519-9"
+target="_blank">10.1186/s13059-018-1519-9</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/30286773" target="_blank">30286773</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6172833/" target="_blank">PMC6172833</a>
 </p>
 <p>
-Wang Y, Song F, Zhang B, Zhang L, <em>et al.</em>
-The 3D Genome Browser: a web-based browser for visualizing 3D genome organization and
-long-range chromatin interactions. <em>Genome Biol</em>. 2018;19(1):151.
-<a href="https://doi.org/10.1186/s13059-018-1519-9" target="_blank">doi:10.1186/s13059-018-1519-9</a>
+Yu S, Fu Y, Wong JH, Wang J, Zhao H, Zhao J, Yue F.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41206958" target="_blank">
+The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D genome
+architecture</a>.
+<em>Nucleic Acids Res</em>. 2026 Jan 6;54(D1):D48-D54.
+DOI: <a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">10.1093/nar/gkaf1109</a>; PMID:
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41206958" target="_blank">41206958</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12807788/" target="_blank">PMC12807788</a>
 </p>

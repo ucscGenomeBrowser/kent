@@ -1,10 +1,10 @@
-# 2026-09-09 Claude max: pcLAI local ancestry for HPRC Release 2 haplotypes, hg38
+# 2026-09-09 Claude max: PCLAI local ancestry for HPRC Release 2 haplotypes, hg38
 #            One composite track, one subtrack per haplotype. Alpha only.
 #            Experimental / demo: no Redmine ticket, deliberately. If this turns
 #            into a real track the notes below are the whole record of how it was
 #            built and what is known to be off about it.
 
-# The pcLAI (point cloud local ancestry inference) annotations come in three
+# The PCLAI (point cloud local ancestry inference) annotations come in three
 # coordinate systems: each assembly's own coordinates (asm_coord, already shipped
 # on the GenArk HPRC assembly hubs as the hprc2annot contrib collection),
 # CHM13 coordinates, and GRCh38 coordinates. This track uses the GRCh38 set.
@@ -33,7 +33,7 @@ awk 'NR==FNR{sz[$1]=$2;next} !($1 in sz){nc++} $3>sz[$1]{over++} $2>=$3{inv++} \
   END{print "nochrom",nc+0,"over",over+0,"inverted",inv+0}' \
   /hive/data/genomes/hg38/chrom.sizes bed/*.bed            # all zero
 
-# The pcLAI BED format is documented at https://github.com/AI-sandbox/hprc-pclai
+# The PCLAI BED format is documented at https://github.com/AI-sandbox/hprc-pclai
 # (README, "Output format"): 0-based half-open like any BED, thickStart ==
 # chromStart, thickEnd == chromEnd, and column 10 is the "centroid" -- the
 # discretized ancestry of the window, written as the PCA centroid of its ancestry
