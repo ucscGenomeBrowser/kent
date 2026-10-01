@@ -80,9 +80,9 @@ char *asmAliasFind(char *alias);
 
 char *asmAliasFindUnlessGenArk(char *alias);
 /* Like asmAliasFind(), but only translate through the asmAlias table if
- * alias isn't already a real, existing GenArk hub -- an accession that
- * resolves on its own should never be promoted to a merely "equivalent"
- * alias. */
+ * alias isn't already a real, existing GenArk hub or a name with its own
+ * active dbDb row -- a name that resolves on its own should never be promoted to
+ * a merely "equivalent" alias. */
 
 #endif /* ASMALIAS_H */
 
