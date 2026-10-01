@@ -288,6 +288,15 @@ def findOnDuty(comments):
     return(None)
 
 
+def findWatchers(comments):
+    """The ottoWatchers header line names people added to every ticket, comma
+    separated."""
+    for line in comments:
+        if line.lower().startswith("# ottowatchers:"):
+            return([n.strip() for n in line.split(":", 1)[1].split(",") if n.strip()])
+    return([])
+
+
 def loadState(path):
     if os.path.exists(path):
         with open(path) as fh:
@@ -548,9 +557,10 @@ def checkPublic(row, entry, now):
     return(result)
 
 
-def fileTicket(result, onDuty, dryRun):
+def fileTicket(result, onDuty, watchers, dryRun):
     """One GB Bug per failing job, to whoever is running otto, with the job's
-    owner as a watcher and named in the body."""
+    owner and the ottoWatchers people as watchers, and the owner named in the
+    body."""
     owner = result["owner"]
     if result["verdict"] == "notPublic":
         subject = "otto job %s: %s on genome.ucsc.edu is older than on hgwdev" % (
@@ -596,14 +606,17 @@ def fileTicket(result, onDuty, dryRun):
         return(None)
     done = subprocess.run(cmd, capture_output=True, text=True)
     print(done.stdout.strip())
-    # dict.fromkeys keeps the order and drops the duplicate when the job's owner
-    # is the person on duty
-    for name in dict.fromkeys(n for n in (owner, onDuty) if n and n != "?"):
-        ticketId = "".join(c for c in done.stdout.split("#")[-1][:6] if c.isdigit())
-        if ticketId:
-            subprocess.run([redmineCli, "watch", ticketId, name],
-                           capture_output=True, text=True)
-    return(done.stdout.strip())
+    # redmineCli prints "Created #NNNNN: <url>"
+    match = re.search(r"Created #(\d+)", done.stdout)
+    if not match:
+        return(None)
+    ticketId = match.group(1)
+    # dict.fromkeys keeps the order and drops a name that is in the list twice,
+    # such as an owner who is also the person on duty
+    for name in dict.fromkeys(n for n in [owner, onDuty] + watchers if n and n != "?"):
+        subprocess.run([redmineCli, "watch", ticketId, name],
+                       capture_output=True, text=True)
+    return(ticketId)
 
 
 def main():
@@ -628,6 +641,7 @@ def main():
     stamps, _ = readTable(args.stamps, 3)
     publicRows = []
     onDuty = findOnDuty(comments)
+    watchers = findWatchers(comments)
     now = datetime.now()
     state = {} if args.no_state else loadState(args.state)
 
@@ -657,6 +671,7 @@ def main():
         elif result["verdict"] in ("unlisted", "unparsed"):
             other.append(result)
         elif result["verdict"] == "ok":
+            entry.pop("ticket", None)
             fine.append(result)
 
     for result in late:
@@ -672,7 +687,9 @@ def main():
         if entry.get("ticket"):
             print("    ticket #%s is already open" % entry["ticket"])
             continue
-        fileTicket(result, onDuty, dryRun=not args.file)
+        ticketId = fileTicket(result, onDuty, watchers, dryRun=not args.file)
+        if ticketId:
+            entry["ticket"] = ticketId
 
     for result in other:
         print("%s: %s" % (result["job"], result["detail"]))
@@ -694,6 +711,7 @@ def main():
         result = checkPublic(row, entry, now)
         entry["checked"] = now.strftime("%Y-%m-%d %H:%M")
         if result["verdict"] == "ok":
+            entry.pop("ticket", None)
             publicFine.append(result)
             continue
         if result["verdict"] == "notOnPublic":
@@ -709,7 +727,9 @@ def main():
         if entry.get("ticket"):
             print("    ticket #%s is already open" % entry["ticket"])
             continue
-        fileTicket(result, onDuty, dryRun=not args.file)
+        ticketId = fileTicket(result, onDuty, watchers, dryRun=not args.file)
+        if ticketId:
+            entry["ticket"] = ticketId
 
     if args.verbose:
         print("\nblind, cannot tell whether these ran (%d):" % len(blind))
