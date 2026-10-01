@@ -55,7 +55,7 @@ ACC["HG02257|1"]=GCA_018466845.2; ACC["HG02257|2"]=GCA_018466835.2
 ACC["HG03516|1"]=GCA_018469425.2; ACC["HG03516|2"]=GCA_018469415.2
 
 # Excluded: HG002 (hg002v1.1) uses a bespoke chr-name scheme that does not match
-# its GenArk assembly's aliases (only pcLAI is present for it), and CHM13 (= hs1)
+# its GenArk assembly's aliases (only PCLAI is present for it), and CHM13 (= hs1)
 # has no annotation data here. Skip these samples.
 declare -A SKIP=( [HG002|1]=1 [HG002|2]=1 [CHM13|0]=1 )
 
