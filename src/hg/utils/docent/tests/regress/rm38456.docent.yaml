@@ -28,6 +28,7 @@
 # reads, so it needs a [section] for that central in ~/.docentLogin.  The session is deleted
 # at the start, in case an earlier run died before its own cleanup, and again at the end.
 proof:
+  - "server-flip 2026-09-30 -- failed on genome-test at step 4 (hashMustFindVal) before 35c5facfb9e reached it, passed on genome-test after make alpha the same day, every check ok"
   - "sandbox-ab 2026-09-30 -- passes on hgwdev-braney with the fix; fails on genome-test (master without it) at step 4, check 1, page contains hashMustFindVal"
   - "sandbox-ab 2026-09-30 -- hgwdev-braney rebuilt with the request test swapped for cartVarExists(): fails at step 7, check 2, page says may be shared; with only the doNewSession name read reverted: fails at step 9, check 3, hashMustFindVal; the real fix back in: passes"
 
