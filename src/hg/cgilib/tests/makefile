@@ -20,10 +20,11 @@ mkdirs:
 	@${MKDIR} output ${BIN_DIR}
 
 # Two runs, because the last step of the rule reads hg.conf's alwaysItemRgb and a mirror may
-# turn it off.
+# turn it off.  The on conf sets it on by name, because the developer's conf may turn it off.
 bedItemRgbTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/bedItemRgbTester bedItemRgbTester.c ${MYLIBS} $L
 	echo "include ${HOME}/.hg.conf" > output/rgbOn.conf
+	echo "alwaysItemRgb=on" >> output/rgbOn.conf
 	echo "include ${HOME}/.hg.conf" > output/rgbOff.conf
 	echo "alwaysItemRgb=off" >> output/rgbOff.conf
 	HGDB_CONF=output/rgbOn.conf ${BIN_DIR}/bedItemRgbTester > output/bedItemRgbTest
