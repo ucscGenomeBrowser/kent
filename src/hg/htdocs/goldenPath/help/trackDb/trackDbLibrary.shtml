@@ -6100,7 +6100,11 @@ For the complete bigBarChart format definitions please see the
 <DIV class="barChartBars"><span class="types barChart bigBarChart"></span>
 <div class="format"><code>barChartBars &lt;label1 label2...&gt;</code></div>
     <P>This setting is a list of labels for the categorical variables (bars).
-    It is required for this track type.
+    It is required for this track type. The labels are positional: the first label
+    names the first value in the expScores field of the data file, the second names
+    the second, and so on. See
+    <A HREF="../barChart.html#barOrder" target="_blank">Setting the order of the bars</A>
+    for how to change the order the bars are drawn in.
     </P>
 </DIV>
 
