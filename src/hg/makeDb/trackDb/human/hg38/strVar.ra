@@ -4,7 +4,6 @@ longLabel Tandem Repeat Variation
 group varRep
 superTrack on
 visibility hide
-pennantIcon New red ../goldenPath/newsarch.html#041026 "Released Apr. 10, 2026"
 
     track webstr
     shortLabel WebSTR

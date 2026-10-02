@@ -5,7 +5,6 @@ group genes
 type bed 4
 visibility hide
 superTrack on
-pennantIcon New red ../goldenPath/newsarch.html#042226 "Released Apr. 22, 2026"
 
         track nmdEscMane
         shortLabel NMD Escape MANE
