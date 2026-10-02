@@ -7220,6 +7220,9 @@ var mouseOver = {
         msgWidth = mouseOver.maximumWidth[trackName];
     }
     $('#mouseOverText').html(mouseOverValue);
+    // mouseOver.css right-aligns a single value; a multiWig's rows of label and
+    // value read better left-aligned, so the color swatches line up
+    $('#mouseOverText').css('text-align', mouseOver.multiWig[trackName] ? 'left' : '');
     $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
