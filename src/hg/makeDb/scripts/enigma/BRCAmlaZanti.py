@@ -1,20 +1,40 @@
 #!/usr/bin/env python3
-# Rebuild of the ENIGMA PP4/BP5 (BRCAmla) track with the Zanti et al. 2025
+# Build of the ENIGMA PP4/BP5 (BRCAmla) track with the Zanti et al. 2025
 # case-control LR (ccLR, PMID 40413188) replacing the Parsons iCOGS
-# case-control component. Reads the current track bigBeds for the other
-# evidence types, merges in the ccLRs from Zanti Supplementary Data 4, and
-# writes new .bed/.bb into the work dir. The outputs are copied onto the
-# staging filenames served by the hub only at release, see the makedoc
-# (makeDb/doc/enigma.txt). refs #37886
+# case-control component (refs #37886).
+#
+# Revision for refs #38467:
+#  - Variants are matched by a left-normalized (chrom, pos, ref, alt) key
+#    instead of by HGVS name string, so the same molecular event written two
+#    ways (c.4574_4575del / c.4574_4575delAA, dup / ins, del15 / del) becomes
+#    one item and its evidence is multiplied together.
+#  - Every item is drawn the way the UCSC ClinVar track draws it: SNVs on the
+#    base, deletions on the deleted bases shifted left, delins on the replaced
+#    bases, insertions and dups as the 2 bp flanking the left-shifted
+#    insertion point.
+#  - Names are written in current HGVS style (no spelled-out deleted or
+#    duplicated bases; dup instead of ins when the insertion copies the
+#    adjacent sequence).
+#  - Zanti rows with a symbolic allele (the single <CNV> row) are dropped.
+#
+# hgvsToVcf mis-converts insertions with an intronic offset (refs #38469), so
+# Zanti rows are keyed from Zanti's own VCF columns, not from their HGVSc.
+#
+# Inputs are the pre-Zanti track (archive/v1.1, bed9+12) and Zanti
+# Supplementary Data 4. Do not point CUR38 at /gbdb/.../BRCAmfa.bb: since the
+# #37886 release that file is this script's own output.
+# Outputs go to WORK; copying them onto the staging filenames is done at
+# release, see the makedoc (makeDb/doc/enigma.txt).
 
-import openpyxl, re, subprocess, sys
+import openpyxl, re, subprocess, sys, functools
 
-WORK = "/hive/data/inside/enigmaTracksData/zantiDraft"
-XLSX = WORK + "/ZantiSuppData4.xlsx"
-CUR38 = "/gbdb/hg38/bbi/enigma/BRCAmfa.bb"   # current (Parsons-based) track, hg38
-CUR19 = "/gbdb/hg19/bbi/enigma/BRCAmfa.bb"   # current track, hg19
-HG38SIZES = "/cluster/data/hg38/chrom.sizes"
-HG19SIZES = "/cluster/data/hg19/chrom.sizes"
+WORK = "/hive/data/inside/enigmaTracksData/rm38467"
+XLSX = "/hive/data/inside/enigmaTracksData/zantiDraft/ZantiSuppData4.xlsx"
+CUR38 = "/hive/data/inside/enigmaTracksData/archive/v1.1/BRCAmfaHg38.bb"   # pre-Zanti track
+ASM = {"38": {"db": "hg38", "twoBit": "/hive/data/genomes/hg38/hg38.2bit",
+              "sizes": "/cluster/data/hg38/chrom.sizes", "out": "BRCAmfaZantiHg38"},
+       "19": {"db": "hg19", "twoBit": "/hive/data/genomes/hg19/hg19.2bit",
+              "sizes": "/cluster/data/hg19/chrom.sizes", "out": "BRCAmfaZantiHg19"}}
 
 TX = {"BRCA1": "NM_007294.4", "BRCA2": "NM_000059.4"}
 
@@ -57,28 +77,101 @@ def assignRGB(lr):
     if lr <= 0.48:      return "252,157,3"   # orange -> BP5
     return "91,91,91"                        # grey   -> no evidence
 
-# ---------------------------------------------------------------------------
-# 1. Current multifactorial track: reuse its already-combined per-evidence LRs
-#    (family/co-occurrence/segregation/pathology) and coordinates for BOTH
-#    assemblies. We DROP the existing case-control column (Parsons iCOGS).
-#    bb columns (1-based): 1-9 bed9, 10 LLR, 11 ACMGcode, 12 famHist,
-#    13 cooc, 14 seg, 15 path, 16 caseControl(Parsons), 17 caputo, 18 parsons,
-#    19 li, 20 easton, 21 mouseOver.
-# ---------------------------------------------------------------------------
-def loadCurrent(bb):
-    d = {}
-    for line in bash("bigBedToBed %s stdout" % bb).splitlines():
-        f = line.split("\t")
-        name = f[3]
-        d[name] = {
-            "chrom": f[0], "start": f[1], "end": f[2],
-            "famHist": f[11], "cooc": f[12], "seg": f[13], "path": f[14],
-            "caputo": f[16], "parsons": f[17], "li": f[18], "easton": f[19],
-        }
-    return d
+def fmt(v):
+    """5 significant figures, so small LRs are not shown as 0.0 (refs #38467)."""
+    return "" if v is None else "%.5g" % v
 
-cur38 = loadCurrent(CUR38)
-cur19 = loadCurrent(CUR19)
+# ---------------------------------------------------------------------------
+# Variant normalization and ClinVar-style spans.
+# ---------------------------------------------------------------------------
+class RefMismatch(Exception):
+    pass
+
+@functools.lru_cache(None)
+def refChunk(asm, chrom, start):
+    out = bash("twoBitToFa %s:%s:%d-%d stdout" % (ASM[asm]["twoBit"], chrom, start, start + 10000))
+    return out.split("\n", 1)[1].replace("\n", "").upper()
+
+def refBase(asm, chrom, pos1):
+    """Reference base at 1-based position."""
+    s = (pos1 - 1) // 10000 * 10000
+    return refChunk(asm, chrom, s)[pos1 - 1 - s]
+
+def normalize(asm, chrom, pos, ref, alt):
+    """Trim, left-shift and re-anchor a VCF-style variant. Returns (chrom, pos, ref, alt),
+    1-based. Pure indels come back anchored on the preceding base; SNVs, MNVs and
+    complex delins come back trimmed and unanchored. Raises RefMismatch if ref does not
+    match the genome."""
+    ref, alt = ref.upper(), alt.upper()
+    for i, b in enumerate(ref):
+        if refBase(asm, chrom, pos + i) != b:
+            raise RefMismatch("%s:%d %s>%s" % (chrom, pos, ref, alt))
+    while len(ref) > 1 and len(alt) > 1 and ref[-1] == alt[-1]:
+        ref, alt = ref[:-1], alt[:-1]
+    while len(ref) > 1 and len(alt) > 1 and ref[0] == alt[0]:
+        ref, alt, pos = ref[1:], alt[1:], pos + 1
+    if len(ref) == 1 and len(alt) == 1:
+        return (chrom, pos, ref, alt)
+    if ref[0] == alt[0]:
+        ref, alt, pos = ref[1:], alt[1:], pos + 1
+    if ref and alt:
+        return (chrom, pos, ref, alt)
+    # pure insertion or deletion of seq before pos: shift left through repeats
+    while True:
+        prev = refBase(asm, chrom, pos - 1)
+        if ref and ref[-1] == prev:
+            ref, pos = prev + ref[:-1], pos - 1
+        elif alt and alt[-1] == prev:
+            alt, pos = prev + alt[:-1], pos - 1
+        else:
+            break
+    prev = refBase(asm, chrom, pos - 1)
+    return (chrom, pos - 1, prev + ref, prev + alt)
+
+def clinvarSpan(key):
+    """0-based [start, end) the way the ClinVar track draws the variant."""
+    chrom, pos, ref, alt = key
+    if len(ref) + len(alt) > 2 and ref[0] == alt[0]:
+        if len(ref) == 1:
+            return chrom, pos - 1, pos + 1          # insertion/dup: 2 flanking bases
+        return chrom, pos, pos + len(ref) - 1       # deletion: deleted bases
+    return chrom, pos - 1, pos - 1 + len(ref)       # SNV, MNV, delins: replaced bases
+
+def isPureInsertion(key):
+    return len(key[2]) == 1 and len(key[3]) > 1 and key[2][0] == key[3][0]
+
+def hgvsToKeys(asm, names):
+    """Run hgvsToVcf on a list of HGVS names; return {name: normalized key}."""
+    fn = "%s/hgvsIn.%s.txt" % (WORK, asm)
+    with open(fn, "w") as fh:
+        fh.write("\n".join(sorted(set(names))) + "\n")
+    keys = {}
+    for line in bash("hgvsToVcf %s %s stdout" % (ASM[asm]["db"], fn)).splitlines():
+        if line.startswith("#"):
+            continue
+        f = line.split("\t")
+        if f[6] != "PASS":
+            sys.exit("hgvsToVcf %s flagged %s: %s" % (asm, f[2], f[6]))
+        m = re.search(r"(del|dup)(\d+)$", f[2])
+        if m and abs(len(f[3]) - len(f[4])) != int(m.group(2)):
+            sys.exit("Base count in %s does not match its range" % f[2])
+        keys[f[2]] = normalize(asm, f[0], int(f[1]), f[3], f[4])
+    return keys
+
+# ---------------------------------------------------------------------------
+# 1. Pre-Zanti multifactorial track (bed9+12). Columns (0-based): 9 LLR,
+#    10 ACMGcode, 11 famHist, 12 cooc, 13 seg, 14 path, 15 caseControl
+#    (Parsons, dropped), 16 caputo, 17 parsons, 18 li, 19 easton, 20 mouseOver.
+# ---------------------------------------------------------------------------
+cur = {}
+for line in bash("bigBedToBed %s stdout" % CUR38).splitlines():
+    f = line.split("\t")
+    if len(f) != 21:
+        sys.exit("Expected 21 columns (bed9+12) in %s, got %d" % (CUR38, len(f)))
+    if f[3] in cur:
+        sys.exit("Name appears twice in %s: %s" % (CUR38, f[3]))
+    cur[f[3]] = {"famHist": f[11], "cooc": f[12], "seg": f[13], "path": f[14],
+                 "caputo": f[16], "parsons": f[17], "li": f[18], "easton": f[19]}
 
 # ---------------------------------------------------------------------------
 # 2. Zanti Supplementary Data 4.  header at row index 4, data from index 5.
@@ -88,8 +181,9 @@ ws = wb["Supplementary Data 4"]
 C = dict(CHR=2, POS19=3, POS38=4, REF=5, ALT=6, GENE=9, HGVSC=12, HGVSP=13,
          BRIDGES=27, CARRIERS=30, UKB=33, CCLR=37, SUGG=38, PS4=42)
 
-zan = {}          # key -> dict
-zan_dropped = 0   # N/A / None / no computable LR
+zan = []          # list of Zanti records
+zanDropped = 0    # N/A / None / no computable LR
+zanSymbolic = 0   # symbolic alleles such as <CNV>
 for i, r in enumerate(ws.iter_rows(values_only=True)):
     if i < 5 or r is None or r[C["GENE"]] is None:
         continue
@@ -99,44 +193,119 @@ for i, r in enumerate(ws.iter_rows(values_only=True)):
     cclr = fnum(r[C["CCLR"]])
     sugg = ("" if r[C["SUGG"]] is None else str(r[C["SUGG"]]).strip())
     if cclr is None or sugg in ("N/A", "None"):
-        zan_dropped += 1
+        zanDropped += 1
+        continue
+    ref = str(r[C["REF"]]).strip()
+    alt = str(r[C["ALT"]]).strip()
+    if ref.startswith("<") or alt.startswith("<"):
+        zanSymbolic += 1
         continue
     hgvsc = None if r[C["HGVSC"]] is None else str(r[C["HGVSC"]]).strip()
     chrom = "chr%s" % str(r[C["CHR"]]).strip()
-    ref = str(r[C["REF"]]).strip()
     if hgvsc and hgvsc.startswith("c."):
-        key = "%s:%s" % (TX[gene], re.sub(r"\s+", "", hgvsc))
-        name = key
+        name = "%s:%s" % (TX[gene], re.sub(r"\s+", "", hgvsc))
     else:
-        key = "%s:%s:%s:%s>%s" % (gene, chrom, str(r[C["POS38"]]).strip(),
-                                  ref, str(r[C["ALT"]]).strip())
-        name = key
-    rec = {"gene": gene, "chrom": chrom, "ref": ref, "name": name,
-           "hgvsp": "" if r[C["HGVSP"]] is None else str(r[C["HGVSP"]]).strip(),
-           "ccLR": cclr, "sugg": sugg,
-           "bridges": r[C["BRIDGES"]], "carriers": r[C["CARRIERS"]], "ukb": r[C["UKB"]],
-           "ps4": "" if r[C["PS4"]] is None else str(r[C["PS4"]]).strip()}
-    for asm, col in (("38", "POS38"), ("19", "POS19")):
-        p = r[C[col]]
-        if p is None or str(p).strip() == "":
-            rec["pos" + asm] = None
+        name = "%s:%s:%s:%s>%s" % (gene, chrom, str(r[C["POS38"]]).strip(), ref, alt)
+    zan.append({"gene": gene, "chrom": chrom, "ref": ref, "alt": alt, "name": name,
+                "hgvsc": name if name.startswith("NM_") else None,
+                "pos38": r[C["POS38"]], "pos19": r[C["POS19"]],
+                "hgvsp": "" if r[C["HGVSP"]] is None else str(r[C["HGVSP"]]).strip(),
+                "ccLR": cclr, "sugg": sugg,
+                "bridges": r[C["BRIDGES"]], "carriers": r[C["CARRIERS"]], "ukb": r[C["UKB"]],
+                "ps4": "" if r[C["PS4"]] is None else str(r[C["PS4"]]).strip()})
+
+# ---------------------------------------------------------------------------
+# 3. Keys for both assemblies. Pre-Zanti items: from their HGVS names via
+#    hgvsToVcf (none are intronic insertions). Zanti rows: from Zanti's own VCF
+#    columns; fall back to the HGVSc only where Zanti's REF does not match the
+#    genome. Cross-check Zanti VCF against HGVSc and report disagreements.
+# ---------------------------------------------------------------------------
+def intronicIns(name):
+    return bool(re.search(r"[+-]\d+_.*ins|_\d+[+-]\d+ins", name)) and "delins" not in name
+
+curKey, zanKey = {}, {}
+refFallback, crossBad = [], []
+for asm in ("38", "19"):
+    hk = hgvsToKeys(asm, list(cur) + [z["hgvsc"] for z in zan if z["hgvsc"]])
+    missing = [n for n in cur if n not in hk]
+    if missing:
+        sys.exit("hgvsToVcf %s could not convert pre-Zanti names: %s" % (asm, missing))
+    curKey[asm] = {n: hk[n] for n in cur}
+    zanKey[asm] = []
+    for z in zan:
+        try:
+            k = normalize(asm, z["chrom"], int(float(str(z["pos" + asm]))), z["ref"], z["alt"])
+        except RefMismatch:
+            if not z["hgvsc"] or z["hgvsc"] not in hk:
+                sys.exit("Zanti REF mismatch with no usable HGVSc: %s" % z["name"])
+            k = hk[z["hgvsc"]]
+            refFallback.append((asm, z["name"]))
         else:
-            s = int(float(str(p).strip())) - 1
-            rec["pos" + asm] = (chrom, str(s), str(s + max(1, len(ref))))
-    zan[key] = rec
+            if z["hgvsc"] and z["hgvsc"] in hk and hk[z["hgvsc"]] != k:
+                if not intronicIns(z["hgvsc"]):
+                    sys.exit("Zanti VCF and HGVSc disagree on %s (%s): %s vs %s"
+                             % (z["name"], asm, k, hk[z["hgvsc"]]))
+                if asm == "38":
+                    crossBad.append(z["name"])
+        zanKey[asm].append(k)
 
 # ---------------------------------------------------------------------------
-# 3. Merge: universe = union of current-track variants and Zanti variants.
-#    New combined LR = product(family, co-occ, seg, path) x Zanti ccLR.
+# 4. Group by hg38 key. Each group's hg19 key must also agree.
 # ---------------------------------------------------------------------------
-allkeys = set(cur38) | set(zan)
-conflicts = []            # (key, MF, ccLR, combined)
-n_both = n_zan_only = n_mf_only = n_no_evidence_left = 0
-color_count = {}
+groups = {}        # hg38 key -> {"cur": [names], "zan": [records], "k19": set()}
+for n in cur:
+    g = groups.setdefault(curKey["38"][n], {"cur": [], "zan": [], "k19": set()})
+    g["cur"].append(n)
+    g["k19"].add(curKey["19"][n])
+for z, k38, k19 in zip(zan, zanKey["38"], zanKey["19"]):
+    g = groups.setdefault(k38, {"cur": [], "zan": [], "k19": set()})
+    g["zan"].append(z)
+    g["k19"].add(k19)
+for k, g in groups.items():
+    if len(g["zan"]) > 1:
+        sys.exit("Two Zanti rows share one variant %s: %s" % (k, [z["name"] for z in g["zan"]]))
+    if len(g["k19"]) != 1:
+        sys.exit("Group %s has inconsistent hg19 keys: %s" % (k, g["k19"]))
 
-def mfProduct(cur):
-    """Product of the four non-case-control components; None if none present."""
-    vals = [fnum(cur[k]) for k in ("famHist", "cooc", "seg", "path")]
+# ---------------------------------------------------------------------------
+# 5. Names. Strip spelled-out bases and counts from del/dup names. For pure
+#    insertions named with ins, ask vcfToHgvs whether HGVS calls it a dup.
+# ---------------------------------------------------------------------------
+def stripSeq(name):
+    return re.sub(r"(del|dup)([ACGT]+|\d+)$", r"\1", name)
+
+insKeys = [k for k, g in groups.items() if isPureInsertion(k)
+           and any(re.search(r"ins[ACGT]+$", n) and "delins" not in n
+                   for n in g["cur"] + [z["name"] for z in g["zan"]])]
+dupName = {}
+if insKeys:
+    fn = WORK + "/insKeys.vcf"
+    with open(fn, "w") as fh:
+        fh.write("##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
+        for i, k in enumerate(insKeys):
+            fh.write("%s\t%d\tk%d\t%s\t%s\t.\t.\t.\n" % (k[0], k[1], i, k[2], k[3]))
+    for line in bash("vcfToHgvs hg38 %s stdout" % fn).splitlines():
+        f = line.split("\t")
+        if len(f) < 9 or f[5] not in TX.values():
+            continue
+        k = insKeys[int(f[2][1:])]
+        if re.search(r"dup[ACGT]*$", f[8]):
+            dupName[k] = stripSeq(f[8])
+
+renamed = []
+def canonicalName(k, g):
+    names = g["cur"] + [z["name"] for z in g["zan"]]
+    if k in dupName:
+        return dupName[k]
+    stripped = sorted(set(stripSeq(n) for n in names))
+    if len(stripped) != 1:
+        sys.exit("Group %s names differ after stripping: %s" % (k, names))
+    return stripped[0]
+
+# ---------------------------------------------------------------------------
+# 6. Merge evidence and write one item per group, both assemblies.
+# ---------------------------------------------------------------------------
+def product(vals):
     vals = [v for v in vals if v is not None]
     if not vals:
         return None
@@ -145,93 +314,91 @@ def mfProduct(cur):
         p *= v
     return p
 
-def buildBed(asm, curmap):
-    """Emit bed lines for one assembly."""
-    global n_both, n_zan_only, n_mf_only, n_no_evidence_left
-    lines = []
-    for key in allkeys:
-        cur = curmap.get(key)
-        z = zan.get(key)
+def mergeList(lists):
+    """Multiply comma lists of per-source LRs position by position (NULL = absent) and
+    write them with fmt()."""
+    lists = [l for l in lists if l]
+    if not lists:
+        return ""
+    cols = [l.split(",") for l in lists]
+    if len(set(len(c) for c in cols)) != 1:
+        sys.exit("Per-source lists of different lengths: %s" % lists)
+    out = []
+    for vals in zip(*cols):
+        p = product([fnum(v) for v in vals])
+        out.append("NULL" if p is None else fmt(p))
+    return ",".join(out)
 
-        # multifactorial part
-        mf = mfProduct(cur) if cur else None
-        cc = z["ccLR"] if z else None
+conflicts = []
+merged = []
+sourceTwice = []
+rows = {"38": [], "19": []}
+counts = {"groups": 0, "merged": 0, "both": 0, "zanOnly": 0, "mfOnly": 0}
+for k, g in groups.items():
+    curs = [cur[n] for n in g["cur"]]
+    z = g["zan"][0] if g["zan"] else None
+    counts["groups"] += 1
+    if len(g["cur"]) + len(g["zan"]) > 1:
+        counts["merged"] += 1
+    if curs and z:
+        counts["both"] += 1
+    elif z:
+        counts["zanOnly"] += 1
+    else:
+        counts["mfOnly"] += 1
+    for src in ("caputo", "parsons", "li", "easton"):
+        if sum(1 for c in curs if c[src]) > 1:
+            sourceTwice.append((g["cur"], src))
 
-        # combined LR
-        terms = [t for t in (mf, cc) if t is not None]
-        if not terms:
-            combined = None
-        else:
-            combined = 1.0
-            for t in terms:
-                combined *= t
+    per = {t: product([fnum(c[t]) for c in curs]) for t in ("famHist", "cooc", "seg", "path")}
+    mf = product(list(per.values()))
+    cc = z["ccLR"] if z else None
+    combined = product([mf, cc])
+    if mf is not None and cc is not None:
+        if (cc >= 2.08 and mf <= 0.48) or (cc <= 0.48 and mf >= 2.08):
+            conflicts.append((canonicalName(k, g), k, fmt(mf), fmt(cc), fmt(combined)))
 
-        # coordinates for this assembly: prefer current-track coords for
-        # multifactorial variants, else Zanti's provided coords.
-        if cur:
-            chrom, start, end = cur["chrom"], cur["start"], cur["end"]
-        elif z and z["pos" + asm]:
-            chrom, start, end = z["pos" + asm]
-        else:
-            continue  # variant not placeable on this assembly
+    name = canonicalName(k, g)
+    oldNames = g["cur"] + [x["name"] for x in g["zan"]]
+    if len(oldNames) > 1:
+        merged.append((name, oldNames, fmt(combined), assignACMGcode(combined)))
+    elif oldNames[0] != name:
+        renamed.append((oldNames[0], name))
 
-        # classify membership (count once, on hg38 pass only)
-        if asm == "38":
-            if cur and z:   n_both += 1
-            elif z:         n_zan_only += 1
-            else:           n_mf_only += 1
-            if combined is None:
-                n_no_evidence_left += 1
-            # direction conflict: MF vs ccLR point opposite ways
-            if mf is not None and cc is not None:
-                if (cc >= 2.08 and mf <= 0.48) or (cc <= 0.48 and mf >= 2.08):
-                    conflicts.append((key, round(mf, 5), round(cc, 5),
-                                      round(combined, 5)))
+    code = assignACMGcode(combined)
+    rgb = assignRGB(combined)
+    mouse = ("<b>HGVSc:</b> %s<br><b>Combined LR:</b> %s<br>"
+             "<b>ACMG Code:</b> %s" % (name, fmt(combined), code))
+    tail = [fmt(combined), code,
+            fmt(per["famHist"]), fmt(per["cooc"]), fmt(per["seg"]), fmt(per["path"]),
+            fmt(cc),
+            fmt(fnum(z["bridges"])) if z else "",
+            fmt(fnum(z["carriers"])) if z else "",
+            fmt(fnum(z["ukb"])) if z else "",
+            z["sugg"] if z else "",
+            mergeList([c["caputo"] for c in curs]),
+            mergeList([c["parsons"] for c in curs]),
+            mergeList([c["li"] for c in curs]),
+            mergeList([c["easton"] for c in curs]),
+            z["hgvsp"] if z else "", mouse]
+    for asm, key in (("38", k), ("19", next(iter(g["k19"])))):
+        chrom, start, end = clinvarSpan(key)
+        rows[asm].append("\t".join([chrom, str(start), str(end), name, "0", ".",
+                                    str(start), str(end), rgb] + tail))
 
-        code = assignACMGcode(combined)
-        rgb = assignRGB(combined)
-        if asm == "38":
-            color_count[rgb] = color_count.get(rgb, 0) + 1
+names = [r.split("\t")[3] for r in rows["38"]]
+if len(names) != len(set(names)):
+    dupNames = sorted(set(n for n in names if names.count(n) > 1))
+    sys.exit("Output names are not unique: %s" % dupNames[:20])
 
-        def fmt(v):
-            return "" if v is None else str(round(v, 5))
-
-        name = z["name"] if z else key
-        hgvsp = z["hgvsp"] if z else ""
-        cc_str = fmt(cc)
-        bridges = fmt(fnum(z["bridges"])) if z else ""
-        carriers = fmt(fnum(z["carriers"])) if z else ""
-        ukb = fmt(fnum(z["ukb"])) if z else ""
-        sugg = z["sugg"] if z else ""
-        caputo = cur["caputo"] if cur else ""
-        parsons = cur["parsons"] if cur else ""
-        li = cur["li"] if cur else ""
-        easton = cur["easton"] if cur else ""
-
-        # mouseOver mirrors the original track: Combined LR + ACMG code only.
-        # Per-source scores (including the Zanti ccLR) live in the detail page,
-        # not the mouseOver, so no single evidence type is singled out.
-        mouse = ("<b>HGVSc:</b> %s<br><b>Combined LR:</b> %s<br>"
-                 "<b>ACMG Code:</b> %s" % (name, fmt(combined), code))
-
-        row = [chrom, start, end, name, "0", ".", start, end, rgb,
-               fmt(combined), code,
-               cur["famHist"] if cur else "", cur["cooc"] if cur else "",
-               cur["seg"] if cur else "", cur["path"] if cur else "",
-               cc_str, bridges, carriers, ukb, sugg,
-               caputo, parsons, li, easton, hgvsp, mouse]
-        lines.append("\t".join(row))
-    return lines
-
-for asm, curmap, sizes, out in (("38", cur38, HG38SIZES, "BRCAmfaZantiHg38"),
-                                ("19", cur19, HG19SIZES, "BRCAmfaZantiHg19")):
-    bed = WORK + "/%s.bed" % out
+for asm in ("38", "19"):
+    bed = "%s/%s.bed" % (WORK, ASM[asm]["out"])
     with open(bed, "w") as fh:
-        fh.write("\n".join(buildBed(asm, curmap)) + "\n")
+        fh.write("\n".join(rows[asm]) + "\n")
     bash("bedSort %s %s" % (bed, bed))
 
 # ---------------------------------------------------------------------------
-# 4. autoSql and bigBed.
+# 7. autoSql and bigBed (same layout as #37886, so trackDb is unchanged).
 # ---------------------------------------------------------------------------
 AS = '''table BRCAmla
 "BRCA1/BRCA2 multifactorial likelihood analysis (PP4/BP5), with Zanti et al. 2025 case-control LR"
@@ -266,27 +433,38 @@ AS = '''table BRCAmla
 with open(WORK + "/BRCAmlaZanti.as", "w") as fh:
     fh.write(AS)
 
-for out, sizes in (("BRCAmfaZantiHg38", HG38SIZES), ("BRCAmfaZantiHg19", HG19SIZES)):
+for asm in ("38", "19"):
+    out = ASM[asm]["out"]
     bash("bedToBigBed -as=%s/BRCAmlaZanti.as -type=bed9+17 -tab %s/%s.bed %s %s/%s.bb"
-         % (WORK, WORK, out, sizes, WORK, out))
+         % (WORK, WORK, out, ASM[asm]["sizes"], WORK, out))
 
 # ---------------------------------------------------------------------------
-# 5. Report.
+# 8. Report.
 # ---------------------------------------------------------------------------
 print("=== BUILD SUMMARY ===")
-print("Zanti variants dropped (N/A / no computable LR): %d" % zan_dropped)
-print("Membership (hg38): both=%d  Zanti-only=%d  multifactorial-only=%d"
-      % (n_both, n_zan_only, n_mf_only))
-print("Variants left with no evidence at all after CC swap: %d" % n_no_evidence_left)
-print("Color counts (hg38): %s" % color_count)
+print("Pre-Zanti items: %d   Zanti rows used: %d" % (len(cur), len(zan)))
+print("Zanti rows dropped: %d N/A or no computable LR, %d symbolic allele"
+      % (zanDropped, zanSymbolic))
+print("Zanti rows keyed from HGVSc because Zanti REF does not match the genome: %d %s"
+      % (len(refFallback), refFallback))
+print("Zanti intronic insertions where hgvsToVcf disagrees with Zanti VCF (#38469): %d"
+      % len(crossBad))
+print("Output items per assembly: %d" % counts["groups"])
+print("Merged groups: %d   Renamed singletons: %d" % (counts["merged"], len(renamed)))
+print("Membership: both=%d  Zanti-only=%d  multifactorial-only=%d"
+      % (counts["both"], counts["zanOnly"], counts["mfOnly"]))
+print("Groups with the same source on two items: %s" % sourceTwice)
 print("Direction conflicts (MF vs ccLR opposite): %d" % len(conflicts))
-conflicts.sort(key=lambda x: abs(__import__("math").log10(x[2]) if x[2] > 0 else 0),
-               reverse=True)
-print("Top conflicts (key, MFproduct, ccLR, combined):")
-for c in conflicts[:15]:
-    print("   ", c)
 with open(WORK + "/directionConflicts.tsv", "w") as fh:
-    fh.write("variant\tmultifactorialProduct\tzantiCcLR\tcombinedLR\n")
+    fh.write("name\tvariant\tmultifactorialProduct\tzantiCcLR\tcombinedLR\n")
     for c in conflicts:
-        fh.write("%s\t%s\t%s\t%s\n" % c)
-print("Conflicts written to directionConflicts.tsv")
+        fh.write("%s\t%s:%d:%s>%s\t%s\t%s\t%s\n" % ((c[0],) + c[1] + c[2:]))
+with open(WORK + "/mergedGroups.tsv", "w") as fh:
+    fh.write("name\toldNames\tcombinedLR\tACMGcode\n")
+    for m in sorted(merged):
+        fh.write("%s\t%s\t%s\t%s\n" % (m[0], ",".join(m[1]), m[2], m[3]))
+with open(WORK + "/renamed.tsv", "w") as fh:
+    fh.write("oldName\tnewName\n")
+    for r in sorted(renamed):
+        fh.write("%s\t%s\n" % r)
+print("Wrote directionConflicts.tsv, mergedGroups.tsv, renamed.tsv")
