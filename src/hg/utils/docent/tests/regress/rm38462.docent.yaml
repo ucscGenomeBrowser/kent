@@ -11,9 +11,9 @@
 # `double swap`. The line dates from 10909409129 (2014). Lou found it while QAing
 # GPN-Star (#38451).
 #
-# This is an XFAIL until genome-test builds e3084c1bf7c. It fails there today for its own
-# reason, and `make test` goes red the morning it passes. Then drop the .xfail from the
-# name and add a server-flip line below.
+# This was an xfail until 2026-10-02. It failed on genome-test that morning, and passed
+# there once a cgi-alpha build that included e3084c1bf7c was installed. The .xfail then came
+# off the name.
 #
 # The fixture is ours, at ~/public_html/docentFixtures/rm38462/hubFlat.txt: one bigWig with
 # every base of chr1:10,000,001-10,100,000 set to 0.75, and two tracks over it. A flat
@@ -49,6 +49,7 @@
 proof:
   - "xfail 2026-10-02 -- fails on genome-test: rm38462neg is drawn 255,141,141 (the whisker shade), wanted 255,0,0"
   - "sandbox-ab 2026-10-02 -- passes on ticket sandbox 38462 (port 48088, ~/kentNegate38462 = origin/master f4d967492fe + double swap): rm38462neg 255,0,0 at 99%"
+  - "server-flip 2026-10-02 -- genome-test's cgi-alpha build of 09:44, with e3084c1bf7c, passes: rm38462neg 255,0,0 at 99%, rm38462pos 0,0,255"
 
 target: genome-test
 db: hg38
