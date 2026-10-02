@@ -6,14 +6,12 @@ superTrack on show
 group rna
 shortLabel PRO-cap
 longLabel PRO-cap nascent RNA transcription start sites from ENCODE 4
-priority 1
 
 track proCapNet
 superTrack on show
 group rna
 shortLabel ProCapNet
 longLabel ProCapNet predicted PRO-cap
-priority 2
 
 track encode4ProCap_A673_procap
 superTrack encode4ProCap full

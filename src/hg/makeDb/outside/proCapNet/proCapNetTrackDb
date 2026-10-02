@@ -40,7 +40,7 @@ def stanza(indent, lines):
     pad = " " * indent
     return "".join(pad + line + "\n" for line in lines) + "\n"
 
-def sourceSuperStanza(track, shortLabel, longLabel, priority):
+def sourceSuperStanza(track, shortLabel, longLabel):
     """One top-level superTrack per data source.
 
     These were briefly nested under a transcriptionStart superTrack, which looks
@@ -53,7 +53,6 @@ def sourceSuperStanza(track, shortLabel, longLabel, priority):
         "group rna",
         f"shortLabel {shortLabel}",
         f"longLabel {longLabel}",
-        f"priority {priority}",
     ])
 
 def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, longLabel,
@@ -172,9 +171,9 @@ def proCapNetTrackDb(opts, args):
         if args.db == "hg38":
             fh.write(sourceSuperStanza(
                 "encode4ProCap", "PRO-cap",
-                "PRO-cap nascent RNA transcription start sites from ENCODE 4", 1))
+                "PRO-cap nascent RNA transcription start sites from ENCODE 4"))
         fh.write(sourceSuperStanza("proCapNet", "ProCapNet",
-                                   "ProCapNet predicted PRO-cap", 2))
+                                   "ProCapNet predicted PRO-cap"))
         if args.db == "hg38":
             fh.write(encode4ProCapTracks(args.db, experiments))
         fh.write(proCapNetTracks(args.db, experiments))

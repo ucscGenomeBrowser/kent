@@ -6,7 +6,6 @@ superTrack on show
 group rna
 shortLabel ProCapNet
 longLabel ProCapNet predicted PRO-cap
-priority 2
 
 track proCapNet_A673_pred
 superTrack proCapNet full
