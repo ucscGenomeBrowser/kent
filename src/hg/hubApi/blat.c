@@ -304,7 +304,7 @@ char *apiKey = cgiOptionalString(argApiKey);
 if (isEmpty(apiKey) && !botException() && !botExceptionUserAgent())
     apiErrAbort(err403, err403Msg,
         "/blat requires an '%s' URL parameter. "
-        "Generate one under My Data > My Track Hubs > Hub Development: API Key, "
+        "Generate one under My Data > Track Hubs > Hub Development: API Key, "
         "then add it to this API call as apiKey=xxxxx. "
         "Contact us if you need assistance.", argApiKey);
 
