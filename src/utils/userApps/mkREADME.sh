@@ -50,7 +50,7 @@ do
            ucscApiClient|trackDbIndexBb|chromToUcsc|tdbRename|tdbSort)
 	     ./${F} -h < /dev/null
              ;;
-           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac|bedJoinTabOffset|expMatrixToBarchartBed|webSync|vai.pl|tabFmt)
+           ameme|aveCols|catUncomment|fetchChromSizes|gmtime|localtime|hgsqldump|pslPairs|qaToQac|bedJoinTabOffset|expMatrixToBarchartBed|barChartReorder|webSync|vai.pl|tabFmt)
 	     ./${F} < /dev/null
              ;;
            *)

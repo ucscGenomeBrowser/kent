@@ -191,9 +191,9 @@ return ret;
 
 char *asmAliasFindUnlessGenArk(char *alias)
 /* Like asmAliasFind(), but only translate through the asmAlias table if
- * alias isn't already a real, existing GenArk hub -- an accession that
- * resolves on its own should never be promoted to a merely "equivalent"
- * alias. */
+ * alias isn't already a real, existing GenArk hub or a name with its own
+ * active dbDb row -- a name that resolves on its own should never be promoted to
+ * a merely "equivalent" alias. */
 {
 if ((alias != NULL) && startsWith("hub_", alias))
     // already a decorated hub_<id>_<name> reference to a specific, already
@@ -202,6 +202,9 @@ if ((alias != NULL) && startsWith("hub_", alias))
     return alias;
 
 if (isGenArk(alias))
+    return alias;
+// a name with its own active dbDb row (native db or curated hub) is not an alias
+if ((alias != NULL) && hDbIsActive(alias))
     return alias;
 return asmAliasFind(alias);
 }
