@@ -58,3 +58,5 @@ include trackDb.135way.ra
 
 # include ce11.GCA_000180635.4.chainNet.ra alpha
 # include ce11.danRer11.chainNet.ra alpha
+
+include gpnStar.ra alpha
