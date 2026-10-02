@@ -659,7 +659,7 @@ for (i = 0; i < preDrawSize; ++i)
 	if (doNegative)
 	    {
 	    dataValue = -dataValue;
-	    int swap = preDraw[i].min;
+	    double swap = preDraw[i].min;
 	    preDraw[i].min = -preDraw[i].max;
 	    preDraw[i].max = -swap;
 	    }
