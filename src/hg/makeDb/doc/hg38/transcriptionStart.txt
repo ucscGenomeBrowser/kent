@@ -1,6 +1,16 @@
 # Transcription start sites: ENCODE 4 PRO-cap and ProCapNet, #35528, Claude
 Thu Sep 17 2026 (Claude/markd)
 
+# STATUS: the composite only partly works, and the plan is to replace it with a
+# superTrack holding the multiWig overlays directly, the way fantom5 does.  A
+# multiWig under a composite draws correctly and the composite's wiggle controls
+# apply, but hgTrackUi lists descendant leaves rather than containers, so the
+# overlays get no inline config block and turning off both strands of a cell line
+# leaves an empty row where the overlay was (#38441).  Under a superTrack each
+# overlay is a track in its own right, with its own full configuration page and
+# no flattening.  The cost is losing the subtrack matrix and the sample class
+# filter.
+
 # Scripts are in ~/kent/src/hg/makeDb/outside/proCapNet.  The cell lines, their
 # ENCODE accessions and their colors are in proCapNetExperiments.tsv there.
 
@@ -33,6 +43,14 @@ cd /hive/data/genomes/hg38/bed/proCapNet
 # also takes out sequence flanking each gap.
 # about 24 GB in, 15.7 to 15.9 GB out per file
 
+# proCapNetPredBuild writes the minus strand negated, so it draws below the
+# baseline from its own values.  Doing it in the data rather than with the
+# trackDb negateValues setting is what makes the composite's own negate control
+# work: that control sets one shared value for the composite, which replaced the
+# per-track negateValues and sent both strands the same way, with no way back to
+# the default short of a cart reset.  encode4ProCap never had the problem,
+# because ENCODE already publishes its minus strand negative.
+
 # confirm the summary statistics are numbers again, they were nan before
 bigWigInfo pred/K562.proCapNet.pos.bw | egrep 'basesCovered|mean|std'
 #   basesCovered: 2,924,001,250
@@ -58,6 +76,32 @@ for chrom in ("chr1", "chr7", "chr14", "chr21", "chrX"):
 print("mismatched windows:", bad)
 PYEOF
 # mismatched windows: 0
+
+##############################################################################
+# negating the minus strand, after the fact
+##############################################################################
+
+# The prediction files were first built with the minus strand positive and
+# flipped at display time with the trackDb negateValues setting.  That broke the
+# composite's negate control, as described above, so the twelve minus-strand
+# files were rewritten with negated values rather than rebuilt from the
+# downloads, which had already been deleted:
+#
+#   for db in hg38 hs1 ; do
+#       base=/hive/data/genomes/$db/bed/proCapNet
+#       mkdir -p $base/previousPred
+#       ls $base/pred/*.neg.bw | while read f ; do
+#           ~/kent/src/hg/makeDb/outside/proCapNet/proCapNetPredToFixedStep \
+#               --negate /hive/data/genomes/$db/chrom.sizes $f $base/negated/$(basename $f)
+#       done
+#   done
+#
+# Each output was checked against its input: same nBasesCovered, value range
+# mirrored, sampled values exactly negated.  The originals were then moved to
+# previousPred/ and the negated files put in their place, so /gbdb needs no new
+# symlinks.  previousPred/ is about 197 GB and can be removed once the track has
+# been through QA.  A rebuild from the downloads does not need any of this:
+# proCapNetPredBuild negates the minus strand itself.
 
 ##############################################################################
 # ENCODE 4 PRO-cap

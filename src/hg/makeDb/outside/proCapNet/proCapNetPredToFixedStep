@@ -18,6 +18,13 @@ def parseArgs():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--chunkSize", type=int, default=CHUNK_SIZE,
                         help="bases held in memory at a time")
+    parser.add_argument("--negate", action="store_true",
+                        help="store the values negated, for a minus-strand file that is "
+                             "to be drawn below the baseline.  Negating here rather than "
+                             "with the trackDb negateValues setting keeps the sign in the "
+                             "data, so the composite's negate control behaves the same way "
+                             "for these tracks as for ones whose minus strand is already "
+                             "stored negative")
     parser.add_argument("chromSizes")
     parser.add_argument("inBigWig")
     parser.add_argument("outBigWig")
@@ -47,19 +54,21 @@ def dataRuns(values):
     edges = np.diff(np.concatenate(([0], hasData.view(np.int8), [0])))
     return np.flatnonzero(edges == 1), np.flatnonzero(edges == -1)
 
-def writeChunk(outBw, chrom, chunkStart, values):
+def writeChunk(outBw, chrom, chunkStart, values, negate):
     starts, ends = dataRuns(values)
+    if negate:
+        values = -values
     for start, end in zip(starts, ends):
         outBw.addEntries(chrom, int(chunkStart + start), values=values[start:end],
                          span=1, step=1)
     return int((ends - starts).sum())
 
-def convertChrom(inBw, outBw, chrom, size, chunkSize):
+def convertChrom(inBw, outBw, chrom, size, chunkSize, negate):
     kept = 0
     for chunkStart in range(0, size, chunkSize):
         chunkEnd = min(chunkStart + chunkSize, size)
         values = inBw.values(chrom, chunkStart, chunkEnd, numpy=True)
-        kept += writeChunk(outBw, chrom, chunkStart, values)
+        kept += writeChunk(outBw, chrom, chunkStart, values, negate)
     return kept
 
 def proCapNetPredToFixedStep(opts, args):
@@ -73,7 +82,8 @@ def proCapNetPredToFixedStep(opts, args):
         outBw.addHeader([(c, sizes[c]) for c in chroms], maxZooms=10)
         for chrom in chroms:
             total += sizes[chrom]
-            kept += convertChrom(inBw, outBw, chrom, sizes[chrom], opts.chunkSize)
+            kept += convertChrom(inBw, outBw, chrom, sizes[chrom], opts.chunkSize,
+                                 opts.negate)
         outBw.close()
     inBw.close()
     print(f"{args.outBigWig}: {len(chroms)} chroms, {total} bases, {kept} with data, "

@@ -14,6 +14,13 @@ compositeUiSubtracks() lists descendant leaves and a multiWig is not a leaf; eac
 overlay is configured from its own hgTrackUi page instead.
 
 Subtrack names are <composite>_<cell>_<dataType>.
+
+STATUS: this only partly works and is expected to be replaced by a superTrack
+holding the multiWig overlays directly.  hgTrackUi lists descendant leaves, not
+containers, so an overlay gets no inline config block and deselecting both
+strands of a cell line leaves an empty row (#38441).  A superTrack gives each
+overlay its own page and no flattening, at the cost of the matrix and the sample
+class filter.
 """
 import argparse
 import re
@@ -89,19 +96,21 @@ def compositeStanza(track, shortLabel, longLabel, experiments, dataTypes, priori
 def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, longLabel,
                   childLabel, priority):
     """One cell line's two strands as an overlay, plus strand drawn up and minus
-    strand drawn down.  The ProCapNet minus-strand files hold positive values and
-    are flipped with negateValues; the ENCODE minus-strand signal is already
-    negative and is not flipped.
+    strand drawn down.  Both sources store the minus strand negated, so neither
+    needs the trackDb negateValues setting.  That setting used to be on the
+    ProCapNet minus tracks, and it broke the composite's own negate control: that
+    control sets one shared value for the composite, which replaced the per-track
+    setting and sent both strands the same way, with no route back to the default
+    short of a cart reset.
 
     fileTag is the part of the file name that says what the file holds, so a
     bigWig downloaded on its own still names its source: the model for the
     predictions, the ENCODE experiment accession for the measurements.
 
-    The parent line says "on", which makes these default-on and is what checks
-    the signal data type in the faceted UI.  The contribution scores stay off, so
-    opening the composite gives signal rather than every data type at once."""
+    The parent line says "on", which makes these default-on.  The contribution
+    scores stay off, so opening the composite gives signal rather than every data
+    type at once."""
     gbdb = GBDB.format(db=db, track=composite) + subDir
-    negate = ["negateValues on"] if dataType == "pred" else []
     out = stanza(8, [
         f"track {composite}_{exp.cell}_{dataType}",
         f"parent {composite} on",
@@ -109,10 +118,6 @@ def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, lon
         "aggregate solidOverlay",
         "showSubtrackColorOnUi on",
         "type bigWig",
-        "autoScale on",
-        "alwaysZero on",
-        "maxHeightPixels 100:40:8",
-        "windowingFunction maximum",
         f"color {exp.color}",
         f"shortLabel {shortLabel}",
         f"longLabel {longLabel}",
@@ -139,7 +144,6 @@ def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, lon
         f"bigDataUrl {gbdb}/{exp.cell}.{fileTag}.neg.bw",
         f"color {exp.color}",
         f"altColor {exp.color}",
-    ] + negate + [
         f"shortLabel {shortLabel} -",
         f"longLabel {childLabel}, minus strand",
     ])
@@ -155,9 +159,6 @@ def contribStanza(db, exp, priority):
         "type bigWig",
         f"bigDataUrl {gbdb}/contrib/{exp.cell}.proCapNet-contrib.bw",
         "logo on",
-        "autoScale on",
-        "alwaysZero on",
-        "maxHeightPixels 100:40:8",
         f"color {exp.color}",
         f"shortLabel {exp.cell} Contribution",
         f"longLabel {exp.cell} ({exp.modelAcc}) ProCapNet sequence-contribution scores",
