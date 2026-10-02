@@ -23,7 +23,6 @@ overlay its own page and no flattening, at the cost of the matrix and the sample
 class filter.
 """
 import argparse
-import re
 from pycbio.sys import cli, fileOps
 from pycbio.tsv import TsvReader
 
@@ -37,64 +36,28 @@ def parseArgs():
     parser.add_argument("outRa")
     return cli.parseOptsArgsWithLogging(parser)
 
-def subGroupTag(name):
-    """A subGroup tag has to be a bare identifier, but cell line names carry
-    punctuation (Caco-2).  Only the tag is sanitized; the label keeps the real
-    name."""
-    return re.sub(r"[^A-Za-z0-9]", "", name)
-
 def stanza(indent, lines):
     pad = " " * indent
     return "".join(pad + line + "\n" for line in lines) + "\n"
 
-def superStanza():
+def sourceSuperStanza(track, shortLabel, longLabel, priority):
+    """One top-level superTrack per data source.
+
+    These were briefly nested under a transcriptionStart superTrack, which looks
+    legal and passes tdbQuery -check -strict but silently loses the outer level:
+    trackDbSuperMarkup() refuses to give a superTrack a parent, so hgTrackDb never
+    writes the outer one.  See #38460."""
     return stanza(0, [
-        "track transcriptionStart",
-        "superTrack on show",
-        "shortLabel Transcription Initiation (TSS)",
-        "longLabel Transcription initiation (TSS)",
-        "group rna",
-    ])
-
-def compositeStanza(track, shortLabel, longLabel, experiments, dataTypes, priority):
-    """The matrix runs over the leaf bigWigs, which is the level hgTrackDb checks
-    and the level compositeUiSubtracks() lists, so each strand is a cell of its
-    own.  The multiWig containers carry no subGroups: a container spans both
-    strands, so it has no single value for the data type dimension, and
-    hgTrackDb -strict rejects a leaf whose groups the parent does not declare.
-
-    dataTypes is a list of (tag, label) pairs, the matrix's X dimension."""
-    cells = " ".join(f"{subGroupTag(e.cell)}={e.cell}" for e in experiments)
-    types = " ".join(f"{tag}={label}" for tag, label in dataTypes)
-    classes = " ".join(f"{subGroupTag(c)}={c}" for c in
-                       sorted({e.sampleClass for e in experiments}))
-    return stanza(4, [
         f"track {track}",
-        "parent transcriptionStart",
-        "compositeTrack on",
-        "type bigWig",
+        "superTrack on show",
+        "group rna",
         f"shortLabel {shortLabel}",
         f"longLabel {longLabel}",
-        f"subGroup1 cellLine Cell_line {cells}",
-        f"subGroup2 dataType Data_type {types}",
-        f"subGroup3 sampleClass Sample_class {classes}",
-        "dimensions dimensionX=dataType dimensionY=cellLine dimA=sampleClass",
-        "filterComposite dimA",
-        "sortOrder cellLine=+ dataType=+",
-        # a config wrench on every subtrack, so one cell line can be rescaled
-        # without touching the rest
-        "configurable on",
-        "autoScale group",
-        "alwaysZero on",
-        "maxHeightPixels 100:40:8",
-        "windowingFunction maximum",
-        "noInherit on",
-        "visibility hide",
         f"priority {priority}",
     ])
 
 def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, longLabel,
-                  childLabel, priority):
+                  childLabel, priority, vis):
     """One cell line's two strands as an overlay, plus strand drawn up and minus
     strand drawn down.  Both sources store the minus strand negated, so neither
     needs the trackDb negateValues setting.  That setting used to be on the
@@ -107,39 +70,43 @@ def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, lon
     bigWig downloaded on its own still names its source: the model for the
     predictions, the ENCODE experiment accession for the measurements.
 
-    The parent line says "on", which makes these default-on.  The contribution
-    scores stay off, so opening the composite gives signal rather than every data
-    type at once."""
+    Each overlay is a member of the transcriptionStart superTrack rather than a
+    composite child, so it is a track in its own right: hgTrackUi gives it a full
+    configuration page, and hiding it hides the whole overlay instead of leaving
+    an empty row.  It therefore carries its own wiggle settings, since there is no
+    composite to inherit them from, and its own html, since a superTrack member
+    does not inherit the container's description page."""
     gbdb = GBDB.format(db=db, track=composite) + subDir
-    out = stanza(8, [
+    out = stanza(0, [
         f"track {composite}_{exp.cell}_{dataType}",
-        f"parent {composite} on",
+        f"superTrack {composite} {vis}",
         "container multiWig",
         "aggregate solidOverlay",
         "showSubtrackColorOnUi on",
         "type bigWig",
+        "autoScale on",
+        "alwaysZero on",
+        "maxHeightPixels 100:40:8",
+        "windowingFunction maximum",
+        "configurable on",
+        f"html {composite}",
         f"color {exp.color}",
         f"shortLabel {shortLabel}",
         f"longLabel {longLabel}",
-        "onlyVisibility full",
         f"priority {priority}",
     ])
-    out += stanza(12, [
+    out += stanza(4, [
         f"track {composite}_{exp.cell}_{dataType}_pos",
         f"parent {composite}_{exp.cell}_{dataType}",
-        f"subGroups cellLine={subGroupTag(exp.cell)} dataType={dataType}Pos"
-        f" sampleClass={subGroupTag(exp.sampleClass)}",
         "type bigWig",
         f"bigDataUrl {gbdb}/{exp.cell}.{fileTag}.pos.bw",
         f"color {exp.color}",
         f"shortLabel {shortLabel} +",
         f"longLabel {childLabel}, plus strand",
     ])
-    out += stanza(12, [
+    out += stanza(4, [
         f"track {composite}_{exp.cell}_{dataType}_neg",
         f"parent {composite}_{exp.cell}_{dataType}",
-        f"subGroups cellLine={subGroupTag(exp.cell)} dataType={dataType}Neg"
-        f" sampleClass={subGroupTag(exp.sampleClass)}",
         "type bigWig",
         f"bigDataUrl {gbdb}/{exp.cell}.{fileTag}.neg.bw",
         f"color {exp.color}",
@@ -151,52 +118,48 @@ def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, lon
 
 def contribStanza(db, exp, priority):
     gbdb = GBDB.format(db=db, track="proCapNet")
-    return stanza(8, [
+    return stanza(0, [
         f"track proCapNet_{exp.cell}_contrib",
-        f"subGroups cellLine={subGroupTag(exp.cell)} dataType=contrib"
-        f" sampleClass={subGroupTag(exp.sampleClass)}",
-        "parent proCapNet off",
+        "superTrack proCapNet hide",
         "type bigWig",
         f"bigDataUrl {gbdb}/contrib/{exp.cell}.proCapNet-contrib.bw",
         "logo on",
+        "autoScale on",
+        "alwaysZero on",
+        "maxHeightPixels 100:40:8",
+        "configurable on",
+        "html proCapNet",
         f"color {exp.color}",
         f"shortLabel {exp.cell} Contribution",
         f"longLabel {exp.cell} ({exp.modelAcc}) ProCapNet sequence-contribution scores",
-        "onlyVisibility full",
         f"priority {priority}",
     ])
 
-def proCapNetComposite(db, experiments):
-    dataTypes = [("predPos", "Predicted_+"), ("predNeg", "Predicted_-")]
-    if db == "hg38":
-        dataTypes.append(("contrib", "Contribution_scores"))
-    out = compositeStanza("proCapNet", "ProCapNet",
-                          "ProCapNet predicted PRO-cap",
-                          experiments, dataTypes, 2)
+def proCapNetTracks(db, experiments):
+    "the prediction overlays, and on hg38 the contribution scores"
+    out = ""
     for priority, exp in enumerate(experiments, 1):
         out += strandOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",
                              f"{exp.cell} Predicted",
                              f"{exp.cell} ({exp.modelAcc}) ProCapNet predicted PRO-cap,"
                              f" plus up minus down",
                              f"{exp.cell} ({exp.modelAcc}) ProCapNet predicted PRO-cap",
-                             priority)
+                             priority, "full")
     if db == "hg38":
         for priority, exp in enumerate(experiments, 11):
             out += contribStanza(db, exp, priority)
     return out
 
-def encode4ProCapComposite(db, experiments):
-    out = compositeStanza("encode4ProCap", "PRO-cap",
-                          "PRO-cap nascent RNA transcription start sites from ENCODE 4",
-                          experiments, [("procapPos", "PRO-cap_+"),
-                                        ("procapNeg", "PRO-cap_-")], 1)
+def encode4ProCapTracks(db, experiments):
+    "the measured PRO-cap overlays, ordered ahead of the predictions"
+    out = ""
     for priority, exp in enumerate(experiments, 1):
         out += strandOverlay(db, "encode4ProCap", exp, "procap", "", exp.procapAcc,
                              f"{exp.cell} PRO-cap",
                              f"{exp.cell} ({exp.procapAcc}) PRO-cap transcription start"
                              f" sites, plus up minus down",
                              f"{exp.cell} ({exp.procapAcc}) PRO-cap transcription start sites",
-                             priority)
+                             priority, "full")
     return out
 
 def proCapNetTrackDb(opts, args):
@@ -206,10 +169,15 @@ def proCapNetTrackDb(opts, args):
         print(f"# Generated by hg/makeDb/outside/proCapNet/proCapNetTrackDb for {args.db}.",
               file=fh)
         print("# Do not edit by hand, edit the script and regenerate.\n", file=fh)
-        fh.write(superStanza())
         if args.db == "hg38":
-            fh.write(encode4ProCapComposite(args.db, experiments))
-        fh.write(proCapNetComposite(args.db, experiments))
+            fh.write(sourceSuperStanza(
+                "encode4ProCap", "PRO-cap",
+                "PRO-cap nascent RNA transcription start sites from ENCODE 4", 1))
+        fh.write(sourceSuperStanza("proCapNet", "ProCapNet",
+                                   "ProCapNet predicted PRO-cap", 2))
+        if args.db == "hg38":
+            fh.write(encode4ProCapTracks(args.db, experiments))
+        fh.write(proCapNetTracks(args.db, experiments))
 
 def main():
     opts, args = parseArgs()

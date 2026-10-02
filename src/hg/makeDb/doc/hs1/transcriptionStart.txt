@@ -1,15 +1,20 @@
 # Transcription start sites: ProCapNet predictions, #35528, Claude
 Thu Sep 17 2026 (Claude/markd)
 
-# STATUS: the composite only partly works, and the plan is to replace it with a
-# superTrack holding the multiWig overlays directly, the way fantom5 does.  A
-# multiWig under a composite draws correctly and the composite's wiggle controls
-# apply, but hgTrackUi lists descendant leaves rather than containers, so the
-# overlays get no inline config block and turning off both strands of a cell line
-# leaves an empty row where the overlay was (#38441).  Under a superTrack each
-# overlay is a track in its own right, with its own full configuration page and
-# no flattening.  The cost is losing the subtrack matrix and the sample class
-# filter.
+# Layout: one superTrack per data source, each holding its multiWig overlays
+# directly, the way fantom5 does.  Not a composite: under a composite hgTrackUi
+# lists descendant leaves rather than containers, so an overlay gets no
+# configuration block of its own and hiding both strands of a cell line leaves an
+# empty row where the overlay was (#38441).  As a superTrack member each overlay
+# is a track in its own right, with a full configuration page, and hiding it
+# hides the whole overlay.  The cost is the subtrack matrix and the sample class
+# filter, neither of which a superTrack offers.
+#
+# These two superTracks are top level rather than sitting inside a single
+# transcriptionStart folder, because superTracks do not nest: a superTrack given
+# a parent passes tdbQuery -check -strict and is then silently dropped at load
+# (#38460).  transcriptionStart.html is left in the tree unused against that
+# being fixed.
 
 # hs1 has the ProCapNet predictions only.  There is no PRO-cap experiment and no
 # sequence-contribution score set on this assembly.  See
