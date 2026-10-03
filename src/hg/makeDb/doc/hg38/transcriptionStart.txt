@@ -10,11 +10,21 @@ Thu Sep 17 2026 (Claude/markd)
 # hides the whole overlay.  The cost is the subtrack matrix and the sample class
 # filter, neither of which a superTrack offers.
 #
-# These two superTracks are top level rather than sitting inside a single
-# transcriptionStart folder, because superTracks do not nest: a superTrack given
-# a parent passes tdbQuery -check -strict and is then silently dropped at load
-# (#38460).  transcriptionStart.html is left in the tree unused against that
-# being fixed.
+# On alpha the two data-source superTracks sit inside a transcriptionStart
+# superTrack; on beta and public they stand on their own.  Nesting a superTrack
+# inside a superTrack needs the fix in #38460, which is on master but not in a
+# release, and these tracks are already released, so each source is written
+# twice with complementary release tags: the nested copy alpha, the flat copy
+# beta,public.  hgTrackDb takes the copy whose release matches and rejects two
+# whose releases overlap, so the tags have to stay complementary.  The public
+# build is byte-identical to what was released.  Drop the release tags and the
+# flat copies once #38460 ships.
+#
+# The alpha build here also needs hgTrackDb and trackDbToTxt in
+# /cluster/bin/x86_64 to carry the #38460 fix.  make alpha does not put anything
+# there: BINDIR defaults to ~/bin/$MACHTYPE, and that directory is updated by
+# the weekly utils build.  They were installed by hand on 2026-10-03 and the
+# next weekly build will overwrite them with whatever is in the branch then.
 
 # Scripts are in ~/kent/src/hg/makeDb/outside/proCapNet.  The cell lines, their
 # ENCODE accessions and their colors are in proCapNetExperiments.tsv there.
