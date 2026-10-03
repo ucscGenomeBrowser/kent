@@ -711,12 +711,8 @@ static void polishSupers(struct trackDb *tdbList)
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    /* Walk the whole chain of parents, not just the immediate one: a supertrack
-     * inside another supertrack is reached only through its child, and without
-     * its fields filled in from settings it reaches the write with a NULL
-     * shortLabel. */
-    struct trackDb *parent;
-    for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL)
 	{
 	trackDbFieldsFromSettings(parent);
 	trackDbPolish(parent);
@@ -789,19 +785,16 @@ struct trackDb *tdbList = NULL;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     struct trackDb *tdb = ref->val;
-    /* Walk up the chain of floating supertrack parents, not just the immediate
-     * one: a supertrack may itself sit inside another supertrack, and only the
-     * innermost is reachable from a track in the forest. */
-    struct trackDb *parent;
-    for (parent = tdb->parent; parent != NULL && tdbIsSuperTrack(parent);
-         parent = parent->parent)
+    struct trackDb *parent = tdb->parent;
+    if (parent != NULL && tdbIsSuperTrack(parent))
 	{
 	/* The supertrack may appear as a 'floating' parent for multiple tracks.
 	 * Only put it on the list once. */
-	if (hashLookup(superTrackHash, parent->track))
-	    break;
-	hashAdd(superTrackHash, parent->track, parent);
-	slAddHead(&tdbList, parent);
+	if (!hashLookup(superTrackHash, parent->track))
+	    {
+	    hashAdd(superTrackHash, parent->track, parent);
+	    slAddHead(&tdbList, parent);
+	    }
 	}
     slAddHead(&tdbList, tdb);
     }
