@@ -7161,9 +7161,12 @@ return (sqlDatabaseExists("hgFixed") && hTableExists("hgFixed", "cutters") &&
 
 static void setSuperTrackHasVisibleMembers(struct trackDb *tdb)
 /* Determine if any member tracks are visible -- currently
- * recording this in the parent's visibility setting */
+ * recording this in the parent's visibility setting.  A supertrack may itself
+ * be a member of another supertrack, and a visible track makes every supertrack
+ * above it visible too. */
 {
-tdb->visibility = tvDense;
+for (; tdb != NULL; tdb = tdbIsSuperTrackChild(tdb) ? tdb->parent : NULL)
+    tdb->visibility = tvDense;
 }
 
 boolean superTrackHasVisibleMembers(struct trackDb *tdb)
@@ -7445,33 +7448,53 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
         assert(track->parent == NULL);
-        track->parent = hashFindVal(superHash, track->tdb->parentName);
-        if (track->parent)
-            continue;
-        /* create track and reference for the supertrack */
-        struct track *superTrack = track->parent = trackFromTrackDb(track->tdb->parent);
-        track->parent = superTrack;
-        if (trackHashRef != NULL)
-            hashAddUnique(trackHashRef,superTrack->track,superTrack);
-        superTrack->hasUi = TRUE;
-        superTrack->group = track->group;
-        superTrack->groupName = cloneString(track->group->name);
-        superTrack->defaultGroupName = cloneString(track->group->name);
 
-        /* handle track reordering */
-        char cartVar[256];
-        safef(cartVar, sizeof(cartVar), "%s.priority",track->tdb->parentName);
-        float priority = (float)cartUsualDouble(cart, cartVar,
-                                        track->tdb->parent->priority);
-        /* remove cart variables that are the same as the trackDb settings */
-        if (priority == track->tdb->parent->priority)
-            cartRemove(cart, cartVar);
-        superTrack->priority = priority;
+        /* Walk up the chain of supertracks, making a track for each the first
+         * time one of its members is seen.  A supertrack may itself be a member
+         * of another supertrack, and only the innermost is reached from the
+         * group's track list.  A supertrack is keyed by the name its members
+         * call it, which for a hub track is the name without the hub prefix. */
+        struct track *child = track;
+        struct trackDb *superTdb = track->tdb->parent;
+        char *superName = track->tdb->parentName;
+        while (superTdb != NULL)
+            {
+            struct track *superTrack = hashFindVal(superHash, superName);
+            if (superTrack != NULL)
+                {   /* already made, and so were its own ancestors */
+                child->parent = superTrack;
+                break;
+                }
+            /* create track and reference for the supertrack */
+            superTrack = trackFromTrackDb(superTdb);
+            child->parent = superTrack;
+            if (trackHashRef != NULL)
+                hashAddUnique(trackHashRef,superTrack->track,superTrack);
+            superTrack->hasUi = TRUE;
+            superTrack->group = track->group;
+            superTrack->groupName = cloneString(track->group->name);
+            superTrack->defaultGroupName = cloneString(track->group->name);
 
-        AllocVar(ref);
-        ref->track = superTrack;
-        slAddHead(&newList, ref);
-        hashAdd(superHash, track->tdb->parentName, superTrack);
+            /* handle track reordering */
+            char cartVar[256];
+            safef(cartVar, sizeof(cartVar), "%s.priority",superName);
+            float priority = (float)cartUsualDouble(cart, cartVar, superTdb->priority);
+            /* remove cart variables that are the same as the trackDb settings */
+            if (priority == superTdb->priority)
+                cartRemove(cart, cartVar);
+            superTrack->priority = priority;
+
+            AllocVar(ref);
+            ref->track = superTrack;
+            slAddHead(&newList, ref);
+            hashAdd(superHash, superName, superTrack);
+
+            if (!tdbIsSuperTrackChild(superTdb))
+                break;
+            child = superTrack;
+            superName = superTdb->parentName;
+            superTdb = superTdb->parent;
+            }
         }
     }
 slSort(&newList, trackRefCmpPriority);

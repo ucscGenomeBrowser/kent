@@ -492,11 +492,20 @@ for(tdb = tdbList; tdb; tdb = next)
     /* save away the next pointer becuase we may detach this node and
      * add it to its supertrack parent */
     next = tdb->next;
-    if (tdb->parent != NULL && sameString(trackName, tdb->parent->track))
+    /* Walk up the chain: a supertrack may sit inside another supertrack, and
+     * neither is in tdbList, so an outer one is only named by an ancestor of a
+     * track that is.  Only an immediate child is added as a subtrack. */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
 	{
-	/* found a supertrack with the right name, add this child */
-	p = tdb->parent;
-	slAddHead(&p->subtracks, tdb);
+	if (sameString(trackName, ancestor->track))
+	    {
+	    /* found a supertrack with the right name */
+	    p = ancestor;
+	    if (ancestor == tdb->parent)
+		slAddHead(&p->subtracks, tdb);
+	    break;
+	    }
 	}
     }
 
