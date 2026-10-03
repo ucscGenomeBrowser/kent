@@ -10,14 +10,11 @@ Thu Sep 17 2026 (Claude/markd)
 # hides the whole overlay.  The cost is the subtrack matrix and the sample class
 # filter, neither of which a superTrack offers.
 #
-# The two data-source superTracks sit inside a transcriptionStart superTrack.
-# That needs the nesting fix in #38460: before it, a superTrack given a parent
-# passed tdbQuery -check -strict and was then silently dropped at load.  Until
-# that fix is released, a plain make here produces a half-built state, because
-# the trackDb make calls two installed binaries that predate it: hgTrackDb drops
-# the container from the table, and trackDbToTxt then writes an hs1 curated hub
-# whose member names a parent stanza that is not there.  Load with a build that
-# has the fix, and rebuild the hub, until it ships.
+# These two superTracks are top level rather than sitting inside a single
+# transcriptionStart folder, because superTracks do not nest: a superTrack given
+# a parent passes tdbQuery -check -strict and is then silently dropped at load
+# (#38460).  transcriptionStart.html is left in the tree unused against that
+# being fixed.
 
 # hs1 has the ProCapNet predictions only.  There is no PRO-cap experiment and no
 # sequence-contribution score set on this assembly.  See
