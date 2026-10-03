@@ -71,8 +71,10 @@ bigWigInfo pred/K562.proCapNet.pos.bw | egrep 'basesCovered|mean'
 # Each output was checked against its input: same nBasesCovered, value range
 # mirrored, sampled values exactly negated.  The originals were then moved to
 # previousPred/ and the negated files put in their place, so /gbdb needs no new
-# symlinks.  previousPred/ is about 197 GB and can be removed once the track has
-# been through QA.  A rebuild from the downloads does not need any of this:
+# symlinks.  previousPred/ has since been deleted, 367 GB over the two
+# assemblies.  Nothing is lost by that: negation is its own inverse, so the
+# originals can be recovered from the files in pred/ by running the same command
+# again.  A rebuild from the downloads does not need any of this either:
 # proCapNetPredBuild negates the minus strand itself.
 
 cd ~/kent/src/hg/makeDb/outside/proCapNet
