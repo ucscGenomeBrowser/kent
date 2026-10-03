@@ -4342,14 +4342,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         return matchingChild;
     }
 
-/* Look "to the sky" in parents of root generation as well. */
+/* Look "to the sky" in parents of root generation as well.  Walk the whole
+ * chain: a supertrack may sit inside another supertrack, and neither is in the
+ * list itself, so the outer one is only reachable through the inner one. */
 if (level == 0)
     {
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	{
-	struct trackDb *p = tdb->parent;
-	if (p != NULL && sameString(track, p->track))
-	    return p;
+	struct trackDb *p;
+	for (p = tdb->parent; p != NULL; p = p->parent)
+	    {
+	    if (sameString(track, p->track))
+		return p;
+	    }
 	}
     }
 
@@ -4384,6 +4389,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     struct trackDb *parent = tdb->parent;
     if (parent != NULL)
         refAdd(&parent->children, tdb);
+    /* A supertrack that is a member of another supertrack is not in tdbList
+     * itself, so the loop above never reaches it.  Add it to its own parent's
+     * children the first time one of its members brings us here. */
+    for (; parent != NULL && tdbIsSuperTrackChild(parent); parent = parent->parent)
+        refAddUnique(&parent->parent->children, parent);
     }
 }
 
