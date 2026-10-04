@@ -465,8 +465,8 @@ struct mwMouseSub
     int height;			/* Height of its row. */
     };
 
-static void multiWigMouseOverJson(struct track *tg, struct wigCartOptions *wigCart,
-    struct mwMouseSub *subList)
+static void multiWigMouseOverJson(struct track *tg, struct hvGfx *hvg,
+    struct wigCartOptions *wigCart, struct mwMouseSub *subList)
 /* Write a record for the container into the mouseOver JSON.  It lists the
  * subtracks that were drawn, so hgTracks.js can show all of their values in
  * one popup, or pick the row under the cursor when there is no overlay. */
@@ -488,9 +488,10 @@ struct mwMouseSub *sub;
 for (sub = subList; sub != NULL; sub = sub->next)
     {
     struct track *subtrack = sub->track;
+    // ixColor is what the subtrack was drawn in, after any color override in the cart
+    struct rgbColor rgb = hvGfxColorIxToRgb(hvg, subtrack->ixColor);
     char color[16];
-    safef(color, sizeof color, "#%02x%02x%02x",
-        subtrack->color.r, subtrack->color.g, subtrack->color.b);
+    safef(color, sizeof color, "#%02x%02x%02x", rgb.r, rgb.g, rgb.b);
     jsonWriteObjectStart(mouseOverJson, NULL);
     jsonWriteString(mouseOverJson, "n", subtrack->track);
     jsonWriteString(mouseOverJson, "l", subtrack->shortLabel);
@@ -573,7 +574,8 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
-	    if (doMouseOver)
+	    // a subtrack that failed to load is drawn as a warning and has no values
+	    if (doMouseOver && subtrack->networkErrMsg == NULL)
 		{
 		struct mwMouseSub *sub;
 		AllocVar(sub);
@@ -602,10 +604,11 @@ if (doMouseOver)
     {
     // the list is in reverse draw order.  multiWigPreDraw reversed the
     // subtracks for stacked mode, so leave that one as it is, and the popup
-    // lists the subtracks in subtrack order in every mode.
+    // lists the subtracks in the order of tg->subtracks in every mode: the
+    // order of the rows top to bottom when there is no overlay.
     if (wigCart->aggregateFunction != wiggleAggregateStacked)
         slReverse(&mouseSubList);
-    multiWigMouseOverJson(tg, wigCart, mouseSubList);
+    multiWigMouseOverJson(tg, hvg, wigCart, mouseSubList);
     slFreeList(&mouseSubList);
     }
 

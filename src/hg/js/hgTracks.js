@@ -6919,8 +6919,10 @@ var mouseOver = {
     tracks: {}, // tracks[trackName] - number of data items for this track
     trackType: {},	// key is track name, value is track type from hgTracks
     mouseOverFunction: {}, // key is track name, value mouseOverFunction string
-    multiWig: {},       // key is multiWig container name, value its JSON record
-    multiWigWidths: {}, // key is multiWig container name, value its popup width
+    // key is multiWig container name, value its JSON record.  No prototype, so
+    // a track named like an Object method ("constructor") is not found here.
+    multiWig: Object.create(null),
+    multiWigWidths: Object.create(null), // key is container name, value popup width
     jsonUrl: {},       // list of json files from hidden DIV elements
     maximumWidth: {},   // maximumWidth[trackName] - largest string to display
     popUpDelay: 200,   // 0.2 second delay before popUp appears
@@ -6933,6 +6935,7 @@ var mouseOver = {
     noDataString: "no&nbsp;data",	// message for no data at this position
     noDataSize: 0,	// will be set to size of text 'no data'
     noAverageString: "&nbsp;zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values&nbsp;",	// "noAverage" function
+    noAverageRow: "zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values",	// the same in a multiWig row
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -6982,6 +6985,7 @@ var mouseOver = {
 	hasChildren = trackDb.hasChildren;
       } else if (hgTracks.trackDb && hgTracks.trackDb[trackName]) {
 	trackType = hgTracks.trackDb[trackName].type;
+	hasChildren = hgTracks.trackDb[trackName].hasChildren;
       } else if (mouseOver.trackType[trackName]) {
 	trackType = mouseOver.trackType[trackName];
       }
@@ -7076,8 +7080,7 @@ var mouseOver = {
     subtrackValue: function (subName, graphOffset)
     {
       if (mouseOver.mouseOverFunction[subName] === "noAverage") {
-         // the row label already has the padding
-         return mouseOver.noAverageString.replace(/^(&nbsp;)+|(&nbsp;)+$/g, "");
+         return mouseOver.noAverageRow;	// the row label already has the padding
       }
       var items = mouseOver.items[subName];
       if (items) {
@@ -7197,6 +7200,14 @@ var mouseOver = {
     var windowUp = false;     // see if window is supposed to become visible
     var mouseOverValue;
     var msgWidth;
+    if (!mouseOver.multiWig[trackName] && !mouseOver.items[trackName] &&
+        hgTracks.trackDb && hgTracks.trackDb[trackName] &&
+        hgTracks.trackDb[trackName].hasChildren) {
+        // a container whose record has not arrived, or was not written
+        // because nothing in it was drawn: nothing to show
+        mouseOver.popUpDisappear();
+        return;
+    }
     if (mouseOver.multiWig[trackName]) {
         mouseOverValue = mouseOver.multiWigValue(trackName, graphOffset, clientY);
         if (mouseOverValue === null) {	// between rows, or over the center label
@@ -7321,8 +7332,8 @@ var mouseOver = {
     //        {x1:n, x2:n, value:s}
     //        where n is an integer in the range: 0..width,
     //        and s is the value string to display
-    //     Will need to get them sorted on x1 for efficient searching as
-    //     they accumulate in the local data structure here.
+    //     wigTrack.c writes them sorted on x1 and not overlapping, which
+    //     findRange() relies on for its binary search.
     //  2020-11-24 more generalized incoming data structure, don't care
     //             what the structure is for each item, this will vary
     //             depending upon the type of track.  trackType now remembered
