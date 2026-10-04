@@ -6,7 +6,7 @@ This track is part of the
 </p>
 
 <p>
-It shows the individual CpG sites that make up the DNA methylation episignatures curated by
+It shows the individual CpG sites that make up the DNA methylation episignatures available on
 <a href="https://epigen.ccm.sickkids.ca/" target="_blank">EpigenCentral</a>, a portal from the
 Centre for Computational Medicine and the Weksberg lab at the Hospital for Sick Children in
 Toronto where a user can upload a methylation array sample and have it classified against those
@@ -35,10 +35,11 @@ the episignature with the largest absolute delta-beta at that site.
 </table>
 
 <p>
-The <b>Direction of methylation change</b> filter uses the same strongest episignature, so it does
-not catch a site where a weaker episignature changes in the opposite direction; about 1,600 of
-the 2,850 sites with more than one episignature are of this kind. The table on the details page
-lists every episignature at the site with its own direction.
+The <b>Direction of methylation change</b> filter uses the episignature with the largest absolute
+delta-beta value at a site. As a result, when multiple episignatures share a CpG and report
+different directions of methylation change, the filter reflects only the direction associated with
+the largest absolute delta-beta value. The table on the details page lists every episignature at
+the site with its own direction.
 </p>
 
 <p>
@@ -109,8 +110,9 @@ methylation arrays in blood, between a group of individuals carrying pathogenic 
 gene or locus concerned and a control group, and keeping the CpG probes whose case-control
 difference survived correction for multiple testing. The studies behind the individual
 signatures are listed in the table above and differ in cohort size, array version, and
-statistical treatment; EpigenCentral collects their published probe lists, adds the disorder and
-OMIM annotation, and serves them together. The portal and the classification it offers are
+statistical treatment; EpigenCentral uses these published DNA methylation signatures to develop
+classification models that enable users to compare their own methylation data against established
+episignatures. The portal and the classification it offers are
 described in Turinsky <em>et al.</em>
 </p>
 
@@ -126,8 +128,7 @@ own column; and 215 rows repeated within the per-site comparison table, affectin
 were removed, since the site's own count of episignatures already counted each one once. As a
 check on the coordinates, 5,000 sampled sites all fall on a CG dinucleotide in the hg38 sequence,
 and all 14,236 probes the track shares with the MethaDory track are at the same position in both.
-One entry, the Dup7 signature at cg19457237, has no direction or delta-beta in the source data
-and is shown as NA. The commands are in the makedoc,
+The commands are in the makedoc,
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/episignatures.txt" target="_blank">doc/hg38/episignatures.txt</a>,
 the scripts in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/episignatures" target="_blank">makeDb/scripts/episignatures</a>,
@@ -155,8 +156,8 @@ binary for your system; instructions for downloading source code and binaries ca
 <h2>Credits</h2>
 
 <p>
-Thanks to Prajkta Kallurkar and the Centre for Computational Medicine, and to the Weksberg lab at
-the Hospital for Sick Children in Toronto, for curating the episignatures and for building the
+Thanks to the Center for Computational Medicine and the Weksberg lab at the Hospital for Sick
+Children (SickKids) in Toronto for curating the episignatures and for building the
 track hub this track is based on. Thanks also to the groups whose published episignatures are
 collected here, listed in the table above. The track was brought to the Genome Browser by Eliza
 Alde, Barali Kitiyakara, Max Haeussler, and Jairo Navarro.
