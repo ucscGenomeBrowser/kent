@@ -625,6 +625,10 @@ if (nextUnderBar)
 return track;
 }
 
+#define maxSuperTrackDepth 10
+// No real trackDb nests supertracks anywhere near this deep; the limit is only
+// here so a malformed parent chain cannot spin forever.
+
 void trackDbSuperMarkup(struct trackDb *tdbList)
 /* Set trackDb from superTrack setting */
 {
@@ -657,10 +661,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
  * a supertrack configured in this trackDb */
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (tdbIsSuperTrack(tdb) || tdb->parent != NULL)
+    if (tdb->parent != NULL)
         continue;
     setting = trackDbLocalSetting(tdb, "parent");
-    if (!setting)
+    // A superTrack may name a parent superTrack, which nests it one level deeper.
+    // Its own "superTrack on" is not a parent reference, so only a non-super may
+    // fall back to the old style, where the setting holds the parent's name.
+    if (!setting && !tdbIsSuperTrack(tdb))
         setting = trackDbLocalSetting(tdb, "superTrack");  // Old style
     if (!setting)
         continue;
@@ -681,6 +688,30 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
             tdb->visibility = max(0, hTvFromStringNoAbort(words[1]));
         }
     freeMem(words[0]);
+    }
+
+/* Now that every link is set, make sure the supertracks form a tree.  Nesting
+ * means the parent chain is walked rather than looked at one level, so a loop
+ * would hang every walker instead of being harmless.  Only a supertrack can
+ * close a loop here, since nothing else is given a parent by this routine, so
+ * breaking it at a supertrack names the track whose setting is wrong and leaves
+ * the members attached to their folder. */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (!tdbIsSuperTrack(tdb) || tdb->parent == NULL)
+        continue;
+    struct trackDb *ancestor;
+    int depth = 0;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+        {
+        if (ancestor == tdb || ++depth > maxSuperTrackDepth)
+            {
+            warn("Supertrack %s is its own ancestor through its parent setting, "
+                 "ignoring that setting.", tdb->track);
+            tdb->parent = NULL;
+            break;
+            }
+        }
     }
 hashFree(&superHash);
 }

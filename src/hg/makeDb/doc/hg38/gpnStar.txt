@@ -1,0 +1,71 @@
+# GPN-Star genomic language model constraint scores, refs #38451
+# Wed Sep 30 05:07:38 PM PDT 2026 (Claude lrnassar)
+
+# Ye, Benegas et al., Nature 2026, doi:10.1038/s41586-026-11005-5, PMID 42717086.
+# The authors provide mutation-rate calibrated LLR scores for every possible SNV as
+# Parquet tables plus browser bigWigs, and a UCSC track hub, on Hugging Face:
+#   https://huggingface.co/datasets/songlab/gpn-star-scores
+# We use their values unmodified (files re-encoded, see below), pinned to dataset revision
+# 47e7f051113abab49f04f43f9107cae2cbbfd34d (logo and LLR files are identical at this
+# revision and at the revision their hub points to). Per score set we take:
+#   A.bw C.bw G.bw T.bw              sequence logo heights, p(base) * (2 - H)
+#   llr_A.bw ... llr_T.bw            signed calibrated LLR per alternate allele,
+#                                    reference allele set to 0, 3 decimals
+# entropy.bw is not used. The browser negates the LLR at display time (negateValues).
+
+# Download, checking each file's size and SHA-256 against the Hugging Face API
+# before moving it into place:
+~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarMirror.py gpn-star-hg38-v100-200m gpn-star-hg38-m447-200m gpn-star-hg38-p243-200m
+
+# Their bigWigs have bad section headers: every fixedStep section that ends right before a
+# coverage gap claims 6 more bases (end - start) than it stores (itemCount). This is a
+# libBigWig bug (pyBigWig 0.3.26, bwWrite.c bwAddIntervalSpanSteps does not subtract the
+# 24-byte section header when setting the end of the last section of each addEntries call).
+# The browser is unaffected, but kent bigWigAverageOverBed and bigWigCorrelate abort on these
+# files (bwgValsOnChrom.c assert). Check a file with:
+#   ~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarCheckSections.py <file.bw> 0
+# Re-encode every file with bigWigToWig | wigToBigWig. The script then runs
+# gpnStarVerify.sh, which checks that the bigWigToBedGraph output (every per-base value) is
+# identical before and after on every chromosome (compared per chromosome, because kent
+# writes chromosomes in alphabetical order) and that no bad sections remain. Zoomed-out summary levels are recomputed by kent at its own
+# resolutions, so whole-chromosome views can differ by a pixel here and there.
+mkdir -p /data/tmp/gpnStarRebuild
+for d in /hive/data/genomes/hg38/bed/gpnStar/v100 /hive/data/genomes/hg38/bed/gpnStar/m447 /hive/data/genomes/hg38/bed/gpnStar/p243; do
+  for f in A C G T llr_A llr_C llr_G llr_T; do
+    echo ~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarRebuild.sh $d/$f.bw \
+        /hive/data/genomes/hg38/chrom.sizes /data/tmp/gpnStarRebuild
+  done
+done | parallel -j 8
+# every job printed "OK ... values identical on N chromosomes, bad sections 0"; move the rebuilt files
+# into place:
+for d in /hive/data/genomes/hg38/bed/gpnStar/v100 /hive/data/genomes/hg38/bed/gpnStar/m447 /hive/data/genomes/hg38/bed/gpnStar/p243; do mv $d/rebuilt/*.bw $d/ && rmdir $d/rebuilt; done
+
+# gpn-star-hg38-v100-200m -> /hive/data/genomes/hg38/bed/gpnStar/v100
+# Spot-check coordinates against one Parquet shard (one-based) to rule out an
+# off-by-one in the authors' conversion to zero-based bigWig intervals:
+cd /data/tmp
+curl -sL -o gpn-star-hg38-v100-200m_llr_chr22.parquet \
+  https://huggingface.co/datasets/songlab/gpn-star-scores/resolve/47e7f051113abab49f04f43f9107cae2cbbfd34d/data/gpn-star-hg38-v100-200m/llr/llr_chr22.parquet
+~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarCoordCheck.py gpn-star-hg38-v100-200m_llr_chr22.parquet hg38 /gbdb/hg38/gpnStar/v100 12
+# Result: 0 mismatches in 12 sampled rows (bigWig == llr_calibrated, ref allele == 0,
+# genome base == Parquet ref).
+
+# gpn-star-hg38-m447-200m -> /hive/data/genomes/hg38/bed/gpnStar/m447
+# Spot-check coordinates against one Parquet shard (one-based) to rule out an
+# off-by-one in the authors' conversion to zero-based bigWig intervals:
+cd /data/tmp
+curl -sL -o gpn-star-hg38-m447-200m_llr_chr22.parquet \
+  https://huggingface.co/datasets/songlab/gpn-star-scores/resolve/47e7f051113abab49f04f43f9107cae2cbbfd34d/data/gpn-star-hg38-m447-200m/llr/llr_chr22.parquet
+~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarCoordCheck.py gpn-star-hg38-m447-200m_llr_chr22.parquet hg38 /gbdb/hg38/gpnStar/m447 12
+# Result: 0 mismatches in 12 sampled rows (bigWig == llr_calibrated, ref allele == 0,
+# genome base == Parquet ref).
+
+# gpn-star-hg38-p243-200m -> /hive/data/genomes/hg38/bed/gpnStar/p243
+# Spot-check coordinates against one Parquet shard (one-based) to rule out an
+# off-by-one in the authors' conversion to zero-based bigWig intervals:
+cd /data/tmp
+curl -sL -o gpn-star-hg38-p243-200m_llr_chr22.parquet \
+  https://huggingface.co/datasets/songlab/gpn-star-scores/resolve/47e7f051113abab49f04f43f9107cae2cbbfd34d/data/gpn-star-hg38-p243-200m/llr/llr_chr22.parquet
+~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarCoordCheck.py gpn-star-hg38-p243-200m_llr_chr22.parquet hg38 /gbdb/hg38/gpnStar/p243 12
+# Result: 0 mismatches in 12 sampled rows (bigWig == llr_calibrated, ref allele == 0,
+# genome base == Parquet ref).

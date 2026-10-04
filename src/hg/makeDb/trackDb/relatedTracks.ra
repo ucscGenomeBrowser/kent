@@ -654,3 +654,21 @@ hg19 ucscGenePfam hmc Missense constraint measured across homologous positions w
 # mm10 mouse strain cross-links:
 mm10 mm10Strains1 mouseStrainsCactus Whole-genome alignment of the 16 strain assemblies to the reference
 mm10 mouseStrainsCactus mm10Strains1 Alternate strain sequences mapped to their reference genome location
+
+# GPN-Star:
+hg38 gpnStarLogoV cons100way Conservation scores from the same 100-vertebrate alignment
+hg38 cons100way gpnStarLogoV A genomic language model trained on this alignment
+hg38 gpnStarLogoM cons447way Conservation scores from the same 447-mammal alignment
+hg38 cons447way gpnStarLogoM A genomic language model trained on this alignment
+hg38 gpnStarLogoP cons447way Primate conservation scores from the same alignment
+hg38 cons447way gpnStarLogoP A genomic language model trained on the primates of this alignment
+hg38 gpnStarLogoM constraintSuper Regional constraint scores
+hg38 constraintSuper gpnStarLogoM Per-base constraint predicted from whole-genome alignments
+mm39 gpnStarLogo cons35way Conservation scores from the same alignment
+mm39 cons35way gpnStarLogo A genomic language model trained on this alignment
+galGal6 gpnStarLogo cons77way Conservation scores from the same alignment
+galGal6 cons77way gpnStarLogo A genomic language model trained on this alignment
+dm6 gpnStarLogo cons124way Conservation scores from the same alignment
+dm6 cons124way gpnStarLogo A genomic language model trained on this alignment
+ce11 gpnStarLogo cons135way Conservation scores from the same alignment
+ce11 cons135way gpnStarLogo A genomic language model trained on this alignment
