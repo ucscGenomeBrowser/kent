@@ -51,7 +51,7 @@ import requests
 # place, so the date in the name buys no reproducibility - prefer the alias.
 DEFAULT_HUB_URL = "http://smithlab.usc.edu/trackdata/methylation/methbase_hub/hub.txt"
 # The mirror lives on hgdownload, served as https://hgdownload.soe.ucsc.edu/hubs/
-# and reached as qateam@hgdownload. Each refresh gets its own vN directory, so
+# served from hgdownload. Each refresh gets its own vN directory, so
 # bump this (or pass -o) when v4 is cut. Do not update the directory that is
 # being served: hardlink it first (cp -al v3 v4), update the copy, then swap.
 DEFAULT_OUT_DIR = "/mirrordata/hubs/methbase/v3"
