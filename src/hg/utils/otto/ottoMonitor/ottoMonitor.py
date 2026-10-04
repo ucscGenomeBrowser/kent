@@ -15,15 +15,26 @@ It reads three things and writes one:
                           grace to allow.  Kept beside this script.
   otto.crontab            not read directly.  The schedule comes from the cron
                           column of ottoOwners.tsv, which is copied from it.
+  ottoMonitorPublic.tsv   the few tracks to compare with the public site that
+                          cannot be found from /gbdb, mostly SQL tables.  The
+                          rest are found at run time.  Kept beside this script.
   state.json              written.  One entry per job: the last run seen, the
                           last verdict, how many runs in a row have failed the
-                          same way, and the ticket number if one is open.
+                          same way, and the ticket number if one is open.  Also
+                          when each public track was first seen behind hgwdev.
 
 A job whose run is late is not automatically somebody's bug.  The source may be
 down, in which case the next run will catch up on its own.  So a late job with a
 source URL gets that URL fetched, and only a late job whose source answers is
 called a real failure.  A source that does not answer has to fail twice in a row
 before it becomes a ticket, which is the slack asked for on the ticket.
+
+A job that runs on time can still leave users with old data, because the copy
+to the RR is a separate root cron that the otto run never sees.  DECIPHER ran
+every week from 2022 to 2026 while its push was switched off (#38436).  So a
+second check compares the "Data last updated" date that hgTrackUi shows on
+hgwdev with the one on genome.ucsc.edu, and reports a track whose public copy
+has stayed behind for longer than its lagDays.
 
 Silent when everything is on time, so cron mails nothing.  Filing tickets is off
 unless --file is given.
@@ -34,8 +45,10 @@ import fnmatch
 import glob
 import json
 import os
+import re
 import subprocess
 import sys
+import time
 from datetime import datetime, timedelta
 
 selfDir = os.path.dirname(os.path.abspath(__file__))
@@ -43,7 +56,29 @@ selfDir = os.path.dirname(os.path.abspath(__file__))
 defaultOwners = "/hive/data/outside/otto/ottoMonitor/ottoOwners.tsv"
 defaultStamps = os.path.join(selfDir, "ottoMonitorStamps.tsv")
 defaultState = "/hive/data/outside/otto/ottoMonitor/state.json"
+defaultPublic = os.path.join(selfDir, "ottoMonitorPublic.tsv")
 redmineCli = os.path.expanduser("~/kent/src/utils/redmineCli")
+
+# The two hosts the public check compares.  hgwdev is where otto installs;
+# genome.ucsc.edu is what users see.
+devHost = "https://hgwdev.gi.ucsc.edu"
+publicHost = "https://genome.ucsc.edu"
+
+ottoDir = "/hive/data/outside/otto"
+gbdbDir = "/gbdb"
+hgsql = "/cluster/bin/x86_64/hgsql"
+
+# How long a public copy may stay behind hgwdev before it is reported.  The
+# pushes for otto jobs run weekly or more often.
+defaultLagDays = 8.0
+
+# Pause between page fetches, so a daily run of thirty pages stays well clear of
+# the RR's bot delay.
+publicFetchPause = 1.0
+
+# hui.c prints this line for both a table and a bigBed/bigWig.  The date is
+# "YYYY-MM-DD HH:MM:SS" for a big file and "YYYY-MM-DD" for a table.
+dateLineRe = re.compile(r"Data last updated at UCSC:&nbsp;</B>\s*([0-9-]+(?: [0-9:]+)?)")
 
 # A run stamp is allowed to be this stale before the job counts as late, on top
 # of the job's own graceHours.  Covers clock skew and a cron that starts slow.
@@ -253,6 +288,15 @@ def findOnDuty(comments):
     return(None)
 
 
+def findWatchers(comments):
+    """The ottoWatchers header line names people added to every ticket, comma
+    separated."""
+    for line in comments:
+        if line.lower().startswith("# ottowatchers:"):
+            return([n.strip() for n in line.split(":", 1)[1].split(",") if n.strip()])
+    return([])
+
+
 def loadState(path):
     if os.path.exists(path):
         with open(path) as fh:
@@ -329,27 +373,230 @@ def classifyLate(result):
     return(result)
 
 
-def fileTicket(result, onDuty, dryRun):
+def ottoLinks():
+    """Every symlink in /gbdb that points into the otto area, as a list of
+    (db, gbdb path, target).  A direct link is how every otto bigBed reaches
+    the browser.  About 2,800 links in 700 databases; a cold scan takes a minute
+    and a half, a warm one under a second."""
+    cmd = ["find", gbdbDir + "/", "-mindepth", "2", "-maxdepth", "4", "-type", "l",
+           "-lname", ottoDir + "/*", "-printf", "%p\t%l\n"]
+    done = subprocess.run(cmd, capture_output=True, text=True, errors="replace")
+    links = []
+    for line in done.stdout.splitlines():
+        path, target = line.split("\t", 1)
+        db = path[len(gbdbDir) + 1:].split("/", 1)[0]
+        links.append((db, path, target))
+    return(links)
+
+
+def bigDataUrls(db):
+    """{gbdb path: [track, ...]} for one database's trackDb on hgwdev."""
+    query = ("select tableName, substring_index(substring_index(settings, "
+             "'bigDataUrl ', -1), '\\n', 1) from trackDb "
+             "where settings like '%bigDataUrl /gbdb/%'")
+    done = subprocess.run([hgsql, "-N", db, "-e", query], capture_output=True, text=True,
+                          errors="replace")
+    urls = {}
+    for line in done.stdout.splitlines():
+        fields = line.split("\t")
+        if len(fields) != 2:
+            continue
+        url = fields[1].strip().replace("$D", db)
+        urls.setdefault(url, []).append(fields[0])
+    return(urls)
+
+
+def discoverPublicTracks(owners, watched):
+    """The bigBed tracks each watched job feeds, found from /gbdb and trackDb
+    rather than listed by hand, so a new file or a new assembly is picked up
+    on its own.
+
+    A link belongs to the job whose directory, taken from its script path in
+    ottoOwners.tsv, is the longest prefix of the link's target.  Two jobs that
+    share a directory (omim and omimUpload, uniprot and uniprotWuhCor1) give
+    it to the first by name; they have the same owner.  Links into a directory
+    no watched job runs from are left out.
+
+    A push copies a directory, so one track per job and /gbdb directory is
+    enough.  uniprot alone has links in 140 databases, though, so each of those
+    gets hg38 and hg19 when it has them, and otherwise the single database
+    whose file is newest.  Within that, the track whose file is newest, because
+    it is the one most likely to be ahead of the public copy."""
+    jobDirs = []
+    for job in sorted(watched):
+        script = owners[job][7]
+        if script.startswith(ottoDir + "/"):
+            jobDirs.append((os.path.dirname(script) + "/", job))
+    # longest directory first, so clinGen/clinGenCspec/ wins over clinGen/
+    jobDirs.sort(key=lambda d: -len(d[0]))
+
+    groups = {}
+    for db, path, target in ottoLinks():
+        job = next((j for d, j in jobDirs if target.startswith(d)), None)
+        if job is None:
+            continue
+        try:
+            mtime = os.path.getmtime(target)
+        except OSError:
+            continue
+        subDir = os.path.dirname(path[len(gbdbDir) + 1:].split("/", 1)[1])
+        groups.setdefault((job, subDir), {}).setdefault(db, []).append((mtime, path))
+
+    urlCache = {}
+    rows = []
+    for (job, subDir), byDb in sorted(groups.items()):
+        dbs = [db for db in ("hg38", "hg19") if db in byDb]
+        if not dbs:
+            dbs = [max(byDb, key=lambda db: max(byDb[db]))]
+        for db in dbs:
+            if db not in urlCache:
+                urlCache[db] = bigDataUrls(db)
+            for mtime, path in sorted(byDb[db], reverse=True):
+                tracks = urlCache[db].get(path)
+                if tracks:
+                    rows.append({"job": job, "db": db, "track": sorted(tracks)[0],
+                                 "lagDays": defaultLagDays, "note": "found in /gbdb"})
+                    break
+    return(rows)
+
+
+def readPublicTable(path):
+    """Rows of ottoMonitorPublic.tsv as dicts, in file order.  Not readTable,
+    because one job can feed several tracks and readTable keys on the job."""
+    rows = []
+    with open(path) as fh:
+        for line in fh:
+            line = line.rstrip("\n")
+            if line.startswith("#") or not line.strip():
+                continue
+            fields = line.split("\t")
+            if len(fields) < 4:
+                continue
+            rows.append({"job": fields[0], "db": fields[1], "track": fields[2],
+                         "lagDays": float(fields[3]),
+                         "note": fields[4] if len(fields) > 4 else ""})
+    return(rows)
+
+
+def trackDate(host, db, track, timeout=60):
+    """The "Data last updated at UCSC" date hgTrackUi shows for one track, as a
+    datetime, or None with the reason when the page has no such line."""
+    url = "%s/cgi-bin/hgTrackUi?db=%s&g=%s" % (host, db, track)
+    cmd = ["curl", "-sS", "--max-time", str(timeout), url]
+    try:
+        done = subprocess.run(cmd, capture_output=True, text=True, errors="replace",
+                              timeout=timeout + 10)
+    except subprocess.TimeoutExpired:
+        return(None, "timed out")
+    if done.returncode != 0:
+        return(None, "curl exit %d" % done.returncode)
+    match = dateLineRe.search(done.stdout)
+    if match is None:
+        if "Can't find" in done.stdout:
+            return(None, "no such track")
+        return(None, "no date on the page")
+    text = match.group(1)
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+        try:
+            return(datetime.strptime(text, fmt), text)
+        except ValueError:
+            pass
+    return(None, "unreadable date %r" % text)
+
+
+def checkPublic(row, entry, now):
+    """Compare one track on hgwdev and on the public site.  entry is this
+    track's slot in state.json and is updated in place.  Returns a dict."""
+    result = dict(row)
+    result["name"] = "%s %s" % (row["db"], row["track"])
+    devDate, devText = trackDate(devHost, row["db"], row["track"])
+    time.sleep(publicFetchPause)
+    pubDate, pubText = trackDate(publicHost, row["db"], row["track"])
+    time.sleep(publicFetchPause)
+    result["dev"] = devText
+    result["public"] = pubText
+    # An alpha track such as clinvarMainAlpha is on hgwdev only, on purpose.
+    if devDate is not None and pubText == "no such track":
+        result["verdict"] = "notOnPublic"
+        return(result)
+    if devDate is None or pubDate is None:
+        result["verdict"] = "publicUnknown"
+        result["detail"] = "hgwdev: %s, genome.ucsc.edu: %s" % (devText, pubText)
+        return(result)
+
+    # The public copy can match hgwdev, or even be newer when someone pushed by
+    # hand and hgwdev was rebuilt since with the same data.  Only older counts.
+    if pubDate >= devDate:
+        entry.pop("behindSince", None)
+        entry["publicSeen"] = pubText
+        result["verdict"] = "ok"
+        return(result)
+
+    # The public copy is older.  That is normal for up to a week, until the next
+    # push.  How long it has been behind is when the monitor first saw it so.  On
+    # the first sighting the earliest moment hgwdev is known to have been ahead
+    # is its own date, so start the clock there rather than at now.
+    #
+    # Also restart the clock when the public date has moved since the last run.
+    # A job that rebuilds daily and is pushed weekly is never equal at the time
+    # this runs, but a public date that moves shows the push is working.
+    since = entry.get("behindSince")
+    if since is None or entry.get("publicSeen", pubText) != pubText:
+        since = devDate.strftime("%Y-%m-%d %H:%M")
+        entry["behindSince"] = since
+    entry["publicSeen"] = pubText
+    result["behindSince"] = since
+    behind = now - datetime.strptime(since, "%Y-%m-%d %H:%M")
+    if behind < timedelta(days=row["lagDays"]):
+        result["verdict"] = "ok"
+        return(result)
+    result["verdict"] = "notPublic"
+    result["detail"] = ("genome.ucsc.edu has data from %s, hgwdev has %s, "
+                        "behind since %s (%d days)" %
+                        (pubText, devText, since, behind.days))
+    return(result)
+
+
+def fileTicket(result, onDuty, watchers, dryRun):
     """One GB Bug per failing job, to whoever is running otto, with the job's
-    owner as a watcher and named in the body."""
+    owner and the ottoWatchers people as watchers, and the owner named in the
+    body."""
     owner = result["owner"]
-    subject = "otto job %s has not run since %s" % (result["job"], result["lastRun"])
+    if result["verdict"] == "notPublic":
+        subject = "otto job %s: %s on genome.ucsc.edu is older than on hgwdev" % (
+            result["job"], result["name"])
+    else:
+        subject = "otto job %s has not run since %s" % (result["job"], result["lastRun"])
     if result.get("ownerIsOnDuty"):
         ownerLine = "This job has no individual owner, so it belongs to whoever is running otto."
     elif owner != "?":
         ownerLine = "The recorded owner of this job is %s." % owner
     else:
         ownerLine = "This job has no recorded owner in ottoOwners.tsv."
-    body = "\n".join([
-        "The otto failure monitor found this job late. Refs #38101.",
-        "",
-        ownerLine,
-        "",
-        "Schedule: %s" % result["cron"],
-        "Last run stamp: %s" % result["lastRun"],
-        "Due: %s" % result.get("due", "-"),
-        "Source check: %s" % result.get("probe", "-"),
-    ])
+    if result["verdict"] == "notPublic":
+        body = "\n".join([
+            "The otto failure monitor found that this track has not reached the "
+            "public site. The otto job runs, but the copy to the RR does not. "
+            "Refs #38101.",
+            "",
+            ownerLine,
+            "",
+            "Track: %s" % result["name"],
+            "Data date on hgwdev: %s" % result["dev"],
+            "Data date on genome.ucsc.edu: %s" % result["public"],
+            "Behind since: %s" % result["behindSince"],
+        ])
+    else:
+        body = "\n".join([
+            "The otto failure monitor found this job late. Refs #38101.",
+            "",
+            ownerLine,
+            "",
+            "Schedule: %s" % result["cron"],
+            "Last run stamp: %s" % result["lastRun"],
+            "Due: %s" % result.get("due", "-"),
+            "Source check: %s" % result.get("probe", "-"),
+        ])
     cmd = [redmineCli, "create", "--project", "genomebrowser", "--tracker", "Bug",
            "--subject", subject, "--description", body]
     if onDuty:
@@ -359,14 +606,17 @@ def fileTicket(result, onDuty, dryRun):
         return(None)
     done = subprocess.run(cmd, capture_output=True, text=True)
     print(done.stdout.strip())
-    # dict.fromkeys keeps the order and drops the duplicate when the job's owner
-    # is the person on duty
-    for name in dict.fromkeys(n for n in (owner, onDuty) if n and n != "?"):
-        ticketId = "".join(c for c in done.stdout.split("#")[-1][:6] if c.isdigit())
-        if ticketId:
-            subprocess.run([redmineCli, "watch", ticketId, name],
-                           capture_output=True, text=True)
-    return(done.stdout.strip())
+    # redmineCli prints "Created #NNNNN: <url>"
+    match = re.search(r"Created #(\d+)", done.stdout)
+    if not match:
+        return(None)
+    ticketId = match.group(1)
+    # dict.fromkeys keeps the order and drops a name that is in the list twice,
+    # such as an owner who is also the person on duty
+    for name in dict.fromkeys(n for n in [owner, onDuty] + watchers if n and n != "?"):
+        subprocess.run([redmineCli, "watch", ticketId, name],
+                       capture_output=True, text=True)
+    return(ticketId)
 
 
 def main():
@@ -382,11 +632,16 @@ def main():
                         help="report the jobs that are fine and the ones we are blind to")
     parser.add_argument("--no-state", action="store_true",
                         help="do not read or write state.json")
+    parser.add_argument("--public", default=defaultPublic, help="ottoMonitorPublic.tsv")
+    parser.add_argument("--no-public", action="store_true",
+                        help="skip the comparison of hgwdev with genome.ucsc.edu")
     args = parser.parse_args()
 
     owners, comments = readTable(args.owners, 10)
     stamps, _ = readTable(args.stamps, 3)
+    publicRows = []
     onDuty = findOnDuty(comments)
+    watchers = findWatchers(comments)
     now = datetime.now()
     state = {} if args.no_state else loadState(args.state)
 
@@ -416,6 +671,7 @@ def main():
         elif result["verdict"] in ("unlisted", "unparsed"):
             other.append(result)
         elif result["verdict"] == "ok":
+            entry.pop("ticket", None)
             fine.append(result)
 
     for result in late:
@@ -431,10 +687,49 @@ def main():
         if entry.get("ticket"):
             print("    ticket #%s is already open" % entry["ticket"])
             continue
-        fileTicket(result, onDuty, dryRun=not args.file)
+        ticketId = fileTicket(result, onDuty, watchers, dryRun=not args.file)
+        if ticketId:
+            entry["ticket"] = ticketId
 
     for result in other:
         print("%s: %s" % (result["job"], result["detail"]))
+
+    # The public-site check.  Tracks found in /gbdb, plus the few that
+    # ottoMonitorPublic.tsv lists because /gbdb cannot find them.  Its state
+    # lives under one key of its own, keyed by db and track, because one job
+    # can feed several tracks.
+    if not args.no_public:
+        seen = set()
+        for row in readPublicTable(args.public) + discoverPublicTracks(owners, watched):
+            if row["job"] in watched and (row["db"], row["track"]) not in seen:
+                seen.add((row["db"], row["track"]))
+                publicRows.append(row)
+    publicState = state.setdefault("_publicSite", {})
+    publicFine, publicAbsent = [], []
+    for row in publicRows:
+        entry = publicState.setdefault("%s.%s" % (row["db"], row["track"]), {})
+        result = checkPublic(row, entry, now)
+        entry["checked"] = now.strftime("%Y-%m-%d %H:%M")
+        if result["verdict"] == "ok":
+            entry.pop("ticket", None)
+            publicFine.append(result)
+            continue
+        if result["verdict"] == "notOnPublic":
+            publicAbsent.append(result)
+            continue
+        print("%s: %s: %s" % (row["job"], result["name"], result["detail"]))
+        if result["verdict"] != "notPublic":
+            continue
+        owner = owners[row["job"]][1]
+        result["ownerIsOnDuty"] = owner == onDutyOwner
+        result["owner"] = (onDuty or "?") if result["ownerIsOnDuty"] else owner
+        print("    owner: %s" % result["owner"])
+        if entry.get("ticket"):
+            print("    ticket #%s is already open" % entry["ticket"])
+            continue
+        ticketId = fileTicket(result, onDuty, watchers, dryRun=not args.file)
+        if ticketId:
+            entry["ticket"] = ticketId
 
     if args.verbose:
         print("\nblind, cannot tell whether these ran (%d):" % len(blind))
@@ -444,6 +739,19 @@ def main():
         for result in fine:
             print("  %-20s last run %s, due %s" %
                   (result["job"], result.get("lastRun", "-"), result.get("due", "-")))
+        if publicRows:
+            print("\npublic site up to date (%d):" % len(publicFine))
+            for result in publicFine:
+                waiting = ""
+                if result.get("behindSince"):
+                    waiting = ", behind since %s, within %g days" % (
+                        result["behindSince"], result["lagDays"])
+                print("  %-20s %-32s hgwdev %s, public %s%s" %
+                      (result["job"], result["name"], result["dev"],
+                       result["public"], waiting))
+            print("\non hgwdev only, not checked (%d):" % len(publicAbsent))
+            for result in publicAbsent:
+                print("  %-20s %s" % (result["job"], result["name"]))
 
     if not args.no_state:
         saveState(args.state, state)

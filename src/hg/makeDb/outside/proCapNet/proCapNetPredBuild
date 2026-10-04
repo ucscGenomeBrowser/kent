@@ -15,7 +15,8 @@ scriptDir=$(dirname $0)
 mkdir -p $outDir
 # The download is named <cell>.<strand>.bigWig; the output says what the file
 # holds, <cell>.proCapNet.<strand>.bw, so a bigWig downloaded on its own still
-# names the model it came from.  Already-converted files are skipped, so an
+# names the model it came from.  The minus strand is written negated, so it draws
+# below the baseline from its own values rather than from a trackDb setting.  Already-converted files are skipped, so an
 # interrupted run can be restarted.
 ls $inDir/*.bigWig \
     | awk -v outDir=$outDir -v sizes=$chromSizes -v prog=$scriptDir/proCapNetPredToFixedStep \
@@ -24,6 +25,7 @@ ls $inDir/*.bigWig \
             strand = n; sub(/.*\./, "", strand);
             cell = n; sub(/\.[^.]*$/, "", cell);
             out = outDir "/" cell ".proCapNet." strand ".bw";
+            negate = (strand == "neg") ? "--negate" : "";
             if (system("test -s " out) != 0)
-                print prog, sizes, $0, out}' \
+                print prog, negate, sizes, $0, out}' \
     | xargs -d '\n' -P $jobs -I CMD sh -c CMD

@@ -169,6 +169,22 @@ proteins as a heatmap, colored on a global gradient from
 <span style="color:#2166ac">tolerated (blue)</span>.
 </p>
 
+<h3>GPN-Star - hg38</h3>
+<p>
+<b>Interpretation:</b> scores are calibrated log-likelihood ratios of the alternate versus the
+reference allele, displayed with the sign flipped (-LLR), so higher values mean a more
+constrained position or a more damaging substitution.
+</p>
+<p>
+<a href="hgTrackUi?g=gpnStarLogoM">GPN-Star</a>
+(Ye, Benegas et al, Nature 2026) is a genomic language model trained on whole-genome alignments
+together with the species tree, without using clinical labels. It scores every possible
+single-base substitution in the genome, coding and non-coding. There are three models, trained
+on alignments of 100 vertebrates (V), 447 mammals (M) and 243 primates (P); the vertebrate model
+did best on coding pathogenic variants, the mammal model on non-coding pathogenic and fine-mapped
+GWAS variants, and the primate model on complex trait heritability.
+</p>
+
 <h2>Display Conventions and Configuration</h2>
 
 <h3>AlphaGenome</h3>
@@ -230,6 +246,12 @@ over a cell to see the substitution and its score. EVE is colored per protein fr
 blue = tolerated) so that cells are comparable across genes. These tracks are best viewed
 zoomed in to a single gene or exon.</p>
 
+<h3>GPN-Star</h3>
+<p>Each of the three models has two tracks: four -LLR bigWig subtracks, one per alternate
+nucleotide, with the reference base shown as zero, and a sequence logo, in which the height of
+each column shows how constrained the position is. See the per-track description
+page for details.</p>
+
 <h2>Data Access</h2>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>
 or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>. The data can be
@@ -271,7 +293,7 @@ href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/doc/hg
 text file. MutScore was already available in bigWig format to download.</p>
 
 <h2>Credits</h2>
-<p>Thanks to the BayesDel, MutScore, M-CAP, ClinPred, PrimateAI-3D and PromoterAI teams for
+<p>Thanks to the BayesDel, MutScore, M-CAP, ClinPred, PrimateAI-3D, PromoterAI and GPN-Star teams for
 providing precomputed data, and to Tiana Pereira, Christopher Lee, Gerardo Perez, and Anna
 Benet-Pages of the Genome Browser team.</p>
 
@@ -365,3 +387,11 @@ PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31484976" target="_blank">314
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6726608/" target="_blank">PMC6726608</a>
 </p>
 
+<p>
+Ye C, Benegas G, Albors C, Li JC, Prillo S, Fields PD, Clarke B, Song YS.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/42717086" target="_blank">
+Predicting genome-wide functional constraints with GPN-Star</a>.
+<em>Nature</em>. 2026 Sep 9;.
+DOI: <a href="https://doi.org/10.1038/s41586-026-11005-5" target="_blank">10.1038/s41586-026-11005-5</a>;
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42717086" target="_blank">42717086</a>
+</p>

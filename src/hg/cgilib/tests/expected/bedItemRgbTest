@@ -1,4 +1,4 @@
-======== hg.conf alwaysItemRgb=(not set, defaults on)
+======== hg.conf alwaysItemRgb=on
 one setting
   (nothing)                                            item colors
   itemRgb on                                           item colors

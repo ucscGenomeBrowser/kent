@@ -15,10 +15,12 @@ mkdirs:
 
 # Run once with the hg.conf gate off and once with it on, so the test pins both
 # the old behavior and the new one.  The generated conf includes the developer's
-# own so the database settings come along.
+# own so the database settings come along.  The off conf sets the gate off by
+# name, because the developer's conf may itself include one that turns it on.
 backupParseTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/backupParseTest backupParseTest.c ../backup.c ${MYLIBS} $L
 	echo "include ${HOME}/.hg.conf" > output/off.hg.conf
+	echo "skipMalformedCgiPairs=off" >> output/off.hg.conf
 	chmod 600 output/off.hg.conf
 	echo "include ${HOME}/.hg.conf" > output/on.hg.conf
 	echo "skipMalformedCgiPairs=on" >> output/on.hg.conf

@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+"""Reorder the bars of a barChart or bigBarChart BED file."""
+import argparse
+import sys
+
+def parseArgs():
+    """Parse the command line arguments."""
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+The bars of a barChart track are drawn in the order their values appear in the
+expScores field, so changing the order means rewriting that field in every row.
+The two order files list the bar names, one per line: the order the BED file is
+in now, and the order you want it in.  Both must name the same bars.
+
+The barChartBars line for the track is printed on stdout.  Remember to put the
+barChartColors setting and the barChartStatsUrl file into the same order.
+
+To reorder a bigBarChart file, convert it to BED first and rebuild it after:
+
+   bigBedToBed input.bb input.bed
+   barChartReorder oldOrder.txt newOrder.txt input.bed reordered.bed
+   bedToBigBed -sort -as=barChartBed.as -type=bed6+5 reordered.bed chrom.sizes output.bb
+
+example:
+   barChartReorder oldOrder.txt newOrder.txt input.bed reordered.bed \\
+       --categories old.categories --outCategories new.categories
+""")
+    parser.add_argument("oldOrder",
+        help="file of bar names, one per line, in the order they appear in expScores now")
+    parser.add_argument("newOrder",
+        help="file of the same bar names, in the order you want them drawn")
+    parser.add_argument("inBed",
+        help="barChart BED file to read, bed6+3 or bed6+5")
+    parser.add_argument("outBed",
+        help="reordered BED file to write")
+    parser.add_argument("--categories",
+        help="a .categories file (barChartCategoryUrl) to put into the new order")
+    parser.add_argument("--outCategories",
+        help="where to write the reordered .categories file, default is to overwrite")
+    if len(sys.argv) == 1:
+        parser.print_help()
+        exit(1)
+    return parser.parse_args()
+
+def readNames(fileName):
+    """Read a file of names, one per line, ignoring blank lines."""
+    return [line.strip() for line in open(fileName) if line.strip()]
+
+def reorderBed(inBed, outBed, old, new, order):
+    """Write outBed with the expScores field of every row put into the new order."""
+    with open(inBed) as inf, open(outBed, "w") as outf:
+        for lineNumber, line in enumerate(inf, 1):
+            if line.startswith("#"):
+                outf.write(line.replace(" ".join(old), " ".join(new)))
+                continue
+            fields = line.rstrip("\n").split("\t")
+            if len(fields) < 9:
+                sys.exit("error: line %d has %d fields, expected at least 9"
+                         % (lineNumber, len(fields)))
+            scores = fields[8].rstrip(",").split(",")
+            if len(scores) != len(old):
+                sys.exit("error: line %d has %d values but %d bar names were given"
+                         % (lineNumber, len(scores), len(old)))
+            fields[8] = ",".join(scores[i] for i in order)
+            outf.write("\t".join(fields) + "\n")
+
+def reorderCategories(inFile, outFile, new):
+    """Rewrite a .categories file so its rows follow the new bar order."""
+    rows = dict()
+    for line in open(inFile):
+        if line.strip():
+            rows[line.split("\t")[0]] = line
+    missing = [name for name in new if name not in rows]
+    if missing:
+        sys.exit("error: no row in %s for: %s" % (inFile, ", ".join(missing)))
+    with open(outFile, "w") as outf:
+        for name in new:
+            outf.write(rows[name])
+
+def main():
+    args = parseArgs()
+    old = readNames(args.oldOrder)
+    new = readNames(args.newOrder)
+    if sorted(old) != sorted(new):
+        sys.exit("error: %s and %s must list the same bar names"
+                 % (args.oldOrder, args.newOrder))
+    order = [old.index(name) for name in new]
+    reorderBed(args.inBed, args.outBed, old, new, order)
+    if args.categories:
+        reorderCategories(args.categories, args.outCategories or args.categories, new)
+    print("barChartBars " + " ".join(new))
+
+main()

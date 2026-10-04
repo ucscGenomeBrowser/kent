@@ -1,0 +1,46 @@
+# #38444 -- a db name that has its own active dbDb row was swapped for an asmAlias accession
+# that has no dbDb row.  The CGI then found no such assembly and fell back to the organism's
+# default or to hg38.  Reported on MLQ #38416: pick the curated hub GRCz12tu in hgGateway,
+# search for a gene, and land on danRer11 or hg38.
+#
+# The fix is 124514ebfd2, in src/hg/lib/asmAlias.c: when the name has an active dbDb row,
+# asmAliasFind keeps it and skips asmAlias.  A second commit, 2b14cc7d4cd, changes the otto
+# script that builds asmAlias (src/hg/utils/otto/genArk/asmAlias/asmAliasUpdate.py) to leave
+# out an alias that matches a dbDb name, ignoring case.
+#
+# Three names, each with an active dbDb row and an asmAlias row on hgcentralbeta and
+# hgcentral (checked 2026-10-03):
+#   GRCz12ab      -> GCF_052040795.1  (curated hub; dbDb uses GCA_052040795.1)
+#   calJac240_pri -> GCF_049354715.1  (curated hub; dbDb uses GCA_049354715.1)
+#   monDom5       -> MonDom5 row, GCF_000002295.2  (the lookup ignores case)
+# Each URL is the one a person reaches: the hub pair with the gene search from the ticket,
+# monDom5 as a plain db= link.  The positive text check is the assertion.  On a build with
+# the bug the page is hg38 and contains none of these names, so every check fails.  hgGateway
+# itself is not driven: its cart-JSON calls return a new hgsid each time, and the hgTracks
+# URL reaches the same alias lookup through the cart's db.
+#
+# What genome-test cannot show: hgcentraltest.asmAlias was reloaded on 2026-10-01 without
+# these rows, so on genome-test this script passes on the data alone, with or without the
+# code fix.  Its failing half is on hgwbeta and the RR, whose centrals still have the rows.
+#
+# No hg.conf gate.
+proof:
+  - "assertion-only 2026-10-03 -- written from #38444 and 124514ebfd2"
+  - "release-ab 2026-10-03 -- fails on hgw0 (v503) and on hgwbeta (v504), neither of which has 124514ebfd2, at step 2: page does not contain monDom5; passes on genome-test. Run alone on both servers, the GRCz12ab check and the calJac240_pri check each fail too"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=monDom5"
+  - expect:
+      text: ["Opossum", "monDom5"]
+
+  - goto: "/cgi-bin/hgTracks?db=GRCz12ab&position=vwf"
+  - expect:
+      text: ["GRCz12ab"]
+
+  - goto: "/cgi-bin/hgTracks?db=calJac240_pri&position=vwf"
+  - expect:
+      text: ["calJac240_pri"]

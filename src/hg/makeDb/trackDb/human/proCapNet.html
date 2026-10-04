@@ -43,10 +43,11 @@ track, available on GRCh38/hg38.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-The matrix on this page has one row per cell line and one column per data type,
-so a checkbox turns on one strand of one cell line's predictions, or its
-contribution scores. Use the <b>Sample class</b> filter to restrict the matrix to
-cancer or non-cancer lines.
+This track collection holds one predicted PRO-cap track per cell line, shown by
+default, and on GRCh38/hg38 one contribution score track per cell line, hidden by
+default. Use the buttons on this page to turn tracks on or off, and click a track's
+name to open its own settings, where the plus and minus strands of a predicted
+PRO-cap track can also be turned on separately.
 </p>
 
 <p>
@@ -138,7 +139,8 @@ The bigWig files are on our
 <a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/proCapNet/" target="_blank">download
 server</a>. Predictions are under <tt>pred/</tt> and are named for the cell line,
 the model and the strand, for example <tt>K562.proCapNet.pos.bw</tt> and
-<tt>K562.proCapNet.neg.bw</tt>. Contribution scores, which exist for GRCh38 only,
+<tt>K562.proCapNet.neg.bw</tt>. Minus strand values are stored as negative
+numbers. Contribution scores, which exist for GRCh38 only,
 are under <tt>contrib/</tt>, for example <tt>K562.proCapNet-contrib.bw</tt>.
 </p>
 
@@ -167,8 +169,8 @@ features within a given range, e.g.
 <p>
 The ProCapNet models are on the
 <a href="https://www.encodeproject.org" target="_blank">ENCODE portal</a> as
-BPNet-model annotations, one per cell line, linked from the Experiment column of
-the table on this page. Each annotation also holds the trained model, sequence
+BPNet-model annotations, one per cell line, linked from the <b>ENCODE model</b>
+column of the table above. Each annotation also holds the trained model, sequence
 contribution scores and predicted signal over a selected set of regions. The
 genome-wide predictions shown here are not part of that ENCODE release.
 </p>

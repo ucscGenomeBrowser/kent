@@ -3,565 +3,536 @@
 
 track transcriptionStart
 superTrack on show
+group rna
 shortLabel Transcription Initiation (TSS)
 longLabel Transcription initiation (TSS)
-group rna
+release alpha
 
     track encode4ProCap
+    superTrack on show
     parent transcriptionStart
-    compositeTrack on
-    type bigWig
+    group rna
     shortLabel PRO-cap
     longLabel PRO-cap nascent RNA transcription start sites from ENCODE 4
-    subGroup1 cellLine Cell_line A673=A673 Caco2=Caco-2 Calu3=Calu3 HUVEC=HUVEC K562=K562 MCF10A=MCF10A
-    subGroup2 dataType Data_type procapPos=PRO-cap_+ procapNeg=PRO-cap_-
-    subGroup3 sampleClass Sample_class Cancer=Cancer Noncancer=Non-cancer
-    dimensions dimensionX=dataType dimensionY=cellLine dimA=sampleClass
-    filterComposite dimA
-    sortOrder cellLine=+ dataType=+
-    configurable on
-    autoScale group
-    alwaysZero on
-    maxHeightPixels 100:40:8
-    windowingFunction maximum
-    noInherit on
-    visibility hide
-    priority 1
+    release alpha
 
-        track encode4ProCap_A673_procap
-        parent encode4ProCap on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 0,114,178
-        shortLabel A673 PRO-cap
-        longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, plus up minus down
-        onlyVisibility full
-        priority 1
-
-            track encode4ProCap_A673_procap_pos
-            parent encode4ProCap_A673_procap
-            subGroups cellLine=A673 dataType=procapPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/A673.ENCSR046BCI.pos.bw
-            color 0,114,178
-            shortLabel A673 PRO-cap +
-            longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, plus strand
-
-            track encode4ProCap_A673_procap_neg
-            parent encode4ProCap_A673_procap
-            subGroups cellLine=A673 dataType=procapNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/A673.ENCSR046BCI.neg.bw
-            color 0,114,178
-            altColor 0,114,178
-            shortLabel A673 PRO-cap -
-            longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, minus strand
-
-        track encode4ProCap_Caco-2_procap
-        parent encode4ProCap on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 213,94,0
-        shortLabel Caco-2 PRO-cap
-        longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, plus up minus down
-        onlyVisibility full
-        priority 2
-
-            track encode4ProCap_Caco-2_procap_pos
-            parent encode4ProCap_Caco-2_procap
-            subGroups cellLine=Caco2 dataType=procapPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/Caco-2.ENCSR100LIJ.pos.bw
-            color 213,94,0
-            shortLabel Caco-2 PRO-cap +
-            longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, plus strand
-
-            track encode4ProCap_Caco-2_procap_neg
-            parent encode4ProCap_Caco-2_procap
-            subGroups cellLine=Caco2 dataType=procapNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/Caco-2.ENCSR100LIJ.neg.bw
-            color 213,94,0
-            altColor 213,94,0
-            shortLabel Caco-2 PRO-cap -
-            longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, minus strand
-
-        track encode4ProCap_Calu3_procap
-        parent encode4ProCap on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 0,158,115
-        shortLabel Calu3 PRO-cap
-        longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, plus up minus down
-        onlyVisibility full
-        priority 3
-
-            track encode4ProCap_Calu3_procap_pos
-            parent encode4ProCap_Calu3_procap
-            subGroups cellLine=Calu3 dataType=procapPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/Calu3.ENCSR935RNW.pos.bw
-            color 0,158,115
-            shortLabel Calu3 PRO-cap +
-            longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, plus strand
-
-            track encode4ProCap_Calu3_procap_neg
-            parent encode4ProCap_Calu3_procap
-            subGroups cellLine=Calu3 dataType=procapNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/Calu3.ENCSR935RNW.neg.bw
-            color 0,158,115
-            altColor 0,158,115
-            shortLabel Calu3 PRO-cap -
-            longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, minus strand
-
-        track encode4ProCap_HUVEC_procap
-        parent encode4ProCap on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 204,121,167
-        shortLabel HUVEC PRO-cap
-        longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, plus up minus down
-        onlyVisibility full
-        priority 4
-
-            track encode4ProCap_HUVEC_procap_pos
-            parent encode4ProCap_HUVEC_procap
-            subGroups cellLine=HUVEC dataType=procapPos sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/HUVEC.ENCSR098LLB.pos.bw
-            color 204,121,167
-            shortLabel HUVEC PRO-cap +
-            longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, plus strand
-
-            track encode4ProCap_HUVEC_procap_neg
-            parent encode4ProCap_HUVEC_procap
-            subGroups cellLine=HUVEC dataType=procapNeg sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/HUVEC.ENCSR098LLB.neg.bw
-            color 204,121,167
-            altColor 204,121,167
-            shortLabel HUVEC PRO-cap -
-            longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, minus strand
-
-        track encode4ProCap_K562_procap
-        parent encode4ProCap on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 230,159,0
-        shortLabel K562 PRO-cap
-        longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, plus up minus down
-        onlyVisibility full
-        priority 5
-
-            track encode4ProCap_K562_procap_pos
-            parent encode4ProCap_K562_procap
-            subGroups cellLine=K562 dataType=procapPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.pos.bw
-            color 230,159,0
-            shortLabel K562 PRO-cap +
-            longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, plus strand
-
-            track encode4ProCap_K562_procap_neg
-            parent encode4ProCap_K562_procap
-            subGroups cellLine=K562 dataType=procapNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.neg.bw
-            color 230,159,0
-            altColor 230,159,0
-            shortLabel K562 PRO-cap -
-            longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, minus strand
-
-        track encode4ProCap_MCF10A_procap
-        parent encode4ProCap on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 86,180,233
-        shortLabel MCF10A PRO-cap
-        longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, plus up minus down
-        onlyVisibility full
-        priority 6
-
-            track encode4ProCap_MCF10A_procap_pos
-            parent encode4ProCap_MCF10A_procap
-            subGroups cellLine=MCF10A dataType=procapPos sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/MCF10A.ENCSR799DGV.pos.bw
-            color 86,180,233
-            shortLabel MCF10A PRO-cap +
-            longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, plus strand
-
-            track encode4ProCap_MCF10A_procap_neg
-            parent encode4ProCap_MCF10A_procap
-            subGroups cellLine=MCF10A dataType=procapNeg sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/encode4ProCap/MCF10A.ENCSR799DGV.neg.bw
-            color 86,180,233
-            altColor 86,180,233
-            shortLabel MCF10A PRO-cap -
-            longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, minus strand
+track encode4ProCap
+superTrack on show
+group rna
+shortLabel PRO-cap
+longLabel PRO-cap nascent RNA transcription start sites from ENCODE 4
+release beta,public
 
     track proCapNet
+    superTrack on show
     parent transcriptionStart
-    compositeTrack on
-    type bigWig
+    group rna
     shortLabel ProCapNet
     longLabel ProCapNet predicted PRO-cap
-    subGroup1 cellLine Cell_line A673=A673 Caco2=Caco-2 Calu3=Calu3 HUVEC=HUVEC K562=K562 MCF10A=MCF10A
-    subGroup2 dataType Data_type predPos=Predicted_+ predNeg=Predicted_- contrib=Contribution_scores
-    subGroup3 sampleClass Sample_class Cancer=Cancer Noncancer=Non-cancer
-    dimensions dimensionX=dataType dimensionY=cellLine dimA=sampleClass
-    filterComposite dimA
-    sortOrder cellLine=+ dataType=+
-    configurable on
-    autoScale group
-    alwaysZero on
-    maxHeightPixels 100:40:8
-    windowingFunction maximum
-    noInherit on
-    visibility hide
-    priority 2
+    release alpha
 
-        track proCapNet_A673_pred
-        parent proCapNet on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 0,114,178
-        shortLabel A673 Predicted
-        longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, plus up minus down
-        onlyVisibility full
-        priority 1
+track proCapNet
+superTrack on show
+group rna
+shortLabel ProCapNet
+longLabel ProCapNet predicted PRO-cap
+release beta,public
 
-            track proCapNet_A673_pred_pos
-            parent proCapNet_A673_pred
-            subGroups cellLine=A673 dataType=predPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/A673.proCapNet.pos.bw
-            color 0,114,178
-            shortLabel A673 Predicted +
-            longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, plus strand
+track encode4ProCap_A673_procap
+superTrack encode4ProCap full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html encode4ProCap
+color 0,114,178
+shortLabel A673 PRO-cap
+longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, plus up minus down
+priority 1
 
-            track proCapNet_A673_pred_neg
-            parent proCapNet_A673_pred
-            subGroups cellLine=A673 dataType=predNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/A673.proCapNet.neg.bw
-            color 0,114,178
-            altColor 0,114,178
-            negateValues on
-            shortLabel A673 Predicted -
-            longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, minus strand
+    track encode4ProCap_A673_procap_pos
+    parent encode4ProCap_A673_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/A673.ENCSR046BCI.pos.bw
+    color 0,114,178
+    shortLabel A673 PRO-cap +
+    longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, plus strand
 
-        track proCapNet_Caco-2_pred
-        parent proCapNet on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 213,94,0
-        shortLabel Caco-2 Predicted
-        longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, plus up minus down
-        onlyVisibility full
-        priority 2
+    track encode4ProCap_A673_procap_neg
+    parent encode4ProCap_A673_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/A673.ENCSR046BCI.neg.bw
+    color 0,114,178
+    altColor 0,114,178
+    shortLabel A673 PRO-cap -
+    longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, minus strand
 
-            track proCapNet_Caco-2_pred_pos
-            parent proCapNet_Caco-2_pred
-            subGroups cellLine=Caco2 dataType=predPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/Caco-2.proCapNet.pos.bw
-            color 213,94,0
-            shortLabel Caco-2 Predicted +
-            longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, plus strand
+track encode4ProCap_Caco-2_procap
+superTrack encode4ProCap full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html encode4ProCap
+color 213,94,0
+shortLabel Caco-2 PRO-cap
+longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, plus up minus down
+priority 2
 
-            track proCapNet_Caco-2_pred_neg
-            parent proCapNet_Caco-2_pred
-            subGroups cellLine=Caco2 dataType=predNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/Caco-2.proCapNet.neg.bw
-            color 213,94,0
-            altColor 213,94,0
-            negateValues on
-            shortLabel Caco-2 Predicted -
-            longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, minus strand
+    track encode4ProCap_Caco-2_procap_pos
+    parent encode4ProCap_Caco-2_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/Caco-2.ENCSR100LIJ.pos.bw
+    color 213,94,0
+    shortLabel Caco-2 PRO-cap +
+    longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, plus strand
 
-        track proCapNet_Calu3_pred
-        parent proCapNet on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 0,158,115
-        shortLabel Calu3 Predicted
-        longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, plus up minus down
-        onlyVisibility full
-        priority 3
+    track encode4ProCap_Caco-2_procap_neg
+    parent encode4ProCap_Caco-2_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/Caco-2.ENCSR100LIJ.neg.bw
+    color 213,94,0
+    altColor 213,94,0
+    shortLabel Caco-2 PRO-cap -
+    longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, minus strand
 
-            track proCapNet_Calu3_pred_pos
-            parent proCapNet_Calu3_pred
-            subGroups cellLine=Calu3 dataType=predPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/Calu3.proCapNet.pos.bw
-            color 0,158,115
-            shortLabel Calu3 Predicted +
-            longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, plus strand
+track encode4ProCap_Calu3_procap
+superTrack encode4ProCap full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html encode4ProCap
+color 0,158,115
+shortLabel Calu3 PRO-cap
+longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, plus up minus down
+priority 3
 
-            track proCapNet_Calu3_pred_neg
-            parent proCapNet_Calu3_pred
-            subGroups cellLine=Calu3 dataType=predNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/Calu3.proCapNet.neg.bw
-            color 0,158,115
-            altColor 0,158,115
-            negateValues on
-            shortLabel Calu3 Predicted -
-            longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, minus strand
+    track encode4ProCap_Calu3_procap_pos
+    parent encode4ProCap_Calu3_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/Calu3.ENCSR935RNW.pos.bw
+    color 0,158,115
+    shortLabel Calu3 PRO-cap +
+    longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, plus strand
 
-        track proCapNet_HUVEC_pred
-        parent proCapNet on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 204,121,167
-        shortLabel HUVEC Predicted
-        longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, plus up minus down
-        onlyVisibility full
-        priority 4
+    track encode4ProCap_Calu3_procap_neg
+    parent encode4ProCap_Calu3_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/Calu3.ENCSR935RNW.neg.bw
+    color 0,158,115
+    altColor 0,158,115
+    shortLabel Calu3 PRO-cap -
+    longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, minus strand
 
-            track proCapNet_HUVEC_pred_pos
-            parent proCapNet_HUVEC_pred
-            subGroups cellLine=HUVEC dataType=predPos sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/HUVEC.proCapNet.pos.bw
-            color 204,121,167
-            shortLabel HUVEC Predicted +
-            longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, plus strand
+track encode4ProCap_HUVEC_procap
+superTrack encode4ProCap full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html encode4ProCap
+color 204,121,167
+shortLabel HUVEC PRO-cap
+longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, plus up minus down
+priority 4
 
-            track proCapNet_HUVEC_pred_neg
-            parent proCapNet_HUVEC_pred
-            subGroups cellLine=HUVEC dataType=predNeg sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/HUVEC.proCapNet.neg.bw
-            color 204,121,167
-            altColor 204,121,167
-            negateValues on
-            shortLabel HUVEC Predicted -
-            longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, minus strand
+    track encode4ProCap_HUVEC_procap_pos
+    parent encode4ProCap_HUVEC_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/HUVEC.ENCSR098LLB.pos.bw
+    color 204,121,167
+    shortLabel HUVEC PRO-cap +
+    longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, plus strand
 
-        track proCapNet_K562_pred
-        parent proCapNet on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 230,159,0
-        shortLabel K562 Predicted
-        longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, plus up minus down
-        onlyVisibility full
-        priority 5
+    track encode4ProCap_HUVEC_procap_neg
+    parent encode4ProCap_HUVEC_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/HUVEC.ENCSR098LLB.neg.bw
+    color 204,121,167
+    altColor 204,121,167
+    shortLabel HUVEC PRO-cap -
+    longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, minus strand
 
-            track proCapNet_K562_pred_pos
-            parent proCapNet_K562_pred
-            subGroups cellLine=K562 dataType=predPos sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/K562.proCapNet.pos.bw
-            color 230,159,0
-            shortLabel K562 Predicted +
-            longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, plus strand
+track encode4ProCap_K562_procap
+superTrack encode4ProCap full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html encode4ProCap
+color 230,159,0
+shortLabel K562 PRO-cap
+longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, plus up minus down
+priority 5
 
-            track proCapNet_K562_pred_neg
-            parent proCapNet_K562_pred
-            subGroups cellLine=K562 dataType=predNeg sampleClass=Cancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/K562.proCapNet.neg.bw
-            color 230,159,0
-            altColor 230,159,0
-            negateValues on
-            shortLabel K562 Predicted -
-            longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, minus strand
+    track encode4ProCap_K562_procap_pos
+    parent encode4ProCap_K562_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.pos.bw
+    color 230,159,0
+    shortLabel K562 PRO-cap +
+    longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, plus strand
 
-        track proCapNet_MCF10A_pred
-        parent proCapNet on
-        container multiWig
-        aggregate solidOverlay
-        showSubtrackColorOnUi on
-        type bigWig
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        windowingFunction maximum
-        color 86,180,233
-        shortLabel MCF10A Predicted
-        longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, plus up minus down
-        onlyVisibility full
-        priority 6
+    track encode4ProCap_K562_procap_neg
+    parent encode4ProCap_K562_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/K562.ENCSR261KBX.neg.bw
+    color 230,159,0
+    altColor 230,159,0
+    shortLabel K562 PRO-cap -
+    longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, minus strand
 
-            track proCapNet_MCF10A_pred_pos
-            parent proCapNet_MCF10A_pred
-            subGroups cellLine=MCF10A dataType=predPos sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/MCF10A.proCapNet.pos.bw
-            color 86,180,233
-            shortLabel MCF10A Predicted +
-            longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, plus strand
+track encode4ProCap_MCF10A_procap
+superTrack encode4ProCap full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html encode4ProCap
+color 86,180,233
+shortLabel MCF10A PRO-cap
+longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, plus up minus down
+priority 6
 
-            track proCapNet_MCF10A_pred_neg
-            parent proCapNet_MCF10A_pred
-            subGroups cellLine=MCF10A dataType=predNeg sampleClass=Noncancer
-            type bigWig
-            bigDataUrl /gbdb/hg38/proCapNet/pred/MCF10A.proCapNet.neg.bw
-            color 86,180,233
-            altColor 86,180,233
-            negateValues on
-            shortLabel MCF10A Predicted -
-            longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, minus strand
+    track encode4ProCap_MCF10A_procap_pos
+    parent encode4ProCap_MCF10A_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/MCF10A.ENCSR799DGV.pos.bw
+    color 86,180,233
+    shortLabel MCF10A PRO-cap +
+    longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, plus strand
 
-        track proCapNet_A673_contrib
-        subGroups cellLine=A673 dataType=contrib sampleClass=Cancer
-        parent proCapNet off
-        type bigWig
-        bigDataUrl /gbdb/hg38/proCapNet/contrib/A673.proCapNet-contrib.bw
-        logo on
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        color 0,114,178
-        shortLabel A673 Contribution
-        longLabel A673 (ENCSR072YCM) ProCapNet sequence-contribution scores
-        onlyVisibility full
-        priority 11
+    track encode4ProCap_MCF10A_procap_neg
+    parent encode4ProCap_MCF10A_procap
+    type bigWig
+    bigDataUrl /gbdb/hg38/encode4ProCap/MCF10A.ENCSR799DGV.neg.bw
+    color 86,180,233
+    altColor 86,180,233
+    shortLabel MCF10A PRO-cap -
+    longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, minus strand
 
-        track proCapNet_Caco-2_contrib
-        subGroups cellLine=Caco2 dataType=contrib sampleClass=Cancer
-        parent proCapNet off
-        type bigWig
-        bigDataUrl /gbdb/hg38/proCapNet/contrib/Caco-2.proCapNet-contrib.bw
-        logo on
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        color 213,94,0
-        shortLabel Caco-2 Contribution
-        longLabel Caco-2 (ENCSR182QNJ) ProCapNet sequence-contribution scores
-        onlyVisibility full
-        priority 12
+track proCapNet_A673_pred
+superTrack proCapNet full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html proCapNet
+color 0,114,178
+shortLabel A673 Predicted
+longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, plus up minus down
+priority 1
 
-        track proCapNet_Calu3_contrib
-        subGroups cellLine=Calu3 dataType=contrib sampleClass=Cancer
-        parent proCapNet off
-        type bigWig
-        bigDataUrl /gbdb/hg38/proCapNet/contrib/Calu3.proCapNet-contrib.bw
-        logo on
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        color 0,158,115
-        shortLabel Calu3 Contribution
-        longLabel Calu3 (ENCSR797DEF) ProCapNet sequence-contribution scores
-        onlyVisibility full
-        priority 13
+    track proCapNet_A673_pred_pos
+    parent proCapNet_A673_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/A673.proCapNet.pos.bw
+    color 0,114,178
+    shortLabel A673 Predicted +
+    longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, plus strand
 
-        track proCapNet_HUVEC_contrib
-        subGroups cellLine=HUVEC dataType=contrib sampleClass=Noncancer
-        parent proCapNet off
-        type bigWig
-        bigDataUrl /gbdb/hg38/proCapNet/contrib/HUVEC.proCapNet-contrib.bw
-        logo on
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        color 204,121,167
-        shortLabel HUVEC Contribution
-        longLabel HUVEC (ENCSR801ECP) ProCapNet sequence-contribution scores
-        onlyVisibility full
-        priority 14
+    track proCapNet_A673_pred_neg
+    parent proCapNet_A673_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/A673.proCapNet.neg.bw
+    color 0,114,178
+    altColor 0,114,178
+    shortLabel A673 Predicted -
+    longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, minus strand
 
-        track proCapNet_K562_contrib
-        subGroups cellLine=K562 dataType=contrib sampleClass=Cancer
-        parent proCapNet off
-        type bigWig
-        bigDataUrl /gbdb/hg38/proCapNet/contrib/K562.proCapNet-contrib.bw
-        logo on
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        color 230,159,0
-        shortLabel K562 Contribution
-        longLabel K562 (ENCSR740IPL) ProCapNet sequence-contribution scores
-        onlyVisibility full
-        priority 15
+track proCapNet_Caco-2_pred
+superTrack proCapNet full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html proCapNet
+color 213,94,0
+shortLabel Caco-2 Predicted
+longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, plus up minus down
+priority 2
 
-        track proCapNet_MCF10A_contrib
-        subGroups cellLine=MCF10A dataType=contrib sampleClass=Noncancer
-        parent proCapNet off
-        type bigWig
-        bigDataUrl /gbdb/hg38/proCapNet/contrib/MCF10A.proCapNet-contrib.bw
-        logo on
-        autoScale on
-        alwaysZero on
-        maxHeightPixels 100:40:8
-        color 86,180,233
-        shortLabel MCF10A Contribution
-        longLabel MCF10A (ENCSR860TYZ) ProCapNet sequence-contribution scores
-        onlyVisibility full
-        priority 16
+    track proCapNet_Caco-2_pred_pos
+    parent proCapNet_Caco-2_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/Caco-2.proCapNet.pos.bw
+    color 213,94,0
+    shortLabel Caco-2 Predicted +
+    longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, plus strand
+
+    track proCapNet_Caco-2_pred_neg
+    parent proCapNet_Caco-2_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/Caco-2.proCapNet.neg.bw
+    color 213,94,0
+    altColor 213,94,0
+    shortLabel Caco-2 Predicted -
+    longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, minus strand
+
+track proCapNet_Calu3_pred
+superTrack proCapNet full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html proCapNet
+color 0,158,115
+shortLabel Calu3 Predicted
+longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, plus up minus down
+priority 3
+
+    track proCapNet_Calu3_pred_pos
+    parent proCapNet_Calu3_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/Calu3.proCapNet.pos.bw
+    color 0,158,115
+    shortLabel Calu3 Predicted +
+    longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, plus strand
+
+    track proCapNet_Calu3_pred_neg
+    parent proCapNet_Calu3_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/Calu3.proCapNet.neg.bw
+    color 0,158,115
+    altColor 0,158,115
+    shortLabel Calu3 Predicted -
+    longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, minus strand
+
+track proCapNet_HUVEC_pred
+superTrack proCapNet full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html proCapNet
+color 204,121,167
+shortLabel HUVEC Predicted
+longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, plus up minus down
+priority 4
+
+    track proCapNet_HUVEC_pred_pos
+    parent proCapNet_HUVEC_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/HUVEC.proCapNet.pos.bw
+    color 204,121,167
+    shortLabel HUVEC Predicted +
+    longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, plus strand
+
+    track proCapNet_HUVEC_pred_neg
+    parent proCapNet_HUVEC_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/HUVEC.proCapNet.neg.bw
+    color 204,121,167
+    altColor 204,121,167
+    shortLabel HUVEC Predicted -
+    longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, minus strand
+
+track proCapNet_K562_pred
+superTrack proCapNet full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html proCapNet
+color 230,159,0
+shortLabel K562 Predicted
+longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, plus up minus down
+priority 5
+
+    track proCapNet_K562_pred_pos
+    parent proCapNet_K562_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/K562.proCapNet.pos.bw
+    color 230,159,0
+    shortLabel K562 Predicted +
+    longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, plus strand
+
+    track proCapNet_K562_pred_neg
+    parent proCapNet_K562_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/K562.proCapNet.neg.bw
+    color 230,159,0
+    altColor 230,159,0
+    shortLabel K562 Predicted -
+    longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, minus strand
+
+track proCapNet_MCF10A_pred
+superTrack proCapNet full
+container multiWig
+aggregate solidOverlay
+showSubtrackColorOnUi on
+type bigWig
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+windowingFunction maximum
+configurable on
+html proCapNet
+color 86,180,233
+shortLabel MCF10A Predicted
+longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, plus up minus down
+priority 6
+
+    track proCapNet_MCF10A_pred_pos
+    parent proCapNet_MCF10A_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/MCF10A.proCapNet.pos.bw
+    color 86,180,233
+    shortLabel MCF10A Predicted +
+    longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, plus strand
+
+    track proCapNet_MCF10A_pred_neg
+    parent proCapNet_MCF10A_pred
+    type bigWig
+    bigDataUrl /gbdb/hg38/proCapNet/pred/MCF10A.proCapNet.neg.bw
+    color 86,180,233
+    altColor 86,180,233
+    shortLabel MCF10A Predicted -
+    longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, minus strand
+
+track proCapNet_A673_contrib
+superTrack proCapNet hide
+type bigWig
+bigDataUrl /gbdb/hg38/proCapNet/contrib/A673.proCapNet-contrib.bw
+logo on
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+configurable on
+html proCapNet
+color 0,114,178
+shortLabel A673 Contribution
+longLabel A673 (ENCSR072YCM) ProCapNet sequence-contribution scores
+priority 11
+
+track proCapNet_Caco-2_contrib
+superTrack proCapNet hide
+type bigWig
+bigDataUrl /gbdb/hg38/proCapNet/contrib/Caco-2.proCapNet-contrib.bw
+logo on
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+configurable on
+html proCapNet
+color 213,94,0
+shortLabel Caco-2 Contribution
+longLabel Caco-2 (ENCSR182QNJ) ProCapNet sequence-contribution scores
+priority 12
+
+track proCapNet_Calu3_contrib
+superTrack proCapNet hide
+type bigWig
+bigDataUrl /gbdb/hg38/proCapNet/contrib/Calu3.proCapNet-contrib.bw
+logo on
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+configurable on
+html proCapNet
+color 0,158,115
+shortLabel Calu3 Contribution
+longLabel Calu3 (ENCSR797DEF) ProCapNet sequence-contribution scores
+priority 13
+
+track proCapNet_HUVEC_contrib
+superTrack proCapNet hide
+type bigWig
+bigDataUrl /gbdb/hg38/proCapNet/contrib/HUVEC.proCapNet-contrib.bw
+logo on
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+configurable on
+html proCapNet
+color 204,121,167
+shortLabel HUVEC Contribution
+longLabel HUVEC (ENCSR801ECP) ProCapNet sequence-contribution scores
+priority 14
+
+track proCapNet_K562_contrib
+superTrack proCapNet hide
+type bigWig
+bigDataUrl /gbdb/hg38/proCapNet/contrib/K562.proCapNet-contrib.bw
+logo on
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+configurable on
+html proCapNet
+color 230,159,0
+shortLabel K562 Contribution
+longLabel K562 (ENCSR740IPL) ProCapNet sequence-contribution scores
+priority 15
+
+track proCapNet_MCF10A_contrib
+superTrack proCapNet hide
+type bigWig
+bigDataUrl /gbdb/hg38/proCapNet/contrib/MCF10A.proCapNet-contrib.bw
+logo on
+autoScale on
+alwaysZero on
+maxHeightPixels 100:40:8
+configurable on
+html proCapNet
+color 86,180,233
+shortLabel MCF10A Contribution
+longLabel MCF10A (ENCSR860TYZ) ProCapNet sequence-contribution scores
+priority 16
 

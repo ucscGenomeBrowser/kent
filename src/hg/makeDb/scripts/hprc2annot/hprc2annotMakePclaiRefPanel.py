@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the pcLAI reference-panel scatterplot data file for the hprc2annot hub.
+"""Build the PCLAI reference-panel scatterplot data file for the hprc2annot hub.
 
-The pcLAI authors publish the PCA coordinates of the 1000 Genomes reference
-haplotypes that define the ancestry space each pcLAI window is placed in:
+The PCLAI authors publish the PCA coordinates of the 1000 Genomes reference
+haplotypes that define the ancestry space each PCLAI window is placed in:
 
   https://github.com/AI-sandbox/hprc-pclai/blob/main/reference_pca_metadata.tsv
 

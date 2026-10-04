@@ -7,13 +7,12 @@ domain is a contiguous region that preferentially interacts with itself in Hi-C 
 </p>
 <h2>Display Conventions and Configuration</h2>
 <p>
-Each domain is drawn as a box. Domains were called on 40 kb-binned Hi-C data, so domain
-edges are uncertain to roughly &plusmn;20 kb and all coordinates fall on a 40 kb grid.
-Domains cover roughly 86&ndash;91% of the genome; they do not tile end to end, and
-the gaps between boxes are Dixon's &quot;boundary&quot; (&lt;400 kb) or &quot;unorganized
-chromatin&quot; (&gt;400 kb) regions. No per-domain confidence score is published by the
-authors, so none is shown. These coordinates are not directly comparable to the other TAD
-tracks, which use different callers.
+Domains were called from Hi-C data analyzed in fixed-size 40 kb bins, so domain edges are
+uncertain to roughly &plusmn;20 kb. Domains cover roughly 86&ndash;91% of the genome, and
+the gaps between domains are what Dixon <em>et al.</em> call &quot;topological
+boundaries&quot; (under 400 kb) or &quot;unorganized chromatin&quot; (over 400 kb). No
+per-domain confidence score is published by the authors, so none is shown. These coordinates
+are not directly comparable to the other TAD tracks.
 </p>
 <h2>Methods</h2>
 <p>
@@ -38,7 +37,10 @@ The underlying bigBed files can be downloaded from our
 <h2>References</h2>
 <p>
 Dixon JR, Selvaraj S, Yue F, Kim A, Li Y, Shen Y, Hu M, Liu JS, Ren B.
-Topological domains in mammalian genomes identified by analysis of chromatin
-interactions. <em>Nature</em>. 2012;485(7398):376-80.
-<a href="https://doi.org/10.1038/nature11082" target="_blank">doi:10.1038/nature11082</a>
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22495300" target="_blank">
+Topological domains in mammalian genomes identified by analysis of chromatin interactions</a>.
+<em>Nature</em>. 2012 Apr 11;485(7398):376-80.
+DOI: <a href="https://doi.org/10.1038/nature11082" target="_blank">10.1038/nature11082</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/22495300" target="_blank">22495300</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3356448/" target="_blank">PMC3356448</a>
 </p>

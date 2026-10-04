@@ -24,6 +24,63 @@ gets that URL fetched.  If the source is down the job is left alone, and only a
 second run in a row that fails the same way becomes a ticket.  If the source
 answers, the failure was something else and it files the same day.
 
+A SECOND QUESTION: DID IT REACH THE PUBLIC SITE
+
+A job can run on time and users can still see old data.  The copy of a job's
+output to the RR is a separate root cron in /etc/crontab, an AutoPush script,
+and the otto run never sees it.  #38436 is the case that prompted this.  The
+DECIPHER job rebuilt its track every week from 2022 to 2026, but the
+decipherAutoPush line had been commented out, so genome.ucsc.edu kept the data
+from 2022-06-19.  The first question called DECIPHER on time the whole while.
+
+WHICH TRACKS
+
+The monitor finds the tracks itself.  It lists every symlink in /gbdb that
+points into /hive/data/outside/otto, gives each one to the watched job whose
+script directory is the longest prefix of the link's target, and looks up the
+hgwdev trackDb track whose bigDataUrl names the link.  A push copies a
+directory, so it keeps one track per job and /gbdb directory: hg38 and hg19
+when the directory has them, otherwise the one database whose file is newest,
+and within that the track whose file is newest.  uniprot alone has links in 140
+databases, which is why it does not check all of them.  A new file or a new
+assembly is picked up without anyone editing a table.
+
+ottoMonitorPublic.tsv lists only what that misses: the SQL tables, which have
+no /gbdb link, grcIncidentDb, whose bigBed is named by a table and not by
+bigDataUrl, and uniprotWuhCor1, whose files sit in a directory no job runs
+from.  New otto tracks are bigBeds, so that list is not expected to grow.
+
+A track that hgwdev has and genome.ucsc.edu does not, such as clinvarCnvAlpha,
+is on hgwdev only on purpose, and -v lists it as not checked.
+
+HOW IT DECIDES
+
+For each track the monitor reads the "Data last updated at UCSC" line from
+hgTrackUi on hgwdev and on genome.ucsc.edu.  When the public date is older, it
+records in state.json when it first saw that, and it reports the track once it
+has stayed behind for more than lagDays, 8 unless the table says otherwise,
+because the pushes for these jobs run weekly or more often.  The clock starts at
+hgwdev's own date on the first sighting.  It restarts whenever the public date
+moves, because a moving date shows the push is working.  That matters for a job
+that rebuilds every day, because its hgwdev copy never matches the public one at
+the time the monitor runs.
+
+This check needs state.json to see a job that rebuilds often.  With --no-state
+the clock starts fresh at hgwdev's date on every run, so a track that hgwdev
+rebuilt this week is never reported however old the public copy is.  DECIPHER
+is like this: it was rebuilt on 2026-09-27, so the cron run first reports it on
+2026-10-05.
+
+The first run, 2026-09-30, found more tracks that are behind.  civic, pubtator
+and strchive have no AutoPush line at all; strchive is waiting for v504, as
+#38268 plans.  hg19 decipher is behind too: hgwdev has 2021-04-04 data and
+genome.ucsc.edu has 2020-12-06, and the crontab comment says hg19 stopped
+being produced.
+
+The /gbdb scan takes about a minute and a half when the directory cache is
+cold.  The page fetches, two per track with a one-second pause, add about a
+minute more.  --no-public skips this check.
+
 THE SURVEYS BEHIND IT
 
   ottoSourceUrls.tsv         where each job's data comes from, the URL to probe,
@@ -41,7 +98,7 @@ Read the signature survey before changing a stamp glob.  It says what each job
 writes and when, which is the difference between a stamp that tracks every run
 and one that only moves when the data changes.
 
-THE THREE INPUTS
+THE FOUR INPUTS
 
   ottoOwners.tsv         who owns each job, whether to watch it, its source URL,
                          and its schedule.  Canonical copy is in genecats at
@@ -49,17 +106,21 @@ THE THREE INPUTS
   ottoMonitorStamps.tsv  where each job's run stamp lives.  Kept beside this
                          script, because it is about the monitor and not about
                          ownership.
+  ottoMonitorPublic.tsv  the few tracks the public-site check cannot find in
+                         /gbdb, mostly SQL tables.  Kept beside this script.
   state.json             written under /hive/data/outside/otto/ottoMonitor/.
                          Holds the last run seen, the last verdict, the number of
                          runs in a row that failed the same way, and the ticket
                          number when one is open.  Without it a second strike
-                         cannot be told from a first.
+                         cannot be told from a first.  The public-site check
+                         keeps its own entries under the key _publicSite.
 
 RUNNING IT
 
   ./ottoMonitor.py                     silent unless something is late
   ./ottoMonitor.py -v                  also lists the on-time jobs and the blind ones
   ./ottoMonitor.py --job clinvar       one job
+  ./ottoMonitor.py --no-public         skip the hgwdev-versus-public comparison
   ./ottoMonitor.py --file              actually file tickets.  OFF by default
 
 Filing is off by default on purpose.  Run it without --file for a while and read

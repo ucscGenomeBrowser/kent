@@ -1,5 +1,5 @@
 #!/bin/bash
-# Convert one pcLAI GRCh38-coordinate BED into a UCSC bigBed.
+# Convert one PCLAI GRCh38-coordinate BED into a UCSC bigBed.
 #
 # The source is a bed9+1: the name column packs three things
 # ("SAMPLE/hN/<window>_(PC1,PC2)") and column 10 is the source's "centroid"

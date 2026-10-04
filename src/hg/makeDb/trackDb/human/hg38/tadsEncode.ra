@@ -3,7 +3,7 @@ parent tads
 priority 2
 compositeTrack faceted
 shortLabel ENCODE TADs
-longLabel ENCODE contact domains (TADs) across 117 human biosamples (Arrowhead/Hi-C)
+longLabel ENCODE contact domains (TADs) across 117 human biosamples (Hi-C)
 type bigBed 4 + 5
 group regulation
 visibility pack
@@ -26,8 +26,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR165UJN
     parent tadsEncode on
-    shortLabel Dorsolateral
-    longLabel ENCODE TADs in Dorsolateral prefrontal cortex (ENCSR165UJN)
+    shortLabel Dorsolateral PFC
+    longLabel ENCODE TADs in dorsolateral prefrontal cortex (ENCSR165UJN)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dorsolateralprefrontalcortex.bb
     color 155,155,18
@@ -57,7 +57,7 @@ html tadsEncode
     track tadsEncode_ENCSR324EJR
     parent tadsEncode on
     shortLabel Heart left ventricle
-    longLabel ENCODE TADs in Heart left ventricle (ENCSR324EJR)
+    longLabel ENCODE TADs in heart left ventricle (ENCSR324EJR)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartleftventricle.bb
     color 116,50,165
@@ -67,7 +67,7 @@ html tadsEncode
     track tadsEncode_ENCSR908NSV
     parent tadsEncode on
     shortLabel Heart right ventricle
-    longLabel ENCODE TADs in Heart right ventricle (ENCSR908NSV)
+    longLabel ENCODE TADs in heart right ventricle (ENCSR908NSV)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/heartrightventricle.bb
     color 116,50,165
@@ -117,7 +117,7 @@ html tadsEncode
     track tadsEncode_ENCSR305RTT
     parent tadsEncode on
     shortLabel Motor neuron
-    longLabel ENCODE TADs in Motor neuron (ENCSR305RTT)
+    longLabel ENCODE TADs in motor neuron (ENCSR305RTT)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/motorneuron.bb
     color 155,155,18
@@ -127,7 +127,7 @@ html tadsEncode
     track tadsEncode_ENCSR872ZCP
     parent tadsEncode on
     shortLabel Ovary
-    longLabel ENCODE TADs in Ovary (ENCSR872ZCP)
+    longLabel ENCODE TADs in ovary (ENCSR872ZCP)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ovary.bb
     color 161,126,151
@@ -137,7 +137,7 @@ html tadsEncode
     track tadsEncode_ENCSR408HOG
     parent tadsEncode on
     shortLabel Pancreas
-    longLabel ENCODE TADs in Pancreas (ENCSR408HOG)
+    longLabel ENCODE TADs in pancreas (ENCSR408HOG)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/pancreas.bb
     color 175,100,41
@@ -147,7 +147,7 @@ html tadsEncode
     track tadsEncode_ENCSR258OVY
     parent tadsEncode on
     shortLabel Transverse colon
-    longLabel ENCODE TADs in Transverse colon (ENCSR258OVY)
+    longLabel ENCODE TADs in transverse colon (ENCSR258OVY)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/transversecolon.bb
     color 86,86,36
@@ -177,7 +177,7 @@ html tadsEncode
     track tadsEncode_ENCSR693PXD
     parent tadsEncode off
     shortLabel Activated B cell
-    longLabel ENCODE TADs in Activated B cell (ENCSR693PXD)
+    longLabel ENCODE TADs in activated B cell (ENCSR693PXD)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedBcell.bb
     color 254,75,173
@@ -186,8 +186,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR291EBI
     parent tadsEncode off
-    shortLabel Activated CD4+ memory
-    longLabel ENCODE TADs in Activated CD4-positive, alpha-beta memory T cell (ENCSR291EBI)
+    shortLabel Act. CD4+ mem. T cell
+    longLabel ENCODE TADs in activated CD4-positive, alpha-beta memory T cell (ENCSR291EBI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetamemoryTcell.bb
     color 254,75,173
@@ -197,7 +197,7 @@ html tadsEncode
     track tadsEncode_ENCSR836MWK
     parent tadsEncode off
     shortLabel Activated CD4+ T cell
-    longLabel ENCODE TADs in Activated CD4-positive, alpha-beta T cell (ENCSR836MWK)
+    longLabel ENCODE TADs in activated CD4-positive, alpha-beta T cell (ENCSR836MWK)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD4positivealphabetaTcell.bb
     color 254,75,173
@@ -207,7 +207,7 @@ html tadsEncode
     track tadsEncode_ENCSR351NAI
     parent tadsEncode off
     shortLabel Activated CD8+ T cell
-    longLabel ENCODE TADs in Activated CD8-positive, alpha-beta T cell (ENCSR351NAI)
+    longLabel ENCODE TADs in activated CD8-positive, alpha-beta T cell (ENCSR351NAI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedCD8positivealphabetaTcell.bb
     color 254,75,173
@@ -216,8 +216,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR195ETV
     parent tadsEncode off
-    shortLabel Activated naive CD4+ T
-    longLabel ENCODE TADs in Activated naive CD4-positive, alpha-beta T cell (ENCSR195ETV)
+    shortLabel Act. naive CD4+ T cell
+    longLabel ENCODE TADs in activated naive CD4-positive, alpha-beta T cell (ENCSR195ETV)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatednaiveCD4positivealphabetaTcell.bb
     color 254,75,173
@@ -227,7 +227,7 @@ html tadsEncode
     track tadsEncode_ENCSR902BCW
     parent tadsEncode off
     shortLabel Activated T-helper 1
-    longLabel ENCODE TADs in Activated T-helper 1 cell (ENCSR902BCW)
+    longLabel ENCODE TADs in activated T-helper 1 cell (ENCSR902BCW)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper1cell.bb
     color 254,75,173
@@ -237,7 +237,7 @@ html tadsEncode
     track tadsEncode_ENCSR474VTW
     parent tadsEncode off
     shortLabel Activated T-helper 2
-    longLabel ENCODE TADs in Activated T-helper 2 cell (ENCSR474VTW)
+    longLabel ENCODE TADs in activated T-helper 2 cell (ENCSR474VTW)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/activatedThelper2cell.bb
     color 254,75,173
@@ -247,7 +247,7 @@ html tadsEncode
     track tadsEncode_ENCSR832NED
     parent tadsEncode off
     shortLabel Adrenal gland
-    longLabel ENCODE TADs in Adrenal gland (ENCSR832NED)
+    longLabel ENCODE TADs in adrenal gland (ENCSR832NED)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/adrenalgland.bb
     color 90,179,68
@@ -257,7 +257,7 @@ html tadsEncode
     track tadsEncode_ENCSR554SLA
     parent tadsEncode off
     shortLabel Aorta
-    longLabel ENCODE TADs in Aorta (ENCSR554SLA)
+    longLabel ENCODE TADs in aorta (ENCSR554SLA)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/aorta.bb
     color 255,37,41
@@ -267,7 +267,7 @@ html tadsEncode
     track tadsEncode_ENCSR464RYO
     parent tadsEncode off
     shortLabel Ascending aorta
-    longLabel ENCODE TADs in Ascending aorta (ENCSR464RYO)
+    longLabel ENCODE TADs in ascending aorta (ENCSR464RYO)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ascendingaorta.bb
     color 255,37,41
@@ -276,8 +276,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR011GNI
     parent tadsEncode off
-    shortLabel The cerebellum
-    longLabel ENCODE TADs in Astrocyte of the cerebellum (ENCSR011GNI)
+    shortLabel Cerebellum astrocyte
+    longLabel ENCODE TADs in astrocyte of the cerebellum (ENCSR011GNI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthecerebellum.bb
     color 155,155,18
@@ -286,8 +286,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR974LXZ
     parent tadsEncode off
-    shortLabel The spinal cord
-    longLabel ENCODE TADs in Astrocyte of the spinal cord (ENCSR974LXZ)
+    shortLabel Spinal cord astrocyte
+    longLabel ENCODE TADs in astrocyte of the spinal cord (ENCSR974LXZ)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/astrocyteofthespinalcord.bb
     color 130,141,158
@@ -307,7 +307,7 @@ html tadsEncode
     track tadsEncode_ENCSR121ALS
     parent tadsEncode off
     shortLabel Pancreas body
-    longLabel ENCODE TADs in Body of pancreas (ENCSR121ALS)
+    longLabel ENCODE TADs in body of pancreas (ENCSR121ALS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/bodyofpancreas.bb
     color 175,100,41
@@ -316,8 +316,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR507AHE
     parent tadsEncode off
-    shortLabel Brain microvascular
-    longLabel ENCODE TADs in Brain microvascular endothelial cell (ENCSR507AHE)
+    shortLabel Brain microvasc. EC
+    longLabel ENCODE TADs in brain microvascular endothelial cell (ENCSR507AHE)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/brainmicrovascularendothelialcell.bb
     color 155,155,18
@@ -327,7 +327,7 @@ html tadsEncode
     track tadsEncode_ENCSR326YHP
     parent tadsEncode off
     shortLabel Breast epithelium
-    longLabel ENCODE TADs in Breast epithelium (ENCSR326YHP)
+    longLabel ENCODE TADs in breast epithelium (ENCSR326YHP)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/breastepithelium.bb
     color 65,171,173
@@ -367,7 +367,7 @@ html tadsEncode
     track tadsEncode_ENCSR556QHB
     parent tadsEncode off
     shortLabel Cardiac septum
-    longLabel ENCODE TADs in Cardiac septum (ENCSR556QHB)
+    longLabel ENCODE TADs in cardiac septum (ENCSR556QHB)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/cardiacseptum.bb
     color 116,50,165
@@ -417,7 +417,7 @@ html tadsEncode
     track tadsEncode_ENCSR317GNS
     parent tadsEncode off
     shortLabel Chondrocyte
-    longLabel ENCODE TADs in Chondrocyte (ENCSR317GNS)
+    longLabel ENCODE TADs in chondrocyte (ENCSR317GNS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/chondrocyte.bb
     color 138,135,169
@@ -427,7 +427,7 @@ html tadsEncode
     track tadsEncode_ENCSR439ILZ
     parent tadsEncode off
     shortLabel Colonic mucosa
-    longLabel ENCODE TADs in Colonic mucosa (ENCSR439ILZ)
+    longLabel ENCODE TADs in colonic mucosa (ENCSR439ILZ)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/colonicmucosa.bb
     color 86,86,36
@@ -437,7 +437,7 @@ html tadsEncode
     track tadsEncode_ENCSR456QYU
     parent tadsEncode off
     shortLabel Dendritic cell
-    longLabel ENCODE TADs in Dendritic cell (ENCSR456QYU)
+    longLabel ENCODE TADs in dendritic cell (ENCSR456QYU)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/dendriticcell.bb
     color 254,75,173
@@ -457,7 +457,7 @@ html tadsEncode
     track tadsEncode_ENCSR393XVI
     parent tadsEncode off
     shortLabel Ectodermal cell
-    longLabel ENCODE TADs in Ectodermal cell (ENCSR393XVI)
+    longLabel ENCODE TADs in ectodermal cell (ENCSR393XVI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/ectodermalcell.bb
     color 118,158,101
@@ -467,7 +467,7 @@ html tadsEncode
     track tadsEncode_ENCSR233RDF
     parent tadsEncode off
     shortLabel Endodermal cell
-    longLabel ENCODE TADs in Endodermal cell (ENCSR233RDF)
+    longLabel ENCODE TADs in endodermal cell (ENCSR233RDF)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endodermalcell.bb
     color 118,158,101
@@ -476,8 +476,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR551IPY
     parent tadsEncode off
-    shortLabel Endometrial
-    longLabel ENCODE TADs in Endometrial microvascular endothelial cells (ENCSR551IPY)
+    shortLabel Endometrial EC
+    longLabel ENCODE TADs in endometrial microvascular endothelial cells (ENCSR551IPY)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endometrialmicrovascularendothelialcells.bb
     color 186,111,165
@@ -486,8 +486,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR982KWR
     parent tadsEncode off
-    shortLabel Hepatic sinusoid
-    longLabel ENCODE TADs in Endothelial cell of hepatic sinusoid (ENCSR982KWR)
+    shortLabel Hepatic sinusoid EC
+    longLabel ENCODE TADs in endothelial cell of hepatic sinusoid (ENCSR982KWR)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofhepaticsinusoid.bb
     color 137,152,82
@@ -496,8 +496,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR788FBI
     parent tadsEncode off
-    shortLabel Umbilical vein
-    longLabel ENCODE TADs in Endothelial cell of umbilical vein (ENCSR788FBI)
+    shortLabel Umbilical vein EC
+    longLabel ENCODE TADs in endothelial cell of umbilical vein (ENCSR788FBI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/endothelialcellofumbilicalvein.bb
     color 255,37,41
@@ -507,7 +507,7 @@ html tadsEncode
     track tadsEncode_ENCSR274FJN
     parent tadsEncode off
     shortLabel Esophagus muscularis
-    longLabel ENCODE TADs in Esophagus muscularis mucosa (ENCSR274FJN)
+    longLabel ENCODE TADs in esophagus muscularis mucosa (ENCSR274FJN)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagusmuscularismucosa.bb
     color 159,131,100
@@ -517,7 +517,7 @@ html tadsEncode
     track tadsEncode_ENCSR015CVF
     parent tadsEncode off
     shortLabel Esophagus squamous
-    longLabel ENCODE TADs in Esophagus squamous epithelium (ENCSR015CVF)
+    longLabel ENCODE TADs in esophagus squamous epithelium (ENCSR015CVF)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/esophagussquamousepithelium.bb
     color 159,131,100
@@ -537,7 +537,7 @@ html tadsEncode
     track tadsEncode_ENCSR136MVS
     parent tadsEncode off
     shortLabel Gastrocnemius medialis
-    longLabel ENCODE TADs in Gastrocnemius medialis (ENCSR136MVS)
+    longLabel ENCODE TADs in gastrocnemius medialis (ENCSR136MVS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/gastrocnemiusmedialis.bb
     color 137,135,170
@@ -617,7 +617,7 @@ html tadsEncode
     track tadsEncode_ENCSR874HTT
     parent tadsEncode off
     shortLabel Caudate nucleus head
-    longLabel ENCODE TADs in Head of caudate nucleus (ENCSR874HTT)
+    longLabel ENCODE TADs in head of caudate nucleus (ENCSR874HTT)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/headofcaudatenucleus.bb
     color 155,155,18
@@ -667,7 +667,7 @@ html tadsEncode
     track tadsEncode_ENCSR869CSI
     parent tadsEncode off
     shortLabel Keratinocyte
-    longLabel ENCODE TADs in Keratinocyte (ENCSR869CSI)
+    longLabel ENCODE TADs in keratinocyte (ENCSR869CSI)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/keratinocyte.bb
     color 127,133,209
@@ -677,7 +677,7 @@ html tadsEncode
     track tadsEncode_ENCSR044YKV
     parent tadsEncode off
     shortLabel Kidney
-    longLabel ENCODE TADs in Kidney (ENCSR044YKV)
+    longLabel ENCODE TADs in kidney (ENCSR044YKV)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/kidney.bb
     color 92,161,153
@@ -687,7 +687,7 @@ html tadsEncode
     track tadsEncode_ENCSR975NRV
     parent tadsEncode off
     shortLabel Left cardiac atrium
-    longLabel ENCODE TADs in Left cardiac atrium (ENCSR975NRV)
+    longLabel ENCODE TADs in left cardiac atrium (ENCSR975NRV)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcardiacatrium.bb
     color 116,50,165
@@ -697,7 +697,7 @@ html tadsEncode
     track tadsEncode_ENCSR298UUL
     parent tadsEncode off
     shortLabel Left colon
-    longLabel ENCODE TADs in Left colon (ENCSR298UUL)
+    longLabel ENCODE TADs in left colon (ENCSR298UUL)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftcolon.bb
     color 86,86,36
@@ -707,7 +707,7 @@ html tadsEncode
     track tadsEncode_ENCSR892BZA
     parent tadsEncode off
     shortLabel Left lung
-    longLabel ENCODE TADs in Left lung (ENCSR892BZA)
+    longLabel ENCODE TADs in left lung (ENCSR892BZA)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftlung.bb
     color 130,163,45
@@ -716,8 +716,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR352EGR
     parent tadsEncode off
-    shortLabel Left ventricle
-    longLabel ENCODE TADs in Left ventricle myocardium inferior (ENCSR352EGR)
+    shortLabel Left ventricle inf.
+    longLabel ENCODE TADs in left ventricle myocardium inferior (ENCSR352EGR)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiuminferior.bb
     color 116,50,165
@@ -726,8 +726,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR333BMU
     parent tadsEncode off
-    shortLabel Left ventricle
-    longLabel ENCODE TADs in Left ventricle myocardium superior (ENCSR333BMU)
+    shortLabel Left ventricle sup.
+    longLabel ENCODE TADs in left ventricle myocardium superior (ENCSR333BMU)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/leftventriclemyocardiumsuperior.bb
     color 116,50,165
@@ -747,7 +747,7 @@ html tadsEncode
     track tadsEncode_ENCSR720WEB
     parent tadsEncode off
     shortLabel Lower leg skin
-    longLabel ENCODE TADs in Lower leg skin (ENCSR720WEB)
+    longLabel ENCODE TADs in lower leg skin (ENCSR720WEB)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlegskin.bb
     color 127,133,209
@@ -757,7 +757,7 @@ html tadsEncode
     track tadsEncode_ENCSR446NJD
     parent tadsEncode off
     shortLabel Left lung lower lobe
-    longLabel ENCODE TADs in Lower lobe of left lung (ENCSR446NJD)
+    longLabel ENCODE TADs in lower lobe of left lung (ENCSR446NJD)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofleftlung.bb
     color 130,163,45
@@ -767,7 +767,7 @@ html tadsEncode
     track tadsEncode_ENCSR749PID
     parent tadsEncode off
     shortLabel Right lung lower lobe
-    longLabel ENCODE TADs in Lower lobe of right lung (ENCSR749PID)
+    longLabel ENCODE TADs in lower lobe of right lung (ENCSR749PID)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/lowerlobeofrightlung.bb
     color 130,163,45
@@ -776,8 +776,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR707XVJ
     parent tadsEncode off
-    shortLabel Mammary epithelial
-    longLabel ENCODE TADs in Mammary epithelial cell (ENCSR707XVJ)
+    shortLabel Mammary epith. cell
+    longLabel ENCODE TADs in mammary epithelial cell (ENCSR707XVJ)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mammaryepithelialcell.bb
     color 65,171,173
@@ -807,7 +807,7 @@ html tadsEncode
     track tadsEncode_ENCSR754GTX
     parent tadsEncode off
     shortLabel Mesodermal cell
-    longLabel ENCODE TADs in Mesodermal cell (ENCSR754GTX)
+    longLabel ENCODE TADs in mesodermal cell (ENCSR754GTX)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesodermalcell.bb
     color 118,158,101
@@ -816,8 +816,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR944UTX
     parent tadsEncode off
-    shortLabel Epicardium mesothelial
-    longLabel ENCODE TADs in Mesothelial cell of epicardium (ENCSR944UTX)
+    shortLabel Epicardial meso. cell
+    longLabel ENCODE TADs in mesothelial cell of epicardium (ENCSR944UTX)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mesothelialcellofepicardium.bb
     color 116,50,165
@@ -827,7 +827,7 @@ html tadsEncode
     track tadsEncode_ENCSR206OUF
     parent tadsEncode off
     shortLabel Descending colon
-    longLabel ENCODE TADs in Mucosa of descending colon (ENCSR206OUF)
+    longLabel ENCODE TADs in mucosa of descending colon (ENCSR206OUF)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/mucosaofdescendingcolon.bb
     color 86,86,36
@@ -837,7 +837,7 @@ html tadsEncode
     track tadsEncode_ENCSR215PTV
     parent tadsEncode off
     shortLabel Naive CD4+ T cell
-    longLabel ENCODE TADs in Naive thymus-derived CD4-positive, alpha-beta T cell (ENCSR215PTV)
+    longLabel ENCODE TADs in naive thymus-derived CD4-positive, alpha-beta T cell (ENCSR215PTV)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naivethymusderivedCD4positivealphabetaTcell.bb
     color 254,75,173
@@ -847,7 +847,7 @@ html tadsEncode
     track tadsEncode_ENCSR971CJS
     parent tadsEncode off
     shortLabel Natural killer cell
-    longLabel ENCODE TADs in Natural killer cell (ENCSR971CJS)
+    longLabel ENCODE TADs in natural killer cell (ENCSR971CJS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/naturalkillercell.bb
     color 254,75,173
@@ -907,7 +907,7 @@ html tadsEncode
     track tadsEncode_ENCSR395DZW
     parent tadsEncode off
     shortLabel Placenta
-    longLabel ENCODE TADs in Placenta (ENCSR395DZW)
+    longLabel ENCODE TADs in placenta (ENCSR395DZW)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/placenta.bb
     color 104,171,71
@@ -917,7 +917,7 @@ html tadsEncode
     track tadsEncode_ENCSR169JKC
     parent tadsEncode off
     shortLabel Posterior cingulate
-    longLabel ENCODE TADs in Posterior cingulate gyrus (ENCSR169JKC)
+    longLabel ENCODE TADs in posterior cingulate gyrus (ENCSR169JKC)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorcingulategyrus.bb
     color 155,155,18
@@ -927,7 +927,7 @@ html tadsEncode
     track tadsEncode_ENCSR941AMF
     parent tadsEncode off
     shortLabel Posterior vena cava
-    longLabel ENCODE TADs in Posterior vena cava (ENCSR941AMF)
+    longLabel ENCODE TADs in posterior vena cava (ENCSR941AMF)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/posteriorvenacava.bb
     color 255,37,41
@@ -937,7 +937,7 @@ html tadsEncode
     track tadsEncode_ENCSR557QRO
     parent tadsEncode off
     shortLabel Prostate gland
-    longLabel ENCODE TADs in Prostate gland (ENCSR557QRO)
+    longLabel ENCODE TADs in prostate gland (ENCSR557QRO)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/prostategland.bb
     color 140,140,140
@@ -947,7 +947,7 @@ html tadsEncode
     track tadsEncode_ENCSR173QPK
     parent tadsEncode off
     shortLabel Psoas muscle
-    longLabel ENCODE TADs in Psoas muscle (ENCSR173QPK)
+    longLabel ENCODE TADs in psoas muscle (ENCSR173QPK)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/psoasmuscle.bb
     color 137,135,170
@@ -967,7 +967,7 @@ html tadsEncode
     track tadsEncode_ENCSR173VDQ
     parent tadsEncode off
     shortLabel Right cardiac atrium
-    longLabel ENCODE TADs in Right cardiac atrium (ENCSR173VDQ)
+    longLabel ENCODE TADs in right cardiac atrium (ENCSR173VDQ)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightcardiacatrium.bb
     color 116,50,165
@@ -977,7 +977,7 @@ html tadsEncode
     track tadsEncode_ENCSR753CKM
     parent tadsEncode off
     shortLabel Liver right lobe
-    longLabel ENCODE TADs in Right lobe of liver (ENCSR753CKM)
+    longLabel ENCODE TADs in right lobe of liver (ENCSR753CKM)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/rightlobeofliver.bb
     color 137,152,82
@@ -986,8 +986,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR921BHU
     parent tadsEncode off
-    shortLabel Right ventricle
-    longLabel ENCODE TADs in Right ventricle myocardium inferior (ENCSR921BHU)
+    shortLabel Right ventricle inf.
+    longLabel ENCODE TADs in right ventricle myocardium inferior (ENCSR921BHU)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiuminferior.bb
     color 116,50,165
@@ -996,8 +996,8 @@ html tadsEncode
 
     track tadsEncode_ENCSR476RFQ
     parent tadsEncode off
-    shortLabel Right ventricle
-    longLabel ENCODE TADs in Right ventricle myocardium superior (ENCSR476RFQ)
+    shortLabel Right ventricle sup.
+    longLabel ENCODE TADs in right ventricle myocardium superior (ENCSR476RFQ)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/Rightventriclemyocardiumsuperior.bb
     color 116,50,165
@@ -1017,7 +1017,7 @@ html tadsEncode
     track tadsEncode_ENCSR119TFS
     parent tadsEncode off
     shortLabel Sciatic nerve
-    longLabel ENCODE TADs in Sciatic nerve (ENCSR119TFS)
+    longLabel ENCODE TADs in sciatic nerve (ENCSR119TFS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sciaticnerve.bb
     color 160,156,0
@@ -1027,7 +1027,7 @@ html tadsEncode
     track tadsEncode_ENCSR123ZFD
     parent tadsEncode off
     shortLabel Sigmoid colon
-    longLabel ENCODE TADs in Sigmoid colon (ENCSR123ZFD)
+    longLabel ENCODE TADs in sigmoid colon (ENCSR123ZFD)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/sigmoidcolon.bb
     color 86,86,36
@@ -1077,7 +1077,7 @@ html tadsEncode
     track tadsEncode_ENCSR692QWS
     parent tadsEncode off
     shortLabel Spleen
-    longLabel ENCODE TADs in Spleen (ENCSR692QWS)
+    longLabel ENCODE TADs in spleen (ENCSR692QWS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/spleen.bb
     color 136,157,97
@@ -1087,7 +1087,7 @@ html tadsEncode
     track tadsEncode_ENCSR569OBN
     parent tadsEncode off
     shortLabel Stomach
-    longLabel ENCODE TADs in Stomach (ENCSR569OBN)
+    longLabel ENCODE TADs in stomach (ENCSR569OBN)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/stomach.bb
     color 145,144,99
@@ -1127,7 +1127,7 @@ html tadsEncode
     track tadsEncode_ENCSR870SXX
     parent tadsEncode off
     shortLabel Testis
-    longLabel ENCODE TADs in Testis (ENCSR870SXX)
+    longLabel ENCODE TADs in testis (ENCSR870SXX)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/testis.bb
     color 139,140,140
@@ -1137,7 +1137,7 @@ html tadsEncode
     track tadsEncode_ENCSR043XTM
     parent tadsEncode off
     shortLabel Thyroid gland
-    longLabel ENCODE TADs in Thyroid gland (ENCSR043XTM)
+    longLabel ENCODE TADs in thyroid gland (ENCSR043XTM)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/thyroidgland.bb
     color 27,119,58
@@ -1147,7 +1147,7 @@ html tadsEncode
     track tadsEncode_ENCSR601RFS
     parent tadsEncode off
     shortLabel Tibial artery
-    longLabel ENCODE TADs in Tibial artery (ENCSR601RFS)
+    longLabel ENCODE TADs in tibial artery (ENCSR601RFS)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/tibialartery.bb
     color 255,37,41
@@ -1157,7 +1157,7 @@ html tadsEncode
     track tadsEncode_ENCSR673UZF
     parent tadsEncode off
     shortLabel Right lung upper lobe
-    longLabel ENCODE TADs in Upper lobe of right lung (ENCSR673UZF)
+    longLabel ENCODE TADs in upper lobe of right lung (ENCSR673UZF)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/upperlobeofrightlung.bb
     color 130,163,45
@@ -1167,7 +1167,7 @@ html tadsEncode
     track tadsEncode_ENCSR008CUR
     parent tadsEncode off
     shortLabel Uterus
-    longLabel ENCODE TADs in Uterus (ENCSR008CUR)
+    longLabel ENCODE TADs in uterus (ENCSR008CUR)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/uterus.bb
     color 186,111,165
@@ -1177,7 +1177,7 @@ html tadsEncode
     track tadsEncode_ENCSR886JAM
     parent tadsEncode off
     shortLabel Vagina
-    longLabel ENCODE TADs in Vagina (ENCSR886JAM)
+    longLabel ENCODE TADs in vagina (ENCSR886JAM)
     type bigBed 4 + 5
     bigDataUrl /gbdb/hg38/bbi/tad/tadsEncode/vagina.bb
     color 255,101,174

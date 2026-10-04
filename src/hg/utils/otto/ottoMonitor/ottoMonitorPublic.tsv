@@ -1,0 +1,25 @@
+# Public-site check for the otto failure monitor: the tracks it cannot find by
+# itself.  Refs #38101, #38436.
+#
+# The monitor finds most of the tracks an otto job feeds on its own: every
+# symlink in /gbdb that points into the job's directory, matched to the trackDb
+# bigDataUrl that names it.  This file lists only what that misses:
+#
+#   - SQL tables, which have no /gbdb link.  New otto tracks are all bigBeds, so
+#     this list is not expected to grow.
+#   - grcIncidentDb, a bigBed named by a one-row table instead of bigDataUrl.
+#   - uniprotWuhCor1, whose files are in /hive/data/outside/otto/uniprot-wuhCor1
+#     while its script runs from uniprot/, so no job's directory contains them.
+#
+# lagDays is how long the public copy may stay behind hgwdev before the track is
+# reported.  Tracks found in /gbdb get 8.
+#
+#job	db	track	lagDays	note
+gwas	hg38	gwasCatalog	8	table
+ncbiRefSeq	hg38	ncbiRefSeqCurated	8	table
+refSeqHistorical	hg38	ncbiRefSeqHistorical	8	table
+omim	hg38	omimGene2	8	table; the omimGene2.bb link in /gbdb dates from 2020 and no track uses it
+omimUpload	hg38	omimLocation	8	table
+decipher	hg38	decipherSnvs	8	table, pushed by decipherAutoPush along with the bigBed
+grcIncidentDb	hg38	grcIncidentDb	8	bigBed file named by a table, not by bigDataUrl
+uniprotWuhCor1	wuhCor1	unipCov2AliSwissprot	8	files in uniprot-wuhCor1/, no job directory contains them
