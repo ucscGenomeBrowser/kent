@@ -102,3 +102,48 @@ python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
 #   cp /hive/data/inside/enigmaTracksData/zantiDraft/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new
 #   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
 # done
+
+##############################################################################
+# PP4/BP5 track: merge equivalent variant names, ClinVar-style positions
+# (DONE - 2026-10-02 - Lou, refs #38467)
+# The source studies spell some variants differently (Li et al. writes the
+# deleted bases out, c.4574_4575delAA; Parsons, Caputo and Zanti write
+# c.4574_4575del; Zanti writes some dups as ins), and the #37886 build matched
+# Zanti to the older track by name string, so 297 variants appeared as two or
+# three items. BRCAmlaZanti.py was revised to:
+#  - key every variant by a left-normalized genomic (chrom, pos, ref, alt):
+#    pre-Zanti items from their HGVS names via hgvsToVcf, Zanti rows from
+#    Zanti's own CHR/POS/REF/ALT columns. hgvsToVcf mis-converts insertions
+#    with an intronic offset (refs #38469), which is why Zanti rows are not
+#    keyed from their HGVSc. 7 Zanti rows carry a REF that does not match the
+#    genome (all A>G) and are keyed from their HGVSc instead.
+#  - multiply the per-type LRs (family history, co-occurrence, segregation,
+#    pathology) and the per-source LR lists of all items sharing a key. Li et
+#    al. lists c.815_824dup twice (39 and 1 probands); Li multiplies
+#    per-proband LRs, so the two rows are multiplied.
+#  - write names in current HGVS style (spelled-out bases and counts dropped;
+#    ins that duplicates adjacent sequence renamed to the dup that vcfToHgvs
+#    reports).
+#  - draw every item the way the ClinVar track does: SNV on its base, deletion
+#    on the deleted bases shifted left, delins on the replaced bases,
+#    insertion/dup on the 2 bases flanking the left-shifted insertion point.
+#    hg19 positions are computed the same way, not lifted.
+#  - drop the Zanti row with symbolic alleles (<CNV>).
+#  - write LRs with 5 significant figures instead of 5 decimals.
+# The pre-Zanti input is now read from archive/v1.1, since /gbdb BRCAmfa.bb
+# has served this script's own output since the #37886 release.
+mkdir /hive/data/inside/enigmaTracksData/rm38467
+cd /hive/data/inside/enigmaTracksData/rm38467
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
+# Result: 13,182 variants per assembly (13,481 before; 595 items merged into
+# 297, one <CNV> row dropped), written as BRCAmfaZantiHg38.bb /
+# BRCAmfaZantiHg19.bb. mergedGroups.tsv lists the merged items, renamed.tsv
+# the 479 renamed singletons, directionConflicts.tsv the 210 variants whose
+# older evidence and ccLR point in opposite directions.
+
+# Release, same procedure as above:
+# for db in Hg19 Hg38; do
+#   cp /hive/data/inside/enigmaTracksData/rm38467/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new
+#   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
+# done
+# and enigma.html (Changelog and Methods text) into /hive/data/outside/enigma/.

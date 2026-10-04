@@ -15,3 +15,4 @@ include promoterAi.ra
 include clinPred.ra
 include eve.ra
 include popEve.ra
+include gpnStar.ra alpha
