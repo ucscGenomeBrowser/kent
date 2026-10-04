@@ -537,18 +537,6 @@ if (strchr(name, '<') || strchr(name, '>') || strchr(name, '"')
              type, name, type);
 }
 
-static void checkHubDisplayText(char *type, char *name)
-/* Abort if name holds a character that is not valid in a short display label (a hub's
- * organism name or freeze/date label).  These get substituted into all sorts of contexts
- * in the CGIs, including attribute values, so keep the same restriction as checkHubIdName
- * plus the punctuation an attribute value has no legitimate use for. Real labels use
- * letters, digits, spaces and ordinary punctuation like . , - / ( ). */
-{
-if (strpbrk(name, "<>\"'&:;") || strchr(name, '\n') || strchr(name, '\r'))
-    errAbort("Bad %s: \"%s\". The characters < > \" ' & : ; and newlines are not allowed in a %s.",
-             type, name, type);
-}
-
 struct grp *readGroupRa(char *groupFileName)
 /* Read in the ra file that describes the groups in an assembly hub. */
 {
@@ -751,13 +739,10 @@ while ((ra = raNextRecord(lf)) != NULL)
     if (twoBitPath != NULL)
 	{
 	el->description  = hashFindVal(ra, "description");
-	if (el->description != NULL)
-	    checkHubDisplayText("genome description", el->description);
 	char *organism = hashFindVal(ra, "organism");
 	if (organism == NULL)
 	    errAbort("must have 'organism' set in assembly hub in stanza ending line %d of %s",
 		     lf->lineIx, lf->fileName);
-	checkHubDisplayText("organism", organism);
 	el->organism  = addHubName(organism, hub->name);
 	hashReplace(ra, "organism", el->organism);
 	el->defaultPos  = hashFindVal(ra, "defaultPos");

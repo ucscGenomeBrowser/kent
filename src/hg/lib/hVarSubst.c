@@ -200,6 +200,14 @@ return (strcasecmp(varBase, "organism") == 0)
     || (strcasecmp(varBase, "db") == 0);
 }
 
+static boolean isFreeTextDbVar(char *varName)
+/* Is this one of the two database vars that carry hub-supplied free text (a genome's
+ * organism name or freeze/date label), as opposed to an internal identifier? */
+{
+char *base = startsWith("o_", varName) ? varName+2 : varName;
+return (strcasecmp(base, "organism") == 0) || (strcasecmp(base, "date") == 0);
+}
+
 static char *valOrDb(char *val, char *database)
 /* return val if not-null, or a clone of database if it is null */
 {
@@ -360,16 +368,30 @@ while ((next = strchr(next, '$')) != NULL)
             /* Escape the value before it goes into the page.  A hub's description html was
              * sanitized once, when the hub was read (trackHub.c, htmlSanitize); this pass
              * runs at render time, long after, so anything it inserted raw would be markup
-             * that nothing had ever looked at.  $organism and $date come straight out of a
-             * hub's genomes.txt, restricted at parse time (trackHub.c,
-             * checkHubDisplayText) to a safe display-label character set.  None of the
-             * variables in either list is meant to carry markup, so escaping them all here
-             * too costs nothing. */
+             * that nothing had ever looked at.  None of the variables in either list is
+             * meant to carry markup, so escaping them all here costs nothing. */
             struct dyString *raw = dyStringNew(64);
             substVar(desc, tdb, database, varName, raw);
-            char *escaped = htmlEncode(raw->string);
+            char *rawStr = raw->string;
+            char *pctEncoded = NULL;
+            if (isFreeTextDbVar(varName))
+                {
+                /* $organism and $date are free text straight out of a hub's genomes.txt --
+                 * real labels can use any punctuation, so this does not reject any of it.
+                 * It only neutralizes the two characters that could give the text a second
+                 * meaning if a track's own html happens to put it in an href or style
+                 * attribute (a URL scheme, or a CSS declaration separator): %-encoding
+                 * survives both HTML-entity decoding and CSS parsing, unlike the literal
+                 * characters, so the colon or semicolon still shows, just inertly. */
+                char *step1 = replaceChars(rawStr, ":", "%3A");
+                pctEncoded = replaceChars(step1, ";", "%3B");
+                freeMem(step1);
+                rawStr = pctEncoded;
+                }
+            char *escaped = htmlEncode(rawStr);
             dyStringAppend(dest, escaped);
             freeMem(escaped);
+            freez(&pctEncoded);
             dyStringFree(&raw);
             start = next = after;
             }
