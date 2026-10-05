@@ -1744,25 +1744,62 @@ def chromSizesFile(db):
     return "/hive/data/genomes/%s/chrom.sizes" % db
 
 def miniprotRamGb(genomeFa, protFa):
-    """ how much RAM to reserve for a miniprot run, in whole GB.
+    """ a first guess at how much RAM to reserve for a miniprot run, in whole GB.
 
-    Two terms, and the second one was learned the hard way. The genome index is linear in
-    sequence and flat in the thread count, measured at about 11 GB per Gb (2.49 GB at -t 1
-    against 2.60 GB at -t 16 on the same 227 Mb, then 2.60 / 4.69 / 8.93 GB for 227 / 424 /
-    811 Mb). But that was measured with 125 proteins held constant, so it missed that the
-    alignment work scales with the protein set as well: the real runs align whole proteomes,
-    78457 sequences for zebrafish against 125 in the measurement, and a 0.46 Gb genome that
-    the genome term alone put at 5 GB died with "[morecore] insufficient memory" inside an
-    8 GB reservation.
+    Only a guess. Two attempts to predict this from the input sizes were both wrong, and the
+    measurements say the quantity is not predictable from them at all:
 
-    So add a term for the protein input and keep the generous floor. Reserving too much
-    only costs queue slots on a cluster that absorbs these jobs easily; reserving too little
-    throws away the whole assembly after it has already run for minutes. refs #38300
+        genome    proteins          peak RSS
+        0.46 Gb   78457 (66 MB)     at most 16 GB, the job completed in that
+        0.86 Gb   50305 (37 MB)     43.3 GB, measured
+
+    The second has half the protein and twice the genome, and needs at least 2.7 times the
+    memory, so no sum of a genome term and a protein term fits both. What actually drives it
+    is how much alignment work the sequence generates - repeats and paralogs give many
+    candidate alignments to hold at once - and that is not visible in the file sizes.
+
+    So this stays a cheap starting estimate and runMiniprotOnCluster() raises it when a job
+    runs out of memory, rather than a third guess at a coefficient. refs #38300
     """
     genomeBytes = os.path.getsize(genomeFa) # fasta is about one byte per base plus headers
     protBytes = os.path.getsize(protFa)
     gb = int(genomeBytes / 1e9 * 14) + int(protBytes / 1e9 * 100) + 1
     return max(gb, 16)
+
+def paraBatchOutOfMemory(jobDir):
+    """ did a job in this finished parasol batch die for lack of memory?
+
+    para.results holds the raw wait status in its first column, so status >> 8 is the exit
+    code. miniprot prints "[morecore] insufficient memory" and aborts, which arrives as 134
+    (128 + SIGABRT). Reading the file is local and cheap; para problems would have to be
+    asked the hub.
+    """
+    resultsFname = join(jobDir, "para.results")
+    if not isfile(resultsFname):
+        return False
+    for line in open(resultsFname):
+        fields = line.split()
+        if not fields:
+            continue
+        try:
+            status = int(fields[0])
+        except ValueError:
+            continue
+        if status >> 8 == 134:
+            return True
+    return False
+
+def clearParaBatch(jobDir):
+    """ forget a finished batch so it can be run again with a different reservation.
+
+    The reservation is recorded in the batch, so para make on top of an existing one does not
+    change it. freeBatch tells the hub to drop it and the local state files have to go too.
+    """
+    run("cd %s && para freeBatch" % jobDir, ignoreErr=True)
+    for fname in ("batch", "batch.bak", "para.results", "para.bookmark"):
+        path = join(jobDir, fname)
+        if isfile(path):
+            os.remove(path)
 
 def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     """ run one miniprot job on the parasol cluster.
@@ -1792,8 +1829,25 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     with open(jobList, "w") as ofh:
         ofh.write("%s {check out exists %s}\n" % (abspath(jobSh), abspath(gffName)))
 
-    logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg" % (db, miniprotThreads, ram))
-    run("cd %s && para make -cpu=%d -ram=%dg jobList" % (jobDir, miniprotThreads, ram))
+    # The first reservation is only an estimate (see miniprotRamGb), so when a job dies for
+    # lack of memory, raise it and run the batch again rather than losing the assembly. Three
+    # tries reach eight times the estimate, which covers the worst case measured so far by a
+    # wide margin. Anything that fails for another reason stops here, so a genome that
+    # segfaults does not get run four times over. refs #38300
+    for attempt in range(3):
+        tryRam = ram * (4 ** attempt)
+        logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg%s" % \
+                (db, miniprotThreads, tryRam, "" if attempt == 0 else " (attempt %d)" % (attempt+1)))
+        ret = run("cd %s && para make -cpu=%d -ram=%dg jobList" % \
+                (jobDir, miniprotThreads, tryRam), ignoreErr=True)
+        if ret == 0:
+            return
+        if not paraBatchOutOfMemory(jobDir):
+            break
+        logging.warning("%s: miniprot ran out of memory in %dg, trying again with more" % (db, tryRam))
+        clearParaBatch(jobDir)
+
+    errAbort("%s: miniprot on the cluster failed, see %s" % (db, jobDir))
 
 def miniprotProteins(fullFaFname, db, mapFname, stats):
     """ align the UniProt proteins straight to the genome with miniprot and write a PSL.
@@ -2316,6 +2370,16 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     if geneTable!="miniprot":
         transcriptFa, transcriptPsl = makeTranscriptFiles(db, geneTable, taxId, mapDir)
+        # An assembly can carry a gene track that yields no transcripts at all, and three of
+        # them did. BLAST was then pointed at an empty database and every one of its 929 jobs
+        # crashed, which took the taxon down after a long detour through the cluster. There is
+        # nothing to align against, so say so and skip the assembly the way one with no
+        # alignments is skipped. refs #38300
+        if os.path.getsize(transcriptFa) == 0:
+            logging.warning("%s: the %s track produced no transcript sequences, so there is "
+                    "nothing for the proteins to be aligned to, skipping this assembly" % \
+                    (db, geneTable))
+            return None, geneTable, None, {"default":"best"}, None, True
         transMd5 = fastaMd5(transcriptFa)
         pslMd5 = tabMd5(transcriptPsl)
     else:
