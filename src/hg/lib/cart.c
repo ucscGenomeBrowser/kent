@@ -906,6 +906,10 @@ char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
 char query[512];
 
+/* The caller may have passed pointers into cart values, which cartRemoveLike below frees. */
+sessionOwner = cloneString(sessionOwner);
+sessionName = cloneString(sessionName);
+
 if (isEmpty(sessionOwner))
     errAbort("Please go back and enter a wiki user name for this session.");
 if (isEmpty(sessionName))
@@ -998,6 +1002,9 @@ else
 	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
 freeMem(encSessionName);
+freeMem(encSessionOwner);
+freeMem(sessionOwner);
+freeMem(sessionName);
 }
 
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
