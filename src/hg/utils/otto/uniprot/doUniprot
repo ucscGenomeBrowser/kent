@@ -366,6 +366,13 @@ def parseArgs():
             "/hive/data/genomes/asmHubs/UCSC_GI.assemblyHubList.txt or a fresh copy of "
             "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt . Use with "
             "--minProteins, which decides how much of GenArk is worth running.")
+    parser.add_option("", "--allowFailures", dest="allowFailures", action="store", type="int",
+            default=0,
+            help="carry on and publish if no more than this many taxa fail, default %default. "
+            "A run across hundreds of assemblies will always have a few organisms that cannot "
+            "be built, and without this a handful of them stops the other hundreds from being "
+            "published. Every failure is still reported and gets its own log under "
+            "the failedTaxa directory.")
     parser.add_option("", "--skipList", dest="skipList", action="store",
             help="file of assemblies to leave alone, one name or accession per line, with "
             "# comments. Entries may carry the full asmId, so a GenArk orderList works as "
@@ -1563,7 +1570,14 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
         # chr1    11994   12144   B4E2Z4  1000    +       11994   12144   0       1       150,    0,      186     336     +       336     186,          249250621        150     0       0       0       0
         row = line.rstrip("\n").split("\t")
 
-        row[-1] = "2" # seqType field: 0=empty, 1=nucleotide, 2=amino_acid
+        # The seqType field (0=empty, 1=nucleotide, 2=amino_acid) used to be stamped "2" here.
+        # It describes the coordinates, not the letters in oSequence, and ours are nucleotides:
+        # these proteins reach the genome through transcripts, so a query is three bases per
+        # residue.  Declaring amino acids made pslFromBigPsl() divide the block sizes by three
+        # and leave the query coordinates alone, which left every reader with an alignment whose
+        # two sides were in different units - a heap overflow in the alignment page, blocks drawn
+        # short in hgTracks, and blocks shorter than a codon loading as size 0, which aborted
+        # pslTransMap and took the lifted SwissProt track down (#38249).  refs #38300
 
         acc = row[3]
         recAnnot = accToMeta.get(acc, None)
@@ -1729,16 +1743,63 @@ def chromSizesFile(db):
         return genArkChromSizes(db, genArkHubDir(db))
     return "/hive/data/genomes/%s/chrom.sizes" % db
 
-def miniprotRamGb(genomeFa):
-    """ how much RAM to reserve for a miniprot run on this genome, in whole GB.
-    Measured on real assemblies: peak RSS is linear in genome size at about 11 GB per Gb
-    of sequence and is flat in the thread count, because the index is built once and shared
-    (2.49 GB at -t 1 versus 2.60 GB at -t 16 on the same 227 Mb). So this is sized off the
-    sequence only, with headroom, and never below a small floor.
+def miniprotRamGb(genomeFa, protFa):
+    """ a first guess at how much RAM to reserve for a miniprot run, in whole GB.
+
+    Only a guess. Two attempts to predict this from the input sizes were both wrong, and the
+    measurements say the quantity is not predictable from them at all:
+
+        genome    proteins          peak RSS
+        0.46 Gb   78457 (66 MB)     at most 16 GB, the job completed in that
+        0.86 Gb   50305 (37 MB)     43.3 GB, measured
+
+    The second has half the protein and twice the genome, and needs at least 2.7 times the
+    memory, so no sum of a genome term and a protein term fits both. What actually drives it
+    is how much alignment work the sequence generates - repeats and paralogs give many
+    candidate alignments to hold at once - and that is not visible in the file sizes.
+
+    So this stays a cheap starting estimate and runMiniprotOnCluster() raises it when a job
+    runs out of memory, rather than a third guess at a coefficient. refs #38300
     """
-    bases = os.path.getsize(genomeFa) # near enough, fasta is one byte per base plus headers
-    gb = int(bases / 1e9 * 14) + 1
-    return max(gb, 8)
+    genomeBytes = os.path.getsize(genomeFa) # fasta is about one byte per base plus headers
+    protBytes = os.path.getsize(protFa)
+    gb = int(genomeBytes / 1e9 * 14) + int(protBytes / 1e9 * 100) + 1
+    return max(gb, 16)
+
+def paraBatchOutOfMemory(jobDir):
+    """ did a job in this finished parasol batch die for lack of memory?
+
+    para.results holds the raw wait status in its first column, so status >> 8 is the exit
+    code. miniprot prints "[morecore] insufficient memory" and aborts, which arrives as 134
+    (128 + SIGABRT). Reading the file is local and cheap; para problems would have to be
+    asked the hub.
+    """
+    resultsFname = join(jobDir, "para.results")
+    if not isfile(resultsFname):
+        return False
+    for line in open(resultsFname):
+        fields = line.split()
+        if not fields:
+            continue
+        try:
+            status = int(fields[0])
+        except ValueError:
+            continue
+        if status >> 8 == 134:
+            return True
+    return False
+
+def clearParaBatch(jobDir):
+    """ forget a finished batch so it can be run again with a different reservation.
+
+    The reservation is recorded in the batch, so para make on top of an existing one does not
+    change it. freeBatch tells the hub to drop it and the local state files have to go too.
+    """
+    run("cd %s && para freeBatch" % jobDir, ignoreErr=True)
+    for fname in ("batch", "batch.bak", "para.results", "para.bookmark"):
+        path = join(jobDir, fname)
+        if isfile(path):
+            os.remove(path)
 
 def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     """ run one miniprot job on the parasol cluster.
@@ -1746,7 +1807,7 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     count, which for a 16 CPU job is far less than miniprot needs, and without -cpu parasol
     would pack more of these onto a node than it has cores for.
     """
-    ram = miniprotRamGb(genomeFa)
+    ram = miniprotRamGb(genomeFa, protFa)
     jobDir = join(workDir, "cluster")
     if not isdir(jobDir):
         os.makedirs(jobDir, exist_ok=True)
@@ -1768,8 +1829,25 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     with open(jobList, "w") as ofh:
         ofh.write("%s {check out exists %s}\n" % (abspath(jobSh), abspath(gffName)))
 
-    logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg" % (db, miniprotThreads, ram))
-    run("cd %s && para make -cpu=%d -ram=%dg jobList" % (jobDir, miniprotThreads, ram))
+    # The first reservation is only an estimate (see miniprotRamGb), so when a job dies for
+    # lack of memory, raise it and run the batch again rather than losing the assembly. Three
+    # tries reach eight times the estimate, which covers the worst case measured so far by a
+    # wide margin. Anything that fails for another reason stops here, so a genome that
+    # segfaults does not get run four times over. refs #38300
+    for attempt in range(3):
+        tryRam = ram * (4 ** attempt)
+        logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg%s" % \
+                (db, miniprotThreads, tryRam, "" if attempt == 0 else " (attempt %d)" % (attempt+1)))
+        ret = run("cd %s && para make -cpu=%d -ram=%dg jobList" % \
+                (jobDir, miniprotThreads, tryRam), ignoreErr=True)
+        if ret == 0:
+            return
+        if not paraBatchOutOfMemory(jobDir):
+            break
+        logging.warning("%s: miniprot ran out of memory in %dg, trying again with more" % (db, tryRam))
+        clearParaBatch(jobDir)
+
+    errAbort("%s: miniprot on the cluster failed, see %s" % (db, jobDir))
 
 def miniprotProteins(fullFaFname, db, mapFname, stats):
     """ align the UniProt proteins straight to the genome with miniprot and write a PSL.
@@ -2239,9 +2317,19 @@ def listMd5(arr):
     return m.hexdigest()
 
 def readGeneToRefSeq(taxId):
-    " return entrezId -> list of Refseq from tsv file "
+    """ return entrezId -> list of Refseq from tsv file, empty if we have none for this taxon.
+
+    Not every organism is in NCBI's gene2refseq, so for some taxa this file cannot exist.
+    The caller only uses it to resolve UniProt's Entrez cross-references to transcripts and
+    already checks whether it got anything, so an empty answer costs a little filtering
+    accuracy rather than the assembly. It used to raise and take the taxon down. refs #38300
+    """
     g2refseq = {}
     fname = join(NCBIDIR, str(taxId)+".tsv")
+    if not isfile(fname):
+        logging.warning("taxon %s is not in the NCBI gene2refseq tables, so UniProt's Entrez "
+                "cross-references cannot be resolved for it" % taxId)
+        return g2refseq
     for line in open(fname):
         geneId, transList = line.rstrip("\n").split('\t')
         transList = transList.split(',')
@@ -2282,6 +2370,16 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     if geneTable!="miniprot":
         transcriptFa, transcriptPsl = makeTranscriptFiles(db, geneTable, taxId, mapDir)
+        # An assembly can carry a gene track that yields no transcripts at all, and three of
+        # them did. BLAST was then pointed at an empty database and every one of its 929 jobs
+        # crashed, which took the taxon down after a long detour through the cluster. There is
+        # nothing to align against, so say so and skip the assembly the way one with no
+        # alignments is skipped. refs #38300
+        if os.path.getsize(transcriptFa) == 0:
+            logging.warning("%s: the %s track produced no transcript sequences, so there is "
+                    "nothing for the proteins to be aligned to, skipping this assembly" % \
+                    (db, geneTable))
+            return None, geneTable, None, {"default":"best"}, None, True
         transMd5 = fastaMd5(transcriptFa)
         pslMd5 = tabMd5(transcriptPsl)
     else:
@@ -2328,7 +2426,15 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     if isfile(mapFname) and not doForce:
         logging.info("%s already exists, not rebuilding the protein -> genome mapping PSL" % mapFname)
-        assert(os.path.getsize(mapFname)!=0)
+        # An empty mapping is a real answer, not a broken file: an organism UniProt has two
+        # proteins for, neither of which aligns, produces one. The caller already treats a
+        # freshly built empty mapping that way and carries on, but reusing a cached one used to
+        # assert here, so such an assembly failed on every run after the first. The golden
+        # eagle did, until this. refs #38300
+        if os.path.getsize(mapFname) == 0:
+            logging.warning("%s: the cached protein -> genome mapping is empty, nothing aligns "
+                    "for this assembly" % db)
+            return mapFname, geneTable, fullMd5, protMapSource, protToTrans, False
         # The lift info describes the mapping, so it has to exist wherever the mapping
         # does. A run that was interrupted between building the PSL and writing this file
         # leaves the PSL behind on its own, and the next run then reuses the PSL and falls
@@ -2632,6 +2738,41 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
 
             shutil.copyfile(mapDescFname, join(dbBigBedDir, "liftInfo.json"))
 
+taxonFailDir = "failedTaxa"
+
+def writeTaxonFailLog(taxId, dbs, ex, trace):
+    """ write one file per failed taxon, holding what failed and how, and return its name.
+
+    lastRun.log is overwritten by the next run and holds every taxon interleaved, so a
+    failure that someone wants to look at a day later is hard to find in it. One file per
+    taxon, named after the taxon, survives and is easy to point at.
+    """
+    if not isdir(taxonFailDir):
+        os.makedirs(taxonFailDir, exist_ok=True)
+    fname = join(taxonFailDir, "%s.log" % taxId)
+    with open(fname, "w") as ofh:
+        ofh.write("taxon:      %s\n" % taxId)
+        ofh.write("assemblies: %s\n" % ", ".join(dbs))
+        ofh.write("when:       %s\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        ofh.write("failure:    %s: %s\n\n" % (type(ex).__name__, ex))
+        ofh.write(trace)
+    return fname
+
+def reportFailedTaxa(failed, todo):
+    " print a block naming every failed taxon, its assemblies and where to read about it "
+    dbsByTax = dict(todo)
+    logging.error("")
+    logging.error("%d taxa failed. Each one has a log of its own:" % len(failed))
+    for taxId in sorted(failed):
+        dbs = ", ".join(dbsByTax.get(taxId, []))
+        logging.error("    taxon %-10s %-56s %s/%s.log" % (taxId, dbs[:56], taxonFailDir, taxId))
+    logging.error("")
+    logging.error("Those logs are under %s in %s and are not overwritten by the next run." % \
+            (taxonFailDir, os.getcwd()))
+    logging.error("To retry just these, add: --dbs=%s" % \
+            ",".join(sorted(set(d for t in failed for d in dbsByTax.get(t, [])))))
+    logging.error("")
+
 def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
     """ work through the taxa, optionally several at a time.
 
@@ -2672,12 +2813,28 @@ def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrem
                 # which is exactly the kind of silent failure this pipeline has a history of.
                 # Log the traceback too: errAbort raises a bare AssertionError, so without
                 # one the message is just "AssertionError:" and says nothing about where.
-                logging.error("taxon %s failed: %s: %s\n%s" % (taxId, type(ex).__name__, ex,
-                        "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))))
+                trace = "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))
+                logFname = writeTaxonFailLog(taxId, dict(todo).get(taxId, []), ex, trace)
+                logging.error("taxon %s failed: %s: %s (details in %s)" % \
+                        (taxId, type(ex).__name__, ex, logFname))
+                logging.error(trace)
                 failed.append(taxId)
 
-    if failed:
-        errAbort("%d of %d taxa failed: %s" % (len(failed), len(todo), ", ".join(str(t) for t in sorted(failed))))
+    if not failed:
+        return
+
+    reportFailedTaxa(failed, todo)
+
+    allowed = options.allowFailures
+    if len(failed) <= allowed:
+        logging.warning("%d taxa failed, which is within the %d allowed, so the run carries "
+                "on and the assemblies that did build will be published. Re-run the failed "
+                "taxa with --dbs once they are fixed." % (len(failed), allowed))
+        return
+
+    errAbort("%d of %d taxa failed, more than the %d allowed by --allowFailures. "
+            "Nothing will be published. See %s for what went wrong." % \
+            (len(failed), len(todo), allowed, taxonFailDir))
 
 def makeSymlink(target, linkName):
     assert(".new" not in linkName) # make sure that this bug never happens again
@@ -3132,6 +3289,16 @@ def splitNcbiIfNeeded(taxIdDbs):
     logging.info("%d of %d taxa have no NCBI gene table yet, splitting %s" % \
             (len(missing), len(taxIdDbs), ncbiGeneFname))
     splitGeneRefseq(ncbiGeneFname, NCBIDIR, taxIdDbs)
+
+    # Some organisms are not in gene2refseq at all, so the split cannot produce a table for
+    # them and they would send every future run back to re-split 2.4 GB. Leave an empty file
+    # to record that we looked; readGeneToRefSeq treats it as "nothing known", which is true.
+    stillMissing = [t for t in missing if not isfile(join(NCBIDIR, "%s.tsv" % t))]
+    for taxId in stillMissing:
+        open(join(NCBIDIR, "%s.tsv" % taxId), "w").close()
+    if stillMissing:
+        logging.info("%d taxa are not in gene2refseq at all, wrote empty tables for them" % \
+                len(stillMissing))
 
 def downloadAndSplitNcbi(taxIdDbs):
     " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "

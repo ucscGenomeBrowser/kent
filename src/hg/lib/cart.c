@@ -906,6 +906,10 @@ char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
 char query[512];
 
+/* The caller may have passed pointers into cart values, which cartRemoveLike below frees. */
+sessionOwner = cloneString(sessionOwner);
+sessionName = cloneString(sessionName);
+
 if (isEmpty(sessionOwner))
     errAbort("Please go back and enter a wiki user name for this session.");
 if (isEmpty(sessionName))
@@ -969,10 +973,15 @@ if (row != NULL)
         hDisconnectCentral(&conn2);
 
         /* A full (non-merge) load just threw away whatever the user had in the browser before.
-         * Leave a marker so that the next hgTracks page can say what was opened and that the
-         * old view is gone.  A merge keeps the current view, so it needs no note. */
+         * Leave a marker, naming the session actually being loaded here, so that the next
+         * hgTracks page can say what was opened and that the old view is gone.  A merge keeps
+         * the current view, so it needs no note. */
         if (!merge)
+            {
             cartSetString(cart, hgsSessionJustLoaded, "on");
+            cartSetString(cart, hgsOtherUserSessionName, sessionName);
+            cartSetString(cart, hgsOtherUserName, sessionOwner);
+            }
 
         /* When loading another user's session, strip accepted-share cart vars
          * so we don't carry shares from the session owner into the current user's
@@ -993,6 +1002,9 @@ else
 	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
 freeMem(encSessionName);
+freeMem(encSessionOwner);
+freeMem(sessionOwner);
+freeMem(sessionName);
 }
 
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,

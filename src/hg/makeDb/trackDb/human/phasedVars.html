@@ -105,8 +105,22 @@ andres.moreno@cinvestav.mx.
 <b>SGDP:</b> The version used was
 <a target="_blank" href="https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/"
 >https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/vcf_variants/</a>,
-merged with bcftools and lifted to hg38 with CrossMap. 
+merged with bcftools and lifted to hg38 with CrossMap.
 </p>
+<!-- hgdp1kSnv is release alpha: uncomment this paragraph when it is released, refs #37306
+<p>
+<b>gnomAD HGDP+1000G, SNVs AC&gt;5:</b> The full gnomAD callset is 3.5 TB and too slow
+to display in haplotype clustering mode except in very small windows. For this
+second, smaller version we kept only single-nucleotide variants with an allele count
+(INFO/AC) higher than five, only the GT genotype field and only the AC, AN and AF
+INFO fields, using bcftools. Indels, rare variants and all other fields are only in
+the full track. See the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/varFreqs.txt"
+target="_blank">makeDoc</a> and the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/varFreqs/hgdp1kCommonSnvs.sh"
+target="_blank">script</a> for details.
+</p>
+-->
 
 <h2>Credits</h2>
 <p>

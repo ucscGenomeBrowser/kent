@@ -2357,12 +2357,18 @@ There are no extra options that can appear on the type hic line.
     <code>R,G,B</code> strings.</P>
 </DIV>
 
-<DIV class="maxItems"><span class="types bed bigBed broadPeak psl"></span>
+<DIV class="maxItems"><span class="types bed bigBed broadPeak psl vcfTabix"></span>
 <div class="format"><code>maxItems &lt;integer&gt;</code></div>
     <P>Maximum number of items to display individually in full or pack or squish mode.  When the maximum is
     exceeded, the track switches to coverage mode.
     Default: 1000. For <code>type bigBed</code> tracks, this setting can never 
     be larger than the hg.conf setting bigBedMaxItems, which by default is 100,000 at UCSC.
+    </P>
+    <P>For <code>type vcfTabix</code> tracks, <code>maxItems</code> is the maximum number of
+    VCF records loaded for the current window. If the window holds more, the track asks the
+    user to zoom in. Without this setting, the limit is the hg.conf setting vcfMaxItems,
+    10,000 by default. Raising it lets the haplotype display of a large genotype VCF be
+    viewed in larger windows, but drawing becomes slow with many samples.
     </P>
     <P>bigBedMaxItems is configured globally for a Genome Browser server and sets an upper limit
     on how many features can be loaded at most from a bigBed file, to avoid a
@@ -5225,6 +5231,17 @@ NA18939	255,127,14</pre>
     AC field of the INFO column. Variants whose INFO has no usable AC are always displayed.
     By default this is 0 (i.e. display all variants).
     </P>
+</DIV>
+
+<DIV class="excludeFilterValues"><span class="types vcf vcfTabix vcfPhasedTrio"></span>
+<div class="format"><code>excludeFilterValues &lt;<EM>value1,value2,...</EM>&gt;</code></div>
+    <P>
+    A comma-separated list of values of the VCF FILTER column. Variants with any of these
+    values are hidden by default. The values must be defined in the VCF header; they are
+    shown pre-checked in the "Exclude variants with these FILTER values" list on the track
+    configuration page, where the user can uncheck them. By default nothing is excluded.
+    </P>
+    <P>Example: <code>excludeFilterValues NonHumanIns</code></P>
 </DIV>
 
 <DIV class="vcfDoFilter"><span class="types vcf vcfTabix vcfPhasedTrio"></span>

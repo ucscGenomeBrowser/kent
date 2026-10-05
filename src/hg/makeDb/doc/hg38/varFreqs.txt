@@ -196,6 +196,18 @@ _sas,INFO/gnomad_AF_sas,INFO/gnomad_AN_sas,INFO/gnomad_popmax,INFO/gnomad_faf95_
 sh ~/kent/src/hg/makeDb/scripts/varFreqs/vcfFilterParallel.sh /gbdb/hg38/phasedVars/hgdp1k/gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz hgdp1k.freq.parallel.vcf.gz "$KEEP" 30 50 &
 tabix -p vcf hgdp1k.freq.vcf.gz
 
+# phasedVars hgdp1kSnv: smaller genotype VCF for HGDP1k, Claude/Max, Sep 29 2026
+# The 3.5TB genotype VCF is too slow for haplotype clustering at higher zoom levels.
+# Keep only SNVs with INFO/AC>5, only FORMAT/GT and INFO/AC,AN,AF. 60 jobs, 10 Mbp chunks.
+# Test region chr20:40-41Mbp: 57698 variants -> 11310, 4.8MB
+cd /hive/data/genomes/hg38/bed/varFreqs/hgdp1k/
+sh ~/kent/src/hg/makeDb/scripts/varFreqs/hgdp1kCommonSnvs.sh gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz hgdp1k.snvAc6.vcf.gz 60 10 > hgdp1kCommonSnvs.log 2>&1
+# took 45 minutes, 3.5TB -> 17GB
+bcftools index -n gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz
+# 189381961
+bcftools index -n hgdp1k.snvAc6.vcf.gz
+# 34033926
+
 # Swefreq, Max, Feb 2026
 # downloaded files from https://swefreq.nbis.se/dataset/SweGen/download
 # Access was approved through the website, but I emailed swefreq@scilifelab.se, it needed a reminder email
@@ -1261,94 +1273,137 @@ python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
 # HostSeq (confirmed against the auto-generated all/varFreqs.trackDb.ra).
 
 ##########
-# 2026-09-23 Claude max
-# SFARI SPARK WGS August 2026 release (DS0000135), 45,178 genomes -> new
-# subtrack sfariSparkWgs45k (doc page shared with sfariSparkExomes.html).
-# Downloaded resources/ with the Globus UI. There is no sites VCF in the release,
-# only an AF table made from the GLnexus pVCFs with
-#   bcftools query -f '%CHROM\t%POS\t%REF\t%ALT\t%AF\n'
-# AF is rounded to 6 decimals, there is no AC or AN. All low AFs in the file,
-# including chrX/chrY, are exact multiples of 1/90356 = 1/(2*45178): the 179M
-# AF=1 alleles are all 1.1e-05, never 1.2e-05, so missingness is ~0 and AN is set
-# to 90356 everywhere, AC=round(AF*AN). Multiallelics are split, singletons
-# (AC=1) are dropped, then bcftools norm left-aligns against hg38.
-cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k
-bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kToVcf.sh \
-    resources/SPARK.WGS.2026_08.gatk.pvcf_variant_frequencies.tsv \
-    /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/sparkWgs45k.vcf.gz 24 > build.log 2>&1
-# Accounting: 436,319,161 input records (chr1-22, X, Y; no chrM, no alts) with
-# 521,466,014 ALT alleles -> 179,411,092 singleton alleles dropped ->
-# 342,054,922 VCF records. No '*' alleles, 0 REF mismatches in bcftools norm,
-# 24.1M records realigned. Output 2.2 GB + tabix index.
-# Spot check APOE: rs429358 chr19:44908684 T>C AF=0.1455, rs7412
-# chr19:44908822 C>T AF=0.0755.
-rm -rf work   # keep only the per-chrom logs, in logs/
-
-##########
 # 2026-09-24 Claude max
-# SFARI SPARK WGS 2026_08 from the genotype pVCFs -> new subtrack
-# sfariSparkWgs45kAsd, with exact AC/AN/AF and ASD/non-ASD splits, no AC cutoff.
-# For now only a demo: the DSCAM locus on chr21, while the ~80 TB of pVCFs download.
-# Downloaded the pVCFs with Globus into pvcf/<chrom>/, 2.5 Mb chunks named
-# SPARK.WGS.2026_08.gatk.<chrom>_<start>_<end>.vcf.gz, 60-85 GB each, no index.
-# INFO has only AF/AQ; the samples are the sample_id column of the metadata.
-# Chunks compress ~10:1 (1.8 MB of text per record), so bcftools parses ~150 MB/s
-# of text, ~1.5 h per chunk. sparkWgs45kPvcfSlice.py bisects over the BGZF
-# blocks to find a position without an index, so a range can be split into
-# pieces that run in parallel.
+# SFARI SPARK WGS August 2026 release (DS0000135), 45,178 genomes -> subtrack
+# sfariSparkWgs45kAsd (doc page shared with sfariSparkExomes.html), with exact
+# AC/AN/AF counted from the genotypes, ASD/non-ASD splits, no AC cutoff, refs #38424
+# Downloaded the GLnexus pVCFs with Globus into pvcf/<chrom>/: 1,248 chunks of
+# 2.5 Mb (chr1-22, X, Y), SPARK.WGS.2026_08.gatk.<chrom>_<start>_<end>.vcf.gz,
+# 75 TB, 60-85 GB each. INFO has only AF/AQ; the samples are the sample_id
+# column of resources/SPARK.WGS.2026_08.sample_metadata.tsv.
+# The chunks compress ~10:1 (1.8 MB of text per record), so each chunk is split
+# into 500 kb pieces, one parasol job each. sparkWgs45kPvcfSlice.py bisects over
+# the BGZF blocks to find a position without needing an index.
+# Per piece, sparkWgs45kPvcfToSites.sh strips every sample column to GT (the
+# other FORMAT fields are 90% of the text, and PL has 528 values per sample at a
+# 31-allele STR such as chr1:10992130, which ran a job out of memory), then
+# bcftools +fill-tags -S (AC/AN/AF overall and per group), view -G, norm -m-
+# -f hg38.fa, drops AC=0 alleles. MONOALLELIC records (GLnexus alleles it
+# could not merge into an overlapping site) have genotypes only for carriers,
+# so fill-tags gives AN=1-2 and AF=1; for these AN is set to 2 x group size and
+# AF recomputed (the old 12k WGS track has the same problem). VARLEN =
+# len(ALT)-len(REF) is added, and the per-allele INFO fields are declared
+# Number=1 (one ALT per record after norm -m-), as the VCF track filters need.
+# The scripts use /cluster/software/src/bcftools-1.22: the conda bcftools in
+# ~max/software links libopenblas, which segfaults under the parasol -ram
+# address-space limit.
 cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k
-mkdir -p pvcfSites/dscam
+mkdir -p pvcfSites/run
 # sample groups from the asd column: 20,858 AUT, 24,320 NON_AUT, none unassigned
 awk -F'\t' 'NR==1{for(i=1;i<=NF;i++)c[$i]=i; next} {a=$c["asd"]; print $c["sample_id"]"\t"(a=="True"?"AUT":(a=="False"?"NON_AUT":"NA"))}' \
     resources/SPARK.WGS.2026_08.sample_metadata.tsv | grep -v 'NA$' > pvcfSites/groups.txt
-# DSCAM, knownGene ENST00000400454.6 chr21:40010999-40847158 (1-based), 64 pieces
-bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kPvcfRange.sh \
-    pvcf/chr21/SPARK.WGS.2026_08.gatk.chr21_40000001_42500000.vcf.gz pvcfSites/groups.txt \
-    40010999 40847159 pvcfSites/dscam/sparkWgs45kAsd.dscam.vcf.gz 64 48 > pvcfSites/dscam/build.log 2>&1
-# 80 seconds on hgwdev. 127,615 input records -> norm split 12,625, realigned
-# 11,261 -> 151,578 output records, of which 49,818 singletons (AC=1). No
-# duplicate CHROM/POS/REF/ALT.
-# For the SFARI demo the DSCAM file was also run through bcftools csq (same
-# options and Ensembl 115 GFF3 as mergeAndAnnotate.sh): 464 missense, 78
-# frameshift, 6 stop_gained, 1,057 synonymous, 149,151 intronic. The genome-wide
-# build below leaves BCSQ out, as for the other cohorts; it is only added when
-# the cohorts are merged by mergeAndAnnotate.sh.
-# MONOALLELIC records (GLnexus alleles it could not merge into an overlapping
-# site): only carriers are called, so fill-tags gave AN=1-2 and AF=1 for them
-# (4,117 records in DSCAM). The old 12k WGS track has the same problem. GLnexus's
-# own AF uses all samples, so sparkWgs45kPvcfToSites.sh sets AN to 2 x group size
-# for these and recomputes the AFs. 238 records still have AN < 45,178: real
-# missing genotypes, e.g. in homopolymer runs.
-# Compared with the AF-table track sfariSparkWgs45k in DSCAM: 99,147 alleles
-# are in both, 6,985 of them differ in AF by more than 1e-4 (1,233 at sites with
-# AN < 88,000). 2,835 alleles with AC >= 2 here are missing from the table track.
-# The table's AF is GLnexus's INFO/AF, and it does not always match the
-# genotypes: e.g. chr21:40011372 G>A has INFO AF=1.1e-05 (one allele) but two
-# 0/1 calls, and 40011375 G>A has AF=0.000111 (10 alleles) but 22 0/1 calls.
-# Counting the GT fields by hand confirms the fill-tags numbers.
-
-# Whole genome on parasol. The download finished: 1,248 chunks (chr1-22, X, Y),
-# 75 TB, each ending in a valid BGZF EOF block, now also with .tbi files. Each
-# chunk is split into 500 kb pieces, one job per piece (a 25 kb test piece: 43 s,
-# ~2 cores, 0.6 GB peak RSS). parasol applies -ram as an address-space limit
-# (ulimit -v and -d) to every process. The first try used the conda bcftools in
-# ~max/software, which links libopenblas; OpenBLAS reserves virtual memory per
-# node core, so every bcftools in the pipeline segfaulted at startup, even
-# "view -h", at both -ram=2g and 4g. The scripts now use the plain
-# /cluster/software/src/bcftools-1.22 build, which runs under 4g; its output for
-# chr21:40300001-40300400 is identical to the demo build (records at the same
-# position come out in a different order, which the merge sort fixes).
-# The second try still crashed one job after 14 min at chr1:10992130, a
-# 31-allele STR record with 95 MB of text: PL has 528 values per sample. Only
-# GT is needed, so sparkWgs45kPvcfToSites.sh now strips every sample column to
-# GT with perl before bcftools; that cuts the text ~10-fold, runs the STR
-# region under a 4 GB limit, and gives identical output (25 kb test piece and
-# DSCAM test region, same md5 of the sorted records).
-cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/pvcfSites
-mkdir -p run
+cd pvcfSites
 bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kPvcfJobs.sh \
     ../pvcf groups.txt pieces > run/jobList       # 6,188 jobs
 cd run
+# a 25 kb piece: 43 s, ~2 cores, 0.6 GB RSS; bcftools needs ~3 GB of address space
 para create -cpu=2 -ram=4g jobList
 para try
 para push -maxJob=200      # capped to spare /hive, 75 TB read in total
+# All 6,188 jobs ran OK (average 26 min, longest 5.6 h while reading /hive,
+# 29 h from submission to the last job with at most ~130 running).
+# The pieces hold 436,319,161 input records, the same number as SFARI's AF table
+# (SPARK.WGS.2026_08.gatk.pvcf_variant_frequencies.tsv): norm split 47,268,026,
+# realigned 32,593,833, no REF mismatches, no duplicates.
+cd ..
+mkdir -p chroms
+ls pieces | sort -V | parallel -j 8 'bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kPvcfMerge.sh chroms/{}.vcf.gz pieces/{}/*.bcf 2> chroms/{}.merge.log'
+/cluster/software/src/bcftools-1.22/bcftools concat --threads 8 -Oz -o sparkWgs45kAsd.vcf.gz \
+    $(ls chroms/*.vcf.gz | sort -V)
+tabix -p vcf sparkWgs45kAsd.vcf.gz      # 13 GB
+rm -rf pieces chroms
+# 518,290,049 records, 166,084,635 singletons (AC=1), 12,030,738 MONOALLELIC
+# records with corrected AN, 7,665,197 with AN < 45,178 (1,508,111 of them on
+# chrY, where only the 20,367 males are called; chrX is called diploid in males,
+# as in the older SPARK tracks). VARLEN -356 to 1,066. No adjacent duplicate
+# CHROM/POS/REF/ALT. APOE rs429358 AF=0.1456 (AUT 0.1472, NON_AUT 0.1442),
+# rs7412 AF=0.0755. AF_AUT >= 0.001 at chr19:44908600-44908900 hides 122 of 125
+# variants in the browser, the same as bcftools view -i 'AF_AUT>=0.001'.
+# Note: GLnexus's INFO/AF, which SFARI's AF table is made from, does not always
+# match the genotypes, e.g. chr21:40011372 G>A has AF=1.1e-05 (one allele) but
+# two 0/1 calls. The counts here come from the genotypes.
+
+# 2026-09-26 Claude max
+# Artifact: 22.9M insertions >= 50 bp (4.4% of all records; 21.2M with AC < 10)
+# vs 66 such indels in chr21:40-42 Mb for the 12k DeepVariant pilot and 5,145 in
+# gnomAD v4.1 genomes. 94% are not a copy of nearby reference, none of 40 had a
+# BLAT hit in hg38, lengths peak at 50-150 bp (read length); NCBI megablast of 5
+# gave oral bacteria (Streptococcus mitis, Neisseria subflava, Rothia
+# mucilaginosa, Solobacterium moorei, a phage). The DNA is from saliva, so most
+# likely soft-clipped bacterial read ends turned into insertions by
+# HaplotypeCaller. Write-up sent to SFARI:
+#   https://hgwdev.gi.ucsc.edu/~max/sfari/sparkWgs45kInsertionArtifacts.html
+# Fix: FILTER NonHumanIns on insertions >= 20 bp whose inserted sequence does not
+# align to hg38 with bwa mem (>= 80% of its length, <= 10% NM) and that gnomAD
+# v4.1 genomes does not have (keeps real non-reference insertions, e.g.
+# chr21:40348226 with AF 0.42). Controls: 400 random hg38 pieces each of 20-150
+# bp all pass as human; of shuffled pieces 7/400 (20 bp), 26/400 (25 bp), 1/400
+# (30 bp) and 0 above pass as human, so a few short artifacts stay unflagged.
+# minimap2 -x sr was tried first and missed 37% of real 60 bp hg38 pieces.
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/nonHumanIns
+ln -s /hive/data/genomes/hg38/bed/varFreqs/all/hg38.fa hg38.fa
+~/software/bwa/bwa index -a bwtsw -p hg38bwa hg38.fa      # 45 min
+cd ../pvcfSites
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kFlagNonHumanIns.sh \
+    sparkWgs45kAsd.vcf.gz ../nonHumanIns/hg38bwa sparkWgs45kAsd.nhi.vcf.gz 20 48 \
+    > ../nonHumanIns/flag.log 2>&1
+mv -f sparkWgs45kAsd.nhi.vcf.gz sparkWgs45kAsd.vcf.gz
+mv -f sparkWgs45kAsd.nhi.vcf.gz.tbi sparkWgs45kAsd.vcf.gz.tbi
+# 25,275,365 records flagged NonHumanIns (1,935,011 of them also MONOALLELIC);
+# 267,799 not-human insertions kept because gnomAD has them; total unchanged at
+# 518,290,049. Distinct inserted sequences not human: 71% (20-29 bp), 75%
+# (30-49), 92% (50-99), 99% (100-149), 82% (>=150).
+# The track hides them by default with the new trackDb setting
+# excludeFilterValues NonHumanIns (the default for the existing "Exclude variants
+# with these FILTER values" checkboxes; hgTracks/vcfTrack.c, lib/vcfUi.c).
+
+##########
+# 2026-09-26 Claude max
+# Combined tracks varFreqsAffected/varFreqsBackground rebuilt with SFARI SPARK
+# 45k WGS (key SPARK45k, is_disease=1, AUT -> affected, NON_AUT -> background),
+# refs #38424. The merge reads a copy without the NonHumanIns records:
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/pvcfSites
+B=/cluster/software/src/bcftools-1.22/bcftools
+for c in $(seq 1 22) X Y; do echo chr$c; done | parallel -j 24 \
+    "$B view -r {} -e 'FILTER~\"NonHumanIns\"' -Ob -o merge.work/{}.bcf sparkWgs45kAsd.vcf.gz"
+$B concat -Oz --threads 8 -o sparkWgs45kAsd.noNonHumanIns.vcf.gz merge.work/chr{1..22}.bcf merge.work/chr{X,Y}.bcf
+tabix -p vcf sparkWgs45kAsd.noNonHumanIns.vcf.gz     # 493,014,684 records
+# databases.tsv: added SPARK45k, the 12k pilot SFARI_WGS is now displayed as
+# "SFARI SPARK iWGS v1.1 Pilot"; populations.tsv: SPARK45k AUT/NON_AUT arms.
+# The build writes varFreqsNew*.bb, which are moved over the live files at the
+# end, so hgwdev's /gbdb never points at a half-written bigBed.
+cd /hive/data/genomes/hg38/bed/varFreqs/all
+rm -f merged.vcf.gz merged.vcf.gz.tbi merged.annotated.vcf.gz \
+      merged.annotated.vcf.gz.tbi normalized_files.txt
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/mergeAndAnnotate.sh
+python3 ~/kent/src/hg/makeDb/scripts/varFreqs/vcfToBigBed.py \
+    --annotated-vcf merged.annotated.vcf.gz --output-prefix varFreqsNew \
+    --split-affected --threads 8 --work-dir /hive/data/genomes/hg38/bed/varFreqs/all \
+    > rebuild45k.log 2>&1
+# Merged variants: 1,505,737,716 (was 1,374,129,993). varFreqsAffected
+# 425,183,826 items / 38.6 GB (was 133,290,997; the 20,858 SPARK 45k ASD genomes
+# add many rare WGS variants), varFreqsBackground 1,381,032,442 items / 71.0 GB
+# (was 1,278,354,588); 191 fields (SPARK45k adds AC/AF and AUT/NON_AUT AC/AF).
+# APOE rs429358: affectedAC/AN 38,922 / 254,866 = 32,782 + 6,140 and
+# 213,150 + 41,716 (SPARK45k AUT), SPARK45k ASD AF 0.147186 as in the subtrack.
+mv varFreqsAffected.bb varFreqsAffected.bb.preSpark45k.bak
+mv varFreqsNewAffected.bb varFreqsAffected.bb
+mv varFreqsBackground.bb varFreqsBackground.bb.preSpark45k.bak
+mv varFreqsNewBackground.bb varFreqsBackground.bb
+mv -f varFreqsNewAffected.as varFreqsAffected.as
+mv -f varFreqsNewBackground.as varFreqsBackground.as
+mv varFreqs.trackDb.ra varFreqs.trackDb.ra.preSpark45k
+mv varFreqsNew.trackDb.ra varFreqs.trackDb.ra
+# varFreqs.ra: SPARK45k in the affectedCohorts/backgroundSources menus and the
+# commented per-cohort filter blocks, taken from varFreqs.trackDb.ra; the
+# affected longLabel now says ~150,000 individuals.

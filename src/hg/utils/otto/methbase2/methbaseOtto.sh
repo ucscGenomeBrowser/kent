@@ -36,7 +36,7 @@ set -o errexit -o nounset -o pipefail
 
 # hgdownload account and the mirror it serves. The vN directory appears in the
 # URL too, so bump both together when a new version is cut.
-DOWNLOAD_HOST=${DOWNLOAD_HOST:-qateam@hgdownload}
+DOWNLOAD_HOST=${DOWNLOAD_HOST:-hgdownload}
 MIRROR_DIR=${MIRROR_DIR:-/mirrordata/hubs/methbase/v3}
 MIRROR_URL=${MIRROR_URL:-https://hgdownload.soe.ucsc.edu/hubs/methbase/v3}
 # methbaseDownload as deployed on hgdownload, not the copy in this directory

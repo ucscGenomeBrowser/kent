@@ -29,13 +29,16 @@ tmp=$outBcf.tmp.bcf
 # overlapping multiallelic site. In them only carriers have a called allele
 # (e.g. ./1) and everyone else is ./., so fill-tags gives AN=1 or 2 and AF=1.
 # GLnexus's own AF for them uses all samples, so set AN to 2 x the samples of
-# each group and recompute AF from AC. Also add VARLEN.
+# each group and recompute AF from AC. Also add VARLEN. After norm -m- every
+# record has one ALT, so the Number=A INFO fields (AC, AF, AQ and the per-group
+# ones) are declared Number=1: the VCF track filters only accept Number=1.
 nAll=$(( $(wc -l < "$groups") * 2 ))
 nAut=$(( $(grep -c $'\tAUT$' "$groups") * 2 ))
 nNon=$(( $(grep -c $'\tNON_AUT$' "$groups") * 2 ))
 fixAwk='
 BEGIN {FS = OFS = "\t"}
-/^#CHROM/ {print "##INFO=<ID=VARLEN,Number=A,Type=Integer,Description=\"Length of ALT minus length of REF: >0 insertion, <0 deletion, 0 substitution\">"}
+/^#CHROM/ {print "##INFO=<ID=VARLEN,Number=1,Type=Integer,Description=\"Length of ALT minus length of REF: >0 insertion, <0 deletion, 0 substitution\">"}
+/^##INFO=<ID=[^,]*,Number=A,/ {sub(/,Number=A,/, ",Number=1,")}
 /^#/ {print; next}
 $7 == "MONOALLELIC" {
     n = split($8, kv, ";")

@@ -52,6 +52,20 @@ superTrack on
         priority 5
         html phasedVars.html
 
+        track hgdp1kSnv
+        shortLabel gnomAD HGDP+1000G SNVs AC>5
+        longLabel Phased Variants: gnomAD HGDP + 1000 genomes callset - SNVs with allele count > 5 only, faster display
+        type vcfTabix
+        parent phasedVars
+        bigDataUrl /gbdb/$D/phasedVars/hgdp1k/hgdp1k.snvAc6.vcf.gz
+        maxWindowToDraw 5000000
+        maxItems 200000
+        visibility pack
+        dataVersion v 3.1.2
+        release alpha
+        priority 6
+        html phasedVars.html
+
         track han945SvVcf
         parent phasedVars
         bigDataUrl /gbdb/$D/phasedVars/han945genotypes.vcf.gz

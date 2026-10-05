@@ -9169,6 +9169,21 @@ if (cfgOptionBooleanDefault("showDownloadUi", TRUE))
     jsInline("var showDownloadButton = true;\n");
 
 // remove the hg.conf option once this feature is released
+if (cfgOptionBooleanDefault("showGenbankDownload", FALSE))
+    {
+    jsInline("var showGenbankDownload = true;\n");
+    // How much sequence the javascript will turn into a GenBank file, in bases.  The
+    // file holds the whole region and is built in the web browser's memory, so the
+    // ceiling belongs to the machine and its users rather than to the code.  Printed
+    // as a number, and a value that is not a positive one falls back to the default,
+    // so a typo in hg.conf cannot write broken javascript or refuse every region.
+    long long maxGbRegion = atoll(cfgOptionDefault("maxGenbankRegion", "25000000"));
+    if (maxGbRegion <= 0)
+        maxGbRegion = 25000000;
+    jsInlineF("var maxGenbankRegion = %lld;\n", maxGbRegion);
+    }
+
+// remove the hg.conf option once this feature is released
 if (cfgOptionBooleanDefault("showIgv", FALSE))
     {
     puts(" <button id='hgtIgv' type='button' "
@@ -10328,17 +10343,66 @@ if (!hideControls)
 		{
                 if (cfgOptionBooleanDefault("groupDropdown", FALSE) && hub && hub->genomeList && hub->genomeList->next)
                     {
-                    puts("<span style='font-size:13px'>Genomes: </span><select style='width:7em' name='db'>");
+                    // deliberately not named "db": this select lives inside TrackForm
+                    // alongside the page's own hidden db field, and sharing that name
+                    // would submit two values for it on any button in the form
+                    safef(idText, sizeof idText, "%s_dbSel", group->name);
+                    hPrintf("<span style='font-size:13px'>Genomes: </span>"
+                            "<select id='%s' style='max-width:9em; text-overflow:ellipsis; "
+                            "overflow:hidden; white-space:nowrap;' "
+                            "title='Switch to another genome in this hub'>\n", idText);
                     for (struct trackHubGenome *thg = hub->genomeList; thg != NULL; thg = thg->next)
                         {
-                        if (!sameWord(thg->name, database))
-                            {
-                            // hub genome names come from the hub, so encode them
-                            char *escName = htmlEncode(thg->name);
-                            printf("<option value='%s'>%s</option>\n", escName, escName);
-                            }
+                        // hOrganism/hFreezeFromDb/hDbDb all already know how to resolve either
+                        // a native db (via dbDb) or a hub_-prefixed genome (via the hub's own
+                        // genomes.txt fields) -- see the identical recipe used for the page
+                        // title above, around trackHubSkipHubName(hOrganism(...)). For a NATIVE
+                        // genome each of those three is its own hgcentral query (pooled
+                        // connection, but still one round trip apiece), so a hub listing many
+                        // native genomes pays 3N queries here. Not batching that: hubs with
+                        // large genome counts are GenArk-style (twoBitPath genomes, resolved
+                        // from the already-parsed hub with no SQL at all); hubs of many native
+                        // genomes are old and small in practice.
+                        char *shortName = trackHubSkipHubName(thg->name); // display only, not allocated
+                        // trackHub.c's genome reader prefixes a hub genome's own organism
+                        // setting with the hub name too (addAssembly), so strip it same as name
+                        char *organismAlloc = hOrganism(thg->name);
+                        char *organism = trackHubSkipHubName(organismAlloc); // display only
+                        char *freeze = hFreezeFromDb(thg->name);
+                        struct dbDb *thgDbDb = hDbDb(thg->name); // never errAborts, unlike hDefaultPos()
+                        char *defaultPos = (thgDbDb != NULL) ? cloneString(thgDbDb->defaultPos) : NULL;
+                        dbDbFree(&thgDbDb);
+                        char extraBuf[400];
+                        extraBuf[0] = 0;
+                        if (isNotEmpty(organism) && isNotEmpty(freeze))
+                            safef(extraBuf, sizeof extraBuf, "%s, %s", organism, freeze);
+                        else if (isNotEmpty(organism))
+                            safef(extraBuf, sizeof extraBuf, "%s", organism);
+                        else if (isNotEmpty(freeze))
+                            safef(extraBuf, sizeof extraBuf, "%s", freeze);
+                        char labelBuf[512];
+                        if (isNotEmpty(extraBuf))
+                            safef(labelBuf, sizeof labelBuf, "%s - %s", shortName, extraBuf);
+                        else
+                            safef(labelBuf, sizeof labelBuf, "%s", shortName);
+                        char *escName = htmlEncode(thg->name);
+                        char *escLabel = htmlEncode(labelBuf);
+                        char *escPos = htmlEncode(emptyForNull(defaultPos));
+                        printf("<option value='%s' title='%s' data-pos='%s'%s>%s</option>\n",
+                            escName, escLabel, escPos,
+                            sameWord(thg->name, database) ? " selected" : "", escLabel);
+                        freez(&organismAlloc);
+                        freez(&freeze);
+                        freez(&defaultPos);
                         }
                     puts("</select>");
+                    jsOnEventByIdF("change", idText,
+                        "var o=this.selectedOptions[0]; document.TrackForm.db.value=this.value; "
+                        "var posEl=document.getElementById('position'); "
+                        "if (posEl) posEl.value=o.dataset.pos||''; "
+                        "var posInput=document.getElementById('positionInput'); "
+                        "if (posInput) posInput.value=''; "
+                        "document.TrackForm.submit(); return true;");
                     }
 
                 // visibility: hidden means that the element takes up space so the center alignment is not disturbed.
@@ -12386,6 +12450,12 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
 
 jsonForClient = newJsonObject(newHash(8));
 jsonObjectAdd(jsonForClient, "cgiVersion", newJsonString(CGI_VERSION));
+// the javascript track data download needs these for the GenBank output
+if (isNotEmpty(organism))
+    jsonObjectAdd(jsonForClient, "organism", newJsonString(trackHubSkipHubName(organism)));
+char *sciName = hScientificName(database);
+if (isNotEmpty(sciName))
+    jsonObjectAdd(jsonForClient, "scientificName", newJsonString(sciName));
 boolean searching = differentString(cartUsualString(cart, TRACK_SEARCH,"0"), "0");
 
 if(!trackImgOnly)

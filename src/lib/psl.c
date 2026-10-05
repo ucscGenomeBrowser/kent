@@ -2274,3 +2274,87 @@ for(ii = 0; ii < psl->blockCount; ii++)
     prevEnd = psl->tStarts[ii] + psl->blockSizes[ii];
     }
 }
+
+struct psl *pslProtFromNaLike(struct psl *psl, int protSize, int *retDroppedAa)
+/* An "na-like" protein psl counts its query in bases, three to a residue, rather than in residues.
+ * That is what pslProtCnv writes, and what the UniProt alignments carry: their proteins reach the
+ * genome through transcripts, so they come out in transcript coordinates.  Return a copy counted
+ * in residues, which is what the protein alignment display expects, or NULL if the psl is not that
+ * shape.  A minus-strand query is left alone: its coordinates are reverse complemented, but qSize
+ * is a multiple of three, so codon boundaries survive that and the arithmetic below is the same.
+ *
+ * Splicing ends a block wherever an exon ends, and about one codon in a hundred straddles one.
+ * Such a residue belongs to two blocks at once, in two places in the genome, so no single column
+ * can hold it: blocks are trimmed to whole codons and those residues are left out, counted in
+ * retDroppedAa so the page can say how many are missing rather than quietly dropping them. */
+{
+if (retDroppedAa != NULL)
+    *retDroppedAa = 0;
+if (protSize <= 0 || psl->qSize != 3 * protSize || psl->blockCount < 1)
+    return NULL;
+/* The query being three times the protein is not enough on its own: a file that still declares
+ * seqType amino_acid reaches here with its block sizes already divided by three and its query
+ * coordinates left in bases, which looks the same by that test but is in two units at once.
+ * Require the blocks to measure the target the way the target is measured, which is true of a
+ * psl whose query side is in bases and false once pslFromBigPsl() has divided them. */
+int last = psl->blockCount - 1;
+if (psl->tStarts[last] + psl->blockSizes[last] != psl->tEnd)
+    return NULL;
+
+/* Cloned rather than built with pslNew(), which keeps the names, strand and counts without
+ * restating them, and gives an array big enough for the blocks that survive trimming. */
+struct psl *prot = pslClone(psl);
+prot->qSize = protSize;
+prot->qStart = psl->qStart / 3;
+prot->qEnd = (psl->qEnd + 2) / 3;
+int i, j = 0, alignedBases = 0, alignedAa = 0;
+for (i = 0; i < psl->blockCount; ++i)
+    {
+    int qs = psl->qStarts[i], sz = psl->blockSizes[i];
+    int firstAa = (qs + 2) / 3;     /* first codon that begins at or after the block start */
+    int endAa = (qs + sz) / 3;      /* one past the last codon that ends at or before its end */
+    alignedBases += sz;
+    if (endAa <= firstAa)
+        continue;                   /* the block is too short to hold a whole codon */
+    prot->qStarts[j] = firstAa;
+    prot->blockSizes[j] = endAa - firstAa;
+    prot->tStarts[j] = psl->tStarts[i] + (firstAa * 3 - qs);
+    alignedAa += prot->blockSizes[j];
+    ++j;
+    }
+prot->blockCount = j;
+if (j == 0)
+    {
+    pslFree(&prot);
+    return NULL;
+    }
+/* Trimming can pull the first and last block in off the ends, so restate the bounds from the
+ * blocks that are left.  A protein psl is recognised by its last block reaching tEnd three bases
+ * to a residue, and pslRc() below reads that to decide whether to step the target in codons, so
+ * these have to agree before anything else looks at them. */
+prot->qStart = prot->qStarts[0];
+prot->qEnd = prot->qStarts[j-1] + prot->blockSizes[j-1];
+prot->tStart = prot->tStarts[0];
+prot->tEnd = prot->tStarts[j-1] + 3 * prot->blockSizes[j-1];
+
+/* The counts are in bases in the psl we were handed, and the page prints them next to a query
+ * measured in residues, so bring them into the same units. */
+prot->match = psl->match / 3;
+prot->misMatch = psl->misMatch / 3;
+prot->repMatch = psl->repMatch / 3;
+prot->nCount = psl->nCount / 3;
+
+/* A bigPsl keeps the reference strand in the field a psl reads as the query strand, so an
+ * alignment to the minus strand arrives claiming the protein is reversed.  Proteins have no
+ * strand; it is the genome that is reverse complemented here, and a reader that believes
+ * otherwise reverse complements the protein and prints nucleotide ambiguity codes.  pslRc()
+ * moves the alignment to the convention where the query runs forward and the target carries the
+ * strand, which is the shape blat gives a protein alignment and what the display expects. */
+if (prot->strand[0] == '-')
+    pslRc(prot);
+
+pslComputeInsertCounts(prot);
+if (retDroppedAa != NULL)
+    *retDroppedAa = alignedBases / 3 - alignedAa;
+return prot;
+}

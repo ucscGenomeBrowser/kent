@@ -292,6 +292,11 @@ struct hash *readPslToBinKeeper(char *sizeFileName, char *pslFileName);
 boolean pslIsProtein(const struct psl *psl);
 /* is psl a protein psl (are it's blockSizes and scores in protein space) */
 
+struct psl *pslProtFromNaLike(struct psl *psl, int protSize, int *retDroppedAa);
+/* Convert an "na-like" protein psl, whose query is counted in bases at three to a residue, into
+ * one counted in residues, or NULL if the psl is not that shape.  Blocks are trimmed to whole
+ * codons and the residues that straddle an exon junction are counted in retDroppedAa. */
+
 struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qString,
                          char *tName, int tSize, int tStart, int tEnd, char *tString,
                          char* strand, unsigned options);

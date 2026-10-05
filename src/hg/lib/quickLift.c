@@ -672,7 +672,10 @@ static struct psl *pslWithoutEmptyBlocks(struct psl *psl)
  * none.  The copy can be left with no blocks at all.  The UniProt bigPsl files store block sizes in bases, and a block shorter than a
  * codon comes out of pslFromBigPsl with size 0.  Drawing does not mind, but pslTransMap
  * checks the alignment after converting it to nucleotides and aborts on the empty block,
- * which takes down every item in the track.  About one alignment in eight has one. */
+ * which takes down every item in the track.  About one alignment in eight has one.
+ *
+ * Dead since #38300: the UniProt files no longer declare amino acid coordinates, so
+ * pslFromBigPsl stops dividing their block sizes by three and none come out empty. */
 {
 int i, j;
 

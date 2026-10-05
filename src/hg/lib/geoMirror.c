@@ -10,6 +10,7 @@
 #include "net.h"
 #include "cheapcgi.h"
 #include "errCatch.h"
+#include "https.h"
 
 /* geographic server (mirror) support
 
@@ -344,10 +345,48 @@ struct slPair *geoMirrorOtherNodes()
 return geoMirrorNodeList(FALSE);
 }
 
+static char *geoMirrorPostRequest(char *url, char *body)
+/* POST body to url with certificate checking forced on for this call, and return the response
+ * body, or NULL on failure.  Caller frees the result. */
+{
+/* This carries a signed proof of the caller's action to a peer node, so a forged certificate
+ * on the way there must not be accepted just because the site's own httpsCertCheck default is
+ * "log".  Pin "abort" for this call the same way oauthLogin.c's httpRequest() does. */
+httpsSetCertCheck("abort");
+struct dyString *header = dyStringNew(256);
+dyStringPrintf(header, "Content-Type: application/x-www-form-urlencoded\r\n");
+dyStringPrintf(header, "Content-Length: %d\r\n", (int)strlen(body));
+char *result = NULL;
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    int sd = netOpenHttpExt(url, "POST", header->string);
+    mustWriteFd(sd, body, strlen(body));
+    int newSd = 0;
+    char *newUrl = NULL;
+    if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+        noWarnAbort();
+    if (newUrl != NULL)
+        {
+        sd = newSd;
+        freeMem(newUrl);
+        }
+    struct dyString *response = netSlurpFile(sd);
+    close(sd);
+    result = dyStringCannibalize(&response);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    freez(&result);
+errCatchFree(&errCatch);
+dyStringFree(&header);
+return result;
+}
+
 struct slPair *geoMirrorNotifyOtherNodes(char *cgiName, struct slPair *cgiVars)
-/* Best-effort: fire cgiVars (name=value) as a GET request at cgiName on every other geo mirror
- * node (per geoMirrorOtherNodes()).  Returns one pair per node attempted, name=node domain and
- * val=the response body, or val=NULL for a node that could not be reached or answered anything
+/* Best-effort: POST cgiVars (name=value) as the body of a request to cgiName on every other geo
+ * mirror node (per geoMirrorOtherNodes()).  Returns one pair per node attempted, name=node domain
+ * and val=the response body, or val=NULL for a node that could not be reached or answered anything
  * but a 200 -- the caller is expected to look at what came back, since a peer that refuses the
  * request answers with a body, not with a connection failure.  Returns NULL when geo mirroring
  * is off or this is the only node.  slPairFreeValsAndList when done.
@@ -363,35 +402,22 @@ for (node = nodes; node != NULL; node = node->next)
     {
     char *domain = (char *)node->val;
     // https, not http: the mirrors redirect http to https, and sending a secret in the clear
-    // to Germany and Japan would leave it in each peer's access log besides
-    struct dyString *url = dyStringCreate("https://%s/cgi-bin/%s?", domain, cgiName);
+    // to Germany and Japan would leave it exposed in transit besides
+    struct dyString *urlDy = dyStringCreate("https://%s/cgi-bin/%s", domain, cgiName);
+    char *url = dyStringCannibalize(&urlDy);
+    struct dyString *body = dyStringNew(256);
     struct slPair *var;
     for (var = cgiVars; var != NULL; var = var->next)
-        dyStringPrintf(url, "%s%s=%s", (var == cgiVars) ? "" : "&", var->name,
+        dyStringPrintf(body, "%s%s=%s", (var == cgiVars) ? "" : "&", var->name,
                        cgiEncodeFull((char *)var->val));
-    char *body = NULL;
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-        {
-        // MustOpenPastHeader, not netSlurpUrl: it errAborts on anything but a 200 and hands
-        // back the body alone, so the caller does not have to pick it out of the headers
-        int sd = netUrlMustOpenPastHeader(url->string);
-        struct dyString *response = netSlurpFile(sd);
-        close(sd);
-        body = dyStringCannibalize(&response);
-        }
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-        {
-        // stderr, not warn(): this is between two servers, and the person who clicked the
-        // button in the browser can do nothing about a peer being down
-        fprintf(stderr, "geoMirrorNotifyOtherNodes: failed to reach %s (%s): %s\n",
-                node->name, domain, errCatch->message->string);
-        freez(&body);
-        }
-    errCatchFree(&errCatch);
-    slPairAdd(&results, domain, body);
-    dyStringFree(&url);
+    char *result = geoMirrorPostRequest(url, body->string);
+    if (result == NULL)
+        // Log the host only, never the request body or the full URL with its query.
+        fprintf(stderr, "geoMirrorNotifyOtherNodes: failed to reach %s (%s)\n",
+                node->name, domain);
+    slPairAdd(&results, domain, result);
+    dyStringFree(&body);
+    freez(&url);
     }
 slPairFreeValsAndList(&nodes);
 slReverse(&results);

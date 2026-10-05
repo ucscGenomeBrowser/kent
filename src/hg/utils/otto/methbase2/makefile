@@ -4,7 +4,7 @@ PREFIX=/hive/data/outside/otto/methbase2/
 # hgdownload copy, but it does NOT run here: methbaseOtto.sh ssh's to
 # hgdownload and runs it there, against the mirror, so the data never crosses
 # to hgwdev. After "make install", push it to hgdownload with "make installRemote".
-DOWNLOAD_HOST=qateam@hgdownload
+DOWNLOAD_HOST=hgdownload
 REMOTE_DIR=/mirrordata/hubs/methbase/
 
 install:
