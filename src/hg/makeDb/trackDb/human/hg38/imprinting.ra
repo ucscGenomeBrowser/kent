@@ -89,6 +89,45 @@ priority 3.5
     filterType.entryType multipleListOr
     filterLabel.entryType Filter by whether OMIM has a gene entry
 
+    track hprcDmr
+    parent imprinting on
+    shortLabel HPRC2 DMRs
+    longLabel Kim et al 2026 - HPRC2 regions with different methylation on the pat. and mat. haplotype
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/imprinting/hprcImprint/hprcDmr.bb
+    visibility pack
+    priority 6
+    itemRgb on
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from CHM13v2.0"
+    mouseOver <b>Higher methylation on</b>: ${parent} haplotype<br><b>Methylation difference (maternal - paternal)</b>: ${methDiff}
+    filterValues.parent Maternal,Paternal
+    filterType.parent multipleListOr
+    filterLabel.parent Filter by haplotype with higher methylation
+    filterByRange.methDiff on
+    filter.methDiff -1:1
+    filterLimits.methDiff -1:1
+    filterLabel.methDiff Methylation difference (maternal - paternal)
+
+    track hprcDmc
+    parent imprinting on
+    shortLabel HPRC2 DMCs
+    longLabel Kim et al 2026 - HPRC2 maternal minus paternal methylation difference at differentially methylated CpGs
+    type bigWig -0.9 0.9
+    bigDataUrl /gbdb/hg38/imprinting/hprcImprint/hprcDmc.bw
+    visibility full
+    priority 7
+    color 230,40,140
+    altColor 0,60,200
+    autoScale off
+    viewLimits -0.5:0.5
+    viewLimitsMax -1:1
+    maxHeightPixels 100:40:8
+    alwaysZero on
+    yLineOnOff on
+    yLineMark 0
+    windowingFunction mean
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from CHM13v2.0"
+
     track kaplanImprint
     parent imprinting on
     compositeTrack on
