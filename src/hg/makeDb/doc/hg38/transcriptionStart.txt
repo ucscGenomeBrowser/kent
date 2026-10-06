@@ -181,8 +181,14 @@ cd ~/kent/src/hg/makeDb/outside/proCapNet
     ~/kent/src/hg/makeDb/trackDb/human/hg38/transcriptionStart.ra
 
 # transcriptionStart.ra is generated; the include line in human/hg38/trackDb.ra
-# is added by hand:
-#   include transcriptionStart.ra alpha
+# is added by hand, with no release tag:
+#   include transcriptionStart.ra
+#
+# The tag has to stay off the include line.  The script writes the release tags
+# per track instead: the container and the nested form of its members are alpha,
+# a flat unnested form of those members is beta and public.  An alpha tag on the
+# include line would gate the whole file and the beta,public stanzas would never
+# ship.
 
 ##############################################################################
 # cleanup

@@ -36,6 +36,8 @@
 <li><a href="#variantEffect">I have a variant, not a region. What does it do to
                              regulation?</a></li>
 <li><a href="#otherGenomes">What is available for assemblies other than human and mouse?</a></li>
+<li><a href="#limits">If a region has all of this evidence, is it definitely
+                       regulatory?</a></li>
 <li><a href="#summary">Summary: regulatory tracks by category</a></li>
 </ul>
 <hr>
@@ -67,7 +69,8 @@ it has been transcribed are a separate subject and are not covered. None of the 
 observes regulation directly. Each one measures a property that regulatory regions tend to have,
 and the case for any particular region is built by stacking several of them. Almost all of these
 signals differ between cell types, so pick the tissue that matters for your question instead of
-reading a genome-wide summary.</p>
+reading a genome-wide summary. How much the completed stack actually proves is covered
+<a href="#limits">at the end of this page</a>.</p>
 <ul>
   <li>
   <strong>Open chromatin.</strong> A region that is in use generally has to be reachable by the
@@ -373,12 +376,12 @@ shown to regulate the gene.</p>
 In <strong>GeneHancer</strong> the higher end of an arc is the element and the lower end is the
 gene it has been linked to. The track pools several kinds of evidence to make those links.
 They include eQTLs, promoter capture Hi-C, correlation between enhancer RNA and gene expression,
-correlation between a transcription factor and a candidate target, and plain proximity. That
-last one is worth remembering, because an arc drawn mostly on distance is making the same
-nearest-gene assumption you were trying to get away from. The track's
+correlation between a transcription factor and a candidate target, and plain proximity.
+Proximity is the weakest of these. An arc drawn mostly on distance makes the same nearest-gene
+assumption you were trying to get away from. The track's
 <em>double elite</em> subset keeps only the cases where both the element and the link to the
-gene were supported by more than one source. It is a great deal smaller and worth a look when
-the full set gives you too much.</p>
+gene were supported by more than one source. It is a great deal smaller, which helps when the
+full set returns too much.</p>
 <p>
 The arcs also say nothing about the relationship between two genes that share an element. An
 element linked to two genes has been associated with each of them separately, which is not a
@@ -624,6 +627,49 @@ as the older clustered Txn Factor ChIP, are still hg19 only.</p>
 For assemblies not hosted at UCSC, or for tracks we do not carry, check the
 <a href="../cgi-bin/hgHubConnect">public hubs</a> list, where other groups publish data through
 our browser.</p>
+
+<a name="limits"></a>
+<h2>Limits of the evidence</h2>
+
+<h6>If a region has all of this evidence, is it definitely regulatory?</h6>
+<p>
+No. These tracks show where biochemical activity was detected, which is not the same as showing
+that the activity matters to an organism. Early ENCODE work reported that around 80% of the
+genome registers some such activity.
+<a href="https://pubmed.ncbi.nlm.nih.gov/23431001/" target="_blank">Graur <em>et al.</em>
+(2013)</a> and
+<a href="https://pubmed.ncbi.nlm.nih.gov/24753594/" target="_blank">Kellis <em>et al.</em>
+(2014)</a> set out the competing definitions of functional and why they do not select the same
+regions.</p>
+<p>
+Attempts to validate predicted regulatory regions give a mixed picture:</p>
+<ul>
+  <li>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/29420474/" target="_blank">Osterwalder <em>et al.</em>
+  (2018)</a>: of ten single-enhancer deletions in mouse, none changed limb morphology. Deleting
+  pairs near the same gene did.</li>
+  <li>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/24603674/" target="_blank">Cusanovich <em>et al.</em>
+  (2014)</a>: after knocking down 59 factors in one cell line, only a small subset of the genes
+  bound by a factor changed expression.</li>
+  <li>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/23236164/" target="_blank">Fisher <em>et al.</em>
+  (2012)</a>: of 104 fly regions, five of the six most heavily bound drove patterned expression,
+  against one of nine lightly bound. Occupancy mattered more than the presence of a peak.</li>
+  <li>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/23818646/" target="_blank">White <em>et al.</em>
+  (2013)</a>: Crx-bound sequences drove expression in mouse retina, while unbound regions
+  carrying the same number of Crx motifs did not.</li>
+  <li>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/25035418/" target="_blank">Kwasnieski <em>et al.</em>
+  (2014)</a>: of 2,000 ENCODE chromatin-state segments tested in K562, those labeled
+  <em>Weak Enhancer</em> drove higher expression than those labeled <em>Enhancer</em>. These are
+  an earlier segmentation, not the <a href="#ccres">cCRE registry</a>.</li>
+</ul>
+<p>
+The reverse errors are common too: working sites that are not conserved, or that match no JASPAR
+profile closely enough to appear in the track. Treat what you find as a ranked list of
+candidates to test, not a set of conclusions.</p>
 
 <a name="summary"></a>
 <h2>Summary: regulatory tracks by category</h2>

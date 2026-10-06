@@ -52,7 +52,7 @@ configurable on
 html encode4ProCap
 color 0,114,178
 shortLabel A673 PRO-cap
-longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites, plus up minus down
+longLabel A673 (ENCSR046BCI) PRO-cap transcription start sites
 priority 1
 
     track encode4ProCap_A673_procap_pos
@@ -86,7 +86,7 @@ configurable on
 html encode4ProCap
 color 213,94,0
 shortLabel Caco-2 PRO-cap
-longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites, plus up minus down
+longLabel Caco-2 (ENCSR100LIJ) PRO-cap transcription start sites
 priority 2
 
     track encode4ProCap_Caco-2_procap_pos
@@ -120,7 +120,7 @@ configurable on
 html encode4ProCap
 color 0,158,115
 shortLabel Calu3 PRO-cap
-longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites, plus up minus down
+longLabel Calu3 (ENCSR935RNW) PRO-cap transcription start sites
 priority 3
 
     track encode4ProCap_Calu3_procap_pos
@@ -154,7 +154,7 @@ configurable on
 html encode4ProCap
 color 204,121,167
 shortLabel HUVEC PRO-cap
-longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites, plus up minus down
+longLabel HUVEC (ENCSR098LLB) PRO-cap transcription start sites
 priority 4
 
     track encode4ProCap_HUVEC_procap_pos
@@ -188,7 +188,7 @@ configurable on
 html encode4ProCap
 color 230,159,0
 shortLabel K562 PRO-cap
-longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites, plus up minus down
+longLabel K562 (ENCSR261KBX) PRO-cap transcription start sites
 priority 5
 
     track encode4ProCap_K562_procap_pos
@@ -222,7 +222,7 @@ configurable on
 html encode4ProCap
 color 86,180,233
 shortLabel MCF10A PRO-cap
-longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites, plus up minus down
+longLabel MCF10A (ENCSR799DGV) PRO-cap transcription start sites
 priority 6
 
     track encode4ProCap_MCF10A_procap_pos
@@ -256,7 +256,7 @@ configurable on
 html proCapNet
 color 0,114,178
 shortLabel A673 Predicted
-longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap, plus up minus down
+longLabel A673 (ENCSR072YCM) ProCapNet predicted PRO-cap
 priority 1
 
     track proCapNet_A673_pred_pos
@@ -290,7 +290,7 @@ configurable on
 html proCapNet
 color 213,94,0
 shortLabel Caco-2 Predicted
-longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap, plus up minus down
+longLabel Caco-2 (ENCSR182QNJ) ProCapNet predicted PRO-cap
 priority 2
 
     track proCapNet_Caco-2_pred_pos
@@ -324,7 +324,7 @@ configurable on
 html proCapNet
 color 0,158,115
 shortLabel Calu3 Predicted
-longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap, plus up minus down
+longLabel Calu3 (ENCSR797DEF) ProCapNet predicted PRO-cap
 priority 3
 
     track proCapNet_Calu3_pred_pos
@@ -358,7 +358,7 @@ configurable on
 html proCapNet
 color 204,121,167
 shortLabel HUVEC Predicted
-longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap, plus up minus down
+longLabel HUVEC (ENCSR801ECP) ProCapNet predicted PRO-cap
 priority 4
 
     track proCapNet_HUVEC_pred_pos
@@ -392,7 +392,7 @@ configurable on
 html proCapNet
 color 230,159,0
 shortLabel K562 Predicted
-longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap, plus up minus down
+longLabel K562 (ENCSR740IPL) ProCapNet predicted PRO-cap
 priority 5
 
     track proCapNet_K562_pred_pos
@@ -426,7 +426,7 @@ configurable on
 html proCapNet
 color 86,180,233
 shortLabel MCF10A Predicted
-longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap, plus up minus down
+longLabel MCF10A (ENCSR860TYZ) ProCapNet predicted PRO-cap
 priority 6
 
     track proCapNet_MCF10A_pred_pos

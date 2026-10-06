@@ -654,9 +654,10 @@ if (wordCount > 4)
      bed->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
-     safecpy(bed->strand, sizeof(bed->strand), row[5]);
+     bed->strand[0] = row[5][0];
+     bed->strand[1] = 0;
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
-	  lineFileAbort(lf, "Expecting + or - in strand");
+	  lineFileAbort(lf, "Expecting + or - in strand, got '%s'", row[5]);
      }
 if (wordCount > 6)
      bed->thickStart = lineFileNeedNum(lf, row, 6);
