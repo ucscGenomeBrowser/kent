@@ -1,0 +1,28 @@
+# #38473 -- since v500, a GFF or GTF custom track whose group column (column 9) was 128
+# characters or longer failed to load with "buffer overflow, size 128, string size: N".
+#
+# fb50a1cca3a (#37761, the -O3 warning cleanup) replaced strncpy with safecpy in
+# niceGeneName() in hg/lib/customFactory.c. It copies the group into a 128-byte buffer, so
+# any longer group aborted the load. FIMO motif output writes long attribute columns, and
+# most of the 124 such errors on the RR between July and September were fimo.gff uploads.
+# None appear in May or June. Fixed in 4976807cc33: niceGeneName keeps the first 127
+# characters, then cuts at the first ';' as before.
+#
+# The check loads one FIMO-style GFF line whose group column is 133 characters and asserts
+# that the track draws and that the overflow text is absent.
+#
+# The strand part of the same ticket is rm38473.
+proof:
+  - "xfail 2026-10-06 -- fails on genome-test and on hgwbeta (v504) with 'buffer overflow, size 128, string size: 133'"
+  - "sandbox-ab 2026-10-06 -- passes on hgwdev-braney hgTracks relinked with 4976807cc33, fails on the same sandbox and on genome-test without it"
+  - "assertion-only 2026-10-06 -- written from #38473 with the fix on master only"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:999000-1002000&hgt.customText=track%20name%3Drm38473gff%20description%3D%22rm38473%20GFF%20long%20group%22%0Achr1%09fimo%09nucleotide_motif%091000001%091000020%0950%09%2B%09.%09Name%3DMA0139.1_chr1%2B%3BAlias%3DCTCF%3BID%3DMA0139.1-1-chr1%3Bpvalue%3D1.2e-05%3Bqvalue%3D0.01%3Bsequence%3DCCGCGCCCTCTAGTGGCCAGAAACCCGCGCCCTCTAGTGGCCAGAAA%0A"
+  - expect:
+      has: 'tr[id^="tr_ct_rm38473gff"]'
+      noText: "buffer overflow"

@@ -1,0 +1,48 @@
+# #38473 -- since v500, a BED or bedDetail custom track whose strand column held more than
+# one character failed to load with "buffer overflow, size 2, string size: N".
+#
+# fb50a1cca3a (#37761, the -O3 warning cleanup) replaced strncpy with safecpy on the copy
+# into the two-character strand field, in hg/lib/customFactory.c (BED) and
+# hg/lib/bedDetail.c (bedDetail). safecpy aborts on a value of two or more characters
+# before the + / - / . check runs. So a strand like "+1", which loaded before, failed, and a
+# plain bad strand like "abc" got the overflow message instead of "Expecting + or - in
+# strand". Fixed in 3e166d23bbd: the copy takes the first character only, and the error now
+# names the value: "Expecting + or - in strand, got 'abc'".
+#
+# Checks:
+#   1. a BED6 track with strand "+1" loads and draws (positive row check, and no overflow text)
+#   2. a bedDetail track with strand "+1" loads and draws, the same way
+#   3. a BED6 track with strand "abc" gets the new message, not the overflow one
+#
+# The long GFF group column from the same commit (niceGeneName, size 128) is watched by
+# rm38473.gff, because that fix reached master later.
+#
+# NOT asserted: which strand the "+1" item is drawn on. The point of the ticket is that the
+# file loads; the strand is "+" by construction once it does.
+proof:
+  - "assertion-only 2026-10-06 -- written from #38473 after 3e166d23bbd reached genome-test"
+  - "release-ab 2026-10-06 -- fails on hgwbeta (v504) at check 1 with 'buffer overflow, size 2, string size: 2' and passes on genome-test"
+  - "sandbox-ab 2026-10-06 -- fails the same way on hgwdev-braney hgTracks built before 3e166d23bbd, passes after relinking it with the fix"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # 1. BED6, strand "+1".
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:999000-1002000&hgt.customText=track%20name%3Drm38473bed%20description%3D%22rm38473%20BED%20strand%20%2B1%22%0Achr1%091000000%091001000%09rm38473item%090%09%2B1%0A"
+  - expect:
+      has: 'tr[id^="tr_ct_rm38473bed"]'
+      noText: "buffer overflow"
+
+  # 2. bedDetail, strand "+1".
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:999000-1002000&hgt.customText=track%20type%3DbedDetail%20name%3Drm38473detail%20description%3D%22rm38473%20bedDetail%20strand%20%2B1%22%0Achr1%091000000%091001000%09rm38473det%090%09%2B1%09id1%09desc1%0A"
+  - expect:
+      has: 'tr[id^="tr_ct_rm38473detail"]'
+      noText: "buffer overflow"
+
+  # 3. A strand that was always bad gets a message that says what is wrong.
+  - goto: "/cgi-bin/hgCustom?db=hg38&hgct_customText=track%20name%3Drm38473bad%0Achr1%091000000%091001000%09rm38473bad%090%09abc%0A"
+  - expect:
+      text: "Expecting + or - in strand, got 'abc'"
+      noText: "buffer overflow"
