@@ -12,6 +12,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
 	${BIN_DIR}/sessionDataTester \
+	${BIN_DIR}/cartParseTest \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/hgvsTester \
@@ -28,7 +29,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -61,6 +62,10 @@ customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 
 hgvsTest: ${BIN_DIR}/hgvsTester mkdirs
 	${MAKE} -f hgvsTests.mk test
+
+cartParseTest: ${BIN_DIR}/cartParseTest mkdirs
+	${BIN_DIR}/cartParseTest > output/cartParseTest 2>&1
+	diff expected/cartParseTest output/cartParseTest
 
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
