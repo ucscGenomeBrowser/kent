@@ -12,8 +12,8 @@
 #
 #     grep multiWigMouseOver /usr/local/apache/cgi-bin/hg.conf     # on genome-test's host
 #
-# So this stays an xfail until BOTH the code has reached genome-test AND the gate is on
-# there. The code arriving on its own does not flip it.
+# The gate was turned on in genome-test's hg.conf on 2026-10-06. A red run on another
+# server (hgwbeta, the RR) means only that the gate is off there.
 #
 # The track is hg19 Layered H3K27Ac (wgEncodeRegMarkH3k27ac), seven ENCODE cell lines,
 # released and frozen. Its default is transparent overlay. Each section sets the mode on
@@ -50,6 +50,7 @@ proof:
   - "xfail 2026-10-02 -- fails on genome-test at the first hover: the tooltip says only wgEncodeRegMarkH3k27ac, the ticket's own complaint"
   - "sandbox-ab 2026-10-02 -- passes on ticket sandbox 38468 (port 48088, ~/kentMultiWig38468 branch multiWigMo38468, gate on). Fails there with multiWigMouseOver=off (the same track-name tooltip), with the stacked-order fix backed out (GM12878 listed first, section 2), and with the wigTrack.c noAverage change backed out (K562 says zoom in to see values, section 1)"
   - "sandbox-ab 2026-10-03 -- section 7 (color override) fails on ticket sandbox 38468 with the swatch taken from the trackDb color (the square is #ff80d4) and passes with the drawn color; whole script also passes on hgwdev-demo1"
+  - "server-flip 2026-10-06 -- a7bfc57976e reached genome-test with multiWigMouseOver=on in its hg.conf and the xfail passed"
 
 target: genome-test
 db: hg19
