@@ -21,6 +21,7 @@
 proof:
   - "assertion-only 2026-10-06 -- written with the fix"
   - "sandbox-ab 2026-10-06 -- failed on genome-test (master without the fix) on the All dbSNP color check, the row having drawn nothing; passed on hgwdev-braney with the fix"
+  - "server-flip 2026-10-06 -- passed on genome-test once 15ca0d2dec6 was installed there, having failed on its last check that morning"
 
 target: genome-test
 db: hg19
