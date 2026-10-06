@@ -1093,6 +1093,17 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
             {
+            /* Refuse the link that closes a loop in the parent chain.  Every
+             * function that walks that chain to the top spins forever on a loop,
+             * and the tracks in it are dropped from the forest without a word.
+             * The links already made are loop-free, which is what ends this walk. */
+            struct trackDb *ancestor;
+            for (ancestor = parent; ancestor != NULL; ancestor = ancestor->parent)
+                {
+                if (ancestor == tdb)
+                    errAbort("Track %s is its own ancestor through its parent %s",
+                             tdb->track, parentName);
+                }
             slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
             tdb->parent = parent;
             }

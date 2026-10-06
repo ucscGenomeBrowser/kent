@@ -181,6 +181,7 @@ USER_APP_SCRIPTS = \
 	chromToUcsc \
 	bigHeat \
 	bigGuessDb \
+	getTrackReferences \
 	hubtools
 
 # Scripts that are not distributed outside of UCSC

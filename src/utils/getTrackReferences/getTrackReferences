@@ -1,6 +1,9 @@
-#!/usr/bin/env python
-import sys, os, urllib.request, urllib.error, argparse, re, html, textwrap, time, requests
+#!/usr/bin/env python3
+import sys, os, urllib.request, urllib.error, argparse, re, html, textwrap, time
+import http.cookiejar
 from xml.etree import ElementTree as ET
+
+userAgent = "getTrackReferences (UCSC Genome Browser; https://genome.ucsc.edu)"
 
 def eutilsFetch(url):
     """ Fetch an E-utilities URL and return the parsed XML.  NCBI allows three requests a
@@ -78,10 +81,28 @@ def resolveDoi(url):
     links out of the PubMed page.  Keep the doi.org link if the publisher does not answer. """
     if not re.match(r"https?://(dx\.)?doi\.org/", url):
         return url
-    try:
-        return requests.head(url, allow_redirects=True, timeout=60).url
-    except requests.RequestException:
-        return url
+    # The opener follows the redirect chain and the response knows where it ended up.  It
+    # needs a cookie jar, because several publishers set a cookie and bounce you back, and
+    # without one you land on their "cookies not supported" page instead of the article.
+    # It also needs a user agent that names us: some of them answer the stock
+    # Python-urllib one with 403.  Finally, some refuse HEAD, so fall back to GET.
+    opener = urllib.request.build_opener(
+        urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+    opener.addheaders = [("User-Agent", userAgent)]
+    blocked = None
+    for method in ("HEAD", "GET"):
+        try:
+            req = urllib.request.Request(url, method=method)
+            with opener.open(req, timeout=60) as resp:
+                return resp.url
+        except urllib.error.HTTPError as e:
+            # the publisher redirected us and then refused to serve the page, which the ones
+            # behind a bot check do.  The article URL is still the one we want.
+            if e.url != url:
+                blocked = e.url
+        except Exception:
+            pass
+    return blocked or url
 
 def fetchFullTextUrl(id):
     """ Return the publisher's URL for a PubMed ID, or None if NCBI lists no full text

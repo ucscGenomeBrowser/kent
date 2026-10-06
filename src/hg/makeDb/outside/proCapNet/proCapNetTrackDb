@@ -165,8 +165,7 @@ def proCapNetTracks(db, experiments):
     for priority, exp in enumerate(experiments, 1):
         out += strandOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",
                              f"{exp.cell} Predicted",
-                             f"{exp.cell} ({exp.modelAcc}) ProCapNet predicted PRO-cap,"
-                             f" plus up minus down",
+                             f"{exp.cell} ({exp.modelAcc}) ProCapNet predicted PRO-cap",
                              f"{exp.cell} ({exp.modelAcc}) ProCapNet predicted PRO-cap",
                              priority, "full")
     if db == "hg38":
@@ -181,7 +180,7 @@ def encode4ProCapTracks(db, experiments):
         out += strandOverlay(db, "encode4ProCap", exp, "procap", "", exp.procapAcc,
                              f"{exp.cell} PRO-cap",
                              f"{exp.cell} ({exp.procapAcc}) PRO-cap transcription start"
-                             f" sites, plus up minus down",
+                             f" sites",
                              f"{exp.cell} ({exp.procapAcc}) PRO-cap transcription start sites",
                              priority, "full")
     return out
