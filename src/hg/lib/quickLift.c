@@ -30,6 +30,48 @@
 #include "pslTransMap.h"
 #include "maf.h"
 
+static boolean quickLiftChainRangeIn(struct chain *chain, int tStart, int tEnd,
+    int *retQStart, int *retQEnd)
+/* The query side range matching tStart..tEnd on the target, rather than the whole extent
+ * of the chain's blocks.  One block can be enormous:  hg19 and hg38 run identical for
+ * 12.8Mb on chr7, so the whole-block answer would ask the other assembly for millions of
+ * bases either side of the window.  Within a block the two sides are colinear, so the
+ * part that matters can be worked out exactly.  Returns FALSE if no block overlaps. */
+{
+struct cBlock *cb;
+int qStart = 0, qEnd = 0;
+boolean any = FALSE;
+
+for (cb = chain->blockList; cb != NULL; cb = cb->next)
+    {
+    int s = max(cb->tStart, tStart);
+    int e = min(cb->tEnd, tEnd);
+    if (s >= e)
+        continue;
+
+    int qLo = cb->qStart + (s - cb->tStart);
+    int qHi = cb->qStart + (e - cb->tStart);
+    if (!any || (qLo < qStart))
+        qStart = qLo;
+    if (!any || (qHi > qEnd))
+        qEnd = qHi;
+    any = TRUE;
+    }
+if (!any)
+    return FALSE;
+
+// correct for strand
+if (chain->qStrand == '-')
+    {
+    int saveStart = qStart;
+    qStart = chain->qSize - qEnd;
+    qEnd = chain->qSize - saveStart;
+    }
+*retQStart = qStart;
+*retQEnd = qEnd;
+return TRUE;
+}
+
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
  * These intervals are NOT YET MAPPED to the current assembly.
@@ -44,30 +86,17 @@ struct bigBedInterval *bbList = NULL, *bb;
 
 for(chain = chainList; chain; chain = chain->next)
     {
-    struct cBlock *cb;
-    cb = chain->blockList; 
-
-    if (cb == NULL)
+    // get the range on the "other" species that maps into the window.  Each block that
+    // overlaps the window comes back whole, and a block can be much longer than the
+    // window, so clip it rather than taking the min and max of the whole blocks.
+    // The range comes back on the plus strand.
+    int qStart, qEnd;
+    if (!quickLiftChainRangeIn(chain, start, end, &qStart, &qEnd))
         continue;
 
-    int qStart = cb->qStart;
-    int qEnd = cb->qEnd;
-
-    // get the range for the links on the "other" species
-    for(; cb; cb = cb->next)
-        {
-        if (cb->qStart < qStart)
-            qStart = cb->qStart;
-        if (cb->qEnd > qEnd)
-            qEnd = cb->qEnd;
-        }
-
     // now grab the items , probably we should parameterize the max number of items, but to what?
-    struct bigBedInterval *thisInterval = NULL;
-    if (chain->qStrand == '-')
-        thisInterval = bigBedIntervalQuery(bbi, chain->qName, chain->qSize - qEnd, chain->qSize - qStart,  1000000, lm);
-    else
-        thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd, 1000000, lm);
+    struct bigBedInterval *thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd,
+                                                              1000000, lm);
 
     // find how much of the items are beyond the viewport
     for(bb=thisInterval; bb; bb = bb->next)
@@ -325,77 +354,6 @@ return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart,
     end + QUICKLIFT_RANGE_PAD, -1);
 }
 
-static void quickLiftChainQueryRange(struct chain *chain, int *retQStart, int *retQEnd)
-/* Return the query-side ("other" species) coordinate range spanned by the
- * aligned blocks of chain, corrected for query strand.  chain->blockList must
- * not be NULL. */
-{
-struct cBlock *cb = chain->blockList;
-int qStart = cb->qStart;
-int qEnd = cb->qEnd;
-
-for(; cb; cb = cb->next)
-    {
-    if (cb->qStart < qStart)
-        qStart = cb->qStart;
-    if (cb->qEnd > qEnd)
-        qEnd = cb->qEnd;
-    }
-
-// correct for strand
-if (chain->qStrand == '-')
-    {
-    int saveStart = qStart;
-    qStart = chain->qSize - qEnd;
-    qEnd = chain->qSize - saveStart;
-    }
-
-*retQStart = qStart;
-*retQEnd = qEnd;
-}
-
-static boolean quickLiftChainRangeIn(struct chain *chain, int tStart, int tEnd,
-    int *retQStart, int *retQEnd)
-/* The query side range matching tStart..tEnd on the target, rather than the whole extent
- * of the chain's blocks.  One block can be enormous:  hg19 and hg38 run identical for
- * 12.8Mb on chr7, so the whole-block answer would ask the other assembly for millions of
- * bases either side of the window.  Within a block the two sides are colinear, so the
- * part that matters can be worked out exactly.  Returns FALSE if no block overlaps. */
-{
-struct cBlock *cb;
-int qStart = 0, qEnd = 0;
-boolean any = FALSE;
-
-for (cb = chain->blockList; cb != NULL; cb = cb->next)
-    {
-    int s = max(cb->tStart, tStart);
-    int e = min(cb->tEnd, tEnd);
-    if (s >= e)
-        continue;
-
-    int qLo = cb->qStart + (s - cb->tStart);
-    int qHi = cb->qStart + (e - cb->tStart);
-    if (!any || (qLo < qStart))
-        qStart = qLo;
-    if (!any || (qHi > qEnd))
-        qEnd = qHi;
-    any = TRUE;
-    }
-if (!any)
-    return FALSE;
-
-// correct for strand
-if (chain->qStrand == '-')
-    {
-    int saveStart = qStart;
-    qStart = chain->qSize - qEnd;
-    qEnd = chain->qSize - saveStart;
-    }
-*retQStart = qStart;
-*retQEnd = qEnd;
-return TRUE;
-}
-
 struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
     struct hash *chainHash)
 // The ranges in the other assembly that map into chrom:start-end on the reference.  The
@@ -462,8 +420,14 @@ for(chain = chainList; chain; chain = chain->next)
     if (chain->blockList == NULL)
         continue;
 
+    // only the part of the chain that maps into the padded window, not the whole extent
+    // of its blocks, which between two similar assemblies can be millions of bases
     int qStart, qEnd;
-    quickLiftChainQueryRange(chain, &qStart, &qEnd);
+    int padStart = start - QUICKLIFT_RANGE_PAD;
+    if (padStart < 0)
+        padStart = 0;
+    if (!quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+        continue;
 
     // now grab the items
     if (query == NULL)
@@ -508,8 +472,14 @@ for(chain = chainList; chain; chain = chain->next)
     if (chain->blockList == NULL)
         continue;
 
+    // only the part of the chain that maps into the padded window, not the whole extent
+    // of its blocks, which between two similar assemblies can be millions of bases
     int qStart, qEnd;
-    quickLiftChainQueryRange(chain, &qStart, &qEnd);
+    int padStart = start - QUICKLIFT_RANGE_PAD;
+    if (padStart < 0)
+        padStart = 0;
+    if (!quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+        continue;
 
     struct genePredReader *gpr = genePredReaderRangeQuery(conn, table, chain->qName,
                                                           qStart, qEnd, extraWhere);
