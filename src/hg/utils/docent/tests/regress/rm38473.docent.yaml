@@ -15,7 +15,7 @@
 #   3. a BED6 track with strand "abc" gets the new message, not the overflow one
 #
 # The long GFF group column from the same commit (niceGeneName, size 128) is watched by
-# rm38473.gff, because that fix reached master later.
+# rm38473.gff.docent.yaml, because that fix reached master later.
 #
 # NOT asserted: which strand the "+1" item is drawn on. The point of the ticket is that the
 # file loads; the strand is "+" by construction once it does.

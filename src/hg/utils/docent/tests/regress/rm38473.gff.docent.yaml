@@ -13,6 +13,7 @@
 #
 # The strand part of the same ticket is rm38473.
 proof:
+  - "server-flip 2026-10-06 -- failed on genome-test with 'buffer overflow, size 128, string size: 133', passed after 4976807cc33 was installed there by make alpha"
   - "xfail 2026-10-06 -- fails on genome-test and on hgwbeta (v504) with 'buffer overflow, size 128, string size: 133'"
   - "sandbox-ab 2026-10-06 -- passes on hgwdev-braney hgTracks relinked with 4976807cc33, fails on the same sandbox and on genome-test without it"
   - "assertion-only 2026-10-06 -- written from #38473 with the fix on master only"
