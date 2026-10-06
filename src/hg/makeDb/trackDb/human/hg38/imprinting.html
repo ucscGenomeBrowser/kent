@@ -22,6 +22,12 @@ allele-specific methylation that defines them.
 
 <ul>
 <li>
+<a href="hgTrackUi?g=monk2018Imprint">Monk iDMRs</a> &mdash; 50 imprinted
+differentially methylated regions recommended by Monk et al. for reporting
+methylation changes in clinical diagnostics, with their nomenclature, aliases
+and germline origin.
+</li>
+<li>
 <a href="hgTrackUi?g=omimImprint">OMIM Genes</a> &mdash; the genes that the
 OMIM staff curate as imprinted or candidate imprinted, published through OMIM's
 GeneScout tool. The two are not distinguished in what OMIM publishes.
@@ -42,31 +48,31 @@ differentially methylated regions that Akbari et al. compiled from five
 genome-wide studies, colored by which parental copy is methylated.
 </li>
 <li>
-<a href="hgTrackUi?g=kaplanImprint">ASM Atlas</a> &mdash; three annotation
+<a href="hgTrackUi?g=kaplanImprint">Rosenski ASM</a> &mdash; three annotation
 sets from a survey of allele-specific methylation in about 40 purified cell
 types: regions whose methylation follows the parent of origin, known control
 regions with their boundaries redrawn, and the much larger pool of regions
 carrying two methylation states that these were drawn from.
 </li>
 <li>
-<a href="hgTrackUi?g=hprcDmr">HPRC2 DMRs</a> &mdash; regions where methylation
+<a href="hgTrackUi?g=hprcDmr">Kim DMRs</a> &mdash; regions where methylation
 differs between the maternal and the paternal haplotype in 123 trio-phased
 genomes of the Human Pangenome Reference Consortium, colored by the parent
 whose copy is more methylated.
 </li>
 <li>
-<a href="hgTrackUi?g=hprcDmc">HPRC2 DMCs</a> &mdash; the maternal minus
+<a href="hgTrackUi?g=hprcDmc">Kim DMCs</a> &mdash; the maternal minus
 paternal methylation difference at the individual CpG sites behind those
 regions.
 </li>
 </ul>
 
 <p>
-The first four sets above are gene or region catalogs assembled from the
+The first five sets above are gene or region catalogs assembled from the
 literature, so they overlap by design: a gene called imprinted by OMIM is
 usually also in Geneimprint, and its control region is usually among the Akbari
 iDMRs.
-The ASM Atlas is different in kind, since its regions were called from
+The Rosenski ASM annotations are different in kind, since their regions were called from
 sequencing data rather than collected from papers, and most of them have never
 been linked to imprinting.
 </p>
@@ -83,25 +89,27 @@ Summary</a>, under DNA Methylation.
 <h2>Color Conventions</h2>
 
 <p>
-The subtracks share one color scheme, so a color means the same thing
-throughout the collection:
+The tracks that name a parental copy use the same two colors:
 </p>
 
 <table class="stdTbl">
-  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
-      <td>The maternal copy is the one the annotation marks</td></tr>
-  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
-      <td>The paternal copy is the one the annotation marks</td></tr>
-  <tr><th style="background-color:#555555;width:2em">&nbsp;</th>
-      <td>The annotation carries no parent of origin</td></tr>
+  <tr><th style="background-color:#DC1414;width:2em">&nbsp;</th>
+      <td>Red &mdash; the maternal copy is the one the annotation marks</td></tr>
+  <tr><th style="background-color:#003CC8;width:2em">&nbsp;</th>
+      <td>Blue &mdash; the paternal copy is the one the annotation marks</td></tr>
 </table>
 
 <p>
-What is being marked differs by subtrack, because the sources annotate
+What is being marked differs by track, because the sources annotate
 different things: Geneimprint names the copy that is <em>expressed</em>, while
-the iDMR track names the copy that is <em>methylated</em>. So H19 is vermillion
-in one and blue in the other, and both are correct. Each subtrack page states
-which copy its colors refer to, and adds any categories that only it uses.
+the Akbari and Monk iDMR tracks name the copy that is <em>methylated</em>, and
+the Kim DMRs name the copy with the higher methylation. So H19 is red in
+Geneimprint and blue in the iDMR tracks, and both are correct. Each track page
+states which copy its colors refer to, and adds any categories that only it
+uses. In Geneimprint, genes with the status Predicted are gray and genes with no
+parent of origin are black. The OMIM track does not state a parental copy and is
+drawn in black. The Rosenski ASM tracks use the same red and blue for the oocyte
+and the sperm gamete, in which the methylation is established.
 </p>
 
 <h2>Data Access</h2>

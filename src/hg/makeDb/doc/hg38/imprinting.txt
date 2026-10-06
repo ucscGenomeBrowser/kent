@@ -282,3 +282,62 @@ cd /hive/data/genomes/hg38/bed/imprinting/phillipy
 # 4827 bed lines in, 4827 bigBed records out, nothing dropped.
 # 2849 maternal, 1978 paternal; every color matches the Maternal/Paternal suffix of the
 # original name, checked before the name was removed.
+
+
+# 2026-10-05 Claude (for max): Monk et al 2018 imprinted DMRs (monk2018Imprint), refs #37599
+#
+# Table 1 of Monk et al 2018 (PMID 27911167, PMC5873357), 50 DMRs in hg19 coordinates.
+# PMC blocks plain downloads, so the table was read from the rendered page with a browser
+# and saved verbatim as monk2018_table1.tsv. The table on the page has nine columns
+# (name, chr, start, finish, CpG count, methylation origin, germline derived, LRG id, aliases);
+# the associated disorders named in the caption are not a column.
+mkdir -p /hive/data/genomes/hg38/bed/imprinting/monk2018
+
+# Convert to bed9+6 (start-1, thousands separators removed, M/P spelled out, colors as in
+# the Akbari track), lift hg19 to hg38 with liftOver -tab -bedPlus=9, build the bigBed.
+~/kent/src/hg/makeDb/scripts/monk2018Imprint/monk2018ImprintBuild.sh
+# 50 regions in, 50 lifted, 0 unmapped, 50 bigBed records.
+# Sanity check: 49 of the 50 lifted regions overlap an Akbari iDMR, and the H19/IGF2
+# IG-DMR has the same hg38 extent in both tracks, so the 1-based start is handled right.
+# SNRPN:Int1-DMR1 is 25,093,008-25,193,829 in the paper: 100 kb for 44 CpGs, while the
+# neighbouring DMR2 is only 0.9 kb. Probably a typo for 25,093,829, but kept as published.
+
+
+# 2026-10-05 Claude (for max): Geneimprint colors changed. Paternal strong blue (0,60,200),
+# maternal strong pink (230,40,140), status Predicted gray (128,128,128) whatever the allele,
+# everything else black. Only geneimprintToBed.py changed (geneColor); re-running it on the
+# saved Geneimprint page gives the same bed as before apart from the color column.
+cd /hive/data/genomes/hg38/bed/imprinting/geneimprint
+~/kent/src/hg/makeDb/scripts/imprinting/geneimprintToBed.py \
+    geneimprint.human.html hgnc.bed refGene.tsv \
+    geneimprint.bed geneimprint.report.txt
+bedToBigBed -type=bed9+9 -tab \
+    -as=$HOME/kent/src/hg/makeDb/scripts/imprinting/geneimprint.as \
+    -extraIndex=name \
+    geneimprint.bed /hive/data/genomes/hg38/chrom.sizes geneimprint.bb
+
+
+# 2026-10-05 Claude (for max): collection colors made consistent, search indexes dropped.
+# Akbari iDMRs and Monk iDMRs now use the strong pink (230,40,140, maternal) and strong blue
+# (0,60,200, paternal) of the Kim and Geneimprint tracks. Only the color constants of
+# akbariIdmrToBed.py and monk2018ImprintToBed.py changed. The Akbari bed was regenerated with the
+# script, the other columns are unchanged, and the bigBed rebuilt with the command above.
+# The Monk bigBed was rebuilt with monk2018ImprintBuild.sh.
+# The searchIndex settings were removed from imprinting.ra, the bigBeds keep their name indexes.
+
+
+# 2026-10-05 Claude (for max): maternal color changed from strong pink to strong red
+# (220,20,20, #DC1414) because pink and blue were hard to tell apart. Paternal stays strong
+# blue (0,60,200). Changed in the Kim DMR script, the Kim DMC bigWig colors in imprinting.ra,
+# geneimprintToBed.py, akbariIdmrToBed.py and monk2018ImprintToBed.py; the four bigBeds were
+# rebuilt with the commands above. The Rosenski tracks are unchanged.
+
+
+# 2026-10-05 Claude (for max): Rosenski and OMIM colors. Rosenski oocyte gDMR is now strong red
+# (220,20,20), sperm gDMR strong blue (0,60,200), the bimodal ramp uses the same blue as its base,
+# secondary DMR green and black are unchanged. kaplanImprintToBed.py has the new colors; the existing
+# hg38 beds were recolored (the bimodal ramp recomputed from the old shade) instead of re-reading the
+# supplementary files, and the three bigBeds were rebuilt with the bedToBigBed line of
+# kaplanImprintLift.sh. OMIM items are now black (0,0,0) instead of gray in omimImprintToBed.py;
+# omimImprint.bed was recolored and the bigBed rebuilt with the command above. The OMIM description
+# page no longer has a color legend, since all items have one color.
