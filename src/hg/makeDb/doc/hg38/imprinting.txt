@@ -341,3 +341,24 @@ bedToBigBed -type=bed9+9 -tab \
 # kaplanImprintLift.sh. OMIM items are now black (0,0,0) instead of gray in omimImprintToBed.py;
 # omimImprint.bed was recolored and the bigBed rebuilt with the command above. The OMIM description
 # page no longer has a color legend, since all items have one color.
+
+
+# 2026-10-06 Claude (for max): Mackay et al 2024 imprinted DMRs (mackay2024Imprint), refs #37599
+#
+# Joint statement on multi-locus imprinting disturbance, PMID 39090763, PMC11295890. Tables 1 to 3
+# were read from the rendered PMC pages with a browser and saved as table1.tsv, table2.tsv and
+# table3.tsv in /hive/data/genomes/hg38/bed/imprinting/imprintTable2024.
+#   Table 1: 48 DMRs with hg38 location, CpG count, associated disorders (acronyms), type
+#            (CA, NC, X), imprint origin
+#   Table 2: the imprinting disorders (used to expand the acronyms)
+#   Table 3: clinically associated vs non-clinical DMRs
+# The Table 1 starts are BED starts: all 48 regions have the same hg38 coordinates as the Monk 2018
+# regions lifted from hg19 (monk2018.hg38.bed has two more, the SNRPN:Int1-DMR1/2 pair).
+# Table 1 has no column for the methylated parent. Oocyte gDMR is maternal and sperm gDMR paternal; the
+# nine secondary-only DMRs take the parent from the Monk table. The two sources agree for all gamete DMRs.
+# Classification comes from Table 3. Not in Table 3: GPR1-AS:TSS, VTRNA2-1, WDR27:Int13, INPP5F:Int2,
+# MKRN3:TSS (Table 1 type X, shown non-clinical) and IGF2:Ex9 (Table 1 CA, shown clinically associated).
+# Table 1 says CA for IGF2:alt-TSS-DMR and MEG3:TSS-DMR but Table 3 lists both as non-clinical; Table 3 wins.
+# Result: 13 clinically associated, 35 non-clinical. Dark red/blue = clinical, light red/blue = non-clinical.
+~/kent/src/hg/makeDb/scripts/mackay2024Imprint/mackay2024ImprintBuild.sh
+# 48 DMRs in, 48 bigBed records, nothing dropped.

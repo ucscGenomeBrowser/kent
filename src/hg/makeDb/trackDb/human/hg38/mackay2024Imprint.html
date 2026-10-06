@@ -1,0 +1,129 @@
+<h2>Description</h2>
+
+<p>
+Part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack">Imprinting</a> track collection, this track
+shows the 48 human germline imprinted differentially methylated regions (DMRs) listed in the joint
+statement of European and international experts on multi-locus imprinting disturbance (MLID), the
+condition in which methylation at several imprinted loci is changed at once. The list is a more
+recent counterpart of the <a href="hgTrackUi?db=$db&amp;g=monk2018Imprint">Monk et al. 2018</a> set
+and can be compared with it. The two lists largely name the same regions, with identical hg38
+coordinates for 48 of them.
+</p>
+
+<p>
+Each region is classified by whether methylation at the region is used in diagnosis. A
+clinically associated DMR is one where a change in methylation is directly associated with an
+imprinting disorder, or is used as a proxy to detect imprinting disturbance. A non-clinical DMR
+is not currently associated with a clinical phenotype or used in diagnosis. For the clinically
+associated regions the track gives the imprinting disorders in which they are involved, with
+the disorder acronyms of the paper expanded to full names.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The color shows the parent whose allele is methylated, and the shade shows the classification:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#DC1414;width:2em">&nbsp;</th>
+      <td>Red &mdash; clinically associated DMR, maternal allele methylated</td></tr>
+  <tr><th style="background-color:#003CC8;width:2em">&nbsp;</th>
+      <td>Blue &mdash; clinically associated DMR, paternal allele methylated</td></tr>
+  <tr><th style="background-color:#F09696;width:2em">&nbsp;</th>
+      <td>Light red &mdash; non-clinical DMR, maternal allele methylated</td></tr>
+  <tr><th style="background-color:#96AFF0;width:2em">&nbsp;</th>
+      <td>Light blue &mdash; non-clinical DMR, paternal allele methylated</td></tr>
+</table>
+
+<p>
+The track can be filtered by clinical classification, methylated allele and imprint origin. The
+imprint origin says whether the methylation is established in the oocyte or in the sperm (germline
+DMR), or only after fertilization (secondary DMR). The details page also shows the type given in
+Table 1 of the paper (clinically associated, non-clinical, or variable methylation that cannot be
+interpreted clinically), whether the region is marked as the key diagnostic DMR of its locus, and
+the other names used for the region in the literature.
+</p>
+
+<p>
+The imprinting disorders named in the track are described in Table 2 of the paper:
+</p>
+
+<table class="stdTbl">
+  <tr><th>Disorder</th><th>Chromosome</th><th>Prevalence</th><th>OMIM</th></tr>
+  <tr><td>Beckwith-Wiedemann syndrome (BWS)</td><td>11p15.5</td><td>1:10,000 to 1:80,000</td><td>130650</td></tr>
+  <tr><td>Silver-Russell syndrome (SRS)</td><td>11p15.5, chr7</td><td>1:16,000</td><td>180860</td></tr>
+  <tr><td>Transient neonatal diabetes mellitus type 1 (TNDM)</td><td>6q24</td><td>1:15,000 to 1:400,000</td><td>601410</td></tr>
+  <tr><td>Pseudohypoparathyroidism type 1b (PHP)</td><td>20q13.3</td><td>not known</td><td>603233</td></tr>
+  <tr><td>Temple syndrome (TS14)</td><td>14q32</td><td>not known</td><td>616222</td></tr>
+  <tr><td>Kagami-Ogata syndrome (KOS14)</td><td>14q32</td><td>not known</td><td>608140</td></tr>
+  <tr><td>Angelman syndrome (AS)</td><td>15q11.2</td><td>1:25,000 to 1:40,000</td><td>105830</td></tr>
+  <tr><td>Prader-Willi syndrome (PWS)</td><td>15q11.2</td><td>1:8,000 to 1:30,000</td><td>176270</td></tr>
+  <tr><td>Mulchandani-Bhoj-Conlin syndrome</td><td>chr20</td><td>not known</td><td>617352</td></tr>
+</table>
+
+<h2>Methods</h2>
+
+<p>
+The regions come from Table 1 of the joint statement, which lists each imprinted DMR with its
+hg38 location, number of CpG sites, imprint origin, associated disorders and type. The expert
+working groups of the statement based the classification on current knowledge and on DNA from
+blood, the most frequently used diagnostic tissue. Tissue-specific, transient and polymorphically
+imprinted loci are not part of the classification. See the paper for details.</p>
+
+<p>
+The tables were copied from their pages on
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab1/" target="_blank">PubMed Central</a>
+(<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab2/" target="_blank">Table 2</a>,
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab3/" target="_blank">Table 3</a>).
+The hg38 starts in Table 1 are already BED starts: they are identical to the Monk et al. regions after
+lifting from hg19, and no further coordinate shift was applied. All 48 regions were kept. The
+H19/IGF2 region is listed in Table 1 as one row for the IG-DMR and the TSS-DMR and appears here under
+the name of the IG-DMR.</p>
+
+<p>
+Table 1 does not state which parent's allele is methylated. For regions with an oocyte germline
+origin the maternal allele was taken as methylated, and for regions with a sperm germline origin the
+paternal allele. For the nine regions that have only a secondary origin, the parent was taken from
+the Monk et al. 2018 table, which has the same regions. For the 39 other regions both sources agree.
+The clinical classification comes from Table 3 of the paper. Six regions are not in Table 3: five
+that Table 1 marks as variable methylation (GPR1-AS:TSS-DMR, VTRNA2-1:DMR, WDR27:Int13-DMR,
+INPP5F:Int2-DMR, MKRN3:TSS-DMR) are shown as non-clinical, and IGF2:Ex9-DMR, which Table 1 marks as
+clinically associated, is shown as clinically associated. Two regions that Table 1 marks as clinically
+associated (IGF2:alt-TSS-DMR and MEG3:TSS-DMR) are listed as non-clinical in Table 3, and the
+track follows Table 3. The type of Table 1 is kept on the details page for all of them.</p>
+
+<p>
+The disorder acronyms in Table 1 were expanded using Table 2. Acronyms without a full entry in
+Table 2 were expanded by interpretation: upd(7)mat is maternal uniparental disomy of chromosome 7,
+which causes Silver-Russell syndrome, and upd(20)mat is maternal uniparental disomy of chromosome
+20, connected here with Mulchandani-Bhoj-Conlin syndrome, the only chromosome 20 syndrome in
+Table 2. See the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt"
+target="_blank">makeDoc file</a> and the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mackay2024Imprint"
+target="_blank">scripts</a>.</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively in table format with the <a href="../cgi-bin/hgTables">Table Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or tab-sep tables. From scripts, the data can be accessed through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>mackay2024Imprint</i>.</p>
+
+<p>For automated download and analysis, the genome annotation is stored in a bigBed file that can be downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/mackay2024/" target="_blank">our download server</a>. The file for this track is called <tt>mackay2024Imprint.bb</tt>. Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled binary for your system. Instructions for downloading source code and binaries can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can also be used to obtain features within a given range, e.g. <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/mackay2024/mackay2024Imprint.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>The original annotation source data can be viewed in
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11295890/table/Tab1/" target="_blank">Table 1 of the paper</a>.</p>
+
+<h2>References</h2>
+
+
+<p>
+Mackay DJG, Gazdagh G, Monk D, Brioude F, Giabicani E, Krzyzewska IM, Kalish JM, Maas SM, Kagami M,
+Beygo J <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39090763" target="_blank">
+Multi-locus imprinting disturbance (MLID): interim joint statement for clinical and molecular
+diagnosis</a>.
+<em>Clin Epigenetics</em>. 2024 Aug 1;16(1):99.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39090763" target="_blank">39090763</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11295890/" target="_blank">PMC11295890</a>
+</p>
+

@@ -12,7 +12,7 @@ priority 3.5
     type bigWig 0 1
     bigDataUrl /gbdb/hg38/imprinting/methBaseAsm/hg38.asm.bw
     visibility full
-    priority 4
+    priority 5
     color 85,85,85
     autoScale off
     viewLimits 0:0.5
@@ -30,7 +30,7 @@ priority 3.5
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/geneimprint/geneimprint.bb
     visibility pack
-    priority 3
+    priority 4
     itemRgb on
     labelFields name,hgncSymbol
     defaultLabelFields name
@@ -52,7 +52,7 @@ priority 3.5
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/akbari2023/akbariIdmr.bb
     visibility pack
-    priority 5
+    priority 6
     itemRgb on
     labelFields gene,name
     defaultLabelFields gene
@@ -68,6 +68,29 @@ priority 3.5
     filterType.studies multipleListOr
     filterLabel.studies Filter by source study
 
+    track mackay2024Imprint
+    parent imprinting on
+    shortLabel Mackay iDMRs
+    longLabel Imprinting - Mackay et al 2024 - Imprinted regions and their clinical association
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/imprinting/mackay2024/mackay2024Imprint.bb
+    visibility pack
+    priority 2
+    itemRgb on
+    labelFields name,otherNames
+    defaultLabelFields name
+    skipEmptyFields on
+    mouseOver <b>${name}</b><br><b>${classification}</b><br><b>Methylated allele</b>: ${methylatedParent}<br><b>Disorders</b>: ${disorders}
+    filterValues.classification Clinically associated,Non-clinical
+    filterType.classification multipleListOr
+    filterLabel.classification Filter by clinical classification
+    filterValues.methylatedParent Maternal,Paternal
+    filterType.methylatedParent multipleListOr
+    filterLabel.methylatedParent Filter by methylated allele
+    filterValues.imprintOrigin Oocyte gDMR,Sperm gDMR,Oocyte gDMR-secondary DMR,Sperm gDMR-secondary DMR,Secondary DMR
+    filterType.imprintOrigin multipleListOr
+    filterLabel.imprintOrigin Filter by imprint origin
+
     track omimImprint
     parent imprinting on
     shortLabel OMIM Genes
@@ -75,7 +98,7 @@ priority 3.5
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/omimImprint/omimImprint.bb
     visibility pack
-    priority 2
+    priority 3
     itemRgb on
     url https://omim.org/entry/$$
     urlLabel OMIM entry:
@@ -93,7 +116,7 @@ priority 3.5
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/imprinting/hprcImprint/hprcDmr.bb
     visibility pack
-    priority 7
+    priority 8
     itemRgb on
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from CHM13v2.0"
     mouseOver <b>Higher methylation on</b>: ${parent} haplotype<br><b>Methylation difference (maternal - paternal)</b>: ${methDiff}
@@ -112,7 +135,7 @@ priority 3.5
     type bigWig -0.9 0.9
     bigDataUrl /gbdb/hg38/imprinting/hprcImprint/hprcDmc.bw
     visibility full
-    priority 8
+    priority 9
     color 220,20,20
     altColor 0,60,200
     autoScale off
@@ -154,7 +177,7 @@ priority 3.5
     longLabel Imprinting - Rosenski et al 2025 - Allele-specific methylation in 39 cell types
     type bigBed 9 +
     visibility hide
-    priority 6
+    priority 7
     itemRgb on
     skipEmptyFields on
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
