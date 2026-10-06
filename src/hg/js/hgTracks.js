@@ -6919,6 +6919,10 @@ var mouseOver = {
     tracks: {}, // tracks[trackName] - number of data items for this track
     trackType: {},	// key is track name, value is track type from hgTracks
     mouseOverFunction: {}, // key is track name, value mouseOverFunction string
+    // key is multiWig container name, value its JSON record.  No prototype, so
+    // a track named like an Object method ("constructor") is not found here.
+    multiWig: Object.create(null),
+    multiWigWidths: Object.create(null), // key is container name, value popup width
     jsonUrl: {},       // list of json files from hidden DIV elements
     maximumWidth: {},   // maximumWidth[trackName] - largest string to display
     popUpDelay: 200,   // 0.2 second delay before popUp appears
@@ -6931,6 +6935,7 @@ var mouseOver = {
     noDataString: "no&nbsp;data",	// message for no data at this position
     noDataSize: 0,	// will be set to size of text 'no data'
     noAverageString: "&nbsp;zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values&nbsp;",	// "noAverage" function
+    noAverageRow: "zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values",	// the same in a multiWig row
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -6980,21 +6985,39 @@ var mouseOver = {
 	hasChildren = trackDb.hasChildren;
       } else if (hgTracks.trackDb && hgTracks.trackDb[trackName]) {
 	trackType = hgTracks.trackDb[trackName].type;
+	hasChildren = hgTracks.trackDb[trackName].hasChildren;
       } else if (mouseOver.trackType[trackName]) {
 	trackType = mouseOver.trackType[trackName];
+      }
+      var imgData = "img_data_" + trackName;
+      var imgDataId  = document.getElementById(imgData);
+      if (hasChildren) {
+        // a multiWig container, whatever its type (an hgCollection one is
+        // mathWig): its JSON carries a record for the container only when
+        // hgTracks wants the popup, and receiveData() then adds the
+        // listeners.  With multiWigMouseOver off there is no container
+        // record, and the fetch only loads subtrack data nobody uses.
+        if (imgDataId) {
+          var mwUrl = mouseOver.jsonFileName(imgDataId);
+          // fetchJsonData() skips a URL it already fetched, so keep the
+          // record we have in that case
+          if (! mouseOver.jsonUrl[mwUrl]) {
+            delete mouseOver.multiWig[trackName];
+            delete mouseOver.multiWigWidths[trackName];
+            mouseOver.fetchJsonData(mwUrl);
+          }
+        }
+        return;
       }
       var validType = false;
       if (trackType) {
 	if (trackType.indexOf("wig") === 0) { validType = true; }
 	if (trackType.indexOf("bigWig") === 0) { validType = true; }
 	if (trackType.indexOf("wigMaf") === 0) { validType = false; }
-	if (hasChildren) { validType = false; }
       }
       if (! validType ) { return; }
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
-      var imgData = "img_data_" + trackName;
-      var imgDataId  = document.getElementById(imgData);
       if (imgDataId && tdDataId) {
 	var url = mouseOver.jsonFileName(imgDataId);
         $( tdDataId ).on("mousemove", mouseOver.mouseMoveDelay);
@@ -7006,33 +7029,28 @@ var mouseOver = {
     // given an X coordinate: x, find the index idx
     // in the rects[idx] array where rects[idx].x1 <= x < rects[idx].x2
     // returning -1 when not found
-    // if we knew the array was sorted on x1 we could get out early
-    //   when x < x1
+    // The rects come from wigTrack.c in increasing x1 order and do not
+    //   overlap, so a binary search finds the one item, in either
+    //   display direction.
     // Note, different track types could have different intersection
     //       procedures.  For example, the HiC track will need to intersect
     //       the mouse position within the diamond/square defined by the
     //       items in the display.
     findRange: function (x, rects)
     {
-      var answer = -1;  // assmume not found
-      var idx = 0;
-      if (hgTracks.revCmplDisp) {
-        var rectsLen = rects.length - 1;
-        for ( idx in rects ) {
-           if ((rects[rectsLen-idx].x1 <= x) && (x < rects[rectsLen-idx].x2)) {
-             answer = rectsLen-idx;
-             break;
-           }
-        }
-      } else {
-        for ( idx in rects ) {
-           if ((rects[idx].x1 <= x) && (x < rects[idx].x2)) {
-             answer = idx;
-             break;
-           }
-        }
+      var lo = 0;
+      var hi = rects.length - 1;
+      while (lo <= hi) {
+         var mid = (lo + hi) >> 1;
+         if (x < rects[mid].x1) {
+            hi = mid - 1;
+         } else if (x >= rects[mid].x2) {
+            lo = mid + 1;
+         } else {
+            return mid;
+         }
       }
-      return answer;
+      return -1;
     },
 
     popUpDisappear: function () {
@@ -7055,6 +7073,87 @@ var mouseOver = {
         $('#mouseOverText').css('display','block');
         $('#mouseOverVerticalLine').css('display','block');
       }
+    },
+
+    // the value at graphOffset for one subtrack of a multiWig, as HTML
+    // without the padding the single-track popup puts around it
+    subtrackValue: function (subName, graphOffset)
+    {
+      if (mouseOver.mouseOverFunction[subName] === "noAverage") {
+         return mouseOver.noAverageRow;	// the row label already has the padding
+      }
+      var items = mouseOver.items[subName];
+      if (items) {
+         var idx = mouseOver.findRange(graphOffset, items);
+         if (idx > -1) { return items[idx].v; }
+      }
+      return mouseOver.noDataString;
+    },
+
+    // HTML for the popup over a multiWig container.  With no overlay the
+    // subtracks are drawn in rows, so show the row under the cursor; in the
+    // overlay modes show every subtrack.  Returns null when the cursor is
+    // not over a row.
+    multiWigValue: function (trackName, graphOffset, clientY)
+    {
+      var mw = mouseOver.multiWig[trackName];
+      var subs = mw.s;
+      if (mw.m === "none") {
+         var img = document.getElementById("img_data_" + trackName);
+         if (!img || !img.parentNode) { return null; }
+         var yRel = clientY - Math.floor(img.parentNode.getBoundingClientRect().top);
+         subs = mw.s.filter(function (sub) {
+            return yRel >= sub.y && yRel < sub.y + sub.h;
+         });
+         if (subs.length === 0) { return null; }
+      }
+      var rows = [];
+      for (var i = 0; i < subs.length; i++) {
+         var sub = subs[i];
+         rows.push(mouseOver.multiWigRowLabel(mw, sub) +
+                   mouseOver.subtrackValue(sub.n, graphOffset) + "&nbsp;");
+      }
+      return rows.join("<br>");
+    },
+
+    // HTML for the start of one multiWig popup row: color swatch and label
+    multiWigRowLabel: function (mw, sub)
+    {
+      var label = sub.l;
+      // add and subtract draw one merged graph under the first subtrack's name
+      if (mw.m === "add") { label = "sum"; }
+      if (mw.m === "subtract") { label = "difference"; }
+      var swatch = "";
+      if (/^#[0-9a-fA-F]{6}$/.test(sub.c)) {
+         swatch = "<span style='color:" + sub.c + "'>&#9632;</span>&nbsp;";
+      }
+      return "&nbsp;" + swatch + htmlEncode(label) + ":&nbsp;";
+    },
+
+    // width of the multiWig popup, the widest row label plus the widest
+    // value of that subtrack.  Measured once per JSON record, so the popup
+    // does not change width as the values change.
+    multiWigWidth: function (trackName)
+    {
+      if (mouseOver.multiWigWidths[trackName] === undefined) {
+         var mw = mouseOver.multiWig[trackName];
+         if (0 === mouseOver.noDataSize) {  // no wig record has set it yet
+           mouseOver.noDataSize = mouseOver.getWidthOfText(mouseOver.noDataString);
+         }
+         var widest = 0;
+         for (var i = 0; i < mw.s.length; i++) {
+            var sub = mw.s[i];
+            // receiveData() measured each subtrack's widest value, or the
+            // noAverage message for a noAverage subtrack
+            var valueWidth = mouseOver.maximumWidth[sub.n] || mouseOver.noDataSize;
+            var rowWidth = mouseOver.getWidthOfText(mouseOver.multiWigRowLabel(mw, sub)) +
+                           valueWidth;
+            if (rowWidth > widest) { widest = rowWidth; }
+         }
+         // + 2 for rounding in the separate measurements
+         mouseOver.multiWigWidths[trackName] = widest + 2;
+      }
+      return mouseOver.multiWigWidths[trackName];
     },
 
     //  the evt.currentTarget.id is the td_data_<trackName> element of
@@ -7099,20 +7198,42 @@ var mouseOver = {
     }
 
     var windowUp = false;     // see if window is supposed to become visible
-    var foundIdx = -1;
-    if (mouseOver.items[trackName]) {
-       foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
+    var mouseOverValue;
+    var msgWidth;
+    if (!mouseOver.multiWig[trackName] && !mouseOver.items[trackName] &&
+        hgTracks.trackDb && hgTracks.trackDb[trackName] &&
+        hgTracks.trackDb[trackName].hasChildren) {
+        // a container whose record has not arrived, or was not written
+        // because nothing in it was drawn: nothing to show
+        mouseOver.popUpDisappear();
+        return;
     }
-    // can show 'no data' when not found
-    var mouseOverValue = mouseOver.noDataString;
-    if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
-       mouseOverValue = mouseOver.noAverageString;
-    }
-    if (foundIdx > -1) { // value to display
-        mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
+    if (mouseOver.multiWig[trackName]) {
+        mouseOverValue = mouseOver.multiWigValue(trackName, graphOffset, clientY);
+        if (mouseOverValue === null) {	// between rows, or over the center label
+            mouseOver.popUpDisappear();
+            return;
+        }
+        msgWidth = mouseOver.multiWigWidth(trackName);
+    } else {
+        var foundIdx = -1;
+        if (mouseOver.items[trackName]) {
+           foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
+        }
+        // can show 'no data' when not found
+        mouseOverValue = mouseOver.noDataString;
+        if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+           mouseOverValue = mouseOver.noAverageString;
+        }
+        if (foundIdx > -1) { // value to display
+            mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
+        }
+        msgWidth = mouseOver.maximumWidth[trackName];
     }
     $('#mouseOverText').html(mouseOverValue);
-    var msgWidth = mouseOver.maximumWidth[trackName];
+    // mouseOver.css right-aligns a single value; a multiWig's rows of label and
+    // value read better left-aligned, so the color swatches line up
+    $('#mouseOverText').css('text-align', mouseOver.multiWig[trackName] ? 'left' : '');
     $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
@@ -7211,8 +7332,8 @@ var mouseOver = {
     //        {x1:n, x2:n, value:s}
     //        where n is an integer in the range: 0..width,
     //        and s is the value string to display
-    //     Will need to get them sorted on x1 for efficient searching as
-    //     they accumulate in the local data structure here.
+    //     wigTrack.c writes them sorted on x1 and not overlapping, which
+    //     findRange() relies on for its binary search.
     //  2020-11-24 more generalized incoming data structure, don't care
     //             what the structure is for each item, this will vary
     //             depending upon the type of track.  trackType now remembered
@@ -7222,6 +7343,16 @@ var mouseOver = {
     {
       mouseOver.popUpDisappear();
       for (var trackName in arr) {
+      if (arr[trackName].t === "multiWig") {   // container record, no data
+         mouseOver.multiWig[trackName] = arr[trackName];
+         delete mouseOver.multiWigWidths[trackName];
+         var mwTd = document.getElementById("td_data_" + trackName);
+         $( mwTd ).off("mousemove", mouseOver.mouseMoveDelay);
+         $( mwTd ).off("mouseout", mouseOver.popUpDisappear);
+         $( mwTd ).on("mousemove", mouseOver.mouseMoveDelay);
+         $( mwTd ).on("mouseout", mouseOver.popUpDisappear);
+         continue;
+      }
 	// clear these variables if they existed before
       if (mouseOver.trackType[trackName]) {mouseOver.trackType[trackName] = undefined;}
       if (mouseOver.items[trackName]) {mouseOver.items[trackName] = undefined;}

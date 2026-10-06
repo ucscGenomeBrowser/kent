@@ -1832,9 +1832,11 @@ if (enableMouseOver && mouseOverData)
     }
 else if (enableMouseOver)
     {
+    // no data in the window, or a noAverage track zoomed out too far
     jsonWriteObjectStart(mouseOverJson, tg->track);
     jsonWriteString(mouseOverJson, "t", tg->tdb->type);
-    jsonWriteString(mouseOverJson, "mo", "noAverage");
+    if (sameOk(trackDbSetting(tg->tdb, "mouseOverFunction"), "noAverage"))
+        jsonWriteString(mouseOverJson, "mo", "noAverage");
     jsonWriteObjectEnd(mouseOverJson);
     }
 

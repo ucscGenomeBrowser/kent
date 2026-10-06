@@ -1,0 +1,108 @@
+# #38468 -- hovering a multiWig container (overlay or stacked) showed only the generic
+# tooltip with the internal track name. A plain wiggle shows the value under the cursor;
+# a multiWig showed none, because hgTracks.js only listened on td_data_<subtrack> rows that
+# a multiWig never draws. The fix writes a record for the container into the mouseover
+# JSON (hg/hgTracks/multiWig.c) and the popup lists every subtrack's value, or, with no
+# overlay, the value of the row under the cursor (hg/js/hgTracks.js).
+#
+# READ THIS BEFORE CALLING A RED RUN A REGRESSION. The popup is behind an hg.conf GATE,
+# `multiWigMouseOver`, and the default is OFF. While it is off no multiWig gets a
+# container record, and the first `tip:` check fails because the tooltip shows only the
+# track name, wgEncodeRegMarkH3k27ac. That is configuration, not code:
+#
+#     grep multiWigMouseOver /usr/local/apache/cgi-bin/hg.conf     # on genome-test's host
+#
+# So this stays an xfail until BOTH the code has reached genome-test AND the gate is on
+# there. The code arriving on its own does not flip it.
+#
+# The track is hg19 Layered H3K27Ac (wgEncodeRegMarkH3k27ac), seven ENCODE cell lines,
+# released and frozen. Its default is transparent overlay. Each section sets the mode on
+# the URL, so a step never depends on the one before. What is asserted:
+#
+#   1. overlay: one popup that names every subtrack with its value, including the two
+#      that have no data at that base ("no data", not a blank);
+#   2. stacked: the same values in the same order as overlay, which is the order of the
+#      rows top to bottom with no overlay (NHLF first; not trackDb priority, which puts
+#      GM12878 first). multiWigPreDraw reverses the subtrack list for stacked mode, and
+#      the popup undoes that, so a broken build lists GM12878 first;
+#   3. add: one row labeled "sum", since mergeWiggles draws one merged graph;
+#   4. no overlay: only the row under the cursor. The hover is at the row's vertical
+#      middle, which is the HUVEC row of seven 31-pixel rows;
+#   5. a window where five subtracks have no data at all says "no data" for them, not
+#      "zoom in to see values". That message comes from hg/hgTracks/wigTrack.c, which used
+#      to flag any wiggle with no data in the window as noAverage. That part of the change
+#      is NOT gated, but only the multiWig popup lets a script see it;
+#   6. reverse-complement display reads the mirrored position. findRange became a binary
+#      search in the same change, and this is the one direction it was not written for;
+#   7. with a color override on NHLF, its square in the popup is the override color.
+#
+# The values are the track's own and do not move: ENCODE Regulation on hg19 is frozen.
+# Each value is matched with the non-breaking space the popup puts after it, so "8" does
+# not also match "8.5". The exception is the LAST row of a popup (GM12878, and the one
+# "sum" row): the tooltip check trims the end of the text, so that space is gone.
+#
+# NOT asserted: the GPN-Star sequence logo on ce11 that the ticket names. It is the same
+# code path, and that track is still in development (#38451), so its name or data can
+# change under this script.
+# The wigTrack.c change also reaches a plain wiggle with no data in the window, which now
+# says "no data" too. That is the same code as section 5 and is not asserted separately.
+proof:
+  - "xfail 2026-10-02 -- fails on genome-test at the first hover: the tooltip says only wgEncodeRegMarkH3k27ac, the ticket's own complaint"
+  - "sandbox-ab 2026-10-02 -- passes on ticket sandbox 38468 (port 48088, ~/kentMultiWig38468 branch multiWigMo38468, gate on). Fails there with multiWigMouseOver=off (the same track-name tooltip), with the stacked-order fix backed out (GM12878 listed first, section 2), and with the wigTrack.c noAverage change backed out (K562 says zoom in to see values, section 1)"
+  - "sandbox-ab 2026-10-03 -- section 7 (color override) fails on ticket sandbox 38468 with the swatch taken from the trackDb color (the square is #ff80d4) and passes with the drawn color; whole script also passes on hgwdev-demo1"
+
+target: genome-test
+db: hg19
+position: chr17:41245990-41246050
+reset: true
+fast: true
+# The image is 1200px. At the default 1000px viewport the right edge of the track is off
+# screen and a hover there raises nothing.
+size: [1400, 900]
+steps:
+  # 1. Overlay: every subtrack, with its value, in subtrack order.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=transparentOverlay"
+  - expect: {rows: [wgEncodeRegMarkH3k27ac]}
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr17:41245995"}
+  - expect: {tip: "NHLF:\u00a08\u00a0", noTip: "zoom"}
+  - expect: {tip: "HSMM:\u00a07.96\u00a0"}
+  - expect: {tip: "K562:\u00a0no\u00a0data"}
+  - expect: {tip: "HUVEC:\u00a0no\u00a0data"}
+  - expect: {tip: "NHEK:\u00a01\u00a0"}
+  - expect: {tip: "H1-hESC:\u00a02.92\u00a0"}
+  - expect: {tip: "GM12878:\u00a02"}
+  - expect: {tip: "NHLF:\u00a08\u00a0\n\u00a0■\u00a0NHEK:"}
+
+  # 2. Stacked: the same order as overlay, though the subtracks are drawn reversed.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=stacked"
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr17:41245995"}
+  - expect: {tip: "NHLF:\u00a08\u00a0\n\u00a0■\u00a0NHEK:"}
+
+  # 3. Add: one merged row.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=add"
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr17:41245995"}
+  - expect: {tip: "sum:\u00a021.88", noTip: "NHLF"}
+
+  # 4. No overlay: only the row under the cursor, the fourth of seven.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=none"
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr17:41245995"}
+  - expect: {tip: "HUVEC:\u00a0no\u00a0data", noTip: ["NHLF", "HSMM"]}
+
+  # 5. Five subtracks with no data anywhere in the window.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr1:10900-10960&wgEncodeRegMarkH3k27ac.aggregate=transparentOverlay"
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr1:10930"}
+  - expect: {tip: "NHLF:\u00a0no\u00a0data", noTip: "zoom"}
+
+  # 6. Reverse-complement display: the left edge shows what the right edge shows going
+  #    forward (NHLF 6.8 at chr17:41246040), and not the left edge's own value.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=transparentOverlay&hgt.revCmplDisp_hg19=1"
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr17:41245995"}
+  - expect: {tip: "NHLF:\u00a06.8\u00a0", noTip: "NHLF:\u00a08\u00a0"}
+  # 7. A color override on one subtrack: the popup's square for it is the color it was
+  #    drawn in, not its trackDb color (#ff80d4).
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=transparentOverlay&hgt.revCmplDisp_hg19=0&wgEncodeRegMarkH3k27acNhlf.colorOverrideOn=1&wgEncodeRegMarkH3k27acNhlf.colorOverride=%2300aa00"
+  - mouseover: {track: wgEncodeRegMarkH3k27ac, at: "chr17:41245995"}
+  - expect: {tip: "NHLF:\u00a08\u00a0", has: "#mouseOverText span[style*='#00aa00']", noHas: "#mouseOverText span[style*='#ff80d4']"}
+
+  # Leave the cart in forward display, with no color override.
+  - goto: "/cgi-bin/hgTracks?db=hg19&hideTracks=1&wgEncodeReg=show&wgEncodeRegMarkH3k27ac=full&pix=1200&position=chr17:41245990-41246050&wgEncodeRegMarkH3k27ac.aggregate=transparentOverlay&hgt.revCmplDisp_hg19=0&wgEncodeRegMarkH3k27acNhlf.colorOverrideOn=0"
