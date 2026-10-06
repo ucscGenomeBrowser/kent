@@ -91,6 +91,17 @@ struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, i
 // chains that do the mapping are added to chainHash, which is the form the lift functions
 // read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
 
+struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, char *chrom,
+                                               int start, int end);
+// Map chrom:start-end in the other assembly onto the reference through the chains in
+// chainHash, one piece for every aligned block it overlaps, in reference coordinates.
+
+struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chrom, int start,
+    int end, struct hash *chainHash);
+// Like quickLiftSourceRanges, but only the source bases that map into the window itself,
+// with no padding.  Right for anything read by a range query that returns every item
+// overlapping the range, such as maf blocks and their summaries.
+
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end);
 // Load the quickLift chains covering chrom:start-end on the reference and return them in a
 // hash keyed on the other assembly's sequence names, which is the shape the lift functions

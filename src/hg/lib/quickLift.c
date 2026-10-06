@@ -355,11 +355,10 @@ return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart,
     end + QUICKLIFT_RANGE_PAD, -1);
 }
 
-struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
-    struct hash *chainHash)
-// The ranges in the other assembly that map into chrom:start-end on the reference.  The
-// chains that do the mapping are added to chainHash, which is the form the lift functions
-// read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
+static struct quickLiftRange *sourceRangesPadded(char *quickLiftFile, char *chrom,
+    int start, int end, int pad, struct hash *chainHash)
+// The ranges in the other assembly that map into chrom:start-end on the reference, with the
+// window widened by pad on each side first.  The chains are added to chainHash.
 {
 struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
 struct quickLiftRange *rangeList = NULL;
@@ -369,16 +368,14 @@ for(chain = chainList; chain; chain = chain->next)
     if (chain->blockList == NULL)
         continue;
 
-    // pad the window the same way quickLiftLoadChains does, so an item that reaches into
-    // the window from just outside it is still found
     int qStart, qEnd;
-    int padStart = start - QUICKLIFT_RANGE_PAD;
+    int padStart = start - pad;
     if (padStart < 0)
         padStart = 0;
     // a chain with no block in the padded window maps nothing into it, and quickLiftSql
     // leaves it out of the chain hash, so leave it out here too:  a lift on a details page
     // then goes through the chains hgTracks drew with.  refs #38512
-    if (!quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+    if (!quickLiftChainRangeIn(chain, padStart, end + pad, &qStart, &qEnd))
         continue;
     struct quickLiftRange *range;
     AllocVar(range);
@@ -393,6 +390,73 @@ for(chain = chainList; chain; chain = chain->next)
     }
 slReverse(&rangeList);
 return rangeList;
+}
+
+struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
+    struct hash *chainHash)
+// The ranges in the other assembly that map into chrom:start-end on the reference.  The
+// chains that do the mapping are added to chainHash, which is the form the lift functions
+// read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
+{
+// pad the window the same way quickLiftLoadChains does, so an item that reaches into
+// the window from just outside it is still found
+return sourceRangesPadded(quickLiftFile, chrom, start, end, QUICKLIFT_RANGE_PAD, chainHash);
+}
+
+struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chrom, int start,
+    int end, struct hash *chainHash)
+// Like quickLiftSourceRanges, but only the source bases that map into the window itself,
+// with no padding.  Right for anything read by a range query that returns every item
+// overlapping the range, such as maf blocks and their summaries:  an item that lands in the
+// window overlaps these bases, and the padding would only read items that land elsewhere.
+// In a multi-region space every region is one block, so the padding is 200 kb of extra
+// alignment for every region on screen.  refs #37788
+{
+return sourceRangesPadded(quickLiftFile, chrom, start, end, 0, chainHash);
+}
+
+struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, char *chrom,
+                                               int start, int end)
+// Map chrom:start-end in the other assembly onto the reference through the chains in
+// chainHash, one piece for every aligned block it overlaps.  The pieces come back in
+// reference coordinates, unsorted, and are freed with slFreeList after freeing each chrom.
+// An item lifted this way is not required to map whole, which suits a summary or density
+// row:  every part of it that lands on the reference is drawn where it lands.
+{
+struct quickLiftRange *pieceList = NULL;
+struct binElement *el, *elList = liftOverChainsInRange(chainHash, chrom, start, end);
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct chain *chain = el->val;
+    struct cBlock *b;
+    for (b = chain->blockList; b != NULL; b = b->next)
+        {
+        // the chains were swapped going into the hash, so t is the other assembly
+        int s = max(start, b->tStart);
+        int e = min(end, b->tEnd);
+        if (s >= e)
+            continue;
+        int qs = b->qStart + (s - b->tStart);
+        int qe = qs + (e - s);
+        struct quickLiftRange *piece;
+        AllocVar(piece);
+        piece->chrom = cloneString(chain->qName);
+        if (chain->qStrand == '-')
+            {
+            piece->start = chain->qSize - qe;
+            piece->end = chain->qSize - qs;
+            }
+        else
+            {
+            piece->start = qs;
+            piece->end = qe;
+            }
+        slAddHead(&pieceList, piece);
+        }
+    }
+slFreeList(&elList);
+return pieceList;
 }
 
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end)

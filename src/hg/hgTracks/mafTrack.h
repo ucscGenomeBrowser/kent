@@ -25,12 +25,17 @@ struct mafPriv *getMafPriv(struct track *track);
 /* zoom level where summary file is used */
 static inline boolean inSummaryMode(struct cart *cart, struct trackDb *tdb, int winSize)
 {
-// A quickLifted maf track has no summary to read.  The summary names a table or file
-// belonging to the assembly the track came from, so it cannot be queried with reference
-// coordinates, and for a hub track the setting comes back rewritten as a path under the
-// hub besides.  Read the real blocks and lift them instead.
+// The summary of a quickLifted maf track belongs to the assembly the track came from, so it
+// is read in that assembly's coordinates and lifted, the way the blocks are
+// (liftedSummariesToHash() in wigMafTrack.c).  Only a table can be read that way.  A bigMaf
+// summary is a file, and for a hub track the setting comes back rewritten as a path under
+// the hub, which is not the source's file.  Those read the real blocks and lift them.
 if (quickLiftIsLifted(tdb))
-    return FALSE;
+    {
+    char *summary = trackDbSetting(tdb, "summary");
+    if (startsWithWord("bigMaf", tdb->type) || (summary == NULL) || (strchr(summary, '/') != NULL))
+        return FALSE;
+    }
 
 char *snpTable = trackDbSetting(tdb, "snpTable");
 unsigned summaryWindowSize = cartOrTdbInt(cart, tdb, "summaryWindowSize", 1000000);
