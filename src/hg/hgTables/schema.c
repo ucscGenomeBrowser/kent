@@ -740,6 +740,17 @@ else
     showSchemaDb(db, tdb, table);
 }
 
+static void printBackToTrackUi()
+/* Link back to the track's hgTrackUi page, with a bit of space below. */
+{
+if (curTrack == NULL)
+    return;
+printf("<p style='margin-top:0; margin-bottom:1.5em'><a href='%s",
+    hTrackUiForTrack(curTrack->track));
+htmlPrintf("?%s=%s&db=%s&g=%s'>&lt; Back to Track Configuration Page</a></p>\n",
+    cartSessionVarName(), cartSessionId(cart), database, curTrack->track);
+}
+
 void doTableSchema(char *db, char *table, struct sqlConnection *conn)
 /* Show schema around table (which is not described by curTrack). */
 {
@@ -747,6 +758,7 @@ struct trackDb *tdb = NULL;
 char parseBuf[256];
 dbOverrideFromTable(parseBuf, &db, &table);
 htmlOpen("Schema for %s", table);
+printBackToTrackUi();
 tdb = hTrackDbForTrack(database, table);
 showSchema(db, tdb, table);
 htmlClose();
@@ -789,6 +801,7 @@ if (curTrackDescribesCurTable())
     if (!isCustomTrack(table) && !hashFindVal(fullTableToTdbHash, table))
         hashAdd(fullTableToTdbHash, table, curTrack);
     htmlOpen("Schema for %s - %s", curTrack->shortLabel, curTrack->longLabel);
+    printBackToTrackUi();
     showSchema(trackHubSkipHubName(database), curTrack, table);
     htmlClose();
     }
