@@ -199,6 +199,15 @@ a composite, and a bigBed track together into a single superTrack.</p>
  <li>It might be a good idea to include a "Data Access" section on your track description page
      which describes how to access the data in your hub and where to download the raw data for the
      tracks in your hub.</li>
+ <li>The References section is easier to get right with the
+     <code>getTrackReferences</code> command-line tool, which is available from our
+     <a href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities
+     directory</a>. Give it PubMed or PubMed Central IDs and it writes out the citations
+     already formatted the way our own description pages use them:
+<pre><code>$ getTrackReferences 21347206 PMC3039671</code></pre>
+     Paste the output into the References section of your page. Add <code>-d</code> for a DOI
+     link, <code>-v</code> to keep every author rather than the first ten, and <code>-p</code>
+     for plain text instead of HTML.</li>
 </ul>
 
 <a id="publicHubExamples"></a>
