@@ -1830,10 +1830,11 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
         ofh.write("%s {check out exists %s}\n" % (abspath(jobSh), abspath(gffName)))
 
     # The first reservation is only an estimate (see miniprotRamGb), so when a job dies for
-    # lack of memory, raise it and run the batch again rather than losing the assembly. Three
-    # tries reach eight times the estimate, which covers the worst case measured so far by a
-    # wide margin. Anything that fails for another reason stops here, so a genome that
-    # segfaults does not get run four times over. refs #38300
+    # lack of memory, raise it fourfold and run the batch again rather than losing the assembly.
+    # Three tries reach sixteen times the estimate, which covers the worst case measured so far
+    # by a wide margin. Anything that fails for another reason stops here, so a genome that
+    # segfaults does not get run three times over. The last failed batch is left in jobDir
+    # for inspection. refs #38300
     for attempt in range(3):
         tryRam = ram * (4 ** attempt)
         logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg%s" % \
@@ -1842,7 +1843,7 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
                 (jobDir, miniprotThreads, tryRam), ignoreErr=True)
         if ret == 0:
             return
-        if not paraBatchOutOfMemory(jobDir):
+        if not paraBatchOutOfMemory(jobDir) or attempt == 2:
             break
         logging.warning("%s: miniprot ran out of memory in %dg, trying again with more" % (db, tryRam))
         clearParaBatch(jobDir)
