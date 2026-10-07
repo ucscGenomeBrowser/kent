@@ -207,6 +207,16 @@ bcftools index -n gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz
 # 189381961
 bcftools index -n hgdp1k.snvAc6.vcf.gz
 # 34033926
+# Oct 7 2026: keep only FILTER=PASS. The script now has -f PASS, but the existing file was
+# filtered in place instead of a rebuild (24 min), then moved over hgdp1k.snvAc6.vcf.gz
+mkdir -p passTmp; tabix -l hgdp1k.snvAc6.vcf.gz > passTmp/chroms.txt
+parallel -j 24 'bcftools view -f PASS -r {} hgdp1k.snvAc6.vcf.gz -Oz -o passTmp/{}.vcf.gz' < passTmp/chroms.txt
+sed 's|^|passTmp/|; s|$|.vcf.gz|' passTmp/chroms.txt > passTmp/files.txt
+bcftools concat -n -f passTmp/files.txt -Oz -o hgdp1k.snvAc6.pass.vcf.gz
+tabix -p vcf hgdp1k.snvAc6.pass.vcf.gz
+mv hgdp1k.snvAc6.pass.vcf.gz hgdp1k.snvAc6.vcf.gz; mv hgdp1k.snvAc6.pass.vcf.gz.tbi hgdp1k.snvAc6.vcf.gz.tbi
+bcftools index -n hgdp1k.snvAc6.vcf.gz
+# 32448766, 15.7GB. Removed 1585160 (4.7%), mostly AS_VQSR, also InbreedingCoeff
 
 # Swefreq, Max, Feb 2026
 # downloaded files from https://swefreq.nbis.se/dataset/SweGen/download
