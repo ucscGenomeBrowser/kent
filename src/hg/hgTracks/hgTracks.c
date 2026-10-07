@@ -8962,7 +8962,7 @@ char *curSessVisTracks = cgiTrackVisString(curSessCart);
 
 // get track-related vars from current cart
 struct dyString *dsCgiVars = dyStringNew(0);
-cartEncodeState(cart, dsCgiVars);
+cartEncodeStateRawNames(cart, dsCgiVars);
 outDefaultTracks(cart, dsCgiVars);
 char *this = dyStringCannibalize(&dsCgiVars);
 // TODO: again, better parsing
@@ -12339,7 +12339,7 @@ if (isNotEmpty(description))
             jsSafe(description), (truncated ? "..." : ""));
     }
 
-dyStringPrintf(dy, "The tracks, position and settings you had in the browser before have been "
+dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have been "
         "replaced by this session and cannot be brought back. If you want to keep a browser "
         "configuration, save it under My Data &gt; My Sessions before you open a session. ");
 }
@@ -12364,7 +12364,7 @@ if (isEmpty(sessionName) || isEmpty(sessionOwner) || hasRecTrackSet(cart))
 
 struct dyString *dy = dyStringNew(1024);
 sessionNoticeText(dy, sessionName, sessionOwner);
-dyStringPrintf(dy, "This note is shown only once, it is gone on the next page.");
+dyStringPrintf(dy, "This note is shown only once; it is gone on the next page.");
 notifyOnce(dy->string, "sessionLoad");
 dyStringFree(&dy);
 }

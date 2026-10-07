@@ -1,0 +1,25 @@
+# loopA and loopB name each other as parent.  loopChild is a subtrack of loopA.
+track loneTrack
+shortLabel lone
+longLabel A track with no parent
+type bed 3
+
+track loopA
+compositeTrack on
+parent loopB
+shortLabel loop A
+longLabel Loop A names loop B as parent
+type bed 3
+
+track loopB
+compositeTrack on
+parent loopA
+shortLabel loop B
+longLabel Loop B names loop A as parent
+type bed 3
+
+track loopChild
+parent loopA on
+shortLabel child
+longLabel A subtrack of loop A
+type bed 3

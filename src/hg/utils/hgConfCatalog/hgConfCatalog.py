@@ -665,6 +665,14 @@ RELEASE_GATES = {
                "jsStripJavascript().  Added off for v504 because QA found "
                "pages the filter changes; the default is meant to flip to "
                "TRUE in v505 once those are fixed."),
+        h("multiWigMouseOver", "flag", "hg/hgTracks/multiWig.c", default="FALSE",
+          role="gate", verified=True, ticket="38468",
+          note="A value popup on a multiWig container: hovering lists each "
+               "subtrack's value at the cursor in the subtrack's color.  "
+               "Read in multiWigDraw(), and only when mouseOverEnabled "
+               "is on and the view is not multi-region.  Off, a multiWig "
+               "shows only its track name on hover, as before.  Added off "
+               "for v505; hgwdev's hg.conf turns it on."),
     ],
 }
 
@@ -1793,6 +1801,13 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38490",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at b50e4cb498f, quickLift: lift "
+               "bigBarChart tracks, behind browser.quickLiftBarChart, refs "
+               "#38490.  Needs a description and a gate or knob call."),
     ],
 }
 

@@ -23,8 +23,9 @@ errAbort(
   "   pafToPsl in.paf out.psl\n"
   "options:\n"
   "   -cigarTag=tag  SAM-style tag that carries the alignment CIGAR string\n"
-  "                  (default cg:Z:).  The CIGAR is made of M/=/X, I and D\n"
-  "                  operators, as minimap2 writes it.\n"
+  "                  (default cg:Z:).  The CIGAR is made of M/=/X, I, D and\n"
+  "                  N operators, as minimap2 writes it (N, as in spliced\n"
+  "                  'minimap2 -x splice' output, is treated like D).\n"
   "   -tSizes=file.chrom.sizes  Tab-separated <name><size> file.  When given,\n"
   "                  each record's target size is taken from here instead of\n"
   "                  the PAF's own tSize column; a target name missing from\n"
@@ -54,8 +55,11 @@ static struct optionSpec options[] = {
 
 static void pushBlock(struct psl *psl, int *blockSpace, int qPos, int tPos, int size)
 /* Append one ungapped alignment block to psl, growing the block arrays if
- * needed. */
+ * needed.  A zero-length block (e.g. from two adjacent indel operators
+ * such as "5M3I2D4M" with no intervening match) is silently dropped. */
 {
+if (size == 0)
+    return;
 if (psl->blockCount >= *blockSpace)
     pslGrow(psl, blockSpace);
 psl->qStarts[psl->blockCount] = qPos;
@@ -113,6 +117,7 @@ while (*c != '\0')
 	    qPos += opLen;
 	    break;
 	case 'D':
+	case 'N':	// N (intron/splice gap) behaves exactly like D here
 	    if (prevOp == '\0')	// leading deletion
 		insl = -opLen;
 	    else
@@ -159,15 +164,28 @@ if (tPos != psl->tEnd - psl->tStart)
 int origQStart = psl->qStart;
 int origQEnd = psl->qEnd;
 int origTStart = psl->tStart;
+boolean qIsRc = (psl->strand[0] == '-');
 
-// handle leading and trailing indels: PSL blocks must start and end on a match
+// handle leading and trailing indels: PSL blocks must start and end on a
+// match.  The CIGAR always runs in target-forward order.  For a '-' strand
+// record that's the *opposite* direction from the PAF-reported (forward-
+// strand) query coordinates, so a CIGAR-leading query indel trims the
+// qEnd end of the range instead of qStart, and a CIGAR-trailing query
+// indel trims qStart instead of qEnd.  The target side has no such
+// swap: target is always reported forward regardless of query strand.
 if (insl > 0)
-    { qNumInsert -= 1; qBaseInsert -= insl; psl->qStart += insl; }
+    {
+    qNumInsert -= 1; qBaseInsert -= insl;
+    if (qIsRc) psl->qEnd -= insl; else psl->qStart += insl;
+    }
 else if (insl < 0)
     { tNumInsert -= 1; tBaseInsert += insl; psl->tStart -= insl; }
 
 if (insr > 0)
-    { qNumInsert -= 1; qBaseInsert -= insr; psl->qEnd -= insr; }
+    {
+    qNumInsert -= 1; qBaseInsert -= insr;
+    if (qIsRc) psl->qStart += insr; else psl->qEnd -= insr;
+    }
 else if (insr < 0)
     { tNumInsert -= 1; tBaseInsert += insr; psl->tEnd += insr; }
 
@@ -300,11 +318,27 @@ while (lineFileNext(lf, &line, &lineSize))
 	tSize = (unsigned)sizesVal;
 	}
 
+    int qStart = sqlSigned(fields[2]);
+    int qEnd = sqlSigned(fields[3]);
+    if (qStart < 0 || qEnd <= qStart || (unsigned)qEnd > qSize)
+	{
+	warn("%s:%d: invalid query range %d-%d (qSize %u), skipping",
+	    lf->fileName, lf->lineIx, qStart, qEnd, qSize);
+	continue;
+	}
+
+    int tStart = sqlSigned(fields[7]);
+    int tEnd = sqlSigned(fields[8]);
+    if (tStart < 0 || tEnd <= tStart || (unsigned)tEnd > tSize)
+	{
+	warn("%s:%d: invalid target range %d-%d (tSize %u), skipping",
+	    lf->fileName, lf->lineIx, tStart, tEnd, tSize);
+	continue;
+	}
+
     int blockSpace = 16;
-    struct psl *psl = pslNew(fields[0], qSize,
-	sqlSigned(fields[2]), sqlSigned(fields[3]),
-	fields[5], tSize,
-	sqlSigned(fields[7]), sqlSigned(fields[8]),
+    struct psl *psl = pslNew(fields[0], qSize, qStart, qEnd,
+	fields[5], tSize, tStart, tEnd,
 	strand, blockSpace, 0);
     psl->match = sqlUnsigned(fields[9]);
     // fields[10], the PAF "number of minimizers"/alignment block length

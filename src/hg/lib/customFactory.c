@@ -1980,7 +1980,7 @@ static char *niceGeneName(char *name)
 static char buf[128];
 char *e;
 
-safecpy(buf, sizeof(buf), name);
+safencpy(buf, sizeof(buf), name, strnlen(name, sizeof(buf) - 1));
 if ((e = strchr(buf, ';')) != NULL)
     *e = 0;
 eraseWhiteSpace(buf);

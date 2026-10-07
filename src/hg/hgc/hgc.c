@@ -28454,7 +28454,15 @@ if (!avoidHandler)
 
 if (!calledHandler)
     {
-    if (tdb != NULL)
+    if ((tdb != NULL) &&
+        (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))
+        {
+        // a quickLifted barChart skips the name-based handlers, but its type still has
+        // its own details page, which genericClickHandler does not draw
+        doBarChartDetails(tdb, item);
+        printTrackHtml(tdb);
+        }
+    else if (tdb != NULL)
         {
         genericClickHandler(tdb, item, NULL);
         }

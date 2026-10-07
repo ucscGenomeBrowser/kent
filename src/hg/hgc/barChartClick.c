@@ -29,6 +29,7 @@
 #include "chromAlias.h"
 #include "jsHelper.h"
 #include "jsonWrite.h"
+#include "quickLift.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -66,7 +67,14 @@ hasOffsets = (
     asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL &&
     asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+// a quickLifted file is in another assembly's coordinates, so fetch what maps to this window
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bb, *bbList;
+if (quickLiftFile)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, start, end, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char *rest = cloneString(bb->rest);
@@ -76,6 +84,15 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
     if (barChart == NULL)
         continue;
+    if (quickLiftFile)
+        {
+        struct bed *lifted = quickLiftIntervalsToBed(bbi, chainHash, bb);
+        if (lifted == NULL)
+            continue;
+        barChart->chrom = lifted->chrom;
+        barChart->chromStart = lifted->chromStart;
+        barChart->chromEnd = lifted->chromEnd;
+        }
     if (sameString(barChart->name, item))
         {
         char *restFields[EXTRA_FIELDS_SIZE];

@@ -11,6 +11,10 @@ export CGI_BIN = ${DESTDIR}/cgi-bin
 export DOCUMENTROOT = ${DESTDIR}/htdocs
 export SCRIPTS = ${DESTDIR}/scripts
 export NOSQLTEST = 1
+# the fetched kent/ tree is not a git checkout; keep git from finding any
+# repository above this directory (e.g. a kent clone this sits inside),
+# else submoduleSetup tries a 'git submodule update' against that repo
+export GIT_CEILING_DIRECTORIES = ${CURDIR}
 
 all:  utils
 
@@ -45,7 +49,8 @@ export MACHTYPE = ${MACHTYPE}\n\
 export CGI_BIN = ${CGI_BIN}\n\
 export DOCUMENTROOT = ${DOCUMENTROOT}\n\
 export SCRIPTS = ${SCRIPTS}\n\
-export NOSQLTEST = 1\n" > kent/src/inc/localEnvironment.mk
+export NOSQLTEST = 1\n\
+export GIT_CEILING_DIRECTORIES = ${GIT_CEILING_DIRECTORIES}\n" > kent/src/inc/localEnvironment.mk
 
 update: clean userApps
 	${MAKE} fetchSource

@@ -1,0 +1,23 @@
+# A composite with two subtracks and a track with no parent.  Links as usual.
+track loneTrack
+shortLabel lone
+longLabel A track with no parent
+type bed 3
+
+track comp
+compositeTrack on
+shortLabel comp
+longLabel A composite
+type bed 3
+
+track compSubA
+parent comp on
+shortLabel sub A
+longLabel Subtrack A
+type bed 3
+
+track compSubB
+parent comp
+shortLabel sub B
+longLabel Subtrack B
+type bed 3

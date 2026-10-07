@@ -10620,18 +10620,22 @@ else
     struct trackDb *loadTrackDb(char *db, char *where);
     struct trackDb *tdb = loadTrackDb(db, query);
 
+    // a track lifted from a hub need not be a track in the native database at all
+    if (tdb == NULL)
+        return NULL;
     html = tdb->html;
     //char *html = tdb->html;
-    if (isEmpty(tdb->html))
+    char *parent = trackDbSetting(tdb, "parent");
+    if (isEmpty(tdb->html) && !isEmpty(parent))
         {
-        char *parent = trackDbSetting(tdb, "parent");
         char *words[10];
 
         chopLine(parent,words);
         sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
         struct trackDb *tdb = loadTrackDb(db, query);
 
-        html = tdb->html;
+        if (tdb != NULL)
+            html = tdb->html;
         }
     }
 return html;
