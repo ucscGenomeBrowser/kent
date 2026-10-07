@@ -1,37 +1,99 @@
 <!DOCTYPE html>
-<!--#set var="TITLE" value="UCSC Genome Browser Home" -->
+<!--#set var="TITLE" value="UCSC Genome Browser: Explore and visualize genomic data" -->
 <!--#set var="ROOT" value="." -->
-
-<head>
-    <meta name="description" content="Explore, visualize, and compare genomic data with the UCSC Genome Browser: free, open-access tools for the human genome and beyond.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="genome, genome browser, human genome, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, SNPs, EST, mRNA, mouse genome, rat genome, chicken genome, chimp genome, dog genome, fruitfly genome, zebrafish genome, xenopus, frog genome, rhesus, opossum, danio rerio genome, drosophila, fugu, yeast, ciona,  comparative genomics, human variation, hapMap">
-    <link rel="stylesheet" href="../style/jWest.css">
-</head>
-
-    <!-- Banner -->
-    <div id="banner" class="jwBanner">
-        <a class="jwAnchor" href="http://www.ucsc.edu/">
-          <div class="jwUcscLogoWrapper">
-            <img alt="University of California Santa Cruz Genomics Institute logo" src="../images/GIlogo.png" class="jwUcscLogoWrapper">
-          </div>
-        </a>
-        <img alt="UCSC DNA helix arch logo" src="../images/ucscHelixLogo.png" class="jwBannerHelixLogo">
-        <div class="jwBannerTitle">
-          Genome Browser
-        </div>
-    </div>
+<!-- Meta tags and home page CSS (inc/gbHomeHead.html), and the lockup header above the menu bar (inc/gbHeader.html) -->
+<!--#set var="HEAD_EXTRA" value="gbHomeHead.html" -->
+<!--#set var="PAGE_BANNER" value="gbHeader.html" -->
 
 <!--#include virtual="$ROOT/inc/gbPageStart.html"-->
 
-<div class="row" style="background:#275172;">
-    <div class="col-md-12">
-<p class="text-center">
-  <a href="cgi-bin/hgTracks"><img class='text-center' src="images/genomeBrowserBanner.jpg"  width="100%" height="100%" style="margin-left:0; margin-top:0;" alt="Welcome to the UCSC Genome Browser."></a>
-<br>
-<br>
-</p>
+<div class="row gbHero">
+  <div class="gbHeroText">
+    <h1>Explore, visualize, and compare genomic data</h1>
+    <p class="gbHeroSub">Free, open-access tools for the human genome and beyond.</p>
+    <div class="gbHeroSearch">
+    <input size=50 name="searchString" id="searchBarSearchString" type="text"
+        aria-label="Search genes, annotations, and help docs"
+        placeholder="Search genes, annotations, and help docs">
+    <button name="searchButton" id="searchBarSearchButton" type="button">Search</button>
+    <span id="searchBarStatus" class="gbVisuallyHidden" role="status" aria-live="polite"></span>
+    <script>
+    function searchBarBusy(busy) {
+        // Show that a search is under way: the lookup and the next page can take a few seconds.
+        // The button is disabled meanwhile, so repeated clicks or Enter presses send nothing more.
+        var btn = document.getElementById('searchBarSearchButton');
+        btn.disabled = busy;
+        btn.setAttribute('aria-busy', busy ? 'true' : 'false');
+        btn.innerHTML = busy ? '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Searching&hellip;' : 'Search';
+        document.getElementById('searchBarStatus').textContent = busy ? 'Searching' : '';
+    }
+    function searchBarClick() {
+        searchStr = document.getElementById('searchBarSearchString').value;
+        if (searchStr.length > 0) {
+            if (document.getElementById('searchBarSearchButton').disabled)
+                return false;   // a search is already on its way
+            // helper functions for checking whether a plain chrom name was searched for
+            term = encodeURIComponent(searchStr.replace(/^[\s]*/,'').replace(/[\s]*$/,''));
+            function onSuccess(jqXHR, textStatus) {
+                if (jqXHR.chromName !== null) {
+                    window.location.assign("../cgi-bin/hgTracks?position=" + term );
+                } else {
+                    window.location.assign("../cgi-bin/hgSearch?search=" + term);
+                }
+            }
+            function onFail(jqXHR, textStatus) {
+                window.location.assign("../cgi-bin/hgSearch?search=" + term);
+            }
+
+            // redirect to search disambiguation page if it looks like we didn't enter a regular position:
+            var canonMatch = searchStr.match(canonicalRangeExp)
+            var gbrowserMatch = searchStr.match(gbrowserRangeExp);
+            var lengthMatch = searchStr.match(lengthRangeExp);
+            var bedMatch = searchStr.match(bedRangeExp);
+            var sqlMatch = searchStr.match(sqlRangeExp);
+            var singleMatch = searchStr.match(singleBaseExp);
+            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
+
+            // the following encodes the cartJson cmd as a query string, skipping reliance
+            // on hgTracks.js:cart:varsToUrlData()
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+            params.append("cjCmd", '{"getChromName": {"searchTerm": "' + term + '"}}');
+            searchBarBusy(true);
+            if (positionMatch === null) {
+                // user may have entered a full chromosome name, check for that asynchronosly:
+                $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgSearch",
+                    data:  params.toString(),
+                    dataType: "json",
+                    trueSuccess: onSuccess,
+                    success: onSuccess,
+                    error: onFail,
+                    cache: true
+                });
+                return false;
+            } else {
+                window.location.assign("../cgi-bin/hgTracks?position=" + term);
+            }
+
+        }
+    }
+    document.getElementById('searchBarSearchButton').addEventListener('click', searchBarClick);
+    // Pressing Back can restore this page from the browser's cache exactly as it was left,
+    // spinner included, so reset the button whenever the page is shown.
+    window.addEventListener('pageshow', function() { searchBarBusy(false); });
+    document.getElementById('searchBarSearchString').addEventListener('keydown', function(e) {
+        // Enter searches, except the Enter that confirms a word in a Chinese, Japanese or Korean input method
+        if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) {
+             e.preventDefault();   // prevents return from also submitting whole form
+             searchBarClick();
+        }
+    });
+    </script>
     </div>
+    <a class="gbHeroButton" href="cgi-bin/hgTracks">Launch the Genome Browser</a>
+  </div>
 </div>
 
       <!-- hgwdev warning (if applicable) -->
@@ -77,77 +139,16 @@
         <em>http://<!--#echo var="HTTP_HOST" --></em> with any questions.</strong></p>
       <!--#endif -->
 
-<div style="display: flex; align-items: center; justify-content: center; text-align: center;margin-top: 10px;">
-    <input size=50 name="searchString" id="searchBarSearchString" type="text"
-        aria-label="Search genes, data, help docs and more"
-        placeholder="Search genes, data, help docs and more..."></input>
-    <input name="searchButton" id="searchBarSearchButton" type="submit" value="Search"></input>
-    <script>
-    function searchBarClick() {
-        searchStr = document.getElementById('searchBarSearchString').value;
-        if (searchStr.length > 0) {
-            // helper functions for checking whether a plain chrom name was searched for
-            term = encodeURIComponent(searchStr.replace(/^[\s]*/,'').replace(/[\s]*$/,''));
-            function onSuccess(jqXHR, textStatus) {
-                if (jqXHR.chromName !== null) {
-                    window.location.assign("../cgi-bin/hgTracks?position=" + term );
-                } else {
-                    window.location.assign("../cgi-bin/hgSearch?search=" + term);
-                }
-            }
-            function onFail(jqXHR, textStatus) {
-                window.location.assign("../cgi-bin/hgSearch?search=" + term);
-            }
 
-            // redirect to search disambiguation page if it looks like we didn't enter a regular position:
-            var canonMatch = searchStr.match(canonicalRangeExp)
-            var gbrowserMatch = searchStr.match(gbrowserRangeExp);
-            var lengthMatch = searchStr.match(lengthRangeExp);
-            var bedMatch = searchStr.match(bedRangeExp);
-            var sqlMatch = searchStr.match(sqlRangeExp);
-            var singleMatch = searchStr.match(singleBaseExp);
-            var positionMatch = canonMatch || gbrowserMatch || lengthMatch || bedMatch || sqlMatch || singleMatch;
-
-            // the following encodes the cartJson cmd as a query string, skipping reliance
-            // on hgTracks.js:cart:varsToUrlData()
-            const url = new URL(window.location.href);
-            const params = new URLSearchParams(url.search);
-            params.append("cjCmd", '{"getChromName": {"searchTerm": "' + term + '"}}');
-            if (positionMatch === null) {
-                // user may have entered a full chromosome name, check for that asynchronosly:
-                $.ajax({
-                    type: "GET",
-                    url: "../cgi-bin/hgSearch",
-                    data:  params.toString(),
-                    dataType: "json",
-                    trueSuccess: onSuccess,
-                    success: onSuccess,
-                    error: onFail,
-                    cache: true
-                });
-                return false;
-            } else {
-                window.location.assign("../cgi-bin/hgTracks?position=" + term);
-            }
-            
-        }
-    }
-    document.getElementById('searchBarSearchButton').addEventListener('click', searchBarClick);
-    $('#searchBarSearchString').bind('keypress', function(e) {  // binds listener to url field
-        if (e.which === 13) {  // listens for return key
-             e.preventDefault();   // prevents return from also submitting whole form
-             searchBarClick();
-        }
-    });
-    </script>
-</span></div>
+<!-- Starting points for new visitors -->
+<!--#include virtual="indexGetStarted.html"-->
 
 <!-- Add tips message only for .ucsc Browser instances. To add a new tip, add a line to allTipsRaw.html in htdocs -->
 <!--#if expr='$SERVER_NAME = /\.ucsc\.edu$/' -->
 
-<div style="background-color: #f0f8ff; border-left: 4px solid #4a90e2; padding: 12px 15px; margin-top: 15px; margin-left: auto; margin-right: auto; max-width: 70%; border-radius: 4px; display: flex; align-items: center; gap: 12px;">
-  <img src="/images/didYouKnow.png" alt="Did you know?" style="height: 50px; width: auto; flex-shrink: 0;">
-  <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #333;">
+<div class="gbTipBox">
+  <img src="images/didYouKnow.svg" alt="" width="44" height="44">
+  <p><strong>Did you know?</strong>
   <!--#include virtual="tipOfDay.html"-->
   </p>
 </div>

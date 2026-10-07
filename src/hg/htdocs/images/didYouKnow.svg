@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Did you know?">
+  <!-- Genome Browser palette: navy #003c6c, medium blue #006aad, yellow #ffbf00, cyan #13a5dc, rubine #da216d, green #93c02d -->
+  <circle cx="32" cy="32" r="31" fill="#003c6c"/>
+  <!-- bulb -->
+  <path d="M32 11c-7.7 0-13.5 5.9-13.5 13.3 0 4.6 2.3 7.8 4.4 10.2 1.6 1.8 2.6 3.3 2.6 5.3v1.2h13v-1.2c0-2 1-3.5 2.6-5.3 2.1-2.4 4.4-5.6 4.4-10.2C45.5 16.9 39.7 11 32 11z" fill="#ffbf00"/>
+  <!-- highlight -->
+  <path d="M23.5 23.5a9 9 0 0 1 6-7" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+  <!-- base: the five color bars from the Genome Browser logomark -->
+  <rect x="25.5" y="44" width="2.2" height="6" rx="0.6" fill="#13a5dc"/>
+  <rect x="28.1" y="44" width="2.2" height="6" rx="0.6" fill="#da216d"/>
+  <rect x="30.7" y="44" width="2.2" height="6" rx="0.6" fill="#ffbf00"/>
+  <rect x="33.3" y="44" width="2.2" height="6" rx="0.6" fill="#93c02d"/>
+  <rect x="35.9" y="44" width="2.6" height="6" rx="0.6" fill="#ffffff"/>
+</svg>
