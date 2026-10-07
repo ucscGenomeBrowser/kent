@@ -1,0 +1,64 @@
+# #16906 -- multi-region pack crashed for tracks with no data in a window.  Matt and Jonathan
+# found it testing hg38Patch6Haplotypes, hg38Patch6Patches and clinGen CNV: in multi-region
+# mode, with some regions empty, hgTracks stopped with an error out of the pack routine.
+#
+# Galt's fix b8bcfccf5500 (2016-02-29, simpleTracks.c) stopped freeing the per-visibility
+# spaceSavers of a composite's subtracks, because a subtrack's visibility flips between the
+# composite's and its own and an older spaceSaver was still needed.  The errAbort it removed
+# read "unexpected error findSpaceSaverAndFreeOldOnes returned NULL at end of pack function";
+# the other errAbort in that function, still there, reads "unexpected current window".
+#
+# The ticket's tracks are gone from hg38, so this uses the Problematic Regions composite,
+# as rm35472 does.  Two custom regions:
+#     chr1:144,874,354-144,875,080   comments has an item, encBlacklist does not
+#     chr1:91,386,300-91,388,400     encBlacklist has one, comments does not
+# so each drawn subtrack is packed with one empty window.  grcExclusions has no item in
+# either window and is hidden by the composite's hideEmptySubtracks (a cart override of that
+# setting to off did not take on genome-test, so it is asserted hidden, as in rm35472).
+#
+# The visibilities follow Galt's note of 2016-02-28: the trigger was "a container track
+# [set to] FULL but the visible subtracks have just PACK", so the subtrack's visibility
+# wobbles between the parent's and its own and an older spaceSaver is needed again after it
+# was freed.  So the composite is full and the subtracks pack first.  The third step turns
+# that round (composite pack, subtracks full), the other direction of the same flip.  The
+# check each time is that both rows are drawn, the second region is in view, and neither
+# errAbort string is on the page.
+#
+# Not seen to fail: the fix is from 2016 and no release before it can be built here, so
+# whether the old code still aborts on this exact recipe is not measured.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr1:144874354-144875080
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A144874354-144875080&pix=1100&hideTracks=1&problematicSuper=show&problematic=full&comments=pack&comments_sel=1&encBlacklist=pack&encBlacklist_sel=1&grcExclusions=pack&grcExclusions_sel=1"
+  - expect:
+      rows: [ruler, comments]
+      exact: true
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr1%20144874354%20144875080%0Achr1%2091386300%2091388400%0A"
+  - expect:
+      rows: [ruler, comments, encBlacklist]
+      exact: true
+      noRows: [grcExclusions]
+      noText:
+        - "returned NULL at end of pack function"
+        - "unexpected current window"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1:91386301-91388400"]'
+
+  # The other direction: composite pack, subtracks full.
+  - goto: "/cgi-bin/hgTracks?problematic=pack&comments=full&encBlacklist=full&grcExclusions=full"
+  - expect:
+      rows: [ruler, comments, encBlacklist]
+      exact: true
+      noRows: [grcExclusions]
+      noText:
+        - "returned NULL at end of pack function"
+        - "unexpected current window"
+      has: '#hgTracksConfigMultiRegionPage.pressed'

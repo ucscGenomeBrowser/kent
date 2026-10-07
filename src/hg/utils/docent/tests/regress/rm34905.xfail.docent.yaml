@@ -1,0 +1,61 @@
+# #34905 -- "Popup issue with Multi-region on hgwdev".  The Selenium qaTestScript.py
+# reported an error in its multi-region step on hgwdev: a four-region custom view on hg38
+# chr7, one region per RefSeq transcript.  Gerardo attached a screenshot and saved the
+# state as the session Gerardo/cron_2024_11_26 ("Here is a session with the error").  The
+# ticket was hibernated two weeks later.
+#
+# What the error was.  The screenshot was not read for this script (the attachment needs
+# a Redmine login).  Two things point at it.  First, Gerardo's qaTestScript.py change
+# c92b0d5c0e7 (2024-12-21), "to avoid a multi-region error caused by the alignment tracks
+# on hgwdev", made the step load a smaller session before it pastes the regions.  Second,
+# the ticket's session, loaded on genome-test on 2026-10-06, still raises a warning popup
+# whose lines include
+#
+#     slice(side) has an invalid X:12 or Y:19055 offset (image width:1580 height:10350)
+#     imgTrack(rmsk) has bad slice
+#     imgBox(hg38.multi:0-270194) has bad track - being skipped.
+#
+# A second load of the same session by curl added "imgTrack(multiz11way) has bad slice",
+# and multiz11way is an alignment track.  Which tracks are named varies from load to
+# load, so the checks name only the fixed part of each line.  The same cart in a single-region view over the same
+# span gives only the ordinary "Image was over 32,000 pixels high ... displayed as density
+# graphs" notice, so the bad slices come from the multi-region path: the image is cut to
+# 10,350 pixels after the density fallback, and the slices keep their old offsets.
+# SOMEONE WHO CAN OPEN THE SCREENSHOT should confirm these are its lines before this
+# proof line is trusted.  If they are not, the script is still a live bug, but it belongs
+# under its own ticket.
+#
+# The first draft hid every track but RefSeq and clicked two items.  That removed the
+# tracks that caused the error, so it passed on every build.
+#
+# Checks, after loading the ticket's session:
+#   * the session really loaded: the Multi-region button is pressed, the first and last
+#     regions have their map boxes, and knownGene is drawn.  A missing session gives a
+#     page with no regions, which fails here rather than passing every noText.
+#   * none of the three warning lines above.  The fourth noText is the warning the same
+#     session gives on hgwdev-demo6 (multiRegionSpaces): "...bb has no chain over
+#     chr7:270194-279542".  It is a different message, but it is the same symptom, a
+#     warning popup on this session in multi-region view.
+#
+# This needs the session to stay in hgcentraltest.  It is Gerardo's, not ours.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket, its session, and qaTestScript.py c92b0d5c0e7"
+  - "xfail 2026-10-06 -- genome-test: the ticket's session warns slice(side) has an invalid offset, imgTrack(rmsk) has bad slice, imgBox has bad track; not yet matched against the ticket's screenshot"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - loadSession: {user: Gerardo, name: cron_2024_11_26}
+  - expect:
+      rows: [knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:192571-260772"]'
+        - 'area[data-tooltip="chr7:549198-727281"]'
+      noText:
+        - "has an invalid"
+        - "has bad slice"
+        - "has bad track"
+        - "has no chain over"

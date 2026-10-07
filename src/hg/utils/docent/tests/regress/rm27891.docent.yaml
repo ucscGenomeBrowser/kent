@@ -1,0 +1,75 @@
+# #27891 -- a multi-region view failed with
+#
+#     unexpected error. virtWinStart=-1 out of range. virtSeqBaseCount=192073
+#
+# Brian Lee hit it from the Rare Harmful Variants (covidMuts) details page, through its
+# "Display regions of interest (8) in multi-region view" link, with two highlights in his
+# cart.  Christopher Lee found the cause: each highlight lined up exactly with the start
+# of one of the regions, so in virtual-chromosome coordinates it started at virt:0.  The
+# highlight parser always took 1 off chromStart, because it expects 1-based input, so a
+# highlight saved by the multi-region code at 0 became -1.  His fix, 8d83056073d
+# (2021-08-03), in hg/hgTracks/hgTracks.c, decrements only when chromStart > 0.
+#
+# The ticket's link is not reachable on hgwdev: covidMuts names a multiRegionsBedUrl of
+# /gbdb/hg38/covidMuts/covidMuts.regions.bed, and that file is not there, so the details
+# page prints no link.  So the regions are pasted as custom regions instead.  They are
+# chosen so that each one starts exactly where one of Christopher's two highlights
+# (from his reproduction note on the ticket) starts.  That is the shape of the bug: a
+# highlight at the very start of a region.
+#
+# THE ORDER OF THE TWO HIGHLIGHTS MATTERS.  When the view switches to multi-region,
+# remapHighlightPos() in hgTracks.c keeps only the FIRST highlight in the cart variable,
+# rewritten as "hg38.multi:<start>-<end>" with a 0-based start, and drops the rest.  The
+# first draft listed Christopher's blue highlight first.  That one maps to multi:6889, the
+# red one at multi:0 was dropped, and the decrement the fix guards was never reached: the
+# script would have passed on a build without 8d83056073d.  Here the red highlight comes
+# first, and it lines up with the first region, so the cart holds hg38.multi:0-6889.
+#
+# Checks:
+#   1. The single-region view at Christopher's position draws covidMuts, so the cart
+#      really holds the highlights and the track before the switch.
+#   2. The multi-region view comes up: the multi-region button is pressed, both regions
+#      have their map boxes, covidMuts is drawn.  It does not carry the ticket's
+#      "virtWinStart=-1 out of range" error.
+#   3. cartDump shows highlight hg38.multi:0-6889, so the state that triggers the bug
+#      (a saved highlight that starts at 0) is really in the cart.
+#   4. hgTracks again reads that highlight back, which is the parse the fix changed, and
+#      still draws the multi-region view with no error.
+#
+# On hgwdev-demo6 (multiRegionSpaces) check 3 fails: the space path leaves the highlight
+# in chr4 coordinates, so no highlight at multi:0 is ever saved and the bug cannot arise.
+# When that path reaches genome-test, a red check 3 means this script should be retired,
+# not that the bug is back.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr4%3A185960873-187290015&pix=1100&hideTracks=1"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr4%3A185960873-187290015&covid=show&covidMuts=pack&highlight=hg38%23chr4%23186080294%23186087182%23ff0000%7Chg38%23chr4%23186989310%23187007252%23aaedff"
+  - expect:
+      rows: [ruler, covidMuts]
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr4%20186080293%20186087182%0Achr4%20186989309%20187007252%0A"
+  - expect:
+      rows: [ruler, covidMuts]
+      noText: ["out of range", "virtWinStart"]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr4:186080294-186087182"]'
+        - 'area[data-tooltip="chr4:186989310-187007252"]'
+
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "hg38.multi:0-6889"
+
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      rows: [ruler, covidMuts]
+      noText: ["out of range", "virtWinStart"]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr4:186989310-187007252"]'

@@ -1,0 +1,47 @@
+# #16700 -- limitedVis broken for multi-region.  Galt, 2016-01-24: a track set to full did
+# not shift from full to pack to squish when the view was zoomed out in multi-region mode.
+# Brian Raney saw it on snp144.  The cause: with several windows sharing one spaceSaver,
+# the height is not known until every window has loaded, and the pack routine returned a
+# count of 1 while loading was still in progress.  Galt's fix (55dec4f5f4e) returns 0
+# instead.  Closed on hgw0, v328.
+#
+# The recipe builds a case where only the SUM over windows crosses the limit.  hgTracks
+# drops a track out of full when its height would pass maximumTrackHeight(), which is
+# maxItems (default 1000) rows.  microsat has no maxItems setting, so the limit is 1000.
+#
+#     chr1:1-60,000,000     751 microsat items
+#     chr2:1-55,000,000     803 microsat items
+#
+# Each region alone stays in full.  Both together are 1,554 items, so the track must leave
+# full.  On genome-test 2026-10-06 the single region is about 12,900px tall (one row per
+# item), and the two-window view is about 2,100px.  A build that kept full across the
+# windows would draw about 25,000px, so the `< 6000` bound has a wide margin both ways.
+#
+# Step 2 pins that the single region really is drawn in full, so a server where microsat
+# is somehow limited already could not pass the multi-region check by accident.  Step 4
+# also asserts the second region's map box, so a view that fell back to one region fails.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr2:1-55000000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr2%3A1-55000000&pix=1100&hideTracks=1&microsat=full"
+  - expect:
+      rows: [ruler, microsat]
+      exact: true
+      box: {sel: '#td_data_microsat', height: '>10000'}
+
+  # Two custom regions, both in view.  Each is under the 1000-item limit; together they
+  # are over it.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr1%200%2060000000%0Achr2%200%2055000000%0A"
+  - expect:
+      rows: [ruler, microsat]
+      exact: true
+      box: {sel: '#td_data_microsat', height: '<6000'}
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr2:1-55000000"]'

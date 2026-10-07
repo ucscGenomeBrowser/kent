@@ -1,0 +1,51 @@
+# #16839 -- "Assembly Hubs don't like multi-region".  Pressing "e v" (exon view) on an
+# assembly hub gave
+#
+#     Couldn't set connection database to hub_664_xl9_1
+#     mySQL error 1049: Unknown database 'hub_664_xl9_1'
+#
+# because exon-only mode reads its gene track from a MySQL table, and an assembly hub has
+# no database.  Christopher Lee's test (note on 2016-03-02): enter exon view on hg38, go to
+# an assembly hub, press "e v" again.  The fix makes an assembly hub ignore exon view, so
+# "on beta nothing happens".  The second route he found, carrying an hg38 exon-view
+# position over to the hub, gave the same error without the keystroke.  Real exon view on
+# hubs is a separate feature, #16938, still hibernating.
+#
+# Hiram's plant hub on genome-test is gone, so this uses the GenArk hub for Arabidopsis
+# TAIR10.1, GCF_000001735.4, which genome-test serves as hub_<n>_GCF_000001735.4.  The
+# keystroke is the URL variable it sets, virtModeType=exonMostly.
+#
+# Checks:
+#   step 1  exon view really is on for hg38 (the Multi-region button is pressed), so the
+#           cart carries exon-view state into the hub.
+#   step 2  the hub opens from that cart: no "Unknown database" or "Couldn't set
+#           connection database" text, the Multi-region button is NOT pressed, and the
+#           hub's own gc5Base and augustus rows are drawn (the page really is the hub).
+#   step 3  exon view asked for on the hub itself: same checks.  Nothing happens.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A155799529-155812871&pix=1100&hideTracks=1&knownGene=pack&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  - goto: "/cgi-bin/hgTracks?db=GCF_000001735.4&pix=1100"
+  - expect:
+      noText: ["Unknown database", "Couldn't set connection database"]
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+      rows: [ruler, gc5Base, augustus]
+      has: '#hgTracksConfigMultiRegionPage'
+
+  - goto: "/cgi-bin/hgTracks?virtModeType=exonMostly"
+  - expect:
+      noText: ["Unknown database", "Couldn't set connection database"]
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+      rows: [ruler, gc5Base, augustus]
+      has: '#hgTracksConfigMultiRegionPage'
+  - shot: hub
