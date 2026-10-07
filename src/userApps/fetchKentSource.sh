@@ -28,9 +28,9 @@ git clone --depth=1 --branch=${branch} \
 cd kent-temp
 
 git checkout ${branch}
-cd src/submodules
-./submoduleSetup
-cd ../..
+cd src
+./submodules/submoduleSetup
+cd ..
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --prefix=kent/ ${branch} \
@@ -39,6 +39,7 @@ src/checkUmask.sh \
 src/ameme \
 src/aladdin \
 src/blat \
+src/checkCompileFlags.sh \
 src/dnaDust \
 src/fuse \
 src/gfClient \
