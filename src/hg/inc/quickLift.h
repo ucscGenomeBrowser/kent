@@ -140,6 +140,10 @@ struct encodePeak *quickLiftPeaks(struct encodePeak *peakList, struct hash *chai
 boolean quickLiftEnabled(struct cart *cart);
 /* Return TRUE if feature is available */
 
+boolean quickLiftBarChartEnabled(struct cart *cart);
+/* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
+ * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that. */
+
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
  * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says

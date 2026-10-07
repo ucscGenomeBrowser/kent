@@ -1043,6 +1043,19 @@ if (cartEnabled != NULL)
 return cfgOptionBooleanDefault("browser.quickLiftAlignments", FALSE);
 }
 
+boolean quickLiftBarChartEnabled(struct cart *cart)
+/* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
+ * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that, the
+ * same way as quickLiftAlignmentsEnabled. */
+{
+char *cartEnabled = cartOptionalString(cart, "browser.quickLiftBarChart");
+
+if (cartEnabled != NULL)
+    return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
+           sameString(cartEnabled, "yes");
+return cfgOptionBooleanDefault("browser.quickLiftBarChart", FALSE);
+}
+
 static int hrCmp(const void *va, const void *vb)
 /* Compare to sort based on chromStart. */
 {
