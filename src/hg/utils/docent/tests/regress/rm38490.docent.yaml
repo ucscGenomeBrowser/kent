@@ -39,6 +39,7 @@ proof:
   - "xfail 2026-10-06 -- red on genome-test at step 3 (rows not drawn: rm38490Bar) until the fix reaches master"
   - "sandbox-ab 2026-10-06 -- convert half, park 38490 with the gate on: hgc built before the avoidHandler branch in hgc.c drew the page without the lifted position; with b50e4cb498f it passed. With the gate off the convert did not lift the track"
   - "server-flip 2026-10-06 -- passed on genome-test once 04e6f098e74, 18643a9064f and b50e4cb498f were installed there (17:27), having failed at step 3 that afternoon"
+  - "release-ab 2026-10-07 -- fails on v504_branch (park 38423) at step 5: the page drew one item box and stopped, so the click found no ENST00000229239; passes on genome-test. It fails later there than on the pre-fix park build (step 3) because v504's crash comes partway through the image map"
 
 target: genome-test
 db: hg38

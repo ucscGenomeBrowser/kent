@@ -1,0 +1,33 @@
+# #38490 -- the track description of a quickLifted hub track crashed hgTrackUi when the
+# track's name was not a track in the source assembly.
+#
+# getTrackHtml() in hg/lib/hui.c looks the lifted track up in the source assembly's
+# trackDb to borrow its description.  A track from a hub has no row there, and the
+# function dereferenced the NULL it got back (18643a9064f).  hgc's details page and both
+# hgTrackUi pages call it.  rm38490 reaches it through hgc; this script reaches it through
+# the right-click Track Description dialog, which asks hgTrackUi for descriptionOnly=1.
+#
+# The full configuration page is not used here: the crash came after everything visible
+# on it, so the broken page and the fixed one show the same text.  The description dialog
+# is different.  The broken hgTrackUi sent back no description at all; the fixed one says
+# it found none.
+#
+# Fixture: the same hub as rm38490, whose track rm38490Bar is not in hg19's trackDb and
+# has no description page.
+proof:
+  - "assertion-only 2026-10-07 -- written after the fix shipped to genome-test"
+  - "sandbox-ab 2026-10-07 -- park 38490 with the fixed hgTracks: passes with the fixed hgTrackUi; with the pre-fix hgTrackUi it failed step 5 (no dialog, no 'No description found for:'). Not release-ab: on v504 it fails earlier, at the right click, because v504's hgTracks crashes on this track first"
+
+target: genome-test
+db: hg38
+position: chr12:6534000-6539000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38490/hub2.txt", db: hg38}
+  # hideTracks leaves a quickLifted track visible, so this hides only the native ones and
+  # keeps the row in view for the right click.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr12%3A6534000-6539000&pix=1100&hideTracks=1"
+  - expect: {rows: [rm38490Bar], noText: "Warning/Error"}
+  - rightClick: {track: rm38490Bar, item: "ENST00000229239", pick: "Track Description"}
+  - expect: {has: "#hgTrackUiDialog:visible", text: "No description found for:"}
