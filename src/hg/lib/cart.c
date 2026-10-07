@@ -1730,9 +1730,14 @@ char *db = cartString(cart, "db");
 struct trackDb *tdb = hTrackDb(db);
 for(; tdb; tdb = tdb->next)
     {
-    struct trackDb *parent = tdb->parent;
-    if (parent && parent->isShow)
-        hideIfNotInCart(cart, parent->track);
+    /* Every ancestor, not just the closest: a supertrack may itself be a member of
+     * another supertrack, and the outer one is reached only through it. */
+    struct trackDb *parent;
+    for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+        {
+        if (parent->isShow)
+            hideIfNotInCart(cart, parent->track);
+        }
     if (tdb->visibility != tvHide)
         hideIfNotInCart(cart, tdb->track);
     }
@@ -3860,9 +3865,15 @@ for (childRef = tdb->parent->children;childRef != NULL; childRef = childRef->nex
     else if (child->visibility != tvHide)
         cartSetString(cart,child->track,"hide");
     }
-// and finally show the parent
-cartSetString(cart,tdb->parent->track,"show");
-WARN("Set %s to 'show'",tdb->parent->track);
+// and finally show the parent, and every superTrack above it: a superTrack may sit
+// inside another superTrack, and opening only the closest one leaves the track hidden
+struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+for (super = supers; super != NULL; super = super->next)
+    {
+    cartSetString(cart,super->name,"show");
+    WARN("Set %s to 'show'",super->name);
+    }
+slNameFreeList(&supers);
 return TRUE;
 }
 

@@ -137,7 +137,15 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             if (tdb && tdb->parent)
                 {
                 if (tdbIsSuperTrackChild(tdb))
-                    jsonWriteStringf(jw, "extraSel", "%s=show&", tdb->parent->track);
+                    {
+                    struct dyString *dy = dyStringNew(0);
+                    struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+                    for (super = supers; super != NULL; super = super->next)
+                        dyStringPrintf(dy, "%s=show&", super->name);
+                    slNameFreeList(&supers);
+                    jsonWriteString(jw, "extraSel", dy->string);
+                    dyStringFree(&dy);
+                    }
                 else
                     {
                     // tdb is a subtrack of a composite or a view

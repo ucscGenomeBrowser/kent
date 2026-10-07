@@ -1458,8 +1458,11 @@ struct hash *nameHash = hashNew(5);
 
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
-    if (tdb->parent != NULL)
-	polishOneTrack(hub, tdb->parent, nameHash);
+    /* Polish every ancestor, not just the closest: a supertrack may itself sit inside
+     * another supertrack, which is reached only through it. */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+	polishOneTrack(hub, ancestor, nameHash);
     next = tdb->next;
     polishOneTrack(hub, tdb, nameHash);
     if (tdb->subtracks != NULL)
@@ -2162,17 +2165,31 @@ for(; tdb; tdb = tdbNext)
         isVisible = checkCartVisibility(cart, tdb);
     else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb)) // child of supertrack
         {
-        if (hashLookup(haveSuper, tdb->parent->track) == NULL)  // output yet?
+        /* Write every supertrack above this track, outermost first.  A supertrack may
+         * itself be a member of another supertrack, and writing only the closest one
+         * leaves its "parent" setting pointing at a stanza the hub does not contain. */
+        struct slRef *supers = NULL, *superRef;
+        struct trackDb *ancestor;
+        for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
             {
-            //if (checkCartVisibility(cart, tdb->parent))
-                {
-                tdb->parent->visibility = tvShow;
-                // a superTrack is not in the list we are walking, so it has no rank
-                // of its own.  Slot it just above the first child that brought it in.
-                outTrack(out, cart, tdb->parent, rank - 0.5);
-                hashStore(haveSuper, tdb->parent->track);
-                }
+            if (tdbIsSuperTrack(ancestor))
+                slAddHead(&supers, slRefNew(ancestor));  // ends up outermost first
             }
+        // a superTrack is not in the list we are walking, so it has no rank of its own.
+        // Slot the chain just above the first child that brought it in.
+        double superRank = rank - 0.5;
+        for (superRef = supers; superRef != NULL; superRef = superRef->next)
+            {
+            struct trackDb *super = superRef->val;
+            if (hashLookup(haveSuper, super->track) == NULL)  // output yet?
+                {
+                super->visibility = tvShow;
+                outTrack(out, cart, super, superRank);
+                hashStore(haveSuper, super->track);
+                }
+            superRank += 0.01;          // keep an outer folder above the one it holds
+            }
+        slFreeList(&supers);
         isVisible = checkCartVisibility(cart, tdb);
         }
 

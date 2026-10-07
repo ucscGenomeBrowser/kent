@@ -5289,7 +5289,7 @@ var popUpHgcOrHgGene = {
             e.preventDefault();
             // Share the details-page URL with hgsid stripped; keep (or add) db so it opens
             // standalone, and note that the link shows the page, not the user's active tracks.
-            // If this track lives inside a superTrack, force that superTrack to "show" in the
+            // If this track lives inside superTracks, force each of them to "show" in the
             // link too -- superTracks default to hide, so without this the linked-to track
             // would come up invisible on a fresh page load.
             if (window.topLinks && window.topLinks.shareUrl) {

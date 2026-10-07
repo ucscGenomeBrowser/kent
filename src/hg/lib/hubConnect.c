@@ -543,10 +543,10 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
 
     addQuickToHash( tdb->settingsHash, quickLiftChain, db);
 
-    if (tdb->parent)
-        {
-        addQuickToHash( tdb->parent->settingsHash, quickLiftChain, db);
-        }
+    /* every ancestor, since a supertrack may itself be a member of another supertrack */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+        addQuickToHash( ancestor->settingsHash, quickLiftChain, db);
     }
 }
 
