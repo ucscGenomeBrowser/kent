@@ -28,9 +28,20 @@ git clone --depth=1 --branch=${branch} \
 cd kent-temp
 
 git checkout ${branch}
-cd src
-./submodules/submoduleSetup
-cd ..
+# only check out the submodule sources here, do not run submoduleSetup:
+# it configures zlib-ng and probes htslib, and those outputs carry absolute
+# kent-temp paths and this host's compiler results, which are wrong after
+# the copy below and on any other machine.  The build in the extracted
+# tree runs submoduleSetup itself.
+git -c protocol.file.allow=always submodule update --init --recursive
+# htslib makes htscodecs/htscodecs/version.h from 'git describe', only when
+# the htscodecs .git is present.  The extracted tree has no .git, so write the
+# header here while git still works, and the rsync below carries it along.
+# Written directly rather than via 'make -C htslib', which would first run
+# the compiler probe for htscodecs.mk and leave that file in the copy.
+(cd src/submodules/htslib/htscodecs && \
+    vers=$(git describe --always --dirty --match 'v[0-9]\.[0-9]*') && \
+    echo "#define HTSCODECS_VERSION_TEXT \"${vers#v}\"" > htscodecs/version.h)
 
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --prefix=kent/ ${branch} \
@@ -48,7 +59,6 @@ src/isPcr \
 src/index \
 src/makefile \
 src/meta \
-src/parasol \
 src/primeMate \
 src/product \
 src/protDust \
@@ -313,6 +323,8 @@ unzip -o -q part${partNumber}Src.zip
 echo "unzip source part ${partNumber} ${ofN}" 1>&2
 unzip -o -q part${partNumber}Src.zip
 
-rsync -a kent-temp/src/submodules/ kent/src/submodules/
+# the submodule .git files point into kent-temp/.git/modules, which is
+# removed below, so leave them out
+rsync -a --exclude=.git kent-temp/src/submodules/ kent/src/submodules/
 
 rm -rf kent-temp
