@@ -1801,6 +1801,13 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38490",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at b50e4cb498f, quickLift: lift "
+               "bigBarChart tracks, behind browser.quickLiftBarChart, refs "
+               "#38490.  Needs a description and a gate or knob call."),
     ],
 }
 
