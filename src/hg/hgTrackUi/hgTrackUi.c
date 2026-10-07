@@ -2865,24 +2865,46 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         enum trackVisibility tv =
                 hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
 	safef(id, sizeof id, "%s_check", tdb->track);
+        boolean checked = tdbIsSuperTrack(tdb)
+                ? !sameString("hide", cartUsualString(cart, tdb->track,
+                                                      tdb->isShow ? "show" : "hide"))
+                : (tv != tvHide);
         printf("<INPUT style='display:none' class='subtrackCheckbox' TYPE=CHECKBOX id='%s'%s>",
-               id, (tv != tvHide?" CHECKED":""));
+               id, (checked?" CHECKED":""));
         safef(javascript, sizeof(javascript), "superT.selChanged(this)");
         struct slPair *event = slPairNew("change", cloneString(javascript));
 
         char *onlyVis = trackDbSetting(tdb, "onlyVisibility");
-        hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
+        /* A child that is itself a container is shown or hidden, not drawn, so it gets the
+         * same hide/show control its own page would give it rather than the display modes. */
+        boolean childIsContainer = tdbIsSuperTrack(tdb);
+        static char *hideShow[] = {"hide", "show"};
+        boolean childShown = FALSE;
+        char *childVizStr = NULL;
+        if (childIsContainer)
+            {
+            // note: not differentString(), which is a bare strcmp and so can be negative;
+            // this value is used as an array index
+            childShown = !sameString("hide",
+                    cartUsualString(cart, tdb->track, tdb->isShow ? "show" : "hide"));
+            childVizStr = hideShow[childShown];
+            hideShowDropDownWithClassExtraAndLabel(tdb->track, NULL, childShown,
+                                        (childShown ? "vizSelect normalText":"vizSelect hiddenText"),
+                                        event, tdb->shortLabel);
+            }
+        else
+            hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
                                         (tv == tvHide ? "vizSelect hiddenText":"vizSelect normalText"),
                                         onlyVis,
                                         event);
 
         // print a group of buttons that act like radiobuttons (see javascript lines below)
         printf("<div data-trackname='%s' class='seg-btn-group' style='margin-right:12px'>", tdb->track);
-        char *trackVizStr = hStringFromTv(tv);
+        char *trackVizStr = childIsContainer ? childVizStr : hStringFromTv(tv);
 
         // vizList is e.g.  {"hide", "dense", "squish", "pack", "full"}, but can be shorter, e.g. when canPack=false
-        char **vizList = hTvGetVizArr(tv, tdb->canPack, onlyVis);
-        int vizListLen = arrNullLen(vizList);
+        char **vizList = childIsContainer ? hideShow : hTvGetVizArr(tv, tdb->canPack, onlyVis);
+        int vizListLen = childIsContainer ? ArraySize(hideShow) : arrNullLen(vizList);
         for (int i = 0; i < vizListLen; i++) {
             char *buttonViz = vizList[i];
             // the currently active viz mode is an 'active' button = pressed
@@ -3841,6 +3863,24 @@ if (sameString(tdb->track, "oligoMatch"))
 return TRUE;
 }
 
+static void cartRemoveAllForSuperTrack(struct cart *cart, struct trackDb *tdb)
+/* Clear a supertrack's own cart variables and those of its members.  SuperTrack children
+ * live in tdb->children, an slRef list, not in the subtracks tree that
+ * cartRemoveAllForTdbAndChildren walks, and a member may itself be a supertrack whose own
+ * members are reached only through it. */
+{
+cartRemoveAllForTdb(cart, tdb);
+struct slRef *childRef;
+for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+    {
+    struct trackDb *child = childRef->val;
+    if (tdbIsSuperTrack(child))
+        cartRemoveAllForSuperTrack(cart, child);
+    else
+        cartRemoveAllForTdb(cart, child);
+    }
+}
+
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
@@ -3914,10 +3954,7 @@ if (tdbIsContainer(tdb) || tdbIsSuperTrack(tdb))
             // the subtracks tree that cartRemoveAllForTdbAndChildren walks.
             // Clear the supertrack's own cart vars (filters, visibility) and
             // each child's vars by hand.
-            cartRemoveAllForTdb(cart, tdb);
-            struct slRef *childRef;
-            for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
-                cartRemoveAllForTdb(cart, (struct trackDb *)childRef->val);
+            cartRemoveAllForSuperTrack(cart, tdb);
             }
         else
             cartRemoveAllForTdbAndChildren(cart,tdb);

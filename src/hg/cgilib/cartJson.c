@@ -518,10 +518,19 @@ if (tdb->parent && fieldOk("parent", fieldHash))
     if (tdbIsSuperTrackChild(tdb))
         {
         // Supertracks have been omitted from fullTrackList, so add the supertrack object's
-        // non-parent/child info here.
-        jsonWriteObjectStart(jwNew, "parent");
-        writeTdbSimple(jwNew, tdb->parent, fieldHash);
-        jsonWriteObjectEnd(jwNew);
+        // non-parent/child info here.  A supertrack may sit inside another supertrack, which
+        // is missing from the list for the same reason, so nest the whole chain.
+        int depth = 0;
+        struct trackDb *ancestor;
+        for (ancestor = tdb->parent; ancestor != NULL && tdbIsSuperTrack(ancestor);
+             ancestor = ancestor->parent)
+            {
+            jsonWriteObjectStart(jwNew, "parent");
+            writeTdbSimple(jwNew, ancestor, fieldHash);
+            depth++;
+            }
+        while (depth-- > 0)
+            jsonWriteObjectEnd(jwNew);
         }
     else
         // Just the name so we don't have infinite loops.

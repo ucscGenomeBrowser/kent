@@ -7361,12 +7361,17 @@ for (track = *pTrackList; track != NULL; track = track->next)
         if (tdbIsSuperTrackChild(track->tdb))
             {
             assert(track->tdb->parentName != NULL);
-            /* supertrack member must be in same group as its super */
-            /* determine supertrack group */
-            safef(cartVar, sizeof(cartVar), "%s.group",track->tdb->parentName);
-            groupName = cloneString(                                              //1
-                    cartUsualString(cart, cartVar, track->tdb->parent->grp));
-            track->tdb->parent->grp = cloneString(groupName);                     //2
+            /* supertrack member must be in same group as its super.  The group belongs to
+             * the outermost supertrack, since that is the one the group list shows, and
+             * every supertrack in between takes the same one. */
+            struct trackDb *outer = track->tdb->parent;
+            while (tdbIsSuperTrackChild(outer))
+                outer = outer->parent;
+            safef(cartVar, sizeof(cartVar), "%s.group",outer->track);
+            groupName = cloneString(cartUsualString(cart, cartVar, outer->grp));
+            struct trackDb *ancestor;
+            for (ancestor = track->tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+                ancestor->grp = cloneString(groupName);
             }
         else
             {
