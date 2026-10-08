@@ -6,7 +6,7 @@
 #define HUBPUBLIC_H
 
 #include "jksql.h"
-#define HUBPUBLIC_NUM_COLS 7
+#define HUBPUBLIC_NUM_COLS 8
 
 extern char *hubPublicCommaSepFieldNames;
 
@@ -21,6 +21,7 @@ struct hubPublic
     unsigned dbCount;	/* Number of databases hub has data for. */
     char *dbList;	/* Comma separated list of databases. */
     char *descriptionUrl;	/* URL to description HTML */
+    char *email;	/* Contact email for the hub */
     };
 
 struct hubEntry
