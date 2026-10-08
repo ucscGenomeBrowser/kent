@@ -490,6 +490,19 @@ RELEASE_GATES = {
                "is drawn, so it applies to tracks lifted before it was set.  "
                "A cart variable of the same name overrides it, like "
                "browser.quickLiftBarChart."),
+        h("browser.quickLiftMafSummary", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38513",
+          note="Let a quickLifted maf track (wigMaf, such as hg19 "
+               "multiz100way) read its summary table above the summary "
+               "window size, from the assembly it came from, and lift the "
+               "rows; read its blocks with no padding around the window; and "
+               "draw its score overview lifted.  Read in "
+               "quickLiftMafSummaryEnabled() and asked by inSummaryMode() "
+               "(hgTracks/mafTrack.h), quickLiftLoadMafs() and the score "
+               "overview in hgTracks/wigMafTrack.c.  Off, a lifted maf reads "
+               "every block at any zoom, as before, which runs out of memory "
+               "at 50 Mb.  A cart variable of the same name overrides it, "
+               "like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "

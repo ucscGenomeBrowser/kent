@@ -171,6 +171,12 @@ boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb);
 /* Return TRUE if tdb is a quickLifted GTEx gene track to draw and click as GTEx:  it is
  * lifted, its name past the hub prefix starts with gtexGene, and browser.quickLiftGtex is on. */
 
+boolean quickLiftMafSummaryEnabled(struct cart *cart);
+/* Return TRUE if a quickLifted maf track reads its summary table above the summary window
+ * size, lifted from the assembly it came from, and reads its blocks with no padding around
+ * the window.  Off unless hg.conf says browser.quickLiftMafSummary=on, and a cart variable
+ * of the same name overrides that. */
+
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
  * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says

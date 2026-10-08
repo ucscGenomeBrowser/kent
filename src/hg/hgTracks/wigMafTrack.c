@@ -292,8 +292,11 @@ quickLiftResolveTable(track->tdb, track->table, &table, &liftDb);
 char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
 
 struct hash *chainHash = newHash(8);
-struct quickLiftRange *range, *rangeList = quickLiftSourceRangesExact(quickLiftFile,
-    chromName, start, end, chainHash);
+// a range query returns every block that overlaps the range, so no padding is needed;  the
+// gate keeps the padded read it replaced.  refs #38513
+struct quickLiftRange *range, *rangeList = quickLiftMafSummaryEnabled(cart) ?
+    quickLiftSourceRangesExact(quickLiftFile, chromName, start, end, chainHash) :
+    quickLiftSourceRanges(quickLiftFile, chromName, start, end, chainHash);
 struct mafAli *srcList = NULL;
 
 for (range = rangeList; range != NULL; range = range->next)
@@ -2926,7 +2929,8 @@ if (wigTrack == NULL)
     else
         {
         /* use or scored refs from maf table*/
-        if (differentString(track->tdb->type, "bigMaf") && quickLiftIsLifted(track->tdb))
+        if (differentString(track->tdb->type, "bigMaf") && quickLiftIsLifted(track->tdb) &&
+            quickLiftMafSummaryEnabled(cart))
             drawLiftedScoreOverview(track, height, seqStart, seqEnd, hvg,
                             xOff, yOff, width, color, scoreVis);
         else if (differentString(track->tdb->type, "bigMaf"))

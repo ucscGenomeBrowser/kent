@@ -408,9 +408,8 @@ struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chr
 // Like quickLiftSourceRanges, but only the source bases that map into the window itself,
 // with no padding.  Right for anything read by a range query that returns every item
 // overlapping the range, such as maf blocks and their summaries:  an item that lands in the
-// window overlaps these bases, and the padding would only read items that land elsewhere.
-// In a multi-region space every region is one block, so the padding is 200 kb of extra
-// alignment for every region on screen.  refs #37788
+// window overlaps these bases, and the padding would only read items that land elsewhere,
+// 200 kb of extra alignment for every source range.  refs #38513
 {
 return sourceRangesPadded(quickLiftFile, chrom, start, end, 0, chainHash);
 }
@@ -1199,6 +1198,18 @@ int fromCart = cartGate(cart, "browser.quickLiftGtex");
 if (fromCart >= 0)
     return fromCart;
 return cfgOptionBooleanDefault("browser.quickLiftGtex", FALSE);
+}
+
+boolean quickLiftMafSummaryEnabled(struct cart *cart)
+/* Return TRUE if a quickLifted maf track reads its summary table above the summary window
+ * size, lifted from the assembly it came from, and reads its blocks with no padding around
+ * the window.  Off unless hg.conf says browser.quickLiftMafSummary=on, and a cart variable
+ * of the same name overrides that, the same way as quickLiftBarChartEnabled.  refs #38513 */
+{
+int fromCart = cartGate(cart, "browser.quickLiftMafSummary");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftMafSummary", FALSE);
 }
 
 boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb)
