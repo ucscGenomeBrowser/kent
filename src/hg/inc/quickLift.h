@@ -91,10 +91,16 @@ struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, i
 // chains that do the mapping are added to chainHash, which is the form the lift functions
 // read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
 
-struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, char *chrom,
-                                               int start, int end);
+struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, struct hash *blockCache,
+                                               char *chrom, int start, int end);
 // Map chrom:start-end in the other assembly onto the reference through the chains in
 // chainHash, one piece for every aligned block it overlaps, in reference coordinates.
+// blockCache is a hash from newHash() that the caller keeps across a run of calls:  it holds
+// each chain's blocks in an array, so finding them is a binary search.  Free it with
+// quickLiftBlockCacheFree().
+
+void quickLiftBlockCacheFree(struct hash **pBlockCache);
+// Free a blockCache from quickLiftMapToReference().  The chains are not freed.
 
 struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chrom, int start,
     int end, struct hash *chainHash);

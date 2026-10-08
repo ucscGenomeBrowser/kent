@@ -415,8 +415,52 @@ struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chr
 return sourceRangesPadded(quickLiftFile, chrom, start, end, 0, chainHash);
 }
 
-struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, char *chrom,
-                                               int start, int end)
+struct chainBlocks
+/* A chain's blocks in an array, in order, for a binary search. */
+    {
+    int count;
+    struct cBlock **blocks;
+    };
+
+static struct chainBlocks *chainBlocksFor(struct hash *blockCache, struct chain *chain)
+/* The blocks of chain as an array, made the first time they are asked for. */
+{
+char key[32];
+safef(key, sizeof key, "%p", chain);
+struct chainBlocks *cb = hashFindVal(blockCache, key);
+if (cb == NULL)
+    {
+    AllocVar(cb);
+    cb->count = slCount(chain->blockList);
+    AllocArray(cb->blocks, cb->count);
+    struct cBlock *b;
+    int i = 0;
+    for (b = chain->blockList; b != NULL; b = b->next)
+        cb->blocks[i++] = b;
+    hashAdd(blockCache, key, cb);
+    }
+return cb;
+}
+
+void quickLiftBlockCacheFree(struct hash **pBlockCache)
+// Free a blockCache from quickLiftMapToReference().  The chains are not freed.
+{
+struct hash *blockCache = *pBlockCache;
+if (blockCache == NULL)
+    return;
+struct hashEl *hel, *helList = hashElListHash(blockCache);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct chainBlocks *cb = hel->val;
+    freeMem(cb->blocks);
+    freeMem(cb);
+    }
+hashElFreeList(&helList);
+hashFree(pBlockCache);
+}
+
+struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, struct hash *blockCache,
+                                               char *chrom, int start, int end)
 // Map chrom:start-end in the other assembly onto the reference through the chains in
 // chainHash, one piece for every aligned block it overlaps.  The pieces come back in
 // reference coordinates, unsorted, and are freed with slFreeList after freeing each chrom.
@@ -429,10 +473,23 @@ struct binElement *el, *elList = liftOverChainsInRange(chainHash, chrom, start, 
 for (el = elList; el != NULL; el = el->next)
     {
     struct chain *chain = el->val;
-    struct cBlock *b;
-    for (b = chain->blockList; b != NULL; b = b->next)
+    struct chainBlocks *cb = chainBlocksFor(blockCache, chain);
+
+    // the chains were swapped going into the hash, so t is the other assembly;  the blocks
+    // are in order on t and do not overlap, so find the first one that ends after start
+    int lo = 0, hi = cb->count;
+    while (lo < hi)
         {
-        // the chains were swapped going into the hash, so t is the other assembly
+        int mid = (lo + hi) / 2;
+        if (cb->blocks[mid]->tEnd <= start)
+            lo = mid + 1;
+        else
+            hi = mid;
+        }
+    int i;
+    for (i = lo; (i < cb->count) && (cb->blocks[i]->tStart < end); i++)
+        {
+        struct cBlock *b = cb->blocks[i];
         int s = max(start, b->tStart);
         int e = min(end, b->tEnd);
         if (s >= e)
