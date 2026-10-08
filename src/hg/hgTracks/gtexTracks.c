@@ -13,6 +13,9 @@
 #include "gtexTissueData.h"
 #include "gtexUi.h"
 #include "spaceSaver.h"
+#include "liftOver.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 enum geneLabelStyle
     {
@@ -200,17 +203,47 @@ return extras->colors;
 /*****************************************************************/
 /* Load sample data, gene info, and anything else needed to draw */
 
-static struct hash *loadGeneModels(char *table)
-/* Load gene models from table */
+static char *gtexLiftDb(struct track *tg)
+/* The assembly a quickLifted GTEx track came from, or NULL when the track is not lifted or
+ * browser.quickLiftGtex is off.  With it off a quickLifted GTEx track is not given these
+ * methods at all (fillInFromType()), and is drawn as a plain bed.  refs #38512 */
 {
+if (!quickLiftIsLiftedGtex(cart, tg->tdb))
+    return NULL;
+return trackDbSetting(tg->tdb, "quickLiftDb");
+}
+
+static struct hash *loadGeneModels(struct track *tg, char *table)
+/* Load gene models from table, hashed by name.  For a quickLifted track they come from the
+ * assembly the track came from and are lifted onto the reference. */
+{
+struct hash *modelHash = newHash(0);
+struct genePred *model = NULL;
+char *liftDb = gtexLiftDb(tg);
+if (liftDb != NULL)
+    {
+    /* Fetched from the source assembly and mapped through the track's chain, the way
+     * maybeLiftGenePred() does it for an ordinary gene track.  refs #38512 */
+    struct hash *chainHash = newHash(8);
+    struct sqlConnection *conn = hAllocConn(liftDb);
+    char *quickLiftFile = trackDbSetting(tg->tdb, "quickLiftUrl");
+    struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table,
+                                                 chromName, winStart, winEnd, NULL, chainHash);
+    hFreeConn(&conn);
+    calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
+    for (model = gpList; model != NULL; model = model->next)
+        if (model->chrom != NULL    // a model whose lift failed is left without a chrom
+            && positiveRangeIntersection(winStart, winEnd, model->txStart, model->txEnd) > 0)
+            hashAdd(modelHash, model->name, model);
+    return modelHash;
+    }
+
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 
-struct hash *modelHash = newHash(0);
-struct genePred *model = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     model = genePredLoad(row+rowOffset);
@@ -395,6 +428,58 @@ struct rgbColor color = extras->colors[id];
 return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
 }
 
+static struct slList *gtexGeneBedLoadLift(char **row, int numFields)
+/* quickLiftSql()'s loader signature around gtexGeneBedLoad(). */
+{
+return (struct slList *)gtexGeneBedLoad(row);
+}
+
+static void gtexGeneBedsLoad(struct track *tg, char *filter)
+/* Put the gene beds in range on tg->items, fetched through the track's chain when it has
+ * one.  quickLiftBeds() cannot do the lift:  it treats each item as a struct bed
+ * and writes thickStart and thickEnd, which in a gtexGeneBed are the geneId pointer.  So
+ * only the range and strand are remapped here.  refs #38512 */
+{
+char *liftDb = gtexLiftDb(tg);
+if (liftDb == NULL)
+    {
+    bedLoadItemWhere(tg, tg->table, filter, (ItemLoader)gtexGeneBedLoad);
+    return;
+    }
+struct hash *chainHash = newHash(8);
+struct sqlConnection *conn = hAllocConn(liftDb);
+char *quickLiftFile = trackDbSetting(tg->tdb, "quickLiftUrl");
+struct gtexGeneBed *geneBed, *nextBed, *liftedList = NULL;
+struct gtexGeneBed *sourceList = (struct gtexGeneBed *)quickLiftSql(conn, quickLiftFile,
+        trackHubSkipHubName(tg->table), chromName, winStart, winEnd, NULL, filter,
+        gtexGeneBedLoadLift, GTEXGENEBED_NUM_COLS, chainHash);
+hFreeConn(&conn);
+for (geneBed = sourceList; geneBed != NULL; geneBed = nextBed)
+    {
+    nextBed = geneBed->next;
+    int start, end;
+    char *sourceChrom = geneBed->chrom;
+    char *error = liftOverRemapRange(chainHash, 0.0, geneBed->chrom,
+                                     geneBed->chromStart, geneBed->chromEnd, geneBed->strand[0],
+                                     0.001, &geneBed->chrom, &start, &end, &geneBed->strand[0]);
+    if (geneBed->chrom != sourceChrom)
+        freeMem(sourceChrom);   // the lift put a copy of the reference chrom in its place
+    /* Items up to QUICKLIFT_RANGE_PAD outside the window come back, and gtexGeneDrawAt()
+     * draws whatever it is given, clamped to the edge.  So keep the window's items
+     * only, as hRangeQuery() does for an unlifted track. */
+    if (error != NULL || positiveRangeIntersection(winStart, winEnd, start, end) == 0)
+        {
+        gtexGeneBedFree(&geneBed);
+        continue;
+        }
+    geneBed->chromStart = start;
+    geneBed->chromEnd = end;
+    slAddHead(&liftedList, geneBed);
+    }
+slSort(&liftedList, bedCmp);
+tg->items = liftedList;
+}
+
 static void gtexGeneLoadItems(struct track *tg)
 /* Load method for track items */
 {
@@ -433,11 +518,11 @@ extras->labelStyle = getLabelStyle(cartUsualStringClosestToHome(cart, tg->tdb, F
 char buf[256];
 char *modelTable = "gtexGeneModel";
 safef(buf, sizeof(buf), "%s%s", modelTable, extras->version ? extras->version: "");
-struct hash *modelHash = loadGeneModels(buf);
+struct hash *modelHash = loadGeneModels(tg, buf);
 
 /* Get geneBeds (names and all-sample tissue median scores) in range */
 char *filter = getScoreFilterClause(cart, tg->tdb, NULL);
-bedLoadItemWhere(tg, tg->table, filter, (ItemLoader)gtexGeneBedLoad);
+gtexGeneBedsLoad(tg, filter);
 
 /* Create geneInfo items with BED and geneModels */
 struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
@@ -464,6 +549,12 @@ else
 	}
     }
 filterTissues(tg);
+
+/* The descriptions are in the known genes of the assembly the genes came from, which for a
+ * quickLifted track is not the reference.  Some assemblies have none.  refs #38512 */
+char *liftDb = gtexLiftDb(tg);
+char *knownDatabase = hdbDefaultKnownDb((liftDb != NULL) ? liftDb : database);
+boolean haveKgXref = sqlDatabaseExists(knownDatabase) && hTableExists(knownDatabase, "kgXref");
 
 while (geneBed != NULL)
     {
@@ -493,13 +584,16 @@ while (geneBed != NULL)
     // get description
     geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
     // NOTE: Consider loading all gene descriptions to save queries
-    char query[256];
-    sqlSafef(query, sizeof(query),
-            "select kgXref.description from kgXref where geneSymbol='%s'", geneBed->name);
-    char *knownDatabase = hdbDefaultKnownDb(database);
-    struct sqlConnection *conn = hAllocConn(knownDatabase);
-    char *desc = sqlQuickString(conn, query);
-    hFreeConn(&conn);
+    char *desc = NULL;
+    if (haveKgXref)
+        {
+        char query[256];
+        sqlSafef(query, sizeof(query),
+                "select kgXref.description from kgXref where geneSymbol='%s'", geneBed->name);
+        struct sqlConnection *conn = hAllocConn(knownDatabase);
+        desc = sqlQuickString(conn, query);
+        hFreeConn(&conn);
+        }
     if (desc)
         {
         // hg38 known genes has extra detail about source; strip it

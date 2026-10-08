@@ -91,6 +91,23 @@ struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, i
 // chains that do the mapping are added to chainHash, which is the form the lift functions
 // read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
 
+struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, struct hash *blockCache,
+                                               char *chrom, int start, int end);
+// Map chrom:start-end in the other assembly onto the reference through the chains in
+// chainHash, one piece for every aligned block it overlaps, in reference coordinates.
+// blockCache is a hash from newHash() that the caller keeps across a run of calls:  it holds
+// each chain's blocks in an array, so finding them is a binary search.  Free it with
+// quickLiftBlockCacheFree().
+
+void quickLiftBlockCacheFree(struct hash **pBlockCache);
+// Free a blockCache from quickLiftMapToReference().  The chains are not freed.
+
+struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chrom, int start,
+    int end, struct hash *chainHash);
+// Like quickLiftSourceRanges, but only the source bases that map into the window itself,
+// with no padding.  Right for anything read by a range query that returns every item
+// overlapping the range, such as maf blocks and their summaries.
+
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end);
 // Load the quickLift chains covering chrom:start-end on the reference and return them in a
 // hash keyed on the other assembly's sequence names, which is the shape the lift functions
@@ -143,6 +160,22 @@ boolean quickLiftEnabled(struct cart *cart);
 boolean quickLiftBarChartEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
  * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that. */
+
+boolean quickLiftGtexEnabled(struct cart *cart);
+/* Return TRUE if a quickLifted GTEx gene track is drawn as GTEx, with its bar charts, from
+ * genes and gene models read out of the assembly it came from through the chain.  Off, it
+ * is drawn as a plain bed.  Off unless hg.conf says browser.quickLiftGtex=on,
+ * and a cart variable of the same name overrides that. */
+
+boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb);
+/* Return TRUE if tdb is a quickLifted GTEx gene track to draw and click as GTEx:  it is
+ * lifted, its name past the hub prefix starts with gtexGene, and browser.quickLiftGtex is on. */
+
+boolean quickLiftMafSummaryEnabled(struct cart *cart);
+/* Return TRUE if a quickLifted maf track reads its summary table above the summary window
+ * size, lifted from the assembly it came from, and reads its blocks with no padding around
+ * the window.  Off unless hg.conf says browser.quickLiftMafSummary=on, and a cart variable
+ * of the same name overrides that. */
 
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,

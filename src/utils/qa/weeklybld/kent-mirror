@@ -1,0 +1,4 @@
+#!/bin/bash
+# kent-mirror - open a login shell inside the kent-mirror docker browser container.
+# refs #37655
+exec docker exec -it kent-mirror bash -l
