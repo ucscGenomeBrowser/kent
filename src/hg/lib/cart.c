@@ -3678,62 +3678,73 @@ if (tdbIsSuper(tdb))
     }
 }
 
-static boolean isVisibilityVar(struct hash *names, char *var)
-/* Return TRUE if var is the visibility of a track or view in names, a subtrack's
- * checkbox ({track}_sel) or a track's image order ({track}_imgOrd). */
+static void addTdbListNames(struct hash *names, struct trackDb *tdbList)
+/* Add the names of all tracks in tdbList and their subtracks and views to hash. */
 {
-if (hashLookup(names, var))
-    return TRUE;
-char *suffixes[] = {"_sel", "_imgOrd"};
-int i;
-for (i = 0; i < ArraySize(suffixes); i++)
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (endsWith(var, suffixes[i]))
-        {
-        char *stem = cloneStringZ(var, strlen(var) - strlen(suffixes[i]));
-        boolean found = (hashLookup(names, stem) != NULL);
-        freeMem(stem);
-        if (found)
-            return TRUE;
-        }
+    hashStore(names, tdb->track);
+    addTdbListNames(names, tdb->subtracks);
     }
-return FALSE;
 }
 
-static boolean isTrackSettingVar(struct hash *names, char *var)
-/* Return TRUE if var starts with {track}. or {track}_ for a track in names. */
+static char *varOwner(struct hash *allNames, char *var)
+/* Return the track that var belongs to: the longest track name that is all of var
+ * or is followed in var by a '.' or '_', or NULL if there is none. The longest, so
+ * that the variables of track foo_1 do not belong to track foo. */
 {
+struct hashEl *hel = hashLookup(allNames, var);
+if (hel != NULL)
+    return hel->name;
 char *buf = cloneString(var);
-boolean found = FALSE;
+char *owner = NULL;
 char *s;
-for (s = buf + 1; *s != 0 && !found; s++)
+for (s = buf + 1; *s != 0; s++)
     {
     if (*s == '.' || *s == '_')
         {
         char c = *s;
         *s = 0;
-        found = (hashLookup(names, buf) != NULL);
+        if ((hel = hashLookup(allNames, buf)) != NULL)
+            owner = hel->name;
         *s = c;
         }
     }
 freeMem(buf);
-return found;
+return owner;
 }
 
-void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb)
+static boolean isVisibilityVar(char *owner, char *var)
+/* Return TRUE if var is the visibility of track or view owner, its subtrack
+ * checkbox ({track}_sel) or its image order ({track}_imgOrd). */
+{
+if (sameString(var, owner))
+    return TRUE;
+char *suffix = var + strlen(owner);
+return sameString(suffix, "_sel") || sameString(suffix, "_imgOrd");
+}
+
+void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb,
+                                         struct trackDb *tdbList)
 /* Remove the settings (filters, colors, display options...) of this tdb, its
  * subtracks, views and superTrack children from the cart, but keep their
  * visibility: the track and view visibilities, the subtrack checkboxes and the
- * image order. */
+ * image order. tdbList has all tracks of the database, so that variables of other
+ * tracks whose names start with this one's are left alone. */
 {
 struct hash *names = hashNew(0);
 addTdbTreeNames(names, tdb);
+struct hash *allNames = hashNew(16);
+addTdbListNames(allNames, tdbList);
+addTdbTreeNames(allNames, tdb);
 // One pass over the cart, not one per track: composites can have 26,000 subtracks
 struct slName *removeList = NULL;
 struct hashEl *hel, *helList = hashElListHash(cart->hash);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
-    if (isTrackSettingVar(names, hel->name) && !isVisibilityVar(names, hel->name))
+    char *owner = varOwner(allNames, hel->name);
+    if (owner != NULL && hashLookup(names, owner) && !isVisibilityVar(owner, hel->name))
         slNameAddHead(&removeList, hel->name);
     }
 hashElFreeList(&helList);
@@ -3741,8 +3752,8 @@ struct slName *var;
 for (var = removeList; var != NULL; var = var->next)
     cartRemove(cart, var->name);
 slFreeList(&removeList);
+hashFree(&allNames);
 hashFree(&names);
-saveState(cart);
 }
 
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal)

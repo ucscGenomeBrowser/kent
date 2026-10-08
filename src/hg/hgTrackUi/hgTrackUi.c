@@ -4775,7 +4775,7 @@ if (isDup)
 
 if (clearSettings)
     {
-    cartRemoveSettingsForTdbAndChildren(cart, tdb);
+    cartRemoveSettingsForTdbAndChildren(cart, tdb, tdbList);
     puts("OK");
     return;
     }
