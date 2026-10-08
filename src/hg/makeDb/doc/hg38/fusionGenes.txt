@@ -1,0 +1,92 @@
+# 2026-10-07 Claude/max: FusionGDB fusion genes, hg19 and hg38, refs #34083
+# Fusion Genes collection (superTrack fusionGenes) with two tracks of the same fusion events:
+#   fusionGdb    bigBed, one 1 bp feature at each partner's breakpoint
+#   fusionGdbTx  bigGenePred, each partner as the part of its transcript kept in the fusion
+# FusionGDB is on hg19. The scripts build hg19 directly and hg38 with liftOver, so this file
+# covers both assemblies. Scripts: ~/kent/src/hg/makeDb/scripts/fusionGdb/
+# A log of all runs is in /hive/data/genomes/hg38/bed/fusionGdb/build.log
+
+# FusionGDB2 has no bulk download (the combined table that Pora Kim sent in the ticket
+# returns 404), so we use the FusionGDB v1 tables (2019/2020).
+mkdir -p /hive/data/genomes/hg38/bed/fusionGdb/download
+cd /hive/data/genomes/hg38/bed/fusionGdb/download
+~/kent/src/hg/makeDb/scripts/fusionGdb/fusionGdbDownload.sh 2>&1 | tee -a ../build.log
+wc -l *.txt
+#  1142095 TCGA_ChiTaRS_combined_fusion_ORF_analyzed_gencode_h19v19.txt
+#    43895 TCGA_ChiTaRS_combined_fusion_ORF_analyzed_gencode_h19v19_fgID.txt
+#    65780 TCGA_ChiTaRS_combined_fusion_information_on_hg19.txt
+#   114616 fgene_disease_associations.txt
+# Only the ORF table and the information table are used. Source codes in columns 1+2:
+# "ChiTaRS3.1" = ChiTaRS 3.1, "TCGA RV" = TumorFusions (Verhaak lab, 15854 fusion genes),
+# "TCGA LD" = Gao et al. 2018 PanCanAtlas (Ding lab, 23944 fusion genes). The gene counts
+# match the FusionGDB paper.
+
+# Breakpoints are 1-based: for the TCGA rows ~95% of 5' breakpoints are the last base of a
+# GENCODE V19 exon and ~95% of 3' breakpoints the first base of one. ChiTaRS breakpoints,
+# from GenBank ESTs and mRNAs, mostly are not at exon boundaries.
+
+# GENCODE V19 transcripts, the gene set FusionGDB used, for fusionGdbTx
+hgsql hg19 -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds,score,name2,cdsStartStat,cdsEndStat,exonFrames from wgEncodeGencodeCompV19" > gencodeV19.gp
+hgsql hg19 -Ne "select transcriptId,geneName,transcriptType from wgEncodeGencodeAttrsV19" > gencodeV19.attrs
+hgsql hg19 -Ne "select transcriptId,tag from wgEncodeGencodeTagV19 where tag in ('appris_principal','CCDS','basic')" > gencodeV19.tags
+
+cd /hive/data/genomes/hg38/bed/fusionGdb
+~/kent/src/hg/makeDb/scripts/fusionGdb/fusionGdbBuild.sh 2>&1 | tee -a build.log
+# writes in /hive/data/genomes/{hg19,hg38}/bed/fusionGdb/:
+#   fusionGdb.bed   -> _fusionGdb.bb, fusionGdb.ix.txt -> _fusionGdb.ix/.ixx (search index)
+#   fusionGdbTx.bed -> _fusionGdbTx.bb
+# FusionGDB terms of use do not allow redistribution: both tracks have "tableBrowser off",
+# and the file names start with "_", which the rsync of /gbdb to hgdownload excludes.
+
+# Fusion events: 65780 rows merge into 52994 distinct breakpoint pairs (5' gene, chrom,
+# position, strand, 3' gene, chrom, position, strand).
+# Frame, from FusionGDB's ORF table: Outside CDS 29801, In-frame 10427, Frame-shift 8310,
+# Not annotated 4456 events.
+# Top fusion by sample count: TMPRSS2::ERG, 129 PRAD samples.
+#
+# Feature names are unique IDs <fusion>.<n>.5p and .3p, where n numbers the breakpoint pairs of
+# a fusion by hg19 coordinates, e.g. TMPRSS2::ERG.14.5p. The label is the fusion name
+# (labelFields). The link to the other partner sets hgFind.matches=<partner ID>, which
+# highlights exactly the partner feature.
+
+# fusionGdb (fusionGdbToBed.py):
+#   hg19: 105783 features, 2 per event minus 205 events where FusionGDB gives "chr?" as the
+#         chromosome of one partner
+#   hg38: 105769 features, 14 more breakpoints could not be lifted
+#   chrMT in FusionGDB is rCRS: kept as chrMT on hg19, written as chrM on hg38 without liftOver.
+#   5 hg38 features land on alt/chrUn sequences (chr7_KI270803v1_alt, chr15_KI270850v1_alt,
+#   chr22_KI270879v1_alt, chrUn_KI270742v1), that is where the chain maps them.
+
+# fusionGdbTx (fusionGdbToBigGenePred.py):
+# Transcripts: the FusionGDB transcript pair with the best frame (In-frame, Frame-shift,
+# other), then GENCODE tags appris_principal > CCDS > basic, then longest CDS/transcript.
+# Events without ORF data: best V19 transcript of the gene that contains the breakpoint.
+# The 5' partner keeps transcript start..breakpoint, the 3' partner breakpoint..end.
+# exonFrames are recomputed where the cut removes coding bases.
+#
+# Gene symbols: 183 ChiTaRS symbols in FusionGDB are Excel dates, e.g. 9-Sep, 6-Mar, 1-Dec,
+# and 1-Sep-04 (= SEPT14), 1-Mar-01 (= MARCH11). They are mapped to the V19 symbol
+# (SEPT/MARCH/MARC/DEC + number) whose transcript contains the breakpoint, all 183 resolve.
+# 1-Mar and 2-Mar on chr1:220.9M are MARC1/MARC2, not MARCH1/2. This fix is only in
+# fusionGdbTx; fusionGdb shows the FusionGDB symbols as they are.
+#
+# Strands: FusionGDB gives the strand of the fusion sequence. Many ChiTaRS GenBank sequences
+# are reverse-complemented: if both genes are on the other strand, the 5'/3' roles are
+# swapped for drawing (3451 events); if only one is, the event is drawn as given (8059
+# events). Both are noted in the orientation field. Only 68 of these are TCGA events.
+#
+#   hg19: 105783 features
+#     partner drawn from a FusionGDB transcript pair: 90986
+#     partner drawn from a GENCODE transcript of the gene: 8334
+#     breakpoint only (1 bp), no V19 transcript of the gene contains it: 6463
+#   hg38: 105699 features, 84 transcript features could not be lifted (partial match)
+#
+# Checks: the clipped exonFrames agree with a direct count of the coding bases for all
+# exons, except in transcripts with an incomplete 5' CDS, where GENCODE does not start at
+# frame 0. Only ~76% (7602/9975) of FusionGDB "In-frame" pairs pass a strict codon check
+# (5' coding length mod 3 == frame at the 3' breakpoint), so FusionGDB's in-frame
+# definition is not a codon check.
+#
+# Mouseover links to the partner as "Fused to: TMPRSS2 (5' partner), chr21 41.5 Mb".
+# skipEmptyFields had to be allowed for bigGenePred in trackDb/tagTypes.tab; hgc already
+# supports it, the bigGenePred details page uses the generic extra field code.

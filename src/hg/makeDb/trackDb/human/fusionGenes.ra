@@ -1,0 +1,59 @@
+track fusionGenes
+superTrack on
+shortLabel Fusion Genes
+longLabel Fusion gene breakpoints from cancer transcriptomes
+group phenDis
+
+    track fusionGdb
+    parent fusionGenes
+    shortLabel FusionGDB
+    longLabel FusionGDB fusion gene breakpoints from TCGA, TumorFusions and ChiTaRS
+    type bigBed 9 +
+    visibility pack
+    itemRgb on
+    bigDataUrl /gbdb/$D/fusionGdb/_fusionGdb.bb
+    labelFields fusion
+    mouseOverField _mouseOver
+    tableBrowser off
+    #maxWindowCoverage 200000
+    urls partnerPos="hgTracks?position=$$" pos5="hgTracks?position=$$" pos3="hgTracks?position=$$" accessions="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+    skipEmptyFields on
+    searchIndex name
+    searchTrix /gbdb/$D/fusionGdb/_fusionGdb.ix
+    filterValues.frame In-frame,Frame-shift,Outside CDS,Not annotated
+    filterValues.sources TumorFusions,PanCanAtlas,ChiTaRS
+    filterType.sources multipleListOr
+    filterValues.cancerTypes ACC|Adrenocortical carcinoma,BLCA|Bladder urothelial carcinoma,BRCA|Breast invasive carcinoma,CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,CHOL|Cholangiocarcinoma,COAD|Colon adenocarcinoma,DLBC|Diffuse large B-cell lymphoma,ESCA|Esophageal carcinoma,GBM|Glioblastoma multiforme,HNSC|Head and neck squamous cell carcinoma,KICH|Kidney chromophobe,KIRC|Kidney renal clear cell carcinoma,KIRP|Kidney renal papillary cell carcinoma,LAML|Acute myeloid leukemia,LGG|Brain lower grade glioma,LIHC|Liver hepatocellular carcinoma,LUAD|Lung adenocarcinoma,LUSC|Lung squamous cell carcinoma,MESO|Mesothelioma,OV|Ovarian serous cystadenocarcinoma,PAAD|Pancreatic adenocarcinoma,PCPG|Pheochromocytoma and paraganglioma,PRAD|Prostate adenocarcinoma,READ|Rectum adenocarcinoma,SARC|Sarcoma,SKCM|Skin cutaneous melanoma,STAD|Stomach adenocarcinoma,TGCT|Testicular germ cell tumors,THCA|Thyroid carcinoma,THYM|Thymoma,UCEC|Uterine corpus endometrial carcinoma,UCS|Uterine carcinosarcoma,UVM|Uveal melanoma
+    filterType.cancerTypes multipleListOr
+    filterByRange.sampleCount on
+    filter.sampleCount 0:129
+    filterLimits.sampleCount 0:129
+
+    track fusionGdbTx
+    parent fusionGenes
+    shortLabel FusionGDB Transcripts
+    longLabel FusionGDB fusion genes, partner transcripts cut at the breakpoint
+    type bigGenePred
+    visibility pack
+    itemRgb on
+    bigDataUrl /gbdb/$D/fusionGdb/_fusionGdbTx.bb
+    labelFields geneName
+    mouseOverField _mouseOver
+    tableBrowser off
+    urls partnerPos="hgTracks?position=$$" pos5="hgTracks?position=$$" pos3="hgTracks?position=$$" accessions="https://www.ncbi.nlm.nih.gov/nuccore/$$"
+    skipEmptyFields on
+    skipFields geneType
+    searchIndex name
+    filterValues.frame In-frame,Frame-shift,Outside CDS,Not annotated
+    filterValues.sources TumorFusions,PanCanAtlas,ChiTaRS
+    filterType.sources multipleListOr
+    filterValues.cancerTypes ACC|Adrenocortical carcinoma,BLCA|Bladder urothelial carcinoma,BRCA|Breast invasive carcinoma,CESC|Cervical squamous cell carcinoma and endocervical adenocarcinoma,CHOL|Cholangiocarcinoma,COAD|Colon adenocarcinoma,DLBC|Diffuse large B-cell lymphoma,ESCA|Esophageal carcinoma,GBM|Glioblastoma multiforme,HNSC|Head and neck squamous cell carcinoma,KICH|Kidney chromophobe,KIRC|Kidney renal clear cell carcinoma,KIRP|Kidney renal papillary cell carcinoma,LAML|Acute myeloid leukemia,LGG|Brain lower grade glioma,LIHC|Liver hepatocellular carcinoma,LUAD|Lung adenocarcinoma,LUSC|Lung squamous cell carcinoma,MESO|Mesothelioma,OV|Ovarian serous cystadenocarcinoma,PAAD|Pancreatic adenocarcinoma,PCPG|Pheochromocytoma and paraganglioma,PRAD|Prostate adenocarcinoma,READ|Rectum adenocarcinoma,SARC|Sarcoma,SKCM|Skin cutaneous melanoma,STAD|Stomach adenocarcinoma,TGCT|Testicular germ cell tumors,THCA|Thyroid carcinoma,THYM|Thymoma,UCEC|Uterine corpus endometrial carcinoma,UCS|Uterine carcinosarcoma,UVM|Uveal melanoma
+    filterType.cancerTypes multipleListOr
+    filterByRange.sampleCount on
+    filter.sampleCount 0:129
+    filterLimits.sampleCount 0:129
+
+searchTable fusionGdb
+searchType bigBed
+searchDescription FusionGDB fusion genes
+searchPriority 50
