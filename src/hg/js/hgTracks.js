@@ -3684,6 +3684,25 @@ var rightClick = {
 
             rightClick.clearItemColors();
 
+        } else if (cmd === 'clearSettings') {
+            // Reset all settings of the track to the defaults but keep its visibility
+            // and that of its subtracks. A subtrack's filters can be set on its
+            // composite, so a subtrack clears the whole composite.
+            rec = hgTracks.trackDb[id];
+            var clearTrack = id;
+            if (rec && tdbIsSubtrack(rec) && rec.parentTrack)
+                clearTrack = rec.parentTrack;
+            $.ajax({
+                type: "GET",
+                url: "../cgi-bin/hgTrackUi",
+                data: cart.addUpdatesToUrl("hgsid=" + getHgsid() + "&db=" + getDb() +
+                          "&hgTrackUi_op=clearSettings&g=" + encodeURIComponent(clearTrack)),
+                dataType: "html",
+                cache: false,
+                success: function() { rightClick.redrawClearedTracks(clearTrack); },
+                error: errorHandler
+            });
+
         } else if (cmd === 'hgTrackUi_follow') {
 
             url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
@@ -3939,6 +3958,25 @@ var rightClick = {
                 imageV2.requestImgUpdate(id, id + "=" + cmd, "", cmd);
             }
         }
+    },
+
+    redrawClearedTracks: function (clearTrack)
+    {   // Redraw the image rows of a track whose settings were just cleared: the track
+        // itself or, for a composite, the rows of its subtracks. Too many rows, or an
+        // image that cannot be updated in place, reload the page instead.
+        var ids = [];
+        for (var tid in hgTracks.trackDb) {
+            var tRec = hgTracks.trackDb[tid];
+            if ((tid === clearTrack || tRec.parentTrack === clearTrack)
+            && document.getElementById('tr_' + tid))
+                ids.push(tid);
+        }
+        if (!imageV2.mapIsUpdateable || ids.length === 0 || ids.length > 10) {
+            imageV2.fullReload();
+            return;
+        }
+        for (var ix = 0; ix < ids.length; ix++)
+            imageV2.requestImgUpdate(ids[ix], "", "");
     },
 
     makeHitCallback: function (title)
@@ -4784,6 +4822,13 @@ var rightClick = {
                     o[rightClick.makeImgTag("palette.png")+" Change Track Color"] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
+                            return true; }
+                    };
+                }
+                if (hgTracks.clearFiltersMenu) {
+                    o[rightClick.makeImgTag("wrench.png")+" Reset filters to defaults"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            rightClick.hit(menuItemClicked, menuObject, "clearSettings");
                             return true; }
                     };
                 }

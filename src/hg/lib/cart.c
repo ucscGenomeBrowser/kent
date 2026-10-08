@@ -3663,6 +3663,88 @@ cartRemoveAllForTdb(cart,tdb);
 saveState(cart);
 }
 
+static void addTdbTreeNames(struct hash *names, struct trackDb *tdb)
+/* Add the names of tdb, its subtracks, views and superTrack children to hash. */
+{
+hashStore(names, tdb->track);
+struct trackDb *subTdb;
+for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+    addTdbTreeNames(names, subTdb);
+if (tdbIsSuper(tdb))
+    {
+    struct slRef *childRef;
+    for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+        addTdbTreeNames(names, (struct trackDb *)childRef->val);
+    }
+}
+
+static boolean isVisibilityVar(struct hash *names, char *var)
+/* Return TRUE if var is the visibility of a track or view in names, a subtrack's
+ * checkbox ({track}_sel) or a track's image order ({track}_imgOrd). */
+{
+if (hashLookup(names, var))
+    return TRUE;
+char *suffixes[] = {"_sel", "_imgOrd"};
+int i;
+for (i = 0; i < ArraySize(suffixes); i++)
+    {
+    if (endsWith(var, suffixes[i]))
+        {
+        char *stem = cloneStringZ(var, strlen(var) - strlen(suffixes[i]));
+        boolean found = (hashLookup(names, stem) != NULL);
+        freeMem(stem);
+        if (found)
+            return TRUE;
+        }
+    }
+return FALSE;
+}
+
+static boolean isTrackSettingVar(struct hash *names, char *var)
+/* Return TRUE if var starts with {track}. or {track}_ for a track in names. */
+{
+char *buf = cloneString(var);
+boolean found = FALSE;
+char *s;
+for (s = buf + 1; *s != 0 && !found; s++)
+    {
+    if (*s == '.' || *s == '_')
+        {
+        char c = *s;
+        *s = 0;
+        found = (hashLookup(names, buf) != NULL);
+        *s = c;
+        }
+    }
+freeMem(buf);
+return found;
+}
+
+void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb)
+/* Remove the settings (filters, colors, display options...) of this tdb, its
+ * subtracks, views and superTrack children from the cart, but keep their
+ * visibility: the track and view visibilities, the subtrack checkboxes and the
+ * image order. */
+{
+struct hash *names = hashNew(0);
+addTdbTreeNames(names, tdb);
+// One pass over the cart, not one per track: composites can have 26,000 subtracks
+struct slName *removeList = NULL;
+struct hashEl *hel, *helList = hashElListHash(cart->hash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    if (isTrackSettingVar(names, hel->name) && !isVisibilityVar(names, hel->name))
+        slNameAddHead(&removeList, hel->name);
+    }
+hashElFreeList(&helList);
+struct slName *var;
+for (var = removeList; var != NULL; var = var->next)
+    cartRemove(cart, var->name);
+slFreeList(&removeList);
+hashFree(&names);
+saveState(cart);
+}
+
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal)
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
 {

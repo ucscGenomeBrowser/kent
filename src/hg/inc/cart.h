@@ -610,6 +610,12 @@ void cartRemoveAllForTdbAndChildren(struct cart *cart, struct trackDb *tdb);
 /* Remove all variables from cart that are associated
    with this tdb and it's children. */
 
+void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb);
+/* Remove the settings (filters, colors, display options...) of this tdb, its
+ * subtracks, views and superTrack children from the cart, but keep their
+ * visibility: the track and view visibilities, the subtrack checkboxes and the
+ * image order. */
+
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal);
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
 
