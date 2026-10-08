@@ -3215,24 +3215,18 @@ void cartEarlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
-va_list argscp;
-va_copy(argscp, args);
 if (!initted && !cgiOptionalString("ajax"))
     {
     cgiPrintContentType("text/html");
     htmStart(stdout, "Early Error");
     initted = TRUE;
     }
+/* htmlVaEncodeErrorText also writes the message to stderr, so only the request info that
+ * starts the log line is written here. */
+logCgiToStderr();
 printf("%s", htmlWarnStartPattern());
 htmlVaEncodeErrorText(format,args);
 printf("%s", htmlWarnEndPattern());
-
-/* write warning/error message to stderr so they get logged. */
-logCgiToStderr();
-vfprintf(stderr, format, argscp);
-va_end(argscp);
-putc('\n', stderr);
-fflush(stderr);
 }
 
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
