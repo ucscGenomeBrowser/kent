@@ -359,12 +359,21 @@ for (group = groupList; group != NULL; group = group->next)
                 if (tdbIsSuperTrackChild(tdb) || tdbIsCompositeChild(tdb))
                     {
                     assert(tdb->parent != NULL && tdb->parent->track);
-                    cartRemove(cart, tdb->parent->track);
-                    if (withPriorityOverride)
+                    /* every container above, not just the closest: a supertrack may
+                     * itself sit inside another supertrack */
+                    struct slName *containers = tdbSuperTrackAncestors(tdb);
+                    slNameAddHead(&containers, tdb->parent->track);
+                    struct slName *container;
+                    for (container = containers; container != NULL; container = container->next)
                         {
-                        safef(pname, sizeof(pname), "%s.priority",tdb->parent->track);
-                        cartRemove(cart, pname);
+                        cartRemove(cart, container->name);
+                        if (withPriorityOverride)
+                            {
+                            safef(pname, sizeof(pname), "%s.priority",container->name);
+                            cartRemove(cart, pname);
+                            }
                         }
+                    slNameFreeList(&containers);
                     }
 
                 track->visibility = tdb->visibility;
@@ -384,17 +393,25 @@ for (group = groupList; group != NULL; group = group->next)
                 if (tdbIsSuperTrackChild(tdb))
                     {
                     assert(tdb->parent != NULL);
-                    /* Leave supertrack members alone -- only change parent */
-                    struct trackDb *parentTdb = tdb->parent;
-                    if ((changeVis == tvHide && !parentTdb->isShow) ||
-                        (changeVis != tvHide && parentTdb->isShow))
+                    /* Leave supertrack members alone -- only change the supertracks above.
+                     * A supertrack may itself sit inside another, and every one of them has
+                     * to move or the member stays hidden by the one that did not. */
+                    struct trackDb *ancestor;
+                    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
                         {
-                        /* remove if setting to default vis */
-                        cartRemove(cart, parentTdb->track);
+                        if (tdbIsSuperTrack(ancestor))
+                            {
+                            if ((changeVis == tvHide && !ancestor->isShow) ||
+                                (changeVis != tvHide && ancestor->isShow))
+                                {
+                                /* remove if setting to default vis */
+                                cartRemove(cart, ancestor->track);
+                                }
+                            else
+                                cartSetString(cart, ancestor->track,
+                                            changeVis == tvHide ? "hide" : "show");
+                            }
                         }
-                    else
-                        cartSetString(cart, parentTdb->track,
-                                    changeVis == tvHide ? "hide" : "show");
                     }
                 // if we're called on the path that has excludeHash set
                 // we also want to set the supertrack children's visbilities
@@ -7011,13 +7028,15 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 				cartRemove(cart, tg->track);
 			    else
 				cartSetString(cart, tg->track, command);
-			    /* hide or show supertrack enclosing this track */
+			    /* hide or show every supertrack enclosing this track */
 			    if (tdbIsSuperTrackChild(tg->tdb))
 				{
-				assert(tg->tdb->parentName != NULL);
-				cartSetString(cart, tg->tdb->parentName,
-					    (sameString(command, "hide") ?
-						"hide" : "show"));
+				struct slName *supers = tdbSuperTrackAncestors(tg->tdb), *super;
+				for (super = supers; super != NULL; super = super->next)
+				    cartSetString(cart, super->name,
+						(sameString(command, "hide") ?
+						    "hide" : "show"));
+				slNameFreeList(&supers);
 				}
 			    }
 			}
@@ -7342,12 +7361,17 @@ for (track = *pTrackList; track != NULL; track = track->next)
         if (tdbIsSuperTrackChild(track->tdb))
             {
             assert(track->tdb->parentName != NULL);
-            /* supertrack member must be in same group as its super */
-            /* determine supertrack group */
-            safef(cartVar, sizeof(cartVar), "%s.group",track->tdb->parentName);
-            groupName = cloneString(                                              //1
-                    cartUsualString(cart, cartVar, track->tdb->parent->grp));
-            track->tdb->parent->grp = cloneString(groupName);                     //2
+            /* supertrack member must be in same group as its super.  The group belongs to
+             * the outermost supertrack, since that is the one the group list shows, and
+             * every supertrack in between takes the same one. */
+            struct trackDb *outer = track->tdb->parent;
+            while (tdbIsSuperTrackChild(outer))
+                outer = outer->parent;
+            safef(cartVar, sizeof(cartVar), "%s.group",outer->track);
+            groupName = cloneString(cartUsualString(cart, cartVar, outer->grp));
+            struct trackDb *ancestor;
+            for (ancestor = track->tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+                ancestor->grp = cloneString(groupName);
             }
         else
             {
@@ -7452,14 +7476,15 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         /* Walk up the chain of supertracks, making a track for each the first
          * time one of its members is seen.  A supertrack may itself be a member
          * of another supertrack, and only the innermost is reached from the
-         * group's track list.  A supertrack is keyed by the name its members
-         * call it, which for a hub track is the name without the hub prefix. */
+         * group's track list.  Key by the supertrack's own track name: a hub
+         * leaf names its parent with the hub prefix while a nested supertrack
+         * names it without, so keying by the name the member uses would build
+         * the same supertrack twice. */
         struct track *child = track;
         struct trackDb *superTdb = track->tdb->parent;
-        char *superName = track->tdb->parentName;
         while (superTdb != NULL)
             {
-            struct track *superTrack = hashFindVal(superHash, superName);
+            struct track *superTrack = hashFindVal(superHash, superTdb->track);
             if (superTrack != NULL)
                 {   /* already made, and so were its own ancestors */
                 child->parent = superTrack;
@@ -7477,7 +7502,7 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
 
             /* handle track reordering */
             char cartVar[256];
-            safef(cartVar, sizeof(cartVar), "%s.priority",superName);
+            safef(cartVar, sizeof(cartVar), "%s.priority",superTdb->track);
             float priority = (float)cartUsualDouble(cart, cartVar, superTdb->priority);
             /* remove cart variables that are the same as the trackDb settings */
             if (priority == superTdb->priority)
@@ -7487,12 +7512,11 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
             AllocVar(ref);
             ref->track = superTrack;
             slAddHead(&newList, ref);
-            hashAdd(superHash, superName, superTrack);
+            hashAdd(superHash, superTdb->track, superTrack);
 
             if (!tdbIsSuperTrackChild(superTdb))
                 break;
             child = superTrack;
-            superName = superTdb->parentName;
             superTdb = superTdb->parent;
             }
         }
@@ -7530,14 +7554,20 @@ hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(t
 }
 
 void limitSuperTrackVis(struct track *track)
-/* Limit track visibility by supertrack parent */
+/* Limit track visibility by supertrack parent.  A supertrack may itself be a
+ * member of another supertrack, and hiding any one of them hides everything
+ * below it, so the whole chain has to be checked. */
 {
-if (tdbIsSuperTrackChild(track->tdb))
+struct trackDb *tdb;
+for (tdb = track->tdb; tdbIsSuperTrackChild(tdb); tdb = tdb->parent)
     {
-    assert(track->tdb->parent != NULL);
-    if (sameString("hide", cartUsualString(cart, track->tdb->parent->track,
-                                           track->tdb->parent->isShow ? "show" : "hide")))
+    assert(tdb->parent != NULL);
+    if (sameString("hide", cartUsualString(cart, tdb->parent->track,
+                                           tdb->parent->isShow ? "show" : "hide")))
+        {
         track->visibility = tvHide;
+        break;
+        }
     }
 }
 
@@ -7554,6 +7584,74 @@ for (track = trackList; track != NULL; track = track->next)
          return subTrack;
     }
 return NULL;
+}
+
+static unsigned superTrackCartVis(struct cart *cart, struct trackDb *superTdb,
+                                  struct trackDb *childTdb, boolean hideTracks)
+/* Apply the cart's visibility to one supertrack, and report whether its _hideKids says to
+ * hide what is under it.  Called once per supertrack above a member, since a supertrack may
+ * itself sit inside another supertrack. */
+{
+char buffer[1024];
+
+// hideTracks means we just arrived from a quickLift.  The lift hub has already
+// written the container the way it is on the source ("superTrack on show"), so
+// the hub stanza decides, not the cart.  Drop any value an earlier lift left
+// under the hub name, and leave the source's own undecorated value alone:  that
+// one belongs to the source assembly, and it is gone anyway whenever the source
+// container is back at its default.
+if (hideTracks && (trackDbSetting(childTdb, "quickLiftUrl") != NULL))
+    cartRemove(cart, superTdb->track);
+boolean superFromCart = !hideTracks;
+// first deal with visibility of super track
+char *s = superFromCart ? cartOptionalString(cart, superTdb->track)
+                        : cgiOptionalString(superTdb->track);
+if (s)
+    {
+    superTdb->visibility = hTvFromString(s) ;
+    cartSetString(cart, superTdb->track, s);
+    }
+else if (startsWith("hub_", superTdb->track))
+    {
+    s = superFromCart ? cartOptionalString(cart, trackHubSkipHubName(superTdb->track))
+                      : cgiOptionalString(trackHubSkipHubName(superTdb->track));
+    // the bare name is the native track's if the assembly has one by that name
+    if (s != NULL && !hubTrackOwnsBareName(database, superTdb->track))
+        s = NULL;
+    if (s)
+        {
+        cartSetString(cart, superTdb->track, s);
+        cartRemove(cart, trackHubSkipHubName(superTdb->track)); // remove the undecorated version
+        superTdb->visibility = hTvFromString(s) ;
+        }
+    }
+
+// now look to see if we have a _hideKids statement to turn off all subtracks
+// (including the current one)
+unsigned hideKids = 0;
+char *usedThis = buffer;
+safef(buffer, sizeof buffer, "%s_hideKids", superTdb->track);
+
+s = cartOptionalString(cart, buffer);
+if (s == NULL && startsWith("hub_", superTdb->track))
+    {
+    char *bare = trackHubSkipHubName(buffer);
+    char *bareVal = cartOptionalString(cart, bare);
+    // the bare name is the native track's if the assembly has one by that name
+    if (bareVal != NULL
+        && hubTrackOwnsBareName(database, superTdb->track))
+        {
+        s = bareVal;
+        usedThis = bare;
+        }
+    }
+
+if (s != NULL)
+    {
+    hideKids = 1;
+    cartRemove(cart, usedThis);  // we don't want this hanging out in the cart
+    }
+return hideKids;
 }
 
 static void setSearchedTrackToPackOrFull(struct track *trackList)
@@ -7724,70 +7822,24 @@ for (track = trackList; track != NULL; track = track->next)
     // deal with any supertracks we're seeing for the first time
     if (tdbIsSuperTrackChild(track->tdb))
         {
-        struct hashEl *hel = NULL;
-
-        if ((hel = hashLookup(superTrackHash, track->tdb->parent->track)) == NULL)   // we haven't seen this guy
+        /* Every supertrack above this track, not just the closest: a supertrack may itself
+         * be a member of another supertrack, and a _hideKids on any of them hides this. */
+        unsigned hideKids = 0;
+        struct trackDb *ancestor;
+        for (ancestor = track->tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
             {
-            // hideTracks means we just arrived from a quickLift.  The lift hub has already
-            // written the container the way it is on the source ("superTrack on show"), so
-            // the hub stanza decides, not the cart.  Drop any value an earlier lift left
-            // under the hub name, and leave the source's own undecorated value alone:  that
-            // one belongs to the source assembly, and it is gone anyway whenever the source
-            // container is back at its default.
-            if (hideTracks && (trackDbSetting(track->tdb, "quickLiftUrl") != NULL))
-                cartRemove(cart, track->tdb->parent->track);
-            boolean superFromCart = !hideTracks;
-            // first deal with visibility of super track
-            char *s = superFromCart ? cartOptionalString(cart, track->tdb->parent->track) : cgiOptionalString(track->tdb->parent->track);
-            if (s)
+            if (tdbIsSuperTrack(ancestor))
                 {
-                track->tdb->parent->visibility = hTvFromString(s) ;
-                cartSetString(cart, track->tdb->parent->track, s);
+                struct hashEl *hel = hashLookup(superTrackHash, ancestor->track);
+                if (hel == NULL)        // we haven't seen this guy
+                    hel = hashAddInt(superTrackHash, ancestor->track,
+                                     superTrackCartVis(cart, ancestor, track->tdb, hideTracks));
+                if (ptToInt(hel->val) == 1)
+                    hideKids = 1;
                 }
-            else if (startsWith("hub_", track->tdb->parent->track))
-                {
-                s = superFromCart ? cartOptionalString( cart, trackHubSkipHubName(track->tdb->parent->track)) : cgiOptionalString( trackHubSkipHubName(track->tdb->parent->track));
-                // the bare name is the native track's if the assembly has one by that name
-                if (s != NULL && !hubTrackOwnsBareName(database, track->tdb->parent->track))
-                    s = NULL;
-                if (s)
-                    {
-                    cartSetString(cart, track->tdb->parent->track, s);
-                    cartRemove(cart, trackHubSkipHubName(track->tdb->parent->track)); // remove the undecorated version
-                    track->tdb->parent->visibility = hTvFromString(s) ;
-                    }
-                }
-            
-            // now look to see if we have a _hideKids statement to turn off all subtracks (including the current one)
-            unsigned hideKids = 0;
-            char *usedThis = buffer;
-            safef(buffer, sizeof buffer, "%s_hideKids", track->tdb->parent->track);
-
-            s = cartOptionalString(cart, buffer);
-            if (s == NULL && startsWith("hub_", track->tdb->parent->track))
-                {
-                char *bare = trackHubSkipHubName(buffer);
-                char *bareVal = cartOptionalString(cart, bare);
-                // the bare name is the native track's if the assembly has one by that name
-                if (bareVal != NULL
-                    && hubTrackOwnsBareName(database, track->tdb->parent->track))
-                    {
-                    s = bareVal;
-                    usedThis = bare;
-                    }
-                }
-
-            if (s != NULL)
-                {
-                hideKids = 1;
-                cartRemove(cart, usedThis);  // we don't want this hanging out in the cart
-                }
-
-            // mark this as having been addressed
-            hel = hashAddInt(superTrackHash, track->tdb->parent->track, hideKids );  
             }
 
-        if ( ptToInt(hel->val) == 1)    // we want to hide this track
+        if (hideKids)                   // we want to hide this track
             {
             if (tvHide == track->tdb->visibility)
                 /* remove if setting to default vis */

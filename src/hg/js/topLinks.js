@@ -361,15 +361,18 @@ var topLinks = (function() {
     // Open a simple "here is the link" dialog for an arbitrary URL, with the hgsid stripped.
     // Used by hgTrackUi (the current page) and by the hgc item-details popup in hgTracks.js.
     // opts (optional): {ensureDb: <db> to add db= if missing, pageNote: true to note it's page-only,
-    // superTrack: <name> of an enclosing superTrack whose visibility must be forced to "show" so
-    // the linked track isn't hidden by the superTrack's own default}.
+    // superTrack: comma separated names of the enclosing superTracks, whose visibility must be
+    // forced to "show" so the linked track isn't hidden by their own default}.
     function shareUrlDialog(url, opts) {
         opts = opts || {};
         var clean = stripHgsid(url);
         if (opts.ensureDb)
             clean = ensureParam(clean, "db", opts.ensureDb);
-        if (opts.superTrack)
-            clean = ensureParam(clean, opts.superTrack, "show", true);
+        if (opts.superTrack) {
+            var supers = opts.superTrack.split(",");
+            for (var i = 0; i < supers.length; i++)
+                clean = ensureParam(clean, supers[i], "show", true);
+        }
         var body = document.createElement("div");
         showModal("Share a link", body, 720);
         showResult(body, clean, {pageNote: opts.pageNote, snapshot: opts.snapshot});

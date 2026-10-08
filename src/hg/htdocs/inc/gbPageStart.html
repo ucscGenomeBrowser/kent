@@ -1,11 +1,15 @@
 <!-- gbPageStart.html - Include file for GB static pages -->
 
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>
             <!--#echo var="TITLE" -->
         </title>
+        <!-- Optional page-specific head lines (meta tags, page CSS), relative to inc/ -->
+        <!--#if expr="${HEAD_EXTRA}" -->
+        <!--#include virtual="$HEAD_EXTRA" -->
+        <!--#endif -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic">
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/font-awesome.min.css">
 
@@ -20,9 +24,6 @@
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/style/gb.css">
         <link rel="stylesheet" href="<!--#echo var="ROOT" -->/staticStyle/gbStatic.css">
 
-        <script src="<!--#echo var="ROOT" -->/js/jquery.js"></script>
-        <script src="<!--#echo var="ROOT" -->/js/bootstrap-3.3.7.min.js"></script>
-
         <!--#if expr="${ENCODING}" -->
         <meta http-equiv="Content-Type" content="text/html; charset=${ENCODING}"/>
         <!--#endif -->
@@ -30,9 +31,19 @@
     </head>
 
     <body>
-        <!-- Blue menu bar / hotlinks -->
-        <!--#include virtual="../cgi-bin/hgMenubar"-->
+        <!-- Optional page banner above the menu bar, relative to inc/ -->
+        <!--#if expr="${PAGE_BANNER}" -->
+        <!--#include virtual="$PAGE_BANNER" -->
+        <!--#endif -->
 
+        <!-- Blue menu bar / hotlinks.  hgMenubar also loads jquery.js, utils.js and the menu CSS. -->
+        <!--#include virtual="../cgi-bin/hgMenubar"-->
+        <!-- Bootstrap's plugins attach to jQuery, so load them after the menu bar's jquery.js.
+             Loading jQuery here as well would replace the copy Bootstrap attached to. -->
+        <script src="<!--#echo var="ROOT" -->/js/bootstrap-3.3.7.min.js"></script>
+
+        <!-- Target of the menu bar's "Skip to main content" link -->
+        <main id="mainContent">
         <!-- Grid layout from bootstrap.css -->
         <div class="container-fluid">
             <!-- Wrapper for GB content -->

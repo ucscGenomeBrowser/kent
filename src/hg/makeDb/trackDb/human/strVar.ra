@@ -1,3 +1,14 @@
+# Tandem Repeat Variation, shared by all human assemblies.
+#
+# This version follows STRchive's GitHub releases (otto job plus strchiveAutoPush,
+# see kent/src/hg/utils/otto/strchive and #38268) and puts the track on hg19 and hs1.
+#
+# The bigDataUrls use $D rather than a hardcoded assembly, and hgTrackDb -strict
+# drops any track whose bigDataUrl file is not there.  So a member appears only on
+# the assemblies it was actually built for: today STRchive is on hg19, hg38 and hs1
+# and the rest are hg38-only.  To add a member on another assembly, put the file in
+# /gbdb/<db>/strVar/ and rebuild trackDb -- nothing here needs to change.
+
 track strVar
 shortLabel Tandem Repeat Variation
 longLabel Tandem Repeat Variation
@@ -10,9 +21,11 @@ visibility hide
     longLabel WebSTR Short Tandem Repeat Loci (EnsembleTR Panel, 1000 Genomes)
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/strVar/webstr.bb
+    bigDataUrl /gbdb/$D/strVar/webstr.bb
     visibility dense
     superTrack strVar dense
+    # hg38 is not $D here on purpose: this is WebSTR's own url and we only built
+    # this track for hg38, so it is the only assembly where the track shows up
     urls repeatId="https://webstr.ucsd.edu/locus?repeat_id=$$&genome=hg38"
     url https://webstr.ucsd.edu/locus?repeat_id=$<repeatId>&genome=hg38
     urlLabel Link to repeat record in WebSTR
@@ -33,21 +46,25 @@ visibility hide
     longLabel STRchive Disease-Associated Short Tandem Repeat Loci
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/strVar/strchive.bb
+    bigDataUrl /gbdb/$D/strVar/strchive.bb
     visibility pack
     superTrack strVar pack
     url https://strchive.org/loci/$$
     urlLabel STRchive locus page
     searchIndex name
-    mouseOver <b>Gene:</b> $gene <br> <b>Motif:</b> $referenceMotif <br> <b>Minimum pathogenic repeat:</b> $pathogenicMin <br> <b>Mode of inheritance:</b> $inheritance <br> <b>Associated disease(s):</b> $disease
-    dataVersion  /gbdb/hg38/strVar/strchive.version.txt
+    mouseOver <b>Gene:</b> $gene <br> <b>Motif:</b> $referenceMotif <br> <b>Minimum pathogenic repeat:</b> $pathogenicMin <br> <b>Mode of inheritance:</b> $inheritance <br> <b>Evidence:</b> $evidence <br> <b>Associated disease(s):</b> $disease
+    filterValues.evidence Definitive,Strong,Moderate,Limited,Provisional,Disputed,Refuted
+    filterType.evidence multiple
+    filterLabel.evidence Evidence for the locus-disease association
+    # written by the strchive otto job, kent/src/hg/utils/otto/strchive
+    dataVersion  /gbdb/$D/strVar/strchive.version.txt
 
     track trexplorer
     shortLabel TRExplorer
     longLabel TRExplorer V2 Tandem Repeat Catalog
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/strVar/trexplorer.bb
+    bigDataUrl /gbdb/$D/strVar/trexplorer.bb
     visibility dense
     superTrack strVar dense
     urls locusId="https://trexplorer.broadinstitute.org/index.html?#showRs=1&q=$$"
@@ -65,7 +82,7 @@ visibility hide
     longLabel ToMMo 61KJPN Short Tandem Repeat Allele Counts (Expansion Hunter)
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/strVar/tommoStr.bb
+    bigDataUrl /gbdb/$D/strVar/tommoStr.bb
     visibility dense
     superTrack strVar dense
     searchIndex name
@@ -81,7 +98,7 @@ visibility hide
     longLabel 1000 Genomes Vienna ONT VNTR Allele Statistics (VAMOS, 1,019 samples, long-read)
     type bigBed 9 +
     itemRgb on
-    bigDataUrl /gbdb/hg38/strVar/viennaVntr.bb
+    bigDataUrl /gbdb/$D/strVar/viennaVntr.bb
     visibility dense
     superTrack strVar dense
     searchIndex name
