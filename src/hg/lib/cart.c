@@ -36,6 +36,7 @@
 #include "jsonWrite.h"
 #include "verbose.h"
 #include "genark.h"
+#include "asmAlias.h"
 #include "quickLift.h"
 #include "pcrResult.h"
 #include "botDelay.h"
@@ -1771,12 +1772,48 @@ char *db = cartOptionalString(cart,"db");
 if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
 
-if (!resolveGenarkDb(cart) && !hDbIsActive(db))
-    errAbort("Can not find database '%s'.<br>"
-            "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s</a> in "
-            "the list of NCBI/INSDC assemblies, then click 'request' when you have found the right assembly "
-            "and enter your email address. We will then make a genome browser and get back to you within a few days.",
-            db, db, db);
+if (resolveGenarkDb(cart) || hDbIsActive(db))
+    return;
+
+// Not a GenArk accession or a database of its own, but it may be an alias of one,
+// e.g. a GCA accession whose GCF equivalent is in GenArk.  hubConnectLoadHubs() would
+// translate it through asmAlias, but only if we don't abort here first.
+db = cloneString(db);  // cartSetString frees the cart's copy
+char *aliasDb = asmAliasFind(db);
+if (differentString(aliasDb, db))
+    {
+    cartSetString(cart, "db", aliasDb);
+    if (resolveGenarkDb(cart) || hDbIsActive(aliasDb))
+        return;
+    }
+
+// This is shown by the bare early error handler, before the page header exists, so it
+// brings its own title bar and margins.
+// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
+errAbort("<div style='background:#003a72; padding:8px 24px'>"
+        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>"
+        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>"
+        "UCSC Genome Browser</a></div>"
+        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+        "<h2>Genome assembly not found</h2>"
+        "<p>The genome assembly <b>%s</b> is not available on this Genome Browser.</p>"
+        "<p>First, check the name for typing errors. UCSC assembly names look like "
+        "<b>hg38</b> or <b>mm39</b>. NCBI assembly accessions look like "
+        "<b>GCA_000001405.15</b> or <b>GCF_000001405.40</b>, including the version "
+        "number after the dot.</p>"
+        "<p>If the name is correct, we may not have a browser for this assembly yet. "
+        "You can ask us to make one:</p>"
+        "<ol><li><a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>Search for %s</a> "
+        "in the list of NCBI assemblies.</li>"
+        "<li>Find the assembly in the results and click its <b>request</b> button.</li>"
+        "<li>Enter your name and email address and submit the request.</li></ol>"
+        "<p>We usually make the browser within a few days and send you an email when it "
+        "is ready.</p>"
+        "<p>To look for another assembly, <a href='../cgi-bin/hgGateway'>go back to the "
+        "Genome Browser start page</a> and type a species name, a common name or an "
+        "assembly name into its search box. If you need help, "
+        "<a href='../contacts.html'>contact us</a>.</p></div>",
+        db, db, db);
 }
 
 boolean isValidToken(char *token)
