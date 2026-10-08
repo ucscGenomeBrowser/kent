@@ -10,6 +10,9 @@
 #include "chainCart.h"
 #include "bigChain.h"
 
+// The most bases of an insertion or deletion that its mouseover shows.  refs #38510
+#define QUICKLIFT_MOUSEOVER_BASES 100
+
 static Color *highlightColors;
 //static unsigned lengthLimit;
 
@@ -159,8 +162,13 @@ for(; hr; hr = hr->next)
 
     if (hr->type == QUICKTYPE_MISMATCH)
         safef(mouseOver, sizeof mouseOver, "mismatch %c->%c", *hr->otherBases, *hr->bases);
+    // the bases of a long insertion or deletion would not fit, and are no use in a mouseover
+    else if ((hr->chromStart == hr->chromEnd) && (hr->otherBaseCount > QUICKLIFT_MOUSEOVER_BASES))
+        safef(mouseOver, sizeof mouseOver, "deletion %ldbp", hr->oChromEnd - hr->oChromStart);
     else if (hr->chromStart == hr->chromEnd)
         safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherBaseCount, hr->otherBases);
+    else if ((hr->oChromStart == hr->oChromEnd) && (hr->baseCount > QUICKLIFT_MOUSEOVER_BASES))
+        safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->chromEnd - hr->chromStart);
     else if (hr->oChromStart == hr->oChromEnd)
         safef(mouseOver, sizeof mouseOver, "insertion %ldbp (%.*s)", hr->chromEnd - hr->chromStart, hr->baseCount, hr->bases);
     else
