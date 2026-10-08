@@ -17,11 +17,12 @@
 <h6><a href="#Parameters">Parameters to endpoint functions</a></h6>
 <h6><a href="#Parameter_use">Required and optional parameters</a></h6>
 <h6><a href="#Track_types">Supported track types</a></h6>
+<h6><a href="#blat_api">The /blat endpoint</a></h6>
 <h6><a href="#Mirrors">Using the API on mirrors and local installations</a></h6>
 <h6><a href="#list_examples">Example data access, list functions</a></h6>
 <h6><a href="#getData_examples">Example data access, getData functions</a></h6>
 <h6><a href="#Search_examples">Example data access, Search functions</a></h6>
-<h6><a href="#blat_api">The /blat endpoint</a></h6>
+<h6><a href="#Blat_examples">Example data access, BLAT functions</a></h6>
 <h6><a href="#Error_examples">Error return examples</a></h6>
 <h6><a href="#Practical_examples">Practical examples</a></h6>
 
@@ -126,8 +127,10 @@ track names, and public hub descriptions within a UCSC Genome Browser genome ass
 <li>Align a DNA or protein sequence to a genome with BLAT and return the hits in PSL format
 (see <a href="#blat_api">The /blat endpoint</a>)</li>
 </ul>
-<b>Note:</b> BLAT also supports programmatic URL queries which return in JSON format. See our
-<a href="/FAQ/FAQblat.html#blat14">BLAT FAQ</a> for more info.
+<p>
+<b>Note:</b> BLAT queries require an API key. See <a href="#blat_api">The /blat endpoint</a> for
+more info. BLAT URL queries with special access are described in our
+<a href="/FAQ/FAQblat.html#blat14">BLAT FAQ</a>.
 </p>
 
 <!-- ========== Endpoint functions ======================= -->
@@ -156,9 +159,16 @@ genome</li>
 <li><b>/getData/sequence</b> - return sequence from specified hub or database genome</li>
 <li><b>/getData/track</b> - return data from specified track in hub or database genome</li>
 <li><b>/search</b> - return search matches within a UCSC Genome Browser genome assembly</li>
-<li><b>/blat/dna</b>, <b>/blat/protein</b>, <b>/blat/transRna</b>, <b>/blat/transDna</b>,
-<b>/blat/guess</b> - align a query sequence to a genome with BLAT. Requires an
-<b>apiKey</b>, see <a href="#blat_api">The /blat endpoint</a></li>
+<li><b>/blat/dna</b> - align a DNA sequence to a genome with BLAT
+(requires <b>apiKey</b>, see <a href="#blat_api">The /blat endpoint</a>)</li>
+<li><b>/blat/protein</b> - align a protein sequence to a genome with BLAT
+(requires <b>apiKey</b>, see <a href="#blat_api">The /blat endpoint</a>)</li>
+<li><b>/blat/transRna</b> - align a translated RNA sequence to a translated genome with BLAT
+(requires <b>apiKey</b>, see <a href="#blat_api">The /blat endpoint</a>)</li>
+<li><b>/blat/transDna</b> - align a translated DNA sequence to a translated genome with BLAT
+(requires <b>apiKey</b>, see <a href="#blat_api">The /blat endpoint</a>)</li>
+<li><b>/blat/guess</b> - align a DNA or protein sequence to a genome with BLAT, with the query
+type guessed from the sequence (requires <b>apiKey</b>, see <a href="#blat_api">The /blat endpoint</a>)</li>
 </ul>
 </p>
 
@@ -192,7 +202,7 @@ target=_blank>UCSC browser coordinate counting systems</a></li>
 <li>trackLeavesOnly=1 - on <em>/list/tracks</em> function, only show tracks, do not show
 composite container information</li>
 <li>revComp=1 - on <em>/getData/sequence</em> function, return reverse complement of sequence data</li>
-<li>jsonOutputArrays=1 - on <em>/getData/track</em> function, JSON format is array type
+<li>jsonOutputArrays=1 - on <em>/getData/track</em> and <em>/blat</em> functions, JSON format is array type
 for each item of data, instead of the default object type</li>
 <li>format=text - on <em>/list/files</em> function, return plain text listing
 of download files instead of JSON format output (which includes more meta-data information).  Text output contains less meta-data in comment lines prefixed by the '#' hash character.</li>
@@ -204,6 +214,13 @@ within the UCSC Genome Browser help documentation</li>
 within the UCSC Genome Browser Public Hubs</li>
 <li>categories=trackDb - on <em>/search?search=&lt;term&gt;&genome=&lt;name&gt;</em> function, restrict the search
 within the track database (trackDb) settings</li>
+<li>userSeq=&lt;sequence&gt; - on <em>/blat</em> functions, specify the DNA or protein sequence to
+align, in FASTA format or as plain sequence</li>
+<li>apiKey=&lt;key&gt; - on <em>/blat</em> functions, specify your API key (required, see
+<a href="#blat_api">The /blat endpoint</a>)</li>
+<li>format=&lt;psl|text|hgblat&gt; - on <em>/blat</em> functions, change the output from the default
+JSON to plain text PSL (<em>psl</em> and <em>text</em> give the same output) or to the hgBlat JSON
+format (<em>hgblat</em>)</li>
 </ul>
 </p>
 <p>
@@ -321,6 +338,77 @@ Any extra parameters not allowed in a function will be flagged as an error.
 </div>
 <p>
 Work is underway to support additional track types
+
+<!-- ========== BLAT ======================= -->
+<a id="blat_api"></a>
+<h2>The /blat endpoint</h2>
+<p>
+The <b>/blat</b> endpoint aligns one or more query sequences to the genome of an
+assembly with BLAT and returns the alignments (hits) in PSL format. It uses the same BLAT
+servers as the <a href="../../cgi-bin/hgBlat" target=_blank>BLAT web page</a>.
+The type of query is given as the last part of the URL path:
+</p>
+<table>
+<tr><th>URL</th><th>Query sequence</th><th>Search</th></tr>
+<tr><td>/blat/dna</td><td>DNA</td><td>DNA against the genome</td></tr>
+<tr><td>/blat/protein</td><td>protein</td><td>protein against the genome, translated in all six frames</td></tr>
+<tr><td>/blat/transRna</td><td>DNA or RNA</td><td>translated query against the translated genome, one strand of the query</td></tr>
+<tr><td>/blat/transDna</td><td>DNA</td><td>translated query against the translated genome, both strands of the query</td></tr>
+<tr><td>/blat/guess</td><td>DNA or protein</td><td>the type is guessed from the first sequence, like
+&quot;BLAT's guess&quot; on the web page</td></tr>
+</table>
+<p>
+The <b>genome</b> parameter names the assembly and <b>userSeq</b> holds the query sequence, either as
+FASTA or as plain sequence. Use <b>hubUrl</b> together with <b>genome</b> to search an assembly hub.
+The assembly must have a BLAT server. If it has none, the API returns an error.
+</p>
+<p>
+<b>API key:</b> Unlike the other endpoints, <b>/blat</b> requires the URL parameter
+<b>apiKey</b>. To get a key, log in to the Genome Browser and go to
+<i>My Data &gt; Track Hubs &gt; Hub Development: API Key</i>. Keys are specific to a server.
+/blat requests that are sent quickly are slowed down more than other API requests. Wait for each
+request to finish before sending the next one. Sending too many requests in a short time returns a
+"too many requests" error (HTTP 429).
+</p>
+<p>
+Limits: A single query sequence can be at most 75,000 bases for DNA and 10,000 for protein or
+translated queries. A request is limited to 25 sequences in total, and to 2.5 times the single
+sequence limit for the sum of all sequences, for example, two DNA sequences of 75,000 bases plus one
+of 37,500 bases. Sequences that go over the limit are skipped without an error.
+</p>
+<p>
+Long sequences make the URL too long, and the server returns a "414 Request-URI Too Long" error.
+For sequences longer than about 8,000 bases, send the sequence in an HTTP POST request instead of
+in the URL. For example, with curl and a FASTA file named <b>mySeq.fa</b>:
+</p>
+<pre>
+curl -X POST 'https://api.genome.ucsc.edu/blat/dna' -d 'genome=hg38' --data-urlencode 'userSeq@mySeq.fa' -d 'apiKey=xxxxx'
+</pre>
+<p>
+Optional parameters:
+</p>
+<ul>
+<li><b>format</b> - the format of the result:
+  <ul>
+  <li>(not set) - JSON, with each hit's values labeled with the PSL field names, for example,
+  "tName": "chr21" (see the <a href="../../FAQ/FAQformat.html#format2" target=_blank>PSL format
+  description</a>)</li>
+  <li><b>psl</b> or <b>text</b> - plain text PSL, with the PSL header lines (psl and text give the
+  same output)</li>
+  <li><b>hgblat</b> - the JSON that <b>hgBlat?output=json</b> returns, with the field names in a
+  separate <b>fields</b> list</li>
+  </ul></li>
+<li><b>jsonOutputArrays=1</b> - return each hit's values without their field names, with the field
+names in a separate <b>fields</b> list</li>
+<li><b>maxItemsOutput</b> - the maximum number of hits to return</li>
+</ul>
+<p>
+For protein and translated queries, <b>strand</b> has two characters, the query strand followed by
+the genome strand, for example, "+-".
+</p>
+<p>
+See <a href="#Blat_examples">BLAT functions</a> for example requests.
+</p>
 
 <!-- ========== API on mirrors and local installations ======================= -->
 <a id="Mirrors"></a>
@@ -470,79 +558,26 @@ target=_blank>Search matches within a UCSC Genome Browser genome assembly and re
 search within the track database (trackDb) settings</a> -
 <br><b>api.genome.ucsc.edu/search?search=signal&genome=hg38&categories=trackDb</b></li>
 </ol>
+<a id="Blat_examples"></a>
+<h3>BLAT functions</h3>
+<p>
+Replace <b>xxxxx</b> with your own API key (see <a href="#blat_api">The /blat endpoint</a>).
+</p>
+<ol>
+<li>BLAT a DNA sequence against a UCSC Genome Browser genome assembly -
+<br><b>api.genome.ucsc.edu/blat/dna?genome=hg38;userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG;apiKey=xxxxx</b></li>
+<li>BLAT a protein sequence against a UCSC Genome Browser genome assembly -
+<br><b>api.genome.ucsc.edu/blat/protein?genome=hg38;userSeq=MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP;apiKey=xxxxx</b></li>
+<li>BLAT a sequence with the query type guessed from the sequence -
+<br><b>api.genome.ucsc.edu/blat/guess?genome=hg38;userSeq=MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP;apiKey=xxxxx</b></li>
+<li>BLAT a DNA sequence and return the results in PSL text format -
+<br><b>api.genome.ucsc.edu/blat/dna?genome=hg38;format=psl;userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG;apiKey=xxxxx</b></li>
+<li>BLAT a DNA sequence and return the results in the hgBlat JSON format -
+<br><b>api.genome.ucsc.edu/blat/dna?genome=hg38;format=hgblat;userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG;apiKey=xxxxx</b></li>
+</ol>
 
 <p>
 </p>
-
-<!-- ========== BLAT ======================= -->
-<a id="blat_api"></a>
-<h2>The /blat endpoint</h2>
-<p>
-The <b>/blat</b> endpoint aligns one or more query sequences to the genome of an
-assembly with BLAT and returns the alignments (hits) in PSL format. It uses the same BLAT
-servers as the <a href="../../cgi-bin/hgBlat" target=_blank>BLAT web page</a>.
-The type of query is given as the last part of the URL path:
-</p>
-<table>
-<tr><th>URL</th><th>Query sequence</th><th>Search</th></tr>
-<tr><td>/blat/dna</td><td>DNA</td><td>DNA against the genome</td></tr>
-<tr><td>/blat/protein</td><td>protein</td><td>protein against the genome, translated in all six frames</td></tr>
-<tr><td>/blat/transRna</td><td>DNA or RNA</td><td>translated query against the translated genome, one strand of the query</td></tr>
-<tr><td>/blat/transDna</td><td>DNA</td><td>translated query against the translated genome, both strands of the query</td></tr>
-<tr><td>/blat/guess</td><td>DNA or protein</td><td>the type is guessed from the first sequence, like
-&quot;BLAT's guess&quot; on the web page</td></tr>
-</table>
-<p>
-The <b>genome</b> parameter names the assembly and <b>userSeq</b> holds the query sequence, either as
-FASTA or as plain sequence. Use <b>hubUrl</b> together with <b>genome</b> to search an assembly hub.
-The assembly must have a BLAT server. If it has none, the API returns an error.
-</p>
-<p>
-<b>API key:</b> Unlike the other endpoints, <b>/blat</b> requires the URL parameter
-<b>apiKey</b>. To get a key, log in to the Genome Browser and go to
-<i>My Data &gt; My Track Hubs &gt; Hub Development: API Key</i>. Keys are specific to a server.
-In addition, BLAT requests are slowed down more strongly than other API requests, per API key,
-when they come in quickly, so a script should wait for each request to finish before it sends the next one.
-</p>
-<p>
-Limits: A single query sequence can be at most 75,000 bases for DNA and 10,000 for protein or
-translated queries. A request is limited to 25 sequences in total, and to 2.5 times the single
-sequence limit for the sum of all sequences. Sequences that go over the limit are skipped.
-</p>
-<p>
-Optional parameters:
-</p>
-<ul>
-<li><b>format</b> - the format of the result:
-  <ul>
-  <li>(not set) - JSON with the usual API fields (<b>genome</b>, <b>qType</b>, <b>tType</b>,
-  <b>itemsReturned</b>, etc.) and the hits as a list called <b>blat</b>. Each hit is an object with the named
-  PSL fields: <b>matches</b>, <b>misMatches</b>, <b>repMatches</b>, <b>nCount</b>, <b>qNumInsert</b>,
-  <b>qBaseInsert</b>, <b>tNumInsert</b>, <b>tBaseInsert</b>, <b>strand</b>, <b>qName</b>,
-  <b>qSize</b>, <b>qStart</b>, <b>qEnd</b>, <b>tName</b>, <b>tSize</b>, <b>tStart</b>, <b>tEnd</b>,
-  <b>blockCount</b>, <b>blockSizes</b>, <b>qStarts</b>, <b>tStarts</b>.
-  See the <a href="../../FAQ/FAQformat.html#format2" target=_blank>PSL format description</a>.</li>
-  <li><b>psl</b> or <b>text</b> - plain text PSL, with the PSL header lines</li>
-  <li><b>hgblat</b> - the JSON that <b>hgBlat?output=json</b> returns, with a
-  <b>fields</b> list and each hit as a list of values in the <b>blat</b> list</li>
-  </ul></li>
-<li><b>jsonOutputArrays=1</b> - return each hit in the default JSON as a list of values instead of an
-object, with the field names in a separate <b>fields</b> list, like <b>/getData/track</b> does.</li>
-<li><b>maxItemsOutput</b> - the maximum number of hits to return</li>
-</ul>
-<p>
-For protein and translated queries, <b>strand</b> has two characters: the strand of the query followed
-by the strand of the genome.
-</p>
-<p>
-Example requests, with your own key in place of <b>xxxxx</b> (a DNA query, a protein query,
-and a DNA query with the PSL text format):
-</p>
-<pre>
-curl -L 'https://api.genome.ucsc.edu/blat/dna?genome=hg38;apiKey=xxxxx;userSeq=GCCTTCGGGTCGGGAAGTCGAGCTCTGAGAAGTTCTCCTAGATTAG'
-curl -L 'https://api.genome.ucsc.edu/blat/protein?genome=hg38;apiKey=xxxxx;userSeq=MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGP'
-curl -L 'https://api.genome.ucsc.edu/blat/dna?genome=hg38;apiKey=xxxxx;format=psl;userSeq=GCCTTCGGGTCGGGAAGTCGAGCTCTGAGAAGTTCTCCTAGATTAG'
-</pre>
 
 <a id="Error_examples"></a>
 <h3>Error return examples</h3>
@@ -555,6 +590,10 @@ target=_blank>Request track data for non-existent chromosome in an assembly hub 
 target=_blank>Request track data from a restricted track</a>. See <a href='../../FAQ/FAQdownloads.html#download40'
 target=_blank>FAQ</a> -
 <br><b>api.genome.ucsc.edu/getData/track?genome=hg19;track=decipherSnvs</b></li>
+<li><a href='https://api.genome.ucsc.edu/blat/dna?genome=hg38;userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG'
+target=_blank>Request a BLAT alignment without an API key</a>. See <a href='#blat_api'>The /blat
+endpoint</a> -
+<br><b>api.genome.ucsc.edu/blat/dna?genome=hg38;userSeq=GTCCTCGGAACCAGGACCTCGGCGTGGCCTAGCG</b></li>
 </ol>
 </p>
 
