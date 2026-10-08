@@ -1,0 +1,41 @@
+# #34776 -- "Can't exit Multi-region mode".  A user wrote in that, once in a multi-region
+# view, the Multi-region dialog would not let them choose "Exit multi-region mode".  Chris
+# found why: the dialog's ajax page rewrote the page's `hgTracks` JavaScript object and
+# left virtModeType out, so the dialog code thought no multi-region mode was on.
+#
+# Galt's fix, 57fc6dd48cd and 61fe3764cf9 (v474), makes the dialog page put virtModeType
+# back into the hgTracks object (hg/hgTracks/config.c, the jsonObjectAdd at the end of the
+# multi-region config page).  The code that disabled the Exit radio button when no mode
+# was on was removed earlier by 0ca07ef7f6c (#29452).
+#
+# The checks, after opening the dialog from an exon-only view:
+#   * text "The display is currently in": hgTracks.js writes that status line into
+#     #multiRegionConfigStatusMsg only when hgTracks.virtModeType is set after the ajax.
+#     On the buggy build the line reads "Select a multi-region viewing mode below."
+#     This is the check that watches the fix.
+#   * noText "Select a multi-region viewing mode below": the message the bug produced.
+#   * has the Exit radio, enabled: the user's own complaint.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # Open the Multi-region dialog the way the user does.
+  - click: '#hgTracksConfigMultiRegionPage'
+  - wait: '#multiRegionConfigStatusMsg em'
+  - expect:
+      text: "The display is currently in"
+      noText: "Select a multi-region viewing mode below"
+      has: 'input#virtModeType[value="default"]:not(:disabled)'

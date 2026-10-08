@@ -1,0 +1,41 @@
+# #37544 -- hgTracks errAborts in packCountRowsOverflow
+#   "unexpected current window %lu, expected first window %lu"
+# when a paired-end BAM subtrack is drawn in multi-region exonMostly mode.  The page
+# comes back truncated: browser chrome, no track image, no warning.
+#
+# Recipe is the ticket's own reproducer URL: hg19, hide all,
+# wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2 in pack, chr12:6533921-6539922,
+# exonMostly on knownGene with 200 bp padding.
+#
+# Checks:
+#   step 1 (normal view) the BAM row is drawn, so the track and its data are there.
+#   step 2 (exonMostly)  the BAM row is still drawn and the multi-region button is
+#                        pressed; noText is the start of the errAbort text.  On a
+#                        crashing build the image is missing, so rows: fails.
+# 2026-10-06: genome-test FAILS this for the ticket's reason (open ticket): the
+# exonMostly page has no image and says "unexpected current window 64636880, expected
+# first window 64638992".  So the file is named .xfail.  hgwdev-demo6 does not crash,
+# but it does not draw the BAM row in the space either, and warns
+# "chr12:6533921-6539922 is not in this multi-region view.", so the space path does
+# not reach the code this ticket is about.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test (v504) errAborts: unexpected current window, expected first window"
+
+target: genome-test
+db: hg19
+position: chr12:6533921-6539922
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr12%3A6533921-6539922&pix=1500&hideTracks=1&wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2=pack"
+  - expect:
+      rows: [ruler, wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2]
+      exact: true
+
+  - goto: "/cgi-bin/hgTracks?pix=1500&virtModeType=exonMostly&emGeneTable=knownGene&emPadding=200"
+  - expect:
+      rows: [ruler, wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2]
+      exact: true
+      noText: "unexpected current window"
+      has: '#hgTracksConfigMultiRegionPage.pressed'
