@@ -4638,7 +4638,9 @@ for (;;)
         ancestor->parent->children = slRefNew(ancestor);
     ancestor = ancestor->parent;
     }
-if (tdbIsSuper(ancestor))
+/* Step back down past every supertrack: a supertrack may itself be a member of
+ * another supertrack, and markup starts below the folders. */
+while (tdbIsSuper(ancestor) && ancestor->children != NULL)
     ancestor = ancestor->children->val;
 trackDbContainerMarkup(NULL, ancestor);
 rInheritFields(ancestor);

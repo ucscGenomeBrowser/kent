@@ -407,6 +407,16 @@ if (tdb->parent)
     jsonWriteString(jw, "parent", tdb->parent->track);
     if (tdb->parent->parent)
         jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
+    /* a supertrack may sit inside another supertrack, so the chain can be deeper than
+     * the two levels named above */
+    struct slName *supers = tdbSuperTrackAncestors(tdb);
+    if (slCount(supers) > 1)
+        {
+        char *names = slNameListToString(supers, ',');
+        jsonWriteString(jw, "superTrackAncestors", names);
+        freeMem(names);
+        }
+    slNameFreeList(&supers);
     }
 if (tdb->settingsHash)
     {

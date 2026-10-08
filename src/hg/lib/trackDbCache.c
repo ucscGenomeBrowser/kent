@@ -42,7 +42,10 @@ struct trackDb *super = (struct trackDb *)hashFindVal(superHash, tdb->parent->tr
 
 if (super == NULL)
     {
-    super = lmCloneTdb(lm, tdb->parent, NULL, NULL);
+    /* Pass superHash down so a supertrack that is itself inside a supertrack
+     * keeps its own parent.  With NULL here the clone came back parentless and
+     * the cache flattened every nested supertrack. */
+    super = lmCloneTdb(lm, tdb->parent, NULL, superHash);
     hashAdd(superHash, super->track, super);
     }
 lmRefAdd(lm, &super->children, tdb);

@@ -74,6 +74,254 @@ div.jwBannerSubtitle {
     padding: 5px;
 }
 
+/* 2026 branding: header with the Genome Browser lockup, and the home page hero.
+ * Colors are from the Genome Browser color palette guide (refs #36625). */
+header.gbHeader {
+    background: white;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 14px 20px 12px 20px;
+}
+
+a.gbHeaderLogo img {
+    display: block;
+    height: 56px;
+    width: auto;
+}
+
+a.gbHeaderTagline, a.gbHeaderTagline:link, a.gbHeaderTagline:visited {
+    color: #003c6c;
+    font-style: italic;
+    font-size: 17px;
+    text-decoration: none;
+}
+
+a.gbHeaderTagline:hover {
+    text-decoration: underline;
+}
+
+/* The menu bar keeps its standard house icon on these pages, not the UCSC helix
+ * that gbStatic.css puts there. */
+#home span#home-link {
+    background-image: url("../images/homeIconSprite.png") !important;
+    background-position: 0 -18px !important;
+    background-size: auto !important;
+    background-color: transparent !important;
+    top: -2px !important;
+    width: 23px !important;
+    height: 18px !important;
+    margin-left: 0 !important;
+}
+
+#home span#home-link:hover {
+    background-position: 0 0 !important;
+}
+
+div.gbHero {
+    background: #003c6c url("../images/gbHeroGraphic.svg") no-repeat right center;
+    background-size: 36% auto;
+    color: white;
+    padding: 40px 0 44px 0;
+    margin-top: -4px;   /* leave a 1px gap under the menu bar, which has a 5px bottom margin */
+}
+
+div.gbHeroText {
+    box-sizing: border-box;
+    max-width: 62%;     /* ends before the graphic, which fills the right 36% */
+    padding-left: 5%;
+    padding-right: 24px;
+}
+
+div.gbHero h1 {
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.2;
+    margin: 0 0 8px 0;
+    padding: 0;
+    background: none;
+    color: white;
+}
+
+div.gbHero p.gbHeroSub {
+    font-size: 19px;
+    margin: 0 0 24px 0;
+    color: white;
+}
+
+div.gbHeroSearch {
+    display: flex;
+    max-width: 600px;
+    margin-bottom: 22px;
+}
+
+div.gbHeroSearch input#searchBarSearchString {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 17px;
+    color: black;
+    background: white;
+    border: none;
+    border-radius: 3px 0 0 3px;
+}
+
+div.gbHeroSearch #searchBarSearchButton {
+    height: 44px;
+    min-width: 166px;   /* room for "Searching..." so the box does not shift when it appears */
+    padding: 0 20px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: bold;
+    color: #003c6c;
+    background: white;
+    border: none;
+    border-left: 1px solid #d0d0d0;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
+}
+
+div.gbHeroSearch #searchBarSearchButton:disabled {
+    cursor: progress;
+    opacity: 1;
+}
+
+/* Text for screen readers only */
+.gbVisuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+a.gbHeroButton, a.gbHeroButton:link, a.gbHeroButton:visited {
+    display: inline-block;
+    background: #ffbf00;
+    color: #003c6c;
+    font-weight: bold;
+    font-size: 17px;
+    padding: 9px 20px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+a.gbHeroButton:hover {
+    background: #ffcf40;
+}
+
+/* Home page "Get started" cards under the hero (indexGetStarted.html) */
+nav.gbGetStarted {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 18px 0 4px 0;
+}
+
+a.gbGetStartedCard, a.gbGetStartedCard:link, a.gbGetStartedCard:visited {
+    flex: 1 1 200px;
+    display: block;
+    background: #f2f2f2;
+    border-top: 3px solid #006aad;
+    border-radius: 3px;
+    padding: 12px 14px;
+    color: #333;
+    text-decoration: none;
+}
+
+a.gbGetStartedCard:hover, a.gbGetStartedCard:focus {
+    background: #e6eef5;
+}
+
+span.gbGetStartedTitle {
+    display: block;
+    color: #003c6c;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+span.gbGetStartedText {
+    display: block;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Home page "Did you know?" tip */
+div.gbTipBox {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 70%;
+    margin: 16px auto 0 auto;
+    padding: 12px 16px;
+    background: #f2f7fb;
+    border-left: 4px solid #006aad;
+    border-radius: 3px;
+}
+
+div.gbTipBox img {
+    flex-shrink: 0;
+    border: none;
+    margin: 0;
+}
+
+div.gbTipBox p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+div.gbTipBox strong:first-child {
+    color: #003c6c;
+    margin-right: 4px;
+}
+
+/* Divider between "More news..." and the mailing list link (indexReleases.html) */
+span.gbNewsDivider {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    margin: 0 14px;
+    vertical-align: middle;
+    background: #b0b0b0;
+}
+
+@media (max-width: 767px) {
+    a.gbHeaderLogo img {
+        height: 40px;
+    }
+    a.gbHeaderTagline, a.gbHeaderTagline:link, a.gbHeaderTagline:visited {
+        font-size: 14px;
+    }
+    div.gbHero {
+        background-image: none;
+        padding: 28px 0 32px 0;
+    }
+    div.gbHeroText {
+        max-width: none;
+        padding: 0 16px;
+    }
+    div.gbHero h1 {
+        font-size: 28px;
+    }
+    div.gbTipBox {
+        max-width: none;
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+}
+
 div.jwRow {
     clear: both;
 }
