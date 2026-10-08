@@ -28454,7 +28454,12 @@ if (!avoidHandler)
 
 if (!calledHandler)
     {
-    if ((tdb != NULL) &&
+    if ((tdb != NULL) && quickLiftIsLiftedGtex(cart, tdb))
+        {
+        // a quickLifted GTEx track skips the name-based handlers too, refs #38512
+        doGtexGeneExpr(tdb, item);
+        }
+    else if ((tdb != NULL) &&
         (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))
         {
         // a quickLifted barChart skips the name-based handlers, but its type still has

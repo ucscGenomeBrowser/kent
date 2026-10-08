@@ -1,0 +1,57 @@
+# #16891 -- MAF custom tracks broken in multi-region.  Matt Speir, 2016-02-25: after
+# entering exon-only mode ("e v"), half of the MAF data around SOD1 disappeared, the left
+# labels did not line up, and after zooming out and scrolling all the MAF data was gone.
+# Christopher Lee added the gene-only case: enter gene-only view, zoom out 1.5x, and the
+# custom track disappears.  Hibernating since 2025-02-21; Lou said in 2023 it was still a
+# bug.
+#
+# Matt's session is gone, so the fixture is our own: hg19 multiz100way over SOD1
+# (chr21:33,031,900-33,041,300), cut down to five species with mafFetch and
+# mafSpeciesSubset, loaded as a type=maf custom track named rm16891maf.  The custom track
+# is loaded in a second request, because hideTracks=1 in the same request hides it too.
+#
+# What this asserts is Christopher's symptom: the MAF row must still be drawn, at its full
+# five-species height (75px on genome-test), in exon-only view, after a zoom out, in
+# gene-only view, and after a zoom out there.  A custom track's row id carries a per-run
+# number, so it is matched as td_data_ct_rm16891maf*.
+#
+# It does NOT assert Matt's "half the data disappears" or the misaligned labels.  Those
+# are pixel-level, and the row keeps its height either way.  On genome-test 2026-10-06
+# every check here passes, so this script cannot see whatever part of the ticket is still
+# open there.
+#
+# On hgwdev-demo6 (multiRegionSpaces=on) the MAF custom track is not drawn at all once the
+# view is a space, so this script fails there at step 5.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg19
+position: chr21:33031900-33041300
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031900-33041300&pix=1100&hideTracks=1&knownGene=pack"
+  - goto: "/cgi-bin/hgTracks?hgt.customText=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2FmrBugs%2F16891%2Frm16891maf.ct.txt"
+  - expect:
+      rows: [ruler, knownGene]
+      has: 'img[id^="img_data_ct_rm16891maf"]'
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly"
+  - expect:
+      has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+  - zoom: out
+  - expect:
+      has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=geneMostly"
+  - expect:
+      has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}
+  - zoom: out
+  - expect:
+      has: ['#hgTracksConfigMultiRegionPage.pressed', 'img[id^="img_data_ct_rm16891maf"]']
+      box: {sel: '[id^="td_data_ct_rm16891maf"]', height: '>=70'}

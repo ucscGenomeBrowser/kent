@@ -1,0 +1,44 @@
+# #20412 -- hgTracks SEGV in multi-region exon view with a barChart track.  Angie hit it on
+# the SSPO gene, hg38, in exon-only multi-region view (virtModeType=exonMostly, knownGene,
+# emPadding 6) with gtexTranscExpr (and tcgaTranscExpr) in pack, when she asked for the whole
+# gene, chr7:149776041-149833965.  gdb showed the crash in barChartMapItem ->
+# filterCategory (hg/hgTracks/barChartTrack.c) hashing a trashed pointer.  Kate could not
+# reproduce it in 2021 and the ticket was Rejected.
+#
+# The state is rebuilt from Angie's session (AngieHinrichs/barChartTrackCrash in
+# hgcentraltest) through URL parameters: the multi-region settings and gtexTranscExpr in
+# pack.  It is bigBarChart today; in 2017 it was the same barChart code reading a table.
+# tcgaTranscExpr is left out: it does not draw from a bare tcgaTranscExpr=pack.
+#
+# Checks: a crash leaves an empty or truncated page, so the assertion is positive -- the
+# barChart row and knownGene are drawn, exactly, in the exon view (button pressed), and the
+# SSPO transcript map box that the 2017 stack was building (ENST00000623373) is there IN
+# THE BARCHART ROW'S OWN MAP, so barChartMapItem, the function that crashed, really ran.
+# knownGene carries a box for the same transcript, so the selector names the map.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr7:149776041-149833965
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A149776041-149833965&pix=1100&hideTracks=1&knownGene=pack&gtexTranscExpr=pack"
+  - expect: {rows: [ruler, knownGene, gtexTranscExpr], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly&emGeneTable=knownGene&emPadding=6"
+  - expect:
+      rows: [ruler, knownGene, gtexTranscExpr]
+      exact: true
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # The whole gene, which is where it crashed.
+  - goto: "/cgi-bin/hgTracks?position=chr7%3A149776041-149833965"
+  - expect:
+      rows: [ruler, knownGene, gtexTranscExpr]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'map[name="map_data_gtexTranscExpr"] area[href*="g=gtexTranscExpr"][href*="i=ENST00000623373"]'
+      noText: "Segmentation"

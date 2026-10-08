@@ -260,15 +260,6 @@ RELEASE_GATES = {
                "looked up, no codon carries a transcript number, and the rendering and the "
                "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
                "released."),
-        h("skipMalformedCgiPairs", "flag", "hg/lib/hgConfig.c", default="FALSE",
-          role="gate", verified=True, ticket="38340",
-          note="Step over a CGI or cookie pair that has no =value, instead of losing the "
-               "pair after it or aborting the request.  Covers parseCookies in cheapcgi, "
-               "hgSession's session backup, and refreshNamedSessionCustomTracks.  The query "
-               "string parsers were fixed unconditionally under #38335 and do not read this "
-               "flag.  The kent libraries cannot read hg.conf, so hgConfig.c hands the "
-               "setting to cheapcgi through cgiSkipMalformedPairs.  Off during QA; flip to "
-               "TRUE once released."),
         h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
           role="gate", verified=True, ticket="38273",
           note="Copy a track collection's generated hub file when the program that writes "
@@ -484,6 +475,21 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("browser.quickLiftGtex", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38512",
+          note="Draw a quickLifted GTEx gene expression track (gtexGene, "
+               "gtexGeneV4, gtexGeneV8) as GTEx, with its bar charts, from "
+               "genes and gene models read out of the assembly it came from "
+               "through the quickLift chain.  Read in quickLiftGtexEnabled() "
+               "and asked in fillInFromType() (simpleTracks.c), which gives a "
+               "lifted track gtexGeneMethods despite its hub prefix, in "
+               "gtexLiftDb() (gtexTracks.c), and in hgc's doMiddle, which "
+               "sends a click on a lifted GTEx item to doGtexGeneExpr().  Off, "
+               "a lifted GTEx track is drawn as a plain bed and clicks go to "
+               "the generic details page, as before.  Asked when the page "
+               "is drawn, so it applies to tracks lifted before it was set.  "
+               "A cart variable of the same name overrides it, like "
+               "browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "

@@ -1,0 +1,36 @@
+# #25706 -- multi-region should show all of the BED regions input.  Dan's case, rn6: sitting
+# at chr1:714271-719690, he pasted two custom regions, the first being exactly where he
+# already was.  The view switched to the virtual chromosome but stayed zoomed on the first
+# region, so the second one was off screen and the view looked as if nothing had happened.
+# Bob noted it only happens when the first region is the current position; otherwise
+# hgTracks jumps to the middle of the new regions and says so.
+#
+# Kate's handoff note says the "Show all" checkbox in the custom-regions dialog answers the
+# request, and the ticket was Hibernated as a feature rather than fixed as a bug.  That
+# checkbox is the cart variable virtWinFull (MULTI_REGION_BED_WIN_FULL in hg/inc/hui.h,
+# drawn in hg/hgTracks/config.c).  So this script drives Dan's exact input with Show all on
+# and asserts that BOTH regions are in view.
+#
+# Checks: the multi-region button is pressed, and each region's map box is there by its
+# data-tooltip (the source range), which is only true when that region is on screen.
+# Measured 2026-10-06: the same script with virtWinFull left out fails on both genome-test
+# and demo6 with no chr10 box, which is still the ticket's complaint when Show all is off.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: rn6
+position: chr1:714271-719690
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=rn6&position=chr1%3A714271-719690&pix=1100&hideTracks=1"
+  - expect: {rows: [ruler], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr1%20714270%20719690%0Achr10%20111418437%20112323899%0A"
+  - expect:
+      rows: [ruler]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1:714271-719690"]'
+        - 'area[data-tooltip="chr10:111418438-112323899"]'

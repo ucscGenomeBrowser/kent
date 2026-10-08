@@ -1,0 +1,35 @@
+# #18006 -- loading a multi-region BED file from a URL gave a puzzling message:
+#
+#     Unable to find any region near the position on the chromosome in the multi-regions.
+#     Now using middle of view.
+#
+# Bob Kuhn's recipe: cart reset, hg19, hide all, UCSC Genes on, then custom regions from a
+# URL to a five-gene BED (FGF1, FGF2, FGF3, FGF13, FGFR1).  Gerardo closed it in 2023 because
+# the message had been rewritten to "Your new regions are not near previous location. Using
+# middle of new coordinates."  That rewritten message is what this asserts.
+#
+# Bob's file is copied into our fixtures (rm18006genes.bed) so his public_html cannot change
+# the test.  The URL goes in multiRegionsBedInput, the dialog's textarea, which accepts a URL
+# as well as BED lines.
+#
+# Checks: the old message is absent (noText, the ticket's own string), the new one is present,
+# the multi-region button is pressed, and knownGene is drawn.  The default hg19 position is
+# on no FGF gene, so the "not near" warning is expected on a correct build.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg19
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&multiRegionsBedInput=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2FmrBugs%2F18006%2Frm18006genes.bed"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      noText: "Unable to find any region near the position"
+      text: "Your new regions are not near previous location"
+      has: '#hgTracksConfigMultiRegionPage.pressed'
