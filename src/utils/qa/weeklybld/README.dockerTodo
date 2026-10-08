@@ -24,7 +24,7 @@ cycle: `buildTipImage.sh`, `run-instance.sh`, `refresh-instance.sh`,
 `remove-instance.sh`, `overlay-cgi.sh`, `smoke-instance.sh`, `start-all.sh`,
 `stop-all.sh`, the shell-in helpers `kent-tip` / `kent-beta` /
 `kent-beta-arm64` / `kent-rel` / `kent-mirror`, `update-mirror.sh`, and the off-host `tunnel-tip.sh` /
-`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh`. Each lifecycle
+`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh` / `tunnel-mirror.sh`. Each lifecycle
 script also takes a release name (`run-instance.sh v503`), and `start-all.sh` /
 `stop-all.sh` pick up every `kent-vNNN` container that exists rather than a
 list. Off-host access to a release instance is `tunnel-release.sh vNNN`, one
@@ -97,7 +97,7 @@ What's not yet exercised live:
 ## TODO
 
 1. **Apache reverse-proxy vhosts** for
-   `hgwdev-dock-{tip,beta,rel}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083}`,
+   `hgwdev-dock-{tip,beta,rel,beta-arm64,mirror}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083,8084,8085}`,
    and something equivalent for the release instances on 8NNN.
    This touches production hgwdev Apache and DNS, so likely a sysadmin ticket.
    Until then, the `tunnel-*.sh` scripts cover off-host access; on-host
