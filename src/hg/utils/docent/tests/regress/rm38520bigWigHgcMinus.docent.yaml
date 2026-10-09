@@ -13,6 +13,7 @@
 proof:
   - "xfail 2026-10-09 -- fails on genome-test (master): master's page, which reads the hg19 file at the hg38 position"
   - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+  - "server-flip 2026-10-09 -- passed on genome-test once ff175308401 was installed there (13:01), with browser.quickLiftWig on, having failed there that morning"
 
 target: genome-test
 db: hg19
