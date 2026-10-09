@@ -265,7 +265,7 @@ else
 	    unlink (defaultFileName);
 	    int childExitStatus = WEXITSTATUS(status);
 	    if (childExitStatus == 42)
-		errAbort("sqlExecProgProfile: exec failed");
+		errAbort("sqlExecProgProfile: exec of %s failed", nargv[0]);
 	    else
 		{
 		// Propagate child's exit status:
