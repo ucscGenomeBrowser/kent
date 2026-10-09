@@ -83,6 +83,10 @@ def main():
     args = parseArgs()
     old = readNames(args.oldOrder)
     new = readNames(args.newOrder)
+    dups = sorted(set(name for name in old if old.count(name) > 1))
+    if dups:
+        sys.exit("error: %s lists these bar names more than once: %s"
+                 % (args.oldOrder, ", ".join(dups)))
     if sorted(old) != sorted(new):
         sys.exit("error: %s and %s must list the same bar names"
                  % (args.oldOrder, args.newOrder))
