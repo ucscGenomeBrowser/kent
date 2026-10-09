@@ -366,6 +366,8 @@ $scriptDir/run_kozak.sh bigGenePred openprot.ms2.bb $scriptDir/openprot.as openp
 # The first build (2026-06-02) took the peptideins from MOESM12_ESM_Sheet1.tsv,
 # which is the training set of the HLA binding classifier, not Table S12, and
 # flagged 628 ORFs. Rebuilt 2026-10-08 from MOESM14, refs #37649.
+# Careful: Nature's file numbers are not the table numbers. MOESMn is Table
+# S(n-2), so MOESM12 is Table S10 and Table S12 is MOESM14.
 
 cd /hive/data/genomes/hg38/bed/ncorfs/gencNcOrf
 
