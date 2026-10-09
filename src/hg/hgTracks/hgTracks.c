@@ -27,6 +27,7 @@
 #include "hPrint.h"
 #include "htmshell.h"
 #include "cart.h"
+#include "cartDb.h"
 #include "hdb.h"
 #include "hui.h"
 #include "hgFind.h"
@@ -12391,6 +12392,45 @@ return (isEmpty(cartOptionalString(cart, "pix")) &&
 
 extern boolean issueBotWarning;
 
+static void outputRecentSessionsData(struct cart *cart)
+/* After a session load, write the user's other recent sessions to the page
+ * for the session load dialog. */
+{
+if (!cartRecentSessionsEnabled() || !cartUsualBoolean(cart, hgsDidSessionLoad, FALSE))
+    return;
+cartRemove(cart, hgsDidSessionLoad);
+
+struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+char *currentId = cartSessionId(cart);
+struct sqlConnection *conn = hConnectCentral();
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteListStart(jw, NULL);
+for (struct slPair *el = recent; el != NULL; el = el->next)
+    {
+    if (sameString(el->name, currentId))
+        continue;
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
+    if (cdb == NULL)
+        continue;
+    char *db = cartContentsVal(cdb->contents, "db");
+    char *position = cartContentsVal(cdb->contents, "position");
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "hgsid", el->name);
+    jsonWriteString(jw, "db", db);
+    jsonWriteString(jw, "position", position);
+    jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
+    jsonWriteObjectEnd(jw);
+    freeMem(db);
+    freeMem(position);
+    cartDbFree(&cdb);
+    }
+jsonWriteListEnd(jw);
+jsInlineF("var recentSessions = %s;\n", jw->dy->string);
+jsonWriteFree(&jw);
+hDisconnectCentral(&conn);
+slPairFreeValsAndList(&recent);
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -12733,6 +12773,10 @@ else
     }
 jsInline(dy->string);
 dyStringFree(&dy);
+
+/* Output recent sessions data for session load dialog */
+if (!trackImgOnly)
+    outputRecentSessionsData(cart);
 
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");

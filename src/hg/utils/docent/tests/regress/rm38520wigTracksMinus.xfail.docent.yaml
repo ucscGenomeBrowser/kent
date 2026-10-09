@@ -1,0 +1,39 @@
+# #38520 -- quickLift lifts wig tracks kept in a table and a .wib file (hg19 phastCons100way
+# lifted onto hg38).  Before the change, quickLift left such tracks out of the lift.
+# hg38 chr1:120,280,000-120,320,000 is covered only by chain 173 of the hg19-to-hg38 quickLift
+# chain, a '-' strand chain:  hg38 0-based p is hg19 0-based 264997287-p there.  So the values
+# run backwards relative to hg19, and a drawing that ignored the strand would put each one in
+# the mirror-image place.
+#
+# hgTracks, '-' strand:  in the 10-base window hg38 chr1:120,290,036-120,290,045 the lifted
+# values are, base by base, 0.104693 0.451488 0.536551 0.621614 0.667417 0.641244 0.549638
+# 0.490748 0.412228 0.386055 (from the hg19 rows and .wib through the chain block).  The two
+# hovers check two of them, at 120,290,040 and 120,290,044.  In the mirror image those two
+# bases would show 0.641244 and 0.104693.  at: names the left edge of a 0-based base, so each
+# hover aims at the middle of its base (1-based N is at: N-0.5), off the pixel two bases share.
+proof:
+  - "xfail 2026-10-09 -- fails on genome-test (master): nothing lifted, only the ruler drawn"
+  - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  # browser.quickLiftWig is a cart gate as well as an hg.conf one, so the script turns it on
+  # for itself and does not depend on how the server is configured
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155592001-155604000&pix=1100&browser.quickLiftWig=on"
+  - hide: all
+  # phyloP stays on:  hiding its view would leave no view that trackDb calls visible, and the
+  # quickLift hub writer then drops the whole composite (#38044)
+  - track: {cons100way: full, cons100wayViewalign: hide, phastCons100way: full}
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noRows: [multiz100way], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:120290036-120290045
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noText: "Warning/Error"}
+  - mouseover: {track: phastCons100way, at: chr1:120290039.5}
+  - expect: {tip: "0.667417", noTip: "0.641244"}
+  - mouseover: {track: phastCons100way, at: chr1:120290043.5}
+  - expect: {tip: "0.412228", noTip: "0.104693"}

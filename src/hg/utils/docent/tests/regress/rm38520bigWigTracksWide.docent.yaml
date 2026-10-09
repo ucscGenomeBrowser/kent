@@ -1,0 +1,22 @@
+# #38520 -- a quickLifted bigWig (hg19 gc5BaseBw lifted onto hg38).
+#
+# hgTracks, zoomed out:  9 Mb of hg38 chr7.  The lifted row has to be drawn, in the track's
+# default color (black, since gc5BaseBw sets none), with no error.
+proof:
+  - "assertion-only 2026-10-09 -- written with the change; passes on genome-test (master) and on park 38520 (branch quickLiftWig), since the bigWig lift in hgTracks predates #38520 and this guards it"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  - go: chr7:155592001-155604000
+  - hide: all
+  - track: {gc5BaseBw: full}
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:150000001-159000000
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - expect: {color: {track: gc5BaseBw, is: "0,0,0"}}
