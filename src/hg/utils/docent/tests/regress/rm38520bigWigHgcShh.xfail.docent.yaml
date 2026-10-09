@@ -16,7 +16,9 @@ position: chr7:155592001-155604000
 reset: true
 fast: true
 steps:
-  - go: chr7:155592001-155604000
+  # browser.quickLiftWig gates the lifted bigWig click too, and it is a cart gate as well as
+  # an hg.conf one, so the script turns it on for itself
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155592001-155604000&pix=1100&browser.quickLiftWig=on"
   - hide: all
   - track: {gc5BaseBw: full}
   - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
