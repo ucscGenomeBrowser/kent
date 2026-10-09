@@ -3041,7 +3041,7 @@ if (liftDb != NULL)
     sqlSafef(extraWhere, sizeof extraWhere, "name = \"%s\"", name);
     gpList = quickLiftGenePreds(conn, quickLiftFile, rootTable,
         seqName, winStart, winEnd, extraWhere, chainHash);
-    calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
+    quickLiftCalcGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, TRUE, FALSE);
     }
 else
     gpList = genePredReaderLoadQuery(conn, table, query);
@@ -3471,6 +3471,37 @@ if (dna == NULL)
 return psl;
 }
 
+static boolean liftedBigPslAt(struct trackDb *tdb, struct bbiFile *bbi,
+                              struct bigBedInterval *bbList, char *item, unsigned seqTypeField,
+                              struct hash *chainHash, struct hash **pMapPsls, int start,
+                              int end)
+/* Does some copy of item in bbList, lifted through the chain it was read for, land exactly
+ * at start-end?  With multi-chain lifting the alignment is read once for every chain over
+ * the window, and that is the copy that was clicked on.  refs #38510 */
+{
+boolean found = FALSE;
+char chromName[bbi->chromBpt->keySize+1];
+int lastChromId = -1;
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+struct bigBedInterval *bb;
+for (bb = bbList; (bb != NULL) && !found; bb = bb->next)
+    {
+    bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromName, sizeof(chromName));
+    lastChromId = bb->chromId;
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, 4);
+    if (!sameString(bedRow[3], item))
+        continue;
+    char *cdsStr, *seq;
+    struct psl *psl = getPslAndSeq(tdb, chromName, bb, seqTypeField, &seq, &cdsStr);
+    struct psl *lifted = quickLiftPsl(quickLiftChainHashForItem(chainHash, bb), pMapPsls, psl);
+    found = (lifted != NULL) && (lifted->tStart == start) && (lifted->tEnd == end);
+    pslFree(&psl);
+    pslFree(&lifted);
+    }
+return found;
+}
+
 void genericBigPslClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Handle click in big psl track. */
@@ -3564,6 +3595,13 @@ char startBuf[16], endBuf[16];
 int lastChromId = -1;
 char chromName[bbi->chromBpt->keySize+1];
 
+// With multi-chain lifting, show only the copy that was clicked on, when one lands exactly
+// where the click was;  the lifts here and in hgTracks can disagree for a long alignment
+// near the edge of the window, and then every copy is shown.  refs #38510
+boolean clickedCopyOnly = (chainHash != NULL) && quickLiftMultiChainEnabled() && !showEvery
+    && (start != end)
+    && liftedBigPslAt(tdb, bbi, bbList, item, seqTypeField, chainHash, &mapPsls, start, end);
+
 boolean firstTime = TRUE;
 struct hash *seqHash = hashNew(0);
 struct dyString *sequencesText = dyStringNew(256);
@@ -3580,10 +3618,16 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         struct psl *psl= getPslAndSeq(tdb, chromName, bb, seqTypeField, &seq, &cdsStr);
         if (chainHash != NULL)
             {
-            struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, psl);
+            struct psl *lifted = quickLiftPsl(quickLiftChainHashForItem(chainHash, bb),
+                                              &mapPsls, psl);
             pslFree(&psl);
             if (lifted == NULL)
                 continue;       // nothing in the chains places this alignment
+            if (clickedCopyOnly && ((lifted->tStart != start) || (lifted->tEnd != end)))
+                {
+                pslFree(&lifted);
+                continue;
+                }
             psl = lifted;
             }
         slAddHead(&pslList, psl);
@@ -9054,7 +9098,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct psl *bbPsl = getPslAndSeq(tdb, bbChrom, bb, seqTypeField, &bbSeq, &bbCds);
     if (ali.quickLiftFile != NULL)
         {
-        struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, bbPsl);
+        struct psl *lifted = quickLiftPsl(quickLiftChainHashForItem(chainHash, bb),
+                                          &mapPsls, bbPsl);
         pslFree(&bbPsl);
         bbPsl = lifted;
         }
@@ -9151,7 +9196,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct psl *bbPsl = getPslAndSeq(tdb, bbChrom, bb, seqTypeField, &bbSeq, &bbCds);
     if (ali.quickLiftFile != NULL)
         {
-        struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, bbPsl);
+        struct psl *lifted = quickLiftPsl(quickLiftChainHashForItem(chainHash, bb),
+                                          &mapPsls, bbPsl);
         pslFree(&bbPsl);
         bbPsl = lifted;
         }
@@ -10691,7 +10737,7 @@ if (liftDb != NULL)
     gpList = quickLiftGenePreds(conn, quickLiftFile, table, seqName, winStart, winEnd, extraWhere, chainHash);
     hFreeConn(&conn);
 
-    calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    quickLiftCalcGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, TRUE, FALSE);
     }
 else
     {
@@ -11223,7 +11269,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (quickLiftFile)
         {
         if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
+            {
+            // with multi-chain lifting an item is read for every chain over the window, and
+            // need not lift through each of them.  refs #38510
+            if (quickLiftMultiChainEnabled())
+                continue;
             errAbort("can't port %s",bedRow[3]);
+            }
         }
     else
         bed = bedLoadN(bedRow, 12);

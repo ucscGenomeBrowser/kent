@@ -14,6 +14,7 @@
 struct psl;
 struct chain;
 struct mafAli;
+struct dyString;
 
 struct quickLiftRegions
 // store highlight information
@@ -135,7 +136,8 @@ struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chr
     int end, struct hash *chainHash);
 // Like quickLiftSourceRanges, but only the source bases that map into the window itself,
 // with no padding.  Right for anything read by a range query that returns every item
-// overlapping the range, such as maf blocks and their summaries.
+// overlapping the range, such as maf blocks and their summaries.  With quickLiftSplitRanges
+// a chain's range is also cut wherever it skips more than QUICKLIFT_SPLIT_GAP source bases.
 
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end);
 // Load the quickLift chains covering chrom:start-end on the reference and return them in a
@@ -249,4 +251,64 @@ boolean quickLiftLiftPos(char *sourceDb, char *destDb,
 boolean quickLiftHubRemoveTrack(struct cart *cart, char *sourceDb, char *trackName);
 /* Remove a track stanza from the quickLift hub file for sourceDb.  Returns
  * TRUE if a stanza matching trackName was found and removed. */
+
+boolean quickLiftMultiChainEnabled();
+/* Lift an item through every chain it overlaps, rather than only the best one.  hg.conf
+ * quickLiftMultiChain, off by default. */
+
+/* With quickLiftSplitRanges the exact source ranges are cut wherever the chain skips more
+ * than this many source bases.  A gap smaller than this is cheaper to read across than to
+ * ask for twice. */
+#define QUICKLIFT_SPLIT_GAP 10000
+
+boolean quickLiftSplitRangesEnabled();
+/* Cut each chain's source range at large gaps, merge the ranges where they overlap, and
+ * read an item only once when it crosses from one range into the next.  hg.conf
+ * quickLiftSplitRanges, off by default. */
+
+struct quickLiftQueryRange
+/* A source range to read items from, and the chain it is read for (0 when the ranges of
+ * all the chains were merged). */
+    {
+    struct quickLiftQueryRange *next;
+    char *chrom;
+    int start, end;
+    int chainId;
+    };
+
+void quickLiftChainSourceRuns(struct chain *chain, int tStart, int tEnd,
+                              struct quickLiftRange **pRangeList);
+/* The source ranges of chain that map into tStart..tEnd, in plus-strand source
+ * coordinates, cut wherever the chain skips more than QUICKLIFT_SPLIT_GAP source bases.
+ * Each piece is added to *pRangeList.  chain is as loaded, the reference on the target
+ * side.  Exported, like the three below, for quickLiftTester. */
+
+struct quickLiftQueryRange *quickLiftQueryRanges(struct chain *chainList, int tStart, int tEnd,
+                                                 boolean perChain, boolean split);
+/* The source ranges that map into tStart..tEnd.  With split they are cut at large gaps in
+ * each chain, sorted, and merged where they overlap:  with perChain each chain keeps its
+ * own ranges, and otherwise the ranges of all the chains are merged.  Without split there
+ * is one range per chain, in chain order.  Free with quickLiftQueryRangeFreeList(). */
+
+void quickLiftQueryRangeFreeList(struct quickLiftQueryRange **pList);
+/* Free a list of quickLiftQueryRanges. */
+
+char *quickLiftRangeWhere(struct dyString *dy, char *startField, int prevEnd, char *extraWhere);
+/* The extraWhere for reading a range that follows one ending at prevEnd on the same
+ * sequence:  extraWhere plus "startField >= prevEnd", built in dy.  Returns extraWhere
+ * itself when startField is NULL. */
+
+struct hash *quickLiftChainHashForItem(struct hash *chainHash, void *item);
+/* The chain hash to lift item through:  with quickLiftMultiChain, a hash of just the chain
+ * it was loaded for, when it was loaded that way, and otherwise chainHash itself.  item must be the pointer the
+ * loader returned, asked about before anything frees it;  a copy falls back to chainHash.
+ * The one-chain hash is reused for the next item, so lift through it before asking again. */
+
+void quickLiftCalcGenePreds(struct genePred *gpList, struct hash *chainHash,
+                            double minMatch, double minBlocks, bool fudgeThick,
+                            boolean multiple, bool preserveInput);
+/* calcLiftOverGenePreds() for genePreds read by quickLiftGenePreds():  each one is lifted
+ * through the chain it was read for when that is known, and through chainHash otherwise.
+ * As there, a genePred that does not lift comes back with a NULL chrom. */
+
 #endif

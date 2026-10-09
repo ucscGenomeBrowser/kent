@@ -1,0 +1,7 @@
+quickLiftSplitRanges=0 quickLiftMultiChain=0
+  chrSrc:1100-1200 inBothChains   chains=1,2
+  chrSrc:1950-30050 crossesTheGap  chains=1,2
+  chrSrc:30100-30200 pastTheGap     chains=1
+  chrSrc:1100-1200 inBothChains   chains=1,2
+  chrSrc:1950-30050 crossesTheGap  chains=1,2
+5 items

@@ -831,7 +831,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             // Move the alignment's target side onto the reference.  Ask the lifted
             // alignment about its own block sizes rather than reusing isProt:  the lift
             // puts a protein alignment into nucleotide space on the way through.
-            struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, psl);
+            struct psl *lifted = quickLiftPsl(quickLiftChainHashForItem(chainHash, bb),
+                                              &mapPsls, psl);
             pslFree(&psl);
             psl = lifted;
             }

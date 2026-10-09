@@ -230,7 +230,7 @@ if (liftDb != NULL)
     struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table,
                                                  chromName, winStart, winEnd, NULL, chainHash);
     hFreeConn(&conn);
-    calcLiftOverGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL, TRUE, FALSE);
+    quickLiftCalcGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, TRUE, FALSE);
     for (model = gpList; model != NULL; model = model->next)
         if (model->chrom != NULL    // a model whose lift failed is left without a chrom
             && positiveRangeIntersection(winStart, winEnd, model->txStart, model->txEnd) > 0)
@@ -252,6 +252,37 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return modelHash;
+}
+
+static struct genePred *modelForGene(struct hash *modelHash, struct gtexGeneBed *geneBed,
+                                     boolean lifted)
+/* The gene model for geneBed.  With multi-chain lifting a quickLifted gene is drawn once for
+ * every chain it overlaps, and its model is lifted the same way, so the hash can hold a model
+ * for each copy under one name.  For a lifted track take the copy at the same place as this
+ * gene, or failing that the one that overlaps it most, and none if no copy overlaps it:
+ * another copy's exons would be drawn in the wrong place.  refs #38510 */
+{
+if (!lifted || !quickLiftMultiChainEnabled())
+    return hashFindVal(modelHash, geneBed->geneId);
+struct genePred *best = NULL;
+int bestOverlap = 0;
+struct hashEl *hel;
+for (hel = hashLookup(modelHash, geneBed->geneId); hel != NULL; hel = hashLookupNext(hel))
+    {
+    struct genePred *model = hel->val;
+    if (!sameString(model->chrom, geneBed->chrom))
+        continue;
+    if ((model->txStart == geneBed->chromStart) && (model->txEnd == geneBed->chromEnd))
+        return model;
+    int overlap = positiveRangeIntersection(model->txStart, model->txEnd,
+                                            geneBed->chromStart, geneBed->chromEnd);
+    if (overlap > bestOverlap)
+        {
+        best = model;
+        bestOverlap = overlap;
+        }
+    }
+return best;
 }
 
 static void loadComputedMedians(struct track *tg, struct gtexGeneInfo *geneInfo)
@@ -459,7 +490,8 @@ for (geneBed = sourceList; geneBed != NULL; geneBed = nextBed)
     nextBed = geneBed->next;
     int start, end;
     char *sourceChrom = geneBed->chrom;
-    char *error = liftOverRemapRange(chainHash, 0.0, geneBed->chrom,
+    char *error = liftOverRemapRange(quickLiftChainHashForItem(chainHash, geneBed), 0.0,
+                                     geneBed->chrom,
                                      geneBed->chromStart, geneBed->chromEnd, geneBed->strand[0],
                                      0.001, &geneBed->chrom, &start, &end, &geneBed->strand[0]);
     if (geneBed->chrom != sourceChrom)
@@ -582,7 +614,8 @@ while (geneBed != NULL)
         geneInfo->label = "";
 
     // get description
-    geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
+    // sometimes this is missing, hash returns NULL. do we check?
+    geneInfo->geneModel = modelForGene(modelHash, geneBed, liftDb != NULL);
     // NOTE: Consider loading all gene descriptions to save queries
     char *desc = NULL;
     if (haveKgXref)

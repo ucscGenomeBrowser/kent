@@ -1,0 +1,4 @@
+chrSrc	1100	1200	inBothChains
+chrSrc	1950	30050	crossesTheGap
+chrSrc	30100	30200	pastTheGap
+chrSrc	50000	50100	notInWindow
