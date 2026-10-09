@@ -791,7 +791,9 @@ typedef enum {
     GLYPH_PENTAGRAM,
     GLYPH_PLUS,
     GLYPH_X,
-    GLYPH_1PX
+    GLYPH_1PX,
+    GLYPH_BAR_LEFT,
+    GLYPH_BAR_RIGHT
     } glyphType;
 
 #define GLYPH_STRING_CIRCLE "Circle"
@@ -805,6 +807,21 @@ typedef enum {
 #define GLYPH_STRING_PLUS "Plus"
 #define GLYPH_STRING_X "X"
 #define GLYPH_STRING_1PX "1px"
+#define GLYPH_STRING_BAR_LEFT "BarLeft"
+#define GLYPH_STRING_BAR_RIGHT "BarRight"
+
+#define BAR_GLYPH_MAX_WIDTH 50  // maximum width of the band of a BarLeft/BarRight glyph, in pixels
+#define BAR_GLYPH_BAR_WIDTH 3   // width of its bar
+
+boolean isBarGlyph(glyphType glyph);
+/* Return TRUE for the BarLeft and BarRight glyphs, which are drawn at one end of the item
+ * instead of at its center. */
+
+boolean barGlyphPixelCoords(int chromStart, int chromEnd, double scale, int xOff, glyphType glyph,
+                            int *pX1, int *pX2);
+/* Get the pixel extent of a BarLeft/BarRight glyph: the left or right end of chromStart-chromEnd,
+ * at most BAR_GLYPH_MAX_WIDTH pixels and at least 1 pixel wide, clipped to the window.
+ * Returns FALSE if it is not in the window. */
 
 void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);

@@ -35,6 +35,8 @@ cd /hive/data/genomes/hg38/bed/fusionGdb
 # writes in /hive/data/genomes/{hg19,hg38}/bed/fusionGdb/:
 #   fusionGdb.bed   -> _fusionGdb.bb, fusionGdb.ix.txt -> _fusionGdb.ix/.ixx (search index)
 #   fusionGdbTx.bed -> _fusionGdbTx.bb
+#   fusionGdbTxDecorator.bed -> _fusionGdbTxDecorator.bb, decorator for fusionGdbTx: a BarLeft or
+#     BarRight glyph (black bar, orange band) on the breakpoint end of each transcript part
 # FusionGDB terms of use do not allow redistribution: both tracks have "tableBrowser off",
 # and the file names start with "_", which the rsync of /gbdb to hgdownload excludes.
 

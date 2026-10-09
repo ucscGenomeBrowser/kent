@@ -1,0 +1,10 @@
+track civicAlpha
+shortLabel CIViC ALPHA
+longLabel CIViC test version: fusion partners as kept transcript parts, colored by evidence level
+type bigBed 12 +
+group phenDis
+bigDataUrl /gbdb/$D/civic/civicAlpha.bb
+decorator.default.bigDataUrl /gbdb/$D/civic/civicAlphaDecorator.bb
+itemRgb on
+mouseOverField mouseOverHTML
+urls origVariant="https://civicdb.org/variants/$$/summary" alleleRegistryId="https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=$$" clinvarId="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" diseaseLink="https://www.disease-ontology.org/?id=DOID:$$"

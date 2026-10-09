@@ -37,6 +37,7 @@ group phenDis
     visibility pack
     itemRgb on
     bigDataUrl /gbdb/$D/fusionGdb/_fusionGdbTx.bb
+    decorator.default.bigDataUrl /gbdb/$D/fusionGdb/_fusionGdbTxDecorator.bb
     labelFields geneName
     mouseOverField _mouseOver
     tableBrowser off

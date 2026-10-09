@@ -1529,7 +1529,14 @@ There are no extra options that can appear on the type hic line.
     there will simply be too many track items and too many decoration labels to process
     visually.  <code>maxLabelBases</code> sets a maximum window size (in bases) for which
     labels will be drawn.  If not set, the value will default to 200kb.
+    In larger windows, glyphs are also drawn as 1 pixel wide lines, except for the
+    BarLeft and BarRight glyphs, which already get narrower when zooming out.
     </p>
+    <p>The glyph of each decoration is set in the decorator bigBed file. Besides shapes like
+    Circle or Star, which are drawn at the center of the decoration, the BarLeft and BarRight
+    glyphs mark the left or right end of a decorated item, e.g. a breakpoint, with a band and a
+    bar. See the <a href="../decorator.html">Track Decorators</a> help page for the list of
+    glyphs.</p>
 </div>
 
 <DIV class="labelOnFeature"><span class="types bed bigBed"></span>

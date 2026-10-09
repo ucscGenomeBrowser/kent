@@ -23,4 +23,8 @@ for db in hg19 hg38; do
     python3 $scriptDir/fusionGdbToBigGenePred.py $info $orf $dl $db fusionGdbTx.bed
     bedToBigBed -tab -type=bed12+23 -as=$scriptDir/fusionGdbTx.as -extraIndex=name \
         fusionGdbTx.bed /hive/data/genomes/$db/chrom.sizes _fusionGdbTx.bb
+    # decorator: a bar glyph on the breakpoint end of each transcript part
+    python3 $scriptDir/fusionGdbTxDecorator.py fusionGdbTx.bed fusionGdbTxDecorator.bed
+    bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
+        fusionGdbTxDecorator.bed /hive/data/genomes/$db/chrom.sizes _fusionGdbTxDecorator.bb
 done
