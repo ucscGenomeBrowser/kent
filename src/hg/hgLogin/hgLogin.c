@@ -1436,7 +1436,7 @@ if (isNotEmpty(curPwd))
     if (isEmpty(given) || !checkPwd(given, curPwd))
         {
         freez(&errMsg);
-        errMsg = cloneString("Please enter your current password.");
+        errMsg = cloneString("Invalid current password.");
         changeEmailPage(conn);
         return;
         }
@@ -1706,7 +1706,7 @@ if (isNotEmpty(curPwd))
     if (isEmpty(given) || !checkPwd(given, curPwd))
         {
         freez(&errMsg);
-        errMsg = cloneString("Please enter your current password.");
+        errMsg = cloneString("Invalid current password.");
         changeRecovEmailPage(conn);
         return;
         }

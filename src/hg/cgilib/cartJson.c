@@ -137,7 +137,15 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             if (tdb && tdb->parent)
                 {
                 if (tdbIsSuperTrackChild(tdb))
-                    jsonWriteStringf(jw, "extraSel", "%s=show&", tdb->parent->track);
+                    {
+                    struct dyString *dy = dyStringNew(0);
+                    struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+                    for (super = supers; super != NULL; super = super->next)
+                        dyStringPrintf(dy, "%s=show&", super->name);
+                    slNameFreeList(&supers);
+                    jsonWriteString(jw, "extraSel", dy->string);
+                    dyStringFree(&dy);
+                    }
                 else
                     {
                     // tdb is a subtrack of a composite or a view
@@ -510,10 +518,19 @@ if (tdb->parent && fieldOk("parent", fieldHash))
     if (tdbIsSuperTrackChild(tdb))
         {
         // Supertracks have been omitted from fullTrackList, so add the supertrack object's
-        // non-parent/child info here.
-        jsonWriteObjectStart(jwNew, "parent");
-        writeTdbSimple(jwNew, tdb->parent, fieldHash);
-        jsonWriteObjectEnd(jwNew);
+        // non-parent/child info here.  A supertrack may sit inside another supertrack, which
+        // is missing from the list for the same reason, so nest the whole chain.
+        int depth = 0;
+        struct trackDb *ancestor;
+        for (ancestor = tdb->parent; ancestor != NULL && tdbIsSuperTrack(ancestor);
+             ancestor = ancestor->parent)
+            {
+            jsonWriteObjectStart(jwNew, "parent");
+            writeTdbSimple(jwNew, ancestor, fieldHash);
+            depth++;
+            }
+        while (depth-- > 0)
+            jsonWriteObjectEnd(jwNew);
         }
     else
         // Just the name so we don't have infinite loops.

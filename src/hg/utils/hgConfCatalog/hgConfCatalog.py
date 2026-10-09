@@ -260,15 +260,6 @@ RELEASE_GATES = {
                "looked up, no codon carries a transcript number, and the rendering and the "
                "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
                "released."),
-        h("skipMalformedCgiPairs", "flag", "hg/lib/hgConfig.c", default="FALSE",
-          role="gate", verified=True, ticket="38340",
-          note="Step over a CGI or cookie pair that has no =value, instead of losing the "
-               "pair after it or aborting the request.  Covers parseCookies in cheapcgi, "
-               "hgSession's session backup, and refreshNamedSessionCustomTracks.  The query "
-               "string parsers were fixed unconditionally under #38335 and do not read this "
-               "flag.  The kent libraries cannot read hg.conf, so hgConfig.c hands the "
-               "setting to cheapcgi through cgiSkipMalformedPairs.  Off during QA; flip to "
-               "TRUE once released."),
         h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
           role="gate", verified=True, ticket="38273",
           note="Copy a track collection's generated hub file when the program that writes "
@@ -492,6 +483,34 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("browser.quickLiftGtex", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38512",
+          note="Draw a quickLifted GTEx gene expression track (gtexGene, "
+               "gtexGeneV4, gtexGeneV8) as GTEx, with its bar charts, from "
+               "genes and gene models read out of the assembly it came from "
+               "through the quickLift chain.  Read in quickLiftGtexEnabled() "
+               "and asked in fillInFromType() (simpleTracks.c), which gives a "
+               "lifted track gtexGeneMethods despite its hub prefix, in "
+               "gtexLiftDb() (gtexTracks.c), and in hgc's doMiddle, which "
+               "sends a click on a lifted GTEx item to doGtexGeneExpr().  Off, "
+               "a lifted GTEx track is drawn as a plain bed and clicks go to "
+               "the generic details page, as before.  Asked when the page "
+               "is drawn, so it applies to tracks lifted before it was set.  "
+               "A cart variable of the same name overrides it, like "
+               "browser.quickLiftBarChart."),
+        h("browser.quickLiftMafSummary", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38513",
+          note="Let a quickLifted maf track (wigMaf, such as hg19 "
+               "multiz100way) read its summary table above the summary "
+               "window size, from the assembly it came from, and lift the "
+               "rows; read its blocks with no padding around the window; and "
+               "draw its score overview lifted.  Read in "
+               "quickLiftMafSummaryEnabled() and asked by inSummaryMode() "
+               "(hgTracks/mafTrack.h), quickLiftLoadMafs() and the score "
+               "overview in hgTracks/wigMafTrack.c.  Off, a lifted maf reads "
+               "every block at any zoom, as before, which runs out of memory "
+               "at 50 Mb.  A cart variable of the same name overrides it, "
+               "like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "
@@ -673,6 +692,14 @@ RELEASE_GATES = {
                "jsStripJavascript().  Added off for v504 because QA found "
                "pages the filter changes; the default is meant to flip to "
                "TRUE in v505 once those are fixed."),
+        h("multiWigMouseOver", "flag", "hg/hgTracks/multiWig.c", default="FALSE",
+          role="gate", verified=True, ticket="38468",
+          note="A value popup on a multiWig container: hovering lists each "
+               "subtrack's value at the cursor in the subtrack's color.  "
+               "Read in multiWigDraw(), and only when mouseOverEnabled "
+               "is on and the view is not multi-region.  Off, a multiWig "
+               "shows only its track name on hover, as before.  Added off "
+               "for v505; hgwdev's hg.conf turns it on."),
     ],
 }
 
@@ -1801,6 +1828,13 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38490",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at b50e4cb498f, quickLift: lift "
+               "bigBarChart tracks, behind browser.quickLiftBarChart, refs "
+               "#38490.  Needs a description and a gate or knob call."),
     ],
 }
 

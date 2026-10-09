@@ -12,6 +12,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
 	${BIN_DIR}/sessionDataTester \
+	${BIN_DIR}/cartParseTest \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/hgvsTester \
@@ -26,9 +27,9 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
-	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest \
+	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -61,6 +62,10 @@ customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 
 hgvsTest: ${BIN_DIR}/hgvsTester mkdirs
 	${MAKE} -f hgvsTests.mk test
+
+cartParseTest: ${BIN_DIR}/cartParseTest mkdirs
+	${BIN_DIR}/cartParseTest > output/cartParseTest 2>&1
+	diff expected/cartParseTest output/cartParseTest
 
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
@@ -121,6 +126,12 @@ dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
 	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
 	diff expected/dataVersionPathTest output/dataVersionPathTest
+
+trackDbLoopTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackDbLoopTester trackDbLoopTester.c ${MYLIBS} $L
+	${BIN_DIR}/trackDbLoopTester input/trackDbLoop/composite.ra input/trackDbLoop/self.ra \
+	    input/trackDbLoop/loop2.ra input/trackDbLoop/loop3.ra > output/trackDbLoopTest
+	diff expected/trackDbLoopTest output/trackDbLoopTest
 
 # genarkLiftOver is set in the conf rather than assumed.  genarkLiftOverDbs returns nothing
 # at all when the option is off, so a developer's own hg.conf without it turns every line of

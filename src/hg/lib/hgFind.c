@@ -2126,7 +2126,12 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         if (tdb->parent)
             {
             if (tdbIsSuperTrackChild(tdb))
-            fprintf(f, "%s=show&", tdb->parent->track);
+            {
+            struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+            for (super = supers; super != NULL; super = super->next)
+                fprintf(f, "%s=show&", super->name);
+            slNameFreeList(&supers);
+            }
             else
             {
             // tdb is a subtrack of a composite or a view

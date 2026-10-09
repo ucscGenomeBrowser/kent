@@ -1,0 +1,11 @@
+input/trackDbLoop/composite.ra
+  comp
+    compSubA
+    compSubB
+  loneTrack
+input/trackDbLoop/self.ra
+  error: Track selfLoop lists itself as its own parent
+input/trackDbLoop/loop2.ra
+  error: Track loopA is its own ancestor through its parent loopB
+input/trackDbLoop/loop3.ra
+  error: Track loopA is its own ancestor through its parent loopB

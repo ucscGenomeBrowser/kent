@@ -19,6 +19,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "quickLift.h"
+#include "trackHub.h"
 #include "genePredReader.h"
 #include "bigChain.h"
 #include "bigLink.h"
@@ -29,6 +30,48 @@
 #include "chainToPsl.h"
 #include "pslTransMap.h"
 #include "maf.h"
+
+static boolean quickLiftChainRangeIn(struct chain *chain, int tStart, int tEnd,
+    int *retQStart, int *retQEnd)
+/* The query side range matching tStart..tEnd on the target, rather than the whole extent
+ * of the chain's blocks.  One block can be enormous:  hg19 and hg38 run identical for
+ * 12.8Mb on chr7, so the whole-block answer would ask the other assembly for millions of
+ * bases either side of the window.  Within a block the two sides are colinear, so the
+ * part that matters can be worked out exactly.  Returns FALSE if no block overlaps. */
+{
+struct cBlock *cb;
+int qStart = 0, qEnd = 0;
+boolean any = FALSE;
+
+for (cb = chain->blockList; cb != NULL; cb = cb->next)
+    {
+    int s = max(cb->tStart, tStart);
+    int e = min(cb->tEnd, tEnd);
+    if (s >= e)
+        continue;
+
+    int qLo = cb->qStart + (s - cb->tStart);
+    int qHi = cb->qStart + (e - cb->tStart);
+    if (!any || (qLo < qStart))
+        qStart = qLo;
+    if (!any || (qHi > qEnd))
+        qEnd = qHi;
+    any = TRUE;
+    }
+if (!any)
+    return FALSE;
+
+// correct for strand
+if (chain->qStrand == '-')
+    {
+    int saveStart = qStart;
+    qStart = chain->qSize - qEnd;
+    qEnd = chain->qSize - saveStart;
+    }
+*retQStart = qStart;
+*retQEnd = qEnd;
+return TRUE;
+}
 
 struct bigBedInterval *quickLiftGetIntervals(char *quickLiftFile, struct bbiFile *bbi,   char *chrom, int start, int end, struct hash **pChainHash)
 /* Return intervals from "other" species that will map to the current window.
@@ -44,30 +87,17 @@ struct bigBedInterval *bbList = NULL, *bb;
 
 for(chain = chainList; chain; chain = chain->next)
     {
-    struct cBlock *cb;
-    cb = chain->blockList; 
-
-    if (cb == NULL)
+    // get the range on the "other" species that maps into the window.  Each block that
+    // overlaps the window comes back whole, and a block can be much longer than the
+    // window, so clip it rather than taking the min and max of the whole blocks.
+    // The range comes back on the plus strand.
+    int qStart, qEnd;
+    if (!quickLiftChainRangeIn(chain, start, end, &qStart, &qEnd))
         continue;
 
-    int qStart = cb->qStart;
-    int qEnd = cb->qEnd;
-
-    // get the range for the links on the "other" species
-    for(; cb; cb = cb->next)
-        {
-        if (cb->qStart < qStart)
-            qStart = cb->qStart;
-        if (cb->qEnd > qEnd)
-            qEnd = cb->qEnd;
-        }
-
     // now grab the items , probably we should parameterize the max number of items, but to what?
-    struct bigBedInterval *thisInterval = NULL;
-    if (chain->qStrand == '-')
-        thisInterval = bigBedIntervalQuery(bbi, chain->qName, chain->qSize - qEnd, chain->qSize - qStart,  1000000, lm);
-    else
-        thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd, 1000000, lm);
+    struct bigBedInterval *thisInterval = bigBedIntervalQuery(bbi, chain->qName, qStart, qEnd,
+                                                              1000000, lm);
 
     // find how much of the items are beyond the viewport
     for(bb=thisInterval; bb; bb = bb->next)
@@ -325,82 +355,10 @@ return chainLoadIdRangeHub(NULL, quickLiftFile, linkFileName, chrom, padStart,
     end + QUICKLIFT_RANGE_PAD, -1);
 }
 
-static void quickLiftChainQueryRange(struct chain *chain, int *retQStart, int *retQEnd)
-/* Return the query-side ("other" species) coordinate range spanned by the
- * aligned blocks of chain, corrected for query strand.  chain->blockList must
- * not be NULL. */
-{
-struct cBlock *cb = chain->blockList;
-int qStart = cb->qStart;
-int qEnd = cb->qEnd;
-
-for(; cb; cb = cb->next)
-    {
-    if (cb->qStart < qStart)
-        qStart = cb->qStart;
-    if (cb->qEnd > qEnd)
-        qEnd = cb->qEnd;
-    }
-
-// correct for strand
-if (chain->qStrand == '-')
-    {
-    int saveStart = qStart;
-    qStart = chain->qSize - qEnd;
-    qEnd = chain->qSize - saveStart;
-    }
-
-*retQStart = qStart;
-*retQEnd = qEnd;
-}
-
-static boolean quickLiftChainRangeIn(struct chain *chain, int tStart, int tEnd,
-    int *retQStart, int *retQEnd)
-/* The query side range matching tStart..tEnd on the target, rather than the whole extent
- * of the chain's blocks.  One block can be enormous:  hg19 and hg38 run identical for
- * 12.8Mb on chr7, so the whole-block answer would ask the other assembly for millions of
- * bases either side of the window.  Within a block the two sides are colinear, so the
- * part that matters can be worked out exactly.  Returns FALSE if no block overlaps. */
-{
-struct cBlock *cb;
-int qStart = 0, qEnd = 0;
-boolean any = FALSE;
-
-for (cb = chain->blockList; cb != NULL; cb = cb->next)
-    {
-    int s = max(cb->tStart, tStart);
-    int e = min(cb->tEnd, tEnd);
-    if (s >= e)
-        continue;
-
-    int qLo = cb->qStart + (s - cb->tStart);
-    int qHi = cb->qStart + (e - cb->tStart);
-    if (!any || (qLo < qStart))
-        qStart = qLo;
-    if (!any || (qHi > qEnd))
-        qEnd = qHi;
-    any = TRUE;
-    }
-if (!any)
-    return FALSE;
-
-// correct for strand
-if (chain->qStrand == '-')
-    {
-    int saveStart = qStart;
-    qStart = chain->qSize - qEnd;
-    qEnd = chain->qSize - saveStart;
-    }
-*retQStart = qStart;
-*retQEnd = qEnd;
-return TRUE;
-}
-
-struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
-    struct hash *chainHash)
-// The ranges in the other assembly that map into chrom:start-end on the reference.  The
-// chains that do the mapping are added to chainHash, which is the form the lift functions
-// read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
+static struct quickLiftRange *sourceRangesPadded(char *quickLiftFile, char *chrom,
+    int start, int end, int pad, struct hash *chainHash)
+// The ranges in the other assembly that map into chrom:start-end on the reference, with the
+// window widened by pad on each side first.  The chains are added to chainHash.
 {
 struct chain *chain, *chainList = quickLiftLoadChains(quickLiftFile, chrom, start, end);
 struct quickLiftRange *rangeList = NULL;
@@ -410,21 +368,21 @@ for(chain = chainList; chain; chain = chain->next)
     if (chain->blockList == NULL)
         continue;
 
-    // pad the window the same way quickLiftLoadChains does, so an item that reaches into
-    // the window from just outside it is still found
     int qStart, qEnd;
-    int padStart = start - QUICKLIFT_RANGE_PAD;
+    int padStart = start - pad;
     if (padStart < 0)
         padStart = 0;
-    if (quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
-        {
-        struct quickLiftRange *range;
-        AllocVar(range);
-        range->chrom = cloneString(chain->qName);
-        range->start = qStart;
-        range->end = qEnd;
-        slAddHead(&rangeList, range);
-        }
+    // a chain with no block in the padded window maps nothing into it, and quickLiftSql
+    // leaves it out of the chain hash, so leave it out here too:  a lift on a details page
+    // then goes through the chains hgTracks drew with.  refs #38512
+    if (!quickLiftChainRangeIn(chain, padStart, end + pad, &qStart, &qEnd))
+        continue;
+    struct quickLiftRange *range;
+    AllocVar(range);
+    range->chrom = cloneString(chain->qName);
+    range->start = qStart;
+    range->end = qEnd;
+    slAddHead(&rangeList, range);
 
     // the query range was read off the chain as it came, so swap only afterwards
     chainSwap(chain);
@@ -432,6 +390,129 @@ for(chain = chainList; chain; chain = chain->next)
     }
 slReverse(&rangeList);
 return rangeList;
+}
+
+struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
+    struct hash *chainHash)
+// The ranges in the other assembly that map into chrom:start-end on the reference.  The
+// chains that do the mapping are added to chainHash, which is the form the lift functions
+// read.  Use this when the items cannot be had from a query quickLiftSql knows how to make.
+{
+// pad the window the same way quickLiftLoadChains does, so an item that reaches into
+// the window from just outside it is still found
+return sourceRangesPadded(quickLiftFile, chrom, start, end, QUICKLIFT_RANGE_PAD, chainHash);
+}
+
+struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chrom, int start,
+    int end, struct hash *chainHash)
+// Like quickLiftSourceRanges, but only the source bases that map into the window itself,
+// with no padding.  Right for anything read by a range query that returns every item
+// overlapping the range, such as maf blocks and their summaries:  an item that lands in the
+// window overlaps these bases, and the padding would only read items that land elsewhere,
+// 200 kb of extra alignment for every source range.  refs #38513
+{
+return sourceRangesPadded(quickLiftFile, chrom, start, end, 0, chainHash);
+}
+
+struct chainBlocks
+/* A chain's blocks in an array, in order, for a binary search. */
+    {
+    int count;
+    struct cBlock **blocks;
+    };
+
+static struct chainBlocks *chainBlocksFor(struct hash *blockCache, struct chain *chain)
+/* The blocks of chain as an array, made the first time they are asked for. */
+{
+char key[32];
+safef(key, sizeof key, "%p", chain);
+struct chainBlocks *cb = hashFindVal(blockCache, key);
+if (cb == NULL)
+    {
+    AllocVar(cb);
+    cb->count = slCount(chain->blockList);
+    AllocArray(cb->blocks, cb->count);
+    struct cBlock *b;
+    int i = 0;
+    for (b = chain->blockList; b != NULL; b = b->next)
+        cb->blocks[i++] = b;
+    hashAdd(blockCache, key, cb);
+    }
+return cb;
+}
+
+void quickLiftBlockCacheFree(struct hash **pBlockCache)
+// Free a blockCache from quickLiftMapToReference().  The chains are not freed.
+{
+struct hash *blockCache = *pBlockCache;
+if (blockCache == NULL)
+    return;
+struct hashEl *hel, *helList = hashElListHash(blockCache);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct chainBlocks *cb = hel->val;
+    freeMem(cb->blocks);
+    freeMem(cb);
+    }
+hashElFreeList(&helList);
+hashFree(pBlockCache);
+}
+
+struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, struct hash *blockCache,
+                                               char *chrom, int start, int end)
+// Map chrom:start-end in the other assembly onto the reference through the chains in
+// chainHash, one piece for every aligned block it overlaps.  The pieces come back in
+// reference coordinates, unsorted, and are freed with slFreeList after freeing each chrom.
+// An item lifted this way is not required to map whole, which suits a summary or density
+// row:  every part of it that lands on the reference is drawn where it lands.
+{
+struct quickLiftRange *pieceList = NULL;
+struct binElement *el, *elList = liftOverChainsInRange(chainHash, chrom, start, end);
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct chain *chain = el->val;
+    struct chainBlocks *cb = chainBlocksFor(blockCache, chain);
+
+    // the chains were swapped going into the hash, so t is the other assembly;  the blocks
+    // are in order on t and do not overlap, so find the first one that ends after start
+    int lo = 0, hi = cb->count;
+    while (lo < hi)
+        {
+        int mid = (lo + hi) / 2;
+        if (cb->blocks[mid]->tEnd <= start)
+            lo = mid + 1;
+        else
+            hi = mid;
+        }
+    int i;
+    for (i = lo; (i < cb->count) && (cb->blocks[i]->tStart < end); i++)
+        {
+        struct cBlock *b = cb->blocks[i];
+        int s = max(start, b->tStart);
+        int e = min(end, b->tEnd);
+        if (s >= e)
+            continue;
+        int qs = b->qStart + (s - b->tStart);
+        int qe = qs + (e - s);
+        struct quickLiftRange *piece;
+        AllocVar(piece);
+        piece->chrom = cloneString(chain->qName);
+        if (chain->qStrand == '-')
+            {
+            piece->start = chain->qSize - qe;
+            piece->end = chain->qSize - qs;
+            }
+        else
+            {
+            piece->start = qs;
+            piece->end = qe;
+            }
+        slAddHead(&pieceList, piece);
+        }
+    }
+slFreeList(&elList);
+return pieceList;
 }
 
 struct hash *quickLiftChainHash(char *quickLiftFile, char *chrom, int start, int end)
@@ -462,8 +543,14 @@ for(chain = chainList; chain; chain = chain->next)
     if (chain->blockList == NULL)
         continue;
 
+    // only the part of the chain that maps into the padded window, not the whole extent
+    // of its blocks, which between two similar assemblies can be millions of bases
     int qStart, qEnd;
-    quickLiftChainQueryRange(chain, &qStart, &qEnd);
+    int padStart = start - QUICKLIFT_RANGE_PAD;
+    if (padStart < 0)
+        padStart = 0;
+    if (!quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+        continue;
 
     // now grab the items
     if (query == NULL)
@@ -508,8 +595,14 @@ for(chain = chainList; chain; chain = chain->next)
     if (chain->blockList == NULL)
         continue;
 
+    // only the part of the chain that maps into the padded window, not the whole extent
+    // of its blocks, which between two similar assemblies can be millions of bases
     int qStart, qEnd;
-    quickLiftChainQueryRange(chain, &qStart, &qEnd);
+    int padStart = start - QUICKLIFT_RANGE_PAD;
+    if (padStart < 0)
+        padStart = 0;
+    if (!quickLiftChainRangeIn(chain, padStart, end + QUICKLIFT_RANGE_PAD, &qStart, &qEnd))
+        continue;
 
     struct genePredReader *gpr = genePredReaderRangeQuery(conn, table, chain->qName,
                                                           qStart, qEnd, extraWhere);
@@ -1056,6 +1149,18 @@ char *cfgEnabled = cartOrCfgOption(cart, "browser.quickLift");
 return cfgEnabled && (sameString(cfgEnabled, "on") || sameString(cfgEnabled, "true")) ;
 }
 
+static int cartGate(struct cart *cart, char *name)
+/* What the cart says about the gate name:  1 for on, 0 for off, -1 when it says nothing and
+ * hg.conf decides.  The hg.conf half stays a literal cfgOptionBooleanDefault in each caller,
+ * which is what the hg.conf catalog's harvester finds. */
+{
+char *cartEnabled = cartOptionalString(cart, name);
+if (cartEnabled == NULL)
+    return -1;
+return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
+       sameString(cartEnabled, "yes");
+}
+
 boolean quickLiftAlignmentsEnabled(struct cart *cart)
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
  * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says
@@ -1065,12 +1170,55 @@ boolean quickLiftAlignmentsEnabled(struct cart *cart)
  * the cfgOption* accessors, which is why browser.quickLift itself is missing from the
  * hg.conf catalog. */
 {
-char *cartEnabled = cartOptionalString(cart, "browser.quickLiftAlignments");
-
-if (cartEnabled != NULL)
-    return sameString(cartEnabled, "on") || sameString(cartEnabled, "true") ||
-           sameString(cartEnabled, "yes");
+int fromCart = cartGate(cart, "browser.quickLiftAlignments");
+if (fromCart >= 0)
+    return fromCart;
 return cfgOptionBooleanDefault("browser.quickLiftAlignments", FALSE);
+}
+
+boolean quickLiftBarChartEnabled(struct cart *cart)
+/* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
+ * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that, the
+ * same way as quickLiftAlignmentsEnabled. */
+{
+int fromCart = cartGate(cart, "browser.quickLiftBarChart");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftBarChart", FALSE);
+}
+
+boolean quickLiftGtexEnabled(struct cart *cart)
+/* Return TRUE if a quickLifted GTEx gene track is drawn as GTEx, with its bar charts, from
+ * genes and gene models read out of the assembly it came from through the chain.  Off, it
+ * is drawn as a plain bed.  Off unless hg.conf says browser.quickLiftGtex=on,
+ * and a cart variable of the same name overrides that, the same way as
+ * quickLiftBarChartEnabled.  refs #38512 */
+{
+int fromCart = cartGate(cart, "browser.quickLiftGtex");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftGtex", FALSE);
+}
+
+boolean quickLiftMafSummaryEnabled(struct cart *cart)
+/* Return TRUE if a quickLifted maf track reads its summary table above the summary window
+ * size, lifted from the assembly it came from, and reads its blocks with no padding around
+ * the window.  Off unless hg.conf says browser.quickLiftMafSummary=on, and a cart variable
+ * of the same name overrides that, the same way as quickLiftBarChartEnabled.  refs #38513 */
+{
+int fromCart = cartGate(cart, "browser.quickLiftMafSummary");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftMafSummary", FALSE);
+}
+
+boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb)
+/* Return TRUE if tdb is a quickLifted GTEx gene track to draw and click as GTEx:  it is
+ * lifted, its name past the hub prefix starts with gtexGene, and browser.quickLiftGtex is on.
+ * refs #38512 */
+{
+return quickLiftIsLifted(tdb) && startsWith("gtexGene", trackHubSkipHubName(tdb->track)) &&
+       quickLiftGtexEnabled(cart);
 }
 
 static int hrCmp(const void *va, const void *vb)

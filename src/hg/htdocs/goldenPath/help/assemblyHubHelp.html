@@ -500,10 +500,11 @@ hub.</p>
 <p>
 Before loading a new or edited hub in the Browser, run <b>hubCheck</b> against it. The utility is
 available from the <a href="https://hgdownload.gi.ucsc.edu/admin/exe/" target="_blank">downloads</a>
-page. It reads the hub the way the Browser does and reports missing files, malformed stanzas,
-settings the Browser does not recognize and data files it cannot open:</p>
+page. It reads the hub the way the Browser does and reports missing files, malformed stanzas and
+data files it cannot open. Add <code>-checkSettings</code> and it also flags trackDb settings that
+are misspelled or not supported:</p>
 <pre>
-hubCheck https://yourLab.yourInstitution.edu/myHub/hub.txt
+hubCheck -checkSettings https://yourLab.yourInstitution.edu/myHub/hub.txt
 </pre>
 <p>
 Problems are reported with the line number of the stanza they came from, which is usually quicker

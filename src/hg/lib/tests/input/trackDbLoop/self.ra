@@ -1,0 +1,7 @@
+# A track that names itself as parent, the case that was always caught.
+track selfLoop
+compositeTrack on
+parent selfLoop
+shortLabel self
+longLabel Names itself as parent
+type bed 3

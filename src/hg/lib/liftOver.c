@@ -103,6 +103,13 @@ if (map == NULL)
 return binKeeperFind(map->bk, start, (end == start) ? end + 1 : end);
 }
 
+struct binElement *liftOverChainsInRange(struct hash *chainHash, char *chrom, int start, int end)
+/* Return every chain in chainHash that overlaps chrom:start-end, as binElements whose val is
+ * the chain.  Free the list with slFreeList, not the chains, which still belong to the hash. */
+{
+return findRange(chainHash, chrom, start, end);
+}
+
 struct chain *liftOverChainForRange(struct hash *chainHash, char *chrom, int start, int end)
 /* Return the chain in chainHash covering the most aligned bases in the given range,
  * or NULL if none overlap it.  This is the chain remapBlockedBed would also pick. */

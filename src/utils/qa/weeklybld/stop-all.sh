@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # stop-all.sh - stop all running docker browser containers (tip, beta,
-# beta-arm64, rel, and every past-release instance). A manually stopped
+# beta-arm64, rel, mirror, and every past-release instance). A manually stopped
 # container stays stopped across daemon restarts; use start-all.sh to bring them
 # back.
 # refs #37655
@@ -9,7 +9,7 @@
 set -eu
 
 # The release instances are whatever kent-vNNN containers exist. refs #38377
-names=(tip beta beta-arm64 rel)
+names=(tip beta beta-arm64 rel mirror)
 while read -r c; do
     names+=("${c#kent-}")
 done < <(docker ps -a --format '{{.Names}}' | grep -E '^kent-v[0-9]{3}$' | sort)

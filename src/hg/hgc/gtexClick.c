@@ -15,6 +15,9 @@
 #include "gtexTissue.h"
 #include "gtexUi.h"
 #include "gtexInfo.h"
+#include "liftOver.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 char *geneClassColorCode(char *geneClass)
 /* Get HTML color code used by GENCODE for transcript class
@@ -64,12 +67,70 @@ hFreeConn(&conn);
 return gtexGene;
 }
 
-static char *getGeneDescription(struct gtexGeneBed *gtexGene)
-/* Get description for gene. Needed because knownGene table semantics have changed in hg38 */
+static struct gtexGeneBed *getLiftedGtexGene(struct trackDb *tdb, char *item, char *table,
+                                             int start, int end)
+/* Retrieve gene info for an item of a quickLifted GTEx track.  The row is in the assembly
+ * the track came from, so look the gene up there by name and keep the copy that lifts to
+ * where it was clicked, start-end on the reference, the way hgTracks lifted it.  The gene
+ * comes back in reference coordinates.  refs #38512 */
 {
-char query[256];
-if (sameString(database, "hg38"))
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+struct sqlConnection *conn = hAllocConn(liftDb);
+struct gtexGeneBed *gtexGene = NULL;
+if (sqlTableExists(conn, table))
     {
+    struct hash *chainHash = quickLiftChainHash(quickLiftFile, seqName, winStart, winEnd);
+    char *geneId = stringIn("ENSG", item);
+    char query[512];
+    sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE %s = '%s'",
+             table, geneId ? "geneId" : "name", geneId ? geneId : item);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    while ((gtexGene == NULL) && ((row = sqlNextRow(sr)) != NULL))
+        {
+        struct gtexGeneBed *gene = gtexGeneBedLoad(row);
+        char *liftChrom;
+        int liftStart, liftEnd;
+        char liftStrand = gene->strand[0];
+        char *error = liftOverRemapRange(chainHash, 0.0, gene->chrom, gene->chromStart,
+                                         gene->chromEnd, gene->strand[0], 0.001,
+                                         &liftChrom, &liftStart, &liftEnd, &liftStrand);
+        if ((error == NULL) && sameString(liftChrom, seqName) && (liftStart == start) &&
+            (liftEnd == end))
+            {
+            freeMem(gene->chrom);
+            gene->chrom = liftChrom;
+            gene->chromStart = liftStart;
+            gene->chromEnd = liftEnd;
+            gene->strand[0] = liftStrand;
+            gtexGene = gene;
+            }
+        else
+            {
+            if (error == NULL)
+                freeMem(liftChrom);
+            gtexGeneBedFree(&gene);
+            }
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+return gtexGene;
+}
+
+static char *getGeneDescription(struct gtexGeneBed *gtexGene, char *geneDb)
+/* Get description for gene from the known genes of geneDb, the assembly the gene came from,
+ * or NULL if it has none.  Needed because knownGene table semantics have changed in hg38 */
+{
+char *knownDatabase = hdbDefaultKnownDb(geneDb);
+if (!sqlDatabaseExists(knownDatabase) || !hTableExists(knownDatabase, "kgXref"))
+    return NULL;    // a lifted gene's source, or the reference, may have no known genes
+char query[256];
+if (sameString(geneDb, "hg38"))
+    {
+    if (!hTableExists(knownDatabase, "knownCanonical"))
+        return NULL;
     char *geneId = cloneString(gtexGene->geneId);
     chopSuffix(geneId);
     sqlSafef(query, sizeof(query), 
@@ -83,7 +144,6 @@ else
                 "SELECT kgXref.description FROM kgXref WHERE geneSymbol='%s'", 
                         gtexGene->name);
     }
-char *knownDatabase = hdbDefaultKnownDb(database);
 struct sqlConnection *conn = hAllocConn(knownDatabase);
 char *desc = sqlQuickString(conn, query);
 hFreeConn(&conn);
@@ -95,20 +155,28 @@ void doGtexGeneExpr(struct trackDb *tdb, char *item)
 {
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct gtexGeneBed *gtexGene = getGtexGene(item, seqName, start, end, tdb->table);
+char *table = trackHubSkipHubName(tdb->table);
+struct gtexGeneBed *gtexGene = NULL;
+boolean lifted = quickLiftIsLiftedGtex(cart, tdb);
+if (lifted)
+    gtexGene = getLiftedGtexGene(tdb, item, table, start, end);
+else
+    gtexGene = getGtexGene(item, seqName, start, end, table);
 if (gtexGene == NULL)
-    errAbort("Can't find gene %s in GTEx gene table %s\n", item, tdb->table);
+    errAbort("Can't find gene %s in GTEx gene table %s\n", item, table);
 
-char *version = gtexVersion(tdb->table);
+char *version = gtexVersion(table);
 genericHeader(tdb, item);
 printf("<b>Gene: </b>");
-char *desc = getGeneDescription(gtexGene);
+// a quickLifted gene's description and gene page are in the assembly it came from
+char *geneDb = lifted ? trackDbSetting(tdb, "quickLiftDb") : database;
+char *desc = getGeneDescription(gtexGene, geneDb);
 if (desc == NULL)
     printf("%s<br>\n", gtexGene->name);
 else
     {
     printf("<a target='_blank' href='%s?db=%s&hgg_gene=%s'>%s</a><br>\n", 
-                        hgGeneName(), database, gtexGene->name, gtexGene->name);
+                        hgGeneName(), geneDb, gtexGene->name, gtexGene->name);
     printf("<b>Description:</b> %s<br>\n", desc);
     }
 printf("<b>Ensembl gene ID:</b> %s<br>\n", gtexGene->geneId);

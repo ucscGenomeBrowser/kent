@@ -1,0 +1,47 @@
+# #20742 -- exon-only view drew no image when the GENCODE track was filtered.  Chris turned
+# on the ALL GENCODE track's Basic subtrack on hg38, filtered it to coding transcripts, and
+# pressed "e v".  No browser image was drawn and no error was shown.  Lou closed it in
+# 2023 as fixed at some point; no commit is named.
+#
+# The ticket's session is gone, so this builds the state from the URL with today's
+# GENCODE composite, wgEncodeGencodeV50.  The filter is the Genes view's filterBy on
+# attrs.transcriptClass, set to coding.  Exon-only mode still takes its exons from
+# knownGene, which is what made the two disagree.
+#
+# BRCA1 plus the start of NBR2, chr17:43044295-43170000.  NBR2's Basic transcripts are
+# all nonCoding (ENST00000460115.5 among them), so:
+#   * step 1, one window: the filter is really on -- BRCA1's coding transcript
+#     ENST00000357654 is drawn and NBR2's ENST00000460115 is not.  Without this a server
+#     that ignored the filter would pass.
+#   * step 2, exon-only view: the GENCODE Basic row is drawn, with the coding item and
+#     without the filtered one, and the Multi-region button is pressed.  The buggy build
+#     drew no image, so the rows: check fails there.
+#
+# On hgwdev-demo6 (the multi-region space) the image is drawn, so the ticket's bug is not
+# there, but step 2 fails: the GENCODE Basic row in the space carries ZZEF1 items
+# (chr17:4 Mb) and no BRCA1 box.  GENCODE has its own trackHandler, wgEncodeGencode, the
+# same class as the known snp125-handler difference in a space.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43170000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43170000&pix=1100&hideTracks=1&knownGene=pack&wgEncodeGencodeSuper=show&wgEncodeGencodeV50=pack&wgEncodeGencodeBasicV50_sel=1&wgEncodeGencodeCompV50_sel=0&wgEncodeGencodePseudoGeneV50_sel=0&wgEncodeGencodePolyaV50_sel=0&wgEncodeGencodeV50ViewGenes.filterBy.attrs.transcriptClass=coding"
+  - expect:
+      rows: [ruler, knownGene, wgEncodeGencodeBasicV50]
+      exact: true
+      has: 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000357654"]'
+      noHas: 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000460115"]'
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene, wgEncodeGencodeBasicV50]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000357654"]'
+      noHas: 'map area[href*="wgEncodeGencodeBasicV50"][href*="ENST00000460115"]'

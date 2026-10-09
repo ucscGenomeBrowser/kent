@@ -1,0 +1,37 @@
+# #38490 -- a quickLifted barChart crashed hgTracks in full as well as pack, and a
+# quickLifted bigMethyl crashed it in full.  rm38490 watches pack; this one watches full.
+#
+# Both crashes had one cause: the quickLift branch of the bigBed loader in
+# hg/hgTracks/bedTrack.c built every lifted item as a plain struct bed and never ran the
+# track's own loader (04e6f098e74).  A barChart item then had a NULL expScores, which
+# barChartMapItem() reads.  A bigMethyl item was a 104-byte struct bed read as a 128-byte
+# struct bedMethyl.  The page stopped before the image map, so no item box reached the
+# browser.
+#
+# The fixture hub sets quickLiftUrl and quickLiftDb itself, because a remote hub is the
+# only way to a lifted bigMethyl: hgConvert does not offer the type (validateOneTdb() in
+# hg/lib/trackHub.c).  The barChart is hg19 GTEx transcripts.  The bigMethyl is a made-up
+# hg19 file of 20 CpGs, 200 bases apart from chr12:6643600; the first lifts to 6534434,
+# which liftOver agrees with.
+#
+# What is asserted: both rows draw in full, the GAPDH transcript ENST00000229239 has an
+# item box, and the first CpG has a box at its lifted position.
+# Deliberately not asserted: the bigMethyl mouseover.  Its "Reads with a deletion" field
+# shows the item name on native tracks too, because the bigBed label is written over
+# nDelete (hg/hgTracks/bedTrack.c, the FIXME above the bigBedMakeLabel call).
+proof:
+  - "assertion-only 2026-10-07 -- written after the fix shipped to genome-test"
+  - "sandbox-ab 2026-10-07 -- park 38490: passes with the fixed hgTracks; with the pre-fix hgTracks it failed step 3 (rows not drawn: rm38490BarFull, rm38490Methyl)"
+  - "release-ab 2026-10-07 -- fails on v504_branch (park 38423) at step 3, the same two rows not drawn; passes on genome-test"
+
+target: genome-test
+db: hg38
+position: chr12:6534000-6539000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38490/hubFull.txt", db: hg38}
+  - go: chr12:6534000-6539000
+  - expect: {rows: [rm38490BarFull, rm38490Methyl], noText: "Warning/Error"}
+  - expect: {has: 'area[href*="i=ENST00000229239"][href*="rm38490BarFull"]'}
+  - expect: {has: 'area[href*="o=6534434&t=6534435"][href*="rm38490Methyl"]'}

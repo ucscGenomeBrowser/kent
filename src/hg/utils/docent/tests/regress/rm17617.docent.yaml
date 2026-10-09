@@ -1,0 +1,48 @@
+# #17617 -- custom multi-region view from a BED with many regions gave
+# "Too many windows in view. Unable to display image at requested zoom level."
+#
+# On entering customUrl mode, hgTracks set the view to the WHOLE virtual chromosome.
+# With thousands of regions that is more than the 4000-window limit, and the page
+# died with the error above.  Galt's fix (v335) instead looks for the custom region
+# nearest the position the user was just on, and opens a window there (or the middle
+# of the virtual chromosome when nothing is near).
+#
+# The fixture is 5000 regions of 100 bp, one every 1 kb along hg38 chr1 from
+# 10,000,000, so the whole virtual chromosome is 5000 windows.  The script starts at
+# chr1:10,500,000-10,502,000, which holds regions r500 and r501, and then switches to
+# customUrl with multiRegionsBedUrl pointing at the fixture and virtWinFull NOT set.
+#
+# The fixture is big enough to trip the old behaviour.  Measured on genome-test
+# 2026-10-06 with curl: the same two requests with virtWinFull=on, which still asks for
+# the whole virtual chromosome, put the ticket's string in the warning box (escaped as
+# \x20 in the page's JavaScript, so a plain grep of the HTML misses it).  So a build that
+# went back to opening customUrl on the whole virtual chromosome fails the noText below.
+# A copy of this script with virtWinFull=on failed on genome-test the same day with
+# 'page contains "Too many windows in view"', so docent does read the warning box.
+#
+# Checks:
+#   noText  the ticket's own error string.
+#   rows    only the ruler is named after the switch: in a space (demo6) knownGene is
+#           drawn as knownGeneSquinked, a known difference this script does not watch.
+#   has     multi-region button pressed, so the view really is a custom-region view,
+#           and the map box of region r500, so the view opened near the old position
+#           rather than at the start or the middle of the virtual chromosome.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr1:10500000-10502000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A10500001-10502000&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=off&multiRegionsBedUrl=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2FmrBugs%2F17617%2Frm17617regions.bed"
+  - expect:
+      rows: [ruler]
+      noText: "Too many windows in view"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1:10500001-10500100"]'

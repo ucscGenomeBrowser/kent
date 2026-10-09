@@ -694,8 +694,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
  * means the parent chain is walked rather than looked at one level, so a loop
  * would hang every walker instead of being harmless.  Only a supertrack can
  * close a loop here, since nothing else is given a parent by this routine, so
- * breaking it at a supertrack names the track whose setting is wrong and leaves
- * the members attached to their folder. */
+ * reporting it at a supertrack names the track whose setting is wrong.  This aborts
+ * rather than warns, to match the composite parent loop check in
+ * trackDbLinkUpGenerations: a loop is never something to carry on past. */
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (!tdbIsSuperTrack(tdb) || tdb->parent == NULL)
@@ -704,16 +705,31 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     int depth = 0;
     for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
         {
-        if (ancestor == tdb || ++depth > maxSuperTrackDepth)
-            {
-            warn("Supertrack %s is its own ancestor through its parent setting, "
-                 "ignoring that setting.", tdb->track);
-            tdb->parent = NULL;
-            break;
-            }
+        if (ancestor == tdb)
+            errAbort("Supertrack %s is its own ancestor through its parent setting",
+                     tdb->track);
+        if (++depth > maxSuperTrackDepth)
+            errAbort("Supertrack %s is nested more than %d deep", tdb->track,
+                     maxSuperTrackDepth);
         }
     }
 hashFree(&superHash);
+}
+
+struct slName *tdbSuperTrackAncestors(struct trackDb *tdb)
+// Names of every superTrack above tdb, innermost first, NULL if there are none.  A superTrack
+// may itself sit inside another superTrack, so showing only the closest one still leaves the
+// track hidden.  Free the result with slNameFreeList.
+{
+struct slName *names = NULL;
+struct trackDb *ancestor;
+for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+    {
+    if (tdbIsSuperTrack(ancestor))
+        slNameAddHead(&names, ancestor->track);
+    }
+slReverse(&names);
+return names;
 }
 
 char *trackDbOrigAssembly(struct trackDb *tdb)

@@ -1674,6 +1674,9 @@ function superUiSetAllTracks(newVal) {
             sel.value = 'full';
         if (sel.value === "")
             sel.value = 'dense';
+        // a nested container's dropdown carries only hide/show
+        if (sel.value === "")
+            sel.value = 'show';
         $(sel).trigger("change");
     }
 }

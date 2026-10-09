@@ -1,10 +1,5 @@
 include ncOrfs.ra
 
-# The released, hg38-only STRchive/strVar version.  The alpha version lives in
-# human/strVarNew.ra and is held back until the auto-push is in place, #38268.
-# Delete this include and the three files it pulls in when that version ships.
-include strVar.ra public
-
 include barCharts.ra
 
 include hoffMap.ra

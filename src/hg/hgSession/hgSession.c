@@ -902,8 +902,10 @@ struct hash *parentHash = newHash(5);
 
 for(; tdb; tdb = tdb->next)
     {
-    struct trackDb *parent = tdb->parent;
-    if (parent) 
+    /* Every ancestor, not just the closest: a supertrack may itself be a member of
+     * another supertrack, and the outer one is reached only through it. */
+    struct trackDb *parent;
+    for (parent = tdb->parent; parent != NULL; parent = parent->parent)
         {
         if (hashLookup(parentHash, parent->track) == NULL)
             {

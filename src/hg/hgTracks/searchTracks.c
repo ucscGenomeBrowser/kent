@@ -190,9 +190,13 @@ struct hash *superTrackHash = hashNew(0);
 struct trackDb *tdb, *ret = NULL;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (tdbIsSuperTrackChild(tdb) && hashFindVal(superTrackHash, tdb->parent->track) == NULL)
+    /* Walk the whole chain: a supertrack may itself be a member of another supertrack,
+     * and only the innermost is reached from the track list. */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
         {
-        hashAdd(superTrackHash, tdb->parent->track, tdb->parent);
+        if (tdbIsSuperTrack(ancestor) && hashFindVal(superTrackHash, ancestor->track) == NULL)
+            hashAdd(superTrackHash, ancestor->track, ancestor);
         }
     }
 struct hashEl *hel, *helList = hashElListHash(superTrackHash);

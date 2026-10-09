@@ -1,0 +1,59 @@
+# #19126 -- "Multi-Region from url doesn't detect when you change assemblies".  Chris Lee
+# built a custom-regions view on gorGor4 from a BED URL, went to the Gateway, picked
+# gorGor3 and pressed GO, and got
+#
+#     BED chromEnd 135448346 > size 131632457 for chromosome/scaffold chr2B
+#
+# The regions belong to one assembly, but the cart kept multiRegionsBedUrl and the new
+# assembly tried to read them.  He could not reproduce it through the Genomes menu, only
+# through the Gateway.  Jairo found it still there in 2025 and hibernated it.
+#
+# The fixture is a two-region BED on hg38 under ~braney/docentFixtures/mrBugs/19126.  Its
+# first region, chr5:181000001-181100000, lies past the end of hg19's chr5 (180,915,260
+# bases), so reading it against hg19 gives the same "BED chromEnd ... > size" complaint.
+#
+# STATUS 2026-10-06: the bug is still there.  The last check fails on genome-test and on
+# hgwdev-demo6 with "BED chromEnd 181100000 > size 180915260 for chromosome/scaffold chr5",
+# hence .xfail.  The view does fall back to a single region; only the warning remains.
+#
+# Checks:
+#   step 1  the custom-regions view really loaded on hg38: the Multi-region button is
+#           pressed and both regions have their own map box.
+#   step 2  after choosing hg19 on the Gateway and pressing GO, the ticket's message
+#           ("BED chromEnd") is absent, and hg19 drew an ordinary single-region view:
+#           knownGene is drawn and the Multi-region button is NOT pressed, which is the
+#           behavior Chris asked for ("Multi-region mode should just exit").
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test with the ticket's own message, BED chromEnd 181100000 > size 180915260 for chromosome/scaffold chr5"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr5%3A181000001-181100000&pix=1100&hideTracks=1&knownGene=pack"
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedUrl=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2FmrBugs%2F19126%2Fhg38Regions.bed"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr5:181000001-181100000"]'
+        - 'area[data-tooltip="chr17:43044295-43125483"]'
+
+  # The Gateway, then the other human assembly picked from its assembly menu.  Docent has
+  # no verb for a <select>, so this step sends the request the menu sends
+  # (hgGateway.js onChangeDbMenu: cart.send({setDb: {db, position: "lastDbPos"}})), then
+  # reloads the Gateway and presses its own GO button.  Going straight to
+  # hgGateway?db=hg19 does NOT reproduce the bug, nor does the Genomes menu.
+  - goto: "/cgi-bin/hgGateway"
+  - goto: "/cgi-bin/hgGateway?cjCmd=%7B%22setDb%22%3A%7B%22db%22%3A%22hg19%22%2C%22position%22%3A%22lastDbPos%22%7D%7D"
+  - goto: "/cgi-bin/hgGateway"
+  - click: ".jwGoButtonContainer"
+  - wait: "#imgTbl"
+  - expect:
+      rows: [ruler, knownGene]
+      url: "db=hg19"
+      noText: "BED chromEnd"
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+  - shot: hg19

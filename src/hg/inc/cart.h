@@ -97,6 +97,10 @@ void cartSaveState(struct cart *cart);
 void cartEncodeState(struct cart *cart, struct dyString *dy);
 /* Add a CGI-encoded var=val&... string of all cart variables to dy. */
 
+void cartEncodeStateRawNames(struct cart *cart, struct dyString *dy);
+/* The same, with variable names written as they stand rather than escaped.  Only for
+ * comparing one cart against another as a string; do not store the result. */
+
 char *cartSessionVarName();
 /* Return name of CGI session ID variable. */
 

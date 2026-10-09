@@ -306,6 +306,46 @@ static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
+static void addSuperMembers(struct trackRef **refList, struct hash *trackHash,
+                            struct trackDb *superTdb)
+/* Add a supertrack's members to refList, and the members of any supertrack among them.
+ * A supertrack may hold another supertrack, whose own members are reached only through it. */
+{
+struct slRef *child;
+for (child = superTdb->children; child != NULL; child = child->next)
+    {
+    struct trackDb *childTdb = child->val;
+    struct track *childTrack = hashFindVal(trackHash, childTdb->track);
+    // Try adding downloadsOnly track
+    if (childTrack == NULL && tdbIsDownloadsOnly(childTdb))
+        {
+        AllocVar(childTrack);           // Fake a track!
+        childTrack->tdb = childTdb;
+        childTrack->hasUi = FALSE;
+        }
+    if (childTrack != NULL)
+        {
+        struct trackRef *ref;
+        AllocVar(ref);
+        ref->track = childTrack;
+        slAddTail(refList, ref);
+        }
+    if (tdbIsSuper(childTdb))
+        addSuperMembers(refList, trackHash, childTdb);
+    }
+}
+
+static int superTrackDepth(struct trackDb *tdb)
+/* How many supertracks are above this track. */
+{
+int depth = 0;
+struct trackDb *ancestor;
+for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+    if (tdbIsSuper(ancestor))
+        depth++;
+return depth;
+}
+
 static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
 /* Put up track configurations. If groupTarget is
@@ -443,27 +483,7 @@ for (group = groupList; group != NULL; group = group->next)
             ref->track = track;
             slAddTail(&refList, ref);
             if (tdbIsSuper(track->tdb))
-                {
-                struct slRef *child = track->tdb->children;
-                for (; child != NULL; child=child->next)
-                    {
-                    struct trackDb *childTdb = child->val;
-                    struct track *childTrack = hashFindVal(trackHash, childTdb->track);
-                    // Try adding downloadsOnly track
-                    if (childTrack == NULL && tdbIsDownloadsOnly(childTdb))
-                        {
-                        AllocVar(childTrack);           // Fake a track!
-                        childTrack->tdb = childTdb;
-                        childTrack->hasUi = FALSE;
-                        }
-                    if (childTrack != NULL)
-                        {
-                        AllocVar(ref);
-                        ref->track = childTrack;
-                        slAddTail(&refList, ref);
-                        }
-                    }
-                }
+                addSuperMembers(&refList, trackHash, track->tdb);
             }
         group->trackList = refList;
         }
@@ -478,8 +498,10 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none;'"),
                 group->name, rowCount++);
         hPrintf("<TD NOWRAP>");
-        if (tdbIsSuperTrackChild(tdb))
-            /* indent members of a supertrack */
+        int superDepth = superTrackDepth(tdb);
+        int indent;
+        for (indent = 0; indent < superDepth; indent++)
+            /* indent members of a supertrack, one step per enclosing supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
         hPrintIcons(tdb);
@@ -495,8 +517,8 @@ for (group = groupList; group != NULL; group = group->next)
         if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD><TD NOWRAP>");
-        if (tdbIsSuperTrackChild(tdb))
-            /* indent members of a supertrack */
+        for (indent = 0; indent < superDepth; indent++)
+            /* indent members of a supertrack, one step per enclosing supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
 	/* If track is not on this chrom print an informational

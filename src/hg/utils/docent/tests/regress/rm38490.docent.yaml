@@ -1,0 +1,74 @@
+# #38490 -- a quickLifted barChart track crashed hgTracks in pack and full, and its
+# details page crashed hgc.
+#
+# hgConvert does not offer barChart for quickLift (validateOneTdb() in hg/lib/trackHub.c
+# lists the types it lifts), so the only way to a lifted barChart is a hub whose own
+# trackDb sets quickLiftUrl and quickLiftDb.  The fixture hub does exactly that, with the
+# hg19 GTEx transcript file and the hg19-to-hg38 quickLift chain.
+#
+# hgTracks: the quickLift branch of the bigBed loader in hg/hgTracks/bedTrack.c built every
+# lifted item as a plain bed and never ran the track's own loader, so a barChart item had
+# no scores and barChartMapItem() read a NULL expScores (04e6f098e74).  The page stopped at
+# the image map, so the item's map box never reached the browser.
+#
+# hgc: getBarChartFromFile() in hg/hgc/barChartClick.c looked for the item at hg38
+# coordinates in the hg19 file, found nothing, and doBarChartDetails() dereferenced NULL.
+# With that fixed, printTrackHtml() crashed next, because getTrackHtml() in hg/lib/hui.c
+# dereferenced the NULL it got looking up rm38490Bar in hg19's trackDb (18643a9064f).
+# Both left an empty page.
+#
+# What is asserted: in pack on hg38, the lifted row is drawn and the GAPDH transcript
+# ENST00000229239 has a map box, and clicking it opens a details page that gives the
+# item's lifted hg38 position, which native hg38 GTEx also gives.  The broken hgTracks
+# fails the row check; a fixed hgTracks with a broken hgc fails only the last check.
+# The hub's data, chain and matrix URLs are on hgdownload because a remote hub may not
+# name a local /gbdb path.
+# Second half, through the UI (b50e4cb498f): hgConvert lifts bigBarChart only when
+# browser.quickLiftBarChart is on.  genome-test's hg.conf turns it on; a cart variable of
+# the same name overrides hg.conf, so the same script also turns it off.  On: the convert
+# lifts GTEx transcripts and the details page gives the lifted position, which also needs
+# the hgc.c branch that sends a barChart past avoidHandler to doBarChartDetails.  Off: the
+# convert names the track as not supported, as it did before the gate existed.
+# GATE: a red on the "on" half with the hub half green means the gate is off on the
+# server: grep browser.quickLiftBarChart /usr/local/apache/cgi-bin/hg.conf
+# Deliberately not asserted: any TPM value, since GTEx data could be replaced, and full
+# mode, which crashed at the same line as pack.
+proof:
+  - "assertion-only 2026-10-06 -- written with the fix"
+  - "sandbox-ab 2026-10-06 -- park 38490 (port 48088): passed with 04e6f098e74+18643a9064f; with the pre-fix hgTracks it failed step 3 (row not drawn); with the fixed hgTracks and pre-fix hgc+hgTrackUi it failed step 6 (no lifted position); genome-test, master without the fix, failed step 3"
+  - "xfail 2026-10-06 -- red on genome-test at step 3 (rows not drawn: rm38490Bar) until the fix reaches master"
+  - "sandbox-ab 2026-10-06 -- convert half, park 38490 with the gate on: hgc built before the avoidHandler branch in hgc.c drew the page without the lifted position; with b50e4cb498f it passed. With the gate off the convert did not lift the track"
+  - "server-flip 2026-10-06 -- passed on genome-test once 04e6f098e74, 18643a9064f and b50e4cb498f were installed there (17:27), having failed at step 3 that afternoon"
+  - "release-ab 2026-10-07 -- fails on v504_branch (park 38423) at step 5: the page drew one item box and stopped, so the click found no ENST00000229239; passes on genome-test. It fails later there than on the pre-fix park build (step 3) because v504's crash comes partway through the image map"
+
+target: genome-test
+db: hg38
+position: chr12:6534000-6539000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38490/hub2.txt", db: hg38}
+  - go: chr12:6534000-6539000
+  - expect: {rows: [rm38490Bar], noText: "Warning/Error"}
+  - expect: {has: 'area[href*="i=ENST00000229239"]'}
+
+  - click: {track: rm38490Bar, item: "ENST00000229239"}
+  - expect: {url: "hgc", text: "chr12:6533927-6538371"}
+
+  # Through the convert, gate on (hg.conf) and then off (cart).
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr12%3A6643000-6648000&pix=1100"
+  - hide: all
+  - track: {gtexTranscExpr: pack}
+  - expect: {rows: [gtexTranscExpr], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [gtexTranscExpr], noText: "Warning/Error"}
+  - expect: {has: 'area[href*="i=ENST00000229239"]'}
+  - click: {track: gtexTranscExpr, item: "ENST00000229239"}
+  - expect: {url: "hgc", text: "chr12:6533927-6538371"}
+
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr12%3A6643000-6648000&pix=1100&browser.quickLiftBarChart=off"
+  - hide: all
+  - track: {gtexTranscExpr: pack}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - expect: {text: "not supported by QuickLift"}

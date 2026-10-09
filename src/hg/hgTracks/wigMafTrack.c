@@ -292,8 +292,11 @@ quickLiftResolveTable(track->tdb, track->table, &table, &liftDb);
 char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
 
 struct hash *chainHash = newHash(8);
-struct quickLiftRange *range, *rangeList = quickLiftSourceRanges(quickLiftFile, chromName,
-    start, end, chainHash);
+// a range query returns every block that overlaps the range, so no padding is needed;  the
+// gate keeps the padded read it replaced.  refs #38513
+struct quickLiftRange *range, *rangeList = quickLiftMafSummaryEnabled(cart) ?
+    quickLiftSourceRangesExact(quickLiftFile, chromName, start, end, chainHash) :
+    quickLiftSourceRanges(quickLiftFile, chromName, start, end, chainHash);
 struct mafAli *srcList = NULL;
 
 for (range = rangeList; range != NULL; range = range->next)
@@ -1239,6 +1242,224 @@ for (mi = miList; mi != NULL; mi = mi->next)
 return TRUE;
 }
 
+static char *summarySpeciesWhere(struct wigMafItem *miList, struct dyString *where)
+/* Fill where with a clause that selects the summaries for the species being drawn, and
+ * return it, or NULL when there are none. */
+{
+struct wigMafItem *mi;
+sqlDyStringPrintf(where, "src in (");
+for (mi = miList; mi != NULL; mi = mi->next)
+    {
+    if (!isPairwiseItem(mi))
+        /* exclude non-species items (e.g. conservation wiggle */
+        continue;
+    sqlDyStringPrintf(where, "'%s'", mi->db);
+    if (mi->next != NULL)
+        sqlDyStringPrintf(where, ",");
+    }
+sqlDyStringPrintf(where, ")");
+/* check for empty where clause */
+if (sameString(where->string,"src in ()"))
+    return NULL;
+return where->string;
+}
+
+static int mafSummaryCmpStart(const void *va, const void *vb)
+/* Compare two mafSummaries by chromStart. */
+{
+const struct mafSummary *a = *((struct mafSummary **)va);
+const struct mafSummary *b = *((struct mafSummary **)vb);
+return (int)a->chromStart - (int)b->chromStart;
+}
+
+static int quickLiftRangeCmp(const void *va, const void *vb)
+/* Compare two quickLiftRanges by chrom, then start. */
+{
+const struct quickLiftRange *a = *((struct quickLiftRange **)va);
+const struct quickLiftRange *b = *((struct quickLiftRange **)vb);
+int diff = strcmp(a->chrom, b->chrom);
+if (diff == 0)
+    diff = a->start - b->start;
+return diff;
+}
+
+static struct quickLiftRange *mergedSourceRanges(char *quickLiftFile, int seqStart, int seqEnd,
+                                                 struct hash *chainHash)
+/* The source ranges under the window, with overlapping ones merged, so that two ranges
+ * never ask for the same rows twice. */
+{
+struct quickLiftRange *range, *next, *mergedList = NULL;
+struct quickLiftRange *rangeList = quickLiftSourceRangesExact(quickLiftFile, chromName,
+                                                              seqStart, seqEnd, chainHash);
+slSort(&rangeList, quickLiftRangeCmp);
+for (range = rangeList; range != NULL; range = next)
+    {
+    next = range->next;
+    if ((mergedList != NULL) && sameString(mergedList->chrom, range->chrom) &&
+        (range->start <= mergedList->end))
+        {
+        mergedList->end = max(mergedList->end, range->end);
+        freeMem(range->chrom);
+        freeMem(range);
+        }
+    else
+        slAddHead(&mergedList, range);
+    }
+slReverse(&mergedList);
+return mergedList;
+}
+
+static struct quickLiftRange *liftedPieces(struct hash *chainHash, struct hash *blockCache,
+                                           struct quickLiftRange *range,
+                                           char *chrom, int start, int end,
+                                           int seqStart, int seqEnd)
+/* The parts of a row from the assembly a track was lifted from that land in the window,
+ * in reference coordinates and clipped to it.  Only the part of the row inside the range
+ * it was read from is mapped, so a row that two ranges both return is drawn once. */
+{
+start = max(start, range->start);
+end = min(end, range->end);
+if (start >= end)
+    return NULL;
+struct quickLiftRange *piece, *next, *keepList = NULL;
+for (piece = quickLiftMapToReference(chainHash, blockCache, chrom, start, end); piece != NULL;
+     piece = next)
+    {
+    next = piece->next;
+    piece->start = max(piece->start, seqStart);
+    piece->end = min(piece->end, seqEnd);
+    if (sameString(piece->chrom, chromName) && (piece->start < piece->end))
+        slAddHead(&keepList, piece);
+    else
+        {
+        freeMem(piece->chrom);
+        freeMem(piece);
+        }
+    }
+return keepList;
+}
+
+static void quickLiftRangeFreeList(struct quickLiftRange **pList)
+/* Free a list of quickLiftRanges and their chroms. */
+{
+struct quickLiftRange *range, *next;
+for (range = *pList; range != NULL; range = next)
+    {
+    next = range->next;
+    freeMem(range->chrom);
+    freeMem(range);
+    }
+*pList = NULL;
+}
+
+static void liftedSummariesToHash(struct track *track, char *summary, char *whereClause,
+                                  int seqStart, int seqEnd, struct hash *componentHash)
+/* Read the summary rows of a quickLifted maf track out of the assembly it came from, and
+ * hash them by species in reference coordinates.  A summary is a table of blocks and
+ * scores in that assembly's coordinates, so it lifts like any other set of ranges;  a row
+ * that crosses a gap in the chains is split, and each part is drawn where it lands.
+ * refs #38510 */
+{
+char *liftDb = trackDbSetting(track->tdb, "quickLiftDb");
+char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
+if (!hTableExists(liftDb, summary))
+    return;
+struct hash *chainHash = newHash(8);
+struct hash *blockCache = newHash(8);
+struct quickLiftRange *range, *rangeList = mergedSourceRanges(quickLiftFile, seqStart, seqEnd,
+                                                              chainHash);
+struct sqlConnection *conn = hAllocConn(liftDb);
+boolean hasFieldLeftStatus = hHasField(liftDb, summary, "leftStatus");
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    int rowOffset = 0;
+    char **row;
+    struct sqlResult *sr = hOrderedRangeQuery(conn, summary, range->chrom, range->start,
+                                              range->end, whereClause, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct mafSummary *ms;
+        if (hasFieldLeftStatus)
+            ms = mafSummaryLoad(row + rowOffset);
+        else
+            /* previous table schema didn't have status fields */
+            ms = mafSummaryMiniLoad(row + rowOffset);
+        struct quickLiftRange *piece, *pieceList = liftedPieces(chainHash, blockCache, range,
+                                ms->chrom, ms->chromStart, ms->chromEnd, seqStart, seqEnd);
+        for (piece = pieceList; piece != NULL; piece = piece->next)
+            {
+            struct mafSummary *lifted = CloneVar(ms);
+            lifted->next = NULL;
+            lifted->chrom = chromName;
+            lifted->chromStart = piece->start;
+            lifted->chromEnd = piece->end;
+            struct hashEl *hel = hashLookup(componentHash, lifted->src);
+            if (hel == NULL)
+                hashAdd(componentHash, lifted->src, lifted);
+            else
+                slAddHead(&(hel->val), lifted);
+            }
+        // the lifted copies share ms->src, so it is freed only when none was made
+        if (pieceList == NULL)
+            mafSummaryFree(&ms);
+        else
+            {
+            freeMem(ms->chrom);
+            freeMem(ms);
+            }
+        quickLiftRangeFreeList(&pieceList);
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+quickLiftRangeFreeList(&rangeList);
+quickLiftBlockCacheFree(&blockCache);
+}
+
+static void drawLiftedScoreOverview(struct track *track, int height, int seqStart, int seqEnd,
+                                    struct hvGfx *hvg, int xOff, int yOff, int width,
+                                    Color color, enum trackVisibility vis)
+/* drawScoreOverview() for a quickLifted maf track:  read the scored references out of
+ * the maf table in the assembly the track came from and draw each where it lands on the
+ * reference.  Without this the table would be read in that assembly's coordinates as if
+ * they were the reference's.  refs #38510 */
+{
+char *liftDb = trackDbSetting(track->tdb, "quickLiftDb");
+char *table = NULL;
+quickLiftResolveTable(track->tdb, track->table, &table, &liftDb);
+char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
+struct hash *chainHash = newHash(8);
+struct hash *blockCache = newHash(8);
+struct quickLiftRange *range, *rangeList = mergedSourceRanges(quickLiftFile, seqStart, seqEnd,
+                                                              chainHash);
+struct sqlConnection *conn = hAllocConn(liftDb);
+double scale = scaleForPixels(width);
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    int rowOffset = 0;
+    char **row;
+    struct sqlResult *sr = hRangeQuery(conn, table, range->chrom, range->start, range->end,
+                                       NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct scoredRef ref;
+        scoredRefStaticLoad(row + rowOffset, &ref);
+        struct quickLiftRange *piece, *pieceList = liftedPieces(chainHash, blockCache, range,
+                                ref.chrom, ref.chromStart, ref.chromEnd, seqStart, seqEnd);
+        for (piece = pieceList; piece != NULL; piece = piece->next)
+            drawScore(ref.score, piece->start, piece->end, seqStart, scale,
+                      hvg, xOff, yOff, height, color, vis);
+        quickLiftRangeFreeList(&pieceList);
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+quickLiftRangeFreeList(&rangeList);
+quickLiftBlockCacheFree(&blockCache);
+}
+
 static boolean drawPairsFromSummary(struct track *track,
         int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
@@ -1247,7 +1468,8 @@ static boolean drawPairsFromSummary(struct track *track,
 /* Draw pairwise display for this multiple alignment */
 char *summary;
 struct wigMafItem *miList = track->items, *mi = miList;
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;
+boolean liftedSummaries = FALSE;
 struct sqlResult *sr = NULL;
 char **row = NULL;
 int rowOffset = 0;
@@ -1295,25 +1517,18 @@ if (track->isBigBed)
         }
     bbiFileClose(&bbi);
     }
+else if (quickLiftIsLifted(track->tdb))
+    {
+    liftedSummariesToHash(track, quickLiftSummaryTable(summary),
+                          summarySpeciesWhere(miList, where), seqStart, seqEnd, componentHash);
+    liftedSummaries = TRUE;
+    }
 else 
     {
     /* Create SQL where clause that will load up just the
      * summaries for the species that we are including. */
     conn = hAllocConn(database);
-    sqlDyStringPrintf(where, "src in (");
-    for (mi = miList; mi != NULL; mi = mi->next)
-        {
-        if (!isPairwiseItem(mi))
-            /* exclude non-species items (e.g. conservation wiggle */
-            continue;
-        sqlDyStringPrintf(where, "'%s'", mi->db);
-        if (mi->next != NULL)
-            sqlDyStringPrintf(where, ",");
-        }
-    sqlDyStringPrintf(where, ")");
-    /* check for empty where clause */
-    if (!sameString(where->string,"src in ()"))
-        whereClause = where->string;
+    whereClause = summarySpeciesWhere(miList, where);
     sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
                             whereClause, &rowOffset);
 
@@ -1341,11 +1556,16 @@ else
     sqlFreeResult(&sr);
     }
 
-/* reverse summary lists */
+/* reverse summary lists.  Lifted ones came from several source ranges, so sort them. */
 cookie = hashFirst(componentHash);
 while ((hel = hashNext(&cookie)) != NULL)
-    slReverse(&hel->val);
-if (!track->isBigBed)
+    {
+    if (liftedSummaries)
+        slSort(&hel->val, mafSummaryCmpStart);
+    else
+        slReverse(&hel->val);
+    }
+if (conn != NULL)
     hFreeConn(&conn);
 
 /* display pairwise items */
@@ -2709,7 +2929,11 @@ if (wigTrack == NULL)
     else
         {
         /* use or scored refs from maf table*/
-        if (differentString(track->tdb->type, "bigMaf"))
+        if (differentString(track->tdb->type, "bigMaf") && quickLiftIsLifted(track->tdb) &&
+            quickLiftMafSummaryEnabled(cart))
+            drawLiftedScoreOverview(track, height, seqStart, seqEnd, hvg,
+                            xOff, yOff, width, color, scoreVis);
+        else if (differentString(track->tdb->type, "bigMaf"))
             drawScoreOverview(track->table, height, seqStart, seqEnd, hvg,
                             xOff, yOff, width, font, color, color, scoreVis);
         else

@@ -832,17 +832,6 @@ slReverse(&list);
 
 
 
-static boolean skipMalformedPairs = FALSE;
-
-void cgiSkipMalformedPairs(boolean on)
-/* Tell the cookie parser to step over a malformed pair instead of losing the
- * pair after it or aborting the request.  These libraries cannot read hg.conf
- * themselves, so hgConfig.c pushes the setting in, the same way
- * cfgSetLogCgiVars pushes cgiSetMaxLogLen.  refs #38340 */
-{
-skipMalformedPairs = on;
-}
-
 static void parseCookies(struct hash **retHash, struct cgiVar **retList)
 /* parses any cookies and puts them into the given hash and list */
 {
@@ -864,43 +853,25 @@ hash = newHash(6);
 namePt = str;
 while (isNotEmpty(namePt))
     {
-    if (skipMalformedPairs)
+    /* Step over the separators of an empty pair, then confine the search
+     * for the '=' to this pair.  Without both, a cookie with a name and no
+     * value swallows the cookie after it, and the same cookie at the end
+     * of the string aborts the CGI.  The browser then sends that cookie
+     * again on every request, so the reader cannot get a page back until
+     * they clear it by hand.  refs #38340 */
+    namePt += strspn(namePt, "; ");
+    if (namePt[0] == 0)
+	break;
+    nextNamePt = strchr(namePt, ';');
+    if (nextNamePt != NULL)
+	*nextNamePt++ = 0;
+    dataPt = strchr(namePt, '=');
+    if (dataPt == NULL)
 	{
-	/* Step over the separators of an empty pair, then confine the search
-	 * for the '=' to this pair.  Without both, a cookie with a name and no
-	 * value swallows the cookie after it, and the same cookie at the end
-	 * of the string aborts the CGI.  The browser then sends that cookie
-	 * again on every request, so the reader cannot get a page back until
-	 * they clear it by hand.  refs #38340 */
-	namePt += strspn(namePt, "; ");
-	if (namePt[0] == 0)
-	    break;
-	nextNamePt = strchr(namePt, ';');
-	if (nextNamePt != NULL)
-	    *nextNamePt++ = 0;
-	dataPt = strchr(namePt, '=');
-	if (dataPt == NULL)
-	    {
-	    namePt = nextNamePt;
-	    continue;
-	    }
-	*dataPt++ = 0;
+	namePt = nextNamePt;
+	continue;
 	}
-    else
-	{
-	dataPt = strchr(namePt, '=');
-	if (dataPt == NULL)
-	    errAbort("Mangled Cookie input string: no = in '%s' (offset %d in complete cookie string: '%s')",
-		     namePt, (int)(namePt - str), getenv("HTTP_COOKIE"));
-	*dataPt++ = 0;
-	nextNamePt = strchr(dataPt, ';');
-	if (nextNamePt != NULL)
-	    {
-	     *nextNamePt++ = 0;
-	     if (*nextNamePt == ' ')
-		 nextNamePt++;
-	    }
-	}
+    *dataPt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
     el->val = dataPt;

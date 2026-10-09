@@ -326,27 +326,113 @@ clean[i] = 0;
 fprintf(stderr, "cart: dropped %s, value is not %s\n", clean, why);
 }
 
+/* A cart variable name is written into the name=value string as it stands, so a name holding
+ * '&', ';' or '=' cannot be told apart from the punctuation around it.  Almost no name does.
+ * A track hub may name a track group "Cut&Tag", which gives a real setting called
+ * hgtgroup_Tanaka_Cut&Tag_IgG_close, and a session written before the CGI parsers were fixed
+ * can hold a name with a separator stuck to the front of it.
+ *
+ * These three routines escape just those characters on the way out and undo it on the way in.
+ * A '%' is escaped only when it starts one of the four sequences below, so a name that
+ * already holds "%2c" or "%20" -- real hub track names do -- keeps the spelling it has always
+ * had, and so does a name with a '+' in it, which a full cgiEncode/cgiDecode pair would turn
+ * into a space.  No name in the 289,872 sessions stored on the RR holds any of the four, so
+ * an old name decodes to itself and nothing already saved changes meaning.  refs #38343 */
+
+static char *cartNameEscapes[] = {"%25", "%26", "%3B", "%3D"};
+static char cartNameChars[] =    {'%',   '&',   ';',   '='};
+
+static int cartNameEscapeIx(char *s)
+/* Return the index of the escape sequence that s starts with, or -1 for anything else. */
+{
+int i;
+for (i = 0;  i < ArraySize(cartNameEscapes);  i++)
+    if (startsWithNoCase(cartNameEscapes[i], s))
+        return i;
+return -1;
+}
+
+static void cartAppendEncodedName(struct dyString *dy, char *name)
+/* Append name to dy with the separators escaped. */
+{
+char *s;
+for (s = name;  *s != 0;  s++)
+    {
+    int ix = -1, i;
+    for (i = 1;  i < ArraySize(cartNameChars);  i++)	/* 1, so not '%' itself */
+        if (*s == cartNameChars[i])
+            {
+            ix = i;
+            break;
+            }
+    if (ix < 0 && *s == '%' && cartNameEscapeIx(s) >= 0)
+        ix = 0;
+    if (ix < 0)
+        dyStringAppendC(dy, *s);
+    else
+        dyStringAppend(dy, cartNameEscapes[ix]);
+    }
+}
+
+static void cartDecodeName(char *name)
+/* Undo cartAppendEncodedName, in place.  The result is never longer than the input. */
+{
+char *in = name, *out = name;
+while (*in != 0)
+    {
+    int ix = cartNameEscapeIx(in);
+    if (ix < 0)
+        *out++ = *in++;
+    else
+        {
+        *out++ = cartNameChars[ix];
+        in += strlen(cartNameEscapes[ix]);
+        }
+    }
+*out = 0;
+}
+
+static char *cartVarNameToMatch(char *var)
+/* Return the part of var that the lists above should be matched against: everything after the
+ * last '&' or ';' when the name holds one, and var itself otherwise.
+ *
+ * The lists match by prefix, and so does every other place in the tree that picks these
+ * settings out of the cart, with cartFindPrefix or startsWith.  A saved session written
+ * before the CGI parsers were fixed can hold a name with a separator stuck to the front of
+ * it, so match the same text those readers match on and the two cannot disagree.
+ * refs #38185, #38335, #38343 */
+{
+char *last = NULL, *s;
+for (s = var;  *s != 0;  s++)
+    if (*s == '&' || *s == ';')
+        last = s;
+if (last == NULL || last[1] == 0)
+    return var;
+return last+1;
+}
+
 static boolean cartValueIsAcceptable(char *var, char *val)
 /* Return TRUE unless var names a server-created file and val names something else.  An empty
  * value is fine; the CGIs treat it as "no file" and several saved sessions carry one. */
 {
 if (isEmpty(val))
     return TRUE;
-if (cartVarHoldsFileName(var))
+char *match = cartVarNameToMatch(var);
+if (cartVarHoldsFileName(match))
     {
     if (isServerUserFilePath(val))
         return TRUE;
     logDroppedFileNameVar(var, "a trash or session-data file name");
     return FALSE;
     }
-if (cartVarHoldsUrlOrFileName(var))
+if (cartVarHoldsUrlOrFileName(match))
     {
     if (isServerUserFileOrUrl(val))
         return TRUE;
     logDroppedFileNameVar(var, "a URL or a trash or session-data file name");
     return FALSE;
     }
-if (cartVarHoldsFileNamePair(var))
+if (cartVarHoldsFileNamePair(match))
     {
     if (fileNamePairIsAcceptable(val))
         return TRUE;
@@ -360,46 +446,31 @@ static void loadHash(struct hash *hash, char *contents)
 /* Load a hash from a cart-like string. */
 {
 char *namePt, *dataPt, *nextNamePt;
-boolean skipMalformed = cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE);
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
     {
-    if (skipMalformed)
+    /* The search for the '=' runs past the next separator on purpose.  This parse is the
+     * exact inverse of what the cart writes, for every session stored on the RR.  Ending a
+     * pair at the first '&' instead turns the tail of an old damaged name into a setting of
+     * its own, which lands last and overrides the real one.  refs #38343 */
+    dataPt = strchr(namePt, '=');
+    if (dataPt == NULL)
 	{
-	/* Step over the separators of an empty pair, then confine the search for
-	 * the '=' to this pair.  Without both, a setting with a name and no value
-	 * renames the setting after it, and the same pair at the end of the string
-	 * aborts the CGI.  This string is a saved session or a cart row rather than
-	 * a request, so the reader has no way to clear it.  refs #38340 */
-	namePt += strspn(namePt, "&;");
-	if (namePt[0] == 0)
-	    break;
-	nextNamePt = strchr(namePt, '&');
-	if (nextNamePt == NULL)
-	    nextNamePt = strchr(namePt, ';');	/* Accomodate DAS. */
-	if (nextNamePt != NULL)
-	    *nextNamePt++ = 0;
-	dataPt = strchr(namePt, '=');
-	if (dataPt == NULL)
-	    {
-	    namePt = nextNamePt;
-	    continue;
-	    }
-	*dataPt++ = 0;
+	/* Nothing that is left holds an '=', so there is no pair left to read.  This
+	 * used to errAbort, and a caller could reach it from the URL: hDefaultPos
+	 * passes the value of position.<db> to this parser, so a request carrying
+	 * position=lastDbPos and position.hg38=a%3Db%26junk ended the whole page
+	 * with "Mangled input string junk".  refs #38343 */
+	break;
 	}
-    else
-	{
-	dataPt = strchr(namePt, '=');
-	if (dataPt == NULL)
-	    errAbort("Mangled input string %s", namePt);
-	*dataPt++ = 0;
-	nextNamePt = strchr(dataPt, '&');
-	if (nextNamePt == NULL)
-	    nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
-	if (nextNamePt != NULL)
-	     *nextNamePt++ = 0;
-	}
+    *dataPt++ = 0;
+    nextNamePt = strchr(dataPt, '&');
+    if (nextNamePt == NULL)
+	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
+    if (nextNamePt != NULL)
+         *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
+    cartDecodeName(namePt);
     if (cartValueIsAcceptable(namePt, dataPt))
         hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
@@ -1731,9 +1802,14 @@ char *db = cartString(cart, "db");
 struct trackDb *tdb = hTrackDb(db);
 for(; tdb; tdb = tdb->next)
     {
-    struct trackDb *parent = tdb->parent;
-    if (parent && parent->isShow)
-        hideIfNotInCart(cart, parent->track);
+    /* Every ancestor, not just the closest: a supertrack may itself be a member of
+     * another supertrack, and the outer one is reached only through it. */
+    struct trackDb *parent;
+    for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+        {
+        if (parent->isShow)
+            hideIfNotInCart(cart, parent->track);
+        }
     if (tdb->visibility != tvHide)
         hideIfNotInCart(cart, tdb->track);
     }
@@ -2189,7 +2265,7 @@ dyStringFree(&dy);
 }
 
 
-void cartEncodeState(struct cart *cart, struct dyString *dy)
+static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames)
 /* Add a CGI-encoded var=val&... string of all cart variables to dy. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
@@ -2203,7 +2279,10 @@ for (el = elList; el != NULL; el = el->next)
 	    firstTime = FALSE;
 	else
 	    dyStringAppendC(dy, '&');
-	dyStringAppend(dy, el->name);
+	if (encodeNames)
+	    cartAppendEncodedName(dy, el->name);
+	else
+	    dyStringAppend(dy, el->name);
 	dyStringAppendC(dy, '=');
 	s = cgiEncode(el->val);
 	dyStringAppend(dy, s);
@@ -2211,6 +2290,22 @@ for (el = elList; el != NULL; el = el->next)
 	}
     }
 hashElFreeList(&elList);
+}
+
+void cartEncodeState(struct cart *cart, struct dyString *dy)
+/* Add a CGI-encoded var=val&... string of all cart variables to dy, for storing and reading
+ * back with cartParseOverHash. */
+{
+cartEncodeStateExt(cart, dy, TRUE);
+}
+
+void cartEncodeStateRawNames(struct cart *cart, struct dyString *dy)
+/* The same, with variable names written as they stand rather than escaped.  This is for
+ * hgTracks, which compares the string against a stored session's contents a piece at a time
+ * rather than parsing it, so escaping a name there would make two equal carts look different.
+ * Nothing should read the result back with cartParseOverHash.  refs #38343 */
+{
+cartEncodeStateExt(cart, dy, FALSE);
 }
 
 static void saveState(struct cart *cart)
@@ -3984,9 +4079,15 @@ for (childRef = tdb->parent->children;childRef != NULL; childRef = childRef->nex
     else if (child->visibility != tvHide)
         cartSetString(cart,child->track,"hide");
     }
-// and finally show the parent
-cartSetString(cart,tdb->parent->track,"show");
-WARN("Set %s to 'show'",tdb->parent->track);
+// and finally show the parent, and every superTrack above it: a superTrack may sit
+// inside another superTrack, and opening only the closest one leaves the track hidden
+struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+for (super = supers; super != NULL; super = super->next)
+    {
+    cartSetString(cart,super->name,"show");
+    WARN("Set %s to 'show'",super->name);
+    }
+slNameFreeList(&supers);
 return TRUE;
 }
 
