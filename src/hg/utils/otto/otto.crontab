@@ -1,8 +1,12 @@
 # DO NOT EDIT THE OTTO CRONTAB FILE DIRECTLY!
-# This file is in the kent git repository: ~/kent/src/hg/utils/otto/otto.crontab
+# This file is in the kent git repository:
+# ~/kent/src/hg/utils/otto/otto.crontab
+#
 # Please edit and commit changes to the git repository,
-# and then ssh otto@hgwdev and run crontab on the edited and checked in file,
-# for example crontab ~lrnassar/kent/src/hg/utils/otto/otto.crontab
+# and then ssh otto@hgwdev and run crontab on the edited and checked in file.
+#
+# For example:
+# crontab ~jairo/kent/src/hg/utils/otto/otto.crontab
 
 # To save the current crontab back into git:
 # crontab -l > ~max/kent/src/hg/utils/otto/otto.crontab
