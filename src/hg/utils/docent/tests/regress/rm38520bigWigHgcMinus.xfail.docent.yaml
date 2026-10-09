@@ -1,0 +1,35 @@
+# #38520 -- a quickLifted bigWig (hg19 gc5BaseBw lifted onto hg38).
+# hg38 chr1:120,280,000-120,320,000 is covered only by chain 173 of the hg19-to-hg38 quickLift
+# chain, a '-' strand chain:  hg38 0-based p is hg19 0-based 264997287-p there.  So the values
+# run backwards relative to hg19, and a drawing that ignored the strand would put each one in
+# the mirror-image place.
+# Before the change the details page queried the hg19 file at the hg38 position, so it
+# reported the values of some other stretch of sequence.  Now it reads each source range
+# through the chain and says "Lifted from: hg19".
+#
+# hgc, '-' strand:  over hg38 chr1:120,280,001-120,320,000 the click reports 6,551 items
+# covering 32,672 bases, mean 40.6167.  The same three numbers come from the hg19 file's own
+# records (bigWigToWig) clipped to the chain blocks.
+proof:
+  - "xfail 2026-10-09 -- fails on genome-test (master): master's page, which reads the hg19 file at the hg38 position"
+  - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  - go: chr7:155592001-155604000
+  - hide: all
+  - track: {gc5BaseBw: full}
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:120280001-120320000
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - click: {track: gc5BaseBw, frac: 0.5}
+  - expect:
+      url: "hgc"
+      text: ["Lifted from:", "6,551", "32,672", "40.6167"]
+      noText: ["Warning/Error"]

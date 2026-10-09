@@ -1,0 +1,40 @@
+# #38520 -- quickLift lifts wig tracks kept in a table and a .wib file (hg19 phastCons100way
+# lifted onto hg38).  Before the change, quickLift left such tracks out of the lift.
+# hg38 chr1:120,280,000-120,320,000 is covered only by chain 173 of the hg19-to-hg38 quickLift
+# chain, a '-' strand chain:  hg38 0-based p is hg19 0-based 264997287-p there.  So the values
+# run backwards relative to hg19, and a drawing that ignored the strand would put each one in
+# the mirror-image place.
+# Before the change the details page of a lifted wig read the table of the same name in hg38,
+# so it said "Database: hg38" and gave hg38's own numbers.  Now it reads hg19 through the
+# chain and says "Lifted from: hg19".
+#
+# hgc, '-' strand:  over hg38 chr1:120,280,001-120,320,000 the click reports 32,607 values
+# covering 32,607 bases, mean 0.11593.  The same count and mean come from reading the hg19 rows
+# and .wib directly through the chain blocks.
+proof:
+  - "xfail 2026-10-09 -- fails on genome-test (master): nothing lifted, only the ruler drawn"
+  - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  # browser.quickLiftWig is a cart gate as well as an hg.conf one, so the script turns it on
+  # for itself and does not depend on how the server is configured
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155592001-155604000&pix=1100&browser.quickLiftWig=on"
+  - hide: all
+  # phyloP stays on:  hiding its view would leave no view that trackDb calls visible, and the
+  # quickLift hub writer then drops the whole composite (#38044)
+  - track: {cons100way: full, cons100wayViewalign: hide, phastCons100way: full}
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noRows: [multiz100way], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:120280001-120320000
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noText: "Warning/Error"}
+  - click: {track: phastCons100way, frac: 0.5}
+  - expect:
+      url: "hgc"
+      text: ["Lifted from:", "32,607", "0.11593"]
+      noText: ["Database: hg38", "Warning/Error"]
