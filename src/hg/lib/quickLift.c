@@ -414,6 +414,56 @@ struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chr
 return sourceRangesPadded(quickLiftFile, chrom, start, end, 0, chainHash);
 }
 
+static int quickLiftRangeCmp(const void *va, const void *vb)
+/* Compare two quickLiftRanges by chrom, then start. */
+{
+const struct quickLiftRange *a = *((struct quickLiftRange **)va);
+const struct quickLiftRange *b = *((struct quickLiftRange **)vb);
+int diff = strcmp(a->chrom, b->chrom);
+if (diff == 0)
+    diff = a->start - b->start;
+return diff;
+}
+
+struct quickLiftRange *quickLiftSourceRangesMerged(char *quickLiftFile, char *chrom, int start,
+    int end, struct hash *chainHash)
+// The ranges from quickLiftSourceRangesExact sorted, with overlapping ones merged, so that
+// two ranges never ask for the same rows twice.
+{
+struct quickLiftRange *range, *next, *mergedList = NULL;
+struct quickLiftRange *rangeList = quickLiftSourceRangesExact(quickLiftFile, chrom,
+                                                              start, end, chainHash);
+slSort(&rangeList, quickLiftRangeCmp);
+for (range = rangeList; range != NULL; range = next)
+    {
+    next = range->next;
+    if ((mergedList != NULL) && sameString(mergedList->chrom, range->chrom) &&
+        (range->start <= mergedList->end))
+        {
+        mergedList->end = max(mergedList->end, range->end);
+        freeMem(range->chrom);
+        freeMem(range);
+        }
+    else
+        slAddHead(&mergedList, range);
+    }
+slReverse(&mergedList);
+return mergedList;
+}
+
+void quickLiftRangeListFree(struct quickLiftRange **pList)
+// Free a list of quickLiftRanges and their chroms.
+{
+struct quickLiftRange *range, *next;
+for (range = *pList; range != NULL; range = next)
+    {
+    next = range->next;
+    freeMem(range->chrom);
+    freeMem(range);
+    }
+*pList = NULL;
+}
+
 struct chainBlocks
 /* A chain's blocks in an array, in order, for a binary search. */
     {
@@ -442,7 +492,8 @@ return cb;
 }
 
 void quickLiftBlockCacheFree(struct hash **pBlockCache)
-// Free a blockCache from quickLiftMapToReference().  The chains are not freed.
+// Free a blockCache from quickLiftMapToReference() or quickLiftMapToReferenceIn().  The chains
+// are not freed.
 {
 struct hash *blockCache = *pBlockCache;
 if (blockCache == NULL)
@@ -508,6 +559,79 @@ for (el = elList; el != NULL; el = el->next)
             piece->start = qs;
             piece->end = qe;
             }
+        slAddHead(&pieceList, piece);
+        }
+    }
+slFreeList(&elList);
+return pieceList;
+}
+
+void quickLiftPieceToReference(struct quickLiftRange *piece, int srcStart, int srcEnd,
+                               int *retStart, int *retEnd)
+// Where srcStart-srcEnd, which lies inside a piece from quickLiftMapToReferenceIn, lands on
+// the reference.  On a '-' piece the reference runs backwards.
+{
+// on a '-' piece the last source base comes first
+int refStart = (piece->strand == '-') ? piece->end - (srcEnd - piece->sourceStart)
+                                      : piece->start + (srcStart - piece->sourceStart);
+*retStart = refStart;
+*retEnd = refStart + (srcEnd - srcStart);
+}
+
+struct quickLiftRange *quickLiftMapToReferenceIn(struct hash *chainHash, struct hash *blockCache,
+                                                 char *chrom, int start, int end,
+                                                 char *refChrom, int refStart, int refEnd)
+// Map chrom:start-end in the other assembly onto the reference through the chains in
+// chainHash, one piece for every aligned block it overlaps, keeping only the pieces on
+// refChrom that overlap refStart-refEnd.  The pieces are not clipped to it.  Unlike
+// quickLiftMapToReference, each piece says where it came from (sourceStart and strand), for
+// quickLiftPieceToReference.  Free them with quickLiftRangeListFree().
+// The loop is a copy of quickLiftMapToReference's, kept apart so that function is unchanged
+// with browser.quickLiftWig off;  a fix to one belongs in the other.  When the gate is
+// retired, quickLiftMapToReference can become a call to this one.
+{
+struct quickLiftRange *pieceList = NULL;
+struct binElement *el, *elList = liftOverChainsInRange(chainHash, chrom, start, end);
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    struct chain *chain = el->val;
+    if (!sameString(chain->qName, refChrom))
+        continue;
+    struct chainBlocks *cb = chainBlocksFor(blockCache, chain);
+
+    // the chains were swapped going into the hash, so t is the other assembly;  the blocks
+    // are in order on t and do not overlap, so find the first one that ends after start
+    int lo = 0, hi = cb->count;
+    while (lo < hi)
+        {
+        int mid = (lo + hi) / 2;
+        if (cb->blocks[mid]->tEnd <= start)
+            lo = mid + 1;
+        else
+            hi = mid;
+        }
+    int i;
+    for (i = lo; (i < cb->count) && (cb->blocks[i]->tStart < end); i++)
+        {
+        struct cBlock *b = cb->blocks[i];
+        int s = max(start, b->tStart);
+        int e = min(end, b->tEnd);
+        if (s >= e)
+            continue;
+        int qs = b->qStart + (s - b->tStart);
+        int qe = qs + (e - s);
+        int pieceStart = (chain->qStrand == '-') ? chain->qSize - qe : qs;
+        int pieceEnd = (chain->qStrand == '-') ? chain->qSize - qs : qe;
+        if ((pieceStart >= refEnd) || (pieceEnd <= refStart))
+            continue;
+        struct quickLiftRange *piece;
+        AllocVar(piece);
+        piece->chrom = cloneString(chain->qName);
+        piece->start = pieceStart;
+        piece->end = pieceEnd;
+        piece->sourceStart = s;
+        piece->strand = chain->qStrand;
         slAddHead(&pieceList, piece);
         }
     }
@@ -1174,6 +1298,35 @@ int fromCart = cartGate(cart, "browser.quickLiftAlignments");
 if (fromCart >= 0)
     return fromCart;
 return cfgOptionBooleanDefault("browser.quickLiftAlignments", FALSE);
+}
+
+boolean quickLiftWigTableOk(char *liftDb, char *table)
+// TRUE if table in liftDb may be read as a lifted wig.  liftDb and table come from trackDb
+// settings a hub can write, and a wiggle row names a file that gets opened, so liftDb has to
+// be an assembly this server has in its own database (not customTrash, whose tables users
+// fill, and not a hub's) and table a wiggle table in it.
+{
+if ((liftDb == NULL) || (table == NULL) || trackHubDatabase(liftDb) || !hDbExists(liftDb) ||
+    !hTableExists(liftDb, table))
+    return FALSE;
+struct sqlConnection *conn = hAllocConn(liftDb);
+boolean ok = (sqlFieldIndex(conn, table, "span") >= 0) &&
+             (sqlFieldIndex(conn, table, "offset") >= 0) &&
+             (sqlFieldIndex(conn, table, "file") >= 0) &&
+             (sqlFieldIndex(conn, table, "lowerLimit") >= 0);
+hFreeConn(&conn);
+return ok;
+}
+
+boolean quickLiftWigEnabled(struct cart *cart)
+/* Return TRUE if quickLift is allowed to lift wig tracks, the kind kept in a table and a
+ * .wib file.  Off unless hg.conf says browser.quickLiftWig=on, and a cart variable of the
+ * same name overrides that, the same way as quickLiftAlignmentsEnabled. */
+{
+int fromCart = cartGate(cart, "browser.quickLiftWig");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftWig", FALSE);
 }
 
 boolean quickLiftBarChartEnabled(struct cart *cart)

@@ -77,12 +77,20 @@ struct bed *quickLiftBeds(struct bed *bedList, struct hash *chainHash, boolean b
 // Map a list of bedd in query coordinates to our current reference
 
 struct quickLiftRange
-// A range in the other assembly that some part of the reference window maps back to.
+// One of two things.  From quickLiftSourceRanges and friends, a range in the other assembly
+// that some part of the reference window maps back to:  chrom, start and end are in the other
+// assembly and sourceStart and strand are unused.  From quickLiftMapToReference and
+// quickLiftMapToReferenceIn, a piece of a source range as it lands on the reference:  chrom,
+// start and end are on the reference, and from quickLiftMapToReferenceIn only, sourceStart and
+// strand say where it came from.
 {
 struct quickLiftRange *next;
-char *chrom;            /* sequence name in the other assembly */
+char *chrom;            /* sequence name, in the other assembly or the reference as above */
 int start;
 int end;
+int sourceStart;        /* a piece:  the start of its bases in the other assembly */
+char strand;            /* a piece:  '-' when the reference runs the other way, so
+                         * sourceStart lands on end-1 rather than start */
 };
 
 struct quickLiftRange *quickLiftSourceRanges(char *quickLiftFile, char *chrom, int start, int end,
@@ -99,8 +107,29 @@ struct quickLiftRange *quickLiftMapToReference(struct hash *chainHash, struct ha
 // each chain's blocks in an array, so finding them is a binary search.  Free it with
 // quickLiftBlockCacheFree().
 
+struct quickLiftRange *quickLiftMapToReferenceIn(struct hash *chainHash, struct hash *blockCache,
+                                                 char *chrom, int start, int end,
+                                                 char *refChrom, int refStart, int refEnd);
+// Like quickLiftMapToReference, but only the pieces on refChrom that overlap refStart-refEnd,
+// not clipped to it, and each piece says where it came from (sourceStart and strand), for
+// quickLiftPieceToReference.  Free them with quickLiftRangeListFree().
+
+void quickLiftPieceToReference(struct quickLiftRange *piece, int srcStart, int srcEnd,
+                               int *retStart, int *retEnd);
+// Where srcStart-srcEnd, which lies inside a piece from quickLiftMapToReferenceIn, lands on
+// the reference.  On a '-' piece the reference runs backwards.
+
 void quickLiftBlockCacheFree(struct hash **pBlockCache);
-// Free a blockCache from quickLiftMapToReference().  The chains are not freed.
+// Free a blockCache from quickLiftMapToReference() or quickLiftMapToReferenceIn().  The chains
+// are not freed.
+
+struct quickLiftRange *quickLiftSourceRangesMerged(char *quickLiftFile, char *chrom, int start,
+    int end, struct hash *chainHash);
+// The ranges from quickLiftSourceRangesExact sorted, with overlapping ones merged, so that
+// two ranges never ask for the same rows twice.
+
+void quickLiftRangeListFree(struct quickLiftRange **pList);
+// Free a list of quickLiftRanges and their chroms.
 
 struct quickLiftRange *quickLiftSourceRangesExact(char *quickLiftFile, char *chrom, int start,
     int end, struct hash *chainHash);
@@ -176,6 +205,15 @@ boolean quickLiftMafSummaryEnabled(struct cart *cart);
  * size, lifted from the assembly it came from, and reads its blocks with no padding around
  * the window.  Off unless hg.conf says browser.quickLiftMafSummary=on, and a cart variable
  * of the same name overrides that. */
+
+boolean quickLiftWigTableOk(char *liftDb, char *table);
+// TRUE if table in liftDb may be read as a lifted wig:  liftDb is an assembly this server has
+// in its own database, and table is a wiggle table in it.
+
+boolean quickLiftWigEnabled(struct cart *cart);
+/* Return TRUE if quickLift is allowed to lift wig tracks, the kind kept in a table and a
+ * .wib file.  Off unless hg.conf says browser.quickLiftWig=on, and a cart variable of the
+ * same name overrides that. */
 
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
