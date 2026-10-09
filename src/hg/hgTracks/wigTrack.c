@@ -2035,6 +2035,14 @@ if (logoMaf != NULL)
     struct wigCartOptions *wigCart = tg->wigCartData;
     if (wigCart->doSequenceLogo)
         {
+        // In multi-region mode the track of every window shares one wigCartOptions, so
+        // give each window after the first its own copy to hold its own base probabilities.
+        struct track *firstWin = tg;
+        while (firstWin->prevWindow != NULL)
+            firstWin = firstWin->prevWindow;
+        if ((firstWin != tg) && (firstWin->wigCartData == tg->wigCartData))
+            tg->wigCartData = wigCart = CloneVar(wigCart);
+
         // see if the MAF is a bigBed
         if (endsWith(logoMaf, ".bb") || endsWith(logoMaf, ".bigMaf"))
             {

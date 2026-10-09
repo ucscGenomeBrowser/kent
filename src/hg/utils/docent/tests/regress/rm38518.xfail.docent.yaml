@@ -1,0 +1,58 @@
+# #38518 -- in multi-region view, the sequence logo on a wiggle with logoMaf (phyloP100way
+# on hg38) drew the base proportions of the LAST region in every region.  The phyloP
+# heights and the reference bases were right; only the A/C/G/T letters of the logo were
+# wrong.  Reported on genome@ on 2026-10-09 with these two regions on chr17 (CACNA1G).
+#
+# The cause is in hg/hgTracks/wigTrack.c.  Every region's copy of the track shares one
+# wigCartOptions, and wigLogoMafCheck() stores the region's MAF base probabilities in it
+# during preDraw.  All regions run preDraw before any of them draws, so every region drew
+# with the last region's array.  The fix gives each region after the first its own copy.
+#
+# What is asserted, all with color: since the page is otherwise identical (same rows, same
+# height, same tooltips):
+#   * four columns of the LEFT region, each drawn in the color of its own reference base
+#     at 85-100% of the column on the fixed build, and in a different color on the buggy
+#     one.  `not:` names the buggy color, so a regression says what it drew.
+#   * two columns of the RIGHT region, which was always right, so that a fix which broke
+#     the last region instead fails here too.
+# The columns are frac: positions across the 40-base view (base i of the view is at
+# frac (i+0.5)/40).  Left region, bases of chr17:50561691-50561710 at index 1, 11, 12
+# and 17: T, A, T, T.  Right region, chr17:50568861-50568880 at index 6 and 7: T, A.
+# MG_GREEN is 0,255,0, MG_RED 255,0,0, MG_BLUE 0,0,255.
+#
+# Deliberately not asserted: the brown C and the blue G columns of the left region whose
+# letters are split across bases, since a multiz update could change which letter wins.
+# multiz100way and phyloP100way are static, so the six columns below should not move.
+proof:
+  - "assertion-only 2026-10-09 -- written with the fix"
+  - "sandbox-ab 2026-10-09 -- failed on genome-test (master without the fix) on all four left-region checks; passed on parked #38518 (port 48111, ~/kent master + the wigLogoMafCheck fix)"
+  - "release-ab 2026-10-09 -- failed on the v504_branch baseline (parked #38423, port 48084) on the same four left-region checks"
+
+target: genome-test
+db: hg38
+position: chr17:50561691-50561710
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&phyloP100way=full&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr17%2050561690%2050561710%0Achr17%2050568860%2050568880%0A"
+
+  # The view must really be the two regions with only the phyloP row, or the color checks
+  # below would be reading something else.
+  - expect:
+      rows: [ruler, phyloP100way]
+      exact: true
+      url: "virtMode=1"
+
+  # The right region, always correct: T then A.
+  - expect:
+      color:
+        - {track: phyloP100way, frac: 0.6625, is: "0,255,0"}
+        - {track: phyloP100way, frac: 0.6875, is: "255,0,0"}
+
+  # The left region, the bug.  T, A, T, T.
+  - expect:
+      color:
+        - {track: phyloP100way, frac: 0.0375, is: "0,255,0", not: "0,0,255"}
+        - {track: phyloP100way, frac: 0.2875, is: "255,0,0", not: "0,0,255"}
+        - {track: phyloP100way, frac: 0.3125, is: "0,255,0", not: "0,0,255"}
+        - {track: phyloP100way, frac: 0.4375, is: "0,255,0", not: "255,0,0"}
