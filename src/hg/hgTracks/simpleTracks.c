@@ -7162,7 +7162,7 @@ if (liftDb != NULL)
     struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table, chromName, winStart, winEnd, NULL, chainHash);
     hFreeConn(&conn);
 
-    calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    quickLiftCalcGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, TRUE, FALSE);
     struct genePred *gp = gpList;
 
     struct linkedFeatures *lfList = NULL;

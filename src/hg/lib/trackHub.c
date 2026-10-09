@@ -2011,6 +2011,8 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        (startsWithNoCase("bigNet", tdb->type) && trackHubBigNetEnabled()) || \
        (isAlignmentType(tdb->type) && quickLiftAlignmentsEnabled(cart)) || \
        (startsWithNoCase("bigBarChart", tdb->type) && quickLiftBarChartEnabled(cart)) || \
+       ((sameWord("wig", tdb->type) || startsWithNoCase("wig ", tdb->type)) &&
+        quickLiftWigEnabled(cart)) ||
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {

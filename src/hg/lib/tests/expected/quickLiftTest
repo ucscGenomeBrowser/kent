@@ -55,4 +55,75 @@ before   100	0	0	0	0	0	0	0	++	prot	100	0	100	chrSrc	1000	700	1000	1	100,	0,	700,
          strand='++' isProtein=1 qSize=100 blockSizes[0]=100 pslCheck errors=0
 lifted   did not lift
 
+== source runs: a 5 kb source gap is read across, window chrRef:0-1000
+  chrSrc:100-5400
+
+== source runs: a source gap of exactly 10000 is read across, window chrRef:0-1000
+  chrSrc:100-10300
+
+== source runs: a source gap of 10001 splits the range, window chrRef:0-1000
+  chrSrc:100-200
+  chrSrc:10201-10301
+
+== source runs: a minus-strand chain, split, on the plus strand, window chrRef:0-1000
+  chrSrc:99800-99900
+  chrSrc:79700-79800
+
+== source runs: the window clips both blocks, window chrRef:150-350
+  chrSrc:150-5350
+
+== source runs: the window misses every block, window chrRef:500-1000
+  (none)
+
+== query ranges: one range per chain (perChain=0 split=0)
+  chrSrc:1000-31000 chain=1
+  chrSrc:1000-2000 chain=2
+  chrSrc2:0-500 chain=3
+  chrSrc:2000-2500 chain=5
+
+== query ranges: one range per chain, multi-chain (perChain=1 split=0)
+  chrSrc:1000-31000 chain=1
+  chrSrc:1000-2000 chain=2
+  chrSrc2:0-500 chain=3
+  chrSrc:2000-2500 chain=5
+
+== query ranges: split and merged across chains (perChain=0 split=1)
+  chrSrc:1000-2500 chain=0
+  chrSrc:30000-31000 chain=0
+  chrSrc2:0-500 chain=0
+
+== query ranges: split and merged within each chain (perChain=1 split=1)
+  chrSrc:1000-2000 chain=1
+  chrSrc:30000-31000 chain=1
+  chrSrc:1000-2000 chain=2
+  chrSrc2:0-500 chain=3
+  chrSrc:2000-2500 chain=5
+
+== quickLiftRangeWhere
+  no start field         NOSQLINJ score > 100  [the caller's own]
+  no extraWhere          NOSQLINJ chromStart >= 500
+  a condition            NOSQLINJ (score > 100) and chromStart >= 500
+  an order clause        NOSQLINJ txStart >= 500 order by score
+  a limit clause         NOSQLINJ txStart >= 500 limit 10
+
+== map to reference: two blocks, chrSrc:150-5350
+  chrRef:150-200
+  chrRef:300-350
+
+== map to reference: the last block only, chrSrc:9050-9200
+  chrRef:550-600
+
+== map to reference: only the gap, chrSrc:250-5300
+  (none)
+
+== map to reference: minus-strand chain, chrSrc:99850-99900
+  chrRef:100-150
+
+== one-chain hash
+  no chain hash:           NULL
+  an item never assigned:  the whole hash
+  both added:              chains=1,2
+  chain 1 removed:         chains=2
+  chain 1 removed again:   chains=2
+
 passed

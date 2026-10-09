@@ -1,0 +1,30 @@
+# #38520 -- a quickLifted bigWig (hg19 gc5BaseBw lifted onto hg38).
+# hg38 chr1:120,280,000-120,320,000 is covered only by chain 173 of the hg19-to-hg38 quickLift
+# chain, a '-' strand chain:  hg38 0-based p is hg19 0-based 264997287-p there.  So the values
+# run backwards relative to hg19, and a drawing that ignored the strand would put each one in
+# the mirror-image place.
+#
+# hgTracks, '-' strand:  through that block hg19 gc5Base.bw gives, in hg38 chr1:120,290,031-
+# 120,290,055 (1-based), 40 at 31-33, 80 at 34-38, 40 at 39-48, 60 at 49-53 and 0 at 54-55.
+# The hovers check the 80 and the 60, which in the mirror image would fall at the other end.
+proof:
+  - "assertion-only 2026-10-09 -- written with the change; passes on genome-test (master) and on park 38520 (branch quickLiftWig), since the bigWig lift in hgTracks predates #38520 and this guards it"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  - go: chr7:155592001-155604000
+  - hide: all
+  - track: {gc5BaseBw: full}
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:120290031-120290055
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - mouseover: {track: gc5BaseBw, at: chr1:120290036}
+  - expect: {tip: "80", noTip: ["40", "60", "."]}
+  - mouseover: {track: gc5BaseBw, at: chr1:120290051}
+  - expect: {tip: "60", noTip: ["40", "80", "."]}

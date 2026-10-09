@@ -1,0 +1,34 @@
+# #38520 -- a quickLifted bigWig (hg19 gc5BaseBw lifted onto hg38).
+# Before the change the details page queried the hg19 file at the hg38 position, so it
+# reported the values of some other stretch of sequence.  Now it reads each source range
+# through the chain and says "Lifted from: hg19".
+#
+# hgc, a window no chain block covers:  hg38 chr1:120,500,001-120,520,000 has no block of the
+# hg19-to-hg38 quickLift chain, so nothing lifts there and the page has to say so.  The old
+# page read hg19 chr1:120,500,001-120,520,000, unrelated sequence, and reported its numbers.
+proof:
+  - "xfail 2026-10-09 -- fails on genome-test (master): master's page, which reads the hg19 file at the hg38 position"
+  - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+  - "server-flip 2026-10-09 -- passed on genome-test once ff175308401 was installed there (13:01), with browser.quickLiftWig on, having failed there that morning"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  # browser.quickLiftWig gates the lifted bigWig click too, and it is a cart gate as well as
+  # an hg.conf one, so the script turns it on for itself
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155592001-155604000&pix=1100&browser.quickLiftWig=on"
+  - hide: all
+  - track: {gc5BaseBw: full}
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:120500001-120520000
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - click: {track: gc5BaseBw, frac: 0.5}
+  - expect:
+      url: "hgc"
+      text: ["Lifted from:", "No data overlapping current position"]
+      noText: ["Statistics on:", "Warning/Error"]

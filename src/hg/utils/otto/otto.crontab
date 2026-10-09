@@ -1,8 +1,13 @@
 # DO NOT EDIT THE OTTO CRONTAB FILE DIRECTLY!
-# This file is in the kent git repository: ~/kent/src/hg/utils/otto/otto.crontab
+# This file is in the kent git repository:
+# ~/kent/src/hg/utils/otto/otto.crontab
+#
 # Please edit and commit changes to the git repository,
-# and then ssh otto@hgwdev and run crontab on the edited and checked in file,
-# for example crontab ~lrnassar/kent/src/hg/utils/otto/otto.crontab
+# and then ssh otto@hgwdev and run crontab on the edited and checked in file.
+#
+# For example:
+# ssh otto@hgwdev
+# crontab ~jairo/kent/src/hg/utils/otto/otto.crontab
 
 # To save the current crontab back into git:
 # crontab -l > ~max/kent/src/hg/utils/otto/otto.crontab
@@ -217,3 +222,5 @@ MAILTO=jbirgmei@ucsc.edu
 
 #MAILTO=cells@ucsc.edu
 #@reboot umask 0000; sleep 240; /cluster/home/max/htdocs-cells-submit/tusd/tusd_linux_amd64/tusd -upload-dir /hive/data/inside/cells/upload/ -port 8443 -max-size 100000000000
+MAILTO=mhaeussl@ucsc.edu
+0 3 1 * * /hive/data/outside/otto/methbase2/methbaseOtto.sh

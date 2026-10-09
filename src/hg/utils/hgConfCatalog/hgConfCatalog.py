@@ -511,6 +511,25 @@ RELEASE_GATES = {
                "every block at any zoom, as before, which runs out of memory "
                "at 50 Mb.  A cart variable of the same name overrides it, "
                "like browser.quickLiftBarChart."),
+        h("browser.quickLiftWig", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38520",
+          note="Let quickLift lift a wig track kept in a table and a .wib "
+               "file (such as hg19 phastCons100way), reading its rows from "
+               "the assembly it came from and drawing each value where the "
+               "chain puts it.  Read in quickLiftWigEnabled() and asked by "
+               "validateOneTdb() (hg/lib/trackHub.c), which lets wig tracks "
+               "into the quickLift hub, by wigLoadItems() "
+               "(hgTracks/wigTrack.c), which also covers a lifted wigMaf's "
+               "conservation wiggles, and by genericWiggleClick() and "
+               "bigWigClick() (hgc/wiggleClick.c), which send a click on a "
+               "lifted wig or bigWig to a page reading the values through the "
+               "chain.  Off, wig tracks are left out of a quickLift, a lifted "
+               "wigMaf draws the same-named wiggle table of the assembly it is "
+               "lifted onto, and a lifted bigWig click queries the file at the "
+               "reference position, all as before.  A lifted wig left in a hub "
+               "written while it was on draws nothing with it off, rather than "
+               "this assembly's table of the same name.  A cart variable of "
+               "the same name overrides it, like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "

@@ -29,6 +29,7 @@
 #include "hgMaf.h"
 #include "chromAlias.h"
 #include "hubConnect.h"
+#include "quickLift.h"
 
 struct wigItem
 /* A wig track item. */
@@ -49,6 +50,12 @@ struct wigItem
     double sumSquares;      /* sum of data points squared, for stddev calc */
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
+    char *sourceChrom;	/* quickLifted:  the sequence in the other assembly, else NULL.
+			 * Not owned:  it is the chrom of the range it was read from */
+    int clipStart, clipEnd;	/* quickLifted:  the part of the row in the other assembly
+				 * that this item draws */
+    struct hash *chainHash;	/* quickLifted:  the chains that map it onto the reference.
+			 * Shared by every item of the track and not freed */
     };
 
 static boolean doLogo(struct track *tg)
@@ -404,6 +411,101 @@ lineFileClose(&lf);
 }
 #endif /* GBROWSE */
 
+static boolean liftedRowsExist(struct sqlConnection *conn, char *table,
+                               struct quickLiftRange *rangeList, char *where)
+/* Whether any of the ranges has a row that matches where, which should end in "limit 1". */
+{
+struct quickLiftRange *range;
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    int rowOffset;
+    struct sqlResult *sr = hRangeQuery(conn, table, range->chrom, range->start, range->end,
+                                       where, &rowOffset);
+    boolean found = (sqlNextRow(sr) != NULL);
+    sqlFreeResult(&sr);
+    if (found)
+        return TRUE;
+    }
+return FALSE;
+}
+
+static void wigLoadLiftedItems(struct track *tg)
+/* The wigLoadItems of a quickLifted track:  read the rows over every range in the assembly
+ * the track came from that maps into the window.  An item keeps the part of its row inside
+ * the range it was read from, so a row that two ranges both return is drawn once.  The
+ * items point at the range list's chroms and share one chain hash, so neither is freed:
+ * they last as long as the items, which is the rest of the CGI run. */
+{
+tg->items = NULL;
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+char *table;
+quickLiftResolveTable(tg->tdb, tg->table, &table, &liftDb);
+if (!quickLiftWigTableOk(liftDb, table))
+    return;
+char *quickLiftFile = trackDbSetting(tg->tdb, "quickLiftUrl");
+struct hash *chainHash = newHash(8);
+struct quickLiftRange *range, *rangeList = quickLiftSourceRangesMerged(quickLiftFile, chromName,
+                                                                       winStart, winEnd, chainHash);
+if (rangeList == NULL)
+    return;
+struct sqlConnection *conn = hAllocConn(liftDb);
+char whereSpan[SMALLBUF];
+char *extraWhere = NULL;
+
+// As in wigLoadItems:  with no data at the minimum span there is no data here, even where a
+// zoomed row covers it (RT #1186).  The smallest over all the ranges, which can be on
+// different sequences.
+int spanMinimum = BIGNUM;
+for (range = rangeList; range != NULL; range = range->next)
+    spanMinimum = min(spanMinimum, max(1, minSpan(conn, table, range->chrom, range->start,
+                                                  range->end, cart, tg->tdb)));
+sqlSafef(whereSpan, sizeof(whereSpan), "span=%d limit 1", spanMinimum);
+if (!liftedRowsExist(conn, table, rangeList, whereSpan))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+
+// As in wigLoadItems:  far enough out, read only the zoomed rows if there are any.
+int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
+if (basesPerPixel >= 1000)
+    {
+    sqlSafef(whereSpan, sizeof(whereSpan), "Span >= 1000 limit 1");
+    if (liftedRowsExist(conn, table, rangeList, whereSpan))
+        {
+        sqlSafef(whereSpan, sizeof(whereSpan), "Span >= 1000");
+        extraWhere = whereSpan;
+        }
+    }
+
+struct hash *spans = newHash(4);
+struct wigItem *wiList = NULL;
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    int rowOffset;
+    char **row;
+    struct sqlResult *sr = hRangeQuery(conn, table, range->chrom, range->start, range->end,
+                                       extraWhere, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct wiggle wiggle;
+        struct wigItem *wi;
+        wiggleStaticLoad(row + rowOffset, &wiggle);
+        AllocVar(wi);
+        wigSetItemData(tg, wi, &wiggle, spans);
+        wi->sourceChrom = range->chrom;
+        wi->clipStart = max(wi->start, range->start);
+        wi->clipEnd = min(wi->end, range->end);
+        wi->chainHash = chainHash;
+        slAddHead(&wiList, wi);
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+slReverse(&wiList);
+tg->items = wiList;
+}
+
 void wigLoadItems(struct track *tg)
 /*      wigLoadItems - read the table rows that hRangeQuery returns
  *      With appropriate adjustment to help hRangeQuery limit its
@@ -425,6 +527,26 @@ void wigLoadItems(struct track *tg)
  *	rows will need to be loaded at any one time.
  */
 {
+// a wigMaf's wiggles are clones of a lifted tdb too, so the gate is checked here as well as
+// where the quickLift hub is written
+if (quickLiftIsLifted(tg->tdb))
+    {
+    if (quickLiftWigEnabled(cart))
+        {
+        wigLoadLiftedItems(tg);
+        return;
+        }
+    // A wig in a quickLift hub written while the gate was on, drawn with it off, as from a
+    // session saved on another server:  the code below would read the table of the same name
+    // in this assembly and draw it as if lifted, so draw nothing.  A wigMaf's wiggles are not
+    // hub tracks and keep the path below.
+    if (isHubTrack(tg->track))
+        {
+        tg->items = NULL;
+        return;
+        }
+    }
+
 struct sqlConnection *conn = NULL ;
 
 // if this is a custom track we don't need an SQL connection to the database
@@ -1843,6 +1965,125 @@ else if (enableMouseOver)
 wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 }	/*	void wigDrawPredraw()	*/
 
+static void addValueToPreDraw(struct preDrawElement *preDraw, int preDrawZero, int preDrawSize,
+                              int x1, int x2, double dataValue)
+/* Add one datum to every pixel from x1 through x2, which are relative to the screen.  A copy of
+ * the per-datum loop in wigLoadPreDraw, used only for a quickLifted wig so that loop is
+ * unchanged with browser.quickLiftWig off;  a fix to one belongs in the other.  When the gate
+ * is retired, wigLoadPreDraw can call this. */
+{
+int i;
+for (i = x1; i <= x2; ++i)
+    {
+    int xCoord = preDrawZero + i;
+    if ((xCoord >= 0) && (xCoord < preDrawSize))
+        {
+        ++preDraw[xCoord].count;
+        if (dataValue > preDraw[xCoord].max)
+            preDraw[xCoord].max = dataValue;
+        if (dataValue < preDraw[xCoord].min)
+            preDraw[xCoord].min = dataValue;
+        preDraw[xCoord].sumData += dataValue;
+        preDraw[xCoord].sumSquares += dataValue * dataValue;
+        }
+    }
+}
+
+static void addRowSummaryToPreDraw(struct preDrawElement *preDraw, int preDrawSize, int xCoord,
+                                   struct wigItem *wi)
+/* Add a whole row to one pixel from the summary it carries, without reading its data.
+ * The (wi->validCount > 0) is a safety check.  It should always be true unless the data
+ * was prepared incorrectly.  A copy of the one-pixel block in wigLoadPreDraw, used only for a
+ * quickLifted wig, like addValueToPreDraw. */
+{
+if ((wi->validCount > 0) && (xCoord >= 0) && (xCoord < preDrawSize))
+    {
+    double upperLimit;
+    preDraw[xCoord].count += wi->validCount;
+    upperLimit = wi->lowerLimit + wi->dataRange;
+    if (upperLimit > preDraw[xCoord].max)
+        preDraw[xCoord].max = upperLimit;
+    if (wi->lowerLimit < preDraw[xCoord].min)
+        preDraw[xCoord].min = wi->lowerLimit;
+    preDraw[xCoord].sumData += wi->sumData;
+    preDraw[xCoord].sumSquares += wi->sumSquares;
+    }
+}
+
+static void liftedItemToPreDraw(struct wigItem *wi, struct udcFile *wibFH, int span,
+                                int seqStart, double pixelsPerBase,
+                                struct preDrawContainer *pre, struct hash *blockCache)
+/* Add a row of a quickLifted wig to preDraw.  The part of the row this item stands for is
+ * mapped onto the reference, one piece for every chain block it overlaps, and each datum is
+ * drawn where it lands.  A datum cut by a block edge is drawn in each piece over the bases
+ * that piece holds. */
+{
+struct preDrawElement *preDraw = pre->preDraw;
+int preDrawZero = pre->preDrawZero;
+int preDrawSize = pre->preDrawSize;
+
+// Only pieces that land in preDraw, smoothing margin included:  another chain can carry the
+// same source bases to anywhere on the chrom, and far enough away the pixel overflows an int.
+int refStart = seqStart - (int)ceil((preDrawZero + 1) / pixelsPerBase);
+int refEnd = seqStart + (int)ceil((preDrawSize - preDrawZero + 1) / pixelsPerBase);
+struct quickLiftRange *piece, *pieceList = quickLiftMapToReferenceIn(wi->chainHash, blockCache,
+                                                wi->sourceChrom, wi->clipStart, wi->clipEnd,
+                                                chromName, refStart, refEnd);
+if ((pieceList == NULL) || (span <= 0))
+    {
+    quickLiftRangeListFree(&pieceList);
+    return;
+    }
+
+// The whole row in one piece on one pixel:  use its summary, as wigLoadPreDraw does.
+if ((pieceList->next == NULL) && (wi->clipStart == wi->start) && (wi->clipEnd == wi->end) &&
+    (pieceList->end - pieceList->start == wi->end - wi->start))
+    {
+    double x1d = (double)(pieceList->start - seqStart) * pixelsPerBase;
+    double x2d = (double)(pieceList->end - seqStart) * pixelsPerBase;
+    if ((x2d - x1d) <= 0.5)
+        {
+        addRowSummaryToPreDraw(preDraw, preDrawSize, preDrawZero + round(x1d), wi);
+        quickLiftRangeListFree(&pieceList);
+        return;
+        }
+    }
+
+unsigned char *readData = (unsigned char *) needMem((size_t) (wi->count + 1));
+udcSeek(wibFH, wi->offset);
+udcRead(wibFH, readData, (size_t) wi->count * (size_t) sizeof(unsigned char));
+for (piece = pieceList; piece != NULL; piece = piece->next)
+    {
+    int srcStart = piece->sourceStart;
+    int srcEnd = srcStart + (piece->end - piece->start);
+    int first = max(0, (srcStart - wi->start) / span);
+    int last = min((int)wi->count - 1, (srcEnd - 1 - wi->start) / span);
+    int dataOffset;
+    for (dataOffset = first; dataOffset <= last; ++dataOffset)
+        {
+        unsigned char datum = readData[dataOffset];
+        if (datum == WIG_NO_DATA)
+            continue;
+        int datumStart = wi->start + dataOffset * span;
+        int segStart = max(datumStart, srcStart);
+        int segEnd = min(datumStart + span, srcEnd);
+        if (segStart >= segEnd)
+            continue;
+        int segRefStart, segRefEnd;
+        quickLiftPieceToReference(piece, segStart, segEnd, &segRefStart, &segRefEnd);
+        // a long block reaches far past the window, where the pixel would overflow an int
+        if ((segRefEnd <= refStart) || (segRefStart >= refEnd))
+            continue;
+        int x1 = (segRefStart - seqStart) * pixelsPerBase;
+        int x2 = x1 + ((segEnd - segStart) * pixelsPerBase);
+        addValueToPreDraw(preDraw, preDrawZero, preDrawSize, x1, x2,
+                          BIN_TO_VALUE(datum, wi->lowerLimit, wi->dataRange));
+        }
+    }
+freeMem(readData);
+quickLiftRangeListFree(&pieceList);
+}
+
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
 /* Do bits that load the predraw buffer tg->preDrawContainer. */
 {
@@ -1858,6 +2099,7 @@ char *currentFile = NULL;
 //char *currentFileRewrite = NULL;
 struct udcFile *wibFH = NULL;	/*	file handle to binary file */
 int i;				/* an integer loop counter	*/
+struct hash *blockCache = NULL;	/*	chain blocks, for a quickLifted track */
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 int usingDataSpan = 1;		/* will become larger if possible */
@@ -1918,6 +2160,14 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    if (wibFH==NULL)
 		errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 	    }
+	if (wi->sourceChrom != NULL)
+	    {
+	    if (blockCache == NULL)
+		blockCache = newHash(8);
+	    liftedItemToPreDraw(wi, wibFH, usingDataSpan, seqStart, pixelsPerBase, pre,
+				blockCache);
+	    continue;
+	    }
 /*	Ready to draw, what do we know:
  *	the feature being processed:
  *	chrom coords:  [wi->start : wi-end)
@@ -1972,6 +2222,7 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 		     *	occupied by this one data item
 		     */
 		    x2 = x1 + (usingDataSpan * pixelsPerBase);
+		    // addValueToPreDraw is a copy of this loop for a quickLifted wig
 		    for (i = x1; i <= x2; ++i)
 			{
 			int xCoord = preDrawZero + i;
@@ -2001,6 +2252,7 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 	     *	should always be true unless the data was
 	     *	prepared incorrectly.
 	     */
+	    // addRowSummaryToPreDraw is a copy of this block for a quickLifted wig
 	    if ((wi->validCount > 0) && (xCoord >= 0) && (xCoord < preDrawSize))
 		{
 		double upperLimit;
@@ -2022,6 +2274,7 @@ if (wibFH > 0)
     wibFH = 0;
     freeMem(currentFile);
     }
+quickLiftBlockCacheFree(&blockCache);
 return pre;
 }
 

@@ -283,6 +283,26 @@ return fileName;
 }
 
 
+static struct quickLiftRange *mergedSourceRanges(char *quickLiftFile, int seqStart, int seqEnd,
+                                                 struct hash *chainHash, boolean exact);
+
+static struct mafAli *dropMafsBefore(struct mafAli *mafList, int prevEnd)
+/* Free and drop the blocks whose reference row starts before prevEnd.  The range before
+ * this one has already returned them. */
+{
+struct mafAli *maf, *next, *keepList = NULL;
+for (maf = mafList; maf != NULL; maf = next)
+    {
+    next = maf->next;
+    if ((maf->components != NULL) && (maf->components->start < prevEnd))
+        mafAliFree(&maf);
+    else
+        slAddHead(&keepList, maf);
+    }
+slReverse(&keepList);
+return keepList;
+}
+
 static struct mafAli *quickLiftLoadMafs(struct track *track, int start, int end)
 /* Load MAF blocks out of the assembly the track came from and map them onto the reference. */
 {
@@ -294,12 +314,21 @@ char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
 struct hash *chainHash = newHash(8);
 // a range query returns every block that overlaps the range, so no padding is needed;  the
 // gate keeps the padded read it replaced.  refs #38513
-struct quickLiftRange *range, *rangeList = quickLiftMafSummaryEnabled(cart) ?
-    quickLiftSourceRangesExact(quickLiftFile, chromName, start, end, chainHash) :
-    quickLiftSourceRanges(quickLiftFile, chromName, start, end, chainHash);
+boolean exact = quickLiftMafSummaryEnabled(cart);
+// With quickLiftSplitRanges the ranges are merged, so they are sorted and never overlap.  A
+// block that crosses from one into the next is returned by both, and is kept from the first
+// only.  refs #38510
+boolean split = quickLiftSplitRangesEnabled();
+struct quickLiftRange *range, *prev = NULL, *rangeList;
+if (split)
+    rangeList = mergedSourceRanges(quickLiftFile, start, end, chainHash, exact);
+else if (exact)
+    rangeList = quickLiftSourceRangesExact(quickLiftFile, chromName, start, end, chainHash);
+else
+    rangeList = quickLiftSourceRanges(quickLiftFile, chromName, start, end, chainHash);
 struct mafAli *srcList = NULL;
 
-for (range = rangeList; range != NULL; range = range->next)
+for (range = rangeList; range != NULL; prev = range, range = range->next)
     {
     struct mafAli *someMafs = NULL;
     if (track->isBigBed)
@@ -318,6 +347,8 @@ for (range = rangeList; range != NULL; range = range->next)
         hFreeConn(&conn);
         hFreeConn(&conn2);
         }
+    if (split && (prev != NULL) && sameString(prev->chrom, range->chrom))
+        someMafs = dropMafsBefore(someMafs, prev->end);
     srcList = slCat(srcList, someMafs);
     }
 
@@ -1284,13 +1315,14 @@ return diff;
 }
 
 static struct quickLiftRange *mergedSourceRanges(char *quickLiftFile, int seqStart, int seqEnd,
-                                                 struct hash *chainHash)
-/* The source ranges under the window, with overlapping ones merged, so that two ranges
- * never ask for the same rows twice. */
+                                                 struct hash *chainHash, boolean exact)
+/* The source ranges under the window, exact or padded, with overlapping ones merged, so that
+ * two ranges never ask for the same rows twice. */
 {
 struct quickLiftRange *range, *next, *mergedList = NULL;
-struct quickLiftRange *rangeList = quickLiftSourceRangesExact(quickLiftFile, chromName,
-                                                              seqStart, seqEnd, chainHash);
+struct quickLiftRange *rangeList = exact ?
+    quickLiftSourceRangesExact(quickLiftFile, chromName, seqStart, seqEnd, chainHash) :
+    quickLiftSourceRanges(quickLiftFile, chromName, seqStart, seqEnd, chainHash);
 slSort(&rangeList, quickLiftRangeCmp);
 for (range = rangeList; range != NULL; range = next)
     {
@@ -1367,7 +1399,7 @@ if (!hTableExists(liftDb, summary))
 struct hash *chainHash = newHash(8);
 struct hash *blockCache = newHash(8);
 struct quickLiftRange *range, *rangeList = mergedSourceRanges(quickLiftFile, seqStart, seqEnd,
-                                                              chainHash);
+                                                              chainHash, TRUE);
 struct sqlConnection *conn = hAllocConn(liftDb);
 boolean hasFieldLeftStatus = hHasField(liftDb, summary, "leftStatus");
 
@@ -1432,7 +1464,7 @@ char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
 struct hash *chainHash = newHash(8);
 struct hash *blockCache = newHash(8);
 struct quickLiftRange *range, *rangeList = mergedSourceRanges(quickLiftFile, seqStart, seqEnd,
-                                                              chainHash);
+                                                              chainHash, TRUE);
 struct sqlConnection *conn = hAllocConn(liftDb);
 double scale = scaleForPixels(width);
 
