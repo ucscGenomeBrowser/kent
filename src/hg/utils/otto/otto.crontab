@@ -6,6 +6,7 @@
 # and then ssh otto@hgwdev and run crontab on the edited and checked in file.
 #
 # For example:
+# ssh otto@hgwdev
 # crontab ~jairo/kent/src/hg/utils/otto/otto.crontab
 
 # To save the current crontab back into git:
