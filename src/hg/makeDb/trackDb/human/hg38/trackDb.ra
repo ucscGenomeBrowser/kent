@@ -962,3 +962,5 @@ include transcriptionStart.ra
 # include hg38.GCF_002880755.1.chainNet.ra alpha
 
 include miniMapChains.ra alpha
+
+include ../fusionGenes.ra alpha

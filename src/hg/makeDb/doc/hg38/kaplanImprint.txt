@@ -176,3 +176,15 @@ done
 # 'hgsid=&g=...'. $parentTrack needs an hgTrackDb built after Sep 2026; an older
 # /cluster/bin/x86_64/hgTrackDb stops the trackDb load with 'setting
 # "parentTrack" not found'.
+
+
+# 2026-10-05 Claude (for max): Parental ASM items that have no known ICR and no imprinted gene
+# nearby used to be named "chrN:hg19start". They are now named "Novel" (kaplanImprintToBed.py,
+# writeParentalAsm). The existing hg38 bed was patched the same way and the bigBed rebuilt with
+# the bedToBigBed line of kaplanImprintLift.sh, so no source file had to be re-read:
+cd /hive/data/genomes/hg38/bed/imprinting/kaplanImprint/hg38
+awk -F'\t' -v OFS='\t' '$4 ~ /^chr[0-9XYM]+:[0-9]+$/ {$4="Novel"} {print}' \
+    kaplanParentalAsm.hg38.bed > kaplanParentalAsm.new.bed
+bedToBigBed -type=bed9+ -tab -as=$HOME/kent/src/hg/makeDb/scripts/imprinting/kaplanParentalAsm.as \
+    -extraIndex=name kaplanParentalAsm.new.bed /hive/data/genomes/hg38/chrom.sizes kaplanParentalAsm.bb
+# 364 of the 458 regions renamed, the 94 named after an ICR or after imprinted genes kept their names.

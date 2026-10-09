@@ -72,6 +72,15 @@ boundaries on transcripts where usually one would use an entirely different trac
 indicate insertion positions on the genome with small triangles. We appreciate user feedback. If
 you have glyph questions, glyph style requests, or have found new glyph applications, please
 contact our <a href="mailto:genome@soe.ucsc.edu">mailing list</a>.
+<p>Two more glyphs, &quot;BarLeft&quot; and &quot;BarRight&quot;, mark one end of a feature, for
+example the breakpoint of a fusion gene partner. They are not drawn at the center of the
+decoration but at its left (lower) or right (higher) end: a band in the fill color covers the end
+of the decoration, up to 50 pixels wide, and a 3 pixel wide bar in the outline color is drawn on
+its edge. The band is a little lower than the item and the bar a little higher, so the bar
+stands out. When zooming out, the band gets narrower with the decoration, down to 1 pixel. To mark
+the end of an item, give the decoration the coordinates of the whole item. In reverse-complement
+display, the glyph stays on the same base, so a BarRight glyph is then shown on the left. The
+strand field of the decoration is not used.</p>
 <p>To use decorators in your track hub or custom tracks, you will need to create an additional bigBed
 file that defines the regions, colors, and glyphs.</p>
 
@@ -111,7 +120,8 @@ A copy of this file can be found <a href="examples/decorator/decoration.as">here
 Valid values for the <code>style</code> field are &quot;block&quot; and &quot;glyph&quot;. Valid
 values for the <code>glyph</code> field include &quot;Circle&quot;, &quot;Square&quot;,
 &quot;Diamond&quot;, &quot;Triangle&quot;, &quot;InvTriangle&quot;, &quot;Octagon&quot;,
-&quot;Star&quot;, &quot;X&quot;, and &quot;Pentagram&quot;. For block <code>style</code>
+&quot;Star&quot;, &quot;X&quot;, &quot;Pentagram&quot;, &quot;BarLeft&quot;, and
+&quot;BarRight&quot;. For block <code>style</code>
 (non-glyph mode), the <code>glyph</code> field can be set to the string &quot;Ignored&quot;. If the
 text is not recognized, Circle is used by default.</p>
 <p>
@@ -168,6 +178,16 @@ chr1 1999 2000 green_circle 0 + 1999 2000 0,255,0,255 1 1 0 chr1:1000-2000:featu
    <li>The 15th field of the decorator bed file (0,255,0,255) specifies the interior of the decoration using RGB
        values and an alpha value to control opacity.</li>
    <li>The <code>Circle</code> glyph style is specified in the last field of the decorator bed file.</li>
+</ul>
+<p>
+To mark the right end of the same feature with an orange band and a black bar, the decoration
+covers the whole feature and uses the <code>BarRight</code> glyph:</p>
+<pre>
+chr1 1000 2000 end_bar 0 + 1000 2000 0,0,0 1 1000 0 chr1:1000-2000:feature glyph 232,89,12,128 BarRight
+</pre>
+<ul>
+   <li>The 9th field (0,0,0) is the color of the bar.</li>
+   <li>The 15th field (232,89,12,128) is the color of the band, here orange at 50% opacity.</li>
 </ul>
 </pre>
 <p>

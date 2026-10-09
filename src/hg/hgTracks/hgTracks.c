@@ -9375,6 +9375,9 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
 jsonObjectAdd(jsonForClient, "canColorItems", newJsonBoolean(canColorItems));
+// right-click "Reset filters to defaults": reset a track's settings but not its visibility
+jsonObjectAdd(jsonForClient, "clearFiltersMenu",
+              newJsonBoolean(cfgOptionBooleanDefault("clearFiltersMenu", FALSE)));
 if (canColorItems)
     jsonObjectAdd(jsonForClient, "itemColors",
                   newJsonString(cartUsualString(cart, "itemColors", "")));

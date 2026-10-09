@@ -282,6 +282,14 @@ RELEASE_GATES = {
                "\"type bigNet\" fails to load with an unsupported-type error, "
                "quickLift refuses the type, and neither hubCheck nor the hubApi "
                "lists it among the supported types."),
+        h("clearFiltersMenu", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38507",
+          note="The \"Reset filters to defaults\" item in hgTracks' right-click "
+               "menu, which clears a track's cart settings (and those of its "
+               "subtracks) but keeps their visibility.  Also read in "
+               "hgTrackUi.c, which does the clearing; with it off the menu item "
+               "is not offered and hgTrackUi ignores the request.  Off during "
+               "QA; flip to TRUE once released."),
         h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "

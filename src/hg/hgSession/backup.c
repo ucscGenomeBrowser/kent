@@ -1103,15 +1103,22 @@ if ((row = sqlNextRow(sr)) != NULL)
 		// The archive holds one file per track and tar walks the directory in
 		// whatever order the file system hands out, so the order of the session
 		// is lost unless the track line itself carries it.  The original track
-		// line rarely has a priority, the one hgTracks orders the tracks by
-		// does, so write that one out with it: the tdb priority the browser
-		// assigned when it loaded the track, or the cart variable that a
-		// drag-and-drop reorder left behind.  A track line that names its own
-		// priority is left alone, the user asked for that one.  A reader that
-		// does not care about the order is unaffected, priority is optional.
+		// line rarely has a priority, so write out the order hgTracks shows:
+		// a drag-and-drop reorder leaves the image position in <track>_imgOrd,
+		// which hgTracks puts above the priority, and hgTracks ignores values
+		// from 10000 (IMG_ORDERTOP) on.  Without one, use the cart priority
+		// from hgTrackUi or the tdb priority the browser assigned when it
+		// loaded the track.  A track line that names its own priority is
+		// left alone, the user asked for that one.  A reader that does not
+		// care about the order is unaffected, priority is optional.
 		char prioVar[256];
 		safef(prioVar, sizeof prioVar, "%s.priority", track->tdb->track);
 		double priority = cartUsualDouble(cart, prioVar, track->tdb->priority);
+		char imgOrdVar[256];
+		safef(imgOrdVar, sizeof imgOrdVar, "%s_imgOrd", track->tdb->track);
+		int imgOrd = cartUsualInt(cart, imgOrdVar, 0);
+		if (imgOrd > 0 && imgOrd < 10000)
+		    priority = imgOrd;
 		if (priority != 0 && !trackLineHasSetting(extra->trackLine, "priority"))
 		    fprintf(fct, "%s priority='%g'\n", extra->trackLine, priority);
 		else

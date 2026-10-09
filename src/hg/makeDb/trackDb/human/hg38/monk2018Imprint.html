@@ -1,0 +1,83 @@
+<h2>Description</h2>
+
+<p>
+Part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack">Imprinting</a> track collection, this track
+shows 50 imprinted differentially methylated regions (DMRs) that Monk et al. proposed as the
+standard set for diagnostic testing of imprinting disorders. Each region has a systematic name
+built from the gene, the position relative to it (promoter, exon, intron or intergenic) and the
+type of region, for example <i>H19/IGF2:IG-DMR</i>. The older names under which a region is
+commonly known, such as ICR1 or KvDMR1, are listed as aliases.
+</p>
+
+<p>
+For each region the track gives the parent whose allele carries the methylation, the number of CpG
+sites, whether the methylation is established in the oocyte or in the sperm (germline DMR) or is
+acquired later and depends on a neighboring germline DMR (secondary DMR), and the matching
+Locus Reference Genomic (LRG) record where one exists. The coordinates in the paper are in hg19.
+Everything here was lifted to hg38, and all 50 regions lifted without loss.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Regions are colored by the parent whose allele is methylated:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#DC1414;width:2em">&nbsp;</th>
+      <td>Red: the maternal allele is methylated</td></tr>
+  <tr><th style="background-color:#003CC8;width:2em">&nbsp;</th>
+      <td>Blue: the paternal allele is methylated</td></tr>
+</table>
+
+<p>
+The track can be filtered by methylated allele and by germline origin. The details page shows all columns of the original table and the
+position as published in hg19.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Monk et al. defined the extent of each DMR from methyl-seq data sets and named the regions with the
+nomenclature proposed by EUCID, using HGNC-approved gene names, so that the same region is reported
+under one name in the clinic. See the paper for details.</p>
+
+<p>
+The table was copied from Table 1 of the paper on the
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5873357/table/t0001/" target="_blank">PubMed Central
+web page</a>. Starts in the table are 1-based, so one was subtracted to get the BED start. The BED
+file was lifted from hg19 to hg38 with <tt>liftOver</tt> and the hg19-to-hg38 chain file. All 50
+regions were converted and none was lost. The thousands separators the web page inserted into
+the LRG identifiers were removed, the dash and prime characters in two names were converted to ASCII,
+and M and P were spelled out as Maternal and Paternal. The coordinates of the region
+SNRPN:Int1-DMR1 are shown as published, 100 kb long for 44 CpGs, which is probably a typing error in
+the paper. See the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt"
+target="_blank">makeDoc file</a> and the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/monk2018Imprint"
+target="_blank">scripts</a>.</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively in table format with the <a href="../cgi-bin/hgTables">Table Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or tab-sep tables. From scripts, the data can be accessed through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>monk2018Imprint</i>.</p>
+
+<p>For automated download and analysis, the genome annotation is stored in a bigBed file that can be downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/monk2018/" target="_blank">our download server</a>. The file for this track is called <tt>monk2018Imprint.bb</tt>. Individual regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled binary for your system. Instructions for downloading source code and binaries can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can also be used to obtain features within a given range, e.g. <tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/monk2018/monk2018Imprint.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>The original annotation source data can be downloaded from
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5873357/table/t0001/" target="_blank">Table 1 of the paper</a>.</p>
+
+<h2>References</h2>
+Failed to fetch complete links from NCBI after 10 tries.  Try again later or just use the PubMed paper link.
+
+
+<p>
+Monk D, Morales J, den Dunnen JT, Russo S, Court F, Prawitt D, Eggermann T, Beygo J, Buiting K,
+Tümer Z <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27911167" target="_blank">
+Recommendations for a nomenclature system for reporting methylation aberrations in imprinted
+domains</a>.
+<em>Epigenetics</em>. 2018;13(2):117-121.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27911167" target="_blank">27911167</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5873357/" target="_blank">PMC5873357</a>
+</p>
+

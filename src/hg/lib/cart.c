@@ -36,6 +36,7 @@
 #include "jsonWrite.h"
 #include "verbose.h"
 #include "genark.h"
+#include "asmAlias.h"
 #include "quickLift.h"
 #include "pcrResult.h"
 #include "botDelay.h"
@@ -1847,12 +1848,48 @@ char *db = cartOptionalString(cart,"db");
 if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
 
-if (!resolveGenarkDb(cart) && !hDbIsActive(db))
-    errAbort("Can not find database '%s'.<br>"
-            "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s</a> in "
-            "the list of NCBI/INSDC assemblies, then click 'request' when you have found the right assembly "
-            "and enter your email address. We will then make a genome browser and get back to you within a few days.",
-            db, db, db);
+if (resolveGenarkDb(cart) || hDbIsActive(db))
+    return;
+
+// Not a GenArk accession or a database of its own, but it may be an alias of one,
+// e.g. a GCA accession whose GCF equivalent is in GenArk.  hubConnectLoadHubs() would
+// translate it through asmAlias, but only if we don't abort here first.
+db = cloneString(db);  // cartSetString frees the cart's copy
+char *aliasDb = asmAliasFind(db);
+if (differentString(aliasDb, db))
+    {
+    cartSetString(cart, "db", aliasDb);
+    if (resolveGenarkDb(cart) || hDbIsActive(aliasDb))
+        return;
+    }
+
+// This is shown by the bare early error handler, before the page header exists, so it
+// brings its own title bar and margins.
+// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
+errAbort("<div style='background:#003a72; padding:8px 24px'>"
+        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>"
+        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>"
+        "UCSC Genome Browser</a></div>"
+        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+        "<h2>Genome assembly not found</h2>"
+        "<p>The genome assembly <b>%s</b> is not available on this Genome Browser.</p>"
+        "<p>First, check the name for typing errors. UCSC assembly names look like "
+        "<b>hg38</b> or <b>mm39</b>. NCBI assembly accessions look like "
+        "<b>GCA_000001405.15</b> or <b>GCF_000001405.40</b>, including the version "
+        "number after the dot.</p>"
+        "<p>If the name is correct, we may not have a browser for this assembly yet. "
+        "You can ask us to make one:</p>"
+        "<ol><li><a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>Search for %s</a> "
+        "in the list of NCBI assemblies.</li>"
+        "<li>Find the assembly in the results and click its <b>request</b> button.</li>"
+        "<li>Enter your name and email address and submit the request.</li></ol>"
+        "<p>We usually make the browser within a few days and send you an email when it "
+        "is ready.</p>"
+        "<p>To look for another assembly, <a href='../cgi-bin/hgGateway'>go back to the "
+        "Genome Browser start page</a> and type a species name, a common name or an "
+        "assembly name into its search box. If you need help, "
+        "<a href='../contacts.html'>contact us</a>.</p></div>",
+        db, db, db);
 }
 
 boolean isValidToken(char *token)
@@ -3273,24 +3310,18 @@ void cartEarlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
-va_list argscp;
-va_copy(argscp, args);
 if (!initted && !cgiOptionalString("ajax"))
     {
     cgiPrintContentType("text/html");
     htmStart(stdout, "Early Error");
     initted = TRUE;
     }
+/* htmlVaEncodeErrorText also writes the message to stderr, so only the request info that
+ * starts the log line is written here. */
+logCgiToStderr();
 printf("%s", htmlWarnStartPattern());
 htmlVaEncodeErrorText(format,args);
 printf("%s", htmlWarnEndPattern());
-
-/* write warning/error message to stderr so they get logged. */
-logCgiToStderr();
-vfprintf(stderr, format, argscp);
-va_end(argscp);
-putc('\n', stderr);
-fflush(stderr);
 }
 
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
@@ -3756,6 +3787,99 @@ for (subTdb=tdb->subtracks;subTdb!=NULL;subTdb=subTdb->next)
     cartRemoveAllForTdbAndChildren(cart,subTdb);
 cartRemoveAllForTdb(cart,tdb);
 saveState(cart);
+}
+
+static void addTdbTreeNames(struct hash *names, struct trackDb *tdb)
+/* Add the names of tdb, its subtracks, views and superTrack children to hash. */
+{
+hashStore(names, tdb->track);
+struct trackDb *subTdb;
+for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+    addTdbTreeNames(names, subTdb);
+if (tdbIsSuper(tdb))
+    {
+    struct slRef *childRef;
+    for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+        addTdbTreeNames(names, (struct trackDb *)childRef->val);
+    }
+}
+
+static void addTdbListNames(struct hash *names, struct trackDb *tdbList)
+/* Add the names of all tracks in tdbList and their subtracks and views to hash. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    hashStore(names, tdb->track);
+    addTdbListNames(names, tdb->subtracks);
+    }
+}
+
+static char *varOwner(struct hash *allNames, char *var)
+/* Return the track that var belongs to: the longest track name that is all of var
+ * or is followed in var by a '.' or '_', or NULL if there is none. The longest, so
+ * that the variables of track foo_1 do not belong to track foo. */
+{
+struct hashEl *hel = hashLookup(allNames, var);
+if (hel != NULL)
+    return hel->name;
+char *buf = cloneString(var);
+char *owner = NULL;
+char *s;
+for (s = buf + 1; *s != 0; s++)
+    {
+    if (*s == '.' || *s == '_')
+        {
+        char c = *s;
+        *s = 0;
+        if ((hel = hashLookup(allNames, buf)) != NULL)
+            owner = hel->name;
+        *s = c;
+        }
+    }
+freeMem(buf);
+return owner;
+}
+
+static boolean isVisibilityVar(char *owner, char *var)
+/* Return TRUE if var is the visibility of track or view owner, its subtrack
+ * checkbox ({track}_sel) or its image order ({track}_imgOrd). */
+{
+if (sameString(var, owner))
+    return TRUE;
+char *suffix = var + strlen(owner);
+return sameString(suffix, "_sel") || sameString(suffix, "_imgOrd");
+}
+
+void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb,
+                                         struct trackDb *tdbList)
+/* Remove the settings (filters, colors, display options...) of this tdb, its
+ * subtracks, views and superTrack children from the cart, but keep their
+ * visibility: the track and view visibilities, the subtrack checkboxes and the
+ * image order. tdbList has all tracks of the database, so that variables of other
+ * tracks whose names start with this one's are left alone. */
+{
+struct hash *names = hashNew(0);
+addTdbTreeNames(names, tdb);
+struct hash *allNames = hashNew(16);
+addTdbListNames(allNames, tdbList);
+addTdbTreeNames(allNames, tdb);
+// One pass over the cart, not one per track: composites can have 26,000 subtracks
+struct slName *removeList = NULL;
+struct hashEl *hel, *helList = hashElListHash(cart->hash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    char *owner = varOwner(allNames, hel->name);
+    if (owner != NULL && hashLookup(names, owner) && !isVisibilityVar(owner, hel->name))
+        slNameAddHead(&removeList, hel->name);
+    }
+hashElFreeList(&helList);
+struct slName *var;
+for (var = removeList; var != NULL; var = var->next)
+    cartRemove(cart, var->name);
+slFreeList(&removeList);
+hashFree(&allNames);
+hashFree(&names);
 }
 
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal)

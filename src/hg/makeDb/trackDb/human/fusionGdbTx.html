@@ -1,0 +1,68 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=fusionGenes">Fusion Genes</a> collection.
+It shows the same fusion events as the <a href="hgTrackUi?g=fusionGdb">FusionGDB</a>
+track, but instead of the breakpoint, each partner gene is drawn as the part of its
+transcript that is kept in the fusion transcript: for the 5' partner from the start of
+the transcript to the breakpoint, for the 3' partner from the breakpoint to the end of
+the transcript. See the <a href="hgTrackUi?g=fusionGdb">FusionGDB</a> page for the data
+sources, the colors and the reading frame annotation.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Features are colored by reading frame, as in the FusionGDB track. The thick part is the
+coding sequence that is kept. The codon frames shown when codon coloring is switched on
+are those of the original transcript, which is the frame of the fusion protein only for
+in-frame fusions.
+</p>
+<p>
+FusionGDB gives the strand of the fusion sequence, not of the genes. For many ChiTaRS
+fusions, which come from GenBank ESTs and mRNAs, the GenBank sequence is the reverse
+complement of the transcript. In these cases both genes are on the other strand than
+given in FusionGDB, the 3' partner comes first in the transcript, and we draw the
+fusion with the roles of the two genes swapped. If only one of the two genes is on the
+other strand, the fusion is drawn as given by FusionGDB. Both cases are noted in the
+mouseover and on the details page.
+</p>
+
+<h2>Methods</h2>
+<p>
+For each breakpoint pair, FusionGDB lists all pairs of GENCODE V19 transcripts of the two
+genes with their reading frame annotation. We took the transcript pair with the best
+reading frame (in-frame, then frame-shift, then any other) and, among those, the
+transcripts tagged appris_principal, then CCDS, then basic, then the one with the longest
+coding sequence. For breakpoint pairs without frame annotation, we took the best GENCODE
+V19 transcript of the gene by the same rules, among the transcripts that contain the
+breakpoint. Each transcript was cut at the breakpoint, which is the last kept base of the
+5' partner and the first kept base of the 3' partner. For hg38, the features were
+converted with liftOver.
+</p>
+<p>
+In FusionGDB, 183 gene symbols from ChiTaRS had been converted to dates by a spreadsheet
+program, e.g. 9-Sep for SEPT9 or 1-Sep-04 for SEPT14. We changed them back to the GENCODE
+V19 symbol (SEPT, MARCH, MARC or DEC genes) whose transcript contains the breakpoint.
+Of the 105,783 partner features on hg19, 90,986 are drawn from a FusionGDB transcript
+pair and 8,334 from a GENCODE transcript of the gene. For 6,463, no GENCODE V19 transcript
+of the gene contains the breakpoint, and only the breakpoint is shown as a 1&nbsp;bp
+feature. In 3,451 fusion events both genes are on the other strand than the fusion
+sequence and the roles were swapped, and in 8,059 only one gene is. On hg38, 84 features
+could not be converted with liftOver and are not shown. Note that FusionGDB's in-frame
+annotation is not always the same as a strict reading frame check: for about a quarter
+of the in-frame breakpoint pairs, the number of coding bases kept from the 5' partner
+does not match the codon frame at the breakpoint of the 3' partner.
+</p>
+<p>
+The commands are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/fusionGenes.txt"
+target="_blank">makeDoc file</a> and the scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/fusionGdb"
+target="_blank">our source repository</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+Because of the FusionGDB terms of use, this track cannot be exported with the Table
+Browser. See the <a href="hgTrackUi?g=fusionGdb">FusionGDB</a> page for how to obtain the
+original data.
+</p>

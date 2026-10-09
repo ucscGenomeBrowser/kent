@@ -28,11 +28,9 @@ Usage:
 import sys, re
 from collections import defaultdict
 
-# One color scheme is shared by the whole Imprinting collection: vermillion
-# means the maternal copy, blue means the paternal copy, neutral gray means the
-# annotation carries no parent of origin. OMIM records that a gene is imprinted
-# but not which copy is active, so every item here is gray.
-NEUTRAL_COLOR = "85,85,85"
+# OMIM records that a gene is imprinted but not which copy is active, so every item
+# is black, the color of annotations without a parent of origin in this collection.
+NEUTRAL_COLOR = "0,0,0"
 
 MAIN_CHROM = re.compile(r"^chr([0-9]+|X|Y|M)$")
 IMPRINT_MARKER = re.compile(r"\(\s*I\s*\)")

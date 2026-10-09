@@ -1,0 +1,180 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=fusionGenes">Fusion Genes</a>
+collection. It shows fusion gene breakpoints from
+<a href="https://compbio.uth.edu/FusionGDB/" target="_blank">FusionGDB</a>, a database of
+human fusion genes and their predicted effect on the encoded protein. The track contains
+about 53,000 distinct breakpoint pairs of 48,000 fusion genes.
+</p>
+<p>
+The breakpoints come from three data sets:
+</p>
+<ul>
+<li>TumorFusions: fusions called with PRADA in TCGA tumor RNA-seq samples (Hu et al. 2018)</li>
+<li>PanCanAtlas: fusions called with STAR-Fusion, EricScript and BREAKFAST in TCGA tumor
+RNA-seq samples (Gao et al. 2018)</li>
+<li>ChiTaRS: chimeric transcripts from GenBank ESTs and mRNAs (ChiTaRS 3.1, Gorohovski et
+al. 2017). These have no sample or cancer type.</li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each fusion is shown as two 1&nbsp;bp features named after the fusion, e.g.
+TMPRSS2::ERG: one at the breakpoint in the 5' partner gene and one at the breakpoint in
+the 3' partner gene. The strand is the strand of the partner gene at that breakpoint. The
+same fusion gene can have several breakpoint pairs, and every pair is a separate
+feature. Each feature has an ID made of the fusion name, the number of the breakpoint
+pair and the partner, e.g. TMPRSS2::ERG.3.5p, shown on the details page. Hover over a feature to see its partner gene, reading frame, number of TCGA
+samples and sources. The details page links to the breakpoint of the partner gene.
+</p>
+<p>
+Features are colored by the effect of the fusion on the reading frame. FusionGDB
+annotated each breakpoint pair for all pairs of GENCODE V19 transcripts of the two genes.
+If at least one transcript pair is in-frame, the feature is shown as in-frame.
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>In-frame: both breakpoints are in coding exons and the fusion transcript keeps
+      the reading frame of the 3' gene</td></tr>
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>Frame-shift: both breakpoints are in coding exons, but the fusion shifts the
+      reading frame of the 3' gene</td></tr>
+  <tr><th style="background-color:#888888;width:2em">&nbsp;</th>
+      <td>Outside CDS: at least one breakpoint is in a UTR or intron in all transcript
+      pairs, or FusionGDB has no reading frame annotation for this breakpoint pair</td></tr>
+</table>
+<p>
+A breakpoint outside the coding sequence does not mean that the fusion makes no protein.
+In TMPRSS2::ERG, for example, the 5' UTR of TMPRSS2 is joined to ERG, and ERG protein is
+made from its own start codon under the control of the TMPRSS2 promoter.
+</p>
+<p>
+The track can be filtered by reading frame, source, TCGA cancer type and number of TCGA
+samples. Fusion names such as TMPRSS2::ERG, TMPRSS2-ERG or TMPRSS2_ERG can be typed into
+the position box.
+</p>
+
+<h2>Methods</h2>
+<p>
+FusionGDB collected fusion breakpoints from ChiTaRS 3.1 (17,860 fusion genes), TumorFusions
+(15,854 fusion genes in 5,517 TCGA samples) and the TCGA PanCanAtlas fusion calls of Gao
+et al. (23,944 fusion genes in 6,071 samples), all on hg19. For every breakpoint pair,
+FusionGDB located both breakpoints in all GENCODE V19 transcripts of the two genes. A
+transcript pair was called in-frame if both breakpoints are in coding exons and the
+length of the fusion transcript from the start codon of the 5' gene to the 3' gene's
+stop codon is a multiple of three, and frame-shift if both are in coding exons but it is
+not. Other combinations were labeled by the breakpoint location, e.g. 5UTR-3CDS. See
+Kim and Zhou 2019 for details.
+</p>
+<p>
+We downloaded the files TCGA_ChiTaRS_combined_fusion_information_on_hg19.txt and
+TCGA_ChiTaRS_combined_fusion_ORF_analyzed_gencode_h19v19.txt from
+<a href="https://ccsm.uth.edu/FusionGDB/download.html" target="_blank">the FusionGDB
+download page</a>. The first file has 65,780 rows, one per fusion, sample and source. We
+merged rows with identical breakpoints in both genes into 52,994 breakpoint pairs and
+wrote one feature for each partner gene. The breakpoint positions in the file are
+1-based. For the TCGA data, about 95% of them are the last base of an exon of the 5'
+gene or the first base of an exon of the 3' gene in GENCODE V19. In 205 breakpoint pairs
+from ChiTaRS, the chromosome of one partner gene is unknown in FusionGDB, and only the
+other partner is shown. For hg38, we converted the breakpoints with liftOver. Mitochondrial
+breakpoints are on the rCRS sequence, called chrMT on hg19 and chrM on hg38, and were not
+converted. 14 breakpoints could not be converted to hg38 and are not shown there, while
+their partner is. The commands are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/fusionGenes.txt"
+target="_blank">makeDoc file</a> and the scripts are in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/fusionGdb"
+target="_blank">our source repository</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The FusionGDB data is free for academic research. Its
+<a href="https://compbio.uth.edu/FusionGDB/terms.html" target="_blank">terms of use</a>
+do not allow redistribution, so this track cannot be exported with the Table Browser.
+The original data can be downloaded from the
+<a href="https://ccsm.uth.edu/FusionGDB/download.html" target="_blank">FusionGDB download
+page</a>. Commercial use requires a license from FusionGDB.
+</p>
+<p>
+The download page has tab-separated text files, all with hg19 coordinates. The main
+files are:
+</p>
+<ul>
+<li><tt>TCGA_ChiTaRS_combined_fusion_information_on_hg19.txt</tt>: one row per fusion,
+sample and source, with the gene, chromosome, breakpoint and strand of both partners.
+This track was built from this file.</li>
+<li><tt>TCGA_ChiTaRS_combined_fusion_ORF_analyzed_gencode_h19v19.txt</tt>: the reading
+frame annotation for every pair of GENCODE V19 transcripts of the two genes.</li>
+<li>Three files for the in-frame transcript pairs, with the sequence of the fusion protein
+(<tt>..._In-frame_100k_check_aminoacid_seq_new.txt</tt>), of the fusion coding sequence
+(<tt>..._In-frame_100k_check_cds_seq.txt</tt>) and of the fusion transcript
+(<tt>..._In-frame_100k_check_transcript_seq.txt</tt>).</li>
+<li>Further files with protein features retained in the fusion, protein-protein
+interactions, related drugs and disease associations of the fusion genes.</li>
+</ul>
+
+<h2>Credits</h2>
+<p>
+Thanks to Pora Kim and the FusionGDB team at the University of Texas Health Science
+Center at Houston for making the data available.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Kim P, Zhou X.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30407583" target="_blank">
+FusionGDB: fusion gene annotation DataBase</a>.
+<em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D994-D1004.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30407583" target="_blank">30407583</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323909/" target="_blank">PMC6323909</a>
+</p>
+
+
+
+<p>
+Kim P, Tan H, Liu J, Lee H, Jung H, Kumar H, Zhou X.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34755868" target="_blank">
+FusionGDB 2.0: fusion gene annotation updates aided by deep learning</a>.
+<em>Nucleic Acids Res</em>. 2022 Jan 7;50(D1):D1221-D1230.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34755868" target="_blank">34755868</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8728198/" target="_blank">PMC8728198</a>
+</p>
+
+
+
+<p>
+Hu X, Wang Q, Tang M, Barthel F, Amin S, Yoshihara K, Lang FM, Martinez-Ledesma E, Lee SH, Zheng S
+<em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29099951" target="_blank">
+TumorFusions: an integrative resource for cancer-associated transcript fusions</a>.
+<em>Nucleic Acids Res</em>. 2018 Jan 4;46(D1):D1144-D1149.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29099951" target="_blank">29099951</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5753333/" target="_blank">PMC5753333</a>
+</p>
+
+
+
+<p>
+Gao Q, Liang WW, Foltz SM, Mutharasu G, Jayasinghe RG, Cao S, Liao WW, Reynolds SM, Wyczalkowski MA,
+Yao L <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/29617662" target="_blank">
+Driver Fusions and Their Implications in the Development and Treatment of Human Cancers</a>.
+<em>Cell Rep</em>. 2018 Apr 3;23(1):227-238.e3.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29617662" target="_blank">29617662</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5916809/" target="_blank">PMC5916809</a>
+</p>
+
+
+
+<p>
+Gorohovski A, Tagore S, Palande V, Malka A, Raviv-Shay D, Frenkel-Morgenstern M.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/27899596" target="_blank">
+ChiTaRS-3.1-the enhanced chimeric transcripts and RNA-seq database matched with protein-protein
+interactions</a>.
+<em>Nucleic Acids Res</em>. 2017 Jan 4;45(D1):D790-D795.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27899596" target="_blank">27899596</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5210585/" target="_blank">PMC5210585</a>
+</p>
+

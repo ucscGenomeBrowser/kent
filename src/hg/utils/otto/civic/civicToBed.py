@@ -121,6 +121,32 @@ MAX_LONG_BED_FIELD_LENGTH: Final = 5000
 ## Default color for items in output bed
 DEFAULT_BED_VARIANT_COLOR: Final = "0"
 
+## Fusion partners are colored by the best CIViC evidence level of the
+## variant. The colors are from the viridis palette, which gets lighter
+## from A to E, so the levels can be told apart in grayscale, too.
+EVIDENCE_LEVEL_COLORS: Final = {
+    "A": "68,1,84",  # validated association
+    "B": "59,82,139",  # clinical evidence
+    "C": "33,145,140",  # case study
+    "D": "94,201,98",  # preclinical evidence
+    "E": "170,220,50",  # inferential association
+    "": "170,170,170",  # no evidence items
+}
+EVIDENCE_LEVEL_NAMES: Final = {
+    "A": "A, validated association",
+    "B": "B, clinical evidence",
+    "C": "C, case study",
+    "D": "D, preclinical evidence",
+    "E": "E, inferential association",
+    "": "",
+}
+
+## Decorator glyph on the breakpoint end of a fusion partner:
+## a black bar on a half-transparent orange band
+FUSION_BAR_COLOR: Final = "0,0,0"
+FUSION_BAND_COLOR: Final = "232,89,12,128"
+DECORATION_AS: Final = "decoration.as"
+
 DOWNLOAD_DIR: Final = "downloads"
 
 # these are in percentages
@@ -231,6 +257,10 @@ def annotate_bed12(bed12df: pd.DataFrame, sourcedf: pd.DataFrame) -> pd.DataFram
     assert bed12df.shape[0] == sourcedf.shape[0]
 
     cvids = sourcedf["clinvar_ids"].fillna("").replace("^NONE FOUND$", "", regex=True)
+    level_names = sourcedf["best_evidence_level"].fillna("").map(EVIDENCE_LEVEL_NAMES)
+    level_html = level_names.where(
+        level_names == "", "<br><b>Best evidence level:</b> " + level_names
+    )
     expect(
         cvids.str.match("[^0-9]").sum() == 0,
         "At least one clinvar_ids entry contains a non-numeric digit, other than 'NONE "
@@ -257,7 +287,9 @@ def annotate_bed12(bed12df: pd.DataFrame, sourcedf: pd.DataFrame) -> pd.DataFram
             + sourcedf["therapies"].str.replace(",", ", ")
             + "<br><b>Associated diseases:</b> "
             + sourcedf["disease_html"]
+            + level_html
         )
+        .assign(evidence_level=level_names)
     )
     ## These are includde sometimes for debugging purposes...
     # "variant_id": gdf.variant_id,
@@ -434,46 +466,57 @@ def read_bed12(fn: str) -> Generator[Bed, None, None]:
             yield Bed.from_line(line)
 
 
-def gene_bed_to_exon(
-    bed: Bed, index1: int, upstream_intron: bool, downstream_intron: bool, name: str
-) -> Bed:
-    """Given a gene Bed, pull out a particular exon indexed from the
-    5' side with a 1-based index, taking into account
-    strand. Optionally include introns as thin parts.
+def gene_bed_to_kept_part(bed: Bed, index1: int, is_5prime: bool, name: str) -> tuple[Bed, bool] | None:
+    """Given a transcript Bed, return the part of it that is kept in a
+    fusion: for the 5' partner from the transcript start to the end of
+    exon `index1`, for the 3' partner from the start of exon `index1` to
+    the transcript end. Exons are 1-based from the 5' end of the
+    transcript. Also returns True if the breakpoint is at the high
+    (right) end of the returned Bed. Returns None if the exon does not
+    exist in the transcript.
 
+    >>> b = Bed("chr1", 100, 1000, "tx", 0, "+", 150, 900, "0", 3, [100, 100, 100], [0, 400, 800])
+    >>> kept, bar_right = gene_bed_to_kept_part(b, 2, True, "A::B")
+    >>> (kept.chromStart, kept.chromEnd, kept.blockCount, kept.blockStarts, kept.thickEnd, bar_right)
+    (100, 600, 2, [0, 400], 600, True)
+    >>> kept, bar_right = gene_bed_to_kept_part(b, 2, False, "A::B")
+    >>> (kept.chromStart, kept.chromEnd, kept.blockStarts, kept.thickStart, bar_right)
+    (500, 1000, [0, 400], 500, False)
+    >>> b.strand = "-"
+    >>> kept, bar_right = gene_bed_to_kept_part(b, 1, True, "A::B")
+    >>> (kept.chromStart, kept.chromEnd, kept.blockCount, bar_right)
+    (900, 1000, 1, False)
     """
-    index0 = int(index1) - 1
-    if bed.strand == "-":
-        upstream_intron, downstream_intron = downstream_intron, upstream_intron
-        index0 = int(bed.blockCount) - 1 - index0
+    index1 = int(index1)
+    if index1 < 1 or index1 > bed.blockCount:
+        return None
+    genomic_idx = index1 - 1 if bed.strand == "+" else bed.blockCount - index1
+    # the 5' partner on + and the 3' partner on - keep the low end of the transcript
+    keep_low = is_5prime == (bed.strand == "+")
+    if keep_low:
+        keep = range(0, genomic_idx + 1)
+    else:
+        keep = range(genomic_idx, bed.blockCount)
+
+    starts = [bed.chromStart + bed.blockStarts[i] for i in keep]
+    ends = [s + bed.blockSizes[i] for s, i in zip(starts, keep)]
     out = deepcopy(bed)
-
-    ## Get the exon boundaries into the thick part
     out.name = name
-    out.thickStart = int(bed.chromStart) + bed.blockStarts[index0]
-    out.thickEnd = out.thickStart + bed.blockSizes[index0]
-
-    ## Set the thin part, optionally including introns
-    up_idx = index0 - 1
-    if upstream_intron and up_idx >= 0:
-        out.chromStart += bed.blockStarts[up_idx] + bed.blockSizes[up_idx]
-    else:
-        out.chromStart = out.thickStart
-
-    down_idx = index0 + 1
-    if downstream_intron and down_idx < bed.blockCount:
-        out.chromEnd = bed.chromStart + bed.blockStarts[down_idx]
-    else:
-        out.chromEnd = out.thickEnd
-
-    out.blockCount = 1
-    out.blockSizes = [out.chromEnd - out.chromStart]
-    out.blockStarts = [0]
-
-    return out
+    out.chromStart = starts[0]
+    out.chromEnd = ends[-1]
+    out.blockCount = len(starts)
+    out.blockSizes = [e - s for s, e in zip(starts, ends)]
+    out.blockStarts = [s - out.chromStart for s in starts]
+    out.thickStart = max(bed.thickStart, out.chromStart)
+    out.thickEnd = min(bed.thickEnd, out.chromEnd)
+    if out.thickStart >= out.thickEnd:  # no coding part left
+        out.thickStart = out.thickEnd = out.chromStart
+    return out, keep_low
 
 
-def transform_fusion_variants(df: pd.DataFrame, ensembl_bed_fn: str) -> pd.DataFrame:
+def transform_fusion_variants(
+    df: pd.DataFrame, ensembl_bed_fn: str
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Convert the fusion type variants from VariantSummaries into a bed12+ data frame"""
 
     def remove_ens_version(x: str) -> str:
@@ -505,39 +548,45 @@ def transform_fusion_variants(df: pd.DataFrame, ensembl_bed_fn: str) -> pd.DataF
         "Not enough matches in Ensembl transcripts, parser or input fix needed",
     )
 
-    valid_upstream = fdf.upstream_tx.isin(ens2bed) & ~fdf.upstream_exon.isnull()
-    upstream_variants = fdf.loc[valid_upstream, :].reset_index(drop=True)
-    upstream_bed12 = []
-    for r in upstream_variants.itertuples():
-        upstream_bed12.append(
-            gene_bed_to_exon(
-                ens2bed[r.upstream_tx],
-                r.upstream_exon,
-                False,
-                True,
-                r.short_variant_string,
-            ).as_str_dict()
-        )
-    upstream_vldf = annotate_bed12(pd.DataFrame(upstream_bed12), upstream_variants)
+    # Each partner is drawn as the part of its transcript that is kept in the
+    # fusion, colored by evidence level, with a decorator glyph on the breakpoint end.
+    vldfs = []
+    decorations = []
+    for tx_col, exon_col, is_5prime in [
+        ("upstream_tx", "upstream_exon", True),
+        ("downstream_tx", "downstream_exon", False),
+    ]:
+        valid = fdf[tx_col].isin(ens2bed) & ~fdf[exon_col].isnull()
+        variants = fdf.loc[valid, :].reset_index(drop=True)
+        bed12 = []
+        kept_rows = []
+        for i, r in enumerate(variants.itertuples()):
+            tx = ens2bed[getattr(r, tx_col)]
+            res = gene_bed_to_kept_part(
+                tx, getattr(r, exon_col), is_5prime, r.short_variant_string
+            )
+            if res is None:
+                logging.warning(
+                    f"Fusion {r.short_variant_string}: exon {getattr(r, exon_col)} not in {tx.name}, skipped"
+                )
+                continue
+            kept, bar_right = res
+            kept.itemRgb = EVIDENCE_LEVEL_COLORS[r.best_evidence_level]
+            bed12.append(kept.as_str_dict())
+            kept_rows.append(i)
+            decorated = f"{kept.chrom}:{kept.chromStart}-{kept.chromEnd}:{kept.name}"
+            decorations.append(
+                [kept.chrom, kept.chromStart, kept.chromEnd, "breakpoint", 0,
+                 kept.strand, kept.chromStart, kept.chromEnd, FUSION_BAR_COLOR,
+                 1, kept.chromEnd - kept.chromStart, 0, decorated, "glyph",
+                 FUSION_BAND_COLOR, "BarRight" if bar_right else "BarLeft"]
+            )
+        variants = variants.iloc[kept_rows].reset_index(drop=True)
+        vldfs.append(annotate_bed12(pd.DataFrame(bed12), variants))
 
-    valid_downstream = fdf.downstream_tx.isin(ens2bed) & ~fdf.downstream_exon.isnull()
-    downstream_variants = fdf.loc[valid_downstream, :].reset_index(drop=True)
-    downstream_bed12 = []
-    for r in downstream_variants.itertuples():
-        downstream_bed12.append(
-            gene_bed_to_exon(
-                ens2bed[r.downstream_tx],
-                r.downstream_exon,
-                True,
-                False,
-                r.short_variant_string,
-            ).as_str_dict()
-        )
-    downstream_vldf = annotate_bed12(
-        pd.DataFrame(downstream_bed12), downstream_variants
-    )
-
-    return pd.concat([upstream_vldf, downstream_vldf])
+    # identical features (same name and coordinates) share one decoration
+    dec_df = pd.DataFrame(decorations).drop_duplicates(subset=[12])
+    return pd.concat(vldfs), dec_df
 
 
 def write_df_to_bed(vldf: pd.DataFrame, outfn: str) -> None:
@@ -865,7 +914,20 @@ def add_variant_diseases_therapies(
         }
     ).set_index("variant_id")
 
-    return variant_df.set_index("variant_id").join(dt_df).reset_index()
+    # The best (alphabetically lowest) evidence level of all evidence items
+    vid2level: dict[int, str] = {}
+    for mpid, level in zip(
+        evidence_df["molecular_profile_id"], evidence_df["evidence_level"]
+    ):
+        if level != level or mpid not in mid2vids:
+            continue
+        for vid in mid2vids[mpid]:
+            vid2level[vid] = min(level, vid2level.get(vid, level))
+
+    out_df = variant_df.set_index("variant_id").join(dt_df).reset_index()
+    return out_df.assign(
+        best_evidence_level=out_df["variant_id"].map(vid2level).fillna("")
+    )
 
 
 def transform_dfs(dfs: dict[str, pd.DataFrame]) -> dict[str, str]:
@@ -894,12 +956,17 @@ def transform_dfs(dfs: dict[str, pd.DataFrame]) -> dict[str, str]:
     gene_variant_df = transform_gene_variant_summaries(filtered_variant)
     gene_beds = liftover_gene_variant_beds(gene_variant_df)
 
-    fusion_variant_dfs = {
-        ref: transform_fusion_variants(filtered_variant, fn)
-        for ref, fn in GENCODE_UCSC_FN.items()
-    }
+    fusion_variant_dfs = {}
+    fusion_decoration_dfs = {}
+    for ref, fn in GENCODE_UCSC_FN.items():
+        fusion_variant_dfs[ref], fusion_decoration_dfs[ref] = transform_fusion_variants(
+            filtered_variant, fn
+        )
 
     fusion_beds = write_fusion_beds(fusion_variant_dfs)
+    decoration_beds = write_fusion_beds(
+        fusion_decoration_dfs, out_fn_template="civic.decorator.{db}.bed"
+    )
 
     finalBed_tmpl = "civic.{ref}.bed"
     finalBigBed_tmpl = "civic.{ref}.bb"
@@ -911,7 +978,13 @@ def transform_dfs(dfs: dict[str, pd.DataFrame]) -> dict[str, str]:
         outbb[ref] = finalBigBed_tmpl.format(ref=ref)
         shell(f"cat {gbed} {fbed} | bedSort /dev/stdin {outbed}")
         shell(
-            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+5 -as=civic.as {outbed} {CHROM_SIZES[ref]} {outbb[ref]}"
+            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+9 -as=civic.as {outbed} {CHROM_SIZES[ref]} {outbb[ref]}"
+        )
+        decbed = decoration_beds[ref]
+        decbb = f"civic.decorator.{ref}.bb"
+        shell(f"bedSort {decbed} {decbed}")
+        shell(
+            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+4 -as={DECORATION_AS} {decbed} {CHROM_SIZES[ref]} {decbb}"
         )
     return outbb
 

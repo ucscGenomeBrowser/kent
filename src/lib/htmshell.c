@@ -60,7 +60,7 @@ void htmlVaEncodeErrorText(char *format, va_list args)
 {
 va_list argscp;
 va_copy(argscp, args);
-char warning[1024];
+char warning[8192];
 
 struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
@@ -679,7 +679,7 @@ void htmlVaWarn(char *format, va_list args)
 va_list argscp;
 va_copy(argscp, args);
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
-char warning[1024];
+char warning[8192];
 
 // html-encode arguments to fight XSS
 struct dyString *ds = dyStringNew(1024);
