@@ -30,6 +30,7 @@
 proof:
   - "assertion-only 2026-10-09 -- written after efdd8825cf7 reached genome-test with both gates on"
   - "sandbox-ab 2026-10-09 -- every check failed on park 38510 (efdd8825cf7 binaries, both gates off): MRC1 had no map box, the GOLGA6L10 copy at 82,339,993 was missing, and the copy at 82,345,809 had a 14th box (drawn twice); passed on genome-test with both gates on"
+  - "release-ab 2026-10-10 -- fails on hgw0 (v504, without efdd8825cf7) at step 8: MRC1 (NM_002438.4) has no map box; passes on genome-test with both gates on"
 
 target: genome-test
 db: hg19

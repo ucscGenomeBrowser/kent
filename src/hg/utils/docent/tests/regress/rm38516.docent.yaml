@@ -1,0 +1,68 @@
+# #38516 -- db=<assembly alias> answered "Can not find database" instead of opening the
+# assembly the alias names.  It worked before 2024.  EBI's EVA links by GCA_ accession only,
+# and for the red fox UCSC has the GCF (GCF_003160815.1), so those links failed.
+#
+# The fix is b58408f0db3 (max): db= now goes through asmAlias before the browser reports a
+# missing assembly, and the not-found page is rewritten (title bar, "Genome assembly not
+# found", three numbered steps to request the assembly, links to the gateway and the contact
+# page, warnings shown up to 8 KB instead of cut at 1 KB).  aaf41a0635a only stops each
+# warning being written to the error log twice; no page can see it.
+#
+# What each step asserts:
+#   1-2  db=GCA_003160815.1 and db=VulVul2.2 (both asmAlias rows -> GCF_003160815.1) draw
+#        the red fox browser.  The positive check is the image row and the assembly name on
+#        the page; v504 gives "Can not find database" and no image at all.
+#   3    db=GCA_000001215.4 (asmAlias -> dm6) draws dm6.
+#   4    db=GCA_000002655.1 has its own GenArk hub, and an asmAlias row to the GCF.  It must
+#        stay on the GCA (#38082).  This one passes on v504 too; it guards the fix from
+#        reaching too far.
+#   5    An unknown accession gives the new page, with the search link carrying the name.
+#   6    A db= holding markup is shown as text, not run (Max's case C6).
+#
+# Data: the asmAlias rows above were checked in hgcentraltest and hgcentralbeta on
+# 2026-10-10.  If a reload drops them, steps 1-3 fail for a data reason, not a code one.
+#
+# NOT asserted: hgGateway?db=GCA_003160815.1 (Max's A5).  The gateway fills itself through
+# cart-JSON calls, which rm38444 also avoids.  No hg.conf gate.
+proof:
+  - "assertion-only 2026-10-10 -- written from #38516, b58408f0db3 and Max's test table on the ticket"
+  - "release-ab 2026-10-10 -- fails on hgw0 and hgwbeta (both v504, without b58408f0db3) at step 2: page does not contain \"VulVul2.2\"; page contains \"Can not find database\"; passes on genome-test. curl on hgw0 shows the old one-paragraph error for the unknown accession too, with no \"Genome assembly not found\""
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=GCA_003160815.1"
+  - expect:
+      text: ["VulVul2.2"]
+      has: '#imgTbl'
+      noText: ["Can not find database", "Genome assembly not found"]
+
+  - goto: "/cgi-bin/hgTracks?db=VulVul2.2"
+  - expect:
+      text: ["VulVul2.2"]
+      has: '#imgTbl'
+      noText: ["Can not find database", "Genome assembly not found"]
+
+  - goto: "/cgi-bin/hgTracks?db=GCA_000001215.4"
+  - expect:
+      text: ["dm6"]
+      has: '#imgTbl'
+      noText: ["Can not find database", "Genome assembly not found"]
+
+  - goto: "/cgi-bin/hgTracks?db=GCA_000002655.1"
+  - expect:
+      text: ["ASM265v1"]
+      has: '#imgTbl'
+
+  - goto: "/cgi-bin/hgTracks?db=GCA_999999999.1"
+  - expect:
+      text: ["Genome assembly not found", "GCA_999999999.1 is not available on this Genome Browser",
+             "Search for GCA_999999999.1", "go back to the Genome Browser start page", "contact us"]
+      has: ['a[href*="assemblySearch.html?q=GCA_999999999.1"]', 'a[href$="hgGateway"]', 'a[href$="contacts.html"]']
+      noHas: '#imgTbl'
+
+  - goto: "/cgi-bin/hgTracks?db=x%27%3E%3Cscript%3Ealert(1)%3C/script%3E"
+  - expect:
+      text: ["Genome assembly not found", "<script>alert(1)</script>"]
