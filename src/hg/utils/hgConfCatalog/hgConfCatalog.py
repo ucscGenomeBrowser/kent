@@ -1847,6 +1847,30 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
+          ticket="38510",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
+               "an item through every chain it overlaps, behind two hg.conf "
+               "gates, refs #38510.  Needs a description and a gate or knob "
+               "call."),
+        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38510",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
+               "an item through every chain it overlaps, behind two hg.conf "
+               "gates, refs #38510.  Needs a description and a gate or knob "
+               "call."),
+        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
+          ticket="35736",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
+               "Came in at 6e201f9c97f, Offer a dialog of previously used "
+               "hgsids when opening a session, if any exist for your hguid, "
+               "refs #35736,#30031.  Needs a description and a gate or knob "
+               "call."),
         h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
           default="FALSE", ticket="38490",
           note="Written down by --auto-register, not yet reviewed by a "
