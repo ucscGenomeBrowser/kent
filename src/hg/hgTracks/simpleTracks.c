@@ -1784,17 +1784,24 @@ static struct glyphShape glyphShapes[] = {
 };
 
 
-boolean isBarGlyph(glyphType glyph)
-/* Return TRUE for the BarLeft and BarRight glyphs, which are drawn at one end of the item
- * instead of at its center. */
+boolean isEndGlyph(glyphType glyph)
+/* Return TRUE for the BarLeft/BarRight and ArrLeft/ArrRight glyphs, which are drawn at one end
+ * of the decoration instead of at its center. */
 {
-return glyph == GLYPH_BAR_LEFT || glyph == GLYPH_BAR_RIGHT;
+return glyph == GLYPH_BAR_LEFT || glyph == GLYPH_BAR_RIGHT ||
+       glyph == GLYPH_ARR_LEFT || glyph == GLYPH_ARR_RIGHT;
 }
 
-boolean barGlyphPixelCoords(int chromStart, int chromEnd, double scale, int xOff, glyphType glyph,
+static boolean isRightEndGlyph(glyphType glyph)
+/* Return TRUE for the end glyphs that are drawn at the right (higher) end */
+{
+return glyph == GLYPH_BAR_RIGHT || glyph == GLYPH_ARR_RIGHT;
+}
+
+boolean endGlyphPixelCoords(int chromStart, int chromEnd, double scale, int xOff, glyphType glyph,
                             int *pX1, int *pX2)
-/* Get the pixel extent of a BarLeft/BarRight glyph: the left or right end of chromStart-chromEnd,
- * at most BAR_GLYPH_MAX_WIDTH pixels and at least 1 pixel wide, clipped to the window.
+/* Get the pixel extent of an end glyph: the left or right end of chromStart-chromEnd,
+ * at most END_GLYPH_MAX_WIDTH pixels and at least 1 pixel wide, clipped to the window.
  * Returns FALSE if it is not in the window. */
 {
 // doubles, as the unclipped pixel positions can overflow an int when zoomed in
@@ -1802,11 +1809,11 @@ double x1 = (chromStart-winStart)*scale;
 double x2 = (chromEnd-winStart)*scale;
 double winWidth = (winEnd-winStart)*scale;
 double width = x2 - x1;
-if (width > BAR_GLYPH_MAX_WIDTH)
-    width = BAR_GLYPH_MAX_WIDTH;
+if (width > END_GLYPH_MAX_WIDTH)
+    width = END_GLYPH_MAX_WIDTH;
 if (width < 1)
     width = 1;
-if (glyph == GLYPH_BAR_RIGHT)
+if (isRightEndGlyph(glyph))
     x1 = x2 - width;
 else
     x2 = x1 + width;
@@ -1823,31 +1830,74 @@ if (*pX2 <= *pX1)
 return TRUE;
 }
 
-static void drawScaledBarGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff,
-                               int y, int heightPer, glyphType glyph, boolean filled,
-                               Color barColor, Color bandColor)
-/* Draw a BarLeft/BarRight glyph: a band over the left or right end of the item, filled with
- * bandColor, and a solid bar in barColor on its outer edge. The bar is not drawn if that edge is
+void drawScaledEndGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff,
+                        int y, int heightPer, glyphType glyph, char strand, boolean filled,
+                        Color barColor, Color fillColor)
+/* Draw an end glyph on the left or right end of chromStart-chromEnd.  If filled, draw its body
+ * in fillColor: a band for BarLeft/BarRight, an arrow for ArrLeft/ArrRight (a triangle when
+ * narrower than END_GLYPH_ARROW_MIN_WIDTH) that points to the right on the + strand and to
+ * the left on the - strand (outwards if strand is neither).
+ * If not filled, draw the solid bar in barColor on its outer edge, unless that edge is
  * outside the window. */
 {
 int x1, x2;
-if (!barGlyphPixelCoords(chromStart, chromEnd, scale, xOff, glyph, &x1, &x2))
+if (!endGlyphPixelCoords(chromStart, chromEnd, scale, xOff, glyph, &x1, &x2))
     return;
 int width = x2 - x1;
-if (filled)
+boolean atRight = isRightEndGlyph(glyph);
+if (filled && (glyph == GLYPH_BAR_LEFT || glyph == GLYPH_BAR_RIGHT))
     {
     // inset the band, so the bar sticks out above and below it
     int inset = (heightPer >= 8) ? 2 : 0;
-    hvGfxBox(hvg, x1, y+inset, width, heightPer-2*inset, bandColor);
+    hvGfxBox(hvg, x1, y+inset, width, heightPer-2*inset, fillColor);
+    }
+else if (filled)
+    {
+    // an arrow with a shaft of half the item height and a head as long as the item is high,
+    // or only the head, a triangle, if there is not enough room for the shaft
+    boolean pointsRight = (strand == '+' || (strand != '-' && atRight));
+    int dir = pointsRight ? 1 : -1;
+    int baseX = pointsRight ? x1 : x2-1;
+    int tipX = pointsRight ? x2-1 : x1;
+    int yTop = y, yBottom = y+heightPer-1;
+    boolean withShaft = (width >= END_GLYPH_ARROW_MIN_WIDTH && heightPer >= 6);
+    int headX = withShaft ? tipX - dir*heightPer : baseX;
+    int shaftTop = yTop + heightPer/4, shaftBottom = yBottom - heightPer/4;
+    struct gfxPoly *poly = gfxPolyNew();
+    if (withShaft)
+        {
+        gfxPolyAddPoint(poly, baseX, shaftTop);
+        gfxPolyAddPoint(poly, headX, shaftTop);
+        }
+    gfxPolyAddPoint(poly, headX, yTop);
+    gfxPolyAddPoint(poly, tipX, y + (heightPer-1)/2);
+    if ((heightPer-1) % 2)  // even height: a two pixel tip, so the head is symmetric
+        gfxPolyAddPoint(poly, tipX, y + heightPer/2);
+    gfxPolyAddPoint(poly, headX, yBottom);
+    if (withShaft)
+        {
+        gfxPolyAddPoint(poly, headX, shaftBottom);
+        gfxPolyAddPoint(poly, baseX, shaftBottom);
+        }
+    hvGfxDrawPoly(hvg, poly, fillColor, TRUE);
+    gfxPolyFree(&poly);
     }
 else
     {
-    if ((glyph == GLYPH_BAR_RIGHT && chromEnd > winEnd) || (glyph == GLYPH_BAR_LEFT && chromStart < winStart))
+    if ((atRight && chromEnd > winEnd) || (!atRight && chromStart < winStart))
         return;
-    int barWidth = min(BAR_GLYPH_BAR_WIDTH, width);
-    int barX = (glyph == GLYPH_BAR_RIGHT) ? x2 - barWidth : x1;
+    int barWidth = min(END_GLYPH_BAR_WIDTH, width);
+    int barX = atRight ? x2 - barWidth : x1;
     // the bar also takes the one pixel gaps to the rows above and below
     hvGfxBox(hvg, barX, y-1, barWidth, heightPer+2, barColor);
+    // when the item is so narrow that only the bar shows, a small flag on the side of the
+    // item shows which way it goes from the bar
+    if (width <= END_GLYPH_BAR_WIDTH && heightPer >= 6)
+        {
+        int flagX = atRight ? barX - END_GLYPH_FLAG_WIDTH : barX + barWidth;
+        hvGfxBox(hvg, flagX, y + heightPer/4, END_GLYPH_FLAG_WIDTH, heightPer - 2*(heightPer/4),
+                 barColor);
+        }
     }
 }
 
@@ -1857,9 +1907,9 @@ void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double sca
  * which may have transparency.
  */
 {
-if (isBarGlyph(glyph))
+if (isEndGlyph(glyph))
     {
-    drawScaledBarGlyph(hvg, chromStart, chromEnd, scale, xOff, y, heightPer, glyph, filled,
+    drawScaledEndGlyph(hvg, chromStart, chromEnd, scale, xOff, y, heightPer, glyph, '.', filled,
                        outlineColor, fillColor);
     return;
     }
@@ -1928,6 +1978,10 @@ if (sameWordOk(glyphStr, GLYPH_STRING_BAR_LEFT))
     return GLYPH_BAR_LEFT;
 if (sameWordOk(glyphStr, GLYPH_STRING_BAR_RIGHT))
     return GLYPH_BAR_RIGHT;
+if (sameWordOk(glyphStr, GLYPH_STRING_ARR_LEFT))
+    return GLYPH_ARR_LEFT;
+if (sameWordOk(glyphStr, GLYPH_STRING_ARR_RIGHT))
+    return GLYPH_ARR_RIGHT;
 
 return GLYPH_CIRCLE;
 }

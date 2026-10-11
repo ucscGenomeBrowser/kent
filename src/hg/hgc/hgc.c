@@ -1017,6 +1017,16 @@ char *url = getUrlSetting(tdb, urlSetting);
 if (url==NULL || isEmpty(url))
     return;
 
+// no link if the URL needs a $<field> that is empty for this item, it would lead nowhere
+struct slPair *field;
+for (field = fields; field != NULL; field = field->next)
+    {
+    char fieldVar[1024];
+    safef(fieldVar, sizeof(fieldVar), "$<%s>", field->name);
+    if (isEmpty((char *)field->val) && stringIn(fieldVar, url))
+        return;
+    }
+
 char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, 
                             encode, fields);
 if (eUrl==NULL)
@@ -1536,12 +1546,13 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
     // a | character can optionally be used to separate the ID used for $$ from the name shown in the link (like in Wikimedia markup)
     char *idForUrl = itemName;
     boolean encode = TRUE;
-    if (strstr(itemName, "|"))
+    char *bar = strchr(itemName, '|');
+    if (bar != NULL)
         {
-        char *parts[2];
-	chopString(itemName, "|", parts, ArraySize(parts));
-        idForUrl = parts[0];
-        itemName = parts[1];
+        // split by hand: chopString skips an empty part, leaving the link text uninitialized
+        *bar = 0;
+        idForUrl = itemName;
+        itemName = bar + 1;
         encode = FALSE; // assume the link is already encoded
         }
     if (startsWith("http", itemName)) // the ID may be a full URL already, encoding would destroy it

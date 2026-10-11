@@ -20,14 +20,120 @@ The features are built on hg19. For hg38, the BED is converted with liftOver and
 feature is dropped if liftOver changes its number of exons.
 
 usage: fusionGdbToBigGenePred.py infoFile orfFile gencodeDir db outBed
-  gencodeDir has gencodeV19.gp, gencodeV19.attrs and gencodeV19.tags
+  gencodeDir has gencodeV19.gp, gencodeV19.attrs, gencodeV19.tags and cbioportalPatients.tsv
 """
-import sys, os, subprocess, tempfile
+import sys, os, subprocess, tempfile, urllib.parse
 from collections import defaultdict, Counter
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fusionGdbToBed import parseInfo, summarizeFrame, liftBreakpoints, readChromSizes, \
-        posStr, colors, otherColor, partnerQuery, partnerField, makeEventIds, featureName
+srcNames = {"ChiTaRS3.1": "ChiTaRS", "TCGARV": "TumorFusions", "TCGALD": "PanCanAtlas"}
+
+# Okabe-Ito blue and vermillion, plus grey
+colors = {"In-frame": "0,114,178", "Frame-shift": "213,94,0"}
+otherColor = "136,136,136"
+
+def parseInfo(fname):
+    """ return dict (5'gene,chr,pos,strand,3'gene,chr,pos,strand) -> dict with sets of sources etc """
+    events = defaultdict(lambda: {"sources": set(), "cancers": set(), "samples": set(), "accs": set()})
+    rowCount = 0
+    for line in open(fname):
+        row = line.rstrip("\r\n").split("\t")
+        assert len(row) == 12, row
+        src, subSrc, cancer, sample, g5, c5, p5, s5, g3, c3, p3, s3 = row
+        rowCount += 1
+        key = (g5, c5, int(p5), s5, g3, c3, int(p3), s3)
+        ev = events[key]
+        ev["sources"].add(srcNames[src + subSrc])
+        if cancer:
+            ev["cancers"].add(cancer)
+        if sample.startswith("TCGA-"):
+            ev["samples"].add(sample)
+        elif sample:
+            ev["accs"].add(sample)
+    print("%s: %d rows, %d distinct breakpoint pairs" % (fname, rowCount, len(events)), file=sys.stderr)
+    return events
+
+def summarizeFrame(orfClasses):
+    if "In-frame" in orfClasses:
+        return "In-frame"
+    if "Frame-shift" in orfClasses:
+        return "Frame-shift"
+    if orfClasses:
+        return "Outside CDS"
+    return "Not annotated"
+
+def liftBreakpoints(bps, chromSizes):
+    """ bps is a set of (chrom, pos) on hg19, 1-based. Return dict (chrom,pos) -> (hg38chrom, hg38pos) or None """
+    mapping = {}
+    tmpDir = tempfile.mkdtemp(dir=".")
+    inBed = os.path.join(tmpDir, "in.bed")
+    outBed = os.path.join(tmpDir, "out.bed")
+    unBed = os.path.join(tmpDir, "unmapped.bed")
+    with open(inBed, "w") as ofh:
+        for chrom, pos in sorted(bps):
+            if chrom == "chrMT":
+                # rCRS on both assemblies, hg38 calls it chrM
+                mapping[(chrom, pos)] = ("chrM", pos)
+                continue
+            ofh.write("%s\t%d\t%d\t%s:%d\n" % (chrom, pos-1, pos, chrom, pos))
+    subprocess.run(["liftOver", "-minMatch=1", inBed, "/gbdb/hg19/liftOver/hg19ToHg38.over.chain.gz",
+        outBed, unBed], check=True, stderr=subprocess.DEVNULL)
+    for line in open(outBed):
+        chrom, start, end, name = line.rstrip("\n").split("\t")
+        oldChrom, oldPos = name.split(":")
+        if chrom not in chromSizes:
+            warn("breakpoint lifted to a sequence not in hg38 chromInfo")
+            continue
+        mapping[(oldChrom, int(oldPos))] = (chrom, int(end))
+    for chrom, pos in bps:
+        if (chrom, pos) not in mapping:
+            warn("breakpoint could not be lifted from hg19 to hg38")
+            mapping[(chrom, pos)] = None
+    for fn in (inBed, outBed, unBed):
+        os.remove(fn)
+    os.rmdir(tmpDir)
+    return mapping
+
+def readChromSizes(db):
+    sizes = {}
+    for line in open("/hive/data/genomes/%s/chrom.sizes" % db):
+        chrom, size = line.split()
+        sizes[chrom] = int(size)
+    return sizes
+
+def posStr(pos):
+    if pos is None:
+        return ""
+    return "%s:%d" % pos
+
+def makeEventIds(events):
+    """ return dict event key -> unique ID "<5' gene>::<3' gene>.<n>". The same fusion gene can
+    have many breakpoint pairs, n numbers them in the order of their hg19 coordinates. The
+    features are named <ID>.5p and <ID>.3p, so every feature has a unique name, which hgc and
+    the hgFind.matches highlight of the partner links need. """
+    byFusion = defaultdict(list)
+    for key in events:
+        byFusion[key[0] + "::" + key[4]].append(key)
+    ids = {}
+    for fusion, keys in byFusion.items():
+        for i, key in enumerate(sorted(keys)):
+            ids[key] = "%s.%d" % (fusion, i + 1)
+    return ids
+
+def featureName(eventId, side):
+    return eventId + (".5p" if side == "5'" else ".3p")
+
+def partnerQuery(region, name):
+    """ return the hgTracks query string that shows region and highlights the items called name,
+    like the result of a search. hgFind.matches is a comma-separated list of item names, but
+    no comma may be added: hgc splits the field values on commas. """
+    return "%s&hgFind.matches=%s" % (region, urllib.parse.quote(name, safe=""))
+
+def partnerField(query, region):
+    """ value of the partnerPos field: the hgc "urls" code puts the part before | into $$ without
+    encoding and shows the part after | as the link text """
+    if not query:
+        return ""
+    return query + "|" + region
 
 warnCounts = Counter()
 
@@ -53,6 +159,33 @@ class Transcript:
 
     def rank(self):
         return (self.tagScore, self.cdsEnd - self.cdsStart, self.txEnd - self.txStart, self.id)
+
+def readCbioportal(dataDir):
+    """ return dict TCGA patient ID -> cBioPortal study ID, from fusionGdbCbioportal.py """
+    patToStudy = {}
+    for line in open(os.path.join(dataDir, "cbioportalPatients.tsv")):
+        patient, studyId = line.rstrip("\n").split("\t")
+        patToStudy[patient] = studyId
+    return patToStudy
+
+def sampleLink(sample, patToStudy):
+    """ return the samples field entry for a TCGA sample barcode: the query string of the
+    cBioPortal patient page|sample, or the plain sample if cBioPortal does not have the patient """
+    patient = sample[:12]  # TCGA-XX-XXXX
+    if patient not in patToStudy:
+        warn("TCGA patient not in cBioPortal, no link")
+        return sample
+    return "studyId=%s&caseId=%s|%s" % (patToStudy[patient], patient, sample)
+
+def readFusionGdbIds(dataDir):
+    """ return dict (5' gene, 3' gene) -> FusionGDB 1 ID. The file has the fusion genes with ORF
+    annotation, in the gene order and with the symbols of the FusionGDB tables. """
+    ids = {}
+    fname = os.path.join(dataDir, "TCGA_ChiTaRS_combined_fusion_ORF_analyzed_gencode_h19v19_fgID.txt")
+    for line in open(fname):
+        g5, entrez5, g3, entrez3, fusion, fgId = line.rstrip("\n").split("\t")
+        ids[(g5, g3)] = fgId
+    return ids
 
 def readGencode(gencodeDir):
     """ return dict accession without version -> Transcript and dict gene -> list of Transcripts """
@@ -225,7 +358,7 @@ def liftBed(inBed, outBed):
     os.remove(tmpOut)
     return rows
 
-sideCol, partnerCol, moCol = 20, 21, 34
+sideCol, partnerCol, moCol = 20, 21, 35
 
 def addPartnerLinks(rows, eventInfo):
     """ fill in the partnerPos field, the region of the other feature of the same event, and
@@ -285,6 +418,8 @@ def main():
     events = parseInfo(infoFile)
     pairs, orfClasses = parseOrfPairs(orfFile)
     txs, byGene = readGencode(gencodeDir)
+    patToStudy = readCbioportal(gencodeDir)
+    fgIds = readFusionGdbIds(gencodeDir)
     events = fixExcelGenes(events, byGene)
     chromSizes = readChromSizes(db)
 
@@ -355,10 +490,13 @@ def main():
                 txId, txType, txStrand = tx.id, tx.type, tx.strand
             txSource[src] += 1
             # partnerPos and mouseover are placeholders, the last column is temporary
-            extra = [side, "", g5, posStr(pos5), g3, posStr(pos3), frame, orientation,
+            # field order is the row order on the details page, keep it in sync with fusionGdbTx.as
+            extra = [side, "", fgIds.get((key[0], key[4]), ""),
+                ",".join(sorted(cancers)), len(samples),
+                ",".join(sampleLink(smp, patToStudy) for smp in samples),
+                g5, posStr(pos5), g3, posStr(pos3), frame, orientation,
                 ",".join(sorted(orfClasses.get(key, []))),
                 ",".join(sorted(ev["sources"])),
-                ",".join(sorted(cancers)), len(samples), ",".join(samples),
                 ",".join(accs), "", eventIdx]
             rows.append(bedRow(chrom, txStrand, clip, featureName(eventIds[key], side), name, color,
                 gene, txId, txType, extra))
