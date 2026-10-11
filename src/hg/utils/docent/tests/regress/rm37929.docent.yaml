@@ -29,6 +29,10 @@
 # with   grep emailLink /usr/local/apache/cgi-bin/hg.conf
 # genome-test has it on (2026-09-30), and the ticket parks include that hg.conf.
 #
+# 525495f91f1 (refs #38197, 2026-10-09) reworded the email-link page and the account-help
+# choice: "we'll" became "we will", the button "Send login link" became "Send sign-in link",
+# and the choice became "Email me a sign-in link."  The checks below follow that wording.
+#
 # Signs in as docentTest (see ~/.docentLogin).  On a ticket park, target the HTTPS port.
 proof:
   - "assertion-only 2026-09-30 -- written from #37929, 3eb8de69a3d and 547d1ed1912"
@@ -57,11 +61,11 @@ steps:
   # The email-link page and the account-help choice that leads to it.
   - goto: "/cgi-bin/hgLogin?hgLogin.do.emailLinkPage=1"
   - expect:
-      has: ['h3:text-is("Email me a sign-in link")', 'input[value="Send login link"]']
-      text: "we'll send you a link that signs you in without a password"
+      has: ['h3:text-is("Email me a sign-in link")', 'input[value="Send sign-in link"]']
+      text: "we will send you a link that signs you in without a password"
   - goto: "/cgi-bin/hgLogin?hgLogin.do.displayAccHelpPage=1"
   - expect:
-      text: ["Having trouble signing in?", "so I can sign in without a password"]
+      text: ["Having trouble signing in?", "Email me a sign-in link."]
 
   # Change email, logged out: refused, and a confirmation link that is not valid is refused.
   - goto: "/cgi-bin/hgLogin?hgLogin.do.changeEmailPage=1"

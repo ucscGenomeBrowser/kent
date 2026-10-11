@@ -1,0 +1,61 @@
+# #38510 -- quickLift lifted an item through only one chain, and read an item once for
+# every chain over the window.
+#
+# hg19 RefSeq Curated quickLifted to hg38.  Two symptoms on master, both from
+# quickLiftGetIntervals/quickLiftSql/quickLiftGenePreds in hg/lib/quickLift.c:
+#   MRC1 (NM_002438.4), hg38 chr10:17,745,000-17,915,000:  its exons fall in more than one
+#     chain, and lifted through the best chain alone it did not lift at all, so MRC1 was
+#     not drawn.
+#   GOLGA6L10 (NM_001164465.3), hg38 chr15:82,330,000-82,356,000:  two chains' source
+#     ranges both returned it, so it was drawn twice, one copy on top of the other.
+#
+# Both fixes are behind hg.conf gates, OFF by default, and neither has a cart override:
+#   quickLiftMultiChain   lift each item through every chain it overlaps (MRC1)
+#   quickLiftSplitRanges  merge overlapping source ranges, read an item once (GOLGA6L10)
+# So this script passes only on a server that turns both on.  Check before reading a red
+# run as a regression:
+#   grep -E '^quickLift(MultiChain|SplitRanges)' /usr/local/apache/cgi-bin/hg.conf
+#
+# What is asserted:
+#   - MRC1 has a map box at all (it had none on master).
+#   - GOLGA6L10's copy at chr15:82,345,809-82,349,475 has its map boxes once.  One drawn
+#     copy of this transcript at the default 850 px makes 13 map boxes there, and the
+#     duplicate on master made 26, so "no 14th box" is "no second copy".  The count is per
+#     copy and comes from the transcript's own exons, so a new RefSeq release that changes
+#     NM_001164465.3 can move it;  the version is in the selector for that reason.
+#   - The other copy of GOLGA6L10 that only multi-chain lifting reaches, at
+#     chr15:82,339,993-82,344,321, is drawn too.
+# Deliberately not asserted: the row count or the image height, which any RefSeq update
+# moves.
+proof:
+  - "assertion-only 2026-10-09 -- written after efdd8825cf7 reached genome-test with both gates on"
+  - "sandbox-ab 2026-10-09 -- every check failed on park 38510 (efdd8825cf7 binaries, both gates off): MRC1 had no map box, the GOLGA6L10 copy at 82,339,993 was missing, and the copy at 82,345,809 had a 14th box (drawn twice); passed on genome-test with both gates on"
+  - "release-ab 2026-10-10 -- fails on hgw0 (v504, without efdd8825cf7) at step 8: MRC1 (NM_002438.4) has no map box; passes on genome-test with both gates on"
+
+target: genome-test
+db: hg19
+position: chr10:18041000-18200100
+reset: true
+fast: true
+steps:
+  - go: chr10:18041000-18200100
+  - hide: all
+  - track: {ncbiRefSeqCurated: pack}
+  - expect: {rows: [ncbiRefSeqCurated], noText: "Warning/Error"}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr10:17745000-17915000
+  - expect:
+      rows: [ncbiRefSeqCurated]
+      noText: "Warning/Error"
+      has: 'area[href*="g=hub_"][href*="ncbiRefSeqCurated&i=NM_002438.4"]'
+
+  - go: chr15:82330000-82356000
+  - expect:
+      rows: [ncbiRefSeqCurated]
+      noText: "Warning/Error"
+      has:
+        - 'area[href*="o=82345808&t=82349475&"][href*="&i=NM_001164465.3"]'
+        - 'area[href*="o=82339992&t=82344321&"][href*="&i=NM_001164465.3"]'
+      noHas: 'area:nth-child(14 of [href*="o=82345808&t=82349475&"][href*="&i=NM_001164465.3"])'

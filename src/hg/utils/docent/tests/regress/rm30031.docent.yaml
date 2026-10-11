@@ -1,0 +1,63 @@
+# #30031 -- loading a session throws away everything the user had in the browser.  The
+# ticket asked for a way back.  6e201f9c97f (Christopher Lee, 2026-10-09, refs #35736 and
+# #30031) keeps a list of the user's recent hgsids and, on the page right after a session
+# load, shows a dialog that lists them with a link to open each one in a new tab.
+#
+# 6e201f9c97f, hg/lib/cart.c (cartUpdateRecentSession: each request moves its hgsid to the
+# front of the "recentSessions" list, kept in userDb only, at most 10, at most 7 days old;
+# a session load sets hgS_didSessionLoad), hg/hgTracks/hgTracks.c (outputRecentSessionsData:
+# writes `var recentSessions = [...]` with db and position of each OTHER hgsid, then clears
+# the marker) and hg/js/hgTracks.js (sessionLoadDialog: a jQuery UI dialog with the id
+# #sessionLoadDialog, title "Recover Your Previous Sessions").
+#
+# How the script gets an hguid with earlier hgsids: a docent `goto:` carries no hgsid, so
+# each hgTracks request below starts a new hgsid under the same hguid cookie.  The list is
+# only kept once the hguid has a userDb row (userIdFound), so the first visit makes the row
+# and the next two each add an hgsid.  Then a settings file is loaded by URL.
+#
+# Checks:
+#   * The dialog is there after the load, with its title and its first sentence.
+#   * It lists an earlier view: the position of the second visit, chr7:155799529-155812871,
+#     which the loaded session (an alt contig) does not have.
+#   * #imgTbl, so the page really drew and the session really loaded.
+#   * The next hgTracks page has no dialog: the marker is used once.
+#
+# NOT asserted: the "Last Active" wording (it depends on the clock) and the Open link's
+# target tab.
+#
+# hg.conf: `recentSessions.enable` defaults to OFF (cfgOptionBooleanDefault(..., FALSE)).
+# genome-test (hgwdev) sets it on; the copies of the hgwbeta hg.conf (2026-10-05) and the
+# RR hg.conf (2026-08-23) in ~/kent/confs do not.  A server without it fails at the wait for #sessionLoadDialog, and
+# that is the configuration, not a regression:
+#     grep -n recentSessions /usr/local/apache/cgi-bin/hg.conf
+proof:
+  - "assertion-only 2026-10-10 -- written from #30031 and 6e201f9c97f after it reached genome-test"
+  - "release-ab 2026-10-10 -- passes on genome-test (master with 6e201f9c97f, recentSessions.enable=on); fails on hgw0 (v504, which has neither the code nor the setting) at step 5, the wait for #sessionLoadDialog: the session loaded and v504 drew the tracks with no dialog"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  # Three requests, each a new hgsid under one hguid.  The first makes the userDb row.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11102837-11267747"
+
+  # Load a session.  The dialog lists the earlier views.
+  - loadSession: "https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/utils/docent/tests/regress/sessionFiles/RM_35326_bug.txt"
+  - wait: '#sessionLoadDialog'
+  - expect:
+      text:
+        - "Recover Your Previous Sessions"
+        - "You just loaded a saved session."
+        - "chr7:155799529-155812871"
+      has: ['#imgTbl', '#sessionLoadDialog a[href*="hgsid="]']
+
+  # The next page has no dialog.
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      has: '#imgTbl'
+      noHas: '#sessionLoadDialog'
+      noText: "Recover Your Previous Sessions"

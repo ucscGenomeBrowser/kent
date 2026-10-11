@@ -27,6 +27,7 @@ proof:
   - "assertion-only 2026-10-09 -- written with the fix"
   - "sandbox-ab 2026-10-09 -- failed on genome-test (master without the fix) on all four left-region checks; passed on parked #38518 (port 48111, ~/kent master + the wigLogoMafCheck fix)"
   - "release-ab 2026-10-09 -- failed on the v504_branch baseline (parked #38423, port 48084) on the same four left-region checks"
+  - "server-flip 2026-10-10 -- 53ecbca4f4b reached genome-test and the nightly's xfail passed"
 
 target: genome-test
 db: hg38

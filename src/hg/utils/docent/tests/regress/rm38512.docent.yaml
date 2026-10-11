@@ -1,0 +1,48 @@
+# #38512 -- a quickLifted GTEx gene expression track (gtexGene, gtexGeneV4, gtexGeneV8)
+# was not drawn as GTEx at all.
+#
+# The quickLift hub writes the lifted track with avoidHandler on, and the GTEx handler in
+# fillInFromType matches only a track named gtexGene*, which a hub_<n>_ name is not.  So
+# hg19 GTEx lifted to hg38 drew as a plain bed 6+:  no bar charts, no expression in the
+# mouseover, and a click went to the generic details page, which showed the same wrong
+# position for every gene.  The fix (0299eb132c7) reads the genes and their models from
+# the source assembly through the chain, draws them with the GTEx methods, and sends a
+# click to the GTEx details page, which finds the gene in the source assembly.
+#
+# Behind browser.quickLiftGtex, OFF by default, on on genome-test.  It is a cart gate as
+# well as an hg.conf one, so the script turns it on for itself on the first URL;
+# browser.quickLiftGtex=off on that URL gives the old page.
+#
+# What is asserted, hg19 GTEx lifted to hg38 at MRC1 (chr10:17,745,000-17,915,000):
+#   - TMEM236 has a map box whose tooltip gives an expression in RPKM, which only the
+#     GTEx bar chart draws.
+#   - a click on TMEM236 opens the GTEx page for it, with its Ensembl gene ID.
+proof:
+  - "assertion-only 2026-10-09 -- written after 0299eb132c7 reached genome-test"
+  - "sandbox-ab 2026-10-09 -- on genome-test with browser.quickLiftGtex=off on the first URL, TMEM236 had no RPKM tooltip and its click opened a page without the Ensembl gene ID"
+  - "release-ab 2026-10-09 -- failed on hgwbeta (v504, which lacks 0299eb132c7) on the RPKM check: the lifted track drew as a plain bed; passed on genome-test"
+
+target: genome-test
+db: hg19
+position: chr10:18041000-18200100
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr10%3A18041000-18200100&pix=850&browser.quickLiftGtex=on"
+  - hide: all
+  - track: {gtexGene: pack}
+  - expect: {rows: [gtexGene], noText: "Warning/Error"}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr10:17745000-17915000
+  - expect:
+      rows: [gtexGene]
+      noText: "Warning/Error"
+      has: 'area[href*="gtexGene&i=TMEM236"][data-tooltip*="RPKM"]'
+
+  - click: {track: gtexGene, item: TMEM236}
+  - expect:
+      url: "hgc"
+      text: ["Ensembl gene ID: ENSG00000148483", "GTEx RNA-seq"]
+      noText: "Warning/Error"

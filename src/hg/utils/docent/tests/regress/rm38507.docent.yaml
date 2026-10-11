@@ -1,0 +1,66 @@
+# #38507 -- a right-click menu entry in hgTracks, "Reset filters to defaults", that clears a
+# track's settings from the cart but keeps its visibility, so a filtered track comes back
+# without a trip to hgTrackUi.
+#
+# 9c5745c0f72 (hg/js/hgTracks.js, hg/hgTrackUi/hgTrackUi.c, hg/lib/cart.c, hg/hgTracks/hgTracks.c)
+# adds the entry.  The menu sends hgTrackUi_op=clearSettings to hgTrackUi, which calls
+# cartRemoveSettingsForTdbAndChildren() and then redraws the track.  1e759565615 (hg/lib/cart.c)
+# gives each cart variable to the LONGEST matching track name, so resetting
+# gnomadGenomesVariantsV3 no longer clears gnomadGenomesVariantsV3_1's settings.
+#
+# The script sets a minimum-QUAL filter on gnomAD v3 (gnomadGenomesVariantsV3, a vcfTabix
+# child of the gnomadVariants superTrack) and an AF filter on its neighbour gnomAD v3.1
+# (gnomadGenomesVariantsV3_1), right-clicks the gnomAD v3 row and picks the entry, then reads
+# cartDump:
+#   * gnomadGenomesVariantsV3.minQual and .applyMinQual are gone (the reset happened);
+#   * "gnomadGenomesVariantsV3 pack" is still there (visibility kept);
+#   * "gnomadGenomesVariantsV3_1.filter.AF 0.25" is still there (1e759565615).
+# The cartDump check before the click proves the URL really set all three.  The gnomAD v3
+# row is checked again after the reset, so the track is still drawn.
+#
+# Not asserted: what the filter does to the drawn items.  QUAL 12345 hides every gnomAD v3
+# item, but an empty row and a row of a few items look alike to the checks.
+#
+# HG.CONF GATE, LOUDLY.  `clearFiltersMenu` is off by default (hgTracks.c and hgTrackUi.c both
+# read cfgOptionBooleanDefault("clearFiltersMenu", FALSE)).  With it off the menu has no entry
+# and the script fails at the rightClick step, listing the entries the menu did offer.  That
+# is a configuration answer, not a regression.  genome-test sets it:
+#     grep -n clearFiltersMenu /usr/local/apache/cgi-bin/hg.conf
+# The 2026-10-05 copies of the hgwbeta and RR hg.conf in ~/kent/confs do not set it.
+#
+# The 1e759565615 half was not seen to fail: no build with 9c5745c0f72 and without
+# 1e759565615 was made.  The release-ab line below is about the entry itself.
+proof:
+  - "assertion-only 2026-10-10 -- written from 9c5745c0f72 and 1e759565615 after they reached genome-test"
+  - "release-ab 2026-10-10 -- passes on genome-test; fails on hgw0 (v504, which predates 9c5745c0f72) at step 6: the gnomAD v3 menu offers no Reset filters to defaults entry. The RR hg.conf does not set clearFiltersMenu either, so this run sees the missing entry, not the gate"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11000000-11010000&hideTracks=1&gnomadVariants=show&gnomadGenomesVariantsV3=pack&gnomadGenomesVariantsV3.applyMinQual=on&gnomadGenomesVariantsV3.minQual=12345&gnomadGenomesVariantsV3_1.filter.AF=0.25"
+  - expect:
+      has: 'tr#tr_gnomadGenomesVariantsV3'
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text:
+        - "gnomadGenomesVariantsV3.minQual 12345"
+        - "gnomadGenomesVariantsV3.applyMinQual on"
+        - "gnomadGenomesVariantsV3_1.filter.AF 0.25"
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:11000000-11010000"
+  - rightClick: {track: gnomadGenomesVariantsV3, frac: 0.5, pick: "Reset filters to defaults"}
+  - sleep: 2000
+  - expect:
+      has: 'tr#tr_gnomadGenomesVariantsV3'
+
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text:
+        - "gnomadGenomesVariantsV3 pack"
+        - "gnomadGenomesVariantsV3_1.filter.AF 0.25"
+      noText:
+        - "gnomadGenomesVariantsV3.minQual"
+        - "gnomadGenomesVariantsV3.applyMinQual"
