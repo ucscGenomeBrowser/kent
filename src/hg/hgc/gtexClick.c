@@ -15,6 +15,7 @@
 #include "gtexTissue.h"
 #include "gtexUi.h"
 #include "gtexInfo.h"
+#include "binRange.h"
 #include "liftOver.h"
 #include "quickLift.h"
 #include "trackHub.h"
@@ -67,6 +68,51 @@ hFreeConn(&conn);
 return gtexGene;
 }
 
+static boolean liftGeneTo(struct hash *chainHash, struct gtexGeneBed *gene, int start, int end)
+/* Lift gene through the chains in chainHash the way hgTracks lifts a GTEx gene, and if it
+ * lands at start-end on the reference, move it there and return TRUE. */
+{
+char *liftChrom;
+int liftStart, liftEnd;
+char liftStrand = gene->strand[0];
+char *error = liftOverRemapRange(chainHash, 0.0, gene->chrom, gene->chromStart,
+                                 gene->chromEnd, gene->strand[0], 0.001,
+                                 &liftChrom, &liftStart, &liftEnd, &liftStrand);
+if (error != NULL)
+    return FALSE;
+if (!sameString(liftChrom, seqName) || (liftStart != start) || (liftEnd != end))
+    {
+    freeMem(liftChrom);
+    return FALSE;
+    }
+freeMem(gene->chrom);
+gene->chrom = liftChrom;
+gene->chromStart = liftStart;
+gene->chromEnd = liftEnd;
+gene->strand[0] = liftStrand;
+return TRUE;
+}
+
+static boolean liftGeneToByOneChain(struct hash *chainHash, struct hash *oneChain,
+                                    struct gtexGeneBed *gene, int start, int end)
+/* With multi-chain lifting hgTracks draws a copy of a gene for every chain it overlaps,
+ * each lifted through that chain alone.  Try each of those chains on its own, in the
+ * reusable one-chain hash oneChain.  refs #38510 */
+{
+boolean found = FALSE;
+struct binElement *el, *elList = liftOverChainsInRange(chainHash, gene->chrom,
+                                                       gene->chromStart, gene->chromEnd);
+for (el = elList; (el != NULL) && !found; el = el->next)
+    {
+    struct chain *chain = el->val;
+    liftOverAddChainHash(oneChain, chain);
+    found = liftGeneTo(oneChain, gene, start, end);
+    liftOverRemoveChainHash(oneChain, chain);
+    }
+slFreeList(&elList);
+return found;
+}
+
 static struct gtexGeneBed *getLiftedGtexGene(struct trackDb *tdb, char *item, char *table,
                                              int start, int end)
 /* Retrieve gene info for an item of a quickLifted GTEx track.  The row is in the assembly
@@ -81,6 +127,7 @@ struct gtexGeneBed *gtexGene = NULL;
 if (sqlTableExists(conn, table))
     {
     struct hash *chainHash = quickLiftChainHash(quickLiftFile, seqName, winStart, winEnd);
+    struct hash *oneChain = quickLiftMultiChainEnabled() ? newHash(4) : NULL;
     char *geneId = stringIn("ENSG", item);
     char query[512];
     sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE %s = '%s'",
@@ -90,28 +137,11 @@ if (sqlTableExists(conn, table))
     while ((gtexGene == NULL) && ((row = sqlNextRow(sr)) != NULL))
         {
         struct gtexGeneBed *gene = gtexGeneBedLoad(row);
-        char *liftChrom;
-        int liftStart, liftEnd;
-        char liftStrand = gene->strand[0];
-        char *error = liftOverRemapRange(chainHash, 0.0, gene->chrom, gene->chromStart,
-                                         gene->chromEnd, gene->strand[0], 0.001,
-                                         &liftChrom, &liftStart, &liftEnd, &liftStrand);
-        if ((error == NULL) && sameString(liftChrom, seqName) && (liftStart == start) &&
-            (liftEnd == end))
-            {
-            freeMem(gene->chrom);
-            gene->chrom = liftChrom;
-            gene->chromStart = liftStart;
-            gene->chromEnd = liftEnd;
-            gene->strand[0] = liftStrand;
+        if (liftGeneTo(chainHash, gene, start, end) ||
+            ((oneChain != NULL) && liftGeneToByOneChain(chainHash, oneChain, gene, start, end)))
             gtexGene = gene;
-            }
         else
-            {
-            if (error == NULL)
-                freeMem(liftChrom);
             gtexGeneBedFree(&gene);
-            }
         }
     sqlFreeResult(&sr);
     }

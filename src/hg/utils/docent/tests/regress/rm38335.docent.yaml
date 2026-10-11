@@ -18,8 +18,8 @@
 # cart whether or not the URL was parsed.
 #
 # NOT covered: #38340, the same loop copied into three more places (cookies, the session
-# backup, the nightly custom-track refresh). It is behind the hg.conf flag
-# skipMalformedCgiPairs, off by default, so genome-test behaves the old way there.
+# backup, the nightly custom-track refresh). Those parsers are not reached through a
+# URL. The unit tests lib/tests/cgiCookieTest and hgSession/tests/backupParseTest cover them.
 proof:
   - "release-ab 2026-09-19 -- both steps fail on hgwbeta (v503) for this ticket's own reason and pass on genome-test. Trailing: 2,726 bytes, `Very Early Error / Mangled CGI input string bogus`. Middle: the page draws, but at chr7:155,799,529-155,812,871, hg38's default, with no error anywhere"
   - "assertion-only 2026-09-19 -- written from #38335 after the fix reached genome-test"

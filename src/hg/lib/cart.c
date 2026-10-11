@@ -1021,6 +1021,7 @@ if (row != NULL)
         sessionTableString = cloneString(sessionTableString);
         char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
         pubSessionsTableString = cloneString(pubSessionsTableString);
+        char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
         struct sqlConnection *conn2 = hConnectCentral();
         sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
         if (!merge)
@@ -1042,6 +1043,11 @@ if (row != NULL)
         loadCgiOverHash(cart, oldVars);
         if (isNotEmpty(actionVar))
             cartRemove(cart, actionVar);
+        if (recentSessions)
+            cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+        else
+            cartRemove(cart, RECENT_SESSIONS_VAR);
+        freeMem(recentSessions);
         hDisconnectCentral(&conn2);
 
         /* A full (non-merge) load just threw away whatever the user had in the browser before.
@@ -1631,6 +1637,7 @@ char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
 sessionTableString = cloneString(sessionTableString);
 char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
 pubSessionsTableString = cloneString(pubSessionsTableString);
+char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
 if (sessionTableString != NULL)
@@ -1679,6 +1686,11 @@ if (isValidEnough)
     }
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
+if (recentSessions)
+    cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+else
+    cartRemove(cart, RECENT_SESSIONS_VAR);
+freeMem(recentSessions);
 vsReport(&stats, dyMessage);
 vsFreeMembers(&stats);
 return isValidEnough;
@@ -2083,6 +2095,69 @@ setUdcCacheDir();
 netSetTimeoutErrorMsg("Connection timeout: either the server is offline or any firewall between UCSC and the server blocks the connection.");
 }
 
+#define MAX_RECENT_SESSIONS 10
+#define RECENT_SESSION_MAX_AGE (7 * 24 * 60 * 60)
+
+boolean cartRecentSessionsEnabled()
+/* Return TRUE if hg.conf turns on recent session tracking. */
+{
+return cfgOptionBooleanDefault("recentSessions.enable", FALSE);
+}
+
+char *cartContentsVal(char *contents, char *var)
+/* Return the CGI-decoded value of var from a CGI-encoded cart contents string,
+ * or NULL if not present.  Free the result when done. */
+{
+if (isEmpty(contents))
+    return NULL;
+char pfx[64];
+char *valIdx = NULL;
+safef(pfx, sizeof(pfx), "%s=", var);
+if (startsWith(pfx, contents))
+    valIdx = contents + strlen(pfx);
+else
+    {
+    char ampPfx[66];
+    safef(ampPfx, sizeof(ampPfx), "&%s", pfx);
+    char *p = strstr(contents, ampPfx);
+    if (p != NULL)
+        valIdx = p + strlen(ampPfx);
+    }
+if (valIdx == NULL)
+    return NULL;
+char *valEnd = strchr(valIdx, '&');
+char *val = valEnd ? cloneStringZ(valIdx, valEnd - valIdx) : cloneString(valIdx);
+cgiDecode(val, val, strlen(val));
+return val;
+}
+
+static void cartUpdateRecentSession(struct cart *cart)
+/* Move the current hgsid to the front of the recent sessions list, dropping
+ * entries that are too old or past MAX_RECENT_SESSIONS. */
+{
+char *currentId = cartSessionId(cart);
+time_t now = time(NULL);
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+struct slPair *newList = NULL;
+int count = 1;
+for (struct slPair *el = list; el != NULL && count < MAX_RECENT_SESSIONS; el = el->next)
+    {
+    if (sameString(el->name, currentId) || now - sqlLongLong(el->val) > RECENT_SESSION_MAX_AGE)
+        continue;
+    slAddHead(&newList, slPairNew(el->name, cloneString(el->val)));
+    count++;
+    }
+slReverse(&newList);
+char nowStr[32];
+safef(nowStr, sizeof nowStr, "%lld", (long long)now);
+slAddHead(&newList, slPairNew(currentId, cloneString(nowStr)));
+char *encoded = slPairListToString(newList, FALSE);
+cartSetString(cart, RECENT_SESSIONS_VAR, encoded);
+freeMem(encoded);
+slPairFreeValsAndList(&list);
+slPairFreeValsAndList(&newList);
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -2120,6 +2195,13 @@ else
 
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
+/* Recent sessions come only from userDb.  Read them before cartParseOverHash
+ * decodes userInfo->contents in place. */
+char *recentSessions = NULL;
+boolean trackRecent = cartRecentSessionsEnabled() && userIdFound;
+if (trackRecent)
+    recentSessions = cartContentsVal(cart->userInfo->contents, RECENT_SESSIONS_VAR);
+
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
@@ -2134,6 +2216,14 @@ safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
 loadCgiOverHash(cart, oldVars);
+
+if (recentSessions)
+    cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+else
+    cartRemove(cart, RECENT_SESSIONS_VAR);
+freeMem(recentSessions);
+/* saveState writes it to userDb by hand. */
+cartExclude(cart, RECENT_SESSIONS_VAR);
 
 fixUpDb(cart); // now is the time to see if someone is loading a Genark hub or specified a bad database.
 
@@ -2243,7 +2333,14 @@ cartRemove(cart, "token"); // cleaning up captcha token if it slipped into the c
 cartDefaultDisconnector(&conn);
 
 if (didSessionLoad)
+    {
     cartHideDefaultTracks(cart);
+    if (trackRecent)
+        cartSetBoolean(cart, hgsDidSessionLoad, TRUE);
+    }
+if (trackRecent)
+    cartUpdateRecentSession(cart);
+
 return cart;
 }
 
@@ -2309,7 +2406,8 @@ cartEncodeStateExt(cart, dy, FALSE);
 }
 
 static void saveState(struct cart *cart)
-/* Save out state to permanent storage in both user and session db. */
+/* Save out state to permanent storage in both user and session db.
+ * The recent sessions list goes to userDb only. */
 {
 struct sqlConnection *conn = cartDefaultConnector();
 struct dyString *encoded = dyStringNew(4096);
@@ -2318,8 +2416,16 @@ struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
 
 /* update sessionDb and userDb tables (removed check for cart stuffing bots) */
-updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
+char *recentSessions = cartOptionalString(cart, RECENT_SESSIONS_VAR);
+if (recentSessions)
+    {
+    char *enc = cgiEncode(recentSessions);
+    dyStringPrintf(encoded, "%s%s=%s", (encoded->stringSize > 0) ? "&" : "",
+                   RECENT_SESSIONS_VAR, enc);
+    freeMem(enc);
+    }
+updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
 cartDefaultDisconnector(&conn);

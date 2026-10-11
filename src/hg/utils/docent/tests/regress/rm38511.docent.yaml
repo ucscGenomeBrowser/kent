@@ -1,0 +1,46 @@
+# #38511 -- the quickLift Alignment Differences mouseover listed every base of an insertion
+# or deletion, in a 4096-byte buffer, so a long one aborted the whole hgTracks page with
+#   buffer overflow, size 4096, format: deletion %ldbp (%.*s)
+#
+# hg19 quickLifted to hg38 at chr15:82,330,000-82,356,000 (GOLGA6L10) has a 297,179 bp
+# deletion.  The fix (b0da423c322) lists the bases only up to 100 of them, and otherwise
+# gives just the length:  "deletion 297179bp".
+#
+# What is asserted:
+#   - the page draws the Alignment Differences row, without the overflow text.  The
+#     overflow was an errAbort, so the positive row check is what catches a page that
+#     stopped early.
+#   - the long deletion's tooltip is the length alone, with no bases:  noTip "(".
+#   - a 42 bp deletion beside it still lists its bases, so the fix did not drop them all.
+#     The tooltips are read in a 150 bp window, where the two map boxes do not overlap.
+# Item names are <chain id>.<n>.<start>.<end> from the hg19-to-hg38 quickLift chain file;
+# a new chain file would renumber them.
+proof:
+  - "assertion-only 2026-10-09 -- written after b0da423c322 reached genome-test"
+  - "release-ab 2026-10-09 -- failed on hgwbeta (v504, which lacks b0da423c322): no rows drawn and the page said buffer overflow, size 4096, format: deletion %ldbp (%.*s); passed on genome-test"
+
+target: genome-test
+db: hg19
+position: chr10:18041000-18200100
+reset: true
+fast: true
+steps:
+  - go: chr10:18041000-18200100
+  - hide: all
+  - track: {ncbiRefSeqCurated: pack}
+  - expect: {rows: [ncbiRefSeqCurated], noText: "Warning/Error"}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr15:82330000-82356000
+  - expect:
+      rows: [quickLiftChain, ncbiRefSeqCurated]
+      noText: ["buffer overflow", "Warning/Error"]
+
+  # 150 bp, so the deletion's map box no longer overlaps its neighbour's
+  - go: chr15:82344901-82345050
+  - expect: {rows: [quickLiftChain], noText: ["buffer overflow", "Warning/Error"]}
+  - mouseover: {track: quickLiftChain, item: "16.1.82344974.82344974"}
+  - expect: {tip: "deletion 297179bp", noTip: "("}
+  - mouseover: {track: quickLiftChain, item: "16.1.82344941.82344941"}
+  - expect: {tip: "deletion 42bp (CAGCCTCTCCTCCTGTTCATGTAGCCTCTCCTCCTGTTCACG)"}

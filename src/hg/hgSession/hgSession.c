@@ -820,6 +820,7 @@ cartRemovePrefix(cart, hgsDoDownloadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
+cartRemove(cart, hgsDidSessionLoad);
 /* Two of the Save form's own inputs.  If they stay in the cart they are stored inside every
  * session saved afterwards, so one session's description travels in sessions that never had
  * one.  hgsNewSessionShare is left alone on purpose: it has the same problem, but it is also
@@ -1793,7 +1794,12 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 cleanHgSessionFromCart(cart);
 clearSessionJustLoadedMarker(cart);
 
+char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
+cartRemove(cart, RECENT_SESSIONS_VAR);
 cartDumpHgSession(cart);
+if (recentSessions)
+    cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+freeMem(recentSessions);
 
 // First output the hubStatus id's for attached trackHubs
 outAttachedHubUrls(cart, NULL);
@@ -2294,34 +2300,6 @@ else
     }
 }
 
-static char *sessionValFromContents(char *contents, char *var)
-/* Extract the value of var (e.g. "db" or "position") from a saved session's CGI-encoded cart
- * contents string, CGI-decoded, or NULL if not present. */
-{
-if (isEmpty(contents))
-    return NULL;
-char pfx[64];
-char *valIdx = NULL;
-safef(pfx, sizeof(pfx), "%s=", var);
-if (startsWith(pfx, contents))
-    valIdx = contents + strlen(pfx);
-else
-    {
-    char ampPfx[66];
-    safef(ampPfx, sizeof(ampPfx), "&%s", pfx);
-    char *p = strstr(contents, ampPfx);
-    if (p != NULL)
-        valIdx = p + strlen(ampPfx);
-    }
-if (valIdx == NULL)
-    return NULL;
-char *valEnd = strchr(valIdx, '&');
-char *enc = valEnd ? cloneStringZ(valIdx, valEnd - valIdx) : cloneString(valIdx);
-char *dec = cgiDecodeClone(enc);
-freez(&enc);
-return dec;
-}
-
 static int countShownTracks(struct cart *cart)
 /* Rough count of tracks turned on in the current cart: cart entries whose value is a display
  * visibility other than hide.  A proxy for "tracks currently shown" for the save-summary line
@@ -2487,8 +2465,8 @@ if (loggedIn)
             char *createdFull = cloneString(firstUse);
             if (strlen(createdFull) == 19)
                 createdFull[16] = '\0';
-            char *db2 = sessionValFromContents(row[4], "db");
-            char *pos2 = sessionValFromContents(row[4], "position");
+            char *db2 = cartContentsVal(row[4], "db");
+            char *pos2 = cartContentsVal(row[4], "position");
             char *description = gotSettings ? getSetting(row[5], "description") : NULL;
             /* lastUse (last time the session was saved/overwritten/loaded) drives the "most
              * recently saved session" quick-update shortcut on the client. */
@@ -2958,7 +2936,7 @@ if (row != NULL)
     char *spacePt = strchr(dateOnly, ' ');
     if (spacePt != NULL)
         *spacePt = '\0';
-    db2 = sessionValFromContents(row[1], "db");
+    db2 = cartContentsVal(row[1], "db");
     }
 sqlFreeResult(&sr);
 struct dyString *extra = dyStringNew(256);

@@ -1,0 +1,26 @@
+# #38520 -- a quickLifted bigWig (hg19 gc5BaseBw lifted onto hg38).
+#
+# hgTracks, '+' strand:  at SHH hg38 = hg19 + 207,306.  hg19 gc5Base.bw has 80 over hg19
+# 0-based 155,595,730-155,595,735 and 40 over 155,595,735-155,595,740, so the lifted row has 80
+# at hg38 155,803,037-155,803,041 and 40 at 155,803,042-155,803,046 (1-based).
+proof:
+  - "assertion-only 2026-10-09 -- written with the change; passes on genome-test (master) and on park 38520 (branch quickLiftWig), since the bigWig lift in hgTracks predates #38520 and this guards it"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  - go: chr7:155592001-155604000
+  - hide: all
+  - track: {gc5BaseBw: full}
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:155803031-155803050
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+  - mouseover: {track: gc5BaseBw, at: chr7:155803039}
+  - expect: {tip: "80", noTip: ["40", "60", "."]}
+  - mouseover: {track: gc5BaseBw, at: chr7:155803044}
+  - expect: {tip: "40", noTip: ["80", "60", "."]}

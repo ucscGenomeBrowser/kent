@@ -78,6 +78,14 @@ if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
 binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
 }
 
+void liftOverRemoveChainHash(struct hash *chainHash, struct chain *chain)
+/* Remove a chain that liftOverAddChainHash() added to chainHash.  The chain is not freed. */
+{
+struct chromMap *map = hashFindVal(chainHash, chain->tName);
+if (map != NULL)
+    binKeeperRemove(map->bk, chain->tStart, chain->tEnd, chain);
+}
+
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
 {
