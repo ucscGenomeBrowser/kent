@@ -1,0 +1,44 @@
+# #38395 -- the REST API could not serve any bigNarrowPeak track.
+#
+# The bug: allowedBigBedType() in src/hg/hubApi/apiUtils.c did not list bigNarrowPeak,
+# although initSupportedTypes() in hubApi.c did.  bigFileOpen() therefore returned NULL for
+# a type the API says it supports.  Three endpoints broke:
+#
+#   * /getData/track and /list/schema answered 400, "failed to find bigDataUrl=...", for a
+#     file that is present and readable.
+#   * /list/chromosomes crashed: bigFileChromInfoOutput() in list.c passed the NULL to
+#     bbiChromList(), and Apache answered 500 with "End of script output before headers".
+#
+# The fix: d6c216fa6a0 (2026-09-21) adds bigNarrowPeak to allowedBigBedType() and puts a
+# NULL guard in bigFileChromInfoOutput().
+#
+# The track is fiberSeqCompendium_PM00001_peaks on hg38, a leaf subtrack.  The released
+# bigNarrowPeak tracks (singleCellSignalsPeaks) are not used, because their names are over
+# 64 characters and /list/chromosomes fails on any name that long, for a separate reason.
+#
+# The page is the JSON itself, read as text.  Both steps assert the track's own keys, so an
+# Apache error page or an empty page fails here.  NOT asserted: peak names, scores or the
+# item count, which a reload of the Fiber-seq data can move.  hubApi/tests `make
+# bigNarrowPeak` watches the same three endpoints with an exact diff; this script is the
+# nightly one, on genome-test.
+proof:
+  - "assertion-only 2026-10-12 -- written from #38395 after d6c216fa6a0 reached genome-test"
+  - "release-ab 2026-10-12 -- fails on ts park 38423 (v504_branch d46687cc563, which lacks d6c216fa6a0): step 3 fails, the page says failed to find bigDataUrl and has no trackType; run alone, the /list/chromosomes step fails on Apache's Internal Server Error. Passes on genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hubApi/getData/track?genome=hg38;track=fiberSeqCompendium_PM00001_peaks;chrom=chr21;start=5015000;end=5016000"
+  # 'pre' is Chromium's JSON view; 'h1' is Apache's 500 page.
+  - wait: 'pre, h1'
+  - expect:
+      text: ['"trackType": "bigNarrowPeak"', '"fiberSeqCompendium_PM00001_peaks": [',
+             '"chrom": "chr21"', '"signalValue":', '"qValue":', '"peak":']
+      noText: ["failed to find bigDataUrl", '"error"', "Internal Server Error"]
+  - goto: "/cgi-bin/hubApi/list/chromosomes?genome=hg38;track=fiberSeqCompendium_PM00001_peaks"
+  - wait: 'pre, h1'
+  - expect:
+      text: ['"track": "fiberSeqCompendium_PM00001_peaks"', '"chromosomes": {', '"chr21": 46709983']
+      noText: ["Internal Server Error", "End of script output", '"error"']
