@@ -88,8 +88,8 @@ my $dbName = "";  # default uses NCBI asmId for name, can specify: abcDef1
 my $defaultName = "";  # will be asmId or dbName if present
 my $workhorse = "hgwdev";  # default workhorse when none chosen
 my $fileServer = "hgwdev";  # default when none chosen
-my $bigClusterHub = "ku";  # default when none chosen
-my $smallClusterHub = "ku";  # default when none chosen
+my $bigClusterHub = "hgwdev";  # default when none chosen
+my $smallClusterHub = "hgwdev";  # default when none chosen
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -162,7 +162,7 @@ Automates build of assembly hub.  Steps:
                    for repeatMasker run.  Use: -runRepeatModeler to perform
                    this procedure, warning: can take a considerable amount
                    of time (12 to 48 hours or more), and consumes an entire
-                   ku cluster node
+                   cluster node
     repeatMasker: run repeat masker cluster run and create bigBed files for
                   the composite track categories of repeats
     simpleRepeat: run trf cluster run and create bigBed file for simple repeats

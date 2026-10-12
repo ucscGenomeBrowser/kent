@@ -179,9 +179,10 @@ With -swap (not a normal stepper step -- see -swap above), chainSwap the
 primary run's all.chain.gz and reuse the net/load logic to build the
 reverse-direction liftOver/quickLift chain, without re-aligning.
 Each completed run also leaves (or refreshes) a dateless symlink
-miniMap2.\$ToDb -> the dated build directory (miniMap2.\$fromDb.swap for a
--swap run), so later runs/tools can find \"the\" build for a pair without
-knowing its date.
+miniMap2.\$toDb -> the dated build directory (miniMap2.\$fromDb -> the
+miniMap2.\$fromDb.swap directory for a -swap run), named with the actual
+db/accession, not ucfirst(), so later runs/tools can find \"the\" build for
+a pair without knowing its date.
 All operations are performed in the build directory, which defaults to
 $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/miniMap2\$ToDb.\$date
 for a plain UCSC database \$fromDb, or to
@@ -1158,7 +1159,7 @@ my $upThrough = ($stopStep eq 'cleanup') ? "" :
 
 # Stable, dateless pointer to this build, refreshed on every run
 # (relative target, so it stays correct if this tree gets mirrored):
-my $stableLink = &asmRoot($tDb) . "/miniMap2.$QDb";
+my $stableLink = &asmRoot($tDb) . "/miniMap2.$qDb";
 &HgAutomate::run("rm -f $stableLink");
 &HgAutomate::run("ln -s " . basename($buildDir) . " $stableLink");
 

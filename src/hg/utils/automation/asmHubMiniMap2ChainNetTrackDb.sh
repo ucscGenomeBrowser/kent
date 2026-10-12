@@ -39,20 +39,11 @@ do
     *.swap) continue ;;
   esac
   targetDb=$accessionId
-  # doMiniMap2.pl names this directory 'miniMap2.$QDb' where $QDb is
-  # ucfirst() of the query db/accession; OtherDb below reproduces the
-  # exact case used in the chain*.bb file names, otherDb reconstructs
-  # the actual lowercase-first db name/accession for table lookups.
-  OtherDb=`echo $mm2Dir | sed -e 's/miniMap2.//;'`
-  dbPrefix2=`printf '%s' "$OtherDb" | cut -c1-2`
-  if [ "${dbPrefix2}" = "GC" ]; then
-    otherDb="${OtherDb}"
-  else
-    firstChar=`printf '%s' "$OtherDb" | cut -c1`
-    restChars=`printf '%s' "$OtherDb" | cut -c2-`
-    lowerFirst=`printf '%s' "$firstChar" | tr 'A-Z' 'a-z'`
-    otherDb="${lowerFirst}${restChars}"
-  fi
+  # doMiniMap2.pl names this symlink 'miniMap2.$qDb' with the actual
+  # query db/accession (otherDb, for table lookups); OtherDb is the
+  # ucfirst() of that, the exact case used in the chain*.bb file names.
+  otherDb=`echo $mm2Dir | sed -e 's/^miniMap2\.//;'`
+  OtherDb="${otherDb^}"
   asmReport=`ls -d $buildDir/download/*assembly_report.txt 2> /dev/null`
 printf "asmReport: %s\n" "${asmReport}" 1>&2
   if [ ! -s "${asmReport}" ]; then
