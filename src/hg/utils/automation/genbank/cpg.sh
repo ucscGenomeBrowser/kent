@@ -27,14 +27,14 @@ if [ ! -f "bbi/${asmName}.cpgIslandExtUnmasked.ncbi.bb" ]; then
   printf "# %s cpgIslandExtUnmasked from %s.ncbi.2bit\n" "${dateStamp}" "${asmName}" 1>&2
   twoBitToFa -noMask "${asmDirectory}/${asmName}.ncbi.2bit" stdout \
     | faToTwoBit stdin "${asmDirectory}/cpgU/ncbi.noMask.2bit"
-  /cluster/bin/scripts/doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+  /cluster/bin/scripts/doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=hgwdev \
      -buildDir=`pwd`/cpgU \
        -stop=makeBed -tableName=cpgIslandExtUnmasked.ncbi \
          -chromSizes="${asmDirectory}/${asmName}.ncbi.chrom.sizes" \
           -maskedSeq="${asmDirectory}/cpgU/ncbi.noMask.2bit" -workhorse=hgwdev \
-              -smallClusterHub=ku "${asmName}" > cpgU/do.log 2>&1
+              -smallClusterHub=hgwdev "${asmName}" > cpgU/do.log 2>&1
   mv "cpgU/${asmName}.cpgIslandExtUnmasked.ncbi.bb" bbi
-#  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
+#  ssh hgwdev "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
   sleep 1
 #  rm -f ncbi.noMask.2bit
 #  rm -fr cpg
@@ -50,14 +50,14 @@ if [ ! -f "bbi/${asmName}.cpgIslandExt.ncbi.bb" ]; then
   mkdir cpg
   touch `pwd`/cpg
   printf "# %s cpgIslandExt from %s.ncbi.2bit\n" "${dateStamp}" "${asmName}" 1>&2
-  /cluster/bin/scripts/doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+  /cluster/bin/scripts/doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=hgwdev \
      -buildDir=`pwd`/cpg \
        -stop=makeBed -tableName=cpgIslandExt.ncbi \
          -chromSizes="${asmDirectory}/${asmName}.ncbi.chrom.sizes" \
           -maskedSeq="${asmDirectory}/${asmName}.ncbi.2bit" -workhorse=hgwdev \
-              -smallClusterHub=ku "${asmName}" > cpg/do.log 2>&1
+              -smallClusterHub=hgwdev "${asmName}" > cpg/do.log 2>&1
   mv "cpg/${asmName}.cpgIslandExt.ncbi.bb" bbi
-#  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
+#  ssh hgwdev "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
   sleep 1
 #  rm -fr cpg
   sleep 1

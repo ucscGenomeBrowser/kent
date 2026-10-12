@@ -45,15 +45,9 @@ my $accession = "$accParts[0]_$accParts[1]";
 my $asmIdPath = &AsmHub::asmIdToPath($asmId);
 my $downloadDir = "$hgDownload/hubs/$asmIdPath/$accession/bbi";
 
-# doMiniMap2.pl names buildDir/trackData/miniMap2.$QDb where $QDb is
-# ucfirst() of the actual query db/accession.  Reconstruct the actual
-# db name/accession, except for a GenArk accession (already starts with
-# the uppercase 'GC', ucfirst is a no-op there).
-sub queryDbFromQDb($) {
-  my ($qDb) = @_;
-  return $qDb if ($qDb =~ m/^GC/);
-  return lcfirst($qDb);
-}
+# doMiniMap2.pl names its dateless symlink buildDir/trackData/miniMap2.$qDb
+# with the actual query db/accession, while the chain*.bb and fb.*.txt
+# file names inside it use $QDb, the ucfirst() of that.
 
 my %queryDates;	# key is asmId, value is assembly date
 my %queryCommonName;	# key is asmId, value is assembly common name
@@ -61,6 +55,52 @@ my %querySubmitter;	# key is asmId, value is assembly submitter
 my %fbStats;	# key is asmId, value is featureBits measure for chains
 my %loStats;	# key is asmId, value is featureBits measure for lift over
 my %fileOtherDb;	# key is asmId, value is the $QDb used in the chain*.bb file names
+my %mm2Version;	# key is asmId, value is minimap2 version from version.txt
+my %mm2Command;	# key is asmId, value is minimap2 command line from version.txt
+my %mashDistance;	# key is asmId, value is mashDistance from version.txt
+my %minimapPreset;	# key is asmId, value is minimapPreset from version.txt
+
+# doMiniMap2.pl records the mash distance, chosen preset, minimap2 version
+# and the minimap2 command line in version.txt in its work directory, e.g.:
+#   mashDistance=0.00159554 minimapPreset=asm5
+#   minimap2 2.31-r1302
+#   minimap2 -cx asm5 -N 5 -p 0.8 -t 8 target.fa query.fa > out.paf
+# returns (version, command, mashDistance, preset), or an empty list when
+# there is no version.txt
+sub readVersionTxt($) {
+  my ($mm2Dir) = @_;
+  return () if (! -s "$mm2Dir/version.txt");
+  my ($version, $command, $mash, $preset) = ("", "", "", "");
+  open (my $vfh, "<", "$mm2Dir/version.txt") or die "can not read $mm2Dir/version.txt";
+  while (my $line = <$vfh>) {
+    chomp $line;
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
+    next if (length($line) < 1);
+    if ($line =~ m/^minimap2\s+-/) {
+      $command = $line;
+    } elsif ($line =~ m/^minimap2\s+(\S+)$/) {
+      $version = $1;
+    } else {
+      foreach my $keyVal (split('\s+', $line)) {
+        my ($key, $val) = split('=', $keyVal, 2);
+        next if (!defined($val));
+        $mash = $val if ($key eq "mashDistance");
+        $preset = $val if ($key eq "minimapPreset");
+      }
+    }
+  }
+  close ($vfh);
+  return ($version, $command, $mash, $preset);
+}
+
+sub htmlEscape($) {
+  my ($str) = @_;
+  $str =~ s/&/&amp;/g;
+  $str =~ s/</&lt;/g;
+  $str =~ s/>/&gt;/g;
+  return $str;
+}
 
 open (TD, "ls -d ${targetBuildDir}/trackData/miniMap2.*|") or die "can not ls -d ${targetBuildDir}/trackData/miniMap2.*";
 while (my $mm2Dir = <TD>) {
@@ -70,10 +110,11 @@ while (my $mm2Dir = <TD>) {
   # 'miniMap2.<otherDb>' -- skip that real *.swap work directory so this
   # query genome is only processed once, via its dateless symlink.
   next if ($mm2Dir =~ m/\.swap$/);
-  my $Qdb = basename($mm2Dir);
+  my $accession = basename($mm2Dir);
+  $accession =~ s/^miniMap2\.//;
+  my $Qdb = ucfirst($accession);
   # the hubDateName will translate the accessionId into an asmId
   # side effect it also returns the date
-  my $accession = &queryDbFromQDb($Qdb);
   my ($qDate, $qAsmName) = &HgAutomate::hubDateName($accession);
   my $qAsmId = "${accession}";
   if ($accession =~ m/^GC/) {
@@ -84,7 +125,7 @@ while (my $mm2Dir = <TD>) {
   my ($qCommonName, undef, $qSubmitter) = &HgAutomate::getAssemblyInfo($dbHost, $qAsmId);
   $queryCommonName{$qAsmId} = $qCommonName;
   $querySubmitter{$qAsmId} = $qSubmitter;
-  my $fbTxt = `ls ${targetBuildDir}/trackData/miniMap2.${Qdb}/fb.*chain${Qdb}Link.txt 2> /dev/null`;
+  my $fbTxt = `ls ${mm2Dir}/fb.*chain${Qdb}Link.txt 2> /dev/null`;
   chomp $fbTxt;
   if ( -s "${fbTxt}" ) {
     my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
@@ -93,7 +134,7 @@ while (my $mm2Dir = <TD>) {
   } else {
     $fbStats{$qAsmId} = "n/a";
   }
-  $fbTxt = `ls ${targetBuildDir}/trackData/miniMap2.${Qdb}/fb.*chainLiftOver${Qdb}.txt 2> /dev/null`;
+  $fbTxt = `ls ${mm2Dir}/fb.*chainLiftOver${Qdb}.txt 2> /dev/null`;
   chomp $fbTxt;
   if ( -s "${fbTxt}" ) {
     my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
@@ -101,6 +142,10 @@ while (my $mm2Dir = <TD>) {
     $loStats{$qAsmId} = $fBits;
   } else {
     $loStats{$qAsmId} = "n/a";
+  }
+  my @versionInfo = &readVersionTxt($mm2Dir);
+  if (scalar(@versionInfo)) {
+    ($mm2Version{$qAsmId}, $mm2Command{$qAsmId}, $mashDistance{$qAsmId}, $minimapPreset{$qAsmId}) = @versionInfo;
   }
 }
 close (TD);
@@ -115,7 +160,7 @@ if ( -s "${namesFile}" ) {
 my $sciName = ${namesFile};
 
 if ( -s "${namesFile}" ) {
-  my $sciName = `grep -v "^#" $namesFile | cut -f5`;
+  $sciName = `grep -v "^#" $namesFile | cut -f5`;
   chomp $sciName;
 }
 
@@ -170,7 +215,7 @@ printf "</ul>
 
 printf "<h3>Alignments identity</h3>\n";
 printf "<table border='1'>\n";
-printf "<caption>showing percent identity, how much of the target is matched by the query</caption>\n";
+printf "<caption>percent of the target genome covered by the query alignments</caption>\n";
 printf "<thead style='position:sticky; top:0; background-color: white;'><tr>\n";
 printf "<th>chains</th><th>lift<br>over</th><th>common<br>name</th><th>assembly</th>\n";
 printf "</tr></thead><tbody>\n";
@@ -281,6 +326,24 @@ group and creates a kd-tree out of the gapless subsections (blocks) of
 the alignments. A dynamic program was then run over the kd-trees to find
 the maximally scoring chains of these blocks.
 </p>
+_EOF_
+    ;
+
+if (scalar(keys %mm2Version)) {
+  printf "<h3>minimap2 version and parameters</h3>\n";
+  printf "<table border='1'>\n";
+  printf "<caption>minimap2 version, <em>mash</em> distance between the target and query assemblies, the minimap2 alignment preset selected from that distance, and the minimap2 command used for each target sequence job</caption>\n";
+  printf "<thead><tr>\n";
+  printf "<th>assembly</th><th>minimap2<br>version</th><th>mash<br>distance</th><th>preset</th><th>command</th>\n";
+  printf "</tr></thead><tbody>\n";
+  foreach my $oAsmId (@orderedByFBits) {
+    next if (!defined($mm2Version{$oAsmId}));
+    printf "<tr><td>%s</td><td>%s</td><td style='text-align:right;'>%s</td><td>%s</td><td><code>%s</code></td></tr>\n", $oAsmId, &htmlEscape($mm2Version{$oAsmId}), &htmlEscape($mashDistance{$oAsmId}), &htmlEscape($minimapPreset{$oAsmId}), &htmlEscape($mm2Command{$oAsmId});
+  }
+  printf "</tbody></table>\n";
+}
+
+print <<_EOF_
 
 <h3>Lift over chain track</h3>
 <p>

@@ -49,16 +49,9 @@ close ($CN);
 
 `mkdir -p $buildDir/bbi`;
 
-# doMiniMap2.pl names buildDir/trackData/miniMap2.$QDb where $QDb is
-# ucfirst() of the actual query db/accession.  Reconstruct the actual
-# db name/accession (otherDb) by undoing that ucfirst, except for a
-# GenArk accession (already starts with the uppercase 'GC', ucfirst is
-# a no-op there).
-sub queryDbFromQDb($) {
-  my ($qDb) = @_;
-  return $qDb if ($qDb =~ m/^GC/);
-  return lcfirst($qDb);
-}
+# doMiniMap2.pl names its dateless symlink buildDir/trackData/miniMap2.$qDb
+# with the actual query db/accession, while the chain*.bb and fb.*.txt
+# file names inside it use $QDb, the ucfirst() of that.
 
 open (DL, "ls -d $buildDir/trackData/miniMap2.*|") or die "can not list $buildDir/trackData/miniMap2.*";
 while (my $mm2Dir = <DL>) {
@@ -68,11 +61,11 @@ while (my $mm2Dir = <DL>) {
   # 'miniMap2.<otherDb>' -- skip that real *.swap work directory so this
   # query genome is only processed once, via its dateless symlink.
   next if ($mm2Dir =~ m/\.swap$/);
-  my $Qdb = basename($mm2Dir);
-  $Qdb =~ s/miniMap2.//;
-  my $queryDb = &queryDbFromQDb($Qdb);
+  my $queryDb = basename($mm2Dir);
+  $queryDb =~ s/^miniMap2\.//;
+  my $Qdb = ucfirst($queryDb);
   $queryPrio{$queryDb} = 100;
-  my $fbTxt = `ls $buildDir/trackData/miniMap2.${Qdb}/fb.*.chain${Qdb}Link.txt 2> /dev/null`;
+  my $fbTxt = `ls $buildDir/trackData/miniMap2.${queryDb}/fb.*.chain${Qdb}Link.txt 2> /dev/null`;
   chomp $fbTxt;
   if (-s "${fbTxt}") {
     my $prio = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
@@ -122,7 +115,7 @@ foreach my $queryDb (@queryList) {
   $comName = $queryDb;
   $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
   $QueryDb = ucfirst($queryDb);
-  my $mm2Dir="miniMap2.$QueryDb";
+  my $mm2Dir="miniMap2.$queryDb";
   `rm -f $buildDir/bbi/$targetDb.chainMiniMap2${QueryDb}.bb`;
   `rm -f $buildDir/bbi/$targetDb.chainMiniMap2${QueryDb}Link.bb`;
   `ln -s ../trackData/$mm2Dir/axtChain/chain${QueryDb}.bb  $buildDir/bbi/$targetDb.chainMiniMap2${QueryDb}.bb`;
@@ -175,7 +168,7 @@ foreach my $queryDb (@queryList) {
   $comName = $queryDb;
   $comName = $commonName{$queryDb} if (defined($commonName{$queryDb}));
   $QueryDb = ucfirst($queryDb);
-  my $mm2Dir="miniMap2.$QueryDb";
+  my $mm2Dir="miniMap2.$queryDb";
 
   if ( -s "$buildDir/trackData/$mm2Dir/axtChain/chainLiftOver${QueryDb}.bb" ) {
     `rm -f $buildDir/bbi/$targetDb.chainLiftOverMiniMap2${QueryDb}.bb`;
