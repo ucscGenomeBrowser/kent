@@ -2,7 +2,7 @@
 # Do not edit by hand, edit the script and regenerate.
 
 track transcriptionStart
-superTrack on show
+superTrack on
 group rna
 shortLabel Transcription Initiation (TSS)
 longLabel Transcription initiation (TSS)
@@ -17,7 +17,7 @@ release alpha
     release alpha
 
 track encode4ProCap
-superTrack on show
+superTrack on
 group rna
 shortLabel PRO-cap
 longLabel PRO-cap nascent RNA transcription start sites from ENCODE 4
@@ -32,7 +32,7 @@ release beta,public
     release alpha
 
 track proCapNet
-superTrack on show
+superTrack on
 group rna
 shortLabel ProCapNet
 longLabel ProCapNet predicted PRO-cap
