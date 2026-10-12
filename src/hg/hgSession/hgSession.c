@@ -831,16 +831,39 @@ cartRemove(cart, hgsNewSessionName);
 cartRemove(cart, hgsNewSessionDescription);
 }
 
-static void clearSessionJustLoadedMarker(struct cart *cart)
+static char *sessionJustLoadedVars[] = {hgsSessionJustLoaded, hgsOtherUserSessionName,
+                                        hgsOtherUserName};
+
+static struct slPair *setAsideSessionJustLoadedMarker(struct cart *cart)
 /* A pending "session just loaded" marker (and the name/owner it refers to) belongs to the
  * live cart's next page view, not to a session's own saved contents.  Call this at every
  * place that bakes the current cart into a persistent artifact (a named session, a local
- * download) -- but not at hgSession's own generic end-of-request cleanup, which must leave
- * the marker alone so hgTracks still gets to show the notice on its next page. */
+ * download), and put the variables back with restoreSessionJustLoadedMarker() once the
+ * artifact is written: the live cart still needs them, hgTracks shows the notice from them
+ * and the recommended track set panel reads the session name and owner. */
 {
-cartRemove(cart, hgsSessionJustLoaded);
-cartRemove(cart, hgsOtherUserSessionName);
-cartRemove(cart, hgsOtherUserName);
+struct slPair *saved = NULL;
+int i;
+for (i = 0;  i < ArraySize(sessionJustLoadedVars);  i++)
+    {
+    char *val = cartOptionalString(cart, sessionJustLoadedVars[i]);
+    if (val != NULL)
+        {
+        // clone it, cartRemove frees the cart's copy
+        slPairAdd(&saved, sessionJustLoadedVars[i], cloneString(val));
+        cartRemove(cart, sessionJustLoadedVars[i]);
+        }
+    }
+return saved;
+}
+
+static void restoreSessionJustLoadedMarker(struct cart *cart, struct slPair **pSaved)
+/* Put back into the live cart what setAsideSessionJustLoadedMarker() took out, and free it. */
+{
+struct slPair *pair;
+for (pair = *pSaved;  pair != NULL;  pair = pair->next)
+    cartSetString(cart, pair->name, pair->val);
+slPairFreeValsAndList(pSaved);
 }
 
 static void outIfNotPresent(struct cart *cart, struct dyString *dy, char *track, int tdbVis)
@@ -985,9 +1008,10 @@ sqlDyStringPrintf(dy, ") VALUES (");
 sqlDyStringPrintf(dy, "'%s', '%s', ", encUserName, encSessionName);
 sqlDyStringPrintf(dy, "'");
 cleanHgSessionFromCart(cart);
-clearSessionJustLoadedMarker(cart);
+struct slPair *justLoaded = setAsideSessionJustLoadedMarker(cart);
 struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
+restoreSessionJustLoadedMarker(cart, &justLoaded);
 
 // First output the hubStatus id's for attached trackHubs
 outAttachedHubUrls(cart, encoded);
@@ -1792,7 +1816,7 @@ char *compressType = cartString(cart, hgsSaveLocalFileCompress);
 struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
-clearSessionJustLoadedMarker(cart);
+struct slPair *justLoaded = setAsideSessionJustLoadedMarker(cart);
 
 char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemove(cart, RECENT_SESSIONS_VAR);
@@ -1800,6 +1824,7 @@ cartDumpHgSession(cart);
 if (recentSessions)
     cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
 freeMem(recentSessions);
+restoreSessionJustLoadedMarker(cart, &justLoaded);
 
 // First output the hubStatus id's for attached trackHubs
 outAttachedHubUrls(cart, NULL);

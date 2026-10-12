@@ -9240,7 +9240,9 @@ if (cfgOptionBooleanDefault("showGenbankDownload", FALSE))
     // ceiling belongs to the machine and its users rather than to the code.  Printed
     // as a number, and a value that is not a positive one falls back to the default,
     // so a typo in hg.conf cannot write broken javascript or refuse every region.
-    long long maxGbRegion = atoll(cfgOptionDefault("maxGenbankRegion", "25000000"));
+    // Only plain digits count: atoll stops at the first comma, so "25,000,000" would be 25.
+    char *maxGbStr = cfgOptionDefault("maxGenbankRegion", "25000000");
+    long long maxGbRegion = isAllDigits(maxGbStr) ? atoll(maxGbStr) : 0;
     if (maxGbRegion <= 0)
         maxGbRegion = 25000000;
     jsInlineF("var maxGenbankRegion = %lld;\n", maxGbRegion);
