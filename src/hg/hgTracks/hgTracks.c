@@ -7611,7 +7611,8 @@ char buffer[1024];
 // under the hub name, and leave the source's own undecorated value alone:  that
 // one belongs to the source assembly, and it is gone anyway whenever the source
 // container is back at its default.
-if (hideTracks && (trackDbSetting(childTdb, "quickLiftUrl") != NULL))
+boolean quickLifted = (trackDbSetting(childTdb, "quickLiftUrl") != NULL);
+if (hideTracks && quickLifted)
     cartRemove(cart, superTdb->track);
 boolean superFromCart = !hideTracks;
 // first deal with visibility of super track
@@ -7622,7 +7623,10 @@ if (s)
     superTdb->visibility = hTvFromString(s) ;
     cartSetString(cart, superTdb->track, s);
     }
-else if (startsWith("hub_", superTdb->track))
+// The undecorated name of a quickLifted container is the source assembly's own
+// setting, in a cart shared by both assemblies, so it is never read or removed here,
+// on the lift page or on any later request on the target.
+else if (startsWith("hub_", superTdb->track) && !quickLifted)
     {
     s = superFromCart ? cartOptionalString(cart, trackHubSkipHubName(superTdb->track))
                       : cgiOptionalString(trackHubSkipHubName(superTdb->track));
