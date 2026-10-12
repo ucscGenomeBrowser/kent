@@ -4043,6 +4043,16 @@ if (trackDbLabel == NULL)
 return trackDbLabel;
 }
 
+static char *asColumnLabel(struct asColumn *asCol)
+/* Return the autoSql comment of a column without the "|longer description" suffix
+ * that hgc shows as a note on the details page. */
+{
+char *pipe = strchr(asCol->comment, '|');
+if (pipe == NULL)
+    return asCol->comment;
+return cloneStringZ(asCol->comment, pipe - asCol->comment);
+}
+
 static filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, struct trackDbFilter *tdbFilter, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
@@ -4059,7 +4069,7 @@ filterBy->column = cloneString(field);
 filterBy->title = cloneString(field); ///  title should come from AS file, or trackDb variable
 struct asColumn *asCol = (as != NULL) ? asColumnFind(as, field) : NULL;
 if (asCol != NULL)
-    filterBy->title = asCol->comment;
+    filterBy->title = asColumnLabel(asCol);
 else if (as != NULL)
     {
     // We have autoSql but the field is missing — that's a typo or an
@@ -7071,10 +7081,7 @@ if (trackDbFilters)
             struct asColumn *asCol = asColumnFind(as, field);
             if (asCol != NULL)
                 { // Found label so replace field; strip "|..." suffix used for detail page
-                field = asCol->comment;
-                char *pipe = strchr(field, '|');
-                if (pipe != NULL)
-                    field = cloneStringZ(field, pipe - field);
+                field = asColumnLabel(asCol);
                 }
             else if (defaultFieldLocation(field) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", field);
@@ -7232,7 +7239,7 @@ if (trackDbFilters)
             if (asCol != NULL)
                 {
                 if (trackDbLabel == NULL)
-                    trackDbLabel = asCol->comment;
+                    trackDbLabel = asColumnLabel(asCol);
                 }
             else if (defaultFieldLocation(filter->fieldName) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", filter->fieldName);
@@ -7528,7 +7535,7 @@ else
             ;
         assert(col);
         // the comment comes from the autoSql inside the hub's bigBed, escape
-        printf(" %s&nbsp;&nbsp;&nbsp;", htmlEncode(col->comment));
+        printf(" %s&nbsp;&nbsp;&nbsp;", htmlEncode(asColumnLabel(col)));
         }
     }
 }
