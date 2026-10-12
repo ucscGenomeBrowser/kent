@@ -6,6 +6,7 @@
 # page that read only the URL (hideTracks), so nothing happened; on the next hgTracks request
 # on the target it read the cart, and hg38 lost clinvarCnv=hide.  hs1 has no native
 # clinvarCnv, so hubTrackOwnsBareName() is true and the fallback is taken.
+# Fixed by 8053db3f754: a quickLifted subtrack never falls back to its bare name.
 #
 # The check is the last one:  back on hg38 after the zoom on hs1, clinvarCnv is still hidden.
 # The hg38 check straight after the first lift shows a lift page alone does no harm, so a
@@ -17,6 +18,7 @@ proof:
   - "assertion-only 2026-10-12 -- written from the subtrack half of #38477 item 2"
   - "xfail 2026-10-12 -- fails on genome-test at the last step, rows that should not be drawn: clinvarCnv back on hg38 after the zoom on hs1. A copy with only the zoom: step removed passes on genome-test"
   - "sandbox-ab 2026-10-12 -- fails on genome-test and passes on hgwdev-braney with the subtrack guard in hgTracks.c (uncommitted at the time). After the zoom the target keeps five rows instead of four. rm38198 and rm38198targetZoom still pass on the sandbox"
+  - "server-flip 2026-10-12 -- passes on genome-test once 8053db3f754 was built there (hgTracks 14:05); it failed there at the last step earlier the same day"
 
 target: genome-test
 db: hg38
