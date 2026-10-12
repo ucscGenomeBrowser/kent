@@ -7928,7 +7928,10 @@ for (track = trackList; track != NULL; track = track->next)
             {
             boolean undecoratedVis = FALSE;
             char *s = hideTracks ? cgiOptionalString( subtrack->track) : cartOptionalString(cart, subtrack->track);
-            if (s == NULL && startsWith("hub_", subtrack->track))
+            // As for a container, the bare name of a quickLifted subtrack is the source
+            // assembly's own setting, so it is never read or removed here.
+            if (s == NULL && startsWith("hub_", subtrack->track)
+                && (trackDbSetting(subtrack->tdb, "quickLiftUrl") == NULL))
                 {
                 // the bare name is the native track's if the assembly has one by that
                 // name.  Look the value up before asking: this runs for every subtrack of
