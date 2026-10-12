@@ -3,6 +3,7 @@
 # Found in the v505 Preview I code review, #38477 item 2.  dba11b63364 fixed this for the
 # page a lift opens and nothing after it.  rm38198.docent.yaml covers that page; it never
 # makes a second request on the target, so it passes with the hole still open.
+# Fixed by fb623a15d54: a quickLifted container never falls back to its bare name.
 #
 # On the page a lift opens, hgConvert sends hideTracks.  superTrackCartVis() in
 # hg/hgTracks/hgTracks.c then drops hub_<n>_wgEncodeReg4 and leaves the source's bare
@@ -29,6 +30,7 @@ proof:
   - "assertion-only 2026-10-12 -- written from #38477 item 2, against dba11b63364"
   - "xfail 2026-10-12 -- fails on genome-test at the last step, rows not drawn: wgEncodeReg4MarkH3k27ac back on hg38 after the zoom on hs1. Every earlier check passes, including hg38 straight after lift 2. A copy with only the zoom: step removed passes, so the zoom is what fails it"
   - "sandbox-ab 2026-10-12 -- fails on genome-test and passes on hgwdev-braney with the superTrackCartVis() fix on master (uncommitted at the time). After the zoom the target draws the same three rows as the lift page instead of two. rm38198 still passes on the sandbox"
+  - "server-flip 2026-10-12 -- passes on genome-test once fb623a15d54 was built there (hgTracks 14:05); it failed there at the last step earlier the same day"
 
 target: genome-test
 db: hg38
