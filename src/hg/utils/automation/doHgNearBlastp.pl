@@ -37,9 +37,9 @@ use vars qw/
 
 # Option defaults:
 # my $clusterHub = 'swarm';
-my $clusterHub = 'ku';
+my $clusterHub = 'hgwdev';
 # my $distrHost = 'swarm';
-my $distrHost = 'ku';
+my $distrHost = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $workhorse = 'least loaded';
 my $blastPath = '/cluster/bin/blast/x86_64/blast-2.2.20';

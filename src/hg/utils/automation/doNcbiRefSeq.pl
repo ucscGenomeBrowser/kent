@@ -40,8 +40,8 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $dbHost = 'hgwdev';
-my $bigClusterHub = 'ku';
-my $smallClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
+my $smallClusterHub = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $defaultFileServer = 'hgwdev';

@@ -9684,6 +9684,65 @@ safef(buf, sizeof buf, "%s %s", org, acc);
 return cloneString(buf);
 }
 
+static char *identityColor(double ident)
+/* Color for a percent identity, the same scale as the BLAT results table. */
+{
+return (ident >= 98) ? "#1f7a34" : (ident >= 95) ? "#4d7c0f" :
+       (ident >= 90) ? "#b45309" : "#b1301f";
+}
+
+static void printAlnBlockTable(struct bafBlock *blocks, char *genomeUrl, char *chromHtml)
+/* Print the "Aligned blocks" section of the modern alignment page: one row per block of the
+ * side-by-side alignment, linking to the block and to its position in the Genome Browser.
+ * genomeUrl is an encoded hgTracks URL that ends in "position=<chrom>:". */
+{
+printf("<h4><a name='alnBlockTable'></a>Aligned blocks</h4>\n");
+printf("<table class='blatAlnTbl'><tr>"
+       "<th title='Jump to this block in the side by side alignment'>Block</th>"
+       "<th title='Start and end of the block in the query sequence'>Query</th>"
+       "<th title='Start and end of the block in the genome. Click to view it in the Genome "
+       "Browser'>Genome</th>"
+       "<th title='Percentage of aligned bases that are identical'>Identity</th>"
+       "<th title='Aligned bases that differ between query and genome'>Mismatches</th>"
+       "<th title='Positions inside the block where one sequence has a small gap'>"
+       "Gap positions</th>"
+       "<th title='Genome bases between this block and the next one, often an intron'>"
+       "Genome gap</th>"
+       "<th title='Query bases between this block and the next one'>Query gap</th>"
+       "</tr>\n");
+struct bafBlock *b;
+for (b = blocks; b != NULL; b = b->next)
+    {
+    int hLo = min(b->hStart, b->hEnd), hHi = max(b->hStart, b->hEnd);
+    char nStartC[32], nEndC[32], hLoC[32], hHiC[32];
+    sprintLongWithCommas(nStartC, b->nStart);
+    sprintLongWithCommas(nEndC, b->nEnd);
+    sprintLongWithCommas(hLoC, hLo);
+    sprintLongWithCommas(hHiC, hHi);
+    int aligned = b->matches + b->mismatches;
+    double ident = (aligned > 0 ? 100.0 * b->matches / aligned : 0.0);
+    printf("<tr><td><a href='#sbs%d'>%d</a></td><td>%s-%s</td>"
+           "<td><a class='gbLink' href='%s%d-%d'>%s:%s-%s</a></td>"
+           "<td style='color:%s'>%.1f%%</td><td>%d</td><td>%d</td>",
+           b->num, b->num, nStartC, nEndC,
+           genomeUrl, hLo, hHi, chromHtml, hLoC, hHiC,
+           identityColor(ident), ident, b->mismatches, b->gapCols);
+    if (b->next == NULL)
+        printf("<td></td><td></td>");
+    else if (b->hGapAfter < 0 || b->nGapAfter < 0)
+        printf("<td colspan=2>overlaps the next block</td>");
+    else
+        {
+        char hGapC[32], nGapC[32];
+        sprintLongWithCommas(hGapC, b->hGapAfter);
+        sprintLongWithCommas(nGapC, b->nGapAfter);
+        printf("<td>%s</td><td>%s</td>", hGapC, nGapC);
+        }
+    printf("</tr>\n");
+    }
+printf("</table>\n");
+}
+
 static void showSomeAlignmentModern(struct psl *psl, bioSeq *oSeq, enum gfType qType,
                        int qStart, int qEnd, char *qName, int cdsS, int cdsE, boolean blatContext)
 /* Modern single-page version of showSomeAlignment: a gold title bar, a full-height "jump to"
@@ -9727,8 +9786,7 @@ hashFree(&seenAlias);
 char *aliasStr = dyStringCannibalize(&aliasDy);   /* "NC_000007.14, CM000669.2, 7" or "" */
 double ident = 100.0 - pslCalcMilliBad(psl, TRUE) * 0.1;
 
-char *idColor = (ident >= 98) ? "#1f7a34" : (ident >= 95) ? "#4d7c0f" :
-                (ident >= 90) ? "#b45309" : "#b1301f";
+char *idColor = identityColor(ident);
 
 /* Offer "Share a link" only in the hgBlat context, and only when a durable bigPsl custom track
  * backs these results; without it there is nothing for a shared session to rebuild the alignment
@@ -9739,8 +9797,10 @@ freeMem(shareBb);
 
 /* Colors imported from the BLAT Redesign (slide 3): grey page, steel-blue section-header bars, navy
  * links with maroon hover, slate text.  The <h2>/<hr> the shared alignment code emits are hidden; its
- * <h4> section headings become the steel-blue bars.  The page chrome is webStartGbNoBanner (a menubar
- * and <main>, no legacy section tables), so we draw our own gold title bar in plain HTML. */
+ * <h4> section headings become the steel-blue bars.  The side-by-side blocks are separated by
+ * bafLabelBlocks()'s gap lines (.bafSep), not by <hr>, so hiding <hr> does not lose them.  The page
+ * chrome is webStartGbNoBanner (a menubar and <main>, no legacy section tables), so we draw our own
+ * gold title bar in plain HTML. */
 printf("<style>"
        "#main-menu-whole{margin-bottom:0}"   /* no gap between the menubar and the title bar */
        "#mainContent{background:#eef1f4}"     /* grey page behind the white alignment panel */
@@ -9778,6 +9838,22 @@ printf("<style>"
         * it would give <pre> a grey box, a border and word-break that mangles the alignment */
        "#blatAlnContent pre{margin:0; padding:2px 0 12px; line-height:1.4; background:none; border:0;"
        " border-radius:0; color:#374a5e; white-space:pre; word-break:normal; word-wrap:normal}"
+       /* side-by-side block labels from bafLabelBlocks() (lib/seqOut.c): a header line per
+        * block, a ruled line with the gap size between blocks, mismatches and merged gaps */
+       /* header in the text color so its Genome Browser link stands out; bootstrap.css takes the
+        * underline off links, put it back on the ones that go to the browser */
+       "#blatAlnContent .bafHead{font-weight:700}"
+       "#blatAlnContent .bafHead a, .blatAlnTbl a.gbLink{font-weight:400; text-decoration:underline}"
+       "#blatAlnContent .bafSep{display:block; border-top:1px solid #999; margin:0 0 10px;"
+       " padding-top:2px; color:#5b6572}"
+       "#blatAlnContent .bafMis{color:#b1301f; font-weight:700}"
+       "#blatAlnContent .bafGap{background:#fde8c8}"
+       /* per-block table, house table style (steel-tint header, zebra rows) */
+       ".blatAlnTbl{border-collapse:collapse; margin:12px 0 14px}"
+       ".blatAlnTbl th, .blatAlnTbl td{border:1px solid #e4e9ef; padding:3px 10px; text-align:right;"
+       " white-space:nowrap}"
+       ".blatAlnTbl th{background:#dbe4ee; color:#003a72; text-align:left}"
+       ".blatAlnTbl tr:nth-child(even) td{background:#f4f7fb}"
        /* key-value summary strip, mirroring hgBlat's .blatStrip (label over value, thin dividers) */
        ".blatAlnStrip{display:flex; align-items:center; gap:24px; flex-wrap:wrap; margin:12px 0 14px}"
        ".blatAlnStat{display:flex; flex-direction:column; gap:1px}"
@@ -9844,10 +9920,16 @@ if (isNotEmpty(aliasStr))
     printf("<p>Genome sequence %s is also known as: %s.</p>\n", chromHtml, aliasStrHtml);
     freeMem(aliasStrHtml);
     }
-/* The shared library returns the number of alignment blocks it actually shows.  The DNA path merges
- * blocks separated by gaps <= 8 bases, so this can be fewer than psl->blockCount; use it (not
- * psl->blockCount) so the sidebar's "Block N" links match the #1..#N anchors that were emitted. */
-int blockCount;
+/* Have the side-by-side alignment label its blocks and collect them.  These are the blocks as
+ * drawn, after the DNA path merged those separated by small gaps, so the table, the sidebar's
+ * "Block N" links and the #sbsN anchors in the alignment all agree.  Each block's genome position,
+ * in the table and in the alignment, links to the Genome Browser there. */
+char *tNameUrl = cgiEncode(psl->tName);
+char genomeUrl[1024];
+safef(genomeUrl, sizeof genomeUrl, "hgTracks?db=%s&hgsid=%s&position=%s:",
+      database, cartSessionId(cart), tNameUrl);
+freeMem(tNameUrl);
+bafLabelBlocks(TRUE, genomeUrl);
 /* Capture the shared library's alignment HTML so we can reorder its sections for this page.  The
  * library emits them as Query (#cDNA), Genome (#genomic), then Side-by-side (#ali), with the
  * per-block anchors living inside the Genome section.  We want Query, Side-by-side, Genome so the
@@ -9856,22 +9938,30 @@ int blockCount;
 char *alnHtml = NULL;
 size_t alnLen = 0;
 FILE *alnF = open_memstream(&alnHtml, &alnLen);
-if (alnF == NULL)
+boolean captured = (alnF != NULL);
+if (!captured)
     {
     /* open_memstream failed (out of memory): render straight to stdout, skipping the section
      * reorder, rather than passing a NULL FILE to the renderer and then calling fclose(NULL). */
     if (qType == gftRna || qType == gftDna)
-        blockCount = showPartialDnaAlignment(psl, oSeq, stdout, cdsS, cdsE, FALSE);
+        showPartialDnaAlignment(psl, oSeq, stdout, cdsS, cdsE, FALSE);
     else
-        blockCount = showGfAlignment(psl, oSeq, stdout, qType, qStart, qEnd, qName);
+        showGfAlignment(psl, oSeq, stdout, qType, qStart, qEnd, qName);
     }
 else
     {
     if (qType == gftRna || qType == gftDna)
-        blockCount = showPartialDnaAlignment(psl, oSeq, alnF, cdsS, cdsE, FALSE);
+        showPartialDnaAlignment(psl, oSeq, alnF, cdsS, cdsE, FALSE);
     else
-        blockCount = showGfAlignment(psl, oSeq, alnF, qType, qStart, qEnd, qName);
+        showGfAlignment(psl, oSeq, alnF, qType, qStart, qEnd, qName);
     fclose(alnF);
+    }
+struct bafBlock *blocks = bafBlocksDrawn();
+bafLabelBlocks(FALSE, NULL);
+if (captured)
+    {
+    if (blocks != NULL)   /* the block table goes above the alignment, so not in the uncaptured case */
+        printAlnBlockTable(blocks, genomeUrl, chromHtml);
     char *pGenome = (alnHtml != NULL) ? stringIn("<H4><A NAME=genomic>", alnHtml) : NULL;
     char *pAli    = (alnHtml != NULL) ? stringIn("<H4><A NAME=ali>", alnHtml) : NULL;
     if (pGenome != NULL && pAli != NULL && pGenome < pAli)
@@ -9886,21 +9976,24 @@ else
     }
 printf("</div>\n");   /* #blatAlnContent */
 
-/* Sidebar, emitted after the alignment so blockCount is known; CSS grid puts it back in column 1.
+/* Sidebar, emitted after the alignment so the blocks are known; CSS grid puts it back in column 1.
  * The inner div is position:sticky so the links stay in view as the long alignment scrolls. */
 printf("<div id='blatAlnNav'><div id='blatAlnNavInner'>\n");
+if (blocks != NULL && captured)
+    printf("<a href='#alnBlockTable'>Aligned blocks</a>\n");
 printf("<a href='#cDNA'>Only query sequence</a>\n"
-       "<a href='#ali'>Side by side alignment</a>\n"
-       "<a href='#genomic'>Only genome sequence</a>\n");
-if (blockCount > 1)   /* per-block jump links, indented under the genome-sequence item where their anchors live */
+       "<a href='#ali'>Side by side alignment</a>\n");
+if (slCount(blocks) > 1)   /* per-block jump links, indented under the side by side alignment */
     {
-    int bi;
+    struct bafBlock *b;
     printf("<div id='blatAlnBlocks'>\n");
-    for (bi = 1;  bi <= blockCount;  ++bi)
-        printf("<a href='#%d'>Block %d</a>\n", bi, bi);
+    for (b = blocks;  b != NULL;  b = b->next)
+        printf("<a href='#sbs%d'>Block %d</a>\n", b->num, b->num);
     printf("</div>\n");
     }
+printf("<a href='#genomic'>Only genome sequence</a>\n");
 printf("</div></div>\n");
+slFreeList(&blocks);
 
 printf("</div>\n");   /* #blatAlnBody */
 

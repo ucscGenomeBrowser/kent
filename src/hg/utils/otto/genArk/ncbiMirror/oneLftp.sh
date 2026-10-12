@@ -77,8 +77,7 @@ lftp -e "
   quit"
 
 export epoch=`date "+%s"`
-# export secondsET=`echo $epoch $startEpoch | awk '{printf "%d", $1-$2}'`
-secondsET=$(( epoch - startEpoch )).
+export secondsET=$(( epoch - startEpoch ))
 export DS=`date "+%F"`
 export T=`date "+%T"`
 printf "### %s %s %s completed lftp %d seconds %s\n" "${epoch}" "${DS}" "${T}" "${secondsET}" "${asmId}"
