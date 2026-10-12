@@ -1,0 +1,22 @@
+table mackay2024Imprint
+"Imprinted differentially methylated regions and their clinical association (Mackay et al 2024)"
+    (
+    string chrom;      "Chromosome"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Imprinted DMR name"
+    uint   score;      "Not used"
+    char[1] strand;    "Strand, not used"
+    uint   thickStart; "Start of thick part"
+    uint   thickEnd;   "End of thick part"
+    uint   reserved;   "Color of the region"
+    string classification; "Clinical classification|Clinically associated: used in diagnosis of an imprinting disorder. Non-clinical: not associated with a clinical phenotype"
+    string methylatedParent; "Methylated allele|Parent whose allele is methylated"
+    uint   numCpGs;    "Number of CpGs|CpG sites in the DMR"
+    string imprintOrigin; "Imprint origin|Whether the methylation is established in the oocyte or sperm (germline DMR) or later (secondary DMR)"
+    string table1Type; "Type in Table 1|Clinically associated, non-clinical, or variable methylation in the paper's Table 1"
+    string keyDmr;     "Key diagnostic DMR|yes for DMRs marked with an asterisk, the most important DMR of a locus for molecular diagnosis"
+    string disorders;  "Associated disorders (as published)|Acronyms as written in Table 1"
+    string disorderNames; "Associated disorders|Full names of the acronyms in Table 1, as described in Table 2 of the paper"
+    string otherNames; "Other names|Other names frequently used in the literature"
+    )

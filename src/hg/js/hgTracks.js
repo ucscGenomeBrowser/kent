@@ -3684,6 +3684,25 @@ var rightClick = {
 
             rightClick.clearItemColors();
 
+        } else if (cmd === 'clearSettings') {
+            // Reset all settings of the track to the defaults but keep its visibility
+            // and that of its subtracks. A subtrack's filters can be set on its
+            // composite, so a subtrack clears the whole composite.
+            rec = hgTracks.trackDb[id];
+            var clearTrack = id;
+            if (rec && tdbIsSubtrack(rec) && rec.parentTrack)
+                clearTrack = rec.parentTrack;
+            $.ajax({
+                type: "GET",
+                url: "../cgi-bin/hgTrackUi",
+                data: cart.addUpdatesToUrl("hgsid=" + getHgsid() + "&db=" + getDb() +
+                          "&hgTrackUi_op=clearSettings&g=" + encodeURIComponent(clearTrack)),
+                dataType: "html",
+                cache: false,
+                success: function() { rightClick.redrawClearedTracks(clearTrack); },
+                error: errorHandler
+            });
+
         } else if (cmd === 'hgTrackUi_follow') {
 
             url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
@@ -3939,6 +3958,25 @@ var rightClick = {
                 imageV2.requestImgUpdate(id, id + "=" + cmd, "", cmd);
             }
         }
+    },
+
+    redrawClearedTracks: function (clearTrack)
+    {   // Redraw the image rows of a track whose settings were just cleared: the track
+        // itself or, for a composite, the rows of its subtracks. Too many rows, or an
+        // image that cannot be updated in place, reload the page instead.
+        var ids = [];
+        for (var tid in hgTracks.trackDb) {
+            var tRec = hgTracks.trackDb[tid];
+            if ((tid === clearTrack || tRec.parentTrack === clearTrack)
+            && document.getElementById('tr_' + tid))
+                ids.push(tid);
+        }
+        if (!imageV2.mapIsUpdateable || ids.length === 0 || ids.length > 10) {
+            imageV2.fullReload();
+            return;
+        }
+        for (var ix = 0; ix < ids.length; ix++)
+            imageV2.requestImgUpdate(ids[ix], "", "");
     },
 
     makeHitCallback: function (title)
@@ -4784,6 +4822,13 @@ var rightClick = {
                     o[rightClick.makeImgTag("palette.png")+" Change Track Color"] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
+                            return true; }
+                    };
+                }
+                if (hgTracks.clearFiltersMenu) {
+                    o[rightClick.makeImgTag("wrench.png")+" Reset filters to defaults"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            rightClick.hit(menuItemClicked, menuObject, "clearSettings");
                             return true; }
                     };
                 }
@@ -8740,5 +8785,87 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
     }
+});
+
+//////////////////////////
+// Session Load Dialog - shows user's recent sessions after loading a session
+
+var sessionLoadDialog = {
+
+    formatTimestamp: function(timestamp) {
+        // Format Unix timestamp to readable date/time
+        var date = new Date(timestamp * 1000);
+        var now = new Date();
+        var diffMs = now - date;
+        var diffDays = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+
+        if (diffDays === 0) {
+            // Today - show time
+            return "Today at " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        } else if (diffDays === 1) {
+            return "Yesterday";
+        } else if (diffDays < 7) {
+            return diffDays + " days ago";
+        } else {
+            return date.toLocaleDateString();
+        }
+    },
+
+    buildSessionList: function(sessions) {
+        // Build HTML for the session list
+        var html = '<div style="max-height: 300px; overflow-y: auto;">';
+        html += '<p style="margin-bottom: 10px;">You just loaded a saved session. ' +
+                'Your previous browser sessions are listed below. ' +
+                'Click to open in a new tab and recover your work.</p>';
+        html += '<table style="width: 100%; border-collapse: collapse;">';
+        html += '<thead><tr style="background: #f0f0f0;">' +
+                '<th style="padding: 8px; text-align: left;">Assembly</th>' +
+                '<th style="padding: 8px; text-align: left;">Position</th>' +
+                '<th style="padding: 8px; text-align: left;">Last Active</th>' +
+                '<th style="padding: 8px; text-align: center;">Open</th>' +
+                '</tr></thead><tbody>';
+
+        for (var i = 0; i < sessions.length; i++) {
+            var s = sessions[i];
+            var url = '../cgi-bin/hgTracks?hgsid=' + encodeURIComponent(s.hgsid);
+            html += '<tr style="border-bottom: 1px solid #ddd;">';
+            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px; font-family: monospace;">' +
+                    htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px;">' + this.formatTimestamp(s.timestamp) + '</td>';
+            html += '<td style="padding: 8px; text-align: center;">' +
+                    '<a href="' + url + '" target="_blank" ' +
+                    'style="color: #0000EE; text-decoration: underline;">Open</a></td>';
+            html += '</tr>';
+        }
+
+        html += '</tbody></table></div>';
+        return html;
+    },
+
+    show: function() {
+        if (typeof recentSessions === 'undefined' || recentSessions.length === 0) {
+            return;
+        }
+        var $dialog = $('<div id="sessionLoadDialog"></div>');
+        $dialog.html(this.buildSessionList(recentSessions));
+        $dialog.dialog({
+            title: 'Recover Your Previous Sessions',
+            width: 550,
+            modal: true,
+            buttons: {
+                'Close': function() {
+                    $(this).dialog('close');
+                }
+            },
+            close: function() {
+                $(this).dialog('destroy').remove();
+            }
+        });
+    }
+};
+
+$(document).ready(function() {
+    sessionLoadDialog.show();
 });
 

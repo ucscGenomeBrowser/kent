@@ -1,0 +1,51 @@
+# #26128 -- in multi-region exon-only view, the dbSNP 153 track in full drew no item
+# names, while dbSNP 142 did.  Gerardo found it on CCR5 (hg38) in 2020 and saw it again
+# on dbSNP 155 in 2024.  The ticket is Hibernating; there is no fix.
+#
+# On hgwdev the cause is visible, because the image code warns there and not on the
+# public site.  In exon view the full-mode label map boxes for the track land below the
+# bottom of the image, sliceIsConsistent() rejects them, and the row is dropped:
+#
+#     imgBox(hg38.multi:...) has bad track - being skipped.
+#
+# So on genome-test the whole row is gone, not only its names.  On the RR, where the
+# warning is off, the row is drawn without its names.  This looks like the same image
+# assembly fault as #38333.
+#
+# Recipe: CCR5 on hg38, knownGene in pack, Common dbSNP(155) in full, then exon view on
+# knownGene.  Common dbSNP is used rather than All dbSNP so that the normal view is
+# really in full (All dbSNP falls back to a density graph at this size) and so that the
+# normal view gives each item a named row.
+#
+# Checks:
+#   1. The normal view draws dbSnp155Common and gives rs1800024 a box in the side-label
+#      map, which is the item name the ticket says goes missing.  This shows the recipe
+#      is in full with names.
+#   2. Exon view: the multi-region button is pressed; dbSnp155Common is drawn; rs1800024
+#      still has its side-label box; there is no "has bad track" warning.
+#
+# xfail: on genome-test on 2026-10-06 step 2 fails because dbSnp155Common is not drawn
+# and the page says "has bad track - being skipped".  It passes on hgwdev-demo6
+# (multiRegionSpaces=on), where exon view is a synthetic assembly and the names are drawn.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test: dbSnp155Common row skipped as a bad track in exon view"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr3%3A46370000-46376500&pix=1100&hideTracks=1"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr3%3A46370000-46376500&knownGene=pack&dbSnp155Composite=show&dbSnp155Common=full"
+  - expect:
+      rows: [ruler, knownGene, dbSnp155Common]
+      has: 'map[name="map_side_dbSnp155Common"] area[href*="i=rs1800024"]'
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly&emGeneTable=knownGene&emPadding=6"
+  - expect:
+      rows: [ruler, knownGene, dbSnp155Common]
+      noText: "has bad track"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'map[name="map_side_dbSnp155Common"] area[href*="i=rs1800024"]'

@@ -55,6 +55,7 @@ group genes
     filterValues.riboseqQuality Excellent,Sufficient,Insufficient,Sufficient in Gaertner et al
     filterType.riboseqQuality multipleListOr
     colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
+    skipFields colorByEvidence,colorByHlaClass
     html gencNcOrfs
     visibility pack
 
@@ -108,7 +109,7 @@ group genes
     mouseOver <b>$gene</b> $uorfType<br> <b>Rank in gene</b>: $rank<br> <b>Kozak</b>: $kozak<br> <b>Intron structure from</b>: $intronsSource
     filterValues.uorfType Non-Overlapping|Non-Overlapping (5' UTR only),Overlapping|Overlapping (overlaps main CDS),N-terminal_extension|N-terminal extension (in-frame)
     filterType.uorfType multipleListOr
-    filterValues.kozak Strong,Moderate,Weak
+    filterValues.kozak Strong,Moderate,Weak,NA
     filterType.kozak multipleListOr
     visibility pack
 

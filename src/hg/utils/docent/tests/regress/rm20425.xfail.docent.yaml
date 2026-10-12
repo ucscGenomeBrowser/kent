@@ -1,0 +1,57 @@
+# #20425 -- a multi-region view of custom regions (a BED3 of BLAT hits, pasted in as
+# custom regions) failed with
+#
+#     doLeftLabels(y=389) returned new y value 485 that is too high - should be 81 at most.
+#
+# Brian Lee traced it to the Detailed Visualization of RepeatMasker Annotations track,
+# rmskJoinedBaseline: hiding that track made the error go away.  The ticket was rejected
+# as a duplicate of #16896, which is the same error from the same track in exon-only
+# mode.  rm16896 covers exonMostly; this script covers the ticket's own mode, custom
+# regions (customUrl), so the two together cover both ways in.
+#
+# Cath's session is on genome.ucsc.edu and its BED3 came from #19619, which is not
+# reproducible here, so the regions are a stand-in: four BLAT-hit-sized regions (500 bp)
+# on three chromosomes, each in repeats.  The size matters.  The first draft used four
+# 50 kb regions, and genome-test passed it while the bug was present: with 500 bp
+# regions the same request on genome-test drops rmskJoinedBaseline, the track Brian Lee
+# named (checked 2026-10-06).  The ticket's regions were BLAT hits, so the small case
+# is the ticket's case.  It is multi-region only and full-mode only: a plain 500 bp view
+# of chr9:133000001-133000500 in full draws both rows on both servers, and the same four
+# regions with the tracks in dense or pack draw both rows on both servers.
+#
+# Checks:
+#   1. In the normal view, both rmskJoined rows are drawn, so the cart has the tracks on.
+#   2. In custom-regions mode: the multi-region button is pressed and every region has its
+#      map box, so the view really is the four regions.  Both rmskJoined rows are drawn,
+#      exact, so the page did not drop rmskJoinedBaseline.  noText is the ticket's
+#      "returned new y value" and "has bad slice", the form the same height mismatch takes
+#      today (see rm16896).
+#   Not asserted: image height.  demo6 draws the space at a different height.
+#
+# 2026-10-06: genome-test FAILS this for the ticket's reason: rmskJoinedBaseline is not
+# drawn in the custom-regions view, with "has bad slice".  hgwdev-demo6
+# (multiRegionSpaces=on) fails too, worse: neither rmskJoined row is drawn.  The 50 kb
+# regions of the first draft pass on both.  So the file is named .xfail.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test (v504) drops rmskJoinedBaseline from a custom-regions view of four 500 bp regions with has bad slice; hgwdev-demo6 drops both rmskJoined rows"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr9%3A133000000-133050000&pix=1100&hideTracks=1&knownGene=pack&joinedRmsk=full&rmskJoinedCurrent=full&rmskJoinedCurrent_sel=1&rmskJoinedBaseline=full&rmskJoinedBaseline_sel=1"
+  - expect: {rows: [ruler, knownGene, rmskJoinedCurrent, rmskJoinedBaseline], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr9%20133000000%20133000500%0Achr1%2010000000%2010000500%0Achr9%20133100000%20133100500%0Achr17%2043044294%2043044794%0A"
+  - expect:
+      rows: [ruler, knownGene, rmskJoinedCurrent, rmskJoinedBaseline]
+      exact: true
+      noText: ["returned new y value", "too high", "has bad slice"]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr9:133000001-133000500"]'
+        - 'area[data-tooltip="chr1:10000001-10000500"]'
+        - 'area[data-tooltip="chr9:133100001-133100500"]'
+        - 'area[data-tooltip="chr17:43044295-43044794"]'

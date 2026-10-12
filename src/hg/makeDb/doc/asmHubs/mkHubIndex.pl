@@ -49,9 +49,11 @@ my $defaultAssembly = shift;
 my $inputList = shift;
 my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
-  $orderList = $toolsDir/$inputList;
+  $orderList = "$toolsDir/$inputList";
 }
 my %cladeId;	# value is asmId, value is clade, useful for 'legacy' index page
+my %genarkAcc;	# key is gcAccession present in RR hgcentral.genark table,
+		# those can use the short /h/<acc> browserUrl
 
 printf STDERR "# mkHubIndex %s %s %s %s\n", $Name, $asmHubName, $defaultAssembly, $orderList;
 my $hprcIndex = 0;
@@ -456,6 +458,9 @@ sub tableContents() {
     my $gbdbUrl = "/gbdb/genark/$accessionDir/$accessionId";
     my $browserName = $commonName;
     my $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?genome=$accessionId&hubUrl=$gbdbUrl/hub.txt";
+    if (defined($genarkAcc{$accessionId})) {
+       $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
+    }
     if ($asmId !~ m/^GC/) {
        $hubUrl = "https://hgdownload.soe.ucsc.edu/goldenPath/$asmId/bigZips";
        $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
@@ -463,14 +468,11 @@ sub tableContents() {
     }
     printf "<tr><td style='text-align: right;'>%d</td>\n", ++$rowCount;
     #  common name and view in browser
-    if ( $asmId =~ m/^GC/ ) {
-       my $hubTxt = "${hubUrl}/hub.txt";
-       my $igvUrl = "https://igv.org/app/?hubURL=$hubTxt";
-       printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
-    } else {
-       my $igvUrl = "https://igv.org/app/?genome=$asmId";
-       printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
-    }
+    # IGV resolves both UCSC db names and GCA_/GCF_ accessions via genome=
+    my $igvGenome = $accessionId;
+    $igvGenome = $asmId if ($asmId !~ m/^GC/);
+    my $igvUrl = "https://igv.org/app/?genome=$igvGenome";
+    printf "<td><span style='float: left;'><a href='%s' target=_blank>%s</a></span><span style='float: right;'>[<a href='%s' target=_blank>IGV</a>]</span></td>\n", $browserUrl, $browserName, $igvUrl;
     # scientific name and data download
     printf "    <td style='text-align: center;'><a href='%s/' target=_blank>%s</a></td>\n", $hubUrl, $sciName;
     if ($asmId !~ m/^GC/) {
@@ -590,6 +592,16 @@ while (my $line = <FH>) {
 }
 close (FH);
 # TBD: and would need to check if all promoted assemblies have been included
+
+# accessions known to the RR genark table get the short /h/<acc> browserUrl
+my $genarkQuery = "/cluster/bin/x86_64/hgsql -hgenome-centdb -N -e 'select gcAccession from genark' hgcentral";
+open (my $ga, "-|", $genarkQuery) or die "can not run: $genarkQuery";
+while (my $acc = <$ga>) {
+  chomp $acc;
+  $genarkAcc{$acc} = 1;
+}
+close ($ga) or die "failed: $genarkQuery";
+printf STDERR "# %d accessions in hgcentral.genark\n", scalar(keys %genarkAcc);
 
 startHtml();
 startTable();

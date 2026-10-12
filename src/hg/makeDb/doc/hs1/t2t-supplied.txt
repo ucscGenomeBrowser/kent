@@ -402,23 +402,24 @@ has to be the parent name plus the primary key value.  The per-subtrack
 child's own display mode and pinning them to dense removes the per-item click
 that the exact copy number is read from.
 
-While the rewrite is in development the old and new versions are both in the
-tree, gated on the include line in t2t-supplied.trackDb.ra, so beta and the RR
-keep serving the current track:
+Released 2026-10-08.  During development the old and new versions both sat in the
+tree, gated on the include line in t2t-supplied.trackDb.ra so that beta and the RR
+kept serving the classic composite; sgdpCopyNumber.trackDb.ra is now the generated
+file, the paired sgdpCopyNumber.alpha.trackDb.ra is gone and the include carries no
+release tag.  sgdpCopyNumber_subset, which was the first 29 samples in plate order
+and existed only because the full picker was unusable, is retired with it (Mark
+approved on #29344).
 
-  include sgdpCopyNumber.trackDb.ra beta,public
-  include sgdpCopyNumber.alpha.trackDb.ra alpha
-
-Push order at release: sgdpCopyNumber_metadata.tsv and sgdpCopyNumber_colors.json
-are new files under /gbdb/hs1/sgdpCopyNumber and have to reach beta and the RR
-before the trackDb change does.  Without the metadata file the configuration page
-has nothing to build its table from, so the track would ship with an empty picker
-and no way to turn any sample on.
-
-When it is released, sgdpCopyNumber.trackDb.ra becomes the generated file and
-both release tags come off.  The sgdpCopyNumber_subset track, which is the
-first 29 samples in plate order and exists only because the full picker was
-unusable, is not in the alpha version.
+Push order, for whoever repeats this on another curated hub: sgdpCopyNumber_metadata.tsv
+and sgdpCopyNumber_colors.json are new files under /gbdb/hs1/sgdpCopyNumber and have
+to reach beta and the RR BEFORE the trackDb change does.  Without the metadata file
+the configuration page has nothing to build its table from, so the track ships with
+an empty picker and no way to turn any sample on.  hs1 is a curated hub, not a native
+assembly and not GenArk, so the rest of the release is makeHub.sh and gbdbPush rather
+than the usual push queue; see the Curated Hubs page on genomewiki.  Note that
+maybeBuildHub writes the tier directories but never removes a file from them, and
+gbdbPush rsyncs without --delete, so sgdpCopyNumber_subset.html has to be deleted by
+hand from /gbdb/hs1/hubs/{alpha,beta,public} and on the RR.
 
 Description page rewritten at the same time.  The old one carried a 319 row
 table of the Eichler lab's internal /net/eichler filesystem paths, which the

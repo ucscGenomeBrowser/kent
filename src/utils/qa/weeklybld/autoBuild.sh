@@ -788,6 +788,39 @@ smoke_instance() {
 
 final_smoke_beta()       { smoke_instance beta; }
 final_smoke_beta_arm64() { smoke_instance beta-arm64; }
+final_smoke_mirror()     { smoke_instance mirror; }
+
+# Update the long-lived kent-mirror container in place, as a real mirror would:
+# the new v${BRANCHNN}_branch browserSetup.sh runs cgiUpdate inside it, then the
+# beta CGIs are copied on top, leaving its carried-forward hg.conf and MariaDB
+# alone. This catches update-path breakage (a CGI that needs a new hg.conf
+# setting or table, a broken browserSetup.sh update) that the fresh-install
+# beta instances cannot see. See update-mirror.sh.
+#
+# NON-FATAL like the smoke tests: a failure leaves a marker that the end-of-phase
+# summary and completion email report, and the build carries on. refs #37655
+final_update_mirror() {
+    local setup="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/browserSetup.sh"
+    local logf="$LOGDIR/v${BRANCHNN}.update-mirror.log"
+    local marker; marker="$(smoke_marker mirror-update)"
+    [[ -f "$setup" ]] || die "browserSetup.sh not found at $setup"
+    if $DRY_RUN; then
+        log "(dry-run) would update kent-mirror in place with $setup"
+        return 0
+    fi
+    if "$WEEKLYBLD/update-mirror.sh" "$setup" >& "$logf"; then
+        rm -f "$marker"
+        log "kent-mirror updated in place. Log: $logf"
+    else
+        : > "$marker"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        log "!!! kent-mirror IN-PLACE UPDATE FAILED -- a mirror updating to"
+        log "!!! v${BRANCHNN} may hit the same problem. Build CONTINUES."
+        log "!!! Log: $logf"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    fi
+    return 0
+}
 
 do_final() {
     log "========== PHASE: FINAL BUILD =========="
@@ -819,6 +852,8 @@ do_final() {
     step docker-beta          final_docker_beta
     step refresh-beta         final_refresh_beta
     step smoke-beta           final_smoke_beta
+    step update-mirror        final_update_mirror
+    step smoke-mirror         final_smoke_mirror
     step docker-beta-arm64    final_docker_beta_arm64
     step refresh-beta-arm64   final_refresh_beta_arm64
     step smoke-beta-arm64     final_smoke_beta_arm64
@@ -832,7 +867,7 @@ do_final() {
         log "##  WARNING: docker smoke test FAILED for:$smoke_failed"
         log "##  The build completed, but the above beta instance(s) are"
         log "##  broken and must be investigated before QA. Per-instance"
-        log "##  logs: $LOGDIR/v${BRANCHNN}.smoke-<name>.log"
+        log "##  logs: $LOGDIR/v${BRANCHNN}.smoke-<name>.log (mirror-update: v${BRANCHNN}.update-mirror.log)"
         log "############################################################"
     fi
 }
@@ -1017,6 +1052,42 @@ wrapup_docker_release() {
 # Refresh kent-rel against the just-pushed release image, then tear down the beta
 # container/image now that v${BRANCHNN} has shipped. refs #37655. Container
 # hygiene only, so a failure here warns but does not abort the phase.
+# The second kent-mirror update of the cycle (the first is final_update_mirror):
+# a plain cgiUpdate from hgdownload with no beta overlay, i.e. exactly what a
+# real mirror gets for this release. If the release has not reached hgdownload
+# yet, update-mirror.sh changes nothing and exits 3; that is flagged for a
+# manual re-run rather than treated as a breakage. Non-fatal either way.
+# refs #37655
+wrapup_update_mirror() {
+    local setup="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/browserSetup.sh"
+    local logf="$LOGDIR/v${BRANCHNN}.update-mirror-release.log"
+    local marker; marker="$(smoke_marker mirror-update)"
+    [[ -f "$setup" ]] || die "browserSetup.sh not found at $setup"
+    if $DRY_RUN; then
+        log "(dry-run) would update kent-mirror from hgdownload with $setup --release"
+        return 0
+    fi
+    local rc=0
+    "$WEEKLYBLD/update-mirror.sh" --release "$setup" >& "$logf" || rc=$?
+    if [[ $rc -eq 0 ]]; then
+        rm -f "$marker"
+        log "kent-mirror updated from hgdownload to the v${BRANCHNN} release. Log: $logf"
+    elif [[ $rc -eq 3 ]]; then
+        : > "$marker"
+        log "WARNING: v${BRANCHNN} is not on hgdownload yet, so kent-mirror was NOT updated."
+        log "         When it is: $WEEKLYBLD/update-mirror.sh --release $setup"
+        log "         then: $WEEKLYBLD/smoke-instance.sh mirror --version ${BRANCHNN}"
+    else
+        : > "$marker"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        log "!!! kent-mirror RELEASE UPDATE FAILED -- real mirrors updating to"
+        log "!!! v${BRANCHNN} may hit the same problem. Wrap-up CONTINUES."
+        log "!!! Log: $logf"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    fi
+    return 0
+}
+
 wrapup_refresh_containers() {
     log "Refreshing local kent-rel container..."
     run "$WEEKLYBLD/refresh-instance.sh" rel || \
@@ -1139,6 +1210,8 @@ do_wrapup() {
     step userapps-src     wrapup_userapps_src
     step docker-release   wrapup_docker_release
     step refresh-containers wrapup_refresh_containers
+    step update-mirror    wrapup_update_mirror
+    step smoke-mirror     final_smoke_mirror
     # Last: a report, so nothing that matters waits on its ~4 minutes.
     step sunset-report    wrapup_sunset_report
 

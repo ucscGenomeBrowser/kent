@@ -4684,6 +4684,14 @@ initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE); 
 
+/* The right-click "Reset filters to defaults" in hgTracks: handled once the tdb is found below */
+boolean clearSettings = sameOk(cartOptionalString(cart, "hgTrackUi_op"), "clearSettings");
+if (clearSettings)
+    {
+    cartRemove(cart, "hgTrackUi_op");
+    clearSettings = cfgOptionBooleanDefault("clearFiltersMenu", FALSE);
+    }
+
 /* Handle dup of track related stuff */
 char *dupeName = handleDupOp(track, trackHash);
 if (dupeName != NULL)
@@ -4800,6 +4808,13 @@ if (isDup)
     if (dup == NULL)
         errAbort("Can't find duplicate track %s", dupWholeName);
     tdb = dupTdbFrom(tdb, dup);
+    }
+
+if (clearSettings)
+    {
+    cartRemoveSettingsForTdbAndChildren(cart, tdb, tdbList);
+    puts("OK");
+    return;
     }
 
 if(cartOptionalString(cart, "ajax"))

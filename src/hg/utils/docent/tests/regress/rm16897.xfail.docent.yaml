@@ -1,0 +1,42 @@
+# #16897 -- multi-region BED loading rejects a file with an empty last line.  Matt's
+# example, a three-line hg38 BED with one blank line at the end, loaded as a custom-region
+# URL, was refused with:
+#
+#     <url> doesn't appear to be in BED format. 3 or more fields required, got 0
+#
+# The typed-input path in hg/hgTracks/hgTracks.c (checkmultiRegionsBedInput) already drops
+# blank lines, but the reader that opens a BED URL does not: a blank line chops to zero
+# fields and hits the numFields < 3 warn.  The ticket is Hibernating and the bug is still
+# there on genome-test on 2026-10-06, so this is an xfail.
+#
+# The fixture is a byte-for-byte copy of Matt's myTestRegions3.txt, trailing blank line
+# included, at ~braney/public_html/docentFixtures/mrBugs/16897/rm16897regions.bed.  It is
+# given through the textarea's cart variable, which takes a URL on its first line.
+#
+# A control copy without the blank line, rm16897control.bed in the same folder, passes this
+# script on genome-test and demo6 (measured 2026-10-06), so the failure is the blank line.
+#
+# Checks: the ticket's own error string is absent, the multi-region button is pressed, and
+# the third region (chrX) has its map box, which is only true when all three regions loaded.
+# virtWinFull=on puts all three regions on screen.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test still warns \"doesn't appear to be in BED format. 3 or more fields required, got 0\""
+
+target: genome-test
+db: hg38
+position: chr9:133255176-133275214
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr9%3A133255176-133275214&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2FmrBugs%2F16897%2Frm16897regions.bed%0A"
+  - expect:
+      rows: [ruler, knownGene]
+      noText: "3 or more fields required, got 0"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr21:31659623-31668931"]'
+        - 'area[data-tooltip="chrX:154762757-154777689"]'

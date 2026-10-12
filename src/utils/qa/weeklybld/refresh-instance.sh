@@ -26,6 +26,10 @@ case "$name" in
     tip|beta|beta-arm64) ;;
     rel)                 docker pull genomebrowser/server:latest ;;
     v[0-9][0-9][0-9])    docker pull "genomebrowser/server:$name" ;;
+    # Recreating kent-mirror would throw away the in-place-updated cgi-bin,
+    # htdocs and hg.conf that are the whole point of it. Use update-mirror.sh,
+    # or remove-instance.sh mirror to deliberately start it over.
+    mirror)              echo "refusing to recreate kent-mirror; use update-mirror.sh" >&2; exit 1 ;;
     *)                   usage ;;
 esac
 container="kent-$name"

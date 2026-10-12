@@ -1,0 +1,48 @@
+# #20575 -- A session saved to a file did not bring its custom data back when the file was
+# loaded.  Both halves of the ticket:
+#   1) a custom track:     ctfile_hg38 was written as ..&#x2F;trash&#x2F;ct&#x2F;...
+#   2) custom regions:     multiRegionsBedUrl was written as ..&#x2F;trash&#x2F;hgt&#x2F;...
+# so the file held HTML-encoded paths, and on upload hgTracks could not find either file:
+# the custom track was gone and the multi-region view lost its BED regions.
+#
+# rm38303 already drives the custom-regions half of this round trip for a different bug.
+# This script adds the custom track, which is the half rm38303 does not cover, and checks
+# both after one save-to-file and upload through hgSession, which is the ticket's recipe.
+#
+# Checks after the round trip:
+#   has   the custom track's row (tr id starts tr_ct_rm20575), so ctfile_hg38 was read;
+#   has   the second region's ruler box chr7:155799530-155812871, so multiRegionsBedUrl
+#         was read and the view is still multi-region;
+#   noText "No BED or BED URL specified", the warning a lost multiRegionsBedUrl gives.
+# The same checks run before the save, so a fixture that never loaded cannot pass.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100&hideTracks=1&knownGene=pack"
+  # A separate request, because hideTracks=1 in the same one hides the new custom track too.
+  - goto: "/cgi-bin/hgTracks?hgct_customText=track%20name%3Drm20575%20description%3D%22rm20575%20fixture%22%20visibility%3Dpack%0Achr17%2043050000%2043060000%20rm20575a%0Achr7%20155800000%20155805000%20rm20575b%0A"
+  - expect:
+      rows: [ruler, knownGene]
+      has: 'tr[id^="tr_ct_rm20575"]'
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr17%2043044294%2043125483%0Achr7%20155799529%20155812871%0A"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'tr[id^="tr_ct_rm20575"]'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+      noText: "No BED or BED URL specified"
+  - session: rt
+  - loadSession: {file: rt}
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'tr[id^="tr_ct_rm20575"]'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+      noText: "No BED or BED URL specified"

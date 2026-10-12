@@ -1,0 +1,104 @@
+<h2>Description</h2>
+
+<p>
+Part of the <a href="hgTrackUi?db=$db&amp;g=$parentTrack">Imprinting</a> track collection,
+this track shows the methylation difference between the maternal and the paternal haplotype at
+individual CpG sites that were found to be differentially methylated (DMCs). The sites come from 123
+trio-phased assemblies of the HPRC release 2. Positive values mean that the maternal copy is more
+methylated, negative values that the paternal copy is more methylated. The regions in the
+<a href="hgTrackUi?db=$db&amp;g=hprcDmr">HPRC2 DMRs</a> track are built from these sites.
+</p>
+
+<p>
+The authors calculated the values on the CHM13v2.0 reference. They were lifted to hg38 for this
+track, see Methods for details.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+The track is a bar graph with one value per CpG site. Bars above the zero line (red) show higher
+methylation on the maternal haplotype and bars below it (blue) higher methylation on the paternal
+haplotype. When zoomed out, the maximum of all sites in a pixel is shown.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Methylation was called from Oxford Nanopore reads with modkit v0.4.1 and the reads were aligned to
+the personalized assemblies with Winnowmap v2.03 (<tt>-x map-ont -I 8G --MD --cs -y -a -Y -L
+--eqx</tt>), keeping primary alignments. Each diploid assembly was split by haplotype and chain
+files from haplotype to CHM13v2.0 were built with a Nextflow pipeline running nf-LO and minimap2.
+Methylation calls were lifted to CHM13v2.0 with CrossMap v0.7.0, using a shift of 1 bp on the
+negative strand so that the methylation tag stays on the C of the CpG. Maternal and paternal groups
+were compared per chromosome with DSS v2.58.0 in R v4.5.3, using DSS::DMLtest with smoothing (span
+500 bp) and unequal dispersion. Differentially methylated CpGs were called with delta 0 and a
+p-value below 0.001. See Lucas et al. for details on the HPRC data.</p>
+
+<p>
+The data file was provided by the authors, who also lifted the values from CHM13v2.0 to hg38 with
+the chain files of the <a href="https://github.com/marbl/CHM13" target="_blank">CHM13 project</a>.
+The bigWig file was linked into /gbdb without changes, see the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/imprinting.txt"
+target="_blank">makeDoc file</a>.</p>
+
+<h2>Data Access</h2>
+
+<p>The data can be explored interactively in table format with the <a href="../cgi-bin/hgTables">Table Browser</a> or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or tab-sep tables. From scripts, the data can be accessed through our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>hprcDmc</i>.</p>
+
+<p>For automated download and analysis, the data is stored in a bigWig file that can be downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/hprcImprint/" target="_blank">our download server</a>. The file for this track is called <tt>hprcDmc.bw</tt>. Individual regions or the whole genome can be obtained using our tool <tt>bigWigToBedGraph</tt>, which can be compiled from the source code or downloaded as a precompiled binary for your system. Instructions for downloading source code and binaries can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can also be used to obtain values within a given range, e.g. <tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg38/imprinting/hprcImprint/hprcDmc.bw -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+
+<p>The original annotation source data was provided by the authors and is available on request.</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Juhyun Kim and Brandon D. Pickett for providing this track.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Lucas JK, Hebbar P, Liao WW, Macias-Velasco JF, Novak AM, Asri M, Balacco JR, Blair AP, Bolognini D,
+Ebler J <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/42539208" target="_blank">
+HPRC2: A human pangenome reference with near-complete coverage of common genetic variation</a>.
+<em>bioRxiv</em>. 2026 Jul 22;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42539208" target="_blank">42539208</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC13419748/" target="_blank">PMC13419748</a>
+</p>
+
+
+
+<p>
+Feng H, Wu H.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34084562" target="_blank">
+Differential methylation analysis for bisulfite sequencing using DSS</a>.
+<em>Quant Biol</em>. 2019 Dec 31;7(4):327-334.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34084562" target="_blank">34084562</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8171293/" target="_blank">PMC8171293</a>
+</p>
+
+
+
+<p>
+Talenti A, Prendergast J.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/34383887" target="_blank">
+nf-LO: A Scalable, Containerized Workflow for Genome-to-Genome Lift Over</a>.
+<em>Genome Biol Evol</em>. 2021 Sep 1;13(9).
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/34383887" target="_blank">34383887</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8412297/" target="_blank">PMC8412297</a>
+</p>
+
+
+
+<p>
+Zhao H, Sun Z, Wang J, Huang H, Kocher JP, Wang L.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/24351709" target="_blank">
+CrossMap: a versatile tool for coordinate conversion between genome assemblies</a>.
+<em>Bioinformatics</em>. 2014 Apr 1;30(7):1006-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/24351709" target="_blank">24351709</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3967108/" target="_blank">PMC3967108</a>
+</p>
+

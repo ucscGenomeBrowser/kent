@@ -54,9 +54,43 @@ set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
 # --skip-add-drop-table ... to avoid dropping existing tables
 # Note that INSERT is turned into REPLACE making our table contents dominant, 
 #      but users additional rows are preserved
-hgsqldump ${IGNORE_TABLES} --skip-lock-tables --skip-add-drop-table --skip-extended-insert --order-by-primary -c -h genome-centdb \
+#
+# These tables are kept on the mirror (CREATE TABLE IF NOT EXISTS), so a column
+# we add on the RR never reaches a mirror whose table predates it, and the
+# REPLACE rows below, which name every column, then fail with "Unknown column"
+# and stop the whole load (refs #38503: hubPublic.email). So the dump is written
+# in three parts: the table definitions, then for every column of these tables
+# a statement that adds the column only if the mirror's table lacks it, then
+# the rows. The add-if-missing check uses information_schema and a prepared
+# statement rather than ADD COLUMN IF NOT EXISTS, which MySQL does not have.
+# CHAR(96) is a backtick, written that way to keep it away from tcsh.
+hgsqldump ${IGNORE_TABLES} --skip-lock-tables --skip-add-drop-table --no-data -h genome-centdb \
         --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
-        "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/; s/INSERT/REPLACE/" \
+        "s/genome-centdb/localhost/; s/CREATE TABLE/CREATE TABLE IF NOT EXISTS/" \
+    >> /tmp/hgcentraltemp.sql
+
+set TABLE_IN_LIST=`echo "${CREATE_AND_FILL}" | sed -e "s/ /','/g"`
+echo "" >> /tmp/hgcentraltemp.sql
+echo "-- Add any of the columns above that an older mirror table is missing" >> /tmp/hgcentraltemp.sql
+hgsql -N -h genome-centdb -e "SELECT CONCAT( \
+    'SET @hgcAddCol = (SELECT IF(COUNT(*) = 0, ''ALTER TABLE ', CHAR(96), TABLE_NAME, CHAR(96), \
+    ' ADD COLUMN ', CHAR(96), COLUMN_NAME, CHAR(96), ' ', COLUMN_TYPE, \
+    IF(IS_NULLABLE = 'YES', ' DEFAULT NULL', ' NOT NULL'), \
+    ''', ''DO 0'') FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ''', \
+    TABLE_NAME, ''' AND COLUMN_NAME = ''', COLUMN_NAME, '''); ', \
+    'PREPARE hgcAddColStmt FROM @hgcAddCol; EXECUTE hgcAddColStmt; DEALLOCATE PREPARE hgcAddColStmt;') \
+    FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = 'hgcentral' \
+    AND TABLE_NAME IN ('${TABLE_IN_LIST}') ORDER BY TABLE_NAME, ORDINAL_POSITION" \
+    >> /tmp/hgcentraltemp.sql
+if ( $status ) then
+	echo "error: could not generate the add-missing-column statements"
+	exit 1
+endif
+echo "" >> /tmp/hgcentraltemp.sql
+
+hgsqldump ${IGNORE_TABLES} --skip-lock-tables --no-create-info --skip-extended-insert --order-by-primary -c -h genome-centdb \
+        --no-create-db --databases hgcentral  | grep -v "^USE " | sed -e \
+        "s/genome-centdb/localhost/; s/INSERT/REPLACE/" \
     >> /tmp/hgcentraltemp.sql
 
 # get rid of some mysql5 trash in the output we don't want, as well as

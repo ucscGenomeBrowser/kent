@@ -15,7 +15,7 @@
 # Writes (into the track data dir, then symlinked into /gbdb/hs1/sgdpCopyNumber):
 #   sgdpCopyNumber_metadata.tsv
 #   sgdpCopyNumber_colors.json
-#   sgdpCopyNumber.alpha.trackDb.ra  - copied by hand into the trackDb tree after review
+#   sgdpCopyNumber.trackDb.ra        - copied by hand into the trackDb tree after review
 
 import json, os, sys, collections
 
@@ -26,7 +26,7 @@ SAMPLES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sgdpCopyNumb
 
 TSV     = os.path.join(DATADIR, "sgdpCopyNumber_metadata.tsv")
 COLORS  = os.path.join(DATADIR, "sgdpCopyNumber_colors.json")
-RA      = os.path.join(DATADIR, "sgdpCopyNumber.alpha.trackDb.ra")
+RA      = os.path.join(DATADIR, "sgdpCopyNumber.trackDb.ra")
 
 TRACK   = "sgdpCopyNumber"
 
@@ -168,10 +168,10 @@ def loadEnaSamples():
 def loadSampleList():
     """The frozen sample list: (libId, legacyTrackName, bigDataUrl) in file order.
 
-    This deliberately does not read the trackDb .ra.  At release the generated stanzas
-    replace sgdpCopyNumber.trackDb.ra, and their names no longer carry the region and
-    population prefix that regionPopFromLegacyName() needs, so a script that read its own
-    output would quietly lose those two fields for any sample the SGDP table misses."""
+    This deliberately does not read the trackDb .ra.  The generated stanzas now are
+    sgdpCopyNumber.trackDb.ra, and their names no longer carry the region and population
+    prefix that regionPopFromLegacyName() needs, so a script that read its own output
+    would quietly lose those two fields for any sample the SGDP table misses."""
     rows = []
     for line in open(SAMPLES, encoding="utf-8"):
         if line.startswith("#") or not line.strip():

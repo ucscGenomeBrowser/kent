@@ -16,23 +16,24 @@ touching production hgwdev. The instances:
 - `kent-beta` -> image `kent:beta` (amd64), port 127.0.0.1:8082, current beta CGIs, exists only between `autoBuild.sh do_final` and the next `do_wrapup`
 - `kent-beta-arm64` -> image `kent:beta-arm64`, port 127.0.0.1:8084, the arm64 beta compiled from source in-image (runs emulated on this amd64 host via QEMU), exists only between `do_final` and the next `do_wrapup`. Lets QA smoke-test the arm64 release artifact before it is pushed at `do_wrapup`. NOT overlaid (amd64 cgi-bin-beta binaries can't run under arm64), so it is genuine beta code baked at build time.
 - `kent-rel`  -> image `genomebrowser/server:latest`, port 127.0.0.1:8083, the released image, refreshed at `do_wrapup`
+- `kent-mirror` -> created once from `genomebrowser/server:v493` (the last release whose hubPublic lacks the #33571 email column, so it carries the same old state as the mirrors #38503 broke), port 127.0.0.1:8085, then NEVER recreated. It is updated in place like a real mirror twice per release: at `do_final`, `update-mirror.sh` runs the new v${NN}_branch `browserSetup.sh -b cgiUpdate` and then overlays the beta CGIs/js/style (new code meets old mirror state before QA starts); at `do_wrapup`, `update-mirror.sh --release` runs the cgiUpdate alone with no overlay, which is exactly what real mirrors get (if hgdownload's hgTracks is not yet this build's, it changes nothing, exits 3, and wrap-up logs the command to re-run later). Either way it keeps its carried-forward hg.conf, hgcentral and MariaDB. It catches update-path breakage the fresh-install instances cannot: a CGI needing a new hg.conf setting or table, leftover files from old releases, a broken browserSetup.sh update. `refresh-instance.sh mirror` refuses; `remove-instance.sh mirror` deliberately starts its history over. Only `cgiUpdate` runs, not a full `update`, which would rsync all of hgFixed. An update failure is non-fatal but flagged like a smoke failure (marker `mirror-update`, logs `logs/v${NN}.update-mirror.log` / `v${NN}.update-mirror-release.log`), and `smoke-instance.sh mirror` runs right after.
 - `kent-vNNN` -> image `genomebrowser/server:vNNN`, port 127.0.0.1:8NNN, a past release, kept so a bug can be reproduced against a release a user is still on (refs #38377). The port encodes the release: v503 -> 8503. Not overlaid, for the same reason `rel` is not: it has to be the code that shipped. Started by hand with `run-instance.sh vNNN`, not by the build, and there is no rule yet for how many to keep.
 
 The lifecycle scripts in this directory implement the build/start/refresh/remove
 cycle: `buildTipImage.sh`, `run-instance.sh`, `refresh-instance.sh`,
 `remove-instance.sh`, `overlay-cgi.sh`, `smoke-instance.sh`, `start-all.sh`,
 `stop-all.sh`, the shell-in helpers `kent-tip` / `kent-beta` /
-`kent-beta-arm64` / `kent-rel`, and the off-host `tunnel-tip.sh` /
-`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh`. Each lifecycle
+`kent-beta-arm64` / `kent-rel` / `kent-mirror`, `update-mirror.sh`, and the off-host `tunnel-tip.sh` /
+`tunnel-beta.sh` / `tunnel-beta-arm64.sh` / `tunnel-rel.sh` / `tunnel-mirror.sh`. Each lifecycle
 script also takes a release name (`run-instance.sh v503`), and `start-all.sh` /
 `stop-all.sh` pick up every `kent-vNNN` container that exists rather than a
 list. Off-host access to a release instance is `tunnel-release.sh vNNN`, one
 script for all of them, because which releases we keep changes. `autoBuild.sh`
 was modified to invoke the lifecycle scripts at `do_final` (build kent:beta +
-kent:beta-arm64, refresh + smoke-test both) and `do_wrapup` (refresh kent-rel +
-tear down kent-beta and kent-beta-arm64).
+kent:beta-arm64, refresh + smoke-test both, update + smoke-test kent-mirror) and `do_wrapup` (refresh kent-rel +
+tear down kent-beta and kent-beta-arm64, release-update + smoke-test kent-mirror).
 
-`smoke-instance.sh [tip|beta|beta-arm64|rel|vNNN ...] [--version NN]` is a quick
+`smoke-instance.sh [tip|beta|beta-arm64|rel|mirror|vNNN ...] [--version NN]` is a quick
 post-start health check: container running, hgGateway, an hg38 + hg19 hgTracks
 render (a real drawn PNG, not just HTTP 200, so it exercises Apache + the CGI +
 MariaDB + trackDb together), hgBlat, hgTables, and the CGI version. With no
@@ -96,7 +97,7 @@ What's not yet exercised live:
 ## TODO
 
 1. **Apache reverse-proxy vhosts** for
-   `hgwdev-dock-{tip,beta,rel}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083}`,
+   `hgwdev-dock-{tip,beta,rel,beta-arm64,mirror}.gi.ucsc.edu` -> `127.0.0.1:{8081,8082,8083,8084,8085}`,
    and something equivalent for the release instances on 8NNN.
    This touches production hgwdev Apache and DNS, so likely a sysadmin ticket.
    Until then, the `tunnel-*.sh` scripts cover off-host access; on-host

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Make a small version of the gnomAD HGDP+1000G genotype VCF (3.5 TB) for the
 # phasedVars hgdp1k track, so haplotype clustering works at higher zoom levels.
-# Keeps only SNVs with INFO/AC > 5, the GT genotype field and INFO/AC,AN,AF.
+# Keeps only PASS SNVs with INFO/AC > 5, the GT genotype field and INFO/AC,AN,AF.
 # Runs 10 Mbp chunks in parallel, then concatenates them.
 #
 # Usage:
@@ -45,7 +45,7 @@ echo "$(wc -l < "$REGIONS_FILE") chunks, running $JOBS jobs"
 # by default -r returns every record that overlaps the region, so a record could
 # end up in two chunks; --regions-overlap pos only uses the start position
 process_chunk() {
-    bcftools view --regions-overlap pos -r "$1" -v snps -i 'INFO/AC>5' "$INPUT" -Ou \
+    bcftools view --regions-overlap pos -r "$1" -f PASS -v snps -i 'INFO/AC>5' "$INPUT" -Ou \
         | bcftools annotate -x '^INFO/AC,INFO/AN,INFO/AF,^FORMAT/GT' -Oz -o "$2.tmp"
     mv "$2.tmp" "$2"
 }

@@ -260,15 +260,6 @@ RELEASE_GATES = {
                "looked up, no codon carries a transcript number, and the rendering and the "
                "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
                "released."),
-        h("skipMalformedCgiPairs", "flag", "hg/lib/hgConfig.c", default="FALSE",
-          role="gate", verified=True, ticket="38340",
-          note="Step over a CGI or cookie pair that has no =value, instead of losing the "
-               "pair after it or aborting the request.  Covers parseCookies in cheapcgi, "
-               "hgSession's session backup, and refreshNamedSessionCustomTracks.  The query "
-               "string parsers were fixed unconditionally under #38335 and do not read this "
-               "flag.  The kent libraries cannot read hg.conf, so hgConfig.c hands the "
-               "setting to cheapcgi through cgiSkipMalformedPairs.  Off during QA; flip to "
-               "TRUE once released."),
         h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
           role="gate", verified=True, ticket="38273",
           note="Copy a track collection's generated hub file when the program that writes "
@@ -291,6 +282,14 @@ RELEASE_GATES = {
                "\"type bigNet\" fails to load with an unsupported-type error, "
                "quickLift refuses the type, and neither hubCheck nor the hubApi "
                "lists it among the supported types."),
+        h("clearFiltersMenu", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38507",
+          note="The \"Reset filters to defaults\" item in hgTracks' right-click "
+               "menu, which clears a track's cart settings (and those of its "
+               "subtracks) but keeps their visibility.  Also read in "
+               "hgTrackUi.c, which does the clearing; with it off the menu item "
+               "is not offered and hgTrackUi ignores the request.  Off during "
+               "QA; flip to TRUE once released."),
         h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "
@@ -484,6 +483,53 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("browser.quickLiftGtex", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38512",
+          note="Draw a quickLifted GTEx gene expression track (gtexGene, "
+               "gtexGeneV4, gtexGeneV8) as GTEx, with its bar charts, from "
+               "genes and gene models read out of the assembly it came from "
+               "through the quickLift chain.  Read in quickLiftGtexEnabled() "
+               "and asked in fillInFromType() (simpleTracks.c), which gives a "
+               "lifted track gtexGeneMethods despite its hub prefix, in "
+               "gtexLiftDb() (gtexTracks.c), and in hgc's doMiddle, which "
+               "sends a click on a lifted GTEx item to doGtexGeneExpr().  Off, "
+               "a lifted GTEx track is drawn as a plain bed and clicks go to "
+               "the generic details page, as before.  Asked when the page "
+               "is drawn, so it applies to tracks lifted before it was set.  "
+               "A cart variable of the same name overrides it, like "
+               "browser.quickLiftBarChart."),
+        h("browser.quickLiftMafSummary", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38513",
+          note="Let a quickLifted maf track (wigMaf, such as hg19 "
+               "multiz100way) read its summary table above the summary "
+               "window size, from the assembly it came from, and lift the "
+               "rows; read its blocks with no padding around the window; and "
+               "draw its score overview lifted.  Read in "
+               "quickLiftMafSummaryEnabled() and asked by inSummaryMode() "
+               "(hgTracks/mafTrack.h), quickLiftLoadMafs() and the score "
+               "overview in hgTracks/wigMafTrack.c.  Off, a lifted maf reads "
+               "every block at any zoom, as before, which runs out of memory "
+               "at 50 Mb.  A cart variable of the same name overrides it, "
+               "like browser.quickLiftBarChart."),
+        h("browser.quickLiftWig", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38520",
+          note="Let quickLift lift a wig track kept in a table and a .wib "
+               "file (such as hg19 phastCons100way), reading its rows from "
+               "the assembly it came from and drawing each value where the "
+               "chain puts it.  Read in quickLiftWigEnabled() and asked by "
+               "validateOneTdb() (hg/lib/trackHub.c), which lets wig tracks "
+               "into the quickLift hub, by wigLoadItems() "
+               "(hgTracks/wigTrack.c), which also covers a lifted wigMaf's "
+               "conservation wiggles, and by genericWiggleClick() and "
+               "bigWigClick() (hgc/wiggleClick.c), which send a click on a "
+               "lifted wig or bigWig to a page reading the values through the "
+               "chain.  Off, wig tracks are left out of a quickLift, a lifted "
+               "wigMaf draws the same-named wiggle table of the assembly it is "
+               "lifted onto, and a lifted bigWig click queries the file at the "
+               "reference position, all as before.  A lifted wig left in a hub "
+               "written while it was on draws nothing with it off, rather than "
+               "this assembly's table of the same name.  A cart variable of "
+               "the same name overrides it, like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "
@@ -1801,6 +1847,30 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
+          ticket="38510",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
+               "an item through every chain it overlaps, behind two hg.conf "
+               "gates, refs #38510.  Needs a description and a gate or knob "
+               "call."),
+        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
+          default="FALSE", ticket="38510",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
+               "an item through every chain it overlaps, behind two hg.conf "
+               "gates, refs #38510.  Needs a description and a gate or knob "
+               "call."),
+        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
+          ticket="35736",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
+               "Came in at 6e201f9c97f, Offer a dialog of previously used "
+               "hgsids when opening a session, if any exist for your hguid, "
+               "refs #35736,#30031.  Needs a description and a gate or knob "
+               "call."),
         h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
           default="FALSE", ticket="38490",
           note="Written down by --auto-register, not yet reviewed by a "

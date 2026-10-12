@@ -78,6 +78,14 @@ if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
 binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
 }
 
+void liftOverRemoveChainHash(struct hash *chainHash, struct chain *chain)
+/* Remove a chain that liftOverAddChainHash() added to chainHash.  The chain is not freed. */
+{
+struct chromMap *map = hashFindVal(chainHash, chain->tName);
+if (map != NULL)
+    binKeeperRemove(map->bk, chain->tStart, chain->tEnd, chain);
+}
+
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
 {
@@ -101,6 +109,13 @@ struct chromMap *map = hashFindVal(chainHash, chrom);
 if (map == NULL)
     return NULL;
 return binKeeperFind(map->bk, start, (end == start) ? end + 1 : end);
+}
+
+struct binElement *liftOverChainsInRange(struct hash *chainHash, char *chrom, int start, int end)
+/* Return every chain in chainHash that overlaps chrom:start-end, as binElements whose val is
+ * the chain.  Free the list with slFreeList, not the chains, which still belong to the hash. */
+{
+return findRange(chainHash, chrom, start, end);
 }
 
 struct chain *liftOverChainForRange(struct hash *chainHash, char *chrom, int start, int end)

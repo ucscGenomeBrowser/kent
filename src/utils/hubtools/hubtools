@@ -36,7 +36,8 @@ def setSubcommandName(parser, name):
         parser._subcommand_name = name
     return parser
 
-#import pyyaml   # not loaded here, so it's not a hard requirement, is lazy loaded in parseMetaYaml()
+# pyyaml is optional: parseMetaYaml() uses it if installed, else parseSimpleYaml().
+# Keep this script to the standard library, so it runs on any python3 without installs.
 
 # ==== functions =====
 
@@ -542,9 +543,45 @@ def parseMetaJson(fname):
     newMeta = json.load(open(fname))
     return newMeta
 
+def yamlScalar(s):
+    " strip a trailing comment and the quotes from a yaml value "
+    s = s.strip()
+    if len(s) >= 2 and s[0] == s[-1] and s[0] in "'\"":
+        return s[1:-1]
+    return re.sub(r"\s+#.*$", "", s)
+
+def parseSimpleYaml(fname):
+    """ parse the subset of yaml that a tracks.yaml needs, without the pyyaml package:
+    a top-level key per track, each with indented 'tag: value' lines below it. Anything
+    else, like lists or multi-line values, needs pyyaml. """
+    data = OrderedDict()
+    trackDict = None
+    for lineNo, line in enumerate(open(fname), start=1):
+        if line.strip() == "" or line.lstrip().startswith("#") or line.strip() == "---":
+            continue
+        indented = line[0] in " \t"
+        key, sep, val = line.strip().partition(":")
+        if not sep or key.startswith("-") or val.strip().startswith(("[", "{", "|", ">")):
+            errAbort("%s line %d: this yaml syntax needs the pyyaml package, install it "
+                    "with 'pip install pyyaml', or use tracks.json or tracks.tsv instead" % (fname, lineNo))
+        key = yamlScalar(key)
+        if not indented:
+            trackDict = OrderedDict()
+            data[key] = trackDict
+        elif trackDict is None:
+            errAbort("%s line %d: indented line before the first track name" % (fname, lineNo))
+        else:
+            trackDict[key] = yamlScalar(val)
+    return data
+
 def parseMetaYaml(fname):
-    " parse yaml file "
-    import yaml # if this doesn't work, run 'pip install pyyaml'
+    " parse yaml file, with pyyaml if it is installed "
+    try:
+        import yaml
+    except ImportError:
+        logging.debug("pyyaml is not installed, using the simple yaml parser for %s" % fname)
+        return parseSimpleYaml(fname)
+
     with open(fname) as stream:
         try:
             return yaml.safe_load(stream)
@@ -3555,21 +3592,63 @@ def relBigDataUrl(urlPrefix, fname):
         return fname
     return urlPrefix + "/" + fname
 
-def ctSortByPriority(tdbData):
+def kentHashString(s):
+    " port of hashString() in kent/src/lib/hash.c: the bytes are signed chars there "
+    result = 0
+    for b in s.encode("utf-8"):
+        if b > 127:
+            b -= 256
+        result = (result + (result << 3) + b) & 0xffffffff
+    return result
+
+def ctTrackId(name):
+    """ the track name that hgTracks gives a custom track, the one its cart variables
+    start with. Port of customTrackTableFromLabel() in kent/src/hg/lib/customTrack.c, the
+    short label of a custom track is the name= of its track line. """
+    alnum = re.sub(r"[^A-Za-z0-9]", "", name)
+    return "ct_%s_%d" % (alnum, kentHashString(name) % 9997)
+
+def getCartImgOrds(serverUrl, hgsid, apiKey):
+    """ return a dict trackName -> position for the tracks that the user dragged into a
+    new order in hgTracks. That order is only in the cart, as <track>_imgOrd variables,
+    the track archive does not have it. Returns an empty dict if cartDump cannot be read. """
+    params = {"hgsid":hgsid, "apiKey":apiKey}
+    url = serverUrl + "/cgi-bin/cartDump?" + urllib.parse.urlencode(params)
+    logging.info("Getting the track order from the cart of hgsid %s" % hgsid)
+    page = httpReqSafe(url)
+    if page is None:
+        logging.warning("Could not read the cart from %s/cgi-bin/cartDump, the hub will "
+                "not have the track order of the session" % serverUrl)
+        return {}
+
+    # cartDump prints one 'variable value' per line, inside some HTML
+    imgOrds = {}
+    for match in re.finditer(r"^(\S+)_imgOrd (-?\d+)\s*$", page, re.MULTILINE):
+        imgOrds[match.group(1)] = int(match.group(2))
+    logging.debug("imgOrd variables in the cart: %s" % imgOrds)
+    return imgOrds
+
+def ctSortByPriority(tdbData, imgOrds=None):
     """ order the custom tracks of one assembly the way the session shows them. The
     archive has one file per track and the tar was made from a directory listing, so the
-    file order is meaningless; the order lives in the priority of the track line, which
-    hgSession writes into every track of the archive. Archives made before it did that
-    have no priority, for those keep the file name order, which is at least stable. """
+    file order is meaningless. Tracks that the user dragged into place come first, in
+    that order, like hgTracks shows them; imgOrds is a dict trackName -> position from the
+    cart. The others are sorted by the priority of the track line, which newer versions
+    of hgSession write into every track of the archive. Without either, keep the file
+    name order, which is at least stable. """
+    imgOrds = imgOrds or {}
     def sortKey(item):
         fname, tdb = item
+        imgOrd = imgOrds.get(ctTrackId(tdb.get("name", "")))
+        if imgOrd is not None:
+            return (0, float(imgOrd), fname)
         prio = tdb.get("priority", "")
         # a track line without a priority sorts after all of the numbered ones
-        return (0, float(prio), fname) if isNumber(prio) else (1, 0.0, fname)
+        return (1, float(prio), fname) if isNumber(prio) else (2, 0.0, fname)
 
     return sorted(tdbData.items(), key=sortKey)
 
-def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
+def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0, imgOrds=None):
     """ convert one db part of a track archive: append a 'genome' stanza and one stanza
     per custom track to the already-open hub.txt handle ofh, and put converted or
     downloaded data files into outDir. bigDataUrls of local files are prefixed with
@@ -3591,7 +3670,7 @@ def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
     getUrlsFnames = []
     doneFnames = set()
     tdbIdx = startIdx
-    for fname, tdb in ctSortByPriority(tdbData):
+    for fname, tdb in ctSortByPriority(tdbData, imgOrds):
         tdb["shortLabel"] = tdb["name"]
 
         tdbIdx += 1
@@ -3647,8 +3726,9 @@ def convCtDb(db, inDir, outDir, urlPrefix, ofh, doDownload, startIdx=0):
 
     return getUrlsFnames, tdbIdx - startIdx
 
-def convArchDir(hubInfoDir, inDir, outDir, doDownload, hubMeta=None):
-    " convert a directory created from the .tar.gz file downloaded via our track archive feature "
+def convArchDir(hubInfoDir, inDir, outDir, doDownload, hubMeta=None, imgOrds=None):
+    """ convert a directory created from the .tar.gz file downloaded via our track archive
+    feature. imgOrds is the track order from the cart, see getCartImgOrds() """
     logging.info("Converting track archive in %s to a new track hub in %s" % (inDir, outDir))
     dbContent = os.listdir(inDir)
     dbDirs = []
@@ -3684,7 +3764,7 @@ def convArchDir(hubInfoDir, inDir, outDir, doDownload, hubMeta=None):
     for db, inSubDir in dbDirs:
         logging.debug("Processing %s, db=%s" % (inSubDir, db))
         dbUrls, dbTracks = convCtDb(db, inSubDir, join(outDir, db), db, ofh, doDownload,
-                startIdx=trackCount)
+                startIdx=trackCount, imgOrds=imgOrds)
         if dbTracks==0:
             continue
         allBigDataUrls.extend(dbUrls)
@@ -3894,7 +3974,10 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
         tgzFh = makeTempFile(dir=downDir, suffix=".tar.gz", mode="wb")
         downloadTrackArchive(serverUrl, hgsid, tgzFh, apiKey)
         tgzFname = tgzFh.name
+        imgOrds = getCartImgOrds(serverUrl, hgsid, apiKey)
     else:
+        # a local archive has no cart, so a drag-and-drop track order is lost
+        imgOrds = None
         tgzFh = None
         tgzFname = url
         archName = basename(url)
@@ -3911,7 +3994,7 @@ def convCtUrlOrFile(url, inDir, outDir, doDownload):
         except TypeError:
             tar.extractall(path=downDir)
 
-    hubTxtFname, trackCount, dbs = convArchDir(inDir, downDir, outDir, doDownload, hubMeta)
+    hubTxtFname, trackCount, dbs = convArchDir(inDir, downDir, outDir, doDownload, hubMeta, imgOrds)
     writeHubDescription(outDir, srcDesc, dbs)
 
     if not debugMode:

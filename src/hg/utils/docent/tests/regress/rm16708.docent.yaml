@@ -1,0 +1,50 @@
+# #16708 -- turning on multi-region exon view jumped to the wrong gene.  Chris Lee saw it
+# with the Augustus track on micMur2: the multi-region view did not open on the gene he
+# was looking at, the first gene drawn was g1442.t1 instead of g1429.t1, and the view
+# could not be dragged left past it.  Galt's fix (v328) also fixed #16534, where Ensembl
+# exon view on dasNov3 jumped upstream to a different gene.
+#
+# The fix is 093a71dbd6b: the exon-mode gene query in hgTracks.c gained "order by chrom,
+# txStart" for every gene table but knownGene, because a "where chrom=" query returns rows
+# in chrom+bin index order.  Today the line is unconditional.  The trigger is still in the
+# data: on 2026-10-06 "select name,txStart from ensGene where chrom='JH564832'" on dasNov3
+# still returns rows out of start order (ENSDNOT00000014322 at 2084600 first), so without
+# the ORDER BY this recipe would again build its regions from an unsorted list.
+#
+# Chris's sessions were on hgwdev in 2016 and are gone.  This script uses the recipe he
+# left on the ticket for future testing: dasNov3 JH564832:1503619-1555676 with ensGene in
+# pack, then multi-region exon view.  On the buggy build the view moved to a different
+# gene.  On a fixed build the view stays on the one gene in that range,
+# ENSDNOT00000005339.3 (JH564832:1525197-1554806).
+#
+# Checks after exon view is on:
+#   * the multi-region button is pressed, so exon view really is on;
+#   * the region box of the gene's first exon is present (padded by 5 bases, so
+#     JH564832:1525192-1525267), so the view opened on THIS gene and at its start;
+#   * an ensGene map box names ENSDNOT00000005339, the positive check that the item is
+#     drawn;
+#   * no ensGene map box names any other transcript, which is the jump the ticket saw.
+# The checks are on map boxes and their data-tooltip, never a title (README.txt).
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: dasNov3
+position: JH564832:1503619-1555676
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=dasNov3&position=JH564832%3A1503619-1555676&pix=1100&hideTracks=1&ensGene=pack"
+  - expect:
+      rows: [ruler, ensGene]
+      exact: true
+      has: 'area[href*="ENSDNOT00000005339"]'
+
+  - goto: "/cgi-bin/hgTracks?db=dasNov3&pix=1100&virtModeType=exonMostly&virtMode=1"
+  - expect:
+      rows: [ruler, ensGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="JH564832:1525192-1525267"]'
+        - 'area[href*="ENSDNOT00000005339"]'
+      noHas: 'area[href*="hgc"][href*="g=ensGene"]:not([href*="ENSDNOT00000005339"])'

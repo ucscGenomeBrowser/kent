@@ -10,8 +10,9 @@ CREATE TABLE hubPublic (
     longLabel varchar(255) not null,	# Hub long label.
     registrationTime varchar(255) not null,	# Time first registered
     dbCount int unsigned not null,	# Number of databases hub has data for.
-    dbList varchar(255) not null,	# Comma separated list of databases.
-    descriptionUrl longblob not null,	# URL to description HTML
+    dbList blob,	# Comma separated list of databases.
+    descriptionUrl longblob,	# URL to description HTML
+    email varchar(255),	# Contact email for the hub
               #Indices
-    PRIMARY KEY(hubUrl)
+    PRIMARY KEY(hubUrl(255))
 );

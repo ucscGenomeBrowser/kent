@@ -621,8 +621,10 @@ function tdbFindChildless(trackDb, delTracks) {
             // This addresses the case where you hide the last child of a composite under a superTrack
             // E.g. All Gencode / Gencode V46 or FANTOM5/Max count 
             if (compLinks.familySize[parentName]===0 && topLinks.familySize[topParentName]===0) {
-                if (!doneParents.includes(parentName)) {
-                    loneParents.push([topParentName, compLinks.families[parentName]]);
+                // the top parent gets hidden, so remove all of its tracks from the image, not only
+                // those of this composite: a superTrack can have direct children (CADD Ins/Del)
+                if (!doneParents.includes(topParentName)) {
+                    loneParents.push([topParentName, topLinks.families[topParentName]]);
                     doneParents.push(topParentName);
                 }
             } else

@@ -552,7 +552,7 @@ qValueFilter bed narrowPeak broadPeak bigNarrowPeak
 qValueFilterLimits bed narrowPeak broadPeak bigNarrowPeak
 singleCellColumnNames *
 skipFields bigBed bigPsl bigGenePred bigLolly
-skipEmptyFields bigBed bigPsl
+skipEmptyFields bigBed bigPsl bigGenePred
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed

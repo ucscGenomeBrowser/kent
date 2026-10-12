@@ -1,0 +1,57 @@
+# #16756 -- in multi-region exon view, a drag-select zoom landed on a different gene.
+# Max reported it on hg19: search for EGF (chr4:110,834,040-110,934,118), turn on
+# exon view, shift-drag over exon 14 with "don't show this again" ticked in the
+# drag-and-select dialog, and the browser zoomed to DUX at chr4:191,012,449-191,013,448,
+# 80 Mb away at the end of chr4.
+#
+# Galt's fix, ba2694a1ace (2016-02-02), was in hg/js/hgTracks.js: the code path taken when
+# the highlighting dialog is turned off did not convert the selection from the
+# virtual-chromosome coordinates of the multi-region view.  With the dialog on, the
+# selection went through a path that did.
+#
+# Recipe: hg19, EGF, knownGene in pack, enableHighlightingDialog=0 (the cart variable
+# behind the dialog's check box), then exon view on knownGene.  The drag uses
+# `dialog: auto`, which lets the page decide, so with the dialog off it zooms straight
+# away the way the bug needed.  The drag covers 5% of the view in the middle of EGF.
+#
+# Checks:
+#   1. Exon view of EGF is up: the multi-region button is pressed and EGF is drawn.
+#   2. After the drag zoom: still in the multi-region view and EGF is still drawn
+#      (positive), and nothing from the DUX4 region at the end of chr4 is on the page
+#      (the ticket's wrong place).  The DUX4 check names the gene and the region box both.
+#
+# What the bug does to this recipe today was checked by hand on 2026-10-06: the fix
+# rewrites the selection from "multi:" coordinates to chr4 coordinates (disguisePosition)
+# before it navigates.  Sending the undisguised position=multi:4628059-4628359 to
+# genome-test in this exon view lands on DUX4 near chr4:191,006,593, the ticket's own
+# wrong place.  So step 2 fails if the disguise is dropped from the no-dialog path.
+#
+# On hgwdev-demo6 (multiRegionSpaces=on) on 2026-10-06 step 2 fails: the drag zoom
+# warns "chr4:4628059-4628359 is not in this multi-region view." and EGF is no longer
+# drawn.  That is this ticket's symptom on the space path: the selection is read in the
+# wrong coordinate system.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg19
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr4%3A110834040-110934118&pix=1100&hideTracks=1&knownGene=pack&enableHighlightingDialog=0"
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly&emGeneTable=knownGene&emPadding=6"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'map[name="map_data_knownGene"] area[data-tooltip*="EGF"]'
+
+  - drag: {fromFrac: 0.55, toFrac: 0.60, dialog: auto}
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'map[name="map_data_knownGene"] area[data-tooltip*="EGF"]'
+      noHas:
+        - 'area[data-tooltip*="DUX4"]'
+        - 'area[data-tooltip^="chr4:191"]'

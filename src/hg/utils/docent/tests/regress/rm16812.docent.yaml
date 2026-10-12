@@ -1,0 +1,42 @@
+# #16812 -- bigWig custom tracks gave a grey screen in multi-region view.  Brian Lee's set
+# of custom tracks on hg19 drew in a normal view, and switching to exon-only view ("e v")
+# drew no image at all.  He narrowed it to the bigWig tracks: the same bigWigs in a hub
+# were fine.  #16816 names the cause, the custom track's bigDataUrl when the track is
+# cloned across windows.  Fixed in v329.
+#
+# The reporter's bigWigs (Hiram's ~/ctDb on genome-test) are not ours to keep, so this
+# loads a small bigWig of our own, a bedGraph of 100-base steps over SOD1 on hg19
+# chr21, as a custom track named rm16812bw:
+#
+#     https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/mrBugs/16812/rm16812.ct.txt
+#
+# The checks, in exon-only view over SOD1:
+#   * the bigWig custom track's row is drawn (its id is ct_rm16812bw_<n>, so a has:
+#     prefix selector rather than rows:, which matches by _suffix).  On the buggy build
+#     the image was grey, so this row was absent.
+#   * ruler and knownGene drawn, and the Multi-region button pressed, so the view is a
+#     real multi-region view and not a fallback to one region.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg19
+position: chr21:33031596-33041570
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031596-33041570&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  # Load the custom tracks on a request of their own: hideTracks=1 would hide them too.
+  - goto: "/cgi-bin/hgTracks?hgct_customText=https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/mrBugs/16812/rm16812.ct.txt"
+  - expect:
+      rows: [ruler, knownGene]
+      has: '[id^="img_data_ct_rm16812bw"]'
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - '[id^="img_data_ct_rm16812bw"]'

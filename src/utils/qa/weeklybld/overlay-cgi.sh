@@ -1,10 +1,11 @@
 #!/bin/bash
 #
-# overlay-cgi.sh <tip|beta>
+# overlay-cgi.sh <tip|beta|mirror>
 #
 # Copy the matching hgwdev CGIs over the public-release CGIs the image shipped
 # with, so kent-tip reflects master (hgwdev's alpha cgi-bin) and kent-beta
-# reflects the branch beta (cgi-bin-beta). Also copies the matching JS and CSS
+# reflects the branch beta (cgi-bin-beta). kent-mirror gets the beta CGIs too,
+# on top of its in-place cgiUpdate (see update-mirror.sh). Also copies the matching JS and CSS
 # (htdocs/style) so the browser's JavaScript and stylesheets stay in sync with
 # the CGI C code.
 #
@@ -23,7 +24,7 @@
 set -eEu
 
 usage() {
-    echo "usage: $(basename "$0") tip|beta" >&2
+    echo "usage: $(basename "$0") tip|beta|mirror" >&2
     exit 1
 }
 
@@ -31,7 +32,7 @@ usage() {
 name="$1"
 case "$name" in
     tip)  cgiSrc=/usr/local/apache/cgi-bin;      jsSrc=/usr/local/apache/htdocs/js;      styleSrc=/usr/local/apache/htdocs/style ;;
-    beta) cgiSrc=/usr/local/apache/cgi-bin-beta; jsSrc=/usr/local/apache/htdocs-beta/js; styleSrc=/usr/local/apache/htdocs-beta/style ;;
+    beta|mirror) cgiSrc=/usr/local/apache/cgi-bin-beta; jsSrc=/usr/local/apache/htdocs-beta/js; styleSrc=/usr/local/apache/htdocs-beta/style ;;
     *)    usage ;;
 esac
 container="kent-$name"

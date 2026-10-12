@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# smoke-instance.sh [tip|beta|beta-arm64|rel|vNNN ...] [--version NN]
+# smoke-instance.sh [tip|beta|beta-arm64|rel|mirror|vNNN ...] [--version NN]
 #
 # Quick smoke test of one or more docker browser QA instances on hgwdev. With no
 # instance arguments it tests the two beta instances (beta + beta-arm64) -- the
@@ -30,9 +30,9 @@ instances=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --version|-v) want_version="${2:?--version needs a number}"; shift 2 ;;
-        tip|beta|beta-arm64|rel|v[0-9][0-9][0-9]) instances+=("$1"); shift ;;
+        tip|beta|beta-arm64|rel|mirror|v[0-9][0-9][0-9]) instances+=("$1"); shift ;;
         -h|--help)
-            echo "usage: $(basename "$0") [tip|beta|beta-arm64|rel|vNNN ...] [--version NN]" >&2
+            echo "usage: $(basename "$0") [tip|beta|beta-arm64|rel|mirror|vNNN ...] [--version NN]" >&2
             exit 1 ;;
         *) echo "unknown argument: $1" >&2; exit 1 ;;
     esac
@@ -45,6 +45,7 @@ port_of() {
         beta)       echo 8082 ;;
         rel)        echo 8083 ;;
         beta-arm64) echo 8084 ;;
+        mirror)     echo 8085 ;;
         # a release instance's port encodes the release, as in run-instance.sh
         v[0-9][0-9][0-9]) echo $(( 8000 + 10#${1#v} )) ;;
     esac

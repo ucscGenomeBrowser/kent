@@ -200,6 +200,10 @@ struct hubConnectStatus *hubConnectNewHub();
 char *hubPublicTableName();
 /* Get the name of the table that lists public hubs.  Don't free the result. */
 
+boolean hubPublicHasEmail(struct sqlConnection *conn);
+/* Return TRUE if the public hubs table has an email column.  Mirrors with an older
+ * hgcentral do not have it, so try to add it first.  If that fails, return FALSE. */
+
 char *hubNameFromUrl(char *hubUrl);
 /* Given the URL for a hub, return its hub_# name. */
 

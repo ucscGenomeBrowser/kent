@@ -1,0 +1,48 @@
+# #16731 -- with the Cancer Genomics hub attached on hg19, exon-only multi-region view
+# on chrY gave a grey screen (hgwdev) or "Too many open files / Couldn't open
+# /gbdb/hg19/multiz100way/maf/chrY.maf" (beta).  Every window opened its own file
+# handles for each hub vcfTabix subtrack until the process ran out.  Christopher Lee
+# confirmed the fix at chrY:15,250,952-15,706,023, where the RR still threw the error.
+#
+# Recipe: hg19 default tracks (multiz100way is on by default, as in the report) plus
+# the hub, at Christopher's region, then exonMostly.  The whole of chrY in the
+# original report is impractical (Galt: it times out), so the smaller region is used.
+#
+# The hub is Max's, at hgwdev ~max/immuno; its VCFs are too large to copy into our
+# fixtures.  If it vanishes, the rows: check fails loudly rather than every noText
+# passing quietly.
+#
+# Checks:
+#   noText  "Too many open files", the ticket's own error.
+#   rows    the hub's pepDb track and multiz100way are drawn in the exon-only view,
+#           so the page did not come back grey.  pepDb (bigBed) rather than one of
+#           the TCGA vcfTabix subtracks: on hgwdev-demo6 (multiRegionSpaces=on) the
+#           vcfTabix subtracks are hidden in a space, as quickLift cannot carry them.
+#   has     the multi-region button is pressed.
+#
+# 2026-10-06: genome-test FAILS this for the ticket's own reason.  The exon-only page
+# says "Too many open files / Couldn't open /gbdb/hg19/multiz100way/maf/chrY.maf",
+# word for word the 2016 report, at the region where the fix was confirmed.  The
+# 2016 fix has regressed, so the file is named .xfail.  hgwdev-demo6 passes, but
+# there the vcfTabix subtracks that open the files are not drawn, so the space path
+# does not exercise the trigger.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test (v504) says Too many open files, Couldn't open /gbdb/hg19/multiz100way/maf/chrY.maf in exonMostly with the hub"
+
+target: genome-test
+db: hg19
+position: chrY:15250952-15706023
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chrY%3A15250952-15706023&pix=1100&hubUrl=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~max%2Fimmuno%2Ftrack%2Fhub%2Fhub.txt"
+  - expect:
+      rows: [ruler, multiz100way, pepDb]
+      noText: "Too many open files"
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly&emGeneTable=knownGene&emPadding=6"
+  - expect:
+      rows: [ruler, multiz100way, pepDb]
+      noText: "Too many open files"
+      has: '#hgTracksConfigMultiRegionPage.pressed'

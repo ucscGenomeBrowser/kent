@@ -2445,3 +2445,5 @@ track jaspar2024 override
 parent jaspar on
 
 include tad.ra alpha
+
+include ../fusionGenes.ra alpha

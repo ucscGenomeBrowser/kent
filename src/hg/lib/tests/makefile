@@ -73,6 +73,11 @@ binTest: mkdirs ${BIN_DIR}/binTest
 quickLiftTest: ${BIN_DIR}/quickLiftTester mkdirs
 	${BIN_DIR}/quickLiftTester > output/quickLiftTest
 	diff expected/quickLiftTest output/quickLiftTest
+	for g in off split multi both; do \
+	    HGDB_CONF=input/quickLift/$$g.hg.conf ${BIN_DIR}/quickLiftTester intervals \
+	        input/quickLift/lift.bb input/quickLift/items.bb > output/quickLiftIntervals.$$g \
+	        && diff expected/quickLiftIntervals.$$g output/quickLiftIntervals.$$g || exit 1; \
+	done
 
 sessionDataTest: ${BIN_DIR}/sessionDataTester mkdirs
 	${BIN_DIR}/sessionDataTester output/sessionData > output/sessionDataTest

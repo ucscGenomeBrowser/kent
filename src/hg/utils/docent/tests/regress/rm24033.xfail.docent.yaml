@@ -1,0 +1,38 @@
+# #24033 -- Multi-region does not go to all the custom BED regions.  Daniel Schmelter
+# pasted three regions on hg38 into the multi-region "Custom regions as BED" box:
+#     chr1 2000 3000 / chr2 3000 4000 / chr3 4000 5000
+# and the view opened on chr1:2001-3000 only (Gerardo in 2023: the first two only),
+# sometimes with "Your new regions are not near your current position".  The ticket is
+# still New.  Galt's comment explains it: on a mode switch hgTracks keeps the best match
+# to the old position rather than showing every region.  The ticket's second complaint,
+# the "Invalid cross-device link" error on session save, needs a login and the RR's
+# /userdata layout, and he could not reproduce it in 2023; it is not tested here.
+#
+# The regions are pasted through the textarea's own cart variable, multiRegionsBedInput,
+# WITHOUT virtWinFull=on, because that is what the dialog sends when the user does not
+# ask for the full view.  rm35472 and rm38303 add virtWinFull=on and so do not see this.
+#
+# Each region of a multi-region view gets a ruler map box whose data-tooltip is its
+# source range, so the check is that all three boxes are present.  noText is the
+# redirect message.  The ticket quoted it from memory as "not near your current
+# position"; the server says "Your new regions are not near previous location."
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test: only chr3:4001-5000 is in view, with the not-near-previous-location warning; passes on hgwdev-demo6 (multiRegionSpaces=on)"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&multiRegionsBedInput=chr1%202000%203000%0Achr2%203000%204000%0Achr3%204000%205000%0A"
+  - expect:
+      rows: [ruler]
+      noText: "not near previous location"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1:2001-3000"]'
+        - 'area[data-tooltip="chr2:3001-4000"]'
+        - 'area[data-tooltip="chr3:4001-5000"]'

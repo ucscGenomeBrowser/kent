@@ -1,0 +1,82 @@
+# #16751 -- multi-region and omimGene2 did not play well together.  Bob Kuhn opened hg19 at
+# FGFR1 with omimGene2=pack and switched multi-region to "exons only".  Sometimes the page
+# broke at once, sometimes on the next click: it fell back to the regular view, or it drew
+# as far as the ideogram and stopped.  Galt found it already fixed on hgwdev on 2016-02-24
+# by some other bug fix, and it shipped in v329.
+#
+# This drives Bob's case: hg19, FGFR1, knownGene and omimGene2 in pack, then exonMostly,
+# then one more request (zoom out 3x), since the ticket says the break could come on the
+# NEXT click.  Each step asserts that
+#   * the image has exactly ruler, knownGene and omimGene2 -- a page that stopped after the
+#     ideogram has no track rows at all;
+#   * the multi-region button is pressed -- a page that fell back to the regular view is not;
+#   * the OMIM item for FGFR1 (OMIM 136350) has its map box, so omimGene2 really drew.
+#
+# Brian Lee narrowed it on 2016-01-31: it needed MORE THAN ONE OMIM item in view.  At
+# Bob's FGFR1 window genome-test draws only one (136350, checked 2026-10-06), so that part
+# alone does not reach the trigger.  Steps 7-12 are Brian Lee's case: hg19
+# chr10:69,644,421-69,700,868 around SIRT1, which holds two OMIM items, 604479 and 609248,
+# in both the normal and the exon view.  Each is asserted by its map box.  OMIM numbers do
+# not change; the otto update can move an item, which would show here as a missing box.
+#
+# Not seen to fail: Galt found it fixed by some other change and named no commit, so there
+# is nothing to revert, and it was intermittent ("sometimes on the next click").
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg19
+position: chr8:38268656-38326352
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr8%3A38268656-38326352&pix=1100&hideTracks=1&knownGene=pack&omimContainer=show&omimGene2=pack"
+  - expect:
+      rows: [ruler, knownGene, omimGene2]
+      exact: true
+      has: 'area[href*="i=136350"]'
+
+  - goto: "/cgi-bin/hgTracks?virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene, omimGene2]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="i=136350"]'
+
+  # The next click, which is where Bob saw it break as often as not.
+  - goto: "/cgi-bin/hgTracks?hgt.out2=1"
+  - expect:
+      rows: [ruler, knownGene, omimGene2]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="i=136350"]'
+
+  # Brian Lee's case: two OMIM items in view.  Leave exon view first.
+  - goto: "/cgi-bin/hgTracks?virtModeType=default&position=chr10%3A69644421-69700868"
+  - expect:
+      rows: [ruler, knownGene, omimGene2]
+      exact: true
+      noHas: '#hgTracksConfigMultiRegionPage.pressed'
+      has:
+        - 'area[href*="i=604479"]'
+        - 'area[href*="i=609248"]'
+
+  - goto: "/cgi-bin/hgTracks?virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene, omimGene2]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="i=604479"]'
+        - 'area[href*="i=609248"]'
+
+  - goto: "/cgi-bin/hgTracks?hgt.out2=1"
+  - expect:
+      rows: [ruler, knownGene, omimGene2]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="i=604479"]'
+        - 'area[href*="i=609248"]'

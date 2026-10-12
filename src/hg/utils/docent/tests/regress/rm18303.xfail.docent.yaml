@@ -1,0 +1,43 @@
+# #18303 -- Short Match (oligoMatch) items are missing in exon-only multi-region mode.
+# Chris Lee's report: with Short Match looking for NGG on mm10, the middle of an exonMostly
+# view showed no matches next to CRISPR targets that must have them, and zooming out made
+# more of them appear.  Closed 2023 as "no longer an issue".  It is still an issue on
+# genome-test on 2026-10-06.
+#
+# The cause, read from hg/hgTracks/hgTracks.c: oligoMatchLoad() gets its sequence from
+# dnaInWindow(), which keeps the DNA in a function-static dnaSeq and fetches it only once,
+# for winStart-winEnd of the FIRST window.  Every later window searches that same first
+# window's DNA and reports the hits at its own winStart.  So each window draws matches for
+# only as many bases as the first window is long, and those matches are at the wrong
+# places.  That fits the ticket: zooming out changes the first window and so the coverage.
+#
+# Recipe: mm10 chr11 Hoxb13 region, knownGene and oligoMatch (NGG) on, switch to
+# exonMostly, then zoom out 10x so the view holds eleven exon windows.  The first window is
+# chr11:96177572-96178121 (550 bp).  Checks:
+#   has   o=96177572 -- a real NGG site in the first window, which draws on any build.
+#   has   o=96197010 -- a real NGG site (drawn in a plain chr11:96195967-96197453 view)
+#                       more than 550 bp into the window chr11:96195967-96197453.  The bug
+#                       draws nothing past 96196509 in that window.
+#   noHas o=96195967 -- a "+" match the bug invents: chr11:96195968-96195970 is CAC, not
+#                       NGG, so a correct build cannot draw an item there.
+# Items are matched on the hgc href (o= start, t= end, g=oligoMatch), not on a title.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test: no oligoMatch item past the first window's length in each window, and a bogus +96,195,968 match is drawn"
+
+target: genome-test
+db: mm10
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=mm10&position=chr11%3A96205000-96260000&pix=1100&hideTracks=1&knownGene=pack&oligoMatch=pack&hgt.oligoMatch=NGG"
+  - goto: "/cgi-bin/hgTracks?virtModeType=exonMostly"
+  - goto: "/cgi-bin/hgTracks?hgt.out3=1"
+  - expect:
+      rows: [ruler, knownGene, oligoMatch]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[href*="&o=96177572&t=96177575&g=oligoMatch"]'
+        - 'area[href*="&o=96197010&t=96197013&g=oligoMatch"]'
+      noHas: 'area[href*="&o=96195967&t=96195970&g=oligoMatch"]'

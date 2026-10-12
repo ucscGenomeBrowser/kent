@@ -207,6 +207,16 @@ bcftools index -n gnomad.genomes.v3.1.2.hgdp_tgp.vcf.gz
 # 189381961
 bcftools index -n hgdp1k.snvAc6.vcf.gz
 # 34033926
+# Oct 7 2026: keep only FILTER=PASS. The script now has -f PASS, but the existing file was
+# filtered in place instead of a rebuild (24 min), then moved over hgdp1k.snvAc6.vcf.gz
+mkdir -p passTmp; tabix -l hgdp1k.snvAc6.vcf.gz > passTmp/chroms.txt
+parallel -j 24 'bcftools view -f PASS -r {} hgdp1k.snvAc6.vcf.gz -Oz -o passTmp/{}.vcf.gz' < passTmp/chroms.txt
+sed 's|^|passTmp/|; s|$|.vcf.gz|' passTmp/chroms.txt > passTmp/files.txt
+bcftools concat -n -f passTmp/files.txt -Oz -o hgdp1k.snvAc6.pass.vcf.gz
+tabix -p vcf hgdp1k.snvAc6.pass.vcf.gz
+mv hgdp1k.snvAc6.pass.vcf.gz hgdp1k.snvAc6.vcf.gz; mv hgdp1k.snvAc6.pass.vcf.gz.tbi hgdp1k.snvAc6.vcf.gz.tbi
+bcftools index -n hgdp1k.snvAc6.vcf.gz
+# 32448766, 15.7GB. Removed 1585160 (4.7%), mostly AS_VQSR, also InbreedingCoeff
 
 # Swefreq, Max, Feb 2026
 # downloaded files from https://swefreq.nbis.se/dataset/SweGen/download
@@ -1407,3 +1417,26 @@ mv varFreqsNew.trackDb.ra varFreqs.trackDb.ra
 # varFreqs.ra: SPARK45k in the affectedCohorts/backgroundSources menus and the
 # commented per-cohort filter blocks, taken from varFreqs.trackDb.ra; the
 # affected longLabel now says ~150,000 individuals.
+
+##########
+# 2026-10-05 Claude max
+# Genotype-only copy of the SPARK WGS 2026_08 pVCFs (75 TB -> ~300 GB, one file),
+# so the originals can be deleted. Keeps CHROM POS REF ALT QUAL FILTER, INFO/AQ
+# and FORMAT/GT for all 45,178 samples; drops ID (= CHROM_POS_REF_ALT), INFO/AF
+# and FORMAT DP AD SB GQ PL RNC. Records are not split or left-aligned. A 25 kb
+# test piece: 680 MB -> 2.9 MB, AC/AN from it identical to the original GTs.
+# Restricted data (individual genotypes): stays on /hive, not in /gbdb.
+cd /hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/gtOnly
+mkdir -p run
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kPvcfGtOnlyJobs.sh ../pvcf pieces > run/jobList  # 6,188 jobs
+cd run
+para create -cpu=2 -ram=4g jobList
+para try
+para push -maxJob=200
+cd ..
+bash ~/kent/src/hg/makeDb/scripts/varFreqs/sparkWgs45kPvcfGtOnlyMerge.sh pieces sparkWgs45k.gtOnly.vcf.gz
+rm -rf pieces
+# 6,188 jobs OK (~11 min each). Pieces 414 GB; one file sparkWgs45k.gtOnly.vcf.gz
+# (443 GB) + .tbi; concat --naive took minutes, tabix ~37 h. 436,319,161 records,
+# same as the pVCFs and the per-chrom counts of SFARI's AF table; 45,178 samples.
+# APOE rs429358: 965 1/1 + 11,222 0/1 -> AC 13,152, as in sfariSparkWgs45kAsd.

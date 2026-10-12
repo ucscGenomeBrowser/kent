@@ -1,0 +1,71 @@
+# #17412 -- "virt nomenclature persists when virt is not onscreen in Multi-Region mode".
+# Bob Kuhn substituted an alt haplotype into hg38 (multi-region, singleAltHaplo mode),
+# then typed a position on another chromosome.  The coordinates still read "virt:...".
+# In his follow-up note he narrowed the complaint: keeping the virtual name is fine, but
+# when he copied that virt: text into the position box and pressed go, nothing happened.
+# Jairo closed it in 2023 as no longer an issue.
+#
+# The virtual chromosome is now called "multi", not "virt".  The position display beside
+# the box still names a multi: range after the move to chr17 (on 2026-10-06 it reads
+# multi:2,689,877,736-2,689,958,924), because singleAltHaplo is the whole genome with one
+# alt swapped in.  So the first half of the ticket is by design today, and a noText of
+# "virt:" would pass on any build because the word itself is gone.  It is not asserted.
+#
+# What this script asserts is the half Bob settled on: the multi: text the display shows
+# works as a position.  It leaves chr17 first, so that a go that does "nothing" stays on
+# chr1 and fails, instead of staying on chr17 and passing.
+#
+# Checks:
+#   step 1  the alt view really loaded: the Multi-region button is pressed and the alt
+#           sequence has its own region box.  Without this step the rest of the script
+#           could pass on a server that ignored singleAltHaplo.
+#   step 2  the move to chr17:43044295-43125483 really happens: the ideogram is chr17's
+#           (a cytoBand map box names chr17), knownGene is drawn, and the view is still
+#           multi-region.  noText is the warning the space path prints when a position
+#           cannot be placed in the view.
+#   step 3  back to chr1 (a chr1 ideogram, no chr17 one), so the next check starts
+#           somewhere else.
+#   step 4  the multi: range the display showed on chr17, typed into the position box
+#           and submitted, lands on chr17 again.
+#
+# On hgwdev-demo6 (multiRegionSpaces) step 2 fails: the move to chr17 is refused with
+# "chr17:43044295-43125483 is not in this multi-region view."  That is a different failure
+# from this ticket, but it is the same user complaint: you cannot leave the alt.
+#
+# The multi: offsets come from hg38's chromosome sizes and the one alt, so a data update
+# cannot move them.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A2094367-3145714&virtModeType=singleAltHaplo&singleAltHaploId=chr1_KI270762v1_alt&pix=1100&hideTracks=1&knownGene=pack"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1_KI270762v1_alt:1-354444"]'
+
+  - goto: "/cgi-bin/hgTracks?position=chr17%3A43044295-43125483"
+  - expect:
+      rows: [ruler, knownGene]
+      noText: "is not in this multi-region view"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area.cytoBand[data-tooltip*="chr17:"]'
+
+  - goto: "/cgi-bin/hgTracks?position=chr1%3A2094367-3145714"
+  - expect:
+      has: 'area.cytoBand[data-tooltip*="chr1:"]'
+      noHas: 'area.cytoBand[data-tooltip*="chr17:"]'
+
+  - goShow: "multi:2689877736-2689958924"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area.cytoBand[data-tooltip*="chr17:"]'
+      noHas: 'area.cytoBand[data-tooltip*="chr1:"]'

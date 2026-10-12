@@ -19,8 +19,8 @@ from collections import defaultdict
 # names the METHYLATED copy, not the expressed one; each subtrack's description
 # page says which copy its colors refer to. Okabe-Ito palette.
 ALLELE_COLOR = {
-    "Maternal": "213,94,0",   # vermillion
-    "Paternal": "0,114,178",  # blue
+    "Maternal": "220,20,20",  # strong red
+    "Paternal": "0,60,200",    # strong blue
 }
 
 EXPECT_HEADER = ["Chromosome", "Start", "End", "Methylated allele", "Name"]

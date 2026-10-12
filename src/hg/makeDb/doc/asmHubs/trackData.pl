@@ -514,7 +514,12 @@ sub computeTrackCell($$$$) {
     }	# elsif ($track eq "rmsk")
   } else {	# working on an assembly hub
     if ( "$track" eq "gc5Base" ) {
-      $trackFile .= ".bw";
+      # gcOnFly.bw (50,000 base windows) replaces gc5Base.bw 2026-08-25
+      if ( -s "$buildDir/bbi/$asmId.gcOnFly.bw" ) {
+        $trackFile = "$buildDir/bbi/$asmId.gcOnFly.bw";
+      } else {
+        $trackFile .= ".bw";
+      }
     } else {
       $trackFile .= ".bb";
     }
