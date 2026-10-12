@@ -9321,10 +9321,11 @@ if (!url)
 struct sqlConnection *conn = hConnectCentral();
 
 char *email = NULL;
-if (sqlColumnExists(conn, "hubPublic", "email"))
+if (hubPublicHasEmail(conn))
     {
     char query[1000];
-    sqlSafef(query, sizeof query, "SELECT email FROM hubPublic WHERE hubUrl='%s'", url);
+    sqlSafef(query, sizeof query, "SELECT email FROM %s WHERE hubUrl='%s'",
+             hubPublicTableName(), url);
     email = sqlQuickNonemptyString(conn, query);
     }
 
