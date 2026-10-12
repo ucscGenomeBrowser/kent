@@ -48,6 +48,7 @@ use vars qw/
     $opt_regenerateMash
     $opt_swap
     $opt_swapDir
+    $opt_liftTableLoad
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -144,6 +145,17 @@ options:
                           liftOver/quickLift chain from that, in
                           -swapDir (default: toDb's own build root)/miniMap2.\$fromDb.swap
     -swapDir dir           Use dir instead of the default -swap work directory.
+    -liftTableLoad         Must be given to let the 'load' step run
+                          hgAddLiftOverChain and addQuickLift.py, which
+                          register this fromDb/toDb pair in hgcentral's
+                          liftOverChain and quickLiftChain tables.  Without
+                          it, 'load' still builds and links the chain/
+                          chainLiftOver/quickLift bigBed files (and the
+                          'database genome' chain tables via hgLoadChain
+                          -test, which doesn't write to any real database)
+                          -- it only skips the two hgcentral registrations,
+                          so repeated experimental runs can't overwrite an
+                          existing liftOverChain/quickLiftChain table entry.
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -223,6 +235,7 @@ sub checkOptions {
 		      'regenerateMash',
 		      'swap',
 		      'swapDir=s',
+		      'liftTableLoad',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -614,18 +627,42 @@ sub doLoad {
   my $whatItDoes =
 "It builds the chain/chainLiftOver/quickLift bigBed pairs, links them into
 $HgAutomate::gbdb/ (GenArk hub-build/accession chain, or native db layout --
-see installLinks() in ottoRequestWatch.sh, which this mirrors), and calls
-hgAddLiftOverChain + addQuickLift.py to register both in hgcentral.  None of
+see installLinks() in ottoRequestWatch.sh, which this mirrors), and -- only
+if -liftTableLoad was given -- calls hgAddLiftOverChain + addQuickLift.py to
+register both in hgcentral's liftOverChain/quickLiftChain tables.  None of
 this needs \$tDb to be a real MySQL database -- hgAddLiftOverChain and
 addQuickLift.py both work fine with obsolete/nonexistent ones by design
 (see hgAddLiftOverChain.c's own comment to that effect).";
   my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
+  # doLoad() needs to be safe to rerun (e.g. just to add -liftTableLoad's
+  # hgcentral registration after an earlier load that skipped it) without
+  # redoing expensive bedToBigBed/hgLoadChain work, and -- for the quickLift
+  # pair below -- without needing quick.chain.txt/quick.link.txt, which get
+  # deleted once this step has already consumed them successfully.  So each
+  # bigBed-building block below is skipped if its own final .bb already
+  # exists; only the symlink-install and hgcentral-registration parts always
+  # rerun.  (Force a true rebuild by removing the relevant .bb first.)
+  my $chainBigBedsDone = -s "$runDir/chain$QDb.bb";
+  my $quickBigBedsDone = -s "$runDir/$tDb.$qDb.quick.bb";
+
   $bossScript->add(<<_EOF_
 wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
 wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
+_EOF_
+  );
 
+  if ($chainBigBedsDone) {
+    $bossScript->add(<<_EOF_
+# $runDir/chain$QDb.bb already exists -- skipping rebuild of the chain/
+# chainLiftOver bigChain pairs (remove it and rerun 'load' to force a
+# rebuild; their sources, all.chain.gz and $liftOverChainFile, are never
+# deleted by this step, so that is always safe).
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
 # Full-chain bigChain pair, from the complete alignment (all.chain.gz) --
 # the standard genome-browser Chain/Net-style track pair.  Built for any
 # target/query pair -- nothing about this needs \$tDb to be a real
@@ -658,7 +695,8 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$liftOverBasesCovered" "\$to
 
 rm -f link.tab chain.tab chainLiftOver${QDb}.tab chainLiftOver${QDb}Link.tab
 _EOF_
-  );
+    );
+  }
 
   # Where the liftOver chain / quickLift bigBeds get linked, and what gets
   # registered in hgcentral, depends only on whether $tDb LOOKS like a
@@ -697,13 +735,23 @@ mkdir -p $gbdbGenarkDir
 rm -f $gbdbGenarkDir/liftOver $gbdbGenarkDir/quickLift
 ln -s $accLevelDir/liftOver $gbdbGenarkDir/liftOver
 ln -s $accLevelDir/quickLift $gbdbGenarkDir/quickLift
-
+_EOF_
+    );
+    if ($opt_liftTableLoad) {
+      $bossScript->add(<<_EOF_
 # Register in hgcentral (works fine without a real MySQL database for
 # \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbGenarkDir/liftOver/$liftOverChainFile $tDb $qDb
 $Bin/addQuickLift.py $tDb $qDb $gbdbGenarkDir/quickLift/$qDb.bb
 _EOF_
-    );
+      );
+    } else {
+      $bossScript->add(<<_EOF_
+# -liftTableLoad not given -- skipping hgAddLiftOverChain/addQuickLift.py
+# so this run does not touch hgcentral's liftOverChain/quickLiftChain tables.
+_EOF_
+      );
+    }
   } else {
     $bossScript->add(<<_EOF_
 # Not a GenArk accession -- native-db-style layout (same as
@@ -730,19 +778,41 @@ ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
 rm -f $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
 ln -s $runDir/$tDb.$qDb.quick.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
 ln -s $runDir/$tDb.$qDb.quickLink.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
-
+_EOF_
+    );
+    if ($opt_liftTableLoad) {
+      $bossScript->add(<<_EOF_
 # Register in hgcentral (works fine without a real MySQL database for
 # \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile $tDb $qDb
 $Bin/addQuickLift.py $tDb $qDb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
 _EOF_
-    );
+      );
+    } else {
+      $bossScript->add(<<_EOF_
+# -liftTableLoad not given -- skipping hgAddLiftOverChain/addQuickLift.py
+# so this run does not touch hgcentral's liftOverChain/quickLiftChain tables.
+_EOF_
+      );
+    }
   }
 
   # quickLift bigBed pair: built for any target/query pair -- it only
   # needs the quick.chain.txt/quick.link.txt doNet already produced,
-  # plus $qSizes, no dependency on \$tDb being a real database.
-  $bossScript->add(<<_EOF_
+  # plus $qSizes, no dependency on \$tDb being a real database.  This block
+  # deletes those .txt sources once it succeeds, so it must not be rerun
+  # blindly once $tDb.$qDb.quick.bb already exists -- they'd be gone.
+  if ($quickBigBedsDone) {
+    $bossScript->add(<<_EOF_
+# $runDir/$tDb.$qDb.quick.bb already exists -- skipping rebuild of the
+# quickLift bigBed pair (its sources, quick.chain.txt/quick.link.txt, are
+# deleted once this succeeds, so it can't safely rebuild from scratch here;
+# remove $runDir/$tDb.$qDb.quick.bb and rerun the 'net'/swap step first if
+# you really need to regenerate it).
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
 bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
 bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
 
@@ -753,7 +823,8 @@ printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPe
 
 rm -f bigChain.as bigLink.as $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
 _EOF_
-  );
+    );
+  }
 
   $bossScript->execute();
 } # doLoad
@@ -795,16 +866,32 @@ sub doSwap {
   my $runDir = "$swapDir/axtChain";
   &HgAutomate::mustMkdir($runDir);
 
-  my $whatItDoes =
+  my $swappedOver = "${origQDb}To" . ucfirst($origTDb) . ".over.chain.gz";
+  # Stable markers for "the expensive chainSwap/net work already happened":
+  # the swapped all.chain.gz and the final liftOver chain.  Neither is ever
+  # deleted by doLoad() (unlike quick.chain.txt/quick.link.txt below), so
+  # they stay valid resume markers even after a later doLoad() call -- e.g.
+  # rerunning -swap only to add -liftTableLoad's hgcentral registration,
+  # without rechaining/renetting a possibly large chain file again.
+  my $swappedChain = "$runDir/$origQDb.$origTDb.all.chain.gz";
+  my $swappedOverPath = "$runDir/$swappedOver";
+
+  if ( -s $swappedChain && -s $swappedOverPath ) {
+    &HgAutomate::verbose(1,
+	"-swap: found existing $swappedOverPath -- skipping chainSwap/net, " .
+	"going straight to the load step.  (Remove $swappedOverPath and " .
+	"rerun -swap if you need to rebuild the swapped chain from " .
+	"scratch.)\n");
+  } else {
+    my $whatItDoes =
 "It chainSwaps the primary $origTDb/$origQDb run's all.chain.gz and nets it
 to produce the $origQDb-to-$origTDb liftOver/quickLift chain, without
 re-aligning.";
-  my $mach = &HgAutomate::chooseWorkhorse();
-  my $bossScript = newBash HgRemoteScript("$runDir/doSwap.bash", $mach,
-				      $runDir, $whatItDoes);
+    my $mach = &HgAutomate::chooseWorkhorse();
+    my $bossScript = newBash HgRemoteScript("$runDir/doSwap.bash", $mach,
+					$runDir, $whatItDoes);
 
-  my $swappedOver = "${origQDb}To" . ucfirst($origTDb) . ".over.chain.gz";
-  $bossScript->add(<<_EOF_
+    $bossScript->add(<<_EOF_
 unset TMPDIR
 if [ -d "/data/tmp" ]; then
   export TMPDIR="/data/tmp"
@@ -831,17 +918,21 @@ chainSwap $primaryChain stdout | chainSort stdin \$tmpDir/all.chain
 gzip -c \$tmpDir/all.chain > $origQDb.$origTDb.all.chain.gz
 
 _EOF_
-  );
-  $bossScript->add(&netFromChainBash('$tmpDir/all.chain', $qSizes, $tSizes,
-				      $runDir, $swappedOver, $origQDb, $origTDb));
-  $bossScript->add(<<_EOF_
+    );
+    $bossScript->add(&netFromChainBash('$tmpDir/all.chain', $qSizes, $tSizes,
+					$runDir, $swappedOver, $origQDb, $origTDb));
+    $bossScript->add(<<_EOF_
 rm -rf \$tmpDir/
 _EOF_
-  );
-  $bossScript->execute();
+    );
+    $bossScript->execute();
+  }
 
   # Reuse doLoad() unchanged for the swapped direction -- swapGlobals()
-  # makes it think it's doing a normal, primary $origQDb-to-$origTDb run:
+  # makes it think it's doing a normal, primary $origQDb-to-$origTDb run.
+  # doLoad() is itself safe to call again (see its own skip-if-built
+  # checks), so this is also how you add -liftTableLoad's hgcentral
+  # registration after an earlier load that skipped it.
   &swapGlobals();
   &doLoad();
 

@@ -4124,7 +4124,7 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 // override is provided; buildFilterBy() already tolerates a NULL `as`.
 // VCF filters are on INFO fields, which are not autoSql columns.
 struct asObject *as = NULL;
-if (!startsWith("vcf", tdb->type))
+if (tdb->type == NULL || !startsWith("vcf", tdb->type))
     as = asForTdb(NULL, tdb);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
@@ -7068,7 +7068,7 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
-    boolean isVcf = startsWith("vcf", tdb->type);
+    boolean isVcf = (tdb->type != NULL && startsWith("vcf", tdb->type));
 
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
@@ -7228,7 +7228,7 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
-    boolean isVcf = startsWith("vcf", tdb->type);
+    boolean isVcf = (tdb->type != NULL && startsWith("vcf", tdb->type));
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
         char *trackDbLabel = getLabelSetting(cart, tdb, filter->fieldName);
