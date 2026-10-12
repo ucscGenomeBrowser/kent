@@ -361,20 +361,27 @@ Build the metadata table, the facet color map and the trackDb stanzas:
 
 It reads the sample list from sgdpCopyNumberSamples.tsv, a frozen manifest of
 (library id, legacy subtrack name, bigDataUrl) checked in beside the script.  It
-deliberately does not read the trackDb .ra: at release the generated stanzas
-replace sgdpCopyNumber.trackDb.ra, and their names no longer carry the
+deliberately does not read the trackDb .ra: the generated stanzas now are
+sgdpCopyNumber.trackDb.ra, and their names no longer carry the
 <region>_<population>_ prefix that the legacy fallback needs, so a script reading
 its own output would quietly drop those two fields.  It joins the manifest to the
 two files above on the library id and writes:
 
   sgdpCopyNumber_metadata.tsv      319 rows, 11 columns
   sgdpCopyNumber_colors.json       Okabe-Ito color per region, for the facet swatches
-  sgdpCopyNumber.alpha.trackDb.ra  copied by hand into trackDb/human/hs1 after review
+  sgdpCopyNumber.trackDb.ra        copied by hand into trackDb/human/hs1 after review
 
-317 of the 319 rows join to the published sample tables.  The two that do not are
-LP6005442-DNA_A09, whose old name gave it Oceania / Australian, and
-LP6005619-DNA_D01, whose old name carried no region prefix at all, so it has
-neither.  Everything else on those two rows is blank.  The script prints both,
+Each is written as <name>.new and moved into place only once all three are
+complete, because /gbdb/hs1/sgdpCopyNumber symlinks the TSV and the JSON and an
+interrupted run must not leave the browser reading half of a rebuild.
+
+Of the 319 rows, 2 are the CHM13 and GRCh38 reference baselines, which are not
+SGDP donors and are filled in directly rather than joined.  Of the remaining 317
+samples, 315 join: 314 from the SGDP sample table and 1 (S_Naxi-2) from the ENA
+pointer file only.  The 2 that join to neither are LP6005442-DNA_A09, whose old
+name gave it Oceania / Australian, and LP6005619-DNA_D01, whose old name carried
+no region prefix at all, so it has neither.  Everything else on those two rows is
+blank.  The script prints both,
 with the region and population it recovered, so a new unmatched sample shows up
 in the build output rather than silently getting empty facets.
 

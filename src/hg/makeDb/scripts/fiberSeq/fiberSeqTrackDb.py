@@ -27,7 +27,7 @@ import sys
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SAMPLE_LIST = os.path.join(SCRIPT_DIR, "fiberSeqSamples.tsv")
 
-# The seven cell lines the lab wants in the always-on overlay, in their order,
+# The seven cell lines the lab wants in the fixed overlay, in their order,
 # with the Okabe-Ito colors they chose in their own hub.
 DEFAULT_OVERLAY = [
     ("PM00001", "230,159,0"),    # GM12878, orange
@@ -66,9 +66,10 @@ DIFF_LEVELS = [
 
 # Shown behind an info icon on the Sample class column heading.
 SAMPLE_CLASS_DESCRIPTION = (
-    "HPRC = Lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
-    "Human Pangenome Reference Consortium. Rare disease samples are cases "
-    "consented to broad genomic data sharing")
+    "HPRC = lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
+    "Human Pangenome Reference Consortium. Common cell lines are widely used "
+    "laboratory lines. Rare disease samples are cases consented to broad "
+    "genomic data sharing.")
 
 # Sample class swatches, shown next to that facet's checkboxes.
 # Okabe-Ito colors for the swatches.
@@ -123,10 +124,12 @@ def writeMetadata(path, samples):
     Sample class is the one faceted column.  Its three values, HPRC, Common cell
     line and Rare disease sample, each cover many samples, which is what a facet
     needs: facetedComposite.js only offers a value that occurs more than once,
-    since a checkbox matching a single row is just a slow search box.  The other
-    three are underscored for that reason.  Sample and Accession are unique per
-    row by definition, and 12 of the 14 cell types are a single sample, so as a
-    facet cell type drew two checkboxes and left 12 samples unreachable.
+    since a checkbox matching a single row is just a slow search box.  Sample
+    and Cell type are underscored for that reason.  Accession needs no
+    underscore: facetedComposite.js drops the primaryKey from the checkbox
+    columns on its own.  Sample and Accession are unique per row by definition,
+    and 12 of the 14 cell types are a single sample, so as a facet cell type
+    drew two checkboxes and left 12 samples unreachable.
 
     Names are underscore separated rather than camelCase: the header is rendered
     by toTitleStyle() in facetedComposite.js, which turns an underscore into a
@@ -161,7 +164,7 @@ def stanza(indent, lines):
 
 
 def accOverlay(gbdb, samples):
-    """The always-on overlay of the seven common cell lines."""
+    """The fixed overlay of the seven common cell lines."""
     byAcc = {s["accession"]: s for s in samples}
     out = stanza(4, [
         "track fiberSeqAcc",

@@ -1,6 +1,6 @@
 track gpnStar
 shortLabel GPN-Star
-longLabel GPN-Star genomic language model constraint scores (135 nematodes)
+longLabel GPN-Star genomic language model constraint scores (135 species)
 superTrack on
 pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
 dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
@@ -8,7 +8,7 @@ group compGeno
 
 track gpnStarLogo
 shortLabel GPN-Star Logo
-longLabel GPN-Star (135 nematodes) sequence logo of predicted constraint
+longLabel GPN-Star (135 species) sequence logo of predicted constraint
 parent gpnStar
 container multiWig
 html gpnStar
@@ -27,7 +27,7 @@ visibility full
 
     track gpnStarLogoA
     shortLabel A
-    longLabel GPN-Star (135 nematodes) logo height of A
+    longLabel GPN-Star (135 species) logo height of A
     parent gpnStarLogo
     type bigWig 0 2
     bigDataUrl /gbdb/ce11/gpnStar/A.bw
@@ -36,7 +36,7 @@ visibility full
 
     track gpnStarLogoC
     shortLabel C
-    longLabel GPN-Star (135 nematodes) logo height of C
+    longLabel GPN-Star (135 species) logo height of C
     parent gpnStarLogo
     type bigWig 0 2
     bigDataUrl /gbdb/ce11/gpnStar/C.bw
@@ -45,7 +45,7 @@ visibility full
 
     track gpnStarLogoG
     shortLabel G
-    longLabel GPN-Star (135 nematodes) logo height of G
+    longLabel GPN-Star (135 species) logo height of G
     parent gpnStarLogo
     type bigWig 0 2
     bigDataUrl /gbdb/ce11/gpnStar/G.bw
@@ -54,7 +54,7 @@ visibility full
 
     track gpnStarLogoT
     shortLabel T
-    longLabel GPN-Star (135 nematodes) logo height of T
+    longLabel GPN-Star (135 species) logo height of T
     parent gpnStarLogo
     type bigWig 0 2
     bigDataUrl /gbdb/ce11/gpnStar/T.bw
@@ -63,7 +63,7 @@ visibility full
 
 track gpnStarLlr
 shortLabel GPN-Star -LLR
-longLabel GPN-Star (135 nematodes) -LLR per alternate allele
+longLabel GPN-Star (135 species) -LLR per alternate allele
 parent gpnStar
 compositeTrack on
 html gpnStar
@@ -85,7 +85,7 @@ visibility dense
 
     track gpnStarLlrA
     shortLabel Mutation: A
-    longLabel GPN-Star (135 nematodes) -LLR: Mutation is A
+    longLabel GPN-Star (135 species) -LLR: Mutation is A
     parent gpnStarLlr on
     type bigWig
     bigDataUrl /gbdb/ce11/gpnStar/llr_A.bw
@@ -95,7 +95,7 @@ visibility dense
 
     track gpnStarLlrC
     shortLabel Mutation: C
-    longLabel GPN-Star (135 nematodes) -LLR: Mutation is C
+    longLabel GPN-Star (135 species) -LLR: Mutation is C
     parent gpnStarLlr on
     type bigWig
     bigDataUrl /gbdb/ce11/gpnStar/llr_C.bw
@@ -105,7 +105,7 @@ visibility dense
 
     track gpnStarLlrG
     shortLabel Mutation: G
-    longLabel GPN-Star (135 nematodes) -LLR: Mutation is G
+    longLabel GPN-Star (135 species) -LLR: Mutation is G
     parent gpnStarLlr on
     type bigWig
     bigDataUrl /gbdb/ce11/gpnStar/llr_G.bw
@@ -115,7 +115,7 @@ visibility dense
 
     track gpnStarLlrT
     shortLabel Mutation: T
-    longLabel GPN-Star (135 nematodes) -LLR: Mutation is T
+    longLabel GPN-Star (135 species) -LLR: Mutation is T
     parent gpnStarLlr on
     type bigWig
     bigDataUrl /gbdb/ce11/gpnStar/llr_T.bw

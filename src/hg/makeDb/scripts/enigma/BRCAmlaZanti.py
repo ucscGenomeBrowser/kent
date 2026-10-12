@@ -78,8 +78,14 @@ def assignRGB(lr):
     return "91,91,91"                        # grey   -> no evidence
 
 def fmt(v):
-    """5 significant figures, so small LRs are not shown as 0.0 (refs #38467)."""
-    return "" if v is None else "%.5g" % v
+    """5 significant figures, so small LRs are not shown as 0.0; fixed notation from
+    1e-4 to 1e6, scientific outside that (refs #38467)."""
+    if v is None:
+        return ""
+    s = "%.5g" % v
+    if "e" in s and 1e-4 <= abs(v) < 1e6:
+        s = ("%f" % float(s)).rstrip("0").rstrip(".")
+    return s
 
 # ---------------------------------------------------------------------------
 # Variant normalization and ClinVar-style spans.
@@ -221,7 +227,11 @@ for i, r in enumerate(ws.iter_rows(values_only=True)):
 #    genome. Cross-check Zanti VCF against HGVSc and report disagreements.
 # ---------------------------------------------------------------------------
 def intronicIns(name):
-    return bool(re.search(r"[+-]\d+_.*ins|_\d+[+-]\d+ins", name)) and "delins" not in name
+    return bool(re.search(r"\d[+-]\d+_.*ins|_\d+[+-]\d+ins", name)) and "delins" not in name
+
+badCur = [n for n in cur if intronicIns(n)]
+if badCur:
+    sys.exit("Pre-Zanti intronic insertions would hit the hgvsToVcf bug (#38469): %s" % badCur)
 
 curKey, zanKey = {}, {}
 refFallback, crossBad = [], []
@@ -269,32 +279,48 @@ for k, g in groups.items():
 
 # ---------------------------------------------------------------------------
 # 5. Names. Strip spelled-out bases and counts from del/dup names. For pure
-#    insertions named with ins, ask vcfToHgvs whether HGVS calls it a dup.
+#    insertions named with ins, ask vcfToHgvs whether HGVS calls it a dup. Zanti
+#    rows with no HGVSc (upstream of the transcripts) are named by vcfToHgvs too,
+#    so the name does not carry an hg38 coordinate onto the hg19 track.
 # ---------------------------------------------------------------------------
 def stripSeq(name):
     return re.sub(r"(del|dup)([ACGT]+|\d+)$", r"\1", name)
 
+def groupNames(g):
+    return g["cur"] + [z["name"] for z in g["zan"]]
+
 insKeys = [k for k, g in groups.items() if isPureInsertion(k)
-           and any(re.search(r"ins[ACGT]+$", n) and "delins" not in n
-                   for n in g["cur"] + [z["name"] for z in g["zan"]])]
-dupName = {}
-if insKeys:
-    fn = WORK + "/insKeys.vcf"
+           and any(re.search(r"ins[ACGT]+$", n) and "delins" not in n for n in groupNames(g))]
+rawKeys = [k for k, g in groups.items() if not any(n.startswith("NM_") for n in groupNames(g))]
+askKeys = insKeys + rawKeys
+geneOf = {k: groups[k]["zan"][0]["gene"] for k in rawKeys}
+vcfName = {}
+if askKeys:
+    fn = WORK + "/vcfToHgvsKeys.vcf"
     with open(fn, "w") as fh:
         fh.write("##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\n")
-        for i, k in enumerate(insKeys):
+        for i, k in enumerate(askKeys):
             fh.write("%s\t%d\tk%d\t%s\t%s\t.\t.\t.\n" % (k[0], k[1], i, k[2], k[3]))
     for line in bash("vcfToHgvs hg38 %s stdout" % fn).splitlines():
         f = line.split("\t")
         if len(f) < 9 or f[5] not in TX.values():
             continue
-        k = insKeys[int(f[2][1:])]
-        if re.search(r"dup[ACGT]*$", f[8]):
-            dupName[k] = stripSeq(f[8])
+        k = askKeys[int(f[2][1:])]
+        if k in geneOf and f[5] != TX[geneOf[k]]:
+            continue
+        vcfName[k] = f[8]
+dupName = {k: stripSeq(vcfName[k]) for k in insKeys
+           if k in vcfName and re.search(r"dup[ACGT]*$", vcfName[k])}
+missing = [k for k in rawKeys if k not in vcfName]
+if missing:
+    sys.exit("vcfToHgvs gave no transcript name for: %s" % missing)
+rawName = {k: stripSeq(vcfName[k]) for k in rawKeys}
 
 renamed = []
 def canonicalName(k, g):
-    names = g["cur"] + [z["name"] for z in g["zan"]]
+    names = groupNames(g)
+    if k in rawName:
+        return rawName[k]
     if k in dupName:
         return dupName[k]
     stripped = sorted(set(stripSeq(n) for n in names))
@@ -329,6 +355,10 @@ def mergeList(lists):
         out.append("NULL" if p is None else fmt(p))
     return ",".join(out)
 
+# The only variant expected to carry one source twice: Li et al. list it under two
+# names with separate probands, and Li's per-variant LR is a product over probands.
+SOURCE_TWICE_OK = {("NM_007294.4:c.815_824dup", "li")}
+
 conflicts = []
 merged = []
 sourceTwice = []
@@ -338,7 +368,9 @@ for k, g in groups.items():
     curs = [cur[n] for n in g["cur"]]
     z = g["zan"][0] if g["zan"] else None
     counts["groups"] += 1
-    if len(g["cur"]) + len(g["zan"]) > 1:
+    name = canonicalName(k, g)
+    oldNames = sorted(set(groupNames(g)))
+    if len(oldNames) > 1:
         counts["merged"] += 1
     if curs and z:
         counts["both"] += 1
@@ -348,7 +380,10 @@ for k, g in groups.items():
         counts["mfOnly"] += 1
     for src in ("caputo", "parsons", "li", "easton"):
         if sum(1 for c in curs if c[src]) > 1:
-            sourceTwice.append((g["cur"], src))
+            if (name, src) not in SOURCE_TWICE_OK:
+                sys.exit("%s appears twice in one merge (%s); check before multiplying"
+                         % (src, g["cur"]))
+            sourceTwice.append((name, src))
 
     per = {t: product([fnum(c[t]) for c in curs]) for t in ("famHist", "cooc", "seg", "path")}
     mf = product(list(per.values()))
@@ -356,10 +391,8 @@ for k, g in groups.items():
     combined = product([mf, cc])
     if mf is not None and cc is not None:
         if (cc >= 2.08 and mf <= 0.48) or (cc <= 0.48 and mf >= 2.08):
-            conflicts.append((canonicalName(k, g), k, fmt(mf), fmt(cc), fmt(combined)))
+            conflicts.append((name, k, fmt(mf), fmt(cc), fmt(combined)))
 
-    name = canonicalName(k, g)
-    oldNames = g["cur"] + [x["name"] for x in g["zan"]]
     if len(oldNames) > 1:
         merged.append((name, oldNames, fmt(combined), assignACMGcode(combined)))
     elif oldNames[0] != name:
@@ -450,10 +483,10 @@ print("Zanti rows keyed from HGVSc because Zanti REF does not match the genome: 
 print("Zanti intronic insertions where hgvsToVcf disagrees with Zanti VCF (#38469): %d"
       % len(crossBad))
 print("Output items per assembly: %d" % counts["groups"])
-print("Merged groups: %d   Renamed singletons: %d" % (counts["merged"], len(renamed)))
+print("Merged groups (more than one name): %d   Renamed: %d" % (counts["merged"], len(renamed)))
 print("Membership: both=%d  Zanti-only=%d  multifactorial-only=%d"
       % (counts["both"], counts["zanOnly"], counts["mfOnly"]))
-print("Groups with the same source on two items: %s" % sourceTwice)
+print("Allowed groups with the same source on two items: %s" % sourceTwice)
 print("Direction conflicts (MF vs ccLR opposite): %d" % len(conflicts))
 with open(WORK + "/directionConflicts.tsv", "w") as fh:
     fh.write("name\tvariant\tmultifactorialProduct\tzantiCcLR\tcombinedLR\n")
