@@ -136,13 +136,15 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # class (A V L I M F Y W R H K D E S T N Q G C P), matching the MaveDB and popEVE heatmap
 # tracks, plus a final row for nonsense. A synonymous measurement fills the reference
 # residue's cell.
-#   427,471  measurements with a single amino acid substitution
-#   385,732  cells drawn. 41,739 measurements are a later nucleotide change encoding a
+#   431,057  measurements with a single amino acid substitution, counting the ones whose
+#            protein term is rebuilt from the submitted p. term (cellFromSubmittedTerm,
+#            3,586), without which the map would be missing cells the variant track draws
+#   387,467  cells drawn. 43,590 measurements are a later nucleotide change encoding a
 #            substitution already measured at that position. The strongest evidence wins the
 #            cell (CSV order is not a defined rule and flipped hundreds of cells between
 #            pathogenic and benign); the cell is marked '+', or '!' where the measurements
-#            disagree in direction. 1,481 cells carry '!' and 28,132 carry '+'. The
-#            cellConflictingDirection counter in the log reads 1,865 because it counts
+#            disagree in direction. 1,625 cells carry '!' and 28,463 carry '+'. The
+#            cellConflictingDirection counter in the log reads 2,155 because it counts
 #            pairwise disagreements, so a cell with three conflicting measurements scores
 #            more than once; it is not a cell count.
 #
