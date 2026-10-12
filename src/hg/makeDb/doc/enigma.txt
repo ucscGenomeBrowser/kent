@@ -123,23 +123,33 @@ python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
 #    per-proband LRs, so the two rows are multiplied.
 #  - write names in current HGVS style (spelled-out bases and counts dropped;
 #    ins that duplicates adjacent sequence renamed to the dup that vcfToHgvs
-#    reports).
+#    reports). Zanti rows with no HGVSc (variants upstream of the transcripts)
+#    are named on the transcript by vcfToHgvs, e.g. NM_000059.4:c.-1276T>C.
 #  - draw every item the way the ClinVar track does: SNV on its base, deletion
 #    on the deleted bases shifted left, delins on the replaced bases,
 #    insertion/dup on the 2 bases flanking the left-shifted insertion point.
-#    hg19 positions are computed the same way, not lifted.
+#    hg19 positions are computed the same way, not lifted; they equal a
+#    liftOver of the hg38 positions. ClinVar's own hg19 track places about 30
+#    BRCA1/BRCA2 indels differently from its hg38 track, so 24 of our hg19
+#    items differ from ClinVar's hg19 items there.
 #  - drop the Zanti row with symbolic alleles (<CNV>).
-#  - write LRs with 5 significant figures instead of 5 decimals.
+#  - write LRs with 5 significant figures instead of 5 decimals (fixed
+#    notation from 1e-4 to 1e6, scientific outside that).
 # The pre-Zanti input is now read from archive/v1.1, since /gbdb BRCAmfa.bb
-# has served this script's own output since the #37886 release.
+# has served this script's own output since the #37886 release. archive/v1.1
+# holds the ten v1.1 staging bigBeds as they were before the v1.2 update
+# (refs #38130):
+#   mkdir -p /hive/data/inside/enigmaTracksData/archive/v1.1
+#   cp /hive/data/inside/enigmaTracksData/BRCA*Hg{19,38}.bb \
+#       /hive/data/inside/enigmaTracksData/archive/v1.1/
 mkdir /hive/data/inside/enigmaTracksData/rm38467
 cd /hive/data/inside/enigmaTracksData/rm38467
 python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
 # Result: 13,182 variants per assembly (13,481 before; 595 items merged into
 # 297, one <CNV> row dropped), written as BRCAmfaZantiHg38.bb /
-# BRCAmfaZantiHg19.bb. mergedGroups.tsv lists the merged items, renamed.tsv
-# the 479 renamed singletons, directionConflicts.tsv the 210 variants whose
-# older evidence and ccLR point in opposite directions.
+# BRCAmfaZantiHg19.bb. mergedGroups.tsv lists the 297 merged variants,
+# renamed.tsv the 688 renamed single items, directionConflicts.tsv the 210
+# variants whose older evidence and ccLR point in opposite directions.
 
 # Release, same procedure as above:
 # for db in Hg19 Hg38; do

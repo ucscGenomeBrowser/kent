@@ -7576,15 +7576,53 @@ var downloadCurrentTrackData = {
     trackInfo: {}, // trackDb of the requested tracks, keyed by the name sent to the api
     currentRequests: {}, // pending requests
     intervalId: null, // the id of the timer that waits on the api
+    // format, headers option and file name, read when Download is clicked and not when the
+    // data arrives, so that changing the dialog during the wait does not change the file
+    outOptions: null,
 
     // the keys of an api getData/track reply that are not tracks
     nonTrackKeys: new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
         "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
         "bigDataUrl", "chromSize", "hubUrl"]),
 
-    failedTrackDataRequest: function(msg) {
-        msgJson = JSON.parse(msg);
-        alert("Download failed. Error message: '" + msgJson.error);
+    failedTrackDataRequest: function(status, msg) {
+        // the api answers an error with json, but a proxy or apache error page does not,
+        // and a dropped connection has no answer at all
+        let error = null;
+        try {
+            error = JSON.parse(msg).error;
+        } catch (e) {
+            error = null;
+        }
+        if (!error) {
+            error = (status === 0) ? "no answer from the server" :
+                "the server answered with status " + status;
+        }
+        alert("Download failed. Error message: '" + error + "'");
+    },
+
+    requestFinished: function(xhr, key, useReply) {
+        // Every way a request can end has to remove its key: makeDownloadFile waits for
+        // currentRequests to be empty, and startDownload allows only one download at a
+        // time, so a key that stays behind blocks the dialog until the page is reloaded.
+        delete downloadCurrentTrackData.currentRequests[key];
+        if (xhr.status === 200) {
+            let reply = null;
+            try {
+                reply = JSON.parse(xhr.responseText);
+            } catch (e) {
+                reply = null;
+            }
+            if (reply !== null) {
+                useReply(reply);
+                return;
+            }
+        }
+        // GenBank sends two requests, report only the first of them that fails
+        if (downloadCurrentTrackData.intervalId !== null) {
+            downloadCurrentTrackData.stopWaiting();
+            downloadCurrentTrackData.failedTrackDataRequest(xhr.status, xhr.responseText);
+        }
     },
 
     receiveTrackData: function(track, data) {
@@ -7977,8 +8015,8 @@ var downloadCurrentTrackData = {
         if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
             // first stop the timer so we don't execute again
             downloadCurrentTrackData.stopWaiting();
-            let outType = $("#outputFormat")[0].selectedOptions[0].value;
-            let withHeaders = document.getElementById("downloadTrackHeaders").checked;
+            let outType = downloadCurrentTrackData.outOptions.outType;
+            let withHeaders = downloadCurrentTrackData.outOptions.withHeaders;
             let data = downloadCurrentTrackData.downloadData[key];
             var blob = null;
             if (outType === 'json') {
@@ -7992,7 +8030,7 @@ var downloadCurrentTrackData = {
             if (blob) {
                 anchor = document.createElement("a");
                 anchor.href = URL.createObjectURL(blob);
-                fname = $("#downloadFileName")[0].value;
+                fname = downloadCurrentTrackData.outOptions.fileName;
                 if (fname.length === 0) {
                     fname = "trackDownload.txt";
                 }
@@ -8067,7 +8105,8 @@ var downloadCurrentTrackData = {
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
         db = getDb();
-        if ($("#outputFormat")[0].selectedOptions[0].value === "gb") {
+        let outType = $("#outputFormat")[0].selectedOptions[0].value;
+        if (outType === "gb") {
             // GenBank output carries the DNA of the region as well, so it can get big.
             // The api itself would serve most of a chromosome, but the sequence arrives as
             // one json string and is then copied into the file, so the web browser needs
@@ -8096,15 +8135,10 @@ var downloadCurrentTrackData = {
             var seqRequest = new XMLHttpRequest();
             downloadCurrentTrackData.currentRequests[seqUrl] = true;
             seqRequest.onreadystatechange = function() {
-                if (4 === this.readyState && 200 === this.status) {
-                    downloadCurrentTrackData.sequenceData = JSON.parse(this.responseText);
-                    delete downloadCurrentTrackData.currentRequests[seqUrl];
-                } else {
-                    if (4 === this.readyState && this.status >= 400) {
-                        downloadCurrentTrackData.stopWaiting();
-                        downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
-                        delete downloadCurrentTrackData.currentRequests[seqUrl];
-                    }
+                if (4 === this.readyState) {
+                    downloadCurrentTrackData.requestFinished(this, seqUrl, function(reply) {
+                        downloadCurrentTrackData.sequenceData = reply;
+                    });
                 }
             };
             seqRequest.open("GET", seqUrl, true);
@@ -8120,16 +8154,10 @@ var downloadCurrentTrackData = {
         var xmlhttp = new XMLHttpRequest();
         downloadCurrentTrackData.currentRequests[apiUrl] = true;
         xmlhttp.onreadystatechange = function() {
-            if (4 === this.readyState && 200 === this.status) {
-                var mapData = JSON.parse(this.responseText);
-                downloadCurrentTrackData.receiveTrackData(apiUrl, mapData);
-                delete downloadCurrentTrackData.currentRequests[apiUrl];
-            } else {
-                if (4 === this.readyState && this.status >= 400) {
-                    downloadCurrentTrackData.stopWaiting();
-                    downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
-                    delete downloadCurrentTrackData.currentRequests[apiUrl];
-                }
+            if (4 === this.readyState) {
+                downloadCurrentTrackData.requestFinished(this, apiUrl, function(reply) {
+                    downloadCurrentTrackData.receiveTrackData(apiUrl, reply);
+                });
             }
         };
         xmlhttp.open("GET", apiUrl, true);
@@ -8137,6 +8165,11 @@ var downloadCurrentTrackData = {
         // the onreadystatechange callback above will trigger
         // when the data has safely arrived
         // wait for the request to complete before making the download file
+        downloadCurrentTrackData.outOptions = {
+            outType: outType,
+            withHeaders: document.getElementById("downloadTrackHeaders").checked,
+            fileName: $("#downloadFileName")[0].value
+        };
         downloadCurrentTrackData.setBusy(true);
         downloadCurrentTrackData.intervalId = setInterval(downloadCurrentTrackData.makeDownloadFile, 200, apiUrl);
     },
@@ -8174,7 +8207,8 @@ var downloadCurrentTrackData = {
         // numeric data, which has no GenBank feature equivalent.  Only the first word
         // of the type, so that wigMaf, which does have features, is not caught
         let first = (type || "").split(" ")[0];
-        return first === "wig" || first === "bigWig" || first === "mathWig";
+        return first === "wig" || first === "bigWig" || first === "mathWig" ||
+            first === "bedGraph";
     },
 
     outputFormatChanged: function(outType) {

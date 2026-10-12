@@ -964,6 +964,38 @@ cgiMakeDoubleVar(cartVar, minQual, 10);
 printf("<BR>\n");
 }
 
+struct slName *vcfExcludeFilterDefault(struct cart *cart, struct trackDb *tdb,
+                                       struct vcfFile *vcff)
+/* Return the trackDb default of excludeFilterValues, trimmed and limited to the FILTER
+ * values that vcff's header defines, or NULL if there is none or the FILTER checkboxes are
+ * turned off.  The default is only a pre-ticked checkbox: a value without a checkbox would
+ * hide its records with no way for the user to show them again. */
+{
+if (!cartOrTdbBoolean(cart, tdb, VCF_DO_FILTER_UI, TRUE))
+    return NULL;
+char *tdbDefault = trackDbSettingClosestToHome(tdb, VCF_EXCLUDE_FILTER_VAR);
+if (isEmpty(tdbDefault))
+    return NULL;
+struct slName *values = NULL;
+struct slName *val, *tdbValues = slNameListFromComma(tdbDefault);
+for (val = tdbValues;  val != NULL;  val = val->next)
+    {
+    char *name = trimSpaces(val->name);
+    if (isEmpty(name) || slNameInList(values, name))
+        continue;
+    struct vcfInfoDef *filt;
+    for (filt = vcff->filterDefs;  filt != NULL;  filt = filt->next)
+        if (sameString(filt->key, name))
+            {
+            slNameAddHead(&values, name);
+            break;
+            }
+    }
+slFreeList(&tdbValues);
+slReverse(&values);
+return values;
+}
+
 static void vcfCfgFilterColumn(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
 			       char *name, boolean parentLevel)
 /* Show controls for filtering by value of VCF's FILTER column, which uses values defined
@@ -998,12 +1030,8 @@ struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR);
 else
-    {
     // trackDb can set the default, e.g. to hide artifact-flagged records
-    char *tdbDefault = trackDbSettingClosestToHome(tdb, VCF_EXCLUDE_FILTER_VAR);
-    if (isNotEmpty(tdbDefault))
-        selectedValues = slNameListFromComma(tdbDefault);
-    }
+    selectedValues = vcfExcludeFilterDefault(cart, tdb, vcff);
 cgiMakeCheckboxGroupWithVals(cartVar, labels, values, filterCount, selectedValues, 1);
 }
 

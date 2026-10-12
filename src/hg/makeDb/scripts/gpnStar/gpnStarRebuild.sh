@@ -1,15 +1,18 @@
 #!/bin/bash
-# Re-encode one GPN-Star bigWig with kent tools to fix its section headers, then verify
-# with gpnStarVerify.sh that every per-base value is unchanged and no bad headers remain.
-# usage: gpnStarRebuild.sh in.bw chrom.sizes tmpDir
-# writes <dir of in.bw>/rebuilt/<name>.bw
+# Re-encode one downloaded GPN-Star bigWig with kent tools to fix its section headers.
+# The new file is moved to its final path only after gpnStarVerify.sh passes; on failure
+# it is deleted and the script exits non-zero.
+# usage: gpnStarRebuild.sh download/in.bw out.bw chrom.sizes tmpDir
 set -beEu -o pipefail
-in=$1; sizes=$2; tmp=$3
-dir=$(dirname $in); name=$(basename $in)
-mkdir -p $dir/rebuilt
-wig=$tmp/gpnStarRebuild.$$.$name.wig
+in=$1; out=$2; sizes=$3; tmp=$4
+wig=$tmp/gpnStarRebuild.$$.$(basename $in).wig
+new=$out.rebuilding
+trap 'rm -f $wig $new' EXIT
 bigWigToWig $in $wig
-wigToBigWig $wig $sizes $dir/rebuilt/$name
+wigToBigWig $wig $sizes $new
 rm -f $wig
-# compare per chromosome: kent writes chromosomes in a different order than the original
-$(dirname $0)/gpnStarVerify.sh $in $dir/rebuilt/$name
+if $(dirname $0)/gpnStarVerify.sh $in $new; then
+    mv $new $out
+else
+    echo "FAIL $in, rebuilt file removed"; exit 1
+fi

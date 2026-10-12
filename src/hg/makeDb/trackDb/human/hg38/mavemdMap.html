@@ -1,7 +1,7 @@
 <h2>Description</h2>
 
 <p>
-This track is part of the <a href="hgTrackUi?g=mavemd">MaveMD</a> collection. It draws each
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=mavemd">MaveMD</a> collection. It draws each
 clinically curated score set as a variant effect map: one column per amino acid position,
 placed at that codon's genomic coordinates, and one row per substitution. A gene measured by
 several score sets gets one map per score set, stacked.
@@ -12,7 +12,7 @@ The map is the view for seeing the shape of a result rather than a single varian
 mark stretches of the protein where substitution is damaging, such as a folded domain or an
 active site; runs of blue mark stretches that tolerate it. Individual measurements, with their
 assay scores, assay metadata and ClinVar and gnomAD annotations, are in the
-<a href="hgTrackUi?g=mavemdVar">MaveMD Variants</a> track, which also explains why a raw
+<a href="hgTrackUi?db=$db&amp;g=mavemdVar">MaveMD Variants</a> track, which also explains why a raw
 functional score cannot be compared between score sets.
 </p>
 
@@ -89,14 +89,14 @@ variant library was built.
 <p>
 MaveMD curates MaveDB score sets for clinical relevance and annotates them with the metadata a
 laboratory needs to judge whether an assay supports a variant classification (McEwen
-<em>et al.</em>). A calibration divides a score set's score range into functional classes;
+<em>et al.</em>, 2025). A calibration divides a score set's score range into functional classes;
 where those classes were compared against variants of known clinical significance, the
 calibration also carries an ACMG/AMP evidence strength derived from the odds of pathogenicity,
 following the ClinGen recommendations for the PS3/BS3 criterion (Brnich <em>et al.</em>, 2019).
 </p>
 
 <p>
-Data are downloaded from the <a href="https://api.mavedb.org" target="_blank">MaveDB API</a>,
+Data are downloaded from the <a href="https://api.mavedb.org/docs" target="_blank">MaveDB API</a>,
 one request per score set. Each measurement is placed by resolving its protein accession to a
 transcript and walking that transcript's coding bases to the requested codon, through RefSeq
 for RefSeq accessions and GENCODE for Ensembl ones. Columns are ordered by genomic coordinate,
@@ -122,22 +122,22 @@ target="_blank">human/hg38/mavemd.ra</a>. The makeDoc records the counts for eac
 or tab-sep tables. From scripts, the data can be accessed through our
 <a href="https://api.genome.ucsc.edu">API</a>, track=<i>mavemdMap</i>. Note that each row is a
 whole map, with its scores and labels held in comma-separated matrix fields; for per-variant
-records use the <a href="hgTrackUi?g=mavemdVar">MaveMD Variants</a> track instead.</p>
+records use the <a href="hgTrackUi?db=$db&amp;g=mavemdVar">MaveMD Variants</a> track instead.</p>
 
 <p>For automated download and analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mavemd/" target="_blank">our download
+<a href="https://hgdownload.gi.ucsc.edu/gbdb/$db/mavemd/" target="_blank">our download
 server</a>. The file for this track is called <tt>mavemdMap.bb</tt>. Individual regions or the
 whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be
 compiled from the source code or downloaded as a precompiled binary for your system.
 Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
+<a href="https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
 can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mavemd/mavemdMap.bb -chrom=chr17
+<tt>bigBedToBed https://hgdownload.gi.ucsc.edu/gbdb/$db/mavemd/mavemdMap.bb -chrom=chr17
 -start=7668402 -end=7687550 stdout</tt></p>
 
 <p>The original annotation source data can be downloaded from the MaveDB API at
-<a href="https://api.mavedb.org" target="_blank">https://api.mavedb.org</a>.</p>
+<a href="https://api.mavedb.org/docs" target="_blank">https://api.mavedb.org/docs</a>.</p>
 
 <h2>Credits</h2>
 

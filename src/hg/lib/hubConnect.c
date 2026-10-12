@@ -24,6 +24,7 @@
 #include "grp.h"
 #include "udc.h"
 #include "hubPublic.h"
+#include "autoUpgrade.h"
 #include "genark.h"
 #include "asmAlias.h"
 #include "cheapcgi.h"
@@ -90,6 +91,16 @@ if (_hubPublicTableName == NULL)
     _hubPublicTableName = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", hubPublicTableConfVariable,
                                              defaultHubPublicTableName);
 return _hubPublicTableName;
+}
+
+boolean hubPublicHasEmail(struct sqlConnection *conn)
+/* Return TRUE if the public hubs table has an email column.  Mirrors with an older
+ * hgcentral do not have it, so try to add it first.  If that fails, return FALSE. */
+{
+char *table = hubPublicTableName();
+if (!sqlColumnExists(conn, table, "email"))
+    autoUpgradeTableAddColumn(conn, table, "email", "varchar(255)", FALSE, "NULL");
+return sqlColumnExists(conn, table, "email");
 }
 
 boolean hubConnectTableExists()

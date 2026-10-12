@@ -1697,6 +1697,7 @@ if (track->limitedVis != tvHide)
         int insideHeight = fontHeight-1;
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
+        struct trackDb *labelTdb = track->tdb;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         labelColor = colorFromCart(track, labelColor);
@@ -1706,6 +1707,7 @@ if (track->limitedVis != tvHide)
             if (tdbComposite != NULL)
                 {
                 label = tdbComposite->longLabel;
+                labelTdb = tdbComposite;
                 labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR,
                                                 tdbComposite->colorG, tdbComposite->colorB);
 
@@ -1721,6 +1723,7 @@ if (track->limitedVis != tvHide)
         else
             labelfont = font;
         labelColor = maybeDarkerLabels(track, hvg, labelColor);
+        label = labelWithParents(labelTdb, label);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
                           labelColor, labelfont, label);
         if (theImgBox && curImgTrack)
@@ -1757,6 +1760,7 @@ if (track->limitedVis != tvHide)
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
             }
+        freeMem(label);
         y += fontHeight;
         }
     y += track->totalHeight(track, track->limitedVis);
@@ -5657,12 +5661,18 @@ if (withLeftLabels && psOutput == NULL)
                 if (tdbIsCompositeChild(track->tdb))
                     {
                     struct trackDb *parent = tdbGetComposite(track->tdb);
+                    char *label = labelWithParents(parent, parent->shortLabel);
                     mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-                                  parent->track, parent->shortLabel, track->track);
+                                  parent->track, label, track->track);
+                    freeMem(label);
                     }
                 else
+                    {
+                    char *label = labelWithParents(track->tdb, track->shortLabel);
                     mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, title,
-                                  track->shortLabel, title);
+                                  label, title);
+                    freeMem(label);
+                    }
                 }
             }
         }
@@ -9230,7 +9240,9 @@ if (cfgOptionBooleanDefault("showGenbankDownload", FALSE))
     // ceiling belongs to the machine and its users rather than to the code.  Printed
     // as a number, and a value that is not a positive one falls back to the default,
     // so a typo in hg.conf cannot write broken javascript or refuse every region.
-    long long maxGbRegion = atoll(cfgOptionDefault("maxGenbankRegion", "25000000"));
+    // Only plain digits count: atoll stops at the first comma, so "25,000,000" would be 25.
+    char *maxGbStr = cfgOptionDefault("maxGenbankRegion", "25000000");
+    long long maxGbRegion = isAllDigits(maxGbStr) ? atoll(maxGbStr) : 0;
     if (maxGbRegion <= 0)
         maxGbRegion = 25000000;
     jsInlineF("var maxGenbankRegion = %lld;\n", maxGbRegion);
@@ -9321,10 +9333,11 @@ if (!url)
 struct sqlConnection *conn = hConnectCentral();
 
 char *email = NULL;
-if (sqlColumnExists(conn, "hubPublic", "email"))
+if (hubPublicHasEmail(conn))
     {
     char query[1000];
-    sqlSafef(query, sizeof query, "SELECT email FROM hubPublic WHERE hubUrl='%s'", url);
+    sqlSafef(query, sizeof query, "SELECT email FROM %s WHERE hubUrl='%s'",
+             hubPublicTableName(), url);
     email = sqlQuickNonemptyString(conn, query);
     }
 

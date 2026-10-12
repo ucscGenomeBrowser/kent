@@ -142,7 +142,8 @@ EVIDENCE_LEVEL_NAMES: Final = {
 }
 
 ## Decorator glyph on the breakpoint end of a fusion partner:
-## a black bar on a half-transparent orange band
+## a black bar and a half-transparent orange arrow that points in the direction
+## of transcription, towards the breakpoint in the 5' partner, away from it in the 3' partner
 FUSION_BAR_COLOR: Final = "0,0,0"
 FUSION_BAND_COLOR: Final = "232,89,12,128"
 DECORATION_AS: Final = "decoration.as"
@@ -560,6 +561,7 @@ def transform_fusion_variants(
         variants = fdf.loc[valid, :].reset_index(drop=True)
         bed12 = []
         kept_rows = []
+        side_decorations = []
         for i, r in enumerate(variants.itertuples()):
             tx = ens2bed[getattr(r, tx_col)]
             res = gene_bed_to_kept_part(
@@ -575,14 +577,18 @@ def transform_fusion_variants(
             bed12.append(kept.as_str_dict())
             kept_rows.append(i)
             decorated = f"{kept.chrom}:{kept.chromStart}-{kept.chromEnd}:{kept.name}"
-            decorations.append(
+            side_decorations.append(
                 [kept.chrom, kept.chromStart, kept.chromEnd, "breakpoint", 0,
                  kept.strand, kept.chromStart, kept.chromEnd, FUSION_BAR_COLOR,
                  1, kept.chromEnd - kept.chromStart, 0, decorated, "glyph",
-                 FUSION_BAND_COLOR, "BarRight" if bar_right else "BarLeft"]
+                 FUSION_BAND_COLOR, "ArrRight" if bar_right else "ArrLeft"]
             )
         variants = variants.iloc[kept_rows].reset_index(drop=True)
-        vldfs.append(annotate_bed12(pd.DataFrame(bed12), variants))
+        vldf = annotate_bed12(pd.DataFrame(bed12), variants)
+        vldfs.append(vldf)
+        # the glyph covers the end of the feature, so it gets the feature's mouseover
+        for dec, name, mouse_over in zip(side_decorations, vldf["name"], vldf["mouseOverHTML"]):
+            decorations.append(dec + [f"Breakpoint of: <b>{name}</b><br>{mouse_over}"])
 
     # identical features (same name and coordinates) share one decoration
     dec_df = pd.DataFrame(decorations).drop_duplicates(subset=[12])
@@ -984,7 +990,7 @@ def transform_dfs(dfs: dict[str, pd.DataFrame]) -> dict[str, str]:
         decbb = f"civic.decorator.{ref}.bb"
         shell(f"bedSort {decbed} {decbed}")
         shell(
-            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+4 -as={DECORATION_AS} {decbed} {CHROM_SIZES[ref]} {decbb}"
+            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+5 -as={DECORATION_AS} {decbed} {CHROM_SIZES[ref]} {decbb}"
         )
     return outbb
 

@@ -2250,7 +2250,9 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
     char *sanitized = NULL, *encSanitized = NULL;
     if (imgTrack->reorderable)
         {
-        sanitized = htmlSanitize(imgTrack->tdb->longLabel);
+        char *label = labelWithParents(imgTrack->tdb, imgTrack->tdb->longLabel);
+        sanitized = htmlSanitize(label);
+        freeMem(label);
         encSanitized = attributeEncode(sanitized);
         }
     if (imgBox->showSideLabel && imgBox->plusStrand)

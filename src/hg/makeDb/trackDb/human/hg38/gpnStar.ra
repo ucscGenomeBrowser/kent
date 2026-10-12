@@ -1,0 +1,333 @@
+track gpnStar
+shortLabel GPN-Star
+longLabel GPN-Star genomic language model constraint scores (primate, mammal, vertebrate)
+superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+group compGeno
+
+track gpnStarLlr
+shortLabel GPN-Star -LLR
+longLabel GPN-Star -LLR per alternate allele (primate, mammal and vertebrate models)
+parent gpnStar
+priority 1
+compositeTrack on
+html gpnStar
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+type bigWig
+subGroup1 model Model P=Primate_(243) M=Mammal_(447) V=Vertebrate_(100)
+subGroup2 allele Mutation A=A C=C G=G T=T
+dimensions dimX=allele dimY=model
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+autoScale off
+alwaysZero on
+viewLimits -3:10
+viewLimitsMax -16:16
+negateValues on
+yLineOnOff on
+yLineMark 0
+graphTypeDefault bar
+maxHeightPixels 100:16:16
+windowingFunction mean+whiskers
+visibility dense
+
+    track gpnStarLlrVA
+    parent gpnStarLlr off
+    subGroups model=V allele=A
+    shortLabel (V) Mutation: A
+    longLabel GPN-Star (V, 100 vertebrates) -LLR: Mutation is A
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/v100/llr_A.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 9
+
+    track gpnStarLlrVC
+    parent gpnStarLlr off
+    subGroups model=V allele=C
+    shortLabel (V) Mutation: C
+    longLabel GPN-Star (V, 100 vertebrates) -LLR: Mutation is C
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/v100/llr_C.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 10
+
+    track gpnStarLlrVG
+    parent gpnStarLlr off
+    subGroups model=V allele=G
+    shortLabel (V) Mutation: G
+    longLabel GPN-Star (V, 100 vertebrates) -LLR: Mutation is G
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/v100/llr_G.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 11
+
+    track gpnStarLlrVT
+    parent gpnStarLlr off
+    subGroups model=V allele=T
+    shortLabel (V) Mutation: T
+    longLabel GPN-Star (V, 100 vertebrates) -LLR: Mutation is T
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/v100/llr_T.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 12
+
+    track gpnStarLlrMA
+    parent gpnStarLlr on
+    subGroups model=M allele=A
+    shortLabel (M) Mutation: A
+    longLabel GPN-Star (M, 447 mammals) -LLR: Mutation is A
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/m447/llr_A.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 5
+
+    track gpnStarLlrMC
+    parent gpnStarLlr on
+    subGroups model=M allele=C
+    shortLabel (M) Mutation: C
+    longLabel GPN-Star (M, 447 mammals) -LLR: Mutation is C
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/m447/llr_C.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 6
+
+    track gpnStarLlrMG
+    parent gpnStarLlr on
+    subGroups model=M allele=G
+    shortLabel (M) Mutation: G
+    longLabel GPN-Star (M, 447 mammals) -LLR: Mutation is G
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/m447/llr_G.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 7
+
+    track gpnStarLlrMT
+    parent gpnStarLlr on
+    subGroups model=M allele=T
+    shortLabel (M) Mutation: T
+    longLabel GPN-Star (M, 447 mammals) -LLR: Mutation is T
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/m447/llr_T.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 8
+
+    track gpnStarLlrPA
+    parent gpnStarLlr off
+    subGroups model=P allele=A
+    shortLabel (P) Mutation: A
+    longLabel GPN-Star (P, 243 primates) -LLR: Mutation is A
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/p243/llr_A.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 1
+
+    track gpnStarLlrPC
+    parent gpnStarLlr off
+    subGroups model=P allele=C
+    shortLabel (P) Mutation: C
+    longLabel GPN-Star (P, 243 primates) -LLR: Mutation is C
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/p243/llr_C.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 2
+
+    track gpnStarLlrPG
+    parent gpnStarLlr off
+    subGroups model=P allele=G
+    shortLabel (P) Mutation: G
+    longLabel GPN-Star (P, 243 primates) -LLR: Mutation is G
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/p243/llr_G.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 3
+
+    track gpnStarLlrPT
+    parent gpnStarLlr off
+    subGroups model=P allele=T
+    shortLabel (P) Mutation: T
+    longLabel GPN-Star (P, 243 primates) -LLR: Mutation is T
+    type bigWig
+    bigDataUrl /gbdb/$D/gpnStar/p243/llr_T.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 4
+
+track gpnStarLogoM
+shortLabel GPN-Star (M) Logo
+longLabel GPN-Star (M, 447 mammals) sequence logo of predicted constraint
+parent gpnStar
+priority 3
+container multiWig
+html gpnStar
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+type bigWig 0 2
+aggregate stacked
+logo on
+showSubtrackColorOnUi on
+autoScale off
+viewLimits 0:2
+viewLimitsMax 0:2
+maxHeightPixels 100:40:16
+visibility full
+
+    track gpnStarLogoMA
+    shortLabel A
+    longLabel GPN-Star (M, 447 mammals) logo height of A
+    parent gpnStarLogoM
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/m447/A.bw
+    color 0,128,0
+    priority 1
+
+    track gpnStarLogoMC
+    shortLabel C
+    longLabel GPN-Star (M, 447 mammals) logo height of C
+    parent gpnStarLogoM
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/m447/C.bw
+    color 0,0,255
+    priority 2
+
+    track gpnStarLogoMG
+    shortLabel G
+    longLabel GPN-Star (M, 447 mammals) logo height of G
+    parent gpnStarLogoM
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/m447/G.bw
+    color 255,166,0
+    priority 3
+
+    track gpnStarLogoMT
+    shortLabel T
+    longLabel GPN-Star (M, 447 mammals) logo height of T
+    parent gpnStarLogoM
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/m447/T.bw
+    color 255,0,0
+    priority 4
+
+track gpnStarLogoV
+shortLabel GPN-Star (V) Logo
+longLabel GPN-Star (V, 100 vertebrates) sequence logo of predicted constraint
+parent gpnStar
+priority 4
+container multiWig
+html gpnStar
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+type bigWig 0 2
+aggregate stacked
+logo on
+showSubtrackColorOnUi on
+autoScale off
+viewLimits 0:2
+viewLimitsMax 0:2
+maxHeightPixels 100:40:16
+visibility hide
+
+    track gpnStarLogoVA
+    shortLabel A
+    longLabel GPN-Star (V, 100 vertebrates) logo height of A
+    parent gpnStarLogoV
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/v100/A.bw
+    color 0,128,0
+    priority 1
+
+    track gpnStarLogoVC
+    shortLabel C
+    longLabel GPN-Star (V, 100 vertebrates) logo height of C
+    parent gpnStarLogoV
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/v100/C.bw
+    color 0,0,255
+    priority 2
+
+    track gpnStarLogoVG
+    shortLabel G
+    longLabel GPN-Star (V, 100 vertebrates) logo height of G
+    parent gpnStarLogoV
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/v100/G.bw
+    color 255,166,0
+    priority 3
+
+    track gpnStarLogoVT
+    shortLabel T
+    longLabel GPN-Star (V, 100 vertebrates) logo height of T
+    parent gpnStarLogoV
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/v100/T.bw
+    color 255,0,0
+    priority 4
+
+track gpnStarLogoP
+shortLabel GPN-Star (P) Logo
+longLabel GPN-Star (P, 243 primates) sequence logo of predicted constraint
+parent gpnStar
+priority 2
+container multiWig
+html gpnStar
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+type bigWig 0 2
+aggregate stacked
+logo on
+showSubtrackColorOnUi on
+autoScale off
+viewLimits 0:2
+viewLimitsMax 0:2
+maxHeightPixels 100:40:16
+visibility hide
+
+    track gpnStarLogoPA
+    shortLabel A
+    longLabel GPN-Star (P, 243 primates) logo height of A
+    parent gpnStarLogoP
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/p243/A.bw
+    color 0,128,0
+    priority 1
+
+    track gpnStarLogoPC
+    shortLabel C
+    longLabel GPN-Star (P, 243 primates) logo height of C
+    parent gpnStarLogoP
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/p243/C.bw
+    color 0,0,255
+    priority 2
+
+    track gpnStarLogoPG
+    shortLabel G
+    longLabel GPN-Star (P, 243 primates) logo height of G
+    parent gpnStarLogoP
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/p243/G.bw
+    color 255,166,0
+    priority 3
+
+    track gpnStarLogoPT
+    shortLabel T
+    longLabel GPN-Star (P, 243 primates) logo height of T
+    parent gpnStarLogoP
+    type bigWig 0 2
+    bigDataUrl /gbdb/$D/gpnStar/p243/T.bw
+    color 255,0,0
+    priority 4

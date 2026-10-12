@@ -184,10 +184,10 @@ struct hubPublic *hubPublicDbLoadAll()
 char query[1024];
 struct hubPublic *list = NULL;
 struct sqlConnection *conn = hConnectCentral();
-/* name the columns: older mirrors have no email column, and hubPublicLoad
- * reads one more column than they would return */
+/* name the columns: older mirrors have no email column and it could not be added,
+ * and hubPublicLoad reads one more column than they would return */
 char *emailColumn = "NULL";
-if (sqlColumnExists(conn, hubPublicTableName(), "email"))
+if (hubPublicHasEmail(conn))
     emailColumn = "email";
 sqlSafef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,registrationTime,"
     "dbCount,dbList,descriptionUrl,%s from %s", emailColumn, hubPublicTableName());

@@ -17,4 +17,5 @@ table decoration
     string style;      "Draw style for the decoration (e.g. block, glyph)"
     string fillColor;  "Secondary color to use for filling decoration, blocks, supports RGBA"
     string glyph;  "The glyph to draw in glyph mode; ignored for other styles"
+    lstring mouseOverHTML; "Mouseover text, the mouseover of the decorated feature"
     )

@@ -56,7 +56,8 @@ if (isEmpty(record->qual) ||
 return FALSE;
 }
 
-static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues)
+static boolean getFilterValues(struct trackDb *tdb, struct vcfFile *vcff,
+                               struct slName **retValues)
 /* Return TRUE and set retValues if cart, or else trackDb, contains FILTER column values to
  * exclude */
 {
@@ -68,11 +69,13 @@ if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
 	*retValues = selectedValues;
     return TRUE;
     }
-char *tdbDefault = trackDbSettingClosestToHome(tdb, VCF_EXCLUDE_FILTER_VAR);
-if (isNotEmpty(tdbDefault))
+struct slName *tdbDefault = vcfExcludeFilterDefault(cart, tdb, vcff);
+if (tdbDefault != NULL)
     {
     if (retValues != NULL)
-	*retValues = slNameListFromComma(tdbDefault);
+	*retValues = tdbDefault;
+    else
+        slFreeList(&tdbDefault);
     return TRUE;
     }
 return FALSE;
@@ -257,7 +260,7 @@ struct slName *filterValues = NULL;
 double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
 int minAc = VCF_DEFAULT_MIN_AC;
 boolean gotQualFilter = getMinQual(tdb, &minQual);
-boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
+boolean gotFilterFilter = getFilterValues(tdb, vcff, &filterValues);
 boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
 boolean gotMinAcFilter = getMinAc(tdb, &minAc);
 struct vcfInfoFilter *infoFilters = buildVcfInfoFilters(vcff, cart, tdb);
@@ -3383,14 +3386,28 @@ track->itemName = vcfHapClusterTrackName;
 track->mapsSelf = TRUE;
 }
 
-static unsigned vcfMaxItems(struct trackDb *tdb)
+static int vcfMaxItems(struct trackDb *tdb)
 /* Get the maximum number of items to grab from a vcf file: trackDb setting maxItems,
- * else hg.conf setting vcfMaxItems, else ten thousand. */
+ * else hg.conf setting vcfMaxItems, else ten thousand.  The trackDb value is capped at
+ * hg.conf maxItemsPossible, like maxItems on the other track types, and 0 means unset.
+ * The result must stay positive: vcf.c reads a negative maxRecords as no limit. */
 {
+unsigned maxItems = 0;
 char *maxItemsStr = trackDbSettingClosestToHome(tdb, "maxItems");
-if (maxItemsStr == NULL)
-    maxItemsStr = cfgOptionDefault("vcfMaxItems", "10000");
-return sqlUnsigned(maxItemsStr);
+if (maxItemsStr != NULL)
+    {
+    maxItems = sqlUnsigned(maxItemsStr);
+    unsigned maxItemsPossible = sqlUnsigned(cfgOptionDefault("maxItemsPossible", "100000"));
+    if (maxItems > maxItemsPossible)
+        maxItems = maxItemsPossible;
+    }
+if (maxItems == 0)
+    maxItems = sqlUnsigned(cfgOptionDefault("vcfMaxItems", "10000"));
+if (maxItems == 0)
+    maxItems = 10000;
+if (maxItems > BIGNUM)
+    maxItems = BIGNUM;
+return maxItems;
 }
 
 static void vcfTabixLoadItems(struct track *tg)

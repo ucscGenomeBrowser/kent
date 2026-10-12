@@ -131,6 +131,12 @@ struct vcfInfoFilter *buildVcfInfoFilters(struct vcfFile *vcff, struct cart *car
 /* Parse the cart/trackDb current filters into something we can filter the records on.
  * Warns about and skips any filter whose INFO field is missing or has the wrong type. */
 
+struct slName *vcfExcludeFilterDefault(struct cart *cart, struct trackDb *tdb,
+                                       struct vcfFile *vcff);
+/* Return the trackDb default of excludeFilterValues, trimmed and limited to the FILTER
+ * values that vcff's header defines, or NULL if there is none or the FILTER checkboxes are
+ * turned off. */
+
 boolean vcfInfoFilterOneRecord(struct vcfRecord *rec, struct vcfInfoFilter *vcfInfoFilters);
 /* Return true if rec passes all the filters on the INFO fields defined in vcfInfoFilters */
 

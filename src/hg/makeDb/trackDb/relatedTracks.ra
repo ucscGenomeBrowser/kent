@@ -656,19 +656,44 @@ mm10 mm10Strains1 mouseStrainsCactus Whole-genome alignment of the 16 strain ass
 mm10 mouseStrainsCactus mm10Strains1 Alternate strain sequences mapped to their reference genome location
 
 # GPN-Star:
-hg38 gpnStarLogoV cons100way Conservation scores from the same 100-vertebrate alignment
-hg38 cons100way gpnStarLogoV A genomic language model trained on this alignment
-hg38 gpnStarLogoM cons447way Conservation scores from the same 447-mammal alignment
-hg38 cons447way gpnStarLogoM A genomic language model trained on this alignment
-hg38 gpnStarLogoP cons447way Primate conservation scores from the same alignment
-hg38 cons447way gpnStarLogoP A genomic language model trained on the primates of this alignment
-hg38 gpnStarLogoM constraintSuper Regional constraint scores
-hg38 constraintSuper gpnStarLogoM Per-base constraint predicted from whole-genome alignments
-mm39 gpnStarLogo cons35way Conservation scores from the same alignment
-mm39 cons35way gpnStarLogo A genomic language model trained on this alignment
-galGal6 gpnStarLogo cons77way Conservation scores from the same alignment
-galGal6 cons77way gpnStarLogo A genomic language model trained on this alignment
-dm6 gpnStarLogo cons124way Conservation scores from the same alignment
-dm6 cons124way gpnStarLogo A genomic language model trained on this alignment
-ce11 gpnStarLogo cons135way Conservation scores from the same alignment
-ce11 cons135way gpnStarLogo A genomic language model trained on this alignment
+hg38 gpnStar predictionScoresSuper Other variant deleteriousness and impact prediction scores
+hg38 predictionScoresSuper gpnStar Language model constraint scores for every possible base change
+hg38 gpnStar constraintSuper Regional constraint scores
+hg38 constraintSuper gpnStar Per-base constraint predicted from whole-genome alignments
+hg38 gpnStar cons100way Conservation scores from the alignment behind the vertebrate model
+hg38 cons100way gpnStar A genomic language model trained on this alignment
+hg38 gpnStar cons447way Conservation scores from the alignment behind the mammal and primate models
+hg38 cons447way gpnStar A genomic language model trained on this alignment and its primates
+mm39 gpnStar cons35way Conservation scores from the same alignment
+mm39 cons35way gpnStar A genomic language model trained on this alignment
+galGal6 gpnStar cons77way Conservation scores from the same alignment
+galGal6 cons77way gpnStar A genomic language model trained on this alignment
+dm6 gpnStar cons124way Conservation scores from the same alignment
+dm6 cons124way gpnStar A genomic language model trained on this alignment
+ce11 gpnStar cons135way Conservation scores from the same alignment
+ce11 cons135way gpnStar A genomic language model trained on this alignment
+# GPN-Star tracks link out one way, so the pages above list the collection only once:
+hg38 >gpnStarLlr predictionScoresSuper Other variant deleteriousness and impact scores
+hg38 >gpnStarLlr constraintSuper Regional constraint scores
+hg38 >gpnStarLlr cons100way Conservation scores, alignment behind the vertebrate model
+hg38 >gpnStarLlr cons447way Conservation scores, alignment behind the mammal and primate models
+hg38 >gpnStarLogoP predictionScoresSuper Other variant deleteriousness and impact scores
+hg38 >gpnStarLogoP constraintSuper Regional constraint scores
+hg38 >gpnStarLogoP cons100way Conservation scores, alignment behind the vertebrate model
+hg38 >gpnStarLogoP cons447way Conservation scores, alignment behind the mammal and primate models
+hg38 >gpnStarLogoM predictionScoresSuper Other variant deleteriousness and impact scores
+hg38 >gpnStarLogoM constraintSuper Regional constraint scores
+hg38 >gpnStarLogoM cons100way Conservation scores, alignment behind the vertebrate model
+hg38 >gpnStarLogoM cons447way Conservation scores, alignment behind the mammal and primate models
+hg38 >gpnStarLogoV predictionScoresSuper Other variant deleteriousness and impact scores
+hg38 >gpnStarLogoV constraintSuper Regional constraint scores
+hg38 >gpnStarLogoV cons100way Conservation scores, alignment behind the vertebrate model
+hg38 >gpnStarLogoV cons447way Conservation scores, alignment behind the mammal and primate models
+mm39 >gpnStarLlr cons35way Conservation scores from the same alignment
+mm39 >gpnStarLogo cons35way Conservation scores from the same alignment
+galGal6 >gpnStarLlr cons77way Conservation scores from the same alignment
+galGal6 >gpnStarLogo cons77way Conservation scores from the same alignment
+dm6 >gpnStarLlr cons124way Conservation scores from the same alignment
+dm6 >gpnStarLogo cons124way Conservation scores from the same alignment
+ce11 >gpnStarLlr cons135way Conservation scores from the same alignment
+ce11 >gpnStarLogo cons135way Conservation scores from the same alignment

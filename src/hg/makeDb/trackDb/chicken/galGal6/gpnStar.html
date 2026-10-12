@@ -1,12 +1,12 @@
 <h2>Description</h2>
 <p>
-This track shows scores from GPN-Star, a genomic language model that predicts how strongly selection constrains
-each base, and how damaging each possible single-base substitution is likely to be. GPN-Star
-learns from a whole-genome alignment of many species together with their evolutionary tree, so it
-combines the cross-species conservation signal used by PhyloP and PhastCons with the surrounding
-sequence context. The model shown here was trained on the alignment of 77 vertebrates to this
-assembly. Scores are available for every possible single-base substitution, in coding and
-non-coding sequence alike.
+This track shows scores from GPN-Star, a genomic language model that predicts how strongly
+selection constrains each base, and how damaging each possible single-base substitution is
+likely to be. GPN-Star learns from a whole-genome alignment of many species together with their
+evolutionary tree, so it combines the cross-species conservation signal used by PhyloP and
+PhastCons with the surrounding sequence context. The model shown here was trained on the
+alignment of 77 vertebrates to this assembly. Scores are available for every possible
+single-base substitution, in coding and non-coding sequence alike.
 </p>
 <p>
 The authors evaluated the model by checking whether variants that the model predicts to be
@@ -29,8 +29,8 @@ the reference base carries no substitution and is shown as zero. The score is th
 log-likelihood ratio (LLR) of the alternate versus the reference allele, displayed with its sign
 flipped (-LLR), so that higher bars mean a substitution the model considers more damaging. The
 default view is scaled from -3 to 10; values outside that range are clipped at the edge of the
-graph, and the range can be changed on the track configuration page. In dense mode the graphs are shown in
-grayscale. When expanded, they use these colors:
+graph, and the range can be changed on the track configuration page. In dense mode the graphs
+are shown in grayscale. When expanded, they use these colors:
 </p>
 <table class="stdTbl">
   <tr><th style="background-color:#8C3C3C;width:2em">&nbsp;</th>
@@ -50,10 +50,11 @@ constrained the position is: a tall stack, up to a maximum of 2, means the model
 about which base belongs there, while a flat or empty column means the position looks neutral.
 The letters are always stacked in the same order, so the base the model favors most is the
 tallest letter, not necessarily the top one. In tall, constrained columns this is almost always
-the reference base; in short columns, where no base is strongly preferred, it often is not.
-The logo is meant for viewing: it shows which positions are constrained,
-but it levels off at a height of 2, so a substitution scored at -5 and one scored at -10 look
-almost the same. Use the -LLR graphs to compare how damaging specific substitutions are. The letters use the standard nucleotide colors:
+the reference base; in short columns, where no base is strongly preferred, it often is not. The
+logo is meant for viewing: it shows which positions are constrained, but it levels off at a
+height of 2, so a substitution scored at -5 and one scored at -10 look almost the same. Use the
+-LLR graphs to compare how damaging specific substitutions are. The letters use the standard
+nucleotide colors:
 </p>
 <table class="stdTbl">
   <tr><th style="background-color:#008000;width:2em">&nbsp;</th><td>A</td></tr>
@@ -76,28 +77,29 @@ GPN-Star is a transformer model trained to predict masked bases in a multiple-sp
 whole-genome alignment, using the species tree to weight related species by their evolutionary
 distance. The LLR of a substitution is the log ratio of the predicted probabilities of the
 alternate and reference alleles. To remove the effect of mutation rate, the authors subtracted
-the average LLR at neutral sites, defined from PhyloP and PhastCons, with the same five-base
-context. The model shown here has 85 million parameters and was trained on the UCSC
-multiz77way alignment of 77 vertebrates. See Ye, Benegas <em>et al.</em> (2026) for details.
+the average LLR at neutral sites (positions within ancestral repeats with near-zero PhyloP and
+PhastCons scores) with the same five-base context. The model shown here has 85 million
+parameters and was trained on the UCSC multiz77way alignment of 77 vertebrates. See Ye, Benegas
+<em>et al.</em> (2026) for details.
 </p>
 <p>
-The bigWig files were downloaded from the
-<a href="https://huggingface.co/datasets/songlab/gpn-star-scores/tree/main/bigwig/gg6"
+The bigWig files were downloaded from the <a
+href="https://huggingface.co/datasets/songlab/gpn-star-scores/tree/47e7f051113abab49f04f43f9107cae2cbbfd34d/bigwig/gg6"
 target="_blank">GPN-Star scores dataset on Hugging Face</a>, revision
 <tt>47e7f051113abab49f04f43f9107cae2cbbfd34d</tt>. We used the four signed LLR files (one per
 alternate allele, with the reference allele set to zero) and the four sequence logo files. The
-LLR values are the authors' mutation-rate calibrated scores, rounded to three decimal places. The
-logo heights were computed by the authors from the same calibrated scores: the four base
+LLR values are the authors' mutation-rate calibrated scores, rounded to three decimal places.
+The logo heights were computed by the authors from the same calibrated scores: the four base
 probabilities are a softmax of the LLRs, with the reference base at zero, and each letter's
 height is its probability times (2 - H), where H is the entropy in bits. The values were not
 modified at UCSC; the browser flips the sign of the LLR at display time. We checked a random
 sample of positions against the authors' Parquet tables to confirm that the scores line up with
-the right base. The download and checking scripts are in
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gpnStar"
-target="_blank">makeDb/scripts/gpnStar</a>, the steps are documented in
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/$db/gpnStar.txt"
-target="_blank">doc/$db/gpnStar.txt</a>, and the track settings are in
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/chicken/galGal6/gpnStar.ra"
+the right base. The download and checking scripts are in <a
+href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gpnStar"
+target="_blank">makeDb/scripts/gpnStar</a>, the steps are documented in <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/$db/gpnStar.txt"
+target="_blank">doc/$db/gpnStar.txt</a>, and the track settings are in <a
+href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/chicken/galGal6/gpnStar.ra"
 target="_blank">trackDb/chicken/galGal6/gpnStar.ra</a>.
 </p>
 
@@ -141,10 +143,10 @@ California, Berkeley for making these scores available and for providing a track
 
 <h2>References</h2>
 <p>
-Ye C, Benegas G, Albors C, Li JC, Prillo S, Fields PD, Clarke B, Song YS.
-<a href="https://www.ncbi.nlm.nih.gov/pubmed/42717086" target="_blank">
-Predicting genome-wide functional constraints with GPN-Star</a>.
-<em>Nature</em>. 2026 Sep 9;.
-DOI: <a href="https://doi.org/10.1038/s41586-026-11005-5" target="_blank">10.1038/s41586-026-11005-5</a>;
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/42717086" target="_blank">42717086</a>
+Ye C, Benegas G, Albors C, Li JC, Prillo S, Fields PD, Clarke B, Song YS. <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/42717086" target="_blank"> Predicting genome-wide
+functional constraints with GPN-Star</a>. <em>Nature</em>. 2026 Sep 9. DOI: <a
+href="https://doi.org/10.1038/s41586-026-11005-5"
+target="_blank">10.1038/s41586-026-11005-5</a>; PMID: <a
+href="https://www.ncbi.nlm.nih.gov/pubmed/42717086" target="_blank">42717086</a>
 </p>

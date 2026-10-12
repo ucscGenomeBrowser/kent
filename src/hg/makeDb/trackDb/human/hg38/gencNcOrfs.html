@@ -100,27 +100,25 @@ from Deutsch et al. (see References). ORFs with no mass spectrometry evidence ar
 <table class="stdTbl">
   <tr>
     <th style="background-color:#E6A817;width:1.5em">&nbsp;</th>
-    <td><b>Gold</b>: TransCODE <b>peptidein</b> (628 ORFs). PeptideAtlas confirms these
-        are translated, making them candidates for peptidein annotation in reference
-        databases.</td>
+    <td><b>Gold</b>: Annotated as a <b>peptidein</b> by Deutsch et al. (121 ORFs, Table S12).</td>
   </tr>
   <tr>
     <th style="background-color:#468CB4;width:1.5em">&nbsp;</th>
-    <td><b>Steel blue</b>: Detected only by HLA immunopeptidomics (1,373 ORFs).</td>
+    <td><b>Steel blue</b>: Detected only by HLA immunopeptidomics (1,667 ORFs).</td>
   </tr>
   <tr>
     <th style="background-color:#4CAF50;width:1.5em">&nbsp;</th>
     <td><b>Forest green</b>: Detected only by non-HLA (whole-cell tryptic) proteomics
-        (66 ORFs).</td>
+        (51 ORFs).</td>
   </tr>
   <tr>
     <th style="background-color:#E66400;width:1.5em">&nbsp;</th>
-    <td><b>Orange</b>: Detected by both methods (35 ORFs).</td>
+    <td><b>Orange</b>: Detected by both methods (21 ORFs).</td>
   </tr>
   <tr>
     <th style="background-color:#808080;width:1.5em">&nbsp;</th>
-    <td><b>Gray</b>: No peptide evidence (5,114 ORFs) or in the peptidein set
-        based on binding predictions only with no direct MS sequences (48 ORFs).</td>
+    <td><b>Gray</b>: No peptide evidence (5,404 ORFs). This includes ORFs whose only
+        non-HLA peptides also map to known proteins and were excluded by the authors.</td>
   </tr>
 </table>
 
@@ -257,9 +255,9 @@ were manually reviewed and classified according to the Prensner et al. tier syst
 numerous HPP-quality HLA peptides; Tier 2B = a single qualifying HLA peptide; Tier 1A/2A =
 additional non-HLA evidence). The study introduced the term <em>peptidein</em> for a
 translation product detectable by mass spectrometry but not yet annotatable as a protein due
-to absent functional evidence. Of the 7,264 Phase I ORFs, 628 passed PeptideAtlas curation
-as peptideins (Table S12); a further 1,522 have HLA or tryptic peptide evidence below the
-peptidein threshold.
+to absent functional evidence. The authors reviewed 137 of the 7,264 Phase I ORFs for
+annotation and classified 121 of them as peptideins (Table S12); a further 1,739 have HLA
+or tryptic peptide evidence but were not classified as peptideins.
 </p>
 
 <p>
@@ -269,12 +267,13 @@ downloaded from the paper's supplementary materials at
 https://doi.org/10.1038/s41586-026-10459-x</a>.
 Each table was joined to the Phase I bigGenePred by the short ORF identifier (e.g.,
 <code>c14riboseqorf80</code>) using the script
-<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/ncOrfs"
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/scripts/ncOrfs/addPeptideEvidence.py"
 target="_blank">addPeptideEvidence.py</a>.
-The script appended 14 new fields to all 7,264 Phase I items; the 5,114 ORFs without peptide
-evidence receive default empty values so they remain visible in the track and filterable on
-<code>isPeptidein</code> and related fields. Non-HLA peptides that map to known proteins or
-are too short to be informative were excluded (Tables S2, <code>exclude</code> column).
+The script appended 14 new fields to all 7,264 Phase I items; the 5,353 ORFs that are not
+in any of these tables receive default empty values so they remain visible in the track and
+filterable on <code>isPeptidein</code> and related fields. Non-HLA peptides that map to known
+proteins or are too short to be informative were excluded (Table S2, <code>exclude</code>
+column), and the non-HLA peptide count includes only the remaining peptides.
 The complete build procedure is documented in
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/ncOrfs.txt"
 target="_blank">ncOrfs.txt</a>.
