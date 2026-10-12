@@ -555,6 +555,8 @@ for (field = fields; field != NULL; field = field->next, i++)
     {
     names[i] = field->name;
     vals[i] = vcfMouseOverValue(field, rec);
+    if (vals[i] == NULL)
+        vals[i] = cloneString("n/a");
     }
 char *result = replaceFieldInPattern(template, n, names, vals);
 for (i = 0; i < n; i++)

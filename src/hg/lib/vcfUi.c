@@ -147,7 +147,12 @@ filter->infoDef = infoDef;
 if (sameString(typeValue, FILTERTEXT_REGEXP))
     {
     filter->comparisonType = COMPARE_REGEXP;
-    regcomp(&filter->regEx, value, REG_NOSUB);
+    if (regcomp(&filter->regEx, value, REG_NOSUB) != 0)
+        {
+        warn("track %s: invalid regular expression for %s: %s", tdb->track, fieldName, value);
+        freeMem(filter);
+        return NULL;
+        }
     }
 else
     {
@@ -478,11 +483,15 @@ for (filter = vcfInfoFilters; filter != NULL; filter = filter->next)
     if (filter->subFieldName != NULL)
         {
         // The filter targets a named sub-field of a pipe-separated INFO value (e.g.
-        // vep.Consequence). One VCF record can carry multiple transcript-level annotations;
-        // the variant passes if any annotation's indexed sub-field hits the value set.
-        boolean anyMatch = FALSE;
+        // vep.Consequence). One VCF record can carry multiple transcript-level annotations.
+        // For OR the variant passes if any annotation's sub-field hits the value set. For AND
+        // every selected value must appear in some annotation of the record.
+        boolean isAnd = (filter->comparisonType == COMPARE_HASH_LIST_AND);
+        unsigned found = 0;
+        boolean done = FALSE;
+        struct hash *seenHash = newHash(5);
         int v;
-        for (v = 0; v < vcfInfoEle->count && !anyMatch; v++)
+        for (v = 0; v < vcfInfoEle->count && !done; v++)
             {
             if (vcfInfoEle->missingData[v])
                 continue;
@@ -500,18 +509,28 @@ for (filter = vcfInfoFilters; filter != NULL; filter = filter->next)
                 int nTerms = chopByChar(tokens[filter->subFieldIndex], '&',
                                         terms, ArraySize(terms));
                 int t;
-                for (t = 0; t < nTerms; t++)
+                for (t = 0; t < nTerms && !done; t++)
                     {
+                    if (hashLookup(seenHash, terms[t]))
+                        continue;
+                    hashStore(seenHash, terms[t]);
                     if (hashLookup(filter->valueHash, terms[t]))
                         {
-                        anyMatch = TRUE;
-                        break;
+                        found++;
+                        if (!isAnd || found >= filter->numValuesInHash)
+                            done = TRUE;
                         }
                     }
                 }
             freeMem(clone);
             }
-        if (!anyMatch)
+        hashFree(&seenHash);
+        if (isAnd)
+            {
+            if (found < filter->numValuesInHash)
+                return FALSE;
+            }
+        else if (!found)
             return FALSE;
         continue;
         }
