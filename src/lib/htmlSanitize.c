@@ -409,41 +409,53 @@ for (;  *s != 0;  ++s)
     }
 }
 
+static char *numericRef(char *p, char *retChar)
+/* If p starts a numeric character reference, &#NN or &#xNN with or without the closing
+ * semicolon, put the character it names in *retChar and return the text just past it.
+ * Otherwise return NULL.  A character above ASCII cannot be part of a scheme or of CSS
+ * syntax, so one stand-in character does for all of them. */
+{
+if (p[0] != '&' || p[1] != '#')
+    return NULL;
+char *digits = p+2;
+int base = 10;
+if (*digits == 'x' || *digits == 'X')
+    {
+    base = 16;
+    digits += 1;
+    }
+/* A browser wants a digit straight away, where strtol would also skip spaces and a sign. */
+if (!(base == 16 ? isxdigit((unsigned char)*digits) : isdigit((unsigned char)*digits)))
+    return NULL;
+char *end = NULL;
+errno = 0;
+long value = strtol(digits, &end, base);
+if (*end == ';')
+    end += 1;
+if (value > 0 && value < 128 && errno == 0)
+    *retChar = (char)value;
+else
+    *retChar = '~';
+return end;
+}
+
 static char *decodeNumericRefs(char *s)
 /* Return a copy of s with numeric character references turned into the characters they
  * name, which is what a browser does before it looks for a scheme.  Only &#NN and &#xNN
  * are decoded, with or without the closing semicolon, because that is what a browser
- * accepts.  A named entity is left alone and the caller refuses the URL over it.  A
- * character above ASCII cannot be part of a scheme, so one stand-in character does for
- * all of them. */
+ * accepts.  A named entity is left alone and the caller refuses the URL over it. */
 {
 struct dyString *dy = dyStringNew(strlen(s)+1);
 char *p = s;
 while (*p != 0)
     {
-    if (p[0] == '&' && p[1] == '#')
+    char c;
+    char *end = numericRef(p, &c);
+    if (end != NULL)
         {
-        char *digits = p+2;
-        int base = 10;
-        if (*digits == 'x' || *digits == 'X')
-            {
-            base = 16;
-            digits += 1;
-            }
-        char *end = NULL;
-        errno = 0;
-        long value = strtol(digits, &end, base);
-        if (end != digits)
-            {
-            if (*end == ';')
-                end += 1;
-            if (value > 0 && value < 128 && errno == 0)
-                dyStringAppendC(dy, (char)value);
-            else
-                dyStringAppendC(dy, '~');
-            p = end;
-            continue;
-            }
+        dyStringAppendC(dy, c);
+        p = end;
+        continue;
         }
     dyStringAppendC(dy, *p);
     p += 1;
@@ -689,6 +701,33 @@ int len = entityNameLen(p);
 return (len > 0 && p[len] == 0 && isSafeEntityName(p, len));
 }
 
+static boolean leavesDeclaration(char *value)
+/* Does value, as the CSS parser will see it, hold a semicolon or a brace?  That is the text
+ * after a browser has decoded the attribute once, so a number is decoded where it stands,
+ * and the semicolon of a name we let through belongs to that name. */
+{
+char *p = value;
+while (*p != 0)
+    {
+    char c = *p;
+    char *end = numericRef(p, &c);
+    if (end == NULL)
+        {
+        end = p + 1;
+        int len = (c == '&' ? entityNameLen(p+1) : 0);
+        if (len > 0 && p[len+1] == ';' && isSafeEntityName(p+1, len))
+            {
+            c = '&';
+            end = p + len + 2;
+            }
+        }
+    if (c == ';' || c == '{' || c == '}')
+        return TRUE;
+    p = end;
+    }
+return FALSE;
+}
+
 static boolean cssValueOk(char *value)
 /* Is value one we will print as a style property, or as an svg attribute that takes the
  * same values?  Look at the text a browser will see, not the text the author wrote.  A
@@ -703,7 +742,7 @@ if (hasOtherEntityName(value))
 char *lower = decodeNumericRefs(value);
 tolowers(lower);
 boolean ok = (stringIn("url(", lower) == NULL && stringIn("expression", lower) == NULL
-              && strchr(lower, '\\') == NULL);
+              && strchr(lower, '\\') == NULL && !leavesDeclaration(value));
 freeMem(lower);
 return ok;
 }
