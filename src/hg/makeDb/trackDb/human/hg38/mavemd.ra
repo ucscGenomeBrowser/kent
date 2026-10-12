@@ -14,6 +14,8 @@ dataVersion /gbdb/$D/mavemd/version.txt
     style heatmap
     visibility pack
     priority 1
+    skipEmptyFields on
+    urls scoreSet="https://mavedb.org/score-sets/$$" mavedbUrl="$$"
     filterText.name .*
     filterType.name regexp
     filterLabel.name Gene or score set
@@ -32,19 +34,19 @@ dataVersion /gbdb/$D/mavemd/version.txt
     skipEmptyFields on
     urls publicationUrl="$$" scoreSet="https://mavedb.org/score-sets/$$" clinGenId="https://reg.clinicalgenome.org/redmine/projects/registry/genboree_registry/by_canonicalid?canonicalid=$$"
     mouseOver <b>${name}</b><br><b>Effect:</b> ${funcClass}<br><b>Assay score:</b> ${funcScore}<br><b>Dataset:</b> ${scoreSetTitle}<br><b>ACMG evidence:</b> ${acmgOutcome}
-    filterValues.acmgOutcome BS3,BS3_moderate,BS3_moderate_plus,BS3_supporting,BS3_very_strong,PS3,PS3_moderate,PS3_moderate_plus,PS3_not_met,PS3_supporting,PS3_very_strong
+    filterValues.acmgOutcome BS3,BS3_moderate,BS3_moderate_plus,BS3_supporting,BS3_very_strong,PS3,PS3_moderate,PS3_moderate_plus,PS3_not_met,PS3_supporting,PS3_very_strong,none assigned
     filterLabel.acmgOutcome ACMG functional evidence
-    filterValues.funcClass abnormal,indeterminate,normal
+    filterValues.funcClass abnormal,indeterminate,normal,not classified
     filterLabel.funcClass Measured functional class
     filterValues.gene ASPA,BAP1,BARD1,BRCA1,BRCA2,CALM1,CARD11,CBS,CHEK2,CRX,CTCF,DDX3X,F9,FKRP,G6PD,GCK,HMBS,JAG1,KCNE1,KCNH2,KCNQ4,LARGE1,MSH2,NDUFAF6,OTC,PALB2,PAX6,PTEN,RAD51C,RAD51D,RHO,SCN5A,SGCB,TARDBP,TP53,TPK1,TSC2,VHL,XRCC2
     filterLabel.gene Gene
     filterValues.clinvarSig Benign,Benign/Likely benign,Benign; association,Conflicting classifications of pathogenicity,Conflicting classifications of pathogenicity; other; risk factor,Conflicting classifications of pathogenicity; risk factor,Likely benign,Likely pathogenic,Likely pathogenic/Likely risk allele,Likely risk allele,Pathogenic,Pathogenic/Likely pathogenic,Pathogenic/Likely pathogenic/Likely risk allele,Pathogenic/Likely pathogenic/Pathogenic,, low penetrance,Uncertain risk allele,Uncertain significance,Uncertain significance/Uncertain risk allele,drug response,no classification for the single variant,not provided,other
     filterLabel.clinvarSig ClinVar significance
-    filterValues.assayMethod Cell fitness,Cell morphology assay,Cell proliferation assay,Direct protein function,Flow cytometry assay,Not applicable (trained predictor),Reporter
+    filterValues.assayMethod Cell fitness,Cell morphology assay,Cell proliferation assay,Direct protein function,Flow cytometry assay,Not applicable (trained predictor),Reporter,not recorded
     filterLabel.assayMethod Assay method
-    filterValues.assayModel Immortalized human cells,Murine primary cells,Not applicable,Other,Yeast
+    filterValues.assayModel Immortalized human cells,Murine primary cells,Not applicable,Other,Yeast,not recorded
     filterLabel.assayModel Assay model system
-    filterValues.libraryMethod Endogenous locus library method,In vitro construct library method,N/A (meta-analysis)
+    filterValues.libraryMethod Endogenous locus library method,In vitro construct library method,N/A (meta-analysis),not recorded
     filterLabel.libraryMethod Variant library method
 
 searchTable mavemdVar

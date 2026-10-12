@@ -21,16 +21,16 @@ each item.
 </p>
 
 <p>
-This collection shows those measurements on the human genome. It covers several dozen score
-sets across a few dozen disease-associated genes and grows as MaveDB curates more; the date of
+This collection shows those measurements on the human genome. It covers scores of score sets
+across dozens of disease-associated genes and grows as MaveDB curates more; the date of
 the data shown is on each track's configuration page. Two views are available:
 </p>
 
 <ul>
-  <li><a href="hgTrackUi?g=mavemdMap">MaveMD Maps</a> draws each score set as a variant effect
+  <li><a href="hgTrackUi?db=$db&amp;g=mavemdMap">MaveMD Maps</a> draws each score set as a variant effect
       map, one column per amino acid position and one row per substitution. This is the view
       for seeing at a glance which parts of a protein tolerate change.</li>
-  <li><a href="hgTrackUi?g=mavemdVar">MaveMD Variants</a> draws one item per measured variant,
+  <li><a href="hgTrackUi?db=$db&amp;g=mavemdVar">MaveMD Variants</a> draws one item per measured variant,
       carrying its assay score, its ACMG functional evidence code where one exists, the assay
       metadata, and matching ClinVar and gnomAD annotations. This is the view for looking up a
       single variant and for filtering.</li>
@@ -44,7 +44,7 @@ insertions and deletions appear in the Variants track alone.
 
 <p>
 A broader, uncurated selection of MaveDB experiments, without clinical calibration, is in the
-<a href="hgTrackUi?g=mavedb">MaveDB Experiments</a> collection.
+<a href="hgTrackUi?db=$db&amp;g=mavedb">MaveDB Experiments</a> collection.
 </p>
 
 <h2>References</h2>
