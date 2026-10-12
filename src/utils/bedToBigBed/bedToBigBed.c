@@ -59,6 +59,7 @@ errAbort(
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
   "and chrom.sizes is a two-column file/URL: <chromosome name> <size in bases>\n"
   "and out.bb is the output indexed big bed file.\n"
+  "The input file may be compressed, as indicated by a .gz, .bz2, .Z or .zip extension.\n"
   "\n"
   "If the assembly <db> is hosted by UCSC, chrom.sizes can be a URL like\n"
   "  http://hgdownload.soe.ucsc.edu/goldenPath/<db>/bigZips/<db>.chrom.sizes\n"
@@ -135,21 +136,6 @@ static struct optionSpec options[] = {
    {"sort", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-static struct lineFile *rewindFile(char *inName, struct lineFile *lf)
-/* set up lineFile to point at the beginning of the file.  It we're reading from a decompressing
- * pipe, we need to close and reopen the pipe. */
-{
-if (lf->pl)
-    {
-    lineFileClose(&lf);
-    lf = lineFileOpen(inName, TRUE);
-    }
-else
-    lineFileRewind(lf);
-
-return lf;
-}
 
 int bbNamedFileChunkCmpByName(const void *va, const void *vb)
 /* Compare two named offset object to facilitate qsorting by name. */
@@ -717,7 +703,7 @@ if (bedCount > 0)
     {
     blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
     AllocArray(boundsArray, blockCount);
-    lf = rewindFile(inName, lf);
+    lf = bbiRewindFile(inName, lf);
     if (eim)
 	bbExIndexMakerAllocChunkArrays(eim, bedCount);
     writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
@@ -743,7 +729,7 @@ bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 if (bedCount > 0)
     {
-    lf = rewindFile(inName, lf); // rewind here so bbiWriteZoomLevels() won't have to
+    lf = bbiRewindFile(inName, lf); // rewind here so bbiWriteZoomLevels() won't have to
     zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
 	bedWriteReducedOnceReturnReducedTwice, fieldCount,
 	doCompress, indexOffset - dataOffset, 
