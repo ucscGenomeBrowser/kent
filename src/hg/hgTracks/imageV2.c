@@ -2094,8 +2094,7 @@ else if (slice->link != NULL)
         hPrintf("  <A HREF='%s'",slice->link);
     if (slice->title != NULL)
         {
-        char *sanitized = htmlSanitize(slice->title);
-        char *encSanitized = attributeEncode(sanitized);
+        char *encTitle = attributeEncode(slice->title);
         if (sliceType == stButton)
             {
             enum browserType browser = cgiClientBrowser(NULL,NULL,NULL);
@@ -2103,16 +2102,15 @@ else if (slice->link != NULL)
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if (imgTrack->reorderable)
                 hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",
-                        encSanitized, newLine, ellipsis, newLine,
+                        encTitle, newLine, ellipsis, newLine,
                         (tdbIsCompositeChild(imgTrack->tdb) ? " highlighted subtracks" : "") );
             else
                 hPrintf(" TITLE='%s%sclick or right click to configure%s'",
-                        encSanitized, newLine, ellipsis);
+                        encTitle, newLine, ellipsis);
             }
         else
-            hPrintf(" TITLE='Click for: &#x0A;%s'", encSanitized );
-        freeMem(sanitized);
-        freeMem(encSanitized);
+            hPrintf(" TITLE='Click for: &#x0A;%s'", encTitle );
+        freeMem(encTitle);
         }
     hPrintf(">\n" );
     }
@@ -2247,13 +2245,12 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
             (imgTrack->centerLabelSeen != clAlways ? " clOpt" : ""),
             (imgTrack->ajaxRetrieval ? " mustRetrieve" : ""));
 
-    char *sanitized = NULL, *encSanitized = NULL;
+    char *encLabel = NULL;
     if (imgTrack->reorderable)
         {
         char *label = labelWithParents(imgTrack->tdb, imgTrack->tdb->longLabel);
-        sanitized = htmlSanitize(label);
+        encLabel = attributeEncode(label);
         freeMem(label);
-        encSanitized = attributeEncode(sanitized);
         }
     if (imgBox->showSideLabel && imgBox->plusStrand)
         {
@@ -2266,7 +2263,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
             hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",
-                    name,encSanitized,newLine);
+                    name,encLabel,newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
@@ -2296,7 +2293,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name, sizeof(name), "side_%s", trackName);
         if (imgTrack->reorderable)
             hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",
-                    name,encSanitized,newLine);
+                    name,encLabel,newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
@@ -2309,8 +2306,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
-    freeMem(encSanitized);
-    freeMem(sanitized);
+    freeMem(encLabel);
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
