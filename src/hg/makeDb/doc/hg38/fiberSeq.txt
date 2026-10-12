@@ -272,7 +272,11 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #    does not exist.  Sample name and cell type live in the metadata TSV.
 #
 # 2. dataTypes brings onlyVisibility with it, which is what lets the bigWig
-#    subtracks default to full while the peak subtracks default to dense.  A
+#    subtracks sit at full while the peak subtracks come up dense.  Note the
+#    two use different settings: the signal types are pinned with
+#    onlyVisibility, the peaks take a plain "visibility dense" default, because
+#    onlyVisibility would stop anyone reaching the pack mode their mouseOver
+#    needs.  See the longer note under rendering checks.  Either way, a
 #    plain composite shares one visibility across all its subtracks, which is
 #    the problem the lab ran into when they asked for peaks in dense and signal
 #    in full.
@@ -355,14 +359,25 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 #    rather than colliding with the accessibility pair's "<sample> Hap1/2".
 #
 # 7. mouseOver text only appears in pack or full.  Dense makes no per-item map
-#    boxes at all, so no bigBed-like track has a per-item hover there.  Since
-#    Andrew asked for peaks in dense by default, the mouseover is there for
-#    whoever switches a peak track to pack.  Checked by temporarily dropping
-#    onlyVisibility and reading the image map: in pack the AREA tags carry
-#      data-tooltip='<b>K562 FIRE peak</b><br>FIRE score: 17.76015
-#                    <br>-log10 FDR: 22.807437495448326<br>Score: 177'
-#    and in dense there are no per-peak AREA tags.  Note the tooltip is HTML
-#    entity encoded in the page, so grep for it with the entities in mind.
+#    boxes at all, so no bigBed-like track has a per-item hover there.  Andrew
+#    asked for peaks in dense by default, so the mouseover is there for whoever
+#    switches a peak track to pack.
+#
+#    This was originally written up as verified, on the strength of a check
+#    that temporarily removed onlyVisibility from the peak stanzas first.  That
+#    was the bug rather than the test: onlyVisibility PINS a faceted child, so
+#    with it in place nobody could reach pack and the mouseOver never showed.
+#    A check that has to remove the setting under test is not a check of what
+#    ships.  The peaks now take a plain "visibility dense" default instead.
+#
+#    To verify it for real, read the map_data image map, not map_center, which
+#    carries only the center label's density link:
+#      MAP name='map_data_fiberSeqCompendium_PM00001_peaks'
+#    At ACTB with the peaks forced to pack the AREA tags carry
+#      data-tooltip='<b>GM12878 FIRE peak</b><br>FIRE score: ...'
+#    and in dense there are no per-peak AREA tags.  The tooltip is HTML entity
+#    encoded in the page, so grep for it with the entities in mind
+#    (FIRE&#x20;peak, not "FIRE peak").
 
 # ---------------------------------------------------------------------------
 # Rendering checks
@@ -374,7 +389,7 @@ bigWigInfo -chroms PM00001/cpg.combined.bw | head -12
 # Note that a child of a container needs the container shown as well; without
 # fiberSeq=show only the ruler comes back.
 #
-# The compendium at the same locus, showing that onlyVisibility works: the
+# The compendium at the same locus, showing the per-data-type defaults: the
 # three default samples come up with peaks in dense and signal in full, in one
 # composite.
 #   ...&fiberSeqCompendium=full

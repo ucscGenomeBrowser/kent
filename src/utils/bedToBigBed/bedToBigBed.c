@@ -21,6 +21,8 @@
 #include "twoBit.h"
 #include "portable.h"
 #include "errCatch.h"
+#include "pipeline.h"
+#include <signal.h>
 
 char *version = "2.10";   // when changing, consider changing in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
@@ -57,6 +59,7 @@ errAbort(
   "Where in.bed is in one of the ascii bed formats, but not including track lines\n"
   "and chrom.sizes is a two-column file/URL: <chromosome name> <size in bases>\n"
   "and out.bb is the output indexed big bed file.\n"
+  "The input file may be compressed, as indicated by a .gz, .bz2, .Z or .zip extension.\n"
   "\n"
   "If the assembly <db> is hosted by UCSC, chrom.sizes can be a URL like\n"
   "  http://hgdownload.soe.ucsc.edu/goldenPath/<db>/bigZips/<db>.chrom.sizes\n"
@@ -133,21 +136,6 @@ static struct optionSpec options[] = {
    {"sort", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-static struct lineFile *rewindFile(char *inName, struct lineFile *lf)
-/* set up lineFile to point at the beginning of the file.  It we're reading from a decompressing
- * pipe, we need to close and reopen the pipe. */
-{
-if (lf->pl)
-    {
-    lineFileClose(&lf);
-    lf = lineFileOpen(inName, TRUE);
-    }
-else
-    lineFileRewind(lf);
-
-return lf;
-}
 
 int bbNamedFileChunkCmpByName(const void *va, const void *vb)
 /* Compare two named offset object to facilitate qsorting by name. */
@@ -715,7 +703,7 @@ if (bedCount > 0)
     {
     blockCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
     AllocArray(boundsArray, blockCount);
-    lf = rewindFile(inName, lf);
+    lf = bbiRewindFile(inName, lf);
     if (eim)
 	bbExIndexMakerAllocChunkArrays(eim, bedCount);
     writeBlocks(usageList, lf, as, itemsPerSlot, boundsArray, blockCount, doCompress,
@@ -741,7 +729,7 @@ bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 int zoomLevels = 0;
 if (bedCount > 0)
     {
-    lf = rewindFile(inName, lf); // rewind here so bbiWriteZoomLevels() won't have to
+    lf = bbiRewindFile(inName, lf); // rewind here so bbiWriteZoomLevels() won't have to
     zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
 	bedWriteReducedOnceReturnReducedTwice, fieldCount,
 	doCompress, indexOffset - dataOffset, 
@@ -878,6 +866,29 @@ bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, asText, as,
 	doCompress, extraIndexList, outName);
 }
 
+static void sortBedFile(char *inName, char *sortFile)
+/* Sort the bed input into sortFile.  The input is read through a lineFile rather than
+ * handed to sort directly, so that a compressed input is decompressed first; sort given
+ * a .gz just shuffles the compressed bytes.  SIGPIPE is ignored so that a sort which
+ * dies partway is reported by pipelineClose rather than killing us mid-write. */
+{
+static char *sortCmd[] = {"sort", "-k1,1", "-k2,2n", NULL};
+static char **sortPipe[] = {sortCmd, NULL};
+if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+    errnoAbort("can't ignore SIGPIPE");
+struct pipeline *pl = pipelineOpen(sortPipe, pipelineWrite, sortFile, NULL, 0);
+FILE *f = pipelineFile(pl);
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    fputs(line, f);
+    fputc('\n', f);
+    }
+lineFileClose(&lf);
+pipelineClose(&pl);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -985,12 +996,7 @@ if (doSort)
     sortFile = cloneString(tmpName);
     verbose(2, "made temporary file %s for sorting",sortFile);
 
-    char sysBuf[4096];
-
-    safef(sysBuf, sizeof sysBuf, "sort -k1,1 -k2,2n %s > %s", bedFileName, sortFile);
-    if (system(sysBuf) != 0)
-        errAbort("Couldn't sort %s into %s.  Error code %d\n", bedFileName, sortFile, errno);
-
+    sortBedFile(bedFileName, sortFile);
     bedFileName = sortFile;
     }
 

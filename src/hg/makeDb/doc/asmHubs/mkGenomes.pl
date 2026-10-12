@@ -64,6 +64,15 @@ my @blatPorts = qw( 4040 4040 4040 4040 4040 );
 my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
+################### print one marked contrib block ##########################
+sub printContribBlock($$$) {
+  my ($thisFh, $thisName, $thisTdb) = @_;
+  printf $thisFh "\n";	# ensure there is a blank line between entries
+  printf $thisFh "# BEGIN genark contrib: %s\n", $thisName;
+  printf $thisFh "%s\n", $thisTdb;
+  printf $thisFh "# END genark contrib: %s\n", $thisName;
+}
+
 ################### writing out hub.txt file, five times ##########################
 sub writeHubTxtFiles($$$$$$$$$$$$$$) {
   my ($fh1, $fh2, $accessionId, $orgName, $descr, $asmId, $asmDate, $defPos, $taxId, $trackDb, $accessionDir, $buildDir, $chromAuthority, $hugeGenome) = @_;
@@ -219,22 +228,19 @@ sub writeHubTxtFiles($$$$$$$$$$$$$$) {
     if (3 == $fileCount) {	# writing to beta.hub.txt
       if (%betaTrackDb) {
          foreach my $contribTrack (sort keys %betaTrackDb) {
-           printf $fh "\n";	# ensure there is a blank line between entries
-           printf $fh "%s\n", $betaTrackDb{$contribTrack};
+           printContribBlock($fh, $contribTrack, $betaTrackDb{$contribTrack});
          }
       }
     } elsif (4 == $fileCount) {	# writing to alpha.hub.txt
       if (%alphaTrackDb) {
          foreach my $contribTrack (sort keys %alphaTrackDb) {
-           printf $fh "\n";	# ensure there is a blank line between entries
-           printf $fh "%s\n", $alphaTrackDb{$contribTrack};
+           printContribBlock($fh, $contribTrack, $alphaTrackDb{$contribTrack});
          }
       }
     } else {			# the other 3 (HT, DL, public.hub.txt) get the public tracks
       if (%publicTrackDb) {
          foreach my $contribTrack (sort keys %publicTrackDb) {
-           printf $fh "\n";	# ensure there is a blank line between entries
-           printf $fh "%s\n", $publicTrackDb{$contribTrack};
+           printContribBlock($fh, $contribTrack, $publicTrackDb{$contribTrack});
          }
       }
     }
@@ -253,7 +259,7 @@ my $blatPort = shift;
 my $inputList = shift;
 my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
-  $orderList = $toolsDir/$inputList;
+  $orderList = "$toolsDir/$inputList";
 }
 
 my @orderList;	# asmId of the assemblies in order from the *.list files

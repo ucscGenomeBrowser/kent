@@ -356,6 +356,21 @@ for (resTry = 0; resTry < resTryCount; ++resTry)
 return resTryCount;
 }
 
+struct lineFile *bbiRewindFile(char *inName, struct lineFile *lf)
+/* set up lineFile to point at the beginning of the file.  If we are reading from a decompressing
+ * pipe, we need to close and reopen the pipe. */
+{
+if (lf->pl)
+    {
+    lineFileClose(&lf);
+    lf = lineFileOpen(inName, TRUE);
+    }
+else
+    lineFileRewind(lf);
+
+return lf;
+}
+
 int bbiWriteZoomLevels(
     struct lineFile *lf,    /* Input file. */
     FILE *f,		    /* Output. */
