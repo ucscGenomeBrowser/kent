@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Mirror the GPN-Star sequence-logo and signed LLR bigWigs from Hugging Face into
-/hive/data/genomes/<db>/bed/gpnStar, pinned to one dataset revision.
+"""Download the GPN-Star sequence-logo and signed LLR bigWigs from Hugging Face into
+/hive/data/genomes/<db>/bed/gpnStar/download, pinned to one dataset revision.
 
-Each file is downloaded to <file>.part (resumable), its size checked against the
-server and its SHA-256 against the Hugging Face LFS oid, and only then moved into place.
+The browser never reads the download directory: gpnStarRebuild.sh re-encodes each file from
+here into /hive/data/genomes/<db>/bed/gpnStar, so re-running this script cannot overwrite the
+files that /gbdb serves.
+
+Each file is downloaded to <file>.part (resumable), its size checked against the server and
+its SHA-256 against the Hugging Face LFS oid, and only then moved into place.
 
 usage: gpnStarMirror.py [scoreSet ...]     (default: all score sets)
 """
@@ -13,15 +17,15 @@ REPO = "songlab/gpn-star-scores"
 REV = "47e7f051113abab49f04f43f9107cae2cbbfd34d"
 FILES = ["A.bw", "C.bw", "G.bw", "T.bw", "llr_A.bw", "llr_C.bw", "llr_G.bw", "llr_T.bw"]
 
-# Hugging Face score set -> local output directory
+# Hugging Face score set -> local download directory
 SCORESETS = {
-    "gpn-star-hg38-v100-200m": "/hive/data/genomes/hg38/bed/gpnStar/v100",
-    "gpn-star-hg38-m447-200m": "/hive/data/genomes/hg38/bed/gpnStar/m447",
-    "gpn-star-hg38-p243-200m": "/hive/data/genomes/hg38/bed/gpnStar/p243",
-    "mm39": "/hive/data/genomes/mm39/bed/gpnStar",
-    "gg6": "/hive/data/genomes/galGal6/bed/gpnStar",
-    "dm6": "/hive/data/genomes/dm6/bed/gpnStar",
-    "ce11": "/hive/data/genomes/ce11/bed/gpnStar",
+    "gpn-star-hg38-v100-200m": "/hive/data/genomes/hg38/bed/gpnStar/download/v100",
+    "gpn-star-hg38-m447-200m": "/hive/data/genomes/hg38/bed/gpnStar/download/m447",
+    "gpn-star-hg38-p243-200m": "/hive/data/genomes/hg38/bed/gpnStar/download/p243",
+    "mm39": "/hive/data/genomes/mm39/bed/gpnStar/download",
+    "gg6": "/hive/data/genomes/galGal6/bed/gpnStar/download",
+    "dm6": "/hive/data/genomes/dm6/bed/gpnStar/download",
+    "ce11": "/hive/data/genomes/ce11/bed/gpnStar/download",
 }
 
 def remoteFiles(scoreSet):
@@ -53,12 +57,18 @@ def mirrorOne(scoreSet, outDir, fname, size, oid):
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         sys.exit("another download is already writing %s" % part)
-    url ="https://huggingface.co/datasets/%s/resolve/%s/bigwig/%s/%s" % (REPO, REV, scoreSet, fname)
+    if os.path.exists(part) and os.path.getsize(part) > size:
+        print("removing oversized %s" % part, flush=True)
+        os.remove(part)
+    url = ("https://huggingface.co/datasets/%s/resolve/%s/bigwig/%s/%s"
+           % (REPO, REV, scoreSet, fname))
     for attempt in range(10):
         if os.path.exists(part) and os.path.getsize(part) >= size:
             break
-        subprocess.call(["curl", "-sS", "-L", "--retry", "5", "-C", "-", "-o", part, url],
+        subprocess.call(["curl", "-sS", "-L", "--fail", "--retry", "5", "-C", "-", "-o", part, url],
                         pass_fds=(lock.fileno(),))
+    if not os.path.exists(part):
+        sys.exit("download failed, no data received for %s" % url)
     got = os.path.getsize(part)
     if got != size:
         sys.exit("size mismatch %s: got %d expected %d" % (part, got, size))
@@ -72,6 +82,9 @@ def mirrorOne(scoreSet, outDir, fname, size, oid):
 
 def main():
     sets = sys.argv[1:] or list(SCORESETS)
+    unknown = [x for x in sets if x not in SCORESETS]
+    if unknown:
+        sys.exit("unknown score set(s): %s\nknown: %s" % (" ".join(unknown), " ".join(SCORESETS)))
     for scoreSet in sets:
         outDir = SCORESETS[scoreSet]
         os.makedirs(outDir, exist_ok=True)
