@@ -64,7 +64,7 @@ my @blatPorts = qw( 4040 4040 4040 4040 4040 );
 my $blatHostDomain = ".soe.ucsc.edu";
 my $groupsTxt = `cat ~/kent/src/hg/makeDb/doc/asmHubs/groups.txt`;
 
-################### writing out hub.txt file, five times ##########################
+################### print one marked contrib block ##########################
 sub printContribBlock($$$) {
   my ($thisFh, $thisName, $thisTdb) = @_;
   printf $thisFh "\n";	# ensure there is a blank line between entries
