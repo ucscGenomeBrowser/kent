@@ -253,7 +253,7 @@ my $blatPort = shift;
 my $inputList = shift;
 my $orderList = $inputList;
 if ( ! -s "$orderList" ) {
-  $orderList = $toolsDir/$inputList;
+  $orderList = "$toolsDir/$inputList";
 }
 
 my @orderList;	# asmId of the assemblies in order from the *.list files
