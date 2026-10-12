@@ -1229,20 +1229,50 @@ dyStringFree(&ui);
 dyStringFree(&id);
 }
 
+char *labelWithParents(struct trackDb *tdb, char *label)
+/* If hg.conf mouseoverParentLabels is on, return label prefixed with the shortLabels of the
+ * containers tdb sits in, e.g. "Container > label" (composite views skipped), so a mouseover
+ * or the drawn long label says where to find a subtrack in the track list.  Otherwise
+ * return a copy of label.
+ * Free with freeMem. */
+{
+static int doPrefix = -1;
+if (doPrefix < 0)
+    doPrefix = cfgOptionBooleanDefault("mouseoverParentLabels", FALSE);
+if (!doPrefix || tdb == NULL)
+    return cloneString(label);
+struct slName *names = NULL;
+struct trackDb *parent;
+for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+    if (!tdbIsCompositeView(parent) && parent->shortLabel != NULL)
+        slNameAddHead(&names, parent->shortLabel);   // ends up outermost first
+if (names == NULL)
+    return cloneString(label);
+struct dyString *dy = dyStringNew(0);
+struct slName *name;
+for (name = names; name != NULL; name = name->next)
+    dyStringPrintf(dy, "%s > ", name->name);
+dyStringAppend(dy, label);
+slNameFreeList(&names);
+return dyStringCannibalize(&dy);
+}
+
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
                      struct track *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
 char buf[4096];
+char *label = labelWithParents(curGroup->tdb, curGroup->shortLabel);
 if (tdbIsCompositeChild(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks",
-          curGroup->shortLabel);
+          label);
 else if (tdbIsComposite(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the maximum display mode density for all %s subtracks",
-          curGroup->shortLabel);
+          label);
 else
-    safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
+    safef(buf, sizeof(buf),"Click to alter the display density of %s", label);
+freeMem(label);
 
 mapBoxReinvoke(hvg, x, y, width, height, curGroup, TRUE, NULL, 0, 0, buf, NULL);
 }

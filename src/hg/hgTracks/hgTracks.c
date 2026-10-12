@@ -1697,6 +1697,7 @@ if (track->limitedVis != tvHide)
         int insideHeight = fontHeight-1;
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
+        struct trackDb *labelTdb = track->tdb;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         labelColor = colorFromCart(track, labelColor);
@@ -1706,6 +1707,7 @@ if (track->limitedVis != tvHide)
             if (tdbComposite != NULL)
                 {
                 label = tdbComposite->longLabel;
+                labelTdb = tdbComposite;
                 labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR,
                                                 tdbComposite->colorG, tdbComposite->colorB);
 
@@ -1721,6 +1723,7 @@ if (track->limitedVis != tvHide)
         else
             labelfont = font;
         labelColor = maybeDarkerLabels(track, hvg, labelColor);
+        label = labelWithParents(labelTdb, label);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
                           labelColor, labelfont, label);
         if (theImgBox && curImgTrack)
@@ -1757,6 +1760,7 @@ if (track->limitedVis != tvHide)
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
             }
+        freeMem(label);
         y += fontHeight;
         }
     y += track->totalHeight(track, track->limitedVis);
@@ -5657,12 +5661,18 @@ if (withLeftLabels && psOutput == NULL)
                 if (tdbIsCompositeChild(track->tdb))
                     {
                     struct trackDb *parent = tdbGetComposite(track->tdb);
+                    char *label = labelWithParents(parent, parent->shortLabel);
                     mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-                                  parent->track, parent->shortLabel, track->track);
+                                  parent->track, label, track->track);
+                    freeMem(label);
                     }
                 else
+                    {
+                    char *label = labelWithParents(track->tdb, track->shortLabel);
                     mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, title,
-                                  track->shortLabel, title);
+                                  label, title);
+                    freeMem(label);
+                    }
                 }
             }
         }

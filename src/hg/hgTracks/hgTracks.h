@@ -709,6 +709,13 @@ void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 
+char *labelWithParents(struct trackDb *tdb, char *label);
+/* If hg.conf mouseoverParentLabels is on, return label prefixed with the shortLabels of the
+ * containers tdb sits in, e.g. "Container > label" (composite views skipped), so a mouseover
+ * or the drawn long label says where to find a subtrack in the track list.  Otherwise
+ * return a copy of label.
+ * Free with freeMem. */
+
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 	struct track *curGroup);
 /* Print out image map rectangle that would invoke this program again.
