@@ -6,7 +6,7 @@ table mavemdVariants
     uint   chromEnd;       "End position in chromosome"
     string name;           "Gene and amino acid change"
     uint   score;          "Score 0-1000 (ACMG evidence strength)"
-    char[1] strand;        "Strand|Transcript strand for codon-projected items; . where the variant was placed from a genomic term"
+    char[1] strand;        "Strand|Transcript strand, set wherever the variant has a usable protein term; . where it has none"
     uint   thickStart;     "Start of thick display"
     uint   thickEnd;       "End of thick display"
     uint   reserved;       "Item color (RGB)"

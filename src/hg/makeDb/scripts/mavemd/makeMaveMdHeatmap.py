@@ -20,12 +20,14 @@ import collections
 import csv
 import glob
 import os
-import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mavemdLib as lib
-from makeMaveMdVariants import (PROTEIN_TERM, calibrationColumns, clean, loadScoreSets)
+from makeMaveMdVariants import (PROTEIN_TERM, SIMPLE_PRO, calibrationColumns, clean,
+                                cdnaReachesCodon, codonSpanOfCdna, loadScoreSets,
+                                loadScoreSetProteins, loadScoreSetTranscripts,
+                                MAX_RESIDUE_MISMATCH)
 
 csv.field_size_limit(10 ** 7)
 
@@ -99,6 +101,23 @@ def recolorToCalibration(byPos, calUrn, stats):
             cell['color'] = lib.cellColor(call['acmgOutcome'], call['funcClass'])
 
 
+def submittedProteinTerm(row, scoreSetProt):
+    """Protein term rebuilt from the submitted p. term, or '' if that is not safe.
+
+    Mirrors the variant builder: MaveDB does not post-map a change written as several
+    substitutions inside one codon, so without this the heatmap would be missing cells the
+    variant track draws. Only fires where every changed base falls in one codon.
+    """
+    urn = clean(row.get('score_set.score_set_urn'))
+    acc = scoreSetProt.get(urn)
+    sub = SIMPLE_PRO.match(clean(row.get('hgvs_pro')))
+    if not (acc and sub):
+        return ''
+    if len(codonSpanOfCdna(clean(row.get('hgvs_nt')))) != 1:
+        return ''
+    return '%s:%s' % (acc, clean(row.get('hgvs_pro')))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -116,24 +135,29 @@ def main():
     lib.setClassPalette(args.classPalette)
 
     scoreSets = loadScoreSets(args.downloadDir)
+    scoreSetProt = loadScoreSetProteins(args.db, loadScoreSetTranscripts(args.downloadDir))
 
     # Resolve every protein accession once.
     protAccs = set()
     for path in sorted(glob.glob(os.path.join(args.downloadDir, 'variants', '*.csv'))):
         with open(path, newline='') as fh:
             for row in csv.DictReader(fh):
-                match = PROTEIN_TERM.match(clean(row.get('mavedb.post_mapped_hgvs_p')) or '')
+                term = (clean(row.get('mavedb.post_mapped_hgvs_p'))
+                        or submittedProteinTerm(row, scoreSetProt))
+                match = PROTEIN_TERM.match(term) if term else None
                 if match:
                     protAccs.add(match.group('acc'))
     protToTx, unresolved = lib.loadProteinToTranscript(args.db, sorted(protAccs))
     codonMaps, missing = lib.loadCodonMaps(args.db, sorted(set(protToTx.values())))
-    lib.addProteinSequence(args.db, codonMaps, args.twoBit, args.workDir)
+    lib.addProteinSequence(codonMaps, args.twoBit, args.workDir)
     if unresolved:
         sys.stderr.write("  WARNING: no transcript for %s\n" % ', '.join(unresolved))
     if missing:
         sys.stderr.write("  WARNING: no genePred for %s\n" % ', '.join(missing))
 
     stats = collections.Counter()
+    residueChecked = collections.Counter()
+    residueBad = collections.Counter()
     entries = []
 
     for path in sorted(glob.glob(os.path.join(args.downloadDir, 'variants', '*.csv'))):
@@ -158,6 +182,10 @@ def main():
                 stats['rows'] += 1
                 urn = urn or clean(row.get('score_set.score_set_urn'))
                 protein = clean(row.get('mavedb.post_mapped_hgvs_p'))
+                if not protein:
+                    protein = submittedProteinTerm(row, scoreSetProt)
+                    if protein:
+                        stats['cellFromSubmittedTerm'] += 1
                 match = PROTEIN_TERM.match(protein) if protein else None
                 if not match:
                     stats['skipNoProteinTerm'] += 1
@@ -178,10 +206,23 @@ def main():
                 # track can fall back on MaveDB's genomic mapping for these; a map has no
                 # such fallback, so the cell is dropped instead of drawn in the wrong place.
                 wtOne = lib.THREE_TO_ONE.get(match.group('wt'))
-                if (codonMap.protein and wtOne and protPos <= len(codonMap.protein)
-                        and codonMap.protein[protPos - 1] != wtOne):
-                    stats['skipResidueMismatch'] += 1
-                    continue
+                # Count every projected codon, not just the mismatching ones: the guard
+                # below is a rate over all of them, the same denominator the variant
+                # builder uses. Counting only mismatches made one bad row in an accession
+                # with no boundary delins read as a 100% failure and abort the build.
+                if codonMap.protein and wtOne and protPos <= len(codonMap.protein):
+                    residueChecked[match.group('acc')] += 1
+                    if codonMap.protein[protPos - 1] != wtOne:
+                        # A multi-base delins spanning a codon boundary is named for the
+                        # residue of the first codon it touches but numbered for the codon
+                        # it changes, so the column is right and the cell stays.
+                        if cdnaReachesCodon(clean(row.get('mavedb.post_mapped_hgvs_c'))
+                                            or clean(row.get('hgvs_nt')), protPos):
+                            stats['residueBoundaryDelins'] += 1
+                        else:
+                            residueBad[match.group('acc')] += 1
+                            stats['skipResidueMismatch'] += 1
+                            continue
                 block = codonMap.codonBlock(protPos)
                 if block is None:
                     stats['skipPositionPastCds'] += 1
@@ -278,9 +319,20 @@ def main():
                 winUrn = None
                 chosenTitle = chosenSource = ''
                 chosenRuo = False
-            entries.append(buildEntry(urn, gene, meta, byPos, codonMap,
-                                      chosenTitle, chosenSource, chosenRuo, stats))
-            stats['scoreSetsWritten'] += 1
+            entry = buildEntry(urn, gene, meta, byPos, codonMap,
+                               chosenTitle, chosenSource, chosenRuo, stats)
+            if entry:
+                entries.append(entry)
+                stats['scoreSetsWritten'] += 1
+
+    # Same wholesale-shift guard the variant builder has; a moved transcript fails close
+    # to 100% and must not quietly produce a map drawn at the wrong codons.
+    failed = [a for a in residueChecked
+              if residueBad[a] / residueChecked[a] > MAX_RESIDUE_MISMATCH]
+    if failed:
+        sys.exit("ERROR: the genome disagrees with the HGVS reference residue for more "
+                 "than %.0f%% of the projected codons in: %s"
+                 % (100 * MAX_RESIDUE_MISMATCH, ', '.join(sorted(failed))))
 
     entries = [e for e in entries if e]
     entries.sort(key=lambda f: (f[0], int(f[1])))

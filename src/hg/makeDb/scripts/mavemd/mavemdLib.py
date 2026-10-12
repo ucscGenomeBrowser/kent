@@ -272,6 +272,16 @@ def loadCodonMaps(db, transcripts):
 DASHES = {0x2010: '-', 0x2011: '-', 0x2012: '-', 0x2013: '-', 0x2014: '-', 0x2015: '-',
           0x2212: '-', 0x00ad: '-'}
 
+# Characters with no NFKD decomposition, which would otherwise vanish. Greek letters show up
+# in protein names (alpha-synuclein) and the Scandinavian letters in author names.
+TRANSLITERATE = {
+    0x00f8: 'o', 0x00d8: 'O', 0x00e6: 'ae', 0x00c6: 'AE', 0x00e5: 'a', 0x00c5: 'A',
+    0x00df: 'ss', 0x0111: 'd', 0x0110: 'D', 0x0142: 'l', 0x0141: 'L',
+    0x03b1: 'alpha', 0x03b2: 'beta', 0x03b3: 'gamma', 0x03b4: 'delta',
+    0x03ba: 'kappa', 0x03bb: 'lambda', 0x03bc: 'u', 0x03c3: 'sigma', 0x03c9: 'omega',
+    0x2018: "'", 0x2019: "'", 0x201c: '"', 0x201d: '"', 0x2026: '...', 0x00b7: '-',
+}
+
 
 def asciiText(value):
     """Flatten text to ASCII, for fields hgTracks draws as raster rather than HTML.
@@ -281,7 +291,14 @@ def asciiText(value):
     library, so an entity appears literally as "&#8211;" on the image. MaveDB score set
     titles carry en dashes ("BRCA2 exons 15-26"), so anything bound for the legend comes
     through here first.
+
+    Transliteration is tried before NFKD, because NFKD has no decomposition for o-slash,
+    ae, Greek letters or curly quotes and they would silently disappear: an unmapped
+    o-slash turns Gronbaek into Grnbk and an unmapped alpha turns alpha-synuclein into
+    -synuclein. Anything still unmapped becomes '?' rather than nothing, so a dropped
+    character is visible instead of silent.
     """
+    import unicodedata
     text = '' if value is None else str(value)
     out = []
     for ch in text:
@@ -290,10 +307,11 @@ def asciiText(value):
             out.append(ch)
         elif code in DASHES:
             out.append('-')
+        elif code in TRANSLITERATE:
+            out.append(TRANSLITERATE[code])
         else:
-            import unicodedata
             folded = unicodedata.normalize('NFKD', ch).encode('ascii', 'ignore').decode()
-            out.append(folded)
+            out.append(folded if folded else '?')
     return ''.join(out)
 
 
@@ -328,7 +346,7 @@ for _bases, _aas in (
 COMPLEMENT = str.maketrans('ACGTacgtNn', 'TGCAtgcaNn')
 
 
-def addProteinSequence(db, maps, twoBit, workDir):
+def addProteinSequence(maps, twoBit, workDir):
     """Translate each transcript's CDS from the genome and hang it on its CodonMap.
 
     This is what lets makeMaveMdVariants.py check a projected codon against the reference
@@ -380,9 +398,13 @@ def addProteinSequence(db, maps, twoBit, workDir):
 
     base = {}
     for chrom, start, end in runs:
-        s = seq.get('%s:%d-%d' % (chrom, start, end))
+        key = '%s:%d-%d' % (chrom, start, end)
+        s = seq.get(key)
         if s is None:
-            continue
+            # Skipping this would leave N in the CDS, mistranslate the protein, and
+            # surface later as a bogus "the transcript has moved" abort.
+            raise RuntimeError('twoBitToFa returned no sequence for %s; cannot translate '
+                               'the CDS it belongs to' % key)
         for offset, ch in enumerate(s):
             base[(chrom, start + offset)] = ch
 

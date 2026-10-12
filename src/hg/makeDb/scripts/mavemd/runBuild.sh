@@ -24,12 +24,12 @@ echo "[$(date +%T)] 1. per-variant bed"
 "$SCRIPTS/makeMaveMdVariants.py" "$DOWNLOAD" mavemdVar.bed \
     --raFragment mavemdFilters.ra --workDir . 2> buildVar.log \
     || { echo "makeMaveMdVariants.py failed:"; tail -n 25 buildVar.log; exit 1; }
-tail -n 14 buildVar.log
+sed -n '/summary/,$p' buildVar.log
 
 echo "[$(date +%T)] 2. heatmap bed"
 "$SCRIPTS/makeMaveMdHeatmap.py" "$DOWNLOAD" mavemdMap.bed 2> buildMap.log \
     || { echo "makeMaveMdHeatmap.py failed:"; tail -n 25 buildMap.log; exit 1; }
-tail -n 9 buildMap.log
+sed -n '/summary/,$p' buildMap.log
 
 echo "[$(date +%T)] 3. sort"
 bedSort mavemdVar.bed mavemdVar.sorted.bed

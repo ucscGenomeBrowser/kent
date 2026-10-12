@@ -28,7 +28,6 @@ import os
 import re
 import subprocess
 import sys
-import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mavemdLib as lib
@@ -54,6 +53,38 @@ MAX_RESIDUE_MISMATCH = 0.25
 def clean(value):
     """Normalise the CSV's several spellings of "no value" to an empty string."""
     return '' if value in NA else value.strip()
+
+
+CDNA_RANGE = re.compile(r'c\.(\d+)(?:_(\d+))?')
+CDNA_POSITIONS = re.compile(r'(\d+)(?=[ACGT]>)')
+SIMPLE_PRO = re.compile(r'^p\.(?P<wt>[A-Z][a-z]{2})(?P<pos>\d+)'
+                        r'(?P<var>[A-Z][a-z]{2}|Ter|=)$')
+
+
+def codonSpanOfCdna(term):
+    """Codons a cDNA term touches, or an empty set if it cannot be read.
+
+    Two shapes matter. A range, c.198_200delinsCTG, covers every base between the two
+    numbers. A bracketed list, c.[1207G>T;1209C>T], names each changed base separately,
+    and c. is followed by '[' so the range pattern does not see it at all; that was the
+    reason the single-codon PTEN changes kept falling through to the haplotype bucket.
+    """
+    if not term:
+        return set()
+    if '[' in term or ';' in term:
+        positions = [int(x) for x in CDNA_POSITIONS.findall(term)]
+        return {(p - 1) // 3 + 1 for p in positions}
+    m = CDNA_RANGE.search(term)
+    if not m:
+        return set()
+    first = int(m.group(1))
+    last = int(m.group(2)) if m.group(2) else first
+    return {(x - 1) // 3 + 1 for x in range(first, last + 1)}
+
+
+def cdnaReachesCodon(term, protPos):
+    """Does a cDNA term change any base of codon protPos?"""
+    return protPos in codonSpanOfCdna(term)
 
 
 def basesToBlocks(bases, chromStart):
@@ -90,7 +121,8 @@ def loadScoreSets(downloadDir):
     """
     scoreSets = {}
     for path in glob.glob(os.path.join(downloadDir, 'scoreSets', '*.json')):
-        record = json.load(open(path))
+        with open(path) as f:
+            record = json.load(f)
         targets = record.get('targetGenes') or [{}]
         gene = targets[0].get('mappedHgncName') or targets[0].get('name') or ''
         publications = record.get('primaryPublicationIdentifiers') or []
@@ -155,6 +187,27 @@ def calibrationColumns(fieldnames):
     return byUrn
 
 
+def loadScoreSetProteins(db, scoreSetTx):
+    """Protein accession for each score set's submission transcript.
+
+    MaveDB leaves post_mapped_hgvs_p empty for a change written as two substitutions in
+    one codon, e.g. PTEN c.[1207G>T;1209C>T] for p.Val403Phe. The submitted protein term
+    is a plain p.Val403Phe with no accession, so the accession has to come from the score
+    set's own transcript.
+    """
+    proteins = {}
+    for urn, tx in scoreSetTx.items():
+        base = tx.split('.')[0]
+        rows = lib.hgsql(db, "select protAcc from ncbiRefSeqLink where mrnaAcc = '%s'"
+                             % lib.checkAccession(tx))
+        if not rows:
+            rows = lib.hgsql(db, "select protAcc from ncbiRefSeqLink where mrnaAcc "
+                                 "like '%s.%%'" % lib.checkAccession(base))
+        if rows and rows[0][0]:
+            proteins[urn] = rows[0][0]
+    return proteins
+
+
 def loadScoreSetTranscripts(downloadDir):
     """The transcript each score set's variants were submitted against, per score set.
 
@@ -188,7 +241,7 @@ def qualifyTerm(term, transcript):
     return term
 
 
-def collectTerms(downloadDir, scoreSetTx):
+def collectTerms(downloadDir, scoreSetTx, scoreSetProt=None):
     """First pass: every HGVS term that needs kent's parser, and the protein accessions.
 
     Returns (terms, protAccs).  terms holds MaveDB's genomic terms plus, for variants
@@ -208,11 +261,13 @@ def collectTerms(downloadDir, scoreSetTx):
                     match = PROTEIN_TERM.match(protein)
                     if match:
                         protAccs.add(match.group('acc'))
+                urn = clean(row.get('score_set.score_set_urn'))
                 if not genomic and not protein:
-                    urn = clean(row.get('score_set.score_set_urn'))
                     original = qualifyTerm(clean(row.get('hgvs_nt')), scoreSetTx.get(urn))
                     if original and ':' in original:
                         terms.add(original)
+                    if scoreSetProt and scoreSetProt.get(urn):
+                        protAccs.add(scoreSetProt[urn])
     return terms, protAccs
 
 
@@ -286,11 +341,12 @@ def main():
     sys.stderr.write("Loaded %d score set records\n" % len(scoreSets))
 
     scoreSetTx = loadScoreSetTranscripts(args.downloadDir)
+    scoreSetProt = loadScoreSetProteins(args.db, scoreSetTx)
     sys.stderr.write("Resolved a submission transcript for %d of %d score sets\n"
                      % (len(scoreSetTx), len(scoreSets)))
 
     sys.stderr.write("Pass 1: collecting HGVS terms\n")
-    terms, protAccs = collectTerms(args.downloadDir, scoreSetTx)
+    terms, protAccs = collectTerms(args.downloadDir, scoreSetTx, scoreSetProt)
     sys.stderr.write("  %d distinct HGVS terms, %d protein accessions\n"
                      % (len(terms), len(protAccs)))
 
@@ -299,7 +355,7 @@ def main():
     if unresolvedProt:
         sys.stderr.write("  WARNING: no transcript for %s\n" % ', '.join(unresolvedProt))
     codonMaps, missingTx = lib.loadCodonMaps(args.db, sorted(set(protToTx.values())))
-    lib.addProteinSequence(args.db, codonMaps, args.twoBit, workDir)
+    lib.addProteinSequence(codonMaps, args.twoBit, workDir)
     if missingTx:
         sys.stderr.write("  WARNING: no ncbiRefSeqCurated entry for %s\n" % ', '.join(missingTx))
     for acc, tx in sorted(protToTx.items()):
@@ -316,6 +372,7 @@ def main():
     filterValues = collections.defaultdict(set)
     residueChecked = collections.Counter()
     residueBad = collections.Counter()
+    residueBoundary = collections.Counter()
     residueExamples = []
     projectionChecked = 0
     projectionMismatch = 0
@@ -341,6 +398,18 @@ def main():
                 protein = clean(row.get('mavedb.post_mapped_hgvs_p'))
                 original = qualifyTerm(clean(row.get('hgvs_nt')), scoreSetTx.get(urn))
                 protMatch = PROTEIN_TERM.match(protein) if protein else None
+                # A change written as several substitutions inside one codon is one amino
+                # acid substitution, not a haplotype, and MaveDB does not post-map it.
+                # Rebuild the protein term from the submitted p. and the score set's own
+                # protein accession, but only when every changed base is in one codon.
+                fromSubmitted = False
+                if not protMatch and not genomic:
+                    sub = SIMPLE_PRO.match(clean(row.get('hgvs_pro')))
+                    acc0 = scoreSetProt.get(urn)
+                    if sub and acc0 and len(codonSpanOfCdna(clean(row.get('hgvs_nt')))) == 1:
+                        protein = '%s:%s' % (acc0, clean(row.get('hgvs_pro')))
+                        protMatch = PROTEIN_TERM.match(protein)
+                        fromSubmitted = bool(protMatch)
 
                 # Codon projection, computed whenever there is a usable protein term so it
                 # can be cross-checked even when a genomic term is also present. A codon
@@ -368,12 +437,23 @@ def main():
                             residueChecked[acc] += 1
                             if codonMap.protein[pos1 - 1] != wtOne:
                                 # The codon we would place does not hold the residue the
-                                # term names, so the projection would put this variant at
-                                # the wrong position. Refuse to place it. In this build
-                                # every case is a nonsense term whose numbering is one
-                                # codon downstream of its own reference residue.
+                                # term names. Usually that means the projection would put
+                                # the variant at the wrong position, so refuse to place
+                                # it. The exception is a multi-base delins spanning a
+                                # codon boundary: MaveDB names it for the residue of the
+                                # first codon the change touches while numbering it for
+                                # the codon it changes, so the position is right and only
+                                # the label is odd. All 99 NDUFAF6 cases are that, e.g.
+                                # c.198_200delinsCTG submitted as p.Arg66Leu arriving as
+                                # p.Arg67Ter. Only call it a placement error when the
+                                # cDNA term does not reach the named codon at all.
                                 residueBad[acc] += 1
-                                residueMismatch = True
+                                if not cdnaReachesCodon(clean(row.get(
+                                        'mavedb.post_mapped_hgvs_c')) or
+                                        clean(row.get('hgvs_nt')), pos1):
+                                    residueMismatch = True
+                                else:
+                                    residueBoundary[acc] += 1
                                 if len(residueExamples) < 10:
                                     residueExamples.append(
                                         '%s %s: term says %s, genome has %s'
@@ -404,7 +484,8 @@ def main():
                                        ','.join(str(b + 1) for b in sorted(codonBases))))
                 elif projected:
                     place = projected
-                    method = 'codon projection'
+                    method = ('codon projection from the submitted protein term'
+                              if fromSubmitted else 'codon projection')
                 elif original and original in placements:
                     place = placements[original]
                     method = 'hgvsToVcf on submitted term'
@@ -439,7 +520,9 @@ def main():
                 # that is two blocks with a thin connector, rather than one solid bar across
                 # the intron: the intron is not part of the codon, and a solid bar there
                 # shows a measurement where none was made and pollutes any range query.
-                if method == 'codon projection' and codonBases and end - start > 3:
+                # startswith, not ==: both projection routes place on a codon and
+                # both can land on one split across an exon junction.
+                if method.startswith('codon projection') and codonBases and end - start > 3:
                     blockStarts, blockSizes = basesToBlocks(codonBases, start)
                     stats['splitCodonItem'] += 1
                 else:
@@ -489,13 +572,25 @@ def main():
 
                 variantUrn = clean(row.get('accession'))
                 score = strengthScore(outcome, chosen['acmgStrength'] if chosen else '')
+                # The mouseOver pattern substitutes fields unconditionally, so an empty
+                # acmgOutcome leaves a dangling "ACMG evidence:" label on the 13% of items
+                # whose score set classifies variants without assigning an ACMG code. Both
+                # labels are set after color and score so neither is affected by them, and
+                # both go into the filter menus as real categories.
+                outcomeLabel = outcome or 'none assigned'
+                funcClassLabel = funcClass or 'not classified'
+                scoreLabel = lib.fmtScore(clean(row.get('scores.score'))) or 'not reported'
                 clinvarSig = clean(row.get('clinvar.%s.clinical_significance' % clinvarRelease))
                 clinvarReview = clean(row.get('clinvar.%s.clinical_review_status' % clinvarRelease))
                 vepConsequence = clean(row.get('vep.vep_functional_consequence'))
                 gnomadVersion = clean(row.get('gnomad.gnomad_version'))
-                assayMethod = meta.get('assayMethod', '')
-                assayModel = meta.get('assayModel', '')
-                libraryMethod = meta.get('libraryMethod', '')
+                # These three are filter columns. An empty value is not offered as a
+                # filter choice, so any selection silently drops the rows that have none
+                # (22,394 of them, from score sets whose experiment record has no assay
+                # keywords). Give them a value so they stay reachable.
+                assayMethod = meta.get('assayMethod', '') or 'not recorded'
+                assayModel = meta.get('assayModel', '') or 'not recorded'
+                libraryMethod = meta.get('libraryMethod', '') or 'not recorded'
 
                 item = [
                     chrom, start, end, name, score, strand, start, end,
@@ -505,10 +600,10 @@ def main():
                     ','.join(str(b) for b in blockStarts) + ',',
                     gene,
                     protein,
-                    outcome,
+                    outcomeLabel,
                     chosen['acmgStrength'] if chosen else '',
-                    funcClass,
-                    lib.fmtScore(clean(row.get('scores.score'))),
+                    funcClassLabel,
+                    scoreLabel,
                     lib.fmtScore(chosen['odds'], 3) if chosen and chosen['odds'] != '' else '',
                     chosen['title'] if chosen else '',
                     source if chosen else '',
@@ -541,10 +636,8 @@ def main():
                 rows.append(item)
                 stats['placed'] += 1
                 stats['method:' + method] += 1
-                if outcome:
-                    filterValues['acmgOutcome'].add(outcome)
-                if funcClass:
-                    filterValues['funcClass'].add(funcClass)
+                filterValues['acmgOutcome'].add(outcomeLabel)
+                filterValues['funcClass'].add(funcClassLabel)
                 if gene:
                     filterValues['gene'].add(gene)
                 # Harvest from the named values, never from positions in `item`: the row
@@ -563,11 +656,13 @@ def main():
         failed = []
         for acc in sorted(residueChecked):
             n, bad = residueChecked[acc], residueBad[acc]
-            rate = bad / n
+            edge = residueBoundary[acc]
+            rate = (bad - edge) / n
             flag = ('  <-- FAILS' if rate > MAX_RESIDUE_MISMATCH
-                    else ('  (dropped)' if bad else ''))
-            sys.stderr.write("    %-18s %6d checked, %5d mismatched (%.3f%%)%s\n"
-                             % (acc, n, bad, 100 * rate, flag))
+                    else ('  (dropped)' if bad - edge else ''))
+            sys.stderr.write("    %-18s %6d checked, %5d mismatched, %5d of those a "
+                             "codon-boundary delins (%.3f%%)%s\n"
+                             % (acc, n, bad, edge, 100 * rate, flag))
             if rate > MAX_RESIDUE_MISMATCH:
                 failed.append(acc)
         for example in residueExamples:

@@ -1,7 +1,7 @@
 <h2>Description</h2>
 
 <p>
-This track is part of the <a href="hgTrackUi?g=mavemd">MaveMD</a> collection. It shows one item
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=mavemd">MaveMD</a> collection. It shows one item
 per measured variant per score set, so a variant measured in several experiments appears once
 for each of them.
 </p>
@@ -74,10 +74,9 @@ than a clinical claim, and use a separate palette:
 <p>
 Filters are available on the ACMG evidence code, the functional class, the gene, the ClinVar
 significance and the assay metadata, and none are applied by default. Because every
-substitution at a codon is a separate item, a well studied gene stacks deeply and the track
-falls back to a density graph in all but narrow windows; filtering to one gene or one evidence
-code makes individual variants readable. Item names, ClinGen allele IDs and MaveDB variant
-identifiers are searchable from the position box.
+substitution at a codon is a separate item, a well studied gene carries thousands of them and
+the track draws as a density graph until the window is down to a few codons. Item names,
+ClinGen allele IDs and MaveDB variant identifiers are searchable from the position box.
 </p>
 
 <h2>Methods</h2>
@@ -85,13 +84,11 @@ identifiers are searchable from the position box.
 <p>
 MaveMD curates MaveDB score sets for clinical relevance, integrates them with ClinVar and the
 ClinGen Allele Registry, and exports evidence structured for ACMG/AMP variant classification
-(McEwen <em>et al.</em>, 2025). Candidates were drawn from MaveDB, from publications cited in ClinVar
-for functional evidence, and from community recommendation, then restricted to genes with a
-moderate or stronger gene-disease association in ClinGen or GenCC.
+(McEwen <em>et al.</em>, 2025).
 </p>
 
 <p>
-Data are downloaded from the <a href="https://api.mavedb.org" target="_blank">MaveDB API</a>,
+Data are downloaded from the <a href="https://api.mavedb.org/docs" target="_blank">MaveDB API</a>,
 one request per score set. MaveDB resolves some score sets to the genome and others only to a
 protein sequence, so a variant is placed from its genomic term where one exists, otherwise by
 projecting its protein term onto the corresponding codon through RefSeq or GENCODE, otherwise
@@ -120,18 +117,18 @@ or tab-sep tables. From scripts, the data can be accessed through our
 
 <p>For automated download and analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mavemd/" target="_blank">our download
+<a href="https://hgdownload.gi.ucsc.edu/gbdb/$db/mavemd/" target="_blank">our download
 server</a>. The file for this track is called <tt>mavemdVar.bb</tt>. Individual regions or the
 whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be
 compiled from the source code or downloaded as a precompiled binary for your system.
 Instructions for downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
+<a href="https://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
 can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mavemd/mavemdVar.bb -chrom=chr17
+<tt>bigBedToBed https://hgdownload.gi.ucsc.edu/gbdb/$db/mavemd/mavemdVar.bb -chrom=chr17
 -start=7668402 -end=7687550 stdout</tt></p>
 
 <p>The original annotation source data can be downloaded from the MaveDB API at
-<a href="https://api.mavedb.org" target="_blank">https://api.mavedb.org</a>.</p>
+<a href="https://api.mavedb.org/docs" target="_blank">https://api.mavedb.org/docs</a>.</p>
 
 <h2>Credits</h2>
 
