@@ -99,6 +99,13 @@ static char *cases[] = {
 "<p style=\"list-style:url&lpar;//example.com/x.png);color:red\">a</p>",
 /* a name a browser does not know leaves its semicolon to end the declaration */
 "<p style=\"color:red&foo;position:fixed\">a</p>",
+/* a value is one declaration, however its characters are written */
+"<p style=\"color:red&#59;position:fixed;text-align:center\">a</p>",
+"<p style=\"color:red&#x3B position:fixed;text-align:center\">a</p>",
+"<p style=\"color:red&#125;p{position:fixed&#125;text-align:center\">a</p>",
+/* an ampersand written as a number does not start a reference of ours, so the semicolon
+ * after it ends the declaration, for us and for a browser alike */
+"<p style=\"color:red&#38;quot;position:fixed;text-align:center\">a</p>",
 };
 
 int main(int argc, char *argv[])

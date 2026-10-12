@@ -1,8 +1,16 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 
-cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/hgTablesTest
-make 
+# Build hgTablesTest from the master tree, not v${BRANCHNN}_branch.  At preview2
+# BRANCHNN is still the previous release, so building from its branch tested
+# hgwdev with last release's test program: v505 preview2 died in carefulAlloc on
+# mm39 jaspar2022 because the oversized-page fix (d48a1f19359, #38359) was in
+# master but not in v504_branch.  The libs are refreshed nightly; make them here
+# too (serially) so the link never picks up a library older than the headers.
+cd $BUILDDIR/kent/src/lib && make
+cd $BUILDDIR/kent/src/hg/lib && make
+cd $BUILDDIR/kent/src/hg/hgTablesTest
+make
 cd $WEEKLYBLD
 
 @ NEXTNN = ( $BRANCHNN + 1 )

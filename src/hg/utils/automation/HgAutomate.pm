@@ -56,35 +56,24 @@ sub readMainCluster(); # forward declaration to keep code order
 # the name of the cluster is in a separate text file, so it's easier to
 # use from bash scripts
 
+# Every host listed here gets ssh'ed to by chooseClusterByBandwidth()
+# whenever a script is not given -bigClusterHub, so only list parasol
+# hubs that actually exist.  The main cluster (cluster.txt) is hgwdev.
 %cluster =
     ( readMainCluster() =>
-        { 'enabled' => 1, 'gigaHz' => 1.4, 'ram' => 8,
-	  'hostCount' => 992, },
+        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
+	  'hostCount' => 64, },
       'hgwdev-101' =>
         { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
 	  'hostCount' => 32, },
-      'hgwdev' =>
-        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
-	  'hostCount' => 64, },
-      'hgwdev-new' =>
-        { 'enabled' => 1, 'gigaHz' => 2.1, 'ram' => 1,
-	  'hostCount' => 64, },
-    );
-
-my %obsoleteCluster =
-    ( 'swarm' => ,
-        { 'enabled' => 1, 'gigaHz' => 2.33, 'ram' => 8,
-	  'hostCount' => 1024, },
-      'memk' =>
-        { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
-	  'hostCount' => 32, },
-      'encodek' =>
-        { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 16,
-	  'hostCount' => 48, },
     );
 
 my @allClusters = (keys %cluster);
 
+# /hive is visible from the parasol hub and all of its nodes, nothing
+# needs to distribute files to it.  chooseFilesystemsForCluster() lists
+# these in clusterLocality order, so /scratch/data is still preferred
+# for input when it exists.
 %clusterFilesystem =
     ( 'scratch' =>
         { root => '/scratch/data', clusterLocality => 1.0,
@@ -92,21 +81,9 @@ my @allClusters = (keys %cluster);
 	  inputFor => \@allClusters, outputFor => [], },
       'hive' =>
         { root => '/hive/data/genomes', clusterLocality => 0.3,
-	  distrHost => ['ku'], distrCommand => '',
-	  inputFor => ['ku'],
-	  outputFor => ['ku'], },
-    );
-
-my %obsoleteClusterFilesystem =
-    ( 'scratch' =>
-        { root => '/scratch/data', clusterLocality => 1.0,
 	  distrHost => [], distrCommand => '',
-	  inputFor => \@allClusters, outputFor => [], },
-      'hive' =>
-        { root => '/hive/data/genomes', clusterLocality => 0.3,
-	  distrHost => ['ku'], distrCommand => '',
-	  inputFor => ['memk', 'encodek', 'swarm'],
-	  outputFor => ['memk', 'encodek', 'swarm'], },
+	  inputFor => \@allClusters,
+	  outputFor => \@allClusters, },
     );
 
 $defaultDbHost = 'hgwdev';
@@ -203,7 +180,7 @@ sub getWarnClusters {
     if ($isInput) {
       return @allClusters;
     } else {
-      return ('encodek');
+      return ();
     }
   }
 }
@@ -256,7 +233,8 @@ sub getWorkhorseLoads {
   my %horses = ();
   my @testList;
   push (@testList, 'hgwdev');
-  for (my $i = 0; $i < 18; ++$i) {
+  # hgcompute-01 through hgcompute-17, there is no hgcompute-00
+  for (my $i = 1; $i < 18; ++$i) {
      my $n = sprintf("%02d", $i);
      push (@testList, "hgcompute-$n");
   }
@@ -408,7 +386,11 @@ sub chooseFilesystemsForCluster {
   confess "Second arg must be either \"in\" or \"out\""
     if ($inOrOut ne 'in' && $inOrOut ne 'out');
   my @filesystems;
-  foreach my $fs (keys %clusterFilesystem) {
+  # most cluster-local filesystem first, callers take the first one
+  # that has their file
+  foreach my $fs (sort { $clusterFilesystem{$b}->{'clusterLocality'} <=>
+			 $clusterFilesystem{$a}->{'clusterLocality'} }
+		  keys %clusterFilesystem) {
     my $fsInfo = $clusterFilesystem{$fs};
     my @okClusters = ($inOrOut eq 'in') ?
        @{$fsInfo->{'inputFor'}} :  @{$fsInfo->{'outputFor'}};

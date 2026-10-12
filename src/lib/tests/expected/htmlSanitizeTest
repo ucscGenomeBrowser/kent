@@ -144,3 +144,18 @@ in : <p style="color:red&foo;position:fixed">a</p>
 out: <p>a</p>
      (removed the value of the style property color)
 
+in : <p style="color:red&#59;position:fixed;text-align:center">a</p>
+out: <p style="text-align:center;">a</p>
+     (removed the value of the style property color)
+
+in : <p style="color:red&#x3B position:fixed;text-align:center">a</p>
+out: <p style="text-align:center;">a</p>
+     (removed the value of the style property color)
+
+in : <p style="color:red&#125;p{position:fixed&#125;text-align:center">a</p>
+out: <p>a</p>
+     (removed the value of the style property color)
+
+in : <p style="color:red&#38;quot;position:fixed;text-align:center">a</p>
+out: <p style="color:red&#38;quot;text-align:center;">a</p>
+

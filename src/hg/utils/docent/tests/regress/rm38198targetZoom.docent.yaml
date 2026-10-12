@@ -1,0 +1,76 @@
+# #38198 -- one zoom on the quickLift target deletes the source's own container setting.
+#
+# Found in the v505 Preview I code review, #38477 item 2.  dba11b63364 fixed this for the
+# page a lift opens and nothing after it.  rm38198.docent.yaml covers that page; it never
+# makes a second request on the target, so it passes with the hole still open.
+# Fixed by fb623a15d54: a quickLifted container never falls back to its bare name.
+#
+# On the page a lift opens, hgConvert sends hideTracks.  superTrackCartVis() in
+# hg/hgTracks/hgTracks.c then drops hub_<n>_wgEncodeReg4 and leaves the source's bare
+# wgEncodeReg4 alone.  On the next hgTracks request on the target (a zoom, a drag, a refresh)
+# hideTracks is gone, and the old fallback runs:  no hub_<n>_wgEncodeReg4 in the cart (the lift
+# page just removed it), so it reads the bare wgEncodeReg4, copies it to the hub name and
+# cartRemove()s the bare one.  The cart is shared across assemblies, so hg38 loses its
+# wgEncodeReg4=hide and the container comes back at its default, show.  hs1 has no native
+# wgEncodeReg4, so hubTrackOwnsBareName() is true and the fallback is taken.
+#
+# The check is the last one:  back on hg38 after the zoom on hs1, the container is still
+# hidden.  The hg38 check straight after the lift is the one rm38198 already makes; it is
+# repeated here so that a failure at the end can only be the zoom.
+#
+# Not asserted: what the target draws after the zoom.  The fix decides that (Max suggests
+# skipping the bare-name fallback for a quickLifted container), and this script is about the
+# source assembly only.
+#
+# hideTracks only rides along when "Hide all default tracks on the target" is ticked (#38477
+# item 3), and docent's convert: leaves that box as the page has it.  If the box ever stops
+# being ticked by default, the lift page itself takes the old path and the earlier hg38 check
+# fails instead -- that is the same bug, not a broken script.
+proof:
+  - "assertion-only 2026-10-12 -- written from #38477 item 2, against dba11b63364"
+  - "xfail 2026-10-12 -- fails on genome-test at the last step, rows not drawn: wgEncodeReg4MarkH3k27ac back on hg38 after the zoom on hs1. Every earlier check passes, including hg38 straight after lift 2. A copy with only the zoom: step removed passes, so the zoom is what fails it"
+  - "sandbox-ab 2026-10-12 -- fails on genome-test and passes on hgwdev-braney with the superTrackCartVis() fix on master (uncommitted at the time). After the zoom the target draws the same three rows as the lift page instead of two. rm38198 still passes on the sandbox"
+  - "server-flip 2026-10-12 -- passes on genome-test once fb623a15d54 was built there (hgTracks 14:05); it failed there at the last step earlier the same day"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125483
+  - hide: all
+  - track: {wgEncodeReg4: hideKids, wgEncodeReg4MarkH3k27ac: full}
+  - expect: {rows: [ruler, wgEncodeReg4MarkH3k27ac], exact: true}
+
+  # Lift 1, container showing, so the lift hub has the container stanza.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, wgEncodeReg4MarkH3k27ac], noText: "Warning/Error"}
+
+  # Hide the container on the source.  This puts wgEncodeReg4=hide in the cart.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - track: {wgEncodeReg4: hide}
+  - expect: {rows: [ruler], noRows: [wgEncodeReg4MarkH3k27ac]}
+
+  # Lift 2, container hidden.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
+
+  # Back on the source straight after the lift page.  dba11b63364 already makes this pass.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - expect: {rows: [ruler], noRows: [wgEncodeReg4MarkH3k27ac]}
+
+  # Lift 3, container still hidden, and this time one zoom on the target: an hgTracks request
+  # on hs1 with no hideTracks.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
+  - zoom: out
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
+
+  # Back on the source.  With the bug the zoom deleted wgEncodeReg4=hide, and the container
+  # is back at its default, drawing H3K27ac.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - expect: {rows: [ruler], noRows: [wgEncodeReg4MarkH3k27ac]}

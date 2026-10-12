@@ -45,7 +45,7 @@ my $crisprScripts = "/hive/data/outside/crisprTrack/scripts";
 
 # Option defaults:
 my $dbHost = 'hgwdev';
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 my $smallClusterHub = 'hgwdev-101';
 my $fileServer = 'hgwdev';
 my $workhorse = 'hgwdev';
