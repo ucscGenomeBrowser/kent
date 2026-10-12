@@ -26,10 +26,14 @@ my $ncbiAsmId = shift;
 my $namesFile = shift;
 my $queryId = shift;
 
-# the exact case used in the chain*.bb/chainLiftOver*.bb file names
-# (asmHubMiniMap2ChainNetTrackDb.sh's $OtherDb), before it gets resolved
-# below into a full asmId for the getAssemblyInfo() lookup
-my $fileOtherDb = $queryId;
+# queryId is the actual query db/accession, as in doMiniMap2.pl's
+# dateless trackData/miniMap2.$queryId symlink.  The chain*.bb/
+# chainLiftOver*.bb and fb.*.txt file names use the ucfirst() of that
+# (asmHubMiniMap2ChainNetTrackDb.sh's $OtherDb).  Both are saved here
+# before queryId gets resolved below into a full asmId for the
+# getAssemblyInfo() lookup.
+my $mm2LinkName = $queryId;
+my $fileOtherDb = ucfirst($queryId);
 
 # if assembly hub, need to find the real full assembly ID
 my $targetBuildDir = "";
@@ -75,6 +79,64 @@ my $chainLinkUrl = "$downloadDir/$asmId.chainMiniMap2${fileOtherDb}Link.bb";
 my $haveLiftOver = ( -s "$targetBuildDir/bbi/$asmId.chainLiftOverMiniMap2$fileOtherDb.bb" ) ? 1 : 0;
 my $loChainUrl = "$downloadDir/$asmId.chainLiftOverMiniMap2$fileOtherDb.bb";
 my $loChainLinkUrl = "$downloadDir/$asmId.chainLiftOverMiniMap2${fileOtherDb}Link.bb";
+
+# featureBits coverage measurements, same files as read by
+# asmHubMiniMap2ChainNetComposite.pl, found in the doMiniMap2.pl
+# trackData/miniMap2.$mm2LinkName directory
+my $mm2Dir = "$targetBuildDir/trackData/miniMap2.$mm2LinkName";
+sub fbPercent($) {
+  my ($fbGlob) = @_;
+  my $fbTxt = `ls $mm2Dir/$fbGlob 2> /dev/null | head -1`;
+  chomp $fbTxt;
+  return "n/a" if (! -s "$fbTxt");
+  my $fBits = `cut -d' ' -f5 $fbTxt | tr -d '()%'`;
+  chomp $fBits;
+  return $fBits;
+}
+my $fbChain = &fbPercent("fb.*chain${fileOtherDb}Link.txt");
+my $fbLiftOver = &fbPercent("fb.*chainLiftOver${fileOtherDb}.txt");
+
+# doMiniMap2.pl records the mash distance, chosen preset, minimap2 version
+# and the minimap2 command line in version.txt in the same directory, e.g.:
+#   mashDistance=0.00159554 minimapPreset=asm5
+#   minimap2 2.31-r1302
+#   minimap2 -cx asm5 -N 5 -p 0.8 -t 8 target.fa query.fa > out.paf
+my $mm2Version = "";
+my $mm2Command = "";
+my $mashDistance = "";
+my $minimapPreset = "";
+my $haveVersionTxt = 0;
+if ( -s "$mm2Dir/version.txt" ) {
+  $haveVersionTxt = 1;
+  open (my $vfh, "<", "$mm2Dir/version.txt") or die "can not read $mm2Dir/version.txt";
+  while (my $line = <$vfh>) {
+    chomp $line;
+    $line =~ s/^\s+//;
+    $line =~ s/\s+$//;
+    next if (length($line) < 1);
+    if ($line =~ m/^minimap2\s+-/) {
+      $mm2Command = $line;
+    } elsif ($line =~ m/^minimap2\s+(\S+)$/) {
+      $mm2Version = $1;
+    } else {
+      foreach my $keyVal (split('\s+', $line)) {
+        my ($key, $val) = split('=', $keyVal, 2);
+        next if (!defined($val));
+        $mashDistance = $val if ($key eq "mashDistance");
+        $minimapPreset = $val if ($key eq "minimapPreset");
+      }
+    }
+  }
+  close ($vfh);
+}
+
+sub htmlEscape($) {
+  my ($str) = @_;
+  $str =~ s/&/&amp;/g;
+  $str =~ s/</&lt;/g;
+  $str =~ s/>/&gt;/g;
+  return $str;
+}
 
 print <<_EOF_
 <h2>Description</h2>
@@ -125,6 +187,21 @@ The lift over chain track shows the subset of the chain, extracted
 with <em>netChainSubset</em> from the best/longest syntenic regions
 of the net, that is used to translate coordinates from the
 <em>$tGenome</em> genome to the <em>$qGenome</em> genome.</p>
+_EOF_
+    ;
+
+if ($fbChain ne "n/a" || $fbLiftOver ne "n/a") {
+  printf "<h3>Alignment coverage</h3>\n";
+  printf "<table border='1'>\n";
+  printf "<caption>percent of the target genome covered by the query alignments</caption>\n";
+  printf "<thead><tr>\n";
+  printf "<th>chains</th><th>lift<br>over</th><th>common<br>name</th><th>assembly</th>\n";
+  printf "</tr></thead><tbody>\n";
+  printf "<tr><td style='text-align:right;'>%s</td><td style='text-align:right;'>%s</td><td>%s</td><td>%s</td></tr>\n", $fbChain, $fbLiftOver, $qGenome, $queryId;
+  printf "</tbody></table>\n";
+}
+
+print <<_EOF_
 
 <h2>Display Conventions and Configuration</h2>
 <p>By default, the chains to chromosome-based assemblies are colored
@@ -149,6 +226,27 @@ into a group and creates a kd-tree out of the gapless subsections (blocks)
 of the alignments. A dynamic program was then run over the kd-trees to
 find the maximally scoring chains of these blocks.
 </p>
+_EOF_
+    ;
+
+if ($haveVersionTxt) {
+  printf "<h3>minimap2 version and parameters</h3>\n";
+  printf "<ul>\n";
+  printf "<li>minimap2 version: <b>%s</b></li>\n", &htmlEscape($mm2Version) if (length($mm2Version));
+  if (length($mashDistance)) {
+    printf "<li><em>mash</em> distance between the target and query assemblies: <b>%s</b></li>\n", &htmlEscape($mashDistance);
+  }
+  if (length($minimapPreset)) {
+    printf "<li>minimap2 alignment preset selected from that distance: <b>%s</b></li>\n", &htmlEscape($minimapPreset);
+  }
+  printf "</ul>\n";
+  if (length($mm2Command)) {
+    printf "<p>\nThe minimap2 command used for each target sequence job:\n</p>\n";
+    printf "<pre>\n%s\n</pre>\n", &htmlEscape($mm2Command);
+  }
+}
+
+print <<_EOF_
 
 <h3>Lift over chain track</h3>
 <p>
