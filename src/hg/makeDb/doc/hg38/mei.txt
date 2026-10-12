@@ -325,7 +325,15 @@ ln -s /hive/data/genomes/hg19/bed/mei/eul1db/eul1dbRef.hg19.bb /gbdb/hg19/mei/eu
 # hg19 bigBed and re-lifted to hg38 with the commands above; item counts
 # (8,991 / 8,988) and all other columns are unchanged.
 
-# 3) meiSwegen: /gbdb/hg38/mei/swegen.bb renamed to _swegen.bb. The
+# 3) Editing a .as is not enough: bedToBigBed embeds a copy of the
+# autoSql in the .bb, and that embedded copy is what hgc and the Table
+# Browser show, not the file in scripts/mei. After the description edits
+# above, deepmei1kg, hmeid, eul1db and eul1dbRef still served the old text
+# (eul1dbRef still named an L1HS-Hybrid sub-group that does not occur in
+# the data) until they were rebuilt from the existing bed with the edited
+# .as. Check with: bigBedInfo -as /gbdb/$db/mei/<file>.bb
+#
+# 4) meiSwegen: /gbdb/hg38/mei/swegen.bb renamed to _swegen.bb. The
 # callset cannot be redistributed, and the underscore prefix is what keeps
 # a file off the public download server. "tableBrowser off" already
 # blocked hgTables and the REST API (verified: the API returns HTTP 403
