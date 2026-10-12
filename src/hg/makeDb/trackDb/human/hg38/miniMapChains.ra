@@ -15,7 +15,7 @@ altColor 100,50,0
 type bed 3
 sortOrder view=+
 otherDb hs1
-html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
+html miniMapChains
 
     track chainNetMiniMap2Hs1Viewchain
     shortLabel Chain
