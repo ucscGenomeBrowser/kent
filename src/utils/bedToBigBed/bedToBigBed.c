@@ -21,6 +21,8 @@
 #include "twoBit.h"
 #include "portable.h"
 #include "errCatch.h"
+#include "pipeline.h"
+#include <signal.h>
 
 char *version = "2.10";   // when changing, consider changing in bedToBigBed, bedGraphToBigWig, and wigToBigWig
 /* Version history from 2.6 on at least -
@@ -878,6 +880,29 @@ bbFileCreate(inName, chromSizes, blockSize, itemsPerSlot, asText, as,
 	doCompress, extraIndexList, outName);
 }
 
+static void sortBedFile(char *inName, char *sortFile)
+/* Sort the bed input into sortFile.  The input is read through a lineFile rather than
+ * handed to sort directly, so that a compressed input is decompressed first; sort given
+ * a .gz just shuffles the compressed bytes.  SIGPIPE is ignored so that a sort which
+ * dies partway is reported by pipelineClose rather than killing us mid-write. */
+{
+static char *sortCmd[] = {"sort", "-k1,1", "-k2,2n", NULL};
+static char **sortPipe[] = {sortCmd, NULL};
+if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+    errnoAbort("can't ignore SIGPIPE");
+struct pipeline *pl = pipelineOpen(sortPipe, pipelineWrite, sortFile, NULL, 0);
+FILE *f = pipelineFile(pl);
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    fputs(line, f);
+    fputc('\n', f);
+    }
+lineFileClose(&lf);
+pipelineClose(&pl);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -985,12 +1010,7 @@ if (doSort)
     sortFile = cloneString(tmpName);
     verbose(2, "made temporary file %s for sorting",sortFile);
 
-    char sysBuf[4096];
-
-    safef(sysBuf, sizeof sysBuf, "sort -k1,1 -k2,2n %s > %s", bedFileName, sortFile);
-    if (system(sysBuf) != 0)
-        errAbort("Couldn't sort %s into %s.  Error code %d\n", bedFileName, sortFile, errno);
-
+    sortBedFile(bedFileName, sortFile);
     bedFileName = sortFile;
     }
 
