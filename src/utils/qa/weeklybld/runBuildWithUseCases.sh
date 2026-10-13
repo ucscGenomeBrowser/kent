@@ -85,7 +85,7 @@ if [ -s $lastClean ]; then
     echo
     git -C $kentSrc log --no-merges --format='    %h %an: %s' $(cat $lastClean)..HEAD | head -60
 fi
-} > $body
+} > $body 2>&1
 
 if ! mail -s "$subject" $buildmeister $qaEmail < $body; then
     # mail failed, so let cron send it instead
