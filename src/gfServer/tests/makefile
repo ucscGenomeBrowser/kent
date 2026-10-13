@@ -31,7 +31,8 @@ test_idxsize: \
     dynServerTest \
     dynServerTransTest \
     dynServerWithDirTest \
-    dynServerPerSeqMaxTest
+    dynServerPerSeqMaxTest \
+    emptyCommandTest
 
 
 directNibTest: mkdirs
@@ -64,6 +65,8 @@ dynServerWithDirTest: mkdirs
 	./bin/testDynServerWithDir ${gfServer}
 dynServerPerSeqMaxTest: mkdirs
 	./bin/testDynServerPerSeqMax ${gfServer}
+emptyCommandTest: mkdirs
+	./bin/testEmptyCommand ${gfServer} $(shell expr 17784 + ${portOffset})
 
 ##
 # tests using a huge genome requring 64-bit offsets
