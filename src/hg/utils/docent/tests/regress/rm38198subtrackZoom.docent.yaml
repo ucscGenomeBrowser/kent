@@ -6,7 +6,9 @@
 # page that read only the URL (hideTracks), so nothing happened; on the next hgTracks request
 # on the target it read the cart, and hg38 lost clinvarCnv=hide.  hs1 has no native
 # clinvarCnv, so hubTrackOwnsBareName() is true and the fallback is taken.
-# Fixed by 8053db3f754: a quickLifted subtrack never falls back to its bare name.
+# Fixed by 8053db3f754, which stopped the fallback altogether.  That also lost the source's
+# hidden state on the target (rm38033), so the fallback is back and only the cartRemove is
+# skipped for a quickLifted subtrack (refs #38477).
 #
 # The check is the last one:  back on hg38 after the zoom on hs1, clinvarCnv is still hidden.
 # The hg38 check straight after the first lift shows a lift page alone does no harm, so a

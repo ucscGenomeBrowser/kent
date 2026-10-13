@@ -17,6 +17,7 @@
 #        stay on the GCA (#38082).  This one passes on v504 too; it guards the fix from
 #        reaching too far.
 #   5    An unknown accession gives the new page, with the search link carrying the name.
+#        The link is URL-encoded since b24a0bff110, so "_" and "." arrive as %5F and %2E.
 #   6    A db= holding markup is shown as text, not run (Max's case C6).
 #
 # Data: the asmAlias rows above were checked in hgcentraltest and hgcentralbeta on
@@ -60,7 +61,7 @@ steps:
   - expect:
       text: ["Genome assembly not found", "GCA_999999999.1 is not available on this Genome Browser",
              "Search for GCA_999999999.1", "go back to the Genome Browser start page", "contact us"]
-      has: ['a[href*="assemblySearch.html?q=GCA_999999999.1"]', 'a[href$="hgGateway"]', 'a[href$="contacts.html"]']
+      has: ['a[href*="assemblySearch.html?q=GCA%5F999999999%2E1"]', 'a[href$="hgGateway"]', 'a[href$="contacts.html"]']
       noHas: '#imgTbl'
 
   - goto: "/cgi-bin/hgTracks?db=x%27%3E%3Cscript%3Ealert(1)%3C/script%3E"
