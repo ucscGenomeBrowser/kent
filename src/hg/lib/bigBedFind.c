@@ -521,7 +521,10 @@ return ml;
 }
 
 static boolean protAccMatches(char *rowProtAcc, struct slName *protAccList)
-/* Return TRUE if rowProtAcc matches one of protAccList, ignoring version (".N") suffixes. */
+/* Return TRUE if rowProtAcc matches one of protAccList.  The version (".N") suffix is
+ * ignored only when one side has none: a deprecated NP_000005.2 from RefSeq Historical
+ * is not the MANE transcript NP_000005.3.  Only the version digits are compared, since a
+ * protAccList name can be a whole search term like "NP_000005.3:p.Val100Ala". */
 {
 char *rowDot = strchr(rowProtAcc, '.');
 int rowLen = rowDot ? (rowDot - rowProtAcc) : (int)strlen(rowProtAcc);
@@ -531,7 +534,14 @@ for (pa = protAccList; pa != NULL; pa = pa->next)
     char *paDot = strchr(pa->name, '.');
     int paLen = paDot ? (paDot - pa->name) : (int)strlen(pa->name);
     if (rowLen > 0 && rowLen == paLen && memcmp(rowProtAcc, pa->name, rowLen) == 0)
-        return TRUE;
+        {
+        if (rowDot == NULL || paDot == NULL)
+            return TRUE;
+        int rowVerLen = strspn(rowDot+1, "0123456789");
+        int paVerLen = strspn(paDot+1, "0123456789");
+        if (rowVerLen == paVerLen && memcmp(rowDot+1, paDot+1, rowVerLen) == 0)
+            return TRUE;
+        }
     }
 return FALSE;
 }
