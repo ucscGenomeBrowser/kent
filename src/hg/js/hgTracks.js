@@ -3699,7 +3699,13 @@ var rightClick = {
                           "&hgTrackUi_op=clearSettings&g=" + encodeURIComponent(clearTrack)),
                 dataType: "html",
                 cache: false,
-                success: function() { rightClick.redrawClearedTracks(clearTrack); },
+                success: function(response) {
+                    // any other page, e.g. an error page, means nothing was reset
+                    if ($.trim(response) === "OK")
+                        rightClick.redrawClearedTracks(clearTrack);
+                    else
+                        warn("Could not reset the settings of this track.");
+                },
                 error: errorHandler
             });
 
