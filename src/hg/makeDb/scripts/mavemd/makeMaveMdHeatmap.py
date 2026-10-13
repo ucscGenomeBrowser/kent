@@ -320,7 +320,8 @@ def main():
                 chosenTitle = chosenSource = ''
                 chosenRuo = False
             entry = buildEntry(urn, gene, meta, byPos, codonMap,
-                               chosenTitle, chosenSource, chosenRuo, stats)
+                               lib.calibrationLabel(chosenTitle, chosenRuo),
+                               chosenSource, chosenRuo, stats)
             if entry:
                 entries.append(entry)
                 stats['scoreSetsWritten'] += 1

@@ -472,6 +472,20 @@ def pickDisplayCall(calls, primaryTitle=None):
     return calls[0], context
 
 
+def calibrationLabel(title, ruo):
+    """Calibration name for display, carrying the research-use-only marker.
+
+    researchUseOnly is a fixed property of the calibration method (ExCALIBR and the two
+    BBI-GMM calibrations are always marked, the rest never are), and no calibration MaveDB
+    flags primary is ever marked, so this one string is enough to tell a reader the call
+    they are looking at came from a method MaveDB does not consider clinical-grade. The
+    full reasoning for which calibration won is in the calibrationSource field.
+    """
+    if not title:
+        return 'none'
+    return '%s, research use only' % title if ruo else title
+
+
 def cellColor(acmgOutcome, funcClass):
     """Color for a heatmap cell or a variant item."""
     if acmgOutcome and acmgOutcome in ACMG_COLORS:
