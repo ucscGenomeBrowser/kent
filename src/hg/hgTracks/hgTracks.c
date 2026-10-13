@@ -12294,7 +12294,7 @@ jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 
 void notifyOnce (char *msg, char *msgId)
 /* Like notify(), but for a message that only makes sense on this page, e.g. after a session was
- * loaded.  It has no "Don't show again" button, as it is gone on the next page anyway. */
+ * loaded.  It has no "Don't show again" button, as it is not shown again on the next page. */
 {
 jsInlineF("notifBoxOnce(\"%s\", \"%s\");\n", msg, msgId);
 }
@@ -12408,7 +12408,8 @@ else
             "been replaced by %s and cannot be brought back. If you want to keep a browser "
             "configuration, save it under My Data &gt; My Sessions before you open a session. ",
             what);
-dyStringPrintf(dy, "This note is shown only once; it is gone on the next page.");
+dyStringPrintf(dy, "To remove this note, click &quot;Close&quot; below, reload or navigate away from "
+        "this page.");
 notifyOnce(dy->string, "sessionLoad");
 dyStringFree(&dy);
 }
