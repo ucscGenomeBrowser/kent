@@ -33,6 +33,12 @@ static char *cases[] = {
 "db=hg38&ctfile_hg38=/somewhere/else",
 "db=hg38&&ctfile_hg38=/somewhere/else",
 "db=hg38&i&ctfile_hg38=/somewhere/else",
+/* The whole name is checked too, so a name that starts with one of these and has more after
+ * a separator is checked as well. */
+"db=hg38&customComposite-hg38&x=/somewhere/else",
+"db=hg38&customComposite-hg38%26x=/somewhere/else",
+"db=hg38&ctfile_hg38;x=/somewhere/else",
+"db=hg38&hubQuickLift-hg38&ctfile_hg38=/somewhere/else",
 /* A track hub may name a track group anything, so a cart variable name can hold an ampersand
  * of its own.  It arrives correctly, because a form field name is encoded in the request and
  * the CGI parser decodes it, and it has to keep working here. */
