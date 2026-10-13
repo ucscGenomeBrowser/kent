@@ -39,17 +39,47 @@ rowCount() {
   ${HGSQL} -N ${DB} -e "select count(*) from $1;"
 }
 
-# abort, leaving the live table untouched, if the newly loaded table has
-# fewer rows than the live table; the new content normally only grows
+# abort, leaving the live tables untouched, when the new table did not
+# load every row of its tab file, or is more than 1% smaller than the
+# live table.  The NCBI files do shrink a little now and then: a
+# suppressed assembly leaves the current file, a reinstated or removed
+# one leaves the historical file.  A bigger drop is more likely a
+# truncated download or a format change.
 checkRowCount() {
-  local table="$1"
-  local oldCount newCount
+  local table="$1" tabFile="$2"
+  local oldCount newCount tabCount
   oldCount=$(rowCount "${table}")
   newCount=$(rowCount "${table}New")
-  if [ "${newCount}" -lt "${oldCount}" ]; then
-    printf "ERROR: %s.%sNew has %s rows, fewer than %s in %s.%s, not swapping\n" \
+  tabCount=$(wc -l < "${tabFile}")
+  if [ "${newCount}" -ne "${tabCount}" ]; then
+    printf "ERROR: %s.%sNew has %s rows, its tab file has %s lines, not swapping\n" \
+      "${DB}" "${table}" "${newCount}" "${tabCount}" 1>&2
+    exit 255
+  fi
+  if [ $(( newCount * 100 )) -lt $(( oldCount * 99 )) ]; then
+    printf "ERROR: %s.%sNew has %s rows, more than 1%% fewer than %s in %s.%s, not swapping\n" \
       "${DB}" "${table}" "${newCount}" "${oldCount}" "${DB}" "${table}" 1>&2
     exit 255
+  fi
+  if [ "${newCount}" -lt "${oldCount}" ]; then
+    printf "# %s.%s: %s rows, %s fewer than before\n" \
+      "${DB}" "${table}" "${newCount}" $(( oldCount - newCount ))
+  fi
+}
+
+# the rows cleanTab() leaves out, not 38 fields; when NCBI adds or
+# removes a column every row is left out, stop before loading nothing
+checkTab() {
+  local source="$1" tabFile="$2"
+  local dropped
+  dropped=$(awk -F'\t' '!/^#/ && NF!=38' "${source}" | wc -l)
+  if [ ! -s "${tabFile}" ]; then
+    printf "ERROR: no rows with 38 fields in %s, did NCBI change the columns ?\n" \
+      "${source}" 1>&2
+    exit 255
+  fi
+  if [ "${dropped}" -gt 0 ]; then
+    printf "# %s: %s rows without 38 fields left out\n" "${source}" "${dropped}"
   fi
 }
 
@@ -63,8 +93,8 @@ loadAndSwap() {
   # first-ever run: give RENAME something to move aside
   ${HGSQL} ${DB} -e "CREATE TABLE IF NOT EXISTS ${cur}  LIKE ${cur}New;
                      CREATE TABLE IF NOT EXISTS ${hist} LIKE ${hist}New;"
-  checkRowCount "${cur}"
-  checkRowCount "${hist}"
+  checkRowCount "${cur}" "${curTab}"
+  checkRowCount "${hist}" "${histTab}"
   ${HGSQL} ${DB} -e "DROP TABLE IF EXISTS ${cur}Old, ${hist}Old;"
   ${HGSQL} ${DB} -e "RENAME TABLE ${cur}  TO ${cur}Old,  ${cur}New  TO ${cur},
                                   ${hist} TO ${hist}Old, ${hist}New TO ${hist};"
@@ -75,12 +105,16 @@ case $type in
   GCA)
     cleanTab "${REPORTS_DIR}/assembly_summary_genbank.txt"            > "${WORKDIR}/genbank.tab"
     cleanTab "${REPORTS_DIR}/assembly_summary_genbank_historical.txt" > "${WORKDIR}/genbankHistorical.tab"
+    checkTab "${REPORTS_DIR}/assembly_summary_genbank.txt" "${WORKDIR}/genbank.tab"
+    checkTab "${REPORTS_DIR}/assembly_summary_genbank_historical.txt" "${WORKDIR}/genbankHistorical.tab"
     loadAndSwap assemblySummaryGenbank           "${WORKDIR}/genbank.tab" \
                 assemblySummaryGenbankHistorical "${WORKDIR}/genbankHistorical.tab"
     ;;
   GCF)
     cleanTab "${REPORTS_DIR}/assembly_summary_refseq.txt"             > "${WORKDIR}/refseq.tab"
     cleanTab "${REPORTS_DIR}/assembly_summary_refseq_historical.txt"  > "${WORKDIR}/refseqHistorical.tab"
+    checkTab "${REPORTS_DIR}/assembly_summary_refseq.txt" "${WORKDIR}/refseq.tab"
+    checkTab "${REPORTS_DIR}/assembly_summary_refseq_historical.txt" "${WORKDIR}/refseqHistorical.tab"
     loadAndSwap assemblySummaryRefseq            "${WORKDIR}/refseq.tab" \
                 assemblySummaryRefseqHistorical  "${WORKDIR}/refseqHistorical.tab"
     ;;
