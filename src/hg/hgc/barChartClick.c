@@ -75,12 +75,16 @@ if (quickLiftFile)
     bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, start, end, &chainHash);
 else
     bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+// A lifted read can hold more than one copy of an item, through two chains or from the
+// padding around the window.  Prefer the copy that lifts to where it was clicked, and fall back
+// to the first copy with the name.
+struct barChartPlusRow *nameMatch = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char *rest = cloneString(bb->rest);
     char startBuf[16], endBuf[16];
     char *row[32];
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
+    int fieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
     struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
     if (barChart == NULL)
         continue;
@@ -93,25 +97,37 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         barChart->chromStart = lifted->chromStart;
         barChart->chromEnd = lifted->chromEnd;
         }
-    if (sameString(barChart->name, item))
+    if (!sameString(barChart->name, item))
+        continue;
+    boolean atClick = (quickLiftFile == NULL) ||
+                      (barChart->chromStart == start && barChart->chromEnd == end);
+    if (!atClick && nameMatch != NULL)
+        continue;
+    char *restFields[EXTRA_FIELDS_SIZE];
+    int restCount = chopTabs(rest, restFields);
+    int restBedFields = (6 + (hasOffsets ? 2 : 0));
+    *extraFieldsCountRet = 0;
+    if (restCount > restBedFields)
         {
-        char *restFields[EXTRA_FIELDS_SIZE];
-        int restCount = chopTabs(rest, restFields);
-        int restBedFields = (6 + (hasOffsets ? 2 : 0));
-        if (restCount > restBedFields)
-            {
-            int i;
-            for (i = 0; i < restCount - restBedFields; i++)
-                extraFieldsRet[i] = restFields[restBedFields + i];
-            *extraFieldsCountRet = (restCount - restBedFields);
-            }
-        AllocVar(ret);
-        ret->barChart = barChart;
-        ret->row = row;
-        return ret;
+        int i;
+        for (i = 0; i < restCount - restBedFields; i++)
+            extraFieldsRet[i] = restFields[restBedFields + i];
+        *extraFieldsCountRet = (restCount - restBedFields);
         }
+    // row and the start and end buffers are on the stack, so the caller gets a copy
+    char **savedRow;
+    AllocArray(savedRow, ArraySize(row));
+    int i;
+    for (i = 0; i < fieldCount; i++)
+        savedRow[i] = cloneString(row[i]);
+    AllocVar(ret);
+    ret->barChart = barChart;
+    ret->row = savedRow;
+    if (atClick)
+        return ret;
+    nameMatch = ret;
     }
-return NULL;
+return nameMatch;
 }
 
 static struct barChartPlusRow *getBarChartFromTable(struct trackDb *tdb, char *table,
@@ -529,10 +545,10 @@ char *extraFields[EXTRA_FIELDS_SIZE];
 int extraFieldCount = 0;
 int numColumns = 0;
 struct barChartPlusRow *bcRow = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
-struct barChartBed *chartItem = bcRow->barChart;
-char **row = bcRow->row;
+struct barChartBed *chartItem = (bcRow == NULL) ? NULL : bcRow->barChart;
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
+char **row = bcRow->row;
 
 genericHeader(tdb, item);
 
