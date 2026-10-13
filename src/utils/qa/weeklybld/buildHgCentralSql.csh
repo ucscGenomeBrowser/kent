@@ -17,7 +17,7 @@ cd ${BUILDHOME}/build-hgdownload/admin
 git pull origin master
 
 ### Creates these tables only
-set CREATE_ONLY="sessionDb userDb hubStatus gbMembers namedSessionDb apiKeys"
+set CREATE_ONLY="sessionDb userDb hubStatus gbMembers gbMemberIdentity namedSessionDb apiKeys"
 set CREATE_OR_LIST=`echo "${CREATE_ONLY}" | sed -e "s/ /|/g"`
 set IGNORE_TABLES=`hgsql -N -h genome-centdb -e "show tables;" hgcentral \
      | egrep -v -w "${CREATE_OR_LIST}" | xargs echo \
