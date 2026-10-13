@@ -12367,18 +12367,14 @@ if (isNotEmpty(description))
     dyStringPrintf(dy, "Session description: <i>%s%s</i> ",
             jsSafe(description), (truncated ? "..." : ""));
     }
-
-dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have been "
-        "replaced by this session and cannot be brought back. If you want to keep a browser "
-        "configuration, save it under My Data &gt; My Sessions before you open a session. ");
 }
 
-static void showSessionLoadNotice()
+static void showSessionLoadNotice(int recentViewCount)
 /* If a saved session has just been loaded into this cart, put a note at the top of the page
- * saying what was opened and that the previous view is gone.  Only on that one page: the marker
- * is taken out of the cart here, so the next page does not have it anymore.  Recommended track
- * sets are left alone: they merge into the cart instead of replacing it and have their own label
- * next to the assembly name. */
+ * saying what was opened and that the previous view was replaced.  If there are recent views to
+ * go back to, link to them.  Only on that one page: the marker is taken out of the cart here,
+ * so the next page does not have it anymore.  Recommended track sets are left alone: they merge
+ * into the cart instead of replacing it and have their own label next to the assembly name. */
 {
 if (trackImgOnly || !cartVarExists(cart, hgsSessionJustLoaded))
     return;
@@ -12388,11 +12384,30 @@ if (!cfgOptionBooleanDefault("sessionLoadNotice", TRUE))
 
 char *sessionName = cartOptionalString(cart, hgsOtherUserSessionName);
 char *sessionOwner = cartOptionalString(cart, hgsOtherUserName);
-if (isEmpty(sessionName) || isEmpty(sessionOwner) || hasRecTrackSet(cart))
+if (hasRecTrackSet(cart))
+    return;
+// settings loaded from a file or URL have no name, cart.c only marks those if recent views are on
+boolean fromFile = isEmpty(sessionName) || isEmpty(sessionOwner);
+if (fromFile && !cartRecentSessionsEnabled())
     return;
 
 struct dyString *dy = dyStringNew(1024);
-sessionNoticeText(dy, sessionName, sessionOwner);
+if (fromFile)
+    dyStringPrintf(dy, "You have loaded browser settings from a file or a URL. ");
+else
+    sessionNoticeText(dy, sessionName, sessionOwner);
+
+char *what = fromFile ? "these settings" : "this session";
+if (recentViewCount > 0)
+    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
+            "been replaced by %s. To go back to them, open "
+            "<a href='#' id='recentViewsLink'>your recent browser views</a>, also under "
+            "My Data &gt; Recent Browser Views. ", what);
+else
+    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
+            "been replaced by %s and cannot be brought back. If you want to keep a browser "
+            "configuration, save it under My Data &gt; My Sessions before you open a session. ",
+            what);
 dyStringPrintf(dy, "This note is shown only once; it is gone on the next page.");
 notifyOnce(dy->string, "sessionLoad");
 dyStringFree(&dy);
@@ -12412,18 +12427,22 @@ return (isEmpty(cartOptionalString(cart, "pix")) &&
 
 extern boolean issueBotWarning;
 
-static void outputRecentSessionsData(struct cart *cart)
-/* After a session load, write the user's other recent sessions to the page
- * for the session load dialog. */
+static int outputRecentSessionsData(struct cart *cart)
+/* Write the user's other recent views to the page for the recent views dialog, when a session
+ * was just loaded or the My Data menu asked for the dialog.  Return how many there are. */
 {
-if (!cartRecentSessionsEnabled() || !cartUsualBoolean(cart, hgsDidSessionLoad, FALSE))
-    return;
-cartRemove(cart, hgsDidSessionLoad);
+if (!cartRecentSessionsEnabled())
+    return 0;
+boolean openDialog = cartUsualBoolean(cart, hgsShowRecentViews, FALSE);
+cartRemove(cart, hgsShowRecentViews);
+if (!openDialog && !cartVarExists(cart, hgsSessionJustLoaded))
+    return 0;
 
 struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
 char *currentId = cartSessionId(cart);
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = hConnectCart();
 struct jsonWrite *jw = jsonWriteNew();
+int count = 0;
 jsonWriteListStart(jw, NULL);
 for (struct slPair *el = recent; el != NULL; el = el->next)
     {
@@ -12434,21 +12453,29 @@ for (struct slPair *el = recent; el != NULL; el = el->next)
         continue;
     char *db = cartContentsVal(cdb->contents, "db");
     char *position = cartContentsVal(cdb->contents, "position");
+    // only set in a copy made just before a session load, "" if it was a file or URL
+    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "hgsid", el->name);
     jsonWriteString(jw, "db", db);
     jsonWriteString(jw, "position", position);
     jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
+    jsonWriteString(jw, "prevViewOf", prevViewOf);
     jsonWriteObjectEnd(jw);
     freeMem(db);
     freeMem(position);
+    freeMem(prevViewOf);
     cartDbFree(&cdb);
+    count++;
     }
 jsonWriteListEnd(jw);
 jsInlineF("var recentSessions = %s;\n", jw->dy->string);
+if (openDialog)
+    jsInline("$(function() { sessionLoadDialog.show(); });\n");
 jsonWriteFree(&jw);
-hDisconnectCentral(&conn);
+hDisconnectCart(&conn);
 slPairFreeValsAndList(&recent);
+return count;
 }
 
 void doMiddle(struct cart *theCart)
@@ -12794,9 +12821,10 @@ else
 jsInline(dy->string);
 dyStringFree(&dy);
 
-/* Output recent sessions data for session load dialog */
+/* Output recent views for the dialog, before the session load note that links to it */
+int recentViewCount = 0;
 if (!trackImgOnly)
-    outputRecentSessionsData(cart);
+    recentViewCount = outputRecentSessionsData(cart);
 
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
@@ -12811,7 +12839,7 @@ if (cartOptionalString(cart, "udcTimeout"))
     notify(buf, "udcTimeout");
     }
 
-showSessionLoadNotice();
+showSessionLoadNotice(recentViewCount);
 
 #ifdef DEBUG
 if (cdsQueryCache != NULL)

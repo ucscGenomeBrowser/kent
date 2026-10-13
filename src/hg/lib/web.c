@@ -1725,6 +1725,14 @@ if(scriptName)
     menuStr = replaceChars(menuStr, "<!-- SHARE_LINK -->", shareLi);
     }
 
+// My Data > Recent Browser Views: the views of this browser in the last days, see
+// cartUpdateRecentSession()
+if (cartRecentSessionsEnabled())
+    menuStr = replaceChars(menuStr, "<!-- RECENT_VIEWS_LINK -->",
+        "<li><a id='recentViewsMenuLink' title='Go back to a view you had in this web browser in "
+        "the last days, e.g. before you opened a session' "
+        "href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1'>Recent Browser Views</a></li>");
+
 if(scriptName)
     {  // Provide optional official mirror servers menu items
     char *geoMenu = geoMirrorMenu();
