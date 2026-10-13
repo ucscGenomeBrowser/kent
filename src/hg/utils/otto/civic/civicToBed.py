@@ -73,6 +73,7 @@ import os
 import ssl
 import subprocess
 from typing import Callable, Final, Generator, Sequence
+import urllib.parse
 import urllib.request
 
 import numpy as np
@@ -133,11 +134,12 @@ EVIDENCE_LEVEL_COLORS: Final = {
     "": "170,170,170",  # no evidence items
 }
 EVIDENCE_LEVEL_NAMES: Final = {
-    "A": "A, validated association",
-    "B": "B, clinical evidence",
-    "C": "C, case study",
-    "D": "D, preclinical evidence",
-    "E": "E, inferential association",
+    # no commas: these are the values of the evidence level filter
+    "A": "A: validated association",
+    "B": "B: clinical evidence",
+    "C": "C: case study",
+    "D": "D: preclinical evidence",
+    "E": "E: inferential association",
     "": "",
 }
 
@@ -291,6 +293,8 @@ def annotate_bed12(bed12df: pd.DataFrame, sourcedf: pd.DataFrame) -> pd.DataFram
             + level_html
         )
         .assign(evidence_level=level_names)
+        .assign(partner_pos="")
+        .assign(variant_type=np.where(sourcedf["feature_type"] == "Fusion", "Fusion", "Gene variant"))
     )
     ## These are includde sometimes for debugging purposes...
     # "variant_id": gdf.variant_id,
@@ -551,8 +555,7 @@ def transform_fusion_variants(
 
     # Each partner is drawn as the part of its transcript that is kept in the
     # fusion, colored by evidence level, with a decorator glyph on the breakpoint end.
-    vldfs = []
-    decorations = []
+    sides = []
     for tx_col, exon_col, is_5prime in [
         ("upstream_tx", "upstream_exon", True),
         ("downstream_tx", "downstream_exon", False),
@@ -585,14 +588,62 @@ def transform_fusion_variants(
             )
         variants = variants.iloc[kept_rows].reset_index(drop=True)
         vldf = annotate_bed12(pd.DataFrame(bed12), variants)
+        sides.append((is_5prime, variants, vldf, side_decorations))
+
+    add_partner_links(sides)
+
+    vldfs = []
+    decorations = []
+    for is_5prime, variants, vldf, side_decorations in sides:
         vldfs.append(vldf)
         # the glyph covers the end of the feature, so it gets the feature's mouseover
-        for dec, name, mouse_over in zip(side_decorations, vldf["name"], vldf["mouseOverHTML"]):
-            decorations.append(dec + [f"Breakpoint of: <b>{name}</b><br>{mouse_over}"])
+        for dec, mouse_over in zip(side_decorations, vldf["mouseOverHTML"]):
+            decorations.append(dec + ["Breakpoint of: " + mouse_over])
 
     # identical features (same name and coordinates) share one decoration
     dec_df = pd.DataFrame(decorations).drop_duplicates(subset=[12])
     return pd.concat(vldfs), dec_df
+
+
+def add_partner_links(sides: list) -> None:
+    """Link each fusion partner to the other partner of the same CIViC variant: fill the
+    partnerPos field, shown as "Fused to" on the details page, and put the same link at the
+    top of the mouseover. The link shows the partner and highlights it with hgFind.matches.
+    `sides` is a list of (is_5prime, variants, vldf, decorations), the rows of variants and
+    vldf correspond. The vldf in each entry is replaced."""
+    # variant ID -> 5' or 3' -> (chrom, start, end, name, gene)
+    features: dict = defaultdict(dict)
+    for is_5prime, variants, vldf, _ in sides:
+        gene_col = "5_prime_partner" if is_5prime else "3_prime_partner"
+        for vid, gene, chrom, start, end, name in zip(
+            variants["variant_id"], variants[gene_col], vldf["chrom"],
+            vldf["chromStart"], vldf["chromEnd"], vldf["name"]
+        ):
+            features[vid][is_5prime] = (chrom, int(start), int(end), name, gene)
+
+    for i, (is_5prime, variants, vldf, decs) in enumerate(sides):
+        side, partner_side = ("5'", "3'") if is_5prime else ("3'", "5'")
+        partner_pos = []
+        mouse_overs = []
+        for vid, name, mouse_over in zip(variants["variant_id"], vldf["name"], vldf["mouseOverHTML"]):
+            gene = features[vid][is_5prime][4]
+            head = f"<b>{name}</b>, {gene} part ({side} partner)"
+            partner = features[vid].get(not is_5prime)
+            if partner is None:
+                partner_pos.append("")
+                mouse_overs.append(f"{head}<br>{mouse_over}")
+                continue
+            p_chrom, p_start, p_end, p_name, p_gene = partner
+            query = "%s:%d-%d&hgFind.matches=%s" % (
+                p_chrom, p_start + 1, p_end, urllib.parse.quote(p_name, safe=""))
+            # no commas: hgc splits a urls field on them
+            text = "%s (%s partner) %s %.1f Mb" % (p_gene, partner_side, p_chrom, p_start / 1e6)
+            partner_pos.append(f"{query}|{text}")
+            link = '<a href="hgTracks?position=%s">Fused to: %s</a>' % (
+                query.replace("&", "&amp;"), text)
+            mouse_overs.append(f"{head}<br>{link}<br>{mouse_over}")
+        sides[i] = (is_5prime, variants,
+                    vldf.assign(partner_pos=partner_pos, mouseOverHTML=mouse_overs), decs)
 
 
 def write_df_to_bed(vldf: pd.DataFrame, outfn: str) -> None:
@@ -984,7 +1035,7 @@ def transform_dfs(dfs: dict[str, pd.DataFrame]) -> dict[str, str]:
         outbb[ref] = finalBigBed_tmpl.format(ref=ref)
         shell(f"cat {gbed} {fbed} | bedSort /dev/stdin {outbed}")
         shell(
-            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+9 -as=civic.as {outbed} {CHROM_SIZES[ref]} {outbb[ref]}"
+            f"{BED_TO_BIG_BED_CMD} -tab -type=bed12+11 -as=civic.as {outbed} {CHROM_SIZES[ref]} {outbb[ref]}"
         )
         decbed = decoration_beds[ref]
         decbb = f"civic.decorator.{ref}.bb"
