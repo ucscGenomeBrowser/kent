@@ -12,3 +12,4 @@ lowelab
 hprc2annot
 RCPediaVGP_v1
 T2TPrimates
+uniprot
