@@ -70,3 +70,12 @@ KAT6A p.533_495
 NP_000054.2:p.Met1Leu
 NP_000054.2:p.Gly500Arg
 NP_055615.8:p.Met1Leu
+
+# A bare codon number or range after an NP_ accession, "p" optional since a number after a
+# protein accession can only be a codon.  A deprecated version (NP_000005.2) goes through the
+# RefSeq Historical protein table.  refs #38285
+NP_000005.3 100
+NP_000005.3 p.100_110
+NP_000005.2 100
+NP_000005.2 p.100-110
+NP_000005.2:p.100

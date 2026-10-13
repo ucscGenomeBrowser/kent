@@ -15,7 +15,7 @@ altColor 100,50,0
 type bed 3
 sortOrder view=+
 otherDb hs1
-html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
+html miniMapChains
 
     track chainNetMiniMap2Hs1Viewchain
     shortLabel Chain
@@ -41,7 +41,7 @@ html html/GCA_020740595.1_mLemCat1.alt.miniMap2ChainNet
         longLabel Swapped from hs1 human (T2T CHM13v2.0/hs1) minimap2 Chained Alignments
         type bigChain hs1
         bigDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1Swap.bb
-        linkDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1LinkSwap.bb
+        linkDataUrl /gbdb/hg38/chainNet/hg38.chainMiniMap2Hs1SwapLink.bb
         priority 2
 
     track chainNetMiniMap2Hs1ViewLiftOver

@@ -1897,11 +1897,11 @@ errAbort("<div style='background:#003a72; padding:8px 24px'>"
         "<p>The genome assembly <b>%s</b> is not available on this Genome Browser.</p>"
         "<p>First, check the name for typing errors. UCSC assembly names look like "
         "<b>hg38</b> or <b>mm39</b>. NCBI assembly accessions look like "
-        "<b>GCA_000001405.15</b> or <b>GCF_000001405.40</b>, including the version "
+        "<b>GCA_000001405.29</b> or <b>GCF_000001405.40</b>, including the version "
         "number after the dot.</p>"
         "<p>If the name is correct, we may not have a browser for this assembly yet. "
         "You can ask us to make one:</p>"
-        "<ol><li><a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>Search for %s</a> "
+        "<ol><li><a href='https://genome.ucsc.edu/assemblySearch.html?q=%s|url|'>Search for %s</a> "
         "in the list of NCBI assemblies.</li>"
         "<li>Find the assembly in the results and click its <b>request</b> button.</li>"
         "<li>Enter your name and email address and submit the request.</li></ol>"
@@ -3933,8 +3933,10 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 static char *varOwner(struct hash *allNames, char *var)
 /* Return the track that var belongs to: the longest track name that is all of var
- * or is followed in var by a '.' or '_', or NULL if there is none. The longest, so
- * that the variables of track foo_1 do not belong to track foo. */
+ * or is followed in var by a '.', or NULL if there is none. A '_' is not a boundary:
+ * the cart is shared by all assemblies and allNames has only this one's tracks,
+ * so foo_V1, the visibility of a track in another assembly, would belong to foo.
+ * The '_' variables of a track (_sel, _imgOrd, _hideKids) are kept anyway. */
 {
 struct hashEl *hel = hashLookup(allNames, var);
 if (hel != NULL)
@@ -3944,7 +3946,7 @@ char *owner = NULL;
 char *s;
 for (s = buf + 1; *s != 0; s++)
     {
-    if (*s == '.' || *s == '_')
+    if (*s == '.')
         {
         char c = *s;
         *s = 0;
@@ -3958,22 +3960,23 @@ return owner;
 }
 
 static boolean isVisibilityVar(char *owner, char *var)
-/* Return TRUE if var is the visibility of track or view owner, its subtrack
- * checkbox ({track}_sel) or its image order ({track}_imgOrd). */
+/* Return TRUE if var is the visibility of track or view owner, its position in the
+ * track order ({track}.priority) or whether its options are expanded ({track}.showCfg). */
 {
 if (sameString(var, owner))
     return TRUE;
 char *suffix = var + strlen(owner);
-return sameString(suffix, "_sel") || sameString(suffix, "_imgOrd");
+return sameString(suffix, ".priority") || sameString(suffix, ".showCfg");
 }
 
 void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb,
                                          struct trackDb *tdbList)
 /* Remove the settings (filters, colors, display options...) of this tdb, its
  * subtracks, views and superTrack children from the cart, but keep their
- * visibility: the track and view visibilities, the subtrack checkboxes and the
- * image order. tdbList has all tracks of the database, so that variables of other
- * tracks whose names start with this one's are left alone. */
+ * visibility: the track and view visibilities, the subtrack checkboxes, the
+ * image order, the track order and hidden or expanded children. tdbList has all
+ * tracks of the database, so that variables of other tracks whose names start
+ * with this one's are left alone. */
 {
 struct hash *names = hashNew(0);
 addTdbTreeNames(names, tdb);

@@ -1017,15 +1017,24 @@ char *url = getUrlSetting(tdb, urlSetting);
 if (url==NULL || isEmpty(url))
     return;
 
-// no link if the URL needs a $<field> that is empty for this item, it would lead nowhere
+// no link if every $<field> in the URL is empty for this item, it would lead nowhere.
+// Only if all of them: gnomAD urls end in &ignore=$<rsId>, which is often empty.
+boolean usesField = FALSE;
+boolean allEmpty = TRUE;
 struct slPair *field;
 for (field = fields; field != NULL; field = field->next)
     {
     char fieldVar[1024];
     safef(fieldVar, sizeof(fieldVar), "$<%s>", field->name);
-    if (isEmpty((char *)field->val) && stringIn(fieldVar, url))
-        return;
+    if (stringIn(fieldVar, url))
+        {
+        usesField = TRUE;
+        if (!isEmpty((char *)field->val))
+            allEmpty = FALSE;
+        }
     }
+if (usesField && allEmpty && !stringIn("$$", url))
+    return;
 
 char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, 
                             encode, fields);
@@ -1553,7 +1562,17 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
         *bar = 0;
         idForUrl = itemName;
         itemName = bar + 1;
+        char *bar2 = strchr(itemName, '|');  // "a|b|c" is shown as "b", like before
+        if (bar2 != NULL)
+            *bar2 = 0;
+        if (isEmpty(itemName))
+            itemName = idForUrl;
         encode = FALSE; // assume the link is already encoded
+        }
+    if (isEmpty(idForUrl)) // "|name": no ID to link to, so show only the name
+        {
+        printf("%s", hubEncode(tdb, itemName));
+        continue;
         }
     if (startsWith("http", itemName)) // the ID may be a full URL already, encoding would destroy it
         encode = FALSE;

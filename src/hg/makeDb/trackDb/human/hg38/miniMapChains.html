@@ -1,0 +1,254 @@
+<h2>Description</h2>
+<p>
+These tracks show regions of this <em>target</em> genome
+(Human - Dec. 2013 (GRCh38/hg38) - GRCh38 Genome Reference Consortium Human Reference 38 (GCA_000001405.15)) that have alignments to other
+<em>query</em> genome assemblies, aligned with <em>lastz</em> or <em>minimap2</em>.
+The alignable parts are shown with thick blocks that look like exons.
+Non-alignable parts between these are shown like introns.
+</p>
+
+<p>
+<em>Query</em> genome assemblies aligned to this <em>target</em> genome assembly:
+<ul>
+<li><a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a> Human Jan. 2022 (T2T CHM13v2.0/hs1) Telomere to telomere (T2T) assembly of haploid CHM13 + chrY (GCA_009914755.4) - lastz, lastz (swap), minimap2 (swap), minimap2</li>
+</ul>
+</p>
+<p>
+The <em>minimap2</em> alignments are intended for pairs of very similar
+same-species/same-individual assemblies, for example the haplotypes of
+a diploid assembly, or closely related strain assemblies, where
+minimap2's splice-free asm5/asm10/asm20 presets do a better job with the
+larger indels and structural differences seen between such assemblies
+than lastz's general-purpose scoring does.
+</p>
+<h3>Alignment coverage</h3>
+<table border='1'>
+<caption>percent of the <em>target</em> genome covered by each type of chain,<br>except <b>quickLift</b>: percent of the <em>query</em> genome covered by the quickLift chain</caption>
+<thead style='position:sticky; top:0; background-color: white;'><tr>
+<th>common<br>name</th><th>assembly</th><th>method</th><th>chains</th><th>syntenic</th><th>reciprocal<br>best</th><th>lift<br>over</th><th>quickLift<br>(% of query)</th>
+</tr></thead><tbody>
+<tr><td>Human</td><td><a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a></td><td>lastz</td><td style='text-align:right;'>92.821</td><td style='text-align:right;'>92.734</td><td style='text-align:right;'>87.633</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>92.035</td></tr>
+<tr><td>Human</td><td><a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a></td><td>lastz (swap)</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>92.857</td><td style='text-align:right;'>92.063</td></tr>
+<tr><td>Human</td><td><a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a></td><td>minimap2 (swap)</td><td style='text-align:right;'>94.375</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>94.372</td><td style='text-align:right;'>92.895</td></tr>
+<tr><td>Human</td><td><a href='https://genome.ucsc.edu/cgi-bin/hgTracks?db=hs1' target=_blank>hs1</a></td><td>minimap2</td><td style='text-align:right;'>92.241</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>&nbsp;</td><td style='text-align:right;'>92.239</td><td style='text-align:right;'>93.016</td></tr>
+</tbody></table>
+<h3>Chain Track</h3>
+<p>
+The chain tracks show alignments of the <em>query</em> genome assemblies to the
+<em>target</em> genome using a gap scoring system that allows longer gaps
+than traditional affine gap scoring systems. It can also tolerate gaps in both
+<em>query</em> and <em>target</em> genomes simultaneously. These
+&quot;double-sided&quot; gaps can be caused by local inversions and
+overlapping deletions in both species.
+</p>
+<p>
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.
+Single lines indicate gaps that are largely due to a deletion in the
+<em>query</em> assembly or an insertion in the <em>target</em>
+assembly.  Double lines represent more complex gaps that involve substantial
+sequence in both species. This may result from inversions, overlapping
+deletions, an abundance of local mutation, or an unsequenced gap in one
+species.  In cases where multiple chains align over a particular region of
+the <em>target</em> genome, the chains with single-lined gaps are often
+due to processed pseudogenes, while chains with double-lined gaps are more
+often due to paralogs and unprocessed pseudogenes.</p>
+<p>
+In the &quot;pack&quot; and &quot;full&quot; display
+modes, the individual feature names indicate the chromosome, strand, and
+location (in thousands) of the match for each matching alignment.</p>
+<p>
+The types of chains measured in the table above:
+<ul>
+<li><b>Chains</b> - The first level of chain track showing all potential chains.
+  The other chain types are derived from this chain data.</li>
+<li><b>Syntenic</b> - Filtered first level chain showing the corresponding
+  regions between the two genomes in the alignment that have the same
+  order of blocks and direction in the alignment.</li>
+<li><b>Reciprocal best</b> - Filtered first level chain showing the
+  corresponding regions where the best target to query alignment,
+  and the best query to target alignment identify the same regions.</li>
+<li><b>Lift over</b> - Filtered first level chain selecting out the
+  best/longest syntenic regions used to translate coordinates from the
+  target genome to the query genome.</li>
+<li><b>quickLift</b> - The lift over chain swapped to the
+  <em>query</em> genome coordinates, used to display annotations
+  from the <em>target</em> genome on the <em>query</em> genome.
+  Its coverage is a percent of the <em>query</em> genome.</li>
+</ul>
+</p>
+<p>
+A <b>(swap)</b> alignment was made with the <em>query</em> as the
+target genome, and then swapped to this <em>target</em> genome coordinates.
+</p>
+<h3>Net Track</h3>
+<p>
+The <em>lastz</em> alignments also have a net track, which shows the best
+<em>query</em> chain for every part of the <em>target</em> genome.
+</p>
+<h2>Display Conventions and Configuration</h2>
+<h3>Chain Track</h3>
+<p>By default, the chains to chromosome-based assemblies are colored
+based on which chromosome they map to in the aligning organism. To turn
+off the coloring, check the &quot;off&quot; button next to: Color
+track based on chromosome.</p>
+<p>
+To display only the chains of one chromosome in the aligning
+organism, enter the name of that chromosome (e.g. chr4) in box next to:
+Filter by chromosome.</p>
+<h3>Net Track</h3>
+<p>
+In full display mode, the top-level (level 1)
+chains are the largest, highest-scoring chains that
+span this region.  In many cases gaps exist in the
+top-level chain.  When possible, these are filled in by
+other chains that are displayed at level 2.  The gaps in
+level 2 chains may be filled by level 3 chains and so
+forth.</p>
+<p>
+Individual items in the display are categorized as one of four types
+(other than gap):</p>
+<p><ul>
+<li><b>Top</b> - the best, longest match. Displayed on level 1.</li>
+<li><b>Syn</b> - line-ups on the same chromosome as the gap in the level above
+it.</li>
+<li><b>Inv</b> - a line-up on the same chromosome as the gap above it, but in
+the opposite orientation.</li>
+<li><b>NonSyn</b> - a match to a chromosome different from the gap in the
+level above.</li>
+</ul></p>
+<h2>Methods</h2>
+<h3>lastz alignments</h3>
+<p>
+The <em>query</em> genome was aligned to the <em>target</em> genome with
+<em>lastz</em>.  The resulting alignments were converted into PSL format and
+fed into <em>axtChain</em>, which organizes all
+alignments between a single <em>query</em> chromosome and a single
+<em>target</em> chromosome into a group and creates a kd-tree out
+of the gapless subsections (blocks) of the alignments. A dynamic program
+was then run over the kd-trees to find the maximally scoring chains of these
+blocks.
+</p>
+<p>
+The chains were sorted with the highest-scoring chains in the genome ranked
+first. The program <em>chainNet</em> was then used to place the chains one at
+a time, trimming them as necessary to fit into sections not already covered by
+a higher-scoring chain.  During this process, a natural hierarchy emerged in
+which a chain that filled a gap in a higher-scoring chain was placed underneath
+that chain. The program <em>netSyntenic</em> was used to fill in information
+about the relationship between higher- and lower-level chains, such as whether
+a lower-level chain was syntenic or inverted relative to the higher-level chain.
+The program <em>netClass</em> was then used to fill in how much of the gaps and
+chains contained <em>N</em>s (sequencing gaps) in one or both species and how
+much was filled with transposons inserted before and after the two organisms
+diverged.  The syntenic and lift over chains were extracted from the net with
+<em>netChainSubset</em>.
+</p>
+<table border='1'>
+<caption>lastz and axtChain parameters, lastz settings not listed here are the lastz defaults</caption>
+<thead><tr><th>assembly</th><th>method</th><th>lastz<br>version</th><th>lastz settings</th><th>axtChain<br>minScore</th><th>axtChain<br>linearGap</th></tr></thead><tbody>
+<tr><td>hs1</td><td>lastz</td><td>1.04.03</td><td><code>T=2 O=600 E=150 M=254 K=4500 Y=15000 Q=human_chimp.v2.q</code></td><td style='text-align:right;'>5000</td><td>medium</td></tr>
+</tbody></table>
+<h3>minimap2 alignments</h3>
+<p>
+The <em>query</em> genome was aligned to the <em>target</em> genome with
+<em>minimap2</em>, one job per <em>target</em> sequence against the whole
+<em>query</em> genome.  The minimap2 alignment preset was selected from the
+<em>mash</em> distance between the two assemblies.  The resulting PAF
+alignments were converted into PSL format using the <em>pafToPsl</em>
+program, and fed into <em>axtChain</em> to construct the chains in the same
+way as for the lastz alignments.  The chain was placed with <em>chainNet</em>,
+and the program <em>netChainSubset</em> was used to extract the best/longest
+syntenic part of that net back out of the chain, giving the lift over chain.
+</p>
+<table border='1'>
+<caption>minimap2 version, <em>mash</em> distance between the target and query assemblies, the minimap2 alignment preset selected from that distance, and the minimap2 command used for each target sequence job</caption>
+<thead><tr><th>assembly</th><th>method</th><th>minimap2<br>version</th><th>mash<br>distance</th><th>preset</th><th>command</th></tr></thead><tbody>
+<tr><td>hs1</td><td>minimap2</td><td>2.31-r1302</td><td style='text-align:right;'>0.000984402</td><td>asm5</td><td><code>minimap2 -cx asm5 -N 5 -p 0.8 -t 8 target.fa query.fa &gt; out.paf</code></td></tr>
+</tbody></table>
+<h2>Data Access</h2>
+<p>
+The lift over chain files are available in the
+<a href='https://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/' target=_blank>liftOver</a> directory of our download
+server, for use with the <em>liftOver</em> command line tool, available from the
+<a href='https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads'
+target=_blank>utilities download directory</a>.
+The complete lastz chain and net files are in the <a href='https://hgdownload.soe.ucsc.edu/goldenPath/hg38/vsHs1/' target=_blank>vsHs1</a> download directory.
+</p>
+
+<h2>Credits</h2>
+<p>
+<em>lastz</em> was developed by Robert Harris, Pennsylvania State University.
+</p>
+<p>
+<em>minimap2</em> was developed by Heng Li.
+</p>
+<p>
+The <em>mash</em> program, used to estimate the divergence between the
+target and query assemblies and automatically select the minimap2
+alignment preset, was developed by Brian Ondov, Todd Treangen, and
+colleagues at the National Biodefense Analysis and Countermeasures
+Center and the University of Maryland.
+</p>
+<p>
+The <em>axtChain</em> program was developed at the University of California at
+Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.</p>
+<p>
+The browser display and database storage of the chains and nets were created
+by Robert Baertsch and Jim Kent.</p>
+<p>
+The <em>chainNet</em>, <em>netSyntenic</em>, and <em>netClass</em> programs
+were developed at the University of California
+Santa Cruz by Jim Kent.</p>
+
+<h2>References</h2>
+<p>
+Harris RS.
+<a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf"
+target="_blank">Improved pairwise alignment of genomic DNA</a>.
+<em>Ph.D. Thesis</em>. Pennsylvania State University, USA. 2007.
+</p>
+
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target=_blank>Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="https://genome.cshlp.org/content/13/1/103.abstract"
+target=_blank>Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
+<p>
+Li H.
+<a href="https://doi.org/10.1093/bioinformatics/bty191"
+target=_blank>Minimap2: pairwise alignment for nucleotide sequences</a>.
+<em>Bioinformatics</em>. 2018 Sep 15;34(18):3094-3100.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/29750242" target="_blank">29750242</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137996/" target="_blank">PMC6137996</a>
+</p>
+
+<p>
+Ondov BD, Treangen TJ, Melsted P, Mallonee AB, Bergman NH, Koren S, Phillippy AM.
+<a href="https://doi.org/10.1186/s13059-016-0997-x"
+target=_blank>Mash: fast genome and metagenome distance estimation using MinHash</a>.
+<em>Genome Biol</em>. 2016 Jun 20;17(1):132.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/27323842" target="_blank">27323842</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4915045/" target="_blank">PMC4915045</a>
+</p>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="https://www.pnas.org/content/100/20/11484"
+target=_blank>Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>

@@ -244,7 +244,7 @@ type bed 3
         noScoreFilter on
         exonNumbers off
         # itemRgb on
-        dataVersion release 3 (20260527)
+        dataVersion /gbdb/$D/bbi/varaicoVersion.txt
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
@@ -259,7 +259,7 @@ type bed 3
         noScoreFilter on
         exonNumbers off
         # itemRgb on
-        dataVersion release 3 (20260527)
+        dataVersion /gbdb/$D/bbi/varaicoVersion.txt
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect

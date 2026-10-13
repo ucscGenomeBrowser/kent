@@ -456,9 +456,12 @@ else
     return 0;
 }
 
-static struct hgFindSpec *loadFindSpecsTbl(char *db, char *tblSpec, char *where)
+static struct hgFindSpec *loadFindSpecsTbl(char *db, char *tblSpec, char *where,
+                                           struct hgFindSpec *earlierList)
 /* Load find specs for the given where and a given tblSpec. where can be
- * NULL. */
+ * NULL.  Skip specs already in earlierList, loaded from a table that comes before
+ * this one in db.trackDb, so that e.g. trackDb_$USER,trackDb does not run every
+ * search twice. */
 {
 struct hgFindSpec *hfsList = NULL;
 char *tbl;
@@ -473,8 +476,10 @@ char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgFindSpec *hfs = hgFindSpecLoad(row);
-    if (!haveSpecAlready(hfsList, hfs))
+    if (!haveSpecAlready(hfsList, hfs) && !haveSpecAlready(earlierList, hfs))
         slAddHead(&hfsList, hfs);
+    else
+        hgFindSpecFree(&hfs);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -489,7 +494,7 @@ struct slName *hgFindSpecList = hgFindSpecNameList(db);
 struct slName *oneSpec;
 
 for (oneSpec = hgFindSpecList; oneSpec != NULL; oneSpec = oneSpec->next)
-    hfsList = slCat(hfsList, loadFindSpecsTbl(db, oneSpec->name, where));
+    hfsList = slCat(hfsList, loadFindSpecsTbl(db, oneSpec->name, where, hfsList));
 slSort(&hfsList, hgFindSpecPriCmp);
 return(hfsList);
 }

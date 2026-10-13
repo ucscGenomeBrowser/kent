@@ -618,9 +618,10 @@ void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb,
                                          struct trackDb *tdbList);
 /* Remove the settings (filters, colors, display options...) of this tdb, its
  * subtracks, views and superTrack children from the cart, but keep their
- * visibility: the track and view visibilities, the subtrack checkboxes and the
- * image order. tdbList has all tracks of the database, so that variables of other
- * tracks whose names start with this one's are left alone. */
+ * visibility: the track and view visibilities, the subtrack checkboxes, the
+ * image order, the track order and hidden or expanded children. tdbList has all
+ * tracks of the database, so that variables of other tracks whose names start
+ * with this one's are left alone. */
 
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal);
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */

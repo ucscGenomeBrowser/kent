@@ -64,6 +64,41 @@ case " $* " in
     *) set -- "$@" --allowFailures=10 ;;
 esac
 
+# The GenArk assemblies are annotated as well as the ones with a database of their own, so
+# the list of them has to be current: an assembly released since the last copy was taken
+# would never be annotated, and nothing would say so. Fetch it fresh, and keep the copy we
+# have if the fetch fails rather than running against nothing. The copy under
+# /hive/data/genomes/asmHubs is not an alternative, it has not been rewritten since 2022.
+# refs #38300
+genArkList=/hive/data/outside/otto/uniprot/UCSC_GI.assemblyHubList.txt
+genArkUrl=https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt
+case " $* " in
+    *" --genArkList"*) ;;
+    *)
+    if curl -sSf --max-time 300 "$genArkUrl" -o "$genArkList.new" 2> "$genArkList.err" ; then
+        if [ -s "$genArkList.new" ] ; then
+            mv -f "$genArkList.new" "$genArkList"
+            echo "GenArk assembly list refreshed: `grep -vc '^#' $genArkList` assemblies"
+        else
+            echo "WARNING: the GenArk assembly list came back empty, keeping the copy from `date -r $genArkList '+%Y-%m-%d'`"
+            rm -f "$genArkList.new"
+        fi
+    else
+        echo "WARNING: could not fetch $genArkUrl, keeping the copy from `date -r $genArkList '+%Y-%m-%d'`"
+        cat "$genArkList.err"
+        rm -f "$genArkList.new"
+    fi
+    rm -f "$genArkList.err"
+
+    # The skip list lives here rather than in a developer's kent checkout: a cron running as
+    # otto must not depend on somebody's home directory still being there. Refresh it from
+    # the tree when hprc.orderList.tsv changes. The HPRC assemblies are covered by their own
+    # collection, so annotating them here would duplicate that work on hundreds of genomes.
+    set -- "$@" --genArkList="$genArkList" --minProteins=20000 \
+        --skipList=/hive/data/outside/otto/uniprot/hprc.orderList.tsv --taxonThreads=20
+    ;;
+esac
+
 echo "running: ./doUniprot run $*"
 ./doUniprot run "$@" > lastRun.log 2>&1
 exitCode=$?

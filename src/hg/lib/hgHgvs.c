@@ -446,6 +446,16 @@ if (pHgvs && *pHgvs)
 //                       4.......               optional range sep and end position
 //                          5.....              1-based end position
 
+// After a protein accession the "p" may be left out: a number after an NP_ can only be a codon.
+#define pseudoHgvsNPPosExp "^" versionedRefSeqNPExp maybePDot posIntRangeExp endOfTerm
+//      0..........................                             whole matching string
+//      1...............                                        acc & optional dot version
+//             2........                                        optional dot version
+//                       3.....                                 optional gene sym in ()s
+//                        4...                                  optional gene symbol
+//                                 5.....                       1-based start position
+//                                       6.......               optional range sep and end position
+//                                          7.....              1-based end position
 
 // Gene symbol, maybe punctuation, and a clear "c." position (and possibly change)
 #define pseudoHgvsGeneSymbolCDotPosExp "^" geneSymbolExp "[: ]+" hgvsCDotPosExp
@@ -1126,6 +1136,21 @@ else if (regexMatchSubstr(term, pseudoHgvsNMPDotPosExp, substrs, ArraySize(subst
         }
     freeMem(npAcc);
     freeMem(nmAcc);
+    }
+else if (regexMatchSubstr(term, pseudoHgvsNPPosExp, substrs, ArraySize(substrs)))
+    {
+    // User gave an NP_ accession and a bare codon number or range of codon numbers.
+    // A deprecated NP_ version still works: getProteinSeq falls back to RefSeq Historical.
+    int npAccIx = 1, npGeneSymbolIx = 4, startPosIx = 5, endPosIx = 7;
+    char *npAcc = regexSubstringClone(term, substrs[npAccIx]);
+    char *geneSymbol = regexSubstrMatched(substrs[npGeneSymbolIx]) ?
+        regexSubstringClone(term, substrs[npGeneSymbolIx]) : NULL;
+    int startPos = regexSubstringInt(term, substrs[startPosIx]);
+    int endPos = regexSubstrMatched(substrs[endPosIx]) ?
+        regexSubstringInt(term, substrs[endPosIx]) : 0;
+    hgvs = hgvsFromBareProtPos(db, npAcc, geneSymbol, startPos, endPos);
+    freeMem(geneSymbol);
+    freeMem(npAcc);
     }
 else if ((isSubst = regexMatchSubstr(term, pseudoHgvsGeneSymbolProtSubstExp,
                                      substrs, ArraySize(substrs))) ||

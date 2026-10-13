@@ -1,6 +1,6 @@
 kentSrc = ../../..
 A = ${DESTBINDIR}/pafToPsl
-PSLCHECK = pslCheck
+PSLCHECK = ${DESTBINDIR}/pslCheck
 include ../../../inc/common.mk
 
 test: hg38ChrMt indelEdges rm38480

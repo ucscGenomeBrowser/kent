@@ -50,7 +50,7 @@ def superStanza():
     here and in sourceSuperStanza once #38460 ships."""
     return stanza(0, [
         "track transcriptionStart",
-        "superTrack on show",
+        "superTrack on",
         "group rna",
         "shortLabel Transcription Initiation (TSS)",
         "longLabel Transcription initiation (TSS)",
@@ -77,7 +77,7 @@ def sourceSuperStanza(track, shortLabel, longLabel):
     ]
     nested = stanza(4, common[:2] + ["parent transcriptionStart"] + common[2:]
                     + ["release alpha"])
-    flat = stanza(0, common + ["release beta,public"])
+    flat = stanza(0, [common[0], "superTrack on"] + common[2:] + ["release beta,public"])
     return nested + flat
 
 def strandOverlay(db, composite, exp, dataType, subDir, fileTag, shortLabel, longLabel,
