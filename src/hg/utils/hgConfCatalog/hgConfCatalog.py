@@ -1847,6 +1847,19 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("mouseoverParentLabels", "flag", "hg/hgTracks/simpleTracks.c",
+          default="FALSE", ticket="38527",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/simpleTracks.c.  Came in at 31a1ceab960, "
+               "hgTracks: new hg.conf setting mouseoverParentLabels, off by "
+               "default.  When on, the drawn long label of a track and its "
+               "mouseovers (side label, button, center label) start with the "
+               "shortLabels of the containers the track sits in, e.g. "
+               "\"Transcription Initiation (TSS) > PRO-cap > A673 PRO-cap\", so "
+               "users can see where to find a subtrack in the track list. "
+               "Composite views are skipped.  refs #38527.  Needs a "
+               "description and a gate or knob call."),
         h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
           ticket="38510",
           note="Written down by --auto-register, not yet reviewed by a "
