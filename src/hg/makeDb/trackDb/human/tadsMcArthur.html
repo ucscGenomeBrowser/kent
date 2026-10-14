@@ -27,9 +27,10 @@ constraint. Boundaries seen in only one or a few maps are largely cell-type-spec
 Raising the filter yields a smaller, higher-confidence set of boundaries.
 </p>
 <p>
-<b>Default filter:</b> this track initially shows boundaries shared by at least
-<b>4 of the 37 maps</b>. Lower the <b>filter</b> (minimum maps) to 1 to display all
-boundaries.
+<b>Stability groups:</b> McArthur &amp; Capra divided boundaries into quartiles of stability
+by the number of maps sharing them: 1 map (cell-type unique), 2&ndash;4, 5&ndash;13, and 14 or
+more of the 37 maps. These groups can serve as a guide when setting the <b>filter</b>. By
+default all boundaries are shown.
 </p>
 <h2>Methods</h2>
 <p>
@@ -37,7 +38,11 @@ TAD boundaries from 37 re-processed cell-type maps were each represented as the 
 windows at both ends of every TAD. The genome was divided into 100 kb windows and, for each
 window, the number of maps with a boundary in it was counted (McArthur &amp; Capra, 2021).
 Data were obtained from the authors' repository on assembly hg19 and lifted to this assembly
-with the UCSC <b>liftOver</b> tool where needed.
+with the UCSC <b>liftOver</b> tool where needed. Lifted boundaries that came out more than
+twice their original size were also removed, because this happens when a boundary spans a gap
+or a rearranged region between the two assemblies.
+One boundary bin that runs past the end of chromosome 17 on hg19 was shortened to end at the
+chromosome end. Each item is named by its source position on hg19.
 </p>
 
 <h2>Data Access</h2>

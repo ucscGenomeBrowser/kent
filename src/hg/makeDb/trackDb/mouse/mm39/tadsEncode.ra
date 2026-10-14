@@ -47,7 +47,7 @@ html tadsEncode
     track tadsEncode_ENCSR028GRK
     parent tadsEncode on
     shortLabel Mouse ESC
-    longLabel ENCODE TADs in Mouse embryonic stem cell (ENCSR028GRK, lifted from mm10)
+    longLabel ENCODE TADs in mouse embryonic stem cell (ENCSR028GRK, lifted from mm10)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/mouseembryonicstemcell.bb
     color 118,158,101
@@ -107,7 +107,7 @@ html tadsEncode
     track tadsEncode_ENCSR357JYI
     parent tadsEncode off
     shortLabel Mouse trophoblast SC
-    longLabel ENCODE TADs in Mouse trophoblast stem cell (ENCSR357JYI, lifted from mm10)
+    longLabel ENCODE TADs in mouse trophoblast stem cell (ENCSR357JYI, lifted from mm10)
     type bigBed 4 + 5
     bigDataUrl /gbdb/mm39/bbi/tad/tadsEncode/mousetrophoblaststemcell.bb
     color 104,171,71
