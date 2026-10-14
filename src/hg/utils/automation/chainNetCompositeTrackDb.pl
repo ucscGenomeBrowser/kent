@@ -153,16 +153,21 @@ my @chainTypes = (
   [ "rBest",    "chainRBest",    "rbest",    "c02", "rbChain", "Reciprocal Best Chained Alignments" ],
   [ "liftOver", "chainLiftOver", "liftover", "c03", "loChain", "Lift Over Chained Alignments" ],
 );
-#   net name, chainType tag, short label, long label
+#   net name, chainType tag, short label, long label, view
 my @netTypes = (
-  [ "net",         "c04", "mafNet",      "Net Alignment" ],
-  [ "synNet",      "c05", "synNet",      "Syntenic Net Alignment" ],
-  [ "rbestNet",    "c06", "rbestNet",    "Reciprocal Best Net Alignment" ],
-  [ "liftOverNet", "c07", "liftOverNet", "Lift Over Net Alignment" ],
+  [ "net",         "c04", "mafNet",      "Net Alignment", "net" ],
+  [ "synNet",      "c05", "synNet",      "Syntenic Net Alignment", "synNet" ],
+  [ "rbestNet",    "c06", "rbestNet",    "Reciprocal Best Net Alignment", "rbestNet" ],
+  [ "liftOverNet", "c07", "liftOverNet", "Lift Over Net Alignment", "liftOverNet" ],
 );
-my %viewTitle = ( 'chain' => "Chains", 'synten' => "Syntenic",
-   'rbest' => "Reciprocal_best", 'liftover' => "Lift_over", 'net' => "Nets" );
-my @viewOrder = ( "chain", "synten", "rbest", "liftover", "net" );
+# subGroup1: one view for each type of chain and net
+my %viewTitle = ( 'chain' => "Chains", 'synten' => "Syntenic_chains",
+   'rbest' => "Reciprocal_best_chains", 'liftover' => "Lift_over_chains",
+   'net' => "Nets", 'synNet' => "Syntenic_nets",
+   'rbestNet' => "Reciprocal_best_nets", 'liftOverNet' => "Lift_over_nets" );
+my @viewOrder = ( "chain", "synten", "rbest", "liftover",
+                  "net", "synNet", "rbestNet", "liftOverNet" );
+my %netView = map { $_->[4] => 1 } @netTypes;	# the net views
 my %chainTypeTitle = ( 'c00' => "chain", 'c01' => "syntenic",
    'c02' => "reciprocal_best", 'c03' => "lift_over", 'c04' => "net",
    'c05' => "syntenic_net", 'c06' => "reciprocal_best_net",
@@ -302,7 +307,7 @@ foreach my $query (@queryList) {
 
     next if ($method ne "lastz");	# nets only from lastz builds
     foreach my $net (@netTypes) {
-      my ($netName, $cTag, $shortTag, $longTag) = @$net;
+      my ($netName, $cTag, $shortTag, $longTag, $netViewName) = @$net;
       my $found = "";
       my $swapSuffix = "";
       foreach my $suffix (@swapSuffixes) {
@@ -339,7 +344,7 @@ foreach my $query (@queryList) {
         next;
       }
       push @subtracks, {
-        'track' => "$netName$Q$swapSuffix", 'view' => "net",
+        'track' => "$netName$Q$swapSuffix", 'view' => $netViewName,
         'species' => $tag, 'chainType' => $cTag, 'method' => $mTag,
         'qId' => $qId,
         'shortLabel' => "$qShortLabel $methodLabel$shortTag",
@@ -464,26 +469,24 @@ if (length($cladeFile)) {
   $firstSub->{'on'} = 1;
 }
 
-# a subGroup with only one value would be a single useless checkbox
-my $useClade = (scalar(@cladeOrder) > 1) ? 1 : 0;
-my $useMethod = (scalar(keys %methodUsed) > 1) ? 1 : 0;
+# without a -cladeFile, every query is in one clade, the matrix has one column
+if (! scalar(@cladeOrder)) {
+  $cladeTag{"all"} = "g00";
+  $cladeTitle{"g00"} = "All";
+  push @cladeOrder, "g00";
+  $queryClade{$_} = "all" foreach (keys %speciesTag);
+}
+
+# subGroup1 the views, one for each type of chain and net, subGroup2 the
+# species, subGroup3 the clades, the matrix: clade x species, the same
+# arrangement as the older chainNetComposite.pl composites
 my @subGroups = (
   "view Views " . join(" ", map { "$_=$viewTitle{$_}" } grep { $viewUsed{$_} } @viewOrder),
   "species Species " . join(" ", map { "$_=$speciesTitle{$_}" } @speciesOrder),
-  "chainType Chain_type " . join(" ", map { "$_=$chainTypeTitle{$_}" } sort(grep { $chainTypeUsed{$_} } keys %chainTypeTitle)),
+  "clade Clade " . join(" ", map { "$_=$cladeTitle{$_}" } @cladeOrder),
 );
-my @dimensions = ("dimensionX=chainType", "dimensionY=species");
-my @sortOrder = ("species=+", "view=+", "chainType=+");
-my @dimLetters = ("A", "B");
-if ($useClade) {
-  push @subGroups, "clade Clade " . join(" ", map { "$_=$cladeTitle{$_}" } @cladeOrder);
-  push @dimensions, "dimension" . shift(@dimLetters) . "=clade";
-}
-if ($useMethod) {
-  push @subGroups, "method Method " . join(" ", map { "$_=$methodTitle{$_}" } sort(grep { $methodUsed{$_} } keys %methodTitle));
-  push @dimensions, "dimension" . shift(@dimLetters) . "=method";
-  push @sortOrder, "method=+";
-}
+my @dimensions = ("dimensionX=clade", "dimensionY=species");
+my @sortOrder = ("species=+", "view=+", "clade=+");
 
 printf "##############################################################################\n";
 printf "# %s - made by: chainNetCompositeTrackDb.pl -composite=%s -method=%s%s %s %s\n",
@@ -530,7 +533,7 @@ foreach my $view (@viewOrder) {
   my $viewVis = "hide";
   if ($view eq "chain") {
     $viewVis = "pack";
-  } elsif ($view eq "net" && scalar(grep { $_->{'view'} eq $view && $_->{'on'} } @subtracks)) {
+  } elsif ($netView{$view} && scalar(grep { $_->{'view'} eq $view && $_->{'on'} } @subtracks)) {
     $viewVis = "dense";
   }
   printf "\n    track %s\n", $viewTrack;
@@ -538,14 +541,12 @@ foreach my $view (@viewOrder) {
   printf "    view %s\n", $view;
   printf "    visibility %s\n", $viewVis;
   printf "    parent %s\n", $composite;
-  printf "    spectrum on\n" if ($view ne "net");
+  printf "    spectrum on\n" if (! $netView{$view});
   foreach my $sub (grep { $_->{'view'} eq $view } @subtracks) {
     printf "\n        track %s\n", $sub->{'track'};
     printf "        parent %s %s\n", $viewTrack, $sub->{'on'} ? "on" : "off";
-    printf "        subGroups view=%s species=%s chainType=%s%s%s\n",
-       $view, $sub->{'species'}, $sub->{'chainType'},
-       $useClade ? " clade=$cladeTag{$queryClade{$sub->{'qId'}}}" : "",
-       $useMethod ? " method=$sub->{'method'}" : "";
+    printf "        subGroups view=%s species=%s clade=%s\n",
+       $view, $sub->{'species'}, $cladeTag{$queryClade{$sub->{'qId'}}};
     printf "        shortLabel %s\n", $sub->{'shortLabel'};
     printf "        longLabel %s\n", $sub->{'longLabel'};
     printf "        type %s\n", $sub->{'type'};
