@@ -2988,6 +2988,11 @@ else
         wigTrack->ixColor = wigColor;
         wigTrack->ixAltColor = hvGfxFindRgb(hvg, &wigTrack->altColor);
         hvGfxSetClip(hvg, xOff, yOff, width, wigTotalHeight(wigTrack, scoreVis) - 1);
+        // drawItems draws what preDrawItems left in the track, and hgTracks only predraws the
+        // tracks in its own list, which these wiggles are not.  refs #38549
+        if (wigTrack->preDrawItems)
+            wigTrack->preDrawItems(wigTrack, seqStart, seqEnd, hvg, xOff, yOff,
+                                   width, font, color, scoreVis);
         wigTrack->drawItems(wigTrack, seqStart, seqEnd, hvg, xOff, yOff,
                              width, font, color, scoreVis);
         hvGfxUnclip(hvg);
