@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-This composite shows the original mouse <b>topologically associating domain (TAD)</b> calls
+This track collection shows the original mouse <b>topologically associating domain (TAD)</b> calls
 from Dixon et al. 2012, the study that defined TADs. Two cell types are shown: mouse
 embryonic stem cells (mESC) and mouse cortex. TADs are self-interacting genomic regions
 whose boundaries (frequently bound by CTCF and cohesin) insulate neighboring regions and
@@ -23,7 +23,9 @@ TAD domains were called by Dixon et al. 2012 with the directionality-index hidde
 model at 40 kb resolution (the published &quot;Combined&quot; replicate call set: 2,200 mESC
 and 1,518 cortex domains, mm9). UCSC lifted the mm9 coordinates to this assembly with
 <b>liftOver</b> (a small percentage of domains that did not map cleanly were dropped) and
-reformatted them to bigBed; no re-calling was performed.
+reformatted them to bigBed; no re-calling was performed. Lifted domains that came out more than
+twice their original size were also removed, because this happens when a domain spans a gap or
+a rearranged region between the two assemblies.
 </p>
 
 <h2>Data Access</h2>

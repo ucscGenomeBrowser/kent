@@ -39,10 +39,14 @@ static inline boolean inSummaryMode(struct cart *cart, struct trackDb *tdb, int 
 // (liftedSummariesToHash() in wigMafTrack.c).  Only a table can be read that way.  A bigMaf
 // summary is a file, not a table, so a lifted bigMaf reads the real blocks and lifts them.
 // With browser.quickLiftMafSummary off, every lifted maf reads the blocks.  refs #38513
+// So does one whose summary table is missing from the source assembly, as it can be on a
+// mirror; liftedSummariesToHash() would find nothing to draw.
 if (quickLiftIsLifted(tdb))
     {
+    char *summary = trackDbSetting(tdb, "summary");
     if (!quickLiftMafSummaryEnabled(cart) || startsWithWord("bigMaf", tdb->type) ||
-        (trackDbSetting(tdb, "summary") == NULL))
+        (summary == NULL) ||
+        !hTableExists(trackDbSetting(tdb, "quickLiftDb"), quickLiftSummaryTable(summary)))
         return FALSE;
     }
 
