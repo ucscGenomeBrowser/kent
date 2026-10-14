@@ -8,7 +8,9 @@ trackDb.txt, an mb2_<db>_metadata.tsv, and an mb2_<db>_colors.json.  Three edits
 are needed before those stanzas can live in our tree:
 
   1. bigDataUrl points at http://smithlab.usc.edu; we serve a mirror under
-     hgdownload.
+     hgdownload.  The original URL of every line we rewrite is recorded in
+     hgdownload_manifest so a separate tool can confirm the mirror actually has
+     the file -- we cannot rely on the contributor's own file list for that.
   2. metaDataUrl and colorSettingsUrl are bare relative filenames.  hgTrackUi
      whitelists exactly those two settings and compares a fetch request against
      the literal setting value (see fileUrlMatchesTrackSetting() in
@@ -30,9 +32,11 @@ it accordingly (a dated directory you keep alongside past versions), rather than
 treating it as scratch.
 
 A copyMethbaseFiles.sh script is generated into the destination directory to put
-everything in its final place, along with a gbdb_manifest listing every /gbdb
-path that script sets up, for pushing those files to production.  Nothing here
-edits any file outside the destination directory.
+everything in its final place, along with two manifests: gbdb_manifest lists
+every /gbdb path that script sets up, for pushing those files to production, and
+hgdownload_manifest lists the contributor URLs whose files have to be on
+hgdownload before the rewritten bigDataUrls resolve.  Nothing here edits any file
+outside the destination directory.
 
 Usage:
   processMethbaseHub [--max-ra-size MB] <sourceHubDir> <destDir>
@@ -59,7 +63,15 @@ RA_NAME = "methbase2.ra"
 # List of the /gbdb paths this delivery sets up, for pushing to production.  The
 # set of metadata and color files changes from one delivery to the next, so a
 # fixed list of filenames the way most otto tracks do it will not work here.
-MANIFEST_NAME = "gbdb_manifest"
+GBDB_MANIFEST_NAME = "gbdb_manifest"
+
+# List of the contributor URLs behind every bigDataUrl we rewrite, one per line.
+# The rewritten setting points at HUB_MIRROR_URL, so each of these files has to
+# have been mirrored there or the track is broken; a separate tool walks this
+# list to check.  The contributor publishes a file list of their own, but it has
+# not been kept current, which is why we build our own from the trackDb we were
+# actually handed.
+HGDOWNLOAD_MANIFEST_NAME = "hgdownload_manifest"
 
 # Settings whose value is a bare filename in the hub and must become a /gbdb path.
 FETCHED_SETTINGS = ("metaDataUrl", "colorSettingsUrl")
@@ -108,8 +120,12 @@ def splitStanzas(text):
     return stanzas
 
 
-def transformStanza(lines, db, counts):
+def transformStanza(lines, db, counts, sourceUrls):
     """Apply the three trackDb edits to one stanza.  Returns the new line list.
+
+    Appends the pre-rewrite URL of each bigDataUrl we redirect to sourceUrls.  A
+    line we could not rewrite is deliberately left out: it still points at the
+    contributor's own host, so nothing has to be mirrored for it.
 
     Everything not named here -- track names, shortLabel, longLabel, colors,
     priorities -- passes through untouched.
@@ -127,6 +143,10 @@ def transformStanza(lines, db, counts):
                 r"\1" + HUB_MIRROR_URL + "/" + SOURCE_HOST, line)
             if n:
                 counts["bigDataUrl"] += 1
+                # The value as the contributor wrote it, before the rewrite.
+                # A substitution happened, so BIG_DATA_URL_RE matched a URL
+                # here and there is certainly a second field to take.
+                sourceUrls.append(line.split(None, 1)[1].strip())
             else:
                 counts["unmatchedHost"] += 1
                 if len(counts["unmatchedSamples"]) < 5:
@@ -310,12 +330,14 @@ def processDb(srcDbDir, destDbDir, db, maxBytes):
     for setting in FETCHED_SETTINGS:
         counts[setting] = 0
 
-    transformed = [transformStanza(lines, db, counts) for lines in stanzas]
+    sourceUrls = []
+    transformed = [transformStanza(lines, db, counts, sourceUrls)
+                   for lines in stanzas]
     written = writeRaFiles(transformed, destDbDir, maxBytes)
 
     nbytes = sum(os.path.getsize(os.path.join(destDbDir, n)) for n in written)
     return {"db": db, "stanzas": len(stanzas), "files": written, "bytes": nbytes,
-            "support": support, "counts": counts}
+            "support": support, "counts": counts, "sourceUrls": sourceUrls}
 
 
 COPY_SCRIPT_TEMPLATE = r'''#!/bin/bash
@@ -489,8 +511,15 @@ $here.  That directory needs to stay where it is; removing it would
 break the tracks.
 
 Those $GBDB_ROOT files still need to go out to production.  They are listed one
-per line in $here/%(manifestName)s.  They are symlinks, so
+per line in $here/%(gbdbManifestName)s.  They are symlinks, so
 whatever pushes them has to follow the link rather than copy it.
+
+Check as well that the bigData files are on hgdownload.  Every track's
+bigDataUrl was rewritten to point under %(hubMirrorUrl)s, and the
+contributor URLs they came from are listed one per line in
+$here/%(hgdownloadManifestName)s.  Any of those that has not been
+mirrored is a broken track, so confirm the whole list is there before these
+stanzas reach production.
 "
 if [ -n "$newDbs" ]; then
     mailBody="$mailBody
@@ -519,14 +548,15 @@ fi
 '''
 
 
-def writeManifest(destDir, entries):
-    """Write the list of /gbdb paths copyMethbaseFiles.sh will create links at.
+def writeManifest(destDir, name, entries):
+    """Write one entry per line to destDir/name, so it can be fed to a tool.
 
-    One path per line, so it can be fed straight to whatever pushes files out to
-    production.  Note these are symlinks into destDir, so the push has to follow
-    them rather than copy the links themselves.
+    Used for both gbdb_manifest (the /gbdb paths copyMethbaseFiles.sh creates
+    links at -- symlinks into destDir, so whatever pushes them to production has
+    to follow them rather than copy the links themselves) and
+    hgdownload_manifest (the contributor URLs to be mirrored).
     """
-    path = os.path.join(destDir, MANIFEST_NAME)
+    path = os.path.join(destDir, name)
     with open(path, "w") as fh:
         for entry in entries:
             fh.write("%s\n" % entry)
@@ -536,10 +566,13 @@ def writeManifest(destDir, entries):
 def writeCopyScript(destDir, dbs):
     path = os.path.join(destDir, "copyMethbaseFiles.sh")
     with open(path, "w") as fh:
-        fh.write(COPY_SCRIPT_TEMPLATE % {"dbList": " ".join(dbs),
-                                         "gbdbRoot": GBDB_ROOT,
-                                         "gbdbSubdir": GBDB_SUBDIR,
-                                         "manifestName": MANIFEST_NAME})
+        fh.write(COPY_SCRIPT_TEMPLATE % {
+            "dbList": " ".join(dbs),
+            "gbdbRoot": GBDB_ROOT,
+            "gbdbSubdir": GBDB_SUBDIR,
+            "gbdbManifestName": GBDB_MANIFEST_NAME,
+            "hgdownloadManifestName": HGDOWNLOAD_MANIFEST_NAME,
+            "hubMirrorUrl": HUB_MIRROR_URL})
     os.chmod(path, os.stat(path).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     return path
 
@@ -584,12 +617,24 @@ def main():
 
     totalUnmatched = 0
     unmatchedSamples = []
-    manifest = []
+    gbdbManifest = []
+    # A file shared between two assemblies would otherwise be fetched twice.
+    # Dedupe rather than sort, so the manifest stays in trackDb order and two
+    # runs of the same delivery produce identical files.
+    hgdownloadManifest = []
+    seenUrls = set()
+    duplicateUrls = 0
     for db in dbs:
         summary = processDb(os.path.join(args.sourceDir, db),
                             os.path.join(args.destDir, db), db, maxBytes)
         for name in summary["support"]:
-            manifest.append("%s/%s" % (gbdbDir(db), name))
+            gbdbManifest.append("%s/%s" % (gbdbDir(db), name))
+        for url in summary["sourceUrls"]:
+            if url in seenUrls:
+                duplicateUrls += 1
+                continue
+            seenUrls.add(url)
+            hgdownloadManifest.append(url)
         counts = summary["counts"]
         totalUnmatched += counts["unmatchedHost"]
         for sample in counts["unmatchedSamples"]:
@@ -600,13 +645,21 @@ def main():
                  len(summary["files"]), " ".join(summary["files"])))
 
     scriptPath = writeCopyScript(args.destDir, dbs)
-    manifestPath = writeManifest(args.destDir, manifest)
+    gbdbPath = writeManifest(args.destDir, GBDB_MANIFEST_NAME, gbdbManifest)
+    hgdownloadPath = writeManifest(args.destDir, HGDOWNLOAD_MANIFEST_NAME,
+                                   hgdownloadManifest)
 
     print()
     print("%d assemblies written to %s" % (len(dbs), os.path.abspath(args.destDir)))
     print("copy script: %s" % os.path.abspath(scriptPath))
     print("gbdb manifest: %s (%d file(s) to push to production)"
-          % (os.path.abspath(manifestPath), len(manifest)))
+          % (os.path.abspath(gbdbPath), len(gbdbManifest)))
+    print("hgdownload manifest: %s (%d URL(s)%s that must be mirrored under %s)"
+          % (os.path.abspath(hgdownloadPath), len(hgdownloadManifest),
+             ", %d duplicate(s) dropped" % duplicateUrls if duplicateUrls else "",
+             HUB_MIRROR_URL))
+    print("Those files have to be on hgdownload before these .ra files go out;")
+    print("the rewritten bigDataUrl settings point at them.")
     print("Keep this directory: %s/<db>/%s/ will link to the .tsv and .json files"
           % (GBDB_ROOT, GBDB_SUBDIR))
     print("in it, so moving or deleting it breaks the tracks.")
