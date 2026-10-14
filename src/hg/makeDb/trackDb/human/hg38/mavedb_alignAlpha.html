@@ -1,0 +1,89 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=mavedb">MaveDB</a> track collection.
+It shows where the sequence each MaveDB experiment tested (its "target") lies on the genome:
+a protein, a coding DNA sequence, or a promoter, enhancer or minigene. Only targets of score
+sets shown in the <a href="hgTrackUi?db=$db&amp;g=mavedb_maps">MaveDB Heatmaps</a> track are
+included, and score sets that describe their variants directly on a reference transcript have
+no target sequence to show.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+There are two subtracks, one for DNA targets and one for protein targets, each set to appear
+only where it has an alignment in view. DNA alignments carry their sequence, so bases that
+differ from the genome are highlighted; many coding targets are codon optimized for the
+assay, and those differences are real, not alignment errors. Protein alignments are drawn
+codon by codon and carry no sequence, so they show where the protein lies but not where it
+differs.
+</p>
+
+<h2>Methods</h2>
+<p>
+Each target is placed at the locus where its score set's variants were placed, never by a
+genome-wide best match. A protein target, or a DNA target that encodes a protein, is matched
+to the reference protein its variants were placed on, or failing that to another RefSeq
+protein of the same gene at that locus (another isoform), by the same rule used for the
+variants: every amino acid must agree at one position, or all but one, or all but a few added
+at one end.
+Each amino acid of the target is then drawn on its codon in the genome, so the alignment
+follows the gene's exons. Other DNA targets, and coding targets that do not match, were aligned
+to the genome with BLAT (<tt>-stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0</tt>), and
+the best-scoring alignment that overlaps the score set's placed variants was kept. A target
+with no such alignment is not shown.
+</p>
+<p>
+The target sequences were downloaded with the score sets from the MaveDB API
+(<tt>https://api.mavedb.org/api/v1</tt>, documented at <a href="https://api.mavedb.org/docs" target="_blank">api.mavedb.org/docs</a>).
+The steps are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/maveDB.txt"
+target="_blank">makeDoc file</a> and the scripts in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/mavedb"
+target="_blank">MaveDB update directory</a> of our source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>mavedb_align_dna</i> or
+track=<i>mavedb_align_aa</i>.
+</p>
+<p>
+For automated download and analysis, the alignments are stored in bigPsl files that can be
+downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/maveDB/" target="_blank">our
+download server</a>. The files are called <tt>mavedbAlignDna.bb</tt> and
+<tt>mavedbAlignAa.bb</tt>. Individual regions or the whole files can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
+can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/maveDB/mavedbAlignAa.bb -chrom=chr17 -start=7660000 -end=7690000 stdout</tt>
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Arbesfeld JA, Da EY, Stevenson JS, Kuzma K, Paul A, Farris T, Capodanno BJ, Grindstaff SB, Riehle K,
+Saraiva-Agostinho N <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">
+Mapping MAVE data for use in human genomics applications</a>.
+<em>Genome Biol</em>. 2025 Jun 25;26(1):179.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">40563119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12188674/" target="_blank">PMC12188674</a>
+</p>
+
+<p>
+Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff
+SB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">
+MaveDB 2024: a curated community database with over seven million variant effects from multiplexed
+functional assays</a>.
+<em>Genome Biol</em>. 2025 Jan 21;26(1):13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">39838450</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11753097/" target="_blank">PMC11753097</a>
+</p>
+
