@@ -20,7 +20,9 @@ Domains were identified with a directionality-index hidden Markov model on 40 kb
 contact matrices (Dixon <em>et al.</em>, 2012). The published combined-replicate domain
 calls (Supplementary Table S3) were obtained for hESC and IMR90, originally on assembly
 hg18/NCBI36, and lifted to this assembly with the UCSC <b>liftOver</b> tool; a small
-fraction of domains that did not map cleanly were dropped.
+fraction of domains that did not map cleanly were dropped. Lifted domains that came out more
+than twice their original size were also removed, because this happens when a domain spans a
+gap or a rearranged region between the two assemblies.
 </p>
 
 <h2>Data Access</h2>

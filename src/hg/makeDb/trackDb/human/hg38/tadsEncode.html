@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-This composite shows <b>TAD domains</b> (&quot;contact domains&quot;) from ENCODE for
+This track collection shows <b>TAD domains</b> (&quot;contact domains&quot;) from ENCODE for
 <b>117 human biosamples</b> on hg38. For 112 biosamples, the domains were called by the
 ENCODE uniform Hi-C pipeline with the Arrowhead algorithm (Juicer). The other 5 come from a
 different ENCODE pipeline (see <b>Calls</b> below). Contact domains are regions that
@@ -20,7 +20,9 @@ the faceted selector. The complete set is available at the
 <p>
 Subtracks are <b>colored by organ</b>. Mousing over a domain shows the biosample and the
 Arrowhead corner score (the likelihood that the spot is a contact-domain corner). The
-details page also reports Arrowhead's upper/lower variance and sign scores. The Arrowhead
+details page also reports Arrowhead's upper/lower variance and sign scores, rounded to
+three decimal places. For A549, ENCODE provides only the corner score, so the other scores
+are not shown. The Arrowhead
 calls use a different algorithm and a finer resolution (5 kb) than the other TAD tracks,
 produce smaller domains, and are not directly comparable to them.
 </p>
@@ -36,7 +38,7 @@ distinguishes the 112 biosamples with native hg38 Arrowhead calls
 SJCRH30, SK-N-MC) for which ENCODE provides only domains lifted from hg19
 (&quot;Lifted from hg19&quot;). These 5 were produced by a different ENCODE pipeline (Dekker
 lab, on hg19) and lifted to hg38. Their domains do not overlap each other, are much larger
-(median about 760 kb), and carry no Arrowhead scores.
+(median about 760 kb), and carry no Arrowhead scores, so no scores are shown for them.
 </p>
 <h2>Methods</h2>
 <p>

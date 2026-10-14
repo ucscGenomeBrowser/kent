@@ -23,6 +23,7 @@ html tadsEncode
     color 130,163,45
     visibility dense
     mouseOver <b>Biosample:</b> A549<br><b>Arrowhead corner score:</b> $cornerScore
+    skipFields uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR165UJN
     parent tadsEncode on
@@ -743,6 +744,7 @@ html tadsEncode
     color 140,140,140
     visibility dense
     mouseOver <b>Biosample:</b> LNCaP clone FGC<br>TAD lifted from hg19 (no Arrowhead score)
+    skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR720WEB
     parent tadsEncode off
@@ -863,6 +865,7 @@ html tadsEncode
     color 130,163,45
     visibility dense
     mouseOver <b>Biosample:</b> NCI-H460<br>TAD lifted from hg19 (no Arrowhead score)
+    skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR088BOG
     parent tadsEncode off
@@ -1013,6 +1016,7 @@ html tadsEncode
     color 127,133,209
     visibility dense
     mouseOver <b>Biosample:</b> RPMI7951<br>TAD lifted from hg19 (no Arrowhead score)
+    skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR119TFS
     parent tadsEncode off
@@ -1043,6 +1047,7 @@ html tadsEncode
     color 137,135,170
     visibility dense
     mouseOver <b>Biosample:</b> SJCRH30<br>TAD lifted from hg19 (no Arrowhead score)
+    skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR312KHQ
     parent tadsEncode off
@@ -1073,6 +1078,7 @@ html tadsEncode
     color 155,155,18
     visibility dense
     mouseOver <b>Biosample:</b> SK-N-MC<br>TAD lifted from hg19 (no Arrowhead score)
+    skipFields cornerScore,uVarScore,lVarScore,upSign,loSign
 
     track tadsEncode_ENCSR692QWS
     parent tadsEncode off

@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-This composite shows <b>TAD domains</b> from the
+This track collection shows <b>TAD domains</b> from the
 <a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>
 (3DGB) 2.0, across <b>30 mouse Hi-C and Micro-C datasets</b>. Each subtrack is one 3DGB
 dataset, displayed exactly as called and published by 3DGB. They are browsable with a
@@ -30,7 +30,9 @@ were manually curated for the human datasets and are not provided here.)
 <p>
 TAD domains were called by the 3D Genome Browser pipeline and are displayed verbatim. UCSC
 performed only a format normalization (reshaping the published per-dataset BED-like file to
-a plain four-column bigBed) and, for mm39, a <b>liftOver</b> from mm10. No re-calling was
+a plain four-column bigBed) and, for mm39, a <b>liftOver</b> from mm10, removing lifted
+domains that came out more than twice their mm10 size (this happens when a domain spans a gap
+or a rearranged region between the two assemblies). No re-calling was
 performed, and the mm10 coordinates are unchanged from the 3DGB files. The dataset metadata
 used for the faceted selector was copied directly from the 3D Genome Browser.
 </p>

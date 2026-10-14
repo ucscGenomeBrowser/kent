@@ -182,17 +182,24 @@ HGDB_CONF=/cluster/home/otto/.hg.conf.beta
 
 MAILTO=cells@ucsc.edu
 # Cell Browser news sec update by Matt/Brittney Sept 2022
-0 0 * * 1-5 umask 002; ~bwick/miniconda3/bin/python3.8 ~bwick/cellBrowser/ucsc/updateNewsSec -r
+# updateNewsSec, tabulate_facets.pl and cbPingHidden run from an installed copy
+# (RM #38523). To change what runs: commit + push in cellBrowser, then run
+# "make install" in your cellBrowser checkout's ucsc/ directory. Never edit the
+# copies in /hive/data/inside/cells/scripts.
+0 0 * * 1-5 umask 002; /hive/data/inside/cells/scripts/env/bin/python3 /hive/data/inside/cells/scripts/updateNewsSec -r
+# Weekdays, mail cells@ if an installed copy differs from develop on GitHub or
+# was edited in place. Silent when in sync.
+30 1 * * 1-5 /hive/data/inside/cells/scripts/env/bin/python3 /hive/data/inside/cells/scripts/cbCheckInstalled
 
 # Update Cell Browser .json facets files using tabulate_facets.pl
-0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && ~bwick/cellBrowser/ucsc/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
+0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /hive/data/inside/cells/scripts/tabulate_facets.pl /usr/local/apache/htdocs-cells-beta/dataset.json
 0 0 * * 1-5 cd /usr/local/apache/htdocs-cells-submit/facets && /usr/local/apache/htdocs-cells-submit/facets/tsv_to_json.py 
  
 # Hidden-dataset reminders (RM #38246). Once a month, queue one draft email per
 # hidden dataset whose submitter has not been asked in a year, and mail the
 # report to cells@. Nothing reaches an author until a person reviews the queue
 # and runs "cbPingHidden send". Silent when nothing is due.
-0 8 1 * * umask 002; ~mspeir/cellBrowser/ucsc/cbPingHidden scan -q --mail-report cells@ucsc.edu
+0 8 1 * * umask 002; /hive/data/inside/cells/scripts/env/bin/python3 /hive/data/inside/cells/scripts/cbPingHidden scan -q --mail-report cells@ucsc.edu
 
 # cbAnnotServer: Cell Browser login/annotation API (RM #37492). Keeps gunicorn
 # (127.0.0.1:5051, Apache proxies /api to it) alive; restarts if down / on reboot.

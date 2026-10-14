@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-This composite shows <b>TAD boundaries</b> across 21 human samples (7 cell lines and 14
+This track collection shows <b>TAD boundaries</b> across 21 human samples (7 cell lines and 14
 primary tissues) from Schmitt <em>et al.</em>, 2016. A boundary is the insulating region
 that separates two adjacent topologically associating domains. These are
 <em>boundaries</em>, not domains; for domain intervals see the Dixon 2012 TADs track.
@@ -21,7 +21,9 @@ Boundaries were called with the insulation-score method at 40 kb resolution (1 M
 insulation square, 200 kb delta window) as described in Schmitt <em>et al.</em>, 2016
 (Supplementary Table S3). Per-sample boundary bins were obtained on assembly hg19; for
 this assembly they were used natively or lifted with the UCSC <b>liftOver</b> tool, with a
-small fraction of bins that did not map cleanly dropped.
+small fraction of bins that did not map cleanly dropped. Lifted bins that came out more than
+twice their original size were also removed, because this happens when a bin spans a gap or a
+rearranged region between the two assemblies.
 </p>
 
 <h2>Data Access</h2>

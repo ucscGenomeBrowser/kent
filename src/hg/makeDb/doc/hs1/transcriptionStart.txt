@@ -1,30 +1,20 @@
 # Transcription start sites: ProCapNet predictions, #35528, Claude
 Thu Sep 17 2026 (Claude/markd)
 
-# Layout: one superTrack per data source, each holding its multiWig overlays
-# directly, the way fantom5 does.  Not a composite: under a composite hgTrackUi
-# lists descendant leaves rather than containers, so an overlay gets no
-# configuration block of its own and hiding both strands of a cell line leaves an
-# empty row where the overlay was (#38441).  As a superTrack member each overlay
-# is a track in its own right, with a full configuration page, and hiding it
-# hides the whole overlay.  The cost is the subtrack matrix and the sample class
-# filter, neither of which a superTrack offers.
+# Layout: a transcriptionStart superTrack holding one traditional composite per
+# data source, each composite holding one multiWig overlay per cell line and the
+# two strands as the overlay's leaves.  One .ra file per top-level track.
 #
-# On alpha the two data-source superTracks sit inside a transcriptionStart
-# superTrack; on beta and public they stand on their own.  Nesting a superTrack
-# inside a superTrack needs the fix in #38460, which is on master but not in a
-# release, and these tracks are already released, so each source is written
-# twice with complementary release tags: the nested copy alpha, the flat copy
-# beta,public.  hgTrackDb takes the copy whose release matches and rejects two
-# whose releases overlap, so the tags have to stay complementary.  The public
-# build is byte-identical to what was released.  Drop the release tags and the
-# flat copies once #38460 ships.
+# Under a composite an overlay gets no configuration block of its own, and
+# deselecting both strands of a cell line leaves an empty row where the overlay
+# was, both because compositeUiSubtracks() lists descendant leaves and a
+# multiWig is not a leaf.  That is #38441, to be fixed in hgTrackUi.  An earlier
+# attempt made each data source a superTrack holding the overlays directly,
+# which avoided #38441 but cost the subtrack matrix and the sample class filter,
+# and needed the superTrack-in-superTrack fix of #38460 to nest in
+# transcriptionStart.  It was reverted.
 #
-# The alpha build here also needs hgTrackDb and trackDbToTxt in
-# /cluster/bin/x86_64 to carry the #38460 fix.  make alpha does not put anything
-# there: BINDIR defaults to ~/bin/$MACHTYPE, and that directory is updated by
-# the weekly utils build.  They were installed by hand on 2026-10-03 and the
-# next weekly build will overwrite them with whatever is in the branch then.
+# The whole set is alpha until #38441 is fixed, tagged on the include lines.
 
 # hs1 has the ProCapNet predictions only.  There is no PRO-cap experiment and no
 # sequence-contribution score set on this assembly.  See
@@ -89,17 +79,13 @@ bigWigInfo pred/K562.proCapNet.pos.bw | egrep 'basesCovered|mean'
 
 cd ~/kent/src/hg/makeDb/outside/proCapNet
 ./proCapNetTrackDb hs1 proCapNetExperiments.tsv \
-    ~/kent/src/hg/makeDb/trackDb/human/hs1/transcriptionStart.ra
+    ~/kent/src/hg/makeDb/trackDb/human/hs1
 
-# transcriptionStart.ra is generated; the include line in human/hs1/trackDb.ra
-# is added by hand, with no release tag:
-#   include transcriptionStart.ra
-#
-# The tag has to stay off the include line.  The script writes the release tags
-# per track instead: the container and the nested form of its members are alpha,
-# a flat unnested form of those members is beta and public.  An alpha tag on the
-# include line would gate the whole file and the beta,public stanzas would never
-# ship.
+# That writes transcriptionStart.ra and proCapNet.ra, one per top-level track;
+# hs1 has no encode4ProCap.  The include lines in human/hs1/trackDb.ra are added
+# by hand:
+#   include transcriptionStart.ra alpha
+#   include proCapNet.ra alpha
 
 # hs1 is a curated hub assembly, so the stanzas reach the browser through the
 # hub built under /gbdb/hs1/hubs/$USER by the trackDb make, and are visible only

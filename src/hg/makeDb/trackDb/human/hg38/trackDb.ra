@@ -922,7 +922,8 @@ include recount3.ra
 
 include long_read_transcripts.ra
 
-include mavedb.ra
+include mavedb.ra beta,public
+include mavedb.alpha.ra alpha
 
 include mavemd.ra alpha
 
@@ -948,7 +949,7 @@ track dnaMethylation override
 
 include methbase2.ra alpha
 
-include fiberSeq.ra alpha
+include fiberSeq.ra
 
 include imprinting.ra alpha
 # include hg38.GCF_040939455.1.chainNet.ra alpha
@@ -957,7 +958,9 @@ include hprcPclai.ra alpha
 
 include episignatures.ra alpha,beta
 
-include transcriptionStart.ra
+include transcriptionStart.ra alpha
+include encode4ProCap.ra alpha
+include proCapNet.ra alpha
 # include hg38.GCA_040939475.2.chainNet.ra alpha
 # include hg38.GCF_002880755.1.chainNet.ra alpha
 
