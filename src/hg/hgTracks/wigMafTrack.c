@@ -3056,7 +3056,13 @@ track->mapsSelf = TRUE;
 //track->canPack = TRUE;
 
 /* deal with conservation wiggle(s) */
-consWigList = wigMafWiggles(database, tdb);
+// A lifted wigMaf's wiggles are tables in the assembly it was lifted from.  With
+// browser.quickLiftWig off they cannot be lifted, and the table of the same name in this
+// assembly is not the right data, so make no wiggle.  refs #38520
+boolean lifted = quickLiftIsLifted(tdb);
+if (lifted && !quickLiftWigEnabled(cart))
+    return;
+consWigList = wigMafWiggles(lifted ? trackDbSetting(tdb, "quickLiftDb") : database, tdb);
 if (consWigList == NULL)
     return;
 
@@ -3082,6 +3088,12 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
         dyStringPrintf(wigType, "%s ", words[i]);
     wigTdb->type = cloneString(wigType->string);
     wigTdb->track = consWig->table;
+    if (lifted)
+        {
+        // give it the quickLift hub's prefix, so it cannot share a name with a native track
+        int prefixLen = hubConnectSkipHubPrefix(tdb->track) - tdb->track;
+        wigTdb->track = catTwoStrings(cloneStringZ(tdb->track, prefixLen), consWig->table);
+        }
     wigTdb->table= consWig->table;
 
     /* Tweak wiggle left labels: replace underscore with space and
