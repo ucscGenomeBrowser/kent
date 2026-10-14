@@ -14,7 +14,8 @@
 proof:
   - "assertion-only 2026-10-14 -- written from #38549"
   - "xfail 2026-10-14 -- fails on genome-test (hgTracks built 15:28, before d463d6f028d) and on hgwbeta (v504): color: nothing is drawn in multiz17way"
-  - "sandbox-ab 2026-10-14 -- passes on park 38520, port 48112 (worktree qlWigMaf38520 with the same change uncommitted), 0,10,100 at chr7:155287600"
+  - "sandbox-ab 2026-10-14 -- passes on park 38520, port 48112 (hgTracks with the change d463d6f028d made), 0,10,100 at chr7:155287600; fails on genome-test without it"
+  - "server-flip 2026-10-14 -- passed on genome-test once d463d6f028d was installed there (cgi-alpha, hgTracks 15:50), having failed there with the 15:28 build"
 
 target: genome-test
 db: hg18
