@@ -85,3 +85,12 @@ chr8	41932207	41932210	KAT6A p.2004	0	-
 chr6	31927752	31927755	NP_000054.2:p.Met1Leu	0	+
 chr6	31943457	31943460	NP_000054.2:p.Gly500Arg	0	+
 chr7	37342687	37342690	NP_055615.8:p.Met1Leu	0	-
+
+# A bare codon number or range after an NP_ accession, "p" optional since a number after a
+# protein accession can only be a codon.  A deprecated version (NP_000005.2) goes through the
+# RefSeq Historical protein table.  refs #38285
+chr12	9112506	9112509	NP_000005.3 100	0	-
+chr12	9112476	9112509	NP_000005.3 p.100_110	0	-
+chr12	9112506	9112509	NP_000005.2 100	0	-
+chr12	9112476	9112509	NP_000005.2 p.100-110	0	-
+chr12	9112506	9112509	NP_000005.2:p.100	0	-

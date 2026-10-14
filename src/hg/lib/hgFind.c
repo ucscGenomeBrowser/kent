@@ -2870,6 +2870,9 @@ struct dyString *clause = dyStringNew(0);
 struct searchCategory *categ;
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
+// a spec in more than one hgFindSpec table (e.g. hgFindSpec_$USER,hgFindSpec) is searched once,
+// the first table in db.trackDb order wins
+struct hash *seenSpecs = hashNew(0);
 struct slName *tbl, *tblList = hTrackDbList();
 for (tbl = tblList; tbl != NULL; tbl = tbl->next)
     {
@@ -2900,6 +2903,12 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             struct hgFindSpec *hfs = hgFindSpecLoad(row);
+            if (hashLookup(seenSpecs, hfs->searchName))
+                {
+                hgFindSpecFree(&hfs);
+                continue;
+                }
+            hashAdd(seenSpecs, hfs->searchName, NULL);
             if (hfs->shortCircuit)
                 slAddHead(&shortList, hfs);
             else
@@ -2908,6 +2917,7 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
         sqlFreeResult(&sr);
         }
     }
+hashFree(&seenSpecs);
 hFreeConn(&conn);
 dyStringFree(&clause);
 

@@ -792,6 +792,13 @@ for (;;)
 	}
     line = buf + strlen(gfSignature());
     command = nextWord(&line);
+    if (command == NULL)
+        {
+	warn("No command in query");
+	++warnCount;
+	close(connectionHandle);
+	continue;
+	}
     if (sameString("quit", command))
         {
 	if (canStop)

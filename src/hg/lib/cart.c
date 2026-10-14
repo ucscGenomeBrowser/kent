@@ -400,6 +400,7 @@ static char *cartVarNameToMatch(char *var)
  * settings out of the cart, with cartFindPrefix or startsWith.  A saved session written
  * before the CGI parsers were fixed can hold a name with a separator stuck to the front of
  * it, so match the same text those readers match on and the two cannot disagree.
+ * The caller checks the whole name as well, since other readers match on that.
  * refs #38185, #38335, #38343 */
 {
 char *last = NULL, *s;
@@ -411,13 +412,9 @@ if (last == NULL || last[1] == 0)
 return last+1;
 }
 
-static boolean cartValueIsAcceptable(char *var, char *val)
-/* Return TRUE unless var names a server-created file and val names something else.  An empty
- * value is fine; the CGIs treat it as "no file" and several saved sessions carry one. */
+static boolean cartValueIsAcceptableAs(char *match, char *var, char *val)
+/* Return TRUE unless match names a server-created file and val names something else. */
 {
-if (isEmpty(val))
-    return TRUE;
-char *match = cartVarNameToMatch(var);
 if (cartVarHoldsFileName(match))
     {
     if (isServerUserFilePath(val))
@@ -440,6 +437,19 @@ if (cartVarHoldsFileNamePair(match))
     return FALSE;
     }
 return TRUE;
+}
+
+static boolean cartValueIsAcceptable(char *var, char *val)
+/* Return TRUE unless var names a server-created file and val names something else.  An empty
+ * value is fine; the CGIs treat it as "no file" and several saved sessions carry one.  Both
+ * the whole name and the part cartVarNameToMatch picks out must pass. */
+{
+if (isEmpty(val))
+    return TRUE;
+if (!cartValueIsAcceptableAs(var, var, val))
+    return FALSE;
+char *match = cartVarNameToMatch(var);
+return match == var || cartValueIsAcceptableAs(match, var, val);
 }
 
 static void loadHash(struct hash *hash, char *contents)
