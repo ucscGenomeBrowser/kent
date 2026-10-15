@@ -752,6 +752,24 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     jsonWriteNumber(jw, "misMatch", psl->misMatch);
     jsonWriteNumber(jw, "gaps", psl->qNumInsert + psl->tNumInsert);
     jsonWriteNumber(jw, "blocks", psl->blockCount);
+    /* The PSL block lists, 0-based and comma-terminated exactly as in a .psl file, so that the
+     * "Download Table" file carries enough to rebuild the alignment.  tSize is needed for that on
+     * a minus-strand genome (translated searches). */
+    jsonWriteNumber(jw, "tSize", psl->tSize);
+    struct dyString *sizes = dyStringNew(0), *qStarts = dyStringNew(0), *tStarts = dyStringNew(0);
+    int b;
+    for (b = 0; b < psl->blockCount; ++b)
+        {
+        dyStringPrintf(sizes, "%u,", psl->blockSizes[b]);
+        dyStringPrintf(qStarts, "%u,", psl->qStarts[b]);
+        dyStringPrintf(tStarts, "%u,", psl->tStarts[b]);
+        }
+    jsonWriteString(jw, "blockSizes", sizes->string);
+    jsonWriteString(jw, "qStarts", qStarts->string);
+    jsonWriteString(jw, "tStarts", tStarts->string);
+    dyStringFree(&sizes);
+    dyStringFree(&qStarts);
+    dyStringFree(&tStarts);
     jsonWriteString(jw, "browserUrl", inTabUrl);
     jsonWriteString(jw, "newTabUrl", newTabUrl);
     if (pslName != NULL)
