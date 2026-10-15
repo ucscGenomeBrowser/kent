@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-This composite shows <b>TAD domains</b> (&quot;contact domains&quot;) called by the ENCODE
+This track collection shows <b>TAD domains</b> (&quot;contact domains&quot;) called by the ENCODE
 uniform Hi-C pipeline across <b>16 mouse biosamples</b>. Contact domains are regions that
 preferentially self-interact, called by the Arrowhead algorithm (Juicer). Each subtrack is
 one biosample, browsable with a <b>faceted selector</b> (filter by organ, biosample type,
@@ -15,7 +15,7 @@ long label); the &quot;Calls&quot; facet records the native call assembly.
 <p>
 Subtracks are <b>colored by organ</b>. Mousing over a domain shows the biosample and the
 Arrowhead corner score. The details page also reports Arrowhead's upper/lower variance and
-sign scores. Use the faceted selector on the track configuration page to choose biosamples
+sign scores. Scores are rounded to three decimal places. Use the faceted selector on the track configuration page to choose biosamples
 by <b>Organ</b>, <b>Biosample type</b>, <b>Assay</b> (intact or in situ Hi-C),
 <b>Life stage</b>, and <b>Calls</b>. These calls use a different algorithm and finer
 resolution (5 kb) than the Dixon domains, produce smaller domains, and are not directly
@@ -31,7 +31,9 @@ both were available) and its contact-domain files were pooled: each Juicer/Arrow
 paired-anchor BEDPE record (both anchors describing the same domain interval) was reduced to a
 single domain interval, the five Arrowhead scores retained, and replicate calls whose
 endpoints fell within one 5 kb bin merged (keeping the higher corner score). For mm39, the
-mm10 domains were lifted with <b>liftOver</b>. The chosen ENCODE experiment accession is given
+mm10 domains were lifted with <b>liftOver</b>, and lifted domains that came out more than
+twice their mm10 size were removed, because this happens when a domain spans a gap or a
+rearranged region between the two assemblies. The chosen ENCODE experiment accession is given
 in each subtrack's long label and links to the ENCODE portal.
 </p>
 

@@ -1,0 +1,69 @@
+# 2026-10-14 Claude atanzer: miRBase 22.1 microRNA precursors, hg38, #36988
+
+# Human microRNA precursors from miRBase release 22.1 (https://mirbase.org/,
+# Kozomara et al. 2019, PMID 30423142), shown in the Non-coding RNA collection
+# (nonCodingRNAs). Items are the precursor hairpins, with the mature miRNAs
+# drawn over them as decorators, and the RNAfold structure of each precursor on
+# the details page (detailsScript.rnaStructure, drawn by
+# src/hg/js/hgc.rnaStructure.js with the vendored fornac and d3 in js/external).
+# Scripts: ~/kent/src/hg/makeDb/scripts/mirBase/
+
+##############################################################################
+# miRBase 22.1 (DONE 2026-10-14)
+##############################################################################
+
+mkdir -p /hive/data/genomes/hg38/bed/mirBase/download
+cd /hive/data/genomes/hg38/bed/mirBase/download
+
+# mirbase.org is often unreachable. The download script fetches
+# https://mirbase.org/download/hsa.gff3; on 2026-10-14 the host did not resolve,
+# so the file was copied from a download made on 2026-05-20 (534796 bytes):
+bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh \
+    || cp -p /hive/users/atanzer/DATA/miRBase/v22.1/gff/hsa.gff3 .
+# The file header says "miRBase v22, date 2018-3-5"; the human annotation is the
+# same in releases 22 and 22.1. It was also compared with mirbase.dat of the same
+# download: hairpin sequences, mature names, accessions and mature positions agree
+# for all 1913 human accessions that have coordinates (mirbase.dat has 4 more,
+# hsa-mir-1973, -3713, -378g and -4456, without genome coordinates).
+
+# Notes on the source data, which the conversion script handles:
+#   - 1918 precursor loci of 1913 accessions: hsa-mir-10401 is at 4 loci and
+#     hsa-mir-4477a and hsa-mir-4477b at 2 each (IDs MI..., MI..._2, ...).
+#   - A mature miRNA's Derives_from names the precursor accession, not the locus,
+#     so the mature miRNAs of the extra loci are assigned to the locus with that
+#     accession that contains them.
+#   - 899 mature names have no -5p/-3p suffix; their arm is taken from the half
+#     of the precursor they lie in.
+
+cd /hive/data/genomes/hg38/bed/mirBase
+# The build takes the sequence of every precursor from hg38, folds it with
+# RNAfold -d2 (ViennaRNA 2.7.2, /cluster/bin/x86_64/RNAfold), and writes the
+# track bigBed and the mature miRNA decorator bigBed:
+bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh
+#   1918 precursor sequences
+#   1918 precursors, 2883 matures, 1918 folds
+#   matures per arm: 3p 1441, 5p 1442
+
+bigBedInfo mirBase.bb | grep itemCount
+#   itemCount: 1,918
+bigBedInfo mirBaseArms.bb | grep itemCount
+#   itemCount: 2,883
+# All precursors and mature miRNAs of the GFF are in the track; every mature
+# miRNA lies inside exactly one precursor locus on the same strand.
+
+# Checks done on the output:
+#   - every folded sequence equals the hg38 sequence at the precursor
+#     coordinates (strand-aware), and every armPositions range cuts exactly the
+#     mature miRNA's hg38 sequence out of the folded sequence, on both strands
+#   - the structures of the 1910 precursors with a unique name are identical to
+#     the ones in the earlier track hub
+
+# The build also writes the trix search index mirBase.ix/.ixx (precursor name, MI
+# accession, mature names and MIMAT accessions), used by searchTrix; trix searches
+# are case-insensitive.
+
+# TODO: fix the structures of misfolded precursors. The MFE structure from
+# RNAfold loses the hairpin at some precursors: at 43 of the 965 precursors with
+# two mature miRNAs, under 60% of the 5p mature pairs with the 3p mature. Kept
+# as is for now; the fix is probably to show a centroid structure (RNAfold -p
+# --centroid) or another ensemble-based structure instead of the MFE.

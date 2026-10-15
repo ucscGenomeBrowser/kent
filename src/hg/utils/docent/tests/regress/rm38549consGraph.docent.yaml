@@ -1,0 +1,27 @@
+# #38549 -- a wigMaf's conservation graph (its trackDb `wiggle` setting) drew empty, native or
+# quickLifted.  Since 9944d8c4a72 (2016) wigDrawItems draws only what preDrawItems stored, and
+# hgTracks predraws only the tracks in its own list.  These graphs are private subtracks of the
+# wigMaf, so nothing predrew them.  Fixed by d463d6f028d:  wigMafDrawScoreGraph predraws each
+# one first, as multiWig does.  The graph was empty on the RR, hgwbeta and genome-test.
+#
+# hg18 multiz17way has `wiggle phastCons17way`.  All 16 species rows are turned off
+# (multiz17way.<species>=0), so the row holds only the graph and the center label.  The label
+# is drawn in the same blue as the graph (0,10,100), so the check samples one column left of
+# it:  chr7:155,287,600, inside an hg18 phastCons17way row whose mean is 0.84.  Before the fix
+# that column is white and the check says "nothing is drawn".
+#
+# Not asserted:  a lifted copy of the graph.  rm38549 covers the lift.
+proof:
+  - "assertion-only 2026-10-14 -- written from #38549"
+  - "xfail 2026-10-14 -- fails on genome-test (hgTracks built 15:28, before d463d6f028d) and on hgwbeta (v504): color: nothing is drawn in multiz17way"
+  - "sandbox-ab 2026-10-14 -- passes on park 38520, port 48112 (hgTracks with the change d463d6f028d made), 0,10,100 at chr7:155287600; fails on genome-test without it"
+  - "server-flip 2026-10-14 -- passed on genome-test once d463d6f028d was installed there (cgi-alpha, hgTracks 15:50), having failed there with the 15:28 build"
+
+target: genome-test
+db: hg18
+position: chr7:155284762-155296761
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg18&position=chr7%3A155284762-155296761&hideTracks=1&multiz17way=full&multiz17way.panTro1=0&multiz17way.rheMac2=0&multiz17way.mm8=0&multiz17way.rn4=0&multiz17way.oryCun1=0&multiz17way.canFam2=0&multiz17way.bosTau2=0&multiz17way.dasNov1=0&multiz17way.loxAfr1=0&multiz17way.echTel1=0&multiz17way.monDom4=0&multiz17way.galGal2=0&multiz17way.xenTro1=0&multiz17way.danRer3=0&multiz17way.tetNig1=0&multiz17way.fr1=0&pix=1100"
+  - expect: {rows: [multiz17way], color: {track: multiz17way, at: "chr7:155287600", is: "0,10,100"}}

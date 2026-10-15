@@ -206,6 +206,8 @@ origAssembly hg19
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 include nonCodingRNAs.ra
+include mirGeneDb.ra alpha
+include mirBase.ra alpha
 
 #track wgRna override 
 #dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
@@ -922,7 +924,8 @@ include recount3.ra
 
 include long_read_transcripts.ra
 
-include mavedb.ra
+include mavedb.ra beta,public
+include mavedb.alpha.ra alpha
 
 include mavemd.ra alpha
 
@@ -948,7 +951,7 @@ track dnaMethylation override
 
 include methbase2.ra alpha
 
-include fiberSeq.ra alpha
+include fiberSeq.ra
 
 include imprinting.ra alpha
 # include hg38.GCF_040939455.1.chainNet.ra alpha
@@ -957,7 +960,9 @@ include hprcPclai.ra alpha
 
 include episignatures.ra alpha,beta
 
-include transcriptionStart.ra
+include transcriptionStart.ra alpha
+include encode4ProCap.ra alpha
+include proCapNet.ra alpha
 # include hg38.GCA_040939475.2.chainNet.ra alpha
 # include hg38.GCF_002880755.1.chainNet.ra alpha
 
@@ -966,3 +971,5 @@ include miniMapChains.ra alpha
 include ../fusionGenes.ra alpha
 
 include gpnStar.ra alpha
+
+include allPrimatesChainNet.ra alpha

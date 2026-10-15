@@ -1,0 +1,34 @@
+# #38549 -- a quickLift of a wigMaf with a conservation wiggle aborted hgTracks with
+# "phastCons17way duplicated, aborting" when the target assembly had its own track of that
+# name.  Fixed by 9af8596d56e (refs #38520):  the lifted wiggle gets the quickLift hub prefix,
+# and its table is looked up in the assembly the track came from.
+#
+# hg18 multiz17way has `wiggle phastCons17way`, and hg17 has a phastCons17way track, so a lift
+# from hg18 to hg17 hit the collision.  It failed on hgwbeta too, not only on dev.  The abort
+# came before the image, so the buggy page has the error text and no track rows:  the script
+# asserts both the missing error and the lifted multiz17way row (matched as a suffix of its
+# hub_<n>_ name).
+#
+# Gates:  a wigMaf is only lifted with browser.quickLiftAlignments on, and the wiggle is only
+# made with browser.quickLiftWig on.  Both are cart gates as well as hg.conf ones, so the
+# script turns them on itself.
+#
+# Not asserted:  that the conservation graph has data in it.  Every wigMaf wiggle graph drew
+# blank at the time, native ones too, which is a separate bug.
+proof:
+  - "assertion-only 2026-10-14 -- written from #38549"
+  - "xfail 2026-10-14 -- fails on genome-test (hgTracks built 09:15, before 9af8596d56e) and on hgwbeta (v504): page says phastCons17way duplicated, aborting, and draws no rows"
+  - "sandbox-ab 2026-10-14 -- passes on park 38520, port 48112 (branch qlWigMaf38520, 551edc66875 = 9af8596d56e)"
+  - "server-flip 2026-10-14 -- passed on genome-test once 9af8596d56e was installed there (cgi-alpha, hgTracks 15:28), having failed there at 15:20"
+
+target: genome-test
+db: hg18
+position: chr7:155284762-155296761
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg18&position=chr7%3A155284762-155296761&hideTracks=1&multiz17way=full&pix=1100&browser.quickLiftAlignments=on&browser.quickLiftWig=on"
+  - expect: {rows: [multiz17way], noText: "Warning/Error"}
+  - convert: {to: hg17, quicklift: true, hideDefaults: true}
+  - click: 'a[href*="hgTracks?"][href*="quickLift."]'
+  - expect: {rows: [multiz17way], noText: "duplicated, aborting"}

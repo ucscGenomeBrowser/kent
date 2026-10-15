@@ -1,0 +1,132 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?db=$db&amp;g=mavedb">MaveDB</a> track collection.
+It shows one heatmap per MaveDB score set: every measured position of the gene is a column,
+and every substitution tested there is a row, colored by its score.
+</p>
+<p>
+Score sets that measured protein changes are drawn as protein heatmaps, with a column for each
+codon. This includes genome editing score sets whose variants are given as DNA changes and
+which MaveDB translated to protein changes; their intronic and untranslated region variants are
+only in the <a href="hgTrackUi?db=$db&amp;g=mavedb_variants">MaveDB Variants</a> track. Score
+sets with no protein changes, such as assays of promoters, enhancers or splicing, are drawn as
+nucleotide heatmaps, with a column for each base.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each heatmap is colored on its own scale, from the lowest score in that score set to the
+highest. The color in the middle is the arithmetic midpoint of the two, not the wild-type
+score. Score direction differs between assays: in some a high score means a normal protein,
+in others an abnormal one, so read the score set description on the details page before
+comparing colors.
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#0000FF;width:2em">&nbsp;</th>
+      <td>Lowest score in the score set</td></tr>
+  <tr><th style="background-color:#C0C0C0;width:2em">&nbsp;</th>
+      <td>Midpoint between the lowest and highest score</td></tr>
+  <tr><th style="background-color:#FF0000;width:2em">&nbsp;</th>
+      <td>Highest score in the score set</td></tr>
+  <tr><th style="background-color:#FFD700;width:2em">&nbsp;</th>
+      <td>The reference amino acid (protein heatmaps) or reference base (nucleotide
+          heatmaps) at that position</td></tr>
+</table>
+<p>
+Rows of protein heatmaps are the 20 amino acids, then <tt>-</tt> for deletion of the residue,
+<tt>*</tt> for a stop codon and <tt>=</tt> for a synonymous change. Rows of nucleotide heatmaps
+are the four bases, on the forward strand of the genome. A codon split by an intron is drawn
+as two columns with the same values. An empty cell was not measured.
+</p>
+<p>
+Where a score set reports the same change more than once, the cell is colored by the first
+score and marked with the number of measurements (<tt>+</tt> for ten or more); hovering over
+the cell lists all of them. Hovering over any cell shows the MaveDB variant number, the change
+on the reference protein, and its score. Changes placed by UCSC rather than by MaveDB carry
+"(UCSC placement)"; the <a href="hgTrackUi?db=$db&amp;g=mavedb_variants">MaveDB Variants</a>
+page explains what that means. Clicking a heatmap opens a page with the score set's
+description, abstract and methods, and a link to MaveDB.
+</p>
+<p>
+Some score sets were measured on a construct that differs from the reference protein, at one
+position (for example a TP53 construct carrying the common Arg72 form) or by a few added
+residues at one end. Changes at those positions are not shown, and the details page names the
+difference. Score sets that report the same domain under two proteases (trypsin and
+chymotrypsin) and a combined score are shown here by the combined score only; all three are in
+the MaveDB Variants track.
+</p>
+<p>
+Many score sets overlap at well studied genes. Use the score set filter on the track settings
+page to show one or a few. When the view is wider than 200,000 bases, the track shows a
+density graph of where heatmaps are instead of the heatmaps.
+</p>
+
+<h2>Methods</h2>
+<p>
+Each MaveDB score set lists its variants as changes to the sequence the experiment tested, and
+MaveDB maps them to human reference sequences: the tested sequence is aligned to GRCh38 with
+BLAT, a RefSeq transcript is chosen (preferring MANE Select), and an offset places the tested
+sequence on the reference protein (Arbesfeld <em>et al.</em>, 2025). Details of each experiment
+are on its details page and on MaveDB.
+</p>
+<p>
+The score sets, their metadata and their variants were downloaded from the MaveDB API
+(<tt>https://api.mavedb.org/api/v1</tt>, documented at <a href="https://api.mavedb.org/docs" target="_blank">api.mavedb.org/docs</a>),
+including MaveDB's mapped terms and ClinGen allele IDs. Each variant was then placed on hg38 as
+described on the <a href="hgTrackUi?db=$db&amp;g=mavedb_variants">MaveDB Variants</a> page,
+and every placed protein change was checked against the reference protein and the genome
+codon. Placed variants were grouped into one heatmap per score set and target. The steps are in
+the <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/maveDB.txt"
+target="_blank">makeDoc file</a> and the scripts in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/utils/otto/mavedb"
+target="_blank">MaveDB update directory</a> of our source tree.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu">API</a>, track=<i>mavedb_maps</i>.
+</p>
+<p>
+For automated download and analysis, the heatmaps are stored in a bigBed file that can be
+downloaded from <a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/maveDB/" target="_blank">our
+download server</a>. The file for this track is called <tt>mavedbMaps.bb</tt>. Individual
+regions or the whole file can be obtained using our tool <tt>bigBedToBed</tt>, which can be
+compiled from the source code or downloaded as a precompiled binary for your system.
+Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
+can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/maveDB/mavedbMaps.bb -chrom=chr17 -start=7660000 -end=7690000 stdout</tt>
+</p>
+<p>
+The original data can be downloaded from <a href="https://mavedb.org" target="_blank">MaveDB</a>.
+Each score set carries its own license, shown on its MaveDB page.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Arbesfeld JA, Da EY, Stevenson JS, Kuzma K, Paul A, Farris T, Capodanno BJ, Grindstaff SB, Riehle K,
+Saraiva-Agostinho N <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">
+Mapping MAVE data for use in human genomics applications</a>.
+<em>Genome Biol</em>. 2025 Jun 25;26(1):179.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">40563119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12188674/" target="_blank">PMC12188674</a>
+</p>
+
+<p>
+Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff
+SB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">
+MaveDB 2024: a curated community database with over seven million variant effects from multiplexed
+functional assays</a>.
+<em>Genome Biol</em>. 2025 Jan 21;26(1):13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">39838450</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11753097/" target="_blank">PMC11753097</a>
+</p>
+

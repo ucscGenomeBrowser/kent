@@ -1,0 +1,77 @@
+<h2>Description</h2>
+<p>
+A multiplexed assay of variant effect (MAVE), such as deep mutational scanning or saturation
+genome editing, measures the functional effect of thousands of variants of one gene or
+element in a single experiment. <a href="https://mavedb.org" target="_blank">MaveDB</a> is the
+public repository for these data sets.
+</p>
+<p>
+This track collection shows the human MaveDB score sets on hg38. It has three tracks:
+</p>
+<ul>
+<li><a href="hgTrackUi?db=$db&amp;g=mavedb_maps">MaveDB Heatmaps</a>: one heatmap per score
+set, with a column for each measured codon (or base) and a row for each substitution.</li>
+<li><a href="hgTrackUi?db=$db&amp;g=mavedb_variants">MaveDB Variants</a>: one item per
+measured variant per score set, searchable by variant name (for example TP53:R175H),
+ClinGen allele ID or MaveDB variant ID.</li>
+<li><a href="hgTrackUi?db=$db&amp;g=mavedb_align_composite">MaveDB Alignments</a>: where the
+sequence each experiment tested lies on the genome.</li>
+</ul>
+<p>
+The data are refreshed from MaveDB automatically when MaveDB adds or changes score sets; the
+version line on each track's page gives the date of the copy shown.
+</p>
+<p>
+Only variants that could be placed on the genome are shown. Most are placed by MaveDB's own
+mapping. Where MaveDB has no mapping, or where its mapping disagrees with the amino acids the
+experiment reports, the variant is placed by UCSC from the experiment's own description and
+checked against the reference protein and genome; the track details say which applies to each
+variant, and the <a href="hgTrackUi?db=$db&amp;g=mavedb_variants">MaveDB Variants</a> page
+describes how. Score sets measured on designed or heavily modified proteins that cannot be
+matched to a reference protein, and score sets of which only a small fraction of variants
+could be placed, are not shown. Variants that change several sites at once, and variants with
+no score, are not shown.
+</p>
+<p>
+Scores are as submitted to MaveDB. Each score set has its own scale and direction: in some a
+high score means a normal protein, in others an abnormal one. Compare variants within a score
+set, not between score sets. For clinically calibrated interpretations of a subset of these
+score sets, see the <a href="hgTrackUi?db=$db&amp;g=mavemd">MaveMD</a> track collection.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The pages of the individual tracks describe how to download and query their data.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the MaveDB team, in particular Alan Rubin and Ben Capodanno, and to the many labs
+who deposited their data in MaveDB. The first version of these tracks was built by Jonathan
+Casper at UCSC.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Arbesfeld JA, Da EY, Stevenson JS, Kuzma K, Paul A, Farris T, Capodanno BJ, Grindstaff SB, Riehle K,
+Saraiva-Agostinho N <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">
+Mapping MAVE data for use in human genomics applications</a>.
+<em>Genome Biol</em>. 2025 Jun 25;26(1):179.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/40563119" target="_blank">40563119</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12188674/" target="_blank">PMC12188674</a>
+</p>
+
+<p>
+Rubin AF, Stone J, Bianchi AH, Capodanno BJ, Da EY, Dias M, Esposito D, Frazer J, Fu Y, Grindstaff
+SB <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">
+MaveDB 2024: a curated community database with over seven million variant effects from multiplexed
+functional assays</a>.
+<em>Genome Biol</em>. 2025 Jan 21;26(1):13.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39838450" target="_blank">39838450</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11753097/" target="_blank">PMC11753097</a>
+</p>
+

@@ -538,8 +538,8 @@ if (quickLiftIsLifted(tg->tdb))
         }
     // A wig in a quickLift hub written while the gate was on, drawn with it off, as from a
     // session saved on another server:  the code below would read the table of the same name
-    // in this assembly and draw it as if lifted, so draw nothing.  A wigMaf's wiggles are not
-    // hub tracks and keep the path below.
+    // in this assembly and draw it as if lifted, so draw nothing.  A lifted wigMaf makes no
+    // wiggles with the gate off.
     if (isHubTrack(tg->track))
         {
         tg->items = NULL;

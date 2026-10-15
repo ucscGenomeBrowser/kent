@@ -51,6 +51,17 @@ struct barChartPlusRow
     char **row;
     };
 
+static char **cloneRow(char **row, int fieldCount, int size)
+/* Return a heap copy of the first fieldCount fields of row, in an array of size slots. */
+{
+char **saved;
+AllocArray(saved, size);
+int i;
+for (i = 0; i < fieldCount; i++)
+    saved[i] = cloneString(row[i]);
+return saved;
+}
+
 static struct barChartPlusRow *getBarChartFromFile(struct trackDb *tdb, char *file,
                                                 char *item, char *chrom, int start, int end,
                                                 struct asObject **retAs, char **extraFieldsRet,
@@ -115,14 +126,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         *extraFieldsCountRet = (restCount - restBedFields);
         }
     // row and the start and end buffers are on the stack, so the caller gets a copy
-    char **savedRow;
-    AllocArray(savedRow, ArraySize(row));
-    int i;
-    for (i = 0; i < fieldCount; i++)
-        savedRow[i] = cloneString(row[i]);
     AllocVar(ret);
     ret->barChart = barChart;
-    ret->row = savedRow;
+    ret->row = cloneRow(row, fieldCount, ArraySize(row));
     if (atClick)
         return ret;
     nameMatch = ret;
@@ -165,7 +171,9 @@ if (sqlTableExists(conn, table))
         barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
         AllocVar(ret);
         ret->barChart = barChart;
-        ret->row = row;
+        // sqlFreeResult frees row, so the caller gets a copy
+        int colCount = sqlCountColumns(sr);
+        ret->row = cloneRow(row, colCount, colCount);
         }
     sqlFreeResult(&sr);
     }

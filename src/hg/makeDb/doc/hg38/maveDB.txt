@@ -135,3 +135,34 @@ $ pslRecalcMatch dna_alignments.psl /gbdb/hg38/hg38.2bit ../../seqFile.fa recalc
               kept:     112     1133
 [jcasper@hgwdev altPslChoice]$ pslToBigPsl -fa=../../seqFile.fa best_of_dna_align.psl stdout | sort -k1,1 -k2,2n > alt_mavedb_dna.bigPslInput
 [jcasper@hgwdev altPslChoice]$ bedToBigBed -as=../../bigPsl.as -type=bed12+13 -tab alt_mavedb_dna.bigPslInput /hive/data/genomes/hg38/chrom.sizes alt_mavedb_dna.bb
+
+#########################################################################
+# MaveDB rebuilt from the MaveDB API (2026-10-13) Claude lrnassar, refs #38396
+# Development build. This becomes an otto job; the scripts are in
+# ~/kent/src/hg/utils/otto/mavedb (see its README.md).
+
+# 1. Fetch: catalogue (every published score set, no organism filter, since
+#    accession-based targets carry no organism; kept if a target is a Homo sapiens sequence
+#    or a human reference accession), score set records and variant CSVs, paced as MaveDB
+#    asked (variants one request at a time). The cache was seeded from the probe download
+#    of 2026-10-06/13, so only score sets changed since were fetched (none were); 1,287
+#    human score sets, 00000053-a-1 not fetched (MaveDB times out on its third page).
+mkdir -p /hive/data/genomes/hg38/bed/mavedb/devCache/variants
+cp -al /hive/data/genomes/hg38/bed/mavedb/2026-10-06/probe/variants/*.csv \
+    /hive/data/genomes/hg38/bed/mavedb/devCache/variants/
+~/kent/src/hg/utils/otto/mavedb/mavedbFetch.py /hive/data/genomes/hg38/bed/mavedb/devCache \
+    --adopt /hive/data/genomes/hg38/bed/mavedb/2026-10-06/probe/allHuman-2026-10-13.json
+# writes catalogue.json, catalogue.tsv, fetched.tsv, apiVersion.txt, scoreSets/, variants/
+
+# 2. Place, check and build the bigBeds:
+mkdir -p /hive/data/genomes/hg38/bed/mavedb/2026-10-13
+cd /hive/data/genomes/hg38/bed/mavedb/2026-10-13
+/usr/bin/python3 ~/kent/src/hg/utils/otto/mavedb/mavedbBuild.py ../devCache/catalogue.json \
+    ../devCache/variants . --scoreSets ../devCache/scoreSets
+# writes mavedbMaps.bb, mavedbVariants.bb, mavedbAlignDna.bb, mavedbAlignAa.bb,
+# build.tsv (one line per score set) and report.txt; report.txt counts every variant
+# placed and every reason a variant was not.
+
+# 3. Version line shown on the track pages (the otto job will write this itself):
+echo "MaveDB API 2026.2.7.4, data retrieved 2026-10-13, converted at UCSC (development build)" \
+    > version.txt
