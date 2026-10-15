@@ -438,3 +438,7 @@ include tad.ra alpha
 include ../nonCodingRNAs.ra alpha
 include ../mirGeneDb.ra alpha
 include ../mirBase.ra alpha
+
+track tRNAs override
+superTrack nonCodingRNAs pack
+release alpha
