@@ -93,8 +93,11 @@ function blatCoverageCell(hit) {
     var width = (hit.qEnd - hit.qStart + 1) / hit.qSize * 100;
     var u = blatUnit();
     var tip = `Query matches the genome at ${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}${u} out of ${blatFmt(hit.qSize)}${u}`;
-    return `<span class="blatCov" title="${tip}"><i style="left:${left.toFixed(1)}%;` +
-        `width:${width.toFixed(1)}%"></i></span>`;
+    // The query start and end are printed next to the bar, as in the classic page's START and END
+    // columns: for short queries like primers the bar alone does not show which bases matched.
+    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">` +
+        `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i></span>` +
+        `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span></span>`;
 }
 
 // ---- summary strip + detail panel ---------------------------------------
@@ -125,6 +128,9 @@ function blatSummaryStrip(cfg, queryCount) {
         actions += '<button type="button" class="gbPill" id="blatSeqBtn" ' +
             'title="Show the sequence you searched with, in FASTA format">Show Query Sequence</button>';
     }
+    actions += '<button type="button" class="gbPill" id="blatTsvBtn" ' +
+        'title="Download the hits in the table below, in their current order and filter, as a ' +
+        'tab-separated file that opens in Excel">Download Table</button>';
     // "Share a link" creates a durable, minimal snapshot session (db + results bigPsl only) and shows
     // its ?u=&s= reopen link (see blatShareLink).  Only offered when a durable bigPsl backs the
     // results (cfg.canShare = autoBigPsl); without it there is nothing for the shared link to reopen.
@@ -254,13 +260,15 @@ var BLAT_HEADER_TIPS = {
     '#': 'Rank by the chosen sort order',
     'Query': 'The query sequence this hit came from',
     'Open in Genome Browser': 'Genomic location of the match (1-based). Click the position to ' +
-        'open the Genome Browser there, or the icon to open it in a new tab.',
+        'open the Genome Browser there, or the icon to open it in a new tab. Click the header ' +
+        'to sort by chromosome and position.',
     'Show': 'Show the base-by-base alignment of your sequence to the genome',
     'Locus': 'Nearest gene(s), and whether the hit falls in an exon, intron, or intergenic region',
     'Score': 'BLAT score: matches minus mismatches and gap penalties. Higher is better.',
     'Identity': 'Percent identity of the aligned bases',
     'Strand': 'Genome strand the query matched (+ or -)',
-    'Query coverage': 'Which part of the query aligned (blue) across its full length',
+    'Query coverage': 'Which part of the query aligned (blue) across its full length, with the ' +
+        'first and last aligned query position. Click to sort by query start.',
     'Span': 'Length of the match on the genome (bp). Larger than the query length means ' +
         'the alignment crosses introns or deletions.'
 };
@@ -450,6 +458,37 @@ function blatToFasta(seqs) {
     }).join('\n');
 }
 
+function blatDownloadText(text, fileName, mimeType) {
+    // Save a string as a file, without a round trip to the server.
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: mimeType }));
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(a.href); }, 0);
+}
+
+function blatHitsToTsv(hits, hasLocus) {
+    // One line per hit, with the columns of the classic results page (positions 1-based) plus the
+    // locus and the match counts, then the PSL block lists, which are 0-based like in a .psl file and
+    // are enough to rebuild the alignment.  Tabs and newlines in a query name would break the columns.
+    var clean = s => String(s === undefined || s === null ? '' : s).replace(/[\t\r\n]/g, ' ');
+    var head = ['query', 'score', 'qStart', 'qEnd', 'qSize', 'identity', 'chrom', 'strand',
+                'tStart', 'tEnd', 'span', 'matches', 'misMatches', 'gaps', 'blocks'];
+    if (hasLocus) { head.push('locus'); }
+    head.push('tSize', 'blockSizes', 'qStarts', 'tStarts');
+    var lines = [head.join('\t')];
+    hits.forEach(function(h) {
+        var row = [h.qName, h.score, h.qStart, h.qEnd, h.qSize, h.identity.toFixed(1), h.chrom,
+                   h.strand, h.tStart, h.tEnd, h.span, h.matches, h.misMatch, h.gaps, h.blocks];
+        if (hasLocus) { row.push(h.locusText); }
+        row.push(h.tSize, h.blockSizes, h.qStarts, h.tStarts);
+        lines.push(row.map(clean).join('\t'));
+    });
+    return lines.join('\n') + '\n';
+}
+
 function blatShowFasta(box, seqs, fileName) {
     // Render seqs as FASTA inside `box`, with Copy-to-clipboard and Download buttons. Generic — takes
     // any [{name, seq}] list so it can be reused for other sequences later.
@@ -471,13 +510,7 @@ function blatShowFasta(box, seqs, fileName) {
         this.textContent = 'Copied';
     });
     document.getElementById('blatSeqDownload').addEventListener('click', function() {
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([fasta], { type: 'text/plain' }));
-        a.download = fileName || 'query.fa';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function() { URL.revokeObjectURL(a.href); }, 0);
+        blatDownloadText(fasta, fileName || 'query.fa', 'text/plain');
     });
     document.getElementById('blatSeqClose').addEventListener('click', function() {
         box.style.display = 'none';
@@ -565,13 +598,18 @@ function blatBuild() {
     var columns = [];
     columns.push({ data: 'rank', className: 'rankCol' });
     if (cfg.multiQuery) { columns.push({ data: 'qName', className: 'queryCol' }); }
-    columns.push({ data: null, orderable: false, className: 'blatPos',
-        render: (d, type, row) => (type === 'display' ? blatPositionCell(row) : row.chrom + ':' + row.tStart) });
+    // Sorts by chromosome, in chr1, chr2 ... chr10 order (numbers zero-padded), then by start.
+    columns.push({ data: null, className: 'blatPos',
+        render: (d, type, row) => (type === 'display' ? blatPositionCell(row) :
+            (type === 'filter' ? row.chrom + ':' + row.tStart :
+                row.chrom.replace(/\d+/g, n => n.padStart(4, '0')) + ':' +
+                String(row.tStart).padStart(10, '0'))) });
     columns.push({ data: null, orderable: false, className: 'actionsCol',
         render: (d, type, row) => (type === 'display' ? blatActionsCell(row) : '') });
-    columns.push({ data: null, className: 'covCol', orderable: false,
+    // Sorts by query start, then query end, so the hits line up along the query.
+    columns.push({ data: null, className: 'covCol',
         render: (d, type, row) => (type === 'display' ? blatCoverageCell(row) :
-            (row.qEnd - row.qStart + 1)) });
+            (type === 'filter' ? row.qStart + '-' + row.qEnd : row.qStart * 1e9 + row.qEnd)) });
     if (cfg.hasLocus) {
         columns.push({ data: 'locusText',
             render: (d, type, row) => (type === 'display' ? blatLocusCell(row) : (d || '')) });
@@ -593,6 +631,14 @@ function blatBuild() {
         info: false,
         order: [],
         language: { search: '', searchPlaceholder: 'Filter hits by locus, chrom, position…' }
+    });
+
+    $('#blatTsvBtn').on('click', function() {
+        var shown = dt.rows({ search: 'applied', order: 'applied' }).data().toArray();
+        var base = cfg.multiQuery ? 'blatResults' :
+            'blat_' + String(cfg.queryName).replace(/[^A-Za-z0-9._-]+/g, '_');
+        blatDownloadText(blatHitsToTsv(shown, cfg.hasLocus), base + '.tsv',
+            'text/tab-separated-values');
     });
 
     $('#blatTable tbody').on('click', 'tr', function(ev) {
