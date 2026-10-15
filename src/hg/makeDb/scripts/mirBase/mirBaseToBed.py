@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert the miRBase human GFF3 to the mirBase track files.
+"""Convert the miRBase GFF3 of one species to the mirBase track files.
 
 Two steps, with RNAfold in between (see mirBaseBuild.sh):
 
@@ -113,8 +113,12 @@ RNAEVAL = RNASUBOPT.replace("RNAsubopt", "RNAeval")
 # single hairpin within the SUBOPT_RANGES. hsa-mir-6134: the suboptimal structure
 # 0.8 kcal/mol above the MFE, in which the mature is more helical (a 1 nt bulge, U79,
 # and a 3 nt bulge, GAU 82-84, instead of the 2x6 interior loop of the MFE).
+# mmu-mir-669k: the single hairpin 3.3 kcal/mol above the lowest-energy single hairpin
+# (5.8 above the MFE), in which the 5p mature region has only 1 nt bulges instead of
+# the 6 nt bulge at nt 34-39 in the repetitive UGUGUG stretch.
 MANUAL_STRUCTURES = {
     "MI0021279": ".((((((((.......))))))))(((((((...(((((((((((((((((((.(((............))))))))).))...))))))..)))))...)))))))..",
+    "MI0006279": ".(((..(((..((...((((((..(((((((.(.((.(((((((((((((..........)))))))))))))))).)))))))..))))))....))...)))..)))..................",
 }
 
 def isHairpin(dotBracket, flank):
@@ -184,10 +188,13 @@ def hairpinRefold(items, flank):
     return refolded
 
 def manualStructures(items):
-    """name -> (dotBracket, foldType text) for MANUAL_STRUCTURES, with the energy from
-    RNAeval -d2, which also checks that the structure fits the sequence."""
+    """name -> (dotBracket, foldType text) for the MANUAL_STRUCTURES among items (the
+    precursors of other species are not), with the energy from RNAeval -d2, which also
+    checks that the structure fits the sequence."""
     res = {}
     for n, dotBracket in MANUAL_STRUCTURES.items():
+        if n not in items:
+            continue
         seq = items[n][0]
         assert len(dotBracket) == len(seq), "manual structure length differs: " + n
         out = subprocess.run([RNAEVAL, "-d2"], input="%s\n%s\n" % (seq, dotBracket),

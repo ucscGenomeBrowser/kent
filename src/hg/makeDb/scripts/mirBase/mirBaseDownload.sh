@@ -1,13 +1,15 @@
 #!/bin/bash
-# Download the miRBase human (hsa) GFF3 into the current directory.
+# Download the miRBase GFF3 of one species (default hsa, human) into the current
+# directory, e.g. mmu.gff3 for mouse.
 # The file goes to <file>.part first and is only moved into place when its size
 # matches the server's, from a one-byte range request.
 # mirbase.org is often unreachable; rerun later if it fails.
-# usage: mirBaseDownload.sh
+# usage: mirBaseDownload.sh [species]
 set -beEu -o pipefail
 
-url=https://mirbase.org/download/hsa.gff3
-f=hsa.gff3
+sp=${1:-hsa}
+url=https://mirbase.org/download/$sp.gff3
+f=$sp.gff3
 
 curl -sS --fail -o $f.part "$url"
 gotSize=$(stat -c %s $f.part)

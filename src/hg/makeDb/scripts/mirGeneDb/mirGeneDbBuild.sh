@@ -1,21 +1,25 @@
 #!/bin/bash
-# Build the mirGeneDb bigBed and its arm decorator bigBed for hg38.
-# Run from /hive/data/genomes/hg38/bed/mirGeneDb after mirGeneDbDownload.sh
-# has filled the download/ subdirectory.
-# The pri-miRNA sequences are taken from hg38 at the MirGeneDB coordinates and
+# Build the mirGeneDb bigBed and its arm decorator bigBed for one assembly.
+# usage: mirGeneDbBuild.sh [db [species]]     default: hg38 hsa
+# Run from /hive/data/genomes/<db>/bed/mirGeneDb after mirGeneDbDownload.sh
+# has filled the download/ subdirectory (for a lifted assembly, with the lifted
+# <species>-all.bed, see mirGeneDbLift.py).
+# The pri-miRNA sequences are taken from the assembly at the MirGeneDB coordinates and
 # folded with RNAfold -d2 (ViennaRNA); pri-miRNAs whose precursor is not one hairpin are
 # refolded with the flanks unpaired in mirGeneDbToBed.py (RNAfold, RNAsubopt).
 set -beEu -o pipefail
 
 scriptDir=$(dirname $(readlink -f $0))
+db=${1:-hg38}
+sp=${2:-hsa}
 dl=download
-twoBit=/hive/data/genomes/hg38/hg38.2bit
-sizes=/hive/data/genomes/hg38/chrom.sizes
+twoBit=/hive/data/genomes/$db/$db.2bit
+sizes=/hive/data/genomes/$db/chrom.sizes
 
-python3 $scriptDir/mirGeneDbToBed.py priFa $dl/hsa-all.bed $twoBit pri.fa
+python3 $scriptDir/mirGeneDbToBed.py priFa $dl/$sp-all.bed $twoBit pri.fa
 RNAfold --version > rnafold.version
 RNAfold -d2 --noPS < pri.fa > pri.fold
-python3 $scriptDir/mirGeneDbToBed.py bed $dl/hsa-all.bed $dl/hsa.gff $dl/hsa.browse.html \
+python3 $scriptDir/mirGeneDbToBed.py bed $dl/$sp-all.bed $dl/$sp.gff $dl/$sp.browse.html \
     pri.fold $twoBit mirGeneDb.unsorted.bed mirGeneDbArms.unsorted.bed
 sort -k1,1 -k2,2n mirGeneDb.unsorted.bed > mirGeneDb.bed
 sort -k1,1 -k2,2n mirGeneDbArms.unsorted.bed > mirGeneDbArms.bed

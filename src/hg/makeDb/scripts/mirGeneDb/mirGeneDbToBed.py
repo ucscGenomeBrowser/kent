@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert the MirGeneDB human annotation to the mirGeneDb track files.
+"""Convert the MirGeneDB annotation of one species to the mirGeneDb track files.
 
 Two steps, with RNAfold in between (see mirGeneDbBuild.sh):
 
@@ -37,7 +37,7 @@ ARM_COLORS = {
 # nucleotides on each side of the precursor in a pri region
 FLANK = 30
 
-FEAT_RE = re.compile(r"^(?P<gene>Hsa-[^_]+)_(?P<feat>pri|pre|[35]p\*?|[35]p_co)(?P<seed>_seed)?$")
+FEAT_RE = re.compile(r"^(?P<gene>[A-Z][a-z]{2}-[^_]+)_(?P<feat>pri|pre|[35]p\*?|[35]p_co)(?P<seed>_seed)?$")
 
 def armClass(armType):
     if armType.endswith("_co"):
@@ -129,7 +129,7 @@ def readBrowse(htmlFile):
         p.feed(f.read())
     meta = {}
     for row in p.rows:
-        if len(row) < 6 or not row[0].startswith("Hsa-"):
+        if len(row) < 6 or not re.match(r"[A-Z][a-z]{2}-", row[0]):
             continue
         # genes with processing variants are marked with a "V" after the name;
         # genes not in miRBase have "None" as miRBase ID and accessions
