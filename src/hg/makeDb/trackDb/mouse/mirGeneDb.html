@@ -1,0 +1,183 @@
+<h2>Description</h2>
+<p>
+MicroRNAs are RNAs of about 22 nucleotides that guide Argonaute proteins to partially
+complementary sites in mRNAs, which represses their translation and speeds up their decay.
+They are cut from hairpins in longer primary transcripts: Drosha releases the precursor
+hairpin, Dicer removes its loop, and one strand of the remaining duplex, the mature miRNA,
+is loaded into Argonaute while the other strand, the star or passenger, is usually degraded.
+</p>
+<p>
+This track shows the mouse microRNA genes of
+<a href="https://mirgenedb.org/" target="_blank">MirGeneDB</a> 3.0, a database of animal
+microRNAs that are curated by hand from small RNA sequencing data with uniform criteria
+for biogenesis and a nomenclature that follows the evolutionary history of each family.
+The track has 457 loci of 404 genes. Each item is a primary miRNA region as defined by
+MirGeneDB: the precursor hairpin plus 30 nucleotides on each side. The two arms of the
+hairpin are drawn on top of each item, colored by whether MirGeneDB annotates them as
+the dominant (mature) arm, the star arm, or as co-mature. For the larger, uncurated set of
+microRNAs registered in miRBase, see the <a href="hgTrackUi?g=mirBase">miRBase</a> track.
+</p>
+<p>
+Clicking an item opens a page with the miRBase ID and accessions, family, seed, the
+positions of the arms and the secondary structure of the primary miRNA region predicted
+with RNAfold. The structure is drawn with forna and can be moved and zoomed; the
+nucleotides of the arms are highlighted in the colors of the track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is labeled with its MirGeneDB ID, e.g. Mmu-Let-7-P1b. Some genes have
+several loci with the suffixes -v1 to -v4; these are variants of the same hairpin
+that MirGeneDB annotates with slightly different ends of the precursor and the arms. The
+arms are drawn as colored blocks over the item:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+      <td>Dominant arm (5p or 3p), the mature miRNA</td></tr>
+  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+      <td>Star arm (5p* or 3p*), the passenger strand</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th>
+      <td>Co-mature arm (3p_co), both arms are about equally abundant</td></tr>
+</table>
+<p>
+The same colors mark the arm nucleotides in the structure on the details page. Items
+can be searched in the position box by MirGeneDB ID, gene name without the -v suffix,
+miRBase ID, family, and miRBase precursor and mature accessions.
+</p>
+
+<h2>Methods</h2>
+<p>
+MirGeneDB annotates microRNAs from public small RNA sequencing data, found with miSRA, and
+genome assemblies. Reads are processed with miSRA or miRTrace, genomes are scanned with
+MirMachine for conserved families, and candidate loci predicted with MirMiner are curated by
+hand using synteny and comparisons of the sequences within each family. A locus is accepted
+only if it meets the MirGeneDB biogenesis criteria, which rely on the pattern of reads on both
+arms of the hairpin. The arm with more reads is the mature arm, the other the star arm; when
+the read counts of the two arms are within a factor of two of each other, MirGeneDB calls them
+co-mature. Version 3.0 has 21,822 microRNA genes from 114 species. See Clarke <em>et al.</em>,
+2025, for details.
+</p>
+<p>
+The mouse annotation was downloaded from
+<a href="https://mirgenedb.org/static/data/mmu/mmu-all.bed"
+target="_blank">https://mirgenedb.org/static/data/mmu/mmu-all.bed</a>,
+which contains all features of all loci on mm10, together with the GFF file
+<a href="https://mirgenedb.org/gff/mmu?all=1&amp;sort=pos"
+target="_blank">https://mirgenedb.org/gff/mmu?all=1&amp;sort=pos</a>
+for the miRBase precursor accessions and the
+<a href="https://mirgenedb.org/browse/mmu" target="_blank">mouse browse table</a>
+for the miRBase IDs, families and mature accessions. Variant loci (-v2 to -v4) take these
+from the gene's entry in the browse table, and the precursor accession from their -v1
+locus. Of the features in the BED file, the track uses the primary regions (457) as
+items and the 5p, 3p, 5p*, 3p* and 3p_co arms (913) as the colored blocks; the
+precursor, loop, flank and motif features are not shown. The seed of each locus,
+nucleotides 2 to 8 of its dominant or co-mature arms, was read from the genome at the seed
+features of the BED file and agrees with the browse table for all 404 genes. The seeds of
+52 of the 53 -v2 to -v4 loci differ from those of their -v1 locus, because their arms are
+shifted. The sequence of every primary region was taken from the genome and folded with
+RNAfold (ViennaRNA 2.7.2, option <tt>-d2</tt>, default energy parameters) to predict the
+minimum free energy (MFE) structure. At 35 loci, the precursor part of the MFE structure
+is not one hairpin, mostly because the flanks pair into the arms, or an arm reaches into
+the hairpin loop. These loci were refolded with the flanks unpaired (<tt>-C</tt>), and
+where that still did not give one hairpin with both arms in the stem, the lowest-energy
+such structure from RNAsubopt (ViennaRNA 2.7.2) is shown. Mmu-Mir-451 keeps its MFE
+structure, in which the 5p arm reaches into the loop: its short precursor is processed
+by Argonaute 2 instead of Dicer, and the arm cannot fit into the stem. The <b>Structure</b>
+row of the details page says which structure is shown.
+</p>
+<p>
+MirGeneDB annotates mouse on mm10. For mm39, all features of each locus were converted
+from mm10 with liftOver, keeping a locus only if all its features map to mm39 with
+unchanged lengths, which was the case for all 457 loci; the mm39 sequences, and so the
+structures and seeds, are identical to those on mm10. The steps are documented in the
+makeDoc files for
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm10/mirGeneDb.txt"
+target="_blank">mm10</a> and
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm39/mirGeneDb.txt"
+target="_blank">mm39</a>, and the scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mirGeneDb"
+target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>mirGeneDb</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in two bigBed files that
+can be downloaded from our download server, for
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm39/mirGeneDb/" target="_blank">mm39</a> and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm10/mirGeneDb/" target="_blank">mm10</a>:
+<tt>mirGeneDb.bb</tt> has the primary regions with all fields shown on the details page,
+including the sequence and dot-bracket structure, and <tt>mirGeneDbArms.bb</tt> has the
+arms. Individual regions or the whole annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries are on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">download page</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mm39/mirGeneDb/mirGeneDb.bb
+-chrom=chr19 -start=0 -end=61420004 stdout</tt>
+</p>
+<p>
+The original annotation can be downloaded from the
+<a href="https://mirgenedb.org/download" target="_blank">MirGeneDB download page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This track was created by Andrea Tanzer, University of Vienna, from the MirGeneDB 3.0
+mouse annotation.
+</p>
+<p>
+MirGeneDB is curated by Bastian Fromm at The Arctic University Museum of Norway, UiT
+The Arctic University of Norway, and Kevin Peterson at Dartmouth College, together with
+the other members of the <a href="https://mirgenedb.org/" target="_blank">MirGeneDB</a>
+consortium.
+</p>
+<p>
+Secondary structures were predicted with RNAfold from the
+<a href="https://www.tbi.univie.ac.at/RNA/" target="_blank">ViennaRNA Package</a>,
+developed by Ronny Lorenz, Ivo Hofacker and colleagues at the University of Vienna.
+The structure display on the details page uses
+<a href="https://github.com/ViennaRNA/fornac" target="_blank">fornac</a> by Peter
+Kerpedjiev, Stefan Hammer and Ronny Lorenz.
+</p>
+
+<h2>References</h2>
+<p>
+Clarke AW, H&oslash;ye E, Hembrom AA, Paynter VM, Vinther J, Wyro&#380;emski &#321;,
+Biryukova I, Formaggioni A,
+Ovchinnikov V, Herlyn H <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/39673268"
+target="_blank">MirGeneDB 3.0: improved taxonomic sampling, uniform nomenclature of novel
+conserved microRNA
+families and updated covariance models</a>.
+<em>Nucleic Acids Res</em>. 2025 Jan 6;53(D1):D116-D128.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/39673268" target="_blank">39673268</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11701709/" target="_blank">PMC11701709</a>
+</p>
+
+<p>
+Kerpedjiev P, Hammer S, Hofacker IL.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/26099263"
+target="_blank">Forna (force-directed RNA): Simple and effective online RNA secondary structure
+diagrams</a>.
+<em>Bioinformatics</em>. 2015 Oct 15;31(20):3377-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26099263" target="_blank">26099263</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4595900/" target="_blank">PMC4595900</a>
+</p>
+
+<p>
+Lorenz R, Bernhart SH, H&ouml;ner Zu Siederdissen C, Tafer H, Flamm C, Stadler PF, Hofacker IL.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22115189"
+target="_blank">ViennaRNA Package 2.0</a>.
+<em>Algorithms Mol Biol</em>. 2011 Nov 24;6:26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22115189" target="_blank">22115189</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3319429/" target="_blank">PMC3319429</a>
+</p>

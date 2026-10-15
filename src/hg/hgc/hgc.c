@@ -5296,18 +5296,25 @@ safef(position, 128, "%s:%d-%d", chromName, seqStart, seqEnd);
 ourPos = cloneString(addCommasToPos(database, position));
 htmlPrintf("<B>%s position:</B> %s<BR>", trackHubSkipHubName(database), ourPos);
 
-int qs,qe;
-qChainRangePlusStrand(subChain, &qs, &qe);
-safef(position, 128, "%s:%d-%d", subChain->qName, qs-1, qe);
-otherPos = cloneString(addCommasToPos(otherDb, position));
+// The clicked window can fall in a gap of the chain, where another chain (often an
+// inversion) is aligned instead.  Then this chain has no bases here to show.
 htmlPrintf("<B>%s position: </B>", trackHubSkipHubName(otherDb));
-linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
-htmlPrintf("%s</A><BR><BR>",  otherPos);
+if (subChain == NULL)
+    printf("N/A (no aligned bases in this chain here)<BR><BR>");
+else
+    {
+    int qs,qe;
+    qChainRangePlusStrand(subChain, &qs, &qe);
+    safef(position, 128, "%s:%d-%d", subChain->qName, qs-1, qe);
+    otherPos = cloneString(addCommasToPos(otherDb, position));
+    linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
+    htmlPrintf("%s</A><BR><BR>",  otherPos);
+    }
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 
-if (otherTbf != NULL || 
+if (subChain != NULL && (otherTbf != NULL ||
     (!startsWith("big", tdb->type) && sqlDatabaseExists(otherDb) 
-     && chromSeqFileExists(otherDb, chain->qName)))
+     && chromSeqFileExists(otherDb, chain->qName))))
     {
     if (chainWinSize < 1000000)
         {

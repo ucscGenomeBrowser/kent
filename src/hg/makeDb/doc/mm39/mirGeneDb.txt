@@ -1,0 +1,48 @@
+# 2026-10-15 Claude atanzer: MirGeneDB 3.0 microRNA genes, mm39, #36988
+
+# Mouse microRNA genes from MirGeneDB 3.0 (https://mirgenedb.org/, Clarke et al.
+# 2025, PMID 39673268), in the Non-coding RNA collection (nonCodingRNAs, shared
+# with mm10 in trackDb/mouse/). MirGeneDB annotates mouse on mm10, so the features
+# of the mm10 download (doc/mm10/mirGeneDb.txt) are lifted to mm39, and the track is
+# then built as on mm10 and hg38 (see doc/hg38/mirGeneDb.txt).
+# Scripts: ~/kent/src/hg/makeDb/scripts/mirGeneDb/
+
+##############################################################################
+# MirGeneDB 3.0 (DONE 2026-10-15)
+##############################################################################
+
+mkdir -p /hive/data/genomes/mm39/bed/mirGeneDb/download
+cd /hive/data/genomes/mm39/bed/mirGeneDb/download
+# The GFF and the browse table have no coordinates that are used, only the
+# accessions and the names, so they are copied as they are:
+cp -p /hive/data/genomes/mm10/bed/mirGeneDb/download/mmu.gff \
+    /hive/data/genomes/mm10/bed/mirGeneDb/download/mmu.browse.html .
+# All features of a locus are lifted together; a locus is kept only if all of
+# them map, to the chromosome and strand of its pri region, with unchanged lengths:
+python3 ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbLift.py \
+    /hive/data/genomes/mm10/bed/mirGeneDb/download/mmu-all.bed \
+    /hive/data/genomes/mm10/bed/liftOver/mm10ToMm39.over.chain.gz mmu-all.bed
+#   457 genes (loci), 457 lifted, 0 left out
+wc -l mmu-all.bed
+#   4602 mmu-all.bed     (4602 features, as on mm10)
+
+cd /hive/data/genomes/mm39/bed/mirGeneDb
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh mm39 mmu
+#   457 pri-miRNA sequences
+#   457 pri-miRNAs, 404 genes in browse table, 403 MI accessions in GFF, 457 folds
+#   457 items, 19 not one hairpin and 16 with an arm in the hairpin loop in the MFE: 17 refolded with the flanks unpaired, 17 as suboptimal hairpins, all with the arms in the stem; 1 with an arm in the loop and 0 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: Mmu-Mir-451
+#   0 without browse table row, 0 seeds differ from browse table
+# (plus "not used" lines for the loop, flank and motif features)
+
+bigBedInfo mirGeneDb.bb | grep itemCount
+#   itemCount: 457
+bigBedInfo mirGeneDbArms.bb | grep itemCount
+#   itemCount: 913
+
+# Checks done on the output:
+#   - every folded sequence equals the mm39 sequence at the pri coordinates
+#     (strand-aware), and every armPositions range cuts exactly the arm's mm39
+#     sequence out of the folded sequence
+#   - sequences, structures, foldType and seeds of all 457 loci are identical to
+#     the mm10 track
