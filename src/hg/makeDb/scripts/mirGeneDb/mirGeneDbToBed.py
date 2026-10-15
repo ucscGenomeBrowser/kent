@@ -11,6 +11,8 @@ Two steps, with RNAfold in between (see mirGeneDbBuild.sh):
           mirGeneDb.bed mirGeneDbArms.bed
       Write the pri-miRNA track (bed6+, see mirGeneDb.as) and the arm decorators
       (bed12+4, kent/src/hg/lib/decoration.as).
+      Pri-miRNAs whose precursor part is not one hairpin in the MFE structure are
+      refolded with the flanks unpaired (see hairpinRefold), with RNAfold and RNAsubopt.
 
 MirGeneDB 3.0 has -v1, -v2 and -v3 loci for some genes, alternative processing
 variants of the same hairpin. The browse table lists such a gene once, under its
@@ -31,6 +33,9 @@ ARM_COLORS = {
     "star":     ((0, 114, 178), "0,114,178,200"),    # blue
     "co":       ((0, 158, 115), "0,158,115,200"),    # bluish green
 }
+
+# nucleotides on each side of the precursor in a pri region
+FLANK = 30
 
 FEAT_RE = re.compile(r"^(?P<gene>Hsa-[^_]+)_(?P<feat>pri|pre|[35]p\*?|[35]p_co)(?P<seed>_seed)?$")
 
@@ -147,6 +152,85 @@ def readGffPreAcc(gffFile):
                 acc[gene] = attrs["Alias"]
     return acc
 
+
+# one unbranched stem-loop, with interior loops and bulges allowed
+HAIRPIN_RE = re.compile(r"^[(.]+\(\.+\)[).]+$")
+# RNAsubopt of ViennaRNA 2.7.2, the version of /cluster/bin/x86_64/RNAfold; there is
+# no RNAsubopt in /cluster/bin yet
+RNASUBOPT = "/cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt"
+# energy ranges above the MFE, in kcal/mol, searched for a single-hairpin structure
+SUBOPT_RANGES = (2, 4, 6, 8)
+
+def isHairpin(dotBracket, flank):
+    """True if the structure without flank nucleotides on each side is one hairpin."""
+    return HAIRPIN_RE.match(dotBracket[flank:len(dotBracket) - flank]) is not None
+
+def rnafold(records):
+    """Fold (name, sequence, constraint) records with RNAfold -d2 -C;
+    name -> (dotBracket, energy)."""
+    out = subprocess.run(["RNAfold", "-d2", "--noPS", "-C"],
+                         input="".join(">%s\n%s\n%s\n" % r for r in records),
+                         capture_output=True, text=True, check=True).stdout
+    lines = [l for l in out.splitlines() if l.strip()]
+    res = {}
+    for i in range(0, len(lines), 3):
+        m = re.match(r"^([.()]+)\s+\(\s*(-?[0-9.]+)\)$", lines[i+2])
+        assert lines[i].startswith(">") and m, "unexpected RNAfold output at " + lines[i]
+        res[lines[i][1:].split()[0]] = (m.group(1), m.group(2))
+    return res
+
+def bestHairpin(seq, constraint, flank):
+    """Lowest-energy RNAsubopt -d2 structure that is one hairpin (see isHairpin), searched
+    up to the largest of SUBOPT_RANGES above the MFE; (dotBracket, energy) or None."""
+    for eRange in SUBOPT_RANGES:
+        out = subprocess.run([RNASUBOPT, "-d2", "-s", "-e", str(eRange), "-C"],
+                             input="%s\n%s\n" % (seq, constraint),
+                             capture_output=True, text=True, check=True).stdout
+        for line in out.splitlines()[1:]:
+            dotBracket, energy = line.split()[:2]
+            if isHairpin(dotBracket, flank):
+                return dotBracket, "%.2f" % float(energy)
+    return None
+
+def hairpinRefold(items, flank):
+    """Refold the items whose MFE structure is not one hairpin, in the part without the
+    flank nucleotides on each side. items: name -> (sequence, dotBracket).
+    The flanks are kept unpaired (x in the constraint), and if the MFE under that
+    constraint is not one hairpin either, the lowest-energy suboptimal structure that is
+    one is taken. Returns name -> (dotBracket, foldType text) for the refolded items;
+    items without a hairpin in the searched range keep their MFE structure."""
+    bad = sorted(n for n, (seq, db) in items.items() if not isHairpin(db, flank))
+    constraint = {n: "x" * flank + "." * (len(items[n][0]) - 2 * flank) + "x" * flank
+                  for n in bad}
+    refolded = {}
+    if flank:
+        folds = rnafold([(n, items[n][0], constraint[n]) for n in bad])
+        for n in bad:
+            if isHairpin(folds[n][0], flank):
+                refolded[n] = (folds[n][0], "flanks unpaired, %s kcal/mol" % folds[n][1])
+    nUnpaired = len(refolded)
+    noHairpin = []
+    for n in bad:
+        if n in refolded:
+            continue
+        best = bestHairpin(items[n][0], constraint[n], flank)
+        if best is None:
+            noHairpin.append(n)
+        else:
+            refolded[n] = (best[0], ("flanks unpaired, " if flank else "") +
+                           "suboptimal hairpin, %s kcal/mol" % best[1])
+    print("%d items, %d without one hairpin in the MFE: %d refolded with the flanks "
+          "unpaired, %d as suboptimal hairpins, %d with no hairpin within %d kcal/mol" %
+          (len(items), len(bad), nUnpaired, len(refolded) - nUnpaired, len(noHairpin),
+           SUBOPT_RANGES[-1]), file=sys.stderr)
+    for n in noHairpin:
+        print("no hairpin, MFE kept: " + n, file=sys.stderr)
+    return refolded
+
+def foldType(refolded, name):
+    """Text for the foldType field."""
+    return refolded[name][1] if name in refolded else "MFE"
+
 def readFold(foldFile):
     """RNAfold output -> name -> (sequence, dotBracket, mfe)."""
     folds = {}
@@ -186,6 +270,9 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
     seedKeys = sorted(seeds)
     seedSeq = dict(zip(seedKeys, genomeSeqs([seeds[k] for k in seedKeys], twoBit)))
 
+    # the pri regions are the precursors plus FLANK nt on each side
+    refolded = hairpinRefold({g: folds[g][:2] for g in pris}, FLANK)
+
     noMeta = seedDiff = 0
     with open(bedOut, "w") as out, open(armsOut, "w") as aOut:
         for gene in sorted(pris, key=lambda g: (pris[g][0], pris[g][1], g)):
@@ -208,6 +295,8 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
                       file=sys.stderr)
 
             seq, dotBracket, mfe = folds[gene]
+            if gene in refolded:
+                dotBracket = refolded[gene][0]
             armPos, armText = [], []
             for aStart, aEnd, armType in geneArms:
                 if aStart < start or aEnd > end:
@@ -224,7 +313,8 @@ def bed(bedFile, gffFile, browseFile, foldFile, twoBit, bedOut, armsOut):
 
             out.write("\t".join([chrom, str(start), str(end), gene, "0", strand,
                 m["mirbaseId"], m["family"], seed, mi, m["acc5p"], m["acc3p"],
-                gene.split("-", 1)[1], ", ".join(armText), mfe, seq, dotBracket,
+                gene.split("-", 1)[1], ", ".join(armText), mfe, foldType(refolded, gene),
+                seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")
     print("%d without browse table row, %d seeds differ from browse table" %
           (noMeta, seedDiff), file=sys.stderr)

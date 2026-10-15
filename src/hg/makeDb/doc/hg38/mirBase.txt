@@ -38,10 +38,24 @@ bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh \
 cd /hive/data/genomes/hg38/bed/mirBase
 # The build takes the sequence of every precursor from hg38, folds it with
 # RNAfold -d2 (ViennaRNA 2.7.2, /cluster/bin/x86_64/RNAfold), and writes the
-# track bigBed and the mature miRNA decorator bigBed:
+# track bigBed and the mature miRNA decorator bigBed.
+# The MFE structure is not a hairpin at some precursors. A precursor counts as
+# misfolded when its structure is not one hairpin, i.e. does not match the regular
+# expression ^[(.]+\(\.+\)[).]+$ (one stem-loop; bulges and interior loops are
+# allowed). For these, the lowest-energy structure that is one hairpin is taken from
+# RNAsubopt -d2 -s, searched up to 8 kcal/mol above the MFE. RNAsubopt is not in
+# /cluster/bin; the build uses ViennaRNA 2.7.2 from
+# /cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt (RNASUBOPT in
+# mirBaseToBed.py). The field foldType says which structure is shown, with its
+# energy; the mfe field is always the MFE.
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh
 #   1918 precursor sequences
 #   1918 precursors, 2883 matures, 1918 folds
+#   1918 items, 63 without one hairpin in the MFE: 0 refolded with the flanks unpaired, 60 as suboptimal hairpins, 3 with no hairpin within 8 kcal/mol
+#   no hairpin, MFE kept: MI0021279
+#   no hairpin, MFE kept: MI0022631
+#   no hairpin, MFE kept: MI0022689
+#   structure chosen by hand: MI0021279, -35.10 kcal/mol
 #   matures per arm: 3p 1441, 5p 1442
 
 bigBedInfo mirBase.bb | grep itemCount
@@ -55,15 +69,21 @@ bigBedInfo mirBaseArms.bb | grep itemCount
 #   - every folded sequence equals the hg38 sequence at the precursor
 #     coordinates (strand-aware), and every armPositions range cuts exactly the
 #     mature miRNA's hg38 sequence out of the folded sequence, on both strands
-#   - the structures of the 1910 precursors with a unique name are identical to
+#   - the MFE structures of the 1910 precursors with a unique name are identical to
 #     the ones in the earlier track hub
 
 # The build also writes the trix search index mirBase.ix/.ixx (precursor name, MI
 # accession, mature names and MIMAT accessions), used by searchTrix; trix searches
 # are case-insensitive.
 
-# TODO: fix the structures of misfolded precursors. The MFE structure from
-# RNAfold loses the hairpin at some precursors: at 43 of the 965 precursors with
-# two mature miRNAs, under 60% of the 5p mature pairs with the 3p mature. Kept
-# as is for now; the fix is probably to show a centroid structure (RNAfold -p
-# --centroid) or another ensemble-based structure instead of the MFE.
+# The 60 suboptimal hairpins are 0 to 7.4 kcal/mol above the MFE (median 0.9).
+# hsa-mir-6134 (MI0021279), hsa-mir-6786 (MI0022631) and hsa-mir-6843 (MI0022689)
+# have no single hairpin within 8 kcal/mol. hsa-mir-6786 and hsa-mir-6843 keep their
+# MFE structure; their precursors seem too long on the 5p side, and the region with
+# the matures folds into a hairpin. For hsa-mir-6134, all structures within 8
+# kcal/mol have a separate hairpin at nt 1-25 and the hairpin loop right next to the
+# mature; the suboptimal structure 0.8 kcal/mol above the MFE, in which the mature
+# is more helical, was chosen by hand from RNAsubopt -d2 -e 8 -s and is set in
+# MANUAL_STRUCTURES in mirBaseToBed.py (energy from RNAeval -d2, same miniforge).
+# Centroid (RNAfold -p) and MEA (--MEA) structures were also tried and fixed hardly
+# any.

@@ -3,7 +3,8 @@
 # Run from /hive/data/genomes/hg38/bed/mirBase after mirBaseDownload.sh
 # has put hsa.gff3 into the download/ subdirectory.
 # The precursor sequences are taken from hg38 at the miRBase coordinates and
-# folded with RNAfold -d2 (ViennaRNA).
+# folded with RNAfold -d2 (ViennaRNA); precursors that are not one hairpin get the best
+# single-hairpin suboptimal structure in mirBaseToBed.py (RNAsubopt).
 set -beEu -o pipefail
 
 scriptDir=$(dirname $(readlink -f $0))
@@ -20,7 +21,7 @@ sort -k1,1 -k2,2n mirBase.unsorted.bed > mirBase.bed
 sort -k1,1 -k2,2n mirBaseArms.unsorted.bed > mirBaseArms.bed
 rm mirBase.unsorted.bed mirBaseArms.unsorted.bed
 
-bedToBigBed -tab -type=bed6+10 -as=$scriptDir/mirBase.as -extraIndex=name \
+bedToBigBed -tab -type=bed6+11 -as=$scriptDir/mirBase.as -extraIndex=name \
     mirBase.bed $sizes mirBase.bb
 bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
     mirBaseArms.bed $sizes mirBaseArms.bb

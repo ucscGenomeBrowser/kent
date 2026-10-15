@@ -14,6 +14,7 @@ table mirBase
     string acc3p;        "miRBase 3p accession"
     lstring arms;        "Mature miRNAs|Name and position"
     string mfe;          "Minimum free energy|kcal/mol, RNAfold -d2"
+    string foldType;     "Structure|MFE, or a single hairpin if the MFE is not one"
     lstring sequence;    "Sequence of the precursor"
     lstring dotBracket;  "Secondary structure|RNAfold -d2, dot-bracket"
     lstring armPositions; "Mature positions in the sequence"

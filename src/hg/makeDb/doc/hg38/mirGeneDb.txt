@@ -39,10 +39,23 @@ bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbDownload.sh
 cd /hive/data/genomes/hg38/bed/mirGeneDb
 # The build takes the sequence of every pri region from hg38, folds it with
 # RNAfold -d2 (ViennaRNA 2.7.2, /cluster/bin/x86_64/RNAfold), and writes the
-# track bigBed and the arm decorator bigBed:
+# track bigBed and the arm decorator bigBed.
+# Folding the pri region (pre plus 30 nt flanks) as a whole loses the hairpin at
+# some loci, when the flanks pair into the arms. A locus counts as misfolded when
+# its structure without the flanks is not one hairpin, i.e. does not match the
+# regular expression ^[(.]+\(\.+\)[).]+$ (one stem-loop; bulges and interior loops
+# are allowed, base pairs from the precursor into the flanks too). Misfolded loci
+# are refolded with the flanks unpaired (RNAfold -d2 -C, flanks marked x). If that
+# is still not one hairpin, the lowest-energy structure under the same constraint
+# that is one is taken from RNAsubopt -d2 -s, searched up to 8 kcal/mol above the
+# MFE. RNAsubopt is not in /cluster/bin; the build uses ViennaRNA 2.7.2 from
+# /cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt (RNASUBOPT in
+# mirGeneDbToBed.py). The field foldType says which structure is shown, with its
+# energy; the mfe field is always the MFE of the unconstrained fold.
 bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh
 #   573 pri-miRNA sequences
 #   573 pri-miRNAs, 514 genes in browse table, 506 MI accessions in GFF, 573 folds
+#   573 items, 14 without one hairpin in the MFE: 13 refolded with the flanks unpaired, 1 as suboptimal hairpins, 0 with no hairpin within 8 kcal/mol
 #   not used: 135 motif_5p features
 #   not used: 360 motif_3p features
 #   not used: 572 loop features
@@ -64,16 +77,17 @@ bigBedInfo mirGeneDbArms.bb | grep itemCount
 #   - every folded sequence equals the hg38 sequence at the pri coordinates
 #     (strand-aware), and every armPositions range cuts exactly the arm's hg38
 #     sequence out of the folded sequence, on both strands
-#   - the structures of the 514 loci that the earlier track hub had are
+#   - the MFE structures of the 514 loci that the earlier track hub had are
 #     identical to the ones there
 
 # The build also writes the trix search index mirGeneDb.ix/.ixx (MirGeneDB ID,
 # gene name without -vN, miRBase ID, family, MI and MIMAT accessions), used by
 # searchTrix; trix searches are case-insensitive.
 
-# TODO: fix the structures of misfolded loci. Folding the pri region (pre plus
-# 30 nt flanks) as a whole loses the hairpin at some loci: at 17 of the 572
-# loci with two arms, under 60% of the 5p arm pairs with the 3p arm, e.g.
-# Hsa-Mir-17-P2a, Hsa-Mir-30-P2d and Hsa-Mir-431 (0%). Kept as is for now; the fix
-# is probably to show a centroid structure (RNAfold -p --centroid) or another
-# ensemble-based structure instead of the MFE.
+# Hsa-Mir-484 gets a suboptimal hairpin, the other 13 loci the MFE structure with
+# the flanks unpaired. Their energies are 10.9 to 36.3 kcal/mol above the
+# MFE of the pri region, as they leave out the pairs of the flanks. Two other
+# approaches were tried for the misfolded loci and not used: centroid (RNAfold -p)
+# and MEA (--MEA) structures fixed hardly any, and enforcing the 5p-to-3p arm
+# region as a hairpin is not needed, as the precursors fold into a hairpin once
+# the flanks cannot pair.

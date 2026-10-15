@@ -16,6 +16,7 @@ table mirGeneDb
     string pageId;       "MirGeneDB ID without the species, for the link to the MirGeneDB page"
     lstring arms;        "Arms|* = star (passenger), co = co-mature"
     string mfe;          "Minimum free energy|kcal/mol, RNAfold -d2"
+    string foldType;     "Structure|MFE, or a single hairpin if the MFE is not one"
     lstring sequence;    "Sequence of the pri-miRNA"
     lstring dotBracket;  "Secondary structure|RNAfold -d2, dot-bracket"
     lstring armPositions; "Arm positions in the sequence"

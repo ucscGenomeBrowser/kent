@@ -11,6 +11,9 @@ Two steps, with RNAfold in between (see mirBaseBuild.sh):
   mirBaseToBed.py bed hsa.gff3 pre.fold mirBase.bed mirBaseArms.bed
       Write the precursor track (bed6+, see mirBase.as) and the mature miRNA
       decorators (bed12+4, kent/src/hg/lib/decoration.as).
+      Precursors whose MFE structure is not one hairpin get the lowest-energy
+      suboptimal structure that is one (see hairpinRefold), from RNAsubopt.
+      A few structures are chosen by hand (MANUAL_STRUCTURES).
 
 A mature miRNA's Derives_from names the precursor accession (MI0033425), not the
 locus, so for a precursor at several loci the mature is assigned to the locus with
@@ -96,6 +99,109 @@ def genomeSeqs(items, twoBit):
             seqs[name].append(line)
     return ["".join(seqs["x%d" % i]).upper().replace("T", "U") for i in range(len(items))]
 
+
+# one unbranched stem-loop, with interior loops and bulges allowed
+HAIRPIN_RE = re.compile(r"^[(.]+\(\.+\)[).]+$")
+# RNAsubopt of ViennaRNA 2.7.2, the version of /cluster/bin/x86_64/RNAfold; there is
+# no RNAsubopt in /cluster/bin yet
+RNASUBOPT = "/cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt"
+# energy ranges above the MFE, in kcal/mol, searched for a single-hairpin structure
+SUBOPT_RANGES = (2, 4, 6, 8)
+RNAEVAL = RNASUBOPT.replace("RNAsubopt", "RNAeval")
+
+# structures chosen by hand from the RNAsubopt -d2 output, for precursors with no
+# single hairpin within the SUBOPT_RANGES. hsa-mir-6134: the suboptimal structure
+# 0.8 kcal/mol above the MFE, in which the mature is more helical (a 1 nt bulge, U79,
+# and a 3 nt bulge, GAU 82-84, instead of the 2x6 interior loop of the MFE).
+MANUAL_STRUCTURES = {
+    "MI0021279": ".((((((((.......))))))))(((((((...(((((((((((((((((((.(((............))))))))).))...))))))..)))))...)))))))..",
+}
+
+def isHairpin(dotBracket, flank):
+    """True if the structure without flank nucleotides on each side is one hairpin."""
+    return HAIRPIN_RE.match(dotBracket[flank:len(dotBracket) - flank]) is not None
+
+def rnafold(records):
+    """Fold (name, sequence, constraint) records with RNAfold -d2 -C;
+    name -> (dotBracket, energy)."""
+    out = subprocess.run(["RNAfold", "-d2", "--noPS", "-C"],
+                         input="".join(">%s\n%s\n%s\n" % r for r in records),
+                         capture_output=True, text=True, check=True).stdout
+    lines = [l for l in out.splitlines() if l.strip()]
+    res = {}
+    for i in range(0, len(lines), 3):
+        m = re.match(r"^([.()]+)\s+\(\s*(-?[0-9.]+)\)$", lines[i+2])
+        assert lines[i].startswith(">") and m, "unexpected RNAfold output at " + lines[i]
+        res[lines[i][1:].split()[0]] = (m.group(1), m.group(2))
+    return res
+
+def bestHairpin(seq, constraint, flank):
+    """Lowest-energy RNAsubopt -d2 structure that is one hairpin (see isHairpin), searched
+    up to the largest of SUBOPT_RANGES above the MFE; (dotBracket, energy) or None."""
+    for eRange in SUBOPT_RANGES:
+        out = subprocess.run([RNASUBOPT, "-d2", "-s", "-e", str(eRange), "-C"],
+                             input="%s\n%s\n" % (seq, constraint),
+                             capture_output=True, text=True, check=True).stdout
+        for line in out.splitlines()[1:]:
+            dotBracket, energy = line.split()[:2]
+            if isHairpin(dotBracket, flank):
+                return dotBracket, "%.2f" % float(energy)
+    return None
+
+def hairpinRefold(items, flank):
+    """Refold the items whose MFE structure is not one hairpin, in the part without the
+    flank nucleotides on each side. items: name -> (sequence, dotBracket).
+    The flanks are kept unpaired (x in the constraint), and if the MFE under that
+    constraint is not one hairpin either, the lowest-energy suboptimal structure that is
+    one is taken. Returns name -> (dotBracket, foldType text) for the refolded items;
+    items without a hairpin in the searched range keep their MFE structure."""
+    bad = sorted(n for n, (seq, db) in items.items() if not isHairpin(db, flank))
+    constraint = {n: "x" * flank + "." * (len(items[n][0]) - 2 * flank) + "x" * flank
+                  for n in bad}
+    refolded = {}
+    if flank:
+        folds = rnafold([(n, items[n][0], constraint[n]) for n in bad])
+        for n in bad:
+            if isHairpin(folds[n][0], flank):
+                refolded[n] = (folds[n][0], "flanks unpaired, %s kcal/mol" % folds[n][1])
+    nUnpaired = len(refolded)
+    noHairpin = []
+    for n in bad:
+        if n in refolded:
+            continue
+        best = bestHairpin(items[n][0], constraint[n], flank)
+        if best is None:
+            noHairpin.append(n)
+        else:
+            refolded[n] = (best[0], ("flanks unpaired, " if flank else "") +
+                           "suboptimal hairpin, %s kcal/mol" % best[1])
+    print("%d items, %d without one hairpin in the MFE: %d refolded with the flanks "
+          "unpaired, %d as suboptimal hairpins, %d with no hairpin within %d kcal/mol" %
+          (len(items), len(bad), nUnpaired, len(refolded) - nUnpaired, len(noHairpin),
+           SUBOPT_RANGES[-1]), file=sys.stderr)
+    for n in noHairpin:
+        print("no hairpin, MFE kept: " + n, file=sys.stderr)
+    return refolded
+
+def manualStructures(items):
+    """name -> (dotBracket, foldType text) for MANUAL_STRUCTURES, with the energy from
+    RNAeval -d2, which also checks that the structure fits the sequence."""
+    res = {}
+    for n, dotBracket in MANUAL_STRUCTURES.items():
+        seq = items[n][0]
+        assert len(dotBracket) == len(seq), "manual structure length differs: " + n
+        out = subprocess.run([RNAEVAL, "-d2"], input="%s\n%s\n" % (seq, dotBracket),
+                             capture_output=True, text=True, check=True).stdout.splitlines()
+        m = re.match(r"^([.()]+)\s+\(\s*(-?[0-9.]+)\)$", out[-1])
+        assert m and m.group(1) == dotBracket, "unexpected RNAeval output for " + n
+        res[n] = (dotBracket, "suboptimal chosen by hand, %s kcal/mol" % m.group(2))
+        print("structure chosen by hand: %s, %s kcal/mol" % (n, m.group(2)), file=sys.stderr)
+    return res
+
+def foldType(refolded, name):
+    """Text for the foldType field."""
+    return refolded[name][1] if name in refolded else "MFE"
+
 def readFold(foldFile):
     """RNAfold output -> name -> (sequence, dotBracket, mfe)."""
     folds = {}
@@ -123,6 +229,10 @@ def bed(gffFile, foldFile, bedOut, armsOut):
     assigned = assignMatures(pres, matures)
     print("%d precursors, %d matures, %d folds" % (len(pres), len(matures), len(folds)),
           file=sys.stderr)
+    items = {p["id"]: folds[p["id"]][:2] for p in pres}
+    refolded = hairpinRefold(items, 0)
+    refolded.update(manualStructures(items))
+
     armCount = defaultdict(int)
     with open(bedOut, "w") as out, open(armsOut, "w") as aOut:
         for p in pres:
@@ -147,11 +257,13 @@ def bed(gffFile, foldFile, bedOut, armsOut):
                           file=sys.stderr)
             armPos.sort()
             seq, dotBracket, mfe = folds[p["id"]]
+            if p["id"] in refolded:
+                dotBracket = refolded[p["id"]][0]
             out.write("\t".join([p["chrom"], str(p["start"]), str(p["end"]), p["name"], "0",
                 p["strand"], p["acc"],
                 ",".join(m["name"] for m in byArm["5p"]), ",".join(m["acc"] for m in byArm["5p"]),
                 ",".join(m["name"] for m in byArm["3p"]), ",".join(m["acc"] for m in byArm["3p"]),
-                ", ".join(armText), mfe, seq, dotBracket,
+                ", ".join(armText), mfe, foldType(refolded, p["id"]), seq, dotBracket,
                 ",".join("%d-%d:%s" % a for a in armPos)]) + "\n")
     print("matures per arm: " + ", ".join("%s %d" % kv for kv in sorted(armCount.items())),
           file=sys.stderr)

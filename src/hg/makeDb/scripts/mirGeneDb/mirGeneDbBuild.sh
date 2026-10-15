@@ -3,7 +3,8 @@
 # Run from /hive/data/genomes/hg38/bed/mirGeneDb after mirGeneDbDownload.sh
 # has filled the download/ subdirectory.
 # The pri-miRNA sequences are taken from hg38 at the MirGeneDB coordinates and
-# folded with RNAfold -d2 (ViennaRNA).
+# folded with RNAfold -d2 (ViennaRNA); pri-miRNAs whose precursor is not one hairpin are
+# refolded with the flanks unpaired in mirGeneDbToBed.py (RNAfold, RNAsubopt).
 set -beEu -o pipefail
 
 scriptDir=$(dirname $(readlink -f $0))
@@ -20,7 +21,7 @@ sort -k1,1 -k2,2n mirGeneDb.unsorted.bed > mirGeneDb.bed
 sort -k1,1 -k2,2n mirGeneDbArms.unsorted.bed > mirGeneDbArms.bed
 rm mirGeneDb.unsorted.bed mirGeneDbArms.unsorted.bed
 
-bedToBigBed -tab -type=bed6+12 -as=$scriptDir/mirGeneDb.as -extraIndex=name \
+bedToBigBed -tab -type=bed6+13 -as=$scriptDir/mirGeneDb.as -extraIndex=name \
     mirGeneDb.bed $sizes mirGeneDb.bb
 bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
     mirGeneDbArms.bed $sizes mirGeneDbArms.bb
