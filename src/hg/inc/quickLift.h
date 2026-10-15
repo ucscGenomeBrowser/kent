@@ -304,6 +304,13 @@ struct hash *quickLiftChainHashForItem(struct hash *chainHash, void *item);
  * loader returned, asked about before anything frees it;  a copy falls back to chainHash.
  * The one-chain hash is reused for the next item, so lift through it before asking again. */
 
+char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
+                          char strand, char **retChrom, int *retStart, int *retEnd,
+                          char *retStrand);
+/* Lift chrom:start-end through one chain:  with quickLiftMultiChain the one item was loaded
+ * for, and otherwise the chain in chainHash with the most aligned bases in the range.  item
+ * may be NULL.  Return NULL on success, or why the range did not lift. */
+
 void quickLiftCalcGenePreds(struct genePred *gpList, struct hash *chainHash,
                             double minMatch, double minBlocks, bool fudgeThick,
                             boolean multiple, bool preserveInput);

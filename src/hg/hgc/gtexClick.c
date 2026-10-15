@@ -68,16 +68,24 @@ hFreeConn(&conn);
 return gtexGene;
 }
 
-static boolean liftGeneTo(struct hash *chainHash, struct gtexGeneBed *gene, int start, int end)
+static boolean liftGeneTo(struct hash *chainHash, boolean bestChain, struct gtexGeneBed *gene,
+                          int start, int end)
 /* Lift gene through the chains in chainHash the way hgTracks lifts a GTEx gene, and if it
- * lands at start-end on the reference, move it there and return TRUE. */
+ * lands at start-end on the reference, move it there and return TRUE.  With bestChain the
+ * gene goes through the chain with the most aligned bases in it, as hgTracks does without
+ * quickLiftMultiChain;  otherwise chainHash holds the one chain to use. */
 {
 char *liftChrom;
 int liftStart, liftEnd;
 char liftStrand = gene->strand[0];
-char *error = liftOverRemapRange(chainHash, 0.0, gene->chrom, gene->chromStart,
-                                 gene->chromEnd, gene->strand[0], 0.001,
-                                 &liftChrom, &liftStart, &liftEnd, &liftStrand);
+char *error;
+if (bestChain)
+    error = quickLiftRemapRange(chainHash, NULL, gene->chrom, gene->chromStart, gene->chromEnd,
+                                gene->strand[0], &liftChrom, &liftStart, &liftEnd, &liftStrand);
+else
+    error = liftOverRemapRange(chainHash, 0.0, gene->chrom, gene->chromStart,
+                               gene->chromEnd, gene->strand[0], 0.001,
+                               &liftChrom, &liftStart, &liftEnd, &liftStrand);
 if (error != NULL)
     return FALSE;
 if (!sameString(liftChrom, seqName) || (liftStart != start) || (liftEnd != end))
@@ -106,7 +114,7 @@ for (el = elList; (el != NULL) && !found; el = el->next)
     {
     struct chain *chain = el->val;
     liftOverAddChainHash(oneChain, chain);
-    found = liftGeneTo(oneChain, gene, start, end);
+    found = liftGeneTo(oneChain, FALSE, gene, start, end);
     liftOverRemoveChainHash(oneChain, chain);
     }
 slFreeList(&elList);
@@ -137,7 +145,7 @@ if (sqlTableExists(conn, table))
     while ((gtexGene == NULL) && ((row = sqlNextRow(sr)) != NULL))
         {
         struct gtexGeneBed *gene = gtexGeneBedLoad(row);
-        if (liftGeneTo(chainHash, gene, start, end) ||
+        if (liftGeneTo(chainHash, TRUE, gene, start, end) ||
             ((oneChain != NULL) && liftGeneToByOneChain(chainHash, oneChain, gene, start, end)))
             gtexGene = gene;
         else

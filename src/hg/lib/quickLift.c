@@ -202,6 +202,20 @@ safef(key, sizeof key, "%p", item);
 hashAddInt(quickLiftMultiFor(chainHash)->itemChain, key, chainId);
 }
 
+static struct hash *oneChainHash(struct quickLiftMulti *qm, struct chain *chain)
+/* The reusable one-chain hash of qm, holding chain on its sequence. */
+{
+struct chain *current = hashFindVal(qm->oneChainBySeq, chain->tName);
+if (current != chain)
+    {
+    if (current != NULL)
+        liftOverRemoveChainHash(qm->oneChain, current);
+    liftOverAddChainHash(qm->oneChain, chain);
+    hashReplace(qm->oneChainBySeq, chain->tName, chain);
+    }
+return qm->oneChain;
+}
+
 struct hash *quickLiftChainHashForItem(struct hash *chainHash, void *item)
 /* The chain hash to lift item through:  with quickLiftMultiChain, a hash of just the chain
  * it was loaded for, when it was loaded that way, and otherwise chainHash itself.  The
@@ -224,15 +238,28 @@ safef(key, sizeof key, "%d", ptToInt(hel->val));
 struct chain *chain = hashFindVal(qm->chainById, key);
 if (chain == NULL)
     return chainHash;
-struct chain *current = hashFindVal(qm->oneChainBySeq, chain->tName);
-if (current != chain)
+return oneChainHash(qm, chain);
+}
+
+char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
+                          char strand, char **retChrom, int *retStart, int *retEnd,
+                          char *retStrand)
+/* Lift chrom:start-end through one chain:  with quickLiftMultiChain the one item was loaded
+ * for, and otherwise the chain in chainHash with the most aligned bases in the range.  Given
+ * all of the chains, liftOverRemapRange() drops a range as "Duplicated in new" when two of
+ * them each cover a little of it, which the short chains beside a long one in a duplicated
+ * region do.  remapBlockedBed() picks the best chain instead, and so does this. */
+{
+struct hash *liftHash = quickLiftChainHashForItem(chainHash, item);
+if ((chainHash != NULL) && (liftHash == chainHash))
     {
-    if (current != NULL)
-        liftOverRemoveChainHash(qm->oneChain, current);
-    liftOverAddChainHash(qm->oneChain, chain);
-    hashReplace(qm->oneChainBySeq, chain->tName, chain);
+    struct chain *best = liftOverChainForRange(chainHash, chrom, start, max(end, start + 1));
+    if (best == NULL)
+        return "Deleted in new";
+    liftHash = oneChainHash(quickLiftMultiFor(chainHash), best);
     }
-return qm->oneChain;
+return liftOverRemapRange(liftHash, 0.0, chrom, start, end, strand, 0.001,
+                          retChrom, retStart, retEnd, retStrand);
 }
 
 static int queryRangeCmp(const void *va, const void *vb)
@@ -1149,20 +1176,20 @@ for(bed = bedList; bed; bed = nextBed)
     bed->next = NULL;
 
     char *error;
-    struct hash *bedChainHash = quickLiftChainHashForItem(chainHash, bed);
     if (!blocked)
         {
-        error = liftOverRemapRange(bedChainHash, 0.0, bed->chrom, bed->chromStart,
-                                   bed->chromEnd, bed->strand[0],
-                             
-                            0.001, &bed->chrom, (int *)&bed->chromStart, (int *)&bed->chromEnd, &bed->strand[0]);
+        error = quickLiftRemapRange(chainHash, bed, bed->chrom, bed->chromStart,
+                                    bed->chromEnd, bed->strand[0], &bed->chrom,
+                                    (int *)&bed->chromStart, (int *)&bed->chromEnd,
+                                    &bed->strand[0]);
 
         // probably this should keep track of cases where the input does NOT have thickStart == chromStart
         bed->thickStart = bed->chromStart;
         bed->thickEnd = bed->chromEnd;
         }
     else
-        error = remapBlockedBed(bedChainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL);
+        error = remapBlockedBed(quickLiftChainHashForItem(chainHash, bed), bed, 0.0, 0.1,
+                                TRUE, TRUE, NULL, NULL);
 
     if (error == NULL)
         {
@@ -1662,11 +1689,10 @@ for(peak = peakList; peak; peak = nextPeak)
     nextPeak = peak->next;
     peak->next = NULL;
 
-    char *error = liftOverRemapRange(quickLiftChainHashForItem(chainHash, peak), 0.0,
-                            peak->chrom, peak->chromStart, peak->chromEnd,
-                            peak->strand[0],
-                            0.001, &peak->chrom, (int *)&peak->chromStart, (int *)&peak->chromEnd,
-                            &peak->strand[0]);
+    char *error = quickLiftRemapRange(chainHash, peak, peak->chrom, peak->chromStart,
+                                      peak->chromEnd, peak->strand[0], &peak->chrom,
+                                      (int *)&peak->chromStart, (int *)&peak->chromEnd,
+                                      &peak->strand[0]);
 
     if (error == NULL)
         slAddHead(&liftedList, peak);
