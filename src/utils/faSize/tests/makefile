@@ -4,7 +4,8 @@ include ../../../inc/common.mk
 
 test: s1 s2 s1_s2 s1_2bit s2_2bit s1_s2_2bit s1AndS2 s1AndS2_2bit \
     allThree allThree_2bit detailed detailed_2bit tab tab_2bit \
-    veryDetailed veryDetailed_2bit mixed mixedDetailed mixedVeryDetailed
+    veryDetailed veryDetailed_2bit mixed mixedDetailed mixedVeryDetailed \
+    comments
 
 s1: outputDir
 	${A} input/s1.fa.gz > output/s1.txt
@@ -81,6 +82,10 @@ mixedDetailed: outputDir
 mixedVeryDetailed: outputDir
 	${A} -veryDetailed input/s1.2bit input/s1.fa.gz input/s2.2bit input/s2.fa.gz input/s1.s2.2bit input/s1.s2.fa.gz > output/mixedVeryDetailed.txt
 	diff expected/mixedVeryDetailed.txt output/mixedVeryDetailed.txt
+
+comments: outputDir
+	${A} -detailed input/comments.fa > output/comments.detailed.txt
+	diff expected/comments.detailed.txt output/comments.detailed.txt
 
 outputDir:
 	@${MKDIR} -p output

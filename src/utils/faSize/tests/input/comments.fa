@@ -1,0 +1,7 @@
+;comment line
+;~key: value
+>chr1 first
+ACGTACGTAC
+GTAC
+>chr2
+TTTTGGGG
