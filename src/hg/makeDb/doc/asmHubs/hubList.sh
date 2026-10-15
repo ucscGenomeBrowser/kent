@@ -21,6 +21,8 @@ fi
 
 cd /home/qateam/cronJobs
 
+export nextTxt="/dev/shm/nextHubList.txt"
+
 rsync -a hiram@hgwdev:kent/src/hg/makeDb/doc/legacyAsmHub/legacy.clade.txt ./
 
 export DS=`date "+%F"`
@@ -49,7 +51,7 @@ printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubLis
 # and better assemblies.
 #
 # currently clade groupings found in the GenArk are:
-# birds fish fungi invertebrate mammals plants primates vertebrate viral bacteria
+# birds fish fungi invertebrate mammals plants primates vertebrate viral archaea bacteria
 #
 # where 'vertebrate' are the 'other' vertebrates not alreaded included in
 #    birds fish mammals primates
@@ -60,12 +62,15 @@ printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubLis
 # 'viral' currently includes most viruses of interest related to human
 #         pathogens
 #
-# future plans to include selected sets of bacteria and archaea assemblies
+# 'bacteria' and 'archaea' assemblies include all RefSeq 'reference' assemblies
 #
 # accession\tassembly\tscientific name\tcommon name\ttaxonId\tGenArk clade
-" > /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
+" > "${nextTxt}"
 
-./asmHubList.pl goForIt | grep -v _009914755 | sort >> /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
+./asmHubList.pl goForIt | grep -v _009914755 | sort >> "${nextTxt}"
+
+rm -f "/mirrordata/hubs/UCSC_GI.assemblyHubList.txt"
+mv  "${nextTxt}" "/mirrordata/hubs/UCSC_GI.assemblyHubList.txt"
 
 export after=`grep -c -v "^#" /mirrordata/hubs/UCSC_GI.assemblyHubList.txt`
 

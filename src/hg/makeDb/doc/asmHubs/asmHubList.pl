@@ -36,8 +36,6 @@ if ($thisMachine eq "hgwdev") {
 }
 
 my %cladeListings;	# key is assemblyName GCA/GCF identifier, value is clade
-# one off until this group gets out here
-$cladeListings{"GCF_000007345.1"} = "archaea";
 
 open (FH, "ls /dev/shm/clade.*.list|grep -v legacy|") or die "can not read /dev/shm/clade.*.list";
 while (my $cladeList = <FH>) {
