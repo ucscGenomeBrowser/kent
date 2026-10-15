@@ -20,7 +20,7 @@
         </p>
         <details>
           <summary><b>How to use Hub Space</b></summary>
-          <p>There are three primary ways to upload your files:</p>
+          <p>There are four primary ways to upload your files:</p>
           <ol>
             <li>
             Upload an individual set of binary-indexed files for immediate visualization.
@@ -33,6 +33,13 @@
             <li>
             To update an existing track hub on Hub Space, you will have to enter the hub's name
             again. Otherwise, Hub Space assumes that you are trying to create a new hub.
+            </li>
+            <li>
+            Upload files from the command line with
+            <a href="/docs/hubs/hubtools.html">hubtools</a>. This is easier for hubs
+            with many files or subdirectories, and when you update a hub, it only uploads
+            the files that have changed.
+            </li>
           </ol>
           <p>
           If a hub.txt file is not provided when uploading the data files, a hub.txt file
@@ -46,7 +53,7 @@
           hub.txt, genomes.txt, every referenced trackDb, and any 2bit files
           in the same upload, and Hub Space will derive each file's assembly
           from the hub definition. For more complex multi-file hubs, the
-          <a href="https://hgdownload.soe.ucsc.edu/admin/exe/">hubtools</a>
+          <a href="/docs/hubs/hubtools.html">hubtools</a>
           command-line uploader remains the recommended path.
           </p>
           <p>

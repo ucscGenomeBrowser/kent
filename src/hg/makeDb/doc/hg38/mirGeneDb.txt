@@ -1,0 +1,97 @@
+# 2026-10-14 Claude atanzer: MirGeneDB 3.0 microRNA genes, hg38, #36988
+
+# Human microRNA genes from MirGeneDB 3.0 (https://mirgenedb.org/, Clarke et al.
+# 2025, PMID 39673268), shown in the Non-coding RNA collection (nonCodingRNAs).
+# Items are the MirGeneDB primary regions (precursor plus 30 nt on each side),
+# with the 5p/3p arms drawn over them as decorators, and the RNAfold structure of
+# each primary region on the details page (detailsScript.rnaStructure, drawn by
+# src/hg/js/hgc.rnaStructure.js with the vendored fornac and d3 in js/external).
+# Scripts: ~/kent/src/hg/makeDb/scripts/mirGeneDb/
+
+##############################################################################
+# MirGeneDB 3.0 (DONE 2026-10-14)
+##############################################################################
+
+mkdir -p /hive/data/genomes/hg38/bed/mirGeneDb/download
+cd /hive/data/genomes/hg38/bed/mirGeneDb/download
+
+# Three files: the BED with all features of all human loci (static file, dated
+# 2024-11-13 on the server, 280693 bytes), the GFF with the miRBase precursor
+# accessions, and the browse table with miRBase IDs, families, seeds and the
+# mature accessions. The GFF and the browse table are generated on request.
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbDownload.sh
+#   hsa-all.bed 280693 bytes
+#   hsa.gff 119486 bytes
+#   hsa.browse.html 3034470 bytes
+
+# Notes on the source data, which the conversion script handles:
+#   - hsa-all.bed has one line per feature, named <gene>_<feature>: pri, pre,
+#     5p, 3p, 5p*, 3p*, 3p_co (co-mature), *_seed, loop, pri_5p, pri_3p and
+#     motif_*. The pri region is always the pre region plus 30 nt on each side.
+#   - 514 genes have 573 loci: 52 genes have processing variants -v1 to -v4
+#     (52, 52, 6 and 1 loci), which differ by about 1 nt at the ends, so the
+#     seeds of the 59 -v2 to -v4 loci differ from their -v1. The
+#     browse table lists such a gene once, without the -vN and with a "V" after
+#     the name; the GFF only lists the -v1 locus.
+#   - Genes that are not in miRBase have "None" as miRBase ID and accessions in
+#     the browse table; these become empty fields.
+
+cd /hive/data/genomes/hg38/bed/mirGeneDb
+# The build takes the sequence of every pri region from hg38, folds it with
+# RNAfold -d2 (ViennaRNA 2.7.2, /cluster/bin/x86_64/RNAfold), and writes the
+# track bigBed and the arm decorator bigBed.
+# Folding the pri region (pre plus 30 nt flanks) as a whole loses the hairpin at
+# some loci, when the flanks pair into the arms. A locus counts as misfolded when
+# its structure without the flanks is not one hairpin, i.e. does not match the
+# regular expression ^[(.]+\(\.+\)[).]+$ (one stem-loop; bulges and interior loops
+# are allowed, base pairs from the precursor into the flanks too), or when an arm
+# reaches into the hairpin loop. Misfolded loci are refolded with the flanks unpaired
+# (RNAfold -d2 -C, flanks marked x). If that is still not one hairpin with all arms in
+# the stem, the lowest-energy structure under the same constraint that is one is
+# taken from RNAsubopt -d2 -s, searched up to 8 kcal/mol above the MFE. Where there
+# is none, the structure is chosen by the hairpin test alone. RNAsubopt is not in /cluster/bin; the build uses ViennaRNA 2.7.2 from
+# /cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt (RNASUBOPT in
+# mirGeneDbToBed.py). The field foldType says which structure is shown, with its
+# energy; the mfe field is always the MFE of the unconstrained fold.
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh
+#   573 pri-miRNA sequences
+#   573 pri-miRNAs, 514 genes in browse table, 506 MI accessions in GFF, 573 folds
+#   573 items, 14 not one hairpin and 18 with an arm in the hairpin loop in the MFE: 16 refolded with the flanks unpaired, 15 as suboptimal hairpins, all with the arms in the stem; 1 with an arm in the loop and 0 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: Hsa-Mir-451
+#   not used: 135 motif_5p features
+#   not used: 360 motif_3p features
+#   not used: 572 loop features
+#   not used: 573 pri_3p features
+#   not used: 573 pri_5p features
+#   not used: 79 motif_loop features
+#   0 without browse table row, 0 seeds differ from browse table
+# (pre and *_seed features are read but not shown: the seed of each locus is
+# taken from hg38 at its seed features and compared with the browse table.)
+
+bigBedInfo mirGeneDb.bb | grep itemCount
+#   itemCount: 573
+bigBedInfo mirGeneDbArms.bb | grep itemCount
+#   itemCount: 1,145
+# 298 5p + 275 5p* + 275 3p + 249 3p* + 48 3p_co = 1145 arms, all inside their
+# pri region. All features of the source BED are accounted for.
+
+# Checks done on the output:
+#   - every folded sequence equals the hg38 sequence at the pri coordinates
+#     (strand-aware), and every armPositions range cuts exactly the arm's hg38
+#     sequence out of the folded sequence, on both strands
+#   - the MFE structures of the 514 loci that the earlier track hub had are
+#     identical to the ones there
+
+# The build also writes the trix search index mirGeneDb.ix/.ixx (MirGeneDB ID,
+# gene name without -vN, miRBase ID, family, MI and MIMAT accessions), used by
+# searchTrix; trix searches are case-insensitive.
+
+# 31 loci show a refolded structure, 0 to 1.6 kcal/mol above the MFE with the
+# flanks unpaired (their energies are higher than the mfe field, which includes the
+# pairs of the flanks). Hsa-Mir-451 keeps its MFE structure with the 5p arm reaching
+# 4 nt into the loop: its 42 nt precursor is processed by Ago2, not Dicer, and its
+# 22 nt arm cannot fit into the stem of any hairpin of the precursor. Two other
+# approaches were tried for the misfolded loci and not used: centroid (RNAfold -p)
+# and MEA (--MEA) structures fixed hardly any, and enforcing the 5p-to-3p arm
+# region as a hairpin is not needed, as the precursors fold into a hairpin once
+# the flanks cannot pair.

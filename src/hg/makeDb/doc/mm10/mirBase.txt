@@ -1,0 +1,64 @@
+# 2026-10-15 Claude atanzer: miRBase 22.1 microRNA precursors, mm10, #38548
+
+# Mouse microRNA precursors from miRBase release 22.1 (https://mirbase.org/,
+# Kozomara et al. 2019, PMID 30423142), in the Non-coding RNA collection
+# (nonCodingRNAs, shared with mm39 in trackDb/mouse/). Same build as the hg38 track,
+# see doc/hg38/mirBase.txt for the notes on the source data and the folding. The
+# miRBase mouse GFF is on GRCm38 (mm10), so no liftOver is needed here; the mm39 track
+# is lifted from this file, see doc/mm39/mirBase.txt.
+# Scripts: ~/kent/src/hg/makeDb/scripts/mirBase/
+
+##############################################################################
+# miRBase 22.1 (DONE 2026-10-15)
+##############################################################################
+
+mkdir -p /hive/data/genomes/mm10/bed/mirBase/download
+cd /hive/data/genomes/mm10/bed/mirBase/download
+# mirbase.org did not respond on 2026-10-15, so mmu.gff3 was copied from Andrea's
+# miRBase 22.1 download (373739 bytes, file date 2024-07-12):
+bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh mmu \
+    || cp -p /hive/users/atanzer/DATA/miRBase/v22.1/gff/mmu.gff3 .
+# The header says "miRBase v22, date 2018-3-5, genome-build-id: GRCm38". The file
+# has 1227 precursor loci of 1226 accessions (mmu-mir-12186 is at two loci) and
+# 2110 matures. The precursor sequences (taken from mm10) agree with hairpin.fa of
+# miRBase 22.1. mirbase.dat of 22.1 has 1234 mouse precursors; mmu-mir-590, -696,
+# -712, -714, -1194, -2183, -7228 and -7238 have no coordinates.
+
+cd /hive/data/genomes/mm10/bed/mirBase
+bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh mm10 mmu
+#   1227 precursor sequences
+#   1227 precursors, 2110 matures, 1227 folds
+#   1227 items, 74 not one hairpin and 49 with an arm in the hairpin loop in the MFE: 0 refolded with the flanks unpaired, 117 as suboptimal hairpins, all with the arms in the stem; 4 with an arm in the loop and 2 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: MI0001730
+#   arm in the hairpin loop: MI0002403
+#   arm in the hairpin loop: MI0022890
+#   arm in the hairpin loop: MI0023710
+#   no hairpin, MFE kept: MI0006300
+#   no hairpin, MFE kept: MI0006305
+#   structure chosen by hand: MI0006279, -32.70 kcal/mol
+#   MI0014099 has 2 matures on the 3p arm
+#   MI0014099 has 2 matures on the 5p arm
+#   matures per arm: 3p 1062, 5p 1048
+# MI0006300 is mmu-mir-669e, MI0006305 mmu-mir-1197, MI0014099 mmu-mir-3102. Matures
+# still reach into the hairpin loop at mmu-mir-451a (MI0001730, Ago2-processed),
+# mmu-mir-468 (MI0002403), -7041 (MI0022890) and -7215 (MI0023710), and in the MFE
+# kept for mmu-mir-669e. The 116 suboptimal hairpins are 0 to 7.8 kcal/mol above the
+# MFE (median 1.0). For
+# mmu-mir-669k (MI0006279), the lowest-energy single hairpin has a 6 nt bulge at nt
+# 34-39 in the 5p mature, in a repetitive UGUGUG stretch; the single hairpin from
+# RNAsubopt -d2 -e 8 -s with only 1 nt bulges there (3.3 kcal/mol higher, 5.8 above
+# the MFE) was chosen by hand and is set in MANUAL_STRUCTURES in mirBaseToBed.py. 328 mature
+# names have no -5p/-3p suffix; their arm is taken from the half of the precursor
+# they lie in.
+
+bigBedInfo mirBase.bb | grep itemCount
+#   itemCount: 1,227
+bigBedInfo mirBaseArms.bb | grep itemCount
+#   itemCount: 2,110
+
+# Checks done on the output:
+#   - every folded sequence equals the mm10 sequence at the precursor coordinates
+#     (strand-aware) and the miRBase 22.1 hairpin sequence, and every armPositions
+#     range cuts exactly the mature miRNA's mm10 sequence out of it
+#   - every structure is one hairpin, except those of mmu-mir-669e and mmu-mir-1197,
+#     with all matures in the stem except at the 5 precursors above

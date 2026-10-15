@@ -1,0 +1,21 @@
+table mirBase
+"miRBase precursor miRNA with its mature miRNAs and predicted secondary structure"
+    (
+    string chrom;        "Chromosome"
+    uint   chromStart;   "Start of the precursor"
+    uint   chromEnd;     "End of the precursor"
+    string name;         "miRBase precursor name"
+    uint   score;        "Not used"
+    char[1] strand;      "Strand"
+    string miAcc;        "miRBase precursor accession"
+    string mature5p;     "Mature miRNA on the 5p arm"
+    string acc5p;        "miRBase 5p accession"
+    string mature3p;     "Mature miRNA on the 3p arm"
+    string acc3p;        "miRBase 3p accession"
+    lstring arms;        "Mature miRNAs|Name and position"
+    string mfe;          "Minimum free energy|kcal/mol, RNAfold -d2"
+    string foldType;     "Structure|MFE, or a single hairpin if the MFE is not one"
+    lstring sequence;    "Sequence of the precursor"
+    lstring dotBracket;  "Secondary structure|RNAfold -d2, dot-bracket"
+    lstring armPositions; "Mature positions in the sequence"
+    )

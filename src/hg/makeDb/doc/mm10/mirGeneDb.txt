@@ -1,0 +1,50 @@
+# 2026-10-15 Claude atanzer: MirGeneDB 3.0 microRNA genes, mm10, #36988
+
+# Mouse microRNA genes from MirGeneDB 3.0 (https://mirgenedb.org/, Clarke et al.
+# 2025, PMID 39673268), in the Non-coding RNA collection (nonCodingRNAs, new for
+# mouse, shared with mm39 in trackDb/mouse/). Same build as the hg38 track, see
+# doc/hg38/mirGeneDb.txt for the notes on the source data and the folding.
+# MirGeneDB annotates mouse on mm10, so no liftOver is needed here; the mm39 track
+# is lifted from this download, see doc/mm39/mirGeneDb.txt.
+# Scripts: ~/kent/src/hg/makeDb/scripts/mirGeneDb/
+
+##############################################################################
+# MirGeneDB 3.0 (DONE 2026-10-15)
+##############################################################################
+
+mkdir -p /hive/data/genomes/mm10/bed/mirGeneDb/download
+cd /hive/data/genomes/mm10/bed/mirGeneDb/download
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbDownload.sh mmu
+#   mmu-all.bed 224811 bytes
+#   mmu.gff 94823 bytes
+#   mmu.browse.html 1446991 bytes
+# The GFF header says "genome-build-id: mm10". mmu-all.bed has 457 pri regions,
+# each the pre region plus 30 nt on each side, as for human.
+
+cd /hive/data/genomes/mm10/bed/mirGeneDb
+bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh mm10 mmu
+#   457 pri-miRNA sequences
+#   457 pri-miRNAs, 404 genes in browse table, 403 MI accessions in GFF, 457 folds
+#   457 items, 19 not one hairpin and 16 with an arm in the hairpin loop in the MFE: 17 refolded with the flanks unpaired, 17 as suboptimal hairpins, all with the arms in the stem; 1 with an arm in the loop and 0 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: Mmu-Mir-451
+#   0 without browse table row, 0 seeds differ from browse table
+# (plus "not used" lines for the loop, flank and motif features)
+# 34 loci show a refolded structure, 0 to 2.6 kcal/mol above the MFE with the
+# flanks unpaired. Mmu-Mir-451 keeps its MFE structure with the 5p arm 4 nt in the
+# loop, as Hsa-Mir-451 on hg38 (Ago2-processed, the arm cannot fit into the stem).
+
+bigBedInfo mirGeneDb.bb | grep itemCount
+#   itemCount: 457
+bigBedInfo mirGeneDbArms.bb | grep itemCount
+#   itemCount: 913
+# 243 5p + 214 5p* + 214 3p + 203 3p* + 39 3p_co = 913 arms. 45 genes have
+# variants: -v1 45, -v2 45, -v3 7 and -v4 1 loci.
+
+# Checks done on the output:
+#   - every folded sequence equals the mm10 sequence at the pri coordinates
+#     (strand-aware), and every armPositions range cuts exactly the arm's mm10
+#     sequence out of the folded sequence
+#   - the precursor part of every structure is one hairpin, with all arms in the
+#     stem except at Mmu-Mir-451
+#   - the MirGeneDB gene page link (https://mirgenedb.org/show/mmu/<pageId>) of
+#     every locus returns a page

@@ -1,0 +1,26 @@
+track mirGeneDb
+superTrack nonCodingRNAs pack
+shortLabel MirGeneDB
+longLabel MirGeneDB curated microRNA genes with arms and predicted structure
+visibility hide
+type bigBed 6 + 13
+bigDataUrl /gbdb/hg38/mirGeneDb/mirGeneDb.bb
+decorator.default.bigDataUrl /gbdb/hg38/mirGeneDb/mirGeneDbArms.bb
+decorator.default.blockMode Overlay
+decorator.default.Overlaytoggle on
+decorator.default.maxLabelBases 500000
+searchIndex name
+searchTrix /gbdb/hg38/mirGeneDb/mirGeneDb.ix
+skipEmptyFields on
+skipFields pageId,sequence,armPositions
+detailsScript.rnaStructure.dotBracket {"exportFields":["sequence","armPositions"],"title":"Secondary structure","colors":{"5p":"#D55E00","3p":"#D55E00","5p*":"#0072B2","3p*":"#0072B2","5p_co":"#009E73","3p_co":"#009E73"},"labels":{"5p":"5p dominant","3p":"3p dominant","5p*":"5p star","3p*":"3p star","5p_co":"5p co-mature","3p_co":"3p co-mature"}}
+mouseOver ${name}<br>miRBase: ${mirbaseId}<br>Family ${family}, seed ${seed}<br>${arms}
+url https://mirgenedb.org/show/hsa/$<pageId>
+urlLabel MirGeneDB gene page
+urls miAcc="https://mirbase.org/hairpin/$$" acc5p="https://mirbase.org/mature/$$" acc3p="https://mirbase.org/mature/$$"
+dataVersion MirGeneDB 3.0
+
+searchTable mirGeneDb
+searchType bigBed
+searchDescription MirGeneDB microRNA genes
+searchPriority 50

@@ -1,0 +1,23 @@
+table mirGeneDb
+"MirGeneDB pri-miRNA with its arms and predicted secondary structure"
+    (
+    string chrom;        "Chromosome"
+    uint   chromStart;   "Start of the pri-miRNA"
+    uint   chromEnd;     "End of the pri-miRNA"
+    string name;         "MirGeneDB ID"
+    uint   score;        "Not used"
+    char[1] strand;      "Strand"
+    string mirbaseId;    "miRBase ID"
+    string family;       "miRNA family"
+    string seed;         "Seed|Nucleotides 2-8 of the dominant arm"
+    string miAcc;        "miRBase precursor accession"
+    string acc5p;        "miRBase 5p accession"
+    string acc3p;        "miRBase 3p accession"
+    string pageId;       "MirGeneDB ID without the species, for the link to the MirGeneDB page"
+    lstring arms;        "Arms|* = star (passenger), co = co-mature"
+    string mfe;          "Minimum free energy|kcal/mol, RNAfold -d2"
+    string foldType;     "Structure|MFE, or a single hairpin if the MFE is not one"
+    lstring sequence;    "Sequence of the pri-miRNA"
+    lstring dotBracket;  "Secondary structure|RNAfold -d2, dot-bracket"
+    lstring armPositions; "Arm positions in the sequence"
+    )

@@ -206,6 +206,8 @@ origAssembly hg19
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 include nonCodingRNAs.ra
+include mirGeneDb.ra alpha
+include mirBase.ra alpha
 
 #track wgRna override 
 #dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3

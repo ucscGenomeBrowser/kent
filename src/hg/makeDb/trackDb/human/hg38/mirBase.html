@@ -1,0 +1,159 @@
+<h2>Description</h2>
+<p>
+MicroRNAs are RNAs of about 22 nucleotides that guide Argonaute proteins to partially
+complementary sites in mRNAs, which represses their translation and speeds up their decay.
+They are cut from hairpins in longer primary transcripts: Drosha releases the precursor
+hairpin, Dicer removes its loop, and one strand of the remaining duplex is loaded into
+Argonaute as the mature miRNA.
+</p>
+<p>
+This track shows the human microRNA precursors of
+<a href="https://mirbase.org/" target="_blank">miRBase</a> release 22.1, the reference
+registry that assigns microRNA names. miRBase collects the microRNAs described in the
+literature and submitted by their authors. The track has 1,918 precursor loci of 1,913
+miRBase precursors, with 2,883 mature miRNAs drawn on top of them, colored by the arm of
+the hairpin they come from. For a manually curated set of human microRNA genes, see the
+<a href="hgTrackUi?g=mirGeneDb">MirGeneDB</a> track. The miRBase 22
+precursors are also part of the
+<a href="hgTrackUi?g=wgRna">sno/miRNA</a> track, without the mature
+miRNAs and structures.
+</p>
+<p>
+Clicking an item opens a page with the miRBase accessions, the mature miRNAs and their
+positions, and the secondary structure of the precursor predicted with RNAfold. The
+structure is drawn with forna and can be moved and zoomed; the nucleotides of the mature
+miRNAs are highlighted in the colors of the track.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each item is a precursor hairpin labeled with its miRBase name, e.g. hsa-mir-200b.
+The mature miRNAs are drawn as colored blocks over the item and labeled with their names:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#E69F00;width:2em">&nbsp;</th>
+      <td>Mature miRNA from the 5' arm of the hairpin (5p)</td></tr>
+  <tr><th style="background-color:#56B4E9;width:2em">&nbsp;</th>
+      <td>Mature miRNA from the 3' arm of the hairpin (3p)</td></tr>
+</table>
+<p>
+The colors only give the arm. Unlike the MirGeneDB track, they do not say which strand is
+the dominant one, as miRBase does not annotate this. The same colors mark the mature
+miRNAs in the structure on the details page. Items can be searched in the position box by
+precursor name, mature miRNA name, and precursor and mature accessions.
+</p>
+
+<h2>Methods</h2>
+<p>
+miRBase annotations come mainly from author submissions, most of them from small RNA
+sequencing studies. miRBase checks submissions only minimally and relies on the authors and
+on the review of their publications; it maps reads from public small RNA sequencing data
+sets to its sequences and labels entries as high or low confidence based on the read
+patterns, and removes entries whose reads are not consistent with microRNA processing.
+Release 22 has 38,589 precursors from 271 organisms, including 1,917 human precursors.
+See Kozomara <em>et al.</em>, 2019, for details.
+</p>
+<p>
+The human annotation was downloaded from
+<a href="https://mirbase.org/download/hsa.gff3"
+target="_blank">https://mirbase.org/download/hsa.gff3</a>.
+The header of the file gives the version as miRBase v22; the human annotation is the same
+in releases 22 and 22.1. Each precursor (type miRNA_primary_transcript) became an item and
+each mature miRNA (type miRNA) a colored block. Three precursors are at more than one
+locus (hsa-mir-10401 at four loci, hsa-mir-4477a and hsa-mir-4477b at two each), and the
+file links a mature miRNA only to the accession of its precursor, not to the locus, so each
+mature miRNA was assigned to the locus that contains it. The arm was taken from the -5p or
+-3p suffix of the mature miRNA name; for the 899 mature miRNAs without a suffix, it was
+taken from the half of the precursor they lie in. In total, 1,442 mature miRNAs are on the
+5' arm and 1,441 on the 3' arm. The sequence of every precursor was taken from hg38 and
+folded with RNAfold (ViennaRNA 2.7.2, option <tt>-d2</tt>, default energy parameters) to
+predict the minimum free energy (MFE) structure. At 140 precursors, the MFE structure is
+not one hairpin or a mature miRNA reaches into the hairpin loop. For 129 of them, the
+lowest-energy structure that is one hairpin with the mature miRNAs in the stem, from
+RNAsubopt (ViennaRNA 2.7.2) within 8 kcal/mol of the MFE, is shown. At 8 precursors, among
+them the Argonaute 2-processed hsa-mir-451a, no such structure exists and a mature miRNA
+stays in the loop; hsa-mir-6786 and hsa-mir-6843 keep their MFE structure, and for
+hsa-mir-6134 a suboptimal structure 0.8 kcal/mol above the MFE was chosen by hand, in
+which the mature miRNA is more helical. The <b>Structure</b> row of the
+details page says which structure is shown. The steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mirBase.txt"
+target="_blank">makeDoc file</a>, and the scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mirBase"
+target="_blank">kent source tree</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="hgTables">Table Browser</a> or the
+<a href="hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>mirBase</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in two bigBed files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mirBase/" target="_blank">our download server</a>:
+<tt>mirBase.bb</tt> has the precursors with all fields shown on the details page,
+including the sequence and dot-bracket structure, and <tt>mirBaseArms.bb</tt> has the
+mature miRNAs. Individual regions or the whole annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries are on our
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">download page</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mirBase/mirBase.bb
+-chrom=chr21 -start=0 -end=46709983 stdout</tt>
+</p>
+<p>
+The original annotation can be downloaded from the
+<a href="https://mirbase.org/download/" target="_blank">miRBase download page</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+This track was created by Andrea Tanzer, University of Vienna, from the miRBase 22.1
+human annotation.
+</p>
+<p>
+miRBase is developed and maintained by Sam Griffiths-Jones and his group at the
+University of Manchester.
+</p>
+<p>
+Secondary structures were predicted with RNAfold from the
+<a href="https://www.tbi.univie.ac.at/RNA/" target="_blank">ViennaRNA Package</a>,
+developed by Ronny Lorenz, Ivo Hofacker and colleagues at the University of Vienna.
+The structure display on the details page uses
+<a href="https://github.com/ViennaRNA/fornac" target="_blank">fornac</a> by Peter
+Kerpedjiev, Stefan Hammer and Ronny Lorenz.
+</p>
+
+<h2>References</h2>
+<p>
+Kerpedjiev P, Hammer S, Hofacker IL.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/26099263"
+target="_blank">Forna (force-directed RNA): Simple and effective online RNA secondary structure
+diagrams</a>.
+<em>Bioinformatics</em>. 2015 Oct 15;31(20):3377-9.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/26099263" target="_blank">26099263</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4595900/" target="_blank">PMC4595900</a>
+</p>
+
+<p>
+Kozomara A, Birgaoanu M, Griffiths-Jones S.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/30423142"
+target="_blank">miRBase: from microRNA sequences to function</a>.
+<em>Nucleic Acids Res</em>. 2019 Jan 8;47(D1):D155-D162.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/30423142" target="_blank">30423142</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6323917/" target="_blank">PMC6323917</a>
+</p>
+
+<p>
+Lorenz R, Bernhart SH, H&ouml;ner Zu Siederdissen C, Tafer H, Flamm C, Stadler PF, Hofacker IL.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/22115189"
+target="_blank">ViennaRNA Package 2.0</a>.
+<em>Algorithms Mol Biol</em>. 2011 Nov 24;6:26.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/22115189" target="_blank">22115189</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3319429/" target="_blank">PMC3319429</a>
+</p>
