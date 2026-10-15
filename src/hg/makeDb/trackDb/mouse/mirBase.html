@@ -65,10 +65,13 @@ name; for the 328 mature miRNAs without a suffix, it was taken from the half of 
 precursor they lie in. In total, 1,048 mature miRNAs are on the 5' arm and 1,062 on the
 3' arm; mmu-mir-3102 has two on each arm. The sequence of every precursor was taken from
 the genome and folded with RNAfold (ViennaRNA 2.7.2, option <tt>-d2</tt>, default energy
-parameters) to predict the minimum free energy (MFE) structure. At 74 precursors, the MFE
-structure is not one hairpin. For 72 of them, the lowest-energy structure that is one
-hairpin, from RNAsubopt (ViennaRNA 2.7.2) within 8 kcal/mol of the MFE, is shown;
-mmu-mir-669e and mmu-mir-1197 keep the MFE structure. For mmu-mir-669k, a single hairpin
+parameters) to predict the minimum free energy (MFE) structure. At 123 precursors, the MFE
+structure is not one hairpin or a mature miRNA reaches into the hairpin loop. For 117 of
+them, the lowest-energy structure that is one hairpin with the mature miRNAs in the stem,
+from RNAsubopt (ViennaRNA 2.7.2) within 8 kcal/mol of the MFE, is shown. At mmu-mir-451a,
+which is processed by Argonaute 2, mmu-mir-468, -7041 and -7215, no such structure exists
+and a mature miRNA stays in the loop; mmu-mir-669e and mmu-mir-1197 keep the MFE
+structure. For mmu-mir-669k, a single hairpin
 with only 1 nt bulges in the 5p mature was chosen by hand from the RNAsubopt output, instead
 of the lowest-energy one with a 6 nt bulge. The <b>Structure</b> row of the
 details page says which structure is shown.

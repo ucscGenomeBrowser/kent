@@ -25,10 +25,13 @@ cd /hive/data/genomes/mm10/bed/mirGeneDb
 bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh mm10 mmu
 #   457 pri-miRNA sequences
 #   457 pri-miRNAs, 404 genes in browse table, 403 MI accessions in GFF, 457 folds
-#   457 items, 19 without one hairpin in the MFE: 16 refolded with the flanks unpaired, 3 as suboptimal hairpins, 0 with no hairpin within 8 kcal/mol
+#   457 items, 19 not one hairpin and 16 with an arm in the hairpin loop in the MFE: 17 refolded with the flanks unpaired, 17 as suboptimal hairpins, all with the arms in the stem; 1 with an arm in the loop and 0 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: Mmu-Mir-451
 #   0 without browse table row, 0 seeds differ from browse table
 # (plus "not used" lines for the loop, flank and motif features)
-# The suboptimal hairpins are those of Mmu-Let-7-P2a2, Mmu-Mir-484 and Mmu-Mir-744.
+# 34 loci show a refolded structure, 0 to 2.6 kcal/mol above the MFE with the
+# flanks unpaired. Mmu-Mir-451 keeps its MFE structure with the 5p arm 4 nt in the
+# loop, as Hsa-Mir-451 on hg38 (Ago2-processed, the arm cannot fit into the stem).
 
 bigBedInfo mirGeneDb.bb | grep itemCount
 #   itemCount: 457
@@ -41,6 +44,7 @@ bigBedInfo mirGeneDbArms.bb | grep itemCount
 #   - every folded sequence equals the mm10 sequence at the pri coordinates
 #     (strand-aware), and every armPositions range cuts exactly the arm's mm10
 #     sequence out of the folded sequence
-#   - the precursor part of every structure is one hairpin
+#   - the precursor part of every structure is one hairpin, with all arms in the
+#     stem except at Mmu-Mir-451
 #   - the MirGeneDB gene page link (https://mirgenedb.org/show/mmu/<pageId>) of
 #     every locus returns a page

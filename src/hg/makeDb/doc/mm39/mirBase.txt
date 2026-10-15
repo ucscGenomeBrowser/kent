@@ -25,7 +25,11 @@ cd /hive/data/genomes/mm39/bed/mirBase
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh mm39 mmu
 #   1227 precursor sequences
 #   1227 precursors, 2110 matures, 1227 folds
-#   1227 items, 74 without one hairpin in the MFE: 0 refolded with the flanks unpaired, 72 as suboptimal hairpins, 2 with no hairpin within 8 kcal/mol
+#   1227 items, 74 not one hairpin and 49 with an arm in the hairpin loop in the MFE: 0 refolded with the flanks unpaired, 117 as suboptimal hairpins, all with the arms in the stem; 4 with an arm in the loop and 2 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: MI0001730
+#   arm in the hairpin loop: MI0002403
+#   arm in the hairpin loop: MI0022890
+#   arm in the hairpin loop: MI0023710
 #   no hairpin, MFE kept: MI0006300
 #   no hairpin, MFE kept: MI0006305
 #   structure chosen by hand: MI0006279, -32.70 kcal/mol

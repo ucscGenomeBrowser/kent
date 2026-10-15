@@ -44,18 +44,20 @@ cd /hive/data/genomes/hg38/bed/mirGeneDb
 # some loci, when the flanks pair into the arms. A locus counts as misfolded when
 # its structure without the flanks is not one hairpin, i.e. does not match the
 # regular expression ^[(.]+\(\.+\)[).]+$ (one stem-loop; bulges and interior loops
-# are allowed, base pairs from the precursor into the flanks too). Misfolded loci
-# are refolded with the flanks unpaired (RNAfold -d2 -C, flanks marked x). If that
-# is still not one hairpin, the lowest-energy structure under the same constraint
-# that is one is taken from RNAsubopt -d2 -s, searched up to 8 kcal/mol above the
-# MFE. RNAsubopt is not in /cluster/bin; the build uses ViennaRNA 2.7.2 from
+# are allowed, base pairs from the precursor into the flanks too), or when an arm
+# reaches into the hairpin loop. Misfolded loci are refolded with the flanks unpaired
+# (RNAfold -d2 -C, flanks marked x). If that is still not one hairpin with all arms in
+# the stem, the lowest-energy structure under the same constraint that is one is
+# taken from RNAsubopt -d2 -s, searched up to 8 kcal/mol above the MFE. Where there
+# is none, the structure is chosen by the hairpin test alone. RNAsubopt is not in /cluster/bin; the build uses ViennaRNA 2.7.2 from
 # /cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt (RNASUBOPT in
 # mirGeneDbToBed.py). The field foldType says which structure is shown, with its
 # energy; the mfe field is always the MFE of the unconstrained fold.
 bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbBuild.sh
 #   573 pri-miRNA sequences
 #   573 pri-miRNAs, 514 genes in browse table, 506 MI accessions in GFF, 573 folds
-#   573 items, 14 without one hairpin in the MFE: 13 refolded with the flanks unpaired, 1 as suboptimal hairpins, 0 with no hairpin within 8 kcal/mol
+#   573 items, 14 not one hairpin and 18 with an arm in the hairpin loop in the MFE: 16 refolded with the flanks unpaired, 15 as suboptimal hairpins, all with the arms in the stem; 1 with an arm in the loop and 0 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: Hsa-Mir-451
 #   not used: 135 motif_5p features
 #   not used: 360 motif_3p features
 #   not used: 572 loop features
@@ -84,9 +86,11 @@ bigBedInfo mirGeneDbArms.bb | grep itemCount
 # gene name without -vN, miRBase ID, family, MI and MIMAT accessions), used by
 # searchTrix; trix searches are case-insensitive.
 
-# Hsa-Mir-484 gets a suboptimal hairpin, the other 13 loci the MFE structure with
-# the flanks unpaired. Their energies are 10.9 to 36.3 kcal/mol above the
-# MFE of the pri region, as they leave out the pairs of the flanks. Two other
+# 31 loci show a refolded structure, 0 to 1.6 kcal/mol above the MFE with the
+# flanks unpaired (their energies are higher than the mfe field, which includes the
+# pairs of the flanks). Hsa-Mir-451 keeps its MFE structure with the 5p arm reaching
+# 4 nt into the loop: its 42 nt precursor is processed by Ago2, not Dicer, and its
+# 22 nt arm cannot fit into the stem of any hairpin of the precursor. Two other
 # approaches were tried for the misfolded loci and not used: centroid (RNAfold -p)
 # and MEA (--MEA) structures fixed hardly any, and enforcing the 5p-to-3p arm
 # region as a hairpin is not needed, as the precursors fold into a hairpin once

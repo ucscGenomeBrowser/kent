@@ -125,6 +125,20 @@ def isHairpin(dotBracket, flank):
     """True if the structure without flank nucleotides on each side is one hairpin."""
     return HAIRPIN_RE.match(dotBracket[flank:len(dotBracket) - flank]) is not None
 
+def armInLoop(dotBracket, arms):
+    """Largest number of nucleotides of one arm inside a hairpin loop; arms are 1-based
+    (start, end) ranges in the sequence."""
+    most = 0
+    for m in re.finditer(r"\((\.+)\)", dotBracket):
+        loopStart, loopEnd = m.start(1) + 1, m.end(1)
+        for start, end in arms:
+            most = max(most, min(end, loopEnd) - max(start, loopStart) + 1)
+    return most
+
+def isGood(dotBracket, arms, flank):
+    """One hairpin (see isHairpin) with all arms in the stem, none in the hairpin loop."""
+    return isHairpin(dotBracket, flank) and armInLoop(dotBracket, arms) == 0
+
 def rnafold(records):
     """Fold (name, sequence, constraint) records with RNAfold -d2 -C;
     name -> (dotBracket, energy)."""
@@ -139,50 +153,69 @@ def rnafold(records):
         res[lines[i][1:].split()[0]] = (m.group(1), m.group(2))
     return res
 
-def bestHairpin(seq, constraint, flank):
-    """Lowest-energy RNAsubopt -d2 structure that is one hairpin (see isHairpin), searched
-    up to the largest of SUBOPT_RANGES above the MFE; (dotBracket, energy) or None."""
+def bestSubopt(seq, constraint, accept):
+    """Lowest-energy RNAsubopt -d2 structure for which accept(dotBracket) is true,
+    searched up to the largest of SUBOPT_RANGES above the MFE; (dotBracket, energy) or None."""
     for eRange in SUBOPT_RANGES:
         out = subprocess.run([RNASUBOPT, "-d2", "-s", "-e", str(eRange), "-C"],
                              input="%s\n%s\n" % (seq, constraint),
                              capture_output=True, text=True, check=True).stdout
         for line in out.splitlines()[1:]:
             dotBracket, energy = line.split()[:2]
-            if isHairpin(dotBracket, flank):
+            if accept(dotBracket):
                 return dotBracket, "%.2f" % float(energy)
     return None
 
 def hairpinRefold(items, flank):
-    """Refold the items whose MFE structure is not one hairpin, in the part without the
-    flank nucleotides on each side. items: name -> (sequence, dotBracket).
-    The flanks are kept unpaired (x in the constraint), and if the MFE under that
-    constraint is not one hairpin either, the lowest-energy suboptimal structure that is
-    one is taken. Returns name -> (dotBracket, foldType text) for the refolded items;
-    items without a hairpin in the searched range keep their MFE structure."""
-    bad = sorted(n for n, (seq, db) in items.items() if not isHairpin(db, flank))
+    """Refold the items whose MFE structure is not one hairpin in the part without the
+    flank nucleotides on each side, or has an arm nucleotide in the hairpin loop.
+    items: name -> (sequence, dotBracket, arms). The flanks are kept unpaired (x in the
+    constraint); the MFE under that constraint is taken if it is one hairpin with the arms
+    in the stem, and otherwise the lowest-energy suboptimal structure that is. Items with
+    no such structure in the searched range get the best structure by the earlier rule:
+    the MFE if it is one hairpin, else the constrained MFE or the lowest-energy suboptimal
+    structure that is one hairpin, else the MFE. Returns name -> (dotBracket, foldType
+    text) for the refolded items."""
+    bad = sorted(n for n, (seq, db, arms) in items.items() if not isGood(db, arms, flank))
+    nNoHairpin = sum(1 for n in bad if not isHairpin(items[n][1], flank))
     constraint = {n: "x" * flank + "." * (len(items[n][0]) - 2 * flank) + "x" * flank
                   for n in bad}
-    refolded = {}
-    if flank:
-        folds = rnafold([(n, items[n][0], constraint[n]) for n in bad])
-        for n in bad:
-            if isHairpin(folds[n][0], flank):
-                refolded[n] = (folds[n][0], "flanks unpaired, %s kcal/mol" % folds[n][1])
-    nUnpaired = len(refolded)
-    noHairpin = []
+    folds = rnafold([(n, items[n][0], constraint[n]) for n in bad]) if flank else {}
+    refolded, armLoop, noHairpin = {}, [], []
+    nUnpaired = nSubopt = 0
     for n in bad:
-        if n in refolded:
+        seq, db, arms = items[n]
+        prefix = "flanks unpaired, " if flank else ""
+        if flank and isGood(folds[n][0], arms, flank):
+            refolded[n] = (folds[n][0], "flanks unpaired, %s kcal/mol" % folds[n][1])
+            nUnpaired += 1
             continue
-        best = bestHairpin(items[n][0], constraint[n], flank)
-        if best is None:
-            noHairpin.append(n)
+        best = bestSubopt(seq, constraint[n], lambda d: isGood(d, arms, flank))
+        if best:
+            refolded[n] = (best[0], prefix + "suboptimal hairpin, %s kcal/mol" % best[1])
+            nSubopt += 1
+            continue
+        # no structure with the arms in the stem: earlier rule, one hairpin only
+        if isHairpin(db, flank):
+            armLoop.append(n)
+            continue
+        if flank and isHairpin(folds[n][0], flank):
+            refolded[n] = (folds[n][0], "flanks unpaired, %s kcal/mol" % folds[n][1])
+            armLoop.append(n)
+            continue
+        best = bestSubopt(seq, constraint[n], lambda d: isHairpin(d, flank))
+        if best:
+            refolded[n] = (best[0], prefix + "suboptimal hairpin, %s kcal/mol" % best[1])
+            armLoop.append(n)
         else:
-            refolded[n] = (best[0], ("flanks unpaired, " if flank else "") +
-                           "suboptimal hairpin, %s kcal/mol" % best[1])
-    print("%d items, %d without one hairpin in the MFE: %d refolded with the flanks "
-          "unpaired, %d as suboptimal hairpins, %d with no hairpin within %d kcal/mol" %
-          (len(items), len(bad), nUnpaired, len(refolded) - nUnpaired, len(noHairpin),
-           SUBOPT_RANGES[-1]), file=sys.stderr)
+            noHairpin.append(n)
+    print("%d items, %d not one hairpin and %d with an arm in the hairpin loop in the MFE: "
+          "%d refolded with the flanks unpaired, %d as suboptimal hairpins, all with the "
+          "arms in the stem; %d with an arm in the loop and %d with no hairpin within "
+          "%d kcal/mol" % (len(items), nNoHairpin, len(bad) - nNoHairpin, nUnpaired, nSubopt,
+          len(armLoop), len(noHairpin), SUBOPT_RANGES[-1]), file=sys.stderr)
+    for n in armLoop:
+        print("arm in the hairpin loop: " + n, file=sys.stderr)
     for n in noHairpin:
         print("no hairpin, MFE kept: " + n, file=sys.stderr)
     return refolded
@@ -236,7 +269,9 @@ def bed(gffFile, foldFile, bedOut, armsOut):
     assigned = assignMatures(pres, matures)
     print("%d precursors, %d matures, %d folds" % (len(pres), len(matures), len(folds)),
           file=sys.stderr)
-    items = {p["id"]: folds[p["id"]][:2] for p in pres}
+    items = {p["id"]: folds[p["id"]][:2] +
+             ([armRange(p, m["start"], m["end"]) for m, arm in assigned.get(p["id"], [])],)
+             for p in pres}
     refolded = hairpinRefold(items, 0)
     refolded.update(manualStructures(items))
 

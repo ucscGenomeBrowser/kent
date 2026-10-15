@@ -42,8 +42,10 @@ cd /hive/data/genomes/hg38/bed/mirBase
 # The MFE structure is not a hairpin at some precursors. A precursor counts as
 # misfolded when its structure is not one hairpin, i.e. does not match the regular
 # expression ^[(.]+\(\.+\)[).]+$ (one stem-loop; bulges and interior loops are
-# allowed). For these, the lowest-energy structure that is one hairpin is taken from
-# RNAsubopt -d2 -s, searched up to 8 kcal/mol above the MFE. RNAsubopt is not in
+# allowed), or when a mature reaches into the hairpin loop. For these, the
+# lowest-energy structure that is one hairpin with all matures in the stem is taken
+# from RNAsubopt -d2 -s, searched up to 8 kcal/mol above the MFE. Where there is
+# none, the structure is chosen by the hairpin test alone. RNAsubopt is not in
 # /cluster/bin; the build uses ViennaRNA 2.7.2 from
 # /cluster/home/atanzer/.local/miniforge3/bin/RNAsubopt (RNASUBOPT in
 # mirBaseToBed.py). The field foldType says which structure is shown, with its
@@ -51,7 +53,15 @@ cd /hive/data/genomes/hg38/bed/mirBase
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh
 #   1918 precursor sequences
 #   1918 precursors, 2883 matures, 1918 folds
-#   1918 items, 63 without one hairpin in the MFE: 0 refolded with the flanks unpaired, 60 as suboptimal hairpins, 3 with no hairpin within 8 kcal/mol
+#   1918 items, 63 not one hairpin and 77 with an arm in the hairpin loop in the MFE: 0 refolded with the flanks unpaired, 129 as suboptimal hairpins, all with the arms in the stem; 8 with an arm in the loop and 3 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: MI0001729
+#   arm in the hairpin loop: MI0006327
+#   arm in the hairpin loop: MI0015833
+#   arm in the hairpin loop: MI0015866
+#   arm in the hairpin loop: MI0016011
+#   arm in the hairpin loop: MI0019310
+#   arm in the hairpin loop: MI0021273
+#   arm in the hairpin loop: MI0029321
 #   no hairpin, MFE kept: MI0021279
 #   no hairpin, MFE kept: MI0022631
 #   no hairpin, MFE kept: MI0022689
@@ -76,7 +86,11 @@ bigBedInfo mirBaseArms.bb | grep itemCount
 # accession, mature names and MIMAT accessions), used by searchTrix; trix searches
 # are case-insensitive.
 
-# The 60 suboptimal hairpins are 0 to 7.4 kcal/mol above the MFE (median 0.9).
+# The 130 suboptimal hairpins are 0 to 7.6 kcal/mol above the MFE (median 1.1).
+# Matures still reach into the hairpin loop at 8 precursors, as no single hairpin
+# within 8 kcal/mol keeps them in the stem: hsa-mir-451a (MI0001729, processed by
+# Ago2, see Hsa-Mir-451 in doc/hg38/mirGeneDb.txt), hsa-mir-1237, -3620, -4302,
+# -4326, -548bb, -5703 and -378j (MI0021273, a suboptimal hairpin, the others MFE).
 # hsa-mir-6134 (MI0021279), hsa-mir-6786 (MI0022631) and hsa-mir-6843 (MI0022689)
 # have no single hairpin within 8 kcal/mol. hsa-mir-6786 and hsa-mir-6843 keep their
 # MFE structure; their precursors seem too long on the 5p side, and the region with

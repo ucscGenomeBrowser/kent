@@ -67,11 +67,14 @@ mature miRNA was assigned to the locus that contains it. The arm was taken from 
 taken from the half of the precursor they lie in. In total, 1,442 mature miRNAs are on the
 5' arm and 1,441 on the 3' arm. The sequence of every precursor was taken from hg38 and
 folded with RNAfold (ViennaRNA 2.7.2, option <tt>-d2</tt>, default energy parameters) to
-predict the minimum free energy (MFE) structure. At 63 precursors, the MFE structure is
-not one hairpin. For 60 of them, the lowest-energy structure that is one hairpin, from
-RNAsubopt (ViennaRNA 2.7.2) within 8 kcal/mol of the MFE, is shown. Of the other 3, two keep
-the MFE structure, and for hsa-mir-6134 a suboptimal structure 0.8 kcal/mol above the MFE
-was chosen by hand, in which the mature miRNA is more helical. The <b>Structure</b> row of the
+predict the minimum free energy (MFE) structure. At 140 precursors, the MFE structure is
+not one hairpin or a mature miRNA reaches into the hairpin loop. For 129 of them, the
+lowest-energy structure that is one hairpin with the mature miRNAs in the stem, from
+RNAsubopt (ViennaRNA 2.7.2) within 8 kcal/mol of the MFE, is shown. At 8 precursors, among
+them the Argonaute 2-processed hsa-mir-451a, no such structure exists and a mature miRNA
+stays in the loop; hsa-mir-6786 and hsa-mir-6843 keep their MFE structure, and for
+hsa-mir-6134 a suboptimal structure 0.8 kcal/mol above the MFE was chosen by hand, in
+which the mature miRNA is more helical. The <b>Structure</b> row of the
 details page says which structure is shown. The steps are documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mirBase.txt"
 target="_blank">makeDoc file</a>, and the scripts are in the
