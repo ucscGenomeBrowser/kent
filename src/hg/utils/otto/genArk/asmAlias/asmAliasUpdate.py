@@ -20,11 +20,14 @@ forward untouched, EXCEPT:
     would make that real dbDb browser's own full-text search term also
     match some unrelated genArk assembly (see hg/hubApi/assemblyList.py,
     which builds its browsable index from both dbDb and asmAlias data)
+  - a row whose alias uses any character outside the set [A-Za-z0-9._-]
+    (see validAlias) is dropped ('INVALID ALIAS:')
 New rows discovered from the NCBI data are appended; a candidate alias
 that is nothing but digits and dots (e.g. '1.0', '26') -- a bare version
 number, never a useful alias -- is never generated in the first place,
 and the same goes for a candidate that collides with an existing
-hgcentraltest.dbDb 'name' (case insensitive).
+hgcentraltest.dbDb 'name' (case insensitive), or that uses any character
+outside the validAlias set [A-Za-z0-9._-].
 
 As a final pass over the complete row set (existing + new), any two alias
 spellings that differ only by case (e.g. 'FF3'/'Ff3') are resolved, since
@@ -140,6 +143,15 @@ def isNumericOnlyAlias(alias):
     return bool(numericAliasRe.match(alias))
 
 
+validAlias = re.compile(r'^[A-Za-z0-9._-]+$')
+
+
+def isValidAlias(alias):
+    """True when alias text uses only the permitted character set:
+    letters, digits, '.', '_' and '-'."""
+    return bool(validAlias.match(alias))
+
+
 def hgsqlRows(db, sql):
     """Run 'hgsql db -N -e sql' and return a list of tab-split field lists."""
     cmd = [hgsqlCmd, db, "-N", "-e", sql]
@@ -224,6 +236,13 @@ def findDbDbNameCollisions(aliasToBrowser, dbDbNames):
     return {alias for alias in aliasToBrowser if alias.lower() in dbDbNames}
 
 
+def findInvalidAliases(aliasToBrowser):
+    """Return the set of existing asmAlias aliases that use characters
+    outside the validAlias character set -- these are dropped from the
+    carried-forward set, not just prevented from being generated."""
+    return {alias for alias in aliasToBrowser if not isValidAlias(alias)}
+
+
 def ftpPathBasename(ftpPath):
     if isEmpty(ftpPath):
         return ""
@@ -284,10 +303,11 @@ def buildCandidates(accession, target, asmName, gbrsPairedAsm, ftpPath, hubAcces
             candidates.add(gbrsPairedAsm)
 
     # a bare version number (e.g. '1.0', '26') is never a useful alias,
-    # and a candidate colliding with an existing dbDb.name must never be
-    # used as an alias for something else (case insensitive)
-    return {c for c in candidates if not isNumericOnlyAlias(c)
-            and c.lower() not in dbDbNames}
+    # an alias may only use the validAlias character set, and a candidate
+    # colliding with an existing dbDb.name must never be used as an alias
+    # for something else (case insensitive)
+    return {c for c in candidates if isValidAlias(c)
+            and not isNumericOnlyAlias(c) and c.lower() not in dbDbNames}
 
 
 def computeBrowserTargets(ncbiData, hubAccessions):
@@ -577,12 +597,21 @@ def main():
             "alias matches an existing dbDb.name, dropping this row\n"
             % (alias, aliasToBrowser[alias]))
 
-    # existing rows on a retired GCA browser, or whose alias collides with
-    # a real dbDb.name, are dropped from the carried-forward set; dropping
-    # the GCA rows here must not block their replacement rows from being
-    # added pointing at the new GCF browser instead
+    invalidAliases = findInvalidAliases(aliasToBrowser)
+    for alias in sorted(invalidAliases):
+        sys.stderr.write(
+            "INVALID ALIAS: existing asmAlias row alias=%s browser=%s -- "
+            "alias uses characters outside [A-Za-z0-9._-], dropping this "
+            "row\n" % (alias, aliasToBrowser[alias]))
+
+    # existing rows on a retired GCA browser, whose alias collides with a
+    # real dbDb.name, or whose alias has invalid characters, are dropped
+    # from the carried-forward set; dropping the GCA rows here must not
+    # block their replacement rows from being added pointing at the new
+    # GCF browser instead
     survivors = {a: b for a, b in aliasToBrowser.items()
-                 if b not in obsoleteGca and a not in dbDbCollisions}
+                 if b not in obsoleteGca and a not in dbDbCollisions
+                 and a not in invalidAliases}
 
     newRows = buildNewRows(ncbiData, hubAccessions, browserTargets,
                             survivors, browserToAliases, dbDbNames)
@@ -614,6 +643,8 @@ def main():
     sys.stderr.write("%d obsolete GCA browser(s) dropped\n" % len(obsoleteGca))
     sys.stderr.write("%d existing row(s) dropped for colliding with a dbDb name\n"
                       % len(dbDbCollisions))
+    sys.stderr.write("%d existing row(s) dropped for invalid alias characters\n"
+                      % len(invalidAliases))
     sys.stderr.write("%d existing row(s) repointed to a newer version\n" % updated)
     sys.stderr.write("%d new asmAlias rows added\n" % (len(newRows) - updated))
     sys.stderr.write("%d row(s) dropped for case-insensitive conflicts\n" % caseDropped)
