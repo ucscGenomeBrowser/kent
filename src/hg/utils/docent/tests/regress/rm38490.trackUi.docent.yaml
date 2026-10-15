@@ -30,4 +30,7 @@ steps:
   - goto: "/cgi-bin/hgTracks?db=hg38&position=chr12%3A6534000-6539000&pix=1100&hideTracks=1"
   - expect: {rows: [rm38490Bar], noText: "Warning/Error"}
   - rightClick: {track: rm38490Bar, item: "ENST00000229239", pick: "Track Description"}
+  # rightClick can return before the menu's hgTrackUi request has gone out, and expect:
+  # looks once.  Without this wait the nightly of 2026-10-15 checked an empty page.
+  - wait: "#hgTrackUiDialog:visible"
   - expect: {has: "#hgTrackUiDialog:visible", text: "No description found for:"}
