@@ -43,8 +43,8 @@ topPriorityNames = [
     'GCF_018350175.1',	# Fca126_mat1.0 Cat
     'GCF_016699485.2',	# GRCg7b Chicken
     'GCF_003957565.2',	# bTaeGut1.4 Zebra finch
-    'GCF_049306965.1',	# GRCz12tu Zebrafish
-    'GCF_052040795.1',	# GRCz12ab Zebrafish
+    'GCF_052040795.2',	# GRCz13ab Zebrafish
+    'GCF_049306965.2',	# GRCz13tu Zebrafish
     'mm10',
     'dm6',
     'danRer11',
@@ -120,7 +120,10 @@ def addAliases(browserName, aliasData, descr):
 
 ####################################################################
 ### reading hgcentral.asmAlias table
+### alias names may only use [A-Za-z0-9._-], anything else is skipped
 ####################################################################
+validAlias = re.compile(r'^[A-Za-z0-9._-]+$')
+
 def asmAliasData():
     # Run the MySQL command and capture the output as bytes
     result = subprocess.run(
@@ -139,11 +142,16 @@ def asmAliasData():
 
     aliasCount = 0
     browserCount = 0
+    skippedCount = 0
 
     for row in rows:
         columns = row.split('\t')	# Split each row into columns
         alias = columns[0]
         browser = columns[1]
+        ### only aliases made of [A-Za-z0-9._-] are allowed
+        if not validAlias.match(alias):
+            skippedCount += 1
+            continue
         if browser not in aliasData:
             aliasData[browser] = []
             browserCount += 1
@@ -151,6 +159,7 @@ def asmAliasData():
         aliasCount += 1
 
     print(f"# counted {aliasCount} aliases for {browserCount} 'browsers'")
+    print(f"# skipped {skippedCount} aliases with characters outside [A-Za-z0-9._-]")
     return aliasData
 
 ####################################################################
@@ -348,11 +357,11 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             ### record the year and status here before bailing out so
             ### these can get into genArk if needed
             asmName = row[15]
-            assemblyLevel = re.sub(r'genome', '', row[11], flags=re.IGNORECASE).lower()
+            assemblyLevel = re.sub(r'genome', '', row[11], flags=re.IGNORECASE).strip().lower()
             year = re.sub(r'/.*', '', row[14])
             yearDict[gcAccession] = year
             versionStatus = row[10].lower()
-            refSeqCategory = re.sub(r'genome', '', row[4]).lower()
+            refSeqCategory = re.sub(r'genome', '', row[4]).strip().lower()
             if refSeqCategory == "na":
                refSeqCategory = ""
             if versionStatus == "na":
@@ -374,7 +383,7 @@ def readAsmSummary(suffix, prioExists, comNames, asmIdClade):
             s0 = re.sub(r'cultivar=', '', strain)
             strain = re.sub(r'ecotype=', '', s0)
             s0 = re.sub(r'strain=', '', strain)
-            strain = re.sub(r'na', '', s0)
+            strain = "" if s0 == "na" else s0
             asmId = gcAccession + "_" + asmName
             asmSubmitter = row[16]
             asmType = row[23]
@@ -1002,8 +1011,8 @@ def main():
         description = addAliases(dbDbName, aliasData, description)
 
         descr = f"{entry['sourceName']} {entry['taxId']} {description}"
-        if year not in organism and year not in descr:
-            descr = f"{entry['sourceName']} {entry['taxId']} {entry['description']} {year}"
+        if year != "n/a" and year not in organism and year not in descr:
+            descr = f"{entry['sourceName']} {entry['taxId']} {description} {year}"
         description = re.sub(r'\s+', ' ', descr).strip()
         haplotypes = csvHaplotypes.get(entry['name'], "")
         outLine =f"{entry['name']}\t{priority}\t{organism}\t{entry['scientificName']}\t{entry['taxId']}\t{clade}\t{description}\t1\t\t{year}\t{refSeqCategory}\t{versionStatus}\t{assemblyLevel}\t{haplotypes}\n"
