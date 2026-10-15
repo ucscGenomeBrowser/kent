@@ -77,9 +77,7 @@ def extractNames(asmRpt, hapX):
 
             pat = re.compile(r'.*ganism name:\s+', re.IGNORECASE)
             sciName = pat.sub('', line)
-            pat = re.compile(r'\s+\(.*\)$')
-            sciName = pat.sub('', sciName)
-            pat = re.compile(r'[()\[\]+*]')
+            pat = re.compile(r'\s+\([^()]*\)$')
             sciName = pat.sub('', sciName)
             pat = re.compile(r'\?')
             sciName = pat.sub(' ', sciName)
@@ -151,7 +149,7 @@ def extractNames(asmRpt, hapX):
                 orgName = saveOrgName
                 pat = re.compile(r'.*ism name:\s+')
                 orgName = pat.sub('', orgName)
-                pat = re.compile(r'\s+\(.*\)$')
+                pat = re.compile(r'\s+\([^()]*\)$')
                 orgName = pat.sub('', orgName)
 
           elif "Date:" in line:
