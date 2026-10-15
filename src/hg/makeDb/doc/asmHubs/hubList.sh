@@ -21,7 +21,7 @@ fi
 
 cd /home/qateam/cronJobs
 
-export nextTxt="/dev/shm/nextHubList.txt"
+export nextTxt="/mirrordata/hubs/.UCSC_GI.assemblyHubList.txt.next"
 
 rsync -a hiram@hgwdev:kent/src/hg/makeDb/doc/legacyAsmHub/legacy.clade.txt ./
 
@@ -35,7 +35,11 @@ printf "taxIdCount before: $taxIdCount\n"
 
 ./cladeListings.sh 1>&2
 
-export asmCount=`find /mirrordata/hubs/GCF /mirrordata/hubs/GCA -mindepth 4 -maxdepth 4 -type d | wc -l`
+export nextRows="${nextTxt}.rows"
+
+./asmHubList.pl goForIt | grep -v _009914755 | sort > "${nextRows}"
+
+export asmCount=$(grep -c . "${nextRows}")
 
 printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt
 # last update: ${DS}, $asmCount assemblies listed
@@ -67,10 +71,10 @@ printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubLis
 # accession\tassembly\tscientific name\tcommon name\ttaxonId\tGenArk clade
 " > "${nextTxt}"
 
-./asmHubList.pl goForIt | grep -v _009914755 | sort >> "${nextTxt}"
+cat "${nextRows}" >> "${nextTxt}"
+rm -f "${nextRows}"
 
-rm -f "/mirrordata/hubs/UCSC_GI.assemblyHubList.txt"
-mv  "${nextTxt}" "/mirrordata/hubs/UCSC_GI.assemblyHubList.txt"
+mv "${nextTxt}" "/mirrordata/hubs/UCSC_GI.assemblyHubList.txt"
 
 export after=`grep -c -v "^#" /mirrordata/hubs/UCSC_GI.assemblyHubList.txt`
 
