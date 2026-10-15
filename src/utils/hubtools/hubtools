@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging, sys, argparse, os, json, subprocess, shutil, string, glob, tempfile, re
-import shlex, urllib, urllib.parse, urllib.request, urllib.error, ssl, time, tarfile, hashlib, gzip, csv, io, base64
+import shlex, platform, urllib, urllib.parse, urllib.request, urllib.error, ssl, time, tarfile, hashlib, gzip, csv, io, base64
 
 from pathlib import Path
 from collections import defaultdict, OrderedDict
@@ -778,7 +778,8 @@ def metaOverride(tdb, meta):
 
     if trackName not in meta and "__" in trackName:
         logging.debug("Using only basename of track %s" % trackName)
-        trackName = trackName.split("__")[1]
+        # top-level tracks are <base>__<type>, composite children <parent>__<base>__<type>
+        trackName = trackName.split("__")[-2]
 
     if trackName not in meta:
         logging.debug("No meta info for track %s" % tdb["track"])
@@ -1002,6 +1003,52 @@ def sslContext():
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
     return ctx
+
+# the converters (bedToBigBed, wigToBigWig, ...) that are not on the PATH are downloaded here
+kentBinDir = os.path.expanduser("~/.local/bin")
+kentExeUrl = "https://hgdownload.soe.ucsc.edu/admin/exe/"
+
+def kentBinDirUrl():
+    " return the hgdownload directory with the UCSC binaries for this OS and CPU "
+    system = platform.system()
+    machine = platform.machine().lower()
+    if machine in ("amd64", "x86_64"):
+        machine = "x86_64"
+    elif machine in ("arm64", "aarch64"):
+        machine = "arm64" if system == "Darwin" else "aarch64"
+
+    if system == "Linux" and machine in ("x86_64", "aarch64"):
+        return kentExeUrl + "linux." + machine + "/"
+    if system == "Darwin" and machine in ("x86_64", "arm64"):
+        return kentExeUrl + "macOSX." + machine + "/"
+    errAbort("There are no UCSC binaries for %s on %s. Install the command line tools some other "
+            "way, e.g. with 'conda install -c bioconda ucsc-bedtobigbed', and put them on your PATH." %
+            (system, platform.machine()))
+
+def requireBin(name):
+    """ return the path of the UCSC binary 'name'. Uses the one on the PATH or in ~/.local/bin,
+    otherwise downloads it from hgdownload into ~/.local/bin first. """
+    path = shutil.which(name)
+    if path:
+        return path
+    path = join(kentBinDir, name)
+    if isfile(path) and os.access(path, os.X_OK):
+        return path
+
+    url = kentBinDirUrl() + name
+    os.makedirs(kentBinDir, exist_ok=True)
+    tmpPath = path + ".tmp"
+    try:
+        with urllib.request.urlopen(url, context=sslContext()) as resp, open(tmpPath, "wb") as ofh:
+            shutil.copyfileobj(resp, ofh)
+    except urllib.error.URLError as e:
+        if isfile(tmpPath):
+            os.remove(tmpPath)
+        errAbort("%s is not on your PATH and could not be downloaded from %s: %s" % (name, url, e))
+    os.chmod(tmpPath, 0o755)
+    os.rename(tmpPath, path)
+    logging.info("%s was not on your PATH, downloaded it from %s to %s" % (name, url, path))
+    return path
 
 def httpReq(url, asBytes=False, asJson=False, params=None, returnFinalUrl=False):
     " HTTP GET a URL with the stdlib and return its content (bytes, parsed JSON or text) "
@@ -1551,9 +1598,9 @@ def gffToGenePred(inFname, outFname, tmpDir):
     isGtf = plainName.endswith(".gtf")
     uniqueFh = None
     if isGtf:
-        cmd = ["gtfToGenePred", "-genePredExt", "-ignoreGroupsWithoutExons", "stdin", outFname]
+        cmd = [requireBin("gtfToGenePred"), "-genePredExt", "-ignoreGroupsWithoutExons", "stdin", outFname]
     else:
-        cmd = ["gff3ToGenePred", "-warnAndContinue", "stdin", outFname]
+        cmd = [requireBin("gff3ToGenePred"), "-warnAndContinue", "stdin", outFname]
         uniqueFh = gff3SeqUniqueIds(inFname, tmpDir)
         if uniqueFh is not None:
             inFname = uniqueFh.name
@@ -1592,7 +1639,7 @@ def convGffToBigBed(inFname, outFname, chromSizes, chromSizesFname, tmpDir, tdb)
     gpFh = makeTempFile(dir=tmpDir, suffix=".gp", prefix="gff.")
     if gffToGenePred(inFname, gpFh.name, tmpDir):
         bgpFh = makeTempFile(dir=tmpDir, suffix=".bed", prefix="bgp.")
-        subprocess.check_call(["genePredToBigGenePred", gpFh.name, bgpFh.name])
+        subprocess.check_call([requireBin("genePredToBigGenePred"), gpFh.name, bgpFh.name])
         gpFh.close()
 
         sortFh = makeTempFile(dir=tmpDir, suffix=".bed", prefix="bgpSorted.")
@@ -1638,7 +1685,7 @@ def convWigToBigWig(inFname, outFname, chromSizesFname, tmpDir):
             plainFh.flush()
             inFname = plainFh.name
 
-    cmd = ["wigToBigWig", "-clip", inFname, chromSizesFname, outFname]
+    cmd = [requireBin("wigToBigWig"), "-clip", inFname, chromSizesFname, outFname]
     logging.debug("Running %s" % " ".join(cmd))
     errDest = None if debugMode else subprocess.DEVNULL
     subprocess.check_call(cmd, stderr=errDest)
@@ -1657,7 +1704,7 @@ def convBedGraphToBigWig(inFname, outFname, chromSizes, chromSizesFname, tmpDir)
         sortFh.close()
         return None
 
-    cmd = ["bedGraphToBigWig", sortFh.name, chromSizesFname, outFname]
+    cmd = [requireBin("bedGraphToBigWig"), sortFh.name, chromSizesFname, outFname]
     logging.debug("Running %s" % " ".join(cmd))
     subprocess.check_call(cmd)
     sortFh.close()
@@ -1797,7 +1844,7 @@ def bigFileChromSizes(url, outFname):
     tool = "bigBedInfo" if url.lower().endswith((".bb", ".bigbed")) else "bigWigInfo"
     logging.info("Reading the chromosome list from %s" % url)
     logging.debug("Running %s -chroms %s" % (tool, url))
-    output = subprocess.check_output([tool, "-chroms", url], universal_newlines=True)
+    output = subprocess.check_output([requireBin(tool), "-chroms", url], universal_newlines=True)
 
     ofh = open(outFname, "wt")
     count = 0
@@ -2375,7 +2422,7 @@ def bigBedRebuildArgs(inUrl, tdbType, tmpDir):
     """ what bedToBigBed needs to build this bigBed again: the -type= string and an autoSql
     file with the fields it actually has.  The total field count comes out of the file, the
     number of ordinary BED fields out of the trackDb type. """
-    out = subprocess.check_output(["bigBedInfo", "-as", inUrl], universal_newlines=True)
+    out = subprocess.check_output([requireBin("bigBedInfo"), "-as", inUrl], universal_newlines=True)
     fieldCount = None
     asLines = None
     asDone = False
@@ -2421,7 +2468,7 @@ def splitBigFile(inUrl, tdbType, aliasMaps, sizeMaps, sizesFnames, outPaths, tmp
     on a haplotype, and what happened to the records that did not make it. """
     isWig = tdbType.split()[0] in ("bigWig", "bedGraph")
     suffix = ".bedGraph" if isWig else ".bed"
-    cmd = ["bigWigToBedGraph", inUrl, "stdout"] if isWig else ["bigBedToBed", inUrl, "stdout"]
+    cmd = [requireBin("bigWigToBedGraph"), inUrl, "stdout"] if isWig else [requireBin("bigBedToBed"), inUrl, "stdout"]
 
     typeStr, asFh = (None, None)
     if not isWig:
@@ -2440,10 +2487,10 @@ def splitBigFile(inUrl, tdbType, aliasMaps, sizeMaps, sizesFnames, outPaths, tmp
         sortFh = makeTempFile(dir=tmpDir, suffix=suffix, prefix="sorted.")
         sortBedFile(fhs[i].name, sortFh.name, tmpDir)
         if isWig:
-            subprocess.check_call(["bedGraphToBigWig", sortFh.name, sizesFnames[i],
+            subprocess.check_call([requireBin("bedGraphToBigWig"), sortFh.name, sizesFnames[i],
                     outPaths[i]])
         else:
-            cmd2 = ["bedToBigBed", sortFh.name, sizesFnames[i], outPaths[i], "-tab",
+            cmd2 = [requireBin("bedToBigBed"), sortFh.name, sizesFnames[i], outPaths[i], "-tab",
                     "-type=" + typeStr]
             if asFh is not None:
                 cmd2.append("-as=" + asFh.name)
@@ -3379,7 +3426,7 @@ def convTsv(db, tsvFname, outBedFname, outAsFname, outBbFname):
 
     chromSizesFname = getChromSizesFname(db)
 
-    cmd = ["bedToBigBed", outBedFname, chromSizesFname, outBbFname, "-tab", "-type=bed%d+" % bedColCount, "-as=%s" % outAsFname]
+    cmd = [requireBin("bedToBigBed"), outBedFname, chromSizesFname, outBbFname, "-tab", "-type=bed%d+" % bedColCount, "-as=%s" % outAsFname]
     subprocess.check_call(cmd)
 
 def convTsvDir(inDir, db, outDir):
@@ -3448,7 +3495,7 @@ def bedToBigBed(inFname, db, outFname, asFname=None, bedType=None, chromSizesFna
     " convert bed to bigbed file, handles chrom.sizes download "
     if chromSizesFname is None:
         chromSizesFname = getChromSizesFname(db)
-    cmd = ["bedToBigBed", inFname, chromSizesFname, outFname, "-tab"]
+    cmd = [requireBin("bedToBigBed"), inFname, chromSizesFname, outFname, "-tab"]
     if asFname:
         cmd.append("-as="+asFname)
     if bedType:
