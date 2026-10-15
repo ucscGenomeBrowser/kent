@@ -557,89 +557,45 @@ function cartHideAnyTrack (id, cartVars, cartVals) {
     }
 }
 
-function tdbCountChildren(trackDb, parentType) {
-    /* return dicts with count of children, uses either the .parentTrack or .topParent trackDb attributes */
-    var familySize = {};
-    var families = {};
-    // sort trackDb into object topParent -> count of children
-    for (var trackName of Object.keys(hgTracks.trackDb)) {
-        var rec = hgTracks.trackDb[trackName];
-        // when looking at superTracks, only look at those children that are in superTracks
-        if (rec[parentType]===undefined) {
-            continue; // ignore tracks without parents
-        }
-
-        var parentTrack = rec[parentType];
-        if (!familySize.hasOwnProperty(parentTrack)) {
-            familySize[parentTrack] = 0;
-            families[parentTrack] = [];
-        }
-        familySize[parentTrack]++;
-        families[parentTrack].push(trackName);
-    }
-
-    var ret = {};
-    ret.familySize = familySize;
-    ret.families = families;
-    return ret;
+function tdbAncestors(rec) {
+    /* names of the containers above a track, outermost first: its superTracks, then its composite */
+    var ancestors = rec.superTrack ? rec.superTrack.split(",").reverse() : [];
+    if (tdbIsSubtrack(rec) && rec.parentTrack)
+        ancestors.push(rec.parentTrack);
+    return ancestors;
 }
 
-function tdbFindChildless(trackDb, delTracks) {
-    /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
-     * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks
-     * The caller needs the children names, as we want to hide the children with Javascript right away */
-
-    // This functions uses a somewhat weird strategy: it counts the children of the composites, also counts the children of superTracks,
-    // and compares both at the end. There may be a better strategy but our data structures are so strange that I didn't know what
-    // else to do.
-    var parentType = "parentTrack";
-    others = [];
-
-    var compLinks = tdbCountChildren(trackDb, "parentTrack"); // look only at direct parents: superTracks and composites
-    var topLinks = tdbCountChildren(trackDb, "topParent");  // look at top parents, so only superTracks
-
-    // decrease the parent's count for each track to delete
-    for (var delTrack of delTracks) {
-        var tdbRec = hgTracks.trackDb[delTrack];
-        let parentName = tdbRec.parentTrack;
-        if (parentName)
-            compLinks.familySize[parentName]--;
-
-        parentName = tdbRec.topParent;
-        if (parentName)
-            topLinks.familySize[parentName]--;
+function tdbHidePlan(trackDb, hideIds) {
+    /* Decide how to hide hideIds, a list of tracks in trackDb. A container (superTrack or composite)
+     * none of whose tracks stay in the image is hidden itself, rather than its children, so it is
+     * never left switched on with nothing to show. The outermost such container is used.
+     * Returns o.parents, an object container -> its tracks in hideIds, and o.tracks, the tracks
+     * that have to be hidden one by one, because all of their containers keep other tracks. */
+    var hideSet = new Set(hideIds);
+    var ancestors = {};
+    var keptAncestors = new Set();
+    for (var name of Object.keys(trackDb)) {
+        ancestors[name] = tdbAncestors(trackDb[name]);
+        if (!hideSet.has(name))
+            for (var anc of ancestors[name])
+                keptAncestors.add(anc);
     }
 
-    // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
-    var loneParents = [];
-    var doneParents = [];
-    for (delTrack of delTracks) {
-        var parentName = hgTracks.trackDb[delTrack].parentTrack;
-        var topParentName = hgTracks.trackDb[delTrack].topParent;
-        if (parentName) {
-            // hide a superTrack parent only if that superTrack does not have any other tracks open
-            // This addresses the case where you hide the last child of a composite under a superTrack
-            // E.g. All Gencode / Gencode V46 or FANTOM5/Max count 
-            if (compLinks.familySize[parentName]===0 && topLinks.familySize[topParentName]===0) {
-                // the top parent gets hidden, so remove all of its tracks from the image, not only
-                // those of this composite: a superTrack can have direct children (CADD Ins/Del)
-                if (!doneParents.includes(topParentName)) {
-                    loneParents.push([topParentName, topLinks.families[topParentName]]);
-                    doneParents.push(topParentName);
-                }
-            } else
-                for (var child of compLinks.families[parentName])
-                    // do not hide tracks of lone parents that are not in delTracks
-                    if (delTracks.includes(child))
-                        others.push(child);
-        } else {
-            others.push(delTrack);
-        }
+    var o = {parents: {}, tracks: []};
+    for (var id of hideSet) {
+        var parent = null;
+        for (var a of ancestors[id])
+            if (!keptAncestors.has(a)) {
+                parent = a;
+                break;
+            }
+        if (parent) {
+            if (!o.parents[parent])
+                o.parents[parent] = [];
+            o.parents[parent].push(id);
+        } else
+            o.tracks.push(id);
     }
-
-    o = {};
-    o.loneParents = loneParents;
-    o.others = Array.from(new Set(others)); // remove duplicates (rare bug in the above)
     return o;
 }
 
