@@ -97,11 +97,19 @@ ClinGen Allele Registry, and exports evidence structured for ACMG/AMP variant cl
 
 <p>
 Data are downloaded from the <a href="https://api.mavedb.org/docs" target="_blank">MaveDB API</a>,
-one request per score set. MaveDB resolves some score sets to the genome and others only to a
-protein sequence, so a variant is placed from its genomic term where one exists, otherwise by
-projecting its protein term onto the corresponding codon through RefSeq or GENCODE, otherwise
-by converting the submitter's transcript term. Haplotypes, several substitutions measured as a
-single unit, have no one position and are excluded.
+one request per score set. Each score set states its variants against its own construct, which
+is often numbered differently from the reference protein, so the build works out one offset per
+score set and checks it against the wild-type residues the experiment itself names. MaveDB
+supplies an offset of its own and it is used wherever it fits those residues; where it does not,
+the offset that does is used instead, and the item says which happened. Every placed variant is
+then checked against both the reference protein and the genome codon.
+</p>
+
+<p>
+Some constructs carry a known change of their own, such as the common P72R form of TP53. A
+measurement at that one position is of a different starting residue from the reference, so it is
+excluded rather than drawn as though it were the reference variant. Haplotypes, several
+substitutions measured as a single unit, have no one position and are excluded as well.
 </p>
 
 <p>

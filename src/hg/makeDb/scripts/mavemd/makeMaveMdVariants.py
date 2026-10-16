@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """Build the MaveMD per-variant bigBed from a fetchMaveMd.py download.
 
-One item per variant per score set.  Placement takes three routes, in order of preference:
+One item per variant per score set. Placement is not done here: it is mavedbPlace.py, in
+utils/otto/mavedb, shared with the MaveDB track so a variant lands in the same place in
+both. In outline it picks one offset per score set target, checked against the wild-type
+residues the experiment itself states, and then checks every placed row against the
+reference protein and the genome codon; mavedbPlace.py documents the rules.
 
-  1. MaveDB's own genomic HGVS (post_mapped_hgvs_g), about a third of the collection
-  2. the codon of the protein term (post_mapped_hgvs_p), about two thirds
-  3. hgvsToVcf on the submitter's original transcript term, for variants MaveDB's mapper
-     did not resolve at all
+That matters here because MaveDB's own mapped terms are wrong for three of MaveMD's score
+sets and the error is invisible from the mapped terms alone, which are rewritten to agree
+with the codon they chose. NDUFAF6 00000663-a-1 is mapped one codon downstream on 3,668
+rows, TPK1 00001251-a-1 is 49 codons downstream on 2,789, and both TARDBP 00000060 score
+sets number a prion-like domain construct 1-42 that MaveDB reads as full-protein positions.
+Placing from the experiment's residues is what catches all three.
 
-Routes 1 and 3 both go through kent's hgvsToVcf rather than a hand-rolled HGVS parser, in
-one batch invocation.  Route 2 is validated against route 1 on the ~154k variants that
-carry both terms; a disagreement rate above a threshold stops the build, because it means
-either RefSeq or MaveDB's mapper has moved under us.
+What this script does is the MaveMD part: choose which of a score set's calibrations to
+display, color by its ACMG code, and carry the ClinVar, gnomAD and assay columns.
 
 Haplotype measurements (p.[Arg19Leu;Gly20Ser]) have no single position and are counted and
 excluded, as they were from the earlier MaveDB track.
@@ -25,79 +29,15 @@ import csv
 import glob
 import json
 import os
-import re
-import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mavemdLib as lib
+import mavedbPlace as mp
 
 csv.field_size_limit(10 ** 7)
 
-# MaveDB states protein terms against RefSeq for most score sets and Ensembl for a few.
-PROTEIN_TERM = re.compile(r'^(?P<acc>(?:N[PM]_|ENSP)[\w.]+):p\.'
-                          r'(?P<wt>[A-Z][a-z]{2})(?P<pos>\d+)'
-                          r'(?P<var>[A-Z][a-z]{2}|Ter|=)$')
-NA = ('NA', '', '-', None)
-
-# Above this fraction of disagreements between our codon projection and MaveDB's own
-# genomic mapping, stop rather than publish coordinates we no longer trust.
-MAX_PROJECTION_MISMATCH = 0.005
-
-# Per-accession ceiling for the wild-type residue check. Individual variants that fail are
-# dropped rather than placed at a position the genome contradicts, so this threshold only
-# has to catch a transcript that has moved wholesale, which fails at close to 100%.
-MAX_RESIDUE_MISMATCH = 0.25
-
-
-def clean(value):
-    """Normalise the CSV's several spellings of "no value" to an empty string."""
-    return '' if value in NA else value.strip()
-
-
-CDNA_RANGE = re.compile(r'c\.(\d+)(?:_(\d+))?')
-CDNA_POSITIONS = re.compile(r'(\d+)(?=[ACGT]>)')
-SIMPLE_PRO = re.compile(r'^p\.(?P<wt>[A-Z][a-z]{2})(?P<pos>\d+)'
-                        r'(?P<var>[A-Z][a-z]{2}|Ter|=)$')
-
-
-def codonSpanOfCdna(term):
-    """Codons a cDNA term touches, or an empty set if it cannot be read.
-
-    Two shapes matter. A range, c.198_200delinsCTG, covers every base between the two
-    numbers. A bracketed list, c.[1207G>T;1209C>T], names each changed base separately,
-    and c. is followed by '[' so the range pattern does not see it at all; that was the
-    reason the single-codon PTEN changes kept falling through to the haplotype bucket.
-    """
-    if not term:
-        return set()
-    if '[' in term or ';' in term:
-        positions = [int(x) for x in CDNA_POSITIONS.findall(term)]
-        return {(p - 1) // 3 + 1 for p in positions}
-    m = CDNA_RANGE.search(term)
-    if not m:
-        return set()
-    first = int(m.group(1))
-    last = int(m.group(2)) if m.group(2) else first
-    return {(x - 1) // 3 + 1 for x in range(first, last + 1)}
-
-
-def cdnaReachesCodon(term, protPos):
-    """Does a cDNA term change any base of codon protPos?"""
-    return protPos in codonSpanOfCdna(term)
-
-
-def basesToBlocks(bases, chromStart):
-    """Contiguous runs of a codon's genomic bases, as BED block starts and sizes."""
-    ordered = sorted(bases)
-    starts, sizes = [ordered[0]], [1]
-    for prev, cur in zip(ordered, ordered[1:]):
-        if cur == prev + 1:
-            sizes[-1] += 1
-        else:
-            starts.append(cur)
-            sizes.append(1)
-    return [s - chromStart for s in starts], sizes
+clean = mp.clean
 
 
 def strengthScore(outcome, strength):
@@ -115,9 +55,10 @@ def strengthScore(outcome, strength):
 def loadScoreSets(downloadDir):
     """Read the score set records, keyed by URN.
 
-    Returns urn -> {title, gene, publication, calibrations}, where calibrations maps a
-    calibration URN to its metadata (title, primary flag, research-use-only flag, and the
-    OddsPath of each functional class).
+    Returns urn -> {record, title, gene, publication, calibrations}, where calibrations
+    maps a calibration URN to its metadata (title, primary flag, research-use-only flag,
+    and the OddsPath of each functional class). record is the record as downloaded, which
+    is what mavedbPlace.placeScoreSet() reads the targets and their sequences from.
     """
     scoreSets = {}
     for path in glob.glob(os.path.join(downloadDir, 'scoreSets', '*.json')):
@@ -157,6 +98,7 @@ def loadScoreSets(downloadDir):
         # medRxiv preprint, whose "identifier" is a DOI. The record carries a resolved url
         # either way, so link that rather than assuming a PMID.
         scoreSets[record['urn']] = {
+            'record': record,
             'assayMethod': keywords.get('Phenotypic Assay Method', ''),
             'assayModel': keywords.get('Phenotypic Assay Model System', ''),
             'assayMechanism': keywords.get('Molecular Mechanism Assessed', ''),
@@ -187,135 +129,21 @@ def calibrationColumns(fieldnames):
     return byUrn
 
 
-def loadScoreSetProteins(db, scoreSetTx):
-    """Protein accession for each score set's submission transcript.
-
-    MaveDB leaves post_mapped_hgvs_p empty for a change written as two substitutions in
-    one codon, e.g. PTEN c.[1207G>T;1209C>T] for p.Val403Phe. The submitted protein term
-    is a plain p.Val403Phe with no accession, so the accession has to come from the score
-    set's own transcript.
-    """
-    proteins = {}
-    for urn, tx in scoreSetTx.items():
-        base = tx.split('.')[0]
-        rows = lib.hgsql(db, "select protAcc from ncbiRefSeqLink where mrnaAcc = '%s'"
-                             % lib.checkAccession(tx))
-        if not rows:
-            rows = lib.hgsql(db, "select protAcc from ncbiRefSeqLink where mrnaAcc "
-                                 "like '%s.%%'" % lib.checkAccession(base))
-        if rows and rows[0][0]:
-            proteins[urn] = rows[0][0]
-    return proteins
+def readScoreSetCsv(path):
+    """One score set's rows, its per-calibration columns and its ClinVar release."""
+    with open(path, newline='') as fh:
+        reader = csv.DictReader(fh)
+        clinvarRelease = ''
+        for name in reader.fieldnames:
+            if name.startswith('clinvar.') and name.endswith('.clinical_significance'):
+                clinvarRelease = name.split('.')[1]
+        return list(reader), calibrationColumns(reader.fieldnames), clinvarRelease
 
 
-def loadScoreSetTranscripts(downloadDir):
-    """The transcript each score set's variants were submitted against, per score set.
-
-    Some score sets state their variants as bare terms with no accession, for example
-    c.34_36delinsCTT.  MaveDB's mapper leaves those unmapped, but the score set's other
-    variants carry a post-mapped cDNA term naming the transcript, so the bare terms can be
-    qualified from their own neighbours.  The most frequent accession wins; a score set
-    whose rows disagree is not qualified at all rather than guessed at.
-    """
-    transcripts = {}
-    for path in sorted(glob.glob(os.path.join(downloadDir, 'variants', '*.csv'))):
-        counts = collections.Counter()
-        urn = ''
-        with open(path, newline='') as fh:
-            for row in csv.DictReader(fh):
-                urn = urn or clean(row.get('score_set.score_set_urn'))
-                cdna = clean(row.get('mavedb.post_mapped_hgvs_c'))
-                if cdna and ':' in cdna:
-                    counts[cdna.split(':')[0]] += 1
-        if urn and counts:
-            top, topCount = counts.most_common(1)[0]
-            if topCount >= 0.9 * sum(counts.values()):
-                transcripts[urn] = top
-    return transcripts
-
-
-def qualifyTerm(term, transcript):
-    """Attach a transcript accession to a bare HGVS term, or return it unchanged."""
-    if term and transcript and ':' not in term and term[:2] in ('c.', 'n.', 'g.'):
-        return '%s:%s' % (transcript, term)
-    return term
-
-
-def collectTerms(downloadDir, scoreSetTx, scoreSetProt=None):
-    """First pass: every HGVS term that needs kent's parser, and the protein accessions.
-
-    Returns (terms, protAccs).  terms holds MaveDB's genomic terms plus, for variants
-    MaveDB failed to map at all, the submitter's original transcript term, qualified with
-    the score set's transcript when it arrived bare.
-    """
-    terms = set()
-    protAccs = set()
-    for path in sorted(glob.glob(os.path.join(downloadDir, 'variants', '*.csv'))):
-        with open(path, newline='') as fh:
-            for row in csv.DictReader(fh):
-                genomic = clean(row.get('mavedb.post_mapped_hgvs_g'))
-                protein = clean(row.get('mavedb.post_mapped_hgvs_p'))
-                if genomic:
-                    terms.add(genomic)
-                if protein:
-                    match = PROTEIN_TERM.match(protein)
-                    if match:
-                        protAccs.add(match.group('acc'))
-                urn = clean(row.get('score_set.score_set_urn'))
-                if not genomic and not protein:
-                    original = qualifyTerm(clean(row.get('hgvs_nt')), scoreSetTx.get(urn))
-                    if original and ':' in original:
-                        terms.add(original)
-                    if scoreSetProt and scoreSetProt.get(urn):
-                        protAccs.add(scoreSetProt[urn])
-    return terms, protAccs
-
-
-def runHgvsToVcf(db, terms, workDir):
-    """Convert HGVS terms to coordinates with kent's hgvsToVcf, in one batch.
-
-    Returns (placements, failures) where placements maps the original term to
-    (chrom, start0, end) with any VCF anchor base trimmed off.
-    """
-    if not terms:
-        return {}, collections.Counter()
-    inPath = os.path.join(workDir, 'terms.hgvs')
-    outPath = os.path.join(workDir, 'terms.vcf')
-    with open(inPath, 'w') as fh:
-        for term in sorted(terms):
-            fh.write(term + '\n')
-    result = subprocess.run(['hgvsToVcf', db, inPath, outPath],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            universal_newlines=True)
-    if result.returncode != 0:
-        raise RuntimeError('hgvsToVcf failed: %s' % result.stderr)
-    unparsed = len([l for l in result.stderr.split('\n') if 'Unable to parse' in l])
-
-    placements = {}
-    failures = collections.Counter()
-    failures['unparsed'] = unparsed
-    with open(outPath) as fh:
-        for line in fh:
-            if line.startswith('#'):
-                continue
-            f = line.rstrip('\n').split('\t')
-            chrom, pos, term, ref, alt, _, flt = f[0], int(f[1]), f[2], f[3], f[4], f[5], f[6]
-            if flt != 'PASS':
-                failures[flt] += 1
-                continue
-            if alt == '.':
-                failures['noAlt'] += 1
-                continue
-            start = pos - 1
-            end = start + len(ref)
-            # VCF anchors an indel on the preceding base; drop it so the item covers only
-            # the bases that actually change.
-            if len(ref) > 1 and len(alt) >= 1 and ref[0] == alt[0]:
-                start += 1
-            if end <= start:
-                end = start + 1
-            placements[term] = (chrom, start, end)
-    return placements, failures
+def shortChangeOf(pl):
+    """The amino acid change for the item name: R175H, R175*, R175=, R175del."""
+    alt = 'del' if pl.alt == '-' else pl.alt
+    return '%s%d%s' % (pl.wt, pl.protPos, alt)
 
 
 def main():
@@ -340,362 +168,234 @@ def main():
     scoreSets = loadScoreSets(args.downloadDir)
     sys.stderr.write("Loaded %d score set records\n" % len(scoreSets))
 
-    scoreSetTx = loadScoreSetTranscripts(args.downloadDir)
-    scoreSetProt = loadScoreSetProteins(args.db, scoreSetTx)
-    sys.stderr.write("Resolved a submission transcript for %d of %d score sets\n"
-                     % (len(scoreSetTx), len(scoreSets)))
+    csvPaths = {}
+    for path in sorted(glob.glob(os.path.join(args.downloadDir, 'variants', '*.csv'))):
+        urn = 'urn:mavedb:' + os.path.basename(path)[len('urn_mavedb_'):-len('.csv')]
+        csvPaths[urn] = path
+    urns = sorted(u for u in csvPaths if u in scoreSets)
+    missing = sorted(set(csvPaths) - set(scoreSets))
+    if missing:
+        sys.stderr.write("  WARNING: no score set record for %s\n" % ', '.join(missing))
 
-    sys.stderr.write("Pass 1: collecting HGVS terms\n")
-    terms, protAccs = collectTerms(args.downloadDir, scoreSetTx, scoreSetProt)
-    sys.stderr.write("  %d distinct HGVS terms, %d protein accessions\n"
-                     % (len(terms), len(protAccs)))
+    ref = mp.Reference(args.db).load()
 
-    sys.stderr.write("Resolving protein accessions to transcripts\n")
-    protToTx, unresolvedProt = lib.loadProteinToTranscript(args.db, sorted(protAccs))
+    # Pass 1 exists only to learn which proteins to load codon maps for, so they are read
+    # once for the whole build rather than per score set. Placement itself is cheap and is
+    # redone in pass 2; the codon maps and the genome translation are what cost.
+    sys.stderr.write("Pass 1: choosing offsets\n")
+    prots = set()
+    for urn in urns:
+        rows, _, _ = readScoreSetCsv(csvPaths[urn])
+        pls, _, _ = mp.placeScoreSet(scoreSets[urn]['record'], rows, ref)
+        prots.update(p.prot for p in pls if p.status == 'placed' and p.prot)
+        prots.update(p.mavedbProt for p in pls if p.mavedbProt)
+    protToMap, unresolvedProt = mp.loadMapsForProteins(ref, prots, args.twoBit, workDir)
+    sys.stderr.write("  codon maps for %d proteins\n" % len(protToMap))
     if unresolvedProt:
-        sys.stderr.write("  WARNING: no transcript for %s\n" % ', '.join(unresolvedProt))
-    codonMaps, missingTx = lib.loadCodonMaps(args.db, sorted(set(protToTx.values())))
-    lib.addProteinSequence(codonMaps, args.twoBit, workDir)
-    if missingTx:
-        sys.stderr.write("  WARNING: no ncbiRefSeqCurated entry for %s\n" % ', '.join(missingTx))
-    for acc, tx in sorted(protToTx.items()):
-        cm = codonMaps.get(tx)
-        if cm:
-            sys.stderr.write("  %-16s -> %-16s %s %s  %d codons\n"
-                             % (acc, tx, cm.chrom, cm.strand, cm.protLen))
-
-    sys.stderr.write("Running hgvsToVcf on %d terms\n" % len(terms))
-    placements, hgvsFailures = runHgvsToVcf(args.db, terms, workDir)
-    sys.stderr.write("  placed %d, failures %s\n" % (len(placements), dict(hgvsFailures)))
+        sys.stderr.write("  WARNING: no transcript or codon map for %s\n"
+                         % ', '.join(sorted(unresolvedProt)))
+    for prot in sorted(protToMap):
+        cm = protToMap[prot]
+        sys.stderr.write("  %-18s -> %-18s %s %s  %d codons\n"
+                         % (prot, cm.tx, cm.chrom, cm.strand, cm.protLen))
 
     stats = collections.Counter()
+    placeStats = collections.Counter()
+    reasons = collections.Counter()
+    offsets = []
     filterValues = collections.defaultdict(set)
-    residueChecked = collections.Counter()
-    residueBad = collections.Counter()
-    residueBoundary = collections.Counter()
-    residueExamples = []
-    projectionChecked = 0
-    projectionMismatch = 0
-    mismatchExamples = []
     rows = []
 
     sys.stderr.write("Pass 2: building items\n")
-    for path in sorted(glob.glob(os.path.join(args.downloadDir, 'variants', '*.csv'))):
-        with open(path, newline='') as fh:
-            reader = csv.DictReader(fh)
-            calCols = calibrationColumns(reader.fieldnames)
-            clinvarRelease = ''
-            for name in reader.fieldnames:
-                if name.startswith('clinvar.') and name.endswith('.clinical_significance'):
-                    clinvarRelease = name.split('.')[1]
-            for row in reader:
-                stats['rows'] += 1
-                urn = clean(row.get('score_set.score_set_urn'))
-                meta = scoreSets.get(urn, {})
-                gene = meta.get('gene') or clean(row.get('score_set.target_gene'))
+    for urn in urns:
+        meta = scoreSets[urn]
+        csvRows, calCols, clinvarRelease = readScoreSetCsv(csvPaths[urn])
+        pls, choices, _ = mp.placeScoreSet(meta['record'], csvRows, ref)
+        placeStats.update('referenceTerm:' + k
+                          for k in mp.placeReferenceTerms(pls, ref, workDir).elements())
+        placeStats.update(mp.checkGenome(pls, ref, args.twoBit, workDir, protToMap))
+        offsets.append((urn, choices))
+        gene = meta.get('gene') or ''
 
-                genomic = clean(row.get('mavedb.post_mapped_hgvs_g'))
-                protein = clean(row.get('mavedb.post_mapped_hgvs_p'))
-                original = qualifyTerm(clean(row.get('hgvs_nt')), scoreSetTx.get(urn))
-                protMatch = PROTEIN_TERM.match(protein) if protein else None
-                # A change written as several substitutions inside one codon is one amino
-                # acid substitution, not a haplotype, and MaveDB does not post-map it.
-                # Rebuild the protein term from the submitted p. and the score set's own
-                # protein accession, but only when every changed base is in one codon.
-                fromSubmitted = False
-                if not protMatch and not genomic:
-                    sub = SIMPLE_PRO.match(clean(row.get('hgvs_pro')))
-                    acc0 = scoreSetProt.get(urn)
-                    if sub and acc0 and len(codonSpanOfCdna(clean(row.get('hgvs_nt')))) == 1:
-                        protein = '%s:%s' % (acc0, clean(row.get('hgvs_pro')))
-                        protMatch = PROTEIN_TERM.match(protein)
-                        fromSubmitted = bool(protMatch)
+        for pl in pls:
+            stats['rows'] += 1
+            row = pl.row
+            if pl.status != 'placed':
+                reasons[pl.reason or 'unplaced'] += 1
+                continue
 
-                # Codon projection, computed whenever there is a usable protein term so it
-                # can be cross-checked even when a genomic term is also present. A codon
-                # at an exon junction is split, so the item spans the intervening intron:
-                # that is the real extent of the codon, and a protein-level measurement
-                # pins down nothing narrower.
-                projected = None
-                codonBases = None
-                residueMismatch = False
-                strand = '.'
-                if protMatch:
-                    tx = protToTx.get(protMatch.group('acc'))
-                    codonMap = codonMaps.get(tx) if tx else None
-                    if codonMap:
-                        codonBases = codonMap.codon(int(protMatch.group('pos')))
-                        strand = codonMap.strand
-                        # Does the genome actually hold the residue the HGVS term asserts?
-                        # This covers every projected codon, unlike the comparison against
-                        # MaveDB's own genomic mapping, which can only see the accessions
-                        # that happen to have genomic-route variants too.
-                        pos1 = int(protMatch.group('pos'))
-                        wtOne = lib.THREE_TO_ONE.get(protMatch.group('wt'))
-                        if codonMap.protein and wtOne and pos1 <= len(codonMap.protein):
-                            acc = protMatch.group('acc')
-                            residueChecked[acc] += 1
-                            if codonMap.protein[pos1 - 1] != wtOne:
-                                # The codon we would place does not hold the residue the
-                                # term names. Usually that means the projection would put
-                                # the variant at the wrong position, so refuse to place
-                                # it. The exception is a multi-base delins spanning a
-                                # codon boundary: MaveDB names it for the residue of the
-                                # first codon the change touches while numbering it for
-                                # the codon it changes, so the position is right and only
-                                # the label is odd. All 99 NDUFAF6 cases are that, e.g.
-                                # c.198_200delinsCTG submitted as p.Arg66Leu arriving as
-                                # p.Arg67Ter. Only call it a placement error when the
-                                # cDNA term does not reach the named codon at all.
-                                residueBad[acc] += 1
-                                if not cdnaReachesCodon(clean(row.get(
-                                        'mavedb.post_mapped_hgvs_c')) or
-                                        clean(row.get('hgvs_nt')), pos1):
-                                    residueMismatch = True
-                                else:
-                                    residueBoundary[acc] += 1
-                                if len(residueExamples) < 10:
-                                    residueExamples.append(
-                                        '%s %s: term says %s, genome has %s'
-                                        % (urn, protein, wtOne,
-                                           codonMap.protein[pos1 - 1]))
-                        if codonBases and not residueMismatch:
-                            start, end = codonMap.codonSpan(int(protMatch.group('pos')))
-                            projected = (codonMap.chrom, start, end)
+            # A protein placement covers its codon, which is two blocks when an intron
+            # splits it: the intron is not part of the codon, and a solid bar across it
+            # would show a measurement where none was made. A row placed only at genomic
+            # level covers the bases its term names.
+            if pl.codon is not None:
+                chrom, strand = pl.chrom, pl.strand
+                runs = mp.codonRuns(pl.codon)
+            else:
+                chrom, strand = ref.ncToChrom[pl.genomic.acc], '.'
+                runs = [pl.genomic.bedRange()]
+            start, end = runs[0][0], runs[-1][1]
+            if len(runs) > 1:
+                stats['splitCodonItem'] += 1
+            blockSizes = [e - b for b, e in runs]
+            blockStarts = [b - start for b, _ in runs]
 
-                place = None
-                method = ''
-                if genomic and genomic in placements:
-                    place = placements[genomic]
-                    method = 'MaveDB genomic mapping'
-                    if projected and codonBases:
-                        # Compare against the codon's actual three bases, not its span:
-                        # a split codon's span includes an intron that the genomic
-                        # coordinate should never fall in.
-                        projectionChecked += 1
-                        overlap = (projected[0] == place[0] and
-                                   any(place[1] <= b < place[2] for b in codonBases))
-                        if not overlap:
-                            projectionMismatch += 1
-                            if len(mismatchExamples) < 10:
-                                mismatchExamples.append(
-                                    '%s %s g=%s:%d-%d codon bases=%s'
-                                    % (urn, protein, place[0], place[1], place[2],
-                                       ','.join(str(b + 1) for b in sorted(codonBases))))
-                elif projected:
-                    place = projected
-                    method = ('codon projection from the submitted protein term'
-                              if fromSubmitted else 'codon projection')
-                elif original and original in placements:
-                    place = placements[original]
-                    method = 'hgvsToVcf on submitted term'
+            protein = '%s:%s' % (pl.prot, mp.proteinTermText(pl)) if pl.prot else ''
+            mavedbTerms = pl.label == mp.PLACED_MAVEDB
+            genomic = pl.genomic.term if pl.genomic else ''
+            submittedNt = clean(row.get('hgvs_nt'))
+            cdna = (clean(row.get('mavedb.post_mapped_hgvs_c')) if mavedbTerms
+                    else (submittedNt if ':' in submittedNt else ''))
 
-                if place is None:
-                    submittedProtein = clean(row.get('hgvs_pro'))
-                    submittedNt = clean(row.get('hgvs_nt'))
-                    # A haplotype can be stated on either axis. PTEN 00000054-a-1 states
-                    # 1,236 of them as nucleotides only, e.g. c.[1207G>T;1209C>T], with no
-                    # protein term at all; testing hgvs_pro alone files them under
-                    # "submitted term rejected" and understates the haplotype count.
-                    if (submittedProtein.startswith('p.[') or ';' in submittedProtein
-                            or submittedNt.startswith('c.[') or ';' in submittedNt):
-                        # A haplotype is several substitutions measured as one unit, so it
-                        # has no single position. The earlier MaveDB track excluded these
-                        # for the same reason.
-                        stats['skipHaplotype'] += 1
-                    elif residueMismatch:
-                        stats['skipResidueMismatch'] += 1
-                    elif protein and not protMatch:
-                        stats['skipProteinTermNotASubstitution'] += 1
-                    elif genomic:
-                        stats['skipGenomicTermRejected'] += 1
-                    elif original:
-                        stats['skipSubmittedTermRejected'] += 1
-                    else:
-                        stats['skipNoUsableTerm'] += 1
+            # Gather every calibration's call for this variant.
+            calls = []
+            for calUrn, cols in calCols.items():
+                outcome = clean(row.get(cols.get('acmg_evidence_outcome_code', ''), ''))
+                funcClass = clean(row.get(cols.get('functional_classification', ''), ''))
+                if not outcome and not funcClass:
                     continue
+                calMeta = meta.get('calibrations', {}).get(calUrn, {})
+                title = calMeta.get('title') or clean(row.get(cols.get('title', ''), ''))
+                ruoText = clean(row.get(cols.get('research_use_only', ''), ''))
+                calls.append({
+                    'urn': calUrn,
+                    'title': title,
+                    'primary': calMeta.get('primary', False),
+                    'ruo': calMeta.get('ruo', ruoText.lower() == 'true'),
+                    'funcClass': funcClass,
+                    'acmgOutcome': outcome,
+                    'acmgCriterion': clean(row.get(cols.get('acmg_criterion', ''), '')),
+                    'acmgStrength': clean(row.get(cols.get('acmg_evidence_strength', ''), '')),
+                    'odds': calMeta.get('odds', {}).get(funcClass, ''),
+                })
 
-                chrom, start, end = place
-                # Draw the real bases as blocks. For a codon split across an exon junction
-                # that is two blocks with a thin connector, rather than one solid bar across
-                # the intron: the intron is not part of the codon, and a solid bar there
-                # shows a measurement where none was made and pollutes any range query.
-                # startswith, not ==: both projection routes place on a codon and
-                # both can land on one split across an exon junction.
-                if method.startswith('codon projection') and codonBases and end - start > 3:
-                    blockStarts, blockSizes = basesToBlocks(codonBases, start)
-                    stats['splitCodonItem'] += 1
-                else:
-                    blockStarts, blockSizes = [0], [end - start]
+            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'))
+            outcome = chosen['acmgOutcome'] if chosen else ''
+            funcClass = chosen['funcClass'] if chosen else ''
+            color = lib.cellColor(outcome, funcClass)
 
-                # Gather every calibration's call for this variant.
-                calls = []
-                for calUrn, cols in calCols.items():
-                    outcome = clean(row.get(cols.get('acmg_evidence_outcome_code', ''), ''))
-                    funcClass = clean(row.get(cols.get('functional_classification', ''), ''))
-                    if not outcome and not funcClass:
-                        continue
-                    calMeta = meta.get('calibrations', {}).get(calUrn, {})
-                    title = calMeta.get('title') or clean(row.get(cols.get('title', ''), ''))
-                    ruoText = clean(row.get(cols.get('research_use_only', ''), ''))
-                    calls.append({
-                        'urn': calUrn,
-                        'title': title,
-                        'primary': calMeta.get('primary', False),
-                        'ruo': calMeta.get('ruo', ruoText.lower() == 'true'),
-                        'funcClass': funcClass,
-                        'acmgOutcome': outcome,
-                        'acmgCriterion': clean(row.get(cols.get('acmg_criterion', ''), '')),
-                        'acmgStrength': clean(row.get(cols.get('acmg_evidence_strength', ''), '')),
-                        'odds': calMeta.get('odds', {}).get(funcClass, ''),
-                    })
+            shortChange = shortChangeOf(pl) if pl.prot else genomic.split(':')[-1]
+            name = '%s:%s' % (gene, shortChange) if gene else shortChange
 
-                chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'))
-                outcome = chosen['acmgOutcome'] if chosen else ''
-                funcClass = chosen['funcClass'] if chosen else ''
-                color = lib.cellColor(outcome, funcClass)
+            allCals = '; '.join(
+                '%s%s: %s' % (c['title'],
+                              ' (research use only)' if c['ruo'] else '',
+                              c['acmgOutcome'] or c['funcClass'] or 'no call')
+                for c in calls) or 'none'
 
-                if protMatch:
-                    wt = lib.THREE_TO_ONE.get(protMatch.group('wt'), protMatch.group('wt'))
-                    varAa = protMatch.group('var')
-                    varAa = '=' if varAa == '=' else lib.THREE_TO_ONE.get(varAa, varAa)
-                    shortChange = '%s%s%s' % (wt, protMatch.group('pos'), varAa)
-                else:
-                    shortChange = (genomic or original).split(':')[-1]
-                name = '%s:%s' % (gene, shortChange) if gene else shortChange
+            variantUrn = clean(row.get('accession'))
+            score = strengthScore(outcome, chosen['acmgStrength'] if chosen else '')
+            # The mouseOver pattern substitutes fields unconditionally, so an empty
+            # acmgOutcome leaves a dangling "ACMG evidence:" label on the 13% of items
+            # whose score set classifies variants without assigning an ACMG code. Both
+            # labels are set after color and score so neither is affected by them, and
+            # both go into the filter menus as real categories.
+            outcomeLabel = outcome or 'none assigned'
+            funcClassLabel = funcClass or 'not classified'
+            scoreLabel = mp.fmtScore(clean(row.get('scores.score'))) or 'not reported'
+            clinvarSig = clean(row.get('clinvar.%s.clinical_significance' % clinvarRelease))
+            clinvarReview = clean(row.get('clinvar.%s.clinical_review_status' % clinvarRelease))
+            vepConsequence = clean(row.get('vep.vep_functional_consequence'))
+            gnomadVersion = clean(row.get('gnomad.gnomad_version'))
+            # These three are filter columns. An empty value is not offered as a
+            # filter choice, so any selection silently drops the rows that have none
+            # (22,394 of them, from score sets whose experiment record has no assay
+            # keywords). Give them a value so they stay reachable.
+            assayMethod = meta.get('assayMethod', '') or 'not recorded'
+            assayModel = meta.get('assayModel', '') or 'not recorded'
+            libraryMethod = meta.get('libraryMethod', '') or 'not recorded'
 
-                allCals = '; '.join(
-                    '%s%s: %s' % (c['title'],
-                                  ' (research use only)' if c['ruo'] else '',
-                                  c['acmgOutcome'] or c['funcClass'] or 'no call')
-                    for c in calls) or 'none'
+            item = [
+                chrom, start, end, name, score, strand, start, end,
+                lib.hexToBedRgb(color),
+                len(blockStarts),
+                ','.join(str(b) for b in blockSizes) + ',',
+                ','.join(str(b) for b in blockStarts) + ',',
+                gene,
+                protein,
+                outcomeLabel,
+                chosen['acmgStrength'] if chosen else '',
+                funcClassLabel,
+                scoreLabel,
+                mp.fmtScore(chosen['odds'], 3) if chosen and chosen['odds'] != '' else '',
+                lib.calibrationLabel(chosen['title'] if chosen else '',
+                                     chosen['ruo'] if chosen else False),
+                source if chosen else '',
+                'yes' if (chosen and chosen['ruo']) else ('no' if chosen else ''),
+                allCals,
+                clinvarSig,
+                clinvarReview,
+                clinvarRelease.replace('_', '-') if clinvarSig else '',
+                clean(row.get('gnomad.gnomad_af')),
+                clean(row.get('gnomad.gnomad_ac')),
+                clean(row.get('gnomad.gnomad_an')),
+                clean(row.get('gnomad.gnomad_faf95_max')),
+                clean(row.get('gnomad.gnomad_faf95_max_ancestry')),
+                gnomadVersion,
+                vepConsequence,
+                urn,
+                meta.get('title', ''),
+                assayMethod,
+                assayModel,
+                meta.get('assayMechanism', ''),
+                libraryMethod,
+                meta.get('publication', ''),
+                meta.get('publicationUrl', ''),
+                genomic,
+                cdna,
+                clean(row.get('clingen.clingen_allele_id')),
+                variantUrn,
+                pl.label,
+            ]
+            rows.append(item)
+            stats['placed'] += 1
+            stats['placement:' + pl.label] += 1
+            filterValues['acmgOutcome'].add(outcomeLabel)
+            filterValues['funcClass'].add(funcClassLabel)
+            if gene:
+                filterValues['gene'].add(gene)
+            # Harvest from the named values, never from positions in `item`: the row
+            # layout has changed several times and positional indices drift silently
+            # into the wrong column.
+            for field, value in (('clinvarSig', clinvarSig),
+                                 ('vepConsequence', vepConsequence),
+                                 ('assayMethod', assayMethod),
+                                 ('assayModel', assayModel),
+                                 ('libraryMethod', libraryMethod)):
+                if value:
+                    filterValues[field].add(value)
 
-                variantUrn = clean(row.get('accession'))
-                score = strengthScore(outcome, chosen['acmgStrength'] if chosen else '')
-                # The mouseOver pattern substitutes fields unconditionally, so an empty
-                # acmgOutcome leaves a dangling "ACMG evidence:" label on the 13% of items
-                # whose score set classifies variants without assigning an ACMG code. Both
-                # labels are set after color and score so neither is affected by them, and
-                # both go into the filter menus as real categories.
-                outcomeLabel = outcome or 'none assigned'
-                funcClassLabel = funcClass or 'not classified'
-                scoreLabel = lib.fmtScore(clean(row.get('scores.score'))) or 'not reported'
-                clinvarSig = clean(row.get('clinvar.%s.clinical_significance' % clinvarRelease))
-                clinvarReview = clean(row.get('clinvar.%s.clinical_review_status' % clinvarRelease))
-                vepConsequence = clean(row.get('vep.vep_functional_consequence'))
-                gnomadVersion = clean(row.get('gnomad.gnomad_version'))
-                # These three are filter columns. An empty value is not offered as a
-                # filter choice, so any selection silently drops the rows that have none
-                # (22,394 of them, from score sets whose experiment record has no assay
-                # keywords). Give them a value so they stay reachable.
-                assayMethod = meta.get('assayMethod', '') or 'not recorded'
-                assayModel = meta.get('assayModel', '') or 'not recorded'
-                libraryMethod = meta.get('libraryMethod', '') or 'not recorded'
+    # The per-accession residue check and the cross-check of MaveDB's genomic terms
+    # against our codon both run inside mavedbPlace.checkGenome(). crossCheckGate() stops
+    # the build when the terms disagree with our codon too often over the whole run,
+    # which is what a drift in RefSeq or in MaveDB's mapper would look like.
+    mp.crossCheckGate(placeStats)
 
-                item = [
-                    chrom, start, end, name, score, strand, start, end,
-                    lib.hexToBedRgb(color),
-                    len(blockStarts),
-                    ','.join(str(b) for b in blockSizes) + ',',
-                    ','.join(str(b) for b in blockStarts) + ',',
-                    gene,
-                    protein,
-                    outcomeLabel,
-                    chosen['acmgStrength'] if chosen else '',
-                    funcClassLabel,
-                    scoreLabel,
-                    lib.fmtScore(chosen['odds'], 3) if chosen and chosen['odds'] != '' else '',
-                    lib.calibrationLabel(chosen['title'] if chosen else '',
-                                         chosen['ruo'] if chosen else False),
-                    source if chosen else '',
-                    'yes' if (chosen and chosen['ruo']) else ('no' if chosen else ''),
-                    allCals,
-                    clinvarSig,
-                    clinvarReview,
-                    clinvarRelease.replace('_', '-') if clinvarSig else '',
-                    clean(row.get('gnomad.gnomad_af')),
-                    clean(row.get('gnomad.gnomad_ac')),
-                    clean(row.get('gnomad.gnomad_an')),
-                    clean(row.get('gnomad.gnomad_faf95_max')),
-                    clean(row.get('gnomad.gnomad_faf95_max_ancestry')),
-                    gnomadVersion,
-                    vepConsequence,
-                    urn,
-                    meta.get('title', ''),
-                    assayMethod,
-                    assayModel,
-                    meta.get('assayMechanism', ''),
-                    libraryMethod,
-                    meta.get('publication', ''),
-                    meta.get('publicationUrl', ''),
-                    genomic,
-                    clean(row.get('mavedb.post_mapped_hgvs_c')),
-                    clean(row.get('clingen.clingen_allele_id')),
-                    variantUrn,
-                    method,
-                ]
-                rows.append(item)
-                stats['placed'] += 1
-                stats['method:' + method] += 1
-                filterValues['acmgOutcome'].add(outcomeLabel)
-                filterValues['funcClass'].add(funcClassLabel)
-                if gene:
-                    filterValues['gene'].add(gene)
-                # Harvest from the named values, never from positions in `item`: the row
-                # layout has changed several times and positional indices drift silently
-                # into the wrong column.
-                for field, value in (('clinvarSig', clinvarSig),
-                                     ('vepConsequence', vepConsequence),
-                                     ('assayMethod', assayMethod),
-                                     ('assayModel', assayModel),
-                                     ('libraryMethod', libraryMethod)):
-                    if value:
-                        filterValues[field].add(value)
-
-    if residueChecked:
-        sys.stderr.write("Wild-type residue check, per protein accession:\n")
-        failed = []
-        for acc in sorted(residueChecked):
-            n, bad = residueChecked[acc], residueBad[acc]
-            edge = residueBoundary[acc]
-            rate = (bad - edge) / n
-            flag = ('  <-- FAILS' if rate > MAX_RESIDUE_MISMATCH
-                    else ('  (dropped)' if bad - edge else ''))
-            sys.stderr.write("    %-18s %6d checked, %5d mismatched, %5d of those a "
-                             "codon-boundary delins (%.3f%%)%s\n"
-                             % (acc, n, bad, edge, 100 * rate, flag))
-            if rate > MAX_RESIDUE_MISMATCH:
-                failed.append(acc)
-        for example in residueExamples:
-            sys.stderr.write("      %s\n" % example)
-        if failed:
-            sys.exit("ERROR: the reference residue in the genome disagrees with the HGVS "
-                     "term for more than %.0f%% of the projected codons in: %s. That is a "
-                     "moved transcript or assembly annotation, not stray upstream rows; "
-                     "do not publish these coordinates."
-                     % (100 * MAX_RESIDUE_MISMATCH, ', '.join(failed)))
-
-    if projectionChecked:
-        rate = projectionMismatch / projectionChecked
-        sys.stderr.write("Codon projection cross-check: %d of %d disagreed with MaveDB's "
-                         "genomic mapping (%.4f%%)\n"
-                         % (projectionMismatch, projectionChecked, 100 * rate))
-        for example in mismatchExamples:
-            sys.stderr.write("    %s\n" % example)
-        if rate > MAX_PROJECTION_MISMATCH:
-            sys.exit("ERROR: codon projection disagrees with MaveDB on %.2f%% of the "
-                     "variants that carry both coordinate systems, above the %.2f%% "
-                     "threshold. RefSeq or the MaveDB mapper has moved; investigate before "
-                     "publishing." % (100 * rate, 100 * MAX_PROJECTION_MISMATCH))
+    sys.stderr.write("\nOffset chosen per score set target\n")
+    for urn, choices in offsets:
+        for prefix, (choice, why) in sorted(choices.items(), key=lambda kv: str(kv[0])):
+            sys.stderr.write("  %-26s %-16s %s\n"
+                             % (urn.split(':')[-1], prefix or '-',
+                                ('%s%+d %s via %s%s'
+                                 % (choice.prot, choice.offset, choice.kind, choice.route,
+                                    '; ' + choice.constructNote() if choice.constructNote()
+                                    else ''))
+                                if choice else 'no offset (%s)' % why))
 
     rows.sort(key=lambda r: (r[0], r[1], r[2]))
     with open(args.outBed, 'w') as out:
         for item in rows:
-            out.write('\t'.join(lib.bedField(f) for f in item) + '\n')
+            out.write('\t'.join(mp.bedField(f) for f in item) + '\n')
 
     sys.stderr.write("\nBuild summary\n")
     for key in sorted(stats):
-        sys.stderr.write("  %-32s %d\n" % (key, stats[key]))
+        sys.stderr.write("  %-36s %d\n" % (key, stats[key]))
+    sys.stderr.write("Not placed\n")
+    for key in sorted(reasons, key=lambda k: -reasons[k]):
+        sys.stderr.write("  %-36s %d\n" % (key, reasons[key]))
+    sys.stderr.write("Placement checks\n")
+    for key in sorted(placeStats):
+        sys.stderr.write("  %-36s %d\n" % (key, placeStats[key]))
 
     if args.raFragment:
         with open(args.raFragment, 'w') as fh:
