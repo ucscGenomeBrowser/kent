@@ -975,6 +975,28 @@ class CodonMap(object):
         return max(runs, key=lambda r: r[1])
 
 
+def codonRuns(codon):
+    """Contiguous runs of a codon's genomic bases, as [(start0, end)] in genome order."""
+    bases = sorted(codon)
+    runs = [[bases[0], bases[0] + 1]]
+    for b in bases[1:]:
+        if b == runs[-1][1]:
+            runs[-1][1] = b + 1
+        else:
+            runs.append([b, b + 1])
+    return [tuple(r) for r in runs]
+
+
+def proteinTermText(pl):
+    """p. term on the reference protein, e.g. p.Gly290Ala, p.Gly290=, p.Gly290del."""
+    wt3 = ONE_TO_THREE[pl.wt]
+    if pl.alt == '=':
+        return 'p.%s%d=' % (wt3, pl.protPos)
+    if pl.alt == '-':
+        return 'p.%s%ddel' % (wt3, pl.protPos)
+    return 'p.%s%d%s' % (wt3, pl.protPos, ONE_TO_THREE[pl.alt])
+
+
 def loadCodonMaps(db, transcripts, table='ncbiRefSeqCurated'):
     """CodonMap for each transcript in one genePred table.
 
