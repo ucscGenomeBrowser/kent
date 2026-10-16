@@ -1,6 +1,7 @@
 include lrSv.ra
 include srSv.ra alpha
 include mei.ra alpha
+include mei.alpha.ra alpha
 
 include predictionScoresSuper.ra
 
