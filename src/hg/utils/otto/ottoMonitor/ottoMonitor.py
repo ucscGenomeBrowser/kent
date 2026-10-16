@@ -69,8 +69,9 @@ gbdbDir = "/gbdb"
 hgsql = "/cluster/bin/x86_64/hgsql"
 
 # How long a public copy may stay behind hgwdev before it is reported.  The
-# pushes for otto jobs run weekly or more often.
-defaultLagDays = 8.0
+# pushes for otto jobs run weekly or more often, but a push can be held for a
+# release or a QA check, so wait a month before complaining.
+defaultLagDays = 30.0
 
 # Pause between page fetches, so a daily run of thirty pages stays well clear of
 # the RR's bot delay.
@@ -532,8 +533,8 @@ def checkPublic(row, entry, now):
         result["verdict"] = "ok"
         return(result)
 
-    # The public copy is older.  That is normal for up to a week, until the next
-    # push.  How long it has been behind is when the monitor first saw it so.  On
+    # The public copy is older.  That is normal until the next push, which can
+    # take a while.  How long it has been behind is when the monitor first saw it so.  On
     # the first sighting the earliest moment hgwdev is known to have been ahead
     # is its own date, so start the clock there rather than at now.
     #

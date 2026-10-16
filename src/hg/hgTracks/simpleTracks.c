@@ -16,6 +16,7 @@
 #include "bed.h"
 #include "basicBed.h"
 #include "htmlColor.h"
+#include "errCatch.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -16197,36 +16198,56 @@ else if (startsWith("rnaStruct", track->track))
 #endif /* GBROWSE */
 }
 
+static void compositeLoadSubtrack(struct track *track, struct track *subtrack)
+/* Load one subtrack of a composite, or settle that it is not going to be drawn.  Anything
+ * in here that errAborts is the one subtrack's fault, and the caller turns it into that
+ * subtrack's message. */
+{
+long thisTime = 0, lastTime = 0;
+if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
+    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
+if (isSubtrackVisible(subtrack) &&
+    ( limitedVisFromComposite(subtrack) != tvHide))
+    {
+    if (!subtrack->parallelLoading)
+	{
+	lastTime = clock1000();
+	checkIfWiggling(cart, subtrack);
+	subtrack->loadItems(subtrack);
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    subtrack->loadTime = thisTime - lastTime;
+	    lastTime = thisTime;
+	    }
+	}
+    }
+else
+    {
+    subtrack->limitedVis = tvHide;
+    subtrack->limitedVisSet = TRUE;
+    }
+}
+
 static void compositeLoad(struct track *track)
 /* Load all subtracks */
 {
 struct track *subtrack;
-long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
-        errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
-    if (isSubtrackVisible(subtrack) &&
-	( limitedVisFromComposite(subtrack) != tvHide))
-	{
-	if (!subtrack->parallelLoading)
-	    {
-	    lastTime = clock1000();
-	    checkIfWiggling(cart, subtrack);
-	    subtrack->loadItems(subtrack);
-	    if (measureTiming)
-		{
-		thisTime = clock1000();
-		subtrack->loadTime = thisTime - lastTime;
-		lastTime = thisTime;
-		}
-	    }
-	}
-    else
-	{
-	subtrack->limitedVis = tvHide;
-	subtrack->limitedVisSet = TRUE;
-	}
+    /* Keep an errAbort to the subtrack that caused it.  The caller wraps this whole
+     * function, so without this one bad subtrack puts its message on the parent, which a
+     * composite never draws, and the subtracks after it are never loaded: the user gets an
+     * empty row with no explanation.  refs #38560 */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	compositeLoadSubtrack(track, subtrack);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	subtrack->networkErrMsg = cloneString(errCatch->message->string);
+    else if (errCatch->gotWarning)
+	warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+    errCatchFree(&errCatch);
     }
 }
 

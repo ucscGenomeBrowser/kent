@@ -13,11 +13,15 @@
 #   - the long deletion's tooltip is the length alone, with no bases:  noTip "(".
 #   - a 42 bp deletion beside it still lists its bases, so the fix did not drop them all.
 #     The tooltips are read in a 150 bp window, where the two map boxes do not overlap.
+#   - clicking the long deletion opens the Alignment Differences page, whose Deletions table
+#     gives "297179 bases" instead of the bases themselves, while the 42 bp row still lists
+#     its bases (86279bcc103, asked for in QA on 2026-10-15).
 # Item names are <chain id>.<n>.<start>.<end> from the hg19-to-hg38 quickLift chain file;
 # a new chain file would renumber them.
 proof:
   - "assertion-only 2026-10-09 -- written after b0da423c322 reached genome-test"
   - "release-ab 2026-10-09 -- failed on hgwbeta (v504, which lacks b0da423c322): no rows drawn and the page said buffer overflow, size 4096, format: deletion %ldbp (%.*s); passed on genome-test"
+  - "sandbox-ab 2026-10-16 -- the details-page check failed on genome-test, which lacks 86279bcc103 (the Deletions table listed all 297,179 bases), and passed on hgwdev-braney with it"
 
 target: genome-test
 db: hg19
@@ -44,3 +48,10 @@ steps:
   - expect: {tip: "deletion 297179bp", noTip: "("}
   - mouseover: {track: quickLiftChain, item: "16.1.82344941.82344941"}
   - expect: {tip: "deletion 42bp (CAGCCTCTCCTCCTGTTCATGTAGCCTCTCCTCCTGTTCACG)"}
+
+  # the details page: the long deletion is a length in the table, the short one its bases
+  - click: {track: quickLiftChain, item: "16.1.82344974.82344974"}
+  - expect:
+      url: "hgc"
+      text: ["Deletions in Window:", "297179 bases", "CAGCCTCTCCTCCTGTTCATGTAGCCTCTCCTCCTGTTCACG"]
+      noText: "Warning/Error"
