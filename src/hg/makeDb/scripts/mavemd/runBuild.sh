@@ -36,7 +36,7 @@ bedSort mavemdVar.bed mavemdVar.sorted.bed
 bedSort mavemdMap.bed mavemdMap.sorted.bed
 
 echo "[$(date +%T)] 4. bigBed"
-bedToBigBed -type=bed12+34 -tab -as="$SCRIPTS/mavemdVariants.as" \
+bedToBigBed -type=bed12+35 -tab -as="$SCRIPTS/mavemdVariants.as" \
     -extraIndex=name,clinGenId,variantUrn \
     mavemdVar.sorted.bed "$CHROMSIZES" mavemdVar.bb 2>&1 | tail -2
 bedToBigBed -type=bed12+20 -tab -as="$SCRIPTS/mavemdHeatmap.as" \

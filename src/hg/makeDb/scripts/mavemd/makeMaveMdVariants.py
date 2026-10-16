@@ -346,6 +346,7 @@ def main():
                 clean(row.get('clingen.clingen_allele_id')),
                 variantUrn,
                 pl.label,
+                mp.bedField(pl.construct or ''),
             ]
             rows.append(item)
             stats['placed'] += 1

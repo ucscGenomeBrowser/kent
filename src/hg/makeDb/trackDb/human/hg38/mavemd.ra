@@ -24,7 +24,7 @@ dataVersion /gbdb/$D/mavemd/version.txt
     parent mavemd
     shortLabel MaveMD Variants
     longLabel MaveMD individual variant measurements with ACMG functional evidence
-    type bigBed 12 + 34
+    type bigBed 12 + 35
     bigDataUrl /gbdb/$D/mavemd/mavemdVar.bb
     itemRgb on
     visibility dense

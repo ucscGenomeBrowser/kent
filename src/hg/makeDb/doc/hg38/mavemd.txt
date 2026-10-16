@@ -52,7 +52,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 #
 #   mavemdLib.py           calibration choice and color tables; also puts
 #                          utils/otto/mavedb on sys.path for mavedbPlace
-#   makeMaveMdVariants.py  per-variant bed12+34 -> mavemdVar.bb
+#   makeMaveMdVariants.py  per-variant bed12+35 -> mavemdVar.bb
 #   makeMaveMdHeatmap.py   per-score-set bed12+20 -> mavemdMap.bb
 #   mavemdVariants.as, mavemdHeatmap.as
 #   runBuild.sh            driver for the two converters plus bedToBigBed
@@ -243,7 +243,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # Every calibration's call is listed on the details page regardless of which one is displayed.
 
 # Build results:
-#   mavemdVar.bb   462,486 items, 46 fields (bed12+34)
+#   mavemdVar.bb   462,486 items, 47 fields (bed12+35)
 #
 # PROVENANCE OF THE ANNOTATIONS. clinvarRelease and gnomadVersion ride on each item that has a
 # ClinVar or gnomAD annotation (60,666 and 3,978 respectively), so a stale annotation is visible
