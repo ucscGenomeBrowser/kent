@@ -109,6 +109,12 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # all. TP53 00000068-0/a/b/c-1, 00001235-a-1 and 00001236-0-1 at residue 72 (the common P72R
 # form, which is in the target name of three of them); KCNE1 00000674-a-2/b-1/c-1 at 38;
 # BRCA1 00001222-b-2 at 1613 (offset +1576); TPK1 00001251-a-1 at 193.
+# The other 68,095 items of those eleven score sets are placed normally, since the
+# construct matches the reference everywhere else, and each carries the construct field:
+# "differs from NP_000537.3 at position 72 (Pro in the reference, Arg in the construct)"
+# and its three counterparts. It is OffsetChoice.constructNote() in mavedbPlace.py, the
+# same string the MaveDB track prints, so a reader can see which backbone a score was
+# measured on. 48,742 of those items are TP53, 9,518 TPK1, 7,574 KCNE1, 2,261 BRCA1.
 #
 # 4,474 items sit in a codon split across an exon junction, so its three bases are not a 3 bp
 # run. Those are written as BED12 with the two real blocks, so the intron draws as a thin
