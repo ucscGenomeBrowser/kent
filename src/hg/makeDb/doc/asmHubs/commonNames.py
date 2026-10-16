@@ -255,6 +255,8 @@ def processList(inFh):
         extraStrings = re.sub(re.escape(asmNameAbbrev) + ' ', '', extraStrings)
         extraStrings = re.sub(r'\s+', ' ', extraStrings)
         words = extraStrings.split()
+        # orgName has had its parens removed, match against that form too
+        words += [re.sub(r'[()]', '', w) for w in words]
         orgList = orgName.split()
         orgName = " ".join([orgWord for orgWord in orgList if orgWord not in words])
         orgName = re.sub(r'=|\s+$|^\s+', '', orgName)
