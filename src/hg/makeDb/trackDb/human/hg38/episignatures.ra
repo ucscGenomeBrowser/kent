@@ -48,7 +48,7 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     track epigenCentral
     parent episignatures
     shortLabel EpigenCentral
-    longLabel EpigenCentral: CpG probes of curated DNA methylation episignatures
+    longLabel EpigenCentral: CpG probes of published DNA methylation episignatures
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/episignatures/_epigenCentral.bb
     visibility pack
