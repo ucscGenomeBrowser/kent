@@ -261,6 +261,10 @@ boolean quickLiftMultiChainEnabled();
  * ask for twice. */
 #define QUICKLIFT_SPLIT_GAP 10000
 
+/* The most bases of an insertion or deletion that the Alignment Differences mouseover and
+ * details page list.  A longer one shows only its length. */
+#define QUICKLIFT_SHOW_BASES 100
+
 boolean quickLiftSplitRangesEnabled();
 /* Cut each chain's source range at large gaps, merge the ranges where they overlap, and
  * read an item only once when it crosses from one range into the next.  hg.conf

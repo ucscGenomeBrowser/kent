@@ -5380,7 +5380,11 @@ if (deletions)
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
         printf("<TR%s>", hilite);
         htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
-        printf("<TD>%.*s</TD><TD>", hr->otherBaseCount, hr->otherBases);
+        // a long deletion's bases would make the table very wide; the alignment link has them
+        if (hr->otherBaseCount > QUICKLIFT_SHOW_BASES)
+            printf("<TD>%u bases</TD><TD>", hr->otherBaseCount);
+        else
+            printf("<TD>%.*s</TD><TD>", hr->otherBaseCount, hr->otherBases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5406,7 +5410,10 @@ if (insertions)
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
         printf("<TR%s>", hilite);
         htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
-        printf("<TD>%.*s</TD><TD>", hr->baseCount, hr->bases);
+        if (hr->baseCount > QUICKLIFT_SHOW_BASES)
+            printf("<TD>%u bases</TD><TD>", hr->baseCount);
+        else
+            printf("<TD>%.*s</TD><TD>", hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
