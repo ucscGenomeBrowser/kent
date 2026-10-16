@@ -1143,6 +1143,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	 if (parent == NULL)
 	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,
 		tdb->track, hub->url, genome->name);
+	 /* Refuse the link that closes a loop in the parent chain.  validateOneTrack runs
+	  * before trackDbLinkUpGenerations and its loop check, and trackDbSetting walks
+	  * this chain to the top, so a loop here spins the CGI forever rather than
+	  * reporting the bad setting.  The links already made are loop-free, which is what
+	  * ends this walk.  refs #38471 */
+	 struct trackDb *ancestor;
+	 for (ancestor = parent; ancestor != NULL; ancestor = ancestor->parent)
+	    {
+	    if (ancestor == tdb)
+	       errAbort("Track %s is its own ancestor through its parent %s in hub %s "
+		   "genome %s", tdb->track, parentName, hub->url, genome->name);
+	    }
 	 // mark the parent as a container
 	 parent->subtracks = tdb;
 
