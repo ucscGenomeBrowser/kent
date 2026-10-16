@@ -8878,6 +8878,12 @@ if (sharedErrMsg)
 	tg->totalHeight = bigWarnTotalHeight;
 	}
     }
+
+/* Recurse, because a container can hold a container: a multiWig inside a composite keeps
+ * its wiggles two levels down, and those are the rows that get drawn.  refs #38560 */
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    setSharedErrorsAcrossWindows(subtrack);
 }
 
 
@@ -9755,12 +9761,7 @@ for (track = trackList; track != NULL; track = track->next)
 // if found, set all windows to same errMsg and set bigWarn track handlers.
 for (track = trackList; track != NULL; track = track->next)
     {
-    setSharedErrorsAcrossWindows(track);
-    struct track *sub;
-    for (sub=track->subtracks; sub; sub=sub->next)
-	{
-	setSharedErrorsAcrossWindows(sub);
-	}
+    setSharedErrorsAcrossWindows(track);   // recurses into subtracks itself
     }
 
 
