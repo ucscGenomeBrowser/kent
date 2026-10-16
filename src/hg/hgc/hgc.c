@@ -9962,7 +9962,7 @@ char genomeUrl[1024];
 safef(genomeUrl, sizeof genomeUrl, "hgTracks?db=%s&hgsid=%s&position=%s:",
       database, cartSessionId(cart), tNameUrl);
 freeMem(tNameUrl);
-bafLabelBlocks(TRUE, genomeUrl);
+bafLabelBlocks(TRUE, genomeUrl, chromHtml);
 /* Capture the shared library's alignment HTML so we can reorder its sections for this page.  The
  * library emits them as Query (#cDNA), Genome (#genomic), then Side-by-side (#ali), with the
  * per-block anchors living inside the Genome section.  We want Query, Side-by-side, Genome so the
@@ -9990,7 +9990,7 @@ else
     fclose(alnF);
     }
 struct bafBlock *blocks = bafBlocksDrawn();
-bafLabelBlocks(FALSE, NULL);
+bafLabelBlocks(FALSE, NULL, NULL);
 if (captured)
     {
     if (blocks != NULL)   /* the block table goes above the alignment, so not in the uncaptured case */

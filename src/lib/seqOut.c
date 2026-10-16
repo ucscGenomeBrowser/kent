@@ -137,6 +137,7 @@ int seqOutColorLookup[] =
 /* State for bafLabelBlocks().  It lives here rather than in struct baf so that the struct
  * keeps its layout for objects compiled against the older header. */
 static boolean labelBlocks = FALSE;		/* Set by bafLabelBlocks(). */
+static char *genomeChromLabel = NULL;		/* Set by bafLabelBlocks(). */
 static char *genomeLinkPrefix = NULL;		/* Set by bafLabelBlocks(). */
 static struct bafBlock *blocksDrawn = NULL;	/* Blocks drawn while labelling, last first. */
 static struct bafBlock *lastBlock = NULL;	/* Last block of the current alignment. */
@@ -171,20 +172,23 @@ static boolean bafInBlock(struct baf *baf)
 return (baf == openBaf);
 }
 
-void bafLabelBlocks(boolean on, char *genomeUrl)
+void bafLabelBlocks(boolean on, char *genomeUrl, char *genomeChrom)
 /* While on, side-by-side alignments start each block with a line giving its number, its
  * position and its identity, put a line saying how big the gap is between two blocks where
  * there would be an <HR>, color mismatched bases and merged gaps, and keep a list of the
  * blocks for bafBlocksDrawn().  Each block gets an anchor named sbs<num>.  If genomeUrl is
  * not NULL, the genome position in the header links to genomeUrl followed by "start-end";
- * it goes into an href as it is, so it must already be encoded.  Off by default. */
+ * it goes into an href as it is, so it must already be encoded.  genomeChrom, if not NULL, is
+ * shown before the genome position and must already be HTML-safe.  Off by default. */
 {
 labelBlocks = on;
 freez(&genomeLinkPrefix);
+freez(&genomeChromLabel);
 if (on)
     {
     slFreeList(&blocksDrawn);
     genomeLinkPrefix = cloneString(genomeUrl);
+    genomeChromLabel = cloneString(genomeChrom);
     }
 }
 
@@ -273,13 +277,17 @@ sprintLongWithCommas(nEnd, block->nEnd);
 sprintLongWithCommas(hStart, block->hStart);
 sprintLongWithCommas(hEnd, block->hEnd);
 int aligned = block->matches + block->mismatches;
+char chromPrefix[512] = "";
+if (genomeChromLabel != NULL)
+    safef(chromPrefix, sizeof chromPrefix, "%s:", genomeChromLabel);
 fprintf(baf->out, "<a name=sbs%d></a><span class='bafHead'>Block %d: query %s-%s, genome ",
         block->num, block->num, nStart, nEnd);
 if (genomeLinkPrefix != NULL)
-    fprintf(baf->out, "<a href='%s%d-%d'>%s-%s</a>", genomeLinkPrefix,
-            min(block->hStart, block->hEnd), max(block->hStart, block->hEnd), hStart, hEnd);
+    fprintf(baf->out, "<a href='%s%d-%d'>%s%s-%s</a>", genomeLinkPrefix,
+            min(block->hStart, block->hEnd), max(block->hStart, block->hEnd), chromPrefix,
+            hStart, hEnd);
 else
-    fprintf(baf->out, "%s-%s", hStart, hEnd);
+    fprintf(baf->out, "%s%s-%s", chromPrefix, hStart, hEnd);
 fprintf(baf->out, ", %.1f%% identity", (aligned > 0 ? 100.0 * block->matches / aligned : 0.0));
 if (block->mismatches > 0)
     fprintf(baf->out, ", %d mismatch%s", block->mismatches, (block->mismatches == 1 ? "" : "es"));
