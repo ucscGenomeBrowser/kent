@@ -40,7 +40,8 @@ for p in download:.; do
         /hive/data/genomes/mm39/chrom.sizes /data/tmp/gpnStarRebuild
   done
 done | parallel -j 8 --halt now,fail=1
-# every job printed "OK ... identical float32 values ..." and "bad sections 0"; the
+# gpnStarRebuild.sh exits non-zero unless the values are identical and no section is
+# bad, and --halt stops the batch on the first failure. Once it finishes, the
 # downloads are no longer needed:
 rm -r /hive/data/genomes/mm39/bed/gpnStar/download
 
