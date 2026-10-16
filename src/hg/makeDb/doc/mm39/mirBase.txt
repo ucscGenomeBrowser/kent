@@ -1,0 +1,50 @@
+# 2026-10-15 Claude atanzer: miRBase 22.1 microRNA precursors, mm39, #38548
+
+# Mouse microRNA precursors from miRBase release 22.1 (https://mirbase.org/,
+# Kozomara et al. 2019, PMID 30423142), in the Non-coding RNA collection
+# (nonCodingRNAs, shared with mm10 in trackDb/mouse/). The miRBase mouse GFF is on
+# GRCm38 (mm10), so the mm10 file (doc/mm10/mirBase.txt) is lifted to mm39, and the
+# track is then built as on mm10 and hg38 (see doc/hg38/mirBase.txt).
+# Scripts: ~/kent/src/hg/makeDb/scripts/mirBase/
+
+##############################################################################
+# miRBase 22.1 (DONE 2026-10-15)
+##############################################################################
+
+mkdir -p /hive/data/genomes/mm39/bed/mirBase/download
+cd /hive/data/genomes/mm39/bed/mirBase/download
+# Each precursor is lifted together with the matures inside it; it is kept only if
+# all of them map, to the chromosome and strand of the precursor, with unchanged
+# lengths:
+python3 ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseLift.py \
+    /hive/data/genomes/mm10/bed/mirBase/download/mmu.gff3 \
+    /hive/data/genomes/mm10/bed/liftOver/mm10ToMm39.over.chain.gz mmu.gff3
+#   1227 precursor loci, 1227 lifted, 0 left out
+
+cd /hive/data/genomes/mm39/bed/mirBase
+bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh mm39 mmu
+#   1227 precursor sequences
+#   1227 precursors, 2110 matures, 1227 folds
+#   1227 items, 74 not one hairpin and 49 with an arm in the hairpin loop in the MFE: 0 refolded with the flanks unpaired, 117 as suboptimal hairpins, all with the arms in the stem; 4 with an arm in the loop and 2 with no hairpin within 8 kcal/mol
+#   arm in the hairpin loop: MI0001730
+#   arm in the hairpin loop: MI0002403
+#   arm in the hairpin loop: MI0022890
+#   arm in the hairpin loop: MI0023710
+#   no hairpin, MFE kept: MI0006300
+#   no hairpin, MFE kept: MI0006305
+#   structure chosen by hand: MI0006279, -32.70 kcal/mol
+#   MI0014099 has 2 matures on the 3p arm
+#   MI0014099 has 2 matures on the 5p arm
+#   matures per arm: 3p 1062, 5p 1048
+
+bigBedInfo mirBase.bb | grep itemCount
+#   itemCount: 1,227
+bigBedInfo mirBaseArms.bb | grep itemCount
+#   itemCount: 2,110
+
+# Checks done on the output:
+#   - every folded sequence equals the mm39 sequence at the precursor coordinates
+#     (strand-aware), and every armPositions range cuts exactly the mature miRNA's
+#     mm39 sequence out of it
+#   - sequences, structures, foldType and matures of all precursors are identical to
+#     the mm10 track

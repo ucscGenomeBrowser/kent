@@ -76,7 +76,15 @@ features of the BED file and agrees with the browse table for all 514 genes. The
 59 -v2 to -v4 loci differ from those of their -v1 locus, because their arms are shifted. The
 sequence of every primary region was taken from hg38 and folded with RNAfold
 (ViennaRNA 2.7.2, option <tt>-d2</tt>, default energy parameters) to predict the
-minimum free energy structure. The steps are documented in the
+minimum free energy (MFE) structure. At 32 loci, the precursor part of the MFE structure
+is not one hairpin, mostly because the flanks pair into the arms, or an arm reaches into
+the hairpin loop. These loci were refolded with the flanks unpaired (<tt>-C</tt>), and
+where that still did not give one hairpin with both arms in the stem, the lowest-energy
+such structure from RNAsubopt (ViennaRNA 2.7.2) is shown. Hsa-Mir-451 keeps its MFE
+structure, in which the 5p arm reaches into the loop: its short precursor is processed
+by Argonaute 2 instead of Dicer, and the arm cannot fit into the stem.
+The <b>Structure</b> row of the details page says which structure is shown.
+The steps are documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mirGeneDb.txt"
 target="_blank">makeDoc file</a>, and the scripts are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mirGeneDb"

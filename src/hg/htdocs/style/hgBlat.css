@@ -22,6 +22,13 @@
 #blatTable td.covCol { min-width:120px; }
 #blatTable thead th { background:var(--headrow); border-bottom:1px solid var(--headrowLine);
     font-size:12px; color:var(--navy); font-weight:700; padding:8px 12px; white-space:nowrap; }
+/* The th background shorthand above wipes out DataTables' sort-arrow images, so the sortable
+ * columns get a text triangle instead: grey while unsorted, navy and pointing up or down once
+ * sorted by that column. */
+#blatTable thead th.sorting::after, #blatTable thead th.sorting_asc::after,
+#blatTable thead th.sorting_desc::after { content:"\25BE"; margin-left:5px; color:var(--muted); }
+#blatTable thead th.sorting_asc::after { content:"\25B4"; color:var(--navy); }
+#blatTable thead th.sorting_desc::after { color:var(--navy); }
 #blatTable tbody td { padding:8px 12px; border-bottom:1px solid var(--lineSoft); white-space:nowrap;
     vertical-align:middle; }
 #blatTable tbody tr { cursor:pointer; }
@@ -63,6 +70,9 @@
 .blatIdPct { font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
 .blatCov { position:relative; display:block; width:150px; max-width:100%; height:10px; background:var(--headrow); border:1px solid var(--headrowLine); }
 .blatCov > i { position:absolute; top:0; bottom:0; background:var(--accent); }
+.blatCovWrap { display:flex; align-items:center; gap:8px; }
+.blatCovWrap .blatCov { flex:0 0 110px; }
+.blatCovNum { font-size:13px; white-space:nowrap; font-variant-numeric:tabular-nums; }
 #blatTable_filter { float:left; margin:0 0 10px; }
 #blatTable_filter input { width:300px; max-width:55vw; border:1px solid var(--btnLine);
     border-radius:0; padding:5px 9px; font-size:14px; }

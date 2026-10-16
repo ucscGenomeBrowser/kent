@@ -3,7 +3,7 @@ superTrack nonCodingRNAs pack
 shortLabel MirGeneDB
 longLabel MirGeneDB curated microRNA genes with arms and predicted structure
 visibility hide
-type bigBed 6 + 12
+type bigBed 6 + 13
 bigDataUrl /gbdb/hg38/mirGeneDb/mirGeneDb.bb
 decorator.default.bigDataUrl /gbdb/hg38/mirGeneDb/mirGeneDbArms.bb
 decorator.default.blockMode Overlay

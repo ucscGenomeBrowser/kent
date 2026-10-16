@@ -86,7 +86,7 @@
 38125	503	lib/tests/pngWriteTest.c	-	library	unrecorded	a PNG written through zlib-ng decodes to exactly the pixels drawn
 38126	504	lib/tests/htmlSanitizeTest.c	rm38126.docent.yaml	library	unrecorded	the allowlist that hub and custom track description HTML is filtered through
 38154	503	hg/lib/tests/pgSnpManyAllelesTester.c	rm38154.docent.yaml	library	sandbox-ab	per-allele counts from AN and AC on a record with 150 ALT alleles, more than the old fixed array of 80
-38157	504	-	rm38157.docent.yaml	page	-	the note hgTracks shows after a session load. The fix is in hg/hgTracks, hg/lib, hg/js, so what changed is what a page says or does
+38157	504	-	rm38157.xfail.docent.yaml	page	-	the note hgTracks shows after a session load. The fix is in hg/hgTracks, hg/lib, hg/js, so what changed is what a page says or does
 38184	504	-	rm38184.docent.yaml	invisible	-	needs one: db= resolving to the assembly already loaded must keep the session position. BLOCKED: needs a live cart, so hgcentral rows to read and write
 38185	504	hg/hgSession/tests/backupParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty pair in a session backup must not eat the variable in front of it
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
@@ -168,3 +168,4 @@
 38518	505	-	rm38518.docent.yaml	page	-	In multi-region view the sequence logo of a logoMaf wiggle (phyloP100way) drew the last region's base proportions in every region: all window copies shared one wigCartOptions and wigLogoMafCheck (hg/hgTracks/wigTrack.c) stored baseProbs there during preDraw. Each window after the first now gets its own copy. The script reads the logo colors of four left-region columns and two right-region columns.
 38545	505	gfServer/tests/bin/testEmptyCommand	-	invisible	release-ab	a request carrying the signature with no command after it is rejected, and the server keeps serving
 38549	-	-	rm38549.docent.yaml	page	-	A quickLift of a wigMaf with a conservation wiggle aborted hgTracks with "duplicated" when the target had a track of the same name (9af8596d56e, needs browser.quickLiftAlignments and browser.quickLiftWig, both cart overrides too). The script lifts hg18 multiz17way to hg17. d463d6f028d fixes the same graph drawing empty, native or lifted, which rm38549consGraph checks by its color
+38555	-	-	rm38555.docent.yaml	page	-	A click on the quickLift Alignment Differences track aborted hgc with "Can't find range in null query chain." when the window was in a gap of the clicked chain (69dbafb9b55). The script lifts hg19 multiz100way to hg38 and opens chain 2 at base level inside its gap at chr1:120,290,026

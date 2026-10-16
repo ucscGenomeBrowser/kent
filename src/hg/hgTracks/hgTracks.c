@@ -9683,12 +9683,26 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			}
 		    else
 			{
-			track->loadItems(track);
-			if (tdbHasDecorators(track))
+			/* An errAbort out of a track's loader takes out that track, not the whole
+			 * image.  parallelLoadData does this for the threaded path; without it here
+			 * the same bad data kills the page whenever parallel loading is off.
+			 * refs #38560 */
+			struct errCatch *errCatch = errCatchNew();
+			if (errCatchStart(errCatch))
 			    {
-			    loadDecorators(track);
-			    decoratorMethods(track);
+			    track->loadItems(track);
+			    if (tdbHasDecorators(track))
+				{
+				loadDecorators(track);
+				decoratorMethods(track);
+				}
 			    }
+			errCatchEnd(errCatch);
+			if (errCatch->gotError)
+			    track->networkErrMsg = cloneString(errCatch->message->string);
+			else if (errCatch->gotWarning)
+			    warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+			errCatchFree(&errCatch);
 			}
 
 		    if (measureTiming)

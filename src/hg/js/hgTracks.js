@@ -3298,8 +3298,28 @@ function removeTrackFromVisibleGroup(track) {
 /* When a track has been hidden by the user, remove its select and label from
  * the visible tracks group */
     let rec = document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]");
-    if (rec)
+    if (rec) {
         rec.parentElement.remove();
+        reflowVisibleGroup();
+    }
+}
+
+function reflowVisibleGroup() {
+/* Removing cells leaves the rows of the visible tracks group ragged, so lay the remaining
+ * cells out again, row by row, with as many columns as the other groups have */
+    let rows = Array.from(document.querySelectorAll("tr[id^='visible-']"));
+    if (rows.length === 0)
+        return;
+    let cols = 1;
+    for (let td of document.querySelectorAll("td.trackLabelTd"))
+        cols = Math.max(cols, td.parentElement.querySelectorAll(":scope > td.trackLabelTd").length);
+    let cells = [];
+    for (let row of rows)
+        cells.push(...row.querySelectorAll(":scope > td"));
+    cells.forEach((cell, i) => rows[Math.floor(i / cols)].appendChild(cell));
+    let usedRows = Math.max(1, Math.ceil(cells.length / cols));
+    for (let row of rows.slice(usedRows))
+        row.remove();
 }
 
   ///////////////////////////////////////
@@ -3341,70 +3361,62 @@ var rightClick = {
         if (!hasPliTracks)
             $("#gnomadColorKeyLegend").hide();
     },
-    hideTracks: function (ids)
-        /* hide specified list of tracks, take care to hide parents rather than children, whenever possible. This is
-         * addressing a basic problem of how we handle container tracks: if you right-click hide the last child, the container is still 
-         * in the track list on the screen as not-hidden, but there are no
-         * tracks shown of this container. This is confusing for the user. The
-         * code below analyzes the track hierarchy and finds out if hiding a
-         * track would lead to a container becoming empty and instead of hiding
-         * just this track, will hide the container. It does this does both on
-         * screen and in the cart. This means that you cannot end up with a container that is
-         * not hidden but no tracks shown of this container, at least not with right-click. */
+    hideTracks: function (ids, keepTracks)
+        /* Hide a list of tracks, in the image and in the cart. A superTrack or composite that would be
+         * left with nothing in the image is hidden itself instead of its children, so it does not stay
+         * switched on with nothing to show. If keepTracks is given, also hide everything else in the
+         * visible tracks group that is not in keepTracks. */
     {
         var cartVars = [];
         var cartVals = [];
+        var plan = tdbHidePlan(hgTracks.trackDb, ids);
 
-        // find parent tracks that are losing all their children (lone parents)
-        var familyAnalysis = tdbFindChildless(hgTracks.trackDb, ids);
-
-        // lone parents get special treatment
-        for (var delFam of familyAnalysis.loneParents) {
-            var loneParent = delFam[0];
-            var loneParentChildren = delFam[1];
-
-            // remove all the lone parent children now from the track image
-            // and also unselect them, if they are children of a composite
-            for (var childName of loneParentChildren) {
+        for (var parent in plan.parents) {
+            for (var childName of plan.parents[parent]) {
                 $(document.getElementById('tr_' + childName)).remove();
-                var rec = hgTracks.trackDb[childName];
-                // the following means that all composite children are always unselected, so you cannot get the
-                // current selection easily back, since we always hide them all, instead of just hiding the parent.
-                // The problem is that it's not easy to find out if there is an easier way to hide them, the code
-                // would have to go over all possible parents, not just topParents. Maybe one day.
-                //if (tdbIsSubtrack(rec)) {
-                 //  cartVars.push(childName+"_sel");
-                 //   cartVals.push('0');
-                //}
+                // a subtrack's own visibility, e.g. set by a search hit, would turn the composite
+                // back on at the next page load (cartTdbTreeReshapeIfNeeded), so remove it
+                if (tdbIsSubtrack(hgTracks.trackDb[childName])) {
+                    cartVars.push(childName);
+                    cartVals.push('[]');
+                }
+                delete hgTracks.trackDb[childName]; // for the next right-click
             }
-
-            // and set the lone parent to hide in the cart
-            cartVars.push(loneParent);
+            cartVars.push(parent);
             cartVals.push('hide');  // need to explicitely set to "hide", not "[]", to hide the default tracks
-             
-            // update the track list below the image
-            vis.update(loneParent, 'hide');
-            rightClick.hideLegends();
-            removeTrackFromVisibleGroup(loneParent);
-            delete hgTracks.trackDb[loneParent]; // for the next right-click
+            vis.update(parent, 'hide');
+            removeTrackFromVisibleGroup(parent);
         }
 
-        // handle all other tracks, they are either not parents or parents with at least one child left
-        var delIds = familyAnalysis.others;
-        for (var i = 0; i<delIds.length; i++) {
-            var id = delIds[i];
+        for (var id of plan.tracks) {
             cartHideAnyTrack(id, cartVars, cartVals);
             $(document.getElementById('tr_' + id)).remove();
             removeTrackFromVisibleGroup(id);
             delete hgTracks.trackDb[id]; // for the next right-click
         }
+        rightClick.hideLegends();
+
+        // tracks that are on but have nothing in the image, e.g. an empty composite with
+        // hideEmptySubtracks, are not in hgTracks.trackDb, only in the visible tracks group
+        if (keepTracks) {
+            for (var el of document.querySelectorAll("[id^='visible-'] [data-track]")) {
+                var visName = el.dataset.track;
+                if (keepTracks.includes(visName))
+                    continue;
+                cartVars.push(visName);
+                cartVals.push('hide');
+                vis.update(visName, 'hide');
+                removeTrackFromVisibleGroup(visName);
+            }
+        }
+
         imageV2.afterImgChange(true);
         cart.setVars( cartVars, cartVals );
     },
 
     hideOthers: function (id) {
         /* hide all tracks but 'id'. Hide parents of composites/folders, rather than their children */
-        var myParent = hgTracks.trackDb[id].parentTrack;
+        var keepTracks = [id, "ruler"].concat(tdbAncestors(hgTracks.trackDb[id]));
 
         var hideList = [];
         for (var otherId in hgTracks.trackDb) {
@@ -3413,7 +3425,7 @@ var rightClick = {
 
             hideList.push(otherId);
         }
-        rightClick.hideTracks(hideList);
+        rightClick.hideTracks(hideList, keepTracks);
     },
     makeMapItem: function (id)
     {   // Create a dummy mapItem on the fly

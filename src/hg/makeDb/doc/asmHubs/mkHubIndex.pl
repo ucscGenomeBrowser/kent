@@ -457,10 +457,7 @@ sub tableContents() {
     my $hubUrl = "https://hgdownload.soe.ucsc.edu/hubs/$accessionDir/$accessionId";
     my $gbdbUrl = "/gbdb/genark/$accessionDir/$accessionId";
     my $browserName = $commonName;
-    my $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?genome=$accessionId&hubUrl=$gbdbUrl/hub.txt";
-    if (defined($genarkAcc{$accessionId})) {
-       $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
-    }
+    my $browserUrl = "https://genome.ucsc.edu/h/$accessionId";
     if ($asmId !~ m/^GC/) {
        $hubUrl = "https://hgdownload.soe.ucsc.edu/goldenPath/$asmId/bigZips";
        $browserUrl = "https://genome.ucsc.edu/cgi-bin/hgTracks?db=$asmId";
