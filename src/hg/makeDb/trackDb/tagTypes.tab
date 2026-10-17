@@ -137,6 +137,8 @@ dimensionZchecked *
 dimensions *
 directUrl *
 dividers *
+dotBracketColor bigBed
+dotBracketField bigBed
 dragAndDrop *
 drawMode hic
 doWiggle bigBed

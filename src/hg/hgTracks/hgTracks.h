@@ -1910,6 +1910,9 @@ char *disguisePositionVirtSingleChrom(char *position); // DISGUISE VMODE
 struct bbiFile *fetchBbiForTrack(struct track *track);
 /* Fetch bbiFile from track, opening it if it is not already open. */
 
+char *restField(struct bigBedInterval *bb, int fieldIdx);
+/* return a given field from the bb->rest field, NULL on error */
+
 void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
                             double scale, Color color, enum trackVisibility vis);
 /* Draw next item buttons and map boxes */

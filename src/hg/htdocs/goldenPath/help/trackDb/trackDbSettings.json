@@ -1338,7 +1338,8 @@
     "bed",
     "bigBed",
     "broadPeak",
-    "psl"
+    "psl",
+    "vcfTabix"
    ],
    "level": "full",
    "fmt": "maxItems <integer>",
@@ -1455,6 +1456,34 @@
    "fmt": "style <heatmap>",
    "ex": "style heatmap",
    "desc": "BigBed tracks can be created with a variety of extra fields."
+  },
+  {
+   "key": "dotBracketField",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "dotBracketField <fieldName>",
+   "ex": "dotBracketField secStr",
+   "desc": "Draws an RNA secondary structure over each item, taken from an extra bigBed field holding a dot-bracket string."
+  },
+  {
+   "key": "dotBracketColor",
+   "category": "bigBed - Item or Region Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "bigBed"
+   ],
+   "level": "new",
+   "fmt": "dotBracketColor <red,green,blue>",
+   "ex": "dotBracketColor 240,228,66",
+   "desc": "The color to draw the secondary structure in, on a track that has dotBracketField set."
   },
   {
    "key": "thickDrawItem",
@@ -3145,6 +3174,22 @@
    "fmt": "minAc < N >",
    "ex": "",
    "desc": "The minimum alternate allele count required for a variant to be displayed, taken from the AC field of the INFO column."
+  },
+  {
+   "key": "excludeFilterValues",
+   "category": "vcfTabix - Variant Call Format Track Settings",
+   "roles": [
+    "leaf"
+   ],
+   "types": [
+    "vcf",
+    "vcfTabix",
+    "vcfPhasedTrio"
+   ],
+   "level": "new",
+   "fmt": "excludeFilterValues < value1,value2,... >",
+   "ex": "",
+   "desc": "A comma-separated list of values of the VCF FILTER column."
   },
   {
    "key": "vcfDoFilter",

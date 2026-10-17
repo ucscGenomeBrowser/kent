@@ -32,6 +32,7 @@
 #include "quickLift.h"
 #include "hgConfig.h"
 #include "heatmap.h"
+#include "dotBracketTrack.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -1154,5 +1155,7 @@ if (sameWordOk(trackDbSetting(tdb, "style"), "heatmap"))
     // maybe some combo of row count and labels.
     heatmapMethods(track);
     }
+else if (trackDbSetting(tdb, DOT_BRACKET_FIELD) != NULL)
+    dotBracketMethods(track);
 }
 

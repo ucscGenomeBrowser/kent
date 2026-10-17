@@ -4807,6 +4807,22 @@ cgiMakeCheckBox(cartVar, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }
 
+void dotBracketCfgUi(struct cart *cart, struct trackDb *tdb)
+/* Checkbox to draw or hide the RNA secondary structure, for a track that names a
+ * dot-bracket column.  Does nothing for a track that does not. */
+{
+if (trackDbSetting(tdb, DOT_BRACKET_FIELD) == NULL)
+    return;
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX,
+                                               TRUE);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, DOT_BRACKET_SHOW_SUFFIX);
+puts("<p>");
+cgiMakeCheckBox(cartVar, option);
+puts(" Draw the RNA secondary structure over each item");
+puts("</p>");
+}
+
 void geneTrackMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
                        boolean defaultOn)
 /* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
