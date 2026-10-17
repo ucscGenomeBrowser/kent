@@ -38,7 +38,7 @@ fast: true
 steps:
   # Two searches, box unchecked, by GET.  The results page builds each track itself, through
   # an ajax call to hgc, hence the sleeps (as in rm38086).
-  - goto: "/cgi-bin/hgBlat?userSeq=ctgggcaacatagcaagaccccatctctacaaaaaatacaaaaattagccgggcgtggtggcgcgcgcctgtagtcccagctactcgggaggctgaggcagg&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - goto: "/cgi-bin/hgBlat?userSeq=CTCTCCCCTAGGCCATAATTAAGTGTCTTGACCTGATTGTTGCTTTCAGGTAAACAGATGTCCTTGTTACTAATCTTATCACAAAGCTTCGTTATGATTTTG&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
   - expect:
       text: "BLAT Search Results"
   - sleep: 3000
@@ -48,7 +48,7 @@ steps:
   - sleep: 3000
 
   # Unchecked keeps both.
-  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1809779-1810005&pix=1100"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1800201-1800302&pix=1100"
   - expect:
       has:
         - 'a.trackLink[data-group="blat"][mouseoverText^="BLAT 102bp SMYD4,"]'
