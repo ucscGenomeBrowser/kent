@@ -43,7 +43,7 @@ surrounding code reads the cart gives two different answers for the same
 question; see the hideTracks note below.
 
 Verification status.  Every row carries verified=True only if its kind and
-persistence were confirmed by reading the code at the cited file:line during
+persistence were confirmed by reading the call site the row cites during
 curation.  Rows inferred from excludeVars membership alone are verified=False.
 --check reports how many public rows are still unverified, because the
 generated page must not go live until that number is zero: a wrong persistence
@@ -73,6 +73,7 @@ where it can be read later.
 """
 
 import argparse
+import collections
 import html
 import json
 import os
@@ -97,7 +98,8 @@ def c(name, kind, src, value="1", persists=False, public=False, note=None,
 
     name       the CGI parameter name as typed on the URL
     kind       "action" (one-shot) or "setting" (persists in the cart)
-    src        file:line where the tree reads it
+    src        the file that reads it; the line is found at print time, see
+               cited_at()
     value      value syntax, for the docs
     persists   True if it is written to the cart and kept
     public     True if it is meant for users and belongs on the help page
@@ -181,49 +183,49 @@ GLOBAL = {
     "what": "Handled in hg/lib/cart.c and hg/lib/web.c rather than in any one "
             "CGI, so they work on every CGI in the tree.",
     "cmds": [
-        c("hgsid", "setting", "hg/lib/cart.c:1520", value="<n>",
+        c("hgsid", "setting", "hg/lib/cart.c", value="<n>",
           persists=True, public=True, verified=True,
           note="Attach to an existing session id instead of the cookie's. It "
                "is written back at cart.c:1289 because it is the session's own "
                "identity, not a user preference. Best left out of a shared "
                "link: it points at one person's session."),
-        c("ignoreCookie", "action", "hg/lib/cart.c:1707",
+        c("ignoreCookie", "action", "hg/lib/cart.c",
           public=True, verified=True,
           note="Start from browser defaults, ignoring the user's cookie cart. "
                "Changes made afterwards still stick to their session, so this "
                "gives a clean first view, not a sandbox."),
-        c("redirect", "action", "hg/lib/cart.c:2636", value="<host>",
+        c("redirect", "action", "hg/lib/cart.c", value="<host>",
           verified=True, leaks=True,
           note="Geo-mirror override, written back out as a cookie. Only "
                "meaningful when geoMirrorEnabled()."),
-        c("_dumpCart", "action", "hg/lib/cart.c:2756", value="<ms>",
+        c("_dumpCart", "action", "hg/lib/cart.c", value="<ms>",
           verified=True, leaks=True,
           note="Write the whole cart to a trash file named by elapsed page "
                "time. Debugging aid that stays in the session once used."),
-        c("_dumpToLog", "action", "hg/lib/cart.c:2744", value="<msg>",
+        c("_dumpToLog", "action", "hg/lib/cart.c", value="<msg>",
           verified=True, leaks=True,
           note="Drop a marker line into the Apache error log."),
-        c("verbose", "action", "hg/lib/cart.c:2763", value="<n>",
+        c("verbose", "action", "hg/lib/cart.c", value="<n>",
           verified=True, leaks=True,
           note="Verbosity level for verbose() output."),
-        c("ajax", "action", "hg/lib/cart.c:2852",
+        c("ajax", "action", "hg/lib/cart.c",
           verified=True,
           note="Suppress page framing and one-time init so the response can be "
                "spliced into an existing page."),
-        c("apiKey", "action", "hg/lib/cart.c:1592", value="<key>",
+        c("apiKey", "action", "hg/lib/cart.c", value="<key>",
           verified=True, leaks=True,
           note="API authentication. Worth noting that it lands in the stored "
                "cart, unlike token below, which is explicitly cleaned out at "
                "cart.c:1805."),
-        c("token", "action", "hg/lib/cart.c:1613", value="<tok>",
+        c("token", "action", "hg/lib/cart.c", value="<tok>",
           verified=True, note="Login token. Removed from the cart deliberately."),
-        c("captcha", "action", "hg/lib/cart.c:1607", value="<s>",
+        c("captcha", "action", "hg/lib/cart.c", value="<s>",
           verified=True, leaks=True,
           note="Suppresses the bot check on user id lookup."),
-        c("jsh_pageVertPos", "action", "hg/lib/jsHelper.c:45", value="<n>",
+        c("jsh_pageVertPos", "action", "hg/lib/jsHelper.c", value="<n>",
           verified=True, leaks=True,
           note="Restore vertical scroll position after a form round trip."),
-        c("action", "action", "hg/lib/web.c:170", value="<verb>", leaks=True,
+        c("action", "action", "hg/lib/web.c", value="<verb>", leaks=True,
           note="Generic dispatch used by a few of the older pages."),
     ],
 }
@@ -238,24 +240,24 @@ SESSIONS = {
             "work on any CGI and not just hgSession. This is how a shared "
             "session link works.",
     "cmds": [
-        c("hgS_doOtherUser", "action", "hg/lib/cart.c:1741", value="submit",
+        c("hgS_doOtherUser", "action", "hg/lib/cart.c", value="submit",
           public=True, verified=True, droppedBy="hg/lib/cart.c:713",
           note="Load a named session belonging to another user. Pair with "
                "hgS_otherUserName and hgS_otherUserSessionName."),
-        c("hgS_otherUserName", "action", "hg/lib/cart.c:1743", value="<user>",
+        c("hgS_otherUserName", "action", "hg/lib/cart.c", value="<user>",
           public=True, verified=True, leaks=True, note="Session owner."),
-        c("hgS_otherUserSessionName", "action", "hg/lib/cart.c:1744",
+        c("hgS_otherUserSessionName", "action", "hg/lib/cart.c",
           value="<name>", public=True, verified=True, leaks=True,
           note="Session name. Only the action variable is removed after the "
                "load, so this and hgS_otherUserName stay in the session."),
-        c("hgS_merge", "action", "hg/lib/cart.c:1745",
+        c("hgS_merge", "action", "hg/lib/cart.c",
           verified=True,
           note="Merge the loaded session into the current cart instead of "
                "replacing it."),
-        c("hgS_doLoadUrl", "action", "hg/lib/cart.c:1753", value="submit",
+        c("hgS_doLoadUrl", "action", "hg/lib/cart.c", value="submit",
           public=True, verified=True, droppedBy="hg/lib/cart.c:1335",
           note="Load session settings from a URL. Pair with hgS_loadUrlName."),
-        c("hgS_loadUrlName", "action", "hg/lib/cart.c:1756", value="<url>",
+        c("hgS_loadUrlName", "action", "hg/lib/cart.c", value="<url>",
           public=True, verified=True, leaks=True,
           note="URL of a saved session settings file. Stays in the session "
                "after the load."),
@@ -265,7 +267,7 @@ SESSIONS = {
         # counted: they are in almost every saved session there is.  A form
         # field that persists is the same defect as a leaking command, so they
         # are described here rather than accepted as out of scope.
-        c("hgS_newSessionName", "action", "hg/hgSession/hgSession.c:1065",
+        c("hgS_newSessionName", "action", "hg/hgSession/hgSession.c",
           value="<name>", verified=True, leaks=True,
           partialDrop="cartRemove at hgSession.c:1070 and 1113 covers "
                       "doSaveSessionJson and doRenameSessionJson.  The Save "
@@ -274,14 +276,14 @@ SESSIONS = {
                       "otherwise shadow the requested name.  In 6400 of 6607 "
                       "saved sessions.",
           note="Name to save the current session under."),
-        c("hgS_newSessionShare", "action", "hg/hgSession/hgSession.c:1071",
+        c("hgS_newSessionShare", "action", "hg/hgSession/hgSession.c",
           value="1", verified=True, leaks=True,
           partialDrop="cartRemove at hgSession.c:1071, 2414 and 2444 covers "
                       "the JSON endpoints only, not the Save form.  In 6398 "
                       "of 6607 saved sessions.",
           note="Whether the saved session may be shared with others."),
         c("hgS_newSessionDescription", "action",
-          "hg/hgSession/hgSession.c:2546", value="<text>", verified=True,
+          "hg/hgSession/hgSession.c", value="<text>", verified=True,
           leaks=True,
           partialDrop="cartRemove at hgSession.c:2547 covers "
                       "doDescribeSessionJson, the AJAX endpoint added with the "
@@ -299,7 +301,7 @@ SESSIONS = {
         # persists.  hgS_shareAnon sat in urlNamesNotCataloged.txt on the
         # reading that it was internal state, which its cgiBoolean read
         # contradicts; it is described here beside the two that arrived with it.
-        c("hgS_shareAnon", "action", "hg/hgSession/hgSession.c:1095",
+        c("hgS_shareAnon", "action", "hg/hgSession/hgSession.c",
           verified=True,
           note="Save under the reserved anonymous user \"l\" with a "
                "server-generated token name instead of under the logged-in "
@@ -307,13 +309,13 @@ SESSIONS = {
                "when nobody is logged in, so it is only needed to ask for an "
                "anonymous link while logged in.  Removed at "
                "hgSession.c:1107."),
-        c("hgS_failIfExists", "action", "hg/hgSession/hgSession.c:1096",
+        c("hgS_failIfExists", "action", "hg/hgSession/hgSession.c",
           verified=True,
           note="Answer {\"exists\": true} instead of overwriting a session "
                "the logged-in user already has under the requested name, so "
                "the Share dialog can warn before clobbering one.  Removed at "
                "hgSession.c:1108."),
-        c("hgS_snapshotType", "action", "hg/hgSession/hgSession.c:1099",
+        c("hgS_snapshotType", "action", "hg/hgSession/hgSession.c",
           value="<type>", verified=True,
           note="Save a lightweight snapshot session holding only one "
                "feature's declared cart variables (hg/lib/snapshotSession.c) "
@@ -329,7 +331,7 @@ SESSIONS = {
         # request can supply it, which is why it is described here rather than
         # accepted as internal state.  That was the mistake made with
         # hgS_shareAnon above.
-        c("hgS_sessionJustLoaded", "action", "hg/hgTracks/hgTracks.c:12216",
+        c("hgS_sessionJustLoaded", "action", "hg/hgTracks/hgTracks.c",
           value="on", verified=True,
           note="Set by cartNew at hg/lib/cart.c:973 on a full session load and "
                "not on a merge, and consumed by showSessionLoadNotice on the "
@@ -347,7 +349,7 @@ SESSIONS = {
         # described rather than listed in the hgS_* family below because that
         # is the part worth knowing: a node asking for a session list must not
         # create a userDb and sessionDb row here.
-        c("hgS_doSessionListJson", "action", "hg/hgSession/hgSession.c:3153",
+        c("hgS_doSessionListJson", "action", "hg/hgSession/hgSession.c",
           verified=True, nocart=True,
           note="Answer this user's saved sessions as JSON.  Read with "
                "cgiOptionalString in main() before the cart exists, and the "
@@ -355,7 +357,7 @@ SESSIONS = {
                "mirror node makes no cart and no hgcentral row.  hgSession "
                "builds this URL itself at hgSession.c:2628 when it fans out to "
                "the other nodes."),
-        c("hgS_doMirrorSessions", "action", "hg/hgSession/hgSession.c:3161",
+        c("hgS_doMirrorSessions", "action", "hg/hgSession/hgSession.c",
           verified=True, nocart=True,
           note="Ask this server for the sessions saved on our other servers: "
                "it sends hgS_doSessionListJson to each node, reads the "
@@ -364,7 +366,7 @@ SESSIONS = {
                "before the cart exists as well, because the fan-out waits on "
                "other servers long enough that it should not hold a cart "
                "open."),
-        c("hgS_*", "action", "hg/hgSession/hgSession.h:19", value="<varies>",
+        c("hgS_*", "action", "hg/hgSession/hgSession.h", value="<varies>",
           note="hgSession's own command family. All transient.",
           members=["hgS_doNewSession", "hgS_doSaveLocal", "hgS_doLoadLocal",
                    "hgS_doMainPage", "hgS_doSessionDetail",
@@ -388,56 +390,56 @@ HGTRACKS_NAV = {
             "them behind one hgt.nav= command while keeping every old name "
             "working. The dispatch is a 22-way else-if chain.",
     "cmds": [
-        c("hgt.left1", "action", "hg/hgTracks/hgTracks.c:11121", verified=True,
+        c("hgt.left1", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Scroll left, 10% of the window."),
-        c("hgt.left2", "action", "hg/hgTracks/hgTracks.c:11119", verified=True,
+        c("hgt.left2", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Scroll left, half a window."),
-        c("hgt.left3", "action", "hg/hgTracks/hgTracks.c:11117", verified=True,
+        c("hgt.left3", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Scroll left, a full window."),
-        c("hgt.right1", "action", "hg/hgTracks/hgTracks.c:11123",
+        c("hgt.right1", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Scroll right, 10%."),
-        c("hgt.right2", "action", "hg/hgTracks/hgTracks.c:11125",
+        c("hgt.right2", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Scroll right, half a window."),
-        c("hgt.right3", "action", "hg/hgTracks/hgTracks.c:11127",
+        c("hgt.right3", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Scroll right, a full window."),
-        c("hgt.in1", "action", "hg/hgTracks/hgTracks.c:11135", verified=True,
+        c("hgt.in1", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom in 1.5x."),
-        c("hgt.in2", "action", "hg/hgTracks/hgTracks.c:11133", verified=True,
+        c("hgt.in2", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom in 3x."),
-        c("hgt.in3", "action", "hg/hgTracks/hgTracks.c:11131", verified=True,
+        c("hgt.in3", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom in 10x."),
-        c("hgt.inBase", "action", "hg/hgTracks/hgTracks.c:11129",
+        c("hgt.inBase", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Zoom all the way in to base level."),
-        c("hgt.out1", "action", "hg/hgTracks/hgTracks.c:11137", verified=True,
+        c("hgt.out1", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom out 1.5x."),
-        c("hgt.out2", "action", "hg/hgTracks/hgTracks.c:11139", verified=True,
+        c("hgt.out2", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom out 3x."),
-        c("hgt.out3", "action", "hg/hgTracks/hgTracks.c:11141", verified=True,
+        c("hgt.out3", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom out 10x."),
-        c("hgt.out4", "action", "hg/hgTracks/hgTracks.c:11143", verified=True,
+        c("hgt.out4", "action", "hg/hgTracks/hgTracks.c", verified=True,
           note="Zoom out 100x."),
-        c("hgt.dinkLL", "action", "hg/hgTracks/hgTracks.c:11145",
+        c("hgt.dinkLL", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Nudge the left edge left by the dink amount."),
-        c("hgt.dinkLR", "action", "hg/hgTracks/hgTracks.c:11147",
+        c("hgt.dinkLR", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Nudge the left edge right."),
-        c("hgt.dinkRL", "action", "hg/hgTracks/hgTracks.c:11149",
+        c("hgt.dinkRL", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Nudge the right edge left."),
-        c("hgt.dinkRR", "action", "hg/hgTracks/hgTracks.c:11151",
+        c("hgt.dinkRR", "action", "hg/hgTracks/hgTracks.c",
           verified=True, note="Nudge the right edge right."),
-        c("hgt.toggleRevCmplDisp", "action", "hg/hgTracks/hgTracks.c:11112",
+        c("hgt.toggleRevCmplDisp", "action", "hg/hgTracks/hgTracks.c",
           public=True, verified=True,
           note="Flip to the reverse complement strand."),
-        c("hgt.nextItem", "action", "hg/hgTracks/hgTracks.c:11155",
+        c("hgt.nextItem", "action", "hg/hgTracks/hgTracks.c",
           value="<track>", verified=True, leaks=True,
           note="Jump to the next item in the named track."),
-        c("hgt.prevItem", "action", "hg/hgTracks/hgTracks.c:11157",
+        c("hgt.prevItem", "action", "hg/hgTracks/hgTracks.c",
           value="<track>", verified=True, leaks=True,
           note="Jump to the previous item in the named track."),
-        c("hgt.jump", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.jump", "action", "hg/hgTracks/hgTracks.c",
           note="The go button next to the position box."),
-        c("hgt.refresh", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.refresh", "action", "hg/hgTracks/hgTracks.c",
           note="Plain redraw."),
-        c("position", "setting", "hg/hgTracks/hgTracks.c:10837",
+        c("position", "setting", "hg/hgTracks/hgTracks.c",
           value="<chrom>:<start>-<end>", persists=True, public=True,
           verified=True,
           note="Persists: it is where the user's session is parked. The "
@@ -457,34 +459,34 @@ HGTRACKS_TRACKSET = {
             "with persists, which is where the help page's warning about "
             "conflicting cart variables comes from.",
     "cmds": [
-        c("hideTracks", "action", "hg/hgTracks/hgTracks.c:7594",
+        c("hideTracks", "action", "hg/hgTracks/hgTracks.c",
           public=True, verified=True,
           note="Hide everything, then apply whatever per-track visibility is "
                "also on the URL. Read straight from CGI here while the code "
                "around it reads the cart, so the two disagree; #37923 calls "
                "this out as a bug to fix, not a feature to preserve."),
-        c("hgt.reset", "action", "hg/hgTracks/hgTracks.c:9112",
+        c("hgt.reset", "action", "hg/hgTracks/hgTracks.c",
           public=True, verified=True,
           note="Reset to this assembly's default track set."),
-        c("hgt.hideAll", "action", "hg/hgTracks/hgTracks.c:9110",
+        c("hgt.hideAll", "action", "hg/hgTracks/hgTracks.c",
           public=True, verified=True, note="Hide every track."),
-        c("hgt.defaultImgOrder", "action", "hg/hgTracks/hgTracks.c:9164",
+        c("hgt.defaultImgOrder", "action", "hg/hgTracks/hgTracks.c",
           verified=True, leaks=True, note="Restore the default vertical track order."),
-        c("hgt.visAllFromCt", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.visAllFromCt", "action", "hg/hgTracks/hgTracks.c",
           note="Set visibility for all custom tracks at once."),
-        c("hgt.collapseGroups", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.collapseGroups", "action", "hg/hgTracks/hgTracks.c",
           note="Collapse every track group in the track controls."),
-        c("hgt.expandGroups", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.expandGroups", "action", "hg/hgTracks/hgTracks.c",
           note="Expand every track group."),
-        c("hgt.tui", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.tui", "action", "hg/hgTracks/hgTracks.c",
           note="Jump to the track's configuration page."),
-        c("rtsLoad", "action", "hg/hgTracks/hgTracks.c:7546", value="<name>",
+        c("rtsLoad", "action", "hg/hgTracks/hgTracks.c", value="<name>",
           verified=True,
           note="Load a Recommended Track Set by name. Removed from the cart "
                "after use."),
-        c("sortExp", "action", "hg/hgTracks/hgTracks.c:5260", value="<track>",
+        c("sortExp", "action", "hg/hgTracks/hgTracks.c", value="<track>",
           verified=True, note="Sort the named track by expression score."),
-        c("sortSim", "action", "hg/hgTracks/hgTracks.c:5253", value="<track>",
+        c("sortSim", "action", "hg/hgTracks/hgTracks.c", value="<track>",
           verified=True, note="Sort the named track by similarity."),
     ],
 }
@@ -498,35 +500,35 @@ HGTRACKS_IMAGE = {
     "what": "What kind of response hgTracks sends back. Several of these exist "
             "for the browser's own AJAX calls rather than for people.",
     "cmds": [
-        c("hgt.psOutput", "action", "hg/hgTracks/hgTracks.c:6123", value="on",
+        c("hgt.psOutput", "action", "hg/hgTracks/hgTracks.c", value="on",
           public=True, verified=True,
           note="Render to PostScript and hand back a PDF. This is what the "
                "PDF/PS link does."),
-        c("hgt.contentType", "action", "hg/hgTracks/hgTracks.c:6096",
+        c("hgt.contentType", "action", "hg/hgTracks/hgTracks.c",
           value="html|<mime>", verified=True,
           note="Override the Content-Type of the reply."),
-        c("hgt.trackImgOnly", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.trackImgOnly", "action", "hg/hgTracks/hgTracks.c",
           note="Return just the track image and its map, no page around it. "
                "Used by drag-scroll and by track reordering."),
-        c("hgt.ideogramToo", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.ideogramToo", "action", "hg/hgTracks/hgTracks.c",
           note="With trackImgOnly, include the chromosome ideogram."),
-        c("hgt.trackNameFilter", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.trackNameFilter", "action", "hg/hgTracks/hgTracks.c",
           value="<track>",
           note="Draw only the named track. Used when one track is refreshed "
                "on its own."),
-        c("hgt.imageV1", "action", "hg/hgTracks/hgTracks.c:9184",
+        c("hgt.imageV1", "action", "hg/hgTracks/hgTracks.c",
           verified=True,
           note="Fall back to the pre-drag-scroll single image. Candidate for "
                "removal if nothing still asks for it."),
-        c("hgt.internal", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.internal", "action", "hg/hgTracks/hgTracks.c",
           note="Internal-only rendering flag."),
-        c("hideControls", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hideControls", "action", "hg/hgTracks/hgTracks.c",
           note="Draw the image with no surrounding controls."),
-        c("hgt.setWidth", "action", "hg/hgTracks/hgTracks.c:95", value="<n>",
+        c("hgt.setWidth", "action", "hg/hgTracks/hgTracks.c", value="<n>",
           note="Set the image width for this request."),
-        c("hgt.positionInput", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.positionInput", "action", "hg/hgTracks/hgTracks.c",
           note="Which position box variant submitted the form."),
-        c("dirty", "action", "hg/hgTracks/hgTracks.c:95",
+        c("dirty", "action", "hg/hgTracks/hgTracks.c",
           note="Legacy form-state marker."),
     ],
 }
@@ -591,17 +593,17 @@ TRACK_SEARCH = {
     "what": "The track search page, whose variables are declared centrally in "
             "hg/inc/search.h and excluded by hgTracks.",
     "cmds": [
-        c("hgt_tSearch", "action", "hg/inc/search.h:13", value="<term>",
+        c("hgt_tSearch", "action", "hg/inc/search.h", value="<term>",
           verified=True, note="Search tracks in the current assembly."),
-        c("hgt_tsPage", "action", "hg/inc/search.h:14", value="<n>",
+        c("hgt_tsPage", "action", "hg/inc/search.h", value="<n>",
           verified=True, note="Result page number."),
-        c("hgt_tsAddRow", "action", "hg/inc/search.h:15", verified=True,
+        c("hgt_tsAddRow", "action", "hg/inc/search.h", verified=True,
           note="Add a metadata criterion row to the search form."),
-        c("hgt_tsDelRow", "action", "hg/inc/search.h:16", verified=True,
+        c("hgt_tsDelRow", "action", "hg/inc/search.h", verified=True,
           note="Remove a criterion row."),
-        c("hgt.suggest", "action", "hg/hgTracks/hgTracks.c:95", value="<term>",
+        c("hgt.suggest", "action", "hg/hgTracks/hgTracks.c", value="<term>",
           note="Gene-name autocomplete hand-off."),
-        c("hgt.suggestTrack", "action", "hg/hgTracks/hgTracks.c:95",
+        c("hgt.suggestTrack", "action", "hg/hgTracks/hgTracks.c",
           value="<track>", note="Track the suggestion came from."),
     ],
 }
@@ -616,32 +618,32 @@ HGTRACKS_MISC = {
             "off or effectively retired. Good candidates for the deletion "
             "pass in #37923.",
     "cmds": [
-        c("hgt.redirectTool", "action", "hg/hgTracks/mainMain.c:61",
+        c("hgt.redirectTool", "action", "hg/hgTracks/mainMain.c",
           value="<tool>", verified=True, leaks=True,
           note="Hand the current view off to an external tool."),
-        c("hgGenomeClick", "action", "hg/hgTracks/hgTracks.c:6272",
+        c("hgGenomeClick", "action", "hg/hgTracks/hgTracks.c",
           verified=True, leaks=True, note="Arrived from hgGenome."),
-        c("startTutorial", "action", "hg/hgTracks/hgTracks.c:12155",
+        c("startTutorial", "action", "hg/hgTracks/hgTracks.c",
           value="true", public=True, verified=True, leaks=True,
           note="Open the browser with the interactive tutorial running."),
-        c("startClinical", "action", "hg/hgTracks/hgTracks.c:12159",
+        c("startClinical", "action", "hg/hgTracks/hgTracks.c",
           value="true", verified=True, leaks=True, note="Clinical tutorial variant."),
-        c("startCustomTutorial", "action", "hg/hgTracks/hgTracks.c:12155",
+        c("startCustomTutorial", "action", "hg/hgTracks/hgTracks.c",
           leaks=True, note="Custom tutorial variant."),
-        c("dumpTracks", "action", "hg/hgTracks/hgTracks.c:95",
+        c("dumpTracks", "action", "hg/hgTracks/hgTracks.c",
           note="Debug dump of the track list. Retirement candidate."),
-        c("ctTest", "action", "hg/hgTracks/hgTracks.c:95",
+        c("ctTest", "action", "hg/hgTracks/hgTracks.c",
           note="Custom track test hook. Retirement candidate."),
-        c("myVarShare", "action", "hg/hgTracks/hgTracks.c:95",
+        c("myVarShare", "action", "hg/hgTracks/hgTracks.c",
           note="myVariants sharing, gated behind the doMyVariants hg.conf "
                "flag. Retirement candidate if that flag is off everywhere."),
-        c("myVarShareCmd", "action", "hg/hgTracks/mainMain.c:72",
+        c("myVarShareCmd", "action", "hg/hgTracks/mainMain.c",
           value="<cmd>", verified=True, leaks=True,
           note="myVariants share API command, same gating."),
-        c("pubsFilterExtId", "action", "hg/hgTracks/pubsTracks.c:368",
+        c("pubsFilterExtId", "action", "hg/hgTracks/pubsTracks.c",
           value="<id>", verified=True, leaks=True,
           note="Restrict the publications track to one article."),
-        c("measureTiming", "setting", "hg/hgGateway/hgGateway.c:1252",
+        c("measureTiming", "setting", "hg/hgGateway/hgGateway.c",
           persists=True, public=True, verified=True,
           note="Persists. Adds per-track timing to the page. Commonly pasted "
                "onto a URL for debugging and then forgotten, which is exactly "
@@ -660,36 +662,36 @@ DATA_LOADING = {
             "the session, which is a distinction worth spelling out on the "
             "help page.",
     "cmds": [
-        c("hubUrl", "action", "hg/inc/hubConnect.h:31", value="<url>",
+        c("hubUrl", "action", "hg/inc/hubConnect.h", value="<url>",
           public=True, verified=True,
           note="Attach a track or assembly hub. Repeatable: several hubUrl= "
                "on one URL attach several hubs."),
-        c("hubClear", "action", "hg/inc/hubConnect.h:37", value="<url>",
+        c("hubClear", "action", "hg/inc/hubConnect.h", value="<url>",
           public=True, verified=True,
           note="Detach any hub already attached at that URL, then attach it "
                "fresh. The way to make a link that does not accumulate hubs."),
-        c("hgt.customText", "action", "hg/inc/customTrack.h:68",
+        c("hgt.customText", "action", "hg/inc/customTrack.h",
           value="<url>|<text>", public=True, verified=True,
           note="Load a custom track, either inline or from a URL."),
-        c("hgct_customText", "action", "hg/inc/customTrack.h:70",
+        c("hgct_customText", "action", "hg/inc/customTrack.h",
           value="<url>|<text>", alias="hgt.customText", deprecated=True,
           verified=True,
           note="Same thing under a second name. Both keep working; document "
                "hgt.customText only."),
-        c("hgt.customFile", "action", "hg/inc/customTrack.h:71",
+        c("hgt.customFile", "action", "hg/inc/customTrack.h",
           value="<upload>", verified=True, note="File-upload form variant."),
-        c("hgct_docText", "action", "hg/inc/customTrack.h:73", value="<html>",
+        c("hgct_docText", "action", "hg/inc/customTrack.h", value="<html>",
           verified=True, leaks=True, note="Description page HTML for a custom track."),
-        c("hgct_docFile", "action", "hg/inc/customTrack.h:74",
+        c("hgct_docFile", "action", "hg/inc/customTrack.h",
           value="<upload>", verified=True, leaks=True, note="Same as a file upload."),
-        c("hubCheckUrl", "action", "hg/inc/hubConnect.h:28", value="<url>",
+        c("hubCheckUrl", "action", "hg/inc/hubConnect.h", value="<url>",
           verified=True, note="Run hubCheck against a hub and show the report."),
-        c("validateHubUrl", "action", "hg/hgHubConnect/hgHubConnect.c:1620",
+        c("validateHubUrl", "action", "hg/hgHubConnect/hgHubConnect.c",
           value="<url>", verified=True, leaks=True, note="Hub validation entry point."),
-        c("hgHubConnect.remakeTrackHub", "action", "hg/inc/hubConnect.h:103",
+        c("hgHubConnect.remakeTrackHub", "action", "hg/inc/hubConnect.h",
           value="on", verified=True,
           note="Force the hub's track list to be rebuilt rather than reused."),
-        c("hgHub_do_*", "action", "hg/inc/hubConnect.h:50", value="<varies>",
+        c("hgHub_do_*", "action", "hg/inc/hubConnect.h", value="<varies>",
           note="hgHubConnect's command family.",
           members=["hgHub_do_clear", "hgHub_do_refresh", "hgHub_do_search",
                    "hgHub_do_deleteSearch", "hgHub_do_filter",
@@ -708,19 +710,19 @@ ASSEMBLY = {
     "what": "Which genome the rest of the URL applies to. All of these persist: "
             "they are the user's current assembly, not a one-off.",
     "cmds": [
-        c("db", "setting", "hg/lib/web.c:1053", value="<db>", persists=True,
+        c("db", "setting", "hg/lib/web.c", value="<db>", persists=True,
           public=True, verified=True,
           note="Assembly, e.g. hg38. The one parameter almost every link "
                "should carry."),
-        c("org", "setting", "hg/lib/web.c:1057", value="<organism>",
+        c("org", "setting", "hg/lib/web.c", value="<organism>",
           persists=True, public=True, verified=True, note="Organism name."),
-        c("clade", "setting", "hg/lib/web.c:1058", value="<clade>",
+        c("clade", "setting", "hg/lib/web.c", value="<clade>",
           persists=True, public=True, verified=True, note="Clade."),
-        c("genome", "setting", "hg/lib/web.c:1055", value="<genome>",
+        c("genome", "setting", "hg/lib/web.c", value="<genome>",
           persists=True, public=True, verified=True,
           note="Assembly hub genome name, for a hub that supplies its own "
                "assembly."),
-        c("singleSearch", "action", "hg/lib/hgFind.c:3865", value="<term>",
+        c("singleSearch", "action", "hg/lib/hgFind.c", value="<term>",
           verified=True, note="Run one search and go straight to the result."),
     ],
 }
@@ -770,7 +772,7 @@ SETTINGS_ON_URL = {
         c("hgt.baseShowAsm", "setting", "hg/hgTracks/hgTracks.c",
           persists=True, verified=True,
           note="Show assembly name in the base track."),
-        c("udcTimeout", "setting", "hg/lib/hui.c:648", value="<seconds>",
+        c("udcTimeout", "setting", "hg/lib/hui.c", value="<seconds>",
           persists=True, verified=True,
           note="How long to wait on a remote data file."),
         c("virtModeType", "setting", "hg/hgTracks/hgTracks.c",
@@ -779,7 +781,7 @@ SETTINGS_ON_URL = {
         c("multiRegionsBedUrl", "setting", "hg/hgTracks/hgTracks.c",
           value="<url>", persists=True, public=True, verified=True,
           note="Multi-region definition fetched from a URL."),
-        c("<track>", "setting", "hg/hgTracks/hgTracks.c:7681",
+        c("<track>", "setting", "hg/hgTracks/hgTracks.c",
           value="full|pack|squish|dense|hide", persists=True, public=True,
           verified=True,
           note="Per-track visibility, the most-used URL parameter of all. For "
@@ -788,10 +790,10 @@ SETTINGS_ON_URL = {
           persists=True, public=True, verified=True,
           note="Vertical row order. Needs a value for every visible track to "
                "behave predictably."),
-        c("<track>_sel", "setting", "hg/lib/hui.c:5434", value="1",
+        c("<track>_sel", "setting", "hg/lib/hui.c", value="1",
           persists=True, public=True, verified=True,
           note="Tick a member of a container so it can draw."),
-        c("<track>_hideKids", "setting", "hg/hgTracks/hgTracks.c:7652",
+        c("<track>_hideKids", "setting", "hg/hgTracks/hgTracks.c",
           value="1", persists=True, public=True, verified=True,
           note="Collapse a container and hide its children."),
         c("<track>.heightPer", "setting", "hg/inc/wiggle.h", value="<n>",
@@ -811,7 +813,7 @@ OTHER_CGIS = {
                 "hgta_do prefix and is stripped from the cart in one call at "
                 "hgTables.c:1737, so every member is an action.",
         "cmds": [
-            c("hgta_do*", "action", "hg/hgTables/hgTables.c:1737",
+            c("hgta_do*", "action", "hg/hgTables/hgTables.c",
               value="<varies>", verified=True,
               note="cartRemovePrefix(cart, hgtaDo) removes the lot after "
                    "dispatch. About 50 members.",
@@ -846,24 +848,24 @@ OTHER_CGIS = {
                        "hgta_doSubmitUserRegions", "hgta_doClearUserRegions",
                        "hgta_doClearSetUserRegionsText", "hgta_doPal",
                        "hgta_palOut", "hgta_doTest"]),
-            c("hgta_metaStatus", "action", "hg/hgTables/hgTables.c:1434",
+            c("hgta_metaStatus", "action", "hg/hgTables/hgTables.c",
               verified=True, note="Metadata page state, removed after use."),
-            c("hgta_metaVersion", "action", "hg/hgTables/hgTables.c:1435",
+            c("hgta_metaVersion", "action", "hg/hgTables/hgTables.c",
               verified=True),
-            c("hgta_metaDatabases", "action", "hg/hgTables/hgTables.c:1436",
+            c("hgta_metaDatabases", "action", "hg/hgTables/hgTables.c",
               verified=True),
-            c("hgta_metaTables", "action", "hg/hgTables/hgTables.c:1437",
+            c("hgta_metaTables", "action", "hg/hgTables/hgTables.c",
               verified=True),
-            c("fbQual", "action", "hg/lib/featureBits.c:350",
+            c("fbQual", "action", "hg/lib/featureBits.c",
               value="<qualifier>", verified=True, leaks=True,
               note="featureBits region qualifier for the output options page."),
-            c("fbUpBases", "action", "hg/lib/featureBits.c:363", value="<n>",
+            c("fbUpBases", "action", "hg/lib/featureBits.c", value="<n>",
               verified=True, leaks=True),
-            c("fbDownBases", "action", "hg/lib/featureBits.c:367",
+            c("fbDownBases", "action", "hg/lib/featureBits.c",
               value="<n>", verified=True, leaks=True),
-            c("fbExonBases", "action", "hg/lib/featureBits.c:358",
+            c("fbExonBases", "action", "hg/lib/featureBits.c",
               value="<n>", verified=True, leaks=True),
-            c("fbIntronBases", "action", "hg/lib/featureBits.c:361",
+            c("fbIntronBases", "action", "hg/lib/featureBits.c",
               value="<n>", verified=True, leaks=True),
         ],
     },
@@ -872,18 +874,18 @@ OTHER_CGIS = {
                 "selects among a long list of handlers, so g is a dispatch "
                 "key rather than a boolean.",
         "cmds": [
-            c("g", "action", "hg/hgc/hgc.c:28618", value="<track>|<htcVerb>",
+            c("g", "action", "hg/hgc/hgc.c", value="<track>|<htcVerb>",
               public=True, verified=True,
               note="Which handler runs. A track name shows that track's item "
                    "details; the htc* and get* verbs are internal pages such "
                    "as getDna and htcGeneMrna."),
-            c("i", "action", "hg/hgc/hgc.c:28618", value="<item>",
+            c("i", "action", "hg/hgc/hgc.c", value="<item>",
               public=True, verified=True, note="Item name."),
             c("i2", "action", "hg/hgc/hgc.c", value="<item>", leaks=True,
               note="Second item, for paired features."),
-            c("aliTable", "action", "hg/hgc/hgc.c:28618", value="<table>",
+            c("aliTable", "action", "hg/hgc/hgc.c", value="<table>",
               verified=True, note="Alignment table to pull the alignment from."),
-            c("aliTrack", "action", "hg/hgc/hgc.c:8838", value="<track>",
+            c("aliTrack", "action", "hg/hgc/hgc.c", value="<track>",
               verified=True,
               note="Track hgc was called on, put on the alignment links by "
                    "aliTrackParam() at hgc.c:7291.  aliTable above is the table "
@@ -893,15 +895,15 @@ OTHER_CGIS = {
                    "this can.  Read with cartUsualString and looked up in "
                    "trackHash.  Added with the quickLift alignment details pages, "
                    "refs #38249."),
-            c("addp", "action", "hg/hgc/hgc.c:28618", verified=True,
+            c("addp", "action", "hg/hgc/hgc.c", verified=True,
               note="Protein-alignment flag."),
-            c("pred", "action", "hg/hgc/hgc.c:28618", value="<table>",
+            c("pred", "action", "hg/hgc/hgc.c", value="<table>",
               verified=True, note="Gene prediction table."),
-            c("quickLiftCcds", "action", "hg/hgc/hgc.c:28618", verified=True,
+            c("quickLiftCcds", "action", "hg/hgc/hgc.c", verified=True,
               note="quickLift CCDS hand-off."),
-            c("doGetBed", "action", "hg/hgc/hgc.c:24549", verified=True, leaks=True,
+            c("doGetBed", "action", "hg/hgc/hgc.c", verified=True, leaks=True,
               note="Return the feature as BED."),
-            c("oldFonts", "action", "hg/hgc/barChartClick.c:384",
+            c("oldFonts", "action", "hg/hgc/barChartClick.c",
               verified=True, leaks=True,
               note="Draw bar chart details with the pre-FreeType fonts, added "
                    "so QA could compare. Retirement candidate."),
@@ -912,18 +914,18 @@ OTHER_CGIS = {
     "hgTrackUi": {
         "what": "The track configuration page.",
         "cmds": [
-            c("g", "action", "hg/hgTrackUi/hgTrackUi.c:4643", value="<track>",
+            c("g", "action", "hg/hgTrackUi/hgTrackUi.c", value="<track>",
               public=True, verified=True,
               note="Which track's settings page to show."),
-            c("track", "action", "hg/hgTrackUi/hgTrackUi.c:4643",
+            c("track", "action", "hg/hgTrackUi/hgTrackUi.c",
               value="<track>", verified=True, note="Alternate spelling of g."),
-            c("fileUrl", "action", "hg/hgTrackUi/hgTrackUi.c:4643",
+            c("fileUrl", "action", "hg/hgTrackUi/hgTrackUi.c",
               value="<url>", verified=True,
               note="Configure a track straight from a data file URL."),
-            c("sourceDb", "action", "hg/hgTrackUi/hgTrackUi.c:4643",
+            c("sourceDb", "action", "hg/hgTrackUi/hgTrackUi.c",
               value="<db>", verified=True, note="Assembly the track came from."),
             c("snp125Defaults_coloring", "action",
-              "hg/hgTrackUi/hgTrackUi.c:563", value="Set+defaults",
+              "hg/hgTrackUi/hgTrackUi.c", value="Set+defaults",
               verified=True, leaks=True,
               note="The \"Set defaults\" button under the SNP colouring "
                    "section.  snp125ResetColorVarsIfNecessary reads it with "
@@ -947,66 +949,66 @@ OTHER_CGIS = {
         "what": "The custom track management page.",
         "cmds": [
             c("hgct_doRemoveCustomTrack", "action",
-              "hg/inc/customTrack.h:77", verified=True,
+              "hg/inc/customTrack.h", verified=True,
               note="Delete the selected custom track."),
-            c("hgct_table", "action", "hg/inc/customTrack.h:78",
+            c("hgct_table", "action", "hg/inc/customTrack.h",
               value="<table>", verified=True, note="Which custom track."),
-            c("hgct_updatedTable", "action", "hg/inc/customTrack.h:79",
+            c("hgct_updatedTable", "action", "hg/inc/customTrack.h",
               value="<table>", verified=True, leaks=True),
             c("op", "action", "hg/hgCustom/hgCustom.c", value="<verb>",
               verified=True, leaks=True, note="Which operation the page should perform."),
-            c("SubmitFile", "action", "hg/hgCustom/hgCustom.c:92",
+            c("SubmitFile", "action", "hg/hgCustom/hgCustom.c",
               verified=True, note="Upload button."),
-            c("ContinueWithWarn", "action", "hg/hgCustom/hgCustom.c:92",
+            c("ContinueWithWarn", "action", "hg/hgCustom/hgCustom.c",
               verified=True, note="Proceed despite parse warnings."),
         ],
     },
     "hgConvert / hgLiftOver": {
         "what": "Coordinate conversion between assemblies.",
         "cmds": [
-            c("hglft_doConvert", "action", "hg/hgConvert/hgConvert.c:40",
+            c("hglft_doConvert", "action", "hg/hgConvert/hgConvert.c",
               verified=True, note="Run the conversion."),
-            c("hglft_toDb", "action", "hg/hgConvert/hgConvert.c:39",
+            c("hglft_toDb", "action", "hg/hgConvert/hgConvert.c",
               value="<db>", verified=True, leaks=True, note="Destination assembly."),
-            c("hglft_toOrg", "action", "hg/hgConvert/hgConvert.c:38",
+            c("hglft_toOrg", "action", "hg/hgConvert/hgConvert.c",
               value="<organism>", verified=True, leaks=True),
-            c("hglft_userData", "action", "hg/hgLiftOver/hgLiftOver.c:639",
+            c("hglft_userData", "action", "hg/hgLiftOver/hgLiftOver.c",
               value="<text>", verified=True, note="Pasted coordinates."),
-            c("hglft_dataFile", "action", "hg/hgLiftOver/hgLiftOver.c:640",
+            c("hglft_dataFile", "action", "hg/hgLiftOver/hgLiftOver.c",
               value="<upload>", verified=True),
-            c("hglft_errorHelp", "action", "hg/hgLiftOver/hgLiftOver.c:641",
+            c("hglft_errorHelp", "action", "hg/hgLiftOver/hgLiftOver.c",
               verified=True, note="Show the error help text."),
         ],
     },
     "hgBlat / hgPcr": {
         "what": "Sequence alignment and primer search.",
         "cmds": [
-            c("userSeq", "action", "hg/hgBlat/hgBlat.c:2616", value="<seq>",
+            c("userSeq", "action", "hg/hgBlat/hgBlat.c", value="<seq>",
               public=True, verified=True, note="Query sequence."),
-            c("type", "action", "hg/hgBlat/hgBlat.c:2616", value="<queryType>",
+            c("type", "action", "hg/hgBlat/hgBlat.c", value="<queryType>",
               verified=True, note="Query type, e.g. DNA or protein."),
-            c("seqFile", "action", "hg/hgBlat/hgBlat.c:2616",
+            c("seqFile", "action", "hg/hgBlat/hgBlat.c",
               value="<upload>", verified=True),
-            c("Lucky", "action", "hg/hgBlat/hgBlat.c:2616", verified=True,
+            c("Lucky", "action", "hg/hgBlat/hgBlat.c", verified=True,
               note="Jump straight to the best hit."),
-            c("Clear", "action", "hg/hgBlat/hgBlat.c:2616", verified=True),
-            c("showPage", "action", "hg/hgBlat/hgBlat.c:2616", verified=True),
-            c("changeInfo", "action", "hg/hgBlat/hgBlat.c:2616",
+            c("Clear", "action", "hg/hgBlat/hgBlat.c", verified=True),
+            c("showPage", "action", "hg/hgBlat/hgBlat.c", verified=True),
+            c("changeInfo", "action", "hg/hgBlat/hgBlat.c",
               verified=True),
-            c("blatNewPage", "setting", "hg/hgBlat/hgBlat.c:776", value="0|1",
+            c("blatNewPage", "setting", "hg/hgBlat/hgBlat.c", value="0|1",
               persists=True, verified=True,
               note="Which results page to draw: the classic hyperlink list or "
                    "the sortable table.  A preference on purpose, so the "
                    "choice sticks for later searches, and hgBlat carries it "
                    "across a session load (hgBlat.c:2679).  hgc reads it too, "
                    "to match the alignment display (hgc.c:9234)."),
-            c("blatReopen", "action", "hg/hgBlat/hgBlat.c:2707",
+            c("blatReopen", "action", "hg/hgBlat/hgBlat.c",
               verified=True,
               note="Re-render the results already in the cart, rather than "
                    "running a new search.  How the banner and the table's "
                    "'Old BLAT result page' link switch format without "
                    "resubmitting the query."),
-            c("blatPslId", "action", "hg/hgBlat/hgBlat.c:2817", value="<file>",
+            c("blatPslId", "action", "hg/hgBlat/hgBlat.c", value="<file>",
               verified=True, leaks=True,
               note="Half of the stable shareable link: with blatFaId, rebuild "
                    "the table straight from the named trash .pslx and .fa, "
@@ -1015,22 +1017,22 @@ OTHER_CGIS = {
                    "intent, but hgBlat's excludeVars (hgBlat.c:3077) lists "
                    "the older u and s share parameters and not these two, so "
                    "the trash file names are written into the user's session."),
-            c("blatFaId", "action", "hg/hgBlat/hgBlat.c:2817", value="<file>",
+            c("blatFaId", "action", "hg/hgBlat/hgBlat.c", value="<file>",
               verified=True, leaks=True,
               note="The .fa half of the blatPslId share link.  Leaks for the "
                    "same reason."),
-            c("wp_f", "action", "hg/hgPcr/hgPcr.c:847", value="<primer>",
+            c("wp_f", "action", "hg/hgPcr/hgPcr.c", value="<primer>",
               public=True, verified=True, note="Forward primer."),
-            c("wp_r", "action", "hg/hgPcr/hgPcr.c:847", value="<primer>",
+            c("wp_r", "action", "hg/hgPcr/hgPcr.c", value="<primer>",
               public=True, verified=True, note="Reverse primer."),
-            c("wp_showPage", "action", "hg/hgPcr/hgPcr.c:847", verified=True),
+            c("wp_showPage", "action", "hg/hgPcr/hgPcr.c", verified=True),
         ],
     },
     "hgGateway / hgSearch / hgChooseDb": {
         "what": "The gateway and search pages, which share a cartJson command "
                 "channel.",
         "cmds": [
-            c("hggw_term", "action", "hg/hgGateway/hgGateway.c:1254",
+            c("hggw_term", "action", "hg/hgGateway/hgGateway.c",
               value="<term>", verified=True,
               note="Species or assembly search term for the gateway's "
                    "autocomplete.  Read before the cart is loaded, to keep the "
@@ -1038,14 +1040,14 @@ OTHER_CGIS = {
                    "SEARCH_TERM in the source, which is why this row used to "
                    "say hgt_tSearch: that name is the track search's, and a "
                    "pooled #define table answered for both."),
-            c("hgcd_term", "action", "hg/hgChooseDb/hgChooseDb.c:224",
+            c("hgcd_term", "action", "hg/hgChooseDb/hgChooseDb.c",
               value="<term>", verified=True,
               note="The same search term on hgChooseDb, which spells its own "
                    "SEARCH_TERM differently.  In that CGI's excludeVars."),
-            c("cjCmd", "action", "hg/inc/cartJson.h:11", value="<json>",
+            c("cjCmd", "action", "hg/inc/cartJson.h", value="<json>",
               verified=True,
               note="cartJson command channel, used by the page's own AJAX."),
-            c("search", "action", "hg/hgSearch/hgSearch.c:563", value="<term>",
+            c("search", "action", "hg/hgSearch/hgSearch.c", value="<term>",
               public=True, verified=True, leaks=True,
               note="Search term for the search results page."),
         ],
@@ -1053,22 +1055,22 @@ OTHER_CGIS = {
     "hgIntegrator / hgVai": {
         "what": "Data Integrator and Variant Annotation Integrator.",
         "cmds": [
-            c("hgi_doQuery", "action", "hg/hgIntegrator/hgIntegrator.c:48",
+            c("hgi_doQuery", "action", "hg/hgIntegrator/hgIntegrator.c",
               verified=True, note="Run the integrator query."),
-            c("hgva_startQuery", "action", "hg/hgVai/hgVai.c:68",
+            c("hgva_startQuery", "action", "hg/hgVai/hgVai.c",
               verified=True, note="Run the annotation query."),
         ],
     },
     "hgCollection": {
         "what": "The track collection builder.",
         "cmds": [
-            c("cmd", "action", "hg/hgCollection/hgCollection.c:32",
+            c("cmd", "action", "hg/hgCollection/hgCollection.c",
               value="<verb>", verified=True, note="Which operation to run."),
-            c("track", "action", "hg/hgCollection/hgCollection.c:32",
+            c("track", "action", "hg/hgCollection/hgCollection.c",
               value="<track>", verified=True),
-            c("collection", "action", "hg/hgCollection/hgCollection.c:32",
+            c("collection", "action", "hg/hgCollection/hgCollection.c",
               value="<name>", verified=True),
-            c("jsonp", "action", "hg/hgCollection/hgCollection.c:32",
+            c("jsonp", "action", "hg/hgCollection/hgCollection.c",
               value="<callback>", verified=True,
               note="JSONP callback name for the AJAX replies."),
         ],
@@ -1076,28 +1078,28 @@ OTHER_CGIS = {
     "hgApi": {
         "what": "The older internal JSON helper, distinct from hubApi.",
         "cmds": [
-            c("cmd", "action", "hg/hgApi/hgApi.c:288", value="<verb>",
+            c("cmd", "action", "hg/hgApi/hgApi.c", value="<verb>",
               verified=True, note="Which query to answer."),
-            c("track", "action", "hg/hgApi/hgApi.c:288", value="<track>",
+            c("track", "action", "hg/hgApi/hgApi.c", value="<track>",
               verified=True),
-            c("table", "action", "hg/hgApi/hgApi.c:288", value="<table>",
+            c("table", "action", "hg/hgApi/hgApi.c", value="<table>",
               verified=True),
-            c("name", "action", "hg/hgApi/hgApi.c:288", value="<name>",
+            c("name", "action", "hg/hgApi/hgApi.c", value="<name>",
               verified=True),
-            c("chrom", "action", "hg/hgApi/hgApi.c:288", value="<chrom>",
+            c("chrom", "action", "hg/hgApi/hgApi.c", value="<chrom>",
               verified=True),
-            c("num", "action", "hg/hgApi/hgApi.c:288", value="<n>",
+            c("num", "action", "hg/hgApi/hgApi.c", value="<n>",
               verified=True),
-            c("var", "action", "hg/hgApi/hgApi.c:288", value="<var>",
+            c("var", "action", "hg/hgApi/hgApi.c", value="<var>",
               verified=True),
             c("offset", "action", "hg/hgApi/hgApi.c", value="<n>",
               verified=True, leaks=True),
             c("symbol", "action", "hg/hgApi/hgApi.c", value="<sym>",
               verified=True, leaks=True),
-            c("fileSearch", "action", "hg/hgApi/hgApi.c:288", verified=True),
-            c("showShortLabel", "action", "hg/hgApi/hgApi.c:288",
+            c("fileSearch", "action", "hg/hgApi/hgApi.c", verified=True),
+            c("showShortLabel", "action", "hg/hgApi/hgApi.c",
               verified=True),
-            c("showLongLabel", "action", "hg/hgApi/hgApi.c:288",
+            c("showLongLabel", "action", "hg/hgApi/hgApi.c",
               verified=True),
         ],
     },
@@ -1112,22 +1114,22 @@ OTHER_CGIS = {
                 "configured it: login.oauth.providers for the social ones, "
                 "login.emailLink for the mail ones.",
         "cmds": [
-            c("provider", "action", "hg/hgLogin/hgLogin.c:2265",
+            c("provider", "action", "hg/hgLogin/hgLogin.c",
               value="<name>", verified=True,
               note="Which configured provider to start a social login with, "
                    "in oauthStart.  Refused unless oauthProviderEnabled(), so "
                    "an unknown name cannot start a redirect."),
-            c("code", "action", "hg/hgLogin/hgLogin.c:2322", value="<code>",
+            c("code", "action", "hg/hgLogin/hgLogin.c", value="<code>",
               verified=True,
               note="The provider's authorization code, handed back on its "
                    "redirect and exchanged server-side for the user's "
                    "identity."),
-            c("state", "action", "hg/hgLogin/hgLogin.c:2293", value="<nonce>",
+            c("state", "action", "hg/hgLogin/hgLogin.c", value="<nonce>",
               verified=True,
               note="The anti-CSRF nonce, compared against the oauth_state "
                    "cart variable that oauthStart saved and then removes, so "
                    "it is single use."),
-            c("oauth_state", "setting", "hg/hgLogin/hgLogin.c:2319",
+            c("oauth_state", "setting", "hg/hgLogin/hgLogin.c",
               value="<nonce>", persists=True, verified=True,
               note="The server's copy of the nonce above, saved by oauthStart "
                    "so it survives the round trip to the provider and removed "
@@ -1140,14 +1142,14 @@ OTHER_CGIS = {
                    "because a cart variable is reachable from a URL by "
                    "default and calling this one out of scope is what hid "
                    "that."),
-            c("oauth_provider", "setting", "hg/hgLogin/hgLogin.c:2320",
+            c("oauth_provider", "setting", "hg/hgLogin/hgLogin.c",
               value="<name>", persists=True, verified=True,
               note="Which provider the login in flight belongs to, saved by "
                    "oauthStart alongside oauth_state, removed with it, and "
                    "server-owned in the same way.  The dispatcher in doMiddle "
                    "reads it to tell a provider's redirect back to us from "
                    "any other request carrying a code or error parameter."),
-            c("error", "action", "hg/hgLogin/hgLogin.c:2298", value="<code>",
+            c("error", "action", "hg/hgLogin/hgLogin.c", value="<code>",
               verified=True, leaks=True,
               note="The provider redirected back with an error instead of a "
                    "code, for instance because the user declined.  Shown "
@@ -1156,28 +1158,28 @@ OTHER_CGIS = {
                    "covers code, state and provider but not this, so a string "
                    "chosen by whoever wrote the redirect is kept in the "
                    "user's session."),
-            c("error_description", "action", "hg/hgLogin/hgLogin.c:2304",
+            c("error_description", "action", "hg/hgLogin/hgLogin.c",
               value="<text>", verified=True, leaks=True,
               note="The provider's human-readable error text, printed through "
                    "htmlEncode.  Leaks into the session for the same reason "
                    "as error."),
-            c("newEmail", "action", "hg/hgLogin/hgLogin.c:1219",
+            c("newEmail", "action", "hg/hgLogin/hgLogin.c",
               value="<email>", verified=True,
               note="The address a change-of-email confirmation link is "
                    "claiming.  Authorized by sig rather than by a login "
                    "cookie, on purpose, so the link works from the new "
                    "mailbox in any browser."),
-            c("exp", "action", "hg/hgLogin/hgLogin.c:1220", value="<epoch>",
+            c("exp", "action", "hg/hgLogin/hgLogin.c", value="<epoch>",
               verified=True,
               note="When that confirmation link stops working.  Inside the "
                    "signed material, so it cannot be pushed out by editing "
                    "the URL."),
-            c("sig", "action", "hg/hgLogin/hgLogin.c:1221", value="<hmac>",
+            c("sig", "action", "hg/hgLogin/hgLogin.c", value="<hmac>",
               verified=True,
               note="The signature over user, newEmail and exp that "
                    "authorizes the change.  Checked before anything else in "
                    "the link is trusted."),
-            c("recovEmail", "action", "hg/hgLogin/hgLogin.c:1391",
+            c("recovEmail", "action", "hg/hgLogin/hgLogin.c",
               value="<email>", verified=True,
               note="The recovery address a confirmation link is claiming, on "
                    "the hgLogin.do.confirmRecovEmail path.  The same shape as "
@@ -1196,33 +1198,33 @@ OTHER_CGIS = {
     "smaller CGIs": {
         "what": "One or two commands each.",
         "cmds": [
-            c("resource", "action", "hg/hgLinkIn/hgLinkIn.c:121",
+            c("resource", "action", "hg/hgLinkIn/hgLinkIn.c",
               value="<kind>", public=True, verified=True,
               note="hgLinkIn: what kind of external identifier follows."),
-            c("id", "action", "hg/hgLinkIn/hgLinkIn.c:121", value="<id>",
+            c("id", "action", "hg/hgLinkIn/hgLinkIn.c", value="<id>",
               public=True, verified=True,
               note="hgLinkIn: the external identifier to resolve."),
-            c("ajaxSection", "action", "hg/hgGene/hgGene.h:264",
+            c("ajaxSection", "action", "hg/hgGene/hgGene.h",
               value="<section>", verified=True,
               note="hgGene: render one section of the gene page."),
-            c("showAllRef", "action", "hg/hgGene/gad.c:62", value="Y",
+            c("showAllRef", "action", "hg/hgGene/gad.c", value="Y",
               verified=True, leaks=True, note="hgGene: show all references, not the first few."),
-            c("clearCache", "action", "hg/hgFileUi/hgFileUi.c:170",
+            c("clearCache", "action", "hg/hgFileUi/hgFileUi.c",
               verified=True, note="hgFileUi and hgFileSearch: drop cached metadata."),
-            c("noDisplay", "action", "hg/cartDump/cartDump.c:253",
+            c("noDisplay", "action", "hg/cartDump/cartDump.c",
               verified=True,
               note="cartDump: do the work without printing the cart."),
-            c("backgroundExec", "action", "hg/hgSession/hgSession.c:2030",
+            c("backgroundExec", "action", "hg/hgSession/hgSession.c",
               value="<cmd>", verified=True,
               note="hgSession: run a long save in the background."),
-            c("backgroundProgress", "action", "hg/hgSession/hgSession.c:1923",
+            c("backgroundProgress", "action", "hg/hgSession/hgSession.c",
               value="<url>", verified=True,
               note="hgSession: poll a background job's progress."),
             c("hgS_sessionDataDbSuffix", "action",
-              "hg/hgSession/hgSession.c:59", value="<suffix>", verified=True),
-            c("hgLogin.do.*", "action", "hg/hgLogin/hgLogin.c:43",
+              "hg/hgSession/hgSession.c", value="<suffix>", verified=True),
+            c("hgLogin.do.*", "action", "hg/hgLogin/hgLogin.c",
               value="<varies>", note="hgLogin's command family."),
-            c("debug", "action", "hg/hgTracks/extTools.c:177", verified=True,
+            c("debug", "action", "hg/hgTracks/extTools.c", verified=True,
               note="extTools and a few others: show debugging output."),
             c("prefix", "action", "hg/hgSuggest/hgSuggest.c", value="<text>",
               verified=True, nocart=True,
@@ -1244,106 +1246,106 @@ HUBAPI = {
             "persists. Names come from hg/hubApi/dataApi.h.",
     "cmds": [
         # documented on goldenPath/help/api.html
-        c("hubUrl", "action", "hg/hubApi/dataApi.h:66", value="<url>",
+        c("hubUrl", "action", "hg/hubApi/dataApi.h", value="<url>",
           public=True, verified=True,
           note="Track hub or assembly hub URL."),
-        c("genome", "action", "hg/hubApi/dataApi.h:67", value="<name>",
+        c("genome", "action", "hg/hubApi/dataApi.h", value="<name>",
           public=True, verified=True,
           note="Assembly in the browser or in a hub. With "
                "/list/genarkGenomes it tests whether that genome exists."),
-        c("track", "action", "hg/hubApi/dataApi.h:69", value="<trackName>",
+        c("track", "action", "hg/hubApi/dataApi.h", value="<trackName>",
           public=True, verified=True,
           note="Which data track, in a hub or a browser assembly."),
-        c("trackLeavesOnly", "action", "hg/hubApi/dataApi.h:68", value="1",
+        c("trackLeavesOnly", "action", "hg/hubApi/dataApi.h", value="1",
           public=True, verified=True,
           note="On /list/tracks, list only tracks and omit the container "
                "information."),
-        c("chrom", "action", "hg/hubApi/dataApi.h:70", value="<chrN>",
+        c("chrom", "action", "hg/hubApi/dataApi.h", value="<chrN>",
           public=True, verified=True,
           note="Chromosome, for sequence or track data."),
-        c("start", "action", "hg/hubApi/dataApi.h:71", value="<n>",
+        c("start", "action", "hg/hubApi/dataApi.h", value="<n>",
           public=True, verified=True,
           note="Start coordinate. Zero-based here, unlike the browser's own "
                "display."),
-        c("end", "action", "hg/hubApi/dataApi.h:72", value="<n>",
+        c("end", "action", "hg/hubApi/dataApi.h", value="<n>",
           public=True, verified=True, note="End coordinate, one-based."),
-        c("revComp", "action", "hg/hubApi/dataApi.h:73", value="1",
+        c("revComp", "action", "hg/hubApi/dataApi.h", value="1",
           public=True, verified=True,
           note="On /getData/sequence, return the reverse complement."),
-        c("maxItemsOutput", "action", "hg/hubApi/dataApi.h:74", value="<n>",
+        c("maxItemsOutput", "action", "hg/hubApi/dataApi.h", value="<n>",
           public=True, verified=True,
           note="Cap the number of items returned. Default and maximum are "
                "1,000,000; -1 asks for the maximum."),
-        c("format", "action", "hg/hubApi/dataApi.h:75", value="text",
+        c("format", "action", "hg/hubApi/dataApi.h", value="text",
           public=True, verified=True,
           note="On /list/files, return a plain text listing instead of JSON."),
-        c("jsonOutputArrays", "action", "hg/hubApi/dataApi.h:76", value="1",
+        c("jsonOutputArrays", "action", "hg/hubApi/dataApi.h", value="1",
           public=True, verified=True,
           note="On /getData/track, return each item as an array rather than "
                "an object."),
-        c("search", "action", "hg/hubApi/dataApi.h:78", value="<term>",
+        c("search", "action", "hg/hubApi/dataApi.h", value="<term>",
           public=True, verified=True,
           note="On /search, the term to look for. Needs genome= too."),
-        c("categories", "action", "hg/hubApi/dataApi.h:77",
+        c("categories", "action", "hg/hubApi/dataApi.h",
           value="helpDocs|publicHubs|trackDb", public=True, verified=True,
           note="On /search, restrict the search to one category."),
-        c("q", "action", "hg/hubApi/dataApi.h:81", value="<query>",
+        c("q", "action", "hg/hubApi/dataApi.h", value="<query>",
           public=True, verified=True,
           note="On /findGenome, the assembly search string. Supports +term, "
                "-term and trailing wildcards."),
-        c("statsOnly", "action", "hg/hubApi/dataApi.h:82", value="1",
+        c("statsOnly", "action", "hg/hubApi/dataApi.h", value="1",
           public=True, verified=True,
           note="On /findGenome, return counts rather than the matches."),
-        c("browser", "action", "hg/hubApi/dataApi.h:83", value="<value>",
+        c("browser", "action", "hg/hubApi/dataApi.h", value="<value>",
           public=True, verified=True,
           note="On /findGenome, restrict by whether a browser exists."),
-        c("year", "action", "hg/hubApi/dataApi.h:84", value="<yyyy>",
+        c("year", "action", "hg/hubApi/dataApi.h", value="<yyyy>",
           public=True, verified=True,
           note="On /findGenome, restrict to assemblies from one year."),
-        c("category", "action", "hg/hubApi/dataApi.h:85",
+        c("category", "action", "hg/hubApi/dataApi.h",
           value="reference|representative", public=True, verified=True,
           note="On /findGenome, restrict by NCBI assembly category."),
-        c("status", "action", "hg/hubApi/dataApi.h:86",
+        c("status", "action", "hg/hubApi/dataApi.h",
           value="reference|representative", public=True, verified=True,
           note="On /findGenome, restrict by NCBI assembly status."),
-        c("level", "action", "hg/hubApi/dataApi.h:87",
+        c("level", "action", "hg/hubApi/dataApi.h",
           value="complete|chromosome|scaffold|contig", public=True,
           verified=True,
           note="On /findGenome, restrict by NCBI assembly level."),
 
         # present in dataApi.h but absent from the public API help page
-        c("skipContext", "action", "hg/hubApi/dataApi.h:79", value="1",
+        c("skipContext", "action", "hg/hubApi/dataApi.h", value="1",
           note="Not documented on the API help page."),
-        c("liftable", "action", "hg/hubApi/dataApi.h:88", value="1",
+        c("liftable", "action", "hg/hubApi/dataApi.h", value="1",
           note="Not documented on the API help page."),
-        c("fromGenome", "action", "hg/hubApi/dataApi.h:89", value="<name>",
+        c("fromGenome", "action", "hg/hubApi/dataApi.h", value="<name>",
           note="Lift source assembly. Not documented on the help page."),
-        c("toGenome", "action", "hg/hubApi/dataApi.h:90", value="<name>",
+        c("toGenome", "action", "hg/hubApi/dataApi.h", value="<name>",
           note="Lift destination assembly. Not documented on the help page."),
-        c("filter", "action", "hg/hubApi/dataApi.h:103", value="<expr>",
+        c("filter", "action", "hg/hubApi/dataApi.h", value="<expr>",
           note="Not documented on the API help page."),
-        c("fileType", "action", "hg/hubApi/dataApi.h:105", value="<type>",
+        c("fileType", "action", "hg/hubApi/dataApi.h", value="<type>",
           note="Not documented on the API help page."),
-        c("userSeq", "action", "hg/hubApi/dataApi.h:107", value="<seq>",
+        c("userSeq", "action", "hg/hubApi/dataApi.h", value="<seq>",
           note="Not documented on the API help page."),
-        c("apiKey", "action", "hg/hubApi/dataApi.h:108", value="<key>",
+        c("apiKey", "action", "hg/hubApi/dataApi.h", value="<key>",
           note="Not documented on the API help page."),
-        c("asmId", "action", "hg/hubApi/dataApi.h:96", value="<id>",
+        c("asmId", "action", "hg/hubApi/dataApi.h", value="<id>",
           note="Assembly request endpoint, not the public data API."),
-        c("name", "action", "hg/hubApi/dataApi.h:97", value="<name>",
+        c("name", "action", "hg/hubApi/dataApi.h", value="<name>",
           note="Assembly request endpoint."),
-        c("betterName", "action", "hg/hubApi/dataApi.h:98", value="<name>",
+        c("betterName", "action", "hg/hubApi/dataApi.h", value="<name>",
           note="Assembly request endpoint."),
-        c("email", "action", "hg/hubApi/dataApi.h:92", value="<addr>",
+        c("email", "action", "hg/hubApi/dataApi.h", value="<addr>",
           note="Assembly request endpoint."),
-        c("comment", "action", "hg/hubApi/dataApi.h:93", value="<text>",
+        c("comment", "action", "hg/hubApi/dataApi.h", value="<text>",
           note="Assembly request endpoint."),
-        c("returnTo", "action", "hg/hubApi/dataApi.h:94", value="<url>",
+        c("returnTo", "action", "hg/hubApi/dataApi.h", value="<url>",
           note="Assembly request endpoint."),
-        c("requestType", "action", "hg/hubApi/dataApi.h:100", value="<type>",
+        c("requestType", "action", "hg/hubApi/dataApi.h", value="<type>",
           note="ottoRequest relay, used between the Euro and Asia nodes and "
                "the RR rather than by users."),
-        c("relaySecret", "action", "hg/hubApi/dataApi.h:101", value="<secret>",
+        c("relaySecret", "action", "hg/hubApi/dataApi.h", value="<secret>",
           note="ottoRequest relay shared secret. Internal."),
     ],
 }
@@ -1525,9 +1527,11 @@ def write_baseline(names, sites=None, path=BASELINE_FILE):
 
 
 def tree_names(cat):
-    """(tree names, name -> file:line, catalog names, raw harvest), or None.
+    """(tree names, name -> file:line, catalog names, raw harvest, reads).
 
-    None means the harvester could not be imported.  Shared by reconcile and
+    reads maps each name to every file:line that reads it, excludeVars[]
+    entries left out.  None in place of the tuple means the harvester could
+    not be imported.  Shared by reconcile and
     --update-baseline so the two cannot disagree about what counts as a name.
     """
     try:
@@ -1558,12 +1562,25 @@ def tree_names(cat):
         return (0 if path.startswith(watched) else 1, path,
                 int(line) if line.isdigit() else 0)
 
+    # A name's place in an excludeVars[] array is not a read.  The array sits
+    # near the top of its file, so letting it compete made it the lowest line
+    # and the citation for every name it lists: hgLogin.c:47 stood in for
+    # eight names read hundreds of lines further down.  It is cited only when
+    # the scan finds no read at all.
+    reads = collections.defaultdict(set)
+    for which in ("cgiReads", "cartRemoves"):
+        for pairs in found[which].values():
+            for name, src in pairs:
+                reads[name].add(src)
     site = {}
     for which in found:
         for pairs in found[which].values():
             for name, src in pairs:
+                if which == "excludeVars" and name in reads:
+                    continue
                 if name not in site or site_key(src) < site_key(site[name]):
                     site[name] = src
+    reads = {n: sorted(s, key=site_key) for n, s in reads.items()}
 
     cat_names = set()
     for e in all_cmds(cat):
@@ -1572,7 +1589,49 @@ def tree_names(cat):
             cat_names.add(m)
 
     tree = set(n for n in h.all_names(found) if literal(n))
-    return tree, site, cat_names, found
+    return tree, site, cat_names, found, reads
+
+
+def cited_at(row, reads=None):
+    """The row's src, with a line number resolved from the tree if there is one.
+
+    src names a file and not a line, as in hgConfCatalog.py.  A line number is
+    derived data, and kept by hand it drifts: by 2026-10-17, 160 of the 238
+    rows that carried one pointed at a line that no longer read the name.  The
+    harvester finds every read anyway, so the line is looked up here.  A row
+    whose file the scan sees no read in, such as one citing the #define in a
+    header, keeps the file alone.
+    """
+    src = row.get("src") or ""
+    here = [s for s in (reads or {}).get(row["name"], ())
+            if s.rpartition(":")[0] == src]
+    if not here:
+        return src
+    if len(here) == 1:
+        return here[0]
+    # Several reads in the one file.  Name the first and say how many, rather
+    # than pick one and imply it is the read that matters.
+    return "%s (%d reads)" % (here[0], len(here))
+
+
+def moved_citations(cat, reads):
+    """Rows whose src is a source file the scan sees no read of the name in.
+
+    Not counted as a problem.  Most of these are deliberate: a row that cites
+    the #define in a header (every hubApi argument, in dataApi.h), or a short
+    name like track or g that the row's CGI reads in a way the harvester does
+    not see while other CGIs read it directly.  --verbose lists them for
+    whoever is curating.
+    """
+    moved = []
+    for e in all_cmds(cat):
+        src = e.get("src") or ""
+        seen = reads.get(e["name"])
+        if not src.endswith((".c", ".h")) or not seen:
+            continue
+        if not any(s.rpartition(":")[0] == src for s in seen):
+            moved.append((e["name"], src, seen))
+    return moved
 
 
 def reconcile(cat, out=sys.stdout, verbose=False):
@@ -1597,7 +1656,7 @@ def reconcile(cat, out=sys.stdout, verbose=False):
     t = tree_names(cat)
     if t is None:
         return 1
-    tree, site, cat_names, found = t
+    tree, site, cat_names, found, reads = t
 
     # A scan that finds almost nothing is a broken scan, not a clean tree, and
     # the difference matters: pointed at the wrong KENT_SRC or an empty clone,
@@ -1638,11 +1697,21 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         for n in new:
             print("    %-28s %s" % (n, site.get(n, "")), file=out)
 
-    problems += persistence_audit(cat, found, out=out, verbose=verbose)
+    if verbose:
+        moved = moved_citations(cat, reads)
+        print("\nsrc names a file the scan sees no read in (%d)" % len(moved),
+              file=out)
+        for name, src, seen in moved:
+            print("    %-28s %s, read at %s"
+                  % (name, src, ", ".join(seen[:3])), file=out)
+
+    problems += persistence_audit(cat, found, out=out, verbose=verbose,
+                                  reads=reads)
     return problems
 
 
-def persistence_audit(cat, found, out=sys.stdout, verbose=False):
+def persistence_audit(cat, found, out=sys.stdout, verbose=False,
+                      reads=None):
     """Check every persists=False claim against what the tree actually does.
 
     cartExclude() is the only thing that keeps a CGI variable out of the saved
@@ -1689,14 +1758,14 @@ def persistence_audit(cat, found, out=sys.stdout, verbose=False):
               "written into the\n     user's session; mark them leaks=True or "
               "fix the CGI)", file=out)
         for e in unclaimed:
-            print("    %-28s %s" % (e["name"], e["src"]), file=out)
+            print("    %-28s %s" % (e["name"], cited_at(e, reads)), file=out)
     if overclaimed:
         print("\nmarked leaks=True but the tree does drop them (%d)"
               % len(overclaimed), file=out)
         print("    (somebody fixed these; drop leaks=True from the catalog "
               "row)", file=out)
         for e in overclaimed:
-            print("    %-28s %s" % (e["name"], e["src"]), file=out)
+            print("    %-28s %s" % (e["name"], cited_at(e, reads)), file=out)
 
     if verbose:
         n_leak = len([e for e in all_cmds(cat) if e.get("leaks")])
@@ -1761,7 +1830,7 @@ def esc(s):
     return html.escape(str(s), quote=False)
 
 
-def cmd_rows(cmds):
+def cmd_rows(cmds, reads=None):
     out = []
     for e in cmds:
         cls = ""
@@ -1792,19 +1861,19 @@ def cmd_rows(cmds):
             "<tr%s><td class='n'>%s</td><td class='v'>%s</td>"
             "<td>%s</td><td class='src'>%s</td></tr>"
             % (cls, esc(e["name"]), esc(e["value"]), " ".join(bits),
-               esc(e["src"])))
+               esc(cited_at(e, reads))))
     return "\n".join(out)
 
 
-def table(cmds):
+def table(cmds, reads=None):
     if not cmds:
         return "<p class='note'>None.</p>"
     return ("<table><tr><th>parameter</th><th>value</th>"
             "<th>what it does</th><th>read at</th></tr>%s</table>"
-            % cmd_rows(cmds))
+            % cmd_rows(cmds, reads))
 
 
-def render_html(cat):
+def render_html(cat, reads=None):
     n = counts(cat)
     p = []
     p.append("<title>Genome Browser URL parameters (#37923)</title>")
@@ -1850,18 +1919,18 @@ def render_html(cat):
     for s in cat["sections"]:
         p.append("<h2>%s</h2>" % esc(s["title"]))
         p.append("<p class='what'>%s</p>" % esc(s["what"]))
-        p.append(table(s["cmds"]))
+        p.append(table(s["cmds"], reads))
 
     p.append("<h2>Other CGIs</h2>")
     for name in sorted(cat["otherCgis"]):
         g = cat["otherCgis"][name]
         p.append("<h3>%s</h3>" % esc(name))
         p.append("<p class='what'>%s</p>" % esc(g["what"]))
-        p.append(table(g["cmds"]))
+        p.append(table(g["cmds"], reads))
 
     p.append("<h2>hubApi</h2>")
     p.append("<p class='what'>%s</p>" % esc(cat["hubApi"]["what"]))
-    p.append(table(cat["hubApi"]["cmds"]))
+    p.append(table(cat["hubApi"]["cmds"], reads))
 
     p.append("</main>")
     p.append("""<script>
@@ -1902,14 +1971,17 @@ def main():
             json.dump(cat, f, indent=1)
         print("wrote %s" % args.json)
     if args.html:
+        # The page cites each read to its line, which takes a scan of the
+        # tree.  Without the harvester it still writes, citing files alone.
+        t = tree_names(cat)
         with open(args.html, "w") as f:
-            f.write(render_html(cat))
+            f.write(render_html(cat, t[4] if t else None))
         print("wrote %s" % args.html)
     if args.updateBaseline:
         t = tree_names(cat)
         if t is None:
             return 1
-        tree, site, cat_names, _ = t
+        tree, site, cat_names, _, _ = t
         was = read_baseline()
         now = tree - cat_names
         write_baseline(now, site)
