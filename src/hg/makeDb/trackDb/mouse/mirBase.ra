@@ -13,6 +13,7 @@ searchIndex name
 searchTrix /gbdb/$D/mirBase/mirBase.ix
 skipEmptyFields on
 skipFields sequence,armPositions
+dotBracketField dotBracket
 detailsScript.rnaStructure.dotBracket {"exportFields":["sequence","armPositions"],"title":"Secondary structure","colors":{"5p":"#E69F00","3p":"#56B4E9"},"labels":{"5p":"5p mature","3p":"3p mature"}}
 mouseOver ${name} (${miAcc})<br>${arms}
 urls miAcc="https://mirbase.org/hairpin/$$" acc5p="https://mirbase.org/mature/$$" acc3p="https://mirbase.org/mature/$$"
