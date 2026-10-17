@@ -7,7 +7,8 @@
 # browserSetup.sh, so NOTHING from the hgwdev filesystem is bind-mounted into
 # the container. Anything that must survive a refresh (the MariaDB data dir and
 # /gbdb) lives on Docker-managed named volumes, which seed from the image's
-# baked content on first use and persist across refresh-instance cycles. For
+# baked content on first use. Only the mirror and release instances keep them
+# across refresh-instance cycles; tip, beta and rel start fresh each time. For
 # tip and beta, the matching hgwdev CGIs are copied in on top afterward (see
 # overlay-cgi.sh) -- a copy, not a mount.
 #
