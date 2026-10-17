@@ -59,13 +59,16 @@ bash ~/kent/src/hg/makeDb/scripts/episignatures/makeMethaDory.sh
 # that the other two do not already have.
 #
 # Every signature label in the loci table now has a metadata row. The build
-# still warns about 5 metadata rows that name one study in the 'signature'
-# column and a different author in StudyID. Three are spelling variants, but two
-# are genuine crossings: the CREBBP-EP300 and NSD2 pairs swap PMID and disorder
-# between Levy2022 and ArefEshghi2020 / Kawai2024 respectively. Reported to the
-# authors, not yet resolved; the rows are used as the sheet has them, the script
-# does not guess. "Smith-Magenis Syndrome" and "Smith-Magenis syndrome" are also
-# still two separate disorder names and so two separate filter entries.
+# still warns about metadata rows that name one study in the 'signature'
+# column and a different author in StudyID; the remaining ones are spelling
+# variants. Four rows were genuine crossings: the CREBBP-EP300 and NSD2 pairs
+# swap PMID, StudyID and disorder between Levy2022 and ArefEshghi2020 / Kawai2024
+# respectively. Reported to the authors, who acknowledged it on 2026-09-21 but
+# have not sent a corrected sheet. Until they do, META_CORRECTIONS in
+# methaDoryToBed.py fixes those four rows (#38371). Delete that table when the
+# corrected sheet arrives. DISORDER_SPELLING_FIXES folds "Smith-Magenis Syndrome"
+# into "Smith-Magenis syndrome", and readMeta collapses the double space in
+# "NOTCH1  Congenital heart defects", so the Disorder filter has one entry each.
 
 # Sanity check that the coordinates are on the right base: every cg probe should
 # land on a CG dinucleotide.
@@ -326,3 +329,59 @@ mv epigenCentral.bb _epigenCentral.bb
 #   10 Mb                 pack             2193 px       8273 px
 #   10 Mb                 squish            553 px        825 px
 #   10 Mb, typical region pack              353 px       2769 px
+
+# 2026-10-16 Claude max: refs #38112
+#
+# Switched to the data provider's bigBed, as they publish it except for one added
+# column. The upstream file is unchanged since the September build (md5
+# 1f2cd0ef372fefa3b42c796fb89f6f40), so the copy downloaded then is used.
+# The only change: a 17th field maxAbsDelta, a copy of their "height" (field 10),
+# so that the supertrack-level maxAbsDelta filter, which both subtracks inherit,
+# works on this track too. The 16 provider fields are byte-identical.
+cd /hive/data/genomes/hg38/bed/episignatures/epigenCentral
+bigBedInfo -asOut episignatures.upstream.bb | sed 's#^lstring comparisonTable;\(.*\)$#lstring comparisonTable;\1\nfloat maxAbsDelta;     "Maximum absolute deltaBeta (copy of height, for the supertrack filter)"#' > episignatures.as
+bigBedToBed episignatures.upstream.bb up.bed
+awk 'BEGIN{FS=OFS="\t"}{print $0,$10}' up.bed > episignatures.bed
+bedToBigBed -tab -type=bed9+8 -as=episignatures.as episignatures.bed \
+    /hive/data/genomes/hg38/chrom.sizes episignatures.maxAbsDelta.bb
+ln -sfn /hive/data/genomes/hg38/bed/episignatures/epigenCentral/episignatures.maxAbsDelta.bb \
+    /gbdb/hg38/episignatures/_epigenCentral.bb
+# What that changes in the track, all in episignatures.ra:
+#   - mouse-over is the provider's own text ("NSD1|Gain|0.318") via mouseOverField
+#   - fields have the provider's names: height, nSignatures, displayOmim is a full URL
+#     (urls displayOmim="$$"); there is no direction or displayDisorder column, so the
+#     direction filter is gone
+#   - the maxAbsDelta filter is back on the supertrack, as before
+#   - no name index in the provider's file, so searchIndex and the epigenCentral
+#     hgFindSpec are gone; a cg number still finds the Illumina array tracks and methaDory
+#   - the 215 duplicate comparison-table rows on 137 probes are back on the details page
+# epigenCentral.bed/.bb in this directory and makeEpigenCentral.sh are the old rewritten
+# build and are no longer used by the track; epigenCentralTable.html still generated the
+# "Included episignatures" table of the description page.
+
+##############################################################################
+# EpiSign genes and regions (DONE 2026-10-16)
+##############################################################################
+# 2026-10-16 Claude max, refs #38567
+
+# The EpiSign group (Sadikovic lab, London Health Sciences Centre) sent
+# UCSC_EpiSign6.1.0_hg38.bed by email, for open release. It is a bedDetail file,
+# already on hg38: one row per disorder code and causative gene or CNV region,
+# plus 15 "DMR: " rows for the imprinted regions and the FMR1 promoter that
+# EpiSign tests directly. Paper: Kerkhof et al. 2024, PMID 38251460.
+mkdir -p /hive/data/genomes/hg38/bed/episignatures/episign
+cd /hive/data/genomes/hg38/bed/episignatures/episign
+# ... UCSC_EpiSign6.1.0_hg38.bed copied in here ...
+
+# episignToBed.py splits the description into disorders and gene, drops the
+# explanatory paragraph repeated on every row, keeps the provider's colors and
+# adds a "code (gene)" label field:
+bash ~/kent/src/hg/makeDb/scripts/episignatures/makeEpisign.sh
+#   input: 231, episignature: 216, DMR: 15, no gene: 14 (CNV syndromes)
+#   itemCount: 231, nothing dropped
+
+# The supertrack-level maxAbsDelta filter (see above) was inherited by this
+# track, which has no such field, and hgTracks errAborted with "error building
+# filter with field maxAbsDelta. Field not found." The filter is now set on
+# methaDory and epigenCentral separately, so the collection page no longer has
+# one control for both.

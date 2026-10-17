@@ -1,0 +1,55 @@
+track lrTransTabSap
+superTrack long_read_transcripts pack
+shortLabel Tabula Sapiens LR
+longLabel Tabula Sapiens single-cell long-read isoforms, colored by SQANTI3 structural category
+type bigBed 12 +
+bigDataUrl /gbdb/$D/lrTransTabSap/lrTransTabSap.bb
+visibility pack
+itemRgb on
+labelFields geneSymbol,name
+defaultLabelFields geneSymbol
+searchIndex name,geneSymbol
+maxWindowCoverage 200000
+skipEmptyFields on
+skipFields score
+detailsDynamicTable _jsonExpr|UMIs per tissue
+mouseOver <b>${geneSymbol}</b> ${name}<br>${category}, ${subcategory}<br>${coding} ${cdsType}<br>${reads} UMIs in ${cells} cells, ${tissues} tissues<br>SQANTI3 filter: ${filterResult}
+filterValues.category Full splice match (FSM),Incomplete splice match (ISM),Novel in catalog (NIC),Novel not in catalog (NNC),Fusion,Genic genomic,Genic intron,Antisense,Intergenic
+filterLabel.category Structural category (SQANTI3)
+filterValues.filterResult Isoform,Artifact
+filterLabel.filterResult SQANTI3 filter result
+filterValues.coding coding,non-coding
+filterLabel.coding Coding potential
+filterValues.nmd yes,no
+filterLabel.nmd Predicted nonsense-mediated decay
+filterByRange.reads on
+filter.reads 0:10000000
+filterLabel.reads Number of UMIs
+filterByRange.cells on
+filter.cells 0:300000
+filterLabel.cells Number of cells with at least one UMI
+filterByRange.tissues on
+filter.tissues 0:26
+filterLabel.tissues Number of tissues with at least one UMI
+urls assocGene="https://www.ensembl.org/Homo_sapiens/Gene/Summary?g=$$" assocTranscript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$" pigeonTranscript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$"
+
+track lrTransTabSapExpr
+superTrack long_read_transcripts hide
+shortLabel Tabula Sapiens LR Expr
+longLabel Tabula Sapiens single-cell long-read isoform expression per tissue
+type bigBarChart
+html lrTransTabSap
+bigDataUrl /gbdb/$D/lrTransTabSap/lrTransTabSapExpr.bb
+visibility pack
+barChartBars Bladder Blood Bone_Marrow Ear Fat Heart Kidney Large_Intestine Liver Lung Lymph_Node Muscle Ovary Pancreas Prostate Salivary_Gland Skin Small_Intestine Spleen Stomach Testis Thymus Tongue Trachea Uterus Vasculature
+barChartMetric UMIs per million
+barChartUnit UMIs per million
+labelFields name2,name
+defaultLabelFields name2
+searchIndex name
+maxWindowToDraw 2000000
+
+searchTable lrTransTabSap
+searchType bigBed
+searchDescription Tabula Sapiens long-read isoforms
+searchPriority 50

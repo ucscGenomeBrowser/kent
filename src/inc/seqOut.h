@@ -76,7 +76,7 @@ struct bafBlock
     int nGapAfter, hGapAfter;	/* Bases skipped before the next block; 0 on the last one. */
     };
 
-void bafLabelBlocks(boolean on, char *genomeUrl);
+void bafLabelBlocks(boolean on, char *genomeUrl, char *genomeChrom);
 /* While on, side-by-side alignments start each block with a line giving its number, its
  * position and its identity, put a line saying how big the gap is between two blocks where
  * there would be an <HR>, color mismatched bases and merged gaps, and keep a list of the

@@ -961,8 +961,7 @@ include hprcPclai.ra alpha
 include episignatures.ra alpha,beta
 
 include transcriptionStart.ra alpha
-include encode4ProCap.ra alpha
-include proCapNet.ra alpha
+include transcriptionStartPublic.ra beta,public
 # include hg38.GCA_040939475.2.chainNet.ra alpha
 # include hg38.GCF_002880755.1.chainNet.ra alpha
 

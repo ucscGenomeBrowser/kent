@@ -62,6 +62,28 @@ DIRECTIONS = ["Strong hypermethylation", "Weak hypermethylation",
 DISORDER_SPELLING_FIXES = {
     "Nicolaiders-Baraitser syndrome": "Nicolaides-Baraitser syndrome",
     "PURA-related disoder": "PURA-related disorder",
+    "Smith-Magenis Syndrome": "Smith-Magenis syndrome",
+}
+
+# Four metadata rows of the 2026-09-16 sheet carry the StudyID, PMID and
+# Disorder of the other study of their pair (CREBBP-EP300 and NSD2). QA checked
+# each PMID against PubMed (#38371). The authors acknowledged it on 2026-09-21
+# but have not sent a corrected sheet. Remove this table once they do. A row is
+# only changed while the sheet still has the wrong StudyID, so a fixed sheet
+# passes through untouched.
+META_CORRECTIONS = {
+    "CREBBP-EP300_ArefEshghi2020": {
+        "wrongStudy": "Levy2022", "study": "ArefEshghi2020",
+        "pmid": "32109418", "disorder": "Rubinstein-Taybi Syndrome"},
+    "CREBBP-EP300.MKHK_Levy2022": {
+        "wrongStudy": "ArefEshghi2020", "study": "Levy2022",
+        "pmid": "35904121", "disorder": "Menke-Hennekam syndrome"},
+    "NSD2_Levy2022": {
+        "wrongStudy": "Kawai2024", "study": "Levy2022",
+        "pmid": "35904121"},
+    "NSD2_Kawai2024": {
+        "wrongStudy": "Levy2022", "study": "Kawai2024",
+        "pmid": "39669601"},
 }
 
 
@@ -87,6 +109,7 @@ def readMeta(fname):
         # a disorder name can contain a comma, and comma is the separator both
         # of the bigBed list fields and of trackDb filterValues, so swap it out
         disorder = vals[idx["Disorder"]].replace(",", ";")
+        disorder = " ".join(disorder.split())   # "NOTCH1  Congenital ..." has two spaces
         disorder = DISORDER_SPELLING_FIXES.get(disorder, disorder)
         meta[key] = {
             "study": vals[idx["StudyID"]],
@@ -95,6 +118,11 @@ def readMeta(fname):
             "signature": vals[idx["Signature"]],
             "notes": vals[idx["Notes"]] if "Notes" in idx else "",
         }
+    for key, fix in META_CORRECTIONS.items():
+        if key in meta and meta[key]["study"] == fix["wrongStudy"]:
+            for field in ("study", "pmid", "disorder"):
+                if field in fix:
+                    meta[key][field] = fix[field]
     return meta
 
 
