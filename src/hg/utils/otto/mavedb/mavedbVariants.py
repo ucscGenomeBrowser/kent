@@ -87,7 +87,7 @@ def variantItems(scoreSet, placements, ref, gene, mapBounds=None):
             continue
         if pl.codon is not None:
             chrom, strand = pl.chrom, pl.strand
-            runs = mavedbMaps.codonRuns(pl.codon)
+            runs = mp.codonRuns(pl.codon)
             start, end = runs[0][0], runs[-1][1]
         elif pl.genomic is not None and not pl.prot:
             chrom, strand = ref.ncToChrom[pl.genomic.acc], '+'
@@ -114,7 +114,7 @@ def variantItems(scoreSet, placements, ref, gene, mapBounds=None):
             mp.bedField(mp.clean(row.get('mavedb.post_mapped_hgvs_g')) if mavedbTerms else ''),
             mp.bedField(mp.clean(row.get('mavedb.post_mapped_hgvs_c')) if mavedbTerms else ''),
             mp.bedField(mp.clean(row.get('mavedb.post_mapped_hgvs_p')) if mavedbTerms else ''),
-            ('%s:%s' % (pl.prot, mavedbMaps.proteinTermText(pl))) if pl.prot else '',
+            ('%s:%s' % (pl.prot, mp.proteinTermText(pl))) if pl.prot else '',
             pl.label,
             mp.bedField(pl.construct or ''),
             mp.bedField(mp.clean(row.get('clingen.clingen_allele_id'))),

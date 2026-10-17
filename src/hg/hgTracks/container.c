@@ -11,6 +11,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "errCatch.h"
 #include "container.h"
 
 
@@ -21,7 +22,21 @@ struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack) && !subtrack->parallelLoading)
-	subtrack->loadItems(subtrack);
+	{
+	/* Keep an errAbort to the child that caused it.  Without this one bad child
+	 * aborts out of the container's own loadItems, so the children after it never
+	 * load and the message lands on the container rather than on the row that
+	 * failed.  refs #38560 */
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    subtrack->loadItems(subtrack);
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	    subtrack->networkErrMsg = cloneString(errCatch->message->string);
+	else if (errCatch->gotWarning)
+	    warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+	errCatchFree(&errCatch);
+	}
     }
 }
 

@@ -493,7 +493,8 @@ struct hgPositions *lookupPosition(struct dyString *dyWarn)
 {
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 range = trimSpaces(range);
-if (isEmpty(range))
+/* "default" comes from position=default URLs, it is not a search term, as in cartGetPosition() */
+if (isEmpty(range) || sameString(range, "default"))
     range = hDefaultPos(database);
 struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn, NULL);
 cartSetString(cart, hgtaRange, range);
@@ -1886,8 +1887,13 @@ initGroupsTracksTables();
 struct dyString *dyWarn = dyStringNew(0);
 boolean noShort = (cartOptionalString(cart, "noShort") != NULL); // is this the second page of results
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
-struct hgPositions *hgp = lookupPosition(dyWarn);
-if (hgp->singlePos && isEmpty(dyWarn->string) && !noShort)
+/* Schema pages do not use the position, so do not let a position search, e.g. for
+ * "default" left in the cart by a position=default URL, turn them into a search results page. */
+boolean isSchemaPage = cartVarExists(cart, hgtaDoSchema) || cartVarExists(cart, hgtaDoSchemaTable);
+struct hgPositions *hgp = NULL;
+if (!isSchemaPage)
+    hgp = lookupPosition(dyWarn);
+if (isSchemaPage || (hgp->singlePos && isEmpty(dyWarn->string) && !noShort))
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
 	doGetGreatOutput(dispatch);

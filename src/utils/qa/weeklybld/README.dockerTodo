@@ -52,8 +52,10 @@ These were decided up front and the entire design depends on them:
    self-contained (MariaDB + Apache + CGIs baked in at build time by
    browserSetup.sh). The only `-v` flags are Docker *named volumes*
    (`kent-<name>-mysql`, `kent-<name>-gbdb`) - Docker-managed, not host paths.
-   They seed from the image's baked content on first run and persist across
-   refresh.
+   They seed from the image's baked content on first run. `refresh-instance.sh`
+   removes them for tip, beta and rel, so those start from the image's own
+   database; a kept volume left kent-rel on a May 2026 hgcentral (#38387).
+   Release instances and kent-mirror keep theirs.
 
 2. **tip and beta must reflect real hgwdev code, not the public release.** The
    Dockerfile's `browserSetup.sh` rsyncs the released CGIs for every build, so

@@ -8799,6 +8799,62 @@ if (sharedVis != 99)
     }
 }
 
+static void loadOneTrackSummary(struct track *track)
+/* Load the zoomed out summary for a track and for any subtrack that has one. */
+{
+if (track->loadSummary && !track->subtracks
+    && !trackDbSetting(track->tdb, "quickLiftUrl")
+    && !startsWith("bigLolly", track->tdb->type))
+    track->loadSummary(track);
+
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if ((tdbVisLimitedByAncestors(cart, subtrack->tdb, TRUE, TRUE) != tvHide)
+        && !subtrack->parallelLoading && subtrack->loadSummary
+        && !trackDbSetting(subtrack->tdb, "quickLiftUrl")
+        && !startsWith("bigLolly", subtrack->tdb->type))
+        subtrack->loadSummary(subtrack);
+    }
+}
+
+static void loadOneTrackSerial(struct track *track, boolean doLoadSummary)
+/* Everything the main thread does to get one track ready to draw.  The checks come first
+ * because they can change what is drawn, then either the summary or the items.  It is a
+ * function so that the caller can put the whole of it inside one errCatch, the way
+ * parallelLoadData does for a worker thread.  Not quite the same work as that one:
+ * checkIfWiggling has always been serial only.  refs #38560 */
+{
+checkMaxWindowToDraw(track);
+checkHideEmptySubtracks(track);
+checkIfWiggling(cart, track);
+if (doLoadSummary)
+    loadOneTrackSummary(track);
+else
+    {
+    track->loadItems(track);
+    if (tdbHasDecorators(track))
+        {
+        loadDecorators(track);
+        decoratorMethods(track);
+        }
+    }
+}
+
+static void spreadErrorToSubtracks(struct track *track, char *message)
+/* Put a container's load error onto its subtracks as well.  A composite parent is not
+ * drawn, its subtracks are, so a message left only on the parent is never painted and the
+ * rows come up empty with nothing to explain them.  Keep it on the parent too, for the
+ * containers that do draw their own row.  refs #38560 */
+{
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (subtrack->networkErrMsg == NULL)
+        subtrack->networkErrMsg = cloneString(message);
+    }
+}
+
 static void setSharedErrorsAcrossWindows(struct track *track)
 /* Look for network errors across all windows
  * if found, set all windows to same errMsg and set bigWarn track handlers. */
@@ -8822,6 +8878,12 @@ if (sharedErrMsg)
 	tg->totalHeight = bigWarnTotalHeight;
 	}
     }
+
+/* Recurse, because a container can hold a container: a multiWig inside a composite keeps
+ * its wiggles two levels down, and those are the rows that get drawn.  refs #38560 */
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    setSharedErrorsAcrossWindows(subtrack);
 }
 
 
@@ -9639,71 +9701,22 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 		    if (measureTiming)
 			lastTime = clock1000();
 
-		    checkMaxWindowToDraw(track);
-
-		    checkHideEmptySubtracks(track);
-
-		    checkIfWiggling(cart, track);
-
-		    if (doLoadSummary)
+		    /* Keep an errAbort to the track that caused it rather than letting it
+		     * take the whole image down.  parallelLoadData does this for the threaded
+		     * path; the serial path needs it too, and over the same work, or the two
+		     * disagree about what a bad track does.  refs #38560 */
+		    struct errCatch *errCatch = errCatchNew();
+		    if (errCatchStart(errCatch))
+			loadOneTrackSerial(track, doLoadSummary);
+		    errCatchEnd(errCatch);
+		    if (errCatch->gotError)
 			{
-			if (track->loadSummary)
-			    {
-			    if (!track->subtracks)
-				{
-				char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
-				if (!quickLiftFile)
-				    {
-				    if (!startsWith("bigLolly", track->tdb->type))
-					{
-					track->loadSummary(track);
-					}
-				    }
-				}
-			    }
-			struct track *subtrack;
-			for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
-			    {
-			    if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
-				{
-				if (!subtrack->parallelLoading)
-				    {
-				    char *quickLiftFile = trackDbSetting(subtrack->tdb, "quickLiftUrl");
-				    if (!quickLiftFile)
-					{
-					if (!startsWith("bigLolly", subtrack->tdb->type))
-					    {
-					    if (subtrack->loadSummary)
-						subtrack->loadSummary(subtrack);
-					    }
-					}
-				    }
-				}
-			    }
+			track->networkErrMsg = cloneString(errCatch->message->string);
+			spreadErrorToSubtracks(track, errCatch->message->string);
 			}
-		    else
-			{
-			/* An errAbort out of a track's loader takes out that track, not the whole
-			 * image.  parallelLoadData does this for the threaded path; without it here
-			 * the same bad data kills the page whenever parallel loading is off.
-			 * refs #38560 */
-			struct errCatch *errCatch = errCatchNew();
-			if (errCatchStart(errCatch))
-			    {
-			    track->loadItems(track);
-			    if (tdbHasDecorators(track))
-				{
-				loadDecorators(track);
-				decoratorMethods(track);
-				}
-			    }
-			errCatchEnd(errCatch);
-			if (errCatch->gotError)
-			    track->networkErrMsg = cloneString(errCatch->message->string);
-			else if (errCatch->gotWarning)
-			    warn("%s", errCatch->message->string);  // errCatch took it, hand it back
-			errCatchFree(&errCatch);
-			}
+		    else if (errCatch->gotWarning)
+			warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+		    errCatchFree(&errCatch);
 
 		    if (measureTiming)
 			{
@@ -9748,12 +9761,7 @@ for (track = trackList; track != NULL; track = track->next)
 // if found, set all windows to same errMsg and set bigWarn track handlers.
 for (track = trackList; track != NULL; track = track->next)
     {
-    setSharedErrorsAcrossWindows(track);
-    struct track *sub;
-    for (sub=track->subtracks; sub; sub=sub->next)
-	{
-	setSharedErrorsAcrossWindows(sub);
-	}
+    setSharedErrorsAcrossWindows(track);   // recurses into subtracks itself
     }
 
 

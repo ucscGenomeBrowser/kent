@@ -45,6 +45,7 @@ chainSelf                          # hg/hgc/hgc.c
 clr                                # hg/lib/hui.c
 coloring                           # hg/hgTrackUi/hgTrackUi.c
 confSet                            # hg/hgTracks/searchTracks.c
+dbSel                              # hg/hgTracks/hgTracks.c
 delAll                             # hg/hgTracks/hgTracks.c
 dispFndTrk                         # hg/hgTracks/searchTracks.c
 dnovo                              # hg/hgTracks/gvfTrack.c

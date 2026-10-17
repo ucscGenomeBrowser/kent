@@ -21,6 +21,12 @@ tags
 src/hg/pslCDnaFilter/algo.h
 src/hg/pslCDnaFilter/usage.h
 
+# a place to put notes to self
+/notes/
+
+# a place for various scratch files you are working on
+/work/
+
 compiled/
 
 # for those that build kent/bin/
