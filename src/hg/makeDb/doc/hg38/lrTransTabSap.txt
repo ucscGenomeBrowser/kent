@@ -31,3 +31,10 @@ time ~/kent/src/hg/makeDb/scripts/lrTrans/lrTransTabSap.sh
 
 # UMIs per tissue, for the per-million normalization of the bar chart:
 cat tissueExpr.tsv.tissues.tsv
+
+# 2026-10-17 Claude (max): category colors changed to the SQANTI3 palette suggested by
+# Mark Diekhans in a note on #38565 (FSM #6BAED6, ISM #FC8D59, NIC #78C679, NNC #EE6A50,
+# GENIC #969696, AS #66C2A4, FUS #FFC125, INTER #E9967A, GI #41B6C4). Only the itemRgb
+# column changes, so rerun the build to regenerate the bigBed:
+cd /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens
+time ~/kent/src/hg/makeDb/scripts/lrTrans/lrTransTabSap.sh

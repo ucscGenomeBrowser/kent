@@ -22,15 +22,15 @@ csv.field_size_limit(sys.maxsize)
 
 # SQANTI3 structural categories: display name and color
 CATS = {
-    "full-splice_match"       : ("Full splice match (FSM)", "0,0,255"),
-    "incomplete-splice_match" : ("Incomplete splice match (ISM)", "0,170,255"),
-    "novel_in_catalog"        : ("Novel in catalog (NIC)", "0,160,0"),
-    "novel_not_in_catalog"    : ("Novel not in catalog (NNC)", "255,0,0"),
-    "fusion"                  : ("Fusion", "255,0,255"),
-    "genic"                   : ("Genic genomic", "255,140,0"),
-    "genic_intron"            : ("Genic intron", "140,70,0"),
-    "antisense"               : ("Antisense", "128,0,255"),
-    "intergenic"              : ("Intergenic", "0,0,0"),
+    "full-splice_match"       : ("Full splice match (FSM)", "107,174,214"),
+    "incomplete-splice_match" : ("Incomplete splice match (ISM)", "252,141,89"),
+    "novel_in_catalog"        : ("Novel in catalog (NIC)", "120,198,121"),
+    "novel_not_in_catalog"    : ("Novel not in catalog (NNC)", "238,106,80"),
+    "fusion"                  : ("Fusion", "255,193,37"),
+    "genic"                   : ("Genic genomic", "150,150,150"),
+    "genic_intron"            : ("Genic intron", "65,182,196"),
+    "antisense"               : ("Antisense", "102,194,164"),
+    "intergenic"              : ("Intergenic", "233,150,122"),
 }
 
 PIGEONCATS = {
