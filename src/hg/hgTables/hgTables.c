@@ -493,7 +493,8 @@ struct hgPositions *lookupPosition(struct dyString *dyWarn)
 {
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 range = trimSpaces(range);
-if (isEmpty(range))
+/* "default" comes from position=default URLs, it is not a search term, as in cartGetPosition() */
+if (isEmpty(range) || sameString(range, "default"))
     range = hDefaultPos(database);
 struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn, NULL);
 cartSetString(cart, hgtaRange, range);
