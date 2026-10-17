@@ -6,7 +6,7 @@ This track is part of the
 </p>
 
 <p>
-It shows the individual CpG sites that make up the DNA methylation episignatures available on
+It shows the individual CpG sites that make up the DNA methylation signatures available on
 <a href="https://epigen.ccm.sickkids.ca/" target="_blank">EpigenCentral</a>, a portal from the
 Centre for Computational Medicine and the Weksberg lab at the Hospital for Sick Children in
 Toronto where a user can upload a methylation array sample and have it classified against those
@@ -43,9 +43,22 @@ the site with its own direction.
 </p>
 
 <p>
-The mouse-over gives the probe ID, how many episignatures cover the site, and the episignature
-with the largest effect there with its disorder, direction, and delta-beta.
+Hovering over a CpG displays:
 </p>
+
+<ul>
+<li>The episignature driving the displayed color (highest absolute delta-beta).</li>
+<li>The methylation direction (Gain or Loss).</li>
+<li>The corresponding delta-beta value.</li>
+</ul>
+
+<p>
+Example (cg16689481):
+</p>
+
+<pre>
+NSD1|Gain|0.318
+</pre>
 
 <p>
 Clicking a site opens a page with a table of every episignature at that site, one row each,
@@ -60,8 +73,8 @@ Four filters are available on the track configuration page. The <b>Episignature<
 keeps only sites that are part of <em>all</em> of the selected episignatures, which is the way
 to find the CpGs that two or more disorders have in common. The others keep a site by the
 <b>Number of episignatures at this probe</b>, the <b>Direction of methylation change</b>, and the
-<b>Absolute delta-beta of the strongest episignature at this probe</b>. The last one also
-appears on the Episignatures collection page, where it filters both tracks at once.
+<b>Absolute delta-beta of the strongest episignature at this probe</b>. The last one
+also appears on the Episignatures collection page, where it filters both tracks at once.
 </p>
 
 <h2>Included episignatures</h2>

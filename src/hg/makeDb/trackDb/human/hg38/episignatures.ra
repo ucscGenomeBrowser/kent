@@ -10,8 +10,8 @@ html episignatures.html
 # both subtracks via cartOptionalStringClosestToHome() walking tdb->parent,
 # so one control filters methaDory and epigenCentral together. A
 # subtrack-level filter.maxAbsDelta would always win over this one; neither
-# subtrack sets one, since the field means the same thing (and is named the
-# same, maxAbsDelta, in both .as files) in both.
+# subtrack sets one. Both .as files have a maxAbsDelta field (in the
+# EpigenCentral bigBed it is a copy of the provider's "height").
 filterByRange.maxAbsDelta on
 filter.maxAbsDelta 0:1
 filterLimits.maxAbsDelta 0:1
@@ -48,7 +48,7 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     track epigenCentral
     parent episignatures
     shortLabel EpigenCentral
-    longLabel EpigenCentral: CpG probes of published DNA methylation episignatures
+    longLabel EpigenCentral: CpG probes of published DNA methylation signatures
     type bigBed 9 +
     bigDataUrl /gbdb/hg38/episignatures/_epigenCentral.bb
     visibility pack
@@ -56,32 +56,21 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     noScoreFilter on
     tableBrowser off
     maxWindowCoverage 10000000
-    searchIndex name
     labelFields name,displaySignature
     defaultLabelFields name,displaySignature
-    skipFields signatureList
+    skipFields signatureList,mouseOver
     detailsDynamicTable comparisonTable|Episignatures at this CpG site
-    urls displayOmim="https://omim.org/entry/$$"
-    mouseOver <b>Probe:</b> ${name}<br><b>Episignatures at this probe:</b> ${sigCount}<br><b>Strongest episignature:</b> ${displaySignature}<br><b>Disorder:</b> ${displayDisorder}<br><b>OMIM:</b> ${displayOmim}<br><b>Direction:</b> ${direction}<br><b>Absolute delta-beta:</b> ${maxAbsDelta}
-    filterByRange.sigCount on
-    filter.sigCount 1:6
-    filterLimits.sigCount 1:6
-    filterLabel.sigCount Number of episignatures at this probe
-    filterValues.direction Gain,Loss
-    filterType.direction multipleListOr
-    filterLabel.direction Direction of methylation change
+    # the provider's bigBed as is: displayOmim is a full URL, mouseOver is
+    # their pre-rendered "signature|direction|deltaBeta" text
+    urls displayOmim="$$"
+    mouseOverField mouseOver
+    filterByRange.nSignatures on
+    filter.nSignatures 1:6
+    filterLimits.nSignatures 1:6
+    filterLabel.nSignatures Number of episignatures at this probe
     filterValues.signatureList 16pDel|Autism spectrum (16pDel),ANKRD11|KBG syndrome (ANKRD11),ARID1B|Coffin-Siris syndrome 1 (ARID1B),ASXL1|Bohring-Opitz syndrome (ASXL1),CHD7|CHARGE syndrome (CHD7),CHD8|Intellectual developmental disorder with autism and macrocephaly (CHD8),Dup7|Chromosome 7q11.23 duplication syndrome (Dup7),DYRK1A|Intellectual developmental disorder; autosomal dominant 7 (DYRK1A),EHMT1|Kleefstra syndrome 1 (EHMT1),EZH2|Weaver syndrome (EZH2),FHS|Floating-Harbor syndrome (FHS),HNRNPK|Au-Kline syndrome (HNRNPK),KANSL1|Koolen-De Vries syndrome (KANSL1),KMT2A|Wiedemann-Steiner syndrome (KMT2A),KMT2B|Dystonia 28; childhood-onset (KMT2B),KMT2C|Kleefstra syndrome 2 (KMT2C),KMT2D_2017|Kabuki syndrome 1 (KMT2D_2017),KMT2D_2026|Kabuki syndrome 1 (KMT2D_2026),MN1|CEBALID syndrome (MN1),NSD1|Sotos syndrome (NSD1),SMARCA2|Nicolaides-Baraitser syndrome (SMARCA2),SRCAP|Developmental delay; hypotonia; musculoskeletal defects; and behavioral abnormalities (SRCAP),T21|Down syndrome (T21),Williams|Williams-Beuren syndrome (Williams)
     filterType.signatureList multipleListAnd
     filterLabel.signatureList Episignature
-
-searchTable epigenCentral
-searchMethod exact
-# see the methaDory spec below for why termRegex and semiShortCircuit are needed
-searchType bigBed
-termRegex ^cg[0-9]+$
-semiShortCircuit 1
-searchDescription Illumina methylation array probe of an EpigenCentral episignature
-searchPriority 51
 
 searchTable methaDory
 searchMethod exact

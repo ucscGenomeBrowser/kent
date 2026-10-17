@@ -326,3 +326,32 @@ mv epigenCentral.bb _epigenCentral.bb
 #   10 Mb                 pack             2193 px       8273 px
 #   10 Mb                 squish            553 px        825 px
 #   10 Mb, typical region pack              353 px       2769 px
+
+# 2026-10-16 Claude max: refs #38112
+#
+# Switched to the data provider's bigBed, as they publish it except for one added
+# column. The upstream file is unchanged since the September build (md5
+# 1f2cd0ef372fefa3b42c796fb89f6f40), so the copy downloaded then is used.
+# The only change: a 17th field maxAbsDelta, a copy of their "height" (field 10),
+# so that the supertrack-level maxAbsDelta filter, which both subtracks inherit,
+# works on this track too. The 16 provider fields are byte-identical.
+cd /hive/data/genomes/hg38/bed/episignatures/epigenCentral
+bigBedInfo -asOut episignatures.upstream.bb | sed 's#^lstring comparisonTable;\(.*\)$#lstring comparisonTable;\1\nfloat maxAbsDelta;     "Maximum absolute deltaBeta (copy of height, for the supertrack filter)"#' > episignatures.as
+bigBedToBed episignatures.upstream.bb up.bed
+awk 'BEGIN{FS=OFS="\t"}{print $0,$10}' up.bed > episignatures.bed
+bedToBigBed -tab -type=bed9+8 -as=episignatures.as episignatures.bed \
+    /hive/data/genomes/hg38/chrom.sizes episignatures.maxAbsDelta.bb
+ln -sfn /hive/data/genomes/hg38/bed/episignatures/epigenCentral/episignatures.maxAbsDelta.bb \
+    /gbdb/hg38/episignatures/_epigenCentral.bb
+# What that changes in the track, all in episignatures.ra:
+#   - mouse-over is the provider's own text ("NSD1|Gain|0.318") via mouseOverField
+#   - fields have the provider's names: height, nSignatures, displayOmim is a full URL
+#     (urls displayOmim="$$"); there is no direction or displayDisorder column, so the
+#     direction filter is gone
+#   - the maxAbsDelta filter is back on the supertrack, as before
+#   - no name index in the provider's file, so searchIndex and the epigenCentral
+#     hgFindSpec are gone; a cg number still finds the Illumina array tracks and methaDory
+#   - the 215 duplicate comparison-table rows on 137 probes are back on the details page
+# epigenCentral.bed/.bb in this directory and makeEpigenCentral.sh are the old rewritten
+# build and are no longer used by the track; epigenCentralTable.html still generated the
+# "Included episignatures" table of the description page.
