@@ -62,6 +62,7 @@ DIRECTIONS = ["Strong hypermethylation", "Weak hypermethylation",
 DISORDER_SPELLING_FIXES = {
     "Nicolaiders-Baraitser syndrome": "Nicolaides-Baraitser syndrome",
     "PURA-related disoder": "PURA-related disorder",
+    "Smith-Magenis Syndrome": "Smith-Magenis syndrome",
 }
 
 # Four metadata rows of the 2026-09-16 sheet carry the StudyID, PMID and
@@ -108,6 +109,7 @@ def readMeta(fname):
         # a disorder name can contain a comma, and comma is the separator both
         # of the bigBed list fields and of trackDb filterValues, so swap it out
         disorder = vals[idx["Disorder"]].replace(",", ";")
+        disorder = " ".join(disorder.split())   # "NOTCH1  Congenital ..." has two spaces
         disorder = DISORDER_SPELLING_FIXES.get(disorder, disorder)
         meta[key] = {
             "study": vals[idx["StudyID"]],

@@ -66,8 +66,9 @@ bash ~/kent/src/hg/makeDb/scripts/episignatures/makeMethaDory.sh
 # respectively. Reported to the authors, who acknowledged it on 2026-09-21 but
 # have not sent a corrected sheet. Until they do, META_CORRECTIONS in
 # methaDoryToBed.py fixes those four rows (#38371). Delete that table when the
-# corrected sheet arrives. "Smith-Magenis Syndrome" and "Smith-Magenis syndrome"
-# are still two separate disorder names and so two separate filter entries.
+# corrected sheet arrives. DISORDER_SPELLING_FIXES folds "Smith-Magenis Syndrome"
+# into "Smith-Magenis syndrome", and readMeta collapses the double space in
+# "NOTCH1  Congenital heart defects", so the Disorder filter has one entry each.
 
 # Sanity check that the coordinates are on the right base: every cg probe should
 # land on a CG dinucleotide.
