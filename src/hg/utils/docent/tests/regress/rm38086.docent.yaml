@@ -26,11 +26,16 @@
 # about the number of hits is asserted -- an assembly update moves it.
 #
 # TWO NAMES ARE ASSERTED IN FULL, and each is a different half of 4fd18ab7854. "102bp SMYD4"
-# is a 102-base query whose top hit is an exon of SMYD4 at chr17:1,809,779; "60aa TP53" is a
+# is a 102-base query copied from SMYD4 exon 7, chr17:1,800,201-1,800,302; "60aa TP53" is a
 # 60-residue protein query, and the aa is the point -- the old code called every query length
 # bp. The query sizes cannot move. The two gene symbols come from a locus lookup, so a
 # renamed gene at either locus is what would move these, not a code change; if one goes red
 # on its own, look there before looking at hgBlat.
+#
+# The DNA query must have ONE clear top hit. Until 2026-10-17 it was an Alu fragment that
+# scored 88 at both SMYD4 and chr1:235,092,368, so the name depended on how hgBlat broke the
+# tie. 997e299d6d1 (#38519) made the shorter chrom name win, and the track became
+# "102bp chr1:235092368". The exon query scores 102 at SMYD4 and 29 at the next hit.
 #
 # The old name is asserted as absent as well. "blat YourSeq" is exactly what a headerless
 # query produced before, and it is the string that says the new naming is in force rather
@@ -57,7 +62,7 @@ reset: true
 fast: true
 steps:
   # A 102 bp human query, sent by GET. The results page builds the custom track itself.
-  - goto: "/cgi-bin/hgBlat?userSeq=ctgggcaacatagcaagaccccatctctacaaaaaatacaaaaattagccgggcgtggtggcgcgcgcctgtagtcccagctactcgggaggctgaggcagg&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
+  - goto: "/cgi-bin/hgBlat?userSeq=CTCTCCCCTAGGCCATAATTAAGTGTCTTGACCTGATTGTTGCTTTCAGGTAAACAGATGTCCTTGTTACTAATCTTATCACAAAGCTTCGTTATGATTTTG&type=BLAT%27s+guess&db=hg38&org=Human&output=hyperlink&Submit=submit"
   - expect:
       text: "BLAT Search Results"
   - sleep: 3000
@@ -66,7 +71,7 @@ steps:
   # matched as `img_data_ct_*` because a custom track's table name carries a per-run number
   # that no script can know in advance. That it is drawn at all is 5915dcd2939: the track
   # comes up visible, and a stale visibility variable used to leave it hidden.
-  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1809779-1810005&pix=1100"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1800201-1800302&pix=1100"
   - expect:
       text: ["BLAT Results", "102bp SMYD4"]
       noText: "blat YourSeq"
@@ -86,7 +91,7 @@ steps:
 
   # BOTH searches are now in the one group. That is what the group and its Delete all are
   # for: before this, a second search was a second unnamed track somewhere in Custom Tracks.
-  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1809779-1810005&pix=1100"
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:1800201-1800302&pix=1100"
   - expect:
       text: ["BLAT Results", "102bp SMYD4", "60aa TP53"]
       noText: ["blat YourSeq", "60bp TP53"]
