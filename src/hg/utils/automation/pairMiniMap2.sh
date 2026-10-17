@@ -12,8 +12,10 @@ export doMiniMap2="$HOME/kent/src/hg/utils/automation/doMiniMap2.pl"
 
 # parse optional flags:
 #   -force          skip genark table verification
-#   -liftTableLoad  passed along to doMiniMap2.pl, allows registration
-#                   in hgcentral liftOverChain/quickLiftChain tables
+#   -liftTableLoad  passed along to doMiniMap2.pl, allows the liftOver/
+#                   quickLift install symlinks (bed/liftOver, goldenPath,
+#                   /gbdb) and registration in hgcentral liftOverChain/
+#                   quickLiftChain tables
 export forceRun=0
 export liftTableLoad=""
 while [ $# -gt 0 ]; do
@@ -42,9 +44,13 @@ The -force option skips the hgcentraltest.genark table verification
    for GenArk assembly identifiers.
 
 The -liftTableLoad option is passed along to doMiniMap2.pl to allow
-   it to register the liftOver and quickLift chains in the hgcentral
-   liftOverChain and quickLiftChain tables.  Without it, those tables
-   are not touched.
+   it to install the liftOver and quickLift chains: the symlinks into
+   bed/liftOver/, goldenPath/<db>/liftOver/, /gbdb/<db>/liftOver/ and
+   /gbdb/<db>/quickLift/ (or the GenArk hub-build and /gbdb/genark/
+   equivalents), and the hgcentral liftOverChain and quickLiftChain
+   table entries.  Without it, the results stay in the build
+   directories, nothing installed is touched.  Run again with it to
+   install a pair that is already done.
 
 Will create directory to work in, for example if, UCSC db:
   /hive/data/genomes/target/bed/miniMap2Query.yyyy-mm-dd/
@@ -168,9 +174,10 @@ function verifyGenark() {
 
 # liftTableRegister - for a direction that was completed by an earlier
 #   run without -liftTableLoad, rerun just doMiniMap2.pl's load step
-#   with -liftTableLoad to register it in hgcentral liftOverChain and
-#   quickLiftChain.  doLoad() skips the bigBed builds that already exist,
-#   and hgAddLiftOverChain/addQuickLift.py are safe to run again.
+#   with -liftTableLoad to install its liftOver/quickLift symlinks and
+#   register it in hgcentral liftOverChain and quickLiftChain.  doLoad()
+#   skips the bigBed builds that already exist, and the symlinks and
+#   hgAddLiftOverChain/addQuickLift.py are safe to run again.
 #   doneDir is the completed build for fromId -> toId, otherDir is the
 #   completed build for the opposite direction.  When doneDir is itself
 #   a *.swap directory (the reverse pair was the primary run), it is
@@ -202,7 +209,7 @@ function liftTableRegister() {
     printf "ERROR: -liftTableLoad registration failed, see ${doneDir}/liftTableLoad.log\n" 1>&2
     exit 255
   fi
-  printf "\n    # hgcentral liftOverChain/quickLiftChain registration, $DS\n    cd ${doneDir}\n    time (%s) >> liftTableLoad.log 2>&1\n" "${cmd[*]}" >> ${buildDir}/makeDoc.txt
+  printf "\n    # liftOver/quickLift install and hgcentral registration, $DS\n    cd ${doneDir}\n    time (%s) >> liftTableLoad.log 2>&1\n" "${cmd[*]}" >> ${buildDir}/makeDoc.txt
 }
 
 # fbLines - show an fb.*.txt file in makeDoc style, if it exists

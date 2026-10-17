@@ -145,17 +145,23 @@ options:
                           liftOver/quickLift chain from that, in
                           -swapDir (default: toDb's own build root)/miniMap2.\$fromDb.swap
     -swapDir dir           Use dir instead of the default -swap work directory.
-    -liftTableLoad         Must be given to let the 'load' step run
+    -liftTableLoad         Must be given to let the 'load' step install the
+                          results: the liftOver/quickLift symlinks into
+                          toDb's .../bed/liftOver/ (plus md5sum.txt),
+                          goldenPath/<db>/liftOver/, /gbdb/<db>/liftOver/
+                          and /gbdb/<db>/quickLift/ (or, for a GenArk
+                          fromDb, its hub-build liftOver/ and quickLift/
+                          and the /gbdb/genark/ links), then
                           hgAddLiftOverChain and addQuickLift.py, which
                           register this fromDb/toDb pair in hgcentral's
                           liftOverChain and quickLiftChain tables.  Without
-                          it, 'load' still builds and links the chain/
-                          chainLiftOver/quickLift bigBed files (and the
-                          'database genome' chain tables via hgLoadChain
-                          -test, which doesn't write to any real database)
-                          -- it only skips the two hgcentral registrations,
-                          so repeated experimental runs can't overwrite an
-                          existing liftOverChain/quickLiftChain table entry.
+                          it, 'load' still builds the chain/chainLiftOver/
+                          quickLift bigBed files in the axtChain run
+                          directory, but makes no symlinks outside it and
+                          no hgcentral entries, so repeated experimental
+                          runs can't replace an installed liftOver/quickLift
+                          file or an existing table entry.  Rerun 'load'
+                          (or -swap) with it later to install.
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -173,7 +179,9 @@ in place of blat -fastMap:
            query genome, then converts PAF+cigar to PSL with pafToPsl.
     chain: Chains the alignments on a big cluster.
     net:   Nets the alignments, uses netChainSubset to extract liftOver chains.
-    load:  Installs liftOver chain files, calls hgAddLiftOverChain on $dbHost.
+    load:  Builds the bigChain/quickLift files; with -liftTableLoad, installs
+           the liftOver/quickLift symlinks and calls hgAddLiftOverChain on
+           $dbHost.
     cleanup: Removes or compresses intermediate files.
 With -swap (not a normal stepper step -- see -swap above), chainSwap the
 primary run's all.chain.gz and reuse the net/load logic to build the
@@ -626,11 +634,12 @@ sub doLoad {
 				      "$runDir/$liftOverChainFile");
 
   my $whatItDoes =
-"It builds the chain/chainLiftOver/quickLift bigBed pairs, links them into
-$HgAutomate::gbdb/ (GenArk hub-build/accession chain, or native db layout --
-see installLinks() in ottoRequestWatch.sh, which this mirrors), and -- only
-if -liftTableLoad was given -- calls hgAddLiftOverChain + addQuickLift.py to
-register both in hgcentral's liftOverChain/quickLiftChain tables.  None of
+"It builds the chain/chainLiftOver/quickLift bigBed pairs and -- only if
+-liftTableLoad was given -- links them into the liftOver/quickLift install
+locations and $HgAutomate::gbdb/ (GenArk hub-build/accession chain, or native
+db layout -- see installLinks() in ottoRequestWatch.sh, which this mirrors)
+and calls hgAddLiftOverChain + addQuickLift.py to register both in
+hgcentral's liftOverChain/quickLiftChain tables.  None of
 this needs \$tDb to be a real MySQL database -- hgAddLiftOverChain and
 addQuickLift.py both work fine with obsolete/nonexistent ones by design
 (see hgAddLiftOverChain.c's own comment to that effect).";
@@ -707,8 +716,22 @@ _EOF_
   # resolving the GenArk build directory via genbankBuild/refseqBuild
   # (AsmHub::asmBuildDir(), verified against the real on-disk layout)
   # rather than the allBuild path installLinks() itself uses.
+  # Everything that reaches outside $runDir -- the liftOver/quickLift
+  # symlinks into the GenArk hub-build directory, the native
+  # $HgAutomate::clusterData/<db>/$HgAutomate::trackBuild/liftOver/,
+  # $HgAutomate::goldenPath/ and $HgAutomate::gbdb/ -- and the hgcentral
+  # registration are all gated on -liftTableLoad, so an experimental run
+  # can't replace an installed liftOver/quickLift file or table entry.
   my $tAccession = &accessionFromPath($tDb);
-  if ($tAccession) {
+  if (! $opt_liftTableLoad) {
+    $bossScript->add(<<_EOF_
+# -liftTableLoad not given -- not making any liftOver/quickLift symlinks
+# outside $runDir and not calling hgAddLiftOverChain/addQuickLift.py, so
+# this run does not touch any installed liftOver/quickLift file or
+# hgcentral's liftOverChain/quickLiftChain tables.
+_EOF_
+    );
+  } elsif ($tAccession) {
     my $tBuildDir = &asmBuildDir($tAccession);
     die "doLoad: '$tDb' looks like a GenArk accession, but no build " .
 	"directory was found for it under $HgAutomate::clusterData/asmHubs/\n"
@@ -736,23 +759,13 @@ mkdir -p $gbdbGenarkDir
 rm -f $gbdbGenarkDir/liftOver $gbdbGenarkDir/quickLift
 ln -s $accLevelDir/liftOver $gbdbGenarkDir/liftOver
 ln -s $accLevelDir/quickLift $gbdbGenarkDir/quickLift
-_EOF_
-    );
-    if ($opt_liftTableLoad) {
-      $bossScript->add(<<_EOF_
+
 # Register in hgcentral (works fine without a real MySQL database for
 # \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbGenarkDir/liftOver/$liftOverChainFile $tDb $qDb
 $Bin/addQuickLift.py $tDb $qDb $gbdbGenarkDir/quickLift/$qDb.bb
 _EOF_
-      );
-    } else {
-      $bossScript->add(<<_EOF_
-# -liftTableLoad not given -- skipping hgAddLiftOverChain/addQuickLift.py
-# so this run does not touch hgcentral's liftOverChain/quickLiftChain tables.
-_EOF_
-      );
-    }
+    );
   } else {
     $bossScript->add(<<_EOF_
 # Not a GenArk accession -- native-db-style layout (same as
@@ -779,23 +792,13 @@ ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
 rm -f $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
 ln -s $runDir/$tDb.$qDb.quick.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
 ln -s $runDir/$tDb.$qDb.quickLink.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
-_EOF_
-    );
-    if ($opt_liftTableLoad) {
-      $bossScript->add(<<_EOF_
+
 # Register in hgcentral (works fine without a real MySQL database for
 # \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
 hgAddLiftOverChain -minMatch=0.1 -multiple -path=$HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile $tDb $qDb
 $Bin/addQuickLift.py $tDb $qDb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
 _EOF_
-      );
-    } else {
-      $bossScript->add(<<_EOF_
-# -liftTableLoad not given -- skipping hgAddLiftOverChain/addQuickLift.py
-# so this run does not touch hgcentral's liftOverChain/quickLiftChain tables.
-_EOF_
-      );
-    }
+    );
   }
 
   # quickLift bigBed pair: built for any target/query pair -- it only
