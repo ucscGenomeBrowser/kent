@@ -321,22 +321,28 @@ for (b = brackets; *b != '\0'; b++)
 return width;
 }
 
-static boolean dotBracketDrawsChars(struct track *tg, struct linkedFeatures *lf,
-                                    double scale, MgFont *font, enum trackVisibility vis)
-/* Is there room to draw the characters for this item, and does the reader want them?
- * The zoom test is not zoomedToBaseLevel, which keeps the width of an M for every base:
- * these characters are a third of that, so they stay readable in a window several times
- * wider.  Stop once a base is too narrow to hold one.  A dense row holds every item in
- * the window and a squished row is shorter than the font, so neither gets characters
- * either, and an item with no blocks has nothing to hang them on.
- *
- * The scale >= 2 test is redundant with the one below it, but dotBracketGlyphWidth walks
- * the string, and at a genome wide view that would run for every item to reach a no. */
+static boolean dotBracketShowing(struct track *tg, struct linkedFeatures *lf,
+                                 enum trackVisibility vis)
+/* Is this item's structure on?  That is a separate question from whether there is room
+ * to draw it: an item whose structure is on but too small to read is drawn as a plain
+ * box, never with the direction arrows, which look like brackets of their own. */
 {
 return (lf->extra != NULL) && (lf->components != NULL) && (vis != tvDense)
-    && (tg->heightPer >= tl.fontHeight) && (scale >= 2)
-    && cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX, TRUE)
-    && (scale >= dotBracketGlyphWidth(font, lf->extra) + 1);
+    && (tg->heightPer >= tl.fontHeight)
+    && cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX, TRUE);
+}
+
+static boolean dotBracketRoomForChars(struct linkedFeatures *lf, double scale, MgFont *font)
+/* Is a base wide enough to hold a character?  Not zoomedToBaseLevel, which keeps the
+ * width of an M for every base: a bracket is a third of that, so the structure stays
+ * readable in a window several times wider.  A pixel of overlap between neighbours is
+ * allowed on top of that, since a bracket is one thin stroke in the middle of its slot
+ * and crowding it reads worse than it looks.
+ *
+ * The scale >= 2 test is redundant with the one after it, but dotBracketGlyphWidth walks
+ * the string, and at a genome wide view that would run for every item to reach a no. */
+{
+return (scale >= 2) && (scale >= dotBracketGlyphWidth(font, lf->extra) - 1);
 }
 
 static void dotBracketDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff,
@@ -345,17 +351,21 @@ static void dotBracketDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg
 /* Draw an item the usual way, then overlay its dot-bracket structure. */
 {
 struct linkedFeatures *lf = item;
-boolean drawChars = dotBracketDrawsChars(tg, lf, scale, font, vis);
+boolean showing = dotBracketShowing(tg, lf, vis);
+boolean drawChars = showing && dotBracketRoomForChars(lf, scale, font);
 boolean exonArrows = tg->exonArrows, exonArrowsAlways = tg->exonArrowsAlways;
 struct simpleFeature **exons;
 Color structColor;
 int exonCount, i, offset = 0;
 
-if (drawChars)
+if (showing)
     {
     /* The characters go in the blocks, where the arrows would be, and the two together
-     * are unreadable.  linkedFeaturesDrawAt drops the arrows for base level sequence
-     * for the same reason; it cannot see this overlay, so do it here. */
+     * are unreadable.  linkedFeaturesDrawAt drops the arrows for base level sequence for
+     * the same reason; it cannot see this overlay, so do it here.  The arrows stay off
+     * when the item is too small for the characters as well: a box of > marks where the
+     * structure was reads as more structure, and the one is replaced by the other as the
+     * reader zooms. */
     tg->exonArrows = FALSE;
     tg->exonArrowsAlways = FALSE;
     }
