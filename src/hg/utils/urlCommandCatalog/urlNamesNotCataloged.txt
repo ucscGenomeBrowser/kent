@@ -163,6 +163,7 @@ hgLogin_sendMailContain            # hg/hgLogin/hgLogin.c
 hgLogin_sendMailTo                 # hg/hgLogin/hgLogin.c
 hgLogin_userName                   # hg/hgLogin/hgLogin.c
 hgS_delete_                        # hg/hgSession/hgSession.c
+hgS_didSessionLoad                 # hg/hgTracks/hgTracks.c
 hgS_do                             # hg/hgSession/hgSession.c
 hgS_doDownload_                    # hg/hgSession/hgSession.c
 hgS_edit_                          # hg/hgSession/hgSession.c
@@ -343,6 +344,7 @@ o                                  # hg/hgc/cgapSageClick.c
 oauth_pending_email                # hg/hgLogin/hgLogin.c
 oauth_pending_email_unverified     # hg/hgLogin/hgLogin.c
 oauth_pending_email_verified       # hg/hgLogin/hgLogin.c
+oauth_pending_formToken            # hg/hgLogin/hgLogin.c
 oauth_pending_name                 # hg/hgLogin/hgLogin.c
 oauth_pending_provider             # hg/hgLogin/hgLogin.c
 oauth_pending_sig                  # hg/hgLogin/hgLogin.c
@@ -390,6 +392,7 @@ pbt.right2                         # hg/gsid/pbGsid/pbGsid.c
 pbt.right3                         # hg/gsid/pbGsid/pbGsid.c
 pbt.tui                            # hg/gsid/pbGsid/pbGsid.c
 pdf                                # hg/altSplice/affySplice/spliceProbeVis.c
+pendingFormToken                   # hg/hgLogin/hgLogin.c
 percentId                          # hg/mouseStuff/knownVsBlat/knownVsBlat.c
 permission                         # hg/hgTracks/myVariantsTrack.c
 phase                              # hg/hgText/hgText.c
@@ -433,6 +436,7 @@ ra                                 # hg/encode/hgEncodeVocab/hgEncodeVocab.c
 randSeed                           # hg/oneShot/cartSimNoInsert/cartSimNoInsert.c
 readOnly                           # hg/oneShot/cartSimNoInsert/cartSimNoInsert.c
 reason                             # hg/encode3/encodeDataWarehouse/edwWebDeprecate/edwWebDeprecate.c
+recentSessions                     # hg/lib/cart.c
 ref                                # hg/das/das.c
 remoteFile                         # hg/hgPhyloPlace/hgPhyloPlace.c
 report                             # hg/encode/docId/docIdView/docIdView.c
