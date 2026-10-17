@@ -4,18 +4,10 @@ shortLabel Episignatures
 longLabel DNA methylation episignatures of rare developmental disorders
 group regulation
 html episignatures.html
-# Supertrack-level filter. Rendered on the supertrack's own hgTrackUi page
-# (superTrackUi() in hgTrackUi.c). Cart values stored under
-# "episignatures.filter.maxAbsDelta.min/max" are inherited at read time by
-# both subtracks via cartOptionalStringClosestToHome() walking tdb->parent,
-# so one control filters methaDory and epigenCentral together. A
-# subtrack-level filter.maxAbsDelta would always win over this one; neither
-# subtrack sets one. Both .as files have a maxAbsDelta field (in the
-# EpigenCentral bigBed it is a copy of the provider's "height").
-filterByRange.maxAbsDelta on
-filter.maxAbsDelta 0:1
-filterLimits.maxAbsDelta 0:1
-filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at this probe
+# The maxAbsDelta filter used to be set here once, so that one control on the
+# collection page filtered methaDory and epigenCentral together. Subtracks
+# inherit it, and hgTracks errAborts ("Field not found") on episign, which
+# has no delta-beta. So each CpG-probe subtrack now sets its own copy.
 
     track methaDory
     parent episignatures
@@ -28,6 +20,10 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     noScoreFilter on
     maxWindowCoverage 10000000
     searchIndex name
+    filterByRange.maxAbsDelta on
+    filter.maxAbsDelta 0:1
+    filterLimits.maxAbsDelta 0:1
+    filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at this probe
     skipFields disorders,signatures,loci,deltaBetas,pvalues,studies,disorderSummary
     detailsDynamicTable _jsonSignatures|Episignatures at this CpG site
     urls publications="https://pubmed.ncbi.nlm.nih.gov/$$/"
@@ -56,6 +52,11 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     noScoreFilter on
     tableBrowser off
     maxWindowCoverage 10000000
+    # maxAbsDelta is a copy of the provider's "height", added at build time
+    filterByRange.maxAbsDelta on
+    filter.maxAbsDelta 0:1
+    filterLimits.maxAbsDelta 0:1
+    filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at this probe
     labelFields name,displaySignature
     defaultLabelFields name,displaySignature
     skipFields signatureList,mouseOver
@@ -72,6 +73,23 @@ filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at thi
     filterType.signatureList multipleListAnd
     filterLabel.signatureList Episignature
 
+    track episign
+    parent episignatures
+    shortLabel EpiSign
+    longLabel EpiSign: genes and regions of clinical episignatures and imprinting/promoter tests
+    type bigBed 9 +
+    bigDataUrl /gbdb/hg38/episignatures/episign.bb
+    visibility pack
+    itemRgb on
+    noScoreFilter on
+    searchIndex name
+    labelFields label
+    skipEmptyFields on
+    skipFields sigCount,label
+    mouseOver <b>${name}</b> ${gene}<br>${disorders}<br><b>Episignatures:</b> ${signatures}<br><b>Type:</b> ${type}
+    filterValues.type Episignature,Imprinting or promoter DMR
+    filterLabel.type Type
+
 searchTable methaDory
 searchMethod exact
 # termRegex puts this spec on the short-circuiting list, the only one that runs
@@ -81,4 +99,10 @@ searchType bigBed
 termRegex ^(cg[0-9]+|ch\.[0-9XYM]+\.[0-9]+[FR])$
 semiShortCircuit 1
 searchDescription Illumina methylation array probe of a published episignature
+searchPriority 50
+
+searchTable episign
+searchMethod exact
+searchType bigBed
+searchDescription EpiSign disorder code
 searchPriority 50

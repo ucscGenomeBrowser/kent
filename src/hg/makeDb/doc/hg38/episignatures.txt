@@ -358,3 +358,30 @@ ln -sfn /hive/data/genomes/hg38/bed/episignatures/epigenCentral/episignatures.ma
 # epigenCentral.bed/.bb in this directory and makeEpigenCentral.sh are the old rewritten
 # build and are no longer used by the track; epigenCentralTable.html still generated the
 # "Included episignatures" table of the description page.
+
+##############################################################################
+# EpiSign genes and regions (DONE 2026-10-16)
+##############################################################################
+# 2026-10-16 Claude max, refs #38567
+
+# The EpiSign group (Sadikovic lab, London Health Sciences Centre) sent
+# UCSC_EpiSign6.1.0_hg38.bed by email, for open release. It is a bedDetail file,
+# already on hg38: one row per disorder code and causative gene or CNV region,
+# plus 15 "DMR: " rows for the imprinted regions and the FMR1 promoter that
+# EpiSign tests directly. Paper: Kerkhof et al. 2024, PMID 38251460.
+mkdir -p /hive/data/genomes/hg38/bed/episignatures/episign
+cd /hive/data/genomes/hg38/bed/episignatures/episign
+# ... UCSC_EpiSign6.1.0_hg38.bed copied in here ...
+
+# episignToBed.py splits the description into disorders and gene, drops the
+# explanatory paragraph repeated on every row, keeps the provider's colors and
+# adds a "code (gene)" label field:
+bash ~/kent/src/hg/makeDb/scripts/episignatures/makeEpisign.sh
+#   input: 231, episignature: 216, DMR: 15, no gene: 14 (CNV syndromes)
+#   itemCount: 231, nothing dropped
+
+# The supertrack-level maxAbsDelta filter (see above) was inherited by this
+# track, which has no such field, and hgTracks errAborted with "error building
+# filter with field maxAbsDelta. Field not found." The filter is now set on
+# methaDory and epigenCentral separately, so the collection page no longer has
+# one control for both.
