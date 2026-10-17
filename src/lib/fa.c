@@ -440,14 +440,20 @@ char *line;
 dnaUtilOpen();
 
 /* Read first line, make sure it starts with '>', and read first word
- * as name of sequence. */
+ * as name of sequence.  Lines starting with ';' (the original FASTA
+ * comment convention) are skipped.  They can only appear here before the
+ * first record, since later ones are read as part of the sequence before. */
 name[0] = 0;
-if (!lineFileNext(lf, &line, &lineSize))
+do
     {
-    *retDna = NULL;
-    *retSize = 0;
-    return FALSE;
+    if (!lineFileNext(lf, &line, &lineSize))
+        {
+        *retDna = NULL;
+        *retSize = 0;
+        return FALSE;
+        }
     }
+while (line[0] == ';');
 if (line[0] == '>')
     {
     line = firstWordInLine(skipLeadingSpaces(line+1));

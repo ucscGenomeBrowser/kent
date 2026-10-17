@@ -47,11 +47,16 @@ if (twoBitIsFile(fileName))
 else
     {
     char *line;
+    boolean sawComment;
     dls->textFile = lineFileOpen(fileName, TRUE);
     if (lineFileNextReal(dls->textFile, &line))
         {
 	line = trimSpaces(line);
-	if (line[0] == '>')
+	/* FASTA comment lines starting with ';' may come before the first record. */
+	sawComment = (line[0] == ';');
+	while (line[0] == ';' && lineFileNextReal(dls->textFile, &line))
+	    line = trimSpaces(line);
+	if (line[0] == '>' || sawComment)
 	    dls->textIsFa = TRUE;
 	lineFileReuse(dls->textFile);
 	}
