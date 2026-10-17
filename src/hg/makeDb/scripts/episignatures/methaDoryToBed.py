@@ -64,6 +64,27 @@ DISORDER_SPELLING_FIXES = {
     "PURA-related disoder": "PURA-related disorder",
 }
 
+# Four metadata rows of the 2026-09-16 sheet carry the StudyID, PMID and
+# Disorder of the other study of their pair (CREBBP-EP300 and NSD2). QA checked
+# each PMID against PubMed (#38371). The authors acknowledged it on 2026-09-21
+# but have not sent a corrected sheet. Remove this table once they do. A row is
+# only changed while the sheet still has the wrong StudyID, so a fixed sheet
+# passes through untouched.
+META_CORRECTIONS = {
+    "CREBBP-EP300_ArefEshghi2020": {
+        "wrongStudy": "Levy2022", "study": "ArefEshghi2020",
+        "pmid": "32109418", "disorder": "Rubinstein-Taybi Syndrome"},
+    "CREBBP-EP300.MKHK_Levy2022": {
+        "wrongStudy": "ArefEshghi2020", "study": "Levy2022",
+        "pmid": "35904121", "disorder": "Menke-Hennekam syndrome"},
+    "NSD2_Levy2022": {
+        "wrongStudy": "Kawai2024", "study": "Levy2022",
+        "pmid": "35904121"},
+    "NSD2_Kawai2024": {
+        "wrongStudy": "Levy2022", "study": "Kawai2024",
+        "pmid": "39669601"},
+}
+
 
 def readMeta(fname):
     """Read the xlsx metadata sheet, keyed on the 'signature' column, which is
@@ -95,6 +116,11 @@ def readMeta(fname):
             "signature": vals[idx["Signature"]],
             "notes": vals[idx["Notes"]] if "Notes" in idx else "",
         }
+    for key, fix in META_CORRECTIONS.items():
+        if key in meta and meta[key]["study"] == fix["wrongStudy"]:
+            for field in ("study", "pmid", "disorder"):
+                if field in fix:
+                    meta[key][field] = fix[field]
     return meta
 
 

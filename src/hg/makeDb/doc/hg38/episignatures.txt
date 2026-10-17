@@ -59,13 +59,15 @@ bash ~/kent/src/hg/makeDb/scripts/episignatures/makeMethaDory.sh
 # that the other two do not already have.
 #
 # Every signature label in the loci table now has a metadata row. The build
-# still warns about 5 metadata rows that name one study in the 'signature'
-# column and a different author in StudyID. Three are spelling variants, but two
-# are genuine crossings: the CREBBP-EP300 and NSD2 pairs swap PMID and disorder
-# between Levy2022 and ArefEshghi2020 / Kawai2024 respectively. Reported to the
-# authors, not yet resolved; the rows are used as the sheet has them, the script
-# does not guess. "Smith-Magenis Syndrome" and "Smith-Magenis syndrome" are also
-# still two separate disorder names and so two separate filter entries.
+# still warns about metadata rows that name one study in the 'signature'
+# column and a different author in StudyID; the remaining ones are spelling
+# variants. Four rows were genuine crossings: the CREBBP-EP300 and NSD2 pairs
+# swap PMID, StudyID and disorder between Levy2022 and ArefEshghi2020 / Kawai2024
+# respectively. Reported to the authors, who acknowledged it on 2026-09-21 but
+# have not sent a corrected sheet. Until they do, META_CORRECTIONS in
+# methaDoryToBed.py fixes those four rows (#38371). Delete that table when the
+# corrected sheet arrives. "Smith-Magenis Syndrome" and "Smith-Magenis syndrome"
+# are still two separate disorder names and so two separate filter entries.
 
 # Sanity check that the coordinates are on the right base: every cg probe should
 # land on a CG dinucleotide.
