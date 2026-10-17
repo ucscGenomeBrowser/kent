@@ -3661,6 +3661,7 @@ else if (tdb->type != NULL)
     if (cType != cfgNone)
         {
         cfgByCfgType(cType,db, cart, tdb,tdb->track, NULL, boxed);
+        dotBracketCfgUi(cart, tdb);   // no-op unless the track names a dot-bracket column
         if (startsWith("gtexGene", track))
             gtexGeneUi(cart, tdb, tdb->track, NULL, TRUE);
         else if (startsWith("gtexEqtlCluster", track))

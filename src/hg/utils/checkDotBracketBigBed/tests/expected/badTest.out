@@ -1,0 +1,8 @@
+output/badTest.bb:1: shortString at chr1:1000-1070: the column holds 39 characters but the item has 40 spliced bases; pad the string with spaces where there is no prediction
+output/badTest.bb:1: shortString at chr1:1000-1070: the '(' at character 1 is never closed
+output/badTest.bb:2: longString at chr1:2000-2020: the column holds 21 characters but the item has 20 spliced bases; pad the string with spaces where there is no prediction
+output/badTest.bb:3: emptyString at chr1:3000-3010: the column holds 0 characters but the item has 10 spliced bases; pad the string with spaces where there is no prediction
+output/badTest.bb:4: badChar at chr1:4000-4010: character 5 is 'x'; only '([{<)]}>.', and space for a base with no prediction, can be drawn
+output/badTest.bb:5: strayClose at chr1:5000-5010: the ')' at character 9 closes a '(' that was never opened
+output/badTest.bb:6: neverClosed at chr1:6000-6010: the '(' at character 1 is never closed
+output/badTest.bb:10: strayCurly at chr1:9100-9110: the '}' at character 1 closes a '{' that was never opened
