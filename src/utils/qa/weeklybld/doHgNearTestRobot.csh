@@ -15,7 +15,7 @@ set res = "`cat ./logs/$log | egrep 'Total'`"
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" == "0" ) then
     echo "error occurred:"
-    echo "$HOME/bin/$MACHTYPE/hgNearTest failed to log any results to ./logs/$log" | mail -s "hgNearTestRobot on $HOST failed to log results to ./logs/$log" ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+    echo "$HOME/bin/$MACHTYPE/hgNearTest failed to log any results to ./logs/$log" | mail -s "hgNearTestRobot on $HOST failed to log results to ./logs/$log" ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
     exit 1
 endif
 
@@ -23,11 +23,11 @@ set wc = `echo "$res" | egrep -v "0 soft errors,  0 hard errors" | wc -w`
 if ( "$wc" != "0" ) then
     echo "errs found:"
     echo "$res"
-    echo "$res" | mail -s "Errors in hgNearTestRobot on $HOST" ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+    echo "$res" | mail -s "Errors in hgNearTestRobot on $HOST" ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
     exit 1
 endif
 #
 echo Done.
-echo "$res" | mail -s "v${BRANCHNN} hgNearTest robot done successfully on $HOST." ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+echo "$res" | mail -s "v${BRANCHNN} hgNearTest robot done successfully on $HOST." ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 exit 0
 
