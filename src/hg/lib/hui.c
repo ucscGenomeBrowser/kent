@@ -11064,8 +11064,6 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    puts("<b>Related tracks</b>\n");
-    puts("<ul>\n");
     struct hash *otherTracksAndDesc = hashNew(0);
     char *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
@@ -11077,6 +11075,7 @@ if (row != NULL)
         }
 
     struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    boolean printedAny = FALSE;
     for (hel = helList; hel != NULL; hel = hel->next)
         {
         char *otherTrack = (char *)hel->name;
@@ -11087,12 +11086,19 @@ if (row != NULL)
             otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
+            if (!printedAny)
+                {
+                puts("<b>Related tracks</b>\n");
+                puts("<ul>\n");
+                printedAny = TRUE;
+                }
             puts("<li>");
             printf("<a href=\"%s?db=%s&g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), database, otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
             puts(": ");
             puts(why);
             }
         }
+    if (printedAny)
         puts("</ul>\n");
     }
 sqlFreeResult(&sr);

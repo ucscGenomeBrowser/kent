@@ -124,6 +124,9 @@ def main():
     for path in sorted(glob.glob(os.path.join(args.downloadDir, 'variants', '*.csv'))):
         csvPaths['urn:mavedb:' + os.path.basename(path)[len('urn_mavedb_'):-len('.csv')]] = path
     urns = sorted(u for u in csvPaths if u in scoreSets)
+    missing = sorted(set(csvPaths) - set(scoreSets))
+    if missing:
+        sys.stderr.write("  WARNING: no score set record for %s\n" % ', '.join(missing))
 
     # The same placement the variant builder uses, so a measurement drawn as a cell here
     # and as an item there is at the same codon. Pass 1 only collects the proteins whose
@@ -281,6 +284,7 @@ def main():
     # codon we chose across the run. Both are the variant builder's guards, run here on
     # the same placements, so the two tracks cannot diverge on what they consider placed.
     mp.crossCheckGate(placeStats)
+    mp.accessionGate(placeStats)
 
     entries = [e for e in entries if e]
     entries.sort(key=lambda f: (f[0], int(f[1])))
