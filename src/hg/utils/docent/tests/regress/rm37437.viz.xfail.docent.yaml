@@ -1,0 +1,63 @@
+# #37437 -- quickLift the RepeatMasker Viz. track (rmskJoined):  hgTracks draws a lifted one
+# as Viz., with its joined fragments, and hgc's details page reads it through the chain.
+#
+# The Viz. subtracks are type "bed 3 +", so they always got into the quickLift hub, but they
+# drew as a plain bed:  the hub prefix on a lifted track's name hides the rmskJoined name
+# handler, and avoidHandler skips it anyway.  With the gate on, fillInFromType() in
+# hg/hgTracks/simpleTracks.c gives a lifted rmskJoined track rmskJoinedMethods
+# (quickLiftIsLiftedRmskJoined() in hg/lib/quickLift.c), and both of its loaders in
+# hg/hgTracks/rmskJoinedTrack.c read the source rows and lift them with
+# quickLiftJoinedRepeat():  each aligned block on its own, the unaligned (-1) blocks kept,
+# the blocks reversed and the strand flipped on a '-' chain.  hgc's doJRepeat() in
+# hg/hgc/rmskJoinedClick.c reads the joined, out and align tables of the source assembly at
+# the item's position there.
+#
+# GATE: browser.quickLiftRmsk, off by default, a cart variable as well as an hg.conf setting,
+# so the script turns it on for itself.
+#   grep browser.quickLiftRmsk /usr/local/apache/cgi-bin/hg.conf
+# With it off a lifted Viz. track still draws, as the plain bed it was before, and this
+# script fails at the map-box check.
+#
+# Where:  hg38 rmskJoinedCurrent lifted onto hg19 at chr1:206,150,000-206,175,000, inside
+# the region hg38 corrected by inverting it, so the quickLift chain is '-' there.  Every one
+# of the 49 lifted items matched liftOver of their aligned blocks with hg38ToHg19.over.chain
+# when this was written.  Item 318366, L2c, is five blocks (two aligned fragments) and '+'
+# in hg38:
+#   * its map box is at exactly hg19 206159554-206163786;  the plain-bed drawing gives the
+#     item's whole extent, unaligned flanks included, and a lift that ignored the strand or
+#     the blocks puts it somewhere else.
+#   * the details page says Orientation '-' and gives the lifted range, says it comes from
+#     hg38, and still finds the item's annotation lines and its two alignments in hg38's
+#     rmskOutCurrent and rmskAlignCurrent.
+# Deliberately not asserted:  pixels of the glyphs, and the count of items in the window.
+proof:
+  - "assertion-only 2026-10-19 -- written with the change, on branch qlRmsk37437"
+  - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 8: the lifted row is drawn as a plain bed, so 318366 has no map box at the lifted aligned range"
+  - "sandbox-ab 2026-10-19 -- park 37437 (port 48115), branch qlRmsk37437: passes with the branch hgTracks, hgc and hgConvert; with master's three (the frozen live sandbox, same hg.conf) it fails at step 8 like genome-test; with the branch hgTracks and master's hgc it fails at step 10, the details page"
+
+target: genome-test
+db: hg38
+position: chr1:206170000-206190000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A206170000-206190000&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {rmskJoinedCurrent: full}
+  - expect: {rows: [rmskJoinedCurrent], noText: "Warning/Error"}
+  - convert: {to: hg19, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:206150000-206175000
+  - expect:
+      rows: [rmskJoinedCurrent]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=206159554&t=206163786"][href*="i=318366"]'
+
+  - click: {track: rmskJoinedCurrent, item: "318366"}
+  - expect:
+      url: "hgc"
+      text: ["Repeat: L2c", "Orientation: -", "chr1:206159555-206163786",
+             "This repeat comes from hg38 and is mapped onto hg19 by quickLift",
+             "RepeatMasker Annotation", "RepeatMasker Alignments"]
+      has: ['a[href*="position=chr1%3A206159555-206163786"]', 'pre']
+      noText: ["Warning/Error", "Couldn't find repeat"]

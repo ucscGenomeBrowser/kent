@@ -1,0 +1,84 @@
+# #37437 -- quickLift bigRmsk tracks (hs1's RepeatMasker, and every GenArk repeatMasker and
+# repeatModeler track):  hgTracks draws the lifted items, hgc's details page reads one
+# through the chain, with its alignments.
+#
+# Before #37437 validateOneTdb() in hg/lib/trackHub.c did not let bigRmsk into the quickLift
+# hub.  Now, with the gate on, bigRmskLoadItems() in hg/hgTracks/bigRmskTrack.c reads the
+# items through quickLiftGetIntervals() and lifts each with quickLiftJoinedRepeat() in
+# hg/lib/quickLift.c:  each aligned block on its own, the unaligned (-1) blocks kept, the
+# blocks reversed and the strand flipped on a '-' chain.  An aligned block that does not map
+# is folded into the unaligned run beside it, so the item keeps the blocks that do.
+# doBigRmskRepeat() in hg/hgc/bigRmskClick.c finds the item by id through the chain, shows
+# its lifted place, and reads the alignments from the source xrefDataUrl (align.bb) at its
+# source position.
+#
+# GATE: browser.quickLiftRmsk, off by default, a cart variable as well as an hg.conf setting,
+# so the script turns it on for itself, and off for the last half.
+#   grep browser.quickLiftRmsk /usr/local/apache/cgi-bin/hg.conf
+#
+# What is asserted:
+#   * hs1 t2tRepeatMasker onto hg38 chr1:147,500,000-147,525,000, where the hs1-to-hg38
+#     quickLift chain is '-'.  Item 246265 (L1M5, '-' in hs1) has a map box at exactly hg38
+#     147500022-147500340.  All 56 items in the window matched liftOver of their aligned
+#     blocks with hs1ToHg38.over.chain when this was written.  Its details page says
+#     Orientation '+', links to the lifted range, says it comes from hs1, and shows its
+#     alignments, which are only found when align.bb is read at the hs1 position.
+#   * GenArk rabbit GCF_964237555.1 repeatMasker onto hg38 chr6:100,000,000-100,025,000.
+#     Item 1164553 has two aligned blocks and only the first maps to hg38, so it is drawn
+#     only because a block that does not map no longer drops the item.  Its box is that
+#     block's lifted extent, 100009628-100009645.  A GenArk assembly is a hub, so this half
+#     also covers a source whose track names carry a hub prefix.
+#   * gate off:  the convert leaves bigRmsk out, as before #37437.
+proof:
+  - "assertion-only 2026-10-19 -- written with the change, on branch qlRmsk37437"
+  - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 8: the lifted t2tRepeatMasker row is not drawn, since master does not lift bigRmsk"
+  - "sandbox-ab 2026-10-19 -- park 37437 (port 48115), branch qlRmsk37437: passes with the branch hgTracks, hgc and hgConvert; with master's three (the frozen live sandbox, same hg.conf) it fails at step 8 like genome-test; with the branch hgTracks and master's hgc it fails at step 10, the details page"
+  - "sandbox-ab 2026-10-19 -- park 37437 with quickLiftJoinedRepeat() edited back to drop an item when any aligned block fails (the rule of the first version that day): the hs1 steps pass and it fails at step 16, no box for rabbit item 1164553; restored, it passes"
+
+target: genome-test
+db: hs1
+position: chr1:147283027-147308038
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hs1&position=chr1%3A147283027-147308038&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {t2tRepeatMasker: full}
+  - expect: {rows: [t2tRepeatMasker], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:147500000-147525000
+  - expect:
+      rows: [t2tRepeatMasker]
+      noText: ["Warning/Error", "not supported by QuickLift"]
+      has: 'area[href*="o=147500022&t=147500340"][href*="i=246265"]'
+
+  - click: {track: t2tRepeatMasker, item: "246265"}
+  - expect:
+      url: "hgc"
+      text: ["Repeat: L1M5", "Orientation: +",
+             "This repeat comes from hs1 and is mapped onto hg38 by quickLift",
+             "RepeatMasker Joined Annotations", "RepeatMasker Alignments"]
+      has: ['a[href*="position=chr1%3A147500023-147500340"]', 'pre']
+      noText: ["Warning/Error", "No item 246265"]
+
+  # A GenArk source, and an item whose second aligned block does not map.  repeatMasker is
+  # on (pack) by default there, and the assembly's own defaults are what get lifted:  a
+  # `track:` step cannot reach it, because on an assembly hub the cart variable carries the
+  # hub's per-server hub_<n>_ prefix.
+  - goto: "/cgi-bin/hgTracks?db=GCF_964237555.1&position=NC_091436.1%3A71690786-71715520&pix=1100&browser.quickLiftRmsk=on"
+  - expect: {rows: [repeatMasker], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr6:100000000-100025000
+  - expect:
+      rows: [repeatMasker]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=100009628&t=100009645"][href*="i=1164553"]'
+
+  # Gate off:  the convert names bigRmsk as not supported, as it did before #37437.
+  - goto: "/cgi-bin/hgTracks?db=hs1&position=chr1%3A147283027-147308038&pix=1100&browser.quickLiftRmsk=off"
+  - hide: all
+  - track: {t2tRepeatMasker: full}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - expect: {text: "not supported by QuickLift"}
