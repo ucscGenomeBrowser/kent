@@ -369,8 +369,10 @@ def main():
     # The per-accession residue check and the cross-check of MaveDB's genomic terms
     # against our codon both run inside mavedbPlace.checkGenome(). crossCheckGate() stops
     # the build when the terms disagree with our codon too often over the whole run,
-    # which is what a drift in RefSeq or in MaveDB's mapper would look like.
+    # which is what a drift in RefSeq or in MaveDB's mapper would look like, and
+    # accessionGate() when a whole accession was dropped for the same reason.
     mp.crossCheckGate(placeStats)
+    mp.accessionGate(placeStats)
 
     sys.stderr.write("\nOffset chosen per score set target\n")
     for urn, choices in offsets:

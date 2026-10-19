@@ -1241,6 +1241,23 @@ def crossCheckGate(stats):
                               100 * MAX_CROSSCHECK_MISMATCH))
 
 
+def accessionGate(stats):
+    """Raise if checkGenome() dropped a whole accession over a run.
+
+    An accession is dropped when the genome disagrees with the stated wild-type residue on
+    more than MAX_GENOME_MISMATCH of its rows, which is what a moved transcript or a
+    changed GENCODE looks like. Every one of its measurements vanishes, so a build that
+    hits this should fail rather than ship short.
+    """
+    dropped = stats['accessionsDropped']
+    if dropped:
+        raise RuntimeError('dropped %d whole protein accession%s: the genome disagrees with '
+                           'the stated wild-type residue on more than %.0f%% of the rows, '
+                           'which is what a moved transcript looks like'
+                           % (dropped, '' if dropped == 1 else 's',
+                              100 * MAX_GENOME_MISMATCH))
+
+
 # ---------------------------------------------------------------- text helpers
 
 DASHES = {0x2010: '-', 0x2011: '-', 0x2012: '-', 0x2013: '-', 0x2014: '-', 0x2015: '-',

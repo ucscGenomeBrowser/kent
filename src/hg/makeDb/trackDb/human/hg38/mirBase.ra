@@ -4,6 +4,7 @@ shortLabel miRBase
 longLabel miRBase microRNA precursors with mature miRNAs and predicted structure
 visibility hide
 type bigBed 6 + 11
+color 0,100,0
 bigDataUrl /gbdb/hg38/mirBase/mirBase.bb
 decorator.default.bigDataUrl /gbdb/hg38/mirBase/mirBaseArms.bb
 decorator.default.blockMode Overlay
