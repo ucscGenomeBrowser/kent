@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "rmskOut.h"
+#include "quickLift.h"
 
 
 /* Repeat items.  Since there are so many of these, to avoid 
@@ -68,6 +69,67 @@ struct repeatItem *ri = item;
 return ri->className;
 }
 
+static void repeatDrawOneFull(struct track *tg, struct hvGfx *hvg, struct rmskOut *ro,
+        struct hash *hash, Color overrideColor, int xOff, int width, int baseWidth)
+/* Draw one repeat in full mode, on the row of its class, in a gray for its divergence. */
+{
+struct repeatItem *ri;
+int heightPer = tg->heightPer;
+int x1,x2,w;
+Color col;
+int percId;
+int grayLevel;
+char statusLine[128];
+char class[256];
+
+// Simplify repClass for lookup: strip trailing '?', simplify *RNA to RNA:
+safecpy(class, sizeof(class), ro->repClass);
+char *p = &(class[strlen(class)-1]);
+if (*p == '?')
+    *p = '\0';
+if (endsWith(class, "RNA"))
+    safecpy(class, sizeof(class), "RNA");
+ri = hashFindVal(hash, class);
+if (ri == NULL)
+   ri = otherRepeatItem;
+percId = 1000 - ro->milliDiv - ro->milliDel - ro->milliIns;
+grayLevel = grayInRange(percId, 500, 1000);
+col = overrideColor ? overrideColor : shadesOfGray[grayLevel];
+x1 = roundingScale(ro->genoStart-winStart, width, baseWidth)+xOff;
+x1 = max(x1, 0);
+x2 = roundingScale(ro->genoEnd-winStart, width, baseWidth)+xOff;
+if (x1 < insideX)
+    x1 = insideX;
+if (x2 > insideX+width)
+    x2 = insideX+width;
+w = x2-x1;
+if (w <= 0)
+    w = 1;
+hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
+if (baseWidth <= 100000)
+    {
+    if (ri == otherRepeatItem)
+        {
+        sprintf(statusLine, "Repeat %s, family %s, class %s",
+            ro->repName, ro->repFamily, ro->repClass);
+        }
+    else
+        {
+        sprintf(statusLine, "Repeat %s, family %s",
+            ro->repName, ro->repFamily);
+        }
+    mapBoxHc(hvg, ro->genoStart, ro->genoEnd, x1, ri->yOffset, w, heightPer, tg->track,
+        ro->repName, statusLine);
+    }
+}
+
+static boolean liftedRepeatInWindow(struct rmskOut *ro)
+/* A lifted repeat is read over padded source ranges, so it may land outside the window. */
+{
+return sameString(ro->genoName, chromName) && (ro->genoStart < winEnd) &&
+       (ro->genoEnd > winStart);
+}
+
 static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
@@ -80,8 +142,20 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-Color col;
-struct sqlConnection *conn = hAllocConn(database);
+boolean lifted = quickLiftIsLifted(tg->tdb);
+struct rmskOut *ro, *liftedList = NULL;
+
+// a lifted track reads its rows from the assembly it came from, mapped onto this one
+if (lifted)
+    {
+    // An rmsk in a quickLift hub written while the gate was on, drawn with it off:  the code
+    // below would read the table of the same name in this assembly, so draw nothing.
+    if (!quickLiftRmskEnabled(cart))
+        return;
+    liftedList = quickLiftSqlLoadRmsk(tg->tdb, tg->table, chromName, winStart, winEnd);
+    }
+
+struct sqlConnection *conn = lifted ? NULL : hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -90,10 +164,7 @@ if (isFull)
     {
     /* Do gray scale representation spread out among tracks. */
     struct hash *hash = newHash(6);
-    struct rmskOut ro;
-    int percId;
-    int grayLevel;
-    char statusLine[128];
+    struct rmskOut rowRo;
 
     for (ri = tg->items; ri != NULL; ri = ri->next)
         {
@@ -101,53 +172,38 @@ if (isFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
-		     &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
+    if (lifted)
         {
-	rmskOutStaticLoad(row+rowOffset, &ro);
-	char class[256];
-	// Simplify repClass for lookup: strip trailing '?', simplify *RNA to RNA:
-	safecpy(class, sizeof(class), ro.repClass);
-	char *p = &(class[strlen(class)-1]);
-	if (*p == '?')
-	    *p = '\0';
-	if (endsWith(class, "RNA"))
-	    safecpy(class, sizeof(class), "RNA");
-	ri = hashFindVal(hash, class);
-	if (ri == NULL)
-	   ri = otherRepeatItem;
-	percId = 1000 - ro.milliDiv - ro.milliDel - ro.milliIns;
-	grayLevel = grayInRange(percId, 500, 1000);
-	col = overrideColor ? overrideColor : shadesOfGray[grayLevel];
-	x1 = roundingScale(ro.genoStart-winStart, width, baseWidth)+xOff;
-	x1 = max(x1, 0);
-	x2 = roundingScale(ro.genoEnd-winStart, width, baseWidth)+xOff;
-	if (x1 < insideX)
-	    x1 = insideX;
-	if (x2 > insideX+width)
-	    x2 = insideX+width;
-	w = x2-x1;
-	if (w <= 0)
-	    w = 1;
-	hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
-	if (baseWidth <= 100000)
-	    {
-	    if (ri == otherRepeatItem)
-		{
-		sprintf(statusLine, "Repeat %s, family %s, class %s",
-		    ro.repName, ro.repFamily, ro.repClass);
-		}
-	    else
-		{
-		sprintf(statusLine, "Repeat %s, family %s",
-		    ro.repName, ro.repFamily);
-		}
-	    mapBoxHc(hvg, ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->track,
-	    	ro.repName, statusLine);
-	    }
-	}
+        for (ro = liftedList; ro != NULL; ro = ro->next)
+            if (liftedRepeatInWindow(ro))
+                repeatDrawOneFull(tg, hvg, ro, hash, overrideColor, xOff, width, baseWidth);
+        }
+    else
+        {
+        sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
+                         &rowOffset);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            rmskOutStaticLoad(row+rowOffset, &rowRo);
+            repeatDrawOneFull(tg, hvg, &rowRo, hash, overrideColor, xOff, width, baseWidth);
+            }
+        }
     freeHash(&hash);
+    }
+else if (lifted)
+    {
+    /* Do black and white on single track. */
+    for (ro = liftedList; ro != NULL; ro = ro->next)
+        {
+        if (!liftedRepeatInWindow(ro))
+            continue;
+        x1 = roundingScale(ro->genoStart-winStart, width, baseWidth)+xOff;
+        x2 = roundingScale(ro->genoEnd-winStart, width, baseWidth)+xOff;
+        w = x2-x1;
+        if (w <= 0)
+            w = 1;
+        hvGfxBox(hvg, x1, yOff, w, heightPer, overrideColor ? overrideColor : MG_BLACK);
+        }
     }
 else
     {
@@ -181,6 +237,7 @@ else
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+rmskOutFreeList(&liftedList);
 }
 
 void repeatMethods(struct track *tg)

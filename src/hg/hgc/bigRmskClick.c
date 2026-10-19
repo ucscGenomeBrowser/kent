@@ -13,6 +13,9 @@
 #include "rmskAlign.h"
 #include "hCommon.h"
 #include "chromAlias.h"
+#include "htmshell.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 
 struct bigRmskAlignRecord
@@ -221,6 +224,39 @@ printf ("  </thead>\n");
 }
 
 
+static boolean liftFields(struct hash *chainHash, char **fields)
+/* Lift the position fields of a bigRmsk row read from the assembly it came from onto the
+ * reference:  chrom, strand, alignStart and alignEnd, the ones this page shows and links to.
+ * Returns FALSE if the item does not lift. */
+{
+char *chrom = cloneString(fields[0]);
+unsigned chromStart = sqlUnsigned(fields[1]);
+unsigned chromEnd = sqlUnsigned(fields[2]);
+char strand[2];
+safecpy(strand, sizeof strand, fields[5]);
+unsigned alignStart = sqlUnsigned(fields[6]);
+unsigned alignEnd = sqlUnsigned(fields[7]);
+int blockCount = sqlSigned(fields[9]);
+int *blockSizes, *blockRelStarts, sizeOne;
+sqlSignedDynamicArray(fields[10], &blockSizes, &sizeOne);
+if (sizeOne != blockCount)
+    return FALSE;
+sqlSignedDynamicArray(fields[11], &blockRelStarts, &sizeOne);
+if (sizeOne != blockCount)
+    return FALSE;
+if (!quickLiftJoinedRepeat(chainHash, &chrom, &chromStart, &chromEnd, strand, &alignStart,
+                           &alignEnd, &blockCount, blockSizes, blockRelStarts))
+    return FALSE;
+fields[0] = chrom;
+fields[5] = cloneString(strand);
+char buf[16];
+safef(buf, sizeof buf, "%u", alignStart);
+fields[6] = cloneString(buf);
+safef(buf, sizeof buf, "%u", alignEnd);
+fields[7] = cloneString(buf);
+return TRUE;
+}
+
 void doBigRmskRepeat (struct trackDb *tdb, char *item)
 /* Main entry point */
 {
@@ -234,7 +270,15 @@ int end = cartInt(cart, "t");
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
 struct bbiFile *bbi = bigBedFileOpenAlias(fileName,chromAliasFindAliases);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+// a quickLifted track reads the file of the assembly it came from through the chain, refs #37437
+boolean lifted = quickLiftIsLifted(tdb);
+struct hash *chainHash = NULL;
+struct bigBedInterval *bbList;
+if (lifted)
+    bbList = quickLiftGetIntervals(trackDbSetting(tdb, "quickLiftUrl"), bbi, chrom, start, end,
+                                   &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
 
 /* Find particular item in list - matching start, and item if possible. */
 boolean found = FALSE;
@@ -243,15 +287,33 @@ const char *data_style = "style=\"padding:0px 6px;\"";
 int bedSize = bbi->fieldCount;
 char *fields[bedSize];
 char startBuf[17], endBuf[17];
+char sourceChrom[256];
+char *rowChrom = chrom;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
+    if (lifted)
+        {
+        bbiCachedChromLookup(bbi, bb->chromId, -1, sourceChrom, sizeof sourceChrom);
+        rowChrom = sourceChrom;
+        }
+    bigBedIntervalToRow(bb, rowChrom, startBuf, endBuf, fields,
                                            bedSize);
     if ( sameOk(fields[12], item) )
         {
         found = TRUE;
         break;
         }
+    }
+
+// the item's place in the assembly it came from, where the alignments are read
+char *alignChrom = chrom;
+int alignQueryStart = start, alignQueryEnd = end;
+if (found && lifted)
+    {
+    alignChrom = cloneString(rowChrom);
+    alignQueryStart = bb->start;
+    alignQueryEnd = bb->end;
+    found = liftFields(quickLiftChainHashForItem(chainHash, bb), fields);
     }
 
 if ( found )
@@ -278,6 +340,11 @@ if ( found )
     printf ("<b>Class:</b> %s<br>\n", class);
     printf ("<b>Subclass:</b> %s<br>\n", subclass);
     printf ("<b>Orientation:</b> %s<br>\n", fields[5]);
+    if (lifted)
+        htmlPrintf ("<br>This repeat comes from %s and is mapped onto %s by quickLift.  "
+                    "The annotation and alignment lines below give its positions in %s.<br>\n",
+                    trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database),
+                    trackDbSetting(tdb, "quickLiftDb"));
     //printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
     //rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
     printf ("<br><br>\n");
@@ -334,7 +401,8 @@ if ( xrefDataUrl )
     //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
     struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
     struct lm *alm = lmInit(0);
-    struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, chrom, start, end, 0, alm);
+    struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, alignChrom, alignQueryStart,
+                                                         alignQueryEnd, 0, alm);
 
     printf ("<h4>RepeatMasker Alignments:</h4>\n");
     printf ("The raw alignment data used by RepeatMasker to generate "
@@ -348,7 +416,7 @@ if ( xrefDataUrl )
     for (bb = abbList; bb != NULL; bb = bb->next)
         {
         char *afields[abbi->fieldCount];
-        bigBedIntervalToRow(bb, chrom, startBuf, endBuf, afields,
+        bigBedIntervalToRow(bb, alignChrom, startBuf, endBuf, afields,
                             abbi->fieldCount);
         if ( sameOk(afields[15], item) )
             {

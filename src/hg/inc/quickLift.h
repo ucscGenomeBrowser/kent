@@ -15,6 +15,8 @@ struct psl;
 struct chain;
 struct mafAli;
 struct dyString;
+struct rmskOut;
+struct rmskJoined;
 
 struct quickLiftRegions
 // store highlight information
@@ -216,6 +218,41 @@ boolean quickLiftWigEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift wig tracks, the kind kept in a table and a
  * .wib file.  Off unless hg.conf says browser.quickLiftWig=on, and a cart variable of the
  * same name overrides that. */
+
+boolean quickLiftRmskEnabled(struct cart *cart);
+/* Return TRUE if quickLift is allowed to lift rmsk (RepeatMasker) tracks.  Off unless hg.conf
+ * says browser.quickLiftRmsk=on, and a cart variable of the same name overrides that. */
+
+struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char *chrom,
+    int start, int end);
+/* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
+ * ranges that map into chrom:start-end on the reference, and map each one onto the reference.
+ * genoName, genoStart, genoEnd and strand are on the reference afterwards.  A row that does
+ * not map is dropped.  Free with rmskOutFreeList(). */
+
+boolean quickLiftIsLiftedRmskJoined(struct cart *cart, struct trackDb *tdb);
+/* Return TRUE if tdb is a quickLifted RepeatMasker Viz. track (rmskJoined) to draw and click
+ * as one:  it is lifted, its name past the hub prefix starts with rmskJoined, and
+ * browser.quickLiftRmsk is on. */
+
+struct rmskJoined *quickLiftSqlLoadRmskJoined(struct trackDb *tdb, char *trackTable,
+    char *chrom, int start, int end, struct hash *chainHash);
+/* Read the rows of a quickLifted rmskJoined track from the assembly it came from, over the
+ * source ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:
+ * lift each one with quickLiftJoinedRepeat() through quickLiftChainHashForItem(chainHash, row).
+ * chainHash, from newHash(), is filled with the chains that do the lifting. */
+
+boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *pChromStart,
+    unsigned *pChromEnd, char *strand, unsigned *pAlignStart, unsigned *pAlignEnd,
+    int *pBlockCount, int *blockSizes, int *blockRelStarts);
+/* Lift a joined RepeatMasker item (an rmskJoined row or a bigRmsk record) onto the reference,
+ * in place.  Each aligned block (blockRelStarts not -1) is lifted on its own;  the unaligned
+ * blocks hold consensus lengths, not genome positions, and are kept.  An aligned block that
+ * does not map, or maps to another sequence or strand than the first one that does, becomes
+ * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
+ * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
+ * the reference chrom.  Returns FALSE, with the item partly changed, if no aligned block maps
+ * or the ones that do land out of order. */
 
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,

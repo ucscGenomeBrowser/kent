@@ -20,6 +20,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "quickLift.h"
 #include "bigRmskUi.h"
 
 /* Track Development Notes:
@@ -562,6 +563,32 @@ else
 }
 
 
+static void bigRmskRecordFree(struct bigRmskRecord **pRm)
+/* Free a bigRmskRecord made by bigRmskLoadItems. */
+{
+struct bigRmskRecord *rm = *pRm;
+if (rm == NULL)
+    return;
+freeMem(rm->chrom);
+freeMem(rm->name);
+freeMem(rm->blockSizes);
+freeMem(rm->blockRelStarts);
+freeMem(rm->description);
+freez(pRm);
+}
+
+static boolean liftedRecordInWindow(struct bigRmskRecord *rm, struct hash *chainHash)
+/* Lift a record read from the assembly it came from onto the reference, and say whether it
+ * lands in the window.  The items are read over padded source ranges, so some land outside
+ * it. */
+{
+return quickLiftJoinedRepeat(chainHash, &rm->chrom, &rm->chromStart, &rm->chromEnd, rm->strand,
+                             &rm->alignStart, &rm->alignEnd, &rm->blockCount, rm->blockSizes,
+                             rm->blockRelStarts) &&
+       sameString(rm->chrom, chromName) && (rm->chromStart < winEnd) &&
+       (rm->chromEnd > winStart);
+}
+
 static void bigRmskLoadItems(struct track *tg)
 /* 
  * Loading is done first given the region the display is currently centered on.
@@ -595,7 +622,17 @@ if (tg->isBigBed)
     if (bbi->fieldCount < 14)
         errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tg->track, bbi->fieldCount);
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+    struct bigBedInterval *bb, *bbList = NULL;
+    // a lifted track reads its items from the assembly they came from and maps them onto
+    // this one;  with browser.quickLiftRmsk off it draws nothing, rather than querying the
+    // file at this assembly's positions
+    boolean lifted = quickLiftIsLifted(tg->tdb);
+    struct hash *chainHash = NULL;
+    if (!lifted)
+        bbList = bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+    else if (quickLiftRmskEnabled(cart))
+        bbList = quickLiftGetIntervals(trackDbSetting(tg->tdb, "quickLiftUrl"), bbi, chromName,
+                                       winStart, winEnd, &chainHash);
     char *bedRow[bbi->fieldCount];
     /* One might ask, "Why didn't you use a linkedFeature set here?" Good question!  I am not using
        a standard encoding of blockStarts as would be expected by a BED12 validator, and therefore
@@ -611,7 +648,14 @@ if (tg->isBigBed)
 
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
-        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        char *rowChrom = chromName;
+        char sourceChrom[256];
+        if (lifted)
+            {
+            bbiCachedChromLookup(bbi, bb->chromId, -1, sourceChrom, sizeof sourceChrom);
+            rowChrom = sourceChrom;
+            }
+        bigBedIntervalToRow(bb, rowChrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
 
         if ( (isFilterRegexp && (regexec(&regEx,bedRow[3], 0, NULL,0 ) == 0)) ||
              (!isFilterRegexp && wildMatch(filterString, bedRow[3])) )
@@ -644,7 +688,10 @@ if (tg->isBigBed)
             rm->description = cloneString(bedRow[13]);
             rm->layoutLevel = -1;  // Indicates layout has not been calculated.
             rm->leftLabel = 0;     // Flag for labels that need to be leftLabeled
-            slAddHead(&detailList, rm);
+            if (lifted && !liftedRecordInWindow(rm, quickLiftChainHashForItem(chainHash, bb)))
+                bigRmskRecordFree(&rm);
+            else
+                slAddHead(&detailList, rm);
             }
         } // for(bb = bbList...
     bbiFileClose(&bbi);

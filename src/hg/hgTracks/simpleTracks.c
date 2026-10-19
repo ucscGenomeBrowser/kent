@@ -16193,6 +16193,10 @@ else if (startsWith("gtexGene", track->track) ||
          // a quickLifted GTEx track carries its hub's prefix, refs #38512
          quickLiftIsLiftedGtex(cart, track->tdb))
     gtexGeneMethods(track);
+else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+    // a quickLifted RepeatMasker Viz. track carries its hub's prefix, so the name handler
+    // misses it, refs #37437
+    rmskJoinedMethods(track);
 else if (startsWith("rnaStruct", track->track))
     rnaSecStrMethods(track);
 #endif /* GBROWSE */

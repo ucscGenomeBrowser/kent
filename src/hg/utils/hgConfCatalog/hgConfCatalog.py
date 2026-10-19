@@ -530,6 +530,25 @@ RELEASE_GATES = {
                "written while it was on draws nothing with it off, rather than "
                "this assembly's table of the same name.  A cart variable of "
                "the same name overrides it, like browser.quickLiftBarChart."),
+        h("browser.quickLiftRmsk", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="37437",
+          note="Let quickLift lift RepeatMasker tracks:  rmsk tables, "
+               "RepeatMasker Viz. (rmskJoined) tables and bigRmsk files, "
+               "reading the items from the assembly they came from and "
+               "drawing each one where the chain puts it.  Read in "
+               "quickLiftRmskEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which lets rmsk and bigRmsk tracks into "
+               "the quickLift hub, by quickLiftIsLiftedRmskJoined(), which "
+               "gives a lifted Viz. track its own drawing in hgTracks, by "
+               "repeatDraw() (hgTracks/rmskTrack.c), bigRmskLoadItems() "
+               "(hgTracks/bigRmskTrack.c), and by the hgc click dispatch, "
+               "which sends a click on a lifted RepeatMasker track to a page "
+               "reading the item through the chain.  Off, rmsk and bigRmsk "
+               "tracks are left out of a quickLift and a lifted Viz. track "
+               "draws as a plain bed, all as before;  a lifted rmsk or bigRmsk "
+               "left in a hub written while it was on draws nothing rather "
+               "than this assembly's data.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "

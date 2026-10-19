@@ -86,6 +86,7 @@
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
 #include "myVariants.h"
+#include "quickLift.h"
 
 //#include "bed3Sources.h"
 
@@ -5790,7 +5791,8 @@ if (withLeftLabels)
             /* rmskJoined tracks are non-standard in FULL mode
                they are just their track height, not per-item height
              */
-            if (startsWith("rmskJoined", track->track))
+            if (startsWith("rmskJoined", track->track) ||
+                quickLiftIsLiftedRmskJoined(cart, track->tdb))
                 ynew = flatTrack->maxHeight + y;
             else
                 ynew = doLeftLabels(track, hvgSide, font, y);

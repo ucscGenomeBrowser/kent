@@ -14,6 +14,9 @@
 #include "rmskAlign.h"
 #include "rmskJoined.h"
 #include "hCommon.h"
+#include "htmshell.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 
 void printAlignment (struct rmskAlign *ra)
@@ -199,6 +202,39 @@ printf ("  </thead>\n");
 }
 
 
+static struct rmskJoined *liftedJoinedRow(struct trackDb *tdb, char *table, char *repeat,
+    char **retSrcChrom, int *retSrcStart)
+/* Find the row of a quickLifted rmskJoined track that was clicked:  read the rows of the
+ * assembly it came from that map into the item, and return the one with this id that lands
+ * where it was clicked, lifted onto the reference.  Its chrom and alignStart in the assembly
+ * it came from go in *retSrcChrom and *retSrcStart.  Returns NULL if there is none. */
+{
+int start = cartInt(cart, "o");
+struct hash *chainHash = newHash(8);
+struct rmskJoined *rm, *next, *rmList = quickLiftSqlLoadRmskJoined(tdb, table, seqName, start,
+    cartInt(cart, "t"), chainHash);
+for (rm = rmList; rm != NULL; rm = next)
+    {
+    next = rm->next;
+    if (!sameString(rm->id, repeat))
+        continue;
+    char *srcChrom = cloneString(rm->chrom);
+    int srcStart = rm->alignStart;
+    if (quickLiftJoinedRepeat(quickLiftChainHashForItem(chainHash, rm), &rm->chrom,
+            &rm->chromStart, &rm->chromEnd, rm->strand, &rm->alignStart, &rm->alignEnd,
+            &rm->blockCount, rm->blockSizes, rm->blockRelStarts) &&
+        sameString(rm->chrom, seqName) && (rm->alignStart == start))
+        {
+        rm->next = NULL;
+        *retSrcChrom = srcChrom;
+        *retSrcStart = srcStart;
+        return rm;
+        }
+    freeMem(srcChrom);
+    }
+return NULL;
+}
+
 void doJRepeat (struct trackDb *tdb, char *repeat)
 /* Main entry point */
 {
@@ -206,6 +242,16 @@ const char *data_style = "style=\"padding:0px 6px;\"";
 char *table = (tdb ? tdb->table : tdb->track);
 char outTable[64];
 char alignTable[64];
+
+// a quickLifted track reads the tables of the assembly it came from, at the item's position
+// there, refs #37437
+boolean lifted = quickLiftIsLifted(tdb);
+char *qDb = database;
+if (lifted)
+    {
+    table = trackHubSkipHubName(tdb->table);
+    qDb = trackDbSetting(tdb, "quickLiftDb");
+    }
 
 /* Currently using a fixed table name design
  * with support for two datasets ( baseline and current ).
@@ -229,7 +275,7 @@ cartWebStart (cart, database, "%s", tdb->longLabel);
 int offset = cartInt (cart, "o");
 if (offset >= 0)
     {
-    struct sqlConnection *conn2 = hAllocConn (database);
+    struct sqlConnection *conn2 = hAllocConn (qDb);
     struct sqlResult *sr2;
     char **row;
     char query[256];
@@ -237,20 +283,29 @@ if (offset >= 0)
     boolean hasBin;
 
     int start = cartInt (cart, "o");
+    char *qChrom = seqName;
+    struct rmskJoined *liftedJoin = NULL;
+    if (lifted)
+        {
+        // the out and align tables are read where the item is in the assembly it came from
+        liftedJoin = liftedJoinedRow(tdb, table, repeat, &qChrom, &start);
+        if (liftedJoin == NULL)
+            errAbort("Couldn't find repeat %s in %s", repeat, qDb);
+        }
 
-    if (hTableExists (database, table))
+    if (hTableExists (qDb, table))
 	{
-	if (!hFindSplitTable (database, seqName, table, qTable, sizeof(qTable), &hasBin))
+	if (!hFindSplitTable (qDb, qChrom, table, qTable, sizeof(qTable), &hasBin))
 	    errAbort("track %s not found", table);
     
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where chrom = '%s' and alignStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
+	       " and id = %s", qTable, qChrom, start-1, repeat);
 
 	sr2 = sqlGetResult (conn2, query);
 	if ((row = sqlNextRow (sr2)) != NULL)
 	    {
-	    struct rmskJoined *rmJoin = rmskJoinedLoad (row + hasBin);
+	    struct rmskJoined *rmJoin = lifted ? liftedJoin : rmskJoinedLoad (row + hasBin);
 
 	    char class[32];
 	    class[0] = '\0';
@@ -277,6 +332,10 @@ if (offset >= 0)
 	    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
 	    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
 		    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
+	    if (lifted)
+	        htmlPrintf ("<br>This repeat comes from %s and is mapped onto %s by quickLift.  "
+	                    "The annotation and alignment lines below give its positions in "
+	                    "%s.<br>\n", qDb, trackHubSkipHubName(database), qDb);
 	    printf ("<br><br>\n");
 	    }
 	sqlFreeResult (&sr2);
@@ -285,15 +344,15 @@ if (offset >= 0)
     /*
      * Locate *.out annotation for this element
      */
-    if (hTableExists (database, outTable))
+    if (hTableExists (qDb, outTable))
 	{
 	int isFirst = 0;
 	struct rmskOut2 *ro;
-	if (!hFindSplitTable (database, seqName, outTable, qTable, sizeof(qTable), &hasBin))
+	if (!hFindSplitTable (qDb, qChrom, outTable, qTable, sizeof(qTable), &hasBin))
 	    errAbort("track %s not found", outTable);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
+	       " and id = %s", qTable, qChrom, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Annotation:</h4>\n");
 	printf
@@ -328,20 +387,25 @@ if (offset >= 0)
 	    printf ("    <td %s>(%d)</td>\n", data_style, ro->repLeft);
 	    printf ("    <td %s>%d</td>\n", data_style, ro->id);
 	    printf ("  <td>\n");
+	    // a lifted line's position is in the assembly it came from, so its links go to the
+	    // whole element where it lands on the reference
+	    int linkStart = lifted ? liftedJoin->alignStart : ro->genoStart;
+	    int linkEnd = lifted ? liftedJoin->alignEnd : ro->genoEnd;
+	    char *linkStrand = lifted ? liftedJoin->strand : ro->strand;
 	    printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">Browser</A>",
 		    hgTracksPathAndSettings (), database, seqName,
-		    ro->genoStart + 1, ro->genoEnd);
+		    linkStart + 1, linkEnd);
 	    char *tbl = cgiUsualString ("table", cgiString ("g"));
 	    printf
 		(" - <A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s%s%s%s%s&c=%s&l=%d&r=%d&"
 		 "strand=%s&table=%s\">"
-		 "DNA</A>\n", hgcPathAndSettings (), database, ro->genoStart,
+		 "DNA</A>\n", hgcPathAndSettings (), database, linkStart,
                  (ro->repName != NULL ? cgiEncode (ro->repName) : ""),
                  cgiEncode("#"),
 		 (ro->repClass != NULL ? cgiEncode (ro->repClass) : ""),
                  cgiEncode("/"),
 		 (ro->repFamily != NULL ? cgiEncode (ro->repFamily) : ""),
-		 seqName, ro->genoStart, ro->genoEnd, cgiEncode (ro->strand),
+		 seqName, linkStart, linkEnd, cgiEncode (linkStrand),
 		 tbl);
 
 	    printf ("  </td>\n");
@@ -358,14 +422,14 @@ if (offset >= 0)
     /*
      * Locate *.align data for this element
      */
-    if (hTableExists (database, alignTable))
+    if (hTableExists (qDb, alignTable))
 	{
 	struct rmskAlign *ro;
-	if (!hFindSplitTable (database, seqName, alignTable, qTable, sizeof(qTable), &hasBin))
+	if (!hFindSplitTable (qDb, qChrom, alignTable, qTable, sizeof(qTable), &hasBin))
 	    errAbort("track %s not found", alignTable);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
+	       " and id = %s", qTable, qChrom, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Alignments:</h4>\n");
 	printf

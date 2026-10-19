@@ -2025,6 +2025,8 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        (startsWithNoCase("bigBarChart", tdb->type) && quickLiftBarChartEnabled(cart)) || \
        ((sameWord("wig", tdb->type) || startsWithNoCase("wig ", tdb->type)) &&
         quickLiftWigEnabled(cart)) ||
+       ((sameWord("rmsk", tdb->type) || startsWithNoCase("bigRmsk", tdb->type)) &&
+        quickLiftRmskEnabled(cart)) ||
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {
@@ -2040,6 +2042,7 @@ if (startsWithNoCase("bigBed", tdb->type) || \
        startsWithNoCase("bigChain", tdb->type) || \
        startsWithNoCase("bigMaf", tdb->type) || \
        startsWithNoCase("bigBarChart", tdb->type) || \
+       startsWithNoCase("bigRmsk", tdb->type) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
