@@ -130,7 +130,9 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 #
 # CHECKS. All of these are in mavedbPlace.py and run on every build:
 #   - every placed row's wild-type residue must match the genome translation of its codon;
-#     an accession failing on more than 25% of its rows is dropped whole (0 accessions)
+#     an accession failing on more than 25% of its rows is dropped whole (0 accessions).
+#     accessionGate() then fails the build, because every measurement on that accession
+#     has silently gone; that is what a moved transcript or a changed GENCODE looks like.
 #   - MaveDB's genomic term, where the row also has a protein placement, must fall inside
 #     that codon. 124,335 rows carry both; 0 disagreed. crossCheckGate() stops the build
 #     above 0.5%, which is what a drift in RefSeq or in MaveDB's mapper would look like.
