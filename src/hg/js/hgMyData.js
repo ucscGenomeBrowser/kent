@@ -514,14 +514,17 @@ const uppy = new Uppy.Uppy({
                 doUpload = false;
                 continue;
             }
-            // check if this hub already exists and the genome is different from what was
-            // just selected, if so, make the user create a new hub. A blank genome means
-            // none has been set yet, not a hub for a genome named "": a directory row is
-            // blank until an upload carrying a genome lands in it, and the hub level
-            // files of a hub that brings its own hub.txt have no genome of their own.
-            // So a blank on either side is not a mismatch.
+            // Check the file's genome against the directory it is going into, which is
+            // the hub itself or one of its subdirectories. What genome a directory row
+            // holds is set out in hg/inc/userdata.h: a hub row has the one genome its
+            // hub.txt names, or is blank. A blank on either side is not a mismatch,
+            // since the hub level files of a hub that brings its own hub.txt have no
+            // genome either. A batch that brings a hub.txt with a genomesFile is not
+            // checked: that hub.txt replaces the hub's definition, its genomes
+            // included.
             let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
-            if (existing && existing.genome && existing.genome !== file.meta.genome) {
+            if (!isSplitHub && existing && existing.genome &&
+                    existing.genome !== file.meta.genome) {
                 // If the existing hub is an assembly hub, adopt its genome
                 // automatically rather than erroring - the UI hid the picker
                 // for this case, so the mismatch is just stale metadata.
