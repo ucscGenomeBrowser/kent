@@ -422,7 +422,8 @@ if [ "${primaryDone}" -eq 0 ]; then
     printf "# ERROR: in progress or failed, ${query} -> ${target}:\n" 1>&2
     ls -ogd ${tRoot}/miniMap2${Query}.* | sed -e 's/^/# /;' 1>&2
     printf "# check the do.log there, and finish it with, for example:\n" 1>&2
-    printf "#   ${doMiniMap2} -continue=<step> -buildDir=<dir> ${tId} ${qId}\n" 1>&2
+    printf "#   ${doMiniMap2} -buildDir=<dir> ${tId} ${qId}\n" 1>&2
+    printf "# which starts at the first step that is not done yet\n" 1>&2
     printf "# or remove it to start over\n" 1>&2
     exit 255
   fi

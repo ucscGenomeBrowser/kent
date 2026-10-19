@@ -99,9 +99,12 @@ options:
 ";
   print STDERR $stepper->getOptionHelp();
   print STDERR <<_EOF_
-    -buildDir dir         Use dir instead of default
+    -buildDir dir         Use dir instead of the build the dateless
+                          miniMap2.\$toDb symlink points at, or, when there
+                          is none yet, a new
                           $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/miniMap2\$ToDb.\$date
-                          (necessary when continuing at a later date).
+                          (give it to make a separate new build of a pair
+                          that already has one).
     -target2Bit /path/target.2bit  Full path to target sequence (fromDb)
     -query2Bit /path/query.2bit    Full path to query sequence (toDb)
     -targetSizes /path/target.chrom.sizes  Full path to target chrom.sizes (fromDb)
@@ -191,12 +194,20 @@ miniMap2.\$toDb -> the dated build directory (miniMap2.\$fromDb -> the
 miniMap2.\$fromDb.swap directory for a -swap run), named with the actual
 db/accession, not ucfirst(), so later runs/tools can find \"the\" build for
 a pair without knowing its date.
+Safe to run again: without -continue, steps whose results are already in
+the build directory are skipped and the run starts at the first step that
+isn't done (load, at the latest -- it skips the bigBeds it already built
+and only replaces symlinks that don't already point at the right file).
+So rerunning a finished build with -liftTableLoad only installs it.  An
+explicit -continue step runs that step even so, subject to its own
+'already done' check.
 All operations are performed in the build directory, which defaults to
 $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/miniMap2\$ToDb.\$date
 for a plain UCSC database \$fromDb, or to
 .../asmHubs/{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/<asmId>/trackData/miniMap2\$ToDb.\$date
 when \$fromDb is a GenArk accession (matching how pairwise lastz builds are
-organized under GenArk) -- unless -buildDir is given.
+organized under GenArk) -- unless the miniMap2.\$toDb symlink already
+points at a build, or -buildDir is given.
 ";
   # Detailed help (-help):
   print STDERR "
@@ -334,7 +345,7 @@ sub doAlign {
   &HgAutomate::mustMkdir($runDir);
 
   my $pafDir = "$runDir/paf";
-  &HgAutomate::checkCleanSlate('align', 'chain', $pafDir, 'run.time');
+  &HgAutomate::checkCleanSlate('align', 'chain', $pafDir, "$runDir/run.time");
 
   my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
 
@@ -477,7 +488,8 @@ sub doChain {
 
   my $pafDir = "$buildDir/run.mm2/paf";
   my $mm2DoneFile = "$buildDir/run.mm2/run.time";
-  &HgAutomate::checkCleanSlate('chain', 'net', 'chainRaw');
+  &HgAutomate::checkCleanSlate('chain', 'net', "$runDir/chainRaw",
+                               "$runDir/run.time");
   &HgAutomate::checkExistsUnlessDebug('align', 'chain',
 				      $pafDir, $mm2DoneFile);
 
@@ -561,12 +573,16 @@ chainNet $chainPath \\
     $tSz $qSz \\
     noClass.net /dev/null
 netChainSubset noClass.net $chainPath stdout \\
-| chainStitchId stdin stdout | gzip -c > $outDir/$overFile
+| chainStitchId stdin stdout | gzip -c > $outDir/tmp.$overFile
 
 # make quickLift chain:
-chainSwap  $outDir/$overFile stdout \\
+chainSwap  $outDir/tmp.$overFile stdout \\
    | chainToBigChain stdin $outDir/$tName.$qName.quick.chain.txt \\
          $outDir/$tName.$qName.quick.link.txt
+
+# The liftOver chain gets its real name last, since its existence is
+# what says this net finished (doMiniMap2.pl netDone()):
+mv $outDir/tmp.$overFile $outDir/$overFile
 _EOF_
   ;
 } # netFromChainBash
@@ -575,9 +591,10 @@ _EOF_
 # * step: net [workhorse]
 sub doNet {
   my $runDir = "$buildDir/axtChain";
-  my @outs = ("$runDir/$tDb.$qDb.all.chain.gz",
-	      "$runDir/noClass.net");
-  &HgAutomate::checkCleanSlate('net', 'load', @outs);
+  # The liftOver chain is the last thing this step writes, so it alone
+  # says the step finished (see netDone()); an all.chain.gz or
+  # noClass.net left by an interrupted net run is simply rewritten.
+  &HgAutomate::checkCleanSlate('net', 'load', "$runDir/$liftOverChainFile");
   &HgAutomate::checkExistsUnlessDebug('chain', 'net', "$runDir/run/chainRaw/");
 
   my $whatItDoes =
@@ -627,6 +644,25 @@ _EOF_
 
 
 #########################################################################
+# linkToBash() -> bash source for a linkTo function: 'linkTo target link'
+#   makes link a symlink to target, but leaves it alone when it already
+#   points there, so rerunning the load step doesn't remove and remake
+#   symlinks that are already correct.
+sub linkToBash {
+  return <<'_EOF_';
+# linkTo target link -- replace link only when it doesn't already point
+# at target:
+linkTo() {
+  if [ "$(readlink "$2" 2>/dev/null || true)" != "$1" ]; then
+    rm -f "$2"
+    ln -s "$1" "$2"
+  fi
+}
+
+_EOF_
+} # linkToBash
+
+#########################################################################
 # * step: load [dbHost]
 sub doLoad {
   my $runDir = "$buildDir/axtChain";
@@ -653,19 +689,24 @@ addQuickLift.py both work fine with obsolete/nonexistent ones by design
   # deleted once this step has already consumed them successfully.  So each
   # bigBed-building block below is skipped if its own final .bb already
   # exists; only the symlink-install and hgcentral-registration parts always
-  # rerun.  (Force a true rebuild by removing the relevant .bb first.)
-  my $chainBigBedsDone = -s "$runDir/chain$QDb.bb";
-  my $quickBigBedsDone = -s "$runDir/$tDb.$qDb.quick.bb";
+  # rerun, and the symlinks are only replaced when they don't already point
+  # at the right file.  (Force a true rebuild by removing the relevant .bb
+  # first.)  Each block's marker is the last .bb it writes, so a block
+  # interrupted partway through is redone in full.
+  my $chainBigBedsDone = -s "$runDir/chainLiftOver${QDb}Link.bb";
+  my $quickBigBedsDone = -s "$runDir/$tDb.$qDb.quickLink.bb";
 
-  $bossScript->add(<<_EOF_
+  if (! ($chainBigBedsDone && $quickBigBedsDone)) {
+    $bossScript->add(<<_EOF_
 wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
 wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
 _EOF_
-  );
+    );
+  }
 
   if ($chainBigBedsDone) {
     $bossScript->add(<<_EOF_
-# $runDir/chain$QDb.bb already exists -- skipping rebuild of the chain/
+# $runDir/chainLiftOver${QDb}Link.bb already exists -- skipping rebuild of the chain/
 # chainLiftOver bigChain pairs (remove it and rerun 'load' to force a
 # rebuild; their sources, all.chain.gz and $liftOverChainFile, are never
 # deleted by this step, so that is always safe).
@@ -708,6 +749,37 @@ _EOF_
     );
   }
 
+  # quickLift bigBed pair: built for any target/query pair -- it only
+  # needs the quick.chain.txt/quick.link.txt doNet already produced,
+  # plus $qSizes, no dependency on \$tDb being a real database.  This block
+  # deletes those .txt sources once it succeeds, so it must not be rerun
+  # blindly once $tDb.$qDb.quickLink.bb already exists -- they'd be gone.
+  # Built before the install block below, so the symlinks and
+  # addQuickLift.py only ever refer to finished files.
+  if ($quickBigBedsDone) {
+    $bossScript->add(<<_EOF_
+# $runDir/$tDb.$qDb.quickLink.bb already exists -- skipping rebuild of the
+# quickLift bigBed pair (its sources, quick.chain.txt/quick.link.txt, are
+# deleted once this succeeds, so it can't safely rebuild from scratch here;
+# remove $runDir/$tDb.$qDb.quickLink.bb and rerun the 'net'/swap step first
+# if you really need to regenerate it).
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
+
+qBases=`ave -col=2 $qSizes | grep "^total" | awk '{printf "%d", \$2}'`
+qCovered=`bigBedInfo $tDb.$qDb.quickLink.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+qPerCent=`echo \$qCovered \$qBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPerCent" > $buildDir/fb.$tDb.quick${QDb}Link.txt
+
+rm -f $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
+_EOF_
+    );
+  }
+
   # Where the liftOver chain / quickLift bigBeds get linked, and what gets
   # registered in hgcentral, depends only on whether $tDb LOOKS like a
   # GenArk accession (a plain name-pattern check, same as everywhere else
@@ -739,26 +811,23 @@ _EOF_
     my $accessionPath = &asmIdToPath($tAccession) . "/$tAccession";
     my $accLevelDir = "$HgAutomate::clusterData/asmHubs/$accessionPath";
     my $gbdbGenarkDir = "/gbdb/genark/$accessionPath";
+    $bossScript->add(&linkToBash());
     $bossScript->add(<<_EOF_
 # GenArk assembly: link into the hub-build directory, then the
 # accession-level convenience symlinks, then the public gbdb symlinks --
 # same three-tier chain installLinks() uses.
 mkdir -p $tBuildDir/liftOver $tBuildDir/quickLift
-rm -f $tBuildDir/liftOver/$liftOverChainFile
-ln -s $runDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
-rm -f $tBuildDir/quickLift/$qDb.bb $tBuildDir/quickLift/$qDb.link.bb
-ln -s $runDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
-ln -s $runDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
+linkTo $runDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
+linkTo $runDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
+linkTo $runDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
 
 mkdir -p $accLevelDir
-rm -f $accLevelDir/liftOver $accLevelDir/quickLift
-ln -s $tBuildDir/liftOver $accLevelDir/liftOver
-ln -s $tBuildDir/quickLift $accLevelDir/quickLift
+linkTo $tBuildDir/liftOver $accLevelDir/liftOver
+linkTo $tBuildDir/quickLift $accLevelDir/quickLift
 
 mkdir -p $gbdbGenarkDir
-rm -f $gbdbGenarkDir/liftOver $gbdbGenarkDir/quickLift
-ln -s $accLevelDir/liftOver $gbdbGenarkDir/liftOver
-ln -s $accLevelDir/quickLift $gbdbGenarkDir/quickLift
+linkTo $accLevelDir/liftOver $gbdbGenarkDir/liftOver
+linkTo $accLevelDir/quickLift $gbdbGenarkDir/quickLift
 
 # Register in hgcentral (works fine without a real MySQL database for
 # \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
@@ -767,31 +836,32 @@ $Bin/addQuickLift.py $tDb $qDb $gbdbGenarkDir/quickLift/$qDb.bb
 _EOF_
     );
   } else {
+    $bossScript->add(&linkToBash());
     $bossScript->add(<<_EOF_
 # Not a GenArk accession -- native-db-style layout (same as
 # installLinks()'s native-db branch), whether or not \$tDb is actually a
 # real MySQL database (e.g. hs1: a full sequence build, no database).
 mkdir -p $liftOverChainDir
-rm -f $liftOverChainPath
-ln -s $runDir/$liftOverChainFile $liftOverChainPath
+linkTo $runDir/$liftOverChainFile $liftOverChainPath
+# md5sum.txt is only rewritten when this chain's entry changes:
 tmpFile=`mktemp -t -p /tmp tmpMd5.XXXXXX`
 grep -v $liftOverChainFile $liftOverChainDir/md5sum.txt > \$tmpFile || true
 md5sum $runDir/$liftOverChainFile | sed -e "s#$runDir/##;" >> \$tmpFile
-sort \$tmpFile > $liftOverChainDir/md5sum.txt
+sort -o \$tmpFile \$tmpFile
+if ! cmp -s \$tmpFile $liftOverChainDir/md5sum.txt; then
+  cat \$tmpFile > $liftOverChainDir/md5sum.txt
+fi
 rm -f \$tmpFile
 
 # Link from download area:
 mkdir -p $HgAutomate::goldenPath/$tDb/liftOver
-rm -f $HgAutomate::goldenPath/$tDb/liftOver/$liftOverChainFile
-ln -s $liftOverChainPath $HgAutomate::goldenPath/$tDb/liftOver/
+linkTo $liftOverChainPath $HgAutomate::goldenPath/$tDb/liftOver/$liftOverChainFile
 
 # Link from genome browser fileserver:
 mkdir -p $HgAutomate::gbdb/$tDb/liftOver $HgAutomate::gbdb/$tDb/quickLift
-rm -f $HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile
-ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
-rm -f $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
-ln -s $runDir/$tDb.$qDb.quick.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
-ln -s $runDir/$tDb.$qDb.quickLink.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
+linkTo $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile
+linkTo $runDir/$tDb.$qDb.quick.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
+linkTo $runDir/$tDb.$qDb.quickLink.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
 
 # Register in hgcentral (works fine without a real MySQL database for
 # \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
@@ -801,34 +871,10 @@ _EOF_
     );
   }
 
-  # quickLift bigBed pair: built for any target/query pair -- it only
-  # needs the quick.chain.txt/quick.link.txt doNet already produced,
-  # plus $qSizes, no dependency on \$tDb being a real database.  This block
-  # deletes those .txt sources once it succeeds, so it must not be rerun
-  # blindly once $tDb.$qDb.quick.bb already exists -- they'd be gone.
-  if ($quickBigBedsDone) {
-    $bossScript->add(<<_EOF_
-# $runDir/$tDb.$qDb.quick.bb already exists -- skipping rebuild of the
-# quickLift bigBed pair (its sources, quick.chain.txt/quick.link.txt, are
-# deleted once this succeeds, so it can't safely rebuild from scratch here;
-# remove $runDir/$tDb.$qDb.quick.bb and rerun the 'net'/swap step first if
-# you really need to regenerate it).
+  $bossScript->add(<<_EOF_
+rm -f bigChain.as bigLink.as
 _EOF_
-    );
-  } else {
-    $bossScript->add(<<_EOF_
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
-
-qBases=`ave -col=2 $qSizes | grep "^total" | awk '{printf "%d", \$2}'`
-qCovered=`bigBedInfo $tDb.$qDb.quickLink.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
-qPerCent=`echo \$qCovered \$qBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPerCent" > $buildDir/fb.$tDb.quick${QDb}Link.txt
-
-rm -f bigChain.as bigLink.as $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
-_EOF_
-    );
-  }
+  );
 
   $bossScript->execute();
 } # doLoad
@@ -942,10 +988,7 @@ _EOF_
 
   # Stable, dateless pointer to this swap build, in $origQDb's own root
   # (relative target, so it stays correct if this tree gets mirrored):
-  my $swapBase = basename($swapDir);
-  my $stableLink = &asmRoot($origQDb) . "/miniMap2.$origTDb";
-  &HgAutomate::run("rm -f $stableLink");
-  &HgAutomate::run("ln -s $swapBase $stableLink");
+  &refreshLink(basename($swapDir), &asmRoot($origQDb) . "/miniMap2.$origTDb");
 } # doSwap
 
 
@@ -1105,6 +1148,57 @@ sub estimateDivergence {
 } # estimateDivergence
 
 #########################################################################
+# refreshLink($target, $link): make $link a symlink to $target, leaving
+# it alone when it already points there.
+sub refreshLink {
+  my ($target, $link) = @_;
+  return if (-l $link && readlink($link) eq $target);
+  &HgAutomate::run("rm -f $link");
+  &HgAutomate::run("ln -s $target $link");
+} # refreshLink
+
+#########################################################################
+# Rerunning without -continue: each of these says a step's results are
+# already in $buildDir, using a file that the step writes last and that
+# the cleanup step leaves in place (cleanup removes run.mm2/paf/ and
+# axtChain/run/chainRaw/, which is why checkCleanSlate() alone did not
+# stop a rerun of a finished build from aligning again).
+sub alignDone { return -s "$buildDir/run.mm2/run.time"; }
+sub chainDone { return -s "$buildDir/axtChain/run/run.time"; }
+sub netDone   { return -s "$buildDir/axtChain/$liftOverChainFile"; }
+
+# firstUndoneStep() -> the first step whose results aren't in $buildDir
+#   yet.  When align, chain and net are all done, that is 'load': load
+#   skips the bigBeds it already built and cleanup only removes files, so
+#   both are cheap and safe to run again.  Dies when a cluster step was
+#   started but didn't finish, since that needs a look at its para batch,
+#   not a new one.
+sub firstUndoneStep {
+  return 'load' if (&netDone());
+  return 'net' if (&chainDone());
+  if (&alignDone()) {
+    my $chainRunDir = "$buildDir/axtChain/run";
+    if (-d "$chainRunDir/chainRaw") {
+      die "chain: $chainRunDir/chainRaw exists but $chainRunDir/run.time " .
+	"does not -- the chain cluster run was started and did not finish.\n" .
+	"Check it with 'para check' in $chainRunDir, finish it there " .
+	"('para push', then 'para time > run.time'), and run this again;\n" .
+	"or remove $chainRunDir/chainRaw to redo the chain step.\n";
+    }
+    return 'chain';
+  }
+  my $alignRunDir = "$buildDir/run.mm2";
+  if (-d "$alignRunDir/paf") {
+    die "align: $alignRunDir/paf exists but $alignRunDir/run.time does " .
+      "not -- the align cluster run was started and did not finish.\n" .
+      "Check it with 'para check' in $alignRunDir, finish it there " .
+      "('para push', then 'para time > run.time'), and run this again;\n" .
+      "or remove $alignRunDir/paf to redo the align step.\n";
+  }
+  return 'align';
+} # firstUndoneStep
+
+#########################################################################
 # main
 
 # Prevent "Suspended (tty input)" hanging:
@@ -1129,8 +1223,27 @@ $ramG = $opt_ram ? $opt_ram : $ramG;
 
 my $date = `date +%Y-%m-%d`;
 chomp $date;
-$buildDir = $opt_buildDir ? $opt_buildDir :
-  &asmRoot($tDb) . "/miniMap2${QDb}.$date";
+# With no -buildDir, use the build the dateless miniMap2.$qDb symlink
+# already points at, if there is one -- otherwise a rerun on a later day
+# would start a new dated build and align everything again.  Give
+# -buildDir to make a separate new build instead.
+my $stableLink = &asmRoot($tDb) . "/miniMap2.$qDb";
+if ($opt_buildDir) {
+  $buildDir = $opt_buildDir;
+} elsif (-l $stableLink && -d $stableLink) {
+  my $linkTarget = readlink($stableLink);
+  if ($linkTarget =~ m/\.swap$/) {
+    die "$stableLink -> $linkTarget: the $tDb to $qDb chain already " .
+	"exists as the -swap of a $qDb to $tDb build.  Give -buildDir " .
+	"to make a separate $tDb to $qDb alignment anyway.\n";
+  }
+  $buildDir = ($linkTarget =~ m#^/#) ? $linkTarget :
+    &asmRoot($tDb) . "/$linkTarget";
+  &HgAutomate::verbose(1, "# using existing build $buildDir " .
+	"($stableLink)\n");
+} else {
+  $buildDir = &asmRoot($tDb) . "/miniMap2${QDb}.$date";
+}
 
 if ($opt_swap) {
   # -swap reuses the primary run's already-completed axtChain/all.chain.gz
@@ -1152,19 +1265,41 @@ if (! -d $buildDir) {
   &HgAutomate::mustMkdir($buildDir);
 }
 
+# Stable, dateless pointer to this build (relative target, so it stays
+# correct if this tree gets mirrored).  Made before any step runs, so a
+# rerun after an interrupted build, even on a later day, finds the same
+# build directory.  pairMiniMap2.sh looks for the load step's fb.*.txt
+# files there, not just this link, to decide a build is finished.
+&refreshLink(basename($buildDir), $stableLink);
+
 &estimateDivergence();
+
+my $stopStep = $stepper->getStopStep();
+
+# Without -continue, pick up where this build left off instead of starting
+# over at align.  An explicit -continue still runs exactly the steps asked
+# for (each step's own checkCleanSlate() guards against redoing it).
+if (! $opt_continue) {
+  my $firstStep = &firstUndoneStep();
+  if ($firstStep ne 'align') {
+    if ($stepper->stepPrecedes($stopStep, $firstStep)) {
+      &HgAutomate::verbose(1, "\n *** Steps through '$stopStep' are " .
+	  "already done in $buildDir -- nothing to do.\n\n");
+      exit 0;
+    }
+    &HgAutomate::verbose(1, "# steps before '$firstStep' are already done " .
+	"in $buildDir, starting at '$firstStep'\n# (give -continue to run " .
+	"a step again)\n");
+    # HgStepManager has no setter, the same thing processOptions() does
+    # for -continue:
+    $stepper->{'startStep'} = $firstStep;
+  }
+}
 
 $stepper->execute();
 
-my $stopStep = $stepper->getStopStep();
 my $upThrough = ($stopStep eq 'cleanup') ? "" :
   "  (through the '$stopStep' step)";
-
-# Stable, dateless pointer to this build, refreshed on every run
-# (relative target, so it stays correct if this tree gets mirrored):
-my $stableLink = &asmRoot($tDb) . "/miniMap2.$qDb";
-&HgAutomate::run("rm -f $stableLink");
-&HgAutomate::run("ln -s " . basename($buildDir) . " $stableLink");
 
 &HgAutomate::verbose(1,
 	"\n *** All done!$upThrough\n");
