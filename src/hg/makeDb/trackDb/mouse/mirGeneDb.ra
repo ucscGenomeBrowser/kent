@@ -4,6 +4,7 @@ shortLabel MirGeneDB
 longLabel MirGeneDB curated microRNA genes with arms and predicted structure
 visibility hide
 type bigBed 6 + 13
+color 0,100,0
 bigDataUrl /gbdb/$D/mirGeneDb/mirGeneDb.bb
 decorator.default.bigDataUrl /gbdb/$D/mirGeneDb/mirGeneDbArms.bb
 decorator.default.blockMode Overlay
