@@ -2035,46 +2035,43 @@ return (struct slList *)rmskOutLoad(row);
 }
 
 struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char *chrom,
-    int start, int end)
+    int start, int end, struct hash *chainHash)
 /* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
- * ranges that map into chrom:start-end on the reference, and map each one onto the reference.
- * genoName, genoStart, genoEnd and strand are on the reference afterwards.  A row that does
- * not map is dropped.  Free with rmskOutFreeList(). */
+ * ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:  lift each
+ * one with quickLiftRmskOut() through quickLiftChainHashForItem(chainHash, row).  chainHash,
+ * from newHash(), is filled with the chains that do the lifting. */
 {
 char *liftDb = trackDbSetting(tdb, "quickLiftDb");
 char *table;
 quickLiftResolveTable(tdb, trackTable, &table, &liftDb);
-struct hash *chainHash = newHash(8);
 struct sqlConnection *conn = hAllocConn(liftDb);
 char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
 // rmskOutLoad reads 16 columns, row[0] through row[15]
 struct rmskOut *roList = (struct rmskOut *)quickLiftSql(conn, quickLiftFile, table, chrom,
     start, end, NULL, NULL, rmskOutLoadItem, 16, chainHash);
 hFreeConn(&conn);
+return roList;
+}
 
-struct rmskOut *ro, *next, *liftedList = NULL;
-for (ro = roList; ro != NULL; ro = next)
-    {
-    next = ro->next;
-    ro->next = NULL;
-
-    // liftOverRemapRange hands back a chrom name that belongs to the chain, so keep our own
-    // copy, which rmskOutFree can free like any other
-    char *liftedChrom;
-    char *error = liftOverRemapRange(quickLiftChainHashForItem(chainHash, ro), 0.0,
-                            ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
-                            0.001, &liftedChrom, (int *)&ro->genoStart, (int *)&ro->genoEnd,
-                            &ro->strand[0]);
-    if (error == NULL)
-        {
-        freeMem(ro->genoName);
-        ro->genoName = cloneString(liftedChrom);
-        slAddHead(&liftedList, ro);
-        }
-    else
-        rmskOutFree(&ro);
-    }
-return liftedList;
+boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro)
+/* Lift an rmsk row read from the assembly it came from onto the reference, in place:
+ * genoName, genoStart, genoEnd and strand.  repStart, repEnd and repLeft are left in the
+ * convention of the source strand, so save ro->strand first if they are to be read.  Returns
+ * FALSE, with the row unchanged, if it does not map. */
+{
+char *liftedChrom;
+int liftedStart, liftedEnd;
+char liftedStrand;
+if (liftOverRemapRange(chainHash, 0.0, ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
+                       0.001, &liftedChrom, &liftedStart, &liftedEnd, &liftedStrand) != NULL)
+    return FALSE;
+// liftOverRemapRange hands back its own copy of the chrom name
+freeMem(ro->genoName);
+ro->genoName = liftedChrom;
+ro->genoStart = liftedStart;
+ro->genoEnd = liftedEnd;
+ro->strand[0] = liftedStrand;
+return TRUE;
 }
 
 static struct slList *rmskJoinedLoadItem(char **row, int numFields)
@@ -2126,10 +2123,12 @@ boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *p
  * does not map, or maps to another sequence or strand than the first one that does, becomes
  * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
  * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
- * the reference chrom.  Returns FALSE, with the item partly changed, if no aligned block maps
- * or the ones that do land out of order. */
+ * the reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
+ * no aligned block maps, or the ones that do land out of order:  drop the item then. */
 {
 int blockCount = *pBlockCount;
+if (blockCount <= 0)
+    return FALSE;
 // the unaligned flanks are drawn past the aligned part:  keep whatever they reach beyond
 // their own sizes, which is how far the item's ends sit from the aligned part
 int first = ((blockCount > 0) && (blockRelStarts[0] < 0)) ? max(blockSizes[0], 0) : 0;
@@ -2160,12 +2159,19 @@ for (i = 0; i < blockCount; i++)
     char *liftChrom;
     char liftStrand;
     int liftStart, liftEnd;
-    if ((end > start) &&
+    boolean lifted = (end > start) &&
         (liftOverRemapRange(chainHash, 0.0, *pChrom, start, end, '+', 0.001, &liftChrom,
-                            &liftStart, &liftEnd, &liftStrand) == NULL) &&
-        ((newChrom == NULL) || (sameString(newChrom, liftChrom) && (newStrand == liftStrand))))
-        {
+                            &liftStart, &liftEnd, &liftStrand) == NULL);
+    boolean keep = lifted &&
+        ((newChrom == NULL) || (sameString(newChrom, liftChrom) && (newStrand == liftStrand)));
+    // liftOverRemapRange hands back its own copy of the chrom name:  keep the first block's
+    // and free the rest
+    if (keep && (newChrom == NULL))
         newChrom = liftChrom;
+    else if (lifted)
+        freeMem(liftChrom);
+    if (keep)
+        {
         newStrand = liftStrand;
         blockSizes[n] = size;
         blockRelStarts[n] = 0;
@@ -2224,9 +2230,11 @@ if (ok)
             }
         *pBlockCount = n;
         freeMem(*pChrom);
-        *pChrom = cloneString(newChrom);
+        *pChrom = newChrom;
+        newChrom = NULL;
         }
     }
+freeMem(newChrom);
 freeMem(newStarts);
 freeMem(newEnds);
 return ok;

@@ -10381,8 +10381,10 @@ printf("Alignment between C briggsae sequence %s (above) and C elegans chromosom
 fetchAndShowWaba("wabaCbr", name);
 }
 
-static void printRepeat(struct rmskOut *ro)
-/* Print the fields of one RepeatMasker item. */
+static void printRepeat(struct rmskOut *ro, char repStrand)
+/* Print the fields of one RepeatMasker item.  repStrand is the strand repStart, repEnd and
+ * repLeft follow, which for a quickLifted item is the strand in the assembly it came from,
+ * not ro->strand. */
 {
 printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
     ro->repName, ro->repName);
@@ -10394,10 +10396,10 @@ printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
 printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
 printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
 printf("<B>Begin in repeat:</B> %d<BR>\n",
-       (ro->strand[0] == '-' ? ro->repLeft : ro->repStart));
+       (repStrand == '-' ? ro->repLeft : ro->repStart));
 printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
 printf("<B>Left in repeat:</B> %d<BR>\n",
-       (ro->strand[0] == '-' ? -ro->repStart : -ro->repLeft));
+       (repStrand == '-' ? -ro->repStart : -ro->repLeft));
 printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
          ro->repName);
 }
@@ -10407,15 +10409,25 @@ static void doLiftedRepeat(struct trackDb *tdb, char *repeat, int start)
  * map into the item's range and print the one that lands where it was clicked. */
 {
 int end = cartInt(cart, "t");
+struct hash *chainHash = newHash(8);
 struct rmskOut *ro, *roList = quickLiftSqlLoadRmsk(tdb, trackHubSkipHubName(tdb->table),
-    seqName, start, end);
+    seqName, start, end, chainHash);
+boolean found = FALSE;
 
 for (ro = roList; ro != NULL; ro = ro->next)
     {
-    if (sameString(ro->repName, repeat) && sameString(ro->genoName, seqName) &&
-        (ro->genoStart == start) && (ro->genoEnd == end))
-        printRepeat(ro);
+    // the repeat coordinates follow the strand in the assembly it came from
+    char sourceStrand = ro->strand[0];
+    if (sameString(ro->repName, repeat) &&
+        quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) &&
+        sameString(ro->genoName, seqName) && (ro->genoStart == start) && (ro->genoEnd == end))
+        {
+        printRepeat(ro, sourceStrand);
+        found = TRUE;
+        }
     }
+if (!found)
+    htmlPrintf("No repeat %s found at %s:%d-%d.<BR>\n", repeat, seqName, start + 1, end);
 htmlPrintf("<BR>This repeat comes from %s and is mapped onto %s by quickLift.<BR>\n",
            trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
 rmskOutFreeList(&roList);
@@ -10454,7 +10466,7 @@ if (offset >= 0)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             ro = rmskOutLoad(row+hasBin);
-            printRepeat(ro);
+            printRepeat(ro, ro->strand[0]);
             }
         }
     hFreeConn(&conn);

@@ -20,6 +20,7 @@
 #     repeat is repLeft, 1, and Left in repeat is -repStart, 3), its lifted hg38 position,
 #     and the line saying it comes from hg19.  Read from hg38's table at the lifted start, as
 #     the native handler would, there is no MER58B there and the page has none of these.
+#   * a '-' chain is rm37437.minus.
 #   * gate off:  the convert leaves rmsk out, as before #37437.
 # Deliberately not asserted:  the number of repeats in the window, which a RepeatMasker
 # update to either assembly would move.

@@ -287,8 +287,14 @@ const char *data_style = "style=\"padding:0px 6px;\"";
 int bedSize = bbi->fieldCount;
 char *fields[bedSize];
 char startBuf[17], endBuf[17];
+if (bedSize < 14)
+    errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
+             bedSize);
 char sourceChrom[256];
 char *rowChrom = chrom;
+// the item's place in the assembly it came from, where the alignments are read
+char *alignChrom = chrom;
+int alignQueryStart = start, alignQueryEnd = end;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     if (lifted)
@@ -300,20 +306,20 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                                            bedSize);
     if ( sameOk(fields[12], item) )
         {
+        if (lifted)
+            {
+            // with multi-chain lifting the same item can come back once for each chain, so
+            // take the copy that lands where it was clicked
+            alignQueryStart = bb->start;
+            alignQueryEnd = bb->end;
+            if (!liftFields(quickLiftChainHashForItem(chainHash, bb), fields) ||
+                (sqlSigned(fields[6]) != start))
+                continue;
+            alignChrom = cloneString(rowChrom);
+            }
         found = TRUE;
         break;
         }
-    }
-
-// the item's place in the assembly it came from, where the alignments are read
-char *alignChrom = chrom;
-int alignQueryStart = start, alignQueryEnd = end;
-if (found && lifted)
-    {
-    alignChrom = cloneString(rowChrom);
-    alignQueryStart = bb->start;
-    alignQueryEnd = bb->end;
-    found = liftFields(quickLiftChainHashForItem(chainHash, bb), fields);
     }
 
 if ( found )
@@ -396,7 +402,8 @@ bbiFileClose(&bbi);
  * Locate *.align data for this element
  */
 char *xrefDataUrl = trackDbSetting(tdb, "xrefDataUrl");
-if ( xrefDataUrl ) 
+// a lifted item that was not found has no place in the assembly it came from to read
+if ( xrefDataUrl && (found || !lifted) )
     {
     //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
     struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);

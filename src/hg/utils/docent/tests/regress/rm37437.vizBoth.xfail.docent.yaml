@@ -1,0 +1,42 @@
+# #37437 -- a quickLifted RepeatMasker Viz. track drawn next to the native one.
+#
+# rmskJoinedTrack.c keeps each track's detail layout in subTracksHash.  It was keyed by table
+# name, and a lifted track's table name has no hub prefix, so the lifted rmskJoinedCurrent and
+# the native one used the same entry:  the second to load overwrote the first, the first to
+# draw drew the other's items and freed them, and the other drew nothing.  It is keyed by
+# track name now.  Found in code review.
+#
+# Where:  mm10 RepeatMasker Viz. lifted onto hg38 chr8:67,014,455-67,029,150, with hg38's own
+# RepeatMasker Viz. on as well, both in full at detail scale (30 kb or less).
+#   * the native row has hg38's MER5A, id 4075899.
+#   * the lifted row has mm10's item 9927 (an Alu at mm10 chr1:10006482) at 67021509-67021650,
+#     and not hg38's 4075899, which is what it showed with the shared entry.
+#
+# GATE: browser.quickLiftRmsk, off by default, a cart variable as well as an hg.conf setting,
+# so the script turns it on for itself.
+#   grep browser.quickLiftRmsk /usr/local/apache/cgi-bin/hg.conf
+proof:
+  - "assertion-only 2026-10-19 -- written with the fix, on branch qlRmsk37437"
+  - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 9: the lifted row is a plain bed, with no box for 9927 at its lifted aligned range"
+  - "sandbox-ab 2026-10-19 -- park 37437:  passes with the fixed hgTracks;  with the hgTracks of 1d8bbc31d4b, which keyed the layout by table, it fails at step 9:  the lifted row carries hg38's 4075899, and neither the native MER5A nor mm10's 9927 is drawn"
+
+target: genome-test
+db: mm10
+position: chr1:9998000-10012000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=mm10&position=chr1%3A9998000-10012000&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {rmskJoinedCurrent: full}
+  - expect: {rows: [rmskJoinedCurrent], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr8:67014455-67029150
+  - track: {rmskJoinedCurrent: full}
+  - expect:
+      noText: ["Warning/Error"]
+      has:
+        - 'area[href*="g=rmskJoinedCurrent&"][href*="i=4075899"]'
+        - 'area[href*="_rmskJoinedCurrent&"][href*="o=67021509&t=67021650"][href*="i=9927"]'
+      noHas: 'area[href*="_rmskJoinedCurrent&"][href*="i=4075899"]'

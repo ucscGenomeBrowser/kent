@@ -224,11 +224,17 @@ boolean quickLiftRmskEnabled(struct cart *cart);
  * says browser.quickLiftRmsk=on, and a cart variable of the same name overrides that. */
 
 struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char *chrom,
-    int start, int end);
+    int start, int end, struct hash *chainHash);
 /* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
- * ranges that map into chrom:start-end on the reference, and map each one onto the reference.
- * genoName, genoStart, genoEnd and strand are on the reference afterwards.  A row that does
- * not map is dropped.  Free with rmskOutFreeList(). */
+ * ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:  lift each
+ * one with quickLiftRmskOut() through quickLiftChainHashForItem(chainHash, row).  chainHash,
+ * from newHash(), is filled with the chains that do the lifting. */
+
+boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro);
+/* Lift an rmsk row read from the assembly it came from onto the reference, in place:
+ * genoName, genoStart, genoEnd and strand.  repStart, repEnd and repLeft are left in the
+ * convention of the source strand, so save ro->strand first if they are to be read.  Returns
+ * FALSE, with the row unchanged, if it does not map. */
 
 boolean quickLiftIsLiftedRmskJoined(struct cart *cart, struct trackDb *tdb);
 /* Return TRUE if tdb is a quickLifted RepeatMasker Viz. track (rmskJoined) to draw and click
@@ -251,8 +257,8 @@ boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *p
  * does not map, or maps to another sequence or strand than the first one that does, becomes
  * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
  * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
- * the reference chrom.  Returns FALSE, with the item partly changed, if no aligned block maps
- * or the ones that do land out of order. */
+ * the reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
+ * no aligned block maps, or the ones that do land out of order:  drop the item then. */
 
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,

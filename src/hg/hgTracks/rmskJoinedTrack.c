@@ -408,7 +408,9 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
              } // else if ( tg->visibility == tvSquish ...
         } // while ( detailList )
     // Create Hash Entry
-    hashReplace(subTracksHash, tg->table, st);
+    // keyed by track, not table:  a quickLifted track has the same table name as the native
+    // one, and the two would share and free each other's levels, refs #37437
+    hashReplace(subTracksHash, tg->track, st);
     slReverse(&fullRIList);
     tg->items = fullRIList;
     } // if ((tg->visibility == tvFull || ...
@@ -479,7 +481,7 @@ setWg();
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     // Lookup the depth of this subTrack and report it
-    struct subTrack *st = hashFindVal(subTracksHash, tg->table);
+    struct subTrack *st = hashFindVal(subTracksHash, tg->track);
     if (st)
         {
         tg->height = (st->levelCount * rmskJoinedItemHeight(tg, NULL));
@@ -1327,7 +1329,7 @@ struct rmskJoined *rm;
 if (vis == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     int level = yOff;
-    struct subTrack *st = hashFindVal(subTracksHash, tg->table);
+    struct subTrack *st = hashFindVal(subTracksHash, tg->track);
     if (!st)
 	return;
 

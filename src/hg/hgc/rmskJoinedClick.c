@@ -240,8 +240,8 @@ void doJRepeat (struct trackDb *tdb, char *repeat)
 {
 const char *data_style = "style=\"padding:0px 6px;\"";
 char *table = (tdb ? tdb->table : tdb->track);
-char outTable[64];
-char alignTable[64];
+char outTable[64] = "";
+char alignTable[64] = "";
 
 // a quickLifted track reads the tables of the assembly it came from, at the item's position
 // there, refs #37437
@@ -344,7 +344,7 @@ if (offset >= 0)
     /*
      * Locate *.out annotation for this element
      */
-    if (hTableExists (qDb, outTable))
+    if (isNotEmpty(outTable) && hTableExists (qDb, outTable))
 	{
 	int isFirst = 0;
 	struct rmskOut2 *ro;
@@ -422,7 +422,7 @@ if (offset >= 0)
     /*
      * Locate *.align data for this element
      */
-    if (hTableExists (qDb, alignTable))
+    if (isNotEmpty(alignTable) && hTableExists (qDb, alignTable))
 	{
 	struct rmskAlign *ro;
 	if (!hFindSplitTable (qDb, qChrom, alignTable, qTable, sizeof(qTable), &hasBin))

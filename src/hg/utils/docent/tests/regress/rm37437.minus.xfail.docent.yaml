@@ -1,0 +1,45 @@
+# #37437 -- the details page of a quickLifted rmsk item on a '-' chain.
+#
+# repStart, repEnd and repLeft in an rmsk row follow the row's strand:  on a '-' strand
+# repeat, Begin in repeat is repLeft and Left in repeat is -repStart.  A lift through a '-'
+# chain flips the row's strand but not those fields, so doLiftedRepeat() in hg/hgc/hgc.c
+# keeps the strand from the assembly the row came from and hands it to printRepeat().  The
+# first version picked them by the lifted strand and printed -13 and -92 here.  Found in
+# code review;  rm37437 has only '+' chain clicks, which could not see it.
+#
+# Where:  mm10 rmsk lifted onto hg38 at chr8:9 Mb.  mm10's MER5B at chr8:35482122-35482201
+# is '-', repStart -13, repEnd 165, repLeft 92, and lands on hg38 at 9012070-9012180 as '+'.
+# A script of its own, because a lift onto hg38 earlier in the same cart leaves a second
+# lifted rmsk row there, and an item click names the row only by its suffix.
+#
+# GATE: browser.quickLiftRmsk, off by default, a cart variable as well as an hg.conf setting,
+# so the script turns it on for itself.
+#   grep browser.quickLiftRmsk /usr/local/apache/cgi-bin/hg.conf
+proof:
+  - "assertion-only 2026-10-19 -- written with the fix, on branch qlRmsk37437"
+  - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 8: the lifted rmsk row is not drawn"
+  - "sandbox-ab 2026-10-19 -- park 37437:  passes with the fixed hgc;  with the hgc of 1d8bbc31d4b, which picked the repeat coordinates by the lifted strand, it fails at step 10 with 'Begin in repeat: -13'"
+
+target: genome-test
+db: mm10
+position: chr8:35475000-35490000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=mm10&position=chr8%3A35475000-35490000&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {rmsk: full}
+  - expect: {rows: [rmsk], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr8:9000000-9015000
+  - expect:
+      rows: [rmsk]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=9012070&t=9012180"][href*="i=MER5B"]'
+  - click: {track: rmsk, item: "MER5B"}
+  - expect:
+      url: "hgc"
+      text: ["Begin in repeat: 92", "Left in repeat: 13", "chr8:9012071-9012180",
+             "This repeat comes from mm10 and is mapped onto hg38 by quickLift"]
+      noText: ["Warning/Error", "Begin in repeat: -13", "No repeat MER5B found"]

@@ -563,6 +563,29 @@ else
 }
 
 
+static void makeClassHashBR()
+/* Build classHashBR if it is not built yet.  bigRmskMethods() calls this on the main thread,
+ * because a bigRmsk track can load in a worker thread (a quickLifted one does), and two
+ * threads building it at once could each see the other's half-built hash.  The hash is
+ * filled before it is published for the same reason. */
+{
+if ( classHashBR != NULL )
+    return;
+struct classRecord *cr;
+int i, numClasses = ArraySize(rptClasses);
+struct hash *hash = newHash(6);
+for (i = 0; i < numClasses; ++i)
+    {
+    AllocVar(cr);
+    cr->className = rptClassNames[i];
+    cr->layoutLevel = i;
+    unsigned int colorInt = rmskJoinedClassColors[i];
+    cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+    hashAdd(hash, rptClasses[i], cr);
+    }
+classHashBR = hash;
+}
+
 static void bigRmskRecordFree(struct bigRmskRecord **pRm)
 /* Free a bigRmskRecord made by bigRmskLoadItems. */
 {
@@ -598,22 +621,7 @@ static void bigRmskLoadItems(struct track *tg)
  * of the layout to determine how many "items" to generate.  
  */
 {
-int i;
-if ( classHashBR == NULL )
-    {
-    struct classRecord *cr;
-    int numClasses = ArraySize(rptClasses);
-    classHashBR = newHash(6);
-    for (i = 0; i < numClasses; ++i)
-        {
-        AllocVar(cr);
-        cr->className = rptClassNames[i];
-        cr->layoutLevel = i;
-        unsigned int colorInt = rmskJoinedClassColors[i];
-        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-        hashAdd(classHashBR, rptClasses[i], cr);
-        }
-    }
+makeClassHashBR();
 
 struct bigRmskRecord *detailList = NULL;
 if (tg->isBigBed)
@@ -1849,6 +1857,7 @@ void bigRmskMethods(struct track *track, struct trackDb *tdb,
                   int wordCount, char *words[])
 {
 commonBigBedMethods(track, tdb, wordCount, words);
+makeClassHashBR();
 track->loadItems = bigRmskLoadItems;
 track->totalHeight = bigRmskTotalHeight;
 track->drawItems = bigRmskDrawItems;

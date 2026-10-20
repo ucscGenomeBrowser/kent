@@ -16,7 +16,8 @@
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
  * during repeatLoad, but rather query the database during the
- * actual drawing. */
+ * actual drawing.  A quickLifted track is the exception:  its rows are
+ * read and lifted into a list at drawing time, then freed. */
 
 static struct repeatItem *otherRepeatItem = NULL;
 static char *repeatClassNames[] =  {
@@ -123,11 +124,38 @@ if (baseWidth <= 100000)
     }
 }
 
-static boolean liftedRepeatInWindow(struct rmskOut *ro)
-/* A lifted repeat is read over padded source ranges, so it may land outside the window. */
+static struct rmskOut *liftedRepeatList(struct track *tg)
+/* The rows of a quickLifted rmsk track, read from the assembly they came from and lifted
+ * onto the reference, that land in the window.  They are read over padded source ranges, so
+ * some land outside it. */
 {
-return sameString(ro->genoName, chromName) && (ro->genoStart < winEnd) &&
-       (ro->genoEnd > winStart);
+struct hash *chainHash = newHash(8);
+struct rmskOut *ro, *next, *liftedList = NULL;
+for (ro = quickLiftSqlLoadRmsk(tg->tdb, tg->table, chromName, winStart, winEnd, chainHash);
+     ro != NULL; ro = next)
+    {
+    next = ro->next;
+    ro->next = NULL;
+    if (quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) &&
+        sameString(ro->genoName, chromName) && (ro->genoStart < winEnd) &&
+        (ro->genoEnd > winStart))
+        slAddHead(&liftedList, ro);
+    else
+        rmskOutFree(&ro);
+    }
+return liftedList;
+}
+
+static void repeatDrawOneDense(struct hvGfx *hvg, int start, int end, int yOff, int heightPer,
+        int xOff, int width, int baseWidth, Color col)
+/* Draw one repeat as a box on the single row of dense mode. */
+{
+int x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
+int x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
+int w = x2-x1;
+if (w <= 0)
+    w = 1;
+hvGfxBox(hvg, x1, yOff, w, heightPer, col);
 }
 
 static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
@@ -140,7 +168,6 @@ struct repeatItem *ri;
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-int x1,x2,w;
 boolean isFull = (vis == tvFull);
 boolean lifted = quickLiftIsLifted(tg->tdb);
 struct rmskOut *ro, *liftedList = NULL;
@@ -152,7 +179,7 @@ if (lifted)
     // below would read the table of the same name in this assembly, so draw nothing.
     if (!quickLiftRmskEnabled(cart))
         return;
-    liftedList = quickLiftSqlLoadRmsk(tg->tdb, tg->table, chromName, winStart, winEnd);
+    liftedList = liftedRepeatList(tg);
     }
 
 struct sqlConnection *conn = lifted ? NULL : hAllocConn(database);
@@ -175,8 +202,7 @@ if (isFull)
     if (lifted)
         {
         for (ro = liftedList; ro != NULL; ro = ro->next)
-            if (liftedRepeatInWindow(ro))
-                repeatDrawOneFull(tg, hvg, ro, hash, overrideColor, xOff, width, baseWidth);
+            repeatDrawOneFull(tg, hvg, ro, hash, overrideColor, xOff, width, baseWidth);
         }
     else
         {
@@ -194,16 +220,8 @@ else if (lifted)
     {
     /* Do black and white on single track. */
     for (ro = liftedList; ro != NULL; ro = ro->next)
-        {
-        if (!liftedRepeatInWindow(ro))
-            continue;
-        x1 = roundingScale(ro->genoStart-winStart, width, baseWidth)+xOff;
-        x2 = roundingScale(ro->genoEnd-winStart, width, baseWidth)+xOff;
-        w = x2-x1;
-        if (w <= 0)
-            w = 1;
-        hvGfxBox(hvg, x1, yOff, w, heightPer, overrideColor ? overrideColor : MG_BLACK);
-        }
+        repeatDrawOneDense(hvg, ro->genoStart, ro->genoEnd, yOff, heightPer, xOff, width,
+                           baseWidth, overrideColor ? overrideColor : MG_BLACK);
     }
 else
     {
@@ -225,12 +243,8 @@ else
 	    {
 	    int start = sqlUnsigned(row[0]);
 	    int end = sqlUnsigned(row[1]);
-	    x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
-	    x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
-	    w = x2-x1;
-	    if (w <= 0)
-		w = 1;
-	    hvGfxBox(hvg, x1, yOff, w, heightPer, overrideColor ? overrideColor : MG_BLACK);
+	    repeatDrawOneDense(hvg, start, end, yOff, heightPer, xOff, width, baseWidth,
+	                       overrideColor ? overrideColor : MG_BLACK);
 	    }
 	}
     dyStringFree(&query);

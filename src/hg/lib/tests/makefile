@@ -11,6 +11,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/mallocTopPadTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
+	${BIN_DIR}/quickLiftJoinedTester \
 	${BIN_DIR}/sessionDataTester \
 	${BIN_DIR}/cartParseTest \
 	${BIN_DIR}/binTest \
@@ -26,7 +27,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
-test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
+test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
 	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
@@ -78,6 +79,10 @@ quickLiftTest: ${BIN_DIR}/quickLiftTester mkdirs
 	        input/quickLift/lift.bb input/quickLift/items.bb > output/quickLiftIntervals.$$g \
 	        && diff expected/quickLiftIntervals.$$g output/quickLiftIntervals.$$g || exit 1; \
 	done
+
+quickLiftJoinedTest: ${BIN_DIR}/quickLiftJoinedTester mkdirs
+	${BIN_DIR}/quickLiftJoinedTester input/quickLift/joined.chain > output/quickLiftJoinedTest
+	diff expected/quickLiftJoinedTest output/quickLiftJoinedTest
 
 sessionDataTest: ${BIN_DIR}/sessionDataTester mkdirs
 	${BIN_DIR}/sessionDataTester output/sessionData > output/sessionDataTest
