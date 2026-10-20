@@ -322,11 +322,9 @@ hDisconnectCentral(&conn);
 }
 
 static void fillEmptyDirRowDb(char *userName, char *location, char *db)
-/* Give a directory row a genome if it does not have one yet. The rows above a file
- * are created without one, so a hub whose first upload landed in a subdirectory has
- * no genome on its own row, and the UI then reads it as a hub for genome "" and
- * refuses to add anything to it. Only ever fills an empty value, so a hub that
- * already has a genome keeps it */
+/* Give a subdirectory row a genome if it does not have one yet. A subdirectory first
+ * made for a file further down has none. Only ever fills an empty value, so a
+ * directory that already has a genome keeps it */
 {
 if (isEmpty(userName) || isEmpty(location) || isEmpty(db))
     return;
@@ -366,8 +364,10 @@ for (i = 0; i < foundSlashes; i++)
     row->fileType = "dir";
     row->creationTime = NULL;
     row->lastModified = sqlUnixTimeToDate(&lastModified, TRUE);
-    // Leaf-only db; ancestors sit above per-genome subdirs.
-    row->db = (i == foundSlashes - 1) ? db : "";
+    // a subdirectory takes the genome of a file directly in it. The hub's own row
+    // takes its genome from the hub.txt instead, see syncHubRowDbToHubTxt
+    boolean takesDb = (i > 0 && i == foundSlashes - 1);
+    row->db = takesDb ? db : "";
     row->location = cloneString(dyStringContents(currLocation));
     row->md5sum = "";
     row->parentDir = i > 0 ? components[i-1] : "";
@@ -375,9 +375,60 @@ for (i = 0; i < foundSlashes; i++)
     // only insert a row for this directory if it's not in the table yet
     if (!checkHubSpaceLocationExists(row->userName, row->location))
         addHubSpaceRowForFile(row);
-    else
+    else if (takesDb)
         fillEmptyDirRowDb(row->userName, row->location, db);
     }
+}
+
+void syncHubRowDbToHubTxt(char *userName, char *hubDir)
+/* Set the db of the hub's own directory row to the db of the hub's hub.txt row.
+ * The hub.txt says which genome the hub is for. One with a genomesFile names
+ * several, so its row has an empty db and the hub row gets that too. A user's own
+ * *.hub.txt wins over a hub.txt. No-op when the hub has no hub.txt row yet */
+{
+if (isEmpty(userName) || isEmpty(hubDir))
+    return;
+char *hubName = hubLeafFromPath(hubDir);
+struct dyString *prefix = dyStringCreate("%s/", hubDir);
+int prefixLen = dyStringLen(prefix);
+struct sqlConnection *conn = hConnectCentral();
+struct dyString *q = sqlDyStringCreate(
+    "select fileName, location, db from hubSpace where userName='%s' and parentDir='%s' "
+    "and fileType='hub.txt'", userName, hubName);
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(q));
+char *hubDb = NULL;
+boolean hubDbFromOwnNamed = FALSE;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *fileName = row[0];
+    char *location = row[1];
+    // a subdirectory of another hub can have the name hubName too
+    if (!startsWith(dyStringContents(prefix), location) ||
+        !sameString(location + prefixLen, fileName))
+        continue;
+    boolean ownNamed = !sameString(fileName, "hub.txt");
+    if (hubDb == NULL || (ownNamed && !hubDbFromOwnNamed))
+        {
+        freeMem(hubDb);
+        hubDb = cloneString(row[2]);
+        hubDbFromOwnNamed = ownNamed;
+        }
+    }
+sqlFreeResult(&sr);
+if (hubDb != NULL)
+    {
+    struct dyString *u = sqlDyStringCreate(
+        "update hubSpace set db='%s' where userName='%s' and location='%s' and fileType='dir'",
+        hubDb, userName, hubDir);
+    sqlUpdate(conn, dyStringContents(u));
+    dyStringFree(&u);
+    }
+hDisconnectCentral(&conn);
+dyStringFree(&q);
+dyStringFree(&prefix);
+freeMem(hubDb);
+freeMem(hubName);
 }
 
 static char *defaultPosFromTwoBit(char *twoBitPath)

@@ -129,9 +129,32 @@ void unlockHubDir(int fd);
 void addHubSpaceRowForFile(struct hubSpace *row);
 /* We created a file for a user, now add an entry to the hubSpace table for it */
 
+/* The db column of a directory row in hubSpace.
+ *
+ * The hub's own row (the top directory, parentDir '') has the db of the hub's
+ * hub.txt row. That is the one genome the hub.txt names, or '' for a hub.txt with
+ * a genomesFile, which can name several genomes. The row is '' until the hub has
+ * a hub.txt row. A user's own *.hub.txt wins over a file named hub.txt. Nothing
+ * else sets it: a data file never gives the hub row its genome, wherever it lands
+ * and in whatever order the files of a batch arrive.
+ *
+ * A subdirectory row has the db of the first file uploaded directly into it that
+ * carries one, and '' until then. A file further down does not set it.
+ *
+ * makeParentDirRows makes the rows and fills in subdirectories, and
+ * syncHubRowDbToHubTxt sets the hub row. pre-finish calls both for every upload,
+ * under the hub lock. hgMyData.js checks a new file's genome against these values,
+ * and reads '' as "no single genome", never as a genome named "". */
+
 void makeParentDirRows(char *userName, time_t lastModified, char *db, char *parentDirStr, char *userDataDir, char *hubType);
 /* For each '/' separated component of parentDirStr, create a row in hubSpace. Return the
  * final subdirectory component of parentDirStr */
+
+void syncHubRowDbToHubTxt(char *userName, char *hubDir);
+/* Set the db of the hub's own directory row to the db of the hub's hub.txt row.
+ * The hub.txt says which genome the hub is for. One with a genomesFile names
+ * several, so its row has an empty db and the hub row gets that too. A user's own
+ * *.hub.txt wins over a hub.txt. No-op when the hub has no hub.txt row yet */
 
 void removeFileForUser(char *fname, char *userName);
 /* Remove a file for this user if it exists */

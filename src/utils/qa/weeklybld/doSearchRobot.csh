@@ -19,11 +19,11 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" != "0" ) then
     echo "errs found:"
     echo "$res"
-    echo "$res" | mail -s "Errors in searchRobot on $HOST" ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
+    echo "$res" | mail -s "Errors in searchRobot on $HOST" ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
     exit 1
 endif
 #
 echo Done.
-echo "$res" | mail -s "v${BRANCHNN} search robot done successfully on $HOST." ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
+echo "$res" | mail -s "v${BRANCHNN} search robot done successfully on $HOST." ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 exit 0
 
