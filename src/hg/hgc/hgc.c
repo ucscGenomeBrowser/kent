@@ -2160,7 +2160,19 @@ if (liftDb)
     {
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
         seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
-    bedPrintPos(liftedBeds, bedSize, tdb);
+    /* that is every lifted item in the window, so print only the one that was clicked,
+     * matched the way the unlifted query below matches it.  refs #38591 */
+    for (bed = liftedBeds; bed != NULL; bed = bed->next)
+        {
+        if ((bed->chromStart != start) ||
+            ((bedSize > 3) && differentStringNullOk(bed->name, item)))
+            continue;
+        if (firstTime)
+            firstTime = FALSE;
+        else
+            htmlHorizontalLine();
+        bedPrintPos(bed, bedSize, tdb);
+        }
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
