@@ -1,8 +1,8 @@
 # #38591 -- a quickLifted bed track kept items that lift outside the window, and its hgc page
 # showed the wrong item.
 #
-# Fixes on branch qlFixes:  d5c25811256 (quickLiftSqlLoadBeds() in hg/lib/quickLift.c keeps
-# only beds that overlap the window) and 72e95deee47 (genericBedClick() in hg/hgc/hgc.c
+# Fixes:  4e060862eb3 (quickLiftSqlLoadBeds() in hg/lib/quickLift.c keeps
+# only beds that overlap the window) and 1c28f320858 (genericBedClick() in hg/hgc/hgc.c
 # prints the lifted bed that was clicked, not the first one in the list).
 #
 # quickLift reads chains for a window padded by 100 kb, so items lift to places off screen.
@@ -13,16 +13,17 @@
 #     track bounds".  The check is the warning text, plus noHas: on the box of the item at
 #     o=1206290, past the window end, plus has: on the in-window CpG: 151 at o=1115798 so an
 #     empty row cannot pass.  Pack mode shows none of this, so the track is full.
-#   * The click check.  CpG: 151 is the third item in the window.  Before 72e95deee47 hgc
+#   * The click check.  CpG: 151 is the third item in the window.  Before 1c28f320858 hgc
 #     printed the first lifted bed:  CpG: 615 at chr1:958934-967274 on master, and CpG: 213
 #     with only the window fix.  Now it prints CpG: 151 at chr1:1115799-1117065.
 #
-# Not asserted:  the narrowPeak/broadPeak half of d5c25811256 (encode.c), which needs a peak
+# Not asserted:  the narrowPeak/broadPeak half of 4e060862eb3 (encode.c), which needs a peak
 # track near a window edge;  and the count of items, which a cpgIslandExt reload could move.
 proof:
   - "assertion-only 2026-10-20 -- written with the fix"
   - "xfail 2026-10-20 -- fails on genome-test at step 7:  page contains \"spills over track bounds\", 2 boxes match o=1206290;  until qlFixes is pushed and built there"
-  - "sandbox-ab 2026-10-20 -- park 38591 (port 48116):  passes with qlFixes at 9e6f2de0564;  with hgc.c and trackHub.c from 994159225dd it fails at step 9 (hgc page shows CpG: 213, not chr1:1115799-1117065)"
+  - "sandbox-ab 2026-10-20 -- park 38591 (port 48116):  passes with qlFixes at 9f488294a82;  with hgc.c and trackHub.c from 96f9c6c8921 it fails at step 9 (hgc page shows CpG: 213, not chr1:1115799-1117065)"
+  - "server-flip 2026-10-20 -- failed on genome-test at step 7 (hgTracks built 05:03, spill warning), passed once f2b3da9fc23 was built there with cgi-alpha (hgTracks and hgc 13:00)"
 
 target: genome-test
 db: hg19
