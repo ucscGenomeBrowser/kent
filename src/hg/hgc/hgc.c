@@ -10381,56 +10381,69 @@ printf("Alignment between C briggsae sequence %s (above) and C elegans chromosom
 fetchAndShowWaba("wabaCbr", name);
 }
 
-static void printRepeat(struct rmskOut *ro, char repStrand)
-/* Print the fields of one RepeatMasker item.  repStrand is the strand repStart, repEnd and
- * repLeft follow, which for a quickLifted item is the strand in the assembly it came from,
- * not ro->strand. */
+static void doLiftedRepeat(struct trackDb *tdb, char *repeat)
+/* The details page of a quickLifted rmsk item, behind browser.quickLiftRmsk:  a copy of
+ * doHgRepeat() that reads the row from the assembly it came from, through the chain, and
+ * prints the one that lands where it was clicked.  repStart, repEnd and repLeft follow the
+ * strand in that assembly, not the lifted one.  The field printing is a copy of doHgRepeat()'s;
+ * a fix to one belongs in the other.  refs #37437 */
 {
-printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
-    ro->repName, ro->repName);
-printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
-printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
-printf("<B>Class:</B> %s<BR>\n", ro->repClass);
-printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
-printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
-printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
-printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
-printf("<B>Begin in repeat:</B> %d<BR>\n",
-       (repStrand == '-' ? ro->repLeft : ro->repStart));
-printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
-printf("<B>Left in repeat:</B> %d<BR>\n",
-       (repStrand == '-' ? -ro->repStart : -ro->repLeft));
-printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
-         ro->repName);
-}
-
-static void doLiftedRepeat(struct trackDb *tdb, char *repeat, int start)
-/* Print a quickLifted repeat.  Its row is in the assembly it came from, so read the rows that
- * map into the item's range and print the one that lands where it was clicked. */
-{
-int end = cartInt(cart, "t");
-struct hash *chainHash = newHash(8);
-struct rmskOut *ro, *roList = quickLiftSqlLoadRmsk(tdb, trackHubSkipHubName(tdb->table),
-    seqName, start, end, chainHash);
-boolean found = FALSE;
-
-for (ro = roList; ro != NULL; ro = ro->next)
+int offset = cartInt(cart, "o");
+cartWebStart(cart, database, "Repeat");
+if (offset >= 0)
     {
-    // the repeat coordinates follow the strand in the assembly it came from
-    char sourceStrand = ro->strand[0];
-    if (sameString(ro->repName, repeat) &&
-        quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) &&
-        sameString(ro->genoName, seqName) && (ro->genoStart == start) && (ro->genoEnd == end))
-        {
-        printRepeat(ro, sourceStrand);
-        found = TRUE;
-        }
+    int start = cartInt(cart, "o");
+    int end = cartInt(cart, "t");
+    struct hash *chainHash = newHash(8);
+    struct rmskOut *ro, *roList = quickLiftSqlLoadRmsk(tdb, trackHubSkipHubName(tdb->table),
+        seqName, start, end, chainHash);
+    boolean found = FALSE;
+
+    printf("<H3>RepeatMasker Information</H3>\n");
+    for (ro = roList; ro != NULL; ro = ro->next)
+	{
+	char repStrand = ro->strand[0];
+	if (!sameString(ro->repName, repeat) ||
+	    !quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	    !sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
+	    continue;
+	found = TRUE;
+	printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+            ro->repName, ro->repName);
+    printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
+	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
+	printf("<B>Class:</B> %s<BR>\n", ro->repClass);
+	printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
+	printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
+	printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
+	printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
+	printf("<B>Begin in repeat:</B> %d<BR>\n",
+	       (repStrand == '-' ? ro->repLeft : ro->repStart));
+	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
+	printf("<B>Left in repeat:</B> %d<BR>\n",
+	       (repStrand == '-' ? -ro->repStart : -ro->repLeft));
+	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
+		 ro->repName);
+	}
+    if (!found)
+	htmlPrintf("No repeat %s found at %s:%d-%d.<BR>\n", repeat, seqName, start + 1, end);
+    htmlPrintf("<BR>This repeat comes from %s and is mapped onto %s by quickLift.<BR>\n",
+               trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
+    rmskOutFreeList(&roList);
     }
-if (!found)
-    htmlPrintf("No repeat %s found at %s:%d-%d.<BR>\n", repeat, seqName, start + 1, end);
-htmlPrintf("<BR>This repeat comes from %s and is mapped onto %s by quickLift.<BR>\n",
-           trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
-rmskOutFreeList(&roList);
+else
+    {
+    if (sameString(repeat, "SINE"))
+	printf("This track contains the short interspersed nuclear element (SINE) class of repeats, which includes ALUs.\n");
+    else if (sameString(repeat, "LINE"))
+        printf("This track contains the long interspersed nuclear element (LINE) class of repeats.\n");
+    else if (sameString(repeat, "LTR"))
+        printf("This track contains the class of long terminal repeats (LTRs), which includes retroposons.\n");
+    else
+        printf("This track contains the %s class of repeats.\n", repeat);
+    printf("Click on an individual repeat element within the track for more information about that item.<BR>\n");
+    }
+printTrackHtml(tdb);
 }
 
 void doHgRepeat(struct trackDb *tdb, char *repeat)
@@ -10450,25 +10463,36 @@ if (offset >= 0)
     boolean hasBin;
     int start = cartInt(cart, "o");
 
+    if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
+	errAbort("Track %s not found", tdb->table);
+    // doLiftedRepeat() has a copy of this function;  a fix to one belongs in the other
+    sqlSafef(query, sizeof query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
+	    table, repeat, seqName, start);
+    sr = sqlGetResult(conn, query);
     if (sameString(tdb->table,"rmskNew"))
         printf("<H3>CENSOR Information</H3>\n");
     else
         printf("<H3>RepeatMasker Information</H3>\n");
-    if (quickLiftIsLifted(tdb))
-        doLiftedRepeat(tdb, repeat, start);
-    else
-        {
-        if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
-            errAbort("Track %s not found", tdb->table);
-        sqlSafef(query, sizeof query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
-                table, repeat, seqName, start);
-        sr = sqlGetResult(conn, query);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            ro = rmskOutLoad(row+hasBin);
-            printRepeat(ro, ro->strand[0]);
-            }
-        }
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	ro = rmskOutLoad(row+hasBin);
+	printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+            ro->repName, ro->repName);
+    printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
+	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
+	printf("<B>Class:</B> %s<BR>\n", ro->repClass);
+	printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
+	printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
+	printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
+	printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
+	printf("<B>Begin in repeat:</B> %d<BR>\n",
+	       (ro->strand[0] == '-' ? ro->repLeft : ro->repStart));
+	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
+	printf("<B>Left in repeat:</B> %d<BR>\n",
+	       (ro->strand[0] == '-' ? -ro->repStart : -ro->repLeft));
+	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
+		 ro->repName);
+	}
     hFreeConn(&conn);
     }
 else
@@ -28697,11 +28721,11 @@ if (!calledHandler)
         // a quickLifted RepeatMasker track skips the name-based handlers, and its click reads
         // the rows of the assembly it came from through the chain, refs #37437
         if (sameWord("rmsk", tdb->type))
-            doHgRepeat(tdb, item);
+            doLiftedRepeat(tdb, item);
         else if (startsWithWord("bigRmsk", tdb->type))
-            doBigRmskRepeat(tdb, item);
+            doLiftedBigRmskRepeat(tdb, item);
         else
-            doJRepeat(tdb, item);
+            doLiftedJRepeat(tdb, item);
         }
     else if ((tdb != NULL) &&
         (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))

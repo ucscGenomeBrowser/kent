@@ -277,11 +277,8 @@ return classRIList;
 
 static struct rmskJoined *liftedJoinedList(struct track *tg)
 /* The rows of a quickLifted rmskJoined track, read from the assembly they came from and
- * lifted onto the reference, that land in the window.  Empty with browser.quickLiftRmsk off,
- * rather than this assembly's table of the same name. */
+ * lifted onto the reference, that land in the window.  refs #37437 */
 {
-if (!quickLiftRmskEnabled(cart))
-    return NULL;
 struct hash *chainHash = newHash(8);
 struct rmskJoined *rm, *next, *liftedList = NULL;
 struct rmskJoined *rmList = quickLiftSqlLoadRmskJoined(tg->tdb, tg->table, chromName,
@@ -302,10 +299,18 @@ for (rm = rmList; rm != NULL; rm = next)
 return liftedList;
 }
 
-static void rmskJoinedLoadItems(struct track *tg)
-/* We do the query(ies) here so we can report how deep the track(s)
- * will be when rmskJoinedTotalHeight() is called later on.
- */
+static char *layoutKey(struct track *tg)
+/* The subTracksHash key for a track's levels:  its table, or for a quickLifted one its name,
+ * since its table name is the native track's.  refs #37437 */
+{
+return quickLiftIsLiftedRmskJoined(cart, tg->tdb) ? tg->track : tg->table;
+}
+
+static void liftedJoinedLoadItems(struct track *tg)
+/* The loadItems of a quickLifted rmskJoined track, behind browser.quickLiftRmsk:  a copy of
+ * rmskJoinedLoadItems() that reads its rows from the assembly they came from, lifted onto
+ * this one, and keys its levels by track name, since a lifted track's table name is the
+ * native track's.  A fix to one belongs in the other.  refs #37437 */
 {
   /*
    * Initialize the subtracks hash - This will eventually contain
@@ -332,25 +337,7 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     AllocVar(st);
     st->levelCount = 0;
     struct rmskJoined *rm = NULL;
-    struct rmskJoined *detailList = NULL;
-    if (quickLiftIsLifted(tg->tdb))
-        detailList = liftedJoinedList(tg);
-    else
-        {
-        char **row;
-        int rowOffset;
-        struct sqlConnection *conn = hAllocConn(database);
-        struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName,
-                                            winStart, winEnd, NULL,
-                                            &rowOffset);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            rm = rmskJoinedLoad(row + rowOffset);
-            slAddHead(&detailList, rm);
-            }
-        sqlFreeResult(&sr);
-        hFreeConn(&conn);
-        }
+    struct rmskJoined *detailList = liftedJoinedList(tg);
     slSort(&detailList, cmpRepeatDiv);
 
     if (detailList)
@@ -408,9 +395,124 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
              } // else if ( tg->visibility == tvSquish ...
         } // while ( detailList )
     // Create Hash Entry
-    // keyed by track, not table:  a quickLifted track has the same table name as the native
-    // one, and the two would share and free each other's levels, refs #37437
     hashReplace(subTracksHash, tg->track, st);
+    slReverse(&fullRIList);
+    tg->items = fullRIList;
+    } // if ((tg->visibility == tvFull || ...
+else
+   tg->items = classRIList;
+}
+
+static void rmskJoinedLoadItems(struct track *tg)
+/* We do the query(ies) here so we can report how deep the track(s)
+ * will be when rmskJoinedTotalHeight() is called later on.
+ */
+{
+if (quickLiftIsLiftedRmskJoined(cart, tg->tdb))
+    {
+    // a quickLifted track reads its rows from the assembly it came from, refs #37437
+    liftedJoinedLoadItems(tg);
+    return;
+    }
+  /*
+   * Initialize the subtracks hash - This will eventually contain
+   * all the repeat data for each displayed subtrack.
+   */
+
+setWg();
+
+if (!subTracksHash)
+    subTracksHash = newHash(20);
+
+//tg->items = makeJRepeatItems();
+ makeJRepeatItems();
+
+int baseWidth = winEnd - winStart;
+pixelsPerBase = (float) insideWidth / (float) baseWidth;
+//Disabled
+//if ((tg->visibility == tvFull || tg->visibility == tvSquish ||
+//     tg->visibility == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+    {
+    struct repeatItem *ri = NULL;
+    struct subTrack *st = NULL;
+    AllocVar(st);
+    st->levelCount = 0;
+    struct rmskJoined *rm = NULL;
+    char **row;
+    int rowOffset;
+    struct sqlConnection *conn = hAllocConn(database);
+    // liftedJoinedLoadItems() has a copy of this function;  a fix to one belongs in the other
+    struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName,
+                                        winStart, winEnd, NULL,
+                                        &rowOffset);
+    struct rmskJoined *detailList = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        rm = rmskJoinedLoad(row + rowOffset);
+        slAddHead(&detailList, rm);
+        }
+    slSort(&detailList, cmpRepeatDiv);
+
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+
+    if (detailList)
+	AllocArray( st->levels, slCount(detailList));
+
+    while (detailList)
+        {
+        st->levels[st->levelCount++] = detailList;
+
+        struct rmskJoined *cr = detailList;
+        detailList = detailList->next;
+        cr->next = NULL;
+        int crChromStart, crChromEnd;
+        int rmChromStart, rmChromEnd;
+        struct rmskJoined *prev = NULL;
+        rm = detailList;
+
+        getExtents(cr, &crChromStart, &crChromEnd);
+
+        if ( tg->visibility == tvFull )
+	    {
+	    AllocVar(ri);
+	    ri->className = cr->name;
+	    slAddHead(&fullRIList, ri);
+	    }
+
+        //Disabled
+        //if ( tg->visibility == tvSquish || tg->visibility == tvPack )
+        if ( tg->visibility == tvFull )
+             {
+             while (rm)
+                 {
+                 getExtents(rm, &rmChromStart, &rmChromEnd);
+
+                 if (rmChromStart > crChromEnd)
+                     {
+                     cr->next = rm;
+                     cr = rm;
+                     crChromEnd = rmChromEnd;
+                     if (prev)
+                         prev->next = rm->next;
+                     else
+                         detailList = rm->next;
+
+                     rm = rm->next;
+                     cr->next = NULL;
+                     }
+                 else
+                     {
+                     // Save for a lower level
+                     prev = rm;
+                     rm = rm->next;
+                     }
+                 } // while ( rm )
+             } // else if ( tg->visibility == tvSquish ...
+        } // while ( detailList )
+    // Create Hash Entry
+    hashReplace(subTracksHash, tg->table, st);
     slReverse(&fullRIList);
     tg->items = fullRIList;
     } // if ((tg->visibility == tvFull || ...
@@ -481,7 +583,7 @@ setWg();
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     // Lookup the depth of this subTrack and report it
-    struct subTrack *st = hashFindVal(subTracksHash, tg->track);
+    struct subTrack *st = hashFindVal(subTracksHash, layoutKey(tg));
     if (st)
         {
         tg->height = (st->levelCount * rmskJoinedItemHeight(tg, NULL));
@@ -1096,94 +1198,132 @@ for (idx = 0; idx < rm->blockCount; idx++)
     }
 }
 
-static void origRepeatDrawOneFull(struct hvGfx *hvg, struct rmskJoined *ro, struct hash *hash,
-        int heightPer, int xOff, int width, int baseWidth)
-/* Draw the aligned blocks of one repeat on the row of its class, in a gray for its
- * divergence. */
+static void liftedOrigRepeatDraw(struct track *tg, int seqStart, int seqEnd,
+		struct hvGfx *hvg, int xOff, int yOff, int width,
+		MgFont * font, Color color, enum trackVisibility vis)
+/* The zoomed-out drawing of a quickLifted rmskJoined track, behind browser.quickLiftRmsk:  a
+ * copy of origRepeatDraw() over rows read from the assembly they came from, lifted onto this
+ * one.  A fix to one belongs in the other.  refs #37437 */
 {
+setWg();
+int baseWidth = seqEnd - seqStart;
 struct repeatItem *ri;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
 int x1, x2, w;
 Color col;
-int percId;
-int grayLevel;
-char class[256];
-// Simplify repClass for lookup: strip trailing '?',
-// simplify *RNA to RNA:
-char *poundPtr = index(ro->name, '#');
-if (poundPtr)
+struct rmskJoined *liftedList = liftedJoinedList(tg);
+
+//Disabled
+//if (vis == tvFull || vis == tvSquish || vis == tvPack)
+if (vis == tvFull)
     {
-    safecpy(class, sizeof(class), poundPtr + 1);
-    char *slashPtr = index(class, '/');
-    if (slashPtr)
-        *slashPtr = '\0';
+    /*
+     * Do grayscale representation spread out among tracks.
+     */
+    struct hash *hash = newHash(6);
+    struct rmskJoined *ro;
+    int percId;
+    int grayLevel;
+
+    for (ri = tg->items; ri != NULL; ri = ri->next)
+	{
+	ri->yOffset = y;
+	y += lineHeight;
+	hashAdd(hash, ri->class, ri);
+	}
+    for (ro = liftedList; ro != NULL; ro = ro->next)
+	{
+	char class[256];
+	// Simplify repClass for lookup: strip trailing '?',
+	// simplify *RNA to RNA:
+	char *poundPtr = index(ro->name, '#');
+	if (poundPtr)
+	    {
+	    safecpy(class, sizeof(class), poundPtr + 1);
+	    char *slashPtr = index(class, '/');
+	    if (slashPtr)
+	        *slashPtr = '\0';
+	    }
+	else
+	    {
+	    safecpy(class, sizeof(class), "Unknown");
+	    }
+	char *p = &(class[strlen(class) - 1]);
+	if (*p == '?')
+	    *p = '\0';
+	if (endsWith(class, "RNA"))
+	    safecpy(class, sizeof(class), "RNA");
+	ri = hashFindVal(hash, class);
+	if (ri == NULL)
+	    ri = otherRepeatItem;
+	percId = 10000 - ro->score;
+	grayLevel = grayInRange(percId, 6000, 10000);
+	col = shadesOfGray[grayLevel];
+
+	int idx = 0;
+	for (idx = 0; idx < ro->blockCount; idx++)
+	    {
+	    // an aligned block can start at relStart 0 when the item has no left flank;  only -1
+	    // marks an unaligned block
+	    if (ro->blockRelStarts[idx] >= 0)
+		{
+		int blockStart = ro->chromStart + ro->blockRelStarts[idx];
+		int blockEnd =
+		    ro->chromStart + ro->blockRelStarts[idx] +
+		    ro->blockSizes[idx];
+
+		x1 = roundingScale(blockStart - winStart, width,
+				    baseWidth) + xOff;
+		x1 = max(x1, 0);
+		x2 = roundingScale(blockEnd - winStart, width,
+				    baseWidth) + xOff;
+		w = x2 - x1;
+		if (w <= 0)
+		    w = 1;
+		hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
+		}
+	    }
+	}
+    freeHash(&hash);
     }
 else
     {
-    safecpy(class, sizeof(class), "Unknown");
+    /*
+     * Do black and white on single track.
+     */
+    struct rmskJoined *ro;
+    for (ro = liftedList; ro != NULL; ro = ro->next)
+	{
+	int idx = 0;
+	int blockCount = ro->blockCount;
+	int *blockSizes = ro->blockSizes;
+	int *blockRelStarts = ro->blockRelStarts;
+	int chromStart = ro->chromStart;
+
+	for (idx = 1; idx < blockCount - 1; idx++)
+	    {
+	    if (blockRelStarts[idx] >= 0)
+		{
+		int blockStart = chromStart + blockRelStarts[idx];
+		int blockEnd =
+		    chromStart + blockRelStarts[idx] + blockSizes[idx];
+
+		x1 = roundingScale(blockStart - winStart,
+				    width, baseWidth) + xOff;
+		x1 = max(x1, 0);
+		x2 = roundingScale(blockEnd - winStart, width,
+				    baseWidth) + xOff;
+		w = x2 - x1;
+		if (w <= 0)
+		    w = 1;
+		hvGfxBox(hvg, x1, yOff, w, heightPer, MG_BLACK);
+		}
+	    }
+	}
     }
-char *p = &(class[strlen(class) - 1]);
-if (*p == '?')
-    *p = '\0';
-if (endsWith(class, "RNA"))
-    safecpy(class, sizeof(class), "RNA");
-ri = hashFindVal(hash, class);
-if (ri == NULL)
-    ri = otherRepeatItem;
-percId = 10000 - ro->score;
-grayLevel = grayInRange(percId, 6000, 10000);
-col = shadesOfGray[grayLevel];
-
-int idx = 0;
-for (idx = 0; idx < ro->blockCount; idx++)
-    {
-    // an aligned block can start at relStart 0 when the item has no left flank;  only -1
-    // marks an unaligned block
-    if (ro->blockRelStarts[idx] >= 0)
-        {
-        int blockStart = ro->chromStart + ro->blockRelStarts[idx];
-        int blockEnd =
-            ro->chromStart + ro->blockRelStarts[idx] +
-            ro->blockSizes[idx];
-
-        x1 = roundingScale(blockStart - winStart, width,
-                            baseWidth) + xOff;
-        x1 = max(x1, 0);
-        x2 = roundingScale(blockEnd - winStart, width,
-                            baseWidth) + xOff;
-        w = x2 - x1;
-        if (w <= 0)
-            w = 1;
-        hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
-        }
-    }
-}
-
-static void origRepeatDrawOneDense(struct hvGfx *hvg, int chromStart, int blockCount,
-        int *blockSizes, int *blockRelStarts, int yOff, int heightPer, int xOff, int width,
-        int baseWidth)
-/* Draw the aligned blocks of one repeat in black on a single row. */
-{
-int x1, x2, w;
-int idx = 0;
-for (idx = 1; idx < blockCount - 1; idx++)
-    {
-    if (blockRelStarts[idx] >= 0)
-        {
-        int blockStart = chromStart + blockRelStarts[idx];
-        int blockEnd =
-            chromStart + blockRelStarts[idx] + blockSizes[idx];
-
-        x1 = roundingScale(blockStart - winStart,
-                            width, baseWidth) + xOff;
-        x1 = max(x1, 0);
-        x2 = roundingScale(blockEnd - winStart, width,
-                            baseWidth) + xOff;
-        w = x2 - x1;
-        if (w <= 0)
-            w = 1;
-        hvGfxBox(hvg, x1, yOff, w, heightPer, MG_BLACK);
-        }
-    }
+rmskJoinedFreeList(&liftedList);
 }
 
 static void origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
@@ -1193,20 +1333,21 @@ static void origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
  * to handle the new rmskJoined table structure.
  */
 {
+if (quickLiftIsLiftedRmskJoined(cart, tg->tdb))
+    {
+    // a quickLifted track reads its rows from the assembly it came from, refs #37437
+    liftedOrigRepeatDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    return;
+    }
 setWg();
 int baseWidth = seqEnd - seqStart;
 struct repeatItem *ri;
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-boolean lifted = quickLiftIsLifted(tg->tdb);
-struct rmskJoined *ro, *liftedList = NULL;
-
-// a lifted track reads its rows from the assembly it came from, mapped onto this one
-if (lifted)
-    liftedList = liftedJoinedList(tg);
-
-struct sqlConnection *conn = lifted ? NULL : hAllocConn(database);
+int x1, x2, w;
+Color col;
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -1219,6 +1360,9 @@ if (vis == tvFull)
      * Do grayscale representation spread out among tracks.
      */
     struct hash *hash = newHash(6);
+    struct rmskJoined *ro;
+    int percId;
+    int grayLevel;
 
     for (ri = tg->items; ri != NULL; ri = ri->next)
 	{
@@ -1226,32 +1370,65 @@ if (vis == tvFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    if (lifted)
-        {
-        for (ro = liftedList; ro != NULL; ro = ro->next)
-            origRepeatDrawOneFull(hvg, ro, hash, heightPer, xOff, width, baseWidth);
-        }
-    else
-        {
-        sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
-                          &rowOffset);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            ro = rmskJoinedLoad(row + rowOffset);
-            origRepeatDrawOneFull(hvg, ro, hash, heightPer, xOff, width, baseWidth);
-            rmskJoinedFree(&ro);
-            }
-        }
+    // liftedOrigRepeatDraw() has a copy of this function;  a fix to one belongs in the other
+    sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
+		      &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	ro = rmskJoinedLoad(row + rowOffset);
+	char class[256];
+	// Simplify repClass for lookup: strip trailing '?',
+	// simplify *RNA to RNA:
+	char *poundPtr = index(ro->name, '#');
+	if (poundPtr)
+	    {
+	    safecpy(class, sizeof(class), poundPtr + 1);
+	    char *slashPtr = index(class, '/');
+	    if (slashPtr)
+	        *slashPtr = '\0';
+	    }
+	else
+	    {
+	    safecpy(class, sizeof(class), "Unknown");
+	    }
+	char *p = &(class[strlen(class) - 1]);
+	if (*p == '?')
+	    *p = '\0';
+	if (endsWith(class, "RNA"))
+	    safecpy(class, sizeof(class), "RNA");
+	ri = hashFindVal(hash, class);
+	if (ri == NULL)
+	    ri = otherRepeatItem;
+	percId = 10000 - ro->score;
+	grayLevel = grayInRange(percId, 6000, 10000);
+	col = shadesOfGray[grayLevel];
+
+	int idx = 0;
+	for (idx = 0; idx < ro->blockCount; idx++)
+	    {
+	    // an aligned block can start at relStart 0 when the item has no left flank;  only -1
+	    // marks an unaligned block
+	    if (ro->blockRelStarts[idx] >= 0)
+		{
+		int blockStart = ro->chromStart + ro->blockRelStarts[idx];
+		int blockEnd =
+		    ro->chromStart + ro->blockRelStarts[idx] +
+		    ro->blockSizes[idx];
+
+		x1 = roundingScale(blockStart - winStart, width,
+				    baseWidth) + xOff;
+		x1 = max(x1, 0);
+		x2 = roundingScale(blockEnd - winStart, width,
+				    baseWidth) + xOff;
+		w = x2 - x1;
+		if (w <= 0)
+		    w = 1;
+		hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
+		}
+	    }
+	rmskJoinedFree(&ro);
+	}
     freeHash(&hash);
-    }
-else if (lifted)
-    {
-    /*
-     * Do black and white on single track.
-     */
-    for (ro = liftedList; ro != NULL; ro = ro->next)
-        origRepeatDrawOneDense(hvg, ro->chromStart, ro->blockCount, ro->blockSizes,
-                               ro->blockRelStarts, yOff, heightPer, xOff, width, baseWidth);
     }
 else
     {
@@ -1279,6 +1456,7 @@ else
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
+	    int idx = 0;
 	    int blockCount = sqlSigned(row[1]);
 	    int sizeOne;
 	    int *blockSizes;
@@ -1288,15 +1466,32 @@ else
 	    assert(sizeOne == blockCount);
 	    sqlSignedDynamicArray(row[3], &blockRelStarts, &sizeOne);
 	    assert(sizeOne == blockCount);
-	    origRepeatDrawOneDense(hvg, chromStart, blockCount, blockSizes, blockRelStarts,
-	                           yOff, heightPer, xOff, width, baseWidth);
+
+	    for (idx = 1; idx < blockCount - 1; idx++)
+		{
+		if (blockRelStarts[idx] >= 0)
+		    {
+		    int blockStart = chromStart + blockRelStarts[idx];
+		    int blockEnd =
+			chromStart + blockRelStarts[idx] + blockSizes[idx];
+
+		    x1 = roundingScale(blockStart - winStart,
+					width, baseWidth) + xOff;
+		    x1 = max(x1, 0);
+		    x2 = roundingScale(blockEnd - winStart, width,
+					baseWidth) + xOff;
+		    w = x2 - x1;
+		    if (w <= 0)
+		        w = 1;
+		    hvGfxBox(hvg, x1, yOff, w, heightPer, MG_BLACK);
+		    }
+		}
 	    }
 	}
     dyStringFree(&query);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-rmskJoinedFreeList(&liftedList);
 }
 
 /* Main callback for displaying this track in the viewport
@@ -1329,7 +1524,7 @@ struct rmskJoined *rm;
 if (vis == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     int level = yOff;
-    struct subTrack *st = hashFindVal(subTracksHash, tg->track);
+    struct subTrack *st = hashFindVal(subTracksHash, layoutKey(tg));
     if (!st)
 	return;
 
