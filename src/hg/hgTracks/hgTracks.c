@@ -5791,8 +5791,10 @@ if (withLeftLabels)
             /* rmskJoined tracks are non-standard in FULL mode
                they are just their track height, not per-item height
              */
-            if (startsWith("rmskJoined", track->track) ||
-                quickLiftIsLiftedRmskJoined(cart, track->tdb))
+            if (startsWith("rmskJoined", track->track))
+                ynew = flatTrack->maxHeight + y;
+            else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+                // a quickLifted RepeatMasker Viz. track is laid out like the native one, refs #37437
                 ynew = flatTrack->maxHeight + y;
             else
                 ynew = doLeftLabels(track, hvgSide, font, y);

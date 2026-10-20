@@ -202,227 +202,6 @@ printf ("  </thead>\n");
 }
 
 
-void doJRepeat (struct trackDb *tdb, char *repeat)
-/* Main entry point */
-{
-const char *data_style = "style=\"padding:0px 6px;\"";
-if (tdb == NULL)
-    errAbort("No RepeatMasker track found for item %s", repeat);
-char *table = tdb->table;
-char outTable[64] = "";
-char alignTable[64] = "";
-
-/* Currently using a fixed table name design
- * with support for two datasets ( baseline and current ).
- * The baseline dataset is the run which all the other
- * tracks are based upon.  The current can be any more
- * recent run of RepeatMasker.
- */
-if (startsWith ("rmskJoinedCurrent", table))
-    {
-    strcpy (alignTable, "rmskAlignCurrent");
-    strcpy (outTable, "rmskOutCurrent");
-    }
-else if (startsWith ("rmskJoinedBaseline", table))
-    {
-    strcpy (alignTable, "rmskAlignBaseline");
-    strcpy (outTable, "rmskOutBaseline");
-    }
-
-cartWebStart (cart, database, "%s", tdb->longLabel);
-
-int offset = cartInt (cart, "o");
-if (offset >= 0)
-    {
-    struct sqlConnection *conn2 = hAllocConn (database);
-    struct sqlResult *sr2;
-    char **row;
-    char query[256];
-    char qTable[HDB_MAX_TABLE_STRING];
-    boolean hasBin;
-
-    int start = cartInt (cart, "o");
-    // doLiftedJRepeat() has a copy of this function;  a fix to one belongs in the other
-
-    if (hTableExists (database, table))
-	{
-	if (!hFindSplitTable (database, seqName, table, qTable, sizeof(qTable), &hasBin))
-	    errAbort("track %s not found", table);
-    
-	sqlSafef (query, sizeof (query),
-	       "select * from %s where chrom = '%s' and alignStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
-
-	sr2 = sqlGetResult (conn2, query);
-	if ((row = sqlNextRow (sr2)) != NULL)
-	    {
-	    struct rmskJoined *rmJoin = rmskJoinedLoad (row + hasBin);
-
-	    char class[32];
-	    class[0] = '\0';
-	    char family[32];
-	    family[0] = '\0';
-	    char *poundPtr = index (rmJoin->name, '#');
-	    if (poundPtr)
-		{
-		// Terminate name string properly
-		safecpy (class, sizeof (class), poundPtr + 1);
-		*poundPtr = '\0';
-		char *slashPtr = index (class, '/');
-		if (slashPtr)
-		    {
-		    // Terminate class string properly
-		    safecpy (family, sizeof (family), slashPtr + 1);
-		    *slashPtr = '\0';
-		    }
-		}
-
-	    printf ("<b>Repeat:</b> %s<br>\n", rmJoin->name);
-	    printf ("<b>Class:</b> %s<br>\n", class);
-	    printf ("<b>Family:</b> %s<br>\n", family);
-	    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
-	    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
-		    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
-	    printf ("<br><br>\n");
-	    }
-	sqlFreeResult (&sr2);
-	}
-
-    /*
-     * Locate *.out annotation for this element
-     */
-    if (outTable[0] != '\0' && hTableExists (database, outTable))
-	{
-	int isFirst = 0;
-	struct rmskOut2 *ro;
-	if (!hFindSplitTable (database, seqName, outTable, qTable, sizeof(qTable), &hasBin))
-	    errAbort("track %s not found", outTable);
-	sqlSafef (query, sizeof (query),
-	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
-	sr2 = sqlGetResult (conn2, query);
-	printf ("<h4>RepeatMasker Annotation:</h4>\n");
-	printf
-	    ("The RepeatMasker annotation line(s) for this element. "
-	     "If the element is fragmented the output will contain one "
-	     "line per joined fragment.<p>\n");
-	printf ("<table cellspacing=\"0\">\n");
-	while ((row = sqlNextRow (sr2)) != NULL)
-	    {
-	    ro = rmskOut2Load (row + hasBin);
-	    if (!isFirst++)
-	        printOutTableHeader (ro->strand[0]);
-	    printf ("  <tr>\n");
-	    printf ("    <td %s>%d</td>\n", data_style, ro->swScore);
-	    printf ("    <td %s>%3.1f</td>\n", data_style,
-		    (double) ro->milliDiv * (double) 0.01);
-	    printf ("    <td %s>%3.1f</td>\n", data_style,
-		    (double) ro->milliDel * (double) 0.01);
-	    printf ("    <td %s>%3.1f</td>\n", data_style,
-		    (double) ro->milliIns * (double) 0.01);
-	    printf ("    <td %s>%s</td>\n", data_style, ro->genoName);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->genoStart + 1);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->genoEnd);
-	    printf ("    </A>");
-	    printf ("    <td %s>(%d)</td>\n", data_style, ro->genoLeft);
-	    printf ("    <td %s>%s</td>\n", data_style, ro->strand);
-	    printf ("    <td %s>%s</td>\n", data_style, ro->repName);
-	    printf ("    <td %s>%s/%s</td>\n", data_style, ro->repClass,
-		    ro->repFamily);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->repStart);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->repEnd);
-	    printf ("    <td %s>(%d)</td>\n", data_style, ro->repLeft);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->id);
-	    printf ("  <td>\n");
-	    printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">Browser</A>",
-		    hgTracksPathAndSettings (), database, seqName,
-		    ro->genoStart + 1, ro->genoEnd);
-	    char *tbl = cgiUsualString ("table", cgiString ("g"));
-	    printf
-		(" - <A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s%s%s%s%s&c=%s&l=%d&r=%d&"
-		 "strand=%s&table=%s\">"
-		 "DNA</A>\n", hgcPathAndSettings (), database, ro->genoStart,
-                 (ro->repName != NULL ? cgiEncode (ro->repName) : ""),
-                 cgiEncode("#"),
-		 (ro->repClass != NULL ? cgiEncode (ro->repClass) : ""),
-                 cgiEncode("/"),
-		 (ro->repFamily != NULL ? cgiEncode (ro->repFamily) : ""),
-		 seqName, ro->genoStart, ro->genoEnd, cgiEncode (ro->strand),
-		 tbl);
-
-	    printf ("  </td>\n");
-
-	    printf ("  </tr>\n");
-
-	    }
-	sqlFreeResult (&sr2);
-	printf ("</table>\n");
-	}
-
-    printf ("<br><br>\n");
-
-    /*
-     * Locate *.align data for this element
-     */
-    if (alignTable[0] != '\0' && hTableExists (database, alignTable))
-	{
-	struct rmskAlign *ro;
-	if (!hFindSplitTable (database, seqName, alignTable, qTable, sizeof(qTable), &hasBin))
-	    errAbort("track %s not found", alignTable);
-	sqlSafef (query, sizeof (query),
-	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start-1, repeat);
-	sr2 = sqlGetResult (conn2, query);
-	printf ("<h4>RepeatMasker Alignments:</h4>\n");
-	printf
-	    ("The raw alignment data used by RepeatMasker to generate "
-	     "the final annotation call for this element. NOTE: The "
-	     "aligned sequence names and consensus positions may differ "
-	     "from the final annotation.<p>\n");
-	printf ("<table>\n");
-	while ((row = sqlNextRow (sr2)) != NULL)
-	    {
-	    ro = rmskAlignLoad (row + hasBin);
-	    printf ("  <tr>\n");
-	    printf ("    <td>%d</td>\n", ro->swScore);
-	    printf ("    <td>%3.2f</td>\n",
-		    (double) ro->milliDiv * (double) 0.01);
-	    printf ("    <td>%3.2f</td>\n",
-		    (double) ro->milliDel * (double) 0.01);
-	    printf ("    <td>%3.2f</td>\n",
-		    (double) ro->milliIns * (double) 0.01);
-	    printf ("    <td>%s</td>\n", ro->genoName);
-	    printf ("    <td>%d</td>\n", ro->genoStart + 1);
-	    printf ("    <td>%d</td>\n", ro->genoEnd);
-	    printf ("    <td>(%d)</td>\n", ro->genoLeft);
-	    printf ("    <td>%s</td>\n", ro->strand);
-	    printf ("    <td>%s</td>\n", ro->repName);
-	    printf ("    <td>%s/%s</td>\n", ro->repClass, ro->repFamily);
-	    if (ro->strand[0] == '-')
-		{
-		printf ("    <td>(%d)</td>\n", ro->repLeft);
-		printf ("    <td>%d</td>\n", ro->repEnd);
-		printf ("    <td>%d</td>\n", ro->repStart);
-		}
-	    else
-		{
-		printf ("    <td>%d</td>\n", ro->repStart);
-		printf ("    <td>%d</td>\n", ro->repEnd);
-		printf ("    <td>(%d)</td>\n", ro->repLeft);
-		}
-	    printf ("    <td>%d</td>\n", ro->id);
-	    printf ("    </tr><tr><td colspan=\"15\"><pre>\n");
-	    printAlignment (ro);
-	    printf ("    </pre><td></tr>\n");
-	    }
-	sqlFreeResult (&sr2);
-	printf ("</table>\n");
-	}
-    hFreeConn (&conn2);
-    }
-printTrackHtml (tdb);
-}
-
 static struct rmskJoined *liftedJoinedRow(struct trackDb *tdb, char *table, char *repeat,
     char **retSrcChrom, int *retSrcStart)
 /* Find the row of a quickLifted rmskJoined track that was clicked:  read the rows of the
@@ -637,6 +416,226 @@ if (offset >= 0)
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
 	       " and id = %s", qTable, qChrom, start-1, repeat);
+	sr2 = sqlGetResult (conn2, query);
+	printf ("<h4>RepeatMasker Alignments:</h4>\n");
+	printf
+	    ("The raw alignment data used by RepeatMasker to generate "
+	     "the final annotation call for this element. NOTE: The "
+	     "aligned sequence names and consensus positions may differ "
+	     "from the final annotation.<p>\n");
+	printf ("<table>\n");
+	while ((row = sqlNextRow (sr2)) != NULL)
+	    {
+	    ro = rmskAlignLoad (row + hasBin);
+	    printf ("  <tr>\n");
+	    printf ("    <td>%d</td>\n", ro->swScore);
+	    printf ("    <td>%3.2f</td>\n",
+		    (double) ro->milliDiv * (double) 0.01);
+	    printf ("    <td>%3.2f</td>\n",
+		    (double) ro->milliDel * (double) 0.01);
+	    printf ("    <td>%3.2f</td>\n",
+		    (double) ro->milliIns * (double) 0.01);
+	    printf ("    <td>%s</td>\n", ro->genoName);
+	    printf ("    <td>%d</td>\n", ro->genoStart + 1);
+	    printf ("    <td>%d</td>\n", ro->genoEnd);
+	    printf ("    <td>(%d)</td>\n", ro->genoLeft);
+	    printf ("    <td>%s</td>\n", ro->strand);
+	    printf ("    <td>%s</td>\n", ro->repName);
+	    printf ("    <td>%s/%s</td>\n", ro->repClass, ro->repFamily);
+	    if (ro->strand[0] == '-')
+		{
+		printf ("    <td>(%d)</td>\n", ro->repLeft);
+		printf ("    <td>%d</td>\n", ro->repEnd);
+		printf ("    <td>%d</td>\n", ro->repStart);
+		}
+	    else
+		{
+		printf ("    <td>%d</td>\n", ro->repStart);
+		printf ("    <td>%d</td>\n", ro->repEnd);
+		printf ("    <td>(%d)</td>\n", ro->repLeft);
+		}
+	    printf ("    <td>%d</td>\n", ro->id);
+	    printf ("    </tr><tr><td colspan=\"15\"><pre>\n");
+	    printAlignment (ro);
+	    printf ("    </pre><td></tr>\n");
+	    }
+	sqlFreeResult (&sr2);
+	printf ("</table>\n");
+	}
+    hFreeConn (&conn2);
+    }
+printTrackHtml (tdb);
+}
+
+void doJRepeat (struct trackDb *tdb, char *repeat)
+/* Main entry point */
+{
+const char *data_style = "style=\"padding:0px 6px;\"";
+if (tdb == NULL)
+    errAbort("No RepeatMasker track found for item %s", repeat);
+char *table = tdb->table;
+char outTable[64] = "";
+char alignTable[64] = "";
+
+/* Currently using a fixed table name design
+ * with support for two datasets ( baseline and current ).
+ * The baseline dataset is the run which all the other
+ * tracks are based upon.  The current can be any more
+ * recent run of RepeatMasker.
+ */
+if (startsWith ("rmskJoinedCurrent", table))
+    {
+    strcpy (alignTable, "rmskAlignCurrent");
+    strcpy (outTable, "rmskOutCurrent");
+    }
+else if (startsWith ("rmskJoinedBaseline", table))
+    {
+    strcpy (alignTable, "rmskAlignBaseline");
+    strcpy (outTable, "rmskOutBaseline");
+    }
+
+cartWebStart (cart, database, "%s", tdb->longLabel);
+
+int offset = cartInt (cart, "o");
+if (offset >= 0)
+    {
+    struct sqlConnection *conn2 = hAllocConn (database);
+    struct sqlResult *sr2;
+    char **row;
+    char query[256];
+    char qTable[HDB_MAX_TABLE_STRING];
+    boolean hasBin;
+
+    int start = cartInt (cart, "o");
+
+    if (hTableExists (database, table))
+	{
+	if (!hFindSplitTable (database, seqName, table, qTable, sizeof(qTable), &hasBin))
+	    errAbort("track %s not found", table);
+    
+	sqlSafef (query, sizeof (query),
+	       "select * from %s where chrom = '%s' and alignStart >= %d"
+	       " and id = %s", qTable, seqName, start-1, repeat);
+
+	sr2 = sqlGetResult (conn2, query);
+	if ((row = sqlNextRow (sr2)) != NULL)
+	    {
+	    struct rmskJoined *rmJoin = rmskJoinedLoad (row + hasBin);
+
+	    char class[32];
+	    class[0] = '\0';
+	    char family[32];
+	    family[0] = '\0';
+	    char *poundPtr = index (rmJoin->name, '#');
+	    if (poundPtr)
+		{
+		// Terminate name string properly
+		safecpy (class, sizeof (class), poundPtr + 1);
+		*poundPtr = '\0';
+		char *slashPtr = index (class, '/');
+		if (slashPtr)
+		    {
+		    // Terminate class string properly
+		    safecpy (family, sizeof (family), slashPtr + 1);
+		    *slashPtr = '\0';
+		    }
+		}
+
+	    printf ("<b>Repeat:</b> %s<br>\n", rmJoin->name);
+	    printf ("<b>Class:</b> %s<br>\n", class);
+	    printf ("<b>Family:</b> %s<br>\n", family);
+	    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
+	    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
+		    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
+	    printf ("<br><br>\n");
+	    }
+	sqlFreeResult (&sr2);
+	}
+
+    /*
+     * Locate *.out annotation for this element
+     */
+    if (outTable[0] != '\0' && hTableExists (database, outTable))
+	{
+	int isFirst = 0;
+	struct rmskOut2 *ro;
+	if (!hFindSplitTable (database, seqName, outTable, qTable, sizeof(qTable), &hasBin))
+	    errAbort("track %s not found", outTable);
+	sqlSafef (query, sizeof (query),
+	       "select * from %s where genoName = '%s' and genoStart >= %d"
+	       " and id = %s", qTable, seqName, start-1, repeat);
+	sr2 = sqlGetResult (conn2, query);
+	printf ("<h4>RepeatMasker Annotation:</h4>\n");
+	printf
+	    ("The RepeatMasker annotation line(s) for this element. "
+	     "If the element is fragmented the output will contain one "
+	     "line per joined fragment.<p>\n");
+	printf ("<table cellspacing=\"0\">\n");
+	while ((row = sqlNextRow (sr2)) != NULL)
+	    {
+	    ro = rmskOut2Load (row + hasBin);
+	    if (!isFirst++)
+	        printOutTableHeader (ro->strand[0]);
+	    printf ("  <tr>\n");
+	    printf ("    <td %s>%d</td>\n", data_style, ro->swScore);
+	    printf ("    <td %s>%3.1f</td>\n", data_style,
+		    (double) ro->milliDiv * (double) 0.01);
+	    printf ("    <td %s>%3.1f</td>\n", data_style,
+		    (double) ro->milliDel * (double) 0.01);
+	    printf ("    <td %s>%3.1f</td>\n", data_style,
+		    (double) ro->milliIns * (double) 0.01);
+	    printf ("    <td %s>%s</td>\n", data_style, ro->genoName);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->genoStart + 1);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->genoEnd);
+	    printf ("    </A>");
+	    printf ("    <td %s>(%d)</td>\n", data_style, ro->genoLeft);
+	    printf ("    <td %s>%s</td>\n", data_style, ro->strand);
+	    printf ("    <td %s>%s</td>\n", data_style, ro->repName);
+	    printf ("    <td %s>%s/%s</td>\n", data_style, ro->repClass,
+		    ro->repFamily);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->repStart);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->repEnd);
+	    printf ("    <td %s>(%d)</td>\n", data_style, ro->repLeft);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->id);
+	    printf ("  <td>\n");
+	    printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">Browser</A>",
+		    hgTracksPathAndSettings (), database, seqName,
+		    ro->genoStart + 1, ro->genoEnd);
+	    char *tbl = cgiUsualString ("table", cgiString ("g"));
+	    printf
+		(" - <A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s%s%s%s%s&c=%s&l=%d&r=%d&"
+		 "strand=%s&table=%s\">"
+		 "DNA</A>\n", hgcPathAndSettings (), database, ro->genoStart,
+                 (ro->repName != NULL ? cgiEncode (ro->repName) : ""),
+                 cgiEncode("#"),
+		 (ro->repClass != NULL ? cgiEncode (ro->repClass) : ""),
+                 cgiEncode("/"),
+		 (ro->repFamily != NULL ? cgiEncode (ro->repFamily) : ""),
+		 seqName, ro->genoStart, ro->genoEnd, cgiEncode (ro->strand),
+		 tbl);
+
+	    printf ("  </td>\n");
+
+	    printf ("  </tr>\n");
+
+	    }
+	sqlFreeResult (&sr2);
+	printf ("</table>\n");
+	}
+
+    printf ("<br><br>\n");
+
+    /*
+     * Locate *.align data for this element
+     */
+    if (alignTable[0] != '\0' && hTableExists (database, alignTable))
+	{
+	struct rmskAlign *ro;
+	if (!hFindSplitTable (database, seqName, alignTable, qTable, sizeof(qTable), &hasBin))
+	    errAbort("track %s not found", alignTable);
+	sqlSafef (query, sizeof (query),
+	       "select * from %s where genoName = '%s' and genoStart >= %d"
+	       " and id = %s", qTable, seqName, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Alignments:</h4>\n");
 	printf

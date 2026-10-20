@@ -299,13 +299,6 @@ for (rm = rmList; rm != NULL; rm = next)
 return liftedList;
 }
 
-static char *layoutKey(struct track *tg)
-/* The subTracksHash key for a track's levels:  its table, or for a quickLifted one its name,
- * since its table name is the native track's.  refs #37437 */
-{
-return quickLiftIsLiftedRmskJoined(cart, tg->tdb) ? tg->track : tg->table;
-}
-
 static void liftedJoinedLoadItems(struct track *tg)
 /* The loadItems of a quickLifted rmskJoined track, behind browser.quickLiftRmsk:  a copy of
  * rmskJoinedLoadItems() that reads its rows from the assembly they came from, lifted onto
@@ -442,7 +435,6 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     char **row;
     int rowOffset;
     struct sqlConnection *conn = hAllocConn(database);
-    // liftedJoinedLoadItems() has a copy of this function;  a fix to one belongs in the other
     struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName,
                                         winStart, winEnd, NULL,
                                         &rowOffset);
@@ -583,7 +575,10 @@ setWg();
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     // Lookup the depth of this subTrack and report it
-    struct subTrack *st = hashFindVal(subTracksHash, layoutKey(tg));
+    struct subTrack *st = hashFindVal(subTracksHash, tg->table);
+    if (quickLiftIsLiftedRmskJoined(cart, tg->tdb))
+        // a quickLifted track's levels are kept under its name, refs #37437
+        st = hashFindVal(subTracksHash, tg->track);
     if (st)
         {
         tg->height = (st->levelCount * rmskJoinedItemHeight(tg, NULL));
@@ -1370,7 +1365,6 @@ if (vis == tvFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    // liftedOrigRepeatDraw() has a copy of this function;  a fix to one belongs in the other
     sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
 		      &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -1524,7 +1518,10 @@ struct rmskJoined *rm;
 if (vis == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     int level = yOff;
-    struct subTrack *st = hashFindVal(subTracksHash, layoutKey(tg));
+    struct subTrack *st = hashFindVal(subTracksHash, tg->table);
+    if (quickLiftIsLiftedRmskJoined(cart, tg->tdb))
+        // a quickLifted track's levels are kept under its name, refs #37437
+        st = hashFindVal(subTracksHash, tg->track);
     if (!st)
 	return;
 

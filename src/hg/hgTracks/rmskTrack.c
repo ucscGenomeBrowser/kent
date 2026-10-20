@@ -224,7 +224,6 @@ if (isFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    // liftedRepeatDraw() has a copy of this loop;  a fix to one belongs in the other
     sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
 		     &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)

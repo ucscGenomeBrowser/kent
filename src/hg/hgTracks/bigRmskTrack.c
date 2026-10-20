@@ -717,7 +717,6 @@ if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
     liftedBigRmskLoadItems(tg);
     return;
     }
-// liftedBigRmskLoadItems() has a copy of this function;  a fix to one belongs in the other
 makeClassHashBR();
 
 struct bigRmskRecord *detailList = NULL;

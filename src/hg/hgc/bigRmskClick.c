@@ -224,202 +224,6 @@ printf ("  </thead>\n");
 }
 
 
-void doBigRmskRepeat (struct trackDb *tdb, char *item)
-/* Main entry point */
-{
-cartWebStart (cart, database, "%s", tdb->longLabel);
-char *chrom = cartString(cart, "c");
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
-
-
-/* Open bigBed file and get interval list. */
-char *fileName = trackDbSetting(tdb, "bigDataUrl");
-struct bbiFile *bbi = bigBedFileOpenAlias(fileName,chromAliasFindAliases);
-struct lm *lm = lmInit(0);
-// doLiftedBigRmskRepeat() has a copy of this function;  a fix to one belongs in the other
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
-
-/* Find particular item in list - matching start, and item if possible. */
-boolean found = FALSE;
-struct bigBedInterval *bb;
-const char *data_style = "style=\"padding:0px 6px;\"";
-int bedSize = bbi->fieldCount;
-char *fields[bedSize];
-char startBuf[17], endBuf[17];
-if (bedSize < 14)
-    errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
-             bedSize);
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
-                                           bedSize);
-    if ( sameOk(fields[12], item) )
-        {
-        found = TRUE;
-        break;
-        }
-    }
-
-if ( found )
-    {
-    char class[32];
-    class[0] = '\0';
-    char subclass[32];
-    subclass[0] = '\0';
-    char *poundPtr = index (fields[3], '#');
-    if (poundPtr)
-        {
-        // Terminate name string properly
-        safecpy (class, sizeof (class), poundPtr + 1);
-        *poundPtr = '\0';
-        char *slashPtr = index (class, '/');
-        if (slashPtr)
-            {
-            // Terminate class string properly
-            safecpy (subclass, sizeof (subclass), slashPtr + 1);
-            *slashPtr = '\0';
-            }
-        }
-    printf ("<b>Repeat:</b> %s<br>\n", fields[3]);
-    printf ("<b>Class:</b> %s<br>\n", class);
-    printf ("<b>Subclass:</b> %s<br>\n", subclass);
-    printf ("<b>Orientation:</b> %s<br>\n", fields[5]);
-    //printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
-    //rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
-    printf ("<br><br>\n");
-
-    printf ("<h4>RepeatMasker Joined Annotations:</h4>\n");
-    printf
-           ("The RepeatMasker annotation line(s) for this element. "
-            "If the element is fragmented the output will contain one "
-            "line per joined fragment.<p>\n");
-
-    printf ("<table cellspacing=\"0\">\n");
-    char *description = fields[13];
-    printOutTableHeaderBR(*fields[5]);
-    char *outLine;
-    char *outLineTok = description;
-    while ((outLine = strsep(&outLineTok,",")) != NULL)
-        {
-        char *outField;
-        char *outFieldTok = outLine;
-        printf ("  <tr>\n");
-        while ((outField = strsep(&outFieldTok," ")) != NULL)
-            {
-            printf ("    <td %s>%s</td>\n", data_style, outField);
-            }
-        printf ("  <td>\n");
-        printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%s\">Browser</A>",
-                hgTracksPathAndSettings (), database, fields[0],
-                atoi(fields[6]) + 1, fields[7]);
-        char *tbl = cgiUsualString ("table", cgiString ("g"));
-        printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
-                "strand=%s&table=%s\">"
-                "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
-                (fields[3] != NULL ? cgiEncode (fields[3]) : ""),
-                fields[0], fields[6], fields[7], cgiEncode (fields[5]),
-                tbl);
-        printf ("  </td>\n");
-        printf ("  </tr>\n");
-        }
-    printf("</table>\n");
-    }
-else
-    {
-    printf("No item %s starting at %d\n", emptyForNull(item), start);
-    }
-lmCleanup(&lm);
-bbiFileClose(&bbi);
-
-/*
- * Locate *.align data for this element
- */
-char *xrefDataUrl = trackDbSetting(tdb, "xrefDataUrl");
-if ( xrefDataUrl ) 
-    {
-    //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
-    struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
-    if (abbi->fieldCount < 17)
-        errAbort("track %s has an xrefDataUrl bigBed with %d columns, needs at least 17.",
-                 tdb->track, abbi->fieldCount);
-    struct lm *alm = lmInit(0);
-    struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, chrom, start, end, 0, alm);
-
-    printf ("<h4>RepeatMasker Alignments:</h4>\n");
-    printf ("The raw alignment data used by RepeatMasker to generate "
-	     "the final annotation call for this element. NOTE: The "
-	     "aligned sequence names and consensus positions may differ "
-	     "from the final annotation.<p>\n");
-    printf ("<table>\n");
-
-    struct bigRmskAlignRecord *arec = NULL;
-    AllocVar(arec);
-    for (bb = abbList; bb != NULL; bb = bb->next)
-        {
-        char *afields[abbi->fieldCount];
-        bigBedIntervalToRow(bb, chrom, startBuf, endBuf, afields,
-                            abbi->fieldCount);
-        if ( sameOk(afields[15], item) )
-            {
-            arec->chrom = afields[0];
-            arec->chromStart = sqlUnsigned(afields[1]);
-            arec->chromEnd = sqlUnsigned(afields[2]);
-            arec->chromRemain = sqlUnsigned(afields[3]);
-            arec->score = sqlFloat(afields[4]);
-            arec->percSubst = sqlFloat(afields[5]);
-            arec->percDel = sqlFloat(afields[6]);
-            arec->percIns = sqlFloat(afields[7]);
-            safef(arec->strand, sizeof(arec->strand), "%s", afields[8]);
-            arec->repName = afields[9];
-            arec->repType = afields[10];
-            arec->repSubtype = afields[11];
-            arec->repStart = sqlUnsigned(afields[12]);
-            arec->repEnd = sqlUnsigned(afields[13]);
-            arec->repRemain = sqlUnsigned(afields[14]);
-            arec->id = sqlUnsigned(afields[15]);
-            arec->calignData = afields[16];
-
-	    printf ("  <tr>\n");
-	    printf ("    <td>%.2f</td>\n", arec->score);
-	    printf ("    <td>%3.2f</td>\n", arec->percSubst);
-	    printf ("    <td>%3.2f</td>\n", arec->percDel);
-	    printf ("    <td>%3.2f</td>\n", arec->percIns);
-	    printf ("    <td>%s</td>\n", arec->chrom);
-	    printf ("    <td>%d</td>\n", arec->chromStart + 1);
-	    printf ("    <td>%d</td>\n", arec->chromEnd);
-	    printf ("    <td>(%d)</td>\n", arec->chromRemain);
-	    printf ("    <td>%s</td>\n", arec->strand);
-	    printf ("    <td>%s</td>\n", arec->repName);
-	    printf ("    <td>%s/%s</td>\n", arec->repType, arec->repSubtype);
-	    if (arec->strand[0] == '-')
-		{
-		printf ("    <td>(%d)</td>\n", arec->repRemain);
-		printf ("    <td>%d</td>\n", arec->repEnd);
-		printf ("    <td>%d</td>\n", arec->repStart);
-		}
-	    else
-		{
-		printf ("    <td>%d</td>\n", arec->repStart);
-		printf ("    <td>%d</td>\n", arec->repEnd);
-		printf ("    <td>(%d)</td>\n", arec->repRemain);
-		}
-	    printf ("    <td>%d</td>\n", arec->id);
-	    printf ("    </tr><tr><td colspan=\"15\"><pre>\n");
-            printAlignmentBR ( 
-                       arec->strand[0], arec->chrom, arec->chromStart, arec->chromEnd, 
-                       arec->repName, arec->repStart, arec->repEnd,
-                       arec->calignData );
-	    printf ("    </pre><td></tr>\n");
-	    }
-        } //for(bb = abblist....
-    printf ("</table>\n");
-    lmCleanup(&alm);
-    bbiFileClose(&abbi);
-    } // if ( xref...
-printTrackHtml(tdb);
-}
-
 static boolean liftFields(struct hash *chainHash, char **fields)
 /* Lift the position fields of a bigRmsk row read from the assembly it came from onto the
  * reference:  chrom, strand, alignStart and alignEnd, the ones the details page shows and
@@ -611,6 +415,201 @@ if ( xrefDataUrl && found )
         {
         char *afields[abbi->fieldCount];
         bigBedIntervalToRow(bb, alignChrom, startBuf, endBuf, afields,
+                            abbi->fieldCount);
+        if ( sameOk(afields[15], item) )
+            {
+            arec->chrom = afields[0];
+            arec->chromStart = sqlUnsigned(afields[1]);
+            arec->chromEnd = sqlUnsigned(afields[2]);
+            arec->chromRemain = sqlUnsigned(afields[3]);
+            arec->score = sqlFloat(afields[4]);
+            arec->percSubst = sqlFloat(afields[5]);
+            arec->percDel = sqlFloat(afields[6]);
+            arec->percIns = sqlFloat(afields[7]);
+            safef(arec->strand, sizeof(arec->strand), "%s", afields[8]);
+            arec->repName = afields[9];
+            arec->repType = afields[10];
+            arec->repSubtype = afields[11];
+            arec->repStart = sqlUnsigned(afields[12]);
+            arec->repEnd = sqlUnsigned(afields[13]);
+            arec->repRemain = sqlUnsigned(afields[14]);
+            arec->id = sqlUnsigned(afields[15]);
+            arec->calignData = afields[16];
+
+	    printf ("  <tr>\n");
+	    printf ("    <td>%.2f</td>\n", arec->score);
+	    printf ("    <td>%3.2f</td>\n", arec->percSubst);
+	    printf ("    <td>%3.2f</td>\n", arec->percDel);
+	    printf ("    <td>%3.2f</td>\n", arec->percIns);
+	    printf ("    <td>%s</td>\n", arec->chrom);
+	    printf ("    <td>%d</td>\n", arec->chromStart + 1);
+	    printf ("    <td>%d</td>\n", arec->chromEnd);
+	    printf ("    <td>(%d)</td>\n", arec->chromRemain);
+	    printf ("    <td>%s</td>\n", arec->strand);
+	    printf ("    <td>%s</td>\n", arec->repName);
+	    printf ("    <td>%s/%s</td>\n", arec->repType, arec->repSubtype);
+	    if (arec->strand[0] == '-')
+		{
+		printf ("    <td>(%d)</td>\n", arec->repRemain);
+		printf ("    <td>%d</td>\n", arec->repEnd);
+		printf ("    <td>%d</td>\n", arec->repStart);
+		}
+	    else
+		{
+		printf ("    <td>%d</td>\n", arec->repStart);
+		printf ("    <td>%d</td>\n", arec->repEnd);
+		printf ("    <td>(%d)</td>\n", arec->repRemain);
+		}
+	    printf ("    <td>%d</td>\n", arec->id);
+	    printf ("    </tr><tr><td colspan=\"15\"><pre>\n");
+            printAlignmentBR ( 
+                       arec->strand[0], arec->chrom, arec->chromStart, arec->chromEnd, 
+                       arec->repName, arec->repStart, arec->repEnd,
+                       arec->calignData );
+	    printf ("    </pre><td></tr>\n");
+	    }
+        } //for(bb = abblist....
+    printf ("</table>\n");
+    lmCleanup(&alm);
+    bbiFileClose(&abbi);
+    } // if ( xref...
+printTrackHtml(tdb);
+}
+
+void doBigRmskRepeat (struct trackDb *tdb, char *item)
+/* Main entry point */
+{
+cartWebStart (cart, database, "%s", tdb->longLabel);
+char *chrom = cartString(cart, "c");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+
+
+/* Open bigBed file and get interval list. */
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName,chromAliasFindAliases);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+
+/* Find particular item in list - matching start, and item if possible. */
+boolean found = FALSE;
+struct bigBedInterval *bb;
+const char *data_style = "style=\"padding:0px 6px;\"";
+int bedSize = bbi->fieldCount;
+char *fields[bedSize];
+char startBuf[17], endBuf[17];
+if (bedSize < 14)
+    errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
+             bedSize);
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
+                                           bedSize);
+    if ( sameOk(fields[12], item) )
+        {
+        found = TRUE;
+        break;
+        }
+    }
+
+if ( found )
+    {
+    char class[32];
+    class[0] = '\0';
+    char subclass[32];
+    subclass[0] = '\0';
+    char *poundPtr = index (fields[3], '#');
+    if (poundPtr)
+        {
+        // Terminate name string properly
+        safecpy (class, sizeof (class), poundPtr + 1);
+        *poundPtr = '\0';
+        char *slashPtr = index (class, '/');
+        if (slashPtr)
+            {
+            // Terminate class string properly
+            safecpy (subclass, sizeof (subclass), slashPtr + 1);
+            *slashPtr = '\0';
+            }
+        }
+    printf ("<b>Repeat:</b> %s<br>\n", fields[3]);
+    printf ("<b>Class:</b> %s<br>\n", class);
+    printf ("<b>Subclass:</b> %s<br>\n", subclass);
+    printf ("<b>Orientation:</b> %s<br>\n", fields[5]);
+    //printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
+    //rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
+    printf ("<br><br>\n");
+
+    printf ("<h4>RepeatMasker Joined Annotations:</h4>\n");
+    printf
+           ("The RepeatMasker annotation line(s) for this element. "
+            "If the element is fragmented the output will contain one "
+            "line per joined fragment.<p>\n");
+
+    printf ("<table cellspacing=\"0\">\n");
+    char *description = fields[13];
+    printOutTableHeaderBR(*fields[5]);
+    char *outLine;
+    char *outLineTok = description;
+    while ((outLine = strsep(&outLineTok,",")) != NULL)
+        {
+        char *outField;
+        char *outFieldTok = outLine;
+        printf ("  <tr>\n");
+        while ((outField = strsep(&outFieldTok," ")) != NULL)
+            {
+            printf ("    <td %s>%s</td>\n", data_style, outField);
+            }
+        printf ("  <td>\n");
+        printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%s\">Browser</A>",
+                hgTracksPathAndSettings (), database, fields[0],
+                atoi(fields[6]) + 1, fields[7]);
+        char *tbl = cgiUsualString ("table", cgiString ("g"));
+        printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
+                "strand=%s&table=%s\">"
+                "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
+                (fields[3] != NULL ? cgiEncode (fields[3]) : ""),
+                fields[0], fields[6], fields[7], cgiEncode (fields[5]),
+                tbl);
+        printf ("  </td>\n");
+        printf ("  </tr>\n");
+        }
+    printf("</table>\n");
+    }
+else
+    {
+    printf("No item %s starting at %d\n", emptyForNull(item), start);
+    }
+lmCleanup(&lm);
+bbiFileClose(&bbi);
+
+/*
+ * Locate *.align data for this element
+ */
+char *xrefDataUrl = trackDbSetting(tdb, "xrefDataUrl");
+if ( xrefDataUrl ) 
+    {
+    //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
+    struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
+    if (abbi->fieldCount < 17)
+        errAbort("track %s has an xrefDataUrl bigBed with %d columns, needs at least 17.",
+                 tdb->track, abbi->fieldCount);
+    struct lm *alm = lmInit(0);
+    struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, chrom, start, end, 0, alm);
+
+    printf ("<h4>RepeatMasker Alignments:</h4>\n");
+    printf ("The raw alignment data used by RepeatMasker to generate "
+	     "the final annotation call for this element. NOTE: The "
+	     "aligned sequence names and consensus positions may differ "
+	     "from the final annotation.<p>\n");
+    printf ("<table>\n");
+
+    struct bigRmskAlignRecord *arec = NULL;
+    AllocVar(arec);
+    for (bb = abbList; bb != NULL; bb = bb->next)
+        {
+        char *afields[abbi->fieldCount];
+        bigBedIntervalToRow(bb, chrom, startBuf, endBuf, afields,
                             abbi->fieldCount);
         if ( sameOk(afields[15], item) )
             {

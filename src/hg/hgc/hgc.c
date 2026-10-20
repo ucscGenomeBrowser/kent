@@ -10477,7 +10477,6 @@ if (offset >= 0)
 
     if (!hFindSplitTable(database, seqName, tdb->table, table, sizeof table, &hasBin))
 	errAbort("Track %s not found", tdb->table);
-    // doLiftedRepeat() has a copy of this function;  a fix to one belongs in the other
     sqlSafef(query, sizeof query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
 	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);

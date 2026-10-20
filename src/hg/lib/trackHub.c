@@ -2043,7 +2043,7 @@ if (startsWithNoCase("bigBed", tdb->type) || \
        startsWithNoCase("bigChain", tdb->type) || \
        startsWithNoCase("bigMaf", tdb->type) || \
        startsWithNoCase("bigBarChart", tdb->type) || \
-       startsWithNoCase("bigRmsk", tdb->type) || \
+       (startsWithNoCase("bigRmsk", tdb->type) && quickLiftRmskEnabled(cart)) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
