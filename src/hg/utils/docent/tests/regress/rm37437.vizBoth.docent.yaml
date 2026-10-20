@@ -19,6 +19,7 @@ proof:
   - "assertion-only 2026-10-19 -- written with the fix, on branch qlRmsk37437"
   - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 9: the lifted row is a plain bed, with no box for 9927 at its lifted aligned range"
   - "sandbox-ab 2026-10-19 -- park 37437:  passes with the fixed hgTracks;  with the hgTracks of 1d8bbc31d4b, which keyed the layout by table, it fails at step 9:  the lifted row carries hg38's 4075899, and neither the native MER5A nor mm10's 9927 is drawn"
+  - "server-flip 2026-10-20 -- passes on genome-test since #37437 was pushed and installed there (cgi-alpha 15:29), having failed there as an xfail on 2026-10-19"
 
 target: genome-test
 db: mm10

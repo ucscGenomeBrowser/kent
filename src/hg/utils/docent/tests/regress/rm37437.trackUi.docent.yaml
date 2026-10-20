@@ -24,6 +24,7 @@ proof:
   - "assertion-only 2026-10-19 -- written with the change, on branch qlRmsk37437"
   - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 6: the lifted rmsk row is not drawn, so the configuration page is never reached"
   - "sandbox-ab 2026-10-19 -- park 37437: passes with the branch binaries and fails at step 6 with master's.  hgTrackUi is the same binary in both, so this shows the page is reachable only with the change; the hgTrackUi checks themselves have not been seen to fail"
+  - "server-flip 2026-10-20 -- passes on genome-test since #37437 was pushed and installed there (cgi-alpha 15:29), having failed there as an xfail on 2026-10-19"
 
 target: genome-test
 db: hg19

@@ -34,6 +34,7 @@ proof:
   - "assertion-only 2026-10-19 -- written with the change, on branch qlRmsk37437"
   - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 8: the lifted row is drawn as a plain bed, so 318366 has no map box at the lifted aligned range"
   - "sandbox-ab 2026-10-19 -- park 37437 (port 48115), branch qlRmsk37437: passes with the branch hgTracks, hgc and hgConvert; with master's three (the frozen live sandbox, same hg.conf) it fails at step 8 like genome-test; with the branch hgTracks and master's hgc it fails at step 10, the details page"
+  - "server-flip 2026-10-20 -- passes on genome-test since #37437 was pushed and installed there (cgi-alpha 15:29), having failed there as an xfail on 2026-10-19"
 
 target: genome-test
 db: hg38
