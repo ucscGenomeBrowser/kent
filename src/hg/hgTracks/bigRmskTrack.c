@@ -562,31 +562,38 @@ else
 }
 
 
+static void makeClassHashBR()
+/* Build classHashBR if it is not built yet.  The hash is filled before it is
+ * published, so a reader never sees it half filled.  bigRmskMethods() calls this
+ * on the main thread, because bigRmsk tracks can load in parallel threads. */
+{
+if ( classHashBR != NULL )
+    return;
+struct classRecord *cr;
+int i, numClasses = ArraySize(rptClasses);
+struct hash *hash = newHash(6);
+for (i = 0; i < numClasses; ++i)
+    {
+    AllocVar(cr);
+    cr->className = rptClassNames[i];
+    cr->layoutLevel = i;
+    unsigned int colorInt = rmskJoinedClassColors[i];
+    cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+    hashAdd(hash, rptClasses[i], cr);
+    }
+classHashBR = hash;
+}
+
 static void bigRmskLoadItems(struct track *tg)
-/* 
+/*
  * Loading is done first given the region the display is currently centered on.
  * This function is responsible for fetching the data *and* defining the number
  * of "items" that will be displayed.  An item represents a row of the track.
  * Therefore, while this is a "loading" function it also needs to perform enough
- * of the layout to determine how many "items" to generate.  
+ * of the layout to determine how many "items" to generate.
  */
 {
-int i;
-if ( classHashBR == NULL )
-    {
-    struct classRecord *cr;
-    int numClasses = ArraySize(rptClasses);
-    classHashBR = newHash(6);
-    for (i = 0; i < numClasses; ++i)
-        {
-        AllocVar(cr);
-        cr->className = rptClassNames[i];
-        cr->layoutLevel = i;
-        unsigned int colorInt = rmskJoinedClassColors[i];
-        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-        hashAdd(classHashBR, rptClasses[i], cr);
-        }
-    }
+makeClassHashBR();
 
 struct bigRmskRecord *detailList = NULL;
 if (tg->isBigBed)
@@ -1815,4 +1822,6 @@ track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
 track->canPack = TRUE;
+// build the class hash here, on the main thread, before any parallel load reads it
+makeClassHashBR();
 }

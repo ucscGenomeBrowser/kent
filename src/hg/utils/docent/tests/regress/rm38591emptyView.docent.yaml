@@ -1,14 +1,14 @@
 # #38591 -- quickLift of a composite with a view that has no subtracks.
 #
-# Fixes on branch qlFixes:  994159225dd and 5c8c67fc65e, validateTdbChildren() in
+# Fixes:  96f9c6c8921 and add9760cc5e, validateTdbChildren() in
 # hg/lib/trackHub.c.  It decided "these are views" from the first child alone, and recursed
 # into each view's subtracks without checking for none.
 #   * Empty view SECOND (rm38591second):  the recursion was handed NULL and read
 #     tdb->subtracks from it.  hgConvert died with SIGSEGV, an empty page.
 #   * Empty view FIRST (rm38591first):  the empty view is linked up as an ordinary
 #     subtrack, so every view was taken for a subtrack and validated as a table.  hgConvert
-#     stopped with "Table 'hg19.rm38591firstB' doesn't exist".  994159225dd alone did not
-#     fix this order;  5c8c67fc65e did.
+#     stopped with "Table 'hg19.rm38591firstB' doesn't exist".  96f9c6c8921 alone did not
+#     fix this order;  add9760cc5e did.
 # Now each child is looked at on its own and an empty view is left out of the lift, so both
 # composites come through with their one real subtrack.
 #
@@ -17,7 +17,8 @@
 proof:
   - "assertion-only 2026-10-20 -- written with the fix"
   - "xfail 2026-10-20 -- fails on genome-test at step 6, no lift link:  hgConvert SIGSEGV in validateTdbChildren(tdb=0x0) on rm38591second;  until qlFixes is pushed and built there"
-  - "sandbox-ab 2026-10-20 -- park 38591 (port 48116):  passes with qlFixes at 9e6f2de0564;  with trackHub.c from 994159225dd (NULL guard only) it fails at step 6, hgConvert stopped on Table rm38591firstB"
+  - "sandbox-ab 2026-10-20 -- park 38591 (port 48116):  passes with qlFixes at 9f488294a82;  with trackHub.c from 96f9c6c8921 (NULL guard only) it fails at step 6, hgConvert stopped on Table rm38591firstB"
+  - "server-flip 2026-10-20 -- failed on genome-test at step 6 (hgConvert built 05:03, SIGSEGV), passed once f2b3da9fc23 was built there with cgi-alpha (hgConvert 13:00)"
 
 target: genome-test
 db: hg19
