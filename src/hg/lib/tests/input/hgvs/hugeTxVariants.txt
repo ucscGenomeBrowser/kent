@@ -1,0 +1,7 @@
+# Variants with a ref of many megabases, run with hgvsTester -variants, so transcript terms too.
+# chr16:35756000-46469400 spans the centromere and overlaps two transcripts,
+# NR_033985.1 (+ strand) at the start and NR_026556.1 (- strand) at the end.
+# deletion
+chr16	35756000	46469400	-
+# same deletion with VCF anchor base as alt
+chr16	35755999	46469400	T

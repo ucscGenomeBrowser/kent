@@ -1,0 +1,13 @@
+# db: hg38
+# inputFile: input/hgvs/hugeTxVariants.txt
+# Variants with a ref of many megabases, run with hgvsTester -variants, so transcript terms too.
+# chr16:35756000-46469400 spans the centromere and overlaps two transcripts,
+# NR_033985.1 (+ strand) at the start and NR_026556.1 (- strand) at the end.
+# deletion
+chr16	35756000	46469400	-	NC_000016.10:g.35756001_46469400del
+	NR_026556.1:n.6060_10719459del		
+	NR_033985.1:n.975_10714374del		
+# same deletion with VCF anchor base as alt
+chr16	35755999	46469400	T	NC_000016.10:g.35756001_46469400del
+	NR_026556.1:n.6060_10719459del		
+	NR_033985.1:n.975_10714374del		
