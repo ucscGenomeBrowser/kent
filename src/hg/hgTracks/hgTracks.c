@@ -9359,12 +9359,17 @@ if (dy->stringSize == 0)
     }
 
 char *encoded = htmlEncode(dy->string);
-printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+struct dyString *tip = dyStringNew(512);
+dyStringPrintf(tip, "<b>Alternate sequence names</b>: %s<br><br>"
        "Alternative sequence names can be used in the position box, custom tracks, "
        "track hubs, bigBed, bigWig, and similar files. "
        "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
-       "for more information'>"
-       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encoded);
+       "for more information", encoded);
+char *encTip = attributeEncode(tip->string);
+printf("<span id='chromAliases' data-tooltip='%s'>"
+       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encTip);
+freeMem(encTip);
+dyStringFree(&tip);
 freeMem(encoded);
 dyStringFree(&dy);
 }

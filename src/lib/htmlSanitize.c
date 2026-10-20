@@ -136,8 +136,10 @@ static char *styleProperties =
 /* Class names allowed.  A class from outside would pick up whatever our own stylesheets and
  * scripts do with that name, so only names we want that for get through.  stdTbl is the
  * bordered table in HGStyle.css, and copyLinkSpan is where hgGateway.js puts a copy button
- * for the link named by the span's data-target.  Our own GenArk description pages use both. */
-static char *classNames = "stdTbl copyLinkSpan";
+ * for the link named by the span's data-target.  Our own GenArk description pages use both.
+ * The fa names are Font Awesome icons, which our own tooltips use. */
+static char *classNames = "stdTbl copyLinkSpan "
+    "fa fa-question-circle fa-info-circle";
 
 /* URL schemes allowed in href and src.  A URL with no scheme at all is allowed too. */
 static char *urlSchemes = "http https mailto ftp";
