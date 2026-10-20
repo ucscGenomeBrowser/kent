@@ -1135,7 +1135,9 @@ if (vis == tvFull)
 	int idx = 0;
 	for (idx = 0; idx < ro->blockCount; idx++)
 	    {
-	    if (ro->blockRelStarts[idx] > 0)
+	    // an aligned block can start at relStart 0 when the item has no left flank;  only -1
+	    // marks an unaligned block
+	    if (ro->blockRelStarts[idx] >= 0)
 		{
 		int blockStart = ro->chromStart + ro->blockRelStarts[idx];
 		int blockEnd =
