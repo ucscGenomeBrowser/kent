@@ -590,10 +590,9 @@ return quickLiftJoinedRepeat(chainHash, &rm->chrom, &rm->chromStart, &rm->chromE
 }
 
 static void makeClassHashBR()
-/* Build classHashBR, filled before it is published.  A copy of the block at the top of
- * bigRmskLoadItems();  a fix to one belongs in the other.  bigRmskMethods() calls this for a
- * quickLifted track on the main thread, because a lifted bigRmsk loads in a worker thread and
- * the block at the top of the loader is not safe to run in two at once.  refs #37437 */
+/* Build classHashBR if it is not built yet.  The hash is filled before it is
+ * published, so a reader never sees it half filled.  bigRmskMethods() calls this
+ * on the main thread, because bigRmsk tracks can load in parallel threads. */
 {
 if ( classHashBR != NULL )
     return;
@@ -618,22 +617,7 @@ static void liftedBigRmskLoadItems(struct track *tg)
  * they came from and lifts each onto this one.  A fix to one belongs in the other.
  * refs #37437 */
 {
-int i;
-if ( classHashBR == NULL )
-    {
-    struct classRecord *cr;
-    int numClasses = ArraySize(rptClasses);
-    classHashBR = newHash(6);
-    for (i = 0; i < numClasses; ++i)
-        {
-        AllocVar(cr);
-        cr->className = rptClassNames[i];
-        cr->layoutLevel = i;
-        unsigned int colorInt = rmskJoinedClassColors[i];
-        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-        hashAdd(classHashBR, rptClasses[i], cr);
-        }
-    }
+makeClassHashBR();
 
 struct bigRmskRecord *detailList = NULL;
 if (tg->isBigBed)
@@ -719,12 +703,12 @@ if (tg->isBigBed)
   
 
 static void bigRmskLoadItems(struct track *tg)
-/* 
+/*
  * Loading is done first given the region the display is currently centered on.
  * This function is responsible for fetching the data *and* defining the number
  * of "items" that will be displayed.  An item represents a row of the track.
  * Therefore, while this is a "loading" function it also needs to perform enough
- * of the layout to determine how many "items" to generate.  
+ * of the layout to determine how many "items" to generate.
  */
 {
 if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
@@ -733,24 +717,8 @@ if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
     liftedBigRmskLoadItems(tg);
     return;
     }
-int i;
-// makeClassHashBR() has a copy of this block, and liftedBigRmskLoadItems() a copy of this
-// function;  a fix to one belongs in the other
-if ( classHashBR == NULL )
-    {
-    struct classRecord *cr;
-    int numClasses = ArraySize(rptClasses);
-    classHashBR = newHash(6);
-    for (i = 0; i < numClasses; ++i)
-        {
-        AllocVar(cr);
-        cr->className = rptClassNames[i];
-        cr->layoutLevel = i;
-        unsigned int colorInt = rmskJoinedClassColors[i];
-        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-        hashAdd(classHashBR, rptClasses[i], cr);
-        }
-    }
+// liftedBigRmskLoadItems() has a copy of this function;  a fix to one belongs in the other
+makeClassHashBR();
 
 struct bigRmskRecord *detailList = NULL;
 if (tg->isBigBed)
@@ -1966,9 +1934,6 @@ void bigRmskMethods(struct track *track, struct trackDb *tdb,
                   int wordCount, char *words[])
 {
 commonBigBedMethods(track, tdb, wordCount, words);
-// a quickLifted track loads in a worker thread, so build the class hash here, refs #37437
-if (quickLiftIsLifted(tdb) && quickLiftRmskEnabled(cart))
-    makeClassHashBR();
 track->loadItems = bigRmskLoadItems;
 track->totalHeight = bigRmskTotalHeight;
 track->drawItems = bigRmskDrawItems;
@@ -1982,4 +1947,6 @@ track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
 track->canPack = TRUE;
+// build the class hash here, on the main thread, before any parallel load reads it
+makeClassHashBR();
 }

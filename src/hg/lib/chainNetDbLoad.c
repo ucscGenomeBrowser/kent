@@ -477,6 +477,36 @@ char startBuf[16], endBuf[16];
 struct chain *chainList = NULL;
 struct chain *chain;
 
+/* Bucket the links by chain id in one pass.  The loop below used to walk the whole
+ * link list for every chain, which is O(chains x links):  invisible while a chain file
+ * holds one chain per sequence in the window, and quadratic once it holds many.
+ * The key is the id as a number, so the match is the same numeric one as before.
+ *
+ * The refs are local memory, freed with everything else by lmCleanup() below, and
+ * each bucket is put back into link-file order so the loop that consumes it and its
+ * closing slReverse() behave exactly as they did.  The hash starts at the default size
+ * and grows with the number of chains, since some callers make one call per chain.
+ * refs #38591 */
+struct hash *linkHash = hashNew(0);
+char idKey[16];
+for (linkBb = linkBbList; linkBb != NULL; linkBb = linkBb->next)
+    {
+    bigBedIntervalToRow(linkBb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    safef(idKey, sizeof idKey, "%u", sqlUnsigned(bedRow[3]));
+    struct hashEl *hel = hashLookup(linkHash, idKey);
+    if (hel == NULL)
+        hel = hashAdd(linkHash, idKey, NULL);
+    struct slRef *ref;
+    lmAllocVar(lm, ref);
+    ref->val = linkBb;
+    ref->next = hel->val;
+    hel->val = ref;
+    }
+struct hashCookie cookie = hashFirst(linkHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    slReverse((struct slRef **)&hel->val);
+
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
@@ -498,22 +528,22 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         chain->score = atof(bedRow[11]);
         chain->id = chainId;
 
-        for (linkBb = linkBbList; linkBb != NULL; linkBb = linkBb->next)
+        struct slRef *linkRef;
+        safef(idKey, sizeof idKey, "%u", chainId);
+        for (linkRef = hashFindVal(linkHash, idKey); linkRef != NULL;
+             linkRef = linkRef->next)
             {
-            bigBedIntervalToRow(linkBb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
-            unsigned chainId = sqlUnsigned(bedRow[3]);
-            if (chainId == chain->id)
-                {
-                struct cBlock *cBlock;
+            bigBedIntervalToRow(linkRef->val, chrom, startBuf, endBuf, bedRow,
+                                ArraySize(bedRow));
+            struct cBlock *cBlock;
 
-                AllocVar(cBlock);
-                slAddHead(&chain->blockList, cBlock);
-                cBlock->tStart = sqlUnsigned(bedRow[1]);
-                cBlock->tEnd = sqlUnsigned(bedRow[2]);
-                unsigned size = cBlock->tEnd - cBlock->tStart;
-                cBlock->qStart = sqlUnsigned(bedRow[4]);
-                cBlock->qEnd = cBlock->qStart + size;
-                }
+            AllocVar(cBlock);
+            slAddHead(&chain->blockList, cBlock);
+            cBlock->tStart = sqlUnsigned(bedRow[1]);
+            cBlock->tEnd = sqlUnsigned(bedRow[2]);
+            unsigned size = cBlock->tEnd - cBlock->tStart;
+            cBlock->qStart = sqlUnsigned(bedRow[4]);
+            cBlock->qEnd = cBlock->qStart + size;
             }
         slReverse(&chain->blockList);
 
@@ -526,6 +556,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 bbiFileClose(&bbi);
 bbiFileClose(&linkBbi);
+hashFree(&linkHash);
 lmCleanup(&lm);
 if ((id > 0) && (bb == NULL))
     errAbort("chain %d is not in %s", id, fileName);

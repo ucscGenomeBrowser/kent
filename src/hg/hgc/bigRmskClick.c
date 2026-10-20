@@ -247,6 +247,9 @@ const char *data_style = "style=\"padding:0px 6px;\"";
 int bedSize = bbi->fieldCount;
 char *fields[bedSize];
 char startBuf[17], endBuf[17];
+if (bedSize < 14)
+    errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
+             bedSize);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
@@ -337,6 +340,9 @@ if ( xrefDataUrl )
     {
     //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
     struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
+    if (abbi->fieldCount < 17)
+        errAbort("track %s has an xrefDataUrl bigBed with %d columns, needs at least 17.",
+                 tdb->track, abbi->fieldCount);
     struct lm *alm = lmInit(0);
     struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, chrom, start, end, 0, alm);
 
@@ -585,6 +591,9 @@ if ( xrefDataUrl && found )
     {
     //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
     struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
+    if (abbi->fieldCount < 17)
+        errAbort("track %s has an xrefDataUrl bigBed with %d columns, needs at least 17.",
+                 tdb->track, abbi->fieldCount);
     struct lm *alm = lmInit(0);
     struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, alignChrom, alignQueryStart,
                                                          alignQueryEnd, 0, alm);

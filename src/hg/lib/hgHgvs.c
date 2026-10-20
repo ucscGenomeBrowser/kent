@@ -2925,9 +2925,15 @@ else
     {
     int refLen = strlen(ref);
     int altLen = strlen(alt);
-    char refInv[refLen+1];
-    safencpy(refInv, sizeof(refInv), ref, refLen);
-    reverseComplement(refInv, refLen);
+    // only same-length ref and alt can be an inversion, so refInv is never longer than alt
+    boolean isInv = FALSE;
+    if (refLen == altLen && refLen > 1)
+        {
+        char refInv[refLen+1];
+        safencpy(refInv, sizeof(refInv), ref, refLen);
+        reverseComplement(refInv, refLen);
+        isInv = sameString(refInv, alt);
+        }
     if (refLen == 1 && altLen == 1)
         dyStringPrintf(dy, "%c>%c", ref[0], alt[0]);
     else if (dupLen > 0)
@@ -2953,7 +2959,7 @@ else
         if (refLen <= HGVS_SEVERAL)
             dyStringAppendN(dy, ref, refLen);
         }
-    else if (refLen == altLen && refLen > 1 && sameString(refInv, alt))
+    else if (isInv)
         {
         dyStringAppend(dy, "inv");
         if (refLen <= HGVS_SEVERAL)
@@ -3023,21 +3029,48 @@ char *hgvsGFromVariant(struct seqWindow *gSeqWin, struct bed3 *variantBed, char 
 struct dyString *dy = dyStringCreate("%s:g.", acc ? acc : variantBed->chrom);
 uint vStart = variantBed->chromStart, vEnd = variantBed->chromEnd;
 assert (vEnd >= vStart);
-gSeqWin->fetch(gSeqWin, variantBed->chrom, vStart, vEnd);
-int refLen = vEnd - vStart;
-char ref[refLen+1];
-seqWindowCopy(gSeqWin, vStart, refLen, ref, sizeof(ref));
 int altLen = strlen(alt);
+// if we have too large of a seq, don't compare all the bases, just the ones relevant to alt
+boolean clampSeq = altLen > 0 && vEnd - vStart > (2*altLen);
+int refLen = clampSeq ? 2*altLen : vEnd - vStart; // clamp to max 2*altLen
+// large enough to hold the ends of ref for trimming, or ref clamped for output
+int refBufLen = max(2*altLen, HGVS_SEVERAL+10);
+char ref[refBufLen+1];
+if (clampSeq)
+    {
+    // the first altLen bases of ref
+    gSeqWin->fetch(gSeqWin, variantBed->chrom, vStart, vStart+altLen);
+    seqWindowCopy(gSeqWin, vStart, altLen, ref, sizeof(ref));
+    // the last altLen bases of ref
+    gSeqWin->fetch(gSeqWin, variantBed->chrom, vEnd-altLen, vEnd);
+    seqWindowCopy(gSeqWin, vEnd-altLen, altLen, ref + altLen, sizeof(ref) - altLen);
+    }
+else
+    {
+    gSeqWin->fetch(gSeqWin, variantBed->chrom, vStart, vEnd);
+    seqWindowCopy(gSeqWin, vStart, min(refLen, refBufLen), ref, sizeof(ref));
+    }
 char altCpy[altLen+1];
 safecpy(altCpy, sizeof(altCpy), alt);
 if (differentString(ref, altCpy))
+    {
     // Trim identical bases from start and end -- unless this is an assertion that there is
     // no change, in which case it's good to keep the range on which that assertion was made.
     trimRefAlt(ref, altCpy, &vStart, &vEnd, &refLen, &altLen);
+    }
+// we may have trimmed up ref and alt, so we need to reset ref to our new vStart and vEnd, only
+// the first refBufLen bases are kept
+refLen = vEnd - vStart;
+gSeqWin->fetch(gSeqWin, variantBed->chrom, vStart, vStart + min(refLen, refBufLen));
+seqWindowCopy(gSeqWin, vStart, min(refLen, refBufLen), ref, sizeof(ref));
 if (indelShiftIsApplicable(refLen, altLen) &&
     indelShift(gSeqWin, &vStart, &vEnd, altCpy, INDEL_SHIFT_NO_MAX, isdRight))
+    {
     // update ref
-    seqWindowCopy(gSeqWin, vStart, refLen, ref, sizeof(ref));
+    refLen = vEnd - vStart;
+    gSeqWin->fetch(gSeqWin, variantBed->chrom, vStart, vStart + min(refLen, refBufLen));
+    seqWindowCopy(gSeqWin, vStart, min(refLen, refBufLen), ref, sizeof(ref));
+    }
 int dupLen = 0;
 if (refLen == 1)
     // Single base: single 1-based coordinate

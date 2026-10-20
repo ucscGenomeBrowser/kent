@@ -281,8 +281,8 @@ struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *li
     char *chrom, int start, int end, char *extraWhere,
     ItemLoader2 loader, int numFields, boolean blocked);
 /* Load items from another assembly via quickLift SQL, map them back to the reference,
- * and return the lifted beds.  Handles custom track table resolution internally.
- * Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
+ * and return the lifted beds that overlap chrom:start-end.  Handles custom track table
+ * resolution internally.  Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
 
 boolean quickLiftLiftPos(char *sourceDb, char *destDb,
     char *chrom, int start, int end,

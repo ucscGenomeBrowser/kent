@@ -1,0 +1,54 @@
+# #38592 -- RepeatMasker details pages:  hgc crashed on an rmskJoined name that is not in
+# trackDb, and the bigRmsk details page read columns its bigBed files do not have.
+#
+# Fix a155b0cd7bc (branch rmskNativeFixes).  It also builds the bigRmsk class table in hgTracks
+# on the main thread;  that is a race between parallel loads and no script can show it.
+#
+# 1. hgc.c findNameBasedHandler() sends any name starting "rmskJoined" to doJRepeat() in
+#    hg/hgc/rmskJoinedClick.c, with tdb NULL when the name is not in trackDb.  doJRepeat() then
+#    read tdb->track and hgc died with SIGSEGV:  an empty page.  Now it says
+#    "No RepeatMasker track found for item 1".  The check is that text, because an empty page
+#    passes every noText:.
+# 2. doBigRmskRepeat() in hg/hgc/bigRmskClick.c read afields[0..16] from the xrefDataUrl
+#    bigBed whatever its column count.  The fixture track rm38592xref has a 14-column bigRmsk
+#    and a 16-column align file.  Before the fix the page printed an alignment table built from
+#    a column past the end of the row;  now it says the file has 16 columns and needs 17.
+#    The control track rm38592ok has the same items with a 17-column align file, and must
+#    still show the alignments.
+#
+# Fixture hub:  ~braney/public_html/docentFixtures/rm38592/rm38592hub.txt (hg38;  both
+# tracks are full in the hub, rm38592short is hidden;  five hs1 RepeatMasker rows
+# from chr1:1,007,000-1,008,000 and their align rows, on hg38 chr1 at the same coordinates).
+#
+# Deliberately not asserted:  the bedSize < 14 check on the main bigRmsk file
+# (rm38592short in the hub).  hgTracks refuses to draw a bigRmsk with fewer than 14 columns,
+# so there is no item to click, and hgc's g= needs the hub_<n>_ prefix, which differs by
+# central.  Seen by hand instead, see proof.
+proof:
+  - "assertion-only 2026-10-20 -- written with the fix"
+  - "xfail 2026-10-20 -- fails on genome-test at step 2, the rmskJoinedNoSuch page is empty, until a155b0cd7bc is pushed and built there"
+  - "sandbox-ab 2026-10-20 -- park 38592 (port 48117):  passes with hgc from a155b0cd7bc;  with hgc from 14ebdc98968 step 2 fails (empty page), and with step 1 removed the rest fails at the xref expect (page shows RepeatMasker Alignments, no message) after the control passes.  rm38592short by hand, URL with hub_200675_:  13-column message with the fix, a page built from a 14th column without it"
+
+target: genome-test
+db: hg38
+position: chr1:1006000-1012000
+reset: true
+fast: true
+steps:
+  # 1. an rmskJoined name that is not a track
+  - goto: "/cgi-bin/hgc?db=hg38&c=chr7&l=155797305&r=155817306&o=155799158&t=155799480&g=rmskJoinedNoSuch&i=1"
+  - expect:
+      text: "No RepeatMasker track found for item 1"
+
+  # 2. bigRmsk details with a short align file, against a control
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38592/rm38592hub.txt", db: hg38, position: "chr1:1006000-1012000"}
+  - expect: {rows: [rm38592ok, rm38592xref]}
+  - click: {track: rm38592ok, item: "1370"}
+  - expect:
+      text: ["RepeatMasker Alignments", "AluY"]
+      noText: ["needs at least 17"]
+  - go: chr1:1006000-1012000
+  - click: {track: rm38592xref, item: "1370"}
+  - expect:
+      text: "has an xrefDataUrl bigBed with 16 columns, needs at least 17"
+      noText: ["RepeatMasker Alignments"]

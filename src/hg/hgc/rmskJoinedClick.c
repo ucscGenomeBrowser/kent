@@ -206,9 +206,11 @@ void doJRepeat (struct trackDb *tdb, char *repeat)
 /* Main entry point */
 {
 const char *data_style = "style=\"padding:0px 6px;\"";
-char *table = (tdb ? tdb->table : tdb->track);
-char outTable[64];
-char alignTable[64];
+if (tdb == NULL)
+    errAbort("No RepeatMasker track found for item %s", repeat);
+char *table = tdb->table;
+char outTable[64] = "";
+char alignTable[64] = "";
 
 /* Currently using a fixed table name design
  * with support for two datasets ( baseline and current ).
@@ -289,7 +291,7 @@ if (offset >= 0)
     /*
      * Locate *.out annotation for this element
      */
-    if (hTableExists (database, outTable))
+    if (outTable[0] != '\0' && hTableExists (database, outTable))
 	{
 	int isFirst = 0;
 	struct rmskOut2 *ro;
@@ -362,7 +364,7 @@ if (offset >= 0)
     /*
      * Locate *.align data for this element
      */
-    if (hTableExists (database, alignTable))
+    if (alignTable[0] != '\0' && hTableExists (database, alignTable))
 	{
 	struct rmskAlign *ro;
 	if (!hFindSplitTable (database, seqName, alignTable, qTable, sizeof(qTable), &hasBin))
@@ -553,7 +555,7 @@ if (offset >= 0)
     /*
      * Locate *.out annotation for this element
      */
-    if (isNotEmpty(outTable) && hTableExists (qDb, outTable))
+    if (outTable[0] != '\0' && hTableExists (qDb, outTable))
 	{
 	int isFirst = 0;
 	struct rmskOut2 *ro;
@@ -627,7 +629,7 @@ if (offset >= 0)
     /*
      * Locate *.align data for this element
      */
-    if (isNotEmpty(alignTable) && hTableExists (qDb, alignTable))
+    if (alignTable[0] != '\0' && hTableExists (qDb, alignTable))
 	{
 	struct rmskAlign *ro;
 	if (!hFindSplitTable (qDb, qChrom, alignTable, qTable, sizeof(qTable), &hasBin))
