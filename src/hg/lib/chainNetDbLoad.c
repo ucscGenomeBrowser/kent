@@ -484,8 +484,10 @@ struct chain *chain;
  *
  * The refs are local memory, freed with everything else by lmCleanup() below, and
  * each bucket is put back into link-file order so the loop that consumes it and its
- * closing slReverse() behave exactly as they did.  refs #38591 */
-struct hash *linkHash = hashNew(16);
+ * closing slReverse() behave exactly as they did.  The hash starts at the default size
+ * and grows with the number of chains, since some callers make one call per chain.
+ * refs #38591 */
+struct hash *linkHash = hashNew(0);
 char idKey[16];
 for (linkBb = linkBbList; linkBb != NULL; linkBb = linkBb->next)
     {
