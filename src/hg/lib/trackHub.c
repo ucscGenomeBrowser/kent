@@ -1847,6 +1847,7 @@ if (!inited)
 
     for(ii = 0; ii < len; ii++)
         hashStore(vettedHash, vettedTracks[ii]);
+    inited = TRUE;
     }
 
 return hashLookup(vettedHash, track) != NULL;
@@ -2062,6 +2063,11 @@ static struct trackDb * validateTdbChildren(struct cart *cart, char *db, struct 
 struct trackDb *validTdbs = NULL;
 struct trackDb *nextTdb;
 unsigned count = 0;
+
+/* No children is not an error, it is the answer.  The recursion below passes
+ * view->subtracks, which is empty for a view that has none.  refs #38591 */
+if (tdb == NULL)
+    return NULL;
 
 if (tdb->subtracks)  // this is a view, descend again
     {
