@@ -2064,32 +2064,27 @@ struct trackDb *validTdbs = NULL;
 struct trackDb *nextTdb;
 unsigned count = 0;
 
-/* No children is not an error, it is the answer.  The recursion below passes
- * view->subtracks, which is empty for a view that has none.  refs #38591 */
-if (tdb == NULL)
-    return NULL;
-
-if (tdb->subtracks)  // this is a view, descend again
+/* Decide view or subtrack for each child, not from the first one.  A view with no
+ * subtracks is marked as a subtrack when the tree is linked up, so it is known by its
+ * own view setting, and it is dropped:  it has nothing to lift.  refs #38591 */
+for(; tdb; tdb = nextTdb)
     {
-    struct trackDb *view = tdb;
-    for (; view; view = nextTdb)
+    nextTdb = tdb->next;
+    if ((tdb->subtracks != NULL) || (trackDbLocalSetting(tdb, "view") != NULL))
         {
-        nextTdb = view->next;
-        view->subtracks = validateTdbChildren(cart, db,view->subtracks, badList);
+        // this is a view, descend again
+        if (tdb->subtracks != NULL)
+            tdb->subtracks = validateTdbChildren(cart, db, tdb->subtracks, badList);
 
-        if (view->subtracks != NULL)
+        if (tdb->subtracks != NULL)
             {
-            slAddHead(&validTdbs, view);
-            if (view->visibility)
+            slAddHead(&validTdbs, tdb);
+            if (tdb->visibility)
                 count++;
             }
         }
-    }
-else
-    {
-    for(; tdb; tdb = nextTdb)
+    else
         {
-        nextTdb = tdb->next;
         boolean visible = isParentVisible(cart, tdb) && isSubtrackVisible(cart, tdb);
         // Lift all siblings of a visible subtrack, but only complain about
         // non-liftable ones the user actually asked for (visible ones).
