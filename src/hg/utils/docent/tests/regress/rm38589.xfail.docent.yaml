@@ -1,0 +1,35 @@
+# #38589 -- RepeatMasker Viz.:  the zoomed-out full view did not draw an aligned block that
+# starts at the start of its item.
+#
+# Above 30 kb, rmskJoinedCurrent in full is drawn by origRepeatDraw() in
+# hg/hgTracks/rmskJoinedTrack.c.  Its full-mode loop drew a block only if blockRelStarts was
+# > 0, and only -1 marks an unaligned block, so an aligned block at relStart 0 was skipped.
+# The fix tests >= 0 (2ca6535c7d4 on master, also 539093c3696 on branch qlRmsk37437).
+#
+# Where:  hg38 MER52A at chr7:20,559,261-20,560,882, whose only aligned block is 1,622 bases
+# at relStart 0 (blocks 0,1622,4 at -1,0,-1).  No other aligned repeat lies within 800 bases,
+# so in a 40 kb window the 5-pixel column at its middle holds only this repeat.  Before the
+# fix that column is empty;  with it, the repeat's gray.
+#
+# The check is color:, because nothing in the page's text or tree changes:  the overview has
+# no map boxes, and the rows, labels and height are the same either way.  The gray is
+# 114,114,114, from the item's score (1880).
+# Deliberately not asserted:  dense mode and the detail view, which drew these blocks before.
+proof:
+  - "assertion-only 2026-10-19 -- written with the fix"
+  - "xfail 2026-10-19 -- fails on genome-test at step 4, nothing drawn at MER52A, until 2ca6535c7d4 is pushed and built there"
+  - "sandbox-ab 2026-10-19 -- park 37437 (port 48115):  passes with an hgTracks carrying the fix (114,114,114 is the only color in the column);  with master's hgTracks from before the fix it fails at step 4, nothing drawn"
+
+target: genome-test
+db: hg38
+position: chr7:20540001-20580000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A20540001-20580000&pix=1100"
+  - hide: all
+  - track: {rmskJoinedCurrent: full}
+  - expect:
+      rows: [rmskJoinedCurrent]
+      noText: ["Warning/Error"]
+      color: {track: rmskJoinedCurrent, at: "chr7:20560071", is: "114,114,114"}
