@@ -19,6 +19,7 @@ proof:
   - "assertion-only 2026-10-19 -- written with the fix"
   - "xfail 2026-10-19 -- fails on genome-test at step 4, nothing drawn at MER52A, until 2ca6535c7d4 is pushed and built there"
   - "sandbox-ab 2026-10-19 -- park 37437 (port 48115):  passes with an hgTracks carrying the fix (114,114,114 is the only color in the column);  with master's hgTracks from before the fix it fails at step 4, nothing drawn"
+  - "server-flip 2026-10-19 -- passed on genome-test once 2ca6535c7d4 was installed there (cgi-alpha 18:03), having failed there at step 4 that afternoon"
 
 target: genome-test
 db: hg38
