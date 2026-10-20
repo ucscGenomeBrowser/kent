@@ -10393,68 +10393,65 @@ printf("Alignment between C briggsae sequence %s (above) and C elegans chromosom
 fetchAndShowWaba("wabaCbr", name);
 }
 
+void doHgRepeat(struct trackDb *tdb, char *repeat);
+/* Do click on a repeat track. */
+
 static void doLiftedRepeat(struct trackDb *tdb, char *repeat)
 /* The details page of a quickLifted rmsk item, behind browser.quickLiftRmsk:  a copy of
  * doHgRepeat() that reads the row from the assembly it came from, through the chain, and
  * prints the one that lands where it was clicked.  repStart, repEnd and repLeft follow the
  * strand in that assembly, not the lifted one.  The field printing is a copy of doHgRepeat()'s;
- * a fix to one belongs in the other.  refs #37437 */
+ * a fix to one belongs in the other.  A click on a class row, with no item, reads no table, so
+ * it goes to doHgRepeat() itself.  refs #37437 */
 {
 int offset = cartInt(cart, "o");
+if (offset < 0)
+    {
+    doHgRepeat(tdb, repeat);
+    return;
+    }
 cartWebStart(cart, database, "Repeat");
-if (offset >= 0)
-    {
-    int start = cartInt(cart, "o");
-    int end = cartInt(cart, "t");
-    struct hash *chainHash = newHash(8);
-    struct rmskOut *ro, *roList = quickLiftSqlLoadRmsk(tdb, trackHubSkipHubName(tdb->table),
-        seqName, start, end, chainHash);
-    boolean found = FALSE;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct hash *chainHash = newHash(8);
+struct rmskOut *ro, *roList = quickLiftSqlLoadRmsk(tdb, trackHubSkipHubName(tdb->table),
+    seqName, start, end, chainHash);
+boolean found = FALSE;
 
-    printf("<H3>RepeatMasker Information</H3>\n");
-    for (ro = roList; ro != NULL; ro = ro->next)
-	{
-	char repStrand = ro->strand[0];
-	if (!sameString(ro->repName, repeat) ||
-	    !quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
-	    !sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
-	    continue;
-	found = TRUE;
-	printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
-            ro->repName, ro->repName);
-    printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
-	printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
-	printf("<B>Class:</B> %s<BR>\n", ro->repClass);
-	printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
-	printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
-	printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
-	printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
-	printf("<B>Begin in repeat:</B> %d<BR>\n",
-	       (repStrand == '-' ? ro->repLeft : ro->repStart));
-	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
-	printf("<B>Left in repeat:</B> %d<BR>\n",
-	       (repStrand == '-' ? -ro->repStart : -ro->repLeft));
-	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
-		 ro->repName);
-	}
-    if (!found)
-	htmlPrintf("No repeat %s found at %s:%d-%d.<BR>\n", repeat, seqName, start + 1, end);
-    htmlPrintf("<BR>This repeat comes from %s and is mapped onto %s by quickLift.<BR>\n",
-               trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
-    rmskOutFreeList(&roList);
-    }
-else
+printf("<H3>RepeatMasker Information</H3>\n");
+for (ro = roList; ro != NULL; ro = ro->next)
     {
-    if (sameString(repeat, "SINE"))
-	printf("This track contains the short interspersed nuclear element (SINE) class of repeats, which includes ALUs.\n");
-    else if (sameString(repeat, "LINE"))
-        printf("This track contains the long interspersed nuclear element (LINE) class of repeats.\n");
-    else if (sameString(repeat, "LTR"))
-        printf("This track contains the class of long terminal repeats (LTRs), which includes retroposons.\n");
-    else
-        printf("This track contains the %s class of repeats.\n", repeat);
-    printf("Click on an individual repeat element within the track for more information about that item.<BR>\n");
+    char repStrand = ro->strand[0];
+    if (!sameString(ro->repName, repeat) ||
+	!quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	!sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
+	continue;
+    found = TRUE;
+    printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+	ro->repName, ro->repName);
+printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
+    printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
+    printf("<B>Class:</B> %s<BR>\n", ro->repClass);
+    printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
+    printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
+    printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
+    printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
+    printf("<B>Begin in repeat:</B> %d<BR>\n",
+	   (repStrand == '-' ? ro->repLeft : ro->repStart));
+    printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
+    printf("<B>Left in repeat:</B> %d<BR>\n",
+	   (repStrand == '-' ? -ro->repStart : -ro->repLeft));
+    printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
+	     ro->repName);
+    // with quickLiftSplitRanges off, two chains whose source ranges overlap can read the
+    // same row twice, and both copies land in the same place
+    break;
     }
+if (!found)
+    htmlPrintf("No repeat %s found at %s:%d-%d.<BR>\n", repeat, seqName, start + 1, end);
+htmlPrintf("<BR>This repeat comes from %s and is mapped onto %s by quickLift.<BR>\n",
+	   trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
+rmskOutFreeList(&roList);
 printTrackHtml(tdb);
 }
 

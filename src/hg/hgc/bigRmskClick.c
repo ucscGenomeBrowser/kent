@@ -14,6 +14,7 @@
 #include "hCommon.h"
 #include "chromAlias.h"
 #include "htmshell.h"
+#include "bPlusTree.h"
 #include "quickLift.h"
 #include "trackHub.h"
 
@@ -227,7 +228,8 @@ printf ("  </thead>\n");
 static boolean liftFields(struct hash *chainHash, char **fields)
 /* Lift the position fields of a bigRmsk row read from the assembly it came from onto the
  * reference:  chrom, strand, alignStart and alignEnd, the ones the details page shows and
- * links to.  Returns FALSE if the item does not lift.  refs #37437 */
+ * links to.  Returns FALSE if the item does not lift, or if its block lists do not have
+ * blockCount entries.  refs #37437 */
 {
 char *chrom = cloneString(fields[0]);
 unsigned chromStart = sqlUnsigned(fields[1]);
@@ -273,7 +275,6 @@ int end = cartInt(cart, "t");
 /* Open bigBed file and get interval list. */
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
 struct bbiFile *bbi = bigBedFileOpenAlias(fileName,chromAliasFindAliases);
-struct lm *lm = lmInit(0);
 struct hash *chainHash = NULL;
 struct bigBedInterval *bbList = quickLiftGetIntervals(trackDbSetting(tdb, "quickLiftUrl"), bbi,
                                                       chrom, start, end, &chainHash);
@@ -289,19 +290,22 @@ if (bedSize < 14)
     errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
              bedSize);
 // the item's place in the assembly it came from, where the alignments are read
-char sourceChrom[256];
+char sourceChrom[bbi->chromBpt->keySize+1];
+int lastChromId = -1;
 char *alignChrom = NULL;
 int alignQueryStart = 0, alignQueryEnd = 0;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    bbiCachedChromLookup(bbi, bb->chromId, -1, sourceChrom, sizeof sourceChrom);
-    bigBedIntervalToRow(bb, sourceChrom, startBuf, endBuf, fields,
-                                           bedSize);
+    bbiCachedChromLookup(bbi, bb->chromId, lastChromId, sourceChrom, sizeof sourceChrom);
+    lastChromId = bb->chromId;
+    if (bigBedIntervalToRow(bb, sourceChrom, startBuf, endBuf, fields,
+                                           bedSize) < 14)
+        continue;
     // with multi-chain lifting the same item can come back once for each chain, so take the
     // copy that lands where it was clicked
     if ( sameOk(fields[12], item) &&
          liftFields(quickLiftChainHashForItem(chainHash, bb), fields) &&
-         (sqlSigned(fields[6]) == start) )
+         (sqlSigned(fields[6]) == start) && sameString(fields[0], chrom) )
         {
         alignChrom = cloneString(sourceChrom);
         alignQueryStart = bb->start;
@@ -383,7 +387,6 @@ else
     {
     printf("No item %s starting at %d\n", emptyForNull(item), start);
     }
-lmCleanup(&lm);
 bbiFileClose(&bbi);
 
 /*
@@ -414,8 +417,9 @@ if ( xrefDataUrl && found )
     for (bb = abbList; bb != NULL; bb = bb->next)
         {
         char *afields[abbi->fieldCount];
-        bigBedIntervalToRow(bb, alignChrom, startBuf, endBuf, afields,
-                            abbi->fieldCount);
+        if (bigBedIntervalToRow(bb, alignChrom, startBuf, endBuf, afields,
+                            abbi->fieldCount) < 17)
+            continue;
         if ( sameOk(afields[15], item) )
             {
             arec->chrom = afields[0];

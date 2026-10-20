@@ -2141,9 +2141,8 @@ if (blockCount <= 0)
     return FALSE;
 // the unaligned flanks are drawn past the aligned part:  keep whatever they reach beyond
 // their own sizes, which is how far the item's ends sit from the aligned part
-int first = ((blockCount > 0) && (blockRelStarts[0] < 0)) ? max(blockSizes[0], 0) : 0;
-int last = ((blockCount > 0) && (blockRelStarts[blockCount-1] < 0)) ?
-           max(blockSizes[blockCount-1], 0) : 0;
+int first = (blockRelStarts[0] < 0) ? max(blockSizes[0], 0) : 0;
+int last = (blockRelStarts[blockCount-1] < 0) ? max(blockSizes[blockCount-1], 0) : 0;
 int extraLeft = max((int)(*pAlignStart - *pChromStart) - first, 0);
 int extraRight = max((int)(*pChromEnd - *pAlignEnd) - last, 0);
 int *newStarts, *newEnds;

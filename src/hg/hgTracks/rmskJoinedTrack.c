@@ -294,8 +294,11 @@ for (rm = rmList; rm != NULL; rm = next)
         (rm->chromEnd > winStart))
         slAddHead(&liftedList, rm);
     else
+        // freeing a row here is safe for quickLiftChainHashForItem:  every row was allocated
+        // before the loop, so a later one cannot reuse a freed one's address
         rmskJoinedFree(&rm);
     }
+slReverse(&liftedList);
 return liftedList;
 }
 

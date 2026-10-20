@@ -614,13 +614,13 @@ char *readOneLineMaybeBgzip(char *fileOrUrl, bits64 offset, bits64 len);
 
 void doJRepeat (struct trackDb *tdb, char *repeat);
 void doBigRmskRepeat (struct trackDb *tdb, char *repeat);
+/* New RepeatMasker Visualization defined in joinedRmskClick.c */
 
 void doLiftedJRepeat (struct trackDb *tdb, char *repeat);
 /* The details page of a quickLifted rmskJoined item, behind browser.quickLiftRmsk. */
 
 void doLiftedBigRmskRepeat (struct trackDb *tdb, char *item);
 /* The details page of a quickLifted bigRmsk item, behind browser.quickLiftRmsk. */
-/* New RepeatMasker Visualization defined in joinedRmskClick.c */
 
 INLINE char* strOrNbsp(char* val)
 /* return val if not empty otherwise HTML entity &nbsp; */

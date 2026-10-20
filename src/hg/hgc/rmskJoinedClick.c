@@ -282,54 +282,48 @@ if (offset >= 0)
     char *qChrom = NULL;
     struct rmskJoined *liftedJoin = liftedJoinedRow(tdb, table, repeat, &qChrom, &start);
     if (liftedJoin == NULL)
-        errAbort("Couldn't find repeat %s in %s", repeat, qDb);
+        {
+        htmlPrintf ("No repeat %s found at %s:%d-%d.<br>\n", repeat, seqName, start + 1,
+                    cartInt (cart, "t"));
+        hFreeConn (&conn2);
+        printTrackHtml (tdb);
+        return;
+        }
 
-    if (hTableExists (qDb, table))
+    // the joined row itself is liftedJoin, already read through the chain
+    {
+    struct rmskJoined *rmJoin = liftedJoin;
+
+    char class[32];
+    class[0] = '\0';
+    char family[32];
+    family[0] = '\0';
+    char *poundPtr = index (rmJoin->name, '#');
+    if (poundPtr)
 	{
-	if (!hFindSplitTable (qDb, qChrom, table, qTable, sizeof(qTable), &hasBin))
-	    errAbort("track %s not found", table);
-    
-	sqlSafef (query, sizeof (query),
-	       "select * from %s where chrom = '%s' and alignStart >= %d"
-	       " and id = %s", qTable, qChrom, start-1, repeat);
-
-	sr2 = sqlGetResult (conn2, query);
-	if ((row = sqlNextRow (sr2)) != NULL)
+	// Terminate name string properly
+	safecpy (class, sizeof (class), poundPtr + 1);
+	*poundPtr = '\0';
+	char *slashPtr = index (class, '/');
+	if (slashPtr)
 	    {
-	    struct rmskJoined *rmJoin = liftedJoin;
-
-	    char class[32];
-	    class[0] = '\0';
-	    char family[32];
-	    family[0] = '\0';
-	    char *poundPtr = index (rmJoin->name, '#');
-	    if (poundPtr)
-		{
-		// Terminate name string properly
-		safecpy (class, sizeof (class), poundPtr + 1);
-		*poundPtr = '\0';
-		char *slashPtr = index (class, '/');
-		if (slashPtr)
-		    {
-		    // Terminate class string properly
-		    safecpy (family, sizeof (family), slashPtr + 1);
-		    *slashPtr = '\0';
-		    }
-		}
-
-	    printf ("<b>Repeat:</b> %s<br>\n", rmJoin->name);
-	    printf ("<b>Class:</b> %s<br>\n", class);
-	    printf ("<b>Family:</b> %s<br>\n", family);
-	    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
-	    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
-		    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
-	    htmlPrintf ("<br>This repeat comes from %s and is mapped onto %s by quickLift.  "
-	                "The annotation and alignment lines below give its positions in "
-	                "%s.<br>\n", qDb, trackHubSkipHubName(database), qDb);
-	    printf ("<br><br>\n");
+	    // Terminate class string properly
+	    safecpy (family, sizeof (family), slashPtr + 1);
+	    *slashPtr = '\0';
 	    }
-	sqlFreeResult (&sr2);
 	}
+
+    printf ("<b>Repeat:</b> %s<br>\n", rmJoin->name);
+    printf ("<b>Class:</b> %s<br>\n", class);
+    printf ("<b>Family:</b> %s<br>\n", family);
+    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
+    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
+	    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
+    htmlPrintf ("<br>This repeat comes from %s and is mapped onto %s by quickLift.  "
+		"The annotation and alignment lines below give its positions in "
+		"%s.<br>\n", qDb, trackHubSkipHubName(database), qDb);
+    printf ("<br><br>\n");
+    }
 
     /*
      * Locate *.out annotation for this element

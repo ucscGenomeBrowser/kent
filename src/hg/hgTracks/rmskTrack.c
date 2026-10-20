@@ -86,8 +86,11 @@ for (ro = quickLiftSqlLoadRmsk(tg->tdb, tg->table, chromName, winStart, winEnd, 
         (ro->genoEnd > winStart))
         slAddHead(&liftedList, ro);
     else
+        // freeing a row here is safe for quickLiftChainHashForItem:  every row was allocated
+        // before the loop, so a later one cannot reuse a freed one's address
         rmskOutFree(&ro);
     }
+slReverse(&liftedList);
 return liftedList;
 }
 
@@ -97,7 +100,8 @@ static void liftedRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 /* The drawing of a quickLifted rmsk track, behind browser.quickLiftRmsk:  repeatDraw() over
  * rows read from the assembly they came from and lifted onto this one, kept in a list rather
  * than streamed from the table.  The two drawing loops are copies of the ones in
- * repeatDraw();  a fix to one belongs in the other.  refs #37437 */
+ * repeatDraw(), with safef() for the status line;  a fix to one belongs in the other.
+ * refs #37437 */
 {
 Color overrideColor = colorFromCart(tg, 0);
 int baseWidth = seqEnd - seqStart;

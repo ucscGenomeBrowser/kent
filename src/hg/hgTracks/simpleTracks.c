@@ -16194,8 +16194,8 @@ else if (startsWith("gtexGene", track->track) ||
          quickLiftIsLiftedGtex(cart, track->tdb))
     gtexGeneMethods(track);
 else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
-    // a quickLifted RepeatMasker Viz. track carries its hub's prefix, so the name handler
-    // misses it, refs #37437
+    // a quickLifted RepeatMasker Viz. track has avoidHandler on, so its name handler is
+    // skipped, refs #37437
     rmskJoinedMethods(track);
 else if (startsWith("rnaStruct", track->track))
     rnaSecStrMethods(track);

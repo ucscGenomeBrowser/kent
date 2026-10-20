@@ -20,6 +20,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "bPlusTree.h"
 #include "quickLift.h"
 #include "bigRmskUi.h"
 
@@ -625,7 +626,6 @@ if (tg->isBigBed)
     struct bbiFile *bbi = fetchBbiForTrack(tg);
     if (bbi->fieldCount < 14)
         errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tg->track, bbi->fieldCount);
-    struct lm *lm = lmInit(0);
     struct hash *chainHash = NULL;
     struct bigBedInterval *bb, *bbList = quickLiftGetIntervals(
         trackDbSetting(tg->tdb, "quickLiftUrl"), bbi, chromName, winStart, winEnd, &chainHash);
@@ -634,6 +634,8 @@ if (tg->isBigBed)
        a standard encoding of blockStarts as would be expected by a BED12 validator, and therefore
        I must use BED9+ and handle the blocks myself. */
     char startBuf[16], endBuf[16];
+    char sourceChrom[bbi->chromBpt->keySize+1];
+    int lastChromId = -1;
 
     char *filterString = cartUsualString(cart, BIGRMSK_NAME_FILTER, BIGRMSK_NAME_FILTER_DEFAULT);
     boolean isFilterRegexp = cartUsualBoolean(cart, BIGRMSK_REGEXP_FILTER, BIGRMSK_REGEXP_FILTER_DEFAULT);
@@ -645,9 +647,10 @@ if (tg->isBigBed)
     for (bb = bbList; bb != NULL; bb = bb->next)
         {
         // the item's row is in the assembly it came from
-        char sourceChrom[256];
-        bbiCachedChromLookup(bbi, bb->chromId, -1, sourceChrom, sizeof sourceChrom);
-        bigBedIntervalToRow(bb, sourceChrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        bbiCachedChromLookup(bbi, bb->chromId, lastChromId, sourceChrom, sizeof sourceChrom);
+        lastChromId = bb->chromId;
+        if (bigBedIntervalToRow(bb, sourceChrom, startBuf, endBuf, bedRow, ArraySize(bedRow)) < 14)
+            continue;
 
         if ( (isFilterRegexp && (regexec(&regEx,bedRow[3], 0, NULL,0 ) == 0)) ||
              (!isFilterRegexp && wildMatch(filterString, bedRow[3])) )
@@ -687,7 +690,6 @@ if (tg->isBigBed)
             }
         } // for(bb = bbList...
     bbiFileClose(&bbi);
-    lmCleanup(&lm);
     } // if (tg->isBigBed...
       //Could also...have DB loader here in the future.
     tg->items = detailList;
