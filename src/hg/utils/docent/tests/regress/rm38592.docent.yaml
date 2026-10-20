@@ -28,6 +28,7 @@ proof:
   - "assertion-only 2026-10-20 -- written with the fix"
   - "xfail 2026-10-20 -- fails on genome-test at step 2, the rmskJoinedNoSuch page is empty, until a155b0cd7bc is pushed and built there"
   - "sandbox-ab 2026-10-20 -- park 38592 (port 48117):  passes with hgc from a155b0cd7bc;  with hgc from 14ebdc98968 step 2 fails (empty page), and with step 1 removed the rest fails at the xref expect (page shows RepeatMasker Alignments, no message) after the control passes.  rm38592short by hand, URL with hub_200675_:  13-column message with the fix, a page built from a 14th column without it"
+  - "server-flip 2026-10-20 -- failed on genome-test at step 2 (empty page) before the build;  passes there after 5a3cc32675a was built into cgi-bin at 13:15, 6 of 6 runs"
 
 target: genome-test
 db: hg38
@@ -40,9 +41,15 @@ steps:
   - expect:
       text: "No RepeatMasker track found for item 1"
 
-  # 2. bigRmsk details with a short align file, against a control
+  # 2. bigRmsk details with a short align file, against a control.  hide: all first, so the
+  # page draws only the two hub rows:  with all of hg38's defaults on, the go: back to
+  # hgTracks timed out or drew without rm38592xref in 2 of 6 runs on genome-test.
+  - go: chr1:1006000-1012000
+  - hide: all
   - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38592/rm38592hub.txt", db: hg38, position: "chr1:1006000-1012000"}
-  - expect: {rows: [rm38592ok, rm38592xref]}
+  - expect:
+      rows: [ruler, rm38592ok, rm38592xref]
+      exact: true
   - click: {track: rm38592ok, item: "1370"}
   - expect:
       text: ["RepeatMasker Alignments", "AluY"]
