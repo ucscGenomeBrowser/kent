@@ -417,6 +417,13 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 
 static void mergeWiggles(struct track *tg, boolean add)
 {
+/* A child whose data failed to load has no preDrawContainer: dereferencing one here took
+ * the whole image down with a segfault.  Merge over the children that do have data; the
+ * failed child still draws its own message.  refs #38560 */
+while ((tg != NULL) && (tg->preDrawContainer == NULL))
+    tg = tg->next;
+if (tg == NULL)
+    return;
 struct preDrawContainer *firstPre = tg->preDrawContainer;
 
 struct track *firstTrack = tg;
@@ -427,14 +434,17 @@ for(tg = tg->next; tg; tg = tg->next)
     {
     struct preDrawContainer *pre = tg->preDrawContainer;
 
-    for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+    if (pre != NULL)
         {
-        struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
-        struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
-        if (add)
-            firstPreDraw->smooth += thisPreDraw->smooth;
-        else
-            firstPreDraw->smooth -= thisPreDraw->smooth;
+        for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+            {
+            struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
+            struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
+            if (add)
+                firstPreDraw->smooth += thisPreDraw->smooth;
+            else
+                firstPreDraw->smooth -= thisPreDraw->smooth;
+            }
         }
     }
 //if (wigCart->autoScale == wiggleScaleAuto)
@@ -542,8 +552,11 @@ if (errMsgFound && currentWindow==windows)  // first window
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
-if (wigCart->aggregateFunction == wiggleAggregateAdd || wigCart->aggregateFunction == wiggleAggregateSubtract)
+if ((wigCart->aggregateFunction == wiggleAggregateAdd
+     || wigCart->aggregateFunction == wiggleAggregateSubtract) && !errMsgFound)
     {
+    /* With a child missing, the sum is wrong whatever we do, so leave the rows as they
+     * are and let the failed one say so.  refs #38560 */
     mergeWiggles(tg->subtracks, wigCart->aggregateFunction == wiggleAggregateAdd);
     tg->subtracks->next = NULL;
     }
