@@ -9723,8 +9723,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			track->networkErrMsg = cloneString(errCatch->message->string);
 			spreadErrorToSubtracks(track, errCatch->message->string);
 			}
-		    else if (errCatch->gotWarning)
-			warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+		    errCatchReWarn(errCatch);  // errCatchStart took the warnings, hand them back
 		    errCatchFree(&errCatch);
 
 		    if (measureTiming)
