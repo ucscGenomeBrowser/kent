@@ -76,6 +76,9 @@
 #blatTable_filter { float:left; margin:0 0 10px; }
 #blatTable_filter input { width:300px; max-width:55vw; border:1px solid var(--btnLine);
     border-radius:0; padding:5px 9px; font-size:14px; }
+/* "Hide alt/fix patches" checkbox after the search box; undo the search-box input rule above */
+#blatTable_filter .blatAltFix { margin-left:18px; cursor:pointer; font-size:14px; }
+#blatTable_filter .blatAltFix input { width:auto; padding:0; margin:0 4px 0 0; vertical-align:middle; }
 #blatTable_wrapper { padding:6px 0 4px; overflow-x:auto; }
 .blatDetail { border-bottom:1px solid var(--line); background:var(--panel); padding:14px 18px 16px; }
 .blatDetail .dhead { display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap; }

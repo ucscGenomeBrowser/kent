@@ -535,14 +535,18 @@ printf("<A title='Show query sequence, genome hit and sequence alignment' "
 printf("details</A> ");
 }
 
+/* The notes for patch sequences, compared by pointer to tell an alt/fix hit from the others. */
+static char *fixNote = "Assembly fix patch: corrects an error in the reference assembly.";
+static char *altNote = "Alternate haplotype: an alternate sequence for this region.";
+
 static char *chromTypeNote(char *tName)
 /* Return a short explanation for special sequence names (alt/fix/random/hap/unplaced), or NULL for a
  * normal chromosome.  tName should be the display name the user sees. */
 {
 if (endsWith(tName, "_fix"))
-    return "Assembly fix patch: corrects an error in the reference assembly.";
+    return fixNote;
 if (endsWith(tName, "_alt") || stringIn("_hap", tName))
-    return "Alternate haplotype: an alternate sequence for this region.";
+    return altNote;
 if (endsWith(tName, "_random"))
     return "Unlocalized sequence: known chromosome, position not determined.";
 if (startsWith("chrUn", tName))
@@ -619,13 +623,14 @@ return locusConn;
 
 static void printBlatResultsApp(struct psl *pslList, char *database, char *organism, char *browserUrl,
     char *hgcUrl, char *pslName, char *faName, char *customText, char *uiState, char *unhideTrack,
-    struct sqlConnection *locusConn, struct subText *subList)
+    struct sqlConnection *locusConn, struct subText *subList, char *ctName)
 /* "Table" output mode: emit the hit data as an inline JSON object plus an empty container, and let
  * hgBlat.js build the UI (summary strip, DataTable with identity/coverage bars, detail panel).
  * All presentation lives in hgBlat.js; this function only assembles data.
  * On a fresh search the per-hit "Alignment details" links go to hgc's htcUserAli (which reads the
  * ephemeral trash .pslx/.fa); on a shared-link reopen (pslName NULL) there is no trash, so they go
- * to htcBlatAlign instead, which rebuilds each alignment from the durable bigPsl custom track. */
+ * to htcBlatAlign instead, which rebuilds each alignment from the durable bigPsl custom track.
+ * ctName is the results custom track when the page was reopened from it (blatCt=), else NULL. */
 {
 struct psl *psl;
 jsIncludeDataTablesLibs();
@@ -648,6 +653,8 @@ jsonWriteBoolean(jw, "isProt", pslIsProtein(pslList));
 jsonWriteNumber(jw, "hitCount", slCount(pslList));
 jsonWriteBoolean(jw, "multiQuery", pslListMultiQuery(pslList));
 jsonWriteBoolean(jw, "hasLocus", locusConn != NULL);
+/* The "Hide alt/fix patches" filter is only offered on human assemblies for now. */
+jsonWriteBoolean(jw, "altFixFilter", sameWord(trackHubSkipHubName(organism), "Human"));
 /* Sharing a link only makes sense when a durable bigPsl custom track was made from the results
  * (autoBigPsl); otherwise there is nothing for the shared session to reopen from. */
 jsonWriteBoolean(jw, "canShare", autoBigPsl);
@@ -655,6 +662,12 @@ jsonWriteBoolean(jw, "canShare", autoBigPsl);
  * present with autoBigPsl.  hgBlat.js shows its own "Rename BLAT Track" button + modal in that case,
  * pre-filled with the track's current name/description (below) so it needs no page-global. */
 jsonWriteBoolean(jw, "canRename", autoBigPsl);
+/* Deleting needs the name of the results track: on a page rendered from the trash files hgBlat.js
+ * gets it from the track this page builds (window.blatCtName in showAliPlaces), on a blatCt= reopen
+ * it is ctName.  A reopen from an old shared session has neither. */
+jsonWriteBoolean(jw, "canDelete", autoBigPsl && (pslName != NULL || ctName != NULL));
+if (ctName != NULL)
+    jsonWriteString(jw, "ctName", ctName);
 if (autoBigPsl)
     {
     char *ctName = NULL, *ctDescription = NULL;
@@ -742,6 +755,9 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     char *note = blatSeqNote(psl->tName, displayChromName);   /* check the display name and its aliases */
     if (note != NULL)
         jsonWriteString(jw, "chromNote", note);
+    /* for the "Hide alt/fix patches" checkbox */
+    if (note == altNote || note == fixNote)
+        jsonWriteBoolean(jw, "altFix", TRUE);
     jsonWriteString(jw, "strand", psl->strand);
     jsonWriteNumber(jw, "tStart", psl->tStart + 1);
     jsonWriteNumber(jw, "tEnd", psl->tEnd);
@@ -1136,6 +1152,8 @@ else  // hyperlink
 	    "    trackName = name; trackDescription = description;\n"
 	    "    buildBigPslCt(url, name, description);\n"
 	    "};\n"
+	    /* Exposed for hgBlat.js's "Delete track" button: the name of the track built above. */
+	    "window.blatCtName = function() { return ct_blat; };\n"
             "$(document).ready(function() {\n"
 	    "\n"
 	    "buildBigPslCt(url, trackName, trackDescription);\n"
@@ -1219,7 +1237,7 @@ else  // hyperlink
             locusConn = blatLocusConn(database, &subList);
 
     if (tableOut)
-        printBlatResultsApp(pslList, database, organism, browserUrl, hgcUrl, pslName, faName, customText, uiState, unhideTrack, locusConn, subList);
+        printBlatResultsApp(pslList, database, organism, browserUrl, hgcUrl, pslName, faName, customText, uiState, unhideTrack, locusConn, subList, NULL);
     else
         {
         printf("<DIV STYLE=\"display:block;\"><PRE>");
@@ -3020,10 +3038,11 @@ printf("</PRE>\n");
  * old session-based links still open.  A separate longer-lived (~6-12 month) auto-expiring anonymous
  * trash tier, for links that should outlive normal trash, is still wanted later (see the
  * edit-kent-code skill note "Trash lifetime & durable anonymous storage"). */
-static void showBigPslResults(char *database, char *organism, char *bbFile)
+static void showBigPslResults(char *database, char *organism, char *bbFile, char *ctName)
 /* Rebuild the Table view from the bigPsl file of a BLAT results custom track, without re-running
  * BLAT and without any stored query sequence.  bbFile must already be checked to be a server
- * file (trash or session data); NULL or a missing file says the results are gone. */
+ * file (trash or session data); NULL or a missing file says the results are gone.  ctName is the
+ * custom track's name if known, for the "Delete track" button. */
 {
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
@@ -3050,7 +3069,7 @@ struct sqlConnection *locusConn = blatLocusConn(database, &subList);
 char uiState[64];
 safef(uiState, sizeof uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart));
 printBlatResultsApp(pslList, database, organism, hgTracksName(), hgcName(),
-    NULL, NULL, NULL, uiState, "", locusConn, subList);
+    NULL, NULL, NULL, uiState, "", locusConn, subList, ctName);
 cartWebEnd();
 }
 
@@ -3059,7 +3078,7 @@ static void doShareReopen(char *database, char *organism)
  * was saved with the session.  The custom track (and its bigBed file) is kept alive by
  * refreshNamedSessionCustomTracks for as long as the shared session exists, so this is durable. */
 {
-showBigPslResults(database, organism, blatFindPinnedBigPsl(cart));
+showBigPslResults(database, organism, blatFindPinnedBigPsl(cart), NULL);
 }
 
 static void doCtReopen(char *database, char *organism, char *ctName)
@@ -3080,7 +3099,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         bbFile = bigDataUrl;
     break;
     }
-showBigPslResults(database, organism, bbFile);
+showBigPslResults(database, organism, bbFile, bbFile != NULL ? ctName : NULL);
 }
 
 static void doReopenResults(char *database, char *organism)
