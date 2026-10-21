@@ -2409,6 +2409,21 @@ for (sf = lf->components; sf != NULL && sf->next != NULL; sf = sf->next)
 return FALSE;
 }
 
+Color baseColorMuteBarbColor(struct hvGfx *hvg, enum baseColorDrawOpt drawOpt,
+                             Color itemColor, Color barbColor)
+/* When mismatch and insertion marks are drawn on the exons (different bases or
+ * different codons), tone the strand chevrons down to halfway between the
+ * item color and barbColor, so the marks stand out more than the chevrons.
+ * Otherwise return barbColor unchanged. */
+{
+if (drawOpt != baseColorDrawDiffBases && drawOpt != baseColorDrawDiffCodons)
+    return barbColor;
+struct rgbColor itemRgb = hvGfxColorIxToRgb(hvg, itemColor);
+struct rgbColor barbRgb = hvGfxColorIxToRgb(hvg, barbColor);
+return hvGfxFindColorIx(hvg, (itemRgb.r + barbRgb.r)/2, (itemRgb.g + barbRgb.g)/2,
+                        (itemRgb.b + barbRgb.b)/2);
+}
+
 void baseColorDrawCdsArrows(struct track *tg, struct linkedFeatures *lf,
                             struct hvGfx *hvg, int xOff, int y, double scale,
                             int heightPer, int winStart, enum baseColorDrawOpt drawOpt,
@@ -2444,7 +2459,8 @@ int orientation = lf->orientation;
  * intron of this transcript is visible on screen - then the intron fishbones
  * already show the strand, so arrows on the coding boxes are redundant clutter */
 boolean drawCds = !zoomedToCodonLevel && !anyIntronOnScreen(lf);
-Color cdsColor1 = hvGfxFindColorIx(hvg, 0xff, 0xff, 0xff);
+Color cdsColor1 = baseColorMuteBarbColor(hvg, drawOpt, color,
+                                         hvGfxFindColorIx(hvg, 0xff, 0xff, 0xff));
 int cdsBh = tl.barbHeight;
 int cdsSpacing = tl.barbSpacing*2;
 
@@ -2459,7 +2475,7 @@ if (utrBh > tl.barbHeight)
     utrBh = tl.barbHeight;
 if (utrBh < 1)
     utrBh = 1;
-Color utrColor = hvGfxContrastingColor(hvg, color);
+Color utrColor = baseColorMuteBarbColor(hvg, drawOpt, color, hvGfxContrastingColor(hvg, color));
 int utrSpacing = tl.barbSpacing*3;
 
 struct simpleFeature *sf;

@@ -4953,6 +4953,7 @@ static int barbMergePixels = -1;   // max pixel gap between blocks still merged 
 if (barbMergePixels < 0)           // barbs; hg.conf barbMergePixels, 0 disables merging
     barbMergePixels = atoi(cfgOptionDefault("barbMergePixels", "3"));
 Color barbColor = hvGfxContrastingColor(hvg, color);
+barbColor = baseColorMuteBarbColor(hvg, drawOpt, color, barbColor);
 int barbRunX1 = -1;
 int barbRunX2 = -1;
 

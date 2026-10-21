@@ -207,6 +207,13 @@ void baseColorDrawCdsArrows(struct track *tg, struct linkedFeatures *lf,
  * spacing over the UTRs as a cue that they are non-coding.  No-op below the
  * codon-color zoom level, when coding coloring is off, or when strand unknown. */
 
+Color baseColorMuteBarbColor(struct hvGfx *hvg, enum baseColorDrawOpt drawOpt,
+                             Color itemColor, Color barbColor);
+/* When mismatch and insertion marks are drawn on the exons (different bases or
+ * different codons), tone the strand chevrons down to halfway between the
+ * item color and barbColor, so the marks stand out more than the chevrons.
+ * Otherwise return barbColor unchanged. */
+
 void addAliMarkMouseOverPx(struct track *tg, struct linkedFeatures *lf,
                            struct hvGfx *hvg, int x, int y, int width, int height, char *text);
 /* Add a mouseover that explains a mismatch, insertion or gap mark at pixels x..x+width.
