@@ -76,6 +76,10 @@ BA.2:
              29760, 29762, 29764,
              29766,                   # only Luxembourg, made a mini-BA.2
              29767, 29784, 29786, 29793, 29800, 29803 ]
+    exclusions:
+      # PJ.2.1 has a real reversion at 22882; exclude masking in PJ.2
+      - site: 22882
+        representative: Canada/ON-PHL-202506587/2025
 
 BA.2.75:
     # Inherits BA.2 masking but has so many problems with false reversions I'm adding a ton here.
@@ -172,6 +176,21 @@ KP.3.1.1:
                   C22928T,  # ''
                   # Others I noticed while looking at the above:
                   G7842A, T23948G, C3565T, T17334G, G19722A, G23055A, T28271A, T23063A, G22910A
+                ]
+
+PJ.2.1:
+    # Inherits from KP.3.1.1
+    representative: Canada/ON-PHL-202604352/2026
+    representativeBacktrack: 1
+    sites: [ 21654  # Fede requests masking of deleted base 21654 (false subst in NYULH samples) 2026-09-25
+           ]
+    reversions: [ A21627C # Same NYULH samples also have reversion 2026-09-25
+                ]
+
+RV.1:
+    # Inherits from JN.1
+    representative: USA/MI-UM-10068301721/2025
+    reversions: [ T22792C  # Reverted in seqs from Egypt, https://github.com/sars-cov-2-variants/lineage-proposals/issues/3588
                 ]
 
 BA.3.2:
@@ -276,3 +295,10 @@ XCK:
     representative: USA/TX-CDC-QDX84451512/2023
     representativeBacktrack: 2
     sites: [ 29729 ]
+
+RW.1:
+    # (XFJ.3.1.2.1) Inherits from JN.1. Inherits exclusion of 21617 and 21618 from XFJ.3 - but then those, along with
+    # 21627, made a mini-RW.1.1 in RW.1.1.2, so mask them (again) in XFJ.3.1.2 or at least RW.1.
+    # https://github.com/sars-cov-2-variants/lineage-proposals/issues/3560#issuecomment-5705810842
+    representative: USA/WI-WSLH-2501470/2025
+    reversions: [ G21617A, T21618C, A21627C ]
