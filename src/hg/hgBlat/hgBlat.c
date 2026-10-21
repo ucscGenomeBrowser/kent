@@ -29,6 +29,7 @@
 #include "hash.h"
 #include "botDelay.h"
 #include "trashDir.h"
+#include "customTrack.h"
 #include "trackHub.h"
 #include "hgConfig.h"
 #include "errCatch.h"
@@ -3019,18 +3020,16 @@ printf("</PRE>\n");
  * old session-based links still open.  A separate longer-lived (~6-12 month) auto-expiring anonymous
  * trash tier, for links that should outlive normal trash, is still wanted later (see the
  * edit-kent-code skill note "Trash lifetime & durable anonymous storage"). */
-static void doShareReopen(char *database, char *organism)
-/* Rebuild the Table view for an OLD shared link (?u=&s=) from the durable bigPsl custom track that
- * was saved with the session, without re-running BLAT and without any stored query sequence.  The
- * custom track (and its bigBed file) is kept alive by refreshNamedSessionCustomTracks for as long
- * as the shared session exists, so this is durable. */
+static void showBigPslResults(char *database, char *organism, char *bbFile)
+/* Rebuild the Table view from the bigPsl file of a BLAT results custom track, without re-running
+ * BLAT and without any stored query sequence.  bbFile must already be checked to be a server
+ * file (trash or session data); NULL or a missing file says the results are gone. */
 {
 cartWebStart(cart, database, "%s (%s) BLAT Results",
     trackHubSkipHubName(organism), trackHubSkipHubName(database));
-char *bbFile = blatFindPinnedBigPsl(cart);
 if (bbFile == NULL || !fileExists(bbFile))
     {
-    printf("<p>These shared BLAT results are no longer available. The custom track that "
+    printf("<p>These BLAT results are no longer available. The custom track that "
            "stored them has expired or been removed. Please run a new "
            "<a href=\"hgBlat\">BLAT search</a>.</p>\n");
     cartWebEnd();
@@ -3039,7 +3038,7 @@ if (bbFile == NULL || !fileExists(bbFile))
 struct psl *pslList = pslListFromBigPslFile(bbFile);
 if (pslList == NULL)
     {
-    printf("<p>These shared BLAT results contained no alignments.</p>\n");
+    printf("<p>These BLAT results contained no alignments.</p>\n");
     cartWebEnd();
     return;
     }
@@ -3053,6 +3052,35 @@ safef(uiState, sizeof uiState, "%s=%s", cartSessionVarName(), cartSessionId(cart
 printBlatResultsApp(pslList, database, organism, hgTracksName(), hgcName(),
     NULL, NULL, NULL, uiState, "", locusConn, subList);
 cartWebEnd();
+}
+
+static void doShareReopen(char *database, char *organism)
+/* Rebuild the Table view for an OLD shared link (?u=&s=) from the durable bigPsl custom track that
+ * was saved with the session.  The custom track (and its bigBed file) is kept alive by
+ * refreshNamedSessionCustomTracks for as long as the shared session exists, so this is durable. */
+{
+showBigPslResults(database, organism, blatFindPinnedBigPsl(cart));
+}
+
+static void doCtReopen(char *database, char *organism, char *ctName)
+/* Rebuild the Table view from one BLAT results custom track of this cart, named by blatCt=:
+ * the "Back to BLAT results" link on that track's hgc item page.  Only a custom track tagged
+ * blatResult=on whose bigDataUrl is a server file (trash or session data) is used, since the
+ * name comes from the URL. */
+{
+char *bbFile = NULL;
+struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    if (ct->tdb == NULL || differentString(ct->tdb->track, ctName))
+        continue;
+    char *bigDataUrl = trackDbSetting(ct->tdb, "bigDataUrl");
+    if (sameOk(trackDbSetting(ct->tdb, "blatResult"), "on") && bigDataUrl != NULL
+    &&  isTrashOrSessionDataPath(bigDataUrl))
+        bbFile = bigDataUrl;
+    break;
+    }
+showBigPslResults(database, organism, bbFile);
 }
 
 static void doReopenResults(char *database, char *organism)
@@ -3175,6 +3203,12 @@ chromAliasSetup(db);
 if (cgiVarExists("s"))
     {
     doShareReopen(db, organism);
+    return;
+    }
+/* "Back to BLAT results" from the item page of a BLAT results custom track. */
+if (cgiOptionalString("blatCt") != NULL)
+    {
+    doCtReopen(db, organism, cgiString("blatCt"));
     return;
     }
 /* Stable shareable-link reopen (blatPslId/blatFaId): rebuild the Table straight from the trash
@@ -3463,7 +3497,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "u", "s", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "u", "s", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

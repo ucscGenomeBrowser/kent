@@ -4349,6 +4349,10 @@ var rightClick = {
         if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
             title = title.split("<br>")[0].split("</b>")[1];
         }
+        // the BLAT track's mouseover has a query coverage bar after the text
+        if (title.search(/<svg/) !== -1) {
+            title = title.split("<br>")[0];
+        }
         // for older UCSC genes tracks, the protein name is forced onto the item name
         if (title.search(/&hgg_prot=/) !== -1) {
             title = title.split("&hgg_prot=")[0];
@@ -4737,6 +4741,20 @@ var rightClick = {
                         return true; }
                 };
                 menu.push(o);
+
+                // BLAT results tracks (blatResult=on): reopen their results table in hgBlat
+                var ctRec = hgTracks.trackDb[ctId];
+                if (ctRec && ctRec.blatResult) {
+                    o = {};
+                    o[rightClick.makeImgTag("magnify.png") + " Back to BLAT results"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            window.location.href = "hgBlat?blatNewPage=1&db=" +
+                                encodeURIComponent(getDb()) + "&blatCt=" +
+                                encodeURIComponent(ctId) + "&hgsid=" + getHgsid();
+                            return true; }
+                    };
+                    menu.push(o);
+                }
             }
 
             //o = {};

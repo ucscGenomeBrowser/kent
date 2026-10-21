@@ -1108,9 +1108,7 @@ while ((psl = pslNext(f)) != NULL)
 	lf->extra = cloneString(buf2);
 
         // set mouse over and color to indicate query position and strand
-        char over[256];
-        safef(over, sizeof over, "%d-%d of %d bp, strand %c", psl->qStart, psl->qEnd, psl->qSize, psl->strand[0]);
-        lf->mouseOver = cloneString(over);
+        lf->mouseOver = blatCoverageMouseOver(psl, qt == gftProt);
         if (sameString(psl->strand, "+"))
             lf->filterColor = MAKECOLOR_32(0,0,0);
         else

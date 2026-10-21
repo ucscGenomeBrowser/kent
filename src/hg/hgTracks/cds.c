@@ -563,7 +563,6 @@ struct diffBaseCol
 /* The mismatches of one item that fall into one pixel column. */
     {
     int count;              /* Number of mismatches in this column. */
-    int firstPos;           /* Chrom position of the first one. */
     int exonStartX, exonEndX;   /* Pixel range of the exon it is in. */
     struct dyString *text;  /* "pos genome>query" list for the mouseover, first few only. */
     };
@@ -600,8 +599,10 @@ static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 /* Draw thin vertical red lines only where mRNA bases differ from genomic.  
  * This assumes that lf has been drawn already, we're zoomed out past 
  * zoomedToBaseLevel, we're not in dense mode etc.
- * The mismatches are first collected per pixel column.  A 1-pixel tick is hard to see,
- * so an isolated one is drawn 2 pixels wide, but only where the next columns have no
+ * The mismatches are first collected per pixel column.  At a pixel or more per base each
+ * mismatched base is drawn at its true width, so a run of them stays solid.  Below that,
+ * a 1-pixel tick is hard to see, so an isolated one is drawn 2 pixels wide, but only
+ * where the next columns have no
  * mismatch: where they are dense, widening would cover the matching columns between
  * them and make the whole exon look red. */
 {
@@ -651,7 +652,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		char gBase = winDna[s-winStart+i];
 		if (qBase != gBase)
 		    {
-		    if (scale >= 2.0)   // a base is wide enough already
+		    if (scale >= 1.0)   // a base is at least a pixel: draw it at its true width
 			drawScaledBox(hvg,  s+i, s+i+1, scale, xOff, y+1, heightPer-2, c);
 		    int x = round((double)(s+i-winStart)*scale);
 		    if (x < 0 || x >= nCols)
@@ -659,7 +660,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		    struct diffBaseCol *col = &cols[x];
 		    if (col->count == 0)
 			{
-			col->firstPos = s+i;
 			col->exonStartX = ex1;
 			col->exonEndX = ex2;
 			col->text = dyStringNew(64);
@@ -683,7 +683,7 @@ for (x = 0; x < nCols; x++)
     struct diffBaseCol *col = &cols[x];
     if (col->count == 0)
         continue;
-    if (scale < 2.0)
+    if (scale < 1.0)   // several bases per pixel: one column per pixel, widen lone ticks
         {
         int x1 = x, x2 = x + 1;
         // keep at least one clean column between this tick and the next one
@@ -2407,6 +2407,60 @@ for (sf = lf->components; sf != NULL && sf->next != NULL; sf = sf->next)
         return TRUE;
     }
 return FALSE;
+}
+
+char *blatCoverageMouseOver(struct psl *psl, boolean isProt)
+/* Return the mouseover of a BLAT alignment: the query range it spans (shown 1-based), how many
+ * query bases it aligns, the query size and strand, and under it a small bar showing which parts
+ * of the query matched, one segment per aligned block, like hgBlat's coverage column.  Parts of
+ * the query between blocks that are aligned elsewhere stay grey.  The bar is an svg because the
+ * tooltip sanitizer keeps svg rects but not the positioning styles a css bar needs;
+ * hgTracks.js mouseOverToLabel cuts it off again for the right-click menu. */
+{
+int barW = 150, barH = 10;
+char *unit = isProt ? "aa" : "bp";
+struct dyString *dy = dyStringNew(1024);
+int aligned = 0, i;
+for (i = 0; i < psl->blockCount; i++)
+    aligned += psl->blockSizes[i];
+char alignedBuf[32];
+sprintLongWithCommas(alignedBuf, aligned);
+dyStringPrintf(dy, "Query %d-%d of %d %s, strand %c, %s %s aligned<br>"
+               "<svg width='%d' height='%d'>"
+               "<rect width='%d' height='%d' fill='#555555' stroke='#000000'/>",
+               psl->qStart + 1, psl->qEnd, psl->qSize, unit, psl->strand[0], alignedBuf, unit,
+               barW, barH, barW, barH);
+/* One rect per block, in query + strand coordinates.  Blocks that land in the same pixels are
+ * merged, so a query with hundreds of short blocks still gives a short svg. */
+int runX1 = -1, runX2 = -1;
+for (i = 0; i < psl->blockCount && psl->qSize > 0; i++)
+    {
+    int qs = psl->qStarts[i];
+    if (psl->strand[0] == '-')
+        qs = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
+    int x1 = (int)((double)barW * qs / psl->qSize);
+    int x2 = (int)((double)barW * (qs + psl->blockSizes[i]) / psl->qSize + 0.5);
+    if (x2 > barW)
+        x2 = barW;
+    if (x2 <= x1)
+        x2 = x1 + 1;
+    if (runX1 >= 0 && x1 <= runX2 && x2 >= runX1)
+        {
+        runX1 = min(runX1, x1);
+        runX2 = max(runX2, x2);
+        continue;
+        }
+    if (runX1 >= 0)
+        dyStringPrintf(dy, "<rect x='%d' width='%d' height='%d' fill='#3b9cff'/>",
+                       runX1, runX2 - runX1, barH);
+    runX1 = x1;
+    runX2 = x2;
+    }
+if (runX1 >= 0)
+    dyStringPrintf(dy, "<rect x='%d' width='%d' height='%d' fill='#3b9cff'/>",
+                   runX1, runX2 - runX1, barH);
+dyStringAppend(dy, "</svg>");
+return dyStringCannibalize(&dy);
 }
 
 Color baseColorMuteBarbColor(struct hvGfx *hvg, enum baseColorDrawOpt drawOpt,

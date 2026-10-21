@@ -293,6 +293,10 @@ if (kindOfChild != kocOrphan)
 boolean isCustomComposite = trackDbSettingOn(track->tdb, CUSTOM_COMPOSITE_SETTING);
 jsonObjectAdd(ele, "isCustomComposite", newJsonBoolean(isCustomComposite));
 
+// BLAT results custom track: hgTracks.js offers "Back to BLAT results" in its right-click menu
+if (trackDbSettingOn(track->tdb, "blatResult"))
+    jsonObjectAdd(ele, "blatResult", newJsonBoolean(TRUE));
+
 // check if track can have merged items, needed for context clicks in track
 char *canHaveMergedItems = trackDbSetting(track->tdb, MERGESPAN_TDB_SETTING);
 if (canHaveMergedItems != NULL)

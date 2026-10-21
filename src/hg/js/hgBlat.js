@@ -88,15 +88,40 @@ function blatUnit() {
     return hgBlatData.config.isProt ? 'aa' : 'bp';
 }
 
+function blatCoverageSegments(hit) {
+    // One [start, end) per aligned block, in query plus-strand coordinates, from the PSL block
+    // lists.  Parts of the query between blocks (aligned elsewhere, or not at all) stay empty.
+    // Falls back to the whole qStart-qEnd span when the block lists are missing or do not fit.
+    var span = [[hit.qStart - 1, hit.qEnd]];
+    if (!hit.blockSizes || !hit.qStarts)
+        return span;
+    var sizes = hit.blockSizes.split(',').filter(s => s !== '').map(Number);
+    var starts = hit.qStarts.split(',').filter(s => s !== '').map(Number);
+    if (sizes.length !== starts.length)
+        return span;
+    var segs = [];
+    for (var i = 0; i < sizes.length; i++) {
+        var s = starts[i];
+        if (hit.strand && hit.strand[0] === '-')
+            s = hit.qSize - (starts[i] + sizes[i]);   // PSL minus-strand query starts are reversed
+        if (s < 0 || s + sizes[i] > hit.qSize)
+            return span;
+        segs.push([s, s + sizes[i]]);
+    }
+    return segs;
+}
+
 function blatCoverageCell(hit) {
-    var left = (hit.qStart - 1) / hit.qSize * 100;
-    var width = (hit.qEnd - hit.qStart + 1) / hit.qSize * 100;
     var u = blatUnit();
     var tip = `Query matches the genome at ${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}${u} out of ${blatFmt(hit.qSize)}${u}`;
+    var bars = blatCoverageSegments(hit).map(function(seg) {
+        var left = seg[0] / hit.qSize * 100;
+        var width = (seg[1] - seg[0]) / hit.qSize * 100;
+        return `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i>`;
+    }).join('');
     // The query start and end are printed next to the bar, as in the classic page's START and END
     // columns: for short queries like primers the bar alone does not show which bases matched.
-    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">` +
-        `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i></span>` +
+    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">${bars}</span>` +
         `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span></span>`;
 }
 

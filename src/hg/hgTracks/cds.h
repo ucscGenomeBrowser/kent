@@ -96,7 +96,7 @@
 #define CDS_RIBO_SLIP2_G  250 
 #define CDS_RIBO_SLIP2_B  255
 
-#define CDS_DIFF_BASE    15  /* bright red, zoomed-out tickmarks where query base != genome */
+#define CDS_DIFF_BASE    15  /* light red, zoomed-out tickmarks where query base != genome */
 #define CDS_DIFF_BASE_R  255
 #define CDS_DIFF_BASE_G  110
 #define CDS_DIFF_BASE_B  110
@@ -206,6 +206,11 @@ void baseColorDrawCdsArrows(struct track *tg, struct linkedFeatures *lf,
  * they are too small to label), and the feature's contrasting color at a wider
  * spacing over the UTRs as a cue that they are non-coding.  No-op below the
  * codon-color zoom level, when coding coloring is off, or when strand unknown. */
+
+char *blatCoverageMouseOver(struct psl *psl, boolean isProt);
+/* Return the mouseover of a BLAT alignment: the query range it spans (shown 1-based), how many
+ * query bases it aligns, the query size and strand, and under it a small svg bar showing which
+ * parts of the query matched, one segment per aligned block, like hgBlat's coverage column. */
 
 Color baseColorMuteBarbColor(struct hvGfx *hvg, enum baseColorDrawOpt drawOpt,
                              Color itemColor, Color barbColor);
