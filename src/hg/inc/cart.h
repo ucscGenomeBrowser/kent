@@ -738,8 +738,11 @@ char *cartOrCfgOption(struct cart *cart, char *name);
 
 /* The user's recent hgsids, as "hgsid=unixTime ..." with the newest first.  Kept in userDb only. */
 #define RECENT_SESSIONS_VAR "recentSessions"
-/* Set when a session load happens, so hgTracks can offer the recent sessions. */
-#define hgsDidSessionLoad hgSessionPrefix "didSessionLoad"
+/* Only in a copy of the cart made just before a session load replaced it: the name of the
+ * session that was loaded, so the list of recent views can say what the copy is. */
+#define hgsPrevViewOf hgSessionPrefix "prevViewOf"
+/* Asks hgTracks to open the list of recent views, used by the My Data menu. */
+#define hgsShowRecentViews hgSessionPrefix "showRecentViews"
 
 boolean cartRecentSessionsEnabled();
 /* Return TRUE if hg.conf turns on recent session tracking. */
