@@ -1193,6 +1193,19 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
+#define DOT_BRACKET_FIELD "dotBracketField"
+/* trackDb setting naming the bigBed column that holds the dot-bracket string. */
+
+#define DOT_BRACKET_COLOR "dotBracketColor"
+/* trackDb setting giving the colour to draw the structure in, as r,g,b. */
+
+#define DOT_BRACKET_SHOW_SUFFIX "dotBracket"
+/* cart suffix for the checkbox that draws, or hides, the structure. */
+
+void dotBracketCfgUi(struct cart *cart, struct trackDb *tdb);
+/* Checkbox to draw or hide the RNA secondary structure, for a track that names a
+ * dot-bracket column.  Does nothing for a track that does not. */
+
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
 

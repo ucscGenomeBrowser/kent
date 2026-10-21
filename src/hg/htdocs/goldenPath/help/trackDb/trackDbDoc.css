@@ -56,6 +56,13 @@ TABLE.settingsTable > tbody > tr > TH {
     max-height:20px;
 }
 TABLE.settingsTable > THEAD > TD { border-style:none; }
+/* An example that is one long line, such as the detailsScript JSON at 168 characters,
+ * widens the whole page without this: a PRE does not wrap, so the cell, the table and
+ * every table below it grow to fit the line. */
+TABLE.settingsTable PRE {
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
 TR.related > TD {
     border-top-style:none;           /* Related rows should have light grey divider.  */
     border-left:0.1em inset gray;    /* Cascading failed, so explicitly declared here. */

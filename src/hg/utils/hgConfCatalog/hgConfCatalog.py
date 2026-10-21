@@ -530,6 +530,25 @@ RELEASE_GATES = {
                "written while it was on draws nothing with it off, rather than "
                "this assembly's table of the same name.  A cart variable of "
                "the same name overrides it, like browser.quickLiftBarChart."),
+        h("browser.quickLiftRmsk", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="37437",
+          note="Let quickLift lift RepeatMasker tracks:  rmsk tables, "
+               "RepeatMasker Viz. (rmskJoined) tables and bigRmsk files, "
+               "reading the items from the assembly they came from and "
+               "drawing each one where the chain puts it.  Read in "
+               "quickLiftRmskEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which lets rmsk and bigRmsk tracks into "
+               "the quickLift hub, by quickLiftIsLiftedRmskJoined(), which "
+               "gives a lifted Viz. track its own drawing in hgTracks, by "
+               "repeatDraw() (hgTracks/rmskTrack.c), bigRmskLoadItems() "
+               "(hgTracks/bigRmskTrack.c), and by the hgc click dispatch, "
+               "which sends a click on a lifted RepeatMasker track to a page "
+               "reading the item through the chain.  Off, rmsk and bigRmsk "
+               "tracks are left out of a quickLift and a lifted Viz. track "
+               "draws as a plain bed, all as before;  a lifted rmsk or bigRmsk "
+               "left in a hub written while it was on draws nothing rather "
+               "than this assembly's data.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "
@@ -719,6 +738,61 @@ RELEASE_GATES = {
                "is on and the view is not multi-region.  Off, a multiWig "
                "shows only its track name on hover, as before.  Added off "
                "for v505; hgwdev's hg.conf turns it on."),
+        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
+          role="gate", verified=True, ticket="38510",
+          note="Lift an item through every chain it overlaps, rather than "
+               "only the best one, so a feature that crosses a break in the "
+               "alignment is drawn in each place it lands.  Read once, in "
+               "quickLiftMultiChainEnabled(), and asked by the loaders in "
+               "hg/lib/quickLift.c, by gtexTracks.c, and by hgc.c and "
+               "gtexClick.c for the details page.  Off, each item goes "
+               "through the one best chain, as before.  Sibling of "
+               "quickLiftSplitRanges; the four on/off pairs of the two are "
+               "the hg.conf inputs of the quickLift unit test in "
+               "hg/lib/tests.  hgwdev's hg.conf turns it on."),
+        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38510",
+          note="Cut each chain's source range at large gaps, merge the "
+               "ranges where they overlap, and read an item only once when "
+               "it crosses from one range into the next.  Read once, in "
+               "quickLiftSplitRangesEnabled(), and asked by the loaders in "
+               "hg/lib/quickLift.c and by hgTracks/wigMafTrack.c.  Off, each "
+               "chain's whole source range is read in one piece, as before.  "
+               "Sibling of quickLiftMultiChain.  hgwdev's hg.conf turns it "
+               "on."),
+        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38490",
+          note="Let quickLift lift bigBarChart tracks.  Read in "
+               "quickLiftBarChartEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which decides what track types go into "
+               "a quickLift hub.  Off, bigBarChart tracks are left out of a "
+               "quickLift, as before.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftAlignments.  hgwdev's "
+               "hg.conf turns it on."),
+        h("mouseoverParentLabels", "flag", "hg/hgTracks/simpleTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38527",
+          note="Start the drawn long label of a track, and its side label, "
+               "button and center label mouseovers, with the shortLabels of "
+               "the containers it sits in, e.g. \"Transcription Initiation "
+               "(TSS) > PRO-cap > A673 PRO-cap\", so a user can see where to "
+               "find a subtrack in the track list.  Composite views are "
+               "skipped.  Read once, in labelWithParents(), which imageV2.c, "
+               "simpleTracks.c and hgTracks.c call for each label.  Off, "
+               "labels are the track's own, as before.  Not set in hgwdev's "
+               "hg.conf."),
+        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
+          role="gate", verified=True, ticket="35736",
+          note="Keep a list of the sessions a user has opened recently, and "
+               "offer the others in a dialog after a session load.  Read in "
+               "cartRecentSessionsEnabled() and asked by cartNew() "
+               "(hg/lib/cart.c), which keeps the list in the cart variable "
+               "recentSessions for a user with an hguid row, and by "
+               "outputRecentSessionsData() (hgTracks.c), which writes the "
+               "dialog's data after a load.  The list lives only in userDb: "
+               "the cart excludes it and saveState writes it by hand, so it "
+               "never enters a saved session.  Off, nothing is recorded and "
+               "no dialog is offered.  Commented out of hgwdev's hg.conf "
+               "as of 2026-10-17."),
     ],
 }
 
@@ -1847,50 +1921,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("mouseoverParentLabels", "flag", "hg/hgTracks/simpleTracks.c",
-          default="FALSE", ticket="38527",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/simpleTracks.c.  Came in at 31a1ceab960, "
-               "hgTracks: new hg.conf setting mouseoverParentLabels, off by "
-               "default.  When on, the drawn long label of a track and its "
-               "mouseovers (side label, button, center label) start with the "
-               "shortLabels of the containers the track sits in, e.g. "
-               "\"Transcription Initiation (TSS) > PRO-cap > A673 PRO-cap\", so "
-               "users can see where to find a subtrack in the track list. "
-               "Composite views are skipped.  refs #38527.  Needs a "
-               "description and a gate or knob call."),
-        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
-          ticket="38510",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
-               "an item through every chain it overlaps, behind two hg.conf "
-               "gates, refs #38510.  Needs a description and a gate or knob "
-               "call."),
-        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
-          default="FALSE", ticket="38510",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
-               "an item through every chain it overlaps, behind two hg.conf "
-               "gates, refs #38510.  Needs a description and a gate or knob "
-               "call."),
-        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
-          ticket="35736",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
-               "Came in at 6e201f9c97f, Offer a dialog of previously used "
-               "hgsids when opening a session, if any exist for your hguid, "
-               "refs #35736,#30031.  Needs a description and a gate or knob "
-               "call."),
-        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
-          default="FALSE", ticket="38490",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at b50e4cb498f, quickLift: lift "
-               "bigBarChart tracks, behind browser.quickLiftBarChart, refs "
-               "#38490.  Needs a description and a gate or knob call."),
     ],
 }
 

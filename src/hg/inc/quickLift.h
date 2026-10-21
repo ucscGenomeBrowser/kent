@@ -15,6 +15,8 @@ struct psl;
 struct chain;
 struct mafAli;
 struct dyString;
+struct rmskOut;
+struct rmskJoined;
 
 struct quickLiftRegions
 // store highlight information
@@ -217,6 +219,47 @@ boolean quickLiftWigEnabled(struct cart *cart);
  * .wib file.  Off unless hg.conf says browser.quickLiftWig=on, and a cart variable of the
  * same name overrides that. */
 
+boolean quickLiftRmskEnabled(struct cart *cart);
+/* Return TRUE if quickLift is allowed to lift rmsk (RepeatMasker) tracks.  Off unless hg.conf
+ * says browser.quickLiftRmsk=on, and a cart variable of the same name overrides that. */
+
+struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char *chrom,
+    int start, int end, struct hash *chainHash);
+/* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
+ * ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:  lift each
+ * one with quickLiftRmskOut() through quickLiftChainHashForItem(chainHash, row).  chainHash,
+ * from newHash(), is filled with the chains that do the lifting. */
+
+boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro);
+/* Lift an rmsk row read from the assembly it came from onto the reference, in place:
+ * genoName, genoStart, genoEnd and strand.  repStart, repEnd and repLeft are left in the
+ * convention of the source strand, so save ro->strand first if they are to be read.  Returns
+ * FALSE, with the row unchanged, if it does not map. */
+
+boolean quickLiftIsLiftedRmskJoined(struct cart *cart, struct trackDb *tdb);
+/* Return TRUE if tdb is a quickLifted RepeatMasker Viz. track (rmskJoined) to draw and click
+ * as one:  it is lifted, its name past the hub prefix starts with rmskJoined, and
+ * browser.quickLiftRmsk is on. */
+
+struct rmskJoined *quickLiftSqlLoadRmskJoined(struct trackDb *tdb, char *trackTable,
+    char *chrom, int start, int end, struct hash *chainHash);
+/* Read the rows of a quickLifted rmskJoined track from the assembly it came from, over the
+ * source ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:
+ * lift each one with quickLiftJoinedRepeat() through quickLiftChainHashForItem(chainHash, row).
+ * chainHash, from newHash(), is filled with the chains that do the lifting. */
+
+boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *pChromStart,
+    unsigned *pChromEnd, char *strand, unsigned *pAlignStart, unsigned *pAlignEnd,
+    int *pBlockCount, int *blockSizes, int *blockRelStarts);
+/* Lift a joined RepeatMasker item (an rmskJoined row or a bigRmsk record) onto the reference,
+ * in place.  Each aligned block (blockRelStarts not -1) is lifted on its own;  the unaligned
+ * blocks hold consensus lengths, not genome positions, and are kept.  An aligned block that
+ * does not map, or maps to another sequence or strand than the first one that does, becomes
+ * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
+ * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
+ * the reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
+ * no aligned block maps, or the ones that do land out of order:  drop the item then. */
+
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,
  * bigChain, maf, bigMaf and wigMaf.  Off unless hg.conf says
@@ -238,8 +281,8 @@ struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *li
     char *chrom, int start, int end, char *extraWhere,
     ItemLoader2 loader, int numFields, boolean blocked);
 /* Load items from another assembly via quickLift SQL, map them back to the reference,
- * and return the lifted beds.  Handles custom track table resolution internally.
- * Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
+ * and return the lifted beds that overlap chrom:start-end.  Handles custom track table
+ * resolution internally.  Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
 
 boolean quickLiftLiftPos(char *sourceDb, char *destDb,
     char *chrom, int start, int end,
@@ -307,6 +350,13 @@ struct hash *quickLiftChainHashForItem(struct hash *chainHash, void *item);
  * it was loaded for, when it was loaded that way, and otherwise chainHash itself.  item must be the pointer the
  * loader returned, asked about before anything frees it;  a copy falls back to chainHash.
  * The one-chain hash is reused for the next item, so lift through it before asking again. */
+
+char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
+                          char strand, char **retChrom, int *retStart, int *retEnd,
+                          char *retStrand);
+/* Lift chrom:start-end through one chain:  with quickLiftMultiChain the one item was loaded
+ * for, and otherwise the chain in chainHash with the most aligned bases in the range.  item
+ * may be NULL.  Return NULL on success, or why the range did not lift. */
 
 void quickLiftCalcGenePreds(struct genePred *gpList, struct hash *chainHash,
                             double minMatch, double minBlocks, bool fudgeThick,

@@ -490,10 +490,9 @@ for (geneBed = sourceList; geneBed != NULL; geneBed = nextBed)
     nextBed = geneBed->next;
     int start, end;
     char *sourceChrom = geneBed->chrom;
-    char *error = liftOverRemapRange(quickLiftChainHashForItem(chainHash, geneBed), 0.0,
-                                     geneBed->chrom,
-                                     geneBed->chromStart, geneBed->chromEnd, geneBed->strand[0],
-                                     0.001, &geneBed->chrom, &start, &end, &geneBed->strand[0]);
+    char *error = quickLiftRemapRange(chainHash, geneBed, geneBed->chrom,
+                                      geneBed->chromStart, geneBed->chromEnd, geneBed->strand[0],
+                                      &geneBed->chrom, &start, &end, &geneBed->strand[0]);
     if (geneBed->chrom != sourceChrom)
         freeMem(sourceChrom);   // the lift put a copy of the reference chrom in its place
     /* Items up to QUICKLIFT_RANGE_PAD outside the window come back, and gtexGeneDrawAt()

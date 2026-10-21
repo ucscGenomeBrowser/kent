@@ -2,12 +2,13 @@ kentSrc = ../..
 include $(kentSrc)/inc/common.mk
 
 # tests get assign different ports so they can run in parallel
-gfServerHuge = gfServerHuge
+# run the binaries this tree just built, not whichever ones are first on the PATH
+gfServerHuge = ${DESTBINDIR}/gfServerHuge
 ifeq (${IDXSIZE},huge)
 gfServer = ${gfServerHuge}
 portOffset = 1
 else
-gfServer = gfServerHuge
+gfServer = ${DESTBINDIR}/gfServer
 portOffset = 0
 endif
 

@@ -86,6 +86,7 @@
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
 #include "myVariants.h"
+#include "quickLift.h"
 
 //#include "bed3Sources.h"
 
@@ -5790,6 +5791,9 @@ if (withLeftLabels)
              */
             if (startsWith("rmskJoined", track->track))
                 ynew = flatTrack->maxHeight + y;
+            else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+                // a quickLifted RepeatMasker Viz. track is laid out like the native one, refs #37437
+                ynew = flatTrack->maxHeight + y;
             else
                 ynew = doLeftLabels(track, hvgSide, font, y);
 
@@ -9357,12 +9361,17 @@ if (dy->stringSize == 0)
     }
 
 char *encoded = htmlEncode(dy->string);
-printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+struct dyString *tip = dyStringNew(512);
+dyStringPrintf(tip, "<b>Alternate sequence names</b>: %s<br><br>"
        "Alternative sequence names can be used in the position box, custom tracks, "
        "track hubs, bigBed, bigWig, and similar files. "
        "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
-       "for more information'>"
-       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encoded);
+       "for more information", encoded);
+char *encTip = attributeEncode(tip->string);
+printf("<span id='chromAliases' data-tooltip='%s'>"
+       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encTip);
+freeMem(encTip);
+dyStringFree(&tip);
 freeMem(encoded);
 dyStringFree(&dy);
 }
@@ -9712,8 +9721,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			track->networkErrMsg = cloneString(errCatch->message->string);
 			spreadErrorToSubtracks(track, errCatch->message->string);
 			}
-		    else if (errCatch->gotWarning)
-			warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+		    errCatchReWarn(errCatch);  // errCatchStart took the warnings, hand them back
 		    errCatchFree(&errCatch);
 
 		    if (measureTiming)

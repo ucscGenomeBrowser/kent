@@ -4807,6 +4807,22 @@ cgiMakeCheckBox(cartVar, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }
 
+void dotBracketCfgUi(struct cart *cart, struct trackDb *tdb)
+/* Checkbox to draw or hide the RNA secondary structure, for a track that names a
+ * dot-bracket column.  Does nothing for a track that does not. */
+{
+if (trackDbSetting(tdb, DOT_BRACKET_FIELD) == NULL)
+    return;
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX,
+                                               TRUE);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, DOT_BRACKET_SHOW_SUFFIX);
+puts("<p>");
+cgiMakeCheckBox(cartVar, option);
+puts(" Draw the RNA secondary structure over each item");
+puts("</p>");
+}
+
 void geneTrackMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
                        boolean defaultOn)
 /* add a checkbox for the user to select a component of a label (e.g. ID, name, other info).
@@ -6834,7 +6850,8 @@ if (max && limitMin
 static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened,
                                boolean boxed, boolean parentLevel,char *name, char *title,
                                char *label, char *scoreName, boolean isHighlight)
-// Shows a score filter control with minimum value and optional range
+// Shows a score filter control with minimum value and optional range.
+// label is HTML: callers must encode any text that came from a hub or a file.
 {
 char *setting = trackDbSetting(tdb, scoreName);
 if (setting)
@@ -6858,14 +6875,15 @@ if (setting)
     filterName = getScoreNameAdd(tdb, scoreName, filterByRange ? _MIN:"");
     safef(varName, sizeof(varName), "%s.%s", name, filterName);
     safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
-          htmlEncode(htmlTextStripTags(label)));
+          htmlTextStripTags(label));
     cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
     if (filterByRange)
         {
         printf("<TD align='left'>to<TD align='left'>");
         filterName = getScoreNameAdd(tdb, scoreName, _MAX);
         safef(varName, sizeof(varName), "%s.%s", name, filterName);
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""),
+              htmlTextStripTags(label));
         cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
         }
     safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
@@ -7103,7 +7121,8 @@ if (trackDbFilters)
 
         if (isHighlight && count == 0)
             printHighlightColorPicker(cart, tdb);
-        showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isHighlight);
+        showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,htmlEncode(label),scoreName,
+                        isHighlight);
         count++;
         }
     if (as != NULL)
@@ -7250,7 +7269,8 @@ if (trackDbFilters)
         if (isHighlight && count == 0)
             printHighlightColorPicker(cart, tdb);
         count++;
-        printf("<P><B>%s items in '%s' field:</B> ", isHighlight ? "Highlight": "Filter", trackDbLabel);
+        printf("<P><B>%s items in '%s' field:</B> ", isHighlight ? "Highlight": "Filter",
+               htmlEncode(trackDbLabel));
 
         char cgiVar[128];
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
@@ -11048,8 +11068,6 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    puts("<b>Related tracks</b>\n");
-    puts("<ul>\n");
     struct hash *otherTracksAndDesc = hashNew(0);
     char *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
@@ -11061,6 +11079,7 @@ if (row != NULL)
         }
 
     struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    boolean printedAny = FALSE;
     for (hel = helList; hel != NULL; hel = hel->next)
         {
         char *otherTrack = (char *)hel->name;
@@ -11071,12 +11090,19 @@ if (row != NULL)
             otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
+            if (!printedAny)
+                {
+                puts("<b>Related tracks</b>\n");
+                puts("<ul>\n");
+                printedAny = TRUE;
+                }
             puts("<li>");
             printf("<a href=\"%s?db=%s&g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), database, otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
             puts(": ");
             puts(why);
             }
         }
+    if (printedAny)
         puts("</ul>\n");
     }
 sqlFreeResult(&sr);

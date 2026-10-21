@@ -92,10 +92,6 @@ ACMG_SEVERITY = ['PS3_very_strong', 'PS3', 'PS3_moderate_plus', 'PS3_moderate',
                  'PS3_not_met', 'BS3_not_met']
 
 
-# Accessions reach hgsql() by string interpolation, so they are checked against this
-# first. Today they can only arrive via PROTEIN_TERM in makeMaveMdVariants.py, whose
-# character class already excludes quotes, but that regex is far from the query and a
-# future edit to it should not be able to open this up silently.
 def pickDisplayCall(calls, primaryTitle=None):
     """Choose which calibration's call drives the color and the filters.
 

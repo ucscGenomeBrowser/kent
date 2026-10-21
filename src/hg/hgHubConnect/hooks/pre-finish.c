@@ -264,6 +264,9 @@ else
             makeParentDirRows(row->userName, lastModified, row->db, row->parentDir, userDataDir, row->hubType);
             row->parentDir = encodedParentDir ? hubLeafFromPath(encodedParentDir) : "";
             addHubSpaceRowForFile(row);
+            // after every row write, so a hub.txt that arrives or changes is seen
+            if (hubDir)
+                syncHubRowDbToHubTxt(row->userName, hubDir);
             unlockHubDir(hubLockFd);
             fprintf(stderr, "added hubSpace row for file '%s'\n", fileName);
             fflush(stderr);

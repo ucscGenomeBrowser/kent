@@ -641,12 +641,12 @@ final_deploy_beta() {
 
 final_email_build_complete() {
     if $DRY_RUN; then
-        log "(dry-run) would email 'v${BRANCHNN} Build complete on beta (day 16)' to $BUILDMEISTEREMAIL galt kent browser-qa"
+        log "(dry-run) would email 'v${BRANCHNN} Build complete on beta (day 16)' to $BUILDMEISTEREMAIL browser-qa"
         return 0
     fi
     echo "v${BRANCHNN} built successfully on beta (day 16)." \
         | mail -s "v${BRANCHNN} Build complete on beta (day 16)." \
-        "$BUILDMEISTEREMAIL" galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+        "$BUILDMEISTEREMAIL" browser-qa@soe.ucsc.edu
 }
 
 final_email_pairings() {

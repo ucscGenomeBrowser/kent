@@ -16202,6 +16202,10 @@ else if (startsWith("gtexGene", track->track) ||
          // a quickLifted GTEx track carries its hub's prefix, refs #38512
          quickLiftIsLiftedGtex(cart, track->tdb))
     gtexGeneMethods(track);
+else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+    // a quickLifted RepeatMasker Viz. track has avoidHandler on, so its name handler is
+    // skipped, refs #37437
+    rmskJoinedMethods(track);
 else if (startsWith("rnaStruct", track->track))
     rnaSecStrMethods(track);
 #endif /* GBROWSE */
@@ -16254,8 +16258,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     errCatchEnd(errCatch);
     if (errCatch->gotError)
 	subtrack->networkErrMsg = cloneString(errCatch->message->string);
-    else if (errCatch->gotWarning)
-	warn("%s", errCatch->message->string);  // errCatch took it, hand it back
+    errCatchReWarn(errCatch);   // errCatchStart took the warnings, hand them back
     errCatchFree(&errCatch);
     }
 }

@@ -14,7 +14,10 @@ Thu Sep 17 2026 (Claude/markd)
 # and needed the superTrack-in-superTrack fix of #38460 to nest in
 # transcriptionStart.  It was reverted.
 #
-# The whole set is alpha until #38441 is fixed, tagged on the include lines.
+# The composite set is alpha until #38441 is fixed.  Beta and public keep the
+# shape that is already released: proCapNet as a top-level superTrack holding
+# the overlays, with no transcriptionStart container.  The script writes one
+# file per shape and the include lines in trackDb.ra choose between them.
 
 # hs1 has the ProCapNet predictions only.  There is no PRO-cap experiment and no
 # sequence-contribution score set on this assembly.  See
@@ -81,11 +84,12 @@ cd ~/kent/src/hg/makeDb/outside/proCapNet
 ./proCapNetTrackDb hs1 proCapNetExperiments.tsv \
     ~/kent/src/hg/makeDb/trackDb/human/hs1
 
-# That writes transcriptionStart.ra and proCapNet.ra, one per top-level track;
-# hs1 has no encode4ProCap.  The include lines in human/hs1/trackDb.ra are added
-# by hand:
+# That writes two files, one per shape: transcriptionStart.ra is the container
+# with the composite inside it, transcriptionStartPublic.ra is the released
+# shape; hs1 has no encode4ProCap.  The include lines in human/hs1/trackDb.ra
+# are added by hand:
 #   include transcriptionStart.ra alpha
-#   include proCapNet.ra alpha
+#   include transcriptionStartPublic.ra beta,public
 
 # hs1 is a curated hub assembly, so the stanzas reach the browser through the
 # hub built under /gbdb/hs1/hubs/$USER by the trackDb make, and are visible only

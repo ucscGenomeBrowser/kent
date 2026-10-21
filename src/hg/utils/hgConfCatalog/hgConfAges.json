@@ -1,5 +1,5 @@
 {
- "current": 504,
+ "current": 505,
  "first": {
   "(not set, defaults on)": {
    "commit": "a0a3411bca2",
@@ -189,6 +189,16 @@
    "tickets": [],
    "ts": 1731599443,
    "version": 474,
+   "via": "call"
+  },
+  "25000000": {
+   "commit": "6743564c0d1",
+   "subject": "hgTracks: tell the user when a track download is incomplete or still being prepared, and put the GenBank size limit unde",
+   "tickets": [
+    38433
+   ],
+   "ts": 1790721463,
+   "version": 505,
    "via": "call"
   },
   "3": {
@@ -391,6 +401,16 @@
    "tickets": [],
    "ts": 1757548483,
    "version": 488,
+   "via": "call"
+  },
+  "PITX2": {
+   "commit": "b6f15357f43",
+   "subject": "hgGeneGraph: bind the feedback-form arithmetic check to its target and a real secret",
+   "tickets": [
+    38399
+   ],
+   "ts": 1790721837,
+   "version": 505,
    "via": "call"
   },
   "Please take our survey": {
@@ -868,6 +888,46 @@
    "version": 504,
    "via": "call"
   },
+  "browser.quickLiftBarChart": {
+   "commit": "b50e4cb498f",
+   "subject": "quickLift: lift bigBarChart tracks, behind browser.quickLiftBarChart, refs #38490",
+   "tickets": [
+    38490
+   ],
+   "ts": 1791332396,
+   "version": 505,
+   "via": "call"
+  },
+  "browser.quickLiftGtex": {
+   "commit": "0299eb132c7",
+   "subject": "quickLift: draw a lifted GTEx gene track as GTEx, with its details page, behind browser.quickLiftGtex, refs #38512",
+   "tickets": [
+    38512
+   ],
+   "ts": 1790289043,
+   "version": 505,
+   "via": "call"
+  },
+  "browser.quickLiftMafSummary": {
+   "commit": "bb57507ebc4",
+   "subject": "quickLift maf: put the summary read and the unpadded block read behind browser.quickLiftMafSummary, refs #38513",
+   "tickets": [
+    38513
+   ],
+   "ts": 1791498176,
+   "version": 505,
+   "via": "call"
+  },
+  "browser.quickLiftWig": {
+   "commit": "ff175308401",
+   "subject": "quickLift: lift wig tracks, and show lifted wig and bigWig values on hgc, refs #38520",
+   "tickets": [
+    38520
+   ],
+   "ts": 1791575844,
+   "version": 505,
+   "via": "call"
+  },
   "browser.recTrackSets": {
    "commit": "bd6e3996c72",
    "subject": "Add hg.conf var to enable Recommended Track Sets.  Remove hgSession URL mod, in favor of hgTracks detecting non-Track-Se",
@@ -1133,6 +1193,16 @@
    "ts": 1426458132,
    "version": 314,
    "via": "literal"
+  },
+  "clearFiltersMenu": {
+   "commit": "9c5745c0f72",
+   "subject": "hgTracks: new right-click menu item 'Reset filters to defaults', clears a track's settings but keeps its own and its sub",
+   "tickets": [
+    38507
+   ],
+   "ts": 1791447342,
+   "version": 505,
+   "via": "call"
   },
   "cloudFlareSecretKey": {
    "commit": "27370697e01",
@@ -1803,7 +1873,6 @@
   },
   "hgGateway.showRefBadge": {
    "commit": "81a04805893",
-   "released": false,
    "subject": "highlight NCBI \"reference\" assemblies in the search result and hg.conf gated with hgGateway.showRefBadge=on default is o",
    "tickets": [
     38401
@@ -2169,6 +2238,16 @@
    "ts": 1557342520,
    "version": 382,
    "via": "literal"
+  },
+  "hubHtmlSanitize": {
+   "commit": "beb596d6144",
+   "subject": "trackHub: add an hg.conf switch for hub description page handling, refs #38126",
+   "tickets": [
+    38126
+   ],
+   "ts": 1790452862,
+   "version": 505,
+   "via": "call"
   },
   "hubSearchText": {
    "commit": "79e2e0421ff",
@@ -2554,6 +2633,16 @@
    "version": 306,
    "via": "call"
   },
+  "maxGenbankRegion": {
+   "commit": "6743564c0d1",
+   "subject": "hgTracks: tell the user when a track download is incomplete or still being prepared, and put the GenBank size limit unde",
+   "tickets": [
+    38433
+   ],
+   "ts": 1790721463,
+   "version": 505,
+   "via": "literal"
+  },
   "maxItemsPossible": {
    "commit": "7b475d1ee80",
    "subject": "make maxItemsPossible an hg.conf variable",
@@ -2624,6 +2713,16 @@
    "version": 407,
    "via": "call"
   },
+  "mouseoverParentLabels": {
+   "commit": "31a1ceab960",
+   "subject": "hgTracks: new hg.conf setting mouseoverParentLabels, off by default. When on, the drawn long label of a track and its mo",
+   "tickets": [
+    38527
+   ],
+   "ts": 1791813604,
+   "version": 505,
+   "via": "call"
+  },
   "multiRegionButtonTop": {
    "commit": "f71865cec0d",
    "subject": "Place multi-region button move under hg.conf control. Add 'pressed' styling to arbitrary buttons. refs #26385",
@@ -2632,6 +2731,16 @@
    ],
    "ts": 1615695868,
    "version": 412,
+   "via": "call"
+  },
+  "multiWigMouseOver": {
+   "commit": "ee90fbd7616",
+   "subject": "hgTracks: value popup for multiWig containers, gated by multiWigMouseOver, refs #38468",
+   "tickets": [
+    38468
+   ],
+   "ts": 1790980771,
+   "version": 505,
    "via": "call"
   },
   "myVariantsDataDir": {
@@ -2968,6 +3077,37 @@
    "version": 503,
    "via": "call"
   },
+  "quickLiftMultiChain": {
+   "commit": "efdd8825cf7",
+   "subject": "quickLift: lift an item through every chain it overlaps, behind two hg.conf gates, refs #38510",
+   "tickets": [
+    38510
+   ],
+   "ts": 1791581375,
+   "version": 505,
+   "via": "call"
+  },
+  "quickLiftSplitRanges": {
+   "commit": "efdd8825cf7",
+   "subject": "quickLift: lift an item through every chain it overlaps, behind two hg.conf gates, refs #38510",
+   "tickets": [
+    38510
+   ],
+   "ts": 1791581375,
+   "version": 505,
+   "via": "call"
+  },
+  "recentSessions.enable": {
+   "commit": "6e201f9c97f",
+   "subject": "Offer a dialog of previously used hgsids when opening a session, if any exist for your hguid, refs #35736,#30031",
+   "tickets": [
+    30031,
+    35736
+   ],
+   "ts": 1791570911,
+   "version": 505,
+   "via": "call"
+  },
   "relatedTrack": {
    "commit": "d156aaa50bb",
    "subject": "hgc and hgTrackUi can query a 'relatedTrack' table to print a list of related tracks to the one being looked at along wi",
@@ -3286,6 +3426,16 @@
    ],
    "ts": 1431788802,
    "version": 317,
+   "via": "call"
+  },
+  "showGenbankDownload": {
+   "commit": "18125243f8a",
+   "subject": "hgTracks: GenBank as a fourth format in the \"Download Current Track Data\" dialog",
+   "tickets": [
+    38433
+   ],
+   "ts": 1790470756,
+   "version": 505,
    "via": "call"
   },
   "showHubApiKey": {
@@ -6135,6 +6285,10 @@
   [
    504,
    "74623f843857f2254e5327c78b98f00c3f7098ff"
+  ],
+  [
+   505,
+   "77c1a2959c646d1c57c01001aeaa3a82be31e1fb"
   ]
  ],
  "schema": 3

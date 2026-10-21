@@ -13,6 +13,10 @@
 #include "rmskAlign.h"
 #include "hCommon.h"
 #include "chromAlias.h"
+#include "htmshell.h"
+#include "bPlusTree.h"
+#include "quickLift.h"
+#include "trackHub.h"
 
 
 struct bigRmskAlignRecord
@@ -221,6 +225,261 @@ printf ("  </thead>\n");
 }
 
 
+static boolean liftFields(struct hash *chainHash, char **fields)
+/* Lift the position fields of a bigRmsk row read from the assembly it came from onto the
+ * reference:  chrom, strand, alignStart and alignEnd, the ones the details page shows and
+ * links to.  Returns FALSE if the item does not lift, or if its block lists do not have
+ * blockCount entries.  refs #37437 */
+{
+char *chrom = cloneString(fields[0]);
+unsigned chromStart = sqlUnsigned(fields[1]);
+unsigned chromEnd = sqlUnsigned(fields[2]);
+char strand[2];
+safecpy(strand, sizeof strand, fields[5]);
+unsigned alignStart = sqlUnsigned(fields[6]);
+unsigned alignEnd = sqlUnsigned(fields[7]);
+int blockCount = sqlSigned(fields[9]);
+int *blockSizes, *blockRelStarts, sizeOne;
+sqlSignedDynamicArray(fields[10], &blockSizes, &sizeOne);
+if (sizeOne != blockCount)
+    return FALSE;
+sqlSignedDynamicArray(fields[11], &blockRelStarts, &sizeOne);
+if (sizeOne != blockCount)
+    return FALSE;
+if (!quickLiftJoinedRepeat(chainHash, &chrom, &chromStart, &chromEnd, strand, &alignStart,
+                           &alignEnd, &blockCount, blockSizes, blockRelStarts))
+    return FALSE;
+fields[0] = chrom;
+fields[5] = cloneString(strand);
+char buf[16];
+safef(buf, sizeof buf, "%u", alignStart);
+fields[6] = cloneString(buf);
+safef(buf, sizeof buf, "%u", alignEnd);
+fields[7] = cloneString(buf);
+return TRUE;
+}
+
+void doLiftedBigRmskRepeat (struct trackDb *tdb, char *item)
+/* The details page of a quickLifted bigRmsk item, behind browser.quickLiftRmsk:  a copy of
+ * doBigRmskRepeat() that reads the file of the assembly the item came from through the chain,
+ * takes the copy of the item that lands where it was clicked, shows where it lands on this
+ * one, and reads its alignments at its position in that assembly.  A fix to one belongs in
+ * the other.  refs #37437 */
+{
+cartWebStart (cart, database, "%s", tdb->longLabel);
+char *chrom = cartString(cart, "c");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+
+
+/* Open bigBed file and get interval list. */
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+struct bbiFile *bbi = bigBedFileOpenAlias(fileName,chromAliasFindAliases);
+struct hash *chainHash = NULL;
+struct bigBedInterval *bbList = quickLiftGetIntervals(trackDbSetting(tdb, "quickLiftUrl"), bbi,
+                                                      chrom, start, end, &chainHash);
+
+/* Find particular item in list - matching start, and item if possible. */
+boolean found = FALSE;
+struct bigBedInterval *bb;
+const char *data_style = "style=\"padding:0px 6px;\"";
+int bedSize = bbi->fieldCount;
+char *fields[bedSize];
+char startBuf[17], endBuf[17];
+if (bedSize < 14)
+    errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
+             bedSize);
+// the item's place in the assembly it came from, where the alignments are read
+char sourceChrom[bbi->chromBpt->keySize+1];
+int lastChromId = -1;
+char *alignChrom = NULL;
+int alignQueryStart = 0, alignQueryEnd = 0;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bbiCachedChromLookup(bbi, bb->chromId, lastChromId, sourceChrom, sizeof sourceChrom);
+    lastChromId = bb->chromId;
+    if (bigBedIntervalToRow(bb, sourceChrom, startBuf, endBuf, fields,
+                                           bedSize) < 14)
+        continue;
+    // with multi-chain lifting the same item can come back once for each chain, so take the
+    // copy that lands where it was clicked
+    if ( sameOk(fields[12], item) &&
+         liftFields(quickLiftChainHashForItem(chainHash, bb), fields) &&
+         (sqlSigned(fields[6]) == start) && sameString(fields[0], chrom) )
+        {
+        alignChrom = cloneString(sourceChrom);
+        alignQueryStart = bb->start;
+        alignQueryEnd = bb->end;
+        found = TRUE;
+        break;
+        }
+    }
+
+if ( found )
+    {
+    char class[32];
+    class[0] = '\0';
+    char subclass[32];
+    subclass[0] = '\0';
+    char *poundPtr = index (fields[3], '#');
+    if (poundPtr)
+        {
+        // Terminate name string properly
+        safecpy (class, sizeof (class), poundPtr + 1);
+        *poundPtr = '\0';
+        char *slashPtr = index (class, '/');
+        if (slashPtr)
+            {
+            // Terminate class string properly
+            safecpy (subclass, sizeof (subclass), slashPtr + 1);
+            *slashPtr = '\0';
+            }
+        }
+    printf ("<b>Repeat:</b> %s<br>\n", fields[3]);
+    printf ("<b>Class:</b> %s<br>\n", class);
+    printf ("<b>Subclass:</b> %s<br>\n", subclass);
+    printf ("<b>Orientation:</b> %s<br>\n", fields[5]);
+    htmlPrintf ("<br>This repeat comes from %s and is mapped onto %s by quickLift.  "
+                "The annotation and alignment lines below give its positions in %s.<br>\n",
+                trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database),
+                trackDbSetting(tdb, "quickLiftDb"));
+    //printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
+    //rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
+    printf ("<br><br>\n");
+
+    printf ("<h4>RepeatMasker Joined Annotations:</h4>\n");
+    printf
+           ("The RepeatMasker annotation line(s) for this element. "
+            "If the element is fragmented the output will contain one "
+            "line per joined fragment.<p>\n");
+
+    printf ("<table cellspacing=\"0\">\n");
+    char *description = fields[13];
+    printOutTableHeaderBR(*fields[5]);
+    char *outLine;
+    char *outLineTok = description;
+    while ((outLine = strsep(&outLineTok,",")) != NULL)
+        {
+        char *outField;
+        char *outFieldTok = outLine;
+        printf ("  <tr>\n");
+        while ((outField = strsep(&outFieldTok," ")) != NULL)
+            {
+            printf ("    <td %s>%s</td>\n", data_style, outField);
+            }
+        printf ("  <td>\n");
+        printf ("<A HREF=\"%s&db=%s&position=%s%%3A%d-%s\">Browser</A>",
+                hgTracksPathAndSettings (), database, fields[0],
+                atoi(fields[6]) + 1, fields[7]);
+        char *tbl = cgiUsualString ("table", cgiString ("g"));
+        printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
+                "strand=%s&table=%s\">"
+                "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
+                (fields[3] != NULL ? cgiEncode (fields[3]) : ""),
+                fields[0], fields[6], fields[7], cgiEncode (fields[5]),
+                tbl);
+        printf ("  </td>\n");
+        printf ("  </tr>\n");
+        }
+    printf("</table>\n");
+    }
+else
+    {
+    printf("No item %s starting at %d\n", emptyForNull(item), start);
+    }
+bbiFileClose(&bbi);
+
+/*
+ * Locate *.align data for this element
+ */
+char *xrefDataUrl = trackDbSetting(tdb, "xrefDataUrl");
+// an item that was not found has no place in the assembly it came from to read
+if ( xrefDataUrl && found ) 
+    {
+    //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
+    struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
+    if (abbi->fieldCount < 17)
+        errAbort("track %s has an xrefDataUrl bigBed with %d columns, needs at least 17.",
+                 tdb->track, abbi->fieldCount);
+    struct lm *alm = lmInit(0);
+    struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, alignChrom, alignQueryStart,
+                                                         alignQueryEnd, 0, alm);
+
+    printf ("<h4>RepeatMasker Alignments:</h4>\n");
+    printf ("The raw alignment data used by RepeatMasker to generate "
+	     "the final annotation call for this element. NOTE: The "
+	     "aligned sequence names and consensus positions may differ "
+	     "from the final annotation.<p>\n");
+    printf ("<table>\n");
+
+    struct bigRmskAlignRecord *arec = NULL;
+    AllocVar(arec);
+    for (bb = abbList; bb != NULL; bb = bb->next)
+        {
+        char *afields[abbi->fieldCount];
+        if (bigBedIntervalToRow(bb, alignChrom, startBuf, endBuf, afields,
+                            abbi->fieldCount) < 17)
+            continue;
+        if ( sameOk(afields[15], item) )
+            {
+            arec->chrom = afields[0];
+            arec->chromStart = sqlUnsigned(afields[1]);
+            arec->chromEnd = sqlUnsigned(afields[2]);
+            arec->chromRemain = sqlUnsigned(afields[3]);
+            arec->score = sqlFloat(afields[4]);
+            arec->percSubst = sqlFloat(afields[5]);
+            arec->percDel = sqlFloat(afields[6]);
+            arec->percIns = sqlFloat(afields[7]);
+            safef(arec->strand, sizeof(arec->strand), "%s", afields[8]);
+            arec->repName = afields[9];
+            arec->repType = afields[10];
+            arec->repSubtype = afields[11];
+            arec->repStart = sqlUnsigned(afields[12]);
+            arec->repEnd = sqlUnsigned(afields[13]);
+            arec->repRemain = sqlUnsigned(afields[14]);
+            arec->id = sqlUnsigned(afields[15]);
+            arec->calignData = afields[16];
+
+	    printf ("  <tr>\n");
+	    printf ("    <td>%.2f</td>\n", arec->score);
+	    printf ("    <td>%3.2f</td>\n", arec->percSubst);
+	    printf ("    <td>%3.2f</td>\n", arec->percDel);
+	    printf ("    <td>%3.2f</td>\n", arec->percIns);
+	    printf ("    <td>%s</td>\n", arec->chrom);
+	    printf ("    <td>%d</td>\n", arec->chromStart + 1);
+	    printf ("    <td>%d</td>\n", arec->chromEnd);
+	    printf ("    <td>(%d)</td>\n", arec->chromRemain);
+	    printf ("    <td>%s</td>\n", arec->strand);
+	    printf ("    <td>%s</td>\n", arec->repName);
+	    printf ("    <td>%s/%s</td>\n", arec->repType, arec->repSubtype);
+	    if (arec->strand[0] == '-')
+		{
+		printf ("    <td>(%d)</td>\n", arec->repRemain);
+		printf ("    <td>%d</td>\n", arec->repEnd);
+		printf ("    <td>%d</td>\n", arec->repStart);
+		}
+	    else
+		{
+		printf ("    <td>%d</td>\n", arec->repStart);
+		printf ("    <td>%d</td>\n", arec->repEnd);
+		printf ("    <td>(%d)</td>\n", arec->repRemain);
+		}
+	    printf ("    <td>%d</td>\n", arec->id);
+	    printf ("    </tr><tr><td colspan=\"15\"><pre>\n");
+            printAlignmentBR ( 
+                       arec->strand[0], arec->chrom, arec->chromStart, arec->chromEnd, 
+                       arec->repName, arec->repStart, arec->repEnd,
+                       arec->calignData );
+	    printf ("    </pre><td></tr>\n");
+	    }
+        } //for(bb = abblist....
+    printf ("</table>\n");
+    lmCleanup(&alm);
+    bbiFileClose(&abbi);
+    } // if ( xref...
+printTrackHtml(tdb);
+}
+
 void doBigRmskRepeat (struct trackDb *tdb, char *item)
 /* Main entry point */
 {
@@ -243,6 +502,9 @@ const char *data_style = "style=\"padding:0px 6px;\"";
 int bedSize = bbi->fieldCount;
 char *fields[bedSize];
 char startBuf[17], endBuf[17];
+if (bedSize < 14)
+    errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tdb->track,
+             bedSize);
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields,
@@ -333,6 +595,9 @@ if ( xrefDataUrl )
     {
     //struct bbiFile *abbi = bigBedFileOpen(xrefDataUrl);
     struct bbiFile *abbi = bigBedFileOpenAlias(xrefDataUrl,chromAliasFindAliases);
+    if (abbi->fieldCount < 17)
+        errAbort("track %s has an xrefDataUrl bigBed with %d columns, needs at least 17.",
+                 tdb->track, abbi->fieldCount);
     struct lm *alm = lmInit(0);
     struct bigBedInterval *abbList = bigBedIntervalQuery(abbi, chrom, start, end, 0, alm);
 

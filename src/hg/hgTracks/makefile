@@ -22,7 +22,7 @@ COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o barChartTrac
 	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o vcfTrack.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
-	wiki.o wikiTrack.o imageV2.o extTools.o hicTrack.o heatmap.o
+	wiki.o wikiTrack.o imageV2.o extTools.o hicTrack.o heatmap.o dotBracketTrack.o
 
 O = mainMain.o ${COMMONO} 
 

@@ -4,6 +4,7 @@ shortLabel miRBase
 longLabel miRBase microRNA precursors with mature miRNAs and predicted structure
 visibility hide
 type bigBed 6 + 11
+color 0,100,0
 bigDataUrl /gbdb/hg38/mirBase/mirBase.bb
 decorator.default.bigDataUrl /gbdb/hg38/mirBase/mirBaseArms.bb
 decorator.default.blockMode Overlay
@@ -13,6 +14,7 @@ searchIndex name
 searchTrix /gbdb/hg38/mirBase/mirBase.ix
 skipEmptyFields on
 skipFields sequence,armPositions
+dotBracketField dotBracket
 detailsScript.rnaStructure.dotBracket {"exportFields":["sequence","armPositions"],"title":"Secondary structure","colors":{"5p":"#E69F00","3p":"#56B4E9"},"labels":{"5p":"5p mature","3p":"3p mature"}}
 mouseOver ${name} (${miAcc})<br>${arms}
 urls miAcc="https://mirbase.org/hairpin/$$" acc5p="https://mirbase.org/mature/$$" acc3p="https://mirbase.org/mature/$$"

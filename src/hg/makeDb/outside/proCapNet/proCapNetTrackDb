@@ -212,13 +212,115 @@ def encode4ProCapComposite(db, experiments):
                              priority)
     return out
 
+def releasedSuper(track, shortLabel, longLabel):
+    """The released shape of a data source: a top level superTrack holding the
+    overlays directly.  The composite shape this file also writes is the one being
+    worked on, and it is gated to alpha from trackDb.ra; this is what beta and
+    public get until that work lands.  refs #35528"""
+    return stanza(0, [
+        f"track {track}",
+        "superTrack on",
+        "group rna",
+        f"shortLabel {shortLabel}",
+        f"longLabel {longLabel}",
+    ])
+
+def releasedOverlay(db, track, exp, dataType, subDir, fileTag, shortLabel, longLabel,
+                    priority):
+    """One cell line's two strands under the released superTrack.  There is no
+    composite to inherit from here, so each overlay carries its own wiggle settings
+    and names its own description page."""
+    gbdb = GBDB.format(db=db, track=track) + subDir
+    out = stanza(0, [
+        f"track {track}_{exp.cell}_{dataType}",
+        f"superTrack {track} full",
+        "container multiWig",
+        "aggregate solidOverlay",
+        "showSubtrackColorOnUi on",
+        "type bigWig",
+        "autoScale on",
+        "alwaysZero on",
+        "maxHeightPixels 100:40:8",
+        "windowingFunction maximum",
+        "configurable on",
+        f"html {track}",
+        f"color {exp.color}",
+        f"shortLabel {shortLabel}",
+        f"longLabel {longLabel}",
+        f"priority {priority}",
+    ])
+    for strand, extra, suffix in (("pos", [], "plus strand"),
+                                  ("neg", [f"altColor {exp.color}"], "minus strand")):
+        out += stanza(4, [
+            f"track {track}_{exp.cell}_{dataType}_{strand}",
+            f"parent {track}_{exp.cell}_{dataType}",
+            "type bigWig",
+            f"bigDataUrl {gbdb}/{exp.cell}.{fileTag}.{strand}.bw",
+            f"color {exp.color}",
+        ] + extra + [
+            f"shortLabel {shortLabel} {'+' if strand == 'pos' else '-'}",
+            f"longLabel {longLabel}, {suffix}",
+        ])
+    return out
+
+def releasedContrib(db, exp, priority):
+    gbdb = GBDB.format(db=db, track="proCapNet")
+    return stanza(0, [
+        f"track proCapNet_{exp.cell}_contrib",
+        "superTrack proCapNet hide",
+        "type bigWig",
+        f"bigDataUrl {gbdb}/contrib/{exp.cell}.proCapNet-contrib.bw",
+        "logo on",
+        "autoScale on",
+        "alwaysZero on",
+        "maxHeightPixels 100:40:8",
+        "configurable on",
+        "html proCapNet",
+        f"color {exp.color}",
+        f"shortLabel {exp.cell} Contribution",
+        f"longLabel {exp.cell} ({exp.modelAcc}) ProCapNet sequence-contribution scores",
+        f"priority {priority}",
+    ])
+
+def releasedProCapNet(db, experiments):
+    out = releasedSuper("proCapNet", "ProCapNet", "ProCapNet predicted PRO-cap")
+    for priority, exp in enumerate(experiments, 1):
+        out += releasedOverlay(db, "proCapNet", exp, "pred", "/pred", "proCapNet",
+                               f"{exp.cell} Predicted",
+                               f"{exp.cell} ({exp.modelAcc}) ProCapNet predicted PRO-cap",
+                               priority)
+    if db == "hg38":
+        for priority, exp in enumerate(experiments, 11):
+            out += releasedContrib(db, exp, priority)
+    return out
+
+def releasedEncode4ProCap(db, experiments):
+    out = releasedSuper("encode4ProCap", "PRO-cap",
+                        "PRO-cap nascent RNA transcription start sites from ENCODE 4")
+    for priority, exp in enumerate(experiments, 1):
+        out += releasedOverlay(db, "encode4ProCap", exp, "procap", "", exp.procapAcc,
+                               f"{exp.cell} PRO-cap",
+                               f"{exp.cell} ({exp.procapAcc}) PRO-cap transcription"
+                               f" start sites",
+                               priority)
+    return out
+
 def proCapNetTrackDb(opts, args):
+    """Two files per assembly, one per shape, chosen by the release tag on the
+    include line in trackDb.ra.  transcriptionStart.ra is the container and the
+    composites inside it, which is the shape being worked on and is alpha until
+    #38441 is fixed.  transcriptionStartPublic.ra is the shape already released,
+    each data source a top level superTrack holding its overlays."""
     experiments = list(TsvReader(args.experimentsTsv))
-    writeRa(args.db, args.outDir, "transcriptionStart", superStanza())
+    alpha = superStanza()
+    released = ""
     if args.db == "hg38":
-        writeRa(args.db, args.outDir, "encode4ProCap",
-                encode4ProCapComposite(args.db, experiments))
-    writeRa(args.db, args.outDir, "proCapNet", proCapNetComposite(args.db, experiments))
+        alpha += encode4ProCapComposite(args.db, experiments)
+        released += releasedEncode4ProCap(args.db, experiments)
+    alpha += proCapNetComposite(args.db, experiments)
+    released += releasedProCapNet(args.db, experiments)
+    writeRa(args.db, args.outDir, "transcriptionStart", alpha)
+    writeRa(args.db, args.outDir, "transcriptionStartPublic", released)
 
 def main():
     opts, args = parseArgs()

@@ -1,0 +1,177 @@
+#!/usr/bin/env python3
+"""Check the dot-bracket secondary structure column of a bigBed, the column named by
+the trackDb dotBracketField setting, against the blocks of each item.  The string
+covers the spliced item, one character per base, with spaces for bases that have no
+prediction, so the bigBed has to have been built with bedToBigBed -tab or those
+spaces will have split the columns."""
+import argparse
+import re
+import subprocess
+import sys
+
+openers = "([{<"
+closers = ")]}>"
+validChars = openers + closers + ". "
+asFieldRe = re.compile(r"^\s*[A-Za-z_][\w\[\]]*\s+([A-Za-z_]\w*)\s*;")
+
+
+def parseArgs():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("bigBed",
+                        help="bigBed file or URL")
+    parser.add_argument("dotBracketField",
+                        help="name of the column holding the dot-bracket string")
+    parser.add_argument("--chrom",
+                        help="only check items on this sequence")
+    parser.add_argument("--maxErrors", type=int, default=100,
+                        help="stop after this many items with problems, 0 for no limit")
+    return parser.parse_args()
+
+
+def runProg(cmd):
+    "run a program and return its standard output"
+    try:
+        return subprocess.run(cmd, check=True, stdout=subprocess.PIPE,
+                              encoding="utf-8").stdout
+    except (OSError, subprocess.CalledProcessError) as ex:
+        raise Exception("failed: " + " ".join(cmd)) from ex
+
+
+def asFieldNames(infoOut):
+    "column names, in order, from the autoSql in the bigBedInfo output"
+    parts = infoOut.split("\nas:\n", 1)
+    if len(parts) != 2:
+        raise Exception("bigBedInfo printed no autoSql for this file, so there are no "
+                        "column names to look the dot-bracket column up by")
+    asText = parts[1].split("\n    )", 1)[0]
+    matches = (asFieldRe.match(line) for line in asText.split("\n"))
+    return [m.group(1) for m in matches if m is not None]
+
+
+def infoValue(infoOut, key):
+    "one value from the bigBedInfo output"
+    for line in infoOut.split("\n"):
+        if line.startswith(key + ":"):
+            return line.split(":", 1)[1].strip()
+    raise Exception(f"bigBedInfo printed no '{key}'")
+
+
+def dotBracketColumn(fieldNames, fieldName):
+    "index of the dot-bracket column, which must be one of the columns after name"
+    if fieldName not in fieldNames:
+        raise Exception(f"the bigBed has no column named '{fieldName}'; its columns are: "
+                        + " ".join(fieldNames))
+    column = fieldNames.index(fieldName)
+    if column < 4:
+        raise Exception(f"'{fieldName}' is bed column {column + 1}; the dot-bracket string "
+                        "has to be in one of the columns after name")
+    return column
+
+
+def bedRows(bigBed, chrom):
+    "generate (line number, columns) over the bigBed, keeping trailing spaces"
+    cmd = ["bigBedToBed", bigBed, "stdout"]
+    if chrom is not None:
+        cmd.insert(1, "-chrom=" + chrom)
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, encoding="utf-8")
+    except OSError as ex:
+        raise Exception("failed: " + " ".join(cmd)) from ex
+    with proc:
+        for lineNo, line in enumerate(proc.stdout, 1):
+            yield lineNo, line.rstrip("\n").split("\t")
+    if proc.returncode != 0:
+        raise Exception("failed: " + " ".join(cmd))
+
+
+def splicedLength(row, definedFieldCount):
+    "number of bases the string covers: the sum of the block sizes, or the span"
+    if definedFieldCount < 12:
+        return int(row[2]) - int(row[1])
+    return sum(int(size) for size in row[10].rstrip(",").split(","))
+
+
+def checkLength(dotBracket, row, definedFieldCount):
+    "problem with the length of the string, which must cover the spliced item"
+    expect = splicedLength(row, definedFieldCount)
+    if len(dotBracket) == expect:
+        return None
+    return (f"the column holds {len(dotBracket)} characters but the item has {expect} "
+            "spliced bases; pad the string with spaces where there is no prediction")
+
+
+def checkChars(dotBracket):
+    "problem with the first character that is neither dot-bracket nor space"
+    for pos, char in enumerate(dotBracket, 1):
+        if char not in validChars:
+            return (f"character {pos} is {char!r}; only {validChars.strip()!r}, and space "
+                    "for a base with no prediction, can be drawn")
+    return None
+
+
+def unclosedProblem(stacks):
+    "problem with the leftmost bracket still open at the end of the string"
+    open1 = [(positions[0], opener) for opener, positions in stacks.items() if positions]
+    if len(open1) == 0:
+        return None
+    pos, opener = min(open1)
+    return f"the '{opener}' at character {pos} is never closed"
+
+
+def checkBalance(dotBracket):
+    "problem with the first unbalanced bracket, each kind nesting on its own"
+    stacks = {opener: [] for opener in openers}
+    for pos, char in enumerate(dotBracket, 1):
+        if char in openers:
+            stacks[char].append(pos)
+        elif char in closers:
+            opener = openers[closers.index(char)]
+            if len(stacks[opener]) == 0:
+                return f"the '{char}' at character {pos} closes a '{opener}' that was never opened"
+            stacks[opener].pop()
+    return unclosedProblem(stacks)
+
+
+def checkRow(row, column, definedFieldCount):
+    "list of problems with one item"
+    dotBracket = row[column]
+    problems = (checkLength(dotBracket, row, definedFieldCount),
+                checkChars(dotBracket), checkBalance(dotBracket))
+    return [problem for problem in problems if problem is not None]
+
+
+def reportRow(bigBed, lineNo, row, problems):
+    "print the problems with one item"
+    name = row[3]
+    where = f"{bigBed}:{lineNo}: {name} at {row[0]}:{row[1]}-{row[2]}"
+    for problem in problems:
+        print(f"{where}: {problem}")
+
+
+def checkRows(args, column, definedFieldCount):
+    "check every item, printing problems, and return the number of bad items"
+    bad = 0
+    for lineNo, row in bedRows(args.bigBed, args.chrom):
+        problems = checkRow(row, column, definedFieldCount)
+        if len(problems) > 0:
+            bad += 1
+            reportRow(args.bigBed, lineNo, row, problems)
+            if bad == args.maxErrors:
+                print(f"stopping at --maxErrors={bad}; there may be more",
+                      file=sys.stderr)
+                break
+    return bad
+
+
+def main():
+    args = parseArgs()
+    infoOut = runProg(["bigBedInfo", "-as", args.bigBed])
+    column = dotBracketColumn(asFieldNames(infoOut), args.dotBracketField)
+    definedFieldCount = int(infoValue(infoOut, "definedFieldCount"))
+    bad = checkRows(args, column, definedFieldCount)
+    if bad > 0:
+        print(f"{args.bigBed}: {bad} items with problems", file=sys.stderr)
+        sys.exit(1)
+
+
+main()

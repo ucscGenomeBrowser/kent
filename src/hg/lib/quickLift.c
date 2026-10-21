@@ -26,6 +26,8 @@
 #include "chromAlias.h"
 #include "customTrack.h"
 #include "encode/encodePeak.h"
+#include "rmskOut.h"
+#include "rmskJoined.h"
 #include "psl.h"
 #include "chainToPsl.h"
 #include "pslTransMap.h"
@@ -202,6 +204,20 @@ safef(key, sizeof key, "%p", item);
 hashAddInt(quickLiftMultiFor(chainHash)->itemChain, key, chainId);
 }
 
+static struct hash *oneChainHash(struct quickLiftMulti *qm, struct chain *chain)
+/* The reusable one-chain hash of qm, holding chain on its sequence. */
+{
+struct chain *current = hashFindVal(qm->oneChainBySeq, chain->tName);
+if (current != chain)
+    {
+    if (current != NULL)
+        liftOverRemoveChainHash(qm->oneChain, current);
+    liftOverAddChainHash(qm->oneChain, chain);
+    hashReplace(qm->oneChainBySeq, chain->tName, chain);
+    }
+return qm->oneChain;
+}
+
 struct hash *quickLiftChainHashForItem(struct hash *chainHash, void *item)
 /* The chain hash to lift item through:  with quickLiftMultiChain, a hash of just the chain
  * it was loaded for, when it was loaded that way, and otherwise chainHash itself.  The
@@ -224,15 +240,28 @@ safef(key, sizeof key, "%d", ptToInt(hel->val));
 struct chain *chain = hashFindVal(qm->chainById, key);
 if (chain == NULL)
     return chainHash;
-struct chain *current = hashFindVal(qm->oneChainBySeq, chain->tName);
-if (current != chain)
+return oneChainHash(qm, chain);
+}
+
+char *quickLiftRemapRange(struct hash *chainHash, void *item, char *chrom, int start, int end,
+                          char strand, char **retChrom, int *retStart, int *retEnd,
+                          char *retStrand)
+/* Lift chrom:start-end through one chain:  with quickLiftMultiChain the one item was loaded
+ * for, and otherwise the chain in chainHash with the most aligned bases in the range.  Given
+ * all of the chains, liftOverRemapRange() drops a range as "Duplicated in new" when two of
+ * them each cover a little of it, which the short chains beside a long one in a duplicated
+ * region do.  remapBlockedBed() picks the best chain instead, and so does this. */
+{
+struct hash *liftHash = quickLiftChainHashForItem(chainHash, item);
+if ((chainHash != NULL) && (liftHash == chainHash))
     {
-    if (current != NULL)
-        liftOverRemoveChainHash(qm->oneChain, current);
-    liftOverAddChainHash(qm->oneChain, chain);
-    hashReplace(qm->oneChainBySeq, chain->tName, chain);
+    struct chain *best = liftOverChainForRange(chainHash, chrom, start, max(end, start + 1));
+    if (best == NULL)
+        return "Deleted in new";
+    liftHash = oneChainHash(quickLiftMultiFor(chainHash), best);
     }
-return qm->oneChain;
+return liftOverRemapRange(liftHash, 0.0, chrom, start, end, strand, 0.001,
+                          retChrom, retStart, retEnd, retStrand);
 }
 
 static int queryRangeCmp(const void *va, const void *vb)
@@ -1149,20 +1178,20 @@ for(bed = bedList; bed; bed = nextBed)
     bed->next = NULL;
 
     char *error;
-    struct hash *bedChainHash = quickLiftChainHashForItem(chainHash, bed);
     if (!blocked)
         {
-        error = liftOverRemapRange(bedChainHash, 0.0, bed->chrom, bed->chromStart,
-                                   bed->chromEnd, bed->strand[0],
-                             
-                            0.001, &bed->chrom, (int *)&bed->chromStart, (int *)&bed->chromEnd, &bed->strand[0]);
+        error = quickLiftRemapRange(chainHash, bed, bed->chrom, bed->chromStart,
+                                    bed->chromEnd, bed->strand[0], &bed->chrom,
+                                    (int *)&bed->chromStart, (int *)&bed->chromEnd,
+                                    &bed->strand[0]);
 
         // probably this should keep track of cases where the input does NOT have thickStart == chromStart
         bed->thickStart = bed->chromStart;
         bed->thickEnd = bed->chromEnd;
         }
     else
-        error = remapBlockedBed(bedChainHash, bed, 0.0, 0.1, TRUE, TRUE, NULL, NULL);
+        error = remapBlockedBed(quickLiftChainHashForItem(chainHash, bed), bed, 0.0, 0.1,
+                                TRUE, TRUE, NULL, NULL);
 
     if (error == NULL)
         {
@@ -1662,11 +1691,10 @@ for(peak = peakList; peak; peak = nextPeak)
     nextPeak = peak->next;
     peak->next = NULL;
 
-    char *error = liftOverRemapRange(quickLiftChainHashForItem(chainHash, peak), 0.0,
-                            peak->chrom, peak->chromStart, peak->chromEnd,
-                            peak->strand[0],
-                            0.001, &peak->chrom, (int *)&peak->chromStart, (int *)&peak->chromEnd,
-                            &peak->strand[0]);
+    char *error = quickLiftRemapRange(chainHash, peak, peak->chrom, peak->chromStart,
+                                      peak->chromEnd, peak->strand[0], &peak->chrom,
+                                      (int *)&peak->chromStart, (int *)&peak->chromEnd,
+                                      &peak->strand[0]);
 
     if (error == NULL)
         slAddHead(&liftedList, peak);
@@ -1737,6 +1765,17 @@ if (fromCart >= 0)
 return cfgOptionBooleanDefault("browser.quickLiftWig", FALSE);
 }
 
+boolean quickLiftRmskEnabled(struct cart *cart)
+/* Return TRUE if quickLift is allowed to lift rmsk (RepeatMasker) tracks.  Off unless hg.conf
+ * says browser.quickLiftRmsk=on, and a cart variable of the same name overrides that, the
+ * same way as quickLiftAlignmentsEnabled. */
+{
+int fromCart = cartGate(cart, "browser.quickLiftRmsk");
+if (fromCart >= 0)
+    return fromCart;
+return cfgOptionBooleanDefault("browser.quickLiftRmsk", FALSE);
+}
+
 boolean quickLiftBarChartEnabled(struct cart *cart)
 /* Return TRUE if quickLift is allowed to lift bigBarChart tracks.  Off unless hg.conf says
  * browser.quickLiftBarChart=on, and a cart variable of the same name overrides that, the
@@ -1780,6 +1819,15 @@ boolean quickLiftIsLiftedGtex(struct cart *cart, struct trackDb *tdb)
 {
 return quickLiftIsLifted(tdb) && startsWith("gtexGene", trackHubSkipHubName(tdb->track)) &&
        quickLiftGtexEnabled(cart);
+}
+
+boolean quickLiftIsLiftedRmskJoined(struct cart *cart, struct trackDb *tdb)
+/* Return TRUE if tdb is a quickLifted RepeatMasker Viz. track (rmskJoined) to draw and click
+ * as one:  it is lifted, its name past the hub prefix starts with rmskJoined, and
+ * browser.quickLiftRmsk is on.  Off, it is drawn as the plain bed its type says. */
+{
+return quickLiftIsLifted(tdb) && startsWith("rmskJoined", trackHubSkipHubName(tdb->track)) &&
+       quickLiftRmskEnabled(cart);
 }
 
 static int hrCmp(const void *va, const void *vb)
@@ -1991,8 +2039,8 @@ struct bed *quickLiftSqlLoadBeds(struct trackDb *tdb, char *trackTable, char *li
     char *chrom, int start, int end, char *extraWhere,
     ItemLoader2 loader, int numFields, boolean blocked)
 /* Load items from another assembly via quickLift SQL, map them back to the reference,
- * and return the lifted beds.  Handles custom track table resolution internally.
- * Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
+ * and return the lifted beds that overlap chrom:start-end.  Handles custom track table
+ * resolution internally.  Caller provides liftDb from trackDbSetting(tdb, "quickLiftDb"). */
 {
 char *table;
 quickLiftResolveTable(tdb, trackTable, &table, &liftDb);
@@ -2003,7 +2051,228 @@ struct bed *bed = (struct bed *)quickLiftSql(conn, quickLiftFile, table, chrom, 
     NULL, extraWhere, loader, numFields, chainHash);
 struct bed *liftedBeds = quickLiftBeds(bed, chainHash, blocked);
 hFreeConn(&conn);
-return liftedBeds;
+
+/* the chains are read for a padded window, so a bed can lift to somewhere off screen */
+struct bed *nextBed, *inWindow = NULL;
+for (bed = liftedBeds; bed != NULL; bed = nextBed)
+    {
+    nextBed = bed->next;
+    if ((bed->chromEnd > start) && (bed->chromStart < end))
+        slAddHead(&inWindow, bed);
+    }
+slReverse(&inWindow);
+return inWindow;
+}
+
+static struct slList *rmskOutLoadItem(char **row, int numFields)
+/* quickLiftSql()'s loader signature around rmskOutLoad(). */
+{
+return (struct slList *)rmskOutLoad(row);
+}
+
+struct rmskOut *quickLiftSqlLoadRmsk(struct trackDb *tdb, char *trackTable, char *chrom,
+    int start, int end, struct hash *chainHash)
+/* Read the rows of a quickLifted rmsk track from the assembly it came from, over the source
+ * ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:  lift each
+ * one with quickLiftRmskOut() through quickLiftChainHashForItem(chainHash, row).  chainHash,
+ * from newHash(), is filled with the chains that do the lifting. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *table;
+quickLiftResolveTable(tdb, trackTable, &table, &liftDb);
+struct sqlConnection *conn = hAllocConn(liftDb);
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+// rmskOutLoad reads 16 columns, row[0] through row[15]
+struct rmskOut *roList = (struct rmskOut *)quickLiftSql(conn, quickLiftFile, table, chrom,
+    start, end, NULL, NULL, rmskOutLoadItem, 16, chainHash);
+hFreeConn(&conn);
+return roList;
+}
+
+boolean quickLiftRmskOut(struct hash *chainHash, struct rmskOut *ro)
+/* Lift an rmsk row read from the assembly it came from onto the reference, in place:
+ * genoName, genoStart, genoEnd and strand.  repStart, repEnd and repLeft are left in the
+ * convention of the source strand, so save ro->strand first if they are to be read.  Returns
+ * FALSE, with the row unchanged, if it does not map. */
+{
+char *liftedChrom;
+int liftedStart, liftedEnd;
+char liftedStrand;
+if (liftOverRemapRange(chainHash, 0.0, ro->genoName, ro->genoStart, ro->genoEnd, ro->strand[0],
+                       0.001, &liftedChrom, &liftedStart, &liftedEnd, &liftedStrand) != NULL)
+    return FALSE;
+// liftOverRemapRange hands back its own copy of the chrom name
+freeMem(ro->genoName);
+ro->genoName = liftedChrom;
+ro->genoStart = liftedStart;
+ro->genoEnd = liftedEnd;
+ro->strand[0] = liftedStrand;
+return TRUE;
+}
+
+static struct slList *rmskJoinedLoadItem(char **row, int numFields)
+/* quickLiftSql()'s loader signature around rmskJoinedLoad(). */
+{
+return (struct slList *)rmskJoinedLoad(row);
+}
+
+struct rmskJoined *quickLiftSqlLoadRmskJoined(struct trackDb *tdb, char *trackTable,
+    char *chrom, int start, int end, struct hash *chainHash)
+/* Read the rows of a quickLifted rmskJoined track from the assembly it came from, over the
+ * source ranges that map into chrom:start-end on the reference.  The rows are NOT lifted:
+ * lift each one with quickLiftJoinedRepeat() through quickLiftChainHashForItem(chainHash, row).
+ * chainHash, from newHash(), is filled with the chains that do the lifting. */
+{
+char *liftDb = trackDbSetting(tdb, "quickLiftDb");
+char *table;
+quickLiftResolveTable(tdb, trackTable, &table, &liftDb);
+struct sqlConnection *conn = hAllocConn(liftDb);
+char *quickLiftFile = trackDbSetting(tdb, "quickLiftUrl");
+// rmskJoinedLoad reads 13 columns, row[0] through row[12]
+struct rmskJoined *rmList = (struct rmskJoined *)quickLiftSql(conn, quickLiftFile, table, chrom,
+    start, end, NULL, NULL, rmskJoinedLoadItem, 13, chainHash);
+hFreeConn(&conn);
+return rmList;
+}
+
+static void addUnaligned(int *blockSizes, int *blockRelStarts, int *pCount, int size)
+/* Add an unaligned block of size to the blocks written so far, joining it to the one before
+ * if that is unaligned too. */
+{
+int n = *pCount;
+if ((n > 0) && (blockRelStarts[n-1] < 0))
+    blockSizes[n-1] += size;
+else
+    {
+    blockSizes[n] = size;
+    blockRelStarts[n] = -1;
+    *pCount = n + 1;
+    }
+}
+
+boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *pChromStart,
+    unsigned *pChromEnd, char *strand, unsigned *pAlignStart, unsigned *pAlignEnd,
+    int *pBlockCount, int *blockSizes, int *blockRelStarts)
+/* Lift a joined RepeatMasker item (an rmskJoined row or a bigRmsk record) onto the reference,
+ * in place.  Each aligned block (blockRelStarts not -1) is lifted on its own;  the unaligned
+ * blocks hold consensus lengths, not genome positions, and are kept.  An aligned block that
+ * does not map, or maps to another sequence or strand than the first one that does, becomes
+ * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
+ * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
+ * the reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
+ * no aligned block maps, or the ones that do land out of order:  drop the item then. */
+{
+int blockCount = *pBlockCount;
+if (blockCount <= 0)
+    return FALSE;
+// the unaligned flanks are drawn past the aligned part:  keep whatever they reach beyond
+// their own sizes, which is how far the item's ends sit from the aligned part
+int first = (blockRelStarts[0] < 0) ? max(blockSizes[0], 0) : 0;
+int last = (blockRelStarts[blockCount-1] < 0) ? max(blockSizes[blockCount-1], 0) : 0;
+int extraLeft = max((int)(*pAlignStart - *pChromStart) - first, 0);
+int extraRight = max((int)(*pChromEnd - *pAlignEnd) - last, 0);
+int *newStarts, *newEnds;
+AllocArray(newStarts, blockCount);
+AllocArray(newEnds, blockCount);
+char *newChrom = NULL;
+char newStrand = 0;
+boolean ok = TRUE;
+int i, n = 0;
+
+// the blocks are rewritten in place:  n never passes i, so a block is read before it is
+// written over
+for (i = 0; i < blockCount; i++)
+    {
+    int size = blockSizes[i];
+    if (blockRelStarts[i] < 0)
+        {
+        addUnaligned(blockSizes, blockRelStarts, &n, size);
+        continue;
+        }
+    int start = *pChromStart + blockRelStarts[i];
+    int end = start + size;
+    char *liftChrom;
+    char liftStrand;
+    int liftStart, liftEnd;
+    boolean lifted = (end > start) &&
+        (liftOverRemapRange(chainHash, 0.0, *pChrom, start, end, '+', 0.001, &liftChrom,
+                            &liftStart, &liftEnd, &liftStrand) == NULL);
+    boolean keep = lifted &&
+        ((newChrom == NULL) || (sameString(newChrom, liftChrom) && (newStrand == liftStrand)));
+    // liftOverRemapRange hands back its own copy of the chrom name:  keep the first block's
+    // and free the rest
+    if (keep && (newChrom == NULL))
+        newChrom = liftChrom;
+    else if (lifted)
+        freeMem(liftChrom);
+    if (keep)
+        {
+        newStrand = liftStrand;
+        blockSizes[n] = size;
+        blockRelStarts[n] = 0;
+        newStarts[n] = liftStart;
+        newEnds[n] = liftEnd;
+        n++;
+        }
+    else
+        addUnaligned(blockSizes, blockRelStarts, &n, size);
+    }
+if (newChrom == NULL)
+    ok = FALSE;
+
+if (ok)
+    {
+    if (newStrand == '-')
+        {
+        reverseInts(blockSizes, n);
+        reverseInts(blockRelStarts, n);
+        reverseInts(newStarts, n);
+        reverseInts(newEnds, n);
+        int tmp = extraLeft;
+        extraLeft = extraRight;
+        extraRight = tmp;
+        strand[0] = (strand[0] == '-') ? '+' : '-';
+        }
+
+    // the aligned blocks have to stay in order on the reference
+    int alignStart = 0, alignEnd = 0, prevStart = -1;
+    for (i = 0; i < n; i++)
+        {
+        if (blockRelStarts[i] < 0)
+            continue;
+        if (newStarts[i] < prevStart)
+            ok = FALSE;
+        if (prevStart < 0)
+            alignStart = newStarts[i];
+        prevStart = newStarts[i];
+        alignEnd = max(alignEnd, newEnds[i]);
+        }
+
+    if (ok)
+        {
+        first = (blockRelStarts[0] < 0) ? max(blockSizes[0], 0) : 0;
+        last = (blockRelStarts[n-1] < 0) ? max(blockSizes[n-1], 0) : 0;
+        *pAlignStart = alignStart;
+        *pAlignEnd = alignEnd;
+        *pChromStart = max(alignStart - first - extraLeft, 0);
+        *pChromEnd = alignEnd + last + extraRight;
+        for (i = 0; i < n; i++)
+            {
+            if (blockRelStarts[i] < 0)
+                continue;
+            blockRelStarts[i] = newStarts[i] - *pChromStart;
+            blockSizes[i] = newEnds[i] - newStarts[i];
+            }
+        *pBlockCount = n;
+        freeMem(*pChrom);
+        *pChrom = newChrom;
+        newChrom = NULL;
+        }
+    }
+freeMem(newChrom);
+freeMem(newStarts);
+freeMem(newEnds);
+return ok;
 }
 
 char *quickLiftChainTable()

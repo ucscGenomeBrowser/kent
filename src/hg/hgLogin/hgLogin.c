@@ -465,7 +465,7 @@ if (isNotEmpty(errMsg))
 hPrintf(
     "<p id=\"confirmationMsg\" class=\"confirmationTxt\">A confirmation email has been sent to you. \n"
     "Please click the confirmation link in the email to activate your account.</p>"
-    "<p>You may have to look in your spam folder for an email from genome-www@soe.ucsc.edu, "
+    "<p>You may have to look in your spam folder for the confirmation email, "
     "especially if you use Microsoft Outlook or Hotmail.</p>");
 if (offerNewAddress)
     {
