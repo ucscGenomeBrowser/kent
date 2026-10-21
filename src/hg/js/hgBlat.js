@@ -544,7 +544,10 @@ function blatWireDelete() {
         $.ajax({
             type: 'POST',
             url: 'hgCustom',
-            data: { hgsid: cfg.hgsid, hgct_doRemoveCustomTrack: '1', hgct_table: ctName },
+            // db: the cart's current assembly may have been changed in another tab, and hgCustom
+            // only looks for the track among the custom tracks of that assembly.
+            data: { hgsid: cfg.hgsid, db: cfg.fullDb, hgct_doRemoveCustomTrack: '1',
+                    hgct_table: ctName },
             dataType: 'html',
             cache: false,
             success: function() {
