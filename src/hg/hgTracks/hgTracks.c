@@ -12753,6 +12753,12 @@ else if (cartVarExists(cart, configDefaultAll))
     cartRemove(cart, configDefaultAll);
     configPageSetTrackVis(-1);
     }
+else if (freeTypeTuneUiOn() && cartVarExists(cart, configFreeTypeReset))
+    {
+    cartRemove(cart, configFreeTypeReset);
+    freeTypeTuneResetCart();
+    configPageSetTrackVis(-2);
+    }
 else if (cartVarExists(cart, configHideAllGroups))
     {
     cartRemove(cart, configHideAllGroups);
