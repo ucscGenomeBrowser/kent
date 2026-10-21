@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -214,6 +214,11 @@ trackHubSkipHubNameTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackHubSkipHubNameTester trackHubSkipHubNameTester.c ${MYLIBS} $L
 	${BIN_DIR}/trackHubSkipHubNameTester > output/trackHubSkipHubNameTest
 	diff expected/trackHubSkipHubNameTest output/trackHubSkipHubNameTest
+
+cartContentsValTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartContentsValTester cartContentsValTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartContentsValTester > output/cartContentsValTest
+	diff expected/cartContentsValTest output/cartContentsValTest
 
 # hgPcrResult_ cart variables fed through the cart's own parse.  The dropped ones are also
 # reported on stderr, the way the CGIs log them, so that goes to /dev/null.  refs #38442
