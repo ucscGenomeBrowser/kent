@@ -415,15 +415,16 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
-static void mergeWiggles(struct track *tg, boolean add)
+static struct track *mergeWiggles(struct track *tg, boolean add)
+/* Add or subtract the children into the first one that has data, and return that one.
+ * NULL when none of them has any.  A child has no preDrawContainer when it was switched
+ * off, since only a visible child is pre-drawn, and also when its data failed to load;
+ * dereferencing one here took the whole image down with a segfault.  refs #38560 */
 {
-/* A child whose data failed to load has no preDrawContainer: dereferencing one here took
- * the whole image down with a segfault.  Merge over the children that do have data; the
- * failed child still draws its own message.  refs #38560 */
 while ((tg != NULL) && (tg->preDrawContainer == NULL))
     tg = tg->next;
 if (tg == NULL)
-    return;
+    return NULL;
 struct preDrawContainer *firstPre = tg->preDrawContainer;
 
 struct track *firstTrack = tg;
@@ -464,6 +465,7 @@ for(tg = tg->next; tg; tg = tg->next)
     firstPre->graphLowerLimit = lowerLimit;
     firstPre->graphUpperLimit = upperLimit;
     }
+return firstTrack;
 }
 
 struct mwMouseSub
@@ -557,8 +559,15 @@ if ((wigCart->aggregateFunction == wiggleAggregateAdd
     {
     /* With a child missing, the sum is wrong whatever we do, so leave the rows as they
      * are and let the failed one say so.  refs #38560 */
-    mergeWiggles(tg->subtracks, wigCart->aggregateFunction == wiggleAggregateAdd);
-    tg->subtracks->next = NULL;
+    struct track *merged = mergeWiggles(tg->subtracks,
+                                        wigCart->aggregateFunction == wiggleAggregateAdd);
+    if (merged != NULL)
+        {
+        /* Keep the child the sum landed on, which is not the first one when the first one
+         * is switched off: keeping the head there left the row empty. */
+        tg->subtracks = merged;
+        merged->next = NULL;
+        }
     }
 int numTrack = 0;
 struct mwMouseSub *mouseSubList = NULL;
