@@ -22,6 +22,8 @@ errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=
 }
 
 #else 
+#include <pthread.h>
+
 FT_Library    library;
 FT_Face       face;
 static char *loadedFile = NULL;  /* Font file the current face was built from. */
@@ -390,16 +392,22 @@ FT_Set_Pixel_Sizes( face, fontHeight, fontHeight);
 ftTextHelper(mg, x, y, baseline,color, font, text, fontHeight, TRUE);
 }
 
+// hgTracks measures labels inside its parallel track-load threads, which share the one
+// face, and a FreeType face is not thread safe.
+static pthread_mutex_t ftWidthMutex = PTHREAD_MUTEX_INITIALIZER;
+
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)
 {
 unsigned int fontHeight;
 unsigned int baseline;
 getFontCorrection(mgFontPixelHeight(font), &fontHeight, &baseline);
+pthread_mutex_lock(&ftWidthMutex);
 FT_Set_Pixel_Sizes( face, fontHeight, fontHeight);
 int n;
 unsigned long offset = 0;
 for(n = 0; n < charCount; n++)
     offset += ftAdvanceForChar(fontHeight, chars[n]);
+pthread_mutex_unlock(&ftWidthMutex);
 offset /= 64;
 return offset;
 }
