@@ -88,15 +88,40 @@ function blatUnit() {
     return hgBlatData.config.isProt ? 'aa' : 'bp';
 }
 
+function blatCoverageSegments(hit) {
+    // One [start, end) per aligned block, in query plus-strand coordinates, from the PSL block
+    // lists.  Parts of the query between blocks (aligned elsewhere, or not at all) stay empty.
+    // Falls back to the whole qStart-qEnd span when the block lists are missing or do not fit.
+    var span = [[hit.qStart - 1, hit.qEnd]];
+    if (!hit.blockSizes || !hit.qStarts)
+        return span;
+    var sizes = hit.blockSizes.split(',').filter(s => s !== '').map(Number);
+    var starts = hit.qStarts.split(',').filter(s => s !== '').map(Number);
+    if (sizes.length !== starts.length)
+        return span;
+    var segs = [];
+    for (var i = 0; i < sizes.length; i++) {
+        var s = starts[i];
+        if (hit.strand && hit.strand[0] === '-')
+            s = hit.qSize - (starts[i] + sizes[i]);   // PSL minus-strand query starts are reversed
+        if (s < 0 || s + sizes[i] > hit.qSize)
+            return span;
+        segs.push([s, s + sizes[i]]);
+    }
+    return segs;
+}
+
 function blatCoverageCell(hit) {
-    var left = (hit.qStart - 1) / hit.qSize * 100;
-    var width = (hit.qEnd - hit.qStart + 1) / hit.qSize * 100;
     var u = blatUnit();
     var tip = `Query matches the genome at ${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}${u} out of ${blatFmt(hit.qSize)}${u}`;
+    var bars = blatCoverageSegments(hit).map(function(seg) {
+        var left = seg[0] / hit.qSize * 100;
+        var width = (seg[1] - seg[0]) / hit.qSize * 100;
+        return `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i>`;
+    }).join('');
     // The query start and end are printed next to the bar, as in the classic page's START and END
     // columns: for short queries like primers the bar alone does not show which bases matched.
-    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">` +
-        `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i></span>` +
+    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">${bars}</span>` +
         `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span></span>`;
 }
 
@@ -120,7 +145,7 @@ function blatSummaryStrip(cfg, queryCount) {
     var actions = '';
     // "View all in browser" is the primary action, so it comes first.
     if (cfg.viewAllUrl) {
-        actions += `<a class="gbPill" title="Open the Genome Browser with all these BLAT hits shown together as one custom track" href="${htmlEncode(cfg.viewAllUrl)}">View all in browser</a>`;
+        actions += `<a class="gbPill" id="blatViewAllBtn" title="Open the Genome Browser with all these BLAT hits shown together as one custom track" href="${htmlEncode(cfg.viewAllUrl)}">View all in browser</a>`;
     }
     // "Show Query Sequence" opens the query FASTA in a panel (with Download / Copy). Only on a fresh
     // search, where the uploaded sequence is available (cfg.querySeqs emitted by hgBlat.c).
@@ -128,9 +153,17 @@ function blatSummaryStrip(cfg, queryCount) {
         actions += '<button type="button" class="gbPill" id="blatSeqBtn" ' +
             'title="Show the sequence you searched with, in FASTA format">Show Query Sequence</button>';
     }
+    // Font Awesome 6 "file-arrow-down" (fontawesome.com, free icons, CC BY 4.0), inlined because
+    // the tree's font-awesome.min.css is version 4.5, which does not have it.
+    var downloadIcon = '<svg class="blatShareIcon" viewBox="0 0 384 512" width="10" height="13" ' +
+        'fill="currentColor" aria-hidden="true"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 ' +
+        '28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384' +
+        'L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 ' +
+        '9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 ' +
+        '24-24s24 10.7 24 24z"/></svg>';
     actions += '<button type="button" class="gbPill" id="blatTsvBtn" ' +
         'title="Download the hits in the table below, in their current order and filter, as a ' +
-        'tab-separated file that opens in Excel">Download Table</button>';
+        'tab-separated file that opens in Excel">' + downloadIcon + 'Download Table</button>';
     // "Share a link" creates a durable, minimal snapshot session (db + results bigPsl only) and shows
     // its ?u=&s= reopen link (see blatShareLink).  Only offered when a durable bigPsl backs the
     // results (cfg.canShare = autoBigPsl); without it there is nothing for the shared link to reopen.
@@ -150,8 +183,28 @@ function blatSummaryStrip(cfg, queryCount) {
     // button (renders immediately with the strip) that replaces the old C-emitted inline form, which
     // only appeared after the buildBigPsl AJAX finished and reflowed the page when clicked.
     if (cfg.canRename) {
+        // Font Awesome 6 "pen" (fontawesome.com, free icons, CC BY 4.0), inlined like the icons above.
+        var penIcon = '<svg class="blatShareIcon" viewBox="0 0 512 512" width="12" height="12" ' +
+            'fill="currentColor" aria-hidden="true"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4' +
+            '-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 ' +
+            '10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1' +
+            '-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>';
         actions += '<button type="button" class="gbPill" id="blatRenameBtn" ' +
-            'title="Rename this BLAT results custom track and its description">Rename BLAT Track</button>';
+            'title="Rename this BLAT results custom track and its description">' + penIcon +
+            'Rename BLAT Track</button>';
+    }
+    if (cfg.canDelete) {
+        // The trash can of hgTracks' custom track delete icon (printTrashIcon() in hgTracks.c).
+        var trashIcon = '<svg class="blatShareIcon" viewBox="0 0 448 512" width="12" height="13" ' +
+            'fill="currentColor" aria-hidden="true"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 ' +
+            '0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 ' +
+            '96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 ' +
+            '0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 ' +
+            '16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 ' +
+            '16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 ' +
+            '16-16V208c0-8.8-7.2-16-16-16z"/></svg>';
+        actions += `<button type="button" class="gbPill" id="blatDeleteBtn" title="${blatDeleteTip(cfg)}">` +
+            trashIcon + '<span class="blatDeleteLabel">Delete track</span></button>';
     }
     return `<div class="gbStrip">${stats}<span class="gbStripActions">${actions}</span></div>`;
 }
@@ -448,6 +501,76 @@ function blatWireRename() {
     });
 }
 
+// ---- Delete BLAT track ----------------------------------------------------
+// The track is removed by an hgCustom request, whose custom track parsing does the removal (the
+// variables are CT_DO_REMOVE_VAR and CT_SELECTED_TABLE_VAR in customTrack.h); its page is not used.
+// The track name is cfg.ctName on a page reopened from the track (blatCt=), else the track this page
+// built (hgBlat.c's window.blatCtName).  On a page built from the trash files the table keeps
+// working without the track, so the button then turns into "Restore track", which rebuilds it
+// through window.blatRenameCt.  A reopened page has no such files, so there the deletion is final.
+
+function blatDeleteTip(cfg) {
+    return 'Remove the custom track with these BLAT results from the Genome Browser, e.g. to ' +
+        'clean up the track list after many searches. ' +
+        (cfg.ctName ? 'The results then cannot be shown again, so save the table first ' +
+                      'with Download Table if you still need them.' :
+                      'This page stays available, and you can restore the track from here.');
+}
+var BLAT_RESTORE_TIP = 'Add the custom track with these BLAT results back to the Genome Browser.';
+
+function blatSetTip(el, text) {
+    // After convertTitleTagsToMouseovers() the tooltip lives in the mouseoverText attribute.
+    if (el.attr('mouseoverText') !== undefined) { el.attr('mouseoverText', htmlEncode(text)); }
+    else { el.attr('title', text); }
+}
+
+function blatWireDelete() {
+    var btn = $('#blatDeleteBtn');
+    var cfg = hgBlatData.config;
+    var deleted = false;
+    btn.on('click', function() {
+        if (deleted) {
+            window.blatRenameCt(cfg.trackName, cfg.trackDescription);
+            deleted = false;
+            btn.find('.blatDeleteLabel').text('Delete track');
+            blatSetTip(btn, blatDeleteTip(cfg));
+            $('#blatViewAllBtn, #blatRenameBtn').show();
+            return;
+        }
+        var ctName = cfg.ctName ||
+            (typeof window.blatCtName === 'function' ? window.blatCtName() : '');
+        if (!ctName) { return; }
+        btn.prop('disabled', true);
+        $.ajax({
+            type: 'POST',
+            url: 'hgCustom',
+            // db: the cart's current assembly may have been changed in another tab, and hgCustom
+            // only looks for the track among the custom tracks of that assembly.
+            data: { hgsid: cfg.hgsid, db: cfg.fullDb, hgct_doRemoveCustomTrack: '1',
+                    hgct_table: ctName },
+            dataType: 'html',
+            cache: false,
+            success: function() {
+                deleted = true;
+                // Without the track these would open the browser with nothing new in it, and a
+                // rename would quietly bring the track back.
+                $('#blatViewAllBtn, #blatRenameBtn').hide();
+                if (cfg.ctName || typeof window.blatRenameCt !== 'function') {
+                    btn.find('.blatDeleteLabel').text('Track deleted');
+                    blatSetTip(btn, 'The custom track with these BLAT results was removed.');
+                    return;
+                }
+                btn.prop('disabled', false).find('.blatDeleteLabel').text('Restore track');
+                blatSetTip(btn, BLAT_RESTORE_TIP);
+            },
+            error: function() {
+                btn.prop('disabled', false);
+                blatSetTip(btn, 'The track could not be deleted. Please try again.');
+            }
+        });
+    });
+}
+
 // ---- FASTA viewer (generic) ----------------------------------------------
 
 function blatToFasta(seqs) {
@@ -594,6 +717,7 @@ function blatBuild() {
     $('#blatShareBtn').on('click', blatShareLink);
     $('#blatSeqBtn').on('click', blatShowQuerySeq);
     blatWireRename();
+    blatWireDelete();
 
     var columns = [];
     columns.push({ data: 'rank', className: 'rankCol' });
@@ -632,6 +756,22 @@ function blatBuild() {
         order: [],
         language: { search: '', searchPlaceholder: 'Filter hits by locus, chrom, position…' }
     });
+
+    // "Hide alt/fix patches" checkbox next to the search box (human assemblies only).  It is a
+    // DataTables row filter, so the Download Table button also leaves out the hidden hits.
+    if (cfg.altFixFilter) {
+        var altFixCount = hits.filter(h => h.altFix).length;
+        $('#blatTable_filter').append(
+            '<label class="blatAltFix" title="Hide hits on alternate haplotype (_alt) and fix ' +
+            'patch (_fix) sequences, which repeat parts of the main chromosomes">' +
+            '<input type="checkbox" id="blatHideAltFix"> Hide alt/fix patches' +
+            ` (${blatFmt(altFixCount)})</label>`);
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex, row) {
+            if (settings.nTable.id !== 'blatTable') { return true; }
+            return !(row.altFix && $('#blatHideAltFix').prop('checked'));
+        });
+        $('#blatHideAltFix').on('change', function() { dt.draw(); });
+    }
 
     $('#blatTsvBtn').on('click', function() {
         var shown = dt.rows({ search: 'applied', order: 'applied' }).data().toArray();

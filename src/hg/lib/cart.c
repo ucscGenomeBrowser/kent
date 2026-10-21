@@ -970,6 +970,43 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+static void updateOne(struct sqlConnection *conn,
+	char *table, struct cartDb *cdb, char *contents, int contentSize);
+static void cartUpdateRecentSession(struct cart *cart, char *id);
+static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
+                               char *skipPrefix);
+
+static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
+/* A full session load is about to replace the cart.  The cart keeps its hgsid, so the view the
+ * user had is gone once the cart is saved.  Store a copy of it in a new sessionDb row and put that
+ * on the list of recent views.  This is only needed if the hgsid existed before this request: a
+ * session link without an hgsid got a new row, and the old view is still in the row of the hgsid
+ * it came from, which is on the list already. */
+{
+if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL || cart->sessionInfo->useCount == 0)
+    return;
+struct sqlConnection *conn = cartDefaultConnector();
+boolean found;
+struct cartDb *copy = loadDb(conn, sessionDbTable(), NULL, &found);
+struct dyString *dy = dyStringNew(4096);
+// The cart already has the variables of this request, among them the hgS_ ones that ask for the
+// session load: keeping those would load the session again when the copy is opened.
+cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+char *encName = cgiEncode(loadedName);
+dyStringPrintf(dy, "%s%s=%s", (dy->stringSize > 0) ? "&" : "", hgsPrevViewOf, encName);
+// updateOne writes useCount+1.  At 2 hgcentralTidy keeps the row for 14 days if it is not
+// opened, at 1 only for 2 days.
+copy->useCount = 1;
+updateOne(conn, sessionDbTable(), copy, dy->string, dy->stringSize);
+char copyId[256];
+cartDbSecureId(copyId, sizeof copyId, copy);
+cartUpdateRecentSession(cart, copyId);
+freeMem(encName);
+dyStringFree(&dy);
+cartDbFree(&copy);
+cartDefaultDisconnector(&conn);
+}
+
 #ifndef GBROWSE
 void cartLoadUserSessionExt(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
@@ -1031,6 +1068,8 @@ if (row != NULL)
         sessionTableString = cloneString(sessionTableString);
         char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
         pubSessionsTableString = cloneString(pubSessionsTableString);
+        if (!merge)
+            cartKeepCopyBeforeLoad(cart, sessionName);
         char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
         struct sqlConnection *conn2 = hConnectCentral();
         sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
@@ -1647,6 +1686,7 @@ char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
 sessionTableString = cloneString(sessionTableString);
 char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
 pubSessionsTableString = cloneString(pubSessionsTableString);
+cartKeepCopyBeforeLoad(cart, "");
 char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
@@ -1693,6 +1733,15 @@ if (isValidEnough)
     /* Overload settings explicitly passed in via CGI (except for the
      * command that sent us here): */
     loadCgiOverHash(cart, oldVars);
+    /* Tell the next hgTracks page that the view was replaced, like a named session load does,
+     * so it can point to the copy of the old view.  The name and owner of a session loaded
+     * earlier may still be in these settings, take them out so the note does not name it. */
+    if (cartRecentSessionsEnabled())
+        {
+        cartSetString(cart, hgsSessionJustLoaded, "on");
+        cartRemove(cart, hgsOtherUserSessionName);
+        cartRemove(cart, hgsOtherUserName);
+        }
     }
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
@@ -2141,11 +2190,10 @@ cgiDecode(val, val, strlen(val));
 return val;
 }
 
-static void cartUpdateRecentSession(struct cart *cart)
-/* Move the current hgsid to the front of the recent sessions list, dropping
+static void cartUpdateRecentSession(struct cart *cart, char *currentId)
+/* Move the hgsid currentId to the front of the recent sessions list, dropping
  * entries that are too old or past MAX_RECENT_SESSIONS. */
 {
-char *currentId = cartSessionId(cart);
 time_t now = time(NULL);
 struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
 struct slPair *newList = NULL;
@@ -2234,6 +2282,9 @@ else
 freeMem(recentSessions);
 /* saveState writes it to userDb by hand. */
 cartExclude(cart, RECENT_SESSIONS_VAR);
+/* Only the copy of a view made before a session load has it: once that copy is opened it is
+ * an ordinary cart again. */
+cartRemove(cart, hgsPrevViewOf);
 
 fixUpDb(cart); // now is the time to see if someone is loading a Genark hub or specified a bad database.
 
@@ -2345,11 +2396,9 @@ cartDefaultDisconnector(&conn);
 if (didSessionLoad)
     {
     cartHideDefaultTracks(cart);
-    if (trackRecent)
-        cartSetBoolean(cart, hgsDidSessionLoad, TRUE);
     }
 if (trackRecent)
-    cartUpdateRecentSession(cart);
+    cartUpdateRecentSession(cart, cartSessionId(cart));
 
 return cart;
 }
@@ -2372,15 +2421,18 @@ dyStringFree(&dy);
 }
 
 
-static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames)
-/* Add a CGI-encoded var=val&... string of all cart variables to dy. */
+static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
+                               char *skipPrefix)
+/* Add a CGI-encoded var=val&... string of all cart variables to dy.  If skipPrefix is not NULL,
+ * leave out the variables that start with it. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
 char *s = NULL;
 for (el = elList; el != NULL; el = el->next)
     {
-    if (!hashLookup(cart->exclude, el->name))
+    if (!hashLookup(cart->exclude, el->name) &&
+        (skipPrefix == NULL || !startsWith(skipPrefix, el->name)))
 	{
 	if (firstTime)
 	    firstTime = FALSE;
@@ -2403,7 +2455,7 @@ void cartEncodeState(struct cart *cart, struct dyString *dy)
 /* Add a CGI-encoded var=val&... string of all cart variables to dy, for storing and reading
  * back with cartParseOverHash. */
 {
-cartEncodeStateExt(cart, dy, TRUE);
+cartEncodeStateExt(cart, dy, TRUE, NULL);
 }
 
 void cartEncodeStateRawNames(struct cart *cart, struct dyString *dy)
@@ -2412,7 +2464,7 @@ void cartEncodeStateRawNames(struct cart *cart, struct dyString *dy)
  * rather than parsing it, so escaping a name there would make two equal carts look different.
  * Nothing should read the result back with cartParseOverHash.  refs #38343 */
 {
-cartEncodeStateExt(cart, dy, FALSE);
+cartEncodeStateExt(cart, dy, FALSE, NULL);
 }
 
 static void saveState(struct cart *cart)

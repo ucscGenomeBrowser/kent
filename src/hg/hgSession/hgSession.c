@@ -820,7 +820,7 @@ cartRemovePrefix(cart, hgsDoDownloadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
-cartRemove(cart, hgsDidSessionLoad);
+cartRemove(cart, hgsPrevViewOf);
 /* Two of the Save form's own inputs.  If they stay in the cart they are stored inside every
  * session saved afterwards, so one session's description travels in sessions that never had
  * one.  hgsNewSessionShare is left alone on purpose: it has the same problem, but it is also

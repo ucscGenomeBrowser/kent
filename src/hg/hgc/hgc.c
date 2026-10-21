@@ -8199,6 +8199,41 @@ puts("<BR><HR>");
 printTrackHtml(tdb);
 }
 
+static char *blatTrashToken(char *path)
+/* Return the basename of path without its suffix, e.g. hgSs_abc_123 for
+ * ../trash/hgSs/hgSs_abc_123.pslx, or NULL if it is not a plain [A-Za-z0-9_] token.
+ * The path comes from the item name in the URL, so nothing else may reach a link. */
+{
+char *slash = strrchr(path, '/');
+char *token = cloneString(slash ? slash + 1 : path);
+chopSuffix(token);
+char *p;
+for (p = token; *p != '\0'; ++p)
+    if (!isalnum((unsigned char)*p) && *p != '_')
+        break;
+if (isEmpty(token) || *p != '\0')
+    freez(&token);
+return token;
+}
+
+static void printBlatResultsBackLink(char *pslName, char *faName)
+/* Print a link that reopens, in hgBlat, the results list of the BLAT search this item
+ * came from, the same link hgBlat's "Share a link" gives.  Only for searches whose
+ * result files are still in trash; hgBlat explains if they are gone by the time the
+ * link is followed. */
+{
+if (strstr(pslName, "/hgSs/") == NULL || !fileExists(pslName))
+    return;
+char *pslId = blatTrashToken(pslName);
+char *faId = blatTrashToken(faName);
+if (pslId != NULL && faId != NULL)
+    printf("<p><a href='hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s&%s'>"
+           "&lsaquo; Back to BLAT results</a></p>\n",
+           database, pslId, faId, cartSidUrlString(cart));
+freeMem(pslId);
+freeMem(faId);
+}
+
 void doUserPsl(char *track, char *item)
 /* Process click on user-defined alignment. */
 {
@@ -8215,8 +8250,10 @@ printf("<H2>BLAT Search Alignments</H2>\n");
 printf("<A href id='hgUsualPslShowAllLink'>Show All</A>\n");
 printf("<H3>Click on a line to see detailed letter-by-letter display</H3>\n");
 
-printf("<div id=hgUsualPslShowItem style='display: block'>\n");
 parseSs(item, &pslName, &faName, &qName);
+printBlatResultsBackLink(pslName, faName);
+
+printf("<div id=hgUsualPslShowItem style='display: block'>\n");
 pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
     {
@@ -24186,6 +24223,13 @@ void bigPslHandlingCtAndGeneric(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Special option to show all alignments for blat ct psl */
 {
+if (sameOk(trackDbSetting(tdb, "blatResult"), "on"))
+    {
+    char *encTrack = cgiEncode(tdb->track);
+    printf("<p><a href='hgBlat?blatNewPage=1&db=%s&blatCt=%s&%s'>&lsaquo; Back to BLAT results</a></p>\n",
+           database, encTrack, cartSidUrlString(cart));
+    freeMem(encTrack);
+    }
 
 if (startsWith("ct_blat", tdb->track) && !sameString(item,"PrintAllSequences"))
     printf("<A href id='genericPslShowAllLink'>Show All</A>\n");

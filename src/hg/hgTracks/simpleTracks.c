@@ -4654,6 +4654,14 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		    }
 		innerLine(hvg, x1, midY1, w, color);
 		innerLine(hvg, x1, midY2, w, color);
+		char *other = startsWith("chain", tg->tdb->type) ? "other assembly" : "query";
+		char text[512];
+		safef(text, sizeof(text), "Double line, gap in both sequences: %d base%s in the "
+		      "genome and %d base%s in the %s lie between these two aligned blocks and "
+		      "do not align to each other. This is usually a region with many "
+		      "differences, but can also be an assembly or sequencing error.",
+		      tGap, (tGap == 1) ? "" : "s", qGap, (qGap == 1) ? "" : "s", other);
+		addAliMarkMouseOverPx(tg, lf, hvg, x1, y, max(w, 3), heightPer, text);
 		}
 	    }
 	if ((vis == tvFull || vis == tvPack) && (intronGap && (qGap == 0) && (tGap >= intronGap)))
@@ -4945,6 +4953,7 @@ static int barbMergePixels = -1;   // max pixel gap between blocks still merged 
 if (barbMergePixels < 0)           // barbs; hg.conf barbMergePixels, 0 disables merging
     barbMergePixels = atoi(cfgOptionDefault("barbMergePixels", "3"));
 Color barbColor = hvGfxContrastingColor(hvg, color);
+barbColor = baseColorMuteBarbColor(hvg, drawOpt, color, barbColor);
 int barbRunX1 = -1;
 int barbRunX2 = -1;
 
