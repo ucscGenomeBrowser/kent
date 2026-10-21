@@ -9,6 +9,7 @@
 #include "jksql.h"
 #include "memalloc.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "memgfx.h"
 #include "hvGfx.h"
 #include "dnaseq.h"
@@ -476,6 +477,44 @@ if ((chromStart < lf->tallStart) || (chromStart > lf->tallEnd))
 hvGfxBox(hvg, thisX-1, thisY, 2, thisHeight, color);
 }
 
+void addAliMarkMouseOverPx(struct track *tg, struct linkedFeatures *lf,
+                           struct hvGfx *hvg, int x, int y, int width, int height, char *text)
+/* Add a mouseover that explains a mismatch, insertion or gap mark at pixels x..x+width.
+ * It links to the item's details page like the rest of the item, and is written before
+ * the item's own map box, so it wins where the two overlap.  Not for BAM or dense mode,
+ * and at most MAX_ALI_MARK_MOUSEOVERS per track: a pack-mode track of cross-species
+ * mRNAs can have 100,000 marks, which made a 90 MB page. */
+{
+#define MAX_ALI_MARK_MOUSEOVERS 300
+static struct imgTrack *countedImgTrack = NULL;   // drawing is serial, one track at a time
+static int count = 0;
+if (!(theImgBox && curImgTrack) || startsWith("bam", tg->tdb->type)
+||  tg->limitedVis == tvDense)
+    return;
+if (curImgTrack != countedImgTrack)
+    {
+    countedImgTrack = curImgTrack;
+    count = 0;
+    }
+if (++count > MAX_ALI_MARK_MOUSEOVERS)
+    return;
+char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
+char *trackName = (tg->originalTrack != NULL) ? tg->originalTrack : tg->track;
+mapBoxHgcOrHgGene(hvg, lf->start, lf->end, x, y, width, height,
+                  trackName, tg->mapItemName(tg, lf), text, directUrl, withHgsid, NULL);
+}
+
+static void addAliMarkMouseOver(struct track *tg, struct linkedFeatures *lf,
+                                struct hvGfx *hvg, int chromPos, int xOff, int y,
+                                int height, double scale, int halfWidth, char *text)
+/* Add a mouseover for a mark drawn at chromPos, a few pixels wide so the 1-2 pixel
+ * mark can be hit with the mouse. */
+{
+int x = round((double)(chromPos-winStart)*scale) + xOff;
+addAliMarkMouseOverPx(tg, lf, hvg, x - halfWidth, y, 2*halfWidth + 1, height, text);
+}
+
 static void drawMidNumber(struct linkedFeatures *lf, struct hvGfx *hvg,
                          int chromStart, int xOff, int y,
 			 int height, double scale, Color color, MgFont *font, int size)
@@ -520,6 +559,38 @@ drawMidNumber(lf, hvg, chromStart-1, xOff, y, height, scale, color, font, size);
 #endif /* SOON */
 
 
+struct diffBaseCol
+/* The mismatches of one item that fall into one pixel column. */
+    {
+    int count;              /* Number of mismatches in this column. */
+    int firstPos;           /* Chrom position of the first one. */
+    int exonStartX, exonEndX;   /* Pixel range of the exon it is in. */
+    struct dyString *text;  /* "pos genome>query" list for the mouseover, first few only. */
+    };
+
+#define MAX_DIFFS_IN_MOUSEOVER 5
+
+static void addDiffBaseColMouseOver(struct track *tg, struct linkedFeatures *lf,
+                                    struct hvGfx *hvg, int x, int y, int height,
+                                    struct diffBaseCol *col, char *colorName)
+/* Add the mouseover for the mismatch tick in one pixel column, listing the bases. */
+{
+struct dyString *dy = dyStringNew(256);
+if (col->count == 1)
+    dyStringPrintf(dy, "Mismatch%s, genome>query: %s:%s", colorName, chromName,
+                   col->text->string);
+else
+    {
+    dyStringPrintf(dy, "%d mismatches%s, genome>query: %s:%s", col->count, colorName,
+                   chromName, col->text->string);
+    if (col->count > MAX_DIFFS_IN_MOUSEOVER)
+        dyStringPrintf(dy, " and %d more. Zoom in to see all.",
+                       col->count - MAX_DIFFS_IN_MOUSEOVER);
+    }
+addAliMarkMouseOverPx(tg, lf, hvg, x - 2, y, 5, height, dy->string);
+dyStringFree(&dy);
+}
+
 static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 	struct linkedFeatures *lf,
 	struct hvGfx *hvg, int xOff,
@@ -528,12 +599,17 @@ static void drawCdsDiffBaseTickmarksOnly(struct track *tg,
 	int winStart)
 /* Draw thin vertical red lines only where mRNA bases differ from genomic.  
  * This assumes that lf has been drawn already, we're zoomed out past 
- * zoomedToBaseLevel, we're not in dense mode etc. */
+ * zoomedToBaseLevel, we're not in dense mode etc.
+ * The mismatches are first collected per pixel column.  A 1-pixel tick is hard to see,
+ * so an isolated one is drawn 2 pixels wide, but only where the next columns have no
+ * mismatch: where they are dense, widening would cover the matching columns between
+ * them and make the whole exon look red. */
 {
 struct simpleFeature *sf = NULL;
 char *winDna = getCachedDna(winStart, winEnd);
-Color c = cdsColor[CDS_STOP];
-// check if we need a contrasting color instead of default 'red' (CDS_STOP)
+Color c = cdsColor[CDS_DIFF_BASE];
+char *colorName = " (red)";   // for the mouseover
+// check if we need a contrasting color instead of default 'red' (CDS_DIFF_BASE)
 char *tickColor = NULL;
 if ( tg->itemColor && (tickColor = trackDbSetting(tg->tdb, "baseColorTickColor")))
     {
@@ -542,7 +618,11 @@ if ( tg->itemColor && (tickColor = trackDbSetting(tg->tdb, "baseColorTickColor")
 	c = hvGfxContrastingColor(hvg, ci);
     else if (sameString(tickColor, "lighterShade"))
 	c = lighterShade(hvg, ci, 1.5);
+    colorName = "";
     }
+int nCols = round((double)(winEnd-winStart)*scale) + 2;
+struct diffBaseCol *cols;
+AllocArray(cols, nCols);
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int s = max(winStart, sf->start);
@@ -561,17 +641,67 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
 	    mrnaS = sf->qStart + (s - sf->start);
 	    }
-	if(mrnaS >= 0)
+	int ex1, ex2;
+	if (mrnaS >= 0 && scaledBoxToPixelCoords(s, e, scale, 0, &ex1, &ex2))
 	    {
 	    int i;
 	    for (i=0; i < (e - s); i++)
 		{
-		if (qSeq->dna[mrnaS+i-qOffset] != winDna[s-winStart+i])
-		    drawScaledBox(hvg,  s+i, s+i+1, scale, xOff, y+1, heightPer-2, c);
+		char qBase = qSeq->dna[mrnaS+i-qOffset];
+		char gBase = winDna[s-winStart+i];
+		if (qBase != gBase)
+		    {
+		    if (scale >= 2.0)   // a base is wide enough already
+			drawScaledBox(hvg,  s+i, s+i+1, scale, xOff, y+1, heightPer-2, c);
+		    int x = round((double)(s+i-winStart)*scale);
+		    if (x < 0 || x >= nCols)
+			continue;
+		    struct diffBaseCol *col = &cols[x];
+		    if (col->count == 0)
+			{
+			col->firstPos = s+i;
+			col->exonStartX = ex1;
+			col->exonEndX = ex2;
+			col->text = dyStringNew(64);
+			}
+		    col->count++;
+		    if (col->count <= MAX_DIFFS_IN_MOUSEOVER)
+			{
+			char posBuf[64];
+			sprintLongWithCommas(posBuf, s+i+1);
+			dyStringPrintf(col->text, "%s%s %c>%c", (col->count > 1) ? ", " : "",
+				       posBuf, toupper(gBase), toupper(qBase));
+			}
+		    }
 		}
 	    }
 	}
     }
+int x;
+for (x = 0; x < nCols; x++)
+    {
+    struct diffBaseCol *col = &cols[x];
+    if (col->count == 0)
+        continue;
+    if (scale < 2.0)
+        {
+        int x1 = x, x2 = x + 1;
+        // keep at least one clean column between this tick and the next one
+        boolean rightFree = (x+1 < col->exonEndX) && cols[x+1].count == 0
+                            && (x+2 >= nCols || cols[x+2].count == 0);
+        boolean leftFree = (x-1 >= col->exonStartX) && cols[x-1].count == 0
+                           && (x-2 < 0 || cols[x-2].count == 0)
+                           && (x-3 < 0 || cols[x-3].count == 0);
+        if (rightFree)
+            x2++;
+        else if (leftFree)
+            x1--;
+        hvGfxBox(hvg, x1 + xOff, y+1, x2 - x1, heightPer-2, c);
+        }
+    addDiffBaseColMouseOver(tg, lf, hvg, x + xOff, y, heightPer, col, colorName);
+    dyStringFree(&col->text);
+    }
+freeMem(cols);
 }
 
 
@@ -1525,6 +1655,9 @@ cdsColor[CDS_RIBO_SLIP1] = hvGfxFindColorIx(hvg,CDS_RIBO_SLIP1_R,
 cdsColor[CDS_RIBO_SLIP2] = hvGfxFindColorIx(hvg,CDS_RIBO_SLIP2_R,
 					    CDS_RIBO_SLIP2_G, 
 					    CDS_RIBO_SLIP2_B);
+cdsColor[CDS_DIFF_BASE] = hvGfxFindColorIx(hvg,CDS_DIFF_BASE_R,
+					    CDS_DIFF_BASE_G,
+					    CDS_DIFF_BASE_B);
 }
 
 
@@ -2344,6 +2477,58 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 }
 
 
+static void addQueryInsertMouseOver(struct track *tg, struct linkedFeatures *lf,
+                                    struct hvGfx *hvg, int s, int xOff, int y, int height,
+                                    double scale, MgFont *font, int size)
+/* Mouseover for the orange number that marks query bases missing from the genome. */
+{
+char text[512];
+safef(text, sizeof(text), "Insertion in query (orange): %d base%s of the query sequence "
+      "%s not in the genome here. Either the query has extra bases or the genome is missing "
+      "them.", size, (size == 1) ? "" : "s", (size == 1) ? "is" : "are");
+char sizeString[32];
+safef(sizeString, sizeof(sizeString), "%d", size);
+int halfWidth = max(2, mgFontStringWidth(font, sizeString)/2 + 1);
+addAliMarkMouseOver(tg, lf, hvg, s, xOff, y, height, scale, halfWidth, text);
+}
+
+static void addUnalignedEndMouseOver(struct track *tg, struct linkedFeatures *lf,
+                                     struct hvGfx *hvg, int s, int xOff, int y, int height,
+                                     double scale, int size)
+/* Mouseover for the purple line that marks unaligned bases at an end of the query. */
+{
+char text[1024];
+safef(text, sizeof(text), "Unaligned end of query (purple): %d base%s at this end of the "
+      "query sequence %s not aligned to the genome.", size, (size == 1) ? "" : "s",
+      (size == 1) ? "is" : "are");
+if (size <= 10)
+    safecat(text, sizeof(text), " These are probably just mismatches: the aligner does not "
+            "extend an alignment over mismatches at the very end of a sequence, so a base "
+            "difference there is shown in purple, not as a red mismatch.");
+else
+    safecat(text, sizeof(text), " This part of the query may align elsewhere, be missing "
+            "from the genome assembly, or be vector or adapter sequence.");
+addAliMarkMouseOver(tg, lf, hvg, s, xOff, y, height, scale, 2, text);
+}
+
+static void addPolyAMouseOver(struct track *tg, struct linkedFeatures *lf,
+                              struct hvGfx *hvg, int s, int xOff, int y, int height,
+                              double scale, int size, boolean isPolyT)
+/* Mouseover for the green line that marks an unaligned poly-A tail or poly-T head. */
+{
+char text[512];
+if (isPolyT)
+    safef(text, sizeof(text), "Poly-T head (green): %d unaligned bases at this end of the "
+          "query sequence are mostly T. This is the poly-A tail of a query that is the "
+          "reverse complement of the mRNA. It is added after transcription, so it is not in "
+          "the genome.", size);
+else
+    safef(text, sizeof(text), "Poly-A tail (green): %d unaligned bases at this end of the "
+          "query sequence are mostly A. The poly-A tail is added after transcription, so it "
+          "is not in the genome.", size);
+addAliMarkMouseOver(tg, lf, hvg, s, xOff, y, height, scale, 2, text);
+}
+
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,
 			      int y, double scale, int heightPer,
@@ -2379,6 +2564,7 @@ if (indelShowPolyA && qSeq)
 		s = psl->tStarts[0];
 	    drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
+	    addPolyAMouseOver(tg, lf, hvg, s, xOff, y, heightPer, scale, psl->qStarts[0], TRUE);
 	    gotPolyAStart = TRUE;
 	    }
 	}
@@ -2397,6 +2583,7 @@ if (indelShowPolyA && qSeq)
 		s = psl->tStart;
 	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
+		addPolyAMouseOver(tg, lf, hvg, s, xOff, y, heightPer, scale, rcQStart, TRUE);
 		gotPolyAEnd = TRUE;
 		}
 	    }
@@ -2413,6 +2600,8 @@ if (indelShowPolyA && qSeq)
 		s = psl->tStarts[lastBlk] + psl->blockSizes[lastBlk];
 	        drawScaledBox(hvg, s, s+1, scale, xOff, y+1, heightPer-2,
 			 cdsColor[CDS_POLY_A]);
+		addPolyAMouseOver(tg, lf, hvg, s, xOff, y, heightPer, scale,
+		    psl->qSize - (psl->qStarts[lastBlk] + psl->blockSizes[lastBlk]), FALSE);
 		gotPolyAEnd = TRUE;
 		gotPolyAEnd = TRUE;
 		}
@@ -2431,6 +2620,7 @@ if (indelShowQInsert)
 				      psl->tStarts[0];
         Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
 	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
+	addUnalignedEndMouseOver(tg, lf, hvg, s, xOff, y, heightPer, scale, qStart);
 	// drawLeftNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, qStart);
 	}
     for (i = 1;  i < psl->blockCount;  i++)
@@ -2451,6 +2641,8 @@ if (indelShowQInsert)
 		Color color = cdsColor[CDS_QUERY_INSERTION];
 		drawMidNumber(lf, hvg, s, xOff, y, heightPer, scale, color, 
 		    font, qBlkStart - qPrevBlkEnd);
+		addQueryInsertMouseOver(tg, lf, hvg, s, xOff, y, heightPer, scale, font,
+		    qBlkStart - qPrevBlkEnd);
 		}
 	    }
 	/* Note: if qBlkStart < qPrevBlkEnd, then we have overlap on query,
@@ -2470,6 +2662,7 @@ if (indelShowQInsert)
         Color color = cdsColor[CDS_QUERY_INSERTION_AT_END];
 	// drawRightNumber(lf, hvg, s, xOff, y, heightPer, scale, color, font, missingAtEnd);
 	drawVertLine(lf, hvg, s, xOff, y, heightPer, scale, color);
+	addUnalignedEndMouseOver(tg, lf, hvg, s, xOff, y, heightPer, scale, missingAtEnd);
 	}
     }
 }
