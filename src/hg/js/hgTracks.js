@@ -3390,6 +3390,7 @@ var rightClick = {
 
         for (var id of plan.tracks) {
             cartHideAnyTrack(id, cartVars, cartVals);
+            vis.update(id, 'hide');  // set its dropdown in the track list below the image too
             $(document.getElementById('tr_' + id)).remove();
             removeTrackFromVisibleGroup(id);
             delete hgTracks.trackDb[id]; // for the next right-click
