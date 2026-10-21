@@ -33,6 +33,7 @@
 <h6><a href='#the-udc-local-cache-directory'>The UDC local cache directory</a></h6>
 <h6><a href='#activating-cram-support-for-the-genome-browser'>Activating CRAM support for the Genome Browser.</a></h6>
 <h6><a href='#using-freetype-font-support-for-anti-aliased-text'>Using FreeType font support for anti-aliased text</a></h6>
+<h6><a href='#trying-out-different-freetype-rendering-settings'>Trying out different FreeType rendering settings</a></h6>
 <h6><a href='#adding-a-new-font-to-the-genome-browser-display'>Adding a new font to the Genome Browser display</a></h6>
 <h6><a href='#building-the-kent-source-tree'>Building the kent source tree.</a></h6>
 <h6><a href='#adding-a-track-hub-to-your-hubpublic-table-so-it-appears-under-my-data-gt-track-hubs'>Adding a track hub to your hubPublic table so it appears under My Data &gt; Track Hubs</a></h6>
@@ -2340,6 +2341,46 @@ e97c9af68414fabe157af711b7691df7  n022004l.pfb
 f13fb8e581426a1ffa5fc12b10ad0f34  n022023l.pfb
 f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
 30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb</code></pre>
+
+<a name='trying-out-different-freetype-rendering-settings'></a>
+<h2>Trying out different FreeType rendering settings</h2>
+
+<p>
+The hgTracks configure page can show a block of controls for the FreeType
+rendering itself. This is a debugging aid for finding settings that look good on
+a given display, not a feature for end users, and it is off unless you add this
+line to hg.conf:
+</p>
+
+<pre><code>freeTypeTuneUI=on</code></pre>
+
+<p>
+The controls are:
+</p>
+
+<ul>
+<li>Size scale and Baseline shift, which adjust the pixel size and
+baseline the browser picks for each of the text sizes in the Text size menu.</li>
+<li>Coverage gamma, an exponent applied to each glyph pixel&#39;s coverage, which
+makes text lighter or heavier without changing its shape.</li>
+<li>Box size scale, the multiplier used for text drawn to fit inside a box,
+such as the letters in a sequence logo.</li>
+<li>Hinting: leave it to the font and FreeType, switch it off, or force the
+auto-hinter.</li>
+<li>Anti-aliasing: Normal, Light, Light (Sub Pixel), and the four LCD
+sub-pixel targets (RGB, BGR, vertical RGB, vertical BGR). The LCD targets
+give three coverage values per pixel, which are mixed into the red, green and
+blue channels separately, so text drawn with them carries colour fringes.
+They are worth looking at only with the auto-hinter on.</li>
+</ul>
+
+<p>
+Every control starts at the value the browser uses today, so the block changes
+nothing until a control is moved, and a Reset FreeType button puts them all back.
+The settings live in the cart, so they follow a session and are saved with it.
+With freeTypeTuneUI off or absent, any settings already in a cart are ignored and
+the rendering is the stock one.
+</p>
 
 <a name='adding-a-new-font-to-the-genome-browser-display'></a>
 <h2>Adding a new font to the Genome Browser display</h2>
