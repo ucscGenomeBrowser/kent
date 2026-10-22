@@ -1326,6 +1326,35 @@ def crossCheckGate(stats):
                               100 * MAX_CROSSCHECK_MISMATCH))
 
 
+# A submitted three-base delins that stands for one amino acid substitution should begin
+# on a codon boundary. NDUFAF6 urn:mavedb:00000663-a-1 does not: every one of its terms
+# starts two bases downstream of the codon its p. term names, which MaveDB's mapper follows,
+# so their coordinates for that whole score set are wrong (Benjamin Capodanno, Oct 2026,
+# being corrected upstream). We place from the p. term and are not affected, but nothing
+# else we run would have noticed, so the build counts it. An occasional misaligned term is
+# ordinary: a three-base change really can straddle two codons.
+CODON_TRIPLE = re.compile(r'c\.(\d+)_(\d+)delins([ACGTacgt]+)')
+
+
+def codonPhases(rows):
+    """(triples, misaligned) over a score set's submitted three-base delins terms."""
+    triples = misaligned = 0
+    for row in rows:
+        nt = row.get('hgvs_nt') or ''
+        if '[' in nt:
+            continue
+        m = CODON_TRIPLE.search(nt)
+        if not m:
+            continue
+        start, end = int(m.group(1)), int(m.group(2))
+        if end - start != 2 or len(m.group(3)) != 3:
+            continue
+        triples += 1
+        if (start - 1) % 3:
+            misaligned += 1
+    return triples, misaligned
+
+
 def accessionGate(stats):
     """Raise if checkGenome() dropped a whole accession over a run.
 
