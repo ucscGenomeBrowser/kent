@@ -603,9 +603,6 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
-        h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c",
-          default="TRUE", role="gate", verified=True,
-          note="Let hubs declare their own track groups.  Public since v492."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),

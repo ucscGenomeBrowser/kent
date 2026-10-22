@@ -32,21 +32,6 @@
 #include "quickLift.h"
 #include "customTrack.h"
 
-boolean hubsCanAddGroups()
-/* can track hubs have their own groups? */
-{
-static boolean canHubs = FALSE;
-static boolean canHubsSet = FALSE;
-
-if (!canHubsSet)
-    {
-    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", TRUE);
-    canHubsSet = TRUE;
-    }
-
-return canHubs;
-}
-
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
 {
@@ -1030,7 +1015,7 @@ if (trackHub != NULL)
     if (hubGenome != NULL)
 	{
         // add groups
-	if ((hubGenome->groups != NULL) && hubsCanAddGroups())
+	if (hubGenome->groups != NULL)
             {
             struct grp *list = readGroupRa(hubGenome->groups);
             grpListAddHubName(list, hub->trackHub);
