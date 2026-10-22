@@ -95,6 +95,18 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 #                 full-protein positions, so both score sets drew at codons 1-42. Offsets
 #                 +289 and +331.
 # Reported to the MaveDB authors 2026-10; see the draft in /hive/users/lrnassar/claude/RM37800.
+# Their reply: NDUFAF6 is worse than the mapping. Every hgvs_nt in that score set starts two
+# bases downstream of the codon its hgvs_pro names, so the submitted nucleotide coordinates
+# are wrong and MaveDB's mapper faithfully followed them. Being corrected upstream. We place
+# from the p. term, the score set is not on the reference-term route, and its post-mapped
+# terms are suppressed, so none of it reaches the track; when the fix lands our label for
+# those items should simply change from "UCSC: corrected MaveDB offset" to "MaveDB".
+# mavedbPlace.codonPhases() counts, per score set, the submitted three-base
+# delins terms that do not start on a codon boundary, which is the only check that would
+# have caught this on our own. It reports and does not abort: an occasional misaligned term
+# is ordinary, because a three-base change really can straddle two codons. This build:
+#   00000663-a-1   5714 of 5714   the whole score set, the real thing
+#   00000662-0-1      1 of 2860   c.1722_1724delinsACG, a genuine straddling change
 #
 # Our own search also wins on 00000665-a/b/c/d-1 (PAX6, NP_000271.1), at offset 0. MaveDB
 # mapped about a third of each of those score sets, 2,832 to 2,857 rows apiece, but onto
@@ -216,7 +228,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # EMPTY FIELDS IN THE MOUSEOVER. The trackDb mouseOver pattern substitutes ${field}
 # unconditionally, so an empty value leaves a dangling label ("ACMG evidence:" with nothing
 # after it). Three fields can legitimately be empty, so the converter writes a readable
-# placeholder rather than an empty string: acmgOutcome "none assigned" (63,397 items, score
+# placeholder rather than an empty string: acmgOutcome "none assigned" (167,641 items, score
 # sets that classify variants without assigning an ACMG code), funcClass "not classified"
 # (3,950 items, all from urn:mavedb:00001267-a-2, which carries no calibration at all) and
 # funcScore "not reported" (5,124 items MaveDB reports as NA, all of them indeterminate).
@@ -251,6 +263,27 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # case; an earlier build mislabelled all of them.
 #
 # Every calibration's call is listed on the details page regardless of which one is displayed.
+#
+# Where no primary is available the choice follows MaveDB's own variant page, whose rule
+# Benjamin Capodanno gave us in October 2026: only a calibration that classifies the variant
+# can supply the call; prefer one that is not research use only, investigator-provided before
+# the rest; and take the strongest evidence within a tier rather than across all of them. A
+# research-use-only calibration is used only where nothing else classifies the variant,
+# 152,808 items, and those say so on the item.
+#
+# Tiering before strength is what makes this differ from ranking on evidence alone, and it
+# costs evidence codes. In 16 score sets the investigator-provided calibration gives a
+# functional class and no ACMG code while ExCALIBR, which is research use only, gives both.
+# Ranking on strength picked ExCALIBR for 104,244 items; tiering picks the investigator call,
+# so those items show no ACMG code (53,460 of them were PS3_not_met, which was already drawn
+# as no evidence, so 50,784 change colour). The two calibrations also disagree about the call
+# itself on 47,876 of them, mostly indeterminate becoming normal, which moves the functional
+# class filter and recolours all 16 of those heatmaps.
+#
+# pickDisplayCall() takes primaryEmpty so the item can say whether a primary exists but
+# classifies nothing, or exists and simply does not classify this variant. The second case
+# does not occur in this build; it is distinguished because the first is a curation gap and
+# saying "no primary designated" about either one is false.
 
 # Build results:
 #   mavemdVar.bb   462,486 items, 47 fields (bed12+35)

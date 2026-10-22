@@ -207,6 +207,7 @@ def main():
                     'urn': calUrn,
                     'title': calMeta.get('title', ''),
                     'primary': calMeta.get('primary', False),
+                    'investigator': calMeta.get('investigator', False),
                     'ruo': calMeta.get('ruo', False),
                     'funcClass': funcClass,
                     'acmgOutcome': outcome,
@@ -214,7 +215,8 @@ def main():
                     'acmgStrength': clean(row.get(cols.get('acmg_evidence_strength', ''), '')),
                     'odds': calMeta.get('odds', {}).get(funcClass, ''),
                 })
-            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'))
+            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'),
+                                                 meta.get('primaryEmpty', False))
             if chosen:
                 calibrationVotes[(chosen['urn'], chosen['title'], chosen['ruo'],
                                   source)] += 1

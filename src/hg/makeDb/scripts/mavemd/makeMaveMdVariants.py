@@ -69,9 +69,11 @@ def loadScoreSets(downloadDir):
         publications = record.get('primaryPublicationIdentifiers') or []
         calibrations = {}
         primaryTitle = None
+        primaryEmpty = False
         for cal in record.get('scoreCalibrations') or []:
             if cal.get('primary'):
                 primaryTitle = cal.get('title', '')
+                primaryEmpty = not cal.get('functionalClassifications')
             oddsByClass = {}
             for fc in cal.get('functionalClassifications') or []:
                 if fc.get('oddspathsRatio') is not None:
@@ -80,6 +82,7 @@ def loadScoreSets(downloadDir):
             calibrations[cal['urn']] = {
                 'title': cal.get('title', ''),
                 'primary': bool(cal.get('primary')),
+                'investigator': bool(cal.get('investigatorProvided')),
                 'ruo': bool(cal.get('researchUseOnly')),
                 'odds': oddsByClass,
             }
@@ -109,6 +112,7 @@ def loadScoreSets(downloadDir):
             'publicationUrl': publications[0].get('url', '') if publications else '',
             'calibrations': calibrations,
             'primaryTitle': primaryTitle,
+            'primaryEmpty': primaryEmpty,
         }
     return scoreSets
 
@@ -203,6 +207,7 @@ def main():
     placeStats = collections.Counter()
     reasons = collections.Counter()
     offsets = []
+    phases = []
     filterValues = collections.defaultdict(set)
     rows = []
 
@@ -215,6 +220,9 @@ def main():
                           for k in mp.placeReferenceTerms(pls, ref, workDir).elements())
         placeStats.update(mp.checkGenome(pls, ref, args.twoBit, workDir, protToMap))
         offsets.append((urn, choices))
+        triples, misaligned = mp.codonPhases(csvRows)
+        if misaligned:
+            phases.append((urn, triples, misaligned))
         gene = meta.get('gene') or ''
 
         for pl in pls:
@@ -261,6 +269,7 @@ def main():
                     'urn': calUrn,
                     'title': title,
                     'primary': calMeta.get('primary', False),
+                    'investigator': calMeta.get('investigator', False),
                     'ruo': calMeta.get('ruo', ruoText.lower() == 'true'),
                     'funcClass': funcClass,
                     'acmgOutcome': outcome,
@@ -269,7 +278,8 @@ def main():
                     'odds': calMeta.get('odds', {}).get(funcClass, ''),
                 })
 
-            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'))
+            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'),
+                                                 meta.get('primaryEmpty', False))
             outcome = chosen['acmgOutcome'] if chosen else ''
             funcClass = chosen['funcClass'] if chosen else ''
             color = lib.cellColor(outcome, funcClass)
@@ -373,6 +383,13 @@ def main():
     # accessionGate() when a whole accession was dropped for the same reason.
     mp.crossCheckGate(placeStats)
     mp.accessionGate(placeStats)
+
+    if phases:
+        sys.stderr.write("\nSubmitted three-base delins terms not starting on a codon\n")
+        for urn, triples, misaligned in phases:
+            sys.stderr.write("  %-26s %d of %d%s\n"
+                             % (urn, misaligned, triples,
+                                '   WHOLE SCORE SET' if misaligned == triples else ''))
 
     sys.stderr.write("\nOffset chosen per score set target\n")
     for urn, choices in offsets:
