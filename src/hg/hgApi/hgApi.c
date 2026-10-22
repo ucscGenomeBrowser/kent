@@ -225,7 +225,13 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         struct lm *lm = lmInit(0);
         struct bigBedInterval *bbList = bigBedNameQuery(bbi, bpt, fieldIx, name, lm);
         if (bbList)
-            gp = (struct genePred *)genePredFromBigGenePred(chrom, bbList);
+            {
+            // The lookup is by name only, so take the chrom from the match, not from the
+            // caller: in multi-region view the caller may only know the virtual chrom.
+            char chromBuf[256];
+            bbiCachedChromLookup(bbi, bbList->chromId, -1, chromBuf, sizeof chromBuf);
+            gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromBuf), bbList);
+            }
         }
     if (!gp)
         dyStringPrintf(output, "{\"error\": \"Couldn't find item: %s\"}", name);
