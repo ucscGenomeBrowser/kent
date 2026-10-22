@@ -1005,7 +1005,7 @@ MIRROR_KNOBS = {
                "exact value turns it on and true, 1 and yes do not, unlike "
                "every flag read through cfgOptionBooleanDefault."),
         h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="knob", public=True, verified=True,
+          default="FALSE", role="gate", public=True, verified=True,
           ticket="38157",
           note="Whether hgTracks shows the note that names the session just "
                "opened and its owner, and says the browser configuration the "

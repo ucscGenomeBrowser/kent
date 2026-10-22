@@ -12404,7 +12404,7 @@ static void showSessionLoadNotice(int recentViewCount)
 if (trackImgOnly || !cartVarExists(cart, hgsSessionJustLoaded))
     return;
 cartRemove(cart, hgsSessionJustLoaded);
-if (!cfgOptionBooleanDefault("sessionLoadNotice", TRUE))
+if (!cfgOptionBooleanDefault("sessionLoadNotice", FALSE))
     return;
 
 char *sessionName = cartOptionalString(cart, hgsOtherUserSessionName);
@@ -12429,12 +12429,10 @@ if (recentViewCount > 0)
             "<a href='#' id='recentViewsLink'>your recent browser views</a>, also under "
             "My Data &gt; Recent Browser Views. ", what);
 else
-    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
-            "been replaced by %s and cannot be brought back. If you want to keep a browser "
-            "configuration, save it under My Data &gt; My Sessions before you open a session. ",
-            what);
-dyStringPrintf(dy, "To remove this note, click &quot;Close&quot; below, reload or navigate away from "
-        "this page.");
+    dyStringPrintf(dy, "%s replaced the tracks, position, and settings you had in the browser "
+            "before. To keep a browser view for later, save it under My Data &gt; My Sessions "
+            "before you open a session. ", fromFile ? "These settings" : "This session");
+dyStringPrintf(dy, "This note goes away when you close it or leave this page.");
 notifyOnce(dy->string, "sessionLoad");
 dyStringFree(&dy);
 }

@@ -5,7 +5,7 @@
 # 3bcf86a0995, hg/hgTracks/hgTracks.c (showSessionLoadNotice, sessionNoticeText), hg/lib/cart.c
 # (the hgsSessionJustLoaded marker a full session load leaves) and hg/js/utils.js
 # (notifBoxOnce).  The note names the session, says who saved it and when, shows its
-# description, and warns that the previous configuration cannot be brought back.  It is shown
+# description, and says that it replaced the view the user had before.  It is shown
 # on that one page only: hgTracks takes the marker out of the cart as it draws the note.
 #
 # The script saves rm38157 with a description on the new Sessions page, then opens it the way
@@ -17,11 +17,11 @@
 # save card.  rm27988 watches the Server column.  The layout of the new page (field widths,
 # info bubbles, the Advanced panel) is left to a person.
 #
-# hg.conf: `sessionLoadNotice` defaults to on (cfgOptionBooleanDefault(..., TRUE)).
-# genome-test had sessionLoadNotice=off from 2026-10-08 to 2026-10-16, and this script was
-# an xfail for that time; since 2026-10-16 it sets sessionLoadNotice=on.  A server with
-# sessionLoadNotice=off fails at the wait for .notifBoxOnce, and that is the configuration,
-# not a regression:
+# hg.conf: `sessionLoadNotice` defaults to off (cfgOptionBooleanDefault(..., FALSE)) since
+# 2026-10-21; before that it defaulted to on.  genome-test had sessionLoadNotice=off from
+# 2026-10-08 to 2026-10-16, and this script was an xfail for that time; since 2026-10-16 it
+# sets sessionLoadNotice=on.  A server without sessionLoadNotice=on fails at the wait for
+# .notifBoxOnce, and that is the configuration, not a regression:
 #     grep -n sessionLoadNotice /usr/local/apache/cgi-bin/hg.conf
 # The new Sessions page is opted into with sessionNewPage=1 on the URL.
 #
@@ -55,7 +55,7 @@ steps:
       text:
         - "You have opened the saved session rm38157, saved by yourself on "
         - "Session description: rm38157 load notice"
-        - "cannot be brought back"
+        - "tracks, position, and settings you had in the browser"
       has: ['#imgTbl', '.notifBoxOnce']
 
   # And only on that page.
