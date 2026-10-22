@@ -374,10 +374,11 @@ RELEASE_GATES = {
                "(synthesizes the group) and customFactory.c (refuses a "
                "hand-written group=blat when the group does not exist).  Off "
                "during QA; flip to TRUE once released."),
-        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="FALSE",
+        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="TRUE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
-               "genark.c and hdb.c."),
+               "genark.c and hdb.c, one of them under #ifdef NTONOW.  On at "
+               "the RR through hg.conf before the default was flipped TRUE."),
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),

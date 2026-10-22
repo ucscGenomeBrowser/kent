@@ -20,7 +20,6 @@ autoBlatBigPsl             stalled  v501  # added v482
 blatShowLocus              stalled  v501  # added v483
 canDoHgcInPopUp            overdue  v501  # flipped v492
 gcOnTheFly                 overdue  v501  # flipped v496
-genarkLiftOver             stalled  v501  # added v484
 greyBarIcons               overdue  v501  # flipped v492
 groupDropdown              stalled  v501  # added v489
 hgHubConnect.validateHub   overdue  v501  # flipped v427
