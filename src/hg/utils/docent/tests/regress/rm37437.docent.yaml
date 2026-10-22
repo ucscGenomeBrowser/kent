@@ -1,0 +1,64 @@
+# #37437 -- quickLift the rmsk (RepeatMasker) track type:  hgTracks draws the lifted
+# repeats, hgc's details page reads the item through the chain.
+#
+# Before #37437 validateOneTdb() in hg/lib/trackHub.c did not let type rmsk into the
+# quickLift hub, so hgConvert named the track as not supported.  Now, with the gate on,
+# quickLiftSqlLoadRmsk() in hg/lib/quickLift.c reads the rmskOut rows of the assembly the
+# track came from over the source ranges that map into the window and lifts each one, and
+# repeatDraw() in hg/hgTracks/rmskTrack.c draws them.  A click goes to doHgRepeat() in
+# hg/hgc/hgc.c, which reads the row the same way, since avoidHandler skips the name handler.
+#
+# GATE: browser.quickLiftRmsk, off by default.  It is a cart variable as well as an hg.conf
+# setting, so the script turns it on for itself, and off again for the last half.
+#   grep browser.quickLiftRmsk /usr/local/apache/cgi-bin/hg.conf
+#
+# What is asserted, hg19 rmsk lifted onto hg38 at SHH:
+#   * the lifted row is drawn, and MER58B has a map box at exactly hg38 155799158-155799480,
+#     which is where liftOver puts hg19's MER58B with hg19ToHg38.over.chain.  Every one of
+#     the 15 lifted items in this window matched liftOver when this was written.
+#   * the details page gives that item's hg19 fields (a minus-strand repeat, so Begin in
+#     repeat is repLeft, 1, and Left in repeat is -repStart, 3), its lifted hg38 position,
+#     and the line saying it comes from hg19.  Read from hg38's table at the lifted start, as
+#     the native handler would, there is no MER58B there and the page has none of these.
+#   * a '-' chain is rm37437.minus.
+#   * gate off:  the convert leaves rmsk out, as before #37437.
+# Deliberately not asserted:  the number of repeats in the window, which a RepeatMasker
+# update to either assembly would move.
+proof:
+  - "assertion-only 2026-10-19 -- written with the change, on branch qlRmsk37437"
+  - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 8: the lifted rmsk row is not drawn, since master does not lift type rmsk"
+  - "sandbox-ab 2026-10-19 -- park 37437 (port 48115), branch qlRmsk37437: passes with the branch hgTracks, hgc and hgConvert; with master's three (the frozen live sandbox, same hg.conf) it fails at step 8 like genome-test; with the branch hgTracks and master's hgc it fails at step 10, the details page"
+  - "server-flip 2026-10-20 -- passes on genome-test since #37437 was pushed and installed there (cgi-alpha 15:29), having failed there as an xfail on 2026-10-19"
+
+target: genome-test
+db: hg19
+position: chr7:155590000-155610000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155590000-155610000&pix=1100&browser.quickLiftRmsk=on"
+  - hide: all
+  - track: {rmsk: full}
+  - expect: {rows: [rmsk], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:155797306-155817306
+  - expect:
+      rows: [rmsk]
+      noText: ["Warning/Error", "not supported by QuickLift"]
+      has: 'area[href*="o=155799158&t=155799480"][href*="i=MER58B"]'
+
+  - click: {track: rmsk, item: "MER58B"}
+  - expect:
+      url: "hgc"
+      text: ["RepeatMasker Information", "Family: hAT-Charlie", "Begin in repeat: 1",
+             "Left in repeat: 3", "chr7:155799159-155799480",
+             "This repeat comes from hg19 and is mapped onto hg38 by quickLift"]
+      noText: ["Warning/Error"]
+
+  # Gate off:  the convert names rmsk as not supported, as it did before #37437.
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155590000-155610000&pix=1100&browser.quickLiftRmsk=off"
+  - hide: all
+  - track: {rmsk: full}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - expect: {text: "not supported by QuickLift"}

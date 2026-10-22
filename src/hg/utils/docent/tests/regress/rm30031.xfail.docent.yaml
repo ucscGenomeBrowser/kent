@@ -1,3 +1,11 @@
+# #30031 -- EXPECTED TO FAIL while genome-test has recentSessions.enable off.  On 2026-10-16
+# /usr/local/apache/cgi-bin/hg.conf changed `recentSessions.enable=on` to
+# `#recentSessions.enable=off` (hg.conf.archive/hg.conf.20261017), as #35736 note of
+# 2026-10-15 asked.  The nightly has failed at step 5, the wait for #sessionLoadDialog, every
+# night since.  The code is fine; the dialog is switched off.  When the setting is turned on
+# again, this script passes, `make test` fails because an xfail passed, and the fix is to drop
+# the .xfail again.
+#
 # #30031 -- loading a session throws away everything the user had in the browser.  The
 # ticket asked for a way back.  6e201f9c97f (Christopher Lee, 2026-10-09, refs #35736 and
 # #30031) keeps a list of the user's recent hgsids and, on the page right after a session

@@ -2160,7 +2160,19 @@ if (liftDb)
     {
     struct bed *liftedBeds = quickLiftSqlLoadBeds(tdb, trackHubSkipHubName(tdb->track), liftDb,
         seqName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN, bedSize, FALSE);
-    bedPrintPos(liftedBeds, bedSize, tdb);
+    /* that is every lifted item in the window, so print only the one that was clicked,
+     * matched the way the unlifted query below matches it.  refs #38591 */
+    for (bed = liftedBeds; bed != NULL; bed = bed->next)
+        {
+        if ((bed->chromStart != start) ||
+            ((bedSize > 3) && differentStringNullOk(bed->name, item)))
+            continue;
+        if (firstTime)
+            firstTime = FALSE;
+        else
+            htmlHorizontalLine();
+        bedPrintPos(bed, bedSize, tdb);
+        }
 
     //extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     }
@@ -4150,7 +4162,7 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
                        char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
-boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE) && cfgOptionBooleanDefault("canSnake", TRUE);
+boolean doSnake = cartOrTdbBoolean(cart, tdb, "doSnake" , FALSE);
 
 if (doSnake)
     return doSnakeChainClick(tdb, item, otherDb);
@@ -5380,7 +5392,11 @@ if (deletions)
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
         printf("<TR%s>", hilite);
         htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
-        printf("<TD>%.*s</TD><TD>", hr->otherBaseCount, hr->otherBases);
+        // a long deletion's bases would make the table very wide; the alignment link has them
+        if (hr->otherBaseCount > QUICKLIFT_SHOW_BASES)
+            printf("<TD>%u bases</TD><TD>", hr->otherBaseCount);
+        else
+            printf("<TD>%.*s</TD><TD>", hr->otherBaseCount, hr->otherBases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -5406,7 +5422,10 @@ if (insertions)
         char *hilite = (clickStart >= 0 && hr->chromStart == clickStart && hr->chromEnd == clickEnd) ? " style='font-weight:bold'" : "";
         printf("<TR%s>", hilite);
         htmlPrintf("<TD>%s</TD><TD>%s</TD>", ourPos, otherPos);
-        printf("<TD>%.*s</TD><TD>", hr->baseCount, hr->bases);
+        if (hr->baseCount > QUICKLIFT_SHOW_BASES)
+            printf("<TD>%u bases</TD><TD>", hr->baseCount);
+        else
+            printf("<TD>%.*s</TD><TD>", hr->baseCount, hr->bases);
         hgcAnchorSomewhereExt("htcChainAli", item, tdb->track, chain->tName, hr->chromStart - 10, hr->chromEnd + 10, tdb->track);
             printf("alignment</A></TD></TR>");
 
@@ -8180,6 +8199,41 @@ puts("<BR><HR>");
 printTrackHtml(tdb);
 }
 
+static char *blatTrashToken(char *path)
+/* Return the basename of path without its suffix, e.g. hgSs_abc_123 for
+ * ../trash/hgSs/hgSs_abc_123.pslx, or NULL if it is not a plain [A-Za-z0-9_] token.
+ * The path comes from the item name in the URL, so nothing else may reach a link. */
+{
+char *slash = strrchr(path, '/');
+char *token = cloneString(slash ? slash + 1 : path);
+chopSuffix(token);
+char *p;
+for (p = token; *p != '\0'; ++p)
+    if (!isalnum((unsigned char)*p) && *p != '_')
+        break;
+if (isEmpty(token) || *p != '\0')
+    freez(&token);
+return token;
+}
+
+static void printBlatResultsBackLink(char *pslName, char *faName)
+/* Print a link that reopens, in hgBlat, the results list of the BLAT search this item
+ * came from, the same link hgBlat's "Share a link" gives.  Only for searches whose
+ * result files are still in trash; hgBlat explains if they are gone by the time the
+ * link is followed. */
+{
+if (strstr(pslName, "/hgSs/") == NULL || !fileExists(pslName))
+    return;
+char *pslId = blatTrashToken(pslName);
+char *faId = blatTrashToken(faName);
+if (pslId != NULL && faId != NULL)
+    printf("<p><a href='hgBlat?blatNewPage=1&db=%s&blatPslId=%s&blatFaId=%s&%s'>"
+           "&lsaquo; Back to BLAT results</a></p>\n",
+           database, pslId, faId, cartSidUrlString(cart));
+freeMem(pslId);
+freeMem(faId);
+}
+
 void doUserPsl(char *track, char *item)
 /* Process click on user-defined alignment. */
 {
@@ -8196,8 +8250,10 @@ printf("<H2>BLAT Search Alignments</H2>\n");
 printf("<A href id='hgUsualPslShowAllLink'>Show All</A>\n");
 printf("<H3>Click on a line to see detailed letter-by-letter display</H3>\n");
 
-printf("<div id=hgUsualPslShowItem style='display: block'>\n");
 parseSs(item, &pslName, &faName, &qName);
+printBlatResultsBackLink(pslName, faName);
+
+printf("<div id=hgUsualPslShowItem style='display: block'>\n");
 pslxFileOpen(pslName, &qt, &tt, &lf);
 while ((psl = pslNext(lf)) != NULL)
     {
@@ -9955,7 +10011,7 @@ char genomeUrl[1024];
 safef(genomeUrl, sizeof genomeUrl, "hgTracks?db=%s&hgsid=%s&position=%s:",
       database, cartSessionId(cart), tNameUrl);
 freeMem(tNameUrl);
-bafLabelBlocks(TRUE, genomeUrl);
+bafLabelBlocks(TRUE, genomeUrl, chromHtml);
 /* Capture the shared library's alignment HTML so we can reorder its sections for this page.  The
  * library emits them as Query (#cDNA), Genome (#genomic), then Side-by-side (#ali), with the
  * per-block anchors living inside the Genome section.  We want Query, Side-by-side, Genome so the
@@ -9983,7 +10039,7 @@ else
     fclose(alnF);
     }
 struct bafBlock *blocks = bafBlocksDrawn();
-bafLabelBlocks(FALSE, NULL);
+bafLabelBlocks(FALSE, NULL, NULL);
 if (captured)
     {
     if (blocks != NULL)   /* the block table goes above the alignment, so not in the uncaptured case */
@@ -10372,6 +10428,68 @@ cartWebStart(cart, database, "Worm Alignment");
 printf("Alignment between C briggsae sequence %s (above) and C elegans chromosome %s (below)\n",
        name, skipChr(seqName));
 fetchAndShowWaba("wabaCbr", name);
+}
+
+void doHgRepeat(struct trackDb *tdb, char *repeat);
+/* Do click on a repeat track. */
+
+static void doLiftedRepeat(struct trackDb *tdb, char *repeat)
+/* The details page of a quickLifted rmsk item, behind browser.quickLiftRmsk:  a copy of
+ * doHgRepeat() that reads the row from the assembly it came from, through the chain, and
+ * prints the one that lands where it was clicked.  repStart, repEnd and repLeft follow the
+ * strand in that assembly, not the lifted one.  The field printing is a copy of doHgRepeat()'s;
+ * a fix to one belongs in the other.  A click on a class row, with no item, reads no table, so
+ * it goes to doHgRepeat() itself.  refs #37437 */
+{
+int offset = cartInt(cart, "o");
+if (offset < 0)
+    {
+    doHgRepeat(tdb, repeat);
+    return;
+    }
+cartWebStart(cart, database, "Repeat");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct hash *chainHash = newHash(8);
+struct rmskOut *ro, *roList = quickLiftSqlLoadRmsk(tdb, trackHubSkipHubName(tdb->table),
+    seqName, start, end, chainHash);
+boolean found = FALSE;
+
+printf("<H3>RepeatMasker Information</H3>\n");
+for (ro = roList; ro != NULL; ro = ro->next)
+    {
+    char repStrand = ro->strand[0];
+    if (!sameString(ro->repName, repeat) ||
+	!quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) ||
+	!sameString(ro->genoName, seqName) || (ro->genoStart != start) || (ro->genoEnd != end))
+	continue;
+    found = TRUE;
+    printf("<B>Name:</B> <A HREF='http://www.girinst.org/protected/repbase_extract.php?access=%s'>%s</A>\n", 
+	ro->repName, ro->repName);
+printf("(link requires <A HREF='http://www.girinst.org/accountservices/register.php'>registration</A>)<BR>");
+    printf("<B>Family:</B> %s<BR>\n", ro->repFamily);
+    printf("<B>Class:</B> %s<BR>\n", ro->repClass);
+    printf("<B>SW Score:</B> %d<BR>\n", ro->swScore);
+    printf("<B>Divergence:</B> %3.1f%%<BR>\n", 0.1 * ro->milliDiv);
+    printf("<B>Deletions:</B>  %3.1f%%<BR>\n", 0.1 * ro->milliDel);
+    printf("<B>Insertions:</B> %3.1f%%<BR>\n", 0.1 * ro->milliIns);
+    printf("<B>Begin in repeat:</B> %d<BR>\n",
+	   (repStrand == '-' ? ro->repLeft : ro->repStart));
+    printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
+    printf("<B>Left in repeat:</B> %d<BR>\n",
+	   (repStrand == '-' ? -ro->repStart : -ro->repLeft));
+    printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
+	     ro->repName);
+    // with quickLiftSplitRanges off, two chains whose source ranges overlap can read the
+    // same row twice, and both copies land in the same place
+    break;
+    }
+if (!found)
+    htmlPrintf("No repeat %s found at %s:%d-%d.<BR>\n", repeat, seqName, start + 1, end);
+htmlPrintf("<BR>This repeat comes from %s and is mapped onto %s by quickLift.<BR>\n",
+	   trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database));
+rmskOutFreeList(&roList);
+printTrackHtml(tdb);
 }
 
 void doHgRepeat(struct trackDb *tdb, char *repeat)
@@ -24105,6 +24223,13 @@ void bigPslHandlingCtAndGeneric(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, int end)
 /* Special option to show all alignments for blat ct psl */
 {
+if (sameOk(trackDbSetting(tdb, "blatResult"), "on"))
+    {
+    char *encTrack = cgiEncode(tdb->track);
+    printf("<p><a href='hgBlat?blatNewPage=1&db=%s&blatCt=%s&%s'>&lsaquo; Back to BLAT results</a></p>\n",
+           database, encTrack, cartSidUrlString(cart));
+    freeMem(encTrack);
+    }
 
 if (startsWith("ct_blat", tdb->track) && !sameString(item,"PrintAllSequences"))
     printf("<A href id='genericPslShowAllLink'>Show All</A>\n");
@@ -28640,6 +28765,19 @@ if (!calledHandler)
         {
         // a quickLifted GTEx track skips the name-based handlers too, refs #38512
         doGtexGeneExpr(tdb, item);
+        }
+    else if ((tdb != NULL) && quickLiftIsLifted(tdb) && quickLiftRmskEnabled(cart) &&
+             (sameWord("rmsk", tdb->type) || startsWithWord("bigRmsk", tdb->type) ||
+              quickLiftIsLiftedRmskJoined(cart, tdb)))
+        {
+        // a quickLifted RepeatMasker track skips the name-based handlers, and its click reads
+        // the rows of the assembly it came from through the chain, refs #37437
+        if (sameWord("rmsk", tdb->type))
+            doLiftedRepeat(tdb, item);
+        else if (startsWithWord("bigRmsk", tdb->type))
+            doLiftedBigRmskRepeat(tdb, item);
+        else
+            doLiftedJRepeat(tdb, item);
         }
     else if ((tdb != NULL) &&
         (startsWithWord("barChart", tdb->type) || startsWithWord("bigBarChart", tdb->type)))

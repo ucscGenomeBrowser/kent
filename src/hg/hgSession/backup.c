@@ -769,23 +769,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 
     char *contents = row[1];
 
-    char *dbIdx = NULL;
-    if (startsWith("db=", contents))  // the first variable in the cart (rare case)
-	dbIdx = contents+3;
-    else
-	dbIdx = strstr(contents, "&db=") + 4;
-	
-    if (dbIdx)
-	{
-	char *dbEnd = strchr(dbIdx, '&');
-	if (dbEnd != NULL)
-	    db = cloneStringZ(dbIdx, dbEnd-dbIdx);
-	else
-	    db = cloneString(dbIdx);
-	}
-    else
-	db = cloneString("n/a");
-    printf("<TD align=center>%s</td>", db);
+    db = cartContentsVal(contents, "db");
+    printf("<TD align=center>%s</td>", (db != NULL) ? htmlEncode(db) : "n/a");
 
     printf("</tr>");
 

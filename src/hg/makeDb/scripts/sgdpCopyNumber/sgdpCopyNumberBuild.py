@@ -35,6 +35,16 @@ RA      = os.path.join(DATADIR, "sgdpCopyNumber.trackDb.ra")
 # half-replaced.
 NEW = ".new"
 
+# The two samples the published SGDP tables do not cover.  The sample list is frozen in
+# sgdpCopyNumberSamples.tsv, so a third one can only appear if that manifest is edited or
+# the Reich lab tables change upstream, and either is worth stopping the build for: an
+# unmatched sample ships with every column but region and population blank, which is easy
+# to miss in a 319 row table.  Add to this set only once the blank columns are understood.
+KNOWN_UNMATCHED = {
+    "LP6005442-DNA_A09",   # Australian, absent from the public SGDP release
+    "LP6005619-DNA_D01",   # legacy name carried no region prefix either, so it has neither
+}
+
 TRACK   = "sgdpCopyNumber"
 
 # The SGDP table's region codes, spelled out.  The two-to-four letter prefixes on the old
@@ -246,6 +256,11 @@ def main():
         for legacyName, libId, region, population in unmatched:
             print("    %-40s region=%-26s population=%s"
                   % (legacyName, region, population))
+        unexpected = sorted({libId for _, libId, _, _ in unmatched} - KNOWN_UNMATCHED)
+        if unexpected:
+            sys.exit("ERROR: %d sample(s) newly unmatched: %s\n"
+                     "Check metaSrc against the manifest before adding them to "
+                     "KNOWN_UNMATCHED." % (len(unexpected), ", ".join(unexpected)))
 
     dupes = [k for k, n in collections.Counter(s["libId"] for s in samples).items() if n > 1]
     if dupes:

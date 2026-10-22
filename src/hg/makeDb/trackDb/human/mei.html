@@ -29,22 +29,18 @@ from another.
       assembled samples relative to the reference assembly
       (HGSVC3, Logsdon et al. 2025, <em>Nature</em>). Available on
       both GRCh38/hg38 (12,642 MEIs) and T2T-CHM13/hs1 (12,919 MEIs).</li>
-  <li><a href="hgTrackUi?db=hg38&g=meiDeepmei1kg">DeepMEI 1000G MEIs</a> -
-      91,617 mobile element insertions called by the DeepMEI
-      convolutional neural network on the 3,202 high-coverage 1000
-      Genomes samples (Xu et al. 2023, bioRxiv). hg38 only.</li>
   <li><a href="hgTrackUi?db=hg38&g=meiHmeid">HMEID 5675 MEIs</a> -
-      36,699 mobile element insertions called by MELT on 5,675 samples
-      from the NyuWa Chinese cohort and the 1000 Genomes Project,
-      with per-cohort and per-super-population allele frequencies
-      (Niu et al. 2022, <em>Nucleic Acids Res</em>). hg38 only.</li>
+      36,699 mobile element insertions called by MELT (Gardner et al.
+      2017) on 5,675 samples from the NyuWa Chinese cohort and the 1000
+      Genomes Project, with per-cohort and per-super-population allele
+      frequencies (Niu et al. 2022, <em>Nucleic Acids Res</em>). hg38 only.</li>
   <li><a href="hgTrackUi?db=hg38&g=meiSwegen">SweGen 1000 MEIs</a> -
       18,090 mobile element insertions called by MELT v2.0.2 on the
       1,000 SweGen Swedish whole-genome samples (Ameur et al. 2017,
       <em>Eur J Hum Genet</em>), lifted from GRCh37 to hg38. The
       short-variant frequencies for the same cohort are in the
       <a href="hgTrackUi?db=hg38&g=swefreq">SweGen</a> subtrack of
-      <a href="hgTrackUi?db=hg38&g=varFreqs">SNV Frequencies</a>.</li>
+      <a href="hgTrackUi?db=hg38&g=varFreqs">SNV Frequencies</a>. hg38 only.</li>
   <li><a href="hgTrackUi?db=hg38&g=meiEul1db">euL1db Insertions</a> -
       curated L1-HS insertion polymorphisms aggregated from 32 published
       studies covering 943 samples (euL1db, Mir et al. 2015,
@@ -67,7 +63,7 @@ whether they are polymorphic).
 
 <h2>Display Conventions and Configuration</h2>
 <p>
-In the four insertion callsets (HGSVC3, DeepMEI, HMEID and SweGen) each
+In the three insertion callsets (HGSVC3, HMEID and SweGen) each
 MEI is shown as a 1-bp anchor block at the position where the insertion
 attaches to the reference, colored by element class:
 </p>
@@ -115,17 +111,6 @@ href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5765326/" target="_blank">PMC
 </p>
 
 <p>
-Byrska-Bishop M, Evani US, Zhao X, Basile AO, Abel HJ, Regier AA, Corvelo A, Clarke WE, Musunuri R,
-Nagulapalli K <em>et al</em>.
-<a href="https://linkinghub.elsevier.com/retrieve/pii/S0092-8674(22)00991-6" target="_blank">
-High-coverage whole-genome sequencing of the expanded 1000 Genomes Project cohort including 602
-trios</a>.
-<em>Cell</em>. 2022 Sep 1;185(18):3426-3440.e19.
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/36055201" target="_blank">36055201</a>; PMC: <a
-href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9439720/" target="_blank">PMC9439720</a>
-</p>
-
-<p>
 Gardner EJ, Lam VK, Harris DN, Chuang NT, Scott EC, Pittard WS, Mills RE, 1000 Genomes Project
 Consortium, Devine SE.
 <a href="http://genome.cshlp.org/lookup/pmidlookup?view=long&amp;pmid=28855259" target="_blank">
@@ -161,12 +146,4 @@ Characterizing mobile element insertions in 5675 genomes</a>.
 <em>Nucleic Acids Res</em>. 2022 Mar 21;50(5):2493-2508.
 PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/35212372" target="_blank">35212372</a>; PMC: <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8934628/" target="_blank">PMC8934628</a>
-</p>
-
-<p>
-Xu X, Huang Y, Wang X, Cheng J, Yuan H, Bu F.
-<a href="https://doi.org/10.1101/2023.03.07.531451" target="_blank">
-Identification of mobile element insertion from whole genome sequencing
-data using deep neural network model</a>.
-<em>bioRxiv</em>. 2023 March 8. doi:10.1101/2023.03.07.531451.
 </p>

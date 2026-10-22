@@ -61,8 +61,8 @@
 #define CDS_QUERY_INSERTION_B 0
 
 #define CDS_QUERY_INSERTION_AT_END 8
-#define CDS_QUERY_INSERTION_AT_END_R 146
-#define CDS_QUERY_INSERTION_AT_END_G 20
+#define CDS_QUERY_INSERTION_AT_END_R 220
+#define CDS_QUERY_INSERTION_AT_END_G 140
 #define CDS_QUERY_INSERTION_AT_END_B 255
 
 #define CDS_POLY_A 9
@@ -96,7 +96,12 @@
 #define CDS_RIBO_SLIP2_G  250 
 #define CDS_RIBO_SLIP2_B  255
 
-#define CDS_NUM_COLORS 15
+#define CDS_DIFF_BASE    15  /* light red, zoomed-out tickmarks where query base != genome */
+#define CDS_DIFF_BASE_R  255
+#define CDS_DIFF_BASE_G  110
+#define CDS_DIFF_BASE_B  110
+
+#define CDS_NUM_COLORS 16
 
 extern struct cacheTwoBitRanges *cdsQueryCache;  /* Cache of querie sequences in alignments */
 
@@ -201,6 +206,24 @@ void baseColorDrawCdsArrows(struct track *tg, struct linkedFeatures *lf,
  * they are too small to label), and the feature's contrasting color at a wider
  * spacing over the UTRs as a cue that they are non-coding.  No-op below the
  * codon-color zoom level, when coding coloring is off, or when strand unknown. */
+
+char *blatCoverageMouseOver(struct psl *psl, boolean isProt);
+/* Return the mouseover of a BLAT alignment: the query range it spans (shown 1-based), how many
+ * query bases it aligns, the query size and strand, and under it a small svg bar showing which
+ * parts of the query matched, one segment per aligned block, like hgBlat's coverage column. */
+
+Color baseColorMuteBarbColor(struct hvGfx *hvg, enum baseColorDrawOpt drawOpt,
+                             Color itemColor, Color barbColor);
+/* When mismatch and insertion marks are drawn on the exons (different bases or
+ * different codons), tone the strand chevrons down to halfway between the
+ * item color and barbColor, so the marks stand out more than the chevrons.
+ * Otherwise return barbColor unchanged. */
+
+void addAliMarkMouseOverPx(struct track *tg, struct linkedFeatures *lf,
+                           struct hvGfx *hvg, int x, int y, int width, int height, char *text);
+/* Add a mouseover that explains a mismatch, insertion or gap mark at pixels x..x+width.
+ * It links to the item's details page.  Call it before the item's own map box is
+ * written.  Not for BAM or dense mode, and capped per track. */
 
 void baseColorOverdrawQInsert(struct track *tg,  struct linkedFeatures *lf,
 			      struct hvGfx *hvg, int xOff,

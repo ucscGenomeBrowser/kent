@@ -31,7 +31,7 @@ import re
 import subprocess
 import sys
 import time
-from urllib.parse import urlencode, urljoin
+from urllib.parse import unquote, urlencode, urljoin
 import urllib.request
 import urllib.error
 
@@ -168,16 +168,30 @@ AREA_HGC_RE = re.compile(
 )
 
 
+HGC_G_RE = re.compile(r"[?&]g=([^&]*)")
+
+# A hub-backed assembly with a MySQL database (hs1) is served as a hub, so its
+# page links carry db=hub_<id>_<assembly> and its cart names need that prefix.
+def hub_prefix(body, assembly):
+    """Return the "hub_<id>_" prefix hgTracks uses for assembly, or ""."""
+    m = re.search(r"[?&]db=(hub_[0-9]+_)" + re.escape(assembly) + r"(&|'|\"|$)", body)
+    return m.group(1) if m else ""
+
+
 def extract_hgc_links(body, base_url, only_track=None):
     """Return unique hgc URLs found in track image AREA tags, optionally only
     those whose g= is only_track."""
     seen = set()
     out = []
-    g_re = re.compile(r"[?&]g=" + re.escape(only_track) + r"(&|$)") if only_track else None
     for m in AREA_HGC_RE.finditer(body):
         href = m.group(1).replace("&amp;", "&")
-        if href in seen or (g_re and not g_re.search(href)):
+        if href in seen:
             continue
+        if only_track:
+            # hgc encodes the track name in g=, e.g. "-" as %2D
+            g = HGC_G_RE.search(href)
+            if not g or unquote(g.group(1)) != only_track:
+                continue
         seen.add(href)
         out.append(urljoin(base_url, href))
     return out
@@ -213,7 +227,7 @@ def exercise_track(http_proto, server, assembly, track, default_pos,
     # Step 1: hide everything in the session cart.
     url1 = f"{base}?{urlencode({**common, 'hgt.hideAll': 'yes'})}"
     try:
-        status, _ = http_get(opener, url1)
+        status, body = http_get(opener, url1)
     except Exception as e:
         err(f"{assembly}.{track}: hideAll request failed: {e}")
         return
@@ -222,15 +236,16 @@ def exercise_track(http_proto, server, assembly, track, default_pos,
         return
 
     # Step 2: enable just this track.
-    enable = {track: "full"}
+    prefix = hub_prefix(body, assembly)
+    enable = {prefix + track: "full"}
     chain = ancestors(track, parents)
     in_faceted = any(a in faceted for a in chain)
     if in_faceted:
         # Faceted children are clamped by their ancestors' visibility, and the
         # other default-selected subtracks will draw too, so keep only our links.
         for a in chain:
-            enable[a] = "full"
-        enable[f"{track}_sel"] = "1"
+            enable[prefix + a] = "full"
+        enable[f"{prefix}{track}_sel"] = "1"
     url2 = f"{base}?{urlencode({**common, **enable})}"
     try:
         status, body = http_get(opener, url2)
@@ -241,7 +256,7 @@ def exercise_track(http_proto, server, assembly, track, default_pos,
         err(f"{assembly}.{track}: enable got HTTP {status}")
         return
 
-    links = extract_hgc_links(body, url2, track if in_faceted else None)
+    links = extract_hgc_links(body, url2, prefix + track if in_faceted else None)
     if not links:
         # No clickable items at default position — not an error, just no coverage.
         Counters.skipped += 1

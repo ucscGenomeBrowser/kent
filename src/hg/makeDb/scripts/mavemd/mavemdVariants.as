@@ -46,5 +46,6 @@ table mavemdVariants
     string cdnaChange;     "cDNA HGVS"
     string clinGenId;      "ClinGen allele ID|CA = canonical (genomic) allele, PA = protein allele"
     string variantUrn;     "MaveDB variant"
-    string placement;      "Placement method|How this variant was placed on the genome"
+    string placement;      "Placement method|MaveDB: the position MaveDB mapped it to. UCSC: corrected MaveDB offset: MaveDB's offset did not fit the residues the experiment states, so the offset that does was used. UCSC: assay numbering: MaveDB gave this score set no offset at all, so the one fitting the stated residues was used. UCSC: MaveDB offset: the offset is MaveDB's, but its mapped term for this row disagreed with it or was absent. UCSC: reference term: MaveDB did not map it and the experiment's own term is on a reference sequence"
+    lstring construct;     "Construct|How the tested sequence differs from the reference"
     )

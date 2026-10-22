@@ -1,0 +1,21 @@
+hub parentLoopHub
+shortLabel Parent Loop Test Hub
+longLabel Hub to test detection of a loop in the parent chain
+email markd@soe.ucsc.edu
+useOneFile on
+
+genome hg19
+
+track loopA
+compositeTrack on
+shortLabel Loop A
+longLabel Loop A, parent is loopB
+parent loopB
+type bigBed 3
+
+track loopB
+compositeTrack on
+shortLabel Loop B
+longLabel Loop B, parent is loopA
+parent loopA
+type bigBed 3

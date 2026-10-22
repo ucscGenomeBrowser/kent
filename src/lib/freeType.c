@@ -2,6 +2,28 @@
 #include "freeType.h"
 #include "iconv.h"
 
+static struct ftTuning ftTune = {1.0, 0, 1.0, 1.3, ftHintDefault, ftAaNormal};
+/* The knobs the configure page can turn when hg.conf freeTypeTuneUI is on.  These values
+ * are the stock rendering, so an untouched tuning changes nothing. */
+
+void ftTuningDefaults(struct ftTuning *tuning)
+/* Fill in the stock values. */
+{
+tuning->sizeScale = 1.0;
+tuning->baselineDelta = 0;
+tuning->gamma = 1.0;
+tuning->boxScale = 1.3;
+tuning->hinting = ftHintDefault;
+tuning->antiAlias = ftAaNormal;
+}
+
+void ftSetTuning(struct ftTuning *tuning)
+/* Set the FreeType knobs.  Call it before anything is drawn: a glyph is cached once per
+ * pixel size, so a hinting change after a glyph is rendered does not reach that glyph. */
+{
+ftTune = *tuning;
+}
+
 #ifndef USE_FREETYPE
 int ftInitialize()
 {
@@ -22,6 +44,8 @@ errAbort("FreeType not enabled. Install FreeType and recompile, or add freeType=
 }
 
 #else 
+#include <pthread.h>
+
 FT_Library    library;
 FT_Face       face;
 static char *loadedFile = NULL;  /* Font file the current face was built from. */
@@ -54,6 +78,78 @@ loadedFile = cloneString(fontFile);
 return 0;
 }
 
+static void mixSubPixel(struct memGfx *mg, int x, int y, double covR, double covG,
+                        double covB, Color color)
+/* Mix one pixel whose three channels are covered by different amounts, which is what an
+ * LCD render gives.  mixDot takes a single coverage, so this does the blend itself.  It
+ * composites against the pixel as it stands and lifts the alpha to the heaviest of the
+ * three coverages, which is right over an opaque background and an approximation over a
+ * transparent one. */
+{
+if ((x < mg->clipMinX) || (x >= mg->clipMaxX) || (y < mg->clipMinY) || (y >= mg->clipMaxY))
+    return;
+double alpha = COLOR_32_ALPHA(color)/255.0;
+covR *= alpha;
+covG *= alpha;
+covB *= alpha;
+Color *pt = _mgPixAdr(mg, x, y);
+int rOut = COLOR_32_RED(color)   * covR + COLOR_32_RED(*pt)   * (1.0 - covR);
+int gOut = COLOR_32_GREEN(color) * covG + COLOR_32_GREEN(*pt) * (1.0 - covG);
+int bOut = COLOR_32_BLUE(color)  * covB + COLOR_32_BLUE(*pt)  * (1.0 - covB);
+double covMax = max(covR, max(covG, covB));
+int aOut = COLOR_32_ALPHA(*pt) + (255 - COLOR_32_ALPHA(*pt)) * covMax;
+*pt = MAKECOLOR_32_A(rOut, gOut, bOut, aOut);
+}
+
+static double ftCoverage(unsigned char raw)
+/* One coverage value, with the gamma knob applied. */
+{
+double coverage = raw/255.0;
+if (ftTune.gamma != 1.0)
+    coverage = pow(coverage, ftTune.gamma);
+return coverage;
+}
+
+static void drawLcdBitmap(struct memGfx *mg, FT_Bitmap *bitmap, Color color, FT_Int x,
+                          FT_Int y, boolean vertical, boolean bgr)
+/* Draw a glyph whose coverage came back three values to the pixel.  Horizontally that is
+ * three bytes across per pixel, vertically three rows down per pixel. */
+{
+int cols = (vertical ? bitmap->width : bitmap->width / 3);
+int rows = (vertical ? bitmap->rows / 3 : bitmap->rows);
+int col, row;
+for (row = 0; row < rows; row++)
+    {
+    for (col = 0; col < cols; col++)
+        {
+        unsigned char *triple;
+        double c[3];
+        int ii;
+        if (vertical)
+            {
+            for (ii = 0; ii < 3; ii++)
+                {
+                triple = bitmap->buffer + (size_t)(row * 3 + ii) * bitmap->width + col;
+                c[ii] = ftCoverage(*triple);
+                }
+            }
+        else
+            {
+            triple = bitmap->buffer + (size_t)row * bitmap->width + col * 3;
+            for (ii = 0; ii < 3; ii++)
+                c[ii] = ftCoverage(triple[ii]);
+            }
+        if ((c[0] > 0) || (c[1] > 0) || (c[2] > 0))
+            {
+            if (bgr)
+                mixSubPixel(mg, x + col, y + row, c[2], c[1], c[0], color);
+            else
+                mixSubPixel(mg, x + col, y + row, c[0], c[1], c[2], color);
+            }
+        }
+    }
+}
+
 void
 draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
              FT_Int      x,
@@ -65,8 +161,16 @@ draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
   FT_Int  y_max = y + bitmap->rows;
 
 
-  /* for simplicity, we assume that `bitmap->pixel_mode' */
-  /* is `FT_PIXEL_MODE_GRAY' (i.e., not a bitmap font)   */
+  /* An LCD render carries three coverages per pixel and is mixed per channel. */
+  if ((bitmap->pixel_mode == FT_PIXEL_MODE_LCD) || (bitmap->pixel_mode == FT_PIXEL_MODE_LCD_V))
+      {
+      boolean vertical = (bitmap->pixel_mode == FT_PIXEL_MODE_LCD_V);
+      boolean bgr = ((ftTune.antiAlias == ftAaLcdBgr) || (ftTune.antiAlias == ftAaLcdVbgr));
+      drawLcdBitmap(mg, bitmap, color, x, y, vertical, bgr);
+      return;
+      }
+
+  /* otherwise `bitmap->pixel_mode' is `FT_PIXEL_MODE_GRAY' */
 
   for ( i = x, p = 0; i < x_max; i++, p++ )
   {
@@ -78,7 +182,7 @@ draw_bitmap( struct memGfx *mg, FT_Bitmap*  bitmap, Color color,
         // have to combine any alpha in the color with the partial intensity
         // specified in the bitmap, since mixDot assumes you're specifying alpha
         // separately
-        double alpha = (src/255.0) * (COLOR_32_ALPHA(color)/255.0);
+        double alpha = ftCoverage(src) * (COLOR_32_ALPHA(color)/255.0);
         mixDot(mg, i, j, alpha, color); 
         }
     }
@@ -128,6 +232,74 @@ switch(requestSize)
         *baseline = (double)requestSize / 1.2;
         break;
     }
+
+/* The tuning knobs, no-ops at their defaults.  A size of zero is not a size FreeType
+ * will take, so keep at least one pixel. */
+if (ftTune.sizeScale != 1.0)
+    {
+    int scaled = (double)*actualSize * ftTune.sizeScale + 0.5;
+    *actualSize = (scaled < 1 ? 1 : scaled);
+    }
+if (ftTune.baselineDelta != 0)
+    {
+    int moved = (int)*baseline + ftTune.baselineDelta;
+    *baseline = (moved < 0 ? 0 : moved);
+    }
+}
+
+static FT_Int32 ftLoadFlags()
+/* The FT_LOAD_* bits the hinting and anti-aliasing knobs ask for, on top of whatever the
+ * caller wants.  The hinting bits and the render target are separate fields of the same
+ * flag word, so the two knobs do not fight over it. */
+{
+FT_Int32 flags = 0;
+switch (ftTune.hinting)
+    {
+    case ftHintNone:
+        flags |= FT_LOAD_NO_HINTING;
+        break;
+    case ftHintAuto:
+        flags |= FT_LOAD_FORCE_AUTOHINT;
+        break;
+    default:
+        break;
+    }
+switch (ftTune.antiAlias)
+    {
+    case ftAaLight:
+    case ftAaLightSubpixel:
+        flags |= FT_LOAD_TARGET_LIGHT;
+        break;
+    case ftAaLcdRgb:
+    case ftAaLcdBgr:
+        flags |= FT_LOAD_TARGET_LCD;
+        break;
+    case ftAaLcdVrgb:
+    case ftAaLcdVbgr:
+        flags |= FT_LOAD_TARGET_LCD_V;
+        break;
+    default:
+        flags |= FT_LOAD_TARGET_NORMAL;
+        break;
+    }
+return flags;
+}
+
+static unsigned char *ftCoverageCopy(FT_Bitmap *bitmap)
+/* The glyph's coverage packed width*rows, which is the shape the blitters read.  A
+ * memcpy will not do: FreeType pads each row out to pitch.  An LCD render has three
+ * bytes per pixel, so width is already three times the pixel count and this copies them
+ * all. */
+{
+size_t size = (size_t)bitmap->width * bitmap->rows;
+if (size == 0)
+    return NULL;
+unsigned char *buf = needMem(size);
+int row;
+for (row = 0; row < bitmap->rows; row++)
+    memcpy(buf + (size_t)row * bitmap->width,
+           bitmap->buffer + (size_t)row * bitmap->pitch, bitmap->width);
+return buf;
 }
 
 static iconv_t ourIconv; // convert context UTF-8 > UNICOD
@@ -186,7 +358,8 @@ struct ftGlyph
     int left;                   /* slot->bitmap_left. */
     int top;                    /* slot->bitmap_top. */
     long advance;               /* advance.x in 26.6 fixed point. */
-    unsigned char *buffer;      /* width*rows GRAY pixels, NULL if empty glyph. */
+    unsigned char *buffer;      /* width*rows coverage bytes, NULL if empty glyph. */
+    unsigned char pixelMode;    /* the FT_PIXEL_MODE_ the coverage came from. */
     };
 
 struct ftSizeTable
@@ -240,7 +413,7 @@ struct ftSizeTable *tbl = ftSizeTableFor(pixelSize);
 if (ch < ftCacheChars && tbl->advanceCached[ch])
     return tbl->advance[ch];
 
-FT_Load_Char( face, ch, 0 );
+FT_Load_Char( face, ch, ftLoadFlags() );
 long advance = face->glyph->advance.x;
 if (ch < ftCacheChars)
     {
@@ -265,7 +438,7 @@ struct ftGlyph *g = &tbl->glyph[ch];
 if (g->rendered)
     return g;
 
-if (FT_Load_Char( face, ch, FT_LOAD_RENDER ) != 0)
+if (FT_Load_Char( face, ch, FT_LOAD_RENDER | ftLoadFlags() ) != 0)
     return NULL;
 FT_GlyphSlot slot = face->glyph;
 g->width = slot->bitmap.width;
@@ -273,13 +446,8 @@ g->rows = slot->bitmap.rows;
 g->left = slot->bitmap_left;
 g->top = slot->bitmap_top;
 g->advance = slot->advance.x;
-// Copy the coverage bitmap exactly as draw_bitmap reads it (packed width*rows).
-size_t size = (size_t)g->width * g->rows;
-if (size > 0)
-    {
-    g->buffer = needMem(size);
-    memcpy(g->buffer, slot->bitmap.buffer, size);
-    }
+g->buffer = ftCoverageCopy(&slot->bitmap);
+g->pixelMode = slot->bitmap.pixel_mode;
 g->rendered = TRUE;
 return g;
 }
@@ -304,12 +472,14 @@ if (*sBuf == 0xfeff)
     sBuf++;
     }
 
+boolean subPixel = (ftTune.antiAlias == ftAaLightSubpixel);
 for(n = 0; n < length; n++)
     {
     int dx;
     dx = x + offset / 64;
-    // Fast path: reuse the cached rendered glyph for default text.
-    if (cacheable)
+    // Fast path: reuse the cached rendered glyph for default text.  Subpixel positioning
+    // renders each glyph where it really falls, so there is nothing to cache.
+    if (cacheable && !subPixel)
         {
         struct ftGlyph *g = ftRenderChar(pixelSize, sBuf[n]);
         if (g != NULL)
@@ -321,6 +491,7 @@ for(n = 0; n < length; n++)
                 bm.width = g->width;
                 bm.rows = g->rows;
                 bm.buffer = g->buffer;
+                bm.pixel_mode = g->pixelMode;
                 draw_bitmap( mg, &bm, color,
                     dx + g->left, y - g->top, mg->pixels, mg->width );
                 }
@@ -328,14 +499,39 @@ for(n = 0; n < length; n++)
             continue;
             }
         }
-    error = FT_Load_Char( face, sBuf[n], FT_LOAD_RENDER );
-    FT_GlyphSlot  slot;
-    slot = face->glyph;
+    FT_GlyphSlot  slot = face->glyph;
+    if (subPixel)
+        {
+        /* Load the outline without rasterizing, shift it by the part of a pixel the pen is
+         * standing on, then rasterize, so the glyph lands where it really falls rather than
+         * at the rounded position.  Shifting the outline rather than calling
+         * FT_Set_Transform leaves the matrix ftTextInBox set alone. */
+        error = FT_Load_Char( face, sBuf[n], ftLoadFlags() );
+        if (!error)
+            {
+            if (slot->format == FT_GLYPH_FORMAT_OUTLINE)
+                FT_Outline_Translate(&slot->outline, offset % 64, 0);
+            error = FT_Render_Glyph(slot, FT_RENDER_MODE_LIGHT);
+            }
+        }
+    else
+        error = FT_Load_Char( face, sBuf[n], FT_LOAD_RENDER | ftLoadFlags() );
     if (!error)
-        draw_bitmap( mg,  &slot->bitmap, color,
-         dx + slot->bitmap_left, y - slot->bitmap_top, mg->pixels, mg->width ); 
-         //offset + slot->bitmap_left, y - slot->bitmap_top, mg->pixels, mg->width ); 
-    offset += slot->advance.x;
+        {
+        /* The blitters read the rows packed.  FreeType usually hands them over that way
+         * already, and then the bitmap is drawn where it lies. */
+        FT_Bitmap bm = slot->bitmap;
+        unsigned char *packed = NULL;
+        if (bm.pitch != (int)bm.width)
+            bm.buffer = packed = ftCoverageCopy(&slot->bitmap);
+        if (bm.buffer != NULL)
+            draw_bitmap( mg,  &bm, color,
+             dx + slot->bitmap_left, y - slot->bitmap_top, mg->pixels, mg->width ); 
+        freeMem(packed);
+        }
+    /* The hinted advance is rounded to a whole pixel, which would leave the pen fraction
+     * above always zero.  Subpixel positioning needs the unhinted advance, 16.16 here. */
+    offset += subPixel ? (slot->linearHoriAdvance >> 10) : slot->advance.x;
     }
 }
 
@@ -355,7 +551,7 @@ if (height > 0)
     pen.x = 0;
     pen.y = 0;
     FT_Set_Transform( face, &matrix, &pen );
-    FT_Set_Pixel_Sizes( face, 1.3*width, 1.3 * height);
+    FT_Set_Pixel_Sizes( face, ftTune.boxScale*width, ftTune.boxScale * height);
     ftTextHelper(mg, x, y, height, color, font, text, 0, FALSE);
     }
 else
@@ -369,7 +565,7 @@ else
     FT_Set_Transform( face, &matrix, &pen );
 
     height = -height;
-    FT_Set_Pixel_Sizes( face, 1.3*width, 1.3 * height);
+    FT_Set_Pixel_Sizes( face, ftTune.boxScale*width, ftTune.boxScale * height);
     ftTextHelper(mg, x, y, height, color, font, text, 0, FALSE);
 
     matrix.yy = (FT_Fixed)(1 * 0x10000L) ;
@@ -390,16 +586,22 @@ FT_Set_Pixel_Sizes( face, fontHeight, fontHeight);
 ftTextHelper(mg, x, y, baseline,color, font, text, fontHeight, TRUE);
 }
 
+// hgTracks measures labels inside its parallel track-load threads, which share the one
+// face, and a FreeType face is not thread safe.
+static pthread_mutex_t ftWidthMutex = PTHREAD_MUTEX_INITIALIZER;
+
 int ftWidth(MgFont *font, unsigned char *chars, int charCount)
 {
 unsigned int fontHeight;
 unsigned int baseline;
 getFontCorrection(mgFontPixelHeight(font), &fontHeight, &baseline);
+pthread_mutex_lock(&ftWidthMutex);
 FT_Set_Pixel_Sizes( face, fontHeight, fontHeight);
 int n;
 unsigned long offset = 0;
 for(n = 0; n < charCount; n++)
     offset += ftAdvanceForChar(fontHeight, chars[n]);
+pthread_mutex_unlock(&ftWidthMutex);
 offset /= 64;
 return offset;
 }

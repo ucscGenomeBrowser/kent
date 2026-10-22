@@ -145,7 +145,7 @@ rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
   /usr/local/apache/htdocs-beta/style/ qateam@hgwbeta:/data/apache/htdocs/style/
 
 echo "build on beta done for v$BRANCHNN [${0}: `date`]"
-echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 
 echo
 echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"

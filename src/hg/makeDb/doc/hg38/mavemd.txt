@@ -20,7 +20,7 @@
 #     a "dataset" maps onto a score set or an experiment, and neither 84 nor 81 is 74, so do
 #     not try to reconcile them. Say "score set" in the docs, not "dataset".
 #  2. Counts are measurement-level. A variant measured by several assays contributes several
-#     measurements. Our 462,287 items are 275,875 distinct ClinGen alleles, which is why a
+#     measurements. Our 462,486 items are 275,791 distinct ClinGen alleles, which is why a
 #     codon studied by several groups stacks over a hundred items deep.
 
 # Request pacing is what MaveDB asked us for directly (Benjamin Capodanno, 21 Aug 2026 email):
@@ -50,101 +50,142 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # Scripts (all in ~/kent/src/hg/makeDb/scripts/mavemd/):
 #   fetchMaveMd.py         download the collection from the API
 #
-# GENCODE VERSION: mavemdLib.py hardcodes GENCODE_ATTRS/GENCODE_GENEPRED to the V50 tables,
-# used only for the six ENSP-stated score sets. Bump both when hg38 moves to a newer GENCODE;
-# the RefSeq route (ncbiRefSeqLink/ncbiRefSeqCurated) is unversioned and needs no attention.
-#   mavemdLib.py           shared: codon projection, color tables, BED field hygiene
-#   makeMaveMdVariants.py  per-variant bed12+34 -> mavemdVar.bb
+#   mavemdLib.py           calibration choice and color tables; also puts
+#                          utils/otto/mavedb on sys.path for mavedbPlace
+#   makeMaveMdVariants.py  per-variant bed12+35 -> mavemdVar.bb
 #   makeMaveMdHeatmap.py   per-score-set bed12+20 -> mavemdMap.bb
 #   mavemdVariants.as, mavemdHeatmap.as
 #   runBuild.sh            driver for the two converters plus bedToBigBed
 
-# COORDINATES. MaveDB's VRS mapper resolves about a third of the collection to the genome and
-# the rest only to a protein sequence, so placement takes three routes:
-#   154,895  MaveDB's own genomic HGVS term, run through kent's hgvsToVcf
-#   296,516  projected from MaveDB's mapped protein term onto its codon
-#     7,321  the submitter's original transcript term, run through hgvsToVcf
-#     3,555  projected from the submitter's own protein term onto its codon
-#   462,287  placed, of 481,717 measurements (96.0%)
+# COORDINATES. Placement is not in this directory: it is mavedbPlace.py, in
+# ~/kent/src/hg/utils/otto/mavedb, shared with the MaveDB track (#38396) so that a variant
+# lands at the same base in both. mavemdLib.py puts that directory on sys.path, so the two
+# converters can "import mavedbPlace as mp"; nothing else is needed to run them by hand.
 #
-# The codon projection resolves the protein accession to its transcript and walks that CDS to
-# the requested codon. MaveDB states protein terms against RefSeq for most score sets and
-# Ensembl for six, so both routes exist: NP_ through ncbiRefSeqLink + ncbiRefSeqCurated, ENSP
-# through wgEncodeGencodeAttrsV50 + wgEncodeGencodeCompV50. All 40 protein accessions resolve.
+# The rule is one offset per score set target: reference position = experiment position +
+# offset, chosen by testing the wild-type residues the experiment itself states against the
+# reference protein. MaveDB supplies an offset of its own and it wins wherever it fits those
+# residues exactly, or at every position but one (a construct carrying a known change, see
+# below). Otherwise our own search over the gene's RefSeq proteins finds the offset that does
+# fit. Every placed row is then checked against the reference protein and against the genome
+# codon, and MaveDB's genomic term, where there is one, must fall inside that codon.
 #
-# 3,584 items sit in a codon split across an exon junction, so its three bases are not a 3 bp
+# Placed, 462,486 of 481,717 measurements (96.0%), by where the offset came from:
+#   430,133  MaveDB, at the position it mapped
+#    18,513  MaveDB's offset did not fit the experiment's residues; ours did
+#     6,519  placed at MaveDB's offset, but its mapped term for the row disagreed with it
+#            or was missing
+#     7,321  MaveDB did not map it at all; the experiment's own term is on a reference
+#            sequence (NM_/NC_), placed through kent's hgvsToVcf with a reference-base check
+#
+# THREE SCORE SETS MAVEDB MAPS AT THE WRONG CODON. This is why the offset is checked rather
+# than taken. In each the experiment's stated residues fit the reference protein at exactly
+# one offset, and it is not the one in MaveDB's mapped terms. The mapped terms are not a
+# clue: MaveDB rewrites the reference residue in them to agree with the codon it chose, so
+# they are self-consistent and agree with the genome, and the error is only visible from the
+# experiment's own residues. Until 2026-10 this track drew all of these at MaveDB's position.
+#   00000663-a-1  NDUFAF6, NP_689629.2. All 5,714 stated residues fit at offset 0; MaveDB
+#                 mapped 3,668 rows one codon downstream. p.Ser45Phe was drawn as V46S.
+#   00001251-a-1  TPK1, NP_071890.2. All fit at offset 0; MaveDB mapped 2,789 rows 49 codons
+#                 downstream, 49 being the length of the segment missing from the isoform
+#                 deposited as the target sequence. p.Val195Thr was drawn as *244T, at the
+#                 stop codon.
+#   00000060-a-1  TARDBP, NP_031401.1, and -a-2. The constructs are the TDP-43 prion-like
+#                 domain, AA 290-331 and AA 332-373, numbered 1-42; MaveDB read 1-42 as
+#                 full-protein positions, so both score sets drew at codons 1-42. Offsets
+#                 +289 and +331.
+# Reported to the MaveDB authors 2026-10; see the draft in /hive/users/lrnassar/claude/RM37800.
+# Their reply: NDUFAF6 is worse than the mapping. Every hgvs_nt in that score set starts two
+# bases downstream of the codon its hgvs_pro names, so the submitted nucleotide coordinates
+# are wrong and MaveDB's mapper faithfully followed them. Being corrected upstream. We place
+# from the p. term, the score set is not on the reference-term route, and its post-mapped
+# terms are suppressed, so none of it reaches the track; when the fix lands our label for
+# those items should simply change from "UCSC: corrected MaveDB offset" to "MaveDB".
+# mavedbPlace.codonPhases() counts, per score set, the submitted three-base
+# delins terms that do not start on a codon boundary, which is the only check that would
+# have caught this on our own. It reports and does not abort: an occasional misaligned term
+# is ordinary, because a three-base change really can straddle two codons. This build:
+#   00000663-a-1   5714 of 5714   the whole score set, the real thing
+#   00000662-0-1      1 of 2860   c.1722_1724delinsACG, a genuine straddling change
+#
+# Our own search also wins on 00000665-a/b/c/d-1 (PAX6, NP_000271.1), at offset 0. MaveDB
+# mapped about a third of each of those score sets, 2,832 to 2,857 rows apiece, but onto
+# another PAX6 isoform, NP_001355823.1, so its offset is not one we can use on ours.
+#
+# Score sets numbered on a domain rather than the whole protein, where MaveDB's offset fits
+# the stated residues exactly: 00000098-a-2 (+1619), 00001222-a-2 (+1672), 00001229-a-2
+# (+544), 00001267-a-2 (+553) and -b-1 (+1511).
+#
+# CONSTRUCTS THAT DIFFER FROM THE REFERENCE. Eleven score sets use a construct carrying one
+# known change of its own, and the offset is accepted with that one position excused. The
+# measurements at that position are of a different starting residue from the reference, so
+# they are dropped rather than drawn as though they were the reference variant: 221 rows in
+# all. TP53 00000068-0/a/b/c-1, 00001235-a-1 and 00001236-0-1 at residue 72 (the common P72R
+# form, which is in the target name of three of them); KCNE1 00000674-a-2/b-1/c-1 at 38;
+# BRCA1 00001222-b-2 at 1613 (offset +1576); TPK1 00001251-a-1 at 193.
+# The other 68,095 items of those eleven score sets are placed normally, since the
+# construct matches the reference everywhere else, and each carries the construct field:
+# "differs from NP_000537.3 at position 72 (Pro in the reference, Arg in the construct)"
+# and its three counterparts. It is OffsetChoice.constructNote() in mavedbPlace.py, the
+# same string the MaveDB track prints, so a reader can see which backbone a score was
+# measured on. 48,742 of those items are TP53, 9,518 TPK1, 7,574 KCNE1, 2,261 BRCA1.
+#
+# 4,474 items sit in a codon split across an exon junction, so its three bases are not a 3 bp
 # run. Those are written as BED12 with the two real blocks, so the intron draws as a thin
-# connector rather than as a solid item up to 95 kb wide. The heatmap column is drawn on the
+# connector rather than as a solid item up to 133 kb wide. The heatmap column is drawn on the
 # longest contiguous run of the codon's bases (CodonMap.codonBlock), keeping the block off
 # the intron.
 #
-# WILD-TYPE RESIDUE CHECK. The cross-check below can only run where a variant has both a
-# genomic and a protein term, and 18 of the 40 protein accessions have no genomic-route
-# variants at all; they hold 97% of the projected items, so a shifted CDS in any of them
-# would move every item and still pass. So addProteinSequence() in mavemdLib.py translates
-# each transcript's CDS straight from hg38.2bit, and every projected codon is checked against
-# the reference residue its own HGVS term asserts. Per accession, above 25% mismatch the build
-# aborts (that is a moved transcript); individual mismatches are dropped rather than placed.
+# An item placed on a protein covers its codon, three bases, even where MaveDB also gave a
+# genomic term naming the one changed base. Before the switch to the shared code those rows
+# were drawn one base wide, which is why basesCovered went from 667,558 to 1,272,893 with
+# almost no change in item count. The codon is what the measurement is of, and it is what
+# the heatmap column covers, so the two tracks now agree.
 #
-# 39 of 40 accessions match at 0.000%. NP_689629.2 (NDUFAF6, urn:mavedb:00000663-a-1) has 99
-# mismatches out of 4,123. Every one is a three-base delins straddling a codon boundary:
-# c.198_200delinsCTG, which the submitter called p.Arg66Leu, arrives as the mapped term
-# NP_689629.2:p.Arg67Ter. The position moves to the second codon the change touches while the
-# reference residue is carried over from the first, so the asserted Arg is codon 66's residue
-# and the genome has K at codon 67. The change does reach codon 67, so the placement itself is
-# right and the items are kept in both tracks. A residue mismatch is only treated as a
-# placement error where the row's cDNA term does not reach the named codon at all
-# (cdnaReachesCodon in makeMaveMdVariants.py); that is the case the 25% abort is guarding.
-
-# CROSS-CHECK. 130,955 measurements carry both a genomic and a protein term, so the projection
-# is run on those too and must land on the genomic coordinate. 41 disagreed (0.0313%), all
-# nonsense terms (p.XxxNNNTer) where MaveDB's protein term names a codon one position off from
-# the nucleotide change; mostly the ENSP-mapped score sets 00000662-0-1 and 00000673-0-1.
-# makeMaveMdVariants.py aborts above 0.5%.
-
-# NOT PLACED (19,430 of 481,717):
-#   18,980  haplotypes: several substitutions measured as one unit, no single position.
-#           All but 17 from urn:mavedb:00000665-a/b/c/d-1; those 17 are the PTEN rows of
-#           00000054-a-1 whose bracket term spans more than one codon, so the single-codon
-#           rescue below correctly declines them. The earlier MaveDB track excluded
-#           haplotype datasets for the same reason.
-#      147  submitted term rejected by hgvsToVcf, and no protein route available.
-#      126  no usable HGVS term of any kind. 124 are TP53 stop-codon readthrough terms
-#           (p.Ter394Ala and friends) that carry no nucleotide term, so the single-codon
-#           rescue cannot fire; 1 is a row named "_wt".
-#      114  genomic term rejected by hgvsToVcf. 113 are three-base "no change" assertions
-#           of the shape NC_000008.11:g.95025148GGC=; 1 is a bare NC_000003.12:g.=.
-#       63  protein term is not a single substitution
+# CHECKS. All of these are in mavedbPlace.py and run on every build:
+#   - every placed row's wild-type residue must match the genome translation of its codon;
+#     an accession failing on more than 25% of its rows is dropped whole (0 accessions).
+#     accessionGate() then fails the build, because every measurement on that accession
+#     has silently gone; that is what a moved transcript or a changed GENCODE looks like.
+#   - MaveDB's genomic term, where the row also has a protein placement, must fall inside
+#     that codon. 124,335 rows carry both; 0 disagreed. crossCheckGate() stops the build
+#     above 0.5%, which is what a drift in RefSeq or in MaveDB's mapper would look like.
+#   - a reference-term placement must match the reference base hgvsToVcf reports
 #
-# The submitter's own protein term is folded into the codon projection, so it is tried
-# second, ahead of hgvsToVcf; the route order is genomic, then either projection, then
-# hgvsToVcf on the submitted term. It recovered 3,555 rows that MaveDB left unmapped. 1,219 of them are PTEN rows written as c.[1207G>T;1209C>T]: two or
-# three changed bases that all sit inside one codon, so they are a single substitution and not
-# a haplotype despite the bracket syntax. codonSpanOfCdna() reads both the range form
-# (c.198_200delins) and the bracket form, and the route only fires where every changed base
-# falls in one codon and the submitted p. term is a plain single substitution.
-
-# Eleven score sets state their variants as bare terms with no accession (c.34_36delinsCTT).
-# MaveDB leaves those unmapped, but their neighbours in the same score set carry a post-mapped
-# cDNA term naming the transcript, so the bare terms are qualified from it and then placed.
-# This is not where the 7,321 hgvsToVcf placements came from: all nine score sets on that
-# route state every hgvs_nt with an accession already, and none of them is one of the eleven.
-# What the bare-term qualification feeds is loadScoreSetProteins(), and through it the 3,555
-# placements from the submitted protein term.
+# GENCODE: the six ENSP-stated score sets (33,201 items) resolve through the newest
+# wgEncodeGencodeAttrsV* table, found at run time by mavedbPlace.newestGencode(), so a new
+# GENCODE on hg38 needs no edit here. The RefSeq route (ncbiRefSeqLink, ncbiRefSeqCurated,
+# and ncbiRefSeqLinkHistorical/ncbiRefSeqHistorical for a retired NP_ version) is unversioned.
+#
+# NOT PLACED (19,231 of 481,717):
+#   18,963  more than one residue or site changed: several substitutions measured as one
+#           unit, with no single position. Almost all from urn:mavedb:00000665-a/b/c/d-1.
+#           A bracketed nucleotide term whose bases all fall in one codon, such as the PTEN
+#           c.[1207G>T;1209C>T], is one amino acid substitution and is placed; the judgement
+#           is made on the protein term where there is one (isMultiVariant).
+#      221  at the one position where the construct differs from the reference, see above
+#       28  MaveDB did not map it and its own term is not on a reference sequence
+#       13  frameshift: the protein term names the codon where the stop appears, not the
+#           site of the change, so it is not a position we can draw
+#        4  multi-residue delins
+#        2  protein term could not be parsed
 
 # HEATMAP. All 84 score sets produce a map. Rows are the 20 standard amino acids ordered by
 # class (A V L I M F Y W R H K D E S T N Q G C P), matching the MaveDB and popEVE heatmap
 # tracks, plus a final row for nonsense. A synonymous measurement fills the reference
 # residue's cell.
-#   431,057  measurements with a single amino acid substitution, counting the ones whose
-#            protein term is rebuilt from the submitted p. term (cellFromSubmittedTerm,
-#            3,586), without which the map would be missing cells the variant track draws
-#   387,467  cells drawn. 43,590 measurements are a later nucleotide change encoding a
+# The columns come from the same placements as the variant track's items, so the two cannot
+# disagree about where a measurement belongs; a cell exists wherever a protein-placed item
+# does and the substitution is one of the 21 rows.
+#   432,754  protein-placed measurements (462,486 items less the 29,732 placed at genomic
+#            level only, which have no residue to put in a row)
+#      460  dropped: the substitution is not one of the 21 rows (Sec, Xaa and friends)
+#   391,758  cells drawn. 40,536 measurements are a later nucleotide change encoding a
 #            substitution already measured at that position. The strongest evidence wins the
 #            cell (CSV order is not a defined rule and flipped hundreds of cells between
 #            pathogenic and benign); the cell is marked '+', or '!' where the measurements
-#            disagree in direction. 1,625 cells carry '!' and 28,463 carry '+'. The
-#            cellConflictingDirection counter in the log reads 2,155 because it counts
+#            disagree in direction. 1,057 cells carry '!' and 27,932 carry '+'. The
+#            cellConflictingDirection counter in the log reads 1,281 because it counts
 #            pairwise disagreements, so a cell with three conflicting measurements scores
 #            more than once; it is not a cell count.
 #
@@ -161,7 +202,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # The renderer splits the score array with chopCommas (keeps a trailing empty field) but the
 # label array with chopByCharRespectDoubleQuotesKeepEmpty (drops one). If the last cell of the
 # last row is empty the counts disagree and the track aborts, so the converter puts a
-# placeholder label on that one cell. 43 score sets needed it. Same trap as popEVE.
+# placeholder label on that one cell. 42 score sets needed it. Same trap as popEVE.
 
 # ASSAY METADATA. The experiment record's controlled keywords carry the fields McEwen et al.
 # argue a clinician judges an assay by, so four of them ride on every item: Phenotypic Assay
@@ -180,16 +221,16 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # NON-ASCII. MaveDB free text carries en dashes and accented author names (Gronbaek-Thygesen
 # and Olvera-Leon are spelled with o-slash, ae and o-acute upstream). The browser does not
 # transcode UTF-8, so these reach the details page as
-# mojibake. mavemdLib.bedField() converts every non-ASCII character to a numeric HTML entity;
+# mojibake. mavedbPlace.bedField() converts every non-ASCII character to a numeric HTML entity;
 # 35,695 variant rows and 6 heatmap rows needed it. Re-check after any rebuild with:
 #   LC_ALL=C grep -cP '[^\x00-\x7F]' mavemdVar.bed mavemdMap.bed     # must be 0
 
 # EMPTY FIELDS IN THE MOUSEOVER. The trackDb mouseOver pattern substitutes ${field}
 # unconditionally, so an empty value leaves a dangling label ("ACMG evidence:" with nothing
 # after it). Three fields can legitimately be empty, so the converter writes a readable
-# placeholder rather than an empty string: acmgOutcome "none assigned" (63,338 items, score
+# placeholder rather than an empty string: acmgOutcome "none assigned" (167,641 items, score
 # sets that classify variants without assigning an ACMG code), funcClass "not classified"
-# (3,896 items, all from urn:mavedb:00001267-a-2, which carries no calibration at all) and
+# (3,950 items, all from urn:mavedb:00001267-a-2, which carries no calibration at all) and
 # funcScore "not reported" (5,124 items MaveDB reports as NA, all of them indeterminate).
 # The placeholders are set after the color and the BED score are computed from the raw
 # values, so neither changes, and both label fields go into their filter menus as real
@@ -211,25 +252,46 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 
 # WHICH CALIBRATION IS SHOWN. A score set can carry up to six calibrations. MaveDB curates a
 # `primary` flag with its own promote and demote API endpoints, so where that primary actually
-# classifies the variant it is their editorial choice and is used as-is: 171,467 items.
+# classifies the variant it is their editorial choice and is used as-is: 171,664 items.
 #
 # Two traps. 21 score sets have no primary at all (one of them has no calibration whatsoever).
 # A further 35 designate one that carries no
 # functionalClassifications, so it says nothing about any variant and arrives as NA on every
 # CSV row - it exists but cannot be displayed. Those are different situations and the item's
 # "Calibration chosen by" field distinguishes them, because telling a user "no primary
-# designated" about a score set that has one is simply false. 172,287 items are in that second
+# designated" about a score set that has one is simply false. 172,235 items are in that second
 # case; an earlier build mislabelled all of them.
 #
 # Every calibration's call is listed on the details page regardless of which one is displayed.
+#
+# Where no primary is available the choice follows MaveDB's own variant page, whose rule
+# Benjamin Capodanno gave us in October 2026: only a calibration that classifies the variant
+# can supply the call; prefer one that is not research use only, investigator-provided before
+# the rest; and take the strongest evidence within a tier rather than across all of them. A
+# research-use-only calibration is used only where nothing else classifies the variant,
+# 152,808 items, and those say so on the item.
+#
+# Tiering before strength is what makes this differ from ranking on evidence alone, and it
+# costs evidence codes. In 16 score sets the investigator-provided calibration gives a
+# functional class and no ACMG code while ExCALIBR, which is research use only, gives both.
+# Ranking on strength picked ExCALIBR for 104,244 items; tiering picks the investigator call,
+# so those items show no ACMG code (53,460 of them were PS3_not_met, which was already drawn
+# as no evidence, so 50,784 change colour). The two calibrations also disagree about the call
+# itself on 47,876 of them, mostly indeterminate becoming normal, which moves the functional
+# class filter and recolours all 16 of those heatmaps.
+#
+# pickDisplayCall() takes primaryEmpty so the item can say whether a primary exists but
+# classifies nothing, or exists and simply does not classify this variant. The second case
+# does not occur in this build; it is distinguished because the first is a curation gap and
+# saying "no primary designated" about either one is false.
 
 # Build results:
-#   mavemdVar.bb   462,287 items, 46 fields (bed12+34)
+#   mavemdVar.bb   462,486 items, 47 fields (bed12+35)
 #
 # PROVENANCE OF THE ANNOTATIONS. clinvarRelease and gnomadVersion ride on each item that has a
-# ClinVar or gnomAD annotation (60,737 and 3,979 respectively), so a stale annotation is visible
+# ClinVar or gnomAD annotation (60,666 and 3,978 respectively), so a stale annotation is visible
 # rather than silent. This build is mixed: 79 score sets served ClinVar 2026-01 and 4 served
-# 2025-01 (57,182 and 3,555 items respectively), on gnomAD v4.1 throughout. A single release
+# 2025-01 (57,111 and 3,555 items respectively), on gnomAD v4.1 throughout. A single release
 # per build is not something to expect;
 # fetchMaveMd.py always asks for the newest ClinVar namespace the score set offers, so the
 # release moves on its own between builds and is not pinned anywhere.
@@ -238,7 +300,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # clinGenId (to the ClinGen Allele Registry, which serves both CA genomic and PA protein
 # alleles). hgc percent-encodes the substituted value, so the score set URN arrives as
 # urn%3Amavedb%3A...%2D0%2D1; mavedb.org resolves that fine. There is no separate mavedbUrl
-# field: it used to store 462,287 copies of 84 distinct strings that are just a prefix plus
+# field: it used to store 462,486 copies of 84 distinct strings that are just a prefix plus
 # scoreSet, so linkifying scoreSet replaces it.
 #
 # DEFAULT DISPLAY. mavemdMap pack at priority 1, mavemdVar dense at priority 2. Pack height
@@ -261,12 +323,11 @@ ln -sf /hive/data/genomes/hg38/bed/mavemd/2026-09-17/version.txt  version.txt
 cd ~/kent/src/hg/makeDb/trackDb
 make DBS=hg38
 #
-# STRAND comes from the transcript of the protein term, so it is set on every item that has a
-# usable one (431,026), not only on the ones the codon projection ultimately placed: 188,219 +,
-# 242,807 -. The remaining 31,261 are '.' - 23,940 placed from a genomic HGVS term with no
-# usable single-substitution protein term (only 1,023 of those have no protein term at all;
-# the other 22,917 have a frameshift or multi-residue delins term, which the projection does
-# not handle), and 7,321 placed by hgvsToVcf from the submitted term.
+# STRAND is the transcript's, so it is set on every item placed on a protein: 190,188 + and
+# 242,566 -. The remaining 29,732 are '.', the items placed at genomic level only, where
+# there is no transcript to take a strand from: 22,411 from a MaveDB genomic term whose row
+# has no usable single-substitution protein term, and 7,321 from the experiment's own
+# reference term.
 
 # Version file for the dataVersion trackDb setting.
 cd /hive/data/genomes/hg38/bed/mavemd/2026-09-17

@@ -3390,6 +3390,7 @@ var rightClick = {
 
         for (var id of plan.tracks) {
             cartHideAnyTrack(id, cartVars, cartVals);
+            vis.update(id, 'hide');  // set its dropdown in the track list below the image too
             $(document.getElementById('tr_' + id)).remove();
             removeTrackFromVisibleGroup(id);
             delete hgTracks.trackDb[id]; // for the next right-click
@@ -4349,6 +4350,10 @@ var rightClick = {
         if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
             title = title.split("<br>")[0].split("</b>")[1];
         }
+        // the BLAT track's mouseover has a query coverage bar after the text
+        if (title.search(/<svg/) !== -1) {
+            title = title.split("<br>")[0];
+        }
         // for older UCSC genes tracks, the protein name is forced onto the item name
         if (title.search(/&hgg_prot=/) !== -1) {
             title = title.split("&hgg_prot=")[0];
@@ -4737,6 +4742,20 @@ var rightClick = {
                         return true; }
                 };
                 menu.push(o);
+
+                // BLAT results tracks (blatResult=on): reopen their results table in hgBlat
+                var ctRec = hgTracks.trackDb[ctId];
+                if (ctRec && ctRec.blatResult) {
+                    o = {};
+                    o[rightClick.makeImgTag("magnify.png") + " Back to BLAT results"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            window.location.href = "hgBlat?blatNewPage=1&db=" +
+                                encodeURIComponent(getDb()) + "&blatCt=" +
+                                encodeURIComponent(ctId) + "&hgsid=" + getHgsid();
+                            return true; }
+                    };
+                    menu.push(o);
+                }
             }
 
             //o = {};
@@ -8840,7 +8859,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 //////////////////////////
-// Session Load Dialog - shows user's recent sessions after loading a session
+// Recent views dialog: the views this web browser had in the last days, opened from the note
+// after a session load or from My Data > Recent Browser Views
 
 var sessionLoadDialog = {
 
@@ -8863,31 +8883,57 @@ var sessionLoadDialog = {
         }
     },
 
+    describe: function(s) {
+        // What a row is: the copy made just before a session load, or a view of another tab
+        if (s.prevViewOf === null || s.prevViewOf === undefined) {
+            return 'Last used ' + this.formatTimestamp(s.timestamp).toLowerCase();
+        }
+        var what = s.prevViewOf ? 'session <b>' + htmlEncode(s.prevViewOf) + '</b>'
+                                : 'settings from a file or URL';
+        return 'Before you opened ' + what + ', ' + this.formatTimestamp(s.timestamp).toLowerCase();
+    },
+
     buildSessionList: function(sessions) {
-        // Build HTML for the session list
-        var html = '<div style="max-height: 300px; overflow-y: auto;">';
-        html += '<p style="margin-bottom: 10px;">You just loaded a saved session. ' +
-                'Your previous browser sessions are listed below. ' +
-                'Click to open in a new tab and recover your work.</p>';
+        // Build HTML for the list of recent views, the copy made before a session load first
+        var html = '<p>These are the views you had in this web browser in the last 7 days. ' +
+                'Open one in a new tab to get it back, or save it as a named session.</p>';
+        if (sessions.length === 0) {
+            return html + '<p>No recently used views are available yet for this internet ' +
+                    'browser. You may want to check other internet browsers or other user ' +
+                    'accounts in these, if you think there should be more. Or ' +
+                    '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
+        }
+        var sorted = sessions.slice().sort(function(a, b) {
+            var aCopy = (a.prevViewOf !== null && a.prevViewOf !== undefined);
+            var bCopy = (b.prevViewOf !== null && b.prevViewOf !== undefined);
+            if (aCopy !== bCopy) {
+                return aCopy ? -1 : 1;
+            }
+            return b.timestamp - a.timestamp;
+        });
+        html += '<div style="max-height: 300px; overflow-y: auto;">';
         html += '<table style="width: 100%; border-collapse: collapse;">';
         html += '<thead><tr style="background: #f0f0f0;">' +
+                '<th style="padding: 8px; text-align: left;">View</th>' +
                 '<th style="padding: 8px; text-align: left;">Assembly</th>' +
                 '<th style="padding: 8px; text-align: left;">Position</th>' +
-                '<th style="padding: 8px; text-align: left;">Last Active</th>' +
-                '<th style="padding: 8px; text-align: center;">Open</th>' +
+                '<th style="padding: 8px;"></th>' +
                 '</tr></thead><tbody>';
 
-        for (var i = 0; i < sessions.length; i++) {
-            var s = sessions[i];
-            var url = '../cgi-bin/hgTracks?hgsid=' + encodeURIComponent(s.hgsid);
+        for (var i = 0; i < sorted.length; i++) {
+            var s = sorted[i];
+            var sid = encodeURIComponent(s.hgsid);
+            var openUrl = '../cgi-bin/hgTracks?hgsid=' + sid;
+            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgsid=' + sid;
             html += '<tr style="border-bottom: 1px solid #ddd;">';
+            html += '<td style="padding: 8px;">' + this.describe(s) + '</td>';
             html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px; font-family: monospace;">' +
-                    htmlEncode(s.position || '(unknown)') + '</td>';
-            html += '<td style="padding: 8px;">' + this.formatTimestamp(s.timestamp) + '</td>';
-            html += '<td style="padding: 8px; text-align: center;">' +
-                    '<a href="' + url + '" target="_blank" ' +
-                    'style="color: #0000EE; text-decoration: underline;">Open</a></td>';
+            html += '<td style="padding: 8px;">' + htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px; white-space: nowrap;">' +
+                    '<a href="' + openUrl + '" target="_blank">Open</a> ' +
+                    '<a href="' + saveUrl + '" target="_blank" ' +
+                    'title="Open the Sessions page with this view, to save it under a name">' +
+                    'Save</a></td>';
             html += '</tr>';
         }
 
@@ -8896,15 +8942,16 @@ var sessionLoadDialog = {
     },
 
     show: function() {
-        if (typeof recentSessions === 'undefined' || recentSessions.length === 0) {
+        if (typeof recentSessions === 'undefined' || $('#sessionLoadDialog').length) {
             return;
         }
         var $dialog = $('<div id="sessionLoadDialog"></div>');
         $dialog.html(this.buildSessionList(recentSessions));
         $dialog.dialog({
-            title: 'Recover Your Previous Sessions',
-            width: 550,
-            modal: true,
+            title: 'Recent Browser Views',
+            width: 650,
+            modal: false,
+            resizable: false,
             buttons: {
                 'Close': function() {
                     $(this).dialog('close');
@@ -8917,7 +8964,9 @@ var sessionLoadDialog = {
     }
 };
 
-$(document).ready(function() {
+// The link in the note after a session load.  The note is added after page load.
+$(document).on('click', '#recentViewsLink', function(ev) {
+    ev.preventDefault();
     sessionLoadDialog.show();
 });
 

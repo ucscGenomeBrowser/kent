@@ -31,6 +31,7 @@ proof:
   - "server-flip 2026-09-30 -- failed on genome-test at step 4 (hashMustFindVal) before 35c5facfb9e reached it, passed on genome-test after make alpha the same day, every check ok"
   - "sandbox-ab 2026-09-30 -- passes on hgwdev-braney with the fix; fails on genome-test (master without it) at step 4, check 1, page contains hashMustFindVal"
   - "sandbox-ab 2026-09-30 -- hgwdev-braney rebuilt with the request test swapped for cartVarExists(): fails at step 7, check 2, page says may be shared; with only the doNewSession name read reverted: fails at step 9, check 3, hashMustFindVal; the real fix back in: passes"
+  - "sandbox-ab 2026-10-21 -- step 4 (db-less session in the classic list): passes on hgwdev-braney with the session lists calling cartContentsVal; fails on genome-test (master without it) at step 11, page does not contain Sharing Sessions"
 
 target: genome-test
 db: hg38
@@ -59,6 +60,17 @@ steps:
   - expect:
       text: ["Unable to save a session without a name"]
       noText: ["hashMustFindVal"]
+
+  # 4. Saved from an empty cart (ignoreCookie=1), so its contents have no db=.  The classic
+  #    session list read past the end of the string looking for one and the CGI segfaulted,
+  #    both on the Save confirmation page and on My Sessions, cutting the page off inside the
+  #    table.  "Sharing Sessions" is the section printed after the list.
+  - goto: "/cgi-bin/hgSession?ignoreCookie=1&hgS_doNewSession=1&hgS_newSessionName=rm38456"
+  - expect:
+      text: ["Overwrote the contents of session", "rm38456", "Sharing Sessions"]
+  - goto: "/cgi-bin/hgSession?sessionNewPage=0"
+  - expect:
+      text: ["rm38456", "Sharing Sessions"]
 
   # Clean up.
   - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38456"

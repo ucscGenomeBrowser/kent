@@ -16,6 +16,7 @@
 #include "bed.h"
 #include "basicBed.h"
 #include "htmlColor.h"
+#include "errCatch.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -4653,6 +4654,14 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		    }
 		innerLine(hvg, x1, midY1, w, color);
 		innerLine(hvg, x1, midY2, w, color);
+		char *other = startsWith("chain", tg->tdb->type) ? "other assembly" : "query";
+		char text[512];
+		safef(text, sizeof(text), "Double line, gap in both sequences: %d base%s in the "
+		      "genome and %d base%s in the %s lie between these two aligned blocks and "
+		      "do not align to each other. This is usually a region with many "
+		      "differences, but can also be an assembly or sequencing error.",
+		      tGap, (tGap == 1) ? "" : "s", qGap, (qGap == 1) ? "" : "s", other);
+		addAliMarkMouseOverPx(tg, lf, hvg, x1, y, max(w, 3), heightPer, text);
 		}
 	    }
 	if ((vis == tvFull || vis == tvPack) && (intronGap && (qGap == 0) && (tGap >= intronGap)))
@@ -4944,6 +4953,7 @@ static int barbMergePixels = -1;   // max pixel gap between blocks still merged 
 if (barbMergePixels < 0)           // barbs; hg.conf barbMergePixels, 0 disables merging
     barbMergePixels = atoi(cfgOptionDefault("barbMergePixels", "3"));
 Color barbColor = hvGfxContrastingColor(hvg, color);
+barbColor = baseColorMuteBarbColor(hvg, drawOpt, color, barbColor);
 int barbRunX1 = -1;
 int barbRunX2 = -1;
 
@@ -16192,41 +16202,72 @@ else if (startsWith("gtexGene", track->track) ||
          // a quickLifted GTEx track carries its hub's prefix, refs #38512
          quickLiftIsLiftedGtex(cart, track->tdb))
     gtexGeneMethods(track);
+else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+    // a quickLifted RepeatMasker Viz. track has avoidHandler on, so its name handler is
+    // skipped, refs #37437
+    rmskJoinedMethods(track);
 else if (startsWith("rnaStruct", track->track))
     rnaSecStrMethods(track);
 #endif /* GBROWSE */
+}
+
+static void compositeLoadSubtrack(struct track *track, struct track *subtrack)
+/* Load one subtrack of a composite, or settle that it is not going to be drawn.  Anything
+ * in here that errAborts is the one subtrack's fault, and the caller turns it into that
+ * subtrack's message. */
+{
+long thisTime = 0, lastTime = 0;
+if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
+    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
+if (isSubtrackVisible(subtrack) &&
+    ( limitedVisFromComposite(subtrack) != tvHide))
+    {
+    if (!subtrack->parallelLoading)
+	{
+	lastTime = clock1000();
+	checkIfWiggling(cart, subtrack);
+	subtrack->loadItems(subtrack);
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    subtrack->loadTime = thisTime - lastTime;
+	    lastTime = thisTime;
+	    }
+	}
+    }
+else
+    {
+    subtrack->limitedVis = tvHide;
+    subtrack->limitedVisSet = TRUE;
+    }
 }
 
 static void compositeLoad(struct track *track)
 /* Load all subtracks */
 {
 struct track *subtrack;
-long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
-        errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
-    if (isSubtrackVisible(subtrack) &&
-	( limitedVisFromComposite(subtrack) != tvHide))
+    /* Keep an errAbort to the subtrack that caused it.  The caller wraps this whole
+     * function, so without this one bad subtrack puts its message on the parent, which a
+     * composite never draws, and the subtracks after it are never loaded: the user gets an
+     * empty row with no explanation.  refs #38560 */
+    unsigned connMark = hConnMark();
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	compositeLoadSubtrack(track, subtrack);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
 	{
-	if (!subtrack->parallelLoading)
-	    {
-	    lastTime = clock1000();
-	    checkIfWiggling(cart, subtrack);
-	    subtrack->loadItems(subtrack);
-	    if (measureTiming)
-		{
-		thisTime = clock1000();
-		subtrack->loadTime = thisTime - lastTime;
-		lastTime = thisTime;
-		}
-	    }
+	subtrack->networkErrMsg = cloneString(errCatch->message->string);
+	/* A loader that aborts never reached its hFreeConn, and the connection cache holds
+	 * sixteen, so without this a handful of failing tracks fills it and every later
+	 * track reports "Too many open sqlConnections" instead of its own trouble.  refs
+	 * #38560 */
+	hConnReleaseSince(connMark);
 	}
-    else
-	{
-	subtrack->limitedVis = tvHide;
-	subtrack->limitedVisSet = TRUE;
-	}
+    errCatchReWarn(errCatch);   // errCatchStart took the warnings, hand them back
+    errCatchFree(&errCatch);
     }
 }
 

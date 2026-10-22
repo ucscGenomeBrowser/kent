@@ -449,7 +449,7 @@ if (res)
 hDisconnectCentral(&conn);
 
 #ifdef NTONOW
-if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", FALSE))
+if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", TRUE))
     {
     if (genarkUrl(database) != NULL)
         res = TRUE;
@@ -872,6 +872,21 @@ void hFreeConn(struct sqlConnection **pConn)
 {
 if (*pConn != NULL)  // don't use hdbCc if never allocated
     sqlConnCacheDealloc(hdbCc, pConn);
+}
+
+unsigned hConnMark()
+/* The number of connections handed out so far, to pass to hConnReleaseSince. */
+{
+return sqlConnCacheMark();
+}
+
+void hConnReleaseSince(unsigned mark)
+/* Put back every connection handed out since the mark.  Call it after catching an
+ * errAbort: the hFreeConn that the code which asked for the connection would have made
+ * never ran, and the cache holds only 16 connections, so a page with a few failing tracks
+ * fills it and every later hAllocConn fails with "Too many open sqlConnections". */
+{
+sqlConnCacheReleaseSince(hdbCc, mark);
 }
 
 static void hCentralMkCache()
@@ -5184,7 +5199,7 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
+if (cfgOptionBooleanDefault("genarkLiftOver", TRUE) && (genarkAccs != NULL))
     {
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
@@ -5244,7 +5259,7 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
+if (cfgOptionBooleanDefault("genarkLiftOver", TRUE) && (genarkAccs != NULL))
     {
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);

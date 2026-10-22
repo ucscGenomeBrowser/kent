@@ -1009,22 +1009,38 @@ function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
 
 function notifBoxOnce(msg, id) {
 /* Show a notification that is meant for this page only, e.g. to say what just happened.
- * Unlike notifBoxSetup() it does not use localStorage, so it has no "Don't show again"
- * button: the message is gone on the next page anyway. */
+ * The message is gone on the next page anyway, but it can come back on a later page
+ * (the next session load), so "Don't show again" keeps it away for good in this web browser. */
     let boxId = id + "notifBoxOnce";
+    let lsKey = "notifBoxOnce_" + id;
     if (document.getElementById(boxId))
         return;
+    try {
+        if (localStorage.getItem(lsKey))
+            return;
+    } catch (e) {
+        // no localStorage, e.g. blocked site data: show the note
+    }
     let box = document.createElement("div");
     box.className = "notifBox notifBoxOnce";
     box.id = boxId;
     box.innerHTML = msg +
-        "<div style='text-align: center'><button id='" + id + "notifyOnceHide'>Close</button></div>";
+        "<div style='text-align: center'><button id='" + id + "notifyOnceHide'>Close</button>&nbsp;" +
+        "<button id='" + id + "notifyOnceHideForever'>Don't show again</button></div>";
     let parentEl = document.getElementById('TrackHeaderForm');
     if (!parentEl)
         parentEl = document.body;
     parentEl.appendChild(box);
     $("#" + id + "notifyOnceHide").click(function() {
         $("#" + boxId).remove();
+    });
+    $("#" + id + "notifyOnceHideForever").click(function() {
+        $("#" + boxId).remove();
+        try {
+            localStorage.setItem(lsKey, "1");
+        } catch (e) {
+            // nothing to remember it in, the note is closed for this page only
+        }
     });
 }
 
@@ -2290,13 +2306,22 @@ function calculateHgTracksWidth()
     return $(window).width() - 20;
 }
 
-function addPixAndReloadPage()
+function addPixAndReloadPage(hgsid, dropVars)
 /* users who do not come in from hgGateway have no pix variable in the URL nor the cart.
  * This is a rare case, and the solution is brute force: if it happens, set pix, then reload the entire page.
- * This will only happen once to these users, as afterwards the cookie is set. */
+ * This will only happen once to these users, as afterwards the cookie is set.
+ * If dropVars is given, take those variables out of the URL and add hgsid, e.g. so a URL that
+ * loaded a session does not load it a second time. */
 {
     var winWidth = calculateHgTracksWidth();
     var myUrl = window.location.href;
+    if (dropVars) {
+        var url = new URL(myUrl);
+        for (var i = 0; i < dropVars.length; i++)
+            url.searchParams.delete(dropVars[i]);
+        url.searchParams.set("hgsid", hgsid);
+        myUrl = url.toString();
+    }
     var sep = '?';
     if (myUrl.indexOf('?')!==-1)
         sep = '&';

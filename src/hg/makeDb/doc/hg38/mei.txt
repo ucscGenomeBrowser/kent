@@ -339,3 +339,23 @@ ln -s /hive/data/genomes/hg19/bed/mei/eul1db/eul1dbRef.hg19.bb /gbdb/hg19/mei/eu
 # blocked hgTables and the REST API (verified: the API returns HTTP 403
 # "protected data"), but without the prefix the bigBed itself would have
 # been mirrored to hgdownload. mei.ra was updated to match.
+
+############################################################
+# 2026-10-16 Lou - regenerated the stale bed intermediates (refs #37524)
+
+# The 2026-09-21 fixes above were built from copies of the bed under
+# /hive/users/lrnassar, so the bed files in the build directories were
+# left at their May dates and no longer matched what /gbdb served: hg38
+# and hs1 meiHgsvc3.{bed,sorted.bed} predated the insertSeq fix, and
+# eul1db.hg19.{bed,sorted.bed} plus both eul1db.hg38 copies predated the
+# sample-join fix (their sampleTable still printed row numbers such as
+# 159 in place of COLO2N). Rerunning the converter, sort and liftOver
+# commands from the meiHgsvc3 and euL1db sections at the top of this file
+# reproduces every served bigBed byte for byte, so the build directories
+# now hold that output instead.
+# eul1dbRef, deepmei, hmeid and swegen were never affected; their beds
+# already matched.
+#
+# To check an on-disk bed against what is served:
+#   bigBedToBed /gbdb/$db/mei/<file>.bb stdout | cmp - <file>.sorted.bed
+# caught by QA review of d22fdb6516f

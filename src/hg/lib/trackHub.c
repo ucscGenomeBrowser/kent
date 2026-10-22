@@ -1143,6 +1143,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	 if (parent == NULL)
 	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,
 		tdb->track, hub->url, genome->name);
+	 /* Refuse the link that closes a loop in the parent chain.  validateOneTrack runs
+	  * before trackDbLinkUpGenerations and its loop check, and trackDbSetting walks
+	  * this chain to the top, so a loop here spins the CGI forever rather than
+	  * reporting the bad setting.  The links already made are loop-free, which is what
+	  * ends this walk.  refs #38471 */
+	 struct trackDb *ancestor;
+	 for (ancestor = parent; ancestor != NULL; ancestor = ancestor->parent)
+	    {
+	    if (ancestor == tdb)
+	       errAbort("Track %s is its own ancestor through its parent %s in hub %s "
+		   "genome %s", tdb->track, parentName, hub->url, genome->name);
+	    }
 	 // mark the parent as a container
 	 parent->subtracks = tdb;
 
@@ -1224,7 +1236,7 @@ if (!isEmpty(hub->name))
 
 if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
-else if ((genome->groups != NULL) && hubsCanAddGroups())
+else if (genome->groups != NULL)
     tdbListAddHubToGroup(hub->name, tdbList);
 else
     trackHubAddGroupName(hub->name, tdbList);
@@ -1835,6 +1847,7 @@ if (!inited)
 
     for(ii = 0; ii < len; ii++)
         hashStore(vettedHash, vettedTracks[ii]);
+    inited = TRUE;
     }
 
 return hashLookup(vettedHash, track) != NULL;
@@ -2013,6 +2026,8 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        (startsWithNoCase("bigBarChart", tdb->type) && quickLiftBarChartEnabled(cart)) || \
        ((sameWord("wig", tdb->type) || startsWithNoCase("wig ", tdb->type)) &&
         quickLiftWigEnabled(cart)) ||
+       ((sameWord("rmsk", tdb->type) || startsWithNoCase("bigRmsk", tdb->type)) &&
+        quickLiftRmskEnabled(cart)) ||
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {
@@ -2028,6 +2043,7 @@ if (startsWithNoCase("bigBed", tdb->type) || \
        startsWithNoCase("bigChain", tdb->type) || \
        startsWithNoCase("bigMaf", tdb->type) || \
        startsWithNoCase("bigBarChart", tdb->type) || \
+       (startsWithNoCase("bigRmsk", tdb->type) && quickLiftRmskEnabled(cart)) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
@@ -2051,27 +2067,27 @@ struct trackDb *validTdbs = NULL;
 struct trackDb *nextTdb;
 unsigned count = 0;
 
-if (tdb->subtracks)  // this is a view, descend again
+/* Decide view or subtrack for each child, not from the first one.  A view with no
+ * subtracks is marked as a subtrack when the tree is linked up, so it is known by its
+ * own view setting, and it is dropped:  it has nothing to lift.  refs #38591 */
+for(; tdb; tdb = nextTdb)
     {
-    struct trackDb *view = tdb;
-    for (; view; view = nextTdb)
+    nextTdb = tdb->next;
+    if ((tdb->subtracks != NULL) || (trackDbLocalSetting(tdb, "view") != NULL))
         {
-        nextTdb = view->next;
-        view->subtracks = validateTdbChildren(cart, db,view->subtracks, badList);
+        // this is a view, descend again
+        if (tdb->subtracks != NULL)
+            tdb->subtracks = validateTdbChildren(cart, db, tdb->subtracks, badList);
 
-        if (view->subtracks != NULL)
+        if (tdb->subtracks != NULL)
             {
-            slAddHead(&validTdbs, view);
-            if (view->visibility)
+            slAddHead(&validTdbs, tdb);
+            if (tdb->visibility)
                 count++;
             }
         }
-    }
-else
-    {
-    for(; tdb; tdb = nextTdb)
+    else
         {
-        nextTdb = tdb->next;
         boolean visible = isParentVisible(cart, tdb) && isSubtrackVisible(cart, tdb);
         // Lift all siblings of a visible subtrack, but only complain about
         // non-liftable ones the user actually asked for (visible ones).

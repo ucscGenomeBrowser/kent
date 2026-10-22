@@ -1368,8 +1368,10 @@
   level: full
   required: false
   summary: This setting is a list of labels for the categorical variables (bars).
-  description: This setting is a list of labels for the categorical variables (bars). It is required for
-    this track type.
+  description: 'This setting is a list of labels for the categorical variables (bars). It is required
+    for this track type. The labels are positional: the first label names the first value in the expScores
+    field of the data file, the second names the second, and so on. See Setting the order of the bars
+    for how to change the order the bars are drawn in.'
   format: barChartBars <label1 label2...>
   examples: []
 - name: barChartColors
@@ -2170,6 +2172,7 @@
   - bigBed
   - broadPeak
   - psl
+  - vcfTabix
   roles:
   - leaf
   category: bigBed - Item or Region Track Settings
@@ -2181,6 +2184,11 @@
     maximum is exceeded, the track switches to coverage mode. Default: 1000. For type bigBed tracks, this
     setting can never be larger than the hg.conf setting bigBedMaxItems, which by default is 100,000 at
     UCSC.
+
+    For type vcfTabix tracks, maxItems is the maximum number of VCF records loaded for the current window.
+    If the window holds more, the track asks the user to zoom in. Without this setting, the limit is the
+    hg.conf setting vcfMaxItems, 10,000 by default. Raising it lets the haplotype display of a large genotype
+    VCF be viewed in larger windows, but drawing becomes slow with many samples.
 
     bigBedMaxItems is configured globally for a Genome Browser server and sets an upper limit on how many
     features can be loaded at most from a bigBed file, to avoid a single track making a Genome Browser
@@ -2351,6 +2359,57 @@
   format: style <heatmap>
   examples:
   - style heatmap
+- name: dotBracketField
+  types:
+  - bigBed
+  roles:
+  - leaf
+  category: bigBed - Item or Region Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: Draws an RNA secondary structure over each item, taken from an extra bigBed field holding a
+    dot-bracket string.
+  description: 'Draws an RNA secondary structure over each item, taken from an extra bigBed field holding
+    a dot-bracket string. A matched pair of bases is written as a pair of brackets, ( and ) , and an unpaired
+    base as a period, which is drawn as a small centered square rather than as a period on the baseline.
+    The pseudoknot brackets [] , {} and <> may be used as well.
+
+    The column is found by name, so the bigBed has to have been built with an autoSql file ( bedToBigBed
+    -as= ), and the column has to come after the first four columns of the file.
+
+    The string covers the spliced item, one character for each base of the blocks, so its length has to
+    equal the sum of the block sizes, or the length of the item when it has no blocks. Write it in the
+    direction the RNA is read, so for an item on the minus strand the first character describes the rightmost
+    base. Where there is no prediction, pad with spaces, which draw nothing; this means the file must
+    be made with bedToBigBed -tab , since a field holding spaces cannot be split on whitespace. The checkDotBracketBigBed
+    utility reads a finished file and reports any string that does not match the blocks of its item, any
+    character that is not part of the notation, and any brackets that do not balance.
+
+    The structure is drawn whenever a base is wide enough to hold one character, which reaches well beyond
+    the zoom at which the sequence itself appears. At wider views, and in dense and squish, where a row
+    is too short for a character, the item is drawn as an ordinary bed. So is every item when the checkbox
+    on the track configuration page, which starts on, is turned off. A row whose string does not match
+    its blocks is reported on the track in place of its data.'
+  format: dotBracketField <fieldName>
+  examples:
+  - dotBracketField secStr
+- name: dotBracketColor
+  types:
+  - bigBed
+  roles:
+  - leaf
+  category: bigBed - Item or Region Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: The color to draw the secondary structure in, on a track that has dotBracketField set.
+  description: The color to draw the secondary structure in, on a track that has dotBracketField set.
+    Written as three numbers from 0 to 255, the same way color is written. Without this setting the structure
+    is drawn in whichever of black or white stands out against the item.
+  format: dotBracketColor <red,green,blue>
+  examples:
+  - dotBracketColor 240,228,66
 - name: thickDrawItem
   types:
   - bed
@@ -2427,7 +2486,15 @@
     manually, but even when that is on, a track display can quickly become unintelligible if the window
     displayed is too large - there will simply be too many track items and too many decoration labels
     to process visually. maxLabelBases sets a maximum window size (in bases) for which labels will be
-    drawn. If not set, the value will default to 200kb.'
+    drawn. If not set, the value will default to 200kb. In larger windows, glyphs are also drawn as 1
+    pixel wide lines, except for the BarLeft/BarRight and ArrLeft/ArrRight glyphs, which already get narrower
+    when zooming out.
+
+    The glyph of each decoration is set in the decorator bigBed file. Besides shapes like Circle or Star,
+    which are drawn at the center of the decoration, the BarLeft/BarRight and ArrLeft/ArrRight glyphs
+    mark the left or right end of a decorated item, e.g. a breakpoint, with a band or an arrow and a bar.
+    The arrow points in the direction of the decoration''s strand. See the Track Decorators help page
+    for the list of glyphs.'
   format: decorator.default.*
   examples: []
 - name: searchIndex
@@ -4918,6 +4985,24 @@
     AC field of the INFO column. Variants whose INFO has no usable AC are always displayed. By default
     this is 0 (i.e. display all variants).
   format: minAc < N >
+  examples: []
+- name: excludeFilterValues
+  types:
+  - vcf
+  - vcfTabix
+  - vcfPhasedTrio
+  roles:
+  - leaf
+  category: vcfTabix - Variant Call Format Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: A comma-separated list of values of the VCF FILTER column.
+  description: A comma-separated list of values of the VCF FILTER column. Variants with any of these values
+    are hidden by default. The values must be defined in the VCF header; they are shown pre-checked in
+    the "Exclude variants with these FILTER values" list on the track configuration page, where the user
+    can uncheck them. By default nothing is excluded.
+  format: excludeFilterValues < value1,value2,... >
   examples: []
 - name: vcfDoFilter
   types:

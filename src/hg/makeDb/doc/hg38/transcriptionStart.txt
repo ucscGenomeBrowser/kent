@@ -3,7 +3,7 @@ Thu Sep 17 2026 (Claude/markd)
 
 # Layout: a transcriptionStart superTrack holding one traditional composite per
 # data source, each composite holding one multiWig overlay per cell line and the
-# two strands as the overlay's leaves.  One .ra file per top-level track.
+# two strands as the overlay's leaves, all in transcriptionStart.ra.
 #
 # Under a composite an overlay gets no configuration block of its own, and
 # deselecting both strands of a cell line leaves an empty row where the overlay
@@ -14,7 +14,12 @@ Thu Sep 17 2026 (Claude/markd)
 # and needed the superTrack-in-superTrack fix of #38460 to nest in
 # transcriptionStart.  It was reverted.
 #
-# The whole set is alpha until #38441 is fixed, tagged on the include lines.
+# The composite set is alpha until #38441 is fixed.  Beta and public keep the
+# shape that is already released: encode4ProCap and proCapNet as top-level
+# superTracks holding the overlays, with no transcriptionStart container, which
+# needs no hgTrackUi change.  The script writes one file per shape and the
+# include lines in trackDb.ra choose between them, so there are no per-stanza
+# release tags to keep in step.
 
 # Scripts are in ~/kent/src/hg/makeDb/outside/proCapNet.  The cell lines, their
 # ENCODE accessions and their colors are in proCapNetExperiments.tsv there.
@@ -170,12 +175,12 @@ cd ~/kent/src/hg/makeDb/outside/proCapNet
 ./proCapNetTrackDb hg38 proCapNetExperiments.tsv \
     ~/kent/src/hg/makeDb/trackDb/human/hg38
 
-# That writes transcriptionStart.ra, encode4ProCap.ra and proCapNet.ra, one per
-# top-level track.  The include lines in human/hg38/trackDb.ra are added by
-# hand:
+# That writes two files, one per shape: transcriptionStart.ra is the container
+# with both composites inside it, transcriptionStartPublic.ra is the released
+# shape.  The include lines in human/hg38/trackDb.ra are added by hand and are
+# what picks one shape per release:
 #   include transcriptionStart.ra alpha
-#   include encode4ProCap.ra alpha
-#   include proCapNet.ra alpha
+#   include transcriptionStartPublic.ra beta,public
 
 ##############################################################################
 # cleanup

@@ -3,7 +3,7 @@ include ../../../../inc/common.mk
 
 hubCheck = ${DESTBINDIR}/hubCheck
 
-test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent dotInName fieldCountMismatch fieldCountTooFew relPath missingFile
+test:: one two errors supertrackChild genomesErrors badType badSubgroups autoScale noLongLabel badGroups goodGroups noCompositeGroup allowWarnings seqNameCheck noSeqNameCheck selfParent parentLoop superParentLoop dotInName fieldCountMismatch fieldCountTooFew relPath missingFile
 
 one:	mkout
 	-${hubCheck} input/hub1.txt > output/output1.txt
@@ -68,6 +68,16 @@ noSeqNameCheck: mkout
 selfParent: mkout
 	-${hubCheck} input/selfParent.txt > output/selfParent.output.txt 2>/dev/null
 	diff expected/selfParent.output.txt output/selfParent.output.txt
+
+# A loop of two tracks naming each other as parent.  Before refs #38471 this did not
+# report anything: hubCheck and the CGIs walked the loop forever.
+parentLoop: mkout
+	-${hubCheck} input/parentLoop.txt > output/parentLoop.output.txt 2>/dev/null
+	diff expected/parentLoop.output.txt output/parentLoop.output.txt
+
+superParentLoop: mkout
+	-${hubCheck} input/superParentLoop.txt > output/superParentLoop.output.txt 2>/dev/null
+	diff expected/superParentLoop.output.txt output/superParentLoop.output.txt
 
 dotInName: mkout
 	-${hubCheck} input/dotInName.txt > output/dotInName.output.txt 2>/dev/null

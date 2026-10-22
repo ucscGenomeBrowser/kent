@@ -1523,6 +1523,7 @@ void setRulerMode();
 #define configShowAllGroups "hgt_doConfigShowAllGroups"
 #define configHideEncodeGroups "hgt_doConfigHideEncodeGroups"
 #define configShowEncodeGroups "hgt_doConfigShowEncodeGroups"
+#define configFreeTypeReset "hgt_doFreeTypeTuneReset"
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
 #define hgtJsCommand "hgt_doJsCommand"
@@ -1545,6 +1546,13 @@ void makeActiveImage(struct track *trackList, char *psOutput);
 
 void configPage();
 /* Put up configuration page. */
+
+boolean freeTypeTuneUiOn();
+/* Is the FreeType tuning section switched on?  It is a debugging aid, off everywhere
+ * until someone puts freeTypeTuneUI=on in hg.conf. */
+
+void freeTypeTuneResetCart();
+/* Drop the FreeType tuning variables, returning the rendering to the stock settings. */
 
 void configPageSetTrackVis(int vis);
 /* Do config page after setting track visibility. If vis is -2, then visibility
@@ -1909,6 +1917,9 @@ char *disguisePositionVirtSingleChrom(char *position); // DISGUISE VMODE
 
 struct bbiFile *fetchBbiForTrack(struct track *track);
 /* Fetch bbiFile from track, opening it if it is not already open. */
+
+char *restField(struct bigBedInterval *bb, int fieldIdx);
+/* return a given field from the bb->rest field, NULL on error */
 
 void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
                             double scale, Color color, enum trackVisibility vis);

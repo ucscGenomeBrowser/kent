@@ -49,30 +49,8 @@ def scoreOf(row):
     return None if value != value else value     # NaN
 
 
-def proteinTermText(pl):
-    """p. term on the reference protein, e.g. p.Gly290Ala, p.Gly290=, p.Gly290del."""
-    wt3 = mp.ONE_TO_THREE[pl.wt]
-    if pl.alt == '=':
-        return 'p.%s%d=' % (wt3, pl.protPos)
-    if pl.alt == '-':
-        return 'p.%s%ddel' % (wt3, pl.protPos)
-    return 'p.%s%d%s' % (wt3, pl.protPos, mp.ONE_TO_THREE[pl.alt])
-
-
 def cellLabel(text):
     return CELL_UNSAFE.sub(' ', text)
-
-
-def codonRuns(codon):
-    """Contiguous runs of a codon's genomic bases, as [(start0, end)] in genome order."""
-    bases = sorted(codon)
-    runs = [[bases[0], bases[0] + 1]]
-    for b in bases[1:]:
-        if b == runs[-1][1]:
-            runs[-1][1] = b + 1
-        else:
-            runs.append([b, b + 1])
-    return [tuple(r) for r in runs]
 
 
 class Grid(object):
@@ -167,7 +145,7 @@ def proteinGrids(placements):
             grid.placedByUcsc = 0
             grid.constructs = set()
         key = (pl.prot, pl.protPos)
-        if not grid.addColumn(codonRuns(pl.codon), key):
+        if not grid.addColumn(mp.codonRuns(pl.codon), key):
             skipped['overlappingColumn'] += 1
             continue
         grid.prots[pl.prot] += 1
@@ -175,7 +153,7 @@ def proteinGrids(placements):
         if row is None:
             skipped['row:' + pl.alt] += 1
             continue
-        label = '%s %s: %s' % (variantNumber(pl.row), proteinTermText(pl), '%.4f' % score)
+        label = '%s %s: %s' % (variantNumber(pl.row), mp.proteinTermText(pl), '%.4f' % score)
         if pl.label != mp.PLACED_MAVEDB:
             label += ' (UCSC placement)'
             grid.placedByUcsc += 1

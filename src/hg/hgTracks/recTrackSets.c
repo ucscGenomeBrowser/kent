@@ -191,35 +191,16 @@ hPrintf("<ul class='indent'>");
 for (recTrackSet = recTrackSets; recTrackSet != NULL; recTrackSet = recTrackSet->next)
     {
 // TODO: consider libifying hgSession.c:add/getSessionLink() and using that
-    boolean mergeSession = cfgOptionBooleanDefault("mergeRecommended", TRUE);
-
-    if (mergeSession)
 #define rtsLoadSessionName  "rtsLoad"
-        hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
-                    hgsOtherUserName "=%s"
-                    "&" rtsLoadSessionName "=%s"
-                    "&hgsid=%s"
-                    "&position="        // JS fills in position
-                    "'>" 
-                "%s</a>: <small>%s</small></li>",
-                    recTrackSet->userName, recTrackSet->sessionName, cartSessionId(cart),
-                    recTrackSet->label, recTrackSet->description);
-    else
-        hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
-                    // preserve these user settings 
-                    "pix=%d&textSize=%s&textFont=%s&hgt.labelWidth=%d"
-                    "&" hgsOtherUserName "=%s"
-                    "&" hgsOtherUserSessionName "=%s"
-                    "&" hgsOtherUserSessionLabel "=%s"
-                    "&hgS_otherUserSessionDesc=%s"
-                    "&" hgsDoOtherUser "=submit"
-                    "&position="        // JS fills in position
-                    "'>" 
-                "%s</a>: <small>%s</small></li>",
-                    tl.picWidth, tl.textSize, tl.textFont, tl.leftLabelWidthChars,
-                    recTrackSet->userName, recTrackSet->sessionName, 
-                    recTrackSet->label, recTrackSet->description,
-                    recTrackSet->label, recTrackSet->description);
+    hPrintf("<li><a class='recTrackSetLink' href='./hgTracks?"
+                hgsOtherUserName "=%s"
+                "&" rtsLoadSessionName "=%s"
+                "&hgsid=%s"
+                "&position="        // JS fills in position
+                "'>" 
+            "%s</a>: <small>%s</small></li>",
+                recTrackSet->userName, recTrackSet->sessionName, cartSessionId(cart),
+                recTrackSet->label, recTrackSet->description);
     }
 hPrintf("</ul>");
 

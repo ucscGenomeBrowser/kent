@@ -329,15 +329,12 @@ RELEASE_GATES = {
                "server-specific, since off they are.  Off during QA; "
                "flip to TRUE once released."),
         h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c",
-          default="FALSE", role="gate", verified=True, ticket="32751",
+          default="TRUE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
-               "page can be reopened and shared.  The read at hgBlat.c:2972 "
-               "overrides the file-scope autoBigPsl, which is initialised "
-               "FALSE at hgBlat.c:60 under the comment \"DEFAULT VALUE change "
-               "to TRUE in future\", and eleven branches downstream test it.  "
-               "Filed as a knob until that was read, on the strength of the "
-               "default being an identifier the harvester could not resolve; "
-               "a flag whose own source says to flip it later is a gate."),
+               "page can be reopened and shared.  The read in main() "
+               "overrides the file-scope autoBigPsl, now initialised TRUE, "
+               "and about a dozen branches downstream test it.  On at the "
+               "RR through hg.conf before the default was flipped TRUE."),
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
@@ -374,10 +371,11 @@ RELEASE_GATES = {
                "(synthesizes the group) and customFactory.c (refuses a "
                "hand-written group=blat when the group does not exist).  Off "
                "during QA; flip to TRUE once released."),
-        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="FALSE",
+        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="TRUE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
-               "genark.c and hdb.c."),
+               "genark.c and hdb.c, one of them under #ifdef NTONOW.  On at "
+               "the RR through hg.conf before the default was flipped TRUE."),
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
@@ -530,6 +528,25 @@ RELEASE_GATES = {
                "written while it was on draws nothing with it off, rather than "
                "this assembly's table of the same name.  A cart variable of "
                "the same name overrides it, like browser.quickLiftBarChart."),
+        h("browser.quickLiftRmsk", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="37437",
+          note="Let quickLift lift RepeatMasker tracks:  rmsk tables, "
+               "RepeatMasker Viz. (rmskJoined) tables and bigRmsk files, "
+               "reading the items from the assembly they came from and "
+               "drawing each one where the chain puts it.  Read in "
+               "quickLiftRmskEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which lets rmsk and bigRmsk tracks into "
+               "the quickLift hub, by quickLiftIsLiftedRmskJoined(), which "
+               "gives a lifted Viz. track its own drawing in hgTracks, by "
+               "repeatDraw() (hgTracks/rmskTrack.c), bigRmskLoadItems() "
+               "(hgTracks/bigRmskTrack.c), and by the hgc click dispatch, "
+               "which sends a click on a lifted RepeatMasker track to a page "
+               "reading the item through the chain.  Off, rmsk and bigRmsk "
+               "tracks are left out of a quickLift and a lifted Viz. track "
+               "draws as a plain bed, all as before;  a lifted rmsk or bigRmsk "
+               "left in a hub written while it was on draws nothing rather "
+               "than this assembly's data.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftBarChart."),
         h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
           default="FALSE", role="gate", verified=True, ticket="38285",
           note="Pulls the MANE Select/Plus Clinical transcript out into its "
@@ -573,24 +590,9 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="The interactive tutorials.  Public since v466, five call "
                "sites across four CGIs.  Nothing is gating any more."),
-        h("canDupTracks", "flag", "hg/lib/dupTrack.c", default="TRUE",
-          role="gate", verified=True,
-          note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c", default="TRUE", role="gate",
-          verified=True,
-          note="Snake display for chain and alignment tracks.  Public since "
-               "v467."),
         h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
-        h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c",
-          default="TRUE", role="gate", verified=True,
-          note="Merge behaviour for recommended track sets.  Public since "
-               "v467."),
-        h("svgBarChart", "flag", "hg/hgc/barChartClick.c", default="TRUE",
-          role="gate", verified=True,
-          note="SVG rather than raster bar charts on the details page.  "
-               "Public since v428, the longest-shipped gate still in place."),
         h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
@@ -599,9 +601,6 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
-        h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c",
-          default="TRUE", role="gate", verified=True,
-          note="Let hubs declare their own track groups.  Public since v492."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
@@ -610,9 +609,6 @@ RELEASE_GATES = {
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c", default="TRUE",
-          role="gate", verified=True,
-          note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c", default="TRUE",
           role="gate", verified=True,
           note="Honour a BED's itemRgb without requiring the track setting.  "
@@ -719,6 +715,61 @@ RELEASE_GATES = {
                "is on and the view is not multi-region.  Off, a multiWig "
                "shows only its track name on hover, as before.  Added off "
                "for v505; hgwdev's hg.conf turns it on."),
+        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
+          role="gate", verified=True, ticket="38510",
+          note="Lift an item through every chain it overlaps, rather than "
+               "only the best one, so a feature that crosses a break in the "
+               "alignment is drawn in each place it lands.  Read once, in "
+               "quickLiftMultiChainEnabled(), and asked by the loaders in "
+               "hg/lib/quickLift.c, by gtexTracks.c, and by hgc.c and "
+               "gtexClick.c for the details page.  Off, each item goes "
+               "through the one best chain, as before.  Sibling of "
+               "quickLiftSplitRanges; the four on/off pairs of the two are "
+               "the hg.conf inputs of the quickLift unit test in "
+               "hg/lib/tests.  hgwdev's hg.conf turns it on."),
+        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38510",
+          note="Cut each chain's source range at large gaps, merge the "
+               "ranges where they overlap, and read an item only once when "
+               "it crosses from one range into the next.  Read once, in "
+               "quickLiftSplitRangesEnabled(), and asked by the loaders in "
+               "hg/lib/quickLift.c and by hgTracks/wigMafTrack.c.  Off, each "
+               "chain's whole source range is read in one piece, as before.  "
+               "Sibling of quickLiftMultiChain.  hgwdev's hg.conf turns it "
+               "on."),
+        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38490",
+          note="Let quickLift lift bigBarChart tracks.  Read in "
+               "quickLiftBarChartEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which decides what track types go into "
+               "a quickLift hub.  Off, bigBarChart tracks are left out of a "
+               "quickLift, as before.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftAlignments.  hgwdev's "
+               "hg.conf turns it on."),
+        h("mouseoverParentLabels", "flag", "hg/hgTracks/simpleTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38527",
+          note="Start the drawn long label of a track, and its side label, "
+               "button and center label mouseovers, with the shortLabels of "
+               "the containers it sits in, e.g. \"Transcription Initiation "
+               "(TSS) > PRO-cap > A673 PRO-cap\", so a user can see where to "
+               "find a subtrack in the track list.  Composite views are "
+               "skipped.  Read once, in labelWithParents(), which imageV2.c, "
+               "simpleTracks.c and hgTracks.c call for each label.  Off, "
+               "labels are the track's own, as before.  Not set in hgwdev's "
+               "hg.conf."),
+        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
+          role="gate", verified=True, ticket="35736",
+          note="Keep a list of the sessions a user has opened recently, and "
+               "offer the others in a dialog after a session load.  Read in "
+               "cartRecentSessionsEnabled() and asked by cartNew() "
+               "(hg/lib/cart.c), which keeps the list in the cart variable "
+               "recentSessions for a user with an hguid row, and by "
+               "outputRecentSessionsData() (hgTracks.c), which writes the "
+               "dialog's data after a load.  The list lives only in userDb: "
+               "the cart excludes it and saveState writes it by hand, so it "
+               "never enters a saved session.  Off, nothing is recorded and "
+               "no dialog is offered.  Commented out of hgwdev's hg.conf "
+               "as of 2026-10-17."),
     ],
 }
 
@@ -951,7 +1002,7 @@ MIRROR_KNOBS = {
                "exact value turns it on and true, 1 and yes do not, unlike "
                "every flag read through cfgOptionBooleanDefault."),
         h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="knob", public=True, verified=True,
+          default="FALSE", role="gate", public=True, verified=True,
           ticket="38157",
           note="Whether hgTracks shows the note that names the session just "
                "opened and its owner, and says the browser configuration the "
@@ -1501,13 +1552,13 @@ BRANDING = {
         h("geneTracks", "internal", "hg/lib/hgFind.c", verified=True),
         h("browser.recTrackSets", "internal", "hg/hgTracks/recTrackSets.c",
           verified=True, family="recTrackSets",
-          note="Recommended track sets.  Goes with the mergeRecommended "
-               "gate."),
+          note="Recommended track sets.  Loading one merges it into the "
+               "current cart."),
         h("browser.recTrackSetsDetectChange", "internal",
           "hg/hgTracks/recTrackSets.c", verified=True,
           family="recTrackSets",
-          note="Drives the 'session changed' banner.  The mergeRecommended "
-               "gate belongs to the same feature."),
+          note="Drives the 'session changed' banner shown after a "
+               "recommended track set is loaded."),
         h("browser.exportedDataHubs", "internal",
           "hg/lib/exportedDataHubs.c", verified=True),
         h("browser.cgiExpireMinutes", "limit",
@@ -1847,50 +1898,38 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("mouseoverParentLabels", "flag", "hg/hgTracks/simpleTracks.c",
-          default="FALSE", ticket="38527",
+        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
+          ticket="38562",
           note="Written down by --auto-register, not yet reviewed by a "
                "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/simpleTracks.c.  Came in at 31a1ceab960, "
-               "hgTracks: new hg.conf setting mouseoverParentLabels, off by "
-               "default.  When on, the drawn long label of a track and its "
-               "mouseovers (side label, button, center label) start with the "
-               "shortLabels of the containers the track sits in, e.g. "
-               "\"Transcription Initiation (TSS) > PRO-cap > A673 PRO-cap\", so "
-               "users can see where to find a subtrack in the track list. "
-               "Composite views are skipped.  refs #38527.  Needs a "
-               "description and a gate or knob call."),
-        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
-          ticket="38510",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
-               "an item through every chain it overlaps, behind two hg.conf "
-               "gates, refs #38510.  Needs a description and a gate or knob "
-               "call."),
-        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
-          default="FALSE", ticket="38510",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at efdd8825cf7, quickLift: lift "
-               "an item through every chain it overlaps, behind two hg.conf "
-               "gates, refs #38510.  Needs a description and a gate or knob "
-               "call."),
-        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
-          ticket="35736",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in hg/lib/cart.c. "
-               "Came in at 6e201f9c97f, Offer a dialog of previously used "
-               "hgsids when opening a session, if any exist for your hguid, "
-               "refs #35736,#30031.  Needs a description and a gate or knob "
-               "call."),
-        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
-          default="FALSE", ticket="38490",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/lib/quickLift.c.  Came in at b50e4cb498f, quickLift: lift "
-               "bigBarChart tracks, behind browser.quickLiftBarChart, refs "
-               "#38490.  Needs a description and a gate or knob call."),
+               "hg/hgTracks/config.c.  Came in at 05d90ce7ada, hgTracks: a "
+               "block of controls on the configure page for the FreeType "
+               "rendering itself, behind hg.conf freeTypeTuneUI, so the "
+               "settings that decide whether small text is readable can be "
+               "found by looking at the browser rather than at a demo "
+               "program.  The controls are the pixel size and baseline picked "
+               "for each text size, a gamma on each glyph pixel's coverage, "
+               "the multiplier used for text drawn to fit a box, the hinting "
+               "mode, and the anti-aliasing target, which now offers Light, "
+               "Light sub pixel and the four LCD sub-pixel targets beside the "
+               "Normal one the browser has always used; a Reset FreeType "
+               "button puts them all back.  Every control starts at what the "
+               "browser draws today and the cart is read only while the "
+               "hg.conf setting is on, so a server without it draws exactly "
+               "what it drew before: checked by rendering the same images "
+               "from this build and from a build of the same tree without the "
+               "change, with the setting absent and the cart carrying a value "
+               "for every control, and comparing them byte for byte.  Two "
+               "things had to be fixed before the knobs meant anything.  The "
+               "glyph copy assumed FreeType had packed the coverage rows when "
+               "it pads each one out to pitch, which is the same for every "
+               "glyph the browser draws today but would have skewed an LCD "
+               "render.  Subpixel positioning needs the unhinted advance, "
+               "since a hinted advance is rounded to a whole pixel and leaves "
+               "the pen with no fraction to stand on, which is why that mode "
+               "first came out identical to Light.  The setting is documented "
+               "in ex.hg.conf and in the mirror manual.  refs #38562.  Needs "
+               "a description and a gate or knob call."),
     ],
 }
 

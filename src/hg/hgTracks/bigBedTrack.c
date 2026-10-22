@@ -32,6 +32,8 @@
 #include "quickLift.h"
 #include "hgConfig.h"
 #include "heatmap.h"
+#include "cds.h"
+#include "dotBracketTrack.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -763,6 +765,10 @@ struct bigBedFilter *highlights = bigBedBuildHighlights(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
+// a BLAT results bigPsl (hgc buildBigPsl) gets a mouseover with a query coverage bar
+boolean blatResult = trackDbSettingOn(track->tdb, "blatResult")
+                     && startsWith("bigPsl", track->tdb->type);
+
 // mouseOvers can be built constructed via trackDb settings instead
 // of embedded directly in bigBed
 char *mouseOverPattern = NULL;
@@ -998,6 +1004,12 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         lf->original = bbCopy;
         }
 
+    if (lf->mouseOver == NULL && blatResult)
+        {
+        struct psl *psl = pslFromBigPsl(chromName, bb, 0, NULL, NULL);
+        lf->mouseOver = blatCoverageMouseOver(psl, pslIsProtein(psl));
+        pslFree(&psl);
+        }
     if (lf->mouseOver == NULL)
         {
         if (mouseOverIdx > 0)
@@ -1154,5 +1166,7 @@ if (sameWordOk(trackDbSetting(tdb, "style"), "heatmap"))
     // maybe some combo of row count and labels.
     heatmapMethods(track);
     }
+else if (trackDbSetting(tdb, DOT_BRACKET_FIELD) != NULL)
+    dotBracketMethods(track);
 }
 

@@ -382,8 +382,11 @@ pointer file only.  The 2 that join to neither are LP6005442-DNA_A09, whose old
 name gave it Oceania / Australian, and LP6005619-DNA_D01, whose old name carried
 no region prefix at all, so it has neither.  Everything else on those two rows is
 blank.  The script prints both,
-with the region and population it recovered, so a new unmatched sample shows up
-in the build output rather than silently getting empty facets.
+with the region and population it recovered, and exits nonzero if a third one
+appears, because the two it tolerates are named in KNOWN_UNMATCHED.  The sample
+list is frozen, so a new one means the manifest was edited or the Reich lab
+tables changed, and an unmatched sample ships with every column but region and
+population blank, which is easy to miss in a 319 row table.
 
 Missing values follow the column's role.  A faceted column (Region, Country, Sex,
 DNA_source) uses the literal NA, which the faceted UI knows to leave out of the

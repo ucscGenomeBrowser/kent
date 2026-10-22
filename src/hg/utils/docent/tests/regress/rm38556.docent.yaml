@@ -1,0 +1,66 @@
+# #38556 -- with quickLiftMultiChain off, a quickLifted item without blocks vanished when two
+# chains each covered part of it.
+#
+# Fix:  5d71281387a, merged as 2883ccf46ed.  liftOverRemapRange() counts every chain that
+# covers 0.001 of a range and drops the range as "Duplicated in new" when there are two.
+# The hg19->hg38 quickLift chains are not single coverage:  over hg19 MRC1 there is the
+# whole-chr10 chain plus about seven chains of about 5 kb.  quickLiftRemapRange() in
+# hg/lib/quickLift.c now lifts such an item through the chain with the most aligned bases.
+# It is used for unblocked SQL beds, encode peaks, and GTEx genes and their clicks.
+#
+# GATE, READ THIS FIRST.  The bug shows only with hg.conf quickLiftMultiChain OFF.  With it on,
+# each item already has one chain, and the old and new code draw the same page.  genome-test
+# has it on:
+#     grep quickLiftMultiChain /usr/local/apache/cgi-bin/hg.conf
+# So on genome-test, the nightly target, this script passes on a build with the bug too.  It
+# watches only that MRC1 is drawn and clicks through under multi-chain.  The proof lines were
+# taken on servers with the gate off:  hgwbeta, and ts park 38556, which is master with
+# quickLiftMultiChain=off in its own hg.conf.  The gate has no cart override on purpose:  it
+# is a kill switch for multi-chain lifting, not a user setting.  When the off path is
+# deleted, delete this script with it.
+#
+# The GTEx gate, browser.quickLiftGtex, is a cart gate as well, so the first URL turns it on
+# (see rm38512).
+#
+# What is asserted, hg19 GTEx lifted to hg38 at MRC1 (chr10:17,745,000-17,915,000):
+#   - MRC1 and MRC1L1 have map boxes.  Before the fix neither one did.
+#   - TMEM236 has a map box, so an empty track cannot pass.  It drew before the fix too.
+#   - a click on MRC1 opens the GTEx page with its Ensembl gene ID.
+# Not asserted:  the extra hg19 copy of TMEM236 at 17776000-17781000, the chr8 BOP1 window,
+# the plain-bed path (quickLiftBeds, which GTEx takes with browser.quickLiftGtex off), and
+# encode peaks, which need a peak track in a duplicated region.
+proof:
+  - "assertion-only 2026-10-20 -- written after 2883ccf46ed was pushed"
+  - "sandbox-ab 2026-10-20 -- failed on hgwbeta (v505, lacks 5d71281387a, multi-chain off) at step 9:  no box for MRC1 or MRC1L1, TMEM236 drawn;  passed on ts park 38556 (port 48115, master after 2883ccf46ed, hgTracks and hgc, quickLiftMultiChain=off)"
+
+target: genome-test
+db: hg19
+position: chr10:18041000-18200100
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr10%3A18041000-18200100&pix=850&browser.quickLiftGtex=on"
+  - hide: all
+  - track: {gtexGene: pack}
+  - expect: {rows: [gtexGene], noText: "Warning/Error"}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr10:17745000-17915000
+  - shot: lifted
+  - expect:
+      rows: [gtexGene]
+      noText: "Warning/Error"
+      has:
+        - 'area[href*="gtexGene&i=TMEM236"]'
+        - 'area[href$="gtexGene&i=MRC1"]'
+        - 'area[href$="gtexGene&i=MRC1L1"]'
+
+  # item: is a substring test on the box's href plus a space plus its title, so a bare MRC1
+  # also matches MRC1L1, which genome-test's multi-chain copies put first.  The href ends in
+  # &i=<name>, so the trailing space makes this match MRC1 alone.
+  - click: {track: gtexGene, item: "&i=MRC1 "}
+  - expect:
+      url: "hgc"
+      text: ["Ensembl gene ID: ENSG00000120586", "GTEx RNA-seq"]
+      noText: "Warning/Error"

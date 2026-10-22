@@ -24,13 +24,13 @@ Each target is placed at the locus where its score set's variants were placed, n
 genome-wide best match. A protein target, or a DNA target that encodes a protein, is matched
 to the reference protein its variants were placed on, or failing that to another RefSeq
 protein of the same gene at that locus (another isoform), by the same rule used for the
-variants: every amino acid must agree at one position, or all but one, or all but a few added
-at one end.
+variants: at a single offset, every amino acid must agree, or all but one, or all but a few
+added at one end.
 Each amino acid of the target is then drawn on its codon in the genome, so the alignment
-follows the gene's exons. Other DNA targets, and coding targets that do not match, were aligned
+follows the gene's exons. DNA targets that do not match, and non-coding DNA targets, were aligned
 to the genome with BLAT (<tt>-stepSize=5 -repMatch=2253 -minScore=20 -minIdentity=0</tt>), and
 the best-scoring alignment that overlaps the score set's placed variants was kept. A target
-with no such alignment is not shown.
+with no such alignment, or a protein target that does not match, is not shown.
 </p>
 <p>
 The target sequences were downloaded with the score sets from the MaveDB API

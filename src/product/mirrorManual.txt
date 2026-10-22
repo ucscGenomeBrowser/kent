@@ -1733,6 +1733,37 @@ The names of the font files that the Genome Browser expects and their md5sums ar
     f3cd9244150f086434b62d5c5bb559b0  n022024l.pfb
     30aef717b7c68a6b6b7760b764fbd01c  z003034l.pfb
 
+# Trying out different FreeType rendering settings
+
+The hgTracks configure page can show a block of controls for the FreeType
+rendering itself. This is a debugging aid for finding settings that look good on
+a given display, not a feature for end users, and it is off unless you add this
+line to hg.conf:
+
+    freeTypeTuneUI=on
+
+The controls are:
+
+-   Size scale and Baseline shift, which adjust the pixel size and
+    baseline the browser picks for each of the text sizes in the Text size menu.
+-   Coverage gamma, an exponent applied to each glyph pixel's coverage, which
+    makes text lighter or heavier without changing its shape.
+-   Box size scale, the multiplier used for text drawn to fit inside a box,
+    such as the letters in a sequence logo.
+-   Hinting: leave it to the font and FreeType, switch it off, or force the
+    auto-hinter.
+-   Anti-aliasing: Normal, Light, Light (Sub Pixel), and the four LCD
+    sub-pixel targets (RGB, BGR, vertical RGB, vertical BGR). The LCD targets
+    give three coverage values per pixel, which are mixed into the red, green and
+    blue channels separately, so text drawn with them carries colour fringes.
+    They are worth looking at only with the auto-hinter on.
+
+Every control starts at the value the browser uses today, so the block changes
+nothing until a control is moved, and a Reset FreeType button puts them all back.
+The settings live in the cart, so they follow a session and are saved with it.
+With freeTypeTuneUI off or absent, any settings already in a cart are ignored and
+the rendering is the stock one.
+
 # Adding a new font to the Genome Browser display
 
 The fonts offered in the hgTracks configure page's Font menu are defined in a

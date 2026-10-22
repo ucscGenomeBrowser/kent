@@ -1652,7 +1652,9 @@ if(scriptName)
 // back to the page they are on now.
     {
     char *loginLi = "";
-    if (loginSystemEnabled() || wikiLinkEnabled())
+    // The background process of hgSession/hgTables has no Apache environment, so the
+    // link would have no host and no /cgi-bin/, refs #38600
+    if ((loginSystemEnabled() || wikiLinkEnabled()) && !cgiVarExists("backgroundExec"))
         {
         char *userName = wikiLinkUserName();
         struct dyString *dy = dyStringNew(512);
@@ -1724,6 +1726,14 @@ if(scriptName)
         }
     menuStr = replaceChars(menuStr, "<!-- SHARE_LINK -->", shareLi);
     }
+
+// My Data > Recent Browser Views: the views of this browser in the last days, see
+// cartUpdateRecentSession()
+if (cartRecentSessionsEnabled())
+    menuStr = replaceChars(menuStr, "<!-- RECENT_VIEWS_LINK -->",
+        "<li><a id='recentViewsMenuLink' title='Go back to a view you had in this web browser in "
+        "the last days, e.g. before you opened a session' "
+        "href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1'>Recent Browser Views</a></li>");
 
 if(scriptName)
     {  // Provide optional official mirror servers menu items

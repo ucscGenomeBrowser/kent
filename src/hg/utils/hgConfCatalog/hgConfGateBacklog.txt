@@ -16,18 +16,13 @@
 # Fields: name, state (overdue or stalled), and the release it was first
 # reported at.  hgConfCatalog.py --sunset prints the full list with dates.
 alwaysItemRgb              overdue  v501  # flipped v466
-autoBlatBigPsl             stalled  v501  # added v482
 blatShowLocus              stalled  v501  # added v483
 canDoHgcInPopUp            overdue  v501  # flipped v492
-canDupTracks               overdue  v501  # flipped v443
-canSnake                   overdue  v501  # flipped v467
 gcOnTheFly                 overdue  v501  # flipped v496
-genarkLiftOver             stalled  v501  # added v484
 greyBarIcons               overdue  v501  # flipped v492
 groupDropdown              stalled  v501  # added v489
 hgHubConnect.validateHub   overdue  v501  # flipped v427
 hgSession.shortLink        stalled  v501  # added v374
-mergeRecommended           overdue  v501  # flipped v467
 newBotDelay                overdue  v501  # flipped v492
 showDownloadUi             overdue  v501  # flipped v467
 showHubApiKey              stalled  v501  # added v473
@@ -35,6 +30,3 @@ showIgv                    stalled  v501  # added v487
 showMouseovers             stalled  v501  # added v446
 showTutorial               overdue  v501  # flipped v466
 storeUserFiles             stalled  v501  # added v447
-svgBarChart                overdue  v501  # flipped v428
-trackHubsCanAddGroups      overdue  v501  # flipped v492
-useBlatBigPsl              overdue  v501  # flipped v348

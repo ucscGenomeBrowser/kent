@@ -20,6 +20,8 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "bPlusTree.h"
+#include "quickLift.h"
 #include "bigRmskUi.h"
 
 /* Track Development Notes:
@@ -562,31 +564,162 @@ else
 }
 
 
+static void bigRmskRecordFree(struct bigRmskRecord **pRm)
+/* Free a bigRmskRecord made by liftedBigRmskLoadItems.  refs #37437 */
+{
+struct bigRmskRecord *rm = *pRm;
+if (rm == NULL)
+    return;
+freeMem(rm->chrom);
+freeMem(rm->name);
+freeMem(rm->blockSizes);
+freeMem(rm->blockRelStarts);
+freeMem(rm->description);
+freez(pRm);
+}
+
+static boolean liftedRecordInWindow(struct bigRmskRecord *rm, struct hash *chainHash)
+/* Lift a record read from the assembly it came from onto the reference, and say whether it
+ * lands in the window.  The items are read over padded source ranges, so some land outside
+ * it.  refs #37437 */
+{
+return quickLiftJoinedRepeat(chainHash, &rm->chrom, &rm->chromStart, &rm->chromEnd, rm->strand,
+                             &rm->alignStart, &rm->alignEnd, &rm->blockCount, rm->blockSizes,
+                             rm->blockRelStarts) &&
+       sameString(rm->chrom, chromName) && (rm->chromStart < winEnd) &&
+       (rm->chromEnd > winStart);
+}
+
+static void makeClassHashBR()
+/* Build classHashBR if it is not built yet.  The hash is filled before it is
+ * published, so a reader never sees it half filled.  bigRmskMethods() calls this
+ * on the main thread, because bigRmsk tracks can load in parallel threads. */
+{
+if ( classHashBR != NULL )
+    return;
+struct classRecord *cr;
+int i, numClasses = ArraySize(rptClasses);
+struct hash *hash = newHash(6);
+for (i = 0; i < numClasses; ++i)
+    {
+    AllocVar(cr);
+    cr->className = rptClassNames[i];
+    cr->layoutLevel = i;
+    unsigned int colorInt = rmskJoinedClassColors[i];
+    cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
+    hashAdd(hash, rptClasses[i], cr);
+    }
+classHashBR = hash;
+}
+
+static void liftedBigRmskLoadItems(struct track *tg)
+/* The loadItems of a quickLifted bigRmsk track, behind browser.quickLiftRmsk:  a copy of
+ * bigRmskLoadItems() that reads the items through the chain from the file of the assembly
+ * they came from and lifts each onto this one.  A fix to one belongs in the other.
+ * refs #37437 */
+{
+makeClassHashBR();
+
+struct bigRmskRecord *detailList = NULL;
+if (tg->isBigBed)
+    {
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    if (bbi->fieldCount < 14)
+        errAbort("track %s has a bigBed being read as a bed14 that has %d columns.", tg->track, bbi->fieldCount);
+    struct hash *chainHash = NULL;
+    struct bigBedInterval *bb, *bbList = quickLiftGetIntervals(
+        trackDbSetting(tg->tdb, "quickLiftUrl"), bbi, chromName, winStart, winEnd, &chainHash);
+    char *bedRow[bbi->fieldCount];
+    /* One might ask, "Why didn't you use a linkedFeature set here?" Good question!  I am not using
+       a standard encoding of blockStarts as would be expected by a BED12 validator, and therefore
+       I must use BED9+ and handle the blocks myself. */
+    char startBuf[16], endBuf[16];
+    char sourceChrom[bbi->chromBpt->keySize+1];
+    int lastChromId = -1;
+
+    char *filterString = cartUsualString(cart, BIGRMSK_NAME_FILTER, BIGRMSK_NAME_FILTER_DEFAULT);
+    boolean isFilterRegexp = cartUsualBoolean(cart, BIGRMSK_REGEXP_FILTER, BIGRMSK_REGEXP_FILTER_DEFAULT);
+    regex_t regEx;
+
+    if (isFilterRegexp)
+        regcomp(&regEx, filterString, REG_NOSUB);
+
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        // the item's row is in the assembly it came from
+        bbiCachedChromLookup(bbi, bb->chromId, lastChromId, sourceChrom, sizeof sourceChrom);
+        lastChromId = bb->chromId;
+        if (bigBedIntervalToRow(bb, sourceChrom, startBuf, endBuf, bedRow, ArraySize(bedRow)) < 14)
+            continue;
+
+        if ( (isFilterRegexp && (regexec(&regEx,bedRow[3], 0, NULL,0 ) == 0)) ||
+             (!isFilterRegexp && wildMatch(filterString, bedRow[3])) )
+
+            {
+            struct bigRmskRecord *rm = NULL;
+            AllocVar(rm);
+            rm->next = NULL;
+            rm->chrom = cloneString(bedRow[0]);
+            rm->chromStart = sqlUnsigned(bedRow[1]);
+            rm->chromEnd = sqlUnsigned(bedRow[2]);
+            rm->name = cloneString(bedRow[3]);
+            rm->score = sqlUnsigned(bedRow[4]);
+            safef(rm->strand, sizeof(rm->strand), "%s", bedRow[5]);
+            rm->alignStart = sqlUnsigned(bedRow[6]);
+            rm->alignEnd = sqlUnsigned(bedRow[7]);
+            // RGB is unused? bedRow[8]
+            rm->blockCount = sqlUnsigned(bedRow[9]);
+            {
+            int sizeOne;
+            sqlSignedDynamicArray(bedRow[10], &rm->blockSizes, &sizeOne);
+            assert(sizeOne == rm->blockCount);
+            }
+            {
+            int sizeOne;
+            sqlSignedDynamicArray(bedRow[11], &rm->blockRelStarts, &sizeOne);
+            assert(sizeOne == rm->blockCount);
+            }
+            rm->id = sqlUnsigned(bedRow[12]);
+            rm->description = cloneString(bedRow[13]);
+            rm->layoutLevel = -1;  // Indicates layout has not been calculated.
+            rm->leftLabel = 0;     // Flag for labels that need to be leftLabeled
+            if (liftedRecordInWindow(rm, quickLiftChainHashForItem(chainHash, bb)))
+                slAddHead(&detailList, rm);
+            else
+                bigRmskRecordFree(&rm);
+            }
+        } // for(bb = bbList...
+    bbiFileClose(&bbi);
+    } // if (tg->isBigBed...
+      //Could also...have DB loader here in the future.
+    tg->items = detailList;
+    // Man, I went back and forth on this one.  I *wish* there was
+    // an API for layout in between the loadItems() and totalHeight()
+    // stubs. The totalHeight() method is called multiple times which
+    // isn't ideal for layout operations since the layout logic needs
+    // to detect if it needs to really re-layout the data (expensive).
+    // For now, this is the only way to be assured that it gets called
+    // once for real changes in the visual appearance.
+    bigRmskLayoutItems(tg);
+}
+  
+
 static void bigRmskLoadItems(struct track *tg)
-/* 
+/*
  * Loading is done first given the region the display is currently centered on.
  * This function is responsible for fetching the data *and* defining the number
  * of "items" that will be displayed.  An item represents a row of the track.
  * Therefore, while this is a "loading" function it also needs to perform enough
- * of the layout to determine how many "items" to generate.  
+ * of the layout to determine how many "items" to generate.
  */
 {
-int i;
-if ( classHashBR == NULL )
+if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
     {
-    struct classRecord *cr;
-    int numClasses = ArraySize(rptClasses);
-    classHashBR = newHash(6);
-    for (i = 0; i < numClasses; ++i)
-        {
-        AllocVar(cr);
-        cr->className = rptClassNames[i];
-        cr->layoutLevel = i;
-        unsigned int colorInt = rmskJoinedClassColors[i];
-        cr->color = MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
-        hashAdd(classHashBR, rptClasses[i], cr);
-        }
+    // a quickLifted track reads its items from the assembly they came from, refs #37437
+    liftedBigRmskLoadItems(tg);
+    return;
     }
+makeClassHashBR();
 
 struct bigRmskRecord *detailList = NULL;
 if (tg->isBigBed)
@@ -1815,4 +1948,6 @@ track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
 track->canPack = TRUE;
+// build the class hash here, on the main thread, before any parallel load reads it
+makeClassHashBR();
 }

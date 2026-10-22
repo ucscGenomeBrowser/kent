@@ -216,6 +216,32 @@ class Offsets(unittest.TestCase):
         self.assertEqual((c.route, c.mismatched), ('mavedb', {5}))
         self.assertEqual(reasons['constructDiffers'], 1)
 
+    def synonymousRow(self, protPos, prot='NP_1.1'):
+        return {'accession': 's%d' % protPos, 'hgvs_nt': 'NA', 'hgvs_splice': 'NA',
+                'hgvs_pro': 'p.=',
+                'mavedb.post_mapped_hgvs_p': term(self.seq[protPos - 1], protPos, '=', prot),
+                'mavedb.post_mapped_hgvs_g': 'NA'}
+
+    def testSynonymousRowOnConstructPositionDropped(self):
+        """BRCA1 00000003-a-1-like: a p.= row MaveDB maps onto the position where the
+        construct differs is dropped with that position's other rows."""
+        rows = rowsForFragment(self.seq, 100, 40, mavedb=('NP_1.1', 100),
+                               construct={5: 'W' if self.seq[104] != 'W' else 'C'})
+        rows += [self.synonymousRow(105), self.synonymousRow(110)]
+        pls, _, _ = self.place(rows)
+        self.assertEqual([(p.status, p.reason) for p in pls[-2:]],
+                         [('rejected', 'constructDiffers'), ('placed', None)])
+
+    def testSynonymousRowDroppedWhenMavedbOffsetRejected(self):
+        rows = rowsForFragment(self.seq, 0, 60)
+        for r in rows:
+            t, _ = mp.parseProteinTerm(r['hgvs_pro'])
+            r['mavedb.post_mapped_hgvs_p'] = term(mp.residueAt(self.seq, t.pos + 2),
+                                                  t.pos + 2, 'Ala', 'NP_1.1')
+        rows.append(self.synonymousRow(12))
+        pls, _, _ = self.place(rows)
+        self.assertEqual(pls[-1].reason, 'mavedbOffsetRejected')
+
     def testTwoMismatchesRejected(self):
         rows = rowsForFragment(self.seq, 250, 30,
                                construct={3: self.otherThan(252), 9: self.otherThan(258)})
@@ -387,6 +413,19 @@ class Offsets(unittest.TestCase):
         self.assertEqual([(p.status, p.reason) for p in pls],
                          [('pending', 'referenceTerm'), ('rejected', 'notMapped')])
 
+    def testNoChangeGenomicTerm(self):
+        """A MaveDB g. term that changes nothing is not placed; the experiment's own
+        reference term is, when there is one."""
+        rows = [{'accession': 'n1', 'hgvs_pro': 'NA', 'hgvs_nt': 'c.3081T>A',
+                 'mavedb.post_mapped_hgvs_p': 'NA',
+                 'mavedb.post_mapped_hgvs_g': 'NC_000018.10:g.23538665T='},
+                {'accession': 'n2', 'hgvs_pro': 'NA', 'hgvs_nt': 'ENST1.1:c.3081T>A',
+                 'mavedb.post_mapped_hgvs_p': 'NA',
+                 'mavedb.post_mapped_hgvs_g': 'NC_000018.10:g.23538665T='}]
+        pls, _, _ = self.place(rows)
+        self.assertEqual([(p.status, p.reason) for p in pls],
+                         [('rejected', 'genomicNoChange'), ('pending', 'referenceTerm')])
+
     def testVcfToGenomic(self):
         g = mp.vcfToGenomic('NC_1.1', 100, 'A', 'G')
         self.assertEqual((g.start, g.end, g.rest, g.bedRange()), (100, 100, 'A>G', (99, 100)))
@@ -397,6 +436,54 @@ class Offsets(unittest.TestCase):
 
     def otherThan(self, i):
         return 'W' if self.seq[i] != 'W' else 'C'
+
+
+class MavedbGenomicSample(unittest.TestCase):
+    """placeReferenceTerms() replaces MaveDB's genomic terms of a score set when a sample
+    of them disagrees with hgvsToVcf of the experiment's own terms (RAD51C SGE)."""
+
+    class Ref(object):
+        db = 'hg38'
+        ncToChrom = {'NC_000017.11': 'chr17'}
+        chromToNc = {'chr17': 'NC_000017.11'}
+
+    def rows(self, shift):
+        out = []
+        for i in range(60):
+            mavedbPos = 1000 + i + shift
+            out.append({'accession': 'g%d' % i, 'hgvs_pro': 'NA',
+                        'hgvs_nt': 'ENST1.1:c.%dA>G' % (i + 1),
+                        'mavedb.post_mapped_hgvs_p': 'NA',
+                        'mavedb.post_mapped_hgvs_g': 'NC_000017.11:g.%dA>G' % mavedbPos})
+        return out
+
+    def placeWith(self, shift):
+        calls = []
+
+        def fakeHgvsToVcf(db, terms, workDir):
+            calls.append(len(terms))
+            return {t: ('PASS', 'chr17', 1000 + int(t.split('c.')[1][:-3]) - 1, 'A', 'G')
+                    for t in terms}
+        saved, mp.runHgvsToVcf = mp.runHgvsToVcf, fakeHgvsToVcf
+        try:
+            pls, _, _ = mp.placeScoreSet(scoreSet(), self.rows(shift), FakeReference({}))
+            stats = mp.placeReferenceTerms(pls, self.Ref(), '/nonexistent')
+        finally:
+            mp.runHgvsToVcf = saved
+        return pls, stats, calls
+
+    def testAgreeingTermsKept(self):
+        pls, stats, calls = self.placeWith(0)
+        self.assertEqual(placedLabels(pls), {mp.PLACED_MAVEDB: 60})
+        self.assertEqual(calls, [mp.GENOMIC_SAMPLE])
+        self.assertEqual(stats['mavedbGenomicReplaced'], 0)
+
+    def testShiftedTermsReplaced(self):
+        pls, stats, calls = self.placeWith(45)
+        self.assertEqual(placedLabels(pls), {mp.PLACED_REFERENCE: 60})
+        self.assertEqual(stats['mavedbGenomicReplaced'], 60)
+        self.assertEqual(sorted(p.genomic.start for p in pls), list(range(1000, 1060)))
+        self.assertEqual(calls, [mp.GENOMIC_SAMPLE, 60 - mp.GENOMIC_SAMPLE])
 
 
 if __name__ == '__main__':

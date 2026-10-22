@@ -1,0 +1,17 @@
+plus:  ref1:1090-1410 align 1100-1400 + [10@-1 300@10 10@-1]
+two fragments:  ref1:1050-2000 align 1100-1950 + [50@-1 300@50 -20@-1 450@450 50@-1]
+no left flank:  ref1:1100-1410 align 1100-1400 + [300@0 10@-1]
+no right flank:  ref1:1090-1400 align 1100-1400 + [10@-1 300@10]
+block in gap:  ref1:1090-1620 align 1100-1610 + [10@-1 300@10 50@-1 100@420 10@-1]
+empty block:  ref1:1090-1410 align 1100-1400 + [10@-1 300@10 10@-1]
+other sequence:  ref1:2800-3050 align 2800-2900 + [100@0 150@-1]
+minus chain:  ref2:4290-4810 align 4300-4800 - [10@-1 200@10 30@-1 200@310 10@-1]
+minus chain, minus item:  ref2:4600-4800 align 4600-4800 + [200@0]
+minus chain, ends past flanks:  ref2:4250-4850 align 4300-4800 - [10@-1 500@50 10@-1]
+negative flanks:  ref1:1000-1300 align 1000-1300 + [-5000@-1 300@0 -7@-1]
+flank past 0:  ref1:0-1300 align 1000-1300 + [5000@-1 300@1000]
+only unaligned:  dropped
+no chain:  dropped
+out of order:  dropped
+no blocks:  dropped
+bad shapes: 0

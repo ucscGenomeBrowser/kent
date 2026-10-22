@@ -511,22 +511,32 @@ return dif;
 }
 
 
+static int pslCmpScoreThenNameLen(const struct psl *a, const struct psl *b)
+/* Score descending.  On a tie the shorter target name first, so chr8 comes before
+ * chr8_KZ208915v1_fix or chr8_KI270821v1_alt: the primary assembly hit is listed first. */
+{
+int diff = pslScore(b) - pslScore(a);
+if (diff == 0)
+    diff = (int)strlen(a->tName) - (int)strlen(b->tName);
+return diff;
+}
+
 int pslCmpScore(const void *va, const void *vb)
-/* Compare to sort based on score (descending). */
+/* Compare to sort based on score (descending), then shorter target name first. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
-return pslScore(b) - pslScore(a);
+return pslCmpScoreThenNameLen(a, b);
 }
 
 int pslCmpQueryScore(const void *va, const void *vb)
-/* Compare to sort based on query then score (descending). */
+/* Compare to sort based on query then score (descending), then shorter target name first. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
 int diff = strcmp(a->qName, b->qName);
 if (diff == 0)
-    diff = pslScore(b) - pslScore(a);
+    diff = pslCmpScoreThenNameLen(a, b);
 return diff;
 }
 

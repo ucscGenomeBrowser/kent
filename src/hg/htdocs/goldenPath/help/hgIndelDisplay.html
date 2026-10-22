@@ -18,7 +18,7 @@ be aligned.</p>
   aligned sequence, a double-sided insertion. If this option is not selected, it will display as a 
   single horizontal line.</li> 
   <li>
-  <font color="#FFA70F">orange lines</font> or <font color="#9214FF">purple lines</font>: 
+  <font color="#FFA70F">orange lines</font> or <font color="#DC8CFF">purple lines</font>:
   unalignable query sequence, orange for the middle of a sequence and purple for the beginning or 
   end.</li> 
   <li>
@@ -50,9 +50,94 @@ sequence or missing bases in the genome sequence. Insertions at the beginning or
 large intron gap may be incorrectly aligned. Unalignable query sequence may also be due to 
 polymorphisms.</p>
 <p> 
-Poly-T heads result from queries that are the reverse complement of the genomic sequence. Poly-A 
-tails and poly-T heads (green) of mRNAs usually can not be aligned to the genome; this is a special 
+Poly-T heads result from queries that are the reverse complement of the genomic sequence. Poly-A
+tails and poly-T heads (green) of mRNAs usually can not be aligned to the genome; this is a special
 case of an unalignable query sequence.</p>
+
+<a name="examples"></a>
+<h2>Examples: mismatch, insertion, gap in both sequences and unaligned end</h2>
+<p>
+Four kinds of marks show where a query sequence, for example a BLAT result or an mRNA, differs
+from the genome. The mismatch marks appear when the track is set to show different bases
+(<em>Color track by bases</em>), the other three when the insertion options above are on. Hold the
+mouse over a mark to see what it is, with its color in brackets.</p>
+<table class="stdTbl">
+  <tr><th>Mark</th><th>Meaning</th></tr>
+  <tr>
+    <td><span style="background-color:#000; color:#FF6E6E; padding:0 6px">&#124;</span>
+    red</td>
+    <td>Mismatch: one aligned base of the query differs from the genome. When zoomed out, several
+    mismatches can share one red line.</td></tr>
+  <tr>
+    <td><span style="background-color:#000; color:#DC8000; padding:0 6px">3</span>
+    orange number</td>
+    <td>Insertion in the query: this many query bases have no counterpart in the genome at this
+    point.</td></tr>
+  <tr>
+    <td><span style="background-color:#000; color:#DC8CFF; padding:0 6px">&#124;</span>
+    purple</td>
+    <td>Unaligned end: bases at the start or end of the query are not aligned to the genome.</td></tr>
+  <tr>
+    <td><span style="font-family:monospace; padding:0 6px">=</span>
+    double line</td>
+    <td>Gap in both sequences: between two aligned blocks, both the genome and the query have
+    bases that do not align to each other.</td></tr>
+</table>
+
+<p>
+<strong>Mismatch (red).</strong> The query and the genome are aligned base by base, and one base
+differs. The alignment continues on both sides.</p>
+<pre>
+genome  ACGTTGCA<b>G</b>TCAGGTCA
+query   ACGTTGCA<b>A</b>TCAGGTCA
+                <b>^</b> red line here
+</pre>
+
+<p>
+<strong>Insertion in the query (orange).</strong> The query has three bases, GGG, that the genome
+does not have. The browser draws an orange &quot;3&quot; at the point where they would go.</p>
+<pre>
+genome  ACGTTGCA---TCAGGTCA
+query   ACGTTGCA<b>GGG</b>TCAGGTCA
+                ^ orange &quot;3&quot; here
+</pre>
+
+<p>
+<strong>Gap in both sequences (double line).</strong> Between two aligned blocks, the genome has
+five bases, CTAGC, and the query has four, GATT, that do not align to each other. The browser
+draws a double line between the blocks. The mouseover gives both sizes: 5 bases in the genome and
+4 in the query. This is usually a short region with many differences, and less often an assembly
+or sequencing error. On chain tracks, a gap whose genome side is more than five times longer
+than the other side is drawn as a single line instead.</p>
+<pre>
+genome  ACGTTGCA<b>CTAGC</b>TCAGGTCA
+query   ACGTTGCA<b>GATT-</b>TCAGGTCA
+                ^^^^^ double line here
+</pre>
+
+<p>
+<strong>Unaligned end (purple).</strong> The last two bases of the query, TT, differ from the
+genome. Because they are at the very end, the aligner does not align them as mismatches: an
+alignment that ended in two mismatches would score lower than one that stops before them. So the
+alignment stops after the last matching base, and the browser draws a purple line there.</p>
+<pre>
+genome  ACGTTGCAGTCAGGT<b>CA</b>
+query   ACGTTGCAGTCAGGT<b>TT</b>
+                       ^ purple line here, TT is not aligned
+</pre>
+
+<p>
+<strong>A short difference at the start or end of a sequence cannot be distinguished from a base
+difference.</strong> In the last example the two bases are simply mismatches, but they are shown in
+purple, as an unaligned end, not in red. A purple line on its own does not tell you whether the end
+of the query is a few changed bases, a sequencing error at the end of a read, adapter or vector
+sequence, or a real part of the query that belongs somewhere else in the genome. The mouseover gives
+the number of unaligned bases. When it is only a few bases, they are most likely mismatches. When it
+is many, look at where the rest of the query aligns. To see the bases themselves, click the item and
+open the alignment: aligned bases are colored blue, and the unaligned end is shown in black.</p>
+<p>
+The same applies to the start of the query. A difference in the first one or two bases is shown
+as a purple line at the start of the alignment, not as a red mismatch.</p>
 <p> 
 For information about mRNA codon and base coloring, click 
 <a href="hgCodonColoringMrna.html">here</a>. For information about EST base coloring, click 

@@ -11,6 +11,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/mallocTopPadTester \
 	${BIN_DIR}/pslReaderTester \
 	${BIN_DIR}/quickLiftTester \
+	${BIN_DIR}/quickLiftJoinedTester \
 	${BIN_DIR}/sessionDataTester \
 	${BIN_DIR}/cartParseTest \
 	${BIN_DIR}/binTest \
@@ -26,10 +27,10 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
-test: binTest quickLiftTest sessionDataTest trashDirTest mallocTopPadTest \
+test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -78,6 +79,10 @@ quickLiftTest: ${BIN_DIR}/quickLiftTester mkdirs
 	        input/quickLift/lift.bb input/quickLift/items.bb > output/quickLiftIntervals.$$g \
 	        && diff expected/quickLiftIntervals.$$g output/quickLiftIntervals.$$g || exit 1; \
 	done
+
+quickLiftJoinedTest: ${BIN_DIR}/quickLiftJoinedTester mkdirs
+	${BIN_DIR}/quickLiftJoinedTester input/quickLift/joined.chain > output/quickLiftJoinedTest
+	diff expected/quickLiftJoinedTest output/quickLiftJoinedTest
 
 sessionDataTest: ${BIN_DIR}/sessionDataTester mkdirs
 	${BIN_DIR}/sessionDataTester output/sessionData > output/sessionDataTest
@@ -209,6 +214,11 @@ trackHubSkipHubNameTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackHubSkipHubNameTester trackHubSkipHubNameTester.c ${MYLIBS} $L
 	${BIN_DIR}/trackHubSkipHubNameTester > output/trackHubSkipHubNameTest
 	diff expected/trackHubSkipHubNameTest output/trackHubSkipHubNameTest
+
+cartContentsValTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartContentsValTester cartContentsValTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartContentsValTester > output/cartContentsValTest
+	diff expected/cartContentsValTest output/cartContentsValTest
 
 # hgPcrResult_ cart variables fed through the cart's own parse.  The dropped ones are also
 # reported on stderr, the way the CGIs log them, so that goes to /dev/null.  refs #38442

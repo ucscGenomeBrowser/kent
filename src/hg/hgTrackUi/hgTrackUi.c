@@ -3685,6 +3685,11 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
+// out here rather than beside cfgByCfgType, since cfgTypeFromTdb says cfgNone for a plain
+// "type bigBed", for "bigBed 6", and for anything carrying noScoreFilter, and those land in
+// the labelCfgUi branch above.  A no-op unless the track names a dot-bracket column.
+dotBracketCfgUi(cart, tdb);
+
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
 
@@ -3841,9 +3846,6 @@ printf("</p>");
 boolean tdbIsDupable(struct trackDb *tdb)
 /* Return TRUE if a track is duplicatable */
 {
-if (!dupTrackEnabled())
-    return FALSE;
-
 /* Can't handle container tracks yet at least */
 if (!tdbIsDataTrack(tdb))
     return FALSE;

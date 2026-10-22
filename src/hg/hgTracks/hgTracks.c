@@ -86,6 +86,7 @@
 #include "mouseOver.h"
 #include "exportedDataHubs.h"
 #include "myVariants.h"
+#include "quickLift.h"
 
 //#include "bed3Sources.h"
 
@@ -1108,9 +1109,7 @@ while ((psl = pslNext(f)) != NULL)
 	lf->extra = cloneString(buf2);
 
         // set mouse over and color to indicate query position and strand
-        char over[256];
-        safef(over, sizeof over, "%d-%d of %d bp, strand %c", psl->qStart, psl->qEnd, psl->qSize, psl->strand[0]);
-        lf->mouseOver = cloneString(over);
+        lf->mouseOver = blatCoverageMouseOver(psl, qt == gftProt);
         if (sameString(psl->strand, "+"))
             lf->filterColor = MAKECOLOR_32(0,0,0);
         else
@@ -1958,7 +1957,11 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
-        int maxWinToDraw = getMaxWindowToDraw(track->tdb);
+        /* A track that failed to load is showing its message, and a trackDb setting may be
+         * why, so do not go back to that setting here.  getMaxWindowToDraw aborts on a
+         * value it cannot read, and an errAbort in the map pass is caught by nobody: it
+         * lands in the middle of a page that has already been half sent.  refs #38560 */
+        int maxWinToDraw = (track->networkErrMsg != NULL) ? 0 : getMaxWindowToDraw(track->tdb);
         if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
             mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
         y += mapHeight;
@@ -4832,6 +4835,19 @@ for(;track;track=track->nextWindow)
 return result;
 }
 
+static boolean anyWindowHasError(struct track *track)
+/* Did this track fail to load in any window?  A track that failed has no items, which
+ * reads the same as empty, so hideEmptySubtracks would drop the one subtrack the reader
+ * needs to be told about.  refs #38560 */
+{
+for (; track != NULL; track = track->nextWindow)
+    {
+    if (track->networkErrMsg != NULL)
+        return TRUE;
+    }
+return FALSE;
+}
+
 boolean anyWindowHaveItems(struct track *track)
 /* Check if track limitedVis == hidden for all windows.
  * Return true if all are hidden */
@@ -5361,8 +5377,11 @@ for (track = trackList; track != NULL; track = track->next)
                     continue;
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack) && 
-                        !(doHideEmpties && !anyWindowHaveItems(subtrack)))
-                        // Ignore subtracks with no items in windows
+                        !(doHideEmpties && !anyWindowHaveItems(subtrack)
+                          && !anyWindowHasError(subtrack)))
+                        // Ignore subtracks with no items in windows, but keep one that
+                        // failed: it has no items either, and hiding it would turn a
+                        // broken subtrack into a silent absence.  refs #38560
 
                     {
                     addPreFlatTrack(&preFlatTracks, subtrack);
@@ -5791,6 +5810,9 @@ if (withLeftLabels)
                they are just their track height, not per-item height
              */
             if (startsWith("rmskJoined", track->track))
+                ynew = flatTrack->maxHeight + y;
+            else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+                // a quickLifted RepeatMasker Viz. track is laid out like the native one, refs #37437
                 ynew = flatTrack->maxHeight + y;
             else
                 ynew = doLeftLabels(track, hvgSide, font, y);
@@ -7110,9 +7132,6 @@ void makeDupeTracks(struct track **pTrackList)
 /* Make up dupe tracks and append to list. Have to also crawl
  * through list to add subtracks */
 {
-if (!dupTrackEnabled())
-    return;
-
 struct dupTrack *dupList = dupTrackListFromCart(cart);
 if (dupList == NULL)
     return;
@@ -8799,6 +8818,62 @@ if (sharedVis != 99)
     }
 }
 
+static void loadOneTrackSummary(struct track *track)
+/* Load the zoomed out summary for a track and for any subtrack that has one. */
+{
+if (track->loadSummary && !track->subtracks
+    && !trackDbSetting(track->tdb, "quickLiftUrl")
+    && !startsWith("bigLolly", track->tdb->type))
+    track->loadSummary(track);
+
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if ((tdbVisLimitedByAncestors(cart, subtrack->tdb, TRUE, TRUE) != tvHide)
+        && !subtrack->parallelLoading && subtrack->loadSummary
+        && !trackDbSetting(subtrack->tdb, "quickLiftUrl")
+        && !startsWith("bigLolly", subtrack->tdb->type))
+        subtrack->loadSummary(subtrack);
+    }
+}
+
+static void loadOneTrackSerial(struct track *track, boolean doLoadSummary)
+/* Everything the main thread does to get one track ready to draw.  The checks come first
+ * because they can change what is drawn, then either the summary or the items.  It is a
+ * function so that the caller can put the whole of it inside one errCatch, the way
+ * parallelLoadData does for a worker thread.  Not quite the same work as that one:
+ * checkIfWiggling has always been serial only.  refs #38560 */
+{
+checkMaxWindowToDraw(track);
+checkHideEmptySubtracks(track);
+checkIfWiggling(cart, track);
+if (doLoadSummary)
+    loadOneTrackSummary(track);
+else
+    {
+    track->loadItems(track);
+    if (tdbHasDecorators(track))
+        {
+        loadDecorators(track);
+        decoratorMethods(track);
+        }
+    }
+}
+
+static void spreadErrorToSubtracks(struct track *track, char *message)
+/* Put a container's load error onto its subtracks as well.  A composite parent is not
+ * drawn, its subtracks are, so a message left only on the parent is never painted and the
+ * rows come up empty with nothing to explain them.  Keep it on the parent too, for the
+ * containers that do draw their own row.  refs #38560 */
+{
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (subtrack->networkErrMsg == NULL)
+        subtrack->networkErrMsg = cloneString(message);
+    }
+}
+
 static void setSharedErrorsAcrossWindows(struct track *track)
 /* Look for network errors across all windows
  * if found, set all windows to same errMsg and set bigWarn track handlers. */
@@ -8822,6 +8897,12 @@ if (sharedErrMsg)
 	tg->totalHeight = bigWarnTotalHeight;
 	}
     }
+
+/* Recurse, because a container can hold a container: a multiWig inside a composite keeps
+ * its wiggles two levels down, and those are the rows that get drawn.  refs #38560 */
+struct track *subtrack;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    setSharedErrorsAcrossWindows(subtrack);
 }
 
 
@@ -8940,8 +9021,13 @@ struct hash *parentHash = newHash(5);
 struct track *track;
 for (track=trackList; track; track=track->next)
     {
-    struct trackDb *parent = track->tdb->parent;
-    if (parent)
+    /* Every ancestor, not just the closest: a supertrack may itself be a member of
+     * another supertrack, and the outer one is reached only through it.  The hgSession
+     * copy of this walks the whole chain, and hasSessionChanged() compares what this one
+     * produces against a session saved by that one, so the two have to agree or a
+     * featured session with nested supertracks looks changed when it is not. */
+    struct trackDb *parent;
+    for (parent = track->tdb->parent; parent != NULL; parent = parent->parent)
         {
         if (hashLookup(parentHash, parent->track) == NULL)
             {
@@ -9297,12 +9383,17 @@ if (dy->stringSize == 0)
     }
 
 char *encoded = htmlEncode(dy->string);
-printf("<span id='chromAliases' title='<b>Alternate sequence names</b>: %s<br><br>"
+struct dyString *tip = dyStringNew(512);
+dyStringPrintf(tip, "<b>Alternate sequence names</b>: %s<br><br>"
        "Alternative sequence names can be used in the position box, custom tracks, "
        "track hubs, bigBed, bigWig, and similar files. "
        "See the <a href=\"/goldenPath/help/assemblyHubHelp.html#chromAlias\">docs page</a> "
-       "for more information'>"
-       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encoded);
+       "for more information", encoded);
+char *encTip = attributeEncode(tip->string);
+printf("<span id='chromAliases' data-tooltip='%s'>"
+       "<a><i class=\"fa fa-info-circle\"></i></a></span>", encTip);
+freeMem(encTip);
+dyStringFree(&tip);
 freeMem(encoded);
 dyStringFree(&dy);
 }
@@ -9639,71 +9730,27 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 		    if (measureTiming)
 			lastTime = clock1000();
 
-		    checkMaxWindowToDraw(track);
-
-		    checkHideEmptySubtracks(track);
-
-		    checkIfWiggling(cart, track);
-
-		    if (doLoadSummary)
+		    /* Keep an errAbort to the track that caused it rather than letting it
+		     * take the whole image down.  parallelLoadData does this for the threaded
+		     * path; the serial path needs it too, and over the same work, or the two
+		     * disagree about what a bad track does.  refs #38560 */
+		    unsigned connMark = hConnMark();
+		    struct errCatch *errCatch = errCatchNew();
+		    if (errCatchStart(errCatch))
+			loadOneTrackSerial(track, doLoadSummary);
+		    errCatchEnd(errCatch);
+		    if (errCatch->gotError)
 			{
-			if (track->loadSummary)
-			    {
-			    if (!track->subtracks)
-				{
-				char *quickLiftFile = trackDbSetting(track->tdb, "quickLiftUrl");
-				if (!quickLiftFile)
-				    {
-				    if (!startsWith("bigLolly", track->tdb->type))
-					{
-					track->loadSummary(track);
-					}
-				    }
-				}
-			    }
-			struct track *subtrack;
-			for (subtrack=track->subtracks; subtrack; subtrack=subtrack->next)
-			    {
-			    if (tdbVisLimitedByAncestors(cart,subtrack->tdb,TRUE,TRUE) != tvHide)
-				{
-				if (!subtrack->parallelLoading)
-				    {
-				    char *quickLiftFile = trackDbSetting(subtrack->tdb, "quickLiftUrl");
-				    if (!quickLiftFile)
-					{
-					if (!startsWith("bigLolly", subtrack->tdb->type))
-					    {
-					    if (subtrack->loadSummary)
-						subtrack->loadSummary(subtrack);
-					    }
-					}
-				    }
-				}
-			    }
+			track->networkErrMsg = cloneString(errCatch->message->string);
+			spreadErrorToSubtracks(track, errCatch->message->string);
+			/* A loader that aborts never reached its hFreeConn, and the
+			 * connection cache holds sixteen, so without this a handful of
+			 * failing tracks fills it and every later track reports "Too many
+			 * open sqlConnections" instead of its own trouble.  refs #38560 */
+			hConnReleaseSince(connMark);
 			}
-		    else
-			{
-			/* An errAbort out of a track's loader takes out that track, not the whole
-			 * image.  parallelLoadData does this for the threaded path; without it here
-			 * the same bad data kills the page whenever parallel loading is off.
-			 * refs #38560 */
-			struct errCatch *errCatch = errCatchNew();
-			if (errCatchStart(errCatch))
-			    {
-			    track->loadItems(track);
-			    if (tdbHasDecorators(track))
-				{
-				loadDecorators(track);
-				decoratorMethods(track);
-				}
-			    }
-			errCatchEnd(errCatch);
-			if (errCatch->gotError)
-			    track->networkErrMsg = cloneString(errCatch->message->string);
-			else if (errCatch->gotWarning)
-			    warn("%s", errCatch->message->string);  // errCatch took it, hand it back
-			errCatchFree(&errCatch);
-			}
+		    errCatchReWarn(errCatch);  // errCatchStart took the warnings, hand them back
+		    errCatchFree(&errCatch);
 
 		    if (measureTiming)
 			{
@@ -9748,12 +9795,7 @@ for (track = trackList; track != NULL; track = track->next)
 // if found, set all windows to same errMsg and set bigWarn track handlers.
 for (track = trackList; track != NULL; track = track->next)
     {
-    setSharedErrorsAcrossWindows(track);
-    struct track *sub;
-    for (sub=track->subtracks; sub; sub=sub->next)
-	{
-	setSharedErrorsAcrossWindows(sub);
-	}
+    setSharedErrorsAcrossWindows(track);   // recurses into subtracks itself
     }
 
 
@@ -12308,7 +12350,8 @@ jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 
 void notifyOnce (char *msg, char *msgId)
 /* Like notify(), but for a message that only makes sense on this page, e.g. after a session was
- * loaded.  It has no "Don't show again" button, as it is gone on the next page anyway. */
+ * loaded.  It is not shown again on the next page; its "Don't show again" button keeps it away
+ * the next time the same thing happens, in this web browser. */
 {
 jsInlineF("notifBoxOnce(\"%s\", \"%s\");\n", msg, msgId);
 }
@@ -12381,34 +12424,53 @@ if (isNotEmpty(description))
     dyStringPrintf(dy, "Session description: <i>%s%s</i> ",
             jsSafe(description), (truncated ? "..." : ""));
     }
-
-dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have been "
-        "replaced by this session and cannot be brought back. If you want to keep a browser "
-        "configuration, save it under My Data &gt; My Sessions before you open a session. ");
 }
 
-static void showSessionLoadNotice()
+static void showSessionLoadNotice(int recentViewCount)
 /* If a saved session has just been loaded into this cart, put a note at the top of the page
- * saying what was opened and that the previous view is gone.  Only on that one page: the marker
- * is taken out of the cart here, so the next page does not have it anymore.  Recommended track
- * sets are left alone: they merge into the cart instead of replacing it and have their own label
- * next to the assembly name. */
+ * saying what was opened and that the previous view was replaced.  If hg.conf turns on recent
+ * views, link to them.  Only on that one page: the marker is taken out of the cart here,
+ * so the next page does not have it anymore.  Recommended track sets are left alone: they merge
+ * into the cart instead of replacing it and have their own label next to the assembly name. */
 {
 if (trackImgOnly || !cartVarExists(cart, hgsSessionJustLoaded))
     return;
 cartRemove(cart, hgsSessionJustLoaded);
-if (!cfgOptionBooleanDefault("sessionLoadNotice", TRUE))
+if (!cfgOptionBooleanDefault("sessionLoadNotice", FALSE))
     return;
 
 char *sessionName = cartOptionalString(cart, hgsOtherUserSessionName);
 char *sessionOwner = cartOptionalString(cart, hgsOtherUserName);
-if (isEmpty(sessionName) || isEmpty(sessionOwner) || hasRecTrackSet(cart))
+if (hasRecTrackSet(cart))
+    return;
+// settings loaded from a file or URL have no name, cart.c only marks those if recent views are on
+boolean fromFile = isEmpty(sessionName) || isEmpty(sessionOwner);
+if (fromFile && !cartRecentSessionsEnabled())
     return;
 
 struct dyString *dy = dyStringNew(1024);
-sessionNoticeText(dy, sessionName, sessionOwner);
-dyStringPrintf(dy, "This note is shown only once; it is gone on the next page.");
-notifyOnce(dy->string, "sessionLoad");
+if (fromFile)
+    dyStringPrintf(dy, "You have loaded browser settings from a file or a URL. ");
+else
+    sessionNoticeText(dy, sessionName, sessionOwner);
+
+char *what = fromFile ? "these settings" : "this session";
+// hgTracks.js opens the same dialog as the My Data menu item when this link is clicked
+char *recentViewsLink = "<a href='#' id='recentViewsLink'>My Data &gt; Recent Browser Views</a>";
+if (recentViewCount > 0)
+    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
+            "been replaced by %s. To go back to them, open %s. ", what, recentViewsLink);
+else if (cartRecentSessionsEnabled())
+    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
+            "been replaced by %s. The views you had in this web browser in the last 7 days are "
+            "under %s. ", what, recentViewsLink);
+else
+    dyStringPrintf(dy, "%s replaced the tracks, position, and settings you had in the browser "
+            "before. To keep a browser view for later, save it under My Data &gt; My Sessions "
+            "before you open a session. ", fromFile ? "These settings" : "This session");
+dyStringPrintf(dy, "This note goes away when you close it or leave this page.");
+// separate ids, so "Don't show again" on one note does not hide the other
+notifyOnce(dy->string, fromFile ? "settingsLoad" : "sessionLoad");
 dyStringFree(&dy);
 }
 
@@ -12426,18 +12488,22 @@ return (isEmpty(cartOptionalString(cart, "pix")) &&
 
 extern boolean issueBotWarning;
 
-static void outputRecentSessionsData(struct cart *cart)
-/* After a session load, write the user's other recent sessions to the page
- * for the session load dialog. */
+static int outputRecentSessionsData(struct cart *cart)
+/* Write the user's other recent views to the page for the recent views dialog, when a session
+ * was just loaded or the My Data menu asked for the dialog.  Return how many there are. */
 {
-if (!cartRecentSessionsEnabled() || !cartUsualBoolean(cart, hgsDidSessionLoad, FALSE))
-    return;
-cartRemove(cart, hgsDidSessionLoad);
+if (!cartRecentSessionsEnabled())
+    return 0;
+boolean openDialog = cartUsualBoolean(cart, hgsShowRecentViews, FALSE);
+cartRemove(cart, hgsShowRecentViews);
+if (!openDialog && !cartVarExists(cart, hgsSessionJustLoaded))
+    return 0;
 
 struct slPair *recent = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
 char *currentId = cartSessionId(cart);
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = hConnectCart();
 struct jsonWrite *jw = jsonWriteNew();
+int count = 0;
 jsonWriteListStart(jw, NULL);
 for (struct slPair *el = recent; el != NULL; el = el->next)
     {
@@ -12448,21 +12514,29 @@ for (struct slPair *el = recent; el != NULL; el = el->next)
         continue;
     char *db = cartContentsVal(cdb->contents, "db");
     char *position = cartContentsVal(cdb->contents, "position");
+    // only set in a copy made just before a session load, "" if it was a file or URL
+    char *prevViewOf = cartContentsVal(cdb->contents, hgsPrevViewOf);
     jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "hgsid", el->name);
     jsonWriteString(jw, "db", db);
     jsonWriteString(jw, "position", position);
     jsonWriteNumber(jw, "timestamp", sqlLongLong(el->val));
+    jsonWriteString(jw, "prevViewOf", prevViewOf);
     jsonWriteObjectEnd(jw);
     freeMem(db);
     freeMem(position);
+    freeMem(prevViewOf);
     cartDbFree(&cdb);
+    count++;
     }
 jsonWriteListEnd(jw);
 jsInlineF("var recentSessions = %s;\n", jw->dy->string);
+if (openDialog)
+    jsInline("$(function() { sessionLoadDialog.show(); });\n");
 jsonWriteFree(&jw);
-hDisconnectCentral(&conn);
+hDisconnectCart(&conn);
 slPairFreeValsAndList(&recent);
+return count;
 }
 
 void doMiddle(struct cart *theCart)
@@ -12480,7 +12554,13 @@ if (noPixVariableSetAndInteractive())
 {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("utils.js", NULL);
-    jsInlineF("addPixAndReloadPage();");
+    // A session load replaces the cart, so pix is gone.  The session is in the cart already:
+    // reloading this URL would load it a second time, and keep a second copy of the view.
+    if (cgiVarExists(hgsDoOtherUser) || cgiVarExists(hgsDoLoadUrl))
+        jsInlineF("addPixAndReloadPage('%s', ['%s', '%s']);", cartSessionId(cart),
+                hgsDoOtherUser, hgsDoLoadUrl);
+    else
+        jsInlineF("addPixAndReloadPage();");
     return;
 }
 
@@ -12711,6 +12791,12 @@ else if (cartVarExists(cart, configDefaultAll))
     cartRemove(cart, configDefaultAll);
     configPageSetTrackVis(-1);
     }
+else if (freeTypeTuneUiOn() && cartVarExists(cart, configFreeTypeReset))
+    {
+    cartRemove(cart, configFreeTypeReset);
+    freeTypeTuneResetCart();
+    configPageSetTrackVis(-2);
+    }
 else if (cartVarExists(cart, configHideAllGroups))
     {
     cartRemove(cart, configHideAllGroups);
@@ -12808,9 +12894,10 @@ else
 jsInline(dy->string);
 dyStringFree(&dy);
 
-/* Output recent sessions data for session load dialog */
+/* Output recent views for the dialog, before the session load note that links to it */
+int recentViewCount = 0;
 if (!trackImgOnly)
-    outputRecentSessionsData(cart);
+    recentViewCount = outputRecentSessionsData(cart);
 
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
@@ -12825,7 +12912,7 @@ if (cartOptionalString(cart, "udcTimeout"))
     notify(buf, "udcTimeout");
     }
 
-showSessionLoadNotice();
+showSessionLoadNotice(recentViewCount);
 
 #ifdef DEBUG
 if (cdsQueryCache != NULL)

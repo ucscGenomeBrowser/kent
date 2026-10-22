@@ -8,7 +8,6 @@
 #include "ra.h"
 #include "portable.h"
 #include "trashDir.h"
-#include "hgConfig.h"
 
 static char *dupFileNameFromCart(struct cart *cart)
 /* Return the name of the trash file holding the dupe track stanzas, or NULL.  The value comes
@@ -259,11 +258,5 @@ tdb->next = NULL;
 tdb->track = cloneString(dup->name);
 dupTrackAddInfoToTdb(dup, tdb);
 return tdb;
-}
-
-boolean dupTrackEnabled()
-/* Return true if we allow tracks to be duped. */
-{
-return  cfgOptionBooleanDefault("canDupTracks", TRUE);
 }
 

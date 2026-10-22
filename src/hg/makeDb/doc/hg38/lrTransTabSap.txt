@@ -1,0 +1,40 @@
+# 2026-10-15 Claude (max): Tabula Sapiens single-cell long-read isoforms, #38565
+# tracks lrTransTabSap and lrTransTabSapExpr in the Long-read Transcripts collection
+# Mantri et al. 2026, bioRxiv doi:10.64898/2026.09.11.748700
+
+mkdir -p /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens/{orig,paper}
+cd /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens/orig
+# files downloaded from Figshare (doi:10.6084/m9.figshare.33411454):
+# https://figshare.com/articles/dataset/A_cross-tissue_single-cell_atlas_of_full-length_human_transcript_isoforms_count_matrices_metadata_and_feature_annotation/33411454
+# Files used:
+#   all_samples_pbids_isoform_structures.bed.gz        exon structures, 854,410 isoforms
+#   all_samples_pbids_feature_metadata_sqanti3.csv     SQANTI3 annotation
+#   all_samples_pbids_feature_metadata_pigeon.csv      pigeon annotation (gene names)
+#   all_samples_pacbio_recollapsed_raw_counts_pbids_bc_anndata_preprocessed.h5ad
+#                                                      per-cell counts, 203,311 cells
+#   sample_metadata.csv                                tube -> donor, tissue
+
+cd /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens
+# needs h5py and numpy
+time ~/kent/src/hg/makeDb/scripts/lrTrans/lrTransTabSap.sh
+# about 2 minutes. Output of the conversion step:
+#   inBed           854410
+#   out             854410
+#   coding          594361
+#   codingDrawn     509719
+#   codingNotDrawn  84642
+# All isoforms of the input BED are in both bigBeds. The SQANTI3 metadata describe
+# the structure of an isoform in one tube ("tissue_source"), whose ends usually differ
+# from the re-collapsed structure in the BED file (exon counts agree for 97%), so the
+# SQANTI3 ORF is drawn as thickStart/thickEnd only when both ends are in BED exons.
+# Every isoform has at least one UMI in the count matrix.
+
+# UMIs per tissue, for the per-million normalization of the bar chart:
+cat tissueExpr.tsv.tissues.tsv
+
+# 2026-10-17 Claude (max): category colors changed to the SQANTI3 palette suggested by
+# Mark Diekhans in a note on #38565 (FSM #6BAED6, ISM #FC8D59, NIC #78C679, NNC #EE6A50,
+# GENIC #969696, AS #66C2A4, FUS #FFC125, INTER #E9967A, GI #41B6C4). Only the itemRgb
+# column changes, so rerun the build to regenerate the bigBed:
+cd /hive/data/genomes/hg38/bed/lrTrans/tabulasapiens
+time ~/kent/src/hg/makeDb/scripts/lrTrans/lrTransTabSap.sh

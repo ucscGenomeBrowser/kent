@@ -21,6 +21,7 @@ for bb in "$SRC"/tads3dgb/*.bb; do
     # column 5 = mm10 size, carried through the lift for the size check, then removed
     bigBedToBed "$bb" stdout | awk -F'\t' -v OFS='\t' '{print $0, $3-$2}' > "$tmp/in.bed"
     liftOver -bedPlus=4 -tab "$tmp/in.bed" "$CHAIN" "$tmp/lift.bed" "$tmp/unmapped"
+    : > "$DST/${name%.bb}.inflated"
     awk -F'\t' -v OFS='\t' -v cnt="$tmp/counts" -v infl="$DST/${name%.bb}.inflated" 'NR==FNR{sz[$1]=$2; next}
         $1 ~ /_/ {nonPrim++; next}
         {if ($3 > sz[$1]) {$3 = sz[$1]; trimmed++}

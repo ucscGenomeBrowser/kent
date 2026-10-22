@@ -58,8 +58,9 @@ HOW IT DECIDES
 For each track the monitor reads the "Data last updated at UCSC" line from
 hgTrackUi on hgwdev and on genome.ucsc.edu.  When the public date is older, it
 records in state.json when it first saw that, and it reports the track once it
-has stayed behind for more than lagDays, 8 unless the table says otherwise,
-because the pushes for these jobs run weekly or more often.  The clock starts at
+has stayed behind for more than lagDays, 30 unless the table says otherwise.
+The pushes for these jobs run weekly or more often, but a push can be held for
+a while, so the monitor waits a month.  The clock starts at
 hgwdev's own date on the first sighting.  It restarts whenever the public date
 moves, because a moving date shows the push is working.  That matters for a job
 that rebuilds every day, because its hgwdev copy never matches the public one at
@@ -67,9 +68,9 @@ the time the monitor runs.
 
 This check needs state.json to see a job that rebuilds often.  With --no-state
 the clock starts fresh at hgwdev's date on every run, so a track that hgwdev
-rebuilt this week is never reported however old the public copy is.  DECIPHER
-is like this: it was rebuilt on 2026-09-27, so the cron run first reports it on
-2026-10-05.
+rebuilt in the last 30 days is never reported however old the public copy is.
+DECIPHER is like this: it is rebuilt every week, so a --no-state run never
+reports it.
 
 The first run, 2026-09-30, found more tracks that are behind.  civic, pubtator
 and strchive have no AutoPush line at all; strchive is waiting for v504, as

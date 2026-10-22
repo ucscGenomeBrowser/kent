@@ -415,8 +415,16 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
-static void mergeWiggles(struct track *tg, boolean add)
+static struct track *mergeWiggles(struct track *tg, boolean add)
+/* Add or subtract the children into the first one that has data, and return that one.
+ * NULL when none of them has any.  A child has no preDrawContainer when it was switched
+ * off, since only a visible child is pre-drawn, and also when its data failed to load;
+ * dereferencing one here took the whole image down with a segfault.  refs #38560 */
 {
+while ((tg != NULL) && (tg->preDrawContainer == NULL))
+    tg = tg->next;
+if (tg == NULL)
+    return NULL;
 struct preDrawContainer *firstPre = tg->preDrawContainer;
 
 struct track *firstTrack = tg;
@@ -427,14 +435,17 @@ for(tg = tg->next; tg; tg = tg->next)
     {
     struct preDrawContainer *pre = tg->preDrawContainer;
 
-    for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+    if (pre != NULL)
         {
-        struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
-        struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
-        if (add)
-            firstPreDraw->smooth += thisPreDraw->smooth;
-        else
-            firstPreDraw->smooth -= thisPreDraw->smooth;
+        for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+            {
+            struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
+            struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
+            if (add)
+                firstPreDraw->smooth += thisPreDraw->smooth;
+            else
+                firstPreDraw->smooth -= thisPreDraw->smooth;
+            }
         }
     }
 //if (wigCart->autoScale == wiggleScaleAuto)
@@ -454,6 +465,7 @@ for(tg = tg->next; tg; tg = tg->next)
     firstPre->graphLowerLimit = lowerLimit;
     firstPre->graphUpperLimit = upperLimit;
     }
+return firstTrack;
 }
 
 struct mwMouseSub
@@ -542,10 +554,20 @@ if (errMsgFound && currentWindow==windows)  // first window
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
-if (wigCart->aggregateFunction == wiggleAggregateAdd || wigCart->aggregateFunction == wiggleAggregateSubtract)
+if ((wigCart->aggregateFunction == wiggleAggregateAdd
+     || wigCart->aggregateFunction == wiggleAggregateSubtract) && !errMsgFound)
     {
-    mergeWiggles(tg->subtracks, wigCart->aggregateFunction == wiggleAggregateAdd);
-    tg->subtracks->next = NULL;
+    /* With a child missing, the sum is wrong whatever we do, so leave the rows as they
+     * are and let the failed one say so.  refs #38560 */
+    struct track *merged = mergeWiggles(tg->subtracks,
+                                        wigCart->aggregateFunction == wiggleAggregateAdd);
+    if (merged != NULL)
+        {
+        /* Keep the child the sum landed on, which is not the first one when the first one
+         * is switched off: keeping the head there left the row empty. */
+        tg->subtracks = merged;
+        merged->next = NULL;
+        }
     }
 int numTrack = 0;
 struct mwMouseSub *mouseSubList = NULL;

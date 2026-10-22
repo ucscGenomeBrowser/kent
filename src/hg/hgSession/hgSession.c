@@ -427,22 +427,9 @@ while ((row = sqlNextRow(sr)) != NULL)
             "<TD>%s</TD>"
             "<TD align='left'>", mktime(&firstUseTm), firstUse, useCount);
 
-    char *dbIdx = NULL;
-    if (startsWith("db=", row[4]))
-        dbIdx = row[4]+3;
-    else
-        dbIdx = strstr(row[4], "&db=") + 4;
-        
-    if (dbIdx != NULL)
-        {
-        char *dbEnd = strchr(dbIdx, '&');
-        char *db = NULL;
-        if (dbEnd != NULL)
-            db = cloneStringZ(dbIdx, dbEnd-dbIdx);
-        else
-            db = cloneString(dbIdx);
-        printf("%s</td><td align='center'>", db);
-        }
+    char *db = cartContentsVal(row[4], "db");
+    if (db != NULL)
+        printf("%s</td><td align='center'>", htmlEncode(db));
     else
         printf("n/a</td><td align=center>");
 
@@ -820,7 +807,7 @@ cartRemovePrefix(cart, hgsDoDownloadPrefix);
 cartRemovePrefix(cart, hgsDo);
 cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
-cartRemove(cart, hgsDidSessionLoad);
+cartRemove(cart, hgsPrevViewOf);
 /* Two of the Save form's own inputs.  If they stay in the cart they are stored inside every
  * session saved afterwards, so one session's description travels in sessions that never had
  * one.  hgsNewSessionShare is left alone on purpose: it has the same problem, but it is also

@@ -1823,11 +1823,29 @@ WILDCARD_RE = re.compile(r"<[a-zA-Z]+>|\*")
 
 
 def as_pattern(n):
-    """Compile a catalog name with <field>/<name>/* stand-ins into a regex."""
-    rx = re.escape(n)
-    rx = re.sub(r"\\<[a-zA-Z]+\\>", r"[A-Za-z0-9_.]+", rx)
-    rx = rx.replace(r"\*", r"[A-Za-z0-9_.]*")
+    """Compile a catalog name with <field>/<name>/* stand-ins into a regex.
+
+    Split on the stand-ins before escaping.  Substituting into re.escape()
+    output instead stopped working in Python 3.7, which no longer escapes < and
+    >, and left every <field> pattern able to match only the literal <field>.
+    """
+    def stand_in(m):
+        return "[A-Za-z0-9_.]*" if m.group(0) == "*" else "[A-Za-z0-9_.]+"
+    parts = WILDCARD_RE.split(n)
+    ins = [stand_in(m) for m in WILDCARD_RE.finditer(n)] + [""]
+    rx = "".join(re.escape(p) + i for p, i in zip(parts, ins))
     return re.compile(r"\A%s\Z" % rx)
+
+
+def is_bare_wildcard(n):
+    """True if a catalog name has nothing left to anchor on without its stand-ins.
+
+    <species>, <view>.<anyTypeVar> and _<origin> match any token at all.  As
+    patterns they would mark every harvested name cataloged, and --reconcile
+    would never report a new one.  sessionCartAudit.py keeps them out of its
+    match path for the same reason, with the same three-character rule.
+    """
+    return len(WILDCARD_RE.sub("", n).strip("._")) < 3
 
 
 def leaf_of(n):
@@ -1865,7 +1883,8 @@ def catalog_keys():
         if not n:
             continue                    # the bare track name, no suffix
         if WILDCARD_RE.search(n):
-            patterns.append(as_pattern(n))
+            if not is_bare_wildcard(n):
+                patterns.append(as_pattern(n))
             leaf = leaf_of(n)
             if leaf:
                 literals.add(leaf)
@@ -1878,7 +1897,8 @@ def catalog_keys():
             n = key(pat.strip())
             if not n:
                 continue
-            patterns.append(as_pattern(n))
+            if not is_bare_wildcard(n):
+                patterns.append(as_pattern(n))
             leaf = leaf_of(n)
             if leaf:
                 literals.add(leaf)

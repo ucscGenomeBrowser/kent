@@ -2555,6 +2555,46 @@ There are no extra options that can appear on the type hic line.
     <pre>   style heatmap</pre>
 </DIV>
 
+<DIV class="dotBracketField"><span class="types bigBed"></span>
+<div class="format"><code>dotBracketField &lt;fieldName&gt;</code></div>
+    <P>Draws an RNA secondary structure over each item, taken from an extra bigBed field
+    holding a dot-bracket string.  A matched pair of bases is written as a pair of
+    brackets, <code>(</code> and <code>)</code>, and an unpaired base as a period, which is
+    drawn as a small centered square rather than as a period on the baseline.  The
+    pseudoknot brackets <code>[]</code>, <code>{}</code> and <code>&lt;&gt;</code> may be
+    used as well.</P>
+    <P>The column is found by name, so the bigBed has to have been built with an autoSql
+    file (<code>bedToBigBed -as=</code>), and the column has to come after the first four
+    columns of the file.</P>
+    <P>The string covers the spliced item, one character for each base of the blocks, so its
+    length has to equal the sum of the block sizes, or the length of the item when it has no
+    blocks.  Write it in the direction the RNA is read, so for an item on the minus strand
+    the first character describes the rightmost base.  Where there is no prediction, pad with
+    spaces, which draw nothing; this means the file must be made with
+    <code>bedToBigBed -tab</code>, since a field holding spaces cannot be split on
+    whitespace.  The <code>checkDotBracketBigBed</code> utility reads a finished file and
+    reports any string that does not match the blocks of its item, any character that is
+    not part of the notation, and any brackets that do not balance.</P>
+    <P>The structure is drawn whenever a base is wide enough to hold one character, which
+    reaches well beyond the zoom at which the sequence itself appears.  At wider views, and
+    in dense and squish, where a row is too short for a character, the item is drawn as an
+    ordinary bed.  So is every item when the checkbox on the track configuration page,
+    which starts on, is turned off.  A row whose string does not match its blocks is
+    reported on the track in place of its data.</P>
+    <P><B>Example:</B></P>
+    <pre>   dotBracketField secStr</pre>
+</DIV>
+
+<DIV class="dotBracketColor"><span class="types bigBed"></span>
+<div class="format"><code>dotBracketColor &lt;red,green,blue&gt;</code></div>
+    <P>The color to draw the secondary structure in, on a track that has
+    <a href="#dotBracketField">dotBracketField</a> set.  Written as three numbers from 0 to
+    255, the same way <a href="#color">color</a> is written.  Without this setting the
+    structure is drawn in whichever of black or white stands out against the item.</P>
+    <P><B>Example:</B></P>
+    <pre>   dotBracketColor 240,228,66</pre>
+</DIV>
+
 <DIV class="thickDrawItem"><span class="types bed bigBed"></span>
 <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
     <P>In bed tracks that
