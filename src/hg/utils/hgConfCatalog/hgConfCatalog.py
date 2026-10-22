@@ -595,10 +595,6 @@ RELEASE_GATES = {
         h("canDupTracks", "flag", "hg/lib/dupTrack.c", default="TRUE",
           role="gate", verified=True,
           note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c", default="TRUE", role="gate",
-          verified=True,
-          note="Snake display for chain and alignment tracks.  Public since "
-               "v467."),
         h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
