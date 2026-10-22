@@ -208,8 +208,8 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         {
         sqlSafef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s' and chrom='%s'", table, name, chrom);
         sr = sqlGetResult(conn, query);
-        row = sqlNextRow(sr);
-        gp = genePredLoad(row);
+        if ((row = sqlNextRow(sr)) != NULL)
+            gp = genePredLoad(row);
         sqlFreeResult(&sr);
         }
     else if (sameString(tdb->type, "bigGenePred") ||

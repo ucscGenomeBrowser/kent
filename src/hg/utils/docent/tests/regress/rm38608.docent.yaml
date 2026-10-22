@@ -1,0 +1,50 @@
+# #38608 -- right-click "Zoom to this exon" in multi-region view.  In exon-only view
+# (Show exons using GENCODE), right-click on an exon of a RefSeq Curated transcript and
+# "Zoom to this exon" showed an Error 500 popup and the position stayed where it was.
+# Found in Bob's ASHG workshop.
+#
+# The menu asks hgApi?cmd=exonToPos for the exon's position and sent hgTracks.chromName
+# as the chrom.  In multi-region view that is the virtual chrom "multi", not chr17, so
+# the genePred lookup in hgApi found no row and genePredLoad() was handed NULL.  The fix
+# takes the chrom from the item's own link (c= on an hgc link, hgg_chrom= on an hgGene
+# link), and hgApi now answers a missing row with its "Couldn't find item" error.
+#
+# Recipe: hg38 over GFAP, only RefSeq Curated on in pack, exon-only view.  Right-click on
+# exon 8 of NM_002055.5 (chr17:44908064-44908149) and pick "Zoom to this exon".
+# The checks after it:
+#   * the position box holds exon 8.  On the buggy build it still holds the start window,
+#     so this is the check that fails;
+#   * no "Encountered error" warning, which is what errorHandler() in ajax.js shows for
+#     the 500;
+#   * still in multi-region view, so the zoom did not drop out of exon-only view.
+# Then the old request itself, straight to hgApi with chrom=multi.  The menu no longer
+# sends it, so only this step watches the hgApi half of the fix: it must answer with the
+# "Couldn't find item" JSON error, not the 500 page.
+proof:
+  - "assertion-only 2026-10-22 -- written from the ticket"
+  - "release-ab 2026-10-22 -- fails on v504_branch (park 38423) and on genome-test at the position check after the menu, with the Error 500 warning on the page; the hgApi step alone fails on genome-test with the 500 page; all passes on park 38608 (branch zoomExon38608)"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&refSeqComposite=pack&ncbiRefSeqCurated=pack&ncbiRefSeqCurated_sel=1&position=chr17%3A44903159-44915500&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, ncbiRefSeqCurated]
+      text: "chr17:44,903,159-44,915,500"
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+  - rightClick: {track: ncbiRefSeqCurated, title: "Exon 8 of 9", pick: "Zoom to this exon"}
+  - expect:
+      rows: [ruler, ncbiRefSeqCurated]
+      text: "chr17:44,908,064-44,908,149"
+      noText: ["Encountered error", "chr17:44,903,159-44,915,500"]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # The hgApi half: the request the old menu sent.
+  - goto: "/cgi-bin/hgApi?db=hg38&cmd=exonToPos&num=8&table=ncbiRefSeqCurated&name=NM_002055.5&chrom=multi"
+  - wait: 'body'
+  - expect:
+      text: "Couldn't find item: NM_002055.5"
+      noText: ["Error 500", "Internal Server Error"]
