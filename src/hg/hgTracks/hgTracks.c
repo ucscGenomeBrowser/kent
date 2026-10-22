@@ -7112,9 +7112,6 @@ void makeDupeTracks(struct track **pTrackList)
 /* Make up dupe tracks and append to list. Have to also crawl
  * through list to add subtracks */
 {
-if (!dupTrackEnabled())
-    return;
-
 struct dupTrack *dupList = dupTrackListFromCart(cart);
 if (dupList == NULL)
     return;

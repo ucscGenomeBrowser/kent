@@ -19,7 +19,6 @@ alwaysItemRgb              overdue  v501  # flipped v466
 autoBlatBigPsl             stalled  v501  # added v482
 blatShowLocus              stalled  v501  # added v483
 canDoHgcInPopUp            overdue  v501  # flipped v492
-canDupTracks               overdue  v501  # flipped v443
 gcOnTheFly                 overdue  v501  # flipped v496
 genarkLiftOver             stalled  v501  # added v484
 greyBarIcons               overdue  v501  # flipped v492

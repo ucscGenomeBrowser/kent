@@ -592,9 +592,6 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="The interactive tutorials.  Public since v466, five call "
                "sites across four CGIs.  Nothing is gating any more."),
-        h("canDupTracks", "flag", "hg/lib/dupTrack.c", default="TRUE",
-          role="gate", verified=True,
-          note="Duplicate-track feature.  Public since v443."),
         h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
