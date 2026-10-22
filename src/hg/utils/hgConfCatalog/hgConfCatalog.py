@@ -329,15 +329,12 @@ RELEASE_GATES = {
                "server-specific, since off they are.  Off during QA; "
                "flip to TRUE once released."),
         h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c",
-          default="FALSE", role="gate", verified=True, ticket="32751",
+          default="TRUE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
-               "page can be reopened and shared.  The read at hgBlat.c:2972 "
-               "overrides the file-scope autoBigPsl, which is initialised "
-               "FALSE at hgBlat.c:60 under the comment \"DEFAULT VALUE change "
-               "to TRUE in future\", and eleven branches downstream test it.  "
-               "Filed as a knob until that was read, on the strength of the "
-               "default being an identifier the harvester could not resolve; "
-               "a flag whose own source says to flip it later is a gate."),
+               "page can be reopened and shared.  The read in main() "
+               "overrides the file-scope autoBigPsl, now initialised TRUE, "
+               "and about a dozen branches downstream test it.  On at the "
+               "RR through hg.conf before the default was flipped TRUE."),
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
@@ -374,10 +371,11 @@ RELEASE_GATES = {
                "(synthesizes the group) and customFactory.c (refuses a "
                "hand-written group=blat when the group does not exist).  Off "
                "during QA; flip to TRUE once released."),
-        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="FALSE",
+        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="TRUE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
-               "genark.c and hdb.c."),
+               "genark.c and hdb.c, one of them under #ifdef NTONOW.  On at "
+               "the RR through hg.conf before the default was flipped TRUE."),
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
@@ -592,24 +590,9 @@ RELEASE_GATES = {
           role="gate", verified=True,
           note="The interactive tutorials.  Public since v466, five call "
                "sites across four CGIs.  Nothing is gating any more."),
-        h("canDupTracks", "flag", "hg/lib/dupTrack.c", default="TRUE",
-          role="gate", verified=True,
-          note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c", default="TRUE", role="gate",
-          verified=True,
-          note="Snake display for chain and alignment tracks.  Public since "
-               "v467."),
         h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
-        h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c",
-          default="TRUE", role="gate", verified=True,
-          note="Merge behaviour for recommended track sets.  Public since "
-               "v467."),
-        h("svgBarChart", "flag", "hg/hgc/barChartClick.c", default="TRUE",
-          role="gate", verified=True,
-          note="SVG rather than raster bar charts on the details page.  "
-               "Public since v428, the longest-shipped gate still in place."),
         h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
@@ -618,9 +601,6 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
-        h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c",
-          default="TRUE", role="gate", verified=True,
-          note="Let hubs declare their own track groups.  Public since v492."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
@@ -629,9 +609,6 @@ RELEASE_GATES = {
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c", default="TRUE",
-          role="gate", verified=True,
-          note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c", default="TRUE",
           role="gate", verified=True,
           note="Honour a BED's itemRgb without requiring the track setting.  "
@@ -1025,7 +1002,7 @@ MIRROR_KNOBS = {
                "exact value turns it on and true, 1 and yes do not, unlike "
                "every flag read through cfgOptionBooleanDefault."),
         h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
-          default="TRUE", role="knob", public=True, verified=True,
+          default="FALSE", role="gate", public=True, verified=True,
           ticket="38157",
           note="Whether hgTracks shows the note that names the session just "
                "opened and its owner, and says the browser configuration the "
@@ -1575,13 +1552,13 @@ BRANDING = {
         h("geneTracks", "internal", "hg/lib/hgFind.c", verified=True),
         h("browser.recTrackSets", "internal", "hg/hgTracks/recTrackSets.c",
           verified=True, family="recTrackSets",
-          note="Recommended track sets.  Goes with the mergeRecommended "
-               "gate."),
+          note="Recommended track sets.  Loading one merges it into the "
+               "current cart."),
         h("browser.recTrackSetsDetectChange", "internal",
           "hg/hgTracks/recTrackSets.c", verified=True,
           family="recTrackSets",
-          note="Drives the 'session changed' banner.  The mergeRecommended "
-               "gate belongs to the same feature."),
+          note="Drives the 'session changed' banner shown after a "
+               "recommended track set is loaded."),
         h("browser.exportedDataHubs", "internal",
           "hg/lib/exportedDataHubs.c", verified=True),
         h("browser.cgiExpireMinutes", "limit",
@@ -1921,6 +1898,38 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
+        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
+          ticket="38562",
+          note="Written down by --auto-register, not yet reviewed by a "
+               "person.  Read with cfgOptionBooleanDefault in "
+               "hg/hgTracks/config.c.  Came in at 05d90ce7ada, hgTracks: a "
+               "block of controls on the configure page for the FreeType "
+               "rendering itself, behind hg.conf freeTypeTuneUI, so the "
+               "settings that decide whether small text is readable can be "
+               "found by looking at the browser rather than at a demo "
+               "program.  The controls are the pixel size and baseline picked "
+               "for each text size, a gamma on each glyph pixel's coverage, "
+               "the multiplier used for text drawn to fit a box, the hinting "
+               "mode, and the anti-aliasing target, which now offers Light, "
+               "Light sub pixel and the four LCD sub-pixel targets beside the "
+               "Normal one the browser has always used; a Reset FreeType "
+               "button puts them all back.  Every control starts at what the "
+               "browser draws today and the cart is read only while the "
+               "hg.conf setting is on, so a server without it draws exactly "
+               "what it drew before: checked by rendering the same images "
+               "from this build and from a build of the same tree without the "
+               "change, with the setting absent and the cart carrying a value "
+               "for every control, and comparing them byte for byte.  Two "
+               "things had to be fixed before the knobs meant anything.  The "
+               "glyph copy assumed FreeType had packed the coverage rows when "
+               "it pads each one out to pitch, which is the same for every "
+               "glyph the browser draws today but would have skewed an LCD "
+               "render.  Subpixel positioning needs the unhinted advance, "
+               "since a hinted advance is rounded to a whole pixel and leaves "
+               "the pen with no fraction to stand on, which is why that mode "
+               "first came out identical to Light.  The setting is documented "
+               "in ex.hg.conf and in the mirror manual.  refs #38562.  Needs "
+               "a description and a gate or knob call."),
     ],
 }
 

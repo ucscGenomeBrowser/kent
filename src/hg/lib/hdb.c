@@ -449,7 +449,7 @@ if (res)
 hDisconnectCentral(&conn);
 
 #ifdef NTONOW
-if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", FALSE))
+if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", TRUE))
     {
     if (genarkUrl(database) != NULL)
         res = TRUE;
@@ -5199,7 +5199,7 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
+if (cfgOptionBooleanDefault("genarkLiftOver", TRUE) && (genarkAccs != NULL))
     {
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
@@ -5259,7 +5259,7 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
+if (cfgOptionBooleanDefault("genarkLiftOver", TRUE) && (genarkAccs != NULL))
     {
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);

@@ -1652,7 +1652,9 @@ if(scriptName)
 // back to the page they are on now.
     {
     char *loginLi = "";
-    if (loginSystemEnabled() || wikiLinkEnabled())
+    // The background process of hgSession/hgTables has no Apache environment, so the
+    // link would have no host and no /cgi-bin/, refs #38600
+    if ((loginSystemEnabled() || wikiLinkEnabled()) && !cgiVarExists("backgroundExec"))
         {
         char *userName = wikiLinkUserName();
         struct dyString *dy = dyStringNew(512);

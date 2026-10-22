@@ -1236,7 +1236,7 @@ if (!isEmpty(hub->name))
 
 if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
-else if ((genome->groups != NULL) && hubsCanAddGroups())
+else if (genome->groups != NULL)
     tdbListAddHubToGroup(hub->name, tdbList);
 else
     trackHubAddGroupName(hub->name, tdbList);

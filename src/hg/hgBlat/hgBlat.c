@@ -61,7 +61,7 @@ boolean autoRearr = FALSE;
 static long enteredMainTime = 0;
 
 
-boolean autoBigPsl = FALSE;  // DEFAULT VALUE change to TRUE in future
+boolean autoBigPsl = TRUE;  // hg.conf autoBlatBigPsl=off turns it off
 
 /* for earlyBotCheck() function at the beginning of main() */
 #define delayFraction   0.5    /* standard penalty is 1.0 for most CGIs; this one is 0.5 */
@@ -927,7 +927,6 @@ void showAliPlaces(char *pslName, char *faName, char *customText, char *database
            char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
-boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", TRUE);
 struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
@@ -1197,7 +1196,7 @@ else  // hyperlink
 
        
         }
-    else if (useBigPsl)
+    else
         {
         char *trackName = NULL;
         char *trackDescription = NULL;

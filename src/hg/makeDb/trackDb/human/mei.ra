@@ -4,6 +4,7 @@ shortLabel Mobile Element Insertions
 longLabel Mobile Element Insertions (polymorphic)
 group varRep
 visibility hide
+pennantIcon New red ../goldenPath/newsarch.html#102326 "Released Oct. 23, 2026"
 
     track meiHgsvc3
     parent mei

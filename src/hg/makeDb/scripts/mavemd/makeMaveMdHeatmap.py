@@ -274,7 +274,7 @@ def main():
             chosenRuo = False
         entry = buildEntry(urn, gene, meta, byPos, codonMap,
                            lib.calibrationLabel(chosenTitle, chosenRuo),
-                           chosenSource, chosenRuo, stats)
+                           chosenSource, chosenRuo, winUrn, stats)
         if entry:
             entries.append(entry)
             stats['scoreSetsWritten'] += 1
@@ -300,7 +300,7 @@ def main():
         sys.stderr.write("  %-36s %d\n" % (key, placeStats[key]))
 
 
-def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, stats):
+def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, calUrn, stats):
     """Assemble one heatmap BED12+ line for a score set."""
     cols = sorted((min(entry['bases']), protPos) for protPos, entry in byPos.items())
     colStarts = [c[0] for c in cols]
@@ -397,7 +397,7 @@ def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, st
         meta.get('assayMethod', ''), meta.get('assayModel', ''),
         meta.get('assayMechanism', ''), meta.get('libraryMethod', ''),
         gene,
-        calTitle, calSource, 'yes' if calRuo else 'no',
+        calTitle, calSource, 'yes' if calRuo else ('no' if calUrn else ''),
         str(measured),
         meta.get('publication', ''),
         'https://mavedb.org/score-sets/%s' % urn,

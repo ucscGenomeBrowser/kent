@@ -32,6 +32,7 @@ for asm in mm10 mm39; do
         # col5 = mm9 size, carried through the lift for the size check, then removed
         awk -v n="$name" 'BEGIN{OFS="\t"}{print $1,$2,$3,n,$3-$2}' "$SRC/$src" > "$tmp/in.bed"
         liftOver -bedPlus=4 -tab "$tmp/in.bed" "${CHAIN[$asm]}" "$tmp/lift.bed" "$tmp/unmapped"
+        : > "$out/$bb.inflated"
         awk -F'\t' -v OFS='\t' -v cnt="$tmp/counts" -v infl="$out/$bb.inflated" 'NR==FNR{sz[$1]=$2; next}
             $1 ~ /_/ {nonPrim++; next}
             {if ($3 > sz[$1]) {$3 = sz[$1]; trimmed++}

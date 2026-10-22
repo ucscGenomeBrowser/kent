@@ -712,13 +712,13 @@ function sessSaveCardHtml(C) {
 }
 
 function sessRecentHtml(recent) {
-    // A quick shortcut to re-save the session the user most recently saved, keeping its name and
+    // A quick shortcut to re-save the session the user most recently used, keeping its name and
     // description.  Hidden when there are no saved sessions.  The button's own mouseover is easy to
     // miss, so a visible (i) bubble carries the same text.
     if (!recent) { return ''; }
     var tip = 'Overwrite this session with the currently active view; keeps the session name and ' +
         'description identical';
-    return '<div class="sessRecent">Most recently saved session: <b>' + sessEnc(recent.name) +
+    return '<div class="sessRecent">Most recently used session: <b>' + sessEnc(recent.name) +
         '</b> <span class="sessRecentTime">(' + sessEnc(recent.lastUse) + ')</span> ' +
         '<button type="button" class="gbPill" id="sessUpdateNow" title="' + tip + '">' +
         'Overwrite now</button> <span class="sessInfo" title="' + tip + '">&#9432;</span></div>';
@@ -830,7 +830,8 @@ function sessionBuild() {
         s.serverUrl = '';   // this is that server, so the Server cell here is text, not a link
     });
 
-    // The session most recently saved/overwritten (max lastUse), for the one-click "Overwrite now".
+    // The session most recently used (max lastUse: saved, overwritten or opened), for the one-click
+    // "Overwrite now".
     // Only this server's own sessions: "Overwrite now" saves through this server's cart.
     var recent = null;
     (sessData.sessions || []).forEach(function(s) {
@@ -853,7 +854,7 @@ function sessionBuild() {
         if (ev.key === 'Enter') { ev.preventDefault(); sessDoSave(); }
     });
 
-    // One-click overwrite of the most recently saved session.
+    // One-click overwrite of the most recently used session.
     if (recent) {
         $('#sessUpdateNow').on('click', function() {
             sessConfirm({

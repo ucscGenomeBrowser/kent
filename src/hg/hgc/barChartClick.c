@@ -626,10 +626,7 @@ if (vals != NULL)
     }
 else
     {
-    if (cfgOptionBooleanDefault("svgBarChart", TRUE))
-	{
-	printBarChart(item, chartItem, tdb, highLevel, metric);
-	}
+    printBarChart(item, chartItem, tdb, highLevel, metric);
     }
 puts("<br>");
 }

@@ -229,7 +229,4 @@ boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId);
 /* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
  * hub for db.  Only reads the hub's URL, never fetches the hub. */
 
-boolean hubsCanAddGroups();
-/* can track hubs have their own groups? */
-
 #endif /* HUBCONNECT_H */
