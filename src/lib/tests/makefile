@@ -11,7 +11,8 @@ test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
     dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
-    hmacTest netSlurpMaxTest htmlEncodeTest cgiDecodeTest udcDotsTest pngWriteTest
+    hmacTest netSlurpMaxTest htmlEncodeTest cgiDecodeTest udcDotsTest pngWriteTest \
+    colorSpecTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -22,6 +23,13 @@ mkdirs:
 testSumDoubles: testSumDoubles.o ${MYLIBS}
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ./testSumDoubles testSumDoubles.o ${MYLIBS} ${L}
+
+colorSpecTest: colorSpecTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/colorSpecTest colorSpecTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/colorSpecTest${EXE}
+	${BIN_DIR}/colorSpecTest > output/colorSpecTest
+	diff expected/colorSpecTest output/colorSpecTest
 
 hmacTest: hmacTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

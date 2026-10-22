@@ -24,6 +24,8 @@
 #include "common.h"
 #include "dystring.h"
 #include "bigBed.h"
+#include "basicBed.h"
+#include "colorSpec.h"
 #include "hgTracks.h"
 #include "dotBracketTrack.h"
 
@@ -110,29 +112,6 @@ dotBracketError(tg, "track %s: %s names the column '%s', which %s.  Set %s to on
 dyStringFree(&names);
 }
 
-static boolean dotBracketParseColor(char *setting, unsigned char *r, unsigned char *g,
-                                    unsigned char *b)
-/* Read an r,g,b setting.  FALSE rather than errAbort when it is not three numbers in
- * range, so a mistyped colour is reported on the track like any other bad data instead
- * of taking the page down, which is what parseColor in trackDbCustom.c would do. */
-{
-char dupe[64], *words[4];
-int i;
-if (strlen(setting) >= sizeof dupe)
-    return FALSE;
-safecpy(dupe, sizeof dupe, setting);
-if (chopString(dupe, ", \t", words, ArraySize(words)) != 3)
-    return FALSE;
-for (i = 0; i < 3; i++)
-    {
-    if (!isAllDigits(words[i]) || (atoi(words[i]) > 255))
-        return FALSE;
-    }
-*r = atoi(words[0]);
-*g = atoi(words[1]);
-*b = atoi(words[2]);
-return TRUE;
-}
 
 static int dotBracketRestIx(struct track *tg, struct bbiFile *bbi)
 /* Index into bb->rest of the column named by the dotBracketField setting, or -1 when
@@ -214,11 +193,11 @@ static void dotBracketLoadItems(struct track *tg)
 /* Load as a gapped bed, resolving the dot-bracket column while the bigBed is open. */
 {
 char *colorSetting = trackDbSetting(tg->tdb, DOT_BRACKET_COLOR);
-unsigned char r, g, b;
-if ((colorSetting != NULL) && !dotBracketParseColor(colorSetting, &r, &g, &b))
-    dotBracketError(tg, "track %s: %s is '%s', which is not three numbers from 0 to 255.  "
-                    "Write it the way the color setting is written, for example 0,0,255.",
-                    tg->track, DOT_BRACKET_COLOR, colorSetting);
+unsigned rgb;
+if ((colorSetting != NULL) && !colorSpecMayParse(colorSetting, &rgb))
+    errAbort("track %s: %s is '%s', which is not a color.  Write it as r,g,b, for example "
+             "0,0,255, or as #0000ff, or as an HTML color name.",
+             tg->track, DOT_BRACKET_COLOR, colorSetting);
 tg->customInt = dotBracketRestIx(tg, fetchBbiForTrack(tg));
 loadGappedBed(tg);
 if (tg->customInt >= 0)
@@ -252,9 +231,12 @@ static Color dotBracketColor(struct track *tg, struct hvGfx *hvg, Color itemColo
  * otherwise whatever stands out against the item. */
 {
 char *setting = trackDbSetting(tg->tdb, DOT_BRACKET_COLOR);
-unsigned char r, g, b;
-if ((setting != NULL) && dotBracketParseColor(setting, &r, &g, &b))
-    return hvGfxFindColorIx(hvg, r, g, b);
+unsigned rgb;
+if ((setting != NULL) && colorSpecMayParse(setting, &rgb))
+    {
+    struct rgbColor color = bedColorToRgb(rgb);
+    return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
+    }
 return hvGfxContrastingColor(hvg, itemColor);
 }
 

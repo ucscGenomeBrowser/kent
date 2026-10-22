@@ -1,0 +1,29 @@
+'0,0,255' -> 000000ff
+'255,255,255' -> 00ffffff
+'0,0,0' -> 00000000
+'#0000ff' -> 000000ff
+'#00FF00' -> 0000ff00
+'#abcdef' -> 00abcdef
+'blue' -> 000000ff
+'black' -> 00000000
+'aqua' -> 0000ffff
+' 12 , 34 , 56 ' -> 000c2238
+'0,0,255,128' -> 800000ff
+'1,2,3,4' -> 04010203
+'darkgreen' -> not a color, retColor untouched yes
+'rebeccapurple' -> not a color, retColor untouched yes
+'' -> not a color, retColor untouched yes
+'256,0,0' -> not a color, retColor untouched yes
+'0,0' -> not a color, retColor untouched yes
+'0,0,0,0,0' -> not a color, retColor untouched yes
+'0,,255' -> not a color, retColor untouched yes
+'0,0,blue' -> not a color, retColor untouched yes
+'-1,0,0' -> not a color, retColor untouched yes
+'0,0,25.5' -> not a color, retColor untouched yes
+'blue2' -> not a color, retColor untouched yes
+'#0000f' -> not a color, retColor untouched yes
+'#0000fff' -> not a color, retColor untouched yes
+'#xxyyzz' -> not a color, retColor untouched yes
+'0000ff' -> not a color, retColor untouched yes
+'16711680' -> not a color, retColor untouched yes
+'rgb(0,0,255)' -> not a color, retColor untouched yes
