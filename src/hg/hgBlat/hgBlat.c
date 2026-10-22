@@ -927,7 +927,6 @@ void showAliPlaces(char *pslName, char *faName, char *customText, char *database
            char *organism, boolean feelingLucky)
 /* Show all the places that align. */
 {
-boolean useBigPsl = cfgOptionBooleanDefault("useBlatBigPsl", TRUE);
 struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
@@ -1197,7 +1196,7 @@ else  // hyperlink
 
        
         }
-    else if (useBigPsl)
+    else
         {
         char *trackName = NULL;
         char *trackDescription = NULL;
