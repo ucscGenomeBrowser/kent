@@ -306,11 +306,13 @@ return width;
 static boolean dotBracketShowing(struct track *tg, struct linkedFeatures *lf,
                                  enum trackVisibility vis)
 /* Is this item's structure on?  That is a separate question from whether there is room
- * to draw it: an item whose structure is on but too small to read is drawn as a plain
- * box, never with the direction arrows, which look like brackets of their own. */
+ * to draw it, in the row or along the bases: an item whose structure is on but too small
+ * to read is drawn as a plain box, never with the direction arrows, which look like
+ * brackets of their own.  Squish is the case that makes the two questions separate.  The
+ * row is too short there for a character, so the structure is never drawn, but the arrows
+ * have to go all the same, since a squished row of them reads as a structure. */
 {
 return (lf->extra != NULL) && (lf->components != NULL) && (vis != tvDense)
-    && (tg->heightPer >= tl.fontHeight)
     && cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX, TRUE);
 }
 
@@ -334,7 +336,8 @@ static void dotBracketDrawItemAt(struct track *tg, void *item, struct hvGfx *hvg
 {
 struct linkedFeatures *lf = item;
 boolean showing = dotBracketShowing(tg, lf, vis);
-boolean drawChars = showing && dotBracketRoomForChars(lf, scale, font);
+boolean drawChars = showing && (tg->heightPer >= tl.fontHeight)
+                    && dotBracketRoomForChars(lf, scale, font);
 boolean exonArrows = tg->exonArrows, exonArrowsAlways = tg->exonArrowsAlways;
 struct simpleFeature **exons;
 Color structColor;
