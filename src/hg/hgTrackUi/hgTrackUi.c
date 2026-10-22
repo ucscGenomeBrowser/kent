@@ -3661,7 +3661,6 @@ else if (tdb->type != NULL)
     if (cType != cfgNone)
         {
         cfgByCfgType(cType,db, cart, tdb,tdb->track, NULL, boxed);
-        dotBracketCfgUi(cart, tdb);   // no-op unless the track names a dot-bracket column
         if (startsWith("gtexGene", track))
             gtexGeneUi(cart, tdb, tdb->track, NULL, TRUE);
         else if (startsWith("gtexEqtlCluster", track))
@@ -3685,6 +3684,11 @@ else if (tdb->type != NULL)
     else if (startsWithWord("bigBed",tdb->type))
         labelCfgUi(db, cart, tdb, tdb->track);
     }
+
+// out here rather than beside cfgByCfgType, since cfgTypeFromTdb says cfgNone for a plain
+// "type bigBed", for "bigBed 6", and for anything carrying noScoreFilter, and those land in
+// the labelCfgUi branch above.  A no-op unless the track names a dot-bracket column.
+dotBracketCfgUi(cart, tdb);
 
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);

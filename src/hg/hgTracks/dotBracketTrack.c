@@ -11,11 +11,18 @@
  * rnaSecStr table.  No code is shared: those items are struct rnaSecStr covering one
  * contiguous span, these are struct linkedFeatures with blocks.
  *
- * Bad data warns and falls back to drawing a plain bed rather than aborting.  Both load
- * paths in hgTracks.c do catch an errAbort out of loadItems, but the message it leaves
- * is whatever text happened to abort, the rest of the rows are lost with it, and
- * nothing catches an errAbort raised while drawing.  Reporting through networkErrMsg
- * keeps the message specific, keeps the other items, and works on either path.
+ * Bad data takes the track down and says why in its place: a row whose string does not
+ * match its blocks, a dotBracketField naming a column the file does not have, or a
+ * dotBracketColor that is not a color.  None of it is drawn around, since a structure
+ * that is quietly missing from some items is worse than a track that says what is wrong
+ * with it.  The way back to the data is the overlay checkbox on the track's configure
+ * page: with it off nothing here reads the column at all and the track draws as the
+ * plain bed it is.
+ *
+ * The report goes through networkErrMsg rather than errAbort where the message names an
+ * item, so that it can name the item rather than being whatever text happened to abort.
+ * Either way both load paths in hgTracks.c end up printing it across the track.  Nothing
+ * here reports while drawing: an errAbort raised there is caught by nobody.
  */
 
 /* Copyright (C) 2026 The Regents of the University of California
@@ -178,8 +185,7 @@ return dotBracket;
 
 static void dotBracketParseItems(struct track *tg)
 /* Hang the genomic order dot-bracket string on each item.  Items merged by mergeSpan
- * are built without a bigBedInterval, so they have no string and draw as plain beds,
- * and so does any item whose string does not check out. */
+ * are built without a bigBedInterval, so they have no string and draw as plain beds. */
 {
 struct linkedFeatures *lf;
 for (lf = tg->items; lf != NULL; lf = lf->next)
@@ -189,11 +195,24 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     }
 }
 
+static boolean dotBracketWanted(struct track *tg)
+/* Is the overlay switched on for this track?  Asked at load as well as at draw: a track
+ * whose data is bad reports in place of itself, and turning the overlay off has to put
+ * the track back, not leave hiding it as the only way out. */
+{
+return cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX, TRUE);
+}
+
 static void dotBracketLoadItems(struct track *tg)
 /* Load as a gapped bed, resolving the dot-bracket column while the bigBed is open. */
 {
 char *colorSetting = trackDbSetting(tg->tdb, DOT_BRACKET_COLOR);
 unsigned rgb;
+if (!dotBracketWanted(tg))
+    {
+    loadGappedBed(tg);   /* overlay off, so nothing here looks at the column or the color */
+    return;
+    }
 if ((colorSetting != NULL) && !colorSpecMayParse(colorSetting, &rgb))
     errAbort("track %s: %s is '%s', which is not a color.  Write it as r,g,b, for example "
              "0,0,255, or as #0000ff, or as an HTML color name.",
@@ -313,7 +332,7 @@ static boolean dotBracketShowing(struct track *tg, struct linkedFeatures *lf,
  * have to go all the same, since a squished row of them reads as a structure. */
 {
 return (lf->extra != NULL) && (lf->components != NULL) && (vis != tvDense)
-    && cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX, TRUE);
+    && dotBracketWanted(tg);
 }
 
 static boolean dotBracketRoomForChars(struct linkedFeatures *lf, double scale, MgFont *font)

@@ -874,6 +874,21 @@ if (*pConn != NULL)  // don't use hdbCc if never allocated
     sqlConnCacheDealloc(hdbCc, pConn);
 }
 
+unsigned hConnMark()
+/* The number of connections handed out so far, to pass to hConnReleaseSince. */
+{
+return sqlConnCacheMark();
+}
+
+void hConnReleaseSince(unsigned mark)
+/* Put back every connection handed out since the mark.  Call it after catching an
+ * errAbort: the hFreeConn that the code which asked for the connection would have made
+ * never ran, and the cache holds only 16 connections, so a page with a few failing tracks
+ * fills it and every later hAllocConn fails with "Too many open sqlConnections". */
+{
+sqlConnCacheReleaseSince(hdbCc, mark);
+}
+
 static void hCentralMkCache()
 /* create the central database cache, trying to connect to the
  * database and failing over if needed */

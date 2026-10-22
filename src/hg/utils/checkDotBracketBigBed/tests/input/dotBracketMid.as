@@ -13,7 +13,7 @@ table dotBracketMid
     int     blockCount;  "Number of blocks"
     int[blockCount] blockSizes;  "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
-    string  before;      "A column ahead of the dot-bracket one"
+    enum(alpha, beta) before;  "An enum column ahead of the dot-bracket one, which the field parsing has to count"
     lstring dotBracket;  "Dot-bracket structure, transcript order"
     string  after;       "A column behind the dot-bracket one"
     )

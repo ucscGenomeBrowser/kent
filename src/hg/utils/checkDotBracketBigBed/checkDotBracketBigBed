@@ -12,7 +12,9 @@ import sys
 openers = "([{<"
 closers = ")]}>"
 validChars = openers + closers + ". "
-asFieldRe = re.compile(r"^\s*[A-Za-z_][\w\[\]]*\s+([A-Za-z_]\w*)\s*;")
+# a field declaration: a type, which may carry an array size in brackets or a value
+# list in parentheses as enum and set do, then the field name
+asFieldRe = re.compile(r"^\s*[A-Za-z_][\w\[\]]*\s*(?:\([^)]*\))?\s+([A-Za-z_]\w*)\s*;")
 
 
 def parseArgs():

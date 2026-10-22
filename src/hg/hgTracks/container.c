@@ -27,12 +27,20 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	 * aborts out of the container's own loadItems, so the children after it never
 	 * load and the message lands on the container rather than on the row that
 	 * failed.  refs #38560 */
+	unsigned connMark = hConnMark();
 	struct errCatch *errCatch = errCatchNew();
 	if (errCatchStart(errCatch))
 	    subtrack->loadItems(subtrack);
 	errCatchEnd(errCatch);
 	if (errCatch->gotError)
+	    {
 	    subtrack->networkErrMsg = cloneString(errCatch->message->string);
+	/* A loader that aborts never reached its hFreeConn, and the connection cache holds
+	 * sixteen, so without this a handful of failing tracks fills it and every later
+	 * track reports "Too many open sqlConnections" instead of its own trouble.  refs
+	 * #38560 */
+	    hConnReleaseSince(connMark);
+	    }
 	errCatchReWarn(errCatch);   // errCatchStart took the warnings, hand them back
 	errCatchFree(&errCatch);
 	}

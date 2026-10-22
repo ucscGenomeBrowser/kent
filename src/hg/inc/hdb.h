@@ -167,6 +167,13 @@ struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *default
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+unsigned hConnMark();
+/* The number of connections handed out so far, to pass to hConnReleaseSince. */
+
+void hConnReleaseSince(unsigned mark);
+/* Put back every connection handed out since the mark.  Call it after catching an
+ * errAbort, where the hFreeConn the aborted code would have made never ran. */
+
 struct sqlConnection *hConnectCentral(void);
 /* Connect to central database where user info and other info
  * not specific to a particular genome lives.  Free this up
