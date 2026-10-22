@@ -269,11 +269,10 @@ def writeBigPsl(lines, seqs, outBb, chromSizes, workDir, asFile):
             for name, seq in sorted(seqs.items()):
                 fh.write('>%s\n%s\n' % (name, seq))
         cmd.insert(1, '-fa=' + base + '.fa')
-    subprocess.run(cmd, check=True)
+    mp.runQuiet(cmd)
     subprocess.run(['sort', '-k1,1', '-k2,2n', '-o', base + '.bigPslInput',
                     base + '.bigPslInput'], check=True)
-    subprocess.run(['bedToBigBed', '-type=bed12+13', '-tab', '-as=' + asFile,
-                    base + '.bigPslInput', chromSizes, outBb + '.tmp'], check=True,
-                   stdout=subprocess.PIPE)
+    mp.runQuiet(['bedToBigBed', '-type=bed12+13', '-tab', '-as=' + asFile,
+                 base + '.bigPslInput', chromSizes, outBb + '.tmp'])
     os.rename(outBb + '.tmp', outBb)
     return len(lines)

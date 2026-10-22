@@ -28,6 +28,7 @@ abort the run; 502/503/504 back off 60, 120, 180, 240 s, then that score set fai
 import argparse
 import concurrent.futures
 import csv
+import http.client
 import json
 import os
 import re
@@ -41,7 +42,8 @@ import urllib.request
 API = 'https://api.mavedb.org/api/v1'
 NAMESPACES = ('scores', 'mavedb', 'clingen')
 PAGE = 100000
-SEARCH_PAGE = 100
+# Search page sizes of successive catalogue walks (crawlCatalogue); 100 is MaveDB's maximum.
+SEARCH_PAGES = (100, 97, 93, 89)
 VARIANT_DELAY = 2
 METADATA_DELAY = 1
 METADATA_WORKERS = 2
@@ -89,7 +91,10 @@ class Api(object):
                     if n >= MAX_429:
                         raise FetchError('%d consecutive 429 responses from MaveDB, stopping'
                                          % n)
-                    wait = int(e.headers.get('Retry-After') or 300) + 30
+                    try:
+                        wait = int(e.headers.get('Retry-After') or 300) + 30
+                    except ValueError:      # the HTTP-date form
+                        wait = 330
                     self.log.write('429 from MaveDB, waiting %d s\n' % wait)
                     time.sleep(wait)
                     continue
@@ -100,7 +105,8 @@ class Api(object):
                     time.sleep(wait)
                     continue
                 raise FetchError('%s: HTTP %d' % (url, e.code))
-            except (urllib.error.URLError, OSError) as e:
+            except (urllib.error.URLError, OSError, http.client.HTTPException) as e:
+                # HTTPException: a connection dropped mid-body (IncompleteRead)
                 if errors < len(BACKOFF_5XX):
                     wait = BACKOFF_5XX[errors]
                     errors += 1
@@ -110,7 +116,11 @@ class Api(object):
                 raise FetchError('%s: %s' % (url, e))
 
     def json(self, url, data=None, delay=METADATA_DELAY):
-        return json.loads(self.request(url, data, delay))
+        body = self.request(url, data, delay)
+        try:
+            return json.loads(body)
+        except ValueError:
+            raise FetchError('%s: not JSON: %r' % (url, body[:200]))
 
 
 def quote(urn):
@@ -125,35 +135,43 @@ def apiVersion(api):
     return api.json(API + '/api/version').get('version', '')
 
 
-def crawlOnce(api):
+def crawlOnce(api, pageSize):
     """(records by URN, numScoreSets) from one paged walk of the published search."""
     records, total, offset = {}, None, 0
     while total is None or offset < total:
         page = api.json(API + '/score-sets/search',
-                        {'published': True, 'offset': offset, 'limit': SEARCH_PAGE})
+                        {'published': True, 'offset': offset, 'limit': pageSize})
         total = page['numScoreSets']
         sets = page.get('scoreSets') or []
         if not sets:
             break
         for s in sets:
             records[s['urn']] = s
-        offset += SEARCH_PAGE
+        offset += pageSize
     return records, total
 
 
 def crawlCatalogue(api):
     """Every published score set. No organism filter: accession-based targets carry no
-    organism and the filter drops them. The catalogue can change during a walk, so a
-    count that does not match numScoreSets is walked again once, then fails the run
-    (a partial walk must not look like withdrawals)."""
-    for attempt in (1, 2):
-        records, total = crawlOnce(api)
+    organism and the filter drops them.
+
+    MaveDB's search order is not stable where pages meet: on 2026-10-22 a walk of 2,938
+    rows returned a few score sets on two adjacent pages and never returned as many others,
+    the same ones on every walk of that page size; pages over 100 are refused (422). Walks
+    with different page sizes put the boundaries elsewhere, so they are combined until they
+    reach numScoreSets (two did, that day). Short of that the run fails, since a partial
+    catalogue must not look like withdrawals.
+    """
+    records = {}
+    for attempt, pageSize in enumerate(SEARCH_PAGES, 1):
+        found, total = crawlOnce(api, pageSize)
+        records.update(found)
         if len(records) == total:
             return list(records.values())
-        api.log.write('catalogue walk %d: %d score sets, numScoreSets %d\n'
+        api.log.write('catalogue walk %d: %d score sets so far, numScoreSets %d\n'
                       % (attempt, len(records), total))
-    raise FetchError('catalogue walk returned %d score sets, MaveDB reports %d'
-                     % (len(records), total))
+    raise FetchError('%d catalogue walks returned %d score sets, MaveDB reports %d'
+                     % (len(SEARCH_PAGES), len(records), total))
 
 
 def isHumanTarget(target):
@@ -208,12 +226,21 @@ def writeAtomic(path, data):
 
 
 def fetchScoreSetRecord(api, urn, path):
-    writeAtomic(path, api.request('%s/score-sets/%s' % (API, quote(urn)),
-                                  delay=METADATA_DELAY))
+    body = api.request('%s/score-sets/%s' % (API, quote(urn)), delay=METADATA_DELAY)
+    try:
+        json.loads(body)
+    except ValueError:
+        raise FetchError('%s record: not JSON: %r' % (urn, body[:200]))
+    writeAtomic(path, body)
 
 
-def fetchVariants(api, urn, path):
-    """All variant rows of a score set, paged, as one CSV."""
+def fetchVariants(api, urn, path, expected=None):
+    """All variant rows of a score set, paged, as one CSV.
+
+    The file is only written when it starts with the CSV header and, given expected (the
+    catalogue's numVariants), has that many rows: a short page would otherwise end the
+    paging early and leave a truncated file that every build reads until the next refetch.
+    """
     ns = '&'.join('namespaces=' + n for n in NAMESPACES)
     chunks, offset = [], 0
     while True:
@@ -225,7 +252,13 @@ def fetchVariants(api, urn, path):
         if sum(1 for l in lines[1:] if l.strip()) < PAGE:
             break
         offset += PAGE
-    writeAtomic(path, b'\n'.join(c for c in chunks if c) + b'\n')
+    data = b'\n'.join(c for c in chunks if c) + b'\n'
+    if not data.startswith(b'accession,'):
+        raise FetchError('%s variants: no CSV header: %r' % (urn, data[:200]))
+    rows = sum(1 for l in data.split(b'\n')[1:] if l.strip())
+    if expected is not None and rows != expected:
+        raise FetchError('%s variants: %d rows, the catalogue says %d' % (urn, rows, expected))
+    writeAtomic(path, data)
 
 
 def fetch(cacheDir, refetch=False, only=None, adopt=None, catalogueOnly=False,
@@ -275,36 +308,44 @@ def fetch(cacheDir, refetch=False, only=None, adopt=None, catalogueOnly=False,
     log.write('%d human score sets; fetching %d records, %d variant files\n'
               % (len(current), len(wantRecord), len(wantVariants)))
 
-    failed = set()
-    with concurrent.futures.ThreadPoolExecutor(METADATA_WORKERS) as pool:
-        futures = {pool.submit(fetchScoreSetRecord, api, urn, paths(urn)[0]): urn
-                   for urn in wantRecord}
-        for f in concurrent.futures.as_completed(futures):
+    failed, recordsDone, variantsDone = set(), set(), set()
+    try:
+        with concurrent.futures.ThreadPoolExecutor(METADATA_WORKERS) as pool:
+            futures = {pool.submit(fetchScoreSetRecord, api, urn, paths(urn)[0]): urn
+                       for urn in wantRecord}
+            for f in concurrent.futures.as_completed(futures):
+                try:
+                    f.result()
+                    recordsDone.add(futures[f])
+                except FetchError as e:
+                    if 'consecutive 429' in str(e):
+                        raise
+                    failed.add(futures[f])
+                    log.write('record failed: %s\n' % e)
+        t0 = time.time()
+        for i, urn in enumerate(wantVariants, 1):
+            expected = current[urn][2]
             try:
-                f.result()
+                fetchVariants(api, urn, paths(urn)[1],
+                              int(expected) if expected.isdigit() else None)
+                variantsDone.add(urn)
             except FetchError as e:
                 if 'consecutive 429' in str(e):
                     raise
-                failed.add(futures[f])
-                log.write('record failed: %s\n' % e)
-    t0 = time.time()
-    for i, urn in enumerate(wantVariants, 1):
-        try:
-            fetchVariants(api, urn, paths(urn)[1])
-        except FetchError as e:
-            if 'consecutive 429' in str(e):
-                raise
-            failed.add(urn)
-            log.write('variants failed: %s\n' % e)
-        if i % 50 == 0:
-            log.write('%d/%d variant files (%.0f s)\n' % (i, len(wantVariants), time.time() - t0))
-
-    # Only a score set whose files all arrived takes its new fingerprint.
-    for urn in set(wantRecord) | set(wantVariants):
-        if urn not in failed:
-            fetched[urn] = current[urn]
-            summary['fetched'].append(urn)
-    writeFingerprints(fetchedPath, fetched)
+                failed.add(urn)
+                log.write('variants failed: %s\n' % e)
+            if i % 50 == 0:
+                log.write('%d/%d variant files (%.0f s)\n'
+                          % (i, len(wantVariants), time.time() - t0))
+    finally:
+        # Only a score set whose files all arrived takes its new fingerprint. Written even
+        # when the run stops early, so what did arrive is not fetched again.
+        for urn in set(wantRecord) | set(wantVariants):
+            if (urn not in wantRecord or urn in recordsDone) and \
+                    (urn not in wantVariants or urn in variantsDone):
+                fetched[urn] = current[urn]
+                summary['fetched'].append(urn)
+        writeFingerprints(fetchedPath, fetched)
     for urn in sorted(failed):
         hasCache = os.path.exists(paths(urn)[1])
         summary['failed' if hasCache else 'failedNew'].append(urn)

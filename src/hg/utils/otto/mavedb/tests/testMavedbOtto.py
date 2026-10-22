@@ -75,5 +75,18 @@ class Bookkeeping(unittest.TestCase):
             self.assertNotEqual(key, mo.releaseKey(fetched, cat, d))
 
 
+class Pruning(unittest.TestCase):
+
+    def testKeepNewestAndDropFailed(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get('TMPDIR', '/data/tmp')) as d:
+            for n in ('2026-09-01', '2026-10-02', '2026-10-02.2', '2026-10-02.10',
+                      '2026-11-01', '2026-10-15.tmp'):
+                os.mkdir(os.path.join(d, n))
+            removed = mo.pruneReleases(d, '2026-11-01')
+            self.assertEqual(removed, ['2026-09-01', '2026-10-02', '2026-10-15.tmp'])
+            self.assertEqual(sorted(os.listdir(d)),
+                             ['2026-10-02.10', '2026-10-02.2', '2026-11-01'])
+
+
 if __name__ == '__main__':
     unittest.main()

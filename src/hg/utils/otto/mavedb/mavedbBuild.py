@@ -16,7 +16,6 @@ import collections
 import csv
 import json
 import os
-import subprocess
 import sys
 import time
 
@@ -89,7 +88,7 @@ def writeBigBed(rows, asFile, bedType, outBb, workDir, extraIndex=None):
     if extraIndex:
         cmd.append('-extraIndex=' + extraIndex)
     cmd += [bed, CHROM_SIZES, outBb + '.tmp']
-    subprocess.run(cmd, check=True, cwd=workDir)
+    mp.runQuiet(cmd, cwd=workDir)
     os.rename(outBb + '.tmp', outBb)
     return len(rows)
 
