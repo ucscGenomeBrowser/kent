@@ -8898,7 +8898,10 @@ var sessionLoadDialog = {
         var html = '<p>These are the views you had in this web browser in the last 7 days. ' +
                 'Open one in a new tab to get it back, or save it as a named session.</p>';
         if (sessions.length === 0) {
-            return html + '<p>There are no other views.</p>';
+            return html + '<p>No recently used views are available yet for this internet ' +
+                    'browser. You may want to check other internet browsers or other user ' +
+                    'accounts in these, if you think there should be more. Or ' +
+                    '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
         }
         var sorted = sessions.slice().sort(function(a, b) {
             var aCopy = (a.prevViewOf !== null && a.prevViewOf !== undefined);

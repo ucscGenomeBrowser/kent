@@ -12319,7 +12319,8 @@ jsInlineF("notifBoxShow(\"hgTracks\", \"%s\");\n", msgId);
 
 void notifyOnce (char *msg, char *msgId)
 /* Like notify(), but for a message that only makes sense on this page, e.g. after a session was
- * loaded.  It has no "Don't show again" button, as it is not shown again on the next page. */
+ * loaded.  It is not shown again on the next page; its "Don't show again" button keeps it away
+ * the next time the same thing happens, in this web browser. */
 {
 jsInlineF("notifBoxOnce(\"%s\", \"%s\");\n", msg, msgId);
 }
@@ -12396,8 +12397,8 @@ if (isNotEmpty(description))
 
 static void showSessionLoadNotice(int recentViewCount)
 /* If a saved session has just been loaded into this cart, put a note at the top of the page
- * saying what was opened and that the previous view was replaced.  If there are recent views to
- * go back to, link to them.  Only on that one page: the marker is taken out of the cart here,
+ * saying what was opened and that the previous view was replaced.  If hg.conf turns on recent
+ * views, link to them.  Only on that one page: the marker is taken out of the cart here,
  * so the next page does not have it anymore.  Recommended track sets are left alone: they merge
  * into the cart instead of replacing it and have their own label next to the assembly name. */
 {
@@ -12423,17 +12424,22 @@ else
     sessionNoticeText(dy, sessionName, sessionOwner);
 
 char *what = fromFile ? "these settings" : "this session";
+// hgTracks.js opens the same dialog as the My Data menu item when this link is clicked
+char *recentViewsLink = "<a href='#' id='recentViewsLink'>My Data &gt; Recent Browser Views</a>";
 if (recentViewCount > 0)
     dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
-            "been replaced by %s. To go back to them, open "
-            "<a href='#' id='recentViewsLink'>your recent browser views</a>, also under "
-            "My Data &gt; Recent Browser Views. ", what);
+            "been replaced by %s. To go back to them, open %s. ", what, recentViewsLink);
+else if (cartRecentSessionsEnabled())
+    dyStringPrintf(dy, "The tracks, position, and settings you had in the browser before have "
+            "been replaced by %s. The views you had in this web browser in the last 7 days are "
+            "under %s. ", what, recentViewsLink);
 else
     dyStringPrintf(dy, "%s replaced the tracks, position, and settings you had in the browser "
             "before. To keep a browser view for later, save it under My Data &gt; My Sessions "
             "before you open a session. ", fromFile ? "These settings" : "This session");
 dyStringPrintf(dy, "This note goes away when you close it or leave this page.");
-notifyOnce(dy->string, "sessionLoad");
+// separate ids, so "Don't show again" on one note does not hide the other
+notifyOnce(dy->string, fromFile ? "settingsLoad" : "sessionLoad");
 dyStringFree(&dy);
 }
 
@@ -12517,7 +12523,13 @@ if (noPixVariableSetAndInteractive())
 {
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("utils.js", NULL);
-    jsInlineF("addPixAndReloadPage();");
+    // A session load replaces the cart, so pix is gone.  The session is in the cart already:
+    // reloading this URL would load it a second time, and keep a second copy of the view.
+    if (cgiVarExists(hgsDoOtherUser) || cgiVarExists(hgsDoLoadUrl))
+        jsInlineF("addPixAndReloadPage('%s', ['%s', '%s']);", cartSessionId(cart),
+                hgsDoOtherUser, hgsDoLoadUrl);
+    else
+        jsInlineF("addPixAndReloadPage();");
     return;
 }
 
