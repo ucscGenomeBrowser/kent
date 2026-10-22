@@ -598,10 +598,6 @@ RELEASE_GATES = {
         h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
-        h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c",
-          default="TRUE", role="gate", verified=True,
-          note="Merge behaviour for recommended track sets.  Public since "
-               "v467."),
         h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
@@ -1564,13 +1560,13 @@ BRANDING = {
         h("geneTracks", "internal", "hg/lib/hgFind.c", verified=True),
         h("browser.recTrackSets", "internal", "hg/hgTracks/recTrackSets.c",
           verified=True, family="recTrackSets",
-          note="Recommended track sets.  Goes with the mergeRecommended "
-               "gate."),
+          note="Recommended track sets.  Loading one merges it into the "
+               "current cart."),
         h("browser.recTrackSetsDetectChange", "internal",
           "hg/hgTracks/recTrackSets.c", verified=True,
           family="recTrackSets",
-          note="Drives the 'session changed' banner.  The mergeRecommended "
-               "gate belongs to the same feature."),
+          note="Drives the 'session changed' banner shown after a "
+               "recommended track set is loaded."),
         h("browser.exportedDataHubs", "internal",
           "hg/lib/exportedDataHubs.c", verified=True),
         h("browser.cgiExpireMinutes", "limit",

@@ -26,7 +26,6 @@ greyBarIcons               overdue  v501  # flipped v492
 groupDropdown              stalled  v501  # added v489
 hgHubConnect.validateHub   overdue  v501  # flipped v427
 hgSession.shortLink        stalled  v501  # added v374
-mergeRecommended           overdue  v501  # flipped v467
 newBotDelay                overdue  v501  # flipped v492
 showDownloadUi             overdue  v501  # flipped v467
 showHubApiKey              stalled  v501  # added v473
