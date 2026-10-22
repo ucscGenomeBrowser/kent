@@ -35,6 +35,5 @@ showIgv                    stalled  v501  # added v487
 showMouseovers             stalled  v501  # added v446
 showTutorial               overdue  v501  # flipped v466
 storeUserFiles             stalled  v501  # added v447
-svgBarChart                overdue  v501  # flipped v428
 trackHubsCanAddGroups      overdue  v501  # flipped v492
 useBlatBigPsl              overdue  v501  # flipped v348

@@ -606,10 +606,6 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="Merge behaviour for recommended track sets.  Public since "
                "v467."),
-        h("svgBarChart", "flag", "hg/hgc/barChartClick.c", default="TRUE",
-          role="gate", verified=True,
-          note="SVG rather than raster bar charts on the details page.  "
-               "Public since v428, the longest-shipped gate still in place."),
         h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
