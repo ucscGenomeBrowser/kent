@@ -64,6 +64,85 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="mei"></a>
+<a name="102326"></a>
+<h2>Oct. 23, 2026 &nbsp;&nbsp; Mobile Element Insertions track collection for human (hg38, hg19 and hs1)</h2>
+<p>
+We are happy to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mei&position=default" target="_blank"><b>Mobile
+Element Insertions</b></a> container track on
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=mei&position=default" target="_blank">GRCh38/hg38</a>,
+<a href="/cgi-bin/hgTrackUi?db=hg19&g=mei&position=default" target="_blank">GRCh37/hg19</a> and
+<a href="/cgi-bin/hgTracks?db=hs1&position=default" target="_blank">T2T-CHM13/hs1</a>.
+Mobile elements are stretches of DNA that copy themselves into new genomic locations,
+and a few families remain active in people today. A site where some individuals carry
+the element and others do not is polymorphic: an important source of structural
+variation that can disrupt genes or alter their expression, and one easy to miss,
+because the inserted sequence is absent from the reference genome. The collection
+gathers callsets from long-read assemblies, short-read cohorts, and a curated
+aggregation of published studies, so you can compare them at a locus.
+</p>
+
+<br>
+
+<div class="text-center">
+  <img src="../images/meiAnnouncementImage.png"
+       alt="The Mobile Element Insertions container track on hg38 at SCFD1, where a
+       full-length L1 insertion of about 6 kb is called independently by the HGSVC3,
+       HMEID, SweGen and euL1db tracks, with a fixed reference L1HS copy nearby."
+       width='95%'>
+  <p class="gbsCaption"><em>The collection at
+  <a href="/cgi-bin/hgTracks?db=hg38&position=chr14:30671317-30691317" target="_blank">SCFD1</a>
+  (chr14). A full-length L1 of about 6 kb is called independently from long reads
+  (HGSVC3, 11.5%), from two short-read cohorts (HMEID 12.2%, SweGen 16.9%), and is
+  recorded in euL1db from seven published studies. The euL1db Ref L1HS track shows a
+  fixed, full-length L1HS copy about 3 kb away.</em></p>
+</div>
+
+<p>
+In the HGSVC3, HMEID and SweGen tracks each insertion is drawn as a single base anchor
+block where the element attaches to the reference, colored by class:
+<b style="color:rgb(0,114,178)">Alu</b>,
+<b style="color:rgb(213,94,0)">L1</b>,
+<b style="color:rgb(0,158,115)">SVA</b>,
+<b style="color:rgb(204,121,167)">HERV-K</b> and <b>snRNA</b> in black. Filters narrow
+by class, length, allele frequency and carrier count, plus caller support and repeat
+overlap where available.
+</p>
+
+<p>
+The two euL1db tracks work differently. Items span real intervals, are colored by the
+lineage of the contributing calls, and report how many studies support them, separating
+repeatedly observed insertions from one-off reports; the companion track shows the L1-HS
+copies already in the reference genome.
+</p>
+
+<table class="stdTbl">
+  <tr><th>Track</th><th>Source</th><th>Samples</th><th>Insertions</th><th>Assemblies</th></tr>
+  <tr><td>HGSVC3 65 MEIs</td>
+      <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/40702183" target="_blank">Logsdon <em>et al</em>. 2025</a></td>
+      <td>65 long-read assemblies</td><td>12,642 (hg38), 12,919 (hs1)</td><td>hg38, hs1</td></tr>
+  <tr><td>HMEID 5675 MEIs</td>
+      <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/35212372" target="_blank">Niu <em>et al</em>. 2022</a></td>
+      <td>5,675 (NyuWa Chinese cohort and 1000 Genomes)</td><td>36,699</td><td>hg38</td></tr>
+  <tr><td>SweGen 1000 MEIs</td>
+      <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28832569" target="_blank">Ameur <em>et al</em>. 2017</a></td>
+      <td>1,000 Swedish</td><td>18,090</td><td>hg38</td></tr>
+  <tr><td>euL1db Insertions</td>
+      <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/25352549" target="_blank">Mir <em>et al</em>. 2015</a></td>
+      <td>943 across 32 published studies</td><td>8,988 (hg38), 8,991 (hg19)</td><td>hg38, hg19</td></tr>
+  <tr><td>euL1db Ref L1HS</td>
+      <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/25352549" target="_blank">Mir <em>et al</em>. 2015</a></td>
+      <td>reference genome</td><td>1,540 (hg38), 1,544 (hg19)</td><td>hg38, hg19</td></tr>
+</table>
+
+<p>
+We thank the participants who donated samples and the groups behind these callsets: the
+Human Genome Structural Variation Consortium, the HMEID team and the NyuWa and 1000
+Genomes cohorts it draws on, the SweGen project, and the euL1db curators. The tracks
+were developed by Maximilian Haeussler with QA by Lou Nassar.
+</p>
+
 <a name="newBLAT"></a>
 <a name="100726"></a>
 <h2>Oct. 7, 2026 &nbsp;&nbsp; Redesigned BLAT search and results pages</h2>
