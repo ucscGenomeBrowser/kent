@@ -329,15 +329,12 @@ RELEASE_GATES = {
                "server-specific, since off they are.  Off during QA; "
                "flip to TRUE once released."),
         h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c",
-          default="FALSE", role="gate", verified=True, ticket="32751",
+          default="TRUE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
-               "page can be reopened and shared.  The read at hgBlat.c:2972 "
-               "overrides the file-scope autoBigPsl, which is initialised "
-               "FALSE at hgBlat.c:60 under the comment \"DEFAULT VALUE change "
-               "to TRUE in future\", and eleven branches downstream test it.  "
-               "Filed as a knob until that was read, on the strength of the "
-               "default being an identifier the harvester could not resolve; "
-               "a flag whose own source says to flip it later is a gate."),
+               "page can be reopened and shared.  The read in main() "
+               "overrides the file-scope autoBigPsl, now initialised TRUE, "
+               "and about a dozen branches downstream test it.  On at the "
+               "RR through hg.conf before the default was flipped TRUE."),
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),

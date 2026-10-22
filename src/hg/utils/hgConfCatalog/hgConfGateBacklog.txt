@@ -16,7 +16,6 @@
 # Fields: name, state (overdue or stalled), and the release it was first
 # reported at.  hgConfCatalog.py --sunset prints the full list with dates.
 alwaysItemRgb              overdue  v501  # flipped v466
-autoBlatBigPsl             stalled  v501  # added v482
 blatShowLocus              stalled  v501  # added v483
 canDoHgcInPopUp            overdue  v501  # flipped v492
 gcOnTheFly                 overdue  v501  # flipped v496
