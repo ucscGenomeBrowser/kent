@@ -870,6 +870,8 @@ var BLAT_GENOME_SEARCH_HELP =
 // which case we simply fall back to the cart-supplied default and skip persistence.
 var BLAT_KEEP_RESULTS_KEY = 'blatKeepResults';
 var BLAT_ONLY_LATEST_KEY = 'blatOnlyLatest';
+// Last submitted query, in sessionStorage (per tab) rather than localStorage.
+var BLAT_USER_SEQ_KEY = 'blatUserSeq';
 
 function blatGetKeepResultsPref() {
     // Returns true/false for a stored preference, or null if the user has never set one here.
@@ -959,11 +961,17 @@ function blatFormBusyWire(cfg) {
 
     $(form).on('submit', function(ev) {
         var btn = (ev.originalEvent && ev.originalEvent.submitter) || lastBtn;
+        var ta = document.getElementById('blatUserSeq');
+        // The cart does not keep the query, so remember it in this tab for the results page's
+        // "New BLAT search" button (see blatFormBuild); Clear forgets it.
+        try {
+            if (btn && btn.name === 'Clear') { sessionStorage.removeItem(BLAT_USER_SEQ_KEY); }
+            else if (ta) { sessionStorage.setItem(BLAT_USER_SEQ_KEY, ta.value); }
+        } catch (e) { /* storage disabled: the form just comes back empty */ }
         // Clear just empties the textarea and comes straight back; no spinner for that.
         if (btn && btn.name === 'Clear') { return; }
         // Nothing to align - hgBlat returns its "please paste a sequence" page immediately, so a
         // spinner would only flash.
-        var ta = document.getElementById('blatUserSeq');
         var file = document.getElementById('blatSeqFile');
         if (!(ta && ta.value.trim()) && !(file && file.files && file.files.length)) { return; }
 
@@ -1209,7 +1217,10 @@ function blatFormBuild() {
     if (genomeInput && cfg.dbLabel) { genomeInput.value = cfg.dbLabel; }
 
     // Restore the sequence from the cart without going through innerHTML (avoids re-escaping).
-    document.getElementById('blatUserSeq').value = cfg.userSeq || '';
+    // userSeq is never saved in the cart, so after a search fall back to the copy kept on submit.
+    var savedSeq = null;
+    try { savedSeq = sessionStorage.getItem(BLAT_USER_SEQ_KEY); } catch (e) { /* ignore */ }
+    document.getElementById('blatUserSeq').value = cfg.userSeq || savedSeq || '';
     blatFormCount();
 
     $('#blatUserSeq').on('input', blatFormCount);
