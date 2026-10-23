@@ -41,6 +41,7 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 #include "api.h"
 #include "chromAlias.h"
 #include "bigBed.h"
+#include "bPlusTree.h"
 #include "trackHub.h"
 #include "cart.h"
 #include "hgFind.h"
@@ -226,11 +227,25 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         struct bigBedInterval *bbList = bigBedNameQuery(bbi, bpt, fieldIx, name, lm);
         if (bbList)
             {
-            // The lookup is by name only, so take the chrom from the match, not from the
-            // caller: in multi-region view the caller may only know the virtual chrom.
-            char chromBuf[256];
-            bbiCachedChromLookup(bbi, bbList->chromId, -1, chromBuf, sizeof chromBuf);
-            gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromBuf), bbList);
+            // The lookup is by name only, and a name can be on two chroms (chrX/chrY PAR
+            // copies).  Take the match on the caller's chrom; if there is none, as in
+            // multi-region view where the caller may only know the virtual chrom, take the
+            // first match.  Either way the chrom in the answer is the match's own.
+            char chromBuf[bbi->chromBpt->keySize+1];
+            struct bigBedInterval *bb, *match = bbList;
+            int lastChromId = -1;
+            for (bb = bbList; bb != NULL; bb = bb->next)
+                {
+                bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromBuf, sizeof chromBuf);
+                lastChromId = bb->chromId;
+                if (sameString(chromBuf, chrom))
+                    {
+                    match = bb;
+                    break;
+                    }
+                }
+            bbiCachedChromLookup(bbi, match->chromId, lastChromId, chromBuf, sizeof chromBuf);
+            gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromBuf), match);
             }
         }
     if (!gp)
