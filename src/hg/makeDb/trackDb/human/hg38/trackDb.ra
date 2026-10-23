@@ -953,6 +953,8 @@ include methbase2.ra alpha
 
 include fiberSeq.ra
 
+include encodeE2g.ra alpha
+
 include imprinting.ra alpha
 # include hg38.GCF_040939455.1.chainNet.ra alpha
 

@@ -1,0 +1,95 @@
+# ENCODE-rE2G enhancer-gene predictions (Engreitz lab, ENCODE4) - Max, 2026-10-23
+# Faceted composite encodeE2g, 1,458 biosamples x 2 data types, alpha.
+
+# ---------------------------------------------------------------------------
+# Scope
+# ---------------------------------------------------------------------------
+
+# Scoped from the ENCODE portal report, saved as e2g.tsv:
+#   https://www.encodeproject.org/report/?type=Annotation&annotation_type=element+gene+regulatory+interaction+predictions&software_used.software.name=distal-regulation-encode_re2g&status=released
+# 1,460 released annotations.  Each annotation holds 11 files: the 4 rE2G
+# files (preferred_default true) and 7 files of the ABC model, which is the
+# intermediate step of the pipeline.  Only rE2G files are used, selected by
+#   analysis_step_version.software_versions.software.name=distal-regulation-encode_re2g
+# on a type=File search.  dataset.annotation_type= returns nothing on File
+# searches, and annotation_type= alone also returns the ABC and other files
+# (3,076 bigInteract, 331 GB).
+#
+# Of the 4 rE2G files, three are downloaded, the thresholded ones:
+#   bigInteract  thresholded links               5.1 GB
+#   bed          thresholded element gene links  5.1 GB
+#   bedpe        thresholded links               2.8 GB
+# Not downloaded: the full predictions bed ("element gene links", 466 GB).
+#
+# Also excluded: the two "ENCODE-rE2G (extended)" annotations, ENCSR621BIJ
+# (K562) and ENCSR997TVR (GM12878), which add H3K27ac and Hi-C to DNase and
+# have a 56-column bed instead of 19.  Max's call, to keep the track a single
+# model.  That leaves 1,458 annotations, the number the Nature paper reports.
+
+# ---------------------------------------------------------------------------
+# Download
+# ---------------------------------------------------------------------------
+
+mkdir -p /hive/data/genomes/hg38/bed/e2g
+cd /hive/data/genomes/hg38/bed/e2g
+# e2g.tsv: saved from the portal report URL above, see log.txt
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gManifest.py
+#   excluded extended-model annotations: ENCSR621BIJ ENCSR997TVR
+#   annotations: 1458  files: 4374  GB: 13.0
+~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gDownload.sh
+#   ALL OK      (md5 of every file checked against the ENCODE md5sum)
+
+# samples.tsv has one row per annotation, with biosample, classification,
+# system and organ slims, treatment, donor sex, life stage and age, and the
+# input DNase experiment, from the Annotation and HumanDonor API records.
+
+# ---------------------------------------------------------------------------
+# Data problems found
+# ---------------------------------------------------------------------------
+
+# 1. Some element coordinates are written in scientific notation by the
+#    upstream code, both in the bed name column and in the bigInteract name and
+#    sourceName: chr15:7.8e+07-78000500, chr22:5e+07-50000832.  13 rows in a
+#    40-file sample.  Rebuilt from the chrom/start/end columns.
+# 2. Every bigInteract item has color #C5204C, whatever the biosample.  Items
+#    are recolored by biosample classification instead, using the facet swatch
+#    colors.
+# 3. bigInteract item names are "gene/element/celltype", too long as a label;
+#    the name is now the target gene.
+
+# ---------------------------------------------------------------------------
+# Build
+# ---------------------------------------------------------------------------
+
+cd /hive/data/genomes/hg38/bed/e2g
+# trackDb first: it also writes encodeE2g_colors.json, which the bigBed step reads
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gTrackDb.py . \
+    ~/kent/src/hg/makeDb/trackDb/human/hg38/encodeE2g.ra
+#   1458 samples, 2916 subtracks, 8 on by default
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gBigBeds.py samples.tsv 16 > bigBeds.log 2>&1
+#   bb/<ENCSR>.interact.bb  bed5+13, hg/lib/interact.as
+#   bb/<ENCSR>.elements.bb  bed9+15, encodeE2gElements.as; score = rE2G score * 1000
+
+mkdir -p /gbdb/hg38/encodeE2g
+ln -sf /hive/data/genomes/hg38/bed/e2g/bb/*.bb /gbdb/hg38/encodeE2g/
+ln -sf /hive/data/genomes/hg38/bed/e2g/encodeE2g_metadata.tsv \
+       /hive/data/genomes/hg38/bed/e2g/encodeE2g_colors.json /gbdb/hg38/encodeE2g/
+
+# ---------------------------------------------------------------------------
+# Track structure
+# ---------------------------------------------------------------------------
+
+# Same faceted-composite machinery as fiberSeqCompendium, see fiberSeq.txt for
+# the naming rules: subtracks are encodeE2g_<annotation accession>_<dataType>,
+# dataTypes links (bigInteract) and elements (bigBed 9+15).
+#
+# Facets (low cardinality): Classification, System, Treated, Sex, Life_stage.
+# Searchable only: _Biosample (369 values), _Organ (~60), _Treatment, _Age,
+# _Donor, _Input_experiment.
+#
+# Defaults: the links of 8 common ENCODE cell lines, untreated, are on; all
+# elements subtracks are off.  Several untreated annotations of one cell line
+# differ only in the input DNase experiment; the one with the lowest input
+# accession (the oldest ENCODE DNase) was taken:
+#   K562 ENCSR171UQE, GM12878 ENCSR604WPK, HepG2 ENCSR932TWZ, H1 ENCSR440PMA,
+#   HCT116 ENCSR575WDI, A549 ENCSR090HJT, MCF-7 ENCSR936SUR, IMR-90 ENCSR376SFG
