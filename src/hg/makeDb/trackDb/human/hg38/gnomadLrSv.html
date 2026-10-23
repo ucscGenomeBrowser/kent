@@ -1,0 +1,147 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=gnomadVariants">gnomAD</a> collection.
+It shows structural variants (SVs) of 50 bp or more from the first long-read
+release of gnomAD (version 0.1, October 2026). The variants were called from PacBio
+HiFi genome sequencing of 1,319 individuals in two cohorts:</p>
+<ul>
+<li><b>All of Us</b>: 1,027 participants of the
+<a href="https://allofus.nih.gov/" target="_blank">All of Us Research Program</a>
+who self-identify as Black or African American, sequenced to about 8x coverage
+from blood DNA.</li>
+<li><b>HPRC/HGSVC</b>: 292 publicly available samples of the Human Pangenome
+Reference Consortium and the Human Genome Structural Variation Consortium,
+sequenced to more than 30x from cell lines.</li>
+</ul>
+<p>
+gnomAD shows the two cohorts separately. Here they are merged into one
+track: a variant found in both cohorts with exactly the same alleles is shown once,
+with the allele counts of both cohorts. The track contains 1.1 million structural
+variants: 250,000 deletions, 790,000 insertions and 18,000 tandem duplications.
+The long-read tandem repeat calls of the same release are in the
+<a href="hgTrackUi?g=gnomadLrTr">gnomAD LR TRs</a> track.</p>
+
+<h2>Display Conventions</h2>
+<p>
+Deletions are drawn over the deleted bases. Insertions are drawn as a
+1-bp feature on the base before the insertion point. Tandem duplications are drawn
+over the reference segment that was duplicated. Items are labeled with the
+SV type and length, e.g. <tt>DEL-3.9k</tt>. By default, items are colored by SV type,
+with the same colors as the <a href="hgTrackUi?g=longReadVariants">Long-read SVs</a>
+tracks:</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Deletion (DEL)</td></tr>
+  <tr><th style="background-color:#0000C8;width:2em">&nbsp;</th>
+      <td>Insertion (INS), including mobile element insertions</td></tr>
+  <tr><th style="background-color:#00A000;width:2em">&nbsp;</th>
+      <td>Tandem duplication (DUP)</td></tr>
+</table>
+<p>
+On the track settings page, "Color by" can be switched to "Allele frequency". The
+items are then colored on a scale from light gray to red, by the allele frequency
+over both cohorts. The scale is logarithmic: an allele frequency of 0.0001 or less
+is light gray, 0.001 is pink, 0.01 is light red, 0.1 is red and 1 is dark red. This is similar to
+the haplotype-count color scale of the gnomAD browser, but it is based on
+allele frequency.</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#D2D2D2;width:2em">&nbsp;</th>
+      <td>AF 0.0001 or lower</td></tr>
+  <tr><th style="background-color:#D09E9E;width:2em">&nbsp;</th>
+      <td>AF 0.001</td></tr>
+  <tr><th style="background-color:#CD6969;width:2em">&nbsp;</th>
+      <td>AF 0.01</td></tr>
+  <tr><th style="background-color:#CA3434;width:2em">&nbsp;</th>
+      <td>AF 0.1</td></tr>
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>AF 1</td></tr>
+</table>
+<p>
+The mouseover shows the type and length, the allele frequency over both cohorts
+and the allele frequency and count in each cohort, the VCF filter if it is not PASS,
+and the predicted gene effects. The details page has links to the variant
+in the gnomAD long-read browser, one per cohort.</p>
+<p>
+The track can be filtered by SV type, length, allele frequency and count,
+cohort, VCF filter value and genomic context. No filter is active by default, so
+the track also shows variants that gnomAD did not pass:</p>
+<ul>
+<li><tt>SINGLE_READ_SUPPORT</tt>: the only carrier has a single supporting read.</li>
+<li><tt>ASSEMBLY_ONLY_SINGLETON</tt>: the only carrier has support only from the
+assembly-based callers (HPRC/HGSVC only).</li>
+<li><tt>LOW_COVERAGE_REGION</tt>: the region has low coverage relative to the genome.</li>
+<li><tt>MONOALLELIC</tt>: the variant is in a region with several variants that could not be
+merged into non-overlapping multi-allelic sites.</li>
+</ul>
+<p>
+To show only variants that passed all filters, select only "PASS" in the VCF filter list.
+When zoomed out to more than 1 Mbp, the track is shown as a density graph.</p>
+
+<h2>Methods</h2>
+<p>
+All of Us samples were sequenced with PacBio HiFi to about 8x
+and processed with the All of Us Long Read Working Group pipeline. HPRC/HGSVC samples
+were sequenced to more than 30x. Their SVs come from the HPRC SV integration pipeline,
+which combines read-based callers with the assembly-based callers dipcall and
+hapdiff, followed by regenotyping with kanpig. SVs were annotated with GATK
+SVAnnotate for their effect on genes, and with their matches to gnomAD v4
+short-read variants. Variants were reclassified, e.g. tandem duplications
+that are not adjacent to their origin were relabeled as insertions, and mobile element
+insertions and deletions were labeled with their subfamily. The pipelines are on
+<a href="https://github.com/talkowski-lab/lr-pipeline" target="_blank">GitHub</a>, and
+the release is described in the
+<a href="https://gnomad.broadinstitute.org/news/2026-10-long-read-genome-data-in-gnomad/"
+target="_blank">gnomAD blog post</a>.</p>
+<p>
+The per-chromosome VCF files of both cohorts were downloaded from the gnomAD
+Amazon S3 bucket, <tt>s3://gnomad-public-us-east-1/release/lr/0.1/vcf/</tt>, which is
+listed on the
+<a href="https://long-read-beta.gnomad.broadinstitute.org/data#lr" target="_blank">gnomAD
+long-read downloads page</a>.
+All records with <tt>allele_type</tt> <tt>del</tt>, <tt>ins</tt> or <tt>dup</tt> and an
+<tt>allele_length</tt> of at least 50 bp were kept, whatever their source (SV caller or
+DeepVariant) and FILTER value. The records of the two cohorts were merged when
+position, REF and ALT were identical. The allele frequency of the merged item
+is the sum of the allele counts of both cohorts, divided by the sum of
+their allele numbers. The input had 855,161 All of Us and 331,729 HPRC/HGSVC
+records; 129,535 alleles were found in both cohorts, which gives 1,057,355 items,
+908,010 of them with FILTER PASS in all cohorts that have them. These numbers include
+variants that did not pass the gnomAD filters, so they are higher than the
+SV numbers in the gnomAD announcement. 539 variants have an allele number of 0
+(no sample was genotyped); their allele frequency is 0.
+The commands are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/gnomadLr.txt"
+target="_blank">makeDoc file</a> and the scripts in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gnomadLr"
+target="_blank">gnomadLr scripts directory</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>gnomadLrSv</i>.</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that can be
+downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/lr/" target="_blank">our download server</a>.
+The file for this track is called <tt>gnomadLrSv.bb</tt>. Individual regions or the whole
+annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the
+source code or downloaded as a precompiled binary for your system. Instructions for downloading
+source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/lr/gnomadLrSv.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<p>
+The original VCF files, which also contain SNVs and small indels and, for HPRC/HGSVC,
+the sample genotypes, can be downloaded from the
+<a href="https://long-read-beta.gnomad.broadinstitute.org/data#lr" target="_blank">gnomAD
+long-read downloads page</a>. gnomAD data is released without use restrictions.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the gnomAD team, the All of Us Research Program and its participants,
+and the HPRC and HGSVC consortia for making these data available.</p>
+
+<h2>References</h2>

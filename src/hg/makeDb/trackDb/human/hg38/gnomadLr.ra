@@ -1,0 +1,82 @@
+track gnomadLrSv
+parent gnomadVariants
+shortLabel gnomAD LR SVs
+longLabel gnomAD Long-Read Structural Variants (All of Us and HPRC/HGSVC, PacBio HiFi)
+bigDataUrl /gbdb/hg38/gnomAD/lr/gnomadLrSv.bb
+type bigBed 9 +
+itemRgb on
+colorFields default="SV type" _afColor="Allele frequency"
+visibility hide
+priority 5
+dataVersion Release 0.1 (October 2026)
+maxWindowCoverage 1000000
+urls gnomadLink="https://long-read-beta.gnomad.broadinstitute.org/variant/$$" dbSnp="https://www.ncbi.nlm.nih.gov/snp/$$"
+skipEmptyFields on
+searchIndex vcfId
+mouseOverField _mouseOver
+filterValues.svType DEL|DEL (Deletion),INS|INS (Insertion),DUP|DUP (Tandem duplication)
+filterType.svType multipleListOr
+filterLabel.svType SV Type
+filterValues.subtype alu_ins,line_ins,sva_ins,alu_del,line_del,sva_del,numt,tandem_dup,dup_interspersed,complex_dup,inv_dup
+filterLabel.subtype Subtype (mobile elements, NUMTs, reclassified duplications)
+filterValues.cohorts All of Us,HPRC/HGSVC
+filterType.cohorts multipleListOr
+filterLabel.cohorts Found in cohort
+filterValues.filter PASS,SINGLE_READ_SUPPORT,ASSEMBLY_ONLY_SINGLETON,LOW_COVERAGE_REGION
+filterType.filter multipleListOr
+filterLabel.filter VCF FILTER value
+filterValues.region SR|Simple repeat,SD|Segmental duplication,RM|RepeatMasker,US|Unique sequence
+filterLabel.region Genomic context
+filter.svLen 50:100000
+filterByRange.svLen on
+filterLabel.svLen SV length (bp)
+filter.AF 0:1
+filterByRange.AF on
+filterLimits.AF 0:1
+filterLabel.AF Allele frequency, both cohorts
+filter.AC 0:2638
+filterByRange.AC on
+filterLabel.AC Allele count, both cohorts
+
+searchTable gnomadLrSv
+searchType bigBed
+searchDescription gnomAD long-read structural variant ID, e.g. chr21-5252561-DEL-3890
+searchPriority 50
+
+track gnomadLrTr
+parent gnomadVariants
+shortLabel gnomAD LR TRs
+longLabel gnomAD Long-Read Tandem Repeat Loci (All of Us and HPRC/HGSVC, PacBio HiFi)
+bigDataUrl /gbdb/hg38/gnomAD/lr/gnomadLrTr.bb
+type bigBed 9 +
+itemRgb on
+colorFields default="Single color" _afColor="Non-reference allele frequency"
+visibility hide
+priority 6
+dataVersion Release 0.1 (October 2026)
+maxWindowCoverage 200000
+urls trid="https://long-read-beta.gnomad.broadinstitute.org/tandem-repeat/$$?dataset=gnomad_r4_lr"
+skipEmptyFields on
+mouseOverField _mouseOver
+filterValues.source TRExplorer,Vamos
+filterLabel.source TR catalog
+filterValues.cohorts All of Us,HPRC/HGSVC
+filterType.cohorts multipleListOr
+filterLabel.cohorts Found in cohort
+filterValues.filter PASS,LOW_COVERAGE_REGION
+filterType.filter multipleListOr
+filterLabel.filter VCF FILTER value
+filterValues.region SR|Simple repeat,SD|Segmental duplication,RM|RepeatMasker,US|Unique sequence
+filterLabel.region Genomic context
+filterValues.homopolymer yes
+filterLabel.homopolymer Homopolymer repeat (motif length 1)
+filter.refLen 0:10000
+filterByRange.refLen on
+filterLabel.refLen Reference length (bp)
+filter.AF 0:1
+filterByRange.AF on
+filterLimits.AF 0:1
+filterLabel.AF Non-reference allele frequency, both cohorts
+filter.AC 0:2638
+filterByRange.AC on
+filterLabel.AC Non-reference allele count, both cohorts

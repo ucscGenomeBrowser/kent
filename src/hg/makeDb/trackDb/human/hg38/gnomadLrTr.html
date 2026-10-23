@@ -1,0 +1,110 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=gnomadVariants">gnomAD</a> collection.
+It shows tandem repeat (TR) loci genotyped in the first long-read release of gnomAD
+(version 0.1, October 2026), from PacBio HiFi genome sequencing of 1,027 All of Us
+participants and 292 HPRC/HGSVC samples. The cohorts are described on the
+<a href="hgTrackUi?g=gnomadLrSv">gnomAD LR SVs</a> page. Long reads span most
+tandem repeats completely, so the length of each repeat allele can be measured
+directly.</p>
+<p>
+gnomAD shows the two cohorts separately. Here they are merged by TR locus, and every
+locus that is in the VCF of at least one cohort is shown once. The track contains
+4.6 million loci. Every locus is a single item, even if it has many alleles: the allele
+sizes and their counts are shown on the details page and in the mouseover.</p>
+
+<h2>Display Conventions</h2>
+<p>
+Each item covers the reference repeat and is labeled with its motif. By
+default, all items are orange. On the track settings page, "Color by" can be switched
+to "Non-reference allele frequency": the items are then colored from light gray to red
+by the fraction of alleles that differ from the reference, over both cohorts.
+The scale is logarithmic:</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#E69F00;width:2em">&nbsp;</th>
+      <td>Default color, all loci</td></tr>
+  <tr><th style="background-color:#D2D2D2;width:2em">&nbsp;</th>
+      <td>Non-reference AF 0.0001 or lower</td></tr>
+  <tr><th style="background-color:#D09E9E;width:2em">&nbsp;</th>
+      <td>Non-reference AF 0.001</td></tr>
+  <tr><th style="background-color:#CD6969;width:2em">&nbsp;</th>
+      <td>Non-reference AF 0.01</td></tr>
+  <tr><th style="background-color:#CA3434;width:2em">&nbsp;</th>
+      <td>Non-reference AF 0.1</td></tr>
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Non-reference AF 1</td></tr>
+</table>
+<p>
+The allele sizes are given for each cohort as the length difference to the
+reference in bp, followed by the allele count, e.g. <tt>-3:2 +6:15</tt> means that 2
+alleles are 3 bp shorter and 15 alleles are 6 bp longer than the reference. An entry
+<tt>+0</tt> is an allele with the same length as the reference but a different
+sequence. The details page links to the locus page in the gnomAD long-read browser,
+which shows the allele length distribution and repeat purity of all alleles.</p>
+<p>
+The track can be filtered by TR catalog, reference length, non-reference allele
+frequency and count, cohort, VCF filter value and genomic context. No filter is
+active by default. When zoomed out to more than 200 kbp, the track is shown as a
+density graph.</p>
+
+<h2>Methods</h2>
+<p>
+Tandem repeats were genotyped with TRGT at the loci of two catalogs,
+<a href="https://github.com/broadinstitute/tandem-repeat-catalogs" target="_blank">TRExplorer</a>
+v1.0.1 and <a href="https://github.com/ChaissonLab/vamos" target="_blank">Vamos</a> v2.1.
+Each VCF record is one locus and lists all observed alleles of this locus as
+ALT alleles, with their allele counts. Details are in the
+<a href="https://gnomad.broadinstitute.org/news/2026-10-long-read-genome-data-in-gnomad/"
+target="_blank">gnomAD blog post</a> and the pipeline on
+<a href="https://github.com/talkowski-lab/lr-pipeline" target="_blank">GitHub</a>.</p>
+<p>
+The per-chromosome VCF files of both cohorts were downloaded from the gnomAD
+Amazon S3 bucket, <tt>s3://gnomad-public-us-east-1/release/lr/0.1/vcf/</tt>, which is
+listed on the
+<a href="https://long-read-beta.gnomad.broadinstitute.org/data#lr" target="_blank">gnomAD
+long-read downloads page</a>.
+All records with <tt>allele_type</tt> <tt>trv</tt> were kept and merged between the
+cohorts by their TR ID (<tt>TRID</tt>). For each cohort, the non-reference allele count is
+the sum of the counts of all ALT alleles, and alleles of the same length were summed for
+the allele size list. The non-reference allele frequency over both cohorts is the sum of the
+non-reference allele counts, divided by the sum of the allele numbers.
+The input had 4,599,174 All of Us and 2,447,044 HPRC/HGSVC loci, which gives
+4,601,703 merged loci. 4,357 loci have an allele number of 0 (no sample was
+genotyped); their non-reference allele frequency is 0.
+The item starts after the VCF padding base, so it covers the repeat as given in the TR ID.
+The commands are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/gnomadLr.txt"
+target="_blank">makeDoc file</a> and the scripts in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/gnomadLr"
+target="_blank">gnomadLr scripts directory</a>.</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>gnomadLrTr</i>.</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that can be
+downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/lr/" target="_blank">our download server</a>.
+The file for this track is called <tt>gnomadLrTr.bb</tt>. Individual regions or the whole
+annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the
+source code or downloaded as a precompiled binary for your system. Instructions for downloading
+source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/gnomAD/lr/gnomadLrTr.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+<p>
+The original VCF files, which include per-allele motif counts and purity and,
+for HPRC/HGSVC, the sample genotypes, can be downloaded from the
+<a href="https://long-read-beta.gnomad.broadinstitute.org/data#lr" target="_blank">gnomAD
+long-read downloads page</a>. gnomAD data is released without use restrictions.</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the gnomAD team, the All of Us Research Program and its participants,
+and the HPRC and HGSVC consortia for making these data available.</p>
+
+<h2>References</h2>
