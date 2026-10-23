@@ -3662,7 +3662,7 @@ var rightClick = {
                         type: "GET",
                         url: "../cgi-bin/hgApi",
                         data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(), 'cmd': ajaxCmd, 'num': results,
-                              'table': args.table, 'name': args.name, 'chrom': hgTracks.chromName}),
+                              'table': args.table, 'name': args.name, 'chrom': args.chrom}),
                         trueSuccess: rightClick.handleZoomCodon,
                         success: catchErrorOrDispatch,
                         error: errorHandler,
@@ -4610,6 +4610,9 @@ var rightClick = {
                                     (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
+                                // In multi-region view hgTracks.chromName is the virtual chrom
+                                // ("multi"), so take the item's real chrom from its link.
+                                var chrom = hgTracks.chromName;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
                                 let a = reg.exec(href);
                                 if (a && a[1]) {
@@ -4618,6 +4621,11 @@ var rightClick = {
                                     a = reg.exec(href);
                                     if (a && a[1]) {
                                         table = a[1];
+                                    }
+                                    reg = new RegExp("hgg_chrom=([^&]+)");
+                                    a = reg.exec(href);
+                                    if (a && a[1]) {
+                                        chrom = a[1];
                                     }
                                 } else {
                                     // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
@@ -4632,6 +4640,11 @@ var rightClick = {
                                             table = a[1];
                                         }
                                     }
+                                    reg = new RegExp("[?&]c=([^&]+)");
+                                    a = reg.exec(href);
+                                    if (a && a[1]) {
+                                        chrom = a[1];
+                                    }
                                 }
                                 if (name && table) {
                                     if (exonNum > 0) {
@@ -4642,7 +4655,7 @@ var rightClick = {
                                                         url: "../cgi-bin/hgApi",
                                                         data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
                                                                 'cmd': "exonToPos", 'num': exonNum,
-                                                                'table': table, 'name': name, 'chrom': hgTracks.chromName}),
+                                                                'table': table, 'name': name, 'chrom': chrom}),
                                                         trueSuccess: rightClick.handleZoomCodon,
                                                         success: catchErrorOrDispatch,
                                                         error: errorHandler,
@@ -4654,14 +4667,14 @@ var rightClick = {
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                         "zoomCodon",
-                                                        {name: name, table: table, 'chrom': hgTracks.chromName});
+                                                        {name: name, table: table, 'chrom': chrom});
                                             return true;}
                                     };
                                         o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom to..."] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
-                                                            {name: name, table: table, 'chrom': hgTracks.chromName});
+                                                            {name: name, table: table, 'chrom': chrom});
                                                 return true;}
                                         };
                                     }
