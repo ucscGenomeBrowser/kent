@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -169,6 +169,12 @@ quickLiftMergeTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftMergeTester quickLiftMergeTester.c ${MYLIBS} $L
 	${BIN_DIR}/quickLiftMergeTester output/quickLiftMerge.hub.txt > output/quickLiftMergeTest
 	diff expected/quickLiftMergeTest output/quickLiftMergeTest
+
+# Includes hgTracks/mafTrack.h for inSummaryMode, an inline there.  Reads hg19.
+quickLiftMafSummaryTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -I../../hgTracks -o ${BIN_DIR}/quickLiftMafSummaryTester quickLiftMafSummaryTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
+	diff expected/quickLiftMafSummaryTest output/quickLiftMafSummaryTest
 
 dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
