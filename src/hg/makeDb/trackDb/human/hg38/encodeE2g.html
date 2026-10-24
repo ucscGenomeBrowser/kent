@@ -21,8 +21,13 @@ scored pairs.
 
 <p>
 This is a faceted composite track. The table on the track settings page lists one row per
-biosample. It can be filtered by biosample classification, body system, treatment, donor sex and
-life stage, and searched by biosample, organ, treatment, donor and input experiment. Each
+biosample. It can be filtered by tissue, biosample classification, body system, treatment, donor
+sex and life stage, and searched by biosample, organ, treatment, donor and input experiment. The
+tissue groups are the GTEx tissues, with the tissue colors of the
+<a href="https://gtexportal.org/" target="_blank">GTEx portal</a>: each ENCODE biosample
+is assigned to the most similar GTEx tissue, and biosamples with no similar GTEx tissue, such as
+stem cells, placenta, eye and bone, are grouped separately. The colors are shown in the tissue
+filter only; all items in the browser are drawn in black. Each
 biosample has two data types:
 </p>
 
@@ -39,13 +44,7 @@ gene, score and distance to the TSS.</li>
 
 <p>
 By default, the element-gene links of eight common ENCODE cell lines are shown: K562, GM12878,
-HepG2, H1, HCT116, A549, MCF-7 and IMR-90, all untreated. Items are colored by biosample
-classification:
-<span style="color:#E69F00">&#9632;</span> tissue,
-<span style="color:#56B4E9">&#9632;</span> primary cell,
-<span style="color:#009E73">&#9632;</span> cell line,
-<span style="color:#CC79A7">&#9632;</span> <em>in vitro</em> differentiated cells and
-<span style="color:#D55E00">&#9632;</span> organoid.
+HepG2, H1, HCT116, A549, MCF-7 and IMR-90, all untreated.
 </p>
 
 <h2>Methods</h2>
@@ -61,7 +60,8 @@ K562 and GM12878, which also uses H3K27ac ChIP-seq and Hi-C, are not included.
 </p>
 
 <p>
-The bigInteract files were converted to make the gene name the item label. Some element
+The bigInteract files were converted to make the gene name the item label and to draw all
+items in black. Some element
 coordinates in the original files were written in scientific notation (e.g.
 <tt>chr15:7.8e+07-78000500</tt>); the element names were rebuilt from the coordinates. The bed
 files were converted to bigBed, with the ENCODE-rE2G score scaled to 0-1000 as the bed score.

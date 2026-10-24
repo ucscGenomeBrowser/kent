@@ -38,7 +38,7 @@ EXT = {"bigInteract": "bigInteract", "bed": "bed.gz", "bedpe": "bedpe.gz"}
 
 def get(path):
     req = urllib.request.Request(BASE + path, headers={"Accept": "application/json"})
-    with urllib.request.urlopen(req) as r:
+    with urllib.request.urlopen(req, timeout=600) as r:
         return json.load(r)["@graph"]
 
 

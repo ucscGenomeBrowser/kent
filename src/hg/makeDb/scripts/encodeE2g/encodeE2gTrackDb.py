@@ -9,10 +9,13 @@
 # Subtracks are encodeE2g_<annotation accession>_<dataType>, with the accession
 # as the only middle component: facetedCompositeUi() cuts the data element at
 # the first underscore after the composite name.  See the fiberSeq makeDoc.
-import csv, json, sys
+import csv, json, os, sys
 
 COMPOSITE = "encodeE2g"
 GBDB = "/gbdb/hg38/encodeE2g"
+# biosample -> tissue group and color, made by encodeBiosampleColors.py
+COLOR_TABLE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           "encodeBiosampleColors.tsv")
 
 # Default subtracks: eight common ENCODE cell lines, untreated.  Where a cell
 # line has several untreated annotations, they differ only in the DNase-seq
@@ -30,25 +33,20 @@ DEFAULT_SELECTED = [
     "ENCSR376SFG",  # IMR-90,  input ENCSR000EKG
 ]
 
-# Okabe-Ito colors for the facet swatches
-CLASS_COLORS = {
-    "tissue": "#E69F00",
-    "primary cell": "#56B4E9",
-    "cell line": "#009E73",
-    "in vitro differentiated cells": "#CC79A7",
-    "organoid": "#D55E00",
-}
-SEX_COLORS = {"female": "#D55E00", "male": "#0072B2", "mixed": "#CC79A7",
-              "unknown": "#999999"}
-
+# The tracks are drawn in black, light colors such as the GTEx yellows are
+# hard to see on white.  Colors are only used for the swatches of the Tissue
+# facet, from COLOR_TABLE.
+#
 # Metadata columns: (header, samples.tsv field).  A plain name is a facet, a
 # leading underscore makes a searchable, sortable column that is not faceted.
 # Only low-cardinality columns are facets: facetedComposite.js offers a value
 # only when it occurs more than once.  Organ has about 60 values, so it is
-# searchable rather than faceted.  Names use underscores, not camelCase,
-# because toTitleStyle() only turns underscores into spaces.
+# searchable rather than faceted.  Tissue has 49, under maxCheckboxes.  Names
+# use underscores, not camelCase, because toTitleStyle() only turns
+# underscores into spaces.
 COLUMNS = [
     ("_Biosample", "biosample"),
+    ("Tissue", "tissueGroup"),
     ("Classification", "classification"),
     ("System", "system"),
     ("_Organ", "organ"),
@@ -63,8 +61,20 @@ COLUMNS = [
 ]
 
 
-def readSamples(path):
-    return list(csv.DictReader(open(path), delimiter="\t"))
+def readColorTable(path):
+    " biosample -> (group, color) "
+    return {r["biosample"]: (r["group"], r["color"])
+            for r in csv.DictReader(open(path), delimiter="\t")}
+
+
+def readSamples(path, colorTable):
+    samples = list(csv.DictReader(open(path), delimiter="\t"))
+    for s in samples:
+        if s["biosample"] not in colorTable:
+            sys.exit("biosample %s not in %s, rerun encodeBiosampleColors.py"
+                     % (s["biosample"], COLOR_TABLE))
+        s["tissueGroup"] = colorTable[s["biosample"]][0]
+    return samples
 
 
 def writeMetadata(path, samples):
@@ -80,9 +90,14 @@ def writeMetadata(path, samples):
             f.write("\t".join(row) + "\n")
 
 
-def writeColors(path):
+def writeColors(path, samples, colorTable):
+    " swatches of the Tissue facet, for the groups that occur "
+    groups = {}
+    for s in samples:
+        group, color = colorTable[s["biosample"]]
+        groups[group] = color
     with open(path, "w") as f:
-        json.dump({"Classification": CLASS_COLORS, "Sex": SEX_COLORS}, f, indent=4)
+        json.dump({"Tissue": dict(sorted(groups.items()))}, f, indent=4)
         f.write("\n")
 
 
@@ -153,7 +168,6 @@ def subtracks(s, priority):
         "bigDataUrl %s/%s.elements.bb" % (GBDB, acc),
         "shortLabel %s Elems" % shortName(s, 11),
         "longLabel %s ENCODE-rE2G elements and target genes (%s)" % (longName(s), acc),
-        "itemRgb on",
         "filter.e2gScore 0",
         "filterLimits.e2gScore 0:1",
         "filterLabel.e2gScore Minimum ENCODE-rE2G score",
@@ -171,14 +185,15 @@ def subtracks(s, priority):
 
 def main():
     buildDir, raFile = sys.argv[1:3]
-    samples = readSamples(buildDir + "/samples.tsv")
+    colorTable = readColorTable(COLOR_TABLE)
+    samples = readSamples(buildDir + "/samples.tsv", colorTable)
     accs = {s["accession"] for s in samples}
     missing = [a for a in DEFAULT_SELECTED if a not in accs]
     if missing:
         sys.exit("default annotations not in samples.tsv: %s" % missing)
 
     writeMetadata(buildDir + "/encodeE2g_metadata.tsv", samples)
-    writeColors(buildDir + "/encodeE2g_colors.json")
+    writeColors(buildDir + "/encodeE2g_colors.json", samples, colorTable)
 
     # defaults first, then the rest by accession
     order = sorted(samples, key=lambda s: (s["accession"] not in DEFAULT_SELECTED,
