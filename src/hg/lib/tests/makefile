@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -136,6 +136,24 @@ cartHubDatabaseTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartHubDatabaseTester cartHubDatabaseTester.c ${MYLIBS} $L
 	${BIN_DIR}/cartHubDatabaseTester > output/cartHubDatabaseTest
 	diff expected/cartHubDatabaseTest output/cartHubDatabaseTest
+
+# Run twice, with the collectionHubCopyOnWrite gate set on and off by name.  Outside a CGI the
+# trash directory is ".", so it runs in a fresh output/run each time, with sessionDataDir
+# there too, and it writes hubStatus rows to hgcentralregress.
+collectionHubCopyTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/collectionHubCopyTester collectionHubCopyTester.c ${MYLIBS} $L
+	./makeHgCentralRegress.sh > /dev/null
+	rm -f output/collectionHubCopyTest
+	for gate in on off; do \
+	    echo "include ${HOME}/.hg.conf" > output/collection.$$gate.conf; \
+	    echo "central.db=hgcentralregress" >> output/collection.$$gate.conf; \
+	    echo "collectionHubCopyOnWrite=$$gate" >> output/collection.$$gate.conf; \
+	    echo "sessionDataDir=${CURDIR}/output/run/sessionData" >> output/collection.$$gate.conf; \
+	    rm -rf output/run; mkdir -p output/run; \
+	    (cd output/run && HGDB_CONF=../collection.$$gate.conf ../../${BIN_DIR}/collectionHubCopyTester) \
+	        >> output/collectionHubCopyTest || exit 1; \
+	done
+	diff expected/collectionHubCopyTest output/collectionHubCopyTest
 
 dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
