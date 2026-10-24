@@ -8264,7 +8264,7 @@ if (quickLiftDb != NULL)
 return customFactoryParallelLoad(bdu, track->tdb->type, db, TRUE) && (track->subtracks == NULL);
 }
 
-static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
+void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
 /* Find leaves of track tree that are remote network resources for parallel-fetch loading */
 {
 struct track *track;

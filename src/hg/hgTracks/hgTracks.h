@@ -985,6 +985,11 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+struct paraFetchData;
+void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary);
+/* Find leaves of track tree that are remote network resources for parallel-fetch loading, and
+ * settle the visibility of each composite child among them before any loader thread starts. */
+
 struct hash *refSeqStatusHashLoad(struct track *tg);
 /* Build a name->refSeqStatus hash for tg's items at load time, so that refGeneColor asks the
  * database nothing while the image is drawn.  NULL when no status table applies. */

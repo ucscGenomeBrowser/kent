@@ -11,7 +11,7 @@ MYLIBS = ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLI
 HGTRACKSO = $(addprefix ../,${COMMONO}) hgTracksStubs.c
 BIN_DIR = bin/${MACHTYPE}
 
-test: exonFramePhasesTest itemCoverageTest bigWigLoadPreDrawTest refGeneColorQueriesTest
+test: exonFramePhasesTest itemCoverageTest bigWigLoadPreDrawTest refGeneColorQueriesTest parallelLoadVisTest
 	rm -r output
 	@echo tested all
 
@@ -39,6 +39,11 @@ refGeneColorQueriesTest: mkdirs
 	${CC} ${CC_PROG_OPTS} ${HG_INC} -o ${BIN_DIR}/refGeneColorQueriesTester refGeneColorQueriesTester.c ${HGTRACKSO} ${MYLIBS} ${L}
 	${BIN_DIR}/refGeneColorQueriesTester > output/refGeneColorQueriesTest
 	diff expected/refGeneColorQueriesTest output/refGeneColorQueriesTest
+
+parallelLoadVisTest: mkdirs
+	${CC} ${CC_PROG_OPTS} ${HG_INC} -o ${BIN_DIR}/parallelLoadVisTester parallelLoadVisTester.c ${HGTRACKSO} ${MYLIBS} ${L}
+	${BIN_DIR}/parallelLoadVisTester > output/parallelLoadVisTest
+	diff expected/parallelLoadVisTest output/parallelLoadVisTest
 
 clean:
 	rm -rf bin output
