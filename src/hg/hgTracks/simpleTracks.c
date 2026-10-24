@@ -3335,6 +3335,24 @@ if (utr3E > utr3S)
     }
 }
 
+void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
+                     int *retStartPhase, int *retEndPhase)
+/* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)
+ * from gp->exonFrames.  The end phase is the frame of the next exon along the transcript, so
+ * the exon at the 3' end has none and its end phase is left alone. */
+{
+*retStartPhase = gp->exonFrames[exonIx-1];
+if (!revStrand)
+    {
+    // the last exon has no next exon, so it has no end phase
+    if (exonIx < gp->exonCount)
+        *retEndPhase = gp->exonFrames[exonIx];
+    }
+else
+    if (exonIx>1)
+        *retEndPhase = gp->exonFrames[exonIx-2];
+}
+
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
     int y, int heightPer, int sItem, int eItem,
     boolean lButton, boolean rButton, int buttonW)
@@ -3459,16 +3477,7 @@ for (ref = exonList; TRUE; )
             phaseText[0] = 0;
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
-                startPhase = gp->exonFrames[exonIx-1];
-                if (!revStrand)
-                    {
-                    // the last exon has no next exon, so it has no end phase
-                    if (exonIx < gp->exonCount)
-                        endPhase = gp->exonFrames[exonIx];
-                    }
-                else 
-                    if (exonIx>1)
-                        endPhase = gp->exonFrames[exonIx-2];
+                exonFramePhases(gp, exonIx, revStrand, &startPhase, &endPhase);
                 // construct a string that tells the user about the codon frame situation of this exon
                 makeExonFrameText(exonIntronNumber, numExons, startPhase, endPhase, phaseText);
                 }

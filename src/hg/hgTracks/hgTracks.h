@@ -985,6 +985,11 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
+                     int *retStartPhase, int *retEndPhase);
+/* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)
+ * from gp->exonFrames.  The exon at the 3' end has no end phase, and it is left alone. */
+
 struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra);
 /* construct a linkedFeatures object from a genePred */
 
