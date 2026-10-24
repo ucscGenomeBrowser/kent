@@ -83,7 +83,7 @@ fi
 
 # The tables tests have needed so far.  Add to this list rather than creating a table by hand,
 # so the next person's run has it too.
-tables="apiKeys namedSessionDb sessionDb userDb gbMembers gbNode genark"
+tables="apiKeys namedSessionDb sessionDb userDb gbMembers gbNode genark asmAlias dbDb"
 
 sql() {
     mysql -h "$host" -u "$user" -p"$password" -N -B -e "$1"

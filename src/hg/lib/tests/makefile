@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -136,6 +136,17 @@ dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
 	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
 	diff expected/dataVersionPathTest output/dataVersionPathTest
+
+# Writes dbDb, asmAlias and genark rows to hgcentralregress, like hubSpaceKeysTest.
+# genarkHubPrefix is set by name, since isGenArk() needs it and ~/.hg.conf need not have it.
+asmAliasActiveDbTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asmAliasActiveDbTester asmAliasActiveDbTester.c ${MYLIBS} $L
+	./makeHgCentralRegress.sh > /dev/null
+	echo "include ${HOME}/.hg.conf" > output/asmAlias.conf
+	echo "central.db=hgcentralregress" >> output/asmAlias.conf
+	echo "genarkHubPrefix=/gbdb/genark" >> output/asmAlias.conf
+	HGDB_CONF=output/asmAlias.conf ${BIN_DIR}/asmAliasActiveDbTester > output/asmAliasActiveDbTest
+	diff expected/asmAliasActiveDbTest output/asmAliasActiveDbTest
 
 # customTracks.useAll is set off by name, since the shared hg.conf turns it on and a BED
 # upload would then load into the customTrash database.
