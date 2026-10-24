@@ -985,6 +985,10 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre);
+/* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
+ * track drawn as a coverage graph. */
+
 void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
                      int *retStartPhase, int *retEndPhase);
 /* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)

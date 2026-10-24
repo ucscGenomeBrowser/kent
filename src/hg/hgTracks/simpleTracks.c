@@ -5991,6 +5991,15 @@ else
     countsToPixelsDown(runs, pre);
 }
 
+void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre)
+/* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
+ * track drawn as a coverage graph. */
+{
+struct covRuns *runs = countOverlaps(tg);
+countsToPixels(runs, pre);
+covRunsFree(&runs);
+}
+
 static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
 /* Convert bbiSummaryElement array into a preDrawElement array */
 {
@@ -6037,11 +6046,7 @@ wigCart->alwaysZero = TRUE;
 if (tg->summary)
     summaryToPixels(tg->summary, pre);
 else
-    {
-    struct covRuns *runs = countOverlaps(tg);
-    countsToPixels(runs, pre);
-    covRunsFree(&runs);
-    }
+    itemCoverageToPixels(tg, pre);
 
 tg->colorShades = shadesOfGray;
 Color cartColor = colorFromCart(tg, 0);
