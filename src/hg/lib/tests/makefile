@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -154,6 +154,11 @@ collectionHubCopyTest: mkdirs
 	        >> output/collectionHubCopyTest || exit 1; \
 	done
 	diff expected/collectionHubCopyTest output/collectionHubCopyTest
+
+ctClearVisTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/ctClearVisTester ctClearVisTester.c ${MYLIBS} $L
+	${BIN_DIR}/ctClearVisTester > output/ctClearVisTest
+	diff expected/ctClearVisTest output/ctClearVisTest
 
 dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
