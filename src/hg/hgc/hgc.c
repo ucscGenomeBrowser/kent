@@ -14740,12 +14740,7 @@ if (strstr(rnaName, "NM_") != NULL)
     }
 else
     {
-    /* No refLink row for this accession.  Zero the whole struct so the fields we
-     * do not fill in read as absent, rather than as whatever was on the stack. */
-    ZeroVar(&rlR);
-    rlR.name    = strdup(kgId);
-    rlR.mrnaAcc = strdup(kgId);
-    rlR.locusLinkId = 0;
+    refLinkInitNoRow(&rlR, kgId);
     rl = &rlR;
     }
 
