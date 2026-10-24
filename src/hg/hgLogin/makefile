@@ -23,3 +23,6 @@ compile: $O
 #        hgsql hgcentraltest -e 'insert into gbMembers (userName,
 #        realName,password,email,lastUse,activated,dateAuthenticated) values ("hgenecat","Fatcat Gene", "<hashed password here>","cat@xyz.edu", NOW(),"Y",NOW());'
 
+
+test::
+	cd tests && ${MAKE} test

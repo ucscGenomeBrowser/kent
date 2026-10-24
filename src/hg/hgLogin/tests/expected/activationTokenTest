@@ -1,0 +1,10 @@
+a token mailed today
+  the right token                                      activates
+  a wrong token                                        refused
+  an empty token                                       refused
+a token past its seven days
+  the right token                                      refused
+an account already activated, so its token is empty
+  an empty token                                       refused
+no such account
+  an empty token                                       refused
