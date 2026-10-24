@@ -256,9 +256,11 @@ boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *p
  * blocks hold consensus lengths, not genome positions, and are kept.  An aligned block that
  * does not map, or maps to another sequence or strand than the first one that does, becomes
  * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
- * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
- * the reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
- * no aligned block maps, or the ones that do land out of order:  drop the item then. */
+ * blocks are reversed and the strand flipped.  If no aligned block maps, the item's extent is
+ * lifted instead, and what lands becomes a single unaligned block, with chromStart-chromEnd
+ * and alignStart-alignEnd both set to it.  *pChrom is freed and replaced with a copy of the
+ * reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
+ * nothing of the item maps, or the aligned blocks land out of order:  drop the item then. */
 
 boolean quickLiftAlignmentsEnabled(struct cart *cart);
 /* Return TRUE if quickLift is allowed to lift alignment tracks: psl, bigPsl, chain,

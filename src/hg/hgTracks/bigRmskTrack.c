@@ -235,6 +235,15 @@ else
     start = rm->alignStart;
     }
 
+// a lifted item none of whose aligned blocks landed is one unaligned block, and its
+// alignStart-alignEnd is the part that did, refs #38613
+if (rm->blockCount == 1)
+    {
+    *pStart = start;
+    *pEnd = rm->alignEnd;
+    return;
+    }
+
 // Now subtract out space for the unaligned sequence
 // bar starting off the graphics portion of the glyph.
 if ( showUnalignedExtents ) 
@@ -640,6 +649,10 @@ if (tg->isBigBed)
     char *filterString = cartUsualString(cart, BIGRMSK_NAME_FILTER, BIGRMSK_NAME_FILTER_DEFAULT);
     boolean isFilterRegexp = cartUsualBoolean(cart, BIGRMSK_REGEXP_FILTER, BIGRMSK_REGEXP_FILTER_DEFAULT);
     regex_t regEx;
+    // an item none of whose aligned blocks lifted is a single unaligned block, which only the
+    // detailed view draws:  the other views draw aligned blocks alone, so there it would be a
+    // row with a name and nothing to click.  The test is bigRmskLayoutItems()'s.  refs #38613
+    boolean detailView = (tg->visibility == tvFull) && (winEnd - winStart <= DETAIL_VIEW_MAX_SCALE);
 
     if (isFilterRegexp)
         regcomp(&regEx, filterString, REG_NOSUB);
@@ -683,7 +696,8 @@ if (tg->isBigBed)
             rm->description = cloneString(bedRow[13]);
             rm->layoutLevel = -1;  // Indicates layout has not been calculated.
             rm->leftLabel = 0;     // Flag for labels that need to be leftLabeled
-            if (liftedRecordInWindow(rm, quickLiftChainHashForItem(chainHash, bb)))
+            if (liftedRecordInWindow(rm, quickLiftChainHashForItem(chainHash, bb)) &&
+                (detailView || (rm->blockCount > 1)))
                 slAddHead(&detailList, rm);
             else
                 bigRmskRecordFree(&rm);
@@ -1400,6 +1414,29 @@ int percId = 1000 - rm->score;
 int grayLevel = grayInRange(percId, 500, 1000);
 fillColor = shadesOfGray[grayLevel];
 outlineColor = ri->color;
+
+if (rm->blockCount == 1)
+    {
+    // a lifted item none of whose aligned blocks landed:  draw the part of it that did as
+    // the dashed unaligned line, with the name before it, refs #38613
+    lx1 = roundingScale(rm->chromStart - winStart, width, baseWidth) + xOff;
+    lx2 = roundingScale(rm->chromEnd - winStart, width, baseWidth) + xOff;
+    if (showUnalignedExtents)
+        drawDashedHorizLine(hvg, lx1, lx2, y + unalignedBlockOffset, 5, 5, black);
+    if (showLabels)
+        {
+        int stringWidth = mgFontStringWidth(tl.font, rm->name) + LABEL_PADDING;
+        if (lx1 - stringWidth - xOff >= -(LABEL_PADDING/2))
+            {
+            hvGfxTextCentered(hvg, lx1 - stringWidth, heightPer - tl.fontHeight + y,
+                              stringWidth, tl.fontHeight, MG_BLACK, tl.font, rm->name);
+            rm->leftLabel = 0;
+            }
+        else if (rm->visualEnd >= winStart)
+            rm->leftLabel = 1;
+        }
+    return;
+    }
 
 // Draw from left to right
 for (idx = 0; idx < rm->blockCount; idx++)

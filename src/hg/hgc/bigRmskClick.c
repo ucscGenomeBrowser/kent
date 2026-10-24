@@ -228,8 +228,9 @@ printf ("  </thead>\n");
 static boolean liftFields(struct hash *chainHash, char **fields)
 /* Lift the position fields of a bigRmsk row read from the assembly it came from onto the
  * reference:  chrom, strand, alignStart and alignEnd, the ones the details page shows and
- * links to.  Returns FALSE if the item does not lift, or if its block lists do not have
- * blockCount entries.  refs #37437 */
+ * links to, and blockCount, which is 1 when none of the item's aligned blocks lifted.
+ * Returns FALSE if the item does not lift, or if its block lists do not have blockCount
+ * entries.  refs #37437 */
 {
 char *chrom = cloneString(fields[0]);
 unsigned chromStart = sqlUnsigned(fields[1]);
@@ -256,6 +257,8 @@ safef(buf, sizeof buf, "%u", alignStart);
 fields[6] = cloneString(buf);
 safef(buf, sizeof buf, "%u", alignEnd);
 fields[7] = cloneString(buf);
+safef(buf, sizeof buf, "%d", blockCount);
+fields[9] = cloneString(buf);
 return TRUE;
 }
 
@@ -343,6 +346,12 @@ if ( found )
                 "The annotation and alignment lines below give its positions in %s.<br>\n",
                 trackDbSetting(tdb, "quickLiftDb"), trackHubSkipHubName(database),
                 trackDbSetting(tdb, "quickLiftDb"));
+    // none of the item's aligned blocks lifted, only what is around them, refs #38613
+    boolean unalignedOnly = (sqlSigned(fields[9]) == 1);
+    if (unalignedOnly)
+        htmlPrintf ("None of this repeat's aligned sequence maps onto %s.  It is drawn where "
+                    "the unaligned sequence beside it lands, %s:%d-%s.<br>\n",
+                    trackHubSkipHubName(database), fields[0], atoi(fields[6]) + 1, fields[7]);
     //printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
     //rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
     printf ("<br><br>\n");
@@ -372,12 +381,14 @@ if ( found )
                 hgTracksPathAndSettings (), database, fields[0],
                 atoi(fields[6]) + 1, fields[7]);
         char *tbl = cgiUsualString ("table", cgiString ("g"));
-        printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
-                "strand=%s&table=%s\">"
-                "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
-                (fields[3] != NULL ? cgiEncode (fields[3]) : ""),
-                fields[0], fields[6], fields[7], cgiEncode (fields[5]),
-                tbl);
+        // the lifted range holds none of the repeat's own sequence then
+        if (!unalignedOnly)
+            printf (" - <A HREF=\"%s&db=%s&o=%s&g=getDna&i=%s&c=%s&l=%s&r=%s&"
+                    "strand=%s&table=%s\">"
+                    "DNA</A>\n", hgcPathAndSettings (), database, fields[6],
+                    (fields[3] != NULL ? cgiEncode (fields[3]) : ""),
+                    fields[0], fields[6], fields[7], cgiEncode (fields[5]),
+                    tbl);
         printf ("  </td>\n");
         printf ("  </tr>\n");
         }
