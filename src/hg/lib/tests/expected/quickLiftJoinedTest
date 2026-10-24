@@ -10,8 +10,12 @@ minus chain, minus item:  ref2:4600-4800 align 4600-4800 + [200@0]
 minus chain, ends past flanks:  ref2:4250-4850 align 4300-4800 - [10@-1 500@50 10@-1]
 negative flanks:  ref1:1000-1300 align 1000-1300 + [-5000@-1 300@0 -7@-1]
 flank past 0:  ref1:0-1300 align 1000-1300 + [5000@-1 300@1000]
-only unaligned:  dropped
+aligned in gap:  ref1:1400-1600 align 1400-1600 + [200@-1]
+aligned off chain:  ref1:2800-2900 align 2800-2900 + [100@-1]
+aligned off minus chain:  ref2:4700-4900 align 4700-4900 - [200@-1]
+only unaligned:  ref1:1100-1400 align 1100-1400 + [300@-1]
 no chain:  dropped
+aligned and flanks off chain:  dropped
 out of order:  dropped
 no blocks:  dropped
 bad shapes: 0
