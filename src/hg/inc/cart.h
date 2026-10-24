@@ -69,6 +69,11 @@ void cartParseOverHashExt(struct cart *cart, char *contents, boolean merge);
  * values which will be in separate hashEl's). If merge is TRUE, we
  * replace existing values with new values */
 
+void cartSetHubDatabase(struct cart *cart, struct hash *oldVars, char *newDatabase);
+/* Put the database that hubConnectLoadHubs chose into the cart.  If that is a change of
+ * assembly, set db in oldVars to "none", which getDbAndGenome reads as a switch: the position
+ * goes to the assembly default and the multi-region variables are dropped. */
+
 struct cart *cartNew(char *userId, char *sessionId,
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of

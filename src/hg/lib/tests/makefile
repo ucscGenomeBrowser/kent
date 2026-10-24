@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -131,6 +131,11 @@ hVarSubstHtmlTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hVarSubstHtmlTester hVarSubstHtmlTester.c ${MYLIBS} $L
 	${BIN_DIR}/hVarSubstHtmlTester > output/hVarSubstHtmlTest
 	diff expected/hVarSubstHtmlTest output/hVarSubstHtmlTest
+
+cartHubDatabaseTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartHubDatabaseTester cartHubDatabaseTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartHubDatabaseTester > output/cartHubDatabaseTest
+	diff expected/cartHubDatabaseTest output/cartHubDatabaseTest
 
 dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
