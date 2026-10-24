@@ -43,6 +43,7 @@ proof:
   - "server-flip 2026-10-20 -- passes on genome-test since #37437 was pushed and installed there (cgi-alpha 15:29), having failed there as an xfail on 2026-10-19"
   - "xfail 2026-10-23 -- #38613 steps: fails on genome-test (master without #38613) at step 12: item 4690 is dropped, so it has no map box"
   - "assertion-only 2026-10-23 -- #38613 steps, branch rmskUnaligned38613: the park (38613, port 48118) could not run the script, since hgConvert there cannot write today's trash/quickLift directory;  the same cart sent to the park by URL drew the step 12 map box and the step 14 details page"
+  - "server-flip 2026-10-23 -- #38613 steps: the whole script passes on genome-test since #38613 (45a4607a0cf) was pushed and installed there (cgi-alpha 18:01), having failed there as an xfail at step 12 earlier that day"
 
 target: genome-test
 db: hg38
