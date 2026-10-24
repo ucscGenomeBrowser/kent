@@ -11,7 +11,7 @@ MYLIBS = ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLI
 HGTRACKSO = $(addprefix ../,${COMMONO}) hgTracksStubs.c
 BIN_DIR = bin/${MACHTYPE}
 
-test: exonFramePhasesTest itemCoverageTest
+test: exonFramePhasesTest itemCoverageTest bigWigLoadPreDrawTest
 	rm -r output
 	@echo tested all
 
@@ -28,6 +28,11 @@ itemCoverageTest: mkdirs
 	${CC} ${CC_PROG_OPTS} ${HG_INC} -o ${BIN_DIR}/itemCoverageTester itemCoverageTester.c ${HGTRACKSO} ${MYLIBS} ${L}
 	${BIN_DIR}/itemCoverageTester > output/itemCoverageTest
 	diff expected/itemCoverageTest output/itemCoverageTest
+
+bigWigLoadPreDrawTest: mkdirs
+	${CC} ${CC_PROG_OPTS} ${HG_INC} -o ${BIN_DIR}/bigWigLoadPreDrawTester bigWigLoadPreDrawTester.c ${HGTRACKSO} ${MYLIBS} ${L}
+	${BIN_DIR}/bigWigLoadPreDrawTester input/quickLiftGap > output/bigWigLoadPreDrawTest
+	diff expected/bigWigLoadPreDrawTest output/bigWigLoadPreDrawTest
 
 clean:
 	rm -rf bin output
