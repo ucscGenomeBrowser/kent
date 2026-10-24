@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -164,6 +164,11 @@ quickLiftContainerTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftContainerTester quickLiftContainerTester.c ${MYLIBS} $L
 	${BIN_DIR}/quickLiftContainerTester > output/quickLiftContainerTest
 	diff expected/quickLiftContainerTest output/quickLiftContainerTest
+
+quickLiftMergeTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftMergeTester quickLiftMergeTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftMergeTester output/quickLiftMerge.hub.txt > output/quickLiftMergeTest
+	diff expected/quickLiftMergeTest output/quickLiftMergeTest
 
 dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L

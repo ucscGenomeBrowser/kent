@@ -93,7 +93,7 @@
 38185	504	lib/tests/cgiParseTest.c	rm38185.docent.yaml	invisible	unrecorded	an empty CGI pair must not abort the request
 38192	504	-	rm38192.docent.yaml	page	-	Login and Sign out returning to a page reached by POST. The fix is in hg/lib, hg/hgTrackUi, so what changed is what a page says or does
 38197	504	-	rm38197.docent.yaml	page	-	setting and validating a recovery email address. The fix is in hg/hgLogin, hg/lib, so what changed is what a page says or does
-38198	504	-	rm38198.docent.yaml	library	-	needs one: a second lift has to update a track already in the hub. BLOCKED: readStanzas is static in trackHub.c and the public entry takes a cart and a trash file
+38198	504	hg/lib/tests/quickLiftMergeTester.c	rm38198.docent.yaml	library	sandbox-ab	a second lift has to update a track already in the hub. writeMergedHubFile (trackHub.c) is no longer static; quickLiftMergeTester writes the hub a first lift leaves (a composite with child2 off, and trackB), merges a second lift (container full, child2 on, a new trackC), and prints the file: replaced in place, trackB kept, trackC added. With the merge put back to keeping any stanza already in the file, the container stays dense and child2 stays off. rm38198 watches the page
 38200	504	-	rm38200.docent.yaml	page	-	a table name ending in an accession, and escaped examples. The fix is in hg/hgTables, so what changed is what a page says or does
 38205	504	-	rm38205.docent.yaml	page	-	the session description taken back out of the cart. The fix is in hg/hgSession, so what changed is what a page says or does
 38206	504	-	rm38206.docent.yaml	page	-	one blue for the menu bar on every page. The fix is in hg/htdocs/style, so what changed is what a page says or does
