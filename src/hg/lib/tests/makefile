@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest hubSpaceKeysTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -136,6 +136,15 @@ dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
 	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
 	diff expected/dataVersionPathTest output/dataVersionPathTest
+
+# customTracks.useAll is set off by name, since the shared hg.conf turns it on and a BED
+# upload would then load into the customTrash database.
+ctLongFieldTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/ctLongFieldTester ctLongFieldTester.c ${MYLIBS} $L
+	echo "include ${HOME}/.hg.conf" > output/ctLongField.conf
+	echo "customTracks.useAll=no" >> output/ctLongField.conf
+	HGDB_CONF=output/ctLongField.conf ${BIN_DIR}/ctLongFieldTester > output/ctLongFieldTest
+	diff expected/ctLongFieldTest output/ctLongFieldTest
 
 trackDbLoopTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackDbLoopTester trackDbLoopTester.c ${MYLIBS} $L
