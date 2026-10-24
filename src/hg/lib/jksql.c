@@ -686,6 +686,13 @@ void sqlMonitorSetIndent(unsigned indent)
 traceIndent = indent;
 }
 
+long sqlQueryCount(void)
+/* Return the number of queries sent since the program started or since sqlMonitorDisable, for
+ * a test that counts the work a function does rather than timing it. */
+{
+return sqlTotalQueries;
+}
+
 void sqlMonitorDisable(void)
 /* Disable tracing or profiling of SQL queries. */
 {

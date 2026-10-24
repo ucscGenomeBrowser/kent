@@ -11,7 +11,7 @@ MYLIBS = ${MYLIBDIR}/jkhgapcgi.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYLI
 HGTRACKSO = $(addprefix ../,${COMMONO}) hgTracksStubs.c
 BIN_DIR = bin/${MACHTYPE}
 
-test: exonFramePhasesTest itemCoverageTest bigWigLoadPreDrawTest
+test: exonFramePhasesTest itemCoverageTest bigWigLoadPreDrawTest refGeneColorQueriesTest
 	rm -r output
 	@echo tested all
 
@@ -33,6 +33,12 @@ bigWigLoadPreDrawTest: mkdirs
 	${CC} ${CC_PROG_OPTS} ${HG_INC} -o ${BIN_DIR}/bigWigLoadPreDrawTester bigWigLoadPreDrawTester.c ${HGTRACKSO} ${MYLIBS} ${L}
 	${BIN_DIR}/bigWigLoadPreDrawTester input/quickLiftGap > output/bigWigLoadPreDrawTest
 	diff expected/bigWigLoadPreDrawTest output/bigWigLoadPreDrawTest
+
+# Reads hg38 refGene and hgFixed.refSeqStatus.
+refGeneColorQueriesTest: mkdirs
+	${CC} ${CC_PROG_OPTS} ${HG_INC} -o ${BIN_DIR}/refGeneColorQueriesTester refGeneColorQueriesTester.c ${HGTRACKSO} ${MYLIBS} ${L}
+	${BIN_DIR}/refGeneColorQueriesTester > output/refGeneColorQueriesTest
+	diff expected/refGeneColorQueriesTest output/refGeneColorQueriesTest
 
 clean:
 	rm -rf bin output

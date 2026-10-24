@@ -9062,9 +9062,6 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
-static struct hash *refSeqStatusHashLoad(struct track *tg);
-/* Build a name->refSeqStatus hash for tg's items (defined below). */
-
 void loadNcbiRefSeq(struct track *tg)
 /* Load up RefSeq known genes. */
 {
@@ -9217,7 +9214,7 @@ tg->ixAltColor = col;
 return(col);
 }
 
-static struct hash *refSeqStatusHashLoad(struct track *tg)
+struct hash *refSeqStatusHashLoad(struct track *tg)
 /* Build (at load time) a name->refSeqStatus hash for this track's items, so that
  * refGeneColorByStatus can shade items at draw time without asking the database
  * once per item.  One batched query instead of one query per drawn gene.

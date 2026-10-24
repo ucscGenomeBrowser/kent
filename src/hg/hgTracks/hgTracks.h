@@ -985,6 +985,10 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+struct hash *refSeqStatusHashLoad(struct track *tg);
+/* Build a name->refSeqStatus hash for tg's items at load time, so that refGeneColor asks the
+ * database nothing while the image is drawn.  NULL when no status table applies. */
+
 void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre);
 /* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
  * track drawn as a coverage graph. */
