@@ -976,6 +976,90 @@ static void cartUpdateRecentSession(struct cart *cart, char *id);
 static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
                                char *skipPrefix);
 
+/* Settings that belong to the person using the browser, not to a session they load: display
+ * preferences, the browser options, and the forms of the tools.  With hg.conf
+ * sessionLoad.keepUserPrefs=on a session load keeps the user's own values, so a link from someone
+ * with a bigger screen or font, or a different BLAT query, does not change them for good.
+ * Never list anything that changes what a session shows: track settings, custom tracks, the BLAT
+ * and PCR result tracks (blatLastBigBed, hgPcrResult_*), db or position.  refs #38616 */
+static char *userPrefVars[] = {
+    // display: font and image width
+    "textSize", "textFont", "textStyle", "fontType", "pix",
+    // hgTracks configure page
+    "ideogram", "guidelines", "showDinkButtons", "enableHighlightingDialog", "doHgcInPopUp",
+    "theme", "parallelFetch.timeout", "trackControlsOnMain", "nextItemArrows", "nextExonArrows",
+    // track search
+    "hgt_tSearch", "tsSimple", "tsName", "tsType", "tsGroup", "tsDescr", "tsSort", "tsCurTab",
+    "tsIncludePublicHubs",
+    // public hub search
+    "hubSearchTerms", "hubDbFilter",
+    // debugging and caching
+    "udcTimeout", "measureTiming",
+    // BLAT form and the last query and results; sort and autoRearr are also read by hgc
+    "userSeq", "seqFile", "type", "sort", "output", "allResults", "autoRearr",
+    "blatOrganism", "blatDb", "blatKeepResults", "blatOnlyLatest", "blatPslFile", "blatFaFile",
+    };
+static char *userPrefPrefixes[] = {
+    "hgt_ts", "hgt_mdbVar", "hgt_mdbVal",       // track search pages and metadata search
+    "wp_",                                       // hgPcr form
+    "hglft_",                                    // hgLiftOver form
+    "hgva_",                                     // hgVai form
+    "hgi_",                                      // hgIntegrator form
+    "hgta_",                                     // Table Browser form, filters, regions, pal.c
+    };
+static boolean keepUserPrefsOnLoad = TRUE;
+
+void cartSetKeepUserPrefsOnLoad(boolean keep)
+/* FALSE makes later session loads take the display preferences from the session, for code that
+ * loads a session only to save it again. */
+{
+keepUserPrefsOnLoad = keep;
+}
+
+static struct slPair *cartSaveUserPrefs(struct cart *cart)
+/* Before a session load: return the user's current display preferences, with a NULL value for
+ * each one the user has not set.  Return NULL if the session's values are to be used. */
+{
+if (!keepUserPrefsOnLoad || !cfgOptionBooleanDefault("sessionLoad.keepUserPrefs", FALSE))
+    return NULL;
+// A session's thumbnail image is drawn the way the session was saved.
+char *script = cgiScriptName();
+if (script != NULL && endsWith(script, "hgRenderTracks"))
+    return NULL;
+struct slPair *prefs = NULL;
+int i;
+for (i = 0; i < ArraySize(userPrefVars); i++)
+    slPairAdd(&prefs, userPrefVars[i], cloneString(cartOptionalString(cart, userPrefVars[i])));
+for (i = 0; i < ArraySize(userPrefPrefixes); i++)
+    {
+    struct hashEl *hel, *helList = cartFindPrefix(cart, userPrefPrefixes[i]);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        slPairAdd(&prefs, hel->name, cloneString(hel->val));
+    hashElFreeList(&helList);
+    }
+return prefs;
+}
+
+static void cartRestoreUserPrefs(struct cart *cart, struct slPair **pPrefs)
+/* After a session load: put back the preferences from cartSaveUserPrefs, and remove the ones the
+ * user had not set, so they get the defaults and not the session's values.  Frees the list. */
+{
+int i;
+for (i = 0; i < ArraySize(userPrefVars); i++)
+    cartRemove(cart, userPrefVars[i]);
+for (i = 0; i < ArraySize(userPrefPrefixes); i++)
+    cartRemovePrefix(cart, userPrefPrefixes[i]);
+// Add, not set: a form variable can have several values.
+slReverse(pPrefs);
+struct slPair *pref;
+for (pref = *pPrefs; pref != NULL; pref = pref->next)
+    {
+    if (pref->val != NULL)
+        cartAddString(cart, pref->name, pref->val);
+    }
+slPairFreeValsAndList(pPrefs);
+}
+
 static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
 /* A full session load is about to replace the cart.  The cart keeps its hgsid, so the view the
  * user had is gone once the cart is saved.  Store a copy of it in a new sessionDb row and put that
@@ -1070,6 +1154,7 @@ if (row != NULL)
         pubSessionsTableString = cloneString(pubSessionsTableString);
         if (!merge)
             cartKeepCopyBeforeLoad(cart, sessionName);
+        struct slPair *userPrefs = cartSaveUserPrefs(cart);
         char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
         struct sqlConnection *conn2 = hConnectCentral();
         sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
@@ -1085,6 +1170,8 @@ if (row != NULL)
             cartSetString(cart, hgSessionTableState, sessionTableString);
         if (pubSessionsTableString != NULL)
             cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+        if (userPrefs != NULL)
+            cartRestoreUserPrefs(cart, &userPrefs);
         if (oldVars)
             hashEmpty(oldVars);
         /* Overload settings explicitly passed in via CGI (except for the
@@ -1687,6 +1774,7 @@ sessionTableString = cloneString(sessionTableString);
 char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
 pubSessionsTableString = cloneString(pubSessionsTableString);
 cartKeepCopyBeforeLoad(cart, "");
+struct slPair *userPrefs = cartSaveUserPrefs(cart);
 char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
@@ -1728,6 +1816,8 @@ if (stats.validCount == 0 && vsErrorCount(&stats) > 0)
     isValidEnough = FALSE;
 if (isValidEnough)
     {
+    if (userPrefs != NULL)
+        cartRestoreUserPrefs(cart, &userPrefs);
     if (oldVars)
         hashEmpty(oldVars);
     /* Overload settings explicitly passed in via CGI (except for the
@@ -1743,6 +1833,8 @@ if (isValidEnough)
         cartRemove(cart, hgsOtherUserName);
         }
     }
+else if (userPrefs != NULL)
+    cartRestoreUserPrefs(cart, &userPrefs);
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
 if (recentSessions)
