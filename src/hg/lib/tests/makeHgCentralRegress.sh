@@ -10,7 +10,8 @@
 # use it, and anything in it may be deleted by the next run, so a test must create the rows it
 # needs and clean up after itself rather than expect to find anything.
 #
-# IT NEEDS A GRANT BEFORE ANY TEST CAN USE IT, and this script cannot make one.  The account
+# IT NEEDS A GRANT BEFORE ANY TEST CAN USE IT, and this script cannot make one.  On hgwdev
+# hgtestuser has had it since 2026-10-24; any other account needs its own.  The account
 # the browser uses for the central holds global SELECT, INSERT, CREATE and DROP, but UPDATE
 # and DELETE only on the databases it has been granted them on one at a time.  So a test can
 # create this database and insert into it, and cannot clean up after itself: the delete comes
@@ -21,8 +22,8 @@
 #
 #     GRANT UPDATE, DELETE ON hgcentralregress.* TO '<central.user>'@'localhost';
 #
-# Until that exists, a test pointed here can set rows up but not take them down, so the tests
-# that need it are held back rather than left failing.
+# Without it, a test pointed here can set rows up but not take them down, and
+# hubSpaceKeysTest fails.
 #
 # Schemas are copied from the central the caller's hg.conf already names, with CREATE TABLE
 # LIKE, rather than kept as a second copy of the schema in the tree.  A column added to
@@ -82,7 +83,7 @@ fi
 
 # The tables tests have needed so far.  Add to this list rather than creating a table by hand,
 # so the next person's run has it too.
-tables="apiKeys namedSessionDb sessionDb userDb gbMembers gbNode genark"
+tables="apiKeys namedSessionDb sessionDb userDb gbMembers gbNode genark asmAlias dbDb hubStatus"
 
 sql() {
     mysql -h "$host" -u "$user" -p"$password" -N -B -e "$1"

@@ -103,6 +103,10 @@ struct customTrack *customTracksParseCartDetailed(char *genomeDb, struct cart *c
  * error, clear the custom track from the cart,  and return NULL.  It
  * will also leak memory. */
 
+void customTracksClearCartVis(struct cart *cart, struct customTrack *ctList);
+/* Remove the visibility cart variable of each track in ctList, so that a brand-new track shows
+ * with its declared visibility. */
+
 void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList);
 /* Save custom tracks to trash file for database in cart */
 

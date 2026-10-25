@@ -30,7 +30,7 @@ ${BIN_DIR}/%: %.c ${MYLIBS}
 test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
 	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
 	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
-	trackHubSkipHubNameTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest refLinkNoRowTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -132,10 +132,79 @@ hVarSubstHtmlTest: mkdirs
 	${BIN_DIR}/hVarSubstHtmlTester > output/hVarSubstHtmlTest
 	diff expected/hVarSubstHtmlTest output/hVarSubstHtmlTest
 
+cartHubDatabaseTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartHubDatabaseTester cartHubDatabaseTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartHubDatabaseTester > output/cartHubDatabaseTest
+	diff expected/cartHubDatabaseTest output/cartHubDatabaseTest
+
+# Run twice, with the collectionHubCopyOnWrite gate set on and off by name.  Outside a CGI the
+# trash directory is ".", so it runs in a fresh output/run each time, with sessionDataDir
+# there too, and it writes hubStatus rows to hgcentralregress.
+collectionHubCopyTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/collectionHubCopyTester collectionHubCopyTester.c ${MYLIBS} $L
+	./makeHgCentralRegress.sh > /dev/null
+	rm -f output/collectionHubCopyTest
+	for gate in on off; do \
+	    echo "include ${HOME}/.hg.conf" > output/collection.$$gate.conf; \
+	    echo "central.db=hgcentralregress" >> output/collection.$$gate.conf; \
+	    echo "collectionHubCopyOnWrite=$$gate" >> output/collection.$$gate.conf; \
+	    echo "sessionDataDir=${CURDIR}/output/run/sessionData" >> output/collection.$$gate.conf; \
+	    rm -rf output/run; mkdir -p output/run; \
+	    (cd output/run && HGDB_CONF=../collection.$$gate.conf ../../${BIN_DIR}/collectionHubCopyTester) \
+	        >> output/collectionHubCopyTest || exit 1; \
+	done
+	diff expected/collectionHubCopyTest output/collectionHubCopyTest
+
+ctClearVisTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/ctClearVisTester ctClearVisTester.c ${MYLIBS} $L
+	${BIN_DIR}/ctClearVisTester > output/ctClearVisTest
+	diff expected/ctClearVisTest output/ctClearVisTest
+
+quickLiftContainerTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftContainerTester quickLiftContainerTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftContainerTester > output/quickLiftContainerTest
+	diff expected/quickLiftContainerTest output/quickLiftContainerTest
+
+quickLiftMergeTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftMergeTester quickLiftMergeTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftMergeTester output/quickLiftMerge.hub.txt > output/quickLiftMergeTest
+	diff expected/quickLiftMergeTest output/quickLiftMergeTest
+
+# Includes hgTracks/mafTrack.h for inSummaryMode, an inline there.  Reads hg19.
+quickLiftMafSummaryTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -I../../hgTracks -o ${BIN_DIR}/quickLiftMafSummaryTester quickLiftMafSummaryTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
+	diff expected/quickLiftMafSummaryTest output/quickLiftMafSummaryTest
+
+refLinkNoRowTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/refLinkNoRowTester refLinkNoRowTester.c ${MYLIBS} $L
+	${BIN_DIR}/refLinkNoRowTester > output/refLinkNoRowTest
+	diff expected/refLinkNoRowTest output/refLinkNoRowTest
+
 dataVersionPathTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
 	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
 	diff expected/dataVersionPathTest output/dataVersionPathTest
+
+# Writes dbDb, asmAlias and genark rows to hgcentralregress, like hubSpaceKeysTest.
+# genarkHubPrefix is set by name, since isGenArk() needs it and ~/.hg.conf need not have it.
+asmAliasActiveDbTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asmAliasActiveDbTester asmAliasActiveDbTester.c ${MYLIBS} $L
+	./makeHgCentralRegress.sh > /dev/null
+	echo "include ${HOME}/.hg.conf" > output/asmAlias.conf
+	echo "central.db=hgcentralregress" >> output/asmAlias.conf
+	echo "genarkHubPrefix=/gbdb/genark" >> output/asmAlias.conf
+	HGDB_CONF=output/asmAlias.conf ${BIN_DIR}/asmAliasActiveDbTester > output/asmAliasActiveDbTest
+	diff expected/asmAliasActiveDbTest output/asmAliasActiveDbTest
+
+# customTracks.useAll is set off by name, since the shared hg.conf turns it on and a BED
+# upload would then load into the customTrash database.
+ctLongFieldTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/ctLongFieldTester ctLongFieldTester.c ${MYLIBS} $L
+	echo "include ${HOME}/.hg.conf" > output/ctLongField.conf
+	echo "customTracks.useAll=no" >> output/ctLongField.conf
+	HGDB_CONF=output/ctLongField.conf ${BIN_DIR}/ctLongFieldTester > output/ctLongFieldTest
+	diff expected/ctLongFieldTest output/ctLongFieldTest
 
 trackDbLoopTest: mkdirs
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackDbLoopTester trackDbLoopTester.c ${MYLIBS} $L
@@ -172,9 +241,9 @@ geoMirrorSelfTest: mkdirs
 	HGDB_CONF=output/geoNode.conf ${BIN_DIR}/geoMirrorSelfTester > output/geoMirrorSelfTest
 	diff expected/geoMirrorSelfTest output/geoMirrorSelfTest
 
-# NOT in the test target above, and waiting on one grant.  This is the one test here that
-# WRITES to a central database, so it is pointed at hgcentralregress,
-# which exists for tests and which nothing else reads.  makeHgCentralRegress.sh creates it and
+# The one test here that WRITES to a central database, so it is pointed at hgcentralregress,
+# which exists for tests and which nothing else reads.  central.user needs UPDATE and DELETE
+# on it; see makeHgCentralRegress.sh for the grant.  makeHgCentralRegress.sh creates it and
 # is safe to run every time.  login.cookieSalt is set because the sync signature is made with
 # it; the value is a test value and means nothing outside this run.
 hubSpaceKeysTest: mkdirs
@@ -185,8 +254,6 @@ hubSpaceKeysTest: mkdirs
 	echo "login.cookieSalt=testSaltForRegressRuns" >> output/regress.conf
 	HGDB_CONF=output/regress.conf ${BIN_DIR}/hubSpaceKeysTester > output/hubSpaceKeysTest
 	diff expected/hubSpaceKeysTest output/hubSpaceKeysTest
-# It runs as soon as central.user has UPDATE and DELETE on hgcentralregress; see
-# makeHgCentralRegress.sh for the grant.  Add it to the test target on that day.
 
 # The conf a CGI reads, not the developer's own: isGenArk() needs genarkHubPrefix, which is
 # set in the shared one.

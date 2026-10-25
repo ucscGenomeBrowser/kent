@@ -59,3 +59,8 @@ ${RENDERA}: ${RENDERO}
 clean::
 	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif
 	rm -f ${RENDERA} ${RENDERO}
+
+# Unit tests linked with the objects above; ../tests holds the Playwright tests, which are not
+# part of make test.
+test:: ${COMMONO}
+	cd unitTests && ${MAKE} test COMMONO="${COMMONO}"

@@ -1,0 +1,10 @@
+before
+  ct_blat_1234             hide
+  ct_blat_5678             hide
+  ct_blat_1234.priority    3
+  knownGene                pack
+after the new ct_blat_1234 is made
+  ct_blat_1234             (gone)
+  ct_blat_5678             hide
+  ct_blat_1234.priority    3
+  knownGene                pack

@@ -14740,12 +14740,7 @@ if (strstr(rnaName, "NM_") != NULL)
     }
 else
     {
-    /* No refLink row for this accession.  Zero the whole struct so the fields we
-     * do not fill in read as absent, rather than as whatever was on the stack. */
-    ZeroVar(&rlR);
-    rlR.name    = strdup(kgId);
-    rlR.mrnaAcc = strdup(kgId);
-    rlR.locusLinkId = 0;
+    refLinkInitNoRow(&rlR, kgId);
     rl = &rlR;
     }
 
@@ -28507,13 +28502,9 @@ if (sameString(cfgOptionDefault("blatOnlyLatestCheckbox", "off"), "on")
  * the same ct_ id as an earlier same-named track the user (or blatOldTracks=hide) hid and later
  * deleted.  The old visibility cart variable outlives the deleted track and would silently start
  * the new track hidden (seen with "I'm feeling lucky": the user lands on hgTracks and the result
- * is invisible, RM #38086).  A brand-new track should always show with its declared visibility,
- * so drop any stale cart variable for its id.  Runs after every block above that can set "hide"
- * (blatOldTracks=hide included), so ordering cannot hide the new track again. */
-struct customTrack *newCt;
-for (newCt = newCts; newCt != NULL; newCt = newCt->next)
-    if (newCt->tdb != NULL)
-        cartRemove(cart, newCt->tdb->track);
+ * is invisible, RM #38086).  Runs after every block above that can set "hide" (blatOldTracks=hide
+ * included), so ordering cannot hide the new track again. */
+customTracksClearCartVis(cart, newCts);
 
 theCtList = customTrackAddToList(ctList, newCts, NULL, FALSE);
 

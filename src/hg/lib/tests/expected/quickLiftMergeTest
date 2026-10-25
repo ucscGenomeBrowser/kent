@@ -1,0 +1,31 @@
+hub quickLiftHubhg19
+shortLabel QuickLift from hg19
+longLabel QuickLift from hg19
+useOneFile on
+email genome-www@soe.ucsc.edu
+
+genome hg19
+
+track container
+quickLifted on
+compositeTrack on
+visibility full
+
+track child1
+quickLifted on
+parent container on
+visibility dense
+
+track child2
+quickLifted on
+parent container on
+visibility dense
+
+track trackB
+quickLifted on
+visibility pack
+
+track trackC
+quickLifted on
+visibility squish
+

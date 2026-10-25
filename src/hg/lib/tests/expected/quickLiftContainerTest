@@ -1,0 +1,6 @@
+source setting "superTrack on hide"
+  superTrack on show
+  1 superTrack line
+source setting "superTrack on show"
+  superTrack on show
+  1 superTrack line

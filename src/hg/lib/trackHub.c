@@ -2231,7 +2231,7 @@ for(; tdb; tdb = tdbNext)
     }
 }
 
-static void writeMergedHubFile(char *filename, char *db, struct dyString *newContent)
+void writeMergedHubFile(char *filename, char *db, struct dyString *newContent)
 /* Write the hub file from the stanzas we just generated plus whatever was already
  * in the file.  A generated stanza replaces the old stanza of the same track, in
  * the slot the old one held, so the file keeps parents ahead of their children.

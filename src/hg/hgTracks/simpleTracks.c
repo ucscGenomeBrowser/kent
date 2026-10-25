@@ -3335,6 +3335,24 @@ if (utr3E > utr3S)
     }
 }
 
+void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
+                     int *retStartPhase, int *retEndPhase)
+/* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)
+ * from gp->exonFrames.  The end phase is the frame of the next exon along the transcript, so
+ * the exon at the 3' end has none and its end phase is left alone. */
+{
+*retStartPhase = gp->exonFrames[exonIx-1];
+if (!revStrand)
+    {
+    // the last exon has no next exon, so it has no end phase
+    if (exonIx < gp->exonCount)
+        *retEndPhase = gp->exonFrames[exonIx];
+    }
+else
+    if (exonIx>1)
+        *retEndPhase = gp->exonFrames[exonIx-2];
+}
+
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
     int y, int heightPer, int sItem, int eItem,
     boolean lButton, boolean rButton, int buttonW)
@@ -3459,16 +3477,7 @@ for (ref = exonList; TRUE; )
             phaseText[0] = 0;
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
-                startPhase = gp->exonFrames[exonIx-1];
-                if (!revStrand)
-                    {
-                    // the last exon has no next exon, so it has no end phase
-                    if (exonIx < gp->exonCount)
-                        endPhase = gp->exonFrames[exonIx];
-                    }
-                else 
-                    if (exonIx>1)
-                        endPhase = gp->exonFrames[exonIx-2];
+                exonFramePhases(gp, exonIx, revStrand, &startPhase, &endPhase);
                 // construct a string that tells the user about the codon frame situation of this exon
                 makeExonFrameText(exonIntronNumber, numExons, startPhase, endPhase, phaseText);
                 }
@@ -5982,6 +5991,15 @@ else
     countsToPixelsDown(runs, pre);
 }
 
+void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre)
+/* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
+ * track drawn as a coverage graph. */
+{
+struct covRuns *runs = countOverlaps(tg);
+countsToPixels(runs, pre);
+covRunsFree(&runs);
+}
+
 static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
 /* Convert bbiSummaryElement array into a preDrawElement array */
 {
@@ -6028,11 +6046,7 @@ wigCart->alwaysZero = TRUE;
 if (tg->summary)
     summaryToPixels(tg->summary, pre);
 else
-    {
-    struct covRuns *runs = countOverlaps(tg);
-    countsToPixels(runs, pre);
-    covRunsFree(&runs);
-    }
+    itemCoverageToPixels(tg, pre);
 
 tg->colorShades = shadesOfGray;
 Color cartColor = colorFromCart(tg, 0);
@@ -9048,9 +9062,6 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
-static struct hash *refSeqStatusHashLoad(struct track *tg);
-/* Build a name->refSeqStatus hash for tg's items (defined below). */
-
 void loadNcbiRefSeq(struct track *tg)
 /* Load up RefSeq known genes. */
 {
@@ -9203,7 +9214,7 @@ tg->ixAltColor = col;
 return(col);
 }
 
-static struct hash *refSeqStatusHashLoad(struct track *tg)
+struct hash *refSeqStatusHashLoad(struct track *tg)
 /* Build (at load time) a name->refSeqStatus hash for this track's items, so that
  * refGeneColorByStatus can shade items at draw time without asking the database
  * once per item.  One batched query instead of one query per drawn gene.

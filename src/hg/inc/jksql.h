@@ -514,6 +514,10 @@ void sqlMonitorSetIndent(unsigned indent);
 void sqlMonitorDisable(void);
 /* Disable tracing or profiling of SQL queries. */
 
+long sqlQueryCount(void);
+/* Return the number of queries sent since the program started or since sqlMonitorDisable, for
+ * a test that counts the work a function does rather than timing it. */
+
 long sqlDateToUnixTime(char *sqlDate);
 /* Convert a SQL date such as "2003-12-09 11:18:43" to clock time
  * (seconds since midnight 1/1/1970 in UNIX). */

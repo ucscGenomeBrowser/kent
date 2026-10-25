@@ -1,0 +1,14 @@
+a session on a GenArk assembly, loaded with the same db=
+  cart db GCF_000001405.40, oldVars db GCF_000001405.40
+a cart on hg38, loaded with a GenArk db=
+  cart db GCF_000001405.40, oldVars db none, so the position is reset
+no db before at all
+  cart db GCF_000001405.40, oldVars db none, so the position is reset
+an empty db before
+  cart db GCF_000001405.40, oldVars db none, so the position is reset
+the cart already holds that db
+  cart db GCF_000001405.40, oldVars db hg38
+the cart holds another db
+  cart db GCF_000001405.40, oldVars db GCF_000001405.40
+no oldVars
+  cart db GCF_000001405.40, oldVars db (no oldVars)

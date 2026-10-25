@@ -1,0 +1,45 @@
+a new key
+  the key comes back for that user             yes
+  and the key names the user                   yes
+
+a second key replaces the first
+  the two keys differ                          yes
+  the old key now names nobody                 yes
+  the new key names the user                   yes
+
+adopting a key another mirror made
+  the stored key is exactly the one given      yes
+  the mirror's own second key is gone          yes
+
+the signature a peer checks
+  over the adopted key                         60b3b6c1c786c68ca82dce10d18d5211a0b07709013a0ee0ba7f8a9a09b7d6b2
+  over a revoke, which carries no key          0f90ee20a6561a0946a82f31b2496234e9ab2822592b6b58861a1d87c52344bf
+  a different key signs differently            yes
+  a different user signs differently           yes
+  a different second signs differently         yes
+
+what a peer accepts
+  a signature made now                         accepted
+  a revoke signed now                          accepted
+  a made-up signature                          refused
+  a signature for another user                 refused
+  a signature for another key                  refused
+  the key swapped after signing                refused
+  a replay from long ago                       refused
+  signed just before the window                refused
+  signed too far in the future                 refused
+  a peer clock 30s ahead                       accepted
+  no timestamp at all                          refused
+  a timestamp that is not a number             refused
+  no signature at all                          refused
+  a newline in the userName                    refused
+
+revoking
+  the user has no key                          yes
+  the revoked key names nobody                 yes
+
+refused
+  generate with no user name                   aborted
+  adopt with no user name                      aborted
+  adopt with no key                            aborted
+
