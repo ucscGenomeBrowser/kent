@@ -40,6 +40,8 @@ boolean trackLayoutInclFontExtras();
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 #define textFontVar "textFont"	/* Variable name used for text font. */
 #define textStyleVar "textStyle"	/* Variable name used for text font style. */
+#define defaultVectorFont "Helvetica"	/* FreeType font used when cart and hg.conf name none. */
+#define defaultVectorFontFile "n019003l.pfb"	/* Its file under freeTypeDir. */
 #define trackTabWidth 11        /* Mini-button width */
 #define MAX_DISPLAY_PIXEL_WIDTH 5000
 

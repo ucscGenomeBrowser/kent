@@ -125,7 +125,7 @@ struct freeTypeFont freeTypeFonts[] = {
 {"AvantGarde-Demi",			"a010015l.pfb"},
 {"AvantGarde-BookOblique",		"a010033l.pfb"},
 {"AvantGarde-DemiOblique",		"a010035l.pfb"},
-{"Helvetica",				"n019003l.pfb"},
+{defaultVectorFont,			defaultVectorFontFile},
 {"Helvetica-Bold",			"n019004l.pfb"},
 {"Helvetica-Oblique",			"n019023l.pfb"},
 {"Helvetica-BoldOblique",		"n019024l.pfb"},
