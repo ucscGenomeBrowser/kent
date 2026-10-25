@@ -1,0 +1,197 @@
+<h2>Description</h2>
+<p>
+This track is part of the <a href="hgTrackUi?g=predictionScoresSuper">Deleteriousness
+Predictions</a> collection.
+The mitochondrial genome (chrM) encodes 13 proteins of the respiratory chain plus the
+2 rRNAs and 22 tRNAs needed to translate them, and is present in hundreds to thousands
+of copies per cell, so a variant can affect all copies (homoplasmy) or only some
+(heteroplasmy). Most pathogenicity predictors are trained on nuclear genes, which is
+why the ACMG/AMP recommendations for mitochondrial variants name mtDNA-specific tools
+such as APOGEE and MitoTIP for computational evidence.
+</p>
+<p>
+The MitImpact APOGEE 2 track shows data from
+<a href="https://mitimpact.mcb2lab.org" target="_blank">MitImpact</a>,
+a collection of pre-computed annotations for all three possible substitutions at every
+position of chrM, almost 50,000 variants. For each variant it gives the gene and
+predicted effect, the class and probability of pathogenicity from APOGEE 2 (missense
+variants) or nAPOGEE (rRNA and tRNA variants), more than 30 other prediction scores,
+conservation, MitoTIP for tRNAs, ClinVar and MITOMAP disease annotations, and allele
+frequencies from gnomAD, HelixMTdb, ToMMo 61KJPN and GenBank.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each variant is a 1 bp feature labeled with its HGVS name on the rCRS (NC_012920.1),
+e.g. m.3243A&gt;G. Positions where two genes overlap (MT-ATP8/MT-ATP6, MT-ND4L/MT-ND4)
+and a few tRNA boundaries carry each variant twice, once per gene, as the scores
+differ between the two genes. Hover over a variant to see the main predictions,
+click it for all annotations, including a table of all other predictors and a table
+of allele frequencies. The details page links to the variant's page on the MitImpact
+website. Variants can be searched by HGVS name or dbSNP rs ID in the position box.
+</p>
+<p>
+Variants are colored by their APOGEE 2 class if they are missense variants and by their
+nAPOGEE class if they are in an rRNA or tRNA gene. Both models use the same seven
+classes; the thresholds are listed in the Methods section.
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#C80000;width:2em">&nbsp;</th>
+      <td>Pathogenic</td></tr>
+  <tr><th style="background-color:#F05000;width:2em">&nbsp;</th>
+      <td>Likely pathogenic</td></tr>
+  <tr><th style="background-color:#D28C00;width:2em">&nbsp;</th>
+      <td>VUS+, variant of uncertain significance, closer to pathogenic</td></tr>
+  <tr><th style="background-color:#787878;width:2em">&nbsp;</th>
+      <td>VUS, variant of uncertain significance</td></tr>
+  <tr><th style="background-color:#82AA28;width:2em">&nbsp;</th>
+      <td>VUS-, variant of uncertain significance, closer to benign</td></tr>
+  <tr><th style="background-color:#00AA3C;width:2em">&nbsp;</th>
+      <td>Likely benign</td></tr>
+  <tr><th style="background-color:#006B1B;width:2em">&nbsp;</th>
+      <td>Benign</td></tr>
+  <tr><th style="background-color:#BEBEBE;width:2em">&nbsp;</th>
+      <td>Not scored by APOGEE 2 or nAPOGEE: synonymous, stop-gain, stop-loss and some
+          start codon variants, control region (D-loop) and intergenic variants</td></tr>
+</table>
+<p>
+The track configuration page has filters for the APOGEE class, the model (APOGEE 2 or
+nAPOGEE), the probability of pathogenicity, the region type (protein-coding, rRNA,
+tRNA, control region, intergenic), the predicted effect and the gene.
+</p>
+
+<h2>Methods</h2>
+<p>
+MitImpact (Castellana et al. 2015, 2021) annotates every possible single-nucleotide
+substitution of the rCRS with SnpEff, gene and protein identifiers, conservation scores
+(UCSC PhyloP and PhastCons, 100 vertebrates and 470 mammals) and the scores of many
+predictors, some run by the MitImpact authors (e.g. PolyPhen-2, SIFT, PROVEAN, the
+TransFIC transforms, COVEC WMV), others taken from their sources or from dbNSFP
+(e.g. MutationTaster, DEOGEN2). APOGEE 2 (Bianco et al. 2023) is the mtDNA-specific
+meta-predictor recommended for missense variants. It is a bagging ensemble of
+k-nearest-neighbor classifiers with random undersampling and SMOTE oversampling, trained
+on 1,874 manually curated missense variants (140 pathogenic or likely pathogenic
+MITOMAP disease variants, 1,734 benign MITOMAP general variants) using 17
+mitochondrion-specific evolutionary, structural and positional features and
+the outputs of other predictors. Its score is converted to a Bayesian probability of
+pathogenicity, which defines the classes: Benign &lt; 0.062, Likely benign 0.062-0.265,
+VUS- 0.265-0.396, VUS 0.396-0.544, VUS+ 0.544-0.716, Likely pathogenic 0.716-0.907,
+Pathogenic &ge; 0.907 (score thresholds). nAPOGEE, introduced with MitImpact 4, applies
+the same seven classes to rRNA and tRNA variants, with separate score thresholds for
+tRNAs (benign &le; 0.0914, likely benign &le; 0.4283, VUS- &le; 0.5232, VUS &le; 0.5988,
+VUS+ &le; 0.6714, likely pathogenic &le; 0.7607, pathogenic above) and rRNAs (benign
+&le; 0.4304, likely benign &le; 0.5769, VUS- &le; 0.6324, VUS &le; 0.6878, VUS+ &le;
+0.7546, likely pathogenic &le; 0.8653, pathogenic above). nAPOGEE has not been published
+yet. MitoTIP scores for tRNA variants and the disease and GenBank frequency data come
+from MITOMAP, ClinVar fields from the ClinVar VCF, population frequencies from gnomAD
+v3.1, HelixMTdb (2020-03-27) and ToMMo 61KJPN. See the
+<a href="https://mitimpact.mcb2lab.org/result_legend" target="_blank">MitImpact output
+legend</a> for the ranges and thresholds of all other predictors.
+</p>
+<p>
+The file <a href="https://mitimpact.mcb2lab.org/static/downloads/MitImpact4_V059.zip"
+target="_blank">MitImpact4_V059.zip</a> (MitImpact 4, release V059, built 2026-10-17)
+was downloaded from the <a href="https://mitimpact.mcb2lab.org/downloads"
+target="_blank">MitImpact download page</a>. A Python script converted each of its
+49,882 rows to one bigBed feature, keeping all 144 columns. The reference allele of
+every row was checked against chrM of hg38, which is the rCRS; all matched, including
+the four variants at position 3107, where the rCRS has an N. The APOGEE 2 and nAPOGEE
+classes were merged into one field with one spelling to color the features, and the
+predictor and frequency columns were also packed into the two tables on the details
+page. The commands are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mitImpact.txt"
+target="_blank">makeDoc file</a>, the scripts in
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mitImpact"
+target="_blank">our source repository</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-sep tables. All 144 MitImpact columns are included. From scripts,
+the data can be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+track=<i>mitImpact</i>.
+</p>
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mitImpact/" target="_blank">our
+download server</a>. The file for this track is called <tt>mitImpact.bb</tt>.
+Individual regions or the whole annotation can be obtained using our tool
+<tt>bigBedToBed</tt>, which can be compiled from the source code or downloaded as a
+precompiled binary for your system. Instructions for downloading source code and
+binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mitImpact/mitImpact.bb
+-chrom=chrM -start=3200 -end=3300 stdout</tt>
+</p>
+<p>
+The original data can be downloaded from the
+<a href="https://mitimpact.mcb2lab.org/downloads" target="_blank">MitImpact download
+page</a>. The columns keep the licenses of their sources, which are listed on the
+<a href="https://mitimpact.mcb2lab.org/license" target="_blank">MitImpact license
+page</a>. APOGEE 1, APOGEE 2 and nAPOGEE are licensed for non-commercial use only
+(CC BY-NC 4.0), and so are the ToMMo 61KJPN, CADD, PolyPhen-2, MutationTaster, DEOGEN2,
+VEST, CHASM and LIST-S2 columns. Please cite MitImpact and the sources of the columns
+you use.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the MitImpact team at the Computational Biology and Bioinformatics Laboratory
+(Fondazione Policlinico Universitario A. Gemelli, Rome) for making MitImpact and APOGEE
+available, and to the authors of all the tools and databases included in it.
+</p>
+
+<h2>References</h2>
+
+
+<p>
+Castellana S, Rónai J, Mazza T.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/25516408" target="_blank">
+MitImpact: an exhaustive collection of pre-computed pathogenicity predictions of human mitochondrial
+non-synonymous variants</a>.
+<em>Hum Mutat</em>. 2015 Feb;36(2):E2413-22.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/25516408" target="_blank">25516408</a>
+</p>
+
+
+
+<p>
+Castellana S, Biagini T, Petrizzelli F, Parca L, Panzironi N, Caputo V, Vescovi AL, Carella M, Mazza
+T.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/33300029" target="_blank">
+MitImpact 3: modeling the residue interaction network of the Respiratory Chain subunits</a>.
+<em>Nucleic Acids Res</em>. 2021 Jan 8;49(D1):D1282-D1288.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33300029" target="_blank">33300029</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7779045/" target="_blank">PMC7779045</a>
+</p>
+
+
+
+<p>
+Castellana S, Fusilli C, Mazzoccoli G, Biagini T, Capocefalo D, Carella M, Vescovi AL, Mazza T.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/28640805" target="_blank">
+High-confidence assessment of functional impact of human mitochondrial non-synonymous genome
+variations by APOGEE</a>.
+<em>PLoS Comput Biol</em>. 2017 Jun;13(6):e1005628.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28640805" target="_blank">28640805</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5501658/" target="_blank">PMC5501658</a>
+</p>
+
+
+
+<p>
+Bianco SD, Parca L, Petrizzelli F, Biagini T, Giovannetti A, Liorni N, Napoli A, Carella M,
+Procaccio V, Lott MT <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/37598215" target="_blank">
+APOGEE 2: multi-layer machine-learning model for the interpretable prediction of mitochondrial
+missense variants</a>.
+<em>Nat Commun</em>. 2023 Aug 19;14(1):5058.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/37598215" target="_blank">37598215</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10439926/" target="_blank">PMC10439926</a>
+</p>
+

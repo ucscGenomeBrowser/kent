@@ -1,0 +1,35 @@
+# MitImpact track: APOGEE 2, nAPOGEE and other predictions for all chrM SNVs, #38617
+# 2026-10-25 (Claude, max)
+mkdir -p /hive/data/genomes/hg38/bed/mitimpact
+cd /hive/data/genomes/hg38/bed/mitimpact
+
+# Downloads https://mitimpact.mcb2lab.org/static/downloads/MitImpact4_V059.zip
+# into MitImpact4_V059/ (CSV + LICENSES.md), unless already there, then converts
+# the CSV to bed9+152 and builds mitImpact.bb. The script checks every reference
+# allele against hg38 chrM (rCRS) and stops if the CSV columns change.
+~/kent/src/hg/makeDb/scripts/mitImpact/makeMitImpact.sh MitImpact4_V059
+# 49882 CSV rows, 49882 bed rows written to mitImpact.bed
+#   -          Not scored         13627
+#   APOGEE 2   Benign             3239
+#   APOGEE 2   Likely benign      6298
+#   APOGEE 2   Likely pathogenic  3809
+#   APOGEE 2   Pathogenic         117
+#   APOGEE 2   VUS                3423
+#   APOGEE 2   VUS+               4481
+#   APOGEE 2   VUS-               2828
+#   nAPOGEE    Benign             4225
+#   nAPOGEE    Likely benign      3393
+#   nAPOGEE    Likely pathogenic  840
+#   nAPOGEE    Pathogenic         605
+#   nAPOGEE    VUS                956
+#   nAPOGEE    VUS+               867
+#   nAPOGEE    VUS-               1174
+# 49882 = 16569 positions x 3 alleles, plus 1 for the N at position 3107 (4 alleles),
+# plus 174 rows for variants that are in two overlapping genes (MT-ATP8/MT-ATP6,
+# MT-ND4L/MT-ND4, and at a few tRNA boundaries). Nothing is skipped.
+
+# The autoSql file mitImpact.as in the scripts directory was written by the
+# converter; after a change to the column list, regenerate it with
+#   python3 ~/kent/src/hg/makeDb/scripts/mitImpact/mitImpactToBed.py \
+#       MitImpact4_V059/MitImpact4_V059.csv chrM.fa /dev/null \
+#       --asOut ~/kent/src/hg/makeDb/scripts/mitImpact/mitImpact.as

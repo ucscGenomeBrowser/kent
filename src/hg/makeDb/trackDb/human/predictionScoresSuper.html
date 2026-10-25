@@ -63,6 +63,23 @@ At an M-CAP score &gt; 0.025, 5% of pathogenic variants are misclassified as ben
 The score varies from 0.0 - 1.0, following a geometric distribution with a mean of 0.09.
 </p>
 
+<!-- MitImpact is alpha only (#38617), uncomment when it is released
+<h3>MitImpact APOGEE 2 - Only chrM</h3>
+<p>
+<b>Interpretation:</b> APOGEE 2 (missense variants) and nAPOGEE (rRNA and tRNA variants)
+sort each variant into seven classes, from Benign over VUS-, VUS and VUS+ to Pathogenic,
+using thresholds on the probability of pathogenicity. ACMG/AMP recommends APOGEE for
+computational evidence on mitochondrial missense variants.
+</p>
+<p>
+<a href="hgTrackUi?g=mitImpact">MitImpact APOGEE 2</a> shows all three possible substitutions at
+every position of the mitochondrial genome, almost 50,000 variants, with their APOGEE 2 or
+nAPOGEE class and probability, more than 30 other prediction scores, MitoTIP for tRNA
+variants, ClinVar and MITOMAP disease annotations, and allele frequencies from gnomAD,
+HelixMTdb and other databases.
+</p>
+-->
+
 <h3>MutScore - hg38/hg19</h3>
 <p>
 <b>Interpretation:</b> The authors defined the thresholds &lt;0.140 for a variant
@@ -229,6 +246,15 @@ over a cell to see the substitution and its score. EVE is colored per protein fr
 (benign) to red (pathogenic); popEVE uses a single global gradient (red = deleterious,
 blue = tolerated) so that cells are comparable across genes. These tracks are best viewed
 zoomed in to a single gene or exon.</p>
+
+<!-- MitImpact is alpha only (#38617), uncomment when it is released
+<h3>MitImpact APOGEE 2</h3>
+<p>A single bigBed track on chrM with one item per variant, labeled with its HGVS name
+(e.g. m.3243A&gt;G). Items are colored from green (benign) to red (pathogenic) by their
+APOGEE 2 or nAPOGEE class; variants that neither model scores are gray. Variants can be
+filtered by class, probability, region type, effect and gene. See the per-track
+description page for details.</p>
+-->
 
 <h2>Data Access</h2>
 The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>

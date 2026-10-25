@@ -1,0 +1,39 @@
+track mitImpact
+shortLabel APOGEE 2
+longLabel MitImpact: APOGEE 2 and other predictions for all chrM single-nucleotide variants
+type bigBed 9 + 152
+bigDataUrl /gbdb/$D/mitImpact/mitImpact.bb
+dataVersion /gbdb/$D/mitImpact/version.txt
+parent predictionScoresSuper
+visibility hide
+chromosomes chrM
+itemRgb on
+noScoreFilter on
+exonNumbers off
+skipEmptyFields on
+mouseOverField _mouseOver
+url https://mitimpact.mcb2lab.org/search?q=$<_mitImpactQuery>
+urlLabel MitImpact page of this variant
+detailsDynamicTable _jsonPredictors|Other pathogenicity predictors,_jsonFreqs|Allele frequencies
+urls dbSnp="https://www.ncbi.nlm.nih.gov/snp/$$" clinvarId="https://www.ncbi.nlm.nih.gov/clinvar/variation/$$/" uniprotId="https://www.uniprot.org/uniprotkb/$$/entry" omimId="https://www.omim.org/entry/$$" ensTranscript="https://www.ensembl.org/Homo_sapiens/Transcript/Summary?t=$$"
+skipFields _mouseOver,_mitImpactQuery,csvChrom,csvPos,ref,alt,hgvs,geneStart,geneEnd,geneStrand,effect,refAa,altAa,aaPos,ensGene,ensProtein,uniprotName,ncbiGene,ncbiProtein,hgncId,apogee2Prob,apogee2Class,napogeeProb,napogeeClass,apogee1Score,apogee1,polyphen2Score,polyphen2,siftScore,sift,sift4gScore,sift4g,proveanScore,provean,mutAssessorScore,mutAssessor,mutTasterScore,mutTaster,mutTasterModel,efinSpScore,efinSp,efinHdScore,efinHd,pantherScore,panther,phdSnpScore,phdSnp,listS2Score,listS2,esm1bScore,esm1b,varityRScore,varityR,varityErScore,varityEr,snpDryadScore,snpDryad,mitoclass1,caddScore,caddPhred,cadd,alphaMissenseScore,alphaMissense,vestPval,vestFdr,vest,mlcScore,mlc,carolScore,carol,condelScore,condel,covecScore,covec,metaSnpScore,metaSnp,mtoolboxScore,mtoolbox,deogen2Score,deogen2,polyphen2TransfScore,polyphen2Transf,siftTransfScore,siftTransf,mutAssessorTransfScore,mutAssessorTransf,chasmPval,chasmFdr,chasm,mitoTipCount,mitoTipPercent,ponTrnaTrna,ponTrnaClass,ponTrnaProb,ponTrnaKondrashov,mitomapDiseaseGbFreq,mitomapDiseaseGbSeqs,clinvarAlleleId,clinvarDiseaseDb,clinvarOtherIds,mitomapGeneral,mitomapGbFreq,mitomapGbSeqs,helixAfHom,helixAcHom,helixAfHet,helixAcHet,helixMeanArf,helixMaxArf,gnomadAfHom,gnomadAcHom,gnomadAfHet,gnomadAcHet,gnomadAn,gnomadFilter,jpn61kAf,jpn61kAc,jpn61kAn
+filterValues.acmgClass Benign,Likely benign,VUS-,VUS,VUS+,Likely pathogenic,Pathogenic,Not scored
+filterLabel.acmgClass APOGEE 2 or nAPOGEE class
+filterValues.apogeeModel APOGEE 2,nAPOGEE
+filterLabel.apogeeModel Model (APOGEE 2 for missense, nAPOGEE for rRNA/tRNA variants)
+filterByRange.apogeeProb on
+filter.apogeeProb 0:1
+filterLimits.apogeeProb 0:1
+filterLabel.apogeeProb APOGEE 2 or nAPOGEE probability of pathogenicity
+filterValues.regionClass protein-coding,rRNA,tRNA,control region,intergenic
+filterLabel.regionClass Region type
+filterValues.effect missense_variant,synonymous_variant,stop_gained,stop_lost,start_lost,initiator_codon_variant,start_retained_variant,stop_retained_variant,non_coding_variant,intergenic_variant
+filterLabel.effect Effect
+filterValues.gene D-loop,intergenic,MT-ATP6,MT-ATP8,MT-CO1,MT-CO2,MT-CO3,MT-CYB,MT-ND1,MT-ND2,MT-ND3,MT-ND4,MT-ND4L,MT-ND5,MT-ND6,MT-RNR1,MT-RNR2,MT-TA,MT-TC,MT-TD,MT-TE,MT-TF,MT-TG,MT-TH,MT-TI,MT-TK,MT-TL1,MT-TL2,MT-TM,MT-TN,MT-TP,MT-TQ,MT-TR,MT-TS1,MT-TS2,MT-TT,MT-TV,MT-TW,MT-TY
+filterLabel.gene Gene
+searchIndex name,dbSnp
+
+searchTable mitImpact
+searchType bigBed
+searchDescription MitImpact chrM variants (HGVS name like m.3243A>G, or dbSNP rs ID)
+searchPriority 50
