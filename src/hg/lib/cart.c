@@ -1006,6 +1006,7 @@ static char *userPrefPrefixes[] = {
     "hgva_",                                     // hgVai form
     "hgi_",                                      // hgIntegrator form
     "hgta_",                                     // Table Browser form, filters, regions, pal.c
+    "position.",                                 // last position on each assembly, not "position"
     };
 static boolean keepUserPrefsOnLoad = TRUE;
 
