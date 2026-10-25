@@ -29,12 +29,21 @@
 #   * the details page says Orientation '-' and gives the lifted range, says it comes from
 #     hg38, and still finds the item's annotation lines and its two alignments in hg38's
 #     rmskOutCurrent and rmskAlignCurrent.
+# #38613 -- an item none of whose aligned blocks lifts is no longer dropped when the rest of
+# it does:  quickLiftJoinedRepeat() lifts the item's extent instead and keeps what lands as
+# one unaligned block, which rmskJoinedTrack.c draws as the dashed unaligned line.  At hg19
+# chr1:3,994,000-3,998,500, hg38 item 4690 (HERVL40-int, aligned part hg38
+# chr1:3932324-3933036, which does not lift) has a map box at exactly hg19 3995268-3997238,
+# where its right flank lands, and its details page gives that range.
 # Deliberately not asserted:  pixels of the glyphs, and the count of items in the window.
 proof:
   - "assertion-only 2026-10-19 -- written with the change, on branch qlRmsk37437"
   - "xfail 2026-10-19 -- fails on genome-test (master without #37437) at step 8: the lifted row is drawn as a plain bed, so 318366 has no map box at the lifted aligned range"
   - "sandbox-ab 2026-10-19 -- park 37437 (port 48115), branch qlRmsk37437: passes with the branch hgTracks, hgc and hgConvert; with master's three (the frozen live sandbox, same hg.conf) it fails at step 8 like genome-test; with the branch hgTracks and master's hgc it fails at step 10, the details page"
   - "server-flip 2026-10-20 -- passes on genome-test since #37437 was pushed and installed there (cgi-alpha 15:29), having failed there as an xfail on 2026-10-19"
+  - "xfail 2026-10-23 -- #38613 steps: fails on genome-test (master without #38613) at step 12: item 4690 is dropped, so it has no map box"
+  - "assertion-only 2026-10-23 -- #38613 steps, branch rmskUnaligned38613: the park (38613, port 48118) could not run the script, since hgConvert there cannot write today's trash/quickLift directory;  the same cart sent to the park by URL drew the step 12 map box and the step 14 details page"
+  - "server-flip 2026-10-23 -- #38613 steps: the whole script passes on genome-test since #38613 (45a4607a0cf) was pushed and installed there (cgi-alpha 18:01), having failed there as an xfail at step 12 earlier that day"
 
 target: genome-test
 db: hg38
@@ -61,4 +70,17 @@ steps:
              "This repeat comes from hg38 and is mapped onto hg19 by quickLift",
              "RepeatMasker Annotation", "RepeatMasker Alignments"]
       has: ['a[href*="position=chr1%3A206159555-206163786"]', 'pre']
+      noText: ["Warning/Error", "Couldn't find repeat"]
+
+  # #38613:  an item whose aligned part does not lift, kept for the part that does
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr1%3A3994000-3998500&pix=1100"
+  - expect:
+      rows: [rmskJoinedCurrent]
+      noText: ["Warning/Error"]
+      has: 'area[href*="o=3995268&t=3997238"][href*="i=4690"]'
+  - click: {track: rmskJoinedCurrent, item: "4690"}
+  - expect:
+      url: "hgc"
+      text: ["Repeat: HERVL40-int", "chr1:3995269-3997238",
+             "This repeat comes from hg38 and is mapped onto hg19 by quickLift"]
       noText: ["Warning/Error", "Couldn't find repeat"]

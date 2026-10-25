@@ -67,5 +67,37 @@ class FailureRate(unittest.TestCase):
         self.assertIsNotNone(mf.tooManyFailures({str(i) for i in range(65)}, tried, set()))
 
 
+class Downloads(unittest.TestCase):
+    """A download is only cached when it is what it claims to be."""
+
+    class FakeApi(object):
+        def __init__(self, body):
+            self.body = body
+
+        def request(self, url, data=None, delay=0, timeout=0):
+            return self.body
+
+    def fetch(self, body, expected):
+        with tempfile.TemporaryDirectory(dir=os.environ.get('TMPDIR', '/data/tmp')) as d:
+            path = os.path.join(d, 'x.csv')
+            mf.fetchVariants(self.FakeApi(body), 'urn:mavedb:1-a-1', path, expected)
+            return open(path, 'rb').read()
+
+    def testVariantRowCount(self):
+        body = b'accession,score\nurn:mavedb:1-a-1#1,0.1\nurn:mavedb:1-a-1#2,0.2\n'
+        self.assertEqual(self.fetch(body, 2), body)
+        with self.assertRaises(mf.FetchError):
+            self.fetch(body, 3)
+        with self.assertRaises(mf.FetchError):
+            self.fetch(b'<html>busy</html>', None)
+
+    def testRecordMustBeJson(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get('TMPDIR', '/data/tmp')) as d:
+            path = os.path.join(d, 'r.json')
+            with self.assertRaises(mf.FetchError):
+                mf.fetchScoreSetRecord(self.FakeApi(b'<html>'), 'urn:mavedb:1-a-1', path)
+            self.assertFalse(os.path.exists(path))
+
+
 if __name__ == '__main__':
     unittest.main()

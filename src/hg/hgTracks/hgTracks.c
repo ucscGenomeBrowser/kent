@@ -1957,7 +1957,11 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
-        int maxWinToDraw = getMaxWindowToDraw(track->tdb);
+        /* A track that failed to load is showing its message, and a trackDb setting may be
+         * why, so do not go back to that setting here.  getMaxWindowToDraw aborts on a
+         * value it cannot read, and an errAbort in the map pass is caught by nobody: it
+         * lands in the middle of a page that has already been half sent.  refs #38560 */
+        int maxWinToDraw = (track->networkErrMsg != NULL) ? 0 : getMaxWindowToDraw(track->tdb);
         if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
             mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
         y += mapHeight;
@@ -4831,6 +4835,19 @@ for(;track;track=track->nextWindow)
 return result;
 }
 
+static boolean anyWindowHasError(struct track *track)
+/* Did this track fail to load in any window?  A track that failed has no items, which
+ * reads the same as empty, so hideEmptySubtracks would drop the one subtrack the reader
+ * needs to be told about.  refs #38560 */
+{
+for (; track != NULL; track = track->nextWindow)
+    {
+    if (track->networkErrMsg != NULL)
+        return TRUE;
+    }
+return FALSE;
+}
+
 boolean anyWindowHaveItems(struct track *track)
 /* Check if track limitedVis == hidden for all windows.
  * Return true if all are hidden */
@@ -5360,8 +5377,11 @@ for (track = trackList; track != NULL; track = track->next)
                     continue;
 
                 if (!isLimitedVisHiddenForAllWindows(subtrack) && 
-                        !(doHideEmpties && !anyWindowHaveItems(subtrack)))
-                        // Ignore subtracks with no items in windows
+                        !(doHideEmpties && !anyWindowHaveItems(subtrack)
+                          && !anyWindowHasError(subtrack)))
+                        // Ignore subtracks with no items in windows, but keep one that
+                        // failed: it has no items either, and hiding it would turn a
+                        // broken subtrack into a silent absence.  refs #38560
 
                     {
                     addPreFlatTrack(&preFlatTracks, subtrack);
@@ -8244,7 +8264,7 @@ if (quickLiftDb != NULL)
 return customFactoryParallelLoad(bdu, track->tdb->type, db, TRUE) && (track->subtracks == NULL);
 }
 
-static void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
+void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary)
 /* Find leaves of track tree that are remote network resources for parallel-fetch loading */
 {
 struct track *track;
@@ -9001,8 +9021,13 @@ struct hash *parentHash = newHash(5);
 struct track *track;
 for (track=trackList; track; track=track->next)
     {
-    struct trackDb *parent = track->tdb->parent;
-    if (parent)
+    /* Every ancestor, not just the closest: a supertrack may itself be a member of
+     * another supertrack, and the outer one is reached only through it.  The hgSession
+     * copy of this walks the whole chain, and hasSessionChanged() compares what this one
+     * produces against a session saved by that one, so the two have to agree or a
+     * featured session with nested supertracks looks changed when it is not. */
+    struct trackDb *parent;
+    for (parent = track->tdb->parent; parent != NULL; parent = parent->parent)
         {
         if (hashLookup(parentHash, parent->track) == NULL)
             {
@@ -9709,6 +9734,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 		     * take the whole image down.  parallelLoadData does this for the threaded
 		     * path; the serial path needs it too, and over the same work, or the two
 		     * disagree about what a bad track does.  refs #38560 */
+		    unsigned connMark = hConnMark();
 		    struct errCatch *errCatch = errCatchNew();
 		    if (errCatchStart(errCatch))
 			loadOneTrackSerial(track, doLoadSummary);
@@ -9717,6 +9743,11 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			{
 			track->networkErrMsg = cloneString(errCatch->message->string);
 			spreadErrorToSubtracks(track, errCatch->message->string);
+			/* A loader that aborts never reached its hFreeConn, and the
+			 * connection cache holds sixteen, so without this a handful of
+			 * failing tracks fills it and every later track reports "Too many
+			 * open sqlConnections" instead of its own trouble.  refs #38560 */
+			hConnReleaseSince(connMark);
 			}
 		    errCatchReWarn(errCatch);  // errCatchStart took the warnings, hand them back
 		    errCatchFree(&errCatch);

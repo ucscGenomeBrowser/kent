@@ -1,0 +1,45 @@
+spans, sampled down, 95-195 over 10 pixels
+   0  count 10  min 1  max 2  sum 15  sumSquares 25
+   1  count 10  min 3  max 3  sum 30  sumSquares 90
+   2  count 10  min 2  max 3  sum 25  sumSquares 65
+   3  count 10  min 2  max 2  sum 20  sumSquares 40
+   4  count 10  min 2  max 3  sum 21  sumSquares 45
+   5  count 10  min 2  max 2  sum 20  sumSquares 40
+   6  count 10  min 1  max 2  sum 15  sumSquares 25
+   7  count 10  min 1  max 1  sum 10  sumSquares 10
+   8  count 10  min 1  max 1  sum 10  sumSquares 10
+   9  count 10  min 1  max 1  sum 10  sumSquares 10
+spans, sampled up, 100-110 over 20 pixels
+   0  count 1  min 2  max 2  sum 2  sumSquares 4
+   1  count 1  min 2  max 2  sum 2  sumSquares 4
+   2  count 1  min 2  max 2  sum 2  sumSquares 4
+   3  count 1  min 2  max 2  sum 2  sumSquares 4
+   4  count 1  min 2  max 2  sum 2  sumSquares 4
+   5  count 1  min 2  max 2  sum 2  sumSquares 4
+   6  count 1  min 2  max 2  sum 2  sumSquares 4
+   7  count 1  min 2  max 2  sum 2  sumSquares 4
+   8  count 1  min 2  max 2  sum 2  sumSquares 4
+   9  count 1  min 2  max 2  sum 2  sumSquares 4
+  10  count 1  min 3  max 3  sum 3  sumSquares 9
+  11  count 1  min 3  max 3  sum 3  sumSquares 9
+  12  count 1  min 3  max 3  sum 3  sumSquares 9
+  13  count 1  min 3  max 3  sum 3  sumSquares 9
+  14  count 1  min 3  max 3  sum 3  sumSquares 9
+  15  count 1  min 3  max 3  sum 3  sumSquares 9
+  16  count 1  min 3  max 3  sum 3  sumSquares 9
+  17  count 1  min 3  max 3  sum 3  sumSquares 9
+  18  count 1  min 3  max 3  sum 3  sumSquares 9
+  19  count 1  min 3  max 3  sum 3  sumSquares 9
+linked features, sampled down, 100-200 over 10 pixels
+   0  count 10  min 0  max 0  sum 0  sumSquares 0
+   1  count 10  min 1  max 1  sum 10  sumSquares 10
+   2  count 10  min 1  max 1  sum 10  sumSquares 10
+   3  count 10  min 0  max 0  sum 0  sumSquares 0
+   4  count 10  min 0  max 0  sum 0  sumSquares 0
+   5  count 10  min 1  max 1  sum 10  sumSquares 10
+   6  count 10  min 1  max 2  sum 11  sumSquares 13
+   7  count 10  min 0  max 1  sum 5  sumSquares 5
+   8  count 10  min 0  max 0  sum 0  sumSquares 0
+   9  count 10  min 0  max 0  sum 0  sumSquares 0
+three features over 250 Mb, 250 pixels, address space limited to 512 MB
+  drawn: 51 of 250 pixels have coverage

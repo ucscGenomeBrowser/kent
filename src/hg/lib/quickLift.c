@@ -2158,9 +2158,11 @@ boolean quickLiftJoinedRepeat(struct hash *chainHash, char **pChrom, unsigned *p
  * blocks hold consensus lengths, not genome positions, and are kept.  An aligned block that
  * does not map, or maps to another sequence or strand than the first one that does, becomes
  * part of the unaligned run beside it, so the blocks may get fewer.  On a '-' chain the
- * blocks are reversed and the strand flipped.  *pChrom is freed and replaced with a copy of
- * the reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
- * no aligned block maps, or the ones that do land out of order:  drop the item then. */
+ * blocks are reversed and the strand flipped.  If no aligned block maps, the item's extent is
+ * lifted instead, and what lands becomes a single unaligned block, with chromStart-chromEnd
+ * and alignStart-alignEnd both set to it.  *pChrom is freed and replaced with a copy of the
+ * reference chrom.  Returns FALSE, with the blocks partly rewritten, if there are no blocks,
+ * nothing of the item maps, or the aligned blocks land out of order:  drop the item then. */
 {
 int blockCount = *pBlockCount;
 if (blockCount <= 0)
@@ -2218,7 +2220,33 @@ for (i = 0; i < blockCount; i++)
         addUnaligned(blockSizes, blockRelStarts, &n, size);
     }
 if (newChrom == NULL)
-    ok = FALSE;
+    {
+    // no aligned block lands, but the flanks may:  the native track draws them as the dashed
+    // extension, so lift the item's own extent and keep what lands as one unaligned block.
+    // alignStart-alignEnd covers it too, since the click box and the details page go by them.
+    // refs #38613
+    char *liftChrom;
+    char liftStrand;
+    int liftStart, liftEnd;
+    ok = (*pChromEnd > *pChromStart) &&
+        (liftOverRemapRange(chainHash, 0.0, *pChrom, *pChromStart, *pChromEnd, '+', 0.001,
+                            &liftChrom, &liftStart, &liftEnd, &liftStrand) == NULL);
+    if (ok)
+        {
+        if (liftStrand == '-')
+            strand[0] = (strand[0] == '-') ? '+' : '-';
+        blockSizes[0] = liftEnd - liftStart;
+        blockRelStarts[0] = -1;
+        *pBlockCount = 1;
+        *pChromStart = *pAlignStart = liftStart;
+        *pChromEnd = *pAlignEnd = liftEnd;
+        freeMem(*pChrom);
+        *pChrom = liftChrom;
+        }
+    freeMem(newStarts);
+    freeMem(newEnds);
+    return ok;
+    }
 
 if (ok)
     {

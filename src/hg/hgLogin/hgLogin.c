@@ -990,16 +990,7 @@ void activateAccount(struct sqlConnection *conn)
 char query[256];
 char *token = cgiUsualString("token", "");
 char *username = cgiUsualString("user","");
-/* Let the database decide whether the token is still current: setupNewAccount sets
- * emailTokenExpires seven days out and the activation mail says the code expires then, so a
- * link older than that must no longer work.  An unknown user name gives NULL here, and an
- * account that has already been activated has an empty emailToken, so both fall through to
- * the same message as a wrong token. */
-sqlSafef(query,sizeof(query),
-    "SELECT emailToken FROM gbMembers WHERE userName='%s' AND emailTokenExpires > NOW()",
-    username);
-char *emailToken = sqlQuickString(conn, query);
-if (isNotEmpty(emailToken) && sameString(emailToken, token))
+if (gbMembersActivationTokenOk(conn, username, token))
     {
     sqlSafef(query,sizeof(query), "UPDATE gbMembers SET lastUse=NOW(), dateActivated=NOW(), emailToken='', emailTokenExpires='', accountActivated='Y' WHERE userName='%s'",
     username);

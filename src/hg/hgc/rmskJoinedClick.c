@@ -322,6 +322,11 @@ if (offset >= 0)
     htmlPrintf ("<br>This repeat comes from %s and is mapped onto %s by quickLift.  "
 		"The annotation and alignment lines below give its positions in "
 		"%s.<br>\n", qDb, trackHubSkipHubName(database), qDb);
+    // none of the item's aligned blocks lifted, only what is around them, refs #38613
+    if (rmJoin->blockCount == 1)
+	htmlPrintf ("None of this repeat's aligned sequence maps onto %s.  The range above "
+		    "is where the unaligned sequence beside it lands.<br>\n",
+		    trackHubSkipHubName(database));
     printf ("<br><br>\n");
     }
 
@@ -375,18 +380,23 @@ if (offset >= 0)
 		    hgTracksPathAndSettings (), database, seqName,
 		    liftedJoin->alignStart + 1, liftedJoin->alignEnd);
 	    char *tbl = cgiUsualString ("table", cgiString ("g"));
-	    printf
-		(" - <A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s%s%s%s%s&c=%s&l=%d&r=%d&"
-		 "strand=%s&table=%s\">"
-		 "DNA</A>\n", hgcPathAndSettings (), database, liftedJoin->alignStart,
-                 (ro->repName != NULL ? cgiEncode (ro->repName) : ""),
-                 cgiEncode("#"),
-		 (ro->repClass != NULL ? cgiEncode (ro->repClass) : ""),
-                 cgiEncode("/"),
-		 (ro->repFamily != NULL ? cgiEncode (ro->repFamily) : ""),
-		 seqName, liftedJoin->alignStart, liftedJoin->alignEnd,
-		 cgiEncode (liftedJoin->strand),
-		 tbl);
+	    // the lifted range holds none of the repeat's own sequence when none of its
+	    // aligned blocks lifted, refs #38613
+	    if (liftedJoin->blockCount != 1)
+		{
+		printf
+		    (" - <A HREF=\"%s&db=%s&o=%d&g=getDna&i=%s%s%s%s%s&c=%s&l=%d&r=%d&"
+		     "strand=%s&table=%s\">"
+		     "DNA</A>\n", hgcPathAndSettings (), database, liftedJoin->alignStart,
+		     (ro->repName != NULL ? cgiEncode (ro->repName) : ""),
+		     cgiEncode("#"),
+		     (ro->repClass != NULL ? cgiEncode (ro->repClass) : ""),
+		     cgiEncode("/"),
+		     (ro->repFamily != NULL ? cgiEncode (ro->repFamily) : ""),
+		     seqName, liftedJoin->alignStart, liftedJoin->alignEnd,
+		     cgiEncode (liftedJoin->strand),
+		     tbl);
+		}
 
 	    printf ("  </td>\n");
 

@@ -1,0 +1,8 @@
+forward strand, exonFrames 0 2 1
+  exon 1  start phase  0  end phase  2
+  exon 2  start phase  2  end phase  1
+  exon 3  start phase  1  end phase -1
+reverse strand, exonFrames 0 2 1
+  exon 1  start phase  0  end phase -1
+  exon 2  start phase  2  end phase  0
+  exon 3  start phase  1  end phase  2

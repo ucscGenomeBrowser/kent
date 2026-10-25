@@ -12,7 +12,9 @@ picks up MaveDB remaps that leave the fingerprint alone and RefSeq/GENCODE table
 Silent when nothing changed. A release prints a short summary, which cron mails; anything
 unexpected raises and exits non-zero. A release that fails a check is left in
 releases/YYYY-MM-DD.tmp/ and the /gbdb links are not touched; once a person has looked at
-it, re-run with --force --ignoreChecks to release it anyway.
+it, --release YYYY-MM-DD --ignoreChecks makes exactly that build the release, without
+fetching or building again. After a release, the newest KEEP_RELEASES are kept and failed
+builds are removed.
 
 Only the new file names are written (mavedbMaps.bb, mavedbVariants.bb, mavedbAlignDna.bb,
 mavedbAlignAa.bb, version.txt); all_mave.bb, mavedb_dna.bb and mavedb_aa.bb (the 2025 build
@@ -55,6 +57,10 @@ MAX_SCORE_SET_DROP = 0.05
 FULL_BUILD_MONTHS = (1, 4, 7, 10)
 FULL_BUILD_DAYS = 90
 LIST_LIMIT = 20
+
+# Releases kept on disk after a new one is made (about 1 GB each), so one can be relinked
+# by hand if the newest turns out wrong.
+KEEP_RELEASES = 3
 
 
 class OttoError(Exception):
@@ -206,6 +212,9 @@ def dryRun(ottoDir, args):
 
 
 def run(ottoDir, gbdbDir, args, log):
+    if args.release:
+        finishRelease(ottoDir, gbdbDir, args.release, args.ignoreChecks, log)
+        return
     today = datetime.date.today()
     cacheDir = os.path.join(ottoDir, 'cache')
     releasesDir = os.path.join(ottoDir, 'releases')
@@ -220,7 +229,7 @@ def run(ottoDir, gbdbDir, args, log):
     variantsDir = os.path.join(cacheDir, 'variants')
     fetched = mavedbFetch.readFingerprints(os.path.join(cacheDir, 'fetched.tsv'))
     key = releaseKey(fetched, catalogue, variantsDir)
-    lastKey, lastName = readLastRelease(ottoDir)
+    lastKey, _ = readLastRelease(ottoDir)
     writeText(os.path.join(ottoDir, 'lastRun.txt'), today.isoformat())
     if key == lastKey and not (args.force or refetch):
         return   # nothing changed: no output, so cron sends no mail
@@ -232,60 +241,87 @@ def run(ottoDir, gbdbDir, args, log):
     os.makedirs(tmpDir)
     log.write('building release %s (%s)\n' % (name, 'full rebuild' if refetch else 'update'))
     log.flush()
-    report, stats = mavedbBuild.build(catalogue, variantsDir, tmpDir,
-                                      os.path.join(cacheDir, 'scoreSets'), log=log)
+    _, stats = mavedbBuild.build(catalogue, variantsDir, tmpDir,
+                                 os.path.join(cacheDir, 'scoreSets'), log=log)
+    # Everything finishRelease() needs goes into the release itself, so a release that
+    # fails a check can be made later from what a person inspected (--release), whatever
+    # the cache has become since.
+    shutil.copy(os.path.join(cacheDir, 'catalogue.tsv'), tmpDir)
+    shutil.copy(os.path.join(cacheDir, 'apiVersion.txt'), tmpDir)
+    with open(os.path.join(tmpDir, 'stats.json'), 'w') as fh:
+        json.dump(stats, fh, indent=1, sort_keys=True)
+    with open(os.path.join(tmpDir, 'pending.json'), 'w') as fh:
+        json.dump({'key': key, 'date': today.isoformat(), 'refetch': refetch,
+                   'fullDue': fullDue, 'apiVersion': summary['apiVersion'],
+                   'scoreSets': summary['scoreSets'], 'failed': summary['failed'],
+                   'failedNew': summary['failedNew']}, fh, indent=1)
+    log.flush()
+    shutil.copy(log.name, os.path.join(tmpDir, 'build.log'))
+    finishRelease(ottoDir, gbdbDir, name, args.ignoreChecks, log)
+
+
+def finishRelease(ottoDir, gbdbDir, name, ignoreChecks, log):
+    """Check releases/<name>.tmp, and if it passes (or ignoreChecks) make it the release:
+    rename it, move the /gbdb links, record it, remove old builds, print the summary."""
+    releasesDir = os.path.join(ottoDir, 'releases')
+    name = name[:-4] if name.endswith('.tmp') else name
+    tmpDir = os.path.join(releasesDir, name + '.tmp')
+    if not os.path.exists(os.path.join(tmpDir, 'pending.json')):
+        raise OttoError('%s is not a built release waiting to be made' % tmpDir)
+    with open(os.path.join(tmpDir, 'pending.json')) as fh:
+        pend = json.load(fh)
+    with open(os.path.join(tmpDir, 'stats.json')) as fh:
+        stats = json.load(fh)
     itemCounts = {bb: bigBedItemCount(os.path.join(tmpDir, bb)) for bb in BIGBEDS}
+    _, lastName = readLastRelease(ottoDir)
     prevDir = os.path.join(releasesDir, lastName) if lastName else None
     prevStats = None
     if prevDir and os.path.exists(os.path.join(prevDir, 'stats.json')):
         with open(os.path.join(prevDir, 'stats.json')) as fh:
             prevStats = json.load(fh)
     problems = checkRelease(stats, prevStats, itemCounts)
-    if problems and not args.ignoreChecks:
+    if problems and not ignoreChecks:
         raise OttoError('release %s not made, the /gbdb links are unchanged:\n  %s\n'
-                        'The build is in %s (report.txt). Once it has been checked, re-run '
-                        'with --force --ignoreChecks to release it.'
-                        % (name, '\n  '.join(problems), tmpDir))
+                        'The build is in %s (report.txt). Once it has been checked, make it '
+                        'the release with: mavedbOtto.py --release %s --ignoreChecks'
+                        % (name, '\n  '.join(problems), tmpDir, name))
 
     # The .bed inputs (1.8 GB) and the converter work files are not needed once the bigBeds
     # are made; everything else stays with the release.
-    shutil.rmtree(os.path.join(tmpDir, 'work'))
+    if os.path.exists(os.path.join(tmpDir, 'work')):
+        shutil.rmtree(os.path.join(tmpDir, 'work'))
     for f in os.listdir(tmpDir):
         if f.endswith('.bed'):
             os.remove(os.path.join(tmpDir, f))
-    shutil.copy(os.path.join(cacheDir, 'catalogue.tsv'), tmpDir)
-    shutil.copy(os.path.join(cacheDir, 'apiVersion.txt'), tmpDir)
-    log.flush()
-    shutil.copy(log.name, os.path.join(tmpDir, 'build.log'))
-    with open(os.path.join(tmpDir, 'stats.json'), 'w') as fh:
-        json.dump(stats, fh, indent=1, sort_keys=True)
     writeText(os.path.join(tmpDir, 'version.txt'),
               'MaveDB API %s, data retrieved %s, converted at UCSC'
-              % (summary['apiVersion'], today.isoformat()))
+              % (pend['apiVersion'], pend['date']))
+    os.remove(os.path.join(tmpDir, 'pending.json'))
     relDir = os.path.join(releasesDir, name)
     os.rename(tmpDir, relDir)
 
     os.makedirs(gbdbDir, exist_ok=True)
     for f in LINKED:
         relink(os.path.join(gbdbDir, f), os.path.join(relDir, f))
-    if refetch:
-        writeText(lastFullPath, today.isoformat())
-    writeText(os.path.join(ottoDir, 'lastRelease.txt'), '%s\t%s' % (key, name))
+    if pend['refetch']:
+        writeText(os.path.join(ottoDir, 'lastFullBuild.txt'), pend['date'])
+    writeText(os.path.join(ottoDir, 'lastRelease.txt'), '%s\t%s' % (pend['key'], name))
+    removed = pruneReleases(releasesDir, name)
 
     prevCat = mavedbFetch.readFingerprints(os.path.join(prevDir, 'catalogue.tsv')) \
-        if prevDir else {}
-    added, changed, removed = catalogueChanges(
+        if prevDir and os.path.exists(prevDir) else {}
+    added, changed, gone = catalogueChanges(
         prevCat, mavedbFetch.readFingerprints(os.path.join(relDir, 'catalogue.tsv')))
     p = prevStats or {}
     ucsc = stats['placed'] - stats['placedByMavedb']
     lines = ['MaveDB track updated: release %s%s' % (name, ', scheduled full rebuild'
-                                                     if fullDue else ''),
-             'MaveDB API %s; %d human score sets in MaveDB' % (summary['apiVersion'],
-                                                               summary['scoreSets']),
+                                                     if pend['fullDue'] else ''),
+             'MaveDB API %s; %d human score sets in MaveDB' % (pend['apiVersion'],
+                                                               pend['scoreSets']),
              'score sets since %s: %d added, %d changed, %d removed'
-             % (lastName or 'the start', len(added), len(changed), len(removed))]
+             % (lastName or 'the start', len(added), len(changed), len(gone))]
     lines += urnList('added', added) + urnList('changed', changed) + \
-        urnList('removed', removed)
+        urnList('removed', gone)
     lines += ['score sets shown: %s (%d left out with under 20%% of variants placed)'
               % (fmtChange(p.get('shownSets'), stats['shownSets']), stats['gatedSets']),
               'heatmap items: %s; variant items: %s'
@@ -295,14 +331,33 @@ def run(ottoDir, gbdbDir, args, log):
               .format(stats['placed'], stats['single'],
                       100.0 * stats['placed'] / max(1, stats['single']),
                       100.0 * ucsc / max(1, stats['placed']))]
-    lines += urnList('download failed, previous copy used', summary['failed'])
-    lines += urnList('new, download failed, left out until next run',
-                     summary['failedNew'])
+    lines += urnList('download failed, previous copy used', pend['failed'])
+    lines += urnList('new, download failed, left out until next run', pend['failedNew'])
     if problems:
         lines.append('released despite failed checks (--ignoreChecks): ' +
                      '; '.join(problems))
+    lines += urnList('old builds removed', removed)
     lines.append('%s/ -> %s' % (gbdbDir, relDir))
     print('\n'.join(lines))
+
+
+def pruneReleases(releasesDir, current):
+    """Remove releases older than the newest KEEP_RELEASES, and failed builds (.tmp), which
+    a new release supersedes. Returns the names removed."""
+    names = os.listdir(releasesDir)
+    built = sorted((n for n in names if not n.endswith('.tmp')
+                    and os.path.isdir(os.path.join(releasesDir, n))), key=releaseSortKey)
+    doomed = [n for n in built[:-KEEP_RELEASES] if n != current]
+    doomed += sorted(n for n in names if n.endswith('.tmp'))
+    for n in doomed:
+        shutil.rmtree(os.path.join(releasesDir, n))
+    return doomed
+
+
+def releaseSortKey(name):
+    """2026-11-02 < 2026-11-02.2 < 2026-11-02.10 < 2026-12-01."""
+    day, _, n = name.partition('.')
+    return day, int(n) if n.isdigit() else 1
 
 
 def main():
@@ -314,6 +369,9 @@ def main():
                     help='build a release even if no score set changed')
     ap.add_argument('--ignoreChecks', action='store_true',
                     help='release even if the release checks fail (after a person looked)')
+    ap.add_argument('--release', metavar='NAME',
+                    help='make the already built releases/NAME.tmp the release, without '
+                    'fetching or building (with --ignoreChecks after a failed check)')
     ap.add_argument('--refetch', action='store_true',
                     help='download every variant file again (a full rebuild)')
     ap.add_argument('--outDir', help='development: use this directory instead of ' + OTTO_DIR)

@@ -1,0 +1,8 @@
+collectionHubCopyOnWrite on, 3 session loads
+  hub files copied to trash   0
+  hubStatus rows added        0
+  the cart still names the saved file   yes
+collectionHubCopyOnWrite off, 3 session loads
+  hub files copied to trash   3
+  hubStatus rows added        4
+  the cart still names the saved file   no

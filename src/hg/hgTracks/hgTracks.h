@@ -985,6 +985,24 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
 
+struct paraFetchData;
+void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary);
+/* Find leaves of track tree that are remote network resources for parallel-fetch loading, and
+ * settle the visibility of each composite child among them before any loader thread starts. */
+
+struct hash *refSeqStatusHashLoad(struct track *tg);
+/* Build a name->refSeqStatus hash for tg's items at load time, so that refGeneColor asks the
+ * database nothing while the image is drawn.  NULL when no status table applies. */
+
+void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre);
+/* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
+ * track drawn as a coverage graph. */
+
+void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
+                     int *retStartPhase, int *retEndPhase);
+/* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)
+ * from gp->exonFrames.  The exon at the 3' end has no end phase, and it is left alone. */
+
 struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra);
 /* construct a linkedFeatures object from a genePred */
 

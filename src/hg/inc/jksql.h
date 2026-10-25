@@ -175,6 +175,13 @@ struct sqlConnection *sqlConnCacheProfileAllocMaybe(struct sqlConnCache *cache,
 /* Allocate a cached connection given a profile and/or database. Return NULL
  * if the database doesn't exist.  */
 
+unsigned sqlConnCacheMark();
+/* The number of connections handed out so far, to pass to sqlConnCacheReleaseSince. */
+
+void sqlConnCacheReleaseSince(struct sqlConnCache *cache, unsigned mark);
+/* Put back every connection this cache has handed out since the mark.  For a caller that
+ * catches an errAbort, where the code that would have put them back never ran. */
+
 void sqlConnCacheDealloc(struct sqlConnCache *cache,struct sqlConnection **pConn);
 /* Free up a cached connection. */
 
@@ -506,6 +513,10 @@ void sqlMonitorSetIndent(unsigned indent);
 
 void sqlMonitorDisable(void);
 /* Disable tracing or profiling of SQL queries. */
+
+long sqlQueryCount(void);
+/* Return the number of queries sent since the program started or since sqlMonitorDisable, for
+ * a test that counts the work a function does rather than timing it. */
 
 long sqlDateToUnixTime(char *sqlDate);
 /* Convert a SQL date such as "2003-12-09 11:18:43" to clock time

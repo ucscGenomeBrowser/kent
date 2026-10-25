@@ -186,6 +186,15 @@ start = rm->alignStart -
     (int) ((mgFontStringWidth(tl.font, rm->name) +
 	    LABEL_PADDING) / pixelsPerBase);
 
+// a lifted item none of whose aligned blocks landed is one unaligned block, drawn as a
+// dashed line over chromStart-chromEnd, refs #38613
+if (rm->blockCount == 1)
+    {
+    *pStart = start;
+    *pEnd = rm->chromEnd;
+    return;
+    }
+
 // Now subtract out space for the unaligned sequence
 // bar starting off the graphics portion of the glyph.
 if ((rm->blockSizes[0] * pixelsPerBase) > MAX_UNALIGNED_PIXEL_LEN)
@@ -861,6 +870,19 @@ int percId = 10000 - rm->score;
 int grayLevel = grayInRange(percId, 6000, 10000);
 fillColor = shadesOfGray[grayLevel];
 outlineColor = ri->color;
+
+if (rm->blockCount == 1)
+    {
+    // a lifted item none of whose aligned blocks landed:  draw the part of it that did as
+    // the dashed unaligned line, with the name before it, refs #38613
+    lx1 = roundingScale(rm->chromStart - winStart, width, baseWidth) + xOff;
+    lx2 = roundingScale(rm->chromEnd - winStart, width, baseWidth) + xOff;
+    drawDashedHorizLine(hvg, lx1, lx2, y + unalignedBlockOffset, 5, 5, black);
+    int stringWidth = mgFontStringWidth(tl.font, rm->name) + LABEL_PADDING;
+    hvGfxTextCentered(hvg, lx1 - stringWidth, heightPer - tl.fontHeight + y, stringWidth,
+                      tl.fontHeight, MG_BLACK, tl.font, rm->name);
+    return;
+    }
 
   // Draw from left to right
 for (idx = 0; idx < rm->blockCount; idx++)

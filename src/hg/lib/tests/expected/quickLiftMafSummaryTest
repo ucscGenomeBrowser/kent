@@ -1,0 +1,16 @@
+inSummaryMode for a lifted track at 50 Mb
+  wigMaf, summary as the hub writes it                 gate on: summary  gate off: blocks
+  wigMaf, summary as a plain table name                gate on: summary  gate off: blocks
+  wigMaf, summary table missing in hg19                gate on: blocks   gate off: blocks
+  bigMaf, which reads its blocks                       gate on: blocks   gate off: blocks
+  wigMaf with no summary setting                       gate on: blocks   gate off: blocks
+at 500 kb, under the summary window
+  wigMaf, summary as the hub writes it                 gate on: blocks   gate off: blocks
+
+source bases asked for over chrRef:1500-2500
+  quickLiftSourceRanges, padded                        31000
+  quickLiftSourceRangesExact                           29000
+
+source bases asked for over chrRef:5200-5300
+  quickLiftSourceRanges, padded                        31000
+  quickLiftSourceRangesExact                           100

@@ -1,0 +1,30 @@
+in  : track name=ct1 | tdb priority 0 | cart: 
+out : track name=ct1
+
+in  : track name=ct1 | tdb priority 5.5 | cart: 
+out : track name=ct1 priority='5.5'
+
+in  : track name=ct1 | tdb priority 5.5 | cart: ct1.priority=12
+out : track name=ct1 priority='12'
+
+in  : track name=ct1 | tdb priority 5.5 | cart: ct1.priority=12 ct1_imgOrd=3
+out : track name=ct1 priority='3'
+
+in  : track name=ct1 | tdb priority 5.5 | cart: ct1_imgOrd=3
+out : track name=ct1 priority='3'
+
+in  : track name=ct1 | tdb priority 5.5 | cart: ct1.priority=12 ct1_imgOrd=10000
+out : track name=ct1 priority='12'
+
+in  : track name=ct1 | tdb priority 5.5 | cart: ct1_imgOrd=0
+out : track name=ct1 priority='5.5'
+
+in  : track name=ct1 | tdb priority 5.5 | cart: ct2_imgOrd=3
+out : track name=ct1 priority='5.5'
+
+in  : track name=ct1 priority=7 | tdb priority 5.5 | cart: ct1_imgOrd=3
+out : track name=ct1 priority=7
+
+in  : track | tdb priority 0 | cart: ct1_imgOrd=3
+out : track priority='3'
+

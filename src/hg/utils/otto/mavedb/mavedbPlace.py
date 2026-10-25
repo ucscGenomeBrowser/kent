@@ -66,6 +66,9 @@ PLACED_ASSAY = 'UCSC: assay numbering'
 PLACED_CORRECTED = 'UCSC: corrected MaveDB offset'
 PLACED_REFERENCE = 'UCSC: reference term'
 
+# MaveDB genomic-only rows per score set compared with hgvsToVcf (placeReferenceTerms).
+GENOMIC_SAMPLE = 20
+
 # Experiment nucleotide terms already written on a reference sequence, which hgvsToVcf can
 # place by themselves (saturation genome editing score sets give NM_ terms).
 REFERENCE_TERM = re.compile(r'^(?:NM_|NC_|NR_|ENST)\d+\.\d+:[cgn]\.')
@@ -722,6 +725,33 @@ def targetForPrefix(scoreSet, prefix):
     return None
 
 
+def mappedRowCheck(choices, mapped):
+    """Why a row placed only by MaveDB's mapped protein term must be dropped, or None.
+
+    Such a row (the experiment wrote p.= or nothing) has no experiment position of its own,
+    so it is held to the offset chosen for its target from the other rows: it is dropped
+    when MaveDB's offset was not the one chosen, or when it falls on a construct position
+    that is dropped for every other row (BRCA1 00000003-a-1 c.520A>C is p.= in the
+    construct, which has Arg at 174, and MaveDB's NP_009225.1:p.Lys175Gln on the
+    reference). With no target offset to compare (fewer than MIN_POSITIONS positions),
+    MaveDB's term stands.
+    """
+    entries = list(choices.values())
+    if len(entries) != 1:
+        entries = [(c, w) for c, w in entries if c is not None and mapped.prefix in
+                   (c.prot, (c.mavedbOffset or (None,))[0])]
+    if len(entries) != 1:
+        return None
+    choice, why = entries[0]
+    if choice is None:
+        return None if why == 'tooFewPositions' else 'noOffset:' + why
+    if choice.mavedbOffset != (choice.prot, choice.offset) or mapped.prefix != choice.prot:
+        return 'mavedbOffsetRejected'
+    if mapped.pos - choice.offset in choice.mismatched:
+        return 'constructTag' if choice.isTag() else 'constructDiffers'
+    return None
+
+
 def placeScoreSet(scoreSet, rows, ref):
     """Place every row of one score set at protein level (no genome lookups yet).
 
@@ -780,21 +810,20 @@ def placeScoreSet(scoreSet, rows, ref):
             # p.Pro1153del), a frameshift names the codon where the stop appears. Those
             # rows are placed by their genomic term only.
             if genomic is not None and not genomic.isSubstitution():
-                pl.status = 'placed'
-                pl.genomic = genomic
-                pl.label = PLACED_MAVEDB
+                placeGenomicOnly(pl, genomic)
                 out.append(pl)
                 continue
+            why = mappedRowCheck(choices, mapped)
             seq = ref.peptide(mapped.prefix)
-            if seq is not None and residueAt(seq, mapped.pos) != mapped.wt:
+            if why:
+                pl.reject(why)
+            elif seq is not None and residueAt(seq, mapped.pos) != mapped.wt:
                 pl.reject('residueVsRefSeq')
             else:
                 setProtein(pl, mapped.prefix, mapped.pos, mapped, PLACED_MAVEDB)
                 pl.genomic = genomic
         elif genomic is not None:
-            pl.status = 'placed'
-            pl.genomic = genomic
-            pl.label = PLACED_MAVEDB
+            placeGenomicOnly(pl, genomic)
         elif REFERENCE_TERM.match(clean(pl.row.get('hgvs_nt'))):
             # MaveDB did not map it, but the experiment's own term is on a reference
             # sequence: placeReferenceTerms() places it and checks the stated base.
@@ -807,19 +836,65 @@ def placeScoreSet(scoreSet, rows, ref):
     return out, choices, reasons
 
 
+def placeGenomicOnly(pl, genomic):
+    """Place a row with no protein placement at MaveDB's genomic term.
+
+    A term that changes nothing (NC_000018.10:g.23538665T=) is not a variant: when the
+    experiment's own term is on a reference sequence, that term is placed instead
+    (placeReferenceTerms), otherwise the row is dropped.
+    """
+    if genomic.rest.endswith('='):
+        if REFERENCE_TERM.match(clean(pl.row.get('hgvs_nt'))):
+            pl.status, pl.reason = 'pending', 'referenceTerm'
+        else:
+            pl.reject('genomicNoChange')
+        return
+    pl.status = 'placed'
+    pl.genomic = genomic
+    pl.label = PLACED_MAVEDB
+
+
 def placeReferenceTerms(placements, ref, workDir):
     """Place 'pending' rows from their experiment's reference nucleotide term.
 
-    One hgvsToVcf run for all of them. Placed rows are genomic-only, labelled
-    PLACED_REFERENCE; a term whose stated reference base disagrees with the genome, or that
-    hgvsToVcf cannot place, is rejected. Returns a Counter of outcomes.
+    Placed rows are genomic-only, labelled PLACED_REFERENCE; a term whose stated reference
+    base disagrees with the genome, or that hgvsToVcf cannot place, is rejected.
+
+    MaveDB's genomic term on a row without a protein placement is checked the same way. Its
+    base check (checkGenome) cannot fail, since MaveDB took the base from the genome, and
+    in a few score sets MaveDB placed every row at the wrong position (RAD51C SGE
+    00000673-*, NPC1 00001232-a-1, 43 bases to 1.8 kb away). The error is per score set,
+    so up to GENOMIC_SAMPLE of its substitutions are compared with hgvsToVcf of the
+    experiment's term; if one lands elsewhere, all its MaveDB genomic-only rows are placed
+    from the experiment's term. hgvsToVcf takes minutes per 100,000 terms, too slow to run
+    on every row. Returns a Counter of outcomes.
     """
-    pending = [p for p in placements if p.status == 'pending']
     stats = collections.Counter()
-    if not pending:
+    mavedbOnly = [p for p in placements
+                  if p.status == 'placed' and not p.prot and p.genomic is not None
+                  and p.label == PLACED_MAVEDB
+                  and REFERENCE_TERM.match(clean(p.row.get('hgvs_nt')))]
+    snvs = [p for p in mavedbOnly if p.genomic.snvRef()]
+    sample = snvs[::max(1, len(snvs) // GENOMIC_SAMPLE)][:GENOMIC_SAMPLE]
+    pending = [p for p in placements if p.status == 'pending']
+    if not pending and not sample:
         return stats
-    terms = {clean(p.row.get('hgvs_nt')) for p in pending}
+    terms = {clean(p.row.get('hgvs_nt')) for p in pending + sample}
     vcfRows = runHgvsToVcf(ref.db, terms, workDir)
+
+    def moved(p):
+        hit = vcfRows.get(clean(p.row.get('hgvs_nt')))
+        return hit is not None and hit[0] == 'PASS' and \
+            (hit[1], hit[2]) != (ref.ncToChrom.get(p.genomic.acc), p.genomic.start)
+
+    if any(moved(p) for p in sample):
+        stats['mavedbGenomicReplaced'] += len(mavedbOnly)
+        for p in mavedbOnly:
+            p.status, p.reason, p.genomic, p.label = 'pending', 'referenceTerm', None, None
+        more = {clean(p.row.get('hgvs_nt')) for p in mavedbOnly} - set(vcfRows)
+        if more:
+            vcfRows.update(runHgvsToVcf(ref.db, more, workDir))
+        pending += mavedbOnly
     for p in pending:
         hit = vcfRows.get(clean(p.row.get('hgvs_nt')))
         if hit is None:
@@ -854,6 +929,16 @@ def vcfToGenomic(nc, pos, refAllele, altAllele):
     rest = 'del' if not altAllele else 'delins' + altAllele
     span = '%d' % pos if end == pos else '%d_%d' % (pos, end)
     return GenomicTerm(nc, pos, end, rest, '%s:g.%s%s' % (nc, span, rest))
+
+
+def runQuiet(cmd, **kw):
+    """Run a kent tool, keeping its progress output out of cron mail; on failure the
+    output goes into the exception."""
+    r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                       universal_newlines=True, **kw)
+    if r.returncode:
+        raise RuntimeError('%s failed (exit %d):\n%s' % (' '.join(cmd), r.returncode,
+                                                         r.stdout[-2000:]))
 
 
 def runHgvsToVcf(db, terms, workDir):
@@ -1239,6 +1324,35 @@ def crossCheckGate(stats):
                            '(%.2f%%), above %.1f%%: the projection is wrong somewhere'
                            % (bad, checked, 100.0 * bad / checked,
                               100 * MAX_CROSSCHECK_MISMATCH))
+
+
+# A submitted three-base delins that stands for one amino acid substitution should begin
+# on a codon boundary. NDUFAF6 urn:mavedb:00000663-a-1 does not: every one of its terms
+# starts two bases downstream of the codon its p. term names, which MaveDB's mapper follows,
+# so their coordinates for that whole score set are wrong (Benjamin Capodanno, Oct 2026,
+# being corrected upstream). We place from the p. term and are not affected, but nothing
+# else we run would have noticed, so the build counts it. An occasional misaligned term is
+# ordinary: a three-base change really can straddle two codons.
+CODON_TRIPLE = re.compile(r'c\.(\d+)_(\d+)delins([ACGTacgt]+)')
+
+
+def codonPhases(rows):
+    """(triples, misaligned) over a score set's submitted three-base delins terms."""
+    triples = misaligned = 0
+    for row in rows:
+        nt = row.get('hgvs_nt') or ''
+        if '[' in nt:
+            continue
+        m = CODON_TRIPLE.search(nt)
+        if not m:
+            continue
+        start, end = int(m.group(1)), int(m.group(2))
+        if end - start != 2 or len(m.group(3)) != 3:
+            continue
+        triples += 1
+        if (start - 1) % 3:
+            misaligned += 1
+    return triples, misaligned
 
 
 def accessionGate(stats):

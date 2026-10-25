@@ -172,9 +172,22 @@ LIFT("negative flanks", "src1", 0, 300, '+', 0, 300, {-5000,-1}, {300,0}, {-7,-1
 // A flank longer than the distance to the start of the sequence stops at 0.
 LIFT("flank past 0", "src1", 0, 300, '+', 0, 300, {5000,-1}, {300,0});
 
-// Dropped:  nothing aligned, nothing that maps, out of order, no blocks.
+// No aligned block lands, but some of the item does:  what lands is kept as one unaligned
+// block, refs #38613.  The aligned block is in the chain gap at src1 500-600, with both
+// flanks around it lifting.
+LIFT("aligned in gap", "src1", 400, 700, '+', 500, 600, {100,-1}, {100,100}, {100,-1});
+// The aligned block is past the end of chain 1, and only the left flank lands.
+LIFT("aligned off chain", "src1", 1900, 2300, '+', 2100, 2200, {200,-1}, {100,200}, {100,-1});
+// The same on a '-' chain, with the right flank landing:  the strand flips.
+LIFT("aligned off minus chain", "src1", 2800, 3200, '+', 2900, 2990,
+     {100,-1}, {90,100}, {210,-1});
+// No aligned block at all.
 LIFT("only unaligned", "src1", 100, 400, '+', 100, 400, {10,-1}, {20,-1});
+
+// Dropped:  nothing that maps, out of order, no blocks.
 LIFT("no chain", "srcX", 100, 400, '+', 100, 400, {300,0});
+LIFT("aligned and flanks off chain", "src1", 2100, 2900, '+', 2200, 2800,
+     {100,-1}, {600,100}, {100,-1});
 LIFT("out of order", "src1", 5000, 5500, '+', 5000, 5500, {100,0}, {100,-1}, {100,350});
 liftOne(chainHash, "no blocks", "src1", 100, 400, '+', 100, 400, 0, NULL, NULL);
 

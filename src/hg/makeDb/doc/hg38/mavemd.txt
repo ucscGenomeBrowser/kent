@@ -73,7 +73,8 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # Placed, 462,486 of 481,717 measurements (96.0%), by where the offset came from:
 #   430,133  MaveDB, at the position it mapped
 #    18,513  MaveDB's offset did not fit the experiment's residues; ours did
-#     6,519  MaveDB named another isoform of the same protein
+#     6,519  placed at MaveDB's offset, but its mapped term for the row disagreed with it
+#            or was missing
 #     7,321  MaveDB did not map it at all; the experiment's own term is on a reference
 #            sequence (NM_/NC_), placed through kent's hgvsToVcf with a reference-base check
 #
@@ -94,9 +95,22 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 #                 full-protein positions, so both score sets drew at codons 1-42. Offsets
 #                 +289 and +331.
 # Reported to the MaveDB authors 2026-10; see the draft in /hive/users/lrnassar/claude/RM37800.
+# Their reply: NDUFAF6 is worse than the mapping. Every hgvs_nt in that score set starts two
+# bases downstream of the codon its hgvs_pro names, so the submitted nucleotide coordinates
+# are wrong and MaveDB's mapper faithfully followed them. Being corrected upstream. We place
+# from the p. term, the score set is not on the reference-term route, and its post-mapped
+# terms are suppressed, so none of it reaches the track; when the fix lands our label for
+# those items should simply change from "UCSC: corrected MaveDB offset" to "MaveDB".
+# mavedbPlace.codonPhases() counts, per score set, the submitted three-base
+# delins terms that do not start on a codon boundary, which is the only check that would
+# have caught this on our own. It reports and does not abort: an occasional misaligned term
+# is ordinary, because a three-base change really can straddle two codons. This build:
+#   00000663-a-1   5714 of 5714   the whole score set, the real thing
+#   00000662-0-1      1 of 2860   c.1722_1724delinsACG, a genuine straddling change
 #
-# Our own search also wins on 00000665-a/b/c/d-1 (HBB, NP_000271.1), at offset 0, where
-# MaveDB mapped nothing to disagree with.
+# Our own search also wins on 00000665-a/b/c/d-1 (PAX6, NP_000271.1), at offset 0. MaveDB
+# mapped about a third of each of those score sets, 2,832 to 2,857 rows apiece, but onto
+# another PAX6 isoform, NP_001355823.1, so its offset is not one we can use on ours.
 #
 # Score sets numbered on a domain rather than the whole protein, where MaveDB's offset fits
 # the stated residues exactly: 00000098-a-2 (+1619), 00001222-a-2 (+1672), 00001229-a-2
@@ -207,16 +221,16 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # NON-ASCII. MaveDB free text carries en dashes and accented author names (Gronbaek-Thygesen
 # and Olvera-Leon are spelled with o-slash, ae and o-acute upstream). The browser does not
 # transcode UTF-8, so these reach the details page as
-# mojibake. mavemdLib.bedField() converts every non-ASCII character to a numeric HTML entity;
+# mojibake. mavedbPlace.bedField() converts every non-ASCII character to a numeric HTML entity;
 # 35,695 variant rows and 6 heatmap rows needed it. Re-check after any rebuild with:
 #   LC_ALL=C grep -cP '[^\x00-\x7F]' mavemdVar.bed mavemdMap.bed     # must be 0
 
 # EMPTY FIELDS IN THE MOUSEOVER. The trackDb mouseOver pattern substitutes ${field}
 # unconditionally, so an empty value leaves a dangling label ("ACMG evidence:" with nothing
 # after it). Three fields can legitimately be empty, so the converter writes a readable
-# placeholder rather than an empty string: acmgOutcome "none assigned" (63,338 items, score
+# placeholder rather than an empty string: acmgOutcome "none assigned" (167,641 items, score
 # sets that classify variants without assigning an ACMG code), funcClass "not classified"
-# (3,896 items, all from urn:mavedb:00001267-a-2, which carries no calibration at all) and
+# (3,950 items, all from urn:mavedb:00001267-a-2, which carries no calibration at all) and
 # funcScore "not reported" (5,124 items MaveDB reports as NA, all of them indeterminate).
 # The placeholders are set after the color and the BED score are computed from the raw
 # values, so neither changes, and both label fields go into their filter menus as real
@@ -238,17 +252,38 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 
 # WHICH CALIBRATION IS SHOWN. A score set can carry up to six calibrations. MaveDB curates a
 # `primary` flag with its own promote and demote API endpoints, so where that primary actually
-# classifies the variant it is their editorial choice and is used as-is: 171,467 items.
+# classifies the variant it is their editorial choice and is used as-is: 171,664 items.
 #
 # Two traps. 21 score sets have no primary at all (one of them has no calibration whatsoever).
 # A further 35 designate one that carries no
 # functionalClassifications, so it says nothing about any variant and arrives as NA on every
 # CSV row - it exists but cannot be displayed. Those are different situations and the item's
 # "Calibration chosen by" field distinguishes them, because telling a user "no primary
-# designated" about a score set that has one is simply false. 172,287 items are in that second
+# designated" about a score set that has one is simply false. 172,235 items are in that second
 # case; an earlier build mislabelled all of them.
 #
 # Every calibration's call is listed on the details page regardless of which one is displayed.
+#
+# Where no primary is available the choice follows MaveDB's own variant page, whose rule
+# Benjamin Capodanno gave us in October 2026: only a calibration that classifies the variant
+# can supply the call; prefer one that is not research use only, investigator-provided before
+# the rest; and take the strongest evidence within a tier rather than across all of them. A
+# research-use-only calibration is used only where nothing else classifies the variant,
+# 152,808 items, and those say so on the item.
+#
+# Tiering before strength is what makes this differ from ranking on evidence alone, and it
+# costs evidence codes. In 16 score sets the investigator-provided calibration gives a
+# functional class and no ACMG code while ExCALIBR, which is research use only, gives both.
+# Ranking on strength picked ExCALIBR for 104,244 items; tiering picks the investigator call,
+# so those items show no ACMG code (53,460 of them were PS3_not_met, which was already drawn
+# as no evidence, so 50,784 change colour). The two calibrations also disagree about the call
+# itself on 47,876 of them, mostly indeterminate becoming normal, which moves the functional
+# class filter and recolours all 16 of those heatmaps.
+#
+# pickDisplayCall() takes primaryEmpty so the item can say whether a primary exists but
+# classifies nothing, or exists and simply does not classify this variant. The second case
+# does not occur in this build; it is distinguished because the first is a curation gap and
+# saying "no primary designated" about either one is false.
 
 # Build results:
 #   mavemdVar.bb   462,486 items, 47 fields (bed12+35)
@@ -256,7 +291,7 @@ mkdir -p /hive/data/genomes/hg38/bed/mavemd/2026-09-17
 # PROVENANCE OF THE ANNOTATIONS. clinvarRelease and gnomadVersion ride on each item that has a
 # ClinVar or gnomAD annotation (60,666 and 3,978 respectively), so a stale annotation is visible
 # rather than silent. This build is mixed: 79 score sets served ClinVar 2026-01 and 4 served
-# 2025-01 (57,182 and 3,555 items respectively), on gnomAD v4.1 throughout. A single release
+# 2025-01 (57,111 and 3,555 items respectively), on gnomAD v4.1 throughout. A single release
 # per build is not something to expect;
 # fetchMaveMd.py always asks for the newest ClinVar namespace the score set offers, so the
 # release moves on its own between builds and is not pinned anywhere.

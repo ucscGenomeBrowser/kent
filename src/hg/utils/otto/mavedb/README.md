@@ -33,7 +33,8 @@ Still to come: `mavedbAutoPush` draft, cron entry.
     mavedbOtto.py -n              # what would happen (downloads the catalogue only)
     mavedbOtto.py --force         # build a release even if nothing changed
     mavedbOtto.py --refetch       # download every variant file again
-    mavedbOtto.py --force --ignoreChecks   # release a build that failed its checks, once checked
+    mavedbOtto.py --release <date> --ignoreChecks   # make a build that failed its checks
+                                  # the release, once checked; no fetch, no rebuild
     mavedbOtto.py --outDir dir    # development run; links go to dir/gbdb
 
 A release is stopped, with the /gbdb links unchanged and the build left in
@@ -42,7 +43,8 @@ heatmap or variant items drop more than 10% (shown score sets more than 5%) from
 release. Cache problems (catalogue count mismatch, more than 5% of downloads failing, five
 429s in a row) and the genome cross-check stop the run before the build. Each release keeps
 `report.txt`, `build.tsv`, `catalogue.tsv`, `stats.json`, `build.log` and `version.txt`;
-`lastRelease.txt` names the live one.
+`lastRelease.txt` names the live one. After a release the three newest releases are kept
+and failed `.tmp` builds are removed.
 
 ## Running a development build
 

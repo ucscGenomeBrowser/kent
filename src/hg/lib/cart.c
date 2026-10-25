@@ -2216,6 +2216,35 @@ slPairFreeValsAndList(&list);
 slPairFreeValsAndList(&newList);
 }
 
+void cartSetHubDatabase(struct cart *cart, struct hash *oldVars, char *newDatabase)
+/* Put the database that hubConnectLoadHubs chose into the cart.  If that is a change of
+ * assembly, set db in oldVars to "none", which getDbAndGenome reads as a switch: the position
+ * goes to the assembly default and the multi-region variables are dropped. */
+{
+char *cartDb = cartOptionalString(cart, "db");
+char *oldDb = (oldVars != NULL) ? hashFindVal(oldVars, "db") : NULL;
+
+if ((cartDb == NULL) || differentString(cartDb, newDatabase))
+    {
+    // resolveGenarkDb takes db out of the cart, so a Genark db= that names the assembly
+    // the cart was already on looks like a database change here.  It is not one, and the
+    // magic below would replace the position we just loaded from a session with the
+    // assembly default and drop the multi-region variables.  refs #38184
+    boolean sameDb = !IS_CART_VAR_EMPTY(oldDb) && sameString(oldDb, newDatabase);
+
+    // this is some magic to use the defaultPosition and reset cart variables
+    if (oldVars && !sameDb)
+        {
+        struct hashEl *hel;
+        if ((hel = hashLookup(oldVars,"db")) != NULL)
+            hel->val = "none";
+        else
+            hashAdd(oldVars, "db", "none");
+        }
+    cartSetString(cart,"db", newDatabase);
+    }
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -2359,30 +2388,7 @@ if (cartCollectionHubCopyOnWrite() && gLocalHubCopyRequested)
 char *newDatabase = hubConnectLoadHubs(cart);
 
 if (newDatabase != NULL)
-    {
-    char *cartDb = cartOptionalString(cart, "db");
-    char *oldDb = (oldVars != NULL) ? hashFindVal(oldVars, "db") : NULL;
-
-    if ((cartDb == NULL) || differentString(cartDb, newDatabase))
-        {
-        // resolveGenarkDb takes db out of the cart, so a Genark db= that names the assembly
-        // the cart was already on looks like a database change here.  It is not one, and the
-        // magic below would replace the position we just loaded from a session with the
-        // assembly default and drop the multi-region variables.  refs #38184
-        boolean sameDb = !IS_CART_VAR_EMPTY(oldDb) && sameString(oldDb, newDatabase);
-
-        // this is some magic to use the defaultPosition and reset cart variables
-        if (oldVars && !sameDb)
-            {
-            struct hashEl *hel;
-            if ((hel = hashLookup(oldVars,"db")) != NULL)
-                hel->val = "none";
-            else
-                hashAdd(oldVars, "db", "none");
-            }
-        cartSetString(cart,"db", newDatabase);
-        }
-    }
+    cartSetHubDatabase(cart, oldVars, newDatabase);
 
 if (exclude != NULL)
     {

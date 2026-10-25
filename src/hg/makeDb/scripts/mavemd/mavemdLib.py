@@ -92,49 +92,60 @@ ACMG_SEVERITY = ['PS3_very_strong', 'PS3', 'PS3_moderate_plus', 'PS3_moderate',
                  'PS3_not_met', 'BS3_not_met']
 
 
-def pickDisplayCall(calls, primaryTitle=None):
+def pickDisplayCall(calls, primaryTitle=None, primaryEmpty=False):
     """Choose which calibration's call drives the color and the filters.
 
-    MaveDB curates a `primary` flag on score calibrations, with its own promote and demote API
-    endpoints, so where that primary actually classifies the variant it is their editorial
-    choice and we use it as-is.
+    MaveDB's own variant page tiers them (Benjamin Capodanno, Oct 2026): only a calibration
+    that actually classifies the variant can provide a call; prefer one that is not research
+    use only, the primary first, then an investigator-provided one, then the rest; and within
+    a tier take the strongest evidence. A research-use-only calibration is used only where
+    nothing else classifies the variant, and the item says so.
 
-    Two things complicate it. Some score sets have no primary designated at all. Others
-    designate one that carries no functional classifications, so it says nothing about any
-    variant and cannot be displayed even though it exists. Those are different situations and
-    the item says which one happened, because "no primary designated" on a score set that has
-    one is simply false.
+    Tiering before strength is the whole point and it costs us evidence codes. An
+    investigator-provided calibration often gives a functional class and no ACMG code while
+    ExCALIBR, which is research use only, gives both, so the call shown is the weaker-looking
+    one. That is MaveDB's editorial judgement and matching it keeps the track saying what
+    their own variant page says.
 
-    `calls` is a list of dicts with keys: urn, title, primary, ruo, funcClass, acmgOutcome,
-    acmgCriterion, acmgStrength, odds. `primaryTitle` is the title of the score set's
-    MaveDB-designated primary calibration, or None if it has none. Returns (chosen, source).
+    `calls` is a list of dicts with keys: urn, title, primary, investigator, ruo, funcClass,
+    acmgOutcome, acmgCriterion, acmgStrength, odds, and holds only the calibrations that
+    classify this variant. `primaryTitle` is the title of the score set's MaveDB-designated
+    primary calibration, or None if it has none; `primaryEmpty` says that primary carries no
+    functional classifications at all, which is a curation gap rather than a judgement about
+    this one variant. Returns (chosen, source).
     """
     if not calls:
         return None, 'none'
-    primary = [c for c in calls if c['primary']]
-    if primary:
-        return primary[0], 'MaveDB primary calibration'
-
-    if primaryTitle:
-        context = ('MaveDB\'s primary calibration (%s) classifies no variants, so it cannot be '
-                   'shown' % primaryTitle)
-    else:
-        context = 'no primary calibration designated'
 
     def rank(call):
         code = call['acmgOutcome']
         return ACMG_SEVERITY.index(code) if code in ACMG_SEVERITY else len(ACMG_SEVERITY)
 
-    scored = [c for c in calls if c['acmgOutcome']]
-    if scored:
-        chosen = min(scored, key=rank)
-        if len(scored) == 1 and len(calls) == 1:
-            return chosen, '%s; showing the only other calibration' % context
-        return chosen, '%s; showing the strongest of %d others' % (context, len(calls))
-    classed = [c for c in calls if c['funcClass']]
-    if classed:
-        return classed[0], '%s; showing the only other calibration with a classification' % context
-    return calls[0], context
+    primary = [c for c in calls if c['primary'] and not c['ruo']]
+    if primary:
+        return min(primary, key=rank), 'MaveDB primary calibration'
+
+    if not primaryTitle:
+        context = 'no primary calibration designated'
+    elif primaryEmpty:
+        context = ('MaveDB\'s primary calibration (%s) classifies no variants, so it cannot '
+                   'be shown' % primaryTitle)
+    else:
+        context = ('MaveDB\'s primary calibration (%s) does not classify this variant'
+                   % primaryTitle)
+
+    for group, what in ((
+            [c for c in calls if not c['ruo'] and c['investigator']], 'investigator-provided'),
+            ([c for c in calls if not c['ruo'] and not c['investigator']], 'other')):
+        if group:
+            if len(group) == 1:
+                return group[0], '%s; showing the %s calibration' % (context, what)
+            return (min(group, key=rank),
+                    '%s; showing the strongest of %d %s calibrations' % (context, len(group), what))
+
+    return (min(calls, key=rank),
+            '%s; nothing outside research use only classifies this variant, showing the '
+            'strongest of %d' % (context, len(calls)))
 
 
 def calibrationLabel(title, ruo):

@@ -248,6 +248,11 @@ struct trackHubGenome *trackHubGetGenomeUndecorated(char *database);
 char *trackHubBuild(char *db, struct cart *cart, struct trackDb **badList);
 /* Build a track hub using trackDb and the cart. */
 
+void writeMergedHubFile(char *filename, char *db, struct dyString *newContent);
+/* Write the quickLift hub file from the stanzas just generated plus whatever was already in the
+ * file.  A generated stanza replaces the old stanza of the same track, in the slot the old one
+ * held; a track in the file that was not generated this time is kept as it was. */
+
 struct grp *readGroupRa(char *groupFileName);
 /* Read in the ra file that describes the groups in an assembly hub. */
 

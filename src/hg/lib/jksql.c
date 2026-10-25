@@ -686,6 +686,13 @@ void sqlMonitorSetIndent(unsigned indent)
 traceIndent = indent;
 }
 
+long sqlQueryCount(void)
+/* Return the number of queries sent since the program started or since sqlMonitorDisable, for
+ * a test that counts the work a function does rather than timing it. */
+{
+return sqlTotalQueries;
+}
+
 void sqlMonitorDisable(void)
 /* Disable tracing or profiling of SQL queries. */
 {
@@ -2687,7 +2694,13 @@ struct sqlConnCacheEntry
     struct sqlProfile *profile;      /* profile for connection, can be NULL if host is explicit */
     struct sqlConnection *conn;      /* connection */
     boolean inUse;                   /* is this in use? */
+    unsigned checkout;               /* which checkout handed it out, see sqlConnCacheMark */
 };
+
+static unsigned sqlConnCacheCheckouts = 0;
+/* Counts every connection any cache has handed out.  Not guarded by a lock: no cache in
+ * this file is, and the threaded track loaders in hgTracks keep away from SQL for that
+ * reason. */
 
 struct sqlConnCache *sqlConnCacheNewRemote(char *host, char *user,
                                            char *password)
@@ -2941,6 +2954,7 @@ if (scce != NULL)
     {
     assert(scce->conn->isFree);
     scce->inUse = TRUE;
+    scce->checkout = ++sqlConnCacheCheckouts;
     scce->conn->isFree = FALSE;
     return scce->conn;
     }
@@ -2978,6 +2992,52 @@ struct sqlConnection *sqlConnCacheProfileAllocMaybe(struct sqlConnCache *cache,
  * if the database doesn't exist.  */
 {
 return sqlConnCacheDoAlloc(cache, profileName, database, FALSE);
+}
+
+unsigned sqlConnCacheMark()
+/* The number of connections handed out so far, to pass to sqlConnCacheReleaseSince. */
+{
+return sqlConnCacheCheckouts;
+}
+
+static void sqlConnFreeResults(struct sqlConnection *sc)
+/* Free any results the connection still has open.  A caller that was cut off part way
+ * through a query left its rows unread, and the next query on that connection would fail
+ * with them still coming. */
+{
+if (sc == NULL)
+    return;
+if (sc->resultList != NULL)
+    {
+    struct dlNode *node, *next;
+    for (node = sc->resultList->head; node->next != NULL; node = next)
+        {
+        struct sqlResult *res = node->val;
+        next = node->next;
+        sqlFreeResult(&res);    /* takes the node out of the list */
+        }
+    }
+sqlConnFreeResults(sc->failoverConn);
+}
+
+void sqlConnCacheReleaseSince(struct sqlConnCache *cache, unsigned mark)
+/* Put back every connection this cache has handed out since the mark.  For a caller that
+ * catches an errAbort: the code that would have called sqlConnCacheDealloc never ran, and
+ * nothing can still be holding those connections, since the stack that asked for them has
+ * been unwound. */
+{
+struct sqlConnCacheEntry *scce;
+if (cache == NULL)
+    return;
+for (scce = cache->entries; scce != NULL; scce = scce->next)
+    {
+    if (scce->inUse && (scce->checkout > mark))
+        {
+        sqlConnFreeResults(scce->conn);
+        scce->inUse = FALSE;
+        scce->conn->isFree = TRUE;
+        }
+    }
 }
 
 void sqlConnCacheDealloc(struct sqlConnCache *cache, struct sqlConnection **pConn)

@@ -207,6 +207,7 @@ def main():
                     'urn': calUrn,
                     'title': calMeta.get('title', ''),
                     'primary': calMeta.get('primary', False),
+                    'investigator': calMeta.get('investigator', False),
                     'ruo': calMeta.get('ruo', False),
                     'funcClass': funcClass,
                     'acmgOutcome': outcome,
@@ -214,7 +215,8 @@ def main():
                     'acmgStrength': clean(row.get(cols.get('acmg_evidence_strength', ''), '')),
                     'odds': calMeta.get('odds', {}).get(funcClass, ''),
                 })
-            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'))
+            chosen, source = lib.pickDisplayCall(calls, meta.get('primaryTitle'),
+                                                 meta.get('primaryEmpty', False))
             if chosen:
                 calibrationVotes[(chosen['urn'], chosen['title'], chosen['ruo'],
                                   source)] += 1
@@ -274,7 +276,7 @@ def main():
             chosenRuo = False
         entry = buildEntry(urn, gene, meta, byPos, codonMap,
                            lib.calibrationLabel(chosenTitle, chosenRuo),
-                           chosenSource, chosenRuo, stats)
+                           chosenSource, chosenRuo, winUrn, stats)
         if entry:
             entries.append(entry)
             stats['scoreSetsWritten'] += 1
@@ -300,7 +302,7 @@ def main():
         sys.stderr.write("  %-36s %d\n" % (key, placeStats[key]))
 
 
-def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, stats):
+def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, calUrn, stats):
     """Assemble one heatmap BED12+ line for a score set."""
     cols = sorted((min(entry['bases']), protPos) for protPos, entry in byPos.items())
     colStarts = [c[0] for c in cols]
@@ -397,7 +399,7 @@ def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, st
         meta.get('assayMethod', ''), meta.get('assayModel', ''),
         meta.get('assayMechanism', ''), meta.get('libraryMethod', ''),
         gene,
-        calTitle, calSource, 'yes' if calRuo else 'no',
+        calTitle, calSource, 'yes' if calRuo else ('no' if calUrn else ''),
         str(measured),
         meta.get('publication', ''),
         'https://mavedb.org/score-sets/%s' % urn,
