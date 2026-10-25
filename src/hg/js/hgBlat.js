@@ -9,7 +9,7 @@
 // Header tooltips reuse the Genome Browser's own mechanism (title + convertTitleTagsToMouseovers).
 
 /* jshint esnext: true */
-/* global $, hgBlatData, convertTitleTagsToMouseovers, htmlEncode, commify, gbShowTimingDialog */
+/* global $, hgBlatData, topLinks, convertTitleTagsToMouseovers, htmlEncode, commify, gbShowTimingDialog */
 
 var blatSelectedRank = null;   // rank of the row shown in the detail panel
 
@@ -426,7 +426,7 @@ function blatShareLink() {
         .catch(function() {
             blatShareBusy = false;
             if (blatShareBoxOpen(box))
-                blatShowShareBox(box, null, 'Could not reach the server. Please try again.');
+                blatShowShareBox(box, null, topLinks.serverUnreachableMsg);
         });
 }
 
