@@ -10,7 +10,7 @@ group hprc
 type bigBed 9 +
 itemRgb on
 denseClick on
-visibility dense
+visibility hide
 onlyVisibility dense
 priority 30
 maxItems 40000
