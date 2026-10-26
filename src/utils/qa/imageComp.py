@@ -126,10 +126,15 @@ def main():
     serverUrl1 = "http://hgwdev.gi.ucsc.edu/"
     serverUrl2 = "http://hgwbeta.soe.ucsc.edu/"
     # If you want to add more sessions, do so in the next 4 lines. Add the user and session name to the list
-    sessionUser1 = ["lou","lou","lou","lou"]
-    sessionUser2 = ["lou","lou","lou","lou"]
-    sessionName1 = ["imageCompCron1.2","bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations","snakesDisplayExample"]
-    sessionName2 = ["imageCompCron1.2","bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations","snakesDisplayExample"]
+    # Skipping imageCompCron1.2 and snakesDisplayExample until the #38595 changes go to hgwbeta
+    #sessionUser1 = ["lou","lou","lou","lou"]
+    #sessionUser2 = ["lou","lou","lou","lou"]
+    #sessionName1 = ["imageCompCron1.2","bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations","snakesDisplayExample"]
+    #sessionName2 = ["imageCompCron1.2","bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations","snakesDisplayExample"]
+    sessionUser1 = ["lou","lou"]
+    sessionUser2 = ["lou","lou"]
+    sessionName1 = ["bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations"]
+    sessionName2 = ["bigLollyAndTrioDisplayExample","logoDisplayWithWeirdConfigurations"]
     serverDir1 = "/hive/users/"+user+"/imageTest/cronImages/server1Images"
     serverDir2 = "/hive/users/"+user+"/imageTest/cronImages/server2Images"
     diffImagesDir = "/hive/users/"+user+"/imageTest/cronImages/diffImages/"
