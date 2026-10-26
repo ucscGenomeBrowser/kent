@@ -1,0 +1,26 @@
+This directory holds all the of the scripts related to the hubSpace hub upload feature.
+
+The main components are:
+tusd/ - holds everything run by admins to have the file transfer daemon
+    running, including cleaning up statle files. These are cronjobs ran by the
+    admins so don't modify them without also changing the admin ran copy. Note there are copies for both the hgwdev version and the RR version
+
+measure/ - the scripts that measure the state of the hubspace file system and
+    output stats for viewing over time
+    measureHubSpace.sh - production copy, run as qateam on the hubspace machine,
+        writes /home/qateam/hubSpace/YYYY/MM/YYYY-MM-DDTHH.txt
+    measureHubSpace.dev.sh - hgwdev copy, writes ~/hubSpace/YYYY/MM/YYYY-MM-DDTHH.txt
+    hubSpaceReport.py - reads all of those dated reports and writes one HTML
+        page of charts (storage, files and users over time, storage by file
+        format) for management.  Usage:
+            hubSpaceReport.py [-l label] logDir outFile.html
+    hubSpaceReport.css, hubSpaceReport.js - the styles and drawing code shared
+        by every page hubSpaceReport.py writes.  The pages load them from their
+        own directory, so copy both into ~chmalee/public_html/hubSpace/ when
+        they change.
+    measureHubSpaceWrapper*.bash - the weekly cron wrappers, one per machine.
+        Each runs the measure script and then hubSpaceReport.py.  The hgwdev
+        page goes to ~chmalee/public_html/hubSpace/hgwdev.html.  The production
+        page is written to /home/qateam/hubSpace/production.html on the
+        hubspace machine, and a cron job on hgwdev copies it next to the
+        hgwdev page.
