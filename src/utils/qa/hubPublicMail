@@ -295,6 +295,12 @@ def hubPublicMail(centralName, statusFname):
     createLockFile(statusFname)
 
     urls = getHubUrls(centralName)
+    # Skipping the ReMap hubs while the remap.univ-amu.fr server is down for a PHP update, refs #38618
+    keptUrls = []
+    for url in urls:
+        if "remap.univ-amu.fr" not in url:
+            keptUrls.append(url)
+    urls = keptUrls
     hubPublicEmails = getHubPublicEmails(centralName)
 
     oldUrlInfo = readStatus(statusFname)
