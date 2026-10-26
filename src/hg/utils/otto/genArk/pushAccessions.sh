@@ -85,7 +85,7 @@ export ottoKentTree="/hive/data/outside/genark/ottoKent/kent"
 export betaGenArkList="${ottoKentTree}/src/hg/makeDb/trackDb/betaGenArk.txt"
 export publicGenArkList="${ottoKentTree}/src/hg/makeDb/trackDb/publicGenArk.txt"
 # cluster-admin sudo script on hgwbeta that pushes /gbdb files to the RR
-export gbdbPushScript="/usr/local/bin/gbdbPush"
+export rootGbDbPush="/root/gbdbPush"
 # where public.hub.txt and public contrib/ go, as qateam from hgwdev
 export rrMachList="hgw0 hgw1 hgw2 genome-euro genome-asia"
 # shared with pushContrib.sh, see there for why it is in /dev/shm
@@ -212,7 +212,7 @@ function gbdbPushRR() {
   { printf "%s\n" "${USER}"
     cat
     printf ".\ny\n"
-  } | ssh qateam@${destMach} "sudo -n ${gbdbPushScript}"
+  } | ssh qateam@${destMach} "sudo -n ${rootGbDbPush}"
 }
 
 ##############################################################################
