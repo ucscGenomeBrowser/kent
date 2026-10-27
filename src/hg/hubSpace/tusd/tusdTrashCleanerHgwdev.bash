@@ -43,7 +43,7 @@ then
     exit "${NOTHING_TO_DO}"
 else
     # delete those files
-    cat "${DELETE_FILE_NAME}" | /bin/parallel rm -f 
+    /bin/parallel rm -f < "${DELETE_FILE_NAME}"
 
     # move the file list to a record keeping location
     mkdir -p "${ARCHIVE_DIR}/${TODAY}"

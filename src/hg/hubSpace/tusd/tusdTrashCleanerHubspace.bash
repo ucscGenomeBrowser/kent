@@ -27,9 +27,9 @@ printf "running tusd trash cleaner on %s\n" "${hostname}"
 # ensure the archive_dir exists, the dated subdir is only made when we
 # actually delete something, so we don't leave empty dirs behind
 mkdir -p "${ARCHIVE_DIR}"
-if [ ! -d "${logDir}" ]; then
-    /bin/mkdir -p "${logDir}"
-    /bin/chmod 777 "${logDir}"
+if [ ! -d "${LOG_DIR}" ]; then
+    /bin/mkdir -p "${LOG_DIR}"
+    /bin/chmod 777 "${LOG_DIR}"
 fi
 touch "${LOG_FILE}"
 /bin/chmod 666 "${LOG_FILE}"
@@ -48,7 +48,7 @@ then
     exit "${NOTHING_TO_DO}"
 else
     # delete those files
-    cat "${DELETE_FILE_NAME}" | /bin/parallel rm -f 
+    /bin/parallel rm -f < "${DELETE_FILE_NAME}"
 
     # move the file list to a record keeping location
     mkdir -p "${ARCHIVE_DIR}/${TODAY}"

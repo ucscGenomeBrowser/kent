@@ -3,16 +3,16 @@
 # measureHubSpace.sh - snapshot some stats about the state of the hubSpace upload area
 #
 # Runs on the hubspace machine (production) and on hgwdev (development copy).
-# The only difference between the two is the tusd data directory, set in the
-# case statement below, so this script can be copied between the two machines
-# unchanged.  Logs land in ~/hubSpace/YYYY/MM/ on both.
+# The only differences between the two are the tusd data directory and the log
+# directory, set in the case statement below, so this script can be copied
+# between the two machines unchanged.  Logs land in LOGROOT/YYYY/MM/.
 
 set -beEu -o pipefail
 
 export LC_ALL=C
 
 usage() {
-    printf "usage: measureHubSpace.dev.sh [--stdout]\n" 1>&2
+    printf "usage: %s [--stdout]\n" "${0##*/}" 1>&2
     printf "    --stdout    write the report to stdout instead of the dated log file\n" 1>&2
 }
 
@@ -27,14 +27,20 @@ fi
 
 hostname=$(hostname -s)
 case "${hostname}" in
-    hubspace) WORKDIR="/data/tusd/data" ;;
-    hgwdev)   WORKDIR="/data/tusd" ;;
+    hubspace)
+        WORKDIR="/data/tusd/data"
+        # hgwdev copies these into /hive/users/qateam/hubSpace/hubspace
+        LOGROOT="/home/qateam/hubSpace"
+        ;;
+    hgwdev)
+        WORKDIR="/data/tusd"
+        LOGROOT="/hive/users/qateam/hubSpace/hgwdev"
+        ;;
     *)
         printf "stopping because not on the hubspace or hgwdev machine (host: %s)\n" "${hostname}" 1>&2
         exit 1
         ;;
 esac
-LOGROOT="${HOME}/hubSpace"
 # for testing the report against a synthetic tree
 WORKDIR="${HUBSPACE_WORKDIR:-${WORKDIR}}"
 export WORKDIR LOGROOT
