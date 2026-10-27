@@ -64,6 +64,76 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="fiberSeq"></a>
+<a name="103026"></a>
+<h2>Oct. 30, 2026 &nbsp;&nbsp; Fiber-seq chromatin accessibility and CpG methylation for 41 samples (hg38)</h2>
+<p>
+We are thrilled to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=fiberSeq&position=default" target="_blank"><b>Fiber-seq</b></a>
+track collection on the human
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=fiberSeq&position=default" target="_blank">GRCh38/hg38</a>
+assembly, from the <a href="https://stergachislab.org/" target="_blank">Stergachis</a> and
+<a href="https://www.vollgerlab.com/" target="_blank">Vollger</a> labs. Fiber-seq treats
+permeabilized cells with an enzyme that adds a methyl group to any adenine it can reach, so
+nucleosomes and other bound proteins leave an unmethylated footprint on the DNA molecule
+underneath them. The molecules are
+then read on a PacBio instrument, which reports the base sequence, the added mark and the cell's
+own CpG methylation from the same read. This is the same property that DNase-seq and ATAC-seq
+measure, but it is recorded one molecule at a time, and the reads are long enough to span
+heterozygous variants. Each read can therefore be assigned to one haplotype or the other, and
+chromatin can be shown for each haplotype on its own rather than averaged across both.
+</p>
+
+<div class="text-center" style="margin-top: 1.5em;">
+<a href="https://genome.ucsc.edu/s/Lou/fiberSeqRelease" target="_blank">
+<img alt="Fiber-seq accessibility and CpG methylation at the KCNQ1OT1 imprinting control region
+on chromosome 11 in K562, where one haplotype is methylated and closed and the other is
+unmethylated and open"
+src="/images/newsArchImages/fiberSeq.png" width='95%'></a>
+<p class="gbsCaption"><em>The imprinting control region of the KCNQ1OT1 long non-coding RNA on
+chromosome 11, in K562. Across the highlighted region the CpGs on one haplotype are nearly
+all methylated and those on the other are nearly all unmethylated, and it is the unmethylated
+haplotype that is open. The bottom track plots the difference between the two, red where it is
+most significant. Loss of methylation here has been associated with Beckwith-Wiedemann
+syndrome.</em></p>
+</div>
+
+<p>
+The collection covers 41 samples: 20 lymphoblastoid lines from individuals sequenced by the
+<a href="https://humanpangenome.org/" target="_blank">Human Pangenome Reference Consortium</a>,
+16 widely used laboratory cell lines, and five rare disease cases. The container is comprised of
+two tracks:
+</p>
+
+<ul>
+  <li>
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=fiberSeqAcc&position=default"
+  target="_blank"><b>Fiber-seq Accessible</b></a> draws percent-accessible chromatin for seven
+  common cell lines on one row, a color each, so cell types can be compared at a glance. The
+  seven are GM12878, K562, HepG2, H1, HEK293T, Jurkat and the near-haploid line Hap1.
+  </li>
+  <li>
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=fiberSeqCompendium&position=default"
+  target="_blank"><b>Fiber-seq Compendium</b></a> holds everything for all 41 samples, which are
+  picked from a searchable table. For each one there is the percent-accessible signal, the FIRE
+  regulatory elements called from single molecules, CpG methylation, the same two signals split
+  by haplotype, and the methylation gap between haplotypes.
+  </li>
+</ul>
+
+<p>
+Accessibility and methylation are scaled 0 to 100 percent everywhere, so a bar height means the
+same thing in every track and every sample. The one exception is the methylation gap between
+haplotypes, which is a difference between two percentages and runs from -100 to +100.
+</p>
+
+<p>
+We thank Andrew Stergachis and Shane Neph at the University of Washington, and Mitchell Vollger
+at the University of Utah, for generating this data, for packaging it for the browser and for
+their help in arranging the tracks. Thanks to Max Haeussler and Lou Nassar for the development
+and release of these tracks.
+</p>
+
 <a name="mei"></a>
 <a name="102326"></a>
 <h2>Oct. 23, 2026 &nbsp;&nbsp; Mobile Element Insertions track collection for human (hg38, hg19 and hs1)</h2>
