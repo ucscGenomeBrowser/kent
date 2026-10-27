@@ -9,7 +9,7 @@ ARCHIVE_DIR="/data/tmp/tusdTrash"
 DELETE_FILE_NAME="toDelete.txt"
 # a one line per run history, quiet runs send no email so this is the
 # only proof the cron actually fired
-LOG_DIR="/cluster/home/chmalee/hubSpace"
+LOG_DIR="/hive/users/qateam/hubSpace"
 LOG_FILE="${LOG_DIR}/tusdTrashCleaner.log"
 # exit code telling the wrapper there was nothing to delete, so no email
 NOTHING_TO_DO=100

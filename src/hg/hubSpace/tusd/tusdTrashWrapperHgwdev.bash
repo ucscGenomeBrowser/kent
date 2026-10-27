@@ -2,7 +2,7 @@
 
 set -beEu -o pipefail
 
-TRASH_CLEANER="/cluster/home/chmalee/bin/tusdTrashCleanerHgwdev.bash"
+TRASH_CLEANER="/hive/users/qateam/hubSpace/tusdTrashCleanerHgwdev.bash"
 VICTIM_LIST="chmalee@ucsc.edu"
 # the cleaner uses this exit code when there was nothing to delete
 NOTHING_TO_DO=100

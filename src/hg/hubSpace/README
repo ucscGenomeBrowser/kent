@@ -21,11 +21,17 @@ measure/ - the scripts that measure the state of the hubspace file system and
             hubSpaceReport.py [-l label] logDir outFile.html
     hubSpaceReport.css, hubSpaceReport.js - the styles and drawing code shared
         by every page hubSpaceReport.py writes.  The pages load them from their
-        own directory, so the hgwdev wrapper copies both into
-        /hive/users/qateam/hubSpace/ on every run.
+        own directory, so "make install" puts them next to the pages.
     measureHubSpaceWrapper*.bash - the weekly cron wrappers, one per machine.
         The hubspace wrapper only runs the measure script.  The hgwdev wrapper
         runs the measure script, copies the hubspace machine's reports to
         /hive, then writes both pages:
             /hive/users/qateam/hubSpace/hgwdev.html
             /hive/users/qateam/hubSpace/production.html
+
+Installing:
+    make install - copies the hgwdev measure and trash cleaner scripts, css and js into
+        /hive/users/qateam/hubSpace/, where the hgwdev cron runs them
+    make hubspace - prints the rsync command that copies the hubspace machine
+        scripts to qateam@hubspace:/home/qateam/hubSpace/.  It does not run
+        it, so the copies there are never overwritten by accident.
