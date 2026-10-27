@@ -1,6 +1,6 @@
 #!/bin/bash
 source ~/.bashrc
-set -beEu -x -o pipefail
+set -beEu -o pipefail
 
 usage() {
     echo "usage: $0 lineageTree.pb prevDataRelease release"
