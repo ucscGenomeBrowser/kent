@@ -178,18 +178,49 @@ ensure_binfmt() {
 # Called at the start of do_wrapup and the post-RR cherry-pick regen path (both run
 # doZip). Not a checkpointed step -- it is a cheap precondition that must re-verify
 # on every (re-)run.
+#
+# Being logged in is not enough: in v505 a valid token passed `gh auth status` and
+# then got HTTP 403 from `gh release create`. kent is public, so any token can read
+# it, and a read proves nothing. Without making a write, check what we can:
+#   - classic token (ghp_): the X-OAuth-Scopes header must include repo/public_repo.
+#   - fine-grained token (github_pat_): the collaborator-permission endpoint, which
+#     GitHub serves only to tokens with access to the repo beyond public reads. A
+#     token still pending org approval should fail it (untested). This cannot see
+#     whether the token was granted Contents: write -- doZip's warning still covers that.
 ensure_gh_auth() {
     if $DRY_RUN; then
-        log "(dry-run) would verify gh auth status"
+        log "(dry-run) would verify gh auth status and write access"
         return 0
     fi
-    if gh auth status >/dev/null 2>&1; then
-        log "OK: gh authenticated"
-    else
-        die "gh is not authenticated (gh auth status failed). Run 'gh auth login' as
-    the build user, then re-run. doZip.csh needs gh to attach the source archives to
-    the GitHub release ($WEEKLYBLD/doZip.csh, refs #37741)."
+    local repo="ucscGenomeBrowser/kent"
+    local fix="Run 'gh auth login' as the build user with a classic token that has
+    the 'repo' and 'read:org' scopes, then re-run. doZip.csh needs gh to create the
+    GitHub release and attach the source archives ($WEEKLYBLD/doZip.csh, refs #37741)."
+    if ! gh auth status >/dev/null 2>&1; then
+        die "gh is not authenticated (gh auth status failed). $fix"
     fi
+    local scopes
+    scopes=$(gh api -i "repos/$repo" 2>/dev/null | tr -d '\r' \
+        | sed -n 's/^[Xx]-[Oo][Aa]uth-[Ss]copes: *//p')
+    if [[ -n "$scopes" ]]; then
+        if [[ ",$scopes," =~ [,\ ](public_)?repo, ]]; then
+            log "OK: gh authenticated (classic token, scopes: $scopes)"
+        else
+            die "gh token lacks the 'repo' scope (scopes: $scopes). $fix"
+        fi
+        return 0
+    fi
+    local login perm
+    login=$(gh api user --jq .login 2>/dev/null)
+    perm=$(gh api "repos/$repo/collaborators/$login/permission" --jq .permission 2>/dev/null)
+    case "$perm" in
+        admin|maintain|write)
+            log "OK: gh authenticated (fine-grained token, $login has $perm on $repo;"
+            log "    cannot verify the token itself has Contents: write)" ;;
+        *)
+            die "gh token cannot see $repo beyond public reads (fine-grained token
+    not approved by the org, or not granted this repo?). $fix" ;;
+    esac
 }
 
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
@@ -887,8 +918,10 @@ generate_release_markdown() {
     log "Generating markdown release notes for v${ver}..."
 
     local html
-    html=$(curl -s "$url") || {
-        log "WARNING: Could not fetch $url - skipping markdown generation"
+    # -f: a missing versions page (404) must fail here; without it the 404 page
+    # was taken as the notes and an empty file was written (v505).
+    html=$(curl -sf "$url") || {
+        log "WARNING: Could not fetch $url (versions page not written yet?) - skipping markdown generation"
         return 0
     }
 
@@ -906,7 +939,7 @@ generate_release_markdown() {
         | sed 's| ([^)]*)\. [A-Z][a-z]*$||' \
         | sed 's|\. [A-Z][a-z]*$||' \
         | sed 's|[[:space:]]*$||' \
-        | sed 's|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g; s|&quot;|"|g' \
+        | sed "s|&lt;|<|g; s|&gt;|>|g; s|&quot;|\"|g; s|&#x27;|'|g; s|&#39;|'|g; s|&amp;|\\&|g" \
         | sed 's|^|- |' \
         > "$outfile"
 
