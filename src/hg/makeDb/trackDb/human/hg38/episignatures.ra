@@ -89,6 +89,7 @@ html episignatures.html
     mouseOver <b>${name}</b> ${gene}<br>${disorders}<br><b>Episignatures:</b> ${signatures}<br><b>Type:</b> ${type}
     filterValues.type Episignature,Imprinting or promoter DMR
     filterLabel.type Type
+    release alpha
 
 searchTable methaDory
 searchMethod exact
