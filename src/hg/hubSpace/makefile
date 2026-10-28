@@ -9,7 +9,10 @@ HGWDEV_FILES=measure/measureHubSpace.dev.sh measure/measureHubSpaceWrapperHgwdev
 HUBSPACE_FILES=measure/measureHubSpace.sh measure/measureHubSpaceWrapperHubspace.bash \
 	tusd/tusdTrashCleanerHubspace.bash tusd/tusdTrashWrapperHubspace.bash
 
+.PHONY: install hubspace
+
 install:
+	mkdir -p ${PREFIX}
 	cp ${HGWDEV_FILES} ${PREFIX}/
 
 # only prints the command, so the hubspace copies are never overwritten by accident

@@ -25,9 +25,11 @@ SEC_CATEGORIES = "file type counts grouped by category"
 SEC_HUB_TEXT = "hub text file names seen more than once"
 SEC_TXT_OTHER = "text files whose name suggests another format"
 SEC_UNKNOWN = "files with no extension or an unrecognized extension"
+# per user names stay out of the page, the section is listed so it ends the one before it
+SEC_USER_DISK = "disk space consumed per user"
 SEC_USERS = "userNames of uploaders"
 SECTIONS = {SEC_UNREADABLE, SEC_UNSEARCHABLE, SEC_WHITESPACE, SEC_FILES, SEC_DISK, SEC_TYPES,
-            SEC_CATEGORIES, SEC_HUB_TEXT, SEC_TXT_OTHER, SEC_UNKNOWN, SEC_USERS}
+            SEC_CATEGORIES, SEC_HUB_TEXT, SEC_TXT_OTHER, SEC_UNKNOWN, SEC_USER_DISK, SEC_USERS}
 
 REPORT_NAME_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})T(\d{2})\.txt$")
 COUNT_RE = re.compile(r"^# count: (\d+)")
