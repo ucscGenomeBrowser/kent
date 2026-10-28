@@ -1,25 +1,34 @@
 #!/usr/bin/env python3
 """
-Convert a MethBase2 track hub delivery from the Smith Lab (USC) into trackDb .ra
-files suitable for inclusion in our own trackDb file set.
+Convert the MethBase2 track hub, as mirrored on hgdownload, into trackDb .ra files
+suitable for inclusion in our own trackDb file set.
 
-The hub arrives as a directory of per-assembly subdirectories, each holding a
-trackDb.txt, an mb2_<db>_metadata.tsv, and an mb2_<db>_colors.json.  Three edits
-are needed before those stanzas can live in our tree:
+methbaseDownload keeps a mirror of the Smith Lab (USC) hub on hgdownload, under
+/mirrordata/hubs/methbase/v3: hub/ holds the hub's text files and data/ the
+bigData files.  hub/ is a directory of per-assembly subdirectories, each holding
+a trackDb.txt, an mb2_<db>_metadata.tsv, and an mb2_<db>_colors.json.  By
+default this script copies hub/ (never data/, which is several TB) from
+hgdownload into a scratch directory, works from that, and removes it afterwards;
+--source-dir points it at a local copy of hub/ instead.
 
-  1. bigDataUrl points at http://smithlab.usc.edu; we serve a mirror under
-     hgdownload.  The original URL of every line we rewrite is recorded in
-     hgdownload_manifest so a separate tool can confirm the mirror actually has
-     the file -- we cannot rely on the contributor's own file list for that.
-  2. metaDataUrl and colorSettingsUrl are bare relative filenames.  hgTrackUi
+methbaseDownload has already pointed every bigDataUrl at the mirror.  Two more
+edits are needed before the stanzas can live in our tree:
+
+  1. metaDataUrl and colorSettingsUrl are bare relative filenames.  hgTrackUi
      whitelists exactly those two settings and compares a fetch request against
      the literal setting value (see fileUrlMatchesTrackSetting() in
      hg/hgTrackUi/hgTrackUi.c), so they have to name something resolvable.  We
      point them at /gbdb/<db>/methBase2/, which copyMethbaseFiles.sh populates
      with symlinks back to this directory.
-  3. The composite stanzas have no parent.  We hang them off a dnaMethylation
+  2. The composite stanzas have no parent.  We hang them off a dnaMethylation
      supertrack that whoever installs the files defines by hand -- that is also
      where the "group" setting lives.
+
+The bigDataUrls themselves pass through unchanged, but each one is checked
+against a listing of the mirror's data/ directory, taken over ssh.  This is a
+second check on top of methbaseDownload's own failure report: every bigDataUrl
+that is missing from the mirror, is empty there, or does not point at the mirror
+at all is listed in missing_bigData.
 
 hg38 and mm39 are additionally too large to commit as a single .ra, so any
 output over --max-ra-size is split on stanza boundaries into a chain of
@@ -32,26 +41,33 @@ it accordingly (a dated directory you keep alongside past versions), rather than
 treating it as scratch.
 
 A copyMethbaseFiles.sh script is generated into the destination directory to put
-everything in its final place, along with two manifests: gbdb_manifest lists
-every /gbdb path that script sets up, for pushing those files to production, and
-hgdownload_manifest lists the contributor URLs whose files have to be on
-hgdownload before the rewritten bigDataUrls resolve.  Nothing here edits any file
-outside the destination directory.
+everything in its final place, along with gbdb_manifest, which lists every /gbdb
+path that script sets up, for pushing those files to production.  Nothing here
+edits any file outside the destination directory.
 
 Usage:
-  processMethbaseHub [--max-ra-size MB] <sourceHubDir> <destDir>
+  processMethbaseHub [--max-ra-size MB] [--source-dir DIR] <destDir>
 """
 
 import argparse
 import os
 import re
+import shlex
 import shutil
 import stat
+import subprocess
 import sys
+import tempfile
 
-# Where we mirror the contributor's bigData files.
-HUB_MIRROR_URL = "http://hgdownload.soe.ucsc.edu/hubs/methbase/v2"
-SOURCE_HOST = "smithlab.usc.edu"
+# The hgdownload mirror that methbaseDownload maintains.  Keep these in step with
+# methbaseOtto.sh; the vN directory appears in both the path and the url.
+DOWNLOAD_HOST = "qateam@hgdownload"
+MIRROR_DIR = "/mirrordata/hubs/methbase/v3"
+MIRROR_URL = "https://hgdownload.soe.ucsc.edu/hubs/methbase/v3"
+
+# Where the copy of the mirror's hub/ directory is made.  It is only needed while
+# this script runs: everything we keep from it is copied into the destination.
+TMP_ROOT = "/data/tmp"
 
 # Where the facet metadata and color files are reached from.  Keep GBDB_SUBDIR in
 # step with copyMethbaseFiles.sh, which creates the symlinks that live there.
@@ -65,19 +81,14 @@ RA_NAME = "methbase2.ra"
 # fixed list of filenames the way most otto tracks do it will not work here.
 GBDB_MANIFEST_NAME = "gbdb_manifest"
 
-# List of the contributor URLs behind every bigDataUrl we rewrite, one per line.
-# The rewritten setting points at HUB_MIRROR_URL, so each of these files has to
-# have been mirrored there or the track is broken; a separate tool walks this
-# list to check.  The contributor publishes a file list of their own, but it has
-# not been kept current, which is why we build our own from the trackDb we were
-# actually handed.
-HGDOWNLOAD_MANIFEST_NAME = "hgdownload_manifest"
+# Every bigDataUrl that will not resolve, one per line as <db>, url, and reason
+# (missing, empty, or off-mirror), tab separated.  Always written, so an empty
+# file is the record that the check ran and found nothing.
+MISSING_BIG_DATA_NAME = "missing_bigData"
 
 # Settings whose value is a bare filename in the hub and must become a /gbdb path.
 FETCHED_SETTINGS = ("metaDataUrl", "colorSettingsUrl")
 
-BIG_DATA_URL_RE = re.compile(
-    r"^(\s*bigDataUrl\s+)https?://" + re.escape(SOURCE_HOST) + r"(?=[/\s]|$)")
 ANY_BIG_DATA_URL_RE = re.compile(r"^\s*bigDataUrl\s")
 
 # Subdirectory names become assembly names, and an assembly name ends up in
@@ -97,6 +108,49 @@ def raPartName(partNum):
     if partNum == 1:
         return RA_NAME
     return "methbase2_%d.ra" % partNum
+
+
+def fetchHub(host, mirrorDir, tmpRoot):
+    """Copy the mirror's hub/ directory into a new scratch directory.
+
+    Returns (scratch directory, path of the copied hub/).  Only hub/ is copied:
+    data/ next to it is the multi-TB bigData mirror.
+    """
+    tmpDir = tempfile.mkdtemp(prefix="methbase2.", dir=tmpRoot)
+    remote = "%s:%s/hub" % (host, mirrorDir)
+    try:
+        subprocess.run(["scp", "-r", "-q", "-o", "BatchMode=yes", remote, tmpDir],
+                       check=True)
+    except subprocess.CalledProcessError as e:
+        shutil.rmtree(tmpDir)
+        raise SystemExit("ERROR: could not copy %s: %s" % (remote, e))
+    return tmpDir, os.path.join(tmpDir, "hub")
+
+
+def listMirrorData(host, mirrorDir):
+    """Every file under the mirror's data/ directory, as {"data/...": size}.
+
+    One ssh and one find, rather than a request per bigDataUrl -- there are
+    tens of thousands of them.  .tmp files are methbaseDownload's downloads in
+    progress, not data.
+    """
+    remoteCmd = ("cd %s && find data -type f ! -name '*.tmp' -printf '%%s %%p\\n'"
+                 % shlex.quote(mirrorDir))
+    try:
+        result = subprocess.run(["ssh", "-o", "BatchMode=yes", host, remoteCmd],
+                                check=True, stdout=subprocess.PIPE,
+                                universal_newlines=True)
+    except subprocess.CalledProcessError as e:
+        raise SystemExit("ERROR: could not list %s/data on %s: %s"
+                         % (mirrorDir, host, e))
+    listing = {}
+    for line in result.stdout.splitlines():
+        size, path = line.split(" ", 1)
+        listing[path] = int(size)
+    if not listing:
+        raise SystemExit("ERROR: %s/data on %s is empty or missing; refusing to "
+                         "report every track as broken." % (mirrorDir, host))
+    return listing
 
 
 def splitStanzas(text):
@@ -120,12 +174,11 @@ def splitStanzas(text):
     return stanzas
 
 
-def transformStanza(lines, db, counts, sourceUrls):
-    """Apply the three trackDb edits to one stanza.  Returns the new line list.
+def transformStanza(lines, db, counts, bigDataUrls):
+    """Apply the two trackDb edits to one stanza.  Returns the new line list.
 
-    Appends the pre-rewrite URL of each bigDataUrl we redirect to sourceUrls.  A
-    line we could not rewrite is deliberately left out: it still points at the
-    contributor's own host, so nothing has to be mirrored for it.
+    Appends the value of each bigDataUrl to bigDataUrls, for checking against
+    the mirror; the line itself is left as is.
 
     Everything not named here -- track names, shortLabel, longLabel, colors,
     priorities -- passes through untouched.
@@ -139,18 +192,9 @@ def transformStanza(lines, db, counts, sourceUrls):
         newLine = line
 
         if ANY_BIG_DATA_URL_RE.match(line):
-            newLine, n = BIG_DATA_URL_RE.subn(
-                r"\1" + HUB_MIRROR_URL + "/" + SOURCE_HOST, line)
-            if n:
-                counts["bigDataUrl"] += 1
-                # The value as the contributor wrote it, before the rewrite.
-                # A substitution happened, so BIG_DATA_URL_RE matched a URL
-                # here and there is certainly a second field to take.
-                sourceUrls.append(line.split(None, 1)[1].strip())
-            else:
-                counts["unmatchedHost"] += 1
-                if len(counts["unmatchedSamples"]) < 5:
-                    counts["unmatchedSamples"].append(line.strip())
+            words = line.split(None, 1)
+            if len(words) == 2:
+                bigDataUrls.append(words[1].strip())
         else:
             stripped = line.lstrip()
             for setting in FETCHED_SETTINGS:
@@ -181,6 +225,28 @@ def transformStanza(lines, db, counts, sourceUrls):
         counts["parentAdded"] += 1
 
     return out
+
+
+def checkBigDataUrls(db, urls, mirrorUrl, listing):
+    """Look each bigDataUrl up in the mirror listing.
+
+    Returns a (db, url, reason) tuple for each one that will not resolve:
+    "missing" if it points into the mirror but the file is not there, "empty"
+    if the file is there with no content, "off-mirror" if it does not point into
+    the mirror at all.
+    """
+    prefix = mirrorUrl.rstrip("/") + "/data/"
+    problems = []
+    for url in urls:
+        if not url.startswith(prefix):
+            problems.append((db, url, "off-mirror"))
+            continue
+        size = listing.get("data/" + url[len(prefix):])
+        if size is None:
+            problems.append((db, url, "missing"))
+        elif size == 0:
+            problems.append((db, url, "empty"))
+    return problems
 
 
 def writeRaFiles(stanzas, destDbDir, maxBytes):
@@ -263,6 +329,59 @@ def referencedSupportFiles(trackDbPath):
     return referenced
 
 
+def hubGenomes(sourceDir):
+    """Assemblies declared in the hub's genomes file, or None if it cannot be read.
+
+    The genomes file is named by hub.txt's genomesFile setting, as in
+    methbaseDownload.
+    """
+    genomesFile = None
+    try:
+        with open(os.path.join(sourceDir, "hub.txt")) as fh:
+            for line in fh:
+                words = line.split(None, 1)
+                if len(words) == 2 and words[0] == "genomesFile":
+                    genomesFile = words[1].strip()
+    except OSError as e:
+        sys.stderr.write("WARNING: cannot read hub.txt: %s\n" % e)
+        return None
+    if genomesFile is None:
+        sys.stderr.write("WARNING: hub.txt has no genomesFile setting\n")
+        return None
+
+    genomes = []
+    try:
+        with open(os.path.join(sourceDir, genomesFile)) as fh:
+            for line in fh:
+                words = line.split(None, 1)
+                if len(words) == 2 and words[0] == "genome":
+                    genomes.append(words[1].strip())
+    except OSError as e:
+        sys.stderr.write("WARNING: cannot read %s: %s\n" % (genomesFile, e))
+        return None
+    return genomes
+
+
+def checkGenomes(sourceDir, dbs):
+    """Warn where genomes.txt and the assembly directories disagree.
+
+    An assembly declared but never published upstream has no directory in the
+    mirror (aplCal1 was the first, in 2026-09).  methbaseDownload already
+    reports those, but a second report here costs nothing.
+    """
+    genomes = hubGenomes(sourceDir)
+    if genomes is None:
+        return
+    for db in sorted(set(genomes) - set(dbs)):
+        sys.stderr.write(
+            "WARNING: %s is listed in the hub's genomes file but has no trackDb "
+            "directory; it was skipped\n" % db)
+    for db in sorted(set(dbs) - set(genomes)):
+        sys.stderr.write(
+            "WARNING: %s has a directory but is not listed in the hub's genomes "
+            "file; it is being processed anyway\n" % db)
+
+
 def validateSource(sourceDir, dbs):
     """Check every assembly before anything gets written.
 
@@ -315,6 +434,10 @@ def processDb(srcDbDir, destDbDir, db, maxBytes):
             continue
         if name == "trackDb.txt":
             continue
+        if name.endswith(".tmp"):
+            # methbaseDownload writes each file via a .tmp and a rename, so one
+            # left here is a write that was interrupted or still in progress.
+            continue
         if name.endswith(".tsv") or name.endswith(".json"):
             shutil.copy2(path, os.path.join(destDbDir, name))
             support.append(name)
@@ -325,19 +448,18 @@ def processDb(srcDbDir, destDbDir, db, maxBytes):
     with open(trackDbPath) as fh:
         stanzas = splitStanzas(fh.read())
 
-    counts = {"bigDataUrl": 0, "unmatchedHost": 0, "unmatchedSamples": [],
-              "parentAdded": 0}
+    counts = {"parentAdded": 0}
     for setting in FETCHED_SETTINGS:
         counts[setting] = 0
 
-    sourceUrls = []
-    transformed = [transformStanza(lines, db, counts, sourceUrls)
+    bigDataUrls = []
+    transformed = [transformStanza(lines, db, counts, bigDataUrls)
                    for lines in stanzas]
     written = writeRaFiles(transformed, destDbDir, maxBytes)
 
     nbytes = sum(os.path.getsize(os.path.join(destDbDir, n)) for n in written)
     return {"db": db, "stanzas": len(stanzas), "files": written, "bytes": nbytes,
-            "support": support, "counts": counts, "sourceUrls": sourceUrls}
+            "support": support, "counts": counts, "bigDataUrls": bigDataUrls}
 
 
 COPY_SCRIPT_TEMPLATE = r'''#!/bin/bash
@@ -354,8 +476,9 @@ COPY_SCRIPT_TEMPLATE = r'''#!/bin/bash
 # script has to stay put.  Deleting or moving it breaks every track.
 #
 # This deliberately makes no other edits.  Adding "include methbase2.ra" to an
-# assembly's trackDb.ra, and defining the dnaMethylation supertrack the
-# composites hang off of (which is where "group" gets set), are done by hand.
+# assembly's trackDb.ra, defining the dnaMethylation supertrack the composites
+# hang off of (which is where "group" gets set), and removing methbase2*.ra
+# files this update no longer writes are done by hand.
 
 set -o errexit -o nounset -o pipefail
 
@@ -368,6 +491,10 @@ GBDB_ROOT="%(gbdbRoot)s"
 GBDB_SUBDIR="%(gbdbSubdir)s"
 
 DBS="%(dbList)s"
+
+# How many bigDataUrls processMethbaseHub found that do not resolve on the
+# mirror; they are listed in %(missingName)s.
+MISSING_COUNT=%(missingCount)d
 
 # These are substituted in when this script is generated, and are used to build
 # paths for mkdir, rm, and ln below.  Empty values would point those at the wrong
@@ -465,6 +592,19 @@ for db in $DBS; do
     fi
 done
 
+# methbase2*.ra files already in the tree that this update does not write --
+# a part left over from a longer split chain, or an older layout's file -- are
+# no longer included by anything, so call them out in the mail too.
+staleFiles=""
+for db in $DBS; do
+    for f in "${dbPath[$db]}/"methbase2*.ra; do
+        base=$(basename "$f")
+        if [ ! -f "$here/$db/$base" ]; then
+            staleFiles="$staleFiles $f"
+        fi
+    done
+done
+
 run() {
     if [ -n "$dryRun" ]; then
         echo "  would run: $*"
@@ -513,14 +653,19 @@ break the tracks.
 Those $GBDB_ROOT files still need to go out to production.  They are listed one
 per line in $here/%(gbdbManifestName)s.  They are symlinks, so
 whatever pushes them has to follow the link rather than copy it.
-
-Check as well that the bigData files are on hgdownload.  Every track's
-bigDataUrl was rewritten to point under %(hubMirrorUrl)s, and the
-contributor URLs they came from are listed one per line in
-$here/%(hgdownloadManifestName)s.  Any of those that has not been
-mirrored is a broken track, so confirm the whole list is there before these
-stanzas reach production.
 "
+if [ "$MISSING_COUNT" -gt 0 ]; then
+    mailBody="$mailBody
+When these files were built, $MISSING_COUNT bigDataUrl(s) did not resolve on the
+mirror under %(mirrorUrl)s/data/.  They are listed one per line,
+with the reason, in $here/%(missingName)s.  Each one is a broken
+track, so fix the mirror or drop those stanzas before they reach production.
+"
+else
+    mailBody="$mailBody
+Every bigDataUrl was found on the mirror when these files were built.
+"
+fi
 if [ -n "$newDbs" ]; then
     mailBody="$mailBody
 These assemblies had no methbase2.ra before this update:"
@@ -535,6 +680,16 @@ a dnaMethylation supertrack for the composite to hang off of."
 else
     mailBody="$mailBody
 Every assembly already had a methbase2.ra; no new include lines should be needed."
+fi
+if [ -n "$staleFiles" ]; then
+    mailBody="$mailBody
+
+These files were already in the trackDb tree but are not part of this update,
+so nothing includes them any more.  Check, then git rm them:"
+    for f in $staleFiles; do
+        mailBody="$mailBody
+    $f"
+    done
 fi
 
 if [ -n "$dryRun" ]; then
@@ -551,10 +706,9 @@ fi
 def writeManifest(destDir, name, entries):
     """Write one entry per line to destDir/name, so it can be fed to a tool.
 
-    Used for both gbdb_manifest (the /gbdb paths copyMethbaseFiles.sh creates
-    links at -- symlinks into destDir, so whatever pushes them to production has
-    to follow them rather than copy the links themselves) and
-    hgdownload_manifest (the contributor URLs to be mirrored).
+    Used for gbdb_manifest (the /gbdb paths copyMethbaseFiles.sh creates links
+    at -- symlinks into destDir, so whatever pushes them to production has to
+    follow them rather than copy the links themselves) and missing_bigData.
     """
     path = os.path.join(destDir, name)
     with open(path, "w") as fh:
@@ -563,7 +717,7 @@ def writeManifest(destDir, name, entries):
     return path
 
 
-def writeCopyScript(destDir, dbs):
+def writeCopyScript(destDir, dbs, mirrorUrl, missingCount):
     path = os.path.join(destDir, "copyMethbaseFiles.sh")
     with open(path, "w") as fh:
         fh.write(COPY_SCRIPT_TEMPLATE % {
@@ -571,32 +725,18 @@ def writeCopyScript(destDir, dbs):
             "gbdbRoot": GBDB_ROOT,
             "gbdbSubdir": GBDB_SUBDIR,
             "gbdbManifestName": GBDB_MANIFEST_NAME,
-            "hgdownloadManifestName": HGDOWNLOAD_MANIFEST_NAME,
-            "hubMirrorUrl": HUB_MIRROR_URL})
+            "missingName": MISSING_BIG_DATA_NAME,
+            "missingCount": missingCount,
+            "mirrorUrl": mirrorUrl.rstrip("/")})
     os.chmod(path, os.stat(path).st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
     return path
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Convert a MethBase2 track hub into trackDb .ra files.")
-    parser.add_argument("sourceDir", help="hub directory to read (must exist)")
-    parser.add_argument("destDir", help="directory to create and write into (must not exist)")
-    parser.add_argument("--max-ra-size", type=float, default=3.0, metavar="MB",
-                        help="split .ra files larger than this many MB (default: 3)")
-    args = parser.parse_args()
-
-    if not os.path.isdir(args.sourceDir):
-        raise SystemExit("ERROR: source directory does not exist: %s" % args.sourceDir)
-    if os.path.exists(args.destDir):
-        raise SystemExit("ERROR: destination already exists: %s" % args.destDir)
-    if args.max_ra_size <= 0:
-        raise SystemExit("ERROR: --max-ra-size must be positive")
-    maxBytes = int(args.max_ra_size * 1024 * 1024)
-
+def convertHub(sourceDir, destDir, maxBytes, mirrorUrl, listing):
+    """Turn the hub copy in sourceDir into destDir's .ra files, script and manifests."""
     dbs = []
-    for name in sorted(os.listdir(args.sourceDir)):
-        if not os.path.isdir(os.path.join(args.sourceDir, name)):
+    for name in sorted(os.listdir(sourceDir)):
+        if not os.path.isdir(os.path.join(sourceDir, name)):
             continue
         if name.startswith("."):
             # .git and friends; never an assembly.
@@ -609,67 +749,98 @@ def main():
                 % name)
         dbs.append(name)
     if not dbs:
-        raise SystemExit("ERROR: no assembly subdirectories in %s" % args.sourceDir)
+        raise SystemExit("ERROR: no assembly subdirectories in %s" % sourceDir)
 
-    validateSource(args.sourceDir, dbs)
+    checkGenomes(sourceDir, dbs)
+    validateSource(sourceDir, dbs)
 
-    os.makedirs(args.destDir)
+    os.makedirs(destDir)
 
-    totalUnmatched = 0
-    unmatchedSamples = []
     gbdbManifest = []
-    # A file shared between two assemblies would otherwise be fetched twice.
-    # Dedupe rather than sort, so the manifest stays in trackDb order and two
-    # runs of the same delivery produce identical files.
-    hgdownloadManifest = []
-    seenUrls = set()
-    duplicateUrls = 0
+    missing = []
     for db in dbs:
-        summary = processDb(os.path.join(args.sourceDir, db),
-                            os.path.join(args.destDir, db), db, maxBytes)
+        summary = processDb(os.path.join(sourceDir, db),
+                            os.path.join(destDir, db), db, maxBytes)
         for name in summary["support"]:
             gbdbManifest.append("%s/%s" % (gbdbDir(db), name))
-        for url in summary["sourceUrls"]:
-            if url in seenUrls:
-                duplicateUrls += 1
-                continue
-            seenUrls.add(url)
-            hgdownloadManifest.append(url)
-        counts = summary["counts"]
-        totalUnmatched += counts["unmatchedHost"]
-        for sample in counts["unmatchedSamples"]:
-            if len(unmatchedSamples) < 5:
-                unmatchedSamples.append("%s: %s" % (db, sample))
+        missing.extend(checkBigDataUrls(db, summary["bigDataUrls"], mirrorUrl,
+                                        listing))
         print("%-10s %6d stanzas  %8.2f MB  %d file(s): %s"
               % (db, summary["stanzas"], summary["bytes"] / 1048576.0,
                  len(summary["files"]), " ".join(summary["files"])))
 
-    scriptPath = writeCopyScript(args.destDir, dbs)
-    gbdbPath = writeManifest(args.destDir, GBDB_MANIFEST_NAME, gbdbManifest)
-    hgdownloadPath = writeManifest(args.destDir, HGDOWNLOAD_MANIFEST_NAME,
-                                   hgdownloadManifest)
+    scriptPath = writeCopyScript(destDir, dbs, mirrorUrl, len(missing))
+    gbdbPath = writeManifest(destDir, GBDB_MANIFEST_NAME, gbdbManifest)
+    missingPath = writeManifest(destDir, MISSING_BIG_DATA_NAME,
+                                ["\t".join(m) for m in missing])
 
     print()
-    print("%d assemblies written to %s" % (len(dbs), os.path.abspath(args.destDir)))
+    print("%d assemblies written to %s" % (len(dbs), os.path.abspath(destDir)))
     print("copy script: %s" % os.path.abspath(scriptPath))
     print("gbdb manifest: %s (%d file(s) to push to production)"
           % (os.path.abspath(gbdbPath), len(gbdbManifest)))
-    print("hgdownload manifest: %s (%d URL(s)%s that must be mirrored under %s)"
-          % (os.path.abspath(hgdownloadPath), len(hgdownloadManifest),
-             ", %d duplicate(s) dropped" % duplicateUrls if duplicateUrls else "",
-             HUB_MIRROR_URL))
-    print("Those files have to be on hgdownload before these .ra files go out;")
-    print("the rewritten bigDataUrl settings point at them.")
     print("Keep this directory: %s/<db>/%s/ will link to the .tsv and .json files"
           % (GBDB_ROOT, GBDB_SUBDIR))
     print("in it, so moving or deleting it breaks the tracks.")
-    if totalUnmatched:
+    if missing:
+        byReason = {}
+        for m in missing:
+            byReason[m[2]] = byReason.get(m[2], 0) + 1
         print()
-        print("WARNING: %d bigDataUrl line(s) did not point at %s and were left "
-              "unchanged." % (totalUnmatched, SOURCE_HOST))
-        for sample in unmatchedSamples:
-            print("    %s" % sample)
-        print("Check whether the contributor changed hosts before installing these files.")
+        print("WARNING: %d bigDataUrl(s) do not resolve on the mirror (%s), listed in %s:"
+              % (len(missing),
+                 ", ".join("%d %s" % (n, r) for r, n in sorted(byReason.items())),
+                 os.path.abspath(missingPath)))
+        for db, url, reason in missing[:5]:
+            print("    %s: %s (%s)" % (db, url, reason))
+        print("Each is a broken track; fix the mirror or drop those stanzas before "
+              "installing these files.")
+    else:
+        print("All bigDataUrls found on the mirror.")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Convert the hgdownload mirror of the MethBase2 track hub into "
+                    "trackDb .ra files.")
+    parser.add_argument("destDir", help="directory to create and write into (must not exist)")
+    parser.add_argument("--max-ra-size", type=float, default=3.0, metavar="MB",
+                        help="split .ra files larger than this many MB (default: 3)")
+    parser.add_argument("--source-dir", metavar="DIR",
+                        help="local copy of the mirror's hub/ directory to read, "
+                             "instead of copying it from hgdownload")
+    parser.add_argument("--host", default=DOWNLOAD_HOST,
+                        help="account and host holding the mirror (default: %(default)s)")
+    parser.add_argument("--mirror-dir", default=MIRROR_DIR,
+                        help="mirror directory on --host (default: %(default)s)")
+    parser.add_argument("--mirror-url", default=MIRROR_URL,
+                        help="url the mirror is served at (default: %(default)s)")
+    parser.add_argument("--tmp-dir", default=TMP_ROOT,
+                        help="where to make the scratch copy of hub/ (default: %(default)s)")
+    args = parser.parse_args()
+
+    if args.source_dir is not None and not os.path.isdir(args.source_dir):
+        raise SystemExit("ERROR: source directory does not exist: %s" % args.source_dir)
+    if os.path.exists(args.destDir):
+        raise SystemExit("ERROR: destination already exists: %s" % args.destDir)
+    if args.max_ra_size <= 0:
+        raise SystemExit("ERROR: --max-ra-size must be positive")
+    maxBytes = int(args.max_ra_size * 1024 * 1024)
+
+    # The listing is needed either way, and is the cheaper of the two remote
+    # steps, so a broken ssh setup fails here before anything is copied.
+    listing = listMirrorData(args.host, args.mirror_dir)
+
+    tmpDir = None
+    if args.source_dir is not None:
+        sourceDir = args.source_dir
+    else:
+        tmpDir, sourceDir = fetchHub(args.host, args.mirror_dir, args.tmp_dir)
+    try:
+        convertHub(sourceDir, args.destDir, maxBytes, args.mirror_url, listing)
+    finally:
+        if tmpDir is not None:
+            shutil.rmtree(tmpDir)
 
 
 if __name__ == "__main__":
