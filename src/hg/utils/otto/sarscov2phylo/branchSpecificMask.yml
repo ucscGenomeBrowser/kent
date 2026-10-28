@@ -184,7 +184,8 @@ PJ.2.1:
     representativeBacktrack: 1
     sites: [ 21654  # Fede requests masking of deleted base 21654 (false subst in NYULH samples) 2026-09-25
            ]
-    reversions: [ A21627C # Same NYULH samples also have reversion 2026-09-25
+    reversions: [ A21627C, # Same NYULH samples also have reversion 2026-09-25
+                  T23423C, # Not a reversion, it's deleted - email from FedeGueli
                 ]
 
 RV.1:
