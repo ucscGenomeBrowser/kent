@@ -13,9 +13,10 @@ microRNAs that are curated by hand from small RNA sequencing data with uniform c
 for biogenesis and a nomenclature that follows the evolutionary history of each family.
 The track has 457 loci of 404 genes. Each item is a primary miRNA region as defined by
 MirGeneDB: the precursor hairpin plus 30 nucleotides on each side. The two arms of the
-hairpin are drawn on top of each item, colored by whether MirGeneDB annotates them as
-the dominant (mature) arm, the star arm, or as co-mature. For the larger, uncurated set of
-microRNAs registered in miRBase, see the <a href="hgTrackUi?g=mirBase">miRBase</a> track.
+hairpin are drawn below each item, colored by arm (5p or 3p); their names show whether
+MirGeneDB annotates them as the dominant (mature) arm, the star arm, or as co-mature. For
+the larger, uncurated set of
+microRNAs registered in miRBase, see the <a href="hgTrackUi?g=mirBaseV22_1">miRBase</a> track.
 </p>
 <p>
 Clicking an item opens a page with the miRBase ID and accessions, family, seed, the
@@ -29,16 +30,21 @@ nucleotides of the arms are highlighted in the colors of the track.
 Each item is labeled with its MirGeneDB ID, e.g. Mmu-Let-7-P1b. Some genes have
 several loci with the suffixes -v1 to -v4; these are variants of the same hairpin
 that MirGeneDB annotates with slightly different ends of the precursor and the arms. The
-arms are drawn as colored blocks over the item:
+arms are drawn as colored blocks below the item, in the same colors as in the
+<a href="hgTrackUi?g=mirBaseV22_1">miRBase</a> track:
 </p>
 <table class="stdTbl">
-  <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
-      <td>Dominant arm (5p or 3p), the mature miRNA</td></tr>
-  <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
-      <td>Star arm (5p* or 3p*), the passenger strand</td></tr>
-  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th>
-      <td>Co-mature arm (3p_co), both arms are about equally abundant</td></tr>
+  <tr><th style="background-color:#E69F00;width:2em">&nbsp;</th>
+      <td>5p arm, from the 5' side of the hairpin</td></tr>
+  <tr><th style="background-color:#56B4E9;width:2em">&nbsp;</th>
+      <td>3p arm, from the 3' side of the hairpin</td></tr>
 </table>
+<p>
+The arm names say which arm is dominant: no suffix for the dominant (mature) arm and
+* for the star (passenger) arm, e.g. Hsa-Mir-21_5p and Hsa-Mir-21_3p*. When both arms
+are about equally abundant, MirGeneDB marks one of them with _co (e.g. Hsa-Mir-431_3p_co)
+and both arms are co-mature; the structure on the details page labels both as such.
+</p>
 <p>
 The same colors mark the arm nucleotides in the structure on the details page. Items
 can be searched in the position box by MirGeneDB ID, gene name without the -v suffix,
@@ -91,9 +97,9 @@ from mm10 with liftOver, keeping a locus only if all its features map to mm39 wi
 unchanged lengths, which was the case for all 457 loci; the mm39 sequences, and so the
 structures and seeds, are identical to those on mm10. The steps are documented in the
 makeDoc files for
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm10/mirGeneDb.txt"
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm10/mirGeneDbV3_0.txt"
 target="_blank">mm10</a> and
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm39/mirGeneDb.txt"
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/mm39/mirGeneDbV3_0.txt"
 target="_blank">mm39</a>, and the scripts are in the
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mirGeneDb"
 target="_blank">kent source tree</a>.
@@ -105,13 +111,13 @@ The data can be explored interactively in table format with the
 <a href="hgTables">Table Browser</a> or the
 <a href="hgIntegrator">Data Integrator</a> and exported from there to
 spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>mirGeneDb</i>.
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>mirGeneDbV3_0</i>.
 </p>
 <p>
 For automated download and analysis, the annotation is stored in two bigBed files that
 can be downloaded from our download server, for
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm39/mirGeneDb/" target="_blank">mm39</a> and
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm10/mirGeneDb/" target="_blank">mm10</a>:
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm39/mirGeneDbV3_0/" target="_blank">mm39</a> and
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/mm10/mirGeneDbV3_0/" target="_blank">mm10</a>:
 <tt>mirGeneDb.bb</tt> has the primary regions with all fields shown on the details page,
 including the sequence and dot-bracket structure, and <tt>mirGeneDbArms.bb</tt> has the
 arms. Individual regions or the whole annotation can be obtained using our tool
@@ -121,7 +127,7 @@ binaries are on our
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
 target="_blank">download page</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mm39/mirGeneDb/mirGeneDb.bb
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/mm39/mirGeneDbV3_0/mirGeneDb.bb
 -chrom=chr19 -start=0 -end=61420004 stdout</tt>
 </p>
 <p>

@@ -12,8 +12,8 @@
 # miRBase 22.1 (DONE 2026-10-14)
 ##############################################################################
 
-mkdir -p /hive/data/genomes/hg38/bed/mirBase/download
-cd /hive/data/genomes/hg38/bed/mirBase/download
+mkdir -p /hive/data/genomes/hg38/bed/mirBaseV22_1/download
+cd /hive/data/genomes/hg38/bed/mirBaseV22_1/download
 
 # mirbase.org is often unreachable. The download script fetches
 # https://mirbase.org/download/hsa.gff3; on 2026-10-14 the host did not resolve,
@@ -35,7 +35,7 @@ bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh \
 #   - 899 mature names have no -5p/-3p suffix; their arm is taken from the half
 #     of the precursor they lie in.
 
-cd /hive/data/genomes/hg38/bed/mirBase
+cd /hive/data/genomes/hg38/bed/mirBaseV22_1
 # The build takes the sequence of every precursor from hg38, folds it with
 # RNAfold -d2 (ViennaRNA 2.7.2, /cluster/bin/x86_64/RNAfold), and writes the
 # track bigBed and the mature miRNA decorator bigBed.

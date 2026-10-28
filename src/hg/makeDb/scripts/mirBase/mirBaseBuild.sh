@@ -25,7 +25,7 @@ sort -k1,1 -k2,2n mirBase.unsorted.bed > mirBase.bed
 sort -k1,1 -k2,2n mirBaseArms.unsorted.bed > mirBaseArms.bed
 rm mirBase.unsorted.bed mirBaseArms.unsorted.bed
 
-bedToBigBed -tab -type=bed6+11 -as=$scriptDir/mirBase.as -extraIndex=name \
+bedToBigBed -tab -type=bed6+12 -as=$scriptDir/mirBase.as -extraIndex=name \
     mirBase.bed $sizes mirBase.bb
 bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
     mirBaseArms.bed $sizes mirBaseArms.bb

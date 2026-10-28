@@ -12,8 +12,8 @@
 # MirGeneDB 3.0 (DONE 2026-10-14)
 ##############################################################################
 
-mkdir -p /hive/data/genomes/hg38/bed/mirGeneDb/download
-cd /hive/data/genomes/hg38/bed/mirGeneDb/download
+mkdir -p /hive/data/genomes/hg38/bed/mirGeneDbV3_0/download
+cd /hive/data/genomes/hg38/bed/mirGeneDbV3_0/download
 
 # Three files: the BED with all features of all human loci (static file, dated
 # 2024-11-13 on the server, 280693 bytes), the GFF with the miRBase precursor
@@ -36,7 +36,7 @@ bash ~/kent/src/hg/makeDb/scripts/mirGeneDb/mirGeneDbDownload.sh
 #   - Genes that are not in miRBase have "None" as miRBase ID and accessions in
 #     the browse table; these become empty fields.
 
-cd /hive/data/genomes/hg38/bed/mirGeneDb
+cd /hive/data/genomes/hg38/bed/mirGeneDbV3_0
 # The build takes the sequence of every pri region from hg38, folds it with
 # RNAfold -d2 (ViennaRNA 2.7.2, /cluster/bin/x86_64/RNAfold), and writes the
 # track bigBed and the arm decorator bigBed.
