@@ -15,6 +15,9 @@ fi
 buildDate=$1
 if [ $# == 2 ]; then
     startingTree=$2
+    echo "Using starting tree $startingTree instead of default daily tree."
+    echo "If gisaidAndPublic.$buildDate.metadata.tsv.gz is not consistent with that,"
+    echo "then modify this script to take an optional metadata input."
 else
     startingTree=gisaidAndPublic.$buildDate.masked.pb.gz
 fi
@@ -30,7 +33,10 @@ today=$(date +%F)
 cd $ottoDir/$buildDate
 
 # Make a list of leaves to keep in the lineageTree.
-python $scriptDir/make_lineage_tree_sample_list.py -i $startingTree -o lineageReps
+python $scriptDir/make_lineage_tree_sample_list.py \
+       -i $startingTree \
+       --input-metadata gisaidAndPublic.$buildDate.metadata.tsv.gz \
+       -o lineageReps
 
 # Extract the subtree of those leaves.
 $matUtils extract -i $startingTree -s lineageReps -o linReps.pb.gz
