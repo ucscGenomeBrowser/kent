@@ -15,6 +15,10 @@
 #      through the first blank line) and keep the subtrack stanzas.
 #   4. if that differs from what is committed, commit and push it.
 #
+# Only step 1 runs now. Steps 2-4 are commented out below: processMethbaseHub
+# builds the trackDb for every assembly, hg38 included, from the same mirror,
+# and these steps would overwrite its output.
+#
 # Silent when nothing changed, which is the otto contract. Any failure aborts
 # the run and prints to stderr, so cron mails it.
 #
@@ -61,40 +65,45 @@ trap 'fail "aborted at line $LINENO"' ERR
 ssh -o BatchMode=yes "$DOWNLOAD_HOST" "$REMOTE_SCRIPT -o $MIRROR_DIR" \
     || fail "mirror update failed on $DOWNLOAD_HOST - see $MIRROR_DIR/download.log"
 
-# 2. a stale tree would make the diff and the push meaningless
-cd "$KENT"
-git pull --ff-only --quiet || fail "git pull failed in $KENT"
-
-# 3. the header runs to the first blank line; everything after it is subtracks
-new=$(mktemp) || fail "mktemp failed"
-trap 'rm -f "$new"' EXIT
-curl -sSf "$MIRROR_URL/hub/hg38/trackDb.txt" | sed '1,/^$/d' > "$new" \
-    || fail "could not fetch hg38 trackDb from $MIRROR_URL"
-
-# guard against committing a truncated fetch or an error page
-lines=$(wc -l < "$new")
-[ "$lines" -ge "$MIN_LINES" ] || fail "hg38 trackDb looks wrong: only $lines lines"
-head -1 "$new" | grep -q '^track ' \
-    || fail "hg38 trackDb does not start with a track stanza after the header"
-grep -q "^bigDataUrl $MIRROR_URL/data/" "$new" \
-    || fail "hg38 trackDb bigDataUrls do not point at $MIRROR_URL/data/"
-
-# 4. nothing to do is the normal monthly outcome, and it stays silent
-if cmp -s "$new" "$RA"; then
-    exit 0
-fi
-
-changed=$(diff "$RA" "$new" | grep -c '^[<>]' || true)
-added=$(diff "$RA" "$new" | grep -c '^>' || true)
-removed=$(diff "$RA" "$new" | grep -c '^<' || true)
-
-cp "$new" "$RA"
-git add "$RA"
-git commit --no-verify --quiet -m \
-    "hg38 Methbase: refresh subtracks from the mirror, $changed lines changed ($added added, $removed removed), refs #34246" \
-    -- "$RA" || fail "git commit failed"
-git push --quiet || fail "git push failed"
-
-# an update happened, so say so - this is the one case that should mail
-echo "MethBase2: hg38 subtracks updated, $changed lines changed ($added added, $removed removed)"
-echo "committed $(git rev-parse --short HEAD) and pushed"
+# Steps 2-4 are disabled: the hg38 trackDb is now built from the mirror by
+# processMethbaseHub, along with every other assembly, and this would overwrite
+# that work with its own subtrack file.  Kept for reference until
+# processMethbaseHub itself is run from here.
+#
+# # 2. a stale tree would make the diff and the push meaningless
+# cd "$KENT"
+# git pull --ff-only --quiet || fail "git pull failed in $KENT"
+#
+# # 3. the header runs to the first blank line; everything after it is subtracks
+# new=$(mktemp) || fail "mktemp failed"
+# trap 'rm -f "$new"' EXIT
+# curl -sSf "$MIRROR_URL/hub/hg38/trackDb.txt" | sed '1,/^$/d' > "$new" \
+#     || fail "could not fetch hg38 trackDb from $MIRROR_URL"
+#
+# # guard against committing a truncated fetch or an error page
+# lines=$(wc -l < "$new")
+# [ "$lines" -ge "$MIN_LINES" ] || fail "hg38 trackDb looks wrong: only $lines lines"
+# head -1 "$new" | grep -q '^track ' \
+#     || fail "hg38 trackDb does not start with a track stanza after the header"
+# grep -q "^bigDataUrl $MIRROR_URL/data/" "$new" \
+#     || fail "hg38 trackDb bigDataUrls do not point at $MIRROR_URL/data/"
+#
+# # 4. nothing to do is the normal monthly outcome, and it stays silent
+# if cmp -s "$new" "$RA"; then
+#     exit 0
+# fi
+#
+# changed=$(diff "$RA" "$new" | grep -c '^[<>]' || true)
+# added=$(diff "$RA" "$new" | grep -c '^>' || true)
+# removed=$(diff "$RA" "$new" | grep -c '^<' || true)
+#
+# cp "$new" "$RA"
+# git add "$RA"
+# git commit --no-verify --quiet -m \
+#     "hg38 Methbase: refresh subtracks from the mirror, $changed lines changed ($added added, $removed removed), refs #34246" \
+#     -- "$RA" || fail "git commit failed"
+# git push --quiet || fail "git push failed"
+#
+# # an update happened, so say so - this is the one case that should mail
+# echo "MethBase2: hg38 subtracks updated, $changed lines changed ($added added, $removed removed)"
+# echo "committed $(git rev-parse --short HEAD) and pushed"

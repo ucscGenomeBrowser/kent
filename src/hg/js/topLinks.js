@@ -18,6 +18,9 @@
 var topLinks = (function() {
     "use strict";
 
+    // Shown when an AJAX request fails without a reply; also used by hgBlat.js.
+    var serverUnreachableMsg = "Could not reach the server. Please try again once you are connected to the internet, or reload the page if you are connected to the internet.";
+
     // Small helper to build an element with properties and inline styles set from the DOM
     // (assigning to element.style.* is CSP-safe, unlike a style="" attribute in markup).
     function el(tag, props, styles) {
@@ -189,7 +192,7 @@ var topLinks = (function() {
             },
             error: function() {
                 statusEl.style.color = "#a00";
-                statusEl.textContent = "Could not reach the server. Please try again.";
+                statusEl.textContent = serverUnreachableMsg;
                 if (onFail) onFail();
             }
         });
@@ -412,7 +415,7 @@ var topLinks = (function() {
                 showCreatePrompt(body, opts, "", name);
             }, function(msg) {
                 prep.style.color = "#a00";
-                prep.textContent = msg || "Could not reach the server. Please try again.";
+                prep.textContent = msg || serverUnreachableMsg;
             });
         }
     }
@@ -626,5 +629,5 @@ var topLinks = (function() {
         init();
 
     return {showLoginDialog: showLoginDialog, showShareDialog: showShareDialog,
-            shareUrl: shareUrlDialog};
+            shareUrl: shareUrlDialog, serverUnreachableMsg: serverUnreachableMsg};
 })();

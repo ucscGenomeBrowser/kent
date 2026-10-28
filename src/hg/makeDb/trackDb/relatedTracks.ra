@@ -127,6 +127,18 @@ hg38 mei longReadVariants Long-read structural variants across multiple cohorts 
 hs1 longReadVariants mei Polymorphic Mobile Element Insertions (Alu, L1, SVA, HERVK, snRNA) from HGSVC3 long-read assemblies
 hs1 mei longReadVariants Long-read structural variants across multiple cohorts (parent SV callsets for the HGSVC3 MEI track)
 
+# gnomAD long-read SVs (release 0.1, All of Us + HPRC/HGSVC):
+hg38 gnomadLrSv longReadVariants Long-read structural variants from many other cohorts
+hg38 longReadVariants gnomadLrSv Long-read SVs from gnomAD, All of Us and HPRC/HGSVC cohorts merged, with allele frequencies
+hg38 gnomadLrSv aou1kSv Earlier SV callset from the same 1,027 All of Us samples
+hg38 aou1kSv gnomadLrSv Newer gnomAD callset that includes the same 1,027 All of Us samples
+hg38 gnomadLrSv gnomadStructuralVariants Short-read structural variants from gnomAD v4.1
+hg38 gnomadStructuralVariants gnomadLrSv Long-read structural variants from gnomAD, with many more insertions
+hg38 gnomadLrSv mei Polymorphic mobile element insertions from HGSVC3 long-read assemblies
+hg38 mei gnomadLrSv Long-read SVs from gnomAD, with Alu, LINE and SVA insertion subtypes
+hg38 gnomadLrSv gnomadLrTr Tandem repeat length variation from the same gnomAD long-read samples
+hg38 gnomadLrTr gnomadLrSv Structural variants of 50 bp or more from the same gnomAD long-read samples
+
 # EVE cross-links:
 hg38 eve alphaMissense A similar deep-learning missense pathogenicity predictor
 hg38 alphaMissense eve A missense pathogenicity predictor trained on evolutionary sequence variation
@@ -336,6 +348,13 @@ hg38 strVar simpleRepeat Tandem repeats annotated in the reference sequence by T
 hg38 simpleRepeat strVar Population variation in the length of tandem repeats
 hg38 ~trexplorer webstr Another genome-wide tandem repeat catalog with per-locus allele distributions
 hg38 ~microsat simpleRepeat Another annotation of short tandem repeats in the reference sequence
+hg38 gnomadLrTr strVar Tandem repeat variation from other population studies
+hg38 strVar gnomadLrTr Tandem repeat allele sizes at 4.6 million loci from gnomAD long-read genomes
+hg38 gnomadLrTr gnomadStr Short-read genotypes at disease-associated repeat loci, from gnomAD v3.1.3
+hg38 gnomadStr gnomadLrTr Long-read allele sizes at 4.6 million tandem repeat loci, from gnomAD
+hg38 gnomadLrTr trexplorer The TR catalog that most gnomAD long-read TR loci come from
+hg38 trexplorer gnomadLrTr Long-read allele sizes at TRExplorer and Vamos loci, from gnomAD
+hg38 >gnomadLrTr simpleRepeat Tandem repeats annotated in the reference sequence by Tandem Repeats Finder
 
 hg19 ~microsat simpleRepeat Another annotation of short tandem repeats in the reference sequence
 

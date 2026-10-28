@@ -4124,7 +4124,18 @@ if (!tdbIsDownloadsOnly(tdb))
             if (canPack == FALSE && tdbIsCompositeChild(tdb))
                 canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
             }
-        else                               // But hgTrackUi page should show local vis
+        else if (tdbIsCompositeChild(tdb) && !tdbIsFacetedComposite(tdbGetComposite(tdb)))
+            {
+            // A subtrack's own page should show the vis its row on the composite page shows.
+            // Its local vis is usually just the trackDb default inherited from the composite,
+            // often hide, and submitting that would pin the subtrack to it.  The checkbox is
+            // left out so that submitting here doesn't pin an unchecked subtrack to hide.
+            // Faceted children keep their local vis, as the parent is only a ceiling there.
+            vis = tdbVisLimitedByAncestors(cart, tdb, FALSE, FALSE);
+            if (canPack == FALSE)
+                canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
+            }
+        else                               // Other tracks' hgTrackUi page should show local vis
             vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis)));
 
         if (tdbIsSuperTrackChild(tdb))
@@ -4571,8 +4582,8 @@ if (!matchFound)
                            "table of per-subtrack metadata and the JSON file of facet "
                            "colors used to build the filter/metadata table on this "
                            "page.  For a track hub, such a URL must point to a file "
-                           "inside the hub's own directory (alongside hub.txt), not an "
-                           "external URL.", track);
+                           "inside the hub's own directory (alongside hub.txt or within "
+                           "a subdirectory there), not an external URL.", track);
     puts("Status: 400 Bad Request");
     errAbort("%s", dyStringContents(dy));
     }

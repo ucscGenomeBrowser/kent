@@ -670,6 +670,21 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    assert(sgd != NULL);
 	    checkOneSubGroups(tdb->track, childTdb, sgd);
 	    }
+
+	// Container (multiWig) subtracks are listed on the composite's hgTrackUi page in place
+	// of their children, so they must declare their subGroups as well.
+	struct slRef *rowList = trackDbListGetRefsToDescendantLeavesOrContainers(tdb->subtracks);
+	struct subGroupData *sgd =  hashFindVal(compositeHash, tdb->track);
+	assert(sgd != NULL);
+	for (child = rowList; child != NULL; child = child->next)
+	    {
+	    struct trackDb *childTdb = child->val;
+	    if (childTdb->subtracks == NULL)
+		continue;  // a leaf, already checked above
+	    verbose(2, "  checking container child %s\n",childTdb->track);
+	    checkOneSubGroups(tdb->track, childTdb, sgd);
+	    }
+	slFreeList(&rowList);
         }
     }
 }

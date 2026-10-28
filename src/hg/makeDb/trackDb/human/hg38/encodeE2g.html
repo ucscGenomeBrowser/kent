@@ -1,0 +1,142 @@
+<h2>Description</h2>
+
+<p>
+This track shows predicted regulatory links between enhancers and the genes they control.
+The predictions were made by the ENCODE-rE2G model in 1,458 human biosamples: tissues,
+primary cells, cell lines, <em>in vitro</em> differentiated cells and organoids. ENCODE-rE2G
+was developed by the Engreitz lab as part of ENCODE4. It is a logistic regression model,
+trained on the results of CRISPR enhancer perturbation screens. The model scores every candidate
+element and gene pair within 5 Mb, using features computed from chromatin accessibility
+(DNase-seq), such as the activity-by-contact (ABC) score, the distance to the gene and the
+number of other elements and genes in between.
+</p>
+
+<p>
+The track shows the thresholded predictions, the element-gene pairs that score above the cutoff
+the authors chose from the CRISPR benchmarks. It does not include the much larger set of all
+scored pairs.
+</p>
+
+<h2>Display Conventions</h2>
+
+<p>
+This is a faceted composite track. The table on the track settings page lists one row per
+biosample. It can be filtered by tissue, biosample classification, body system, treatment, donor
+sex and life stage, and searched by biosample, organ, treatment, donor and input experiment. The
+tissue groups are the GTEx tissues, with the tissue colors of the
+<a href="https://gtexportal.org/" target="_blank">GTEx portal</a>: each ENCODE biosample
+is assigned to the most similar GTEx tissue, and biosamples with no similar GTEx tissue, such as
+stem cells, placenta, eye and bone, are grouped separately. The colors are shown in the tissue
+filter only; all items in the browser are drawn in black. Each
+biosample has two data types:
+</p>
+
+<ul>
+<li><b>Element-gene links</b>: one arc per predicted link, from the regulatory element to the
+transcription start site of the target gene. The label is the target gene. Clicking an arc
+shows the ENCODE-rE2G score of the link.</li>
+<li><b>Elements</b>: the regulatory elements themselves, one item per element and target gene,
+labeled with the target gene. An element that regulates several genes is shown once for each of
+them. The score can be filtered on the track settings page, and so can the element class
+(promoter, genic or intergenic). Hovering over an item in pack or full mode shows its target
+gene, score and distance to the TSS.</li>
+</ul>
+
+<p>
+By default, the element-gene links of eight common ENCODE cell lines are shown: K562, GM12878,
+HepG2, H1, HCT116, A549, MCF-7 and IMR-90, all untreated.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+The thresholded predictions of all released ENCODE-rE2G annotations on GRCh38 were downloaded
+from the <a href="https://www.encodeproject.org/" target="_blank">ENCODE portal</a> through its
+API, in the bigInteract and bed formats. For each biosample, ENCODE-rE2G was run on one DNase-seq
+experiment, and a cell line with several DNase-seq experiments therefore has several annotations
+here, one per input experiment. The ENCODE accession of the input experiment is in the
+<em>Input experiment</em> column. Annotations of the "extended" ENCODE-rE2G model, available for
+K562 and GM12878, which also uses H3K27ac ChIP-seq and Hi-C, are not included.
+</p>
+
+<p>
+The bigInteract files were converted to make the gene name the item label and to draw all
+items in black. Some element
+coordinates in the original files were written in scientific notation (e.g.
+<tt>chr15:7.8e+07-78000500</tt>); the element names were rebuilt from the coordinates. The bed
+files were converted to bigBed, with the ENCODE-rE2G score scaled to 0-1000 as the bed score.
+Biosample, treatment and donor information is from the ENCODE annotation, biosample and donor
+records.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a>. From scripts, the data can be accessed
+through our <a href="https://api.genome.ucsc.edu">API</a>, one biosample and data type at a time,
+for example track=<i>encodeE2g_ENCSR171UQE_links</i> for the K562 links or
+<i>encodeE2g_ENCSR171UQE_elements</i> for the K562 elements. The track name <i>encodeE2g</i>
+refers to the whole set and holds no data of its own.
+</p>
+
+<p>
+For automated download and analysis, the files can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/encodeE2g/" target="_blank">our download
+server</a>, named by ENCODE annotation accession: <tt>&lt;accession&gt;.interact.bb</tt> and
+<tt>&lt;accession&gt;.elements.bb</tt>. The mapping from accession to biosample is in
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/encodeE2g/encodeE2g_metadata.tsv"
+target="_blank">encodeE2g_metadata.tsv</a>. The files can be converted to text with our tool
+<tt>bigBedToBed</tt>, which can be downloaded as a precompiled binary for your system from
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/encodeE2g/ENCSR171UQE.elements.bb
+-chrom=chr8 -start=127000000 -end=130000000 stdout</tt>.
+</p>
+
+<p>
+The original files, including the full predictions without a threshold, are available from the
+<a href="https://www.encodeproject.org/search/?type=Annotation&amp;annotation_type=element+gene+regulatory+interaction+predictions&amp;software_used.software.name=distal-regulation-encode_re2g"
+target="_blank">ENCODE portal</a>. The model code is at
+<a href="https://github.com/EngreitzLab/ENCODE_rE2G" target="_blank">github.com/EngreitzLab/ENCODE_rE2G</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Andreas Gschwind, Jesse Engreitz and the ENCODE consortium for making these predictions
+available.
+</p>
+
+<h2>References</h2>
+
+<p>
+Gschwind AR, Mualim KS, Karbalayghareh A, Sheth MU, Dey KK, Jagoda E, Nurtdinov RN, Xi W, Tan AS,
+Jones H <em>et al</em>.
+<a href="https://doi.org/10.1101/2023.11.09.563812" target="_blank">
+An encyclopedia of enhancer-gene regulatory interactions in the human genome</a>.
+<em>bioRxiv</em>. 2023 Nov 13;.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38014075" target="_blank">38014075</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10680627/" target="_blank">PMC10680627</a>
+</p>
+
+<p>
+Fulco CP, Nasser J, Jones TR, Munson G, Bergman DT, Subramanian V, Grossman SR, Anyoha R, Doughty
+BR, Patwardhan TA <em>et al</em>.
+<a href="https://doi.org/10.1038/s41588-019-0538-0" target="_blank">
+Activity-by-contact model of enhancer-promoter regulation from thousands of CRISPR
+perturbations</a>.
+<em>Nat Genet</em>. 2019 Dec;51(12):1664-1669.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/31784727" target="_blank">31784727</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6886585/" target="_blank">PMC6886585</a>
+</p>
+
+<p>
+Nasser J, Bergman DT, Fulco CP, Guckelberger P, Doughty BR, Patwardhan TA, Jones TR, Nguyen TH,
+Ulirsch JC, Lekschas F <em>et al</em>.
+<a href="https://doi.org/10.1038/s41586-021-03446-x" target="_blank">
+Genome-wide enhancer maps link risk variants to disease genes</a>.
+<em>Nature</em>. 2021 May;593(7858):238-243.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/33828297" target="_blank">33828297</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9153265/" target="_blank">PMC9153265</a>
+</p>

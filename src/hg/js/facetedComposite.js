@@ -89,6 +89,16 @@ $(function() {
         return bar >= 0 ? s.slice(0, bar) : s;
     };
 
+    // True if a quote at str[i] opens a quoted field: only whitespace before it
+    // since the field started, or it starts the label of an id|"label" value.
+    // An apostrophe inside a word, as in "Peyer's patch", is plain text;
+    // treating it as a quote swallowed the following tabs.
+    const opensQuote = (str, start, i) => {
+        if (str[i] !== '"' && str[i] !== "'") return false;
+        const before = str.slice(start, i).trim();
+        return before === "" || before.endsWith("|");
+    };
+
     // Split a TSV row on tabs, respecting double- or single-quoted fields.
     function parseTsvRow(str) {
         const fields = [];
@@ -100,7 +110,7 @@ $(function() {
                     inQuote = false;
                 }
                 i++;
-            } else if (str[i] === '"' || str[i] === "'") {
+            } else if (opensQuote(str, start, i)) {
                 q = str[i]; inQuote = true; i++;
             } else if (str[i] === '\t') {
                 fields.push(str.slice(start, i)); i++; start = i;
@@ -128,7 +138,7 @@ $(function() {
                     inQuote = false;
                 }
                 i++;
-            } else if (str[i] === '"' || str[i] === "'") {
+            } else if (opensQuote(str, start, i)) {
                 q = str[i]; inQuote = true; i++;
             } else if (str[i] === ',') {
                 tokens.push(str.slice(start, i).trim()); i++; start = i;

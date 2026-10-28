@@ -90,7 +90,9 @@ def main():
     # onlyVisibility stays, moved to dense: it is what keeps a reader out of
     # pack, which at 463 subtracks would be enormous.
     w("denseClick on\n")
-    w("visibility dense\n")
+    # visibility hide: the track starts off for everyone and is too prominent
+    # otherwise. Once switched on, onlyVisibility leaves dense as the only mode.
+    w("visibility hide\n")
     w("onlyVisibility dense\n")
     w("priority 30\n")
     # A whole chromosome holds a few thousand windows per haplotype, well over the
