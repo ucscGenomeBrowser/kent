@@ -241,6 +241,12 @@ return pmmReceiveTimeOut(pmm, ru, 0);
 }
 
 
+/* Microseconds to wait for each reply packet from hub or node before giving
+ * up.  The query itself was acknowledged, but that only means it was received,
+ * not that a reply will ever come (e.g. hub restarted or reply packets lost).
+ * Generous so that a busy hub never trips it. */
+#define PMREPLYTIMEOUT (10*60*1000000)
+
 void pmFetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
 /* Read everything you can from socket and output to file. */
 {
@@ -248,7 +254,7 @@ struct paraMultiMessage pmm;
 FILE *f = mustOpen(fileName, "w");
 /* ensure the multi-message response comes from the correct ip and has no duplicate msgs*/
 pmmInit(&pmm, pm);
-while (pmmReceive(&pmm, ru))
+while (pmmReceiveTimeOut(&pmm, ru, PMREPLYTIMEOUT))
     {
     if (pm->size == 0)
 	break;
@@ -317,7 +323,7 @@ struct paraMessage pm;
 pmInitFromName(&pm, host, paraHubPortStr);
 if (!pmSendStringWithRetries(&pm, ru, query))
     noWarnAbort();
-if (!pmReceive(&pm, ru))
+if (!pmReceiveTimeOut(&pm, ru, PMREPLYTIMEOUT))
     noWarnAbort();
 rudpClose(&ru);
 return cloneString(pm.data);
@@ -340,8 +346,10 @@ if (!pmSendStringWithRetries(&pm, ru, query))
     noWarnAbort();
 for (;;)
     {
-    if (!pmmReceive(&pmm, ru))
-	break;
+    /* Abort rather than return a partial list, which callers would
+     * take as complete (e.g. para would think queued jobs were lost). */
+    if (!pmmReceiveTimeOut(&pmm, ru, PMREPLYTIMEOUT))
+	noWarnAbort();
     if (pm.size == 0)
 	break;
     count = chopByChar(pm.data, '\n', row, ArraySize(row));
