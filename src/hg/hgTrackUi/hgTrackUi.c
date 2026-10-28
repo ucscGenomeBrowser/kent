@@ -4571,8 +4571,8 @@ if (!matchFound)
                            "table of per-subtrack metadata and the JSON file of facet "
                            "colors used to build the filter/metadata table on this "
                            "page.  For a track hub, such a URL must point to a file "
-                           "inside the hub's own directory (alongside hub.txt), not an "
-                           "external URL.", track);
+                           "inside the hub's own directory (alongside hub.txt or within "
+                           "a subdirectory there), not an external URL.", track);
     puts("Status: 400 Bad Request");
     errAbort("%s", dyStringContents(dy));
     }
