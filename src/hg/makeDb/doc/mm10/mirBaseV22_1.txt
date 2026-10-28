@@ -3,17 +3,17 @@
 # Mouse microRNA precursors from miRBase release 22.1 (https://mirbase.org/,
 # Kozomara et al. 2019, PMID 30423142), in the Non-coding RNA collection
 # (nonCodingRNAs, shared with mm39 in trackDb/mouse/). Same build as the hg38 track,
-# see doc/hg38/mirBase.txt for the notes on the source data and the folding. The
+# see doc/hg38/mirBaseV22_1.txt for the notes on the source data and the folding. The
 # miRBase mouse GFF is on GRCm38 (mm10), so no liftOver is needed here; the mm39 track
-# is lifted from this file, see doc/mm39/mirBase.txt.
+# is lifted from this file, see doc/mm39/mirBaseV22_1.txt.
 # Scripts: ~/kent/src/hg/makeDb/scripts/mirBase/
 
 ##############################################################################
 # miRBase 22.1 (DONE 2026-10-15)
 ##############################################################################
 
-mkdir -p /hive/data/genomes/mm10/bed/mirBase/download
-cd /hive/data/genomes/mm10/bed/mirBase/download
+mkdir -p /hive/data/genomes/mm10/bed/mirBaseV22_1/download
+cd /hive/data/genomes/mm10/bed/mirBaseV22_1/download
 # mirbase.org did not respond on 2026-10-15, so mmu.gff3 was copied from Andrea's
 # miRBase 22.1 download (373739 bytes, file date 2024-07-12):
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh mmu \
@@ -24,7 +24,7 @@ bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseDownload.sh mmu \
 # miRBase 22.1. mirbase.dat of 22.1 has 1234 mouse precursors; mmu-mir-590, -696,
 # -712, -714, -1194, -2183, -7228 and -7238 have no coordinates.
 
-cd /hive/data/genomes/mm10/bed/mirBase
+cd /hive/data/genomes/mm10/bed/mirBaseV22_1
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh mm10 mmu
 #   1227 precursor sequences
 #   1227 precursors, 2110 matures, 1227 folds

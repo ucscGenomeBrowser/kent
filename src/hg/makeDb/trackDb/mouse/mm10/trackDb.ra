@@ -436,8 +436,8 @@ parent jaspar on
 include tad.ra alpha
 
 include ../nonCodingRNAs.ra alpha
-include ../mirGeneDb.ra alpha
-include ../mirBase.ra alpha
+include ../mirGeneDbV3_0.ra alpha
+include ../mirBaseV22_1.ra alpha
 
 track tRNAs override
 superTrack nonCodingRNAs pack
