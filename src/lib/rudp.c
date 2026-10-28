@@ -434,7 +434,7 @@ int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize,
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. 
  * Also returns ip address of message source. If timeOut is nonzero,
- * it represents the timeout in milliseconds.  It will set errno to
+ * it represents the timeout in microseconds.  It will set errno to
  * ETIMEDOUT in this case.*/
 {
 char inBuf[udpEthMaxSize];
