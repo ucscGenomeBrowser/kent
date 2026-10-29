@@ -3,25 +3,25 @@
 # Mouse microRNA precursors from miRBase release 22.1 (https://mirbase.org/,
 # Kozomara et al. 2019, PMID 30423142), in the Non-coding RNA collection
 # (nonCodingRNAs, shared with mm10 in trackDb/mouse/). The miRBase mouse GFF is on
-# GRCm38 (mm10), so the mm10 file (doc/mm10/mirBase.txt) is lifted to mm39, and the
-# track is then built as on mm10 and hg38 (see doc/hg38/mirBase.txt).
+# GRCm38 (mm10), so the mm10 file (doc/mm10/mirBaseV22_1.txt) is lifted to mm39, and the
+# track is then built as on mm10 and hg38 (see doc/hg38/mirBaseV22_1.txt).
 # Scripts: ~/kent/src/hg/makeDb/scripts/mirBase/
 
 ##############################################################################
 # miRBase 22.1 (DONE 2026-10-15)
 ##############################################################################
 
-mkdir -p /hive/data/genomes/mm39/bed/mirBase/download
-cd /hive/data/genomes/mm39/bed/mirBase/download
+mkdir -p /hive/data/genomes/mm39/bed/mirBaseV22_1/download
+cd /hive/data/genomes/mm39/bed/mirBaseV22_1/download
 # Each precursor is lifted together with the matures inside it; it is kept only if
 # all of them map, to the chromosome and strand of the precursor, with unchanged
 # lengths:
 python3 ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseLift.py \
-    /hive/data/genomes/mm10/bed/mirBase/download/mmu.gff3 \
+    /hive/data/genomes/mm10/bed/mirBaseV22_1/download/mmu.gff3 \
     /hive/data/genomes/mm10/bed/liftOver/mm10ToMm39.over.chain.gz mmu.gff3
 #   1227 precursor loci, 1227 lifted, 0 left out
 
-cd /hive/data/genomes/mm39/bed/mirBase
+cd /hive/data/genomes/mm39/bed/mirBaseV22_1
 bash ~/kent/src/hg/makeDb/scripts/mirBase/mirBaseBuild.sh mm39 mmu
 #   1227 precursor sequences
 #   1227 precursors, 2110 matures, 1227 folds

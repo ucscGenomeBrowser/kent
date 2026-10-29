@@ -25,13 +25,13 @@ sort -k1,1 -k2,2n mirGeneDb.unsorted.bed > mirGeneDb.bed
 sort -k1,1 -k2,2n mirGeneDbArms.unsorted.bed > mirGeneDbArms.bed
 rm mirGeneDb.unsorted.bed mirGeneDbArms.unsorted.bed
 
-bedToBigBed -tab -type=bed6+13 -as=$scriptDir/mirGeneDb.as -extraIndex=name \
+bedToBigBed -tab -type=bed6+16 -as=$scriptDir/mirGeneDb.as -extraIndex=name \
     mirGeneDb.bed $sizes mirGeneDb.bb
 bedToBigBed -tab -type=bed12+4 -as=$scriptDir/../../../lib/decoration.as \
     mirGeneDbArms.bed $sizes mirGeneDbArms.bb
 
 # search index, case-insensitive: MirGeneDB ID, the gene name without the variant
 # (-vN), miRBase ID, family, MI and MIMAT accessions
-awk -F'\t' '{g=$4; sub(/-v[0-9]+$/, "", g); print $4, g, $7, $8, $10, $11, $12}' mirGeneDb.bed \
+awk -F'\t' '{g=$4; sub(/-v[0-9]+$/, "", g); print $4, g, $8, $9, $11, $12, $13}' mirGeneDb.bed \
     > mirGeneDb.ix.txt
 ixIxx mirGeneDb.ix.txt mirGeneDb.ix mirGeneDb.ixx
