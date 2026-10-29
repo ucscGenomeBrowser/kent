@@ -1532,6 +1532,12 @@ There are no extra options that can appear on the type hic line.
     In larger windows, glyphs are also drawn as 1 pixel wide lines, except for the
     BarLeft/BarRight and ArrLeft/ArrRight glyphs, which already get narrower when zooming out.
     </p>
+    <p><code>decorator.default.maxDrawBases &lt;integer&gt;</code></p>
+    <p>This sets a maximum window size (in bases) above which the decorations are not drawn
+    at all, and the decorator file is not read.  Decorations on items that are only a pixel
+    or two wide are rarely worth the space they take up, and decorations in adjacent mode can
+    double or triple the height of the track.  If not set, or set to 0, there is no limit.
+    There is also a box on the track configuration page for this.</p>
     <p>The glyph of each decoration is set in the decorator bigBed file. Besides shapes like
     Circle or Star, which are drawn at the center of the decoration, the BarLeft/BarRight and
     ArrLeft/ArrRight glyphs mark the left or right end of a decorated item, e.g. a breakpoint,

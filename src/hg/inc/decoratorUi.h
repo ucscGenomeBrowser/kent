@@ -37,4 +37,9 @@ long decoratorUiMaxLabeledBaseCount(struct trackDb *tdb, struct cart *cart);
  * displays at most that many bases.  This helps reduce confusion in zoomed-out
  * situations. */
 
+long decoratorUiMaxDrawnBaseCount(struct trackDb *tdb, struct cart *cart);
+/* Return the entered (or default) number of bases.  Decorations are only drawn
+ * if the size of the global window (spanning all region windows) displays at
+ * most that many bases.  Zero means no limit. */
+
 #endif // DECORATOR_UI_H

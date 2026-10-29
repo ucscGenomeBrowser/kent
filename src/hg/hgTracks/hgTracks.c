@@ -8392,6 +8392,10 @@ if (quickLiftDb != NULL)
 for (struct trackDb *decoratorTdb = decoratorTdbs; decoratorTdb != NULL;
         decoratorTdb = decoratorTdb->next)
     {
+    long maxDrawBases = decoratorUiMaxDrawnBaseCount(decoratorTdb, cart);
+    if (maxDrawBases > 0 && virtWinBaseCount > maxDrawBases)
+        continue;  // zoomed out past the point where these decorations say anything
+
     char *decoratorUrl = trackDbSetting(decoratorTdb, "bigDataUrl");
     if (!decoratorUrl)
         {
@@ -8488,7 +8492,8 @@ while(1)
 	    if (tdbHasDecorators(pfd->track))
 		{
 		loadDecorators(pfd->track);
-		decoratorMethods(pfd->track);
+		if (hasDecorators(pfd->track))  // nothing loaded if zoomed out past maxDrawBases
+		    decoratorMethods(pfd->track);
 		}
             }
 
@@ -8855,7 +8860,8 @@ else
     if (tdbHasDecorators(track))
         {
         loadDecorators(track);
-        decoratorMethods(track);
+        if (hasDecorators(track))  // nothing loaded if zoomed out past maxDrawBases
+            decoratorMethods(track);
         }
     }
 }

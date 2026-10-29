@@ -960,7 +960,7 @@ include imprinting.ra alpha
 
 include hprcPclai.ra alpha
 
-include episignatures.ra alpha,beta
+include episignatures.ra
 
 include transcriptionStart.ra alpha
 include transcriptionStartPublic.ra beta,public
