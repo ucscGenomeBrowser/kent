@@ -215,6 +215,12 @@ hgsql hg38 -Ne "select searchName, shortCircuit, searchPriority from hgFindSpec_
 # Santini2025 3), 27 of them with different delta-betas. The build keeps both, so
 # 28 sites list one signature twice and show a sigCount one too high. No site's
 # color class depends on the repeat.
+#
+# trackDb and page changes from the same QA pass: a sigCount range filter on
+# methaDory (1:41, as epigenCentral has nSignatures), related-track links from
+# methaDory to snpArrayIllumina850k, epicV2illuminaMethylation and epigenCentral
+# in relatedTracks.ra, and a bigBedToBed example on methaDory.html that fits
+# inside its chromosome (chr7:73800000-74000000, 49 sites).
 
 ##############################################################################
 # EpigenCentral episignature loci (DONE 2026-09-18)
@@ -422,3 +428,10 @@ bash ~/kent/src/hg/makeDb/scripts/episignatures/makeEpisign.sh
 # filter with field maxAbsDelta. Field not found." The filter is now set on
 # methaDory and epigenCentral separately, so the collection page no longer has
 # one control for both.
+
+# 2026-10-29 Claude jairo, refs #38371
+# episign is tagged release alpha in episignatures.ra while methaDory and
+# epigenCentral are released, so its row in the collection table and the clause
+# "and the genes and regions tested by a clinical episignature test" were taken
+# out of episignatures.html (48841bf1f4f), and the page says "two tracks". Put
+# both back, with "three tracks", when episign is released (#38567).
