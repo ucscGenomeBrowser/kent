@@ -662,6 +662,11 @@ hg38 epigenCentral epicV2illuminaMethylation Array probes that include every CpG
 hg38 epicV2illuminaMethylation epigenCentral CpG probes of this array that are part of curated DNA methylation episignatures
 hg38 epigenCentral snpArrayIllumina850k Array probes that include nearly all CpG sites in this track
 hg38 snpArrayIllumina850k epigenCentral CpG probes of this array that are part of curated DNA methylation episignatures
+hg38 methaDory snpArrayIllumina850k Array probes that include nearly all CpG sites in this track
+hg38 snpArrayIllumina850k methaDory CpG probes of this array that are part of published DNA methylation episignatures
+hg38 methaDory epicV2illuminaMethylation Array probes that include most CpG sites in this track
+hg38 epicV2illuminaMethylation methaDory CpG probes of this array that are part of published DNA methylation episignatures
+hg38 ~methaDory epigenCentral CpG sites of episignatures from another curated collection
 
 hg19 constraintSuper predictionScoresSuper Per-variant deleteriousness and pathogenicity scores, rather than regional constraint
 hg19 predictionScoresSuper constraintSuper Regional and gene-level constraint measured from population variation
