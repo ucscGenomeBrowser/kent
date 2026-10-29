@@ -349,6 +349,15 @@ visually.</p>
 <pre>
 decorator.default.maxLabelBases 100000
 </pre>
+<p>
+The <b>maxDrawBases</b> setting goes further and sets a maximum window size (in bases) above
+which the decorations are not drawn at all. Decorations on items that are only a pixel or two
+wide are rarely worth the space they take up, and in adjacent mode they can double or triple
+the height of the track. If not set, or set to 0, there is no limit and decorations are drawn
+at every zoom level.</p>
+<pre>
+decorator.default.maxDrawBases 2500
+</pre>
 <p> A full list of supported decorator
 settings is available in the
 <a href="trackDb/trackDbDoc.html#decorator">trackDb documentation</a>.</p>
