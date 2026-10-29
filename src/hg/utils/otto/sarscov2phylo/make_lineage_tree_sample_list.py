@@ -124,6 +124,7 @@ def parse_args():
            args.max_keep_discordant != 0.0:
             print(f"Warning: --max-keep-discordant={args.max_keep_discordant} was given but -m/--input-metadata was " +
                   "not provided, so --max-keep-discordant will have no effect.")
+    return args
 
 
 @dataclass
