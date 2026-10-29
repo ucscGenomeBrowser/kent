@@ -182,6 +182,27 @@ python3 ~/kent/src/hg/makeDb/scripts/episignatures/makeHtmlTables.py \
 hgsql hg38 -Ne "select searchName, shortCircuit, searchPriority from hgFindSpec_max where searchTable='methaDory'"
 # methaDory  1  50
 
+# 2026-10-29 Claude jairo: refs #38371
+#
+# QA found three more errors in the authors' files. methaDoryToBed.py now fixes
+# them until the authors send corrected files:
+#   - WRONG_DISORDERS: the four chr7q11.23del rows of the metadata sheet give
+#     "Phelan-McDermid syndrome", the disorder of the 22q13.3 deletion. The
+#     7q11.23 deletion is Williams-Beuren syndrome.
+#   - DISORDER_SPELLING_FIXES: "Borjeson-Forssman-Lehmann syndrome" is spelled
+#     in ASCII, as OMIM does (#301900). The sheet has a raw UTF-8 o-umlaut,
+#     which the browser shows garbled.
+#   - LOCUS_SPELLING_FIXES: locus and signature "RNU2-2.biallellic" is
+#     "RNU2-2.biallelic", on both sides of the join.
+# makeHtmlTables.py now writes any non-ASCII character as its named HTML entity
+# (Leit&atilde;o in pubAuthorYear.tsv).
+# Rebuilt with makeMethaDory.sh, then pasted methaDoryFilters.ra into
+# episignatures.ra and regenerated both tables in methaDory.html. 23,700 of the
+# 268,900 sites changed, all in the disorder, signature and locus text; the
+# positions, colors and values are unchanged. The tables had not been
+# regenerated since the 2026-10-16 Smith-Magenis and NOTCH1 fix, so that fix now
+# shows on the page as well.
+
 ##############################################################################
 # EpigenCentral episignature loci (DONE 2026-09-18)
 ##############################################################################
