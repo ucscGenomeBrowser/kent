@@ -36,8 +36,8 @@ chomp $ncbiAssemblyId;
 my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
 
-my $gapOverlapItemCount = "<no items in this track>";
-my $tandemDupsItemCount = "<no items in this track>";
+my $gapOverlapItemCount = "&lt;no items in this track&gt;";
+my $tandemDupsItemCount = "&lt;no items in this track&gt;";
 
 if ( -s $gapOverlapBbi ) {
   $gapOverlapItemCount = `/cluster/bin/x86_64/bigBedInfo $gapOverlapBbi | egrep "itemCount:|basesCovered:" | xargs echo | sed -e 's/itemCount/Item count/; s/ basesCovered/; Bases covered/;'`;

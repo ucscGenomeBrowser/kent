@@ -162,6 +162,8 @@ def main():
                         choices=sorted(lib.CLASS_PALETTES),
                         help='palette for measurements with no ACMG code')
     parser.add_argument('--raFragment', help='write generated trackDb filterValues here')
+    parser.add_argument('--statsJson', help='write the build counters here, for the otto '
+                        'job\'s release checks')
     parser.add_argument('--workDir', help='scratch directory (default: alongside outBed)')
     args = parser.parse_args()
     lib.setClassPalette(args.classPalette)
@@ -416,6 +418,18 @@ def main():
     sys.stderr.write("Placement checks\n")
     for key in sorted(placeStats):
         sys.stderr.write("  %-36s %d\n" % (key, placeStats[key]))
+
+    if args.statsJson:
+        with open(args.statsJson, 'w') as fh:
+            json.dump({'variantItems': stats['placed'],
+                       'rows': stats['rows'],
+                       'scoreSets': len(urns),
+                       'placedByMavedb': stats['placement:' + mp.PLACED_MAVEDB],
+                       'notPlaced': sum(reasons.values()),
+                       'accessionsDropped': placeStats['accessionsDropped'],
+                       'crossChecked': placeStats['crossChecked'],
+                       'filterValues': {f: sorted(v) for f, v in filterValues.items()}},
+                      fh, indent=1, sort_keys=True)
 
     if args.raFragment:
         with open(args.raFragment, 'w') as fh:
