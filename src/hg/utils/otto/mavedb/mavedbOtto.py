@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """mavedbOtto.py -- keep the hg38 MaveDB track in sync with the MaveDB API.
 
-Monthly cron. Each run updates the cache from the API (mavedbFetch.py: only score sets
+Weekly cron. Each run updates the cache from the API (mavedbFetch.py: only score sets
 whose fingerprint changed are downloaded), and when the score sets the build would read
 differ from those of the last release, builds a new release (mavedbBuild.py) into
 releases/YYYY-MM-DD/, checks it, and moves the /gbdb/hg38/maveDB/ symlinks to it. Every

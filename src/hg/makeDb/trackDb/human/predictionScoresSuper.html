@@ -237,18 +237,18 @@ accessed from scripts through our <a href="https://api.genome.ucsc.edu" target="
 be found via the table browser or by clicking onto the signal tracks.
 
 <p>
-For automated download and analysis, the genome annotation is stored in a bigBed file that
+For automated download and analysis, most of these scores are stored in bigWig files that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mutscore/" target="_blank">our download server</a>, there is one subdirectory per score.
-The files for this track are called usually called by their alternate allele, e.g. <tt>mcapA.bw</tt> and <tt>mutScoreA.bw</tt>. Individual
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/" target="_blank">our download server</a>, with one subdirectory per score
+(e.g. <tt>mutscore/</tt>, and on hg19 also <tt>mcap/</tt> and <tt>bayesDel/</tt>).
+The files are usually named by their alternate allele, e.g. <tt>mutscore/mutscoreA.bw</tt> and <tt>mcap/A.bw</tt>. Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigWigToBedGraph</tt>
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool
 can also be used to obtain only features within a given range, e.g. 
-<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg19/mcap/mcapA.bw -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
-</p>
+<tt>bigWigToBedGraph http://hgdownload.soe.ucsc.edu/gbdb/hg19/mcap/A.bw -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
 
 <p>The original BayesDel files are available at the
 <a target="_blank" href="https://fenglab.chpc.utah.edu/BayesDel/BayesDel.html">BayesDel website</a>.

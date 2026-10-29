@@ -13,8 +13,12 @@ class palettes.
 import os
 import sys
 
+# The MaveDB otto job's placement code, in the sibling directory. The same relative hop
+# works in the kent tree (utils/otto/mavemd -> utils/otto/mavedb) and in the installed
+# copies (/hive/data/outside/otto/mavemd -> .../mavedb), so this file does not need to know
+# which one it is running from.
 OTTO_MAVEDB = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                            '..', '..', '..', 'utils', 'otto', 'mavedb'))
+                                            '..', 'mavedb'))
 if OTTO_MAVEDB not in sys.path:
     sys.path.insert(0, OTTO_MAVEDB)
 

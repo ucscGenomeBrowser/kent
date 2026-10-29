@@ -96,6 +96,7 @@ if [ -s "new.timeStamps.txt" ]; then
   sed -e 's#^#genark/#;'  new.timeStamps.txt >> rsync.gbdb.toRR.fileList.txt
 fi
 
+./whatToRemove.sh
 ./quickLiftNew.sh
 ./liftOverNew.sh
 ./loopDetect.sh
