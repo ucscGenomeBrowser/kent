@@ -89,7 +89,11 @@ LOCUS_SPELLING_FIXES = {
 # but have not sent a corrected sheet. Remove this table once they do. A row is
 # only changed while the sheet still has the wrong StudyID, so a fixed sheet
 # passes through untouched.
+# HNRNPU_Lee2023 has StudyID Lee2024 and PMID 38797891, an unrelated mouse
+# muscle paper by Lee EJ; the study is Lee S et al. 2023, PMID 37407733 (#38371).
 META_CORRECTIONS = {
+    "HNRNPU_Lee2023": {
+        "wrongStudy": "Lee2024", "study": "Lee2023", "pmid": "37407733"},
     "CREBBP-EP300_ArefEshghi2020": {
         "wrongStudy": "Levy2022", "study": "ArefEshghi2020",
         "pmid": "32109418", "disorder": "Rubinstein-Taybi Syndrome"},
