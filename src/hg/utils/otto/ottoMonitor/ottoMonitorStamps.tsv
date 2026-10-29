@@ -45,6 +45,7 @@ uniprotWuhCor1	-	6	blind, and the source is dead. See #38280
 clinGen	/hive/data/outside/otto/clinGen/clinGenGeneValidity/ls.check	6	rewritten every run
 clinGenCspec	/hive/data/outside/otto/clinGen/clinGenCspec	8	dir mtime: svis.json is written then removed on no change
 varChat	/hive/data/outside/otto/varChat	8	dir mtime: the .latest.bb files are written then removed
+mavedb	/hive/data/outside/otto/mavedb/logs/*.log	8	one log per run day, opened before the fetch; a quarterly full rebuild takes a few hours
 vista	/hive/data/outside/otto/vista	8	dir mtime: the .latest files are written then removed
 civic	/hive/data/outside/otto/civic/gene_features/temp*	12	dir mtime: the temp bed files are rewritten every run
 grcIncidentDb	/hive/data/outside/otto/grcIncidentDb/*	6	every per-assembly dir is touched each run

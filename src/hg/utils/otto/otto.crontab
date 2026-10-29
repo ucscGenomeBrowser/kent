@@ -100,6 +100,11 @@ MAILTO=otto-group@ucsc.edu
 # InSiGHT VCEP ClinVar curated variants weekly update
 08 03 * * 2 umask 002; /hive/data/outside/otto/insight/doUpdate.sh
 
+# MaveDB track (RM #38396) - weekly, silent unless a release was made or the run failed;
+# a full refetch and rebuild every quarter
+MAILTO=lrnassar@ucsc.edu,otto-group@ucsc.edu
+23 05 * * 3 umask 002; /hive/data/outside/otto/mavedb/mavedbOtto.py
+
 # VCEP hub spec version notifier (RM #37795) - monthly, silent unless one of our
 # VCEP hub description pages is behind the ClinGen CSpec registry
 MAILTO=otto-group@ucsc.edu

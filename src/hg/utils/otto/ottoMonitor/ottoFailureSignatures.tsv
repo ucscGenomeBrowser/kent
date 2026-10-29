@@ -42,6 +42,7 @@ uniprotWuhCor1	daily 04:00	none	-	archive/covid-19.<date>.xml	NONE. curl -s, exi
 clinGen	daily 09:00	perRunFile	clinGenGeneValidity/ls.check and release.list, rewritten every run	release.diff	
 clinGenCspec	weekly Wed 11:11	dirMtime	svis.json written then removed on no-change	svis.json.old, the two bb files	four retries, then a message naming the CSpec status page, exit 1
 varChat	weekly Thu 22:22	dirMtime	.latest.bb files written then removed on no-change	varChat.hg*.bb, version.txt	set -e -o pipefail; a count difference guard
+mavedb	weekly Wed 05:23	log	logs/<date>.log, opened before the fetch	releases/<date>/ and lastRelease.txt; quarterly full rebuild even with no change	Python exception to stderr and exit 1; a release that fails its checks is left in releases/<date>.tmp
 vista	monthly 1st 09:00	dirMtime	.latest.bed and .latest.bb written then removed on no-change	vista.*.bb	WEAK: no set -e, and bedToBigBed stderr goes to /dev/null
 civic	monthly 2nd 12:12	dirMtime	gene_features/temp* rewritten every run	the civic bb files	set -o pipefail -o errexit
 grcIncidentDb	daily 06:33	perRunFile	the per-assembly directories are touched every run	the incident bb files	
