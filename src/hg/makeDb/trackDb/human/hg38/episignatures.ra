@@ -24,6 +24,10 @@ html episignatures.html
     filter.maxAbsDelta 0:1
     filterLimits.maxAbsDelta 0:1
     filterLabel.maxAbsDelta Absolute delta-beta of the strongest episignature at this probe
+    filterByRange.sigCount on
+    filter.sigCount 1:41
+    filterLimits.sigCount 1:41
+    filterLabel.sigCount Number of episignatures at this probe
     skipFields disorders,signatures,loci,deltaBetas,pvalues,studies,disorderSummary
     detailsDynamicTable _jsonSignatures|Episignatures at this CpG site
     urls publications="https://pubmed.ncbi.nlm.nih.gov/$$/"
