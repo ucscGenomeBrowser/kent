@@ -26,8 +26,9 @@ or is not covered by the arrays at all.
 
 <p>
 Each item is one CpG site, named with its Illumina probe ID, and spans the two bases of the CpG
-dinucleotide. Typing a probe ID such as <tt>cg05654765</tt> into the position box jumps to that
-site.
+dinucleotide. The 308 probes whose ID starts with <tt>ch.</tt> measure a cytosine outside a CpG
+and span a single base. Typing a probe ID such as <tt>cg05654765</tt> into the position box jumps
+to that site.
 </p>
 
 <p>
@@ -84,7 +85,7 @@ classes of the color legend, by the number of episignatures at a site, and by th
 delta-beta at a site. The three list filters keep a site if any of its episignatures matches, so
 selecting a single disorder shows exactly the sites that belong to that disorder's signature,
 though the detail page of each site still lists the other disorders that share it. Zoomed out past
-10 Mbp the track switches to a density graph; the "Display data as a density graph" checkbox on
+10 Mbp the track switches to a density graph; the <b>Display data as a density graph</b> checkbox on
 this page overrides that.
 </p>
 
@@ -365,14 +366,14 @@ that is easier to read, but they are what the Table Browser and <tt>bigBedToBed<
 <p>
 For automated download and analysis, the genome annotation is stored in a bigBed file that can be
 downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/episignatures/" target="_blank">our download
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/episignatures/" target="_blank">our download
 server</a>. The file for this track is called <tt>methaDory.bb</tt>. Individual regions or the
 whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled
 from the source code or downloaded as a precompiled binary for your system. Instructions for
 downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>. The tool can
 also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/episignatures/methaDory.bb -chrom=chr21
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/$db/episignatures/methaDory.bb -chrom=chr21
 -start=0 -end=100000000 stdout</tt>
 </p>
 
