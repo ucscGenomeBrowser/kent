@@ -9,7 +9,8 @@ bigDataUrl /gbdb/hg38/mirGeneDbV3_0/mirGeneDb.bb
 decorator.default.bigDataUrl /gbdb/hg38/mirGeneDbV3_0/mirGeneDbArms.bb
 decorator.default.blockMode Adjacent
 decorator.default.Overlaytoggle on
-decorator.default.maxLabelBases 500000
+decorator.default.maxLabelBases 0
+decorator.default.maxDrawBases 3000
 searchIndex name
 searchTrix /gbdb/hg38/mirGeneDbV3_0/mirGeneDb.ix
 skipEmptyFields on
