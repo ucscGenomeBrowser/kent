@@ -36,6 +36,9 @@
 mkdir -p /hive/data/genomes/hg38/bed/episignatures/methaDory
 cd /hive/data/genomes/hg38/bed/episignatures/methaDory
 # ... the two files above were copied in here, the tsv gzipped ...
+# md5sum 20260916_*
+#   380693aaf86b76ff7689762b857721fc  20260916_episignatures_loci.tsv.gz
+#   d8ad6590f058d30b444d1668c49a1b35  20260916_episignatures_loci_metadata.xlsx
 
 # The probe table gives Illumina probe IDs, not coordinates. Positions come from
 # the Illumina manifests already served as tracks on the browser, preferring
@@ -47,7 +50,7 @@ bash ~/kent/src/hg/makeDb/scripts/episignatures/makeMethaDory.sh
 #   input rows:                  847863
 #   rows with no probe position: 373 (293 distinct probes)
 #   bed features written:        268900
-#   distinct disorders:          105
+#   distinct disorders:          104 (105 before the Smith-Magenis merge)
 #   distinct genes/loci:         113
 #   distinct studies:            74
 #

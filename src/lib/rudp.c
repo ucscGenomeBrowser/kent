@@ -239,9 +239,10 @@ if (microDiff < 0)
 return microDiff;
 }
 
-static boolean readReadyWait(int sd, int microseconds)
+static int readReadyWait(int sd, int microseconds)
 /* Wait for descriptor to have some data to read, up to
- * given number of microseconds. */
+ * given number of microseconds.  Returns 1 if data is ready,
+ * 0 on time out, -1 with a warning on select failure. */
 {
 struct timeval tv;
 fd_set set;
@@ -266,8 +267,10 @@ for (;;)
 	{
 	if (errno == EINTR)	/* Select interrupted, not timed out. */
 	    continue;
-    	else 
-    	    warn("select failure in rudp: %s", strerror(errno));
+	int selectErr = errno;
+	warn("select failure in rudp: %s", strerror(selectErr));
+	errno = selectErr;	/* warn() may clobber errno, callers report it */
+	return -1;
     	}
     else
 	{
@@ -294,7 +297,10 @@ for (;;)
     int dt;
     struct timeval tv;
 
-    if (readReadyWait(ru->socket, timeOut))
+    int ready = readReadyWait(ru->socket, timeOut);
+    if (ready < 0)
+	return FALSE;
+    if (ready > 0)
 	{
 	/* Read message and if it's our ack return true.   */
 	readSize = recvfrom(ru->socket, &head, sizeof(head), 0, 
@@ -428,7 +434,7 @@ int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize,
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. 
  * Also returns ip address of message source. If timeOut is nonzero,
- * it represents the timeout in milliseconds.  It will set errno to
+ * it represents the timeout in microseconds.  It will set errno to
  * ETIMEDOUT in this case.*/
 {
 char inBuf[udpEthMaxSize];
@@ -443,7 +449,13 @@ for (;;)
     {
     if (timeOut != 0)
 	{
-	if (!readReadyWait(ru->socket, timeOut))
+	int ready = readReadyWait(ru->socket, timeOut);
+	if (ready < 0)
+	    {
+	    ru->failCount += 1;
+	    return -1;
+	    }
+	if (ready == 0)
 	    {
 	    warn("rudpReceive timed out\n");
 	    errno = ETIMEDOUT;

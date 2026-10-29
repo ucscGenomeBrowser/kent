@@ -62,7 +62,10 @@ if (bookMark > resultsSize)
       (unsigned long long) bookMark,
       (unsigned long long) resultsSize);
 if (bookMark == resultsSize)
+    {
+    lineFileClose(&lf);
     return list;
+    }
 while (lineFileNext(lf, &line, &lineSize))
     {
     bookMark = lineFileTell(lf);
