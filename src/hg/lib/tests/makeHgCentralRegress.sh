@@ -47,29 +47,18 @@ if [ ! -r "$conf" ]; then
     exit 1
 fi
 
-# An hg.conf may include another one, so follow one level of include to find the settings.
-# Later lines win in hg.conf, and so they do here.
-confValue() {
-    local key="$1"
-    local value=""
-    local inc
-    while read -r inc; do
-        if [ -r "$inc" ]; then
-            local v
-            v=$(grep "^$key=" "$inc" 2>/dev/null | tail -1 | cut -d= -f2-)
-            [ -n "$v" ] && value="$v"
-        fi
-    done < <(grep '^include ' "$conf" 2>/dev/null | sed 's/^include //')
-    local own
-    own=$(grep "^$key=" "$conf" 2>/dev/null | tail -1 | cut -d= -f2-)
-    [ -n "$own" ] && value="$own"
-    echo "$value"
-}
-
-host=$(confValue central.host)
-user=$(confValue central.user)
-password=$(confValue central.password)
-source=$(confValue central.db)
+# The settings are read by hgConfValue, which uses hgConfig.c, so includes are followed to any
+# depth and relative to the file that names them, exactly as a CGI follows them.  An earlier
+# copy of that logic here followed one level, relative to the current directory, and missed
+# central settings three includes down.  The makefile builds hgConfValue before calling this.
+hgConfValue="$(dirname "$0")/bin/$(uname -m)/hgConfValue"
+if [ ! -x "$hgConfValue" ]; then
+    echo "makeHgCentralRegress.sh: no $hgConfValue;" \
+        "run make bin/$(uname -m)/hgConfValue in $(dirname "$0")" >&2
+    exit 1
+fi
+{ read -r host; read -r user; read -r password; read -r source; } \
+    < <(HGDB_CONF="$conf" "$hgConfValue" central.host central.user central.password central.db)
 target=hgcentralregress
 
 if [ -z "$host" ] || [ -z "$user" ] || [ -z "$source" ]; then
