@@ -22,7 +22,7 @@ development. Other types include <b>downstream ORFs (dORFs)</b> in 3' UTRs,
 and ORFs in transcripts annotated as non-coding RNAs or pseudogenes.
 </p>
 <p>This track collection imports various databases and annotates all ORFs with their Kozak strength, 
-and colors the features by Kozak strength.</p>
+and colors the items by Kozak strength.</p>
 
 <p>Click any of the track names below to show their configuration/documentation page:</p>
 
@@ -255,22 +255,23 @@ Every ORF in every subtrack carries three additional annotation fields derived f
 genomic sequence around its start codon:
 </p>
 <ul>
-  <li><b>startCodon</b>: first three bases of the ORF on the transcript strand
+  <li><b>startCodon</b> (not present on 5ULTRA uORFs): first three bases of the ORF on the transcript strand
       (ATG / CTG / GTG / TTG / ACG / other).</li>
-  <li><b>kozakStrength</b>: categorical Kozak label. <i>Strong</i> if both position
+  <li><b>kozakStrength</b> (kozak on 5ULTRA uORFs): categorical Kozak label. <i>Strong</i> if both position
       &minus;3 is A/G and position +4 is G. <i>Moderate</i> if only one of those holds.
       <i>Weak</i> if neither. <i>non-ATG</i> for non-AUG starts where the Kozak rule
-      does not apply. <i>None</i> if the context could not be retrieved.</li>
-  <li><b>kozakTE</b>: numeric Kozak translational efficiency (TE), looked up from the
+      does not apply. <i>None</i> if the context could not be retrieved (5ULTRA uORFs
+      calls this value "NA" instead).</li>
+  <li><b>kozakTE</b> (not present on 5ULTRA uORFs): numeric Kozak translational efficiency (TE), looked up from the
       11-base TIS context in the Noderer 2014 FACS-seq TE table and divided by 100.
       <code>-1</code> for non-ATG starts and rows with no lookup.</li>
 </ul>
 
 <p>
-Features in every subtrack are colored by the categorical <b>kozakStrength</b>
-field. The same legend applies to all subtracks except the three GENCODE ncORF tracks
-(Phase I, Phase II Primary, Phase II Comprehensive), which use a similar but visually
-distinct palette; see the
+Items in every subtrack are colored by the categorical <b>kozakStrength</b> field
+(<b>kozak</b> on 5ULTRA uORFs). The same legend applies to all subtracks except the
+three GENCODE ncORF tracks (Phase I, Phase II Primary, Phase II Comprehensive), which
+use a similar but visually distinct palette. See the
 <a href="../cgi-bin/hgTrackUi?db=hg38&g=gencNcOrfs">GENCODE ncORFs page</a> for their
 exact colors:
 </p>
@@ -279,7 +280,7 @@ exact colors:
 <span style="display:inline-block; background-color:#5B9BD5; width:18px; height:12px; vertical-align:middle;"></span> <b>Moderate</b>: only one of position &minus;3 (A/G) or position +4 (G) matches.<br>
 <span style="display:inline-block; background-color:#A9A9A9; width:18px; height:12px; vertical-align:middle;"></span> <b>Weak</b>: neither position &minus;3 (A/G) nor position +4 (G) matches.<br>
 <span style="display:inline-block; background-color:#000000; width:18px; height:12px; vertical-align:middle;"></span> <b>non-ATG</b>: near-cognate start codon. The Kozak rule does not apply.<br>
-<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b>: chromosome edge or other case where the 11-base context could not be read.
+<span style="display:inline-block; background-color:#D3D3D3; width:18px; height:12px; vertical-align:middle;"></span> <b>no context</b> (called "NA" on 5ULTRA uORFs): chromosome edge or other case where the 11-base context could not be read.
 </p>
 
 <p>

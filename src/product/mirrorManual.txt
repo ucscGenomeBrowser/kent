@@ -1418,49 +1418,72 @@ features:
 User accounts on the Genome Browser are handled by the hgLogin CGI, with the accounts stored
 in the gbMembers table of the hgcentral database. An account lets a user save and share named
 sessions. Enabling the login system itself (the login.systemName, wiki.host and cookie
-settings) is described at http://genomewiki.ucsc.edu/index.php/Enabling_hgLogin and in the
-comments of the example hg.conf. Once login is enabled, users can register with a username
+settings) is described on the
+[Enabling hgLogin](https://genomewiki.ucsc.edu/index.php/Enabling_hgLogin) genomewiki page and
+in the comments of the
+[example hg.conf](https://github.com/ucscGenomeBrowser/kent/blob/master/src/product/ex.hg.conf)
+file. Once login is enabled, users can register with a username
 and password. The settings below add two more ways to sign in, both optional and both off
 until you configure them: with an external identity provider, or with a one-time link sent by
-email.
+email. A third setting lets users change their recovery email address.
 
 A note on secrets first: the file cgi-bin/hg.conf is part of the source tree and is not
 private, so it must never contain passwords or OAuth client secrets. Put all secrets in
 cgi-bin/hg.conf.private, a file that hg.conf includes and that is not shared. Non-secret
 settings such as the provider list, labels and endpoint URLs can live in either file.
 
-## Social sign-in (Google, ORCID, GitHub, or any OpenID Connect provider)
+Several of these features need login.cookieSalt, a long secret random string that you choose
+and put in hg.conf.private. hgLogin uses this string to sign two things: the confirmation links
+that hgLogin emails to users, and the sign-in information that Google, GitHub or another
+provider sends back to hgLogin. The signature lets hgLogin detect a link or sign-in that has
+been faked.
 
-You can let users sign in with an external identity provider using OAuth 2.0 / OpenID
-Connect. First register an OAuth client with each provider and set its "redirect" or
+The email sign-in link and the recovery email features send email to users. They only work if
+the server can send email and login.mailReturnAddr is set. login.mailReturnAddr is the address
+that hgLogin's emails are sent from. An example is on the
+[Enabling hgLogin](https://genomewiki.ucsc.edu/index.php/Enabling_hgLogin) page. If
+login.mailReturnAddr is set to NOEMAIL, hgLogin sends no confirmation
+emails.
+
+hgLogin updates the hgcentral database itself when it runs with these features. It adds three
+columns to the gbMembers table: recovEmailVerified, which records whether a recovery email
+address has been confirmed, and loginToken and loginTokenExpires, which the email sign-in link
+uses. Once at least one social sign-in provider has both its client id and secret set, it also
+creates the gbMemberIdentity table, which links each account to its Google, GitHub or other
+sign-in. For this to work, the MySQL user that hgLogin connects with must be allowed to alter
+and create tables in hgcentral.
+
+## Social sign-in (Google, GitHub, or any OpenID Connect provider)
+
+You can let users sign in with an external identity provider using OAuth 2.0 / OpenID Connect
+(OIDC). First register an OAuth client at each provider's developer console:
+
+* Google: <https://console.cloud.google.com/auth/clients>
+* GitHub: <https://github.com/settings/developers>
+
+Registering gives you a client id and a client secret. Set the client's "redirect" or
 "callback" URL to your hgLogin URL exactly, for example
-https://yourbrowser.university.edu/cgi-bin/hgLogin . You create the client id and secret at
-each provider's developer console:
-
-    Google:  https://console.cloud.google.com/auth/clients
-    ORCID:   https://orcid.org/developer-tools
-    GitHub:  https://github.com/settings/applications/
+https://yourbrowser.university.edu/cgi-bin/hgLogin . Social sign-in also needs login.cookieSalt,
+described above.
 
 For GitHub you can register a whole domain, such as gi.ucsc.edu, which then covers all of its
-subdomains (handy if you have several sandboxes); the other providers require each exact
-hostname to be listed. Then list the providers to offer and give each one a block of
-settings:
+subdomains (handy if you have several sandboxes). The other providers require each exact
+hostname to be listed. Then list the providers to offer in login.oauth.providers, and give
+each one its own settings:
 
-    login.oauth.providers=google,orcid,github,myuni
+    login.oauth.providers=google,github,myuni
 
-The names google, orcid and github are recognized and come with built-in endpoints, so they
+The names google and github are recognized and come with built-in endpoints, so they
 only need a client id and secret (put the secrets in hg.conf.private):
 
     login.oauth.google.clientId=xxxxxxxx.apps.googleusercontent.com
     login.oauth.google.clientSecret=xxxxxxxx
-    login.oauth.orcid.clientId=APP-XXXXXXXXXXXXXXXX
-    login.oauth.orcid.clientSecret=xxxxxxxx
-    login.oauth.github.clientId=Iv1.xxxxxxxx
+    login.oauth.github.clientId=Ov23xxxxxxxx
     login.oauth.github.clientSecret=xxxxxxxx
 
-Any other OpenID Connect server works too. Give it a label (used on the button), credentials,
-and either an issuer, from which the endpoints are discovered automatically, or the three
-endpoint URLs written out explicitly:
+Any other OpenID Connect provider works too. Give it a label, which is the name shown on its
+sign-in button, its client id and secret, and either its issuer URL or its three endpoint URLs.
+With the issuer URL, hgLogin looks up the endpoint URLs from the provider itself:
 
     login.oauth.myuni.label=My University
     login.oauth.myuni.clientId=xxxx
@@ -1472,9 +1495,9 @@ endpoint URLs written out explicitly:
     login.oauth.myuni.userinfoUrl=https://idp.myuni.edu/userinfo
     login.oauth.myuni.scopes=openid email profile
 
-Two OpenID Connect federations are useful for reaching many universities at once, without
-registering separately with each institution. Register with them and configure them like any
-other OIDC provider above (a label, client id/secret and issuer):
+Two services, CILogon and LifeScience RI, let users sign in through their own university,
+without you registering with each university. Register with them and set them up like any
+other OpenID Connect provider above, with a label, client id and secret, and issuer URL:
 
     CILogon, for US universities:        https://cilogon.org/oauth2/register
     LifeScience RI, for EU universities: https://services.aai.lifescience-ri.eu/spreg/auth
@@ -1487,48 +1510,64 @@ space or slash):
     login.oauth.cilogon.issuer=https://cilogon.org
     login.oauth.lsaii.issuer=https://login.aai.lifescience-ri.eu/oidc
 
-CILogon needs one more setting. It sends the address it got from the user's institution but
-does not mark it as verified, even for a real institutional sign-in, so by default hgLogin
-discards it and asks the user to type an address and confirm it by mail. That is a pointless
-round trip for an address the institution already vouched for, so tell hgLogin to take
-CILogon's word for it:
+CILogon needs one more setting. CILogon may send an address without marking it as verified.
+By default, hgLogin only uses addresses that the provider has marked as verified, so it asks
+the CILogon user to type an address and confirm it by mail. This setting tells hgLogin to use
+the address CILogon sends:
 
     login.oauth.cilogon.trustEmail=on
 
-Turn trustEmail on only for a provider that reads the address from somewhere the user cannot
-type into, such as a federation that gets it from the user's own institution. It is off for
-every provider unless you set it. Leave it off for GitHub in particular: GitHub will hand over
-a primary address whose owner never confirmed it, and with trustEmail on, an address like that
-is enough to be signed in to an existing account that uses it.
+Turn trustEmail on only for a provider whose addresses are given out by an organization, such as
+a university, and not chosen by the user. It is off for every provider unless you set it. Leave
+it off for Google and GitHub, which already say whether an address is verified.
 
-Without trustEmail, a provider that does not verify an address is not refused; hgLogin simply
-behaves as if no address had been sent, which is also what happens with ORCID (ORCID's OpenID
-Connect offers only the "openid" scope and never releases an address at all). The user is asked
-for an address, and the account does not work until they open the link mailed to it.
-
-(For social login, login.cookieSalt must be set, to a secret random string: it is the key that signs the
-identity handed back from the provider, so hgLogin refuses to run a social login without it.)
+Without trustEmail, a provider that does not verify an address is not refused. hgLogin simply
+behaves as if no address had been sent. The user is asked for an address, and the account
+does not work until they open the link mailed to it.
 
 A provider's button appears on the login and sign-up pages only when both its client id and
-secret are set, so unconfigured mirrors are unaffected. When a provider reports an email
-address that it has verified (or one you have trusted with trustEmail), and that address
-matches an existing account, that account is automatically linked to the new identity and the
-user is signed in; if the address matches several accounts, the user is asked which one to
-use. An address hgLogin will not trust never takes part in that matching at all, so it cannot
-be used to reach somebody else's account. GitHub is a plain OAuth 2.0 provider
-rather than OpenID Connect and is handled as a special case; it is the only non-OIDC provider
-supported without extra code. (The older, un-prefixed keys login.google.clientId and
-login.orcid.clientId are still recognized for backward compatibility.)
+secret are set, so mirrors that do not set them up are unaffected.
+
+When a user signs in with a provider, hgLogin looks for an existing account with the same email
+address. It uses the address only if the provider says it is verified, or if you turned on
+trustEmail for that provider. If the address is an account's email address or its confirmed
+recovery email address, that account is linked to the provider sign-in and the user is signed
+in. If the address matches more than one account, the user picks which one. An address that is
+not verified is never used to find an account, so it cannot be used to sign in to someone
+else's account.
+
+GitHub does not use OpenID Connect, so hgLogin has special code for it. Other providers that
+do not use OpenID Connect would need new code.
 
 ## Passwordless email sign-in link, and changing the account email
 
     login.emailLink=on
 
-When this is on, the login page offers an "Email me a sign-in link" option: the user types
-their email address and receives a one-time link that signs them in without a password, which
-is convenient on a computer where the password is not saved. The same switch also enables the
-"Change email" option in the account menu. It is off by default and needs working outbound
-email (see login.mailReturnAddr), so turn it on only where email delivery is configured.
+When this is on, the login page offers an "Email me a sign-in link" option: the user types the
+account's email address or its confirmed recovery email address, and receives a one-time link
+that signs them in without a password. login.emailLink=on also turns on the "Change email"
+option in the account menu. It is off by default. Turn it on only where the server can send
+email.
+
+## Recovery email address
+
+When users sign up, they can give a second email address, called a recovery email address.
+hgLogin mails a confirmation link to that address. Once the link is opened, the recovery address
+gets a copy of the password-reset email. It can also be used to look up a forgotten username, to
+get an email sign-in link, or to match an account during social sign-in. Until then, hgLogin
+does not use the recovery address. Recovery addresses already in gbMembers when hgLogin adds the
+recovEmailVerified column count as confirmed. If login.cookieSalt is not set, or
+login.mailReturnAddr is NOEMAIL, no confirmation link is sent. The recovery address is then
+treated as confirmed from the start.
+
+    login.recovEmailChange=on
+
+When this is on, the account menu offers a "Change recovery email" option, where users can set
+or change their recovery email address. There is no option to remove a recovery address, only to
+replace it. Users whose account has a password must enter it first. hgLogin then mails a
+confirmation link to the new address. The new address replaces the old one only after that link
+is opened. Until then, the old recovery address keeps working. This setting is off by default,
+and it needs login.cookieSalt and a server that can send email.
 
 # Proxy support
 

@@ -22,6 +22,7 @@ import argparse
 import collections
 import csv
 import glob
+import json
 import os
 import sys
 
@@ -112,6 +113,8 @@ def main():
                         help='genome sequence, for the wild-type residue check')
     parser.add_argument('--workDir', default='.',
                         help='scratch directory for the sequence fetch')
+    parser.add_argument('--statsJson', help='write the build counters here, for the otto '
+                        'job\'s release checks')
     parser.add_argument('--classPalette', default='purple',
                         choices=sorted(lib.CLASS_PALETTES),
                         help='palette for measurements with no ACMG code')
@@ -301,6 +304,13 @@ def main():
     for key in sorted(placeStats):
         sys.stderr.write("  %-36s %d\n" % (key, placeStats[key]))
 
+    if args.statsJson:
+        with open(args.statsJson, 'w') as fh:
+            json.dump({'mapItems': stats['scoreSetsWritten'],
+                       'cells': stats['cellsDrawn'],
+                       'scoreSetsSkipped': stats['scoreSetSkipped'],
+                       'overlaps': stats['overlap']}, fh, indent=1, sort_keys=True)
+
 
 def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, calUrn, stats):
     """Assemble one heatmap BED12+ line for a score set."""
@@ -381,6 +391,7 @@ def buildEntry(urn, gene, meta, byPos, codonMap, calTitle, calSource, calRuo, ca
         labelParts[-1] = '(not measured)'
         stats['trailingFix'] += 1
 
+    stats['cellsDrawn'] += measured
     bedScore = int(round(1000.0 * pathogenic / measured)) if measured else 0
     shortUrn = urn.replace('urn:mavedb:', '')
     name = '%s %s' % (gene, shortUrn) if gene else shortUrn
