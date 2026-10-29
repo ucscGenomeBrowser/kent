@@ -210,6 +210,7 @@ OTTO = {
  "clinGen":("ClinGen","track",["clinGen"],["hg19","hg38"]),
  "varChat":("VarChat","track",["varChat"],["hg19","hg38"]),
  "mavedb":("MaveDB","track",["mavedb"],["hg38"]),
+ "mavemd":("MaveMD","track",["mavemd"],["hg38"]),
  "vista":("VISTA Enhancers","track",["vistaEnhancers"],["hg38","mm10"]),
  "civic":("CIViC","track",["civic"],["hg19","hg38"]),
  "pubtatorDbSnp":("PubTator","track",["pubtator"],["hg19","hg38"]),

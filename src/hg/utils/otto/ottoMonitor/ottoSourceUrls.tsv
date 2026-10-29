@@ -44,6 +44,7 @@ clinGen	external	ftp://ftp.clinicalgenome.org/	clinGen/clinGenWrapper.sh	four fi
 clinGenCspec	external	https://cspec.genome.network/cspec/api/svis	clinGen/clinGenCspec/makeClinGenCspec.sh	THREE independent sources: cspec, http://purl.obolibrary.org/obo/mondo.json, https://search.clinicalgenome.org/kb/gene-validity/download; already retries and already names a status page per source	HEAD 400, GET -r 0-0 200 -- HEAD is not supported
 varChat	external	https://ucsc-engenome-varchat.s3.eu-west-1.amazonaws.com/latest/version.txt	varChat/varChatOtto.sh	version.txt is a cheap probe	HEAD 200
 mavedb	external	https://api.mavedb.org/api/v1/api/version	mavedb/mavedbFetch.py	API constant in mavedbFetch.py; the version call is the cheapest one	HEAD 405, GET -r 0-0 200
+mavemd	external	https://api.mavedb.org/api/v1/api/version	mavemd/mavemdFetch.py	API constant in mavemdFetch.py; the version call is the cheapest one	HEAD 405, GET -r 0-0 200
 vista	external	https://gitlab.com/egsb-mfgl/vista-data/-/raw/main/locus_ucsc_hg38.bed	vista/vistaOtto.sh	also reads hgdownload chrom.sizes	HEAD 200
 civic	externalIndirect	https://civicdb.org/	civic/civicToBed.py	DOWNLOAD_BASE_URL constant; doCivicUpdate.sh only runs uv	host root 206; /downloads is 403 to curl and the file path is date-templated
 grcIncidentDb	external	ftp://ftp.ncbi.nih.gov/pub/grc/human/	grcIncidentDb/runUpdate.sh		ftp listing 226, trailing slash required

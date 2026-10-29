@@ -105,6 +105,13 @@ MAILTO=otto-group@ucsc.edu
 MAILTO=lrnassar@ucsc.edu,otto-group@ucsc.edu
 23 05 * * 3 umask 002; /hive/data/outside/otto/mavedb/mavedbOtto.py
 
+# MaveMD track (RM #37800) - weekly, silent unless a release was made or the run failed;
+# a full refetch and rebuild every quarter. The day after MaveDB on purpose: the two jobs
+# never hit the MaveDB API at the same time, and MaveMD runs on whatever placement code
+# the MaveDB job was installed with.
+MAILTO=lrnassar@ucsc.edu,otto-group@ucsc.edu
+23 05 * * 4 umask 002; /hive/data/outside/otto/mavemd/mavemdOtto.py
+
 # VCEP hub spec version notifier (RM #37795) - monthly, silent unless one of our
 # VCEP hub description pages is behind the ClinGen CSpec registry
 MAILTO=otto-group@ucsc.edu
