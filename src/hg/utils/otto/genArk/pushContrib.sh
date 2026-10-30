@@ -24,7 +24,7 @@
 ###      only the contrib/ directories and hub.txt, with -fullPush the
 ###      whole assembly directory
 ###
-###  usage: pushContrib.sh [-fullPush] <contribName> <redmine #> <beta|public>
+###  usage: pushContrib.sh [-fullPush] [-verbose] <contribName> <redmine #> <beta|public>
 #############################################################################
 
 set -beEu -o pipefail
@@ -37,19 +37,31 @@ if [[ "${hostName}" != "${expectHost}" ]]; then
 fi
 
 function usage() {
-  printf "usage: %s [-fullPush] <contribName> <redmine #> <beta|public>\n" "$(basename "$0")" 1>&2
-  printf "  beta      : push to hgwbeta, contribName must be in betaGenArk.txt\n" 1>&2
-  printf "  public    : push to hgwbeta and the RR machines, contribName is\n" 1>&2
-  printf "              added to publicGenArk.txt when only in betaGenArk.txt\n" 1>&2
-  printf "  -fullPush : push the whole assembly directories, not only\n" 1>&2
-  printf "              the contrib/ directories and hub.txt\n" 1>&2
+  cat <<EOF 1>&2
+usage: $(basename "$0") [-fullPush] [-verbose] <contribName> <redmine #> <beta|public>
+  beta      : push to hgwbeta, contribName must be in betaGenArk.txt
+  public    : push to hgwbeta and the RR machines, contribName is
+              added to publicGenArk.txt when only in betaGenArk.txt
+  -fullPush : push the whole assembly directories, not only
+              the contrib/ directories and hub.txt
+  -verbose  : pushAccessions.sh shows each step, every file changed,
+              rsync stats and times
+EOF
 }
 
 export fullPushOpt=""
-if [ $# -gt 0 ] && [ "${1}" = "-fullPush" ]; then
-  fullPushOpt="-fullPush"
+export verboseOpt=""
+while [ $# -gt 0 ] && [[ "${1}" == -* ]]
+do
+  case "${1}" in
+    -fullPush) fullPushOpt="-fullPush" ;;
+    -verbose) verboseOpt="-verbose" ;;
+    *) printf "ERROR: unknown option '%s'\n" "${1}" 1>&2
+       usage
+       exit 255 ;;
+  esac
   shift
-fi
+done
 
 if [ $# -ne 3 ]; then
   usage
@@ -218,5 +230,5 @@ if [ "${releaseTier}" = "public" ]; then
   rrOpt="-rr"
 fi
 mapfile -t accArray < "${accList}"
-printf "### %s %s %s %d assemblies %s\n" "${pushAccessions}" "${rrOpt}" "${fullPushOpt}" "${accCount}" "$(date '+%F %T')" 1>&2
-"${pushAccessions}" ${rrOpt} ${fullPushOpt} "${accArray[@]}"
+printf "### %s %s %s %s %d assemblies %s\n" "${pushAccessions}" "${rrOpt}" "${fullPushOpt}" "${verboseOpt}" "${accCount}" "$(date '+%F %T')" 1>&2
+"${pushAccessions}" ${rrOpt} ${fullPushOpt} ${verboseOpt} "${accArray[@]}"
