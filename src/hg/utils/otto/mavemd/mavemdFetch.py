@@ -196,14 +196,21 @@ def fetchVariants(api, urn, path, wanted, expected=None):
     early and leave a truncated file that every build reads until the next refetch.
     """
     query = '&'.join('namespaces=' + urllib.parse.quote(n, safe='') for n in wanted)
-    chunks, offset = [], 0
+    chunks, offset, got = [], 0, 0
     while True:
         body = api.request('%s/score-sets/%s/variants/data?%s&start=%d&limit=%d'
                            % (API, quote(urn), query, offset, PAGE))
         lines = body.split(b'\n')
         chunks.append(body.rstrip(b'\n') if offset == 0
                       else b'\n'.join(lines[1:]).rstrip(b'\n'))
-        if sum(1 for l in lines[1:] if l.strip()) < PAGE:
+        page = sum(1 for l in lines[1:] if l.strip())
+        got += page
+        if page < PAGE:
+            break
+        # A score set whose count is an exact multiple of PAGE would otherwise take one
+        # more request, at a start past the last row. The API's answer to that is not
+        # something we know, and it is not one of the codes request() retries.
+        if expected is not None and got >= expected:
             break
         offset += PAGE
     data = b'\n'.join(c for c in chunks if c) + b'\n'
@@ -249,16 +256,34 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
                'scoreSets': len(urns), 'fetched': [], 'failed': [], 'failedNew': [],
                'superseded': [], 'dropped': []}
 
+    fetchedPath = os.path.join(cacheDir, 'fetched.tsv')
+    fetched = readFingerprints(fetchedPath)
+
     # The record and the namespace list together make the fingerprint, so both are read
     # every run. Two concurrent requests, as asked.
+    #
+    # A score set we cannot describe is carried forward at the fingerprint it was last
+    # fetched at, rather than dropped. The collection still names it, so dropping it would
+    # look like a removal: the pruning below would delete a good cached copy, and the
+    # release key would move, all because of one transient 500. It is counted as a failure
+    # instead and tooManyFailures() decides whether the run is worth continuing.
     def describe(urn):
-        record = api.json('%s/score-sets/%s' % (API, quote(urn)))
-        wanted, offered = namespacesFor(api, urn)
-        return urn, record, wanted, offered
+        try:
+            record = api.json('%s/score-sets/%s' % (API, quote(urn)))
+            wanted, offered = namespacesFor(api, urn)
+            return urn, record, wanted, offered, None
+        except FetchError as e:
+            return urn, None, None, None, e
 
-    current, records, wantedNs = {}, {}, {}
+    current, records, wantedNs, failedMeta = {}, {}, {}, {}
     with concurrent.futures.ThreadPoolExecutor(METADATA_WORKERS) as pool:
-        for urn, record, wanted, offered in pool.map(describe, urns):
+        for urn, record, wanted, offered, err in pool.map(describe, urns):
+            if err is not None:
+                failedMeta[urn] = err
+                if urn in fetched:
+                    current[urn] = fetched[urn]
+                log.write('record failed: %s\n' % err)
+                continue
             current[urn] = fingerprint(record, offered)
             records[urn] = record
             wantedNs[urn] = wanted
@@ -275,21 +300,20 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
     if catalogueOnly:
         return summary
 
-    fetchedPath = os.path.join(cacheDir, 'fetched.tsv')
-    fetched = readFingerprints(fetchedPath)
-
     # A score set the collection no longer names must leave the cache, because the
     # converters read it by globbing the directory: left behind, its variants would keep
     # being built into the track. MaveDB replaced seven superseded members on 2026-10-21,
-    # which is exactly this case.
-    for urn in sorted(set(fetched) - set(current)):
+    # which is exactly this case. This is judged on the collection itself, never on which
+    # records happened to download, so a failed metadata read cannot evict anything.
+    inCollection = set(urns)
+    for urn in sorted(set(fetched) - inCollection):
         for path in paths(urn):
             if os.path.exists(path):
                 os.remove(path)
         del fetched[urn]
         summary['dropped'].append(urn)
     for sub, ext in (('variants', '.csv'), ('scoreSets', '.json')):
-        stems = {fileStem(u) for u in current}
+        stems = {fileStem(u) for u in inCollection}
         for name in sorted(os.listdir(os.path.join(cacheDir, sub))):
             if name.endswith(ext) and name[:-len(ext)] not in stems:
                 os.remove(os.path.join(cacheDir, sub, name))
@@ -334,6 +358,7 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
             summary['fetched'].append(urn)
         writeFingerprints(fetchedPath, fetched)
 
+    failed |= set(failedMeta)
     for urn in sorted(failed):
         summary['failed' if os.path.exists(paths(urn)[1]) else 'failedNew'].append(urn)
     summary['fetched'].sort()
@@ -343,17 +368,19 @@ def fetch(cacheDir, refetch=False, collection=MAVEMD_COLLECTION, catalogueOnly=F
         with open(failedPath) as fh:
             before = set(fh.read().split())
     writeAtomic(failedPath, ''.join(u + '\n' for u in sorted(failed)).encode())
-    tooMany = tooManyFailures(failed, set(want), before)
+    # Judged against the whole collection, not against the handful we happened to try.
+    # In a quiet week nothing needs downloading, so one metadata failure would otherwise
+    # be one failure out of one attempt and would stop the run.
+    tooMany = tooManyFailures(failed, inCollection, before)
     if tooMany:
         raise FetchError(tooMany)
     return summary
 
 
 def tooManyFailures(failed, tried, before):
-    """An error message when more than MAX_FAILED_FRACTION of the score sets tried this run
-    failed, else None. A score set that also failed last run (before) is left out of the
-    count: one that MaveDB times out on every week would otherwise be the only one tried
-    in a quiet week and fail the run every time."""
+    """An error message when more than MAX_FAILED_FRACTION of the collection failed this
+    run, else None. A score set that also failed last run (before) is left out of the
+    count, so one MaveDB times out on every week does not stop the run every week."""
     fresh = tried - before
     new = failed - before
     if fresh and len(new) > MAX_FAILED_FRACTION * len(fresh):

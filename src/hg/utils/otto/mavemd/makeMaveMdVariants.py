@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the MaveMD per-variant bigBed from a fetchMaveMd.py download.
+"""Build the MaveMD per-variant bigBed from a mavemdFetch.py cache.
 
 One item per variant per score set. Placement is not done here: it is mavedbPlace.py, in
 utils/otto/mavedb, shared with the MaveDB track so a variant lands in the same place in
