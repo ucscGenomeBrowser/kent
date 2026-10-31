@@ -41,6 +41,7 @@
 add                                # hg/lib/hui.c
 bin                                # hg/cgilib/annoStreamDb.c
 bip                                # hg/hgTracks/gvfTrack.c
+cfgLink                            # hg/lib/hui.c
 chainSelf                          # hg/hgc/hgc.c
 clr                                # hg/lib/hui.c
 coloring                           # hg/hgTrackUi/hgTrackUi.c

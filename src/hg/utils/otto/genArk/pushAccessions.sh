@@ -28,9 +28,8 @@
 ###
 ###  With -rr, after the hgwbeta steps above, the same accession also
 ###  goes out to the RR machines:
-###   4. (-fullPush only) the content files from step 1, sent from hgwbeta
-###      by the cluster-admin sudo script gbdbPush on hgwbeta (which pushes
-###      to hgw0/1/2, genome-euro, genome-asia and hgdownload1/3)
+###   4. (-fullPush only) the content files from step 1, rsync from hgwdev
+###      to the rrMachList machines, without --delete
 ###   5. the contrib/<track>/ directories listed in publicGenArk.txt,
 ###      rsync from hgwdev to the rrMachList machines
 ###   6. public.hub.txt renamed to hub.txt, or for an assembly with only a
@@ -41,7 +40,10 @@
 ###  The release lists betaGenArk.txt and publicGenArk.txt are read from
 ###  the otto kent tree, the same tree ottoBuildGenArkHub.py builds from.
 ###
-###  usage: pushAccessions.sh [-rr] [-fullPush] GCA_123456789.1 [GCF_987654321.2 ...]
+###  Without -verbose only one line at the start and end of each accession
+###  is printed, plus any errors.
+###
+###  usage: pushAccessions.sh [-rr] [-fullPush] [-verbose] GCA_123456789.1 [GCF_987654321.2 ...]
 #############################################################################
 
 set -beEu -o pipefail
@@ -54,19 +56,24 @@ if [[ "${hostName}" != "${expectHost}" ]]; then
 fi
 
 function usage() {
-  printf "usage: %s [-rr] [-fullPush] GCA_123456789.1 [GCF_987654321.2 ...]\n" "$(basename "$0")" 1>&2
-  printf "  -rr       : also push to the RR machines after hgwbeta\n" 1>&2
-  printf "  -fullPush : push the whole assembly directory, not only\n" 1>&2
-  printf "              the contrib/ directories and hub.txt\n" 1>&2
+  cat <<EOF 1>&2
+usage: $(basename "$0") [-rr] [-fullPush] [-verbose] GCA_123456789.1 [GCF_987654321.2 ...]
+  -rr       : also push to the RR machines after hgwbeta
+  -fullPush : push the whole assembly directory, not only
+              the contrib/ directories and hub.txt
+  -verbose  : show each step, every file changed, rsync stats and times
+EOF
 }
 
 export rrPush="no"
 export fullPush="no"
+export verbose="no"
 while [ $# -gt 0 ] && [[ "${1}" == -* ]]
 do
   case "${1}" in
     -rr) rrPush="yes" ;;
     -fullPush) fullPush="yes" ;;
+    -verbose) verbose="yes" ;;
     *) printf "ERROR: unknown option '%s'\n" "${1}" 1>&2
        usage
        exit 255 ;;
@@ -84,10 +91,10 @@ export gbdbTop="/gbdb/genark"
 export ottoKentTree="/hive/data/outside/genark/ottoKent/kent"
 export betaGenArkList="${ottoKentTree}/src/hg/makeDb/trackDb/betaGenArk.txt"
 export publicGenArkList="${ottoKentTree}/src/hg/makeDb/trackDb/publicGenArk.txt"
-# cluster-admin sudo script on hgwbeta that pushes /gbdb files to the RR
-export rootGbDbPush="/root/gbdbPush"
-# where public.hub.txt and public contrib/ go, as qateam from hgwdev
-export rrMachList="hgw0 hgw1 hgw2 genome-euro genome-asia"
+# where content, public.hub.txt and public contrib/ go, as qateam from hgwdev.
+# Not the asia node: qateam can not log in there, the cluster
+# administrators manage its contents
+export rrMachList="hgw0 hgw1 hgw2 genome-euro"
 # shared with pushContrib.sh, see there for why it is in /dev/shm
 export lockFile="/dev/shm/pushGenArk.lock"
 
@@ -106,6 +113,27 @@ if ! flock -n 9; then
   printf "ERROR: another pushContrib.sh or pushAccessions.sh is already running (%s is locked)\n" "${lockFile}" 1>&2
   exit 255
 fi
+
+##############################################################################
+### rsync with the given arguments; with -verbose also list every file
+### changed (--itemize-changes), the transfer --stats and the time taken
+##############################################################################
+function runRsync() {
+  if [ "${verbose}" = "yes" ]; then
+    time (rsync --stats --itemize-changes "$@")
+  else
+    rsync "$@"
+  fi
+}
+
+##############################################################################
+### printf only with -verbose
+##############################################################################
+function verboseLog() {
+  if [ "${verbose}" = "yes" ]; then
+    printf "$@"
+  fi
+}
 
 ##############################################################################
 ### given an accession, echo its /gbdb/genark path, e.g.
@@ -135,19 +163,19 @@ function missingOnMach() {
 ##############################################################################
 function pushContent() {
   local accDir="${1}"
-  printf "### content: %s -> %s %s\n" "${accDir}" "${destMach}" "$(date '+%F %T')"
+  verboseLog "### content: %s -> %s %s\n" "${accDir}" "${destMach}" "$(date '+%F %T')"
   ssh qateam@${destMach} "umask 002; mkdir -p '${gbdbTop}/${accDir}'" < /dev/null
   # --delete only removes files rsync would otherwise have considered
   # transferring; excluded paths (contrib/ and the hub.txt files) are
   # excluded from the delete pass too unless --delete-excluded is added.
   # Do NOT add --delete-excluded here -- contrib/ and hub.txt on hgwbeta
   # are owned by pushContrib()/pushHubTxt() below, not this rsync.
-  time (rsync --delete --stats -a -L --itemize-changes \
+  runRsync --delete -a --no-g -L \
     --exclude="hub.txt" \
     --exclude="alpha.hub.txt" --exclude="beta.hub.txt" \
     --exclude="public.hub.txt" --exclude="user.hub.txt" \
     --exclude="contrib/" \
-    "${gbdbTop}/${accDir}/" "qateam@${destMach}:${gbdbTop}/${accDir}/")
+    "${gbdbTop}/${accDir}/" "qateam@${destMach}:${gbdbTop}/${accDir}/"
 }
 
 ##############################################################################
@@ -172,9 +200,9 @@ function pushContrib() {
     if [ -d "${contribDir}" ]; then
       for M in ${machList}
       do
-        printf "### contrib: %s -> %s %s\n" "${contribDir}" "${M}" "$(date '+%F %T')"
-        time (rsync --mkpath --stats -a -L --itemize-changes \
-          "${contribDir}/" "qateam@${M}:${contribDir}/")
+        verboseLog "### contrib: %s -> %s %s\n" "${contribDir}" "${M}" "$(date '+%F %T')"
+        runRsync --mkpath -a --no-g -L \
+          "${contribDir}/" "qateam@${M}:${contribDir}/"
       done
     fi
   done
@@ -199,45 +227,27 @@ function pushHubTxt() {
     printf "ERROR: no beta.hub.txt or hub.txt found for %s\n" "${accDir}" 1>&2
     exit 255
   fi
-  printf "### hub.txt: %s -> %s:%s %s\n" "${src}" "${destMach}" "${dest}" "$(date '+%F %T')"
-  time (rsync --stats -a -L --itemize-changes "${src}" "qateam@${destMach}:${dest}")
+  verboseLog "### hub.txt: %s -> %s:%s %s\n" "${src}" "${destMach}" "${dest}" "$(date '+%F %T')"
+  runRsync -a --no-g -L "${src}" "qateam@${destMach}:${dest}"
 }
 
 ##############################################################################
-### feed a list of hgwbeta /gbdb paths (on stdin) to the sudo gbdbPush
-### script on hgwbeta, answering its prompts: the user name, the path
-### list ended with '.', then 'y' to proceed
-##############################################################################
-function gbdbPushRR() {
-  { printf "%s\n" "${USER}"
-    cat
-    printf ".\ny\n"
-  } | ssh qateam@${destMach} "sudo -n ${rootGbDbPush}"
-}
-
-##############################################################################
-### push the content files of one accession from hgwbeta to the RR,
-### naming the top level entries of the accession directory to gbdbPush
-### (directories go recursively), leaving out hub.txt and contrib/ the
-### same way pushContent() does
+### push the content files of one accession from hgwdev to the RR, with
+### the same excludes as pushContent(); no --delete on the RR, files
+### removed on hgwdev stay on the RR machines
 ##############################################################################
 function pushContentRR() {
   local accDir="${1}"
-  local accPath="${gbdbTop}/${accDir}"
-  local entryList
-  entryList=$(ssh qateam@${destMach} "ls -A '${accPath}'" < /dev/null \
-    | { grep -v -x -E 'hub\.txt|alpha\.hub\.txt|beta\.hub\.txt|public\.hub\.txt|user\.hub\.txt|contrib' || true; })
-  if [ -z "${entryList}" ]; then
-    printf "ERROR: no content found in %s:%s\n" "${destMach}" "${accPath}" 1>&2
-    exit 255
-  fi
-  # gbdbPush puts each name into a shell command run as root
-  if printf "%s\n" "${entryList}" | grep -v -x -E '[A-Za-z0-9._-]+' 1>&2; then
-    printf "ERROR: unexpected file name(s) above in %s:%s, not pushing\n" "${destMach}" "${accPath}" 1>&2
-    exit 255
-  fi
-  printf "### RR content: %s:%s -> RR %s\n" "${destMach}" "${accPath}" "$(date '+%F %T')"
-  printf "%s\n" "${entryList}" | sed -e "s#^#${accPath}/#" | gbdbPushRR
+  for M in ${rrMachList}
+  do
+    verboseLog "### RR content: %s -> %s %s\n" "${accDir}" "${M}" "$(date '+%F %T')"
+    runRsync --mkpath -a --no-g -L \
+      --exclude="hub.txt" \
+      --exclude="alpha.hub.txt" --exclude="beta.hub.txt" \
+      --exclude="public.hub.txt" --exclude="user.hub.txt" \
+      --exclude="contrib/" \
+      "${gbdbTop}/${accDir}/" "qateam@${M}:${gbdbTop}/${accDir}/"
+  done
 }
 
 ##############################################################################
@@ -266,8 +276,8 @@ function pushHubTxtRR() {
   fi
   for M in ${rrMachList}
   do
-    printf "### RR hub.txt: %s -> %s:%s %s\n" "${src}" "${M}" "${dest}" "$(date '+%F %T')"
-    time (rsync --stats -a -L --itemize-changes "${src}" "qateam@${M}:${dest}")
+    verboseLog "### RR hub.txt: %s -> %s:%s %s\n" "${src}" "${M}" "${dest}" "$(date '+%F %T')"
+    runRsync -a --no-g -L "${src}" "qateam@${M}:${dest}"
   done
 }
 

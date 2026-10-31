@@ -822,6 +822,17 @@ MIRROR_KNOBS = {
                "measurably faster to draw, so both positions have a "
                "constituency.  Its companions freeTypeDir and freeTypeFont "
                "are plain values and stay."),
+        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
+          role="knob", ticket="38562", public=True, verified=True,
+          note="Shows a block of FreeType controls on the hgTracks configure "
+               "page: pixel size and baseline per text size, glyph gamma, the "
+               "fit-to-box multiplier, hinting and the anti-aliasing target, "
+               "with a Reset FreeType button.  The freeTypeTune.* cart "
+               "variables are read only while this is on, so a server without "
+               "it draws what it always drew.  A debugging aid for tuning "
+               "small text, not a feature waiting to ship, so it stays off by "
+               "default and is a knob.  Documented in ex.hg.conf and the "
+               "mirror manual."),
         h("trustTrackDb", "flag", "hg/lib/hdb.c", default="FALSE",
           role="knob", verified=True,
           note="Skip the per-track check that a trackDb row's table or file "
@@ -1898,38 +1909,6 @@ AWAITING_REVIEW = {
         # --auto-register inserts new rows directly below this line.  Leave the
         # marker in place; it is how the writer finds its way in.
         # AUTO-REGISTER INSERTION POINT
-        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
-          ticket="38562",
-          note="Written down by --auto-register, not yet reviewed by a "
-               "person.  Read with cfgOptionBooleanDefault in "
-               "hg/hgTracks/config.c.  Came in at 05d90ce7ada, hgTracks: a "
-               "block of controls on the configure page for the FreeType "
-               "rendering itself, behind hg.conf freeTypeTuneUI, so the "
-               "settings that decide whether small text is readable can be "
-               "found by looking at the browser rather than at a demo "
-               "program.  The controls are the pixel size and baseline picked "
-               "for each text size, a gamma on each glyph pixel's coverage, "
-               "the multiplier used for text drawn to fit a box, the hinting "
-               "mode, and the anti-aliasing target, which now offers Light, "
-               "Light sub pixel and the four LCD sub-pixel targets beside the "
-               "Normal one the browser has always used; a Reset FreeType "
-               "button puts them all back.  Every control starts at what the "
-               "browser draws today and the cart is read only while the "
-               "hg.conf setting is on, so a server without it draws exactly "
-               "what it drew before: checked by rendering the same images "
-               "from this build and from a build of the same tree without the "
-               "change, with the setting absent and the cart carrying a value "
-               "for every control, and comparing them byte for byte.  Two "
-               "things had to be fixed before the knobs meant anything.  The "
-               "glyph copy assumed FreeType had packed the coverage rows when "
-               "it pads each one out to pitch, which is the same for every "
-               "glyph the browser draws today but would have skewed an LCD "
-               "render.  Subpixel positioning needs the unhinted advance, "
-               "since a hinted advance is rounded to a whole pixel and leaves "
-               "the pen with no fraction to stand on, which is why that mode "
-               "first came out identical to Light.  The setting is documented "
-               "in ex.hg.conf and in the mirror manual.  refs #38562.  Needs "
-               "a description and a gate or knob call."),
     ],
 }
 
