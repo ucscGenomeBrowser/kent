@@ -22,4 +22,18 @@ boolean colorSpecMayParse(char *spec, unsigned *retColor);
 unsigned colorSpecParse(char *spec);
 /* Parse a color spec, errAbort naming the spec and the spellings it could have used. */
 
+unsigned colorSpecParseOrDefault(char *spec, char *defaultSpec);
+/* Parse a color spec loosely, returning the color of defaultSpec for anything that cannot
+ * be read at all.  This takes spellings the two above turn away, among them an empty value
+ * between two commas and a number wide enough to wrap.  defaultSpec is written in the code
+ * rather than by a user, so it is read strictly and errAborts if it is not a color.
+ *
+ * Use this for a field existing hubs and data files already set, so that a value already
+ * written keeps drawing the color it draws now.  Use the strict pair for a new field,
+ * where the error reaches the author writing the first value. */
+
+unsigned colorSpecParseOrDefaultColor(char *spec, unsigned defaultColor);
+/* colorSpecParseOrDefault with the default already packed, for a caller that reads a color
+ * off every row and would otherwise parse the same default text each time. */
+
 #endif /* COLORSPEC_H */
