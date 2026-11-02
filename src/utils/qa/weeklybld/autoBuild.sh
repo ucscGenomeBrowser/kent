@@ -199,9 +199,12 @@ ensure_gh_auth() {
     if ! gh auth status >/dev/null 2>&1; then
         die "gh is not authenticated (gh auth status failed). $fix"
     fi
+    # The `|| true` on each gh api call is load-bearing under `set -e`: gh exits
+    # non-zero on any HTTP error, which would abort here with no FATAL line and no
+    # alert email. An empty result falls through to the die() below instead.
     local scopes
     scopes=$(gh api -i "repos/$repo" 2>/dev/null | tr -d '\r' \
-        | sed -n 's/^[Xx]-[Oo][Aa]uth-[Ss]copes: *//p')
+        | sed -n 's/^[Xx]-[Oo][Aa]uth-[Ss]copes: *//p') || true
     if [[ -n "$scopes" ]]; then
         if [[ ",$scopes," =~ [,\ ](public_)?repo, ]]; then
             log "OK: gh authenticated (classic token, scopes: $scopes)"
@@ -211,8 +214,9 @@ ensure_gh_auth() {
         return 0
     fi
     local login perm
-    login=$(gh api user --jq .login 2>/dev/null)
-    perm=$(gh api "repos/$repo/collaborators/$login/permission" --jq .permission 2>/dev/null)
+    login=$(gh api user --jq .login 2>/dev/null) || true
+    perm=$(gh api "repos/$repo/collaborators/$login/permission" --jq .permission 2>/dev/null) \
+        || true
     case "$perm" in
         admin|maintain|write)
             log "OK: gh authenticated (fine-grained token, $login has $perm on $repo;"

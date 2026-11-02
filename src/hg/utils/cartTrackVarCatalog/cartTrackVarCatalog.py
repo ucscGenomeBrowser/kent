@@ -443,6 +443,17 @@ FAMILIES = {
             v("indelPolyA", "bool", "hg/inc/hui.h:INDEL_POLY_A"),
         ],
     },
+    "dotBracket": {
+        "what": "RNA secondary structure drawn over the items of a track "
+                "whose trackDb names a dot-bracket column (dotBracketField).  "
+                "hg/lib/hui.c:dotBracketCfgUi.",
+        "vars": [
+            v("dotBracket", "bool", "hg/inc/hui.h:DOT_BRACKET_SHOW_SUFFIX",
+              default="on",
+              note="Read with cartUsualBooleanClosestToHome, so a container "
+                   "setting reaches its children."),
+        ],
+    },
     "label": {
         "what": "Which label to draw.  Legacy tracks each grew their own "
                 "checkbox set, which is why the same idea appears under so "
@@ -492,6 +503,11 @@ FAMILIES = {
               note="Draw labels for blocks in overlay mode."),
             v("decorator.<name>.maxLabelBases", "int",
               "hg/lib/decoratorUi.c:26", default="200000"),
+            v("decorator.<name>.maxDrawBases", "int",
+              "hg/lib/decoratorUi.c:decoratorUiMaxDrawnBaseCount",
+              default="0", tdb="decorator.default.maxDrawBases",
+              note="Hide the decorations when the window is wider than this "
+                   "many bases.  0 means no limit."),
             v("decorator.<name>.filterBy.<field>", "list",
               "hg/lib/decoratorUi.c:176", multi=True,
               note="Whole filterBy family nests here."),

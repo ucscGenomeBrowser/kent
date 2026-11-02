@@ -9740,7 +9740,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 		     * take the whole image down.  parallelLoadData does this for the threaded
 		     * path; the serial path needs it too, and over the same work, or the two
 		     * disagree about what a bad track does.  refs #38560 */
-		    unsigned connMark = hConnMark();
+		    unsigned connGeneration = hConnGeneration();
 		    struct errCatch *errCatch = errCatchNew();
 		    if (errCatchStart(errCatch))
 			loadOneTrackSerial(track, doLoadSummary);
@@ -9753,7 +9753,7 @@ for (doLoadLoop=0; doLoadLoop < 2; ++doLoadLoop)
 			 * connection cache holds sixteen, so without this a handful of
 			 * failing tracks fills it and every later track reports "Too many
 			 * open sqlConnections" instead of its own trouble.  refs #38560 */
-			hConnReleaseSince(connMark);
+			hConnFreeNewerThan(connGeneration);
 			}
 		    errCatchReWarn(errCatch);  // errCatchStart took the warnings, hand them back
 		    errCatchFree(&errCatch);

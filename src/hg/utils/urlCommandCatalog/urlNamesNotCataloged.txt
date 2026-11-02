@@ -123,6 +123,7 @@ fileList                           # hg/encode3/encodeDataWarehouse/edwWebDeprec
 fixMembers                         # hg/gsid/gsidMember/gsidMember.c
 foot                               # hg/hgc/interactClick.c
 fpcChrom                           # hg/gigAssembler/cmParse/cmParse.c
+freeTypeTune.                      # hg/hgTracks/config.c
 fromProg                           # hg/gisaid/gisaidTable/gisaidTable.c
 gapOpenCost                        # hg/pslFilter/pslFilter.c
 gapSizeLogMod                      # hg/pslFilter/pslFilter.c
@@ -163,7 +164,6 @@ hgLogin_sendMailContain            # hg/hgLogin/hgLogin.c
 hgLogin_sendMailTo                 # hg/hgLogin/hgLogin.c
 hgLogin_userName                   # hg/hgLogin/hgLogin.c
 hgS_delete_                        # hg/hgSession/hgSession.c
-hgS_didSessionLoad                 # hg/hgTracks/hgTracks.c
 hgS_do                             # hg/hgSession/hgSession.c
 hgS_doDownload_                    # hg/hgSession/hgSession.c
 hgS_edit_                          # hg/hgSession/hgSession.c
@@ -173,6 +173,7 @@ hgS_load_                          # hg/hgSession/hgSession.c
 hgS_makeDownload_                  # hg/hgSession/hgSession.c
 hgS_oldSessionName                 # hg/hgSession/hgSession.c
 hgS_otherUserSessionLabel          # hg/hgTracks/hgTracks.c
+hgS_prevViewOf                     # hg/lib/cart.c
 hgS_saveLocalBackupFileName        # hg/hgSession/backup.c
 hgS_share_                         # hg/hgSession/hgSession.c
 hgS_showDownload_                  # hg/hgSession/hgSession.c
@@ -229,6 +230,7 @@ hgt_doConfigShowAll                # hg/hgTracks/hgTracks.c
 hgt_doConfigShowAllGroups          # hg/hgTracks/hgTracks.c
 hgt_doConfigShowEncodeGroups       # hg/hgTracks/hgTracks.c
 hgt_doDefaultShowAll               # hg/hgTracks/hgTracks.c
+hgt_doFreeTypeTuneReset            # hg/hgTracks/hgTracks.c
 hgt_doJsCommand                    # hg/hgTracks/hgTracks.c
 hgta_corrMaxLimitCount             # hg/lib/web.c
 hgta_corrWinSize                   # hg/lib/web.c
