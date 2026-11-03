@@ -20,6 +20,9 @@ errAbort(
   "options:\n"
   "  -cds=file.cds - tab-separated columns with the qName and a GenBank style one-based CDS (e.g. 475..1731, <1..354)\n"
   "  -fa=file.fasta\n"
+  "  -trimOverlap - shorten a target block that runs into the next one instead of stopping.\n"
+  "     BED needs blocks that ascend without overlap, while a translated alignment may join\n"
+  "     blocks lying in different reading frames, which do overlap in the genome.\n"
   "NOTE: to build bigBed:\n"
   "   wget https://genome.ucsc.edu/goldenPath/help/examples/bigPsl.as\n"
   "   bedToBigBed -type=bed12+13 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
@@ -32,8 +35,11 @@ boolean snakeMode = FALSE;
 static struct optionSpec options[] = {
    {"cds", OPTION_STRING},
    {"fa", OPTION_STRING},
+   {"trimOverlap", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+static boolean trimOverlap = FALSE;   /* -trimOverlap */
 
 static unsigned initNumBlocks = 1000;
 static unsigned currentNumBlocks = 0;
@@ -59,6 +65,62 @@ else
     ExpandArray(oBlockStarts, currentNumBlocks, size);
     }
 currentNumBlocks = size;
+}
+
+static int firstBlockOverlap(struct bigPsl *bigPsl)
+/* Return the index of the first target block that starts before the one in front of it ends,
+ * or 0 when the blocks ascend without overlap the way BED requires.  A translated alignment
+ * can join blocks lying in different reading frames, and those overlap in the genome once the
+ * query lengths are multiplied out. */
+{
+int ii;
+for (ii = 1; ii < bigPsl->blockCount; ii++)
+    if (bigPsl->chromStarts[ii] < bigPsl->chromStarts[ii-1] + bigPsl->blockSizes[ii-1])
+        return ii;
+return 0;
+}
+
+static void trimOverlappingBlocks(struct bigPsl *bigPsl, int mult)
+/* Shorten every target block that runs into the next one until the blocks ascend without
+ * overlap.  Only the end of the earlier block moves, and only by whole query units (three
+ * bases for a protein query), so the query start of each block is still right.  A block left
+ * with no whole unit is dropped; the last block is never shortened, so one always survives. */
+{
+int ii, out = 0;
+for (ii = 0; ii < bigPsl->blockCount; ii++)
+    {
+    int size = bigPsl->blockSizes[ii];
+    if (ii + 1 < bigPsl->blockCount)
+        {
+        int room = bigPsl->chromStarts[ii+1] - bigPsl->chromStarts[ii];
+        if (size > room)
+            size = (room / mult) * mult;
+        }
+    if (size > 0)
+        {
+        bigPsl->blockSizes[out] = size;
+        bigPsl->chromStarts[out] = bigPsl->chromStarts[ii];
+        bigPsl->oChromStarts[out] = bigPsl->oChromStarts[ii];
+        out += 1;
+        }
+    }
+bigPsl->blockCount = out;
+
+/* BED wants the first block to start at chromStart, so a dropped leading block moves it. */
+int shift = bigPsl->chromStarts[0];
+if (shift != 0)
+    {
+    bigPsl->chromStart += shift;
+    bigPsl->thickStart = bigPsl->chromStart;
+    for (ii = 0; ii < bigPsl->blockCount; ii++)
+        bigPsl->chromStarts[ii] -= shift;
+    }
+
+/* chromEnd still matches the last block, which is never shortened, but the query range
+ * follows the blocks that are left. */
+ii = bigPsl->blockCount - 1;
+bigPsl->oChromStart = bigPsl->oChromStarts[0];
+bigPsl->oChromEnd = bigPsl->oChromStarts[ii] + bigPsl->blockSizes[ii] / mult;
 }
 
 void outBigPsl(FILE *fp, struct psl *psl, struct hash *fastaHash, struct hash *cdsHash)
@@ -114,7 +176,19 @@ for(ii=0; ii < bigPsl.blockCount; ii++)
     oBlockStarts[ii] = psl->qStarts[ii] ;
     blockSizes[ii] = psl->blockSizes[ii] * mult;
     }
-    
+
+int overlap = firstBlockOverlap(&bigPsl);
+if (overlap > 0)
+    {
+    if (!trimOverlap)
+        errAbort("%s aligned to %s:%d-%d has target blocks %d and %d that overlap, which BED "
+                 "cannot represent.  A translated alignment may join blocks lying in different "
+                 "reading frames.  Rerun with -trimOverlap to shorten the earlier block.",
+                 psl->qName, bigPsl.chrom, bigPsl.chromStart, bigPsl.chromEnd,
+                 overlap - 1, overlap);
+    trimOverlappingBlocks(&bigPsl, mult);
+    }
+
 bigPsl.seqType = PSL_SEQTYPE_EMPTY;
 if (fastaHash)
     {
@@ -200,6 +274,7 @@ if (argc != 3)
     usage();
 char *fastaFile = optionVal("fa", NULL);
 char *cdsFile = optionVal("cds", NULL);
+trimOverlap = optionExists("trimOverlap");
 
 pslToBigPsl(argv[1], argv[2], fastaFile, cdsFile);
 return 0;

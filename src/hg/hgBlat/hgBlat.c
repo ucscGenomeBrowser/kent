@@ -1100,24 +1100,34 @@ else  // hyperlink
         jsInlineF(
 	    
 	    "var ct_blat = '';\n"
+	    "var ctBuildFailed = false;\n"
 	    "\n"
 	    "function buildBigPslCtSuccess (content, status)\n"
 	    "{ // Finishes the successful creation of blat ct bigPsl.  Called by ajax return.\n"
 	    "  // saves the ct name so it can be used later for rename or delete.\n"
 	    "\n"
 	    "var matchWord = '&table=';\n"
-	    "var ct_blatPos = content.indexOf(matchWord) + matchWord.length;\n"
+	    /* hgc serves an errAbort page with a 200, so jQuery hands it to us as a success and the
+	     * name of the track it was supposed to make is simply absent.  Test indexOf itself: the
+	     * old test added the match length first, so a missing name read as -1 + 7 and passed,
+	     * and a build that had died looked exactly like one that had worked (RM #38680). */
+	    "var matchStart = content.indexOf(matchWord);\n"
 	    "\n"
-	    "if (ct_blatPos >= 0)\n"
+	    "if (matchStart < 0)\n"
 	    "    {\n"
-	    "    var ct_blatPosEnd = content.indexOf('\"', ct_blatPos);\n"
-	    "    ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
-	    "    if (luckyLocation == '')\n"
-	    "        {\n"
+	    "    ctBuildFailed = true;\n"
+	    "    warn('The BLAT results could not be turned into a track, so the genome browser "
+	           "will not show them.  The hits below are still good.');\n"
+	    "    return;\n"
+	    "    }\n"
+	    "var ct_blatPos = matchStart + matchWord.length;\n"
+	    "var ct_blatPosEnd = content.indexOf('\"', ct_blatPos);\n"
+	    "ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
+	    "if (luckyLocation == '')\n"
+	    "    {\n"
 	    /* set the ct name on whatever CT_SELECTED_TABLE_VAR inputs are present (the rename form has
 	     * one; the old delete form that had a second was removed), so no [1] undefined error */
-	    "        $('input[name=\""CT_SELECTED_TABLE_VAR"\"]').each(function(){ this.value = ct_blat; });\n"
-	    "        }\n"
+	    "    $('input[name=\""CT_SELECTED_TABLE_VAR"\"]').each(function(){ this.value = ct_blat; });\n"
 	    "    }\n"
 	    "}\n"
 	    "\n"
@@ -1158,11 +1168,16 @@ else  // hyperlink
             "$(document).ready(function() {\n"
 	    "\n"
 	    "buildBigPslCt(url, trackName, trackDescription);\n"
-	    "if (luckyLocation !== '')\n"
+	    /* The ajax above is synchronous, so a failed build has already warned by here.  Staying
+	     * put lets the user read that warning; jumping would land them on a browser with no
+	     * track and nothing said. */
+	    "if (luckyLocation !== '' && !ctBuildFailed)\n"
 	    "    {\n"
             "    location.replace(luckyLocation);\n"
 	    "    }\n"
-	    "else\n"
+	    /* The rename item is only on the page when the search was not "I'm feeling lucky", and a
+	     * lucky search that failed to build its track now stays here instead of jumping. */
+	    "else if ($('#renameFormItem').length > 0)\n"
 	    "    {\n"
 	    "    $('#renameFormItem')[0].style.display = 'block';\n"
 	    "    }\n"
