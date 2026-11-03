@@ -28369,7 +28369,10 @@ char *bigPslFile = replaceSuffix(outputBigBed, "bigPsl");
 
 char faNameBuffer[strlen("-fa=") + strlen(faName) + 1];
 safef(faNameBuffer, sizeof faNameBuffer, "-fa=%s", faName);
-char *cmd11[] = {"loader/pslToBigPsl", pslName,  faNameBuffer, "stdout", NULL};
+/* -trimOverlap: a protein query can align with its target blocks in two reading frames, so
+ * the blocks overlap in the genome and BED cannot hold them.  Shortening the earlier block
+ * costs part of one alignment; without it pslToBigPsl stops and there is no track at all. */
+char *cmd11[] = {"loader/pslToBigPsl", "-trimOverlap", pslName,  faNameBuffer, "stdout", NULL};
 char *cmd12[] = {"sort","-k1,1","-k2,2n", NULL};
 char **cmds1[] = { cmd11, cmd12, NULL};
 struct pipeline *pl = pipelineOpen(cmds1, pipelineWrite, bigPslFile, NULL, 0);
