@@ -327,6 +327,8 @@ def pruneDecisionLogs():
 
 STATE_CONN = None
 ALERT_TO_OVERRIDE = None
+STATE_DIR = None
+INDEX_OK = False
 
 
 def sendAlert(key, subject, body):
@@ -946,6 +948,15 @@ class CallCapReached(AskError):
     """This run has made CALL_CAP model calls already."""
 
 
+class AskLimitError(AskError):
+    """The subscription's usage limit is reached. Not the message's fault: stop the
+    run and try again later; the 3-day fetch window keeps the message."""
+
+
+LIMIT_TEXT = re.compile(r'hit your .{0,20}limit|usage limit|rate limit|limit reached|'
+                        r'resets \d', re.IGNORECASE)
+
+
 _callCount = 0
 
 
@@ -990,6 +1001,8 @@ def ask(prompt, schema, model, fallbackModel=None, systemPrompt='', tools=None, 
         raise AskError(f"claude -p exited {result.returncode} without JSON: {detail}")
     if envelope.get('is_error') or envelope.get('subtype') != 'success':
         detail = str(envelope.get('result') or envelope.get('subtype'))[:500]
+        if LIMIT_TEXT.search(detail):
+            raise AskLimitError(f"Claude usage limit: {detail}")
         if re.search(r'auth|login|token|401|403', detail, re.IGNORECASE):
             raise AskAuthError(f"claude -p could not authenticate: {detail}")
         raise AskError(f"claude -p failed ({envelope.get('subtype')}): {detail}")
@@ -1075,7 +1088,8 @@ STAGE1_SCHEMA = {
     'additionalProperties': False,
     'required': ['disposition', 'dispositionReason', 'confidence', 'sensitivePersonalInfo',
                  'canonicalSubject', 'digestTopic', 'summaryLine', 'cleanBodyTextile',
-                 'category', 'hubName', 'hubUrl', 'assemblies', 'urls', 'attachmentRoles'],
+                 'category', 'playbooks', 'hubName', 'hubUrl', 'assemblies', 'urls',
+                 'attachmentRoles'],
     'properties': {
         'disposition': {'type': 'string', 'enum': DISPOSITIONS},
         'dispositionReason': {'type': 'string'},
@@ -1086,6 +1100,9 @@ STAGE1_SCHEMA = {
         'summaryLine': {'type': 'string'},
         'cleanBodyTextile': {'type': 'string'},
         'category': {'type': 'string', 'enum': MLQ_CATEGORIES},
+        'playbooks': {'type': 'array', 'maxItems': 2, 'items': {
+            'type': 'string', 'enum': ['LiftOver', 'Login', 'User Accounts', 'IP blocked',
+                                       'Sessions', 'CAPTCHA']}},
         'hubName': {'type': 'string'},
         'hubUrl': {'type': 'string'},
         'assemblies': {'type': 'array', 'items': {'type': 'string'}},
@@ -1165,6 +1182,12 @@ cleanBodyTextile: the new content of this one message, formatted as Redmine Text
 - If the message has no new content at all (only quoted text), return an empty string.
 
 category: the closest MLQ category; "Other" if none fits.
+playbooks: which of the team's playbooks cover what this email is about, at most two, even
+if the category differs: LiftOver (chain files, converting coordinates), Login (signing in,
+activation, passwords), User Accounts (account changes and deletion, Hub Space quota), IP
+blocked (cannot reach the site, rate limits, blocked addresses), Sessions (saved and shared
+sessions), CAPTCHA (the bot check, Cloudflare, scripts or tools blocked by it, API keys).
+Empty if none applies.
 hubName, hubUrl: if the email is about one specific track hub or assembly hub that someone
 runs (not a request for a new GenArk assembly), its name and hub.txt URL; else "".
 assemblies: genome assemblies named (hg38, mm39, GCA_...). urls: URLs in the new content.
@@ -1326,7 +1349,7 @@ def classify(conn, rec, facts, matchedSubject):
             and not facts['staffLogin']):
         cached = {k: verdict[k] for k in ('disposition', 'dispositionReason', 'confidence',
                                            'category')}
-        cached.update({'sensitivePersonalInfo': False, 'canonicalSubject': '',
+        cached.update({'sensitivePersonalInfo': False, 'canonicalSubject': '', 'playbooks': [],
                        'digestTopic': '', 'summaryLine': '', 'cleanBodyTextile': '',
                        'hubName': '', 'hubUrl': '', 'assemblies': [], 'urls': [],
                        'attachmentRoles': []})
@@ -1401,7 +1424,7 @@ def stage1(conn, rec, facts):
         matchedSubject = f"#{facts['ticketId']} ({facts['ticketStatus']})"
     try:
         verdict, meta = classify(conn, rec, facts, matchedSubject)
-    except (AskAuthError, CallCapReached):
+    except (AskAuthError, AskLimitError, CallCapReached):
         raise
     except AskError as e:
         logDecision('disposition', rec['messageId'], error=str(e), fromAddr=rec['fromAddr'],
@@ -1420,7 +1443,8 @@ def stage1(conn, rec, facts):
                 disposition=verdict['disposition'], reason=verdict['dispositionReason'],
                 confidence=verdict['confidence'],
                 sensitivePersonalInfo=verdict['sensitivePersonalInfo'],
-                category=verdict['category'], canonicalSubject=verdict['canonicalSubject'],
+                category=verdict['category'], playbooks=verdict.get('playbooks', []),
+                canonicalSubject=verdict['canonicalSubject'],
                 digestTopic=verdict['digestTopic'], summaryLine=verdict['summaryLine'],
                 hubName=verdict['hubName'], hubUrl=verdict['hubUrl'],
                 assemblies=verdict['assemblies'], urls=verdict['urls'],
@@ -1428,7 +1452,495 @@ def stage1(conn, rec, facts):
                 wordsPreserved=ok, wordsUnmatched=unmatched, wordsTotal=total, **meta)
     logDecision('action', rec['messageId'], fromAddr=rec['fromAddr'], subject=rec['subject'],
                 **act)
+    act['_verdict'] = verdict
     return act
+
+
+# ---------------------------------------------------------------------------
+# Index of answered MLQs (step 3): what "similar past tickets" are drawn from
+
+INDEX_SINCE = '2021-01-01'      # older answers describe a browser that has since changed
+INDEX_CHUNK = 400               # tickets per database query
+INDEX_TEXT_CHARS = 4000         # per question and per answer
+GREETING = re.compile(r"^\s*(hi|hello|dear|good (morning|afternoon|evening)|greetings)\b"
+                      r"[^\n]{0,60}$", re.I | re.M)
+QUOTE_CUT = re.compile(r"^\s*(>|On .{0,200}wrote:\s*$|-----\s*Original Message|"
+                       r"From: .*@|________________)", re.I)
+STOPWORDS = set("""a about after all also am an and any are as at be been but by can could did
+do does for from get got had has have hello hi how i if in into is it its just me my need no
+not of on or our please re so some than thank thanks that the their them then there these
+they this to too ucsc genome browser us use using was we were what when where which while
+who why will with would you your""".split())
+
+
+def indexPath(stateDir):
+    return os.path.join(stateDir, 'index.sqlite')
+
+
+def userFacingReply(note, staffFirstNames, question):
+    """The part of a staff note written to the user, or None for internal discussion.
+
+    Same rule as the draft baseline (RM #38234): the note must contain a greeting
+    line, and a greeting naming a staff member the question does not mention is
+    staff talking to staff. Quoted text after the reply is cut."""
+    text = (note or '').replace('\r', '')
+    m = GREETING.search(text)
+    if not m:
+        return None
+    words = re.findall(r'[a-z]+', m.group(0).lower())
+    if len(words) > 1 and words[1] in staffFirstNames and words[1] not in question.lower():
+        return None
+    out = []
+    for line in text[m.start():].split('\n'):
+        if QUOTE_CUT.match(line):
+            break
+        out.append(line)
+    return '\n'.join(out).strip() or None
+
+
+def questionText(description):
+    """A ticket's question without the bot's Summary/From header lines."""
+    text = (description or '').replace('\r', '')
+    text = re.sub(r'^\s*\*Summary:\*[^\n]*\n', '', text)
+    text = re.sub(r'^\s*\*?From:\*?[^\n]*\n', '', text.lstrip())
+    return text.strip()
+
+
+def buildIndex(stateDir):
+    """Rebuild the answered-MLQ index from the Redmine database into a new file,
+    then swap it in, so a reader never sees a half-built index."""
+    started = time.time()
+    staffAddrs = {r['address'] for r in dbQuery(
+        "select lower(e.address) address from email_addresses e join users u on u.id=e.user_id "
+        "where u.type='User' and u.login<>'gbauto'")}
+    staffFirst = {r['f'] for r in dbQuery(
+        "select distinct lower(firstname) f from users where type='User' and firstname<>''")}
+    tmp = indexPath(stateDir) + '.new'
+    if os.path.exists(tmp):
+        os.remove(tmp)
+    idx = sqlite3.connect(tmp)
+    idx.executescript("""
+        create table tickets (id integer primary key, created text, category text,
+                              subject text, question text, answer text, status text);
+        create virtual table ticketsFts using fts5(subject, question, answer,
+            content='tickets', content_rowid='id', tokenize='porter unicode61');
+        create table meta (key text primary key, value text);
+    """)
+    ids = [r['id'] for r in dbQuery(
+        "select i.id from issues i join issue_statuses s on s.id=i.status_id "
+        "where i.tracker_id=7 and i.created_on>=%s and s.is_closed=1 order by i.id",
+        (INDEX_SINCE,))]
+    kept = 0
+    for start in range(0, len(ids), INDEX_CHUNK):
+        chunk = ids[start:start + INDEX_CHUNK]
+        marks = ','.join(['%s'] * len(chunk))
+        issues = {r['id']: r for r in dbQuery(
+            f"select i.id, i.created_on, i.subject, i.description, s.name status, cv.value cat "
+            f"from issues i join issue_statuses s on s.id=i.status_id "
+            f"left join custom_values cv on cv.customized_id=i.id and cv.customized_type='Issue' "
+            f"  and cv.custom_field_id=28 where i.id in ({marks})", chunk)}
+        answers = {}
+        for j in dbQuery(
+                f"select j.journalized_id id, j.notes, u.login from journals j "
+                f"join users u on u.id=j.user_id where j.journalized_id in ({marks}) "
+                f"and j.notes<>'' order by j.id", chunk):
+            note = j['notes']
+            if note.lstrip().startswith('--- AI Suggested Response'):
+                continue
+            question = questionText(issues[j['id']]['description'])
+            if j['login'] == 'gbauto':
+                m = re.match(r'\s*--- New Email Update ---\s*\n\s*From:\s*(.+)', note)
+                sender = headerAddress(m.group(1)) if m else ''
+                if not (sender in staffAddrs or re.search(r'@(soe\.)?ucsc\.edu$', sender)):
+                    continue
+                reply = note[m.end():].strip() if m else ''
+            else:
+                reply = userFacingReply(note, staffFirst, question)
+            if reply:
+                answers.setdefault(j['id'], []).append(reply)
+        for tid, issue in issues.items():
+            if tid not in answers:
+                continue
+            answer = '\n\n---\n\n'.join(answers[tid][:3])[:INDEX_TEXT_CHARS]
+            idx.execute("insert into tickets values (?,?,?,?,?,?,?)",
+                        (tid, str(issue['created_on']), issue['cat'] or 'Other',
+                         issue['subject'] or '',
+                         questionText(issue['description'])[:INDEX_TEXT_CHARS],
+                         answer, issue['status']))
+            kept += 1
+    idx.execute("insert into ticketsFts(ticketsFts) values ('rebuild')")
+    idx.execute("insert into meta values ('builtAt', ?)", (utcNow(),))
+    idx.commit()
+    idx.close()
+    os.replace(tmp, indexPath(stateDir))
+    logDecision('index', None, closedTickets=len(ids), indexed=kept,
+                seconds=round(time.time() - started, 1))
+    logger.info(f"Built answered-MLQ index: {kept} of {len(ids)} closed tickets since "
+                f"{INDEX_SINCE} have a staff answer ({time.time() - started:.0f}s)")
+    return kept
+
+
+def similarTickets(stateDir, text, category, k, exclude=(), before=None):
+    """The k answered tickets most like `text`, same category first.
+
+    BM25 over subject, question and answer (subject weighted highest). Tickets
+    in `exclude` are never returned, and with `before` only tickets created
+    earlier are (the trial uses both, so a test ticket never sees its own answer
+    or one written after it)."""
+    words = [w for w in dict.fromkeys(re.findall(r'[a-z0-9][a-z0-9_.-]+', text.lower()))
+             if w not in STOPWORDS and len(w) > 2][:40]
+    if not words:
+        return []
+    query = ' OR '.join('"' + w.replace('"', '') + '"' for w in words)
+    idx = sqlite3.connect(indexPath(stateDir))
+    exclude = set(exclude)
+    found = []
+    for sameCategory in (True, False):
+        sql = ("select t.id, t.created, t.category, t.subject, t.question, t.answer "
+               "from ticketsFts f join tickets t on t.id=f.rowid where ticketsFts match ? "
+               + ("and t.category=? " if sameCategory else "")
+               + "order by bm25(ticketsFts, 4.0, 1.0, 1.0) limit ?")
+        limit = k * 3 + len(exclude) + (500 if before else 0)
+        args = (query, category, limit) if sameCategory else (query, limit)
+        for row in idx.execute(sql, args):
+            if row[0] in exclude or any(f['id'] == row[0] for f in found):
+                continue
+            if before and row[1] >= before:
+                continue
+            found.append(dict(zip(('id', 'created', 'category', 'subject', 'question',
+                                   'answer'), row)))
+            if len(found) == k:
+                break
+        if len(found) == k:
+            break
+    idx.close()
+    return found
+
+
+def writeCorpusDump(stateDir, dumpDir, exclude=()):
+    """One text file per indexed ticket, for a draft call that may Grep past answers."""
+    os.makedirs(dumpDir, exist_ok=True)
+    idx = sqlite3.connect(indexPath(stateDir))
+    exclude = set(exclude)
+    n = 0
+    for tid, created, cat, subject, question, answer in idx.execute(
+            "select id, created, category, subject, question, answer from tickets"):
+        if tid in exclude:
+            continue
+        with open(os.path.join(dumpDir, f"{tid}.txt"), 'w') as f:
+            f.write(f"Ticket #{tid} ({created[:10]}, {cat})\nSubject: {subject}\n\n"
+                    f"QUESTION:\n{question}\n\nSTAFF ANSWER:\n{answer}\n")
+        n += 1
+    idx.close()
+    return n
+
+
+# ---------------------------------------------------------------------------
+# Draft reply (step 4; built in step 3 so the trial tests the production code)
+
+INTERNAL_HOSTS = re.compile(r'hgwdev|genome-test|hgwbeta|hgwalpha|/hive/|/cluster/|'
+                            r'\bgenecats\b', re.I)
+PAST_TICKET_CHARS = 2500        # per past ticket: question and answer, each
+
+DRAFT_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'required': ['draftTextile', 'ticketsUsed', 'urlsCited', 'confidence'],
+    'properties': {
+        'draftTextile': {'type': 'string'},
+        'ticketsUsed': {'type': 'array', 'items': {'type': 'integer'}},
+        'urlsCited': {'type': 'array', 'items': {'type': 'string'}},
+        'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+    },
+}
+
+DRAFT_SYSTEM = """You draft a reply to an email sent to the UCSC Genome Browser support
+team. A team member (the MLM on duty) reads your draft, edits it and sends it, so write
+the reply they would send, not notes to them. Answer only through the JSON schema.
+
+What you are given:
+- The PLAYBOOK for this kind of question: the team's own guidelines (links we give,
+  questions we ask, answers by situation, things we never say). Follow it. Where a past
+  ticket disagrees with the playbook, the playbook wins; past answers can be out of date.
+- PAST TICKETS: similar questions and how the team answered them. Use them for what we
+  actually say and link; do not copy details that belonged to that other person's case.
+- Possibly a folder of more past tickets you can search with Grep, Glob and Read.
+- The EMAIL to answer.
+
+Rules:
+- Stay within using the Genome Browser and its data and tools. Do not interpret biology
+  or clinical findings, do not give medical advice, do not promise dates or that
+  something will be built or fixed, and do not speak for other organizations.
+- If something needed to answer is missing (assembly, exact steps, a session link, an
+  error message), ask for it the way the playbook says rather than guessing.
+- Only use URLs that appear in the playbook, in the past tickets or in the email. Never
+  make a URL up. Never mention internal servers or paths (hgwdev, genome-test, hgwbeta,
+  /hive, /cluster) unless the email itself does.
+- Start "Hello, <first name>." when the sender's first name is known, else "Hello,".
+  Be brief and direct: a few short paragraphs. End with the team's usual closing about
+  further questions if the playbook or past answers give one. Do not sign a name.
+- Write Redmine Textile, not Markdown: no **, ##, backticks or backslash escapes. Bullet
+  lists use "* ", numbered lists "# ". Commands and file contents go in <pre></pre>.
+- ticketsUsed: the numbers of the past tickets you actually relied on. urlsCited: every
+  URL in your draft. confidence: how likely a team member could send your draft with
+  only light edits, 0 to 1."""
+
+
+def pastTicketBlock(t):
+    return (f"#{t['id']} ({t['created'][:10]}, {t['category']}) {t['subject']}\n"
+            f"QUESTION:\n{t['question'][:PAST_TICKET_CHARS]}\n"
+            f"STAFF ANSWER:\n{t['answer'][:PAST_TICKET_CHARS]}")
+
+
+def draftPrompt(playbook, email, pastTickets, withDump):
+    parts = [f"PLAYBOOK:\n<<<\n{playbook or '(no playbook for this category yet)'}\n>>>"]
+    if pastTickets:
+        parts.append("PAST TICKETS:\n" + '\n\n=====\n\n'.join(pastTicketBlock(t)
+                                                            for t in pastTickets))
+    if withDump:
+        parts.append("The current folder holds more past tickets, one file per ticket "
+                     "(<number>.txt with QUESTION and STAFF ANSWER). Search them with Grep "
+                     "if the past tickets above do not cover the question.")
+    parts.append(f"EMAIL:\nFrom: {email['from']}\nSubject: {email['subject']}\n\n"
+                 f"{email['body']}")
+    return '\n\n'.join(parts)
+
+
+def urlLoads(url):
+    """True if a URL the draft cites answers with a success status."""
+    try:
+        resp = requests.get(url, timeout=20, allow_redirects=True, stream=True,
+                            headers={'User-Agent': 'mlqTriage link check'})
+        resp.close()
+        return resp.status_code < 400
+    except requests.exceptions.RequestException:
+        return False
+
+
+def draftProblems(draft, email):
+    """What is wrong with a draft, checked by the script rather than trusted to the model."""
+    problems = []
+    text = draft['draftTextile']
+    for host in set(m.group(0) for m in INTERNAL_HOSTS.finditer(text)):
+        if host.lower() not in email['body'].lower():
+            problems.append(f"names an internal host or path the email did not: {host}")
+    for url in set(re.findall(r'https?://[^\s<>"\')\]]+', text)):
+        url = url.rstrip('.,;:')
+        if not urlLoads(url):
+            problems.append(f"URL does not load: {url}")
+    # "# " starts a Textile numbered list, so only ** and backticks mark Markdown.
+    if re.search(r'\*\*|`', text):
+        problems.append("uses Markdown (** or backticks); write Textile")
+    return problems
+
+
+def draftReply(playbook, email, pastTickets, dumpDir=None, model=None):
+    """Write one draft; check it; if it fails a check, retry once with the reasons.
+
+    Returns (draft, problems, attempts). `problems` is empty for a clean draft."""
+    tools = ['Read', 'Grep', 'Glob'] if dumpDir else None
+    prompt = draftPrompt(playbook, email, pastTickets, bool(dumpDir))
+    problems = []
+    for attempt in (1, 2):
+        if problems:
+            prompt += ("\n\nYOUR PREVIOUS DRAFT HAD THESE PROBLEMS; fix them:\n- "
+                       + '\n- '.join(problems))
+        draft = ask(prompt, DRAFT_SCHEMA, model or CONFIG['MODEL_DRAFT'],
+                    CONFIG['MODEL_DRAFT_FALLBACK'], DRAFT_SYSTEM, tools=tools, cwd=dumpDir,
+                    timeout=600 if dumpDir else 300)
+        draft['draftTextile'] = tidyTextile(draft['draftTextile'])
+        problems = draftProblems(draft, email)
+        if not problems:
+            return draft, [], attempt
+    return draft, problems, 2
+
+
+# ---------------------------------------------------------------------------
+# Draft stage (step 4): playbook + 5 similar past tickets, no tools (trial, plan 6c)
+
+DRAFT_PAST_TICKETS = 5
+INDEX_MAX_AGE_HOURS = 20
+# MLQ category -> playbook file. Categories without a playbook draft from past tickets only.
+PLAYBOOK_FILES = {
+    'LiftOver': 'liftOver.md', 'Login': 'login.md', 'User Accounts': 'userAccounts.md',
+    'IP blocked': 'ipBlocked.md', 'Sessions': 'sessions.md', 'CAPTCHA': 'captcha.md',
+}
+# Only new questions get a draft for now. A reply with no exact match nearly always
+# belongs to an existing ticket; once Stage 2 (step 6) decides it is new, it gets one too.
+DRAFTED = {'question'}
+
+
+def ensureIndex(stateDir):
+    """Rebuild the answered-MLQ index when missing or older than INDEX_MAX_AGE_HOURS.
+    A rebuild takes a few seconds, so it rides along in a normal run once a day."""
+    path = indexPath(stateDir)
+    if os.path.exists(path):
+        row = sqlite3.connect(path).execute("select value from meta where key='builtAt'").fetchone()
+        if row and datetime.now(timezone.utc) - datetime.fromisoformat(row[0]) < \
+                timedelta(hours=INDEX_MAX_AGE_HOURS):
+            return
+    buildIndex(stateDir)
+
+
+def loadPlaybooks(names):
+    """The approved playbooks for the given categories, joined, and which were found.
+    A question can need a playbook outside its own category (a download blocked by the
+    bot check is filed under Downloads but answered by the CAPTCHA playbook)."""
+    texts, used = [], []
+    for name in dict.fromkeys(names):
+        fileName = PLAYBOOK_FILES.get(name)
+        path = os.path.join(CONFIG.get('PLAYBOOK_DIR') or '', fileName or '')
+        if fileName and CONFIG.get('PLAYBOOK_DIR') and os.path.exists(path):
+            texts.append(open(path).read())
+            used.append(name)
+    return '\n\n=====\n\n'.join(texts), used
+
+
+def staffAlreadyAnswered(conn, rec):
+    """True if someone on an active Redmine account wrote in this thread earlier.
+    A thread that becomes a new ticket after staff replied needs no draft (1c #8)."""
+    return conn.execute(
+        "select 1 from messages m join accounts a on a.address=m.fromAddr "
+        "where m.gmailThreadId=? and m.receivedAt<? limit 1",
+        (rec['gmailThreadId'], rec['receivedAt'])).fetchone() is not None
+
+
+def relatedTicketsBlock(stateDir, ticketIds):
+    """The "Related RM tickets" list under a draft: the tickets the draft relied on."""
+    if not ticketIds:
+        return ''
+    idx = sqlite3.connect(indexPath(stateDir))
+    lines = []
+    for tid in ticketIds:
+        row = idx.execute("select subject from tickets where id=?", (tid,)).fetchone()
+        lines.append(f"* #{tid} {row[0] if row else ''}".rstrip())
+    idx.close()
+    return "\n\n*Related RM tickets:*\n" + '\n'.join(lines)
+
+
+def draftStage(conn, stateDir, rec, verdict, act):
+    """Write the draft a new ticket would carry, check it, and log it. Returns a
+    short outcome string for the run log, or None when no draft is due."""
+    if verdict['disposition'] not in DRAFTED or not act.get('render', '').startswith('*Summary:*'):
+        return None
+    if staffLogin(conn, rec['fromAddr']):
+        return None                     # staff writing in need no draft
+    if staffAlreadyAnswered(conn, rec):
+        logDecision('draft', rec['messageId'], skipped='staff already answered in this thread',
+                    fromAddr=rec['fromAddr'], subject=rec['subject'])
+        return 'skipped (staff already answered)'
+    playbook, playbooksUsed = loadPlaybooks([verdict['category']] + verdict.get('playbooks', []))
+    queryText = '\n'.join([verdict['canonicalSubject'], verdict['summaryLine'],
+                           verdict['cleanBodyTextile'][:1500]])
+    past = similarTickets(stateDir, queryText, verdict['category'], DRAFT_PAST_TICKETS)
+    email = {'from': rec['from'], 'subject': verdict['canonicalSubject'] or rec['subject'],
+             'body': verdict['cleanBodyTextile']}
+    try:
+        draft, problems, attempts = draftReply(playbook, email, past)
+    except (AskAuthError, AskLimitError, CallCapReached):
+        raise
+    except AskError as e:
+        logDecision('draft', rec['messageId'], error=str(e), fromAddr=rec['fromAddr'],
+                    subject=rec['subject'])
+        return f"failed: {e}"
+    used = [t for t in draft['ticketsUsed'] if t in {p['id'] for p in past}]
+    post = ("--- AI Suggested Response (Draft) ---\n\n" + draft['draftTextile']
+            + relatedTicketsBlock(stateDir, used))
+    logDecision('draft', rec['messageId'], fromAddr=rec['fromAddr'], subject=rec['subject'],
+                category=verdict['category'], playbooksUsed=playbooksUsed,
+                pastGiven=[p['id'] for p in past], ticketsUsed=used,
+                ticketsClaimedNotGiven=[t for t in draft['ticketsUsed'] if t not in used],
+                urlsCited=draft['urlsCited'], confidence=draft['confidence'],
+                problems=problems, attempts=attempts, model=CONFIG['MODEL_DRAFT'], post=post)
+    return (f"drafted (confidence {draft['confidence']:.2f}, {len(used)} related ticket(s)"
+            + (f", {len(problems)} check(s) still failing" if problems else '') + ')')
+
+
+# ---------------------------------------------------------------------------
+# Draft usage score: the baseline method (RM #38234 baseline/METHOD.md), ported
+# unchanged so shadow drafts are scored exactly like the 5.6% baseline and the trial.
+
+USED_SHINGLE, USED_SENT = 0.40, 0.50
+PARTLY_SHINGLE, PARTLY_SENT, PARTLY_URLS = 0.08, 0.15, 1
+GENERIC_URLS = {"genome.ucsc.edu", "genome.ucsc.edu/contacts.html", "genome.ucsc.edu/faq",
+                "genome.ucsc.edu/training/index.html",
+                "genome.ucsc.edu/goldenpath/help/contacts.html", "genome.ucsc.edu/license",
+                "genome-euro.ucsc.edu", "genome-asia.ucsc.edu"}
+BOILER = re.compile(r"^\s*(i hope this (is|was) helpful|if you have any (further|other|additional) "
+                    r"questions|all messages sent to that address|(all )?messages sent to that "
+                    r"address|if your question includes sensitive|please (don.t|do not) hesitate|"
+                    r"please let us know if|let us know if you|looking forward)", re.I)
+COURTESY = re.compile(r"^\s*(thank(s| you)\b|we appreciate|we apologi[sz]e|sorry)", re.I)
+
+
+def _norm(t):
+    t = re.sub(r"https?://", "", t.lower())
+    return re.sub(r"[^\w./:#?=&-]+", " ", t).split()
+
+
+def _urls(t):
+    out = set()
+    for u in re.findall(r"https?://[^\s)\]>\"']+", t):
+        u = re.sub(r"^https?://", "", u.lower()).rstrip(".,;:/")
+        if u not in GENERIC_URLS:
+            out.add(u)
+    return out
+
+
+def _sentences(t):
+    parts = re.split(r"(?<=[.!?])\s+|\n+", t)
+    return [p for p in (" ".join(_norm(s)) for s in parts) if len(p.split()) >= 5]
+
+
+def _dropBoiler(t):
+    parts = re.split(r"(?<=[.!?])\s+|\n+", t)
+    return "\n".join(p for p in parts if p.strip() and not BOILER.match(p)
+                     and not (COURTESY.match(p) and len(p.split()) <= 9))
+
+
+def draftUsage(draft, reply, question=''):
+    """USED / PARTLY USED / NOT USED for one draft against the staff reply sent."""
+    import difflib
+    draft, reply = _dropBoiler(draft), _dropBoiler(reply)
+    qw = _norm(question)
+    qsh = {tuple(qw[i:i + 8]) for i in range(len(qw) - 7)}
+    qtext = " ".join(qw)
+    dw, rw = _norm(draft), _norm(reply)
+    dsh = {tuple(dw[i:i + 8]) for i in range(len(dw) - 7)}
+    rsh = [s for s in (tuple(rw[i:i + 8]) for i in range(len(rw) - 7)) if s not in qsh]
+    shingle = sum(s in dsh for s in rsh) / len(rsh) if rsh else 0.0
+    ds, rs = _sentences(draft), [x for x in _sentences(reply) if x not in qtext]
+    hit = sum(1 for s in rs if any(difflib.SequenceMatcher(None, s, x, autojunk=False).ratio()
+                                   >= 0.8 for x in ds))
+    sent = hit / len(rs) if rs else 0.0
+    shared = len((_urls(draft) & _urls(reply)) - _urls(question))
+    if shingle >= USED_SHINGLE or (sent >= USED_SENT and len(rs) >= 3):
+        return 'USED'
+    if shingle >= PARTLY_SHINGLE or sent >= PARTLY_SENT or shared >= PARTLY_URLS:
+        return 'PARTLY USED'
+    return 'NOT USED'
+
+
+def firstStaffReply(ticketId):
+    """The first reply staff sent the user on a ticket, as the old script recorded it."""
+    staffAddrs = {r['address'] for r in dbQuery(
+        "select lower(e.address) address from email_addresses e join users u on u.id=e.user_id "
+        "where u.type='User' and u.login<>'gbauto'")}
+    for j in dbQuery("select j.notes, u.login from journals j join users u on u.id=j.user_id "
+                     "where j.journalized_id=%s and j.notes<>'' order by j.id", (ticketId,)):
+        note = j['notes']
+        if note.lstrip().startswith('--- AI Suggested Response'):
+            continue
+        if j['login'] == 'gbauto':
+            m = re.match(r'\s*--- New Email Update ---\s*\n\s*From:\s*(.+)', note)
+            sender = headerAddress(m.group(1)) if m else ''
+            if m and (sender in staffAddrs or re.search(r'@(soe\.)?ucsc\.edu$', sender)):
+                return note[m.end():].strip()
+        else:
+            reply = userFacingReply(note, set(), '')
+            if reply:
+                return reply
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -1463,9 +1975,14 @@ def messageFacts(conn, rec, accountsOk):
 
 def runStage1(conn, rec, facts, counts):
     """Run Stage 1 on one message and record the outcome in the state file."""
+    act = stage1(conn, rec, facts)      # a limit or auth failure raises before counting
     conn.execute("update messages set attempts=coalesce(attempts, 0)+1 where messageId=?",
                  (rec['messageId'],))
-    act = stage1(conn, rec, facts)
+    drafted = None
+    if act and INDEX_OK:
+        drafted = draftStage(conn, STATE_DIR, rec, act['_verdict'], act)
+        if drafted:
+            counts['drafts'] = counts.get('drafts', 0) + 1
     conn.execute("update messages set action=? where messageId=?",
                  ('classified' if act else 'error', rec['messageId']))
     conn.commit()
@@ -1475,10 +1992,23 @@ def runStage1(conn, rec, facts, counts):
                     + (' (unsure)' if act['unsure'] else '')
                     + f"; moderation {act['moderation']}; ticket {act['ticket']}"
                     + (f"; reopen {act['reopen']}" if act['reopen'] != 'n/a' else '')
-                    + (f"; why: {act['why']}" if act['why'] else ''))
+                    + (f"; why: {act['why']}" if act['why'] else '')
+                    + (f"; draft {drafted}" if drafted else ''))
 
 
 def runShadow(conn, days, started):
+    global INDEX_OK
+    try:
+        ensureIndex(STATE_DIR)
+        INDEX_OK = True
+    except Exception as e:
+        # Drafts need the index; classification does not, so carry on without drafts.
+        logger.exception("Answered-MLQ index refresh failed; no drafts this run")
+        sendAlert('index', 'Answered-MLQ index refresh failed', f"{type(e).__name__}: {e}")
+    return runShadowInner(conn, days, started)
+
+
+def runShadowInner(conn, days, started):
     """Steps 0-2: record each new message with its facts, classify it (Stage 1),
     log what would be done, then see what the old script did with earlier ones."""
     refreshAccounts(conn)
@@ -1597,7 +2127,40 @@ def report(conn, sinceDays):
             print(f"  {s['receivedAt'][:16]} {s['fromAddr'][:30]:30} {s['subject'][:45]:45} "
                   f"{old}; {new}")
     reportStage1(conn, seen)
+    reportDrafts(conn, seen)
     print(f"\n{len(seen)} message(s) in the last {sinceDays} day(s)")
+
+
+def reportDrafts(conn, seen):
+    """Drafts written, and how much of each one staff reused in the reply they sent,
+    scored exactly like the 2026 baseline (5.6% any use)."""
+    drafts = [r for r in readDecisions({'draft'}) if r['messageId'] in seen]
+    actions = {r['messageId']: r for r in readDecisions({'action'}) if r['messageId'] in seen}
+    written = [d for d in drafts if 'post' in d]
+    print(f"\nDrafts: {len(written)} written, "
+          f"{sum(1 for d in drafts if 'skipped' in d)} skipped (staff already answered), "
+          f"{sum(1 for d in drafts if 'error' in d)} failed, "
+          f"{sum(1 for d in written if d['problems'])} still failing a check after the retry")
+    scored = {'USED': 0, 'PARTLY USED': 0, 'NOT USED': 0}
+    waiting = 0
+    for d in written:
+        row = conn.execute("select oldTicketId from messages where messageId=?",
+                           (d['messageId'],)).fetchone()
+        reply = firstStaffReply(row[0]) if row and row[0] else None
+        if not reply:
+            waiting += 1
+            continue
+        draftText = d['post'].split('\n\n', 1)[-1].split('\n\n*Related RM tickets:*')[0]
+        question = actions.get(d['messageId'], {}).get('render', '')
+        cls = draftUsage(draftText, reply, question)
+        scored[cls] += 1
+        print(f"  {cls:11} #{row[0]} {d['subject'][:55]} (confidence {d['confidence']:.2f})")
+    n = sum(scored.values())
+    if n:
+        print(f"  any use: {(scored['USED'] + scored['PARTLY USED']) / n:.0%} of {n} with a "
+              f"staff reply (baseline 5.6%); {waiting} still waiting for a staff reply")
+    elif written:
+        print(f"  {waiting} draft(s) waiting for a staff reply to score against")
 
 
 def reportStage1(conn, seen):
@@ -1642,7 +2205,7 @@ def reportStage1(conn, seen):
 
 
 def main():
-    global SHADOW, DECISION_LOG_DIR, STATE_CONN, ALERT_TO_OVERRIDE
+    global SHADOW, DECISION_LOG_DIR, STATE_CONN, ALERT_TO_OVERRIDE, STATE_DIR
     parser = argparse.ArgumentParser(description='File mailing-list email into Redmine MLQ '
                                      'tickets (RM #38234). Step 0: shadow skeleton only.')
     parser.add_argument('--shadow', action='store_true',
@@ -1661,6 +2224,10 @@ def main():
     parser.add_argument('--report', type=int, metavar='DAYS',
                         help='Compare the shadow with mlqAutomate.py over the last DAYS days, '
                         'then exit (reads the state file and decision log only)')
+    parser.add_argument('--playbooks', help='Directory of approved playbooks (<category>.md); '
+                        'without it drafts use past tickets only')
+    parser.add_argument('--build-index', action='store_true',
+                        help='Rebuild the index of answered MLQs (for drafts), then exit')
     parser.add_argument('--verbose', action='store_true')
     args = parser.parse_args()
 
@@ -1669,12 +2236,14 @@ def main():
     SHADOW = True
     ALERT_TO_OVERRIDE = args.alert_to
     CONFIG['CALL_CAP'] = args.call_cap
+    CONFIG['PLAYBOOK_DIR'] = args.playbooks
 
     makeStateDir(args.state_dir)
     setupLogging(args.state_dir, args.verbose)
     loadHgConf()
     socket.setdefaulttimeout(CONFIG['GOOGLE_TIMEOUT'])
     DECISION_LOG_DIR = args.state_dir
+    STATE_DIR = args.state_dir
 
     if args.report:
         report(openState(args.state_dir), args.report)
@@ -1688,12 +2257,21 @@ def main():
     try:
         if args.selftest:
             return 0 if selftest() else 1
+        if args.build_index:
+            buildIndex(args.state_dir)
+            return 0
         pruneDecisionLogs()
         runShadow(STATE_CONN, args.days, started)
     except AskAuthError as e:
         sendAlert('claude-auth', 'Claude login failed',
                   f"{e}\n\nMost likely the qateam claude.oauthToken in ~/.hg.conf has expired. "
                   f"Mint a new one with 'claude setup-token', then check with: claude -p 'say ok'")
+        return 1
+    except AskLimitError as e:
+        sendAlert('claude-limit', 'Claude usage limit reached',
+                  f"{e}\n\nThe run stopped; messages are kept and processed on a later run "
+                  f"once the limit resets. If this repeats, the qateam subscription is too "
+                  f"small for the MLQ and code-review crons together.")
         return 1
     except CallCapReached as e:
         sendAlert('call-cap', 'Run stopped at the call cap', str(e))
