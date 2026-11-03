@@ -136,11 +136,14 @@ def h(name, kind, src, default=None, note=None, public=False, verified=False,
                 line is derived data: it is recomputed for display from the
                 harvester, so an edit above a read is not a citation to fix
     default     compiled-in default if the read supplies one
-    role        for boolean flags only: "gate" (a release gate, temporary by
+    role        for boolean flags: "gate" (a release gate, temporary by
                 intent, subject to sunsetting) or "knob" (a permanent
                 deployment switch, exempt).  Every cfgOptionBooleanDefault
                 flag in the tree must be one or the other; --reconcile
-                enforces that
+                enforces that.  A setting that is not a flag can be a gate
+                too when the code it controls is temporary, such as a
+                measurement that should come out once it has run, but it
+                must then carry an explicit sunset, since it has no flip
     sunset      release by which a gate should be gone from the tree.  Omit to
                 take the default of flipped + KEEP_AFTER_FLIP; the age cache
                 supplies the flip version
@@ -1491,7 +1494,8 @@ LOGGING = {
         h("logProxy", "debug", "hg/lib/cart.c", verified=True,
           family="proxy"),
         h("pngTimingSampleRate", "debug", "hg/hgTracks/hgTracks.c",
-          default="0", verified=True, ticket="38109",
+          default="0", verified=True, ticket="38109", role="gate",
+          sunset=508,
           note="One page load in this many measures how long the track image "
                "took to reach the reader.  hgTracks writes the rate into the "
                "page as a JavaScript variable and reportPngTiming() in "
@@ -1503,7 +1507,12 @@ LOGGING = {
                "can see, because apache stops timing once the kernel has the "
                "bytes.  Zero, or the setting left out, and nothing is written "
                "into the page, so the beacon is off.  It samples rather than "
-               "reporting every load because each report is another request."),
+               "reporting every load because each report is another request.  "
+               "A gate because the measurement is done: #38109 closed on "
+               "2026-11-03 keeping zlib level 6.  At its sunset, delete the "
+               "read in hgTracks.c, reportPngTiming() in hgTracks.js and "
+               "hg/utils/pngTiming, and any pngTimingSampleRate line left in "
+               "an hg.conf."),
     ],
 }
 
@@ -2026,7 +2035,9 @@ def gate_lifecycle(cat, ages):
         tickets, ticket_from = ([], None)
         if hh and hasattr(hh, "ticket_for"):
             tickets, ticket_from = hh.ticket_for(name, ages)
-        shipped = v.get("default") == "TRUE"
+        # A gate that is not a flag has no default to flip.  Its code is
+        # already live, so it counts as shipped and waits for its sunset.
+        shipped = v.get("default") == "TRUE" or v.get("kind") != "flag"
         # A flip date with a FALSE default now means the flip was reverted, so
         # the flag is back to gating and the flip date must not drive a
         # deadline.
@@ -2550,8 +2561,10 @@ def check(cat, out=sys.stderr):
             print("    %-34s %s" % (n, ", ".join(s)), file=out)
 
     for v in all_vars(cat):
-        if v.get("role") == "gate" and v.get("kind") != "flag":
-            print("gate not of kind flag: %s" % v["name"], file=out)
+        if (v.get("role") == "gate" and v.get("kind") != "flag"
+                and not v.get("sunset")):
+            print("gate not of kind flag needs a sunset=: %s" % v["name"],
+                  file=out)
             problems += 1
         if v.get("sunset") and not v.get("role") == "gate":
             print("sunset on a non-gate: %s" % v["name"], file=out)
