@@ -945,7 +945,16 @@ generate_release_markdown() {
         | sed 's|[[:space:]]*$||' \
         | sed "s|&lt;|<|g; s|&gt;|>|g; s|&quot;|\"|g; s|&#x27;|'|g; s|&#39;|'|g; s|&amp;|\\&|g" \
         | sed 's|^|- |' \
-        > "$outfile"
+        > "$outfile.tmp"
+
+    # Replace the notes only with a non-empty result, so an earlier run's notes for this
+    # version survive a page with no code changes, and doZip.csh never gets an empty file.
+    if [[ ! -s "$outfile.tmp" ]]; then
+        log "WARNING: No code changes found in $url - skipping markdown generation"
+        rm -f "$outfile.tmp"
+        return 0
+    fi
+    mv -f "$outfile.tmp" "$outfile"
 
     log "Markdown release notes written to $outfile"
 }
