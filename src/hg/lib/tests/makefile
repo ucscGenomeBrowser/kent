@@ -142,7 +142,7 @@ cartHubDatabaseTest: mkdirs
 # there too, and it writes hubStatus rows to hgcentralregress.
 collectionHubCopyTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/collectionHubCopyTester collectionHubCopyTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	rm -f output/collectionHubCopyTest
 	for gate in on off; do \
 	    echo "include ${HOME}/.hg.conf" > output/collection.$$gate.conf; \
@@ -190,7 +190,7 @@ dataVersionPathTest: mkdirs
 # genarkHubPrefix is set by name, since isGenArk() needs it and ~/.hg.conf need not have it.
 asmAliasActiveDbTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asmAliasActiveDbTester asmAliasActiveDbTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/asmAlias.conf
 	echo "central.db=hgcentralregress" >> output/asmAlias.conf
 	echo "genarkHubPrefix=/gbdb/genark" >> output/asmAlias.conf
@@ -248,7 +248,7 @@ geoMirrorSelfTest: mkdirs
 # it; the value is a test value and means nothing outside this run.
 hubSpaceKeysTest: mkdirs ${BIN_DIR}/hgConfValue
 	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hubSpaceKeysTester hubSpaceKeysTester.c ${MYLIBS} $L
-	./makeHgCentralRegress.sh > /dev/null
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
 	echo "include ${HOME}/.hg.conf" > output/regress.conf
 	echo "central.db=hgcentralregress" >> output/regress.conf
 	echo "login.cookieSalt=testSaltForRegressRuns" >> output/regress.conf

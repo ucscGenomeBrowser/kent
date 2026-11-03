@@ -50,11 +50,13 @@ fi
 # The settings are read by hgConfValue, which uses hgConfig.c, so includes are followed to any
 # depth and relative to the file that names them, exactly as a CGI follows them.  An earlier
 # copy of that logic here followed one level, relative to the current directory, and missed
-# central settings three includes down.  The makefile builds hgConfValue before calling this.
-hgConfValue="$(dirname "$0")/bin/$(uname -m)/hgConfValue"
+# central settings three includes down.  The makefile builds hgConfValue before calling this
+# and passes its path in HG_CONF_VALUE, because the binary is in bin/${MACHTYPE} and the
+# MACHTYPE make uses need not be uname -m (bash sets its own MACHTYPE when none is exported).
+hgConfValue="${HG_CONF_VALUE:-$(dirname "$0")/bin/$(uname -m)/hgConfValue}"
 if [ ! -x "$hgConfValue" ]; then
     echo "makeHgCentralRegress.sh: no $hgConfValue;" \
-        "run make bin/$(uname -m)/hgConfValue in $(dirname "$0")" >&2
+        "run make bin/\${MACHTYPE}/hgConfValue in $(dirname "$0")" >&2
     exit 1
 fi
 { read -r host; read -r user; read -r password; read -r source; } \
