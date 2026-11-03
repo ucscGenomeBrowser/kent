@@ -2359,6 +2359,24 @@
   format: style <heatmap>
   examples:
   - style heatmap
+- name: heatmap_background
+  types:
+  - bigBed
+  roles:
+  - leaf
+  category: bigBed - Item or Region Track Settings
+  context: trackDb
+  level: new
+  required: false
+  summary: This setting is for use with the heatmap style for bigBed tracks.
+  description: 'This setting is for use with the heatmap style for bigBed tracks. By default, the background
+    color for a heatmap is transparent and shows the page beneath. If a color is supplied with this setting
+    (either as a hex code like #FF0A2B or as a comma-separated RGB string like 255,32,120), it will be
+    used instead. The background color is shown in every cell that has no data to display, so care should
+    be taken to avoid having the background color match actual heatmap values.'
+  format: heatmap.background <color>
+  examples:
+  - heatmap.background 128,0,128
 - name: dotBracketField
   types:
   - bigBed

@@ -84,12 +84,13 @@ fi
 AWK_LIB=$(cat <<'EOF'
 BEGIN {
     FS = "\t"
+    # genomic data formats, plain or compressed, whether or not a hub can display them
     knownList = "bb bigbed bw bigwig bed bed.gz bedgraph bedgraph.gz wig " \
                 "2bit fa fa.gz fasta fasta.gz " \
-                "bam bai cram crai vcf vcf.gz tbi csi " \
+                "bam bai cram crai sam vcf vcf.gz tbi csi " \
                 "hic cool mcool " \
                 "txt html gff gff.gz gff3 gff3.gz gtf gtf.gz " \
-                "psl bigpsl chain bigchain net maf bigmaf " \
+                "psl psl.gz bigpsl chain chain.gz bigchain net net.gz maf maf.gz bigmaf " \
                 "genepred biggenepred narrowpeak broadpeak " \
                 "bigbarchart barchart interact biginteract bignarrowpeak " \
                 "bigmethyl bigdbsnp longtabix pgsnp vcftabix"
@@ -100,11 +101,11 @@ BEGIN {
     split("bai crai tbi csi", iTmp, " ")
     for (i in iTmp)
         isIndex[iTmp[i]] = 1
-    # recognizable, but not something a hub can display: users dropping a whole
-    # working directory in place bring along scripts, logs and intermediates
+    # recognizable, but not genomic data: users dropping a whole working
+    # directory in place bring along scripts, logs and intermediates
     auxList = "as log py sh bash pl r rmd ipynb json yaml yml md pdf png jpg " \
               "jpeg svg csv tsv tab xlsx docx gz zip tar tar.gz tgz " \
-              "chain chain.gz net net.gz psl.gz maf.gz sam sizes err out"
+              "sizes err out"
     split(auxList, aTmp, " ")
     for (i in aTmp) {
         known[aTmp[i]] = 1
@@ -289,15 +290,22 @@ END {
 # "data", which is no help at all for a file with no extension.  These are the
 # magic numbers from the front of each format, either byte order.
 sniffMagic() {
-    local path="${1}" magic="" desc=""
+    local path="${1}" magic="" inner="" desc=""
     magic=$(od -An -tx1 -N 8 "${path}" 2> /dev/null | tr -d ' \n' || true)
     case "${magic}" in
         26fc8f88*|888ffc26*) printf "bigWig"; return ;;
         ebf28987*|8789f2eb*) printf "bigBed"; return ;;
         43274a1a*|1a412743*) printf "2bit"; return ;;
-        424d0100*)           printf "bam"; return ;;
-        48494301*)           printf "hic"; return ;;
+        48494300*)           printf "hic"; return ;;
         "")                  printf "unreadable or empty"; return ;;
+        1f8b*)
+            # BAM is BGZF compressed, its "BAM\1" magic is the first decompressed bytes
+            inner=$(gzip -dc "${path}" 2> /dev/null | od -An -tx1 -N 4 | tr -d ' \n' || true)
+            if [ "${inner}" = "42414d01" ]; then
+                printf "bam"
+                return
+            fi
+            ;;
     esac
     # not one of ours, file(1) is better at the rest.  Its output runs long for
     # compressed data, and only the front of it is ever interesting here.
@@ -350,6 +358,28 @@ if [ "${unknownCount}" -gt 0 ]; then
     done < ${UNKNOWN}.shown
     rm -f ${UNKNOWN}.shown
 fi
+
+# tally the disk space of each user, from the file sizes so it matches the
+# tallies above rather than du.  Uploads live under WORKDIR/xx/userName/.
+printf "# disk space consumed per user\n" >> ${LOG}
+printf "#   count       bytes  userName\n" >> ${LOG}
+awk -v workdir="${WORKDIR}" "${AWK_LIB}"'
+{
+    relPath = $2
+    if (substr(relPath, 1, length(workdir) + 1) == workdir "/")
+        relPath = substr(relPath, length(workdir) + 2)
+    user = "(not in a user directory)"
+    if (split(relPath, parts, "/") >= 3)
+        user = parts[2]
+    count[user]++
+    bytes[user] += $1
+}
+END {
+    for (u in count)
+        printf "%.0f\t%d\t%s\t%s\n", bytes[u], count[u], human(bytes[u]), u
+}' ${FILELIST} \
+    | sort -t$'\t' -k1,1nr \
+    | awk -F'\t' '{ printf "%8d  %10s  %s\n", $2, $3, $4 }' >> ${LOG}
 
 # tally the users
 printf "# userNames of uploaders\n" >> ${LOG}

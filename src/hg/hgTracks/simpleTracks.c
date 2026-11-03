@@ -16263,7 +16263,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
      * function, so without this one bad subtrack puts its message on the parent, which a
      * composite never draws, and the subtracks after it are never loaded: the user gets an
      * empty row with no explanation.  refs #38560 */
-    unsigned connMark = hConnMark();
+    unsigned connGeneration = hConnGeneration();
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	compositeLoadSubtrack(track, subtrack);
@@ -16275,7 +16275,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	 * sixteen, so without this a handful of failing tracks fills it and every later
 	 * track reports "Too many open sqlConnections" instead of its own trouble.  refs
 	 * #38560 */
-	hConnReleaseSince(connMark);
+	hConnFreeNewerThan(connGeneration);
 	}
     errCatchReWarn(errCatch);   // errCatchStart took the warnings, hand them back
     errCatchFree(&errCatch);

@@ -236,6 +236,7 @@ hapClusterMethod vcf vcfTabix
 hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
+heatmap.background bigBed
 hgGene genePred
 hgsid bed genePred bigBed bigGenePred
 hicArcLimit hic
