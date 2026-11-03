@@ -1438,6 +1438,8 @@ def stage1(conn, rec, facts):
         # Fall back to the raw text, never to a body that may have been reworded.
         verdict['cleanBodyTextile'] = '<pre>\n' + rec['bodyText'].strip() + '\n</pre>'
     act = decideAction(rec, verdict, facts)
+    if act['reopen'].startswith('Stage 3'):
+        reopenStage(rec, verdict, facts, act)
     logDecision('disposition', rec['messageId'], fromAddr=rec['fromAddr'],
                 subject=rec['subject'], lists=rec['lists'], source=rec['source'],
                 disposition=verdict['disposition'], reason=verdict['dispositionReason'],
@@ -1454,6 +1456,121 @@ def stage1(conn, rec, facts):
                 **act)
     act['_verdict'] = verdict
     return act
+
+
+# ---------------------------------------------------------------------------
+# Stage 3 (step 5): does a reply on a closed ticket need us again?
+
+MODEL_REOPEN = 'opus'
+MODEL_REOPEN_FALLBACK = 'sonnet'
+HISTORY_EVENTS = 12             # most recent ticket events shown
+HISTORY_NOTE_CHARS = 1200
+
+REOPEN_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'required': ['conversationState', 'shouldReopen', 'reason', 'confidence'],
+    'properties': {
+        'conversationState': {'type': 'string',
+                              'enum': ['awaiting_us', 'awaiting_user', 'resolved']},
+        'shouldReopen': {'type': 'boolean'},
+        'reason': {'type': 'string'},
+        'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+    },
+}
+
+REOPEN_SYSTEM = """You decide whether a new email on a CLOSED support ticket needs the UCSC
+Genome Browser support team to act again. The email is always added to the ticket; your
+answer only decides whether the ticket is reopened so the person on duty sees it. Answer
+only through the JSON schema.
+
+Reopen (shouldReopen true, conversationState awaiting_us) when the email asks something new
+or follow-up, reports that the problem is not fixed or has come back, sends information the
+team asked for, or otherwise expects an answer or an action from the team.
+
+Do not reopen (shouldReopen false) when the email only thanks the team, confirms that
+something worked, says the person will try it and report back later, closes the
+conversation, or is information the team does not need to act on (conversationState
+resolved or awaiting_user).
+
+Judge from the ticket history: what the team last said and whether it left the person with
+something to do. A thank-you that also carries something for the team is a reopen: a real
+question, an answer to a question the team asked, a choice between options the team
+offered, files or details the team requested, or a difficulty that remains, even if
+mentioned in passing ("it works, but it is hard to find again"). Only a message with
+nothing the team could act on or want to know stays closed.
+reason: one sentence a team member can check against the email. confidence: how sure you
+are, 0 to 1."""
+
+
+def ticketHistory(ticketId, before):
+    """A closed ticket as it stood when a message arrived: the question, then its most
+    recent emails, notes and status changes. AI drafts are left out."""
+    issue = dbQuery("select i.subject, i.description, i.created_on from issues i where i.id=%s",
+                    (ticketId,))
+    if not issue:
+        return None
+    cutoff = toDbTime(before)
+    names = {str(r['id']): r['name'] for r in dbQuery("select id, name from issue_statuses")}
+    events = []
+    for j in dbQuery(
+            "select j.id, j.created_on, j.notes, u.login, "
+            "  (select group_concat(concat(d.old_value, '>', d.value)) from journal_details d "
+            "   where d.journal_id=j.id and d.prop_key='status_id') status "
+            "from journals j join users u on u.id=j.user_id "
+            "where j.journalized_id=%s and j.created_on < %s order by j.id", (ticketId, cutoff)):
+        when = str(j['created_on'])[:16]
+        note = (j['notes'] or '').strip()
+        if j['status']:
+            changes = ', '.join(f"{names.get(a, a)} -> {names.get(b, b)}"
+                                for a, b in (c.split('>') for c in j['status'].split(',')))
+            events.append(f"[{when}] status changed by {j['login']}: {changes}")
+        if not note or note.startswith('--- AI Suggested Response'):
+            continue
+        m = re.match(r'--- New Email Update ---\s*\n\s*From:\s*(.+)\n', note)
+        label = f"email from {m.group(1).strip()}" if m else f"note by staff member {j['login']}"
+        body = note[m.end():].strip() if m else note
+        events.append(f"[{when}] {label}:\n{body[:HISTORY_NOTE_CHARS]}")
+    head = (f"Ticket #{ticketId}: {issue[0]['subject']} (opened {str(issue[0]['created_on'])[:10]})\n"
+            f"Original question:\n{questionText(issue[0]['description'])[:2000]}")
+    shown = events[-HISTORY_EVENTS:]
+    skipped = len(events) - len(shown)
+    return head + (f"\n\n({skipped} earlier events not shown)" if skipped else '') + \
+        "\n\n" + '\n\n'.join(shown)
+
+
+def reopenJudgment(history, sender, isOpener, body):
+    """One Stage 3 call on a ticket history from ticketHistory(). Returns the decision
+    dict, or raises AskError. No database access, so the trial can run it in threads."""
+    prompt = (f"TICKET HISTORY (the ticket is closed):\n<<<\n{history}\n>>>\n\n"
+              f"NEW EMAIL from {sender}"
+              f"{' (the person who opened the ticket)' if isOpener else ''}:\n<<<\n{body}\n>>>")
+    return ask(prompt, REOPEN_SCHEMA, MODEL_REOPEN, MODEL_REOPEN_FALLBACK, REOPEN_SYSTEM)
+
+
+def reopenStage(rec, verdict, facts, act):
+    """Decide the reopen for a reply on a closed ticket and record it in act.
+
+    Uncertain means reopen: a wrong reopen is visible and costs a click, a wrong
+    non-reopen leaves a question unseen on a closed ticket."""
+    try:
+        decision = reopenJudgment(ticketHistory(facts['ticketId'], rec['receivedAt']),
+                                  rec['fromAddr'], rec['fromAddr'] == facts.get('ticketOpener'),
+                                  verdict['cleanBodyTextile'])
+    except (AskAuthError, AskLimitError, CallCapReached):
+        raise
+    except AskError as e:
+        act['reopen'] = 'reopen (Stage 3 failed, so reopen to be safe)'
+        logDecision('reopen', rec['messageId'], error=str(e), ticketId=facts['ticketId'])
+        return
+    unsure = decision['confidence'] < UNSURE_BELOW
+    reopen = decision['shouldReopen'] or unsure
+    act['reopen'] = (('reopen' if reopen else 'no reopen')
+                     + (' (not sure, so reopen)' if unsure and not decision['shouldReopen'] else '')
+                     + f": {decision['reason']}")
+    logDecision('reopen', rec['messageId'], ticketId=facts['ticketId'],
+                fromAddr=rec['fromAddr'], subject=rec['subject'], reopen=reopen,
+                unsure=unsure, model=MODEL_REOPEN, **decision)
 
 
 # ---------------------------------------------------------------------------
@@ -2127,8 +2244,25 @@ def report(conn, sinceDays):
             print(f"  {s['receivedAt'][:16]} {s['fromAddr'][:30]:30} {s['subject'][:45]:45} "
                   f"{old}; {new}")
     reportStage1(conn, seen)
+    reportReopens(conn, seen)
     reportDrafts(conn, seen)
     print(f"\n{len(seen)} message(s) in the last {sinceDays} day(s)")
+
+
+def reportReopens(conn, seen):
+    """Every Stage 3 decision next to what the old script did with the same message."""
+    decisions = [r for r in readDecisions({'reopen'}) if r['messageId'] in seen]
+    print(f"\nReopen decisions on closed tickets (Stage 3): {len(decisions)}")
+    for d in decisions:
+        row = conn.execute("select oldReopened from messages where messageId=?",
+                           (d['messageId'],)).fetchone()
+        old = ('old reopened' if row and row[0] else
+               'old did not reopen' if row and row[0] is not None else 'old not observed yet')
+        new = 'ERROR' if 'error' in d else ('reopen' if d['reopen'] else 'no reopen')
+        flag = '' if ('reopened' in old) == (new == 'reopen') or 'not observed' in old else '  <--'
+        print(f"  #{d.get('ticketId')} {d.get('fromAddr', '')[:28]:28} new={new:9} {old}{flag}")
+        if 'reason' in d:
+            print(f"      {d['conversationState']} ({d['confidence']:.2f}): {d['reason'][:140]}")
 
 
 def reportDrafts(conn, seen):
