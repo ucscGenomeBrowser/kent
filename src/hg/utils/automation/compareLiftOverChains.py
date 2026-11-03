@@ -179,19 +179,28 @@ def analyzeChain(path):
         tSizes.setdefault(c['tName'], c['tSize'])
         qSizes.setdefault(c['qName'], c['qSize'])
         tSpans.append(c['tEnd'] - c['tStart'])
-        tIntervals[c['tName']].append((c['tStart'], c['tEnd']))
-        # chain format always gives qStart/qEnd in the qStrand's own
-        # coordinate frame; normalize '-' strand chains back to the
-        # query's forward strand so coverage can be merged correctly.
-        if c['qStrand'] == '-':
-            qS, qE = c['qSize'] - c['qEnd'], c['qSize'] - c['qStart']
-        else:
-            qS, qE = c['qStart'], c['qEnd']
-        qIntervals[c['qName']].append((qS, qE))
+        # (tStart, tEnd)/(qStart, qEnd) are only the chain's overall
+        # bounding span -- it can cross large unaligned stretches (indels,
+        # inversions, assembly gaps) via the blocks' own dt/dq gaps.  Walk
+        # the blocks themselves to get the actually-aligned intervals;
+        # using the span as "coverage" badly overcounts true aligned bases.
+        tPos = c['tStart']
+        qPos = c['qStart']
         for size, dt, dq in c['blocks']:
+            tIntervals[c['tName']].append((tPos, tPos + size))
+            # chain format always gives qPos in the qStrand's own
+            # coordinate frame; normalize '-' strand chains back to the
+            # query's forward strand so coverage can be merged correctly.
+            if c['qStrand'] == '-':
+                qS, qE = c['qSize'] - (qPos + size), c['qSize'] - qPos
+            else:
+                qS, qE = qPos, qPos + size
+            qIntervals[c['qName']].append((qS, qE))
             blockSizes.append(size)
             tGap += dt
             qGap += dq
+            tPos += size + dt
+            qPos += size + dq
     nBlocks = len(blockSizes)
     targetIntervals = mergeIntervalsByChrom(tIntervals)
     queryIntervals = mergeIntervalsByChrom(qIntervals)
