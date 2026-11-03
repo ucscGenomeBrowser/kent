@@ -1,0 +1,96 @@
+<h2>Description</h2>
+
+Tracks showing chain/liftOver comparisons for different alignment methods.
+Target assembly: GRCh38/hg38, Query assembly: hs1/T2T-CHM13.
+<ol>
+<ul>The liftOver chain from the T2T project</ul>
+<ul>The liftOver chain from the UCSC procedure 'Same Species' BLAT alignment</ul>
+<ul>The liftOver chain from the UCSC procedure lastz/chain/net alignment</ul>
+<ul>The liftOver chain from the miniMap2 alignment</ul>
+</ol>
+
+Tracks shown for each type of alignment procedure:
+<ul>
+<li>the 'liftOver' chain</li>
+<li>the 'all' chain before liftOver filtering</li>
+<li>the 'Quick Lift' chain file from the same alignment procedure on the
+    query hs1/CHM13</li>
+<li>the 'raw' chain output of miniMap2 before applying the UCSC
+    axtChain | chainBridge</li>
+<li>the items from Gencode V50 genePred that failed the lift through the
+   liftOver file.  mouseOver shows the 'reason' for the failed lift.</li>
+<li>Intersections of the liftOver files, a 'common' track showing what
+    each of the 4 lift over chain files had in common, and a 'unique'
+    track for each method showing what it has unique from the others.
+</ul>
+
+<h2>Methods</h2>
+
+The track data was obtained:
+<ul>
+<li>T2T liftOver - from files supplied by the CHM13 T2T project</li>
+<li>BLAT/sameSpecies - result from UCSC procedure doSameSpeciesLiftOver.pl</li>
+<li>lastz/chain/net - result from UCSC procedure doBlastzChainNet.pl</li>
+<li>miniMap2 - result from UCSC procedure doMiniMap2.pl</li>
+</ul>
+
+<h2>Measurements</h2>
+
+Results of the liftOver test as performed by the claude generated
+script in the kent source tree:
+<b>src/hg/utils/automation/compareLiftOverChains.py</b>
+<hr>
+<table border=1 width=800>
+<caption>genePred&nbsp;translation&nbsp;(liftOver&nbsp;-genePred):&nbsp;hg38.gencodeV50.gp&nbsp;&nbsp;(670,670&nbsp;transcripts)</caption>
+<thead>
+<tr><th>lift type</th><th>items mapped</th><th>mapped %</th><th>items unmapped</th><th>unmapped %</th></tr>
+</thead><tbody>
+<tr><th>T2T</th><td style='text-align:right'>636,964</td><td style='text-align:right'>94.97%</td><td style='text-align:right'>33,706</td><td style='text-align:right'>5.03%</td></tr>
+<tr><th>blat</th><td style='text-align:right'>664,105</td><td style='text-align:right'>99.02%</td><td style='text-align:right'>6,565</td><td style='text-align:right'>0.98%</td></tr>
+<tr><th>lastz</th><td style='text-align:right'>661,673</td><td style='text-align:right'>98.66%</td><td style='text-align:right'>8,997</td><td style='text-align:right'>1.34%</td></tr>
+<tr><th>miniMap2</th><td style='text-align:right'>653,480</td><td style='text-align:right'>97.44%</td><td style='text-align:right'>17,190</td><td style='text-align:right'>2.56%</td></tr>
+</tbody></table>
+
+<hr>
+<table border=1>
+  <caption>Chain file structural statistics</caption>
+  <thead>
+    <tr>
+      <th scope="col">lift type</th>
+      <th scope="col">chains</th>
+      <th scope="col">blocks</th>
+      <th scope="col">blocks/chain</th>
+      <th scope="col">aligned bp</th>
+      <th scope="col">tGap bp</th>
+      <th scope="col">qGap bp</th>
+      <th scope="col">blockN50</th>
+      <th scope="col">chainSpanN50</th>
+      <th scope="col">tCovered bp</th>
+      <th scope="col">tCov%</th>
+      <th scope="col">qCovered bp</th>
+      <th scope="col">qCov%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>T2T</th>
+      <td style='text-align:right'>6,194</td><td>806,856</td><td style='text-align:right'>130.26</td><td>2,855,045,442</td><td style='text-align:right'>643,725,325</td><td style='text-align:right'>1,162,973,122</td>
+      <td style='text-align:right'>8,808</td><td style='text-align:right'>138,293,707</td><td>2,855,045,442</td><td>86.54%</td><td>2,833,627,790</td><td>90.90%</td>
+    </tr>
+    <tr>
+      <th>blat</th>
+      <td style='text-align:right'>25,022</td><td>921,927</td><td style='text-align:right'>36.84</td><td>3,120,824,076</td><td style='text-align:right'>1,876,714,239</td><td style='text-align:right'>1,754,136,266</td>
+      <td style='text-align:right'>8,614</td><td style='text-align:right'>90,861,057</td><td>3,120,824,076</td><td>94.59%</td><td>2,909,234,445</td><td>93.33%</td>
+    </tr>
+    <tr>
+      <th>lastz</th>
+      <td style='text-align:right'>7,706</td><td>823,517</td><td style='text-align:right'>106.87</td><td>3,036,957,179</td><td style='text-align:right'>582,710,582</td><td style='text-align:right'>637,875,116</td>
+      <td style='text-align:right'>8,808</td><td style='text-align:right'>138,293,707</td><td>3,036,957,179</td><td>92.05%</td><td>2,869,005,268</td><td>92.04%</td>
+    </tr>
+    <tr>
+      <th>miniMap2</th>
+      <td style='text-align:right'>6,807</td><td>799,012</td><td style='text-align:right'>117.38</td><td>3,043,165,590</td><td style='text-align:right'>406,490,762</td><td style='text-align:right'>486,806,389</td>
+      <td style='text-align:right'>8,758</td><td style='text-align:right'>138,293,691</td><td>3,043,165,590</td><td>92.24%</td><td>2,899,565,742</td><td>93.02%</td>
+    </tr>
+  </tbody>
+</table>
