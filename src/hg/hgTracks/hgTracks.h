@@ -2001,6 +2001,12 @@ boolean hasRecTrackSet(struct cart *cart);
 void printRecTrackSets();
 /* Create dialog with list of recommended track sets */
 
+struct slName *recTrackSetConnectHubs(struct cart *cart, char *sessionName);
+/* Call this before the track hubs are added to the track list.  Copy the hub connections
+ * of a recommended track set from its htdocs file into the cart, and load the hubs again if
+ * one is new, so that the hub tracks are drawn on this page.  Return the track group names
+ * ("hub_<id>") of the set's hubs, or NULL if the set has no file or no hubs. */
+
 boolean loadRecTrackSetFromFile(struct cart *cart, char *sessionName);
 /* If a contents file exists in htdocs for this recommended track set, merge its
  * settings into the current cart and return TRUE.  Return FALSE if no file, so the

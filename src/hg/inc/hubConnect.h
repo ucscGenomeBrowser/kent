@@ -171,6 +171,11 @@ struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boole
 char *hubConnectLoadHubs(struct cart *cart);
 /* load the track data hubs.  Set a static global to remember them */
 
+void hubConnectPortHubStatus(struct cart *cart);
+/* When a session has been saved on a different host it may have cart variables that reference
+ * hubStatus id's that are different than what the local machine has.  Use the "assumesHub" cart
+ * variable, which maps id numbers to URL's, to rename them to the local id's. */
+
 struct hubConnectStatus *hubConnectGetHubs();
 /* return the static global to the track data hubs */
 

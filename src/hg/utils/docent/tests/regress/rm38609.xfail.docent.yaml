@@ -1,0 +1,77 @@
+# #38609 -- the "ENIGMA BRCA1/BRCA2 VCEP" and "InSiGHT Lynch Syndrome VCEP" Recommended
+# Track Sets did not show their hub tracks until the page was reloaded.
+#
+# Since 0df5f6317fd (v500) a track set is merged into the cart from a file in
+# htdocs/data/recTrackSets/<db>/ inside the same hgTracks request.  The merge ran after the
+# hubs were added to the track list, and hubs are only connected when the cart loads, so a
+# hub that the set switches on drew nothing until the next page.  The fix connects the set's
+# hubs before the hub tracks are added, and returns the set's hub tracks to their defaults
+# after the set's "hide all", because the set files carry no visibility lines for them.
+#
+# Checks:
+#   step 1  ENIGMA from a fresh cart: the ENIGMA hub's tracks are drawn on the FIRST page,
+#           with no reload.  This is the ticket's own bug.
+#   step 2  ENIGMA a second time, while its hub is already connected: the hub tracks are
+#           still drawn.  Before the fix the set's "hide all" hid them and nothing in the
+#           set file turned them back on.
+#   step 3  InSiGHT after ENIGMA, at MLH1: the InSiGHT hub's tracks are drawn on the first
+#           page.  noRows on two ENIGMA tracks is a weak check, because they have no items
+#           at MLH1 and would not be drawn anyway; it is kept as a guard against a set
+#           that turns every connected hub on.
+#
+# Every rtsLoad request is a fresh click through the menu, because hgTracks.js
+# (showRecTrackSetsPopup) writes the current position into each link only when the dialog
+# opens.  Hub rows carry a per-run hub_<n>_ prefix, which `rows:` matches by suffix.
+#
+# NOT asserted: the BRCA Exchange hub (brcaVariants, popfreqVariants), which the ENIGMA set
+# also connects.  It is served from brcaexchange.org, so an outage there would turn this
+# script red for a reason that is not a regression.  The ENIGMA and InSiGHT hubs are on
+# hgdownload.soe.ucsc.edu.
+#
+# Needs browser.recTrackSets=on on the target, as genome-test has.
+proof:
+  - "assertion-only 2026-11-03 -- written from #38609 and the uncommitted fix in ~/kent/src"
+  - "sandbox-ab 2026-11-03 -- passes on hgwdev-braney (master + the fix) and fails on genome-test (master without it) at step 1: rows not drawn: BRCAclinDomains, BRCAmla, BRCAfunctionalAssays, BRCAexonWeights, BRCAsplicing. Step 1 stops the run there, so steps 2 and 3 were not seen to fail; a curl run on genome-test showed step 2's symptom (0 ENIGMA hub rows on a second load)"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100"
+  - expect:
+      rows: [ruler]
+      noRows: [BRCAmla, pvs1]
+
+  # Step 1: the ticket.  ENIGMA from a cart with no hubs connected.
+  - hover: '#tools2'
+  - click: '#recTrackSetsMenuItem'
+  - wait: '#recTrackSetsPopup a.recTrackSetLink'
+  - click: '#recTrackSetsPopup a.recTrackSetLink[href*="rtsLoad=BRCA1_BRCA2_ENIGMA_hg38"]'
+  - wait: '#imgTbl'
+  - shot: enigmaFirst
+  - expect:
+      rows: [BRCAclinDomains, BRCAmla, BRCAfunctionalAssays, BRCAexonWeights, BRCAsplicing]
+
+  # Step 2: the same set again, with its hub already connected.
+  - hover: '#tools2'
+  - click: '#recTrackSetsMenuItem'
+  - wait: '#recTrackSetsPopup a.recTrackSetLink'
+  - click: '#recTrackSetsPopup a.recTrackSetLink[href*="rtsLoad=BRCA1_BRCA2_ENIGMA_hg38"]'
+  - wait: '#imgTbl'
+  - expect:
+      rows: [BRCAclinDomains, BRCAmla, BRCAfunctionalAssays, BRCAexonWeights, BRCAsplicing]
+
+  # Step 3: InSiGHT, a set with a different hub.  Its tracks cover the Lynch syndrome genes
+  # and have no items at BRCA1, where `rows:` would not see them, so move to MLH1 first.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr3%3A36993332-37050918&pix=1100"
+  - hover: '#tools2'
+  - click: '#recTrackSetsMenuItem'
+  - wait: '#recTrackSetsPopup a.recTrackSetLink'
+  - click: '#recTrackSetsPopup a.recTrackSetLink[href*="rtsLoad=insightVcepHg38"]'
+  - wait: '#imgTbl'
+  - shot: insightAfterEnigma
+  - expect:
+      rows: [clinDomains, pvs1, grpAF, HCIpriors, functionalAssays, insightCuratedVars]
+      noRows: [BRCAmla, BRCAfunctionalAssays]

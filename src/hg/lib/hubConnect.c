@@ -1504,7 +1504,7 @@ if (!isEmpty(dir))
 return 0;
 }
 
-static void portHubStatus(struct cart *cart)
+void hubConnectPortHubStatus(struct cart *cart)
 /* When a session has been saved on a different host it may have cart variables that reference hubStatus id's
  * that are different than what the local machine has.  Look for these cases using the "assumesHub" cart variable
  * that maps id numbers to URL's. */
@@ -1597,9 +1597,9 @@ char *newDatabase = checkForNew( cart);
 newDatabase = asmAliasFindUnlessGenArk(newDatabase);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 
-portHubStatus(cart);
+hubConnectPortHubStatus(cart);
 
-// portHubStatus may have rewritten db to point at a remapped assembly hub id
+// hubConnectPortHubStatus may have rewritten db to point at a remapped assembly hub id
 dbSpec = asmAliasFindUnlessGenArk(cartOptionalString(cart, "db"));
 
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart, dbSpec);
