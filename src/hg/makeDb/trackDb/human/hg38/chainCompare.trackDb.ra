@@ -176,7 +176,8 @@ group x
 priority 140.1
 color 0,0,0
 altColor 100,50,0
-type bigBed 6 +
+type bigBed 9 +
+itemRgb on
 mouseOverField reason
 configurable on
 html chainCompare

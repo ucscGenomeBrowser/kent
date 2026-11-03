@@ -52,6 +52,20 @@ script in the kent source tree:
 </tbody></table>
 
 <hr>
+<p>
+The liftOver <em>failures</em> track items are colored for their unmapped reason:
+<ul>
+<li>Deleted in new - red 255,0,0,</li>
+<li>Partially deleted in new - light red 128,0,0,</li>
+<li>Boundary problem - blue 0,0,255,</li>
+<li>Can't find thickStart/thickEnd - green 0,255,0,</li>
+</ul>
+</p>
+<p>
+And in the table below, the large counts for <b>Deleted in new</b> are
+almost all because of the chrUn/_alt/_fix/_random contigs, there are only
+7 actual items 'Deleted in new' on actual chrN chromosomes, 1 in the blat.unmapped track and six items in the miniMap2 unmapped track.
+</p>
 <table border=1>
 <caption>genePred unmapped reason breakdown</caption>
 <thead>
