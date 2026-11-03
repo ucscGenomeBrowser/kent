@@ -1,0 +1,373 @@
+##############################################################################
+# hs1ChainCompare
+##############################################################################
+track hs1ChainCompare
+compositeTrack on
+shortLabel hs1 on hg38 liftOver
+longLabel hs1 on hg38 chain comparisons
+subGroup1 view Views chain=Chains synten=Syntenic_chains rbest=Reciprocal_best_chains liftover=Lift_over_chains net=Nets synNet=Syntenic_nets rbestNet=Reciprocal_best_nets
+subGroup2 alignment Alignment s000=blat_hs1 s001=miniMap2_hs1 s002=T2T_project s003=lastz_hs1
+subGroup3 chainType Chain_type g00=all_chain g01=lift_over g02=quick_lift g03=before_chaining
+dragAndDrop subTracks
+visibility hide
+group x
+noInherit on
+priority 100.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+dimensions dimensionX=chainType dimensionY=alignment
+sortOrder alignment=+ view=+ chainType=+
+chainMinScore 5000
+chainLinearGap medium
+configurable on
+html chainCompare
+
+    track hs1ChainCompareViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    parent hs1ChainCompare
+    spectrum on
+
+        track T2TLiftOverHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s002 chainType=g01
+        shortLabel T2T liftOver
+        longLabel liftOver from T2T project
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverT2T.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverT2TLink.bb
+        otherDb hs1
+        priority 5.325
+
+        track blatLiftOverHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s000 chainType=g01
+        shortLabel blat liftOver
+        longLabel blat sameSpecies alignment liftOver hs1
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverBlatHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverBlatHs1Link.bb
+        otherDb hs1
+        priority 5.425
+
+        track lastzLiftOverHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s003 chainType=g01
+        shortLabel lastz liftOver
+        longLabel lastz alignment liftOver Hs1
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverLastzHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverLastzHs1Link.bb
+        otherDb hs1
+        priority 5.455
+
+        track miniMap2LiftOverHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s001 chainType=g01
+        shortLabel miniMap2 liftOver
+        longLabel miniMap2 alignment liftOver Hs1
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.liftOverMiniMap2Hs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.liftOverMiniMap2Hs1Link.bb
+        otherDb hs1
+        priority 5.525
+
+        track mm2QuickHs1
+        parent hs1ChainCompareViewchain on
+        subGroups view=chain alignment=s001 chainType=g02
+        shortLabel mm2 quickLift
+        longLabel quickLift from hs1 miniMap2 alignment
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftMiniMap2Hs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftMiniMap2Hs1Link.bb
+        otherDb hs1
+        chainMinScore 5000
+        chainLinearGap medium
+        priority 5.625
+
+        track blatQuickHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s000 chainType=g02
+        shortLabel blat quickLift
+        longLabel quickLift result from blat sameSpecies hg38 on hs1
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftBlatHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftBlatHs1Link.bb
+        otherDb hs1
+        priority 5.825
+
+        track lastzQuickHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s003 chainType=g02
+        shortLabel lastz quickLift
+        longLabel quickLift result from lastz/chain/net hg38 on hs1
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftLastzHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftLastzHs1Link.bb
+        otherDb hs1
+        priority 5.918
+
+        track T2TAllChainHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s002 chainType=g00
+        shortLabel T2T allChain
+        longLabel all.chain from T2T project
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.allChainT2T.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.allChainT2TLink.bb
+        otherDb hs1
+        priority 5.925
+
+        track blatAllChainHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s000 chainType=g00
+        shortLabel blat allChain
+        longLabel all.chain result from blat sameSpecies hs1 on hg38
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.allChainBlatHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.allChainBlatHs1Link.bb
+        otherDb hs1
+        priority 6.005
+
+        track lastzAllChainHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s003 chainType=g00
+        shortLabel lastz allChain
+        longLabel all.chain result from lastz/chain/net hs1 on hg38
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainHs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainHs1Link.bb
+        otherDb hs1
+        priority 6.015
+
+        track mm2ChainHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s001 chainType=g00
+        shortLabel mm2 allChain
+        longLabel UCSC chain result of miniMap2 output hs1 on hg38
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hs1Link.bb
+        otherDb hs1
+        priority 6.225
+
+        track mm2RawChainHs1
+        parent hs1ChainCompareViewchain off
+        subGroups view=chain alignment=s001 chainType=g03
+        shortLabel mm2 rawChain
+        longLabel miniMap2 chain output before UCSC chaining hs1 on hg38
+        type bigChain hs1
+        bigDataUrl /gbdb/$D/chainNet/$D.rawChainMiniMap2Hs1.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.rawChainMiniMap2Hs1Link.bb
+        otherDb hs1
+        priority 6.325
+
+##############################################################################
+# lift failures
+##############################################################################
+track chainCompareLiftFailures
+compositeTrack on
+shortLabel hs1 liftOver failures
+longLabel liftOver to hs1/CHM13 failures on Gencode V50 genePred: T2T, sameSpecies blat, lastz, miniMap2
+visibility dense
+group x
+priority 140.1
+color 0,0,0
+altColor 100,50,0
+type bigBed 6 +
+mouseOverField reason
+configurable on
+html chainCompare
+
+track failedT2T
+parent chainCompareLiftFailures
+shortLabel failed T2T
+longLabel failed T2T liftOver Gencode v50 genePred
+priority 2
+bigDataUrl /gbdb/hg38/chainCompare/T2T.unmapped.bb
+
+track failedBlat
+parent chainCompareLiftFailures
+shortLabel failed BLAT
+longLabel failed BLAT/sameSpecies liftOver Gencode v50 genePred
+priority 3
+bigDataUrl /gbdb/hg38/chainCompare/blat.unmapped.bb
+
+track failedLastz
+parent chainCompareLiftFailures
+shortLabel failed LASTZ
+longLabel failed lastz/chain/net liftOver Gencode v50 genePred
+priority 4
+bigDataUrl /gbdb/hg38/chainCompare/lastzOverChain.unmapped.bb
+
+track failedMiniMap2
+parent chainCompareLiftFailures
+shortLabel failed miniMap2
+longLabel failed miniMap2 liftOver Gencode v50 genePred
+priority 5
+bigDataUrl /gbdb/hg38/chainCompare/miniMap2LiftOver.unmapped.bb
+
+##############################################################################
+# overlaps
+##############################################################################
+track chainCompareOverlaps
+compositeTrack on
+shortLabel hs1 liftOver intersections
+longLabel hs1 intersection of liftOver files: T2T, sameSpecies blat, lastz, miniMap2
+visibility hide
+group x
+priority 150.1
+color 0,0,0
+altColor 100,50,0
+type bigBed 4
+configurable on
+html chainCompare
+
+track common4way
+parent chainCompareOverlaps
+shortLabel 4-way in common
+longLabel common regions from intersection of all four hs1/T2T-CHM13 alignments
+priority 1
+bigDataUrl /gbdb/hg38/chainCompare/4XCommon.bb
+
+track uniqueT2T
+parent chainCompareOverlaps
+shortLabel unique T2T
+longLabel unique regions in the T2T liftOver
+priority 2
+bigDataUrl /gbdb/hg38/chainCompare/T2T.bb
+
+track uniqueBlat
+parent chainCompareOverlaps
+shortLabel unique BLAT
+longLabel unique regions in the BLAT/sameSpecies liftOver
+priority 3
+bigDataUrl /gbdb/hg38/chainCompare/blat.bb
+
+track uniqueLastz
+parent chainCompareOverlaps
+shortLabel unique LASTZ
+longLabel unique regions in the lastz/chain/net liftOver
+priority 4
+bigDataUrl /gbdb/hg38/chainCompare/lastz.bb
+
+track uniqueMiniMap2
+parent chainCompareOverlaps
+shortLabel unique miniMap2
+longLabel unique regions in the miniMap2 liftOver
+priority 5
+bigDataUrl /gbdb/hg38/chainCompare/miniMap2.bb
+
+##############################################################################
+# hg19ChainCompare
+##############################################################################
+track hg19ChainCompare
+compositeTrack on
+shortLabel hg19 on hg38 liftOver
+longLabel hg19 on hg38 chain comparisons
+subGroup1 view Views chain=Chains synten=Syntenic_chains rbest=Reciprocal_best_chains liftover=Lift_over_chains net=Nets synNet=Syntenic_nets rbestNet=Reciprocal_best_nets
+subGroup2 alignment Alignment s000=blat_hg19 s001=miniMap2_hg19
+subGroup3 chainType Chain_type g00=all_chain g01=lift_over g02=quick_lift g03=before_chaining
+dragAndDrop subTracks
+visibility hide
+group x
+noInherit on
+priority 200.1
+color 0,0,0
+altColor 100,50,0
+type bed 3
+dimensions dimensionX=chainType dimensionY=alignment
+sortOrder alignment=+ view=+ chainType=+
+chainMinScore 5000
+chainLinearGap medium
+configurable on
+html chainCompare
+
+    track hg19ChainCompareViewchain
+    shortLabel Chains
+    view chain
+    visibility pack
+    parent hg19ChainCompare
+    spectrum on
+
+        track blatLiftOverHg19
+        parent hg19ChainCompareViewchain off
+        subGroups view=chain alignment=s000 chainType=g01
+        shortLabel blat liftOver
+        longLabel blat sameSpecies alignment liftOver Hg19
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.chainLiftOverBlatHg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainLiftOverBlatHg19Link.bb
+        otherDb hg19
+        priority 5.425
+
+        track miniMap2LiftOverHg19
+        parent hg19ChainCompareViewchain off
+        subGroups view=chain alignment=s001 chainType=g01
+        shortLabel miniMap2 liftOver
+        longLabel miniMap2 alignment liftOver Hg19
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.liftOverMiniMap2Hg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.liftOverMiniMap2Hg19Link.bb
+        otherDb hg19
+        priority 5.525
+
+        track mm2QuickHg19
+        parent hg19ChainCompareViewchain on
+        subGroups view=chain alignment=s001 chainType=g02
+        shortLabel mm2 quickLift
+        longLabel quickLift from hg19 miniMap2 alignment
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftMiniMap2Hg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftMiniMap2Hg19Link.bb
+        otherDb hg19
+        chainMinScore 5000
+        chainLinearGap medium
+        priority 5.625
+
+        track blatQuickHg19
+        parent hg19ChainCompareViewchain off
+        subGroups view=chain alignment=s000 chainType=g02
+        shortLabel blat quickLift
+        longLabel quickLift result from blat sameSpecies hg38 on hg19
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftBlatHg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainQuickLiftBlatHg19Link.bb
+        otherDb hg19
+        priority 5.825
+
+        track blatAllChainHg19
+        parent hg19ChainCompareViewchain off
+        subGroups view=chain alignment=s000 chainType=g00
+        shortLabel blat allChain
+        longLabel all.chain result from blat sameSpecies hg19 on hg38
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.allChainBlatHg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.allChainBlatHg19Link.bb
+        otherDb hg19
+        priority 5.925
+
+        track mm2RawChainHg19
+        parent hg19ChainCompareViewchain off
+        subGroups view=chain alignment=s001 chainType=g03
+        shortLabel mm2 rawChain
+        longLabel miniMap2 chain output before UCSC chaining hg19 on hg38
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.rawChainMiniMap2Hg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.rawChainMiniMap2Hg19Link.bb
+        otherDb hg19
+        priority 6.025
+
+        track mm2ChainHg19
+        parent hg19ChainCompareViewchain off
+        subGroups view=chain alignment=s001 chainType=g00
+        shortLabel mm2 allChain
+        longLabel UCSC chain result of miniMap2 output hg19 on hg38
+        type bigChain hg19
+        bigDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hg19.bb
+        linkDataUrl /gbdb/$D/chainNet/$D.chainMiniMap2Hg19Link.bb
+        otherDb hg19
+        priority 6.125
+
