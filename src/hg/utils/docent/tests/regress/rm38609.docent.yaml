@@ -32,6 +32,7 @@
 proof:
   - "assertion-only 2026-11-03 -- written from #38609 and the uncommitted fix in ~/kent/src"
   - "sandbox-ab 2026-11-03 -- passes on hgwdev-braney (master + the fix) and fails on genome-test (master without it) at step 1: rows not drawn: BRCAclinDomains, BRCAmla, BRCAfunctionalAssays, BRCAexonWeights, BRCAsplicing. Step 1 stops the run there, so steps 2 and 3 were not seen to fail; a curl run on genome-test showed step 2's symptom (0 ENIGMA hub rows on a second load)"
+  - "server-flip 2026-11-03 -- passes on genome-test after 941a7fadd76 reached it (make cgi-alpha), where the same checks failed at step 1 earlier the same day"
 
 target: genome-test
 db: hg38
