@@ -29,9 +29,9 @@ Tracks shown for each type of alignment procedure:
 The track data was obtained:
 <ul>
 <li>T2T liftOver - from files supplied by the CHM13 T2T project</li>
-<li>BLAT/sameSpecies - result from UCSC procedure doSameSpeciesLiftOver.pl</li>
-<li>lastz/chain/net - result from UCSC procedure doBlastzChainNet.pl</li>
-<li>miniMap2 - result from UCSC procedure doMiniMap2.pl</li>
+<li>BLAT/sameSpecies - result from UCSC procedure doSameSpeciesLiftOver.pl - uses: axtChain | chainBridge, linearGap=medium, minScore=1000, scoreScheme default HOXD70</li>
+<li>lastz/chain/net - result from UCSC procedure doBlastzChainNet.pl - uses: axtChain | chainAntiRepeat, linearGap=medium, minScore=5000, scoreScheme=human_chimp.v2.q</li>
+<li>miniMap2 - result from UCSC procedure doMiniMap2.pl - uses: axtChain | chainBridge | pafToPsl, arguments: -cx asm5 -N 5 -p 0.8 -t 8 </li>
 </ul>
 
 <h2>Measurements</h2>
@@ -50,6 +50,19 @@ script in the kent source tree:
 <tr><th>lastz</th><td style='text-align:right'>661,673</td><td style='text-align:right'>98.66%</td><td style='text-align:right'>8,997</td><td style='text-align:right'>1.34%</td></tr>
 <tr><th>miniMap2</th><td style='text-align:right'>653,480</td><td style='text-align:right'>97.44%</td><td style='text-align:right'>17,190</td><td style='text-align:right'>2.56%</td></tr>
 </tbody></table>
+
+<hr>
+<table border=1>
+<caption>genePred unmapped reason breakdown</caption>
+<thead>
+<tr><th>lift type</th><th>Deleted<br>in new</th><th>Partially<br>deleted in new</th><th>Boundary<br>problem</th><th>Can't find<br>thickStart/thickEnd</th></tr>
+</thead>
+<tbody>
+<tr><th>T2T</th><td style='text-align:right'>26,378</td><td style='text-align:right'>5,048</td><td style='text-align:right'>2,273</td><td style='text-align:right'>7</td></tr>
+<tr><th>blat</th><td style='text-align:right'>4,665</td><td style='text-align:right'>1,869</td><td style='text-align:right'>27</td><td style='text-align:right'>4</td></tr>
+<tr><th>lastz</th><td style='text-align:right'>4,052</td><td style='text-align:right'>2,664</td><td style='text-align:right'>2,273</td><td style='text-align:right'>8</td></tr>
+<tr><th>miniMap2</th><td style='text-align:right'>9,434</td><td style='text-align:right'>5,790</td><td style='text-align:right'>1,943</td><td style='text-align:right'>23</td></tr>
+</tbody>
 
 <hr>
 <table border=1>
