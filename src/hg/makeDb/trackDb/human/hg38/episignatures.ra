@@ -4,6 +4,7 @@ shortLabel Episignatures
 longLabel DNA methylation episignatures of rare developmental disorders
 group regulation
 html episignatures.html
+pennantIcon New red ../goldenPath/newsarch.html#110326 "Released Nov. 3, 2026"
 # The maxAbsDelta filter used to be set here once, so that one control on the
 # collection page filtered methaDory and epigenCentral together. Subtracks
 # inherit it, and hgTracks errAborts ("Field not found") on episign, which

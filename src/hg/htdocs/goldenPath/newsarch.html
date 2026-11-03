@@ -64,6 +64,67 @@ credits page</a> for acknowledgments of the data we host.</p>
 
 <a name="2026"></a>
 
+<a name="episignatures"></a>
+<a name="110326"></a>
+<h2>Nov. 3, 2026 &nbsp;&nbsp; Episignatures: DNA methylation signatures of rare developmental
+disorders (hg38)</h2>
+<p>
+We are pleased to announce a new
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=episignatures&position=default"
+target="_blank"><b>Episignatures</b></a> track collection on the human GRCh38/hg38 assembly. An
+episignature is a pattern of DNA methylation in blood that is specific to a genetic disorder. Many
+rare developmental disorders are caused by variants in genes that regulate chromatin, and
+individuals who carry them share a characteristic set of CpG sites that are more or less methylated
+than in unaffected people. Clinical labs use these signatures to classify variants of uncertain
+significance, by testing whether a patient's methylation array profile matches a known signature.
+The new tracks show the individual CpG sites that published episignatures are built from, so they
+can be viewed next to genes, regulatory elements and the methylation arrays themselves.
+</p>
+
+<p>
+The collection contains two tracks:
+</p>
+
+<ul>
+  <li>
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=methaDory&position=default"
+  target="_blank"><b>MethaDory</b></a> shows more than 260,000 CpG sites from 189 published
+  episignatures for about 100 rare disorders, reported in 74 studies and compiled by the authors of
+  the open-source <a href="https://github.com/f-ferraro/MethaDory" target="_blank">MethaDory</a>
+  classifier. Sites are colored by the strongest effect reported at the site: warm colors for
+  hypermethylation, cool colors for hypomethylation, a darker shade for a difference of at least
+  10 percentage points, and purple where episignatures at the site disagree in direction. The
+  track can be filtered by disorder, gene or locus, study, direction, number of episignatures and
+  effect size, and an Illumina probe ID such as <tt>cg05654765</tt> can be typed into the
+  position box to jump to it.
+  </li>
+  <li>
+  <a href="/cgi-bin/hgTrackUi?db=hg38&g=epigenCentral&position=default"
+  target="_blank"><b>EpigenCentral</b></a> shows the 15,035 CpG sites of the 24 episignatures
+  for 23 rare disorders available on
+  <a href="https://epigen.ccm.sickkids.ca/" target="_blank">EpigenCentral</a>, a portal from the
+  Hospital for Sick Children in Toronto where a methylation array sample can be uploaded and
+  classified against those signatures.
+  </li>
+</ul>
+
+<p>
+Because a CpG site is often part of the signature of several disorders, both tracks show one item
+per site, and clicking it opens a table of every episignature at that site with its disorder,
+methylation difference and p-value. The two sets were compiled independently and overlap heavily,
+but neither contains the other.
+</p>
+
+<p>
+We would like to thank Federico Ferraro and Dmitrijs Rots at Erasmus MC, University Medical Center
+Rotterdam, for compiling the MethaDory episignature sites and providing them for open release, and
+the Centre for Computational Medicine and the Weksberg lab at the Hospital for Sick Children for
+curating the EpigenCentral episignatures and building the track hub the EpigenCentral track is
+based on. The EpigenCentral track was built by Eliza Alde and Barali Kitiyakara during their
+summer internship with the Genome Browser team. We also thank Max Haeussler, Lou Nassar and Jairo
+Navarro for the development and release of these tracks.
+</p>
+
 <a name="fiberSeq"></a>
 <a name="103026"></a>
 <h2>Oct. 30, 2026 &nbsp;&nbsp; Fiber-seq chromatin accessibility and CpG methylation for 41 samples (hg38)</h2>
