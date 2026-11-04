@@ -2037,15 +2037,47 @@ def draftPrompt(playbook, email, pastTickets, withDump):
     return '\n\n'.join(parts)
 
 
-def urlLoads(url):
-    """True if a URL the draft cites answers with a success status."""
+MAX_URLS_CHECKED = 15
+MAX_REDIRECTS = 5
+
+
+def publicHost(host):
+    """True only if every address the host resolves to is a public one. The link check
+    runs on hgwdev, inside UCSC's network, and the URLs come from model output that
+    read a stranger's email, so it must never be steered at loopback, private,
+    link-local or reserved addresses."""
+    import ipaddress
     try:
-        resp = requests.get(url, timeout=20, allow_redirects=True, stream=True,
-                            headers={'User-Agent': 'mlqTriage link check'})
-        resp.close()
-        return resp.status_code < 400
-    except requests.exceptions.RequestException:
+        infos = socket.getaddrinfo(host, None)
+    except (socket.gaierror, UnicodeError):
         return False
+    for info in infos:
+        ip = ipaddress.ip_address(info[4][0])
+        if not ip.is_global or ip.is_multicast:
+            return False
+    return bool(infos)
+
+
+def urlLoads(url):
+    """True if a URL the draft cites answers with a success status. Only public hosts
+    are fetched, and redirects are followed by hand so each hop is checked too."""
+    from urllib.parse import urlsplit, urljoin
+    for _ in range(MAX_REDIRECTS + 1):
+        parts = urlsplit(url)
+        if parts.scheme not in ('http', 'https') or not parts.hostname or \
+                not publicHost(parts.hostname):
+            return False
+        try:
+            resp = requests.get(url, timeout=20, allow_redirects=False, stream=True,
+                                headers={'User-Agent': 'mlqTriage link check'})
+            resp.close()
+        except requests.exceptions.RequestException:
+            return False
+        if resp.is_redirect and resp.headers.get('Location'):
+            url = urljoin(url, resp.headers['Location'])
+            continue
+        return resp.status_code < 400
+    return False
 
 
 def draftProblems(draft, email):
@@ -2055,10 +2087,17 @@ def draftProblems(draft, email):
     for host in set(m.group(0) for m in INTERNAL_HOSTS.finditer(text)):
         if host.lower() not in email['body'].lower():
             problems.append(f"names an internal host or path the email did not: {host}")
-    for url in set(re.findall(r'https?://[^\s<>"\')\]]+', text)):
-        url = url.rstrip('.,;:')
+    # The check is for URLs the model may have made up, so links copied from the email
+    # itself are not fetched; the rest are capped per draft.
+    urls = sorted({u.rstrip('.,;:') for u in re.findall(r'https?://[^\s<>"\')\]]+', text)})
+    # Internal hosts (hgwdev, genome-test, ...) have public UCSC addresses, so the IP
+    # check would let them through; they are never fetched, only flagged above.
+    urls = [u for u in urls if u not in email['body'] and not INTERNAL_HOSTS.search(u)]
+    for url in urls[:MAX_URLS_CHECKED]:
         if not urlLoads(url):
             problems.append(f"URL does not load: {url}")
+    if len(urls) > MAX_URLS_CHECKED:
+        problems.append(f"cites {len(urls)} links; keep it to the ones that matter")
     # "# " starts a Textile numbered list, so only ** and backticks mark Markdown.
     if re.search(r'\*\*|`', text):
         problems.append("uses Markdown (** or backticks); write Textile")
@@ -2602,14 +2641,16 @@ def factsForTicket(conn, rec, ticket, matchedBy, notes, accountsOk):
 
 def runStage1(conn, rec, facts, counts):
     """Run Stage 1 on one message and record the outcome in the state file."""
-    act = stage1(conn, rec, facts)      # a limit or auth failure raises before counting
-    conn.execute("update messages set attempts=coalesce(attempts, 0)+1 where messageId=?",
-                 (rec['messageId'],))
+    # A usage-limit, login or call-cap failure in any model call (Stages 1-4 or the draft)
+    # raises before the attempt is counted, so it never spends this message's retries.
+    act = stage1(conn, rec, facts)
     drafted = None
     if act and INDEX_OK:
         drafted = draftStage(conn, STATE_DIR, rec, act['_verdict'], act)
         if drafted:
             counts['drafts'] = counts.get('drafts', 0) + 1
+    conn.execute("update messages set attempts=coalesce(attempts, 0)+1 where messageId=?",
+                 (rec['messageId'],))
     status = 'classified' if act else 'error'
     if act and not SHADOW:
         conn.execute("update messages set writeAttempts=coalesce(writeAttempts, 0)+1 "
