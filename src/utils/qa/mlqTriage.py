@@ -2860,7 +2860,10 @@ def reportStage1(conn, seen):
     dispositions = {r['messageId']: r for r in readDecisions({'disposition'})
                     if r['messageId'] in seen and 'disposition' in r}
     actions = {r['messageId']: r for r in readDecisions({'action'}) if r['messageId'] in seen}
-    errors = [r for r in readDecisions({'disposition'}) if r['messageId'] in seen and 'error' in r]
+    # Only messages whose Stage 1 never succeeded: a failure later retried successfully
+    # (a usage limit, say) is not an outstanding error.
+    errors = [r for r in readDecisions({'disposition'}) if r['messageId'] in seen and 'error' in r
+              and r['messageId'] not in dispositions]
     counts = {}
     for d in dispositions.values():
         counts[d['disposition']] = counts.get(d['disposition'], 0) + 1
