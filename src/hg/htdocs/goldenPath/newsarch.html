@@ -89,22 +89,38 @@ The collection contains two tracks:
   <li>
   <a href="/cgi-bin/hgTrackUi?db=hg38&g=methaDory&position=default"
   target="_blank"><b>MethaDory</b></a> shows more than 260,000 CpG sites from 189 published
-  episignatures for about 100 rare disorders, reported in 74 studies and compiled by the authors of
-  MethaDory, an open-source episignature classifier available on
-  <a href="https://github.com/f-ferraro/MethaDory" target="_blank">GitHub</a>. Sites are colored by the strongest effect reported at the site: warm colors for
-  hypermethylation, cool colors for hypomethylation, a darker shade for a difference of at least
-  10 percentage points, and purple where episignatures at the site disagree in direction. The
-  track can be filtered by disorder, gene or locus, study, direction, number of episignatures and
-  effect size, and an Illumina probe ID such as <tt>cg05654765</tt> can be typed into the
-  position box to jump to it.
+  episignatures for about 100 rare disorders. The episignatures come from 74 studies and were
+  compiled by the authors of MethaDory, an open-source episignature classifier available on
+  <a href="https://github.com/f-ferraro/MethaDory" target="_blank">GitHub</a>. The track can be
+  filtered by disorder, gene, study, direction, effect size and number of episignatures, and
+  searched by Illumina probe ID. Each site is colored by the strongest effect reported there:
+  <table class="stdTbl">
+    <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
+        <td>Strong hypermethylation &mdash; delta-beta of 0.10 or more</td></tr>
+    <tr><th style="background-color:#E69F00;width:2em">&nbsp;</th>
+        <td>Weak hypermethylation &mdash; delta-beta between 0 and 0.10</td></tr>
+    <tr><th style="background-color:#56B4E9;width:2em">&nbsp;</th>
+        <td>Weak hypomethylation &mdash; delta-beta between -0.10 and 0</td></tr>
+    <tr><th style="background-color:#0072B2;width:2em">&nbsp;</th>
+        <td>Strong hypomethylation &mdash; delta-beta of -0.10 or less</td></tr>
+    <tr><th style="background-color:#CC79A7;width:2em">&nbsp;</th>
+        <td>Conflicting &mdash; episignatures at the site disagree in direction</td></tr>
+  </table>
   </li>
   <li>
   <a href="/cgi-bin/hgTrackUi?db=hg38&g=epigenCentral&position=default"
-  target="_blank"><b>EpigenCentral</b></a> shows the 15,035 CpG sites of the 24 episignatures
-  for 23 rare disorders available on the
-  <a href="https://epigen.ccm.sickkids.ca/" target="_blank">EpigenCentral web portal</a> from the
-  Hospital for Sick Children in Toronto, where a methylation array sample can be uploaded and
-  classified against those signatures.
+  target="_blank"><b>EpigenCentral</b></a> shows 15,035 CpG sites from 24 episignatures for 23
+  rare disorders. The episignatures come from the
+  <a href="https://epigen.ccm.sickkids.ca/" target="_blank">EpigenCentral web portal</a> at the
+  Hospital for Sick Children in Toronto, where a methylation array sample can be classified
+  against them. The track can be filtered by episignature, direction, effect size and number of
+  episignatures. Each site is colored by the direction of the strongest effect reported there:
+  <table class="stdTbl">
+    <tr><th style="background-color:#FF5F01;width:2em">&nbsp;</th>
+        <td>Gain of methylation &mdash; positive delta-beta</td></tr>
+    <tr><th style="background-color:#0072EB;width:2em">&nbsp;</th>
+        <td>Loss of methylation &mdash; negative delta-beta</td></tr>
+  </table>
   </li>
 </ul>
 
