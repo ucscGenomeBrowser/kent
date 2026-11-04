@@ -1210,6 +1210,49 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
+static void checkShownSuperTracks(struct trackDb *tdbList)
+/* Warn about each superTrack set to show that has no visible child. */
+{
+struct hash *seenHash = hashNew(0);
+struct hash *visHash = hashNew(0);
+struct slRef *superList = NULL;
+struct slRef *ref, *refList = trackDbListGetRefsToDescendants(tdbList);
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct trackDb *child = ref->val;
+    struct trackDb *parent;
+    for (parent = child->parent; parent != NULL && tdbIsSuperTrack(parent);
+         child = parent, parent = parent->parent)
+        {
+        if (!hashLookup(seenHash, parent->track))
+            {
+            hashAdd(seenHash, parent->track, NULL);
+            refAdd(&superList, parent);
+            }
+        boolean childVis;
+        if (tdbIsSuperTrack(child))
+            childVis = child->isShow;
+        else
+            childVis = (child->visibility != tvHide);
+        if (childVis)
+            hashStore(visHash, parent->track);
+        }
+    }
+slReverse(&superList);
+for (ref = superList; ref != NULL; ref = ref->next)
+    {
+    struct trackDb *super = ref->val;
+    if (super->isShow && !hashLookup(visHash, super->track))
+        warn("warning: superTrack \"%s\" is set to show but none of its tracks are visible. "
+            "Give at least one of its tracks a visibility other than hide, or remove 'show' "
+            "from its 'superTrack on show' line.", super->track);
+    }
+slFreeList(&superList);
+slFreeList(&refList);
+hashFree(&seenHash);
+hashFree(&visHash);
+}
+
 int hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome,
                 struct trackHubCheckOptions *options, struct dyString *errors)
 /* Check out genome within hub. */
@@ -1265,6 +1308,7 @@ if (errCatchStart(errCatch))
      * for hubCheck to complain about. */
     tdbList = trackDbPolishAfterLinkupKeepAll(tdbList);
     checkTrackNamesForDots(tdbList);
+    checkShownSuperTracks(tdbList);
     trackHubPolishTrackNames(hub, tdbList);
     }
 errCatchEnd(errCatch);
