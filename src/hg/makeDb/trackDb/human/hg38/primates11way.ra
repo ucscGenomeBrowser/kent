@@ -2,7 +2,7 @@
 
 track primates11way
 type bed 4
-superTrack on show
+superTrack on
 shortLabel 11 primates
 longLabel 11 primates multiple alignment, cactus and multiz comparison
 html primates11way
