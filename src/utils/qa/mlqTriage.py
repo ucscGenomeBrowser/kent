@@ -329,6 +329,7 @@ STATE_CONN = None
 ALERT_TO_OVERRIDE = None
 STATE_DIR = None
 INDEX_OK = False
+ACCOUNTS_OK = False
 
 
 def sendAlert(key, subject, body):
@@ -794,7 +795,7 @@ def exactMatch(conn, rec):
 def ticketFacts(ticketId):
     """Status, opener and duplicate target of an MLQ ticket, from the database."""
     rows = dbQuery("select i.id, i.status_id, s.name status, s.is_closed, i.description, "
-                   "i.subject, cv.value email from issues i "
+                   "i.subject, i.created_on, cv.value email from issues i "
                    "join issue_statuses s on s.id=i.status_id "
                    "left join custom_values cv on cv.customized_id=i.id "
                    "  and cv.customized_type='Issue' and cv.custom_field_id=40 "
@@ -807,7 +808,8 @@ def ticketFacts(ticketId):
     if not opener and r['email']:
         opener = r['email'].split(',')[0].strip().lower()
     facts = {'ticketId': r['id'], 'status': r['status'], 'isClosed': bool(r['is_closed']),
-             'statusId': r['status_id'], 'opener': opener, 'subject': r['subject']}
+             'statusId': r['status_id'], 'opener': opener, 'subject': r['subject'],
+             'created': str(r['created_on'])}
     if r['status_id'] == STATUS_REJECTED:
         dup = dbQuery("select issue_to_id from issue_relations where issue_from_id=%s "
                       "and relation_type='duplicates'", (ticketId,))
@@ -1369,8 +1371,8 @@ def listTag(rec):
 def decideAction(rec, verdict, facts):
     """What the script does with one classified message (Stage 1 action table).
 
-    Thread matching by subject (Stage 2), the reopen judgment (Stage 3) and hub
-    routing (Stage 4) are later steps; where they would decide, the action says so."""
+    Called after Stage 2, so a message with no ticket here is a new ticket. The
+    reopen (Stage 3) and hub routing (Stage 4) are added to the result afterwards."""
     d = verdict['disposition']
     moderated = any(l in CONFIG['MODERATED_LISTS'] for l in rec['lists'])
     unsure = verdict['confidence'] < UNSURE_BELOW
@@ -1407,10 +1409,7 @@ def decideAction(rec, verdict, facts):
         act['render'] = (f"--- New Email Update ---\n\nFrom: {rec['fromAddr']}\n\n"
                          f"{verdict['cleanBodyTextile']}")
         return act
-    if d in ('reply', 'digest_reply', 'acknowledgement'):
-        act['ticket'] = 'Stage 2 subject match (step 6), else new ticket'
-    else:
-        act['ticket'] = 'new ticket (Stage 2 subject check in step 6)'
+    act['ticket'] = 'new ticket'
     act['newSubject'] = f"{listTag(rec)} {verdict['canonicalSubject']}".strip()
     act['render'] = (f"*Summary:* {verdict['summaryLine']}\n\n*From:* {rec['fromAddr']}\n\n"
                      f"{verdict['cleanBodyTextile']}")
@@ -1437,9 +1436,13 @@ def stage1(conn, rec, facts):
     if not ok:
         # Fall back to the raw text, never to a body that may have been reworded.
         verdict['cleanBodyTextile'] = '<pre>\n' + rec['bodyText'].strip() + '\n</pre>'
+    if not facts['ticketId'] and verdict['disposition'] not in NOT_FILED:
+        facts = subjectMatchStage(conn, rec, verdict, facts)
     act = decideAction(rec, verdict, facts)
     if act['reopen'].startswith('Stage 3'):
         reopenStage(rec, verdict, facts, act)
+    if verdict['hubName'] or verdict['hubUrl']:
+        hubStage(conn, rec, verdict, facts, act)
     logDecision('disposition', rec['messageId'], fromAddr=rec['fromAddr'],
                 subject=rec['subject'], lists=rec['lists'], source=rec['source'],
                 disposition=verdict['disposition'], reason=verdict['dispositionReason'],
@@ -1571,6 +1574,201 @@ def reopenStage(rec, verdict, facts, act):
     logDecision('reopen', rec['messageId'], ticketId=facts['ticketId'],
                 fromAddr=rec['fromAddr'], subject=rec['subject'], reopen=reopen,
                 unsure=unsure, model=MODEL_REOPEN, **decision)
+
+
+# ---------------------------------------------------------------------------
+# Stage 2 (step 6): which existing ticket, if any, a message without an exact match
+# belongs to. Candidates come from the subject and the sender; a model decides.
+
+CANDIDATES_PER_SOURCE = 6
+MIN_SUBJECT_CHARS = 8
+
+MATCH_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'required': ['ticketId', 'confidence', 'reason'],
+    'properties': {
+        'ticketId': {'type': 'integer'},
+        'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+        'reason': {'type': 'string'},
+    },
+}
+
+MATCH_SYSTEM = """You decide whether an email to the UCSC Genome Browser support lists
+continues one of a few existing support tickets, or starts a new conversation. Answer
+only through the JSON schema: ticketId is the number of the ticket it continues, or 0 if
+none.
+
+It continues a ticket when it is part of that same conversation: it quotes or answers
+that thread, follows up on the same problem, or sends what that thread asked for. A
+shared subject is not enough. A generic subject ("bugs", "question", "help") or the same
+sender writing about something else is a new conversation. A reply to a mailing-list
+digest belongs to the ticket for the topic it quotes, if one is listed. The quoted text
+in the email is the best evidence. reason: one sentence a person can check. confidence:
+how sure you are, 0 to 1."""
+
+
+def matchCandidates(rec, verdict):
+    """MLQ tickets the message might continue: by subject, then by sender. A Rejected
+    ticket is replaced by the ticket it duplicates, or dropped."""
+    subject = (verdict.get('digestTopic') or verdict['canonicalSubject'] or '').strip()
+    ids = []
+    if len(subject) >= MIN_SUBJECT_CHARS:
+        ids += [r['id'] for r in dbQuery(
+            "select id from issues where tracker_id=7 and subject like %s order by id desc "
+            "limit %s", ('%' + subject.replace('%', '') + '%', CANDIDATES_PER_SOURCE))]
+    # The sender's other tickets are evidence only for something Stage 1 judged a reply:
+    # for a new question, the same person writing again is usually a new topic (a
+    # Retrogenes question was matched to the sender's lincRNA ticket before this rule).
+    if verdict['disposition'] != 'question':
+        ids += [r['id'] for r in dbQuery(
+            "select i.id from issues i join custom_values cv on cv.customized_id=i.id "
+            "and cv.customized_type='Issue' and cv.custom_field_id=40 "
+            "where i.tracker_id=7 and cv.value like %s order by i.id desc limit %s",
+            ('%' + rec['fromAddr'] + '%', CANDIDATES_PER_SOURCE))]
+    # Only tickets that existed when the email arrived: otherwise a shadow or backfill run
+    # finds the ticket mlqAutomate.py created from this very email and "matches" it.
+    arrived = toDbTime(rec['receivedAt'])
+    candidates = []
+    for tid in dict.fromkeys(ids):
+        facts = ticketFacts(tid)
+        if facts and facts['statusId'] == STATUS_REJECTED:
+            facts = ticketFacts(facts['duplicateOf']) if facts.get('duplicateOf') else None
+        if facts and facts['created'] < arrived and \
+                all(c['ticketId'] != facts['ticketId'] for c in candidates):
+            candidates.append(facts)
+    return candidates
+
+
+def candidateBlock(ticket):
+    """What the model sees of one candidate ticket."""
+    rows = dbQuery("select i.created_on, i.updated_on, i.description from issues i where i.id=%s",
+                   (ticket['ticketId'],))
+    last = dbQuery("select j.notes from journals j join users u on u.id=j.user_id "
+                   "where j.journalized_id=%s and j.notes like %s order by j.id desc limit 1",
+                   (ticket['ticketId'], '%--- New Email Update ---%'))
+    r = rows[0]
+    return (f"#{ticket['ticketId']} [{ticket['status']}, opened {str(r['created_on'])[:10]}, "
+            f"last activity {str(r['updated_on'])[:10]}] {ticket['subject']}\n"
+            f"Opened by: {ticket['opener']}\n"
+            f"Question: {questionText(r['description'])[:600]}\n"
+            + (f"Latest email: {last[0]['notes'][:400]}" if last else ''))
+
+
+def subjectMatchStage(conn, rec, verdict, facts):
+    """Stage 2: return facts for the ticket this message continues, or the facts
+    unchanged when it is new. Every subject-only match is checked by the model,
+    however many candidates there are and however old they are (plan section 3)."""
+    candidates = matchCandidates(rec, verdict)
+    if not candidates:
+        logDecision('match', rec['messageId'], candidates=[], ticketId=None,
+                    reason='no candidate tickets', fromAddr=rec['fromAddr'],
+                    subject=rec['subject'])
+        return facts
+    prompt = ("CANDIDATE TICKETS:\n\n" + '\n\n'.join(candidateBlock(c) for c in candidates)
+              + f"\n\nEMAIL\nFrom: {rec['from']}\nSubject: {rec['subject']}\nDate: {rec['date']}\n"
+              + (f"Digest topic: {verdict['digestTopic']}\n" if verdict.get('digestTopic') else '')
+              + f"Triage judged it: {verdict['disposition']}, about: {verdict['summaryLine']}\n"
+              + f"\n{rec['bodyText'][:4000]}")
+    try:
+        verdictMatch = ask(prompt, MATCH_SCHEMA, CONFIG['MODEL_JUDGE'],
+                           CONFIG['MODEL_JUDGE_FALLBACK'], MATCH_SYSTEM)
+    except (AskAuthError, AskLimitError, CallCapReached):
+        raise
+    except AskError as e:
+        logDecision('match', rec['messageId'], error=str(e),
+                    candidates=[c['ticketId'] for c in candidates])
+        return facts
+    chosen = next((c for c in candidates if c['ticketId'] == verdictMatch['ticketId']), None)
+    logDecision('match', rec['messageId'], candidates=[c['ticketId'] for c in candidates],
+                ticketId=chosen['ticketId'] if chosen else None,
+                modelTicketId=verdictMatch['ticketId'], confidence=verdictMatch['confidence'],
+                reason=verdictMatch['reason'], fromAddr=rec['fromAddr'], subject=rec['subject'],
+                model=CONFIG['MODEL_JUDGE'])
+    if not chosen:
+        return facts
+    return factsForTicket(conn, rec, chosen, 'subjectMatch', facts['notes'], ACCOUNTS_OK)
+
+
+# ---------------------------------------------------------------------------
+# Stage 4 (step 6): hub routing. A message about a hub that has a ticket on the GB Hub
+# tracker also goes to that ticket (Lou, 2026-09-21): update it, relate the two, leave
+# a pointer on the MLQ, keep the MLQ. Shadow mode only logs what would be done.
+
+HUB_TRACKER = 45
+HUB_SCHEMA = {
+    'type': 'object',
+    'additionalProperties': False,
+    'required': ['hubTicketId', 'confidence', 'reason'],
+    'properties': {
+        'hubTicketId': {'type': 'integer'},
+        'confidence': {'type': 'number', 'minimum': 0, 'maximum': 1},
+        'reason': {'type': 'string'},
+    },
+}
+
+HUB_SYSTEM = """You match an email about a UCSC Genome Browser track hub or assembly hub to
+the team's Hub tracker ticket for that same hub, if there is one. Answer only through the
+JSON schema: hubTicketId is the ticket number, or 0 if none of the listed tickets is about
+this hub. Match on the hub itself (its name, its hub.txt URL, the group running it), not on
+a general topic. A request for a new GenArk assembly is not a hub ticket. reason: one
+sentence a person can check. confidence: 0 to 1."""
+
+
+def hubTickets():
+    """Every Hub tracker ticket: number, subject and any hub.txt URLs in its description."""
+    out = []
+    for r in dbQuery("select i.id, i.subject, i.description, s.name status from issues i "
+                     "join issue_statuses s on s.id=i.status_id where i.tracker_id=%s "
+                     "order by i.id desc", (HUB_TRACKER,)):
+        urls = sorted(set(re.findall(r'https?://\S+?hub\.txt', r['description'] or '')))[:3]
+        out.append(f"#{r['id']} [{r['status']}] {r['subject']}"
+                   + (f"  hubs: {' '.join(urls)}" if urls else ''))
+    return out
+
+
+def hubStage(conn, rec, verdict, facts, act):
+    """Stage 4: find the Hub ticket for a hub-related message and log what would be done.
+    The returned ticket must exist and be on the Hub tracker before anything is planned
+    (plan section 5, the two cross-tracker guards)."""
+    prompt = (f"HUB TRACKER TICKETS:\n" + '\n'.join(hubTickets())
+              + f"\n\nEMAIL\nFrom: {rec['from']}\nSubject: {rec['subject']}\n"
+              f"Hub named: {verdict['hubName']}\nHub URL: {verdict['hubUrl']}\n\n"
+              f"{verdict['cleanBodyTextile'][:3000]}")
+    try:
+        hub = ask(prompt, HUB_SCHEMA, CONFIG['MODEL_JUDGE'], CONFIG['MODEL_JUDGE_FALLBACK'],
+                  HUB_SYSTEM)
+    except (AskAuthError, AskLimitError, CallCapReached):
+        raise
+    except AskError as e:
+        logDecision('hub', rec['messageId'], error=str(e))
+        return
+    plan = []
+    hubId = hub['hubTicketId']
+    if hubId:
+        row = dbQuery("select tracker_id from issues where id=%s", (hubId,))
+        if not row or row[0]['tracker_id'] != HUB_TRACKER:
+            logDecision('hub', rec['messageId'], hubTicketId=hubId, refused=True,
+                        reason=f"#{hubId} is not a Hub tracker ticket", modelReason=hub['reason'])
+            return
+        plan.append(f"post the message on Hub ticket #{hubId}")
+        mlq = facts.get('ticketId')
+        if mlq:
+            related = dbQuery("select 1 from issue_relations where (issue_from_id=%s and "
+                              "issue_to_id=%s) or (issue_from_id=%s and issue_to_id=%s)",
+                              (mlq, hubId, hubId, mlq))
+            if not related:
+                plan.append(f"relate MLQ #{mlq} to Hub #{hubId}")
+            pointer = dbQuery("select 1 from journals where journalized_id=%s and notes like %s",
+                              (mlq, f'%#{hubId}%'))
+            if not pointer:
+                plan.append(f"leave a pointer to Hub #{hubId} on MLQ #{mlq}")
+        else:
+            plan.append(f"relate the new MLQ to Hub #{hubId} and leave a pointer on it")
+        act['hub'] = '; '.join(plan)
+    logDecision('hub', rec['messageId'], hubTicketId=hubId or None, plan=plan,
+                confidence=hub['confidence'], reason=hub['reason'], hubName=verdict['hubName'],
+                hubUrl=verdict['hubUrl'], fromAddr=rec['fromAddr'], subject=rec['subject'])
 
 
 # ---------------------------------------------------------------------------
@@ -1882,9 +2080,9 @@ PLAYBOOK_FILES = {
     'LiftOver': 'liftOver.md', 'Login': 'login.md', 'User Accounts': 'userAccounts.md',
     'IP blocked': 'ipBlocked.md', 'Sessions': 'sessions.md', 'CAPTCHA': 'captcha.md',
 }
-# Only new questions get a draft for now. A reply with no exact match nearly always
-# belongs to an existing ticket; once Stage 2 (step 6) decides it is new, it gets one too.
-DRAFTED = {'question'}
+# New questions get a draft, and so do replies and digest replies that Stage 2 found
+# belong to no existing ticket.
+DRAFTED = {'question', 'reply', 'digest_reply'}
 
 
 def ensureIndex(stateDir):
@@ -1949,7 +2147,9 @@ def draftStage(conn, stateDir, rec, verdict, act):
     playbook, playbooksUsed = loadPlaybooks([verdict['category']] + verdict.get('playbooks', []))
     queryText = '\n'.join([verdict['canonicalSubject'], verdict['summaryLine'],
                            verdict['cleanBodyTextile'][:1500]])
-    past = similarTickets(stateDir, queryText, verdict['category'], DRAFT_PAST_TICKETS)
+    # As of the email's arrival, so a backfill or test cannot draw on tickets opened later.
+    past = similarTickets(stateDir, queryText, verdict['category'], DRAFT_PAST_TICKETS,
+                          before=toDbTime(rec['receivedAt']))
     email = {'from': rec['from'], 'subject': verdict['canonicalSubject'] or rec['subject'],
              'body': verdict['cleanBodyTextile']}
     try:
@@ -2065,8 +2265,14 @@ def firstStaffReply(ticketId):
 
 def messageFacts(conn, rec, accountsOk):
     """Step 1: the facts about one new message, and what they alone decide."""
-    login = staffLogin(conn, rec['fromAddr'])
     ticket, matchedBy, notes = resolveTicket(conn, rec)
+    return factsForTicket(conn, rec, ticket, matchedBy, notes, accountsOk)
+
+
+def factsForTicket(conn, rec, ticket, matchedBy, notes, accountsOk):
+    """What the facts decide for a message once its ticket is known, whether it was
+    found exactly (step 1) or by subject (Stage 2)."""
+    login = staffLogin(conn, rec['fromAddr'])
     facts = {'staffLogin': login, 'matchedBy': matchedBy, 'notes': notes,
              'ticketId': ticket['ticketId'] if ticket else None,
              'ticketStatus': ticket['status'] if ticket else None,
@@ -2128,8 +2334,10 @@ def runShadow(conn, days, started):
 def runShadowInner(conn, days, started):
     """Steps 0-2: record each new message with its facts, classify it (Stage 1),
     log what would be done, then see what the old script did with earlier ones."""
+    global ACCOUNTS_OK
     refreshAccounts(conn)
     accountsOk, accountsWhy = accountsUsable(conn)
+    ACCOUNTS_OK = accountsOk
     if not accountsOk:
         logger.error(f"Active-account list not trusted ({accountsWhy}): no reopens this run")
         sendAlert('accounts', 'Active-account list not trusted',
@@ -2244,9 +2452,36 @@ def report(conn, sinceDays):
             print(f"  {s['receivedAt'][:16]} {s['fromAddr'][:30]:30} {s['subject'][:45]:45} "
                   f"{old}; {new}")
     reportStage1(conn, seen)
+    reportMatches(conn, seen)
     reportReopens(conn, seen)
     reportDrafts(conn, seen)
     print(f"\n{len(seen)} message(s) in the last {sinceDays} day(s)")
+
+
+def reportMatches(conn, seen):
+    """Stage 2 subject matches next to the ticket the old script used, and Stage 4 hub plans."""
+    matches = [r for r in readDecisions({'match'}) if r['messageId'] in seen]
+    print(f"\nSubject matching (Stage 2): {len(matches)} message(s) without an exact match")
+    for m in matches:
+        row = conn.execute("select oldAction, oldTicketId from messages where messageId=?",
+                           (m['messageId'],)).fetchone()
+        old = (f"old {row[0]} #{row[1]}" if row and row[1] else
+               f"old {row[0]}" if row and row[0] else 'old not observed yet')
+        new = 'ERROR' if 'error' in m else (f"#{m['ticketId']}" if m.get('ticketId') else 'new ticket')
+        same = row and row[1] and m.get('ticketId') == row[1]
+        flag = '' if same or (not m.get('ticketId') and row and row[0] == 'created') else '  <--'
+        print(f"  {m.get('fromAddr', '')[:28]:28} {m.get('subject', '')[:42]:42} new={new:10} "
+              f"{old}{flag}")
+        if m.get('reason') and m.get('candidates'):
+            print(f"      candidates {m['candidates']}: {m['reason'][:130]}")
+    hubs = [r for r in readDecisions({'hub'}) if r['messageId'] in seen]
+    print(f"\nHub routing (Stage 4): {len(hubs)} hub-related message(s)")
+    for h in hubs:
+        print(f"  {h.get('subject', '')[:50]:50} "
+              + (f"Hub #{h['hubTicketId']}: {'; '.join(h.get('plan', []))}" if h.get('hubTicketId')
+                 else 'no Hub ticket' if 'error' not in h else 'ERROR'))
+        if h.get('reason'):
+            print(f"      {h['reason'][:140]}")
 
 
 def reportReopens(conn, seen):
