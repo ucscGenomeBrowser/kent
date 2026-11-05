@@ -1,0 +1,56 @@
+
+# #38660 -- quickLift dropped a transcript in a multi-region view when only its intron
+# was in a region.
+#
+# Fix:  hg/lib/quickLift.c, hgTracks/bigBedTrack.c and hgTracks/simpleTracks.c, behind
+# hg.conf multiRegionSpaces with the rest of #37788.  In a multi-region space every track is lifted into a
+# synthetic assembly through a bigChain.  clipBedToChains() trimmed an item to the
+# chain's blocks and gave up when no exon was left, so a transcript whose intron alone
+# crossed a region was counted "could not be lifted" and not drawn.  Now the span is
+# snapped to the aligned region edges and drawn as an intron line.
+#
+# Fixture:  ~braney/public_html/docentFixtures/rm38660/session2.txt, hg38 custom regions
+# from regions.bed:  chr1:246089945-246093231, inside an intron of SMYD3 (every SMYD3
+# transcript is intron-only there), and chr21:31659627-31660007, the first exon of SOD1
+# as a control that draws on every build.  The session has no nonVirtPosition line:
+# with one, the old virtual-chromosome path opens on that region alone and the SOD1
+# control is off screen.
+#
+# Checks:
+#   * GENCODE (knownGene, a SQL genePred track):  three SMYD3 transcripts have an item
+#     box, matched by the hgGene link.  The build without the fix draws none of them.
+#   * MANE (a bigGenePred, the bigBedTrack.c path):  the SMYD3 MANE transcript
+#     ENST00000490107 has an item box.
+#   * SOD1 ENST00000270142 has a box in both tracks.  It is the positive check that the
+#     view really loaded, since every check above is also absent on an empty page.
+# Not asserted:  the "(N items could not be lifted)" label.  It sits in a title
+# attribute, which the page's JavaScript moves.  Not asserted either:  a bare
+# data-tooltip of SMYD3, which the GTEx track also carries on both builds.
+#
+# Gate:  the space path needs `multiRegionSpaces=on` in hg.conf
+#   grep multiRegionSpaces /usr/local/apache/cgi-bin-demo6/hg.conf
+# With it off (genome-test today) hgTracks takes the old virtual-chromosome path, which
+# never had this bug, so the script passes there and tests nothing about the fix.  The
+# fix itself is also behind quickLiftMultiChain, which is on wherever multiRegionSpaces
+# is on;  with quickLiftMultiChain=off the SMYD3 boxes are gone again by design.
+proof:
+  - "assertion-only 2026-11-03 -- written with the fix"
+  - "sandbox-ab 2026-11-03 -- hgwdev-demo6 (multiRegionSpaces=on):  passes with the fix build;  with hgTracks built from 23349e903e6 (no fix) it fails on the knownGene and mane SMYD3 boxes, page label GENCODE V50 (3 items could not be lifted);  passes on genome-test (old path, multiRegionSpaces off)"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - loadSession: https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38660/session2.txt
+  - expect:
+      rows: [knownGene, mane]
+      has:
+        - 'area[href*="hgg_gene=ENST00000270142."]'
+        - 'area[href*="g=mane"][href*="i=ENST00000270142."]'
+        - 'area[href*="hgg_gene=ENST00000630181."]'
+        - 'area[href*="hgg_gene=ENST00000490107."]'
+        - 'area[href*="hgg_gene=ENST00001143091."]'
+        - 'area[href*="g=mane"][href*="i=ENST00000490107."]'
+  - shot: smyd3Intron

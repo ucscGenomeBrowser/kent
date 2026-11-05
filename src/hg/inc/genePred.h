@@ -390,6 +390,12 @@ struct genePredExt  *genePredFromBigGenePred( char *chrom, struct bigBedInterval
 struct genePredExt  *genePredFromBigGenePredRow(char **row);
 /* build a genePred from a bigGenePred row */
 
+struct trackDb;
+struct genePred *genePredForTrackItem(char *db, struct trackDb *tdb, char *name, char *chrom);
+/* Load one item of a genePred or bigGenePred track by name, or NULL if there is no such
+ * item, the track is of another type, or its file cannot be read.  The copy on chrom is
+ * taken when there is one, and otherwise the first copy.  Free with genePredFree(). */
+
 /* options to genePredTranslate */
 #define GENEPRED_TRANSLATE_SELENO              0x01   /* Assume internal TGA code for selenocysteine and translate to `U' */
 #define GENEPRED_TRANSLATE_INCLUDE_STOP        0x02   /* If the CDS ends with a stop codon, represent it as a `*' */

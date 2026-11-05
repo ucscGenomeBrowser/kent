@@ -93,6 +93,13 @@ void maybeDrawQuickLiftLines( struct track *tg, int seqStart, int seqEnd,
                       MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the indel regions in quickLifted tracks as a highlight. */
 {
+/* A synthetic assembly is a concatenation of chosen regions, so every boundary between two
+ * of them is a gap in the chain.  Marking each one on every lifted track says nothing: the
+ * gaps are how the assembly was built, not anomalies in the alignment, and at this density
+ * they bury the data.  The boundaries are already drawn once, as region separators. */
+if (coordRulerUrl != NULL)
+    return;
+
 char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
 if (quickLiftFile == NULL)
     return;

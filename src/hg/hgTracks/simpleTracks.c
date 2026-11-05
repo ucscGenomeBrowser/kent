@@ -148,6 +148,7 @@
 #include "bedTabix.h"
 #include "knetUdc.h"
 #include "trackHub.h"
+#include "multiRegionSpace.h"
 #include "hubConnect.h"
 #include "bigWarn.h"
 #include "quickLift.h"
@@ -1318,11 +1319,20 @@ if (x < xEnd)
     {
     char *encodedItem = cgiEncode(item);
     char *encodedTrack = cgiEncode(track);
+    /* What the link says, which in a multi-region space is the source position rather
+     * than the one it is drawn at.  refs #37788 */
+    char *linkChrom = chromName;
+    int linkWinStart = winStart, linkWinEnd = winEnd;
+    if (multiRegionSpacesEnabled())
+        multiRegionSpaceLinkPosition(&linkChrom, &linkWinStart, &linkWinEnd, &start, &end);
     if (theImgBox && curImgTrack)
         {
         char link[2000];
         if (directUrl)
             {
+            if (multiRegionSpacesEnabled())
+                safef(link,sizeof(link),directUrl, item, linkChrom, start, end, encodedTrack, database);
+            else
             safef(link,sizeof(link),directUrl, item, chromName, start, end, encodedTrack, database);
             if (withHgsid)
                 safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", cartSidUrlString(cart));
@@ -1331,6 +1341,11 @@ if (x < xEnd)
             {
 	    // NOTE: chopped out winStart/winEnd
 	    // NOTE: Galt added winStart/winEnd back in for multi-region
+            if (multiRegionSpacesEnabled())
+                safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
+                    hgcNameAndSettings(), database, cgiEncode(linkChrom), linkWinStart, linkWinEnd,
+                    start, end, encodedTrack, encodedItem);
+            else
             safef(link,sizeof(link),"%s&db=%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
                 hgcNameAndSettings(), database, cgiEncode(chromName), winStart, winEnd, start, end, encodedTrack, encodedItem);
             }
@@ -1352,12 +1367,21 @@ if (x < xEnd)
         if (directUrl)
             {
             hPrintf("HREF=\"");
+            if (multiRegionSpacesEnabled())
+                hPrintf(directUrl, item, linkChrom, start, end, encodedTrack, database);
+            else
             hPrintf(directUrl, item, chromName, start, end, encodedTrack, database);
             if (withHgsid)
                 hPrintf("&%s", cartSidUrlString(cart));
             }
         else
             {
+            if (multiRegionSpacesEnabled())
+                hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
+                    hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
+                    linkChrom, linkWinStart, linkWinEnd,
+                    database, tl.picWidth);
+            else
             hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
                 hgcNameAndSettings(), start, end, encodedTrack, encodedItem,
                     chromName, winStart, winEnd,
@@ -2384,6 +2408,12 @@ for (el = tg->items; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+static struct slList *gvPosLoadWithBin(char **row)
+/* gvPosLoad() reads the bin field itself, so hand it the row from the bin on. */
+{
+return (struct slList *)gvPosLoad(row - 1);
+}
+
 void loadGV(struct track *tg)
 /* Load human mutation with filter */
 {
@@ -2414,6 +2444,40 @@ char query[1024];
 sqlSafef(query, sizeof query, "select * from hgFixed.gvSrc");
 srcList = gvSrcLoadByQuery(conn, query);
 /* load part need from gv table, outside of loop (load in hash?) */
+if (liftedInSpace(tg))
+    {
+    /* Lifted into a multi-region space:  the same filters, on items read through the
+     * quickLift stamp.  refs #37788 */
+    struct gvPos *el, *next, *loaded = (struct gvPos *)quickLiftSqlLoadItems(tg->tdb,
+                tg->table, chromName, winStart, winEnd, NULL, gvPosLoadWithBin, NULL, FALSE);
+    for (el = loaded; el != NULL; el = next)
+        {
+        struct gv *details = NULL;
+        char query[256];
+        next = el->next;
+        el->next = NULL;
+        sqlSafef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", el->name);
+        details = gvLoadByQuery(conn2, query);
+        /* searched items are always visible */
+        if (hgFindMatches != NULL && hashIntValDefault(hgFindMatches, el->name, 0) == 1)
+            slAddHead(&list, el);
+        else if (!gvFilterType(details))
+            gvPosFree(&el);
+        else if (!gvFilterLoc(details))
+            gvPosFree(&el);
+        else if (!gvFilterSrc(details, srcList))
+            gvPosFree(&el);
+        else if (!gvFilterAccuracy(details))
+            gvPosFree(&el);
+        else if (!gvFilterDA(details))
+            gvPosFree(&el);
+        else
+            slAddHead(&list, el);
+        gvFreeList(&details);
+        }
+    }
+else
+    {
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2440,6 +2504,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     gvFreeList(&details);
     }
 sqlFreeResult(&sr);
+    }
 slReverse(&list);
 gvSrcFreeList(&srcList);
 tg->items = list;
@@ -3164,6 +3229,19 @@ static int cdsMrnaPos(struct linkedFeatures *lf, int g)
 /* 1-based HGVS c. position of genomic base g, which must lie in the CDS.
  * c.1 is the first base of the CDS, distances measured in spliced space. */
 {
+if (lf->exonCodonBase != NULL)
+    {
+    /* A gene clipped to a multi-region space:  count from what its exon had 5' of it in the
+     * whole gene.  exonCodonBase follows the exons of the genePred it was drawn from. */
+    struct genePred *gp = lf->original;
+    int i;
+    for (i = 0; i < gp->exonCount; i++)
+        {
+        int s = max(gp->exonStarts[i], gp->cdsStart), e = min(gp->exonEnds[i], gp->cdsEnd);
+        if ((s <= g) && (g < e) && (lf->exonCodonBase[i] >= 0))
+            return lf->exonCodonBase[i] + ((lf->orientation >= 0) ? g - s : e - 1 - g) + 1;
+        }
+    }
 if (lf->orientation >= 0)
     return splicedBaseCount(lf, lf->tallStart, g) + 1;
 else
@@ -4149,6 +4227,74 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
+void loadLinkedFeaturesWithLoadersLift(struct track *tg, struct slList *(*itemLoader)(char **row),
+                                   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
+                                   char *scoreColumn, char *moreWhere,
+                                   boolean (*itemFilter)(struct slList *item),
+                                   void (*liftAdjust)(void *item, boolean flipped,
+                                                      int clippedStart))
+/* loadLinkedFeaturesWithLoaders() with a liftAdjust, for a track lifted into a */
+/* multi-region space.  refs #37788 */
+/* Make a linkedFeatures loader by providing three functions: (1) a regular */
+/* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
+/* translating function, and (3) a function to free the the thing loaded in (1). */
+/* A quickLifted track places each item whole (see quickLiftSqlLoadItems) and then calls */
+/* liftAdjust, if not NULL, to fix up the rest of the item. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset;
+struct linkedFeatures *lfList = NULL;
+char extraWhere[256] ;
+boolean lifted = liftedInSpace(tg);
+char *where = moreWhere;
+struct slList *item, *next, *itemList = NULL;
+/* Use tg->tdb->track because subtracks inherit composite track's tdb
+ * by default, and the variable is named after the composite track. */
+if ((scoreColumn != NULL) && (cartVarExistsAnyLevel(cart, tg->tdb, FALSE, SCORE_FILTER)))
+    {
+    char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,scoreColumn);
+    if (scoreFilterClause != NULL)
+        {
+        if (moreWhere)
+            sqlSafef(extraWhere, sizeof(extraWhere), "%-s and %-s", scoreFilterClause, moreWhere);
+        else
+            sqlSafef(extraWhere, sizeof(extraWhere), "%-s", scoreFilterClause);
+        freeMem(scoreFilterClause);
+        where = extraWhere;
+        if (!lifted)
+            sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, extraWhere, &rowOffset);
+        }
+    }
+else if (!lifted)
+    sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, moreWhere, &rowOffset);
+if (lifted)
+    itemList = quickLiftSqlLoadItems(tg->tdb, tg->table, chromName, winStart, winEnd, where,
+                                     itemLoader, liftAdjust, TRUE);
+else
+    {
+    while ((row = sqlNextRow(sr)) != NULL)
+        slAddHead(&itemList, itemLoader(row + rowOffset));
+    slReverse(&itemList);
+    }
+for (item = itemList; item != NULL; item = next)
+    {
+    next = item->next;
+    item->next = NULL;
+    if ((itemFilter == NULL) || (itemFilter(item) == TRUE))
+	{
+	struct linkedFeatures *lf = lfFromWhatever(item);
+	slAddHead(&lfList, lf);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
 char *linkedFeaturesSeriesName(struct track *tg, void *item)
 /* Return name of item */
 {
@@ -4612,6 +4758,37 @@ int heightPer = tg->heightPer;
 int midY = y + (heightPer>>1);
 if (! ((intronGap > 0) || chainLines))
     return;
+if ((vis == tvFull || vis == tvPack) && (intronGap > 0)
+    && liftedInSpace(tg))
+    {
+    /* An item lifted into a multi-region space can reach past its first or last block,
+     * or have no block in view at all, where it runs out of a region through an intron
+     * (#38660).  Those parts are intron too, and get the barbs the gaps below get.  An
+     * item whose blocks span the whole of it draws nothing here. */
+    int blockStart = lf->end, blockEnd = lf->start;
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+        {
+        blockStart = min(blockStart, sf->start);
+        blockEnd = max(blockEnd, sf->end);
+        }
+    int ends[2][2] = {{lf->start, blockStart}, {blockEnd, lf->end}};
+    if (lf->components == NULL)
+        {
+        ends[0][1] = lf->end;
+        ends[1][0] = ends[1][1];      /* nothing on the right */
+        }
+    int i;
+    for (i = 0;  i < 2;  ++i)
+        {
+        int s = max(ends[i][0], winStart), e = min(ends[i][1], winEnd);
+        if (s >= e)
+            continue;
+        int x1 = round((double)(s-winStart)*scale) + xOff;
+        int x2 = round((double)(e-winStart)*scale) + xOff;
+        clippedBarbs(hvg, x1, midY, x2 - x1, tl.barbHeight, tl.barbSpacing,
+                     lf->orientation, bColor, FALSE);
+        }
+    }
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     if (sf->next != NULL)
@@ -5299,6 +5476,10 @@ if (rButton)
     }
 
 boolean compat = exonNumberMapsCompatible(tg, vis);
+/* An item with no exons in view, only an intron (#38660), has nothing to number;  it gets
+ * the one map box over the whole item instead. */
+if (multiRegionSpacesEnabled() && compat && (((struct linkedFeatures *)item)->components == NULL))
+    compat = FALSE;
 if (vis == tvSquish || vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
     {
     int w = x2-textX;
@@ -6659,6 +6840,13 @@ else
     }
 lf->components = sfList;
 linkedFeaturesBoundsAndGrays(lf);
+if (multiRegionSpacesEnabled() && (sfList == NULL))
+    {
+    /* A lifted item with no blocks in view, only an intron (#38660):  the bounds cannot
+     * come from its blocks. */
+    lf->start = bed->chromStart;
+    lf->end = bed->chromEnd;
+    }
 lf->tallStart = bed->thickStart;
 lf->tallEnd = bed->thickEnd;
 lf->score = bed->score;
@@ -6767,6 +6955,108 @@ lfs->features = lfList;
 return lfs;
 }
 
+static struct linkedFeaturesSeries *lfsFromBedConn(struct sqlConnection *conn,
+        struct lfs *lfsbed, char *tdbPslTable, struct hash *chainHash, struct hash **pMapPsls)
+/* Create linked feature series object from database bed record, reading its alignments
+ * through conn.  If chainHash is not NULL the bed and its alignments are in the other
+ * assembly of a quickLift, and the alignments are lifted to the reference;  the series
+ * then runs from the first lifted alignment to the last, and has none if none lift. */
+{
+struct sqlResult *sr = NULL;
+char **row, rest[64];
+int rowOffset, i;
+struct linkedFeaturesSeries *lfs;
+struct linkedFeatures *lfList = NULL, *lf;
+
+AllocVar(lfs);
+lfs->name = cloneString(lfsbed->name);
+lfs->start = lfsbed->chromStart;
+lfs->end = lfsbed->chromEnd;
+lfs->orientation = orientFromChar(lfsbed->strand[0]);
+
+/* Get linked features */
+for (i = 0; i < lfsbed->lfCount; i++)
+    {
+    AllocVar(lf);
+    sqlSafef(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
+
+    // use psl table from trackDb, if specified there
+    char *pslTable = lfsbed->pslTable;
+    if (tdbPslTable != NULL)
+        pslTable = tdbPslTable;
+
+    sr = hRangeQuery(conn, pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
+                     lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct psl *psl = pslLoad(row+rowOffset);
+        if (chainHash != NULL)
+            psl = quickLiftPsl(chainHash, pMapPsls, psl);
+        if (psl != NULL)
+            {
+            lf = lfFromPsl(psl, FALSE);
+            slAddHead(&lfList, lf);
+            }
+	}
+    sqlFreeResult(&sr);
+    }
+slReverse(&lfList);
+sqlFreeResult(&sr);
+lfs->features = lfList;
+if ((chainHash != NULL) && (lfList != NULL))
+    {
+    char *chrom, strand;
+    lfs->start = lfList->start;
+    lfs->end = lfList->end;
+    for (lf = lfList->next; lf != NULL; lf = lf->next)
+        {
+        lfs->start = min(lfs->start, lf->start);
+        lfs->end = max(lfs->end, lf->end);
+        }
+    int liftStart, liftEnd;
+    if ((liftOverRemapRange(chainHash, 0.0, lfsbed->chrom, lfsbed->chromStart,
+                            lfsbed->chromEnd, lfsbed->strand[0], 0.001, &chrom,
+                            &liftStart, &liftEnd, &strand) == NULL))
+        lfs->orientation = orientFromChar(strand);
+    }
+return lfs;
+}
+
+static struct slList *lfsLoadRow(char **row, int numFields)
+/* lfsLoad() for quickLiftSql(). */
+{
+return (struct slList *)lfsLoad(row);
+}
+
+static struct linkedFeaturesSeries *lfsFromBedsInRangeLifted(struct track *tg, int start,
+                                                             int end, char *extraWhere)
+/* Return linked features from range of the table in the track's quickLiftDb, with their
+ * alignments lifted to the reference. */
+{
+char *liftDb = trackDbSetting(tg->tdb, "quickLiftDb");
+char *table;
+quickLiftResolveTable(tg->tdb, tg->track, &table, &liftDb);
+struct hash *chainHash = newHash(8);
+struct hash *mapPsls = NULL;
+struct sqlConnection *conn = hAllocConn(liftDb);
+char *quickLiftFile = cloneString(trackDbSetting(tg->tdb, "quickLiftUrl"));
+struct lfs *lfsbed, *bedList = (struct lfs *)quickLiftSql(conn, quickLiftFile, table, chromName,
+                                     start, end, NULL, extraWhere, lfsLoadRow, 0, chainHash);
+char *pslTable = trackDbSetting(tg->tdb, "lfPslTable");
+struct linkedFeaturesSeries *lfs, *lfsList = NULL;
+for (lfsbed = bedList; lfsbed != NULL; lfsbed = lfsbed->next)
+    {
+    lfs = lfsFromBedConn(conn, lfsbed, pslTable, quickLiftChainHashForItem(chainHash, lfsbed),
+                         &mapPsls);
+    /* the chains are read for a padded window, so a pair can lift to somewhere off screen */
+    if ((lfs->features != NULL) && (lfs->end > start) && (lfs->start < end))
+        slAddHead(&lfsList, lfs);
+    }
+hFreeConn(&conn);
+slSort(&lfsList, linkedFeaturesSeriesCmp);
+return lfsList;
+}
+
 static struct linkedFeaturesSeries *lfsFromBedsInRange(struct track *tg, int start, int end,
                                                        char *chromName)
 /* Return linked features from range of table. */
@@ -6783,6 +7073,13 @@ char optionScoreStr[256]; /* Option -  score filter */
 safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER);
 // Special case where CloserToHome not appropriate
 int optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (liftedInSpace(tg))
+    {
+    char extraWhere[128];
+    sqlSafef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
+    hFreeConn(&conn);
+    return lfsFromBedsInRangeLifted(tg, start, end, (optionScore > 0) ? extraWhere : NULL);
+    }
 if (optionScore > 0)
     {
     char extraWhere[128];
@@ -7180,6 +7477,13 @@ if (tg->itemAttrTbl != NULL)
                                   gp->chrom, gp->txStart, gp->txEnd);
 
 linkedFeaturesBoundsAndGrays(lf);
+if (multiRegionSpacesEnabled() && (lf->components == NULL))
+    {
+    /* A transcript with no exons in view, only an intron (#38660):  the bounds cannot
+     * come from its blocks. */
+    lf->start = gp->txStart;
+    lf->end = gp->txEnd;
+    }
 
 if (gp->cdsStart >= gp->cdsEnd)
     {
@@ -7254,6 +7558,37 @@ return connectedLfFromGenePredInRangeExtra(tg, conn, table, chrom,
                                                 start, end, FALSE);
 }
 
+struct clippedGene
+/* A genePred clipped to a multi-region space before its lift. */
+    {
+    int *codonBase;     /* from quickLiftClipGenePredToBlocks(), one per exon */
+    char strand;        /* strand before the lift */
+    int exonCount;      /* exon count before the lift */
+    };
+
+struct origSpan
+/* Where a genePred was before its lift into a multi-region space. */
+    {
+    char *chrom;        /* source sequence */
+    int start, end;     /* txStart and txEnd on it */
+    char strand;        /* strand on it */
+    };
+
+static int *liftedCodonBase(struct hash *codonBaseHash, struct genePred *gp)
+/* The codon bases for a lifted gp, in the order of its exons now, or NULL if it was not
+ * clipped or the lift did not keep its exons one for one. */
+{
+char key[64];
+safef(key, sizeof key, "%p", gp);
+struct clippedGene *cg = hashFindVal(codonBaseHash, key);
+if ((cg == NULL) || (cg->exonCount != gp->exonCount))
+    return NULL;
+if (cg->strand != gp->strand[0])
+    /* the lift turned it around, so its exons now run the other way */
+    reverseInts(cg->codonBase, cg->exonCount);
+return cg->codonBase;
+}
+
 static void maybeLiftGenePred(struct track *tg, char *table, char *chrom, int start, int end, boolean extra)
 /* Load a bunch of genePreds, perhaps quickLifting them. */
 {
@@ -7270,7 +7605,85 @@ if (liftDb != NULL)
     struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table, chromName, winStart, winEnd, NULL, chainHash);
     hFreeConn(&conn);
 
+    struct genePred *sgp, *sNextGp;
+    struct hash *codonBaseHash = NULL;
+    struct hash *origSpanHash = NULL;
+    struct genePred *intronOnlyList = NULL;
+    if (liftedInSpace(tg))
+        {
+        /* A transcript whose only part in the space is an intron is lifted here and kept
+         * out of the ordinary lift, which cannot place it (#38660).  These go at the end
+         * of the list, so the rows the other transcripts pack into do not move. */
+        struct genePred *liftList = NULL;
+        for (sgp = gpList; sgp != NULL; sgp = sNextGp)
+            {
+            sNextGp = sgp->next;
+            if (quickLiftIntronOnlyGenePred(chainHash, sgp))
+                slAddHead(&intronOnlyList, sgp);
+            else
+                slAddHead(&liftList, sgp);
+            }
+        slReverse(&liftList);
+        slReverse(&intronOnlyList);
+        gpList = liftList;
+
+        /* A region can end inside an exon;  keep the part of it in the region, and
+         * remember where its codons are in the whole gene.  Remember also where the whole
+         * transcript was, so its line can run to the edge of its region after the lift. */
+        codonBaseHash = newHash(0);
+        origSpanHash = newHash(0);
+        for (sgp = gpList; sgp != NULL; sgp = sgp->next)
+            {
+            char key[64];
+            safef(key, sizeof key, "%p", sgp);
+            struct origSpan *os;
+            AllocVar(os);
+            os->chrom = cloneString(sgp->chrom);
+            os->start = sgp->txStart;
+            os->end = sgp->txEnd;
+            os->strand = sgp->strand[0];
+            hashAdd(origSpanHash, key, os);
+            int *codonBase = quickLiftClipGenePredToBlocks(
+                                    quickLiftChainHashForItem(chainHash, sgp), sgp);
+            if (codonBase != NULL)
+                {
+                struct clippedGene *cg;
+                AllocVar(cg);
+                cg->codonBase = codonBase;
+                cg->strand = sgp->strand[0];
+                cg->exonCount = sgp->exonCount;
+                hashAdd(codonBaseHash, key, cg);
+                }
+            }
+        }
     quickLiftCalcGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, TRUE, FALSE);
+    if (origSpanHash != NULL)
+        {
+        /* The lift set each transcript's ends from its blocks;  one that runs out of its
+         * region draws its intron line to the region's edge instead (#38660). */
+        for (sgp = gpList; sgp != NULL; sgp = sgp->next)
+            {
+            if (sgp->chrom == NULL)
+                continue;
+            char key[64];
+            safef(key, sizeof key, "%p", sgp);
+            struct origSpan *os = hashFindVal(origSpanHash, key);
+            char *spanChrom = NULL;
+            int spanStart = 0, spanEnd = 0;
+            char spanStrand = 0;
+            if ((os == NULL) || !quickLiftSnappedSpan(chainHash, sgp, os->chrom, os->start,
+                                       os->end, os->strand, &spanChrom, &spanStart,
+                                       &spanEnd, &spanStrand))
+                continue;
+            if (sameString(spanChrom, sgp->chrom))
+                {
+                sgp->txStart = min(sgp->txStart, spanStart);
+                sgp->txEnd = max(sgp->txEnd, spanEnd);
+                }
+            freeMem(spanChrom);
+            }
+        }
+    gpList = slCat(gpList, intronOnlyList);
     struct genePred *gp = gpList;
 
     struct linkedFeatures *lfList = NULL;
@@ -7280,6 +7693,16 @@ if (liftDb != NULL)
             continue;
         if (positiveRangeIntersection(winStart, winEnd, gp->txStart, gp->txEnd) == 0)
             continue;
+        if (codonBaseHash != NULL)
+            {
+            struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, gp, TRUE);
+            lf->exonCodonBase = liftedCodonBase(codonBaseHash, gp);
+            /* the bounds came from the blocks;  the transcript reaches further */
+            lf->start = min(lf->start, gp->txStart);
+            lf->end = max(lf->end, gp->txEnd);
+            slAddHead(&lfList, lf);
+            }
+        else
         slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, TRUE));
         }
     slReverse(&lfList);
@@ -7998,6 +8421,9 @@ if ((bigGenePred != NULL) && ((file = udcFileMayOpen(bigGenePred, udcDefaultDir(
     udcFileClose(&file);
     loadKnownBigGenePred(tg, isGencode);
     }
+else if (isGencode && liftedInSpace(tg))
+    /* loadKnownGencode() reads the table at the window and would ignore the stamp. */
+    loadGenePredWithName2(tg);
 else if (!isGencode)
     loadGenePredWithName2(tg);
 else
@@ -9769,6 +10195,14 @@ static void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,
 /* Generic itg->item loader, adding extra clause to hgRangeQuery if query is NULL
  * and extraWhere is not NULL */
 {
+if ((query == NULL) && liftedInSpace(tg))
+    {
+    /* Every loader handed to this makes a struct that begins like a bed3. */
+    tg->items = quickLiftSqlLoadItems(tg->tdb, table, chromName, winStart, winEnd, extraWhere,
+                                      loader, NULL, FALSE);
+    slSort(&tg->items, bedCmp);
+    return;
+    }
 struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
 struct sqlResult *sr = NULL;
@@ -9943,6 +10377,23 @@ return TRUE;
 void loadTfbsConsSites(struct track *tg)
 /* Load conserved binding site track, all items that meet the cutoff. */
 {
+if (liftedInSpace(tg))
+    {
+    /* Lifted into a multi-region space:  read through the quickLift stamp.  refs #37788 */
+    struct tfbsConsSites *ro, *next, *list = NULL;
+    float cutoff = sqlFloat(cartUsualString(cart,TFBS_SITES_CUTOFF,TFBS_SITES_CUTOFF_DEFAULT));
+    struct tfbsConsSites *loaded = (struct tfbsConsSites *)quickLiftSqlLoadItems(tg->tdb,
+                tg->table, chromName, winStart, winEnd, NULL, (void *)tfbsConsSitesLoad, NULL,
+                FALSE);
+    for (ro = loaded; ro != NULL; ro = next)
+        {
+        next = ro->next;
+        if (tfbsConsSitesWeightFilterItem(tg,ro,cutoff))
+            slAddHead(&list, ro);
+        }
+    tg->items = list;
+    return;
+    }
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
@@ -14320,9 +14771,21 @@ hFreeConn(&conn);
 tg->items = list;
 }
 
+static struct slList *protVarPosLoadWithBin(char **row)
+/* protVarPosLoad() reads the bin field itself, so hand it the row from the bin on. */
+{
+return (struct slList *)protVarPosLoad(row - 1);
+}
+
 void loadProtVar(struct track *tg)
 /* Load UniProt Variants with labels */
 {
+if (liftedInSpace(tg))
+    {
+    tg->items = quickLiftSqlLoadItems(tg->tdb, tg->table, chromName, winStart, winEnd, NULL,
+                                      protVarPosLoadWithBin, NULL, FALSE);
+    return;
+    }
 struct protVarPos *list = NULL, *el;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -16206,6 +16669,22 @@ else if (sameWord(type, "lorax"))
     {
     loraxMethods(track);
     }
+/* In a multi-region space the wildcard handlers below are skipped for a track with
+ * avoidHandler on.  These match on the track NAME, and they run here, before the
+ * avoidHandler check in addTdbListToTrackList().  A track lifted into a hub with no
+ * id keeps its bare name and would match, picking up a handler that knows nothing
+ * about quickLift and opens SQL on the current assembly.  A quickLifted GTEx or
+ * RepeatMasker Viz. track keeps its handler, which does know about quickLift.
+ * refs #37788, #38512 */
+boolean avoidHandler = multiRegionSpacesEnabled() && trackDbSettingOn(tdb, "avoidHandler");
+if (avoidHandler)
+    {
+    if (quickLiftIsLiftedGtex(cart, track->tdb))
+        gtexGeneMethods(track);
+    else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+        rmskJoinedMethods(track);
+    }
+else
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
@@ -16439,6 +16918,15 @@ if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
 
 /* setup function handlers for composite track */
 handler = lookupTrackHandlerClosestToHome(tdb);
+/* With multiRegionSpaces on the handler goes through applyTrackHandler(), which may leave
+ * it out;  the track then gets the composite's own methods.  refs #37788 */
+if (multiRegionSpacesEnabled() && smart && (handler != NULL) && applyTrackHandler(track, handler))
+    /* handles its own load and height */
+    ;
+else
+    {
+    if (multiRegionSpacesEnabled())
+        handler = NULL;      /* left out above, or never there */
 if (smart && handler != NULL)
     /* handles it's own load and height */
     handler(track);
@@ -16446,6 +16934,7 @@ else
     {
     track->loadItems = compositeLoad;
     track->totalHeight = compositeTotalHeight;
+    }
     }
 
 if (altColors && (finalR || finalG || finalB))
@@ -16478,7 +16967,12 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
         boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
         if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(subTdb)) != NULL)
+            {
+            if (multiRegionSpacesEnabled())
+                applyTrackHandler(subtrack, handler);
+            else
             handler(subtrack);
+            }
         }
 
     /* Add subtrack settings (table, colors, labels, vis & pri).  This is only
@@ -16708,6 +17202,80 @@ for( ; (handler == NULL) && (tdb->parent != NULL);  )
     handler = lookupTrackHandler(tdb);
     }
 return handler;
+}
+
+static boolean loaderLifts(void (*loadItems)(struct track *tg))
+/* Does this loader, installed by a name handler, read its items through the quickLift
+ * stamp?  Each one goes through bedPlusLabelLoad(), loadBed9(), maybeLiftGenePred(),
+ * bedLoadItem() or quickLiftSqlLoadItems(). */
+{
+return (loadItems == loadKnownGene) || (loadItems == loadRefGene) ||
+       (loadItems == loadNcbiRefSeq) || (loadItems == loadGenePredWithName2) ||
+       (loadItems == loadDgv) || (loadItems == gadLoad) || (loadItems == cosmicLoad) ||
+       (loadItems == omimGeneLoad) || (loadItems == omimGene2Load) ||
+       (loadItems == omimAvSnpLoad) || (loadItems == omimLocationLoad) ||
+       (loadItems == decipherSnvsLoad) || (loadItems == loadSnp125) ||
+       (loadItems == loadCpgIsland) || (loadItems == loadSimpleRepeats) ||
+       (loadItems == loadGenomicSuperDups) || (loadItems == gapLoad) ||
+       cytoBandsIsLoader(loadItems) || (loadItems == loadFishClones) ||
+       (loadItems == loadRecombRate) || (loadItems == loadRecombRateRat) ||
+       (loadItems == loadRecombRateMouse) || (loadItems == loadStsMap) ||
+       (loadItems == loadStsMap28) || (loadItems == loadStsMapMouse) ||
+       (loadItems == loadStsMapRat) || goldIsLoader(loadItems) ||
+       rmskJoinedIsLoader(loadItems) || (loadItems == loadTfbsConsSites) ||
+       (loadItems == loadProtVar) || (loadItems == loadGV) ||
+       (loadItems == loadRnaSecStr) || (loadItems == cgapSageLoadItems) ||
+       (loadItems == loadBacEndPairs) || (loadItems == loadItemsSwitchDbTss) ||
+       (loadItems == illuminaProbesLoadItems);
+}
+
+boolean liftedInSpace(struct track *tg)
+/* Is this track lifted into a multi-region space?  The lifted loaders test this rather than
+ * quickLiftDb alone:  a track lifted by ordinary quickLift reaches them only by its name
+ * handler, which the quickLift hub writer turns off with "avoidHandler on".  refs #37788 */
+{
+return (multiRegionSpaceForDb(database) != NULL) &&
+       (trackDbSetting(tg->tdb, "quickLiftDb") != NULL);
+}
+
+boolean applyTrackHandler(struct track *track, TrackHandler handler)
+/* Run the name handler on track and remember it, so that a multi-region space can run
+ * it again once the track is stamped.  Return FALSE if the handler was left out.
+ *
+ * A handler may install a loader that reads its table at the window's coordinates and
+ * ignores the quickLift stamp.  In a multi-region space that is the source table read
+ * at synthetic coordinates, which draws real items from the wrong place.  Such a
+ * handler is undone, as the quickLift hub writer leaves it out with "avoidHandler on",
+ * and the track keeps the methods of its type, which lift.  A type with no methods of
+ * its own (clonePos, ctgPos) has only its handler, so that one stays and
+ * liftTrackIntoSpace() keeps the track out of the image.  With multiRegionSpaces off it
+ * only runs the handler, as before.  refs #37788 */
+{
+if (!multiRegionSpacesEnabled())
+    {
+    handler(track);
+    return TRUE;
+    }
+struct track before = *track;
+handler(track);
+track->nameHandler = handler;
+track->nameHandlerLifts = (handler == (TrackHandler)bigWarnMethods) ||
+                          trackHubQuickLiftVetted(track->track) ||
+                          (track->loadItems == before.loadItems) || loaderLifts(track->loadItems);
+if (!track->nameHandlerLifts && (before.loadItems != NULL) &&
+    (multiRegionSpaceForDb(database) != NULL))
+    {
+    *track = before;
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean trackHandlerOkInSpace(struct track *track)
+/* Can the name handler that set this track's methods be trusted in a multi-region space?
+ * refs #37788 */
+{
+return (track->nameHandler == NULL) || track->nameHandlerLifts;
 }
 
 void registerTrackHandlers()

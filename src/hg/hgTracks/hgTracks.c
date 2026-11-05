@@ -32,6 +32,7 @@
 #include "hui.h"
 #include "hgFind.h"
 #include "hgTracks.h"
+#include "multiRegionSpace.h"
 #include "trashDir.h"
 #include "grp.h"
 #include "versionInfo.h"
@@ -121,6 +122,17 @@ boolean baseShowAsm;           /* TRUE if should display assembly info at top of
 boolean baseShowScaleBar;      /* TRUE if should display scale bar at very top of base track */
 boolean baseShowRuler;         /* TRUE if should display the basic ruler in the base track (default) */
 char *baseTitle = NULL;        /* Title it should display top of base track (optional)*/
+char *spaceUserVirtModeType = NULL;
+                               /* While drawing in a synthetic multi-region space the
+                                * local virtModeType is "default", because the space IS
+                                * an ordinary assembly to everything downstream.  The
+                                * user's own choice is kept here and written back to the
+                                * cart, so the next request enters the space again.
+                                * refs #37788 */
+char *coordRulerUrl = NULL;    /* If set (by installMultiRegionSpace()), url of the
+                                * quickLift chain that maps this synthetic assembly back to
+                                * its source.  Makes the main ruler number in source
+                                * coordinates and marks the region boundaries. */
 static char *userSeqString = NULL;  /* User sequence .fa/.psl file. */
 
 /* These variables are set by getPositionFromCustomTracks() at the very
@@ -2170,6 +2182,13 @@ if (baseShowScaleBar)
     }
 if (baseShowRuler && (insideWidth >=36))
     {
+    if (coordRulerUrl != NULL)
+        {
+        /* synthetic assembly: number the ruler in source coordinates */
+        struct baseRange *ranges = loadBaseRangesFromChain(coordRulerUrl, chromName, winStart, winEnd);
+        drawSourceCoordRuler(hvg, ranges, winStart, winEnd, y, rulerHeight, font);
+        }
+    else
     hvGfxDrawRulerBumpText(hvg, insideX, y, rulerHeight, insideWidth, MG_BLACK,
                            font, relNumOff, winBaseCount, 0, 1);
     }
@@ -2446,6 +2465,129 @@ if(isNotEmpty(highlightDef))
 return hlList;
 }
 
+static boolean highlightIntoSpace(struct highlightVar *h)
+/* Map one highlight from the SOURCE coordinates it is stored in onto the synthetic
+ * sequence being drawn.  Answers FALSE when the space does not reach it, which is
+ * the right answer for a highlight the user made outside this view.
+ *
+ * The cart keeps source coordinates and is never rewritten.  A synthetic sequence
+ * carries the name of the source sequence it came from, so a highlight rewritten
+ * into synthetic coordinates would be indistinguishable from a source one, and
+ * leaving the view would then read it at the wrong scale.  Mapping at draw time
+ * costs a chain lookup and keeps the stored highlight meaning one thing.
+ * refs #37788 */
+{
+char *chainFile = multiRegionSpaceForDb(database);
+if (chainFile == NULL)
+    return TRUE;	/* not in a space:  already in display coordinates */
+if (!sameOk(h->db, database))
+    return FALSE;
+/* chromStart and chromEnd are long, deliberately, to hold a virtual-chromosome
+ * coordinate from an older cart;  sourceToSyntheticRange() takes int.  Nothing warns
+ * about the narrowing, so check rather than rely on the chromosome name lookup
+ * happening to reject such a highlight first. */
+if (h->chromStart < 0 || h->chromEnd > INT_MAX)
+    return FALSE;
+char *synChrom = NULL;
+int synStart = 0, synEnd = 0;
+if (!sourceToSyntheticRange(chainFile, h->chrom, h->chromStart, h->chromEnd,
+                            &synChrom, &synStart, &synEnd))
+    return FALSE;
+h->chrom = synChrom;
+h->chromStart = synStart;
+h->chromEnd = synEnd;
+return TRUE;
+}
+
+static void highlightsFromVirtualChrom(char *chainFile)
+/* Rewrite into source coordinates any highlight the cart holds in the virtual
+ * chromosome's.  Multi-region view keeps a highlight made in it as "db.multi:s-e", and
+ * a saved session or a link made in that view carries one.  The space lays out the
+ * same regions end to end, as the virtual chromosome did, so a virtual coordinate is a
+ * coordinate on the space's one sequence, and the chain maps it back.  The cart then
+ * holds what highlightIntoSpace() expects, and leaving the view finds the highlight
+ * on the chromosome, as leaving the virtual chromosome does.
+ *
+ * One that reaches more than one source sequence has no source range to write, and is
+ * left as it is.  The caller skips singleAltHaplo, whose old layout was different.
+ * refs #37788 */
+{
+struct highlightVar *h, *hlList = parseHighlightInfo();
+char *synChrom = multiRegionSpaceSoleChrom(chainFile);
+if (hlList == NULL || synChrom == NULL)
+    return;
+boolean changed = FALSE;
+struct dyString *dy = dyStringNew(0);
+for (h = hlList;  h != NULL;  h = h->next)
+    {
+    char *srcChrom;
+    int srcStart, srcEnd;
+    if (sameOk(h->db, database) &&
+        (sameOk(h->chrom, MULTI_REGION_CHROM) || sameOk(h->chrom, OLD_MULTI_REGION_CHROM)) &&
+        h->chromStart >= 0 && h->chromEnd <= INT_MAX &&
+        syntheticToSourceRange(chainFile, synChrom, h->chromStart, h->chromEnd,
+                               &srcChrom, &srcStart, &srcEnd))
+        {
+        h->chrom = srcChrom;
+        h->chromStart = srcStart;
+        h->chromEnd = srcEnd;
+        changed = TRUE;
+        }
+    if (dy->stringSize > 0)
+        dyStringAppendC(dy, '|');
+    /* Every entry in the current five-field form, as highlightForSpace() writes it.
+     * The old "db.chrom:s-e" form is split at the first dot, which is inside the db
+     * name of a GenArk or hub assembly (GCF_000001405.40), and the whole list is
+     * written back, so one old-form entry would lose every highlight on such a db. */
+    dyStringPrintf(dy, "%s#%s#%ld#%ld#%s", h->db, h->chrom, h->chromStart + 1, h->chromEnd,
+                   isEmpty(h->hexColor) ? "aaffff" : h->hexColor);
+    }
+if (changed)
+    cartSetString(cart, "highlight", dy->string);
+dyStringFree(&dy);
+}
+
+static char *highlightForSpace()
+/* The highlights in the coordinates of the synthetic image, for the JavaScript to
+ * position.  NULL when no space is installed, which is when the cart string is
+ * already in display coordinates and the client should use it as it stands.
+ *
+ * ONE ENTRY PER CART ENTRY, in cart order.  An entry the space does not reach is
+ * copied through unmapped rather than dropped:  the client finds a highlight by its
+ * index in this list and then edits the CART list at that index, so the two have to
+ * line up.  An unmapped entry keeps its source chromosome name, which is not the
+ * name being drawn, so the drawer skips it of its own accord.
+ *
+ * The caller owns the result.  refs #37788 */
+{
+if (multiRegionSpaceForDb(database) == NULL)
+    return NULL;
+struct highlightVar *h, *hlList = parseHighlightInfo();
+if (hlList == NULL)
+    return NULL;
+
+struct dyString *dy = dyStringNew(0);
+for (h = hlList;  h != NULL;  h = h->next)
+    {
+    if (dy->stringSize > 0)
+        dyStringAppendC(dy, '|');
+    /* Not mapped:  hand back what the cart holds, so the index still counts. */
+    if (!highlightIntoSpace(h))
+        {
+        dyStringPrintf(dy, "%s#%s#%ld#%ld#%s", h->db, h->chrom, h->chromStart + 1,
+                       h->chromEnd, isEmpty(h->hexColor) ? "aaffff" : h->hexColor);
+        continue;
+        }
+    /* The reader takes the start as 1-based and decrements it, and wants all five
+     * fields:  four of them with an empty colour would parse as the colour "#".
+     * An empty colour only reaches here from a pre-2018 cart, so it takes the same
+     * default the server-side drawer uses. */
+    dyStringPrintf(dy, "%s#%s#%ld#%ld#%s", h->db, h->chrom, h->chromStart + 1, h->chromEnd,
+                   isEmpty(h->hexColor) ? "aaffff" : h->hexColor);
+    }
+return dyStringCannibalize(&dy);
+}
+
 static void drawHighlights(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
 // Draw the highlight regions in the image.  Only done if theImgBox is not defined.
 // Thus it is done for ps/pdf and view image but for html output the highlights are drawn 
@@ -2474,6 +2616,9 @@ if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used
                     }
                 }
             }
+
+        if (!highlightIntoSpace(h))
+            continue;
 
         if ((h->db && sameString(h->db, database))
         &&  (h->chrom && sameString(h->chrom,virtChromName))
@@ -3572,6 +3717,93 @@ slReverse(&virtRegionList);
 hFreeConn(&conn);
 }
 
+static struct trackDb *singleTransTdb(char *track)
+/* The trackDb of the track a single-transcript view was made from, or NULL.  Kept,
+ * because the conditions and the region list both need it, and without the trackDb
+ * cache each tdbForTrack() is a load of the whole trackDb.  refs #37788 */
+{
+static struct trackDb *tdb = NULL;
+static char *askedFor = NULL;
+if (askedFor == NULL || differentString(askedFor, track))
+    {
+    tdb = tdbForTrack(database, track, NULL);
+    freeMem(askedFor);
+    askedFor = cloneString(track);
+    }
+return tdb;
+}
+
+static char *singleTransChrom()
+/* The chrom a single-transcript view looks for its item on:  the assembly's own name
+ * for the cart's singleTransChrom, or "" when that is not a sequence of this assembly.
+ * The conditions and the lookup both use this one answer, so two requests that find
+ * different copies of a name (the chrX and chrY PAR copies) can never share a key.
+ * Kept;  the caller does not own the result.  refs #37788 */
+{
+static char *chrom = NULL;
+if (chrom == NULL)
+    {
+    char *cartChrom = cartOptionalString(cart, SINGLE_TRANS_CHROM_VAR);
+    if (isNotEmpty(cartChrom))
+        chrom = hgOfficialChromName(database, cartChrom);
+    if (chrom == NULL)
+        chrom = "";
+    }
+return chrom;
+}
+
+static boolean initVirtRegionsFromTrackItem(char *track, char *name, char *chrom,
+                                           boolean codingOnly)
+/* Make the region list the exons of one item of a genePred or bigGenePred track, in
+ * genomic order and orientation.  With codingOnly, each exon is clipped to the CDS and
+ * an exon with no coding bases is left out.  This is the "Make this my coordinate
+ * system" view the right-click menu asks for.  Returns FALSE with a warning when the
+ * item cannot be found or, with codingOnly, has no CDS.  refs #37788 */
+{
+virtRegionList = NULL;
+struct trackDb *tdb = singleTransTdb(track);
+if (tdb == NULL)
+    {
+    warn("Track %s is not available to use as a coordinate system", track);
+    return FALSE;
+    }
+struct genePred *gp = genePredForTrackItem(database, tdb, name, chrom);
+if (gp == NULL)
+    {
+    warn("Couldn't find %s in %s to use as a coordinate system", name, tdb->shortLabel);
+    return FALSE;
+    }
+if (codingOnly && gp->cdsStart >= gp->cdsEnd)
+    {
+    warn("%s has no coding region to use as a coordinate system", name);
+    genePredFree(&gp);
+    return FALSE;
+    }
+int i;
+for (i = 0;  i < gp->exonCount;  ++i)
+    {
+    int start = gp->exonStarts[i];
+    int end = gp->exonEnds[i];
+    if (codingOnly)
+        {
+        start = max(start, (int)gp->cdsStart);
+        end = min(end, (int)gp->cdsEnd);
+        if (start >= end)
+            continue;
+        }
+    struct virtRegion *v;
+    AllocVar(v);
+    v->chrom = cloneString(gp->chrom);
+    v->start = start;
+    v->end   = end;
+    v->strand[0] = '+';
+    slAddHead(&virtRegionList, v);
+    }
+slReverse(&virtRegionList);
+genePredFree(&gp);
+return TRUE;
+}
+
 boolean initSingleAltHaplotype(char *haplotypeId)
 /* create a testing regionlist from haplotype with given id */
 {
@@ -3671,6 +3903,126 @@ defaultVirtWinEnd += offset;
 
 // concatenate the 3 lists.
 virtRegionList = slCat(before,slCat(virtRegionList,after));
+
+return TRUE;
+}
+
+static boolean altPlacedReversed(struct sqlConnection *conn, char *haplotypeId,
+                                 char *haploChrom)
+/* Is this alt placed on its chromosome in the opposite orientation?  altLocations gives
+ * only where it goes, so ask its alignment to the chromosome, and believe the largest
+ * one:  some alts have a smaller second alignment on the other strand.  hg38 has 58
+ * alts aligned only in reverse, chr7_KI270805v1_alt among them, whose copy of PTPRN2 is
+ * on + where chr7's is on -.  FALSE when the assembly has no such table.  refs #37788 */
+{
+if (!sqlTableExists(conn, "altSeqLiftOverPsl"))
+    return FALSE;
+char query[512];
+sqlSafef(query, sizeof query, "select strand from altSeqLiftOverPsl where qName='%s' "
+         "and tName='%s' order by matches desc limit 1", haplotypeId, haploChrom);
+char strand[8];
+if (sqlQuickQuery(conn, query, strand, sizeof strand) == NULL)
+    return FALSE;
+return (strand[0] == '-');
+}
+
+static boolean initSingleAltHaplotypeInPlace(char *haplotypeId)
+/* Show one alt haplotype in place:  the chromosome it is placed on, with the alt spliced
+ * in where the placement says it belongs, and nothing else.
+ *
+ * That list used to have every other chromosome concatenated around it.  For
+ * chr6_cox_hap2 on hg19 it made a virtual chromosome of 3,228,662,127 bases of which the
+ * chromosome and the alt are 171,036,692, five per cent.  The rest was the other 212
+ * haplotype, alt and fix sequences, because initAllChroms() takes every "chr%" that is
+ * not _random or chrUn, INCLUDING A SECOND COPY of the alt being shown, which is one of
+ * them.  Nothing in the mode used any of it, and a saved position out in it is a position
+ * in some unrelated chromosome with "show me this alt haplotype" nominally on.
+ *
+ * It also put the mode out of reach of a multi-region space, which is drawn as an
+ * ordinary window whose coordinates are ints.  refs #37788 */
+{
+struct sqlConnection *conn = hAllocConn(database);
+virtRegionList = NULL;
+struct sqlResult *sr;
+char **row;
+char *table = endsWith(haplotypeId, "_fix") ? "fixLocations" : "altLocations";
+if (! hTableExists(database, table))
+    {
+    warn("initSingleAltHaplotype: table '%s' not found in database %s, "
+         "can't find %s", table, database, haplotypeId);
+    return FALSE;
+    }
+
+// where is the alt haplo placed?
+char query[256];
+sqlSafef(query, sizeof(query), "select chrom, chromStart, chromEnd from %s "
+         "where name rlike '^%s(:[0-9-]+)?'", table, haplotypeId);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (!row)
+    {
+    warn("no haplotype found for [%s] in %s", haplotypeId, table);
+    return FALSE;
+    }
+char *haploChrom = cloneString(row[0]);
+int haploStart = sqlUnsigned(row[1]);
+int haploEnd   = sqlUnsigned(row[2]);
+sqlFreeResult(&sr);
+// what is the size of the alt haplo?
+int haploSize = hChromSize(database, haplotypeId); // hopefully this will work
+
+int chromSize = hChromSize(database, haploChrom);	// size of the regular chrom
+
+/* The three pieces, in the order they are laid out.  A piece with no bases is left out
+ * rather than laid out empty:  an alt placed at the very start of its chromosome has no
+ * leading flank, and hg38's altLocations has 338 of those. */
+struct virtRegion *v;
+int synthSize = 0;
+if (haploStart > 0)
+    {
+    AllocVar(v);
+    v->chrom = haploChrom;
+    v->start = 0;
+    v->end   = haploStart;
+    slAddHead(&virtRegionList, v);
+    synthSize += haploStart;
+    }
+
+AllocVar(v);
+v->chrom = haplotypeId;
+v->start = 0;
+v->end   = haploSize;
+/* An alt placed in reverse is laid down reverse-complemented, so it reads the same way
+ * as the chromosome around it.  Only a space can draw that;  the virtual chromosome
+ * ignores the strand, so it is left unset there and that path is unchanged. */
+if (multiRegionSpacesEnabled() && altPlacedReversed(conn, haplotypeId, haploChrom))
+    v->strand[0] = '-';
+slAddHead(&virtRegionList, v);
+synthSize += haploSize;
+
+if (haploEnd < chromSize)
+    {
+    AllocVar(v);
+    v->chrom = haploChrom;
+    v->start = haploEnd;
+    v->end   = chromSize;
+    slAddHead(&virtRegionList, v);
+    synthSize += chromSize - haploEnd;
+    }
+
+slReverse(&virtRegionList);
+hFreeConn(&conn);
+
+/* Open on the alt with a flank of its own length each side, which is what the mode is
+ * for.  These are the coordinates of the list above and need no shifting now that
+ * nothing is laid out in front of it;  clipped to the list's own length rather than to
+ * the chromosome's, since the alt and the placement it replaces are different sizes. */
+defaultVirtWinStart = haploStart - haploSize;
+if (defaultVirtWinStart < 0)
+    defaultVirtWinStart = 0;
+defaultVirtWinEnd = (long)haploStart + 2 * (long)haploSize;
+if (defaultVirtWinEnd > synthSize)
+    defaultVirtWinEnd = synthSize;
 
 return TRUE;
 }
@@ -4603,6 +4955,620 @@ if (saveBoth)
 }
 
 
+static struct multiRegionSpan *spansFromVirtRegions()
+/* The region list as the plain spans multiRegionSpace works in.  Deliberately not
+ * struct bed: a genome-wide exon list is nearly 400,000 regions, and a bed is four
+ * times the size of what is needed here.  refs #37788 */
+{
+struct multiRegionSpan *list = NULL, *span;
+struct virtRegion *v;
+boolean singleAlt = sameOk(virtModeType, "singleAltHaplo");
+for (v = virtRegionList;  v != NULL;  v = v->next)
+    {
+    AllocVar(span);
+    span->chrom = v->chrom;	/* borrowed, and the list does not outlive it */
+    span->start = v->start;
+    span->end = v->end;
+    /* Only singleAltHaplo lays a region down reversed.  The single-transcript mode
+     * also stores a strand, the gene's, and reversing that view is not what it asks. */
+    span->strand = (singleAlt && v->strand[0] == '-') ? '-' : '+';
+    slAddHead(&list, span);
+    }
+slReverse(&list);
+return list;
+}
+
+static void liftTrackListIntoSpace(struct track *trackList, char *chainFile);
+/* Defined below, beside getTrackList().  Declared here because the track list can be
+ * built either before or after the space is installed, and whichever happens second
+ * has to do the stamping.  refs #37788 */
+
+/* The cart remembers the space the last request used, so a repeat of the same view
+ * needs neither the region list nor hgcentral.  Two variables, because the name of a
+ * chain says nothing about what it is a chain OF:  the conditions are what make it
+ * safe to reuse, and a request whose conditions differ must not take this one. */
+#define MULTI_REGION_SPACE_CHAIN_VAR  "multiRegionSpaceChain"
+#define MULTI_REGION_SPACE_KEY_VAR    "multiRegionSpaceKey"
+
+/* The version of the conditions string, its first word.  It is the version of the
+ * description, not of the code.  Change it whenever the same conditions would produce
+ * different regions than they did before, or the same view would be written
+ * differently, which retires every row rather than letting one answer an older
+ * question.  mrs1 wrote the cart's text for each setting;  mrs2 left out the search
+ * matches and wrote the cart's text for pad, name and chrom. */
+#define MULTI_REGION_CONDITIONS_VERSION "mrs3"
+
+static void addCondition(struct dyString *dy, char *name, char *value)
+/* Add one name and value to a conditions string.  Encoded, because a value such as a
+ * name filter is typed by the user and can hold anything, and two conditions that
+ * differ must never write the same string. */
+{
+char *encoded = cgiEncode(value == NULL ? "" : value);
+dyStringPrintf(dy, "|%s=%s", name, encoded);
+freeMem(encoded);
+}
+
+static boolean addBooleanCondition(struct dyString *dy, char *name, char *table, char *suffix,
+                                   boolean usual)
+/* Add one of the gene track's boolean cart settings, as the value initRegionList()
+ * reads, not as the cart spells it.  The cart holds whatever text a URL sent:  "1",
+ * "on" and "xyz" are three spellings with two meanings, and writing the text would
+ * make a row in hgcentral for every spelling.  Returns the value. */
+{
+char varName[SMALLBUF];
+safef(varName, sizeof varName, "%s.%s", table, suffix);
+boolean value = cartUsualBoolean(cart, varName, usual);
+dyStringPrintf(dy, "|%s=%d", name, value);
+return value;
+}
+
+static char *knownToTagValue(char *set)
+/* The spelling knownToTag stores for this set name, or NULL if it has none.  MySQL
+ * compares without case and ignores trailing spaces, so "basic", "BASIC" and "basic  "
+ * all select the same genes;  the stored spelling is the one meaning they share.
+ * Free the result. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+/* Not a fixed buffer:  the set name is cart text of any length, and the slow path
+ * reads it the same way, through a dyString. */
+struct dyString *query = sqlDyStringCreate("select value from knownToTag where value='%s' limit 1",
+                                           set);
+char *value = sqlQuickString(conn, query->string);
+dyStringFree(&query);
+hFreeConn(&conn);
+return value;
+}
+
+/* The most search matches a conditions string describes.  A longer list is not
+ * recorded;  that view builds its region list, which is always right. */
+#define MULTI_REGION_MAX_MATCHES 100
+
+static boolean addSearchMatchConditions(struct dyString *dy)
+/* Add the genes a search lets past every filter.  initVirtRegionsFromEMGeneTableExons()
+ * keeps any gene named in hgFind.matches whatever the filters say, so two views with the
+ * same settings and different matches can have different regions.
+ *
+ * The cart keeps hgFind.matches after the search, so it is set on most requests, and
+ * leaving those views out would lose the shortcut for most users.  So the names are
+ * written, but only the ones that are genes of this table on this chrom, spelled
+ * exactly as the whitelist compares them, sorted:  any other name changes nothing,
+ * and writing it would make a row for every name a URL sent.
+ *
+ * Returns FALSE, so the view is not recorded, for a list over the limit. */
+{
+if (hgFindMatches == NULL || hgFindMatches->elCount == 0)
+    return TRUE;
+if (hgFindMatches->elCount > MULTI_REGION_MAX_MATCHES)
+    return FALSE;
+struct dyString *query = sqlDyStringCreate("select distinct name from %s where chrom='%s' "
+                                           "and name in (", emGeneTable, chromName);
+struct hashEl *el, *elList = hashElListHash(hgFindMatches);
+for (el = elList;  el != NULL;  el = el->next)
+    {
+    if (el != elList)
+        sqlDyStringPrintf(query, ",");
+    sqlDyStringPrintf(query, "'%s'", el->name);
+    }
+sqlDyStringPrintf(query, ")");
+hashElFreeList(&elList);
+
+struct slName *matchList = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* MySQL compares without case;  the whitelist is an exact hash lookup. */
+    if (hashLookup(hgFindMatches, row[0]))
+        slNameAddHead(&matchList, row[0]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+dyStringFree(&query);
+
+if (matchList != NULL)
+    {
+    slSort(&matchList, slNameCmp);
+    char *joined = slNameListToString(matchList, ',');
+    addCondition(dy, "matches", joined);
+    freeMem(joined);
+    slFreeList(&matchList);
+    }
+return TRUE;
+}
+
+static boolean addGeneFilterConditions(struct dyString *dy)
+/* Add the gene track settings that initRegionList() reads, each one read with the same
+ * call and the same default as there, so that two views that select the same genes
+ * write the same conditions.  Change the two together.  Only knownGene and refGene
+ * have filters there;  any other table adds nothing.
+ *
+ * Returns FALSE when a view cannot be described in a bounded way:  a set name that is
+ * not in knownToTag.  That view selects no genes, so it never builds a space and
+ * nothing would be recorded anyway. */
+{
+if (sameString(emGeneTable, "knownGene"))
+    {
+    addBooleanCondition(dy, "noncoding", emGeneTable, "show.noncoding", TRUE);
+    if (!addBooleanCondition(dy, "spliceVariants", emGeneTable, "show.spliceVariants", TRUE))
+        {
+        /* Which table holds the canonical set is a trackDb setting, and only the
+         * splice-variant filter reads it. */
+        char *canonicalTable = trackDbSettingOrDefault(emGeneTrack->tdb, "canonicalTable",
+                                                       "knownCanonical");
+        addCondition(dy, "canonicalTable",
+                     hTableExists(database, canonicalTable) ? canonicalTable : "");
+        }
+    if (!addBooleanCondition(dy, "comprehensive", emGeneTable, "show.comprehensive", FALSE)
+        && hTableExists(database, "knownToTag"))
+        {
+        char varName[SMALLBUF];
+        safef(varName, sizeof varName, "%s.show.set", emGeneTable);
+        char *set = cartUsualString(cart, varName, "basic");
+        if (sameString(set, "all"))
+            addCondition(dy, "set", "all");
+        else
+            {
+            char *value = knownToTagValue(set);
+            if (value == NULL)
+                return FALSE;
+            addCondition(dy, "set", value);
+            freeMem(value);
+            }
+        }
+    addBooleanCondition(dy, "pseudo", emGeneTable, "show.pseudo", FALSE);
+    }
+else if (sameString(emGeneTable, "refGene"))
+    addBooleanCondition(dy, "hideNoncoding", emGeneTable, "hideNoncoding", FALSE);
+return TRUE;
+}
+
+static long geneTableLoadTime(char *table)
+/* When the gene table behind this view was last loaded, or 0 if that cannot be asked.
+ *
+ * Without this a reload of knownGene would leave every remembered exon view pointing
+ * at the regions of the previous build:  the conditions would be unchanged, so the
+ * old chain would be reused, and the view would be stale rather than slow.
+ *
+ * Two cases answer 0, and in both the guard is simply absent.  A gene track that is a
+ * bigBed has no table to ask.  And sqlTableMaybeUpdateTime() does not work on InnoDB,
+ * which reports no update time at all.  What bounds the damage in those cases is that
+ * the chain lives in the trash:  once the cleaner takes it, the next request builds
+ * the region list again and records the new answer. */
+{
+if (isEmpty(table) || trackHubDatabase(database) || !hTableExists(database, table))
+    return 0;
+struct sqlConnection *conn = hAllocConn(database);
+time_t loaded = sqlTableMaybeUpdateTime(conn, table);
+hFreeConn(&conn);
+return (long)loaded;
+}
+
+/* The longest conditions string that is kept.  Every distinct string is a row in the
+ * hgcentral table, and the values come from the cart, so a longer one is not recorded
+ * at all:  that view builds its region list every time, which is always right. */
+#define MULTI_REGION_MAX_CONDITIONS 1024
+
+static char *conditionsOrNull(struct dyString **pDy)
+/* Return the conditions in *pDy, or NULL if they are too long to record.  Frees *pDy. */
+{
+struct dyString *dy = *pDy;
+if (dyStringLen(dy) > MULTI_REGION_MAX_CONDITIONS)
+    {
+    dyStringFree(pDy);
+    return NULL;
+    }
+return dyStringCannibalize(pDy);
+}
+
+static char *multiRegionSpaceConditions()
+/* Everything that decides which regions this view will produce, written out without
+ * building the region list.  NULL for a mode that cannot be described this way, which
+ * costs the shortcut and nothing else:  the caller then builds the region list, which
+ * is always right.
+ *
+ * Exon and gene view are described because they need it:  their region list is a scan
+ * of the whole gene table on every request.  A single transcript made into a coordinate
+ * system is described too, though it is cheap to build, because the key it leaves in
+ * the cart is how a new item is told from scrolling in the old one.  A BED list is not
+ * described.
+ *
+ * Every value is written as the region builder reads it, never as the cart spells it:
+ * the cart holds whatever a URL sent, and each distinct string is a row in hgcentral.
+ * The only reads are small ones:  the knownToTag set name, and which search matches
+ * are genes on this chrom.
+ *
+ * Answered once and kept, because both ways into the space ask, and on a miss both of
+ * them run.  Nothing it reads can change within a request:  it is asked before the
+ * space is installed, which is the only thing that changes what chromName means.  The
+ * caller does not own the result.  refs #37788 */
+{
+static char *conditions = NULL;
+static boolean asked = FALSE;
+if (asked)
+    return conditions;
+asked = TRUE;
+
+char *itemTrack = cartOptionalString(cart, SINGLE_TRANS_TABLE_VAR);
+if (sameString(virtModeType, "singleTrans") && isNotEmpty(itemTrack))
+    {
+    /* One item made into a coordinate system.  Cheap to build, but described anyway:
+     * the chain name it leaves in the cart is how installMultiRegionSpace() tells a
+     * new item from scrolling about in the old one.
+     *
+     * Each value is the one the lookup uses.  The name needs no change:  the lookup
+     * matches it exactly, so only a real name builds and records anything.  The chrom
+     * is singleTransChrom(), which the lookup is also given.  The load time is of the
+     * track's table, which need not have the track's name. */
+    struct trackDb *tdb = singleTransTdb(itemTrack);
+    if (tdb == NULL)
+        return NULL;
+    struct dyString *dy = dyStringCreate(MULTI_REGION_CONDITIONS_VERSION);
+    addCondition(dy, "db", database);
+    addCondition(dy, "mode", virtModeType);
+    addCondition(dy, "track", itemTrack);
+    addCondition(dy, "name", cartUsualString(cart, "singleTransId", singleTransId));
+    addCondition(dy, "chrom", singleTransChrom());
+    dyStringPrintf(dy, "|cds=%d", cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR, FALSE));
+    dyStringPrintf(dy, "|loaded=%ld", geneTableLoadTime(tdb->table));
+    conditions = conditionsOrNull(&dy);
+    return conditions;
+    }
+
+if (!sameString(virtModeType, "exonMostly") && !sameString(virtModeType, "geneMostly"))
+    return NULL;
+if (isEmpty(emGeneTable) || emGeneTrack == NULL)
+    return NULL;
+/* A name filter is free text, so each one typed would be a row of its own.  A
+ * filtered view is not recorded;  it builds its region list, as it always could. */
+char nameFilterVar[SMALLBUF];
+safef(nameFilterVar, sizeof nameFilterVar, "%s.nameFilter", emGeneTable);
+if (isNotEmpty(cartOptionalString(cart, nameFilterVar)))
+    return NULL;
+
+struct dyString *dy = dyStringCreate(MULTI_REGION_CONDITIONS_VERSION);
+addCondition(dy, "db", database);
+addCondition(dy, "chrom", chromName);
+addCondition(dy, "mode", virtModeType);
+addCondition(dy, "table", emGeneTable);
+/* Padding as padExons() uses it:  none below zero, and never more than the chrom, so
+ * each of the values that pad alike is written alike. */
+int pad = sameString(virtModeType, "geneMostly") ? gmPadding : emPadding;
+pad = max(0, min(pad, hChromSize(database, chromName)));
+dyStringPrintf(dy, "|pad=%d", pad);
+
+/* The gene track's own settings, the ones initRegionList() reads to decide which
+ * genes and which parts of them go into the list. */
+if (!addGeneFilterConditions(dy) || !addSearchMatchConditions(dy))
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+dyStringPrintf(dy, "|loaded=%ld", geneTableLoadTime(emGeneTable));
+if (measureTiming)
+    measureTime("multiRegion: describe the view, including when %s was loaded", emGeneTable);
+conditions = conditionsOrNull(&dy);
+return conditions;
+}
+
+static boolean entersOnWholeView(char *mode)
+/* Does the virtual chromosome open this mode on the whole of itself?  The same test as
+ * the first-time branch of the virtual-chromosome window setup:  everything except the
+ * modes that look near the previous position, and singleAltHaplo, which has a window
+ * of its own.  refs #37788 */
+{
+if (sameString(mode, "exonMostly") || sameString(mode, "geneMostly") ||
+    sameString(mode, "kcGenes") || sameString(mode, "singleAltHaplo") ||
+    sameString(mode, "default"))
+    return FALSE;
+if (sameString(mode, "customUrl"))
+    return cartUsualBoolean(cart, MULTI_REGION_BED_WIN_FULL, FALSE);
+return TRUE;
+}
+
+static void installMultiRegionSpace(char *chainFile, char *conditions)
+/* Draw in the synthetic coordinate space this chain describes.
+ *
+ * From here on the browser draws an ordinary single window.  The database name now
+ * means the synthetic coordinates (hdb answers chrom sizes and sequence out of the
+ * chain), and the same chain numbers the ruler in source coordinates, draws the
+ * separators between regions, and turns the position box back into source
+ * coordinates on the way out.  None of the virtual chromosome machinery runs.
+ *
+ * The database does not change, so the cart survives, and the cart still says
+ * exonMostly:  only the local mode is switched, and cartSetString() at the end of
+ * doMiddle() writes the user's own choice back.
+ *
+ * Called from both ways in:  the one that built the region list, and the one that
+ * found the chain without it.  Everything from here on is the same either way,
+ * because a space is described by its chain and by nothing else.  refs #37788 */
+{
+/* The chain the previous request drew in, read before it is replaced below. */
+char *lastChainName = cloneString(cartOptionalString(cart, MULTI_REGION_SPACE_CHAIN_VAR));
+
+/* Remember the chain, so the next request for this same view needs neither the
+ * region list nor hgcentral.  The bare name, not the path:  see
+ * multiRegionSpaceChainForName().  Always with the conditions it was built for,
+ * since a name on its own does not say which view it belongs to. */
+if (isNotEmpty(conditions))
+    {
+    cartSetString(cart, MULTI_REGION_SPACE_CHAIN_VAR, multiRegionSpaceChainName(chainFile));
+    cartSetString(cart, MULTI_REGION_SPACE_KEY_VAR, conditions);
+    }
+else
+    {
+    cartRemove(cart, MULTI_REGION_SPACE_CHAIN_VAR);
+    cartRemove(cart, MULTI_REGION_SPACE_KEY_VAR);
+    }
+
+/* The window is still in source coordinates and has been resolved against the
+ * source sizes, which is why the space goes in only now. */
+char *srcChrom = chromName;
+int srcStart = winStart, srcEnd = winEnd;
+
+multiRegionSpaceSetDisplay(database, srcChrom, chainFile);
+coordRulerUrl = chainFile;
+
+/* Stamp a track list that was already built.  getTrackList() does this itself when it
+ * runs after the space is installed, which is the usual order.  But setEMGeneTrack()
+ * calls initTrackList() when the cart has no usable emGeneTable, and that runs BEFORE
+ * this function;  initTrackList() then does nothing the second time, getTrackList()
+ * never runs again, and every native track would keep its ordinary loader and read
+ * the SOURCE file at SYNTHETIC coordinates.  That is silent:  the position box is
+ * right and the items are from somewhere else entirely.  Exactly one of the two calls
+ * does the work, because the other one sees no space or no list.  refs #37788 */
+if (trackList != NULL)
+    {
+    liftTrackListIntoSpace(trackList, chainFile);
+    if (measureTiming)
+        measureTime("multiRegion: stamp %d already-built tracks", slCount(trackList));
+    }
+/* cloneString: virtModeType points into the cart's own hash, and cartSetString()
+ * frees that string when it replaces it.  Without the copy the second write below
+ * reads freed memory, which showed up as an empty lastVirtModeType. */
+spaceUserVirtModeType = cloneString(virtModeType);
+
+/* Entering the mode, rather than moving about inside it.  The cart's lastVirtModeType
+ * is still what the previous request drew, because a space writes the user's own mode
+ * back into BOTH cart variables;  so this is the same test the virtual-chromosome path
+ * makes before it uses its default window. */
+boolean enteringMode = !sameOk(lastVirtModeType, virtModeType);
+/* Picking another item from the menu while already in a single-item view is entering
+ * a new view, not moving about in the old one:  open it on the whole item. */
+if (sameString(virtModeType, "singleTrans") &&
+    !sameOk(lastChainName, multiRegionSpaceChainName(chainFile)))
+    enteringMode = TRUE;
+freeMem(lastChainName);
+
+char *synChrom = NULL;
+int synStart = 0, synEnd = 0;
+boolean inView = FALSE;
+char *virtChrom = NULL;
+int virtStart = 0, virtEnd = 0;
+if (startsWith(MULTI_REGION_CHROM, position) &&
+    hgParseChromRange(NULL, position, &virtChrom, &virtStart, &virtEnd) &&
+    sameString(virtChrom, MULTI_REGION_CHROM) &&
+    virtEnd <= hChromSize(database, multiRegionSpaceSoleChrom(chainFile)))
+    {
+    /* A position on the virtual chromosome, which is what a saved session or an old
+     * link holds.  There is no source chromosome to map:  chromName was never resolved
+     * for it.  The space lays the regions out in the order the virtual chromosome did,
+     * so the same two numbers are a range on the space's one sequence.  One past the
+     * end of that sequence is an old singleAltHaplo position, from when that mode laid
+     * out the whole genome, and takes the branches below instead. */
+    chromName = multiRegionSpaceSoleChrom(chainFile);
+    winStart = virtStart;
+    winEnd = virtEnd;
+    if (measureTiming)
+        measureTime("multiRegion: virtual position %s:%d-%d", chromName, winStart+1, winEnd);
+    }
+else if (sameString(virtModeType, "singleAltHaplo") && enteringMode)
+    {
+    /* This mode exists to show one alt haplotype, and the user is hardly ever already
+     * standing on the chromosome that carries it.  initSingleAltHaplotypeInPlace() has worked
+     * out where the alt sits and how much flank to show, and in a space those numbers
+     * ARE the synthetic coordinates:  the space holds the alt's chromosome and the alt
+     * and nothing in front of them.  Go there, which is what the virtual chromosome
+     * does with the same two numbers. */
+    chromName = multiRegionSpaceSoleChrom(chainFile);
+    int synSize = hChromSize(database, chromName);
+    winStart = max(0, (int)defaultVirtWinStart);
+    winEnd = min(synSize, (int)defaultVirtWinEnd);
+    if (measureTiming)
+        measureTime("multiRegion: enter %s at the alt, %s:%d-%d", virtModeType,
+                    chromName, winStart+1, winEnd);
+    }
+else if (enteringMode && entersOnWholeView(virtModeType))
+    {
+    /* The virtual chromosome opens these on the whole of itself rather than near where
+     * the user was:  customUrl when virtWinFull asks for it, and the modes with no
+     * previous position to be near.  Same rule, so a custom region list with the full
+     * view box checked shows every region and not just the first. */
+    chromName = multiRegionSpaceSoleChrom(chainFile);
+    winStart = 0;
+    winEnd = hChromSize(database, chromName);
+    if (measureTiming)
+        measureTime("multiRegion: enter %s on the whole view, %s:%d-%d", virtModeType,
+                    chromName, winStart+1, winEnd);
+    }
+else
+    {
+    inView = sourceToSyntheticRange(chainFile, srcChrom, srcStart, srcEnd,
+                                    &synChrom, &synStart, &synEnd);
+    if (measureTiming)
+        measureTime("multiRegion: map %s:%d-%d into the space (%s)", srcChrom, srcStart+1, srcEnd,
+                    inView ? "in view" : "not in view");
+    if (inView)
+        {
+        chromName = synChrom;
+        winStart = synStart;
+        winEnd = synEnd;
+        }
+    else
+        {
+        /* Nothing of the window is in the view, which is ordinary:  the user was
+         * somewhere else when they turned multi-region on.  Land at the start of the
+         * synthetic sequence.
+         *
+         * chromName is still the SOURCE name here, and a space holds only the sequences
+         * its own regions came from, so asking hChromSize() about it would reach
+         * mustGetChromInfo() and abort:  the user would get this warning followed by a
+         * dead end.  The space has exactly one sequence;  go there. */
+        warn("%s:%d-%d is not in this multi-region view.", srcChrom, srcStart+1, srcEnd);
+        chromName = multiRegionSpaceSoleChrom(chainFile);
+        winStart = 0;
+        winEnd = min(10000, hChromSize(database, chromName));
+        }
+    }
+
+/* The name of what is on the screen is the synthetic sequence, not the chromosome the
+ * request happened to arrive on.  displayChromName was resolved from the latter, before
+ * the space existed, and virtChromName follows it whenever virtMode is off, which it
+ * is here.  Left alone, the hidden position field and the ruler's own links name
+ * whatever chromosome the user came from:  hg19 opens on chr7, so entering
+ * singleAltHaplo for an alt on chr6 wrote "chr7" beside synthetic coordinates.  Exon
+ * view never showed it, because there the space is named after the chromosome the user
+ * was already on.  refs #37788 */
+displayChromName = chromAliasGetDisplayChrom(database, cart, chromName);
+
+/* One window over the whole synthetic sequence, which is the shape the "default"
+ * branch of initRegionList() builds. */
+/* lastVirtModeType has to follow, or the "did the virtual chromosome change"
+ * test below doMiddle's window setup compares the cart's exonMostly against this
+ * request's default and concludes the user is leaving multi-region view. */
+virtModeType = "default";
+lastVirtModeType = "default";
+virtMode = FALSE;
+struct virtRegion *v;
+AllocVar(v);
+v->chrom = chromName;
+v->start = 0;
+v->end = hChromSize(database, chromName);
+virtRegionList = v;
+virtWinStart = winStart;
+virtWinEnd = winEnd;
+/* Not in singleAltHaplo.  That mode's space is the chromosome and the alt, but a
+ * highlight saved in it was made on the old virtual chromosome, which was the whole
+ * genome laid end to end.  Its coordinates name other bases now, and mapping them
+ * would write the wrong place into the cart.  Left alone, the cart keeps the
+ * highlight as the session saved it. */
+if (!sameString(spaceUserVirtModeType, "singleAltHaplo"))
+    highlightsFromVirtualChrom(chainFile);
+}
+
+static boolean enterMultiRegionSpace()
+/* If a synthetic coordinate space covers this region list, draw in it.
+ *
+ * This is the way in that has the region list already, and it is the one that is
+ * always right:  the list names the chain, and a chain that does not exist yet is
+ * built here.  enterMultiRegionSpaceFromConditions() is tried first, and this runs
+ * when that found nothing.
+ *
+ * The hg.conf gate and a virtModeType of "default" are the only two quiet ways out.
+ * Everything below aborts rather than returning to the virtual-chromosome path:  a
+ * multi-region view that quietly draws through the old code when the space cannot be
+ * built looks exactly like one that worked, and the whole point of the space is that
+ * it IS the view.  refs #37788 */
+{
+if (!multiRegionSpacesEnabled())
+    return FALSE;
+if (sameString(virtModeType, "default"))
+    return FALSE;
+
+if (virtRegionList == NULL)
+    errAbort("Multi-region view in %s mode produced no regions to show.", virtModeType);
+
+/* The one other way out.  A region list can come from any URL, and each new one runs
+ * the builder;  past the limit the view is drawn the way it was before spaces. */
+int regionCount = slCount(virtRegionList);
+if (regionCount > multiRegionSpaceMaxRegions())
+    {
+    warn("This multi-region view has %d regions, more than the %d a coordinate space "
+         "is built for, so it is drawn without one.", regionCount,
+         multiRegionSpaceMaxRegions());
+    return FALSE;
+    }
+
+struct multiRegionSpan *spans = spansFromVirtRegions();
+if (measureTiming)
+    measureTime("multiRegion: spans from the region list");
+
+char *conditions = multiRegionSpaceConditions();
+char *chainFile = multiRegionSpaceChainFile(database, spans, conditions);
+slFreeList(&spans);
+installMultiRegionSpace(chainFile, conditions);
+return TRUE;
+}
+
+static boolean enterMultiRegionSpaceFromConditions()
+/* Draw in the space this view used last time, without building its region list.
+ *
+ * The region list is the expensive part of a multi-region view (a scan of the whole
+ * gene table), and on a repeat of a view that has been drawn before, its only use
+ * would be to name a chain that already exists.  So the conditions are asked first:
+ * the cart, which remembers the chain the last request used, and then the table in
+ * hgcentral that maps conditions to region lists.
+ *
+ * Returns FALSE for anything it cannot answer, and this is the one place in this
+ * feature where a quiet FALSE is right:  the caller then builds the region list and
+ * enterMultiRegionSpace() draws the same view the slow way.  Nothing is skipped, only
+ * deferred.  refs #37788 */
+{
+if (!multiRegionSpacesEnabled())
+    return FALSE;
+if (sameString(virtModeType, "default"))
+    return FALSE;
+
+char *conditions = multiRegionSpaceConditions();
+if (conditions == NULL)
+    return FALSE;
+
+char *chainFile = NULL;
+if (sameOk(conditions, cartOptionalString(cart, MULTI_REGION_SPACE_KEY_VAR)))
+    chainFile = multiRegionSpaceChainForName(cartOptionalString(cart,
+                                                MULTI_REGION_SPACE_CHAIN_VAR));
+if (chainFile == NULL)
+    chainFile = multiRegionSpaceChainForConditions(conditions);
+if (chainFile == NULL)
+    return FALSE;
+
+/* What initRegionList() sets on the way past that the rest of the page reads.  It is
+ * not going to run, so they are set here instead.  The region list itself is not
+ * among them:  installMultiRegionSpace() replaces it with the one window over the
+ * synthetic sequence, which is all that is left of it by the time anything looks. */
+lastDbPosCart = cartOfNothing();
+lastDbPosSaveCartSetting("emGeneTable");
+if (sameString(virtModeType, "singleTrans"))
+    virtModeShortDescr = cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR, FALSE) ?
+                         "coding exons" : "transcript";
+else
+    virtModeShortDescr = sameString(virtModeType, "geneMostly") ? "genes" : "exons";
+virtModeExtraState = "";
+
+installMultiRegionSpace(chainFile, conditions);
+return TRUE;
+}
+
 boolean initRegionList()
 /* initialize window list */
 {
@@ -4651,6 +5617,10 @@ else if (sameString(virtModeType, "exonMostly")
     //DISGUISE makes obsolete dySaveCartSetting(dy, "emPadding");
     if (sameString(virtModeType, "geneMostly"))
 	geneMostly = TRUE;
+    /* multiRegionSpaceConditions() writes every setting read below, with the same
+     * calls and defaults (addGeneFilterConditions()), and the search matches
+     * (addSearchMatchConditions()), so that a cached space has these regions.
+     * Change them together.  refs #37788 */
     if (sameString(emGeneTable, "knownGene"))
 	{
 	// test cart var knownGene.show.noncoding
@@ -4740,18 +5710,47 @@ else if (sameString(virtModeType, "singleTrans"))
 	warn("Single transcript Id should not be blank");
 	return FALSE; // return to default mode
 	}
+    char *itemTrack = cartOptionalString(cart, SINGLE_TRANS_TABLE_VAR);
+    if (multiRegionSpacesEnabled() && isNotEmpty(itemTrack))
+        {
+        /* An item picked from the right-click menu, from any genePred or bigGenePred
+         * track.  Without the track the mode is the older single transcript from the
+         * exon-view gene table, left as it was.  refs #37788 */
+        boolean codingOnly = cartUsualBoolean(cart, SINGLE_TRANS_CDS_VAR, FALSE);
+        if (!initVirtRegionsFromTrackItem(itemTrack, singleTransId,
+                                          singleTransChrom(),
+                                          codingOnly))
+            return FALSE; // return to default mode
+        virtModeShortDescr = codingOnly ? "coding exons" : "transcript";
+        dySaveCartSetting(dy, SINGLE_TRANS_TABLE_VAR, TRUE);
+        dySaveCartSetting(dy, SINGLE_TRANS_CHROM_VAR, TRUE);
+        dySaveCartSetting(dy, SINGLE_TRANS_CDS_VAR, TRUE);
+        }
+    else
     setEMGeneTrack();
     dySaveCartSetting(dy, "singleTransId", TRUE);
     }
 else if (sameString(virtModeType, "singleAltHaplo"))
     {
     singleAltHaploId = cartUsualString(cart, "singleAltHaploId", singleAltHaploId); // default is chr6_cox_hap2
+    if (multiRegionSpacesEnabled())
+        {
+        // a space shows the alt's chromosome and the alt only, refs #37788
+        if (!initSingleAltHaplotypeInPlace(singleAltHaploId))
+            {
+            virtRegionList = NULL;
+            return FALSE; // return to default mode
+            }
+        }
+    else
+        {
     initAllChroms();  // we want to default to full genome view.
     if (!initSingleAltHaplotype(singleAltHaploId))
 	{
 	virtRegionList = NULL;
 	return FALSE; // return to default mode
 	}
+        }
     // was "single haplo" but that might confuse some users.
     virtModeShortDescr = endsWith(singleAltHaploId, "_fix") ? "fix patch" : "alt haplo";
     dySaveCartSetting(dy, "singleAltHaploId", TRUE);
@@ -5748,7 +6747,21 @@ if (withLeftLabels)
         if (baseShowRuler)
             {
             char rulerLabel[SMALLBUF];
+            /* On a synthetic assembly the ruler numbers in source coordinates, so name the
+             * source sequence beside them, the way multi-region view names each window's
+             * chromosome.  NULL means the window spans more than one, and then the
+             * assembly's own name is the only honest label. */
+            char *rulerChromName = displayChromName;
+            if (coordRulerUrl != NULL)
+                {
+                char *srcChrom = sourceChromForWindow(coordRulerUrl, chromName,
+                                                      winStart, winEnd);
+                if (srcChrom != NULL)
+                    rulerChromName = srcChrom;
+                }
             char *shortChromName = cloneString(displayChromName );
+            if (rulerChromName != displayChromName)
+                shortChromName = cloneString(rulerChromName);
             safef(rulerLabel,ArraySize(rulerLabel),":%s",shortChromName);
             int labelWidth = mgFontStringWidth(font,rulerLabel);
             while ((labelWidth > 0) && (labelWidth > leftLabelWidth))
@@ -5834,6 +6847,8 @@ else
 
 /* Draw guidelines. */
 
+if ((coordRulerUrl != NULL) && emAltHighlight)
+    withGuidelines = TRUE;  // a synthetic assembly alternates its region backgrounds too
 if (virtMode && emAltHighlight)
     withGuidelines = TRUE;  // we cannot draw the alternating backgrounds without guidelines layer
 
@@ -5845,6 +6860,17 @@ if (withGuidelines)
         {
         struct tempName gifBg;
         char base[64];
+	if (coordRulerUrl != NULL)
+	    {
+	    // A synthetic assembly's separators sit at its region boundaries, so they move
+	    // with the window.  Like virtMode's, this background cannot be the reusable file
+	    // that fixed-spacing guidelines get cached in, or the first window's lines are
+	    // served for every window after it.
+	    safecpy(base,sizeof(base),"winSeparators");  // non-reusable temp file
+	    trashDirFile(&gifBg, "hgt", base, ".png");
+	    exists = FALSE;
+	    }
+	else
 	if (virtMode) // window separators
 	    {
 	    safecpy(base,sizeof(base),"winSeparators");  // non-reusable temp file
@@ -5894,6 +6920,13 @@ if (withGuidelines)
 		for (window=windows->next; window; window=window->next) // skip first window, not needed
 		    hvGfxBox(bgImg, window->insideX, 0, 1, pixHeight, lightRed);
 		}
+	    }
+	else if (coordRulerUrl != NULL)
+	    {
+	    // A synthetic assembly built from a region list: mark the region boundaries the
+	    // way multi-region view does, rather than laying evenly spaced guidelines over it.
+	    drawSourceRangeSeparators(bgImg, coordRulerUrl, chromName, winStart, winEnd,
+				      fullInsideX, fullInsideWidth, pixHeight, emAltHighlight);
 	    }
 	else
 	    {
@@ -5949,6 +6982,9 @@ if (rulerMode != tvHide)
 		imgTrackAddMapItem(curImgTrack, "#", position,
 		    x, sliceOffsetY, x+window->insideWidth, sliceOffsetY+sliceHeight, RULER_TRACK_NAME, NULL);
 		}
+	    else if (coordRulerUrl != NULL)
+		mapSourceRangePositions(curImgTrack, coordRulerUrl, chromName, winStart, winEnd,
+		    window->insideX, window->insideWidth, sliceOffsetY, sliceOffsetY+sliceHeight);
 
 	    }
 
@@ -6372,7 +7408,12 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
         boolean avoidHandler = trackDbSettingOn(tdb, "avoidHandler");
         if (!avoidHandler && ( handler = lookupTrackHandlerClosestToHome(tdb)) != NULL)
+            {
+            if (multiRegionSpacesEnabled())
+                applyTrackHandler(track, handler);
+            else
             handler(track);
+            }
         }
     if (cgiVarExists("hgGenomeClick"))
 	makeHgGenomeTrackVisible(track);
@@ -6430,6 +7471,30 @@ safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", trackName);
 return cartUsualInt(cart, optionScoreStr, 0);
 }
 
+static struct bed *ctDbBeds(struct track *tg, struct customTrack *ct, int fieldCount)
+/* The beds of a custom track kept in customTrash that fall in the window.  A lifted one,
+ * such as one drawn in a multi-region space, is read in the coordinates it was loaded in
+ * and mapped onto the reference through its chain.  refs #37788 */
+{
+if ((multiRegionSpaceForDb(database) != NULL) && quickLiftIsLifted(tg->tdb))
+    return quickLiftSqlLoadBeds(tg->tdb, tg->table, trackDbSetting(tg->tdb, "quickLiftDb"),
+                                chromName, winStart, winEnd, NULL, (ItemLoader2)bedLoadN,
+                                fieldCount, TRUE);
+
+struct bed *list = NULL;
+int rowOffset;
+char **row;
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+struct sqlResult *sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
+                                   NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    slAddHead(&list, bedLoadN(row+rowOffset, fieldCount));
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+return list;
+}
+
 void ctLoadSimpleBed(struct track *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
@@ -6438,6 +7503,17 @@ struct customTrack *ct = tg->customPt;
 struct bed *bed, *nextBed, *list = NULL;
 int scoreFilter = getScoreFilter(ct->tdb->track);
 
+if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
+    {
+    for (bed = ctDbBeds(tg, ct, ct->fieldCount); bed != NULL; bed = nextBed)
+        {
+        nextBed = bed->next;
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	slAddHead(&list, bed);
+	}
+    }
+else
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
@@ -6487,6 +7563,25 @@ int scoreFilter = getScoreFilter(ct->tdb->track);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
+if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
+    {
+    struct bed *nextBed;
+    for (bed = ctDbBeds(tg, ct, 9); bed != NULL; bed = nextBed)
+        {
+        nextBed = bed->next;
+	if (scoreFilter && bed->score < scoreFilter)
+	    continue;
+	bed8To12(bed);
+	lf = lfFromBed(bed);
+	if (useItemRgb)
+	    {
+            lf->useItemRgb = TRUE;
+	    lf->filterColor=bed->itemRgb;
+	    }
+	slAddHead(&lfList, lf);
+	}
+    }
+else
 if (ct->dbTrack)
     {
     int rowOffset;
@@ -6546,6 +7641,22 @@ struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 int scoreFilter = getScoreFilter(ct->tdb->track);
 
+if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
+    {
+    struct bed *nextBed;
+    // bed8To12() replaces the blocks, so read no further than itemRgb:  a bed 10 or 11 has
+    // a blockCount without both block arrays, which a lift would read
+    for (bed = ctDbBeds(tg, ct, min(ct->fieldCount, 9)); bed != NULL; bed = nextBed)
+        {
+        nextBed = bed->next;
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	bed8To12(bed);
+	lf = lfFromBed(bed);
+	slAddHead(&lfList, lf);
+	}
+    }
+else
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
@@ -6598,6 +7709,24 @@ int scoreFilter = getScoreFilter(ct->tdb->track);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
+if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
+    {
+    struct bed *nextBed;
+    for (bed = ctDbBeds(tg, ct, ct->fieldCount); bed != NULL; bed = nextBed)
+        {
+        nextBed = bed->next;
+	lf = lfFromBed(bed);
+	    if (scoreFilter && bed->score < scoreFilter)
+		continue;
+	if (useItemRgb)
+	    {
+            lf->useItemRgb = TRUE;
+	    lf->filterColor=bed->itemRgb;
+	    }
+	slAddHead(&lfList, lf);
+	}
+    }
+else
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
@@ -6653,6 +7782,17 @@ void ctLoadColoredExon(struct track *tg)
 struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+if (ct->dbTrack && (multiRegionSpaceForDb(database) != NULL))
+    {
+    struct bed *nextBed;
+    for (bed = ctDbBeds(tg, ct, ct->fieldCount); bed != NULL; bed = nextBed)
+        {
+        nextBed = bed->next;
+	lfs = lfsFromColoredExonBed(bed);
+	slAddHead(&lfsList, lfs);
+	}
+    }
+else
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
@@ -7700,6 +8840,133 @@ if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     }
 }
 
+static void hideFromSpace(struct track *track)
+/* This track cannot be drawn in the synthetic space, so keep it out of this image.
+ * The CART is not touched:  the track control still shows what the user chose, and
+ * leaving the view brings the track back.  This is the shape checkMaxWindowToDraw()
+ * uses for a track it will not draw.  refs #37788 */
+{
+track->loadItems = dontLoadItems;
+track->limitedVis = tvHide;
+track->limitedVisSet = TRUE;
+if (track->parent != NULL)
+    {
+    /* A subtrack is asked about through isSubtrackVisible() rather than through its
+     * own visibility, and that answer is cached the first time it is taken. */
+    track->subTrackVis = FALSE;
+    track->subTrackVisSet = TRUE;
+    }
+}
+
+static boolean liftTrackIntoSpace(struct track *track, char *chainFile)
+/* Stamp this track, and the subtracks under it that draw, with the chain that maps
+ * them into the synthetic space.  Answer whether anything under it can be drawn;
+ * a container whose visible children all fail is one of the ways to answer no.
+ * refs #37788 */
+{
+if (trackDbSetting(track->tdb, "quickLiftUrl") != NULL)
+    /* Already lifted from somewhere else, so its items are not in this assembly's
+     * coordinates at all and our chain would not fix that. */
+    return FALSE;
+if (isCustomTrack(track->track) && trackDbSetting(track->tdb, "bigDataUrl") == NULL)
+    {
+    /* A custom track without a bigDataUrl file is carried only when it is a bed kept in
+     * customTrash and drawn by one of the loaders that go through ctDbBeds(), which
+     * reads it through the stamp.  Any other loader would select SOURCE rows by
+     * SYNTHETIC coordinates and draw them in the wrong place.  ctLoadColoredExon() is
+     * left out:  a lift that drops a block leaves expCount and expIds as they were. */
+    struct customTrack *ct = track->customPt;
+    if ((ct == NULL) || !ct->dbTrack ||
+        !((track->loadItems == ctLoadSimpleBed) || (track->loadItems == ctLoadBed8) ||
+          (track->loadItems == ctLoadBed9) || (track->loadItems == ctLoadGappedBed)))
+        return FALSE;
+    quickLiftAssignChainOne(track->tdb, chainFile, database);
+    return TRUE;
+    }
+if (!trackHandlerOkInSpace(track))
+    /* The name handler installed a loader that ignores the stamp and would read the
+     * source table at synthetic coordinates.  applyTrackHandler() undoes such a handler
+     * in a space, so it is still here only when the type has no loader of its own, or
+     * when setEMGeneTrack() built the track list before the space was installed. */
+    return FALSE;
+if (track->subtracks != NULL)
+    {
+    struct track *subtrack;
+    boolean anyLifted = FALSE;
+    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+        if (!isSubtrackVisible(subtrack))
+            {
+            /* Invisible by THIS predicate.  findLeavesForParallelLoad() picks what to
+             * pre-load with tdbVisLimitedByAncestors() instead, on the tdb rather than
+             * the track, and where the two disagree an unstamped subtrack would be
+             * handed to a worker and read at synthetic coordinates.  Hiding it costs
+             * nothing for a subtrack already invisible and makes the answer total,
+             * rather than leaving the invariant resting on two predicates agreeing. */
+            hideFromSpace(subtrack);
+            continue;
+            }
+        if (liftTrackIntoSpace(subtrack, chainFile))
+            anyLifted = TRUE;
+        else
+            hideFromSpace(subtrack);
+        }
+    if (!anyLifted)
+        return FALSE;
+    }
+else if (!trackHubQuickLiftCanCarry(cart, track->tdb))
+    return FALSE;
+quickLiftAssignChainOne(track->tdb, chainFile, database);
+if ((track->subtracks == NULL) && (track->nameHandler != NULL) &&
+    trackHubQuickLiftVetted(track->track))
+    /* The handler ran before the stamp existed, and a handler may choose its loader by
+     * asking for the stamp:  gencodeGeneMethods() picks the one that lifts only when
+     * quickLiftDb is set.  The tested handlers only assign methods, so running one
+     * again is safe. */
+    track->nameHandler(track);
+return TRUE;
+}
+
+static void liftTrackListIntoSpace(struct track *trackList, char *chainFile)
+/* Stamp the tracks that draw with the chain that maps them into the synthetic space,
+ * and keep the ones quickLift cannot carry out of the image.
+ *
+ * An unstamped track keeps its ordinary loader, which would read the SOURCE file at
+ * SYNTHETIC coordinates and draw real items in the wrong place.  Absent is safe,
+ * wrong is not.  But absent means not drawn, not gone:  an earlier version pruned
+ * the trackDb list instead and took half the assembly's track controls off the page
+ * with it, so the user could not turn those tracks on at all.
+ *
+ * Only the tracks that draw are asked.  The question itself is cheap, but the answer
+ * only matters for a track that draws, and walking the whole trackDb to ask it costs
+ * a private copy of the shared trackDb cache and a database query for every big*
+ * track that keeps its file name in a table.  refs #37788 */
+{
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->visibility == tvHide)
+        continue;
+    if (!liftTrackIntoSpace(track, chainFile))
+        hideFromSpace(track);
+    }
+}
+
+static void liftShownTrackIntoSpace(struct track *track)
+/* parentChildCartCleanup() can show a container that was hidden when getTrackList()
+ * stamped the space, when the cart turns on one of its subtracks.  Stamp it now, or it
+ * keeps its ordinary loader and reads the SOURCE at SYNTHETIC coordinates.  refs #37788 */
+{
+char *spaceChain = multiRegionSpaceForDb(database);
+if ((spaceChain == NULL) || (track->visibility == tvHide))
+    return;
+char *liftUrl = trackDbSetting(track->tdb, "quickLiftUrl");
+if ((liftUrl != NULL) && sameString(liftUrl, spaceChain))
+    return;
+if (!liftTrackIntoSpace(track, spaceChain))
+    hideFromSpace(track);
+}
+
 struct track *getTrackList( struct group **pGroupList, int vis)
 /* Return list of all tracks, organizing by groups.
  * If vis is -1, restore default groups to tracks.
@@ -8014,6 +9281,19 @@ for (track = trackList; track != NULL; track = track->next)
             }
         }
     }
+
+/* In a synthetic multi-region space every track is drawn through the chain that
+ * defines the space, so it is lifted in place rather than cloned into a hub.  This
+ * runs here, at the end, because the loop above is what settles visibility and only
+ * the tracks that draw are asked.  refs #37788 */
+char *spaceChain = multiRegionSpaceForDb(database);
+if (spaceChain != NULL)
+    {
+    liftTrackListIntoSpace(trackList, spaceChain);
+    if (measureTiming)
+        measureTime("multiRegion: stamp %d tracks for the space", slCount(trackList));
+    }
+
 return trackList;
 }
 
@@ -8232,7 +9512,10 @@ for (;track != NULL; track = track->next)
         {
         shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
         if (shapedByubtrackOverride)
+            {
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
+            liftShownTrackIntoSpace(track);
+            }
         }
     if ((shapedByubtrackOverride || cleanedByContainerSettings)
     &&  tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
@@ -8248,7 +9531,10 @@ for (;track != NULL; track = track->next)
                 {
                 char *cartVis = cartOptionalString(cart,child->track);
                 if (cartVis)
+                    {
                     child->visibility = hTvFromString(cartVis);
+                    liftShownTrackIntoSpace(child);
+                    }
                 }
             }
         }
@@ -9113,10 +10399,23 @@ if (differentString(curSessVisTracks, thisSessVisTracks))
 return isSessChanged;
 }
 
+static char *userVirtModeType()
+/* The multi-region mode the USER asked for, which is what the controls have to report.
+ *
+ * It is not always the mode being drawn.  In a synthetic multi-region space the global
+ * virtModeType is "default", because the space is an ordinary assembly to everything
+ * downstream, and reading the global there leaves the Multi-region button unpressed and
+ * the dialog believing it is in the normal view.  refs #37788 */
+{
+return (spaceUserVirtModeType != NULL) ? spaceUserVirtModeType : virtModeType;
+}
+
 static void printMultiRegionButton()
 /* Print button that launches multi-region configuration pop-up */
 {
 boolean isPressed = FALSE;
+if (differentString(userVirtModeType(), "default"))
+    isPressed = TRUE;
 if (differentString(virtModeType, "default"))
     isPressed = TRUE;
 char buf[256];
@@ -9954,6 +11253,14 @@ if (virtMode)
     jsonObjectAdd(jsonForClient, "virtualSingleChrom", newJsonBoolean(virtualSingleChrom())); // DISGUISE POS
     jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(virtModeType));
     }
+else if (spaceUserVirtModeType != NULL)
+    /* A synthetic space is not in virtMode, and the multi-region dialog still has to say
+     * which view it is in.  refs #37788 */
+    jsonObjectAdd(jsonForClient, "virtModeType", newJsonString(spaceUserVirtModeType));
+
+/* Offer "Make this my coordinate system" on gene items.  refs #37788 */
+if (multiRegionSpacesEnabled())
+    jsonObjectAdd(jsonForClient, "multiRegionSpaces", newJsonBoolean(TRUE));
 
 char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
@@ -10172,6 +11479,16 @@ if (!hideControls)
         if (cfgOptionBooleanDefault("showAliases", TRUE) && sameString(virtModeType, "default"))
             printAliases(chromName, virtChromName);
 
+        // On a synthetic multi-region assembly the window's own coordinates mean
+        // nothing to the reader, so show the source span the way multi-region view
+        // does with windowsSpanPosition().  refs #37788
+        char *srcSpan = NULL;
+        if (coordRulerUrl != NULL)
+            srcSpan = sourceSpanPosition(coordRulerUrl, chromName, winStart, winEnd);
+
+	if (srcSpan != NULL)
+	    safef(buf, sizeof buf, "%s", srcSpan);
+	else
 	if (virtualSingleChrom()) // DISGUISE VMODE
 	    safef(buf, sizeof buf, "%s", windowsSpanPosition());
 	else
@@ -10182,6 +11499,11 @@ if (!hideControls)
         // position box
         char *pressedClass = "";
         char *showVirtRegions = "";
+        if (srcSpan != NULL)
+            {
+            pressedClass = "pressed";
+            showVirtRegions = "show multi-region position ranges and ";
+            }
         if (differentString(virtModeType, "default"))
             {
             pressedClass = "pressed";
@@ -11306,8 +12628,26 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
 
 lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType);
 
+/* A view that has been drawn before is found from the cart or from the conditions
+ * table, and then the region list is never built.  That is the whole saving:  in exon
+ * or gene view the list is a scan of the gene table, about a quarter of a second, and
+ * on a repeat its only use would be to name a chain that already exists.  A FALSE
+ * here means only that this request has to do it the slow way.  refs #37788 */
+if (measureTiming && multiRegionSpacesEnabled() && !sameString(virtModeType, "default"))
+    measureTime("before the multi-region space lookup");
+boolean inSpace = enterMultiRegionSpaceFromConditions();
+if (measureTiming && multiRegionSpacesEnabled() && !sameString(virtModeType, "default"))
+    measureTime("multiRegion: ask for a space already built for this view (%s)",
+                inSpace ? "found one" : "none");
+if (inSpace)
+    positionIsVirt = FALSE;
+
+/* Only when no space was found ready-made.  This loop is what builds the region
+ * list, and finding a space is exactly what makes it unnecessary. */
 while(TRUE)
     {
+    if (inSpace)
+        break;
     if (sameString(virtModeType, "default") && !(sameString(lastVirtModeType, "default")))
 	{ // RETURNING TO DEFAULT virtModeType
 	virtModeType = "default";
@@ -11328,9 +12668,25 @@ while(TRUE)
 	}
     else
 	{ // virt mode failed, forced to return to default
+	/* An item picked from the right-click menu that cannot be made a coordinate
+	 * system (no CDS, say) leaves the user where they were, not at the
+	 * assembly's default position.  refs #37788 */
+	char *stayAt = NULL;
+	if (multiRegionSpacesEnabled() && sameString(virtModeType, "singleTrans") &&
+	    isNotEmpty(cartOptionalString(cart, SINGLE_TRANS_TABLE_VAR)))
+	    {
+	    /* A space writes its source position to the cart, so position is right
+	     * both from a plain view and from a space;  the old virtual chromosome
+	     * writes a multi: position, and nonVirtPosition is its source one. */
+	    stayAt = cartOptionalString(cart, "position");
+	    if (isEmpty(stayAt) || startsWith(MULTI_REGION_CHROM, stayAt))
+		stayAt = cartOptionalString(cart, "nonVirtPosition");
+	    }
 	virtModeType = "default";
 	cartSetString(cart, "virtModeType", virtModeType);
 	position = cloneString(hDefaultPos(database));
+	if (isNotEmpty(stayAt))
+	    position = cloneString(stayAt);
         resolvePosition(&position);
 	positionIsVirt=FALSE;
 	virtMode=FALSE;
@@ -11343,7 +12699,17 @@ while(TRUE)
 
 //testRegionList(); // check if it is ascending non-overlapping regions. (this is not the case with custom user-defined-regions)
 
+if (!inSpace)
+    {
+    if (measureTiming && multiRegionSpacesEnabled())
+        measureTime("initRegionList (%s): %d regions", virtModeType, slCount(virtRegionList));
+    if (enterMultiRegionSpace())
+        positionIsVirt = FALSE;
+    }
+
 makeVirtChrom();
+if (measureTiming && multiRegionSpacesEnabled())
+    measureTime("makeVirtChrom");
 
 //testVirtChromBinarySearch();
 
@@ -11525,6 +12891,7 @@ baseTitle = cartUsualString(cart, titleVar, "");
 if (sameString(baseTitle, ""))
     baseTitle = NULL;
 
+
 if  (cgiVarExists("hgt.toggleRevCmplDisp"))
     toggleRevCmplDisp();
 setRulerMode();
@@ -11669,6 +13036,12 @@ cartSetString(cart, "db", database);
 char newPos[256];
 
 // disguise the cart pos var
+char *srcSpanPos = NULL;
+if (coordRulerUrl != NULL)
+    srcSpanPos = sourceSpanPosition(coordRulerUrl, chromName, winStart, winEnd);
+if (srcSpanPos != NULL)   // synthetic assembly: store source coords, refs #37788
+    safef(newPos, sizeof newPos, "%s", srcSpanPos);
+else
 if (virtualSingleChrom()) // DISGUISE VMODE
     safef(newPos, sizeof newPos, "%s", windowsSpanPosition());
 else // usual
@@ -11679,7 +13052,29 @@ cartSetString(cart, "position", position);
 cartSetString(cart, "oldPosition", position);
 //cartSetString(cart, "lastPosition", position);  // this is set in cart.c
 
+/* A space draws with virtMode off, but the cart is also read by CGIs that have no
+ * spaces:  genome-test sharing hgcentraltest with a sandbox, this branch with the
+ * hg.conf gate turned off, or a session saved here and loaded elsewhere.  Beside the
+ * multi: position and the user's mode they expect virtMode on, and with it off they
+ * stop at "positionIsVirt=1 but virtMode=0".  The next request through a space
+ * turns it off again on entry.  refs #37788 */
 cartSetBoolean(cart, "virtMode", virtMode);
+if (spaceUserVirtModeType != NULL)
+    cartSetBoolean(cart, "virtMode", TRUE);
+/* In a synthetic space the cart has to keep the user's own choice, or one request
+ * through a space would leave multi-region view.  The GLOBALS stay "default"
+ * though: the image has not been drawn yet (doTrackForm() is called below), and
+ * the drawing must keep treating this as an ordinary assembly.  Putting the mode
+ * back here made virtualSingleChrom() true again for the draw, and
+ * mapBoxReinvoke() then ran disguisePositionVirtSingleChrom() over a synthetic
+ * position and freed what came back.  refs #37788 */
+if (spaceUserVirtModeType != NULL)
+    {
+    cartSetString(cart, "virtModeType", spaceUserVirtModeType);
+    cartSetString(cart, "lastVirtModeType", spaceUserVirtModeType);
+    }
+else
+    {
 cartSetString(cart, "virtModeType", virtModeType);
 virtModeType = cartString(cart, "virtModeType"); // refresh the pointer after changing hash
 
@@ -11687,6 +13082,7 @@ virtModeType = cartString(cart, "virtModeType"); // refresh the pointer after ch
 lastVirtModeType=virtModeType;
 cartSetString(cart, "lastVirtModeType", lastVirtModeType);
 lastVirtModeType = cartString(cart, "lastVirtModeType"); // refresh
+    }
 
 lastVirtModeExtraState=virtModeExtraState;
 cartSetString(cart, "lastVirtModeExtraState", lastVirtModeExtraState);
@@ -11694,8 +13090,16 @@ lastVirtModeExtraState = cartString(cart, "lastVirtModeExtraState"); // refresh
 
 
 // save a quick position to use if user leaves virtMode.
+/* A space keeps one too, in source coordinates, for the same reason the cart's
+ * virtMode stays on above:  leaving multi-region view reads it, and without it
+ * both paths ask hChromSize() about a NULL chromosome.  refs #37788 */
+char *spaceNonVirtPos = NULL;
+if (!virtMode && (spaceUserVirtModeType != NULL) && (coordRulerUrl != NULL))
+    spaceNonVirtPos = sourceFirstSeqPosition(coordRulerUrl, chromName, winStart, winEnd);
 if (virtMode)
     cartSetString(cart, "nonVirtPosition", nonVirtPositionFromWindows());
+else if (spaceNonVirtPos != NULL)
+    cartSetString(cart, "nonVirtPosition", spaceNonVirtPos);
 else
     cartRemove(cart, "nonVirtPosition");
 
@@ -12570,6 +13974,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 
 measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
+multiRegionSpaceSetTiming(measureTiming);
 
 if (measureTiming)
     measureTime("Got cart: %d elements, userId=%s (=cookie), sessionId=%s", theCart->hash->elCount,
@@ -12872,9 +14277,16 @@ if (cartVarExists(cart, "hgt.convertChromToVirtChrom"))
 jsonObjectAdd(jsonForClient, "measureTiming", newJsonBoolean(measureTiming));
 // js code needs to know if a highlightRegion is defined for this db
 checkAddHighlight(); // call again in case tracksDisplay's call to resolvePosition changed vars
+/* "highlight" is always the CART string, so every path in hgTracks.js that edits the
+ * list and writes it back keeps storing source coordinates.  "highlightSpace" is the
+ * same list mapped onto the synthetic image, which is what the drawer positions
+ * against; it is absent outside a space.  refs #37788 */
 char *highlightDef = cartOptionalString(cart, "highlight");
 if (highlightDef)
     jsonObjectAdd(jsonForClient, "highlight", newJsonString(highlightDef));
+char *highlightSpace = highlightForSpace();
+if (highlightSpace)
+    jsonObjectAdd(jsonForClient, "highlightSpace", newJsonString(highlightSpace));
 
 char *prevColor = cartOptionalString(cart, "prevHlColor");
 if (prevColor)
@@ -12924,6 +14336,8 @@ int recentViewCount = 0;
 if (!trackImgOnly)
     recentViewCount = outputRecentSessionsData(cart);
 
+if (measureTiming && multiRegionSpacesEnabled())
+    multiRegionSpaceReportTiming();
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
 

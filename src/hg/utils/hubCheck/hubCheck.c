@@ -21,6 +21,7 @@
 #include "knetUdc.h"
 #include "hgFind.h"
 #include "twoBit.h"
+#include "multiRegionSpace.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
@@ -795,6 +796,7 @@ else if (tdb->subtracks != NULL)
 static char *VALID_TRACK_TYPES[] = {
     "bam", "bigBarChart", "bigBed", "bigChain", "bigGenePred", "bigInteract", "bigNet",
     "bigLolly", "bigMaf", "bigMethyl", "bigNarrowPeak", "bigPsl", "bigRmsk",
+    "bigBaseView",  /* a multi-region space's coordRuler, gated below, refs #37788 */
     "bigWig", "halSnake", "hic", "longTabix", "vcfPhasedTrio", "vcfTabix", NULL};
 
 static bool typeIsTurnedOff(char *trackType)
@@ -803,6 +805,8 @@ static bool typeIsTurnedOff(char *trackType)
 {
 if (sameString(trackType, "bigNet"))
     return !trackHubBigNetEnabled();
+if (sameString(trackType, "bigBaseView"))
+    return !multiRegionSpacesEnabled();
 return FALSE;
 }
 

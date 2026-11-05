@@ -40,6 +40,9 @@ O=adjacency.o affyPairs.o agpFrag.o agpGap.o alignSeqSizes.o altGraphX.o \
   userdata.o variantProjector.o vcfUi.o vegaInfo.o web.o wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o \
   wiggleUtils.o wikiLink.o wikiTrack.o bigRmskAlignBed.o bigRmskBed.o
 
+# Synthetic multi-region coordinate spaces, refs #37788
+O += multiRegionSpace.o
+
 ifeq (${USE_HIC}, 1)
   O += straw.o
 endif

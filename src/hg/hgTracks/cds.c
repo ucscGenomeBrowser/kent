@@ -748,6 +748,10 @@ Color lighterShade(struct hvGfx *hvg, Color color, double percentLess)
 #define GRAYIX_CDS_ERROR -2
 #define GRAYIX_CDS_STOP  -3
 #define GRAYIX_CDS_SYN_PROT -4
+// a codon piece whose other bases are not in the picture (a gene clipped to a multi-region
+// space), in the first or the second of the alternating shades:  no letter
+#define GRAYIX_CDS_UNKNOWN  -5
+#define GRAYIX_CDS_UNKNOWN2 -6
 
 static Color colorAndCodonFromGrayIx(struct hvGfx *hvg, char *codon, int grayIx, 
 			      Color ixColor)
@@ -774,6 +778,16 @@ else if (grayIx == GRAYIX_CDS_SYN_PROT)
     {
     color = cdsColor[CDS_SYN_PROT];
     sprintf(codon,"*");
+    }
+else if (grayIx == GRAYIX_CDS_UNKNOWN)
+    {
+    color = ixColor;
+    codon[0] = '\0';
+    }
+else if (grayIx == GRAYIX_CDS_UNKNOWN2)
+    {
+    color = lighterShade(hvg, ixColor,1.5);
+    codon[0] = '\0';
     }
 #ifdef LOWELAB
 else if(grayIx == - 'V')
@@ -1783,6 +1797,9 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
             else
                 frame = 0;
 	    }
+        if ((lf->exonCodonBase != NULL) && (lf->exonCodonBase[i] >= 0))
+            /* a gene clipped to a multi-region space:  number its codons as in the whole gene */
+            codonIndex = lf->exonCodonBase[i] / 3 + 1;
 
         if(frame == 0)
             strcpy(partialCodonSeq,"");
@@ -1957,6 +1974,13 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
                 if (strlen(partialCodonSeq) == 3)
                     sf->grayIx = codonToGrayIx(partialCodonSeq, altColor,
                             &foundStart, !posStrand, colorStopStart, &sf->codonAa);
+                else if (lf->exonCodonBase != NULL)
+                    {
+                    /* the rest of this codon was clipped off with a multi-region space's
+                     * region, so its amino acid is not known:  shade it, no letter */
+                    sf->grayIx = altColor ? GRAYIX_CDS_UNKNOWN : GRAYIX_CDS_UNKNOWN2;
+                    sf->codonAa = 'X';
+                    }
                 else
                     {
                     sf->grayIx = GRAYIX_CDS_ERROR;
