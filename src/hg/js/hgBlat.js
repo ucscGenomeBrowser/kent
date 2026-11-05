@@ -119,10 +119,13 @@ function blatCoverageCell(hit) {
         var width = (seg[1] - seg[0]) / hit.qSize * 100;
         return `<i style="left:${left.toFixed(1)}%;width:${width.toFixed(1)}%"></i>`;
     }).join('');
-    // The query start and end are printed next to the bar, as in the classic page's START and END
-    // columns: for short queries like primers the bar alone does not show which bases matched.
-    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">${bars}</span>` +
-        `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span></span>`;
+    return `<span class="blatCovWrap" title="${tip}"><span class="blatCov">${bars}</span></span>`;
+}
+
+// The query start and end, as in the classic page's START and END columns: for short queries
+// like primers the coverage bar alone does not show which bases matched.
+function blatQueryPosCell(hit) {
+    return `<span class="blatCovNum">${blatFmt(hit.qStart)}-${blatFmt(hit.qEnd)}</span>`;
 }
 
 // ---- summary strip + detail panel ---------------------------------------
@@ -320,8 +323,8 @@ var BLAT_HEADER_TIPS = {
     'Score': 'BLAT score: matches minus mismatches and gap penalties. Higher is better.',
     'Identity': 'Percent identity of the aligned bases',
     'Strand': 'Genome strand the query matched (+ or -)',
-    'Query coverage': 'Which part of the query aligned (blue) across its full length, with the ' +
-        'first and last aligned query position. Click to sort by query start.',
+    'Query match':'First and last aligned query position. Click to sort by query start.',
+    'Query coverage': 'Which part of the query aligned (blue) across its full length.',
     'Span': 'Length of the match on the genome (bp). Larger than the query length means ' +
         'the alignment crosses introns or deletions.'
 };
@@ -688,6 +691,7 @@ function blatBuild() {
     if (cfg.multiQuery) { th.push('<th>Query</th>'); }
     th.push('<th>Open in Genome Browser</th>');
     th.push('<th>Show</th>');
+    th.push('<th>Query match</th>');
     th.push('<th>Query coverage</th>');
     if (cfg.hasLocus) { th.push('<th>Locus</th>'); }
     th.push('<th>Score</th>');
@@ -731,9 +735,13 @@ function blatBuild() {
     columns.push({ data: null, orderable: false, className: 'actionsCol',
         render: (d, type, row) => (type === 'display' ? blatActionsCell(row) : '') });
     // Sorts by query start, then query end, so the hits line up along the query.
+    columns.push({ data: null, className: 'qPosCol',
+        render: (d, type, row) => (type === 'display' ? blatQueryPosCell(row) :
+            (type === 'filter' ? row.qStart + '-' + row.qEnd : row.qStart * 1e9 + row.qEnd)) });
+    // The coverage bar sorts the same way, by query start then end.
     columns.push({ data: null, className: 'covCol',
         render: (d, type, row) => (type === 'display' ? blatCoverageCell(row) :
-            (type === 'filter' ? row.qStart + '-' + row.qEnd : row.qStart * 1e9 + row.qEnd)) });
+            (type === 'filter' ? '' : row.qStart * 1e9 + row.qEnd)) });
     if (cfg.hasLocus) {
         columns.push({ data: 'locusText',
             render: (d, type, row) => (type === 'display' ? blatLocusCell(row) : (d || '')) });
