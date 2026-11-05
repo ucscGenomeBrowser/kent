@@ -661,9 +661,11 @@ jsonWriteBoolean(jw, "altFixFilter", sameWord(trackHubSkipHubName(organism), "Hu
  * (autoBigPsl); otherwise there is nothing for the shared session to reopen from. */
 jsonWriteBoolean(jw, "canShare", autoBigPsl);
 /* Renaming the results custom track needs the bigPsl track + the C blatRenameCt() helper, both only
- * present with autoBigPsl.  hgBlat.js shows its own "Rename BLAT Track" button + modal in that case,
- * pre-filled with the track's current name/description (below) so it needs no page-global. */
-jsonWriteBoolean(jw, "canRename", autoBigPsl);
+ * present with autoBigPsl, and the helper only on a page built from the trash files (pslName set),
+ * not on a reopen from the track or a shared link.  hgBlat.js shows its own "Rename BLAT Track"
+ * button + modal in that case, pre-filled with the track's current name/description (below) so it
+ * needs no page-global. */
+jsonWriteBoolean(jw, "canRename", autoBigPsl && pslName != NULL);
 /* Deleting needs the name of the results track: on a page rendered from the trash files hgBlat.js
  * gets it from the track this page builds (window.blatCtName in showAliPlaces), on a blatCt= reopen
  * it is ctName.  A reopen from an old shared session has neither. */
@@ -1045,6 +1047,8 @@ else  // hyperlink
         dyStringPrintf(url, "&l=%d", psl->tStart);
         dyStringPrintf(url, "&r=%d", psl->tEnd);
         dyStringPrintf(url, "&%s=%s",  cartSessionVarName(), cartSessionId(cart));
+        /* the assembly of this search: the cart's db may change in another tab (hgc doMiddle) */
+        dyStringPrintf(url, "&blatDb=%s", cgiEncode(database));
         dyStringPrintf(url, "&Submit=%s", cgiEncode("Create a stable custom track with these results"));
         if (pslIsProtein(psl))
             dyStringPrintf(url, "&isProt=on");
@@ -1120,6 +1124,7 @@ else  // hyperlink
 	           "will not show them.  The hits below are still good.');\n"
 	    "    return;\n"
 	    "    }\n"
+	    "ctBuildFailed = false;\n"
 	    "var ct_blatPos = matchStart + matchWord.length;\n"
 	    "var ct_blatPosEnd = content.indexOf('\"', ct_blatPos);\n"
 	    "ct_blat = content.slice(ct_blatPos, ct_blatPosEnd);\n"
@@ -1134,8 +1139,11 @@ else  // hyperlink
 	    "function buildBigPslCt (url, trackName, trackDescription)\n"
 	    "{ // call hgc to buildBigPsl from blat result.\n"
 	    "\n"
+	    /* Only a build that hands back the new track's name clears this (buildBigPslCtSuccess): an
+	     * error page or a failed request leaves it set. */
+	    "ctBuildFailed = true;\n"
 	    "var cgiVars = 'trackName='+encodeURIComponent(trackName)+'&trackDescription='+encodeURIComponent(trackDescription);\n"
-	    "if (!ct_blat !== '')\n"
+	    "if (ct_blat !== '')\n"
 	    "    {\n"  	
 	    "    cgiVars += '&"CT_DO_REMOVE_VAR"='+encodeURIComponent('Remove Custom Track');\n"
 	    "    cgiVars += '&"CT_SELECTED_TABLE_VAR"='+encodeURIComponent(ct_blat);\n"
@@ -1162,6 +1170,7 @@ else  // hyperlink
 	    "window.blatRenameCt = function(name, description) {\n"
 	    "    trackName = name; trackDescription = description;\n"
 	    "    buildBigPslCt(url, name, description);\n"
+	    "    return !ctBuildFailed;\n"   /* the ajax call is synchronous */
 	    "};\n"
 	    /* Exposed for hgBlat.js's "Delete track" button: the name of the track built above. */
 	    "window.blatCtName = function() { return ct_blat; };\n"
@@ -3110,12 +3119,74 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     if (ct->tdb == NULL || differentString(ct->tdb->track, ctName))
         continue;
     char *bigDataUrl = trackDbSetting(ct->tdb, "bigDataUrl");
-    if (sameOk(trackDbSetting(ct->tdb, "blatResult"), "on") && bigDataUrl != NULL
+    if (blatIsResultTrack(ct->tdb) && bigDataUrl != NULL
     &&  isTrashOrSessionDataPath(bigDataUrl))
         bbFile = bigDataUrl;
     break;
     }
+/* The page's "Share a link" saves blatLastBigBed, so it must name the results shown here, not
+ * those of the newest search. */
+if (bbFile != NULL)
+    cartSetString(cart, "blatLastBigBed", bbFile);
 showBigPslResults(database, organism, bbFile, bbFile != NULL ? ctName : NULL);
+}
+
+static void doDeleteCt(char *database, char *ctName)
+/* hgBlat.js's "Delete track" button: remove one BLAT results custom track of this cart and answer
+ * with JSON, {"deleted":true} or {"error":"..."}.  The assembly comes with the request and the
+ * cart's db is not changed, since the user may have switched assemblies in another tab.  Only a
+ * custom track tagged blatResult=on is removed, since the name comes from the request. */
+{
+char *err = NULL;
+/* Parts of the custom track code read the cart's db rather than the database passed to them
+ * (customTracksSaveCart, for one), so the cart has the results' db while they run. */
+char *cartDb = cloneString(cartOptionalString(cart, "db"));
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    if (!hDbIsActive(database) && !trackHubDatabase(database))
+        err = "The assembly of these BLAT results is not available.";
+    else
+        {
+        cartSetString(cart, "db", database);
+        struct customTrack *ct, *ctList = customTracksParseCart(database, cart, NULL, NULL);
+        for (ct = ctList; ct != NULL; ct = ct->next)
+            if (ct->tdb != NULL && sameString(ct->tdb->track, ctName)
+            &&  blatIsResultTrack(ct->tdb))
+                break;
+        if (ct == NULL)
+            err = "The custom track with these BLAT results was not found. It may have been "
+                  "deleted already.";
+        else
+            {
+            slRemoveEl(&ctList, ct);
+            customTracksSaveCart(database, cart, ctList);
+            cartRemove(cart, ctName);
+            char prefix[256];
+            safef(prefix, sizeof prefix, "%s.", ctName);
+            cartRemovePrefix(cart, prefix);
+            }
+        }
+    }
+errCatchEnd(errCatch);
+if (cartDb != NULL)
+    cartSetString(cart, "db", cartDb);
+else
+    cartRemove(cart, "db");
+freeMem(cartDb);
+if (errCatch->gotError)
+    err = errCatch->message->string;
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+if (err == NULL)
+    jsonWriteBoolean(jw, "deleted", TRUE);
+else
+    jsonWriteStringf(jw, "error", "The track could not be deleted: %s", err);
+jsonWriteObjectEnd(jw);
+cgiPrintContentType("application/json");
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+errCatchFree(&errCatch);
 }
 
 static void doReopenResults(char *database, char *organism)
@@ -3224,6 +3295,14 @@ if (cgiOptionalString("s") != NULL)
     else
         cartRemove(cart, "blatNewPage");
     freeMem(myNewPage);
+    }
+
+/* hgBlat.js's "Delete track" button.  Before getDbAndGenome, which would store the request's db
+ * in the cart. */
+if (cgiOptionalString("blatDeleteCt") != NULL && cgiOptionalString("blatCtDb") != NULL)
+    {
+    doDeleteCt(cgiString("blatCtDb"), cgiString("blatDeleteCt"));
+    return;
     }
 
 orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
@@ -3532,7 +3611,7 @@ else
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "u", "s", NULL};
+char *excludeVars[] = {"Submit", "submit", "Clear", "Lucky", "type", "userSeq", "seqFile", "showPage", "changeInfo", "blatReopen", "blatCt", "blatDeleteCt", "blatCtDb", "u", "s", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

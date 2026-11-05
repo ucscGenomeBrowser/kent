@@ -1,0 +1,57 @@
+track apogee2
+shortLabel APOGEE2 / nAPOGEE
+longLabel APOGEE 2 and nAPOGEE scores for all chrM single-nucleotide variants (only chrM)
+type bigWig
+compositeTrack on
+parent predictionScoresSuper
+visibility hide
+chromosomes chrM
+color 100,130,160
+maxHeightPixels 128:40:8
+viewLimits 0:1
+mouseOverFunction noAverage
+dataVersion /gbdb/$D/apogee2/version.txt
+
+        track apogee2_A
+        shortLabel Mutation: A
+        longLabel APOGEE 2 / nAPOGEE score: variant is A
+        type bigWig
+        parent apogee2 on
+        visibility dense
+        bigDataUrl /gbdb/$D/apogee2/a.bw
+        maxHeightPixels 128:40:8
+        viewLimits 0:1
+        setColorWith /gbdb/$D/apogee2/a.color.bb
+
+        track apogee2_C
+        shortLabel Mutation: C
+        longLabel APOGEE 2 / nAPOGEE score: variant is C
+        type bigWig
+        parent apogee2 on
+        visibility dense
+        bigDataUrl /gbdb/$D/apogee2/c.bw
+        maxHeightPixels 128:40:8
+        viewLimits 0:1
+        setColorWith /gbdb/$D/apogee2/c.color.bb
+
+        track apogee2_G
+        shortLabel Mutation: G
+        longLabel APOGEE 2 / nAPOGEE score: variant is G
+        type bigWig
+        parent apogee2 on
+        visibility dense
+        bigDataUrl /gbdb/$D/apogee2/g.bw
+        maxHeightPixels 128:40:8
+        viewLimits 0:1
+        setColorWith /gbdb/$D/apogee2/g.color.bb
+
+        track apogee2_T
+        shortLabel Mutation: T
+        longLabel APOGEE 2 / nAPOGEE score: variant is T
+        type bigWig
+        parent apogee2 on
+        visibility dense
+        bigDataUrl /gbdb/$D/apogee2/t.bw
+        maxHeightPixels 128:40:8
+        viewLimits 0:1
+        setColorWith /gbdb/$D/apogee2/t.color.bb

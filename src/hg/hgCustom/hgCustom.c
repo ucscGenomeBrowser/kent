@@ -29,6 +29,7 @@
 #include "myVariantsShare.h"
 #include "wikiLink.h"
 #include "hgConfig.h"
+#include "blatShare.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -1117,7 +1118,7 @@ struct customTrack *ct, *next;
 for (ct = ctList; ct != NULL; ct = next)
     {
     next = ct->next;
-    if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+    if (blatIsResultTrack(ct->tdb))
         {
         myVariantsHandleCtRemoval(ct, cart, database);
         slRemoveEl(&ctList, ct);

@@ -17,6 +17,7 @@
 #include "hgConfig.h"
 #include "portable.h"
 #include "trashDir.h"
+#include "trackDb.h"
 #include "blatShare.h"
 
 struct psl *pslListFromBigPslFile(char *bbFileName)
@@ -108,4 +109,10 @@ if (f == NULL)
 if (isTrashOrSessionDataPath(f))
     return cloneString(f);
 return NULL;
+}
+
+boolean blatIsResultTrack(struct trackDb *tdb)
+/* Return TRUE if tdb is a BLAT results custom track, tagged blatResult=on by hgc's buildBigPsl. */
+{
+return tdb != NULL && trackDbSettingOn(tdb, "blatResult");
 }

@@ -30,6 +30,13 @@ fi
 # make sure this is a valid database name
 if ! mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -Ne "show databases" | grep -qw $db
 then
+  # GenArk hub assemblies in dbDb have no MySQL database on genome-mysql
+  nibPath=$(mysql --user=genome --host=genome-mysql.soe.ucsc.edu -A -Ne \
+      "select nibPath from dbDb where name='$db'" hgcentral)
+  if [[ "$nibPath" == hub:/gbdb/genark/* ]]
+  then
+    exit 0
+  fi
   echo -e "\nERROR: database $db not found.\n" >&2
   exit 1
 fi

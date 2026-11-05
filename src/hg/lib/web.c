@@ -1729,11 +1729,19 @@ if(scriptName)
 
 // My Data > Recent Browser Views: the views of this browser in the last days, see
 // cartUpdateRecentSession()
+// The link carries the hgsid like the other menu links: without one, every click would start a
+// new cart, which then pushes a real view off the list of recent views.
 if (cartRecentSessionsEnabled())
-    menuStr = replaceChars(menuStr, "<!-- RECENT_VIEWS_LINK -->",
-        "<li><a id='recentViewsMenuLink' title='Go back to a view you had in this web browser in "
-        "the last days, e.g. before you opened a session' "
-        "href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1'>Recent Browser Views</a></li>");
+    {
+    struct dyString *dy = dyStringCreate("<li><a id='recentViewsMenuLink' "
+        "title='Go back to a view you had in this web browser in the last days, e.g. before you "
+        "opened a session' href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1");
+    if (cart)
+        dyStringPrintf(dy, "&%s=%s", cartSessionVarName(), cartSessionId(cart));
+    dyStringAppend(dy, "'>Recent Browser Views</a></li>");
+    menuStr = replaceChars(menuStr, "<!-- RECENT_VIEWS_LINK -->", dy->string);
+    dyStringFree(&dy);
+    }
 
 if(scriptName)
     {  // Provide optional official mirror servers menu items
