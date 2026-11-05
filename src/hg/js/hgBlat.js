@@ -323,7 +323,7 @@ var BLAT_HEADER_TIPS = {
     'Score': 'BLAT score: matches minus mismatches and gap penalties. Higher is better.',
     'Identity': 'Percent identity of the aligned bases',
     'Strand': 'Genome strand the query matched (+ or -)',
-    'Query match':'First and last aligned query position. Click to sort by query start.',
+    'Query match': 'First and last aligned query position. Click to sort by query start.',
     'Query coverage': 'Which part of the query aligned (blue) across its full length.',
     'Span': 'Length of the match on the genome (bp). Larger than the query length means ' +
         'the alignment crosses introns or deletions.'
