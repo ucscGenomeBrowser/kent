@@ -46,6 +46,8 @@ PW_ENV="env PLAYWRIGHT_BROWSERS_PATH=$PW/browsers NODE_PATH=$PW/node_modules"
 TO=${DOCENT_NIGHTLY_TO:-braney@ucsc.edu}
 LOGDIR=${DOCENT_NIGHTLY_LOGS:-/hive/users/braney/docentNightly/logs}
 FLIPS=${DOCENT_NIGHTLY_FLIPS:-/hive/users/braney/docentNightly/flips.log}
+STATUSDIR=${DOCENT_NIGHTLY_STATUS:-/hive/users/braney/public_html/docentStatus}
+STATUSURL=${DOCENT_NIGHTLY_STATUS_URL:-https://hgwdev.gi.ucsc.edu/~braney/docentStatus/}
 STAMP=$(date +%Y-%m-%d_%H%M)
 # Only a label for the flips.log line.  Every script here says `target: genome-test`
 # itself; this is not read from them, so override it if that ever stops being true.
@@ -187,6 +189,18 @@ TESTS=$(cd "$HERE" && git ls-files '*.docent.yaml' 2>/dev/null \
   echo
   echo "full log kept at $OUT"
 } > "$OUT" 2>&1
+
+# The status page: one row per script, with its history, its proof and a link to try it.
+# Written after the log, because the log is what it reads.  A failure here is reported in
+# the mail and changes nothing else, since the page only reports what the log says.
+if [ -n "${TESTS// /}" ]; then
+  if st=$(cd "$HERE" && $PW_ENV python3 nightlyStatus.py --logs "$LOGDIR" \
+            --flips "$FLIPS" --out "$STATUSDIR" 2>&1); then
+    echo "status page: $STATUSURL ($st)" >> "$OUT"
+  else
+    printf 'status page NOT updated:\n%s\n' "$st" >> "$OUT"
+  fi
+fi
 
 # subject_state is set inside the block above, which runs in this shell, so it survives.
 n=$(grep -c '^  ok$' "$OUT" 2>/dev/null || echo 0)

@@ -7,19 +7,30 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/genePredTester \
+	${BIN_DIR}/trashDirTester \
+	${BIN_DIR}/mallocTopPadTester \
 	${BIN_DIR}/pslReaderTester \
-#	${BIN_DIR}/annoGratorTester \
+	${BIN_DIR}/quickLiftTester \
+	${BIN_DIR}/quickLiftJoinedTester \
+	${BIN_DIR}/sessionDataTester \
+	${BIN_DIR}/cartParseTest \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/hgvsTester \
 	${BIN_DIR}/sqlCheck 
+# annoGratorTester is left out, like the annoGratorTest target below.  A commented
+# line inside the list above would comment out every entry after it, because the
+# backslash on the line before joins them into one line.
 
 ${BIN_DIR}/%: %.c ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${CC_PROG_OPTS} -o $@ $*.c ${MYLIBS} $L
 
 #test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
-test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest
+test: binTest quickLiftTest quickLiftJoinedTest sessionDataTest trashDirTest mallocTopPadTest \
+	hVarSubstHtmlTest dataVersionPathTest genarkLiftOverTest trackDbLoopTest \
+	snapshotTypeTest sessionDirTest geoMirrorSelfTest asForDbTest vcfInfoFilterTest pgSnpManyAllelesTest \
+	trackHubSkipHubNameTest hubSpaceKeysTest asmAliasActiveDbTest cartHubDatabaseTest collectionHubCopyTest ctClearVisTest quickLiftContainerTest quickLiftMergeTest quickLiftMafSummaryTest refLinkNoRowTest ctLongFieldTest cartContentsValTest cartPcrVarTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest hgvsTest cartParseTest
 	rm -r output
 	echo tested all
 
@@ -53,8 +64,235 @@ customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 hgvsTest: ${BIN_DIR}/hgvsTester mkdirs
 	${MAKE} -f hgvsTests.mk test
 
+cartParseTest: ${BIN_DIR}/cartParseTest mkdirs
+	${BIN_DIR}/cartParseTest > output/cartParseTest 2>&1
+	diff expected/cartParseTest output/cartParseTest
+
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
+
+quickLiftTest: ${BIN_DIR}/quickLiftTester mkdirs
+	${BIN_DIR}/quickLiftTester > output/quickLiftTest
+	diff expected/quickLiftTest output/quickLiftTest
+	for g in off split multi both; do \
+	    HGDB_CONF=input/quickLift/$$g.hg.conf ${BIN_DIR}/quickLiftTester intervals \
+	        input/quickLift/lift.bb input/quickLift/items.bb > output/quickLiftIntervals.$$g \
+	        && diff expected/quickLiftIntervals.$$g output/quickLiftIntervals.$$g || exit 1; \
+	done
+
+quickLiftJoinedTest: ${BIN_DIR}/quickLiftJoinedTester mkdirs
+	${BIN_DIR}/quickLiftJoinedTester input/quickLift/joined.chain > output/quickLiftJoinedTest
+	diff expected/quickLiftJoinedTest output/quickLiftJoinedTest
+
+sessionDataTest: ${BIN_DIR}/sessionDataTester mkdirs
+	${BIN_DIR}/sessionDataTester output/sessionData > output/sessionDataTest
+	diff expected/sessionDataTest output/sessionDataTest
+
+# Three runs, because hgConfig caches the config it read, so one process can only answer for
+# one spelling of sessionDataDir.  The fixture is made here rather than in C: a directory, a
+# symlink to it, and three confs naming the same place three ways.  Each conf includes the
+# developer's own so the database settings come along, and is mode 600 because hgConfig
+# refuses a group-readable file whose name begins with a dot -- these do not, but the habit is
+# worth keeping.
+trashDirTest: ${BIN_DIR}/trashDirTester mkdirs
+	rm -rf output/sd
+	${MKDIR} output/sd/real/hgt
+	ln -s real output/sd/link
+	echo "include ${HOME}/.hg.conf" > output/sd/link.conf
+	echo "sessionDataDir=`pwd`/output/sd/link" >> output/sd/link.conf
+	echo "include ${HOME}/.hg.conf" > output/sd/real.conf
+	echo "sessionDataDir=`pwd`/output/sd/real" >> output/sd/real.conf
+	echo "include ${HOME}/.hg.conf" > output/sd/rel.conf
+	echo "sessionDataDir=output/sd/link" >> output/sd/rel.conf
+	HGDB_CONF=output/sd/link.conf ${BIN_DIR}/trashDirTester \
+	    "the symlink, absolute" `pwd`/output/sd/link `pwd`/output/sd/real \
+	    > output/trashDirTest
+	HGDB_CONF=output/sd/real.conf ${BIN_DIR}/trashDirTester \
+	    "the resolved directory, absolute" `pwd`/output/sd/link `pwd`/output/sd/real \
+	    >> output/trashDirTest
+	HGDB_CONF=output/sd/rel.conf ${BIN_DIR}/trashDirTester \
+	    "the symlink, relative" `pwd`/output/sd/link `pwd`/output/sd/real \
+	    >> output/trashDirTest
+	diff expected/trashDirTest output/trashDirTest
+
+# Twice: once with the setting and once without, because the answer is the DIFFERENCE between
+# them.  A single run could pass on a library whose own default happened to be large.
+# The off conf sets 0 by name, because the developer's conf may include one that sets it.
+mallocTopPadTest: ${BIN_DIR}/mallocTopPadTester mkdirs
+	echo "include ${HOME}/.hg.conf" > output/topPadOff.conf
+	echo "mallocTopPad=0" >> output/topPadOff.conf
+	echo "include ${HOME}/.hg.conf" > output/topPadOn.conf
+	echo "mallocTopPad=33554432" >> output/topPadOn.conf
+	HGDB_CONF=output/topPadOff.conf ${BIN_DIR}/mallocTopPadTester > output/mallocTopPadTest
+	HGDB_CONF=output/topPadOn.conf ${BIN_DIR}/mallocTopPadTester >> output/mallocTopPadTest
+	diff expected/mallocTopPadTest output/mallocTopPadTest
+
+hVarSubstHtmlTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hVarSubstHtmlTester hVarSubstHtmlTester.c ${MYLIBS} $L
+	${BIN_DIR}/hVarSubstHtmlTester > output/hVarSubstHtmlTest
+	diff expected/hVarSubstHtmlTest output/hVarSubstHtmlTest
+
+cartHubDatabaseTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartHubDatabaseTester cartHubDatabaseTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartHubDatabaseTester > output/cartHubDatabaseTest
+	diff expected/cartHubDatabaseTest output/cartHubDatabaseTest
+
+# Run twice, with the collectionHubCopyOnWrite gate set on and off by name.  Outside a CGI the
+# trash directory is ".", so it runs in a fresh output/run each time, with sessionDataDir
+# there too, and it writes hubStatus rows to hgcentralregress.
+collectionHubCopyTest: mkdirs ${BIN_DIR}/hgConfValue
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/collectionHubCopyTester collectionHubCopyTester.c ${MYLIBS} $L
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
+	rm -f output/collectionHubCopyTest
+	for gate in on off; do \
+	    echo "include ${HOME}/.hg.conf" > output/collection.$$gate.conf; \
+	    echo "central.db=hgcentralregress" >> output/collection.$$gate.conf; \
+	    echo "collectionHubCopyOnWrite=$$gate" >> output/collection.$$gate.conf; \
+	    echo "sessionDataDir=${CURDIR}/output/run/sessionData" >> output/collection.$$gate.conf; \
+	    rm -rf output/run; mkdir -p output/run; \
+	    (cd output/run && HGDB_CONF=../collection.$$gate.conf ../../${BIN_DIR}/collectionHubCopyTester) \
+	        >> output/collectionHubCopyTest || exit 1; \
+	done
+	diff expected/collectionHubCopyTest output/collectionHubCopyTest
+
+ctClearVisTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/ctClearVisTester ctClearVisTester.c ${MYLIBS} $L
+	${BIN_DIR}/ctClearVisTester > output/ctClearVisTest
+	diff expected/ctClearVisTest output/ctClearVisTest
+
+quickLiftContainerTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftContainerTester quickLiftContainerTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftContainerTester > output/quickLiftContainerTest
+	diff expected/quickLiftContainerTest output/quickLiftContainerTest
+
+quickLiftMergeTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/quickLiftMergeTester quickLiftMergeTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftMergeTester output/quickLiftMerge.hub.txt > output/quickLiftMergeTest
+	diff expected/quickLiftMergeTest output/quickLiftMergeTest
+
+# Includes hgTracks/mafTrack.h for inSummaryMode, an inline there.  Reads hg19.
+quickLiftMafSummaryTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -I../../hgTracks -o ${BIN_DIR}/quickLiftMafSummaryTester quickLiftMafSummaryTester.c ${MYLIBS} $L
+	${BIN_DIR}/quickLiftMafSummaryTester input/quickLift/lift.bb > output/quickLiftMafSummaryTest
+	diff expected/quickLiftMafSummaryTest output/quickLiftMafSummaryTest
+
+refLinkNoRowTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/refLinkNoRowTester refLinkNoRowTester.c ${MYLIBS} $L
+	${BIN_DIR}/refLinkNoRowTester > output/refLinkNoRowTest
+	diff expected/refLinkNoRowTest output/refLinkNoRowTest
+
+dataVersionPathTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/dataVersionPathTester dataVersionPathTester.c ${MYLIBS} $L
+	${BIN_DIR}/dataVersionPathTester > output/dataVersionPathTest
+	diff expected/dataVersionPathTest output/dataVersionPathTest
+
+# Writes dbDb, asmAlias and genark rows to hgcentralregress, like hubSpaceKeysTest.
+# genarkHubPrefix is set by name, since isGenArk() needs it and ~/.hg.conf need not have it.
+asmAliasActiveDbTest: mkdirs ${BIN_DIR}/hgConfValue
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asmAliasActiveDbTester asmAliasActiveDbTester.c ${MYLIBS} $L
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
+	echo "include ${HOME}/.hg.conf" > output/asmAlias.conf
+	echo "central.db=hgcentralregress" >> output/asmAlias.conf
+	echo "genarkHubPrefix=/gbdb/genark" >> output/asmAlias.conf
+	HGDB_CONF=output/asmAlias.conf ${BIN_DIR}/asmAliasActiveDbTester > output/asmAliasActiveDbTest
+	diff expected/asmAliasActiveDbTest output/asmAliasActiveDbTest
+
+# customTracks.useAll is set off by name, since the shared hg.conf turns it on and a BED
+# upload would then load into the customTrash database.
+ctLongFieldTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/ctLongFieldTester ctLongFieldTester.c ${MYLIBS} $L
+	echo "include ${HOME}/.hg.conf" > output/ctLongField.conf
+	echo "customTracks.useAll=no" >> output/ctLongField.conf
+	HGDB_CONF=output/ctLongField.conf ${BIN_DIR}/ctLongFieldTester > output/ctLongFieldTest
+	diff expected/ctLongFieldTest output/ctLongFieldTest
+
+trackDbLoopTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackDbLoopTester trackDbLoopTester.c ${MYLIBS} $L
+	${BIN_DIR}/trackDbLoopTester input/trackDbLoop/composite.ra input/trackDbLoop/self.ra \
+	    input/trackDbLoop/loop2.ra input/trackDbLoop/loop3.ra > output/trackDbLoopTest
+	diff expected/trackDbLoopTest output/trackDbLoopTest
+
+# genarkLiftOver is set in the conf rather than assumed.  genarkLiftOverDbs returns nothing
+# at all when the option is off, so a developer's own hg.conf without it turns every line of
+# the expected output into "0 back" and the test goes red for a reason that is not the code.
+genarkLiftOverTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/genarkLiftOverTester genarkLiftOverTester.c ${MYLIBS} $L
+	echo "include ${HOME}/.hg.conf" > output/genarkLiftOver.conf
+	echo "genarkLiftOver=on" >> output/genarkLiftOver.conf
+	HGDB_CONF=output/genarkLiftOver.conf ${BIN_DIR}/genarkLiftOverTester > output/genarkLiftOverTest
+	diff expected/genarkLiftOverTest output/genarkLiftOverTest
+
+snapshotTypeTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/snapshotTypeTester snapshotTypeTester.c ${MYLIBS} $L
+	${BIN_DIR}/snapshotTypeTester > output/snapshotTypeTest
+	diff expected/snapshotTypeTest output/snapshotTypeTest
+
+sessionDirTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/sessionDirTester sessionDirTester.c ${MYLIBS} $L
+	${BIN_DIR}/sessionDirTester > output/sessionDirTest
+	diff expected/sessionDirTest output/sessionDirTest
+
+# browser.node is set in the conf rather than assumed, since a developer's own hg.conf need
+# not have one.
+geoMirrorSelfTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/geoMirrorSelfTester geoMirrorSelfTester.c ${MYLIBS} $L
+	echo "include ${HOME}/.hg.conf" > output/geoNode.conf
+	echo "browser.node=1" >> output/geoNode.conf
+	HGDB_CONF=output/geoNode.conf ${BIN_DIR}/geoMirrorSelfTester > output/geoMirrorSelfTest
+	diff expected/geoMirrorSelfTest output/geoMirrorSelfTest
+
+# The one test here that WRITES to a central database, so it is pointed at hgcentralregress,
+# which exists for tests and which nothing else reads.  central.user needs UPDATE and DELETE
+# on it; see makeHgCentralRegress.sh for the grant.  makeHgCentralRegress.sh creates it and
+# is safe to run every time.  login.cookieSalt is set because the sync signature is made with
+# it; the value is a test value and means nothing outside this run.
+hubSpaceKeysTest: mkdirs ${BIN_DIR}/hgConfValue
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/hubSpaceKeysTester hubSpaceKeysTester.c ${MYLIBS} $L
+	HG_CONF_VALUE=${BIN_DIR}/hgConfValue ./makeHgCentralRegress.sh > /dev/null
+	echo "include ${HOME}/.hg.conf" > output/regress.conf
+	echo "central.db=hgcentralregress" >> output/regress.conf
+	echo "login.cookieSalt=testSaltForRegressRuns" >> output/regress.conf
+	HGDB_CONF=output/regress.conf ${BIN_DIR}/hubSpaceKeysTester > output/hubSpaceKeysTest
+	diff expected/hubSpaceKeysTest output/hubSpaceKeysTest
+
+# The conf a CGI reads, not the developer's own: isGenArk() needs genarkHubPrefix, which is
+# set in the shared one.
+asForDbTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/asForDbTester asForDbTester.c ${MYLIBS} $L
+	echo "include /usr/local/apache/cgi-bin/hg.conf" > output/genark.conf
+	HGDB_CONF=output/genark.conf ${BIN_DIR}/asForDbTester > output/asForDbTest 2>&1
+	diff expected/asForDbTest output/asForDbTest
+
+# The warnings for filters a VCF cannot support are part of what is checked, so the tester
+# prints them in line with its other output rather than on stderr.
+vcfInfoFilterTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/vcfInfoFilterTester vcfInfoFilterTester.c ${MYLIBS} $L
+	${BIN_DIR}/vcfInfoFilterTester > output/vcfInfoFilterTest
+	diff expected/vcfInfoFilterTest output/vcfInfoFilterTest
+
+# per-allele counts from a VCF record with more alleles than the old fixed array held.
+# refs #38154
+pgSnpManyAllelesTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/pgSnpManyAllelesTester pgSnpManyAllelesTester.c ${MYLIBS} $L
+	${BIN_DIR}/pgSnpManyAllelesTester > output/pgSnpManyAllelesTest
+	diff expected/pgSnpManyAllelesTest output/pgSnpManyAllelesTest
+
+trackHubSkipHubNameTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/trackHubSkipHubNameTester trackHubSkipHubNameTester.c ${MYLIBS} $L
+	${BIN_DIR}/trackHubSkipHubNameTester > output/trackHubSkipHubNameTest
+	diff expected/trackHubSkipHubNameTest output/trackHubSkipHubNameTest
+
+cartContentsValTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartContentsValTester cartContentsValTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartContentsValTester > output/cartContentsValTest
+	diff expected/cartContentsValTest output/cartContentsValTest
+
+# hgPcrResult_ cart variables fed through the cart's own parse.  The dropped ones are also
+# reported on stderr, the way the CGIs log them, so that goes to /dev/null.  refs #38442
+cartPcrVarTest: mkdirs
+	${CC} ${CC_PROG_OPTS} -o ${BIN_DIR}/cartPcrVarTester cartPcrVarTester.c ${MYLIBS} $L
+	${BIN_DIR}/cartPcrVarTester > output/cartPcrVarTest 2> /dev/null
+	diff expected/cartPcrVarTest output/cartPcrVarTest
 
 sqlCheck: ${BIN_DIR}/sqlCheck mkdirs
 	${MAKE} -f sqlCheck.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output

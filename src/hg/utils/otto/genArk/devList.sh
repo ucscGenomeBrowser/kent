@@ -23,6 +23,20 @@ export statList="gbdbGenArkStat.${machName}.${DS}"
 export quickLiftStat="gbdbQuickLiftStat.${machName}.${DS}"
 export liftOverStat="gbdbLiftOverStat.${machName}.${DS}"
 
+##############################################################################
+### copy a file into place for readers such as pushContrib.sh: cp to a
+### temporary name next to the destination, then rename it, so a reader
+### never sees a partly written file.  A rename is only atomic within one
+### file system, hence the cp from /dev/shm first.
+##############################################################################
+function installAtomic() {
+  local src="${1}"
+  local dest="${2}"
+  local tmpDest="${dest}.tmp.$$"
+  cp -p "${src}" "${tmpDest}"
+  mv -f "${tmpDest}" "${dest}"
+}
+
 find -L /gbdb/genark/GCA /gbdb/genark/GCF -type d | sort \
   | gzip -c > /dev/shm/${fileOut}.gz
 
@@ -37,7 +51,7 @@ find -L ./GCA ./GCF -type f | sed -e 's#^./##;' | sort | gzip -c \
 zcat /dev/shm/gbdbGenark.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
 	| gzip -c > /dev/shm/${statList}.gz
 cp -p /dev/shm/${statList}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
-cp -p /dev/shm/${statList}.gz /hive/data/inside/GenArk/pushRR/dev.todayList.gz
+installAtomic /dev/shm/${statList}.gz /hive/data/inside/GenArk/pushRR/dev.todayList.gz
 
 rm -f /dev/shm/gbdbGenark.fl.gz /dev/shm/${statList}.gz
 
@@ -51,7 +65,7 @@ zcat /dev/shm/gbdbQuickLift.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
   | gzip -c > /dev/shm/${quickLiftStat}.gz
 
 cp -p /dev/shm/${quickLiftStat}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
-cp -p /dev/shm/${quickLiftStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.quickLiftList.gz
+installAtomic /dev/shm/${quickLiftStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.quickLiftList.gz
 
 rm -f /dev/shm/gbdbQuickLift.fl.gz /dev/shm/${quickLiftStat}.gz
 
@@ -64,6 +78,6 @@ zcat /dev/shm/gbdbLiftOver.fl.gz | xargs stat -L --printf="%Y\t%n\n" \
   | gzip -c > /dev/shm/${liftOverStat}.gz
 
 cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/logs/${Y}/${M}/
-cp -p /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.liftOverList.gz
+installAtomic /dev/shm/${liftOverStat}.gz /hive/data/inside/GenArk/pushRR/dev.today.liftOverList.gz
 
 rm -f /dev/shm/gbdbLiftOver.fl.gz /dev/shm/${liftOverStat}.gz

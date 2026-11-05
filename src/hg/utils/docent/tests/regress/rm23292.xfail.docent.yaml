@@ -1,0 +1,43 @@
+# #23292 -- a highlight was drawn on only one copy of an overlapping multi-region view.
+# Jonathan Casper showed the same stretch of chr7 twice with two regions one base apart,
+#     chr7 70892456 70898369
+#     chr7 70892457 70898370
+# and the highlight inside it was drawn only on the left half.  It should be on both.
+# Jairo closed it on 2024-11-01 as no longer an issue.
+#
+# This sets the highlight through the cart variable before entering multi-region, so that
+# hgTracks maps it into the view, then asserts TWO highlight boxes: hgTracks.js draws each
+# one as a div.highlightItem, and :nth-match(...,2) exists only when there are at least two.
+# The first one is the positive check that the highlight drew at all.  knownGene is on so
+# that both copies have rows; both region boxes are asserted to show both copies are in view.
+#
+# XFAIL, ALTHOUGH THE TICKET IS CLOSED.  On 2026-10-06 genome-test and hgwdev-demo6 both draw
+# the highlight on the left copy only, exactly as the ticket reports.  remapHighlightPos() in
+# hgTracks.c maps the cart highlight to ONE virtual range (findNearestVirtMatch), so a region
+# shown twice can only get one box.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test and hgwdev-demo6: one .highlightItem, on the left copy only"
+
+target: genome-test
+db: hg38
+position: chr7:70892457-70898369
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7%3A70892457-70898369&pix=1100&hideTracks=1&knownGene=pack&highlight=hg38.chr7%3A70894001-70895000%23aaedff"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has: '.highlightItem'
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr7%2070892456%2070898369%0Achr7%2070892457%2070898370%0A"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:70892457-70898369"]'
+        - 'area[data-tooltip="chr7:70892458-70898370"]'
+        - ':nth-match(.highlightItem, 1)'
+        - ':nth-match(.highlightItem, 2)'

@@ -1,0 +1,93 @@
+# #38608 -- right-click "Zoom to this exon" in multi-region view.  In exon-only view
+# (Show exons using GENCODE), right-click on an exon of a RefSeq Curated transcript and
+# "Zoom to this exon" showed an Error 500 popup and the position stayed where it was.
+# Found in Bob's ASHG workshop.
+#
+# The menu asks hgApi?cmd=exonToPos for the exon's position and sent hgTracks.chromName
+# as the chrom.  In multi-region view that is the virtual chrom "multi", not chr17.
+#   * genePred tracks (RefSeq Curated): the lookup in hgApi found no row and
+#     genePredLoad() was handed NULL, so the page showed an Error 500.
+#   * bigGenePred tracks (GENCODE): the lookup is by name only, so it found the gene, but
+#     hgApi labelled the answer with the chrom it was given.  "multi:<real coordinates>"
+#     is a position on the virtual chrom, so the zoom went to the wrong place, silently.
+# The fix takes the chrom from the item's own link (c= on an hgc link, hgg_chrom= on an
+# hgGene link).  hgApi answers a missing genePred row with its "Couldn't find item"
+# error.  On a bigGenePred track it takes the match on the chrom it was asked for, else
+# the first match, and labels the answer with that match's own chrom.
+#
+# Recipe: hg38 over GFAP, exon-only view.  Exon 8 of NM_002055.5 and of
+# ENST00000588735.3 is the same 86 bases, chr17:44908064-44908149.
+#   1. RefSeq Curated alone, right-click that exon, "Zoom to this exon".
+#   2. GENCODE alone, the same.  Five GENCODE transcripts share the exon, and its tooltip
+#      text "c.1172-1257 (p.391-419)" picks one of them; any of them zooms to the same place.
+#   After each: the position box holds the exon (on the buggy build it holds the start
+#   window, or a wrong place for GENCODE, so this is the check that fails); no
+#   "Encountered error" warning, which is what errorHandler() in ajax.js shows for the
+#   500; and still in multi-region view.
+#   3. The old requests themselves, straight to hgApi with chrom=multi.  The menu no
+#   longer sends them, so only these steps watch the hgApi half of the fix: RefSeq
+#   Curated must answer with the "Couldn't find item" JSON error, not the 500 page, and
+#   GENCODE must answer with chr17, not "multi:".
+#   4. A transcript on two chroms.  hg19 GENCODE V49lift37 has ENST00000577553.1 on chrX
+#   (425315-425416) and chrY (375315-375416), the PAR copies.  Asked from chrY, hgApi must
+#   answer with the chrY copy.  Before the fix it put the chrX coordinates under the chrY
+#   name, the wrong place again.
+#
+# The exon numbers, the tooltip text and the coordinates come from live RefSeq and
+# GENCODE data, on hg38 and hg19.  A new version of either transcript can turn this red with no regression.
+proof:
+  - "assertion-only 2026-10-22 -- written from the ticket"
+  - "release-ab 2026-10-22 -- fails on v504_branch (park 38423) and on genome-test at the position check after the menu, with the Error 500 warning on the page; the hgApi step alone fails on genome-test with the 500 page; all passes on park 38608 (branch zoomExon38608)"
+  - "release-ab 2026-10-22 -- with the GENCODE block and the hgApi bigGenePred fix added, each of the four blocks was run alone on v504_branch (park 38423) and on genome-test and failed at its own check: RefSeq position + Encountered error, GENCODE position (silent wrong place), hgApi RefSeq 500 page, hgApi GENCODE multi: position; the full script passes on park 38608"
+  - "release-ab 2026-10-23 -- block 4 (hg19 PAR transcript asked from chrY) added; run alone it fails on v504_branch (park 38423) and on genome-test with the chrX coordinates under the chrY name, and on the branch's previous hgApi (1638807fbba) it answered with the chrX copy; the full script passes on park 38608"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  # 1. RefSeq Curated (genePred).
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&refSeqComposite=pack&ncbiRefSeqCurated=pack&ncbiRefSeqCurated_sel=1&position=chr17%3A44903159-44915500&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, ncbiRefSeqCurated]
+      text: "chr17:44,903,159-44,915,500"
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+  - rightClick: {track: ncbiRefSeqCurated, title: "Exon 8 of 9", pick: "Zoom to this exon"}
+  - expect:
+      rows: [ruler, ncbiRefSeqCurated]
+      text: "chr17:44,908,064-44,908,149"
+      noText: ["Encountered error", "chr17:44,903,159-44,915,500"]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # 2. GENCODE (bigGenePred).
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&knownGene=pack&position=chr17%3A44903159-44915500&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      text: "chr17:44,903,159-44,915,500"
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+  - rightClick: {track: knownGene, title: "c.1172-1257 (p.391-419)", pick: "Zoom to this exon"}
+  - expect:
+      rows: [ruler, knownGene]
+      text: "chr17:44,908,064-44,908,149"
+      noText: ["Encountered error", "chr17:44,903,159-44,915,500"]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+
+  # 3. The hgApi half: the requests the old menu sent.
+  - goto: "/cgi-bin/hgApi?db=hg38&cmd=exonToPos&num=8&table=ncbiRefSeqCurated&name=NM_002055.5&chrom=multi"
+  - wait: 'body'
+  - expect:
+      text: "Couldn't find item: NM_002055.5"
+      noText: ["Error 500", "Internal Server Error"]
+  - goto: "/cgi-bin/hgApi?db=hg38&cmd=exonToPos&num=8&table=knownGene&name=ENST00000588735.3&chrom=multi"
+  - wait: 'body'
+  - expect:
+      text: '"pos": "chr17:44908064-44908149"'
+      noText: ["multi:", "Error 500", "Internal Server Error"]
+
+  # 4. A name on two chroms: the hgApi answer is the copy on the chrom that was asked for.
+  - goto: "/cgi-bin/hgApi?db=hg19&cmd=exonToPos&num=1&table=knownGeneV49lift37&name=ENST00000577553.1&chrom=chrY"
+  - wait: 'body'
+  - expect:
+      text: '"pos": "chrY:375316-375416"'
+      noText: ["chrY:425316", "chrX:", "Error 500", "Internal Server Error"]

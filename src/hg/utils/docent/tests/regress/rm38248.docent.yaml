@@ -1,0 +1,80 @@
+# #38248 -- a deprecated RefSeq protein accession either failed outright or silently
+# returned the whole gene.
+#
+# The RefSeq Historical track records the protein accession of every deprecated transcript
+# but stored no protein SEQUENCES, so hgHgvs had nothing to translate a p. term against, and
+# a bare NP_ was answered by hgFixed.refLink, which stores accessions without their version
+# and so cannot tell NP_000005.2 from NP_000005.3.  This is the protein half of #26016,
+# which was left undone when that ticket was released.
+#
+# Four commits: c8c1b1a9ada, 71bb7711b13, 4c1caa46a5c and 115c6d24a46.  They add the hg38
+# table ncbiRefSeqPepTableHistorical (66,119 rows, translated out of the rna.gbff we already
+# download), a fallback to it in getProteinSeq() in hg/lib/hgHgvs.c, a rule that picks the
+# NEWEST deprecated transcript rather than an arbitrary one, and a search rule in
+# human/trackDb.ra for the bare versioned accession.
+#
+# THE TABLE HAS TO BE PUSHED FOR ANY OF THIS TO WORK, and the code fails quietly without it.
+# So a red run here is worth checking against hgsql before it is read as a code regression:
+#
+#     hgsql hg38 -e "select count(*) from ncbiRefSeqPepTableHistorical"
+#
+# Every check is the resolved position, read out of the #positionDisplay span, because a
+# search that answers wrongly returns a perfectly good page.  Each interval below differs
+# from what the build before the fix returned, so the positive check is the whole test.
+#
+# The last three steps are the ones that stop this being a one-way test.  NP_000007.1 is the
+# important one: it is a CURRENT protein that also has deprecated transcripts, 46,308
+# accessions are in that position, and the search rule deliberately excludes them.  If that
+# term ever starts returning a list instead of a jump, the rule has grown too wide.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38248 and its four commits after they reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: NP_000005.2:p.Val100Ser does not resolve to chr12:9,112,502-9,112,514"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # An HGVS p. term on a deprecated protein.  Used to give the whole gene,
+  # chr12:9,067,708-9,115,919; now it gives the codon.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NP_000005.2:p.Val100Ser&pix=1100"
+  - expect: {rows: [ruler], text: "chr12:9,112,502-9,112,514"}
+
+  # The same codon reached through the deprecated TRANSCRIPT accession.  This is the half
+  # 4c1caa46a5c fixed: several deprecated transcripts can carry the protein, and the lookup
+  # used to take an arbitrary one.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NM_000014.4:p.Val100Ser&pix=1100"
+  - expect: {rows: [ruler], text: "chr12:9,112,502-9,112,514"}
+
+  # A deprecated protein whose accession returned NO RESULT AT ALL before the fix.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NP_003182.1&pix=1100"
+  - expect: {rows: [ruler], text: "chr5:33,440,985-33,468,064"}
+
+  # A bare deprecated accession that maps to more than one deprecated transcript.  About
+  # 2,570 accessions are in this position and a short list is the right answer, so this step
+  # asserts the list page rather than a position: both transcripts named, and the track they
+  # came from.  It used to jump to the whole gene through hgFixed.refLink.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NP_000005.2&pix=1100"
+  - expect:
+      text: "NCBI RefSeq Historical Transcript Versions"
+      has:
+        - '#hgFindResults a[href*="hgFind.matches=NM_000014.4,"]'
+        - '#hgFindResults a[href*="hgFind.matches=NM_000014.5,"]'
+
+  # Control 1, and the one to read first on a red morning.  NP_000007.1 is a current
+  # protein with deprecated transcripts behind it.  It must still be a single jump.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NP_000007.1&pix=1100"
+  - expect:
+      rows: [ruler]
+      text: "chr1:75,724,709-75,763,679"
+      noText: "Your search resulted in multiple matches"
+
+  # Control 2: the CURRENT version of the accession from the first step still answers with
+  # the whole gene, through the path it always used.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NP_000005.3&pix=1100"
+  - expect: {rows: [ruler], text: "chr12:9,067,708-9,115,919"}
+
+  # Control 3: the same accession with no version at all is unversioned by definition and
+  # must keep going through hgFixed.refLink to the gene.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=NP_000005&pix=1100"
+  - expect: {rows: [ruler], text: "chr12:9,067,708-9,115,919"}

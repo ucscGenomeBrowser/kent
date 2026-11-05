@@ -31,6 +31,7 @@ UTILS_APPLIST = \
 	bigPslToPsl \
 	binFromRange \
 	chainToBigChain \
+	checkDotBracketBigBed \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \
@@ -107,6 +108,7 @@ DIRS = ${buildRefresh} \
 TEST_DIRS = \
 	bedMergeAdjacent \
 	bedPartition \
+	checkDotBracketBigBed \
 	genePredFilter \
 	genePredToProt \
 	gff3ToGenePred \

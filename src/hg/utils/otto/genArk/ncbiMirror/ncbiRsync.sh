@@ -35,15 +35,7 @@ epoch=`date "+%s"`
 mkdir -p "$TOP/log/$YYYY/$MM"
 export logFile="$TOP/log/$YYYY/$MM/$DS.$epoch.$type.log"
 
-printf "### %s %s %s starting initial count scan\n" "${epoch}" "${DS}" "${T}" >> "${logFile}"
-
 cd /hive/data/outside/ncbi/genomes
-export countBefore=`find ./$type -mindepth 4 -maxdepth 4 -type d | awk -F'/' '{print $6}' | sort | wc -l`
-
-epoch=`date "+%s"`
-DS=`date "+%F"`
-T=`date "+%T"`
-LC_NUMERIC=en_US printf "### %s %s %s assemblies before rsync: %'d\n" "${epoch}" "${DS}" "${T}" "${countBefore}" >> "${logFile}"
 
 # rsync is obsolete at NCBI in 2025 - turned off due to robot abuse
 if [ 1 -eq 0 ]; then
@@ -74,13 +66,6 @@ DS=`date "+%F"`
 T=`date "+%T"`
 printf "### %s %s %s completed rsync\n" "${epoch}" "${DS}" "${T}" >> "${logFile}"
 
-export countAfter=`find ./$type -mindepth 4 -maxdepth 4 -type d | awk -F'/' '{print $6}' | sort | wc -l`
-export newCount=`echo $countAfter $countBefore | awk '{printf "%d", $1 - $2}'`
-epoch=`date "+%s"`
-DS=`date "+%F"`
-T=`date "+%T"`
-LC_NUMERIC=en_US printf "### %s %s %s assemblies after rsync: %'d - %'d = %'d new assemblies\n" "${epoch}" "${DS}" "${T}" "${countAfter}" "${countBefore}" "${newCount}" >> "${logFile}"
-
 # the extra tr and tail prevent gigantic outputs since a lot of the
 # log is the progress counter from rsync which is one gigantic line
 # separated by ctrl-M
@@ -92,6 +77,11 @@ tail -25 "${logFile}" | tr '' '\n' | tail -25 1>&2
 
 cd /hive/data/outside/ncbi/genomes/reports
 ./fetch.sh $type >> "${logFile}" 2>&1
+
+# row counts of the assembly_summary files and genark tables from fetch.sh,
+# plus any ERROR from loadAssemblySummaries.sh (e.g. refused table swap)
+printf "#### assembly summary sizes ####\n" 1>&2
+grep -E '^(### size |ERROR:)' "${logFile}" 1>&2
 
 printf "#### tail -45 logFile ####\n" 1>&2
 tail -45 "${logFile}" | tr '' '\n' | tail -45 1>&2

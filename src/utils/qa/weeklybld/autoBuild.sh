@@ -178,18 +178,53 @@ ensure_binfmt() {
 # Called at the start of do_wrapup and the post-RR cherry-pick regen path (both run
 # doZip). Not a checkpointed step -- it is a cheap precondition that must re-verify
 # on every (re-)run.
+#
+# Being logged in is not enough: in v505 a valid token passed `gh auth status` and
+# then got HTTP 403 from `gh release create`. kent is public, so any token can read
+# it, and a read proves nothing. Without making a write, check what we can:
+#   - classic token (ghp_): the X-OAuth-Scopes header must include repo/public_repo.
+#   - fine-grained token (github_pat_): the collaborator-permission endpoint, which
+#     GitHub serves only to tokens with access to the repo beyond public reads. A
+#     token still pending org approval should fail it (untested). This cannot see
+#     whether the token was granted Contents: write -- doZip's warning still covers that.
 ensure_gh_auth() {
     if $DRY_RUN; then
-        log "(dry-run) would verify gh auth status"
+        log "(dry-run) would verify gh auth status and write access"
         return 0
     fi
-    if gh auth status >/dev/null 2>&1; then
-        log "OK: gh authenticated"
-    else
-        die "gh is not authenticated (gh auth status failed). Run 'gh auth login' as
-    the build user, then re-run. doZip.csh needs gh to attach the source archives to
-    the GitHub release ($WEEKLYBLD/doZip.csh, refs #37741)."
+    local repo="ucscGenomeBrowser/kent"
+    local fix="Run 'gh auth login' as the build user with a classic token that has
+    the 'repo' and 'read:org' scopes, then re-run. doZip.csh needs gh to create the
+    GitHub release and attach the source archives ($WEEKLYBLD/doZip.csh, refs #37741)."
+    if ! gh auth status >/dev/null 2>&1; then
+        die "gh is not authenticated (gh auth status failed). $fix"
     fi
+    # The `|| true` on each gh api call is load-bearing under `set -e`: gh exits
+    # non-zero on any HTTP error, which would abort here with no FATAL line and no
+    # alert email. An empty result falls through to the die() below instead.
+    local scopes
+    scopes=$(gh api -i "repos/$repo" 2>/dev/null | tr -d '\r' \
+        | sed -n 's/^[Xx]-[Oo][Aa]uth-[Ss]copes: *//p') || true
+    if [[ -n "$scopes" ]]; then
+        if [[ ",$scopes," =~ [,\ ](public_)?repo, ]]; then
+            log "OK: gh authenticated (classic token, scopes: $scopes)"
+        else
+            die "gh token lacks the 'repo' scope (scopes: $scopes). $fix"
+        fi
+        return 0
+    fi
+    local login perm
+    login=$(gh api user --jq .login 2>/dev/null) || true
+    perm=$(gh api "repos/$repo/collaborators/$login/permission" --jq .permission 2>/dev/null) \
+        || true
+    case "$perm" in
+        admin|maintain|write)
+            log "OK: gh authenticated (fine-grained token, $login has $perm on $repo;"
+            log "    cannot verify the token itself has Contents: write)" ;;
+        *)
+            die "gh token cannot see $repo beyond public reads (fine-grained token
+    not approved by the org, or not granted this repo?). $fix" ;;
+    esac
 }
 
 # Check that we are on the master branch (in the WEEKLYBLD git repo).
@@ -641,12 +676,12 @@ final_deploy_beta() {
 
 final_email_build_complete() {
     if $DRY_RUN; then
-        log "(dry-run) would email 'v${BRANCHNN} Build complete on beta (day 16)' to $BUILDMEISTEREMAIL galt kent browser-qa"
+        log "(dry-run) would email 'v${BRANCHNN} Build complete on beta (day 16)' to $BUILDMEISTEREMAIL browser-qa"
         return 0
     fi
     echo "v${BRANCHNN} built successfully on beta (day 16)." \
         | mail -s "v${BRANCHNN} Build complete on beta (day 16)." \
-        "$BUILDMEISTEREMAIL" galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+        "$BUILDMEISTEREMAIL" browser-qa@soe.ucsc.edu
 }
 
 final_email_pairings() {
@@ -788,6 +823,39 @@ smoke_instance() {
 
 final_smoke_beta()       { smoke_instance beta; }
 final_smoke_beta_arm64() { smoke_instance beta-arm64; }
+final_smoke_mirror()     { smoke_instance mirror; }
+
+# Update the long-lived kent-mirror container in place, as a real mirror would:
+# the new v${BRANCHNN}_branch browserSetup.sh runs cgiUpdate inside it, then the
+# beta CGIs are copied on top, leaving its carried-forward hg.conf and MariaDB
+# alone. This catches update-path breakage (a CGI that needs a new hg.conf
+# setting or table, a broken browserSetup.sh update) that the fresh-install
+# beta instances cannot see. See update-mirror.sh.
+#
+# NON-FATAL like the smoke tests: a failure leaves a marker that the end-of-phase
+# summary and completion email report, and the build carries on. refs #37655
+final_update_mirror() {
+    local setup="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/browserSetup.sh"
+    local logf="$LOGDIR/v${BRANCHNN}.update-mirror.log"
+    local marker; marker="$(smoke_marker mirror-update)"
+    [[ -f "$setup" ]] || die "browserSetup.sh not found at $setup"
+    if $DRY_RUN; then
+        log "(dry-run) would update kent-mirror in place with $setup"
+        return 0
+    fi
+    if "$WEEKLYBLD/update-mirror.sh" "$setup" >& "$logf"; then
+        rm -f "$marker"
+        log "kent-mirror updated in place. Log: $logf"
+    else
+        : > "$marker"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        log "!!! kent-mirror IN-PLACE UPDATE FAILED -- a mirror updating to"
+        log "!!! v${BRANCHNN} may hit the same problem. Build CONTINUES."
+        log "!!! Log: $logf"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    fi
+    return 0
+}
 
 do_final() {
     log "========== PHASE: FINAL BUILD =========="
@@ -819,6 +887,8 @@ do_final() {
     step docker-beta          final_docker_beta
     step refresh-beta         final_refresh_beta
     step smoke-beta           final_smoke_beta
+    step update-mirror        final_update_mirror
+    step smoke-mirror         final_smoke_mirror
     step docker-beta-arm64    final_docker_beta_arm64
     step refresh-beta-arm64   final_refresh_beta_arm64
     step smoke-beta-arm64     final_smoke_beta_arm64
@@ -832,7 +902,7 @@ do_final() {
         log "##  WARNING: docker smoke test FAILED for:$smoke_failed"
         log "##  The build completed, but the above beta instance(s) are"
         log "##  broken and must be investigated before QA. Per-instance"
-        log "##  logs: $LOGDIR/v${BRANCHNN}.smoke-<name>.log"
+        log "##  logs: $LOGDIR/v${BRANCHNN}.smoke-<name>.log (mirror-update: v${BRANCHNN}.update-mirror.log)"
         log "############################################################"
     fi
 }
@@ -852,8 +922,10 @@ generate_release_markdown() {
     log "Generating markdown release notes for v${ver}..."
 
     local html
-    html=$(curl -s "$url") || {
-        log "WARNING: Could not fetch $url - skipping markdown generation"
+    # -f: a missing versions page (404) must fail here; without it the 404 page
+    # was taken as the notes and an empty file was written (v505).
+    html=$(curl -sf "$url") || {
+        log "WARNING: Could not fetch $url (versions page not written yet?) - skipping markdown generation"
         return 0
     }
 
@@ -871,9 +943,18 @@ generate_release_markdown() {
         | sed 's| ([^)]*)\. [A-Z][a-z]*$||' \
         | sed 's|\. [A-Z][a-z]*$||' \
         | sed 's|[[:space:]]*$||' \
-        | sed 's|&lt;|<|g; s|&gt;|>|g; s|&amp;|\&|g; s|&quot;|"|g' \
+        | sed "s|&lt;|<|g; s|&gt;|>|g; s|&quot;|\"|g; s|&#x27;|'|g; s|&#39;|'|g; s|&amp;|\\&|g" \
         | sed 's|^|- |' \
-        > "$outfile"
+        > "$outfile.tmp"
+
+    # Replace the notes only with a non-empty result, so an earlier run's notes for this
+    # version survive a page with no code changes, and doZip.csh never gets an empty file.
+    if [[ ! -s "$outfile.tmp" ]]; then
+        log "WARNING: No code changes found in $url - skipping markdown generation"
+        rm -f "$outfile.tmp"
+        return 0
+    fi
+    mv -f "$outfile.tmp" "$outfile"
 
     log "Markdown release notes written to $outfile"
 }
@@ -1017,6 +1098,42 @@ wrapup_docker_release() {
 # Refresh kent-rel against the just-pushed release image, then tear down the beta
 # container/image now that v${BRANCHNN} has shipped. refs #37655. Container
 # hygiene only, so a failure here warns but does not abort the phase.
+# The second kent-mirror update of the cycle (the first is final_update_mirror):
+# a plain cgiUpdate from hgdownload with no beta overlay, i.e. exactly what a
+# real mirror gets for this release. If the release has not reached hgdownload
+# yet, update-mirror.sh changes nothing and exits 3; that is flagged for a
+# manual re-run rather than treated as a breakage. Non-fatal either way.
+# refs #37655
+wrapup_update_mirror() {
+    local setup="$BUILDHOME/v${BRANCHNN}_branch/kent/src/product/installer/browserSetup.sh"
+    local logf="$LOGDIR/v${BRANCHNN}.update-mirror-release.log"
+    local marker; marker="$(smoke_marker mirror-update)"
+    [[ -f "$setup" ]] || die "browserSetup.sh not found at $setup"
+    if $DRY_RUN; then
+        log "(dry-run) would update kent-mirror from hgdownload with $setup --release"
+        return 0
+    fi
+    local rc=0
+    "$WEEKLYBLD/update-mirror.sh" --release "$setup" >& "$logf" || rc=$?
+    if [[ $rc -eq 0 ]]; then
+        rm -f "$marker"
+        log "kent-mirror updated from hgdownload to the v${BRANCHNN} release. Log: $logf"
+    elif [[ $rc -eq 3 ]]; then
+        : > "$marker"
+        log "WARNING: v${BRANCHNN} is not on hgdownload yet, so kent-mirror was NOT updated."
+        log "         When it is: $WEEKLYBLD/update-mirror.sh --release $setup"
+        log "         then: $WEEKLYBLD/smoke-instance.sh mirror --version ${BRANCHNN}"
+    else
+        : > "$marker"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        log "!!! kent-mirror RELEASE UPDATE FAILED -- real mirrors updating to"
+        log "!!! v${BRANCHNN} may hit the same problem. Wrap-up CONTINUES."
+        log "!!! Log: $logf"
+        log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    fi
+    return 0
+}
+
 wrapup_refresh_containers() {
     log "Refreshing local kent-rel container..."
     run "$WEEKLYBLD/refresh-instance.sh" rel || \
@@ -1139,6 +1256,8 @@ do_wrapup() {
     step userapps-src     wrapup_userapps_src
     step docker-release   wrapup_docker_release
     step refresh-containers wrapup_refresh_containers
+    step update-mirror    wrapup_update_mirror
+    step smoke-mirror     final_smoke_mirror
     # Last: a report, so nothing that matters waits on its ~4 minutes.
     step sunset-report    wrapup_sunset_report
 

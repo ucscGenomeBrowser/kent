@@ -1,0 +1,72 @@
+# #38200 -- the Table Browser read the version suffix of an assembly accession as a database
+# name, which made the HPRCv2 and GenArk chain and net subtracks unusable.
+#
+# hgTables has always taken a dot in a table name to mean "this table is in another
+# database", the way uniProt.taxon is, and tested for it with a bare `strchr(table, '.')` at
+# five sites.  That holds until a table name ENDS in an accession version:
+# chainLiftOverGCA_018466835.2 was read as the table `2` inside a database called
+# `chainLiftOverGCA_018466835`.  Three symptoms, all from the same line of reasoning:
+#
+#   * the main page skipped the hTableInfo lookup, getIdField() fell through to
+#     DESCRIBE <table>, and since these are bigChain tracks with a bigDataUrl and no SQL
+#     table at all the CGI errAborted mid-page, leaving an unclosed <TR>;
+#   * "Selected fields" gave `Unknown database 'chainLiftOverGCA_018466835'` and a truncated
+#     page with no closing </FORM>;
+#   * skipping the lookup also left isPositional FALSE, so the track offered no BED output
+#     and the region box stopped restricting anything.
+#
+# e0b4fac7ce2 adds tableHasDbPrefix(), which asks sqlDatabaseExists() about the text before
+# the first dot (cached, since a page asks it of every table name it handles), and routes
+# all five sites through it.
+#
+# The third symptom is the one worth asserting on the main page, because it is a positive
+# check: the BED output option is only offered for a positional table, so its presence says
+# the hTableInfo lookup happened.  A noText: on the error string would not do on its own --
+# the broken page was truncated, and everything is absent from a truncated page.
+#
+# The field checkboxes on the "Selected fields" page carry the resolved db.table, so their
+# names say which way the dot was read: `hgta_fs.check.hg38.chainLiftOverGCA_018466835.2.chrom`
+# is the whole bug in one attribute.  The last step is the same page for uniProt.taxon,
+# where the prefix really IS a database and must stay one -- a fix that simply stopped
+# splitting on dots would pass everything above and fail that.
+#
+# NOT covered: 60405d637bb, which escapes the `<` in the free-form query examples on the
+# filter page.  An HTML parser treats `<` followed by a space as literal text, so the
+# example reads correctly in a browser either way; what it broke was hgTablesTest's
+# validator, and that is not something a rendered page can be asked about.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38200 and e0b4fac7ce2 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the Table Browser main page has no Output format, no BED output option and no checked range radio"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # The main page, with the track the ticket names and a range selected.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_group=hprc&hgta_track=hprcV2chain&hgta_regionType=range&position=chr1:121978212-126978211"
+  - expect:
+      text: "Output format"
+      has:
+        - 'select[name="hgta_table"] option[value="chainLiftOverGCA_018466835.2"]'
+        - '#outputTypeDropdown option#outBed'
+        - 'input[name="hgta_regionType"][value="range"]:checked'
+      noText: ["Unknown database", "mySQL error"]
+
+  # "Selected fields" for the same table.  This is the page that used to abort with
+  # Unknown database 'chainLiftOverGCA_018466835'.  The checkbox names are the assertion:
+  # the database is hg38 and the whole accession, version included, is the table.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_group=hprc&hgta_track=hprcV2chain&hgta_table=chainLiftOverGCA_018466835.2&hgta_regionType=range&position=chr1:121978212-126978211&hgta_outputType=selectedFields&hgta_doTopSubmit=get+output"
+  - expect:
+      has:
+        - 'input[name="hgta_fs.check.hg38.chainLiftOverGCA_018466835.2.chrom"]'
+        - 'input[name="hgta_fs.check.hg38.chainLiftOverGCA_018466835.2.chainScore"]'
+      noText: ["Unknown database", "mySQL error"]
+
+  # The control: a dot that really does name another database.  uniProt.taxon has to keep
+  # being read as the taxon table in the uniProt database, so its checkboxes carry no hg38.
+  - goto: "/cgi-bin/hgTables?db=hg38&hgta_group=allTables&hgta_track=uniProt&hgta_table=uniProt.taxon&hgta_regionType=genome&hgta_outputType=selectedFields&hgta_doTopSubmit=get+output"
+  - expect:
+      has: 'input[name="hgta_fs.check.uniProt.taxon.binomial"]'
+      noHas: 'input[name="hgta_fs.check.hg38.uniProt.taxon.binomial"]'
+      noText: "Unknown database"

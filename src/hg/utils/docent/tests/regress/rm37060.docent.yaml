@@ -1,0 +1,60 @@
+# #37060 -- multi-region exon view ignored the newer knownGene settings: the pseudogene
+# checkbox, the track sets (Basic, All, MANE) and the ID filter "Show only transcripts
+# with these accessions" (knownGene.nameFilter).  The MLQ report was a transcript,
+# ENST00000649947, drawn with one exon where it has two, because the exon regions were
+# built from the wrong set of rows.  Galt's fix 9840af33fea (2026-02-03, v494) reads all
+# three settings in the exon-region builder in hgTracks.c.
+#
+# This script drives the ID filter, the part of the fix that changes the region list the
+# most and that a buggy build cannot satisfy by accident.  hg38 chr10:13744599-14074698
+# (Galt's region) with knownGene.nameFilter=ENST00000357447.7.  Exon view pads each exon
+# by 5 bases, and each region of the view gets a map box whose data-tooltip is its source
+# range.  Without the filter this range gives 13 regions from several basic transcripts;
+# with it, only that transcript's exons make regions.
+#
+# WHY NOT ENST00000649947.1, the transcript Galt named.  On genome-test (v504) that filter
+# in exon view builds the right region list (trackLog position chr10:13858841-14024487,
+# its two exons) and then hgTracks aborts with "double free or corruption (fasttop)" in
+# the Apache error log, so the page is empty.  That happens with the All set and with
+# squishyPackPoint raised out of the way, and not with ENST00000357447.7.  It is a crash
+# after the region list, not this ticket's bug, so this script steps around it.  It does
+# not happen on hgwdev-demo6 (the multiRegionSpaces branch).
+#
+# Checks after exon view is on:
+#   * the multi-region button is pressed;
+#   * the regions of ENST00000357447.7's exons at chr10:13747735-13747819 and
+#     chr10:13858846-13858912 are present (positive checks);
+#   * regions that only OTHER transcripts make in this range are absent:
+#     chr10:13744599-13744697, chr10:13756030-13756206 and chr10:13991809-13991998.
+#     The old code ignored the filter and built these;
+#   * no knownGene map box names any other transcript.
+# The pseudogene part of the fix is #27338's script.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr10:13744599-14074698
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr10%3A13744599-14074698&pix=1100&hideTracks=1&knownGene=pack&knownGene.nameFilter=ENST00000357447.7"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has: 'area[href*="ENST00000357447"]'
+      noHas: 'area[href*="hgg_type=knownGene"]:not([href*="ENST00000357447"])'
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&virtModeType=exonMostly&virtMode=1"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr10:13747730-13747825"]'
+        - 'area[data-tooltip="chr10:13858841-13858918"]'
+        - 'area[href*="ENST00000357447"]'
+      noHas:
+        - 'area[data-tooltip="chr10:13744599-13744697"]'
+        - 'area[data-tooltip="chr10:13756030-13756206"]'
+        - 'area[data-tooltip="chr10:13991809-13991998"]'
+        - 'area[href*="hgg_type=knownGene"]:not([href*="ENST00000357447"])'

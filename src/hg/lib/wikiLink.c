@@ -65,6 +65,26 @@ static char *wikiLinkUserNameCookie()
 return cfgOptionDefault(CFG_WIKI_USER_NAME_COOKIE, "hgLoginUserName");
 }
 
+char *wikiLinkLoginCookieHeader()
+/* Return a "Cookie:" header line that passes this request's login cookies - and only those, not
+ * the cart cookie - on to another one of our servers, or NULL if the request carries no login
+ * cookies.  Free when done. */
+{
+char *userCookie = wikiLinkUserNameCookie();
+char *keyCookie = wikiLinkLoggedInCookie();
+char *userVal = findCookieData(userCookie);
+char *keyVal = findCookieData(keyCookie);
+if (isEmpty(userVal) || isEmpty(keyVal))
+    return NULL;
+/* A cookie value with a newline in it could add headers of its own to the request we are about
+ * to write.  Browsers do not send such a value; something else did, so send nothing. */
+if (strpbrk(userVal, "\r\n") != NULL || strpbrk(keyVal, "\r\n") != NULL)
+    return NULL;
+struct dyString *dy = dyStringNew(256);
+dyStringPrintf(dy, "Cookie: %s=%s; %s=%s\r\n", userCookie, userVal, keyCookie, keyVal);
+return dyStringCannibalize(&dy);
+}
+
 static char *getLoginCookieSalt()
 /* Return the secret salt that we hash with userName to verify cookie key, NULL if undefined. */
 {

@@ -27,7 +27,7 @@ import sys
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SAMPLE_LIST = os.path.join(SCRIPT_DIR, "fiberSeqSamples.tsv")
 
-# The seven cell lines the lab wants in the always-on overlay, in their order,
+# The seven cell lines the lab wants in the fixed overlay, in their order,
 # with the Okabe-Ito colors they chose in their own hub.
 DEFAULT_OVERLAY = [
     ("PM00001", "230,159,0"),    # GM12878, orange
@@ -66,51 +66,41 @@ DIFF_LEVELS = [
 
 # Shown behind an info icon on the Sample class column heading.
 SAMPLE_CLASS_DESCRIPTION = (
-    "HPRC = Lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
-    "Human Pangenome Reference Consortium")
+    "HPRC = lymphoblastoid (B-lymphocyte, EBV) cell lines from the NHGRI "
+    "Human Pangenome Reference Consortium. Common cell lines are widely used "
+    "laboratory lines. Rare disease samples are cases consented to broad "
+    "genomic data sharing.")
 
 # Sample class swatches, shown next to that facet's checkboxes.
 # Okabe-Ito colors for the swatches.
 SAMPLE_CLASS_COLORS = {
     "HPRC": "#0072B2",
-    "Common Cell Line": "#D55E00",
+    "Common cell line": "#D55E00",
+    "Rare disease sample": "#009E73",
 }
 
 
-# Lymphoblastoid lines that are not from the Human Pangenome Reference
-# Consortium: GM12878 is the ENCODE line and HG002 is Genome in a Bottle.  Both
-# are B-lymphocyte EBV lines like the HPRC samples, so cell type alone cannot
-# tell them apart and they have to be named.
-NOT_HPRC = {"GM12878", "HG002"}
-
-
-def sampleClass(sample, cellType):
-    """Split a sample two ways for the Sample class column.
-
-    HPRC is a lymphoblastoid (B-lymphocyte, EBV) line from the consortium;
-    everything else, including the two lymphoblastoid lines listed in NOT_HPRC,
-    is a common cell line."""
-    if "lymphoblastoid" in cellType.lower() and sample not in NOT_HPRC:
-        return "HPRC"
-    return "Common Cell Line"
-
-
 def readSamples(path):
-    """Read fiberSeqSamples.tsv into a list of dicts, in file order."""
+    """Read fiberSeqSamples.tsv into a list of dicts, in file order.
+
+    sampleClass comes from the lab's own sample sheet, not from the cell type.
+    The 27 lymphoblastoid lines split three ways, 20 HPRC and 5 rare disease
+    samples and 2 common cell lines, and nothing in the cell type tells them
+    apart.  Expect the rare disease group to grow; the lab is sending more."""
     samples = []
     with open(path) as f:
         for line in f:
             if line.startswith("#") or not line.strip():
                 continue
             fields = line.rstrip("\n").split("\t")
-            if len(fields) < 4:
-                sys.exit("bad sample line, want 4 fields: %s" % line.rstrip())
-            acc, sample, cellType, _hash = fields[:4]
+            if len(fields) < 5:
+                sys.exit("bad sample line, want 5 fields: %s" % line.rstrip())
+            acc, sample, cellType, _hash, sampleClass = fields[:5]
             samples.append({
                 "accession": acc,
                 "sample": sample,
                 "cellType": cellType,
-                "sampleClass": sampleClass(sample, cellType),
+                "sampleClass": sampleClass,
             })
     if not samples:
         sys.exit("no samples read from %s" % path)
@@ -125,17 +115,21 @@ def writeMetadata(path, samples):
     Accession is the primaryKey but sits last, since it is the least interesting
     thing about a sample.  Nothing requires the primaryKey to come first:
     facetedComposite.js only checks that the column exists, and every use of it
-    is by name.  It is still the default sort, because accession order keeps the
-    common cell lines together and then the HPRC samples together, which sample
-    name in alphabetical order would scatter.
+    is by name.  It is still the default sort, because accession order mostly
+    groups samples of a kind together, which sample name in alphabetical order
+    would scatter.  Only mostly: the accessions were assigned as the lab
+    produced the data, so the common cell lines fall in two runs either side of
+    the HPRC block.
 
-    Sample class is the one faceted column.  Its two values, HPRC and Common
-    Cell Line, each cover many samples, which is what a facet needs:
-    facetedComposite.js only offers a value that occurs more than once, since a
-    checkbox matching a single row is just a slow search box.  The other three
-    are underscored for that reason.  Sample and Accession are unique per row by
-    definition, and 12 of the 14 cell types are a single sample, so as a facet
-    cell type drew two checkboxes and left 12 samples unreachable.
+    Sample class is the one faceted column.  Its three values, HPRC, Common cell
+    line and Rare disease sample, each cover many samples, which is what a facet
+    needs: facetedComposite.js only offers a value that occurs more than once,
+    since a checkbox matching a single row is just a slow search box.  Sample
+    and Cell type are underscored for that reason.  Accession needs no
+    underscore: facetedComposite.js drops the primaryKey from the checkbox
+    columns on its own.  Sample and Accession are unique per row by definition,
+    and 12 of the 14 cell types are a single sample, so as a facet cell type
+    drew two checkboxes and left 12 samples unreachable.
 
     Names are underscore separated rather than camelCase: the header is rendered
     by toTitleStyle() in facetedComposite.js, which turns an underscore into a
@@ -170,7 +164,7 @@ def stanza(indent, lines):
 
 
 def accOverlay(gbdb, samples):
-    """The always-on overlay of the seven common cell lines."""
+    """The fixed overlay of the seven common cell lines."""
     byAcc = {s["accession"]: s for s in samples}
     out = stanza(4, [
         "track fiberSeqAcc",
@@ -187,7 +181,7 @@ def accOverlay(gbdb, samples):
         "maxHeightPixels 100:50:8",
         "visibility full",
         "priority 1",
-        "shortLabel Fiber-seq Acc",
+        "shortLabel Fiber-seq Accessible",
         "longLabel Fiber-seq percent-accessible chromatin in seven common cell lines",
     ])
     for acc, color in DEFAULT_OVERLAY:
@@ -307,7 +301,18 @@ def compendium(gbdb, dataUrlDir, samples):
             "scoreFilterLimits 0:1000",
             "mouseOver <b>%s FIRE peak</b><br>FIRE score: ${signalValue}"
             "<br>-log10 FDR: ${qValue}<br>Score: ${score}" % name,
-            "onlyVisibility dense",
+            # "visibility", not "onlyVisibility" as every other data type here
+            # uses, and the difference is not cosmetic.  onlyVisibility PINS a
+            # faceted child: tdbVisLimitedByAncestors() in hg/lib/hui.c
+            # overwrites the computed visibility with it, so a request for pack
+            # or full is discarded and the dropdown offers only hide and dense.
+            # That made the mouseOver above dead config, since no bigBed-like
+            # track draws per-item map boxes in dense.  A plain "visibility" is
+            # a default instead: peaks still come up dense, as the lab asked in
+            # July, but switching to pack or full now works and the mouseOver
+            # appears.  The signal types keep onlyVisibility, where pinning to
+            # full costs nothing - a bigWig draws the same at pack and full.
+            "visibility dense",
             pri(),
         ])
 
@@ -385,6 +390,14 @@ def compendium(gbdb, dataUrlDir, samples):
         ])
         # Least significant first, so the more significant levels draw on top.
         # Not "i": that is the sample index pri() builds its priority from.
+        #
+        # The priority is what makes that happen and is not decoration.  This is
+        # a solid overlay and all four files hold the same value at a shared
+        # base, so the level that draws last is the colour the user sees.  Order
+        # of declaration does not survive: makeContainerTrack() in
+        # hg/hgTracks/container.c sorts the children with trackPriCmp, which
+        # compares priority alone, and slSort is not a stable sort, so children
+        # left on the parent's inherited priority draw in an arbitrary order.
         for level, (fname, label, color) in enumerate(DIFF_LEVELS):
             out += stanza(12, [
                 "track fiberSeqCompendium_%s_cpgDiff_l%d" % (acc, level),
@@ -394,6 +407,7 @@ def compendium(gbdb, dataUrlDir, samples):
                 "color %s" % color,
                 "shortLabel %s %s" % (name, label),
                 "longLabel %s CpG haplotype difference, %s" % (name, label),
+                "priority %d" % (level + 1),
             ])
     return out
 
@@ -419,6 +433,10 @@ def hapOverlay(gbdb, acc, name, dataType, file1, file2,
         "onlyVisibility full",
         priority,
     ])
+    # Haplotype 1 then haplotype 2.  This overlay is transparent, so the order
+    # barely shows, but a child without its own priority inherits the parent's
+    # and then draws in whatever order slSort happens to leave it in - see the
+    # longer note on the cpgDiff children, where the same thing is visible.
     for hap, fname, color in (("h1", file1, HAP1_COLOR), ("h2", file2, HAP2_COLOR)):
         n = hap[1]
         out += stanza(12, [
@@ -427,7 +445,11 @@ def hapOverlay(gbdb, acc, name, dataType, file1, file2,
             "type bigWig",
             "bigDataUrl %s/%s/%s" % (gbdb, acc, fname),
             "color %s" % color,
-            "shortLabel %s Hap%s" % (name, n),
+            "priority %s" % n,
+            # Take the prefix from the container's own shortLabel, so the CpG
+            # children come out "<sample> CpG Hap1" rather than colliding with
+            # the accessibility children's "<sample> Hap1".
+            "shortLabel %s%s" % (shortLabel.removesuffix("1/2"), n),
             "longLabel %s %s" % (childLongLabel, n),
         ])
     return out
@@ -461,11 +483,12 @@ def main():
                 "# Do not edit by hand, edit the script and regenerate.\n\n")
         f.write(stanza(0, [
             "track fiberSeq",
-            "superTrack on show",
+            "superTrack on",
             "shortLabel Fiber-seq",
             "longLabel Fiber-seq chromatin accessibility, regulatory elements and CpG methylation",
             "group regulation",
             "priority 2.5",
+            'pennantIcon New red ../goldenPath/newsarch.html#103026 "Released Oct. 30, 2026"',
         ]))
         f.write(accOverlay(args.gbdb_dir, samples))
         f.write(compendium(args.gbdb_dir, args.gbdb_dir, samples))

@@ -201,6 +201,8 @@ static void bigFileChromInfoOutput(struct jsonWrite *jw,
 /* output the chromosome list for the bigDataUrl file */
 {
 struct bbiFile *bbi = bigFileOpen(thisTrack->type, bigDataUrl);
+if (NULL == bbi)
+    apiErrAbort(err415, err415Msg, "track type '%s' for track=%s not supported at this time for endpoint '/list/chromosomes'", thisTrack->type, thisTrack->track);
 struct bbiChromInfo *chrList = bbiChromList(bbi);
 slSort(chrList, chromInfoCmp);
 struct bbiChromInfo *el = chrList;
@@ -405,6 +407,16 @@ if (tdb->parent)
     jsonWriteString(jw, "parent", tdb->parent->track);
     if (tdb->parent->parent)
         jsonWriteString(jw, "parentParent", tdb->parent->parent->track);
+    /* a supertrack may sit inside another supertrack, so the chain can be deeper than
+     * the two levels named above */
+    struct slName *supers = tdbSuperTrackAncestors(tdb);
+    if (slCount(supers) > 1)
+        {
+        char *names = slNameListToString(supers, ',');
+        jsonWriteString(jw, "superTrackAncestors", names);
+        freeMem(names);
+        }
+    slNameFreeList(&supers);
     }
 if (tdb->settingsHash)
     {

@@ -87,7 +87,10 @@ static char *urlPrefix = "";	/* initalized to support self references */
 struct slName *supportedTypes = NULL;
 
 static void initSupportedTypes()
-/* initalize the list of supported track types */
+/* initalize the list of supported track types
+ * a bed-like big* type added here must also be added to allowedBigBedType()
+ * in apiUtils.c, which is what actually opens the file
+ */
 {
 struct slName *el = newSlName("bed");
 slAddHead(&supportedTypes, el);
@@ -181,7 +184,13 @@ struct hubPublic *hubPublicDbLoadAll()
 char query[1024];
 struct hubPublic *list = NULL;
 struct sqlConnection *conn = hConnectCentral();
-sqlSafef(query, sizeof(query), "select * from %s", hubPublicTableName());
+/* name the columns: older mirrors have no email column and it could not be added,
+ * and hubPublicLoad reads one more column than they would return */
+char *emailColumn = "NULL";
+if (hubPublicHasEmail(conn))
+    emailColumn = "email";
+sqlSafef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,registrationTime,"
+    "dbCount,dbList,descriptionUrl,%s from %s", emailColumn, hubPublicTableName());
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)

@@ -18,6 +18,7 @@
 # two other quickLift tickets use, and a row check on it would fail for that reason.
 proof:
   - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
+  - "sandbox-ab 2026-09-16 -- failed on a #37547 cart-visibility build before the isParentVisible fix in hg/lib/trackHub.c, passed on the same sandbox with the fix and with master; the same hg.conf all three times"
 
 target: genome-test
 db: hg38

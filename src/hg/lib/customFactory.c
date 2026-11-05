@@ -654,9 +654,10 @@ if (wordCount > 4)
      bed->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
-     safecpy(bed->strand, sizeof(bed->strand), row[5]);
+     bed->strand[0] = row[5][0];
+     bed->strand[1] = 0;
      if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
-	  lineFileAbort(lf, "Expecting + or - in strand");
+	  lineFileAbort(lf, "Expecting + or - in strand, got '%s'", row[5]);
      }
 if (wordCount > 6)
      bed->thickStart = lineFileNeedNum(lf, row, 6);
@@ -1979,7 +1980,7 @@ static char *niceGeneName(char *name)
 static char buf[128];
 char *e;
 
-safecpy(buf, sizeof(buf), name);
+safencpy(buf, sizeof(buf), name, strnlen(name, sizeof(buf) - 1));
 if ((e = strchr(buf, ';')) != NULL)
     *e = 0;
 eraseWhiteSpace(buf);
@@ -3924,8 +3925,13 @@ if ((val = hashFindVal(hash, "htmlUrl")) != NULL)
 		close(sd);
 		char *fetched = dyStringCannibalize(&ds);
 		/* This came in over the network, so keep only what we allow. */
-		track->tdb->html = htmlSanitize(fetched);
-		freeMem(fetched);
+		if (hubHtmlSanitizeOn())
+		    {
+		    track->tdb->html = htmlSanitize(fetched);
+		    freeMem(fetched);
+		    }
+		else
+		    track->tdb->html = fetched;
 		}
 	    }
 	}

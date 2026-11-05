@@ -89,6 +89,16 @@ $(function() {
         return bar >= 0 ? s.slice(0, bar) : s;
     };
 
+    // True if a quote at str[i] opens a quoted field: only whitespace before it
+    // since the field started, or it starts the label of an id|"label" value.
+    // An apostrophe inside a word, as in "Peyer's patch", is plain text;
+    // treating it as a quote swallowed the following tabs.
+    const opensQuote = (str, start, i) => {
+        if (str[i] !== '"' && str[i] !== "'") return false;
+        const before = str.slice(start, i).trim();
+        return before === "" || before.endsWith("|");
+    };
+
     // Split a TSV row on tabs, respecting double- or single-quoted fields.
     function parseTsvRow(str) {
         const fields = [];
@@ -100,7 +110,7 @@ $(function() {
                     inQuote = false;
                 }
                 i++;
-            } else if (str[i] === '"' || str[i] === "'") {
+            } else if (opensQuote(str, start, i)) {
                 q = str[i]; inQuote = true; i++;
             } else if (str[i] === '\t') {
                 fields.push(str.slice(start, i)); i++; start = i;
@@ -128,7 +138,7 @@ $(function() {
                     inQuote = false;
                 }
                 i++;
-            } else if (str[i] === '"' || str[i] === "'") {
+            } else if (opensQuote(str, start, i)) {
                 q = str[i]; inQuote = true; i++;
             } else if (str[i] === ',') {
                 tokens.push(str.slice(start, i).trim()); i++; start = i;
@@ -223,12 +233,59 @@ $(function() {
         return rowCount < 50 ? -1 : 25;
     }
 
-    function saveUiState(patch) {
+    // Drop the least recently written saved state belonging to some *other*
+    // faceted composite, to make room.  Returns false when there is nothing
+    // left to drop, which is the caller's signal to give up.
+    function evictOtherUiState() {
         try {
-            localStorage.setItem(uiStateKey,
-                                 JSON.stringify(Object.assign(loadUiState(), patch)));
+            let oldestKey = null, oldestTime = Infinity;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (!key || !key.startsWith("facetedComposite.") || key === uiStateKey)
+                    continue;
+                let saved = 0;
+                try {
+                    // An entry we cannot read is the first one to go.
+                    saved = (JSON.parse(localStorage.getItem(key)) || {}).saved || 0;
+                } catch (e) {
+                    saved = 0;
+                }
+                if (saved < oldestTime) {
+                    oldestTime = saved;
+                    oldestKey = key;
+                }
+            }
+            if (oldestKey === null)
+                return false;
+            localStorage.removeItem(oldestKey);
+            return true;
         } catch (e) {
-            /* private window, or the quota is full; the page works without it */
+            return false;
+        }
+    }
+
+    function saveUiState(patch) {
+        // The timestamp is what makes eviction above "least recently written"
+        // rather than arbitrary.
+        const write = () => localStorage.setItem(
+            uiStateKey,
+            JSON.stringify(Object.assign(loadUiState(), patch, {saved: Date.now()})));
+        try {
+            write();
+        } catch (e) {
+            // Out of quota.  A hand-dragged order is one id per row, so a few
+            // large composites can fill the store between them; without the
+            // retry below the first one to hit the limit would leave every
+            // faceted composite on this origin silently unable to save again.
+            while (evictOtherUiState()) {
+                try {
+                    write();
+                    return;
+                } catch (e2) {
+                    /* still no room; drop another and try again */
+                }
+            }
+            /* private window, or nothing left to evict; the page works without it */
         }
     }
 
@@ -480,7 +537,9 @@ $(function() {
 
         // Determine which column to sort by: use defaultSortField if it matches
         // a metadata column, otherwise fall back to the first data column.
-        let defaultSortCol = 1;  // column 0 is checkboxes, 1 is first data col
+        // column 0 is the checkboxes and column 1 the drag handle, so the first
+        // data column is at DATA_COL_OFFSET
+        let defaultSortCol = DATA_COL_OFFSET;
         if (embeddedData.defaultSortField) {
             const idx = colIdxForName(embeddedData.defaultSortField);
             if (idx > 0)
@@ -705,23 +764,29 @@ $(function() {
 
         // Clicking a tab switches the selection filter and redraws. "Selected"
         // is always clickable; with nothing selected it just shows an empty list.
-        function setFilterMode(showSelected) {
+        function setFilterMode(showSelected, keepSavedOrder) {
             toggleCheckbox.checked = showSelected;
             // Rows can only be dragged on the Active tab, and dragging only
             // means something while the table is sorted by the drag column, so
             // entering the tab renumbers that column from whatever order is on
             // screen and sorts by it.  Leaving restores nothing: the column
             // sort the user had is still in the header, one click away.
+            // keepSavedOrder skips the renumbering, for the one caller that is
+            // not a click: restoring this tab on page load, where the order
+            // field already holds the hand-dragged order read back from
+            // localStorage and renumbering would throw it away.
             table.column(reorderColIdx).visible(showSelected, false);
             syncReorderSearchCell(showSelected);
             table.rowReorder[showSelected ? "enable" : "disable"]();
             if (showSelected) {
-                let n = 0;
-                table.rows({order: "current", search: "none"}).every(function () {
-                    const d = this.data();
-                    d[ORDER_FIELD] = n++;
-                    this.data(d);
-                });
+                if (!keepSavedOrder) {
+                    let n = 0;
+                    table.rows({order: "current", search: "none"}).every(function () {
+                        const d = this.data();
+                        d[ORDER_FIELD] = n++;
+                        this.data(d);
+                    });
+                }
                 table.order([reorderColIdx, "asc"]);
             }
             table.draw();
@@ -911,7 +976,7 @@ $(function() {
         // shows every row.  Only restored when something is actually selected,
         // since this tab on an empty selection is a blank table.
         if (savedState.tab === "active" && table.rows({selected: true}).count())
-            setFilterMode(true);
+            setFilterMode(true, true);
 
         return table;
     }  // end initTable
@@ -950,8 +1015,14 @@ $(function() {
                     }
                 }
             }
-            for (const [id, span] of valMap) {
-                span.textContent = `(${counts.get(id) ?? 0})`;
+            for (const [id, {span, checkbox, label}] of valMap) {
+                const count = counts.get(id) ?? 0;
+                span.textContent = `(${count})`;
+                // Hide unchecked values that would add nothing, the way most
+                // faceted-search UIs (e.g. Amazon) prune the option list as
+                // filters narrow it. A *checked* value stays visible even at
+                // 0 so the user can see, and undo, the filter that zeroed it.
+                label.style.display = (count === 0 && !checkbox.checked) ? "none" : "";
             }
         }
     }
@@ -990,6 +1061,33 @@ $(function() {
         const excludeCheckboxes = [primaryKey];
 
         const filtersDiv = document.getElementById("filters");
+
+        // "Clear all filters" sits above every facet group and resets every
+        // filter in one click: facet checkboxes and the per-column table
+        // search boxes alike, since both narrow the table the same way. Built
+        // here, before the facets, so it lands first in the sidebar; its
+        // listener closes over allCboxGroups, filled in as each facet below
+        // is built, so it works regardless of build order. Only actually
+        // inserted into the DOM once we know at least one facet group got
+        // built (see below), matching the "no-facets" check that hides the
+        // whole sidebar otherwise.
+        const clearAllBtn = document.createElement("button");
+        clearAllBtn.textContent = "Clear all filters";
+        clearAllBtn.type = "button";
+        const allCboxGroups = [];
+        clearAllBtn.addEventListener("click", () => {
+            allCboxGroups.forEach(cboxes => cboxes.forEach(cb => { cb.checked = false; }));
+            checkboxFilters.clear();
+            $("#theMetaDataTable thead input[type='text']").each(function () {
+                this.value = "";
+            });
+            textFilters.clear();
+            table.columns().search("");
+            saveUiState({facets: {}, searches: {}});
+            table.draw();
+            updateActiveFilters();
+        });
+
         colNames.forEach((key) => {
             // skip attributes if they should be excluded from checkbox sets
             if (excludeCheckboxes.includes(key) || key.startsWith("_")) {
@@ -1070,7 +1168,11 @@ $(function() {
                     delete facets[key];
                 saveUiState({facets: facets});
                 if (narrowing) {
-                    showTracks();
+                    // Only worth turning the container back on when there is
+                    // something for it to draw.  With nothing selected the
+                    // track would come back as an empty image.
+                    if (table.rows({selected: true}).count())
+                        showTracks();
                     // Narrowing by a facet is about finding samples in the full
                     // list, so a facet applied while only the selected rows are
                     // showing would filter a handful of rows the user had
@@ -1100,7 +1202,7 @@ $(function() {
                 const countSpan = document.createElement("span");
                 countSpan.textContent = `(${count})`;
                 label.appendChild(countSpan);
-                colSpans.set(id.toLowerCase(), countSpan);
+                colSpans.set(id.toLowerCase(), { span: countSpan, checkbox, label });
 
                 // "only" narrows this facet to this one value.  Hidden until
                 // the row is hovered, so a long list stays quiet to read.  It
@@ -1126,6 +1228,7 @@ $(function() {
 
             facetDiv.appendChild(facetBody);
             filtersDiv.appendChild(facetDiv);
+            allCboxGroups.push(cboxes);
 
             // --- Wire up collapse toggle ---
             heading.addEventListener("click", () => {
@@ -1169,7 +1272,10 @@ $(function() {
         // The sidebar is a fixed-width column that does not shrink, so an empty
         // one would sit beside the table as 300px of nothing.  Checked on the
         // element rather than with :empty, which a stray newline in the markup
-        // template would quietly defeat.
+        // template would quietly defeat.  "Clear all" is only worth having, and
+        // is only inserted, once at least one facet group exists to clear.
+        if (filtersDiv.children.length > 0)
+            filtersDiv.insertBefore(clearAllBtn, filtersDiv.firstChild);
         filtersDiv.classList.toggle("no-facets", filtersDiv.children.length === 0);
 
         // Any facet boxes put back from the last visit were ticked while the
@@ -1382,6 +1488,18 @@ $(function() {
         hideLoading();  // table is built and drawn; remove the spinner
     }
 
+    function extractErrorText(html) {
+        // The CGI's error page is a full HTML document; DOMParser lets us pull out
+        // just the rendered body text (skipping <head>/<title>) without ever
+        // inserting the untrusted markup into the live document.
+        try {
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            return (doc.body?.textContent || "").replace(/\s+/g, " ").trim();
+        } catch (e) {
+            return "";
+        }
+    }
+
     function loadDataAndInit() {  // load data and call init functions
         const { mdid, primaryKey, metadataUrl, colorSettingsUrl, track } = embeddedData;
 
@@ -1405,8 +1523,16 @@ $(function() {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
             });
         req.then(response => {
-            if (!response.ok) {  // a 404 will look like plain text
-                throw new Error(`HTTP Status: ${response.status}`);
+            if (!response.ok) {
+                // The server's error page explains *why* the fetch was rejected (e.g.
+                // a metaDataUrl outside the hub's directory), which is far more useful
+                // than the bare status code, so pull that text out instead of
+                // discarding the response body.
+                return response.text().then(bodyText => {
+                    const detail = extractErrorText(bodyText);
+                    throw new Error(`HTTP Status: ${response.status}` +
+                                     (detail ? ` - ${detail}` : ""));
+                });
             }
             return response.text();
             })

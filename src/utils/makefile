@@ -81,6 +81,7 @@ UTILS_APPLIST = \
 	newPythonProg \
 	nibFrag \
 	nibSize \
+	pafToPsl \
 	paraFetch \
 	paraSync \
 	pslMap \
@@ -171,6 +172,7 @@ UCSC_APPS = \
 USER_APP_SCRIPTS = \
 	bedJoinTabOffset.py \
 	expMatrixToBarchartBed \
+	barChartReorder \
 	barChartMaxLimit \
 	ucscApiClient \
 	tdbRename \
@@ -179,6 +181,7 @@ USER_APP_SCRIPTS = \
 	chromToUcsc \
 	bigHeat \
 	bigGuessDb \
+	getTrackReferences \
 	hubtools
 
 # Scripts that are not distributed outside of UCSC
@@ -285,6 +288,13 @@ test: testAll
 	cd twoBitToFa && ${MAKE} test
 	cd twoBitInfo && ${MAKE} test
 	cd bedGeneParts && ${MAKE} test
+# testRegistry is not an app, so the testAll rule above cannot reach it.  Its test checks
+# that every row of the ticket-to-test registry still names a test that is in the tree,
+# refs #38391.
+	cd testRegistry && ${MAKE} test
+# USER_APP_SCRIPTS are not in ALL_APPS either, so testAll cannot reach their tests.
+	cd barChartReorder && ${MAKE} test
+	cd expMatrixToBarchartBed && ${MAKE} test
 
 clean: $(ALL_APPS:%=%.clean)
 	touch non-empty-rm.o

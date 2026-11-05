@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "rmskOut.h"
+#include "quickLift.h"
 
 
 /* Repeat items.  Since there are so many of these, to avoid 
@@ -68,10 +69,136 @@ struct repeatItem *ri = item;
 return ri->className;
 }
 
+static struct rmskOut *liftedRepeatList(struct track *tg)
+/* The rows of a quickLifted rmsk track, read from the assembly they came from and lifted
+ * onto the reference, that land in the window.  They are read over padded source ranges, so
+ * some land outside it.  refs #37437 */
+{
+struct hash *chainHash = newHash(8);
+struct rmskOut *ro, *next, *liftedList = NULL;
+for (ro = quickLiftSqlLoadRmsk(tg->tdb, tg->table, chromName, winStart, winEnd, chainHash);
+     ro != NULL; ro = next)
+    {
+    next = ro->next;
+    ro->next = NULL;
+    if (quickLiftRmskOut(quickLiftChainHashForItem(chainHash, ro), ro) &&
+        sameString(ro->genoName, chromName) && (ro->genoStart < winEnd) &&
+        (ro->genoEnd > winStart))
+        slAddHead(&liftedList, ro);
+    else
+        // freeing a row here is safe for quickLiftChainHashForItem:  every row was allocated
+        // before the loop, so a later one cannot reuse a freed one's address
+        rmskOutFree(&ro);
+    }
+slReverse(&liftedList);
+return liftedList;
+}
+
+static void liftedRepeatDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* The drawing of a quickLifted rmsk track, behind browser.quickLiftRmsk:  repeatDraw() over
+ * rows read from the assembly they came from and lifted onto this one, kept in a list rather
+ * than streamed from the table.  The two drawing loops are copies of the ones in
+ * repeatDraw(), with safef() for the status line;  a fix to one belongs in the other.
+ * refs #37437 */
+{
+Color overrideColor = colorFromCart(tg, 0);
+int baseWidth = seqEnd - seqStart;
+struct repeatItem *ri;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+Color col;
+struct rmskOut *ro, *liftedList = liftedRepeatList(tg);
+
+if (isFull)
+    {
+    /* Do gray scale representation spread out among tracks. */
+    struct hash *hash = newHash(6);
+    int percId;
+    int grayLevel;
+    char statusLine[128];
+
+    for (ri = tg->items; ri != NULL; ri = ri->next)
+        {
+	ri->yOffset = y;
+	y += lineHeight;
+	hashAdd(hash, ri->class, ri);
+	}
+    for (ro = liftedList; ro != NULL; ro = ro->next)
+        {
+	char class[256];
+	// Simplify repClass for lookup: strip trailing '?', simplify *RNA to RNA:
+	safecpy(class, sizeof(class), ro->repClass);
+	char *p = &(class[strlen(class)-1]);
+	if (*p == '?')
+	    *p = '\0';
+	if (endsWith(class, "RNA"))
+	    safecpy(class, sizeof(class), "RNA");
+	ri = hashFindVal(hash, class);
+	if (ri == NULL)
+	   ri = otherRepeatItem;
+	percId = 1000 - ro->milliDiv - ro->milliDel - ro->milliIns;
+	grayLevel = grayInRange(percId, 500, 1000);
+	col = overrideColor ? overrideColor : shadesOfGray[grayLevel];
+	x1 = roundingScale(ro->genoStart-winStart, width, baseWidth)+xOff;
+	x1 = max(x1, 0);
+	x2 = roundingScale(ro->genoEnd-winStart, width, baseWidth)+xOff;
+	if (x1 < insideX)
+	    x1 = insideX;
+	if (x2 > insideX+width)
+	    x2 = insideX+width;
+	w = x2-x1;
+	if (w <= 0)
+	    w = 1;
+	hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
+	if (baseWidth <= 100000)
+	    {
+	    if (ri == otherRepeatItem)
+		{
+		safef(statusLine, sizeof statusLine, "Repeat %s, family %s, class %s",
+		    ro->repName, ro->repFamily, ro->repClass);
+		}
+	    else
+		{
+		safef(statusLine, sizeof statusLine, "Repeat %s, family %s",
+		    ro->repName, ro->repFamily);
+		}
+	    mapBoxHc(hvg, ro->genoStart, ro->genoEnd, x1, ri->yOffset, w, heightPer, tg->track,
+	    	ro->repName, statusLine);
+	    }
+	}
+    freeHash(&hash);
+    }
+else
+    {
+    /* Do black and white on single track. */
+    for (ro = liftedList; ro != NULL; ro = ro->next)
+	{
+	x1 = roundingScale(ro->genoStart-winStart, width, baseWidth)+xOff;
+	x2 = roundingScale(ro->genoEnd-winStart, width, baseWidth)+xOff;
+	w = x2-x1;
+	if (w <= 0)
+	    w = 1;
+	hvGfxBox(hvg, x1, yOff, w, heightPer, overrideColor ? overrideColor : MG_BLACK);
+	}
+    }
+rmskOutFreeList(&liftedList);
+}
+
 static void repeatDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width,
         MgFont *font, Color color, enum trackVisibility vis)
 {
+if (quickLiftIsLifted(tg->tdb) && quickLiftRmskEnabled(cart))
+    {
+    // a quickLifted rmsk reads its rows from the assembly it came from, refs #37437
+    liftedRepeatDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
+    return;
+    }
 Color overrideColor = colorFromCart(tg, 0);
 int baseWidth = seqEnd - seqStart;
 struct repeatItem *ri;

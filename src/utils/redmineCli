@@ -185,6 +185,7 @@ USER_IDS = {
     "ana": 174, "ana benet": 174,
     "angie": 34, "angie hinrichs": 34,
     "ann": 3, "ann zweig": 3,
+    "atanzer": 199, "andrea": 199, "andrea tanzer": 199,
     "bob": 45, "bob kuhn": 45,
     "blee": 122, "brian lee": 122,
     "braney": 31, "brian raney": 31,
@@ -227,6 +228,7 @@ USER_IDS = {
 }
 
 ATTRIBUTION = "**From Claude:**\n\n"
+WRITTEN_ATTRIBUTION = "**Written by %s, posted by Claude:**\n\n"
 
 # ---------------------------------------------------------------------------
 # Shared helpers
@@ -428,16 +430,38 @@ def resolve_tracker(name_or_id):
              + ", ".join(sorted(set(TRACKER_IDS.keys()))))
 
 
-def prepend_attribution(text):
-    """Prepend 'From Claude:' attribution to text for write operations.
+def prepend_attribution(text, written_by=None):
+    """Prepend an attribution line to text for write operations.
 
-    Idempotent: if the text already begins with a 'From Claude:' attribution
-    line (e.g. '**From Claude:**', '***From Claude:***'), return it unchanged
-    so the header is not duplicated when Claude models include it in the body.
+    With written_by, the line says the person wrote the words and Claude only
+    posted them.  Without it, the line is the plain 'From Claude:'.
+
+    Idempotent: if the text already begins with either attribution line
+    (e.g. '**From Claude:**', '***From Claude:***', '**Written by X, posted by
+    Claude:**'), return it unchanged so the header is not duplicated when
+    Claude models include it in the body.
     """
-    if text and re.match(r'^\s*\*+\s*From Claude:?\s*\*+', text, re.IGNORECASE):
+    if text and re.match(r'^\s*\*+\s*(From Claude|Written by .{1,100}?, posted by Claude)'
+                         r'\s*:?\s*\*+', text, re.IGNORECASE):
         return text
+    if written_by:
+        return (WRITTEN_ATTRIBUTION % written_by) + text
     return ATTRIBUTION + text
+
+
+def resolve_written_by(value, base_url, api_key):
+    """Turn the --written-by argument into a name to put in the attribution line.
+
+    A value is used as given.  An empty value (the flag with no argument) means
+    the owner of the API key, whose name comes from the Redmine API.
+    """
+    if value:
+        return value
+    user = api_get(base_url, "/users/current.json", api_key).get("user", {})
+    name = " ".join(x for x in (user.get("firstname"), user.get("lastname")) if x)
+    if not name:
+        sys.exit("Error: could not work out who you are, pass a name to --written-by")
+    return name
 
 
 def strip_emoji(text):
@@ -938,7 +962,10 @@ def cmd_comment(args):
     if not message:
         sys.exit("Error: --message or --message-file is required")
 
-    message = strip_emoji(prepend_attribution(message))
+    written_by = None
+    if args.written_by is not None:
+        written_by = resolve_written_by(args.written_by, args.base_url, args.api_key)
+    message = strip_emoji(prepend_attribution(message, written_by))
     issue = {"notes": message}
     if args.private:
         issue["private_notes"] = True
@@ -1203,12 +1230,22 @@ def fetch_relations(base_url, ticket_id, api_key):
 
 
 def summarize_issue(base_url, ticket_id, api_key):
-    """Return {id, subject, status, tracker} for a ticket, or None if it can't be read
-    (e.g. deleted or no permission)."""
+    """Return {id, subject, status, tracker} for a ticket, or None if the ticket itself
+    is not accessible (deleted -> 404, or no permission -> 403).  Any other failure
+    (network trouble, rate limiting, bad API key) is re-raised, so it is not silently
+    hidden behind a "(not readable)" label."""
     try:
         d = api_get(base_url, f"/issues/{ticket_id}.json", api_key)["issue"]
-    except SystemExit:
-        return None
+    except SystemExit as e:
+        # api_get exits with "Error: HTTP <code> GET <url>: <body>", where body is up to 500
+        # characters of whatever the server sent.  Match the prefix we build, not anywhere in
+        # the string: a 502 or a proxy error page that happens to quote "HTTP 404 GET" in its
+        # own text would otherwise be swallowed and labelled "(not readable)", which is exactly
+        # the confusion this function exists to prevent.
+        msg = str(e)
+        if msg.startswith("Error: HTTP 403 GET ") or msg.startswith("Error: HTTP 404 GET "):
+            return None
+        raise
     return {"id": d["id"], "subject": d.get("subject", ""),
             "status": d.get("status", {}).get("name", ""),
             "tracker": d.get("tracker", {}).get("name", "")}
@@ -1657,6 +1694,10 @@ def build_parser():
     p_comment.add_argument("--message", help="Comment text")
     p_comment.add_argument("--message-file", dest="message_file",
                            help="Read comment from file (- for stdin)")
+    p_comment.add_argument("--written-by", dest="written_by", nargs="?", const="",
+                           metavar="NAME",
+                           help="Say the comment was written by NAME and only posted by "
+                                "Claude.  With no NAME, use the name on the API key.")
     p_comment.add_argument("--private", action="store_true",
                            help="Mark this comment as a private note "
                                 "(only visible to project members with permission)")

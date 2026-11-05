@@ -1,0 +1,43 @@
+# Variants for hgvsTester -variants: chrom, 0-based start, end, alt ('-' for none).
+# BRCA2 exon 11 (+ strand), chr13:32337000-32337210:
+# SNV
+chr13	32337001	32337002	G
+# 1-base deletion in AA, shifts right
+chr13	32337010	32337011	-
+# 31-base deletion, bases not printed
+chr13	32337100	32337131	-
+# 41-base deletion
+chr13	32337100	32337141	-
+# 100-base deletion
+chr13	32337050	32337150	-
+# 101-base ref with VCF anchor base as alt
+chr13	32337049	32337150	A
+# 5001-base ref with VCF anchor base as alt
+chr13	32336299	32341300	C
+# insertion
+chr13	32337020	32337020	CCC
+# 4-base dup of TTTT
+chr13	32337025	32337025	TTTT
+# 200-base insertion
+chr13	32337100	32337100	CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# MNV
+chr13	32337030	32337033	GTT
+# 2-base ref replaced by 5 bases
+chr13	32337060	32337062	GGGGG
+# 60-base ref replaced by 5 bases, nothing to trim
+chr13	32337050	32337110	GGGCC
+# 100-base ref, alt shares 2 bases at each end
+chr13	32337050	32337150	ATCCGA
+# no change
+chr13	32337000	32337010	TTTCTCAGAC
+# inversion
+chr13	32337154	32337160	ATCACC
+# alt is the first 40 bases of a 100-base ref
+chr13	32337000	32337100	TTTCTCAGACAATGAGAATAATTTTGTCTTCCAAGTAGCT
+# TP53 exon (- strand), chr17:7676000-7676110:
+# SNV
+chr17	7676010	7676011	C
+# 50-base deletion
+chr17	7676020	7676070	-
+# 61-base ref with anchor base as alt; ref also ends with that base
+chr17	7676019	7676080	C

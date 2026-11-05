@@ -1,10 +1,5 @@
 include ncOrfs.ra
 
-# The released, hg38-only STRchive/strVar version.  The alpha version lives in
-# human/strVarNew.ra and is held back until the auto-push is in place, #38268.
-# Delete this include and the three files it pulls in when that version ships.
-include strVar.ra beta,public
-
 include barCharts.ra
 
 include hoffMap.ra
@@ -211,6 +206,8 @@ origAssembly hg19
 pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 
 include nonCodingRNAs.ra
+include mirGeneDbV3_0.ra alpha
+include mirBaseV22_1.ra alpha
 
 #track wgRna override 
 #dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
@@ -927,7 +924,10 @@ include recount3.ra
 
 include long_read_transcripts.ra
 
-include mavedb.ra
+include mavedb.ra beta,public
+include mavedb.alpha.ra alpha
+
+include mavemd.ra alpha
 
 include vgpLiftOver.ra alpha
 include psuVsUcscChains.ra alpha
@@ -951,9 +951,33 @@ track dnaMethylation override
 
 include methbase2.ra alpha
 
-include fiberSeq.ra alpha
+include fiberSeq.ra
+
+include encodeE2g.ra alpha
 
 include imprinting.ra alpha
 # include hg38.GCF_040939455.1.chainNet.ra alpha
 
 include hprcPclai.ra alpha
+
+include episignatures.ra
+
+# tmp removed due to problem with track
+#include transcriptionStart.ra alpha
+include transcriptionStartPublic.ra beta,public
+# include hg38.GCA_040939475.2.chainNet.ra alpha
+# include hg38.GCF_002880755.1.chainNet.ra alpha
+
+include miniMapChains.ra alpha
+
+include ../fusionGenes.ra alpha
+
+include gpnStar.ra alpha
+
+include allPrimatesChainNet.ra alpha
+
+include mitImpact.ra alpha
+
+include apogee2.ra alpha
+
+include chainCompare.trackDb.ra alpha

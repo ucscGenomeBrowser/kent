@@ -35,19 +35,22 @@ H_ALIAS, H_PREV = 16, 18
 
 MAIN_CHROM = re.compile(r"^chr([0-9]+|X|Y|M)$")
 
-# One color scheme is shared by the whole Imprinting collection: vermillion
-# means the maternal copy, blue means the paternal copy, and neutral gray means
-# the annotation carries no parent of origin. Categories that exist only in this
-# catalog get their own hues, which no other subtrack reuses. Okabe-Ito, so the
-# colors stay distinguishable under all three kinds of colorblindness.
+# Genes are colored by the expressed parental copy: strong blue for paternal and
+# strong red for maternal. Genes with the status Predicted are gray whatever
+# their allele, and everything else is black.
+PREDICTED_COLOR = "128,128,128"
 ALLELE_COLOR = {
-    "Paternal":          "0,114,178",    # blue,           shared: paternal copy
-    "Maternal":          "213,94,0",     # vermillion,     shared: maternal copy
-    "Unknown":           "85,85,85",     # gray,           shared: no parent of origin
-    "Biallelic":         "0,158,115",    # bluish green,   this catalog only
-    "Isoform Dependent": "230,159,0",    # orange,         this catalog only
-    "Random":            "204,121,167",  # reddish purple, this catalog only
+    "Paternal": "0,60,200",
+    "Maternal": "220,20,20",
 }
+OTHER_COLOR = "0,0,0"
+
+
+def geneColor(status, allele):
+    " color of one gene from its imprint status and expressed allele "
+    if status == "Predicted":
+        return PREDICTED_COLOR
+    return ALLELE_COLOR.get(allele, OTHER_COLOR)
 
 
 def parseGeneimprint(fname):
@@ -276,7 +279,7 @@ def main():
         beds.append([
             locus["chrom"], locus["start"], locus["end"], row["gene"], 0,
             locus["strand"], locus["start"], locus["end"],
-            ALLELE_COLOR.get(row["allele"], ALLELE_COLOR["Unknown"]),
+            geneColor(row["status"], row["allele"]),
             row["status"], row["allele"], row["aliases"], row["band"],
             locus["symbol"], locus["hgncId"], locus["geneName"],
             locus["locusType"], how,

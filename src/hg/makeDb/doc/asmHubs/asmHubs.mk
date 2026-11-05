@@ -97,7 +97,7 @@ done
 hubIndex::
 	rm -f ${destDir}/${testIndexName}.html ${destDir}/${indexName}.html ${destDir}/download.${indexName}.html
 	${toolsDir}/mkHubIndex.pl ${Name} ${name} ${defaultAssembly} ${orderList} | sed -e 's#${name}/hub.txt#${name}/${hubFile}.txt#;' > ${destDir}/download.${indexName}.html
-	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s#genome.ucsc.edu#genome-test.gi.ucsc.edu#;" ${destDir}/download.${indexName}.html > ${destDir}/${indexName}.html
+	sed -e "s#genome.ucsc.edu/h/#genome-test.gi.ucsc.edu/h/#g; s/hgdownload.soe/hgdownload-test.gi/g; s#genome.ucsc.edu#genome-test.gi.ucsc.edu#; s#/hub.txt#/alpha.hub.txt#" ${destDir}/download.${indexName}.html > ${destDir}/${indexName}.html
 	chmod +x ${destDir}/${indexName}.html ${destDir}/download.${indexName}.html
 
 asmStats::

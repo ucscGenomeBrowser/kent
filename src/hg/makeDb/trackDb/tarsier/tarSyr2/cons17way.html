@@ -77,16 +77,6 @@ level (see <EM>Gap Annotation</EM>, below). </P>
 <B>Table 1.</B> <EM>Genome assemblies included in the 17-way Conservation track.</EM>
 </BLOCKQUOTE></P>
 
-Downloads for data in this track are available:
-<UL>
-<LI>
-<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/tarSyr2/multiz17way/">Multiz alignments</A> (MAF format), and phylogenetic trees
-<LI>
-<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/tarSyr2/phyloP17way/">PhyloP conservation</A> (WIG format)
-<LI>
-<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/tarSyr2/phastCons17way/">PhastCons conservation</A> (WIG format)
-</UL>
-
 <H2>Display Conventions and Configuration</H2>
 <P>
 The track configuration options allow the user to display the three different
@@ -115,7 +105,7 @@ Configuration buttons are available to select all of the species
 (<EM>Set all</EM>), deselect all of the species (<EM>Clear all</EM>), or
 use the default settings (<EM>Set defaults</EM>).
 Note that excluding species from the pairwise display does not alter the
-the conservation score display.</P>
+conservation score display.</P>
 <P>
 To view detailed information about the alignments at a specific
 position, zoom the display in to 30,000 or fewer bases, then click on
@@ -205,7 +195,6 @@ translation, depending on the species chosen (<B>Table 2</B>).
 <TR ALIGN=left><TD>RefSeq</TD><TD>rhesus</TD></TR>
 <TR ALIGN=left><TD>TransMap Genes</TD><TD>tarsier, bonobo, gibbon, crab-eating macaque, green monkey, squirrel monkey</TD></TR>
 <TR ALIGN=left><TD>no annotation</TD><TD>proboscis monkey, golden snub-nosed monkey</TD></TR>
-</TD></TR>
 </TABLE>
 <B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
 </BLOCKQUOTE></P>
@@ -235,7 +224,6 @@ assemblies.
 <TR ALIGN=left><TD><B>type of net alignment</B></TD><TD><B>Species</B></TD></TR>
 <TR ALIGN=left><TD>Syntenic Net</TD><TD>chimp, orangutan, gibbon, green monkey, crab-eating macaque, rhesus, baboon, marmoset, human</TD></TR>
 <TR ALIGN=left><TD>Reciprocal best Net</TD><TD>bonobo, gorilla, proboscis monkey, golden snub-nosed monkey, squirrel monkey, mouse lemur, bushbaby</TD></TR>
-</TD></TR>
 </TABLE>
 <B>Table 3.</B> <EM>Type of Net alignment</EM>
 </BLOCKQUOTE>
@@ -329,6 +317,35 @@ raw log odds scores are retained in the "name" field and can be seen on the
 details page or in the browser when the track's display mode is set to
 "pack" or "full".
 </P>
+
+<h2>Data Access</h2>
+<p>
+The alignments and the conservation scores can be retrieved for a single region or for a list of
+regions with the <a href="hgTables?db=tarSyr2">Table Browser</a>, which returns the alignments
+in MAF format and the scores as wiggle data. The conservation scores, though not the alignments,
+can also be joined with other annotations in the <a href="hgIntegrator?db=tarSyr2">Data
+Integrator</a>. For automated access, our <a href="../goldenPath/help/api.html">REST API</a>
+serves the alignment and conservation tracks individually, by name.
+</p>
+<p>
+Downloads for data in this track are available:
+</p>
+<UL>
+<LI>
+<A HREF="https://hgdownload.soe.ucsc.edu/goldenPath/tarSyr2/multiz17way/" target="_blank">Multiz alignments</A> (MAF format), and phylogenetic trees
+<LI>
+<A HREF="https://hgdownload.soe.ucsc.edu/goldenPath/tarSyr2/phyloP17way/" target="_blank">PhyloP conservation</A> (WIG format)
+<LI>
+<A HREF="https://hgdownload.soe.ucsc.edu/goldenPath/tarSyr2/phastCons17way/" target="_blank">PhastCons conservation</A> (WIG format)
+</UL>
+<p>
+Genome-wide alignment files are large. Among our command-line programs, <tt>mafsInRegion</tt>,
+<tt>mafSpeciesSubset</tt> and <tt>mafFrags</tt> pull out a region, a subset of species, or the
+alignment underlying a gene. They can be downloaded from the <a
+href="https://hgdownload.soe.ucsc.edu/admin/exe/" target="_blank">utilities directory</a>, and
+each one prints its usage when run with no arguments. See our <a
+href="../FAQ/FAQdownloads.html">Data Access FAQ</a> for more information.
+</p>
 
 <H2>Credits</H2>
 <P> This track was created using the following programs:

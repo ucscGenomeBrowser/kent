@@ -709,6 +709,13 @@ void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 
+char *labelWithParents(struct trackDb *tdb, char *label);
+/* If hg.conf mouseoverParentLabels is on, return label prefixed with the shortLabels of the
+ * containers tdb sits in, e.g. "Container > label" (composite views skipped), so a mouseover
+ * or the drawn long label says where to find a subtrack in the track list.  Otherwise
+ * return a copy of label.
+ * Free with freeMem. */
+
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 	struct track *curGroup);
 /* Print out image map rectangle that would invoke this program again.
@@ -744,6 +751,10 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 		    int x, int y, int width, int height);
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
+
+boolean denseClickEnabled(struct track *tg);
+/* Should a dense row of this track get one clickable map box per item, instead */
+/* of a single box that expands the track? */
 
 void mapStatusMessage(char *format, ...)
 /* Write out stuff that will cause a status message to
@@ -787,7 +798,11 @@ typedef enum {
     GLYPH_PENTAGRAM,
     GLYPH_PLUS,
     GLYPH_X,
-    GLYPH_1PX
+    GLYPH_1PX,
+    GLYPH_BAR_LEFT,
+    GLYPH_BAR_RIGHT,
+    GLYPH_ARR_LEFT,
+    GLYPH_ARR_RIGHT
     } glyphType;
 
 #define GLYPH_STRING_CIRCLE "Circle"
@@ -801,6 +816,35 @@ typedef enum {
 #define GLYPH_STRING_PLUS "Plus"
 #define GLYPH_STRING_X "X"
 #define GLYPH_STRING_1PX "1px"
+#define GLYPH_STRING_BAR_LEFT "BarLeft"
+#define GLYPH_STRING_BAR_RIGHT "BarRight"
+#define GLYPH_STRING_ARR_LEFT "ArrLeft"
+#define GLYPH_STRING_ARR_RIGHT "ArrRight"
+
+#define END_GLYPH_MAX_WIDTH 50  // maximum width of the band or arrow of an end glyph, in pixels
+#define END_GLYPH_BAR_WIDTH 3   // width of its bar
+#define END_GLYPH_ARROW_MIN_WIDTH 30  // narrower ArrLeft/ArrRight glyphs are drawn as triangles
+#define END_GLYPH_FLAG_WIDTH 3  // width of the flag next to the bar when only the bar is visible
+
+boolean isEndGlyph(glyphType glyph);
+/* Return TRUE for the BarLeft/BarRight and ArrLeft/ArrRight glyphs, which are drawn at one end
+ * of the decoration instead of at its center. */
+
+boolean endGlyphPixelCoords(int chromStart, int chromEnd, double scale, int xOff, glyphType glyph,
+                            int *pX1, int *pX2);
+/* Get the pixel extent of an end glyph: the left or right end of chromStart-chromEnd,
+ * at most END_GLYPH_MAX_WIDTH pixels and at least 1 pixel wide, clipped to the window.
+ * Returns FALSE if it is not in the window. */
+
+void drawScaledEndGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff,
+                        int y, int heightPer, glyphType glyph, char strand, boolean filled,
+                        Color barColor, Color fillColor);
+/* Draw an end glyph on the left or right end of chromStart-chromEnd.  If filled, draw its body
+ * in fillColor: a band for BarLeft/BarRight, an arrow for ArrLeft/ArrRight (a triangle when
+ * narrower than END_GLYPH_ARROW_MIN_WIDTH) that points to the right on the + strand and to
+ * the left on the - strand (outwards if strand is neither).
+ * If not filled, draw the solid bar in barColor on its outer edge, unless that edge is
+ * outside the window. */
 
 void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor);
@@ -940,6 +984,24 @@ void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the thing loaded in (1). */
+
+struct paraFetchData;
+void findLeavesForParallelLoad(struct track *trackList, struct paraFetchData **ppfdList, boolean doLoadSummary);
+/* Find leaves of track tree that are remote network resources for parallel-fetch loading, and
+ * settle the visibility of each composite child among them before any loader thread starts. */
+
+struct hash *refSeqStatusHashLoad(struct track *tg);
+/* Build a name->refSeqStatus hash for tg's items at load time, so that refGeneColor asks the
+ * database nothing while the image is drawn.  NULL when no status table applies. */
+
+void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre);
+/* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
+ * track drawn as a coverage graph. */
+
+void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
+                     int *retStartPhase, int *retEndPhase);
+/* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)
+ * from gp->exonFrames.  The exon at the 3' end has no end phase, and it is left alone. */
 
 struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra);
 /* construct a linkedFeatures object from a genePred */
@@ -1479,6 +1541,7 @@ void setRulerMode();
 #define configShowAllGroups "hgt_doConfigShowAllGroups"
 #define configHideEncodeGroups "hgt_doConfigHideEncodeGroups"
 #define configShowEncodeGroups "hgt_doConfigShowEncodeGroups"
+#define configFreeTypeReset "hgt_doFreeTypeTuneReset"
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
 #define hgtJsCommand "hgt_doJsCommand"
@@ -1501,6 +1564,13 @@ void makeActiveImage(struct track *trackList, char *psOutput);
 
 void configPage();
 /* Put up configuration page. */
+
+boolean freeTypeTuneUiOn();
+/* Is the FreeType tuning section switched on?  It is a debugging aid, off everywhere
+ * until someone puts freeTypeTuneUI=on in hg.conf. */
+
+void freeTypeTuneResetCart();
+/* Drop the FreeType tuning variables, returning the rendering to the stock settings. */
 
 void configPageSetTrackVis(int vis);
 /* Do config page after setting track visibility. If vis is -2, then visibility
@@ -1866,6 +1936,9 @@ char *disguisePositionVirtSingleChrom(char *position); // DISGUISE VMODE
 struct bbiFile *fetchBbiForTrack(struct track *track);
 /* Fetch bbiFile from track, opening it if it is not already open. */
 
+char *restField(struct bigBedInterval *bb, int fieldIdx);
+/* return a given field from the bb->rest field, NULL on error */
+
 void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
                             double scale, Color color, enum trackVisibility vis);
 /* Draw next item buttons and map boxes */
@@ -1927,6 +2000,12 @@ boolean hasRecTrackSet(struct cart *cart);
 
 void printRecTrackSets();
 /* Create dialog with list of recommended track sets */
+
+struct slName *recTrackSetConnectHubs(struct cart *cart, char *sessionName);
+/* Call this before the track hubs are added to the track list.  Copy the hub connections
+ * of a recommended track set from its htdocs file into the cart, and load the hubs again if
+ * one is new, so that the hub tracks are drawn on this page.  Return the track group names
+ * ("hub_<id>") of the set's hubs, or NULL if the set has no file or no hubs. */
 
 boolean loadRecTrackSetFromFile(struct cart *cart, char *sessionName);
 /* If a contents file exists in htdocs for this recommended track set, merge its

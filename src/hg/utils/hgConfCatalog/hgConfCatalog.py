@@ -136,11 +136,14 @@ def h(name, kind, src, default=None, note=None, public=False, verified=False,
                 line is derived data: it is recomputed for display from the
                 harvester, so an edit above a read is not a citation to fix
     default     compiled-in default if the read supplies one
-    role        for boolean flags only: "gate" (a release gate, temporary by
+    role        for boolean flags: "gate" (a release gate, temporary by
                 intent, subject to sunsetting) or "knob" (a permanent
                 deployment switch, exempt).  Every cfgOptionBooleanDefault
                 flag in the tree must be one or the other; --reconcile
-                enforces that
+                enforces that.  A setting that is not a flag can be a gate
+                too when the code it controls is temporary, such as a
+                measurement that should come out once it has run, but it
+                must then carry an explicit sunset, since it has no flip
     sunset      release by which a gate should be gone from the tree.  Omit to
                 take the default of flipped + KEEP_AFTER_FLIP; the age cache
                 supplies the flip version
@@ -260,15 +263,6 @@ RELEASE_GATES = {
                "looked up, no codon carries a transcript number, and the rendering and the "
                "mouseover are byte-identical to before.  Off during QA; flip to TRUE once "
                "released."),
-        h("skipMalformedCgiPairs", "flag", "hg/lib/hgConfig.c", default="FALSE",
-          role="gate", verified=True, ticket="38340",
-          note="Step over a CGI or cookie pair that has no =value, instead of losing the "
-               "pair after it or aborting the request.  Covers parseCookies in cheapcgi, "
-               "hgSession's session backup, and refreshNamedSessionCustomTracks.  The query "
-               "string parsers were fixed unconditionally under #38335 and do not read this "
-               "flag.  The kent libraries cannot read hg.conf, so hgConfig.c hands the "
-               "setting to cheapcgi through cgiSkipMalformedPairs.  Off during QA; flip to "
-               "TRUE once released."),
         h("collectionHubCopyOnWrite", "flag", "hg/lib/cart.c", default="FALSE",
           role="gate", verified=True, ticket="38273",
           note="Copy a track collection's generated hub file when the program that writes "
@@ -291,6 +285,14 @@ RELEASE_GATES = {
                "\"type bigNet\" fails to load with an unsupported-type error, "
                "quickLift refuses the type, and neither hubCheck nor the hubApi "
                "lists it among the supported types."),
+        h("clearFiltersMenu", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38507",
+          note="The \"Reset filters to defaults\" item in hgTracks' right-click "
+               "menu, which clears a track's cart settings (and those of its "
+               "subtracks) but keeps their visibility.  Also read in "
+               "hgTrackUi.c, which does the clearing; with it off the menu item "
+               "is not offered and hgTrackUi ignores the request.  Off during "
+               "QA; flip to TRUE once released."),
         h("showMouseovers", "flag", "hg/hgTracks/config.c", default="FALSE",
           role="gate", verified=True,
           note="Mouseover text on track items instead of the browser's own "
@@ -313,16 +315,29 @@ RELEASE_GATES = {
           default="FALSE", role="gate", verified=True,
           note="Expose the hub API key UI.  Shares its call site with "
                "storeUserFiles, so the two should be retired together."),
+        h("syncHubApiKeys", "flag", "hg/hgHubConnect/trackHubWizard.c",
+          default="FALSE", role="gate", verified=True, ticket="38323",
+          note="Make an api key generated on one UCSC geo mirror (genome.ucsc.edu, "
+               "genome-euro, genome-asia) work on all of them, instead of only on the "
+               "central database of whichever mirror issued it.  Read at the top of "
+               "syncApiKeyToOtherNodes() (the sender, called from cjGenerateApiKey and "
+               "cjRevokeApiKey) and cjSyncApiKey() (the receiver): off, generate/revoke "
+               "behave exactly as before the gate existed, and the hgHubSyncApiKey cartJson "
+               "command is refused outright rather than merely unreachable.  Uses "
+               "geoMirrorNotifyOtherNodes() (hg/lib/geoMirror.c) to find peer mirrors from "
+               "hgcentral.gbNode and login.cookieSalt to sign the request, so no separate "
+               "list of mirror addresses or secret needed provisioning.  Third read is in "
+               "getBotCheckString() (hg/lib/botDelay.c), which picks the wording of the "
+               "invalid-apiKey error: with the gate off it still says keys are "
+               "server-specific, since off they are.  Off during QA; "
+               "flip to TRUE once released."),
         h("autoBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c",
-          default="FALSE", role="gate", verified=True, ticket="32751",
+          default="TRUE", role="gate", verified=True, ticket="32751",
           note="Always create a custom track from BLAT results, so a result "
-               "page can be reopened and shared.  The read at hgBlat.c:2972 "
-               "overrides the file-scope autoBigPsl, which is initialised "
-               "FALSE at hgBlat.c:60 under the comment \"DEFAULT VALUE change "
-               "to TRUE in future\", and eleven branches downstream test it.  "
-               "Filed as a knob until that was read, on the strength of the "
-               "default being an identifier the harvester could not resolve; "
-               "a flag whose own source says to flip it later is a gate."),
+               "page can be reopened and shared.  The read in main() "
+               "overrides the file-scope autoBigPsl, now initialised TRUE, "
+               "and about a dozen branches downstream test it.  On at the "
+               "RR through hg.conf before the default was flipped TRUE."),
         h("blatShowLocus", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
           role="gate", verified=True,
           note="Show the genomic locus alongside BLAT results."),
@@ -333,7 +348,7 @@ RELEASE_GATES = {
                "- mRNA/EST, PSL and similar hgc details - instead of the classic "
                "two-frame <frameset>.  Off during QA; flip to TRUE once released."),
         h("blatNewPageBanner", "flag", "hg/hgBlat/hgBlat.c", default="FALSE",
-          role="gate", verified=True,
+          role="gate", verified=True, ticket="37893",
           note="The banner on the classic BLAT results page that offers a "
                "one-click switch to the new sortable table display.  Guards "
                "the advertisement, not the feature: turning it on makes the "
@@ -354,14 +369,16 @@ RELEASE_GATES = {
           note="Put BLAT result custom tracks in their own \"BLAT Results\" track "
                "group (with a \"Delete all\" button) instead of Custom Tracks, and "
                "give headerless queries a useful default name (query size + top-hit "
-               "gene) rather than \"blat YourSeq\".  Read in three CGIs that must "
-               "agree: hgBlat.c:1493 (naming), hgc.c:27514 (tags the track "
-               "group=blat), hgTracks.c:7262 (synthesizes the group).  Off during "
-               "QA; flip to TRUE once released."),
-        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="FALSE",
+               "gene) rather than \"blat YourSeq\".  Four reads that must agree: "
+               "hgBlat.c (naming), hgc.c (tags the track group=blat), hgTracks.c "
+               "(synthesizes the group) and customFactory.c (refuses a "
+               "hand-written group=blat when the group does not exist).  Off "
+               "during QA; flip to TRUE once released."),
+        h("genarkLiftOver", "flag", "hg/lib/genark.c", default="TRUE",
           role="gate", verified=True,
           note="Offer liftOver between GenArk assemblies.  Four call sites in "
-               "genark.c and hdb.c."),
+               "genark.c and hdb.c, one of them under #ifdef NTONOW.  On at "
+               "the RR through hg.conf before the default was flipped TRUE."),
         h("showIgv", "flag", "hg/hgTracks/hgTracks.c", default="FALSE",
           role="gate", verified=True,
           note="An IGV link in the track hamburger menus."),
@@ -376,8 +393,31 @@ RELEASE_GATES = {
                "take traffic from the browser UI."),
         h("groupDropdown", "flag", "hg/hgTracks/hgTracks.c",
           default="FALSE", role="gate", verified=True,
-          note="Track group chooser as a dropdown rather than the current "
-               "layout."),
+          note="A \"Genomes:\" dropdown added to a hub's group header, next "
+               "to its Hide group/Refresh buttons, shown whenever the hub "
+               "declares more than one genome in its genomesFile.  Lists "
+               "every genome trackHub.c parsed for that hub, labeled "
+               "\"<name> - <organism>, <freeze>\" via hOrganism()/"
+               "hFreezeFromDb() -- the same lookup hgTracks already uses for "
+               "the page title, so it resolves both a native UCSC db (via "
+               "hgcentral's dbDb table) and a GenArk-style hub genome (via "
+               "the hub's own genomes.txt fields) uniformly, a GenArk "
+               "accession like GCF_011064425.1 included.  The select is "
+               "width-capped with ellipsis, but each option's title "
+               "attribute carries the full label, and the browser's native "
+               "popup still renders at full width regardless.  The "
+               "currently loaded genome is preselected.  Choosing another "
+               "resets TrackForm's position field to that genome's own "
+               "default position (via hDbDb(), same as the label lookup) "
+               "before resubmitting, since a coordinate carried over from a "
+               "different assembly usually does not exist there; option "
+               "values are the hub genomes' raw names -- bare for a native "
+               "UCSC assembly, hub_<id>_-prefixed for a GenArk-style "
+               "twoBitPath genome -- exactly what hgTracks already accepts "
+               "as db elsewhere.  Added nearly a year ago and still off "
+               "everywhere but cgi-bin-max's and cgi-bin-emalekos's "
+               "hg.conf, so it is overdue rather than fresh; see the "
+               "sunset report."),
         h("showAliases", "flag", "hg/hgTracks/hgTracks.c", default="TRUE",
           role="gate", verified=True,
           note="Show chromosome alias names in the position box.  On by "
@@ -444,30 +484,118 @@ RELEASE_GATES = {
                "cfgOption* accessors, which is why browser.quickLift is not in "
                "this catalog.  A cart variable of the same name still "
                "overrides it, so both answers can be had on one machine."),
+        h("browser.quickLiftGtex", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38512",
+          note="Draw a quickLifted GTEx gene expression track (gtexGene, "
+               "gtexGeneV4, gtexGeneV8) as GTEx, with its bar charts, from "
+               "genes and gene models read out of the assembly it came from "
+               "through the quickLift chain.  Read in quickLiftGtexEnabled() "
+               "and asked in fillInFromType() (simpleTracks.c), which gives a "
+               "lifted track gtexGeneMethods despite its hub prefix, in "
+               "gtexLiftDb() (gtexTracks.c), and in hgc's doMiddle, which "
+               "sends a click on a lifted GTEx item to doGtexGeneExpr().  Off, "
+               "a lifted GTEx track is drawn as a plain bed and clicks go to "
+               "the generic details page, as before.  Asked when the page "
+               "is drawn, so it applies to tracks lifted before it was set.  "
+               "A cart variable of the same name overrides it, like "
+               "browser.quickLiftBarChart."),
+        h("browser.quickLiftMafSummary", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38513",
+          note="Let a quickLifted maf track (wigMaf, such as hg19 "
+               "multiz100way) read its summary table above the summary "
+               "window size, from the assembly it came from, and lift the "
+               "rows; read its blocks with no padding around the window; and "
+               "draw its score overview lifted.  Read in "
+               "quickLiftMafSummaryEnabled() and asked by inSummaryMode() "
+               "(hgTracks/mafTrack.h), quickLiftLoadMafs() and the score "
+               "overview in hgTracks/wigMafTrack.c.  Off, a lifted maf reads "
+               "every block at any zoom, as before, which runs out of memory "
+               "at 50 Mb.  A cart variable of the same name overrides it, "
+               "like browser.quickLiftBarChart."),
+        h("browser.quickLiftWig", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38520",
+          note="Let quickLift lift a wig track kept in a table and a .wib "
+               "file (such as hg19 phastCons100way), reading its rows from "
+               "the assembly it came from and drawing each value where the "
+               "chain puts it.  Read in quickLiftWigEnabled() and asked by "
+               "validateOneTdb() (hg/lib/trackHub.c), which lets wig tracks "
+               "into the quickLift hub, by wigLoadItems() "
+               "(hgTracks/wigTrack.c), which also covers a lifted wigMaf's "
+               "conservation wiggles, and by genericWiggleClick() and "
+               "bigWigClick() (hgc/wiggleClick.c), which send a click on a "
+               "lifted wig or bigWig to a page reading the values through the "
+               "chain.  Off, wig tracks are left out of a quickLift, a lifted "
+               "wigMaf draws the same-named wiggle table of the assembly it is "
+               "lifted onto, and a lifted bigWig click queries the file at the "
+               "reference position, all as before.  A lifted wig left in a hub "
+               "written while it was on draws nothing with it off, rather than "
+               "this assembly's table of the same name.  A cart variable of "
+               "the same name overrides it, like browser.quickLiftBarChart."),
+        h("browser.quickLiftRmsk", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="37437",
+          note="Let quickLift lift RepeatMasker tracks:  rmsk tables, "
+               "RepeatMasker Viz. (rmskJoined) tables and bigRmsk files, "
+               "reading the items from the assembly they came from and "
+               "drawing each one where the chain puts it.  Read in "
+               "quickLiftRmskEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which lets rmsk and bigRmsk tracks into "
+               "the quickLift hub, by quickLiftIsLiftedRmskJoined(), which "
+               "gives a lifted Viz. track its own drawing in hgTracks, by "
+               "repeatDraw() (hgTracks/rmskTrack.c), bigRmskLoadItems() "
+               "(hgTracks/bigRmskTrack.c), and by the hgc click dispatch, "
+               "which sends a click on a lifted RepeatMasker track to a page "
+               "reading the item through the chain.  Off, rmsk and bigRmsk "
+               "tracks are left out of a quickLift and a lifted Viz. track "
+               "draws as a plain bed, all as before;  a lifted rmsk or bigRmsk "
+               "left in a hub written while it was on draws nothing rather "
+               "than this assembly's data.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftBarChart."),
+        h("showManeInSearch", "flag", "hg/cgilib/cartJson.c",
+          default="FALSE", role="gate", verified=True, ticket="38285",
+          note="Pulls the MANE Select/Plus Clinical transcript out into its "
+               "own section on the hgSearch disambiguation page, above an "
+               "\"Other transcripts\" section for the rest.  Applies when a "
+               "gene-symbol + codon-range search (e.g. \"BRCA1 100-200\") "
+               "returns many RefSeq isoform predictions merged onto one "
+               "genomic footprint, which otherwise gives no indication of "
+               "which transcript is the clinically relevant one.  Read once, "
+               "in hgPositionsJson(), and only reached at all when a hit's "
+               "table is ncbiRefSeq* or refGene, so a typical search never "
+               "pays for the check.  Added in the current release, so it is "
+               "doing exactly what a gate is supposed to do and has not "
+               "earned a deadline yet.  On in cgi-bin-max's hg.conf for "
+               "testing; not yet turned on anywhere shared."),
+        h("showGenbankDownload", "flag", "hg/hgTracks/hgTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38433",
+          note="A GenBank flat file option in the \"Download Current Track "
+               "Data\" dialog, beside its JSON, CSV and TSV output.  The file "
+               "holds the DNA of the region plus the selected track items as "
+               "a feature table, with blocks as join() locations and "
+               "thickStart..thickEnd as a CDS, so the region opens in "
+               "SnapGene, Benchling or ApE.  Read once, and the flag is the "
+               "only door into the format:  the writer in hgTracks.js runs "
+               "from one value of the format select, and the second api call "
+               "that fetches the sequence fires only for that value, so with "
+               "the flag off neither is reachable and the select offers the "
+               "three formats it always did.  What the flag does not cover is "
+               "the dialog rework that came with the same ticket -- output "
+               "format first, page-sized font and buttons, the position on "
+               "its own line -- which is not GenBank-specific and lands for "
+               "everyone.  Sits behind showDownloadUi, the gate on the dialog "
+               "itself, which has defaulted TRUE since v467.  Added in the "
+               "current release, so it is doing exactly what a gate is "
+               "supposed to do and has not earned a deadline yet.  On in "
+               "cgi-bin-max's hg.conf for testing; not yet turned on anywhere "
+               "shared."),
         # Gates whose default has flipped TRUE.  These are the deletable ones:
         # the feature is public and the flag is now only an off switch.
         h("showTutorial", "flag", "hg/hgCustom/hgCustom.c", default="TRUE",
           role="gate", verified=True,
           note="The interactive tutorials.  Public since v466, five call "
                "sites across four CGIs.  Nothing is gating any more."),
-        h("canDupTracks", "flag", "hg/lib/dupTrack.c", default="TRUE",
-          role="gate", verified=True,
-          note="Duplicate-track feature.  Public since v443."),
-        h("canSnake", "flag", "hg/hgc/hgc.c", default="TRUE", role="gate",
-          verified=True,
-          note="Snake display for chain and alignment tracks.  Public since "
-               "v467."),
         h("showDownloadUi", "flag", "hg/hgTracks/hgTracks.c",
           default="TRUE", role="gate", verified=True,
           note="The download-current-track UI.  Public since v467."),
-        h("mergeRecommended", "flag", "hg/hgTracks/recTrackSets.c",
-          default="TRUE", role="gate", verified=True,
-          note="Merge behaviour for recommended track sets.  Public since "
-               "v467."),
-        h("svgBarChart", "flag", "hg/hgc/barChartClick.c", default="TRUE",
-          role="gate", verified=True,
-          note="SVG rather than raster bar charts on the details page.  "
-               "Public since v428, the longest-shipped gate still in place."),
         h("canDoHgcInPopUp", "flag", "hg/hgTracks/config.c", default="TRUE",
           role="gate", verified=True,
           note="Details pages in a popup instead of a page load.  Public "
@@ -476,9 +604,6 @@ RELEASE_GATES = {
           default="TRUE", role="gate", verified=True,
           note="The grey side-bar icons on track images.  Public since v492.  "
                "Four call sites in hgTracks.c and imageV2.c."),
-        h("trackHubsCanAddGroups", "flag", "hg/lib/hubConnect.c",
-          default="TRUE", role="gate", verified=True,
-          note="Let hubs declare their own track groups.  Public since v492."),
         h("newBotDelay", "flag", "hg/lib/botDelay.c", default="TRUE",
           role="gate", verified=True,
           note="The reworked bot-delay logic.  Public since v492."),
@@ -487,9 +612,6 @@ RELEASE_GATES = {
           note="Calculate the GC percent track at draw time instead of "
                "reading a stored table.  Public since v496, so it is inside "
                "its grace period."),
-        h("useBlatBigPsl", "flag", "hg/hgBlat/hgBlat.c", default="TRUE",
-          role="gate", verified=True,
-          note="bigPsl output from BLAT.  Public since v348."),
         h("alwaysItemRgb", "flag", "hg/cgilib/bedCart.c", default="TRUE",
           role="gate", verified=True,
           note="Honour a BED's itemRgb without requiring the track setting.  "
@@ -562,6 +684,95 @@ RELEASE_GATES = {
                "browser behaved before the change rather than anything about "
                "the machine, so it is a gate and should go once nobody has "
                "asked for the old behaviour."),
+        h("hgGateway.showRefBadge", "flag", "hg/hgGateway/hgGateway.c",
+          default="FALSE", role="gate", verified=True, ticket="38401",
+          note="A green \"reference\" word before an assembly in the "
+               "gateway search results when NCBI's refSeqCategory for it "
+               "is \"reference\".  Only the GenArk matches from "
+               "assemblyList can carry it; a dbDb assembly and a match "
+               "from the NCBI assembly search never do.  With the gate "
+               "off, isReference is always FALSE in the JSON and "
+               "autocompleteCat.js draws no badge and no mouseover."),
+        h("denseClick", "flag", "hg/hgTracks/simpleTracks.c", default="FALSE",
+          role="gate", verified=True, ticket="38364",
+          note="One clickable map box per item in a dense row, so a click "
+               "reaches the item's details page instead of expanding the "
+               "track.  Read once, in denseClickEnabled().  A gate over the "
+               "whole feature: with it on, a track still has to opt in with "
+               "the denseClick trackDb setting, and with it off no track "
+               "gets it whatever its trackDb says."),
+        h("hubHtmlSanitize", "flag", "hg/lib/trackHub.c", default="FALSE",
+          role="gate", verified=True, ticket="38126",
+          note="Passes description HTML from hubs and custom tracks through "
+               "htmlSanitize() on the way in.  Read once, in "
+               "hubHtmlSanitizeOn(), which every entry point and hubCheck "
+               "ask.  Off is the older behavior: customTrack.c falls back to "
+               "jsStripJavascript().  Added off for v504 because QA found "
+               "pages the filter changes; the default is meant to flip to "
+               "TRUE in v505 once those are fixed."),
+        h("multiWigMouseOver", "flag", "hg/hgTracks/multiWig.c", default="FALSE",
+          role="gate", verified=True, ticket="38468",
+          note="A value popup on a multiWig container: hovering lists each "
+               "subtrack's value at the cursor in the subtrack's color.  "
+               "Read in multiWigDraw(), and only when mouseOverEnabled "
+               "is on and the view is not multi-region.  Off, a multiWig "
+               "shows only its track name on hover, as before.  Added off "
+               "for v505; hgwdev's hg.conf turns it on."),
+        h("quickLiftMultiChain", "flag", "hg/lib/quickLift.c", default="FALSE",
+          role="gate", verified=True, ticket="38510",
+          note="Lift an item through every chain it overlaps, rather than "
+               "only the best one, so a feature that crosses a break in the "
+               "alignment is drawn in each place it lands.  Read once, in "
+               "quickLiftMultiChainEnabled(), and asked by the loaders in "
+               "hg/lib/quickLift.c, by gtexTracks.c, and by hgc.c and "
+               "gtexClick.c for the details page.  Off, each item goes "
+               "through the one best chain, as before.  Sibling of "
+               "quickLiftSplitRanges; the four on/off pairs of the two are "
+               "the hg.conf inputs of the quickLift unit test in "
+               "hg/lib/tests.  hgwdev's hg.conf turns it on."),
+        h("quickLiftSplitRanges", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38510",
+          note="Cut each chain's source range at large gaps, merge the "
+               "ranges where they overlap, and read an item only once when "
+               "it crosses from one range into the next.  Read once, in "
+               "quickLiftSplitRangesEnabled(), and asked by the loaders in "
+               "hg/lib/quickLift.c and by hgTracks/wigMafTrack.c.  Off, each "
+               "chain's whole source range is read in one piece, as before.  "
+               "Sibling of quickLiftMultiChain.  hgwdev's hg.conf turns it "
+               "on."),
+        h("browser.quickLiftBarChart", "flag", "hg/lib/quickLift.c",
+          default="FALSE", role="gate", verified=True, ticket="38490",
+          note="Let quickLift lift bigBarChart tracks.  Read in "
+               "quickLiftBarChartEnabled() and asked by validateOneTdb() "
+               "(hg/lib/trackHub.c), which decides what track types go into "
+               "a quickLift hub.  Off, bigBarChart tracks are left out of a "
+               "quickLift, as before.  A cart variable of the same name "
+               "overrides it, like browser.quickLiftAlignments.  hgwdev's "
+               "hg.conf turns it on."),
+        h("mouseoverParentLabels", "flag", "hg/hgTracks/simpleTracks.c",
+          default="FALSE", role="gate", verified=True, ticket="38527",
+          note="Start the drawn long label of a track, and its side label, "
+               "button and center label mouseovers, with the shortLabels of "
+               "the containers it sits in, e.g. \"Transcription Initiation "
+               "(TSS) > PRO-cap > A673 PRO-cap\", so a user can see where to "
+               "find a subtrack in the track list.  Composite views are "
+               "skipped.  Read once, in labelWithParents(), which imageV2.c, "
+               "simpleTracks.c and hgTracks.c call for each label.  Off, "
+               "labels are the track's own, as before.  Not set in hgwdev's "
+               "hg.conf."),
+        h("recentSessions.enable", "flag", "hg/lib/cart.c", default="FALSE",
+          role="gate", verified=True, ticket="35736",
+          note="Keep a list of the sessions a user has opened recently, and "
+               "offer the others in a dialog after a session load.  Read in "
+               "cartRecentSessionsEnabled() and asked by cartNew() "
+               "(hg/lib/cart.c), which keeps the list in the cart variable "
+               "recentSessions for a user with an hguid row, and by "
+               "outputRecentSessionsData() (hgTracks.c), which writes the "
+               "dialog's data after a load.  The list lives only in userDb: "
+               "the cart excludes it and saveState writes it by hand, so it "
+               "never enters a saved session.  Off, nothing is recorded and "
+               "no dialog is offered.  Commented out of hgwdev's hg.conf "
+               "as of 2026-10-17."),
     ],
 }
 
@@ -614,6 +825,17 @@ MIRROR_KNOBS = {
                "measurably faster to draw, so both positions have a "
                "constituency.  Its companions freeTypeDir and freeTypeFont "
                "are plain values and stay."),
+        h("freeTypeTuneUI", "flag", "hg/hgTracks/config.c", default="FALSE",
+          role="knob", ticket="38562", public=True, verified=True,
+          note="Shows a block of FreeType controls on the hgTracks configure "
+               "page: pixel size and baseline per text size, glyph gamma, the "
+               "fit-to-box multiplier, hinting and the anti-aliasing target, "
+               "with a Reset FreeType button.  The freeTypeTune.* cart "
+               "variables are read only while this is on, so a server without "
+               "it draws what it always drew.  A debugging aid for tuning "
+               "small text, not a feature waiting to ship, so it stays off by "
+               "default and is a knob.  Documented in ex.hg.conf and the "
+               "mirror manual."),
         h("trustTrackDb", "flag", "hg/lib/hdb.c", default="FALSE",
           role="knob", verified=True,
           note="Skip the per-track check that a trackDb row's table or file "
@@ -779,15 +1001,41 @@ MIRROR_KNOBS = {
                "search\" checkbox, the opt-in inverse of blatOldTracks above: "
                "results accumulate by default and a user asks for the earlier "
                "ones to be removed.  Two call sites that have to agree, "
-               "hgBlat.c:2815 which shows the box and hgc.c:27616 which acts "
-               "on the cart variable blatOnlyLatest it sets, so a stale cart "
-               "value cannot delete tracks on a machine where the feature is "
-               "off.  A knob in spirit for the same reason as blatOldTracks, "
-               "and a string rather than a flag, so it carries no gate/knob "
-               "role.  Being a string has one consequence worth knowing: it "
+               "hgBlat.c which shows the box and hgc.c which acts on the cart "
+               "variable blatOnlyLatest it sets, so a stale cart value cannot "
+               "delete tracks on a machine where the feature is off.  "
+               "Temporary, not a lasting mirror switch: the setting exists "
+               "because the behavior was argued over, and on 2026-09-18 in "
+               "#37996 the author said it should become the default soon and "
+               "the setting and its code should then come out.  A gate in "
+               "spirit, but a string rather than a flag, so it carries no "
+               "gate/knob role and the sunset report cannot chase it; that "
+               "decision lives here.  Being a string has one consequence "
+               "worth knowing: it "
                "is compared with sameString against \"on\", so only that "
                "exact value turns it on and true, 1 and yes do not, unlike "
                "every flag read through cfgOptionBooleanDefault."),
+        h("sessionLoadNotice", "flag", "hg/hgTracks/hgTracks.c",
+          default="FALSE", role="gate", public=True, verified=True,
+          ticket="38157",
+          note="Whether hgTracks shows the note that names the session just "
+               "opened and its owner, and says the browser configuration the "
+               "user had before is gone.  showSessionLoadNotice draws it once "
+               "and once only: the marker hgS_sessionJustLoaded is taken out "
+               "of the cart on the same page, so the next page does not have "
+               "it.  A recommended track set is left alone, because it merges "
+               "into the cart instead of replacing it and has its own label "
+               "beside the assembly name.  Born TRUE at 3bcf86a0995 and "
+               "documented in product/ex.hg.conf as an off switch, so it "
+               "never held the feature back; the off position is for a site "
+               "whose users open sessions constantly and do not need telling, "
+               "which is a deployment call.",
+          debatable="A site-wide off switch born in the same commit as a "
+                    "user-visible change has the shape of a gate, and nobody "
+                    "has said whether a mirror is meant to keep this one.  "
+                    "If the note turns out to be uncontroversial there is "
+                    "nothing left for the switch to do, and it should be "
+                    "deleted rather than kept as a knob."),
     ],
 }
 
@@ -1062,6 +1310,25 @@ LIMITS = {
         h("warnSeconds", "limit", "hg/hgTracks/hgTracks.c",
           verified=True, note="Log a warning for any hgTracks render slower "
                               "than this."),
+        h("maxGenbankRegion", "limit", "hg/hgTracks/hgTracks.c",
+          default='"25000000"', verified=True, ticket="38433",
+          note="Bases.  The largest region the \"Download Current Track Data\" "
+               "dialog will write as a GenBank file, which unlike its other "
+               "formats carries the DNA of the whole region.  A ceiling is "
+               "needed because the file is built in the web browser rather "
+               "than by a CGI:  a 50 Mbp region answers with 340 MB of track "
+               "json and 50 MB of sequence, which is parsed, copied into the "
+               "file text and copied again into the Blob, so the tab needs "
+               "several times the region in memory and can be killed by it.  "
+               "25 Mbp measured as the point where that stays comfortable; a "
+               "mirror serving well provisioned desktops can raise it and a "
+               "GBiB should lower it, which is why it is a knob rather than a "
+               "number in the javascript.  Read only when showGenbankDownload "
+               "is on, and written into the page for hgTracks.js; a value that "
+               "is not a positive number falls back to the default rather than "
+               "aborting the CGI or writing broken javascript.  The javascript "
+               "carries the same default for a page served without the "
+               "setting, e.g. from a cached older hgTracks.js."),
         h("hubSpaceLockTimeout", "limit", "hg/lib/userdata.c",
           default='"300"', verified=True, ticket="37964",
           note="Seconds an upload will wait for another upload to the same "
@@ -1227,7 +1494,8 @@ LOGGING = {
         h("logProxy", "debug", "hg/lib/cart.c", verified=True,
           family="proxy"),
         h("pngTimingSampleRate", "debug", "hg/hgTracks/hgTracks.c",
-          default="0", verified=True, ticket="38109",
+          default="0", verified=True, ticket="38109", role="gate",
+          sunset=508,
           note="One page load in this many measures how long the track image "
                "took to reach the reader.  hgTracks writes the rate into the "
                "page as a JavaScript variable and reportPngTiming() in "
@@ -1239,7 +1507,12 @@ LOGGING = {
                "can see, because apache stops timing once the kernel has the "
                "bytes.  Zero, or the setting left out, and nothing is written "
                "into the page, so the beacon is off.  It samples rather than "
-               "reporting every load because each report is another request."),
+               "reporting every load because each report is another request.  "
+               "A gate because the measurement is done: #38109 closed on "
+               "2026-11-03 keeping zlib level 6.  At its sunset, delete the "
+               "read in hgTracks.c, reportPngTiming() in hgTracks.js and "
+               "hg/utils/pngTiming, and any pngTimingSampleRate line left in "
+               "an hg.conf."),
     ],
 }
 
@@ -1299,13 +1572,13 @@ BRANDING = {
         h("geneTracks", "internal", "hg/lib/hgFind.c", verified=True),
         h("browser.recTrackSets", "internal", "hg/hgTracks/recTrackSets.c",
           verified=True, family="recTrackSets",
-          note="Recommended track sets.  Goes with the mergeRecommended "
-               "gate."),
+          note="Recommended track sets.  Loading one merges it into the "
+               "current cart."),
         h("browser.recTrackSetsDetectChange", "internal",
           "hg/hgTracks/recTrackSets.c", verified=True,
           family="recTrackSets",
-          note="Drives the 'session changed' banner.  The mergeRecommended "
-               "gate belongs to the same feature."),
+          note="Drives the 'session changed' banner shown after a "
+               "recommended track set is loaded."),
         h("browser.exportedDataHubs", "internal",
           "hg/lib/exportedDataHubs.c", verified=True),
         h("browser.cgiExpireMinutes", "limit",
@@ -1616,7 +1889,8 @@ RUNTIME_NAMES = {
                "provider names in login.oauth.providers, so the whole family "
                "is invisible to any scan.  The fields are clientId, "
                "clientSecret, label, type, issuer, authUrl, tokenUrl, "
-               "userinfoUrl and scopes.  A second read tries the older "
+               "userinfoUrl, scopes, and trustEmail, which is the one read as "
+               "a boolean.  A second read tries the older "
                "login.<provider>.<field> spelling, which is why a mirror can "
                "have credentials under either prefix."),
         h("{temp}", "internal", "hg/hgcentralTidy/hgcentralTidy.c",
@@ -1671,6 +1945,7 @@ SECTIONS = [
 ]
 
 AWAITING_TITLE = "Awaiting review"
+RUNTIME_TITLE = "Runtime-built names"
 
 
 def build():
@@ -1760,7 +2035,9 @@ def gate_lifecycle(cat, ages):
         tickets, ticket_from = ([], None)
         if hh and hasattr(hh, "ticket_for"):
             tickets, ticket_from = hh.ticket_for(name, ages)
-        shipped = v.get("default") == "TRUE"
+        # A gate that is not a flag has no default to flip.  Its code is
+        # already live, so it counts as shipped and waits for its sunset.
+        shipped = v.get("default") == "TRUE" or v.get("kind") != "flag"
         # A flip date with a FALSE default now means the flip was reverted, so
         # the flag is back to gating and the flip date must not drive a
         # deadline.
@@ -2173,8 +2450,10 @@ def redundant_settings(cat, ages=None):
             v = by.get(name)
             if v is None or v.get("default") != "TRUE":
                 continue
+            flip = flipped.get(name) or {}
             rec = {"name": name, "path": path, "line": lineno, "value": val,
-                   "flipped": (flipped.get(name) or {}).get("version")}
+                   "flipped": flip.get("version"),
+                   "unreleased": flip.get("released") is False}
             if val in TRUE_WORDS:
                 found["redundant"].append(rec)
             elif val in FALSE_WORDS:
@@ -2213,8 +2492,15 @@ def redundant_report(cat, ages=None, verbose=False, out=sys.stdout):
 
     def line(r):
         where = "%s:%d" % (r["path"], r["line"])
-        when = ("default TRUE since v%d" % r["flipped"] if r["flipped"]
-                else "flip version unknown, refresh the age cache")
+        if not r["flipped"]:
+            when = "flip version unknown, refresh the age cache"
+        elif r.get("unreleased"):
+            # The flip is on master and no branch carries it yet, so no machine
+            # anywhere is running it.  Saying "since" here would invite exactly
+            # the deletion the paragraph below warns against.
+            when = "default TRUE in v%d, not released yet" % r["flipped"]
+        else:
+            when = "default TRUE since v%d" % r["flipped"]
         return "  %-26s %-8s %-52s %s" % (r["name"], r["value"], where, when)
 
     n = len(found["redundant"])
@@ -2275,8 +2561,10 @@ def check(cat, out=sys.stderr):
             print("    %-34s %s" % (n, ", ".join(s)), file=out)
 
     for v in all_vars(cat):
-        if v.get("role") == "gate" and v.get("kind") != "flag":
-            print("gate not of kind flag: %s" % v["name"], file=out)
+        if (v.get("role") == "gate" and v.get("kind") != "flag"
+                and not v.get("sunset")):
+            print("gate not of kind flag needs a sunset=: %s" % v["name"],
+                  file=out)
             problems += 1
         if v.get("sunset") and not v.get("role") == "gate":
             print("sunset on a non-gate: %s" % v["name"], file=out)
@@ -2388,6 +2676,14 @@ def awaiting_review(cat):
     """Rows the writer put in the holding pen, still unclassified."""
     for sec in cat["sections"]:
         if sec["title"] == AWAITING_TITLE:
+            return list(sec["vars"])
+    return []
+
+
+def runtime_names(cat):
+    """Rows standing for a family whose real name is built at run time."""
+    for sec in cat["sections"]:
+        if sec["title"] == RUNTIME_TITLE:
             return list(sec["vars"])
     return []
 
@@ -2680,7 +2976,14 @@ def reconcile(cat, out=sys.stdout, verbose=False):
     # A flag the writer put in the holding pen is unclassified too, but it is
     # already written down and reported under its own heading below, so saying
     # it twice under two different instructions would just be confusing.
-    unclassified = sorted(tree_flags - classified - pending)
+    #
+    # A run-time-built name is exempt because it is not a flag.  A row like
+    # {key} stands for a whole family of settings, read here with a boolean
+    # accessor and elsewhere as a string or a credential, so neither answer to
+    # "gate or knob" is true of it and there is no single default to sunset.
+    # The family is described in the row's note instead.
+    runtime = {v["name"] for v in runtime_names(cat)}
+    unclassified = sorted(tree_flags - classified - pending - runtime)
     if unclassified:
         problems += len(unclassified)
         print("\nboolean flag classified neither gate nor knob (%d): nobody "
@@ -2689,8 +2992,12 @@ def reconcile(cat, out=sys.stdout, verbose=False):
         for n in unclassified:
             print("    %-40s %s" % (n, sorted(tree[n]["sites"])[0]), file=out)
     elif verbose:
-        print("all %d boolean flags in the tree are classified" %
-              len(tree_flags), file=out)
+        exempt = len(tree_flags & runtime)
+        print("all %d boolean flags in the tree are classified%s" %
+              (len(tree_flags) - exempt,
+               ", and %d built at run time %s exempt"
+               % (exempt, "is" if exempt == 1 else "are")
+               if exempt else ""), file=out)
 
     # Does the catalog's default= still match the tree's?
     #

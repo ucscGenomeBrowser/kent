@@ -9,7 +9,7 @@
 # General rules for CGI in Python:
 # - never insert values into SQL queries. Write %s in the query and provide the
 #   arguments to sqlQuery as a list.  
-# - never print incoming HTTP argument as raw text. Run it through cgi.escape to 
+# - never print incoming HTTP argument as raw text. Run it through html.escape to 
 #   destroy javascript code in them.
 
 try:
@@ -49,6 +49,11 @@ contentLineDone = False
 doWarnBot = False
 # current bot delay in milliseconds
 botDelayMsecs = 0
+
+# set when one hguid cookie has been seen from too many IP addresses, see
+# recordHguidIpAndMaybeForceCaptcha(). This is the python side of the "captcha" CGI variable
+# that lib/botDelay.c sets for lib/cart.c:forceUserIdOrCaptcha()
+forceCaptcha = False
 
 # two global variables: the first is the botDelay limit after which the page is slowed down and a warning is shown
 # the second is the limit after which the page is not shown anymore
@@ -126,8 +131,32 @@ def cfgOption(name, default=None):
 
 def cfgOptionBoolean(name, default=False):
     " return True if option is set to 1, on or true, or default if not set "
-    val = hgConf.get(name, default) in [True, "on", "1", "true"]
+    val = cfgOption(name, default) in [True, "on", "1", "true"]
     return val
+
+def cfgOptionBooleanDefault(name, default=False):
+    """ like hg/lib/hgConfig.c:cfgOptionBooleanDefault: return the option as a boolean,
+    or 'default' when the option is not set at all. Unlike cfgOptionBoolean(), a default
+    of True stays True only as long as hg.conf does not say otherwise. """
+    val = cfgOption(name)
+    if val is None:
+        return default
+    return val in [True, "on", "1", "true"]
+
+def cfgOptionEnvDefault(envName, name, default=None):
+    " like hg/lib/hgConfig.c:cfgOptionEnvDefault: environment wins over hg.conf "
+    val = os.environ.get(envName)
+    if val is not None:
+        return val
+    return cfgOption(name, default)
+
+def userDbTable():
+    " port of lib/cartDb.c:userDbTable "
+    return cfgOptionEnvDefault("HGDB_USERDBTABLE", "userDbName", "userDb")
+
+def sessionDbTable():
+    " port of lib/cartDb.c:sessionDbTable "
+    return cfgOptionEnvDefault("HGDB_SESSIONDBTABLE", "sessionDbName", "sessionDb")
 
 def sqlConnect(db, host=None, user=None, passwd=None):
     """ connect to sql server specified in hg.conf with given db. Like jksql.c. """
@@ -145,7 +174,7 @@ def sqlConnect(db, host=None, user=None, passwd=None):
 def sqlTableExists(conn, table):
     " return True if table exists. Like jksql.c "
     query = "SHOW TABLES LIKE %s"
-    sqlQueryExists(conn, query, table)
+    return sqlQueryExists(conn, query, (table,))
 
 def sqlQueryExists(conn, query, args=None):
     " return true if query returns a result. Like jksql.c. No caching for now, unlike hdb.c. "
@@ -249,6 +278,35 @@ def sqlQuery(conn, query, args=None):
     recs = [Rec(*row) for row in data]
 
     return recs
+
+def sqlUpdate(conn, query, args=None):
+    """ Run a query that changes the database and commit it. Like jksql.c:sqlUpdate.
+    pymysql opens its connections with autocommit switched off, so without the commit
+    here the write is rolled back when the CGI exits and nothing is ever stored.
+    """
+    cursor = conn.cursor()
+
+    if jksqlTrace:
+        sys.stderr.write("SQL_UPDATE 0 %s %s %s %s\n" % (conn.host, conn.db, query, args))
+
+    cursor.execute(query, args)
+    conn.commit()
+    cursor.close()
+
+def sqlQuickNum(conn, query, args=None):
+    " return the first field of the first row as an int, 0 if there is no row. Like jksql.c "
+    cursor = conn.cursor()
+
+    if jksqlTrace:
+        sys.stderr.write("SQL_QUERY 0 %s %s %s %s\n" % (conn.host, conn.db, query, args))
+
+    cursor.execute(query, args)
+    row = cursor.fetchone()
+    cursor.close()
+
+    if row is None or row[0] is None:
+        return 0
+    return int(row[0])
 
 def htmlPageEnd(oldJquery=False):
     " close html body/page "
@@ -376,7 +434,9 @@ def printContentType(contType="text/html", status=None, fname=None, headers=None
         print("Content-type: %s; charset=utf-8" % contType)
 
         if status:
-            if status==400:
+            if status==302:
+                print("Status: 302 Found")
+            elif status==400:
                 print("Status: 400 Bad Request")
             elif status==429:
                 print("Status: 429 Too Many Requests")
@@ -457,30 +517,211 @@ def getCookieUser():
 
 def showCookieError():
     " output error message if cookie not found "
-    print("Content-type: text/html\n\n")
+    printContentType()
     print("<html><body>")
     print("Sorry, the gene interactions viewer requires that you visit the genome browser first once, to defend against bots. ")
     print("<a href='hgTracks'>Click here</a> to visit the genome browser, then come back to this page.")
     print("</body></html>")
     sys.exit(0)
 
+def cartDbParseId(cartId):
+    """ split a cart identifier of the form 12345_sessionKey into (12345, "sessionKey").
+    Port of lib/cartDb.c:cartDbParseId. Unlike the C version, which runs the id through
+    sqlUnsignedLong() and aborts on anything that is not a number, a value we cannot parse
+    returns (None, None) here: this is called on a cookie an attacker picked, so a bad
+    value has to be an ordinary negative answer and not an error page.
+    """
+    if not cartId:
+        return None, None
+
+    idStr, _, sessionKey = cartId.partition("_")
+    # userDb.id is a bigint unsigned, so it never has more than 20 digits. The length check
+    # is not cosmetic: python 3.11 and later refuse to convert a very long digit string and
+    # would raise instead of returning an answer.
+    if not idStr.isdigit() or len(idStr) > 20:
+        return None, None
+
+    if sessionKey=="":
+        sessionKey = None
+
+    return int(idStr), sessionKey
+
+# cache for cartDbHasSessionKey(), which is a static in the C code
+userDbHasSessionKey = None
+
+def cartDbHasSessionKey(conn, table):
+    " return True if the table has a sessionKey column. Port of lib/cartDb.c:cartDbHasSessionKey "
+    global userDbHasSessionKey
+
+    if userDbHasSessionKey is None:
+        query = "SHOW COLUMNS FROM "+table+" LIKE 'sessionKey'"
+        userDbHasSessionKey = sqlQueryExists(conn, query)
+
+    return userDbHasSessionKey
+
+# cache for isValidHguid(), so the cookie is not looked up twice per request
+validHguidCache = {}
+
+def isValidHguid(cookieUserId):
+    """ Check that the hguid cookie really names a row in the userDb table, port of
+    lib/botDelay.c:isValidHguid.
+
+    This is the check that the python code was missing. Anyone can send any string as a
+    cookie, so without it the bottleneck server counts requests against a name the caller
+    invented, and a fresh name gets a fresh allowance.
+    """
+    if not cookieUserId:
+        return False
+
+    if cookieUserId in validHguidCache:
+        return validHguidCache[cookieUserId]
+
+    userId, sessionKey = cartDbParseId(cookieUserId)
+    if userId is None:
+        validHguidCache[cookieUserId] = False
+        return False
+
+    table = userDbTable()
+    conn = hConnectCentralNoCache()
+    try:
+        if sessionKey is None:
+            # old mirrors have no sessionKey column and their cookies are a bare number.
+            # Where the column does exist, a cookie without a key is not acceptable: the ids
+            # are sequential, so it could simply be guessed.
+            if cartDbHasSessionKey(conn, table):
+                isValid = False
+            else:
+                query = "SELECT id FROM "+table+" WHERE id=%(id)s"
+                isValid = sqlQueryExists(conn, query, {"id":userId})
+        else:
+            query = "SELECT id FROM "+table+" WHERE id=%(id)s AND sessionKey=%(sessionKey)s"
+            isValid = sqlQueryExists(conn, query, {"id":userId, "sessionKey":sessionKey})
+    finally:
+        conn.close()
+
+    validHguidCache[cookieUserId] = isValid
+    return isValid
+
+def isValidHgsidForEarlyBotCheck(rawHgsid):
+    """ port of lib/botDelay.c:isValidHgsidForEarlyBotCheck. We only check the shape of the
+    string here, not the database - that happens later when the cart is loaded.
+    """
+    import re
+    # just in case it is egregiously large, only the first part is needed to decide
+    hgsid = rawHgsid[:49]
+    # \Z, not $: python's $ also matches just before a trailing newline, the POSIX regex the
+    # C code uses does not, and we want the same answer on both sides
+    return re.match(r"^[0-9][0-9]*_[a-zA-Z0-9]{28}\Z", hgsid) is not None
+
+def botException():
+    " return True if the client address is on the bottleneck.except list. Port of lib/botDelay.c "
+    exceptIps = cfgOption("bottleneck.except")
+    if not exceptIps:
+        return False
+
+    remoteAddr = os.environ.get("REMOTE_ADDR")
+    if not remoteAddr:
+        return False
+
+    return remoteAddr in exceptIps.split()
+
+def recordHguidIpAndMaybeForceCaptcha():
+    """ port of lib/botDelay.c:recordHguidIpAndMaybeForceCaptcha.
+
+    When hguidIpTracking is switched on in hg.conf, note this request's (hguid, address)
+    pair in the hgcentral tracking table. If one hguid has been seen from more than
+    hguidIpTracking.maxIps different addresses within hguidIpTracking.windowSeconds, set
+    the module-level forceCaptcha flag. The C code sets a "captcha" CGI variable at this
+    point instead, which lib/cart.c:forceUserIdOrCaptcha() then acts on.
+
+    This is what catches a cookie that has been copied around a botnet: the bottleneck
+    server can only count requests, and traffic spread thinly over hundreds of thousands
+    of addresses never trips a per-address or per-cookie limit.
+    """
+    global forceCaptcha
+
+    if not cfgOptionBooleanDefault("hguidIpTracking.enabled", False):
+        return
+
+    cookieUserId = getCookieUser()
+    clientIp = os.environ.get("REMOTE_ADDR")
+    if not cookieUserId or not clientIp:
+        return
+
+    if not isValidHguid(cookieUserId):
+        return
+
+    userId, _ = cartDbParseId(cookieUserId)
+
+    maxIps = int(cfgOption("hguidIpTracking.maxIps", "10"))
+    windowSeconds = int(cfgOption("hguidIpTracking.windowSeconds", "600"))
+    table = cfgOption("hguidIpTracking.table", "hguidIpAccess")
+
+    conn = hConnectCentralNoCache()
+    try:
+        query = "INSERT INTO "+table+" (userId, ip, lastSeen) VALUES (%(userId)s, %(ip)s, NOW()) " \
+                "ON DUPLICATE KEY UPDATE lastSeen=NOW()"
+        sqlUpdate(conn, query, {"userId":userId, "ip":clientIp})
+
+        query = "SELECT COUNT(DISTINCT ip) FROM "+table+" WHERE userId=%(userId)s " \
+                "AND lastSeen > NOW() - INTERVAL %(windowSeconds)s SECOND"
+        distinctIps = sqlQuickNum(conn, query, {"userId":userId, "windowSeconds":windowSeconds})
+    finally:
+        conn.close()
+
+    if distinctIps > maxIps:
+        forceCaptcha = True
+
+def sendToBrowserForCaptcha():
+    """ This hguid is in use from too many addresses at once. Send the caller to hgTracks,
+    which is a C CGI and runs the same check, so it will put up the Cloudflare challenge
+    itself. We cannot show the challenge here: checking the token that comes back needs the
+    Cloudflare secret from hg.conf, and there is no reason to hand that to a python CGI when
+    the C code a redirect away already does it.
+    """
+    sys.stderr.write("hgLib.py captchaRedirect\n")
+    printContentType(status=302, headers={"Location" : "hgTracks"})
+    print("<html><body>")
+    print("Please visit the <a href='hgTracks'>genome browser</a> first, then come back to this page.")
+    print("</body></html>")
+    sys.exit(0)
+
 def getBotCheckString(ip, fraction):
-    " port of lib/botDelay.c:getBotCheckString: compose user.ip fraction for bot check  "
-    userId = getCookieUser()
+    """ port of lib/botDelay.c:getBotCheckString: compose the string that the bottleneck
+    server counts against, "<key> <fraction>".
 
-    if not userId:
-        showCookieError()
+    Like the C code, prefer a validated hguid cookie, then an hgsid that at least has the
+    right shape, and only fall back to the address when there is neither.
+    """
+    if not cfgOptionBooleanDefault("newBotDelay", True):
+        # the old system, only relevant on mirrors: bottleneck on cookie or address
+        cookieUserId = getCookieUser()
+        if cookieUserId:
+            return "%s.%s %f" % (cookieUserId, ip, fraction)
+        return "%s %f" % (ip, fraction)
 
-    botCheckString = "uid%s %f" % (userId, fraction)
+    cookieUserId = getCookieUser()
+    if isValidHguid(cookieUserId):
+        return "uid%s %f" % (cookieUserId, fraction)
 
-    return botCheckString
+    # this happens on sites that use the Cloudflare challenge only for a caller that has
+    # never been to the browser, or one that made its cookie up
+    hgsid = cgiString("hgsid")
+    if hgsid and isValidHgsidForEarlyBotCheck(hgsid):
+        return "sid%s %f" % (hgsid, fraction)
+
+    if hgsid:
+        # we were given an invalid hgsid - penalize this source in case of abuse.
+        # As in the C code this only changes the string sent to the bottleneck server,
+        # not the delay thresholds the caller applies.
+        fraction *= 5
+
+    return "%s %f" % (ip, fraction)
 
 def hgBotDelay(fraction=1.0, useBytes=None, botCheckString=None):
     """
     Implement bottleneck delay, get bottleneck server from hg.conf.
     This behaves similar to the function src/hg/lib/botDelay.c:hgBotDelay
-    It does not use the hgsid, currently it always uses the IP address.
-    Using the hgsid makes little sense. It is more lenient than the C version.
 
     If useBytes is set, use only the first x bytes of the IP address. This helps
     block bots that all use similar IP addresses, at the risk of blocking
@@ -493,21 +734,25 @@ def hgBotDelay(fraction=1.0, useBytes=None, botCheckString=None):
     ip = os.environ.get("REMOTE_ADDR")
     if not ip: # skip if not called from Apache
         return
+
+    if botException(): # our own QA scripts and anyone else on the exception list
+        return
+
     if useBytes is not None and ip.count(".")==3: # do not do this for ip6 addresses
         ip = ".".join(ip.split(".")[:useBytes])
 
     host = cfgOption("bottleneck.host")
     port = cfgOption("bottleneck.port")
 
-    if not host or not port or not ip:
+    if not host or not port:
         return
 
     warnMsg = None
     if botCheckString is None:
         botCheckString = getBotCheckString(ip, fraction)
     else:
-        warnMsg = "Too many parallel requests for this CGI program. Please wait for a while and try this page again. If the problem persists, "
-        "please email us at genome@soe.ucsc.edu."
+        warnMsg = "Too many parallel requests for this CGI program. Please wait for a while and " \
+            "try this page again. If the problem persists, please email us at genome@soe.ucsc.edu."
 
     millis = botDelayTime(host, port, botCheckString)
     debug(1, "Bottleneck delay: %d msecs" % millis)
@@ -697,11 +942,23 @@ def cgiString(name, default=None):
 def cgiGetAll():
     return cgiArgs
 
+def cgiWasSpoofed():
+    """ True when this is being run from a command line rather than by the web server, like
+    lib/cheapcgi.c:cgiWasSpoofed. Apache always sets REQUEST_METHOD for a CGI, so this cannot
+    be reached over HTTP. QA and developers run these from a shell, where there is no browser
+    to go and fetch a cookie with.
+    """
+    return "REQUEST_METHOD" not in os.environ
+
 def makeRandomKey(numBits=128+33):
     " copied line-by-line from kent/src/lib/htmlshell.c:makeRandomKey "
     import base64
-    numBytes = (numBits + 7) / 8  # round up to nearest whole byte.
-    numBytes = int(((numBytes+2)/3)*3) # round up to the nearest multiple of 3 to avoid equals-char padding in base64 output
+    # the C code does these two in integer arithmetic. Python's "/" is float division, which
+    # rounded 21 bytes up to 23 and so produced a 32-character key ending in the "=" padding
+    # this is meant to avoid - where C produces 28 characters, which is what the rest of the
+    # code, including the hgsid format check, expects.
+    numBytes = (numBits + 7) // 8  # round up to nearest whole byte.
+    numBytes = ((numBytes+2)//3)*3 # round up to the nearest multiple of 3 to avoid equals-char padding in base64 output
     f = open("/dev/urandom", "rb") # open random system device for read-only access.
     binaryString = f.read(numBytes)
     f.close()
@@ -1015,10 +1272,12 @@ def cartDbLoadFromId(conn, table, cartId, oldCart):
     " Like src/hg/lib/cart.c, opens cart table and parses cart contents given a cartId of the format 123123_csctac "
     if cartId==None:
         return {}
-    cartFields = cartId.split("_")
-    if len(cartFields)!=2:
-        errAbort("Could not parse identifier %s for cart table %s" % (cgi.escape(cartId), table))
-    idStr, secureId = cartFields
+
+    idStr, secureId = cartDbParseId(cartId)
+    if idStr is None or secureId is None:
+        # an identifier we cannot parse is simply not a valid one. It used to abort here,
+        # which handed anyone sending a malformed cookie an error page of their choosing.
+        return None
 
     query = "SELECT contents FROM "+table+" WHERE id=%(id)s and sessionKey=%(sessionKey)s"
     rows = sqlQuery(conn, query, {"id":idStr, "sessionKey":secureId})
@@ -1041,6 +1300,15 @@ def hConnectCentral():
     if centralConn:
         return centralConn
 
+    centralConn = hConnectCentralNoCache()
+    return centralConn
+
+def hConnectCentralNoCache():
+    """ similar to src/hg/lib/hdb.c:hConnectCentralNoCache: a new connection that the caller
+    closes again. The bot checks run before the bottleneck delay, and a delay can be a sleep of
+    many seconds, so they must not leave a connection sitting on the MariaDB server. Opening one
+    costs less than a millisecond.
+    """
     centralDb = cfgOption("central.db")
     if centralDb is None:
         errAbort("Could not find central.db in hg.conf. Installation error.")
@@ -1057,10 +1325,7 @@ def hConnectCentral():
     if centralHost is None:
         errAbort("Could not find central.host in hg.conf. Installation error.")
 
-    conn = sqlConnect(centralDb, host=centralHost, user=centralUser, passwd=centralPwd)
-
-    centralConn = conn
-    return conn
+    return sqlConnect(centralDb, host=centralHost, user=centralUser, passwd=centralPwd)
 
 def cartNew(conn, table):
     " create a new cart and return ID "
@@ -1085,12 +1350,12 @@ def cartAndCookieSimple():
     conn = hConnectCentral()
 
     cart = {}
-    userInfo = cartDbLoadFromId(conn, "userDb", hguid, cart)
+    userInfo = cartDbLoadFromId(conn, userDbTable(), hguid, cart)
     if userInfo is None:
         # invalid cookie hguid
         showCookieError()
 
-    sessionInfo = cartDbLoadFromId(conn, "sessionDb", hgsid, cart)
+    sessionInfo = cartDbLoadFromId(conn, sessionDbTable(), hgsid, cart)
     if sessionInfo is None:
         # tolerate invalid hgsid
         sessionInfo = {}
@@ -1114,7 +1379,27 @@ def cgiSetup(bottleneckFraction=1.0, useBytes=None, botCheckString=None):
         global verboseLevel
         verboseLevel = int(cgiString("debug"))
 
-    hgBotDelay(fraction=bottleneckFraction, useBytes=useBytes, botCheckString=botCheckString)
+    # our own QA machines and anyone else on bottleneck.except skip all of this, as they do
+    # in lib/botDelay.c:earlyBotCheck and lib/cart.c:forceUserIdOrCaptcha
+    if not botException():
+        # the order here follows lib/botDelay.c:earlyBotCheck - note the cookie/address pair,
+        # then go through the bottleneck, and only then decide whether to serve the request.
+        # Deciding first, as this used to, meant a caller without a cookie never reached the
+        # bottleneck server at all and so was never counted or slowed down.
+        recordHguidIpAndMaybeForceCaptcha()
+
+        hgBotDelay(fraction=bottleneckFraction, useBytes=useBytes, botCheckString=botCheckString)
+
+        if forceCaptcha:
+            sendToBrowserForCaptcha()
+
+        # A caller with no usable cookie has never been to the genome browser. The C CGIs
+        # answer that with the Cloudflare challenge (lib/cart.c:forceUserIdOrCaptcha); we
+        # cannot show it here, so keep the older affordance and send them to the browser to
+        # pick up a cookie. Doing it here rather than inside getBotCheckString(), where it
+        # used to sit, is the point: the bottleneck server has now seen the request.
+        if not cgiWasSpoofed() and not isValidHguid(getCookieUser()):
+            showCookieError()
 
     cart = cartAndCookieSimple()
     return cart

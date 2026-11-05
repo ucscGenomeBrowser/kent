@@ -6,7 +6,9 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "chain.h"
 #include "bigChain.h"
+#include "bigLink.h"
 
 
 
@@ -211,4 +213,62 @@ char *insert = &linkBuffer[insertOffset];
 strcpy(insert, ".link.bb");
 
 return cloneString(linkBuffer);
+}
+
+struct bigChain *chainRecToBigChain(struct chain *chain)
+/* make a bigChain from a chain */
+{
+struct bigChain *bc;
+AllocVar(bc);
+bc->chrom = cloneString(chain->tName);
+bc->chromStart = chain->tStart;
+bc->chromEnd = chain->tEnd;
+char buf[128];
+safef(buf, sizeof(buf), "%d", chain->id);
+bc->name = cloneString(buf);
+bc->score = 1000;
+bc->strand[0] = chain->qStrand;
+bc->tSize = chain->tSize;
+bc->qName = cloneString(chain->qName);
+bc->qSize = chain->qSize;
+bc->qStart = chain->qStart;
+bc->qEnd = chain->qEnd;
+bc->chainScore = chain->score;
+return bc;
+}
+
+struct bigLink *chainBlockToBigLink(struct chain *chain, struct cBlock *cblk)
+/* make a chain link from a chain block */
+{
+struct bigLink *bl;
+AllocVar(bl);
+bl->chrom = cloneString(chain->tName);
+bl->chromStart = cblk->tStart;
+bl->chromEnd = cblk->tEnd;
+char buf[128];
+safef(buf, sizeof(buf), "%d", chain->id);
+bl->name = cloneString(buf);
+bl->qStart = cblk->qStart;
+return bl;
+}
+
+void chainToBigChainOne(struct chain *chain, struct bigChain **bigChains, struct bigLink **bigLinks)
+/* convert one chain to a bigChain and a bigLink per block, adding them to the
+ * heads of the given lists */
+{
+for (struct cBlock *cblk = chain->blockList; cblk != NULL; cblk = cblk->next)
+    {
+    slAddHead(bigLinks, chainBlockToBigLink(chain, cblk));
+    }
+slAddHead(bigChains, chainRecToBigChain(chain));
+}
+
+void chainToBigChainList(struct chain *chains, struct bigChain **bigChains, struct bigLink **bigLinks)
+/* convert a list of chains to bigChains and bigLinks, sorted by target position.
+ * The new records are added to whatever is already on the given lists */
+{
+for (struct chain *chain = chains; chain != NULL; chain = chain->next)
+    chainToBigChainOne(chain, bigChains, bigLinks);
+slSort(bigChains, bigChainCmpTarget);
+slSort(bigLinks, bigLinkCmpTarget);
 }

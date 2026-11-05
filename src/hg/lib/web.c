@@ -1166,38 +1166,14 @@ getDbGenomeClade(cart, retDb, retGenome, &garbage, oldVars);
 freeMem(garbage);
 }
 
-static void webIncludeFileSubst(char *file, struct cart *cart)
-/* Include an HTML file in a CGI.  If cart is non-null, invoke hVarSubstWithCart.
- *   The file path may begin with hDocumentRoot(); if it doesn't, it is
- *   assumed to be relative and hDocumentRoot() will be prepended. */
-{
-char *str = hFileContentsOrWarning(file);
-if (cart != NULL)
-    {
-    char *db = cartString(cart, "db");
-    hVarSubstWithCart("webIncludeFileSubst", cart, NULL, db, &str);
-    }
-puts(str);
-freeMem(str);
-}
-
 void webIncludeFile(char *file)
 /* Include an HTML file in a CGI.
  *   The file path may begin with hDocumentRoot(); if it doesn't, it is
  *   assumed to be relative and hDocumentRoot() will be prepended. */
 {
-return webIncludeFileSubst(file, NULL);
-}
-
-void webIncludeHelpFileSubst(char *fileRoot, struct cart *cart, boolean addHorizLine)
-/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
- * print out the contents of the file.  If cart is non-NULL, invoke hVarSubstWithCart
- * before printing.  If addHorizLine, print out an <HR> first. */
-{
-if (addHorizLine)
-    htmlHorizontalLine();
-char *file = hHelpFile(fileRoot);
-webIncludeFileSubst(file, cart);
+char *str = hFileContentsOrWarning(file);
+puts(str);
+freeMem(str);
 }
 
 void webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
@@ -1205,7 +1181,9 @@ void webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
  * print out the contents of the file.  If addHorizLine, print out an
  * <HR> first. */
 {
-return webIncludeHelpFileSubst(fileRoot, NULL, addHorizLine);
+if (addHorizLine)
+    htmlHorizontalLine();
+webIncludeFile(hHelpFile(fileRoot));
 }
 
 void webPrintLinkTableStart()
@@ -1674,7 +1652,9 @@ if(scriptName)
 // back to the page they are on now.
     {
     char *loginLi = "";
-    if (loginSystemEnabled() || wikiLinkEnabled())
+    // The background process of hgSession/hgTables has no Apache environment, so the
+    // link would have no host and no /cgi-bin/, refs #38600
+    if ((loginSystemEnabled() || wikiLinkEnabled()) && !cgiVarExists("backgroundExec"))
         {
         char *userName = wikiLinkUserName();
         struct dyString *dy = dyStringNew(512);
@@ -1745,6 +1725,22 @@ if(scriptName)
         shareLi = dyStringCannibalize(&dy);
         }
     menuStr = replaceChars(menuStr, "<!-- SHARE_LINK -->", shareLi);
+    }
+
+// My Data > Recent Browser Views: the views of this browser in the last days, see
+// cartUpdateRecentSession()
+// The link carries the hgsid like the other menu links: without one, every click would start a
+// new cart, which then pushes a real view off the list of recent views.
+if (cartRecentSessionsEnabled())
+    {
+    struct dyString *dy = dyStringCreate("<li><a id='recentViewsMenuLink' "
+        "title='Go back to a view you had in this web browser in the last days, e.g. before you "
+        "opened a session' href='../cgi-bin/hgTracks?" hgsShowRecentViews "=1");
+    if (cart)
+        dyStringPrintf(dy, "&%s=%s", cartSessionVarName(), cartSessionId(cart));
+    dyStringAppend(dy, "'>Recent Browser Views</a></li>");
+    menuStr = replaceChars(menuStr, "<!-- RECENT_VIEWS_LINK -->", dy->string);
+    dyStringFree(&dy);
     }
 
 if(scriptName)

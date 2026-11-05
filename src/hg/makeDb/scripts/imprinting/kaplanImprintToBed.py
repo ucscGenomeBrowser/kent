@@ -17,15 +17,15 @@ Usage: kaplanImprintToBed.py <bedDir> <tsvDir> <outDir>
 """
 import sys, os, re, csv, collections
 
-# Okabe-Ito, chosen so the three gamete-of-origin classes stay distinguishable
-# under any of the three kinds of colour blindness.
+# Strong red and blue for the maternal and paternal copy, green and black for the rest, so the
+# gamete-of-origin classes stay distinguishable.
 COLOR = {
-    "Oocyte gDMR"   : "213,94,0",     # vermillion, maternally methylated
-    "Sperm gDMR"    : "0,114,178",    # blue, paternally methylated
+    "Oocyte gDMR"   : "220,20,20",    # strong red, maternally methylated
+    "Sperm gDMR"    : "0,60,200",     # strong blue, paternally methylated
     "Secondary DMR" : "0,158,115",    # bluish green, methylation acquired later
     ""              : "0,0,0",        # black, gamete of origin not established
 }
-BIMODAL_COLOR = "0,114,178"
+BIMODAL_COLOR = "0,60,200"
 
 def bimodalShade(count, maxCount):
     """ a light-to-dark ramp in the one bimodal colour, so that a region shared
@@ -314,7 +314,7 @@ def writeParentalAsm(bedDir, tsvDir, outDir, icrType, icrGenes):
                 name = genes[0] if len(genes) == 1 else "%s and %d more" % (genes[0], len(genes) - 1)
             else:
                 regionType = "Novel region"
-                name = "%s:%s" % (chrom, start)
+                name = "Novel"
             counts[regionType] += 1
 
             icm, blast, sperm, oocyte = methData.get(region, ("", "", "", ""))

@@ -50,8 +50,8 @@
 # (one subtrack per dataset; each carries an explicit per-subtrack color resolved
 # from the organ JSON). Reproducible; rerunnable.
 
-# Build scripts and autoSql are version-controlled at ~/kent/src/hg/makeDb/scripts/tad/ and
-# symlinked into the per-source build dirs, so the commands below run the in-tree copies.
+# Build scripts and autoSql are version-controlled at ~/kent/src/hg/makeDb/scripts/tad/ and are
+# run from there (see the 2026-10-13 rebuild section at the end of this file).
 cd /hive/data/outside/tad/3dgenome/build
 python3 buildTads3dgb.py
 # -> hg38/tads3dgb/<id>.bb  (464 bigBeds, bed4)
@@ -126,14 +126,14 @@ make DBS=hg38 FIND=find
 # subtrackUrls (like wgEncodeReg4); the readable biosample name (_Biosample) and full ENCODE
 # summary (_Description) are shown in the metadata table but not faceted. shortLabels are
 # word-boundary summaries (no mid-word truncation; CD4-positive->CD4+ etc.); bigBed filenames
-# keep the readable biosample symbol. (A549 organ "musculature of body"->Muscle and similar
-# follow ENCODE's organ_slim verbatim; organ reflects ENCODE's annotation, not a disease-origin call.)
+# keep the readable biosample symbol. (Organ is ENCODE's organ_slim annotation, not our own call
+# on where a cancer cell line came from, e.g. A673 "musculature of body" -> Muscle.)
 
 cd /hive/data/outside/tad/encode/build
 python3 buildTadsEncode.py
 # -> hg38/tadsEncode/<symbol>.bb  (117 bigBeds, bigBed 4+5)
-# -> hg38/tadsEncode_metadata.tsv (118 rows; cols Biosample Organ Biosample_type Assay
-#    Life_stage Calls _Biosample)
+# -> hg38/tadsEncode_metadata.tsv (118 rows; cols Accession _Biosample Organ Biosample_type
+#    Assay Life_stage Calls _Description)
 # -> hg38/tadsEncode.ra  (faceted composite header + 117 subtrack stanzas)
 
 # Symlink bigBeds (directory symlink) and metadata TSV into /gbdb
@@ -209,3 +209,119 @@ make DBS=hg38 FIND=find
 #   bedToBigBed -> /hive/data/outside/tad/mcarthur2021/build/hg38/tadsMcArthur.bb (14,287 after lift).
 #   Symlinked to /gbdb/hg38/bbi/tad/ . trackDb: tadsMcArthur (filter.contexts, spectrum) in
 #   human/hg38/tad.ra. html tadsMcArthur.html.
+
+##############################################################################
+# QA-fix rebuild of all TAD tracks (hg19, hg38, mm10, mm39)  2026-10-13 (lou)
+##############################################################################
+# Supersedes the BUILD descriptions and commands above. The fetch/provenance notes above still
+# describe where each input came from, but the inputs now live in
+# /hive/data/outside/tad/<dataset>/source (step 1 below), the .as files are read from
+# ~/kent/src/hg/makeDb/scripts/tad/, and the scripts are run from that git dir as shown below
+# (the /hive/data/outside/tad/*.as and build-dir script symlinks were removed).
+# Changes, from the QA review on Redmine #21599:
+#   - Every raw input now lives under /hive/data/outside/tad/<dataset>/source (copied from the
+#     personal project dir), and the scripts read the .as files from their own git directory.
+#   - Dixon/Schmitt/McArthur are built by one script (buildTadsHuman.sh) instead of prose steps;
+#     the spreadsheet -> BED step is scripted (extractTadsSupplements.py; output is byte-identical
+#     to the earlier source BEDs).
+#   - Lifted items are trimmed to the chrom end instead of dropped by bedClip (keeps the hg19
+#     McArthur boundary chr17:81100000-81200000, which runs 4,790 bp past the chr17 end), and
+#     lifted items more than twice their source size are dropped (the chain jumped a gap or
+#     rearranged block inside the item).
+#   - Schmitt items are named with the full sample name instead of the sheet code; McArthur items
+#     are named by their hg19 source bin, 1-based (e.g. "hg19 chr1:600001-700000").
+#   - ENCODE scores are written to 3 decimals; per-subtrack skipFields hides the score fields that
+#     the source does not have (A549: only cornerScore; the 5 lifted-from-hg19 biosamples: none).
+#   - 3DGB bigBeds now carry tadDomain.as; typographic hyphens/minus/spaces in the 3DGB catalog
+#     text are folded to ASCII (e.g. "PANC-1" now matches all 4 PANC-1 datasets).
+#   - The ENCODE/3DGB build scripts now write the trackDb labels and visibilities that were
+#     previously hand-edited in trackDb (QA commit b7b9978c92a), so a rebuild does not revert them.
+
+# 1. Inputs into /hive/data/outside/tad
+T=/hive/data/outside/tad
+P=/hive/users/lrnassar/claude/RM21599
+cp -a $P/dixon2012/41586_2012_BFnature11082_MOESM330_ESM.xls $T/dixon2012/source/
+cp -a $P/schmidtt2016/mmc4.xlsx $T/schmitt2016/source/
+cp -a $P/encode/contact_domains $P/encode/_meta $P/encode/contact_domains_manifest.tsv \
+      $P/encode/README.md $T/encode/source/
+mkdir -p $T/3dgenome/source
+cp -a $P/3dgenome/tad_beds $P/3dgenome/datasets_api.json $P/3dgenome/classification.tsv \
+      $T/3dgenome/source/
+# McArthur: source/100kbBookendBoundaries_byStability.bed is the file from the authors' repo,
+# https://github.com/emcarthur/TAD-stability-heritability at commit
+# 184f51a92551e9a18a91460c07e87a328b10fe80.
+
+# 2. Spreadsheets -> source BEDs (Dixon hESC/IMR90 hg18 + mouse mm9, Schmitt 21 x hg19)
+cd /data/tmp
+K=~/kent/src/hg/makeDb/scripts/tad
+X=$(mktemp -d /data/tmp/tadExtract.XXXXXX)
+python3 $K/extractTadsSupplements.py $T/dixon2012/source/41586_2012_BFnature11082_MOESM330_ESM.xls \
+    $T/schmitt2016/source/mmc4.xlsx $X
+cp $X/dixon_*.hg18.bed $X/mm9_*_domains.bed $T/dixon2012/source/
+cp $X/schmitt_*.hg19.bed $T/schmitt2016/source/
+rm -rf $X
+
+# 3. Build. Each script takes an optional root dir (default /hive/data/outside/tad, which writes
+# straight into the live build dirs that /gbdb points at). This rebuild was run into a staging
+# root that links to the live inputs, compared item by item against the live bigBeds (only the
+# intended changes above differed), then rsync'ed into place:
+for d in 3dgenome dixon2012 encode mcarthur2021 schmitt2016; do
+    mkdir -p $T/backup.2026-10-13/$d; cp -a $T/$d/build $T/backup.2026-10-13/$d/; done
+G=$T/staging.2026-10-13
+mkdir -p $G/encode $G/3dgenome
+ln -s $T/organ_colors.json $G/organ_colors.json
+for d in dixon2012 schmitt2016 mcarthur2021; do mkdir -p $G/$d; ln -s $T/$d/source $G/$d/source; done
+ln -s $T/encode/source $G/encode/source; ln -s $T/encode/mouse $G/encode/mouse
+ln -s $T/3dgenome/source $G/3dgenome/source; ln -s $T/3dgenome/mouse $G/3dgenome/mouse
+$K/buildTadsHuman.sh $G                  # Dixon, Schmitt, McArthur on hg19 + hg38
+$K/buildDixonMouse.sh $G                 # Dixon mouse, mm9 -> mm10 + mm39
+python3 $K/buildTadsEncode.py hg38 $G
+python3 $K/buildTadsEncode.py mm10 $G
+$K/liftEncodeMouse.sh $G                 # ENCODE mm10 -> mm39
+python3 $K/buildTads3dgb.py hg38 $G
+python3 $K/buildTads3dgb.py mm10 $G
+$K/liftTads3dgbMouse.sh $G               # 3DGB mm10 -> mm39
+# compare every staged bigBed with the live one (bigBedToBed: coordinates, names, scores, .as)
+for d in dixon2012 schmitt2016 mcarthur2021 encode 3dgenome; do rsync -a $G/$d/build/ $T/$d/build/; done
+rm -rf $G
+# Per-stage counts are written to <dataset>/build/buildTadsHuman.log, buildDixonMouse.log,
+# encode/build/mm39/liftEncodeMouse.log and 3dgenome/build/mm39/liftTads3dgbMouse.log; unmapped
+# and dropped-as-inflated items to <dataset>/build/<asm>/<name>.{unmapped,inflated}.
+# hg38 counts (hg19 counts are in ../hg19.txt):
+#   set               source unmapped nonPrimary trimmed inflated  final
+#   Dixon hESC          3127       76          0       0        0   3051
+#   Dixon IMR90         2348       68          0       0        1   2279
+#   Schmitt TRO         2435       21          0       0        0   2414
+#   Schmitt RV          2083       19          1       0        0   2063
+#   Schmitt OV          2164       15          2       0        1   2146
+#   Schmitt MSC         2290       27          1       0        1   2261
+#   Schmitt BL          2148       19          1       0        2   2126
+#   Schmitt LI          2272       21          1       0        1   2249
+#   Schmitt LG          2258       16          1       0        3   2238
+#   Schmitt LV          2079       18          1       0        1   2059
+#   Schmitt NPC         2378       24          1       0        1   2352
+#   Schmitt AO          2044       16          1       0        1   2026
+#   Schmitt AD          2148       17          1       0        2   2128
+#   Schmitt SB          2195       26          1       0        2   2166
+#   Schmitt MES         2479       27          1       0        1   2450
+#   Schmitt SX          2335       31          1       0        3   2300
+#   Schmitt PO          2224       20          1       0        3   2200
+#   Schmitt PA          2199       17          0       0        2   2180
+#   Schmitt IMR90       2231       23          1       0        2   2205
+#   Schmitt GM12878     2306       26          0       0        0   2280
+#   Schmitt CO          2194       18          1       0        2   2173
+#   Schmitt HC          2204       21          0       0        0   2183
+#   Schmitt H1          2502       29          1       0        0   2472
+#   McArthur mcarthur  14345       56          2       0        8  14279
+
+# 4. trackDb: the generated .ra replaces the trackDb copy (only skipFields lines were new on
+# hg38; on mm10/mm39 also two lowercased longLabels).
+cp $T/encode/build/hg38/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/
+cp $T/encode/build/mm10/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm10/
+cp $T/encode/build/mm39/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm39/
+# (tads3dgb.ra regenerated identical to trackDb on all three assemblies.)
+# Hand edits in human/{hg19,hg38}/tad.ra: tadsSchmitt gets labelFields none and one
+# composite-level mouseOver using $name (replacing the 21 per-subtrack mouseOvers);
+# tadsMcArthur default filter.contexts 4:37 -> 1:37 (no default filter).
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS="hg19 hg38 mm10 mm39"

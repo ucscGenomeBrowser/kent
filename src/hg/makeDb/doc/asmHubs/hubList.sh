@@ -21,6 +21,8 @@ fi
 
 cd /home/qateam/cronJobs
 
+export nextTxt="/mirrordata/hubs/.UCSC_GI.assemblyHubList.txt.next"
+
 rsync -a hiram@hgwdev:kent/src/hg/makeDb/doc/legacyAsmHub/legacy.clade.txt ./
 
 export DS=`date "+%F"`
@@ -33,7 +35,11 @@ printf "taxIdCount before: $taxIdCount\n"
 
 ./cladeListings.sh 1>&2
 
-export asmCount=`find /mirrordata/hubs/GCF /mirrordata/hubs/GCA -mindepth 4 -maxdepth 4 -type d | wc -l`
+export nextRows="${nextTxt}.rows"
+
+./asmHubList.pl goForIt | grep -v _009914755 | sort > "${nextRows}"
+
+export asmCount=$(grep -c . "${nextRows}")
 
 printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt
 # last update: ${DS}, $asmCount assemblies listed
@@ -49,7 +55,7 @@ printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubLis
 # and better assemblies.
 #
 # currently clade groupings found in the GenArk are:
-# birds fish fungi invertebrate mammals plants primates vertebrate viral bacteria
+# birds fish fungi invertebrate mammals plants primates vertebrate viral archaea bacteria
 #
 # where 'vertebrate' are the 'other' vertebrates not alreaded included in
 #    birds fish mammals primates
@@ -60,12 +66,15 @@ printf "# This file: https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubLis
 # 'viral' currently includes most viruses of interest related to human
 #         pathogens
 #
-# future plans to include selected sets of bacteria and archaea assemblies
+# 'bacteria' and 'archaea' assemblies include all RefSeq 'reference' assemblies
 #
 # accession\tassembly\tscientific name\tcommon name\ttaxonId\tGenArk clade
-" > /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
+" > "${nextTxt}"
 
-./asmHubList.pl goForIt | grep -v _009914755 | sort >> /mirrordata/hubs/UCSC_GI.assemblyHubList.txt
+cat "${nextRows}" >> "${nextTxt}"
+rm -f "${nextRows}"
+
+mv "${nextTxt}" "/mirrordata/hubs/UCSC_GI.assemblyHubList.txt"
 
 export after=`grep -c -v "^#" /mirrordata/hubs/UCSC_GI.assemblyHubList.txt`
 

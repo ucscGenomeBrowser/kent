@@ -38,6 +38,7 @@
 #
 # Fixed and on the RR on 2026-07-28, so there is no build left to watch this fail on.
 proof:
+  - "release-ab 2026-09-18 -- fails on the released v499 and v500 docker images and passes on v501, which is where 94f9b53d3db and b551f6c3ac8 first ship. On v500 the page is whole (10 rows drawn) and only the position is wrong, so the failure is this ticket's and not a broken page"
   - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
 
 target: genome-test

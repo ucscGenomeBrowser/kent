@@ -1091,7 +1091,18 @@ return (-1);
 unsigned int bedParseColor(char *colorSpec)
 /* Parse an HTML color string, a  string of 3 or 4 comma-sep unsigned color values 0-255, 
  * or a 6-digit hex string  preceded by #. 
- * O/w return unsigned integer value.  Return -1 on error */
+ * O/w return unsigned integer value.  Return -1 on error
+ *
+ * WARNING: it does not return -1 on error, it mostly aborts.  A string holding a comma
+ * goes to bedParseRgb, which returns -1 for anything it does not like, so 0,0,blue is
+ * drawn as -1.  Anything else falls through to sqlUnsigned, which errAborts with a
+ * message about integers that says nothing about colors.  Which of the two a caller gets
+ * turns on whether the bad string happens to hold a comma, and none of the callers looks
+ * at the return value.  bedParseRgb is loose as well: it tests only the first character
+ * of each value for a digit, and masks with 0xff, so 999,0,0 comes out as 231,0,0.
+ *
+ * Use colorSpecMayParse or colorSpecParse in colorSpec.h for new code.  Moving the
+ * callers here over is RM #38601. */
 {
 if (strchr(colorSpec,','))
     return bedParseRgb(colorSpec);

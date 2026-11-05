@@ -89,6 +89,7 @@ hideEmptySubtracksLabel *
 hideEmptySubtracksMultiBedUrl *
 hideEmptySubtracksSourcesUrl *
 color *
+colorByInfo* vcf vcfTabix
 colorByStrand bigBed bed genePred bigGenePred
 colorChromDefault psl bigPsl
 colorSettingsUrl *
@@ -122,6 +123,7 @@ defaultMaf wigMaf
 defaultMaxWeight bed
 defaultGroupBy *
 defaultSortField *
+denseClick bigBed bed bigPsl genePred bigGenePred psl
 denseCoverage bigBed
 densePack bed bigBed
 dimensionAchecked *
@@ -135,6 +137,8 @@ dimensionZchecked *
 dimensions *
 directUrl *
 dividers *
+dotBracketColor bigBed
+dotBracketField bigBed
 dragAndDrop *
 drawMode hic
 doWiggle bigBed
@@ -142,6 +146,7 @@ downloadUrl* *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
+excludeFilterValues vcf vcfTabix vcfPhasedTrio
 exonArrows genePred bed broadPeak bigBed
 exonArrowsDense bed
 exonNumbers genePred bed broadPeak psl big*
@@ -231,6 +236,7 @@ hapClusterMethod vcf vcfTabix
 hapClusterTreeAngle vcf vcfTabix
 hapClusterHeight vcf vcfTabix
 hapmapPhase bed
+heatmap.background bigBed
 hgGene genePred
 hgsid bed genePred bigBed bigGenePred
 hicArcLimit hic
@@ -333,7 +339,7 @@ motifMapTable factorSource
 motifMaxWindow factorSource
 motifDrawDefault factorSource
 mouseOverField big*
-mouseOver bigLolly bigBed bigPsl bigGenePred bed bigDbSnp bigNarrowPeak
+mouseOver bigLolly bigBed bigPsl bigGenePred bed bigDbSnp bigNarrowPeak vcfTabix
 mouseOverFunction bigWig
 msaTable wig wigMafProt wigMaf
 multiRegionsBedUrl *
@@ -516,7 +522,7 @@ sGroup_Zaire(DRC)_1976-7 wigMaf
 *FilterPriority bed narrowPeak broadPeak big*
 *HighlightPriority bed narrowPeak broadPeak big*
 sampleColorFile vcf vcfTabix
-sampleMetadataFile vcf vcfTabix
+sampleMetadataFile vcf vcfTabix vcfPhasedTrio
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl bigNarrowPeak
 scoreFilterByRange bed peptideMapping bigBed bigPsl
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed bigPsl bigNarrowPeak
@@ -537,7 +543,7 @@ showCdsMaxZoom psl bigPsl chain bigChain
 showCfg *
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
-showHardyWeinberg vcf vcfTabix
+showHardyWeinberg vcf vcfTabix vcfPhasedTrio
 showNames bam
 showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
@@ -549,7 +555,7 @@ qValueFilter bed narrowPeak broadPeak bigNarrowPeak
 qValueFilterLimits bed narrowPeak broadPeak bigNarrowPeak
 singleCellColumnNames *
 skipFields bigBed bigPsl bigGenePred bigLolly
-skipEmptyFields bigBed bigPsl
+skipEmptyFields bigBed bigPsl bigGenePred
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed

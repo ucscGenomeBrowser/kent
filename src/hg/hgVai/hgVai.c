@@ -1378,7 +1378,7 @@ printf("</FORM>");
 jsReloadOnBackButton(cart);
 
 webNewSection("Using the Variant Annotation Integrator");
-webIncludeHelpFileSubst("hgVaiHelpText", cart, FALSE);
+webIncludeHelpFile("hgVaiHelpText", FALSE);
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("hgVai.js", NULL);
 jsIncludeFile("ui.dropdownchecklist.js", NULL);

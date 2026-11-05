@@ -61,6 +61,11 @@ char *wikiLinkHost();
 boolean wikiLinkEnabled();
 /* Return TRUE if all wiki.* parameters are defined in hg.conf . */
 
+char *wikiLinkLoginCookieHeader();
+/* Return a "Cookie:" header line that passes this request's login cookies - and only those, not
+ * the cart cookie - on to another one of our servers, or NULL if the request carries no login
+ * cookies.  Free when done. */
+
 char *wikiLinkUserName();
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */

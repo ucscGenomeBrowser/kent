@@ -5,10 +5,11 @@ This track shows <b>mobile element insertions (MEIs)</b> called by
 on the 3,202 high-coverage 1000 Genomes Project samples (NYGC
 re-sequencing) aligned to GRCh38. At each site, at least one of the
 3,202 samples carries a non-reference insertion of an Alu, L1 (LINE-1)
-or SVA mobile element. DeepMEI is a convolutional neural-network
-caller that scans short-read alignments for the read-pair, split-read
-and clipping signatures of a new insertion and classifies each
-candidate site as Alu, L1 or SVA.
+or SVA mobile element. DeepMEI screens short-read alignments for
+the soft-clipped and discordant read signatures of a new insertion,
+assigns each candidate to Alu, L1 or SVA by aligning it to mobile
+element consensus sequences, and then genotypes the site with a
+convolutional neural network.
 </p>
 
 <table class="stdTbl">
@@ -51,17 +52,30 @@ The score column encodes the alt-allele frequency on a 0-1000 scale.
 Filters allow restricting to specific element classes, allele frequency
 and carrier counts.
 </p>
+<p>
+This callset carries no site-level quality filter: the FILTER column is
+empty on all 91,617 records. It is also singleton-heavy, with 43,627
+sites (47.6%) called in a single sample. Raising the <b>Carrier Sample
+Count</b> filter above 1 restricts the display to sites seen in more
+than one individual.
+</p>
 
 <h2>Methods</h2>
 <p>
-DeepMEI is a deep convolutional neural network that detects
-non-reference mobile element insertions from short-read whole-genome
-sequencing. For every candidate site supported by an anomalous
-read-pair, split-read or soft-clip signature, the surrounding alignment
-pile-up is encoded as an image and passed through a CNN that classifies
-the site as Alu, L1, SVA or background. The model was trained on
-labelled MEIs from the 1000 Genomes phase 3 callset and orthogonal
-long-read truth sets. For this track, DeepMEI was run on the
+DeepMEI detects non-reference mobile element insertions from
+short-read whole-genome sequencing. Candidate sites are found from
+soft-clipped and discordant reads, and each candidate is assigned to
+Alu, L1 or SVA by aligning the soft-clipped sequence against a
+library of mobile element consensus sequences from Repbase. The surrounding alignment pile-up is then encoded
+as a six-channel 351 &times; 100 image and passed through an Inception
+v3 convolutional neural network, which returns probabilities for the
+three genotypes homozygous reference, heterozygous and homozygous
+insertion; the highest probability becomes the genotype call. The model
+was trained on ten samples from the 1000 Genomes Project phase 4
+release, using the project's freeze_V3 structural variant calls as
+labels after manual confirmation in IGV. Long-read data was used to
+benchmark the tool rather than to train it. For this track, DeepMEI was
+run on the
 high-coverage (~30&times;) Illumina re-sequencing of all 3,202
 1000 Genomes Project samples produced by the New York Genome Center
 (NYGC), giving 6,404 haplotypes per site. See Xu et al. 2023 (bioRxiv)
@@ -77,7 +91,8 @@ bigBed following the steps described in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
 target="_blank">makeDoc file</a>. Conversion uses scripts in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
-target="_blank">src/hg/makeDb/scripts/mei</a>: VCF-style positions
+target="_blank">src/hg/makeDb/scripts/mei</a>,
+and the track configuration is in <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/mei.ra" target="_blank">trackDb/human/mei.ra</a>: VCF-style positions
 (1-based POS, anchor base) are converted to half-open BED coordinates
 (<tt>chromStart = POS - 1</tt>, <tt>chromEnd = chromStart + 1</tt>),
 per-sample genotypes are tallied across the 3,202 samples, and items
@@ -90,22 +105,22 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from
 there to spreadsheet or tab-separated tables. From scripts, the data can
-be accessed through our <a href="https://api.genome.ucsc.edu">API</a>,
+be accessed through our <a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
 track=<i>meiDeepmei1kg</i>.
 </p>
 <p>
 For automated download and analysis, the genome annotation is stored in
 a bigBed file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/" target="_blank">
 our download server</a>.  The file for this track is called
-<tt>deepmei1kg.bb</tt> in <tt>/gbdb/hg38/mei/</tt>. Individual regions
+<tt>deepmei1kg.bb</tt> in <tt>/gbdb/$db/mei/</tt>. Individual regions
 or the whole genome annotation can be obtained using our tool
 <tt>bigBedToBed</tt>, which can be compiled from the source code or
 downloaded as a precompiled binary for your system. Instructions for
 downloading source code and binaries can be found
-<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/deepmei1kg.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/deepmei1kg.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>.
 </p>
 <p>
 The original annotation source data can be downloaded from the

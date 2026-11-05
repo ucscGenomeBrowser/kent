@@ -1,0 +1,129 @@
+# #38251 -- in a window narrower than about 1100px the Login / Share-a-link icon left the
+# blue bar.  On hgGateway and the home page it landed in the white logo area above it; on
+# hgTracks it slid leftwards across the menu as the window narrowed and hid whichever item
+# was under its opaque background, and at some widths the menu items wrapped out of the
+# 32px-high bar and were drawn below it on white.
+#
+# b82bce91b10 is one file, hg/htdocs/style/nice_menu.css.  The rule it replaced put the icon
+# at `position:sticky` with `float:right` so that it would follow the right edge of the
+# window while the 1000px-wide bar scrolled sideways.  `sticky` only moves an element that
+# is in the normal flow, and the float was what put it there -- which is what made the icon
+# share a line with the menu items.  Both declarations are gone; the icon stays at the
+# right-hand end of the bar, where the wide-window rule already put it.
+#
+# THIS IS THE SCRIPT `box:` WAS ADDED FOR.  The bug is geometry -- where one box sits
+# relative to another -- and until now `expect:` could not ask: has:/noHas: say what is in
+# the page and never where it is, and `color:`, the one check that reads pixels, samples a
+# track row inside the image and cannot be pointed at a page element.  Every selector used
+# here matched just as well on the build with the bug.
+#
+# Three things are asserted on each of the four pages b82bce91b10 measured, one per symptom:
+#
+#   clear:   the icon does not touch the menu, with 8px to spare.  THIS IS THE CHECK THAT
+#            CATCHES THE BUG; see the measurement below.
+#   inside:  the icon is within the bar.  This is the ticket as filed, and it is the weaker
+#            of the two: the icon never left the bar horizontally on hgGateway, it slid
+#            leftwards inside it.
+#   height:  the bar is still one row.  The items wrapping out of it was the third symptom,
+#            and the bar's own height is the cheapest way to ask.
+#
+# `clear:` names the menu LIST, `ul.nice-menu`, and not the individual links or list items,
+# and that choice is the difference between a test and a decoration.  Measured at 700px on
+# hgGateway against a build with b82bce91b10 reverted (ticket sandbox 38252):
+#
+#     fixed     #topRightLinks at 964,114 30x32   -- the right-hand end of the 1000px bar
+#     reverted  #topRightLinks at 652,114 34x32   -- 312px to the left, following the window
+#     both      ul.nice-menu   at  30,114 898x26
+#
+# So the icon at 652 sits ON the menu list, and at 964 it is 36px clear of it.  The first
+# draft of this script asked about `> li > a` instead, and 652..686 happens to fall in a gap
+# BETWEEN two link boxes -- it passed on the reverted build at every width from 390 to 1099.
+# The list as one box has no gaps.
+#
+# The home page is left out of the clear: check on purpose.  There "Home" is the 84px UCSC
+# logo rather than the 23px house icon, so the menu runs to x=980 against an icon at x=964
+# and they overlap on the FIXED build too.  b82bce91b10 says so itself: in a window narrower
+# than the 1000px bar the icon is off the right edge until you scroll, "and I do not know a
+# better fix".  Asserting it there would be asserting a known remaining issue.
+#
+# ONE WIDTH PER RUN.  `size:` is read once, when the browser context is made, so a script
+# cannot sweep widths.  700px is inside the media query and is the case Gerardo reported:
+# two windows side by side on a 14-inch laptop.  850px on hgTracks is the other width worth
+# having, since hovering "About Us" there used to blank every label in the bar; it needs a
+# second script, or a verb that resizes mid-run.
+#
+# The last step reads the stylesheet the server is really serving and checks that the two
+# declarations whose removal was the fix are gone.  It is a blunter statement of the same
+# thing and it is kept because it names the CAUSE where the checks above name the effect: a
+# morning where both go red says which rule came back.  Neither `position:sticky` nor
+# `float:right` appears anywhere else in that file (its two floats are `float: left`), and
+# the colors and the word "sticky" both appear in its own comments, which is why the strings
+# have to be the declarations exactly as CSS writes them.
+#
+# WATCHED TO FAIL.  The whole directory was run against ticket sandbox 38252, which is master
+# with this batch's fixes reverted, built into the freeze -- CGIs, js and htdocs/style, since
+# this fix is a stylesheet and would not travel with a CGI-only build.  Confirmed the park was
+# really serving the pre-fix rule (`position:sticky` and `float:right` both present in
+# /style/nice_menu.css as served) before believing either verdict.
+proof:
+
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the icon is at 666,0 while the bar is at 0,114 -- 114px ABOVE it, in the white logo area, which is the screenshot on the ticket"
+target: genome-test
+db: hg38
+# A window narrow enough to be inside the @media rule under test.  Every step here runs at
+# this size; the wide-window layout is not what this ticket is about.
+size: [700, 800]
+reset: true
+fast: true
+steps:
+  # hgGateway, one of the two pages the icon left the bar on, because they draw a logo banner
+  # above the bar for it to land in.  The narrow-window rule is in force -- the links have
+  # collapsed into the hamburger, which is `display:none` on a wide window.
+  - goto: "/cgi-bin/hgGateway?db=hg38"
+  - expect:
+      has: ['#main-menu-whole', '#topRightLinks', '#trToggle:visible']
+      box:
+        - {sel: "#topRightLinks", inside: "#main-menu-whole"}
+        - {sel: "#topRightLinks", clear: "#main-menu ul.nice-menu", gap: 8}
+        - {sel: "#main-menu-whole", height: "<=40"}
+
+  # The home page, the other one the icon left the bar on, and a static page rather than a
+  # CGI: it builds its bar through hgMenubar.c and loads nice_menu.css on its own.  No
+  # clear: here -- see the header.  (A ts park serves no menu bar on a static page at all,
+  # so this step is the one part of the script that cannot be A/B'd.)
+  - goto: "/index.html"
+  - expect:
+      text: UCSC Genome Browser
+      has: ['#topRightLinks', '#trToggle:visible']
+      box:
+        - {sel: "#topRightLinks", inside: "#main-menu-whole"}
+        - {sel: "#main-menu-whole", height: "<=40"}
+
+  # hgTracks.  Here the icon never left the bar; what it did was sweep across the items.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:1000000-1001000&hideTracks=1&pix=1100"
+  - expect:
+      rows: [ruler]
+      box:
+        - {sel: "#topRightLinks", inside: "#main-menu-whole"}
+        - {sel: "#topRightLinks", clear: "#main-menu ul.nice-menu", gap: 8}
+        - {sel: "#main-menu-whole", height: "<=40"}
+
+  # hgTrackUi, the fourth page in the commit's own measurement.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=knownGene"
+  - expect:
+      text: "GENCODE"
+      box:
+        - {sel: "#topRightLinks", inside: "#main-menu-whole"}
+        - {sel: "#topRightLinks", clear: "#main-menu ul.nice-menu", gap: 8}
+        - {sel: "#main-menu-whole", height: "<=40"}
+
+  # And the rule itself, in the stylesheet as the server serves it.  A CSS file opened by URL
+  # renders as a plain text document, so text:/noText: read it directly.
+  - goto: "/style/nice_menu.css"
+  # Chromium builds the plain-text view of a non-HTML document in a <pre>, and it is not
+  # always there when the load event fires -- without this wait the step below reads an
+  # empty body and fails for a reason that is not the stylesheet.
+  - wait: 'pre'
+  - expect:
+      text: "@media (max-width: 1100px)"
+      noText: ["position:sticky", "float:right"]

@@ -20,6 +20,14 @@ endif
 PW_DIR ?= /hive/groups/browser/uiTest/pw
 PW_ENV ?= PLAYWRIGHT_BROWSERS_PATH=$(PW_DIR)/browsers NODE_PATH=$(PW_DIR)/node_modules
 T      ?=
+# TARGET points the whole directory at one server, overriding the `target:` each script
+# carries: `make test TARGET=hgwdev-demo9`, or a ticket park, or a full .../cgi-bin URL.
+# It takes the same values `target:` does. docent.js and preflight.js both read
+# DOCENT_TARGET, so the fixture check and the run agree on which server is being driven.
+# Use it to try a suite somewhere else, not to change where it belongs: the committed
+# scripts stay pointed at their own server, which is what the nightly reads.
+TARGET     ?=
+TARGET_ENV := $(if $(TARGET),DOCENT_TARGET=$(TARGET))
 # `make parity` needs one script that is expected to PASS, so an .xfail one is no use as
 # the default. An including makefile can name a better one.
 PASSING := $(filter-out %.xfail,$(patsubst %.docent.yaml,%,$(wildcard *.docent.yaml)))
@@ -34,7 +42,7 @@ PROOF  ?= $(dir $(PREFLIGHT))proof.js
 # went away" from "a bug came back" -- which are the same red without it. Run it before
 # the suite, and on its own as often as you like.
 preflight:
-	@$(PW_ENV) node $(PREFLIGHT) .
+	@$(TARGET_ENV) $(PW_ENV) node $(PREFLIGHT) .
 
 # What evidence each script has that it would catch its bug, and the tally. No browser
 # and no network, so it costs nothing to run and the number can go straight into a commit
@@ -76,7 +84,7 @@ test:
 	  case $$b in *.xfail) want=1;; esac; \
 	  if [ $$want = 1 ]; then printf '=== %s (expected to fail)\n' "$$b"; \
 	  else printf '=== %s\n' "$$b"; fi; \
-	  $(PW_ENV) node $(DOCENT) $$f > $$b.log 2>&1; got=$$?; \
+	  $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $$f > $$b.log 2>&1; got=$$?; \
 	  if [ $$got -ne 0 ] && [ $$want -eq 0 ]; then \
 	    echo "  FAILED -- run said:"; sed 's/^/    /' $$b.log; fail=1; \
 	  elif [ $$got -eq 0 ] && [ $$want -eq 1 ]; then \
@@ -99,13 +107,13 @@ test:
 #                    Cart bleed between runs would show up here and nowhere else.
 parity:
 	@echo "=== $(PARITY) fast"; \
-	  DOCENT_FAST=1 $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.fast.log 2>&1 \
+	  DOCENT_FAST=1 $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.fast.log 2>&1 \
 	  || { sed 's/^/    /' parity.fast.log; exit 1; }
 	@echo "=== $(PARITY) slow (records an mp4, so this one is not quick)"; \
-	  $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.slow.log 2>&1 \
+	  $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.slow.log 2>&1 \
 	  || { sed 's/^/    /' parity.slow.log; exit 1; }
 	@echo "=== $(PARITY) again, to catch state left behind by the last run"; \
-	  DOCENT_FAST=1 $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.rerun.log 2>&1 \
+	  DOCENT_FAST=1 $(TARGET_ENV) $(PW_ENV) node $(DOCENT) $(PARITY).docent.yaml > parity.rerun.log 2>&1 \
 	  || { sed 's/^/    /' parity.rerun.log; exit 1; }
 # Same rule as `test`: the three logs and the mp4 the slow run records are kept only when
 # a step failed, and a failing step exits above before this line is reached.
@@ -136,7 +144,7 @@ parity:
 # is not about trackDb at all. Both targets strip exactly that line, so it cannot get
 # into a baseline either. The other two trackDb lines -- a hub genome, an unreachable
 # hubApi -- are real news about the derivation and are left in.
-DERIVE_ENV = DOCENT_DERIVE=1 $(PW_ENV)
+DERIVE_ENV = DOCENT_DERIVE=1 $(TARGET_ENV) $(PW_ENV)
 DERIVE_FILTER = sed '/^trackDb: [0-9][0-9]* tracks for /d'
 BASELINES := $(patsubst expected/%.derive,%,$(wildcard expected/*.derive))
 

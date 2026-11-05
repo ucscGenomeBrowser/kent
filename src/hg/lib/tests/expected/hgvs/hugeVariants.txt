@@ -1,0 +1,8 @@
+# db: hg38
+# inputFile: input/hgvs/hugeVariants.txt
+# Variants with a ref of many megabases, run with hgvsTester -variants -noTx.
+# Only the g. term is tested here; hugeTxVariants.txt tests the transcript terms.
+# whole chr21 deleted
+chr21	0	46709983	-	NC_000021.9:g.1_46709983del
+# 10Mb ref with VCF anchor base as alt
+chr21	20000000	30000001	C	NC_000021.9:g.20000002_30000001del

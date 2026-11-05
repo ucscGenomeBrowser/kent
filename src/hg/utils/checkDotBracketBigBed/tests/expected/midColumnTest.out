@@ -1,0 +1,1 @@
+output/midColumnTest.bb:2: midShort at chr1:2000-2020: the column holds 10 characters but the item has 20 spliced bases; pad the string with spaces where there is no prediction

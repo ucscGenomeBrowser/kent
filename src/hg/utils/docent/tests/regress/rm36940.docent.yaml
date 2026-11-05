@@ -1,0 +1,113 @@
+# #36940 -- hgc trusted the field count on a bigBed track's type line.
+#
+# The ticket started somewhere else: with bigBedOnePath=off, mm10's knownGene genes went
+# missing.  9f5a3871b95 removed the bigBedOnePath fallback entirely, leaving one path for
+# loading a bigBed, so the old path that dropped those genes cannot come back.  There is
+# nothing left to test there -- the setting is gone, and a check that mm10's genes draw
+# would pass on every build ever made.
+#
+# The second fix under this ticket is testable, and this is it.  0ca1bd9ec11: a hub could
+# declare fewer than three fields, or a negative number, and hg/hgc/bigBedClick.c read past
+# the start of an array before anything noticed the count was wrong.  It now stops with a
+# message naming the track and the count it declared:
+#
+#     Track hub_<n>_rm36940badCount1 declares 'type bigBed 1', but a bigBed has at least
+#     3 fields.
+#
+# hubCheck does NOT catch this (Jairo checked): it flags `type bigBed 99` and
+# `type bigBed -5` but says nothing about 1 or 2, so a hub declaring either passes hubCheck
+# clean and fails only when a reader clicks an item.  That is the realistic way a hub author
+# meets this, and it is the route the script takes.
+#
+# THE THREE ACCEPTED COUNTS ARE HALF THE TEST.  A guard that simply rejected anything it was
+# unsure of would pass every rejection check here, so each accepted track is asserted to
+# render a SIX-field item: Score and Strand are fields 5 and 6, and they are on the page only
+# if the count really was resolved to what the file holds.  `type bigBed` with no count is
+# the zero sentinel the fix had to leave alone, and `type bigBed 99` is the clamp.
+#
+# The fixture is ~/public_html/docentFixtures/rm36940/, copied from Jairo's hub at
+# ~jairo/public_html/Claude/36940 so that nothing outside this repository can change what
+# this measures, with every track renamed to an rm36940 prefix -- regress/README.txt's rule
+# about a fixture never sharing a name with a native track.  Seven tracks, all pointing at
+# the same 6-field bigBed, so the count on the type line is the only variable.
+#
+# The message arrives in the yellow Warning/Error box rather than as a bare error page, and
+# the box is hidden markup until the page's JavaScript shows it, so `text:` reads it only
+# because this runs in a real browser.
+#
+# `type bigBed 3` is deliberately not clicked.  Three fields means no item NAME, so hgTracks
+# writes an empty i= into the href and `item:` has nothing to match; it is legal, it is
+# covered by hubCheck, and reaching it here would need a positional click that says less
+# than the three above.
+proof:
+  - "assertion-only 2026-09-17 -- written from #36940 and 0ca1bd9ec11 after the fix reached genome-test"
+  - "sandbox-ab 2026-09-17 -- ticket sandbox 38252, master with this batch's fixes reverted (tree ~/kentRevert22, branch revert22docent; CGIs, js and htdocs all built into the freeze): the hgc page carries no 'declares type bigBed 1, but a bigBed has at least 3 fields' message"
+  - "assertion-only 2026-09-17 -- v503 cannot be the baseline here: on v503_branch built into ticket sandbox 38316 the fixture hub draws no rows at all, so the run never reaches the field-count check.  The hand-built revert above is this script's evidence"
+
+target: genome-test
+db: hg38
+position: chr17:7667000-7676000
+reset: true
+fast: true
+steps:
+  - go: chr17:7667000-7676000
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm36940/hub.txt", db: hg38}
+  - go: chr17:7667000-7676000
+
+  # All seven rows draw whatever the type line says: the count is only consulted when an
+  # item is clicked, which is why this was not caught before a reader clicked one.
+  - expect:
+      rows:
+        - rm36940badCountNeg5
+        - rm36940badCount1
+        - rm36940badCount2
+        - rm36940okCount3
+        - rm36940okCount6
+        - rm36940okCountNone
+        - rm36940okCount99
+
+  # Rejected: a count below three.  The message names the count, so a guard that rejected
+  # every hub track would not satisfy it.
+  - click: {track: rm36940badCount1, item: itemA}
+  - expect:
+      text: "declares 'type bigBed 1', but a bigBed has at least 3 fields"
+      noText: "Genomic Size"
+
+  - go: chr17:7667000-7676000
+  - click: {track: rm36940badCount2, item: itemA}
+  - expect:
+      text: "declares 'type bigBed 2', but a bigBed has at least 3 fields"
+      noText: "Genomic Size"
+
+  # Rejected: a negative count, which is the other shape of the same bad input.
+  - go: chr17:7667000-7676000
+  - click: {track: rm36940badCountNeg5, item: itemA}
+  - expect:
+      text: "declares 'type bigBed -5', but a bigBed has at least 3 fields"
+      noText: "Genomic Size"
+
+  # Accepted: the count that matches the file.  Six fields, so the page carries the name,
+  # the score and the strand.
+  - go: chr17:7667000-7676000
+  - click: {track: rm36940okCount6, item: itemA}
+  - expect:
+      # Score and Strand are fields 5 and 6: they are on the page only if the count really
+      # resolved to what the file holds.
+      text: ["itemA", "Score:", "Strand:", "chr17:7668001-7669500"]
+      noText: "at least 3 fields"
+
+  # Accepted: no count at all.  Zero is the sentinel meaning "read it from the file", and it
+  # is the case a `count < 3` test would reject if it were written carelessly.
+  - go: chr17:7667000-7676000
+  - click: {track: rm36940okCountNone, item: itemA}
+  - expect:
+      text: ["itemA", "Score:", "Strand:"]
+      noText: "at least 3 fields"
+
+  # Accepted: a count larger than the file holds, clamped to the file's six.
+  - go: chr17:7667000-7676000
+  - click: {track: rm36940okCount99, item: itemA}
+  - expect:
+      text: ["itemA", "Score:", "Strand:"]
+      noText: "at least 3 fields"

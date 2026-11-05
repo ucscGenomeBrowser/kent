@@ -1,0 +1,15 @@
+mainForm	GET	/cgi-bin/hgNear
+	logicFirst	SELECT	n/a	any
+		all
+		any
+	logicLast	SELECT	n/a	any
+		all
+		any
+	logicNoValue	SELECT	n/a	any
+		all
+		any
+	spaced	INPUT	TEXT	spacedValue
+	boxFirst	INPUT	CHECKBOX	on
+	boxLast	INPUT	CHECKBOX	on
+	disabledText	INPUT	TEXT	stillNamed
+	Submit	INPUT	SUBMIT	n/a

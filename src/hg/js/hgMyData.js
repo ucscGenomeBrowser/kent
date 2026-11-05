@@ -3,8 +3,6 @@
 /* This file contains all the code needed to get the HubSpace UI functioning.
  * There are some helper functions that are sort of general and could probably
  * be added to utils.js or similar as well as 3 main pieces:
- * - the api key generation/revocation: functions to request new/revoke old apiKeys
- *       this code runs on the Hub Development tab of hgHubConnect
  * - uppyOptions and uppy constructor: Uppy is a 3rd party library for handling
  *       user uploads. The uppyOptions object and constructor are used to modify
  *       the default behavior, including what to do when a file has been added
@@ -22,6 +20,10 @@
  *
  *   TODO: most of this code could probably be modularized successfully, or split up
  *   so it is easier to read.
+ *
+ * The API key generation and revocation used to be a fourth piece here. It is in
+ * hubApiKey.js now: the Hub Development tab offers those controls on sites that do not
+ * run hubSpace, and such a site never loads this file.
  */
 
 
@@ -180,63 +182,6 @@ function refreshBatchSelects(uppyInstance) {
     if (plugin && uppyInstance.getFiles().length > 1) {
         plugin.addBatchSelectsToDashboard();
     }
-}
-
-function generateApiKey() {
-    let apiKeyInstr = document.getElementById("apiKeyInstructions");
-    let apiKeyDiv = document.getElementById("apiKey");
-
-    if (!document.getElementById("spinner")) {
-        let spinner = document.createElement("i");
-        spinner.id = "spinner";
-        spinner.classList.add("fa", "fa-spinner", "fa-spin");
-        document.getElementById("generateApiKey").after(spinner);
-    }
-
-    let handleSuccess = function(reqObj) {
-        apiKeyDiv.textContent = reqObj.apiKey;
-        apiKeyInstr.style.display = "block";
-        let revokeDiv= document.getElementById("revokeDiv");
-        revokeDiv.style.display = "block";
-        document.getElementById("spinner").remove();
-
-        // remove the word 'already' from the message if we have just re-generated a key
-        let refreshSpan = document.getElementById("removeOnGenerate");
-        if (refreshSpan) {
-            refreshSpan.style.display = "none";
-        }
-    };
-
-    let cartData = {generateApiKey: {}};
-    cart.setCgiAndUrl(fileListEndpoint);
-    cart.send(cartData, handleSuccess);
-    cart.flush();
-}
-
-function revokeApiKeys() {
-    let apiKeyInstr = document.getElementById("apiKeyInstructions");
-    let apiKeyDiv = document.getElementById("apiKey");
-
-    if (!document.getElementById("spinner")) {
-        let spinner = document.createElement("i");
-        spinner.id = "spinner";
-        spinner.classList.add("fa", "fa-spinner", "fa-spin");
-        document.getElementById("revokeApiKeys").after(spinner);
-    }
-
-    let handleSuccess = function(req) {
-        apiKeyInstr.style.display = "none";
-        document.getElementById("spinner").remove();
-        let generateDiv = document.getElementById("generateDiv");
-        generateDiv.style.display = "block";
-        let revokeDiv = document.getElementById("revokeDiv");
-        revokeDiv.style.display = "none";
-    };
-
-    let cartData = {revokeApiKey: {}};
-    cart.setCgiAndUrl(fileListEndpoint);
-    cart.send(cartData, handleSuccess);
-    cart.flush();
 }
 
 const fileNameRegex = /[0-9a-zA-Z._]+/g; // allowed characters in file names
@@ -569,14 +514,17 @@ const uppy = new Uppy.Uppy({
                 doUpload = false;
                 continue;
             }
-            // check if this hub already exists and the genome is different from what was
-            // just selected, if so, make the user create a new hub. A blank genome means
-            // none has been set yet, not a hub for a genome named "": a directory row is
-            // blank until an upload carrying a genome lands in it, and the hub level
-            // files of a hub that brings its own hub.txt have no genome of their own.
-            // So a blank on either side is not a mismatch.
+            // Check the file's genome against the directory it is going into, which is
+            // the hub itself or one of its subdirectories. What genome a directory row
+            // holds is set out in hg/inc/userdata.h: a hub row has the one genome its
+            // hub.txt names, or is blank. A blank on either side is not a mismatch,
+            // since the hub level files of a hub that brings its own hub.txt have no
+            // genome either. A batch that brings a hub.txt with a genomesFile is not
+            // checked: that hub.txt replaces the hub's definition, its genomes
+            // included.
             let existing = hubCreate.uiState.filesHash[file.meta.parentDir];
-            if (existing && existing.genome && existing.genome !== file.meta.genome) {
+            if (!isSplitHub && existing && existing.genome &&
+                    existing.genome !== file.meta.genome) {
                 // If the existing hub is an assembly hub, adopt its genome
                 // automatically rather than erroring - the UI hid the picker
                 // for this case, so the mismatch is just stale metadata.
@@ -820,12 +768,16 @@ function propagateAssemblyHubMeta(uppyInstance) {
     // We detect the hub-defining files by filename rather than by meta.fileType,
     // because setFileMeta updates Uppy's state immutably - file objects captured
     // from getFiles() earlier in this event may still carry old meta.
+    //
+    // Returns a promise that settles once the metadata is stamped. Reading a
+    // hub.txt is asynchronous, so callers that must see the stamped values wait
+    // on it. The promise never rejects.
     let files = uppyInstance.getFiles();
     let twoBit = files.find(looksLikeTwoBit);
     let hubTxt = files.find(looksLikeHubTxt);
     if (!twoBit && !hubTxt) {
         hubCreate.clearLastHubBatchDescriptor();
-        return;
+        return Promise.resolve();
     }
 
     function applyGenomeToSiblings(genome, alsoLockHubDefiners, hubType) {
@@ -864,7 +816,7 @@ function propagateAssemblyHubMeta(uppyInstance) {
     if (hubTxt) {
         hubBatchParsesInFlight++;
         setUploadButtonEnabled(false);
-        hubCreate.parseHubBatch(uppyInstance.getFiles()).then((descriptor) => {
+        return hubCreate.parseHubBatch(uppyInstance.getFiles()).then((descriptor) => {
             // Skip stale parses; only the latest-completed one applies.
             if (descriptor !== hubCreate.getLastHubBatchDescriptor()) return;
             for (let e of descriptor.errors) {
@@ -901,11 +853,11 @@ function propagateAssemblyHubMeta(uppyInstance) {
             hubBatchParsesInFlight--;
             if (hubBatchParsesInFlight === 0) setUploadButtonEnabled(true);
         });
-        return;
     }
 
     let asmGenome = twoBit.meta.genome || hubCreate.sanitizeGenomeName(twoBit.name);
     applyGenomeToSiblings(asmGenome, false, "assemblyHub");
+    return Promise.resolve();
 }
 
 // create a custom uppy plugin to batch change the type and db fields
@@ -1263,14 +1215,23 @@ class BatchChangePlugin extends Uppy.BasePlugin {
             // adopts its genome and gets hubType=assemblyHub. Also handle hub.txt:
             // parse it client-side and, if it declares an assembly hub, mirror
             // those values onto every file (hub.txt wins).
-            propagateAssemblyHubMeta(this.uppy);
+            let stamped = propagateAssemblyHubMeta(this.uppy);
 
             if (this.uppy.getFiles().length > 1) {
                 this.addBatchSelectsToDashboard();
             } else {
-                // only open the file editor when there is one file
-                const dash = uppy.getPlugin("Dashboard");
-                dash.toggleFileCard(true, file.id);
+                // only open the file editor when there is one file, and only after
+                // the hub.txt parse. The card copies file.meta when it opens and
+                // writes that copy back on save, so an earlier open saves hg38.
+                stamped.then(() => {
+                    if (!this.uppy.getFile(file.id)) {
+                        return;
+                    }
+                    const dash = this.uppy.getPlugin("Dashboard");
+                    if (dash) {
+                        dash.toggleFileCard(true, file.id);
+                    }
+                });
             }
         });
         this.uppy.on("file-removed", (file) => {
@@ -3069,7 +3030,12 @@ var hubCreate = (function() {
         cart.debug(debugCartJson);
         // get the file list immediately upon page load
         let activeTab = $("#tabs").tabs( "option", "active" );
-        if (activeTab === 3) {
+        // Which tab this is depends on what the mirror turns on: hgHubConnect only prints
+        // the Hub Development tab when hgHubConnect.validateHub is set, so on a mirror with
+        // storeUserFiles on and validateHub off, Hub Upload is the third tab and not the
+        // fourth.  Find it by its panel instead of counting.
+        let hubUploadTab = $('#tabs > ul > li > a[href="#hubUpload"]').parent().index();
+        if (hubUploadTab >= 0 && activeTab === hubUploadTab) {
             let url = new URL(window.location.href);
             if (url.protocol === "http:") {
                 warn(`The hub upload feature is only available over HTTPS. Please load the HTTPS version of ` +

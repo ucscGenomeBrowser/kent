@@ -17,6 +17,7 @@ export TOP="/hive/data/outside/ncbi/genomes"
 cd "${TOP}"
 
 export asmId=$1
+[[ "$asmId" =~ ^GC[AF]_[0-9]{9}\.[0-9]+_[A-Za-z0-9._-]+$ ]] || usage
 export gcX="${asmId:0:3}"
 export d0="${asmId:4:3}"
 export d1="${asmId:7:3}"
@@ -53,7 +54,8 @@ export startEpoch=`date "+%s"`
 
 lftp -e "
   open ftp://ftp.ncbi.nlm.nih.gov;
-  set net:timeout 1200;
+  set net:timeout 300;
+  set net:max-retries 5;
   set mirror:dereference yes;
   mirror --parallel=4 --verbose --only-newer --delete --no-perms \
     -x suppressed \
@@ -75,9 +77,8 @@ lftp -e "
   quit"
 
 export epoch=`date "+%s"`
-export secondsET=`echo $epoch $startEpoch | awk '{printf "%d", $1-$2}'`
+export secondsET=$(( epoch - startEpoch ))
 export DS=`date "+%F"`
 export T=`date "+%T"`
 printf "### %s %s %s completed lftp %d seconds %s\n" "${epoch}" "${DS}" "${T}" "${secondsET}" "${asmId}"
 printf "%s\n" "done: ${srcDir}" 1>&2
-exit $?

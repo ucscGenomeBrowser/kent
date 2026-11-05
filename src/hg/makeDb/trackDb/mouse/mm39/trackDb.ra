@@ -73,3 +73,9 @@ priority 3
 html dnaMethylation.html
 
 include methbase2.ra alpha
+
+include gpnStar.ra alpha
+
+include ../nonCodingRNAs.ra alpha
+include ../mirGeneDbV3_0.ra alpha
+include ../mirBaseV22_1.ra alpha

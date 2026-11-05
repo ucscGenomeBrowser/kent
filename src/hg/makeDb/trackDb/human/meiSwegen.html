@@ -7,18 +7,21 @@ cohort of 1,000 Swedish whole-genome samples (Ameur et al. 2017). Each
 site is an insertion of an Alu, L1 (LINE-1), SVA or HERV-K mobile
 element relative to the reference. The SweGen short-variant frequency
 data for the same cohort is shown in the
-<a href="hgTrackUi?g=swegen">SweGen variant frequencies</a> subtrack of
+<a href="hgTrackUi?db=hg38&g=swefreq">SweGen variant frequencies</a> subtrack of
 the SNV Frequencies collection.
 </p>
 
 <table class="stdTbl">
-<tr><th>Class</th><th>MEIs</th></tr>
-<tr><td>Alu</td><td>14,467</td></tr>
-<tr><td>L1</td><td>2,429</td></tr>
-<tr><td>SVA</td><td>1,131</td></tr>
-<tr><td>HERVK</td><td>73</td></tr>
-<tr><th>Total (GRCh37)</th><th>18,100</th></tr>
-<tr><th>Total (after liftOver to hg38)</th><th>18,090</th></tr>
+<tr>
+  <th>Class</th>
+  <th>Original GRCh37 callset</th>
+  <th>Shown in this track (hg38)</th>
+</tr>
+<tr><td>Alu</td><td>14,467</td><td>14,461</td></tr>
+<tr><td>L1</td><td>2,429</td><td>2,426</td></tr>
+<tr><td>SVA</td><td>1,131</td><td>1,131</td></tr>
+<tr><td>HERVK</td><td>73</td><td>72</td></tr>
+<tr><th>Total</th><th>18,100</th><th>18,090</th></tr>
 </table>
 
 <p>
@@ -105,7 +108,8 @@ documented in the
 <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
 target="_blank">makeDoc file</a>; the scripts live in
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
-target="_blank">src/hg/makeDb/scripts/mei</a>.
+target="_blank">src/hg/makeDb/scripts/mei</a>,
+and the track configuration is in <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/mei.ra" target="_blank">trackDb/human/mei.ra</a>.
 </p>
 
 <h3>Why the original GRCh37 MELT VCF rather than the GRCh38 SVDB files</h3>
@@ -147,7 +151,7 @@ data.
 
 
 <p>
-Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, Kähäri AK, Lundin P, Che H
+Ameur A, Dahlberg J, Olason P, Vezzi F, Karlsson R, Martin M, Viklund J, K&#228;h&#228;ri AK, Lundin P, Che H
 <em>et al</em>.
 <a href="https://doi.org/10.1038/ejhg.2017.130" target="_blank">
 SweGen: a whole-genome data resource of genetic variability in a cross-section of the Swedish

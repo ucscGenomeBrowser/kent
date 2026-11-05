@@ -1,0 +1,50 @@
+# #16975 -- in a multi-region view built from custom regions on two chromosomes, clicking
+# a custom track item in any region but the first gave an hgc error page:
+#
+#     Couldn't find <item name>@<chrom>:<start>-<end>
+#
+# Cath found it on danRer10 with BLAT results shown through a custom regions URL.  Galt
+# found the cause: hgc took the chromosome from the cart's nonVirtPosition, which is the
+# FIRST window, and not from the c= on the click URL.  His fix, 563adc90807 (2016-03-10),
+# made hgc.c use nonVirtPosition only where it is needed.
+#
+# The recipe is Galt's own test case from the ticket: the same 10 kb on hg19 chr21 and
+# chr22, as two custom regions.  A BED4 custom track has one item in each region.  The
+# item on chr22 is in the SECOND window, which is the case the bug broke.
+#
+# Checks:
+#   1. Both regions are drawn, and the custom track row is on the page.  This proves the
+#      multi-region view is really up, so the click below lands in the second window.
+#   2. The hgc page for the chr22 item names the item and its chr22 position, and it
+#      does not carry the ticket's "Couldn't find" error.  The positive check matters:
+#      an hgc page that failed some other way has no "Couldn't find" either.
+#
+# On hgwdev-demo6 (multiRegionSpaces=on) on 2026-10-06 the custom track row is not drawn
+# in the multi-region view (only ruler), so step 5 fails before the click, and the ticket's
+# hgc path cannot be reached there.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg19
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&pix=1100&hideTracks=1"
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&hgt.customText=track%20name%3Drm16975ct%20description%3D%22rm16975%20items%22%20visibility%3Dpack%0Achr21%0933033000%0933036000%09rm16975a%0Achr22%0933033000%0933036000%09rm16975b%0A"
+  - expect:
+      has: 'tr[id^="tr_ct_rm16975ct"]'
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr21%2033031596%2033041570%0Achr22%2033031596%2033041570%0A"
+  - expect:
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'tr[id^="tr_ct_rm16975ct"]'
+        - 'area[data-tooltip="chr21:33031597-33041570"]'
+        - 'area[data-tooltip="chr22:33031597-33041570"]'
+
+  - click: {track: "ct_rm16975ct*", item: rm16975b}
+  - expect:
+      url: "hgc"
+      text: ["rm16975b", "chr22:33033001-33036000"]
+      noText: "Couldn't find"

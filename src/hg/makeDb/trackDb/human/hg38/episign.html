@@ -1,0 +1,136 @@
+<h2>Description</h2>
+
+<p>
+This track is part of the
+<a href="hgTrackUi?g=episignatures">Episignatures</a> collection.
+</p>
+
+<p>
+It shows the genes and genomic regions behind the disorders that the EpiSign clinical test can
+detect, as of EpiSign version 6.1.0. EpiSign is a diagnostic DNA methylation test run by the
+EpiSign Clinical Testing Network, a group of clinical laboratories in Canada, the United States
+and Europe. A blood sample is measured on a methylation array and compared to the episignatures
+in the EpiSign Knowledge Database. Unlike the other tracks in this collection, this track does
+not show the CpG sites of a signature. Instead, each feature marks the locus whose alteration
+causes the methylation pattern: the causative gene for single-gene disorders, or the deleted or
+duplicated region for copy-number syndromes such as Wolf-Hirschhorn or Potocki-Lupski syndrome.
+</p>
+
+<p>
+EpiSign also tests a set of imprinted regions and the <i>FMR1</i> promoter directly, by
+looking at methylation at that region itself rather than across the genome. These
+differentially methylated regions (DMRs) are included as a second type of feature.
+</p>
+
+<p>
+The track contains 231 features for more than 170 disorder codes and more than 240
+episignatures. A disorder that can be caused by several genes, for example the BAFopathies or
+Fanconi anemia, has one feature per gene.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Each feature is labeled with the EpiSign disorder code followed by the gene or region in parentheses. The
+colors are the ones chosen by the data provider:
+</p>
+
+<table class="stdTbl">
+  <tr><th style="background-color:#3F637F;width:2em">&nbsp;</th>
+      <td><b>Dark blue</b> &mdash; episignature: gene or region whose alteration causes a
+          genome-wide DNA methylation episignature</td></tr>
+  <tr><th style="background-color:#919397;width:2em">&nbsp;</th>
+      <td><b>Gray</b> &mdash; imprinting or promoter DMR tested directly
+          (imprinting disorders, fragile X syndrome, <i>BCLAF3</i> 5' UTR)</td></tr>
+</table>
+
+<p>
+The mouse-over and the details page list the disorders, the gene, and the EpiSign IDs of the
+episignatures for that locus. A disorder often has several episignature IDs. Suffixes such as
+<tt>_SEN</tt> and <tt>_SPC</tt>, <tt>_PLA</tt> and <tt>_PLB</tt>, or <tt>_SEC</tt> denote
+alternative versions of the signature for the same disorder. For a DMR, the label shows the
+codes of the disorders tested at that region, separated by commas, and the details page gives
+the region and EpiSign's name for it.
+</p>
+
+<p>
+The features can be filtered by type on the track configuration page. Disorder codes can be
+typed into the position box, e.g. <tt>BAFopathy</tt> or <tt>CHARGE</tt>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+EpiSign analysis is performed on genomic DNA from peripheral blood, measured with Illumina
+Infinium methylation arrays (MethylationEPIC). Each sample is normalized and compared to the
+EpiSign Knowledge Database, which holds thousands of methylation profiles of patients with
+confirmed genetic diagnoses and of controls, using unsupervised clustering and a support vector
+machine classifier that assigns a methylation variant pathogenicity (MVP) score for every
+episignature. In parallel, methylation at imprinted regions and at the <i>FMR1</i> promoter is
+assessed. Kerkhof et al. 2024 describe the results of 2399 clinical cases tested through the
+EpiSign Clinical Testing Network and give recommendations for reporting.
+</p>
+
+<p>
+The data was provided by the EpiSign group as a BED file,
+<tt>UCSC_EpiSign6.1.0_hg38.bed</tt>, with one row per disorder and locus and with the
+coordinates already on the hg38 assembly. We split its free-text description into the disorders
+and the gene, removed the explanatory paragraph that was repeated on every row, and converted the
+file to bigBed format. All 231 rows of the file are shown in the track, none were removed. The
+steps are documented in the
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/episignatures.txt"
+target="_blank">makeDoc file</a> and the scripts are in our
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/episignatures"
+target="_blank">source repository</a>.
+</p>
+
+<h2>Data Access</h2>
+
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
+tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>, track=<i>episign</i>.
+</p>
+
+<p>
+For automated download and analysis, the annotation is stored in a bigBed file that can be
+downloaded from
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/hg38/episignatures/" target="_blank">our download
+server</a>. The file for this track is called <tt>episign.bb</tt>. Individual regions or the whole
+annotation can be obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the
+source code or downloaded as a precompiled binary for your system. Instructions for downloading
+source code and binaries can be found
+<a href="https://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
+The tool can also be used to obtain features within a given range, e.g.
+<tt>bigBedToBed https://hgdownload.soe.ucsc.edu/gbdb/hg38/episignatures/episign.bb -chrom=chr21
+-start=0 -end=100000000 stdout</tt>
+</p>
+
+<p>
+More information about EpiSign testing is available at
+<a href="https://episign.com/" target="_blank">episign.com</a>.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Bekim Sadikovic and the EpiSign group at the Verspeeten Clinical Genome Centre,
+London Health Sciences Centre, for providing the data.
+</p>
+
+<h2>References</h2>
+
+
+
+<p>
+Kerkhof J, Rastin C, Levy MA, Relator R, McConkey H, Demain L, Dominguez-Garrido E, Kaat LD, Houge
+SD, DuPont BR <em>et al</em>.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/38251460" target="_blank">
+Diagnostic utility and reporting recommendations for clinical DNA methylation episignature testing
+in genetically undiagnosed rare diseases</a>.
+<em>Genet Med</em>. 2024 May;26(5):101075.
+PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/38251460" target="_blank">38251460</a>
+</p>
+

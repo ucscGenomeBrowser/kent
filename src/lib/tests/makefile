@@ -10,7 +10,9 @@ pipelineTester = ${BIN_DIR}/pipelineTester
 test: errCatchTest htmlPageTest htmlExpandUrlTest htmlSanitizeTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test \
     tabixTest vcfTest hacTreeTest mmHashTest testSumDoubles jsonQueryTest \
-    dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest
+    dnaCodonTest pathSimplifyTest faSpeedReadTest cgiParseTest cgiCookieTest \
+    hmacTest netSlurpMaxTest htmlEncodeTest cgiDecodeTest udcDotsTest pngWriteTest \
+    colorSpecTest
 	rm -r output fetchUrlTest testSumDoubles
 	@echo tested all
 
@@ -21,6 +23,34 @@ mkdirs:
 testSumDoubles: testSumDoubles.o ${MYLIBS}
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ./testSumDoubles testSumDoubles.o ${MYLIBS} ${L}
+
+colorSpecTest: colorSpecTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/colorSpecTest colorSpecTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/colorSpecTest${EXE}
+	${BIN_DIR}/colorSpecTest > output/colorSpecTest
+	diff expected/colorSpecTest output/colorSpecTest
+
+hmacTest: hmacTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/hmacTest hmacTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/hmacTest${EXE}
+	${BIN_DIR}/hmacTest > output/hmacTest
+	diff expected/hmacTest output/hmacTest
+
+htmlEncodeTest: htmlEncodeTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/htmlEncodeTest htmlEncodeTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/htmlEncodeTest${EXE}
+	${BIN_DIR}/htmlEncodeTest > output/htmlEncodeTest
+	diff expected/htmlEncodeTest output/htmlEncodeTest
+
+netSlurpMaxTest: netSlurpMaxTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/netSlurpMaxTest netSlurpMaxTest.o ${MYLIBS} ${L}
+	${STRIP} ${BIN_DIR}/netSlurpMaxTest${EXE}
+	${BIN_DIR}/netSlurpMaxTest > output/netSlurpMaxTest
+	diff expected/netSlurpMaxTest output/netSlurpMaxTest
 
 pathSimplifyTest: pathSimplifyTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
@@ -49,6 +79,26 @@ cgiCookieTest: cgiCookieTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/cgiCookieTest${EXE}
 	${BIN_DIR}/cgiCookieTest > output/cgiCookieTest
 	diff expected/cgiCookieTest output/cgiCookieTest
+
+# cgiDecode on malformed %hh escapes, and a check that it never reads past its input.
+# refs #37262
+cgiDecodeTest: cgiDecodeTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/cgiDecodeTest cgiDecodeTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/cgiDecodeTest > output/cgiDecodeTest
+	diff expected/cgiDecodeTest output/cgiDecodeTest
+
+# the cache path udc makes for a remote URL with "." or ".." in it.  refs #38120
+udcDotsTest: udcDotsTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/udcDotsTest udcDotsTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/udcDotsTest > output/udcDotsTest
+	diff expected/udcDotsTest output/udcDotsTest
+
+# a PNG written from a memGfx decodes to the same pixels, with the UP row filter.
+# refs #38107, #38125
+pngWriteTest: pngWriteTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/pngWriteTest pngWriteTest.o ${MYLIBS} ${L}
+	${BIN_DIR}/pngWriteTest output/pngWriteTest.png > output/pngWriteTest
+	diff expected/pngWriteTest output/pngWriteTest
 
 cgiParseTest: cgiParseTest.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
@@ -86,6 +136,8 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
+	${BIN_DIR}/htmlPageTest input/valuelessAttrs.html > output/valuelessAttrs.out
+	diff expected/valuelessAttrs.out output/valuelessAttrs.out
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
@@ -431,6 +483,11 @@ udcCacheSizesCheck: udcCacheSizesCheck.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)
 	${CC} ${COPT} -o ${BIN_DIR}/udcCacheSizesCheck udcCacheSizesCheck.o ${MYLIBS} ${L}
 	${BIN_DIR}/udcCacheSizesCheck
+
+# https ferry thread leak check, needs a remote url, run with httpsFerryLeakTest.sh:
+httpsFerryLeakTest: httpsFerryLeakTest.o ${MYLIBS} mkdirs
+	@${MKDIR} $(dir $@)
+	${CC} ${COPT} -o ${BIN_DIR}/httpsFerryLeakTest httpsFerryLeakTest.o ${MYLIBS} ${L}
 
 testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 	@${MKDIR} $(dir $@)

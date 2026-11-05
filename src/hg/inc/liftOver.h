@@ -140,9 +140,16 @@ char *remapBlockedBed(struct hash *chainHash, struct bed *bed,
 void liftOverAddChainHash(struct hash *chainHash, struct chain *chain);
 /* Add this chain to the hash of chains used by remapBlockedBed */
 
+void liftOverRemoveChainHash(struct hash *chainHash, struct chain *chain);
+/* Remove a chain that liftOverAddChainHash() added to chainHash.  The chain is not freed. */
+
 struct chain *liftOverChainForRange(struct hash *chainHash, char *chrom, int start, int end);
 /* Return the chain in chainHash covering the most aligned bases in the given range,
  * or NULL if none overlap it.  This is the chain remapBlockedBed would also pick. */
+
+struct binElement *liftOverChainsInRange(struct hash *chainHash, char *chrom, int start, int end);
+/* Return every chain in chainHash that overlaps chrom:start-end, as binElements whose val is
+ * the chain.  Free the list with slFreeList, not the chains, which still belong to the hash. */
 
 char *liftOverChainTable();
 /* Return the name of the liftOverChain table. */

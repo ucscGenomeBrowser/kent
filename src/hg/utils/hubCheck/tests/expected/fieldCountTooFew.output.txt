@@ -1,0 +1,4 @@
+Found 3 problems:
+Track "fieldTooFew1" declares 'type bigBed 1', but a bigBed has at least 3 fields (chrom, chromStart, chromEnd). Change the type line to match the file's field count, or leave the number off and the count is read from the file.
+Track "fieldTooFew2" declares 'type bigBed 2', but a bigBed has at least 3 fields (chrom, chromStart, chromEnd). Change the type line to match the file's field count, or leave the number off and the count is read from the file.
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

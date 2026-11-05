@@ -1,0 +1,31 @@
+# #21649 -- hgConvert titled its page with the organism instead of the position when
+# hgTracks was in the single-alt-haplotype multi-region mode.  Brian Lee, 2018-06-22:
+# turn on the haplotype mode (chr1_KI270762v1_alt), follow "View -> In other genomes
+# (convert)", and the page says "Convert Mouse to New Assembly".  The gene and exon modes
+# show "Convert chr1:2094367-3145714 to New Assembly" as they should.  Daniel Schmelter
+# saw "Convert Human" in 2021, Lou "Convert Orangutan" on mm10 in 2024.  Hibernating.
+#
+# The title is cartWebStart(cart, database, "Convert %s to New Assembly", fromPos) in
+# hgConvert.c.  The checks: the page must not say "Convert Human to New Assembly" (the
+# ticket's string for hg38), and must say "Convert chr1", which is where the alt
+# haplotype sits.  Step 2 pins that hgTracks really is in multi-region mode first.
+#
+# THE BUG IS STILL THERE.  On genome-test and hgwdev-demo6, 2026-10-06, the page says
+# "Convert Human to New Assembly" and the script fails at step 5.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test at step 5 for the ticket's own reason: the hgConvert title is \"Convert Human to New Assembly\""
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A2094367-3145714&pix=1100&hideTracks=1&knownGene=pack"
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=singleAltHaplo&singleAltHaploId=chr1_KI270762v1_alt"
+  - expect:
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+  - goto: "/cgi-bin/hgConvert"
+  - expect:
+      text: ["to New Assembly", "Convert chr1"]
+      noText: "Convert Human to New Assembly"

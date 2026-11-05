@@ -1,0 +1,71 @@
+# #38264 -- share links from BLAT results, hgc alignments and the blue-bar "Share a link" now
+# save a small "snapshot" session that holds only the shared view, under the reserved user
+# "l", instead of the user's whole cart.  For BLAT that means the results bigPsl is moved into
+# session storage (sessionDataDir), so the link keeps working after the trash is cleaned.
+#
+# 32cd2100d9d (tagged refs #38197 by mistake), lib/snapshotSession.c, hg/js/hgBlat.js,
+# hg/hgBlat/hgBlat.c, hg/hgc/hgc.c and hg/hgSession/hgSession.c; c1ac48b0feb scopes the
+# lifetime wording to the BLAT share.  The blue-bar dialog is rm10138's.
+#
+# WHAT THIS ASSERTS.  It opens an existing BLAT snapshot link, one Lou made on hgwdev on
+# 2026-09-17 (400 bp of SOD1 on hg38):
+#     hgcentraltest.namedSessionDb  userName=l  sessionName=__A15qjNR6PsOKnQNlnVW9AeVk
+#     settings "snapshotType blat", contents db + blatLastBigBed only, and the bigPsl at
+#     /data/apache/userdata/sessions/2d/l/82/9c/829c45ae6d/hgBlat/259/
+# Two things are checked:
+#   * the results table is rebuilt from the durable bigPsl: the top hit, its locus, and none of
+#     the two "no longer available" / "no alignments" messages doShareReopen prints instead;
+#   * "Share a link" on that page shows the snapshot wording ("It stores only the results ...",
+#     "valid for years") and not v503's "the link works for at least 48 hours", which was a
+#     link to trash files.  On a reopened link the button shows the page's own URL and creates
+#     nothing: user "l" held 168 rows in hgcentraltest before and after a run on 2026-09-30.
+#
+# THE REOPEN HALF IS NOT NEW.  v503 already reopened ?u=&s= links, and it rebuilds this table
+# too.  Only the share box tells the two builds apart.  The reopen checks stay because they
+# are what make the share-box check meaningful: without them a snapshot that failed to load
+# would show no Share button at all.
+#
+# NOT COVERED, deliberately.  Creating a snapshot: every click writes a row under "l" that
+# docentTest cannot delete, and snapshotCleaner would leave it for about four years, so a
+# nightly script would litter hgcentraltest (rm10138 stops before its button for the same
+# reason).  The hgc htcBlatAlign share, and snapshotCleaner itself, have no page to read.
+#
+# THE FIXTURE.  The row and its file exist only on the servers that read hgcentraltest and
+# /data/apache/userdata on hgwdev, so this does not run on hgwbeta.  snapshotCleaner removes
+# a snapshot only when nobody has opened it for snapshot.ttlDays (about four years by
+# default), and every run of this script opens it.  If it is ever gone, the first wait fails
+# with the page saying "These shared BLAT results are no longer available"; make a new BLAT
+# share on genome-test and put its token in the goto.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38264, 32cd2100d9d and c1ac48b0feb after they reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test; fails on v503 (ts park 38316, v503_branch 707b184e329, http 48106) at step 6, the share box: v503 reopened the table but its box said 'the link works for at least 48 hours' and neither snapshot sentence"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  # The snapshot link, rebuilt from its bigPsl in session storage.
+  - goto: "/cgi-bin/hgBlat?u=l&s=__A15qjNR6PsOKnQNlnVW9AeVk"
+  - wait: 'text=exon SOD1'
+  - expect:
+      text:
+        - "Human (hg38) BLAT Results"
+        - "chr21:31,659,701-31,660,100"
+        - "exon SOD1"
+      noText:
+        - "These shared BLAT results are no longer available"
+        - "These shared BLAT results contained no alignments"
+
+  # Share a link on a reopened link shows that link, and says what a snapshot keeps.
+  - click: '#blatShareBtn'
+  - wait: '#gbShareInput'
+  - expect:
+      text:
+        - "It stores only the results, not your other tracks or settings."
+        - "The link remains valid for years"
+      noText:
+        - "Creating link"
+        - "Could not create the link"
+        - "the link works for at least 48 hours"

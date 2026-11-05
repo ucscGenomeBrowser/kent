@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 #
-# asmHubList.pl - can scan the ./GCF and ./GCA directories to find the
+# asmHubList.pl - uses the clade listings to find the ./GCF and ./GCA
 #               - hubs that have a hub.txt and thus are functional hubs
 #  works on hgwdev and on hgdownload
 
@@ -12,7 +12,7 @@ use File::Basename;
 my $argc = scalar(@ARGV);
 if ($argc != 1) {
   printf STDERR "usage: asmHubList.pl goForIt | sort > assembly.hub.list.today\n";
-  printf STDERR "will scan the ./GCF and ./GCA hierarchies to find ready to\n";
+  printf STDERR "will use the clade listings to find ready to\n";
   printf STDERR "go assembly hubs on hgwdev or on hgdownload.\n";
   exit 255;
 }
@@ -36,8 +36,6 @@ if ($thisMachine eq "hgwdev") {
 }
 
 my %cladeListings;	# key is assemblyName GCA/GCF identifier, value is clade
-# one off until this group gets out here
-$cladeListings{"GCF_000007345.1"} = "archaea";
 
 open (FH, "ls /dev/shm/clade.*.list|grep -v legacy|") or die "can not read /dev/shm/clade.*.list";
 while (my $cladeList = <FH>) {
@@ -76,15 +74,22 @@ close (FH);
 
 my $missCount = 0;
 
-open (FH, "find ./GCF ./GCA -mindepth 4 -maxdepth 4 -type d |") or die "can not find ./GCF ./GCA";
-while (my $path = <FH>) {
-  chomp $path;
-  my $hubTxt = "$path/hub.txt";
-  if ( ! -s "$hubTxt" ) {
-    printf STDERR "# ERROR: can not find hub.txt in\n%s\n", $hubTxt;
+# the hub directory path is computed directly from the accession:
+#   GCF_000001405.40 -> ./GCF/000/001/405/GCF_000001405.40
+# much faster than a 'find' through the GCF/GCA hierarchy.  Hubs on
+# the filesystem not in any clade listing are not seen here, the weekly
+# hubTxtAudit.sh script reports those.
+foreach my $acc (sort keys %cladeListings) {
+  my ($gcX, $num) = $acc =~ m/^(GC[AF])_(\d{9})\./;
+  if (!defined($num)) {
+    printf STDERR "# warning: can not parse accession '%s'\n", $acc;
+    next;
   }
+  my $path = sprintf("./%s/%s/%s/%s/%s", $gcX, substr($num,0,3),
+     substr($num,3,3), substr($num,6,3), $acc);
+  my $hubTxt = "$path/hub.txt";
   if ( -s "$hubTxt" ) {
-    open (GE, "egrep '^description|^scientificName|^htmlPath|^taxId' $hubTxt|tr -d ''|") or die "can not read $hubTxt";
+    open (GE, "<", $hubTxt) or die "can not read $hubTxt";
     my $descr = "";
     my $sciName = "";
     my $asmId = "";
@@ -92,14 +97,16 @@ while (my $path = <FH>) {
     my $asmName = "";
     while (my $line = <GE>) {
       chomp $line;
+      $line =~ s/\r//g;
       my ($tag, $value) = split('\s+', $line, 2);
-      if ($line =~ m/^description/) {
+      next if (!defined($value));
+      if ($tag eq "description") {
         $descr = $value;
-      } elsif ($line =~ m/^scientificName/) {
+      } elsif ($tag eq "scientificName") {
         $sciName = $value;
-      } elsif ($line =~ m/^taxId/) {
+      } elsif ($tag eq "taxId") {
         $taxId = $value;
-      } elsif ($line =~ m/^htmlPath/) {
+      } elsif ($tag eq "htmlPath") {
         $asmId = $value;
         $asmId=~ s/.description.html//;
         $asmId=~ s#html/##;
@@ -107,18 +114,15 @@ while (my $path = <FH>) {
       }
     }
     close (GE);
-    my $acc = basename($path);
-    my $clade = "n/a";
-    $clade = $cladeListings{$acc} if (defined($cladeListings{$acc}));
+    $asmName = "" if (!defined($asmName));
+    my $clade = $cladeListings{$acc};
     printf "%s\t%s\t%s\t%s\t%s\t%s\n", $acc, $asmName, $sciName, $descr, $taxId, $clade;
   } else {
     ++$missCount;
     printf STDERR "# missing '%s'\n", $hubTxt;
   }
 }
-close (FH);
 
 if ($missCount > 0) {
-  printf STDERR "# failed to find %d genomes in clade listings vs. genome files here\n", $missCount;
-  exit 255;
+  printf STDERR "# warning: failed to find hub.txt for %d genomes in clade listings\n", $missCount;
 }

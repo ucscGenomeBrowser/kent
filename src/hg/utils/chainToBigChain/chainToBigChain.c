@@ -27,53 +27,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct bigChain *chainRecToBigChain(struct chain *chain)
-/* make a bigChain from a chain */
-{
-struct bigChain *bc;
-AllocVar(bc);
-bc->chrom = cloneString(chain->tName);
-bc->chromStart = chain->tStart;
-bc->chromEnd = chain->tEnd;
-char buf[128];
-safef(buf, sizeof(buf), "%d", chain->id);
-bc->name = cloneString(buf);
-bc->score = 1000;
-bc->strand[0] = chain->qStrand;
-bc->tSize = chain->tSize;
-bc->qName = cloneString(chain->qName);
-bc->qSize = chain->qSize;
-bc->qStart = chain->qStart;
-bc->qEnd = chain->qEnd;
-bc->chainScore = chain->score;
-return bc;
-}
-
-struct bigLink *chainBlockToBigLink(struct chain *chain, struct cBlock *cblk)
-/* make a chain link from a chain block */
-{
-struct bigLink *bl;
-AllocVar(bl);
-bl->chrom = cloneString(chain->tName);
-bl->chromStart = cblk->tStart;
-bl->chromEnd = cblk->tEnd;
-char buf[128];
-safef(buf, sizeof(buf), "%d", chain->id);
-bl->name = cloneString(buf);
-bl->qStart = cblk->qStart;
-return bl;
-}
-
-void convertChain(struct chain *chain, struct bigChain **bigChains, struct bigLink **bigLinks)
-/* convert on chain to bigChain and bigLink */
-{
-for (struct cBlock *cblk = chain->blockList; cblk != NULL; cblk = cblk->next)
-    {
-    slAddHead(bigLinks, chainBlockToBigLink(chain, cblk));
-    }
-slAddHead(bigChains, chainRecToBigChain(chain));
-}
-
 static void convertChains(char *chainIn, struct bigChain **bigChains, struct bigLink **bigLinks)
 /* convert all chains to bigChains and links  */
 {
@@ -81,7 +34,7 @@ struct chain *chain;
 struct lineFile *lf = lineFileOpen(chainIn, TRUE);
 while ((chain = chainRead(lf)) != NULL)
     {
-    convertChain(chain, bigChains, bigLinks);
+    chainToBigChainOne(chain, bigChains, bigLinks);
     chainFree(&chain);
     }
 lineFileClose(&lf);

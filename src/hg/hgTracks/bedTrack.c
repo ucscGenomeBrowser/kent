@@ -20,6 +20,8 @@
 #include "liftOver.h"
 #include "quickLift.h"
 #include "htmlColor.h"
+#include "barChartBed.h"
+#include "bedMethyl.h"
 
 #define SEQ_DELIM '~'
 
@@ -41,6 +43,15 @@ return ret;
 
 
 char *bedName(struct track *tg, void *item);
+
+static boolean quickLiftNeedsLoader(bedItemLoader loader)
+/* TRUE if a quickLifted item has to come from the track's own loader, because the plain
+ * bed the lift makes would lose fields the track draws from.  Only loaders whose extra
+ * fields hold no coordinates belong here:  an interact item's source and target regions
+ * would also need lifting. */
+{
+return (loader == barChartSimpleBedLoad) || (loader == (bedItemLoader)bedMethylLoad);
+}
 
 void loadSimpleBedWithLoader(struct track *tg, bedItemLoader loader)
 /* Load the items in one track using specified loader - just move beds in window... */
@@ -118,8 +129,21 @@ else if (tg->isBigBed)
             }
         if (quickLiftFile)
             {
-            if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
+            struct bed *lifted = quickLiftIntervalsToBed(bbi, chainHash, bb);
+            if (lifted == NULL)
                 continue;
+            if (!quickLiftNeedsLoader(loader))
+                bed = lifted;
+            else
+                {
+                // The track's own loader fills in the fields past the bed ones (a barChart's
+                // scores, say).  Run it, then move the item to where the lift put it.
+                if ((bed = loader(bedRow)) == NULL)
+                    continue;
+                bed->chrom = lifted->chrom;
+                bed->chromStart = lifted->chromStart;
+                bed->chromEnd = lifted->chromEnd;
+                }
             }
         else
             bed = loader(bedRow);

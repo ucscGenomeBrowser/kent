@@ -1,0 +1,13 @@
+track settings that share the prefix are kept
+  hgPcrResult_imgOrd         3                                        kept
+  hgPcrResult_targetStyle    box                                      kept
+a result pair of trash files is kept
+  hgPcrResult_hg38           two trash files                          kept
+  hgPcrResult_hg38           two trash files and a target             kept
+a result that does not name two trash files is dropped
+  hgPcrResult_hg38           3                                        dropped
+  hgPcrResult_hg38           a psl file outside the trash             dropped
+  hgPcrResult_hg38           a primer file outside the trash          dropped
+the exclusions are exact names, not suffixes
+  hgPcrResult_hg38_imgOrd    two files outside the trash              dropped
+  hgPcrResult_imgOrdx        two files outside the trash              dropped

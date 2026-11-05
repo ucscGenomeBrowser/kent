@@ -174,6 +174,11 @@ return parent;
 }
 #define tdbGetSuperTrack(tdb) tdbGetImmediateFolder(tdb)
 
+struct slName *tdbSuperTrackAncestors(struct trackDb *tdb);
+// Names of every superTrack above tdb, innermost first, NULL if there are none.  A superTrack
+// may itself sit inside another superTrack, so showing only the closest one still leaves the
+// track hidden.  Free the result with slNameFreeList.
+
 
 // --- Composites are 2 or 3 level containers of tracks organized into a single hgTrackUi cfg page
 INLINE void tdbMarkAsComposite( struct trackDb *tdb)

@@ -1,0 +1,19 @@
+hub superParentLoopHub
+shortLabel Super Parent Loop Test Hub
+longLabel Hub to test a parent loop between two track collections
+email markd@soe.ucsc.edu
+useOneFile on
+
+genome hg19
+
+track supA
+superTrack on show
+shortLabel Super A
+longLabel Super A, parent is supB
+parent supB
+
+track supB
+superTrack on show
+shortLabel Super B
+longLabel Super B, parent is supA
+parent supA

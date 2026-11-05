@@ -1,0 +1,49 @@
+# #16896 -- RepeatMasker Viz. (rmskJoined) in full, in multi-region exon-only mode over
+# hg38 chr9:132,232,678-134,058,196, failed with
+#   "doLeftLabels(y=519) returned new y value 7431 that is too high - should be 249 at most."
+# The track should have dropped to dense at that scale, as it does in normal mode.
+# Brian Lee could not reproduce it in 2020 and closed the ticket.
+#
+# Recipe is Brian Lee's closing recipe, built from URL parameters: hide all, turn
+# RepeatMasker Viz. (rmskJoinedCurrent) on in full, exonMostly on knownGene.  The
+# position is the first 400 kb of the ticket's 1.8 Mb range.  At the full range the
+# exon-only page takes about 57 s on genome-test even with knownGene alone, past
+# docent's 30 s navigation timeout, and with rmsk viz added genome-test dies with
+# needMem: out of memory (checked 2026-10-06 with curl).
+#
+# Checks:
+#   noText  "returned new y value", the ticket's own error, and "has bad slice",
+#           the form the same height mismatch takes on genome-test today.
+#   rows    both rmsk viz rows (Current and Baseline, both on by default) are drawn, so the page did not just drop the track.
+#   has     the multi-region button is pressed, so the view really is exon-only.
+#
+# 2026-10-06: genome-test FAILS this for the ticket's reason in a new form.  In
+# exon-only mode both rmsk viz rows are dropped with "slice(side) has an invalid X:12
+# or Y:649 offset (image width:1100 height:496)" / "imgTrack(rmskJoinedBaseline) has
+# bad slice": the image is sized for less than the full-mode rmsk rows need, the same
+# mismatch the 2016 doLeftLabels error reported.  With both rmsk viz tracks in dense
+# instead of full, the same exon-only request draws both rows (curl, 2026-10-06), so
+# the drop is tied to full mode, as the ticket said.  At the ticket's full 1.8 Mb range
+# genome-test runs out of memory instead.  So the file is named .xfail.
+#
+# On hgwdev-demo6 (multiRegionSpaces=on) both rmsk viz rows are drawn in the space and
+# the script passes.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test (v504) drops both rmsk viz rows in exonMostly with imgTrack has bad slice; hgwdev-demo6 passes"
+
+target: genome-test
+db: hg38
+position: chr9:132232678-132632678
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr9%3A132232678-132632678&pix=1100&hideTracks=1&knownGene=pack&joinedRmsk=full&rmskJoinedCurrent=full&rmskJoinedCurrent_sel=1"
+  - expect: {rows: [ruler, knownGene, rmskJoinedCurrent, rmskJoinedBaseline], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly&emGeneTable=knownGene&emPadding=6"
+  - expect:
+      rows: [ruler, knownGene, rmskJoinedCurrent, rmskJoinedBaseline]
+      exact: true
+      noText: ["returned new y value", "has bad slice"]
+      has: '#hgTracksConfigMultiRegionPage.pressed'

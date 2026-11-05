@@ -1,0 +1,66 @@
+# #37984 -- social sign-in for hgLogin: "Sign in with Google", GitHub, and any OIDC provider
+# (CILogon here), on the login page and, as "Sign up with ...", on the sign-up page.  This
+# script watches only what can be seen without an outside provider: that the buttons are
+# drawn, where they sit, and that each one starts the flow on our own hgLogin with the
+# provider's name.
+#
+# Commits: 5f7a14fde8c (the first social login), f85553903a3 (configurable OIDC providers,
+# GitHub, the top-level email-link button), c465f5ce00f (provider errors shown on the login
+# page), f75ffeed34d (match on the recovery email too), d91971402ab (gbMembers.lastUse on an
+# OAuth login).  The buttons and their links are all in v502, so NO RELEASE HERE PREDATES
+# THEM: every baseline parked on this machine (v502, v503, v504) draws the same buttons, and
+# this script passes on all of them.  Its proof stays assertion-only for that reason, not
+# because nobody looked.  What it guards is the future: a change to hgLogin or to
+# userAccounts.css that drops or reorders the buttons.
+#
+# What is asserted:
+#
+#   * Login page: Google, GitHub and CILogon buttons, each an a.socialButton whose href is
+#     hgLogin?hgLogin.do.oauthStart=1&provider=<name>, inside div.socialLogin, which opens
+#     with an "or" divider and comes after the email-link button.
+#   * Sign-up page: the same three as "Sign up with ...", above the "or" divider and the
+#     "Sign up using email" form.
+#
+# NOT covered, because each needs a real provider account: the token exchange and landing
+# signed in, linking by verified email, the account chooser and its signed pending identity
+# (the hmacTest unit test in src/lib/tests pins that signature, c2e25edbf8c), recovery-email
+# matching, the lastUse update, and the provider error message, which oauthReturn() shows only
+# when the cart holds the state that oauthStart set just before it redirected to the
+# provider.  No button is ever clicked, because every one of them leaves for the provider.
+#
+# hg.conf GATE: the buttons come from login.oauth.providers and the per-provider clientId and
+# clientSecret, which on hgwdev live in hg.conf.private (printSocialButtons() prints nothing
+# when no provider is configured).  The provider names are configuration, not code: a server
+# that drops one fails here, and a server that adds ORCID still passes, since nothing here is
+# exact.  Settle it with
+#   grep -c '^login.oauth.providers' /usr/local/apache/cgi-bin/hg.conf.private
+# genome-test lists google, github and cilogon (2026-09-30).
+proof:
+  - "assertion-only 2026-09-30 -- written from #37984 and f85553903a3; passes on genome-test, hgwbeta, and ts parks 38423 (v504), 38316 (v503) and 38304 (v502), because the buttons shipped in v502 and no older release is parked"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1"
+  - expect:
+      has:
+        - '#accountLoginForm'
+        - 'a.socialButton[href*="hgLogin.do.emailLinkPage=1"] + div.socialLogin > .orDivider:first-child'
+        - 'div.socialLogin a.socialButton[href$="hgLogin.do.oauthStart=1&provider=google"]:text-is("Sign in with Google")'
+        - 'div.socialLogin a.socialButton[href$="hgLogin.do.oauthStart=1&provider=github"]:text-is("Sign in with GitHub")'
+        - 'div.socialLogin a.socialButton[href*="hgLogin.do.oauthStart=1&provider=cilogon"]:has-text("Sign in with CILogon")'
+      noHas: 'div.socialLogin a.socialButton:not([href*="/cgi-bin/hgLogin?hgLogin.do.oauthStart=1&provider="])'
+
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.signupPage=1"
+  - expect:
+      has:
+        - 'div.socialLogin a.socialButton[href$="provider=google"]:text-is("Sign up with Google")'
+        - 'div.socialLogin a.socialButton[href$="provider=github"]:text-is("Sign up with GitHub")'
+        - 'div.socialLogin a.socialButton[href*="provider=cilogon"]:has-text("Sign up with CILogon")'
+        - 'div.socialLogin > .orDivider:last-child'
+        # Case-blind: the heading's case is #37929's business (3eb8de69a3d), not this one's.
+        - 'div.socialLogin ~ h3:text-matches("^sign up using email$", "i")'
+      noText: "Sign in with Google"

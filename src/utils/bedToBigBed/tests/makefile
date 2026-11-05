@@ -3,7 +3,7 @@ A = bedToBigBed
 include ../../../inc/common.mk
 
 test: testOddSorted testRgb testMultiInsAtEnd itemsRgb tabSep testBadChrom1 testBbSize1 testBbSize2 testDevStdin testStdin \
-	testCompress testNotSorted testFixScores
+	testCompress testNotSorted testFixScores testSortNotSorted testSortCompress
 
 # use ! cmd 2> output/$@.err || (${shouldHaveFailed})
 shouldHaveFailed = echo "Error: command should have failed" >&2 && false
@@ -49,6 +49,12 @@ testSortNotSorted: outputDir
 	${BINDIR}/${A} -tab -type=bed9+3 -sort input/notSorted.bed input/notSorted.chrom.sizes output/notSorted.bb 
 	bigBedToBed output/notSorted.bb output/notSorted.bed
 	diff expected/notSorted.bed output/notSorted.bed
+
+# -sort has to decompress before handing the input to sort
+testSortCompress: outputDir
+	${BINDIR}/${A} -tab -type=bed9+3 -sort input/notSorted.bed.gz input/notSorted.chrom.sizes output/notSortedGz.bb
+	bigBedToBed output/notSortedGz.bb output/notSortedGz.bed
+	diff expected/notSorted.bed output/notSortedGz.bed
 
 testNotSorted: outputDir
 	! ${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err || (${shouldHaveFailed})

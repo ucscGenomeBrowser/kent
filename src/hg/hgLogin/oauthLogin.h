@@ -13,6 +13,13 @@
  *   login.oauth.<name>.tokenUrl        or to override discovery)
  *   login.oauth.<name>.userinfoUrl
  *   login.oauth.<name>.scopes        Space-separated (default "openid email profile")
+ *   login.oauth.<name>.trustEmail    Accept this provider's address even when it does not
+ *                                    say email_verified (default off).  Turn it on only for
+ *                                    a provider that gets the address from somewhere the
+ *                                    user cannot type into, e.g. a federation that reads it
+ *                                    from the user's own institution.  Without it, an
+ *                                    unverified address is discarded and the user is asked
+ *                                    for one and has to confirm it by mail.
  *
  * "google", "orcid" and "github" are known names with built-in endpoints, so those only
  * need clientId/clientSecret.  The older login.<name>.clientId/clientSecret keys are still
@@ -32,6 +39,11 @@ struct oauthIdentity
     char *subject;          /* stable, unique id from the provider */
     char *email;            /* email reported by provider, or NULL */
     boolean emailVerified;  /* TRUE if the provider asserts the email is verified */
+    char *emailUnverified;  /* an address the provider released that we would not take: it did
+                             * not say the address is verified and hg.conf does not trust this
+                             * provider (see trustEmail).  Never used to match an account or to
+                             * sign anyone in -- only to say why we are asking the user for an
+                             * address, and to offer it back as a starting point. */
     char *displayName;      /* full name from provider, or NULL */
     };
 

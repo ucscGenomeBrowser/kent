@@ -11,7 +11,8 @@
 # actually shipped is in v488, so this asserts the behavior of that one, not the reverted
 # one.
 #
-# The session is kept. Gerardo/RM_35326_bug is on genome-test, and what it contributes is
+# The session is kept, as the text file sessionFiles/RM_35326_bug.txt (Gerardo/RM_35326_bug
+# saved from genome-test), so the script runs on any server.  What it contributes is
 # hard to build in steps: a position on an alt contig, with the GRC Patches track showing
 # and the four recount3 tracks on -- the ticket's own title asks whether recount3 is
 # involved, so the assertion below names two of them and would catch the view coming back
@@ -28,7 +29,7 @@ db: hg38
 reset: true
 fast: true
 steps:
-  - loadSession: {user: Gerardo, name: RM_35326_bug}
+  - loadSession: "https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/utils/docent/tests/regress/sessionFiles/RM_35326_bug.txt"
 
   # A missing session is not an error -- hgTracks answers 200 with an early-error page and
   # every noText check on it passes -- so both halves are needed here.

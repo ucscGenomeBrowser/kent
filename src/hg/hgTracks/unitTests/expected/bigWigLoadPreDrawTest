@@ -1,0 +1,33 @@
+half in the first block, chrRef:1500-2500 over 10 pixels
+   0  count 100  max 5
+   1  count 100  max 5
+   2  count 100  max 5
+   3  count 100  max 5
+   4  count 100  max 5
+   5  count 0  max -1e+300
+   6  count 0  max -1e+300
+   7  count 0  max -1e+300
+   8  count 0  max -1e+300
+   9  count 0  max -1e+300
+inside the gap, no block, chrRef:4000-5000 over 10 pixels
+   0  count 0  max -1e+300
+   1  count 0  max -1e+300
+   2  count 0  max -1e+300
+   3  count 0  max -1e+300
+   4  count 0  max -1e+300
+   5  count 0  max -1e+300
+   6  count 0  max -1e+300
+   7  count 0  max -1e+300
+   8  count 0  max -1e+300
+   9  count 0  max -1e+300
+the second block, chrRef:7500-9500 over 10 pixels
+   0  count 0  max -1e+300
+   1  count 0  max -1e+300
+   2  count 200  max 7
+   3  count 200  max 7
+   4  count 200  max 7
+   5  count 200  max 7
+   6  count 200  max 7
+   7  count 0  max -1e+300
+   8  count 0  max -1e+300
+   9  count 0  max -1e+300

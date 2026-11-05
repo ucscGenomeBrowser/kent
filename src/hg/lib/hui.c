@@ -556,7 +556,8 @@ char* fileType = parts[0];
 stripString(fileType, "\"");  // Remove double quotes, weird that chopByWhiteRespectDoubleQuotes doesn't do this
 char* url = parts[1];
 char *newUrl = replaceInUrl(url, "", NULL, database, "", 0, 0, track, FALSE, NULL);
-printf("<br>Download: <a href=\"%s\">%s</a>", newUrl, fileType);
+// downloadUrl may be hub supplied
+printf("<br>Download: <a href=\"%s\">%s</a>", htmlEncode(newUrl), htmlEncode(fileType));
 }
 
 static void makeFileDownloads(struct trackDb *tdb, char *db) 
@@ -2821,8 +2822,15 @@ if (vis == tvHide)
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 setting = cartOptionalString(cart, objName);
-if (setting == NULL)
-    setting = cartOptionalString(cart, trackHubSkipHubName(objName));
+if (setting == NULL && startsWith("hub_", subtrack->track))
+    {
+    // a hub subtrack may be checked under its bare name, but not when the assembly has a
+    // track of that name - then the variable is that track's
+    char *bareSetting = cartOptionalString(cart, trackHubSkipHubName(objName));
+    if (bareSetting != NULL && hubTrackOwnsBareName(cartOptionalString(cart, "db"),
+                                                    subtrack->track))
+        setting = bareSetting;
+    }
 if (setting != NULL)
     {
     if (sameWord("on",setting)) // ouch! cartUsualInt was interpreting "on" as 0, which was bad bug!
@@ -3071,7 +3079,7 @@ if (members->count == 0)
 // First tally all subtrack counts
 int ixIn=0;
 struct slRef *subtrackRef, *subtrackRefList =
-				    trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+			    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 struct trackDb *subtrack;
 members->subtrackCount    = needMem(members->count * sizeof(int));
 members->currentlyVisible = needMem(members->count * sizeof(int));
@@ -3351,7 +3359,9 @@ if (filtering && !sameWord(filtering,"off"))
 	    for (;abcIx < membersForAll->dimMax && membersForAll->letters[abcIx] != letter;abcIx++)
 		; // Advance to correct letter
 	    if (abcIx >= membersForAll->dimMax)
-		errAbort("Invalid 'filterComposite' trackDb setting. Dimension '%s' not found.",
+		errAbort("Invalid 'filterComposite' trackDb setting. Dimension '%s' not found: "
+			 "it must be declared in the 'dimensions' setting, and at least one "
+			 "subtrack's 'subGroups' setting must use that dimension's subgroup.",
 			 dim);
 	    if (sameWord(filterGroups[ix],"one"))
 		membersForAll->members[abcIx]->fcType = fctOne;
@@ -4035,6 +4045,16 @@ if (trackDbLabel == NULL)
 return trackDbLabel;
 }
 
+static char *asColumnLabel(struct asColumn *asCol)
+/* Return the autoSql comment of a column without the "|longer description" suffix
+ * that hgc shows as a note on the details page. */
+{
+char *pipe = strchr(asCol->comment, '|');
+if (pipe == NULL)
+    return asCol->comment;
+return cloneStringZ(asCol->comment, pipe - asCol->comment);
+}
+
 static filterBy_t *buildFilterBy(struct trackDb *tdb, struct cart *cart, struct asObject *as, struct trackDbFilter *tdbFilter, char *name)
 /* Build a filterBy_t structure from a <column>FilterValues statement. */
 {
@@ -4051,7 +4071,7 @@ filterBy->column = cloneString(field);
 filterBy->title = cloneString(field); ///  title should come from AS file, or trackDb variable
 struct asColumn *asCol = (as != NULL) ? asColumnFind(as, field) : NULL;
 if (asCol != NULL)
-    filterBy->title = asCol->comment;
+    filterBy->title = asColumnLabel(asCol);
 else if (as != NULL)
     {
     // We have autoSql but the field is missing — that's a typo or an
@@ -4104,7 +4124,10 @@ filterBy_t *filterByValues(struct trackDb *tdb, struct cart *cart, struct trackD
 // bigData file that isn't reachable at UI time both return NULL here.
 // That's fine for filterValues.* settings as long as a filterLabel.*
 // override is provided; buildFilterBy() already tolerates a NULL `as`.
-struct asObject *as = asForTdb(NULL, tdb);
+// VCF filters are on INFO fields, which are not autoSql columns.
+struct asObject *as = NULL;
+if (tdb->type == NULL || !startsWith("vcf", tdb->type))
+    as = asForTdb(NULL, tdb);
 filterBy_t *filterByList = NULL, *filter;
 struct trackDbFilter *fieldFilter;
 while ((fieldFilter = slPopHead(&trackDbFilters)) != NULL)
@@ -4361,19 +4384,19 @@ printf("<OPTION");
 if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,name))
     printf(" SELECTED");
 if (filterBy->useIndex || filterBy->valueAndLabel)
-    printf(" value='%s'",name);
+    printf(" value='%s'",htmlEncode(name));    // filterValues are hub supplied
 if (filterBy->styleFollows)
     {
     char *styler = label + strlen(label)+1;
     if (*styler != '\0')
 	{
 	if (*styler == '#') // Legacy: just the color that follows
-	    printf(" style='color: %s;'",styler);
+	    printf(" style='color: %s;'",htmlEncode(styler));
 	else
-	    printf(" style='%s'",styler);
+	    printf(" style='%s'",htmlEncode(styler));
 	}
     }
-printf(">%s</OPTION>\n",label);
+printf(">%s</OPTION>\n",htmlEncode(label));   // filterValues are hub supplied
 }
 
 static boolean filterByColumnIsMultiple(struct cart *cart, struct trackDb *tdb,  char *setting)
@@ -4535,9 +4558,9 @@ for (filterBy = filterBySet;  filterBy != NULL;  filterBy = filterBy->next, ix++
 	    if (*styler != '\0')
 		{
 		if (*styler == '#') // Legacy: just the color that follows
-		    printf(" style='color: %s;'",styler);
+		    printf(" style='color: %s;'",htmlEncode(styler));
 		else
-		    printf(" style='%s'",styler);
+		    printf(" style='%s'",htmlEncode(styler));
 		}
 	    }
 	printf(">%s</OPTION>\n",htmlEncode(label));   // filterValues are hub supplied
@@ -4784,6 +4807,22 @@ char cartVar[1024];
 safef(cartVar, sizeof cartVar, "%s.%s", trackHubSkipHubName(tdb->track), suffix);
 cgiMakeCheckBox(cartVar, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
+}
+
+void dotBracketCfgUi(struct cart *cart, struct trackDb *tdb)
+/* Checkbox to draw or hide the RNA secondary structure, for a track that names a
+ * dot-bracket column.  Does nothing for a track that does not. */
+{
+if (trackDbSetting(tdb, DOT_BRACKET_FIELD) == NULL)
+    return;
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, FALSE, DOT_BRACKET_SHOW_SUFFIX,
+                                               TRUE);
+char cartVar[1024];
+safef(cartVar, sizeof cartVar, "%s.%s", tdb->track, DOT_BRACKET_SHOW_SUFFIX);
+puts("<p>");
+cgiMakeCheckBox(cartVar, option);
+puts(" Draw the RNA secondary structure over each item");
+puts("</p>");
 }
 
 void geneTrackMakeCheckBox(struct cart *cart, struct trackDb *tdb, char *sym, char *desc,
@@ -5456,6 +5495,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 	     && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone) // but the composite is configurable.
 	    cType = cfgNone;
 	}
+    // A container (multiWig) subtrack is configured on its own hgTrackUi page, which also lists
+    // its children, so it gets a link there instead of an embedded cfg dialog.
+    boolean isContainer = (subtrack->subtracks != NULL);
+    if (isContainer)
+	cType = cfgNone;
 
     if (sortOrder == NULL && !useDragAndDrop)
 	{
@@ -5570,6 +5614,15 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     "<span class='link'>&nbsp;Configure</span></span>\n"
 	    printf(SUBTRACK_CFG_WRENCH,id, (visibleCB ? "":" disabled"));
 	    jsOnEventByIdF("click", id, "return subCfg.cfgToggle(this,\"%s\");", subtrack->track);
+	    }
+	else if (isContainer)  // a link to the container's own page; submitting the form on the
+	    {                  // way keeps any unsaved changes made here, as on supertrack pages
+	    safef(id, sizeof id, "%s_cfgLink", subtrack->track);
+	    printf("<a id='%s' href='%s?db=%s&g=%s&%s' title='Configure this track and its subtracks'>"
+		   "<img src='../images/wrench.png'>&nbsp;Configure</a>\n",
+		   id, hTrackUiForTrack(subtrack->track), db, cgiEncode(subtrack->track),
+		   cartSidUrlString(cart));
+	    jsOnEventById("click", id, "return superT.submitAndLink(this);");
 	    }
 	}
     printf("</TD>");
@@ -5695,7 +5748,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     puts("</TD></TR>\n");
 
     boolean showCfg = trackDbSettingOn(subtrack, "showCfg");
-    if (showCfg)
+    if (showCfg && !isContainer)
         jsInlineF(" subCfg.cfgToggle(document.getElementById(\"%s_toggle\"),\"%s\");",  subtrack->track, subtrack->track);
 
     }
@@ -5857,8 +5910,10 @@ static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *pa
 char buffer[SMALLBUF];
 struct trackDb *subtrack;
 
-// Get list of leaf subtracks to work with
-struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+// Get list of leaf subtracks to work with.  Container (multiWig) subtracks are listed as a
+// single subtrack rather than as their individual children.
+struct slRef *subtrackRef, *subtrackRefList =
+                    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
 sortOrder_t* sortOrder = sortOrderGet(cart, parentTdb);
@@ -5936,7 +5991,8 @@ assert(primarySubtrack != NULL);
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
 char htmlIdentifier[SMALLBUF];
 
-// Get list of leaf subtracks to work with and sort them
+// Get list of leaf subtracks to work with and sort them.  Unlike compositeUiSubtracks, this
+// (used by hgTables) descends into container multiWigs, as hgTables works on individual tables.
 struct slRef *subtrackRef, *subtrackRefList =
 			    trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
 if (NULL != trackDbSetting(parentTdb, "sortOrder")
@@ -6041,9 +6097,6 @@ if (boxed)
 void snakeOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in snake mode */
 {
-if (!cfgOptionBooleanDefault("canSnake", TRUE))
-    return;
-
 printf("<BR><B>Display data as a rearrangement graph:</B> ");
 boolean option = cartOrTdbBoolean(cart, tdb, "doSnake", FALSE);
 
@@ -6813,7 +6866,8 @@ if (max && limitMin
 static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened,
                                boolean boxed, boolean parentLevel,char *name, char *title,
                                char *label, char *scoreName, boolean isHighlight)
-// Shows a score filter control with minimum value and optional range
+// Shows a score filter control with minimum value and optional range.
+// label is HTML: callers must encode any text that came from a hub or a file.
 {
 char *setting = trackDbSetting(tdb, scoreName);
 if (setting)
@@ -6837,14 +6891,15 @@ if (setting)
     filterName = getScoreNameAdd(tdb, scoreName, filterByRange ? _MIN:"");
     safef(varName, sizeof(varName), "%s.%s", name, filterName);
     safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
-          htmlEncode(htmlTextStripTags(label)));
+          htmlTextStripTags(label));
     cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
     if (filterByRange)
         {
         printf("<TD align='left'>to<TD align='left'>");
         filterName = getScoreNameAdd(tdb, scoreName, _MAX);
         safef(varName, sizeof(varName), "%s.%s", name, filterName);
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""),
+              htmlTextStripTags(label));
         cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
         }
     safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
@@ -6930,7 +6985,10 @@ if (filterSettings)
     struct slName *filter = NULL;
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
-        if (differentString(filter->name,NO_SCORE_FILTER))
+        // vcfDoFilter and vcfDoInfoFilter are VCF UI toggles, not filters on a field
+        if (differentString(filter->name,NO_SCORE_FILTER)
+            && differentString(filter->name, VCF_DO_FILTER_UI)
+            && differentString(filter->name, VCF_DO_INFOFILTER_UI))
             {
             AllocVar(tdbFilter);
             slAddHead(&trackDbFilterList, tdbFilter);
@@ -7024,7 +7082,7 @@ if (sameString("qValue", field))
 return -1;
 }
 
-static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
+int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
                                  boolean boxed, boolean parentLevel,char *name, char *title,
                                  boolean isHighlight)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
@@ -7044,6 +7102,7 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
+    boolean isVcf = (tdb->type != NULL && startsWith("vcf", tdb->type));
 
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
@@ -7051,15 +7110,12 @@ if (trackDbFilters)
         char *scoreName = cloneString(filter->name);
         char *trackDbLabel = getLabelSetting(cart, tdb, field);
 
-        if (as != NULL)
+        if (as != NULL && !isVcf)
             {
             struct asColumn *asCol = asColumnFind(as, field);
             if (asCol != NULL)
                 { // Found label so replace field; strip "|..." suffix used for detail page
-                field = asCol->comment;
-                char *pipe = strchr(field, '|');
-                if (pipe != NULL)
-                    field = cloneStringZ(field, pipe - field);
+                field = asColumnLabel(asCol);
                 }
             else if (defaultFieldLocation(field) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", field);
@@ -7081,7 +7137,8 @@ if (trackDbFilters)
 
         if (isHighlight && count == 0)
             printHighlightColorPicker(cart, tdb);
-        showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isHighlight);
+        showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,htmlEncode(label),scoreName,
+                        isHighlight);
         count++;
         }
     if (as != NULL)
@@ -7150,6 +7207,24 @@ if (!blocked)  // scoreFilter is implicit unless NO_SCORE_FILTER
 return FALSE;
 }
 
+char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
+/* Figure out how the trackDb is specifying the HIGHLIGHT_TYPE variable and return its setting */
+{
+char settingString[4096];
+safef(settingString, sizeof settingString, "%s.%s", HIGHLIGHT_TYPE_NAME_LOW, field);
+char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s.%s", field, HIGHLIGHT_TYPE_NAME_CAP);
+    setting = cartOrTdbString(cart, tdb, settingString, NULL);
+    }
+if (setting == NULL)
+    {
+    safef(settingString, sizeof settingString, "%s%s", field, HIGHLIGHT_TYPE_NAME_CAP);
+    setting = cartOrTdbString(cart, tdb, settingString, def);
+    }
+return setting;
+}
 
 char *getFilterType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
 // figure out how the trackDb is specifying the FILTER_TYPE variable and return its setting
@@ -7170,7 +7245,7 @@ if (setting == NULL)
 return setting;
 }
 
-static int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight)
+int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight)
 /* Show all the text filters for this track. */
 {
 int count = 0;
@@ -7188,17 +7263,18 @@ if (trackDbFilters)
         conn = hAllocConnTrack(db, tdb);
     struct asObject *as = asForTdb(conn, tdb);
     hFreeConn(&conn);
+    boolean isVcf = (tdb->type != NULL && startsWith("vcf", tdb->type));
     while ((filter = slPopHead(&trackDbFilters)) != NULL)
         {
         char *trackDbLabel = getLabelSetting(cart, tdb, filter->fieldName);
         char *value = cartUsualStringClosestToHome(cart, tdb, FALSE, filter->name, filter->setting);
-        if (as != NULL)
+        if (as != NULL && !isVcf)
             {
             struct asColumn *asCol = asColumnFind(as, filter->fieldName);
             if (asCol != NULL)
                 {
                 if (trackDbLabel == NULL)
-                    trackDbLabel = asCol->comment;
+                    trackDbLabel = asColumnLabel(asCol);
                 }
             else if (defaultFieldLocation(filter->fieldName) < 0)
                 errAbort("Building filter on field %s which is not in AS file.", filter->fieldName);
@@ -7209,7 +7285,8 @@ if (trackDbFilters)
         if (isHighlight && count == 0)
             printHighlightColorPicker(cart, tdb);
         count++;
-        printf("<P><B>%s items in '%s' field:</B> ", isHighlight ? "Highlight": "Filter", trackDbLabel);
+        printf("<P><B>%s items in '%s' field:</B> ", isHighlight ? "Highlight": "Filter",
+               htmlEncode(trackDbLabel));
 
         char cgiVar[128];
         safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,filter->name);
@@ -7494,7 +7571,7 @@ else
             ;
         assert(col);
         // the comment comes from the autoSql inside the hub's bigBed, escape
-        printf(" %s&nbsp;&nbsp;&nbsp;", htmlEncode(col->comment));
+        printf(" %s&nbsp;&nbsp;&nbsp;", htmlEncode(asColumnLabel(col)));
         }
     }
 }
@@ -8551,7 +8628,8 @@ else
 
 treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
-    printf("</TD><TD VALIGN=\"TOP\"><IMG SRC=\"../images/%s\"></TD></TR></TABLE>", treeImage);
+    printf("</TD><TD VALIGN=\"TOP\"><IMG SRC=\"../images/%s\"></TD></TR></TABLE>",
+        htmlEncode(treeImage));   // treeImage may be hub supplied
 else
     puts("</TD></TR></TABLE>");
 
@@ -9447,7 +9525,7 @@ memset(chked, 0, sizeof(chked));
 memset(enabd, 0, sizeof(chked));
 
 struct slRef *subtrackRef, *subtrackRefList =
-                                    trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+                            trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 struct trackDb *subtrack;
 if (dimensionX || dimensionY) // Must be an X or Y dimension
     {
@@ -9638,7 +9716,8 @@ puts("</TABLE>");
 
 // if there is a treeImage, put it beside the matrix
 if (treeImage != NULL)
-    printf("</TD><TD><IMG SRC=\"%s\"></TD></TABLE>", treeImage);
+    printf("</TD><TD><IMG SRC=\"%s\"></TD></TABLE>",
+        htmlEncode(treeImage));   // treeImage may be hub supplied
 
 // If any filter additional filter composites, they can be added at the end.
 compositeUiByFilter(db, cart, parentTdb, formName);
@@ -9717,7 +9796,8 @@ else
 button = cgiOptionalString(buttonVar);
 if (isNotEmpty(button))
     {
-    struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+    struct slRef *tdbRefList =
+                    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
     struct slRef *tdbRef;
     for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         {
@@ -9768,7 +9848,8 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         button = cgiOptionalString(buttonVar);
         if (isEmpty(button))
             continue;
-	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+	struct slRef *tdbRefList =
+                    trackDbListGetRefsToDescendantLeavesOrContainers(parentTdb->subtracks);
 	struct slRef *tdbRef;
 	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
             {
@@ -9989,6 +10070,86 @@ else
     return b;
 }
 
+static struct hash *bareNameTrackNames = NULL;  // native track names, from the caller's list
+
+static void rAddTrackNames(struct hash *hash, struct trackDb *tdbList)
+/* Add every track name in the list, its containers, and its descendants to hash. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    hashStore(hash, tdb->track);
+    if (tdb->parent != NULL)            // supertracks are reachable only this way
+        hashStore(hash, tdb->parent->track);
+    rAddTrackNames(hash, tdb->subtracks);
+    }
+}
+
+void hubTrackBareNamesFromTdbList(struct trackDb *tdbList)
+/* Let hubTrackOwnsBareName() answer from this list of tracks rather than from trackDb.
+ * A CGI that has already built the full track list should call this once, with it: the
+ * list holds the assembly's tracks and the attached hubs' together, and a hub track is
+ * always "hub_<id>_"-prefixed there, so an undecorated name can only match a native
+ * track.  Without this the question costs a trackDb query per distinct bare name. */
+{
+hashFree(&bareNameTrackNames);
+bareNameTrackNames = hashNew(16);
+rAddTrackNames(bareNameTrackNames, tdbList);
+}
+
+boolean hubTrackOwnsBareName(char *db, char *hubTrack)
+/* A hub track can be named on a URL or in the cart without its "hub_<id>_" prefix, so
+ * that hub links stay readable, and the visibility and selection code falls back to that
+ * bare name when the decorated one has no value.  The bare name is the hub track's alone
+ * only when the assembly has no track of that name: when it does, the variable belongs to
+ * the native track, and letting the hub track take it moves the user's setting to a track
+ * they were not looking at and drops it from the one they were.  Takes the decorated hub
+ * track name; FALSE for anything that isn't one.
+ *   With a list registered this is a read-only hash lookup, safe to call from anywhere.
+ * The trackDb fallback is not: it opens a connection and fills a static cache, so a
+ * caller that has no list must reach it on the main thread.  hgTracks registers its list
+ * in loadFromTrackDb(), so it never takes that path. */
+{
+if (hubTrack == NULL || !startsWith("hub_", hubTrack))
+    return FALSE;
+char *underscore = strchr(hubTrack + 4, '_');   // "hub_" alone is not a decorated name
+if (underscore == NULL)
+    return FALSE;
+char *bareName = underscore + 1;
+if (startsWith("hub_", bareName))
+    return TRUE;    // a bare name that is itself decorated is no native track's
+if (isEmpty(db) || trackHubDatabase(db) || isHubTrack(db))
+    return TRUE;    // an assembly hub has no native trackDb to collide with
+
+// The cheap way: the caller handed us its track list, so this is one hash lookup.
+if (bareNameTrackNames != NULL)
+    return (hashLookup(bareNameTrackNames, bareName) == NULL);
+
+// Otherwise ask trackDb for just this name.  That is a query, so remember the answers:
+// one request asks this of many tracks, and of the same name for every subtrack of a
+// container.  NOTE: not hTrackDbForTrack(), which would be tidier - hTrackDb() only
+// memoizes through the shared-memory cache, so with cacheTrackDbDir unset it reloads the
+// whole trackDb on every call.
+static struct hash *nativeCache = NULL;
+if (nativeCache == NULL)
+    nativeCache = hashNew(0);
+char key[1024];
+safef(key, sizeof(key), "%s:%s", db, bareName);
+struct hashEl *hel = hashLookup(nativeCache, key);
+if (hel == NULL)
+    {
+    boolean isNative = FALSE;
+    struct sqlConnection *conn = hAllocConn(db);
+    if (conn != NULL)
+        {
+        isNative = (hMaybeTrackInfo(conn, bareName) != NULL);
+        hFreeConn(&conn);
+        }
+    hel = hashAddInt(nativeCache, key, isNative);
+    }
+return (ptToInt(hel->val) == 0);
+}
+
 enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,
                                         boolean *subtrackOverride)
 // returns visibility NOT limited by ancestry.
@@ -10008,11 +10169,18 @@ if (cart != NULL) // cart is optional
     {
     char *cartVis = cartOptionalString(cart, tdb->track);
     boolean cgiVar = FALSE;
-    // check hub tracks for visibility settings without the hub prefix
-    if (startsWith("hub_", tdb->track) && (cartVis == NULL))
+    // check hub tracks for visibility settings without the hub prefix, but not when the
+    // assembly has a track of that name - then the bare name is that track's.  Ask the URL
+    // first: hubTrackOwnsBareName() can cost a query, and almost no request has a bare name
+    // on it at all.
+    if (cartVis == NULL && startsWith("hub_", tdb->track))
         {
-        cartVis = cgiOptionalString( trackHubSkipHubName(tdb->track));
-        cgiVar = TRUE;
+        char *bareVis = cgiOptionalString(trackHubSkipHubName(tdb->track));
+        if (bareVis != NULL && hubTrackOwnsBareName(cartOptionalString(cart, "db"), tdb->track))
+            {
+            cartVis = bareVis;
+            cgiVar = TRUE;
+            }
         }
 
     if (cartVis != NULL)
@@ -10054,12 +10222,19 @@ if (tdbIsContainerChild(tdb))
         // inheriting the parent's.  NOTE: tdb->visibility can't tell "asked for something"
         // from "inherited a default", since trackDbFieldsFromSettings() fills it through
         // the inheriting trackDbSetting() - hence trackDbLocalSetting here.
+        // A trackDb "visibility hide" is only a default though, and a generated hub
+        // trackDb can carry one on every subtrack; taking it for a request to hide left a
+        // checked subtrack undrawable with nothing on the page to say why.  So only a cart
+        // value counts as the user asking for hide - trackDb hide falls back like no
+        // setting at all, since whether the child shows is the checkbox's business.
+        boolean askedToHide = (subtrackOverride && vis == tvHide);
         boolean hasOwnVis = (subtrackOverride
-                             || trackDbLocalSetting(tdb, "visibility") != NULL);
+                             || (trackDbLocalSetting(tdb, "visibility") != NULL
+                                 && vis != tvHide));
         if (onlyVis != NULL)
             {
             // onlyVisibility pins the child to a single mode, but asking to hide still hides
-            if (!(hasOwnVis && vis == tvHide))
+            if (!askedToHide)
                 vis = tvFromVisOnlySetting(onlyVis);
             }
         else if (!hasOwnVis)
@@ -10287,7 +10462,8 @@ struct dyString *ds = dyStringNew(0);
 
 // generate markup
 if (url)
-    dyStringPrintf(ds, "<a class='pennantIconText' href='%s' target='ucscHelp' ", url);
+    dyStringPrintf(ds, "<a class='pennantIconText' href='%s' target='ucscHelp' ",
+        htmlEncode(url));   // pennantIcon may be hub supplied
 else if (isTextIcon)
     dyStringAppend(ds, "<span class='pennantIconText' ");
 if (isTextIcon)
@@ -10489,18 +10665,22 @@ else
     struct trackDb *loadTrackDb(char *db, char *where);
     struct trackDb *tdb = loadTrackDb(db, query);
 
+    // a track lifted from a hub need not be a track in the native database at all
+    if (tdb == NULL)
+        return NULL;
     html = tdb->html;
     //char *html = tdb->html;
-    if (isEmpty(tdb->html))
+    char *parent = trackDbSetting(tdb, "parent");
+    if (isEmpty(tdb->html) && !isEmpty(parent))
         {
-        char *parent = trackDbSetting(tdb, "parent");
         char *words[10];
 
         chopLine(parent,words);
         sqlSafef(query, sizeof query,  "tableName = '%s'", trackHubSkipHubName(words[0]));
         struct trackDb *tdb = loadTrackDb(db, query);
 
-        html = tdb->html;
+        if (tdb != NULL)
+            html = tdb->html;
         }
     }
 return html;
@@ -10906,8 +11086,6 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    puts("<b>Related tracks</b>\n");
-    puts("<ul>\n");
     struct hash *otherTracksAndDesc = hashNew(0);
     char *why, *otherTrack;
     for (; row != NULL; row = sqlNextRow(sr))
@@ -10919,6 +11097,7 @@ if (row != NULL)
         }
 
     struct hashEl *hel, *helList = hashElListHash(otherTracksAndDesc);
+    boolean printedAny = FALSE;
     for (hel = helList; hel != NULL; hel = hel->next)
         {
         char *otherTrack = (char *)hel->name;
@@ -10929,12 +11108,19 @@ if (row != NULL)
             otherTdb = tdbForTrack(database, otherTrack, NULL);
         if (otherTdb)
             {
+            if (!printedAny)
+                {
+                puts("<b>Related tracks</b>\n");
+                puts("<ul>\n");
+                printedAny = TRUE;
+                }
             puts("<li>");
             printf("<a href=\"%s?db=%s&g=%s&%s\">%s</a>", hTrackUiForTrack(otherTdb->track), database, otherTdb->track, cartSidUrlString(cart), otherTdb->shortLabel);
             puts(": ");
             puts(why);
             }
         }
+    if (printedAny)
         puts("</ul>\n");
     }
 sqlFreeResult(&sr);

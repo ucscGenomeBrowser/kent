@@ -1,0 +1,8 @@
+browser.node names one row; another row exists
+  no HTTP_HOST at all, as on the command line  self=the node browser.node names      others=2
+  HTTP_HOST is the configured node             self=the node browser.node names      others=2
+  HTTP_HOST is the OTHER node                  self=the other node                   others=2
+  the other node with a port on it             self=the other node                   others=2
+  a host in no gbNode row                      self=the node browser.node names      others=2
+  an empty HTTP_HOST                           self=the node browser.node names      others=2
+

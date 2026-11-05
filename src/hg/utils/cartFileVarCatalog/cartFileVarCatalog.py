@@ -206,7 +206,9 @@ CATALOG = [
            "unscreened value was an arbitrary file write as well as a read.  Both "
            "names are checked at the point of use too, in pcrResultParseCart() "
            "and in hgPcr's pcrResultCartFiles().  hgPcrResult_targetStyle shares "
-           "the prefix and is a display setting, so cart.c excludes it by name."),
+           "the prefix and is a display setting, so cart.c excludes it by name.  So "
+           "is hgPcrResult_imgOrd, the track's place in the image after a drag, "
+           "because hgPcrResult is also the track name (#38442)."),
 
     # ---- either a URL or a file we made --------------------------------------
     # Screened against urlOrFileNameCartVars[] with isServerUserFileOrUrl(),

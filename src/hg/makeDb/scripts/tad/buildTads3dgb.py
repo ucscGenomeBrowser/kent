@@ -4,8 +4,8 @@
 # Literal data: only a format normalization (10-col 3DGB bed -> bed4). No re-calling,
 # merging, lifting, or recurrence scoring. refs #21599
 #
-# Reads:  3DGB source beds + datasets_api.json + classification.tsv (project dir)
-#         organ_colors.json (TAD-owned /hive/data/outside/tad copy; has Colon/Bladder/Cervix added)
+# Reads:  3DGB source beds + datasets_api.json + classification.tsv (<tadDir>/3dgenome/source)
+#         organ_colors.json (TAD-owned <tadDir> copy; has Colon/Bladder/Cervix added)
 # Writes: build/hg38/tads3dgb/<id>.bb, tads3dgb_metadata.tsv, tads3dgb.ra
 
 import json, csv, os, subprocess, sys, collections, re
@@ -14,19 +14,23 @@ import json, csv, os, subprocess, sys, collections, re
 # classification.tsv (which carries the curated Condition/Treatment/Provenance facets); mm10 iterates
 # the mouse TAD-called datasets straight from the API (no curated facets -> those 3 are omitted).
 # mm39 is produced by lifting the mm10 bigBeds (see liftTads3dgbMouse.sh).
+# Optional second argument tadDir (default /hive/data/outside/tad) is the root that inputs are read
+# from and output is written under; pass a staging copy to rebuild without touching live files.
 ASM    = sys.argv[1] if len(sys.argv) > 1 else "hg38"
-APIJS  = "/hive/users/lrnassar/claude/RM21599/3dgenome/datasets_api.json"
-CLASS  = "/hive/users/lrnassar/claude/RM21599/3dgenome/classification.tsv"
-COLORS = "/hive/data/outside/tad/organ_colors.json"   # TAD-owned (symlinked into /gbdb/<asm>/bbi/tad/)
+TAD    = sys.argv[2] if len(sys.argv) > 2 else "/hive/data/outside/tad"
+APIJS  = TAD + "/3dgenome/source/datasets_api.json"
+CLASS  = TAD + "/3dgenome/source/classification.tsv"
+ASFILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tadDomain.as")
+COLORS = TAD + "/organ_colors.json"   # TAD-owned (symlinked into /gbdb/<asm>/bbi/tad/)
 ASCFG = {
- "hg38": dict(beds="/hive/users/lrnassar/claude/RM21599/3dgenome/tad_beds",
+ "hg38": dict(beds=TAD + "/3dgenome/source/tad_beds",
               chroms="/hive/data/genomes/hg38/chrom.sizes",
-              out="/hive/data/outside/tad/3dgenome/build/hg38", species="human",
+              out=TAD + "/3dgenome/build/hg38", species="human",
               default_on={"63","67","122","103"}),   # GM12878, H1-ESC, IMR-90, HMEC
- "mm10": dict(beds="/hive/data/outside/tad/3dgenome/mouse/tad_beds",
+ "mm10": dict(beds=TAD + "/3dgenome/mouse/tad_beds",
               chroms="/hive/data/genomes/mm10/chrom.sizes",
-              out="/hive/data/outside/tad/3dgenome/build/mm10", species="mouse",
-              default_on=set()),                      # mouse ships all-off (per user)
+              out=TAD + "/3dgenome/build/mm10", species="mouse",
+              default_on={"418","424","429"}),        # mESC Dixon 2012, CH12-LX Rao 2014, mESC WT Micro-C
 }
 C = ASCFG[ASM]
 BEDS=C["beds"]; CHROMS=C["chroms"]; OUT=C["out"]; SPECIES=C["species"]; DEFAULT_ON=C["default_on"]
@@ -50,9 +54,15 @@ def hex2rgb(h):
     h = h.lstrip("#")
     return "%d,%d,%d" % (int(h[0:2],16), int(h[2:4],16), int(h[4:6],16))
 
+# 3DGB catalog text uses typographic hyphens/minus/spaces that break text search
+# ("PANC-1" does not match "PANC\u20111"); fold them to ASCII. Greek letters are kept,
+# with MICRO SIGN folded to GREEK MU so "uM" is spelled one way.
+PUNCT = str.maketrans({"\u2010": "-", "\u2011": "-", "\u2012": "-", "\u2013": "-", "\u2212": "-",
+                       "\u00a0": " ", "\u202f": " ", "\u2009": " ", "\u00b5": "\u03bc"})
+
 def clean(s):
     """Collapse whitespace; never return empty (faceted JS throws on blank cells)."""
-    s = "" if s is None else str(s)
+    s = "" if s is None else str(s).translate(PUNCT)
     s = re.sub(r"\s+", " ", s.replace("\t", " ")).strip()
     return s
 
@@ -89,6 +99,15 @@ def scap(s):
     if first[:1].isalpha() and first == first.lower():
         return s[:1].upper() + s[1:]
     return s
+
+# Hand-picked shortLabels where shortlab() truncation collides and the study suffix
+# (below) does not separate them (QA, refs #21599). Keyed by 3DGB dataset id.
+SHORT_OVERRIDE = {
+    "48": "Keratinocyte day0", "49": "Keratinocyte day3", "50": "Keratinocyte day6",
+    "690": "NPC neuron D868D 1", "691": "NPC neuron D868D 2", "692": "NPC neuron D868D 3",
+    "693": "NPC neuron D868N 1", "694": "NPC neuron D868N 2", "695": "NPC neuron D868N 3",
+    "96": "HCT-116 RAD21 auxin 6h", "97": "HCT-116 RAD21 no auxin",
+}
 
 def main():
     os.makedirs(BBDIR, exist_ok=True)
@@ -155,7 +174,7 @@ def main():
                 if len(f) < 3:
                     continue
                 out.write("%s\t%s\t%s\t%s\n" % (f[0], f[1], f[2], dname))
-        rc = subprocess.run(["bedToBigBed", "-type=bed4", "-tab", tmp, CHROMS, bb],
+        rc = subprocess.run(["bedToBigBed", "-type=bed4", "-tab", "-as=" + ASFILE, tmp, CHROMS, bb],
                             stderr=subprocess.PIPE, text=True)
         os.remove(tmp)
         if rc.returncode != 0:
@@ -173,6 +192,15 @@ def main():
     if missing_color:
         print("ORGANS WITHOUT COLOR KEY:", dict(missing_color), file=sys.stderr)
     print("converted %d / %d datasets" % (len(meta), len(rows)))
+
+    # shortLabels: a cell line in several studies gets the study ID appended ("K-562 GSE63525");
+    # SHORT_OVERRIDE wins. All shortLabels must end up unique.
+    nshort = collections.Counter(x[3] for x in meta)
+    meta = [(d, m, rgb, SHORT_OVERRIDE.get(d) or (short + " " + m["Study"] if nshort[short] > 1 else short),
+             long, mouse) for d, m, rgb, short, long, mouse in meta]
+    dup = [k for k, n in collections.Counter(x[3] for x in meta).items() if n > 1]
+    if dup:
+        sys.exit("duplicate shortLabels: %s" % dup)
 
     # metadata TSV (tab-sep; primaryKey + facet cols + hidden _Description)
     cols = list(meta[0][1].keys())
@@ -210,7 +238,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl %s/tads3dgb/%s.bb
     color %s
-    visibility dense
+    visibility pack
     mouseOver %s
 
 """ % (did, onoff, short, long, GBDB, did, rgb, mouse))

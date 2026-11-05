@@ -1,0 +1,42 @@
+# #38487 -- a quickLifted bigBed asked the source assembly for every item under the whole
+# chain block that overlaps the window, not for the part of the block the window covers.
+#
+# hg19 and hg38 are identical for 12.8 Mb on chr7, so the hg19-to-hg38 chain has one block
+# there (hg38 chr7:114,626,813-127,461,646).  A window anywhere inside it made
+# quickLiftGetIntervals() in hg/lib/quickLift.c query hg19 over all 12.8 Mb.  For dbSNP155
+# that is more than the query's 1,000,000-item limit, the items came back from the start of
+# the block, and none of them were in the window.  So the lifted "All dbSNP(155)" row was
+# EMPTY, while the sparser "Common dbSNP(155)" row beside it drew normally.
+#
+# The fix clips each block to the window before taking the source range
+# (quickLiftChainRangeIn), and does the same for quickLiftSql() and quickLiftGenePreds(),
+# whose over-wide queries were only slow, not wrong, and so cannot be seen on a page.
+#
+# What is asserted: after the lift, the All dbSNP row draws black items (color: fails on a
+# row that drew nothing, which is exactly the bug), and the Common row draws too, as a
+# control that the lift itself worked.  The hg19 view is checked first so that a missing
+# hg19 track fails before the convert rather than looking like the bug.
+# Deliberately not asserted: an item count, since dbSNP data is the kind that gets
+# replaced.
+proof:
+  - "assertion-only 2026-10-06 -- written with the fix"
+  - "sandbox-ab 2026-10-06 -- failed on genome-test (master without the fix) on the All dbSNP color check, the row having drawn nothing; passed on hgwdev-braney with the fix"
+  - "server-flip 2026-10-06 -- passed on genome-test once 15ca0d2dec6 was installed there, having failed on its last check that morning"
+
+target: genome-test
+db: hg19
+position: chr7:117899892-117939892
+reset: true
+fast: true
+steps:
+  - go: chr7:117899892-117939892
+  - hide: all
+  - track: {dbSnp155Composite: show, dbSnp155: dense, dbSnp155Common: dense}
+  - expect: {rows: [dbSnp155, dbSnp155Common], noText: "Warning/Error"}
+  - expect: {color: {track: dbSnp155, is: "0,0,0"}}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [dbSnp155, dbSnp155Common], noText: "Warning/Error"}
+  - expect: {color: {track: dbSnp155Common, is: "0,0,0"}}
+  - expect: {color: {track: dbSnp155, is: "0,0,0"}}

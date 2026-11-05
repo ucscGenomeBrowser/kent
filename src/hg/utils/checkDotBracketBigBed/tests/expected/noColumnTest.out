@@ -1,0 +1,1 @@
+Exception: the bigBed has no column named 'notAColumn'; its columns are: chrom chromStart chromEnd name score strand thickStart thickEnd reserved blockCount blockSizes chromStarts dotBracket

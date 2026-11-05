@@ -64,11 +64,6 @@ boolean snapshotHasRequired(struct snapshotType *type, struct cart *cart);
 /* Return FALSE when type declares a requiredVar that is missing/empty in cart (saving it would make
  * a link that reopens to nothing), otherwise TRUE. */
 
-boolean snapshotIsSnapshotName(char *sessionName);
-/* Return TRUE if sessionName is a snapshot name (starts with the "__" prefix).  Only the snapshot
- * writer/cleaner should care: a user's own session can carry the same prefix, so this must not be
- * used to decide whether to show a row to its owner - see snapshotIsSnapshotSettings(). */
-
 char *snapshotTypeFromSettings(char *settings);
 /* Return the snapshot type recorded in a namedSessionDb settings string ("snapshotType blat" ->
  * "blat"), or NULL when there is none, i.e. the row is an ordinary saved session.  The value is not

@@ -49,3 +49,5 @@ html dnaMethylation.html
 include methbase2.ra alpha
 
 include danioCode.ra alpha
+# include danRer11.GCF_052040795.1.chainNet.ra alpha
+# include danRer11.GCF_049306965.2.chainNet.ra alpha

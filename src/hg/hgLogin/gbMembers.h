@@ -87,5 +87,9 @@ void gbMembersOutput(struct gbMembers *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean gbMembersActivationTokenOk(struct sqlConnection *conn, char *userName, char *token);
+/* Return TRUE if token is userName's current activation token: not empty, and not past
+ * emailTokenExpires. */
+
 #endif /* GBMEMBERS_H */
 

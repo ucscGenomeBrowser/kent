@@ -1,0 +1,72 @@
+# The session round trip, on a cart with real weight behind it.
+#
+# selftest already does session: -> expect: -> loadSession:, which is the right shape, and
+# it does it on a cart holding two rows. That is not enough to exercise the part of
+# hgSession that actually breaks. Saving a cart is not a copy of it: outIfNotPresent() in
+# hg/hgSession/hgSession.c writes a trackDb DEFAULT for every track that is deliberately
+# NOT in the cart, so the file says what is hidden as well as what is shown. On a two-track
+# cart that function has almost nothing to do. A save-and-reload path that dropped rows was
+# watched to leave selftest green, and this script is what would have gone red.
+#
+# The weight comes from a Recommended Track Set, which is where a clinical user starts:
+# View/Clinical_SNVs_hg38, listed in DOCUMENT_ROOT/data/recTrackSets/recTrackSets.hg38.tab
+# and loaded by hg/hgTracks/recTrackSets.c. It draws 33 tracks and the ruler, and the file
+# the `session:` step below writes out of that cart is 741 settings, 248 of them track
+# visibilities and 154 of those `hide`. It is a saved session on the server, so
+# `make preflight` checks it is still there -- a deleted session answers 200 with a page
+# that has no track image, on which every noText: check passes.
+#
+# `exact: true` is on both halves and it is the whole test. Naming the rows that came back
+# is what says the cart survived; `rows:` on its own would pass on a reload that lost four
+# of them. The set is stated in full rather than counted because a count cannot say WHICH
+# row went missing, and the failure message prints the rows actually drawn.
+#
+# When genome-test's trackDb changes what this session draws, this script goes red for an
+# honest reason. Read the failure before editing the list: a row that arrives is news
+# about trackDb, a row that leaves on one half of the trip and not the other is the bug
+# this exists for.
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # No go: and no position: -- the session carries its own window (chr12, near FGF23).
+  - loadSession: {user: View, name: Clinical_SNVs_hg38}
+
+  # The baseline, and at the same time the check that the session really loaded.
+  - expect:
+      rows: [ruler, avada, caddA, caddC, caddDel, caddG, caddIns, caddT, clinvarMain,
+             clinvarSubLolly, genCC, geneReviews, gnomadConstraint,
+             gnomadGenomesVariantsV3_1_1, hgmd, lovdShort, mane, mastermind,
+             missenseByGene, missenseByTranscriptV4_1_1, multiz100way, ncbiRefSeqCurated,
+             ncbiRefSeqHgmd, omimGene2, phyloP100way, pliByTranscriptV4_1_1, revelA,
+             revelC, revelG, revelT, unipDisulfBond, unipInterest, unipLocSignal,
+             unipModif]
+      exact: true
+      noText: "Could not find session"
+
+  # The whole cart at this step, written the way hgSession's "save settings to a local
+  # file" button writes it.
+  - session: clinical
+
+  # Move somewhere the saved state has to undo. Two rows, so a restore that half worked
+  # cannot be mistaken for one that worked.
+  - hide: all
+  - track: {mane: pack}
+  - expect: {rows: [ruler, mane], exact: true, noRows: [clinvarMain, revelA]}
+
+  # Back up through hgSession's own upload form.
+  - loadSession: {file: clinical}
+
+  # The same 34 rows, stated again in full rather than referred to, because a test that
+  # said "as before" would have nothing to print when it failed.
+  - expect:
+      rows: [ruler, avada, caddA, caddC, caddDel, caddG, caddIns, caddT, clinvarMain,
+             clinvarSubLolly, genCC, geneReviews, gnomadConstraint,
+             gnomadGenomesVariantsV3_1_1, hgmd, lovdShort, mane, mastermind,
+             missenseByGene, missenseByTranscriptV4_1_1, multiz100way, ncbiRefSeqCurated,
+             ncbiRefSeqHgmd, omimGene2, phyloP100way, pliByTranscriptV4_1_1, revelA,
+             revelC, revelG, revelT, unipDisulfBond, unipInterest, unipLocSignal,
+             unipModif]
+      exact: true
+      noText: "Could not find session"

@@ -36095,3 +36095,51 @@ ln -s /hive/data/genomes/hg19/bed/clinPred/{a,c,g,t}.color.bb /gbdb/hg19/clinPre
 #   Dixon visibility pack, Schmitt+McArthur hide) + tads/tadsDixon/tadsSchmitt/tadsMcArthur .html.
 #   Gated: include tad.ra alpha in human/hg19/trackDb.ra.
 cd ~/kent/src/hg/makeDb/trackDb && make DBS=hg19 FIND=find
+
+# 2026-10-13 (lou) QA-fix rebuild: all hg19 TAD bigBeds were rebuilt with
+# ~/kent/src/hg/makeDb/scripts/tad/buildTadsHuman.sh (commands and the list of changes are in
+# ../hg38/tad.txt, section "QA-fix rebuild"). For hg19: Schmitt items are named with the full
+# sample name, McArthur items by their 1-based hg19 bin, and the McArthur boundary at
+# chr17:81100000-81200000 is now kept, trimmed to the chr17 end (it was dropped by bedClip,
+# 14,344 -> 14,345). Counts (Schmitt is native hg19, so source == final):
+#   set               source unmapped nonPrimary trimmed inflated  final
+#   Dixon hESC          3127       65          0       0        0   3062
+#   Dixon IMR90         2348       58          0       0        0   2290
+#   Schmitt TRO         2435        0          0       0        0   2435
+#   Schmitt RV          2083        0          0       0        0   2083
+#   Schmitt OV          2164        0          0       0        0   2164
+#   Schmitt MSC         2290        0          0       0        0   2290
+#   Schmitt BL          2148        0          0       0        0   2148
+#   Schmitt LI          2272        0          0       0        0   2272
+#   Schmitt LG          2258        0          0       0        0   2258
+#   Schmitt LV          2079        0          0       0        0   2079
+#   Schmitt NPC         2378        0          0       0        0   2378
+#   Schmitt AO          2044        0          0       0        0   2044
+#   Schmitt AD          2148        0          0       0        0   2148
+#   Schmitt SB          2195        0          0       0        0   2195
+#   Schmitt MES         2479        0          0       0        0   2479
+#   Schmitt SX          2335        0          0       0        0   2335
+#   Schmitt PO          2224        0          0       0        0   2224
+#   Schmitt PA          2199        0          0       0        0   2199
+#   Schmitt IMR90       2231        0          0       0        0   2231
+#   Schmitt GM12878     2306        0          0       0        0   2306
+#   Schmitt CO          2194        0          0       0        0   2194
+#   Schmitt HC          2204        0          0       0        0   2204
+#   Schmitt H1          2502        0          0       0        0   2502
+#   McArthur mcarthur  14345        0          0       1        0  14345
+
+#########################################################################
+# mei - Mobile Element Insertions, euL1db subtracks (DONE 2026-09-21 Lou)
+# refs #37524
+#
+# hg19 carries two of the six subtracks of the "Mobile Insertions" (mei)
+# superTrack: meiEul1db (8,991 curated L1-HS insertion polymorphisms) and
+# meiEul1dbRef (1,544 reference-genome L1HS copies), both from euL1db
+# v1.00 (Mir et al. 2015, PMID 25352549). euL1db's coordinates are hg19
+# natively; the hg38 copies are lifted from these.
+#
+# The stanza lives in trackDb/human/mei.ra (shared across assemblies via
+# $D) and every build step for both assemblies is documented together in:
+#   ~/kent/src/hg/makeDb/doc/hg38/mei.txt
+#
+# Files: /gbdb/hg19/mei/eul1db.bb, /gbdb/hg19/mei/eul1dbRef.bb

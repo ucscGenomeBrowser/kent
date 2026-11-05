@@ -1,0 +1,1313 @@
+#!/usr/bin/env perl
+
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
+# edit ~/kent/src/hg/utils/automation/doMiniMap2.pl instead.
+
+# doMiniMap2.pl -- same-species / same-haplotype liftOver pipeline,
+# modeled directly on doSameSpeciesLiftOver.pl, but using minimap2
+# instead of blat as the alignment engine.
+#
+# Intended use: two very similar same-species assemblies where blat's
+# -fastMap query-chunking dance isn't needed and minimap2's splice-free
+# asm5/asm10/asm20 presets do a better job with the larger indels and
+# structural differences you see between the two haplotypes of a
+# diploid (trio-binned or hifiasm/verkko dual-assembly) genome, or
+# between two closely related strain assemblies.
+#
+# Requires the kent command pafToPsl (PAF+cigar -> PSL) so the existing
+# axtChain/chainNet/netChainSubset toolchain can be reused unchanged.
+
+use Getopt::Long;
+use warnings;
+use strict;
+use FindBin qw($Bin);
+use lib "$Bin";
+use File::Basename qw(basename);
+use HgAutomate;
+use HgRemoteScript;
+use HgStepManager;
+use AssemblyDivergence qw(mashDistance choosePipeline
+			   $mashAsm5Max $mashAsm10Max $mashLastzMin $mashWarnMax);
+use AsmHub qw(accessionFromPath asmBuildDir asmIdToPath);
+
+# Option variable names, both common and peculiar to this script:
+use vars @HgAutomate::commonOptionVars;
+use vars @HgStepManager::optionVars;
+use vars qw/
+    $opt_buildDir
+    $opt_target2Bit
+    $opt_targetSizes
+    $opt_query2Bit
+    $opt_querySizes
+    $opt_minimapPreset
+    $opt_minimapCpu
+    $opt_minimapSecondaryN
+    $opt_minimapSecondaryRatio
+    $opt_chainRam
+    $opt_chainCpu
+    $opt_regenerateMash
+    $opt_swap
+    $opt_swapDir
+    $opt_liftTableLoad
+    /;
+
+# Specify the steps supported with -continue / -stop:
+my $stepper = new HgStepManager(
+    [ { name => 'align',   func => \&doAlign },
+      { name => 'chain',   func => \&doChain },
+      { name => 'net',     func => \&doNet },
+      { name => 'load',    func => \&doLoad },
+      { name => 'cleanup', func => \&doCleanup },
+    ]
+				);
+
+# Option defaults:
+my $dbHost = 'hgwdev';
+my $ramG = '24g';	# minimap2 index + 8 threads on a whole genome needs headroom
+# minimapPreset is normally left undef and picked automatically by
+# estimateDivergence() (mash distance -> asm5/asm10/asm20); -minimapPreset
+# overrides that and skips the mash run entirely.
+my $minimapPreset;
+my $minimapCpu = 8;		# -t N threads given to each minimap2 job
+# Secondary alignments are kept (not '--secondary=no') so axtChain/chainNet
+# see the same kind of overlapping candidate alignments a lastz/blastz run
+# would give them, and can use genome-scale synteny context to arbitrate
+# ambiguous/duplicated regions -- rather than trusting minimap2's own local,
+# per-query-region primary/secondary call alone.  Defaults match minimap2's
+# own -N/-p defaults; only override via -minimapSecondaryN/-Ratio if you
+# have a specific reason to.
+my $minimapSecondaryN = 5;		# -N INT to minimap2
+my $minimapSecondaryRatio = 0.8;	# -p FLOAT to minimap2
+my $chainRam = '16g';		# -chainRam=Ng argument
+my $chainCpu = 1;		# -chainCpu=N argument
+# mash distance thresholds ($mashAsm5Max/$mashAsm10Max/$mashLastzMin/
+# $mashWarnMax) used to pick a preset (or reject the pair outright) come
+# from AssemblyDivergence.pm, shared with mashDistance.pl and anything
+# else that needs to triage a pair between this pipeline and
+# doBlastzChainNet.pl.
+
+my $base = $0;
+$base =~ s/^(.*\/)?//;
+
+sub usage {
+  # Usage / help / self-documentation:
+  my ($status, $detailed) = @_;
+  # Basic help (for incorrect usage):
+  print STDERR "
+usage: $base fromDb toDb
+options:
+";
+  print STDERR $stepper->getOptionHelp();
+  print STDERR <<_EOF_
+    -buildDir dir         Use dir instead of the build the dateless
+                          miniMap2.\$toDb symlink points at, or, when there
+                          is none yet, a new
+                          $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/miniMap2\$ToDb.\$date
+                          (give it to make a separate new build of a pair
+                          that already has one).
+    -target2Bit /path/target.2bit  Full path to target sequence (fromDb)
+    -query2Bit /path/query.2bit    Full path to query sequence (toDb)
+    -targetSizes /path/target.chrom.sizes  Full path to target chrom.sizes (fromDb)
+    -querySizes  /path/query.chrom.sizes   Full path to query chrom.sizes (toDb)
+    -minimapPreset asm5|asm10|asm20  minimap2 -x preset to use.  By default
+                          this is chosen automatically via AssemblyDivergence.pm
+                          (same logic as the standalone mashDistance.pl): mash
+                          sketches \$fromDb and \$toDb and picks a preset from
+                          the mash distance between them (< $mashAsm5Max -> asm5,
+                          < $mashAsm10Max -> asm10, < $mashLastzMin -> asm20).
+                          At or above $mashLastzMin this script refuses to run
+                          -- that pair looks too diverged for minimap2's asm*
+                          presets; use doBlastzChainNet.pl instead, or give
+                          -minimapPreset to skip the mash run and force a
+                          specific preset anyway.
+    -minimapCpu N         Threads given to each minimap2 cluster job (-t N),
+                          default: $minimapCpu
+    -ram Ng               Cluster ram size for minimap2, default: -ram=$ramG
+    -minimapSecondaryN N  minimap2 -N: max secondary alignments retained per
+                          primary hit, default: $minimapSecondaryN.  Secondary
+                          alignments are kept (not -secondary=no) so
+                          axtChain/chainNet get the same kind of overlapping
+                          candidate alignments a lastz run would give them,
+                          and can resolve ambiguous/duplicated regions using
+                          genome-scale synteny context instead of relying on
+                          minimap2's own local primary/secondary call alone.
+    -minimapSecondaryRatio F  minimap2 -p: minimum secondary-to-primary score
+                          ratio to keep a secondary at all, default:
+                          $minimapSecondaryRatio
+    -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
+    -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
+    -regenerateMash       Force the mash divergence check to re-sketch and
+                          overwrite even if a cached .msh (GenArk mashSketch/
+                          cache or \$buildDir/mashDistance.txt) already
+                          exists.  Ignored if -minimapPreset is also given,
+                          since that skips the mash run entirely.
+    -swap                 fromDb toDb are the same as the already-completed
+                          primary run's; instead of aligning again, chainSwap
+                          the primary run's axtChain/all.chain.gz (requires it
+                          to already exist) and build the toDb-to-fromDb
+                          liftOver/quickLift chain from that, in
+                          -swapDir (default: toDb's own build root)/miniMap2.\$fromDb.swap
+    -swapDir dir           Use dir instead of the default -swap work directory.
+    -liftTableLoad         Must be given to let the 'load' step install the
+                          results: the liftOver/quickLift symlinks into
+                          toDb's .../bed/liftOver/ (plus md5sum.txt),
+                          goldenPath/<db>/liftOver/, /gbdb/<db>/liftOver/
+                          and /gbdb/<db>/quickLift/ (or, for a GenArk
+                          fromDb, its hub-build liftOver/ and quickLift/
+                          and the /gbdb/genark/ links), then
+                          hgAddLiftOverChain and addQuickLift.py, which
+                          register this fromDb/toDb pair in hgcentral's
+                          liftOverChain and quickLiftChain tables.  Without
+                          it, 'load' still builds the chain/chainLiftOver/
+                          quickLift bigBed files in the axtChain run
+                          directory, but makes no symlinks outside it and
+                          no hgcentral entries, so repeated experimental
+                          runs can't replace an installed liftOver/quickLift
+                          file or an existing table entry.  Rerun 'load'
+                          (or -swap) with it later to install.
+_EOF_
+  ;
+  print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
+						'workhorse' => '',
+						'fileServer' => '',
+						'ram' => $ramG,
+						'minimapCpu' => $minimapCpu,
+						'bigClusterHub' => '');
+  print STDERR "
+Automates a same-species/same-haplotype liftOver (minimap2/chain/net)
+pipeline, patterned after doSameSpeciesLiftOver.pl but using minimap2
+in place of blat -fastMap:
+    align: Aligns the assemblies using minimap2 -cx \$minimapPreset on a
+           big cluster, one job per target sequence against the full
+           query genome, then converts PAF+cigar to PSL with pafToPsl.
+    chain: Chains the alignments on a big cluster.
+    net:   Nets the alignments, uses netChainSubset to extract liftOver chains.
+    load:  Builds the bigChain/quickLift files; with -liftTableLoad, installs
+           the liftOver/quickLift symlinks and calls hgAddLiftOverChain on
+           $dbHost.
+    cleanup: Removes or compresses intermediate files.
+With -swap (not a normal stepper step -- see -swap above), chainSwap the
+primary run's all.chain.gz and reuse the net/load logic to build the
+reverse-direction liftOver/quickLift chain, without re-aligning.
+Each completed run also leaves (or refreshes) a dateless symlink
+miniMap2.\$toDb -> the dated build directory (miniMap2.\$fromDb -> the
+miniMap2.\$fromDb.swap directory for a -swap run), named with the actual
+db/accession, not ucfirst(), so later runs/tools can find \"the\" build for
+a pair without knowing its date.
+Safe to run again: without -continue, steps whose results are already in
+the build directory are skipped and the run starts at the first step that
+isn't done (load, at the latest -- it skips the bigBeds it already built
+and only replaces symlinks that don't already point at the right file).
+So rerunning a finished build with -liftTableLoad only installs it.  An
+explicit -continue step runs that step even so, subject to its own
+'already done' check.
+All operations are performed in the build directory, which defaults to
+$HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/miniMap2\$ToDb.\$date
+for a plain UCSC database \$fromDb, or to
+.../asmHubs/{genbankBuild,refseqBuild}/GCx/ddd/ddd/ddd/<asmId>/trackData/miniMap2\$ToDb.\$date
+when \$fromDb is a GenArk accession (matching how pairwise lastz builds are
+organized under GenArk) -- unless the miniMap2.\$toDb symlink already
+points at a build, or -buildDir is given.
+";
+  # Detailed help (-help):
+  print STDERR "
+Assumptions:
+1. /scratch/data/\$db/\$db.2bit contains sequence for database/assembly \$db.
+2. $HgAutomate::clusterData/\$db/chrom.sizes contains all sequence names and sizes from
+   \$db.2bit.
+3. The \$db.2bit files have already been distributed to cluster-scratch
+   (/scratch/data/<db>/).
+4. pafToPsl is on \$PATH on the machine that runs the align cluster jobs.
+5. mash is on \$PATH on the machine that runs this script (used once, up
+   front, to auto-select -minimapPreset unless it is given explicitly).
+6. fromDb and toDb are two haplotypes/assemblies of the same species/
+   individual -- this is not a general any-vs-any pipeline.  For that,
+   use doBlastzChainNet.pl.
+" if ($detailed);
+  print "\n";
+  exit $status;
+}
+
+
+# Globals:
+# Command line args: tDb=fromDb, qDb=toDb
+my ($tDb, $qDb);
+
+# Other:
+my ($buildDir);
+my ($tSeq, $tSizes, $qSeq, $qSizes, $QDb, $fileServer);
+my ($liftOverChainDir, $liftOverChainFile, $liftOverChainPath, $swapDir);
+
+sub checkOptions {
+  # Make sure command line options are valid/supported.
+  my $ok = GetOptions(@HgStepManager::optionSpec,
+		      'buildDir=s',
+		      'target2Bit=s',
+		      'targetSizes=s',
+		      'query2Bit=s',
+		      'querySizes=s',
+		      'minimapPreset=s',
+		      'minimapCpu=i',
+		      'minimapSecondaryN=i',
+		      'minimapSecondaryRatio=f',
+		      'chainRam=s',
+		      'chainCpu=i',
+		      'regenerateMash',
+		      'swap',
+		      'swapDir=s',
+		      'liftTableLoad',
+		      @HgAutomate::commonOptionSpec,
+		      );
+  &usage(1) if (!$ok);
+  &usage(0, 1) if ($opt_help);
+  &HgAutomate::processCommonOptions();
+  my $err = $stepper->processOptions();
+  usage(1) if ($err);
+  $dbHost = $opt_dbHost if ($opt_dbHost);
+  if ($opt_minimapPreset) {
+    $minimapPreset = $opt_minimapPreset;
+    if ($minimapPreset !~ /^asm(5|10|20)$/) {
+      die "-minimapPreset must be one of asm5, asm10, asm20 (got '$minimapPreset')\n";
+    }
+  }
+  # else: leave $minimapPreset undef -- estimateDivergence() will set it
+  # from a mash distance once $tSeq/$qSeq/$buildDir are known.
+}
+
+
+sub getClusterSeqs {
+  # Choose cluster and look for already-installed 2bit files on appropriate
+  # cluster-scratch storage.  Exit with an error message if we can't find them.
+  my $paraHub = $opt_bigClusterHub ? $opt_bigClusterHub :
+    &HgAutomate::chooseClusterByBandwidth();
+  my ($tSeqScratch, $qSeqScratch);
+  if ($opt_target2Bit) {
+    $tSeqScratch = $opt_target2Bit
+  } else {
+    my @okFilesystems =
+      &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
+    if ( -e "/scratch/data/$tDb/$tDb.2bit" ) {
+        $tSeqScratch = "/scratch/data/$tDb/$tDb.2bit";
+    } else {
+      foreach my $fs (@okFilesystems) {
+	&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
+        if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
+          $tSeqScratch = "$fs/$tDb/$tDb.2bit";
+          last;
+        }
+      }
+    }
+    if (! defined $tSeqScratch) {
+      # No pre-staged cluster-scratch copy -- fall back to $tSeq, already
+      # resolved by getSeqAndSizes() (GenArk build tree or clusterData),
+      # which every cluster node can also reach, just not as fast as true
+      # scratch storage:
+      &HgAutomate::verbose(1,
+	  "align: no cluster-scratch copy of $tDb/$tDb.2bit found in " .
+	  join("/, ", @okFilesystems) . "/ -- using $tSeq instead.\n");
+      $tSeqScratch = $tSeq;
+    }
+  }
+
+  if ($opt_query2Bit) {
+        $qSeqScratch = $opt_query2Bit;
+  } else {
+    my @okFilesystems =
+      &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
+    if ( -e "/scratch/data/$qDb/$qDb.2bit" ) {
+        $qSeqScratch = "/scratch/data/$qDb/$qDb.2bit";
+    } else {
+      foreach my $fs (@okFilesystems) {
+        if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
+          $qSeqScratch = "$fs/$qDb/$qDb.2bit";
+          last;
+        }
+      }
+    }
+    if (! defined $qSeqScratch) {
+      # Same fallback as the target side above:
+      &HgAutomate::verbose(1,
+	  "align: no cluster-scratch copy of $qDb/$qDb.2bit found in " .
+	  join("/, ", @okFilesystems) . "/ -- using $qSeq instead.\n");
+      $qSeqScratch = $qSeq;
+    }
+  }
+  &HgAutomate::verbose(1, "Using $paraHub, $tSeqScratch and $qSeqScratch\n");
+  return ($paraHub, $tSeqScratch, $qSeqScratch);
+} # getClusterSeqs
+
+
+
+#########################################################################
+# * step: align [bigClusterHub]
+sub doAlign {
+  my $runDir = "$buildDir/run.mm2";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $pafDir = "$runDir/paf";
+  &HgAutomate::checkCleanSlate('align', 'chain', $pafDir, "$runDir/run.time");
+
+  my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
+
+  # Unlike blat -fastMap, minimap2 does not need the query pre-split into
+  # small chunks or an .ooc repeat mask -- it indexes and aligns whole
+  # sequences directly.  We only partition on the target side, one job
+  # per target sequence (same trick doSameSpeciesLiftOver.pl uses: pick a
+  # chunkSize at least as large as the biggest target sequence so nothing
+  # actually gets split), and align each target job against the *whole*
+  # query genome in one shot.
+
+  # script for a single job: convert target 2bit spec(s) to fasta, align
+  # against the pre-built whole-query fasta, convert PAF -> PSL.
+  # NOTE: partitionSequence.pl may bundle several small target sequences
+  # into one $runDir/tParts/partNNN.lst file instead of handing us a bare
+  # 2bit spec directly (it does this whenever a genome has lots of tiny
+  # scaffolds -- see its own usage message) -- path1 in that case is a
+  # *relative* path like "tParts/part010.lst", so it has to be resolved
+  # against $runDir before we cd elsewhere, and expanded into one
+  # twoBitToFa call per line rather than treated as a single 2bit spec.
+  my $fh = &HgAutomate::mustOpen(">$runDir/job.sh");
+  print $fh <<_EOF_
+#!/bin/bash
+set -beEu -o pipefail
+
+targetSpec=\$1
+outPsl=\$2
+
+if [[ "\$targetSpec" == *.lst ]]; then
+  targetSpec="$runDir/\$targetSpec"
+fi
+
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  tmpSz=`df --output=avail -k /tmp | tail -1`
+  shmSz=`df --output=avail -k /dev/shm | tail -1`
+  if [ "\$shmSz" -gt "\$tmpSz" ]; then
+    mkdir -p /dev/shm/tmp
+    chmod 777 /dev/shm/tmp
+    export TMPDIR="/dev/shm/tmp"
+  else
+    export TMPDIR="/tmp"
+  fi
+fi
+
+# Use local disk for output, and move the final result to \$outPsl
+# when done, to minimize I/O.
+tmpDir=`mktemp -d -p \$TMPDIR doMm2.XXXXXX`
+pushd \$tmpDir > /dev/null
+
+: > target.fa
+if [[ "\$targetSpec" == *.lst ]]; then
+  while read -r spec; do
+    twoBitToFa "\$spec" stdout
+  done < "\$targetSpec" > target.fa
+else
+  twoBitToFa \$targetSpec target.fa
+fi
+
+minimap2 -cx $minimapPreset -N $minimapSecondaryN -p $minimapSecondaryRatio -t $minimapCpu \\
+    target.fa $runDir/query.fa > tmpOut.paf
+
+pafToPsl -tSizes=$tSizes -qSizes=$qSizes tmpOut.paf tmpOut.psl
+
+mv tmpOut.psl \$outPsl
+
+popd > /dev/null
+rm -rf \$tmpDir
+_EOF_
+  ;
+  close($fh);
+  &HgAutomate::run("chmod a+x $runDir/job.sh");
+
+  &HgAutomate::makeGsub($runDir,
+			'job.sh $(path1) {check out line ' .
+			 $pafDir . '/$(file1).psl}');
+
+  my $paraRun = &HgAutomate::paraRun($ramG, $minimapCpu);
+  my $whatItDoes = "It performs a cluster run of minimap2 -cx $minimapPreset.";
+  my $bossScript = newBash HgRemoteScript("$runDir/doAlign.bash", $paraHub,
+				      $runDir, $whatItDoes);
+
+  # Don't allow target sequences to be split -- we align (and chain) whole
+  # target sequences against the whole query, we never lift target coords
+  # back up.  Use the max target seq size as the chunkSize for
+  # partitionSequence.pl on the target.
+  my $tpSize = `awk '{print \$2;}' $tSizes | sort -nr | head -1`;
+  chomp $tpSize;
+  my $minTpSize = 10000000;
+  $tpSize = $minTpSize if ($tpSize < $minTpSize);
+
+  my $gensub2 = &HgAutomate::gensub2();
+  $bossScript->add(<<_EOF_
+# Record how the preset was chosen (mash distance, if it ran -- see
+# estimateDivergence()) and exactly which minimap2 and what arguments were
+# used, for reproducibility -- the per-job command line is otherwise
+# buried in job.sh on whatever cluster node happened to run it.
+if [ -s $buildDir/mashDistance.txt ]; then
+  cat $buildDir/mashDistance.txt > $buildDir/version.txt
+else
+  printf "minimapPreset=$minimapPreset (explicit -minimapPreset, mash not run)\\n" > $buildDir/version.txt
+fi
+printf "minimap2 " >> $buildDir/version.txt
+minimap2 --version >> $buildDir/version.txt
+printf "minimap2 -cx $minimapPreset -N $minimapSecondaryN -p $minimapSecondaryRatio -t $minimapCpu target.fa query.fa > out.paf\\n" >> $buildDir/version.txt
+
+# Convert the whole query 2bit to fasta once; every target job aligns
+# against this same file.
+twoBitToFa $qSeqScratch query.fa
+
+# Compute partition (coordinate ranges) for cluster job.  This does
+# not need to be run on the build fileserver because it does not actually
+# split any sequences -- it merely computes ranges based on the chrom.sizes.
+rm -rf tParts
+$Bin/partitionSequence.pl $tpSize 0 $tSeqScratch \\
+   $tSizes 2000 \\
+  -lstDir=tParts > t.lst
+
+mkdir $pafDir
+
+$gensub2 t.lst single gsub jobList
+
+$paraRun
+_EOF_
+  );
+  $bossScript->execute();
+} # doAlign
+
+
+#########################################################################
+# * step: chain [smallClusterHub]
+
+sub doChain {
+  my $runDir = "$buildDir/axtChain/run";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $pafDir = "$buildDir/run.mm2/paf";
+  my $mm2DoneFile = "$buildDir/run.mm2/run.time";
+  &HgAutomate::checkCleanSlate('chain', 'net', "$runDir/chainRaw",
+                               "$runDir/run.time");
+  &HgAutomate::checkExistsUnlessDebug('align', 'chain',
+				      $pafDir, $mm2DoneFile);
+
+  my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
+
+  # One PSL per target sequence already (align step did not split further),
+  # so the chain job list is simply the contents of $pafDir/*.psl.
+  &HgAutomate::run("ls $pafDir/*.psl | xargs -n 1 basename > $runDir/pslParts.lst");
+
+  # script for a single job: chain one target-sequence's PSL.
+  my $fh = &HgAutomate::mustOpen(">$runDir/job.sh");
+  print $fh <<_EOF_
+#!/bin/bash
+set -beEu -o pipefail
+
+inPsl=\$1
+outChain=\$2
+
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  tmpSz=`df --output=avail -k /tmp | tail -1`
+  shmSz=`df --output=avail -k /dev/shm | tail -1`
+  if [ "\$shmSz" -gt "\$tmpSz" ]; then
+    mkdir -p /dev/shm/tmp
+    chmod 777 /dev/shm/tmp
+    export TMPDIR="/dev/shm/tmp"
+  else
+    export TMPDIR="/tmp"
+  fi
+fi
+
+tmpOut=`mktemp -p \$TMPDIR doMm2.chain.XXXXXX`
+
+axtChain -verbose=0 -linearGap=medium -psl $pafDir/\$inPsl \\
+    $tSeqScratch $qSeqScratch stdout \\
+| chainBridge -linearGap=medium stdin $tSeqScratch $qSeqScratch \\
+    \$tmpOut
+mv \$tmpOut \$outChain
+chmod 664 \$outChain
+_EOF_
+  ;
+  close($fh);
+  &HgAutomate::run("chmod a+x $runDir/job.sh");
+
+  &HgAutomate::makeGsub($runDir,
+			'job.sh $(path1) ' .
+			'{check out line+ chainRaw/$(path1).chain}');
+  my $whatItDoes = "It does a cluster run to chain the minimap2 alignments.";
+  my $bossScript = newBash HgRemoteScript("$runDir/doChain.bash", $paraHub,
+				      $runDir, $whatItDoes);
+  my $paraRun = &HgAutomate::paraRun($chainRam, $chainCpu);
+  my $gensub2 = &HgAutomate::gensub2();
+  $bossScript->add(<<_EOF_
+mkdir chainRaw
+
+$gensub2 pslParts.lst single gsub jobList
+$paraRun
+_EOF_
+  );
+  $bossScript->execute();
+} # doChain
+
+
+#########################################################################
+# netFromChainBash($chainPath, $tSz, $qSz, $outDir, $overFile, $tName, $qName)
+#   -> bash source (string) that nets a single, already merge-sorted chain
+#   file into a liftOver chain + quickLift chain pair.  $chainPath can be
+#   a literal path or a not-yet-Perl-interpolated bash expression (the
+#   caller controls that by how it quotes the argument) -- this doesn't
+#   care, it just emits it verbatim.  Shared by doNet() (on the freshly
+#   merged chainRaw/*.chain) and doSwap() (on a chainSwap'd chain) so the
+#   "net one chain" logic isn't duplicated between them.
+sub netFromChainBash {
+  my ($chainPath, $tSz, $qSz, $outDir, $overFile, $tName, $qName) = @_;
+  return <<_EOF_
+chainNet $chainPath \\
+    $tSz $qSz \\
+    noClass.net /dev/null
+netChainSubset noClass.net $chainPath stdout \\
+| chainStitchId stdin stdout | gzip -c > $outDir/tmp.$overFile
+
+# make quickLift chain:
+chainSwap  $outDir/tmp.$overFile stdout \\
+   | chainToBigChain stdin $outDir/$tName.$qName.quick.chain.txt \\
+         $outDir/$tName.$qName.quick.link.txt
+
+# The liftOver chain gets its real name last, since its existence is
+# what says this net finished (doMiniMap2.pl netDone()):
+mv $outDir/tmp.$overFile $outDir/$overFile
+_EOF_
+  ;
+} # netFromChainBash
+
+#########################################################################
+# * step: net [workhorse]
+sub doNet {
+  my $runDir = "$buildDir/axtChain";
+  # The liftOver chain is the last thing this step writes, so it alone
+  # says the step finished (see netDone()); an all.chain.gz or
+  # noClass.net left by an interrupted net run is simply rewritten.
+  &HgAutomate::checkCleanSlate('net', 'load', "$runDir/$liftOverChainFile");
+  &HgAutomate::checkExistsUnlessDebug('chain', 'net', "$runDir/run/chainRaw/");
+
+  my $whatItDoes =
+"It nets the chained minimap2 alignments and runs netChainSubset to produce
+liftOver chains.";
+  my $mach = &HgAutomate::chooseWorkhorse();
+  my $bossScript = newBash HgRemoteScript("$runDir/doNet.bash", $mach,
+				      $runDir, $whatItDoes);
+  $bossScript->add(<<_EOF_
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  tmpSz=`df --output=avail -k /tmp | tail -1`
+  shmSz=`df --output=avail -k /dev/shm | tail -1`
+  if [ "\$shmSz" -gt "\$tmpSz" ]; then
+    mkdir -p /dev/shm/tmp
+    chmod 777 /dev/shm/tmp
+    export TMPDIR="/dev/shm/tmp"
+  else
+    export TMPDIR="/tmp"
+  fi
+fi
+tmpDir=`mktemp -d -p \$TMPDIR doMm2.net.XXXXXX`
+
+# Merge up the hierarchy and assign unique chain IDs -- one chain file for
+# the whole genome.  chainNet doesn't need this pre-split by chromosome
+# the way doSameSpeciesLiftOver.pl split it; that was only ever a scale
+# optimization doBlastzChainNet.pl itself only applies conditionally (its
+# own \$splitRef), and this same-species/haplotype-scale pipeline doesn't
+# need it either.
+chainMergeSort run/chainRaw/*.chain > \$tmpDir/all.chain
+gzip -c \$tmpDir/all.chain > $tDb.$qDb.all.chain.gz
+
+_EOF_
+  );
+  $bossScript->add(&netFromChainBash('$tmpDir/all.chain', $tSizes, $qSizes,
+				      $runDir, $liftOverChainFile, $tDb, $qDb));
+  $bossScript->add(<<_EOF_
+rm -rf \$tmpDir/
+_EOF_
+  );
+  $bossScript->execute();
+} # doNet
+
+
+#########################################################################
+# linkToBash() -> bash source for a linkTo function: 'linkTo target link'
+#   makes link a symlink to target, but leaves it alone when it already
+#   points there, so rerunning the load step doesn't remove and remake
+#   symlinks that are already correct.
+sub linkToBash {
+  return <<'_EOF_';
+# linkTo target link -- replace link only when it doesn't already point
+# at target:
+linkTo() {
+  if [ "$(readlink "$2" 2>/dev/null || true)" != "$1" ]; then
+    rm -f "$2"
+    ln -s "$1" "$2"
+  fi
+}
+
+_EOF_
+} # linkToBash
+
+#########################################################################
+# * step: load [dbHost]
+sub doLoad {
+  my $runDir = "$buildDir/axtChain";
+  &HgAutomate::checkExistsUnlessDebug('net', 'load',
+				      "$runDir/$liftOverChainFile");
+
+  my $whatItDoes =
+"It builds the chain/chainLiftOver/quickLift bigBed pairs and -- only if
+-liftTableLoad was given -- links them into the liftOver/quickLift install
+locations and $HgAutomate::gbdb/ (GenArk hub-build/accession chain, or native
+db layout -- see installLinks() in ottoRequestWatch.sh, which this mirrors)
+and calls hgAddLiftOverChain + addQuickLift.py to register both in
+hgcentral's liftOverChain/quickLiftChain tables.  None of
+this needs \$tDb to be a real MySQL database -- hgAddLiftOverChain and
+addQuickLift.py both work fine with obsolete/nonexistent ones by design
+(see hgAddLiftOverChain.c's own comment to that effect).";
+  my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
+				      $runDir, $whatItDoes);
+
+  # doLoad() needs to be safe to rerun (e.g. just to add -liftTableLoad's
+  # hgcentral registration after an earlier load that skipped it) without
+  # redoing expensive bedToBigBed/hgLoadChain work, and -- for the quickLift
+  # pair below -- without needing quick.chain.txt/quick.link.txt, which get
+  # deleted once this step has already consumed them successfully.  So each
+  # bigBed-building block below is skipped if its own final .bb already
+  # exists; only the symlink-install and hgcentral-registration parts always
+  # rerun, and the symlinks are only replaced when they don't already point
+  # at the right file.  (Force a true rebuild by removing the relevant .bb
+  # first.)  Each block's marker is the last .bb it writes, so a block
+  # interrupted partway through is redone in full.
+  my $chainBigBedsDone = -s "$runDir/chainLiftOver${QDb}Link.bb";
+  my $quickBigBedsDone = -s "$runDir/$tDb.$qDb.quickLink.bb";
+
+  if (! ($chainBigBedsDone && $quickBigBedsDone)) {
+    $bossScript->add(<<_EOF_
+wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
+_EOF_
+    );
+  }
+
+  if ($chainBigBedsDone) {
+    $bossScript->add(<<_EOF_
+# $runDir/chainLiftOver${QDb}Link.bb already exists -- skipping rebuild of the chain/
+# chainLiftOver bigChain pairs (remove it and rerun 'load' to force a
+# rebuild; their sources, all.chain.gz and $liftOverChainFile, are never
+# deleted by this step, so that is always safe).
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
+# Full-chain bigChain pair, from the complete alignment (all.chain.gz) --
+# the standard genome-browser Chain/Net-style track pair.  Built for any
+# target/query pair -- nothing about this needs \$tDb to be a real
+# database, only \$tSizes and the chain files doNet already produced.
+hgLoadChain -test -noBin -tIndex $tDb chain$QDb $runDir/$tDb.$qDb.all.chain.gz
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
+
+totalBases=`ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
+basesCovered=`bigBedInfo chain${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+percentCovered=`echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > $buildDir/fb.$tDb.chain${QDb}Link.txt
+
+rm -f link.tab chain.tab chain${QDb}.tab chain${QDb}Link.tab
+
+# LiftOver-subset bigChain pair, from the netChainSubset-extracted chain
+# (over.chain.gz) -- the strict, single-best-path-per-region subset.
+# Also built unconditionally, same reasoning as above.
+hgLoadChain -test -noBin -tIndex $tDb chainLiftOver$QDb $runDir/$liftOverChainFile
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chainLiftOver${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chainLiftOver${QDb}.tab $tSizes chainLiftOver${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chainLiftOver${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chainLiftOver${QDb}Link.tab $tSizes chainLiftOver${QDb}Link.bb
+
+liftOverBasesCovered=`bigBedInfo chainLiftOver${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+liftOverPercentCovered=`echo \$liftOverBasesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$liftOverBasesCovered" "\$totalBases" "\$liftOverPercentCovered" > $buildDir/fb.$tDb.chainLiftOver${QDb}.txt
+
+rm -f link.tab chain.tab chainLiftOver${QDb}.tab chainLiftOver${QDb}Link.tab
+_EOF_
+    );
+  }
+
+  # quickLift bigBed pair: built for any target/query pair -- it only
+  # needs the quick.chain.txt/quick.link.txt doNet already produced,
+  # plus $qSizes, no dependency on \$tDb being a real database.  This block
+  # deletes those .txt sources once it succeeds, so it must not be rerun
+  # blindly once $tDb.$qDb.quickLink.bb already exists -- they'd be gone.
+  # Built before the install block below, so the symlinks and
+  # addQuickLift.py only ever refer to finished files.
+  if ($quickBigBedsDone) {
+    $bossScript->add(<<_EOF_
+# $runDir/$tDb.$qDb.quickLink.bb already exists -- skipping rebuild of the
+# quickLift bigBed pair (its sources, quick.chain.txt/quick.link.txt, are
+# deleted once this succeeds, so it can't safely rebuild from scratch here;
+# remove $runDir/$tDb.$qDb.quickLink.bb and rerun the 'net'/swap step first
+# if you really need to regenerate it).
+_EOF_
+    );
+  } else {
+    $bossScript->add(<<_EOF_
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
+
+qBases=`ave -col=2 $qSizes | grep "^total" | awk '{printf "%d", \$2}'`
+qCovered=`bigBedInfo $tDb.$qDb.quickLink.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
+qPerCent=`echo \$qCovered \$qBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
+printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPerCent" > $buildDir/fb.$tDb.quick${QDb}Link.txt
+
+rm -f $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
+_EOF_
+    );
+  }
+
+  # Where the liftOver chain / quickLift bigBeds get linked, and what gets
+  # registered in hgcentral, depends only on whether $tDb LOOKS like a
+  # GenArk accession (a plain name-pattern check, same as everywhere else
+  # in this pipeline) -- never on whether it's a real MySQL database.
+  # This mirrors ottoRequestWatch.sh's installLinks() exactly, except
+  # resolving the GenArk build directory via genbankBuild/refseqBuild
+  # (AsmHub::asmBuildDir(), verified against the real on-disk layout)
+  # rather than the allBuild path installLinks() itself uses.
+  # Everything that reaches outside $runDir -- the liftOver/quickLift
+  # symlinks into the GenArk hub-build directory, the native
+  # $HgAutomate::clusterData/<db>/$HgAutomate::trackBuild/liftOver/,
+  # $HgAutomate::goldenPath/ and $HgAutomate::gbdb/ -- and the hgcentral
+  # registration are all gated on -liftTableLoad, so an experimental run
+  # can't replace an installed liftOver/quickLift file or table entry.
+  my $tAccession = &accessionFromPath($tDb);
+  if (! $opt_liftTableLoad) {
+    $bossScript->add(<<_EOF_
+# -liftTableLoad not given -- not making any liftOver/quickLift symlinks
+# outside $runDir and not calling hgAddLiftOverChain/addQuickLift.py, so
+# this run does not touch any installed liftOver/quickLift file or
+# hgcentral's liftOverChain/quickLiftChain tables.
+_EOF_
+    );
+  } elsif ($tAccession) {
+    my $tBuildDir = &asmBuildDir($tAccession);
+    die "doLoad: '$tDb' looks like a GenArk accession, but no build " .
+	"directory was found for it under $HgAutomate::clusterData/asmHubs/\n"
+      if (! $tBuildDir);
+    my $accessionPath = &asmIdToPath($tAccession) . "/$tAccession";
+    my $accLevelDir = "$HgAutomate::clusterData/asmHubs/$accessionPath";
+    my $gbdbGenarkDir = "/gbdb/genark/$accessionPath";
+    $bossScript->add(&linkToBash());
+    $bossScript->add(<<_EOF_
+# GenArk assembly: link into the hub-build directory, then the
+# accession-level convenience symlinks, then the public gbdb symlinks --
+# same three-tier chain installLinks() uses.
+mkdir -p $tBuildDir/liftOver $tBuildDir/quickLift
+linkTo $runDir/$liftOverChainFile $tBuildDir/liftOver/$liftOverChainFile
+linkTo $runDir/$tDb.$qDb.quick.bb $tBuildDir/quickLift/$qDb.bb
+linkTo $runDir/$tDb.$qDb.quickLink.bb $tBuildDir/quickLift/$qDb.link.bb
+
+mkdir -p $accLevelDir
+linkTo $tBuildDir/liftOver $accLevelDir/liftOver
+linkTo $tBuildDir/quickLift $accLevelDir/quickLift
+
+mkdir -p $gbdbGenarkDir
+linkTo $accLevelDir/liftOver $gbdbGenarkDir/liftOver
+linkTo $accLevelDir/quickLift $gbdbGenarkDir/quickLift
+
+# Register in hgcentral (works fine without a real MySQL database for
+# \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
+hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbGenarkDir/liftOver/$liftOverChainFile $tDb $qDb
+$Bin/addQuickLift.py $tDb $qDb $gbdbGenarkDir/quickLift/$qDb.bb
+_EOF_
+    );
+  } else {
+    $bossScript->add(&linkToBash());
+    $bossScript->add(<<_EOF_
+# Not a GenArk accession -- native-db-style layout (same as
+# installLinks()'s native-db branch), whether or not \$tDb is actually a
+# real MySQL database (e.g. hs1: a full sequence build, no database).
+mkdir -p $liftOverChainDir
+linkTo $runDir/$liftOverChainFile $liftOverChainPath
+# md5sum.txt is only rewritten when this chain's entry changes:
+tmpFile=`mktemp -t -p /tmp tmpMd5.XXXXXX`
+grep -v $liftOverChainFile $liftOverChainDir/md5sum.txt > \$tmpFile || true
+md5sum $runDir/$liftOverChainFile | sed -e "s#$runDir/##;" >> \$tmpFile
+sort -o \$tmpFile \$tmpFile
+if ! cmp -s \$tmpFile $liftOverChainDir/md5sum.txt; then
+  cat \$tmpFile > $liftOverChainDir/md5sum.txt
+fi
+rm -f \$tmpFile
+
+# Link from download area:
+mkdir -p $HgAutomate::goldenPath/$tDb/liftOver
+linkTo $liftOverChainPath $HgAutomate::goldenPath/$tDb/liftOver/$liftOverChainFile
+
+# Link from genome browser fileserver:
+mkdir -p $HgAutomate::gbdb/$tDb/liftOver $HgAutomate::gbdb/$tDb/quickLift
+linkTo $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile
+linkTo $runDir/$tDb.$qDb.quick.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
+linkTo $runDir/$tDb.$qDb.quickLink.bb $HgAutomate::gbdb/$tDb/quickLift/$qDb.link.bb
+
+# Register in hgcentral (works fine without a real MySQL database for
+# \$tDb -- see hgAddLiftOverChain.c and addQuickLift.py):
+hgAddLiftOverChain -minMatch=0.1 -multiple -path=$HgAutomate::gbdb/$tDb/liftOver/$liftOverChainFile $tDb $qDb
+$Bin/addQuickLift.py $tDb $qDb $HgAutomate::gbdb/$tDb/quickLift/$qDb.bb
+_EOF_
+    );
+  }
+
+  $bossScript->add(<<_EOF_
+rm -f bigChain.as bigLink.as
+_EOF_
+  );
+
+  $bossScript->execute();
+} # doLoad
+
+
+#########################################################################
+# swapGlobals: swap $tDb/$qDb (and everything derived from them) so
+# doLoad() can be reused unchanged for the -swap direction, mirroring
+# doBlastzChainNet.pl's own swapGlobals().  $buildDir becomes $swapDir,
+# which the caller (doSwap()) must have already set.
+sub swapGlobals {
+  ($tDb, $qDb) = ($qDb, $tDb);
+  $QDb = ucfirst($qDb);
+  ($tSeq, $qSeq) = ($qSeq, $tSeq);
+  ($tSizes, $qSizes) = ($qSizes, $tSizes);
+  $buildDir = $swapDir;
+  $liftOverChainDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
+  $liftOverChainFile = "${tDb}To${QDb}.over.chain.gz";
+  $liftOverChainPath = "$liftOverChainDir/$liftOverChainFile";
+} # swapGlobals
+
+#########################################################################
+# * -swap (not a normal stepper step): chainSwap the primary run's
+# all.chain.gz and reuse doNet()'s netFromChainBash() + doLoad() to
+# produce the reverse-direction liftOver/quickLift chain, without
+# re-aligning anything.
+sub doSwap {
+  my $origTDb = $tDb;
+  my $origQDb = $qDb;
+
+  my $primaryChain = "$buildDir/axtChain/$origTDb.$origQDb.all.chain.gz";
+  if (! -e $primaryChain) {
+    die "-swap: can't find $primaryChain -- run the primary $origTDb " .
+	"$origQDb build (through at least the 'net' step) first.\n";
+  }
+
+  $swapDir = $opt_swapDir ? $opt_swapDir :
+    &asmRoot($origQDb) . "/miniMap2.$origTDb.swap";
+  my $runDir = "$swapDir/axtChain";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $swappedOver = "${origQDb}To" . ucfirst($origTDb) . ".over.chain.gz";
+  # Stable markers for "the expensive chainSwap/net work already happened":
+  # the swapped all.chain.gz and the final liftOver chain.  Neither is ever
+  # deleted by doLoad() (unlike quick.chain.txt/quick.link.txt below), so
+  # they stay valid resume markers even after a later doLoad() call -- e.g.
+  # rerunning -swap only to add -liftTableLoad's hgcentral registration,
+  # without rechaining/renetting a possibly large chain file again.
+  my $swappedChain = "$runDir/$origQDb.$origTDb.all.chain.gz";
+  my $swappedOverPath = "$runDir/$swappedOver";
+
+  if ( -s $swappedChain && -s $swappedOverPath ) {
+    &HgAutomate::verbose(1,
+	"-swap: found existing $swappedOverPath -- skipping chainSwap/net, " .
+	"going straight to the load step.  (Remove $swappedOverPath and " .
+	"rerun -swap if you need to rebuild the swapped chain from " .
+	"scratch.)\n");
+  } else {
+    my $whatItDoes =
+"It chainSwaps the primary $origTDb/$origQDb run's all.chain.gz and nets it
+to produce the $origQDb-to-$origTDb liftOver/quickLift chain, without
+re-aligning.";
+    my $mach = &HgAutomate::chooseWorkhorse();
+    my $bossScript = newBash HgRemoteScript("$runDir/doSwap.bash", $mach,
+					$runDir, $whatItDoes);
+
+    $bossScript->add(<<_EOF_
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
+else
+  tmpSz=`df --output=avail -k /tmp | tail -1`
+  shmSz=`df --output=avail -k /dev/shm | tail -1`
+  if [ "\$shmSz" -gt "\$tmpSz" ]; then
+    mkdir -p /dev/shm/tmp
+    chmod 777 /dev/shm/tmp
+    export TMPDIR="/dev/shm/tmp"
+  else
+    export TMPDIR="/tmp"
+  fi
+fi
+tmpDir=`mktemp -d -p \$TMPDIR doMm2.swap.XXXXXX`
+
+# chainSwap flips target/query coordinates on each already uniquely-ID'd
+# chain block; chainSort re-sorts by the new target's coordinate order,
+# same as doBlastzChainNet.pl's own swapChains() -- no need to re-run
+# chainMergeSort, the IDs from the primary run are still unique.
+chainSwap $primaryChain stdout | chainSort stdin \$tmpDir/all.chain
+gzip -c \$tmpDir/all.chain > $origQDb.$origTDb.all.chain.gz
+
+_EOF_
+    );
+    $bossScript->add(&netFromChainBash('$tmpDir/all.chain', $qSizes, $tSizes,
+					$runDir, $swappedOver, $origQDb, $origTDb));
+    $bossScript->add(<<_EOF_
+rm -rf \$tmpDir/
+_EOF_
+    );
+    $bossScript->execute();
+  }
+
+  # Reuse doLoad() unchanged for the swapped direction -- swapGlobals()
+  # makes it think it's doing a normal, primary $origQDb-to-$origTDb run.
+  # doLoad() is itself safe to call again (see its own skip-if-built
+  # checks), so this is also how you add -liftTableLoad's hgcentral
+  # registration after an earlier load that skipped it.
+  &swapGlobals();
+  &doLoad();
+
+  # Stable, dateless pointer to this swap build, in $origQDb's own root
+  # (relative target, so it stays correct if this tree gets mirrored):
+  &refreshLink(basename($swapDir), &asmRoot($origQDb) . "/miniMap2.$origTDb");
+} # doSwap
+
+
+#########################################################################
+# * step: cleanup [fileServer]
+sub doCleanup {
+  my $runDir = "$buildDir";
+  my $whatItDoes = "It cleans up or compresses intermediate files.";
+  $fileServer = &HgAutomate::chooseFileServer($runDir);
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
+				      $runDir, $whatItDoes);
+  $bossScript->add(<<_EOF_
+rm -f run.mm2/query.fa
+rm -rf run.mm2/paf/
+rm -rf axtChain/run/chainRaw/
+rm -f axtChain/noClass.net
+# mashSketch.{a,b}.msh only ever exist here if estimateDivergence() fell
+# back to a one-off sketch (tSeq/qSeq didn't resolve to a real GenArk
+# accession or UCSC db -- see AssemblyDivergence.pm's sketch()); for a
+# normal assembly the sketch lives in its own permanent, shared cache
+# under /hive/data/genomes/, never here, so this is a no-op in that case:
+rm -f mashSketch.a.msh mashSketch.b.msh
+_EOF_
+  );
+  $bossScript->execute();
+} # doCleanup
+
+
+# asmRoot($db) -> this assembly's own build-directory root:
+#   a GenArk accession's real build dir + "/trackData" (matching how
+#   pairwise lastz builds are organized under GenArk), or
+#   clusterData/$db/$HgAutomate::trackBuild for a plain UCSC database.
+#   Used for both $buildDir (rooted at $tDb) and $swapDir (rooted at
+#   $qDb), and for where each run's dateless "current build" symlink goes.
+sub asmRoot {
+  my ($db) = @_;
+  my $accession = &accessionFromPath($db);
+  my $asmBuild = $accession ? &asmBuildDir($accession) : undef;
+  return $asmBuild ? "$asmBuild/trackData"
+                    : "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild";
+} # asmRoot
+
+# resolveAssemblySeq($db, $opt2Bit, $optSizes) -> ($seq, $sizes)
+#   $opt2Bit/$optSizes, if given (-target2Bit etc.), always win.
+#   Otherwise, if $db looks like a GenArk accession (accessionFromPath())
+#   with a real build directory (AsmHub::asmBuildDir()), resolve straight
+#   to that build tree's own <asmId>.2bit/.chrom.sizes -- the same
+#   resolution AssemblyDivergence.pm's sketch() already does for mash,
+#   just for the actual alignment inputs here.  Otherwise falls back to
+#   the traditional /scratch/data or clusterData/$db/$db.2bit UCSC-db
+#   location, as before.  Doesn't require the result to actually exist --
+#   getSeqAndSizes() checks that afterward.
+sub resolveAssemblySeq {
+  my ($db, $opt2Bit, $optSizes) = @_;
+  my $accession = &accessionFromPath($db);
+  my $asmBuild = $accession ? &asmBuildDir($accession) : undef;
+  my $asmId = $asmBuild ? basename($asmBuild) : undef;
+
+  my $seq;
+  if ($opt2Bit) {
+    $seq = $opt2Bit;
+  } elsif ($asmBuild) {
+    $seq = "$asmBuild/$asmId.2bit";
+  } else {
+    $seq = "/scratch/data/$db/$db.2bit";
+    if (! -e $seq) {
+      # allow it to exist here too:
+      my $fs = "$HgAutomate::clusterData";
+      &HgAutomate::verbose(1, "checking $fs/$db/$db.2bit\n");
+      $seq = "$fs/$db/$db.2bit" if (-e "$fs/$db/$db.2bit");
+    }
+  }
+
+  my $sizes;
+  if ($optSizes) {
+    $sizes = $optSizes;
+  } elsif ($asmBuild) {
+    $sizes = "$asmBuild/$asmId.chrom.sizes";
+  } else {
+    $sizes = "$HgAutomate::clusterData/$db/chrom.sizes";
+  }
+
+  return ($seq, $sizes);
+} # resolveAssemblySeq
+
+sub getSeqAndSizes {
+  ($tSeq, $tSizes) = &resolveAssemblySeq($tDb, $opt_target2Bit, $opt_targetSizes);
+  ($qSeq, $qSizes) = &resolveAssemblySeq($qDb, $opt_query2Bit, $opt_querySizes);
+
+  my $problem = 0;
+  foreach my $file ($tSeq, $tSizes, $qSeq, $qSizes) {
+    if (! -e $file) {
+      warn "Error: cannot find required file \"$file\"\n";
+      $problem = 1;
+    }
+  }
+  if ($problem && !$opt_debug) {
+    warn "Run $base -help for a description of expected files.\n";
+    exit 1;
+  }
+} # getSeqAndSizes
+
+
+sub estimateDivergence {
+  # Pick -minimapPreset automatically via AssemblyDivergence.pm's mash
+  # distance between tDb and qDb, unless the user already gave
+  # -minimapPreset explicitly.  Cheap (mash sketch+dist on a whole genome
+  # is seconds to low minutes), so we just run it locally rather than
+  # turning it into its own cluster step.
+  if ($minimapPreset) {
+    &HgAutomate::verbose(1,
+	"Using explicit -minimapPreset=$minimapPreset (mash not run).\n");
+    return;
+  }
+  my $mashFile = "$buildDir/mashDistance.txt";
+  if (-e $mashFile && ! $opt_regenerateMash) {
+    # Reuse a previous estimate so -continue steps stay consistent with
+    # whatever the align step (if already run) actually used.
+    open(my $fh, "<", $mashFile) || die "Can't read $mashFile: $!\n";
+    my $line = <$fh>;
+    close($fh);
+    if ($line =~ /^mashDistance=(\S+)\s+minimapPreset=(\S+)/) {
+      $minimapPreset = $2;
+      &HgAutomate::verbose(1, "Reusing cached mash distance $1 -> " .
+	  "-minimapPreset=$minimapPreset from $mashFile\n");
+      return;
+    }
+  }
+  if ($opt_debug) {
+    $minimapPreset = 'asm5';
+    &HgAutomate::verbose(1, "-debug: skipping mash, using -minimapPreset=$minimapPreset\n");
+    return;
+  }
+  &HgAutomate::verbose(1,
+      "Estimating $tDb/$qDb divergence with mash to pick -minimapPreset ...\n");
+  my $dist = eval { &AssemblyDivergence::mashDistance($tSeq, $qSeq, $buildDir, $opt_regenerateMash); };
+  if ($@) {
+    $minimapPreset = 'asm5';
+    warn "estimateDivergence: $@" .
+	 "falling back to -minimapPreset=$minimapPreset.  Pass " .
+	 "-minimapPreset explicitly to pick it yourself and silence this.\n";
+    return;
+  }
+  my ($pipeline, $preset, $warning) = &AssemblyDivergence::choosePipeline($dist);
+  warn "$warning\n" if ($warning);
+  if ($pipeline ne 'minimap2') {
+    die "estimateDivergence: mash distance $dist between $tDb and $qDb " .
+	"looks too diverged for doMiniMap2.pl -- use doBlastzChainNet.pl " .
+	"instead, or re-run with -minimapPreset to force minimap2 anyway.\n";
+  }
+  $minimapPreset = $preset;
+  open(my $fh, ">", $mashFile) || die "Can't write $mashFile: $!\n";
+  print $fh "mashDistance=$dist minimapPreset=$minimapPreset\n";
+  close($fh);
+  &HgAutomate::verbose(1,
+      "mash distance $dist between $tDb and $qDb -> -minimapPreset=$minimapPreset\n");
+} # estimateDivergence
+
+#########################################################################
+# refreshLink($target, $link): make $link a symlink to $target, leaving
+# it alone when it already points there.
+sub refreshLink {
+  my ($target, $link) = @_;
+  return if (-l $link && readlink($link) eq $target);
+  &HgAutomate::run("rm -f $link");
+  &HgAutomate::run("ln -s $target $link");
+} # refreshLink
+
+#########################################################################
+# Rerunning without -continue: each of these says a step's results are
+# already in $buildDir, using a file that the step writes last and that
+# the cleanup step leaves in place (cleanup removes run.mm2/paf/ and
+# axtChain/run/chainRaw/, which is why checkCleanSlate() alone did not
+# stop a rerun of a finished build from aligning again).
+sub alignDone { return -s "$buildDir/run.mm2/run.time"; }
+sub chainDone { return -s "$buildDir/axtChain/run/run.time"; }
+sub netDone   { return -s "$buildDir/axtChain/$liftOverChainFile"; }
+
+# firstUndoneStep() -> the first step whose results aren't in $buildDir
+#   yet.  When align, chain and net are all done, that is 'load': load
+#   skips the bigBeds it already built and cleanup only removes files, so
+#   both are cheap and safe to run again.  Dies when a cluster step was
+#   started but didn't finish, since that needs a look at its para batch,
+#   not a new one.
+sub firstUndoneStep {
+  return 'load' if (&netDone());
+  return 'net' if (&chainDone());
+  if (&alignDone()) {
+    my $chainRunDir = "$buildDir/axtChain/run";
+    if (-d "$chainRunDir/chainRaw") {
+      die "chain: $chainRunDir/chainRaw exists but $chainRunDir/run.time " .
+	"does not -- the chain cluster run was started and did not finish.\n" .
+	"Check it with 'para check' in $chainRunDir, finish it there " .
+	"('para push', then 'para time > run.time'), and run this again;\n" .
+	"or remove $chainRunDir/chainRaw to redo the chain step.\n";
+    }
+    return 'chain';
+  }
+  my $alignRunDir = "$buildDir/run.mm2";
+  if (-d "$alignRunDir/paf") {
+    die "align: $alignRunDir/paf exists but $alignRunDir/run.time does " .
+      "not -- the align cluster run was started and did not finish.\n" .
+      "Check it with 'para check' in $alignRunDir, finish it there " .
+      "('para push', then 'para time > run.time'), and run this again;\n" .
+      "or remove $alignRunDir/paf to redo the align step.\n";
+  }
+  return 'align';
+} # firstUndoneStep
+
+#########################################################################
+# main
+
+# Prevent "Suspended (tty input)" hanging:
+&HgAutomate::closeStdin();
+
+&checkOptions();
+
+&usage(1) if (scalar(@ARGV) != 2);
+($tDb, $qDb) = @ARGV;
+
+&getSeqAndSizes();
+$QDb = ucfirst($qDb);
+$liftOverChainDir = "$HgAutomate::clusterData/$tDb/$HgAutomate::trackBuild/liftOver";
+$liftOverChainFile = "${tDb}To${QDb}.over.chain.gz";
+$liftOverChainPath = "$liftOverChainDir/$liftOverChainFile";
+$chainRam = $opt_chainRam ? $opt_chainRam : $chainRam;
+$chainCpu = $opt_chainCpu ? $opt_chainCpu : $chainCpu;
+$minimapCpu = $opt_minimapCpu ? $opt_minimapCpu : $minimapCpu;
+$minimapSecondaryN = $opt_minimapSecondaryN ? $opt_minimapSecondaryN : $minimapSecondaryN;
+$minimapSecondaryRatio = $opt_minimapSecondaryRatio ? $opt_minimapSecondaryRatio : $minimapSecondaryRatio;
+$ramG = $opt_ram ? $opt_ram : $ramG;
+
+my $date = `date +%Y-%m-%d`;
+chomp $date;
+# With no -buildDir, use the build the dateless miniMap2.$qDb symlink
+# already points at, if there is one -- otherwise a rerun on a later day
+# would start a new dated build and align everything again.  Give
+# -buildDir to make a separate new build instead.
+my $stableLink = &asmRoot($tDb) . "/miniMap2.$qDb";
+if ($opt_buildDir) {
+  $buildDir = $opt_buildDir;
+} elsif (-l $stableLink && -d $stableLink) {
+  my $linkTarget = readlink($stableLink);
+  if ($linkTarget =~ m/\.swap$/) {
+    die "$stableLink -> $linkTarget: the $tDb to $qDb chain already " .
+	"exists as the -swap of a $qDb to $tDb build.  Give -buildDir " .
+	"to make a separate $tDb to $qDb alignment anyway.\n";
+  }
+  $buildDir = ($linkTarget =~ m#^/#) ? $linkTarget :
+    &asmRoot($tDb) . "/$linkTarget";
+  &HgAutomate::verbose(1, "# using existing build $buildDir " .
+	"($stableLink)\n");
+} else {
+  $buildDir = &asmRoot($tDb) . "/miniMap2${QDb}.$date";
+}
+
+if ($opt_swap) {
+  # -swap reuses the primary run's already-completed axtChain/all.chain.gz
+  # (doSwap() checks for it directly) -- never auto-create $buildDir here.
+  if (! -d $buildDir) {
+    die "-swap: $buildDir does not exist -- run the primary $tDb $qDb " .
+	"build first, or give -buildDir to point at it.\n";
+  }
+  &doSwap();
+  &HgAutomate::verbose(1,
+	"\n *** All done!  -swap steps were performed in $swapDir\n\n");
+  exit 0;
+}
+
+if (! -d $buildDir) {
+  if ($stepper->stepPrecedes('align', $stepper->getStartStep())) {
+    die "$buildDir does not exist; try running again with -buildDir.\n";
+  }
+  &HgAutomate::mustMkdir($buildDir);
+}
+
+# Stable, dateless pointer to this build (relative target, so it stays
+# correct if this tree gets mirrored).  Made before any step runs, so a
+# rerun after an interrupted build, even on a later day, finds the same
+# build directory.  pairMiniMap2.sh looks for the load step's fb.*.txt
+# files there, not just this link, to decide a build is finished.
+&refreshLink(basename($buildDir), $stableLink);
+
+&estimateDivergence();
+
+my $stopStep = $stepper->getStopStep();
+
+# Without -continue, pick up where this build left off instead of starting
+# over at align.  An explicit -continue still runs exactly the steps asked
+# for (each step's own checkCleanSlate() guards against redoing it).
+if (! $opt_continue) {
+  my $firstStep = &firstUndoneStep();
+  if ($firstStep ne 'align') {
+    if ($stepper->stepPrecedes($stopStep, $firstStep)) {
+      &HgAutomate::verbose(1, "\n *** Steps through '$stopStep' are " .
+	  "already done in $buildDir -- nothing to do.\n\n");
+      exit 0;
+    }
+    &HgAutomate::verbose(1, "# steps before '$firstStep' are already done " .
+	"in $buildDir, starting at '$firstStep'\n# (give -continue to run " .
+	"a step again)\n");
+    # HgStepManager has no setter, the same thing processOptions() does
+    # for -continue:
+    $stepper->{'startStep'} = $firstStep;
+  }
+}
+
+$stepper->execute();
+
+my $upThrough = ($stopStep eq 'cleanup') ? "" :
+  "  (through the '$stopStep' step)";
+
+&HgAutomate::verbose(1,
+	"\n *** All done!$upThrough\n");
+&HgAutomate::verbose(1,
+	" *** Steps were performed in $buildDir\n");
+if ($stepper->stepPrecedes('net', $stopStep)) {
+  &HgAutomate::verbose(1,
+	" *** Test installation ($HgAutomate::gbdb, goldenPath, hgLiftover " .
+	"operation) on $dbHost.\n");
+}
+&HgAutomate::verbose(1, "\n");

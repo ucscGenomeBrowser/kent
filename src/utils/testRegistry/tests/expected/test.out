@@ -1,0 +1,3 @@
+lib/tests/pathSimplifyTest.c                     defends #37263 (v504, assertion-only)
+lib/tests/faSpeedReadTest.c                      defends #38320 (v504, sandbox-ab)
+lib/tests/cgiCookieTest.c                        defends #38340 (v-, unrecorded)

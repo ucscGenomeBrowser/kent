@@ -1,0 +1,18 @@
+an active dbDb row and an alias row: kept
+  asmAliasFind                 GCF_938444999.1
+  asmAliasFindUnlessGenArk     regress38444active
+an inactive dbDb row and an alias row: swapped
+  asmAliasFind                 GCF_938444999.1
+  asmAliasFindUnlessGenArk     GCF_938444999.1
+no dbDb row, an alias row: swapped
+  asmAliasFind                 GCF_938444999.1
+  asmAliasFindUnlessGenArk     GCF_938444999.1
+no rows at all: unchanged
+  asmAliasFind                 regress38444plain
+  asmAliasFindUnlessGenArk     regress38444plain
+a GenArk accession with an alias row: kept
+  asmAliasFind                 GCF_938444999.1
+  asmAliasFindUnlessGenArk     GCA_938444001.1
+a hub_ name: unchanged
+  asmAliasFind                 GCF_938444999.1
+  asmAliasFindUnlessGenArk     hub_1234_regress38444active

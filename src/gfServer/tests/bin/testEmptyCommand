@@ -1,0 +1,33 @@
+#!/bin/bash -e
+set -beEu -o pipefail
+if [ $# != 2 ] ; then
+    echo "wrong # args $0 gfServer port" >&2
+    exit 1
+fi
+testName=$(basename $0)
+gfServer=$1
+port=$2
+
+# Signature that prefixes every gfServer command.  Must match gfSignature()
+# in jkOwnLib/genoFind.c.  If that string changes, the warnings/noSig check
+# below goes red, which is the signal to update this line.  refs #38545
+signature=0ddf270562684f29
+
+$gfServer start localhost ${port} -canStop input/creaGeno.2bit >/dev/null &
+sleep 1
+
+# Send the signature with no command after it.  The server must reject this
+# and keep serving.  refs #38545
+printf "%s" "$signature" > /dev/tcp/localhost/${port}
+
+# The malformed request must be counted as a warning, not a bad signature,
+# and the server must still answer a normal query.
+{
+  echo "status after malformed request:"
+  $gfServer status localhost ${port} | grep -E '^(noSig|warnings) '
+  echo "query still works:"
+  $gfServer query localhost ${port} input/mCrea.mrna
+} > output/$testName.out
+
+$gfServer stop localhost ${port} > /dev/null
+diff -u expected/$testName.out output/$testName.out

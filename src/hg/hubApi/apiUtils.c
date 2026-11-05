@@ -366,6 +366,9 @@ return trackFound;
 boolean allowedBigBedType(char *type)
 /* return TRUE if the big* bed-like type is to be supported
  * add to this list as the big* bed-like supported types are expanded
+ * every bed-like big* type named in initSupportedTypes() (hubApi.c) belongs
+ * here too, otherwise bigFileOpen() returns NULL for a type the API says it
+ * supports and the caller reports a missing file
  */
 {
 if (startsWithWord("bigBarChart", type) ||
@@ -373,6 +376,7 @@ if (startsWithWord("bigBarChart", type) ||
     startsWithWord("bigGenePred", type) ||
     startsWithWord("bigInteract", type) ||
     startsWithWord("bigLolly", type) ||
+    startsWithWord("bigNarrowPeak", type) ||
     startsWithWord("bigRmsk", type) ||
     startsWithWord("bigDbSnp", type) ||
     startsWithWord("bigMaf", type) ||

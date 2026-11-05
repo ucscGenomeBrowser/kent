@@ -17,6 +17,18 @@
 # names those lines here.  Deleting one is a judgement about a file this job
 # does not own, so it only ever reports them.
 #
+# And one more file of its own: hgConfAges.json, the committed cache of when
+# each setting was first read and when each gate's default flipped.  Nothing
+# else refreshes it.  The wrap-up's sunset report rebuilds a private copy in
+# the build's logs directory, because the build must not dirty its own tree,
+# so the committed cache went stale at every release until somebody rebuilt it
+# by hand, and meanwhile every gate added since reported "age unknown".  So
+# when the tree's CGI_VERSION is newer than the version the cache was built at,
+# this job rebuilds it and commits it with the rest.  That is once a release,
+# the first night after final day.  It waits for v${NN}_branch, because a
+# rebuild before the branch exists would file that release's flips as not yet
+# released and would then be kept for the whole cycle.
+#
 # It runs in the weekly build's own tree, and that tree is shared with a build
 # process that will not tolerate surprises, so three rules are absolute:
 #
@@ -48,6 +60,8 @@ CHECKOUT=${HGCONF_NIGHTLY_CHECKOUT:-$BUILDHOME/kent}
 LOCKFILE=${AUTOBUILD_LOCKFILE:-/tmp/autoBuild.lock}
 RELPATH=src/hg/utils/hgConfCatalog/hgConfCatalog.py
 CATALOG=$CHECKOUT/$RELPATH
+AGESREL=src/hg/utils/hgConfCatalog/hgConfAges.json
+HARVEST=$CHECKOUT/src/hg/utils/hgConfCatalog/harvestHgConf.py
 PUSH=${HGCONF_NIGHTLY_PUSH:-yes}
 HEARTBEAT=${HGCONF_NIGHTLY_HEARTBEAT:-yes}
 # The build's own log directory: untracked, already written to by the build
@@ -81,6 +95,7 @@ fail() {
 
 [[ -d $CHECKOUT/.git ]] || fail "no checkout at $CHECKOUT"
 [[ -x $CATALOG ]] || fail "no hgConfCatalog.py at $CATALOG"
+[[ -x $HARVEST ]] || fail "no harvestHgConf.py at $HARVEST"
 
 cd "$CHECKOUT"
 
@@ -106,14 +121,15 @@ fi
 committed=no
 cleanup() {
     if [[ $committed == no ]]; then
-        git checkout -- "$RELPATH" 2>/dev/null || true
+        git checkout -- "$RELPATH" "$AGESREL" 2>/dev/null || true
     fi
 }
 trap cleanup EXIT
 
-# Only this one file is ours to touch.  Anything else already modified means
+# Only these two files are ours to touch.  Anything else already modified means
 # somebody is working here, and the build is about to complain about it anyway.
-others=$(git status --porcelain -- . | grep -v '^?? ' | grep -v " $RELPATH$" || true)
+others=$(git status --porcelain -- . | grep -v '^?? ' \
+    | grep -v -e " $RELPATH$" -e " $AGESREL$" || true)
 if [[ -n $others ]]; then
     fail "$CHECKOUT has local changes outside the catalog:
 $others"
@@ -122,7 +138,7 @@ fi
 # Start from what master actually says.  Without this, rows written last night
 # are still here, the writer counts them as already registered, and the commit
 # turns into a pile of yesterdays.
-git checkout -- "$RELPATH" 2>/dev/null || true
+git checkout -- "$RELPATH" "$AGESREL" 2>/dev/null || true
 git fetch --quiet origin master
 git merge --quiet --ff-only origin/master \
     || fail "cannot fast-forward $CHECKOUT to origin/master; sort it out by hand"
@@ -144,6 +160,37 @@ trap 'cleanup; rm -rf "$work"' EXIT
 # recomputed for display.  So this job commits only when a setting is genuinely
 # new, which was three of those sixteen nights.
 "$CATALOG" --auto-register  > "$work/register" 2>&1
+
+# The age cache, once a release.  The version in the cache is the one it was
+# built at; the tree's is the release master is working toward.  The rebuild
+# walks the whole history, about five minutes, so it runs only when the two
+# differ.  It dates each commit by the v*_branch that holds it, so it needs
+# every release branch, not only the new one: with one branch it would date
+# all older history to that release.  The fetch above brought only master, so
+# fetch them all first.  When the new branch is not there yet, leave the cache
+# alone and try again tomorrow.
+treever=$(sed -n 's/.*CGI_VERSION *"\([0-9]*\)".*/\1/p' \
+    src/hg/inc/versionInfo.h | head -1)
+cachever=$(python3 -c 'import json, sys
+print(json.load(open(sys.argv[1])).get("current") or "")' "$AGESREL" \
+    2>/dev/null || true)
+ages=""
+if [[ -n $treever ]] && { [[ -z $cachever ]] || (( cachever < treever )); }; then
+    git fetch --quiet origin \
+        'refs/heads/v*_branch:refs/remotes/origin/v*_branch' 2>/dev/null || true
+    if ! git rev-parse --verify --quiet \
+            "refs/remotes/origin/v${treever}_branch" > /dev/null; then
+        ages="age cache still at v${cachever:-?}, v${treever}_branch not found"
+    elif env -u HGCONF_AGE_CACHE "$HARVEST" --age --refresh \
+            > "$work/ages" 2>&1; then
+        ages="age cache rebuilt at v$treever"
+    else
+        # A failed walk may have left half a file.  Put the committed one back
+        # and say so in the mail; tomorrow's run tries again.
+        git checkout -- "$AGESREL" 2>/dev/null || true
+        ages="age cache rebuild FAILED at v$treever, see below"
+    fi
+fi
 
 # What is left after the machine has done all it honestly can.  Non-zero
 # whenever a row is waiting to be classified, so the exit code is information.
@@ -183,10 +230,19 @@ waiting=$(sed -n \
     "$work/reconcile" | head -1)
 : "${waiting:=0}"
 at=$(git rev-parse --short HEAD)
+agenote=${ages:+, $ages}
 
-if git diff --quiet -- "$RELPATH"; then
+# Said in both mails when the rebuild was tried and did not work.
+ages_notes() {
+    [[ $ages == *FAILED* ]] || return 0
+    echo
+    echo "harvestHgConf.py --age --refresh failed:"
+    sed 's/^/  /' "$work/ages"
+}
+
+if git diff --quiet -- "$RELPATH" "$AGESREL"; then
     beat "nothing to register, $waiting awaiting classification," \
-         "$redundant conf line(s) to delete, tree at $at"
+         "$redundant conf line(s) to delete, tree at $at$agenote"
     # Still speak up if reconcile found something the machine cannot fix on its
     # own, since that is the whole point of running.  This goes out whatever the
     # heartbeat setting: it is news, not a pulse.
@@ -195,6 +251,7 @@ if git diff --quiet -- "$RELPATH"; then
         cat "$work/reconcile"
     fi
     redundant_notes
+    ages_notes
     exit 0
 fi
 
@@ -206,7 +263,9 @@ fi
 # and every one of them matched.  The report says what was actually written.
 names=$(sed -n 's/^    \([A-Za-z0-9_.{}]*\) .*/\1/p' "$work/register" | paste -sd, - )
 count=$(echo "$names" | tr ',' '\n' | grep -c . || true)
-if [[ -z $names ]]; then
+if [[ -z $names ]] && git diff --quiet -- "$RELPATH"; then
+    subject="hgConfCatalog: rebuild the age cache at v$treever, refs #37925"
+elif [[ -z $names ]]; then
     subject="hgConfCatalog: update the catalog, refs #37925"
 elif [[ ${#names} -le 60 ]]; then
     subject="hgConfCatalog: register $names, refs #37925"
@@ -217,17 +276,25 @@ fi
 {
     echo "$subject"
     echo
-    echo "Written by nightlyRegister.sh, which records the settings the tree"
-    echo "reads that the catalog was missing.  Only facts copied off the call"
-    echo "site are filled in.  No classification is guessed: a new boolean gets no"
-    echo "role=, because calling a release gate a knob would hide it from the"
-    echo "sunset report for good, and every row lands in the 'Awaiting review'"
-    echo "section until somebody reads the call site."
-    echo
-    sed 's/^/  /' "$work/register"
+    if ! git diff --quiet -- "$RELPATH"; then
+        echo "Written by nightlyRegister.sh, which records the settings the tree"
+        echo "reads that the catalog was missing.  Only facts copied off the call"
+        echo "site are filled in.  No classification is guessed: a new boolean gets no"
+        echo "role=, because calling a release gate a knob would hide it from the"
+        echo "sunset report for good, and every row lands in the 'Awaiting review'"
+        echo "section until somebody reads the call site."
+        echo
+        sed 's/^/  /' "$work/register"
+        echo
+    fi
+    if ! git diff --quiet -- "$AGESREL"; then
+        echo "hgConfAges.json rebuilt by nightlyRegister.sh with harvestHgConf.py"
+        echo "--age --refresh, because the tree is at v$treever and the cache was"
+        echo "built at v${cachever:-?}."
+    fi
 } > "$work/msg"
 
-git add -- "$RELPATH"
+git add -- "$RELPATH" "$AGESREL"
 git commit --quiet --file "$work/msg"
 committed=yes
 
@@ -246,7 +313,7 @@ if [[ $PUSH == yes ]]; then
 fi
 
 beat "committed ${count:-0} row(s) at $(git rev-parse --short HEAD)," \
-     "$waiting awaiting classification, $redundant conf line(s) to delete"
+     "$waiting awaiting classification, $redundant conf line(s) to delete$agenote"
 echo "hg.conf catalog: $subject"
 echo
 sed 's/^/  /' "$work/register"
@@ -254,4 +321,5 @@ echo
 echo "Left for a person to decide:"
 sed 's/^/  /' "$work/reconcile"
 redundant_notes
+ages_notes
 exit 0

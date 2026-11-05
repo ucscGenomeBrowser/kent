@@ -1,0 +1,74 @@
+# #38462 -- a wiggle or bigWig with `negateValues on` drew its mean+whiskers range from a
+# max that had been cut to a whole number.
+#
+# The cause is three lines in preDrawWindowFunction(), hg/hgTracks/wigTrack.c:
+#
+#     int swap = preDraw[i].min;          <-- min and max are doubles (wigCommon.h)
+#     preDraw[i].min = -preDraw[i].max;
+#     preDraw[i].max = -swap;
+#
+# so the old min loses its fraction on the way into the new max. The fix, e3084c1bf7c, is
+# `double swap`. The line dates from 10909409129 (2014). Lou found it while QAing
+# GPN-Star (#38451).
+#
+# This was an xfail until 2026-10-02. It failed on genome-test that morning, and passed
+# there once a cgi-alpha build that included e3084c1bf7c was installed. The .xfail then came
+# off the name.
+#
+# The fixture is ours, at ~/public_html/docentFixtures/rm38462/hubFlat.txt: one bigWig with
+# every base of chr1:10,000,001-10,100,000 set to 0.75, and two tracks over it. A flat
+# signal is on purpose. Every pixel then has min = max = mean = 0.75, so:
+#
+#   rm38462neg   negateValues on, points, viewLimits -1:0, mean+whiskers, altColor 255,0,0
+#       fixed    min = max = -0.75. The whisker is one pixel and the mean is drawn over it,
+#                in altColor, since the value is negative -> the row is 255,0,0
+#       broken   max = -(int)0.75 = 0. The whisker runs from 0 down to -0.75, 75 of the
+#                row's 100 pixels, in the light whisker shade -> the row is 255,141,141
+#   rm38462pos   the same track without negateValues, viewLimits 0:1. It is 0,0,255 on
+#                both builds. It shows that the fixture loaded and that whiskers are drawn
+#                at all, so a failure on rm38462neg is about negation.
+#
+# With real data, as in the ticket, the min and max differ, and the light whisker covers
+# most of the row on BOTH builds. Only its top edge moves (to 0 when the true max is
+# between -1 and 0). `color:` reads the shade the row is mostly drawn in, and that is
+# blind to the edge. A flat signal turns the edge into a change of shade.
+#
+# Watched both ways on 2026-10-02 (sandbox-ab, below). Against genome-test, rm38462neg is
+# 255,141,141 at 99% of the row. Against the #38462 ticket sandbox on port 48088, tree
+# ~/kentNegate38462 (origin/master f4d967492fe plus the one-word fix), it is 255,0,0 at 99%.
+# rm38462pos is 0,0,255 at 100% on both.
+#
+# NOT asserted: the mean+/-std box. preDrawWindowFunction negates the value and the min
+# and max, but not sumData, so the std box is computed from the un-negated mean. That is
+# a separate question and outside #38462.
+#
+# The 100 kb window gives about 145 bases a pixel, which mean+whiskers needs: hgTracks
+# draws whiskers only when there are more bases than pixels. The hub declares
+# `visibility full` itself, so there is no `track:` step. A hub track's cart name carries
+# a per-run hub_<n>_ prefix that `track:` cannot write.
+proof:
+  - "xfail 2026-10-02 -- fails on genome-test: rm38462neg is drawn 255,141,141 (the whisker shade), wanted 255,0,0"
+  - "sandbox-ab 2026-10-02 -- passes on ticket sandbox 38462 (port 48088, ~/kentNegate38462 = origin/master f4d967492fe + double swap): rm38462neg 255,0,0 at 99%"
+  - "server-flip 2026-10-02 -- genome-test's cgi-alpha build of 09:44, with e3084c1bf7c, passes: rm38462neg 255,0,0 at 99%, rm38462pos 0,0,255"
+
+target: genome-test
+db: hg38
+position: chr1:10000001-10100000
+reset: true
+fast: true
+steps:
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38462/hubFlat.txt", db: hg38}
+  - go: chr1:10000001-10100000
+
+  # The hub attached and both rows were drawn. Setup, not the assertion.
+  - expect:
+      rows: [rm38462neg, rm38462pos]
+      noText: "Unable to open"
+
+  # The control. Without negateValues the flat signal is a single dark line in `color`.
+  - expect: {color: {track: rm38462pos, is: "0,0,255"}}
+
+  # The bug, last, because the script stops at the first failure. The negated row is its
+  # mean line in altColor, and `not:` names the whisker shade that the broken max
+  # stretches from 0 to -0.75.
+  - expect: {color: {track: rm38462neg, is: "255,0,0", not: "255,141,141"}}

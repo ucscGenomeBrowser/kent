@@ -81,6 +81,17 @@ return 0;
 }
 
 
+static boolean isEndGlyphDecoration(struct decoration *d)
+/* Return TRUE if d is a BarLeft/BarRight or ArrLeft/ArrRight glyph.  These are drawn at one
+ * end of their range, not at its center.  Compares the names directly instead of calling
+ * parseGlyphType, as this runs for every decoration in the window. */
+{
+return decorationGetStyle(d) == DECORATION_STYLE_GLYPH &&
+       (sameWordOk(d->glyph, GLYPH_STRING_BAR_LEFT) || sameWordOk(d->glyph, GLYPH_STRING_BAR_RIGHT) ||
+        sameWordOk(d->glyph, GLYPH_STRING_ARR_LEFT) || sameWordOk(d->glyph, GLYPH_STRING_ARR_RIGHT));
+}
+
+
 int getDecorationStartPixel(struct decoration *d, struct window *w, double scale)
 /* Get the start pixel for this decoration in the window.  This is slightly complicated
  * because while a glyph may be defined in the file as spanning a wide start-end range
@@ -96,8 +107,8 @@ if (baseStart <= w->winStart)
 else
     startPixel = round((double)(baseStart - w->winStart)*scale);
 
-// Switch to glyph calculations if necessary
-if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
+// Switch to glyph calculations if necessary.  End glyphs lie within their range, like blocks.
+if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH && !isEndGlyphDecoration(d))
     {
     // glyphs must be adjacent if we've reached this point
     int baseEnd = d->chromEnd;
@@ -131,8 +142,8 @@ if (baseEnd >= w->winEnd)
 else
     end = round((baseEnd - w->winStart)*scale);
 
-// Switch to glyph calculations if necessary
-if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
+// Switch to glyph calculations if necessary.  End glyphs lie within their range, like blocks.
+if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH && !isEndGlyphDecoration(d))
     {
     int baseStart = d->chromStart;
     int centeredBaseStart = (baseStart + baseEnd)/2;
@@ -938,7 +949,8 @@ for (thisInterval = intervalList; thisInterval != NULL; thisInterval = thisInter
         }
     else if (decorationGetStyle(newDec) == DECORATION_STYLE_GLYPH)
         {
-        if (reduceGlyphs)
+        // end glyphs already shrink with the item, down to 1 pixel
+        if (reduceGlyphs && !isEndGlyphDecoration(newDec))
             {
             freeMem(newDec->glyph);
             newDec->glyph = cloneString(GLYPH_STRING_1PX);
@@ -1301,8 +1313,12 @@ void drawGlyphDecoration(struct decoration *d, struct hvGfx *hvg, double scale, 
 glyphType glyph = parseGlyphType(d->glyph);
 Color outlineColor = bedColorToGfxColor(d->color);
 Color fillColor = bedColorToGfxColor(bedParseColor(d->fillColor));
-drawScaledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
-                 heightPer, glyph, filled, outlineColor, fillColor);
+if (isEndGlyph(glyph))
+    drawScaledEndGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y, heightPer, glyph,
+                       d->strand[0], filled, outlineColor, fillColor);
+else
+    drawScaledGlyph(hvg, d->chromStart, d->chromEnd, scale, xOff, y,
+                     heightPer, glyph, filled, outlineColor, fillColor);
 }
 
 
@@ -1326,6 +1342,12 @@ if (decorationGetStyle(d) == DECORATION_STYLE_BLOCK)
         {
         return;  // apparently we don't intersect the window
         }
+    }
+else if (isEndGlyphDecoration(d))
+    {
+    if (!endGlyphPixelCoords(d->chromStart, d->chromEnd, scale, xOff, parseGlyphType(d->glyph),
+                             &startX, &endX))
+        return;
     }
 else if (decorationGetStyle(d) == DECORATION_STYLE_GLYPH)
     {

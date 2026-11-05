@@ -9,7 +9,7 @@
 #include "hubPublic.h"
 
 
-char *hubPublicCommaSepFieldNames = "hubUrl,shortLabel,longLabel,registrationTime,dbCount,dbList,descriptionUrl";
+char *hubPublicCommaSepFieldNames = "hubUrl,shortLabel,longLabel,registrationTime,dbCount,dbList,descriptionUrl,email";
 
 void hubPublicStaticLoad(char **row, struct hubPublic *ret)
 /* Load a row from hubPublic table into ret.  The contents of ret will
@@ -23,6 +23,7 @@ ret->registrationTime = row[3];
 ret->dbCount = sqlUnsigned(row[4]);
 ret->dbList = row[5];
 ret->descriptionUrl = row[6];
+ret->email = row[7];
 }
 
 struct hubPublic *hubPublicLoadByQuery(struct sqlConnection *conn, char *query)
@@ -55,8 +56,8 @@ void hubPublicSaveToDb(struct sqlConnection *conn, struct hubPublic *el, char *t
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = dyStringNew(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%u,'%s','%s')", 
-	tableName,  el->hubUrl,  el->shortLabel,  el->longLabel,  el->registrationTime,  el->dbCount,  el->dbList,  el->descriptionUrl);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s',%u,'%s','%s','%s')", 
+	tableName,  el->hubUrl,  el->shortLabel,  el->longLabel,  el->registrationTime,  el->dbCount,  el->dbList,  el->descriptionUrl,  el->email);
 sqlUpdate(conn, update->string);
 dyStringFree(&update);
 }
@@ -75,6 +76,7 @@ ret->registrationTime = cloneString(row[3]);
 ret->dbCount = sqlUnsigned(row[4]);
 ret->dbList = cloneString(row[5]);
 ret->descriptionUrl = cloneString(row[6]);
+ret->email = cloneString(row[7]);
 return ret;
 }
 
@@ -84,7 +86,7 @@ struct hubPublic *hubPublicLoadAll(char *fileName)
 {
 struct hubPublic *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -102,7 +104,7 @@ struct hubPublic *hubPublicLoadAllByChar(char *fileName, char chopper)
 {
 struct hubPublic *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -130,6 +132,7 @@ ret->registrationTime = sqlStringComma(&s);
 ret->dbCount = sqlUnsignedComma(&s);
 ret->dbList = sqlStringComma(&s);
 ret->descriptionUrl = sqlStringComma(&s);
+ret->email = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -147,6 +150,7 @@ freeMem(el->longLabel);
 freeMem(el->registrationTime);
 freeMem(el->dbList);
 freeMem(el->descriptionUrl);
+freeMem(el->email);
 freez(pEl);
 }
 
@@ -190,6 +194,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->descriptionUrl);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->email);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -251,11 +259,18 @@ fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->descriptionUrl);
 fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"email");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->email);
+fputc('"',f);
 fputc('}',f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
 
 struct hubEntry *hubEntryTextLoad(char **row, bool hasDescription)
 {

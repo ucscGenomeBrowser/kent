@@ -1,0 +1,33 @@
+in  : plain
+out : plain
+in  : a+b+c
+out : a b c
+in  : %41%42%43
+out : ABC
+in  : %4a%4A%4b
+out : JJK
+in  : 100%25
+out : 100%
+in  : %2B+%20
+out : +  
+in  : %00after
+out : 
+in  : %zzx
+out : ?x
+in  : %4gx
+out : ?x
+in  : %g4x
+out : ?x
+in  : end%
+out : end?
+in  : end%4
+out : end?
+in  : %
+out : ?
+in  : %%41
+out : ?1
+in  : %1F%7f%FF
+out : \x1f\x7f\xff
+in  : 
+out : 
+no read-ahead: %41+%42%2b decodes to "A B+" without reading past its length

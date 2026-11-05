@@ -1,0 +1,160 @@
+# ENCODE-rE2G enhancer-gene predictions (Engreitz lab, ENCODE4) - Max, 2026-10-23
+# Faceted composite encodeE2g, 1,458 biosamples x 2 data types, alpha.
+
+# ---------------------------------------------------------------------------
+# Scope
+# ---------------------------------------------------------------------------
+
+# Scoped from the ENCODE portal report, saved as e2g.tsv:
+#   https://www.encodeproject.org/report/?type=Annotation&annotation_type=element+gene+regulatory+interaction+predictions&software_used.software.name=distal-regulation-encode_re2g&status=released
+# 1,460 released annotations.  Each annotation holds 11 files: the 4 rE2G
+# files (preferred_default true) and 7 files of the ABC model, which is the
+# intermediate step of the pipeline.  Only rE2G files are used, selected by
+#   analysis_step_version.software_versions.software.name=distal-regulation-encode_re2g
+# on a type=File search.  dataset.annotation_type= returns nothing on File
+# searches, and annotation_type= alone also returns the ABC and other files
+# (3,076 bigInteract, 331 GB).
+#
+# Of the 4 rE2G files, three are downloaded, the thresholded ones:
+#   bigInteract  thresholded links               5.1 GB
+#   bed          thresholded element gene links  5.1 GB
+#   bedpe        thresholded links               2.8 GB
+# Not downloaded: the full predictions bed ("element gene links", 466 GB).
+#
+# Also excluded: the two "ENCODE-rE2G (extended)" annotations, ENCSR621BIJ
+# (K562) and ENCSR997TVR (GM12878), which add H3K27ac and Hi-C to DNase and
+# have a 56-column bed instead of 19.  Max's call, to keep the track a single
+# model.  That leaves 1,458 annotations, the number the Nature paper reports.
+
+# ---------------------------------------------------------------------------
+# Download
+# ---------------------------------------------------------------------------
+
+mkdir -p /hive/data/genomes/hg38/bed/e2g
+cd /hive/data/genomes/hg38/bed/e2g
+# e2g.tsv: saved from the portal report URL above, see log.txt
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gManifest.py
+#   excluded extended-model annotations: ENCSR621BIJ ENCSR997TVR
+#   annotations: 1458  files: 4374  GB: 13.0
+~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gDownload.sh
+#   ALL OK      (md5 of every file checked against the ENCODE md5sum)
+
+# samples.tsv has one row per annotation, with biosample, classification,
+# system and organ slims, treatment, donor sex, life stage and age, and the
+# input DNase experiment, from the Annotation and HumanDonor API records.
+
+# ---------------------------------------------------------------------------
+# Data problems found
+# ---------------------------------------------------------------------------
+
+# 1. Some element coordinates are written in scientific notation by the
+#    upstream code, both in the bed name column and in the bigInteract name and
+#    sourceName: chr15:7.8e+07-78000500, chr22:5e+07-50000832.  13 rows in a
+#    40-file sample.  Rebuilt from the chrom/start/end columns.
+# 2. Every bigInteract item has color #C5204C, whatever the biosample.  All
+#    items are written in black instead, see "Colors" below.
+# 3. bigInteract item names are "gene/element/celltype", too long as a label;
+#    the name is now the target gene.
+
+# ---------------------------------------------------------------------------
+# Build
+# ---------------------------------------------------------------------------
+
+cd /hive/data/genomes/hg38/bed/e2g
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gTrackDb.py . \
+    ~/kent/src/hg/makeDb/trackDb/human/hg38/encodeE2g.ra
+#   1458 samples, 2916 subtracks, 8 on by default
+#   also writes encodeE2g_metadata.tsv and encodeE2g_colors.json here
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeE2gBigBeds.py -force samples.tsv 16 > bigBeds.log 2>&1
+#   bb/<ENCSR>.interact.bb  bed5+13, hg/lib/interact.as, all items black
+#   bb/<ENCSR>.elements.bb  bed9+15, encodeE2gElements.as; score = rE2G score * 1000,
+#                           itemRgb 0, no itemRgb setting, so black
+#   Numbers rounded to 4 significant digits (distances to integers): the files
+#   have float noise like 0.23549900000000001, which showed in the mouseOver.
+#   Without -force, samples whose bigBeds exist are skipped (resume after a crash).
+#   23 GB in all: interact 7.1 GB, elements 16 GB (28 GB before the rounding)
+
+mkdir -p /gbdb/hg38/encodeE2g
+ln -sf /hive/data/genomes/hg38/bed/e2g/bb/*.bb /gbdb/hg38/encodeE2g/
+ln -sf /hive/data/genomes/hg38/bed/e2g/encodeE2g_metadata.tsv \
+       /hive/data/genomes/hg38/bed/e2g/encodeE2g_colors.json /gbdb/hg38/encodeE2g/
+
+# ---------------------------------------------------------------------------
+# Track structure
+# ---------------------------------------------------------------------------
+
+# Same faceted-composite machinery as fiberSeqCompendium, see fiberSeq.txt for
+# the naming rules: subtracks are encodeE2g_<annotation accession>_<dataType>,
+# dataTypes links (bigInteract) and elements (bigBed 9+15).
+#
+# Facets (low cardinality): Tissue (49 groups, with color swatches, see Colors
+# below), Classification, System, Treated, Sex, Life_stage.
+# Searchable only: _Biosample (369 values), _Organ (~60), _Treatment, _Age,
+# _Donor, _Input_experiment.
+#
+# Defaults: the links of 8 common ENCODE cell lines, untreated, are on; all
+# elements subtracks are off.  Several untreated annotations of one cell line
+# differ only in the input DNase experiment; the one with the lowest input
+# accession (the oldest ENCODE DNase) was taken:
+#   K562 ENCSR171UQE, GM12878 ENCSR604WPK, HepG2 ENCSR932TWZ, H1 ENCSR440PMA,
+#   HCT116 ENCSR575WDI, A549 ENCSR090HJT, MCF-7 ENCSR936SUR, IMR-90 ENCSR376SFG
+
+# ---------------------------------------------------------------------------
+# Colors: ENCODE biosample -> GTEx tissue table, reusable
+# ---------------------------------------------------------------------------
+
+# All items are drawn in black: Max's call, light colors such as the GTEx
+# yellows are hard to see on white.  Colors appear only as the swatches of the
+# "Tissue" facet (colorSettingsUrl encodeE2g_colors.json, which only colors the
+# facet checkboxes, never the items).
+#
+# Each ENCODE biosample term is assigned a tissue group and color by
+#   ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeBiosampleColors.py
+# written to, and committed as,
+#   ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeBiosampleColors.tsv
+# 369 biosamples, 49 groups.  It is meant for reuse by other ENCODE tracks: the
+# input is any ENCODE API dump with biosample_ontology objects.
+#
+# Color sources searched in the tree:
+#   GTEx tissues (53): hgFixed.gtexTissueV8 (decimal colors),
+#     hg/makeDb/outside/gtexHub/metadata/tissueColors.rgb.txt (r,g,b),
+#     hg/hgc/hgcData/gtexColorsV8.R; applied to beds by addTissueColors in
+#     doc/hg38/gtex.txt.  NOT used for the colors: in hgFixed.gtexTissueV8
+#     seven tissues share a tan placeholder #CDB79E (Liver, Kidney - Cortex,
+#     Spleen, Bladder, Colon - Sigmoid, Small Intestine, Minor Salivary Gland),
+#     and the gtexHub rgb file has yet another value for them.  The colors come
+#     from the GTEx portal API instead, colorHex of
+#       https://gtexportal.org/api/v2/dataset/tissueSiteDetail?itemsPerPage=100
+#     where every tissue has its own color, except that GTEx gives all brain
+#     regions the same yellow #EEEE00.  hgFixed still supplies the UCSC short
+#     names and the descriptions, matched to the portal ids
+#     ("Brain - Caudate (basal ganglia)" -> Brain_Caudate_basal_ganglia).
+#   ENCODE2 cell lines: "color" in hg/makeDb/trackDb/cv/alpha/cv.ra.  Only 8
+#     human cell lines have one (GM12878 K562 HepG2 HepG2b HeLa-S3 HUVEC H1-hESC
+#     LNCaP), the rest of the 96 colored terms are mouse.  Recorded in the
+#     cvColor column, 6 biosamples here, but not used.
+#
+# Rules, first match wins (match column in the table):
+#   name   explicit table: brain regions, heart atria, aorta/coronary/tibial
+#          artery, colon sigmoid, esophagus layers, skin site, fat pads, in vitro
+#          neurons -> Brain - Cortex, urothelium -> Bladder, Calu3 -> Lung ...
+#   cell   ENCODE cell_slims: B cell -> EBV-transformed lymphocytes; T, NK,
+#          myeloid, other hematopoietic -> Whole Blood; iPS -> stem cells;
+#          fibroblast -> Cultured fibroblasts; keratinocyte, melanocyte -> Skin.
+#          Not "embryonic cell": ENCODE gives that slim to myoblasts.
+#   organ  ENCODE organ_slims, most specific first, e.g. liver, kidney -> Kidney -
+#          Cortex, brain -> Brain - Cortex, bone marrow -> Whole Blood, so cell
+#          lines get the tissue they come from (K562 -> Whole Blood, HepG2 ->
+#          Liver, A549 -> Lung, MCF-7 -> Breast).
+#   none   -> Other (grey): C803, limb
+# Groups with no similar GTEx tissue get their own strong colors, none used
+# by GTEx: Embryonic and stem cells, Placenta and extraembryonic, Eye, Bone.
+
+cd /hive/data/genomes/hg38/bed/e2g
+hgsql hgFixed -Ne 'select name, description, color from gtexTissueV8' > gtexTissueV8.tsv
+curl -s 'https://gtexportal.org/api/v2/dataset/tissueSiteDetail?itemsPerPage=100' > gtexPortalTissues.json
+python3 -I ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeBiosampleColors.py \
+    annotations.json gtexTissueV8.tsv gtexPortalTissues.json \
+    ~/kent/src/hg/makeDb/trackDb/cv/alpha/cv.ra \
+    ~/kent/src/hg/makeDb/scripts/encodeE2g/encodeBiosampleColors.tsv
+# encodeE2gTrackDb.py reads that table for the Tissue column and the swatches.

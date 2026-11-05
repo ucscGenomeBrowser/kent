@@ -19,6 +19,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "jsonParse.h"
+#include "errCatch.h"
 #include "jsonWrite.h"
 #include "net.h"
 #include "trackHub.h"
@@ -648,11 +649,20 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 char *jsonConfig = fp->val;
                 if (isNotEmpty(jsonConfig))
                     {
-                    struct jsonElement *configEl = jsonParse(jsonConfig);
-                    // jsonObjectVal hands back NULL for a JSON null, and the hash
-                    // routines below dereference their argument, so a hub writing
-                    // "detailsScript.<plotType>.<field> null" would crash us.
-                    struct hash *configHash = jsonObjectVal(configEl, "detailsScript config");
+                    /* This text comes out of a hub's trackDb, so it may be anything at
+                     * all.  jsonParse aborts on malformed JSON and jsonObjectVal aborts on
+                     * a value that is not an object, so one mistyped setting - "histogram
+                     * myField 5" - would otherwise take down the whole details page.
+                     * jsonObjectVal also hands back NULL for a JSON null, and the hash
+                     * routines below dereference their argument.  Catch all of it, drop
+                     * the setting and carry on with the rest of the page. */
+                    struct hash *configHash = NULL;
+                    struct errCatch *errCatch = errCatchNew();
+                    if (errCatchStart(errCatch))
+                        configHash = jsonObjectVal(jsonParse(jsonConfig),
+                                                   "detailsScript config");
+                    errCatchEnd(errCatch);
+                    errCatchFree(&errCatch);
                     if (configHash == NULL)
                         {
                         jsonWriteObjectEnd(jw);

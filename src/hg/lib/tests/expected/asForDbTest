@@ -1,0 +1,5 @@
+asForDb with
+  a GenArk accession                         returned, no autoSql
+  an assembly that is a real database        returned, no autoSql
+  a name that is none of those               aborted, trying to reach a database of that name
+

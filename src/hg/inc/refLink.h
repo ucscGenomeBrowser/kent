@@ -52,5 +52,9 @@ void refLinkOutput(struct refLink *el, FILE *f, char sep, char lastSep);
 #define refLinkCommaOut(el,f) refLinkOutput(el,f,',',',');
 /* Print out refLink as a comma separated list including final comma. */
 
+void refLinkInitNoRow(struct refLink *rl, char *acc);
+/* Fill in rl for an accession that has no refLink row: name and mrnaAcc are acc and everything
+ * else reads as absent.  The whole struct is zeroed first. */
+
 #endif /* REFLINK_H */
 

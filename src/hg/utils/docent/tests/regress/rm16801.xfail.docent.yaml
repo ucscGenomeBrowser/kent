@@ -1,0 +1,52 @@
+# #16801 -- Multi-region with custom regions: a visit to the Table Browser resets the view.
+# Brian Lee reported it in 2016 and Gerardo could still reproduce it on 2026-03-13.  Load
+# custom regions on three chromosomes, open hgTables, come back to hgTracks through the
+# blue-bar "Genome Browser" link, and the view is no longer the custom regions: it opens
+# zoomed in on one gene inside them (ABO for this BED file).  A BED whose regions are all
+# on one chromosome came back fine, so it is the multi-chromosome case that breaks.
+#
+# The fixture is Matt Speir's myTestRegions1.txt from the ticket, copied to
+# ~braney/public_html/docentFixtures/mrBugs/16801/ so that nothing outside this test can
+# change it.  Three regions: ABO on chr9, one on chr21, one on chrX.
+#
+# Checks.  Each region of a multi-region view gets a map box whose data-tooltip is its
+# source range, so `area[data-tooltip="chrN:a-b"]` is present only while that region is in
+# the view.  The first expect pins that the custom regions loaded at all (and that the
+# multi-region button is pressed).  The last expect, after the hgTables round trip, asks
+# for the same three boxes again: the bug leaves one region at most on screen, so the chr21
+# and chrX boxes are the ones that catch it.
+#
+# The ticket is open.  On 2026-10-06 the last expect fails on genome-test for the
+# ticket's reason: only the chr9 (ABO) box is left.  On hgwdev-demo6 (multiRegionSpaces=on)
+# it fails too: no region box at all, and the server warns that
+# "chr7:155799529-155812871 is not in this multi-region view", the hg38 default position.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test, only the chr9 region is left after the hgTables round trip"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&knownGene=pack&virtModeType=customUrl&virtWinFull=on&multiRegionsBedUrl=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2FmrBugs%2F16801%2Frm16801regions.bed"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr9:133255176-133275214"]'
+        - 'area[data-tooltip="chr21:31659623-31668931"]'
+        - 'area[data-tooltip="chrX:154762757-154777689"]'
+
+  # The Table Browser, then back through the blue bar's "Genome Browser" link, which
+  # carries nothing but the hgsid.
+  - goto: "/cgi-bin/hgTables?db=hg38"
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr9:133255176-133275214"]'
+        - 'area[data-tooltip="chr21:31659623-31668931"]'
+        - 'area[data-tooltip="chrX:154762757-154777689"]'

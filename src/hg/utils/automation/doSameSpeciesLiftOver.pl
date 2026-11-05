@@ -26,7 +26,6 @@ use vars qw/
     $opt_querySizes
     $opt_chainRam
     $opt_chainCpu
-    $opt_localTmp
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -41,8 +40,6 @@ my $stepper = new HgStepManager(
 
 # Option defaults:
 my $dbHost = 'hgwdev';
-my $ramG = '4g';
-my $cpu = 1;
 my $blatRam = '3g';	# -ram=Ng argument
 my $blatCpu = 1;	# -cpu=N argument
 my $chainRam = '16g';	# -chainRam=Ng argument
@@ -78,14 +75,13 @@ options:
     -querySizes  /path/query.chrom.sizes   Full path to query chrom.sizes (toDb)
     -chainRam  Ng  Cluster ram size for chain step, default: -chainRam=$chainRam
     -chainCpu  N   Cluster CPUs number for chain step, default: -chainCpu=$chainCpu
-    -localTmp  /tmp  Full path to temporary storage for heavy I/O usage - UNUSED 2025-10
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
 						'workhorse' => '',
 						'fileServer' => '',
-						'ram' => $ramG,
-						'cpu' => $cpu,
+						'ram' => $blatRam,
+						'cpu' => $blatCpu,
 						'bigClusterHub' => '');
   print STDERR "
 Automates UCSC's same-species liftOver (blat/chain/net) pipeline, based on
@@ -101,12 +97,19 @@ $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/blat.\$toDb.\$date unl
   # Detailed help (-help):
   print STDERR "
 Assumptions:
-1. /scratch/data/\$db/\$db.2bit contains RepeatMasked sequence for
-   database/assembly \$db.
-2. $HgAutomate::clusterData/\$db/chrom.sizes contains all sequence names and sizes from
-   \$db.2bit.
-3. The \$db.2bit files have already been distributed to cluster-scratch
-   (/scratch/data/<db>/).
+1. \$db.2bit contains RepeatMasked sequence for database/assembly \$db.
+   It is given by -target2Bit/-query2Bit, otherwise it is found at
+   /scratch/data/\$db/\$db.2bit or $HgAutomate::clusterData/\$db/\$db.2bit
+   and must be visible from the cluster hub.
+2. chrom.sizes contains all sequence names and sizes from \$db.2bit.
+   It is given by -targetSizes/-querySizes, otherwise it is
+   $HgAutomate::clusterData/\$db/chrom.sizes .
+3. The blat 11.ooc file for fromDb is given by -ooc, otherwise it is
+   /hive/data/genomes/\$fromDb/11.ooc (-ooc=none runs blat without one).
+4. When fromDb has no database on $dbHost, the net step also builds the
+   chain\${ToDb}.bb/chain\${ToDb}Link.bb bigBed files in run.chain/ and the
+   quickLift bigBed files in the build directory, and the load step does
+   nothing.
 " if ($detailed);
   print "\n";
   exit $status;
@@ -116,7 +119,6 @@ Assumptions:
 # Globals:
 # Command line args: tDb=fromDb, qDb=toDb
 my ($tDb, $qDb);
-my $localTmp = &HgAutomate::tmpDir();	# do the right thing in UCSC environment
 
 # Other:
 my ($buildDir);
@@ -134,7 +136,6 @@ sub checkOptions {
 		      'querySizes=s',
 		      'chainRam=s',
 		      'chainCpu=i',
-		      'localTmp=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -143,7 +144,6 @@ sub checkOptions {
   my $err = $stepper->processOptions();
   usage(1) if ($err);
   $dbHost = $opt_dbHost if ($opt_dbHost);
-  $localTmp = $opt_localTmp ? $opt_localTmp : $localTmp;
 }
 
 
@@ -215,13 +215,13 @@ sub doAlign {
       $ooc = "$opt_ooc";
     }
   }
-  my $dashOoc = "-ooc=$ooc";
+  my $dashOoc = $ooc ? "-ooc=$ooc" : "";
   my $pslDir = "$runDir/psl";
 
   &HgAutomate::checkCleanSlate('align', 'chain', $pslDir, 'run.time');
 
   my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
-  if (! &HgAutomate::machineHasFile($paraHub, $ooc)) {
+  if ($ooc && ! &HgAutomate::machineHasFile($paraHub, $ooc)) {
     die "align: $paraHub does not have $ooc -- if that is not the correct " .
       "location, please run again with -ooc.\n";
   }
@@ -229,72 +229,76 @@ sub doAlign {
   # script for a single job: split query partition further into
   # $splitSize bites while building a .lft liftUp spec; blat; lift.
   my $size = $splitSize;
-  my $fh = &HgAutomate::mustOpen(">$runDir/job.csh");
+  my $fh = &HgAutomate::mustOpen(">$runDir/job.sh");
   print $fh <<_EOF_
-#!/bin/csh -ef
+#!/bin/bash
 
-set targetList = \$1
-set queryListIn = \$2
-set outPsl = \$3
+set -beEu -o pipefail
 
-unsetenv TMPDIR
-if ( -d "/data/tmp" ) then
-  setenv TMPDIR "/data/tmp"
-else if ( -d "/scratch/tmp" ) then
-  setenv TMPDIR "/scratch/tmp"
+targetList=\$1
+queryListIn=\$2
+outPsl=\$3
+
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
 else
-  set tmpSz = `df --output=avail -k /tmp | tail -1`
-  set shmSz = `df --output=avail -k /dev/shm | tail -1`
-  if ( "\${shmSz}" > "\${tmpSz}" ) then
+  tmpSz=\$(df --output=avail -k /tmp | tail -1 | tr -d ' ')
+  shmSz=\$(df --output=avail -k /dev/shm | tail -1 | tr -d ' ')
+  if [ "\${shmSz}" -gt "\${tmpSz}" ]; then
      mkdir -p /dev/shm/tmp
      chmod 777 /dev/shm/tmp
-     setenv TMPDIR "/dev/shm/tmp"
+     export TMPDIR="/dev/shm/tmp"
   else
-     setenv TMPDIR "/tmp"
-  endif
-endif
+     export TMPDIR="/tmp"
+  fi
+fi
 
-if (\$targetList:e == "lst") set targetList = $runDir/\$targetList
-if (\$queryListIn:e == "lst") set queryListIn = $runDir/\$queryListIn
+if [ "\${targetList##*.}" = "lst" ]; then targetList=$runDir/\$targetList; fi
+if [ "\${queryListIn##*.}" = "lst" ]; then queryListIn=$runDir/\$queryListIn; fi
 
 # Use local disk for output, and move the final result to \$outPsl
 # when done, to minimize I/O.
-set tmpDir = `mktemp -d -p \$TMPDIR doSame.blat.XXXXXX`
-pushd \$tmpDir
+tmpDir=\$(mktemp -d -p \$TMPDIR doSame.blat.XXXXXX)
+pushd \$tmpDir > /dev/null
 
 # We might get a .lst or a 2bit spec here -- convert to (list of) 2bit spec:
-if (\$queryListIn:e == "lst") then
-  set specList = `cat \$queryListIn`
+if [ "\${queryListIn##*.}" = "lst" ]; then
+  specList=\$(cat \$queryListIn)
 else
-  set specList = \$queryListIn
-endif
+  specList=\$queryListIn
+fi
 
 # Further partition the query spec(s) into $splitSize coord ranges, building up
 # a .lst of 2bit specs for blat and a .lft liftUp spec for the results:
 cp /dev/null reSplitQuery.lst
 cp /dev/null query.lft
-foreach spec (\$specList)
-  set file  = `echo \$spec | awk -F: '{print \$1;}'`
-  set seq   = `echo \$spec | awk -F: '{print \$2;}'`
-  set range = `echo \$spec | awk -F: '{print \$3;}'`
-  set start = `echo \$range | awk -F- '{print \$1;}'`
-  set end   = `echo \$range | awk -F- '{print \$2;}'`
-  if (! -e q.sizes) twoBitInfo \$file q.sizes
-  set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
-  set chunkEnd = '0'
-  while (\$chunkEnd < \$end)
-    set chunkEnd = `echo \$start $size | awk '{print \$1+\$2}'`
-    if (\$chunkEnd > \$end) set chunkEnd = \$end
-    set chunkSize = `echo \$chunkEnd \$start | awk '{print \$1-\$2}'`
-    echo \$file\\:\$seq\\:\$start-\$chunkEnd >> reSplitQuery.lst
-    if ((\$start == 0) && (\$chunkEnd == \$seqSize)) then
-      echo "\$start	\$seq	\$seqSize	\$seq	\$seqSize" >> query.lft
+for spec in \$specList
+do
+  file=\$(echo \$spec | awk -F: '{print \$1;}')
+  seq=\$(echo \$spec | awk -F: '{print \$2;}')
+  range=\$(echo \$spec | awk -F: '{print \$3;}')
+  start=\$(echo \$range | awk -F- '{print \$1;}')
+  end=\$(echo \$range | awk -F- '{print \$2;}')
+  if [ ! -e q.sizes ]; then twoBitInfo \$file q.sizes; fi
+  seqSize=\$(awk '\$1 == "'\$seq'" {print \$2;}' q.sizes)
+  chunkEnd=0
+  while [ \$chunkEnd -lt \$end ]
+  do
+    chunkEnd=\$((start + $size))
+    if [ \$chunkEnd -gt \$end ]; then chunkEnd=\$end; fi
+    chunkSize=\$((chunkEnd - start))
+    echo "\$file:\$seq:\$start-\$chunkEnd" >> reSplitQuery.lst
+    if [ \$start -eq 0 ] && [ \$chunkEnd -eq \$seqSize ]; then
+      printf "%s\\t%s\\t%s\\t%s\\t%s\\n" \$start \$seq \$seqSize \$seq \$seqSize >> query.lft
     else
-      echo "\$start	\$seq"":\$start-\$chunkEnd	\$chunkSize	\$seq	\$seqSize" >> query.lft
-    endif
-    set start = `echo \$chunkEnd $splitOverlap | awk '{print \$1-\$2}'`
-  end
-end
+      printf "%s\\t%s:%s-%s\\t%s\\t%s\\t%s\\n" \$start \$seq \$start \$chunkEnd \$chunkSize \$seq \$seqSize >> query.lft
+    fi
+    start=\$((chunkEnd - $splitOverlap))
+  done
+done
 
 # Align unsplit target sequence(s) to .lst of 2bit specs for $splitSize chunks
 # of query:
@@ -307,20 +311,20 @@ liftUp -pslQ -nohead tmpOut.psl query.lft warn tmpUnlifted.psl
 # Move final result into place:
 mv tmpOut.psl \$outPsl
 
-popd
+popd > /dev/null
 rm -rf \$tmpDir
 _EOF_
   ;
   close($fh);
-  &HgAutomate::run("chmod a+x $runDir/job.csh");
+  &HgAutomate::run("chmod a+x $runDir/job.sh");
 
   &HgAutomate::makeGsub($runDir,
-			'job.csh $(path1) $(path2) {check out line ' .
+			'job.sh $(path1) $(path2) {check out line ' .
 			 $pslDir . '/$(file1)/$(file2).psl}');
 
   my $paraRun = &HgAutomate::paraRun($blatRam, $blatCpu);
   my $whatItDoes = "It performs a cluster run of blat -fastMap.";
-  my $bossScript = new HgRemoteScript("$runDir/doAlign.csh", $paraHub,
+  my $bossScript = newBash HgRemoteScript("$runDir/doAlign.bash", $paraHub,
 				      $runDir, $whatItDoes);
 
   # Don't allow target sequences to be split because we don't lift them
@@ -349,9 +353,10 @@ $Bin/partitionSequence.pl 10000000 0 $qSeqScratch \\
   -lstDir=qParts > q.lst
 
 mkdir $pslDir
-foreach f (`cat t.lst`)
-  mkdir $pslDir/\$f:t
-end
+for f in \$(cat t.lst)
+do
+  mkdir $pslDir/\${f##*/}
+done
 
 $gensub2 t.lst q.lst gsub jobList
 
@@ -431,31 +436,33 @@ sub doChain {
   my ($paraHub, $tSeqScratch, $qSeqScratch) = &getClusterSeqs();
 
   # script for a single job: cat inputs if necessary and chain.
-  my $fh = &HgAutomate::mustOpen(">$runDir/job.csh");
+  my $fh = &HgAutomate::mustOpen(">$runDir/job.sh");
   print $fh <<_EOF_
-#!/bin/csh -ef
+#!/bin/bash
 
-set inPattern = \$1
-set outChain = \$2
+set -beEu -o pipefail
 
-unsetenv TMPDIR
-if ( -d "/data/tmp" ) then
-  setenv TMPDIR "/data/tmp"
-else if ( -d "/scratch/tmp" ) then
-  setenv TMPDIR "/scratch/tmp"
+inPattern=\$1
+outChain=\$2
+
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
 else
-  set tmpSz = `df --output=avail -k /tmp | tail -1`
-  set shmSz = `df --output=avail -k /dev/shm | tail -1`
-  if ( "\${shmSz}" > "\${tmpSz}" ) then
+  tmpSz=\$(df --output=avail -k /tmp | tail -1 | tr -d ' ')
+  shmSz=\$(df --output=avail -k /dev/shm | tail -1 | tr -d ' ')
+  if [ "\${shmSz}" -gt "\${tmpSz}" ]; then
      mkdir -p /dev/shm/tmp
      chmod 777 /dev/shm/tmp
-     setenv TMPDIR "/dev/shm/tmp"
+     export TMPDIR="/dev/shm/tmp"
   else
-     setenv TMPDIR "/tmp"
-  endif
-endif
+     export TMPDIR="/tmp"
+  fi
+fi
 
-set tmpOut = `mktemp -p \$TMPDIR doSame.chain.XXXXXX`
+tmpOut=\$(mktemp -p \$TMPDIR doSame.chain.XXXXXX)
 
 cat $pslDir/\$inPattern* \\
 | axtChain -verbose=0 -linearGap=medium -psl stdin \\
@@ -467,21 +474,22 @@ chmod 664 \$outChain
 _EOF_
   ;
   close($fh);
-  &HgAutomate::run("chmod a+x $runDir/job.csh");
+  &HgAutomate::run("chmod a+x $runDir/job.sh");
 
   &HgAutomate::makeGsub($runDir,
-			'job.csh $(path1) ' .
+			'job.sh $(path1) ' .
 			'{check out line+ chainRaw/$(path1).chain}');
   my $whatItDoes = "It does a cluster run to chain the blat alignments.";
-  my $bossScript = new HgRemoteScript("$runDir/doChain.csh", $paraHub,
+  my $bossScript = newBash HgRemoteScript("$runDir/doChain.bash", $paraHub,
 				      $runDir, $whatItDoes);
   my $paraRun = &HgAutomate::paraRun($chainRam, $chainCpu);
   my $gensub2 = &HgAutomate::gensub2();
   $bossScript->add(<<_EOF_
 mkdir chainRaw
-foreach d ($pslDir/*)
-  mkdir chainRaw/\$d:t
-end
+for d in $pslDir/*
+do
+  mkdir chainRaw/\${d##*/}
+done
 
 $gensub2 pslParts.lst single gsub jobList
 $paraRun
@@ -504,36 +512,37 @@ sub doNet {
 "It nets the chained blat alignments and runs netChainSubset to produce
 liftOver chains.";
   my $mach = &HgAutomate::chooseWorkhorse();
-  my $bossScript = new HgRemoteScript("$runDir/doNet.csh", $mach,
+  my $bossScript = newBash HgRemoteScript("$runDir/doNet.bash", $mach,
 				      $runDir, $whatItDoes);
   my $chromBased = (`wc -l < $tSizes` <= $HgAutomate::splitThreshold);
   my $lump = $chromBased ? "" : "-lump=100";
   $bossScript->add(<<_EOF_
-unsetenv TMPDIR
-if ( -d "/data/tmp" ) then
-  setenv TMPDIR "/data/tmp"
-else if ( -d "/scratch/tmp" ) then
-  setenv TMPDIR "/scratch/tmp"
+unset TMPDIR
+if [ -d "/data/tmp" ]; then
+  export TMPDIR="/data/tmp"
+elif [ -d "/scratch/tmp" ]; then
+  export TMPDIR="/scratch/tmp"
 else
-  set tmpSz = `df --output=avail -k /tmp | tail -1`
-  set shmSz = `df --output=avail -k /dev/shm | tail -1`
-  if ( "\${shmSz}" > "\${tmpSz}" ) then
+  tmpSz=\$(df --output=avail -k /tmp | tail -1 | tr -d ' ')
+  shmSz=\$(df --output=avail -k /dev/shm | tail -1 | tr -d ' ')
+  if [ "\${shmSz}" -gt "\${tmpSz}" ]; then
      mkdir -p /dev/shm/tmp
      chmod 777 /dev/shm/tmp
-     setenv TMPDIR "/dev/shm/tmp"
+     export TMPDIR="/dev/shm/tmp"
   else
-     setenv TMPDIR "/tmp"
-  endif
-endif
+     export TMPDIR="/tmp"
+  fi
+fi
 # Use local scratch disk... this can be quite I/O intensive:
-set tmpDir = `mktemp -d -p \$TMPDIR doSame.blat.XXXXXX`
+tmpDir=\$(mktemp -d -p \$TMPDIR doSame.net.XXXXXX)
 
 # Merge up the hierarchy and assign unique chain IDs:
 mkdir \$tmpDir/chainMerged
-foreach d (chainRaw/*)
-  set tChunk = \$d:t
+for d in chainRaw/*
+do
+  tChunk=\${d##*/}
   chainMergeSort \$d/*.chain > \$tmpDir/chainMerged/\$tChunk.chain
-end
+done
 
 chainMergeSort \$tmpDir/chainMerged/*.chain \\
 | chainSplit $lump \$tmpDir/chainSplit stdin
@@ -541,14 +550,15 @@ endsInLf \$tmpDir/chainSplit/*.chain
 rm -rf \$tmpDir/chainMerged/
 
 mkdir \$tmpDir/netSplit \$tmpDir/overSplit
-foreach f (\$tmpDir/chainSplit/*.chain)
-  set split = \$f:t:r
+for f in \$tmpDir/chainSplit/*.chain
+do
+  split=\$(basename \$f .chain)
   chainNet \$f \\
     $tSizes $qSizes \\
     \$tmpDir/netSplit/\$split.net /dev/null
   netChainSubset \$tmpDir/netSplit/\$split.net \$f stdout \\
   | chainStitchId stdin \$tmpDir/overSplit/\$split.chain
-end
+done
 endsInLf \$tmpDir/netSplit/*.net
 endsInLf \$tmpDir/overSplit/*.chain
 
@@ -564,6 +574,35 @@ chainSwap  $buildDir/$liftOverChainFile stdout \\
 rm -rf \$tmpDir/
 _EOF_
   );
+  if (! $dbExists) {
+    $bossScript->add(<<_EOF_
+
+# bigChain/bigLink of all.chain here in run.chain/, quickLift bigBeds
+# in the buildDir:
+hgLoadChain -test -noBin -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
+wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
+wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
+sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
+awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
+
+bedToBigBed -type=bed6+6 -as=bigChain.as -tab $buildDir/$tDb.$qDb.quick.chain.txt $qSizes $buildDir/$tDb.$qDb.quick.bb
+bedToBigBed -type=bed4+1 -as=bigLink.as -tab $buildDir/$tDb.$qDb.quick.link.txt $qSizes $buildDir/$tDb.$qDb.quickLink.bb
+
+totalBases=\$(ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}')
+basesCovered=\$(bigBedInfo chain${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
+percentCovered=\$(echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}')
+printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > $buildDir/fb.$tDb.chain${QDb}Link.txt
+
+qBases=\$(ave -col=2 $qSizes | grep "^total" | awk '{printf "%d", \$2}')
+qCovered=\$(bigBedInfo $buildDir/$tDb.$qDb.quickLink.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ',')
+qPerCent=\$(echo \$qCovered \$qBases | awk '{printf "%.3f", 100.0*\$1/\$2}')
+printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPerCent" > $buildDir/fb.$tDb.quick${QDb}Link.txt
+rm -f link.tab chain.tab bigChain.as bigLink.as chain${QDb}.tab chain${QDb}Link.tab $buildDir/$tDb.$qDb.quick.chain.txt $buildDir/$tDb.$qDb.quick.link.txt
+_EOF_
+    );
+  }
   $bossScript->execute();
 } # doNet
 
@@ -575,20 +614,26 @@ sub doLoad {
   &HgAutomate::checkExistsUnlessDebug('net', 'load',
 				      "$buildDir/$liftOverChainFile");
 
+  # without a database, the bigBed files were made in the net step
+  if (! $dbExists) {
+    &HgAutomate::verbose(1, "# load: no database $tDb on $dbHost, " .
+			 "nothing to load\n");
+    return;
+  }
+
   my $whatItDoes =
 "It makes links from $HgAutomate::gbdb/ and goldenPath/ (download area) to the liftOver
 chains file, and calls hgAddLiftOverChain to register the $HgAutomate::gbdb location.";
-  my $bossScript = new HgRemoteScript("$runDir/doLoad.csh", $dbHost,
+  my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
-  if ($dbExists) {
-    $bossScript->add(<<_EOF_
+  $bossScript->add(<<_EOF_
 # Link to standardized location of liftOver files:
 mkdir -p $liftOverChainDir
 rm -f $liftOverChainPath
 ln -s $buildDir/$liftOverChainFile $liftOverChainPath
-set tmpFile = `mktemp -t -p /tmp tmpMd5.XXXXXX`
-csh -c "grep -v $liftOverChainFile $liftOverChainDir/md5sum.txt || true" > \$tmpFile
+tmpFile=\$(mktemp -t -p /tmp tmpMd5.XXXXXX)
+grep -v $liftOverChainFile $liftOverChainDir/md5sum.txt > \$tmpFile || true
 md5sum $buildDir/$liftOverChainFile | sed -e "s#$buildDir/##;" >> \$tmpFile
 sort \$tmpFile > $liftOverChainDir/md5sum.txt
 rm -f \$tmpFile
@@ -607,34 +652,7 @@ ln -s $liftOverChainPath $HgAutomate::gbdb/$tDb/liftOver/
 # ~/.hg.conf) so that hgLiftOver will know that this is available:
 hgAddLiftOverChain $tDb $qDb
 _EOF_
-    );
-  } else {
-    $bossScript->add(<<_EOF_
-hgLoadChain -test -noBin -tIndex $tDb chain$QDb $buildDir/$liftOverChainFile
-wget --no-check-certificate -O bigChain.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigChain.as'
-wget --no-check-certificate -O bigLink.as 'https://raw.githubusercontent.com/ucscGenomeBrowser/kent/refs/heads/master/src/hg/lib/bigLink.as'
-sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\\t"} {print \$2, \$4, \$5, \$11, 1000, \$8, \$3, \$6, \$7, \$9, \$10, \$1}' > chain${QDb}.tab
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab chain${QDb}.tab $tSizes chain${QDb}.bb
-awk 'BEGIN {OFS="\\t"} {print \$1, \$2, \$3, \$5, \$4}' link.tab | sort -k1,1 -k2,2n > chain${QDb}Link.tab
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab chain${QDb}Link.tab $tSizes chain${QDb}Link.bb
-
-bedToBigBed -type=bed6+6 -as=bigChain.as -tab $tDb.$qDb.quick.chain.txt $qSizes $tDb.$qDb.quick.bb
-bedToBigBed -type=bed4+1 -as=bigLink.as -tab $tDb.$qDb.quick.link.txt $qSizes $tDb.$qDb.quickLink.bb
-
-set totalBases = `ave -col=2 $tSizes | grep "^total" | awk '{printf "%d", \$2}'`
-set basesCovered = `bigBedInfo chain${QDb}Link.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
-set percentCovered = `echo \$basesCovered \$totalBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$basesCovered" "\$totalBases" "\$percentCovered" > fb.$tDb.chain.${QDb}Link.txt
-
-set qBases = `ave -col=2 $qSizes | grep "^total" | awk '{printf "%d", \$2}'`
-set qCovered = `bigBedInfo $tDb.$qDb.quickLink.bb | grep "basesCovered" | cut -d' ' -f2 | tr -d ','`
-set qPerCent = `echo \$qCovered \$qBases | awk '{printf "%.3f", 100.0*\$1/\$2}'`
-printf "%d bases of %d (%s%%) in intersection\\n" "\$qCovered" "\$qBases" "\$qPerCent" > fb.$tDb.quick${QDb}Link.txt
-rm -f link.tab chain.tab bigChain.as bigLink.as chain${QDb}.tab chain${QDb}Link.tab $tDb.$qDb.quick.chain.txt $tDb.$qDb.quick.link.txt
-
-_EOF_
-    );
-  }
+  );
   $bossScript->execute();
 } # doLoad
 
@@ -645,16 +663,12 @@ sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "It cleans up or compresses intermediate files.";
   $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   my $pslDir = "run.blat/psl";
   $bossScript->add(<<_EOF_
 rm -rf $pslDir/
 rm -rf run.chain/chainRaw/
-rm -rf run.chain/chainMerged/
-rm -rf run.chain/chainSplit/
-rm -rf run.chain/netSplit/
-rm -rf run.chain/overSplit/
 _EOF_
   );
   $bossScript->execute();

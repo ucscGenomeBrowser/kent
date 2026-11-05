@@ -81,6 +81,9 @@ system package management tools.
         cd userApps
         make
 
+   If you used the `curl` method in step 1, you are already in
+   `./userApps/`, so skip the `cd userApps` line.
+
    This build fetches (with git) approximately 200 Mb/7,800 files of
       kent source code, and constructs about 223 command binaries
       of approximate size near 600 Mb.

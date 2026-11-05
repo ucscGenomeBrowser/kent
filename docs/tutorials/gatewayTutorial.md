@@ -85,6 +85,7 @@ organism.
 </div>
 
 ---
+
 <div class="row">
 <div class="col-md-6">
 
@@ -119,6 +120,7 @@ width=90%
 </div>
 
 ---
+
 ### Using the search box
 
 <div class="row">

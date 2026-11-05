@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""
+Turn studySummary.tsv and locusSummary.tsv into the two HTML tables that go on
+the MethaDory description page. Writes the table markup only; it is pasted into
+methaDory.html between the marker comments.
+"""
+
+import csv
+import html
+import html.entities
+import os
+import sys
+
+
+def loadAuthorYear():
+    fname = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pubAuthorYear.tsv")
+    authorYear = {}
+    with open(fname) as fh:
+        for line in fh:
+            if line.startswith("#") or not line.strip():
+                continue
+            pmid, ay = line.rstrip("\n").split("\t")
+            authorYear[pmid] = ay
+    return authorYear
+
+
+def pubLinks(pmidField, authorYear):
+    out = []
+    for pmid in pmidField.split(","):
+        pmid = pmid.strip()
+        if not pmid:
+            continue
+        if pmid not in authorYear:
+            raise ValueError("no author/year in pubAuthorYear.tsv for id %s" % pmid)
+        if pmid.isdigit():
+            out.append('<a href="https://pubmed.ncbi.nlm.nih.gov/%s/" target="_blank">%s</a>'
+                       % (pmid, authorYear[pmid]))
+        else:
+            out.append('<a href="%s" target="_blank">%s</a>'
+                       % (html.escape(pmid), authorYear[pmid]))
+    return ", ".join(out) if out else "&nbsp;"
+
+
+def namedEntities(s):
+    """The browser does not transcode UTF-8, so write every non-ASCII character
+    as its named HTML entity (Leit&atilde;o in pubAuthorYear.tsv)."""
+    return "".join(c if ord(c) < 128 else "&%s;" % html.entities.codepoint2name[ord(c)]
+                   for c in s)
+
+
+def studyAnchor(study):
+    """The #fragment a study's row in the Studies table is addressed by, also
+    used as the anchor's id so the Genes and loci table can link to it."""
+    return "study-" + study
+
+
+def studyTable(fname, out):
+    authorYear = loadAuthorYear()
+    out.write('<table class="stdTbl">\n')
+    out.write("<tr><th>Study</th><th>PubMed</th><th>Episignatures</th>"
+              "<th>Disorders</th><th>Probes reported</th><th>Distinct probes</th></tr>\n")
+    with open(fname) as fh:
+        for r in csv.DictReader(fh, delimiter="\t"):
+            out.write(namedEntities('<tr id="%s"><td>%s</td><td>%s</td><td>%s</td><td>%s</td>'
+                      "<td>%s</td><td>%s</td></tr>\n"
+                      % (html.escape(studyAnchor(r["study"]), quote=True),
+                         html.escape(r["study"]), pubLinks(r["pmid"], authorYear),
+                         r["signatures"], html.escape(r["disorders"]) or "&nbsp;",
+                         "{:,}".format(int(r["probeRows"])),
+                         "{:,}".format(int(r["uniqProbes"])))))
+    out.write("</table>\n")
+
+
+def studyLinks(studiesField):
+    out = []
+    for study in studiesField.split(","):
+        study = study.strip()
+        if not study:
+            continue
+        out.append('<a href="#%s">%s</a>'
+                   % (html.escape(studyAnchor(study), quote=True), html.escape(study)))
+    return ", ".join(out) if out else "&nbsp;"
+
+
+def locusTable(fname, out):
+    out.write('<table class="stdTbl">\n')
+    out.write("<tr><th>Gene or locus</th><th>Disorders</th><th>Episignatures</th>"
+              "<th>Studies</th><th>Probes reported</th><th>Distinct probes</th></tr>\n")
+    with open(fname) as fh:
+        for r in csv.DictReader(fh, delimiter="\t"):
+            out.write(namedEntities("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td>"
+                      "<td>%s</td><td>%s</td></tr>\n"
+                      % (html.escape(r["locus"]),
+                         html.escape(r["disorders"]) or "&nbsp;",
+                         r["signatures"], studyLinks(r["studies"]),
+                         "{:,}".format(int(r["probeRows"])),
+                         "{:,}".format(int(r["uniqProbes"])))))
+    out.write("</table>\n")
+
+
+which, fname = sys.argv[1], sys.argv[2]
+if which == "studies":
+    studyTable(fname, sys.stdout)
+else:
+    locusTable(fname, sys.stdout)

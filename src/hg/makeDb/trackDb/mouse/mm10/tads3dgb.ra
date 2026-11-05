@@ -14,33 +14,33 @@ maxCheckboxes 50
 html tads3dgb
 
     track tads3dgb_418
-    parent tads3dgb off
+    parent tads3dgb on
     shortLabel mESC
     longLabel mESC TAD domains (Embryo, Hi-C, GSE35156)
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/418.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> mESC (Embryo, Hi-C)
 
     track tads3dgb_424
-    parent tads3dgb off
+    parent tads3dgb on
     shortLabel CH12-LX
     longLabel CH12-LX TAD domains (Blood, Hi-C, GSE63525)
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/424.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> CH12-LX (Blood, Hi-C)
 
     track tads3dgb_429
-    parent tads3dgb off
+    parent tads3dgb on
     shortLabel mESC WT MicroC
     longLabel mESC WT MicroC TAD domains (Embryo, Micro-C, GSE130275)
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/429.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> mESC WT MicroC (Embryo, Micro-C)
 
     track tads3dgb_432
@@ -50,7 +50,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/432.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> mESC NELFB dTAB T0 MicroC (Embryo, Micro-C)
 
     track tads3dgb_445
@@ -60,7 +60,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/445.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> SSBP3 DMSO MicroC (Blood, Micro-C)
 
     track tads3dgb_446
@@ -70,7 +70,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/446.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> SSBP3 dTAGV1 MicroC (Blood, Micro-C)
 
     track tads3dgb_621
@@ -80,7 +80,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/621.bb
     color 6,218,147
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> Thymus Treg WT (Thymus, Hi-C)
 
     track tads3dgb_622
@@ -90,7 +90,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/622.bb
     color 6,218,147
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> Thymus Treg KO (Thymus, Hi-C)
 
     track tads3dgb_623
@@ -100,7 +100,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/623.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO scr rep1 (Embryo, Hi-C)
 
     track tads3dgb_625
@@ -110,7 +110,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/625.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO sh1A rep1 (Embryo, Hi-C)
 
     track tads3dgb_626
@@ -120,7 +120,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/626.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO sh1A rep2 (Embryo, Hi-C)
 
     track tads3dgb_627
@@ -130,7 +130,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/627.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO scr DS rep1 (Embryo, Hi-C)
 
     track tads3dgb_628
@@ -140,7 +140,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/628.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO scr DS rep2 (Embryo, Hi-C)
 
     track tads3dgb_629
@@ -150,7 +150,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/629.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO sh1A DS rep1 (Embryo, Hi-C)
 
     track tads3dgb_630
@@ -160,7 +160,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/630.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 6KO sh1A DS rep2 (Embryo, Hi-C)
 
     track tads3dgb_631
@@ -170,7 +170,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/631.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> Spleen WT (Blood, Hi-C)
 
     track tads3dgb_632
@@ -180,7 +180,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/632.bb
     color 254,75,173
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> Spleen KO (Blood, Hi-C)
 
     track tads3dgb_645
@@ -190,7 +190,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/645.bb
     color 6,218,147
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> EBKO DNs All (Thymus, Hi-C)
 
     track tads3dgb_673
@@ -200,7 +200,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/673.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> mESC rep1 (Embryo, Hi-C)
 
     track tads3dgb_674
@@ -210,7 +210,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/674.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> mESC rep2 (Embryo, Hi-C)
 
     track tads3dgb_675
@@ -220,7 +220,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/675.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 2i rep1 (Embryo, Hi-C)
 
     track tads3dgb_676
@@ -230,7 +230,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/676.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> 2i rep2 (Embryo, Hi-C)
 
     track tads3dgb_677
@@ -240,7 +240,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/677.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> EPSC rep1 (Embryo, Hi-C)
 
     track tads3dgb_678
@@ -250,7 +250,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/678.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> EPSC rep2 (Embryo, Hi-C)
 
     track tads3dgb_679
@@ -260,7 +260,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/679.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> RA rep1 (Embryo, Hi-C)
 
     track tads3dgb_680
@@ -270,7 +270,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/680.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> RA rep2 (Embryo, Hi-C)
 
     track tads3dgb_712
@@ -280,7 +280,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/712.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> XEN R1 (Embryo, Hi-C)
 
     track tads3dgb_713
@@ -290,7 +290,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/713.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> XEN R2 (Embryo, Hi-C)
 
     track tads3dgb_714
@@ -300,7 +300,7 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/714.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> TSC R1 (Embryo, Hi-C)
 
     track tads3dgb_715
@@ -310,6 +310,6 @@ html tads3dgb
     type bigBed 4
     bigDataUrl /gbdb/mm10/bbi/tad/tads3dgb/715.bb
     color 118,158,101
-    visibility dense
+    visibility pack
     mouseOver <b>3DGB TAD domain:</b> TSC R2 (Embryo, Hi-C)
 

@@ -1,0 +1,32 @@
+# #38027 -- with any font other than Bitmap, turning the ideogram on or off changed how a
+# packed track laid out its rows. Pack mode decides the rows by measuring item labels,
+# and the measuring used whichever text engine happened to be loaded. FreeType was loaded
+# only when an image was made, so with the ideogram on (its image made first) labels were
+# measured in FreeType, and with it off they were measured in the bitmap font and drawn in
+# FreeType. Fixed by bd85159b36d (merged as a3cffed60a2), which loads the chosen engine in
+# initTl() before anything is measured. Both commits are in v503_branch and not in
+# v502_branch.
+#
+# The recipe is the one from the ticket that Jairo verified on hgwbeta: hg38
+# chr12:6,500,000-6,700,000, knownGene in pack, pix=850, Helvetica at size 8. Helvetica is
+# also what a fresh cart gets on genome-test and the RR, so this is the ordinary user's case.
+#
+# The image is the same height both ways on the fixed build, 345 pixels. On v502 the
+# ideogram-off view packs knownGene into one more row and comes out 355. The ideogram
+# is its own image, outside #imgTbl, so it adds nothing to either number.
+#
+# The number is tied to the knownGene data in that window. When a GENCODE update changes
+# it, both steps fail together showing the SAME new height, and the fix is to put that
+# height in both. Two DIFFERENT heights is this bug back.
+proof:
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): ideogram on 345px, ideogram off 355px (one more knownGene row). Passes on genome-test, 345px both ways"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr12:6500000-6700000&pix=850&textFont=Helvetica&textSize=8&ideogram=1&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true, height: "=345"}
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr12:6500000-6700000&pix=850&textFont=Helvetica&textSize=8&ideogram=0&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true, height: "=345"}

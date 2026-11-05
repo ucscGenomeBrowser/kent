@@ -6,7 +6,9 @@
 #include "errCatch.h"
 #include "grp.h"
 #include "hdb.h"
+#include "hgConfig.h"
 #include "hgFind.h"
+#include "bigBedFind.h"
 #include "htmlSanitize.h"
 #include "htmshell.h"
 #include "hubConnect.h"
@@ -74,6 +76,15 @@ void hgPositionsJson(struct jsonWrite *jw, char *db, struct hgPositions *hgp, st
 struct hgPosTable *table;
 jsonWriteListStart(jw, "positionMatches");
 struct trackDb *tdbList = NULL;
+// Opened lazily, on the first RefSeq/refGene hit (most searches never need it), and
+// sharing tdbList with the tdbForTrack calls below so it costs at most one extra
+// trackDb load per request, not a second one on top of theirs.
+struct maneLookup *maneLookup = NULL;
+boolean maneLookupAttempted = FALSE;
+boolean measureTiming = FALSE;
+if (cart)
+    measureTiming = cartUsualBoolean(cart, "measureTiming", FALSE);
+long maneLookupTimeMs = 0;
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
@@ -126,7 +137,15 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             if (tdb && tdb->parent)
                 {
                 if (tdbIsSuperTrackChild(tdb))
-                    jsonWriteStringf(jw, "extraSel", "%s=show&", tdb->parent->track);
+                    {
+                    struct dyString *dy = dyStringNew(0);
+                    struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+                    for (super = supers; super != NULL; super = super->next)
+                        dyStringPrintf(dy, "%s=show&", super->name);
+                    slNameFreeList(&supers);
+                    jsonWriteString(jw, "extraSel", dy->string);
+                    dyStringFree(&dy);
+                    }
                 else
                     {
                     // tdb is a subtrack of a composite or a view
@@ -138,6 +157,39 @@ for (table = hgp->tableList; table != NULL; table = table->next)
             jsonWriteString(jw, "posName", htmlEncode(pos->name));
             jsonWriteString(jw, "highlight", pos->highlight);
             jsonWriteBoolean(jw, "canonical", pos->canonical);
+            // MANE annotation only applies to RefSeq transcript hits (the pseudo-HGVS
+            // gene-symbol + codon-range search returns ncbiRefSeq*/refGene matches keyed
+            // by "/"-joined NP_ protein accessions in pos->name).
+            if (cfgOptionBooleanDefault("showManeInSearch", FALSE) && pos->chrom != NULL &&
+                (startsWith("ncbiRefSeq", trackName) || sameString("refGene", trackName)))
+                {
+                if (!maneLookupAttempted)
+                    {
+                    long maneOpenT0 = clock1000();
+                    maneLookup = maneLookupOpen(db, &tdbList);
+                    maneLookupTimeMs += clock1000() - maneOpenT0;
+                    maneLookupAttempted = TRUE;
+                    }
+                if (maneLookup != NULL)
+                    {
+                    struct slName *protAccList = slNameListFromString(pos->name, '/');
+                    long maneT0 = clock1000();
+                    char *maneProtAcc = NULL;
+                    char *maneStatus = maneStatusForRegion(maneLookup, pos->chrom,
+                                                           pos->chromStart, pos->chromEnd,
+                                                           protAccList, &maneProtAcc);
+                    maneLookupTimeMs += clock1000() - maneT0;
+                    if (maneStatus != NULL)
+                        {
+                        jsonWriteString(jw, "maneStatus", htmlEncode(maneStatus));
+                        // the single accession that is the actual MANE transcript, since
+                        // pos->name/posName above may be a "/"-joined group of transcripts
+                        // that all share this genomic footprint
+                        jsonWriteString(jw, "maneProtAcc", htmlEncode(maneProtAcc));
+                        }
+                    slFreeList(&protAccList);
+                    }
+                }
             if (pos->description)
                 {
                 stripString(pos->description, "\n");
@@ -152,6 +204,9 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         }
     }
     jsonWriteListEnd(jw); // end positionMatches
+if (measureTiming && maneLookupAttempted)
+    jsonWriteNumber(jw, "maneLookupTimeMs", maneLookupTimeMs);
+maneLookupClose(&maneLookup);
 }
 
 static struct hgPositions *collapseHgpList(struct hgPositions *hgpList, struct jsonWrite *jw, char *searchTerm, char *db)
@@ -463,10 +518,19 @@ if (tdb->parent && fieldOk("parent", fieldHash))
     if (tdbIsSuperTrackChild(tdb))
         {
         // Supertracks have been omitted from fullTrackList, so add the supertrack object's
-        // non-parent/child info here.
-        jsonWriteObjectStart(jwNew, "parent");
-        writeTdbSimple(jwNew, tdb->parent, fieldHash);
-        jsonWriteObjectEnd(jwNew);
+        // non-parent/child info here.  A supertrack may sit inside another supertrack, which
+        // is missing from the list for the same reason, so nest the whole chain.
+        int depth = 0;
+        struct trackDb *ancestor;
+        for (ancestor = tdb->parent; ancestor != NULL && tdbIsSuperTrack(ancestor);
+             ancestor = ancestor->parent)
+            {
+            jsonWriteObjectStart(jwNew, "parent");
+            writeTdbSimple(jwNew, ancestor, fieldHash);
+            depth++;
+            }
+        while (depth-- > 0)
+            jsonWriteObjectEnd(jwNew);
         }
     else
         // Just the name so we don't have infinite loops.
@@ -675,8 +739,13 @@ if (htmlPath != NULL)
 	char *fetched = lineFileReadAll(lf);
 	lineFileClose(&lf);
 	/* This one came in over the network from a hub, so print only what we allow. */
-	htmlString = htmlSanitize(fetched);
-	freeMem(fetched);
+	if (hubHtmlSanitizeOn())
+	    {
+	    htmlString = htmlSanitize(fetched);
+	    freeMem(fetched);
+	    }
+	else
+	    htmlString = fetched;
 	}
     }
 return htmlString;

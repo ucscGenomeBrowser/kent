@@ -27,6 +27,7 @@
 #include "regexHelper.h"
 #include "suggest.h"
 #include "trackHub.h"
+#include "htmlSanitize.h"
 #include "web.h"
 #include "botDelay.h"
 #include "genark.h"
@@ -54,6 +55,13 @@ if (errCatchStart(errCatch))
     char *htmlPath = hHtmlPath(db);
     if (isNotEmpty(htmlPath))
         descText = udcFileReadAll(htmlPath, NULL, 0, NULL);
+    /* A hub's page gets the same treatment here as everywhere else we show one. */
+    if (descText != NULL && trackHubDatabase(db) && hubHtmlSanitizeOn())
+        {
+        char *clean = htmlSanitize(descText);
+        freeMem(descText);
+        descText = clean;
+        }
     }
 errCatchEnd(errCatch);
 // Just ignore errors for now.
@@ -781,9 +789,10 @@ struct gHubMatch
     char *scientificName;
     char *commonName;
     unsigned priority; // for ranking, currently unused
+    boolean isReference; // TRUE if assemblyList.refSeqCategory == 'reference'
     };
 
-static struct gHubMatch *gHubMatchNew(char *acc, char *hubUrl, char *asmName, char *scientificName, char *commonName, unsigned priority)
+static struct gHubMatch *gHubMatchNew(char *acc, char *hubUrl, char *asmName, char *scientificName, char *commonName, unsigned priority, boolean isReference)
 /* Allocate and return a description of an assembly hub db. */
 {
 struct gHubMatch *match;
@@ -794,6 +803,7 @@ match->asmName = cloneString(asmName);
 match->scientificName = cloneString(scientificName);
 match->commonName = cloneString(commonName);
 match->priority = priority;
+match->isReference = isReference;
 return match;
 }
 
@@ -1024,6 +1034,7 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
     jsonWriteString(jw, "db", gHubMatch->asmName);
     jsonWriteString(jw, "hubUrl", gHubMatch->hubUrl);
     jsonWriteString(jw, "scientificName", gHubMatch->scientificName);
+    jsonWriteBoolean(jw, "isReference", gHubMatch->isReference);
     // Add a category label for customized autocomplete-with-categories.
     jsonWriteString(jw, "category", "UCSC GenArk - bulk-annotated assemblies from NCBI Genbank/RefSeq");
     jsonWriteString(jw, "value", gHubMatch->asmName);
@@ -1035,6 +1046,17 @@ for (gHubMatch = gHubMatchList;  gHubMatch != NULL;  gHubMatch = gHubMatch->next
 
 /* maximum limit of how many matches to display from genark */
 #define GENARK_LIMIT 20
+
+static char *devAlphaHubTxt(char *hubUrl)
+/* On hgwdev, genome-test and hgwdev sandboxes, GenArk hubs are staged under
+ * alpha.hub.txt instead of hub.txt.  On those hosts, swap the trailing
+ * hub.txt for alpha.hub.txt; otherwise return an unchanged copy.
+ * Result is always newly allocated; free when done. */
+{
+if (hIsPrivateHost())
+    return replaceChars(hubUrl, "hub.txt", "alpha.hub.txt");
+return cloneString(hubUrl);
+}
 
 static struct gHubMatch *filterGenarkMatches(char *genarkHubUrl, struct genark *matchList)
 /* Turn the sql results into a struct gHubMatch list */
@@ -1049,7 +1071,9 @@ for (match = matchList; match != NULL; match = match->next)
     // the match contains tab-sep accession, hubUrl, asmName, scientificName, commonName
     char hubUrl[PATH_LEN+1];
     safef(hubUrl, sizeof(hubUrl), "%s/%s", genarkHubUrl, match->hubUrl);
-    slAddHead(&ret, gHubMatchNew(match->gcAccession, hubUrl, match->asmName, match->scientificName, match->commonName, -1));
+    char *finalHubUrl = devAlphaHubTxt(hubUrl);
+    slAddHead(&ret, gHubMatchNew(match->gcAccession, finalHubUrl, match->asmName, match->scientificName, match->commonName, -1, FALSE));
+    freeMem(finalHubUrl);
     if (c > GENARK_LIMIT)
 	break;
     }
@@ -1081,7 +1105,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 	++c;
 	char genarkUrl[PATH_MAX];
 	safef(genarkUrl, sizeof(genarkUrl), "%s/%s", genarkPrefix, el->hubUrl);
-	slAddHead(&ret, gHubMatchNew(el->name, genarkUrl, NULL, el->scientificName, el->commonName, *el->priority));
+	char *finalHubUrl = devAlphaHubTxt(genarkUrl);
+	boolean isReference = FALSE;
+	if (cfgOptionBooleanDefault("hgGateway.showRefBadge", FALSE) && isNotEmpty(el->refSeqCategory))
+	    {
+	    char rscBuf[64];
+	    safecpy(rscBuf, sizeof(rscBuf), el->refSeqCategory);
+	    isReference = sameWord(trimSpaces(rscBuf), "reference");
+	    }
+	slAddHead(&ret, gHubMatchNew(el->name, finalHubUrl, NULL, el->scientificName, el->commonName, *el->priority, isReference));
+	freeMem(finalHubUrl);
 	}
 	else
 	{

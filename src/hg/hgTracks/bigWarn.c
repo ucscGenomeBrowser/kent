@@ -117,19 +117,21 @@ int bigWarnTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height. Called before and after drawItems.
  * Must set the following variables: height, lineHeight, heightPer. */
 {
-if (tg->height == 0)  // since this gets called more that once, but we should calculate the same thing each time, don't re-do it.
-    {    
-    tg->heightPer = tl.fontHeight;        /* Height per item line minus border. */
-    tg->lineHeight = tg->heightPer+4;     /* Height per item line including border. */ 
+/* Work this out every time rather than keeping the first answer.  The message decides the
+ * height, so the answer does not change, but a track that was sized before it failed
+ * arrives here with that size already set: a multiWig child inside a composite is sized
+ * by limitVisibility during the composite load, and bigDrawWarning would then centre the
+ * message inside a band of that size instead of the row it is drawing into, which puts
+ * the text below the row and leaves a yellow band with nothing on it.  refs #38560 */
+tg->heightPer = tl.fontHeight;        /* Height per item line minus border. */
+tg->lineHeight = tg->heightPer+4;     /* Height per item line including border. */
 
-    /* count lines in reformated warning msg */
-    char *errMsg = bigWarnReformat(tg->networkErrMsg);
-    int n = bigWarnNumLines(errMsg);
-    freeMem(errMsg);
+/* count lines in reformated warning msg */
+char *errMsg = bigWarnReformat(tg->networkErrMsg);
+int n = bigWarnNumLines(errMsg);
+freeMem(errMsg);
 
-    tg->height = tg->lineHeight * n; /* Total height - must be set. */
-
-    }
+tg->height = tg->lineHeight * n; /* Total height - must be set. */
 return tg->height;
 }
 

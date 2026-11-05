@@ -1,0 +1,32 @@
+# gnomAD long-read release 0.1, SV and TR tracks (gnomadLrSv, gnomadLrTr), Claude/max, 2026-10-22
+# Data: PacBio HiFi, All of Us (1,027 samples, sites-only VCFs) and HPRC/HGSVC (292 samples, with genotypes)
+# Announcement: https://gnomad.broadinstitute.org/news/2026-10-long-read-genome-data-in-gnomad/
+
+mkdir -p /hive/data/genomes/hg38/bed/gnomad/lr
+cd /hive/data/genomes/hg38/bed/gnomad/lr
+# 24 per-chromosome VCFs + tbi per cohort, 100 GB (aou/) and 250 GB (hgsvc_hprc/), plus README.md
+~max/software/aws2/v2/current/bin/aws s3 sync "s3://gnomad-public-us-east-1/release/lr/0.1/vcf/" ./
+
+# SVs = allele_type del/ins/dup with |allele_length| >= 50, TRs = allele_type trv.
+# The two cohorts are merged: SVs by POS/REF/ALT, TRs by TRID. All FILTER values are kept.
+# Runs 24 chromosomes in parallel, about 10 minutes, then writes gnomadLrSv.bb and gnomadLrTr.bb
+time ~/kent/src/hg/makeDb/scripts/gnomadLr/gnomadLrBuild.sh > build.log 2>&1
+
+# input records and output items, summed over chromosomes
+awk -F'\t' '{k=$2"\t"$3"\t"$4; s[k]+=$5} END{for(k in s) print k"\t"s[k]}' counts.tsv | sort
+#  input  aou  del   194855
+#  input  aou  dup    10868
+#  input  aou  ins   649438
+#  input  aou  trv  4599174
+#  input  hg   del   111808
+#  input  hg   dup     9389
+#  input  hg   ins   210532
+#  input  hg   trv  2447044
+#  output sv   all  1057355   (129,535 SV alleles are in both cohorts)
+#  output tr   all  4601703   (2,444,515 TR loci are in both cohorts)
+# 539 SVs and 4,357 TR loci have AN=0 (no genotyped sample); their AF is set to 0.
+
+cut -f10 gnomadLrSv.bed | sort | uniq -c
+#  250332 DEL
+#   17774 DUP
+#  789249 INS

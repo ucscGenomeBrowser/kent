@@ -345,7 +345,7 @@ if (isNotEmpty(txRef))
     {
     // Watch out for overlapping blocks due to ribosomal slippage as in SARS-CoV-2.
     int fudge = 3;
-    int bufLen = gEnd - gStart + 1 + fudge;
+    size_t bufLen = bufSizeForSplicedPlusGInsBases(txAli, gStart, gEnd) + fudge;
     char splicedGSeq[bufLen];
     splicedGSeq[0] = '\0';
     spliceGenomicInRange(gSeqWin, gStart, gEnd, txAli, FALSE, splicedGSeq, sizeof(splicedGSeq));
@@ -885,17 +885,36 @@ boolean isRc = (pslQStrand(txAli) == '-');
 // Genomic coords and sequence for variant -- trim identical bases from ref and alt if any:
 uint gStart = gBed3->chromStart, gEnd = gBed3->chromEnd;
 int refLen = gEnd - gStart;
-char gRef[refLen+1];
-seqWindowCopy(gSeqWin, gStart, refLen, gRef, sizeof(gRef));
 // ALT='*' means the variant is irrelevant because it falls in a deleted region.  Treat as no-change.
-if (sameString(gAlt, "*"))
+boolean altIsRef = sameString(gAlt, "*");
+if (altIsRef)
     altLen = refLen;
 char gAltCpy[altLen+1];
-safecpy(gAltCpy, sizeof(gAltCpy), (sameString(gAlt, "*") ? gRef: gAlt));
+if (altIsRef)
+    seqWindowCopy(gSeqWin, gStart, refLen, gAltCpy, sizeof(gAltCpy));
+else
+    safecpy(gAltCpy, sizeof(gAltCpy), gAlt);
+// if ref is much longer than alt, only the first and last altLen bases of ref can be trimmed
+boolean clampSeq = refLen > 2*altLen;
+int refBufLen = clampSeq ? 2*altLen : refLen;
+char gRef[refBufLen+1];
+if (clampSeq)
+    {
+    // the first altLen bases of ref
+    seqWindowCopy(gSeqWin, gStart, altLen, gRef, sizeof(gRef));
+    // the last altLen bases of ref
+    seqWindowCopy(gSeqWin, gEnd-altLen, altLen, gRef + altLen, sizeof(gRef) - altLen);
+    }
+else
+    seqWindowCopy(gSeqWin, gStart, refLen, gRef, sizeof(gRef));
 if (differentString(gRef, gAltCpy))
+    {
     // Trim identical bases from start and end -- unless this is an assertion that there is
     // no change, in which case it's good to keep the range on which that assertion was made.
     trimRefAlt(gRef, gAltCpy, &gStart, &gEnd, &refLen, &altLen);
+    }
+// gRef may only hold the ends of ref, so set refLen from the trimmed coords
+refLen = gEnd - gStart;
 // Even if we may later shift the variant position in the direction of transcription, first do
 // an initial projection to find exon boundaries and detect mismatch between genome and tx.
 vpPosGenoToTx(isRc ? gEnd : gStart, txAli, &vpTx->start, FALSE);
@@ -910,7 +929,13 @@ if (vpTx->gAlt == NULL)
 if (vpTx->txAlt == NULL)
     vpTxSetTxAlt(vpTx, gSeqWin, gStart, gEnd, gAltCpy, isRc);
 if (vpTx->gRef == NULL)
-    vpTx->gRef = cloneMaybeRc(gRef, isRc);
+    {
+    gSeqWin->fetch(gSeqWin, gBed3->chrom, gStart, gEnd);
+    vpTx->gRef = needLargeMem(refLen+1);
+    seqWindowCopy(gSeqWin, gStart, refLen, vpTx->gRef, refLen+1);
+    if (isRc)
+        reverseComplement(vpTx->gRef, refLen);
+    }
 return vpTx;
 }
 

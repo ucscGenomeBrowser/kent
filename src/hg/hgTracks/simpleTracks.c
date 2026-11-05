@@ -16,6 +16,7 @@
 #include "bed.h"
 #include "basicBed.h"
 #include "htmlColor.h"
+#include "errCatch.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -41,6 +42,7 @@
 #include "hash.h"
 #include "decorator.h"
 #include "decoratorUi.h"
+#include "htmlSanitize.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -1137,9 +1139,13 @@ va_start(args, format);
 struct dyString *dy = dyStringNew(0);
 dyStringVaPrintf(dy, format, args);
 va_end(args);
+char *sanitized = htmlSanitize(dy->string);
 char *encoded = attributeEncode(dy->string);
-hPrintf(" TITLE=\"%s\" data-tooltip=\"%s\"", encoded, encoded);
+char *encSanitized = attributeEncode(sanitized);
+hPrintf(" TITLE=\"%s\" data-tooltip=\"%s\"", encoded, encSanitized);
 freeMem(encoded);
+freeMem(sanitized);
+freeMem(encSanitized);
 dyStringFree(&dy);
 }
 
@@ -1224,20 +1230,50 @@ dyStringFree(&ui);
 dyStringFree(&id);
 }
 
+char *labelWithParents(struct trackDb *tdb, char *label)
+/* If hg.conf mouseoverParentLabels is on, return label prefixed with the shortLabels of the
+ * containers tdb sits in, e.g. "Container > label" (composite views skipped), so a mouseover
+ * or the drawn long label says where to find a subtrack in the track list.  Otherwise
+ * return a copy of label.
+ * Free with freeMem. */
+{
+static int doPrefix = -1;
+if (doPrefix < 0)
+    doPrefix = cfgOptionBooleanDefault("mouseoverParentLabels", FALSE);
+if (!doPrefix || tdb == NULL)
+    return cloneString(label);
+struct slName *names = NULL;
+struct trackDb *parent;
+for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+    if (!tdbIsCompositeView(parent) && parent->shortLabel != NULL)
+        slNameAddHead(&names, parent->shortLabel);   // ends up outermost first
+if (names == NULL)
+    return cloneString(label);
+struct dyString *dy = dyStringNew(0);
+struct slName *name;
+for (name = names; name != NULL; name = name->next)
+    dyStringPrintf(dy, "%s > ", name->name);
+dyStringAppend(dy, label);
+slNameFreeList(&names);
+return dyStringCannibalize(&dy);
+}
+
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
                      struct track *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
 char buf[4096];
+char *label = labelWithParents(curGroup->tdb, curGroup->shortLabel);
 if (tdbIsCompositeChild(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks",
-          curGroup->shortLabel);
+          label);
 else if (tdbIsComposite(curGroup->tdb))
     safef(buf, sizeof(buf),"Click to alter the maximum display mode density for all %s subtracks",
-          curGroup->shortLabel);
+          label);
 else
-    safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
+    safef(buf, sizeof(buf),"Click to alter the display density of %s", label);
+freeMem(label);
 
 mapBoxReinvoke(hvg, x, y, width, height, curGroup, TRUE, NULL, 0, 0, buf, NULL);
 }
@@ -1332,7 +1368,13 @@ if (x < xEnd)
         hPrintf("\" ");
         if (statusLine != NULL)
             {
-            hPrintf(" TITLE='%s' data-tooltip='%s' ", item, statusLine);
+            char *encItem = attributeEncode(item);
+            char *sanitized = htmlSanitize(statusLine);
+            char *encoded = attributeEncode(sanitized);
+            hPrintf(" TITLE='%s' data-tooltip='%s' ", encItem, encoded);
+            freeMem(sanitized);
+            freeMem(encoded);
+            freeMem(encItem);
             }
         hPrintf("%s>\n", dyStringContents(id));
         }
@@ -1773,12 +1815,135 @@ static struct glyphShape glyphShapes[] = {
 };
 
 
+boolean isEndGlyph(glyphType glyph)
+/* Return TRUE for the BarLeft/BarRight and ArrLeft/ArrRight glyphs, which are drawn at one end
+ * of the decoration instead of at its center. */
+{
+return glyph == GLYPH_BAR_LEFT || glyph == GLYPH_BAR_RIGHT ||
+       glyph == GLYPH_ARR_LEFT || glyph == GLYPH_ARR_RIGHT;
+}
+
+static boolean isRightEndGlyph(glyphType glyph)
+/* Return TRUE for the end glyphs that are drawn at the right (higher) end */
+{
+return glyph == GLYPH_BAR_RIGHT || glyph == GLYPH_ARR_RIGHT;
+}
+
+boolean endGlyphPixelCoords(int chromStart, int chromEnd, double scale, int xOff, glyphType glyph,
+                            int *pX1, int *pX2)
+/* Get the pixel extent of an end glyph: the left or right end of chromStart-chromEnd,
+ * at most END_GLYPH_MAX_WIDTH pixels and at least 1 pixel wide, clipped to the window.
+ * Returns FALSE if it is not in the window. */
+{
+// doubles, as the unclipped pixel positions can overflow an int when zoomed in
+double x1 = (chromStart-winStart)*scale;
+double x2 = (chromEnd-winStart)*scale;
+double winWidth = (winEnd-winStart)*scale;
+double width = x2 - x1;
+if (width > END_GLYPH_MAX_WIDTH)
+    width = END_GLYPH_MAX_WIDTH;
+if (width < 1)
+    width = 1;
+if (isRightEndGlyph(glyph))
+    x1 = x2 - width;
+else
+    x2 = x1 + width;
+if (x2 <= 0 || x1 >= winWidth)
+    return FALSE;
+if (x1 < 0)
+    x1 = 0;
+if (x2 > winWidth)
+    x2 = winWidth;
+*pX1 = round(x1) + xOff;
+*pX2 = round(x2) + xOff;
+if (*pX2 <= *pX1)
+    *pX2 = *pX1 + 1;
+return TRUE;
+}
+
+void drawScaledEndGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff,
+                        int y, int heightPer, glyphType glyph, char strand, boolean filled,
+                        Color barColor, Color fillColor)
+/* Draw an end glyph on the left or right end of chromStart-chromEnd.  If filled, draw its body
+ * in fillColor: a band for BarLeft/BarRight, an arrow for ArrLeft/ArrRight (a triangle when
+ * narrower than END_GLYPH_ARROW_MIN_WIDTH) that points to the right on the + strand and to
+ * the left on the - strand (outwards if strand is neither).
+ * If not filled, draw the solid bar in barColor on its outer edge, unless that edge is
+ * outside the window. */
+{
+int x1, x2;
+if (!endGlyphPixelCoords(chromStart, chromEnd, scale, xOff, glyph, &x1, &x2))
+    return;
+int width = x2 - x1;
+boolean atRight = isRightEndGlyph(glyph);
+if (filled && (glyph == GLYPH_BAR_LEFT || glyph == GLYPH_BAR_RIGHT))
+    {
+    // inset the band, so the bar sticks out above and below it
+    int inset = (heightPer >= 8) ? 2 : 0;
+    hvGfxBox(hvg, x1, y+inset, width, heightPer-2*inset, fillColor);
+    }
+else if (filled)
+    {
+    // an arrow with a shaft of half the item height and a head as long as the item is high,
+    // or only the head, a triangle, if there is not enough room for the shaft
+    boolean pointsRight = (strand == '+' || (strand != '-' && atRight));
+    int dir = pointsRight ? 1 : -1;
+    int baseX = pointsRight ? x1 : x2-1;
+    int tipX = pointsRight ? x2-1 : x1;
+    int yTop = y, yBottom = y+heightPer-1;
+    boolean withShaft = (width >= END_GLYPH_ARROW_MIN_WIDTH && heightPer >= 6);
+    int headX = withShaft ? tipX - dir*heightPer : baseX;
+    int shaftTop = yTop + heightPer/4, shaftBottom = yBottom - heightPer/4;
+    struct gfxPoly *poly = gfxPolyNew();
+    if (withShaft)
+        {
+        gfxPolyAddPoint(poly, baseX, shaftTop);
+        gfxPolyAddPoint(poly, headX, shaftTop);
+        }
+    gfxPolyAddPoint(poly, headX, yTop);
+    gfxPolyAddPoint(poly, tipX, y + (heightPer-1)/2);
+    if ((heightPer-1) % 2)  // even height: a two pixel tip, so the head is symmetric
+        gfxPolyAddPoint(poly, tipX, y + heightPer/2);
+    gfxPolyAddPoint(poly, headX, yBottom);
+    if (withShaft)
+        {
+        gfxPolyAddPoint(poly, headX, shaftBottom);
+        gfxPolyAddPoint(poly, baseX, shaftBottom);
+        }
+    hvGfxDrawPoly(hvg, poly, fillColor, TRUE);
+    gfxPolyFree(&poly);
+    }
+else
+    {
+    if ((atRight && chromEnd > winEnd) || (!atRight && chromStart < winStart))
+        return;
+    int barWidth = min(END_GLYPH_BAR_WIDTH, width);
+    int barX = atRight ? x2 - barWidth : x1;
+    // the bar also takes the one pixel gaps to the rows above and below
+    hvGfxBox(hvg, barX, y-1, barWidth, heightPer+2, barColor);
+    // when the item is so narrow that only the bar shows, a small flag on the side of the
+    // item shows which way it goes from the bar
+    if (width <= END_GLYPH_BAR_WIDTH && heightPer >= 6)
+        {
+        int flagX = atRight ? barX - END_GLYPH_FLAG_WIDTH : barX + barWidth;
+        hvGfxBox(hvg, flagX, y + heightPer/4, END_GLYPH_FLAG_WIDTH, heightPer - 2*(heightPer/4),
+                 barColor);
+        }
+    }
+}
+
 void drawScaledGlyph(struct hvGfx *hvg, int chromStart, int chromEnd, double scale, int xOff, int y,
                       int heightPer, glyphType glyph, boolean filled, Color outlineColor, Color fillColor)
 /* Draw a glyph as a circle/polygon.  If filled, draw as with fillColor,
  * which may have transparency.
  */
 {
+if (isEndGlyph(glyph))
+    {
+    drawScaledEndGlyph(hvg, chromStart, chromEnd, scale, xOff, y, heightPer, glyph, '.', filled,
+                       outlineColor, fillColor);
+    return;
+    }
 int glyphHeight = heightPer-1;
 int startX, endX;
 double middleX, middleY = y+heightPer/2.0;
@@ -1840,6 +2005,14 @@ if (sameWordOk(glyphStr, GLYPH_STRING_X))
     return GLYPH_X;
 if (sameWordOk(glyphStr, GLYPH_STRING_1PX))
     return GLYPH_1PX;
+if (sameWordOk(glyphStr, GLYPH_STRING_BAR_LEFT))
+    return GLYPH_BAR_LEFT;
+if (sameWordOk(glyphStr, GLYPH_STRING_BAR_RIGHT))
+    return GLYPH_BAR_RIGHT;
+if (sameWordOk(glyphStr, GLYPH_STRING_ARR_LEFT))
+    return GLYPH_ARR_LEFT;
+if (sameWordOk(glyphStr, GLYPH_STRING_ARR_RIGHT))
+    return GLYPH_ARR_RIGHT;
 
 return GLYPH_CIRCLE;
 }
@@ -2715,7 +2888,7 @@ else
     boolean isNotLastExon = (exonIntronNumber<numExons);
 
     static const char *phasePrefix  = 
-        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle-o'></i></a></b>";
+        "<b><a target=_blank href='../goldenPath/help/codonPhase.html'> <i class='fa fa-question-circle'></i></a></b>";
 
     if (isNotLastExon)
         {
@@ -2997,7 +3170,112 @@ else
     return splicedBaseCount(lf, g + 1, lf->tallEnd) + 1;
 }
 
-static void exonCdsNote(struct linkedFeatures *lf, int s, int e, char *buf, int bufSize)
+static void sfCdsRange(struct linkedFeatures *lf, struct simpleFeature *sf, int *retLo, int *retHi)
+/* The c. positions of the first and last base of sf, low number first.  On the minus strand
+ * c. counts the other way along the genome, so the two ends swap. */
+{
+int a = cdsMrnaPos(lf, sf->start), b = cdsMrnaPos(lf, sf->end - 1);
+*retLo = min(a, b);
+*retHi = max(a, b);
+}
+
+static void codonCdsRange(struct linkedFeatures *lf, struct simpleFeature *prev,
+                          struct simpleFeature *codon, int *retCStart, int *retCEnd)
+/* The HGVS c. range of one codon from lf->codons, measured rather than computed as
+ * 3*codonIndex-2 .. 3*codonIndex.  The two part company whenever the annotated CDS does not
+ * begin on a codon boundary: exonFrames says so, and baseColorCodonsFromGenePred then makes
+ * codon 1 short instead of shifting every number after it, so from there on the arithmetic
+ * is off by the missing bases.  A codon split across an intron is two list entries sharing
+ * one codonIndex and they are neighbours in the list, so prev and next are all that have to
+ * be looked at.  prev is the list entry before codon, NULL at the head of the list. */
+{
+int lo, hi;
+sfCdsRange(lf, codon, &lo, &hi);
+struct simpleFeature *neighbors[2];
+neighbors[0] = prev;
+neighbors[1] = codon->next;
+int i;
+for (i = 0;  i < ArraySize(neighbors);  i++)
+    {
+    struct simpleFeature *other = neighbors[i];
+    if ((other == NULL) || (other->codonIndex != codon->codonIndex))
+        continue;
+    int oLo, oHi;
+    sfCdsRange(lf, other, &oLo, &oHi);
+    lo = min(lo, oLo);
+    hi = max(hi, oHi);
+    }
+*retCStart = lo;
+*retCEnd = hi;
+}
+
+static int cdsFirstCodonBases(struct track *tg, struct linkedFeatures *lf)
+/* How many coding bases the transcript's first codon has: 3 normally, but 1 or 2 when the
+ * annotated CDS starts part way into a codon, as a 5'-truncated transcript's does.  genePred
+ * records that as the frame of the first coding exon, and baseColorCodonsFromGenePred numbers
+ * the codons accordingly - a short codon 1, not a shifted numbering - so anything turning a
+ * c. position into a p. number has to know about it.  3 when there is no frame to read, which
+ * is also the right answer for every transcript whose CDS starts on a codon boundary. */
+{
+char *type = (tg->tdb != NULL) ? tg->tdb->type : NULL;
+if (type == NULL || !(startsWith("genePred", type) || startsWith("bigGenePred", type)))
+    return 3;
+struct genePred *gp = (struct genePred *)(lf->original);
+/* Same test baseColorCodonsFromGenePred uses to decide whether to trust exonFrames. */
+if (gp == NULL || gp->exonFrames == NULL || gp->optFields < genePredExonFramesFld)
+    return 3;
+int i, i0, iN, iInc;
+if (lf->orientation >= 0)
+    { i0 = 0;  iN = gp->exonCount;  iInc = 1; }
+else
+    { i0 = gp->exonCount - 1;  iN = -1;  iInc = -1; }
+for (i = i0;  i != iN;  i += iInc)
+    {
+    if (gp->exonEnds[i] <= gp->cdsStart || gp->exonStarts[i] >= gp->cdsEnd)
+        continue;       // an all-UTR exon, ahead of the first coding one
+    return (gp->exonFrames[i] > 0) ? 3 - gp->exonFrames[i] : 3;
+    }
+return 3;
+}
+
+static int codonForCdsPos(int firstCodonBases, int c)
+/* The 1-based codon number that c. position c falls in.  With a full first codon this is the
+ * familiar (c+2)/3; with a short one every codon after it is shifted. */
+{
+if (c <= firstCodonBases)
+    return 1;
+return 2 + (c - firstCodonBases - 1) / 3;
+}
+
+static boolean exonCodonRange(struct linkedFeatures *lf, int cdS, int cdE,
+                              int *retP5, int *retP3)
+/* First and last codon number covering the coding interval [cdS, cdE), read off lf->codons
+ * so that the exon's mouseover and the per-codon mouseovers inside it cannot disagree.
+ * FALSE when the track has no codon list, which is when it is not drawing codons at all and
+ * so has no per-codon mouseover to agree with. */
+{
+if (lf->codons == NULL)
+    return FALSE;
+int lo = 0, hi = 0;
+struct simpleFeature *sf;
+for (sf = lf->codons;  sf != NULL;  sf = sf->next)
+    {
+    if (sf->codonIndex <= 0 || sf->start >= cdE || sf->end <= cdS)
+        continue;   // a UTR block (codonIndex 0), or a codon outside this exon
+    if (lo == 0 || sf->codonIndex < lo)
+        lo = sf->codonIndex;
+    if (sf->codonIndex > hi)
+        hi = sf->codonIndex;
+    }
+if (lo == 0)
+    return FALSE;
+*retP5 = lo;
+*retP3 = hi;
+return TRUE;
+}
+
+static void exonCdsNote(struct track *tg, struct linkedFeatures *lf, int s, int e,
+                        char *buf, int bufSize)
 /* Describe the exon [s,e) of a coding transcript in HGVS c. coordinates: the UTR
  * piece(s) as c.-N / c.*N and the coding piece as a c. range together with the
  * codon (p.) numbers it covers.  This is what the popup shows when we are zoomed
@@ -3029,7 +3307,16 @@ if (cdE > cdS)
     {
     int c5 = cdsMrnaPos(lf, posStrand ? cdS : cdE - 1);
     int c3 = cdsMrnaPos(lf, posStrand ? cdE - 1 : cdS);
-    int p5 = (c5 + 2) / 3, p3 = (c3 + 2) / 3;
+    int p5, p3;
+    if (!exonCodonRange(lf, cdS, cdE, &p5, &p3))
+        {
+        /* No codon list to read the numbers off - the track is zoomed out past the level
+         * that builds one - so count them, taking the same short first codon into account
+         * that the codon list would have. */
+        int firstCodonBases = cdsFirstCodonBases(tg, lf);
+        p5 = codonForCdsPos(firstCodonBases, c5);
+        p3 = codonForCdsPos(firstCodonBases, c3);
+        }
     if (p5 == p3)
         safef(buf + len, bufSize - len, "<b>Codons: </b> c.%d-%d (p.%d)<br>", c5, c3, p5);
     else
@@ -3046,6 +3333,24 @@ if (utr3E > utr3S)
     else
         safef(buf + len, bufSize - len, "<b>3' UTR: </b> c.%s_%s<br>", loBuf, hiBuf);
     }
+}
+
+void exonFramePhases(struct genePred *gp, int exonIx, boolean revStrand,
+                     int *retStartPhase, int *retEndPhase)
+/* Set the codon phase at the start and at the end of exon exonIx (1-based, in genomic order)
+ * from gp->exonFrames.  The end phase is the frame of the next exon along the transcript, so
+ * the exon at the 3' end has none and its end phase is left alone. */
+{
+*retStartPhase = gp->exonFrames[exonIx-1];
+if (!revStrand)
+    {
+    // the last exon has no next exon, so it has no end phase
+    if (exonIx < gp->exonCount)
+        *retEndPhase = gp->exonFrames[exonIx];
+    }
+else
+    if (exonIx>1)
+        *retEndPhase = gp->exonFrames[exonIx-2];
 }
 
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
@@ -3172,16 +3477,7 @@ for (ref = exonList; TRUE; )
             phaseText[0] = 0;
             if ((gp != NULL) && gp->exonFrames && isExon)
                 {
-                startPhase = gp->exonFrames[exonIx-1];
-                if (!revStrand)
-                    {
-                    // the last exon has no next exon, so it has no end phase
-                    if (exonIx < gp->exonCount)
-                        endPhase = gp->exonFrames[exonIx];
-                    }
-                else 
-                    if (exonIx>1)
-                        endPhase = gp->exonFrames[exonIx-2];
+                exonFramePhases(gp, exonIx, revStrand, &startPhase, &endPhase);
                 // construct a string that tells the user about the codon frame situation of this exon
                 makeExonFrameText(exonIntronNumber, numExons, startPhase, endPhase, phaseText);
                 }
@@ -3191,10 +3487,10 @@ for (ref = exonList; TRUE; )
                 // draw mapBoxes for the codons if we are zoomed in far enough
                 if (isExon && lf->codons && zoomedToCdsColorLevel)
                     {
-                    struct simpleFeature *codon;
+                    struct simpleFeature *codon, *prevCodon = NULL;
                     struct dyString *codonDy = dyStringNew(0);
                     int codonS, codonE;
-                    for (codon = lf->codons; codon != NULL; codon = codon->next)
+                    for (codon = lf->codons; codon != NULL; prevCodon = codon, codon = codon->next)
                         {
                         codonS = codon->start; codonE = codon->end;
                         if (codonS > e || codonE < s)
@@ -3226,13 +3522,17 @@ for (ref = exonList; TRUE; )
                                     // if you change this text, make sure you also change hgTracks.js:mouseOverToLabel
                                     if (!isEmpty(existingText))
                                         dyStringPrintf(codonDy, "<b>Transcript: </b> %s<br>", existingText);
-                                    int codonHgvsIx = (codon->codonIndex - 1) * 3;
-                                    if (codonHgvsIx >= 0)
+                                    if (codon->codonIndex > 0)
                                         {
-                                        int cStart = codonHgvsIx + 1;
-                                        int cEnd = codonHgvsIx + 3;
+                                        /* The c. range is measured off the codon's own bases
+                                         * rather than taken as 3*codonIndex-2 .. 3*codonIndex:
+                                         * when the annotated CDS does not start on a codon
+                                         * boundary codon 1 is short, and the arithmetic is
+                                         * then wrong for the whole transcript. */
+                                        int cStart, cEnd;
+                                        codonCdsRange(lf, prevCodon, codon, &cStart, &cEnd);
                                         // a codon is a single amino acid; p. is 1-based like c.
-                                        int pPos = codonHgvsIx / 3 + 1;
+                                        int pPos = codon->codonIndex;
                                         // the one-letter amino acid was stored on the codon when it
                                         // was translated (cds.c); map it to its three-letter code
                                         char aaLetter = codon->codonAa;
@@ -3257,20 +3557,21 @@ for (ref = exonList; TRUE; )
                                          * is which only in that case:  for every other
                                          * transcript there is one count and "Codon" says it. */
                                         boolean shifted = baseColorCodonIsShifted(codon);
-                                        dyStringPrintf(codonDy, "<b>Codon%s: </b> c.%d-%d (p.%d)<br>",
-                                                shifted ? " counted on the genome" : "",
+                                        dyStringPrintf(codonDy, "<b>%s: </b> c.%d-%d (p.%d)<br>",
+                                                shifted ? "Genomic codon number" : "Codon",
                                                 cStart, cEnd, pPos);
                                         if (shifted)
                                             {
                                             int txCStart = (codon->txCodonIndex - 1) * 3 + 1;
                                             dyStringPrintf(codonDy,
-                                                "<b>Counted on the transcript: </b> "
+                                                "<b>Transcript codon number: </b> "
                                                 "c.%d-%d (p.%d)<br>",
                                                 txCStart, txCStart+2, codon->txCodonIndex);
                                             dyStringPrintf(codonDy,
-                                                "<b>Note: </b>This transcript's sequence has an "
-                                                "indel relative to the genome, so the two "
-                                                "numbers differ. "
+                                                "<b>Note: </b>This transcript's sequence has "
+                                                "extra or missing bases compared to the genome "
+                                                "before this codon, so the genomic and transcript "
+                                                "codon numbers differ. "
                                                 "<a target=_blank "
                                                 "href=\"../FAQ/FAQgenes.html#txIndel\">"
                                                 "Help</a><br>");
@@ -3344,7 +3645,7 @@ for (ref = exonList; TRUE; )
                                 // coding transcript, too far out to draw the codons: give the
                                 // exon's cDNA range and the codons it covers, so a c. or p.
                                 // position can be found without zooming into every exon
-                                exonCdsNote(lf, s, e, posBuf, sizeof(posBuf));
+                                exonCdsNote(tg, lf, s, e, posBuf, sizeof(posBuf));
                             posNote = posBuf;
                             }
                         }
@@ -4362,6 +4663,20 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 		    }
 		innerLine(hvg, x1, midY1, w, color);
 		innerLine(hvg, x1, midY2, w, color);
+		// An intron of a spliced alignment, with a few unaligned query bases at the
+		// splice site, is no "region with many differences": leave it to the item's
+		// own mouseover.
+		if (!(intronGap > 0 && tGap >= intronGap && tGap > 5 * qGap))
+		    {
+		    char *other = aliMarkOtherSeqName(tg);
+		    char text[512];
+		    safef(text, sizeof(text), "Double line, gap in both sequences: %d base%s in "
+			  "the genome and %d base%s in the %s lie between these two aligned "
+			  "blocks and do not align to each other. This is usually a region with "
+			  "many differences, but can also be an assembly or sequencing error.",
+			  tGap, (tGap == 1) ? "" : "s", qGap, (qGap == 1) ? "" : "s", other);
+		    addAliMarkMouseOverPx(tg, lf, hvg, x1, y, max(w, 3), heightPer, text);
+		    }
 		}
 	    }
 	if ((vis == tvFull || vis == tvPack) && (intronGap && (qGap == 0) && (tGap >= intronGap)))
@@ -4563,6 +4878,7 @@ else if (drawOpt > baseColorDrawOff)
          * the genome does not give the transcript's own codon numbers.  This alignment is
          * what lets each codon carry both numbers; NULL for a track with no alignment. */
         struct genbankCds txCds;
+        ZeroVar(&txCds);   // stays zeroed when there is no alignment to fill it in
         struct psl *txAli = baseColorTxAliForGenePred(tg, gp, &txCds);
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons),
                 cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE),
@@ -4652,6 +4968,7 @@ static int barbMergePixels = -1;   // max pixel gap between blocks still merged 
 if (barbMergePixels < 0)           // barbs; hg.conf barbMergePixels, 0 disables merging
     barbMergePixels = atoi(cfgOptionDefault("barbMergePixels", "3"));
 Color barbColor = hvGfxContrastingColor(hvg, color);
+barbColor = baseColorMuteBarbColor(hvg, drawOpt, color, barbColor);
 int barbRunX1 = -1;
 int barbRunX2 = -1;
 
@@ -4926,8 +5243,10 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 {
-// Don't bother if we are imageV2 and a dense child.
-if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+// Don't bother if we are imageV2 and a dense child, unless denseClick is on for
+// this track, in which case the dense row is meant to be clickable per item.
+if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)
+||  denseClickEnabled(tg))
     {
     char *directUrl = trackDbSetting(tg->tdb, "directUrl");
     boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
@@ -5678,6 +5997,15 @@ else
     countsToPixelsDown(runs, pre);
 }
 
+void itemCoverageToPixels(struct track *tg, struct preDrawContainer *pre)
+/* Fill pre with the coverage of tg's items over the window, one element per pixel, for a
+ * track drawn as a coverage graph. */
+{
+struct covRuns *runs = countOverlaps(tg);
+countsToPixels(runs, pre);
+covRunsFree(&runs);
+}
+
 static void summaryToPixels(struct bbiSummaryElement *summary, struct preDrawContainer *pre)
 /* Convert bbiSummaryElement array into a preDrawElement array */
 {
@@ -5724,11 +6052,7 @@ wigCart->alwaysZero = TRUE;
 if (tg->summary)
     summaryToPixels(tg->summary, pre);
 else
-    {
-    struct covRuns *runs = countOverlaps(tg);
-    countsToPixels(runs, pre);
-    covRunsFree(&runs);
-    }
+    itemCoverageToPixels(tg, pre);
 
 tg->colorShades = shadesOfGray;
 Color cartColor = colorFromCart(tg, 0);
@@ -5802,6 +6126,58 @@ genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer
                             doButtons);
 }
 
+boolean denseClickEnabled(struct track *tg)
+/* Should a dense row of this track get one clickable map box per item, instead
+ * of a single box that expands the track?  The hg.conf denseClick flag is a
+ * gate over the whole feature: while it is off, which is the default, no track
+ * gets this no matter what its trackDb says.  With the gate on, a track opts in
+ * with a denseClick trackDb setting. */
+{
+if (!cfgOptionBooleanDefault("denseClick", FALSE))
+    return FALSE;
+return trackDbSettingOn(tg->tdb, "denseClick");
+}
+
+static void denseMapItem(struct track *tg, struct hvGfx *hvg, struct slList *item,
+                         int xOff, int y, int width, double scale, char *pixelUsed)
+/* Put down a map box for one item of a dense row, so that a click on it reaches
+ * the item's details page instead of expanding the track.  A dense row can hold
+ * tens of thousands of items, so skip an item whose every pixel already belongs
+ * to an earlier item: that box would sit under the earlier one and could never
+ * be clicked.  This holds the row to at most one box per pixel. */
+{
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int x2 = round((eClp - winStart)*scale) + xOff;
+if (x2 <= x1)
+    x2 = x1 + 1;
+int p1 = x1 - xOff;
+int p2 = x2 - xOff;
+if (p1 < 0)
+    p1 = 0;
+if (p2 > width)
+    p2 = width;
+if (p1 >= p2)
+    return;
+boolean anyFree = FALSE;
+int p;
+for (p = p1;  p < p2;  ++p)
+    {
+    if (!pixelUsed[p])
+        {
+        anyFree = TRUE;
+        pixelUsed[p] = TRUE;
+        }
+    }
+if (!anyFree)
+    return;
+tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+            s, e, x1, y, x2 - x1, tg->heightPer);
+}
+
 static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd,
                                       struct hvGfx *hvg, int xOff, int yOff, int width,
                                       MgFont *font, Color color, enum trackVisibility vis)
@@ -5810,11 +6186,18 @@ static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct slList *item;
 int y = yOff;
+/* In dense the whole row is normally one box that expands the track.  With
+ * denseClick on, each item gets its own box instead; the whole-row box that
+ * doTrackMap puts down afterwards still covers the gaps between items. */
+boolean denseMaps = (vis == tvDense && width > 0 && !tg->mapsSelf && denseClickEnabled(tg));
+char *pixelUsed = (denseMaps ? needMem(width) : NULL);
 for (item = tg->items; item != NULL; item = item->next)
     {
     if (tg->itemColor != NULL)
         color = tg->itemColor(tg, item, hvg);
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    if (denseMaps)
+        denseMapItem(tg, hvg, item, xOff, y, width, scale, pixelUsed);
     if (vis == tvFull)
         {
         /* The doMapItems will make the mapboxes normally but make */
@@ -5872,6 +6255,7 @@ for (item = tg->items; item != NULL; item = item->next)
         y += tg->lineHeight;
         }
     }
+freez(&pixelUsed);
 }
 
 void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
@@ -6161,8 +6545,10 @@ void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
  * Fallback to itemName if there is no mouseOver field.
  * (derived from genericMapItem) */
 {
-// Don't bother if we are imageV2 and a dense child.
-if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
+// Don't bother if we are imageV2 and a dense child, unless denseClick is on for
+// this track, in which case the dense row is meant to be clickable per item.
+if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb)
+&&  !denseClickEnabled(tg))
     return;
 
 struct linkedFeatures *lf = item;
@@ -6709,8 +7095,10 @@ static void bedPlusLabelMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				int x, int y, int width, int height)
 /* Special mouseover text from item->label. (derived from genericMapItem) */
 {
-// Don't bother if we are imageV2 and a dense child.
-if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+// Don't bother if we are imageV2 and a dense child, unless denseClick is on for
+// this track, in which case the dense row is meant to be clickable per item.
+if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)
+|| denseClickEnabled(tg))
     {
     struct bedPlusLabel *bpl = item;;
     char *mouseOverText = isEmpty(bpl->label) ? bpl->bed.name : bpl->label;
@@ -6888,7 +7276,7 @@ if (liftDb != NULL)
     struct genePred *gpList = quickLiftGenePreds(conn, quickLiftFile, table, chromName, winStart, winEnd, NULL, chainHash);
     hFreeConn(&conn);
 
-    calcLiftOverGenePreds( gpList, chainHash, 0.0, 0.0, TRUE, NULL, NULL,  TRUE, FALSE);
+    quickLiftCalcGenePreds(gpList, chainHash, 0.0, 0.0, TRUE, TRUE, FALSE);
     struct genePred *gp = gpList;
 
     struct linkedFeatures *lfList = NULL;
@@ -8680,9 +9068,6 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
-static struct hash *refSeqStatusHashLoad(struct track *tg);
-/* Build a name->refSeqStatus hash for tg's items (defined below). */
-
 void loadNcbiRefSeq(struct track *tg)
 /* Load up RefSeq known genes. */
 {
@@ -8835,7 +9220,7 @@ tg->ixAltColor = col;
 return(col);
 }
 
-static struct hash *refSeqStatusHashLoad(struct track *tg)
+struct hash *refSeqStatusHashLoad(struct track *tg)
 /* Build (at load time) a name->refSeqStatus hash for this track's items, so that
  * refGeneColorByStatus can shade items at draw time without asking the database
  * once per item.  One batched query instead of one query per drawn gene.
@@ -15830,43 +16215,76 @@ else if (sameWord(type, "lorax"))
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
-else if (startsWith("gtexGene", track->track))
+else if (startsWith("gtexGene", track->track) ||
+         // a quickLifted GTEx track carries its hub's prefix, refs #38512
+         quickLiftIsLiftedGtex(cart, track->tdb))
     gtexGeneMethods(track);
+else if (quickLiftIsLiftedRmskJoined(cart, track->tdb))
+    // a quickLifted RepeatMasker Viz. track has avoidHandler on, so its name handler is
+    // skipped, refs #37437
+    rmskJoinedMethods(track);
 else if (startsWith("rnaStruct", track->track))
     rnaSecStrMethods(track);
 #endif /* GBROWSE */
+}
+
+static void compositeLoadSubtrack(struct track *track, struct track *subtrack)
+/* Load one subtrack of a composite, or settle that it is not going to be drawn.  Anything
+ * in here that errAborts is the one subtrack's fault, and the caller turns it into that
+ * subtrack's message. */
+{
+long thisTime = 0, lastTime = 0;
+if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
+    errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
+if (isSubtrackVisible(subtrack) &&
+    ( limitedVisFromComposite(subtrack) != tvHide))
+    {
+    if (!subtrack->parallelLoading)
+	{
+	lastTime = clock1000();
+	checkIfWiggling(cart, subtrack);
+	subtrack->loadItems(subtrack);
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    subtrack->loadTime = thisTime - lastTime;
+	    lastTime = thisTime;
+	    }
+	}
+    }
+else
+    {
+    subtrack->limitedVis = tvHide;
+    subtrack->limitedVisSet = TRUE;
+    }
 }
 
 static void compositeLoad(struct track *track)
 /* Load all subtracks */
 {
 struct track *subtrack;
-long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types or mnissing a type s)
-        errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (was a type specified for this track?)\n", subtrack->track, track->track);
-    if (isSubtrackVisible(subtrack) &&
-	( limitedVisFromComposite(subtrack) != tvHide))
+    /* Keep an errAbort to the subtrack that caused it.  The caller wraps this whole
+     * function, so without this one bad subtrack puts its message on the parent, which a
+     * composite never draws, and the subtracks after it are never loaded: the user gets an
+     * empty row with no explanation.  refs #38560 */
+    unsigned connGeneration = hConnGeneration();
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	compositeLoadSubtrack(track, subtrack);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
 	{
-	if (!subtrack->parallelLoading)
-	    {
-	    lastTime = clock1000();
-	    checkIfWiggling(cart, subtrack);
-	    subtrack->loadItems(subtrack);
-	    if (measureTiming)
-		{
-		thisTime = clock1000();
-		subtrack->loadTime = thisTime - lastTime;
-		lastTime = thisTime;
-		}
-	    }
+	subtrack->networkErrMsg = cloneString(errCatch->message->string);
+	/* A loader that aborts never reached its hFreeConn, and the connection cache holds
+	 * sixteen, so without this a handful of failing tracks fills it and every later
+	 * track reports "Too many open sqlConnections" instead of its own trouble.  refs
+	 * #38560 */
+	hConnFreeNewerThan(connGeneration);
 	}
-    else
-	{
-	subtrack->limitedVis = tvHide;
-	subtrack->limitedVisSet = TRUE;
-	}
+    errCatchReWarn(errCatch);   // errCatchStart took the warnings, hand them back
+    errCatchFree(&errCatch);
     }
 }
 

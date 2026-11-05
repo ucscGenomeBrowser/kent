@@ -1,0 +1,72 @@
+# #38303 -- loading a saved session dropped its multiRegionsBedUrl and drew a single-region
+# view with "No BED or BED URL specified" where the saved multi-region view should have been.
+# Found during the v503 CGI release, by the Selenium qaTestScript, on hgw0.  583 sessions on
+# the RR were affected and stayed broken until v504, because the v503 build patch was
+# rejected.
+#
+# The cause is a path comparison.  hgTracks will only read a session's file from a small set
+# of configured directories, and it compared the stored path against the configured spelling.
+# On the RR the session-data directory is reached through a symlink, so a path that had been
+# stored in its RESOLVED spelling did not match the configured one and the file was refused.
+# 67700f0c574 accepts either spelling; 71475dc7c4a then narrows that to the three absolute
+# session-data directories after code review, leaving the TRASH directory on the original
+# plain comparison.
+#
+# THE TICKET'S OWN SPELLING IS NOT REPRODUCIBLE HERE, AND IT DOES NOT MATTER.  The reported
+# failure needs the configured and resolved spellings of the session-data directory to
+# differ, and on this machine they do not: hg.conf says
+# sessionDataDir=/data/apache/userdata/sessions and `namei -l` finds no symlink in it.
+# Gerardo said the same on the ticket -- hgwdev has no /userdata symlink and no affected
+# sessions in hgcentraltest -- and tested on hgwbeta instead.
+#
+# What this script drives is the other path through the same check: a multi-region session
+# whose BED lives in TRASH.  The regions are pasted through the URL, hgTracks writes them to
+# ../trash/hgt/custRgn_*.bed and stores that path in multiRegionsBedUrl, and the session is
+# saved and loaded back.
+#
+# THE FIRST DRAFT OF THIS HEADER SAID THE SCRIPT COULD NOT CATCH THE BUG.  That was wrong,
+# and the A/B run is what showed it: with 67700f0c574 and 71475dc7c4a reverted, the
+# multi-region view is gone after the round trip -- the drawn rows are ruler and knownGene,
+# the multi-region button is not pressed and the second region has no map box.  So the fix
+# reaches the trash path too, and this script sees it.  Worth remembering as a rule: a
+# claim that a test cannot fail is a measurement, not an inference.
+#
+# The assertion is not the error string on its own.  "No BED or BED URL specified" is absent
+# from a page that failed for some other reason too, so the check is that the SECOND region
+# is really drawn: its map box carries the region as a data-tooltip, and a view that fell
+# back to one region has no such box.  README.txt: never assert a `title`, because hgTracks'
+# own tooltip code moves it into data-tooltip once the page's JavaScript has run.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38303, 67700f0c574 and 71475dc7c4a; the ticket's own case is not reproducible on genome-test, see above"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the multi-region view is gone after the session round trip"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  # Two custom regions, pasted through the textarea's own cart variable.  virtWinFull=on so
+  # that both are in view rather than the second being off screen.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr17%2043044294%2043125483%0Achr7%20155799529%20155812871%0A"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+      noText: "No BED or BED URL specified"
+
+  # Save the whole cart, in the format hgSession's "save settings to a local file" produces,
+  # and send it straight back up through hgSession's upload form.  That is the round trip the
+  # ticket is about, with multiRegionsBedUrl holding a trash path.
+  - session: mr
+  - loadSession: {file: mr}
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+      noText: "No BED or BED URL specified"

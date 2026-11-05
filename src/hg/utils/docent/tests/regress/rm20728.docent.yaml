@@ -1,0 +1,27 @@
+# #20728 -- multi-region on eboVir3.  On beta and the RR in 2017, exon-only mode on the Ebola
+# assembly failed with "Table 'eboVir3.refGene' doesn't exist": the mode looked for a default
+# gene table the assembly does not have.  On hgwdev it worked, because there the gene set
+# for the mode was another track.  Closed in 2023 with no code note.
+#
+# Recipe: eboVir3 with virtModeType=exonMostly from a reset cart, which is the URL in the
+# ticket.  The checks:
+#   * noText is the ticket's own error string, minus the quote marks around the table name;
+#   * the multi-region button is pressed, so the mode really took;
+#   * the ruler has a map box for the first exon region, KM034562v1:464-2695 (the NP gene),
+#     so the view really is the exon regions and not a fallback to the whole genome.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: eboVir3
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=eboVir3&pix=1100&virtModeType=exonMostly"
+  - expect:
+      noText: "refGene' doesn't exist"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="KM034562v1:464-2695"]'
+        - 'area[data-tooltip="KM034562v1:11575-18225"]'

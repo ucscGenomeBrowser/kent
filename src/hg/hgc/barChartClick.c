@@ -29,6 +29,7 @@
 #include "chromAlias.h"
 #include "jsHelper.h"
 #include "jsonWrite.h"
+#include "quickLift.h"
 
 #define EXTRA_FIELDS_SIZE 256
 
@@ -50,6 +51,17 @@ struct barChartPlusRow
     char **row;
     };
 
+static char **cloneRow(char **row, int fieldCount, int size)
+/* Return a heap copy of the first fieldCount fields of row, in an array of size slots. */
+{
+char **saved;
+AllocArray(saved, size);
+int i;
+for (i = 0; i < fieldCount; i++)
+    saved[i] = cloneString(row[i]);
+return saved;
+}
+
 static struct barChartPlusRow *getBarChartFromFile(struct trackDb *tdb, char *file,
                                                 char *item, char *chrom, int start, int end,
                                                 struct asObject **retAs, char **extraFieldsRet,
@@ -66,35 +78,62 @@ hasOffsets = (
     asColumnFind(as, BARCHART_OFFSET_COLUMN) != NULL &&
     asColumnFind(as, BARCHART_LEN_COLUMN) != NULL);
 struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+// a quickLifted file is in another assembly's coordinates, so fetch what maps to this window
+char *quickLiftFile = cloneString(trackDbSetting(tdb, "quickLiftUrl"));
+struct hash *chainHash = NULL;
+struct bigBedInterval *bb, *bbList;
+if (quickLiftFile)
+    bbList = quickLiftGetIntervals(quickLiftFile, bbi, chrom, start, end, &chainHash);
+else
+    bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+// A lifted read can hold more than one copy of an item, through two chains or from the
+// padding around the window.  Prefer the copy that lifts to where it was clicked, and fall back
+// to the first copy with the name.
+struct barChartPlusRow *nameMatch = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     char *rest = cloneString(bb->rest);
     char startBuf[16], endBuf[16];
     char *row[32];
-    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
+    int fieldCount = bigBedIntervalToRow(bb, chrom, startBuf, endBuf, row, ArraySize(row));
     struct barChartBed *barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
     if (barChart == NULL)
         continue;
-    if (sameString(barChart->name, item))
+    if (quickLiftFile)
         {
-        char *restFields[EXTRA_FIELDS_SIZE];
-        int restCount = chopTabs(rest, restFields);
-        int restBedFields = (6 + (hasOffsets ? 2 : 0));
-        if (restCount > restBedFields)
-            {
-            int i;
-            for (i = 0; i < restCount - restBedFields; i++)
-                extraFieldsRet[i] = restFields[restBedFields + i];
-            *extraFieldsCountRet = (restCount - restBedFields);
-            }
-        AllocVar(ret);
-        ret->barChart = barChart;
-        ret->row = row;
-        return ret;
+        struct bed *lifted = quickLiftIntervalsToBed(bbi, chainHash, bb);
+        if (lifted == NULL)
+            continue;
+        barChart->chrom = lifted->chrom;
+        barChart->chromStart = lifted->chromStart;
+        barChart->chromEnd = lifted->chromEnd;
         }
+    if (!sameString(barChart->name, item))
+        continue;
+    boolean atClick = (quickLiftFile == NULL) ||
+                      (barChart->chromStart == start && barChart->chromEnd == end);
+    if (!atClick && nameMatch != NULL)
+        continue;
+    char *restFields[EXTRA_FIELDS_SIZE];
+    int restCount = chopTabs(rest, restFields);
+    int restBedFields = (6 + (hasOffsets ? 2 : 0));
+    *extraFieldsCountRet = 0;
+    if (restCount > restBedFields)
+        {
+        int i;
+        for (i = 0; i < restCount - restBedFields; i++)
+            extraFieldsRet[i] = restFields[restBedFields + i];
+        *extraFieldsCountRet = (restCount - restBedFields);
+        }
+    // row and the start and end buffers are on the stack, so the caller gets a copy
+    AllocVar(ret);
+    ret->barChart = barChart;
+    ret->row = cloneRow(row, fieldCount, ArraySize(row));
+    if (atClick)
+        return ret;
+    nameMatch = ret;
     }
-return NULL;
+return nameMatch;
 }
 
 static struct barChartPlusRow *getBarChartFromTable(struct trackDb *tdb, char *table,
@@ -132,7 +171,9 @@ if (sqlTableExists(conn, table))
         barChart = barChartBedLoadOptionalOffsets(row, hasOffsets);
         AllocVar(ret);
         ret->barChart = barChart;
-        ret->row = row;
+        // sqlFreeResult frees row, so the caller gets a copy
+        int colCount = sqlCountColumns(sr);
+        ret->row = cloneRow(row, colCount, colCount);
         }
     sqlFreeResult(&sr);
     }
@@ -512,10 +553,10 @@ char *extraFields[EXTRA_FIELDS_SIZE];
 int extraFieldCount = 0;
 int numColumns = 0;
 struct barChartPlusRow *bcRow = getBarChart(tdb, item, seqName, start, end, &as, extraFields, &extraFieldCount);
-struct barChartBed *chartItem = bcRow->barChart;
-char **row = bcRow->row;
+struct barChartBed *chartItem = (bcRow == NULL) ? NULL : bcRow->barChart;
 if (chartItem == NULL)
     errAbort("Can't find item %s in barChart table/file %s\n", item, tdb->table);
+char **row = bcRow->row;
 
 genericHeader(tdb, item);
 
@@ -585,10 +626,7 @@ if (vals != NULL)
     }
 else
     {
-    if (cfgOptionBooleanDefault("svgBarChart", TRUE))
-	{
-	printBarChart(item, chartItem, tdb, highLevel, metric);
-	}
+    printBarChart(item, chartItem, tdb, highLevel, metric);
     }
 puts("<br>");
 }

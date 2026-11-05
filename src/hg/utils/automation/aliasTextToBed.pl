@@ -75,6 +75,7 @@ my %nameLabels = (
    "VEuPathDB" => "VEuPathDB",
    "hprcV2" => "HPRCv2",
    "plasmoDB" => "PlasmoDB",
+   "T2T" => "T2T",
    "custom" => "custom"
 );
 

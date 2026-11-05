@@ -1,6 +1,6 @@
 <h2>Description</h2>
 <p>
-The ENCODE4 long-read RNA-seq collection annotates trancripts using numerical triplets representing 
+The ENCODE4 long-read RNA-seq collection annotates transcripts using numerical triplets representing 
 the identity of the start site, exon junction chain, and transcript end site of each transcript. 
 This method reveals how promoter selection, splice pattern, and 3’ processing are deployed across 
 human tissues.
@@ -41,7 +41,7 @@ For automated analysis, the data may be queried from our
 
 <p>
 The data underlying this track is available in the file
-<a href="https://hgdownload.gi.ucsc.edu/gbdb/$db/encode4/encode4LongRnaTranscripts.bb">encode4LongRna.bb</a>.
+<a href="https://hgdownload.gi.ucsc.edu/gbdb/$db/encode4/encode4LongRnaTranscripts.bb">encode4LongRnaTranscripts.bb</a>.
 Individual regions or the whole genome annotation can be obtained using our
 tool <tt>bigBedToBed</tt>, which is available on our
 <a href="http://hgdownload.gi.ucsc.edu/downloads.html#utilities_downloads">download server</a>.
@@ -49,14 +49,14 @@ For example, to extract only annotations in a given region, you could use the fo
 </p>
 
 <pre>
-bigBedToBed -chrom=chr1 -start=100000 -end=100500 https://hgdownload.gi.ucsc.edu/gbdb/$db/encode4LongRna.bb stdout
+bigBedToBed -chrom=chr1 -start=100000 -end=100500 https://hgdownload.gi.ucsc.edu/gbdb/$db/encode4/encode4LongRnaTranscripts.bb stdout
 </pre>
 
 <p>
 Please refer to our
 <a href="https://groups.google.com/a/soe.ucsc.edu/forum/#!forum/genome">mailing list archives</a>
 for questions, or our
-<a href="../../FAQ/FAQdownloads.html#downloads36">Data Access FAQ</a>
+<a href="../../FAQ/FAQdownloads.html#download36">Data Access FAQ</a>
 for more information.
 </p>
 

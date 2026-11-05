@@ -4,7 +4,7 @@ table meiHmeid
 string  chrom;             "Reference chromosome or scaffold"
 uint    chromStart;        "0-based start position (anchor base)"
 uint    chromEnd;          "Half-open end position (anchor base + 1)"
-string  name;              "Item label (INS, MEI class, carrier allele count)"
+string  name;              "Item label (element class, carrier allele count)"
 uint    score;             "Score (alt-allele frequency * 1000)"
 char[1] strand;            "Strand (always .)"
 uint    thickStart;        "Start of thick drawing region"

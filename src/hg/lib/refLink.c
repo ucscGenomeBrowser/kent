@@ -139,3 +139,13 @@ fprintf(f, "%u", el->omimId);
 fputc(lastSep,f);
 }
 
+void refLinkInitNoRow(struct refLink *rl, char *acc)
+/* Fill in rl for an accession that has no refLink row, as doKnownGene does: name and mrnaAcc
+ * are acc and everything else reads as absent.  rl is usually on the stack, so the whole struct
+ * is zeroed first rather than only the fields set here; readers test omimId and pass protAcc as
+ * a string.  refs #38317 */
+{
+ZeroVar(rl);
+rl->name = cloneString(acc);
+rl->mrnaAcc = cloneString(acc);
+}

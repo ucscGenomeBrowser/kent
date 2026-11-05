@@ -340,6 +340,8 @@ void cgiAddHttpHeader(char *name, char *value)
  * line, e.g. cgiAddHttpHeader("Cache-Control", "no-store").  Both strings are
  * cloned.  Has no effect once the header has been written. */
 {
+if (didContentType)
+    return;   // the header block is closed; nothing would ever print this
 slPairAdd(&cgiExtraHeaders, name, cloneString(value));
 }
 
@@ -830,17 +832,6 @@ slReverse(&list);
 
 
 
-static boolean skipMalformedPairs = FALSE;
-
-void cgiSkipMalformedPairs(boolean on)
-/* Tell the cookie parser to step over a malformed pair instead of losing the
- * pair after it or aborting the request.  These libraries cannot read hg.conf
- * themselves, so hgConfig.c pushes the setting in, the same way
- * cfgSetLogCgiVars pushes cgiSetMaxLogLen.  refs #38340 */
-{
-skipMalformedPairs = on;
-}
-
 static void parseCookies(struct hash **retHash, struct cgiVar **retList)
 /* parses any cookies and puts them into the given hash and list */
 {
@@ -862,43 +853,25 @@ hash = newHash(6);
 namePt = str;
 while (isNotEmpty(namePt))
     {
-    if (skipMalformedPairs)
+    /* Step over the separators of an empty pair, then confine the search
+     * for the '=' to this pair.  Without both, a cookie with a name and no
+     * value swallows the cookie after it, and the same cookie at the end
+     * of the string aborts the CGI.  The browser then sends that cookie
+     * again on every request, so the reader cannot get a page back until
+     * they clear it by hand.  refs #38340 */
+    namePt += strspn(namePt, "; ");
+    if (namePt[0] == 0)
+	break;
+    nextNamePt = strchr(namePt, ';');
+    if (nextNamePt != NULL)
+	*nextNamePt++ = 0;
+    dataPt = strchr(namePt, '=');
+    if (dataPt == NULL)
 	{
-	/* Step over the separators of an empty pair, then confine the search
-	 * for the '=' to this pair.  Without both, a cookie with a name and no
-	 * value swallows the cookie after it, and the same cookie at the end
-	 * of the string aborts the CGI.  The browser then sends that cookie
-	 * again on every request, so the reader cannot get a page back until
-	 * they clear it by hand.  refs #38340 */
-	namePt += strspn(namePt, "; ");
-	if (namePt[0] == 0)
-	    break;
-	nextNamePt = strchr(namePt, ';');
-	if (nextNamePt != NULL)
-	    *nextNamePt++ = 0;
-	dataPt = strchr(namePt, '=');
-	if (dataPt == NULL)
-	    {
-	    namePt = nextNamePt;
-	    continue;
-	    }
-	*dataPt++ = 0;
+	namePt = nextNamePt;
+	continue;
 	}
-    else
-	{
-	dataPt = strchr(namePt, '=');
-	if (dataPt == NULL)
-	    errAbort("Mangled Cookie input string: no = in '%s' (offset %d in complete cookie string: '%s')",
-		     namePt, (int)(namePt - str), getenv("HTTP_COOKIE"));
-	*dataPt++ = 0;
-	nextNamePt = strchr(dataPt, ';');
-	if (nextNamePt != NULL)
-	    {
-	     *nextNamePt++ = 0;
-	     if (*nextNamePt == ' ')
-		 nextNamePt++;
-	    }
-	}
+    *dataPt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
     AllocVar(el);
     el->val = dataPt;
@@ -1374,6 +1347,20 @@ if (res == NULL)
 return res;
 }
 
+static boolean jsLiteralBackslash(char c)
+/* Is this a character that we put a backslash in front of in a javascript string literal? */
+{
+return (c == '\''
+     || c == '\"'
+     || c == '&'
+     || c == '\\'
+     || c == '\n'
+     || c == '\r'
+     || c == '\t'
+     || c == '\b'
+     || c == '\f');
+}
+
 char *javaScriptLiteralEncode(char *inString)
 /* Use backslash escaping on newline
  * and quote chars, backslash and others.
@@ -1392,16 +1379,9 @@ if (inString == NULL)
 in = inString;
 while ((c = *in++) != 0)
     {
-    if (c == '\''
-     || c == '\"'
-     || c == '&'
-     || c == '\\'
-     || c == '\n'
-     || c == '\r'
-     || c == '\t'
-     || c == '\b'
-     || c == '\f'
-	)
+    if (c == '<')
+        outSize += 4;   // "\x3C", see below
+    else if (jsLiteralBackslash(c))
         outSize += 2;
     else
         outSize += 1;
@@ -1413,16 +1393,19 @@ in = inString;
 out = outString;
 while ((c = *in++) != 0)
     {
-    if (c == '\''
-     || c == '\"'
-     || c == '&'
-     || c == '\\'
-     || c == '\n'
-     || c == '\r'
-     || c == '\t'
-     || c == '\b'
-     || c == '\f'
-	)
+    if (c == '<')
+	{
+	/* These literals end up inside an inline <script> block, and the HTML parser looks
+	 * for "</script>" in there before javascript ever sees the text.  A backslash does
+	 * not hide the < from the parser, but \x3C is the same character to javascript and
+	 * leaves no < to be found. */
+	*out++ = '\\';
+	*out++ = 'x';
+	*out++ = '3';
+	*out++ = 'C';
+	continue;
+	}
+    if (jsLiteralBackslash(c))
         *out++ = '\\';
     *out++ = c;
     }
@@ -2628,8 +2611,9 @@ if (anyAll != NULL)
         else
             checked = sameString(val,selected);
         }
+    // the label is HTML text here, not a javascript literal
     dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked ? " SELECTED" : ""),
-                   val, javaScriptLiteralEncode(label));
+                   val, htmlEncode(label));
     if (label != val)
         freeMem(val);
     }
@@ -2650,7 +2634,7 @@ for (; valPair != NULL; valPair = valPair->next)
     if (valPair->val != NULL)
         label = valPair->val;
     dyStringPrintf(output, "<OPTION%s VALUE='%s'>%s</OPTION>\n",(checked ? " SELECTED" : ""),
-                   (char *)valPair->name, javaScriptLiteralEncode(label));
+                   (char *)valPair->name, htmlEncode(label));
     }
 
 dyStringPrintf(output,"</SELECT>\n");

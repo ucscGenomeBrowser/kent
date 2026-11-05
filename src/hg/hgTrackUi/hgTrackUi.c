@@ -2294,7 +2294,7 @@ jsInline(
 "    box.val('pack');\n"
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
-    oligoMatchVar, oligoMatchVar, 45, oligo);
+    oligoMatchVar, oligoMatchVar, 45, htmlEncode(oligo));   // cart value, encode it
 puts("<br>Examples: TATAWAAR, AAAAA");
 jsOnEventById("input", oligoMatchVar, "packTrack();");
 
@@ -2320,7 +2320,7 @@ jsInline(
 "    box.val('full');\n"
 "}\n");
 printf("<input name='%s' id='%s' size=\"%d\" value=\"%s\" type=\"TEXT\">",
-    gcOnFlyWindowSize, gcOnFlySizeVar, 15, winSize);
+    gcOnFlyWindowSize, gcOnFlySizeVar, 15, htmlEncode(winSize));   // cart value, encode it
 jsOnEventById("input", gcOnFlySizeVar, "fullTrack();");
 puts("<P>UCSC standard window size is 5 bases.  Adjust size as desired.</P>");
 /* Add standard wiggle graph controls (height, scale, graph type, smoothing, etc.) */
@@ -2829,7 +2829,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     struct trackDb *tdb = childRef->val;
     if (childRef == superTdb->children) // first time through
         {
-        printf("<TR style='border-bottom: none'><TD style='margin-bottom:10px' NOWRAP colspan=2>\n");
+        printf("<TR style='border-bottom: none'><TD style='padding-bottom:8px' NOWRAP colspan=2>\n");
 
         // Hide/show everything with a single click, the two most common cases
         printf("<button type='button' id='superVizHideAllButton'>Hide all tracks</button>\n");
@@ -2865,24 +2865,46 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
         enum trackVisibility tv =
                 hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
 	safef(id, sizeof id, "%s_check", tdb->track);
+        boolean checked = tdbIsSuperTrack(tdb)
+                ? !sameString("hide", cartUsualString(cart, tdb->track,
+                                                      tdb->isShow ? "show" : "hide"))
+                : (tv != tvHide);
         printf("<INPUT style='display:none' class='subtrackCheckbox' TYPE=CHECKBOX id='%s'%s>",
-               id, (tv != tvHide?" CHECKED":""));
+               id, (checked?" CHECKED":""));
         safef(javascript, sizeof(javascript), "superT.selChanged(this)");
         struct slPair *event = slPairNew("change", cloneString(javascript));
 
         char *onlyVis = trackDbSetting(tdb, "onlyVisibility");
-        hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
+        /* A child that is itself a container is shown or hidden, not drawn, so it gets the
+         * same hide/show control its own page would give it rather than the display modes. */
+        boolean childIsContainer = tdbIsSuperTrack(tdb);
+        static char *hideShow[] = {"hide", "show"};
+        boolean childShown = FALSE;
+        char *childVizStr = NULL;
+        if (childIsContainer)
+            {
+            // note: not differentString(), which is a bare strcmp and so can be negative;
+            // this value is used as an array index
+            childShown = !sameString("hide",
+                    cartUsualString(cart, tdb->track, tdb->isShow ? "show" : "hide"));
+            childVizStr = hideShow[childShown];
+            hideShowDropDownWithClassExtraAndLabel(tdb->track, NULL, childShown,
+                                        (childShown ? "vizSelect normalText":"vizSelect hiddenText"),
+                                        event, tdb->shortLabel);
+            }
+        else
+            hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
                                         (tv == tvHide ? "vizSelect hiddenText":"vizSelect normalText"),
                                         onlyVis,
                                         event);
 
         // print a group of buttons that act like radiobuttons (see javascript lines below)
         printf("<div data-trackname='%s' class='seg-btn-group' style='margin-right:12px'>", tdb->track);
-        char *trackVizStr = hStringFromTv(tv);
+        char *trackVizStr = childIsContainer ? childVizStr : hStringFromTv(tv);
 
         // vizList is e.g.  {"hide", "dense", "squish", "pack", "full"}, but can be shorter, e.g. when canPack=false
-        char **vizList = hTvGetVizArr(tv, tdb->canPack, onlyVis);
-        int vizListLen = arrNullLen(vizList);
+        char **vizList = childIsContainer ? hideShow : hTvGetVizArr(tv, tdb->canPack, onlyVis);
+        int vizListLen = childIsContainer ? ArraySize(hideShow) : arrNullLen(vizList);
         for (int i = 0; i < vizListLen; i++) {
             char *buttonViz = vizList[i];
             // the currently active viz mode is an 'active' button = pressed
@@ -3663,6 +3685,11 @@ else if (tdb->type != NULL)
         labelCfgUi(db, cart, tdb, tdb->track);
     }
 
+// out here rather than beside cfgByCfgType, since cfgTypeFromTdb says cfgNone for a plain
+// "type bigBed", for "bigBed 6", and for anything carrying noScoreFilter, and those land in
+// the labelCfgUi branch above.  A no-op unless the track names a dot-bracket column.
+dotBracketCfgUi(cart, tdb);
+
 if (tdbSupportsColorOverride(tdb))
     colorTrackOption(cart, tdb->track, tdb);
 
@@ -3750,6 +3777,9 @@ if (tdbIsFacetedComposite(tdb))
 
 if (tdbParent->html)
     {
+    // the excerpt below is the container's own description page, so it needs the same
+    // substitution the track's page gets further down
+    hVarSubstTrackDbHtml(tdbParent, database);
     // collapsed panel for Description
     printf("<p><table>");  // required by jsCollapsible
     jsBeginCollapsibleSectionFontSize(cart, tdb->track, "superDescription", "Description", FALSE,
@@ -3816,9 +3846,6 @@ printf("</p>");
 boolean tdbIsDupable(struct trackDb *tdb)
 /* Return TRUE if a track is duplicatable */
 {
-if (!dupTrackEnabled())
-    return FALSE;
-
 /* Can't handle container tracks yet at least */
 if (!tdbIsDataTrack(tdb))
     return FALSE;
@@ -3836,6 +3863,24 @@ if (sameString(tdb->track, "cutters"))
 if (sameString(tdb->track, "oligoMatch"))
     return FALSE;
 return TRUE;
+}
+
+static void cartRemoveAllForSuperTrack(struct cart *cart, struct trackDb *tdb)
+/* Clear a supertrack's own cart variables and those of its members.  SuperTrack children
+ * live in tdb->children, an slRef list, not in the subtracks tree that
+ * cartRemoveAllForTdbAndChildren walks, and a member may itself be a supertrack whose own
+ * members are reached only through it. */
+{
+cartRemoveAllForTdb(cart, tdb);
+struct slRef *childRef;
+for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+    {
+    struct trackDb *child = childRef->val;
+    if (tdbIsSuperTrack(child))
+        cartRemoveAllForSuperTrack(cart, child);
+    else
+        cartRemoveAllForTdb(cart, child);
+    }
 }
 
 void trackUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
@@ -3871,8 +3916,8 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
     if (liftDb)
         tdb->html = getTrackHtml(liftDb, tdb->table);
-    // resolve $hgsid, and for a hub the rest of its description page variables
-    hVarSubstTrackDbHtml(cart, tdb, database);
+    // a hub's description page has not been substituted yet
+    hVarSubstTrackDbHtml(tdb, database);
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
     if (tdb->html != NULL && tdb->html[0] != 0)
         {
@@ -3887,7 +3932,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
             ; // Get the first parent that has html
         if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
             {
-            hVarSubstTrackDbHtml(cart, tdbParent, database);
+            hVarSubstTrackDbHtml(tdbParent, database);
             printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",
                    COLOR_DARKGREEN,tdbParent->shortLabel);
             printRelatedTracks(database,trackHash,tdb,cart);
@@ -3911,10 +3956,7 @@ if (tdbIsContainer(tdb) || tdbIsSuperTrack(tdb))
             // the subtracks tree that cartRemoveAllForTdbAndChildren walks.
             // Clear the supertrack's own cart vars (filters, visibility) and
             // each child's vars by hand.
-            cartRemoveAllForTdb(cart, tdb);
-            struct slRef *childRef;
-            for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
-                cartRemoveAllForTdb(cart, (struct trackDb *)childRef->val);
+            cartRemoveAllForSuperTrack(cart, tdb);
             }
         else
             cartRemoveAllForTdbAndChildren(cart,tdb);
@@ -4082,7 +4124,18 @@ if (!tdbIsDownloadsOnly(tdb))
             if (canPack == FALSE && tdbIsCompositeChild(tdb))
                 canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
             }
-        else                               // But hgTrackUi page should show local vis
+        else if (tdbIsCompositeChild(tdb) && !tdbIsFacetedComposite(tdbGetComposite(tdb)))
+            {
+            // A subtrack's own page should show the vis its row on the composite page shows.
+            // Its local vis is usually just the trackDb default inherited from the composite,
+            // often hide, and submitting that would pin the subtrack to it.  The checkbox is
+            // left out so that submitting here doesn't pin an unchecked subtrack to hide.
+            // Faceted children keep their local vis, as the parent is only a ceiling there.
+            vis = tdbVisLimitedByAncestors(cart, tdb, FALSE, FALSE);
+            if (canPack == FALSE)
+                canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
+            }
+        else                               // Other tracks' hgTrackUi page should show local vis
             vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis)));
 
         if (tdbIsSuperTrackChild(tdb))
@@ -4304,8 +4357,8 @@ char *liftDb = cloneString(trackDbSetting(tdb, "quickLiftDb"));
 // quickLiftChain has static html
 if (liftDb && differentString(trackHubSkipHubName(tdb->track), "quickLiftChain"))
     tdb->html = getTrackHtml(liftDb, tdb->table);
-// resolve $hgsid, and for a hub the rest of its description page variables
-hVarSubstTrackDbHtml(cart, tdb, database);
+// a hub's description page has not been substituted yet
+hVarSubstTrackDbHtml(tdb, database);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     char *browserVersion;
@@ -4415,7 +4468,8 @@ return newTrack;
 }
 
 /* Setting names whose file contents are safe to serve via hgFetch.
- * Only admin-configured (native track) values are checked -- never hub or custom tracks.
+ * Only admin-configured values are checked -- native tracks and curated hubs,
+ * never user hubs or custom tracks.
  * Do NOT add bigDataUrl or bigDataIndex here -- those may be restricted (we
  * might change this later to instead respect the tableBrowser setting in trackDb). */
 static char *fetchableSettings[] = {"metaDataUrl", "colorSettingsUrl", NULL};
@@ -4443,6 +4497,29 @@ for (p = fetchableSettings; *p != NULL; p++)
 return FALSE;
 }
 
+static boolean trackIsFromCuratedHub(char *db, char *track,
+                                     struct hubConnectStatus *hubStatusList)
+/* Check if a hub track comes from the curated hub that dbDb names for this assembly.
+ * A curated hub such as hs1 keeps its data outside the hub.txt directory, so
+ * fileUrlMatchesHub rejects it, but its trackDb is admin-configured and as
+ * trustworthy as a native track's.  A user hub attached to the same assembly is
+ * not, hence the match against the curated directory dbDb names.  Any copy in
+ * that directory counts, not only this server's curatedHubPrefix, so that a link
+ * to one sandbox's copy (/gbdb/hs1/hubs/<name>/hub.txt) also works on another. */
+{
+unsigned hubId = hubIdFromTrackName(track);
+struct hubConnectStatus *hubStatus;
+for (hubStatus = hubStatusList; hubStatus != NULL; hubStatus = hubStatus->next)
+    {
+    if (hubStatus->id == hubId)
+        return hubConnectIsCuratedHubUrl(trackHubSkipHubName(db), hubStatus->hubUrl);
+    }
+// Not in the cart: each server attaches its own curated copy for the assembly,
+// so a link to another sandbox's copy arrives here with a different hub in the
+// cart.  Check that hub by id, reading only its URL.
+return hubConnectIdIsCuratedHub(trackHubSkipHubName(db), hubId);
+}
+
 void handleFileFetch(struct cart *cart)
 /* Checks if a requested file is a legal request based on an attached cart or
  * native track.  If so, retrieves the file content via UDC and retransmits
@@ -4459,6 +4536,7 @@ fileUrl = resolveDotDots(urlClone);
 freeMem(urlClone);
 
 boolean matchFound = FALSE;
+char *track = cartOptionalString(cart, "track");
 
 // Check if fileUrl falls under a connected hub's base directory
 struct hubConnectStatus *hubStatusList = hubConnectStatusListFromCartAll(cart);
@@ -4473,17 +4551,17 @@ while (hubStatus != NULL)
     hubStatus = hubStatus->next;
     }
 
-// For native database tracks (not hub or custom tracks), check if fileUrl matches
-// a whitelisted trackDb setting.  Only native tracks are checked here because their
-// settings are admin-configured and trusted.  Hub and custom track settings are
-// user-controlled and could be used for SSRF attacks.
+// For native database tracks and curated hub tracks, check if fileUrl matches a
+// whitelisted trackDb setting.  Only these are checked here because their settings are
+// admin-configured and trusted.  User hub and custom track settings are user-controlled
+// and could be used for SSRF attacks.
 if (!matchFound)
     {
-    char *track = cartOptionalString(cart, "track");
     char *sourceDb = cartOptionalString(cart, "sourceDb"); // for future quickLift use
     if (sourceDb == NULL)
         sourceDb = database;
-    if (track != NULL && !isHubTrack(track) && !isCustomTrack(track))
+    if (track != NULL && !isCustomTrack(track) &&
+        (!isHubTrack(track) || trackIsFromCuratedHub(sourceDb, track, hubStatusList)))
         {
         struct trackDb *tdb = tdbForTrack(sourceDb, track, NULL);
         if (tdb != NULL)
@@ -4493,8 +4571,21 @@ if (!matchFound)
 
 if (!matchFound)
     {
+    struct dyString *dy = dyStringNew(512);
+    dyStringPrintf(dy, "Requested URL '%s' does not fall under any connected hub's "
+                       "directory, and does not match a whitelisted trackDb setting.",
+                       fileUrl);
+    if (isNotEmpty(track))
+        dyStringPrintf(dy, "  This URL is the value of a fetchable trackDb setting "
+                           "('metaDataUrl' or 'colorSettingsUrl') in the stanza for "
+                           "track '%s'.  Those settings name, respectively, the TSV "
+                           "table of per-subtrack metadata and the JSON file of facet "
+                           "colors used to build the filter/metadata table on this "
+                           "page.  For a track hub, such a URL must point to a file "
+                           "inside the hub's own directory (alongside hub.txt or within "
+                           "a subdirectory there), not an external URL.", track);
     puts("Status: 400 Bad Request");
-    errAbort("Supplied fileUrl does not match any connected hubs or track settings.");
+    errAbort("%s", dyStringContents(dy));
     }
 
 // By now we know that fileUrl points to something valid to fetch and return to the user.
@@ -4598,13 +4689,21 @@ cart = theCart;
  * than a program error, so hUserAbort, which keeps it out of the stack dumps. */
 track = cartOptionalString(cart, "g");
 if (isEmpty(track))
-    hUserAbort("This page needs to know which track to show, and the address it was reached by "
-               "does not name one.  Open a track's settings from the browser, or add the track "
-               "name to the address with the g parameter, e.g. hgTrackUi?db=hg38&g=knownGene");
+    hUserAbort("This page's address does not include a track name.  Add the track name to the "
+               "address with the g parameter, e.g. hgTrackUi?db=hg38&g=knownGene, or open a "
+               "track's settings from the Genome Browser.");
 getDbAndGenome(cart, &database, &ignored, NULL);
 initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE); 
+
+/* The right-click "Reset filters to defaults" in hgTracks: handled once the tdb is found below */
+boolean clearSettings = sameOk(cartOptionalString(cart, "hgTrackUi_op"), "clearSettings");
+if (clearSettings)
+    {
+    cartRemove(cart, "hgTrackUi_op");
+    clearSettings = cfgOptionBooleanDefault("clearFiltersMenu", FALSE);
+    }
 
 /* Handle dup of track related stuff */
 char *dupeName = handleDupOp(track, trackHash);
@@ -4724,9 +4823,12 @@ if (isDup)
     tdb = dupTdbFrom(tdb, dup);
     }
 
-// A hub's description page never went through hgTrackDb, so its variables are substituted
-// here instead.  This is what lets a hub page link to its container with $parentTrack.
-hVarSubstTrackDbHtml(cart, tdb, database);
+if (clearSettings)
+    {
+    cartRemoveSettingsForTdbAndChildren(cart, tdb, tdbList);
+    puts("OK");
+    return;
+    }
 
 if(cartOptionalString(cart, "ajax"))
     {
@@ -4761,6 +4863,7 @@ else
     htmlDoEscape();
     trackUi(tdb, tdbList, ct, FALSE);
     printf("<BR>\n");
+    jsFixUpPageLinks();
     jsonPrintGlobals();
     webEnd();
     }

@@ -191,6 +191,19 @@ def extractNames(asmRpt, hapX):
       print(f"Error: File '{asmRpt}' not found.", file=sys.stderr)
       sys.exit(1)
 
+### drop stray quote marks or parens left behind by the name trimming,
+### only when they are unbalanced, e.g.: serovar strain 'Patoc
+### a ' that opens a word without a closing partner is a stray quote,
+### leave alone apostrophes such as: brewer's yeast, witches' butter
+def dropUnbalanced(name):
+    openQuotes = len(re.findall(r"(?<!\S)'", name))
+    closeQuotes = len(re.findall(r"'(?!\S)", name))
+    if openQuotes > closeQuotes:
+      name = re.sub(r"(?<!\S)'", '', name)
+    if name.count('(') != name.count(')'):
+      name = re.sub(r'[()]', '', name)
+    return re.sub(r'\s+', ' ', name).strip()
+
 ### inFh is a file handle to a list of assembly identifiers,
 ###  might be a multi column file, ignore anything after the first column
 def processList(inFh):
@@ -232,19 +245,23 @@ def processList(inFh):
         ab = hapX.replace(hx,'')
         hapX = ab
       asmType, sciName, orgName, yearDate, isolate, cultivar, extraStrings = extractNames(asmRpt, hapX)
-      outStr = f"{asmId}\t{orgName}"
+      outStr = f"{asmId}\t{dropUnbalanced(orgName)}"
       if len(extraStrings):
-        pat = re.compile(r'[()\[\]+*]')
+        # Preserve parentheses for viral strain nomenclature, only remove brackets and other chars
+        pat = re.compile(r'[\[\]+*]')
         extraStrings = pat.sub('', extraStrings)
         pat = re.compile(r'\?')
         extraStrings = pat.sub(' ', extraStrings)
         extraStrings = re.sub(re.escape(asmNameAbbrev) + ' ', '', extraStrings)
         extraStrings = re.sub(r'\s+', ' ', extraStrings)
         words = extraStrings.split()
+        # orgName has had its parens removed, match against that form too
+        words += [re.sub(r'[()]', '', w) for w in words]
         orgList = orgName.split()
         orgName = " ".join([orgWord for orgWord in orgList if orgWord not in words])
         orgName = re.sub(r'=|\s+$|^\s+', '', orgName)
         orgName = re.sub(r'\s+', ' ', orgName).strip()
+        orgName = dropUnbalanced(orgName)
         if len(orgName):
           outStr = f"{asmId}\t{orgName} ({extraStrings})"
         else:

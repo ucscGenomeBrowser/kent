@@ -1,0 +1,29 @@
+# Publication behind each EpigenCentral episignature, as listed in the lab's hub README at
+# https://github.com/ccmbioinfo/EpigenCentral-UCSC-Genome-Browser
+# Every PMID here was checked against PubMed esummary; EHMT1 has no PubMed record and is
+# cited by DOI. Columns: signature, PMID (or empty), DOI (or empty).
+#signature	pmid	doi
+16pDel	31311581
+ANKRD11	36440975
+ARID1B	42527582
+ASXL1	35361921
+CHD7	28475860
+CHD8	31311581
+DYRK1A	34345024
+Dup7	26166478
+EHMT1		10.20517/jtgg.2020.23
+EZH2	32243864
+FHS	33909990
+HNRNPK	36130591
+KANSL1	38282074
+KMT2A	42318777
+KMT2B	42318777
+KMT2C	39013459
+KMT2D_2017	28475860
+KMT2D_2026	42134323
+MN1	40280028
+NSD1	26690673
+SMARCA2	31288860
+SRCAP	33909990
+T21	42492524
+Williams	26166478

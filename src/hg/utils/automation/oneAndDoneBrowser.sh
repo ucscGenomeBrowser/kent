@@ -141,14 +141,14 @@ cd "${buildDir}"
 
 printf "\$HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \\
   -continue=\"${stepStart}\" -stop=\"${stepEnd}\" -dbName=\"${dbName}\" \\
-     -rmskSpecies=\"${rmskSpecies}\" -bigClusterHub=ku -buildDir=\`pwd\` \\
+     -rmskSpecies=\"${rmskSpecies}\" -bigClusterHub=hgwdev -buildDir=\`pwd\` \\
         -fileServer=hgwdev -smallClusterHub=hgwdev \\
            ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} \\
               -workhorse=hgwdev \"${asmId}\" >> build.log 2>&1\n" 1>&2
 
 $HOME/kent/src/hg/utils/automation/doAssemblyHub.pl \
   -continue="${stepStart}" -stop="${stepEnd}" -dbName="${dbName}" \
-     -rmskSpecies="${rmskSpecies}" -bigClusterHub=ku -buildDir=`pwd` \
+     -rmskSpecies="${rmskSpecies}" -bigClusterHub=hgwdev -buildDir=`pwd` \
         -fileServer=hgwdev -smallClusterHub=hgwdev \
            ${noRmsk} ${ncbiRmsk} ${ucscNames} ${augustusSpecies} \
               -workhorse=hgwdev "${asmId}" >> build.log 2>&1

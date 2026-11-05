@@ -1,0 +1,68 @@
+# #37621 -- a quickLifted bigWig was drawn stretched to the bounds of the chain, so signal
+# was painted where nothing is aligned.
+#
+# One commit, 5dd36916814, in bigWigLoadPreDraw() (hg/hgTracks/bigWigTrack.c).  After
+# chainSubsetOnT() clips a chain to the window, each block's pixels were scaled by the span
+# of that clipped chain instead of by the window.  When the aligned blocks reach both edges
+# of the view the two are the same, which is why this went unnoticed.  When the alignment
+# stops short, the old code spread the aligned part across the whole row.
+#
+# The window here is the simplest case of that: hs1 chr7:100,001-120,000, where exactly one
+# chain (chain 7 of /gbdb/hg38/quickLift/hs1.bb) overlaps the view and its first aligned
+# block starts at 107,741.  So the left 39% of the row has nothing aligned to it.  Checked
+# with bigBedToBed on hs1.bb and hs1.link.bb on 2026-09-30.  One chain matters for a second
+# reason: a chain that overlaps the window with no block in it crashes v503 (#38236), so the
+# four-chain window the ticket used, chr7:59,300,000-59,400,000, draws an empty page on the
+# baseline and cannot tell the two builds apart for this ticket's reason.
+#
+# The track is gc5BaseBw, because GC percent has a value at nearly every base, so an empty
+# column means "not aligned" and not "no data".  hs1 has a native gc5BaseBw as well;
+# hideDefaults hides it, so the only gc5BaseBw row on the lifted view is the hub_<n>_ one.
+#
+# What is read is the wiggle tooltip, #mouseOverText, which reports the value under the
+# cursor or the words "no data".  A graph has no map boxes, so this is the one text a script
+# can read per column.
+#
+#   * chr7:104,000 and chr7:107,000, unaligned: the tooltip says "no data".  On v503 it
+#     says a number ("40" at 104,000 on 2026-09-30), because the aligned signal was spread
+#     over this part of the row.
+#   * chr7:115,000, aligned: the tooltip says a number, not "no data", and the row is drawn
+#     in black there.  This is the positive check that the lift drew anything at all.
+#
+# The checks match "data", not "no data": the space in the tooltip is not a plain space, and
+# tip: "no data" fails on the fixed build with `tooltip says "no data", wanted "no data"`.
+# The noTip: digits are what tell "no data" from a value.
+#
+# The number at 115,000 ("30" on genome-test, "26.6667" on v503) is NOT asserted.  It is a
+# mean over the bases one pixel covers, so it moves with the image width.
+#
+# NOT covered: point 2 of the ticket (the zoom level over indels), which the fix commit
+# answers as not a bug, and several chains in one window overwriting each other.
+proof:
+  - "assertion-only 2026-09-30 -- written from #37621 and 5dd36916814 after the fix shipped"
+  - "release-ab 2026-09-30 -- fails on v503 (ts 38316, v503_branch 707b184e329) and passes on genome-test and hgwbeta (v504). On v503 the tooltip at hs1 chr7:104,000, where nothing is aligned, says \"40\" where it should say \"no data\""
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871&hideTracks=1&gc5BaseBw=full"
+  - expect: {rows: [ruler, gc5BaseBw], exact: true}
+
+  - convert: {to: hs1, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:100001-120000
+  - expect: {rows: [gc5BaseBw], noText: "Warning/Error"}
+
+  # Aligned: drawn, and the tooltip carries a value.
+  - expect: {color: {track: gc5BaseBw, at: "chr7:115000", is: "0,0,0"}}
+  - mouseover: {track: gc5BaseBw, at: "chr7:115000"}
+  - expect: {noTip: "data", has: '#mouseOverText:visible'}
+
+  # Not aligned: nothing there.  The old code put the aligned signal here.
+  - mouseover: {track: gc5BaseBw, at: "chr7:104000"}
+  - expect: {tip: "data", noTip: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]}
+  - mouseover: {track: gc5BaseBw, at: "chr7:107000"}
+  - expect: {tip: "data", noTip: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]}

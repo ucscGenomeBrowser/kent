@@ -17,6 +17,8 @@
 #include "customComposite.h"
 #include "chromAlias.h"
 #include "trackHub.h"
+#include "htmlSanitize.h"
+#include "blatShare.h"
 
 // Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
@@ -215,7 +217,7 @@ return kindOfChild;
 }
 
 char* tdbTopParent(struct trackDb *tdb)
-/* return the name of the top-most parent, so the parent of a composite or the name of the superTrack for 
+/* return the name of the top-most parent, so the parent of a composite or the name of the superTrack for
  * a composite in a superTrack. Or return NULL if this is already a top-level track. */
 {
     if (!tdb->parent)
@@ -263,6 +265,18 @@ char* topParent = tdbTopParent(track->tdb);
 if (topParent)
     jsonObjectAdd(ele, "topParent", newJsonString(topParent));
 
+// Names of the enclosing superTracks, if any, so a direct link to this track (e.g. the hgc
+// "Share a link" popup) can also turn their visibility to "show" -- superTracks default to
+// hide, so without this the track would not appear when the link is opened fresh.
+struct slName *supers = tdbSuperTrackAncestors(track->tdb);
+if (supers != NULL)
+    {
+    char *superTrack = slNameListToString(supers, ',');
+    jsonObjectAdd(ele, "superTrack", newJsonString(superTrack));
+    freeMem(superTrack);
+    slNameFreeList(&supers);
+    }
+
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)
     {
@@ -279,6 +293,10 @@ if (kindOfChild != kocOrphan)
 
 boolean isCustomComposite = trackDbSettingOn(track->tdb, CUSTOM_COMPOSITE_SETTING);
 jsonObjectAdd(ele, "isCustomComposite", newJsonBoolean(isCustomComposite));
+
+// BLAT results custom track: hgTracks.js offers "Back to BLAT results" in its right-click menu
+if (blatIsResultTrack(track->tdb))
+    jsonObjectAdd(ele, "blatResult", newJsonBoolean(TRUE));
 
 // check if track can have merged items, needed for context clicks in track
 char *canHaveMergedItems = trackDbSetting(track->tdb, MERGESPAN_TDB_SETTING);
@@ -1876,7 +1894,13 @@ for (;item!=NULL;item=item->next)
         if (cfgOptionBooleanDefault("showMouseovers", FALSE))
             {
             if (isNotEmpty(item->tooltip))
-                hPrintf(" title='%s' data-tooltip='%s'", encodedString, attributeEncode(item->tooltip));
+                {
+                char *sanitized = htmlSanitize(item->tooltip);
+                char *encoded = attributeEncode(sanitized);
+                hPrintf(" title='%s' data-tooltip='%s'", encodedString, encoded);
+                freeMem(encoded);
+                freeMem(sanitized);
+                }
             else
                 hPrintf(" TITLE='%s'", encodedString);
             }
@@ -1891,7 +1915,11 @@ for (;item!=NULL;item=item->next)
     else if (isNotEmpty(item->tooltip) && cfgOptionBooleanDefault("showMouseovers", FALSE))
         {
         // some items have no title string (no item name) but do have tooltips
-        hPrintf(" data-tooltip='%s'", attributeEncode(item->tooltip));
+        char *sanitized = htmlSanitize(item->tooltip);
+        char *encoded = attributeEncode(sanitized);
+        hPrintf(" data-tooltip='%s'", encoded);
+        freeMem(encoded);
+        freeMem(sanitized);
         }
     if (item->id != NULL)
         hPrintf(" id='%s'", item->id);
@@ -2071,6 +2099,7 @@ else if (slice->link != NULL)
         hPrintf("  <A HREF='%s'",slice->link);
     if (slice->title != NULL)
         {
+        char *encTitle = attributeEncode(slice->title);
         if (sliceType == stButton)
             {
             enum browserType browser = cgiClientBrowser(NULL,NULL,NULL);
@@ -2078,14 +2107,15 @@ else if (slice->link != NULL)
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if (imgTrack->reorderable)
                 hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",
-                        attributeEncode(slice->title), newLine, ellipsis, newLine,
+                        encTitle, newLine, ellipsis, newLine,
                         (tdbIsCompositeChild(imgTrack->tdb) ? " highlighted subtracks" : "") );
             else
                 hPrintf(" TITLE='%s%sclick or right click to configure%s'",
-                        attributeEncode(slice->title), newLine, ellipsis);
+                        encTitle, newLine, ellipsis);
             }
         else
-            hPrintf(" TITLE='Click for: &#x0A;%s'", attributeEncode(slice->title) );
+            hPrintf(" TITLE='Click for: &#x0A;%s'", encTitle );
+        freeMem(encTitle);
         }
     hPrintf(">\n" );
     }
@@ -2220,6 +2250,13 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
             (imgTrack->centerLabelSeen != clAlways ? " clOpt" : ""),
             (imgTrack->ajaxRetrieval ? " mustRetrieve" : ""));
 
+    char *encLabel = NULL;
+    if (imgTrack->reorderable)
+        {
+        char *label = labelWithParents(imgTrack->tdb, imgTrack->tdb->longLabel);
+        encLabel = attributeEncode(label);
+        freeMem(label);
+        }
     if (imgBox->showSideLabel && imgBox->plusStrand)
         {
         // button
@@ -2231,7 +2268,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
             hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",
-                    name,attributeEncode(imgTrack->tdb->longLabel),newLine);
+                    name,encLabel,newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
@@ -2261,7 +2298,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         safef(name, sizeof(name), "side_%s", trackName);
         if (imgTrack->reorderable)
             hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",
-                    name,attributeEncode(imgTrack->tdb->longLabel),newLine);
+                    name,encLabel,newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE, jsonTdbVars);
@@ -2274,6 +2311,7 @@ for (;imgTrack!=NULL;imgTrack=imgTrack->next)
         sliceAndMapDraw(imgBox,imgTrack,stButton, name,FALSE, jsonTdbVars);
         hPrintf("</TD>\n");
         }
+    freeMem(encLabel);
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");

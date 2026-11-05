@@ -45,6 +45,110 @@
 </tr>
 
 <tr>
+    <td>2026-10-17</td>
+    <td>bigBed</td>
+    <td><a href="trackDbHub.html#dotBracketField">dotBracketField</a></td>
+    <td>Draws an RNA secondary structure over each item, read as a dot-bracket string from a
+    named extra field. The string covers the spliced item, one character per base of the
+    blocks, and spaces pad the bases with no prediction.</td>
+</tr>
+
+<tr>
+    <td>2026-10-17</td>
+    <td>bigBed</td>
+    <td><a href="trackDbHub.html#dotBracketColor">dotBracketColor</a></td>
+    <td>Sets the color the RNA secondary structure is drawn in on a track using
+    dotBracketField. Without it the structure is drawn in black or white, whichever stands
+    out against the item.</td>
+</tr>
+
+<tr>
+    <td>2026-10-09</td>
+    <td>bed, bigBed, genePred, bigGenePred, psl, bigPsl</td>
+    <td><a href="trackDbHub.html#decorator">decorator</a></td>
+    <td>Two more decorator glyphs, ArrLeft and ArrRight: like BarLeft and BarRight, but with an
+    arrow in the fill color, or only its head when narrow, that points in the direction of the decoration's strand. See the
+    <a href="../decorator.html">Track Decorators</a> page.</td>
+</tr>
+
+<tr>
+    <td>2026-10-08</td>
+    <td>bed, bigBed, genePred, bigGenePred, psl, bigPsl</td>
+    <td><a href="trackDbHub.html#decorator">decorator</a></td>
+    <td>Two new decorator glyphs, BarLeft and BarRight, mark the left or right end of an item,
+    e.g. the breakpoint of a fusion gene partner, with a band in the fill color and a bar in the
+    outline color. See the <a href="../decorator.html">Track Decorators</a> page.</td>
+</tr>
+
+<tr>
+    <td>2026-09-30</td>
+    <td>vcfTabix</td>
+    <td><a href="trackDbHub.html#maxItems">maxItems</a></td>
+    <td>Now also sets the maximum number of VCF records loaded for the window, which was only
+    configurable server-wide with the hg.conf setting vcfMaxItems (default 10,000).</td>
+</tr>
+
+<tr>
+    <td>2026-09-26</td>
+    <td>vcf, vcfTabix, vcfPhasedTrio</td>
+    <td><a href="trackDbHub.html#excludeFilterValues">excludeFilterValues</a></td>
+    <td>New setting. A comma-separated list of FILTER column values whose variants are
+    hidden by default. The values are pre-checked in the "Exclude variants with these FILTER
+    values" list on the configuration page, and the user can uncheck them.</td>
+</tr>
+
+<tr>
+    <td>2026-09-21</td>
+    <td>bed, bigBed, bedDetail, bedGraph, bedLogR</td>
+    <td><a href="trackDbHub.html#itemRgb">itemRgb</a></td>
+    <td>A track that sets both <code>itemRgb on</code> and
+    <a href="trackDbHub.html#color">color</a> again takes its item colors from the file's
+    RGB column and its label color from <code>color</code>; since 2025 <code>color</code> had
+    won outright. Both settings are inherited from a track's <code>parent</code>, and an
+    explicit <code>itemRgb</code> wins wherever it is set. The <code>itemRgb</code> entry now
+    lists all four combinations, and the
+    <a href="trackDbHub.html#colorFields">colorFields</a> entry no longer says that any
+    <code>color</code> setting suppresses item coloring.</td>
+</tr>
+
+<tr>
+    <td>2026-09-18</td>
+    <td>all</td>
+    <td><a href="trackDbHub.html#html">html</a></td>
+    <td>A hub's track description page now has variables substituted into it.
+    <code>${db}</code>, <code>${organism}</code>, <code>${Organism}</code>,
+    <code>${ORGANISM}</code>, <code>${date}</code> and <code>${downloadsServer}</code> were
+    already available on UCSC's own track descriptions and now work in a hub's as well.
+    <code>${track}</code> and <code>${parentTrack}</code> are new: they give a track's name
+    and the name of its container in the form the Genome Browser uses, so the page of a
+    track inside a <a href="trackDbHub.html#compositeTrack">compositeTrack</a> or a
+    <a href="trackDbHub.html#superTrack">superTrack</a> can link back to the container's own
+    page. A dollar sign followed by anything else is left alone.</td>
+</tr>
+<tr>
+    <td>2026-09-17</td>
+    <td>vcf, vcfTabix, vcfPhasedTrio</td>
+    <td><a href="trackDbHub.html#sampleColorFile">sampleColorFile</a></td>
+    <td>Documenting the last two VCF settings that had no entry here.
+    <code>sampleColorFile</code> names a tab-separated sample-to-color table that colors the
+    clustering tree drawn by <code>hapClusterMethod treeFile</code>; a space-separated list of
+    <code>label=url</code> pairs offers the reader a choice of colorings.
+    <a href="trackDbHub.html#showHardyWeinberg">showHardyWeinberg</a> adds the predicted
+    Hardy-Weinberg genotype frequencies to the details page of a two-allele variant.
+    <code>showHardyWeinberg</code> and
+    <a href="trackDbHub.html#sampleMetadataFile">sampleMetadataFile</a> also work on
+    <code>vcfPhasedTrio</code> tracks, which tagTypes.tab had not allowed.</td>
+</tr>
+<tr>
+    <td>2026-09-16</td>
+    <td>bed, bigBed, genePred, bigGenePred, psl, bigPsl</td>
+    <td><a href="trackDbHub.html#denseClick">denseClick</a></td>
+    <td>New setting. In dense mode the whole row is normally one link that expands the
+    track. With <code>denseClick on</code> each item on the dense row gets its own link
+    to its details page and its own mouseover, while the track keeps its single-row
+    height. Clicking a part of the row that holds no item still expands the track.</td>
+</tr>
+<tr>
     <td>2026-09-09</td>
     <td>vcf, vcfTabix, vcfPhasedTrio</td>
     <td><a href="trackDbHub.html#minAc">minAc</a></td>

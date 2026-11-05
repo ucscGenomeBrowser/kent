@@ -26,6 +26,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
+// Shared with tests/preflight.js so a run and its fixture check cannot disagree about
+// which server is being driven, which hg.conf it reads, or which account signs in.
+// docent.js is no longer a single file: targetConf.js has to travel with it.
+const { resolveTarget, serverFor, loginLookup } = require('./targetConf.js');
 
 // ---------- parse script + config ----------
 const SCRIPT = process.argv[2];
@@ -71,22 +75,14 @@ const STILLDIR = STILLPARENT ? path.resolve(HERE, STILLPARENT, base)
 const SESSDIR = path.join(
   path.resolve(HERE, process.env.DOCENT_SESSIONS || doc.sessions || 'sessions'), base);
 
-// `target:` takes a shorthand from this table, a bare `hgwdev-<user>` sandbox name
-// (expanded below), or a full https://.../cgi-bin URL. Default is genome-test, so a
-// script that forgets to say where it runs does not silently hit someone's sandbox.
-const SERVERS = {
-  'rr': 'https://genome.ucsc.edu/cgi-bin',
-  'genome-test': 'https://genome-test.gi.ucsc.edu/cgi-bin',
-  'hgwdev': 'https://hgwdev.gi.ucsc.edu/cgi-bin',
-  'hgwbeta': 'https://hgwbeta.soe.ucsc.edu/cgi-bin',
-};
-const resolveTarget = t => {
-  if (!t) return SERVERS['genome-test'];
-  if (SERVERS[t]) return SERVERS[t];
-  if (/^hgwdev-[a-z0-9._-]+$/i.test(t)) return `https://${t}.gi.ucsc.edu/cgi-bin`;  // personal sandbox
-  return t;                                                    // full URL
-};
-const SERVER = resolveTarget(doc.target).replace(/\/$/, '');
+// `target:` takes a shorthand (rr, genome-test, hgwdev, hgwbeta), a bare `hgwdev-<user>`
+// sandbox name, or a full https://.../cgi-bin URL; DOCENT_TARGET overrides it for the
+// whole run, so a suite written against one server can be pointed at another -- a sandbox,
+// a ticket park, a demo browser -- without editing the scripts. Both rules live in
+// targetConf.js, beside the fixture check that has to agree with them. The trackDb cache
+// below keys on SERVER, so a redirected run cannot read back a listing fetched from the
+// server the script names.
+const SERVER = serverFor(doc.target);
 // SCALE: the same tour rendered at k times the resolution, for figures that have to print.
 // Nothing is upscaled -- a still only ever has the pixels it was drawn with -- so each layer
 // is asked to draw k times as many while the layout is left alone:
@@ -297,6 +293,33 @@ const SCALE_INIT = ({ k, tipPx }) => {
   else add();
 };
 
+// hgTracks has TWO tooltips and their ids differ only in the case of one letter, so a check
+// that reads one is blind to the other. hg/js/utils.js hangs an ITEM's tooltip off
+// `#mouseoverContainer`: the text of a map box's title, an rsID or a gene name. A WIGGLE
+// reports itself the other way -- the `mouseOver` module in hg/js/hgTracks.js writes the
+// value under the cursor into `#mouseOverText`, read out of the per-pixel spans hgTracks
+// leaves in a trash .json (`div.mouseOverData[jsonUrl=...]`). A track drawn as a coverage
+// graph has no map boxes at all, so its numbers exist ONLY in the second one, and a `tip:`
+// that looked at the first read an empty string and then waited out its timeout.
+//
+// hg/js/mouseOver.js is an older copy of that module and is NOT what the page runs: it
+// wants a `#mouseOverContainer` and a `.wigMouseOver` that hgTracks no longer writes. Do
+// not take it for the live code, as this did.
+//
+// Item tooltip first, so a page showing both answers the way it always did.
+const TIP_INIT = () => {
+  window.__docentTip = () => {
+    for (const id of ['mouseoverContainer', 'mouseOverText']) {
+      const e = document.getElementById(id);
+      if (!e || !e.offsetWidth) continue;
+      const st = getComputedStyle(e);
+      if (st.display === 'none' || st.visibility === 'hidden') continue;
+      return e;
+    }
+    return null;
+  };
+};
+
 // ---------- animated cursor (same technique as the walkthrough-video skill's record.js) ----------
 // The glyph and its box are shared with pinShot(), which draws a STATIC copy at every
 // pinned mouseover so a combined figure shows where each tooltip was raised from. Keep
@@ -329,6 +352,24 @@ const CURSOR_INIT = ({ box, svg }) => {
   else add();
 };
 
+// ---------- LOGIN: the one fixture that cannot live in the repository ----------
+// hgCollection, and the saving half of hgSession, refuse to run for a visitor who is not
+// logged in (hgCollection.c doMiddle, "You must be logged in to edit collections"). The
+// login cookie is validated against a salted hash (login.cookieSalt, hg/lib/wikiLink.c),
+// so there is no way to hand the browser a cookie: a script that needs one of those pages
+// has to sign in the way a person does.
+//
+// Which account that is, and why it is keyed by hgcentral rather than by server, is in
+// targetConf.js. All this adds is the failure: `login:` is a step, so it throws, while
+// preflight reports the same sentence as a missing fixture. A password cannot go in a
+// script, `login:` has no argument that could carry one, and nothing here prints one.
+function loginCreds(server) {
+  const c = loginLookup(server);
+  if (c.why) throw new Error(`login: ${c.why}`);
+  return { user: c.user, password: c.password,
+           from: c.source === 'the environment' ? c.source : `[${c.section}] in ${c.source}` };
+}
+
 function absurl(u) {
   if (/^https?:/.test(u)) return u;
   if (u.startsWith('/cgi-bin/')) return SERVER.replace(/\/cgi-bin$/, '') + u;
@@ -350,14 +391,23 @@ const T_START = Date.now();
   if (DERIVE) { await deriveMain(); return; }
   fs.mkdirSync(STILLDIR, { recursive: true });
   const browser = await chromium.launch({ headless: true, args: ['--force-color-profile=srgb'] });
+  // A ticket park's https port serves one self-signed certificate shared by every park, so
+  // accept it there -- and only there, never for a real server. The https port is the one a
+  // `login:` needs on a park: hgLogin writes its form action as https:// on the port it was
+  // reached on, so the plain-http port posts the password to a TLS listener that is not there.
+  const loopback = /^https:\/\/(127\.0\.0\.1|localhost)(:|\/)/.test(SERVER);
   const ctx = await browser.newContext({
     viewport: { width: VW, height: VH }, deviceScaleFactor: SCALE,
+    ...(loopback ? { ignoreHTTPSErrors: true } : {}),
     ...(FAST ? {} : { recordVideo: { dir: path.join(HERE, '.vid_' + base), size: { width: VW, height: VH } } }),
   });
   if (SCALE > 1) await ctx.addInitScript(SCALE_INIT, SCALE_ARGS);
+  await ctx.addInitScript(TIP_INIT);
   await ctx.addInitScript(CURSOR_INIT, { box: CURSOR_BOX, svg: CURSOR_SVG });
   await ctx.addInitScript(() => { try { localStorage.setItem('hgTracks_hideTutorial', '1'); } catch (e) {} });
   const page = await ctx.newPage();
+  const T_REC = Date.now();        // the recorder starts with the page; see FLASH below
+  const shotSecs = [];             // when each shot: was taken, seconds into the recording
   const cur = { x: 120, y: 120 };
   const pinnedTips = [];   // recorded mouseover tooltips for the next pinShot (per view)
 
@@ -645,10 +695,9 @@ const T_START = Date.now();
       // Floating overlays to capture together with the image: the mouseover tooltip,
       // and any visible jQuery-UI dialog (e.g. the drag-select "Zoom In / Highlight" box).
       const overlays = [];
-      const tip = document.getElementById('mouseoverContainer');
-      if (tip && tip.offsetWidth > 0 &&
-          getComputedStyle(tip).display !== 'none' && getComputedStyle(tip).visibility !== 'hidden') overlays.push(tip);
-      for (const d of document.querySelectorAll('.ui-dialog')) if (d.offsetWidth > 0) overlays.push(d);
+      const tip = window.__docentTip && window.__docentTip();
+      if (tip) overlays.push(tip);
+      for (const d of document.querySelectorAll('.ui-dialog, .context-menu')) if (d.offsetWidth > 0) overlays.push(d);
       if (!overlays.length) return null;
       const a = im.getBoundingClientRect();
       let x = a.left, y = a.top, x2 = a.right, y2 = a.bottom;
@@ -665,6 +714,7 @@ const T_START = Date.now();
       // unusable as a figure. Capture the viewport only, i.e. the top of the page.
       await page.screenshot({ path: p });
     }
+    shotSecs.push((Date.now() - T_REC) / 1000);
     console.log('SHOT', p);
     await sleep(SHOTHOLD);
   }
@@ -678,6 +728,13 @@ const T_START = Date.now();
     let key = null;
     for (const c of cands) {
       key = await page.evaluate(k => {
+        // A trailing * matches by prefix, for a custom track, whose id carries a random
+        // number no script can know in advance (ct_rm38087_723 is ct_rm38087_*).
+        if (k.endsWith('*')) {
+          const pre = [...document.querySelectorAll('[id^="img_data_"]')]
+            .find(e => e.id.startsWith('img_data_' + k.slice(0, -1)));
+          return pre ? pre.id.replace('img_data_', '') : null;
+        }
         if (document.getElementById('img_data_' + k)) return k;
         const el = [...document.querySelectorAll('[id^="img_data_"]')]
           .find(e => e.id === 'img_data_' + k || e.id.endsWith('_' + k));
@@ -720,10 +777,17 @@ const T_START = Date.now();
   // rm35920 read hg38's native `ultras` for years the same way. An answer that is wrong
   // but reads as a pass is worse than a failure, so this now returns nothing and lets the
   // error below say where the name really was.
-  async function itemXY(t, want, titleOnly) {
+  //
+  // `spanOnly` says the caller asked by VALUE, which only a wiggle has, so the map-box scan
+  // is skipped entirely. It has to be: a track's own center label carries the title "Click
+  // to alter the display density of <track>", and a track whose name contains the wanted
+  // digits matches that box before any span is looked at. A probe for the value 3 on a
+  // track called rm38253stairs hovered the center label and was told so only because the
+  // tooltip that came up disagreed with the one the box promised.
+  async function itemXY(t, want, titleOnly, spanOnly) {
     const { key, img, row, imgPx } = await trackBox(t);
     const band = { top: row.y, bot: row.y + row.height };
-    const area = await page.evaluate(({ want, titleOnly, band, imgBox, key }) => {
+    const area = spanOnly ? null : await page.evaluate(({ want, titleOnly, band, imgBox, key }) => {
       // Does this map hold the pixels of the track we were asked about?
       const isMine = m => {
         const nm = (m && m.getAttribute('name')) || '';
@@ -781,12 +845,22 @@ const T_START = Date.now();
                   + (p.tip ? `, expecting tip "${p.tip.slice(0, 40)}"` : ''));
       return { x: p.cx, y: p.cy, href: p.href, tip: p.tip };
     }
+    // A WIGGLE has no per-item map box at all: its values live in the spans the `mouseOver`
+    // module in hg/js/hgTracks.js fetches from a trash .json, one run of pixels per value.
+    // They are `mouseOver.items[<track>]`, each `{x1, x2, v}`, and x1/x2 are offsets from
+    // the left edge of `td_data_<track>` in the pixels the SERVER drew -- which is what
+    // hgTracks.js itself compares the cursor against. This read used to go to
+    // `window.mapData.spans[...]` for a member called `value`; that is hg/js/mouseOver.js,
+    // an older copy of the module the page does not load, and the member there is `v` as
+    // well, so `value:` had never matched anything on any track.
     const span = await page.evaluate(({ keys, want }) => {
-      const md = window.mapData; if (!md || !md.spans) return null;
+      const mo = window.mouseOver; if (!mo || !mo.items) return null;
       for (const k of keys) {
-        const arr = md.spans[k]; if (!arr) continue;
-        const s = arr.find(r => String(r.value || '').includes(want));
-        if (s) return { x1: s.x1, x2: s.x2 };
+        const arr = mo.items[k]; if (!arr) continue;
+        const s = arr.find(r => String(r.v).includes(want));
+        if (!s) continue;
+        const td = document.getElementById('td_data_' + k);
+        return { x1: s.x1, x2: s.x2, tdLeft: td ? td.getBoundingClientRect().left : null };
       }
       return null;
     }, { keys: [key, t], want: String(want) });
@@ -855,7 +929,8 @@ const T_START = Date.now();
           + `${show.length < names.length ? `, ... (${names.length} distinct; DOCENT_ROWS=1 for all)` : ''}`
           : ' and none of them carries a name or a title'}${alsoIn}`);
     }
-    return { x: img.x + imgPx * (span.x1 + span.x2) / 2, y: row.y + row.height / 2, href: null };
+    const left = (span.tdLeft != null) ? span.tdLeft : img.x;
+    return { x: left + imgPx * (span.x1 + span.x2) / 2, y: row.y + row.height / 2, href: null };
   }
   // A POSITIONAL point plus the hgc link of the map box nearest it. `click:` needs this
   // because some tracks have no item that can be named at all: every subtrack of GIAB
@@ -1007,6 +1082,116 @@ const T_START = Date.now();
       return { top, total, box: [xa, xb, w, h] };
     }, { id, frac, xpx: (o.x != null) ? Number(o.x) : null, wide: Number(o.wide || 5) });
   }
+  // A size against a comparison spec: a bare number is a CEILING, which is the check anyone
+  // actually wants, and "<1200", ">=300", "=850" are there when it is not. Shared by the
+  // image `height:` and by `box:`, so the two cannot drift into different grammars.
+  // Returns null when it holds, or the text of what went wrong.
+  function cmpSize(got, spec, what) {
+    const m = /^\s*(<=|>=|<|>|=)?\s*(\d+)\s*$/.exec(String(spec));
+    if (!m) return `${what}: cannot read "${spec}"`;
+    const n = Number(m[2]), op = m[1] || '<=';
+    const ok = op === '<' ? got < n : op === '>' ? got > n
+      : op === '>=' ? got >= n : op === '=' ? got === n : got <= n;
+    return ok ? null : `${what} is ${Math.round(got)}px, wanted ${op}${n}`;
+  }
+  // The bounding boxes of everything a selector matches, in DOCUMENT coordinates (the page's
+  // own scroll added in), so two elements can be compared even when the page has been
+  // scrolled between the two reads. An element with no box at all -- display:none, or never
+  // laid out -- is dropped rather than reported as a zero-sized box at the origin, which
+  // would sit "inside" anything.
+  async function elemRects(sel) {
+    return await page.evaluate(s => {
+      const out = [];
+      document.querySelectorAll(s).forEach(e => {
+        const r = e.getBoundingClientRect();
+        if (r.width <= 0 && r.height <= 0) return;
+        out.push({ left: r.left + scrollX, top: r.top + scrollY,
+                   right: r.right + scrollX, bottom: r.bottom + scrollY,
+                   width: r.width, height: r.height });
+      });
+      return out;
+    }, sel).catch(() => null);
+  }
+  const showRect = r => `${Math.round(r.left)},${Math.round(r.top)} `
+    + `${Math.round(r.width)}x${Math.round(r.height)}`;
+  // box: WHERE an element sits, which no other check here can ask. has:/noHas: say what is in
+  // the page and never where it is, and color: samples a track row inside the image and
+  // cannot be pointed at a page element. #38251 is the bug that needs this: the narrow-window
+  // menu icon left the blue bar and slid across the menu items, with the same elements, the
+  // same text and the same selectors matching either way.
+  //
+  //   box: {sel: "#topRightLinks", inside: "#main-menu-whole"}   every edge within that box
+  //   box: {sel: "#topRightLinks", clear: "ul.nice-menu > li > a", gap: 8}  overlaps none
+  //   box: {sel: "#main-menu-whole", height: "<=34", width: ">=1000"}
+  //
+  // Name the LINK rather than the list item when asking about overlap: an li's box carries
+  // padding and is wider than the label inside it, so a clear: on the li can fail for a
+  // reason that is not a bug.
+  //
+  // EVERY element `sel:` matches has to satisfy every clause, which is the natural reading of
+  // `{sel: "ul.nice-menu > li", inside: "#main-menu-whole"}` -- every menu item is in the bar
+  // -- and behaves the way a first-match rule would when the selector names one element.
+  // `inside:` and `clear:` take the first match of THEIR selector, since a container is one
+  // element, except that `clear:` is checked against all of them: "it must not cover any menu
+  // item" is the question being asked.
+  //
+  // `tolerance:` (default 1px) is slack on `inside:`, for a border or a rounded edge that
+  // rounds the wrong way. `gap:` on `clear:` asks for that many pixels of clear space rather
+  // than merely for no overlap.
+  async function boxCheck(o) {
+    const bad = [];
+    if (!o.sel) return ['box: needs sel:'];
+    const mine = await elemRects(o.sel);
+    if (mine == null) return [`box: cannot read the selector "${o.sel}"`];
+    if (!mine.length) return [`box: nothing with a box matches "${o.sel}"`];
+    const tol = (o.tolerance != null) ? Number(o.tolerance) : 1;
+    // Which of several matches went wrong is worth saying, and saying nothing when there is
+    // only one: "ul.nice-menu > li (3 of 9)" reads badly for a single #topRightLinks.
+    const which = i => mine.length > 1 ? `${o.sel} (${i + 1} of ${mine.length})` : o.sel;
+    let outer = null, others = null;
+    if (o.inside != null) {
+      outer = await elemRects(o.inside);
+      if (outer == null) bad.push(`box: cannot read the selector "${o.inside}"`);
+      else if (!outer.length) bad.push(`box: nothing with a box matches "${o.inside}"`);
+    }
+    if (o.clear != null) {
+      others = await elemRects(o.clear);
+      if (others == null) bad.push(`box: cannot read the selector "${o.clear}"`);
+      else if (!others.length) bad.push(`box: nothing with a box matches "${o.clear}"`);
+    }
+    const gap = Number(o.gap || 0);
+    mine.forEach((me, i) => {
+      if (outer && outer.length) {
+        const b = outer[0];
+        const off = [];
+        if (me.left   < b.left   - tol) off.push(`${Math.round(b.left - me.left)}px past its left`);
+        if (me.right  > b.right  + tol) off.push(`${Math.round(me.right - b.right)}px past its right`);
+        if (me.top    < b.top    - tol) off.push(`${Math.round(b.top - me.top)}px above it`);
+        if (me.bottom > b.bottom + tol) off.push(`${Math.round(me.bottom - b.bottom)}px below it`);
+        if (off.length)
+          bad.push(`${which(i)} is not inside ${o.inside}: ${off.join(', ')}`
+                 + ` -- it is at ${showRect(me)}, ${o.inside} at ${showRect(b)}`);
+      }
+      if (others && others.length) {
+        // A selector can legitimately match the element under test as well (every li, say,
+        // against every li); an element never has to be clear of itself.
+        const hits = others.filter(r => !(r.left === me.left && r.top === me.top
+                                       && r.width === me.width && r.height === me.height)
+                                     && me.left < r.right + gap && r.left < me.right + gap
+                                     && me.top < r.bottom + gap && r.top < me.bottom + gap);
+        if (hits.length)
+          bad.push(`${which(i)} at ${showRect(me)} is not clear of ${hits.length} of `
+                 + `${others.length} "${o.clear}"`
+                 + (gap ? ` by ${gap}px` : '') + `: ${hits.slice(0, 3).map(showRect).join('; ')}`);
+      }
+      for (const [k, spec] of [['height', o.height], ['width', o.width]]) {
+        if (spec == null) continue;
+        const why = cmpSize(me[k], spec, `${which(i)} ${k}`);
+        if (why) bad.push(why);
+      }
+    });
+    return bad;
+  }
   // "r,g,b" or "#rrggbb" -> [r,g,b]. No color NAMES on purpose: trackDb's `color 0,255,0`
   // is not CSS `green` (#008000), and a script that says one and means the other would be
   // wrong in a way nobody would look for.
@@ -1028,7 +1213,8 @@ const T_START = Date.now();
     const t = o.track; if (!t) throw new Error('mouseover: needs a track');
     const want = o.item ?? o.title ?? o.value;         // identity mode if any is set
     const spot = (want != null)
-      ? await itemXY(t, want, o.title != null && o.item == null && o.value == null)
+      ? await itemXY(t, want, o.title != null && o.item == null && o.value == null,
+                     o.value != null && o.item == null && o.title == null)
       : await posXY(t, o);
     const { x, y } = spot;
     // Raise a FRESH tooltip for THIS item, and be sure it IS this item's. The browser shows
@@ -1040,29 +1226,20 @@ const T_START = Date.now();
     // "some tooltip is visible" is therefore not enough: when we know the item's own text
     // (from its map box) we wait for exactly that.
     const tipHtml = () => page.evaluate(() => {
-      const c = document.getElementById('mouseoverContainer');
-      if (!c || !c.offsetWidth) return null;
-      const st = getComputedStyle(c);
-      return (st.display === 'none' || st.visibility === 'hidden') ? null : c.innerHTML;
+      const c = window.__docentTip();
+      return c ? c.innerHTML : null;
     });
     const prevTip = await tipHtml();
     await page.mouse.move(2, y); cur.x = 2; cur.y = y;
-    if (prevTip) await page.waitForFunction(() => {
-      const c = document.getElementById('mouseoverContainer');
-      if (!c || !c.offsetWidth) return true;
-      const st = getComputedStyle(c);
-      return st.display === 'none' || st.visibility === 'hidden';
-    }, null, { timeout: 2000 }).catch(() => {});
+    if (prevTip) await page.waitForFunction(() => !window.__docentTip(),
+      null, { timeout: 2000 }).catch(() => {});
     await sleep(60);
     await glide(x, y);
     // small jiggle so the mousemove handler definitely fires and positions the tooltip
     await page.mouse.move(x + 1, y); await sleep(60); await page.mouse.move(x, y);
     const shown = () => page.evaluate(() => {
-      const c = document.getElementById('mouseoverContainer');
-      if (!c || !c.offsetWidth) return null;
-      const st = getComputedStyle(c);
-      if (st.display === 'none' || st.visibility === 'hidden') return null;
-      return (c.textContent || '').replace(/\s+/g, ' ').trim();
+      const c = window.__docentTip();
+      return c ? (c.textContent || '').replace(/\s+/g, ' ').trim() : null;
     });
     const wantTip = spot.tip || null;
     if (wantTip) {
@@ -1072,10 +1249,8 @@ const T_START = Date.now();
       // leaves no whitespace at all in textContent, so any tag-to-space normalisation would
       // never match and the wait would just burn its timeout on a tooltip that was right.
       await page.waitForFunction(w => {
-        const c = document.getElementById('mouseoverContainer');
-        if (!c || !c.offsetWidth) return false;
-        const st = getComputedStyle(c);
-        if (st.display === 'none' || st.visibility === 'hidden') return false;
+        const c = window.__docentTip();
+        if (!c) return false;
         const flat = z => z.replace(/\s+/g, '');
         // A distinctive PREFIX, not the whole string: the head of a mouseOver carries the
         // item's identity (its name/HGVS), while the tail can render differently from the
@@ -1089,10 +1264,8 @@ const T_START = Date.now();
                    + `      got : ${JSON.stringify(flat(await shown()).slice(0, 70))}`);
     } else {
       await page.waitForFunction(prev => {
-        const c = document.getElementById('mouseoverContainer');
-        if (!c || !c.offsetWidth) return false;
-        const st = getComputedStyle(c);
-        if (st.display === 'none' || st.visibility === 'hidden') return false;
+        const c = window.__docentTip();
+        if (!c) return false;
         return prev == null || c.innerHTML !== prev;
       }, prevTip, { timeout: 3000 }).catch(() => {});
     }
@@ -1132,8 +1305,8 @@ const T_START = Date.now();
   // own offset so pinShot() can draw a cursor exactly where the tip was raised from.
   async function recordTip(x, y) {
     const t = await page.evaluate(({ x, y }) => {
-      const c = document.getElementById('mouseoverContainer');
-      if (!c || !c.offsetWidth) return null;
+      const c = window.__docentTip();
+      if (!c) return null;
       const im = document.getElementById('imgTbl');
       const ir = im ? im.getBoundingClientRect() : { left: 0, top: 0 };
       return { cx: x - ir.left, cy: y - ir.top,
@@ -1390,6 +1563,32 @@ const T_START = Date.now();
     await captureState();
     if (o.shot) await shot(o.shot);
   }
+  // The warning text the server put on the page, for a failure message. hgTracks lists each
+  // warn() as an <li> under #warnList. hgCustom prints a red "Error" (orange "Warning") span
+  // and the message after it. Without this a run that fails on noText: "Warning/Error", or
+  // on a custom track that never loaded, says only THAT the server complained, and the why
+  // is left in the Apache error log. The 2026-09-27 nightly lost two scripts that way to a
+  // 20-minute hgdownload outage, and the log alone could not tell it from a regression.
+  async function serverWarnings() {
+    const said = await page.evaluate(() => {
+      const out = [...document.querySelectorAll('#warnList li')].map(e => e.textContent);
+      // hgCustom writes <B><span>Error</span><P>message</B>, and the parser moves the
+      // message out of the span's element, so take the page text that follows the span.
+      const body = document.body ? document.body.innerText : '';
+      for (const s of document.querySelectorAll('span')) {
+        const t = s.textContent.trim();
+        if ((t !== 'Error' && t !== 'Warning') || !/red|orange/i.test(s.style.color)) continue;
+        const r = document.createRange();
+        r.setStartAfter(s);
+        r.setEnd(document.body, document.body.childNodes.length);
+        const after = r.toString().trim().split('\n')[0];
+        if (after) out.push(`${t}: ${after}`);
+      }
+      return out;
+    }).catch(() => []);
+    const clip = s => s.replace(/\s+/g, ' ').trim().slice(0, 400);
+    return [...new Set(said.map(clip).filter(Boolean))].slice(0, 5);
+  }
   // The only verb that can fail a run. Every other verb renders happily whatever it is
   // handed: a superTrack that came up whole and made an image 7,581 px tall, a subtrack
   // that never hid, a pinned tooltip that grabbed the neighbouring item, an Apache 414
@@ -1407,8 +1606,15 @@ const T_START = Date.now();
   //   expect: {url: "hgSearch", noUrl: "%E2%80%8B"}  the address bar does / does not
   //   expect: {has: "#td_data_mane map[name=map_center_mane]"}  this selector matches
   //   expect: {noHas: "#td_data_knownGene map[name=map_center_mane]"}  ... does not
+  //   expect: {value: {sel: "#positionInput", is: "chr7:1-100"}}  this form field holds this
+  //   expect: {box: {sel: "#topRightLinks", inside: "#main-menu-whole"}}  where it sits
   //   expect: {color: {track: crm4, is: "0,0,255"}}   the items in that row are drawn blue
   //   expect: {color: {track: crm4, part: label, is: "0,255,0"}}  ... its center label green
+  //
+  // `text:`, `noText:`, `has:`, `noHas:`, `rows:` and `noRows:` all take one value or a LIST
+  // of them. That matters most for the two text checks: a check that stringifies its argument
+  // turns ["a", "b"] into "a,b", which no page contains, so it would pass on anything -- and
+  // pass silently, which is worse than failing.
   //
   // `url:`/`noUrl:` are a substring check on the CURRENT address, which is the only place
   // some things are visible at all: which CGI a click actually reached, and what the page
@@ -1416,13 +1622,17 @@ const T_START = Date.now();
   // before the position box submits it, and the term is invisible in the rendered page --
   // the only evidence either way is whether `%E2%80%8B` survives into the URL.
   //
-  // `has:`/`noHas:` are for a bug whose whole signature is WHERE something sits in the
-  // page. #37785 attached a squishyPack track's center label to the wrong row: same rows
-  // drawn, same total height, same pixels -- only the row the label hangs off changed, so
-  // rows:, height: and text: are all blind to it. Both take a CSS selector, or a list of
+  // `has:`/`noHas:` are for a bug whose whole signature is where something sits in the
+  // page's TREE. #37785 attached a squishyPack track's center label to the wrong row: same
+  // rows drawn, same total height, same pixels -- only the row the label hangs off changed,
+  // so rows:, height: and text: are all blind to it. Both take a CSS selector, or a list of
   // them, and each may name several elements. Reach for these last: an assertion on
   // hgTracks' own ids and classes is the most likely thing here to break for a reason
   // that is not a bug.
+  //
+  // `box:` is for where something sits on the SCREEN, which a selector cannot say at all.
+  // #38251's icon left the blue bar and slid across the menu items at narrow widths with
+  // every selector still matching. See boxCheck().
   //
   // `color:` is the one check that reads the IMAGE rather than the page, because a bug about
   // color changes nothing else: same rows, same height, same items, same tooltips. It names
@@ -1436,9 +1646,8 @@ const T_START = Date.now();
     const url = page.url();
     const seen = await page.evaluate(() => {
       const im = document.getElementById('imgTbl');
-      const tip = document.getElementById('mouseoverContainer');
-      const up = tip && tip.offsetWidth > 0 && getComputedStyle(tip).display !== 'none'
-        && getComputedStyle(tip).visibility !== 'hidden';
+      const tip = window.__docentTip && window.__docentTip();
+      const up = !!tip;
       return {
         rows: [...document.querySelectorAll('[id^="img_data_"]')].map(e => e.id.replace('img_data_', '')),
         cssHeight: im ? im.getBoundingClientRect().height : 0,
@@ -1481,23 +1690,30 @@ const T_START = Date.now();
     const banned = list(o.noRows).filter(w => drawn(w));
     if (banned.length) bad.push(`rows that should not be drawn: ${banned.join(', ')}`);
     if (o.height != null) {
-      // A bare number is a ceiling, which is the check anyone actually wants.
-      const m = /^\s*(<=|>=|<|>|=)?\s*(\d+)\s*$/.exec(String(o.height));
-      if (!m) bad.push(`height: cannot read "${o.height}"`);
-      else {
-        const n = Number(m[2]), op = m[1] || '<=';
-        const ok = op === '<' ? height < n : op === '>' ? height > n
-          : op === '>=' ? height >= n : op === '=' ? height === n : height <= n;
-        if (!ok) bad.push(`image is ${height}px, wanted ${op}${n}`);
-      }
+      const why = cmpSize(height, o.height, 'image');
+      if (why) bad.push(why);
     }
     if (o.tip != null && !seen.tip.includes(String(o.tip)))
       bad.push(seen.tip ? `tooltip says "${seen.tip}", wanted "${o.tip}"`
                         : `no tooltip is up, wanted "${o.tip}"`);
-    if (o.text != null && !seen.text.includes(String(o.text)))
-      bad.push(`page does not contain "${o.text}"`);
-    if (o.noText != null && seen.text.includes(String(o.noText)))
-      bad.push(`page contains "${o.noText}"`);
+    // `tip:` is a SUBSTRING test, because an item's tooltip is markup and its tail renders
+    // differently from the title it came from. That is right for a name and wrong for a
+    // number: a coverage graph's tooltip is the value and nothing else, so `tip: "1"` is
+    // also satisfied by "1.5" and by "13" -- the prefix trap that #38279 hit with two
+    // messages sharing a head. `noTip:` is the delimiter this check otherwise has no way to
+    // carry: state the digits and the decimal point the value must NOT contain and only one
+    // number is left. One string or a LIST, like every other no-check here.
+    for (const no of list(o.noTip))
+      if (seen.tip.includes(String(no)))
+        bad.push(`tooltip says "${seen.tip}", which must not contain "${no}"`);
+    // text:/noText: take one string or a LIST of them, the way has:/noHas: do. They have to:
+    // a list handed to a check that stringifies its argument fails OPEN -- ["a", "b"] becomes
+    // "a,b", which no page contains, so the check passes on anything and passes silently.
+    // Six scripts in one batch were written that way and all six looked green.
+    for (const want of list(o.text))
+      if (!seen.text.includes(want)) bad.push(`page does not contain "${want}"`);
+    for (const want of list(o.noText))
+      if (seen.text.includes(want)) bad.push(`page contains "${want}"`);
     if (o.url != null && !url.includes(String(o.url)))
       bad.push(`url is "${url}", wanted it to contain "${o.url}"`);
     if (o.noUrl != null && url.includes(String(o.noUrl)))
@@ -1512,6 +1728,33 @@ const T_START = Date.now();
       if (n > 0) bad.push(`${n} element(s) match "${sel}", wanted none`);
       else if (n < 0) bad.push(`noHas: cannot read the selector "${sel}"`);
     }
+    // value: what a form field holds NOW. A selector cannot ask that: a framework that draws
+    // the field sets the value PROPERTY, and [value=...] matches only the attribute, which it
+    // never touches. The selector has to name exactly one field, since reading the first of
+    // several would quietly pick one. A list is allowed, like color:.
+    for (const one of (o.value == null ? [] : (Array.isArray(o.value) ? o.value : [o.value]))) {
+      if (!one || typeof one !== 'object' || !one.sel) {
+        bad.push('value: takes {sel: <selector>, is: <text>} or not: in place of is:');
+        continue;
+      }
+      if (one.is == null && one.not == null) { bad.push(`value: ${one.sel} needs is: or not:`); continue; }
+      const n = await page.locator(one.sel).count().catch(() => -1);
+      if (n !== 1) {
+        bad.push(n < 0 ? `value: cannot read the selector "${one.sel}"`
+                       : `value: ${n} elements match "${one.sel}", wanted exactly one`);
+        continue;
+      }
+      const got = await page.locator(one.sel).inputValue({ timeout: 2000 }).catch(() => null);
+      if (got == null) bad.push(`value: "${one.sel}" is not a form field`);
+      else if (one.is != null && got !== String(one.is))
+        bad.push(`${one.sel} holds "${got}", wanted "${one.is}"`);
+      else if (one.not != null && got === String(one.not))
+        bad.push(`${one.sel} holds "${got}", which it should not`);
+    }
+    // box: where an element sits. A list is allowed and every entry is checked, so one step
+    // can state a whole layout and a failure names every part of it that came out wrong.
+    for (const one of (o.box == null ? [] : (Array.isArray(o.box) ? o.box : [o.box])))
+      bad.push(...await boxCheck((typeof one === 'object') ? one : { sel: one }));
     // color: the pixels hgTracks drew in a row, which no other check here can see. A list
     // is allowed, and every entry is checked, so one step can state the whole of a color
     // matrix and a failure names every row that came out wrong rather than only the first.
@@ -1555,7 +1798,8 @@ const T_START = Date.now();
       console.log(`EXPECT ok -- ${seen.rows.length} row(s), ${height}px`);
       return;
     }
-    const msg = bad.join('; ') + `\n  drawn: ${seen.rows.join(', ') || '(none)'}`;
+    const said = (await serverWarnings()).map(w => `\n  server said: ${w}`).join('');
+    const msg = bad.join('; ') + `\n  drawn: ${seen.rows.join(', ') || '(none)'}` + said;
     if (o.warn) console.warn('EXPECT (warning only):', msg);
     else throw new Error(msg);
   }
@@ -1569,7 +1813,13 @@ const T_START = Date.now();
   // Optional `track:` picks the row the drag runs over (y); default is the middle of
   // the image. `shot:` captures the open dialog (e.g. the Figure 1A drag-select box).
   // `then:` = zoom (default, clicks Zoom In) | highlight (Single Highlight) | cancel
-  // (Escape, leaves the view unchanged).
+  // (Escape, leaves the view unchanged) | none (leaves the dialog OPEN, so later steps can
+  // tick its checkbox or press one of its other buttons with click:).
+  // `dialog: auto` stops the verb forcing the dialog on. By default it arms
+  // hgTracks.enableHighlightingDialog and opens the dialog itself, so a figure always gets
+  // one. With auto the selection is handed to the page's own dragSelect.selectEnd(), which
+  // opens the dialog only if the user has not switched it off and otherwise zooms straight
+  // away, so a script can see what the "Don't show this again" checkbox did (#38071).
   async function drag(o) {
     // A bare string is the region; `range:` is the same thing with room for other
     // keys. Both expand to the from:/to: endpoints the rest of this function uses.
@@ -1634,13 +1884,15 @@ const T_START = Date.now();
     // highlight_shot.js does it.
     await glide(x1, y); await sleep(200);
     // Arm the highlighting dialog and open a zero-width selection at the start point.
-    await page.evaluate(({ ix1, y1, y2 }) => {
+    const auto = o.dialog === 'auto';
+    if (o.dialog != null && !auto) throw new Error(`drag: dialog: takes only "auto", not "${o.dialog}"`);
+    await page.evaluate(({ ix1, y1, y2, auto }) => {
       try {
-        hgTracks.enableHighlightingDialog = true;
+        if (!auto) hgTracks.enableHighlightingDialog = true;
         dragSelect.startTime = Date.now();
         $(imageV2.imgTbl).imgAreaSelect({ x1: ix1, y1, x2: ix1, y2, show: true });
       } catch (_) {}
-    }, { ix1: x1 - tbl.x, y1, y2 });
+    }, { ix1: x1 - tbl.x, y1, y2, auto });
     // Sweep to the end, widening the band to the cursor's x at every step.
     const dsteps = Math.max(10, Math.round(Math.abs(x2 - x1) / 9));
     for (let i = 1; i <= dsteps; i++) {
@@ -1653,6 +1905,38 @@ const T_START = Date.now();
     }
     cur.x = x2; cur.y = y;
     await sleep(200);
+    if (auto) {
+      // Let the page decide: the same call imgAreaSelect makes when the mouse is released,
+      // with an event that carries no modifier keys. It either opens the dialog or zooms.
+      const before = await page.evaluate(() => { try { return hgTracks.winStart + '-' + hgTracks.winEnd; } catch (e) { return ''; } });
+      const was = page.url();
+      const r = await page.evaluate(({ ix1, ix2, y1, y2, ey }) => {
+        try {
+          const tb = imageV2.imgTbl[0], ofs = jQuery(tb).offset();
+          const ev = { altKey: false, metaKey: false, ctrlKey: false, shiftKey: true,
+                       pageX: ofs.left + ix2, pageY: ofs.top + ey };
+          const selection = { x1: Math.min(ix1, ix2), x2: Math.max(ix1, ix2), y1, y2,
+                              width: Math.abs(ix2 - ix1), height: y2 - y1, event: ev };
+          dragSelect.selectEnd(tb, selection, ev);
+          return true;
+        } catch (e) { return String((e && e.message) || e); }
+      }, { ix1: x1 - tbl.x, ix2: x2 - tbl.x, y1, y2, ey: y - tbl.y });
+      if (r !== true) throw new Error('drag: dragSelect.selectEnd failed (' + r + ')');
+      const how = await Promise.race([
+        page.waitForSelector('#dragSelectDialog:visible', { timeout: 10000 }).then(() => 'dialog'),
+        page.waitForFunction(prev => { try { return (hgTracks.winStart + '-' + hgTracks.winEnd) !== prev; } catch (e) { return false; } },
+                             before, { timeout: 10000 }).then(() => 'zoom'),
+        page.waitForFunction(u => location.href !== u, was, { timeout: 10000 }).then(() => 'zoom'),
+      ]).catch(() => null);
+      if (!how) throw new Error('drag: dialog: auto -- neither the dialog nor a zoom followed the selection');
+      if (how === 'zoom') {
+        console.log('drag: no dialog, the page zoomed straight away');
+        await page.waitForSelector('#imgTbl'); await sleep(400);
+        await captureState();
+        return;
+      }
+      console.log('drag: the page opened the drag-select dialog');
+    } else {
     // Band is fully drawn — now raise the Drag-and-select dialog.
     const res = await page.evaluate(({ f1, f2, posStr }) => {
       try {
@@ -1666,9 +1950,13 @@ const T_START = Date.now();
     }, { f1: (x1 - dataLeft) / dataW, f2: (x2 - dataLeft) / dataW, posStr });
     const up = await page.waitForSelector('#dragSelectDialog:visible', { timeout: 4000 }).then(() => true).catch(() => false);
     if (!up) throw new Error('drag: drag-select dialog did not open' + (res === true ? '' : ' (' + res + ')'));
+    }
     await sleep(400);
     if (o.shot) await shot(o.shot);
     const act = o.then || 'zoom';
+    if (!['zoom', 'highlight', 'cancel', 'none'].includes(act))
+      throw new Error(`drag: then: takes zoom, highlight, cancel or none, not "${act}"`);
+    if (act === 'none') return;
     if (act === 'cancel') { await page.keyboard.press('Escape'); }
     else {
       const label = (act === 'highlight') ? 'Single Highlight' : 'Zoom In';
@@ -2096,6 +2384,54 @@ const T_START = Date.now();
         if (o.shot) { await shot(o.shot); return; }
         break;
       }
+      case 'login': {
+        // Sign in through hgLogin, so the steps after this one can reach a page that
+        // needs a user -- hgCollection above all. Credentials come from loginCreds(),
+        // never from the script. Takes no argument, or {shot:}.
+        const o = (arg && typeof arg === 'object') ? arg : {};
+        const c = loginCreds(SERVER);
+        console.log(`LOGIN ${c.user} on ${SERVER} (credentials from ${c.from})`);
+        await nav('/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1');
+        await page.waitForSelector('#accountLoginForm', { timeout: 15000 });
+        await glideTo('#userName'); await page.click('#userName');
+        await typeIn(page, '#userName', c.user);
+        await typeIn(page, '#password', c.password);
+        await clickGlide('input[name="hgLogin.do.displayLogin"]');
+        await page.waitForLoadState('load');
+        // hgLogin answers a bad password by drawing the same form again with a red
+        // message, which is a perfectly good page: without this check every later step
+        // would run logged out and the failure would surface somewhere else entirely.
+        // On a fast server (a loopback ticket park) a navigation can still be under way when
+        // this query runs -- the POST's own answer, or the good-password page's redirect
+        // below -- and Playwright throws "Execution context was destroyed". Either page
+        // could be the one arriving, so wait for it to load and ask again rather than guess.
+        let onForm;
+        for (let tries = 0; ; tries++) {
+          try { onForm = await page.$('#accountLoginForm'); break; }
+          catch (e) {
+            if (!/Execution context was destroyed/.test(e.message) || tries >= 4) throw e;
+            await page.waitForLoadState('load').catch(() => {});
+          }
+        }
+        if (onForm) {
+          const why = (await page.innerText('body')).split('\n').map(l => l.trim())
+                        .filter(Boolean).slice(0, 8).join(' | ');
+          throw new Error(`login: still on the login page as ${c.user} -- ${why}`);
+        }
+        // hgLogin answers a good password with a page that navigates ITSELF a moment
+        // later: returnToURL(150) writes setTimeout(function(){location=...}, 150). Return
+        // while that timer is pending and the next step's goto: races it, and the browser
+        // aborts one of the two -- which arrives as a flat `net::ERR_ABORTED` on a URL
+        // that is perfectly fine. So wait for the redirect to land before going on. The
+        // failure path above is checked first, since that page never leaves hgLogin and
+        // there is no redirect to wait for.
+        await page.waitForURL(u => !/\/hgLogin(\?|$)/.test(String(u)), { timeout: 10000 })
+                  .catch(() => {});
+        await page.waitForLoadState('load').catch(() => {});
+        await captureState();
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
       case 'addCustomTrack': {
         // DEMONSTRATE loading a custom track via the UI: My Data -> Custom Tracks
         // (hgCustom), paste the track data (or a data URL) into the box, click Submit,
@@ -2127,7 +2463,48 @@ const T_START = Date.now();
           await captureState();
         } else {
           console.warn('addCustomTrack: submit did not reach the manage page (data error?)');
+          for (const w of await serverWarnings()) console.warn(`  server said: ${w}`);
         }
+        if (o.shot) { await shot(o.shot); return; }
+        break;
+      }
+      case 'hubUpload': {
+        // Add files to the Hub Upload dashboard (hgHubConnect -> Hub Upload -> Upload), the
+        // way a user dropping them there would. Takes {name:, text:} for one file, or
+        // {files: [{name:, text:}, ...]} for several, and shot:. The files in one step arrive
+        // together, as one batch, which is what the dashboard does with a multi-file drop.
+        // Nothing is uploaded: the files wait in the dashboard, so a run leaves nothing on the
+        // server. The page needs a user, so a login: step comes first.
+        const o = (arg && typeof arg === 'object') ? arg : {};
+        const files = o.files || (o.name != null ? [{ name: o.name, text: o.text }] : []);
+        if (!files.length)
+          throw new Error('hubUpload: takes {name:, text:} or {files: [{name:, text:}, ...]}');
+        await nav(`/cgi-bin/hgHubConnect?db=${state.db}#hubUpload`);
+        await page.waitForSelector('#hubUpload', { timeout: 15000 });
+        // The Upload button is a DataTables button, disabled until the user's file list has
+        // come back, which only happens for a logged-in user on a server with storeUserFiles.
+        await page.waitForFunction(() => {
+          const b = document.querySelector('.uploadButton');
+          return !!b && !b.classList.contains('disabled');
+        }, null, { timeout: 20000 }).catch(() => {
+          throw new Error('hubUpload: the Upload button never became clickable -- is there a '
+                          + 'login: step before this one, and is storeUserFiles on for this server?');
+        });
+        await clickGlide('.uploadButton');
+        await page.waitForSelector('.uppy-Dashboard-inner', { timeout: 15000 });
+        // The dashboard has two hidden file inputs, one of them with webkitdirectory for a
+        // folder drop. The plain one is the file drop.
+        const input = (await page.evaluateHandle(() =>
+          [...document.querySelectorAll('input.uppy-Dashboard-input')]
+            .find(i => i.type === 'file' && !i.webkitdirectory))).asElement();
+        if (!input) throw new Error('hubUpload: the Hub Upload dashboard has no file input');
+        await input.setInputFiles(files.map(f => ({
+          name: String(f.name), mimeType: 'text/plain', buffer: Buffer.from(String(f.text ?? '')),
+        })));
+        // Wait on uppy's own list rather than on what the dashboard draws: with one file the
+        // dashboard can show the file card instead of the list, so no list item appears.
+        await page.waitForFunction(n => typeof uppy !== 'undefined' && uppy.getFiles().length >= n,
+                                   files.length, { timeout: 15000 });
         if (o.shot) { await shot(o.shot); return; }
         break;
       }
@@ -2178,7 +2555,8 @@ const T_START = Date.now();
           const named = arg.item ?? arg.title ?? arg.value;
           const it = (named != null)
             ? await itemXY(arg.track, named,
-                           arg.title != null && arg.item == null && arg.value == null)
+                           arg.title != null && arg.item == null && arg.value == null,
+                           arg.value != null && arg.item == null && arg.title == null)
             : (arg.raw ? await posXY(arg.track, arg) : await areaXY(arg.track, arg));
           await glide(it.x, it.y); await sleep(200);
           // A raw click on the data area is swallowed by hgTracks' drag-select handler, so
@@ -2210,8 +2588,115 @@ const T_START = Date.now();
           await captureState();
         }
         break;
+      case 'rightClick': {
+        // Open hgTracks' right-click menu over a track and, with pick:, choose an entry by a
+        // substring of its text. Addressed like click: -- item:/title: by identity, or
+        // at:/frac:/x: for a bare point on the row. The menu is the only way in to what it
+        // offers (Delete Custom Track, Hide all other tracks, Move to top ...), and each
+        // entry runs in place, so the verb waits out the page's ajax rather than a load.
+        // With no pick: the menu is left open, for a shot: of it or an expect: on its text.
+        if (!arg || typeof arg !== 'object' || !arg.track)
+          throw new Error('rightClick: takes {track: <name>, item:|title:|at:|frac:|x:, pick: <menu text>}');
+        const named = arg.item ?? arg.title;
+        const it = (named != null)
+          ? await itemXY(arg.track, named, arg.title != null && arg.item == null, false)
+          : await posXY(arg.track, arg);
+        await glide(it.x, it.y); await sleep(200);
+        await page.mouse.click(it.x, it.y, { button: 'right' });
+        const menuUp = await page.waitForSelector('.context-menu:visible', { timeout: 8000 }).then(() => true).catch(() => false);
+        if (!menuUp) throw new Error(`rightClick: no menu came up over ${arg.track}`);
+        await sleep(300);
+        if (arg.pick == null) {
+          if (arg.shot) { await shot(arg.shot); return; }
+          break;
+        }
+        const offered = await page.$$eval('.context-menu-item', els => els
+          .filter(e => e.offsetWidth > 0).map(e => (e.innerText || e.textContent || '').trim()));
+        // An exact entry wins over a substring, so pick: Hide is the visibility entry and
+        // not "Hide all other tracks".
+        const want = String(arg.pick).trim().toLowerCase();
+        let i = offered.findIndex(t => t.toLowerCase() === want);
+        if (i < 0) i = offered.findIndex(t => t.toLowerCase().includes(want));
+        if (i < 0) throw new Error(`rightClick: no menu entry "${arg.pick}"; the menu offered: ${offered.join(' | ')}`);
+        console.log('rightClick:', arg.track, '->', offered[i]);
+        if (arg.shot) await shot(arg.shot);
+        const entry = page.locator('.context-menu-item:visible').nth(i);
+        const box = await entry.boundingBox();
+        if (box) { await glide(box.x + Math.min(40, box.width / 2), box.y + box.height / 2); await sleep(200); }
+        const was = page.url();
+        await entry.click();
+        // An entry answers with an in-place redraw, an hgc/hgTrackUi dialog, or a full
+        // navigation (View image, Configure). Wait for the page to go quiet either way.
+        await page.waitForFunction(u => location.href !== u || !window.jQuery || jQuery.active === 0,
+                                   was, { timeout: 20000 }).catch(() => {});
+        await page.waitForLoadState('load').catch(() => {});
+        await page.waitForSelector('#imgTbl', { timeout: 20000 }).catch(() => {});
+        await sleep(300);
+        await captureState();
+        break;
+      }
+      case 'setVis': {
+        // Set a track's visibility with its own dropdown under the image, IN PLACE: the
+        // select changes and its change event fires, and the page's handler does the rest,
+        // with no navigation. `track:` is the other half: it asks for the mode in a URL and
+        // draws a fresh page, so it can never see what the dropdown's handler does to the
+        // page it is on -- the Visible Tracks list keeping a hidden track (#38035), say.
+        // {<track>: <mode>, ...} in order; `in: visible` uses the copy in the Visible Tracks
+        // group, `in: group` the one in the track's own group (a visible track has both).
+        if (!arg || typeof arg !== 'object') throw new Error('setVis: takes {<track>: <mode>}');
+        const where = arg.in;
+        if (where != null && where !== 'visible' && where !== 'group')
+          throw new Error(`setVis: in: takes visible or group, not "${where}"`);
+        for (const [name, mode] of Object.entries(arg)) {
+          if (name === 'in' || name === 'shot') continue;
+          const own = `select[name="${name}"]`;
+          const sel = (where === 'visible') ? `[id^="visible-"] ${own}`
+                    : (where === 'group') ? `${own}:not([id^="visible-"] ${own})` : own;
+          const opts = await page.locator(sel).first()
+            .evaluate(el => [...el.options].map(o => o.value)).catch(() => null);
+          if (!opts) throw new Error(`setVis: no visibility dropdown for ${name}` +
+                                     (where ? ` in the ${where === 'visible' ? 'Visible Tracks' : 'its own'} group` : '') + ' on this page');
+          if (!opts.includes(String(mode))) throw new Error(`setVis: ${name} offers ${opts.join('/')}, not ${mode}`);
+          console.log('setVis:', `${name}=${mode}`, where ? `(${where})` : '');
+          await openSelectVisible(sel, String(mode), 6, true);
+        }
+        // The handler posts the new value to the cart and may redraw; let that finish.
+        await page.waitForFunction(() => !window.jQuery || jQuery.active === 0, null, { timeout: 20000 }).catch(() => {});
+        await sleep(300);
+        await captureState();
+        if (arg.shot) { await shot(arg.shot); return; }
+        break;
+      }
       case 'hover': await glideTo(arg); await page.hover(arg); break;
-      case 'wait': await page.waitForSelector(arg, { timeout: 15000 }); break;
+      case 'fill': {
+        // Type into an arbitrary form field: {<selector>: <text>}, one or more pairs, in order.
+        // The named verbs type into the boxes they own (position, hub URL, hub search); this is
+        // for any other box, such as the session name on the Sessions page save card (#38311).
+        // The field is emptied first, so a value left from an earlier step cannot run into it.
+        if (!arg || typeof arg !== 'object') throw new Error('fill: takes {<selector>: <text>}');
+        for (const [sel, text] of Object.entries(arg)) {
+          await glideTo(sel);
+          await page.fill(sel, '');
+          await typeIn(page, sel, text);
+        }
+        break;
+      }
+      case 'wait': {
+        // A selector to wait FOR, or {gone: <sel>} for one to wait OUT. Both directions are
+        // needed because a script that asserts what a click did has to wait on the half of the
+        // answer that settles LAST, and that is not always the half that appears. #38257 is the
+        // case that forced it: hgHubConnect.js switches the tab inside the click dispatch, while
+        // topLinks.js closes the Account popup from a setTimeout(..., 0), so waiting for the tab
+        // returns a tick early and the popup is still on the page. That is a race the script
+        // loses about half the time, and it reads as the fix having come undone.
+        if (arg && typeof arg === 'object') {
+          if (!arg.gone) throw new Error('wait: an object argument takes gone: <selector>');
+          await page.waitForSelector(arg.gone, { state: 'detached', timeout: 15000 });
+        } else {
+          await page.waitForSelector(arg, { timeout: 15000 });
+        }
+        break;
+      }
       case 'sleep': await sleep(Number(arg)); return;
       default: console.warn('unknown verb:', verb);
     }
@@ -2254,7 +2739,43 @@ const T_START = Date.now();
   const vdir = path.join(HERE, '.vid_' + base);
   const webm = fs.readdirSync(vdir).filter(f => f.endsWith('.webm')).map(f => path.join(vdir, f)).sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs)[0];
   const FF = execFileSync('python3', ['-c', 'import imageio_ffmpeg,sys;sys.stdout.write(imageio_ffmpeg.get_ffmpeg_exe())']).toString().trim();
-  execFileSync(FF, ['-y', '-loglevel', 'error', '-i', webm, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '22', '-preset', 'veryfast', '-movflags', '+faststart', OUTMP4]);
+  // THE CAPTURE ARTIFACT, and why the transcode is where it is dealt with.
+  //
+  // Playwright's screenshot captures from the same surface the video recorder reads, so a
+  // `shot:` taken while recording can leave ONE bad frame in the video: the track image
+  // painted on a grey, unpainted page. It is a race -- a re-render may or may not carry
+  // it -- and a sweep of 46 finished tours found it in 24. Proved by rendering a tour with
+  // every `shot:` removed, which is always clean.
+  //
+  // It cannot be fixed at the capture. CDP's Page.captureScreenshot with fromSurface:false
+  // does keep the recorder out of it, but Chromium then IGNORES the clip and answers with
+  // the whole viewport, so every still would need cropping and a taller-than-viewport
+  // image could not be captured at all. Measured, not assumed.
+  //
+  // So the frame is dropped here instead, in the one encode that was going to happen
+  // anyway. Nothing is re-encoded twice and the stills are untouched. The search is
+  // narrowed to the moments a shot was actually taken (shotSecs), so an ordinary dark
+  // frame in the tour itself is never a candidate. Refs #37892, found on #38364.
+  const FPS = 25, DIP = 20, NEAR = 0.5;
+  let vfilter = null;
+  if (shotSecs.length) {
+    const stats = execFileSync(FF, ['-loglevel', 'error', '-i', webm, '-vf',
+      `fps=${FPS},scale=160:-1,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-`,
+      '-f', 'null', '-'], { maxBuffer: 1 << 28 }).toString();
+    const y = [...stats.matchAll(/YAVG=([0-9.]+)/g)].map(m => +m[1]);
+    const bad = [];
+    for (let i = 1; i < y.length - 1; i++)
+      if (y[i] < y[i - 1] - DIP && y[i] < y[i + 1] - DIP &&
+          shotSecs.some(t => Math.abs(t - i / FPS) < NEAR)) bad.push(i);
+    if (bad.length) {
+      vfilter = `fps=${FPS},select='not(${bad.map(i => `eq(n\,${i})`).join('+')})',setpts=N/${FPS}/TB`;
+      console.log(`  (dropped ${bad.length} capture-artifact frame(s) at ` +
+                  bad.map(i => (i / FPS).toFixed(2) + 's').join(', ') + ')');
+    }
+  }
+  execFileSync(FF, ['-y', '-loglevel', 'error', '-i', webm,
+    ...(vfilter ? ['-vf', vfilter, '-r', String(FPS)] : []),
+    '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '22', '-preset', 'veryfast', '-movflags', '+faststart', OUTMP4]);
   fs.rmSync(vdir, { recursive: true, force: true });
   if (process.env.DOCENT_TIME) console.log(`--- mp4 transcode: ${((Date.now() - tVid) / 1000).toFixed(1)}s`);
   console.log('DONE ->', OUTMP4, '| stills in', STILLDIR,

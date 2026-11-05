@@ -32,6 +32,9 @@
 #include "quickLift.h"
 #include "hgConfig.h"
 #include "heatmap.h"
+#include "cds.h"
+#include "dotBracketTrack.h"
+#include "blatShare.h"
 
 static unsigned getFieldNum(struct bbiFile *bbi, char *field)
 // get field number for field name in bigBed.  errAbort if field not found.
@@ -151,24 +154,6 @@ else
 filter->isHighlight = isHighlight;
 
 return filter;
-}
-
-char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def)
-{
-char settingString[4096];
-safef(settingString, sizeof settingString, "%s.%s", HIGHLIGHT_TYPE_NAME_LOW, field);
-char *setting = cartOrTdbString(cart, tdb, settingString, NULL);
-if (setting == NULL)
-    {
-    safef(settingString, sizeof settingString, "%s.%s", field, HIGHLIGHT_TYPE_NAME_CAP);
-    setting = cartOrTdbString(cart, tdb, settingString, NULL);
-    }
-if (setting == NULL)
-    {
-    safef(settingString, sizeof settingString, "%s%s", field, HIGHLIGHT_TYPE_NAME_CAP);
-    setting = cartOrTdbString(cart, tdb, settingString, def);
-    }
-return setting;
 }
 
 struct bigBedFilter *bigBedMakeFilterBy(struct cart *cart, struct bbiFile *bbi, struct trackDb *tdb, char *field, struct slName *choices, boolean isHighlight)
@@ -781,6 +766,10 @@ struct bigBedFilter *highlights = bigBedBuildHighlights(cart, bbi, track->tdb) ;
 if (compositeChildHideEmptySubtracks(cart, track->tdb, NULL, NULL))
    labelTrackAsHideEmpty(track);
 
+// a BLAT results bigPsl (hgc buildBigPsl) gets a mouseover with a query coverage bar
+boolean blatResult = blatIsResultTrack(track->tdb)
+                     && startsWith("bigPsl", track->tdb->type);
+
 // mouseOvers can be built constructed via trackDb settings instead
 // of embedded directly in bigBed
 char *mouseOverPattern = NULL;
@@ -849,7 +838,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
             // Move the alignment's target side onto the reference.  Ask the lifted
             // alignment about its own block sizes rather than reusing isProt:  the lift
             // puts a protein alignment into nucleotide space on the way through.
-            struct psl *lifted = quickLiftPsl(chainHash, &mapPsls, psl);
+            struct psl *lifted = quickLiftPsl(quickLiftChainHashForItem(chainHash, bb),
+                                              &mapPsls, psl);
             pslFree(&psl);
             psl = lifted;
             }
@@ -1015,6 +1005,12 @@ for (bb = bbList; bb != NULL; bb = bb->next)
         lf->original = bbCopy;
         }
 
+    if (lf->mouseOver == NULL && blatResult)
+        {
+        struct psl *psl = pslFromBigPsl(chromName, bb, 0, NULL, NULL);
+        lf->mouseOver = blatCoverageMouseOver(psl, pslIsProtein(psl));
+        pslFree(&psl);
+        }
     if (lf->mouseOver == NULL)
         {
         if (mouseOverIdx > 0)
@@ -1171,5 +1167,7 @@ if (sameWordOk(trackDbSetting(tdb, "style"), "heatmap"))
     // maybe some combo of row count and labels.
     heatmapMethods(track);
     }
+else if (trackDbSetting(tdb, DOT_BRACKET_FIELD) != NULL)
+    dotBracketMethods(track);
 }
 

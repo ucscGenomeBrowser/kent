@@ -1,0 +1,44 @@
+# #38555 -- a click on the quickLift Alignment Differences track aborted hgc with "Can't
+# find range in null query chain." when the clicked window was in a gap of the chain.
+#
+# hg19 lifted to hg38 uses /gbdb/hg19/quickLift/hg38.bb.  Its chain 2 covers all of hg38
+# chr1 but has no aligned bases in chr1:120,154,590-121,344,828, where chain 173 (minus
+# strand, the inversion) is aligned instead.  quickLiftChainClick (hg/hgc/hgc.c) took the
+# part of the chain inside the window, got NULL, and passed it to qChainRangePlusStrand,
+# which aborts.  69dbafb9b55 prints "N/A (no aligned bases in this chain here)" for the
+# other assembly's position in that case and leaves out the whole-window alignment link.
+# Found by QA on #38513 (note 7); hgwbeta has the same error.
+#
+# What is asserted:  on the hgc page for chain 2 in a window inside the gap, the new N/A
+# line is there, the Alignment Differences tables below it are drawn, and the abort text is
+# not.  Chain 2 has its own map box only at base level, where the track draws whole chains,
+# so the window is 30 bp.  The click names it by "quickLiftChain&i=2":  a bare "2" is a
+# substring of nearly every href on the page.  Not asserted:  the tables' contents, which
+# are not what the ticket changed.  The chain id 2 belongs to the current hg38.bb; a rebuilt
+# chain file can renumber it, and then the click step fails because no item named 2 is drawn.
+proof:
+  - "assertion-only 2026-10-15 -- written after 69dbafb9b55 was pushed"
+  - "sandbox-ab 2026-10-15 -- failed on genome-test (hgc built 05:19, before the fix) at the last expect, server said \"Can't find range in null query chain.\"; passed on hgwdev-braney with the fix"
+  - "server-flip 2026-10-15 -- failed on genome-test that morning (hgc built 05:19), passed once 69dbafb9b55 was installed there with cgi-alpha (hgc built 09:28)"
+
+target: genome-test
+db: hg19
+position: chr1:1000000-1100000
+reset: true
+fast: true
+steps:
+  - go: chr1:1000000-1100000
+  - hide: all
+  - track: {multiz100way: full}
+  - expect: {rows: [ruler, multiz100way], noText: "Warning/Error"}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr1:120290026-120290055
+  - expect: {rows: [quickLiftChain], noText: "Warning/Error"}
+
+  - click: {track: quickLiftChain, item: "quickLiftChain&i=2"}
+  - expect:
+      url: "hgc"
+      text: ["N/A (no aligned bases in this chain here)", "Insertions:"]
+      noText: ["Can't find range in null query chain", "Warning/Error"]

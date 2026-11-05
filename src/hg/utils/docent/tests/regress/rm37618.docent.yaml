@@ -1,0 +1,35 @@
+# #37618 -- VCF items colored by the value of an INFO field, set in trackDb with
+# `colorByInfo <field>` and `colorByInfo.<field> value=color,...`.
+#
+# The code is de6d2d4e5d0 (Christopher Lee: filters, coloring and mouseovers for VCF
+# tracks), in hg/lib/vcfUi.c and hg/hgTracks/vcfTrack.c.  As with #37617 the settings are
+# not documented yet and the experimental gnomAD v4.1.1 track is not to be QA'd, so this
+# uses the same fixture, ~/public_html/docentFixtures/rm37617/.
+#
+# The fixture's rm37618Color track has `colorByInfo CLASS` with pathogenic red and benign
+# blue.  chr1:1,000,100 is pathogenic and chr1:1,000,300 is benign.  Before the change the
+# setting was ignored and both items drew in the default VCF grey, 128,128,128, so a color check at each
+# position is the whole test: the rows, the item names and the map boxes are the same on
+# both builds.
+#
+# The unit test for the same settings is hg/lib/tests/vcfInfoFilterTester.c (showColors).
+proof:
+  - "assertion-only 2026-09-29 -- written from #37618 and de6d2d4e5d0"
+  - "release-ab 2026-09-29 -- fails on hgwbeta (v504, whose v504_branch lacks de6d2d4e5d0) and passes on genome-test. On v504 the row is drawn 128,128,128 at both positions"
+
+target: genome-test
+db: hg38
+position: chr1:1000000-1000800
+reset: true
+fast: true
+steps:
+  - go: chr1:1000000-1000800
+  - hide: all
+  - hub: {url: "https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm37617/rm37617hub.txt", db: hg38}
+  - go: chr1:1000000-1000800
+
+  - expect:
+      rows: [rm37618Color]
+      color:
+        - {track: rm37618Color, at: "chr1:1000100", is: "255,0,0", not: "0,0,255"}
+        - {track: rm37618Color, at: "chr1:1000300", is: "0,0,255", not: "255,0,0"}

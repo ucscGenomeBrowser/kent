@@ -6,6 +6,8 @@
 #ifndef BIGBEDFILTER_H
 #define BIGBEDFILTER_H
 
+#include <regex.h>
+
 /* First the filtering variables */
 /* the values legal for *FilterType */
 #define FILTERBY_SINGLE                 "single"
@@ -90,12 +92,24 @@
 #define HIGHLIGHT_COLOR_CART_VAR "highlightColor"
 /* End highlight variables */
 
+enum bigBedFilterType {
+    // the type of the comparison
+    COMPARE_LESS,
+    COMPARE_MORE,
+    COMPARE_BETWEEN,
+    COMPARE_HASH,
+    COMPARE_REGEXP,
+    COMPARE_WILDCARD,
+    COMPARE_HASH_LIST_AND,
+    COMPARE_HASH_LIST_OR
+};
+
 struct bigBedFilter
 /* Filter on a field in a bigBed file. */
 {
 struct bigBedFilter *next;
 int fieldNum;   // the field number
-enum {COMPARE_LESS, COMPARE_MORE, COMPARE_BETWEEN, COMPARE_HASH, COMPARE_REGEXP, COMPARE_WILDCARD, COMPARE_HASH_LIST_AND, COMPARE_HASH_LIST_OR } comparisonType;  // the type of the comparison
+enum bigBedFilterType comparisonType;  // the type of the comparison
 double value1, value2;
 struct hash *valueHash;
 unsigned numValuesInHash;
@@ -145,5 +159,8 @@ struct trackDbFilter *tdbGetTrackHighlightByHighlights( struct trackDb *tdb);
 
 char *getFilterType(struct cart *cart, struct trackDb *tdb, char *field, char *def);
 // figure out how the trackDb is specifying the FILTER_TYPE variable and return its setting
+
+char *getHighlightType(struct cart *cart, struct trackDb *tdb, char *field, char *def);
+/* Figure out how the trackDb is specifying the HIGHLIGHT_TYPE variable and return its setting */
 
 #endif /* BIGBEDFILTER_H */

@@ -1,0 +1,47 @@
+# #38444 -- a db name that has its own active dbDb row was swapped for an asmAlias accession
+# that has no dbDb row.  The CGI then found no such assembly and fell back to the organism's
+# default or to hg38.  Reported on MLQ #38416: pick the curated hub GRCz12tu in hgGateway,
+# search for a gene, and land on danRer11 or hg38.
+#
+# The fix is 124514ebfd2, in src/hg/lib/asmAlias.c: when the name has an active dbDb row,
+# asmAliasFind keeps it and skips asmAlias.  A second commit, 2b14cc7d4cd, changes the otto
+# script that builds asmAlias (src/hg/utils/otto/genArk/asmAlias/asmAliasUpdate.py) to leave
+# out an alias that matches a dbDb name, ignoring case.
+#
+# Three names had an active dbDb row and an asmAlias row on hgcentralbeta and hgcentral
+# (checked 2026-10-03):
+#   GRCz12ab      -> GCF_052040795.1  (curated hub; dbDb used GCA_052040795.1)
+#   calJac240_pri -> GCF_049354715.1  (curated hub; dbDb uses GCA_049354715.1)
+#   monDom5       -> MonDom5 row, GCF_000002295.2  (the lookup ignores case)
+# The script checks the last two.  GRCz12ab was dropped on 2026-10-16: hgcentraltest
+# replaced its dbDb row with GRCz13ab (GCA_052040795.2), so GRCz12ab now correctly resolves
+# through asmAlias to the GenArk hub GCF_052040795.1, and the check failed on the data.
+# Each URL is the one a person reaches: calJac240_pri with the gene search from the ticket,
+# monDom5 as a plain db= link.  The positive text check is the assertion.  On a build with
+# the bug the page is hg38 and contains neither name, so every check fails.  hgGateway
+# itself is not driven: its cart-JSON calls return a new hgsid each time, and the hgTracks
+# URL reaches the same alias lookup through the cart's db.
+#
+# What no server can show any more: 2b14cc7d4cd keeps a dbDb name out of asmAlias, and on
+# 2026-10-16 none of hgcentraltest, hgcentralbeta or hgcentral had an asmAlias row whose
+# alias is an active dbDb name.  So this script now passes on the data alone, with or
+# without the code fix.  The release-ab line below is from 2026-10-03, when hgwbeta and the
+# RR still had the rows.  It guards against those rows coming back.
+#
+# No hg.conf gate.
+proof:
+  - "assertion-only 2026-10-03 -- written from #38444 and 124514ebfd2"
+  - "release-ab 2026-10-03 -- fails on hgw0 (v503) and on hgwbeta (v504), neither of which has 124514ebfd2, at step 2: page does not contain monDom5; passes on genome-test. Run alone on both servers, the GRCz12ab check and the calJac240_pri check each fail too"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=monDom5"
+  - expect:
+      text: ["Opossum", "monDom5"]
+
+  - goto: "/cgi-bin/hgTracks?db=calJac240_pri&position=vwf"
+  - expect:
+      text: ["calJac240_pri"]

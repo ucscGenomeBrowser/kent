@@ -60,7 +60,7 @@ void htmlVaEncodeErrorText(char *format, va_list args)
 {
 va_list argscp;
 va_copy(argscp, args);
-char warning[1024];
+char warning[8192];
 
 struct dyString *ds = dyStringNew(1024);
 vaHtmlDyStringPrintf(ds, format, args);
@@ -178,7 +178,7 @@ char *htmlTextStripTags(char *s)
 {
 if (s == NULL)
     return NULL;
-char *scrubbed = needMem(strlen(s));
+char *scrubbed = needMem(strlen(s) + 1);
 char *from=s;
 char *to=scrubbed;
 while (*from!='\0')
@@ -203,7 +203,7 @@ char *htmlTextStripJavascriptCssAndTags(char *s)
 {
 if (s == NULL)
     return NULL;
-char *scrubbed = needMem(strlen(s));
+char *scrubbed = needMem(strlen(s) + 1);
 char *from=s;
 char *to=scrubbed;
 while (*from!='\0')
@@ -298,6 +298,12 @@ int htmlEncodeTextExtended(char *s, char *out, int outSize)
 {
 int total = 0;
 char c = 0;
+if (s == NULL)
+    {
+    if (out)
+        *out = '\0';
+    return 0;
+    }
 do
     {
     c=*s++;
@@ -358,6 +364,12 @@ int nonAlphaNumericHexEncodeText(char *s, char *out, int outSize,
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
+if (s == NULL)
+    {
+    if (out)
+        *out = '\0';
+    return 0;
+    }
 int encodedSize = strlen(prefix) + 2 + strlen(postfix);
 int total = 0;
 char c = 0;
@@ -667,7 +679,7 @@ void htmlVaWarn(char *format, va_list args)
 va_list argscp;
 va_copy(argscp, args);
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
-char warning[1024];
+char warning[8192];
 
 // html-encode arguments to fight XSS
 struct dyString *ds = dyStringNew(1024);
@@ -1109,14 +1121,6 @@ safef(meta, sizeof meta, "<meta http-equiv='Content-Security-Policy' content=\"%
 return cloneString(meta);
 }
 
-char *getCspMetaResponseHeader(char *policy)
-/* get the policy string as an http response header */
-{
-char response[4096];
-safef(response, sizeof response, "Content-Security-Policy: %s\n", policy); 
-return cloneString(response);
-}
-
 char *getCspMetaHeader()
 /* return meta CSP header string */
 {
@@ -1134,17 +1138,6 @@ fputs(meta, f);
 freeMem(meta);
 }
 
-void generateCspResponseHeader(FILE *f)
-/* generate the CSP as an http response header.  Carries the same nonce as the
- * meta tag, since getNonce() is one-per-process, so a page may safely have both.
- * Must be called before the blank line that ends the http header block. */
-{
-char *policy = getCspPolicyString();
-char *header = getCspMetaResponseHeader(policy);
-fputs(header, f);
-freeMem(header);
-freeMem(policy);
-}
 
 
 void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, int dirDepth)

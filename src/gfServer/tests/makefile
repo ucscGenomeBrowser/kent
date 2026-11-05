@@ -2,12 +2,13 @@ kentSrc = ../..
 include $(kentSrc)/inc/common.mk
 
 # tests get assign different ports so they can run in parallel
-gfServerHuge = gfServerHuge
+# run the binaries this tree just built, not whichever ones are first on the PATH
+gfServerHuge = ${DESTBINDIR}/gfServerHuge
 ifeq (${IDXSIZE},huge)
 gfServer = ${gfServerHuge}
 portOffset = 1
 else
-gfServer = gfServerHuge
+gfServer = ${DESTBINDIR}/gfServer
 portOffset = 0
 endif
 
@@ -31,7 +32,8 @@ test_idxsize: \
     dynServerTest \
     dynServerTransTest \
     dynServerWithDirTest \
-    dynServerPerSeqMaxTest
+    dynServerPerSeqMaxTest \
+    emptyCommandTest
 
 
 directNibTest: mkdirs
@@ -64,6 +66,8 @@ dynServerWithDirTest: mkdirs
 	./bin/testDynServerWithDir ${gfServer}
 dynServerPerSeqMaxTest: mkdirs
 	./bin/testDynServerPerSeqMax ${gfServer}
+emptyCommandTest: mkdirs
+	./bin/testEmptyCommand ${gfServer} $(shell expr 17784 + ${portOffset})
 
 ##
 # tests using a huge genome requring 64-bit offsets

@@ -1,0 +1,21 @@
+# A three-track loop: loopA -> loopB -> loopC -> loopA.
+track loopA
+compositeTrack on
+parent loopB
+shortLabel loop A
+longLabel Loop A
+type bed 3
+
+track loopB
+compositeTrack on
+parent loopC
+shortLabel loop B
+longLabel Loop B
+type bed 3
+
+track loopC
+compositeTrack on
+parent loopA
+shortLabel loop C
+longLabel Loop C
+type bed 3

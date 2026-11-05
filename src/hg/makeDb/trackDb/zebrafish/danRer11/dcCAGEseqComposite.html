@@ -1,12 +1,10 @@
 <h2>Description</h2>
 
 <p>
-This track is part of the <a href="hgTrackUi?g=danioCode">DANIO-CODE</a> track collection.
-CAGE (cap analysis of gene expression) sequences only the very first bases of capped
-RNA molecules. Each read therefore marks one transcription start site, at base
-resolution. Because promoters usually fire from a small cluster of neighboring start
-sites rather than a single base, the individual start sites are grouped into tag
-clusters, and a tag cluster is a good working definition of an active promoter.
+This track was produced by the
+<a href="https://danio-code-dcc.genereg.net/" target="_blank">DANIO-CODE project</a>.
+CAGE sequencing marks the first base of each capped RNA molecule at base resolution,
+and neighboring start sites are grouped into tag clusters that mark active promoters.
 </p>
 
 <p>
@@ -72,6 +70,9 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
 spreadsheet or tab-separated tables. From scripts, the data can be accessed through
 our <a href="https://api.genome.ucsc.edu">API</a>, track=<i>dcCAGEseqComposite</i>.
+This track is a container and holds no data of its own, so the API needs the name of one
+of the 32 per-sample subtracks listed on the track configuration page, for example
+track=<i>DCD001527SQ_DCD011310DT_signal</i>.
 </p>
 
 <p>

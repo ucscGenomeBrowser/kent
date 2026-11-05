@@ -1,0 +1,11 @@
+an accession that is in the table
+  just that one                                  1 back
+
+names that are not accessions
+  hg38 and mm39, so the query is never built     0 back
+  GC' or '1'='1                                  0 back
+  an accession with a statement after it         0 back
+
+a list with both in it
+  one real, one quoted, one not an accession     1 back
+

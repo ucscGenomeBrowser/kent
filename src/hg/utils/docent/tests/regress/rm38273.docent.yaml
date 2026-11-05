@@ -1,0 +1,129 @@
+# #38273 -- every load of a saved session that holds a track collection copied the
+# collection's hub file to a new name in trash and registered the copy in
+# hgcentral.hubStatus.  The copy is only needed when someone edits the collection, so nearly
+# all of them were waste: 81% of hubStatus was these dead rows.
+#
+# 59e2bbf2d3a, hg/lib/cart.c, hg/lib/sessionData.c and hg/hgCollection/hgCollection.c.  A
+# session load no longer copies.  hgCollection, the only program that writes one of these
+# files, asks for its own trash copy before it opens the cart (cartRequestLocalHubCopy), so the
+# file a saved session names is never written in place.
+#
+# PART 1 is the reported bug, and it is the half that tells the builds apart.  It loads
+# cath/hgCollectionHg19MultiWigCollection, the session measured on the ticket on 2026-09-19,
+# and reads cartDump: customComposite-hg19 must still name the session's own file under
+# /data/apache/userdata/sessions/, not a fresh ../trash/hgComposite/ copy.  A copy is also a
+# new hubStatus row, so this is the page-side view of "no row per load".  The collection row
+# drawn from that file is the check that the session really loaded.  Nothing here writes to
+# cath's file; its md5 was the same before and after every run on 2026-09-30.
+#
+# PART 2 is the copy-on-write half, which only a signed-in user reaches.  It makes a one-track
+# collection (gc5BaseBw), saves it as rm38273, loads it back (the cart names the session's
+# file), opens hgCollection (the cart now names a trash copy), adds phyloP100wayAll with the
+# track's right-click menu (it is drawn in the collection), and loads rm38273 once more.  That
+# last load must show gc5BaseBw and NOT phyloP100wayAll: the saved session's own file was left
+# alone.  The cartReset before Part 2 matters, because Part 1 leaves cath's collection in the
+# cart, and a new collection made on top of it would carry cath's tracks.
+#
+# A BUG THIS SCRIPT STEPS AROUND, found writing it on 2026-09-30.  Under the gate, the FIRST
+# edit made from hgTracks' right-click menu straight after loading a collection session is
+# lost.  hgCollection takes its copy, which gives the hub a new id.  The menu sent the
+# collection as hub_<old id>_coll, and printTrackDbListToHub() (hgCollection.c) writes the new
+# track only under a collection whose full name matches, so the copy is written without it.
+# The second add, sent with the new id, works.  Seen on genome-test and on the v504 park (38423): loading cath's session and
+# picking Add to "New Collection" on phyloP100wayAll leaves the collection unchanged, and the
+# newest trash copy has no phyloP100wayAll in it.  v503 (38316), which copies at load, adds it
+# on the first try.  The same edit also made two hubStatus rows, one for customComposite-hg19
+# and one for customComposite-hg38, which cath's session also carries.  Part 2 opens
+# hgCollection before the right-click so that its add is not the first edit.  When the bug is
+# fixed, drop that goto and its cartDump check; the next expect then watches it.
+#
+# HG.CONF GATE, LOUDLY.  `collectionHubCopyOnWrite` is off by default
+# (cartCollectionHubCopyOnWrite() in hg/lib/cart.c), and with it off Part 1 fails exactly as
+# the old build does.  genome-test sets it:
+#     grep -n collectionHubCopyOnWrite /usr/local/apache/cgi-bin/hg.conf
+# The ts parks include that hg.conf, so they have the gate too.
+#
+# WHERE IT CAN RUN.  cath's session and its file exist only on the servers that read
+# hgcentraltest and hgwdev's /data/apache/userdata, so not on hgwbeta.  On a ts park Part 2
+# fails at the save, because a park runs as its developer and cannot write
+# /data/apache/userdata ("Couldn't make directory ... Permission denied" in the park's
+# error_log); that is the park, not the code.
+#
+# Each run leaves one small hub file under docentTest's session directory, because deleting a
+# session does not remove its files, and one trash copy with its hubStatus row.  The session
+# row itself is deleted at the start, in case an earlier run died, and again at the end.  On
+# a ticket park, run against the HTTPS port so that login works.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38273 and 59e2bbf2d3a after it reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test; fails on v503 (ts park 38316, v503_branch 707b184e329, https 49106) at step 4: after loading cath's session, customComposite-hg19 named a new ../trash/hgComposite/ copy instead of the session's file. The v504 park (38423) passes Part 1 and fails Part 2 at the save, on the park's permissions"
+
+target: genome-test
+db: hg19
+size: [1400, 2400]
+reset: true
+fast: true
+steps:
+  # Part 1: somebody else's collection session, loaded and not touched.
+  - goto: "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=cath&hgS_otherUserSessionName=hgCollectionHg19MultiWigCollection"
+  - expect:
+      has: '#imgTbl tr[id^="tr_hub_"][id$="_wgEncodeBroadHistoneGm12878H3k4me1StdSig_33e70"]'
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "customComposite-hg19 /data/apache/userdata/sessions/8b/cath/f66b4ed5/hgComposite/067/hub_hgwdev_8647_329450.txt"
+      noText: "customComposite-hg19 ../trash/hgComposite/"
+
+  # Part 2: our own collection session, edited after it is loaded.
+  - goto: "/cgi-bin/cartReset"
+  - sleep: 2000
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "Cookies passed to"
+      noText: "customComposite-hg19"
+  - login: true
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38273"
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21:33031597-33041570&gc5BaseBw=full"
+  - goto: "/cgi-bin/hgCollection?db=hg19&cmd=newCollection&track=gc5BaseBw"
+  - expect:
+      text: "serverSays"
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessSaveName'
+  - fill: {'#sessSaveName': rm38273}
+  - click: '#sessSaveBtn'
+  - wait: '#sessionAppTable tr:has(a:text-is("rm38273"))'
+
+  - goto: "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=docentTest&hgS_otherUserSessionName=rm38273"
+  - expect:
+      has: '#imgTbl tr[id^="tr_hub_"][id*="_gc5BaseBw_"]'
+      noHas: '#imgTbl tr[id^="tr_hub_"][id*="_phyloP100wayAll_"]'
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "customComposite-hg19 /data/apache/userdata/sessions/"
+      noText: "customComposite-hg19 ../trash/hgComposite/"
+
+  - goto: "/cgi-bin/hgCollection"
+  - expect:
+      has: '#doNewCollection'
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "customComposite-hg19 ../trash/hgComposite/"
+      noText: "customComposite-hg19 /data/apache/userdata/sessions/"
+
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      rows: [phyloP100wayAll]
+  - rightClick: {track: phyloP100wayAll, frac: 0.3, pick: 'Add to "New Collection"'}
+  - sleep: 2000
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      has:
+        - '#imgTbl tr[id^="tr_hub_"][id*="_gc5BaseBw_"]'
+        - '#imgTbl tr[id^="tr_hub_"][id*="_phyloP100wayAll_"]'
+
+  - goto: "/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=docentTest&hgS_otherUserSessionName=rm38273"
+  - expect:
+      has: '#imgTbl tr[id^="tr_hub_"][id*="_gc5BaseBw_"]'
+      noHas: '#imgTbl tr[id^="tr_hub_"][id*="_phyloP100wayAll_"]'
+
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm38273"
+  - expect:
+      text: '"success": true'

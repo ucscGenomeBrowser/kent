@@ -29,6 +29,7 @@
 #include "myVariantsShare.h"
 #include "wikiLink.h"
 #include "hgConfig.h"
+#include "blatShare.h"
 
 static long loadTime = 0;
 static boolean issueBotWarning = FALSE;
@@ -215,7 +216,21 @@ if (!isUpdateForm)
         "setupGenomeSearchBar({\n"
         "    inputId: '%s',\n"
         "    onSelect: function(item) {\n"
-        "        document.mainForm.db.value = item.genome;\n"
+        "        let db = dbFromRecentItem(item);\n"
+        "        if (item.hubUrl) {\n"
+        "            let hubUrlInp = document.createElement(\"input\");\n"
+        "            hubUrlInp.name = \"hubUrl\";\n"
+        "            hubUrlInp.type = \"hidden\";\n"
+        "            hubUrlInp.value = item.hubUrl;\n"
+        "            let genomeInp = document.createElement(\"input\");\n"
+        "            genomeInp.name = \"genome\";\n"
+        "            genomeInp.type = \"hidden\";\n"
+        "            genomeInp.value = item.genome;\n"
+        "            document.mainForm.appendChild(genomeInp);\n"
+        "            document.mainForm.appendChild(hubUrlInp);\n"
+        "        }\n"
+        "        document.mainForm.db.value = db;\n"
+        "        document.mainForm.submit();\n"
         "    }\n"
         "});\n"
         , searchBarId
@@ -1103,7 +1118,7 @@ struct customTrack *ct, *next;
 for (ct = ctList; ct != NULL; ct = next)
     {
     next = ct->next;
-    if (ct->tdb != NULL && sameOk(trackDbSetting(ct->tdb, "blatResult"), "on"))
+    if (blatIsResultTrack(ct->tdb))
         {
         myVariantsHandleCtRemoval(ct, cart, database);
         slRemoveEl(&ctList, ct);

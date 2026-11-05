@@ -1,0 +1,50 @@
+# #38302 -- hgLogin's activateAccount() crashed on an unknown user name, and activation
+# links never expired.  Both had been in the file since 2012/2013 and were found during the
+# v503 code review.
+#
+#     char *emailToken = sqlQuickString(conn, query);   /* NULL when there is no such row */
+#     if (sameString(emailToken, token))                /* sameString(NULL, ...) dereferences */
+#
+# So a request naming a user who does not exist killed the CGI, and anyone could do it from
+# a plain GET with no account of their own.  Separately, an account that had already been
+# activated has an EMPTY emailToken, and `&token=` with no value matched it.
+#
+# 800ff0dc702 puts the expiry into the query -- `AND emailTokenExpires > NOW()`, which is the
+# seven days the confirmation mail already promises -- and guards the compare with
+# isNotEmpty().  An unknown user, an expired link, an empty token and a wrong token all now
+# land on one message.
+#
+# The assertion is POSITIVE, and has to be.  The crash gave the browser a truncated
+# document, and on a truncated document every noText: and every noHas: passes -- the whole
+# of README.txt's rule about hgTrackUi applies here for the same reason.  So the check is
+# the sentence the fixed page says, quoted in full, which also pins the new wording: the old
+# message did not mention expiry, so a build that still had the old text fails this even if
+# it did not crash.
+#
+# What is NOT covered: the expiry itself.  Watching a link go stale means writing a row into
+# gbMembers with emailTokenExpires in the past, and this directory does not write to
+# hgcentral.  The query change is exercised only in as much as an unknown user still reaches
+# the message through it.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38302 and 800ff0dc702 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the unknown-user request returns neither the message nor the login form -- the crash"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # An account that does not exist.  This is the crash: the SELECT returns no row, so
+  # emailToken was NULL and sameString() read through it.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=nosuchuser38302&token=x"
+  - expect:
+      text: "This activation link is not valid, has expired, or has already been used."
+      has: 'input[name="hgLogin_userName"]'
+
+  # The same request with no token value at all, which is the other half: an already
+  # activated account stores an empty emailToken, and an empty token used to compare equal
+  # to it.  On an unknown user it is also the NULL crash again, from a shorter URL.
+  - goto: "/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=nosuchuser38302&token="
+  - expect:
+      text: "This activation link is not valid, has expired, or has already been used."
+      has: 'input[name="hgLogin_userName"]'

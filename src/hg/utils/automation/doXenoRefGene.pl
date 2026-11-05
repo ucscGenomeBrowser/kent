@@ -34,7 +34,7 @@ my $stepper = new HgStepManager(
 				);
 
 # Option defaults:
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $ram = '4g';

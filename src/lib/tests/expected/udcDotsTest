@@ -1,0 +1,26 @@
+in  : https://hgdownload.soe.ucsc.edu/hubs/GCF/000/001/405/hub.txt
+dir : /udcCache/https/hgdownload.soe.ucsc.edu/hubs/GCF/000/001/405/hub.txt
+in  : http://example.com/a//b/file.bb
+dir : /udcCache/http/example.com/a//b/file.bb
+in  : http://example.com/dir/
+dir : /udcCache/http/example.com/dir/
+in  : http://example.com/..foo/.bar/file...bb
+dir : /udcCache/http/example.com/..foo/.bar/file...bb
+in  : http://example.com/a/./b/./file.bb
+dir : /udcCache/http/example.com/a/b/file.bb
+in  : http://example.com/hubs/hg38/../shared/file.bb
+dir : /udcCache/http/example.com/hubs/shared/file.bb
+in  : http://example.com/a/b/c/../../file.bb
+dir : /udcCache/http/example.com/a/file.bb
+in  : http://example.com/a/b/../../c/./file.bb
+dir : /udcCache/http/example.com/c/file.bb
+in  : ftp://example.com/pub/x/../y/file.bw
+dir : /udcCache/ftp/example.com/pub/y/file.bw
+in  : http://example.com/../file.bb
+abort: Illegal '..' in the path of a remote URL: http://example.com/../file.bb
+in  : http://example.com/a/../../file.bb
+abort: Illegal '..' in the path of a remote URL: http://example.com/a/../../file.bb
+in  : http://example.com/a/../../../../etc/passwd
+abort: Illegal '..' in the path of a remote URL: http://example.com/a/../../../../etc/passwd
+in  : https://example.com/..
+abort: Illegal '..' in the path of a remote URL: https://example.com/..

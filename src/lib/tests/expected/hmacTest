@@ -1,0 +1,12 @@
+md5  rfc2202 case 2                750c783e6ab0b503eaa86e310a5db738
+sha1 rfc2202 case 2                effcdf6ae5eb2fa2d27416d5f184df9c259a7c79
+md5  key a  data bc                85eb17cece10c4e933813796e2ec411c
+md5  key ab data c                 c9423b5406a6665b5f4e6fe2f63c6b0d
+    the two                        differ, as they must
+md5  salt s3cret                   ed11a626abc997fa1ef562a1220a6079
+md5  salt s3crat                   ac45bcfd9bddd7b6eae7b94c320a9772
+md5  length                        32
+sha1 length                        40
+md5  empty data                    cd32bedd46aa63cffa3023f050fc78e3
+
+0 failures

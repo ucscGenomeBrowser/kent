@@ -40,6 +40,7 @@
 # asserted nothing. This is the case those two checks exist for.
 proof:
   - "assertion-only 2026-09-06 -- written from the ticket after the fix had shipped"
+  - "release-ab 2026-09-18 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 in ticket sandbox 38316, port 48106: the descPage- prefix is absent there. An inverted copy run both ways banked the complement the header table had only claimed: on v503 #hubDescProbe, #hubDescProbeScript and input[name=hubDescProbeInput] are ALL present and #descPage-hubDescProbe absent, and on genome-test the exact inverse"
 
 target: genome-test
 db: hg38

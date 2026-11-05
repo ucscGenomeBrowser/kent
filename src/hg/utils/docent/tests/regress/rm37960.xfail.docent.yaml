@@ -1,0 +1,39 @@
+# #37960 -- cartGetPosition writes lastVirtModeExtra, but every reader uses
+# lastVirtModeExtraState.  In hg/lib/cart.c, the `if (!gotCart)` block of cartGetPosition()
+# initializes a fresh lastDbPos cart and sets "lastVirtModeExtra" to "".  No code reads that
+# name.  Brian's note on the ticket: on the position=lastDbPos path, restoreSavedVirtPosition()
+# in hgTracks copies every variable of that temporary cart into the user's own cart, and the
+# cleanup in hg/lib/web.c only knows the ...State spelling, so the junk variable stays in the
+# cart and in any session saved after it.  Nothing else visible goes wrong, because readers
+# default lastVirtModeExtraState to "" anyway.
+#
+# The ticket is New (Low), and the variable is still written on genome-test on 2026-10-06,
+# so this is an xfail.
+#
+# The recipe is the path the note names: a fresh cart (reset: true), one hgTracks request
+# with position=lastDbPos and no saved position for hg38, so gotCart is FALSE; then cartDump.
+#
+# Checks on the cartDump page:
+#   * text: "lastVirtModeExtraState " and the position.hg38 value -- the positive checks,
+#     true only when the lastDbPos path really ran and cartDump answered.
+#   * noText: "lastVirtModeExtra " with its trailing space, the line cartDump prints for the
+#     misspelled variable with an empty value.  The correct name is not a match, because in
+#     it "Extra" is followed by "State", not by a space.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test cartDump shows a \"lastVirtModeExtra \" line after position=lastDbPos on a fresh cart"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=lastDbPos&pix=1100"
+  - expect: {rows: [ruler]}
+
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text:
+        - "lastVirtModeExtraState "
+        - "position.hg38 lastVirtModeType=default"
+      noText: "lastVirtModeExtra "

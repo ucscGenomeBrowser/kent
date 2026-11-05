@@ -36,6 +36,7 @@
 #include "jsonWrite.h"
 #include "verbose.h"
 #include "genark.h"
+#include "asmAlias.h"
 #include "quickLift.h"
 #include "pcrResult.h"
 #include "botDelay.h"
@@ -282,9 +283,11 @@ return FALSE;
 static boolean cartVarHoldsFileNamePair(char *var)
 /* Return TRUE if var is one of the variables that hold a pair of file names.
  * hgPcrResult_targetStyle is a display setting that shares the hgPcrResult_ prefix with the
- * per-db result variables, so it is excluded by name. */
+ * per-db result variables, so it is excluded by name.  So is hgPcrResult_imgOrd: hgPcrResult
+ * is also the name of the track, and that is where hgTracks saves the track's place in the
+ * image after a drag.  refs #38442 */
 {
-if (sameString(var, PCR_RESULT_TARGET_STYLE))
+if (sameString(var, PCR_RESULT_TARGET_STYLE) || sameString(var, PCR_RESULT_TRACK_NAME "_imgOrd"))
     return FALSE;
 int i;
 for (i = 0;  i < ArraySize(fileNamePairCartVarPrefixes);  i++)
@@ -323,27 +326,110 @@ clean[i] = 0;
 fprintf(stderr, "cart: dropped %s, value is not %s\n", clean, why);
 }
 
-static boolean cartValueIsAcceptable(char *var, char *val)
-/* Return TRUE unless var names a server-created file and val names something else.  An empty
- * value is fine; the CGIs treat it as "no file" and several saved sessions carry one. */
+/* A cart variable name is written into the name=value string as it stands, so a name holding
+ * '&', ';' or '=' cannot be told apart from the punctuation around it.  Almost no name does.
+ * A track hub may name a track group "Cut&Tag", which gives a real setting called
+ * hgtgroup_Tanaka_Cut&Tag_IgG_close, and a session written before the CGI parsers were fixed
+ * can hold a name with a separator stuck to the front of it.
+ *
+ * These three routines escape just those characters on the way out and undo it on the way in.
+ * A '%' is escaped only when it starts one of the four sequences below, so a name that
+ * already holds "%2c" or "%20" -- real hub track names do -- keeps the spelling it has always
+ * had, and so does a name with a '+' in it, which a full cgiEncode/cgiDecode pair would turn
+ * into a space.  No name in the 289,872 sessions stored on the RR holds any of the four, so
+ * an old name decodes to itself and nothing already saved changes meaning.  refs #38343 */
+
+static char *cartNameEscapes[] = {"%25", "%26", "%3B", "%3D"};
+static char cartNameChars[] =    {'%',   '&',   ';',   '='};
+
+static int cartNameEscapeIx(char *s)
+/* Return the index of the escape sequence that s starts with, or -1 for anything else. */
 {
-if (isEmpty(val))
-    return TRUE;
-if (cartVarHoldsFileName(var))
+int i;
+for (i = 0;  i < ArraySize(cartNameEscapes);  i++)
+    if (startsWithNoCase(cartNameEscapes[i], s))
+        return i;
+return -1;
+}
+
+static void cartAppendEncodedName(struct dyString *dy, char *name)
+/* Append name to dy with the separators escaped. */
+{
+char *s;
+for (s = name;  *s != 0;  s++)
+    {
+    int ix = -1, i;
+    for (i = 1;  i < ArraySize(cartNameChars);  i++)	/* 1, so not '%' itself */
+        if (*s == cartNameChars[i])
+            {
+            ix = i;
+            break;
+            }
+    if (ix < 0 && *s == '%' && cartNameEscapeIx(s) >= 0)
+        ix = 0;
+    if (ix < 0)
+        dyStringAppendC(dy, *s);
+    else
+        dyStringAppend(dy, cartNameEscapes[ix]);
+    }
+}
+
+static void cartDecodeName(char *name)
+/* Undo cartAppendEncodedName, in place.  The result is never longer than the input. */
+{
+char *in = name, *out = name;
+while (*in != 0)
+    {
+    int ix = cartNameEscapeIx(in);
+    if (ix < 0)
+        *out++ = *in++;
+    else
+        {
+        *out++ = cartNameChars[ix];
+        in += strlen(cartNameEscapes[ix]);
+        }
+    }
+*out = 0;
+}
+
+static char *cartVarNameToMatch(char *var)
+/* Return the part of var that the lists above should be matched against: everything after the
+ * last '&' or ';' when the name holds one, and var itself otherwise.
+ *
+ * The lists match by prefix, and so does every other place in the tree that picks these
+ * settings out of the cart, with cartFindPrefix or startsWith.  A saved session written
+ * before the CGI parsers were fixed can hold a name with a separator stuck to the front of
+ * it, so match the same text those readers match on and the two cannot disagree.
+ * The caller checks the whole name as well, since other readers match on that.
+ * refs #38185, #38335, #38343 */
+{
+char *last = NULL, *s;
+for (s = var;  *s != 0;  s++)
+    if (*s == '&' || *s == ';')
+        last = s;
+if (last == NULL || last[1] == 0)
+    return var;
+return last+1;
+}
+
+static boolean cartValueIsAcceptableAs(char *match, char *var, char *val)
+/* Return TRUE unless match names a server-created file and val names something else. */
+{
+if (cartVarHoldsFileName(match))
     {
     if (isServerUserFilePath(val))
         return TRUE;
     logDroppedFileNameVar(var, "a trash or session-data file name");
     return FALSE;
     }
-if (cartVarHoldsUrlOrFileName(var))
+if (cartVarHoldsUrlOrFileName(match))
     {
     if (isServerUserFileOrUrl(val))
         return TRUE;
     logDroppedFileNameVar(var, "a URL or a trash or session-data file name");
     return FALSE;
     }
-if (cartVarHoldsFileNamePair(var))
+if (cartVarHoldsFileNamePair(match))
     {
     if (fileNamePairIsAcceptable(val))
         return TRUE;
@@ -353,6 +439,19 @@ if (cartVarHoldsFileNamePair(var))
 return TRUE;
 }
 
+static boolean cartValueIsAcceptable(char *var, char *val)
+/* Return TRUE unless var names a server-created file and val names something else.  An empty
+ * value is fine; the CGIs treat it as "no file" and several saved sessions carry one.  Both
+ * the whole name and the part cartVarNameToMatch picks out must pass. */
+{
+if (isEmpty(val))
+    return TRUE;
+if (!cartValueIsAcceptableAs(var, var, val))
+    return FALSE;
+char *match = cartVarNameToMatch(var);
+return match == var || cartValueIsAcceptableAs(match, var, val);
+}
+
 static void loadHash(struct hash *hash, char *contents)
 /* Load a hash from a cart-like string. */
 {
@@ -360,9 +459,20 @@ char *namePt, *dataPt, *nextNamePt;
 namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
     {
+    /* The search for the '=' runs past the next separator on purpose.  This parse is the
+     * exact inverse of what the cart writes, for every session stored on the RR.  Ending a
+     * pair at the first '&' instead turns the tail of an old damaged name into a setting of
+     * its own, which lands last and overrides the real one.  refs #38343 */
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)
-	errAbort("Mangled input string %s", namePt);
+	{
+	/* Nothing that is left holds an '=', so there is no pair left to read.  This
+	 * used to errAbort, and a caller could reach it from the URL: hDefaultPos
+	 * passes the value of position.<db> to this parser, so a request carrying
+	 * position=lastDbPos and position.hg38=a%3Db%26junk ended the whole page
+	 * with "Mangled input string junk".  refs #38343 */
+	break;
+	}
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, '&');
     if (nextNamePt == NULL)
@@ -370,6 +480,7 @@ while (namePt != NULL && namePt[0] != 0)
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
+    cartDecodeName(namePt);
     if (cartValueIsAcceptable(namePt, dataPt))
         hashAdd(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
@@ -859,6 +970,57 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
+static void updateOne(struct sqlConnection *conn,
+	char *table, struct cartDb *cdb, char *contents, int contentSize);
+static void cartUpdateRecentSession(struct cart *cart, char *id);
+static struct cartDb *cartReusableCopy(struct sqlConnection *conn, struct cart *cart);
+static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
+                               char *skipPrefix);
+
+/* The cart as it was stored, before the variables of this request were applied to it.  cartNew
+ * sets it only for a request with hgSession variables, as only those can load a session. */
+static char *cartStateBeforeRequest = NULL;
+
+static void cartKeepCopyBeforeLoad(struct cart *cart, char *loadedName)
+/* A full session load is about to replace the cart.  The cart keeps its hgsid, so the view the
+ * user had is gone once the cart is saved.  Store a copy of it in a sessionDb row and put that
+ * on the list of recent views.  This is only needed if the hgsid existed before this request: a
+ * session link without an hgsid got a new row, and the old view is still in the row of the hgsid
+ * it came from, which is on the list already.  The row is a new one, or the row of the oldest copy
+ * when that is about to drop off the list, so a user has at most MAX_RECENT_SESSIONS copies. */
+{
+if (!cartRecentSessionsEnabled() || cart->sessionInfo == NULL || cart->sessionInfo->useCount == 0)
+    return;
+struct sqlConnection *conn = cartDefaultConnector();
+struct cartDb *copy = cartReusableCopy(conn, cart);
+if (copy == NULL)
+    {
+    boolean found;
+    copy = loadDb(conn, sessionDbTable(), NULL, &found);
+    }
+struct dyString *dy = dyStringNew(4096);
+// Keep the view from before this request: the variables of a session link (position,
+// hideTracks, ...) belong to the session being loaded.  The hgS_ ones that ask for the load are
+// never kept, as they would load the session again when the copy is opened.
+if (cartStateBeforeRequest != NULL)
+    dyStringAppend(dy, cartStateBeforeRequest);
+else
+    cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+char *encName = cgiEncode(loadedName);
+dyStringPrintf(dy, "%s%s=%s", (dy->stringSize > 0) ? "&" : "", hgsPrevViewOf, encName);
+// updateOne writes useCount+1.  At 2 hgcentralTidy keeps the row for 14 days if it is not
+// opened, at 1 only for 2 days.
+copy->useCount = 1;
+updateOne(conn, sessionDbTable(), copy, dy->string, dy->stringSize);
+char copyId[256];
+cartDbSecureId(copyId, sizeof copyId, copy);
+cartUpdateRecentSession(cart, copyId);
+freeMem(encName);
+dyStringFree(&dy);
+cartDbFree(&copy);
+cartDefaultDisconnector(&conn);
+}
+
 #ifndef GBROWSE
 void cartLoadUserSessionExt(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
@@ -876,6 +1038,10 @@ char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
 char query[512];
+
+/* The caller may have passed pointers into cart values, which cartRemoveLike below frees. */
+sessionOwner = cloneString(sessionOwner);
+sessionName = cloneString(sessionName);
 
 if (isEmpty(sessionOwner))
     errAbort("Please go back and enter a wiki user name for this session.");
@@ -916,6 +1082,9 @@ if (row != NULL)
         sessionTableString = cloneString(sessionTableString);
         char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
         pubSessionsTableString = cloneString(pubSessionsTableString);
+        if (!merge)
+            cartKeepCopyBeforeLoad(cart, sessionName);
+        char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
         struct sqlConnection *conn2 = hConnectCentral();
         sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
         if (!merge)
@@ -937,7 +1106,23 @@ if (row != NULL)
         loadCgiOverHash(cart, oldVars);
         if (isNotEmpty(actionVar))
             cartRemove(cart, actionVar);
+        if (recentSessions)
+            cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+        else
+            cartRemove(cart, RECENT_SESSIONS_VAR);
+        freeMem(recentSessions);
         hDisconnectCentral(&conn2);
+
+        /* A full (non-merge) load just threw away whatever the user had in the browser before.
+         * Leave a marker, naming the session actually being loaded here, so that the next
+         * hgTracks page can say what was opened and that the old view is gone.  A merge keeps
+         * the current view, so it needs no note. */
+        if (!merge)
+            {
+            cartSetString(cart, hgsSessionJustLoaded, "on");
+            cartSetString(cart, hgsOtherUserSessionName, sessionName);
+            cartSetString(cart, hgsOtherUserName, sessionOwner);
+            }
 
         /* When loading another user's session, strip accepted-share cart vars
          * so we don't carry shares from the session owner into the current user's
@@ -958,6 +1143,9 @@ else
 	     sessionName, sessionOwner);
 sqlFreeResult(&sr);
 freeMem(encSessionName);
+freeMem(encSessionOwner);
+freeMem(sessionOwner);
+freeMem(sessionName);
 }
 
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
@@ -1512,6 +1700,8 @@ char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
 sessionTableString = cloneString(sessionTableString);
 char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
 pubSessionsTableString = cloneString(pubSessionsTableString);
+cartKeepCopyBeforeLoad(cart, "");
+char *recentSessions = cloneString(cartOptionalString(cart, RECENT_SESSIONS_VAR));
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
 if (sessionTableString != NULL)
@@ -1557,9 +1747,23 @@ if (isValidEnough)
     /* Overload settings explicitly passed in via CGI (except for the
      * command that sent us here): */
     loadCgiOverHash(cart, oldVars);
+    /* Tell the next hgTracks page that the view was replaced, like a named session load does,
+     * so it can point to the copy of the old view.  The name and owner of a session loaded
+     * earlier may still be in these settings, take them out so the note does not name it. */
+    if (cartRecentSessionsEnabled())
+        {
+        cartSetString(cart, hgsSessionJustLoaded, "on");
+        cartRemove(cart, hgsOtherUserSessionName);
+        cartRemove(cart, hgsOtherUserName);
+        }
     }
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
+if (recentSessions)
+    cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+else
+    cartRemove(cart, RECENT_SESSIONS_VAR);
+freeMem(recentSessions);
 vsReport(&stats, dyMessage);
 vsFreeMembers(&stats);
 return isValidEnough;
@@ -1683,9 +1887,14 @@ char *db = cartString(cart, "db");
 struct trackDb *tdb = hTrackDb(db);
 for(; tdb; tdb = tdb->next)
     {
-    struct trackDb *parent = tdb->parent;
-    if (parent && parent->isShow)
-        hideIfNotInCart(cart, parent->track);
+    /* Every ancestor, not just the closest: a supertrack may itself be a member of
+     * another supertrack, and the outer one is reached only through it. */
+    struct trackDb *parent;
+    for (parent = tdb->parent; parent != NULL; parent = parent->parent)
+        {
+        if (parent->isShow)
+            hideIfNotInCart(cart, parent->track);
+        }
     if (tdb->visibility != tvHide)
         hideIfNotInCart(cart, tdb->track);
     }
@@ -1724,12 +1933,48 @@ char *db = cartOptionalString(cart,"db");
 if ((db == NULL) || startsWith("hub_", db) || sameString("0", db))
     return;
 
-if (!resolveGenarkDb(cart) && !hDbIsActive(db))
-    errAbort("Can not find database '%s'.<br>"
-            "You can <a href='https://genome.ucsc.edu/assemblySearch.html?q=%s'>search for the genome %s</a> in "
-            "the list of NCBI/INSDC assemblies, then click 'request' when you have found the right assembly "
-            "and enter your email address. We will then make a genome browser and get back to you within a few days.",
-            db, db, db);
+if (resolveGenarkDb(cart) || hDbIsActive(db))
+    return;
+
+// Not a GenArk accession or a database of its own, but it may be an alias of one,
+// e.g. a GCA accession whose GCF equivalent is in GenArk.  hubConnectLoadHubs() would
+// translate it through asmAlias, but only if we don't abort here first.
+db = cloneString(db);  // cartSetString frees the cart's copy
+char *aliasDb = asmAliasFind(db);
+if (differentString(aliasDb, db))
+    {
+    cartSetString(cart, "db", aliasDb);
+    if (resolveGenarkDb(cart) || hDbIsActive(aliasDb))
+        return;
+    }
+
+// This is shown by the bare early error handler, before the page header exists, so it
+// brings its own title bar and margins.
+// The handler wraps the message in <P>, which the browser closes empty at the first <div>.
+errAbort("<div style='background:#003a72; padding:8px 24px'>"
+        "<style>body {margin:0; font-family:Arial,Helvetica,sans-serif} p:empty {display:none}</style>"
+        "<a href='../index.html' style='color:white; text-decoration:none; font-size:20px'>"
+        "UCSC Genome Browser</a></div>"
+        "<div style='margin:16px 24px; max-width:50em; font-size:15px; line-height:1.5'>"
+        "<h2>Genome assembly not found</h2>"
+        "<p>The genome assembly <b>%s</b> is not available on this Genome Browser.</p>"
+        "<p>First, check the name for typing errors. UCSC assembly names look like "
+        "<b>hg38</b> or <b>mm39</b>. NCBI assembly accessions look like "
+        "<b>GCA_000001405.29</b> or <b>GCF_000001405.40</b>, including the version "
+        "number after the dot.</p>"
+        "<p>If the name is correct, we may not have a browser for this assembly yet. "
+        "You can ask us to make one:</p>"
+        "<ol><li><a href='https://genome.ucsc.edu/assemblySearch.html?q=%s|url|'>Search for %s</a> "
+        "in the list of NCBI assemblies.</li>"
+        "<li>Find the assembly in the results and click its <b>request</b> button.</li>"
+        "<li>Enter your name and email address and submit the request.</li></ol>"
+        "<p>We usually make the browser within a few days and send you an email when it "
+        "is ready.</p>"
+        "<p>To look for another assembly, <a href='../cgi-bin/hgGateway'>go back to the "
+        "Genome Browser start page</a> and type a species name, a common name or an "
+        "assembly name into its search box. If you need help, "
+        "<a href='../contacts.html'>contact us</a>.</p></div>",
+        db, db, db);
 }
 
 boolean isValidToken(char *token)
@@ -1923,6 +2168,128 @@ setUdcCacheDir();
 netSetTimeoutErrorMsg("Connection timeout: either the server is offline or any firewall between UCSC and the server blocks the connection.");
 }
 
+#define MAX_RECENT_SESSIONS 20
+#define RECENT_SESSION_MAX_AGE (7 * 24 * 60 * 60)
+
+boolean cartRecentSessionsEnabled()
+/* Return TRUE if hg.conf turns on recent session tracking. */
+{
+return cfgOptionBooleanDefault("recentSessions.enable", FALSE);
+}
+
+char *cartContentsVal(char *contents, char *var)
+/* Return the CGI-decoded value of var from a CGI-encoded cart contents string,
+ * or NULL if not present.  Free the result when done. */
+{
+if (isEmpty(contents))
+    return NULL;
+char pfx[64];
+char *valIdx = NULL;
+safef(pfx, sizeof(pfx), "%s=", var);
+if (startsWith(pfx, contents))
+    valIdx = contents + strlen(pfx);
+else
+    {
+    char ampPfx[66];
+    safef(ampPfx, sizeof(ampPfx), "&%s", pfx);
+    char *p = strstr(contents, ampPfx);
+    if (p != NULL)
+        valIdx = p + strlen(ampPfx);
+    }
+if (valIdx == NULL)
+    return NULL;
+char *valEnd = strchr(valIdx, '&');
+char *val = valEnd ? cloneStringZ(valIdx, valEnd - valIdx) : cloneString(valIdx);
+cgiDecode(val, val, strlen(val));
+return val;
+}
+
+static void cartUpdateRecentSession(struct cart *cart, char *currentId)
+/* Move the hgsid currentId to the front of the recent sessions list, dropping
+ * entries that are too old or past MAX_RECENT_SESSIONS. */
+{
+time_t now = time(NULL);
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+struct slPair *newList = NULL;
+int count = 1;
+for (struct slPair *el = list; el != NULL && count < MAX_RECENT_SESSIONS; el = el->next)
+    {
+    if (sameString(el->name, currentId) || now - sqlLongLong(el->val) > RECENT_SESSION_MAX_AGE)
+        continue;
+    slAddHead(&newList, slPairNew(el->name, cloneString(el->val)));
+    count++;
+    }
+slReverse(&newList);
+char nowStr[32];
+safef(nowStr, sizeof nowStr, "%lld", (long long)now);
+slAddHead(&newList, slPairNew(currentId, cloneString(nowStr)));
+char *encoded = slPairListToString(newList, FALSE);
+cartSetString(cart, RECENT_SESSIONS_VAR, encoded);
+freeMem(encoded);
+slPairFreeValsAndList(&list);
+slPairFreeValsAndList(&newList);
+}
+
+static struct cartDb *cartReusableCopy(struct sqlConnection *conn, struct cart *cart)
+/* Return the sessionDb row of a copy made by cartKeepCopyBeforeLoad that is about to drop off the
+ * list of recent views, or NULL if there is none.  Writing the next copy into that row keeps the
+ * number of copies per user at MAX_RECENT_SESSIONS, however many sessions are loaded. */
+{
+struct cartDb *reuse = NULL;
+time_t now = time(NULL);
+struct slPair *list = slPairListFromString(cartOptionalString(cart, RECENT_SESSIONS_VAR), FALSE);
+int kept = 0;
+for (struct slPair *el = list; el != NULL && reuse == NULL; el = el->next)
+    {
+    // cartUpdateRecentSession keeps MAX_RECENT_SESSIONS-1 entries that are not too old
+    if (now - sqlLongLong(el->val) <= RECENT_SESSION_MAX_AGE && ++kept < MAX_RECENT_SESSIONS)
+        continue;
+    if (sameString(el->name, cartSessionId(cart)))
+        continue;
+    struct cartDb *cdb = cartDbLoadFromId(conn, sessionDbTable(), el->name);
+    if (cdb == NULL)
+        continue;
+    // Opening a copy removes the marker, so a copy someone went back to is left alone.
+    char *mark = cartContentsVal(cdb->contents, hgsPrevViewOf);
+    if (mark != NULL)
+        reuse = cdb;
+    else
+        cartDbFree(&cdb);
+    freeMem(mark);
+    }
+slPairFreeValsAndList(&list);
+return reuse;
+}
+
+void cartSetHubDatabase(struct cart *cart, struct hash *oldVars, char *newDatabase)
+/* Put the database that hubConnectLoadHubs chose into the cart.  If that is a change of
+ * assembly, set db in oldVars to "none", which getDbAndGenome reads as a switch: the position
+ * goes to the assembly default and the multi-region variables are dropped. */
+{
+char *cartDb = cartOptionalString(cart, "db");
+char *oldDb = (oldVars != NULL) ? hashFindVal(oldVars, "db") : NULL;
+
+if ((cartDb == NULL) || differentString(cartDb, newDatabase))
+    {
+    // resolveGenarkDb takes db out of the cart, so a Genark db= that names the assembly
+    // the cart was already on looks like a database change here.  It is not one, and the
+    // magic below would replace the position we just loaded from a session with the
+    // assembly default and drop the multi-region variables.  refs #38184
+    boolean sameDb = !IS_CART_VAR_EMPTY(oldDb) && sameString(oldDb, newDatabase);
+
+    // this is some magic to use the defaultPosition and reset cart variables
+    if (oldVars && !sameDb)
+        {
+        struct hashEl *hel;
+        if ((hel = hashLookup(oldVars,"db")) != NULL)
+            hel->val = "none";
+        else
+            hashAdd(oldVars, "db", "none");
+        }
+    cartSetString(cart,"db", newDatabase);
+    }
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -1960,6 +2327,13 @@ else
 
 cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 
+/* Recent sessions come only from userDb.  Read them before cartParseOverHash
+ * decodes userInfo->contents in place. */
+char *recentSessions = NULL;
+boolean trackRecent = cartRecentSessionsEnabled() && userIdFound;
+if (trackRecent)
+    recentSessions = cartContentsVal(cart->userInfo->contents, RECENT_SESSIONS_VAR);
+
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
@@ -1973,7 +2347,32 @@ char when[1024];
 safef(when, sizeof(when), "open %s %s", userId, sessionId);
 cartTrace(cart, when, conn);
 
+if (trackRecent && sessionIdFound)
+    {
+    struct cgiVar *cv;
+    for (cv = cgiVarList(); cv != NULL; cv = cv->next)
+        if (startsWith(hgSessionPrefix, cv->name))
+            break;
+    if (cv != NULL)
+        {
+        struct dyString *dy = dyStringNew(4096);
+        cartEncodeStateExt(cart, dy, TRUE, hgSessionPrefix);
+        cartStateBeforeRequest = dyStringCannibalize(&dy);
+        }
+    }
+
 loadCgiOverHash(cart, oldVars);
+
+if (recentSessions)
+    cartSetString(cart, RECENT_SESSIONS_VAR, recentSessions);
+else
+    cartRemove(cart, RECENT_SESSIONS_VAR);
+freeMem(recentSessions);
+/* saveState writes it to userDb by hand. */
+cartExclude(cart, RECENT_SESSIONS_VAR);
+/* Only the copy of a view made before a session load has it: once that copy is opened it is
+ * an ordinary cart again. */
+cartRemove(cart, hgsPrevViewOf);
 
 fixUpDb(cart); // now is the time to see if someone is loading a Genark hub or specified a bad database.
 
@@ -2048,30 +2447,7 @@ if (cartCollectionHubCopyOnWrite() && gLocalHubCopyRequested)
 char *newDatabase = hubConnectLoadHubs(cart);
 
 if (newDatabase != NULL)
-    {
-    char *cartDb = cartOptionalString(cart, "db");
-    char *oldDb = (oldVars != NULL) ? hashFindVal(oldVars, "db") : NULL;
-
-    if ((cartDb == NULL) || differentString(cartDb, newDatabase))
-        {
-        // resolveGenarkDb takes db out of the cart, so a Genark db= that names the assembly
-        // the cart was already on looks like a database change here.  It is not one, and the
-        // magic below would replace the position we just loaded from a session with the
-        // assembly default and drop the multi-region variables.  refs #38184
-        boolean sameDb = !IS_CART_VAR_EMPTY(oldDb) && sameString(oldDb, newDatabase);
-
-        // this is some magic to use the defaultPosition and reset cart variables
-        if (oldVars && !sameDb)
-            {
-            struct hashEl *hel;
-            if ((hel = hashLookup(oldVars,"db")) != NULL)
-                hel->val = "none";
-            else
-                hashAdd(oldVars, "db", "none");
-            }
-        cartSetString(cart,"db", newDatabase);
-        }
-    }
+    cartSetHubDatabase(cart, oldVars, newDatabase);
 
 if (exclude != NULL)
     {
@@ -2083,7 +2459,12 @@ cartRemove(cart, "token"); // cleaning up captcha token if it slipped into the c
 cartDefaultDisconnector(&conn);
 
 if (didSessionLoad)
+    {
     cartHideDefaultTracks(cart);
+    }
+if (trackRecent)
+    cartUpdateRecentSession(cart, cartSessionId(cart));
+
 return cart;
 }
 
@@ -2105,21 +2486,27 @@ dyStringFree(&dy);
 }
 
 
-void cartEncodeState(struct cart *cart, struct dyString *dy)
-/* Add a CGI-encoded var=val&... string of all cart variables to dy. */
+static void cartEncodeStateExt(struct cart *cart, struct dyString *dy, boolean encodeNames,
+                               char *skipPrefix)
+/* Add a CGI-encoded var=val&... string of all cart variables to dy.  If skipPrefix is not NULL,
+ * leave out the variables that start with it. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
 char *s = NULL;
 for (el = elList; el != NULL; el = el->next)
     {
-    if (!hashLookup(cart->exclude, el->name))
+    if (!hashLookup(cart->exclude, el->name) &&
+        (skipPrefix == NULL || !startsWith(skipPrefix, el->name)))
 	{
 	if (firstTime)
 	    firstTime = FALSE;
 	else
 	    dyStringAppendC(dy, '&');
-	dyStringAppend(dy, el->name);
+	if (encodeNames)
+	    cartAppendEncodedName(dy, el->name);
+	else
+	    dyStringAppend(dy, el->name);
 	dyStringAppendC(dy, '=');
 	s = cgiEncode(el->val);
 	dyStringAppend(dy, s);
@@ -2129,8 +2516,25 @@ for (el = elList; el != NULL; el = el->next)
 hashElFreeList(&elList);
 }
 
+void cartEncodeState(struct cart *cart, struct dyString *dy)
+/* Add a CGI-encoded var=val&... string of all cart variables to dy, for storing and reading
+ * back with cartParseOverHash. */
+{
+cartEncodeStateExt(cart, dy, TRUE, NULL);
+}
+
+void cartEncodeStateRawNames(struct cart *cart, struct dyString *dy)
+/* The same, with variable names written as they stand rather than escaped.  This is for
+ * hgTracks, which compares the string against a stored session's contents a piece at a time
+ * rather than parsing it, so escaping a name there would make two equal carts look different.
+ * Nothing should read the result back with cartParseOverHash.  refs #38343 */
+{
+cartEncodeStateExt(cart, dy, FALSE, NULL);
+}
+
 static void saveState(struct cart *cart)
-/* Save out state to permanent storage in both user and session db. */
+/* Save out state to permanent storage in both user and session db.
+ * The recent sessions list goes to userDb only. */
 {
 struct sqlConnection *conn = cartDefaultConnector();
 struct dyString *encoded = dyStringNew(4096);
@@ -2139,8 +2543,16 @@ struct dyString *encoded = dyStringNew(4096);
 cartEncodeState(cart, encoded);
 
 /* update sessionDb and userDb tables (removed check for cart stuffing bots) */
-updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
+char *recentSessions = cartOptionalString(cart, RECENT_SESSIONS_VAR);
+if (recentSessions)
+    {
+    char *enc = cgiEncode(recentSessions);
+    dyStringPrintf(encoded, "%s%s=%s", (encoded->stringSize > 0) ? "&" : "",
+                   RECENT_SESSIONS_VAR, enc);
+    freeMem(enc);
+    }
+updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
 cartDefaultDisconnector(&conn);
@@ -2869,7 +3281,10 @@ cartDefaultDisconnector(&conn);
 }
 
 void cartWriteCookie(struct cart *cart, char *cookieName)
-/* Write out HTTP Set-Cookie statement for cart. */
+/* Queue the HTTP Set-Cookie statement(s) for the cart.  cgiPrintContentType() writes them,
+ * so this has to run before that does but does not have to be the thing that writes them:
+ * a caller that has already closed the header block loses the cookie rather than printing
+ * a Set-Cookie line into the page body, where it never did anything anyway. */
 {
 char *domain = cfgVal("central.domain");
 if (sameWord("HTTPHOST", domain))
@@ -2898,12 +3313,14 @@ if (sameString(userIdKey,"")) // make sure we do not write any blank cookies.
     }
 else
     {
+    char cookie[1024];
     if (!isEmpty(domain))
-	printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+	safef(cookie, sizeof cookie, "%s=%s; path=/; domain=%s; expires=%s",
 		cookieName, userIdKey, domain, cookieDate());
     else
-	printf("Set-Cookie: %s=%s; path=/; expires=%s\r\n",
+	safef(cookie, sizeof cookie, "%s=%s; path=/; expires=%s",
 		cookieName, userIdKey, cookieDate());
+    cgiAddHttpHeader("Set-Cookie", cookie);
     }
 if (geoMirrorEnabled())
     {
@@ -2912,7 +3329,10 @@ if (geoMirrorEnabled())
     char *redirect = cgiOptionalString("redirect");
     if (redirect)
         {
-        printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
+        char cookie[1024];
+        safef(cookie, sizeof cookie, "redirect=%s; path=/; domain=%s; expires=%s",
+                redirect, cgiServerName(), cookieDate());
+        cgiAddHttpHeader("Set-Cookie", cookie);
         }
     }
 /* Validate login cookies if login is enabled */
@@ -2920,7 +3340,7 @@ if (loginSystemEnabled())
     {
     struct slName *newCookies = loginValidateCookies(cart), *sl;
     for (sl = newCookies;  sl != NULL;  sl = sl->next)
-        printf("Set-Cookie: %s\r\n", sl->name);
+        cgiAddHttpHeader("Set-Cookie", sl->name);
     }
 }
 
@@ -3047,14 +3467,19 @@ void cartWriteHeaderAndCont(struct cart* cart, char *cookieName, char *contType)
  * contType defaults to text/html when NULL.
  * cookieName defaults to hUserCookie() when NULL */
 {
-/* cgiPrintContentType() writes the header only once per process, so the flows that reach here
- * twice (e.g. hgc emitting it early via cartAndCookieWithHtml, then webStart asking again) do
- * not need to check first.  Return early anyway, so we do not write a second cookie either. */
+/* Nothing can be added to a header block that has already been closed, so there is nothing
+ * useful left to do.  The flows that reach here twice - hgc emitting the header early via
+ * cartAndCookieWithHtml and then webStart asking again - are the common case; the other one
+ * is an early warn() during cartNew, which writes its own header before there is a cart to
+ * take a cookie from.  cartAndCookieWithHtml queues the content policy ahead of that warn
+ * for exactly that reason; the cookie cannot be queued that early and is simply lost. */
 if (cgiDidContentType())
     return;
 if (!cookieName)
     cookieName = hUserCookie();
 
+/* These two queue header lines and cgiPrintContentType writes them, so their order here is
+ * a matter of taste rather than of the wire format. */
 cspWriteResponseHeader();
 cartWriteCookie(cart, cookieName);
 cgiPrintContentType(contType);
@@ -3066,6 +3491,11 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
 {
+/* Queue the content policy before anything can write a header.  An early warn during
+ * cartForSession() below prints the Content-Type line itself, and after that no header
+ * line can be added, so a policy queued only at cartWriteHeaderAndCont() time would be
+ * missing from exactly the pages that report a problem. */
+cspWriteResponseHeader();
 // Note: early abort works fine but early warn does not
 htmlPushEarlyHandlers();
 struct cart *cart = cartForSession(cookieName, exclude, oldVars);
@@ -3113,24 +3543,18 @@ void cartEarlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
-va_list argscp;
-va_copy(argscp, args);
 if (!initted && !cgiOptionalString("ajax"))
     {
     cgiPrintContentType("text/html");
     htmStart(stdout, "Early Error");
     initted = TRUE;
     }
+/* htmlVaEncodeErrorText also writes the message to stderr, so only the request info that
+ * starts the log line is written here. */
+logCgiToStderr();
 printf("%s", htmlWarnStartPattern());
 htmlVaEncodeErrorText(format,args);
 printf("%s", htmlWarnEndPattern());
-
-/* write warning/error message to stderr so they get logged. */
-logCgiToStderr();
-vfprintf(stderr, format, argscp);
-va_end(argscp);
-putc('\n', stderr);
-fflush(stderr);
 }
 
 void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
@@ -3598,6 +4022,102 @@ cartRemoveAllForTdb(cart,tdb);
 saveState(cart);
 }
 
+static void addTdbTreeNames(struct hash *names, struct trackDb *tdb)
+/* Add the names of tdb, its subtracks, views and superTrack children to hash. */
+{
+hashStore(names, tdb->track);
+struct trackDb *subTdb;
+for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
+    addTdbTreeNames(names, subTdb);
+if (tdbIsSuper(tdb))
+    {
+    struct slRef *childRef;
+    for (childRef = tdb->children; childRef != NULL; childRef = childRef->next)
+        addTdbTreeNames(names, (struct trackDb *)childRef->val);
+    }
+}
+
+static void addTdbListNames(struct hash *names, struct trackDb *tdbList)
+/* Add the names of all tracks in tdbList and their subtracks and views to hash. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    hashStore(names, tdb->track);
+    addTdbListNames(names, tdb->subtracks);
+    }
+}
+
+static char *varOwner(struct hash *allNames, char *var)
+/* Return the track that var belongs to: the longest track name that is all of var
+ * or is followed in var by a '.', or NULL if there is none. A '_' is not a boundary:
+ * the cart is shared by all assemblies and allNames has only this one's tracks,
+ * so foo_V1, the visibility of a track in another assembly, would belong to foo.
+ * The '_' variables of a track (_sel, _imgOrd, _hideKids) are kept anyway. */
+{
+struct hashEl *hel = hashLookup(allNames, var);
+if (hel != NULL)
+    return hel->name;
+char *buf = cloneString(var);
+char *owner = NULL;
+char *s;
+for (s = buf + 1; *s != 0; s++)
+    {
+    if (*s == '.')
+        {
+        char c = *s;
+        *s = 0;
+        if ((hel = hashLookup(allNames, buf)) != NULL)
+            owner = hel->name;
+        *s = c;
+        }
+    }
+freeMem(buf);
+return owner;
+}
+
+static boolean isVisibilityVar(char *owner, char *var)
+/* Return TRUE if var is the visibility of track or view owner, its position in the
+ * track order ({track}.priority) or whether its options are expanded ({track}.showCfg). */
+{
+if (sameString(var, owner))
+    return TRUE;
+char *suffix = var + strlen(owner);
+return sameString(suffix, ".priority") || sameString(suffix, ".showCfg");
+}
+
+void cartRemoveSettingsForTdbAndChildren(struct cart *cart, struct trackDb *tdb,
+                                         struct trackDb *tdbList)
+/* Remove the settings (filters, colors, display options...) of this tdb, its
+ * subtracks, views and superTrack children from the cart, but keep their
+ * visibility: the track and view visibilities, the subtrack checkboxes, the
+ * image order, the track order and hidden or expanded children. tdbList has all
+ * tracks of the database, so that variables of other tracks whose names start
+ * with this one's are left alone. */
+{
+struct hash *names = hashNew(0);
+addTdbTreeNames(names, tdb);
+struct hash *allNames = hashNew(16);
+addTdbListNames(allNames, tdbList);
+addTdbTreeNames(allNames, tdb);
+// One pass over the cart, not one per track: composites can have 26,000 subtracks
+struct slName *removeList = NULL;
+struct hashEl *hel, *helList = hashElListHash(cart->hash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    char *owner = varOwner(allNames, hel->name);
+    if (owner != NULL && hashLookup(names, owner) && !isVisibilityVar(owner, hel->name))
+        slNameAddHead(&removeList, hel->name);
+    }
+hashElFreeList(&helList);
+struct slName *var;
+for (var = removeList; var != NULL; var = var->next)
+    cartRemove(cart, var->name);
+slFreeList(&removeList);
+hashFree(&allNames);
+hashFree(&names);
+}
+
 char *cartOrTdbString(struct cart *cart, struct trackDb *tdb, char *var, char *defaultVal)
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
 {
@@ -3795,9 +4315,15 @@ for (childRef = tdb->parent->children;childRef != NULL; childRef = childRef->nex
     else if (child->visibility != tvHide)
         cartSetString(cart,child->track,"hide");
     }
-// and finally show the parent
-cartSetString(cart,tdb->parent->track,"show");
-WARN("Set %s to 'show'",tdb->parent->track);
+// and finally show the parent, and every superTrack above it: a superTrack may sit
+// inside another superTrack, and opening only the closest one leaves the track hidden
+struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+for (super = supers; super != NULL; super = super->next)
+    {
+    cartSetString(cart,super->name,"show");
+    WARN("Set %s to 'show'",super->name);
+    }
+slNameFreeList(&supers);
 return TRUE;
 }
 

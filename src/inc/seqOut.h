@@ -62,6 +62,32 @@ struct baf
     bool nCountDown;	 /* True if want needle numbers counting down. */
     };
 
+struct bafBlock
+/* One block of a side-by-side alignment as drawn, after small gaps were merged into it.
+ * Positions are the numbers printed on the alignment lines, so they count down on a
+ * reverse-complemented sequence. */
+    {
+    struct bafBlock *next;
+    int num;			/* 1 for the first block drawn. */
+    int nStart, nEnd;		/* First and last needle (query) position, 1-based. */
+    int hStart, hEnd;		/* First and last haystack (genome) position, 1-based. */
+    int matches, mismatches;	/* Aligned columns that agree and disagree. */
+    int gapCols;		/* Columns of the small gaps merged into this block. */
+    int nGapAfter, hGapAfter;	/* Bases skipped before the next block; 0 on the last one. */
+    };
+
+void bafLabelBlocks(boolean on, char *genomeUrl, char *genomeChrom);
+/* While on, side-by-side alignments start each block with a line giving its number, its
+ * position and its identity, put a line saying how big the gap is between two blocks where
+ * there would be an <HR>, color mismatched bases and merged gaps, and keep a list of the
+ * blocks for bafBlocksDrawn().  Each block gets an anchor named sbs<num>.  If genomeUrl is
+ * not NULL, the genome position in the header links to genomeUrl followed by "start-end";
+ * it goes into an href as it is, so it must already be encoded.  Off by default. */
+
+struct bafBlock *bafBlocksDrawn();
+/* Return the blocks drawn since bafLabelBlocks() was turned on and forget them.  Free with
+ * slFreeList. */
+
 void bafInit(struct baf *baf, DNA *needle, int nNumOff, boolean nCountDown,
 	DNA *haystack, int hNumOff, boolean hCountDown, 
 	FILE *out, int lineSize, boolean isTrans);

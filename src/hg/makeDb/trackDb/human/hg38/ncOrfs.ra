@@ -29,32 +29,38 @@ group genes
     parent ncOrfs
     bigDataUrl /gbdb/hg38/ncOrfs/gencNcOrf/Ribo-seq_ORFs.kozak.peptides.bb
     shortLabel GENCODE Phase I ncORFs
-    longLabel ncORFs: GENCODE Phase I non-canonical ORFs with Ribo-seq and peptide evidence
+    longLabel ncORFs: GENCODE Phase I non-canonical ORFs with Ribo-seq, peptide evidence
     type bigGenePred
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides
-    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    mouseOver <b>$name</b> in <b>${geneName2}</b> ($geneType)<br><b>Kozak</b>: $kozakStrength (TE $kozakTE)<br><b>Replicated</b>: $replicated<br><b>Peptidein</b>: $isPeptidein<br><b>HLA tier</b>: $hlaFinalTier<br><b>HLA peptides</b>: $hlaNPeptides
+    filterValues.startCodon ATG,other
     filterType.startCodon multipleListOr
-    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterLabel.startCodon Start codon read from genome
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
-    filter.kozakTE 0:1.5
+    filter.kozakTE -1:1.5
     filterLimits.kozakTE -1:1.5
     filterValues.replicated yes,no
     filterType.replicated multipleListOr
+    filterLabel.replicated Replicated in more than one Ribo-seq ORF study
     filterValues.isPeptidein yes,no
     filterType.isPeptidein multipleListOr
+    filterLabel.isPeptidein Annotated as a peptidein by Deutsch et al. 2026 (Table S12)
     filterValues.hlaClass I,II,Both
     filterType.hlaClass multipleListOr
+    filterLabel.hlaClass HLA class(es) in which peptides were detected (. if none)
     filterValues.hlaFinalTier Tier 1B,Tier 2B,Tier 1A - Numerous nonHLA peptides,Tier 2A - One nonHLA peptide,Tier 3,Tier 4,Novel CDS isoform
     filterType.hlaFinalTier multipleListOr
     filterValues.hlaHppCategory HPP+,1PepCandidate,Insufficient
     filterType.hlaHppCategory multipleListOr
     filterValues.riboseqQuality Excellent,Sufficient,Insufficient,Sufficient in Gaertner et al
     filterType.riboseqQuality multipleListOr
+    filterLabel.riboseqQuality Manual rating of Ribo-seq support (. if not evaluated)
     colorFields default="Kozak strength" colorByEvidence="Evidence type" colorByHlaClass="HLA class"
+    skipFields colorByEvidence,colorByHlaClass
     html gencNcOrfs
     visibility pack
 
@@ -67,10 +73,10 @@ group genes
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
-    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    mouseOver <b>$name</b> in <b>${geneName2}</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other
     filterType.startCodon multipleListOr
-    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
     filter.kozakTE -1:1.5
@@ -87,10 +93,10 @@ group genes
     itemRgb on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    mouseOver <b>$name</b> in <b>$geneName2</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
-    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other,none
+    mouseOver <b>$name</b> in <b>${geneName2}</b> ($geneType)<br> <b>Start codon</b>: $startCodon<br> <b>Kozak</b>: $kozakStrength (TE $kozakTE)
+    filterValues.startCodon ATG,CTG,GTG,TTG,ACG,other
     filterType.startCodon multipleListOr
-    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG,None
+    filterValues.kozakStrength Strong,Moderate,Weak,non-ATG
     filterType.kozakStrength multipleListOr
     filterByRange.kozakTE on
     filter.kozakTE -1:1.5
@@ -108,7 +114,7 @@ group genes
     mouseOver <b>$gene</b> $uorfType<br> <b>Rank in gene</b>: $rank<br> <b>Kozak</b>: $kozak<br> <b>Intron structure from</b>: $intronsSource
     filterValues.uorfType Non-Overlapping|Non-Overlapping (5' UTR only),Overlapping|Overlapping (overlaps main CDS),N-terminal_extension|N-terminal extension (in-frame)
     filterType.uorfType multipleListOr
-    filterValues.kozak Strong,Moderate,Weak
+    filterValues.kozak Strong,Moderate,Weak,NA
     filterType.kozak multipleListOr
     visibility pack
 

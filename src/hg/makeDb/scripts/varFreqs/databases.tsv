@@ -17,7 +17,10 @@
 #   not an affected-disease case cohort, and ships no affected/unaffected label.
 AllOfUs	AllOfUs	/gbdb/hg38/varFreqs/_allofus/allOfUs.locAncFreq.vcf.gz	.	.	0
 SPARK	SFARI SPARK WES	/gbdb/hg38/varFreqs/_sfari/SPARK.iWES_v3.2024_08.deepvariant.norm.vcf.gz	AC	AF	1
-SFARI_WGS	SFARI SPARK WGS	/gbdb/hg38/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz	AC	AF	1
+SFARI_WGS	SFARI SPARK iWGS v1.1 Pilot	/gbdb/hg38/varFreqs/_sfari/wgs_12519_genome.deepvariant.norm.vcf.gz	AC	AF	1
+# SPARK45k: SFARI SPARK WGS 2026_08, 45,178 genomes. The merge reads a copy without the
+# 25M FILTER=NonHumanIns insertions (oral bacteria DNA from the saliva samples, see makeDoc).
+SPARK45k	SFARI SPARK 45k WGS	/hive/data/genomes/hg38/bed/varFreqs/sparkWgs45k/pvcfSites/sparkWgs45kAsd.noNonHumanIns.vcf.gz	AC	AF	1
 GenomeAsia	GenomeAsia SNVs	/gbdb/hg38/varFreqs/ga100k/ga100k.subst.vcf.gz	AC	AF	0
 GenomeAsiaIndel	GenomeAsia Indels	/gbdb/hg38/varFreqs/ga100k/ga100k.indels.vcf.gz	AC	AF	0
 NPM	NPM Singapore	/gbdb/hg38/varFreqs/_npm/SG10K_Health_r5.3.2.sites.vcf.bgz	AC	AF	0

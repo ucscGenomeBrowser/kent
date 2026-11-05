@@ -11,8 +11,12 @@
 # (same pattern as the daily tips and the session thumbnails, which are likewise
 # generated into htdocs and are not tracked in git).
 #
-# Output behavior: quiet on success, except that a restricted file found to be
-# reachable on hgdownload always prints, so cron mails it.
+# Output behavior: both scripts write their running commentary to stdout and anything
+# that needs a person to stderr, and this script sends stdout to $LOG. So mail from this
+# cron line means something is wrong: a restricted file reachable on hgdownload, an otto
+# job whose assembly list disagrees with trackDb, an otto job nobody has described, or an
+# error. Everything else is in the log. Do not echo progress here without redirecting it;
+# the mail was the whole progress log until RM #38295 and nobody read it.
 
 set -o errexit -o pipefail
 umask 002
@@ -21,19 +25,24 @@ DIR=${RTDIR:-/hive/data/outside/otto/trackLists}
 HTDOCS=${HTDOCS:-/usr/local/apache/htdocs}   # override for testing
 PAGE=mirrorTracks.html
 DEST=goldenPath/help                         # sits with the other mirror docs
+LOG=$DIR/lastRun.log
 
 cd "$DIR"
 
+: > "$LOG"
+
 # --refresh-contrib is implicit: the crawl re-runs itself when the cache ages out
-./collect.py --cache "$DIR/cache" -o "$DIR/collected.json"
+./collect.py --cache "$DIR/cache" -o "$DIR/collected.json" >> "$LOG"
 
 # public page: no list of reachable restricted files
-./mkPage.py -i "$DIR/collected.json" -o "$DIR/$PAGE"
+./mkPage.py -i "$DIR/collected.json" -o "$DIR/$PAGE" >> "$LOG"
 
 # internal copy, keeps the hgdownload cross-check, stays on hgwdev
-./mkPage.py -i "$DIR/collected.json" -o "$DIR/internal.html" --internal
+./mkPage.py -i "$DIR/collected.json" -o "$DIR/internal.html" --internal >> "$LOG"
 
-# only replace the live page if it actually changed
+# Only replace the live page if it actually changed. In practice it always has, because
+# the page carries its own generation date, so cmp never sees two identical files. Kept
+# for the day that date comes off, and so a hand run says what it touched.
 if ! cmp -s "$DIR/$PAGE" "$HTDOCS/$DEST/$PAGE"; then
     cp "$DIR/$PAGE" "$HTDOCS/$DEST/$PAGE"
     # The execute bit is what makes apache run the SSI includes on a .html file
@@ -41,5 +50,5 @@ if ! cmp -s "$DIR/$PAGE" "$HTDOCS/$DEST/$PAGE"; then
     # bare content with no menu bar and no stylesheets, which is the state
     # allTips.html is in. Do not drop this chmod.
     chmod 775 "$HTDOCS/$DEST/$PAGE"
-    echo "trackLists: updated $HTDOCS/$DEST/$PAGE"
+    echo "trackLists: updated $HTDOCS/$DEST/$PAGE" >> "$LOG"
 fi

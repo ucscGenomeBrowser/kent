@@ -625,6 +625,10 @@ if (nextUnderBar)
 return track;
 }
 
+#define maxSuperTrackDepth 10
+// No real trackDb nests supertracks anywhere near this deep; the limit is only
+// here so a malformed parent chain cannot spin forever.
+
 void trackDbSuperMarkup(struct trackDb *tdbList)
 /* Set trackDb from superTrack setting */
 {
@@ -657,10 +661,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
  * a supertrack configured in this trackDb */
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (tdbIsSuperTrack(tdb) || tdb->parent != NULL)
+    if (tdb->parent != NULL)
         continue;
     setting = trackDbLocalSetting(tdb, "parent");
-    if (!setting)
+    // A superTrack may name a parent superTrack, which nests it one level deeper.
+    // Its own "superTrack on" is not a parent reference, so only a non-super may
+    // fall back to the old style, where the setting holds the parent's name.
+    if (!setting && !tdbIsSuperTrack(tdb))
         setting = trackDbLocalSetting(tdb, "superTrack");  // Old style
     if (!setting)
         continue;
@@ -682,7 +689,47 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         }
     freeMem(words[0]);
     }
+
+/* Now that every link is set, make sure the supertracks form a tree.  Nesting
+ * means the parent chain is walked rather than looked at one level, so a loop
+ * would hang every walker instead of being harmless.  Only a supertrack can
+ * close a loop here, since nothing else is given a parent by this routine, so
+ * reporting it at a supertrack names the track whose setting is wrong.  This aborts
+ * rather than warns, to match the composite parent loop check in
+ * trackDbLinkUpGenerations: a loop is never something to carry on past. */
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (!tdbIsSuperTrack(tdb) || tdb->parent == NULL)
+        continue;
+    struct trackDb *ancestor;
+    int depth = 0;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+        {
+        if (ancestor == tdb)
+            errAbort("Supertrack %s is its own ancestor through its parent setting",
+                     tdb->track);
+        if (++depth > maxSuperTrackDepth)
+            errAbort("Supertrack %s is nested more than %d deep", tdb->track,
+                     maxSuperTrackDepth);
+        }
+    }
 hashFree(&superHash);
+}
+
+struct slName *tdbSuperTrackAncestors(struct trackDb *tdb)
+// Names of every superTrack above tdb, innermost first, NULL if there are none.  A superTrack
+// may itself sit inside another superTrack, so showing only the closest one still leaves the
+// track hidden.  Free the result with slNameFreeList.
+{
+struct slName *names = NULL;
+struct trackDb *ancestor;
+for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+    {
+    if (tdbIsSuperTrack(ancestor))
+        slNameAddHead(&names, ancestor->track);
+    }
+slReverse(&names);
+return names;
 }
 
 char *trackDbOrigAssembly(struct trackDb *tdb)
@@ -1062,6 +1109,17 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 	struct trackDb *parent = hashFindVal(trackHash, parentName);
 	if (parent != NULL)
             {
+            /* Refuse the link that closes a loop in the parent chain.  Every
+             * function that walks that chain to the top spins forever on a loop,
+             * and the tracks in it are dropped from the forest without a word.
+             * The links already made are loop-free, which is what ends this walk. */
+            struct trackDb *ancestor;
+            for (ancestor = parent; ancestor != NULL; ancestor = ancestor->parent)
+                {
+                if (ancestor == tdb)
+                    errAbort("Track %s is its own ancestor through its parent %s",
+                             tdb->track, parentName);
+                }
             slAddHead(&parent->subtracks, tdb); // composite/multiWig children are ONLY subtracks
             tdb->parent = parent;
             }

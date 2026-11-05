@@ -15,12 +15,12 @@ The <b>UCSC Unusual Regions</b> subtrack contains annotations collected at UCSC,
 put together from other tracks, our experiences and support email list
 requests over the years. For example, it contains the most well-known gene
 clusters (IGH, IGL, PAR1/2, TCRA, TCRB, etc) and annotations for the GRC
-<a href="/cgi-bin/hgTracks?db=hg19&chromInfoPage=">fixed sequences, alternate haplotypes, unplaced
+<a href="/cgi-bin/hgTracks?db=hg38&chromInfoPage=">fixed sequences, alternate haplotypes, unplaced
 contigs, pseudo-autosomal regions, and mitochondria</a>. These loci can yield alignments with
 low-quality mapping scores and discordant read pairs, especially for short-read sequencing data.
 The data set was manually curated, based on the <a href="/cgi-bin/hgGateway">Genome Browser's
 assembly</a> description, the <a href="/FAQ/FAQdownloads.html">FAQs</a> about assembly, and the
-<a href="/cgi-bin/hgTrackUi?db=hg19&g=refSeqComposite">NCBI RefSeq &quot;other&quot; annotations</a>
+<a href="/cgi-bin/hgTrackUi?db=hg38&g=refSeqComposite">NCBI RefSeq &quot;other&quot; annotations</a>
 track data.
 </li>
 
@@ -98,11 +98,23 @@ low mapping quality alignments. The easy regions generated through this k-mer un
 are referred to as pm151:lenient, where &quot;pm&quot; stands for panmask. In addition, low
 complexity regions identified by SDUST were removed.</p>
 <p>The pm151 regions are used to filter spurious variant calls in centromeres, long repeats, and
-other genomic regions where short-read mapping is often problematic. They cover 88.2% of hg38,
+other genomic regions where short-read mapping is often problematic. They cover 87.8% of hg38,
 92.2% of coding regions, and 96.3% of ClinVar pathogenic variants. The track can be used to filter
 variant calls for clinical or research human samples. Like the HighRepro track in this container
 (see above), it shows regions that are easy to sequence, not those that are problematic. The data
 was derived from the HPRC assemblies, and this track presents the 151b-easy panmask set.</p>
+
+<!--
+<h3>Panmask Difficult 151b Regions</h3>
+<p>
+The <b>Panmask Difficult 151b Regions</b> subtrack is the complement of the Panmask Easy 151b Regions
+track above: it marks the bases of the genome that Panmask did not classify as easy, so a
+variant caller can expect lower accuracy there. Unlike Panmask Easy, this track directly
+represents difficult regions, matching the rest of this container track, so it is the version
+used in the Problematic Regions Recommended Track Set. It was built at UCSC, not downloaded, by
+inverting the Panmask Easy 151b regions with the <tt>featureBits</tt> tool and removing assembly
+gaps, restricted to the 24 chromosomes that Panmask itself covers.</p>
+-->
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -126,7 +138,7 @@ or the <a href="../cgi-bin/hgIntegrator">Data Integrator</a>.
 <p>
 For automated download and analysis, the genome annotation is stored in bigBed files that
 can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/problematic/" target="_blank">our download server</a>.
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/problematic/" target="_blank">our download server</a>.
 Individual
 regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
 which can be compiled from the source code or downloaded as a precompiled

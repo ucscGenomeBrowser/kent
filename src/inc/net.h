@@ -190,6 +190,11 @@ struct dyString *netSlurpFile(int sd);
 /* Slurp file into dynamic string and return.  Result will include http headers and
  * the like. */
 
+struct dyString *netSlurpFileMax(int sd, size_t maxSize);
+/* Slurp file into dynamic string and return.  If maxSize is nonzero and the data runs
+ * past it, stop reading, free what was read, and return NULL.  Zero means no limit,
+ * which is what netSlurpFile does. */
+
 struct dyString *netSlurpUrl(char *url);
 /* Go grab all of URL and return it as dynamic string.  Result will include http headers
  * and the like. This will errAbort if there's a problem. */

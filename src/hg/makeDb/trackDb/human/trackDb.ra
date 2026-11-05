@@ -1,6 +1,7 @@
 include lrSv.ra
 include srSv.ra alpha
-include mei.ra alpha
+include mei.ra
+include mei.alpha.ra alpha
 
 include predictionScoresSuper.ra
 
@@ -43,6 +44,7 @@ include trackDb.clinGen.ra
 
 # CIViC cancer variant interpretation
 include civic.ra
+include civicAlpha.ra alpha
 
 # Genome In a Bottle
 include trackDb.giab.ra
@@ -162,7 +164,6 @@ longLabel Genetic Variants mentioned in scientific publications
 superTrack on
 group phenDis
 type bed 3
-pennantIcon Updated red ../goldenPath/newsarch.html#062526 "Updated Varaico Variants and Varaico Variants (suppl) tracks to Release 3 Jun. 25, 2026"
 
         track mastermind
         shortLabel Mastermind Variants
@@ -241,11 +242,10 @@ pennantIcon Updated red ../goldenPath/newsarch.html#062526 "Updated Varaico Vari
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaico.bb
-        pennantIcon Updated red ../goldenPath/newsarch.html#062526 "Updated Jun. 25, 2026"
         noScoreFilter on
         exonNumbers off
         # itemRgb on
-        dataVersion release 3 (20260527)
+        dataVersion /gbdb/$D/bbi/varaicoVersion.txt
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
@@ -257,11 +257,10 @@ pennantIcon Updated red ../goldenPath/newsarch.html#062526 "Updated Varaico Vari
         visibility dense
         type bigBed 9 +
         bigDataUrl /gbdb/$D/bbi/varaicoSuppl.bb
-        pennantIcon Updated red ../goldenPath/newsarch.html#062526 "Updated Jun. 25, 2026"
         noScoreFilter on
         exonNumbers off
         # itemRgb on
-        dataVersion release 3 (20260527)
+        dataVersion /gbdb/$D/bbi/varaicoVersion.txt
         parent varsInPubs pack
         urls outlink="$$" selectedPmid="https://www.ncbi.nlm.nih.gov/pubmed/$$" rgene="https://www.ncbi.nlm.nih.gov/nuccore/$$"
         mouseOver <b>$hgncSymbol $variantOrigStrs</b> in: $author ($journal, $year) - $title <br> <b>Number of publications:</b> $articlesCount <br> <b>Variant Effect:</b> $variantEffect
@@ -2825,9 +2824,9 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 type chain genbank
-iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
-iframeOptions height='600' width='1024'
-idInUrlSql SELECT qName from gbDnaBigChain where id=%-s
+# a link, not an iframe: NCBI sends X-Frame-Options: SAMEORIGIN, so nuccore cannot be framed
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
+idInUrlSql SELECT qName from gbDnaBigChain where id='%s'
 
 track gbSmall
 shortLabel GenBank Small
@@ -2837,8 +2836,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 type psl
-iframeUrl https://www.ncbi.nlm.nih.gov/nuccore/$$
-iframeOptions height='600' width='1024'
+# a link, not an iframe: NCBI sends X-Frame-Options: SAMEORIGIN, so nuccore cannot be framed
+url https://www.ncbi.nlm.nih.gov/nuccore/$$
 #idInUrlSql SELECT qName from gbDnaBigChain where id=%-s
 
 track affyTranscription
@@ -5646,10 +5645,8 @@ include phasedVars.ra
 
 # Tandem Repeat Variation superTrack.  Shared by all human assemblies: the
 # bigDataUrls use $D and -strict drops the members whose file is not there, so
-# each assembly gets only the tracks that were actually built for it.  Alpha only
-# until the STRchive auto-push is installed, #38268 -- beta and public still get
-# the hg38-only human/hg38/strVar.ra.  Drop the "alpha" here to release it.
-include strVarNew.ra alpha
+# each assembly gets only the tracks that were actually built for it, #38268.
+include strVar.ra
 
 track dnaMethylation
 superTrack on

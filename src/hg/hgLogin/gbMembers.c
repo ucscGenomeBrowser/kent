@@ -244,3 +244,19 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean gbMembersActivationTokenOk(struct sqlConnection *conn, char *userName, char *token)
+/* Return TRUE if token is userName's current activation token.  Let the database decide
+ * whether the token is still current: setupNewAccount sets emailTokenExpires seven days out and
+ * the activation mail says the code expires then, so a link older than that must no longer
+ * work.  An unknown user name gives NULL here, and an account that has already been activated
+ * has an empty emailToken, so both fall through to the same answer as a wrong token. */
+{
+char query[256];
+sqlSafef(query,sizeof(query),
+    "SELECT emailToken FROM gbMembers WHERE userName='%s' AND emailTokenExpires > NOW()",
+    userName);
+char *emailToken = sqlQuickString(conn, query);
+boolean ok = (isNotEmpty(emailToken) && sameString(emailToken, token));
+freeMem(emailToken);
+return ok;
+}

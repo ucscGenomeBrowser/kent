@@ -1,19 +1,32 @@
 # EXPECTED TO FAIL. The other half of pagechecks.docent.yaml.
 #
-# The same view with all four new checks aimed the wrong way at once. If this run ever
-# exits 0, at least one of url:, noUrl:, has: and noHas: has stopped comparing anything --
-# and since the regression suite next door leans on them for bugs that rows:, height: and
-# text: cannot see, they would pass silently over exactly those bugs.
+# The same view with every page-level check aimed the wrong way at once. If this run ever
+# exits 0, the checks below have stopped comparing anything -- and since the regression
+# suite next door leans on them for bugs that rows:, height: and text: cannot see, they
+# would pass silently over exactly those bugs.
 #
-# One script rather than four because each check was also verified on its own by hand when
-# it was written, and four near-identical scripts is four things to keep in step. The
-# failure names every check that failed, so a single run says which of the four broke.
+# One script rather than one per check because each was also verified on its own by hand
+# when it was written, and a pile of near-identical scripts is a pile of things to keep in
+# step. The failure names every check that failed, so a single run says which broke. Note
+# what that does and does not buy: `expect:` throws when ANY check fails, so this script
+# goes green as long as at least one of them still works. It catches all of them breaking
+# at once -- a change to how `bad` is collected, say -- not one of them breaking alone.
 #
-# The failure it should print, all four in one message:
-#   url is "https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?...", wanted it to contain
+# The two list checks are here for a particular failure. text: and noText: took one string
+# until 2026-09-17, and a list handed to a check that stringifies its argument fails OPEN:
+# ["a", "b"] becomes "a,b", which no page contains, so the check passes on anything and
+# passes silently. Each list below holds one entry aimed wrongly and one aimed rightly, so
+# it fails only if every entry is really looked at on its own.
+#
+# The failure it should print, all eight in one message, in this order:
+#   page does not contain "no page says this"; page contains "Visible Tracks"; url is
+#     "https://genome-test.gi.ucsc.edu/cgi-bin/hgTracks?...", wanted it to contain
 #     "/hgSearch"; url contains "/hgTracks": ...; nothing matches
 #     "#td_data_ruler map[name=map_center_mane]"; 1 element(s) match
-#     "#td_data_mane map[name=map_center_mane]", wanted none
+#     "#td_data_mane map[name=map_center_mane]", wanted none; #topRightLinks is not inside
+#     #main-menu: 32px below it -- it is at 964,0 30x32, #main-menu at 30,0 970x0;
+#     #topRightLinks at 964,0 30x32 is not clear of 1 of 1 "#trToggle": 970,0 18x32;
+#     #main-menu-whole height is 32px, wanted >=500
 target: genome-test
 db: hg38
 position: chr7:155799529-155812871
@@ -26,5 +39,16 @@ steps:
   - expect:
       url: "/hgSearch"
       noUrl: "/hgTracks"
+      # One entry each way, so a list that is not really iterated cannot satisfy this.
+      text: ["chr7:155,799,529-155,812,871", "no page says this"]
+      noText: ["no page says this either", "Visible Tracks"]
       has: "#td_data_ruler map[name=map_center_mane]"
       noHas: "#td_data_mane map[name=map_center_mane]"
+      box:
+        # #topRightLinks is a SIBLING of #main-menu inside the bar, to the right of it, so
+        # it can never be inside it.
+        - {sel: "#topRightLinks", inside: "#main-menu"}
+        # The icon overlaps its own hamburger button by construction.
+        - {sel: "#topRightLinks", clear: "#trToggle"}
+        # The bar is one 32px row and is not going to be 500 tall.
+        - {sel: "#main-menu-whole", height: ">=500"}

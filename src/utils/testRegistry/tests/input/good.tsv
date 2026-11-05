@@ -1,0 +1,8 @@
+# A small registry for testing testRegistry itself.  The paths are real files in the tree,
+# because check is meant to look at the file system and say so when one is gone.
+#ticket	release	test	docent	why	evidence	note
+37263	504	lib/tests/pathSimplifyTest.c	-	library	assertion-only	dot-dot collapsing
+38303	504	-	rm38303.docent.yaml	invisible	-	needs one: a session file path spelled through a symlinked config directory
+38320	504	lib/tests/faSpeedReadTest.c	-	invisible	sandbox-ab	the grower and the caller asked for different sizes
+38340	504	hg/hgSession/tests/backupParseTest.c	-	invisible	unrecorded	a valueless pair in a session backup
+38340	-	lib/tests/cgiCookieTest.c	-	invisible	unrecorded	the same pair in a cookie header, no target version yet

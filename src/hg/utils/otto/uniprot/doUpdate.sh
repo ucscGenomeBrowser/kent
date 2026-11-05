@@ -43,7 +43,64 @@ fi
 trap 'logRun "INTERRUPTED killed by a signal"; rm -f /hive/data/outside/uniProt/current/doUniprot.lock; exit 130' INT TERM HUP
 
 logRun "START"
-./doUniprot run > lastRun.log 2>&1
+# Anything after the first argument is handed to doUniprot, so a hand restart can say
+# "./doUpdate.sh run -p" to skip the download and the multi-day parse and still get the
+# lock handling, the run log and the failure mail. Cron passes only "run".
+# Guard the shift rather than hiding its complaint: shift is a POSIX special built-in, so
+# in a shell that follows that rule (dash, which is /bin/sh on Debian and in most
+# containers) shifting an empty argument list ends the script then and there. The run log
+# would show a START with no END, which reads exactly like a run still in progress.
+if [ $# -gt 0 ]; then
+    shift
+fi
+
+# A monthly run covers a hundred or more organisms and there are always a few that cannot be
+# built: an organism UniProt barely annotates, one NCBI has no gene table for, a genome that
+# needs more memory than we reserved. Without this, any one of them stops the other hundred
+# from being published. Failures are still reported in full and each gets its own log under
+# failedTaxa/. Pass --allowFailures yourself to override this default. refs #38300
+case " $* " in
+    *" --allowFailures"*) ;;
+    *) set -- "$@" --allowFailures=10 ;;
+esac
+
+# The GenArk assemblies are annotated as well as the ones with a database of their own, so
+# the list of them has to be current: an assembly released since the last copy was taken
+# would never be annotated, and nothing would say so. Fetch it fresh, and keep the copy we
+# have if the fetch fails rather than running against nothing. The copy under
+# /hive/data/genomes/asmHubs is not an alternative, it has not been rewritten since 2022.
+# refs #38300
+genArkList=/hive/data/outside/otto/uniprot/UCSC_GI.assemblyHubList.txt
+genArkUrl=https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt
+case " $* " in
+    *" --genArkList"*) ;;
+    *)
+    if curl -sSf --max-time 300 "$genArkUrl" -o "$genArkList.new" 2> "$genArkList.err" ; then
+        if [ -s "$genArkList.new" ] ; then
+            mv -f "$genArkList.new" "$genArkList"
+            echo "GenArk assembly list refreshed: `grep -vc '^#' $genArkList` assemblies"
+        else
+            echo "WARNING: the GenArk assembly list came back empty, keeping the copy from `date -r $genArkList '+%Y-%m-%d'`"
+            rm -f "$genArkList.new"
+        fi
+    else
+        echo "WARNING: could not fetch $genArkUrl, keeping the copy from `date -r $genArkList '+%Y-%m-%d'`"
+        cat "$genArkList.err"
+        rm -f "$genArkList.new"
+    fi
+    rm -f "$genArkList.err"
+
+    # The skip list lives here rather than in a developer's kent checkout: a cron running as
+    # otto must not depend on somebody's home directory still being there. Refresh it from
+    # the tree when hprc.orderList.tsv changes. The HPRC assemblies are covered by their own
+    # collection, so annotating them here would duplicate that work on hundreds of genomes.
+    set -- "$@" --genArkList="$genArkList" --minProteins=20000 \
+        --skipList=/hive/data/outside/otto/uniprot/hprc.orderList.tsv --taxonThreads=20
+    ;;
+esac
+
+echo "running: ./doUniprot run $*"
+./doUniprot run "$@" > lastRun.log 2>&1
 exitCode=$?
 trap - INT TERM HUP
 logRun "END exit=$exitCode"
@@ -72,6 +129,11 @@ if [ $exitCode -ne 0 ] ; then
     echo
     echo "Last 25 lines of the log:"
     tail -25 lastFail.log
+    if [ -d failedTaxa ] ; then
+        echo
+        echo "Per-taxon failure logs, one file each, kept until the next failure of that taxon:"
+        ls -1 failedTaxa/*.log 2>/dev/null | sed "s|^|    /hive/data/outside/otto/uniprot/|"
+    fi
     exit $exitCode
 fi
 

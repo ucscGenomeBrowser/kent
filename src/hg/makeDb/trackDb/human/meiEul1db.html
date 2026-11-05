@@ -15,7 +15,7 @@ This track shows the curated set of L1-HS insertion polymorphisms catalogued in
 of L1HS retrotransposon insertions in humans (Mir et al. 2015). Each feature is
 a Meta Retrotransposon Insertion Polymorphism (MRIP) &mdash; a non-redundant
 genomic site obtained by merging close Sample Retrotransposon Insertion Polymorphisms
-(SRIPs) reported across 32 published studies covering more than 900 samples.
+(SRIPs) reported across 32 published studies covering 943 samples.
 </p>
 
 <h2>Display Conventions and Configuration</h2>
@@ -48,10 +48,11 @@ present in the reference genome.
 <h2>Methods</h2>
 <p>
 euL1db integrates published L1-HS insertion calls from a wide range of
-detection assays. Most studies used enrichment-based protocols
-(RC-seq, L1-seq, Ewing PCR, TIP-seq), high-throughput whole-genome
-sequencing analysed with TranspoSeq, MELT or similar pipelines, or
-fosmid-based long-read approaches. For each accepted study the original
+detection assays. The methods behind the largest numbers of insertions are
+Ewing PCR, RC-seq, Tea, L1-seq and TranspoSeq, followed by the Ewing
+pipeline, Spanner, fosmid sequencing, TranspoSeq-exome and candidate-gene
+assays. The detection method is recorded for every insertion and is shown
+on the details page. For each accepted study the original
 authors&#39; sample-level calls (SRIPs) were curated and re-mapped to hg19
 where needed. SRIPs that are within 200&nbsp;bp of each other on the same strand
 and are germline are merged into a single non-redundant MRIP. Somatic events
@@ -65,15 +66,15 @@ March 2018, last updated 14 October 2014) using the script
    target="_blank">meiEul1dbToBed.py</a>, which joins the MRIP, SRIP, Sample,
 Individual, Study and Methods tables and emits a BED9+ file. For details of
 the build process see the makeDoc text file
-<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg19/mei.txt"
-   target="_blank">hg19/mei.txt</a>, and the scripts directory
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/mei.txt"
+   target="_blank">doc/hg38/mei.txt</a>, and the scripts directory
 <a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/mei"
-   target="_blank">src/hg/makeDb/scripts/mei</a>.
+   target="_blank">src/hg/makeDb/scripts/mei</a>,
+   and the track configuration is in <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/trackDb/human/mei.ra" target="_blank">trackDb/human/mei.ra</a>.
 The Helman2014 study used numeric chromosome names (23 = X, 24 = Y); these
 were renamed in the build script. The hg19 BED was lifted to hg38 with
 <tt>liftOver</tt> using the standard <tt>hg19ToHg38.over.chain.gz</tt> chain.
-Of 8,991 hg19 MRIPs, 8,988 lifted successfully; the 3 unlifted MRIPs are
-listed in the build directory.
+Of 8,991 hg19 MRIPs, 8,988 lifted successfully.
 </p>
 
 <h2>Data Access</h2>
@@ -88,14 +89,14 @@ track=<i>meiEul1db</i>.
 <p>
 For automated download and analysis, the annotation is stored in a bigBed
 file that can be downloaded from
-<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/" target="_blank">our download
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/" target="_blank">our download
 server</a>. The file for this track is called <tt>eul1db.bb</tt>. Individual regions
 or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a precompiled binary
 for your system. Instructions for downloading source code and binaries can be
-found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads" target="_blank">here</a>.
 The tool can also be used to obtain features within a given range, e.g.
-<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/mei/eul1db.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/$db/mei/eul1db.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt>
 </p>
 <p>
 The original annotation source data can be downloaded from

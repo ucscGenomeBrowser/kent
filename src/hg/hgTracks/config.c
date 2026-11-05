@@ -198,6 +198,48 @@ char *fontName = NULL;
 return chosenFreeTypeFont(&fontName) != NULL;
 }
 
+/* Cart variables behind the FreeType tuning controls.  They only do anything while
+ * hg.conf freeTypeTuneUI is on, so a value left behind by an experiment cannot change
+ * what a server without that setting draws. */
+#define ftTuneSizeScaleVar  "freeTypeTune.sizeScale"
+#define ftTuneBaselineVar   "freeTypeTune.baselineDelta"
+#define ftTuneGammaVar      "freeTypeTune.gamma"
+#define ftTuneBoxScaleVar   "freeTypeTune.boxScale"
+#define ftTuneHintingVar    "freeTypeTune.hinting"
+#define ftTuneAntiAliasVar  "freeTypeTune.antiAlias"
+#define ftTunePrefix        "freeTypeTune."
+
+boolean freeTypeTuneUiOn()
+/* Is the FreeType tuning section switched on?  It is a debugging aid, off everywhere
+ * until someone puts freeTypeTuneUI=on in hg.conf. */
+{
+return cfgOptionBooleanDefault("freeTypeTuneUI", FALSE);
+}
+
+void freeTypeTuneResetCart()
+/* Drop the FreeType tuning variables, returning the rendering to the stock settings. */
+{
+cartRemovePrefix(cart, ftTunePrefix);
+}
+
+static void applyFreeTypeTuning()
+/* Push the tuning from the cart into the FreeType code.  Defaults reproduce the stock
+ * rendering, so this is a no-op until someone moves a control. */
+{
+struct ftTuning tuning;
+ftTuningDefaults(&tuning);
+if (freeTypeTuneUiOn())
+    {
+    tuning.sizeScale = cartUsualDouble(cart, ftTuneSizeScaleVar, tuning.sizeScale);
+    tuning.baselineDelta = cartUsualInt(cart, ftTuneBaselineVar, tuning.baselineDelta);
+    tuning.gamma = cartUsualDouble(cart, ftTuneGammaVar, tuning.gamma);
+    tuning.boxScale = cartUsualDouble(cart, ftTuneBoxScaleVar, tuning.boxScale);
+    tuning.hinting = cartUsualInt(cart, ftTuneHintingVar, tuning.hinting);
+    tuning.antiAlias = cartUsualInt(cart, ftTuneAntiAliasVar, tuning.antiAlias);
+    }
+ftSetTuning(&tuning);
+}
+
 void initFontEngine()
 /* Load the text engine the user has picked, before anything measures a string.
  * Pack mode reserves room for an item by measuring its label, and
@@ -209,6 +251,7 @@ char *fontName = NULL;
 char *fontFile = chosenFreeTypeFont(&fontName);
 if (fontFile != NULL)
     mgLoadFontEngine(FONT_METHOD_FREETYPE, fontFile);
+applyFreeTypeTuning();
 }
 
 void maybeNewFonts(struct hvGfx *hvg)
@@ -218,6 +261,62 @@ char *fontName = NULL;
 char *fontFile = chosenFreeTypeFont(&fontName);
 if (fontFile != NULL)
     hvGfxSetFontMethod(hvg, FONT_METHOD_FREETYPE, fontName, fontFile);
+applyFreeTypeTuning();
+}
+
+static void freeTypeTuneUi()
+/* Rough controls for experimenting with the FreeType rendering, shown only when hg.conf
+ * freeTypeTuneUI is on.  Every control's default is the stock rendering. */
+{
+struct ftTuning stock;
+ftTuningDefaults(&stock);
+
+hPrintf("<TR><TD colspan=4><HR>FreeType tuning (debugging, hg.conf freeTypeTuneUI)</TD></TR>");
+
+hPrintf("<TR><TD>Size scale:<TD style=\"text-align: right\">");
+hDoubleVar(ftTuneSizeScaleVar, cartUsualDouble(cart, ftTuneSizeScaleVar, stock.sizeScale), 6);
+hPrintf("<TD>multiplies the pixel size picked for the text size, stock %g</TD></TR>",
+        stock.sizeScale);
+
+hPrintf("<TR><TD>Baseline shift:<TD style=\"text-align: right\">");
+hIntVar(ftTuneBaselineVar, cartUsualInt(cart, ftTuneBaselineVar, stock.baselineDelta), 6);
+hPrintf("<TD>pixels added to the baseline, stock %d</TD></TR>", stock.baselineDelta);
+
+hPrintf("<TR><TD>Coverage gamma:<TD style=\"text-align: right\">");
+hDoubleVar(ftTuneGammaVar, cartUsualDouble(cart, ftTuneGammaVar, stock.gamma), 6);
+hPrintf("<TD>exponent on a pixel's coverage, under 1 is heavier, stock %g</TD></TR>",
+        stock.gamma);
+
+hPrintf("<TR><TD>Box size scale:<TD style=\"text-align: right\">");
+hDoubleVar(ftTuneBoxScaleVar, cartUsualDouble(cart, ftTuneBoxScaleVar, stock.boxScale), 6);
+hPrintf("<TD>the multiplier text drawn to fit a box uses, stock %g</TD></TR>",
+        stock.boxScale);
+
+static char *hintLabels[] = {"default", "none", "force autohint"};
+static char *hintValues[] = {"0", "1", "2"};
+char hintNow[16];
+safef(hintNow, sizeof hintNow, "%d", cartUsualInt(cart, ftTuneHintingVar, stock.hinting));
+hPrintf("<TR><TD>Hinting:<TD style=\"text-align: right\">");
+cgiMakeDropListFull(ftTuneHintingVar, hintLabels, hintValues, ArraySize(hintValues),
+                    hintNow, NULL, NULL);
+hPrintf("<TD>what to ask FreeType for, stock default</TD></TR>");
+
+static char *aaLabels[] = {"Normal", "Light", "Light (Sub Pixel)", "LCD (RGB)",
+                           "LCD (BGR)", "LCD (vert. RGB)", "LCD (vert. BGR)"};
+static char *aaValues[] = {"0", "1", "2", "3", "4", "5", "6"};
+char aaNow[16];
+safef(aaNow, sizeof aaNow, "%d", cartUsualInt(cart, ftTuneAntiAliasVar, stock.antiAlias));
+hPrintf("<TR><TD>Anti-aliasing:<TD style=\"text-align: right\">");
+cgiMakeDropListFull(ftTuneAntiAliasVar, aaLabels, aaValues, ArraySize(aaValues),
+                    aaNow, NULL, NULL);
+hPrintf("<TD>the render target, stock Normal.  The LCD modes need auto-hinting to be "
+        "worth looking at.</TD></TR>");
+
+hPrintf("<TR><TD colspan=2>");
+cgiMakeButton(configFreeTypeReset, "Reset FreeType");
+hPrintf("<TD>puts every control above back to the stock setting</TD></TR>");
+
+hPrintf("<TR><TD colspan=4><HR></TD></TR>");
 }
 
 static void textFontDropDown()
@@ -304,6 +403,46 @@ static void textSizeDropDown()
 {
 static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
+}
+
+static void addSuperMembers(struct trackRef **refList, struct hash *trackHash,
+                            struct trackDb *superTdb)
+/* Add a supertrack's members to refList, and the members of any supertrack among them.
+ * A supertrack may hold another supertrack, whose own members are reached only through it. */
+{
+struct slRef *child;
+for (child = superTdb->children; child != NULL; child = child->next)
+    {
+    struct trackDb *childTdb = child->val;
+    struct track *childTrack = hashFindVal(trackHash, childTdb->track);
+    // Try adding downloadsOnly track
+    if (childTrack == NULL && tdbIsDownloadsOnly(childTdb))
+        {
+        AllocVar(childTrack);           // Fake a track!
+        childTrack->tdb = childTdb;
+        childTrack->hasUi = FALSE;
+        }
+    if (childTrack != NULL)
+        {
+        struct trackRef *ref;
+        AllocVar(ref);
+        ref->track = childTrack;
+        slAddTail(refList, ref);
+        }
+    if (tdbIsSuper(childTdb))
+        addSuperMembers(refList, trackHash, childTdb);
+    }
+}
+
+static int superTrackDepth(struct trackDb *tdb)
+/* How many supertracks are above this track. */
+{
+int depth = 0;
+struct trackDb *ancestor;
+for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+    if (tdbIsSuper(ancestor))
+        depth++;
+return depth;
 }
 
 static void trackConfig(struct track *trackList, struct group *groupList,
@@ -443,27 +582,7 @@ for (group = groupList; group != NULL; group = group->next)
             ref->track = track;
             slAddTail(&refList, ref);
             if (tdbIsSuper(track->tdb))
-                {
-                struct slRef *child = track->tdb->children;
-                for (; child != NULL; child=child->next)
-                    {
-                    struct trackDb *childTdb = child->val;
-                    struct track *childTrack = hashFindVal(trackHash, childTdb->track);
-                    // Try adding downloadsOnly track
-                    if (childTrack == NULL && tdbIsDownloadsOnly(childTdb))
-                        {
-                        AllocVar(childTrack);           // Fake a track!
-                        childTrack->tdb = childTdb;
-                        childTrack->hasUi = FALSE;
-                        }
-                    if (childTrack != NULL)
-                        {
-                        AllocVar(ref);
-                        ref->track = childTrack;
-                        slAddTail(&refList, ref);
-                        }
-                    }
-                }
+                addSuperMembers(&refList, trackHash, track->tdb);
             }
         group->trackList = refList;
         }
@@ -478,8 +597,10 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("<TR %sid='%s-%d'>",(isOpen ? "" : "style='display: none;'"),
                 group->name, rowCount++);
         hPrintf("<TD NOWRAP>");
-        if (tdbIsSuperTrackChild(tdb))
-            /* indent members of a supertrack */
+        int superDepth = superTrackDepth(tdb);
+        int indent;
+        for (indent = 0; indent < superDepth; indent++)
+            /* indent members of a supertrack, one step per enclosing supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
         hPrintIcons(tdb);
@@ -495,8 +616,8 @@ for (group = groupList; group != NULL; group = group->next)
         if (track->hasUi)
 	    hPrintf("</A>");
 	hPrintf("</TD><TD NOWRAP>");
-        if (tdbIsSuperTrackChild(tdb))
-            /* indent members of a supertrack */
+        for (indent = 0; indent < superDepth; indent++)
+            /* indent members of a supertrack, one step per enclosing supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 
 	/* If track is not on this chrom print an informational
@@ -711,6 +832,8 @@ if (freeTypeOn())
     textStyleDropDown();
     hPrintf("</TR>");
     hPrintf("</TR>");
+    if (freeTypeTuneUiOn())
+        freeTypeTuneUi();
     }
 
 if (cfgOptionBooleanDefault("showMouseovers", FALSE))

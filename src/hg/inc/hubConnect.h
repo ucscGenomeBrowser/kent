@@ -171,6 +171,11 @@ struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, boole
 char *hubConnectLoadHubs(struct cart *cart);
 /* load the track data hubs.  Set a static global to remember them */
 
+void hubConnectPortHubStatus(struct cart *cart);
+/* When a session has been saved on a different host it may have cart variables that reference
+ * hubStatus id's that are different than what the local machine has.  Use the "assumesHub" cart
+ * variable, which maps id numbers to URL's, to rename them to the local id's. */
+
 struct hubConnectStatus *hubConnectGetHubs();
 /* return the static global to the track data hubs */
 
@@ -200,6 +205,10 @@ struct hubConnectStatus *hubConnectNewHub();
 char *hubPublicTableName();
 /* Get the name of the table that lists public hubs.  Don't free the result. */
 
+boolean hubPublicHasEmail(struct sqlConnection *conn);
+/* Return TRUE if the public hubs table has an email column.  Mirrors with an older
+ * hgcentral do not have it, so try to add it first.  If that fails, return FALSE. */
+
 char *hubNameFromUrl(char *hubUrl);
 /* Given the URL for a hub, return its hub_# name. */
 
@@ -217,7 +226,12 @@ boolean hubConnectIsCurated(char *db);
 boolean hubConnectGetCuratedUrl(char *db, char **hubUrl);
 /* Check to see if this db is a curated hub and if so return its hubUrl */
 
-boolean hubsCanAddGroups();
-/* can track hubs have their own groups? */
+boolean hubConnectIsCuratedHubUrl(char *db, char *hubUrl);
+/* Return TRUE if hubUrl is any of the curated copies of the assembly hub for db,
+ * whichever curatedHubPrefix (alpha, beta, public, a sandbox name) it belongs to. */
+
+boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId);
+/* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
+ * hub for db.  Only reads the hub's URL, never fetches the hub. */
 
 #endif /* HUBCONNECT_H */

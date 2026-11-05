@@ -1,0 +1,105 @@
+======== sessionDataDir spelled the symlink, absolute
+pathIsUnderDir
+  /a/b        /a/b/c.bed                                     accept
+  /a/b/       /a/b/c.bed  (trailing slash on the dir)        accept
+  /a/b        /a/bb/c.bed (sibling that starts the same)     refuse
+  /a/b        /a/b        (the directory itself, no file)    refuse
+  /a/b        /a/b/       (nothing after the slash)          refuse
+  /a/b        /a/b/../../etc/passwd                          refuse
+  /a/b        /a/b/x/../y.bed (a .. that stays inside)       refuse
+  /a/b        /a/b/..x/y.bed  (a name that begins with ..)   accept
+  (empty dir) /a/b/c.bed                                     refuse
+  /a/b        (empty path)                                   refuse
+  /           /etc/passwd  (a dir of just a slash)           refuse
+
+isRemoteUrl
+  http://example.org/a.bb                                    accept
+  https://example.org/a.bb                                   accept
+  ftp://example.org/a.bb                                     accept
+  file:///etc/passwd                                         refuse
+  gopher://example.org/a.bb                                  refuse
+  /etc/passwd                                                refuse
+
+isTrashOrSessionDataPath, sessionDataDir is the symlink, absolute
+  <link>/hgt/user.bed   through the symlink                  accept
+  <real>/hgt/user.bed   the resolved spelling                accept
+  /etc/passwd                                                refuse
+  <link>/../../../etc/passwd                                 refuse
+  http://example.org/a.bb  (a URL is not a file path)        refuse
+
+the other two doors, for <link>/hgt/user.bed
+  isServerUserFilePath                                       accept
+  isServerUserFileOrUrl                                      accept
+  isServerUserFilePath   http://example.org/a.bb             refuse
+  isServerUserFileOrUrl  http://example.org/a.bb             accept
+
+======== sessionDataDir spelled the resolved directory, absolute
+pathIsUnderDir
+  /a/b        /a/b/c.bed                                     accept
+  /a/b/       /a/b/c.bed  (trailing slash on the dir)        accept
+  /a/b        /a/bb/c.bed (sibling that starts the same)     refuse
+  /a/b        /a/b        (the directory itself, no file)    refuse
+  /a/b        /a/b/       (nothing after the slash)          refuse
+  /a/b        /a/b/../../etc/passwd                          refuse
+  /a/b        /a/b/x/../y.bed (a .. that stays inside)       refuse
+  /a/b        /a/b/..x/y.bed  (a name that begins with ..)   accept
+  (empty dir) /a/b/c.bed                                     refuse
+  /a/b        (empty path)                                   refuse
+  /           /etc/passwd  (a dir of just a slash)           refuse
+
+isRemoteUrl
+  http://example.org/a.bb                                    accept
+  https://example.org/a.bb                                   accept
+  ftp://example.org/a.bb                                     accept
+  file:///etc/passwd                                         refuse
+  gopher://example.org/a.bb                                  refuse
+  /etc/passwd                                                refuse
+
+isTrashOrSessionDataPath, sessionDataDir is the resolved directory, absolute
+  <link>/hgt/user.bed   through the symlink                  refuse
+  <real>/hgt/user.bed   the resolved spelling                accept
+  /etc/passwd                                                refuse
+  <link>/../../../etc/passwd                                 refuse
+  http://example.org/a.bb  (a URL is not a file path)        refuse
+
+the other two doors, for <link>/hgt/user.bed
+  isServerUserFilePath                                       refuse
+  isServerUserFileOrUrl                                      refuse
+  isServerUserFilePath   http://example.org/a.bb             refuse
+  isServerUserFileOrUrl  http://example.org/a.bb             accept
+
+======== sessionDataDir spelled the symlink, relative
+pathIsUnderDir
+  /a/b        /a/b/c.bed                                     accept
+  /a/b/       /a/b/c.bed  (trailing slash on the dir)        accept
+  /a/b        /a/bb/c.bed (sibling that starts the same)     refuse
+  /a/b        /a/b        (the directory itself, no file)    refuse
+  /a/b        /a/b/       (nothing after the slash)          refuse
+  /a/b        /a/b/../../etc/passwd                          refuse
+  /a/b        /a/b/x/../y.bed (a .. that stays inside)       refuse
+  /a/b        /a/b/..x/y.bed  (a name that begins with ..)   accept
+  (empty dir) /a/b/c.bed                                     refuse
+  /a/b        (empty path)                                   refuse
+  /           /etc/passwd  (a dir of just a slash)           refuse
+
+isRemoteUrl
+  http://example.org/a.bb                                    accept
+  https://example.org/a.bb                                   accept
+  ftp://example.org/a.bb                                     accept
+  file:///etc/passwd                                         refuse
+  gopher://example.org/a.bb                                  refuse
+  /etc/passwd                                                refuse
+
+isTrashOrSessionDataPath, sessionDataDir is the symlink, relative
+  <link>/hgt/user.bed   through the symlink                  refuse
+  <real>/hgt/user.bed   the resolved spelling                refuse
+  /etc/passwd                                                refuse
+  <link>/../../../etc/passwd                                 refuse
+  http://example.org/a.bb  (a URL is not a file path)        refuse
+
+the other two doors, for <link>/hgt/user.bed
+  isServerUserFilePath                                       refuse
+  isServerUserFileOrUrl                                      refuse
+  isServerUserFilePath   http://example.org/a.bb             refuse
+  isServerUserFileOrUrl  http://example.org/a.bb             accept
+

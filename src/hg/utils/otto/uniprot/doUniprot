@@ -2,7 +2,7 @@
 import urllib.request, urllib.error, urllib.parse, time, os, atexit
 import datetime, optparse, sys, logging, subprocess, glob, shutil
 import sys, gzip, logging,re, json
-import concurrent.futures
+import concurrent.futures, traceback
 
 from urllib.parse import urlparse
 from os.path import *
@@ -113,26 +113,180 @@ def errAbort(msg):
     logging.error(msg)
     assert(False) # generate stacktrace
 
-def getTaxIdDbs(onlyDbs):
+def taxonProteinCounts(uprotDir):
+    """ taxon id -> number of UniProt proteins, SwissProt and TrEMBL together.
+
+    Needed before anything is parsed, to decide which taxa are worth running at all, so it
+    is read from the fasta headers, which carry OX=<taxid>. Scanning TrEMBL means reading
+    40 GB, about twenty minutes, so the answer is cached beside the download and rebuilt
+    only when it is missing or older than the fasta it came from.
+    """
+    cacheFname = join(uprotDir, "taxonProteinCounts.tab")
+    sprotFa = join(uprotDir, "uniprot_sprot.fasta.gz")
+    tremblFa = join(uprotDir, "uniprot_trembl.fasta.gz")
+
+    if isfile(cacheFname) and os.path.getmtime(cacheFname) >= os.path.getmtime(sprotFa):
+        counts = {}
+        for line in open(cacheFname):
+            taxId, count = line.rstrip("\n").split("\t")
+            counts[int(taxId)] = int(count)
+        logging.info("Read protein counts for %d taxa from %s" % (len(counts), cacheFname))
+        return counts
+
+    logging.info("Counting UniProt proteins per taxon, this reads the whole fasta and takes a while")
+    counts = defaultdict(int)
+    for faFname in (sprotFa, tremblFa):
+        if not isfile(faFname):
+            logging.warning("%s does not exist, not counting it" % faFname)
+            continue
+        cmd = "zcat %s | grep -o 'OX=[0-9]*'" % faFname
+        proc = subprocess.Popen(cmd, shell=True, stdout=PIPE, encoding="utf8")
+        for line in proc.stdout:
+            counts[int(line[3:])] += 1
+        proc.stdout.close()
+        proc.wait()
+
+    with open(cacheFname, "w") as ofh:
+        for taxId in sorted(counts):
+            ofh.write("%d\t%d\n" % (taxId, counts[taxId]))
+    logging.info("Wrote protein counts for %d taxa to %s" % (len(counts), cacheFname))
+    return counts
+
+def readGenArkList(fname):
+    """ parse the GenArk assembly list, accession -> taxon id.
+    Tab separated: accession, asmName, scientificName, commonName, taxId, clade.
+    """
+    accToTax = {}
+    # latin1: the organism and common names carry bytes that are not valid UTF-8, and
+    # python would stop on the first one. Only the accession and the taxon id are used.
+    for line in open(fname, encoding="latin1"):
+        if line.startswith("#"):
+            continue
+        f = line.rstrip("\n").split("\t")
+        if len(f) < 5 or not f[4].isdigit():
+            continue
+        accToTax[f[0]] = int(f[4])
+    logging.info("Read %d GenArk assemblies from %s" % (len(accToTax), fname))
+    return accToTax
+
+def readSkipList(fname):
+    """ read a file of assemblies to leave alone, one name or accession per line.
+
+    Blank lines and anything after a # are ignored, so the file can say why each entry is
+    there. Accessions may carry the full asmId with its assembly-name suffix, as the GenArk
+    orderLists do, and only the accession part is used, so
+    kent/src/hg/makeDb/doc/hprcAsmHub/hprc.orderList.tsv can be handed over unchanged.
+    """
+    if not fname:
+        return set()
+    skip = set()
+    lineCount = 0
+    for line in open(fname, encoding="latin1"):
+        line = line.split("#")[0].strip()
+        if not line:
+            continue
+        name = line.split()[0].split("\t")[0]
+        lineCount += 1
+        skip.add(name)
+        # GCA_018466835.2_HG02257_mat_hprc_f2 -> GCA_018466835.2
+        parts = name.split("_")
+        if len(parts) > 2 and accRe.match("%s_%s" % (parts[0], parts[1])):
+            skip.add("%s_%s" % (parts[0], parts[1]))
+    # len(skip) counts both name forms of an accession, so report the lines read
+    logging.info("Read %d assemblies to skip from %s" % (lineCount, fname))
+    return skip
+
+def getGenArkTaxIdDbs(onlyDbs, options):
+    """ build the plan from the GenArk assembly list instead of from dbDb.
+
+    dbDb holds the few thousand assemblies the browser serves directly; GenArk holds about
+    fifty thousand. Most of those are not worth running: UniProt annotates most species
+    barely at all, and an assembly whose organism has a handful of proteins cannot produce
+    a useful track. --minProteins is the filter, and it wants to be high to start with.
+    A bacterial proteome is only a few thousand proteins, so a threshold of a few thousand
+    pulls in the whole of the bacteria clade; 20000 keeps it to the large eukaryotic
+    proteomes. refs #38300
+    """
+    accToTax = readGenArkList(options.genArkList)
+    counts = taxonProteinCounts(options.uniprotDir)
+    minProt = options.minProteins
+    skipAsm = readSkipList(options.skipList)
+
+    # Keep only the newest version of each assembly, and do it against the whole list
+    # before anything else is filtered out. GenArk lists every version it has carried, so
+    # GCA_018466835.1 sits beside GCA_018466835.2. Doing this after the skip list would
+    # leave the old version behind whenever the new one was skipped, which is exactly the
+    # HPRC case: 94 of the 108 human assemblies that survived the HPRC list were .1
+    # versions of accessions whose .2 had just been removed.
+    newest = {}
+    for acc in accToTax:
+        base, _, ver = acc.rpartition(".")
+        ver = int(ver) if ver.isdigit() else 0
+        if base not in newest or ver > newest[base][0]:
+            newest[base] = (ver, acc)
+    oldCount = len(accToTax) - len(newest)
+    accToTax = {acc: accToTax[acc] for _, acc in newest.values()}
+
+    # an entry on the skip list names an assembly, not one of its versions
+    skipBases = set(a.rpartition(".")[0] for a in skipAsm if "." in a)
+
+    taxIdToDbs = defaultdict(list)
+    skippedTaxa, skippedAsm, noHub, blacklisted = set(), 0, 0, 0
+    for acc, taxId in sorted(accToTax.items()):
+        if onlyDbs is not None and acc not in onlyDbs:
+            continue
+        if acc in skipAsm or acc.rpartition(".")[0] in skipBases:
+            blacklisted += 1
+            continue
+        if counts.get(taxId, 0) < minProt:
+            skippedTaxa.add(taxId)
+            skippedAsm += 1
+            continue
+        if genArkAccDir(acc) is None or not isdir(genArkAccDir(acc)):
+            # listed but not served from /gbdb/genark here, nothing to build against
+            noHub += 1
+            continue
+        taxIdToDbs[taxId].append(acc)
+
+    logging.info("GenArk plan: %d assemblies over %d taxa with at least %d UniProt proteins" % \
+            (sum(len(v) for v in taxIdToDbs.values()), len(taxIdToDbs), minProt))
+    logging.info("GenArk plan: skipped %d assemblies over %d taxa below the protein threshold, "
+            "%d on the skip list, %d superseded by a newer version, and %d not present "
+            "under %s" % (skippedAsm, len(skippedTaxa), blacklisted, oldCount, noHub, genArkRoot))
+    return taxIdToDbs
+
+def getTaxIdDbs(onlyDbs, options):
     """ return a dict with taxonId -> list of most recent dbs (e.g. for human, it's hg19 and hg38) 
     if onlyDbs is a set, keep only these dbs.
     If onlyDbs is None, remove all nonAutoDbs.
     """
-    query = "select taxId, name from dbDb where active=1 order by orderKey;"
+    if options.genArkList:
+        return getGenArkTaxIdDbs(onlyDbs, options)
+
+    skipAsm = readSkipList(options.skipList)
+    query = "select taxId, name, nibPath from dbDb where active=1 order by orderKey;"
     rows = runQuery("hgcentral", query, usePublic=True)
     taxIdToDbs = defaultdict(list)
-    # take only the first database for every taxonId
-    for taxId, dbCode in rows:
+    # Take the first assembly of each kind for every taxon: the first GenArk one and the
+    # first classic one. Taking only the very first, as this did, stopped updating the
+    # classic assembly the moment a GenArk assembly for the same organism appeared and
+    # sorted ahead of it. Cow is the example: ARS_UCD2.0 arrived, so bosTau9 silently
+    # stayed on the UniProt release it had, while the new data went into a GenArk contrib
+    # collection. Users are still on bosTau9. refs #38300
+    seen = defaultdict(set)
+    for taxId, dbCode, nibPath in rows:
 
         if onlyDbs:
             if dbCode not in onlyDbs:
                 continue
         else:
-            if dbCode in notAutoDbs:
+            if dbCode in notAutoDbs or dbCode in skipAsm:
                 continue
 
         taxId = int(taxId)
-        if taxId not in taxIdToDbs:
+        kind = "genark" if (nibPath or "").startswith("hub:") else "classic"
+        if kind not in seen[taxId]:
+            seen[taxId].add(kind)
             taxIdToDbs[taxId].append(dbCode)
 
     for taxId, manNames in manualTaxIdDbs.items():
@@ -202,11 +356,35 @@ def parseArgs():
             default="/usr/local/apache/htdocs-hgdownload/goldenPath/archive/",
             help="Location of archive directory, default %default")
     parser.add_option("", "--taxonThreads", dest="taxonThreads", action="store", type="int",
-            default=1,
+            default=20,
             help="how many taxa to process at the same time, default %default. Raising this "
             "keeps the cluster busy: one taxon at a time leaves it idle during the long "
-            "single-threaded steps between batches. 4 to 6 is a reasonable range. Assemblies "
+            "single-threaded steps between batches. Around 20 is a reasonable working value. Assemblies "
             "of the same taxon always run one after the other, they share a fasta file.")
+    parser.add_option("", "--genArkList", dest="genArkList", action="store",
+            help="build the plan from this GenArk assembly list instead of from dbDb, e.g. "
+            "/hive/data/genomes/asmHubs/UCSC_GI.assemblyHubList.txt or a fresh copy of "
+            "https://hgdownload.soe.ucsc.edu/hubs/UCSC_GI.assemblyHubList.txt . Use with "
+            "--minProteins, which decides how much of GenArk is worth running.")
+    parser.add_option("", "--allowFailures", dest="allowFailures", action="store", type="int",
+            default=0,
+            help="carry on and publish if no more than this many taxa fail, default %default. "
+            "A run across hundreds of assemblies will always have a few organisms that cannot "
+            "be built, and without this a handful of them stops the other hundreds from being "
+            "published. Every failure is still reported and gets its own log under "
+            "the failedTaxa directory.")
+    parser.add_option("", "--skipList", dest="skipList", action="store",
+            help="file of assemblies to leave alone, one name or accession per line, with "
+            "# comments. Entries may carry the full asmId, so a GenArk orderList works as "
+            "is: --skipList=kent/src/hg/makeDb/doc/hprcAsmHub/hprc.orderList.tsv drops the "
+            "464 HPRC haplotype assemblies, which take human from 572 assemblies to 108.")
+    parser.add_option("", "--minProteins", dest="minProteins", action="store", type="int",
+            default=1,
+            help="skip a taxon with fewer than this many UniProt proteins, default %default, "
+            "i.e. skip only the empty ones. UniProt annotates most species barely at all: of "
+            "the 3974 taxa that have a GenArk assembly and a SwissProt entry, the median has "
+            "four proteins and only 558 have more than a hundred. Raise this when running "
+            "across many assemblies, to skip the ones that cannot produce a useful track.")
     parser.add_option("", "--mapQa", dest="mapQa", action="store_true", \
             help="output some QA stats for the maps")
     parser.add_option("", "--db", dest="db", action="store_true", \
@@ -217,7 +395,7 @@ def parseArgs():
     (options, args) = parser.parse_args()
 
     if options.db:
-        taxIdDbs = getTaxIdDbs(None)
+        taxIdDbs = getTaxIdDbs(None, options)
         print("-- Current TaxId<->database assignment:")
         for key, val in taxIdDbs.items():
             print (key, val)
@@ -1033,11 +1211,30 @@ def miniprotVersion():
 
 dbIsHubCache = {}
 
+genArkRoot = "/gbdb/genark"
+accRe = re.compile(r"^GC[AF]_[0-9]{9}\.[0-9]+$")
+
+def genArkAccDir(acc):
+    """ the /gbdb/genark directory of a GenArk accession, from the accession alone.
+    The path is sharded on the digits, three at a time:
+    GCF_029289425.2 -> /gbdb/genark/GCF/029/289/425/GCF_029289425.2
+    """
+    if not accRe.match(acc):
+        return None
+    prefix, digits = acc.split("_")
+    digits = digits.split(".")[0]
+    return join(genArkRoot, prefix, digits[0:3], digits[3:6], digits[6:9], acc)
+
 def genArkHubDir(db):
     """ return the hub directory of a hub assembly, or None for a classic db.
-    dbDb.nibPath is "hub:<dir>" for these, e.g.
+    For an assembly named by its accession, which is how the GenArk list names them, the
+    path follows from the accession. Otherwise dbDb.nibPath says "hub:<dir>", e.g.
     hub:/gbdb/genark/GCF/029/289/425/GCF_029289425.2 for a GenArk assembly.
     """
+    accDir = genArkAccDir(db)
+    if accDir is not None:
+        return accDir if isdir(accDir) else None
+
     if db not in dbIsHubCache:
         rows = list(runQuery("hgcentral", "select nibPath from dbDb where name='%s'" % db, usePublic=True))
         nibPath = rows[0][0] if rows else ""
@@ -1373,7 +1570,14 @@ def pslToBigPsl(mapFname, protSeqs, accToDb, accToMeta, accToMapSource, accToTra
         # chr1    11994   12144   B4E2Z4  1000    +       11994   12144   0       1       150,    0,      186     336     +       336     186,          249250621        150     0       0       0       0
         row = line.rstrip("\n").split("\t")
 
-        row[-1] = "2" # seqType field: 0=empty, 1=nucleotide, 2=amino_acid
+        # The seqType field (0=empty, 1=nucleotide, 2=amino_acid) used to be stamped "2" here.
+        # It describes the coordinates, not the letters in oSequence, and ours are nucleotides:
+        # these proteins reach the genome through transcripts, so a query is three bases per
+        # residue.  Declaring amino acids made pslFromBigPsl() divide the block sizes by three
+        # and leave the query coordinates alone, which left every reader with an alignment whose
+        # two sides were in different units - a heap overflow in the alignment page, blocks drawn
+        # short in hgTracks, and blocks shorter than a codon loading as size 0, which aborted
+        # pslTransMap and took the lifted SwissProt track down (#38249).  refs #38300
 
         acc = row[3]
         recAnnot = accToMeta.get(acc, None)
@@ -1539,16 +1743,63 @@ def chromSizesFile(db):
         return genArkChromSizes(db, genArkHubDir(db))
     return "/hive/data/genomes/%s/chrom.sizes" % db
 
-def miniprotRamGb(genomeFa):
-    """ how much RAM to reserve for a miniprot run on this genome, in whole GB.
-    Measured on real assemblies: peak RSS is linear in genome size at about 11 GB per Gb
-    of sequence and is flat in the thread count, because the index is built once and shared
-    (2.49 GB at -t 1 versus 2.60 GB at -t 16 on the same 227 Mb). So this is sized off the
-    sequence only, with headroom, and never below a small floor.
+def miniprotRamGb(genomeFa, protFa):
+    """ a first guess at how much RAM to reserve for a miniprot run, in whole GB.
+
+    Only a guess. Two attempts to predict this from the input sizes were both wrong, and the
+    measurements say the quantity is not predictable from them at all:
+
+        genome    proteins          peak RSS
+        0.46 Gb   78457 (66 MB)     at most 16 GB, the job completed in that
+        0.86 Gb   50305 (37 MB)     43.3 GB, measured
+
+    The second has half the protein and twice the genome, and needs at least 2.7 times the
+    memory, so no sum of a genome term and a protein term fits both. What actually drives it
+    is how much alignment work the sequence generates - repeats and paralogs give many
+    candidate alignments to hold at once - and that is not visible in the file sizes.
+
+    So this stays a cheap starting estimate and runMiniprotOnCluster() raises it when a job
+    runs out of memory, rather than a third guess at a coefficient. refs #38300
     """
-    bases = os.path.getsize(genomeFa) # near enough, fasta is one byte per base plus headers
-    gb = int(bases / 1e9 * 14) + 1
-    return max(gb, 8)
+    genomeBytes = os.path.getsize(genomeFa) # fasta is about one byte per base plus headers
+    protBytes = os.path.getsize(protFa)
+    gb = int(genomeBytes / 1e9 * 14) + int(protBytes / 1e9 * 100) + 1
+    return max(gb, 16)
+
+def paraBatchOutOfMemory(jobDir):
+    """ did a job in this finished parasol batch die for lack of memory?
+
+    para.results holds the raw wait status in its first column, so status >> 8 is the exit
+    code. miniprot prints "[morecore] insufficient memory" and aborts, which arrives as 134
+    (128 + SIGABRT). Reading the file is local and cheap; para problems would have to be
+    asked the hub.
+    """
+    resultsFname = join(jobDir, "para.results")
+    if not isfile(resultsFname):
+        return False
+    for line in open(resultsFname):
+        fields = line.split()
+        if not fields:
+            continue
+        try:
+            status = int(fields[0])
+        except ValueError:
+            continue
+        if status >> 8 == 134:
+            return True
+    return False
+
+def clearParaBatch(jobDir):
+    """ forget a finished batch so it can be run again with a different reservation.
+
+    The reservation is recorded in the batch, so para make on top of an existing one does not
+    change it. freeBatch tells the hub to drop it and the local state files have to go too.
+    """
+    run("cd %s && para freeBatch" % jobDir, ignoreErr=True)
+    for fname in ("batch", "batch.bak", "para.results", "para.bookmark"):
+        path = join(jobDir, fname)
+        if isfile(path):
+            os.remove(path)
 
 def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     """ run one miniprot job on the parasol cluster.
@@ -1556,7 +1807,7 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     count, which for a 16 CPU job is far less than miniprot needs, and without -cpu parasol
     would pack more of these onto a node than it has cores for.
     """
-    ram = miniprotRamGb(genomeFa)
+    ram = miniprotRamGb(genomeFa, protFa)
     jobDir = join(workDir, "cluster")
     if not isdir(jobDir):
         os.makedirs(jobDir, exist_ok=True)
@@ -1578,8 +1829,26 @@ def runMiniprotOnCluster(db, genomeFa, protFa, gffName, workDir):
     with open(jobList, "w") as ofh:
         ofh.write("%s {check out exists %s}\n" % (abspath(jobSh), abspath(gffName)))
 
-    logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg" % (db, miniprotThreads, ram))
-    run("cd %s && para make -cpu=%d -ram=%dg jobList" % (jobDir, miniprotThreads, ram))
+    # The first reservation is only an estimate (see miniprotRamGb), so when a job dies for
+    # lack of memory, raise it fourfold and run the batch again rather than losing the assembly.
+    # Three tries reach sixteen times the estimate, which covers the worst case measured so far
+    # by a wide margin. Anything that fails for another reason stops here, so a genome that
+    # segfaults does not get run three times over. The last failed batch is left in jobDir
+    # for inspection. refs #38300
+    for attempt in range(3):
+        tryRam = ram * (4 ** attempt)
+        logging.info("%s: miniprot on the cluster, -cpu=%d -ram=%dg%s" % \
+                (db, miniprotThreads, tryRam, "" if attempt == 0 else " (attempt %d)" % (attempt+1)))
+        ret = run("cd %s && para make -cpu=%d -ram=%dg jobList" % \
+                (jobDir, miniprotThreads, tryRam), ignoreErr=True)
+        if ret == 0:
+            return
+        if not paraBatchOutOfMemory(jobDir) or attempt == 2:
+            break
+        logging.warning("%s: miniprot ran out of memory in %dg, trying again with more" % (db, tryRam))
+        clearParaBatch(jobDir)
+
+    errAbort("%s: miniprot on the cluster failed, see %s" % (db, jobDir))
 
 def miniprotProteins(fullFaFname, db, mapFname, stats):
     """ align the UniProt proteins straight to the genome with miniprot and write a PSL.
@@ -1639,6 +1908,56 @@ def getTransIds(db, geneTable, transcriptFa):
     logging.info("Got %d distinct transcript IDs from MySQL table" % len(allTrans))
     return allTrans
 
+def catSourceTransMap(db, allTransIds):
+    """ map Ensembl transcript accession, without version, to the CAT transcript names we
+    have in our fasta.
+
+    CAT names a transcript after the source gene, e.g. AL627309.3-1, which matches nothing
+    UniProt knows. Every row of the CAT bigBed carries a sourceTranscript field holding the
+    Ensembl transcript it was lifted from, so that is the join. One Ensembl transcript can
+    name several of ours, because paralogs are lifted from the same source, and because
+    duplicate CAT names were made unique with a -dup suffix earlier.
+    """
+    hubDir = genArkHubDir(db)
+    geneBb = findBestGeneBigBed(db, hubDir)[1] if hubDir else None
+    if geneBb is None:
+        logging.warning("%s: no CAT bigBed found, cannot map to Ensembl transcripts" % db)
+        return {}
+
+    # which column is sourceTranscript
+    asText = subprocess.Popen(["bigBedInfo", "-as", geneBb], stdout=PIPE, encoding="utf8").communicate()[0]
+    fields = re.findall(r"^\s+\S+\s+\**(\w+)\s*;", asText, flags=re.MULTILINE)
+    if "sourceTranscript" not in fields or "name" not in fields:
+        logging.warning("%s: %s has no sourceTranscript field, cannot map to Ensembl" % (db, geneBb))
+        return {}
+    nameIdx, srcIdx = fields.index("name"), fields.index("sourceTranscript")
+
+    # Reproduce the -dup suffixes exactly rather than attaching every paralog to every
+    # source transcript. makeTranscriptFiles walks the bigBed in the same order and renames
+    # the second and later rows that share a name, so the same running count recovers which
+    # of our transcripts each bigBed row became.
+    shortToLong = {}
+    seen = {}
+    proc = subprocess.Popen(["bigBedToBed", geneBb, "stdout"], stdout=PIPE, encoding="utf8")
+    for line in proc.stdout:
+        row = line.rstrip("\n").split("\t")
+        if len(row) <= max(nameIdx, srcIdx):
+            continue
+        name = row[nameIdx]
+        seen[name] = seen.get(name, 0) + 1
+        ourId = name if seen[name]==1 else "%s-dup%d" % (name, seen[name])
+        if ourId not in allTransIds:
+            continue
+        src = row[srcIdx].split(".")[0]
+        if not src or src in ("None", "NA"):
+            continue
+        shortToLong.setdefault(src, []).append(ourId)
+    proc.stdout.close()
+
+    logging.info("%s: %d Ensembl transcripts map to %d of our %d CAT transcripts" % \
+            (db, len(shortToLong), sum(len(v) for v in shortToLong.values()), len(allTransIds)))
+    return shortToLong
+
 def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, commonTrans, \
         ofh, verDiffCount, pairCount):
     """ given a list of transcript IDs, write them to select file, if their base (before dot)
@@ -1655,7 +1974,10 @@ def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, c
             continue
 
         commonTrans.add(transId)
-        if transId!=shortToLong[shortId]:
+        # ourIds is a list: usually one transcript, but a CAT gene set can name several,
+        # since paralogs are lifted from the same source transcript
+        ourIds = shortToLong[shortId]
+        if transId not in ourIds:
             verDiffCount+=1
         pairCount += 1
 
@@ -1664,7 +1986,8 @@ def writeTransToSelect(upSeqIds, transIds, shortToLong, notFound, outTransIds, c
         # with the acc.version that we have in our transcript file. This saves a few hundred
         # transcripts, sometimes thousands, from getting removed
         for upSeqId in upSeqIds:
-            ofh.write("%s\t%s\n" % (upSeqId, shortToLong[shortId]))
+            for ourId in ourIds:
+                ofh.write("%s\t%s\n" % (upSeqId, ourId))
         foundTransCount+=1
     return foundTransCount, verDiffCount, pairCount
 
@@ -1673,7 +1996,9 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
     PSL file. The tool for this is called pslSelect. This helps force the alignment
     to the correct transcript. It turned out to be absolutely necessary. see makeUniProtPsl.sh """
     # get the UniProt field that holds the list of annotated transcript IDs
-    if "encode" in geneTable or "ensGene" in geneTable:
+    if "encode" in geneTable or "ensGene" in geneTable or geneTable=="catGenes":
+        # CAT is lifted from Ensembl/GENCODE, so its transcripts carry an Ensembl source
+        # transcript and UniProt's Ensembl cross-reference is the one that matches
         transField = "ensemblTrans"
     elif "refGene" in geneTable or "ncbiRefSeq" in geneTable:
         transField = "refSeq"
@@ -1691,9 +2016,16 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
 
     # create a mapping from no-version (short) to with-version accession (long), so we can fix them up later 
     # to the accessions that we actually have in our fasta file
-    shortToLong = {}
-    for acc in allTransIds:
-        shortToLong[acc.split(".")[0]] = acc
+    if geneTable=="catGenes":
+        # CAT names its transcripts after the source gene, so the ids in our fasta match no
+        # UniProt cross-reference at all. The CAT bigBed does carry, per transcript, the
+        # Ensembl transcript it was lifted from, so map through that and use UniProt's
+        # Ensembl cross-reference. refs #38300
+        shortToLong = catSourceTransMap(db, allTransIds)
+    else:
+        shortToLong = {}
+        for acc in allTransIds:
+            shortToLong.setdefault(acc.split(".")[0], []).append(acc)
 
     logging.debug("Example transcript IDs: %s" % list(allTransIds)[:10])
 
@@ -1815,7 +2147,9 @@ def buildSelectFile(tabFnames, mapDir, taxId, db, geneTable, transcriptFa, geneT
 
     # for debugging
     if len(notFoundAtAll)!=0:
-        notFoundFname = join(mapDir, "lastRun_noAnnotatedTranscriptIDs.txt")
+        # per assembly: mapDir is shared, and with --taxonThreads several assemblies would
+        # otherwise write this same file at the same time
+        notFoundFname = join(mapDir, "lastRun_noAnnotatedTranscriptIDs.%s.txt" % db)
         notFoundFh = open(notFoundFname, "w")
         #notFoundFh.write(str(notFoundAtAll)+"\n")
         for acc in notFoundAtAll:
@@ -1984,9 +2318,19 @@ def listMd5(arr):
     return m.hexdigest()
 
 def readGeneToRefSeq(taxId):
-    " return entrezId -> list of Refseq from tsv file "
+    """ return entrezId -> list of Refseq from tsv file, empty if we have none for this taxon.
+
+    Not every organism is in NCBI's gene2refseq, so for some taxa this file cannot exist.
+    The caller only uses it to resolve UniProt's Entrez cross-references to transcripts and
+    already checks whether it got anything, so an empty answer costs a little filtering
+    accuracy rather than the assembly. It used to raise and take the taxon down. refs #38300
+    """
     g2refseq = {}
     fname = join(NCBIDIR, str(taxId)+".tsv")
+    if not isfile(fname):
+        logging.warning("taxon %s is not in the NCBI gene2refseq tables, so UniProt's Entrez "
+                "cross-references cannot be resolved for it" % taxId)
+        return g2refseq
     for line in open(fname):
         geneId, transList = line.rstrip("\n").split('\t')
         transList = transList.split(',')
@@ -2014,7 +2358,6 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
     a realignment/rebuild of the pslMap PSL file.
     """
     # use MD5s of the input files to determine if the protein -> genome map has to be rebuilt
-    global MINALI
     protMd5 = fastaMd5(protFa)
 
     stats = OrderedDict()
@@ -2028,6 +2371,16 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     if geneTable!="miniprot":
         transcriptFa, transcriptPsl = makeTranscriptFiles(db, geneTable, taxId, mapDir)
+        # An assembly can carry a gene track that yields no transcripts at all, and three of
+        # them did. BLAST was then pointed at an empty database and every one of its 929 jobs
+        # crashed, which took the taxon down after a long detour through the cluster. There is
+        # nothing to align against, so say so and skip the assembly the way one with no
+        # alignments is skipped. refs #38300
+        if os.path.getsize(transcriptFa) == 0:
+            logging.warning("%s: the %s track produced no transcript sequences, so there is "
+                    "nothing for the proteins to be aligned to, skipping this assembly" % \
+                    (db, geneTable))
+            return None, geneTable, None, {"default":"best"}, None, True
         transMd5 = fastaMd5(transcriptFa)
         pslMd5 = tabMd5(transcriptPsl)
     else:
@@ -2051,22 +2404,45 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
                 geneTable, transcriptFa, geneToRefSeqs, metaMd5, transMd5, stats)
         protToTrans = parseKeyVal(selectFname)
 
-    allMd5s = [protMd5, transMd5, pslMd5]
+    # ciona's genome is from a different organism than the refseq transcripts, so it needs a
+    # lower threshold. Keep it a local and never assign to the global MINALI: with
+    # --taxonThreads several assemblies run at once and would see each other's value.
+    minAli = 0.85 if db in ["ci3"] else MINALI
+
+    allMd5s = [protMd5, transMd5, pslMd5, str(minAli)]
     if selectFname:
         pairMd5 = tabMd5(selectFname)
         allMd5s.append(pairMd5)
         stats["pairMd5"] = pairMd5[:10]
         stats["pairFname"] = selectFname
 
-    # if either the protein sequences, the transcripts, their alignment or the
-    # protein/transcript mapping changes -> create a new PSL mapping file
+    # if either the protein sequences, the transcripts, their alignment, the
+    # protein/transcript mapping or the alignment threshold changes -> create a new PSL
+    # mapping file. minAli belongs in here: it decides which alignments survive, so a
+    # mapping built at one threshold must not be silently reused at another. That is
+    # exactly what happened after the MINALI global leaked across threads. refs #38300
     fullMd5 = listMd5(allMd5s)[:10]
 
     mapFname = join(mapDir, "%(geneTable)s_%(fullMd5)s.psl" % locals())
 
     if isfile(mapFname) and not doForce:
         logging.info("%s already exists, not rebuilding the protein -> genome mapping PSL" % mapFname)
-        assert(os.path.getsize(mapFname)!=0)
+        # An empty mapping is a real answer, not a broken file: an organism UniProt has two
+        # proteins for, neither of which aligns, produces one. The caller already treats a
+        # freshly built empty mapping that way and carries on, but reusing a cached one used to
+        # assert here, so such an assembly failed on every run after the first. The golden
+        # eagle did, until this. refs #38300
+        if os.path.getsize(mapFname) == 0:
+            logging.warning("%s: the cached protein -> genome mapping is empty, nothing aligns "
+                    "for this assembly" % db)
+            return mapFname, geneTable, fullMd5, protMapSource, protToTrans, False
+        # The lift info describes the mapping, so it has to exist wherever the mapping
+        # does. A run that was interrupted between building the PSL and writing this file
+        # leaves the PSL behind on its own, and the next run then reuses the PSL and falls
+        # over copying the file that was never written. Write it here too. refs #38300
+        if not isfile(mapDescFname):
+            logging.info("%s is missing next to the reused mapping, writing it" % mapDescFname)
+            writeMapDesc(stats, db, geneTable, mapDescFname)
         # careful: if you modify this, also modify the other return statement below
         return mapFname, geneTable, fullMd5, protMapSource, protToTrans, False
 
@@ -2081,12 +2457,10 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
         logging.error("Could not find any gene table for %s, using miniprot to map proteins" % db)
         miniprotProteins(protFa, db, mapFname, stats)
     else:
-        if db in ["ci3"]: # wow: ciona's genome is from a different organism than the refseq transcripts.
-            MINALI = 0.85
-        stats["minAli"] = MINALI
+        stats["minAli"] = minAli
         workDir = "clusterRun-map-%s-%s-%s.tmp" % (db, geneTable, fullMd5)
 
-        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(MINALI), workDir, mapFname]
+        scriptArgs = [protFa, transcriptFa, transcriptPsl, str(minAli), workDir, mapFname]
         if selectFname is not None:
             scriptArgs.append(selectFname)
 
@@ -2098,7 +2472,15 @@ def makeProteinGenomePsl(taxId, protFa, tabFnames, db, doForce, mapDir, mapDescF
 
     writeMapDesc(stats, db, geneTable, mapDescFname)
 
-    assert(os.path.getsize(mapFname)!=0)
+    if os.path.getsize(mapFname)==0:
+        # Nothing aligned. On an organism with a handful of UniProt proteins this is a fact
+        # about the data, not a failure of the run: taxon 216574, the golden eagle, offers
+        # two proteins and neither of them aligns. Treat it the way an organism with no
+        # proteins at all is already treated, skip the assembly and carry on, rather than
+        # asserting and taking the whole run down. refs #38300
+        logging.warning("%s: no protein aligned to the genome, skipping this assembly" % db)
+        return None, geneTable, fullMd5, protMapSource, protToTrans, True
+
     # if you modify this line, also modify the other return statement above
     return mapFname, geneTable, fullMd5, protMapSource, protToTrans, True
 
@@ -2233,9 +2615,19 @@ def updateUniprot(args, onlyDbs, taxIdDbs, options):
         # download NCBI -> refseq tables
         downloadAndSplitNcbi(taxIdDbs)
         downloadUniprot(uprotDir)
+    else:
+        # the per-taxon NCBI tables are keyed on the plan, not on the UniProt release, so a
+        # plan with taxa that have never been run needs them even when the download is
+        # skipped. This is the GenArk case: 104 tables existed for the dbDb plan of 109
+        # taxa, against 664 taxa here.
+        splitNcbiIfNeeded(taxIdDbs)
 
     downVersion = readRelStringUniprot(uprotDir)
-    tabVersion = open(join(tabDir, "version.txt")).read()
+    # No version file means nothing has been parsed into this directory yet, so parse.
+    # Do not assume it is there: it is absent on a first run, and removing it is the way to
+    # force a reparse when the release has not changed but the taxon list has.
+    versionFname = join(tabDir, "version.txt")
+    tabVersion = open(versionFname).read() if isfile(versionFname) else None
 
     doParse = True
     if downVersion==tabVersion:
@@ -2297,9 +2689,10 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
 
         accToDb = concatFiles(faFnames, fullFaFname)
 
-        if os.path.getsize(fullFaFname)==0:
-            logging.warn("File %s is empty. Taxon ID %s does not have any UniProt annotations." \
-                    " Skipping this organism." % (fullFaFname, taxId))
+        protCount = len(accToDb)
+        if protCount < max(1, options.minProteins):
+            logging.warning("Taxon %s has %d UniProt proteins, fewer than the %d required. "
+                    "Skipping this organism." % (taxId, protCount, max(1, options.minProteins)))
             return
 
         tabFnames = ["tab/swissprot.%d.tab" % taxId]
@@ -2324,6 +2717,11 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
             mapFname, geneTable, mapMd5, accToMapSource, accToTrans, isNewMap = \
                 makeProteinGenomePsl(taxId, fullFaFname, tabFnames, db, options.force, dbMapDir, mapDescFname)
 
+            if mapFname is None or os.path.getsize(mapFname)==0:
+                # covers both the freshly built and the reused mapping file
+                logging.warning("%s: no protein/genome alignments, nothing to build" % db)
+                continue
+
             dbBigBedDir = makeSubDir(bigBedDir, db)
 
             convMapToBigPsl(fullFaFname, mapFname, dbBigBedDir, accToDb, accToMeta, accToMapSource, accToTrans, chromSizesFname, doTrembl)
@@ -2340,6 +2738,41 @@ def oneTaxon(taxId, dbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doT
             uniprotLift(fullFaFname, annotFnames, chromSizesFname, mapFname, dbBigBedDir, accToDb, accToMeta, options)
 
             shutil.copyfile(mapDescFname, join(dbBigBedDir, "liftInfo.json"))
+
+taxonFailDir = "failedTaxa"
+
+def writeTaxonFailLog(taxId, dbs, ex, trace):
+    """ write one file per failed taxon, holding what failed and how, and return its name.
+
+    lastRun.log is overwritten by the next run and holds every taxon interleaved, so a
+    failure that someone wants to look at a day later is hard to find in it. One file per
+    taxon, named after the taxon, survives and is easy to point at.
+    """
+    if not isdir(taxonFailDir):
+        os.makedirs(taxonFailDir, exist_ok=True)
+    fname = join(taxonFailDir, "%s.log" % taxId)
+    with open(fname, "w") as ofh:
+        ofh.write("taxon:      %s\n" % taxId)
+        ofh.write("assemblies: %s\n" % ", ".join(dbs))
+        ofh.write("when:       %s\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        ofh.write("failure:    %s: %s\n\n" % (type(ex).__name__, ex))
+        ofh.write(trace)
+    return fname
+
+def reportFailedTaxa(failed, todo):
+    " print a block naming every failed taxon, its assemblies and where to read about it "
+    dbsByTax = dict(todo)
+    logging.error("")
+    logging.error("%d taxa failed. Each one has a log of its own:" % len(failed))
+    for taxId in sorted(failed):
+        dbs = ", ".join(dbsByTax.get(taxId, []))
+        logging.error("    taxon %-10s %-56s %s/%s.log" % (taxId, dbs[:56], taxonFailDir, taxId))
+    logging.error("")
+    logging.error("Those logs are under %s in %s and are not overwritten by the next run." % \
+            (taxonFailDir, os.getcwd()))
+    logging.error("To retry just these, add: --dbs=%s" % \
+            ",".join(sorted(set(d for t in failed for d in dbsByTax.get(t, [])))))
+    logging.error("")
 
 def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrembl):
     """ work through the taxa, optionally several at a time.
@@ -2379,11 +2812,30 @@ def runTaxa(taxIdDbs, onlyDbs, options, tabDir, faDir, mapDir, bigBedDir, doTrem
                 # sys.exit(), which raises SystemExit. In a worker thread that would
                 # otherwise kill just that thread and leave the run looking successful,
                 # which is exactly the kind of silent failure this pipeline has a history of.
-                logging.error("taxon %s failed: %s: %s" % (taxId, type(ex).__name__, ex))
+                # Log the traceback too: errAbort raises a bare AssertionError, so without
+                # one the message is just "AssertionError:" and says nothing about where.
+                trace = "".join(traceback.format_exception(type(ex), ex, ex.__traceback__))
+                logFname = writeTaxonFailLog(taxId, dict(todo).get(taxId, []), ex, trace)
+                logging.error("taxon %s failed: %s: %s (details in %s)" % \
+                        (taxId, type(ex).__name__, ex, logFname))
+                logging.error(trace)
                 failed.append(taxId)
 
-    if failed:
-        errAbort("%d of %d taxa failed: %s" % (len(failed), len(todo), ", ".join(str(t) for t in sorted(failed))))
+    if not failed:
+        return
+
+    reportFailedTaxa(failed, todo)
+
+    allowed = options.allowFailures
+    if len(failed) <= allowed:
+        logging.warning("%d taxa failed, which is within the %d allowed, so the run carries "
+                "on and the assemblies that did build will be published. Re-run the failed "
+                "taxa with --dbs once they are fixed." % (len(failed), allowed))
+        return
+
+    errAbort("%d of %d taxa failed, more than the %d allowed by --allowFailures. "
+            "Nothing will be published. See %s for what went wrong." % \
+            (len(failed), len(todo), allowed, taxonFailDir))
 
 def makeSymlink(target, linkName):
     assert(".new" not in linkName) # make sure that this bug never happens again
@@ -2805,17 +3257,54 @@ def splitGeneRefseq(fname, outDir, uniprotTaxIds):
 
     writeGeneTsv(geneToTrans, lastTax, outDir)
 
-def downloadAndSplitNcbi(taxIdDbs):
-    " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
-    logging.info("Downloading NCBI gene2refseq file gene2refseq.tsv")
+ncbiGeneFname = join(NCBIDIR, "gene2refseq.gz")
+
+def downloadNcbi():
+    " download the NCBI gene -> RefSeq transcript file "
+    logging.info("Downloading NCBI gene2refseq")
     # --no-progress-meter, not -s: it drops the progress bar, which otherwise writes a few
     # hundred lines of percentages into lastRun.log, but still shows errors. Plain -s would
     # hide the errors too, which is why they were dropped here in the first place.
-    # --fail so an HTTP error is reported as one, instead of piping NCBI's error page into
-    # zcat and failing with a confusing "not in gzip format"
-    cmd = "curl --no-progress-meter --show-error --fail https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz | zcat > ncbi/gene2refseq.tsv"
-    run(cmd)
-    splitGeneRefseq("ncbi/gene2refseq.gz", NCBIDIR, taxIdDbs)
+    # --fail so an HTTP error is reported as one, instead of writing NCBI's error page to
+    # the file and failing later with a confusing "not in gzip format".
+    # Keep it gzipped: this used to unpack to gene2refseq.tsv, 16 GB, while the split below
+    # went on reading gene2refseq.gz, so the download and the split named different files
+    # and the per-taxon tables were built from whichever .gz happened to be lying around.
+    tmpName = ncbiGeneFname + ".tmp"
+    run("curl --no-progress-meter --show-error --fail "
+        "https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz > %s" % tmpName)
+    os.rename(tmpName, ncbiGeneFname)
+
+def splitNcbiIfNeeded(taxIdDbs):
+    """ make sure there is a per-taxon NCBI gene -> RefSeq table for every taxon we will
+    map through RefSeq models. Splitting is cheap next to downloading, and the tables are
+    per taxon, so a plan with new taxa needs it even when the download is skipped.
+    """
+    missing = [t for t in taxIdDbs if not isfile(join(NCBIDIR, "%s.tsv" % t))]
+    if not missing:
+        return
+    if not isfile(ncbiGeneFname):
+        errAbort("%s is missing and the download was skipped, so the per-taxon NCBI tables "
+                "for %d taxa cannot be built. Run without --skipDownload." %
+                (ncbiGeneFname, len(missing)))
+    logging.info("%d of %d taxa have no NCBI gene table yet, splitting %s" % \
+            (len(missing), len(taxIdDbs), ncbiGeneFname))
+    splitGeneRefseq(ncbiGeneFname, NCBIDIR, taxIdDbs)
+
+    # Some organisms are not in gene2refseq at all, so the split cannot produce a table for
+    # them and they would send every future run back to re-split 2.4 GB. Leave an empty file
+    # to record that we looked; readGeneToRefSeq treats it as "nothing known", which is true.
+    stillMissing = [t for t in missing if not isfile(join(NCBIDIR, "%s.tsv" % t))]
+    for taxId in stillMissing:
+        open(join(NCBIDIR, "%s.tsv" % taxId), "w").close()
+    if stillMissing:
+        logging.info("%d taxa are not in gene2refseq at all, wrote empty tables for them" % \
+                len(stillMissing))
+
+def downloadAndSplitNcbi(taxIdDbs):
+    " download and split the NCBI genes file with a mapping NCBI gene -> RefSeq transcripts "
+    downloadNcbi()
+    splitGeneRefseq(ncbiGeneFname, NCBIDIR, taxIdDbs)
 
 def delFlag():
     global flagFname
@@ -2831,7 +3320,7 @@ def main():
     if options.onlyDbs:
         onlyDbs = set(options.onlyDbs.split(","))
 
-    taxIdDbs = getTaxIdDbs(onlyDbs)
+    taxIdDbs = getTaxIdDbs(onlyDbs, options)
 
     if options.mapQa:
         mapQa(options.tabDir, options.faDir, options.mapDir, onlyDbs, taxIdDbs)

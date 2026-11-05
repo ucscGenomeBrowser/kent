@@ -1,5 +1,5 @@
 track LCRs
-superTrack on show
+superTrack on
 type bed 4
 shortLabel LCRs
 longLabel Low complexity regions from Heng Li, longdust measurements

@@ -1,0 +1,71 @@
+# #38205 -- hgSession left the session description in the cart, so it was copied into every
+# session saved afterwards.  On hgwdev 41 saved sessions carried a description belonging to a
+# different session, and since loading a shared session applies the cart it was saved with,
+# the text travelled to whoever the link was sent to.
+#
+# 992880730e0 (merged as 4917e0d5615) adds two names to cleanHgSessionFromCart():
+#
+#     cartRemove(cart, hgsNewSessionName);           /* hgS_newSessionName */
+#     cartRemove(cart, hgsNewSessionDescription);    /* hgS_newSessionDescription */
+#
+# That function already ran in the two places that matter -- at the end of hgSession(), so the
+# user's own cart is clean, and inside saveCartAsSession() just before the cart is encoded, so
+# no saved session holds them.  Adding them to excludeVars[] instead would not work, because
+# doSessionChange() reads the description back out of the cart in the same request that posts
+# it.
+#
+# THE OBSERVABLE IS cartDump.  The two variables are not drawn anywhere: the Description box
+# on the Sessions page is filled from the SESSION's own settings, not from the cart, so a
+# reader cannot see the leak on any page -- which is why it lived for years.  cartDump prints
+# the whole cart as plain text, which is the only place the bug is visible without saving a
+# session into hgcentral.  This directory does not write to a shared central, so the half of
+# the fix inside saveCartAsSession() is not exercised here; it is the same function call.
+#
+# hgS_newSessionShare IS THE CONTROL, and a well-chosen one, because the commit leaves it
+# behind ON PURPOSE.  It has exactly the same problem, but it is also the only memory of the
+# user's "Allow this session to be loaded by others" choice, and showSavingOptions() defaults
+# that box to checked, so removing it would quietly re-check the box for someone who keeps
+# their sessions private.  All three variables go in on the same request, so a build that
+# simply dropped every hgS_ variable -- or a cartDump that had stopped printing the cart at
+# all -- fails this rather than passing it.
+#
+# No login.  hgSession cleans the cart at the end of every request whether or not anyone is
+# signed in, and cartDump does not care either.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38205 and 992880730e0 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: cartDump still holds hgS_newSessionName and hgS_newSessionDescription, values and all"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  # An hgTracks request first, so that the cart exists and the browser is holding its cookie.
+  # `reset: true` sends cartReset, and a bare hgSession request after that does not hand the
+  # browser a cart of its own -- the next page then gets a different one and reads as empty.
+  - go: chr7:155799529-155812871
+
+  # One request that hands hgSession all three of the Save form's inputs, the way submitting
+  # that form does.
+  - goto: "/cgi-bin/hgSession?hgS_newSessionName=rm38205stuckName&hgS_newSessionDescription=rm38205+leaked+description&hgS_newSessionShare=on"
+
+  # The cart, as text.  Both the variable NAMES and the values that were sent have to be gone:
+  # the name alone would miss a build that kept the variable with an empty value, and the
+  # value alone would miss one that renamed it.
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "hgS_newSessionShare on"
+      noText:
+        - "hgS_newSessionDescription"
+        - "hgS_newSessionName"
+        - "rm38205 leaked description"
+        - "rm38205stuckName"
+
+  # And again after another hgSession request that mentions neither, since the bug was about
+  # what SURVIVES into later requests rather than about the request that set it.
+  - goto: "/cgi-bin/hgSession"
+  - goto: "/cgi-bin/cartDump"
+  - expect:
+      text: "hgS_newSessionShare on"
+      noText: ["hgS_newSessionDescription", "rm38205 leaked description"]

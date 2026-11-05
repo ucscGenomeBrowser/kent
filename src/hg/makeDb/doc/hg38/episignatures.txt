@@ -1,0 +1,437 @@
+# 2026-09-16 Claude max: MethaDory episignature CpG probes, hg38
+
+# The episignatures superTrack collects the CpG positions that published DNA
+# methylation signatures of rare developmental disorders are built from. Its
+# first subtrack is MethaDory.
+
+##############################################################################
+# MethaDory episignature loci (DONE 2026-09-17)
+##############################################################################
+
+# Federico Ferraro and Dmitrijs Rots (Erasmus MC Rotterdam) sent two files by
+# email, for open release:
+#   20260916_episignatures_loci.tsv          probe, gene/locus, deltaBeta,
+#                                            study, pval, padj, label
+#   20260916_episignatures_loci_metadata.xlsx  study -> PMID, signature,
+#                                            disorder, notes
+# There is no public download URL for these; MethaDory itself, with its trained
+# classifiers, is at https://github.com/f-ferraro/MethaDory and the preprint is
+# doi:10.1101/2025.03.28.25324859.
+#
+# A first version dated 20260914 was built and then superseded; it is kept in
+# prev-20260914/ for reference. Two things changed in the second version, both
+# of which the build has to cope with:
+#   - the three provisional CHD3 signatures (Santini20252A/2B/2C, alternative
+#     versions still being tested for the original authors) were removed, and
+#     the missing metadata for SPEN Radio2021 and the missing probes for
+#     MORC2 Peymani2026 were added
+#   - the 'signature' column of the metadata sheet, which is the key that joins
+#     to the Label column of the loci table, switched from "CHD3_Santini2025" to
+#     "CHD3 Santini2025". methaDoryToBed.py normalises spaces to underscores on
+#     both sides so either spelling joins.
+# The loci tsv is also CRLF. Python's text mode strips the CR, but a shell
+# pipeline over it does not: counting labels with "zcat | cut -f7 | sort -u"
+# gives 190 rather than 189, because one line ends LF and the rest CRLF.
+
+mkdir -p /hive/data/genomes/hg38/bed/episignatures/methaDory
+cd /hive/data/genomes/hg38/bed/episignatures/methaDory
+# ... the two files above were copied in here, the tsv gzipped ...
+# md5sum 20260916_*
+#   380693aaf86b76ff7689762b857721fc  20260916_episignatures_loci.tsv.gz
+#   d8ad6590f058d30b444d1668c49a1b35  20260916_episignatures_loci_metadata.xlsx
+
+# The probe table gives Illumina probe IDs, not coordinates. Positions come from
+# the Illumina manifests already served as tracks on the browser, preferring
+# EPIC v1 850K, then EPIC v2, then 450K. probeCoords.sh does that and is called
+# by the build script below; makeMethaDory.sh runs the whole thing:
+bash ~/kent/src/hg/makeDb/scripts/episignatures/makeMethaDory.sh
+
+# Numbers it reports, for the record:
+#   input rows:                  847863
+#   rows with no probe position: 373 (293 distinct probes)
+#   bed features written:        268900
+#   distinct disorders:          105 (since 2026-10-29: the Smith-Magenis merge
+#                                removed one, the Williams-Beuren relabel added one)
+#   distinct genes/loci:         113
+#   distinct studies:            74
+#
+# The 373 dropped rows are probes that appear in none of the three manifests.
+# They are listed in methaDory.bed.unmapped. The remaining 847,490 probe-by-
+# signature rows merge into 268,900 CpG sites, since a site is usually reported
+# by more than one signature (up to 41, at cg05654765). 267,974 of the sites are
+# positioned from the EPIC 850k manifest and 926 from EPIC v2; 450K adds nothing
+# that the other two do not already have.
+#
+# Every signature label in the loci table now has a metadata row. The build
+# still warns about metadata rows that name one study in the 'signature'
+# column and a different author in StudyID; the remaining ones are spelling
+# variants. Four rows were genuine crossings: the CREBBP-EP300 and NSD2 pairs
+# swap PMID, StudyID and disorder between Levy2022 and ArefEshghi2020 / Kawai2024
+# respectively. Reported to the authors, who acknowledged it on 2026-09-21 but
+# have not sent a corrected sheet. Until they do, META_CORRECTIONS in
+# methaDoryToBed.py fixes those four rows (#38371). Delete that table when the
+# corrected sheet arrives. DISORDER_SPELLING_FIXES folds "Smith-Magenis Syndrome"
+# into "Smith-Magenis syndrome", and readMeta collapses the double space in
+# "NOTCH1  Congenital heart defects", so the Disorder filter has one entry each.
+
+# Sanity check that the coordinates are on the right base: every cg probe should
+# land on a CG dinucleotide.
+awk -F'\t' 'BEGIN{OFS="\t"} $4 ~ /^cg/ {print $1,$2,$3,$4}' methaDory.bed \
+    | shuf -n 20000 > /tmp/samp.bed
+twoBitToFa /gbdb/hg38/hg38.2bit stdout -bed=/tmp/samp.bed | grep -v '^>' \
+    | tr 'a-z' 'A-Z' | sort | uniq -c | sort -rn | head
+# 19996 CG, and 4 singletons at known polymorphic manifest positions.
+
+# Compare the position of a probe against the existing EPIC 850k track, which
+# is where it came from:
+bigBedToBed /gbdb/hg38/bbi/illumina/epic850K.bb stdout \
+    | awk -F'\t' '$4=="cg21870274"{print $1,$2,$3}'
+awk -F'\t' '$4=="cg21870274"{print $1,$2,$3}' methaDory.bed
+
+# The filter menus in the trackDb stanza (filterValues.disorders,
+# filterValues.loci, filterValues.studies, filterValues.direction) are generated
+# by the build into methaDoryFilters.ra. When the source data is refreshed, paste
+# those four pairs of lines back into human/hg38/episignatures.ra rather than editing them
+# by hand.
+
+# The two tables on the description page are generated the same way:
+python3 ~/kent/src/hg/makeDb/scripts/episignatures/makeHtmlTables.py \
+    studies studySummary.tsv > studyTable.html
+python3 ~/kent/src/hg/makeDb/scripts/episignatures/makeHtmlTables.py \
+    loci locusSummary.tsv > locusTable.html
+# and pasted into human/hg38/methaDory.html between the
+# "<!-- BEGIN generated ... -->" and "<!-- END generated -->" markers under the
+# "Studies" and "Genes and loci" headings. The counts quoted in the Description
+# and Methods paragraphs of that page have to be updated by hand at the same
+# time.
+#
+# Both tables link out to PubMed with a "Lastname Year" label rather than the bare
+# PMID, looked up from scripts/episignatures/pubAuthorYear.tsv (also used by
+# epigenCentralToBed.py for the EpigenCentral locus table). On a refresh, add an
+# entry for every new PMID before regenerating the tables; the scripts errAbort on
+# an id with no entry rather than falling back to the raw number.
+
+# Colour: five classes, from the strongest effect at the site. Warm = hyper,
+# cool = hypo, darker = |delta-beta| >= 0.10, purple = conflicting. Three things
+# decided this, all measured on the data rather than assumed:
+#
+#   - A linear ramp on delta-beta would be useless. The distribution is heavily
+#     right-skewed: median 0.110, p75 0.159, p90 0.232, p99 0.416, max 0.835,
+#     and 43% of sites sit in 0.05-0.10. Nearly everything would land in the
+#     bottom fifth of the ramp.
+#
+#   - The low end is a reporting artefact, not biology. Per study, the minimum
+#     |delta-beta| reveals the cut-off each paper applied before publishing its
+#     site list: 4 studies cut at 0.20 (Velasco2021 among them, whose median is
+#     therefore 0.254 against Levy2022's 0.076), 25 at ~0.10, 33 at ~0.05, and
+#     12 applied none. 98.1% of rows come from a study that cut at >= 0.05.
+#     So quantile-derived bins would partly encode "which study reported this".
+#     A fixed, interpretable line at 0.10 is used instead; it is also the modal
+#     reporting cut-off. Check it on a refresh with:
+#       python3 -c "..."  # per-study min/median/p90 of abs(deltaBeta)
+#     and see the caution paragraph on methaDory.html.
+#
+#   - "Conflicting" needs a size test, not a unanimity test. Requiring all
+#     signatures at a site to agree flags 39% of sites, and that class is almost
+#     a proxy for how many signatures share the probe: 0% of single-signature
+#     sites are mixed, 43.8% at two, 75.0% at 3-5, 95.5% at 6-10, 99.7% at 11+.
+#     Requiring an opposing signature to reach 80% of the top effect
+#     (CONFLICT_FRAC in methaDoryToBed.py) leaves 10.0%, which really are sites
+#     with no dominant direction. At 50% it would be 27.3%, at 67% 17.2%.
+#
+# Resulting class sizes, all comfortably populated:
+#   Strong hypermethylation 69879 26.0% | Weak hypermethylation 68907 25.6%
+#   Weak hypomethylation    36045 13.4% | Strong hypomethylation 67250 25.0%
+#   Conflicting             26819 10.0%
+#
+# The class names must not contain a comma: they go into filterValues.direction,
+# and comma is its separator. "Hypermethylated, strong" was silently chopped
+# into two menu entries before they were renamed to "Strong hypermethylation".
+
+# Details page: the per-signature values are stored twice. Once as parallel
+# comma-separated columns (signatures, disorders, loci, deltaBetas, pvalues,
+# studies), which is what the Table Browser and bigBedToBed hand back and what
+# the filters run on, and once as a JSON object in a _jsonSignatures field that
+# "detailsDynamicTable _jsonSignatures|..." renders as a real table, so a reader
+# can see which delta-beta belongs to which disorder. The comma columns are in
+# skipFields so the details page shows only the table.
+#
+# Two things to know before copying this pattern:
+#   - detailsDynamicTable has two encodings. A field whose name starts with
+#     "json" or "_json" is treated as JSON and handed to hgc.js; any other field
+#     name is treated as the ";"-and-"|" encoding, which hgc expands inside a
+#     fixed char[4096] and errAborts with "Error substituting" past that. One
+#     probe here carries 41 signatures (3,243 bytes of JSON), so only the JSON
+#     encoding is usable.
+#   - hgc.js makeGenericTable() draws one row per key of the JSON object, and
+#     when a key's value is an array it emits one cell per element and does not
+#     draw the key. So an object of arrays gives a plain grid. Use string keys
+#     that are not integer-like ("r000", "r001", ...): JavaScript reorders
+#     integer-like keys numerically, other string keys keep insertion order.
+# The field is built by jsonTable() in methaDoryToBed.py, ASCII-escaped, since
+# kent's jsonParse passes \uXXXX through untouched.
+
+# Track search: the position box has to find a probe by its cg number. The
+# bigBed carries -extraIndex=name, and episignatures.ra has a matching
+# searchTable stanza. That stanza needs termRegex and semiShortCircuit, not just
+# searchPriority: hgFind splits specs into a short-circuiting list and a long
+# list (hgPositionsFind in hg/lib/hgFind.c), only specs with a termRegex land on
+# the short list, and as soon as one short spec matches the long list is never
+# run at all. Without the termRegex the spec loaded fine and searching a probe
+# silently returned only the Illumina array hits. semiShortCircuit then stops
+# our spec from suppressing those array hits in turn.
+hgsql hg38 -Ne "select searchName, shortCircuit, searchPriority from hgFindSpec_max where searchTable='methaDory'"
+# methaDory  1  50
+
+# 2026-10-29 Claude jairo: refs #38371
+#
+# QA found three more errors in the authors' files. methaDoryToBed.py now fixes
+# them until the authors send corrected files:
+#   - WRONG_DISORDERS: the four chr7q11.23del rows of the metadata sheet give
+#     "Phelan-McDermid syndrome", the disorder of the 22q13.3 deletion. The
+#     7q11.23 deletion is Williams-Beuren syndrome.
+#   - DISORDER_SPELLING_FIXES: "Borjeson-Forssman-Lehmann syndrome" is spelled
+#     in ASCII, as OMIM does (#301900). The sheet has a raw UTF-8 o-umlaut,
+#     which the browser shows garbled.
+#   - LOCUS_SPELLING_FIXES: locus and signature "RNU2-2.biallellic" is
+#     "RNU2-2.biallelic", on both sides of the join.
+# makeHtmlTables.py now writes any non-ASCII character as its named HTML entity
+# (Leit&atilde;o in pubAuthorYear.tsv).
+# Rebuilt with makeMethaDory.sh, then pasted methaDoryFilters.ra into
+# episignatures.ra and regenerated both tables in methaDory.html. 23,700 of the
+# 268,900 sites changed, all in the disorder, signature and locus text; the
+# positions, colors and values are unchanged. The tables had not been
+# regenerated since the 2026-10-16 Smith-Magenis and NOTCH1 fix, so that fix now
+# shows on the page as well.
+#
+# Later the same day: the HNRNPU_Lee2023 metadata row gives StudyID Lee2024 and
+# PMID 38797891, an unrelated mouse muscle paper by Lee EJ. The study is Lee S et
+# al. 2023, PMID 37407733. Added to META_CORRECTIONS, added 37407733 to
+# pubAuthorYear.tsv, rebuilt and regenerated the Studies table. Only the
+# publications field of the 21 HNRNPU_Lee2023 sites changed.
+#
+# Not changed, left for the authors: the loci table repeats 30 probe/signature
+# pairs (SETD2c1740 Lee2023 13, SETD2.LLS Lee2023 9, KDM2A Anderson2026 5, CHD3
+# Santini2025 3), 27 of them with different delta-betas. The build keeps both, so
+# 28 sites list one signature twice and show a sigCount one too high. No site's
+# color class depends on the repeat.
+#
+# trackDb and page changes from the same QA pass: a sigCount range filter on
+# methaDory (1:41, as epigenCentral has nSignatures), related-track links from
+# methaDory to snpArrayIllumina850k, epicV2illuminaMethylation and epigenCentral
+# in relatedTracks.ra, and a bigBedToBed example on methaDory.html that fits
+# inside its chromosome (chr7:73800000-74000000, 49 sites).
+
+##############################################################################
+# EpigenCentral episignature loci (DONE 2026-09-18)
+##############################################################################
+
+# 2026-09-18 Claude max: refs #38112
+#
+# The second subtrack of the episignatures container. The EpigenCentral group at the
+# Centre for Computational Medicine / Weksberg lab (Hospital for Sick Children,
+# Toronto) publishes its episignatures as a track hub:
+#   https://github.com/ccmbioinfo/EpigenCentral-UCSC-Genome-Browser
+# and asked us to host it as a native track instead. The portal itself is at
+# https://epigen.ccm.sickkids.ca/ and is described in PMID 32623772.
+#
+# Barali Kitiyakara and Eliza Alde reviewed the hub, cloned it and worked out the
+# trackDb settings; that work is on the ticket and at
+#   ~bkitiyak/public_html/epigenCentralHub/
+# What is here is the same set of changes redone as a repeatable build from the
+# upstream file, so a refresh is one command.
+#
+# The hub's episignatures.bb already has the probe coordinates on hg38, so there is
+# nothing to lift or map. The build downloads it and rewrites four things:
+#   - the OMIM column holds a full https://omim.org/entry/NNNNNN URL; only the number
+#     is kept so trackDb's "urls displayOmim=" can build the link
+#   - the hub renders its own mouse-over into a column ("NSD1|Loss|-0.346") and points
+#     mouseOverField at it. That column becomes the direction alone and trackDb builds
+#     the mouse-over from the fields, which is what the rest of our tracks do
+#   - 215 rows of the per-site comparison table, on 137 sites, are exact duplicates of
+#     another row for the same signature. The site's own nSignatures/signatureList
+#     columns already count each signature once, so the duplicates are dropped
+#   - the disorder of the strongest signature is added as its own column, so the
+#     mouse-over can name the disorder and not only the gene
+# Two columns are also renamed to what the MethaDory subtrack calls the same numbers:
+# height -> maxAbsDelta and nSignatures -> sigCount.
+
+mkdir -p /hive/data/genomes/hg38/bed/episignatures/epigenCentral
+cd /hive/data/genomes/hg38/bed/episignatures/epigenCentral
+bash ~/kent/src/hg/makeDb/scripts/episignatures/makeEpigenCentral.sh
+
+# Numbers it reports, for the record:
+#   upstream md5:                  1f2cd0ef372fefa3b42c796fb89f6f40
+#   features written:              15035   (same as the upstream itemCount)
+#   episignatures:                 24, over 23 disorders
+#   displayed direction:           Gain 5972, Loss 9063
+#   duplicate table rows dropped:  215, on 137 probes
+#   table rows with no delta-beta: 1
+#   widest comparison table:       478 bytes (cg26004771), hgc limit 4096
+#
+# No feature is dropped: every probe in the hub is in the track. The one row with no
+# delta-beta is the Dup7 signature at cg19457237, which the source has as NA in both
+# the direction and the delta-beta column while giving it an adjusted p-value; it is
+# shown as NA. The script errAborts rather than guessing if the displayed signature
+# itself were the one missing a value.
+#
+# The widest comparison table matters because that field uses the ';' rows / '|' cells
+# encoding of detailsDynamicTable, which printEmbeddedTable() in hg/hgc/hgc.c expands
+# inside a fixed char[4096]. At 478 bytes there is a wide margin, so this track does
+# not need the _json encoding that methaDory has to use. The script checks the limit
+# on every build and stops if a refresh ever crosses it.
+
+# Sanity check on the coordinates, the same one the MethaDory build does: every cg
+# probe should sit on a CG dinucleotide. The features are 1 bp, so take start..start+2.
+awk -F'\t' 'BEGIN{OFS="\t"} {print $1,$2,$2+2,$4}' epigenCentral.bed \
+    | shuf -n 5000 > /tmp/samp.bed
+twoBitToFa /gbdb/hg38/hg38.2bit stdout -bed=/tmp/samp.bed | grep -v '^>' \
+    | tr 'a-z' 'A-Z' | sort | uniq -c
+# 5000 CG, no exceptions.
+
+# Cross-check against the MethaDory subtrack, which got its positions from the Illumina
+# manifests rather than from EpigenCentral. 14,236 of the 15,035 probes are in both and
+# every one of them is at the same position; 799 are only here.
+bigBedToBed /gbdb/hg38/episignatures/methaDory.bb stdout \
+    | awk -F'\t' '{print $4"\t"$1":"$2}' | sort -u > /tmp/md.pos
+awk -F'\t' '{print $4"\t"$1":"$2}' epigenCentral.bed | sort -u > /tmp/ec.pos
+join -t$'\t' /tmp/md.pos /tmp/ec.pos | awk -F'\t' '$2!=$3' | wc -l
+# 0
+
+# The signature filter menu and the "Included episignatures" table of the description
+# page are generated by the build, into epigenCentralFilters.ra and
+# epigenCentralTable.html. On a refresh, paste the two .ra lines back into
+# human/hg38/episignatures.ra, and the table back into human/hg38/epigenCentral.html
+# between the "<!-- BEGIN generated ... -->" and "<!-- END generated -->" markers,
+# rather than editing either by hand. The counts quoted in the Description and Methods
+# paragraphs of that page have to be updated at the same time.
+#
+# One of those counts, in Display Conventions, is how many multi-signature sites also carry
+# a signature in the opposite direction to the strongest one, which the color and the
+# direction filter do not show (1,618 of 2,848 in this build). Recount it with:
+python3 -c "
+m = x = 0
+for l in open('epigenCentral.bed'):
+    rows = [r.split('|') for r in l.rstrip('\\n').split('\\t')[16].split(';')][1:]
+    if len(rows) > 1:
+        m += 1
+        x += len({r[3] for r in rows if r[3] != 'NA'}) > 1
+print(x, 'of', m)"
+#
+# The publication behind each signature comes from the hub's README and is kept in
+# scripts/episignatures/epigenCentralRefs.tsv, since the README is not machine
+# readable. All 18 distinct PMIDs were checked against PubMed esummary before being
+# written down; EHMT1 is the one signature with no PubMed record and is cited by DOI.
+# The hub's own HTML page has every one of these links pointing at PMID 31311581 while
+# displaying a different number, which is why they are generated here instead.
+
+# A comma in a filterValues entry is the entry separator and cannot be escaped when the
+# filterType is one of the *List* kinds, so the commas inside three of the disorder names
+# ("Dystonia 28, childhood-onset" and friends) become semicolons in the menu labels, as in
+# the methaDory menu, by writeRa() in epigenCentralToBed.py. The bigBed keeps the names as
+# the source has them. (Changed from dropping the commas during QA, 2026-09-25.)
+
+# Track search: the position box finds a probe by its cg number. The bigBed carries
+# -extraIndex=name and episignatures.ra has a matching searchTable stanza. Both this
+# spec and the methaDory one carry termRegex and semiShortCircuit, so a probe ID that
+# is in both tracks returns a hit in both, plus the Illumina array tracks.
+hgsql hg38 -Ne "select searchName, shortCircuit, searchPriority from hgFindSpec_max where searchTable='epigenCentral'"
+# epigenCentral  1  51
+
+# Lou asked on the ticket for downloads to be off, so the stanza has "tableBrowser off"
+# and the Data Access section points at EpigenCentral's own portal and repository. That
+# switch covers the Table Browser, the Data Integrator and the REST API, but the bigBed
+# itself still sits in /gbdb and would otherwise be reachable on hgdownload.
+#
+# 2026-09-28 Claude max: refs #38112
+# Hide the bigBed from hgdownload the same way the restricted varFreqs subtracks do
+# (see the 2026-05-15 entry in varFreqs.txt): prefix the gbdb filename with "_", which
+# hgdownload's rsync excludes. Only epigenCentral needs this; methaDory.bb in the same
+# /gbdb/hg38/episignatures/ directory keeps its plain name since it stays downloadable.
+cd /gbdb/hg38/episignatures
+mv epigenCentral.bb _epigenCentral.bb
+# Symlink target under /hive/data/genomes/... unchanged. Updated the bigDataUrl in the
+# epigenCentral stanza of human/hg38/episignatures.ra to match.
+
+# Visibility: the track is sparse almost everywhere, 15,035 sites over the genome, but it
+# has one hot spot at the HOXA cluster. Measured heights at 1100px wide, pack, with no
+# other track on:
+#   chr7:27,140,000-27,250,000 (110 kb)   961 px
+#   chr7:27,000,000-28,000,000 (1 Mb)    1937 px
+#   chr7 (whole chromosome)              3345 px
+# There is no automatic fallback at any of those, so the stanza has the same
+# maxWindowCoverage as methaDory. It was 200000 at first and raised to 10000000 on
+# 2026-09-18, because 200 kb sent most gene-neighbourhood views to the coverage graph.
+# Above that the track draws as a coverage graph, 81 px, and below it stays in pack.
+#
+# Heights at 1100 px wide, HOXA hot spot unless noted, for the tall views this allows:
+#                                       epigenCentral   methaDory
+#   200 kb                pack             1281 px       1889 px
+#   1 Mb                  pack             1937 px       5729 px
+#   5 Mb                  pack             2129 px       7777 px
+#   10 Mb                 pack             2193 px       8273 px
+#   10 Mb                 squish            553 px        825 px
+#   10 Mb, typical region pack              353 px       2769 px
+
+# 2026-10-16 Claude max: refs #38112
+#
+# Switched to the data provider's bigBed, as they publish it except for one added
+# column. The upstream file is unchanged since the September build (md5
+# 1f2cd0ef372fefa3b42c796fb89f6f40), so the copy downloaded then is used.
+# The only change: a 17th field maxAbsDelta, a copy of their "height" (field 10),
+# so that the supertrack-level maxAbsDelta filter, which both subtracks inherit,
+# works on this track too. The 16 provider fields are byte-identical.
+cd /hive/data/genomes/hg38/bed/episignatures/epigenCentral
+bigBedInfo -asOut episignatures.upstream.bb | sed 's#^lstring comparisonTable;\(.*\)$#lstring comparisonTable;\1\nfloat maxAbsDelta;     "Maximum absolute deltaBeta (copy of height, for the supertrack filter)"#' > episignatures.as
+bigBedToBed episignatures.upstream.bb up.bed
+awk 'BEGIN{FS=OFS="\t"}{print $0,$10}' up.bed > episignatures.bed
+bedToBigBed -tab -type=bed9+8 -as=episignatures.as episignatures.bed \
+    /hive/data/genomes/hg38/chrom.sizes episignatures.maxAbsDelta.bb
+ln -sfn /hive/data/genomes/hg38/bed/episignatures/epigenCentral/episignatures.maxAbsDelta.bb \
+    /gbdb/hg38/episignatures/_epigenCentral.bb
+# What that changes in the track, all in episignatures.ra:
+#   - mouse-over is the provider's own text ("NSD1|Gain|0.318") via mouseOverField
+#   - fields have the provider's names: height, nSignatures, displayOmim is a full URL
+#     (urls displayOmim="$$"); there is no direction or displayDisorder column, so the
+#     direction filter is gone
+#   - the maxAbsDelta filter is back on the supertrack, as before
+#   - no name index in the provider's file, so searchIndex and the epigenCentral
+#     hgFindSpec are gone; a cg number still finds the Illumina array tracks and methaDory
+#   - the 215 duplicate comparison-table rows on 137 probes are back on the details page
+# epigenCentral.bed/.bb in this directory and makeEpigenCentral.sh are the old rewritten
+# build and are no longer used by the track; epigenCentralTable.html still generated the
+# "Included episignatures" table of the description page.
+
+##############################################################################
+# EpiSign genes and regions (DONE 2026-10-16)
+##############################################################################
+# 2026-10-16 Claude max, refs #38567
+
+# The EpiSign group (Sadikovic lab, London Health Sciences Centre) sent
+# UCSC_EpiSign6.1.0_hg38.bed by email, for open release. It is a bedDetail file,
+# already on hg38: one row per disorder code and causative gene or CNV region,
+# plus 15 "DMR: " rows for the imprinted regions and the FMR1 promoter that
+# EpiSign tests directly. Paper: Kerkhof et al. 2024, PMID 38251460.
+mkdir -p /hive/data/genomes/hg38/bed/episignatures/episign
+cd /hive/data/genomes/hg38/bed/episignatures/episign
+# ... UCSC_EpiSign6.1.0_hg38.bed copied in here ...
+
+# episignToBed.py splits the description into disorders and gene, drops the
+# explanatory paragraph repeated on every row, keeps the provider's colors and
+# adds a "code (gene)" label field:
+bash ~/kent/src/hg/makeDb/scripts/episignatures/makeEpisign.sh
+#   input: 231, episignature: 216, DMR: 15, no gene: 14 (CNV syndromes)
+#   itemCount: 231, nothing dropped
+
+# The supertrack-level maxAbsDelta filter (see above) was inherited by this
+# track, which has no such field, and hgTracks errAborted with "error building
+# filter with field maxAbsDelta. Field not found." The filter is now set on
+# methaDory and epigenCentral separately, so the collection page no longer has
+# one control for both.
+
+# 2026-10-29 Claude jairo, refs #38371
+# episign is tagged release alpha in episignatures.ra while methaDory and
+# epigenCentral are released, so its row in the collection table and the clause
+# "and the genes and regions tested by a clinical episignature test" were taken
+# out of episignatures.html (48841bf1f4f), and the page says "two tracks". Put
+# both back, with "three tracks", when episign is released (#38567).

@@ -25,32 +25,35 @@
 import json, os, re, gzip, subprocess, sys
 from collections import defaultdict, Counter
 
-# Assembly-aware: `python3 buildTadsEncode.py [hg38|mm10]` (default hg38, the original human build).
-# mm10 is the native mouse build; mm39 is produced by lifting the mm10 bigBeds (see liftEncodeMouse.sh).
+# Assembly-aware: `python3 buildTadsEncode.py [hg38|mm10] [tadDir]` (default hg38, the original
+# human build). mm10 is the native mouse build; mm39 is produced by lifting the mm10 bigBeds (see
+# liftEncodeMouse.sh). tadDir (default /hive/data/outside/tad) is the root that inputs are read
+# from and output is written under; pass a staging copy to rebuild without touching live files.
 ASM = sys.argv[1] if len(sys.argv) > 1 else "hg38"
-_HUMAN = "/hive/users/lrnassar/claude/RM21599/encode"
-_MOUSE = "/hive/data/outside/tad/encode/mouse"
+TAD = sys.argv[2] if len(sys.argv) > 2 else "/hive/data/outside/tad"
+_HUMAN = TAD+"/encode/source"
+_MOUSE = TAD+"/encode/mouse"
 CFG = {
  "hg38": dict(src=_HUMAN+"/contact_domains",
-              manif="/hive/data/outside/tad/encode/source/_cd_select.json",
-              meta="/hive/data/outside/tad/encode/source/encode_meta_all.json",
-              pert="/hive/data/outside/tad/encode/source/encode_perturbed.json",
-              chroms="/hive/data/genomes/hg38/chrom.sizes", out="/hive/data/outside/tad/encode/build/hg38",
-              species="human",
+              manif=_HUMAN+"/_cd_select.json",
+              meta=_HUMAN+"/encode_meta_all.json",
+              pert=_HUMAN+"/encode_perturbed.json",
+              chroms="/hive/data/genomes/hg38/chrom.sizes", out=TAD+"/encode/build/hg38",
+              species="human", calls_desc="Hi-C",   # 5 lifted biosamples are not Arrowhead calls
               default_on={"GM12878","K562","HepG2","HCT116","IMR-90","A549","HL-60/S4",
                 "heart left ventricle","heart right ventricle","dorsolateral prefrontal cortex",
                 "ovary","pancreas","transverse colon","motor neuron"}),
  "mm10": dict(src=_MOUSE+"/contact_domains", manif=_MOUSE+"/source/_cd_select.json",
               meta=_MOUSE+"/source/encode_meta_all.json", pert=_MOUSE+"/source/encode_perturbed.json",
-              chroms="/hive/data/genomes/mm10/chrom.sizes", out="/hive/data/outside/tad/encode/build/mm10",
-              species="mouse",
+              chroms="/hive/data/genomes/mm10/chrom.sizes", out=TAD+"/encode/build/mm10",
+              species="mouse", calls_desc="Arrowhead/Hi-C",
               default_on={"mouse embryonic stem cell","CH12.LX","heart","left cerebral cortex"}),
 }
 C = CFG[ASM]
 SRC=C["src"]; MANIF=C["manif"]; META=C["meta"]; PERT=C["pert"]; CHROMS=C["chroms"]
-SPECIES=C["species"]; DEFAULT_ON=C["default_on"]
-COLORS = "/hive/data/outside/tad/organ_colors.json"   # TAD-owned (symlinked into /gbdb/<asm>/bbi/tad/)
-ASFILE = "/hive/data/outside/tad/tadDomainEncode.as"
+SPECIES=C["species"]; DEFAULT_ON=C["default_on"]; CALLS_DESC=C["calls_desc"]
+COLORS = TAD+"/organ_colors.json"   # TAD-owned (symlinked into /gbdb/<asm>/bbi/tad/)
+ASFILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tadDomainEncode.as")
 GBDB   = "/gbdb/%s/bbi/tad" % ASM
 OUT    = C["out"]
 BBDIR  = os.path.join(OUT, "tadsEncode")
@@ -111,6 +114,37 @@ def hex2rgb(h):
 ENC_ABBR=[(r'CD4-positive','CD4+'),(r'CD8-positive','CD8+'),(r'CD34-positive','CD34+'),
           (r'CD14-positive','CD14+'),(r'thymus-derived ',''),(r', alpha-beta',''),
           (r' myocardium',''),(r'-positive','+'),(r'-negative','-')]
+# Hand-picked shortLabels where shortlab() cuts off meaning or collides (QA, refs #21599).
+# Keyed by ENCODE biosample term_name; shared by hg38 and mm10 (mm39 inherits via the lift).
+SHORT_OVERRIDE={
+ "astrocyte of the cerebellum":"Cerebellum astrocyte",
+ "astrocyte of the spinal cord":"Spinal cord astrocyte",
+ "endothelial cell of umbilical vein":"Umbilical vein EC",
+ "endometrial microvascular endothelial cells":"Endometrial EC",
+ "endothelial cell of hepatic sinusoid":"Hepatic sinusoid EC",
+ "brain microvascular endothelial cell":"Brain microvasc. EC",
+ "dorsolateral prefrontal cortex":"Dorsolateral PFC",
+ "left ventricle myocardium inferior":"Left ventricle inf.",
+ "left ventricle myocardium superior":"Left ventricle sup.",
+ "Right ventricle myocardium inferior":"Right ventricle inf.",
+ "Right ventricle myocardium superior":"Right ventricle sup.",
+ "mesothelial cell of epicardium":"Epicardial meso. cell",
+ "activated naive CD4-positive, alpha-beta T cell":"Act. naive CD4+ T cell",
+ "activated CD4-positive, alpha-beta memory T cell":"Act. CD4+ mem. T cell",
+ "mammary epithelial cell":"Mammary epith. cell",
+ "mouse embryonic stem cell":"Mouse ESC",
+ "mouse trophoblast stem cell":"Mouse trophoblast SC",
+ "v-Abl transformed pro-B cells":"v-Abl pro-B cell",
+}
+def midlab(term):
+    """Biosample as it reads mid-sentence in a longLabel: the ENCODE term_name, except a
+    capitalized multi-word common noun phrase ("Right ventricle myocardium") is lowercased.
+    Proper names (Jurkat, Ramos), cell lines and acronyms keep their case."""
+    w=term.split(" ")
+    if len(w)>1 and re.match(r"^[A-Z][a-z]+$",w[0]) and all(x==x.lower() for x in w[1:]):
+        return term[0].lower()+term[1:]
+    return term
+
 STOP={"the","of","a","an","in","on","to","and","for","with","at","by"}
 def shortlab(name, maxlen=22, abbr=None):
     """Concise, sensical shortLabel: abbreviate, truncate only at whole-word boundaries
@@ -176,7 +210,8 @@ def parse_domains(path, fmt, tier, name):
                 s,e=c[1],c[2]; sc=["0","0","0","0","0"]
             si,ei=int(s),int(e)
             if si<0 or ei>CHROMSZ[ch] or si>=ei: continue   # drop out-of-bounds/degenerate
-            out.append([ch,si,ei,name]+sc+[float(sc[0])])
+            # scores written to 3 decimals (source has 16-17 digits); ranking key stays full precision
+            out.append([ch,si,ei,name]+["%.3f"%float(x) for x in sc]+[float(sc[0])])
     return out
 
 def main():
@@ -281,7 +316,7 @@ parent tads
 priority 2
 compositeTrack faceted
 shortLabel ENCODE TADs
-longLabel ENCODE contact domains (TADs) across %d %s biosamples (Arrowhead/Hi-C)
+longLabel ENCODE contact domains (TADs) across %d %s biosamples (%s)
 type bigBed 4 + 5
 group regulation
 visibility pack
@@ -292,10 +327,14 @@ subtrackUrls Accession=https://www.encodeproject.org/experiments/$$/
 maxCheckboxes 50
 html tadsEncode
 
-""" % (len(subtracks), SPECIES, GBDB, GBDB))
+""" % (len(subtracks), SPECIES, CALLS_DESC, GBDB, GBDB))
         for s in sorted(subtracks,key=lambda s:(s["on"]!="on", s["term"].lower())):
-            short=scap(shortlab(s["term"],22,ENC_ABBR))
-            long="ENCODE TADs in %s (%s)"%(s["dterm"],s["encsr"])
+            short=SHORT_OVERRIDE.get(s["term"]) or scap(shortlab(s["term"],22,ENC_ABBR))
+            long="ENCODE TADs in %s (%s)"%(midlab(s["term"]),s["encsr"])
+            # hide score fields the source does not have (tier 12: cornerScore only; 11/5: none)
+            skip={16:"",12:"uVarScore,lVarScore,upSign,loSign"}.get(s["tier"],
+                  "cornerScore,uVarScore,lVarScore,upSign,loSign")
+            skip="    skipFields %s\n"%skip if skip else ""
             mouse=("<b>Biosample:</b> %s<br>TAD lifted from hg19 (no Arrowhead score)"%s["dterm"] if s["lifted"]
                    else "<b>Biosample:</b> %s<br><b>Arrowhead corner score:</b> $cornerScore"%s["dterm"])
             fh.write(
@@ -308,8 +347,8 @@ html tadsEncode
     color %s
     visibility dense
     mouseOver %s
-
-"""%(s["encsr"],s["on"],short,long,GBDB,s["symbol"],s["rgb"],mouse))
+%s
+"""%(s["encsr"],s["on"],short,long,GBDB,s["symbol"],s["rgb"],mouse,skip))
     print("wrote %d subtracks -> %s"%(len(subtracks),RA))
 
 if __name__=="__main__":

@@ -1,0 +1,96 @@
+# #37972 -- in Hub Upload, a batch whose hub is defined by one of its own files did not
+# carry that hub to the other files. Adding a 2bit with track files beside it, the track
+# files took the 2bit's genome but not its hub name, so unless the user noticed and fixed
+# it by hand they uploaded into a separate hub from the 2bit. Two commits:
+#
+#   25a03671f5c  names the hub from the 2bit or the hub.txt and keeps the batch boxes in
+#                step with the files. It is in v502_branch AND v503_branch.
+#   55efeb031b7  takes the batch genome from a hub.txt that names one, whether or not it
+#                is an assembly hub, and redraws the genome box when a file restamps it.
+#                It is in v503_branch and not in v502_branch; it is the commit that kept
+#                this ticket open through v502.
+#
+# So the script has two halves and only the second can tell v502 from v503.
+#
+# First half, a 2bit and a bed file: the batch Hub Name box reads the 2bit's name and the
+# genome box is locked to it. This is the ticket's own complaint; v502 already passes it.
+#
+# Second half, a hub.txt for an ordinary track hub naming mm10, and a bed file: the genome
+# box is locked to mm10 with a note that the hub.txt decided it, and the hub name comes
+# from the hub.txt's hub line. On v502 the batch kept the session's assembly: the UCSC
+# genome picker is still there, and the rows would have been written for hg38, a genome
+# the hub.txt never names. The hub name box reads rm37972Hub on both builds. mm10 because it is not the default, so the two cannot agree
+# by accident.
+#
+# Nothing is uploaded; the files wait in the dashboard. Hub Upload needs a user, so the
+# script logs in with the docent account (README.txt in this directory says where its
+# credentials live).
+proof:
+  - "release-ab 2026-09-26 -- the second half fails on v502_branch (park 38304, https port 49113): no #batchAsmHubGenome, the #batchDbSelect picker still there, no \"genome locked by hub.txt\" note. The first half passes on v502 as expected, since 25a03671f5c is already there. Passes on genome-test"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - login: true
+
+  - hubUpload:
+      files:
+        - {name: rm37972asm.2bit, text: "not a real 2bit; the dashboard goes by the name"}
+        - {name: rm37972.bed, text: "rm37972asm\t0\t100\trm37972item\n"}
+  - wait: '#batch-selector-div'
+  - expect:
+      value: {sel: '#batchAsmHubGenome', is: rm37972asm}
+      noHas: '#batchDbSelect'
+
+  # Name the hub on the 2bit's card, the way the ticket describes, and save it.
+  - click: '.uppy-Dashboard-Item[id*="rm37972asm"] .uppy-Dashboard-Item-action--edit'
+  - wait: '.uppy-Dashboard-FileCard'
+  - fill: {'#uppy-Dashboard-FileCard-input-parentDir': rm37972Named}
+  - click: '.uppy-Dashboard-FileCard .uppy-c-btn-primary'
+  - wait: {gone: '.uppy-Dashboard-FileCard'}
+  - expect:
+      value: {sel: '#batchParentDir', is: rm37972Named}
+
+  # The bed file's own card is where the upload takes its hub from.
+  - click: '.uppy-Dashboard-Item[id*="rm37972-bed"] .uppy-Dashboard-Item-action--edit, .uppy-Dashboard-Item[id*="rm37972/bed"] .uppy-Dashboard-Item-action--edit'
+  - wait: '.uppy-Dashboard-FileCard'
+  - expect:
+      value:
+        - {sel: '#uppy-Dashboard-FileCard-input-parentDir', is: rm37972Named}
+        - {sel: '.uppy-Dashboard-FileCard input[id$="AsmHubInput"]', is: rm37972asm}
+
+  # Leave the page, or the next hubUpload, whose address differs only after the #, lands
+  # on the same page with this batch still in it.
+  - click: '.uppy-Dashboard-FileCard .uppy-c-btn-primary'
+  - wait: {gone: '.uppy-Dashboard-FileCard'}
+  - goto: "/cgi-bin/hgGateway?db=hg38"
+
+  - hubUpload:
+      files:
+        - name: hub.txt
+          text: |
+            hub rm37972Hub
+            shortLabel rm37972 hub
+            longLabel rm37972 hub, a track hub whose hub.txt names mm10
+            useOneFile on
+            genome mm10
+
+            track rm37972Track
+            shortLabel rm37972 track
+            longLabel rm37972 track
+            type bed 4
+            bigDataUrl rm37972.bb
+        - {name: rm37972.bed, text: "chr1\t3000000\t3000100\trm37972item\n"}
+  # The hub.txt is read asynchronously and the box is redrawn after, so wait for the batch
+  # controls and then give the read a moment. Waiting for the locked box itself would make a
+  # build with the bug fail on a timeout instead of on the check that names it.
+  - wait: '#batch-selector-div'
+  - sleep: 3
+  - expect:
+      value:
+        - {sel: '#batchAsmHubGenome', is: mm10}
+        - {sel: '#batchParentDir', is: rm37972Hub}
+      text: "genome locked by hub.txt"
+      noHas: '#batchDbSelect'

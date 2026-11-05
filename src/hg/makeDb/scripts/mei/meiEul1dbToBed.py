@@ -57,10 +57,12 @@ def load_studies(path):
 
 
 def load_individuals(path):
+    # euL1db joins on 1-based row numbers, not on names: the Individual_id
+    # column of Samples.txt is the row number of the individual in this file.
     inds = {}
-    for cols in open_tab(path):
-        name = cols[0]
-        inds[name] = {
+    for i, cols in enumerate(open_tab(path), start=1):
+        inds[str(i)] = {
+            "name":       cols[0],
             "population": cols[3] if len(cols) > 3 else ".",
             "country":    cols[4] if len(cols) > 4 else ".",
             "clinical":   cols[5] if len(cols) > 5 else ".",
@@ -70,10 +72,12 @@ def load_individuals(path):
 
 
 def load_samples(path):
+    # As for individuals, the sampleID column of SRIP.txt is the 1-based row
+    # number of the sample in this file, not the sample name.
     samples = {}
-    for cols in open_tab(path):
-        name = cols[0]
-        samples[name] = {
+    for i, cols in enumerate(open_tab(path), start=1):
+        samples[str(i)] = {
+            "name":       cols[0],
             "individual": cols[1] if len(cols) > 1 else ".",
             "clinical":   cols[3] if len(cols) > 3 else ".",
             "tissue":     cols[5] if len(cols) > 5 else ".",
@@ -151,7 +155,7 @@ def aggregate_srips(srip_path, methods, samples, individuals):
                 a["tissues"].add(tissue)
             ind = individuals.get(ind_id, {})
             pop = ind.get("population", ".")
-            if pop and pop != "." and pop != "Unknown":
+            if pop and pop != "." and pop.lower() != "unknown":
                 a["populations"].add(pop)
             disease = ind.get("disease", ".")
             if disease and disease != "." and disease.lower() != "unknown":
@@ -175,7 +179,7 @@ def aggregate_srips(srip_path, methods, samples, individuals):
             a["pcrAny"] = True
         a["rows"].append({
             "srip": srip_id,
-            "sample": sample_id,
+            "sample": samples.get(sample_id, {}).get("name", sample_id),
             "study": study,
             "lineage": lineage,
             "integrity": integrity,

@@ -892,7 +892,7 @@ priority 9
         subGroups view=net species=s028b clade=c02
         shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign anoCar1 chainAnoCar1
+        type netAlign thaSir1 chainThaSir1
         otherDb thaSir1
 
         track netAmbMex1

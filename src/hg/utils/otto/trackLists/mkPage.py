@@ -31,27 +31,68 @@ def cell(w, text, indent="    "):
 VARIANT_CONTAINERS = ("varFreqs", "phasedVars")
 
 def rows_by_track(restricted):
-    """Group the restricted rows by track. The per-row "why" is deliberately not
-    carried through: which tests fired is explained once in prose below the table."""
-    by = collections.defaultdict(lambda: dict(dbs=set(), label="", container=""))
+    """Group the restricted rows by track, and note which row each one belongs under.
+
+    A subtrack whose parent is restricted too has a label written to be read underneath
+    that parent, so on its own it says very little and sorts nowhere useful: alphaGenome's
+    four subtracks are labelled "Mutation: A" through "Mutation: T" and land under M,
+    nowhere near AlphaGenome. Record the nearest ancestor that is itself listed, and let
+    the table put the two back together. Every row stays, because each of these subtracks
+    is its own file that a mirror cannot have.
+
+    The per-row "why" is deliberately not carried through: which tests fired is explained
+    once in prose below the table."""
+    by = collections.defaultdict(lambda: dict(dbs=set(), label="", container="",
+                                              containerLabel="", ancestors=[]))
     for r in restricted:
         e = by[r["track"]]
         e["dbs"].add(r["db"])
         e["label"] = e["label"] or r.get("shortLabel", "")
         e["container"] = e["container"] or r.get("container", "")
+        e["containerLabel"] = e["containerLabel"] or r.get("containerLabel", "")
+        e["ancestors"] = e["ancestors"] or r.get("ancestors", [])
+    for t, e in by.items():
+        e["anchor"] = next((a for a in e["ancestors"] if a in by), t)
     return by
 
-def restricted_table(w, by):
-    """One table of restricted tracks, sorted by the label the reader sees."""
+def display_label(track, e):
+    """The label the reader sees for one row.
+
+    A track named after its container is part of the container rather than one of its
+    members: varFreqsBackground is the combined reference file across the cohorts, not
+    another cohort, and "Population reference" says that only to someone who already
+    knows. Name the container in front of it. The cohorts themselves (topmed, allofus)
+    are not named after varFreqs and keep their own labels."""
+    label = e["label"] or track
+    if e["container"] and e["containerLabel"] and track.startswith(e["container"]):
+        return "%s: %s" % (e["containerLabel"], label)
+    return label
+
+def restricted_table(w, rows):
+    """One table of restricted tracks.
+
+    Sorted by container, so the three OMIM rows and the two DECIPHER rows sit together
+    instead of landing wherever their own labels fall; then by the row a subtrack belongs
+    under, so AlphaGenome is followed by its four; then by the label the reader sees. A
+    subtrack cannot be separated from its parent by this, because the two always share an
+    outermost container and so land in the same table."""
+    labels = dict((t, display_label(t, e)) for t, e in rows)
+    def order(item):
+        t, e = item
+        anchor = e.get("anchor", t)
+        return ((e["containerLabel"] or labels[t]).lower(),
+                labels.get(anchor, labels[t]).lower(),
+                0 if anchor == t else 1,          # the parent, then what hangs off it
+                labels[t].lower())
     w('<table>')
     w('  <tr>')
     w('    <th>Track</th>')
     w('    <th>Table or track name</th>')
     w('    <th>Assemblies</th>')
     w('  </tr>')
-    for t, e in sorted(by, key=lambda x: (x[1]["label"] or x[0]).lower()):
+    for t, e in sorted(rows, key=order):
         w('  <tr>')
-        cell(w, e["label"] or t)
+        cell(w, display_label(t, e))
         w('    <td><code>%s</code></td>' % esc(t))
         cell(w, " ".join(sorted(e["dbs"])))
         w('  </tr>')
@@ -174,10 +215,22 @@ def main():
             w('  </tr>')
         w('</table>')
     else:
+        # Only the tracks distributed as a file can be fetched, which is 39 of the 58
+        # rows; the rest live in our database tables and there is nothing to request.
+        # Say which, and say nothing at all about blocking on a run where the fetches
+        # came back empty, or a network blip reads as an all-clear.
+        checked = d.get("counts", {}).get("fileChecks", 0)
+        unknown = len(d.get("uncheckedDownloads", []))
         w('<p>')
-        w('Every track named above is checked against the download server each time this page')
-        w('is rebuilt, and every file marked as restricted is correctly blocked there. Checked')
-        w('on %s.' % esc(today))
+        w('The tracks above that we distribute as files are fetched from the download server')
+        w('each time this page is rebuilt; those held in our database tables have no file to')
+        w('request and are not part of that check.')
+        if unknown:
+            w('Of the %d files tried on %s, %d gave no answer at all, so this run could not'
+              % (checked, esc(today), unknown))
+            w('finish the check. The rest are correctly blocked.')
+        else:
+            w('All %d files tried on %s are correctly blocked there.' % (checked, esc(today)))
         w('</p>')
     w('')
 
@@ -202,7 +255,7 @@ def main():
         cell(w, j["name"])
         cell(w, j["schedule"])
         cell(w, j["detail"])
-        cell(w, j.get("assemblies", "") if j["kind"] == "track" else "")
+        cell(w, j.get("assemblies", ""))
         w('  </tr>')
     w('</table>')
     notifiers = [j for j in d["otto"] if j["kind"] == "notifier"]
@@ -225,6 +278,29 @@ def main():
             cell(w, j["name"], indent="    ")
             cell(w, j["schedule"], indent="    ")
             cell(w, j["detail"], indent="    ")
+            w('  </tr>')
+        w('</table>')
+    # A job we have no description for used to be dropped from the page without a word,
+    # which is how STRchive went missing from it. Naming the ones we cannot describe is
+    # both honest to the reader and the thing most likely to get them described.
+    unnamed = [j for j in d["otto"] if j["kind"] == "unclassified"]
+    if unnamed:
+        w('')
+        w('<h3>Jobs we have not described yet</h3>')
+        w('<p>')
+        w('These run on the same schedule as the tracks above, but we have not yet written')
+        w('down what they update, so treat the table above as incomplete by this much. If one')
+        w('of them matters to your mirror, ask on the mailing list and we will fill it in.')
+        w('</p>')
+        w('<table>')
+        w('  <tr>')
+        w('    <th>Runs</th>')
+        w('    <th>Command</th>')
+        w('  </tr>')
+        for j in sorted(unnamed, key=lambda x: x["command"]):
+            w('  <tr>')
+            cell(w, j["schedule"])
+            w('    <td><code>%s</code></td>' % esc(j["command"]))
             w('  </tr>')
         w('</table>')
     w('')

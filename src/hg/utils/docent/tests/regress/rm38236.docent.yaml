@@ -1,0 +1,74 @@
+# #38236 -- hgTracks died with SIGSEGV when a quickLift view moved to the SECOND region
+# hgConvert offers, and the reader got a blank page.
+#
+# hgConvert can return more than one region on the target.  Converting hg38
+# chr1:224,000,000-224,100,000 to hs1 offers chr1:223,189,752-223,289,224, which draws, and
+# chr7:59,324,765-59,325,193, which did not: about 12.6 kB of HTML that stops right after
+# the TrackHeaderForm, with no track rows, and a SIGSEGV in the error log with an empty
+# stack.  It reproduced on hgwdev and hgwbeta at v503 and on hgw0 at v502, so it was not new
+# in v503.
+#
+# 07ba37612b1 adds the missing NULL check in hg/hgTracks/bigWigTrack.c: the loop over chain
+# blocks used the chain chainSubsetOnT() handed back without testing it, and NULL is what
+# comes back when a chain in the list does not intersect the window.
+#
+# Two things the ticket established that this script is built on:
+#
+#   * THE SIGNAL TRACK IS THE POINT.  The crash is in the code that draws them, so a lifted
+#     view with no signal track in it never fails and the same click looks harmless.  The
+#     ticket's videos both turn one on before converting.
+#   * The URL variables are not needed.  Once the lift hub is connected, a plain window
+#     change reaches it, which is why this goes `open: lift` and then `go:` rather than
+#     hunting for the second link on the hgConvert result page.  Jairo's window table showed
+#     the crash needs that region at under a 100 kb view; 428 bp, 5 kb, 20 kb and 50 kb all
+#     crashed and 100 kb drew, so the ticket's own 428 bp window is used here.
+#
+# The assertion is `rows:`, which is the right shape for this bug and for almost nothing
+# else here: the page the crash produced has no track rows at all, so naming the two that
+# have to be drawn is both the positive check and the crash check.  A noText: would pass on
+# it -- everything is absent from a page that stopped halfway.
+#
+# wgEncodeRegMarkH3k4me1 rather than any bigWig to hand: it is `visibility hide` under a
+# superTrack that is itself hidden, which is regress/README.txt's rule for a track: step,
+# and the expect: straight after the track: is that file's other rule.
+#
+# curl cannot drive this at all.  The first hgTracks response for a new cart is a 4.5 kB
+# addPixAndReloadPage() stub, so a crashing machine and a healthy one look identical.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38236 and 07ba37612b1 after the fix reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the 428bp window on hgConvert second region draws no rows -- the blank page from the SIGSEGV"
+
+target: genome-test
+db: hg38
+position: chr1:224000000-224100000
+reset: true
+fast: true
+steps:
+  - go: chr1:224000000-224100000
+  - hide: all
+  - track: {wgEncodeReg: hideKids}
+  - track: {wgEncodeRegMarkH3k4me1: full}
+  - expect: {rows: [ruler, wgEncodeRegMarkH3k4me1], exact: true}
+
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+
+  # The first region hgConvert offers, which drew even with the bug.  If this one is wrong
+  # the lift itself failed and the step below would be reporting the wrong thing.
+  - expect:
+      rows: [quickLiftChain, wgEncodeRegMarkH3k4me1]
+      noText: "Warning/Error"
+
+  # The second region, 428 bp.  This is the window from the ticket, and the one that
+  # returned a blank page on every server before the fix.
+  - go: chr7:59324765-59325193
+  - expect:
+      rows: [ruler, wgEncodeRegMarkH3k4me1]
+      noText: "Warning/Error"
+
+  # An offset window in the same region, and a 20 kb one.  Both are from Jairo's table and
+  # both crashed, so they say the fix is about the region rather than about one address.
+  - go: chr7:59320000-59320428
+  - expect: {rows: [ruler, wgEncodeRegMarkH3k4me1]}
+  - go: chr7:59320000-59340000
+  - expect: {rows: [ruler, wgEncodeRegMarkH3k4me1]}

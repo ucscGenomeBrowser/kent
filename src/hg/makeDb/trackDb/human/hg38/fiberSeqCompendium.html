@@ -1,36 +1,37 @@
 <h2>Description</h2>
 
 <p>
-This track is part of the <a href="hgTrackUi?g=fiberSeq">Fiber-seq</a> collection. It holds the
-full Fiber-seq data for 41 samples: 14 cell lines and 27 lymphoblastoid
-lines derived from individuals sequenced by the Human Pangenome Reference Consortium and the
-Genome in a Bottle project. Chromatin accessibility and CpG methylation are read from the same
+This track is part of the <a href="hgTrackUi?db=hg38&amp;g=fiberSeq">Fiber-seq</a> collection. It holds the
+full Fiber-seq data for 41 samples: 27 lymphoblastoid lines and 14 other cell lines. The Sample
+class filter splits them by where they came from. Chromatin accessibility and CpG methylation
+are read from the same
 molecules in the same experiment, so both are kept in one table here and can be compared without
 worrying about differences in cell preparation or sequencing depth. Six kinds of data are
 available for each sample:
 </p>
 
 <ul>
-  <li>Percent accessible: the fraction of Fiber-seq molecules on which a position was called
-      accessible, combining both chromosomes.</li>
-  <li>FIRE peaks: the accessible regulatory elements called from that signal, with a score and
-      a false discovery rate.</li>
-  <li>Haplotype accessibility: the percent-accessible signal computed separately for the two
-      parental chromosomes and drawn as an overlay, which makes elements that are open on one
-      chromosome but not the other visible directly.</li>
-  <li>CpG methylation: percent of reads methylated at each CpG, over both chromosomes.</li>
-  <li>Haplotype CpG: the same measure computed separately for the two parental chromosomes.</li>
-  <li>CpG haplotype difference: the difference in percent methylation between the two
+  <li><b>Percent accessible</b>: the fraction of Fiber-seq molecules on which a position was
+      called accessible, combining both chromosomes.</li>
+  <li><b>FIRE peaks</b>: the accessible regulatory elements called from that signal, with a
+      score and a false discovery rate.</li>
+  <li><b>Haplotype accessibility</b>: the percent-accessible signal computed separately for the
+      two parental chromosomes and drawn as an overlay, which makes elements that are open on
+      one chromosome but not the other visible directly.</li>
+  <li><b>CpG methylation</b>: percent of reads methylated at each CpG, over both
+      chromosomes.</li>
+  <li><b>Haplotype CpG</b>: the same measure computed separately for the two parental
+      chromosomes.</li>
+  <li><b>CpG haplotype difference</b>: the difference in percent methylation between the two
       chromosomes, at four nested significance thresholds.</li>
 </ul>
 
 <p>
-Because 41 samples times six kinds of data is far too many tracks for a checkbox list, samples
-are chosen from a searchable table on this page. Pick the kinds of data you want along the top,
-then select samples in the table; the browser turns on that combination for every sample you
-picked, and keeps each sample's tracks together in the display. Sample class has filter
-checkboxes in the panel to the left, and every column can be searched with the box under its
-heading and clicked to sort, so a sample can be found by name, cell type, sample class or
+Samples are chosen from the searchable table on this page. Pick the kinds of data you want along
+the top, then select samples in the table; the browser turns on that combination for every
+sample you picked, and keeps each sample's tracks together in the display. Sample class has
+filter checkboxes in the panel to the left, and every column can be searched with the box under
+its heading and clicked to sort, so a sample can be found by name, cell type, sample class or
 accession.
 </p>
 
@@ -62,9 +63,8 @@ samples.
 
 <p>
 The CpG haplotype difference track runs from -100 to +100 percent, so a bar above the midline
-means haplotype 1 is more methylated and a bar below it means haplotype 2 is. It is a stack of
-four overlaid signals, one per significance threshold, drawn least significant first so that the
-more significant levels are painted on top:
+means haplotype 1 is more methylated and a bar below it means haplotype 2 is. Each position is
+colored by the most stringent significance threshold it meets:
 </p>
 
 <table class="stdTbl">
@@ -89,19 +89,27 @@ The color swatches next to the Sample class filters are:
       <td>HPRC, a lymphoblastoid (B-lymphocyte, EBV) line from the Human Pangenome Reference
           Consortium</td></tr>
   <tr><th style="background-color:#D55E00;width:2em">&nbsp;</th>
-      <td>Common cell line, which here also covers GM12878 and HG002: both are lymphoblastoid,
-          but they come from ENCODE and from Genome in a Bottle rather than from the
-          consortium</td></tr>
+      <td>Common cell line. Two of these are lymphoblastoid as well but come from elsewhere:
+          GM12878 from ENCODE and HG002 from the Genome in a Bottle project</td></tr>
+  <tr><th style="background-color:#009E73;width:2em">&nbsp;</th>
+      <td>Rare disease sample, from a case consented to broad genomic data sharing. Five so far:
+          GM25455, GM25456, GM27730, GM28570 and GM28572</td></tr>
 </table>
+
+<p>
+The classification is the one supplied by the laboratory, not one inferred from the cell type.
+</p>
 
 <p>
 Peaks carry two filterable values, the FIRE score in the signalValue field and the false
 discovery rate as a -log10 value in the qValue field, and both can be filtered from a peak
-track's own configuration page, along with the score. No filter is applied by default. A short
+track's own configuration page, along with the score. No filter is applied by default. The FDR
+value stops at 100, which is the highest the pipeline reports rather than a real ceiling on
+significance, and 9 percent of the peaks in this track sit at it; filtering at the top of that
+range therefore selects a large group rather than a handful of outstanding peaks. A short
 tick inside each peak marks the point source, the single base the pipeline picked as the summit.
-Switching a peak track to pack or full also gives each peak a mouseover with its FIRE score and
-FDR; dense mode has no per-peak hover, which is a property of dense display rather than of this
-track. The pValue field of the source files is set to -1 throughout and carries no information.
+Switching a peak track to pack or full gives each peak a mouseover with its FIRE score and FDR.
+The pValue field of the source files is set to -1 throughout and carries no information.
 </p>
 
 <h2>Methods</h2>
@@ -161,9 +169,10 @@ target="_blank">kent source tree</a>.
 <p>
 GM12878 (accession PM00001) was reprocessed by the lab in September 2026 and every file for that
 sample was replaced here. The earlier release had two placeholder haplotype accessibility bigWigs
-covering a single base, so its haplotype overlay drew nothing; those now carry full data. Its
-peak calls and CpG haplotype values changed with the reprocessing as well, so figures made from
-the first version of this track will not reproduce exactly for that sample.
+covering a single base, so its haplotype overlay drew nothing. The lab re-ran the sample with
+parental sequence added for phasing, and those tracks now carry full data. Its peak calls and
+CpG haplotype values changed with the reprocessing as well, so figures made from the first
+version of this track will not reproduce exactly for that sample.
 </p>
 
 <h2>Data Access</h2>
@@ -173,7 +182,12 @@ The data can be explored interactively in table format with the
 <a href="../cgi-bin/hgTables">Table Browser</a> or the
 <a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to spreadsheet or
 tab-sep tables. From scripts, the data can be accessed through our
-<a href="https://api.genome.ucsc.edu">API</a>, track=<i>fiberSeqCompendium</i>.
+<a href="https://api.genome.ucsc.edu">API</a>, one sample and data type at a time, for example
+track=<i>fiberSeqCompendium_PM00001_acc</i> for GM12878 accessibility,
+<i>fiberSeqCompendium_PM00001_cpg</i> for its CpG methylation, or
+<i>fiberSeqCompendium_PM00001_peaks</i> for its FIRE peaks. The track name
+<i>fiberSeqCompendium</i> refers to the whole set of samples, holds no data of its own and cannot
+be queried.
 </p>
 
 <p>
@@ -217,7 +231,7 @@ assembling it into track hubs and for their help in arranging these tracks for t
 <h2>References</h2>
 
 <p>
-Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sedeño-Cortés AE, Fondrie
+Vollger MR, Swanson EG, Neph SJ, Ranchalis J, Munson KM, Ho CH, Cheng YHH, Sede&#241;o-Cort&#233;s AE, Fondrie
 WE, Bohaczuk SC <em>et al</em>.
 <a href="https://doi.org/10.1101/2024.06.14.599122" target="_blank">
 A haplotype-resolved view of human gene regulation</a>.

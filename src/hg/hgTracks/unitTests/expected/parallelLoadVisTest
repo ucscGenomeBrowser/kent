@@ -1,0 +1,12 @@
+no cart settings: composite full, 2 handed to loaders
+  regress38254a  loaded; visibility before the threads start: full, the lazy value full
+  regress38254b  loaded; visibility before the threads start: full, the lazy value full
+no cart settings: composite dense, 2 handed to loaders
+  regress38254a  loaded; visibility before the threads start: dense, the lazy value dense
+  regress38254b  loaded; visibility before the threads start: dense, the lazy value dense
+one child set to pack and one hidden: composite full, 1 handed to loaders
+  regress38254a  loaded; visibility before the threads start: pack, the lazy value pack
+  regress38254b  not loaded
+a child set to full under a dense composite: composite dense, 2 handed to loaders
+  regress38254a  loaded; visibility before the threads start: full, the lazy value full
+  regress38254b  loaded; visibility before the threads start: dense, the lazy value dense

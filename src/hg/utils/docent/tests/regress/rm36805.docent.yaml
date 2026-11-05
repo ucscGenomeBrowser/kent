@@ -32,9 +32,11 @@ db: mm10
 reset: true
 fast: true
 steps:
-  - loadSession: {user: Gerardo, name: RM_36805_TOGA_hangs}
+  # Gerardo/RM_36805_TOGA_hangs, saved as a text file (sessionFiles/README.txt) so the script
+  # runs on any server, not only the one whose hgcentral holds the session.
+  - loadSession: "https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/utils/docent/tests/regress/sessionFiles/RM_36805_TOGA_hangs.txt"
 
-  # A session that has gone away is not an error -- hgTracks serves a 200 with no image and
+  # A session that did not load is not an error -- hgTracks serves a 200 with no image and
   # every noText on it passes -- so the row check is what says the session really loaded.
   - expect: {noText: "Could not find session", rows: [HLTOGAannotvHg38v1]}
 

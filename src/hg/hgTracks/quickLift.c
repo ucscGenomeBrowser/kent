@@ -159,8 +159,13 @@ for(; hr; hr = hr->next)
 
     if (hr->type == QUICKTYPE_MISMATCH)
         safef(mouseOver, sizeof mouseOver, "mismatch %c->%c", *hr->otherBases, *hr->bases);
+    // the bases of a long insertion or deletion would not fit, and are no use in a mouseover
+    else if ((hr->chromStart == hr->chromEnd) && (hr->otherBaseCount > QUICKLIFT_SHOW_BASES))
+        safef(mouseOver, sizeof mouseOver, "deletion %ldbp", hr->oChromEnd - hr->oChromStart);
     else if (hr->chromStart == hr->chromEnd)
         safef(mouseOver, sizeof mouseOver, "deletion %ldbp (%.*s)", hr->oChromEnd - hr->oChromStart, hr->otherBaseCount, hr->otherBases);
+    else if ((hr->oChromStart == hr->oChromEnd) && (hr->baseCount > QUICKLIFT_SHOW_BASES))
+        safef(mouseOver, sizeof mouseOver, "insertion %ldbp", hr->chromEnd - hr->chromStart);
     else if (hr->oChromStart == hr->oChromEnd)
         safef(mouseOver, sizeof mouseOver, "insertion %ldbp (%.*s)", hr->chromEnd - hr->chromStart, hr->baseCount, hr->bases);
     else

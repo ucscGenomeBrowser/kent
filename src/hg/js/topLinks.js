@@ -18,6 +18,9 @@
 var topLinks = (function() {
     "use strict";
 
+    // Shown when an AJAX request fails without a reply; also used by hgBlat.js.
+    var serverUnreachableMsg = "Could not reach the server. Please try again once you are connected to the internet, or reload the page if you are connected to the internet.";
+
     // Small helper to build an element with properties and inline styles set from the DOM
     // (assigning to element.style.* is CSP-safe, unlike a style="" attribute in markup).
     function el(tag, props, styles) {
@@ -142,7 +145,7 @@ var topLinks = (function() {
         if (changeEmailUrl)
             addLink(ul, changeEmailUrl, "Change email");
         if (changeRecovEmailUrl)
-            addLink(ul, changeRecovEmailUrl, "Recovery email");
+            addLink(ul, changeRecovEmailUrl, "Change recovery email");
         addLink(ul, logoutUrl, "Sign out");
         body.appendChild(ul);
         showModal("Account", body);
@@ -189,7 +192,7 @@ var topLinks = (function() {
             },
             error: function() {
                 statusEl.style.color = "#a00";
-                statusEl.textContent = "Could not reach the server. Please try again.";
+                statusEl.textContent = serverUnreachableMsg;
                 if (onFail) onFail();
             }
         });
@@ -342,27 +345,37 @@ var topLinks = (function() {
     }
 
     // Add name=val to url if it isn't already present (used to keep db= after stripping hgsid).
-    function ensureParam(url, name, val) {
+    // With force=true, overwrite any existing value instead (used for superTrack=show, since the
+    // page's own hgsid-derived value would otherwise win instead of the value we need to send).
+    function ensureParam(url, name, val, force) {
         try {
             var u = new URL(url);
-            if (!u.searchParams.has(name))
+            if (force || !u.searchParams.has(name))
                 u.searchParams.set(name, val);
             return u.toString();
         } catch (e) {
-            if (new RegExp("[?&]" + name + "=").test(url))
-                return url;
+            var re = new RegExp("([?&])" + name + "=[^&]*");
+            if (re.test(url))
+                return force ? url.replace(re, "$1" + name + "=" + encodeURIComponent(val)) : url;
             return url + (url.indexOf("?") >= 0 ? "&" : "?") + name + "=" + encodeURIComponent(val);
         }
     }
 
     // Open a simple "here is the link" dialog for an arbitrary URL, with the hgsid stripped.
     // Used by hgTrackUi (the current page) and by the hgc item-details popup in hgTracks.js.
-    // opts (optional): {ensureDb: <db> to add db= if missing, pageNote: true to note it's page-only}.
+    // opts (optional): {ensureDb: <db> to add db= if missing, pageNote: true to note it's page-only,
+    // superTrack: comma separated names of the enclosing superTracks, whose visibility must be
+    // forced to "show" so the linked track isn't hidden by their own default}.
     function shareUrlDialog(url, opts) {
         opts = opts || {};
         var clean = stripHgsid(url);
         if (opts.ensureDb)
             clean = ensureParam(clean, "db", opts.ensureDb);
+        if (opts.superTrack) {
+            var supers = opts.superTrack.split(",");
+            for (var i = 0; i < supers.length; i++)
+                clean = ensureParam(clean, supers[i], "show", true);
+        }
         var body = document.createElement("div");
         showModal("Share a link", body, 720);
         showResult(body, clean, {pageNote: opts.pageNote, snapshot: opts.snapshot});
@@ -402,7 +415,7 @@ var topLinks = (function() {
                 showCreatePrompt(body, opts, "", name);
             }, function(msg) {
                 prep.style.color = "#a00";
-                prep.textContent = msg || "Could not reach the server. Please try again.";
+                prep.textContent = msg || serverUnreachableMsg;
             });
         }
     }
@@ -616,5 +629,5 @@ var topLinks = (function() {
         init();
 
     return {showLoginDialog: showLoginDialog, showShareDialog: showShareDialog,
-            shareUrl: shareUrlDialog};
+            shareUrl: shareUrlDialog, serverUnreachableMsg: serverUnreachableMsg};
 })();

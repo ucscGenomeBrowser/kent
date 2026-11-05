@@ -294,6 +294,14 @@ LoadModule cgi_module $MODDIR/mod_cgi.so
 LoadModule log_config_module $MODDIR/mod_log_config.so
 LoadModule ssl_module $MODDIR/mod_ssl.so
 
+# One developer over a tunnel needs a small pool.  The prefork defaults keep 5 to
+# 10 idle children per park, and with a few dozen parks left running that came to
+# hundreds of httpd processes on hgwdev.
+StartServers 1
+MinSpareServers 1
+MaxSpareServers 2
+MaxRequestWorkers 20
+
 TypesConfig /etc/mime.types
 DirectoryIndex index.html
 

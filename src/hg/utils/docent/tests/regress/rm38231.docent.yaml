@@ -1,0 +1,41 @@
+# #38231 -- the Track Search page printed an HTML entity in its blue bar title. On hg38 it
+# read
+#
+#     Search for Tracks in the Human Dec. 2013 (GRCh38&#x2F;hg38) Assembly
+#
+# where it should read (GRCh38/hg38). Every assembly whose dbDb description carries a slash
+# showed it. The title was escaped twice: searchTracks.c ran htmlEncode() on the organism
+# and the freeze name, and webStartWrapperDetailedNoArgs() then printed the title through
+# htmlTextOut(), which escaped the ampersand of each entity again.
+#
+# 20ca104b989 (#38123) added the first htmlEncode(). 6d28e748f8a (#38172) removed it on
+# master, and #38231 is the build patch that carried it onto v503_branch as 707b184e329.
+# Neither commit is in v502_branch. So NO released version ever had this bug: v502 predates
+# the cause and v503 shipped with the patch. It lived only on hgwdev and in the v503
+# preview builds on hgwbeta, and a release-ab line cannot be earned for it.
+#
+# The check is on the page text. innerText reads a double-escaped entity as its six
+# characters, so `noText: "&#x2F;"` catches the bug directly, and the positive `text:`
+# catches a title that went missing altogether. hg19 is a second assembly with a slash in
+# its description, so a fix aimed at one dbDb row cannot pass.
+#
+# The organism and the freeze name are still escaped once by htmlTextOut(). The commit
+# message says the assembly-hub case that prompted 20ca104b989 was checked by hand; that
+# half needs a hub whose genomes.txt holds markup and is not driven here.
+proof:
+  - "assertion-only 2026-09-26 -- written from 6d28e748f8a after the fix shipped; no release carries the bug, so it cannot be watched failing on one"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hgt_tSearch=Search"
+  - expect:
+      text: "Search for Tracks in the Human Dec. 2013 (GRCh38/hg38) Assembly"
+      noText: ["&#x2F;", "&amp;"]
+
+  - goto: "/cgi-bin/hgTracks?db=hg19&pix=1100&hgt_tSearch=Search"
+  - expect:
+      text: "(GRCh37/hg19) Assembly"
+      noText: ["&#x2F;", "&amp;"]

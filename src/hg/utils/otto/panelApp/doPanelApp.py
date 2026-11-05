@@ -2,8 +2,11 @@
 
 from datetime import date
 import pandas as pd,time 
-import gzip, logging, re, sys, json, time, requests, shutil, os, subprocess
+import gzip, logging, re, sys, json, time, requests, shutil, os, subprocess, argparse
 from requests.exceptions import RequestException
+
+# set by the -force command line option: skip the 10% itemCount difference check
+force = False
 
 def bash(cmd):
     """Run the cmd in bash subprocess"""
@@ -78,7 +81,10 @@ def checkIfFilesTooDifferent(oldFname,newFname):
     newItemCount = int(newItemCount.rstrip().split("itemCount: ")[1].replace(",",""))
 
     if abs(newItemCount - oldItemCount) > 0.1 * max(newItemCount, oldItemCount):
-        sys.exit(f"Difference between itemCounts greater than 10%: {newItemCount}, {oldItemCount}")
+        msg = f"Difference between itemCounts greater than 10%: {newItemCount}, {oldItemCount}"
+        if not force:
+            sys.exit(msg)
+        print("Warning: "+oldFname+": "+msg+" - continuing anyways, -force was specified")
     else:
         print(oldFname+" vs. new count: "+str(oldItemCount)+" - "+str(newItemCount))
 
@@ -983,8 +989,18 @@ def downloadGenes(url, onlyPanels=None):
     return pd_19_table, pd_38_table
 
 
+def parseArgs():
+    " parse the command line and set the global force flag "
+    global force
+    parser = argparse.ArgumentParser(description="Build the PanelApp tracks for hg19 and hg38.")
+    parser.add_argument("-force", "--force", action="store_true",
+                        help="ignore the 10%% itemCount difference check and update the files anyways")
+    args = parser.parse_args()
+    force = args.force
+
 def main():
     " create the 2 x three BED files and convert each to bigBed and update the archive "
+    parseArgs()
 
     # the script uses relative pathnames, so make sure we're always in the right directory
     os.chdir("/hive/data/outside/otto/panelApp")

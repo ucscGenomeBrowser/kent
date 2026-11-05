@@ -47,6 +47,7 @@ errAbort(
   "      <chrom> <start> <end> <value>\n"
   "and chrom.sizes is a two-column file/URL: <chromosome name> <size in bases>\n"
   "and out.bw is the output indexed big wig file.\n"
+  "The input file may be compressed, as indicated by a .gz, .bz2, .Z or .zip extension.\n"
   "If the assembly <db> is hosted by UCSC, chrom.sizes can be a URL like\n"
   "  http://hgdownload.soe.ucsc.edu/goldenPath/<db>/bigZips/<db>.chrom.sizes\n"
   "or you may use the script fetchChromSizes to download the chrom.sizes file.\n"
@@ -425,7 +426,7 @@ bits64 sectionCount = bbiCountSectionsNeeded(usageList, itemsPerSlot);
 writeOne(f, sectionCount);
 struct bbiBoundsArray *boundsArray;
 AllocArray(boundsArray, sectionCount);
-lineFileRewind(lf);
+lf = bbiRewindFile(inName, lf);
 bits32 maxSectionSize = 0;
 writeSections(usageList, lf, itemsPerSlot, boundsArray, sectionCount, f,
 	resTryCount, resScales, resSizes, doCompress, &maxSectionSize);
@@ -444,6 +445,7 @@ bits64 zoomDataOffsets[bbiMaxZoomLevels];
 bits64 zoomIndexOffsets[bbiMaxZoomLevels];
 
 /* Call monster zoom maker library function that bedToBigBed also uses. */
+lf = bbiRewindFile(inName, lf); // rewind here so bbiWriteZoomLevels() won't have to
 int zoomLevels = bbiWriteZoomLevels(lf, f, blockSize, itemsPerSlot,
     bedGraphWriteReducedOnceReturnReducedTwice, 4,
     doCompress, indexOffset - dataOffset, 

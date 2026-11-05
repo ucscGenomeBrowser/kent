@@ -1,0 +1,66 @@
+# GPN-Star genomic language model constraint scores, refs #38451
+# Sep 30 2026, updated Mon Oct 12 2026 (Claude lrnassar)
+
+# Ye, Benegas et al., Nature 2026, doi:10.1038/s41586-026-11005-5, PMID 42717086.
+# The authors provide mutation-rate calibrated LLR scores for every possible SNV as
+# Parquet tables plus browser bigWigs, and a UCSC track hub, on Hugging Face:
+#   https://huggingface.co/datasets/songlab/gpn-star-scores
+# We use their bigWig values, pinned to dataset revision
+# 47e7f051113abab49f04f43f9107cae2cbbfd34d. Per score set we take:
+#   A.bw C.bw G.bw T.bw         sequence logo heights, p(base) * (2 - H)
+#   llr_A.bw ... llr_T.bw       signed calibrated LLR per alternate allele,
+#                               reference allele set to 0, 3 decimals
+# entropy.bw is not used. The browser negates the LLR at display time (negateValues).
+
+# 1. Download into /hive/data/genomes/mm39/bed/gpnStar/download,
+#    which the browser never reads, checking each file's size and SHA-256 against the
+#    Hugging Face API before moving it into place.
+#    Re-running this cannot touch the files that /gbdb serves.
+~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarMirror.py mm39
+
+# 2. Re-encode. The downloaded bigWigs have bad section headers: every fixedStep section
+#    that ends right before a coverage gap claims 6 more bases (end - start) than it
+#    stores (itemCount). This is a libBigWig bug (pyBigWig 0.3.26, bwWrite.c
+#    bwAddIntervalSpanSteps does not subtract the 24-byte section header when setting
+#    the end of the last section of each addEntries call), reported as
+#    https://github.com/deeptools/pyBigWig/issues/166. The browser is unaffected, but
+#    kent bigWigAverageOverBed and bigWigCorrelate abort on these files. Check with:
+#      ~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarCheckSections.py <file.bw> 0
+#    gpnStarRebuild.sh re-encodes one file with bigWigToWig | wigToBigWig, runs
+#    gpnStarVerify.sh (exact float32 comparison of every chromosome with
+#    gpnStarCompare.py, plus the section check) and moves the new file into place
+#    only if that passes. Zoomed-out summary levels are recomputed by kent at its own
+#    resolutions, so whole-chromosome views can differ by a pixel here and there.
+mkdir -p /data/tmp/gpnStarRebuild
+cd /hive/data/genomes/mm39/bed/gpnStar
+for p in download:.; do
+  src=${p%%:*}; dst=${p#*:}
+  for f in A C G T llr_A llr_C llr_G llr_T; do
+    echo ~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarRebuild.sh $src/$f.bw $dst/$f.bw \
+        /hive/data/genomes/mm39/chrom.sizes /data/tmp/gpnStarRebuild
+  done
+done | parallel -j 8 --halt now,fail=1
+# gpnStarRebuild.sh exits non-zero unless the values are identical and no section is
+# bad, and --halt stops the batch on the first failure. Once it finishes, the
+# downloads are no longer needed:
+rm -r /hive/data/genomes/mm39/bed/gpnStar/download
+
+# Note on how the served files were checked:
+#    For this release the files were first re-encoded with an earlier version of these
+#    scripts that compared bigWigToBedGraph text (%g, 6 significant digits) per
+#    chromosome instead of raw float32 values; all 56 files passed that check.
+#    The exact float32 comparison was run on the ce11 and dm6 files (all identical);
+#    the originals for this assembly were not kept. The values are 3-decimal numbers
+#    below 17 in magnitude, which 6 significant digits reproduce exactly.
+
+# 3. Spot-check coordinates against one Parquet shard (one-based) to rule out an
+#    off-by-one in the authors' conversion to zero-based bigWig intervals. Needs pyarrow.
+cd /data/tmp
+HF=https://huggingface.co/datasets/songlab/gpn-star-scores/resolve
+REV=47e7f051113abab49f04f43f9107cae2cbbfd34d
+curl -sfL -o mm39_llr_chr19.parquet \
+  $HF/$REV/data/mm39/llr/llr_chr19.parquet
+~/kent/src/hg/makeDb/scripts/gpnStar/gpnStarCoordCheck.py \
+    mm39_llr_chr19.parquet mm39 /hive/data/genomes/mm39/bed/gpnStar 30
+# Result: 0 mismatches in 30 random rows (bigWig == llr_calibrated, ref allele == 0,
+# genome base == Parquet ref).

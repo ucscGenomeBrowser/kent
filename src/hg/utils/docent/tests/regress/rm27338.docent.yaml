@@ -1,0 +1,48 @@
+# #27338 -- multi-region "Show exons with gene annotations" (exon view) built its regions
+# from pseudogenes too.  Lou filed it with no text in 2021; Jairo confirmed it was still
+# an issue in 2024 and set it to Hibernating.  Galt's fix for #37060 (9840af33fea,
+# 2026-02-03, v494) taught the exon-region builder in hgTracks.c to read the knownGene
+# `show.pseudo` setting, default off, and skip every transcript whose knownAttrs
+# transcriptClass is 'pseudo'.  So this ticket's bug is expected to be gone on genome-test.
+#
+# The case: hg38 chr10:13744599-14074698 (Galt's region for #37060) holds the processed
+# pseudogene ENST00000475013.1, chr10:13870796-13871175.  It is tagged `basic` in
+# knownToTag, so the default Basic set does not remove it; only the pseudogene filter
+# does.  Exon view pads each exon by 5 bases, and each region of the view gets a map box
+# whose data-tooltip is its source range, so its region would be chr10:13870791-13871181.
+#
+# Checks:
+#   * default settings: exon view is on and draws the neighbouring exon regions
+#     chr10:13858841-13858918 and chr10:13991809-13991998 (positive checks), and has NO
+#     region box for the pseudogene.  This is the ticket's symptom.
+#   * knownGene.show.pseudo=on: the pseudogene region IS present.  This proves the
+#     selector would match if the region were built, so the noHas above is not vacuous,
+#     and it pins that the setting is read at all.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr10:13744599-14074698
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr10%3A13744599-14074698&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&virtModeType=exonMostly&virtMode=1"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr10:13858841-13858918"]'
+        - 'area[data-tooltip="chr10:13991809-13991998"]'
+      noHas: 'area[data-tooltip="chr10:13870791-13871181"]'
+
+  # Turn pseudogenes on; exon view rebuilds its regions from the new setting.
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&knownGene.show.pseudo=on&virtModeType=exonMostly&virtMode=1"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr10:13870791-13871181"]'

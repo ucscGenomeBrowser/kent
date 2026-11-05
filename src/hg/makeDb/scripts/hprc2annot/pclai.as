@@ -1,5 +1,5 @@
 table pclai
-"HPRC point cloud local ancestry inference (pcLAI), assembly coordinates"
+"HPRC point cloud local ancestry inference (PCLAI), assembly coordinates"
     (
     string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
@@ -12,5 +12,5 @@ table pclai
     uint   reserved;   "Item color (R,G,B)"
     string window;     "Local ancestry window id (~1000 SNPs)"
     string pca;        "Window PCA|PCA-space coordinates (PC1,PC2) predicted for this window"
-    string centroid;   "Ancestry centroid|Discretized pcLAI ancestry of this window, given as the (PC1,PC2) centroid of that ancestry cluster"
+    string centroid;   "Ancestry centroid|Discretized PCLAI ancestry of this window, given as the (PC1,PC2) centroid of that ancestry cluster"
     )

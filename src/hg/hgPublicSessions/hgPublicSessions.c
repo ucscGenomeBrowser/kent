@@ -55,7 +55,6 @@ struct galleryEntry *galLoad(char **row)
  * 6. namedSessionDb.contents
  * 7. namedSessionDb.firstUse */
 {
-char *dbIdx, *dbEnd;
 struct galleryEntry *ret;
 AllocVar(ret);
 ret->realName = cloneString(row[0]);
@@ -75,19 +74,8 @@ else
     ret->imgUri = NULL;
 ret->useCount = sqlUnsignedLong(row[4]);
 ret->settings = cloneString(row[5]);
-if (startsWith("db=", row[6]))
-    dbIdx = row[6] + 3;
-else
-    dbIdx = strstr(row[6], "&db=") + 4;
-if (dbIdx != NULL)
-    {
-    dbEnd = strchr(dbIdx, '&');
-    if (dbEnd != NULL)
-        ret->db = cloneStringZ(dbIdx, dbEnd-dbIdx);
-    else
-        ret->db = cloneString(dbIdx);
-    }
-else
+ret->db = cartContentsVal(row[6], "db");
+if (ret->db == NULL)
     ret->db = cloneString("n/a");
 ret->firstUse = cloneString(row[7]);
 char *spacePt = strchr(ret->firstUse, ' ');

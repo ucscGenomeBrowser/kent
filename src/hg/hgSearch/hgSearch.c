@@ -630,7 +630,12 @@ if (cartJsonIsNoWarns() && hgp && hgp->singlePos)
     if (track && track->parent)
         {
         if (tdbIsSuperTrackChild(track))
-            printf("&%s=show", track->parent->track);
+            {
+            struct slName *supers = tdbSuperTrackAncestors(track), *super;
+            for (super = supers; super != NULL; super = super->next)
+                printf("&%s=show", super->name);
+            slNameFreeList(&supers);
+            }
         else
             {
             // tdb is a subtrack of a composite or a view

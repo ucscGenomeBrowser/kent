@@ -557,87 +557,45 @@ function cartHideAnyTrack (id, cartVars, cartVals) {
     }
 }
 
-function tdbCountChildren(trackDb, parentType) {
-    /* return dicts with count of children, uses either the .parentTrack or .topParent trackDb attributes */
-    var familySize = {};
-    var families = {};
-    // sort trackDb into object topParent -> count of children
-    for (var trackName of Object.keys(hgTracks.trackDb)) {
-        var rec = hgTracks.trackDb[trackName];
-        // when looking at superTracks, only look at those children that are in superTracks
-        if (rec[parentType]===undefined) {
-            continue; // ignore tracks without parents
-        }
-
-        var parentTrack = rec[parentType];
-        if (!familySize.hasOwnProperty(parentTrack)) {
-            familySize[parentTrack] = 0;
-            families[parentTrack] = [];
-        }
-        familySize[parentTrack]++;
-        families[parentTrack].push(trackName);
-    }
-
-    var ret = {};
-    ret.familySize = familySize;
-    ret.families = families;
-    return ret;
+function tdbAncestors(rec) {
+    /* names of the containers above a track, outermost first: its superTracks, then its composite */
+    var ancestors = rec.superTrack ? rec.superTrack.split(",").reverse() : [];
+    if (tdbIsSubtrack(rec) && rec.parentTrack)
+        ancestors.push(rec.parentTrack);
+    return ancestors;
 }
 
-function tdbFindChildless(trackDb, delTracks) {
-    /* Find parents that have no children left anymore in hgTracks.trackDb if you remove delTracks.
-     * return obj with o.loneParents as array of [parent, array of children] , and o.others as an array of all other tracks
-     * The caller needs the children names, as we want to hide the children with Javascript right away */
-
-    // This functions uses a somewhat weird strategy: it counts the children of the composites, also counts the children of superTracks,
-    // and compares both at the end. There may be a better strategy but our data structures are so strange that I didn't know what
-    // else to do.
-    var parentType = "parentTrack";
-    others = [];
-
-    var compLinks = tdbCountChildren(trackDb, "parentTrack"); // look only at direct parents: superTracks and composites
-    var topLinks = tdbCountChildren(trackDb, "topParent");  // look at top parents, so only superTracks
-
-    // decrease the parent's count for each track to delete
-    for (var delTrack of delTracks) {
-        var tdbRec = hgTracks.trackDb[delTrack];
-        let parentName = tdbRec.parentTrack;
-        if (parentName)
-            compLinks.familySize[parentName]--;
-
-        parentName = tdbRec.topParent;
-        if (parentName)
-            topLinks.familySize[parentName]--;
+function tdbHidePlan(trackDb, hideIds) {
+    /* Decide how to hide hideIds, a list of tracks in trackDb. A container (superTrack or composite)
+     * none of whose tracks stay in the image is hidden itself, rather than its children, so it is
+     * never left switched on with nothing to show. The outermost such container is used.
+     * Returns o.parents, an object container -> its tracks in hideIds, and o.tracks, the tracks
+     * that have to be hidden one by one, because all of their containers keep other tracks. */
+    var hideSet = new Set(hideIds);
+    var ancestors = {};
+    var keptAncestors = new Set();
+    for (var name of Object.keys(trackDb)) {
+        ancestors[name] = tdbAncestors(trackDb[name]);
+        if (!hideSet.has(name))
+            for (var anc of ancestors[name])
+                keptAncestors.add(anc);
     }
 
-    // for the parents of deleted tracks with a count of 0, create an array of [parentName, children]
-    var loneParents = [];
-    var doneParents = [];
-    for (delTrack of delTracks) {
-        var parentName = hgTracks.trackDb[delTrack].parentTrack;
-        var topParentName = hgTracks.trackDb[delTrack].topParent;
-        if (parentName) {
-            // hide a superTrack parent only if that superTrack does not have any other tracks open
-            // This addresses the case where you hide the last child of a composite under a superTrack
-            // E.g. All Gencode / Gencode V46 or FANTOM5/Max count 
-            if (compLinks.familySize[parentName]===0 && topLinks.familySize[topParentName]===0) {
-                if (!doneParents.includes(parentName)) {
-                    loneParents.push([topParentName, compLinks.families[parentName]]);
-                    doneParents.push(topParentName);
-                }
-            } else
-                for (var child of compLinks.families[parentName])
-                    // do not hide tracks of lone parents that are not in delTracks
-                    if (delTracks.includes(child))
-                        others.push(child);
-        } else {
-            others.push(delTrack);
-        }
+    var o = {parents: {}, tracks: []};
+    for (var id of hideSet) {
+        var parent = null;
+        for (var a of ancestors[id])
+            if (!keptAncestors.has(a)) {
+                parent = a;
+                break;
+            }
+        if (parent) {
+            if (!o.parents[parent])
+                o.parents[parent] = [];
+            o.parents[parent].push(id);
+        } else
+            o.tracks.push(id);
     }
-
-    o = {};
-    o.loneParents = loneParents;
-    o.others = Array.from(new Set(others)); // remove duplicates (rare bug in the above)
     return o;
 }
 
@@ -1049,6 +1007,43 @@ function notifBoxSetup(cgiName, keyName, msg, skipCloseButton) {
     });
 }
 
+function notifBoxOnce(msg, id) {
+/* Show a notification that is meant for this page only, e.g. to say what just happened.
+ * The message is gone on the next page anyway, but it can come back on a later page
+ * (the next session load), so "Don't show again" keeps it away for good in this web browser. */
+    let boxId = id + "notifBoxOnce";
+    let lsKey = "notifBoxOnce_" + id;
+    if (document.getElementById(boxId))
+        return;
+    try {
+        if (localStorage.getItem(lsKey))
+            return;
+    } catch (e) {
+        // no localStorage, e.g. blocked site data: show the note
+    }
+    let box = document.createElement("div");
+    box.className = "notifBox notifBoxOnce";
+    box.id = boxId;
+    box.innerHTML = msg +
+        "<div style='text-align: center'><button id='" + id + "notifyOnceHide'>Close</button>&nbsp;" +
+        "<button id='" + id + "notifyOnceHideForever'>Don't show again</button></div>";
+    let parentEl = document.getElementById('TrackHeaderForm');
+    if (!parentEl)
+        parentEl = document.body;
+    parentEl.appendChild(box);
+    $("#" + id + "notifyOnceHide").click(function() {
+        $("#" + boxId).remove();
+    });
+    $("#" + id + "notifyOnceHideForever").click(function() {
+        $("#" + boxId).remove();
+        try {
+            localStorage.setItem(lsKey, "1");
+        } catch (e) {
+            // nothing to remember it in, the note is closed for this page only
+        }
+    });
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";
@@ -1430,6 +1425,90 @@ function getHgsid()
         return hgsid.value;
 
     return "";
+}
+
+function addHgsidToLinks(root)
+{// add the session id to every link under root that points at one of our own CGIs
+ // A track description page is written by whoever wrote the track or the hub, and is only
+ // lightly sanitized, so the session id cannot be put into it on the server: an <img> in
+ // such a page would then send the id to whatever host the page names. Doing it here means
+ // only an <a href> that stays on this host, in this cgi-bin directory, ever sees it, and
+ // the id is never in what the page's author gets to read back.
+    var hgsid = getHgsid();
+    if (!hgsid)
+        return;
+    // the page doing this is itself a CGI, so its own directory is the cgi-bin directory
+    var cgiDir = window.location.pathname.replace(/[^\/]*$/, '');
+    var links = (root || document).querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute('href');
+        // an empty href, or one that only jumps within this page, is not a link to a CGI
+        if (!href || href.charAt(0) === '#')
+            continue;
+        var url;
+        try {
+            url = new URL(href, document.baseURI);
+        } catch (e) {
+            continue;     // mailto:, a malformed href, anything we cannot place
+        }
+        if (url.host !== window.location.host || url.pathname.replace(/[^\/]*$/, '') !== cgiDir)
+            continue;
+        // a CGI has no filename extension; a .html or a .png sitting in the same directory
+        // is not one, and neither is a link to the directory itself
+        if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(url.pathname.replace(/^.*\//, '')))
+            continue;
+        // keep the fragment at the end, and leave the rest of the href byte for byte: it may
+        // hold encodings that a round trip through URL would rewrite
+        var hash = '';
+        var hashAt = href.indexOf('#');
+        if (hashAt !== -1) {
+            hash = href.substring(hashAt);
+            href = href.substring(0, hashAt);
+        }
+        // a description page written while the server still filled in a $hgsid variable can
+        // carry the reference itself.  Nothing resolves it now, and hgsid=$hgsid is not a
+        // session id, so drop it and let the real one take its place below.
+        href = href.replace(/([?&])hgsid=(?:\$\{hgsid\}|\$hgsid)(&|$)/i, '$1')
+                   .replace(/[?&]$/, '');
+        if (/[?&]hgsid=/i.test(href))
+            continue;
+        links[i].setAttribute('href', href + (href.indexOf('?') === -1 ? '?' : '&') +
+                              'hgsid=' + encodeURIComponent(hgsid) + hash);
+    }
+}
+
+function offsiteLinksToNewTab(root)
+{// send every link under root that leaves this server to a new tab, and keep that tab from
+ // reaching back. rel=noopener stops the page that opens from steering the tab it came from
+ // through window.opener; rel=noreferrer keeps our own URL, which carries the session id,
+ // out of the Referer header it sends. The href on a track description page is written by
+ // whoever wrote the track or the hub, so neither is theoretical.
+    var links = (root || document).querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+        var href = links[i].getAttribute('href');
+        if (!href || href.charAt(0) === '#')
+            continue;
+        var url;
+        try {
+            url = new URL(href, document.baseURI);
+        } catch (e) {
+            continue;
+        }
+        // a page somewhere else: a mailto: or an ftp: link has nothing to gain from a tab
+        if ((url.protocol !== 'http:' && url.protocol !== 'https:') ||
+            url.host === window.location.host)
+            continue;
+        // leave a target the page asked for alone, but still add the rel: the popup in
+        // hgTracks puts target=_blank on everything before this runs
+        if (!links[i].getAttribute('target'))
+            links[i].setAttribute('target', '_blank');
+        var rel = links[i].getAttribute('rel') || '';
+        if (!/\bnoopener\b/.test(rel))
+            rel += (rel ? ' ' : '') + 'noopener';
+        if (!/\bnoreferrer\b/.test(rel))
+            rel += ' noreferrer';
+        links[i].setAttribute('rel', rel);
+    }
 }
 
 function undecoratedDb(db)
@@ -2227,13 +2306,22 @@ function calculateHgTracksWidth()
     return $(window).width() - 20;
 }
 
-function addPixAndReloadPage()
+function addPixAndReloadPage(hgsid, dropVars)
 /* users who do not come in from hgGateway have no pix variable in the URL nor the cart.
  * This is a rare case, and the solution is brute force: if it happens, set pix, then reload the entire page.
- * This will only happen once to these users, as afterwards the cookie is set. */
+ * This will only happen once to these users, as afterwards the cookie is set.
+ * If dropVars is given, take those variables out of the URL and add hgsid, e.g. so a URL that
+ * loaded a session does not load it a second time. */
 {
     var winWidth = calculateHgTracksWidth();
     var myUrl = window.location.href;
+    if (dropVars) {
+        var url = new URL(myUrl);
+        for (var i = 0; i < dropVars.length; i++)
+            url.searchParams.delete(dropVars[i]);
+        url.searchParams.set("hgsid", hgsid);
+        myUrl = url.toString();
+    }
     var sep = '?';
     if (myUrl.indexOf('?')!==-1)
         sep = '&';
@@ -3946,9 +4034,9 @@ var dragReorder = {
                             let tdb = hgTracks.trackDb[tdbKey];
                             let tooltip = " click or right click to configure... drag to reorder";
                             if (typeof tdb.parentLabel !== 'undefined') {
-                                addMouseover(span, tdb.parentLabel + tooltip + " highlighted subtracks");
+                                addMouseover(span, htmlEncode(tdb.parentLabel + tooltip + " highlighted subtracks"));
                             } else {
-                                addMouseover(span, tdb.shortLabel + tooltip);
+                                addMouseover(span, htmlEncode(tdb.shortLabel + tooltip));
                             }
                             span.addEventListener("click", (e) => {
                                 // trigger a click on the <a> of the td
@@ -4359,7 +4447,7 @@ function titleTagToMouseover(mapEl) {
     if (mapEl.dataset.tooltip)
         addMouseover(mapEl, mapEl.dataset.tooltip);
     else
-        addMouseover(mapEl, mapEl.title);
+        addMouseover(mapEl, htmlEncode(mapEl.title));
 }
 
 function gbShowTimingDialog(serverRows, clientRows) {

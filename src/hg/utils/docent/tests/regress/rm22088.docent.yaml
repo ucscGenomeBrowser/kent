@@ -1,0 +1,51 @@
+# #22088 -- a mathWig collection in multi-region exon view errored out once the view was
+# zoomed out.  Brian Lee's GTEx collection gave "Too many open files", and the follow-up
+# sessions on the ticket gave "Too many open sqlConnections for cache".  Braney's fix
+# 00dd647be13 (v372) added the missing hFreeConn() calls to getWigData() and its helper in
+# mathWig.c: every window of a multi-region view reads each wig table of the equation
+# again, each read leaked a cached connection, and the cache holds 16 (sqlConnCacheMax in
+# jksql.c).  A view with more windows than that ran out.
+#
+# The user's collection is gone, so the fixture is our own hub with one mathWig over two
+# native hg38 wig tables, the same "$db.table" terms hgCollection writes, plus the gc5Base
+# bigWig by URL.  The bigWig term is also what keeps the hub reader from treating the
+# whole equation as a relative path (a setting ending in "Url" is left alone only when it
+# contains "://"):
+#     https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/mrBugs/22088/rm22088hub.txt
+# Its track is named rm22088math so it cannot collide with a native track.
+#
+# The view is hg38 chr10:13744599-14074698 in exon view, about 13 regions, then zoomed out
+# once as in the ticket, which adds more.  Two terms times that many windows is well over
+# 16 leaked connections on a build without the fix.
+#
+# Checks:
+#   * the mathWig row is drawn, in single-region view and then in exon view after the
+#     zoom (positive checks; a page that died early draws no rows);
+#   * the multi-region button is pressed;
+#   * neither error string from the ticket is on the page.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+position: chr10:13744599-14074698
+reset: true
+fast: true
+steps:
+  # Hide everything but knownGene first, then attach the hub: its one track comes on at
+  # its hub-declared visibility, full.  (A `track:` step cannot name it, because the hub
+  # number in hub_<n>_rm22088math is only known once the hub is attached.)
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr10%3A13744599-14074698&pix=1100&hideTracks=1&knownGene=pack"
+  - hub: https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/mrBugs/22088/rm22088hub.txt
+  - expect:
+      rows: [ruler, knownGene, rm22088math]
+      exact: true
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&virtModeType=exonMostly&virtMode=1"
+  - zoom: out
+  - expect:
+      rows: [ruler, knownGene, rm22088math]
+      has: '#hgTracksConfigMultiRegionPage.pressed'
+      noText:
+        - "Too many open sqlConnections for cache"
+        - "Too many open files"

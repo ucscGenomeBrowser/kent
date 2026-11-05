@@ -1,0 +1,76 @@
+# #27988 -- a user whose sessions were saved on genome-euro or genome-asia could not find
+# them on genome.ucsc.edu, because each server keeps its own namedSessionDb.  The new Sessions
+# page now asks our other servers for the user's sessions and merges them into the table, with
+# a Server column saying where each one lives.
+#
+# 1c52aaa9282, hg/hgSession/hgSession.c and hg/js/hgSession.js: the hgS_doMirrorSessions
+# endpoint (this server's hgSession asks the other nodes, forwarding the login cookie), the
+# Server column, and a "Go to <server>" button in place of Share/Edit/Overwrite/Delete for a
+# row held elsewhere.  a47a4664fd7 (and its twin aeee0cca244): a server that is not the node
+# hg.conf names still knows it is itself, so a sandbox does not list itself as a mirror.
+#
+# The script saves rm27988 on genome-test and reloads the page.  It then asserts that the
+# table has a Server column, that the local row says "genome-test" in plain text and has its
+# Share button, and that the SAME session comes back a second time from hgwdev-max, with the
+# server name as a link and "Go to hgwdev-max" as its only button.  That second row is the
+# whole cross-server path end to end: genome-test's hgSession asked hgwdev-max with the login
+# cookie, and hgwdev-max answered with docentTest's own sessions.  It comes back because
+# hgwdev-max reads the same hgcentraltest, which is the duplicate Jairo noticed on 2026-09-18.
+#
+# HG.CONF GATE, LOUDLY.  The node list comes from `browser.node=1` and
+# `browser.geoSuffix=Test` in genome-test's hg.conf, which make hgSession read
+# hgcentraltest.gbNodeTest (genome-test, genome-preview, hgwdev-max) instead of gbNode (the
+# three RR nodes).  Without them the page has no thisServer and no mirrors, and every check
+# after the save fails.  Settle it with
+#     grep -n geoSuffix /usr/local/apache/cgi-bin/hg.conf
+#     hgsql hgcentraltest -Ne 'select * from gbNodeTest'
+# hgwbeta cannot run this script for that reason: hgcentralbeta has no gbNode table at all and
+# the beta page emits neither thisServer nor mirrors (checked 2026-09-30).
+#
+# IT ALSO NEEDS hgwdev-max TO ANSWER.  If step 9 (the wait for the hgwdev-max row) goes red
+# while the local row is there, look at Max's sandbox first:
+#     curl -s 'https://hgwdev-max.gi.ucsc.edu/cgi-bin/hgSession?sessionNewPage=1' | grep -c mirrors
+# If a later tree drops hgwdev-max from gbNodeTest, name another node that reads hgcentraltest.
+#
+# NOT asserted: the "Missing a session? We could not reach genome-preview" note under the
+# toolbar.  Whether preview answers depends on what preview is running that week.  Also not
+# reachable from here: the real mirrors genome-euro and genome-asia, which is the case the
+# ticket was filed about.
+#
+# The page is opted into with sessionNewPage=1 on the URL.  The session is deleted at the
+# start, in case an earlier run died, and again at the end.  On a ticket park, run against the
+# HTTPS port so that login works.
+proof:
+  - "assertion-only 2026-09-30 -- written from #27988, 1c52aaa9282 and a47a4664fd7 after both reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test; fails on v503 (ts park 38316, v503_branch 707b184e329, https 49106) at step 9, the wait for the rm27988 row with a Go to button: the session saved and its local row was drawn, but v503 has no Server column and fetches nothing from other servers"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm27988"
+
+  # Save rm27988 on this server.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessSaveName'
+  - fill: {'#sessSaveName': rm27988}
+  - click: '#sessSaveBtn'
+  - wait: '#sessionAppTable tr:has(a:text-is("rm27988"))'
+
+  # Load the page again, so the other servers are asked, and wait for their answer.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessionAppTable tr:has(a:text-is("rm27988")):has(button[data-act="server"])'
+  - expect:
+      has:
+        - '#sessionAppTable th:text-is("Server")'
+        - '#sessionAppTable tr:has(a:text-is("rm27988")):has(span:text-is("genome-test")):has(button[data-act="share"])'
+        - '#sessionAppTable tr:has(a:text-is("rm27988")):has(a:text-is("hgwdev-max")):has(button[data-act="server"]:text-is("Go to hgwdev-max"))'
+      noHas: '#sessionAppTable tr:has(a:text-is("rm27988")):has(a:text-is("hgwdev-max")):has(button[data-act="delete"])'
+
+  # Clean up.
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=rm27988"
+  - expect:
+      text: '"success": true'

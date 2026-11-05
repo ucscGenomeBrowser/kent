@@ -1,0 +1,5 @@
+200 hg38 refGene names on chr1
+  queries to load the status map       at most 2
+  queries while coloring every gene    0
+  some genes in the normal color       yes
+  some genes in a lighter shade        yes

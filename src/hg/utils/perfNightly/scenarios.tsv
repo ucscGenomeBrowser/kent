@@ -1,0 +1,30 @@
+# hgTracks start-up scenarios.  ONE tab between fields.  refs #37547
+#
+# name		a label, and the stem of every file the run writes
+# db		assembly.  A GenArk hub assembly is reached by its bare accession.
+# load		how the cell's tracks get turned on in a fresh cart:
+#		  -			trackDb defaults
+#		  session:FILE		load sessions/FILE by URL.  The only form that
+#					reproduces a real session -- see compare.sh.
+#		  q:FRAGMENT		a literal query fragment
+# position	the view
+# pix		image width.  Sent explicitly so no cell takes the reload bootstrap.
+#
+# Four axes, eight cells: native and GenArk, few tracks and many, narrow and wide.
+# GenArk matters on its own because its start-up is a different path -- hub.txt and the
+# hub trackDb arrive over udc, not from MySQL.
+#
+# The GenArk heavy cells use hgt.visAllFromCt rather than a session file on purpose.
+# Every track in a hub is named hub_<hubStatusId>_<track>, and the id is assigned per
+# machine, so a frozen fixture naming those tracks would address the wrong rows -- or
+# nothing -- on any other machine or after a hubStatus change, and nothing would warn.
+#
+# name	db	load	position	pix
+hg38-few-narrow	hg38	-	chr17:43044295-43125483	1100
+hg38-few-wide	hg38	-	chr1:1-10000000	1100
+hg38-many-narrow	hg38	session:hg38-clinical.session	chr17:43000000-43150000	1100
+hg38-many-wide	hg38	session:hg38-clinical.session	chr1:1-10000000	1100
+genark-few-narrow	GCF_016699485.2	-	chr1:1000000-1100000	1100
+genark-few-wide	GCF_016699485.2	-	chr1:1-10000000	1100
+genark-many-narrow	GCF_000001735.4	q:hgt.visAllFromCt=pack	chr1:1-500000	1100
+genark-many-wide	GCF_000001735.4	q:hgt.visAllFromCt=pack	chr1:1-30000000	1100

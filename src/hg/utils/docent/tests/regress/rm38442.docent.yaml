@@ -1,0 +1,54 @@
+# #38442 -- after any track was dragged, the "Your Sequence from PCR Search" track went back
+# to the bottom of the image on the next zoom or scroll.  Reported on MLQ #38440.
+#
+# The fix is 3607635bd5f, six lines in src/hg/lib/cart.c.  hgTracks saves a dragged track's
+# place as <track>_imgOrd, and the PCR track is called hgPcrResult, so its place is saved
+# as hgPcrResult_imgOrd.  The cart check added in 554396e4474 (#37623) treated every
+# hgPcrResult_ variable except hgPcrResult_targetStyle as a pair of PCR result file names,
+# and dropped this one on the next cart load.  With no saved place, hgTracks put the PCR
+# track at the end.
+#
+# How the drag is made: Docent has no verb that drags a track to a new place, but a drag
+# does nothing except save <track>_imgOrd cart variables (imageV2.setOrder in
+# hg/js/utils.js).  So the goto below sets those variables in the URL, the same values a
+# drag of the PCR track to the top would save.
+#
+# What is asserted: the three rows in the saved order, twice.  First straight after the goto
+# that sets the variables, then after a zoom, which loads the cart from the database.  With
+# the bug BOTH checks fail: the same test in cart.c runs on the CGI variables of a request
+# (the cgiVarList() loop in cart.c) as well as on a cart load, so v504 drops
+# hgPcrResult_imgOrd from the URL itself and draws the PCR row last on the first page.
+# The second check is the user's own symptom, a zoom after the drag.
+#
+# The PCR search is the ticket's own, from a cart reset.  The result link is what turns the
+# PCR track on and writes hgPcrResult_hg38, so a script that skipped hgPcr would have no PCR
+# track to order.
+proof:
+  - "assertion-only 2026-09-29 -- written from #38442 and 3607635bd5f"
+  - "release-ab 2026-09-29 -- fails on hgwbeta (v504, whose v504_branch lacks 3607635bd5f) and passes on genome-test. On v504 the first order check fails: drawn ruler, rmsk, knownGene, hgPcrResult. When Build Patch #38443 reaches hgwbeta it passes there too"
+
+target: genome-test
+db: hg38
+position: chr16:15720751-15721221
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgPcr?db=hg38&wp_target=genome&wp_f=CGAAGTTTCCACACCAACCATG&wp_r=GGATAAGGCTGGGGTCTGAACT&Submit=submit"
+  - expect:
+      text: "chr16:15720751+15721221"
+
+  - click: 'a:has-text("chr16:15720751+15721221")'
+  - expect:
+      rows: [hgPcrResult]
+
+  # The places a drag of the PCR track to just under the ruler would save.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr16:15720751-15721221&hideTracks=1&hgPcrResult=pack&rmsk=dense&knownGene=pack&ruler_imgOrd=1&hgPcrResult_imgOrd=2&rmsk_imgOrd=3&knownGene_imgOrd=4"
+  - expect:
+      rows: [hgPcrResult, rmsk, knownGene]
+      ordered: true
+
+  # Zoom out 3x: a new request, so the order now comes back from the cart.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr16:15720281-15721691"
+  - expect:
+      rows: [hgPcrResult, rmsk, knownGene]
+      ordered: true

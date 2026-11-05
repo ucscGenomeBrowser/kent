@@ -1,0 +1,41 @@
+# #17411 -- one trailing space breaks the alternate-haplotype multi-region view.  Bob
+# pasted chr1_GL383518v1_alt into the "Show one alternate haplotype" box with a trailing
+# space and got
+#
+#     no haplotype found for [chr1_GL383518v1_alt ] in altLocations
+#
+# Gerardo reproduced it on the RR in 2023 and set the ticket to Hibernating in 2026-03.
+# No fix: hgTracks.c reads singleAltHaploId with cartUsualString() and passes it to
+# initSingleAltHaplotype() untrimmed.  So this script is an xfail until someone trims it.
+#
+# The cart variable is the dialog's own text box, singleAltHaploId, so a URL with
+# virtModeType=singleAltHaplo is what the dialog's Submit sends.
+#
+# The checks assert the fixed behavior:
+#   * noText: the ticket's own error string.
+#   * has the pressed Multi-region button: the view really is multi-region.
+#   * has a region box for the alt itself, chr1_GL383518v1_alt: the alt is placed.
+#
+# The positive checks were tried with the space removed: on genome-test and on
+# hgwdev-demo6 that page passes every check, so the failure below is the space alone.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test and hgwdev-demo6 with the ticket's own error, no haplotype found for [chr1_GL383518v1_alt ]; passes on both with the space removed"
+
+target: genome-test
+db: hg38
+position: chr1:1-100000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A1-100000&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  # The alt id with one trailing space, %20.
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=singleAltHaplo&singleAltHaploId=chr1_GL383518v1_alt%20"
+  - expect:
+      rows: [ruler]
+      noText: "no haplotype found for"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip*="chr1_GL383518v1_alt"]'

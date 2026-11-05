@@ -314,6 +314,9 @@ else
 
     for(; liftedPeaks; liftedPeaks = liftedPeaks->next)
         {
+        /* the chains are read for a padded window, so a peak can lift to somewhere off screen */
+        if ((liftedPeaks->chromEnd <= winStart) || (liftedPeaks->chromStart >= winEnd))
+            continue;
         struct linkedFeatures *lf = lfFromEncodePeak((struct slList *)liftedPeaks, tg->tdb, scoreMin, scoreMax);
 
         if (lf)

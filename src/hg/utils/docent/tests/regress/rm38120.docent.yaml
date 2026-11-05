@@ -1,0 +1,53 @@
+# #38120 -- the #38056 cache-escape fix made udc reject any ".." path component in a
+# remote URL, which also broke hubs doing something legal: a trackDb or bigDataUrl that
+# reaches up a directory so two assemblies can share a file.  The NHGRI T2T hub hit it
+# with TMP.MAT/../HG002v1.1/rep.trackDb.txt.  The user saw
+#
+#     Illegal '..' in the path of a remote URL: https://...
+#
+# and the hub did not load.
+#
+# 954265a3a58 (Mark) is the fix: udcPathAndFileNames resolves "." and ".." the way the
+# remote server does and aborts only when ".." would climb above the host, with the same
+# message, so the #38056 hole stays closed.
+#
+# Which release had the bug, from git: the rejection went onto v502_branch as the build
+# patch e1b3439ca70 (cherry-pick of 2e48cc57a9f) and shipped in tag v502_branch.1
+# (2026-08-11).  d20cf8da390 reverted it on v502_branch only, in tag v502_branch.2
+# (2026-08-19), which reopens the #38056 hole there instead.  v503 carries 2e48cc57a9f
+# and the real fix 954265a3a58 together, so no v503 build ever rejected "..".  So the
+# baseline that fails this script is v502_branch.1, NOT the v502_branch tip, which
+# passes it for the wrong reason (no check at all).
+#
+# The fixture, ~/public_html/docentFixtures/rm38120, is built so every path climbs and
+# lands back inside the hub:
+#
+#   * genomes.txt says `trackDb hg38/../hg38/trackDb.txt`.  A ".." in the MIDDLE of a
+#     relative path survives expandUrlOnBase, so the trackDb read goes to udc with it,
+#     which is the T2T case.  On the buggy build the whole hub fails here.
+#   * rm38120abs has an absolute bigDataUrl with "/../" in the middle, which
+#     trackHubRelativeUrl passes through untouched, so udc opens the bigBed with it.
+#   * rm38120rel has `bigDataUrl ../shared/rm38120.bb`, a climb relative to the trackDb.
+#
+# The checks: both hub rows drawn and nothing else (exact), the error string absent, and
+# each row's items present by name -- a row that drew with no items would pass `rows:`,
+# and the absolute-URL track can only draw its items if udc opened the "/../" URL.
+proof:
+  - "assertion-only 2026-09-26 -- written from the ticket and from 954265a3a58, after the fix shipped; the failing baseline is tag v502_branch.1"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - hub: https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm38120/hub.txt
+  - expect:
+      rows: [ruler, rm38120rel, rm38120abs]
+      exact: true
+      noText: ["Illegal '..'", "Warning/Error"]
+      has:
+        - '[id^="td_data_hub_"][id$="_rm38120abs"] area[href*="i=rm38120a"]'
+        - '[id^="td_data_hub_"][id$="_rm38120rel"] area[href*="i=rm38120a"]'

@@ -1,0 +1,54 @@
+# #16740 -- multi-region + Get DNA.  In gene-only multi-region view (virtModeType=geneMostly)
+# the View > DNA Sequence menu link asked hgc for the FIRST region only, while the Table
+# Browser, hgConvert and the Data Integrator all got the whole span.  Ann's recipe, hg38:
+# start at chr14:37,569,780-37,615,238, turn on gene mode, then View > DNA: the Get DNA
+# page showed chr14:37,569,780-37,579,131, the end of the first region.
+#
+# The ticket was closed in 2024 as not reproducible.  It still reproduces on genome-test on
+# 2026-10-06: hg/hgTracks/menu.c builds the dnaLink href from winStart/winEnd, which in
+# multi-region view are the first window's coordinates.  With today's knownGene the view
+# has four regions, the first is chr14:37569780-37580258, and the link carries
+# l=37569779&r=37580258 while the position box says chr14:37,569,780-37,615,238.  The
+# Table Browser visit in Ann's recipe is not needed to see it, so it is left out.
+#
+# Checks:
+#   * the multi-region button is pressed and a region's map box ends at 37615238, the end
+#     of the starting window, so the view really is the gene view over that window
+#     (positive checks).  The interior region boundaries are not named: they come from
+#     knownGene and move with a GENCODE update.
+#   * the dnaLink href carries l=37569779&r=37615238, the whole view (the fixed behavior).
+#   * it does not carry r=37580258, the first region's end (the ticket's symptom).
+#   * following the link, the hgc page's FASTA header names the whole range.
+# On hgwdev-demo6 (multiRegionSpaces=on) the same view gives dnaLink c=chr14&l=13555436&
+# r=13594924: the space's own coordinates under the source chrom name, so hgc would return the
+# wrong hg38 sequence.  Same check, different wrong answer.
+#
+# The two ends come from knownGene too: a gene overlaps each end of the starting window
+# and the view is clipped there.  A red run that says no box ends at 37615238, or that
+# names a different first-region end, is a GENCODE update, not this bug.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- genome-test: dnaLink carries r=37580258 (first region end) in geneMostly view"
+
+target: genome-test
+db: hg38
+position: chr14:37569780-37615238
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr14%3A37569780-37615238&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=geneMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip$="-37615238"]'
+        - 'a#dnaLink[href*="&l=37569779&r=37615238&"]'
+      noHas: 'a#dnaLink[href*="&r=37580258&"]'
+
+  - click: 'a#dnaLink'
+  - expect:
+      text: "range=chr14:37569780-37615238"
+      noText: "range=chr14:37569780-37580258"

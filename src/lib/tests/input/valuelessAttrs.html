@@ -1,0 +1,40 @@
+<HTML>
+<HEAD><TITLE>Valueless attribute test</TITLE></HEAD>
+<BODY>
+<FORM ACTION="/cgi-bin/hgNear" NAME="mainForm" METHOD=GET>
+
+<!-- A valueless attribute in front of a valued one.  This is what
+     cgiMakeDropList emits, and what hgNear's any/all menu looks like. -->
+<SELECT NAME="logicFirst">
+<OPTION value='all'>All</OPTION>
+<OPTION SELECTED value='any'>Any</OPTION>
+</SELECT>
+
+<!-- The same menu with the valueless attribute at the end. -->
+<SELECT NAME="logicLast">
+<OPTION value='all'>All</OPTION>
+<OPTION value='any' SELECTED>Any</OPTION>
+</SELECT>
+
+<!-- No VALUE attribute at all, so the option text is the value. -->
+<SELECT NAME="logicNoValue">
+<OPTION>all</OPTION>
+<OPTION SELECTED>any</OPTION>
+</SELECT>
+
+<!-- Spaces on both sides of the equals sign. -->
+<INPUT TYPE = TEXT NAME = 'spaced' VALUE = 'spacedValue'>
+
+<!-- CHECKED in front of the name. -->
+<INPUT TYPE=CHECKBOX CHECKED NAME=boxFirst VALUE=on>
+
+<!-- CHECKED after the name. -->
+<INPUT TYPE=CHECKBOX NAME=boxLast VALUE=on CHECKED>
+
+<!-- A valueless attribute between two valued ones. -->
+<INPUT TYPE=TEXT DISABLED NAME=disabledText VALUE=stillNamed>
+
+<INPUT TYPE=SUBMIT NAME=Submit VALUE=go>
+</FORM>
+</BODY>
+</HTML>

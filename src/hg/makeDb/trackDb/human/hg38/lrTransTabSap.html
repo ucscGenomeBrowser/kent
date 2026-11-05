@@ -1,0 +1,154 @@
+<h2>Description</h2>
+<p>
+These two tracks are part of the <a href="hgTrackUi?g=long_read_transcripts">Long-read
+Transcripts</a> collection. They show the transcript isoforms of the Tabula Sapiens
+single-cell long-read atlas (Mantri et al. 2026), which covers 26 tissues from 12
+donors, about 200,000 cells and 144 cell types. The atlas contains 854,000 isoforms.
+More than 330,000 of them have splice junctions that are not in GENCODE, either new
+combinations of known splice sites or new splice sites.
+</p>
+<ul>
+<li>Tabula Sapiens LR (<tt>lrTransTabSap</tt>) shows the exon structure of
+every isoform, colored by its SQANTI3 structural category. Clicking an isoform
+shows its annotation and a table with the number of molecules and cells in each
+tissue.</li>
+<li>Tabula Sapiens LR Expr (<tt>lrTransTabSapExpr</tt>) shows the same
+isoforms as bar charts, with one bar per tissue, for comparing the expression
+of the isoforms of a gene across tissues. This track is off by default.</li>
+</ul>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each isoform is drawn as a transcript, with the thick part showing the open
+reading frame predicted by SQANTI3. Isoforms are labeled with the gene name
+assigned by pigeon, and the isoform ID (e.g. PB.100940.3354) can be shown as a
+second label on the track settings page. Both the gene name and the isoform ID
+can be typed into the position box. The color shows the SQANTI3 structural
+category, which compares the splice junctions of the isoform to the GENCODE
+transcripts:
+</p>
+<table class="stdTbl">
+  <tr><th style="background-color:#6BAED6;width:2em">&nbsp;</th>
+      <td>Full splice match (FSM): all splice junctions match a reference transcript</td></tr>
+  <tr><th style="background-color:#FC8D59;width:2em">&nbsp;</th>
+      <td>Incomplete splice match (ISM): the junctions match a consecutive part of a reference transcript, but there are fewer of them</td></tr>
+  <tr><th style="background-color:#78C679;width:2em">&nbsp;</th>
+      <td>Novel in catalog (NIC): all donor and acceptor sites are known, but in a new combination</td></tr>
+  <tr><th style="background-color:#EE6A50;width:2em">&nbsp;</th>
+      <td>Novel not in catalog (NNC): at least one donor or acceptor site is not in the reference</td></tr>
+  <tr><th style="background-color:#FFC125;width:2em">&nbsp;</th>
+      <td>Fusion: the isoform spans two or more reference genes</td></tr>
+  <tr><th style="background-color:#969696;width:2em">&nbsp;</th>
+      <td>Genic genomic: overlaps exons and introns of a reference gene</td></tr>
+  <tr><th style="background-color:#41B6C4;width:2em">&nbsp;</th>
+      <td>Genic intron: entirely within an intron of a reference gene</td></tr>
+  <tr><th style="background-color:#66C2A4;width:2em">&nbsp;</th>
+      <td>Antisense: on the opposite strand of a reference gene</td></tr>
+  <tr><th style="background-color:#E9967A;width:2em">&nbsp;</th>
+      <td>Intergenic: no overlap with a reference gene</td></tr>
+</table>
+<p>
+The isoforms can be filtered on the track settings page by structural category,
+by the SQANTI3 filter result (isoform or likely artifact, see Methods), by coding
+potential, by predicted nonsense-mediated decay and by the number of molecules,
+cells or tissues in which the isoform was found. No filter is active by default,
+so the 162,000 isoforms that the SQANTI3 rules filter classified as likely
+artifacts are shown too. When more than 200 kbp are shown, the track switches to
+a coverage graph.
+</p>
+<p>
+Expression is counted in molecules (UMIs), so reads that came from the same cDNA
+molecule are counted once. In the bar chart track, the height of each bar is the
+number of molecules of the isoform in a tissue per million molecules of all
+isoforms in that tissue.
+</p>
+
+<h2>Methods</h2>
+<p>
+Barcoded full-length cDNA from the 10x Genomics 3' single-cell RNA-seq reactions
+of the Tabula Sapiens project was used for 60 long-read libraries from 26 tissues
+of 12 donors, so the long reads come from the same dissociated cells as the
+short-read Tabula Sapiens data. After depletion of TSO artifacts, the cDNA was
+concatenated into 16-segment molecules with the PacBio Kinnex single-cell RNA kit
+and sequenced on PacBio Revio to obtain HiFi reads. Reads were split with skera,
+primers removed with lima, cell barcodes and UMIs extracted, corrected and
+deduplicated with isoseq tag, refine, correct and groupdedup, aligned to the
+GRCh38.p13 primary assembly with pbmm2 and collapsed into transcript models with
+isoseq collapse. To give each structure a single identifier across the atlas, the
+collapsed models of all samples were pooled, re-aligned and collapsed again.
+The models were classified against GENCODE v41 with pigeon and with SQANTI3
+(v6.0.1, with ORF prediction, refTSS CAGE peaks and polyA motifs), and SQANTI3's
+rules filter labeled each model as isoform or artifact. Cells with more than 1,000
+UMIs were kept, and isoforms were required to be found in at least 5 cells with at
+least 10 UMIs in total. Cell types were assigned with popV and the Cell Ontology.
+For more details, see Mantri et al. 2026.
+</p>
+<p>
+The data files were downloaded from
+<a href="https://figshare.com/articles/dataset/A_cross-tissue_single-cell_atlas_of_full-length_human_transcript_isoforms_count_matrices_metadata_and_feature_annotation/33411454"
+target="_blank">Figshare</a>. The exon structures are taken
+from the file <tt>all_samples_pbids_isoform_structures.bed.gz</tt>, and the
+annotation fields from the SQANTI3 and pigeon tables
+(<tt>all_samples_pbids_feature_metadata_sqanti3.csv</tt>,
+<tt>all_samples_pbids_feature_metadata_pigeon.csv</tt>). The SQANTI3 annotation of
+an isoform describes the structure of the isoform in one of the samples, shown as
+"Annotated in" on the details page, and its ends can differ from the structure
+after collapsing all samples, which is the one we show. For this reason, the open
+reading frame predicted by SQANTI3 is drawn only when both of its ends fall into
+exons of the collapsed structure. This is the case for 509,719 of the 594,361
+isoforms that SQANTI3 classified as coding; the remaining 84,642 are drawn
+without a thick part, but their ORF annotation is still shown on the details
+page. The UMIs and cells per tissue were summed from the per-cell isoform count
+matrix (<tt>all_samples_pacbio_recollapsed_raw_counts_pbids_bc_anndata_preprocessed.h5ad</tt>,
+203,311 cells, 638,489,044 UMIs), and the bar chart values are these counts
+divided by the total number of UMIs of each tissue, times one million.
+All 854,410 isoforms of the input file are shown in both tracks. The commands
+are documented in our
+<a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/makeDb/doc/hg38/lrTransTabSap.txt"
+target="_blank">makeDoc file</a> and the scripts are in the
+<a href="https://github.com/ucscGenomeBrowser/kent/tree/master/src/hg/makeDb/scripts/lrTrans"
+target="_blank">lrTrans scripts directory</a>.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The data can be explored interactively in table format with the
+<a href="../cgi-bin/hgTables">Table Browser</a> or the
+<a href="../cgi-bin/hgIntegrator">Data Integrator</a> and exported from there to
+spreadsheet or tab-separated tables. From scripts, the data can be accessed through our
+<a href="https://api.genome.ucsc.edu" target="_blank">API</a>,
+track=<i>lrTransTabSap</i> for the isoforms and track=<i>lrTransTabSapExpr</i> for
+the bar charts.
+</p>
+<p>
+For automated download and analysis, the annotations are stored in bigBed files that
+can be downloaded from
+<a href="http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrTransTabSap/" target="_blank">our download
+server</a>. The files for these tracks are called <tt>lrTransTabSap.bb</tt> and
+<tt>lrTransTabSapExpr.bb</tt>. Individual regions or the whole genome annotation can be
+obtained using our tool <tt>bigBedToBed</tt>, which can be compiled from the source code
+or downloaded as a precompiled binary for your system. Instructions for downloading
+source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads"
+target="_blank">here</a>. The tool can also be used to obtain features within a given
+range, e.g.
+<tt>bigBedToBed http://hgdownload.soe.ucsc.edu/gbdb/hg38/lrTransTabSap/lrTransTabSap.bb
+-chrom=chr21 -start=0 -end=100000000 stdout</tt>
+</p>
+<p>
+The original data, including the per-cell count matrices at gene, transcript and
+isoform level, can be downloaded from
+<a href="https://doi.org/10.6084/m9.figshare.33411454" target="_blank">Figshare</a>.
+The analysis code of the study is on
+<a href="https://github.com/madhavmantri/tabula_longread" target="_blank">GitHub</a>.
+</p>
+
+<h2>References</h2>
+<p>
+Mantri M, Detweiler AM, Lee J, Kwon JH, Zhou A, Tong L, Jones RC, Neff NF, Tabula
+Sapiens Consortium, Quake SR.
+<a href="https://doi.org/10.64898/2026.09.11.748700" target="_blank">
+Single-cell splice isoform usage reveals distinct axes of cellular identity and
+senescence</a>.
+<em>bioRxiv</em>. 2026 Sep 14.
+</p>

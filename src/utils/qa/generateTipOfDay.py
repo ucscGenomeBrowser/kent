@@ -33,9 +33,10 @@ FOOTER = """<!--#include virtual="$ROOT/inc/gbPageEnd.html" -->
 """
 
 # Tip box template
-TIP_TEMPLATE = """<div style="background-color: #f0f8ff; border-left: 4px solid #4a90e2; padding: 12px 15px; margin-top: 15px; margin-left: auto; margin-right: auto; max-width: 70%; border-radius: 4px; display: flex; align-items: center; gap: 12px;">
-  <img src="/images/didYouKnow.png" alt="Did you know?" style="height: 50px; width: auto; flex-shrink: 0;">
+TIP_TEMPLATE = """<div style="background-color: #f2f7fb; border-left: 4px solid #006aad; padding: 12px 16px; margin-top: 16px; margin-left: auto; margin-right: auto; max-width: 70%; border-radius: 3px; display: flex; align-items: center; gap: 14px;">
+  <img src="images/didYouKnow.svg" alt="" width="44" height="44" style="flex-shrink: 0; border: none; margin: 0;">
   <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #333;">
+  <strong style="color: #003c6c; margin-right: 4px;">Did you know?</strong>
   {line}
   </p>
 </div>

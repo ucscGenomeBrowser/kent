@@ -101,7 +101,10 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct bed tempBed;
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, fields, bbi->fieldCount);
     if (quickLiftFile)
-        bed = quickLiftIntervalsToBed(bbi, chainHash, bb);
+        {
+        if ((bed = quickLiftIntervalsToBed(bbi, chainHash, bb)) == NULL)
+            continue;
+        }
     else
         {
         tempBed.chrom = chrom;

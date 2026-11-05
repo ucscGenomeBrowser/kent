@@ -1,0 +1,34 @@
+# #16534 -- Mary Mangan's multi-region testing, issue 4: on dasNov3 (armadillo), turning on
+# exon-only mode from the default position moved the view about 250 kb upstream.  She started
+# at JH564832:1,503,619-1,555,676 and landed at JH564832:1,261,496-1,461,740, with only three
+# items on screen.  Matt Speir saw the same jump on panda and tied it to assemblies whose
+# multi-region gene track is Ensembl Genes.  The ticket was closed as fixed by Galt's work on
+# #16708.
+#
+# Recipe: the ticket's starting position with ensGene in pack, then virtModeType=exonMostly
+# in one request.  Each region of a multi-region view gets a ruler map box whose
+# data-tooltip is its source range.  After the fix the exon regions are the ensGene exons
+# inside the starting window: the first is JH564832:1525192-1525267, exon 6 of
+# ENSDNOT00000005339.3.  That box is the positive check.  The noHas checks are the bug
+# itself: no region box may start at 1.2, 1.3 or 1.4 Mb, which is where the jumped view
+# put every region.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: dasNov3
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=dasNov3&position=JH564832%3A1503619-1555676&pix=1100&hideTracks=1&ensGene=pack&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, ensGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="JH564832:1525192-1525267"]'
+        - 'area[data-tooltip*="ENSDNOT00000005339"]'
+      noHas:
+        - 'area[data-tooltip^="JH564832:12"]'
+        - 'area[data-tooltip^="JH564832:13"]'
+        - 'area[data-tooltip^="JH564832:14"]'

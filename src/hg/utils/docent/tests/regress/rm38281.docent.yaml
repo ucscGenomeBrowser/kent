@@ -1,0 +1,79 @@
+# #38281 -- a superTrack's settings page got "Hide all tracks" and "Show all tracks", and
+# lost "Apply to all visible tracks".
+#
+# Two commits.  5515006ee81 is the page itself -- it is the one to read, and it is easy to
+# miss, because its subject line is "tiny text change on trackUi page, no ticket".
+# c94e417525c is hg/js/hui.js, where superUiSetAllTracks() stopped taking an onlyVisible
+# flag and started taking the visibility to apply.
+#
+# What is new, and why each half is asserted here:
+#
+#   * "Apply to all visible tracks" is GONE, button and help text both.  It needed two
+#     sentences to tell it apart from "Apply to all tracks", and the dropdown plus "Apply to
+#     all tracks" still covers dense and squish.
+#   * "Show all tracks" asks for PACK and falls back to FULL for a track that has no pack.
+#     That is the whole of the new hui.js code, and it is the only part of this ticket that
+#     a check on the markup alone cannot see.
+#
+# rm36917 is the other script on this page and it already asserts that the three buttons
+# exist and that "Show all tracks" leaves no child hidden.  This one deliberately does not
+# repeat that.  It takes caddSuper, which settles the rule in a single click because it is
+# MIXED: `cadd` is a signal track whose dropdown offers only Hide, Dense and Full, while
+# `caddDel` and `caddIns` offer pack as well.  One button, one page, two different answers
+# -- so a version that simply applied one fixed visibility fails here whichever one it
+# picked.
+#
+# NOT asserted: dd8d4476a69, today's follow-up, which changes the row above the track list
+# from an ineffective `margin-bottom:10px` (margin does nothing on a TD) to
+# `padding-bottom:8px`.  It had not reached genome-test when this was written -- the page
+# there still carries the margin -- so the check would be red for a reason that is not a
+# regression.  When it arrives, the assertion is
+# `has: 'td[style*="padding-bottom"]'` / `noHas: 'td[style*="margin-bottom:10px"]'` on the
+# first step.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38281, 5515006ee81 and c94e417525c after both reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: the superTrack page offers Apply to all visible tracks and neither new button"
+
+target: genome-test
+db: hg38
+position: chr1:11102837-11267747
+reset: true
+fast: true
+steps:
+  # A superTrack of signal tracks.  The old button and its help text are gone from the page.
+  - goto: "/cgi-bin/hgTrackUi?db=hg38&g=caddSuper"
+  - expect:
+      text: "Use the buttons below to set their visibility"
+      has: ['#superVizHideAllButton', '#superVizShowAllButton']
+      noHas: '#superVizApplyButton'
+      noText: "Apply to all visible tracks"
+
+  # The state before the click, so the check after it is about the button and not about a
+  # default.  `cadd` comes up dense and its dropdown offers no pack at all.
+  - expect:
+      has: 'select#cadd option[value="dense"]:checked'
+      noHas: 'select#cadd option[value="pack"]'
+
+  - click: '#superVizShowAllButton'
+  - sleep: 600
+
+  # The two answers.  `cadd` has no pack, so the fallback in superUiSetAllTracks() has to
+  # land it on full; its two siblings do have pack and must be left there.  Before
+  # c94e417525c neither button existed, and a version that set the value and stopped would
+  # leave `cadd` empty, which is the case the fallback is written for.
+  - expect:
+      has:
+        - 'select#cadd option[value="full"]:checked'
+        - 'select#caddDel option[value="pack"]:checked'
+        - 'select#caddIns option[value="pack"]:checked'
+      noHas: 'select.vizSelect.hiddenText'
+
+  # And "Hide all tracks", the other new button, takes every one of them back to hide --
+  # including the one that just went to full through the fallback.
+  - click: '#superVizHideAllButton'
+  - sleep: 600
+  - expect:
+      has:
+        - 'select#cadd option[value="hide"]:checked'
+        - 'select#caddDel option[value="hide"]:checked'
+      noHas: 'select.vizSelect.normalText'

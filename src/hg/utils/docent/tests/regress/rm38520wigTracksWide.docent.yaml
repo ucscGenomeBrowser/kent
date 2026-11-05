@@ -1,0 +1,31 @@
+# #38520 -- quickLift lifts wig tracks kept in a table and a .wib file (hg19 phastCons100way
+# lifted onto hg38).  Before the change, quickLift left such tracks out of the lift.
+#
+# hgTracks, zoomed out:  9 Mb of hg38 chr7, about 8,000 bases a pixel, where a whole row of
+# the table falls inside one pixel and the lifted draw uses the row's own summary when one
+# chain block holds the row.  The row has to be drawn, in the track's color (70,130,70),
+# with no error.  A row that drew nothing fails the color check.
+proof:
+  - "xfail 2026-10-09 -- fails on genome-test (master): nothing lifted, only the ruler drawn"
+  - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+  - "server-flip 2026-10-09 -- passed on genome-test once ff175308401 was installed there (13:01), with browser.quickLiftWig on, having failed there that morning"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  # browser.quickLiftWig is a cart gate as well as an hg.conf one, so the script turns it on
+  # for itself and does not depend on how the server is configured
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155592001-155604000&pix=1100&browser.quickLiftWig=on"
+  - hide: all
+  # phyloP stays on:  hiding its view would leave no view that trackDb calls visible, and the
+  # quickLift hub writer then drops the whole composite (#38044)
+  - track: {cons100way: full, cons100wayViewalign: hide, phastCons100way: full}
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noRows: [multiz100way], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:150000001-159000000
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noText: "Warning/Error"}
+  - expect: {color: {track: phastCons100way, is: "70,130,70"}}

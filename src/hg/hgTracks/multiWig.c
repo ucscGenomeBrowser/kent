@@ -15,6 +15,8 @@
 #include "wigCommon.h"
 #include "hui.h"
 #include "customComposite.h"
+#include "hgConfig.h"
+#include "jsonWrite.h"
 
 struct floatPic
 /* A picture that stores RGB values in floating point. */
@@ -413,8 +415,16 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     }
 }
 
-static void mergeWiggles(struct track *tg, boolean add)
+static struct track *mergeWiggles(struct track *tg, boolean add)
+/* Add or subtract the children into the first one that has data, and return that one.
+ * NULL when none of them has any.  A child has no preDrawContainer when it was switched
+ * off, since only a visible child is pre-drawn, and also when its data failed to load;
+ * dereferencing one here took the whole image down with a segfault.  refs #38560 */
 {
+while ((tg != NULL) && (tg->preDrawContainer == NULL))
+    tg = tg->next;
+if (tg == NULL)
+    return NULL;
 struct preDrawContainer *firstPre = tg->preDrawContainer;
 
 struct track *firstTrack = tg;
@@ -425,14 +435,17 @@ for(tg = tg->next; tg; tg = tg->next)
     {
     struct preDrawContainer *pre = tg->preDrawContainer;
 
-    for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+    if (pre != NULL)
         {
-        struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
-        struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
-        if (add)
-            firstPreDraw->smooth += thisPreDraw->smooth;
-        else
-            firstPreDraw->smooth -= thisPreDraw->smooth;
+        for(ii=firstPre->preDrawZero; ii < firstPre->preDrawZero + firstPre->width; ii++)
+            {
+            struct preDrawElement *firstPreDraw = &firstPre->preDraw[ii];
+            struct preDrawElement *thisPreDraw = &pre->preDraw[ii];
+            if (add)
+                firstPreDraw->smooth += thisPreDraw->smooth;
+            else
+                firstPreDraw->smooth -= thisPreDraw->smooth;
+            }
         }
     }
 //if (wigCart->autoScale == wiggleScaleAuto)
@@ -452,6 +465,58 @@ for(tg = tg->next; tg; tg = tg->next)
     firstPre->graphLowerLimit = lowerLimit;
     firstPre->graphUpperLimit = upperLimit;
     }
+return firstTrack;
+}
+
+struct mwMouseSub
+/* A subtrack drawn in a multiWig, remembered for the mouseOver popup. */
+    {
+    struct mwMouseSub *next;
+    struct track *track;	/* The subtrack. */
+    int y;			/* Top of its row relative to the container top. */
+    int height;			/* Height of its row. */
+    };
+
+static void multiWigMouseOverJson(struct track *tg, struct hvGfx *hvg,
+    struct wigCartOptions *wigCart, struct mwMouseSub *subList)
+/* Write a record for the container into the mouseOver JSON.  It lists the
+ * subtracks that were drawn, so hgTracks.js can show all of their values in
+ * one popup, or pick the row under the cursor when there is no overlay. */
+{
+if (subList == NULL)
+    return;
+char *mode = "overlay";
+if (wigCart->aggregateFunction == wiggleAggregateNone)
+    mode = "none";
+else if (wigCart->aggregateFunction == wiggleAggregateAdd)
+    mode = "add";
+else if (wigCart->aggregateFunction == wiggleAggregateSubtract)
+    mode = "subtract";
+jsonWriteObjectStart(mouseOverJson, tg->track);
+jsonWriteString(mouseOverJson, "t", "multiWig");
+jsonWriteString(mouseOverJson, "m", mode);
+jsonWriteListStart(mouseOverJson, "s");
+struct mwMouseSub *sub;
+for (sub = subList; sub != NULL; sub = sub->next)
+    {
+    struct track *subtrack = sub->track;
+    // ixColor is what the subtrack was drawn in, after any color override in the cart
+    struct rgbColor rgb = hvGfxColorIxToRgb(hvg, subtrack->ixColor);
+    char color[16];
+    safef(color, sizeof color, "#%02x%02x%02x", rgb.r, rgb.g, rgb.b);
+    jsonWriteObjectStart(mouseOverJson, NULL);
+    jsonWriteString(mouseOverJson, "n", subtrack->track);
+    jsonWriteString(mouseOverJson, "l", subtrack->shortLabel);
+    jsonWriteString(mouseOverJson, "c", color);
+    jsonWriteNumber(mouseOverJson, "y", sub->y);
+    jsonWriteNumber(mouseOverJson, "h", sub->height);
+    jsonWriteObjectEnd(mouseOverJson);
+    }
+jsonWriteListEnd(mouseOverJson);
+jsonWriteObjectEnd(mouseOverJson);
+// hidden element that tells hgTracks.js to fetch the JSON file
+hPrintf("<div id='mouseOver_%s' name='%s' class='hiddenText mouseOverData' jsonUrl='%s'></div>\n",
+    tg->track, tg->track, mouseOverJsonFile->forCgi);
 }
 
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
@@ -489,12 +554,24 @@ if (errMsgFound && currentWindow==windows)  // first window
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
-if (wigCart->aggregateFunction == wiggleAggregateAdd || wigCart->aggregateFunction == wiggleAggregateSubtract)
+if ((wigCart->aggregateFunction == wiggleAggregateAdd
+     || wigCart->aggregateFunction == wiggleAggregateSubtract) && !errMsgFound)
     {
-    mergeWiggles(tg->subtracks, wigCart->aggregateFunction == wiggleAggregateAdd);
-    tg->subtracks->next = NULL;
+    /* With a child missing, the sum is wrong whatever we do, so leave the rows as they
+     * are and let the failed one say so.  refs #38560 */
+    struct track *merged = mergeWiggles(tg->subtracks,
+                                        wigCart->aggregateFunction == wiggleAggregateAdd);
+    if (merged != NULL)
+        {
+        /* Keep the child the sum landed on, which is not the first one when the first one
+         * is switched off: keeping the head there left the row empty. */
+        tg->subtracks = merged;
+        merged->next = NULL;
+        }
     }
 int numTrack = 0;
+struct mwMouseSub *mouseSubList = NULL;
+boolean doMouseOver = enableMouseOver && cfgOptionBooleanDefault("multiWigMouseOver", FALSE);
 boolean customComposite = FALSE;
 if (isCustomComposite(tg->tdb))
     customComposite = TRUE;
@@ -519,6 +596,16 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    if (wigCart->aggregateFunction != wiggleAggregateNone)
 		subtrack->lineHeight = tg->lineHeight;
 	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	    // a subtrack that failed to load is drawn as a warning and has no values
+	    if (doMouseOver && subtrack->networkErrMsg == NULL)
+		{
+		struct mwMouseSub *sub;
+		AllocVar(sub);
+		sub->track = subtrack;
+		sub->y = y - yOff;
+		sub->height = height;
+		slAddHead(&mouseSubList, sub);
+		}
 	    if (wigCart->aggregateFunction == wiggleAggregateNone)
 		{
 		y += height + 1;
@@ -534,6 +621,18 @@ if (wigCart->aggregateFunction == wiggleAggregateTransparent)
    floatPicIntoHvg(wgo->image, xOff, yOff, hvg);
    floatPicFree((struct floatPic **)&wgo->image);
    }
+
+if (doMouseOver)
+    {
+    // the list is in reverse draw order.  multiWigPreDraw reversed the
+    // subtracks for stacked mode, so leave that one as it is, and the popup
+    // lists the subtracks in the order of tg->subtracks in every mode: the
+    // order of the rows top to bottom when there is no overlay.
+    if (wigCart->aggregateFunction != wiggleAggregateStacked)
+        slReverse(&mouseSubList);
+    multiWigMouseOverJson(tg, hvg, wigCart, mouseSubList);
+    slFreeList(&mouseSubList);
+    }
 
 char *url = trackUrl(tg->track, chromName);
 mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track, tg->track, NULL,

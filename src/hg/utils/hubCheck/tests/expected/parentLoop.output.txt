@@ -1,0 +1,3 @@
+Found 2 problems:
+Track loopB is its own ancestor through its parent loopA in hub input/parentLoop.txt genome hg19
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.

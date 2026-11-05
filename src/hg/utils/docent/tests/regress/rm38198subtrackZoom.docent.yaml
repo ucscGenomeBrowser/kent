@@ -1,0 +1,53 @@
+# #38198 -- one zoom on the quickLift target deletes the source's own SUBTRACK setting.
+#
+# The subtrack twin of rm38198targetZoom.  In the subtrack loop of the visibility code in
+# hg/hgTracks/hgTracks.c, a quickLifted subtrack with no hub_<n>_ value in the cart fell back
+# to its bare name, copied it to the hub name and cartRemove()d the bare one.  On the lift
+# page that read only the URL (hideTracks), so nothing happened; on the next hgTracks request
+# on the target it read the cart, and hg38 lost clinvarCnv=hide.  hs1 has no native
+# clinvarCnv, so hubTrackOwnsBareName() is true and the fallback is taken.
+# Fixed by 8053db3f754, which stopped the fallback altogether.  That also lost the source's
+# hidden state on the target (rm38033), so the fallback is back and only the cartRemove is
+# skipped for a quickLifted subtrack (refs #38477).
+#
+# The check is the last one:  back on hg38 after the zoom on hs1, clinvarCnv is still hidden.
+# The hg38 check straight after the first lift shows a lift page alone does no harm, so a
+# failure at the end can only be the zoom.
+#
+# Not asserted: which clinvar rows the target draws.  A lifted composite comes back with all
+# of its children visible (#38044), so clinvarCnv is on the target either way.
+proof:
+  - "assertion-only 2026-10-12 -- written from the subtrack half of #38477 item 2"
+  - "xfail 2026-10-12 -- fails on genome-test at the last step, rows that should not be drawn: clinvarCnv back on hg38 after the zoom on hs1. A copy with only the zoom: step removed passes on genome-test"
+  - "sandbox-ab 2026-10-12 -- fails on genome-test and passes on hgwdev-braney with the subtrack guard in hgTracks.c (uncommitted at the time). After the zoom the target keeps five rows instead of four. rm38198 and rm38198targetZoom still pass on the sandbox"
+  - "server-flip 2026-10-12 -- passes on genome-test once 8053db3f754 was built there (hgTracks 14:05); it failed there at the last step earlier the same day"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125483
+  - hide: all
+  # Hide one subtrack on the source.  This puts clinvarCnv=hide in the cart.
+  - track: {clinvar: pack, clinvarCnv: hide}
+  - expect: {rows: [ruler, clinvarMain], noRows: [clinvarCnv]}
+
+  # Lift 1, then back on hg38 straight after the lift page:  clinvarCnv is still hidden.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, clinvarMain], noText: "Warning/Error"}
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - expect: {rows: [ruler, clinvarMain], noRows: [clinvarCnv]}
+
+  # Lift 2, and one zoom on the target: an hgTracks request on hs1 with no hideTracks.
+  - convert: {to: hs1, quicklift: true}
+  - open: lift
+  - expect: {rows: [quickLiftChain, clinvarMain], noText: "Warning/Error"}
+  - zoom: out
+  - expect: {rows: [quickLiftChain, clinvarMain], noText: "Warning/Error"}
+
+  # Back on hg38.  With the bug the zoom deleted clinvarCnv=hide and it is drawn again.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483"
+  - expect: {rows: [ruler, clinvarMain], noRows: [clinvarCnv]}

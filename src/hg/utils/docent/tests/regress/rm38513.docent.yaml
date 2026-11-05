@@ -1,0 +1,40 @@
+# #38513 -- a quickLifted multiple alignment never used its summary table.
+#
+# A lifted maf track (hg19 multiz100way on hg38) read every alignment block in the window
+# at any zoom, with 100 kb of padding on each side of every source range.  Above 1 Mb the
+# unlifted track reads its summary table instead.  Lifted, 5 Mb of chr1 took 14 s, and
+# 50 Mb or more ran hgTracks out of memory in mafLoadInRegion2, leaving a page with no
+# image.  The fix (ba8f65e4ab4, ceeac4590e0, bb57507ebc4) reads the summary rows from the
+# source assembly above 1 Mb and lifts them, and reads no padding:  50 Mb in under 2 s.
+#
+# Behind browser.quickLiftMafSummary, OFF by default, on on genome-test.  It is a cart gate
+# as well as an hg.conf one, so the script turns it on for itself;
+# browser.quickLiftMafSummary=off on the first URL gives the old behavior.
+#
+# What is asserted:  at 50 Mb the lifted multiz100way row is drawn and the page has no
+# error.  Not asserted:  the time, since a timed check goes red on a busy server.  Below
+# 1 Mb the gate changes only the padding, and the drawn image is the same, so nothing is
+# checked there.
+proof:
+  - "assertion-only 2026-10-09 -- written after bb57507ebc4 reached genome-test"
+  - "sandbox-ab 2026-10-09 -- on genome-test with browser.quickLiftMafSummary=off on the first URL, the 50 Mb page did not come back within Docent's 30 s page timeout (step 8 go), where with the gate on the whole script takes 9 s"
+
+target: genome-test
+db: hg19
+position: chr1:1000000-1100000
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr1%3A1000000-1100000&pix=850&browser.quickLiftMafSummary=on"
+  - hide: all
+  - track: {multiz100way: full}
+  - expect: {rows: [multiz100way], noText: "Warning/Error"}
+
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - expect: {rows: [multiz100way], noText: "Warning/Error"}
+
+  - go: chr1:1000001-51000000
+  - expect:
+      rows: [ruler, multiz100way]
+      noText: ["Warning/Error", "Out of memory", "out of memory"]

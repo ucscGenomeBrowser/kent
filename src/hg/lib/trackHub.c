@@ -1006,6 +1006,13 @@ boolean trackHubBigNetEnabled()
 return cfgOptionBooleanDefault("bigNet", FALSE);
 }
 
+boolean hubHtmlSanitizeOn()
+/* Return TRUE if description HTML from hubs and custom tracks goes through htmlSanitize.
+ * Off unless hg.conf says hubHtmlSanitize=on. */
+{
+return cfgOptionBooleanDefault("hubHtmlSanitize", FALSE);
+}
+
 static void validateOneTrack( struct trackHub *hub, 
     struct trackHubGenome *genome, struct trackDb *tdb)
 /* Validate a track's trackDb entry. */
@@ -1136,6 +1143,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	 if (parent == NULL)
 	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,
 		tdb->track, hub->url, genome->name);
+	 /* Refuse the link that closes a loop in the parent chain.  validateOneTrack runs
+	  * before trackDbLinkUpGenerations and its loop check, and trackDbSetting walks
+	  * this chain to the top, so a loop here spins the CGI forever rather than
+	  * reporting the bad setting.  The links already made are loop-free, which is what
+	  * ends this walk.  refs #38471 */
+	 struct trackDb *ancestor;
+	 for (ancestor = parent; ancestor != NULL; ancestor = ancestor->parent)
+	    {
+	    if (ancestor == tdb)
+	       errAbort("Track %s is its own ancestor through its parent %s in hub %s "
+		   "genome %s", tdb->track, parentName, hub->url, genome->name);
+	    }
 	 // mark the parent as a container
 	 parent->subtracks = tdb;
 
@@ -1217,7 +1236,7 @@ if (!isEmpty(hub->name))
 
 if ((genome->twoBitPath != NULL) && (*foundFirstGenome == FALSE))
     *foundFirstGenome = TRUE;
-else if ((genome->groups != NULL) && hubsCanAddGroups())
+else if (genome->groups != NULL)
     tdbListAddHubToGroup(hub->name, tdbList);
 else
     trackHubAddGroupName(hub->name, tdbList);
@@ -1294,7 +1313,10 @@ char *trackHubSkipHubName(char *name)
 {
 if ((name == NULL) || !startsWith("hub_", name))
     return name;
-return strchr(&name[4], '_') + 1;
+char *ptr = strchr(&name[4], '_');
+if (ptr == NULL)
+    return name;
+return ptr + 1;
 }
 
 struct trackDb *findTdbByBareName(struct trackDb *tdbList, char *bareName)
@@ -1351,8 +1373,13 @@ void trackHubAddOneDescription(char *trackDbFile, struct trackDb *tdb)
 char *html = trackHubDescriptionText(trackDbFile, tdb);
 if (html == NULL)
     return;                     /* no page of its own, so leave any it inherited alone */
-tdb->html = htmlSanitize(html);
-freeMem(html);
+if (hubHtmlSanitizeOn())
+    {
+    tdb->html = htmlSanitize(html);
+    freeMem(html);
+    }
+else
+    tdb->html = html;
 }
 
 struct slName *trackHubDescriptionRemovals(char *trackDbFile, struct trackDb *tdb)
@@ -1361,6 +1388,11 @@ struct slName *trackHubDescriptionRemovals(char *trackDbFile, struct trackDb *td
 {
 char *html = trackHubDescriptionText(trackDbFile, tdb);
 struct slName *removed = NULL;
+if (!hubHtmlSanitizeOn())
+    {
+    freeMem(html);
+    return NULL;
+    }
 char *clean = htmlSanitizeReport(html, &removed);
 freeMem(html);
 freeMem(clean);
@@ -1438,8 +1470,11 @@ struct hash *nameHash = hashNew(5);
 
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
-    if (tdb->parent != NULL)
-	polishOneTrack(hub, tdb->parent, nameHash);
+    /* Polish every ancestor, not just the closest: a supertrack may itself sit inside
+     * another supertrack, which is reached only through it. */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+	polishOneTrack(hub, ancestor, nameHash);
     next = tdb->next;
     polishOneTrack(hub, tdb, nameHash);
     if (tdb->subtracks != NULL)
@@ -1537,6 +1572,8 @@ if (bigDataUrl != NULL)
         if (startsWithWord("bigBed", type) && (typeString != NULL))
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
+            if (numFields < 3)
+                errAbort("Track \"%s\" declares 'type bigBed %u', but a bigBed has at least 3 fields (chrom, chromStart, chromEnd). Change the type line to match the file's field count, or leave the number off and the count is read from the file.", trackHubSkipHubName(tdb->track), numFields);
             if (numFields > bbi->fieldCount)
                 errAbort("bigBed file '%s' has %d fields, but track \"%s\" declares 'type bigBed %d'. Either regenerate the bigBed with the correct number of fields, or change the type line to match the file's field count.", bigDataUrl, bbi->fieldCount, trackHubSkipHubName(tdb->track), numFields);
             }
@@ -1810,6 +1847,7 @@ if (!inited)
 
     for(ii = 0; ii < len; ii++)
         hashStore(vettedHash, vettedTracks[ii]);
+    inited = TRUE;
     }
 
 return hashLookup(vettedHash, track) != NULL;
@@ -1985,6 +2023,11 @@ if (sameString("cytoBandIdeo", trackHubSkipHubName(tdb->track)) ||
        startsWithNoCase("bigLolly", tdb->type) || \
        (startsWithNoCase("bigNet", tdb->type) && trackHubBigNetEnabled()) || \
        (isAlignmentType(tdb->type) && quickLiftAlignmentsEnabled(cart)) || \
+       (startsWithNoCase("bigBarChart", tdb->type) && quickLiftBarChartEnabled(cart)) || \
+       ((sameWord("wig", tdb->type) || startsWithNoCase("wig ", tdb->type)) &&
+        quickLiftWigEnabled(cart)) ||
+       ((sameWord("rmsk", tdb->type) || startsWithNoCase("bigRmsk", tdb->type)) &&
+        quickLiftRmskEnabled(cart)) ||
        sameWord("bed", tdb->type) ||
        startsWithNoCase("bed ", tdb->type)))
     {
@@ -1999,6 +2042,8 @@ if (startsWithNoCase("bigBed", tdb->type) || \
        startsWithNoCase("bigPsl", tdb->type) || \
        startsWithNoCase("bigChain", tdb->type) || \
        startsWithNoCase("bigMaf", tdb->type) || \
+       startsWithNoCase("bigBarChart", tdb->type) || \
+       (startsWithNoCase("bigRmsk", tdb->type) && quickLiftRmskEnabled(cart)) || \
        startsWithNoCase("bigWig", tdb->type))
     {
     char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
@@ -2022,27 +2067,27 @@ struct trackDb *validTdbs = NULL;
 struct trackDb *nextTdb;
 unsigned count = 0;
 
-if (tdb->subtracks)  // this is a view, descend again
+/* Decide view or subtrack for each child, not from the first one.  A view with no
+ * subtracks is marked as a subtrack when the tree is linked up, so it is known by its
+ * own view setting, and it is dropped:  it has nothing to lift.  refs #38591 */
+for(; tdb; tdb = nextTdb)
     {
-    struct trackDb *view = tdb;
-    for (; view; view = nextTdb)
+    nextTdb = tdb->next;
+    if ((tdb->subtracks != NULL) || (trackDbLocalSetting(tdb, "view") != NULL))
         {
-        nextTdb = view->next;
-        view->subtracks = validateTdbChildren(cart, db,view->subtracks, badList);
+        // this is a view, descend again
+        if (tdb->subtracks != NULL)
+            tdb->subtracks = validateTdbChildren(cart, db, tdb->subtracks, badList);
 
-        if (view->subtracks != NULL)
+        if (tdb->subtracks != NULL)
             {
-            slAddHead(&validTdbs, view);
-            if (view->visibility)
+            slAddHead(&validTdbs, tdb);
+            if (tdb->visibility)
                 count++;
             }
         }
-    }
-else
-    {
-    for(; tdb; tdb = nextTdb)
+    else
         {
-        nextTdb = tdb->next;
         boolean visible = isParentVisible(cart, tdb) && isSubtrackVisible(cart, tdb);
         // Lift all siblings of a visible subtrack, but only complain about
         // non-liftable ones the user actually asked for (visible ones).
@@ -2140,17 +2185,31 @@ for(; tdb; tdb = tdbNext)
         isVisible = checkCartVisibility(cart, tdb);
     else if (isParentVisible(cart, tdb) &&  isSubtrackVisible(cart, tdb)) // child of supertrack
         {
-        if (hashLookup(haveSuper, tdb->parent->track) == NULL)  // output yet?
+        /* Write every supertrack above this track, outermost first.  A supertrack may
+         * itself be a member of another supertrack, and writing only the closest one
+         * leaves its "parent" setting pointing at a stanza the hub does not contain. */
+        struct slRef *supers = NULL, *superRef;
+        struct trackDb *ancestor;
+        for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
             {
-            //if (checkCartVisibility(cart, tdb->parent))
-                {
-                tdb->parent->visibility = hTvFromString("tvShow");
-                // a superTrack is not in the list we are walking, so it has no rank
-                // of its own.  Slot it just above the first child that brought it in.
-                outTrack(out, cart, tdb->parent, rank - 0.5);
-                hashStore(haveSuper, tdb->parent->track);
-                }
+            if (tdbIsSuperTrack(ancestor))
+                slAddHead(&supers, slRefNew(ancestor));  // ends up outermost first
             }
+        // a superTrack is not in the list we are walking, so it has no rank of its own.
+        // Slot the chain just above the first child that brought it in.
+        double superRank = rank - 0.5;
+        for (superRef = supers; superRef != NULL; superRef = superRef->next)
+            {
+            struct trackDb *super = superRef->val;
+            if (hashLookup(haveSuper, super->track) == NULL)  // output yet?
+                {
+                super->visibility = tvShow;
+                outTrack(out, cart, super, superRank);
+                hashStore(haveSuper, super->track);
+                }
+            superRank += 0.01;          // keep an outer folder above the one it holds
+            }
+        slFreeList(&supers);
         isVisible = checkCartVisibility(cart, tdb);
         }
 
@@ -2172,7 +2231,7 @@ for(; tdb; tdb = tdbNext)
     }
 }
 
-static void writeMergedHubFile(char *filename, char *db, struct dyString *newContent)
+void writeMergedHubFile(char *filename, char *db, struct dyString *newContent)
 /* Write the hub file from the stanzas we just generated plus whatever was already
  * in the file.  A generated stanza replaces the old stanza of the same track, in
  * the slot the old one held, so the file keeps parents ahead of their children.

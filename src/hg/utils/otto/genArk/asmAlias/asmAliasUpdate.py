@@ -8,16 +8,26 @@ forward untouched, EXCEPT:
   - rows on a GenBank (GCA) browser that has since been superseded by an
     equivalent live RefSeq (GCF) browser -- those are dropped and
     replaced with equivalent rows pointing at the new RefSeq browser
-  - a row whose alias's genark data now resolves to a newer dot version
+  - a row whose alias's NCBI data now resolves to a newer dot version
     of the *same* GCA/GCF accession root (see isSameAssemblyNewerVersion)
     -- these are repointed ('UPDATE:') to the newer version.  This is
     never done when the existing browser is a plain UCSC database name
     (e.g. 'hg38', 'dm6') rather than a GCA_/GCF_ accession -- those are
     always left alone, and any other kind of mismatch is only reported
     ('ERROR:'), never silently changed
-New rows discovered from the genark data are appended; a candidate alias
+  - a row whose alias text collides (case insensitive) with an existing
+    hgcentraltest.dbDb 'name' is dropped ('DBDB COLLISION:') -- using it
+    would make that real dbDb browser's own full-text search term also
+    match some unrelated genArk assembly (see hg/hubApi/assemblyList.py,
+    which builds its browsable index from both dbDb and asmAlias data)
+  - a row whose alias uses any character outside the set [A-Za-z0-9._-]
+    (see validAlias) is dropped ('INVALID ALIAS:')
+New rows discovered from the NCBI data are appended; a candidate alias
 that is nothing but digits and dots (e.g. '1.0', '26') -- a bare version
-number, never a useful alias -- is never generated in the first place.
+number, never a useful alias -- is never generated in the first place,
+and the same goes for a candidate that collides with an existing
+hgcentraltest.dbDb 'name' (case insensitive), or that uses any character
+outside the validAlias set [A-Za-z0-9._-].
 
 As a final pass over the complete row set (existing + new), any two alias
 spellings that differ only by case (e.g. 'FF3'/'Ff3') are resolved, since
@@ -35,6 +45,7 @@ human to decide what to do about; it does not fix those itself.
 
 Data sources, all read live and kept in memory -- no intermediate files:
   - hgcentraltest.asmAlias                    (via hgsql)
+  - hgcentraltest.dbDb                        (via hgsql)
   - genark.assemblySummaryGenbank             (via hgsql)
   - genark.assemblySummaryGenbankHistorical   (via hgsql)
   - genark.assemblySummaryRefseq              (via hgsql)
@@ -132,6 +143,15 @@ def isNumericOnlyAlias(alias):
     return bool(numericAliasRe.match(alias))
 
 
+validAlias = re.compile(r'^[A-Za-z0-9._-]+$')
+
+
+def isValidAlias(alias):
+    """True when alias text uses only the permitted character set:
+    letters, digits, '.', '_' and '-'."""
+    return bool(validAlias.match(alias))
+
+
 def hgsqlRows(db, sql):
     """Run 'hgsql db -N -e sql' and return a list of tab-split field lists."""
     cmd = [hgsqlCmd, db, "-N", "-e", sql]
@@ -162,9 +182,9 @@ def fetchHubList(url):
     return hubAccessions
 
 
-def fetchGenarkData():
+def fetchNcbiData():
     """Return dict: assemblyAccession -> (asmName, gbrsPairedAsm, ftpPath, table)."""
-    genarkData = {}
+    ncbiData = {}
     for table in genarkTables:
         sql = ("SELECT assemblyAccession, asmName, gbrsPairedAsm, ftpPath "
                "FROM %s" % table)
@@ -172,16 +192,16 @@ def fetchGenarkData():
             if len(row) != 4:
                 continue
             accession, asmName, gbrsPairedAsm, ftpPath = row
-            if accession in genarkData:
-                prior = genarkData[accession]
+            if accession in ncbiData:
+                prior = ncbiData[accession]
                 if prior[0:3] != (asmName, gbrsPairedAsm, ftpPath):
                     sys.stderr.write(
                         "WARNING: %s appears in both %s and %s with "
                         "differing data, keeping first seen\n"
                         % (accession, prior[3], table))
                 continue
-            genarkData[accession] = (asmName, gbrsPairedAsm, ftpPath, table)
-    return genarkData
+            ncbiData[accession] = (asmName, gbrsPairedAsm, ftpPath, table)
+    return ncbiData
 
 
 def fetchExistingAsmAlias():
@@ -192,6 +212,35 @@ def fetchExistingAsmAlias():
         aliasToBrowser[alias] = browser
         browserToAliases.setdefault(browser, set()).add(alias)
     return aliasToBrowser, browserToAliases
+
+
+def fetchDbDbNames():
+    """Return the lower-cased set of every hgcentraltest.dbDb 'name' -- an
+    alias that collides with one of these (case insensitive) must never be
+    used for anything else: it would make that real dbDb browser's own
+    full-text search term also match some unrelated genArk assembly (see
+    hg/hubApi/assemblyList.py, which builds its browsable index from both
+    dbDb and asmAlias data)."""
+    names = set()
+    for row in hgsqlRows(centralDb, "SELECT name FROM dbDb"):
+        if row and row[0]:
+            names.add(row[0].lower())
+    return names
+
+
+def findDbDbNameCollisions(aliasToBrowser, dbDbNames):
+    """Return the set of existing asmAlias aliases (by alias text) that
+    collide (case insensitive) with an hgcentraltest.dbDb 'name' -- these
+    must be dropped from the carried-forward set, not just prevented from
+    being generated going forward."""
+    return {alias for alias in aliasToBrowser if alias.lower() in dbDbNames}
+
+
+def findInvalidAliases(aliasToBrowser):
+    """Return the set of existing asmAlias aliases that use characters
+    outside the validAlias character set -- these are dropped from the
+    carried-forward set, not just prevented from being generated."""
+    return {alias for alias in aliasToBrowser if not isValidAlias(alias)}
 
 
 def ftpPathBasename(ftpPath):
@@ -215,7 +264,8 @@ def ftpDerivedName(accession, ftpPath):
     return base
 
 
-def buildCandidates(accession, target, asmName, gbrsPairedAsm, ftpPath, hubAccessions):
+def buildCandidates(accession, target, asmName, gbrsPairedAsm, ftpPath, hubAccessions,
+                     dbDbNames):
     """Alias candidates derived from 'accession's own data that should
     point at 'target' -- normally target == accession, but a GenBank
     accession superseded by a live paired RefSeq hub redirects target to
@@ -252,18 +302,22 @@ def buildCandidates(accession, target, asmName, gbrsPairedAsm, ftpPath, hubAcces
         if gbrsPairedAsm not in hubAccessions:
             candidates.add(gbrsPairedAsm)
 
-    # a bare version number (e.g. '1.0', '26') is never a useful alias
-    return {c for c in candidates if not isNumericOnlyAlias(c)}
+    # a bare version number (e.g. '1.0', '26') is never a useful alias,
+    # an alias may only use the validAlias character set, and a candidate
+    # colliding with an existing dbDb.name must never be used as an alias
+    # for something else (case insensitive)
+    return {c for c in candidates if isValidAlias(c)
+            and not isNumericOnlyAlias(c) and c.lower() not in dbDbNames}
 
 
-def computeBrowserTargets(genarkData, hubAccessions):
+def computeBrowserTargets(ncbiData, hubAccessions):
     """For every live-hub accession, decide which browser value its own
     alias candidates should point at: itself, unless it is a GenBank
     (GCA) accession whose paired RefSeq (GCF) accession also has a live
     hub -- in that case it is superseded and everything about it
     redirects to the paired GCF (GCF is always preferred over GCA)."""
     targets = {}
-    for accession, (asmName, gbrsPairedAsm, ftpPath, table) in genarkData.items():
+    for accession, (asmName, gbrsPairedAsm, ftpPath, table) in ncbiData.items():
         if accession not in hubAccessions:
             continue
         if (accession.startswith("GCA_") and not isEmpty(gbrsPairedAsm)
@@ -328,7 +382,7 @@ def pickWinner(accessions):
     return winner, discarded
 
 
-def reportExistingRowProblems(aliasToBrowser, hubAccessions, genarkData):
+def reportExistingRowProblems(aliasToBrowser, hubAccessions, ncbiData):
     for alias, browser in aliasToBrowser.items():
         if browser.startswith("GCA_") or browser.startswith("GCF_"):
             if browser not in hubAccessions:
@@ -336,11 +390,6 @@ def reportExistingRowProblems(aliasToBrowser, hubAccessions, genarkData):
                     "ERROR: existing asmAlias row alias=%s browser=%s -- "
                     "browser is not in the current GenArk hub list\n"
                     % (alias, browser))
-            elif browser not in genarkData:
-                sys.stderr.write(
-                    "ERROR: existing asmAlias row alias=%s browser=%s -- "
-                    "browser accession not found in any genark summary "
-                    "table\n" % (alias, browser))
 
 
 def findObsoleteGcaBrowsers(browserTargets, browserToAliases):
@@ -377,14 +426,14 @@ def isSameNameDifferentFormat(accession, bestName, priorAliases):
     return False
 
 
-def buildNewRows(genarkData, hubAccessions, browserTargets, aliasToBrowser,
-                  browserToAliases):
+def buildNewRows(ncbiData, hubAccessions, browserTargets, aliasToBrowser,
+                  browserToAliases, dbDbNames):
     # first pass: gather every alias candidate text -> set of target
     # browsers that want it, and report apparent name changes along the way
     aliasCandidates = {}   # alias -> set of target browsers
     reportedNameChecks = set()   # (target, bestName) already logged once
 
-    for accession, (asmName, gbrsPairedAsm, ftpPath, table) in genarkData.items():
+    for accession, (asmName, gbrsPairedAsm, ftpPath, table) in ncbiData.items():
         target = browserTargets.get(accession)
         if target is None:
             continue  # no live browser instance, can't be used as 'browser'
@@ -407,7 +456,7 @@ def buildNewRows(genarkData, hubAccessions, browserTargets, aliasToBrowser,
                     % (target, bestName, sorted(priorAliases)))
 
         for alias in buildCandidates(accession, target, asmName, gbrsPairedAsm,
-                                      ftpPath, hubAccessions):
+                                      ftpPath, hubAccessions, dbDbNames):
             aliasCandidates.setdefault(alias, set()).add(target)
 
     # second pass: resolve each alias to a single winning browser, then
@@ -442,7 +491,7 @@ def buildNewRows(genarkData, hubAccessions, browserTargets, aliasToBrowser,
                 continue
             sys.stderr.write(
                 "ERROR: alias=%s already exists in asmAlias pointing "
-                "to browser=%s, genark data wants it to point to "
+                "to browser=%s, NCBI data wants it to point to "
                 "browser=%s -- not touching existing row\n"
                 % (alias, oldBrowser, winner))
             continue  # a conflict we must not silently overwrite
@@ -513,21 +562,25 @@ def main():
     hubAccessions = fetchHubList(hubListUrl)
     sys.stderr.write("  %d hub accessions found\n" % len(hubAccessions))
 
-    sys.stderr.write("fetching genark assembly summary tables ...\n")
-    genarkData = fetchGenarkData()
-    sys.stderr.write("  %d accessions found\n" % len(genarkData))
+    sys.stderr.write("fetching NCBI assembly summary tables ...\n")
+    ncbiData = fetchNcbiData()
+    sys.stderr.write("  %d accessions found\n" % len(ncbiData))
 
     sys.stderr.write("fetching existing hgcentraltest.asmAlias ...\n")
     aliasToBrowser, browserToAliases = fetchExistingAsmAlias()
     sys.stderr.write("  %d existing alias rows\n" % len(aliasToBrowser))
 
-    reportExistingRowProblems(aliasToBrowser, hubAccessions, genarkData)
+    sys.stderr.write("fetching hgcentraltest.dbDb names ...\n")
+    dbDbNames = fetchDbDbNames()
+    sys.stderr.write("  %d dbDb names found\n" % len(dbDbNames))
+
+    reportExistingRowProblems(aliasToBrowser, hubAccessions, ncbiData)
 
     # decide, once, which browser value every live accession's own alias
     # candidates should point at (itself, or its live paired GCF if it's
     # a superseded GCA) -- this is the single source of truth the rest of
     # the script builds on
-    browserTargets = computeBrowserTargets(genarkData, hubAccessions)
+    browserTargets = computeBrowserTargets(ncbiData, hubAccessions)
 
     obsoleteGca = findObsoleteGcaBrowsers(browserTargets, browserToAliases)
     for browser in sorted(obsoleteGca):
@@ -537,13 +590,31 @@ def main():
             "replacing them\n"
             % (browser, obsoleteGca[browser], sorted(browserToAliases[browser])))
 
-    # existing rows on a retired GCA browser are dropped from the carried-
-    # forward set, and must not block their replacement rows from being
-    # added pointing at the new GCF browser instead
-    survivors = {a: b for a, b in aliasToBrowser.items() if b not in obsoleteGca}
+    dbDbCollisions = findDbDbNameCollisions(aliasToBrowser, dbDbNames)
+    for alias in sorted(dbDbCollisions):
+        sys.stderr.write(
+            "DBDB COLLISION: existing asmAlias row alias=%s browser=%s -- "
+            "alias matches an existing dbDb.name, dropping this row\n"
+            % (alias, aliasToBrowser[alias]))
 
-    newRows = buildNewRows(genarkData, hubAccessions, browserTargets,
-                            survivors, browserToAliases)
+    invalidAliases = findInvalidAliases(aliasToBrowser)
+    for alias in sorted(invalidAliases):
+        sys.stderr.write(
+            "INVALID ALIAS: existing asmAlias row alias=%s browser=%s -- "
+            "alias uses characters outside [A-Za-z0-9._-], dropping this "
+            "row\n" % (alias, aliasToBrowser[alias]))
+
+    # existing rows on a retired GCA browser, whose alias collides with a
+    # real dbDb.name, or whose alias has invalid characters, are dropped
+    # from the carried-forward set; dropping the GCA rows here must not
+    # block their replacement rows from being added pointing at the new
+    # GCF browser instead
+    survivors = {a: b for a, b in aliasToBrowser.items()
+                 if b not in obsoleteGca and a not in dbDbCollisions
+                 and a not in invalidAliases}
+
+    newRows = buildNewRows(ncbiData, hubAccessions, browserTargets,
+                            survivors, browserToAliases, dbDbNames)
 
     # merge as a dict, not a concatenation: newRows normally only adds
     # aliases absent from survivors, but a same-assembly version-bump
@@ -570,6 +641,10 @@ def main():
         outHandle.close()
 
     sys.stderr.write("%d obsolete GCA browser(s) dropped\n" % len(obsoleteGca))
+    sys.stderr.write("%d existing row(s) dropped for colliding with a dbDb name\n"
+                      % len(dbDbCollisions))
+    sys.stderr.write("%d existing row(s) dropped for invalid alias characters\n"
+                      % len(invalidAliases))
     sys.stderr.write("%d existing row(s) repointed to a newer version\n" % updated)
     sys.stderr.write("%d new asmAlias rows added\n" % (len(newRows) - updated))
     sys.stderr.write("%d row(s) dropped for case-insensitive conflicts\n" % caseDropped)

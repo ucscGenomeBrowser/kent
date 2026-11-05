@@ -36,9 +36,9 @@ my $cpgLh = "/hive/data/staging/data/cpgIslandExt/cpglh";
 
 # Option defaults:
 # my $bigClusterHub = 'swarm';
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 # my $smallClusterHub = 'encodek';
-my $smallClusterHub = 'ku';
+my $smallClusterHub = 'hgwdev';
 my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';

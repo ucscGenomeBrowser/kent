@@ -7,6 +7,7 @@ table hubPublic
     string longLabel;	"Hub long label."
     string registrationTime; "Time first registered"
     uint dbCount;	"Number of databases hub has data for."
-    string dbList; "Comma separated list of databases."
+    lstring dbList; "Comma separated list of databases."
     lstring descriptionUrl; "URL to description HTML"
+    string email; "Contact email for the hub"
     )

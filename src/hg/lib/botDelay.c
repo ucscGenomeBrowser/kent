@@ -231,14 +231,17 @@ if (useNew)
 
             if (userName)
                 safef(botCheckString, 256, "apiKey%s %f", apiKey, fraction);
-            else 
+            else
+                {
+                // Point at this server, whichever one it is, rather than at a hardcoded host
+                char keyUrl[1024];
+                safef(keyUrl, sizeof(keyUrl), "http%s://%s/cgi-bin/hgHubConnect#hubDeveloper",
+                        cgiAppendSForHttps(), cgiServerNamePort());
                 hUserAbort("Invalid apiKey provided on URL. "
                         "Make sure that the apiKey is valid, "
-                        "check https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect#hubDeveloper to create one "
-                        "or check this key. Note that an apiKey for genome-euro must be created on "
-                        "https://genome-euro.ucsc.edu/cgi-bin/hgHubConnect and the same for genome-asia or "
-                        "other mirrors, apiKeys are server-specific. If you have problems with the apiKey, "
-                        "contact us.");
+                        "check %s to create one or check this key. "
+                        "If you have problems with the apiKey, contact us.", keyUrl);
+                }
             }
         else
             {

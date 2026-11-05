@@ -1,0 +1,370 @@
+biosample	classification	group	gtexTissue	color	match	cvColor	organs
+8988T	cell line	Pancreas	pancreas	#995522	organ		pancreas
+A172	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+A549	cell line	Lung	lung	#99FF00	organ		lung
+A673	cell line	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+ACHN	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+activated B cell	primary cell	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+activated CD4-positive, alpha-beta memory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated CD4-positive, CD25-positive, alpha-beta regulatory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated CD8-positive, alpha-beta memory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		
+activated effector memory CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated gamma-delta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated naive CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated naive CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated T-cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated T-helper 1 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated T-helper 2 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+activated T-helper 9 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+adipocyte	in vitro differentiated cells	Adipose - Subcutaneous	adiposeSubcut	#FF6600	name		connective tissue
+adrenal gland	tissue	Adrenal Gland	adrenalGland	#33DD33	organ		adrenal gland|endocrine gland
+AG04449	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+AG04450	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		lung|connective tissue
+AG08395	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+AG08396	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		lung|connective tissue
+AG09309	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+AG09319	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|mouth
+AG10803	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+AG20443	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+Ammon's horn	tissue	Brain - Hippocampus	brainHippocampus	#EEEE00	name		brain
+amniotic epithelial cell	primary cell	Placenta and extraembryonic		#8000FF	organ		placenta|epithelium|extraembryonic component
+amniotic stem cell	primary cell	Placenta and extraembryonic		#8000FF	organ		connective tissue|extraembryonic component
+aorta	tissue	Artery - Aorta	arteryAorta	#FF5555	name		vasculature|arterial blood vessel|blood vessel
+ascending aorta	tissue	Artery - Aorta	arteryAorta	#FF5555	name		vasculature|arterial blood vessel|blood vessel
+astrocyte	in vitro differentiated cells	Brain - Spinal cord (cervical c-1)	brainSpinalcord	#EEEE00	organ		spinal cord|brain
+astrocyte of the cerebellum	primary cell	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+astrocyte of the hippocampus	primary cell	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+astrocyte of the spinal cord	primary cell	Brain - Spinal cord (cervical c-1)	brainSpinalcord	#EEEE00	name		spinal cord
+B cell	primary cell	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+BE2C	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+bipolar neuron	in vitro differentiated cells	Brain - Cortex	brainCortex	#EEEE00	name		ear|eye|spinal cord|brain
+BJ	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body|penis
+body of pancreas	tissue	Pancreas	pancreas	#995522	organ		pancreas
+brain	tissue	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+brain microvascular endothelial cell	primary cell	Brain - Cortex	brainCortex	#EEEE00	organ		epithelium|vasculature|blood vessel|brain
+brain pericyte	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		connective tissue|brain
+breast epithelium	tissue	Breast - Mammary Tissue	breastMamTissue	#33CCCC	organ		epithelium|breast
+bronchial epithelial cell	primary cell	Lung	lung	#99FF00	organ		lung|bronchus|epithelium
+C803	cell line	Other		#808080	none		epithelium|nose
+Caco-2	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|colon|intestine
+Caki2	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+Calu3	cell line	Lung	lung	#99FF00	name		
+cardiac fibroblast	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|heart
+cardiac muscle cell	primary cell	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		musculature of body|heart
+cardiac myoblast	in vitro differentiated cells	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		musculature of body|heart
+cardiac septum	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+cardiovascular progenitor cell	in vitro differentiated cells	Heart - Left Ventricle	heartLeftVentricl	#660099	name		
+caudate nucleus	tissue	Brain - Caudate (basal ganglia)	brainCaudate	#EEEE00	name		brain
+CD14-positive monocyte	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+CD1c-positive myeloid dendritic cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+CD4-positive, alpha-beta memory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+CD4-positive, CD25-positive, alpha-beta regulatory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+CD8-positive, alpha-beta memory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+central memory CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		
+central memory CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		
+cerebellar cortex	tissue	Brain - Cerebellum	brainCerebellum	#EEEE00	name		brain
+cerebellum	tissue	Brain - Cerebellum	brainCerebellum	#EEEE00	name		brain
+chondrocyte	in vitro differentiated cells	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	organ		connective tissue
+chorion	tissue	Placenta and extraembryonic		#8000FF	organ		extraembryonic component
+choroid plexus epithelial cell	primary cell	Brain - Cortex	brainCortex	#EEEE00	organ		epithelium|vasculature|brain
+CMK	cell line	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|bone marrow|blood|bone element
+COLO829	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+colonic mucosa	tissue	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|colon|intestine
+common myeloid progenitor, CD34-positive	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bone marrow|bone element
+coronary artery	tissue	Artery - Coronary	arteryCoronary	#FFAA99	name		blood vessel|vasculature|arterial blood vessel|heart
+CWRU1	cell line	Embryonic and stem cells		#00A000	cell		connective tissue
+D341Med	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+D721Med	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+Daoy	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+dedifferentiated amniotic fluid mesenchymal stem cell	primary cell	Placenta and extraembryonic		#8000FF	organ		connective tissue|extraembryonic component
+dermis blood vessel endothelial cell	primary cell	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	organ		epithelium|skin of body|vasculature|blood vessel
+dermis microvascular lymphatic vessel endothelial cell	primary cell	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	organ		skin of body|lymphatic vessel|vasculature|blood vessel|epithelium
+DND-41	cell line	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+dorsolateral prefrontal cortex	tissue	Brain - Frontal Cortex (BA9)	brainFrontCortex	#EEEE00	name		brain
+ecto neural progenitor cell	in vitro differentiated cells	Brain - Cortex	brainCortex	#EEEE00	name		
+effector CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		
+effector memory CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+effector memory CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+EH	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|penis
+EL	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|penis
+ELF-1	cell line	Embryonic and stem cells		#00A000	organ		embryo
+ELR	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|penis
+embryonic facial prominence	tissue	Embryonic and stem cells		#00A000	organ		embryo
+endodermal cell	in vitro differentiated cells	Embryonic and stem cells		#00A000	organ		embryo
+endothelial cell	in vitro differentiated cells	Artery - Tibial	arteryTibial	#FF0000	name		epithelium
+endothelial cell of umbilical vein	primary cell	Placenta and extraembryonic		#8000FF	organ		extraembryonic component|vasculature|blood vessel|placenta|epithelium|vein
+epidermal melanocyte	primary cell	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	cell		epithelium|skin of body
+epithelial cell of esophagus	primary cell	Esophagus - Mucosa	esophagusMucosa	#552200	name		epithelium|esophagus
+epithelial cell of prostate	primary cell	Prostate	prostate	#DDDDDD	organ		epithelium|prostate gland
+epithelial cell of proximal tubule	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+esophagus muscularis mucosa	tissue	Esophagus - Muscularis	esophagusMuscular	#BB9988	name		musculature of body|esophagus
+esophagus squamous epithelium	tissue	Esophagus - Mucosa	esophagusMucosa	#552200	name		epithelium|esophagus
+eye	tissue	Eye		#003366	organ		eye
+femur	tissue	Bone		#805000	organ		skeleton|limb|bone element
+fibroblast of dermis	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+fibroblast of gingiva	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|mouth
+fibroblast of lung	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		lung|connective tissue
+fibroblast of mammary gland	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		mammary gland|exocrine gland|connective tissue
+fibroblast of peridontal ligament	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|mouth
+fibroblast of pulmonary artery	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|vasculature|arterial blood vessel|blood vessel
+fibroblast of skin of abdomen	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+fibroblast of skin of back	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+fibroblast of skin of left biceps	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		skin of body
+fibroblast of skin of left quadriceps	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		skin of body
+fibroblast of skin of right biceps	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		skin of body
+fibroblast of skin of right quadriceps	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		skin of body
+fibroblast of skin of scalp	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+fibroblast of the aortic adventitia	primary cell	Artery - Aorta	arteryAorta	#FF5555	name		connective tissue|vasculature|arterial blood vessel|blood vessel
+fibroblast of the conjunctiva	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|eye
+fibroblast of upper back skin	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+fibroblast of villous mesenchyme	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		placenta|connective tissue|extraembryonic component
+forelimb muscle	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body|limb
+foreskin fibroblast	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body|penis
+foreskin keratinocyte	primary cell	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	cell		epithelium|skin of body|penis
+foreskin melanocyte	primary cell	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	cell		penis
+frontal cortex	tissue	Brain - Frontal Cortex (BA9)	brainFrontCortex	#EEEE00	name		brain
+G401	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+gastrocnemius medialis	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body|limb
+germinal center	tissue	Spleen	spleen	#778855	name		lymphoid tissue
+globus pallidus	tissue	Brain - Putamen (basal ganglia)	brainPutamen	#EEEE00	name		brain
+glomerular endothelial cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney|vasculature
+glomerular visceral epithelial cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+glutamatergic neuron	in vitro differentiated cells	Brain - Cortex	brainCortex	#EEEE00	name		
+GM03348	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+GM04503	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+GM04504	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body
+GM06990	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM10248	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM10266	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM12864	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM12865	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM12878	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell	153,38,0	bodily fluid|blood
+GM12891	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM12892	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM13976	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM13977	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM18507	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		lymphoid tissue
+GM19238	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM19239	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM19240	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM20000	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+GM23248	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|skin of body|limb
+GM23338	cell line	Embryonic and stem cells		#00A000	cell		skin of body
+H1	cell line	Embryonic and stem cells		#00A000	organ	0,107,27	embryo
+H4	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		epithelium|brain
+H54	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+H7	cell line	Embryonic and stem cells		#00A000	organ		embryo
+H9	cell line	Embryonic and stem cells		#00A000	organ		embryo
+HAP-1	cell line	Whole Blood	wholeBlood	#FF00BB	organ		bone marrow|bone element
+HCEC 1CT	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|colon|intestine
+HCT116	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|epithelium|colon|intestine
+head of caudate nucleus	tissue	Brain - Caudate (basal ganglia)	brainCaudate	#EEEE00	name		brain
+heart	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+heart left ventricle	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+heart right ventricle	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+HEK293T	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+HeLa-S3	cell line	Uterus	uterus	#FF66FF	organ	0,119,158	epithelium|uterus
+hematopoietic multipotent progenitor cell	in vitro differentiated cells	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+hepatic stellate cell	primary cell	Liver	liver	#AABB66	name		connective tissue|exocrine gland|liver|endocrine gland
+hepatocyte	in vitro differentiated cells	Liver	liver	#AABB66	organ		exocrine gland|epithelium|liver|endocrine gland
+HepG2	cell line	Liver	liver	#AABB66	organ	189,0,157	exocrine gland|epithelium|liver|endocrine gland
+HFF-Myc	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|penis
+HFFc6	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|penis
+hindlimb muscle	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body|limb
+HK-2	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+HL-60	cell line	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+HPDE6-E6E7	cell line	Pancreas	pancreas	#995522	organ		epithelium|pancreas|exocrine gland
+HS-27A	cell line	Whole Blood	wholeBlood	#FF00BB	organ		epithelium|bone marrow|bone element
+HS-5	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|bone marrow|bone element
+HT-29	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|epithelium|colon|intestine
+HT1080	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	organ		connective tissue|epithelium
+HTR-8/SVneo	cell line	Placenta and extraembryonic		#8000FF	organ		placenta|extraembryonic component|embryo
+HuH-7	cell line	Liver	liver	#AABB66	organ		exocrine gland|epithelium|liver|endocrine gland
+HuH-7.5	cell line	Liver	liver	#AABB66	organ		exocrine gland|epithelium|liver|endocrine gland
+immature natural killer cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bone marrow|bone element|thymus|lymph node|spleen
+IMR-90	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		lung|connective tissue
+inferior parietal cortex	tissue	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+inflammatory macrophage	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+iPS DF 19.11	cell line	Embryonic and stem cells		#00A000	cell		skin of prepuce of penis|skin of body|penis
+iPS DF 19.7	cell line	Embryonic and stem cells		#00A000	cell		skin of prepuce of penis|skin of body|penis
+iPS DF 4.7	cell line	Embryonic and stem cells		#00A000	cell		skin of prepuce of penis|skin of body|penis
+iPS DF 6.9	cell line	Embryonic and stem cells		#00A000	cell		skin of prepuce of penis|skin of body|penis
+iPS-NIHi11	cell line	Embryonic and stem cells		#00A000	cell		skin of body
+iPS-NIHi7	cell line	Embryonic and stem cells		#00A000	cell		skin of body
+iris pigment epithelial cell	primary cell	Eye		#003366	organ		epithelium|eye
+Ishikawa	cell line	Uterus	uterus	#FF66FF	organ		uterus
+islet precursor cell	in vitro differentiated cells	Pancreas	pancreas	#995522	organ		pancreas
+Jurkat, Clone E6-1	cell line	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+K562	cell line	Whole Blood	wholeBlood	#FF00BB	cell	46,0,184	bodily fluid|blood
+Karpas-422	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|lymph node|blood
+KBM-7	cell line	Whole Blood	wholeBlood	#FF00BB	organ		bone marrow|bone element
+keratinocyte	primary cell	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	cell		epithelium|skin of body
+kidney	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+kidney capillary endothelial cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney|vasculature|blood vessel
+kidney epithelial cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+kidney glomerular epithelial cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+kidney tubule cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+L1-S8	cell line	Embryonic and stem cells		#00A000	cell		bone marrow|bone element
+L1-S8R	cell line	Embryonic and stem cells		#00A000	cell		bone marrow|bone element
+large intestine	tissue	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|intestine
+left cardiac atrium	tissue	Heart - Atrial Appendage	heartAtrialAppend	#9900FF	name		heart
+left colon	tissue	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|colon|intestine
+left forelimb	tissue	Bone		#805000	organ		skeleton|limb|bone element
+left hindlimb	tissue	Bone		#805000	organ		skeleton|limb|bone element
+left kidney	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+left lobe of liver	tissue	Liver	liver	#AABB66	organ		exocrine gland|liver|endocrine gland
+left lung	tissue	Lung	lung	#99FF00	organ		lung
+left renal cortex interstitium	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+left renal pelvis	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney|ureter
+left ventricle myocardium inferior	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+left ventricle myocardium superior	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+LHCN-M2	cell line	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+limb	tissue	Other		#808080	none		limb
+liver	tissue	Liver	liver	#AABB66	organ		exocrine gland|liver|endocrine gland
+LNCaP clone FGC	cell line	Prostate	prostate	#DDDDDD	organ	0,119,158	epithelium|prostate gland
+LoVo	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|epithelium|colon|intestine
+lower leg skin	tissue	Skin - Sun Exposed (Lower leg)	skinExposed	#7777FF	name		skin of body|limb
+lower lobe of left lung	tissue	Lung	lung	#99FF00	organ		lung
+lower lobe of right lung	tissue	Lung	lung	#99FF00	organ		lung
+lung	tissue	Lung	lung	#99FF00	organ		lung
+lung microvascular endothelial cell	primary cell	Lung	lung	#99FF00	organ		lung|epithelium|vasculature|blood vessel
+M059J	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+mammary epithelial cell	primary cell	Breast - Mammary Tissue	breastMamTissue	#33CCCC	organ		mammary gland|epithelium|exocrine gland
+MCF 10A	cell line	Breast - Mammary Tissue	breastMamTissue	#33CCCC	organ		mammary gland|epithelium|exocrine gland
+MCF-7	cell line	Breast - Mammary Tissue	breastMamTissue	#33CCCC	organ		mammary gland|epithelium|exocrine gland
+medulla oblongata	tissue	Brain - Substantia nigra	brainSubstanNigra	#EEEE00	name		brain
+memory B cell	primary cell	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+mesenchymal stem cell	in vitro differentiated cells	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	organ		connective tissue
+mesendoderm	in vitro differentiated cells	Embryonic and stem cells		#00A000	organ		embryo
+mesenteric fat pad	tissue	Adipose - Visceral (Omentum)	adiposeVisceral	#FFAA00	name		connective tissue|adipose tissue
+mesodermal cell	in vitro differentiated cells	Embryonic and stem cells		#00A000	organ		embryo
+mesothelial cell of epicardium	in vitro differentiated cells	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		epithelium|pericardium|heart
+MG63	cell line	Bone		#805000	organ		bone element
+midbrain	tissue	Brain - Substantia nigra	brainSubstanNigra	#EEEE00	name		brain
+middle frontal gyrus	tissue	Brain - Frontal Cortex (BA9)	brainFrontCortex	#EEEE00	name		brain
+MM.1S	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+mucosa of descending colon	tissue	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|colon|intestine
+mucosa of gallbladder	tissue	Liver	liver	#AABB66	name		gallbladder
+muscle of arm	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body|limb
+muscle of back	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+muscle of leg	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body|limb
+muscle of trunk	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+myocyte	in vitro differentiated cells	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+myotube	in vitro differentiated cells	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+naive B cell	primary cell	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+naive thymus-derived CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+naive thymus-derived CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+NAMALWA	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+natural killer cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+NB4	cell line	Whole Blood	wholeBlood	#FF00BB	organ		bone marrow|bone element
+NCI-H226	cell line	Lung	lung	#99FF00	organ		lung
+NCI-H460	cell line	Lung	lung	#99FF00	organ		lung|epithelium
+NCI-H929	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bone marrow|bone element
+nephron progenitor cell	in vitro differentiated cells	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+neural crest cell	in vitro differentiated cells	Embryonic and stem cells		#00A000	organ		embryo
+neural progenitor cell	in vitro differentiated cells	Brain - Cortex	brainCortex	#EEEE00	name		
+neuronal stem cell	in vitro differentiated cells	Embryonic and stem cells		#00A000	organ		embryo
+non-pigmented ciliary epithelial cell	primary cell	Eye		#003366	name		epithelium
+NT2/D1	cell line	Testis	testis	#AAAAAA	organ		epithelium|testis|gonad
+occipital lobe	tissue	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+OCI-LY7	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+omental fat pad	tissue	Adipose - Visceral (Omentum)	adiposeVisceral	#FFAA00	name		connective tissue|adipose tissue
+osteoblast	primary cell	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	organ		connective tissue
+osteocyte	in vitro differentiated cells	Bone		#805000	organ		connective tissue|bone element
+ovary	tissue	Ovary	ovary	#FFAAFF	organ		ovary|gonad
+Panc1	cell line	Pancreas	pancreas	#995522	organ		epithelium|pancreas
+pancreas	tissue	Pancreas	pancreas	#995522	organ		pancreas
+PC-3	cell line	Prostate	prostate	#DDDDDD	organ		prostate gland
+PC-9	cell line	Lung	lung	#99FF00	organ		lung
+Peyer's patch	tissue	Small Intestine - Terminal Ileum	smallIntestine	#555522	name		lymphoid tissue|intestine
+placenta	tissue	Placenta and extraembryonic		#8000FF	organ		placenta|extraembryonic component
+pons	tissue	Brain - Substantia nigra	brainSubstanNigra	#EEEE00	name		brain
+posterior cingulate gyrus	tissue	Brain - Anterior cingulate cortex (BA24)	brainAnCinCortex	#EEEE00	name		brain
+posterior vena cava	tissue	Artery - Tibial	arteryTibial	#FF0000	organ		vein|vasculature|blood vessel
+progenitor cell of endocrine pancreas	in vitro differentiated cells	Pancreas	pancreas	#995522	organ		pancreas|endocrine gland
+prostate gland	tissue	Prostate	prostate	#DDDDDD	organ		prostate gland
+psoas muscle	tissue	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+pulmonary artery endothelial cell	primary cell	Artery - Tibial	arteryTibial	#FF0000	organ		epithelium|vasculature|arterial blood vessel|blood vessel
+putamen	tissue	Brain - Putamen (basal ganglia)	brainPutamen	#EEEE00	name		brain
+RCC	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+RCC 7860	cell line	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+renal cortex interstitium	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+renal cortical epithelial cell	primary cell	Kidney - Cortex	kidneyCortex	#22FFDD	organ		epithelium|kidney
+renal pelvis	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+retina	tissue	Eye		#003366	organ		eye
+retinal pigment epithelial cell	primary cell	Eye		#003366	organ		epithelium|eye
+right atrium auricular region	tissue	Heart - Atrial Appendage	heartAtrialAppend	#9900FF	name		heart
+right cardiac atrium	tissue	Heart - Atrial Appendage	heartAtrialAppend	#9900FF	name		heart
+right forelimb	tissue	Bone		#805000	organ		skeleton|limb|bone element
+right hindlimb	tissue	Bone		#805000	organ		skeleton|limb|bone element
+right kidney	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+right lobe of liver	tissue	Liver	liver	#AABB66	organ		exocrine gland|liver|endocrine gland
+right lung	tissue	Lung	lung	#99FF00	organ		lung
+right renal cortex interstitium	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney
+right renal pelvis	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney|ureter
+Right ventricle myocardium inferior	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+Right ventricle myocardium superior	tissue	Heart - Left Ventricle	heartLeftVentricl	#660099	organ		heart
+RKO	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|epithelium|colon|intestine
+RPMI7951	cell line	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	organ		epithelium|skin of body
+RPMI8226	cell line	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+RWPE1	cell line	Prostate	prostate	#DDDDDD	organ		epithelium|prostate gland
+RWPE2	cell line	Prostate	prostate	#DDDDDD	organ		epithelium|prostate gland
+sciatic nerve	tissue	Nerve - Tibial	nerveTibial	#FFD700	name		nerve
+sigmoid colon	tissue	Colon - Sigmoid	colonSigmoid	#EEBB77	name		large intestine|colon|intestine
+SJCRH30	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		connective tissue|musculature of body
+SJSA1	cell line	Bone		#805000	organ		bone element
+SK-MEL-5	cell line	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	organ		epithelium|skin of body
+SK-N-DZ	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+SK-N-MC	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		epithelium|brain
+SK-N-SH	cell line	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+skeletal muscle cell	primary cell	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+skeletal muscle myoblast	primary cell	Muscle - Skeletal	muscleSkeletal	#AAAAFF	organ		musculature of body
+skin of body	tissue	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	organ		skin of body
+small intestine	tissue	Small Intestine - Terminal Ileum	smallIntestine	#555522	organ		small intestine|intestine
+smooth muscle cell of the brain vasculature	primary cell	Brain - Cortex	brainCortex	#EEEE00	organ		vasculature|brain
+spinal cord	tissue	Brain - Spinal cord (cervical c-1)	brainSpinalcord	#EEEE00	name		spinal cord
+spleen	tissue	Spleen	spleen	#778855	organ		immune organ|spleen
+stimulated activated CD4-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+stimulated activated CD8-positive, alpha-beta memory T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+stimulated activated effector memory CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+stimulated activated naive B cell	primary cell	Cells - EBV-transformed lymphocytes	xformedlymphocytes	#CC66FF	cell		bodily fluid|blood
+stimulated activated naive CD8-positive, alpha-beta T cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+stomach	tissue	Stomach	stomach	#FFDD99	organ		stomach
+stromal cell of bone marrow	primary cell	Whole Blood	wholeBlood	#FF00BB	organ		connective tissue|bone marrow|bone element
+superior temporal gyrus	tissue	Brain - Cortex	brainCortex	#EEEE00	organ		brain
+suppressor macrophage	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+suprapubic skin	tissue	Skin - Not Sun Exposed (Suprapubic)	skinNotExposed	#0000FF	name		skin of body
+SW480	cell line	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|epithelium|colon|intestine
+T follicular helper cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		
+T-cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+T-helper 1 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+T-helper 17 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+T-helper 2 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+T-helper 22 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+T-helper 9 cell	primary cell	Whole Blood	wholeBlood	#FF00BB	cell		bodily fluid|blood
+T47D	cell line	Breast - Mammary Tissue	breastMamTissue	#33CCCC	organ		mammary gland|epithelium|exocrine gland
+testis	tissue	Testis	testis	#AAAAAA	organ		testis|gonad
+thoracic aorta	tissue	Artery - Aorta	arteryAorta	#FF5555	name		vasculature|arterial blood vessel|blood vessel
+thymus	tissue	Spleen	spleen	#778855	organ		thymus|endocrine gland|immune organ
+thyroid gland	tissue	Thyroid	thyroid	#006600	organ		endocrine gland|thyroid gland
+tibial artery	tissue	Artery - Tibial	arteryTibial	#FF0000	name		vasculature|limb|arterial blood vessel|blood vessel
+tibial nerve	tissue	Nerve - Tibial	nerveTibial	#FFD700	name		limb|nerve
+tongue	tissue	Minor Salivary Gland	minorSalivGland	#99BB88	name		mouth|tongue
+transverse colon	tissue	Colon - Transverse	colonTransverse	#CC9955	organ		large intestine|colon|intestine
+trophoblast cell	primary cell	Placenta and extraembryonic		#8000FF	organ		extraembryonic component|embryo
+type B pancreatic cell	in vitro differentiated cells	Pancreas	pancreas	#995522	organ		epithelium|pancreas|endocrine gland
+umbilical cord	tissue	Placenta and extraembryonic		#8000FF	organ		extraembryonic component
+upper lobe of left lung	tissue	Lung	lung	#99FF00	organ		lung
+upper lobe of right lung	tissue	Lung	lung	#99FF00	organ		lung
+ureter	tissue	Kidney - Cortex	kidneyCortex	#22FFDD	organ		kidney|ureter
+urinary bladder	tissue	Bladder	bladder	#AA0000	organ		urinary bladder
+urothelium cell line	cell line	Bladder	bladder	#AA0000	name		epithelium
+uterus	tissue	Uterus	uterus	#FF66FF	organ		uterus
+vagina	tissue	Vagina	vagina	#FF5599	organ		vagina
+WERI-Rb-1	cell line	Eye		#003366	organ		eye
+WI38	cell line	Cells - Cultured fibroblasts	xformedfibroblasts	#AAEEFF	cell		lung|connective tissue
+WTC11	cell line	Embryonic and stem cells		#00A000	cell		connective tissue|skin of body

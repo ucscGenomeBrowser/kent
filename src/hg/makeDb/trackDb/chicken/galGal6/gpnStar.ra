@@ -1,0 +1,125 @@
+track gpnStar
+shortLabel GPN-Star
+longLabel GPN-Star genomic language model constraint scores (77 vertebrates)
+superTrack on
+pennantIcon New red ../goldenPath/newsarch.html#TBD "Released TBD"
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+group compGeno
+
+track gpnStarLogo
+shortLabel GPN-Star Logo
+longLabel GPN-Star (77 vertebrates) sequence logo of predicted constraint
+parent gpnStar
+container multiWig
+html gpnStar
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+type bigWig 0 2
+aggregate stacked
+logo on
+showSubtrackColorOnUi on
+autoScale off
+viewLimits 0:2
+viewLimitsMax 0:2
+maxHeightPixels 100:40:16
+visibility full
+
+    track gpnStarLogoA
+    shortLabel A
+    longLabel GPN-Star (77 vertebrates) logo height of A
+    parent gpnStarLogo
+    type bigWig 0 2
+    bigDataUrl /gbdb/galGal6/gpnStar/A.bw
+    color 0,128,0
+    priority 1
+
+    track gpnStarLogoC
+    shortLabel C
+    longLabel GPN-Star (77 vertebrates) logo height of C
+    parent gpnStarLogo
+    type bigWig 0 2
+    bigDataUrl /gbdb/galGal6/gpnStar/C.bw
+    color 0,0,255
+    priority 2
+
+    track gpnStarLogoG
+    shortLabel G
+    longLabel GPN-Star (77 vertebrates) logo height of G
+    parent gpnStarLogo
+    type bigWig 0 2
+    bigDataUrl /gbdb/galGal6/gpnStar/G.bw
+    color 255,166,0
+    priority 3
+
+    track gpnStarLogoT
+    shortLabel T
+    longLabel GPN-Star (77 vertebrates) logo height of T
+    parent gpnStarLogo
+    type bigWig 0 2
+    bigDataUrl /gbdb/galGal6/gpnStar/T.bw
+    color 255,0,0
+    priority 4
+
+track gpnStarLlr
+shortLabel GPN-Star -LLR
+longLabel GPN-Star (77 vertebrates) -LLR per alternate allele
+parent gpnStar
+compositeTrack on
+html gpnStar
+maxWindowToDraw 10000000
+mouseOverFunction noAverage
+dataVersion GPN-Star scores, Hugging Face revision 47e7f05 (September 2026)
+type bigWig
+autoScale off
+alwaysZero on
+viewLimits -3:10
+viewLimitsMax -16:16
+negateValues on
+yLineOnOff on
+yLineMark 0
+graphTypeDefault bar
+maxHeightPixels 100:16:16
+windowingFunction mean+whiskers
+visibility dense
+
+    track gpnStarLlrA
+    shortLabel Mutation: A
+    longLabel GPN-Star (77 vertebrates) -LLR: Mutation is A
+    parent gpnStarLlr on
+    type bigWig
+    bigDataUrl /gbdb/galGal6/gpnStar/llr_A.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 1
+
+    track gpnStarLlrC
+    shortLabel Mutation: C
+    longLabel GPN-Star (77 vertebrates) -LLR: Mutation is C
+    parent gpnStarLlr on
+    type bigWig
+    bigDataUrl /gbdb/galGal6/gpnStar/llr_C.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 2
+
+    track gpnStarLlrG
+    shortLabel Mutation: G
+    longLabel GPN-Star (77 vertebrates) -LLR: Mutation is G
+    parent gpnStarLlr on
+    type bigWig
+    bigDataUrl /gbdb/galGal6/gpnStar/llr_G.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 3
+
+    track gpnStarLlrT
+    shortLabel Mutation: T
+    longLabel GPN-Star (77 vertebrates) -LLR: Mutation is T
+    parent gpnStarLlr on
+    type bigWig
+    bigDataUrl /gbdb/galGal6/gpnStar/llr_T.bw
+    color 140,60,60
+    altColor 60,60,140
+    priority 4
+

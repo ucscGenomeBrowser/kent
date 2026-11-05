@@ -1,0 +1,12 @@
+track chainLiftOverHg38
+subTrack GCA_009914755.4_T2T-CHM13v2.0ChainNetViewchain on
+subGroups view=chain species=s003 clade=c00
+shortLabel hg38 loChain
+longLabel hg38 (Dec. 2013) Lift Over Chained Alignments
+type bigChain hg38
+bigDataUrl  /gbdb/hs1/bbi/chainLiftOverHg38.bb
+linkDataUrl  /gbdb/hs1/bbi/chainLiftOverHg38Link.bb
+otherDb hg38
+html html/GCA_009914755.4_T2T-CHM13v2.0.chainNet
+priority 16
+

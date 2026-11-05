@@ -37,9 +37,10 @@ track by codons</em> pull-down menu.</p>
     <th>Nonsynonymous mRNA codons</th> 
     <th>mRNA bases/different mRNA bases</th></tr> 
   <tr>
-    <td><font color="FF0000"><strong>red</strong></font></td> 
-    <td>&quot;*&quot; stop codons</td> <td>non-conservative codon substitutions</td> 
-    <td>base substitutions</td></tr> 
+    <td><font color="FF0000"><strong>red</strong></font></td>
+    <td>&quot;*&quot; stop codons</td> <td>non-conservative codon substitutions</td>
+    <td>base substitutions (when zoomed out, a light red line,
+    <a href="hgIndelDisplay.html#examples">see examples</a>)</td></tr>
   <tr> 
     <td><font color="E0E000"><strong>yellow</strong></font></td> 
     <td>&nbsp;</td> 
@@ -79,6 +80,10 @@ priority of display, from most important to least important, is: different mRNA 
 codon coloring (if enabled), and then <a href="hgIndelDisplay.html">alignment coloring</a> (if 
 enabled). The browser will not display genomic/mRNA codon coloring when viewing large regions of the
 genome. To view labeling, the track must be zoomed to within 3 times the base level.</p>
+<p>
+A base difference in the first or last few bases of an aligned sequence is usually not shown as a
+red mismatch: the aligner leaves those bases unaligned, and they are shown as a purple
+<a href="hgIndelDisplay.html#examples">unaligned end</a> instead.</p>
 <p> 
 For information about alignment insertion/deletion display options, click 
 <a href="hgIndelDisplay.html">here</a>.</p> 

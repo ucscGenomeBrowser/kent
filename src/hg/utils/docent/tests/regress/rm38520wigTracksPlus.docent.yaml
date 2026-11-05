@@ -1,0 +1,35 @@
+# #38520 -- quickLift lifts wig tracks kept in a table and a .wib file (hg19 phastCons100way
+# lifted onto hg38).  Before the change, quickLift left such tracks out of the lift.
+#
+# hgTracks, '+' strand:  at SHH hg38 = hg19 + 207,306, one ungapped chain block.  In the
+# 10-base window hg38 chr7:155,803,031-155,803,040 the only nonzero lifted value is 0.062992,
+# at 155,803,036 (hg19 0-based 155,595,729, read straight from the hg19 rows and .wib).
+# hg38's own phastCons100way has 0.425197 at that base, so the tooltip also tells the lifted
+# row from the native one.  at: names the left edge of a 0-based base, and an edge pixel holds
+# both neighbours' values averaged, so the hover aims at the middle of the base:  1-based
+# 155,803,036 is at: 155803035.5.
+proof:
+  - "xfail 2026-10-09 -- fails on genome-test (master): nothing lifted, only the ruler drawn"
+  - "sandbox-ab 2026-10-09 -- passes on park 38520, port 48112 (branch quickLiftWig 8740124b45b)"
+  - "server-flip 2026-10-09 -- passed on genome-test once ff175308401 was installed there (13:01), with browser.quickLiftWig on, having failed there that morning"
+
+target: genome-test
+db: hg19
+position: chr7:155592001-155604000
+reset: true
+fast: true
+steps:
+  # browser.quickLiftWig is a cart gate as well as an hg.conf one, so the script turns it on
+  # for itself and does not depend on how the server is configured
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr7%3A155592001-155604000&pix=1100&browser.quickLiftWig=on"
+  - hide: all
+  # phyloP stays on:  hiding its view would leave no view that trackDb calls visible, and the
+  # quickLift hub writer then drops the whole composite (#38044)
+  - track: {cons100way: full, cons100wayViewalign: hide, phastCons100way: full}
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noRows: [multiz100way], noText: "Warning/Error"}
+  - convert: {to: hg38, quicklift: true, hideDefaults: true}
+  - open: lift
+  - go: chr7:155803031-155803040
+  - expect: {rows: [phastCons100way, phyloP100wayAll], noText: "Warning/Error"}
+  - mouseover: {track: phastCons100way, at: chr7:155803035.5}
+  - expect: {tip: "0.062992", noTip: "0.425197"}

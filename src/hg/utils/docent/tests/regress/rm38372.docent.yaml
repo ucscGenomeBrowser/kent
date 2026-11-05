@@ -1,0 +1,47 @@
+# #38372 -- on hgCustom, picking a different genome in the search bar left the reader on the
+# Add Custom Tracks form, even when that genome already had custom tracks.  Reloading the
+# same assembly from anywhere else landed on Manage Custom Tracks.
+#
+# b8441cbcbe6, hg/hgCustom/hgCustom.c.  The search bar's onSelect used to set the hidden db
+# input and stop, so nothing reloaded.  It now sets db (and hubUrl and genome for a hub
+# assembly) and calls document.mainForm.submit(), and hgCustom then draws whichever page the
+# new genome calls for.
+#
+# The script makes a custom track on hg38, goes to hgCustom on hg19 (no tracks, so the Add
+# form), types hg38 into the genome search bar and picks it from the suggestions.  The
+# assertion is that the page that comes back is Manage Custom Tracks for hg38 and lists the
+# track.  Before the fix nothing reloads, so the Add form stays up and names hg19.
+#
+# NOT asserted: the side effect Jairo noted on the ticket, that anything left in the paste box
+# is submitted too when the genome changes.  Chris Lee called that a feature, so it is not a
+# regression either way.  The hub-assembly branch (hubUrl, genome) is not exercised.
+#
+# The suggestions come from hubApi's genome search, so a failure at the wait for the menu is
+# the search, not this ticket; #38372 notes it did not work on hgwdev for a while because of
+# the robots work.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38372 after b8441cbcbe6 reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test, hgwbeta (v504) and ts park 38423 (v504_branch); fails on ts park 38316 (v503_branch) at the last step: after hg38 is picked from the search bar the page is still Add Custom Tracks, with no Manage Custom Tracks and no rm38372ct"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1:999000-1002000&hgt.customText=track%20name%3Drm38372ct%20description%3D%22rm38372%20hg38%20track%22%0Achr1%201000000%201001000%20rm38372item%0A"
+  - expect:
+      has: 'tr[id^="tr_ct_rm38372ct"]'
+
+  # hg19 has no custom tracks, so this is the Add form.
+  - goto: "/cgi-bin/hgCustom?db=hg19"
+  - wait: '#genomeSearch'
+  - expect:
+      text: "Add Custom Tracks"
+      noText: ["Manage Custom Tracks", "rm38372ct"]
+
+  - fill: {'#genomeSearch': 'hg38'}
+  - wait: 'ul.ui-autocomplete li:has-text("hg38")'
+  - click: 'ul.ui-autocomplete li:has-text("GRCh38/hg38")'
+  - expect:
+      text: ["Manage Custom Tracks", "rm38372ct", "rm38372 hg38 track"]
+      noText: "Add Custom Tracks"

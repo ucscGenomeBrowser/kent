@@ -316,6 +316,50 @@ int mgFontStringWidth(MgFont *font, char *string);
 int mgFontCharWidth(MgFont *font, char c);
 /* How wide is a character? */
 
+enum ftHinting
+/* What to ask FreeType to do about hinting. */
+    {
+    ftHintDefault = 0,    /* whatever the font and FreeType decide, the stock behaviour */
+    ftHintNone = 1,       /* FT_LOAD_NO_HINTING */
+    ftHintAuto = 2,       /* FT_LOAD_FORCE_AUTOHINT */
+    };
+
+enum ftAntiAlias
+/* How FreeType covers a glyph's edges.  This is the render target, a separate choice
+ * from the hinting above, and the same list ftinspect offers.  Monochrome is not here:
+ * the browser does not draw aliased text.  The LCD modes return
+ * three coverages per pixel, which the blitter mixes into the red, green and blue
+ * channels separately; RGB and BGR differ only in which end of the triple is red. */
+    {
+    ftAaNormal = 0,         /* FT_LOAD_TARGET_NORMAL, 256 grey levels, the stock behaviour */
+    ftAaLight = 1,          /* FT_LOAD_TARGET_LIGHT, hinted vertically only */
+    ftAaLightSubpixel = 2,  /* light, and the glyph rendered at the fractional pen position */
+    ftAaLcdRgb = 3,         /* FT_LOAD_TARGET_LCD */
+    ftAaLcdBgr = 4,         /* FT_LOAD_TARGET_LCD, triples read the other way round */
+    ftAaLcdVrgb = 5,        /* FT_LOAD_TARGET_LCD_V */
+    ftAaLcdVbgr = 6,        /* FT_LOAD_TARGET_LCD_V, triples read the other way round */
+    };
+
+struct ftTuning
+/* Knobs on the FreeType rendering, for experimenting from the hgTracks configure page
+ * when hg.conf freeTypeTuneUI is on.  The values below are the stock rendering, so a
+ * tuning left at its defaults changes nothing. */
+    {
+    double sizeScale;        /* scales the pixel size getFontCorrection picked, stock 1.0 */
+    int baselineDelta;       /* added to the baseline it picked, stock 0 */
+    double gamma;            /* exponent on a glyph pixel's coverage, stock 1.0 */
+    double boxScale;         /* the size multiplier ftTextInBox uses, stock 1.3 */
+    enum ftHinting hinting;  /* stock ftHintDefault */
+    enum ftAntiAlias antiAlias;  /* stock ftAaNormal */
+    };
+
+void ftSetTuning(struct ftTuning *tuning);
+/* Set the FreeType knobs.  Call it before anything is drawn: a glyph is cached once per
+ * pixel size, so a hinting change after a glyph is rendered does not reach that glyph. */
+
+void ftTuningDefaults(struct ftTuning *tuning);
+/* Fill in the stock values. */
+
 void mgLoadFontEngine(unsigned int method, char *fontFile);
 /* Load a text engine without attaching it to an image.  Text measurement
  * (mgFontStringWidth) answers from whichever engine is loaded, so a caller that

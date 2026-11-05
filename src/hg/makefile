@@ -26,7 +26,7 @@ BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf utils/ps
 #endif
 
 # these should not be included in UTILS_APPLIST or parallel test runs will fail
-TEST_DIRS = lib
+TEST_DIRS = lib utils
 
 TEST_EXTRA = cgilib
 

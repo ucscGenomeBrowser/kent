@@ -311,11 +311,44 @@ compressPipeline = textOutInit(fileName, compressType, &saveStdout);
 }
 
 
+static boolean dbNameExists(char *db)
+/* Return TRUE if db is the name of a database we can reach.  Cached, since a
+ * page asks this of every table name it handles. */
+{
+static struct hash *checked = NULL;
+if (checked == NULL)
+    checked = newHash(8);
+struct hashEl *hel = hashLookup(checked, db);
+if (hel != NULL)
+    return ptToInt(hel->val);
+boolean exists = sqlDatabaseExists(db);
+hashAddInt(checked, db, exists);
+return exists;
+}
+
+boolean tableHasDbPrefix(char *table)
+/* Return TRUE when the text before the first dot in table is the name of a
+ * database, as in uniProt.taxon.  A dot on its own does not mean that: a table
+ * name can carry an assembly accession version, the way the HPRCv2 and GenArk
+ * chain/net subtracks do in chainLiftOverGCA_018466835.2. */
+{
+char *dot = strchr(table, '.');
+if (dot == NULL || dot == table)
+    return FALSE;
+char db[256];
+if (dot - table >= (int)sizeof(db))
+    return FALSE;
+safencpy(db, sizeof(db), table, dot - table);
+return dbNameExists(db);
+}
+
 void dbOverrideFromTable(char buf[256], char **pDb, char **pTable)
 /* If *pTable includes database, overrider *pDb with it, using
  * buf to hold string. */
 {
 char *s;
+if (!tableHasDbPrefix(*pTable))
+    return;
 safef(buf, 256, "%s", *pTable);
 s = strchr(buf, '.');
 if (s != NULL)
@@ -460,7 +493,8 @@ struct hgPositions *lookupPosition(struct dyString *dyWarn)
 {
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
 range = trimSpaces(range);
-if (isEmpty(range))
+/* "default" comes from position=default URLs, it is not a search term, as in cartGetPosition() */
+if (isEmpty(range) || sameString(range, "default"))
     range = hDefaultPos(database);
 struct hgPositions *hgp = hgFindSearch(cart, &range, NULL, NULL, NULL, getScriptName(), dyWarn, NULL);
 cartSetString(cart, hgtaRange, range);
@@ -590,7 +624,7 @@ if (sameString(table, WIKI_TRACK_TABLE))
     safef(dbTable, sizeof(dbTable), "%s.%s", wikiDbName(), WIKI_TRACK_TABLE);
     return cloneString(dbTable);
     }
-else if (strchr(table, '.') != NULL)
+else if (tableHasDbPrefix(table))
     return cloneString(table);
 else
     {
@@ -988,16 +1022,26 @@ else if (track != NULL && !tdbIsComposite(track))
         }
     }
 /* If we haven't found the answer but this looks like a non-positional table,
- * use the first field.  Skip for hub assemblies, which have no SQL database. */
+ * use the first field.  Skip for hub assemblies, which have no SQL database, and
+ * for anything else with no SQL table to describe.  showMainControlTable() only
+ * looks up hTableInfo when the table name has no dot in it, taking a dot to mean
+ * another database, so a file-backed track whose name carries an accession
+ * version -- chainLiftOverGCA_018466835.2 and the rest of the HPRCv2 and GenArk
+ * chain/net subtracks -- arrives here with hti NULL.  Describing a table that
+ * does not exist aborts in the middle of the page, leaving unclosed table rows
+ * behind. */
 if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos)
     && !trackHubDatabase(db))
     {
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
-    struct slName *fieldList = sqlListFields(conn, table);
-    if (fieldList == NULL)
-        errAbort("getIdField: Can't find fields of table %s", table);
-    idField = cloneString(fieldList->name);
-    slFreeList(&fieldList);
+    if (sqlTableExists(conn, table))
+        {
+        struct slName *fieldList = sqlListFields(conn, table);
+        if (fieldList == NULL)
+            errAbort("getIdField: Can't find fields of table %s", table);
+        idField = cloneString(fieldList->name);
+        slFreeList(&fieldList);
+        }
     hFreeConn(&conn);
     }
 return idField;
@@ -1843,8 +1887,13 @@ initGroupsTracksTables();
 struct dyString *dyWarn = dyStringNew(0);
 boolean noShort = (cartOptionalString(cart, "noShort") != NULL); // is this the second page of results
 char *range = windowsToAscii(cloneString(cartUsualString(cart, hgtaRange, "")));
-struct hgPositions *hgp = lookupPosition(dyWarn);
-if (hgp->singlePos && isEmpty(dyWarn->string) && !noShort)
+/* Schema pages do not use the position, so do not let a position search, e.g. for
+ * "default" left in the cart by a position=default URL, turn them into a search results page. */
+boolean isSchemaPage = cartVarExists(cart, hgtaDoSchema) || cartVarExists(cart, hgtaDoSchemaTable);
+struct hgPositions *hgp = NULL;
+if (!isSchemaPage)
+    hgp = lookupPosition(dyWarn);
+if (isSchemaPage || (hgp->singlePos && isEmpty(dyWarn->string) && !noShort))
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
 	doGetGreatOutput(dispatch);

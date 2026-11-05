@@ -96,15 +96,16 @@ void htmlMemDeath();
 char *getNonce();
 /* make nonce one-use-per-page */
 
+char *getCspPolicyString();
+/* Return the Content Security Policy, the value part of the header, freeMem when done.
+ * Carries the same nonce as the meta tag, since getNonce() is one-per-process, so a page
+ * may safely have both. */
+
 char *getCspMetaHeader();
 /* return meta CSP header string */
 
 void generateCspMetaHeader(FILE *f);
 /* Generate Meta CSP Header */
-
-void generateCspResponseHeader(FILE *f);
-/* Generate the CSP as an http response header.  Must be called before the
- * blank line that ends the http header block. */
 
 void htmlStart(char *title);
 /* Write the start of a cgi-generated html file */

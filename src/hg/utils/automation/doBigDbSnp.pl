@@ -43,7 +43,7 @@ my $equivRegions = 'equivRegions.tab';
 # Option defaults:
 my $assemblyList = 'GRCh37.p13,GRCh38.p13';
 my $dbHost = 'hgwdev';
-my $bigClusterHub = 'ku';
+my $bigClusterHub = 'hgwdev';
 my $smallClusterHub = 'hgwdev';
 my $workhorse = 'hgwdev';
 

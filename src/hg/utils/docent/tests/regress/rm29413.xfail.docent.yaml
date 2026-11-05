@@ -1,0 +1,48 @@
+# #29413 -- "Recommended Track Sets do not work while in multi-region".  Jairo put hg38
+# into multi-region mode with the alt haplotype chr1_KI270762v1_alt substituted, then
+# picked a Recommended Track Set from the menu, and got a grey screen.  In 2025 Gerardo
+# found the grey screen gone, but the Clinical SNVs set still failed with
+#
+#     slice(side) has bad map
+#
+# while the other track sets loaded.  The ticket is still New.
+#
+# Clinical SNVs is the set that failed, so it is the one this script loads.  The click
+# goes through the real menu item and the real link in its dialog, because hgTracks.js
+# (showRecTrackSetsPopup) writes the current position into each link only when the
+# dialog opens; a hand-built URL would carry a different position.
+#
+# Checks:
+#   step 1  the alt view really loaded: the Multi-region button is pressed and the alt
+#           sequence has its own region box.
+#   step 2  after loading Clinical SNVs: no "has bad map" warning (the ticket's own
+#           text); the track set really loaded -- clinvarMain, mane and revelA, three of
+#           its tracks, are drawn, and none of them was on before; and the view is still
+#           multi-region.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test with the ticket's own text: mapItem has coordinates outside of image (height:28600), slice(side) has bad map, imgTrack(unipSplice) has bad slice"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr1%3A2094367-3145714&virtModeType=singleAltHaplo&singleAltHaploId=chr1_KI270762v1_alt&pix=1100&hideTracks=1&knownGene=pack"
+  - expect:
+      rows: [ruler, knownGene]
+      exact: true
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr1_KI270762v1_alt:1-354444"]'
+
+  - hover: '#tools2'
+  - click: '#recTrackSetsMenuItem'
+  - wait: '#recTrackSetsPopup a.recTrackSetLink'
+  - click: '#recTrackSetsPopup a.recTrackSetLink[href*="rtsLoad=Clinical_SNVs_hg38"]'
+  - wait: '#imgTbl'
+  - shot: clinicalSnvs
+  - expect:
+      rows: [ruler, clinvarMain, mane, revelA]
+      noText: "has bad map"
+      has: '#hgTracksConfigMultiRegionPage.pressed'

@@ -31,3 +31,9 @@ include varFreqs.ra alpha,beta
 
 include lrSv.ra
 # include hs1.GCF_000165445.2.chainNet.ra alpha
+
+# tmp removed due to problem with composite tracks
+#include transcriptionStart.ra alpha
+include transcriptionStartPublic.ra beta,public
+
+include miniMapChains.ra alpha

@@ -368,6 +368,9 @@ are described below along with the settings specific to their types.</P>
         <div class="format"><code>compareGenomeLinks &lt;db[.table[.column]]=label&gt;
                                     [db[.table[.column] =label &hellip;]</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="denseClick"><A name="denseClick"></A><IMG class='toggle detail'>
+        <div class="format"><code>denseClick &lt;on/off&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="denseCoverage"><A name="denseCoverage"></A><IMG class='toggle detail'>
         <div class="format"><code>denseCoverage &lt;maxVal&gt;</code></div>
     </TD></TR>
@@ -531,6 +534,15 @@ are described below along with the settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="style"><A name="style"></A><IMG class='toggle detail'>
         <div class="format"><code>style &lt;heatmap&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="heatmap_background"><A name="heatmap_background"></A><IMG class='toggle detail'>
+        <div class="format"><code>heatmap.background &lt;color&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dotBracketField"><A name="dotBracketField"></A><IMG class='toggle detail'>
+        <div class="format"><code>dotBracketField &lt;fieldName&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="dotBracketColor"><A name="dotBracketColor"></A><IMG class='toggle detail'>
+        <div class="format"><code>dotBracketColor &lt;red,green,blue&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"></A><IMG class='toggle detail'>
         <div class="format"><code>thickDrawItem &lt;off/on&gt;</code></div>
@@ -1181,6 +1193,9 @@ are described below along with the settings specific to their types.</P>
     <TR class="related" VALIGN=TOP><TD class="hapClusterMethod"><A NAME="hapClusterMethod"><IMG class='toggle detail setF'>
         <div class="format"><code class="level-full">hapClusterMethod &lt;centerWeighted|fileOrder|treeFile <em>url</em>&gt;</code></div>
     </TD></TR>
+    <TR class="related" VALIGN=TOP><TD class="sampleColorFile"><A NAME="sampleColorFile"><IMG class='toggle detail setF'>
+        <div class="format"><code class="level-new">sampleColorFile &lt;url&gt;</code></div>
+    </TD></TR>
     <TR class="related" VALIGN=TOP><TD class="hapClusterColorBy"><A NAME="hapClusterColorBy"><IMG class='toggle detail setF'>
         <div class="format"><code class="level-full"><code>hapClusterColorBy &lt;altOnly|function|refAlt|base&gt;</code></div>
     </TD></TR>
@@ -1208,6 +1223,9 @@ are described below along with the settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="minAc"><A NAME="minAc"><IMG class='toggle detail'>
         <div class="format"><code class="level-new">minAc &lt;<EM>N</EM>&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="excludeFilterValues"><A NAME="excludeFilterValues"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">excludeFilterValues &lt;<EM>value1,value2,...</EM>&gt;</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="vcfDoFilter"><A NAME="vcfDoFilter"><IMG class='toggle detail'>
         <div class="format"><code class="level-new">vcfDoFilter &lt;on/off&gt;</code></div>
     </TD></TR>
@@ -1222,6 +1240,9 @@ are described below along with the settings specific to their types.</P>
     </TD></TR>
     <TR VALIGN=TOP><TD class="sampleMetadataFile"><A NAME="sampleMetadataFile"><IMG class='toggle detail'>
         <div class="format"><code class="level-new">sampleMetadataFile &lt;url&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="showHardyWeinberg"><A NAME="showHardyWeinberg"><IMG class='toggle detail'>
+        <div class="format"><code class="level-new">showHardyWeinberg &lt;on/off&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD>
             <P>Additional settings found in the "Item or
@@ -1264,7 +1285,7 @@ are described below along with the settings specific to their types.</P>
         <div class="format"><code class="level-full">vcfUseAltSampleNames &lt;on/off&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="vcfPhasedColorBy"><A NAME="vcfPhasedColorBy"><IMG class='toggle detail'>
-        <div class="format"><code class="level-new">vcfPhasedColorBy &lt;mendelDiff|deNovo|function|noColor&gt;</code></div>
+        <div class="format"><code class="level-new">vcfPhasedColorBy &lt;noColor|function|deNovo|mendelDiff&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="geneTrack"><A NAME="geneTrack"><IMG class='toggle detail'>
         <div class="format"><code class="level-new">geneTrack &lt;track&gt;</code></div>

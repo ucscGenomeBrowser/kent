@@ -2,8 +2,8 @@
 # Redmine #21599.  Mouse counterpart of human hg38 tads (domains only; the human Schmitt +
 # McArthur boundary tracks have no mouse data). Built by reusing the human pipelines + liftOver.
 # This doc covers BOTH mm10 and mm39 (the build scripts emit both); mm39 trackDb mirrors mm10.
-# Build scripts and autoSql are version-controlled at ~/kent/src/hg/makeDb/scripts/tad/ and
-# symlinked into the per-source build dirs, so the commands below run the in-tree copies.
+# Build scripts and autoSql are version-controlled at ~/kent/src/hg/makeDb/scripts/tad/ and are
+# run from there (see the 2026-10-13 rebuild section at the end of this file).
 # Organ colors come from the TAD-owned /hive/data/outside/tad/organ_colors.json (symlinked into
 # /gbdb/<asm>/bbi/tad/organ_colors.json) - a copy of the wgEncodeReg4 map, isolated so TAD
 # additions never touch the shared file.
@@ -103,3 +103,40 @@ for asm in mm10 mm39; do
 done
 #   mouse/{mm10,mm39}/tad.ra: include tads3dgb.ra ; html tads3dgb.html.
 cd ~/kent/src/hg/makeDb/trackDb && make DBS=mm10 FIND=find && make DBS=mm39 FIND=find
+
+##############################################################################
+# QA-fix rebuild (mm10 + mm39)  2026-10-13 (lou)
+##############################################################################
+# Supersedes the BUILD descriptions and commands above (paths under /hive/users/lrnassar, the
+# lifttest dir, /hive/data/outside/tad/*.as and "ships all-off" are out of date). Commands,
+# input locations, the staging/compare step and the full list of changes are in ../hg38/tad.txt
+# (section "QA-fix rebuild"); the mouse steps are:
+K=~/kent/src/hg/makeDb/scripts/tad
+cd /data/tmp
+$K/buildDixonMouse.sh          # reads /hive/data/outside/tad/dixon2012/source/mm9_*_domains.bed
+python3 $K/buildTadsEncode.py mm10
+$K/liftEncodeMouse.sh
+python3 $K/buildTads3dgb.py mm10
+$K/liftTads3dgbMouse.sh
+# Mouse-specific changes: every lift (mm9 -> mm10/mm39, mm10 -> mm39) now trims to the chrom end
+# and drops lifted items more than twice their source size; ENCODE scores written to 3 decimals;
+# mm10 3DGB bigBeds carry tadDomain.as; 3DGB subtracks visibility pack with 3 on by default
+# (418 mESC Dixon 2012, 424 CH12-LX Rao 2014, 429 mESC WT Micro-C); ENCODE shortLabel overrides
+# and lowercased biosample in longLabels now come from the script.
+# Counts (in = source items; unmapped by liftOver; inflated = dropped by the 2x size rule):
+#   Dixon mESC    mm10  in 2200  unmapped 47  nonPrimary 0  trimmed 0  inflated 0  final 2153
+#   Dixon Cortex  mm10  in 1518  unmapped 29  nonPrimary 0  trimmed 0  inflated 0  final 1489
+#   Dixon mESC    mm39  in 2200  unmapped 39  nonPrimary 0  trimmed 0  inflated 1  final 2160
+#   Dixon Cortex  mm39  in 1518  unmapped 25  nonPrimary 0  trimmed 0  inflated 0  final 1493
+#   ENCODE mm39 (16 files): in 99017, unmapped 182, nonPrimary 0, trimmed 0, inflated 5, final 98830
+#     mousetrophoblaststemcell.bb inflated 1
+#     Thelper17cell.bb inflated 1
+#     Thelper1cell.bb inflated 1
+#     vAbltransformedproBcells.bb inflated 2
+#   3DGB mm39 (30 files): in 91392, unmapped 1284, nonPrimary 0, trimmed 0, inflated 2, final 90106
+#     622.bb inflated 1
+#     625.bb inflated 1
+cp /hive/data/outside/tad/encode/build/mm10/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm10/
+cp /hive/data/outside/tad/encode/build/mm39/tadsEncode.ra ~/kent/src/hg/makeDb/trackDb/mouse/mm39/
+cd ~/kent/src/hg/makeDb/trackDb
+make DBS="mm10 mm39"

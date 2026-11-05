@@ -90,6 +90,11 @@ $(function() {
   // menubar links point to hgHubConnect#<tab>. When already on this page a same-page
   // hash link only scrolls; intercept and switch tabs instead.
   $(document).on("click", "a[href*='hgHubConnect'][href*='#']", function(ev) {
+      // only same-page links are tab switches. A mirror sends people to the hgHubConnect
+      // of the login host, and that hash names a tab here too, so without this check the
+      // link is swallowed and reopens the tab the reader is already looking at.
+      if (this.host !== window.location.host)
+          return;
       var index = tabIndexForHash(this.hash);
       if (index >= 0) {
           ev.preventDefault();

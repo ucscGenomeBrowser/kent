@@ -1,0 +1,69 @@
+# #37595 -- a trackDb iframeUrl frame was printed at the top of an item's details page, above
+# the item's own fields.  It now comes after the "View DNA for this feature" line, with the
+# rest of the details.
+#
+# 2eecd47992b, hg/hgc (hgc.c, hgc.h, loraxClick.c).  printIframe() no longer writes the frame;
+# it queues it, and printPendingIframe() writes it out from the position-printing routines
+# (printPos, bedPrintPos).  The same commit dropped the old guard that printed the frame only
+# for a track that ALSO had a url setting, so a track with iframeUrl and no url shows its frame
+# for the first time.  d75c53ecece then fixed the five dead iframeUrl settings that change
+# exposed: the PDB ones now frame https://www.rcsb.org/structure/, and the NCBI nuccore ones
+# became a plain url, since nuccore refuses to be framed.
+#
+# Three pages, one per path through the code:
+#
+#   * wuhCor1 pdb 8aou -- the generic hgc path (genericClickHandlerPlus).  wuhCor1's pdb has a
+#     url AND an iframeUrl, so v503 draws a frame here too, but ABOVE the details, straight
+#     after the EBI link and before Score.  The check is the ORDER: the frame is a later
+#     sibling (`~`) of the View DNA link.  There is no reverse check: on v503 a <p> follows
+#     the frame and the parser puts the View DNA link inside it, so the link is not the
+#     frame's sibling either way and a noHas on that order would pass on anything.
+#   * eboVir3 pdb 4nl8 -- the same path, with an iframeUrl and no url.  v503 draws no frame at
+#     all here.  The frame also has to be the https rcsb.org one from d75c53ecece; before it,
+#     the page framed http://www.pdb.org/..., which a browser blocks on an https page.
+#   * hg38 recount3_gtex 28707816 -- the bigBed path (bigBedClick.c, then bedPrintPos).  The
+#     judges' notes on the ticket said this track showed no frame; on 2026-09-30 genome-test,
+#     hgwbeta and v503 all print one for this item, so the bigBed path draws.  v503 prints it
+#     above the Position line.
+#
+# The frames load outside sites (rcsb.org, snaptron.cs.jhu.edu).  Nothing here asserts what is
+# INSIDE a frame, only where the frame element sits in the page, so a frame that errors or is
+# refused changes nothing.  One outside failure does show: goto: waits for the page's load
+# event, which waits for its frames, so a frame host that HANGS for 30 s times the step out.
+# A red goto: on step 3 or 5 is that, not this ticket; curl the frame's src to tell.
+#
+# TICKET PARKS read trackDb_braney ahead of trackDb (db.trackDb in their hg.conf), and that
+# table does not carry d75c53ecece: eboVir3 pdb there still frames http://www.pdb.org/.  On a
+# park's http port the page's load event then never arrives (the frame's host does not
+# answer) and step 3 times out; on its https port step 4 fails on the pdb.org frame.  Both
+# are the park's trackDb, not the code.  genome-test and hgwbeta read the shared trackDb.
+#
+# NOT covered: the lorax path (hg38 tgpArchive, loraxClick.c), where the frame is the whole
+# page and prints where it always did, and the bigPsl path, which has no live iframeUrl track.
+proof:
+  - "assertion-only 2026-09-30 -- written from #37595, 2eecd47992b and d75c53ecece after both reached genome-test"
+  - "release-ab 2026-09-30 -- passes on genome-test and hgwbeta (v504); fails on ts park 38316 (v503_branch) at step 2: no iframe after the View DNA link on wuhCor1 pdb 8aou, where v503 prints the frame above Score"
+
+target: genome-test
+db: wuhCor1
+reset: true
+fast: true
+steps:
+  # The generic path, a track with url and iframeUrl both.
+  - goto: "/cgi-bin/hgc?db=wuhCor1&g=pdb&i=8aou&c=NC_045512v2&o=259&t=805&l=259&r=805"
+  - expect:
+      text: ["Protein Data Bank (PDB) Sequence Matches (8aou)", "View DNA for this feature"]
+      has: 'a[href*="g=getDna"] ~ iframe#hgcIframe[src="https://www.rcsb.org/structure/8aou"]'
+
+  # iframeUrl and no url: a frame that v503 never drew, now under the details.
+  - goto: "/cgi-bin/hgc?db=eboVir3&g=pdb&i=4nl8&c=KM034562v1&o=1732&t=1756&l=1732&r=1756"
+  - expect:
+      text: ["(4nl8)", "View DNA for this feature"]
+      has: 'a[href*="g=getDna"] ~ iframe#hgcIframe[src="https://www.rcsb.org/structure/4nl8"]'
+      noHas: 'iframe[src*="pdb.org/"]:not([src*="rcsb.org"])'
+
+  # The bigBed path.
+  - goto: "/cgi-bin/hgc?db=hg38&c=chr7&l=155799528&r=155812871&o=155803726&t=155806295&g=recount3_gtex&i=28707816"
+  - expect:
+      text: ["28707816", "chr7:155803727-155806295", "View DNA for this feature"]
+      has: 'a[href*="g=getDna"] ~ iframe#hgcIframe[src*="snaptron.cs.jhu.edu"][src*="jid=28707816"]'

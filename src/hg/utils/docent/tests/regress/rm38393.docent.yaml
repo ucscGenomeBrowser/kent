@@ -1,0 +1,36 @@
+# #38393 -- the REST API's /search endpoint returned HTTP 500 on every query.
+#
+# The bug: 1db5c89d97f (2026-09-17, refs #38285) added a read of measureTiming out of the
+# cart at the top of hgPositionsJson() in src/hg/cgilib/cartJson.c.  hubApi builds no cart,
+# and src/hg/hubApi/search.c has always passed NULL to hgPositionsJson(), so every /search
+# died in cartUsualBoolean(cart=0x0) before it printed a header.  Apache answered 500 with
+# "End of script output before headers: hubApi" in its error log.
+#
+# The fix: 32fbe1660c6 (2026-09-21), cartJson.c, a NULL check around that read.
+#
+# No release carries the bug.  1db5c89d97f and 32fbe1660c6 both landed between v503 and
+# v504, so v503 has neither and v504 has both, and this script passes on both.  The builds
+# that do have it are the ones made from master between 2026-09-17 and 2026-09-21; two
+# ticket parks from those days are the before for the sandbox-ab line below.
+#
+# The page is the JSON itself, read as text.  A 500 is Apache's own error page, so the
+# checks are all positive: the JSON's own keys, and BRCA1's MANE position, which is what
+# the search has to find.  hubApi/tests `make search01` watches the same request with a
+# bracket count; this script is the nightly one, on genome-test, with a named answer.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38393 after 32fbe1660c6 reached genome-test"
+  - "sandbox-ab 2026-09-30 -- fails on ts parks 38395 (branch narrowPeak38395, built 2026-09-21 09:04) and 38252 (branch revert22docent, built 2026-09-17), both of which hold 1db5c89d97f and not 32fbe1660c6: step 3 fails: the page is Apache's Internal Server Error and has no positionMatches. Passes on genome-test, hgwbeta (v504), park 38423 (v504_branch) and park 38316 (v503_branch, which predates the bug)"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hubApi/search?search=brca1;genome=hg38"
+  # 'pre' is Chromium's JSON view; 'h1' is Apache's 500 page, so a broken build reaches the
+  # expect: below and fails there, naming the error, rather than timing out here.
+  - wait: 'pre, h1'
+  - expect:
+      text: ['"genome": "hg38"', '"positionMatches": [', '"trackName": "mane"',
+             '"position": "chr17:43044295-43125364"']
+      noText: ["Internal Server Error", "End of script output"]

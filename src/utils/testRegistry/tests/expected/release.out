@@ -1,0 +1,15 @@
+37263  v504   lib/tests/pathSimplifyTest.c               -                          library    assertion-only  dot-dot collapsing
+38303  v504   -                                          rm38303.docent.yaml        invisible  -               needs one: a session file path spelled through a symlinked config directory
+38320  v504   lib/tests/faSpeedReadTest.c                -                          invisible  sandbox-ab      the grower and the caller asked for different sizes
+38340  v504   hg/hgSession/tests/backupParseTest.c       -                          invisible  unrecorded      a valueless pair in a session backup
+
+3 tickets covered by 3 tests, 1 waiting for one
+  v504      4 tickets
+1 also have a docent script, 0 have no test of any kind
+why a unit test:
+  invisible    3 tickets
+  library      1 tickets
+evidence, weakest first:
+  unrecorded           1 rows
+  assertion-only       1 rows
+  sandbox-ab           1 rows

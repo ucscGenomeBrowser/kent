@@ -17,10 +17,9 @@
 # So this script has now watched the behaviour break and come back, which is more than the
 # rest of the suite can say. It was an .xfail between the two.
 #
-# The session is braney/crash1, the same one rm37388 uses, because it pins a state that is
-# awkward to build in steps: hg38 with a quickLift hub active whose source is the GenArk
-# GCA_018466835.2, and an xenoRefGene track from that hub. rm38272 uses it too, so preflight
-# covers it for all three.
+# The state is the one rm37388 builds: hg38 with a quickLift hub active whose source is the
+# GenArk GCA_018466835.2, and an xenoRefGene track from that hub.  It used to come from the
+# saved session braney/crash1, which only genome-test could load; it is built in steps now.
 #
 # A separate from-scratch reproduction, which needs no session at all and can be pointed at
 # any server, is kept at
@@ -35,8 +34,15 @@ db: hg38
 reset: true
 fast: true
 steps:
-  - loadSession: {user: braney, name: crash1}
-  - expect: {noText: "Could not find session"}
+  # The lifted view is built in steps, not loaded from a session.  A quickLift session names
+  # its hub by a path on the server that made it, and re-pointing it does not work (#38046),
+  # so braney/crash1 ran only on genome-test.  These steps run on any server.  They lift the
+  # mitochondrion of GenArk GCA_018466835.2 to hg38, the state crash1 held.
+  - goto: "/cgi-bin/hgTracks?db=GCA_018466835.2&position=chrMT_JAGYVI020000079v1_random:1-16566&pix=1100"
+  - expect: {rows: [xenoRefGene]}
+  - goto: "/cgi-bin/hgConvert?db=GCA_018466835.2&position=chrMT_JAGYVI020000079v1_random:1-16566&hglft_toOrg=Human&hglft_toDb=hg38&doQuickLift=on&hglft_doConvert=submit"
+  - click: 'a[href*="hgTracks?"][href*="quickLift."]'
+  - expect: {rows: [xenoRefGene], text: "chrM"}
 
   - click: {track: xenoRefGene, item: "NM_126741.2"}
 

@@ -2126,7 +2126,12 @@ for (table = hgp->tableList; table != NULL; table = table->next)
         if (tdb->parent)
             {
             if (tdbIsSuperTrackChild(tdb))
-            fprintf(f, "%s=show&", tdb->parent->track);
+            {
+            struct slName *supers = tdbSuperTrackAncestors(tdb), *super;
+            for (super = supers; super != NULL; super = super->next)
+                fprintf(f, "%s=show&", super->name);
+            slNameFreeList(&supers);
+            }
             else
             {
             // tdb is a subtrack of a composite or a view
@@ -2865,6 +2870,9 @@ struct dyString *clause = dyStringNew(0);
 struct searchCategory *categ;
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
+// a spec in more than one hgFindSpec table (e.g. hgFindSpec_$USER,hgFindSpec) is searched once,
+// the first table in db.trackDb order wins
+struct hash *seenSpecs = hashNew(0);
 struct slName *tbl, *tblList = hTrackDbList();
 for (tbl = tblList; tbl != NULL; tbl = tbl->next)
     {
@@ -2895,6 +2903,12 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             struct hgFindSpec *hfs = hgFindSpecLoad(row);
+            if (hashLookup(seenSpecs, hfs->searchName))
+                {
+                hgFindSpecFree(&hfs);
+                continue;
+                }
+            hashAdd(seenSpecs, hfs->searchName, NULL);
             if (hfs->shortCircuit)
                 slAddHead(&shortList, hfs);
             else
@@ -2903,6 +2917,7 @@ for (tbl = tblList; tbl != NULL; tbl = tbl->next)
         sqlFreeResult(&sr);
         }
     }
+hashFree(&seenSpecs);
 hFreeConn(&conn);
 dyStringFree(&clause);
 
@@ -4381,8 +4396,13 @@ if (htmlPath != NULL)
 	char *fetched = lineFileReadAll(lf);
 	lineFileClose(&lf);
 	/* This one came in over the network from a hub, so print only what we allow. */
-	htmlString = htmlSanitize(fetched);
-	freeMem(fetched);
+	if (hubHtmlSanitizeOn())
+	    {
+	    htmlString = htmlSanitize(fetched);
+	    freeMem(fetched);
+	    }
+	else
+	    htmlString = fetched;
 	htmlStrLength = (htmlString == NULL ? 0 : strlen(htmlString));
 	}
     }

@@ -1,0 +1,26 @@
+# #38022 -- the "Show all" checkbox was missing from the multi-region dialog.  The hg.conf
+# setting multiRegionButtonTop was read with two built-in defaults: TRUE in hgTracks.c (the
+# button position) and FALSE in config.c (whether to draw the checkbox).  When #28831
+# commented the setting out of every hg.conf, the checkbox went away everywhere.
+#
+# 5ee67436362 (refs #37977) changed config.c to default TRUE as well.
+#
+# This opens the multi-region dialog the way its button does (hgTracksConfigMultiRegionPage=
+# multi-region) and asserts the checkbox, input#virtWinFull, is on the page next to the
+# regions textarea, which is the positive check that the dialog itself drew.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+  - goto: "/cgi-bin/hgTracks?hgTracksConfigMultiRegionPage=multi-region"
+  - expect:
+      has:
+        - 'textarea#multiRegionsBedInput'
+        - 'input[type=checkbox]#virtWinFull'
+      text: "Show all"

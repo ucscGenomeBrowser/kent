@@ -1,0 +1,53 @@
+# #19302 -- Multi-region and the Data Integrator interfere.  Bob Kuhn, 2017-04-25: in a
+# multi-region view of regions loaded from a file, a trip hgTracks -> Data Integrator ->
+# hgTracks lost the view; hgTracks came back showing only the first region.  Angie added
+# that the Table Browser did the same, since it does not understand the virtual
+# chromosome.  Gerardo closed it on 2023-07-28 because he could not reproduce it.
+#
+# The recipe uses three custom regions pasted through the URL (Bob's FGF genes are hg19
+# coordinates; these are hg38 regions in the same spirit, on three chromosomes), visits
+# hgIntegrator and then hgTables, and comes back to plain hgTracks after each.  The check
+# each time is that the view is still multi-region and that the LAST two regions still
+# have their map boxes.  A view that fell back to the first region has neither.
+#
+# THE BUG IS STILL THERE, although the ticket is Closed.  On genome-test 2026-10-06 the
+# script fails at step 6: after the hgIntegrator visit hgTracks shows multi:1-81,189,
+# which is exactly the length of the first region (chr17, 81,189 bp), so the chr7 and
+# chr12 boxes are gone.  A control without the hgIntegrator visit (a plain second
+# /cgi-bin/hgTracks request) keeps all three regions, so the loss is the visit.  On
+# hgwdev-demo6 the same step loses the chr12 region.  The hgTables leg is not reached.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test at step 6 for the ticket's own reason: after hgIntegrator the view is the first region only (multi:1-81,189)"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17%3A43044295-43125483&pix=1100&hideTracks=1&knownGene=pack"
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr17%2043044294%2043125483%0Achr7%20155799529%20155812871%0Achr12%2025205245%2025250936%0A"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+        - 'area[data-tooltip="chr12:25205246-25250936"]'
+
+  - goto: "/cgi-bin/hgIntegrator"
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+        - 'area[data-tooltip="chr12:25205246-25250936"]'
+
+  - goto: "/cgi-bin/hgTables"
+  - goto: "/cgi-bin/hgTracks"
+  - expect:
+      rows: [ruler, knownGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr7:155799530-155812871"]'
+        - 'area[data-tooltip="chr12:25205246-25250936"]'

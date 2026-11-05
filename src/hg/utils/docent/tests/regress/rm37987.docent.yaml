@@ -1,0 +1,67 @@
+# #37987 -- a color picked by dragging inside the highlight color picker was not used.
+#
+# Reported on the mailing list (#37983) against the hgTracks Drag-and-select dialog:
+# clicking one of the palette squares worked, but dragging in the gradient square only
+# repainted the picker, and Save Color then saved the color that had been showing before.
+#
+# 26c8e4e2290 is the fix. It is in origin/v503_branch and not in origin/v502_branch, so
+# v502 is the release-ab baseline. hg/js/hui.js only, so a baseline build needs the JS
+# installed, not only the CGIs.
+#
+# The buttons read the hex text box beside the swatch, not the picker. spectrum treats a
+# palette click as a chosen color and fires change, which fills the box. A gesture in the
+# gradient fires only spectrum's move callback, and the picker had none, so the box kept
+# its old value. The fix adds a move handler that writes the color into the box (and a
+# hide handler that resyncs it, so a cancelled drag does not leave the dragged color).
+#
+# The picker lives in makeHighlightPicker in hui.js, and the Drag-and-select dialog is only
+# one of its two callers. The other is hgTrackUi, for a bigBed that carries a highlight
+# filter, and that page stays open, so this script drives the picker there. Same function,
+# same box, same missing callback. The Drag-and-select dialog itself cannot be used: the
+# drag: verb always acts on the dialog it opens (Zoom In, Single Highlight, or Escape), so
+# nothing can be clicked inside it.
+#
+# The gesture is one click in the middle of the gradient square. spectrum's draggable
+# calls its move handler on mousedown as well as on every mousemove, so a click there is
+# the start of a drag as far as the picker is concerned, and runs the same callback. A
+# palette square would be the wrong thing to click: that path worked before the fix.
+#
+# Checks, and what each one catches:
+#   * before the click, the box holds the starting color. This pins down what "changed"
+#     means below, and fails loudly if the picker never drew.
+#   * after the click, the box no longer holds it. On the broken build the box keeps the
+#     starting color until "choose" is clicked, so this is the check that flips.
+#
+# Nothing native on hg38 has a highlight filter, so the track comes from a fixture hub,
+# ~/public_html/docentFixtures/rm37987, whose header says why it exists (and why it needs a
+# filterText beside the highlight). The hub's track
+# name carries a hub_<n>_ prefix that differs every run, so the track settings page is
+# reached through the configure link in the track list, and the box is found by the ends
+# of its id.
+proof:
+  - "assertion-only 2026-09-26 -- written from 26c8e4e2290 after the fix shipped; drives the same picker on hgTrackUi, not in the Drag-and-select dialog"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): after the click in the gradient the highlight color box still holds #ffff00; passes on genome-test and on the v503_branch park (38316)"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - hide: all
+  - hub: https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/rm37987/hub.txt
+  - expect: {rows: [rm37987hl]}
+
+  - click: 'a[href*="hgTrackUi"][href*="rm37987hl"]'
+  - wait: 'input[id$="rm37987hl.highlightColorPicker"] + .sp-replacer'
+  - expect:
+      value: {sel: 'input[id^="colorPicker."][id$="rm37987hl.highlightColorInput"]', is: "#ffff00"}
+
+  # The page has a second spectrum picker, for the track's color override, so name this
+  # one's swatch by the input spectrum hides and draws it after.
+  - click: 'input[id$="rm37987hl.highlightColorPicker"] + .sp-replacer'
+  - wait: '.sp-container:not(.sp-hidden) .sp-color'
+  - click: '.sp-container:not(.sp-hidden) .sp-color'
+  - expect:
+      value: {sel: 'input[id^="colorPicker."][id$="rm37987hl.highlightColorInput"]', not: "#ffff00"}

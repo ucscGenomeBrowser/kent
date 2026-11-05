@@ -167,6 +167,16 @@ struct sqlConnection *hAllocConnDbTbl(char *spec, char **tableRet, char *default
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+unsigned hConnGeneration();
+/* The current connection generation, to pass to hConnFreeNewerThan.  It counts the
+ * connections handed out so far and names none of them, so nothing is taken out of the
+ * cache by asking.  See sqlConnCacheGeneration in jksql.h. */
+
+void hConnFreeNewerThan(unsigned generation);
+/* Put back every connection handed out to this thread after the given generation.  Call
+ * it after catching an errAbort, where the hFreeConn the aborted code would have made
+ * never ran. */
+
 struct sqlConnection *hConnectCentral(void);
 /* Connect to central database where user info and other info
  * not specific to a particular genome lives.  Free this up
@@ -581,7 +591,12 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList);
  * subtrack then inheritance will be handled.  (Unless a subtrack has
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found.
- * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout. */
+ * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
+ *   Pass tdbList whenever you look up more than one track.  With it NULL this loads the
+ * whole trackDb to find one name, and that is only cheap where the shared-memory cache
+ * is on (cacheTrackDbDir in hg.conf) - with the cache off hTrackDb() does not memoize,
+ * so a loop over N names is N full trackDb loads.  To ask only whether a name exists,
+ * hMaybeTrackInfo() is a single-row query instead. */
 #define hTrackDbForTrack(db,track) tdbForTrack(db,track,NULL)
 
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);

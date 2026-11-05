@@ -1,0 +1,63 @@
+# #38333 -- in multi-region exon view some track rows are dropped with no message on the
+# public site.  The layout puts a track's slices below the bottom of the image that was
+# actually produced, sliceIsConsistent() in hg/hgTracks/imageV2.c rejects them, and
+# imgBoxIsComplete() drops the whole row.  imageBoxDraw() prints the warning only on a
+# private host, so hgwdev says "has bad slice" and the RR says nothing.  The ticket is New;
+# there is no fix.
+#
+# THE TICKET'S OWN RECIPE IS NOT USED.  It is the Clinical SNVs session at BRCA1 at 1,500
+# pixels.  On genome-test 2026-10-06 it drew all five tracks in exon view, so it no longer
+# reaches the bug, and the exon-view page took 29.7 seconds, which is past docent's 30-second
+# goto: limit.  The ticket itself says the failure is not a simple height threshold, so a
+# data update can move it in and out of reach.
+#
+# THIS RECIPE REACHES THE SAME CHECK EVERY TIME.  It came out of the draft script for
+# #29033: one bigMaf custom track in full over SOD1 on hg19, then exon view.  On
+# genome-test 2026-10-06 (4 of 4 runs, curl and docent) hgTracks prints
+#
+#     slice(side) has an invalid X:12 or Y:1505 offset (image width:1100 height:609)
+#     imgTrack(knownGene) has bad slice
+#
+# and draws only the ruler: the bigMaf row and knownGene are both dropped.  The normal view
+# draws all three.  hgwdev-demo6 (multiRegionSpaces, #37788) draws all three in exon view.
+# It is the same check and the same symptom as the ticket.  Whether the cause is the same
+# as the Clinical SNVs case is not known.
+#
+# The fixture is a copy of Brian Lee's bigMaf.bb from #29033, in our own directory:
+#     https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/mrBugs/38333/rm38333.ct.txt
+# The track is named rm38333maf, so no native track can take its row.
+#
+# Checks:
+#   step 4  the normal view draws ruler, knownGene and the bigMaf row, so the custom track
+#           really loaded and a missing row in step 6 is the bug, not the recipe.
+#   step 6  exon view: the Multi-region button is pressed, knownGene and the bigMaf row are
+#           both drawn, and the page has no "has bad slice" warning (the ticket's own string,
+#           which genome-test shows because it is a private host).
+# Not asserted: the row heights, which the bigMaf species list sets.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+  - "xfail 2026-10-06 -- fails on genome-test at step 6 for the ticket's own reason: 'imgTrack(knownGene) has bad slice', only the ruler drawn; passes on hgwdev-demo6"
+
+target: genome-test
+db: hg19
+position: chr21:33031596-33041570
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031596-33041570&pix=1100&hideTracks=1&knownGene=pack"
+  - expect: {rows: [ruler, knownGene], exact: true}
+
+  # Load the custom track on a request of its own: hideTracks=1 would hide it too.
+  - goto: "/cgi-bin/hgTracks?hgct_customText=https://hgwdev.gi.ucsc.edu/~braney/docentFixtures/mrBugs/38333/rm38333.ct.txt"
+  - expect:
+      rows: [ruler, knownGene]
+      has: '[id^="img_data_ct_rm38333maf_"]'
+      noText: "has bad slice"
+
+  - goto: "/cgi-bin/hgTracks?pix=1100&virtModeType=exonMostly"
+  - expect:
+      rows: [ruler, knownGene]
+      noText: "has bad slice"
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - '[id^="img_data_ct_rm38333maf_"]'

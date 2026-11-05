@@ -21,4 +21,7 @@ table civicdbBed
     lstring diseaseLink;         "Associated disease types"
     lstring therapies;           "Associated therapies"
     lstring mouseOverHTML;       "Disease and therapy summary"
+    string evidenceLevel;        "Best evidence level|A (best) to E"
+    string partnerPos;           "Fused to"
+    string variantType;          "Variant type"
 )

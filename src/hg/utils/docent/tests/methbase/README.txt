@@ -7,6 +7,16 @@ Ten scripts, run by hand against genome.ucsc.edu:
     make test T=mbSignal       # just one
     make preflight             # the hub URLs and the server, no browser
 
+    make test TARGET=hgwdev-demo9      # the same ten, against another server
+
+TARGET is in ../docentTest.mk and is described in ../README.txt.  These ten are worth
+redirecting at a branch build, because both hubs are reachable from any of our machines
+and nine of the ten are hg38 and mm39 only.  What changes on another server is the
+trackDb underneath: on 2026-09-14 all ten passed against the demo9 sandbox in 4m39s,
+against 5m17s for the same ten on the RR, and mbMouse had to be given an mm39 trackDb
+there first -- until it was, the mm39 page was the "can not find any trackDb tables"
+error and the script died at step 2 with no #hgt.hideAll to click.
+
 What "MethBase on the RR" means
 -------------------------------
 

@@ -1,0 +1,4 @@
+#chr	chromStart	chromEnd	name	score	strand	name2	expCount	expScores;wholeBlood muscleSkeletal adiposeSubcut breastMamTissue colonTransverse	_offset	_lineLength
+chr14	95086227	95158010	ENSG00000100697.10	999	-	DICER1	5	4.89,6.69,10.94,11.60,8.00	93153	26788
+chr14	95181939	95319906	ENSG00000165959.7	999	-	CLMN	5	1.68,1.38,7.08,9.53,9.32	66148	27004
+chr14	95417493	95475836	ENSG00000176438.8	999	-	SYNE3	5	1.39,0.35,7.29,3.73,0.74	38669	27478

@@ -46,6 +46,12 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 #define hgsDoGalleryJson hgSessionPrefix "doGalleryJson"
 #define hgsDoOverwriteJson hgSessionPrefix "doOverwriteJson"
 #define hgsDoDescribeJson hgSessionPrefix "doDescribeJson"
+/* Asked for by hgSession.js on another mirror node; answered without a cart, see
+ * doSessionListJson(). */
+#define hgsDoSessionListJson hgSessionPrefix "doSessionListJson"
+/* Asked for by this server's own hgSession.js; fetches the above from every other node, see
+ * doMirrorSessionsJson(). */
+#define hgsDoMirrorSessions hgSessionPrefix "doMirrorSessions"
 
 #define hgsSharePrefix hgSessionPrefix "share_"
 #define hgsGalleryPrefix hgSessionPrefix "gallery_"

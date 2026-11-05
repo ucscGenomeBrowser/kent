@@ -1,0 +1,66 @@
+# #38323 -- API keys on genome-euro and genome-asia.  The API key section of hgHubConnect was
+# gated on storeUserFiles as well as showHubApiKey, so a mirror that does not run hub upload
+# could never show it, and its Generate and Revoke buttons lived in hgMyData.js, which only
+# the hub upload tab loads.  This script watches the parts that a login host shows as well:
+# the section, the module its buttons now call, and the refusal of a key sync on a site that
+# has not turned sync on.  It only looks.  It never clicks Generate key or Revoke.
+#
+# Commits: 1ea512b92ec (the section is gated on showHubApiKey alone), 0ae2a6a36d7 (Generate
+# and Revoke move into the new hg/js/hubApiKey.js, which printApiKeySection() includes
+# itself; hgHubConnect.js stops swallowing a link to another host), ac3191c7e76 (the mirror
+# Hub Upload tab shows instructions), 14ecff07305 and 33eb806d370 (hgHubSyncApiKey, a key
+# sync between geo mirrors behind syncHubApiKeys, answered before any cart is built).  None
+# is in v503.
+#
+# What is asserted:
+#
+#   * Logged in, the Hub Development tab holds #apiKeySection with its heading and the
+#     Generate key button, and the page loads hubApiKey.js.  On v503 the section is drawn
+#     too (genome-test sets both storeUserFiles and showHubApiKey), so the script tag is
+#     what tells the builds apart: the buttons there call hgMyData.js.
+#   * A cjCmd naming hgHubSyncApiKey is answered with the ticket's own refusal, "not enabled
+#     on this site", as bare JSON and without a cart.  v503 has no such command and answers
+#     "cartJson: unrecognized command".
+#
+# Whether docentTest already has a key is not asserted, since that is the account's state,
+# and #generateApiKey is on the page either way.
+#
+# NOT covered: everything that is only true on a host that is not the login host -- the
+# mirror Hub Upload instructions, the link to genome.ucsc.edu that is no longer swallowed,
+# a key written to that mirror's own central -- and the sync itself between three mirrors.
+# hgwdev is the login host, so none of it can be drawn here.  Generate and Revoke are not
+# pressed, by rule: this is a shared test account.
+#
+# hg.conf GATES: showHubApiKey=on for the section (genome-test sets showHubApiKey=true), and
+# the sync refusal depends on syncHubApiKeys being OFF, its default.  Lou's note of
+# 2026-09-28 says the RR will turn it on after the release; on a server with it on, the
+# second check fails, and that is a configuration answer.  Settle both with
+#   grep -E '^(showHubApiKey|syncHubApiKeys)' /usr/local/apache/cgi-bin/hg.conf
+#
+# Signs in as docentTest (see ~/.docentLogin).  On a ticket park, target the HTTPS port.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38323, 1ea512b92ec, 0ae2a6a36d7 and 14ecff07305"
+  - "release-ab 2026-09-30 -- passes on genome-test, hgwbeta and ts park 38423 (v504, https 49084); fails on v503 (ts park 38316, https 49106) at step 5, no hubApiKey.js on the page although the section and its Generate key button are drawn; with that check taken out it fails at step 7, the sync request answered 'cartJson: unrecognized command'"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgHubConnect?db=hg38"
+  - click: 'a[href="#hubDeveloper"]'
+  - wait: '#apiKeySection'
+  - expect:
+      text: "Generate an API key"
+      has:
+        - '#hubDeveloper #apiKeySection #generateApiKey'
+        - '#apiKeySection #revokeApiKeys'
+        - 'script[src*="hubApiKey"]'
+
+  # A peer's key sync, on a site where sync is off.
+  - goto: '/cgi-bin/hgHubConnect?cjCmd=%7B%22hgHubSyncApiKey%22%3A%7B%7D%7D'
+  - expect:
+      text: '"error": "hgHubSyncApiKey: not enabled on this site"'
+      noText: "unrecognized command"

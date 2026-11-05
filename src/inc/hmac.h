@@ -6,6 +6,9 @@
 char *hmacSha1(char *key, char *data);
 /* Calculate a openssl SHA1 keyed-hash message authentication code (HMAC) */
 
+char *hmacSha256(char *key, char *data);
+/* Calculate a openssl SHA256 keyed-hash message authentication code (HMAC) */
+
 char *hmacMd5(char *key, char *data);
 /* Calculate a openssl MD5 keyed-hash message authentication code (HMAC) */
 

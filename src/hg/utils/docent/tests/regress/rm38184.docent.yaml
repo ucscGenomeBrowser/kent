@@ -1,0 +1,60 @@
+# #38184 -- db=GCF_... together with a session load aborted with "Unknown database
+# 'GCF_...'".  Each half worked on its own; only the combination failed, and it failed on the
+# RR, euro, hgwbeta and genome-test alike.  Found while working the mail-list report #38145.
+#
+# In hg/lib/cart.c: fixUpDb() resolves a GenArk accession by setting genome=, adding hubUrl=
+# and removing db.  cartLoadSettingsFromUserInput() then runs, and it opens with
+# cartRemoveLike(cart, "*"), which throws away what fixUpDb just wrote, and closes with
+# loadCgiOverHash(cart, oldVars), which puts the raw CGI db=GCF_001194135.2 back.  Nothing
+# resolved it a second time, so the bare accession reached hDbConnect.
+#
+# a6a7e658e25 re-resolves the db after the session-load block and before
+# hubConnectLoadHubs(), which also fixes the same failure on hgS_doOtherUser; b0f8840863d
+# keeps the session's position when db= resolves to the assembly the session was already on.
+#
+# The URL is spelled out in a goto: rather than written as `loadSession:`, because that verb
+# builds its own URL and cannot put db= in front of the load -- and db= in front of the load
+# is the entire bug.
+#
+# Two things are asserted, and both are needed:
+#
+#   * THE ASSEMBLY RESOLVED.  The rows are the GenArk hub's own tracks, matched by suffix
+#     past the per-run hub_<n>_ prefix.  On the build with the bug there was no page to draw
+#     them on.
+#   * THE SESSION REALLY LOADED.  README.txt's rule: a settings file that has gone away does
+#     not fail loudly, so a test that only asked about the assembly would pass with the
+#     session doing nothing -- which is exactly the state this ticket is about.  The fixture
+#     holds one line, `ruler hide`, and the ruler is drawn on every hgTracks page that has
+#     not been told otherwise, so noRows: [ruler] is a one-bit answer to "did the cart take
+#     the file".  ~/public_html/docentFixtures/rm38184/session.txt; `make preflight` fetches
+#     it, since preflight.js now reads hgS_loadUrlName out of a goto: as well.
+#
+# The first step is the control, and it comes first for two reasons: the same accession with
+# no session load has always worked, so a green first step and a red second one says the bug
+# is back rather than that GenArk or the assembly moved -- and it is also where the ruler is
+# seen being drawn, before the session takes it away.
+#
+# NOT covered: the hgS_doOtherUser branch, which a6a7e658e25 fixes in the same way.  It needs
+# a named session in hgcentraltest, and this directory does not create one.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38184, a6a7e658e25 and b0f8840863d after both reached genome-test"
+  - "release-ab 2026-09-17 -- fails on v503 and passes on genome-test (v504). v503_branch 707b184e329 built into ticket sandbox 38316, CGIs, js and htdocs: db=GCF_001194135.2 with a session load draws no GenArk rows at all"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  # First the control, on a clean cart: db= on its own, which never failed.  It is also the
+  # "before" for the ruler -- hgTracks draws it on any page that has not been told otherwise.
+  - goto: "/cgi-bin/hgTracks?db=GCF_001194135.2"
+  - expect:
+      rows: [ruler, gc5Base, ncbiRefSeq]
+      noText: "Unknown database"
+
+  # Now the combination the ticket is about.
+  - goto: "/cgi-bin/hgTracks?db=GCF_001194135.2&hgS_doLoadUrl=submit&hgS_loadUrlName=https%3A%2F%2Fhgwdev.gi.ucsc.edu%2F~braney%2FdocentFixtures%2Frm38184%2Fsession.txt&ignoreCookie=1"
+  - expect:
+      rows: [gc5Base, ncbiRefSeq, repeatMasker, windowMasker]
+      noRows: [ruler]
+      noText: ["Unknown database", "Very Early Error"]

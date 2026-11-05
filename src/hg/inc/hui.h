@@ -1149,6 +1149,22 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
+void hubTrackBareNamesFromTdbList(struct trackDb *tdbList);
+/* Let hubTrackOwnsBareName() answer from this list of tracks rather than from trackDb.
+ * A CGI that has already built the full track list should call this once, with it: the
+ * list holds the assembly's tracks and the attached hubs' together, and a hub track is
+ * always "hub_<id>_"-prefixed there, so an undecorated name can only match a native
+ * track.  Without this the question costs a trackDb query per distinct bare name. */
+
+boolean hubTrackOwnsBareName(char *db, char *hubTrack);
+/* A hub track can be named on a URL or in the cart without its "hub_<id>_" prefix, so
+ * that hub links stay readable, and the visibility and selection code falls back to that
+ * bare name when the decorated one has no value.  The bare name is the hub track's alone
+ * only when the assembly has no track of that name: when it does, the variable belongs to
+ * the native track, and letting the hub track take it moves the user's setting to a track
+ * they were not looking at and drops it from the one they were.  Takes the decorated hub
+ * track name; FALSE for anything that isn't one. */
+
 enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,
                                         boolean *subtrackOverride);
 // returns visibility NOT limited by ancestry.
@@ -1176,6 +1192,19 @@ void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
+
+#define DOT_BRACKET_FIELD "dotBracketField"
+/* trackDb setting naming the bigBed column that holds the dot-bracket string. */
+
+#define DOT_BRACKET_COLOR "dotBracketColor"
+/* trackDb setting giving the colour to draw the structure in, as r,g,b. */
+
+#define DOT_BRACKET_SHOW_SUFFIX "dotBracket"
+/* cart suffix for the checkbox that draws, or hides, the structure. */
+
+void dotBracketCfgUi(struct cart *cart, struct trackDb *tdb);
+/* Checkbox to draw or hide the RNA secondary structure, for a track that names a
+ * dot-bracket column.  Does nothing for a track that does not. */
 
 void labelCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix);
 /* Put up a choice for labels. */
@@ -1455,6 +1484,15 @@ struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
 // if 'column' is provided, and there are multiple filterBy columns,
 // only the named column's clause is returned.
 // The 'and' param and dyString in/out allows stringing multiple where clauses together
+
+
+int textFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean isHighlight);
+/* Show all the text filters for this track. */
+
+int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened,
+                                 boolean boxed, boolean parentLevel,char *name, char *title,
+                                 boolean isHighlight);
+// Shows all *Filter style filters.  Note that these are in random order and have no graceful title
 
 boolean makeDownloadsLink(char *database, struct trackDb *tdb);
 // Make a downloads link (if appropriate and then returns TRUE)

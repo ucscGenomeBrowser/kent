@@ -15,6 +15,7 @@
 #include "sqlList.h"
 #include "jksql.h"
 #include "htmlSanitize.h"
+#include "trackHub.h"
 #include "customTrack.h"
 #include "myVariants.h"
 #include "ctgPos.h"
@@ -600,6 +601,18 @@ dyStringFree(&ds);
 carefulClose(&f);
 }
 
+void customTracksClearCartVis(struct cart *cart, struct customTrack *ctList)
+/* Remove the visibility cart variable of each track in ctList, so that a brand-new track shows
+ * with its declared visibility.  Custom track ids are deterministic from the track name, so a
+ * new track can get the id of an earlier same-named one that was hidden and then deleted, and
+ * that track's visibility variable outlives it.  refs #38086 */
+{
+struct customTrack *ct;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (ct->tdb != NULL)
+        cartRemove(cart, ct->tdb->track);
+}
+
 void customTracksSaveCart(char *genomeDb, struct cart *cart, struct customTrack *ctList)
 /* Save custom tracks to trash file for database in cart */
 {
@@ -878,7 +891,7 @@ html = customDocParse(html);  /* this will chew up the input string */
 if(html != NULL)
     {
     char *tmp = html;
-    html = htmlSanitize(html);
+    html = hubHtmlSanitizeOn() ? htmlSanitize(html) : jsStripJavascript(html);
     freeMem(tmp);
     }
 else

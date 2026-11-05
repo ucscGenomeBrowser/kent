@@ -4,7 +4,7 @@ table meiHgsvc3
 string  chrom;             "Reference chromosome or scaffold"
 uint    chromStart;        "0-based start position (anchor base)"
 uint    chromEnd;           "Half-open end position (anchor base + 1)"
-string  name;              "Item label (INS, insertion length, carrier sample count)"
+string  name;              "Item label (element class, insertion length, carrier sample count)"
 uint    score;             "Score (alt-allele frequency * 1000)"
 char[1] strand;            "Strand (always .)"
 uint    thickStart;        "Start of thick drawing region"

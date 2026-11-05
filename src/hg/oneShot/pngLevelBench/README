@@ -1,0 +1,82 @@
+pngLevelBench - what the png compression level costs and saves.  Refs #38109.
+
+The decision in #38109 needs two numbers for every candidate zlib level: the
+bytes the track image grows by (B) and the encode time it saves (S).  A reader
+gains from a lower level only when their throughput is above B / S, which is a
+speed, so B and S turn each level into one break-even link speed.  The reader
+side of that comparison comes from hg/utils/pngTiming/pngTimingReport.py.
+
+Four pieces, in the order they run.
+
+1. pickUrls.py    pick a corpus of real hgTracks URLs out of an access log.
+
+       zcat /hive/data/inside/wwwstats/RR/2026/hgw1/access_log.20260823.gz \
+         | grep -a '"GET /cgi-bin/hgTracks?' | awk '{print $7, $9}' | gzip > gets.gz
+       hgsql -N -e "show databases" > localDbs.txt
+       pickUrls.py gets.gz localDbs.txt corpusUrls.tsv 300
+
+   URLs are sampled in proportion to how often each was loaded, so the corpus
+   is traffic weighted.  Custom track and hub URLs are dropped, since they
+   reach off the machine, and so are assemblies this machine does not have.
+
+2. render.sh       render each URL against a parked hgTracks and keep the png.
+
+       render.sh corpusUrls.tsv corpus 48088 6
+
+   The port is the ticket sandbox's and the last argument is how many renders
+   to run at once.  It uses hgRenderTracks, which returns the image itself
+   rather than a page, and it sends an explicit pix= so the first hit is a
+   render and not addPixAndReloadPage().  Rendering in parallel changes nothing
+   that is measured later, since the encode is timed offline.
+
+3. pngLevelBench   encode each corpus image at every level, 0 to 9.
+
+       pngLevelBench -tab -reps=3 corpus/*.png > bench.tsv
+       pngLevelBench -check one.png            # the validation, see below
+
+   The encode matches lib/pngwrite.c exactly: RGBA, 8 bits, no interlace, row
+   filter pinned to UP.  Only the level varies, and nothing is written to disk,
+   so the time is the encode alone.
+
+   The row filter can be swept too, since the two settings interact and the
+   filter that compresses best is not the same one at every level or on every
+   image:
+
+       pngLevelBench -tab -reps=2 -minLevel=1 -maxLevel=6 \
+           -filters=none,sub,up,avg,paeth,all corpus/*.png > sweep.tsv
+
+   `all` is libpng's own per row choice, which is what the browser did before
+   #38107 pinned UP.  Everything is compared against `-baseFilter` at `-base`,
+   which defaults to the pair the browser ships, up at 6.
+
+4. levelReport.py  aggregate into per-level B, S and break-even speed.
+
+       levelReport.py bench.tsv logSizes.tsv 6
+
+   logSizes.tsv is one real image size per line, from the same log:
+
+       zcat access_log.*.gz | grep -a 'GET /trash/hgt/hgt_' \
+         | awk '$9==200 && $10>1000 && $7 ~ /\.png/ {print $10}' > logSizes.tsv
+
+   The `$7 ~ /\.png/` matters.  The same directory holds the mouseover .json
+   files, which are small and numerous, and counting them drags every size
+   percentile down.
+
+What makes the numbers trustworthy, and what does not
+-----------------------------------------------------
+The validation is `-check`: at level 6, which is what libpng's default
+resolves to, the encoder here must reproduce the file hgTracks wrote, byte for
+byte.  It did for all 290 images of the 2026-09-02 corpus.  That is what lets
+an offline measurement stand for what the CGI does.  It also means the tool has
+to link the same zlib the browser links: build it in a tree with the zlib-ng
+submodule, and check `nm -D` shows a defined `deflate`.  Linking the system
+zlib instead (`make ZLIB=-lz`, supported by inc/common.mk:78) is how to measure
+the difference between the two, and then the level 6 check will fail on purpose.
+
+The known weakness is the corpus, not the encoder.  A replayed URL carries no
+usable hgsid, so hgTracks renders the trackDb default track set rather than the
+reader's own.  The corpus therefore has a narrower size range than real
+traffic: for the 2026-09-02 run, corpus p10 to p90 was 85 to 169 KB against 27
+to 326 KB in the log.  levelReport.py reweights the corpus to match the log's
+size histogram and says how much of the real traffic has no corpus image to
+speak for it.

@@ -12,10 +12,14 @@ general/unaffected background. For the full list of contributing projects, see t
 <a href="hgTrackUi?g=varFreqs">SNV Frequencies</a> collection page.
 </p>
 <p>
-The affected counts are drawn from the affected or case arm of five disease-study cohorts:
-SFARI SPARK WES and SFARI SPARK WGS (autism spectrum disorder probands), SCHEMA
-(schizophrenia cases), GREGoR (affected rare-disease participants), and GA4K (a pediatric
-rare-disease cohort). For SPARK, SFARI WGS, SCHEMA, and GREGoR, the source data carries an
+The affected counts are drawn from the affected or case arm of six disease-study cohorts:
+SFARI SPARK WES, SFARI SPARK iWGS v1.1 Pilot and SFARI SPARK 45k WGS (autism spectrum
+disorder probands), SCHEMA (schizophrenia cases), GREGoR (affected rare-disease
+participants), and GA4K (a pediatric rare-disease cohort). From SFARI SPARK 45k WGS, the 25
+million insertions flagged as non-human sequence (FILTER NonHumanIns, mostly oral bacteria
+DNA from the saliva samples, see the
+<a href="hgTrackUi?g=sfariSparkWgs45kAsd">subtrack's description</a>) were left out.
+For the three SPARK cohorts, SCHEMA, and GREGoR, the source data carries an
 explicit affected/unaffected (or case/control) label, and only the affected arm feeds this
 track. GA4K reports a single cohort-wide frequency with no per-individual label; because it
 is a rare-disease cohort, it is counted as affected here, with the caveat that it enrolls
@@ -61,8 +65,8 @@ column instead. The pooled rate is preferred over a max-across-cohorts statistic
 small cohort with a high local AF cannot dominate the displayed frequency.
 </p>
 <p>
-The pooled rate also inherits a <b>shared-sample bias</b>: the SFARI SPARK WGS cohort
-(~12k probands) is a subset of the larger SFARI SPARK WES cohort (~155k probands), so
+The pooled rate also inherits a <b>shared-sample bias</b>: the SFARI SPARK iWGS v1.1 Pilot
+cohort (~12k probands) is a subset of the larger SFARI SPARK WES cohort (~155k probands), so
 probands sequenced in both contribute their AC and AN twice to the affected pool. Where
 this happens, pooled AN is inflated and pooled AF is skewed toward the frequency in the
 shared subset. Treat the pooled rate as a cross-cohort summary rather than an unbiased

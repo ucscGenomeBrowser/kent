@@ -1,0 +1,51 @@
+# #38071 -- in the Drag-and-select dialog, "Save Color" ignored the "Don't show this again
+# and always zoom with shift" checkbox. Every other button in the dialog honored it. Tick
+# the box, press Save Color, and the dialog came back on the next drag.
+#
+# 19ffb1f276b is the fix (hg/js/hgTracks.js): the Save Color handler now sets
+# hgTracks.enableHighlightingDialog to false when the box is ticked and stores
+# enableHighlightingDialog=0 in the cart, the way Zoom In already did. It is in
+# origin/v503_branch and not in origin/v502_branch. A baseline build needs the JS.
+#
+# The drags here use `dialog: auto`, which hands the selection to the page's own
+# dragSelect.selectEnd() instead of opening the dialog by force. So the page decides:
+# dialog, or a straight zoom.
+#
+# Checks, and what each one catches:
+#   * the first drag opens the dialog, and `then: none` leaves it open. Without this the
+#     later checks would pass on a page that never offered the dialog at all.
+#   * after the box and Save Color, a second drag on the same page zooms with no dialog.
+#     On the broken build hgTracks.enableHighlightingDialog was still true, so the dialog
+#     came back and the noHas below fails.
+#   * after a reload, a third drag still zooms with no dialog. This is the cart half of the
+#     fix: the page reads enableHighlightingDialog back from the cart.
+proof:
+  - "assertion-only 2026-09-26 -- written from 19ffb1f276b, after the fix shipped"
+  - "release-ab 2026-09-26 -- fails on v502_branch (park 38304): after the box and Save Color the next drag opens the dialog again; on genome-test both later drags zoom straight away"
+
+target: genome-test
+db: hg38
+position: chr7:155799529-155812871
+reset: true
+fast: true
+steps:
+  - go: chr7:155799529-155812871
+  - drag: {range: "chr7:155,803,000-155,806,000", dialog: auto, then: none}
+  - expect:
+      has: ['#dragSelectDialog:visible', '#disableDragHighlight']
+
+  - click: '#disableDragHighlight'
+  - click: '.ui-dialog-buttonset button:has-text("Save Color")'
+  - sleep: 500
+  - expect: {noHas: '#dragSelectDialog:visible'}
+
+  # Same page: the in-memory setting.
+  - drag: {range: "chr7:155,803,500-155,805,500", dialog: auto, then: none}
+  - expect:
+      noHas: '#dragSelectDialog:visible'
+      url: "hgTracks"
+
+  # Fresh page: the setting has to come back from the cart.
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr7:155799529-155812871"
+  - drag: {range: "chr7:155,803,000-155,806,000", dialog: auto, then: none}
+  - expect: {noHas: '#dragSelectDialog:visible'}

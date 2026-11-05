@@ -102,3 +102,87 @@ python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
 #   cp /hive/data/inside/enigmaTracksData/zantiDraft/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new
 #   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
 # done
+
+##############################################################################
+# PP4/BP5 track: merge equivalent variant names, ClinVar-style positions
+# (DONE - 2026-10-02 - Lou, refs #38467)
+# The source studies spell some variants differently (Li et al. writes the
+# deleted bases out, c.4574_4575delAA; Parsons, Caputo and Zanti write
+# c.4574_4575del; Zanti writes some dups as ins), and the #37886 build matched
+# Zanti to the older track by name string, so 297 variants appeared as two or
+# three items. BRCAmlaZanti.py was revised to:
+#  - key every variant by a left-normalized genomic (chrom, pos, ref, alt):
+#    pre-Zanti items from their HGVS names via hgvsToVcf, Zanti rows from
+#    Zanti's own CHR/POS/REF/ALT columns. hgvsToVcf mis-converts insertions
+#    with an intronic offset (refs #38469), which is why Zanti rows are not
+#    keyed from their HGVSc. 7 Zanti rows carry a REF that does not match the
+#    genome (all A>G) and are keyed from their HGVSc instead.
+#  - multiply the per-type LRs (family history, co-occurrence, segregation,
+#    pathology) and the per-source LR lists of all items sharing a key. Li et
+#    al. lists c.815_824dup twice (39 and 1 probands); Li multiplies
+#    per-proband LRs, so the two rows are multiplied.
+#  - write names in current HGVS style (spelled-out bases and counts dropped;
+#    ins that duplicates adjacent sequence renamed to the dup that vcfToHgvs
+#    reports). Zanti rows with no HGVSc (variants upstream of the transcripts)
+#    are named on the transcript by vcfToHgvs, e.g. NM_000059.4:c.-1276T>C.
+#  - draw every item the way the ClinVar track does: SNV on its base, deletion
+#    on the deleted bases shifted left, delins on the replaced bases,
+#    insertion/dup on the 2 bases flanking the left-shifted insertion point.
+#    hg19 positions are computed the same way, not lifted; they equal a
+#    liftOver of the hg38 positions. ClinVar's own hg19 track places about 30
+#    BRCA1/BRCA2 indels differently from its hg38 track, so 24 of our hg19
+#    items differ from ClinVar's hg19 items there.
+#  - drop the Zanti row with symbolic alleles (<CNV>).
+#  - write LRs with 5 significant figures instead of 5 decimals (fixed
+#    notation from 1e-4 to 1e6, scientific outside that).
+# The pre-Zanti input is now read from archive/v1.1, since /gbdb BRCAmfa.bb
+# has served this script's own output since the #37886 release. archive/v1.1
+# holds the ten v1.1 staging bigBeds as they were before the v1.2 update
+# (refs #38130):
+#   mkdir -p /hive/data/inside/enigmaTracksData/archive/v1.1
+#   cp /hive/data/inside/enigmaTracksData/BRCA*Hg{19,38}.bb \
+#       /hive/data/inside/enigmaTracksData/archive/v1.1/
+mkdir /hive/data/inside/enigmaTracksData/rm38467
+cd /hive/data/inside/enigmaTracksData/rm38467
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py
+# Result: 13,182 variants per assembly (13,481 before; 595 items merged into
+# 297, one <CNV> row dropped), written as BRCAmfaZantiHg38.bb /
+# BRCAmfaZantiHg19.bb. mergedGroups.tsv lists the 297 merged variants,
+# renamed.tsv the 688 renamed single items, directionConflicts.tsv the 210
+# variants whose older evidence and ccLR point in opposite directions.
+
+# Release, same procedure as above:
+# for db in Hg19 Hg38; do
+#   cp /hive/data/inside/enigmaTracksData/rm38467/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new
+#   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.new /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
+# done
+# and enigma.html (Changelog and Methods text) into /hive/data/outside/enigma/.
+
+##############################################################################
+# ENIGMA PP4/BP5: Zanti "No evidence*" ccLRs not used in the combined LR
+# (2026-11-04, Lou, refs #38666)
+# Zanti et al. 2025 Supplementary Data 4 labels 8,487 ccLRs "No evidence*" in
+# its suggested evidence column (footnote h: fewer than 3 individuals combined
+# and/or, for BRCA2, only one dataset). Per the ENIGMA VCEP, these are treated
+# as not informative. BRCAmlaZanti.py still writes the value to the
+# caseControlLR field but leaves it out of the combined LR and the direction
+# conflict check. Same inputs as #38467 (archive/v1.1 and ZantiSuppData4.xlsx).
+mkdir /hive/data/inside/enigmaTracksData/rm38666
+cd /hive/data/inside/enigmaTracksData/rm38666
+python3 ~/kent/src/hg/makeDb/scripts/enigma/BRCAmlaZanti.py > build.log
+# Result: 13,182 variants per assembly, same names and positions as #38467.
+# 4,242 variants change ACMG code: 3,584 that have only a "No evidence*" ccLR
+# have no combined LR and are now grey, and 658 with other evidence are
+# recoded from that evidence alone. directionConflicts.tsv drops from 210 to
+# 112 variants. codeChanges.tsv lists every variant whose code changed
+# (compared with rm38467/BRCAmfaZantiHg38.bed).
+
+# Release (2026-11-05). The #38467 bigBeds were first saved to
+# /hive/data/inside/enigmaTracksData/archive/v1.3-rm38666/:
+# for db in Hg19 Hg38; do
+#   cp -p /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb /hive/data/inside/enigmaTracksData/archive/v1.3-rm38666/
+#   cp /hive/data/inside/enigmaTracksData/rm38666/BRCAmfaZanti$db.bb /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.tmp
+#   mv /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb.tmp /hive/data/inside/enigmaTracksData/BRCAmfa$db.bb
+# done
+# and enigma.html (Methods, Changelog, link to the Changelog in the NOTE box,
+# Credits) into /hive/data/outside/enigma/.

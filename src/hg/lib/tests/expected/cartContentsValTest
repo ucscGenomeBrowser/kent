@@ -1,0 +1,27 @@
+the variable first, in the middle and last
+  db=hg38&position=chr1:1-1000                 db       -> "hg38"
+  hgsid=1&db=hg38&position=chr1:1-1000         db       -> "hg38"
+  hgsid=1&position=chr1:1-1000&db=hg38         db       -> "hg38"
+  db=hg38                                      db       -> "hg38"
+
+no such variable
+  hgsid=1&position=chr1:1-1000                 db       -> NULL
+  (empty string)                               db       -> NULL
+  NULL                                         db       -> NULL
+
+a longer name that ends in the one asked for is a different variable
+  hubdb=hg19&position=chr1:1-1000              db       -> NULL
+  hubdb=hg19&db=hg38                           db       -> "hg38"
+  mydb=hg19                                    db       -> NULL
+
+an encoded & or = inside a value does not start a variable
+  position=x%26db%3Dhg19&db=hg38               db       -> "hg38"
+  position=x%26db%3Dhg19                       db       -> NULL
+
+the value is CGI-decoded
+  db=hub_1_GCA%5F000001405.15                  db       -> "hub_1_GCA_000001405.15"
+  db=%3Cb%3E                                   db       -> "<b>"
+
+an empty value is an empty string, not NULL
+  db=&position=chr1:1-1000                     db       -> ""
+  position=chr1:1-1000&db=                     db       -> ""

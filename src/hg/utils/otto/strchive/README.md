@@ -72,10 +72,8 @@ follows the pattern of `mitoMapAutoPush` and `varChatAutoPush` in
 shortly after the otto cron.  **Until it is installed, the otto job keeps hgwdev
 current and the RR does not move.**
 
-For that reason the new trackDb is held at alpha.  `human/strVarNew.ra` is included
-`alpha` only; beta and public still get the old hg38-only `human/hg38/strVar.ra`, so
-the RR keeps describing the data it actually has.  The header of `strVarNew.ra` lists
-what to delete and rename when the push goes in.  See #38268.
+The trackDb is `human/strVar.ra`, shared by hg19, hg38 and hs1.  It replaced the old
+hg38-only `human/hg38/strVar.ra` when this went public.  See #38268.
 
 ## Adding an assembly
 

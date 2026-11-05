@@ -41,6 +41,7 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 #include "api.h"
 #include "chromAlias.h"
 #include "bigBed.h"
+#include "bPlusTree.h"
 #include "trackHub.h"
 #include "cart.h"
 #include "hgFind.h"
@@ -208,8 +209,8 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         {
         sqlSafef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s' and chrom='%s'", table, name, chrom);
         sr = sqlGetResult(conn, query);
-        row = sqlNextRow(sr);
-        gp = genePredLoad(row);
+        if ((row = sqlNextRow(sr)) != NULL)
+            gp = genePredLoad(row);
         sqlFreeResult(&sr);
         }
     else if (sameString(tdb->type, "bigGenePred") ||
@@ -225,7 +226,27 @@ else if (sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         struct lm *lm = lmInit(0);
         struct bigBedInterval *bbList = bigBedNameQuery(bbi, bpt, fieldIx, name, lm);
         if (bbList)
-            gp = (struct genePred *)genePredFromBigGenePred(chrom, bbList);
+            {
+            // The lookup is by name only, and a name can be on two chroms (chrX/chrY PAR
+            // copies).  Take the match on the caller's chrom; if there is none, as in
+            // multi-region view where the caller may only know the virtual chrom, take the
+            // first match.  Either way the chrom in the answer is the match's own.
+            char chromBuf[bbi->chromBpt->keySize+1];
+            struct bigBedInterval *bb, *match = bbList;
+            int lastChromId = -1;
+            for (bb = bbList; bb != NULL; bb = bb->next)
+                {
+                bbiCachedChromLookup(bbi, bb->chromId, lastChromId, chromBuf, sizeof chromBuf);
+                lastChromId = bb->chromId;
+                if (sameString(chromBuf, chrom))
+                    {
+                    match = bb;
+                    break;
+                    }
+                }
+            bbiCachedChromLookup(bbi, match->chromId, lastChromId, chromBuf, sizeof chromBuf);
+            gp = (struct genePred *)genePredFromBigGenePred(cloneString(chromBuf), match);
+            }
         }
     if (!gp)
         dyStringPrintf(output, "{\"error\": \"Couldn't find item: %s\"}", name);

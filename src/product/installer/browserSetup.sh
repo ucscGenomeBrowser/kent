@@ -555,6 +555,36 @@ echo Deactivating MySQL strict mode
 sed -Ei '/^\[(mysqld|server)\]$/a sql_mode='  $MYCNF
 }
 
+# The assembly search box asks hubApi for assemblies matching what was typed, and that
+# lookup is a MySQL FULLTEXT search over hgcentral.assemblyList.  The table is MyISAM, so
+# ft_min_word_len decides the shortest word that gets into the index.  Mariadb defaults to
+# 4, which leaves out every three-letter assembly name, so hs1, rn7 and dm6 cannot be found
+# in the search box.  UCSC runs with 3.  Returns 0 if the config file was changed, in which
+# case Mariadb has to be restarted for the new value to take effect.  refs #38387
+function mysqlSetFtMinWordLen ()
+{
+    # setMYCNF exits when it cannot find the config file, so run it in a subshell and
+    # treat a failure as "nothing to change" rather than letting it kill an update
+    local cnf
+    cnf=$( setMYCNF > /dev/null 2>&1; echo "$MYCNF" ) || true
+    if [ -z "$cnf" ] ; then
+        echo2 Could not find the Mariadb config file, leaving ft_min_word_len alone
+        return 1
+    fi
+    if grep -q '^[[:space:]]*ft_min_word_len' $cnf ; then
+        return 1
+    fi
+    echo2 Setting ft_min_word_len=3 in $cnf, so three-letter assembly names like hs1 can be found in the assembly search box
+    sed -Ei '/^\[(mysqld|server)\]$/a ft_min_word_len=3'  $cnf
+    if ! grep -q '^ft_min_word_len=3' $cnf ; then
+        # no [mysqld] or [server] section to add it to, so say so rather than trying
+        # again, and restarting Mariadb, on every later run
+        echo2 Warning: could not add ft_min_word_len to $cnf, add it by hand under [mysqld]
+        return 1
+    fi
+    return 0
+}
+
 function mysqlAllowOldPasswords
 # mysql >= 8 does not allow the old passwords anymore. But our client is still compiled
 # with the old, non-SHA256 encryption. So we must deactivate this new feature.
@@ -2080,6 +2110,21 @@ function cleanTrash ()
 
 function updateBlatServers ()
 {
+   # A new ft_min_word_len only takes effect after a restart, and the FULLTEXT index on
+   # assemblyList is rebuilt by the hgcentral load below, so both have to happen first
+   if mysqlSetFtMinWordLen ; then
+       # an error from the init script is tolerated here: when Mariadb is under a
+       # supervisor, as it is in our docker image, it comes back on its own and "stop"
+       # reports a failure even though the restart worked
+       stopMysql || true
+       startMysql || true
+       minWordLen=`$MYSQL -NBe 'select @@ft_min_word_len' 2> /dev/null` || minWordLen=unknown
+       if [ "$minWordLen" != "3" ] ; then
+           echo2 Warning: Mariadb reports ft_min_word_len=$minWordLen after the restart, so three-letter assembly names will still not be found in the search box.
+           echo2 Restart Mariadb by hand, then run: mysql -e '"REPAIR TABLE hgcentral.assemblyList QUICK"'
+       fi
+   fi
+
    echo2 Creating or updating the BLAT servers table
    downloadFile http://$HGDOWNLOAD/admin/hgcentral.sql | $MYSQL hgcentral
    # the blat servers don't have fully qualified dom names in the download data

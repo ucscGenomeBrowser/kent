@@ -1,0 +1,60 @@
+# #38398 -- a hub.txt added to Hub Upload names its genome, and saving the file card threw
+# that away. The page reads the hub.txt to fill in the genome and the hub name, but the
+# reading takes a moment. With one file the dashboard opened the file card at once, the
+# card copied the file's settings before the reading had finished, and "Save changes"
+# wrote that early copy back: the session default genome in place of the one the hub.txt
+# named. The card itself looked right, so the user saw nothing wrong until the upload was
+# refused. Fixed by 1ab5d556690, which opens the card only after the hub.txt is read.
+#
+# The genome here is mm10 because it is not the default: with hg38 on both sides there is
+# nothing to tell apart. Nothing is uploaded; the file waits in the dashboard.
+#
+# Two looks at the card are asserted. The first is the card as it opens. On the build with
+# the bug the genome box there already reads mm10, because it is drawn from the file's own
+# settings, and only the hub name box gives it away (defaultHub). The second is the card
+# reopened after "Save changes", which shows what the upload would send: on the build with
+# the bug both boxes are wrong there, genome hg38 and hub defaultHub.
+#
+# Hub Upload needs a user, so the script logs in with the docent account (README.txt in this
+# directory says where its credentials live).
+proof:
+  - "release-ab 2026-09-26 -- fails on hgwbeta (v504, whose v504_branch lacks 1ab5d556690) and passes on genome-test. On v504 the first check fails with #uppy-Dashboard-FileCard-input-parentDir holds \"defaultHub\", wanted \"rm38398Hub\"; with that check made a warning, the reopened card fails too, holding genome \"hg38\" and hub \"defaultHub\""
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - login: true
+  - hubUpload:
+      name: hub.txt
+      text: |
+        hub rm38398Hub
+        shortLabel rm38398 hub
+        longLabel rm38398 hub, for the Hub Upload genome test
+        useOneFile on
+        genome mm10
+
+        track rm38398Track
+        shortLabel rm38398 track
+        longLabel rm38398 track
+        type bigWig
+        bigDataUrl rm38398.bw
+
+  # One file, so the card opens by itself once the hub.txt is read.
+  - wait: '.uppy-Dashboard-FileCard'
+  - expect:
+      value:
+        - {sel: '.uppy-Dashboard-FileCard input[id$="AsmHubInput"]', is: mm10}
+        - {sel: '#uppy-Dashboard-FileCard-input-parentDir', is: rm38398Hub}
+
+  # Save changes, then open the card again and read what the save left behind.
+  - click: '.uppy-Dashboard-FileCard .uppy-c-btn-primary'
+  - wait: {gone: '.uppy-Dashboard-FileCard'}
+  - click: '.uppy-Dashboard-Item-action--edit'
+  - wait: '.uppy-Dashboard-FileCard'
+  - expect:
+      value:
+        - {sel: '.uppy-Dashboard-FileCard input[id$="AsmHubInput"]', is: mm10}
+        - {sel: '#uppy-Dashboard-FileCard-input-parentDir', is: rm38398Hub}
+      noHas: '.uppy-Dashboard-FileCard select[id$="DbSelect"]'

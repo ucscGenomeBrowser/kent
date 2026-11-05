@@ -87,6 +87,11 @@ dyStringAppendC(errCatchStack->message, '\n');
 boolean errCatchPushHandlers(struct errCatch *errCatch)
 /* Push error handlers.  Not usually called directly. */
 {
+/* An abort caught here never reaches the default handler, so anything the aborting code set
+ * up for that handler - hVaUserAbort turning doContentType on so a user error reaches the
+ * browser - is not wanted and, worse, would still be set for the next abort, which may be a
+ * real one on a page that has already written its header. */
+errCatch->savedDoContentType = errAbortGetDoContentType();
 pushAbortHandler(errCatchAbortHandler);
 pushWarnHandler(errCatchWarnHandler);
 struct errCatch **pErrCatchStack = getStack();
@@ -97,6 +102,7 @@ return TRUE;
 void errCatchEnd(struct errCatch *errCatch)
 /* Restore error handlers and pop self off of catching stack. */
 {
+errAbortSetDoContentType(errCatch->savedDoContentType);
 popWarnHandler();
 popAbortHandler();
 struct errCatch **pErrCatchStack = getStack(), *errCatchStack = *pErrCatchStack;

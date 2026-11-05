@@ -138,7 +138,7 @@ if (!settings)
     errAbort("Could not connect to MySQL. Profile '%s.*' not found. "
             "Most likely the statements %s.host, %s.user and %s.password are missing in ~/.hg.conf or (...)/cgi-bin/hg.conf or the conf file was not found",
             profile, profile, profile, profile);
-if (sameString(prog, "mysqldump"))
+if (sameString(prog, "mysqldump") || sameString(prog, "mariadb-dump"))
     {  // need to suppress the database setting, it messes up mysqldump and is not needed. comment it out
     settings = replaceChars(settings, "\ndatabase=", "\n#database=");
     }
@@ -265,7 +265,7 @@ else
 	    unlink (defaultFileName);
 	    int childExitStatus = WEXITSTATUS(status);
 	    if (childExitStatus == 42)
-		errAbort("sqlExecProgProfile: exec failed");
+		errAbort("sqlExecProgProfile: exec of %s failed", nargv[0]);
 	    else
 		{
 		// Propagate child's exit status:

@@ -336,7 +336,8 @@ def addContrib(args):
     """Install a contrib track collection into the GenArk assembly hubs:
     symlink its data files + docs into <buildDir>/contrib/<name>/, write a
     per-assembly <name>.trackDb.txt with hub-root-relative paths, and wire that
-    block into each assembly's served hub.txt. Everything is written into the
+    block into each assembly's alpha.hub.txt, plus beta.hub.txt / public.hub.txt
+    for a collection already on those release lists. Everything is written into the
     assembly's GenArk build directory (see buildDir); the served /gbdb/genark
     and asmHubs/<acc> symlink trees are left alone. --remove undoes all of it."""
     name = args.name.rstrip("/")
@@ -359,6 +360,11 @@ def addContrib(args):
     if not accs:
         sys.exit("error: no accession directories (GCA_*/GCF_*) under %s" % root)
     trackNames = contribTrackNames(root, accs)
+    # Which single-file hub tiers to wire. alpha always; beta and public only for a
+    # collection already on the matching release list (this never promotes anything,
+    # setTierMembership below is what changes the lists).
+    tiers = ["alpha"] + [k for k in ("beta", "public")
+                         if name in listMembers(TIER_LISTS[k])]
 
     done = 0
     skipped = 0
@@ -371,18 +377,21 @@ def addContrib(args):
             skipped += 1
             continue
         dest = os.path.join(asmDir, "contrib", name)
-        # the alpha-tier single-file hub in the build dir (asmHubs/<acc>/alpha.hub.txt
-        # and /gbdb/genark/<acc>/alpha.hub.txt are symlinks to this); asmId is the
-        # build directory basename, which carries the assembly-name suffix.
-        asmId = os.path.basename(asmDir)
-        # Only the alpha tier for now: <asmId>.singleFile.hub.txt is what
-        # /gbdb/genark/<acc>/hub.txt points at and is served as the assembly's
-        # default hub, so a contrib collection under test stays out of it.
-        hubTxt = os.path.join(asmDir, "alpha.hub.txt")
+        # The single-file hub tiers in the build dir. alpha.hub.txt is what
+        # asmHubs/<acc>/alpha.hub.txt and /gbdb/genark/<acc>/alpha.hub.txt point at.
+        # beta.hub.txt and public.hub.txt are normally composed by mkGenomes.pl at the
+        # next clade build, which inlines exactly the per-assembly trackDb written just
+        # below, so wiring them here as well only makes a trackDb fix reach hgwbeta (and
+        # the public tier) without waiting for that rebuild; the rebuild then converges
+        # on the same content rather than fighting it. <asmId>.singleFile.hub.txt is
+        # what /gbdb/genark/<acc>/hub.txt points at and is served as the assembly's
+        # default hub, so it is deliberately never touched.
+        hubTxts = [os.path.join(asmDir, "%s.hub.txt" % t) for t in tiers]
 
         if args.remove:
-            if os.path.exists(hubTxt):
-                wireHubTxt(hubTxt, name, "", remove=True, dryRun=args.dry_run)
+            for hubTxt in hubTxts:
+                if os.path.exists(hubTxt):
+                    wireHubTxt(hubTxt, name, "", remove=True, dryRun=args.dry_run)
             if args.dry_run:
                 print("  rm -rf %s" % dest)
             elif os.path.isdir(dest):
@@ -416,16 +425,19 @@ def addContrib(args):
             else:
                 with open(destTdb, "w") as fh:
                     fh.write(tdb)
-            if os.path.exists(hubTxt):
-                wireHubTxt(hubTxt, name, tdb, remove=False, dryRun=args.dry_run,
-                           trackNames=trackNames)
-            else:
-                sys.stderr.write("warn %s: no hub.txt to wire at %s\n" % (acc, hubTxt))
+            for hubTxt in hubTxts:
+                if os.path.exists(hubTxt):
+                    wireHubTxt(hubTxt, name, tdb, remove=False, dryRun=args.dry_run,
+                               trackNames=trackNames)
+                else:
+                    sys.stderr.write("warn %s: no hub.txt to wire at %s\n"
+                                     % (acc, hubTxt))
         done += 1
 
     verb = "removed from" if args.remove else "installed into"
-    print("addContrib %s: %s %d assemblies, skipped %d (no assembly hub)"
-          % (name, verb, done, skipped))
+    print("addContrib %s: %s %d assemblies, skipped %d (no assembly hub), "
+          "hub tiers wired: %s"
+          % (name, verb, done, skipped, " ".join(tiers)))
 
     tier = getattr(args, "tier", "alpha")
     changed = setTierMembership(name, tier, args.remove, args.dry_run)

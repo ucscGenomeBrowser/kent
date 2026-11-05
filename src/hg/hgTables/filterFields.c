@@ -476,7 +476,7 @@ struct dbTable *dtList, *dt;
 char dbTableBuf[256];
 
 cartSetString(cart, hgtaFieldSelectTable, getDbTable(db, table));
-if (strchr(table, '.'))
+if (tableHasDbPrefix(table))
     htmlOpen("Select Fields from %s", table);
 else
     htmlOpen("Select Fields from %s.%s", db, table);
@@ -1095,7 +1095,7 @@ if (!(isWig||isBedGr||(isBb && !isKnownGene)||isBam||isVcf||isLongTabix||isHic))
     hPrintf(" &nbsp;&nbsp; name like 'ENST%%' <br>");
     hPrintf(" &nbsp;&nbsp; name like \"ENST*\" <br>");
     hPrintf(" &nbsp;&nbsp; name = 'ENST00000693149.1_1' <br>");
-    hPrintf(" &nbsp;&nbsp; (name = 'ENST00000693149.1_1' and score < 100) or (name = 'ENST00000691165.1_1' and score < 1000) <br>");
+    hPrintf(" &nbsp;&nbsp; (name = 'ENST00000693149.1_1' and score &lt; 100) or (name = 'ENST00000691165.1_1' and score &lt; 1000) <br>");
     
     hPrintf("</TD></TR></TABLE>\n");
     }
@@ -1286,7 +1286,7 @@ struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
 char dbTableBuf[256];
 
-if (strchr(table, '.'))
+if (tableHasDbPrefix(table))
     htmlOpen("Filter on Fields from %s", table);
 else
     htmlOpen("Filter on Fields from %s.%s", db, table);

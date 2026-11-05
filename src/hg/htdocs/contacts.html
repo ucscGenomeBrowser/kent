@@ -191,6 +191,8 @@ to match documentation:</p>
                     cache: true
                 });
                 return false;
+            } else {
+                window.location.assign("../cgi-bin/hgTracks?position=" + term);
             }
 
         }

@@ -1,0 +1,12 @@
+Found 11 problems:
+warning: missing description page for track. Add 'html allHidden1.html' line to the 'allHidden1' track stanza. 
+warning: missing description page for track. Add 'html allHidden2.html' line to the 'allHidden2' track stanza. 
+warning: missing description page for track. Add 'html innerAllHidden1.html' line to the 'innerAllHidden1' track stanza. 
+warning: missing description page for track. Add 'html innerNotShown1.html' line to the 'innerNotShown1' track stanza. 
+warning: missing description page for track. Add 'html notShown1.html' line to the 'notShown1' track stanza. 
+warning: missing description page for track. Add 'html oneVisible1.html' line to the 'oneVisible1' track stanza. 
+warning: missing description page for track. Add 'html oneVisible2.html' line to the 'oneVisible2' track stanza. 
+warning: missing hub overview description page. Add a 'descriptionUrl hubDescription.html' line to hub.txt.
+warning: superTrack "allHidden" is set to show but none of its tracks are visible. Give at least one of its tracks a visibility other than hide, or remove 'show' from its 'superTrack on show' line.
+warning: superTrack "innerAllHidden" is set to show but none of its tracks are visible. Give at least one of its tracks a visibility other than hide, or remove 'show' from its 'superTrack on show' line.
+warning: superTrack "outerHiddenInner" is set to show but none of its tracks are visible. Give at least one of its tracks a visibility other than hide, or remove 'show' from its 'superTrack on show' line.

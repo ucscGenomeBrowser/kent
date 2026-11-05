@@ -35,3 +35,5 @@ priority 3
 html dnaMethylation.html
 
 include methbase2.ra alpha
+
+include gpnStar.ra alpha

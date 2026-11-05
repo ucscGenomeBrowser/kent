@@ -16,7 +16,12 @@
 # hub update away from matching the wrong assembly.
 #
 # The session is Gerardo's own, kept because what it holds -- a custom track plus a hub on
-# hg38 -- is what made the search return several kinds of hit.
+# hg38 -- is what made the search return several kinds of hit.  It is the text file
+# sessionFiles/quickLift_CT_hub.txt now, so the script runs on any server.  The saved
+# session held its 43 custom tracks as a file and a customTrash table on genome-test; the
+# text file loads them from sessionFiles/quickLift_CT_hub.ct.txt through hgt.customText
+# instead.  That is Gerardo's track suite without two commented-out tracks whose URLs carry
+# a password.
 proof:
   - "assertion-only 2026-09-05 -- written from the ticket after the fix had shipped"
 
@@ -25,8 +30,14 @@ db: hg38
 reset: true
 fast: true
 steps:
-  - loadSession: {user: Gerardo, name: quickLift_CT_hub}
-  - expect: {noText: "Could not find session"}
+  - loadSession: "https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/utils/docent/tests/regress/sessionFiles/quickLift_CT_hub.txt"
+  # What says the session really loaded: its custom tracks and its hub are drawn.  A custom
+  # track's row name ends in a number that changes with every load, and a hub's number is
+  # assigned by each server, so both are matched by the part that does not change.
+  - expect:
+      has:
+        - 'tr[id^="tr_hub_"][id$="_brcaVariants"]'
+        - 'tr[id^="tr_ct_1bed3"]'
 
   - convert: {to: GCA_018466835.1, quicklift: true}
   - open: lift

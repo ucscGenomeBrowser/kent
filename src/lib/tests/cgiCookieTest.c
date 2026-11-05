@@ -13,15 +13,16 @@ static char *cases[] = {
 /* the ordinary shape, with and without the space a browser usually sends */
 "first=1; second=2; third=3",
 "first=1;second=2;third=3",
-/* an empty pair, at the front, in the middle and at the end.  The middle one
- * names the next cookie "; second", so nothing looks it up and that cookie is
- * silently lost, which is the cookie twin of #38185 */
+/* an empty pair, at the front, in the middle and at the end.  The parser used
+ * to name the cookie after a middle one "; second", so nothing looked it up and
+ * that cookie was silently lost, which is the cookie twin of #38185 */
 ";first=1;second=2",
 "first=1;;second=2;third=3",
 "first=1;second=2;;",
-/* a cookie with a name and no =value.  This aborts the CGI, and because the
- * browser sends the same cookie again on every request, the reader cannot get
- * a page back until they clear it by hand.  The cookie twin of #38335 */
+/* a cookie with a name and no =value.  This used to abort the CGI, and because
+ * the browser sends the same cookie again on every request, the reader could
+ * not get a page back until they cleared it by hand.  The cookie twin of
+ * #38335 */
 "first=1; broken; second=2",
 "first=1; second=2; broken",
 "broken",
@@ -32,14 +33,12 @@ static char *cases[] = {
 ";",
 };
 
-static void readAll(char *cookie, boolean skip)
+static void readAll(char *cookie)
 /* Print what the three names read out of this cookie string. */
 {
 int j;
 setenv("HTTP_COOKIE", cookie, 1);
 cgiResetState();
-cgiSkipMalformedPairs(skip);
-printf("%-4s: ", skip ? "on" : "off");
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
@@ -59,13 +58,10 @@ printf("\n");
 int main(int argc, char *argv[])
 {
 int i;
-/* Each case is read twice, with hg.conf skipMalformedCgiPairs off and on, so
- * the test also pins that the gate leaves the old behavior alone. */
 for (i = 0;  i < ArraySize(cases);  ++i)
     {
     printf("cookie: %s\n", cases[i]);
-    readAll(cases[i], FALSE);
-    readAll(cases[i], TRUE);
+    readAll(cases[i]);
     printf("\n");
     }
 return 0;

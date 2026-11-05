@@ -24,27 +24,13 @@
 #include "grp.h"
 #include "udc.h"
 #include "hubPublic.h"
+#include "autoUpgrade.h"
 #include "genark.h"
 #include "asmAlias.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "quickLift.h"
 #include "customTrack.h"
-
-boolean hubsCanAddGroups()
-/* can track hubs have their own groups? */
-{
-static boolean canHubs = FALSE;
-static boolean canHubsSet = FALSE;
-
-if (!canHubsSet)
-    {
-    canHubs = cfgOptionBooleanDefault("trackHubsCanAddGroups", TRUE);
-    canHubsSet = TRUE;
-    }
-
-return canHubs;
-}
 
 boolean isHubTrack(char *trackName)
 /* Return TRUE if it's a hub track. */
@@ -90,6 +76,16 @@ if (_hubPublicTableName == NULL)
     _hubPublicTableName = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", hubPublicTableConfVariable,
                                              defaultHubPublicTableName);
 return _hubPublicTableName;
+}
+
+boolean hubPublicHasEmail(struct sqlConnection *conn)
+/* Return TRUE if the public hubs table has an email column.  Mirrors with an older
+ * hgcentral do not have it, so try to add it first.  If that fails, return FALSE. */
+{
+char *table = hubPublicTableName();
+if (!sqlColumnExists(conn, table, "email"))
+    autoUpgradeTableAddColumn(conn, table, "email", "varchar(255)", FALSE, "NULL");
+return sqlColumnExists(conn, table, "email");
 }
 
 boolean hubConnectTableExists()
@@ -492,11 +488,20 @@ for(tdb = tdbList; tdb; tdb = next)
     /* save away the next pointer becuase we may detach this node and
      * add it to its supertrack parent */
     next = tdb->next;
-    if (tdb->parent != NULL && sameString(trackName, tdb->parent->track))
+    /* Walk up the chain: a supertrack may sit inside another supertrack, and
+     * neither is in tdbList, so an outer one is only named by an ancestor of a
+     * track that is.  Only an immediate child is added as a subtrack. */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
 	{
-	/* found a supertrack with the right name, add this child */
-	p = tdb->parent;
-	slAddHead(&p->subtracks, tdb);
+	if (sameString(trackName, ancestor->track))
+	    {
+	    /* found a supertrack with the right name */
+	    p = ancestor;
+	    if (ancestor == tdb->parent)
+		slAddHead(&p->subtracks, tdb);
+	    break;
+	    }
 	}
     }
 
@@ -534,10 +539,10 @@ for(tdb = tdbList; tdb; tdb = tdb->next)
 
     addQuickToHash( tdb->settingsHash, quickLiftChain, db);
 
-    if (tdb->parent)
-        {
-        addQuickToHash( tdb->parent->settingsHash, quickLiftChain, db);
-        }
+    /* every ancestor, since a supertrack may itself be a member of another supertrack */
+    struct trackDb *ancestor;
+    for (ancestor = tdb->parent; ancestor != NULL; ancestor = ancestor->parent)
+        addQuickToHash( ancestor->settingsHash, quickLiftChain, db);
     }
 }
 
@@ -1010,7 +1015,7 @@ if (trackHub != NULL)
     if (hubGenome != NULL)
 	{
         // add groups
-	if ((hubGenome->groups != NULL) && hubsCanAddGroups())
+	if (hubGenome->groups != NULL)
             {
             struct grp *list = readGroupRa(hubGenome->groups);
             grpListAddHubName(list, hub->trackHub);
@@ -1353,6 +1358,79 @@ boolean hubConnectIsCurated(char *db)
 return hubConnectGetCuratedUrl(db, NULL);
 }
 
+static boolean hubUrlInCuratedDir(char *dir, char *hubUrl)
+/* Return TRUE if hubUrl is <dir>/<prefix>/hub.txt ('hs1' style) or
+ * <dir>/<prefix>.hub.txt or <dir>/hub.txt (GenArk style). */
+{
+int dirLen = strlen(dir);
+if (dirLen == 0 || !startsWith(dir, hubUrl) || hubUrl[dirLen] != '/')
+    return FALSE;
+char *rest = hubUrl + dirLen + 1;
+char *slash = strchr(rest, '/');
+if (slash == NULL)          // GenArk
+    return endsWith(rest, "hub.txt");
+if (slash > rest)           // hs1, with a non-empty <prefix>
+    return sameString(slash + 1, "hub.txt");
+return FALSE;
+}
+
+boolean hubConnectIsCuratedHubUrl(char *db, char *hubUrl)
+/* Return TRUE if hubUrl is any of the curated copies of the assembly hub for db,
+ * whichever curatedHubPrefix (alpha, beta, public, a sandbox name) it belongs to.
+ * hubConnectGetCuratedUrl() only returns the copy this server's curatedHubPrefix
+ * points to, so a link made on one sandbox fails that test on every other one.
+ * The copies all sit in the dbDb nibPath directory. */
+{
+if (isEmpty(db) || isEmpty(hubUrl) || strstr(hubUrl, "..") != NULL)
+    return FALSE;
+struct sqlConnection *conn = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof query, "SELECT nibPath from %s where name = '%s' AND nibPath like '%s%%'",
+          dbDbTable(), db, hubCuratedPrefix);
+char *nibPath = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+if (isEmpty(nibPath))
+    return FALSE;
+
+// lookForCuratedHubs() stores the hub.txt URL after hReplaceGbdb(), which picks
+// gbdbLoc1 or gbdbLoc2 per file.  On a mirror the directory and the hub.txt can
+// resolve differently, so try the raw path and both replacements.
+char *dir = nibPath + strlen(hubCuratedPrefix);
+boolean ret = hubUrlInCuratedDir(dir, hubUrl);
+if (!ret)
+    {
+    char *loc1Dir = hReplaceGbdbLocal(dir);
+    ret = hubUrlInCuratedDir(loc1Dir, hubUrl);
+    freeMem(loc1Dir);
+    }
+char *gbdbLoc2 = cfgOption("gbdbLoc2");
+if (!ret && gbdbLoc2 != NULL && startsWith("/gbdb/", dir))
+    {
+    char *loc2Dir = replaceChars(dir, "/gbdb/", gbdbLoc2);
+    ret = hubUrlInCuratedDir(loc2Dir, hubUrl);
+    freeMem(loc2Dir);
+    }
+freeMem(nibPath);
+return ret;
+}
+
+boolean hubConnectIdIsCuratedHub(char *db, unsigned hubId)
+/* Return TRUE if the hub with this hubStatus id is a curated copy of the assembly
+ * hub for db (see hubConnectIsCuratedHubUrl).  Only reads the hub's URL: unlike
+ * hubFromId() it never fetches the hub, so an id taken from a CGI parameter
+ * cannot make us open or re-check an arbitrary hub. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[1024];
+sqlSafef(query, sizeof query, "select hubUrl from %s where id=%u",
+         getHubStatusTableName(), hubId);
+char *hubUrl = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+boolean ret = hubConnectIsCuratedHubUrl(db, hubUrl);
+freeMem(hubUrl);
+return ret;
+}
+
 static int lookForCuratedHubs(struct cart *cart, char *db,  char *curatedHubPrefix)
 /* Check to see if db is a curated hub which will require the hub to be attached. 
  * The variable curatedHubPrefix has the release to use (alpha, beta, public, or a user name ) */
@@ -1426,7 +1504,7 @@ if (!isEmpty(dir))
 return 0;
 }
 
-static void portHubStatus(struct cart *cart)
+void hubConnectPortHubStatus(struct cart *cart)
 /* When a session has been saved on a different host it may have cart variables that reference hubStatus id's
  * that are different than what the local machine has.  Look for these cases using the "assumesHub" cart variable
  * that maps id numbers to URL's. */
@@ -1519,9 +1597,9 @@ char *newDatabase = checkForNew( cart);
 newDatabase = asmAliasFindUnlessGenArk(newDatabase);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 
-portHubStatus(cart);
+hubConnectPortHubStatus(cart);
 
-// portHubStatus may have rewritten db to point at a remapped assembly hub id
+// hubConnectPortHubStatus may have rewritten db to point at a remapped assembly hub id
 dbSpec = asmAliasFindUnlessGenArk(cartOptionalString(cart, "db"));
 
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart, dbSpec);

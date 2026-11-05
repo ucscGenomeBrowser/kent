@@ -1,0 +1,45 @@
+# #24055 -- GTEx in multi-region at a large zoom.  Two custom regions of about 50 Mb each,
+# chr5 and chr6, only GTEx Gene on, in dense.  Changing GTEx to pack from the right-click
+# menu blanked the image with "hgTracks object is missing from the response": the ajax
+# redraw died on the server.  Zooming in 10x first avoided it.  Lou closed it in 2023
+# after seeing the fixed message instead, "There are too many items to display the track
+# in pack mode."
+#
+# Recipe: the ticket's two regions pasted through multiRegionsBedInput with virtWinFull=on,
+# so both are in view, and gtexGene dense.  Then the right-click menu's pack entry, which is
+# the in-place ajax redraw the ticket's short recipe uses.  The checks after it:
+#   * noText is the ticket's error string, and also the wording that replaced it.  max's
+#     8aab2eef34e (2025-05-06, refs #26554) changed that warn() in hgTracks.js to "An
+#     unexpected error has occurred. Please consider letting us know ...", so on today's
+#     code the ticket's own string can never appear and a noText of it alone could not
+#     fail.  The new wording is the one a returning bug would show;
+#   * the gtexGene dropdown in Visible Tracks holds pack, so the menu entry really took
+#     (the row still draws dense-looking: GTEx falls back when pack has too many items);
+#   * the image is still there with the gtexGene row, and both regions still have their
+#     ruler map boxes, so the redraw really came back.
+proof:
+  - "assertion-only 2026-10-06 -- written from the ticket"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+size: [1400, 900]
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&pix=1100&hideTracks=1&gtexGene=dense&virtModeType=customUrl&virtWinFull=on&multiRegionsBedInput=chr5%2050000%2050000000%0Achr6%2050000%2050000000%0A"
+  - expect:
+      rows: [ruler, gtexGene]
+      has:
+        - '#hgTracksConfigMultiRegionPage.pressed'
+        - 'area[data-tooltip="chr5:50001-50000000"]'
+        - 'area[data-tooltip="chr6:50001-50000000"]'
+  - rightClick: {track: gtexGene, frac: 0.5, pick: pack}
+  - expect:
+      rows: [ruler, gtexGene]
+      noText:
+        - "hgTracks object is missing from the response"
+        - "An unexpected error has occurred"
+      value: {sel: '[id^="visible-"] select[name="gtexGene"]', is: pack}
+      has:
+        - 'area[data-tooltip="chr5:50001-50000000"]'
+        - 'area[data-tooltip="chr6:50001-50000000"]'

@@ -1,0 +1,35 @@
+Varaico OTTO update (tracks varaico, varaicoSuppl on hg19, hg38, hs1)
+Contact: Johannes Birgmeier <jbirgmei@ucsc.edu>. Redmine #38543.
+
+What it does
+  doUpdate.sh runs daily from otto's crontab in /hive/data/outside/otto/varaico.
+  It installs the newest release staged under /hive/users/jbirgmei/TRACK_VERSIONS/
+  whose directory contains a non-empty READY file, unless that release is already
+  the one in currentRelease.txt (then it exits quietly, without mail).
+
+Staging a release (developer side, built by the amelie2 pipeline)
+  /hive/users/jbirgmei/TRACK_VERSIONS/v<N>_<YYYYMMDD>/
+      {hg19,hg38,hs1}/normalized_variants.<db>.bb               -> varaico
+      {hg19,hg38,hs1}/normalized_variants_supplements.<db>.bb   -> varaicoSuppl
+      READY   one line, the public version, e.g. "release 5 (20270301)"
+  Write READY last, after every file is in place.
+
+Checks (before anything changes; any failure mails the log and changes nothing)
+  - every bigBed opens (bigBedInfo)
+  - item count within +-20% of the installed file
+  - every chrom is in /hive/data/genomes/<db>/chrom.sizes
+  A refused release stays refused (and mails daily) until it is fixed or a newer
+  release is staged. To install an intended big change, do the steps by hand.
+
+Install
+  - archive: /hive/data/genomes/<db>/bed/varaico.<current>/<db>.varaico{,Suppl}.<current>.bb,
+    linked from htdocs-hgdownload/goldenPath/archive/<db>/varaico/<current>/
+  - copy the new files to /hive/data/genomes/<db>/bed/varaico/varaico{,Suppl}.bb
+    via a temp file + mv; write varaicoVersion.txt there
+  - /gbdb/<db>/bbi/varaico{,Suppl}.bb and varaicoVersion.txt point at those files
+    (trackDb: dataVersion /gbdb/$D/bbi/varaicoVersion.txt)
+  - mail the log on success
+
+Manual use
+  ./doUpdate.sh --dry-run    run the checks against the newest READY release only
+  Logs: logs/YYYY/MM/*.log

@@ -1,0 +1,72 @@
+<h2>Description</h2>
+<p>
+This track collection shows <b>TAD domains</b> from the
+<a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>
+(3DGB) 2.0, across <b>30 mouse Hi-C and Micro-C datasets</b>. Each subtrack is one 3DGB
+dataset, displayed exactly as called and published by 3DGB. They are browsable with a
+<b>faceted selector</b> (organ, cell type, assay, year, study); the displayed domain
+intervals are 3DGB's own, with no UCSC re-calling, merging, or recurrence scoring.
+</p>
+<p>
+The calls are native to mm10. On mm39 they are shown lifted from mm10 (noted in each track's
+long label). By default a small set of reference datasets is shown (mESC, CH12-LX, and mESC
+WT MicroC). Use the faceted selector to enable other datasets.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+Each subtrack is <b>colored by organ</b>. These datasets are <b>not a cross-comparable
+consensus</b>. Each represents one dataset's own TAD calls. Because 3DGB calls TADs from
+Hi-C data analyzed in fixed-size 20 or 25 kb bins, domain edges are only accurate to roughly
+one bin, and domains do not cover the whole genome.
+</p>
+<p>
+The facets are <b>Organ</b>, <b>Cell type</b>, <b>Assay</b>, <b>Year</b>, and <b>Study</b>.
+(The human 3DGB track additionally offers Condition, Treatment, and Provenance facets; those
+were manually curated for the human datasets and are not provided here.)
+</p>
+
+<h2>Methods</h2>
+<p>
+TAD domains were called by the 3D Genome Browser pipeline and are displayed verbatim. UCSC
+performed only a format normalization (reshaping the published per-dataset BED-like file to
+a plain four-column bigBed) and, for mm39, a <b>liftOver</b> from mm10, removing lifted
+domains that came out more than twice their mm10 size (this happens when a domain spans a gap
+or a rearranged region between the two assemblies). No re-calling was
+performed, and the mm10 coordinates are unchanged from the 3DGB files. The dataset metadata
+used for the faceted selector was copied directly from the 3D Genome Browser.
+</p>
+
+<h2>Data Access</h2>
+<p>
+The raw data can be explored interactively with the
+<a href="hgTables" target="_blank">Table Browser</a> or the
+<a href="hgIntegrator" target="_blank">Data Integrator</a>. For programmatic access, the
+track can be accessed using the Genome Browser's
+<a href="https://genome.ucsc.edu/goldenPath/help/api.html" target="_blank">REST API</a>.
+The underlying bigBed files can be downloaded from our
+<a href="https://hgdownload.soe.ucsc.edu/gbdb/$db/bbi/tad/" target="_blank">download server</a>.
+The complete original datasets are available from the
+<a href="http://3dgenome.fsm.northwestern.edu/" target="_blank">3D Genome Browser</a>.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the 3D Genome Browser team (Yue lab, Northwestern University). The 3D Genome Browser
+data are distributed under a
+<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+license (free for non-commercial use). Please cite the 3D Genome Browser, and the original
+studies, when using these data.
+</p>
+
+<h2>References</h2>
+<p>
+Yu S, Fu Y, Wong JH, Wang J, Zhao H, Zhao J, Yue F.
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41206958" target="_blank">
+The 3D Genome Browser 2.0: an enhanced online platform for visualizing and analyzing 3D genome
+architecture</a>.
+<em>Nucleic Acids Res</em>. 2026 Jan 6;54(D1):D48-D54.
+DOI: <a href="https://doi.org/10.1093/nar/gkaf1109" target="_blank">10.1093/nar/gkaf1109</a>; PMID:
+<a href="https://www.ncbi.nlm.nih.gov/pubmed/41206958" target="_blank">41206958</a>; PMC: <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12807788/" target="_blank">PMC12807788</a>
+</p>

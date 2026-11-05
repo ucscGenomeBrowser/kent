@@ -15,6 +15,8 @@ SPARK	AUT	ASD proband	AC_AUT	AF_AUT	affected
 SPARK	NON_AUT	Non-ASD family	AC_NON_AUT	AF_NON_AUT	unaffected
 SFARI_WGS	AUT	ASD proband	AC_AUT	AF_AUT	affected
 SFARI_WGS	NON_AUT	Non-ASD family	AC_NON_AUT	AF_NON_AUT	unaffected
+SPARK45k	AUT	ASD proband	AC_AUT	AF_AUT	affected
+SPARK45k	NON_AUT	Non-ASD family	AC_NON_AUT	AF_NON_AUT	unaffected
 # SCHEMA schizophrenia case/control split (summed across analysis groups)
 SCHEMA	CASE	Schizophrenia case	AC_CASE	AF_CASE	affected
 SCHEMA	CTRL	Control	AC_CTRL	AF_CTRL	unaffected

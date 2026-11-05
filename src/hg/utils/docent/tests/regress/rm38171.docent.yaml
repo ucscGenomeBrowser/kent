@@ -1,0 +1,73 @@
+# #38171 -- GeneCards asked us to move our links to their new URL format, and some of the
+# links we had were already dead.
+#
+# 6a8e756b473 replaces
+#
+#     http://www.genecards.org/cgi-bin/carddisp.pl?gene=%s     the old card URL
+#     http://www.genecards.org/cgi-bin/cardsearch.pl?search=%s the search endpoint, which
+#                                                              had stopped redirecting
+#
+# with https://www.genecards.org/card/%s in ten files: four places in the code
+# (hgGene's links.ra and gencodeSection.c, hgc's gencodeClick.c and printGeneCards()) and
+# six trackDb stanzas (MANE, GenCC, GeneHancer, denovoDb).
+#
+# This is a link substitution, so the check is the link: the new href has to be there AND
+# both old endpoints have to be gone.  The second half is what makes it a test.  A page
+# that still carries carddisp.pl also carries the gene symbol, the track's labels and every
+# other word a text check might pick, so a positive check on its own passes on the build
+# this ticket was filed about.  cardsearch.pl is named separately from carddisp.pl because
+# they were two different bugs -- one was a format change the reporter asked for, the other
+# was a link that had already stopped working.
+#
+# Four of the five link sites in the commit are covered, one per page, each reached the way
+# a reader reaches it.  The fifth, hgGeneGraph, is a Python CGI with its own link table and
+# is left to the one that follows it.
+proof:
+  - "assertion-only 2026-09-17 -- written from #38171 and 6a8e756b473 after the fix reached genome-test"
+  - "sandbox-ab 2026-09-17 -- ticket sandbox 38252, master with this batch's fixes reverted (tree ~/kentRevert22, branch revert22docent; CGIs, js and htdocs all built into the freeze): hgGene has no genecards.org/card/BRCA1 link and one cardsearch.pl link instead"
+  - "assertion-only 2026-09-17 -- v503 is the wrong baseline for this one: 6a8e756b473 landed 2026-08-24, before the v503 branch was cut, so the fix is IN v503 and this script passes there.  v502 or older would be its release baseline"
+
+target: genome-test
+db: hg38
+position: chr17:43044295-43125483
+reset: true
+fast: true
+steps:
+  - go: chr17:43044295-43125483
+  - hide: all
+  - track: {mane: pack, ncbiRefSeqCurated: pack, knownGene: pack}
+  - expect: {rows: [ruler, mane, ncbiRefSeqCurated, knownGene]}
+
+  # 1. hgc, via a trackDb `url` setting: mane.ra.  BRCA1's MANE Select transcript.
+  - click: {track: mane, item: "ENST00000357654.9"}
+  - expect:
+      text: BRCA1
+      has: 'a[href="https://www.genecards.org/card/BRCA1"]'
+      noHas: ['a[href*="carddisp.pl"]', 'a[href*="cardsearch.pl"]']
+
+  # 2. hgc, via printGeneCards() in hgc.c.  This is the one that used the dead
+  # cardsearch.pl endpoint rather than the old card URL.
+  - go: chr17:43044295-43125483
+  - click: {track: ncbiRefSeqCurated, item: "NM_007294.4"}
+  - expect:
+      text: BRCA1
+      has: 'a[href="https://www.genecards.org/card/BRCA1"]'
+      noHas: ['a[href*="carddisp.pl"]', 'a[href*="cardsearch.pl"]']
+
+  # 3. hgGene, via hgGeneData/Human/links.ra.  A GENCODE item links to hgGene rather than
+  # to hgc, so this page is only reachable by clicking one.
+  - go: chr17:43044295-43125483
+  - click: {track: knownGene, item: "ENST00000357654.9"}
+  - expect:
+      url: hgGene
+      has: 'a[href="https://www.genecards.org/card/BRCA1"]'
+      noHas: ['a[href*="carddisp.pl"]', 'a[href*="cardsearch.pl"]']
+
+  # 4. hgc, via gencodeClick.c, which serves the GENCODE Versions archive tracks and not
+  # the default gene track.  Reached by URL because turning an archive subtrack on to click
+  # one item in it costs more than the page is worth here.
+  - goto: "/cgi-bin/hgc?db=hg38&c=chr17&o=43044294&t=43125364&g=wgEncodeGencodeBasicV49&i=ENST00000357654.9&table=wgEncodeGencodeBasicV49"
+  - expect:
+      text: ENST00000357654.9
+      has: 'a[href="https://www.genecards.org/card/BRCA1"]'
+      noHas: ['a[href*="carddisp.pl"]', 'a[href*="cardsearch.pl"]']

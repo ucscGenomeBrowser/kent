@@ -318,9 +318,12 @@ bigBarChart on a hub can be viewed <a href="./trackDb/trackDbHub.html#bigBarChar
    <a href="http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes" 
    target="_blank">http://hgdownload.gi.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.</li>
    <li>Save the autoSql file <a href="examples/barChart/barChartBed.as">barChartBed.as</a> to your computer.</li>
-   <li>Run bedToBigBed to create the bigBarChart file:
+   <li>Run bedToBigBed to create the bigBarChart file. <em>expMatrixToBarchartBed</em> writes
+   its rows in item-name order rather than chromosome order, so include the <code>-sort</code>
+   option and let bedToBigBed put them in position order for you. Without it the program stops
+   with &quot;is not sorted at line ...&quot; as soon as the two orders disagree:
    <pre><code>
-bedToBigBed -as=barChartBed.as -type=bed6+5 inputBed hg38.chrom.sizes output.bigBed
+bedToBigBed -sort -as=barChartBed.as -type=bed6+5 inputBed hg38.chrom.sizes output.bigBed
    </code></pre></li>
    <li>Move the newly constructed bigBarChart file to a web accessible http, https, or ftp location.</li>
    <li>Construct a custom track line with a bigDataUrl parameter pointing to the newly created
@@ -559,6 +562,95 @@ You can then view the bigBarChart custom track with the following track line:
 track name="My singleCell barChart" type=bigBarChart bigDataUrl=https://hgwdev.gi.ucsc.edu/goldenPath/help/examples/barChart/singleCell/myTissueComp.bb
 </pre>
 -->
+<a name="barOrder"></a>
+<h2>Setting the order of the bars</h2>
+<p>
+Bars are drawn left to right in the order their values appear in the expScores field. Nothing
+re-sorts them in the browser image, so the order is a property of the data file itself.
+The labels are positional in the same way: the first name in the
+<a href="trackDb/trackDbHub.html#barChartBars" target="_blank">barChartBars</a> setting, or the
+first line of the file named by
+<a href="trackDb/trackDbHub.html#barChartCategoryUrl" target="_blank">barChartCategoryUrl</a>,
+belongs to the first value in expScores, the second to the second, and so on. The colors in
+<a href="trackDb/trackDbHub.html#barChartColors" target="_blank">barChartColors</a> and the rows
+of the statistics file named by
+<a href="trackDb/trackDbHub.html#barChartStatsUrl" target="_blank">barChartStatsUrl</a> are read
+the same way, one per bar.</p>
+<p>
+Datasets often read better in an order other than the alphabetical one most tools produce, for
+instance tissues grouped by the biology rather than by the first letter of their names. Changing
+the order means moving the values inside the expScores field of every row, and moving the labels,
+colors and statistics to match. The <em>barChartReorder</em> program does the first part and
+prints the <code>barChartBars</code> line for the second. It works on any barChart BED file,
+whatever produced it, so it does not matter whether you started from an expression matrix, from
+<em>matrixToBarChartBed</em>, from your own pipeline, or from a file somebody sent you.</p>
+
+<h6 id="barOrderScript">The barChartReorder utility</h6>
+<p>
+Download <em>barChartReorder</em> from the
+<a href="http://hgdownload.gi.ucsc.edu/admin/exe" target="_blank">utilities directory</a>
+appropriate for your operating system, and make sure it is on your PATH as described in
+<a href="#example3">Example #3</a>. Run it with no arguments for a usage message.</p>
+<p>
+It takes two files that list the bar names, one name per line: the order the file is in now, and
+the order you want. Both must name the same bars. Pass the BED file to rewrite and the file to
+write, and optionally a <em>.categories</em> file to put into the same order:</p>
+<pre><code>cat oldOrder.txt
+adiposeSubcut
+breastMamTissue
+colonTransverse
+muscleSkeletal
+wholeBlood
+
+cat newOrder.txt
+wholeBlood
+muscleSkeletal
+adiposeSubcut
+breastMamTissue
+colonTransverse
+
+barChartReorder oldOrder.txt newOrder.txt input.bed reordered.bed \
+    --categories old.categories --outCategories new.categories
+barChartBars wholeBlood muscleSkeletal adiposeSubcut breastMamTissue colonTransverse
+</code></pre>
+<p>
+The last line is the program's output. Paste it into the track, and put
+<code>barChartColors</code> and the
+<a href="trackDb/trackDbHub.html#barChartStatsUrl" target="_blank">barChartStatsUrl</a> file into
+the same order by hand. The program stops with an error rather than writing a half-correct file if
+the two order files disagree, if a row does not hold as many values as there are names, or if the
+categories file is missing one of the bars.</p>
+
+<h6 id="barOrderBigBed">Reordering a bigBarChart file</h6>
+<p>
+A bigBarChart file is a binary index, so convert it to text first and rebuild it afterwards. Use
+the same schema you started from, which you can recover from the file itself with
+<code>bigBedInfo -as input.bb</code>:</p>
+<pre><code>bigBedToBed input.bb input.bed
+barChartReorder oldOrder.txt newOrder.txt input.bed reordered.bed
+bedToBigBed -sort -as=barChartBed.as -type=bed6+5 reordered.bed hg38.chrom.sizes output.bb
+</code></pre>
+
+<h6 id="barOrderBuild">Choosing the order when you first build the file</h6>
+<p>
+If you are building from an expression matrix as in <a href="#example3">Example #3</a>, you can
+get the order right at the start instead and skip the step above.
+<em>expMatrixToBarchartBed</em> groups the samples alphabetically by category name unless you give
+it <code>--groupOrderFile</code>, which takes the same kind of file as <em>newOrder.txt</em>
+above:</p>
+<pre><code>expMatrixToBarchartBed --groupOrderFile newOrder.txt \
+    exampleSampleData.txt exampleMatrix.txt hg38.gtexTranscripts out.bed
+</code></pre>
+<p>
+List every category that appears in the sample file: one left out is dropped from the output
+without any warning, and a name in the order file that is not in the sample file stops the program
+with an error. The order it used becomes the header line of the output file, and
+<code>--verbose</code> prints it to the screen as well.</p>
+<p>
+In either case the matrix file and the sample file are left alone. The samples in them are matched
+to categories by name rather than by position, so the boxplot on the details page needs no
+changes.</p>
+
 <h2>Sharing your data with others</h2>
 <p>
 If you would like to share your barChart/bigBarChart data track with a colleague, learn how to create a URL by 

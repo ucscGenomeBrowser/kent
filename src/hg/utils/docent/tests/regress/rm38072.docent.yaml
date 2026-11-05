@@ -1,0 +1,34 @@
+# #38072 -- the ClinVar interpretations lollipop row (clinvarSubLolly) had no
+# maxHeightPixels, so its height ceiling was the bigLolly default of 128. Asking for a
+# taller row, which a print-resolution figure does, was clamped straight back to 128 by
+# cartTdbFetchMinMaxPixels, and the row came out a sliver beside tracks that had grown.
+# Fixed by 3258e4421c0, which gives it "maxHeightPixels 512:128:11" in clinvar.ra. That
+# commit is in v503_branch and not in v502_branch.
+#
+# The fix is a trackDb line, not code, so it lives in each server's hg38 trackDb table and
+# not in the CGIs. A ticket sandbox built from an older release reads the same shared
+# trackDb as genome-test and cannot show the bug, and every public server is past v503.
+# So this can only ever be assertion-only, and what it defends against is the line being
+# dropped or the ceiling lowered in a later trackDb edit. Checked 2026-09-26: it passes on
+# the v502_branch park (38304) as well, as it must.
+#
+# The row asks for 400 pixels. With the 128 ceiling back, the image is about 180 pixels:
+# the ruler plus a 128-pixel row. With the ceiling at 512 it is 453. The second step is the
+# control: with no height asked for, the row keeps its default of 128, so the 453 is the
+# setting at work and not some other change that made the row tall.
+proof:
+  - "assertion-only 2026-09-26 -- written from 3258e4421c0 after it shipped; a trackDb change, so no code baseline can flip it"
+
+target: genome-test
+db: hg38
+reset: true
+fast: true
+steps:
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483&clinvarSubLolly.heightPer=400"
+  - hide: all
+  - track: {clinvar: hideKids, clinvarSubLolly: full}
+  - expect: {rows: [ruler, clinvarSubLolly], exact: true, height: ">=430"}
+  - expect: {height: 480}
+
+  - goto: "/cgi-bin/hgTracks?db=hg38&position=chr17:43044295-43125483&clinvarSubLolly.heightPer=128"
+  - expect: {rows: [ruler, clinvarSubLolly], exact: true, height: 220}

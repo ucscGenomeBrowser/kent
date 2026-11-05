@@ -1,0 +1,38 @@
+#!/bin/bash -e
+# Download the ENCODE PRO-cap signal bigWigs listed in a manifest from
+# proCapNetEncodeMeta and sum them per cell type and strand.
+#
+# ENCODE publishes signal per replicate, and for MCF10A per sequencing run, with
+# no pooled file, so the summing is done here.  The downloaded per-replicate
+# files go to rawDir, which is only needed for the summing; the summed tracks go
+# to outDir.
+#
+# usage: proCapNetEncodeBuild encodeFiles.tsv chrom.sizes rawDir outDir
+
+if [ $# != 4 ] ; then
+    echo "usage: proCapNetEncodeBuild encodeFiles.tsv chrom.sizes rawDir outDir" >&2
+    exit 1
+fi
+manifest=$1
+chromSizes=$2
+rawDir=$3
+outDir=$4
+scriptDir=$(dirname $0)
+
+mkdir -p $rawDir $outDir
+
+# -L follows the portal redirect to the download host
+awk -F'\t' -v rawDir=$rawDir \
+    'NR>1 {printf "curl -sSfL --retry 5 -o %s/%s.%s.bigWig %s\n", rawDir, $4, $5, $9}' $manifest \
+    | xargs -d '\n' -P 6 -I CMD sh -c CMD
+
+# the output name carries the ENCODE experiment accession, so a bigWig downloaded
+# on its own still names the experiment it came from
+for cellStrand in $(awk -F'\t' 'NR>1 {print $1":"$2":"$5}' $manifest | sort -u) ; do
+    cell=$(echo $cellStrand | cut -d: -f1)
+    acc=$(echo $cellStrand | cut -d: -f2)
+    strand=$(echo $cellStrand | cut -d: -f3)
+    inBigWigs=$(awk -F'\t' -v c=$cell -v s=$strand -v rawDir=$rawDir \
+                    'NR>1 && $1==c && $5==s {printf "%s/%s.%s.bigWig ", rawDir, $4, $5}' $manifest)
+    $scriptDir/proCapNetMergeSignal $chromSizes $outDir/$cell.$acc.$strand.bw $inBigWigs
+done

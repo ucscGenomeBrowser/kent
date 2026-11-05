@@ -450,7 +450,7 @@ if (res)
 hDisconnectCentral(&conn);
 
 #ifdef NTONOW
-if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", FALSE))
+if ((res == FALSE) && cfgOptionBooleanDefault("genarkLiftOver", TRUE))
     {
     if (genarkUrl(database) != NULL)
         res = TRUE;
@@ -873,6 +873,22 @@ void hFreeConn(struct sqlConnection **pConn)
 {
 if (*pConn != NULL)  // don't use hdbCc if never allocated
     sqlConnCacheDealloc(hdbCc, pConn);
+}
+
+unsigned hConnGeneration()
+/* The current connection generation, to pass to hConnFreeNewerThan. */
+{
+return sqlConnCacheGeneration();
+}
+
+void hConnFreeNewerThan(unsigned generation)
+/* Put back every connection handed out after the given generation.  Call it after
+ * catching an errAbort: the hFreeConn that the code which asked for the connection would
+ * have made never ran, and the cache holds only 16 connections, so a page with a few
+ * failing tracks fills it and every later hAllocConn fails with "Too many open
+ * sqlConnections". */
+{
+sqlConnCacheFreeNewerThan(hdbCc, generation);
 }
 
 static void hCentralMkCache()
@@ -3017,7 +3033,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    boolean isGenarkHub = sameOk(db->nibPath, "genark");
+    boolean isGenarkHub = db->nibPath &&
+	(sameOk(db->nibPath, "genark") || startsWith("hub:/gbdb/genark", db->nibPath));
     if (!doCheck || (isGenarkHub || hashLookup(hash, db->name)))
         {
 	slAddHead(&dbList, db);
@@ -4342,14 +4359,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         return matchingChild;
     }
 
-/* Look "to the sky" in parents of root generation as well. */
+/* Look "to the sky" in parents of root generation as well.  Walk the whole
+ * chain: a supertrack may sit inside another supertrack, and neither is in the
+ * list itself, so the outer one is only reachable through the inner one. */
 if (level == 0)
     {
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	{
-	struct trackDb *p = tdb->parent;
-	if (p != NULL && sameString(track, p->track))
-	    return p;
+	struct trackDb *p;
+	for (p = tdb->parent; p != NULL; p = p->parent)
+	    {
+	    if (sameString(track, p->track))
+		return p;
+	    }
 	}
     }
 
@@ -4384,6 +4406,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     struct trackDb *parent = tdb->parent;
     if (parent != NULL)
         refAdd(&parent->children, tdb);
+    /* A supertrack that is a member of another supertrack is not in tdbList
+     * itself, so the loop above never reaches it.  Add it to its own parent's
+     * children the first time one of its members brings us here. */
+    for (; parent != NULL && tdbIsSuperTrackChild(parent); parent = parent->parent)
+        refAddUnique(&parent->parent->children, parent);
     }
 }
 
@@ -4414,7 +4441,12 @@ struct trackDb *hTrackDbWithCartVersion(char *db, int *retCartVersion)
  * the supertrack trackDb subtrack fields are not set here (would be
  * incompatible with the returned list)
  * Returns list sorted by priority
- *	NOTE: this result is cached, do not free it !
+ *	NOTE: do not free this result - when the cache is on it is shared memory.
+ * NOTE: "cached" here means the shared-memory trackDb cache, which is only on when
+ * cacheTrackDbDir is set in hg.conf (it is not on a sandbox by default).  There is no
+ * memoizing besides that: with the cache off, every call reloads and relinks the whole
+ * trackDb, so calling this once per track name is quadratic.  Load the list once and
+ * pass it around - see tdbForTrack()'s tdbList argument.
  */
 {
 if (trackHubDatabase(db))
@@ -4631,7 +4663,9 @@ for (;;)
         ancestor->parent->children = slRefNew(ancestor);
     ancestor = ancestor->parent;
     }
-if (tdbIsSuper(ancestor))
+/* Step back down past every supertrack: a supertrack may itself be a member of
+ * another supertrack, and markup starts below the folders. */
+while (tdbIsSuper(ancestor) && ancestor->children != NULL)
     ancestor = ancestor->children->val;
 trackDbContainerMarkup(NULL, ancestor);
 rInheritFields(ancestor);
@@ -5175,7 +5209,7 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
+if (cfgOptionBooleanDefault("genarkLiftOver", TRUE) && (genarkAccs != NULL))
     {
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);
@@ -5235,7 +5269,7 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
         dbDbFree(&dbDb);
     }
 
-if (cfgOptionBooleanDefault("genarkLiftOver", FALSE) && (genarkAccs != NULL))
+if (cfgOptionBooleanDefault("genarkLiftOver", TRUE) && (genarkAccs != NULL))
     {
     struct dbDb *genarkDbDbs = genarkLiftOverDbs(genarkAccs);
     liftOverDbList = slCat(liftOverDbList, genarkDbDbs);

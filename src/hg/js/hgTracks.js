@@ -3298,8 +3298,28 @@ function removeTrackFromVisibleGroup(track) {
 /* When a track has been hidden by the user, remove its select and label from
  * the visible tracks group */
     let rec = document.querySelector("[id^='visible-'] [data-track=\"" + track + "\"]");
-    if (rec)
+    if (rec) {
         rec.parentElement.remove();
+        reflowVisibleGroup();
+    }
+}
+
+function reflowVisibleGroup() {
+/* Removing cells leaves the rows of the visible tracks group ragged, so lay the remaining
+ * cells out again, row by row, with as many columns as the other groups have */
+    let rows = Array.from(document.querySelectorAll("tr[id^='visible-']"));
+    if (rows.length === 0)
+        return;
+    let cols = 1;
+    for (let td of document.querySelectorAll("td.trackLabelTd"))
+        cols = Math.max(cols, td.parentElement.querySelectorAll(":scope > td.trackLabelTd").length);
+    let cells = [];
+    for (let row of rows)
+        cells.push(...row.querySelectorAll(":scope > td"));
+    cells.forEach((cell, i) => rows[Math.floor(i / cols)].appendChild(cell));
+    let usedRows = Math.max(1, Math.ceil(cells.length / cols));
+    for (let row of rows.slice(usedRows))
+        row.remove();
 }
 
   ///////////////////////////////////////
@@ -3341,70 +3361,63 @@ var rightClick = {
         if (!hasPliTracks)
             $("#gnomadColorKeyLegend").hide();
     },
-    hideTracks: function (ids)
-        /* hide specified list of tracks, take care to hide parents rather than children, whenever possible. This is
-         * addressing a basic problem of how we handle container tracks: if you right-click hide the last child, the container is still 
-         * in the track list on the screen as not-hidden, but there are no
-         * tracks shown of this container. This is confusing for the user. The
-         * code below analyzes the track hierarchy and finds out if hiding a
-         * track would lead to a container becoming empty and instead of hiding
-         * just this track, will hide the container. It does this does both on
-         * screen and in the cart. This means that you cannot end up with a container that is
-         * not hidden but no tracks shown of this container, at least not with right-click. */
+    hideTracks: function (ids, keepTracks)
+        /* Hide a list of tracks, in the image and in the cart. A superTrack or composite that would be
+         * left with nothing in the image is hidden itself instead of its children, so it does not stay
+         * switched on with nothing to show. If keepTracks is given, also hide everything else in the
+         * visible tracks group that is not in keepTracks. */
     {
         var cartVars = [];
         var cartVals = [];
+        var plan = tdbHidePlan(hgTracks.trackDb, ids);
 
-        // find parent tracks that are losing all their children (lone parents)
-        var familyAnalysis = tdbFindChildless(hgTracks.trackDb, ids);
-
-        // lone parents get special treatment
-        for (var delFam of familyAnalysis.loneParents) {
-            var loneParent = delFam[0];
-            var loneParentChildren = delFam[1];
-
-            // remove all the lone parent children now from the track image
-            // and also unselect them, if they are children of a composite
-            for (var childName of loneParentChildren) {
+        for (var parent in plan.parents) {
+            for (var childName of plan.parents[parent]) {
                 $(document.getElementById('tr_' + childName)).remove();
-                var rec = hgTracks.trackDb[childName];
-                // the following means that all composite children are always unselected, so you cannot get the
-                // current selection easily back, since we always hide them all, instead of just hiding the parent.
-                // The problem is that it's not easy to find out if there is an easier way to hide them, the code
-                // would have to go over all possible parents, not just topParents. Maybe one day.
-                //if (tdbIsSubtrack(rec)) {
-                 //  cartVars.push(childName+"_sel");
-                 //   cartVals.push('0');
-                //}
+                // a subtrack's own visibility, e.g. set by a search hit, would turn the composite
+                // back on at the next page load (cartTdbTreeReshapeIfNeeded), so remove it
+                if (tdbIsSubtrack(hgTracks.trackDb[childName])) {
+                    cartVars.push(childName);
+                    cartVals.push('[]');
+                }
+                delete hgTracks.trackDb[childName]; // for the next right-click
             }
-
-            // and set the lone parent to hide in the cart
-            cartVars.push(loneParent);
+            cartVars.push(parent);
             cartVals.push('hide');  // need to explicitely set to "hide", not "[]", to hide the default tracks
-             
-            // update the track list below the image
-            vis.update(loneParent, 'hide');
-            rightClick.hideLegends();
-            removeTrackFromVisibleGroup(loneParent);
-            delete hgTracks.trackDb[loneParent]; // for the next right-click
+            vis.update(parent, 'hide');
+            removeTrackFromVisibleGroup(parent);
         }
 
-        // handle all other tracks, they are either not parents or parents with at least one child left
-        var delIds = familyAnalysis.others;
-        for (var i = 0; i<delIds.length; i++) {
-            var id = delIds[i];
+        for (var id of plan.tracks) {
             cartHideAnyTrack(id, cartVars, cartVals);
+            vis.update(id, 'hide');  // set its dropdown in the track list below the image too
             $(document.getElementById('tr_' + id)).remove();
             removeTrackFromVisibleGroup(id);
             delete hgTracks.trackDb[id]; // for the next right-click
         }
+        rightClick.hideLegends();
+
+        // tracks that are on but have nothing in the image, e.g. an empty composite with
+        // hideEmptySubtracks, are not in hgTracks.trackDb, only in the visible tracks group
+        if (keepTracks) {
+            for (var el of document.querySelectorAll("[id^='visible-'] [data-track]")) {
+                var visName = el.dataset.track;
+                if (keepTracks.includes(visName))
+                    continue;
+                cartVars.push(visName);
+                cartVals.push('hide');
+                vis.update(visName, 'hide');
+                removeTrackFromVisibleGroup(visName);
+            }
+        }
+
         imageV2.afterImgChange(true);
         cart.setVars( cartVars, cartVals );
     },
 
     hideOthers: function (id) {
         /* hide all tracks but 'id'. Hide parents of composites/folders, rather than their children */
-        var myParent = hgTracks.trackDb[id].parentTrack;
+        var keepTracks = [id, "ruler"].concat(tdbAncestors(hgTracks.trackDb[id]));
 
         var hideList = [];
         for (var otherId in hgTracks.trackDb) {
@@ -3413,7 +3426,7 @@ var rightClick = {
 
             hideList.push(otherId);
         }
-        rightClick.hideTracks(hideList);
+        rightClick.hideTracks(hideList, keepTracks);
     },
     makeMapItem: function (id)
     {   // Create a dummy mapItem on the fly
@@ -3649,7 +3662,7 @@ var rightClick = {
                         type: "GET",
                         url: "../cgi-bin/hgApi",
                         data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(), 'cmd': ajaxCmd, 'num': results,
-                              'table': args.table, 'name': args.name, 'chrom': hgTracks.chromName}),
+                              'table': args.table, 'name': args.name, 'chrom': args.chrom}),
                         trueSuccess: rightClick.handleZoomCodon,
                         success: catchErrorOrDispatch,
                         error: errorHandler,
@@ -3683,6 +3696,31 @@ var rightClick = {
         } else if (cmd === 'clearItemColors') {
 
             rightClick.clearItemColors();
+
+        } else if (cmd === 'clearSettings') {
+            // Reset all settings of the track to the defaults but keep its visibility
+            // and that of its subtracks. A subtrack's filters can be set on its
+            // composite, so a subtrack clears the whole composite.
+            rec = hgTracks.trackDb[id];
+            var clearTrack = id;
+            if (rec && tdbIsSubtrack(rec) && rec.parentTrack)
+                clearTrack = rec.parentTrack;
+            $.ajax({
+                type: "GET",
+                url: "../cgi-bin/hgTrackUi",
+                data: cart.addUpdatesToUrl("hgsid=" + getHgsid() + "&db=" + getDb() +
+                          "&hgTrackUi_op=clearSettings&g=" + encodeURIComponent(clearTrack)),
+                dataType: "html",
+                cache: false,
+                success: function(response) {
+                    // any other page, e.g. an error page, means nothing was reset
+                    if ($.trim(response) === "OK")
+                        rightClick.redrawClearedTracks(clearTrack);
+                    else
+                        warn("Could not reset the settings of this track.");
+                },
+                error: errorHandler
+            });
 
         } else if (cmd === 'hgTrackUi_follow') {
 
@@ -3939,6 +3977,25 @@ var rightClick = {
                 imageV2.requestImgUpdate(id, id + "=" + cmd, "", cmd);
             }
         }
+    },
+
+    redrawClearedTracks: function (clearTrack)
+    {   // Redraw the image rows of a track whose settings were just cleared: the track
+        // itself or, for a composite, the rows of its subtracks. Too many rows, or an
+        // image that cannot be updated in place, reload the page instead.
+        var ids = [];
+        for (var tid in hgTracks.trackDb) {
+            var tRec = hgTracks.trackDb[tid];
+            if ((tid === clearTrack || tRec.parentTrack === clearTrack)
+            && document.getElementById('tr_' + tid))
+                ids.push(tid);
+        }
+        if (!imageV2.mapIsUpdateable || ids.length === 0 || ids.length > 10) {
+            imageV2.fullReload();
+            return;
+        }
+        for (var ix = 0; ix < ids.length; ix++)
+            imageV2.requestImgUpdate(ids[ix], "", "");
     },
 
     makeHitCallback: function (title)
@@ -4293,6 +4350,10 @@ var rightClick = {
         if (title.search(/<b>Transcript: ?<[/]b>/) !== -1) {
             title = title.split("<br>")[0].split("</b>")[1];
         }
+        // the BLAT track's mouseover has a query coverage bar after the text
+        if (title.search(/<svg/) !== -1) {
+            title = title.split("<br>")[0];
+        }
         // for older UCSC genes tracks, the protein name is forced onto the item name
         if (title.search(/&hgg_prot=/) !== -1) {
             title = title.split("&hgg_prot=")[0];
@@ -4501,15 +4562,16 @@ var rightClick = {
                                 title = decodeURIComponent(a[1].replace(/\+/g, " "));
                             }
                         }
+                        var titleHtml = htmlEncode(title);
 
                         if (displayItemFunctions) {
-                            o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
+                            o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  titleHtml] = {
                                 onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                     "selectWholeGene"); return true;
                                           }
                                 };
-                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + title] =
+                            o[rightClick.makeImgTag("highlight.png") + " Highlight " + titleHtml] =
                                 {   onclick: function(menuItemClicked, menuObject) {
                                         rightClick.hit(menuItemClicked, menuObject,
                                                        "highlightItem");
@@ -4518,7 +4580,7 @@ var rightClick = {
                                 };
                             var itemForColor = rightClick.itemFromHref(href);
                             if (hgTracks.canColorItems && itemForColor) {
-                                o[rightClick.makeImgTag("palette.png") + " Color " + title + "..."] =
+                                o[rightClick.makeImgTag("palette.png") + " Color " + titleHtml + "..."] =
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                            "colorThisItem");
@@ -4528,7 +4590,7 @@ var rightClick = {
                                 if (rightClick.findItemColor(itemForColor.track,
                                                              itemForColor.name)) {
                                     o[rightClick.makeImgTag("palette.png") +
-                                            " Remove color from " + title] =
+                                            " Remove color from " + titleHtml] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                                "removeItemColor");
@@ -4548,6 +4610,9 @@ var rightClick = {
                                     (rec.type.indexOf("genePred") !== -1 || rec.type.indexOf("bigGenePred") !== -1)) {
                                 // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
                                 var name, table;
+                                // In multi-region view hgTracks.chromName is the virtual chrom
+                                // ("multi"), so take the item's real chrom from its link.
+                                var chrom = hgTracks.chromName;
                                 var reg = new RegExp("hgg_gene=([^&]+)");
                                 let a = reg.exec(href);
                                 if (a && a[1]) {
@@ -4556,6 +4621,11 @@ var rightClick = {
                                     a = reg.exec(href);
                                     if (a && a[1]) {
                                         table = a[1];
+                                    }
+                                    reg = new RegExp("hgg_chrom=([^&]+)");
+                                    a = reg.exec(href);
+                                    if (a && a[1]) {
+                                        chrom = a[1];
                                     }
                                 } else {
                                     // http://hgwdev-larrym.gi.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
@@ -4570,6 +4640,11 @@ var rightClick = {
                                             table = a[1];
                                         }
                                     }
+                                    reg = new RegExp("[?&]c=([^&]+)");
+                                    a = reg.exec(href);
+                                    if (a && a[1]) {
+                                        chrom = a[1];
+                                    }
                                 }
                                 if (name && table) {
                                     if (exonNum > 0) {
@@ -4580,7 +4655,7 @@ var rightClick = {
                                                         url: "../cgi-bin/hgApi",
                                                         data: cart.varsToUrlData({ 'hgsid': getHgsid(), 'db': getDb(),
                                                                 'cmd': "exonToPos", 'num': exonNum,
-                                                                'table': table, 'name': name, 'chrom': hgTracks.chromName}),
+                                                                'table': table, 'name': name, 'chrom': chrom}),
                                                         trueSuccess: rightClick.handleZoomCodon,
                                                         success: catchErrorOrDispatch,
                                                         error: errorHandler,
@@ -4592,20 +4667,20 @@ var rightClick = {
                                     {   onclick: function(menuItemClicked, menuObject) {
                                             rightClick.hit(menuItemClicked, menuObject,
                                                         "zoomCodon",
-                                                        {name: name, table: table, 'chrom': hgTracks.chromName});
+                                                        {name: name, table: table, 'chrom': chrom});
                                             return true;}
                                     };
                                         o[rightClick.makeImgTag("magnify.png")+" Enter exon to zoom to..."] =
                                         {   onclick: function(menuItemClicked, menuObject) {
                                                 rightClick.hit(menuItemClicked, menuObject,
                                                             "zoomExon",
-                                                            {name: name, table: table, 'chrom': hgTracks.chromName});
+                                                            {name: name, table: table, 'chrom': chrom});
                                                 return true;}
                                         };
                                     }
                                 }
                             }
-                            o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+title] = {
+                            o[rightClick.makeImgTag("dnaIcon.png")+" Get DNA for "+titleHtml] = {
                                 onclick: function(menuItemClicked, menuObject) {
                                     rightClick.hit(menuItemClicked, menuObject, "getDna");
                                     return true; }
@@ -4634,7 +4709,7 @@ var rightClick = {
                                 item = rightClick.makeImgTag("book.png") + " Show details...";
                             else
                                 item = rightClick.makeImgTag("book.png")+" Show details for "+
-                                       title + "...";
+                                       htmlEncode(title) + "...";
                             o[item] = {onclick: function(menuItemClicked, menuObject) {
                                        rightClick.hit(menuItemClicked,menuObject,"followLink");
                                        return true; }
@@ -4680,6 +4755,20 @@ var rightClick = {
                         return true; }
                 };
                 menu.push(o);
+
+                // BLAT results tracks (blatResult=on): reopen their results table in hgBlat
+                var ctRec = hgTracks.trackDb[ctId];
+                if (ctRec && ctRec.blatResult) {
+                    o = {};
+                    o[rightClick.makeImgTag("magnify.png") + " Back to BLAT results"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            window.location.href = "hgBlat?blatNewPage=1&db=" +
+                                encodeURIComponent(getDb()) + "&blatCt=" +
+                                encodeURIComponent(ctId) + "&hgsid=" + getHgsid();
+                            return true; }
+                    };
+                    menu.push(o);
+                }
             }
 
             //o = {};
@@ -4783,6 +4872,13 @@ var rightClick = {
                     o[rightClick.makeImgTag("palette.png")+" Change Track Color"] = {
                         onclick: function(menuItemClicked, menuObject) {
                             rightClick.hit(menuItemClicked, menuObject, "changeTrackColor");
+                            return true; }
+                    };
+                }
+                if (hgTracks.clearFiltersMenu) {
+                    o[rightClick.makeImgTag("wrench.png")+" Reset filters to defaults"] = {
+                        onclick: function(menuItemClicked, menuObject) {
+                            rightClick.hit(menuItemClicked, menuObject, "clearSettings");
                             return true; }
                     };
                 }
@@ -5288,8 +5384,14 @@ var popUpHgcOrHgGene = {
             e.preventDefault();
             // Share the details-page URL with hgsid stripped; keep (or add) db so it opens
             // standalone, and note that the link shows the page, not the user's active tracks.
-            if (window.topLinks && window.topLinks.shareUrl)
-                window.topLinks.shareUrl(popUpHgcOrHgGene.href, {ensureDb: getDb(), pageNote: true});
+            // If this track lives inside superTracks, force each of them to "show" in the
+            // link too -- superTracks default to hide, so without this the linked-to track
+            // would come up invisible on a fresh page load.
+            if (window.topLinks && window.topLinks.shareUrl) {
+                var rec = hgTracks.trackDb[popUpHgcOrHgGene.table];
+                window.topLinks.shareUrl(popUpHgcOrHgGene.href,
+                    {ensureDb: getDb(), pageNote: true, superTrack: rec && rec.superTrack});
+            }
         });
         appendNonceJsToPage(nonceJs);
         let subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpHgcOrHgGene.table]) ? popUpHgcOrHgGene.table : "";
@@ -5759,6 +5861,13 @@ var popUp = {
 
 	//alert(cleanHtml);  // DEBUG REMOVE
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
+
+        // the description page inside carries no session id of its own, so add it to the
+        // links in it that stay on this server, and put a rel on the ones that do not --
+        // the replace above has already given every link in it a target
+        var popDiv = document.getElementById('pop');
+        addHgsidToLinks(popDiv);
+        offsiteLinksToNewTab(popDiv);
 
 	appendNonceJsToPage(nonceJs);
 
@@ -6905,6 +7014,10 @@ var mouseOver = {
     tracks: {}, // tracks[trackName] - number of data items for this track
     trackType: {},	// key is track name, value is track type from hgTracks
     mouseOverFunction: {}, // key is track name, value mouseOverFunction string
+    // key is multiWig container name, value its JSON record.  No prototype, so
+    // a track named like an Object method ("constructor") is not found here.
+    multiWig: Object.create(null),
+    multiWigWidths: Object.create(null), // key is container name, value popup width
     jsonUrl: {},       // list of json files from hidden DIV elements
     maximumWidth: {},   // maximumWidth[trackName] - largest string to display
     popUpDelay: 200,   // 0.2 second delay before popUp appears
@@ -6917,6 +7030,7 @@ var mouseOver = {
     noDataString: "no&nbsp;data",	// message for no data at this position
     noDataSize: 0,	// will be set to size of text 'no data'
     noAverageString: "&nbsp;zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values&nbsp;",	// "noAverage" function
+    noAverageRow: "zoom&nbsp;in&nbsp;to&nbsp;see&nbsp;values",	// the same in a multiWig row
 
     // items{} - key name is track name, value is an array of data items
     //           where the format of each item can be different for different
@@ -6966,21 +7080,39 @@ var mouseOver = {
 	hasChildren = trackDb.hasChildren;
       } else if (hgTracks.trackDb && hgTracks.trackDb[trackName]) {
 	trackType = hgTracks.trackDb[trackName].type;
+	hasChildren = hgTracks.trackDb[trackName].hasChildren;
       } else if (mouseOver.trackType[trackName]) {
 	trackType = mouseOver.trackType[trackName];
+      }
+      var imgData = "img_data_" + trackName;
+      var imgDataId  = document.getElementById(imgData);
+      if (hasChildren) {
+        // a multiWig container, whatever its type (an hgCollection one is
+        // mathWig): its JSON carries a record for the container only when
+        // hgTracks wants the popup, and receiveData() then adds the
+        // listeners.  With multiWigMouseOver off there is no container
+        // record, and the fetch only loads subtrack data nobody uses.
+        if (imgDataId) {
+          var mwUrl = mouseOver.jsonFileName(imgDataId);
+          // fetchJsonData() skips a URL it already fetched, so keep the
+          // record we have in that case
+          if (! mouseOver.jsonUrl[mwUrl]) {
+            delete mouseOver.multiWig[trackName];
+            delete mouseOver.multiWigWidths[trackName];
+            mouseOver.fetchJsonData(mwUrl);
+          }
+        }
+        return;
       }
       var validType = false;
       if (trackType) {
 	if (trackType.indexOf("wig") === 0) { validType = true; }
 	if (trackType.indexOf("bigWig") === 0) { validType = true; }
 	if (trackType.indexOf("wigMaf") === 0) { validType = false; }
-	if (hasChildren) { validType = false; }
       }
       if (! validType ) { return; }
       var tdData = "td_data_" + trackName;
       var tdDataId  = document.getElementById(tdData);
-      var imgData = "img_data_" + trackName;
-      var imgDataId  = document.getElementById(imgData);
       if (imgDataId && tdDataId) {
 	var url = mouseOver.jsonFileName(imgDataId);
         $( tdDataId ).on("mousemove", mouseOver.mouseMoveDelay);
@@ -6992,33 +7124,28 @@ var mouseOver = {
     // given an X coordinate: x, find the index idx
     // in the rects[idx] array where rects[idx].x1 <= x < rects[idx].x2
     // returning -1 when not found
-    // if we knew the array was sorted on x1 we could get out early
-    //   when x < x1
+    // The rects come from wigTrack.c in increasing x1 order and do not
+    //   overlap, so a binary search finds the one item, in either
+    //   display direction.
     // Note, different track types could have different intersection
     //       procedures.  For example, the HiC track will need to intersect
     //       the mouse position within the diamond/square defined by the
     //       items in the display.
     findRange: function (x, rects)
     {
-      var answer = -1;  // assmume not found
-      var idx = 0;
-      if (hgTracks.revCmplDisp) {
-        var rectsLen = rects.length - 1;
-        for ( idx in rects ) {
-           if ((rects[rectsLen-idx].x1 <= x) && (x < rects[rectsLen-idx].x2)) {
-             answer = rectsLen-idx;
-             break;
-           }
-        }
-      } else {
-        for ( idx in rects ) {
-           if ((rects[idx].x1 <= x) && (x < rects[idx].x2)) {
-             answer = idx;
-             break;
-           }
-        }
+      var lo = 0;
+      var hi = rects.length - 1;
+      while (lo <= hi) {
+         var mid = (lo + hi) >> 1;
+         if (x < rects[mid].x1) {
+            hi = mid - 1;
+         } else if (x >= rects[mid].x2) {
+            lo = mid + 1;
+         } else {
+            return mid;
+         }
       }
-      return answer;
+      return -1;
     },
 
     popUpDisappear: function () {
@@ -7041,6 +7168,87 @@ var mouseOver = {
         $('#mouseOverText').css('display','block');
         $('#mouseOverVerticalLine').css('display','block');
       }
+    },
+
+    // the value at graphOffset for one subtrack of a multiWig, as HTML
+    // without the padding the single-track popup puts around it
+    subtrackValue: function (subName, graphOffset)
+    {
+      if (mouseOver.mouseOverFunction[subName] === "noAverage") {
+         return mouseOver.noAverageRow;	// the row label already has the padding
+      }
+      var items = mouseOver.items[subName];
+      if (items) {
+         var idx = mouseOver.findRange(graphOffset, items);
+         if (idx > -1) { return items[idx].v; }
+      }
+      return mouseOver.noDataString;
+    },
+
+    // HTML for the popup over a multiWig container.  With no overlay the
+    // subtracks are drawn in rows, so show the row under the cursor; in the
+    // overlay modes show every subtrack.  Returns null when the cursor is
+    // not over a row.
+    multiWigValue: function (trackName, graphOffset, clientY)
+    {
+      var mw = mouseOver.multiWig[trackName];
+      var subs = mw.s;
+      if (mw.m === "none") {
+         var img = document.getElementById("img_data_" + trackName);
+         if (!img || !img.parentNode) { return null; }
+         var yRel = clientY - Math.floor(img.parentNode.getBoundingClientRect().top);
+         subs = mw.s.filter(function (sub) {
+            return yRel >= sub.y && yRel < sub.y + sub.h;
+         });
+         if (subs.length === 0) { return null; }
+      }
+      var rows = [];
+      for (var i = 0; i < subs.length; i++) {
+         var sub = subs[i];
+         rows.push(mouseOver.multiWigRowLabel(mw, sub) +
+                   mouseOver.subtrackValue(sub.n, graphOffset) + "&nbsp;");
+      }
+      return rows.join("<br>");
+    },
+
+    // HTML for the start of one multiWig popup row: color swatch and label
+    multiWigRowLabel: function (mw, sub)
+    {
+      var label = sub.l;
+      // add and subtract draw one merged graph under the first subtrack's name
+      if (mw.m === "add") { label = "sum"; }
+      if (mw.m === "subtract") { label = "difference"; }
+      var swatch = "";
+      if (/^#[0-9a-fA-F]{6}$/.test(sub.c)) {
+         swatch = "<span style='color:" + sub.c + "'>&#9632;</span>&nbsp;";
+      }
+      return "&nbsp;" + swatch + htmlEncode(label) + ":&nbsp;";
+    },
+
+    // width of the multiWig popup, the widest row label plus the widest
+    // value of that subtrack.  Measured once per JSON record, so the popup
+    // does not change width as the values change.
+    multiWigWidth: function (trackName)
+    {
+      if (mouseOver.multiWigWidths[trackName] === undefined) {
+         var mw = mouseOver.multiWig[trackName];
+         if (0 === mouseOver.noDataSize) {  // no wig record has set it yet
+           mouseOver.noDataSize = mouseOver.getWidthOfText(mouseOver.noDataString);
+         }
+         var widest = 0;
+         for (var i = 0; i < mw.s.length; i++) {
+            var sub = mw.s[i];
+            // receiveData() measured each subtrack's widest value, or the
+            // noAverage message for a noAverage subtrack
+            var valueWidth = mouseOver.maximumWidth[sub.n] || mouseOver.noDataSize;
+            var rowWidth = mouseOver.getWidthOfText(mouseOver.multiWigRowLabel(mw, sub)) +
+                           valueWidth;
+            if (rowWidth > widest) { widest = rowWidth; }
+         }
+         // + 2 for rounding in the separate measurements
+         mouseOver.multiWigWidths[trackName] = widest + 2;
+      }
+      return mouseOver.multiWigWidths[trackName];
     },
 
     //  the evt.currentTarget.id is the td_data_<trackName> element of
@@ -7085,20 +7293,42 @@ var mouseOver = {
     }
 
     var windowUp = false;     // see if window is supposed to become visible
-    var foundIdx = -1;
-    if (mouseOver.items[trackName]) {
-       foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
+    var mouseOverValue;
+    var msgWidth;
+    if (!mouseOver.multiWig[trackName] && !mouseOver.items[trackName] &&
+        hgTracks.trackDb && hgTracks.trackDb[trackName] &&
+        hgTracks.trackDb[trackName].hasChildren) {
+        // a container whose record has not arrived, or was not written
+        // because nothing in it was drawn: nothing to show
+        mouseOver.popUpDisappear();
+        return;
     }
-    // can show 'no data' when not found
-    var mouseOverValue = mouseOver.noDataString;
-    if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
-       mouseOverValue = mouseOver.noAverageString;
-    }
-    if (foundIdx > -1) { // value to display
-        mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
+    if (mouseOver.multiWig[trackName]) {
+        mouseOverValue = mouseOver.multiWigValue(trackName, graphOffset, clientY);
+        if (mouseOverValue === null) {	// between rows, or over the center label
+            mouseOver.popUpDisappear();
+            return;
+        }
+        msgWidth = mouseOver.multiWigWidth(trackName);
+    } else {
+        var foundIdx = -1;
+        if (mouseOver.items[trackName]) {
+           foundIdx = mouseOver.findRange(graphOffset, mouseOver.items[trackName]);
+        }
+        // can show 'no data' when not found
+        mouseOverValue = mouseOver.noDataString;
+        if (mouseOver.mouseOverFunction[trackName] === "noAverage") {
+           mouseOverValue = mouseOver.noAverageString;
+        }
+        if (foundIdx > -1) { // value to display
+            mouseOverValue = "&nbsp;" + mouseOver.items[trackName][foundIdx].v + "&nbsp;";
+        }
+        msgWidth = mouseOver.maximumWidth[trackName];
     }
     $('#mouseOverText').html(mouseOverValue);
-    var msgWidth = mouseOver.maximumWidth[trackName];
+    // mouseOver.css right-aligns a single value; a multiWig's rows of label and
+    // value read better left-aligned, so the color swatches line up
+    $('#mouseOverText').css('text-align', mouseOver.multiWig[trackName] ? 'left' : '');
     $('#mouseOverText').width(msgWidth);
     var msgHeight = Math.ceil($('#mouseOverText').height());
     var lineHeight = Math.max(0, tdHeight - msgHeight);
@@ -7197,8 +7427,8 @@ var mouseOver = {
     //        {x1:n, x2:n, value:s}
     //        where n is an integer in the range: 0..width,
     //        and s is the value string to display
-    //     Will need to get them sorted on x1 for efficient searching as
-    //     they accumulate in the local data structure here.
+    //     wigTrack.c writes them sorted on x1 and not overlapping, which
+    //     findRange() relies on for its binary search.
     //  2020-11-24 more generalized incoming data structure, don't care
     //             what the structure is for each item, this will vary
     //             depending upon the type of track.  trackType now remembered
@@ -7208,6 +7438,16 @@ var mouseOver = {
     {
       mouseOver.popUpDisappear();
       for (var trackName in arr) {
+      if (arr[trackName].t === "multiWig") {   // container record, no data
+         mouseOver.multiWig[trackName] = arr[trackName];
+         delete mouseOver.multiWigWidths[trackName];
+         var mwTd = document.getElementById("td_data_" + trackName);
+         $( mwTd ).off("mousemove", mouseOver.mouseMoveDelay);
+         $( mwTd ).off("mouseout", mouseOver.popUpDisappear);
+         $( mwTd ).on("mousemove", mouseOver.mouseMoveDelay);
+         $( mwTd ).on("mouseout", mouseOver.popUpDisappear);
+         continue;
+      }
 	// clear these variables if they existed before
       if (mouseOver.trackType[trackName]) {mouseOver.trackType[trackName] = undefined;}
       if (mouseOver.items[trackName]) {mouseOver.items[trackName] = undefined;}
@@ -7382,16 +7622,77 @@ var trackSearch = {
 ////////
 var downloadCurrentTrackData = {
     downloadData: {}, // container for holding data while it comes in from the api
+    sequenceData: null, // the region's DNA, only fetched for the GenBank output
+    trackInfo: {}, // trackDb of the requested tracks, keyed by the name sent to the api
     currentRequests: {}, // pending requests
     intervalId: null, // the id of the timer that waits on the api
+    // format, headers option and file name, read when Download is clicked and not when the
+    // data arrives, so that changing the dialog during the wait does not change the file
+    outOptions: null,
 
-    failedTrackDataRequest: function(msg) {
-        msgJson = JSON.parse(msg);
-        alert("Download failed. Error message: '" + msgJson.error);
+    // the keys of an api getData/track reply that are not tracks
+    nonTrackKeys: new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
+        "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
+        "bigDataUrl", "chromSize", "hubUrl"]),
+
+    failedTrackDataRequest: function(status, msg) {
+        // the api answers an error with json, but a proxy or apache error page does not,
+        // and a dropped connection has no answer at all
+        let error = null;
+        try {
+            error = JSON.parse(msg).error;
+        } catch (e) {
+            error = null;
+        }
+        if (!error) {
+            error = (status === 0) ? "no answer from the server" :
+                "the server answered with status " + status;
+        }
+        alert("Download failed. Error message: '" + error + "'");
+    },
+
+    requestFinished: function(xhr, key, useReply) {
+        // Every way a request can end has to remove its key: makeDownloadFile waits for
+        // currentRequests to be empty, and startDownload allows only one download at a
+        // time, so a key that stays behind blocks the dialog until the page is reloaded.
+        delete downloadCurrentTrackData.currentRequests[key];
+        if (xhr.status === 200) {
+            let reply = null;
+            try {
+                reply = JSON.parse(xhr.responseText);
+            } catch (e) {
+                reply = null;
+            }
+            if (reply !== null) {
+                useReply(reply);
+                return;
+            }
+        }
+        // GenBank sends two requests, report only the first of them that fails
+        if (downloadCurrentTrackData.intervalId !== null) {
+            downloadCurrentTrackData.stopWaiting();
+            downloadCurrentTrackData.failedTrackDataRequest(xhr.status, xhr.responseText);
+        }
     },
 
     receiveTrackData: function(track, data) {
         downloadCurrentTrackData.downloadData[track] = data;
+    },
+
+    setBusy: function(busy) {
+        // the dialog gives no other sign that anything is happening between the click and
+        // the browser's own download, which is seconds once a few tracks are selected
+        $("#downloadTracksStatus").toggle(busy);
+        $("#downloadTracksGo").prop("disabled", busy);
+    },
+
+    stopWaiting: function() {
+        // clear the timer that waits on the api and forget its id, so that the next
+        // download can start.  The id has to be forgotten and not just cleared: it is
+        // the one place that records whether a download is still running
+        clearInterval(downloadCurrentTrackData.intervalId);
+        downloadCurrentTrackData.intervalId = null;
+        downloadCurrentTrackData.setBusy(false);
     },
 
     convertJson: function(data, outType, withHeaders) {
@@ -7402,14 +7703,17 @@ var downloadCurrentTrackData = {
         let outSep = outType === "tsv" ? '\t' : ',';
         // TODO: someday we will probably want to include some of these fields
         // for each track downloaded, perhaps as an option
-        let ignoredKeys = new Set(["chrom", "dataTime", "dataTimeStamp", "downloadTime", "downloadTimeStamp",
-            "start", "end", "track", "trackType", "genome", "itemsReturned", "columnTypes",
-            "bigDataUrl", "chromSize", "hubUrl"]);
+        let ignoredKeys = downloadCurrentTrackData.nonTrackKeys;
         let columnTypes;
         let cleanData = {};
-        // first get rid of top level non track object keys
+        // first get rid of top level non track object keys.  A track's value is always
+        // the array of its rows, so anything else is one of the api's own fields: that
+        // test, rather than the list of names, is what keeps a field the api adds later
+        // from being written out as if it were a track.  maxItemsLimit and
+        // dataDownloadUrl, which only show up when a reply was truncated, used to end up
+        // here, and the string one was then iterated one character per row
         _.each(data, function(val, key) {
-            if (ignoredKeys.has(key)) {
+            if (ignoredKeys.has(key) || !Array.isArray(val)) {
                 // squirrel away the columnTypes if requested
                 if (key === "columnTypes") {
                     columnTypes = data[key];
@@ -7424,7 +7728,7 @@ var downloadCurrentTrackData = {
             str += "track name=\"" + track + "\"\n";
             if (withHeaders) {
                 let headers = [];
-                if (columnTypes) {
+                if (columnTypes && columnTypes[track]) {
                     for (let i of columnTypes[track]) {
                         headers.push(i.name);
                     }
@@ -7445,22 +7749,338 @@ var downloadCurrentTrackData = {
         return new Blob([str], {type: "text/plain"});
     },
 
+    // The GenBank flat file writer below turns the region's DNA plus the track
+    // items into a feature table. The format is fixed column: feature keys start
+    // at column 6, locations and qualifiers at column 22, lines wrap at 80.
+
+    gbIndent: "                     ", // 21 spaces, the qualifier indent
+
+    gbWrap: function(firstPrefix, contPrefix, text, breakChars) {
+        // wrap text to 79 columns, breaking after one of breakChars, and put
+        // contPrefix in front of every line but the first
+        let out = "";
+        let line = firstPrefix + text;
+        while (line.length > 79) {
+            let breakPos = -1;
+            for (let c of breakChars) {
+                breakPos = Math.max(breakPos, line.lastIndexOf(c, 78));
+            }
+            if (breakPos <= contPrefix.length) {
+                breakPos = 78;  // nothing to break on, cut it
+            }
+            out += line.slice(0, breakPos + 1).replace(/\s+$/, "") + "\n";
+            line = contPrefix + line.slice(breakPos + 1).replace(/^\s+/, "");
+        }
+        return out + line + "\n";
+    },
+
+    gbQualifier: function(name, value) {
+        // a /name="value" qualifier. Inner quotes are doubled, as the format wants,
+        // and very long values are cut, they are usually not what people are after
+        let str = String(value).replace(/\s+/g, " ");
+        if (str.length > 300) {
+            str = str.slice(0, 300) + "...";
+        }
+        // the doubling has to come after the cut: cutting a doubled pair in half would
+        // leave a lone quote, and the value would end there as far as a parser is concerned
+        str = str.replace(/"/g, '""');
+        return downloadCurrentTrackData.gbWrap(downloadCurrentTrackData.gbIndent,
+            downloadCurrentTrackData.gbIndent, "/" + name + "=\"" + str + "\"", " ");
+    },
+
+    gbLocation: function(blocks, strand, partialLeft, partialRight) {
+        // blocks are [start, end] pairs, 1-based, inclusive, in ascending order.
+        // "<" and ">" mark a feature that runs off the edge of the downloaded region
+        let parts = [];
+        for (let i = 0; i < blocks.length; i++) {
+            let s = String(blocks[i][0]);
+            let e = String(blocks[i][1]);
+            if (i === 0 && partialLeft) { s = "<" + s; }
+            if (i === blocks.length - 1 && partialRight) { e = ">" + e; }
+            parts.push(s === e ? s : s + ".." + e);
+        }
+        let loc = parts.length > 1 ? "join(" + parts.join(",") + ")" : parts[0];
+        if (strand === "-") {
+            loc = "complement(" + loc + ")";
+        }
+        return loc;
+    },
+
+    gbFeature: function(key, blocks, strand, partialLeft, partialRight, quals) {
+        let loc = downloadCurrentTrackData.gbLocation(blocks, strand, partialLeft, partialRight);
+        let str = downloadCurrentTrackData.gbWrap("     " + key.padEnd(16),
+            downloadCurrentTrackData.gbIndent, loc, ",");
+        for (let q of quals) {
+            str += downloadCurrentTrackData.gbQualifier(q[0], q[1]);
+        }
+        return str;
+    },
+
+    // columns that become the feature location or a dedicated qualifier, so they
+    // are not repeated as /note
+    gbCoordColumns: new Set(["chrom", "chromStart", "chromEnd", "txStart", "txEnd",
+        "tStart", "tEnd", "tName", "tSize", "start", "end", "strand", "blockCount",
+        "blockSizes", "chromStarts", "blockStarts", "tStarts", "qStarts", "exonCount",
+        "exonStarts", "exonEnds", "thickStart", "thickEnd", "cdsStart", "cdsEnd",
+        "reserved", "itemRgb", "bin"]),
+
+    gbTrackFeatures: function(trackName, label, type, rows, colTypes, winStart, winEnd) {
+        // turn the api rows of one track into GenBank feature table entries,
+        // returns a list of {start:, text:} so that all tracks can be sorted together
+        let idx = {};
+        if (colTypes) {
+            colTypes.forEach(function(col, i) { idx[col.name] = i; });
+        } else {
+            // no column info from the api, assume the usual bed order
+            ["chrom", "chromStart", "chromEnd", "name", "score", "strand"].forEach(
+                function(n, i) { idx[n] = i; });
+        }
+        let pick = function(names) {
+            for (let n of names) {
+                if (n in idx) { return n; }
+            }
+            return null;
+        };
+        let startCol = pick(["chromStart", "txStart", "tStart", "start"]);
+        let endCol = pick(["chromEnd", "txEnd", "tEnd", "end"]);
+        if (startCol === null || endCol === null) {
+            return [];  // no coordinates, nothing we can place on the sequence
+        }
+        let nameCol = pick(["name", "qName", "geneName", "id"]);
+        let geneCol = pick(["geneName", "name2", "geneSymbol", "gene"]);
+        let strandCol = pick(["strand"]);
+        let cdsStartCol = pick(["thickStart", "cdsStart"]);
+        let cdsEndCol = pick(["thickEnd", "cdsEnd"]);
+        let sizesCol = pick(["blockSizes"]);
+        let relStartsCol = pick(["chromStarts", "blockStarts"]);
+        let absStartsCol = pick(["tStarts"]);
+        let exonStartsCol = pick(["exonStarts"]);
+        let exonEndsCol = pick(["exonEnds"]);
+        let splitNums = function(str) {
+            if (str === null || str === undefined) { return []; }
+            return String(str).split(",").filter(function(s) { return s.length > 0; }).map(Number);
+        };
+        // cut blocks down to the region and make them 1-based and relative to it
+        let clip = function(blocks) {
+            let out = [];
+            for (let b of blocks) {
+                let s = Math.max(b[0], winStart);
+                let e = Math.min(b[1], winEnd);
+                if (e > s) { out.push([s - winStart + 1, e - winStart]); }
+            }
+            return out;
+        };
+        let features = [];
+        for (let row of rows) {
+            if (!Array.isArray(row)) { continue; }
+            let start = Number(row[idx[startCol]]);
+            let end = Number(row[idx[endCol]]);
+            if (isNaN(start) || isNaN(end)) { continue; }
+            let strand = strandCol !== null ? String(row[idx[strandCol]] || "") : "";
+            // a psl strand can be two characters, the target strand is the last one
+            strand = strand.length > 0 ? strand.slice(-1) : "";
+            let blocks = null;
+            if (sizesCol !== null && (relStartsCol !== null || absStartsCol !== null)) {
+                // bed12 block starts are relative to chromStart, psl tStarts are not
+                let relative = relStartsCol !== null;
+                let sizes = splitNums(row[idx[sizesCol]]);
+                let starts = splitNums(row[idx[relative ? relStartsCol : absStartsCol]]);
+                let offset = relative ? start : 0;
+                if (sizes.length > 0 && sizes.length === starts.length) {
+                    blocks = [];
+                    for (let i = 0; i < sizes.length; i++) {
+                        blocks.push([offset + starts[i], offset + starts[i] + sizes[i]]);
+                    }
+                }
+            } else if (exonStartsCol !== null && exonEndsCol !== null) {
+                let exonStarts = splitNums(row[idx[exonStartsCol]]);
+                let exonEnds = splitNums(row[idx[exonEndsCol]]);
+                if (exonStarts.length > 0 && exonStarts.length === exonEnds.length) {
+                    blocks = [];
+                    for (let i = 0; i < exonStarts.length; i++) {
+                        blocks.push([exonStarts[i], exonEnds[i]]);
+                    }
+                }
+            }
+            // a block list that does not describe the item is a sign the columns hold
+            // something else, so fall back to one block covering the whole item
+            if (blocks !== null) {
+                let blockEnd = start;
+                for (let b of blocks) {
+                    if (b[0] < blockEnd || b[1] <= b[0] || b[1] > end) {
+                        blocks = null;
+                        break;
+                    }
+                    blockEnd = b[1];
+                }
+            }
+            if (blocks === null) {
+                blocks = [[start, end]];
+            }
+            let exons = clip(blocks);
+            if (exons.length === 0) { continue; }
+            let quals = [];
+            let name = nameCol !== null ? String(row[idx[nameCol]]) : "";
+            if (name.length > 0) {
+                quals.push(["label", name]);  // what sequence viewers show on the feature
+            }
+            if (geneCol !== null && geneCol !== nameCol && row[idx[geneCol]]) {
+                quals.push(["gene", row[idx[geneCol]]]);
+            }
+            // the track name is in here too, it is what leads back to the browser or the api
+            quals.push(["note", "UCSC track: " +
+                (label === trackName ? trackName : label + " (" + trackName + ")")]);
+            for (let col in idx) {
+                if (downloadCurrentTrackData.gbCoordColumns.has(col) ||
+                        col === nameCol || col === geneCol) {
+                    continue;
+                }
+                let val = row[idx[col]];
+                if (val === null || val === undefined || val === "" || val === ".") {
+                    continue;
+                }
+                quals.push(["note", col + ": " + val]);
+            }
+            let cdsStart = cdsStartCol !== null ? Number(row[idx[cdsStartCol]]) : 0;
+            let cdsEnd = cdsEndCol !== null ? Number(row[idx[cdsEndCol]]) : 0;
+            let hasCds = downloadCurrentTrackData.isGeneModelType(type) &&
+                !isNaN(cdsStart) && !isNaN(cdsEnd) && cdsEnd > cdsStart;
+            let key = "misc_feature";
+            if (hasCds) {
+                key = "mRNA";
+            } else if (blocks.length > 1) {
+                key = "misc_RNA";
+            }
+            features.push({start: exons[0][0],
+                text: downloadCurrentTrackData.gbFeature(key, exons, strand,
+                    start < winStart, end > winEnd, quals)});
+            if (hasCds) {
+                let cdsBlocks = [];
+                for (let b of blocks) {
+                    let s = Math.max(b[0], cdsStart);
+                    let e = Math.min(b[1], cdsEnd);
+                    if (e > s) { cdsBlocks.push([s, e]); }
+                }
+                let cdsExons = clip(cdsBlocks);
+                if (cdsExons.length > 0) {
+                    features.push({start: cdsExons[0][0],
+                        text: downloadCurrentTrackData.gbFeature("CDS", cdsExons, strand,
+                            cdsStart < winStart, cdsEnd > winEnd, quals)});
+                }
+            }
+        }
+        return features;
+    },
+
+    convertGenbank: function(data, seqData) {
+        // write a GenBank flat file: the DNA of the region plus the track items
+        // as features. Coordinates are 1-based and relative to the region.
+        if (!seqData || !seqData.dna) {
+            alert("Download failed: could not get the sequence for this region.");
+            return null;
+        }
+        let seq = seqData.dna.toLowerCase();
+        // the sequence reply is what the coordinates are relative to, so it sets the
+        // region.  It is also the only one of the two that names the sequence on a hub
+        // assembly, and it names it the way the assembly does, e.g. CP139523.1 rather
+        // than the chr1 alias the browser displays
+        let chrom = seqData.chrom !== undefined ? seqData.chrom : data.chrom;
+        let winStart = seqData.start !== undefined ? seqData.start : data.start;
+        let winEnd = winStart + seq.length;
+        // a hub assembly arrives as hub_<id>_<accession>, and the hub id is local to this
+        // browser session, so it has no business in a file someone keeps or passes on
+        let db = undecoratedTrack(data.genome);
+        let columnTypes = data.columnTypes;
+        let features = [];
+        let skipped = [];
+        _.each(data, function(val, track) {
+            if (downloadCurrentTrackData.nonTrackKeys.has(track) || !Array.isArray(val)) {
+                return;
+            }
+            let tdb = downloadCurrentTrackData.trackInfo[track] || {};
+            let label = tdb.shortLabel || track;
+            if (downloadCurrentTrackData.isWiggleType(tdb.type)) {
+                // the dialog greys these out, this is for a track that got here anyway:
+                // one feature per wiggle value would be millions of lines and would
+                // mean nothing to a sequence viewer
+                skipped.push(label);
+                return;
+            }
+            features = features.concat(downloadCurrentTrackData.gbTrackFeatures(track, label,
+                tdb.type, val, columnTypes ? columnTypes[track] : null, winStart, winEnd));
+        });
+        features.sort(function(a, b) { return a.start - b.start; });
+
+        let posStr = chrom + ":" + (winStart + 1) + "-" + winEnd;
+        let months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                      "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        let now = new Date();
+        let date = String(now.getDate()).padStart(2, "0") + "-" + months[now.getMonth()] +
+            "-" + now.getFullYear();
+        let organism = hgTracks.organism || db;
+        let sciName = hgTracks.scientificName || organism;
+        let str = "LOCUS       " + (db + "_" + chrom + "_" + (winStart + 1) + "_" + winEnd).padEnd(16) +
+            " " + String(seq.length).padStart(11) + " bp    DNA     linear   UNK " + date + "\n";
+        str += downloadCurrentTrackData.gbWrap("DEFINITION  ", "            ",
+            sciName + " " + posStr + " (" + db + "), from the UCSC Genome Browser.", " ");
+        str += "ACCESSION   " + chrom + "\n";
+        str += "VERSION     " + chrom + "\n";
+        str += "KEYWORDS    .\n";
+        str += "SOURCE      " + organism + "\n";
+        str += "  ORGANISM  " + sciName + "\n";
+        str += downloadCurrentTrackData.gbWrap("COMMENT     ", "            ",
+            "Sequence and annotations downloaded from the UCSC Genome Browser, " +
+            "https://genome.ucsc.edu. Assembly " + db + ", region " + posStr +
+            ". Positions in this file are relative to the start of the region.", " ");
+        if (data.maxItemsLimit) {
+            str += downloadCurrentTrackData.gbWrap("            ", "            ",
+                "INCOMPLETE: the data API stopped at the limit it puts on one request, so " +
+                "some annotations in this region are missing from this file.", " ");
+        }
+        if (skipped.length > 0) {
+            str += downloadCurrentTrackData.gbWrap("            ", "            ",
+                "Not included, these tracks hold numeric data rather than features: " +
+                skipped.join(", ") + ".", " ");
+        }
+        str += "FEATURES             Location/Qualifiers\n";
+        str += downloadCurrentTrackData.gbFeature("source", [[1, seq.length]], "", false, false,
+            [["organism", sciName], ["mol_type", "genomic DNA"],
+             ["note", "UCSC Genome Browser assembly " + db + ", " + posStr]]);
+        for (let feature of features) {
+            str += feature.text;
+        }
+        str += "ORIGIN      \n";
+        for (let i = 0; i < seq.length; i += 60) {
+            let line = String(i + 1).padStart(9);
+            for (let j = 0; j < 60; j += 10) {
+                line += " " + seq.slice(i + j, i + j + 10);
+            }
+            str += line.replace(/\s+$/, "") + "\n";
+        }
+        str += "//\n";
+        return new Blob([str], {type: "text/plain"});
+    },
+
     makeDownloadFile: function(key) {
         if (_.keys(downloadCurrentTrackData.currentRequests).length === 0) {
             // first stop the timer so we don't execute again
-            clearInterval(downloadCurrentTrackData.intervalId);
-            let outType = $("#outputFormat")[0].selectedOptions[0].value;
-            let withHeaders = document.getElementById("downloadTrackHeaders").checked;
+            downloadCurrentTrackData.stopWaiting();
+            let outType = downloadCurrentTrackData.outOptions.outType;
+            let withHeaders = downloadCurrentTrackData.outOptions.withHeaders;
+            let data = downloadCurrentTrackData.downloadData[key];
             var blob = null;
             if (outType === 'json') {
-                blob = new Blob([JSON.stringify(downloadCurrentTrackData.downloadData[key])], {type: "text/plain"});
+                blob = new Blob([JSON.stringify(data)], {type: "text/plain"});
+            } else if (outType === 'gb') {
+                blob = downloadCurrentTrackData.convertGenbank(data,
+                    downloadCurrentTrackData.sequenceData);
             } else {
-                blob = downloadCurrentTrackData.convertJson(downloadCurrentTrackData.downloadData[key], outType, withHeaders);
+                blob = downloadCurrentTrackData.convertJson(data, outType, withHeaders);
             }
             if (blob) {
                 anchor = document.createElement("a");
                 anchor.href = URL.createObjectURL(blob);
-                fname = $("#downloadFileName")[0].value;
+                fname = downloadCurrentTrackData.outOptions.fileName;
                 if (fname.length === 0) {
                     fname = "trackDownload.txt";
                 }
@@ -7471,6 +8091,9 @@ var downloadCurrentTrackData = {
                     case "csv":
                         if (!fname.endsWith(".csv")) {fname += ".csv";}
                         break;
+                    case "gb":
+                        if (!fname.endsWith(".gb")) {fname += ".gb";}
+                        break;
                     default:
                         if (!fname.endsWith(".txt")) {fname += ".txt";}
                         break;
@@ -7479,18 +8102,40 @@ var downloadCurrentTrackData = {
                 anchor.click();
                 window.URL.revokeObjectURL(anchor.href);
                 downloadCurrentTrackData.downloadData = {};
+                downloadCurrentTrackData.sequenceData = null;
+            }
+            // the api stops at a limit on the number of items it will return and says so
+            // in the reply. Say it out loud: the file looks complete otherwise, and a
+            // truncated set of annotations is worse than none if nobody notices
+            if (data && data.maxItemsLimit) {
+                alert("Your file is incomplete. The data API returned " +
+                    (data.itemsReturned ? data.itemsReturned.toLocaleString() + " items and " : "") +
+                    "stopped at the limit it puts on one request. Zoom in, or select fewer " +
+                    "tracks, to get everything in this region. The Table Browser and our " +
+                    "download server have no such limit.");
             }
         }
     },
 
     startDownload: function() {
+        // A second click while the first download is still running used to start a second
+        // timer and overwrite the id of the first, leaving a timer nothing could stop:  it
+        // went on firing every 200ms after the data had been handed over and cleared, with
+        // nothing left to build a file from.  One download at a time, and the click that
+        // comes too early is simply ignored, the one already running will finish.
+        if (downloadCurrentTrackData.intervalId !== null) {
+            return;
+        }
         trackList = [];
+        downloadCurrentTrackData.trackInfo = {};
         $(".downloadTrackName:checked").each(function(i, elem) {
             trackName = elem.id;
             if (getDb().startsWith("hub_")) {
                 // when we are working with assembly hubs, we undecorate the name
                 trackName = undecoratedTrack(elem.id);
             }
+            // the api replies with the undecorated name, keep the trackDb under it
+            downloadCurrentTrackData.trackInfo[trackName] = hgTracks.trackDb[elem.id];
             trackList.push(trackName);
         });
         if (trackList.length == 0) {
@@ -7510,6 +8155,45 @@ var downloadCurrentTrackData = {
         start = hgTracks.winStart;
         end = hgTracks.winEnd;
         db = getDb();
+        let outType = $("#outputFormat")[0].selectedOptions[0].value;
+        if (outType === "gb") {
+            // GenBank output carries the DNA of the region as well, so it can get big.
+            // The api itself would serve most of a chromosome, but the sequence arrives as
+            // one json string and is then copied into the file, so the web browser needs
+            // several times the region in memory and a big region can kill the tab.
+            let regionLimit = downloadCurrentTrackData.genbankRegionLimit();
+            if (end - start > regionLimit) {
+                alert("This region is " + (end - start).toLocaleString() + " bp, more than the " +
+                    regionLimit.toLocaleString() + " bp limit for " +
+                    "GenBank output: the file holds the sequence of the whole region and your " +
+                    "web browser may not have the memory to build it. Zoom in, or use the Table " +
+                    "Browser or our download server for a whole chromosome.");
+                return;
+            }
+            if (end - start > 5000000 &&
+                    !confirm("This region is " + (end - start).toLocaleString() + " bp. " +
+                        "The GenBank file contains the sequence of the whole region and " +
+                        "may take a while to build. Continue?")) {
+                return;
+            }
+            downloadCurrentTrackData.sequenceData = null;
+            let seqUrl = "../cgi-bin/hubApi/getData/sequence?";
+            seqUrl += "chrom=" + chrom;
+            seqUrl += ";start=" + start;
+            seqUrl += ";end=" + end;
+            seqUrl += ";genome=" + db;
+            var seqRequest = new XMLHttpRequest();
+            downloadCurrentTrackData.currentRequests[seqUrl] = true;
+            seqRequest.onreadystatechange = function() {
+                if (4 === this.readyState) {
+                    downloadCurrentTrackData.requestFinished(this, seqUrl, function(reply) {
+                        downloadCurrentTrackData.sequenceData = reply;
+                    });
+                }
+            };
+            seqRequest.open("GET", seqUrl, true);
+            seqRequest.send();
+        }
         apiUrl = "../cgi-bin/hubApi/getData/track?";
         apiUrl += "chrom=" + chrom;
         apiUrl += ";start=" + start;
@@ -7520,16 +8204,10 @@ var downloadCurrentTrackData = {
         var xmlhttp = new XMLHttpRequest();
         downloadCurrentTrackData.currentRequests[apiUrl] = true;
         xmlhttp.onreadystatechange = function() {
-            if (4 === this.readyState && 200 === this.status) {
-                var mapData = JSON.parse(this.responseText);
-                downloadCurrentTrackData.receiveTrackData(apiUrl, mapData);
-                delete downloadCurrentTrackData.currentRequests[apiUrl];
-            } else {
-                if (4 === this.readyState && this.status >= 400) {
-                    clearInterval(downloadCurrentTrackData.intervalId);
-                    downloadCurrentTrackData.failedTrackDataRequest(this.responseText);
-                    delete downloadCurrentTrackData.currentRequests[apiUrl];
-                }
+            if (4 === this.readyState) {
+                downloadCurrentTrackData.requestFinished(this, apiUrl, function(reply) {
+                    downloadCurrentTrackData.receiveTrackData(apiUrl, reply);
+                });
             }
         };
         xmlhttp.open("GET", apiUrl, true);
@@ -7537,9 +8215,86 @@ var downloadCurrentTrackData = {
         // the onreadystatechange callback above will trigger
         // when the data has safely arrived
         // wait for the request to complete before making the download file
+        downloadCurrentTrackData.outOptions = {
+            outType: outType,
+            withHeaders: document.getElementById("downloadTrackHeaders").checked,
+            fileName: $("#downloadFileName")[0].value
+        };
+        downloadCurrentTrackData.setBusy(true);
         downloadCurrentTrackData.intervalId = setInterval(downloadCurrentTrackData.makeDownloadFile, 200, apiUrl);
     },
 
+
+    // file name suffix per output format, the same ones makeDownloadFile appends
+    fileExtensions: {json: ".txt", csv: ".csv", tsv: ".tsv", gb: ".gb"},
+
+    // Bases. Only the fallback: hgTracks.c writes the hg.conf setting of the same name
+    // into the page, and that is what normally decides. Kept here so the check still has
+    // a sane number if the page was served without it, e.g. from a cached javascript
+    // file older than the setting.
+    maxGenbankRegionDefault: 25000000,
+
+    genbankRegionLimit: function() {
+        return (typeof maxGenbankRegion !== 'undefined' && maxGenbankRegion > 0) ?
+            maxGenbankRegion : downloadCurrentTrackData.maxGenbankRegionDefault;
+    },
+
+    isGeneModelType: function(type) {
+        // only these carry a transcript model, where the thick part really is the CDS.
+        // bigRmsk, for one, keeps the aligned parts of a repeat in the same columns, and
+        // calling that a coding sequence would put an invented protein in the file
+        let words = (type || "").split(" ");
+        if (words[0] === "genePred" || words[0] === "bigGenePred") {
+            return true;
+        }
+        if (words[0] === "bed" || words[0] === "bigBed") {
+            return parseInt(words[1], 10) >= 12;
+        }
+        return false;
+    },
+
+    isWiggleType: function(type) {
+        // numeric data, which has no GenBank feature equivalent.  Only the first word
+        // of the type, so that wigMaf, which does have features, is not caught
+        let first = (type || "").split(" ")[0];
+        return first === "wig" || first === "bigWig" || first === "mathWig" ||
+            first === "bedGraph";
+    },
+
+    outputFormatChanged: function(outType) {
+        // keep the rest of the dialog in step with the format that is now selected
+        let isGenbank = outType === "gb";
+        $("#downloadHeaderOpt").toggle(!isGenbank);
+        $("#downloadGenbankNote").toggle(isGenbank);
+        // show the suffix the file will really get
+        let nameInput = document.getElementById("downloadFileName");
+        if (nameInput) {
+            let ext = downloadCurrentTrackData.fileExtensions[outType] || ".txt";
+            nameInput.value = nameInput.value.replace(/\.(txt|csv|tsv|gb|json)$/i, "") + ext;
+        }
+        // GenBank has nothing to write for a wiggle, so grey those tracks out
+        $(".downloadTrackName").each(function(i, elem) {
+            if (elem.dataset.alwaysDisabled === "1" ||
+                    !downloadCurrentTrackData.isWiggleType(elem.dataset.trackType)) {
+                return;
+            }
+            if (isGenbank) {
+                // remember the tick so that leaving GenBank again puts it back
+                if (!elem.disabled) {
+                    elem.dataset.checkedBeforeGb = elem.checked ? "1" : "0";
+                }
+                elem.checked = false;
+            } else if (elem.dataset.checkedBeforeGb !== undefined) {
+                elem.checked = elem.dataset.checkedBeforeGb === "1";
+                delete elem.dataset.checkedBeforeGb;
+            }
+            elem.disabled = isGenbank;
+            let label = elem.nextElementSibling;
+            if (label && label.tagName === "LABEL") {
+                label.style.color = isGenbank ? "#888" : "";
+            }
+        });
+    },
 
     showDownloadUi: function() {
         // Populate the dialog with the current list of tracks
@@ -7576,52 +8331,130 @@ var downloadCurrentTrackData = {
                 autoOpen: false,
                 buttons: downloadTrackDataButtons
             });
+            // jquery-ui draws its dialogs in a smaller font than the page and squashes
+            // the two buttons it adds itself, so put both back to what the rest of the
+            // page uses.  This has to happen before the first open, because the dialog
+            // measures and centers itself on the size its contents have at that moment.
+            let dialogFont = {"font-family": $("body").css("font-family"),
+                              "font-size": $("body").css("font-size")};
+            let dialogWrap = $(downloadDialog).closest(".ui-dialog");
+            dialogWrap.css(dialogFont);
+            dialogWrap.find(".ui-dialog-content").css(dialogFont);
+            // jquery-ui pins the button pane to "height: 1em", so a button of normal
+            // height hangs out of the bottom of the dialog.  Let the pane size itself,
+            // its clearfix then takes care of the floated button set inside it
+            dialogWrap.find(".ui-dialog-buttonpane").css(dialogFont).css("height", "auto");
+            dialogWrap.find(".ui-dialog-buttonpane button").css(dialogFont)
+                .css("padding", "3px 10px");
+            // Somewhere to say that a download is being prepared. It goes in the button
+            // pane rather than in the dialog body, because the body scrolls once the
+            // track list is long and a message the user has to scroll to find is no
+            // better than no message. The Download button gets an id so that it can be
+            // disabled while the file is being built.
+            dialogWrap.find(".ui-dialog-buttonpane button").first().attr("id", "downloadTracksGo");
+            dialogWrap.find(".ui-dialog-buttonset").after(
+                "<span id='downloadTracksStatus' style='display: none; padding-left: 10px'>" +
+                "Preparing the file, this can take a while for a large region...</span>");
         }
-        htmlStr = "<p>Use this selection window to download track data" +
-            " for the current region (" + genomePos.get() + "). Please note that large regions" +
-            " may be slow to download.</p>";
-        htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
-            "&nbsp;" +
-            "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
-            "</div>";
-        _.each(hgTracks.trackDb, function(track, trackName) {
-            showDisabledMsg = false;
-            if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
-                htmlStr += "<input type=checkbox class='downloadTrackName' id='" + trackName + "'";
-                if (trackName.startsWith("ct_") || trackName === "hgPcrResult" ||
-                        track.type === "mathWig" || !tdbIsLeaf(track)) {
-                    showDisabledMsg = true;
-                    htmlStr += " disabled ";
-                } else {
-                    htmlStr += " checked ";
-                }
-                htmlStr +=  ">";
-                htmlStr += "<label>" + track.shortLabel + "</label>";
-                htmlStr += "</input>";
-                if (showDisabledMsg) {
-                    htmlStr += "&nbsp;<span id='" + trackName + "Tooltip'><a href='#'>(?)</a></span>";
-                }
-                htmlStr += "<br>";
-            }
-        });
-        htmlStr += "<div ><label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
-        htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
-            " value='" + getDb() + ".tracks'></input>";
-        htmlStr += "<br>";
+        // the strand the browser is showing, which the Reverse button flips
+        let strandStr = hgTracks.revCmplDisp ? "(- strand)" : "(+ strand)";
+        htmlStr = "<p>Use this selection window to download track data for the current region:" +
+            // the position is data, not prose, so it gets the monospace treatment and a
+            // line of its own
+            "<br><span style=\"font-family: 'Roboto Mono', 'Courier New', monospace; " +
+            "font-weight: bold\">" + htmlEncode(genomePos.get()) + "&nbsp;&nbsp;" + strandStr +
+            "</span><br>" +
+            "Large regions may be slow to download.</p>";
+        // the output format comes first: it decides which tracks can be downloaded at all
+        htmlStr += "<div>";
         htmlStr += "<label style='padding-right: 10px' for='outputFormat'>Choose an output format</label>";
         htmlStr += "<select name='outputFormat' id='outputFormat'>";
         htmlStr += "<option selected value='json'>JSON</option>";
         htmlStr += "<option value='csv'>CSV</option>";
         htmlStr += "<option value='tsv'>TSV</option>";
+        // the GenBank output is under hg.conf control for now
+        let withGenbank = typeof showGenbankDownload !== 'undefined' && showGenbankDownload;
+        if (withGenbank) {
+            htmlStr += "<option value='gb'>GenBank</option>";
+        }
         htmlStr += "</select>";
-        htmlStr += "<br>";
+        // an option of the format, so it sits with it and disappears with it
+        htmlStr += "<div id='downloadHeaderOpt'>";
         htmlStr += "<label style='padding-right: 10px' for='downloadTrackHeaders'>Include track column headers</label>";
         htmlStr += "<input type='checkbox' checked id='downloadTrackHeaders'></input>";
         htmlStr += "</div>";
+        // its own block, so that it does not move up next to the format select when the
+        // column header option above it is hidden
+        htmlStr += "<div>";
+        htmlStr += "<label style='padding-right: 10px' for='downloadFileName'>Enter an output file name</label>";
+        // undecoratedTrack strips the hub_<id>_ that a hub assembly's name carries, the
+        // hub id is this browser's cart detail and means nothing in a file name
+        htmlStr += "<input type=text size=30 class='downloadFileName' id='downloadFileName'" +
+            " value='" + htmlEncode(undecoratedTrack(getDb())) + ".tracks'></input>";
+        htmlStr += "</div>";
+        htmlStr += "</div>";
+        htmlStr += "<div style='margin-top: 12px'>";
+        _.each(hgTracks.trackDb, function(track, trackName) {
+            showDisabledMsg = false;
+            if (!trackName.includes("Squish") && trackName !== "ruler" && track.visibility > 0) {
+                htmlStr += "<input type=checkbox class='downloadTrackName' id='" +
+                    htmlEncode(trackName) + "'";
+                // the first word of the type is all the output formats need. A hub writes
+                // its own type strings and this one goes into an html attribute, so keep
+                // it to the characters a type name can legitimately have
+                htmlStr += " data-track-type='" +
+                    (track.type || "").split(" ")[0].replace(/[^A-Za-z0-9]/g, "") + "'";
+                if (trackName.startsWith("ct_") || trackName === "hgPcrResult" ||
+                        track.type === "mathWig" || !tdbIsLeaf(track)) {
+                    showDisabledMsg = true;
+                    // disabled whatever the output format is, so the format must not undo it
+                    htmlStr += " data-always-disabled='1' disabled ";
+                } else {
+                    htmlStr += " checked ";
+                }
+                htmlStr +=  ">";
+                htmlStr += "<label>" + htmlEncode(track.shortLabel) + "</label>";
+                htmlStr += "</input>";
+                if (showDisabledMsg) {
+                    htmlStr += "&nbsp;<span id='" + htmlEncode(trackName) +
+                        "Tooltip'><a href='#'>(?)</a></span>";
+                }
+                htmlStr += "<br>";
+            }
+        });
+        htmlStr += "</div>";
+        htmlStr  += "<div><button id='checkAllDownloadTracks'>Check All</button>" +
+            "&nbsp;" +
+            "<button id='uncheckAllDownloadTracks'>Clear All</button>" +
+            "</div>";
+        if (withGenbank) {
+            htmlStr += "<div id='downloadGenbankNote' " +
+                "style='display: none; margin-top: 12px; font-size: 90%'>The GenBank file also " +
+                "contains the DNA sequence of the region, always on the forward strand, even " +
+                "when the browser is showing the reverse complement. Tracks with numerical " +
+                "data, e.g. bigWigs, have no GenBank equivalent and are greyed out." +
+                "<br>" +
+                "GenBank files can be read by all sequence editors, e.g. SnapGene, Benchling, " +
+                "Geneious Prime, ApE, Vector NTI, CLC, Lasergene, MacVector, UGENE, Serial Cloner, " +
+                "Clone Manager, BioEdit, Artemis and DNA Strider. You can " +
+                "<a href='mailto:genome@soe.ucsc.edu'>contact us</a> if the file does not look " +
+                "the way you expect in your software.</div>";
+        }
         downloadDialog.innerHTML = htmlStr;
+        if (withGenbank) {
+            $("#outputFormat").on("change", function() {
+                downloadCurrentTrackData.outputFormatChanged(this.value);
+            });
+            // start out consistent with the format the select opens on
+            downloadCurrentTrackData.outputFormatChanged($("#outputFormat")[0].value);
+        }
         $("#checkAllDownloadTracks").on("click", function() {
             $(".downloadTrackName").each(function(i, elem) {
-                elem.checked = true;
+                // a disabled box can still be checked from script, and :checked finds it
+                // again when the download starts, so leave the greyed out tracks alone
+                if (!elem.disabled) {
+                    elem.checked = true;
+                }
             });
         });
         $("#uncheckAllDownloadTracks").on("click", function() {
@@ -8036,5 +8869,117 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
     }
+});
+
+//////////////////////////
+// Recent views dialog: the views this web browser had in the last days, opened from the note
+// after a session load or from My Data > Recent Browser Views
+
+var sessionLoadDialog = {
+
+    formatTimestamp: function(timestamp) {
+        // Format Unix timestamp to readable date/time
+        var date = new Date(timestamp * 1000);
+        var now = new Date();
+        var diffMs = now - date;
+        var diffDays = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+
+        if (diffDays === 0) {
+            // Today - show time
+            return "Today at " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        } else if (diffDays === 1) {
+            return "Yesterday";
+        } else if (diffDays < 7) {
+            return diffDays + " days ago";
+        } else {
+            return date.toLocaleDateString();
+        }
+    },
+
+    describe: function(s) {
+        // What a row is: the copy made just before a session load, or a view of another tab
+        if (s.prevViewOf === null || s.prevViewOf === undefined) {
+            return 'Last used ' + this.formatTimestamp(s.timestamp).toLowerCase();
+        }
+        var what = s.prevViewOf ? 'session <b>' + htmlEncode(s.prevViewOf) + '</b>'
+                                : 'settings from a file or URL';
+        return 'Before you opened ' + what + ', ' + this.formatTimestamp(s.timestamp).toLowerCase();
+    },
+
+    buildSessionList: function(sessions) {
+        // Build HTML for the list of recent views, the copy made before a session load first
+        var html = '<p>These are the views you had in this web browser in the last 7 days. ' +
+                'Open one in a new tab to get it back, or save it as a named session.</p>';
+        if (sessions.length === 0) {
+            return html + '<p>No recently used views are available yet for this internet ' +
+                    'browser. You may want to check other internet browsers or other user ' +
+                    'accounts in these, if you think there should be more. Or ' +
+                    '<a href="../contacts.html" target="_blank">contact us</a>.</p>';
+        }
+        var sorted = sessions.slice().sort(function(a, b) {
+            var aCopy = (a.prevViewOf !== null && a.prevViewOf !== undefined);
+            var bCopy = (b.prevViewOf !== null && b.prevViewOf !== undefined);
+            if (aCopy !== bCopy) {
+                return aCopy ? -1 : 1;
+            }
+            return b.timestamp - a.timestamp;
+        });
+        html += '<div style="max-height: 300px; overflow-y: auto;">';
+        html += '<table style="width: 100%; border-collapse: collapse;">';
+        html += '<thead><tr style="background: #f0f0f0;">' +
+                '<th style="padding: 8px; text-align: left;">View</th>' +
+                '<th style="padding: 8px; text-align: left;">Assembly</th>' +
+                '<th style="padding: 8px; text-align: left;">Position</th>' +
+                '<th style="padding: 8px;"></th>' +
+                '</tr></thead><tbody>';
+
+        for (var i = 0; i < sorted.length; i++) {
+            var s = sorted[i];
+            var sid = encodeURIComponent(s.hgsid);
+            var openUrl = '../cgi-bin/hgTracks?hgsid=' + sid;
+            var saveUrl = '../cgi-bin/hgSession?hgS_doMainPage=1&hgsid=' + sid;
+            html += '<tr style="border-bottom: 1px solid #ddd;">';
+            html += '<td style="padding: 8px;">' + this.describe(s) + '</td>';
+            html += '<td style="padding: 8px;">' + htmlEncode(s.db || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px;">' + htmlEncode(s.position || '(unknown)') + '</td>';
+            html += '<td style="padding: 8px; white-space: nowrap;">' +
+                    '<a href="' + openUrl + '" target="_blank">Open</a> ' +
+                    '<a href="' + saveUrl + '" target="_blank" ' +
+                    'title="Open the Sessions page with this view, to save it under a name">' +
+                    'Save</a></td>';
+            html += '</tr>';
+        }
+
+        html += '</tbody></table></div>';
+        return html;
+    },
+
+    show: function() {
+        if (typeof recentSessions === 'undefined' || $('#sessionLoadDialog').length) {
+            return;
+        }
+        var $dialog = $('<div id="sessionLoadDialog"></div>');
+        $dialog.html(this.buildSessionList(recentSessions));
+        $dialog.dialog({
+            title: 'Recent Browser Views',
+            width: 650,
+            modal: false,
+            resizable: false,
+            buttons: {
+                'Close': function() {
+                    $(this).dialog('close');
+                }
+            },
+            close: function() {
+                $(this).dialog('destroy').remove();
+            }
+        });
+    }
+};
+
+// The link in the note after a session load.  The note is added after page load.
+$(document).on('click', '#recentViewsLink', function(ev) {
+    ev.preventDefault();
+    sessionLoadDialog.show();
 });
 

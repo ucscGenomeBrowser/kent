@@ -75,7 +75,7 @@ urls rcvAcc="https://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="https://www.ncbi.
 release alpha
 
 include mm10Strains1SuperTrack.ra
-include mouseStrainsCactus.ra alpha
+include mouseStrainsCactus.ra
 
 track qPcrPrimers override
 group regulation
@@ -434,3 +434,11 @@ track jaspar2024 override
 parent jaspar on
 
 include tad.ra alpha
+
+include ../nonCodingRNAs.ra alpha
+include ../mirGeneDbV3_0.ra alpha
+include ../mirBaseV22_1.ra alpha
+
+track tRNAs override
+superTrack nonCodingRNAs pack
+release alpha

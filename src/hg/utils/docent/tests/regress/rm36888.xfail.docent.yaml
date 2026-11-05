@@ -50,11 +50,24 @@
 # Two links carry the long label and only one of them gets the note, which is why the
 # check is "at least one matches" and not a count.
 #
+# WHAT THE NOTE SAYS, AND WHY ONLY HALF OF IT IS ASSERTED. 07f0635fd35 reworded all three
+# density labels on 2026-09-18. The two automatic causes now read "density graph: too many
+# items, zoom in" (window too wide) and "density graph: too many items, zoom in or use
+# dense" (too many items); the one the user asks for reads "density graph: turn off on the
+# track settings page". The check below matches the prefix the two automatic causes share,
+# which is what the pre-reword string did as well. The full too-many-items sentence is the
+# one this bug should produce, but nobody can see it until the fix lands, and an exact
+# string guessed from the source would keep this script red after the flip instead of
+# letting it pass -- which is the one thing an xfail must not do. Tighten it to the full
+# sentence on the day it goes green. The prefix still excludes the user-asked message, and
+# a bigBedMaxItems raised past 600,000 still produces no note at all and fails loudly.
+#
 # The hub declares `visibility pack` itself, so there is no `hide: all` and no `track:`
 # step here: a track inside an attached hub carries a hub_<n>_ prefix that differs every
 # run and cannot be named in a cart variable.
 proof:
   - "xfail 2026-09-09 -- red on every server; bigMethylMethods installs no loadSummary, and the one-liner that fixes it is not committed"
+  - "xfail 2026-09-18 -- still red for its own reason after 07f0635fd35 reworded the density labels. Run against genome-test under a plain name so the text prints: `rows not drawn: rm36888Methyl`, the data row, with the note check second. Both selectors retranslated to the new wording the same day"
 
 target: genome-test
 reset: true
@@ -71,7 +84,7 @@ steps:
   # only to a window that overflowed.
   - expect:
       rows: [ruler, rm36888Methyl]
-      noHas: 'a.trackLink[data-track$="rm36888Methyl"][mouseovertext*="too many features, density shown"], a.trackLink[data-track$="rm36888Methyl"][title*="too many features, density shown"]'
+      noHas: 'a.trackLink[data-track$="rm36888Methyl"][mouseovertext*="density graph: too many items"], a.trackLink[data-track$="rm36888Methyl"][title*="density graph: too many items"]'
 
   # The bug. 600,000 items in the window, six times bigBedMaxItems. Today the data row is
   # not drawn at all; with loadSummary installed the track falls back to the coverage
@@ -79,4 +92,4 @@ steps:
   - go: chr1:1000001-1150000
   - expect:
       rows: [ruler, rm36888Methyl]
-      has: 'a.trackLink[data-track$="rm36888Methyl"][mouseovertext*="too many features, density shown"], a.trackLink[data-track$="rm36888Methyl"][title*="too many features, density shown"]'
+      has: 'a.trackLink[data-track$="rm36888Methyl"][mouseovertext*="density graph: too many items"], a.trackLink[data-track$="rm36888Methyl"][title*="density graph: too many items"]'

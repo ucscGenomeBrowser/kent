@@ -337,9 +337,10 @@ if (wordCount > 4)
      item->score = lineFileNeedNum(lf, row, 4);
 if (wordCount > 5)
      {
-     safecpy(item->strand, sizeof(item->strand), row[5]);
+     item->strand[0] = row[5][0];
+     item->strand[1] = 0;
      if (item->strand[0] != '+' && item->strand[0] != '-' && item->strand[0] != '.')
-          lineFileAbort(lf, "Expecting + or - in strand");
+          lineFileAbort(lf, "Expecting + or - in strand, got '%s'", row[5]);
      }
 if (wordCount > 6)
      item->thickStart = lineFileNeedNum(lf, row, 6);

@@ -17,6 +17,7 @@
 # hgTrackUi has no track image, so the positive text: is what tells a crash from a page:
 # a SIGSEGV gives the browser an empty document, where every noText: check passes.
 proof:
+  - "release-ab 2026-09-18 -- fails on the released v499 docker image and passes on v500, which is where 7b74ff4b43a first ships. The v499 failure is on this ticket's own error string, \"Can't find duplicate track dup_1_refGene\""
   - "assertion-only 2026-09-12 -- written from the ticket and from 7b74ff4b43a, after the fix shipped"
 
 target: genome-test

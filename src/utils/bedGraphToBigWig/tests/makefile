@@ -2,7 +2,7 @@ kentSrc = ../../..
 A = bedGraphToBigWig
 include ../../../inc/common.mk
 
-test: testBadChrom1 testBbSize1 testBbSize2
+test: testBadChrom1 testBbSize1 testBbSize2 testCompress
 
 testBadChrom1:  outputDir
 	-${BINDIR}/${A} input/test1.bed  input/human.chrom.sizes.txt output/noFile.chromAlias.bb   2> output/testBadChrom1.err
@@ -15,6 +15,11 @@ testBbSize1: outputDir output/human.chromAlias.bb
 	${BINDIR}/${A} input/test1.bed output/human.chromAlias.bb output/test1.bw -sizesIsBb 
 	bigWigToBedGraph output/test1.bw output/test1.bed
 	diff input/test1.bed output/test1.bed
+
+testCompress: outputDir output/human.chromAlias.bb
+	${BINDIR}/${A} input/test1.bed output/human.chromAlias.bb output/test1Plain.bw -sizesIsBb
+	${BINDIR}/${A} input/test1.bed.gz output/human.chromAlias.bb output/test1Gz.bw -sizesIsBb
+	cmp output/test1Plain.bw output/test1Gz.bw
 
 testBbSize2: outputDir output/human.chromAlias.bb
 	-${BINDIR}/${A} input/mixed.bed output/human.chromAlias.bb output/noFile.chromAlias.bb -sizesIsBb 2> output/mixed.err

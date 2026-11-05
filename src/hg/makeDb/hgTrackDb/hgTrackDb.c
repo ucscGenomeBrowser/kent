@@ -673,6 +673,21 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	    assert(sgd != NULL);
 	    checkOneSubGroups(tdb->track, childTdb, sgd);
 	    }
+
+	// Container (multiWig) subtracks are listed on the composite's hgTrackUi page in place
+	// of their children, so they must declare their subGroups as well.
+	struct slRef *rowList = trackDbListGetRefsToDescendantLeavesOrContainers(tdb->subtracks);
+	struct subGroupData *sgd =  hashFindVal(compositeHash, tdb->track);
+	assert(sgd != NULL);
+	for (child = rowList; child != NULL; child = child->next)
+	    {
+	    struct trackDb *childTdb = child->val;
+	    if (childTdb->subtracks == NULL)
+		continue;  // a leaf, already checked above
+	    verbose(2, "  checking container child %s\n",childTdb->track);
+	    checkOneSubGroups(tdb->track, childTdb, sgd);
+	    }
+	slFreeList(&rowList);
         }
     }
 }
@@ -714,13 +729,60 @@ static void polishSupers(struct trackDb *tdbList)
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    struct trackDb *parent = tdb->parent;
-    if (parent != NULL)
+    /* Walk the whole chain of parents, not just the immediate one: a supertrack
+     * inside another supertrack is reached only through its child, and without
+     * its fields filled in from settings it reaches the write with a NULL
+     * shortLabel. */
+    struct trackDb *parent;
+    for (parent = tdb->parent; parent != NULL; parent = parent->parent)
 	{
 	trackDbFieldsFromSettings(parent);
 	trackDbPolish(parent);
 	}
     }
+}
+
+static void checkShownSuperTracks(char *org, char *database, struct trackDb *tdbList)
+/* Warn about each superTrack set to show that has no visible child. */
+{
+struct hash *seenHash = hashNew(0);
+struct hash *visHash = hashNew(0);
+struct slRef *superList = NULL;
+struct slRef *ref, *refList = trackDbListGetRefsToDescendants(tdbList);
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    struct trackDb *child = ref->val;
+    struct trackDb *parent;
+    for (parent = child->parent; parent != NULL && tdbIsSuperTrack(parent);
+         child = parent, parent = parent->parent)
+        {
+        if (!hashLookup(seenHash, parent->track))
+            {
+            hashAdd(seenHash, parent->track, NULL);
+            refAdd(&superList, parent);
+            }
+        boolean childVis;
+        if (tdbIsSuperTrack(child))
+            childVis = child->isShow;
+        else
+            childVis = (child->visibility != tvHide);
+        if (childVis)
+            hashStore(visHash, parent->track);
+        }
+    }
+slReverse(&superList);
+for (ref = superList; ref != NULL; ref = ref->next)
+    {
+    struct trackDb *super = ref->val;
+    if (super->isShow && !hashLookup(visHash, super->track))
+        fprintf(stderr, "Warning: superTrack %s %s %s is set to show but has no visible "
+            "children. Give at least one child a visibility other than hide, or remove "
+            "'show' from its superTrack line.\n", org, database, super->track);
+    }
+slFreeList(&superList);
+slFreeList(&refList);
+hashFree(&seenHash);
+hashFree(&visHash);
 }
 
 static struct trackDb *buildTrackDb(char *org, char *database, char *hgRoot, boolean strict)
@@ -771,6 +833,7 @@ if (strict)
     tdbList = pruneStrict(tdbList, database);
 
 tdbList = pruneEmptyContainers(tdbList);
+checkShownSuperTracks(org, database, tdbList);
 checkSubGroups(database,tdbList,strict);
 trackDbPrioritizeContainerItems(tdbList);
 
@@ -788,16 +851,19 @@ struct trackDb *tdbList = NULL;
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     struct trackDb *tdb = ref->val;
-    struct trackDb *parent = tdb->parent;
-    if (parent != NULL && tdbIsSuperTrack(parent))
+    /* Walk up the chain of floating supertrack parents, not just the immediate
+     * one: a supertrack may itself sit inside another supertrack, and only the
+     * innermost is reachable from a track in the forest. */
+    struct trackDb *parent;
+    for (parent = tdb->parent; parent != NULL && tdbIsSuperTrack(parent);
+         parent = parent->parent)
 	{
 	/* The supertrack may appear as a 'floating' parent for multiple tracks.
 	 * Only put it on the list once. */
-	if (!hashLookup(superTrackHash, parent->track))
-	    {
-	    hashAdd(superTrackHash, parent->track, parent);
-	    slAddHead(&tdbList, parent);
-	    }
+	if (hashLookup(superTrackHash, parent->track))
+	    break;
+	hashAdd(superTrackHash, parent->track, parent);
+	slAddHead(&tdbList, parent);
 	}
     slAddHead(&tdbList, tdb);
     }

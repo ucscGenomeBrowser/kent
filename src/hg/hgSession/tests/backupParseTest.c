@@ -9,7 +9,6 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "errCatch.h"
-#include "hgConfig.h"
 
 struct downloadResults
 /* Only the first two fields of backup.c's struct, which is all slCount and a
@@ -36,13 +35,13 @@ return s;
 static char *cases[] = {
 /* one custom track, found */
 "db=hg38&ctfile_hg38=../trash/ct/probe.bed",
-/* an empty pair in front of it names it "&ctfile_hg38", which does not match
- * the ctfile_ prefix, so the custom track is left out of the backup with no
- * warning.  The reader gets a backup that is missing a track.  refs #38185 */
+/* an empty pair in front of it used to name it "&ctfile_hg38", which does not
+ * match the ctfile_ prefix, so the custom track was left out of the backup with
+ * no warning.  The reader got a backup that was missing a track.  refs #38185 */
 "db=hg38&&ctfile_hg38=../trash/ct/probe.bed",
-/* a pair with no =value in front of it does the same.  refs #38340 */
+/* a pair with no =value in front of it did the same.  refs #38340 */
 "db=hg38&i&ctfile_hg38=../trash/ct/probe.bed",
-/* either one after it aborts the whole backup instead */
+/* either one after it used to abort the whole backup instead */
 "db=hg38&ctfile_hg38=../trash/ct/probe.bed&g-catV2",
 "db=hg38&ctfile_hg38=../trash/ct/probe.bed&&",
 /* two assemblies, both found */
@@ -52,8 +51,6 @@ static char *cases[] = {
 int main(int argc, char *argv[])
 {
 int i;
-printf("hg.conf skipMalformedCgiPairs=%s\n\n",
-       cfgOptionBooleanDefault("skipMalformedCgiPairs", FALSE) ? "on" : "off");
 for (i = 0;  i < ArraySize(cases);  ++i)
     {
     printf("in  : %s\n", cases[i]);

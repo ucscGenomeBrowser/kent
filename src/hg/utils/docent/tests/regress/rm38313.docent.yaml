@@ -1,0 +1,66 @@
+# #38313 -- My Sessions left out a user's own sessions whose name starts with "__".  The
+# snapshot work (32cd2100d9d, #38264) hid share tokens from both My Sessions listings by their
+# "__" name prefix, and the listings return only the signed-in user's rows, so the test also
+# hid sessions that users had named that way themselves.  Eleven such sessions belonged to
+# four accounts on the RR.  The owner could open one from its URL, but could no longer see it
+# in the list, rename it, describe it, change its sharing or delete it.
+#
+# b50a995e326, hg/hgSession/hgSession.c and lib/snapshotSession.c.  Both listings now skip a
+# row only when its settings column carries a "snapshotType <name>" line, which
+# saveSnapshotSession() writes and a user's own session never has.
+#
+# The script signs in, saves a session named __rm38313 from the new page's save card, and
+# asserts it is listed in BOTH listings: the new page's table (with its own Delete button, so
+# the row is usable and not a remote copy), and the classic page's table.  The wait straight
+# after the save is the first check: on a build with the bug the save succeeds and the row
+# never appears.
+#
+# NOT asserted: that a real snapshot row stays hidden.  Every snapshot today belongs to the
+# reserved user "l", never to a signed-in user, so no listing docentTest can see ever holds
+# one.  hg/lib/tests/snapshotTypeTester.c pins the settings reader for that side.
+#
+# WHY THE BASELINE IS NOT A RELEASE.  The bug arrived with 32cd2100d9d and was fixed by
+# b50a995e326, and both are in v504_branch and in neither v503_branch nor v502_branch.  So no
+# release has the bug: v503 has no filter at all and passes this script.  The baseline is ts
+# park 38343, whose hgSession was frozen from a master build on 2026-09-11 12:04, after the
+# snapshot work and before the fix.
+#
+# The page is opted into with sessionNewPage=1 on the URL, so no hg.conf gate is needed.  The
+# session is deleted at the start, in case an earlier run died, and again at the end.  On a
+# ticket park, run against the HTTPS port so that login works.
+proof:
+  - "assertion-only 2026-09-30 -- written from #38313 and b50a995e326 after it reached genome-test and hgwbeta"
+  - "sandbox-ab 2026-09-30 -- passes on genome-test and hgwbeta (v504); fails on ts park 38343 (master hgSession built 2026-09-11, before b50a995e326, https 49095) at step 7, the wait for the __rm38313 row. hgcentraltest held the row (docentTest, __rm38313, shared=1, empty settings), so the save worked and the listing hid it; the classic page on the same park listed rm38157 and not __rm38313"
+
+target: genome-test
+db: hg38
+size: [1400, 900]
+reset: true
+fast: true
+steps:
+  - login: true
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=__rm38313"
+
+  # Save __rm38313 from the save card.  On the buggy build the save works and the row never shows.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessSaveName'
+  - fill: {'#sessSaveName': __rm38313}
+  - click: '#sessSaveBtn'
+  - wait: '#sessionAppTable tr:has(a:text-is("__rm38313"))'
+
+  # The new page's listing, on a fresh load, with the local buttons.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=1"
+  - wait: '#sessionAppTable'
+  - expect:
+      has: '#sessionAppTable tr:has(a:text-is("__rm38313")):has(button[data-act="delete"])'
+
+  # The classic page's listing.
+  - goto: "/cgi-bin/hgSession?sessionNewPage=0"
+  - expect:
+      text: "My Sessions"
+      has: 'a[id^="linkEl-"]:text-is("__rm38313")'
+
+  # Clean up.
+  - goto: "/cgi-bin/hgSession?hgS_doDeleteJson=1&hgS_oldSessionName=__rm38313"
+  - expect:
+      text: '"success": true'

@@ -1,0 +1,25 @@
+# DeepMEI stays on alpha only. The caller is an unrefereed 2023 preprint and
+# the callset carries no quality filter; Jessica Storer, who reviewed the
+# paper, advised against publishing it until it has been benchmarked
+# (see #37524). The rest of the collection is in mei.ra.
+
+    track meiDeepmei1kg
+    parent mei
+    bigDataUrl /gbdb/$D/mei/deepmei1kg.bb
+    shortLabel DeepMEI 1000G MEIs
+    longLabel Mobile element insertions in 3,202 1000 Genomes samples (DeepMEI)
+    dataVersion DeepMEI 1000 Genomes high-confidence callset, 2022-11-21
+    type bigBed 9 +
+    itemRgb on
+    visibility pack
+    mouseOver <b>${teClass}</b> insertion<br>Carriers: ${carrierCount}/${sampleCount} samples<br>Allele frequency: ${altAlleleFreq}
+    filterValues.teClass Alu,L1,SVA
+    filterType.teClass multipleListOr
+    filterLabel.teClass Mobile Element Class
+    filter.altAlleleFreq 0:1
+    filterByRange.altAlleleFreq on
+    filterLimits.altAlleleFreq 0:1
+    filterLabel.altAlleleFreq Allele Frequency
+    filter.carrierCount 0:3202
+    filterByRange.carrierCount on
+    filterLabel.carrierCount Carrier Sample Count

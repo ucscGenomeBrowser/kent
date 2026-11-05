@@ -1,0 +1,22 @@
+BED strand +
+  one strand '+'
+BED strand +1, used to overflow
+  one strand '+'
+BED strand -1, used to overflow
+  one strand '-'
+BED strand x, refused
+  aborted: Error line 1 of custom track: Expecting + or - in strand, got 'x'
+BED strand xy, refused with the whole value
+  aborted: Error line 1 of custom track: Expecting + or - in strand, got 'xy'
+bedDetail strand +
+  one strand '+'
+bedDetail strand +1, used to overflow
+  one strand '+'
+bedDetail strand xy, refused with the whole value
+  aborted: Error line 1 of bedDetail: Expecting + or - in strand, got 'xy'
+GFF group column short
+  name shortGene (9 characters)
+GFF group column 200 characters, used to overflow at 128
+  name mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm (127 characters)
+GFF group column cut at the first ;
+  name cut (3 characters)
