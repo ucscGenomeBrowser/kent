@@ -623,6 +623,13 @@ slSort(&cdsUtrBlks, gff3AnnRefLocCmp);
 return cdsUtrBlks;
 }
 
+static boolean isCdsPart(struct gff3Ann *ann)
+/* is this a CDS record that is part of a discontinuous CDS feature? */
+{
+return sameString(ann->type, gff3FeatCDS)
+    && ((ann->prevPart != NULL) || (ann->nextPart != NULL));
+}
+
 static struct genePred *mrnaToGenePred(struct gff3Ann *gene, struct gff3Ann *mrna)
 /* construct a genePred from an mRNA or transript record, return NULL if there is an error.
  * The gene argument maybe null if there isn't a gene parent */
@@ -637,7 +644,17 @@ struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
 
 if (useExons == NULL) // if we don't have any exons, just use the feature
     {
-    useExons = gff3AnnRefNew(mrna);
+    if (isCdsPart(mrna))
+        {
+        // multi-exon CDS that is a direct child of a gene: one record per
+        // exon, all with the same ID, linked by nextPart starting at the head.
+        struct gff3Ann *part;
+        for (part = mrna; part != NULL; part = part->nextPart)
+            slAddHead(&useExons, gff3AnnRefNew(part));
+        slSort(&useExons, gff3AnnRefLocCmp);
+        }
+    else
+        useExons = gff3AnnRefNew(mrna);
     if (sameString(mrna->type, gff3FeatCDS))
 	cdsBlks = useExons;
     }
@@ -729,6 +746,8 @@ static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *
    increment on error and genePred discarded */
 {
 recProcessed(processed, mrna);
+if (isCdsPart(mrna) && (mrna->prevPart != NULL))
+    return;  // not the first part, all parts are converted with the first one
 
 struct genePred *gp = mrnaToGenePred(gene, mrna);
 if (gp != NULL)

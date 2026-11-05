@@ -1,0 +1,13 @@
+##gff-version 3
+LT635626.1	EMBL	gene	9	63	.	+	.	ID=gene-PVP01_API00100;Name=PVP01_API00100;gbkey=Gene;gene_biotype=tRNA;locus_tag=PVP01_API00100
+LT635626.1	EMBL	tRNA	9	63	.	+	.	ID=rna-PVP01_API00100;Parent=gene-PVP01_API00100;gbkey=tRNA;locus_tag=PVP01_API00100;product=tRNA-Thr
+LT635626.1	EMBL	exon	9	63	.	+	.	ID=exon-PVP01_API00100-1;Parent=rna-PVP01_API00100;gbkey=tRNA;locus_tag=PVP01_API00100;product=tRNA-Thr
+LT635626.1	EMBL	gene	90	704	.	+	.	ID=gene-PVP01_API00200;Name=PVP01_API00200;gbkey=Gene;gene_biotype=protein_coding;locus_tag=PVP01_API00200
+LT635626.1	EMBL	CDS	90	704	.	+	0	ID=cds-VUZ99253.1;Parent=gene-PVP01_API00200;Dbxref=NCBI_GP:VUZ99253.1;Name=VUZ99253.1;gbkey=CDS;locus_tag=PVP01_API00200;product=apicoplast ribosomal protein S4%2C putative;protein_id=VUZ99253.1
+FLZR02000001.1	EMBL	pseudogene	10224	12567	.	+	.	ID=gene-PVP01_0000040;Name=PVP01_0000040;gbkey=Gene;gene_biotype=pseudogene;locus_tag=PVP01_0000040;pseudo=true
+FLZR02000001.1	EMBL	CDS	10224	11226	.	+	0	ID=cds-PVP01_0000040;Parent=gene-PVP01_0000040;gbkey=CDS;locus_tag=PVP01_0000040;product=STP1 protein;pseudo=true
+FLZR02000001.1	EMBL	CDS	11286	11762	.	+	2	ID=cds-PVP01_0000040;Parent=gene-PVP01_0000040;gbkey=CDS;locus_tag=PVP01_0000040;product=STP1 protein;pseudo=true
+FLZR02000001.1	EMBL	CDS	11807	12567	.	+	2	ID=cds-PVP01_0000040;Parent=gene-PVP01_0000040;gbkey=CDS;locus_tag=PVP01_0000040;product=STP1 protein;pseudo=true
+FLZR02000001.1	EMBL	gene	19750	20668	.	-	.	ID=gene-PVP01_0000060;Name=PVP01_0000060;gbkey=Gene;gene_biotype=protein_coding;locus_tag=PVP01_0000060
+FLZR02000001.1	EMBL	CDS	19750	20421	.	-	0	ID=cds-VUZ99291.1;Parent=gene-PVP01_0000060;Dbxref=NCBI_GP:VUZ99291.1;Name=VUZ99291.1;gbkey=CDS;locus_tag=PVP01_0000060;product=Plasmodium exported protein%2C unknown function;protein_id=VUZ99291.1
+FLZR02000001.1	EMBL	CDS	20582	20668	.	-	0	ID=cds-VUZ99291.1;Parent=gene-PVP01_0000060;Dbxref=NCBI_GP:VUZ99291.1;Name=VUZ99291.1;gbkey=CDS;locus_tag=PVP01_0000060;product=Plasmodium exported protein%2C unknown function;protein_id=VUZ99291.1

@@ -12,7 +12,7 @@ test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOu
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
 	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
 	frameShiftTest mm10GencodeTest ncbiSegmentsTest ncbiProblemsTest makeBadTest \
-	transcriptOnlyTest hprcTest errDupIdDiffParentsTest
+	transcriptOnlyTest hprcTest errDupIdDiffParentsTest geneCdsDiscontinuousTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -135,6 +135,12 @@ hprcTest: mkout
 errDupIdDiffParentsTest: mkout
 	if ! ${gff3ToGenePred} input/dupIdDiffParents.gff3 /dev/null >output/$@.out 2>&1 ; then true ; else ${cmdShouldFail} ; fi
 	diff expected/$@.out output/$@.out
+
+# NCBI GFF3 for EMBL-submitted assemblies: multi-exon CDS directly under the
+# gene, no mRNA/exon records; parts must form one transcript (#38689)
+geneCdsDiscontinuousTest: mkout
+	${gff3ToGenePred} -useName input/geneCdsDiscontinuous.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 
 mkout:
 	@mkdir -p output
