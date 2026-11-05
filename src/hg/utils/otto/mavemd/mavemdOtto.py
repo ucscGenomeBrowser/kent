@@ -6,9 +6,9 @@ whose fingerprint changed are downloaded), and when what the build would read di
 from the last release, builds a new release (mavemdBuild.py) into releases/YYYY-MM-DD/,
 checks it, and moves the /gbdb/hg38/mavemd/ symlinks to it.
 
-What makes a release is a key over three things a build depends on: the fingerprint of
-every cached score set, the hg38 annotation tables the placement reads (ncbiRefSeq and
-the newest GENCODE), and nothing else. A quarterly refetch and rebuild covers the one
+What makes a release is a key over two things a build depends on: the fingerprint of
+every cached score set, and the hg38 annotation tables the placement reads (ncbiRefSeq
+and the newest GENCODE). A quarterly refetch and rebuild covers the one
 case the key cannot see, MaveDB remapping a score set without touching its record.
 
 Silent when nothing changed. A release prints a short summary, which cron mails; anything
@@ -100,8 +100,10 @@ def readLastRelease(ottoDir):
 def annotationStamp(db='hg38', log=sys.stderr):
     """'table=updateTime' for each annotation table, plus the newest GENCODE table name.
 
-    A failure here must not stop the run: the quarterly rebuild still covers it, so a
-    MySQL hiccup should cost us a late rebuild, not a missed week.
+    None when the tables cannot be read, so the caller can reuse the stamp the last
+    release was made with. Hashing a placeholder instead would move the release key,
+    which is the opposite of what a MySQL hiccup should do: one unwanted build now and
+    another when it comes back.
     """
     parts = []
     try:
@@ -121,8 +123,8 @@ def annotationStamp(db='hg38', log=sys.stderr):
             parts.append('gencode=' + newest)
     except (subprocess.CalledProcessError, OSError, ValueError) as e:
         log.write('could not read the annotation tables (%s); '
-                  'the release key leaves them out this run\n' % e)
-        return 'unavailable'
+                  'reusing the last release\'s stamp\n' % e)
+        return None
     return ' '.join(parts)
 
 
@@ -243,7 +245,7 @@ def dryRun(ottoDir, args):
     cacheDir = os.path.join(ottoDir, 'cache')
     summary = mavemdFetch.fetch(cacheDir, collection=args.collection, catalogueOnly=True,
                                 log=sys.stderr)
-    current = mavemdFetch.readFingerprints(os.path.join(cacheDir, 'catalogue.tsv'))
+    current = summary['catalogue']
     fetched = mavemdFetch.readFingerprints(os.path.join(cacheDir, 'fetched.tsv'))
     toFetch = [u for u in current if fetched.get(u) != current[u]]
     _, lastName = readLastRelease(ottoDir)
@@ -280,6 +282,10 @@ def run(ottoDir, gbdbDir, args, log):
     fetched = mavemdFetch.readFingerprints(os.path.join(cacheDir, 'fetched.tsv'))
     current = mavemdFetch.readFingerprints(os.path.join(cacheDir, 'catalogue.tsv'))
     stamp = annotationStamp(log=log)
+    if stamp is None:
+        stamp = readText(os.path.join(ottoDir, 'annotations.txt')) or 'unavailable'
+    else:
+        writeText(os.path.join(ottoDir, 'annotations.txt'), stamp)
     key = releaseKey(fetched, current, cacheDir, stamp)
     lastKey, _ = readLastRelease(ottoDir)
     writeText(os.path.join(ottoDir, 'lastRun.txt'), today.isoformat())
